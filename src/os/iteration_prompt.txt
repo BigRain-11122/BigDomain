@@ -12,9 +12,9 @@
    - 基线缺失（首轮：last_order 为空或 last_decision_rows=0）=全读一次定基线：既有行按历史行处理（时间早于骨架安装=知悉回执一行入 log·非本司执行面不动），把现行 decisions.md 行数（UTF-8 口径）与 orders.md 最新时间记入 state.json 作基线——此后只比增量
 3. 认领任务板最上未完项（tasks.md=正典板 ↔ src/os/backlog.md=认领工作板·六件同源起版；认领动作落 backlog 行；全部为依赖 CEO 物理件的项=不可认领，如实记录待物理件）
 4. 干活：严格按【优先级】与【铁律】执行，做不完的拆细，剩余部分写回 backlog 顶行
-5. 收账：src/os/state.json（tick 加一；log 追加本轮一句话实况一行+轮账本一行「tokens: local=N api=N api_reason=<一行理由>」）→定向 git add 相关文件（禁全量 add）→commit（一行英文消息·≤500 字符·尾标 [via BigDomain-OSLoop]）→push（origin 已通）；backlog 完成项标 [done 日期]+tasks.md 对应项勾选；push 失败=只记录不修下轮再看
+5. 收账：src/os/state.json（tick 加一；log 追加本轮一句话实况一行+轮账本一行「tokens: local=N api=N api_reason=<一行理由>」）→docs/status-export.json 轮内刷新（硅基观测窗接口·ledger P-61=R-20260924-silicon-watch §六批2：export_ts ISO8601+do+depts/outs/results 全派生自实际状态〔F3 律禁写死〕——实况有变即刷·无变且未超 24h 新鲜度闸可跳）→定向 git add 相关文件（禁全量 add）→commit（一行英文消息·≤500 字符·尾标 [via BigDomain-OSLoop]）→push（origin 已通）；backlog 完成项标 [done 日期]+tasks.md 对应项勾选；push 失败=只记录不修下轮再看
 
-【空转快速路径】开轮先走五静判定（省 token·禁重读全文档链）：只读 state.json log 尾 3 行 + backlog 顶行 + evolution-ledger @BigDomain 行有无新增未回 + decisions.md 行数比对（UTF-8 口径）+ git status --short。五静全过（①无新转办〔ledger 无未回 @BigDomain 行+orders.md 无新令+global-benchmarks 未超 7 天〕 ②decisions.md 无新行 ③任务板顶行不可认领〔全部依赖 CEO 物理件〕 ④树净无 index.lock ⑤无其他会话活跃写盘迹象——git status 三查即近似）→一行收账即出：state.json 记「idle-fast（五静）」一行·tick 加一·定向 commit state.json+push，不进开轮五步。任一异常（新转办/新行/可认领活/脏树/锁）→转全任务书照走。空转轮不为凑工作量造活；禁止自我膨胀式立法。
+【空转快速路径】开轮先走五静判定（省 token·禁重读全文档链）：只读 state.json log 尾 3 行 + backlog 顶行 + evolution-ledger @BigDomain 行有无新增未回 + decisions.md 行数比对（UTF-8 口径）+ git status --short。五静全过（①无新转办〔ledger 无未回 @BigDomain 行+orders.md 无新令+global-benchmarks 未超 7 天〕 ②decisions.md 无新行 ③任务板顶行不可认领〔全部依赖 CEO 物理件〕 ④树净无 index.lock ⑤无其他会话活跃写盘迹象——git status 三查即近似）→一行收账即出：state.json 记「idle-fast（五静）」一行·tick 加一·docs/status-export.json export_ts 超 24h 顺带刷新（P-61 新鲜度闸）·定向 commit state.json+push，不进开轮五步。任一异常（新转办/新行/可认领活/脏树/锁）→转全任务书照走。空转轮不为凑工作量造活；禁止自我膨胀式立法。
 
 【优先级】P-47 业务件五件按序（①大厅 WebSocket 规格+判据预注册 ②代币双式账本 schema+对账脚本设计 ③UGC+msgSecCheck 管道设计 ④19.9 支付对接设计〔商户号未到=设计先行〕 ⑤权益/月卡面设计）→设计件落 docs/spec/（每件必含四件套：判据预注册+AIGC 生成标识面+msgSecCheck 前置闸+非投顾风险提示常驻面）→沙箱代码（无服务器期=docker-compose 本地沙箱先行；CEO 物理件到位后 bootstrap 部署）→闲时台账维护。
 
