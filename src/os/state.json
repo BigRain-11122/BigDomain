@@ -1,5 +1,5 @@
 {
-  "tick": 5,
+  "tick": 6,
   "log": [
     "2026-09-24 R1 首轮定基线：decisions.md=17 行（UTF-8 口径）——既有行均早于骨架安装=知悉回执不动作；其中 D-20260924-02「其余司 backlog 自评采纳」自评=骨架 mandate 已内建（空转快道/token 轮账本/反重复引用不复制/单执行体锁退避/编码律/判据预注册），无新增采纳项；orders.md 顶行 2026-09-24 13:57 记为 last_order 基线——此后只比增量",
     "2026-09-24 R1 收讫 P-2026-09-24-47（业务 API 五件=已在板 P-47-1~5·无未回执行项；本轮开工 P-47-1 规格半件）",
@@ -19,7 +19,10 @@
     "2026-09-24 R4 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（账本纯标准库实现·三问门未涉·合 15:30 锚定语「先干能本地干的事」）",
     "2026-09-24 R5 开轮扫描回执：ledger @BigDomain 四行（P-42/47/52/53）全已回执·无新增未回；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平；树净无锁；五静不全过（backlog 顶行 P-47-1c 可认领）→转全任务书照走",
     "2026-09-24 R5 实况：认领 P-47-1c 并完成——src/sandbox/lobby/ 城市面扩展落盘（city.py=census 白名单查询/化身 intake 队列+evt_id 受理回执/HTTP 只读 read API+store.py 增 census_cache 导入查询法〔server-city §2 面法=导入 SQLite+查询 API〕+config.json city 节〔白名单/荣誉席=数据件遵编码律〕+city_data/ 样件〔citizens-light.jsonl 含深水区字段正例+world-public.json 含 as_of〕+test_client.py 增 AC-S11~S13 断言与心跳实例端口避撞）；判据自验 13/13 全过（S1~S10 回归全绿+S11~S13 全绿）：S11 应答字段 ⊆ 白名单·深水区 recent_ring/recent_ring_date/hook 源内有零泄漏·越白名单请求 E_FORBIDDEN_FIELD·荣誉席 C-00001 零渲染·S12 闸命中零落零回执·净内容落 avatar.intake 事件行+回执 evt_id·S13 /city/snapshot 带 as_of+404/405 全对+只读副本直写试 PermissionError 拒+哈希不变；:ro 沙箱模拟=Windows 只读属性（生产=docker :ro 部署日验）；AC-S8b 回归冒烟 40×60s p95=7.4ms 0 drop；如实记两处修（executescript/Py3.14 无 S_IREADONLY→FILE_ATTRIBUTE_READONLY）+一处口径注记（server-city §4 白名单显列 12 字段名〔id 含〕·ledger 行写「11 字段」=计数差异·以 §4 文本为准）；双板同步标 done；spec §三件清单补记城市面增件；下一可认领=P-47-3",
-    "2026-09-24 R5 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（城市面纯标准库+既有 websockets 本地库·三问门未涉·合 15:30 锚定语）"
+    "2026-09-24 R5 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（城市面纯标准库+既有 websockets 本地库·三问门未涉·合 15:30 锚定语）",
+    "2026-09-24 R6 开轮扫描回执：ledger @BigDomain 行全已回执无新增未回（夜轮 03:07 巡检报行提及本司=非转办·骨架安装前历史行）；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平；树净无锁；五静不全过（backlog 顶行 P-47-3 可认领）→转全任务书照走",
+    "2026-09-24 R6 实况：认领 P-47-3 规格半件并完成——docs/spec/ugc-pipeline-spec.md 落盘（三层筛选正典映射：L1 双闸+分类路由/L2 池+整理初版/L3 终审状态机·落地级 needs_ceo_review 永不自动采纳=P1 只呈批；判据 AC-U1~U12+AC-UP1~UP5 先于实现注册；msgSecCheck=五件唯一真实外部触点·三问门如实过门=过门但 blocked on 账号域物理件·沙箱 mock 闸·未接线拒启 E_GATE_OFFLINE 三件同源；灰区人工复核=默认永挂起不放行；跨仓零写=导出三面+越仓路径拒启路径闸；账本联动=gate_receipts 回执纪律对接 AC-L8；编年史=全终态导出〔未采纳也进城记〕；AI 整理=producer 诚实标注〔ai_generated=true iff local_llm〕·服务器面永禁 LLM〔零 token 服务器律〕）；P-47-3b 骨架半件排 backlog 顶行；P-32 日清=当日无新集团面 open 项（呈批件已入 spec 呈批面·零膨胀不写）",
+    "2026-09-24 R6 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 接线（msgSecCheck=设计件内触点·三问门过但 blocked on 物理件·未接）"
   ],
   "last_order": "2026-09-24 13:57",
   "last_decision_rows": 17
