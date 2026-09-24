@@ -4,9 +4,9 @@
 > 双板律：本板=认领/进度工作面；`tasks.md`=正典任务板。两板同六件起版，完成态两板同步。
 > 集团转办扫描（见 `iteration_prompt.txt` 开轮五步②）新入项排顶行——ledger 未回执行 @BigDomain 转办（如 P-2026-09-24-42 的 §四价目「成交执行面」分工注记半项）由扫描步入板，不在此预录。
 
-- [ ] P-47-1b 大厅 WebSocket 沙箱骨架（docker-compose 本地沙箱·按 `docs/spec/lobby-websocket-spec.md` 判据 AC-S1~S10 逐条实现+自验·Python websockets 首选）——P-47-1「骨架」半件拆细（做不完拆细写回顶行律）；依赖：无（服务器未购=沙箱先行）；来源=ledger P-2026-09-24-47；落点=src/sandbox/lobby/
+- [x] P-47-1b 大厅 WebSocket 沙箱骨架（docker-compose 本地沙箱·按 `docs/spec/lobby-websocket-spec.md` 判据 AC-S1~S10 逐条实现+自验·Python websockets 首选）[done 2026-09-24] 判据自验 10/10 全过（AC-S3 往返 0.1/0.3ms≤500ms；AC-S4 闸配置缺失=rc2 拒启 E_GATE_OFFLINE+命中不广播不落公共流；AC-S5 ai_generated 服务端权威；AC-S8a 心跳 30/60 配置+无 pong 断开机制 3.0s 验；AC-S8b 100 并发×300s 全窗压测 p95=32.3ms≤200ms·0 断连）；docker 本机缺位=按判据表原生 Python 同判据直跑·compose 可选件未落（docker 到机再补）；未验路径如实记：60s 解禁不等待（muted_until 未来时戳断言）；件=src/sandbox/lobby/{server,sec_gate,store,test_client}.py+config.json（闸词表/风险文案/AI 标识=JSON 数据件·遵编码律）；依赖：无；来源=ledger P-2026-09-24-47；落点=src/sandbox/lobby/
 - [x] P-2026-09-24-42 转办半项①：BLUEPRINT §四价目「成交执行面」分工注记（全部价目=店内闭环+外部成交与算力经济归 BigCompute·引用其 BLUEPRINT 边界节不复制）——扫描步入板即执行 [done 2026-09-24]
-- [ ] P-47-1 业务 API 五件之一：大厅 WebSocket 规格+骨架（判据预注册先行）——规格半件 [done 2026-09-24]（`docs/spec/lobby-websocket-spec.md`·判据预注册 AC-S1~S10+AC-P1~P5+合规四件套齐）；骨架半件拆细=P-47-1b（顶行）；来源=ledger P-2026-09-24-47
+- [x] P-47-1 业务 API 五件之一：大厅 WebSocket 规格+骨架（判据预注册先行）——规格半件 [done 2026-09-24]（`docs/spec/lobby-websocket-spec.md`·判据预注册 AC-S1~S10+AC-P1~P5+合规四件套齐）；骨架半件 [done 2026-09-24]（P-47-1b·判据自验 10/10 全过）；来源=ledger P-2026-09-24-47
 - [ ] P-47-2 代币双式账本 schema+对账脚本设计（纯内循环·不提现不外流·BLUEPRINT §五.4）——来源=ledger P-2026-09-24-47；落点=docs/spec/
 - [ ] P-47-3 UGC+msgSecCheck 管道设计（前置闸合规面·未接内容安全=大厅禁开门·BLUEPRINT §五.3）——来源=ledger P-20260924-47；落点=docs/spec/
 - [ ] P-47-4 19.9 支付对接设计（微信支付商户 API·商户号=CEO 物理件未到=设计先行·类目已代决 D2=非游戏类目小程序+虚拟支付）——来源=ledger P-2026-09-24-47；落点=docs/spec/

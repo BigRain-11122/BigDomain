@@ -1,0 +1,30 @@
+{
+  "protocol_version": 1,
+  "default_port": 8091,
+  "max_text_len": 2000,
+  "rooms": ["lobby", "quant", "cocreate"],
+  "ai_label_text": "AI 生成",
+  "risk_warning": {
+    "doc_pointer": "docs/spec/lobby-websocket-spec.md §二 安全闸管道（sys.risk_warning 常驻面）",
+    "text": "风险提示（常驻·不可折叠）：本大厅为 AI 算力验证与历史回测研究展示场景，一切内容均非投资建议，不构成任何收益承诺，不代客实盘；围观所见为研究过程展示，非跟单依据；站内代币为内循环权益，不可提现、不可外流；请独立判断，风险自担。",
+    "persistent": true
+  },
+  "gate": {
+    "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
+    "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"]
+  },
+  "rate_limit": {
+    "max_messages": 5,
+    "window_seconds": 10,
+    "mute_trigger_violations": 3,
+    "mute_seconds": 60
+  },
+  "heartbeat": {
+    "ping_interval": 30,
+    "ping_timeout": 60
+  },
+  "sandbox_entrance": {
+    "mock": true,
+    "token_ttl_seconds": 3600
+  }
+}
