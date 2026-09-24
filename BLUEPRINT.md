@@ -38,6 +38,8 @@
 | 6 | 用户激励智能体 | 自动发代币/勋章/权限/外观 | **代币双式账本+权益沙箱已在盘**（P-47-2b/5b·AC 全绿·引用不复制）+分配层设计件已建（`docs/spec/incentive-agent-spec.md`·P-67② 参数+公示+协议三面） | 剩差=首档参数 [needs-CEO] 呈批锁定（AC-LP4 先例）+生产接线（msgSecCheck 账号域物理件）——准入四判据/三公示/三不可协议条款见 spec |
 | 7 | **直播推流智能体** | FluxVerse 城市画面/回测演出/开发过程→多平台同步推流；弹幕入城→居民回应；高光切片自动喂 BigStream | FluxVerse 画面采集+BigLife 居民 LLM+BigStream 剪辑链全部现成（引用不复制） | 新建：推流桥接层+弹幕事件登记+购物车挂载——**Phase 1 零成本先行件** |
 
+> **自进化评估注记（ledger P-2026-09-24-70 派工⑤·2026-09-24 落·判据面=`docs/research/R-20260924-eigen-product-face.md`）**：CEO 所引 EiGEN 编号判负（arXiv 2508.19102=张冠李戴·集团消歧波 `cph4/research/R-20260924-eigen-agents.md` 在册·禁再引用）；本司智能体=产品运行面**禁运行时自进化**（零 token 服务器律·server-city §3：生产面永禁跑 LLM）——经验进化归司内 OSLoop dev 面（判据预注册+AC 回归=评分层·config 数据件=基因位·零新引入）；Evolver 式构件级基因评分=集团净增量候选·试点面归 Biggame（`--review` 一周窗）·其结果=本司回访触发器（随周轮扫描·零新增机制）。
+
 ## 四、商业化四层（正典化）
 
 > **分工注记（ledger P-2026-09-24-42 @BigDomain 转办·2026-09-24 落）**：本节全部价目=**店内闭环**（BigDomain 平台产品运营面）；外部成交通道与算力经济归 BigCompute（边界引用 `compute/BigCompute/BLUEPRINT.md` 边界节·不复制内容）。
