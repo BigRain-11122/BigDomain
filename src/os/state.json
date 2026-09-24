@@ -1,1 +1,13 @@
-{"tick": 0, "log": [], "last_order": "", "last_decision_rows": 0}
+{
+  "tick": 1,
+  "log": [
+    "2026-09-24 R1 首轮定基线：decisions.md=17 行（UTF-8 口径）——既有行均早于骨架安装=知悉回执不动作；其中 D-20260924-02「其余司 backlog 自评采纳」自评=骨架 mandate 已内建（空转快道/token 轮账本/反重复引用不复制/单执行体锁退避/编码律/判据预注册），无新增采纳项；orders.md 顶行 2026-09-24 13:57 记为 last_order 基线——此后只比增量",
+    "2026-09-24 R1 收讫 P-2026-09-24-47（业务 API 五件=已在板 P-47-1~5·无未回执行项；本轮开工 P-47-1 规格半件）",
+    "2026-09-24 R1 执行 P-2026-09-24-42 两半项回执：①§四价目「成交执行面」分工注记（店内闭环+外部成交归 BigCompute·引用其 BLUEPRINT 边界节不复制）②§四直播形态1「无人值守」合规注记（封禁级·BigCompute risk-register E1·开播策略以其风控为准）——均落本仓 BLUEPRINT.md，判据自验过（§四价目注记含「店内闭环」字样+指向 BigCompute）",
+    "2026-09-24 R1 P-35/36 层位声明落 BLUEPRINT.md 头部（L0=本 OSLoop 自领池/L1=无不强造直报 L2/L2=本司 orders 台账/L3=决策轮）——首轮必做一次落定",
+    "2026-09-24 R1 实况：认领 P-47-1 规格半件并完成——docs/spec/lobby-websocket-spec.md 落盘（判据预注册 AC-S1~S10+AC-P1~P5 先于实现+合规四件套齐·事件方言对齐 R-2 §4 P3 六字段核+evt_id·SQLite WAL）；骨架半件拆细 P-47-1b 排 backlog 顶行；计划任务 BigDomain-OSLoop 实测=Running（本轮即其 14:44 触发·无需自愈）",
+    "2026-09-24 R1 tokens: local=0 api=unmeasured api_reason=宿主 codely 会话无 token 计量出口·如实记录；轮内零新外部 API 触点（三问门未涉）"
+  ],
+  "last_order": "2026-09-24 13:57",
+  "last_decision_rows": 17
+}
