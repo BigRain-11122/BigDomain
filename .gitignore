@@ -13,3 +13,7 @@ __pycache__/
 # sandbox runtime artifacts (src/sandbox/lobby: venv, sqlite db, jsonl export)
 src/sandbox/lobby/.venv/
 src/sandbox/lobby/data/
+# sandbox runtime artifacts (src/sandbox/ugc: sqlite db, acceptance-test exports;
+# the real export/ reflux dir stays tracked - it is the git read-only channel)
+src/sandbox/ugc/data/
+src/sandbox/ugc/export-ac-*/

@@ -98,6 +98,7 @@ CREATE TABLE gate_receipts (   -- 过闸回执（AC-U10·账本 AC-L8 的消费�
 ```
 - API 面（沙箱 stub）：`ugc.submit`（入城凭证校验+双闸+路由）/`ugc.pool_query`（含 disclaimer·AC-U8）/`ugc.review_verdict`（复核裁定）/`ugc.export`（导出三面）。
 - 配置数据件：`src/sandbox/ugc/config.json`（编码律：中文文案/路由词表/灰区词表/噪音规则/呈批阈值外置 JSON·阈值与分值占位标 [needs-CEO]）。
+- 沙箱机械表（P-47-3b 实现注记·判据零变更）：`ugc_ingest_log`（分流件幂等登记）/`ugc_entrance`（mock 入城凭证·生产=P-47-4 支付回执）/`ugc_drafts`（整理初版载体）/`ceo_receipts`（呈批回执行·AC-U9 触发器依赖）——四判据表照本节原样落码，机械表只承载机制；触发器执法面四条：入池态锁定（INSERT 非 pooled 拒）/合法迁移图+终态不可回退/落地标记走合法图两跳并在单事务（进 needs_ceo_review 后 needs_ceo 冻结不可清标）/回执只对 adopted 开。
 
 ### 回流件（跨仓零写·导出三面·各线自取消化）
 - `proposal_feed/<line>.jsonl`：过闸+drafted 提案池导出（Biggame 排产/BigMoney 回测/BigStream 选题/BigLife 人设/FluxVerse 承建/BigDomain 决策轮——各线自取·反重复律）。

@@ -1,0 +1,77 @@
+{
+  "protocol_version": 1,
+  "max_content_len": 2000,
+  "sources": {
+    "enum": ["direct", "lobby_idea", "avatar_intake", "live_danmaku"],
+    "enabled": ["direct", "lobby_idea", "avatar_intake"],
+    "entrance_required": ["direct", "lobby_idea", "live_danmaku"],
+    "note": "live_danmaku=预留位（AC-UP3 推流桥接线后启用·本件不预实现）；avatar_intake=公面围观可受理（AC-S12 同源）"
+  },
+  "gate": {
+    "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
+    "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"],
+    "gray_words": ["政治", "宗教", "医疗", "维权", "集资"],
+    "note": "沙箱=词表 mock（生产=msgSecCheck 三态 pass/review/risky·AC-UP1 blocked on 平台资质=CEO 物理件）；闸件 import 复用 lobby sec_gate·灰区词表为本管道扩展面"
+  },
+  "rate_limit": {
+    "max_submissions": 5,
+    "window_seconds": 10,
+    "note": "同大厅 AC-S9 参数（配置驱动）；仅直提面生效——分流件入口上游大厅已限"
+  },
+  "routing": {
+    "rules": [
+      {"line": "biggame", "keywords": ["玩法", "副本", "关卡", "策划案"]},
+      {"line": "bigmoney", "keywords": ["回测", "因子", "策略库"]},
+      {"line": "bigstream", "keywords": ["切片", "短视频", "拍城"]},
+      {"line": "biglife", "keywords": ["人设", "台本", "问候语"]},
+      {"line": "fluxverse", "keywords": ["地标", "建筑", "场景"]},
+      {"line": "bigdomain", "keywords": ["大厅", "月卡", "会员权益"]}
+    ],
+    "default_line": "unsorted",
+    "note": "六业务线+unsorted 兜底；路由=数据件驱动（改配置不改代码·AC-U4）；各线自取消化（反重复律·禁双建）"
+  },
+  "noise": {
+    "emoji_pattern": "[\\U0001F000-\\U0001FAFF\\u2600-\\u27BF\\u2B00-\\u2BFF\\uFE0F]",
+    "min_content_len": 4,
+    "flood_window_seconds": 60,
+    "flood_max_submissions": 5,
+    "note": "[needs-CEO] 灌水阈值为占位值；纯表情/超短/重复灌水→noise 档：只分流不销毁（原始事件行保留·诚实律）"
+  },
+  "approval": {
+    "threshold_len": 30,
+    "landfall_keywords": ["上线新玩法", "开新商城", "新系统立项"],
+    "note": "[needs-CEO] 落地级阈值与关键词为占位值；越阈值=自动标 needs_ceo_review 走呈批（P1 只呈批·永不自动采纳）"
+  },
+  "hot": {
+    "min_score": 10,
+    "score_len_factor": 1,
+    "note": "[needs-CEO] 热门分值占位：score=len(content)*factor（沙箱排序导出；AC-UP5 生产接 BigStream 素材线）"
+  },
+  "draft_template": {
+    "title_max_len": 24,
+    "labels": {
+      "restated": "原意重述",
+      "suggested_line": "建议消化线",
+      "matched_keywords": "命中关键词",
+      "risk_note": "风险注记"
+    },
+    "note": "整理初版=规则模板（producer=rule_template·服务器面永禁 LLM·零 token）；LLM 升级位=本地离线批另呈批"
+  },
+  "compliance": {
+    "disclaimer": "非投顾常驻提示：提案池与编年史内容均为用户研究/创作思路，不构成投资建议；采纳与否与任何收益无关，平台不作任何收益承诺。站内代币为内循环权益，不可提现、不可外流。（常驻展示·不可折叠）",
+    "disclaimer_persistent": true,
+    "ai_label_text": "AI 整理",
+    "draft_risk_note": "本整理初版由规则模板自动归集（非 LLM 生成）；内容为用户研究/创作思路，不构成投资建议，采纳与否与收益无关。",
+    "chronicle_note": "全终态进城市编年史：采纳件带署名位；未采纳件零代币零署名承诺，仅城史留痕（「未采纳也进城市编年史」）。"
+  },
+  "export": {
+    "dir": "export",
+    "note": "跨仓零写：导出件三面（proposal_feed/<line>.jsonl/chronicle.jsonl/hot_index.jsonl）只落本仓内目录·git 只读通道语义·各线自取；越仓路径=拒启（AC-U11）"
+  },
+  "entrance": {
+    "mock": true,
+    "ttl_seconds": 3600,
+    "note": "沙箱 mock 入城凭证（发入口须入城凭证·§四 C0 免费围观付费入城）；生产=P-47-4 支付回执（账号域物理件·永不代办）"
+  },
+  "params_status": "[needs-CEO] 全部词表/阈值/分值为沙箱占位值，正式口径开闸前呈批锁定；msgSecCheck 真实接线=AC-UP1 blocked on 平台资质（CEO 物理件·未接线=管道禁开门）"
+}
