@@ -22,13 +22,13 @@ import sys
 import time
 import uuid
 from collections import deque
-from datetime import datetime, timezone
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 
+from city import CityFace, start_city_http  # noqa: E402
 from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # noqa: E402
-from store import EventStore  # noqa: E402
+from store import EventStore, utc_now_iso  # noqa: E402
 
 try:  # websockets >= 13 asyncio implementation
     from websockets.asyncio.server import serve
@@ -42,10 +42,6 @@ except ImportError:  # older releases, legacy implementation
 from websockets.exceptions import ConnectionClosed  # noqa: E402
 
 LOBBY = None
-
-
-def utc_now_iso():
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z"
 
 
 def conn_path(ws):
@@ -76,10 +72,11 @@ class Client:
 
 
 class Lobby:
-    def __init__(self, cfg, gate, store):
+    def __init__(self, cfg, gate, store, city=None):
         self.cfg = cfg
         self.gate = gate
         self.store = store
+        self.city = city  # P-47-1c read-only city face (may be None)
         self.rooms = [str(r) for r in cfg["rooms"]]
         self.clients = set()
         self.proposal_pool = []  # idea queue stub (3-layer co-creation entry)
@@ -321,6 +318,21 @@ class Lobby:
             },
         )
 
+    async def handle_census_query(self, client, msg):
+        # AC-S11: public read face - spectators may query, whitelist enforced
+        if self.city is None:
+            await self.send_reject(client, "E_BAD_FRAME", "city face not enabled")
+            return
+        await send_frame(client.ws, self.city.census_snapshot_frame(msg))
+
+    async def handle_avatar_register(self, client, msg):
+        # AC-S12: intake face - gates 1+2, queue = one public event row,
+        # receipt carries evt_id; household registration is BigLife T-04
+        if self.city is None:
+            await self.send_reject(client, "E_BAD_FRAME", "city face not enabled")
+            return
+        await send_frame(client.ws, self.city.avatar_register_frame(client.actor, msg))
+
     async def handle_room(self, client, msg, action):
         payload = msg.get("payload")
         room = payload.get("room") if isinstance(payload, dict) else None
@@ -353,6 +365,10 @@ class Lobby:
             await self.handle_room(client, msg, "unsubscribe")
         elif mtype == "pay.grant_sandbox":
             await self.handle_grant(client, msg)
+        elif mtype == "census.query":
+            await self.handle_census_query(client, msg)
+        elif mtype == "avatar.register":
+            await self.handle_avatar_register(client, msg)
         else:
             await self.send_reject(client, "E_BAD_FRAME", "unknown type: " + str(mtype))
 
@@ -398,6 +414,8 @@ def build_parser():
     parser.add_argument("--db", default=os.path.join(BASE, "data", "events.db"))
     parser.add_argument("--ping-interval", type=float, default=None, help="test override")
     parser.add_argument("--ping-timeout", type=float, default=None, help="test override")
+    parser.add_argument("--city-dir", default=None, help="read-only city data dir override")
+    parser.add_argument("--city-http-port", type=int, default=None, help="city read API port override")
     return parser
 
 
@@ -439,12 +457,24 @@ def main():
         cfg["heartbeat"]["ping_timeout"]
     )
     global LOBBY
-    LOBBY = Lobby(cfg, gate, EventStore(args.db))
-    print(
-        "serving ws://%s:%d/ws rooms=%s ping_interval=%g ping_timeout=%g gate=ok db=%s"
-        % (args.host, port, ",".join(LOBBY.rooms), ping_interval, ping_timeout, args.db),
-        flush=True,
-    )
+    store = EventStore(args.db)
+    city = None
+    city_cfg = cfg.get("city")
+    if isinstance(city_cfg, dict) and city_cfg.get("enabled", True):
+        city_dir = args.city_dir or os.path.join(BASE, str(city_cfg.get("data_dir", "city_data")))
+        city = CityFace(city_cfg, gate, store, city_dir)
+    LOBBY = Lobby(cfg, gate, store, city=city)
+    banner = "serving ws://%s:%d/ws rooms=%s ping_interval=%g ping_timeout=%g gate=ok db=%s" % (
+        args.host, port, ",".join(LOBBY.rooms), ping_interval, ping_timeout, args.db)
+    if city is not None:
+        city_port = (
+            args.city_http_port if args.city_http_port is not None
+            else int(city_cfg.get("http_port", 8092))
+        )
+        httpd = start_city_http(args.host, city_port, city)
+        banner += " city_api=http://%s:%d/city/snapshot census_rows=%d city_dir=%s" % (
+            args.host, httpd.server_address[1], city.imported, city.city_dir)
+    print(banner, flush=True)
     try:
         asyncio.run(run_server(args.host, port, ping_interval, ping_timeout))
     except KeyboardInterrupt:

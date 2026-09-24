@@ -1,20 +1,26 @@
-"""Acceptance suite for the sandbox lobby server (BigDomain P-47-1b).
+"""Acceptance suite for the sandbox lobby server (BigDomain P-47-1b + P-47-1c).
 
-Asserts the pre-registered criteria AC-S1..AC-S10 from
-docs/spec/lobby-websocket-spec.md section 1. Each criterion prints
-PASS/FAIL with evidence; the process exits non-zero on any FAIL.
+Asserts the pre-registered criteria AC-S1..AC-S13 from
+docs/spec/lobby-websocket-spec.md section 1 (AC-S11..S13 = city running
+face: census whitelist reads, avatar intake, read-only HTTP API). Each
+criterion prints PASS/FAIL with evidence; the process exits non-zero on
+any FAIL.
 
 Usage (run with the repo venv python that has websockets installed):
-    python test_client.py            # AC-S1..S7, S9, S10 + startup refusal + heartbeat mechanism
+    python test_client.py            # AC-S1..S7, S9..S13 + startup refusal + heartbeat mechanism
     python test_client.py --load     # AC-S8 load: LOAD_N conns for LOAD_SECS (default 100 x 300s)
 """
 
 import asyncio
 import base64
+import hashlib
+import http.client
 import json
 import os
+import shutil
 import socket
 import sqlite3
+import stat
 import subprocess
 import sys
 import tempfile
@@ -204,7 +210,8 @@ def raw_no_pong_client(port, deadline=10):
 
 def heartbeat_mechanism_case():
     """AC-S8 half: no-pong client gets disconnected by the keepalive loop."""
-    srv = ServerProc(8094, extra=["--ping-interval", "1", "--ping-timeout", "2"])
+    srv = ServerProc(8094, extra=["--ping-interval", "1", "--ping-timeout", "2",
+                                   "--city-http-port", "8097"])
     srv.start()
     try:
         t0 = time.perf_counter()
@@ -215,6 +222,213 @@ def heartbeat_mechanism_case():
             % elapsed)
     finally:
         srv.stop()
+
+
+CITY_HTTP_PORT = 8096
+DEEP_WATER = ("recent_ring", "recent_ring_date", "hook")
+# Windows: os.chmod honors FILE_ATTRIBUTE_*; POSIX fallback to plain mode bits
+READONLY_FLAG = getattr(stat, "FILE_ATTRIBUTE_READONLY", stat.S_IRUSR)
+WRITABLE_FLAG = getattr(stat, "FILE_ATTRIBUTE_NORMAL", stat.S_IRUSR | stat.S_IWUSR)
+
+
+def city_readonly_copy():
+    """Copy committed city fixtures to a temp dir and set the read-only
+    attribute: a native stand-in for the production :ro mount (AC-S13)."""
+    src = os.path.join(BASE, "city_data")
+    dst_root = tempfile.mkdtemp(prefix="lobby-city-ro-")
+    dst = os.path.join(dst_root, "city")
+    shutil.copytree(src, dst)
+    return dst, city_hashes(dst, readonly=True)
+
+
+def city_hashes(city_dir, readonly=False):
+    out = {}
+    for root, _dirs, files in os.walk(city_dir):
+        for name in files:
+            path = os.path.join(root, name)
+            with open(path, "rb") as handle:
+                out[path] = hashlib.sha256(handle.read()).hexdigest()
+            if readonly:
+                os.chmod(path, READONLY_FLAG)
+    return out
+
+
+def city_write_refused(city_dir):
+    """Direct write attempt into the read-only city dir must fail."""
+    probe = os.path.join(city_dir, "world-public.json")
+    try:
+        with open(probe, "w", encoding="utf-8") as handle:
+            handle.write("tamper")
+    except OSError:
+        return True
+    return False
+
+
+def city_restore_writable(city_dir):
+    for root, _dirs, files in os.walk(city_dir):
+        for name in files:
+            try:
+                os.chmod(os.path.join(root, name), WRITABLE_FLAG)
+            except OSError:
+                pass
+
+
+def http_json(port, method, path):
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+    try:
+        conn.request(method, path)
+        resp = conn.getresponse()
+        raw = resp.read()
+        try:
+            obj = json.loads(raw)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            obj = {}
+        return resp.status, obj
+    finally:
+        conn.close()
+
+
+def fixture_census_rows():
+    rows = []
+    with open(os.path.join(BASE, "city_data", "citizens-light.jsonl"), encoding="utf-8") as handle:
+        for line in handle:
+            if line.strip():
+                rows.append(json.loads(line))
+    return rows
+
+
+def fixture_snapshot():
+    with open(os.path.join(BASE, "city_data", "world-public.json"), encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+async def city_cases():
+    """AC-S11/S12/S13: city running face against a read-only city dir."""
+    with open(CONFIG, encoding="utf-8") as handle:
+        cfg = json.load(handle)
+    whitelist = set(cfg["city"]["census_whitelist"])
+    rows = fixture_census_rows()
+    snap_pkg = fixture_snapshot()
+    row0 = rows[0]
+    cid = row0["id"]
+    ro_dir, hashes_before = city_readonly_copy()
+    srv = ServerProc(
+        8095,
+        db=os.path.join(tempfile.mkdtemp(prefix="lobby-city-db-"), "events.db"),
+        extra=["--city-dir", ro_dir, "--city-http-port", str(CITY_HTTP_PORT)])
+    srv.start()
+    ws = None
+    try:
+        # spectator connection: census read + intake are public faces (no entrance)
+        ws, _, _ = await open_client(8095)
+
+        # AC-S11: whitelist-only snapshot; deep-water fields never leave
+        await ws.send(frame("census.query", payload={"id": cid}))
+        snap = await recv_json(ws)
+        fields = snap.get("payload", {}).get("fields", {})
+        subset = set(fields) <= whitelist
+        name_match = fields.get("name") == row0["name"]
+        leaks = [k for k in DEEP_WATER if k in fields]
+        ok_full = (snap.get("type") == "census.snapshot"
+                   and snap.get("payload", {}).get("rendered") is True
+                   and subset and name_match and not leaks)
+
+        # AC-S11: explicit field subset
+        await ws.send(frame("census.query", payload={"id": cid, "fields": ["name", "age"]}))
+        sub = await recv_json(ws)
+        ok_sub = (sub.get("type") == "census.snapshot"
+                  and set(sub.get("payload", {}).get("fields", {})) == {"name", "age"})
+
+        # AC-S11: off-whitelist field request -> E_FORBIDDEN_FIELD
+        await ws.send(frame("census.query",
+                           payload={"id": cid, "fields": ["name", "recent_ring"]}))
+        rej = await recv_json(ws)
+        ok_forbidden = (rej.get("type") == "sec.reject"
+                        and rej.get("payload", {}).get("code") == "E_FORBIDDEN_FIELD")
+
+        # AC-S11: honorary seat C-00001..09 renders nothing
+        await ws.send(frame("census.query", payload={"id": "C-00001"}))
+        hon = await recv_json(ws)
+        ok_honorary = (hon.get("type") == "census.snapshot"
+                       and hon.get("payload", {}).get("fields") == {}
+                       and hon.get("payload", {}).get("rendered") is False)
+
+        # AC-S11: unknown id -> found=false, zero fields
+        await ws.send(frame("census.query", payload={"id": "B-99999"}))
+        unk = await recv_json(ws)
+        ok_unknown = (unk.get("type") == "census.snapshot"
+                      and unk.get("payload", {}).get("found") is False
+                      and unk.get("payload", {}).get("fields") == {})
+        record("AC-S11", ok_full and ok_sub and ok_forbidden and ok_honorary and ok_unknown,
+               "full: keys=%d subset=%s name-match=%s deep-water-leak=%s; subset=%s "
+               "forbidden=%s honorary-zero-render=%s unknown=%s"
+               % (len(fields), subset, name_match, leaks, ok_sub, ok_forbidden,
+                  ok_honorary, ok_unknown))
+
+        # AC-S12: spectator intake -> public event row + receipt with evt_id
+        await ws.send(frame("avatar.register",
+                           payload={"name": "沙箱访客化身", "intro": "想参与东区灯语谱共创"}))
+        receipt = await recv_json(ws)
+        evt_id = receipt.get("payload", {}).get("evt_id")
+        ok_receipt = (receipt.get("type") == "avatar.intake_receipt"
+                      and bool(evt_id) and receipt.get("evt_id") == evt_id
+                      and receipt.get("ai_generated") is False)
+        intake_rows = db_query(
+            srv.db,
+            "SELECT evt_id, zone FROM events WHERE type='avatar.intake' AND summary LIKE ?",
+            ("%沙箱访客化身%",))
+        ok_queued = (len(intake_rows) == 1 and intake_rows[0][0] == evt_id
+                     and intake_rows[0][1] == "intake")
+
+        # AC-S12: ungated content never lands and never receipts
+        fw = cfg["gate"]["forbidden_words"][0]
+        ab = cfg["gate"]["advisory_ban_words"][0]
+        await ws.send(frame("avatar.register",
+                            payload={"name": "坏样本甲", "intro": "内容含禁词 " + fw}))
+        rej1 = await recv_json(ws)
+        await ws.send(frame("avatar.register",
+                            payload={"name": "坏样本乙", "intro": "内容含投顾词 " + ab}))
+        rej2 = await recv_json(ws)
+        ok_gate_rej = (rej1.get("payload", {}).get("code") == "E_CONTENT_REJECTED"
+                       and rej2.get("payload", {}).get("code") == "E_CONTENT_REJECTED")
+        n_bad = db_query(srv.db, "SELECT COUNT(*) FROM events WHERE type='avatar.intake' "
+                         "AND (summary LIKE ? OR summary LIKE ?)",
+                         ("%坏样本甲%", "%坏样本乙%"))[0][0]
+        record("AC-S12", ok_receipt and ok_queued and ok_gate_rej and n_bad == 0,
+               "receipt-evt_id=%s queued-row=%s gate-rejects=%s ungated-rows=%d"
+               % (ok_receipt, ok_queued, ok_gate_rej, n_bad))
+
+        # AC-S13: HTTP read API on the read-only city dir
+        code_snap, body = http_json(CITY_HTTP_PORT, "GET", "/city/snapshot")
+        ok_snap = (code_snap == 200 and body.get("as_of") == snap_pkg.get("as_of")
+                   and body.get("city", {}).get("population") == snap_pkg["city"]["population"])
+        code_cen, cen = http_json(CITY_HTTP_PORT, "GET", "/census/" + cid)
+        cen_fields = cen.get("fields", {})
+        ok_cen = (code_cen == 200 and set(cen_fields) <= whitelist
+                  and cen_fields.get("name") == row0["name"]
+                  and not any(k in cen_fields for k in DEEP_WATER))
+        code_miss, _ = http_json(CITY_HTTP_PORT, "GET", "/census/B-99999")
+        code_path, _ = http_json(CITY_HTTP_PORT, "GET", "/nope")
+        ok_404 = code_miss == 404 and code_path == 404
+        w_post, _ = http_json(CITY_HTTP_PORT, "POST", "/city/snapshot")
+        w_put, _ = http_json(CITY_HTTP_PORT, "PUT", "/census/" + cid)
+        w_del, _ = http_json(CITY_HTTP_PORT, "DELETE", "/city/snapshot")
+        ok_405 = w_post == 405 and w_put == 405 and w_del == 405
+        ro_refused = city_write_refused(ro_dir)
+        unchanged = city_hashes(ro_dir) == hashes_before
+        record("AC-S13", ok_snap and ok_cen and ok_404 and ok_405 and ro_refused and unchanged,
+               "snapshot-200-as_of=%s census-subset=%s 404=%d/%d 405=%d/%d/%d "
+               "ro-write-refused=%s files-unchanged=%s"
+               % (ok_snap, ok_cen, code_miss, code_path, w_post, w_put, w_del,
+                  ro_refused, unchanged))
+    finally:
+        if ws is not None:
+            try:
+                await ws.close()
+            except Exception:
+                pass
+        srv.stop()
+        city_restore_writable(ro_dir)
 
 
 async def suite():
@@ -426,6 +640,8 @@ async def suite():
             except Exception:
                 pass
         srv.stop()
+
+    await city_cases()
 
 
 def ws_open(ws):

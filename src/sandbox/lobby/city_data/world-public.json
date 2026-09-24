@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-09-24T14:00:00Z",
+  "source": "world-public snapshot package (sandbox stand-in for the git read-only channel; production = FluxVerse tick-round-end export, visitor-facing delay <= 20min)",
+  "city": {
+    "population": 1024,
+    "districts_open": 7,
+    "visitors_today": 87,
+    "ambient": "黄昏灯语长廊人流回升；共创提案数较昨日 +3",
+    "trend_hint": "东区灯语谱整理进入第二周，居民之声筛选照常开放"
+  },
+  "events_tail": [
+    {"ts_utc": "2026-09-24T13:50:00Z", "zone": "east-corridor", "summary": "东灯语长廊完成一次灯芯草补种"},
+    {"ts_utc": "2026-09-24T13:56:00Z", "zone": "south-market", "summary": "周六居民之声筛选收束，2 条入围"},
+    {"ts_utc": "2026-09-24T14:00:00Z", "zone": "north-ferry", "summary": "北渡区新版航线草图挂出征求意见"}
+  ]
+}

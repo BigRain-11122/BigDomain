@@ -26,5 +26,20 @@
   "sandbox_entrance": {
     "mock": true,
     "token_ttl_seconds": 3600
+  },
+  "city": {
+    "enabled": true,
+    "data_dir": "city_data",
+    "http_port": 8092,
+    "census_file": "citizens-light.jsonl",
+    "snapshot_file": "world-public.json",
+    "census_whitelist": [
+      "id", "name", "species", "faction", "gender", "age",
+      "district", "block", "profession", "creed", "brain_digest", "behavior_hint"
+    ],
+    "honorary_seats": [
+      "C-00001", "C-00002", "C-00003", "C-00004", "C-00005",
+      "C-00006", "C-00007", "C-00008", "C-00009"
+    ]
   }
 }

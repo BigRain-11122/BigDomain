@@ -81,7 +81,7 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 
 ## 三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）
 - 选型：首选 Python 3.11+ `websockets` 库（零编译·单文件可读·集团 Python 工具链亲和）；备选 Node `ws`。定夺判据=实现轮本机运行时可用性实勘。
-- 件清单：`src/sandbox/lobby/server.py`（入口/闸/限速/心跳）、`sec_gate.py`（沙箱词表闸+非投顾词表）、`store.py`（SQLite WAL+evt_id+日导出）、`docker-compose.yml`（沙箱编排·可选）、`test_client.py`（AC-S1~S10 逐条断言）。
+- 件清单：`src/sandbox/lobby/server.py`（入口/闸/限速/心跳）、`sec_gate.py`（沙箱词表闸+非投顾词表）、`store.py`（SQLite WAL+evt_id+日导出+census_cache 查询索引）、`docker-compose.yml`（沙箱编排·可选）、`test_client.py`（AC-S1~S13 逐条断言）；P-47-1c 城市面增件（2026-09-24 R5 落）：`city.py`（census 白名单查询/化身 intake 队列+受理回执/HTTP 只读 read API）+`city_data/`（git 只读通道沙箱样件：citizens-light.jsonl+world-public.json）。
 - 依赖零外采：标准库+websockets 为限；不接任何外部 API（三问门：无必要·无授权）。
 
 ## 四、合规四件套自检（每设计件必含·本件对照）

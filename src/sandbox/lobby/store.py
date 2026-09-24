@@ -12,8 +12,14 @@ import json
 import os
 import sqlite3
 import threading
+from datetime import datetime, timezone
 
 REPO = "domain/BigDomain"
+
+
+def utc_now_iso():
+    """Canonical UTC timestamp for frames and event rows."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z"
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
@@ -25,6 +31,10 @@ CREATE TABLE IF NOT EXISTS events (
     zone   TEXT NOT NULL,
     summary TEXT NOT NULL,
     payload_json TEXT
+);
+CREATE TABLE IF NOT EXISTS census_cache (
+    cid TEXT PRIMARY KEY,
+    fields_json TEXT NOT NULL
 );
 """
 
@@ -48,7 +58,7 @@ class EventStore:
         self._conn = sqlite3.connect(db_path, check_same_thread=False, isolation_level=None)
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.execute("PRAGMA synchronous=NORMAL")
-        self._conn.execute(_SCHEMA)
+        self._conn.executescript(_SCHEMA)
 
     def append(self, ts_utc, evt_type, actor, zone, summary, payload=None, evt_id=None):
         """Insert one public event; returns evt_id. Replaying the exact same
@@ -102,6 +112,38 @@ class EventStore:
                 handle.write(json.dumps(obj, ensure_ascii=False, sort_keys=True) + "\n")
                 written += 1
         return path, written
+
+    def import_census(self, rows):
+        """Replace the census cache from a git read-only import (whole-table
+        refresh: the source jsonl is the truth, the cache is a query index
+        per server-city section 2). Rows keep every source field; the public
+        face filters by the whitelist at response time. Returns row count."""
+        pairs = []
+        for row in rows:
+            cid = str(row.get("id", "")).strip()
+            if cid:
+                pairs.append((cid, json.dumps(row, ensure_ascii=False, sort_keys=True)))
+        with self._lock:
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute("DELETE FROM census_cache")
+                self._conn.executemany(
+                    "INSERT OR REPLACE INTO census_cache (cid, fields_json) VALUES (?,?)",
+                    pairs,
+                )
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return len(pairs)
+
+    def census_lookup(self, cid):
+        """Return the full imported census row for cid, or None."""
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT fields_json FROM census_cache WHERE cid = ?", (cid,)
+            ).fetchone()
+        return json.loads(row[0]) if row else None
 
     def close(self):
         with self._lock:
