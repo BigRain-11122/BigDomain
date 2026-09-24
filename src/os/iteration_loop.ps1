@@ -6,8 +6,12 @@
 # OS task is the only 10-min channel that survives closed windows (:x4 lane,
 # see cph4/cadence.md 10-min lane table). Every beat: guards -> spawn ONE
 # headless codely round (src/os/iteration_prompt.txt driven) -> heartbeat.
-# Round budget 25 min; overlap prevented by logs/round.lock (15-min stale
-# takeover = cadence.md group standard for tick loops) + task-level IgnoreNew.
+# Round budget 25 min; overlap prevented by logs/round.lock + task-level
+# IgnoreNew. Lock = group single-instance standard D-20260925-03 (2026-09-25
+# decision round; originated from this loop's R13/R14 stale-takeover incident
+# report): PID-recorded lock + pre-takeover holder liveness probe + atomic
+# CreateNew grab + takeover floor 1.2 x budget (30 min). Verified by
+# src/os/test_lock.ps1.
 #
 # ENCODING RULE: this file must stay PURE ASCII. powershell.exe 5.1 decodes
 # BOM-less .ps1 as ANSI/GBK and swallows quote bytes after multibyte sequences.
@@ -19,7 +23,8 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1
 param(
     [string]$Project = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [int]$LockMaxAgeMinutes = 15,
+    # takeover floor: 1.2 x round budget per group standard D-20260925-03
+    [int]$LockMaxAgeMinutes = 30,
     [int]$RoundTimeoutMinutes = 25
 )
 $ErrorActionPreference = 'Continue'
@@ -41,14 +46,51 @@ function Beat([string]$m) {
     Add-Content -Path $heart -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') osloop: $m" -Encoding UTF8
 }
 
-# ---- single-instance: previous headless round still alive? ----
+# ---- single-instance lock begin (D-20260925-03) ----
+# Group single-instance standard (decision D-20260925-03, 2026-09-25 round;
+# originated from this loop's R13/R14 stale-takeover incident report; paradigm
+# = the FluxVerse tick.lock implementation this decision ratified as proven):
+#   - the lock file records the holder PID (written+flushed+closed at once,
+#     no held handle);
+#   - before any takeover the holder PID is probed for liveness and the
+#     takeover floor is 1.2 x round budget (30 min): a dead holder alone is
+#     NOT takeover proof - its orphaned child round may still be writing
+#     (R13 lesson); heartbeat touching was explicitly rejected by the call;
+#   - the lock is removed only after death/overage is confirmed, then the
+#     grab is atomic (FileMode.CreateNew) so racing beats cannot both win.
+# Verified by src/os/test_lock.ps1 (AC-D03-1..10).
 $lock = Join-Path $logDir 'round.lock'
-if (Test-Path $lock) {
-    $age = ((Get-Date) - (Get-Item $lock).LastWriteTime).TotalMinutes
-    if ($age -lt $LockMaxAgeMinutes) { Log "skip: previous round still running (age=$([int]$age)min)"; Beat 'skip (round in flight)'; exit 0 }
-    Log "stale round lock expired (age=$([int]$age)min) - taking over"
+$lockAcquired = $false
+for ($i = 0; $i -lt 24 -and -not $lockAcquired; $i++) {
+    if (Test-Path $lock) {
+        $lockAge = ((Get-Date) - (Get-Item $lock).LastWriteTime).TotalMinutes
+        $holderPid = ''
+        try { $holderPid = ([string]([System.IO.File]::ReadAllText($lock))).Trim() } catch {}
+        if ($holderPid -notmatch '^\d{1,8}$') { $holderPid = 'unreadable' }
+        $holderAlive = $false
+        if ($holderPid -ne 'unreadable') { $holderAlive = [bool](Get-Process -Id ([int]$holderPid) -ErrorAction SilentlyContinue) }
+        if ($holderAlive -and $lockAge -lt $LockMaxAgeMinutes) { Log "skip: holder PID $holderPid alive, round in flight (age=$([int]$lockAge)min)"; Beat "skip (round in flight pid $holderPid)"; exit 0 }
+        if (-not $holderAlive -and $holderPid -ne 'unreadable' -and $lockAge -lt $LockMaxAgeMinutes) { Log "skip: holder PID $holderPid dead but age=$([int]$lockAge)min < ${LockMaxAgeMinutes}min floor (orphan-writer window)"; Beat 'skip (young lock, holder dead)'; exit 0 }
+        if ($holderPid -eq 'unreadable' -and $lockAge -lt $LockMaxAgeMinutes) { Log "skip: unreadable lock, age=$([int]$lockAge)min < ${LockMaxAgeMinutes}min floor"; Beat 'skip (unreadable young lock)'; exit 0 }
+        $holderState = 'dead'
+        if ($holderAlive) { $holderState = 'alive-hung' }
+        Log "stale lock confirmed (holder pid=$holderPid state=$holderState, age=$([int]$lockAge)min) - taking over"
+        Remove-Item -Path $lock -Force -ErrorAction SilentlyContinue
+        Start-Sleep -Milliseconds 250
+        continue
+    }
+    try {
+        $lockFs = [System.IO.File]::Open($lock, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, ([System.IO.FileShare]::Read -bor [System.IO.FileShare]::Delete))
+        $lockBytes = [System.Text.Encoding]::ASCII.GetBytes([string]$PID)
+        $lockFs.Write($lockBytes, 0, $lockBytes.Length)
+        $lockFs.Flush()
+        $lockFs.Close()
+        $lockAcquired = $true
+        Log "lock acquired (pid=$PID)"
+    } catch { Start-Sleep -Milliseconds 250 }
 }
-Set-Content -Path $lock -Value $stamp -Encoding UTF8
+if (-not $lockAcquired) { Log 'skip: lock grab not won after retries'; Beat 'skip (grab retries exhausted)'; exit 0 }
+# ---- single-instance lock end ----
 
 try {
     Log "iteration round start $stamp"
