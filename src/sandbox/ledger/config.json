@@ -1,0 +1,30 @@
+{
+  "protocol_version": 1,
+  "token": {
+    "code": "DT",
+    "official_name": "[needs-CEO]",
+    "ai_label_text": "AI 判定",
+    "disclaimer": "非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）",
+    "disclaimer_persistent": true
+  },
+  "gate": {
+    "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
+    "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"]
+  },
+  "actions": {
+    "login":       {"score": 5,  "daily_cap": 10, "pool": "pool:reward", "ai_adjudicated": false, "content_gate": false, "note": "[needs-CEO] 占位值"},
+    "invite":      {"score": 10, "daily_cap": 20, "pool": "pool:reward", "ai_adjudicated": false, "content_gate": false, "note": "[needs-CEO] 占位值"},
+    "active_day":  {"score": 3,  "daily_cap": 6,  "pool": "pool:reward", "ai_adjudicated": false, "content_gate": false, "note": "[needs-CEO] 占位值"},
+    "cocreate":    {"score": 20, "daily_cap": 40, "pool": "pool:share",   "ai_adjudicated": false, "content_gate": true,  "note": "[needs-CEO] 占位值·共创内容奖励须过闸"},
+    "brain_hole":  {"score": 15, "daily_cap": 30, "pool": "pool:share",   "ai_adjudicated": false, "content_gate": true,  "note": "[needs-CEO] 占位值·脑洞内容奖励须过闸"},
+    "chat_mining": {"score": 8,  "daily_cap": 16, "pool": "pool:reward",  "ai_adjudicated": true,  "content_gate": true,  "note": "[needs-CEO] 占位值·AI 判定产出带 source_ai 审计标记"}
+  },
+  "share_ratios": {
+    "cocreate_share_pct": 20,
+    "observation_share_pct": 30,
+    "iaa_share_pct": 10,
+    "note": "[needs-CEO] 占位值·分成上限=生态内循环额（BLUEPRINT §四规则）"
+  },
+  "params_status": "[needs-CEO] 全部数值为占位值，定价确认权归 CEO，开闸前呈批锁定（AC-LP4）；正式代币命名=[needs-CEO]",
+  "sandbox_note": "沙箱 mock 入口 token.grant_sandbox；生产触发源（19.9 支付/算力包/IAA 结算/观测费分成）到位后全换（AC-LP1）"
+}

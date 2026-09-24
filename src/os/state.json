@@ -1,5 +1,5 @@
 {
-  "tick": 3,
+  "tick": 4,
   "log": [
     "2026-09-24 R1 首轮定基线：decisions.md=17 行（UTF-8 口径）——既有行均早于骨架安装=知悉回执不动作；其中 D-20260924-02「其余司 backlog 自评采纳」自评=骨架 mandate 已内建（空转快道/token 轮账本/反重复引用不复制/单执行体锁退避/编码律/判据预注册），无新增采纳项；orders.md 顶行 2026-09-24 13:57 记为 last_order 基线——此后只比增量",
     "2026-09-24 R1 收讫 P-2026-09-24-47（业务 API 五件=已在板 P-47-1~5·无未回执行项；本轮开工 P-47-1 规格半件）",
@@ -13,7 +13,10 @@
     "2026-09-24 R2 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（websockets=本地库安装非 API 触点）",
     "2026-09-24 R3 开轮扫描回执：ledger @BigDomain 新增两行均照转办执行毕——P-2026-09-24-52①（P-47 五件规格吸收城市运行面·勿另起炉灶：lobby spec v0.2 并入 AC-S11~S13=census 白名单/化身注册 intake/参观只读 read API+§二城市运行面节·三律与零 token 服务器律全引用 server-city 不复制；P-47-2 件落 AC-L11 身份绑定=census 化身 ID·零新增身份系统）+P-2026-09-24-53①（全速五件·自报 AC 证据随 commit：本轮交付 P-47-2 规格件·判据表随 commit 在案）；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平（集团 docs/orders.md 新行 15:00/15:25 已由 P-52/P-53 转办覆盖·15:15 购买卡=CPH4 直办不涉本司）；树净无锁",
     "2026-09-24 R3 实况：认领 P-47-2 规格半件并完成——docs/spec/token-ledger-spec.md 落盘（双式记账=equity:auth 权益账户法：铸出唯一对手方恒负·零和恒等 Σ全账户=0+授权恒等 Σ(usr+池)=Σmint 两式可机验；AC-L1~L11 沙箱判据+AC-LP1~LP4 生产判据先于实现注册；合规四件套齐：AIGC=source_ai 服务端权威+账单「AI 判定」标识·msgSecCheck=共创奖励 ref 过闸核+闸未接线拒启（与 AC-S4 同源）·非投顾=bill disclaimer 常驻字段；结构性禁令=无 withdraw/transfer-out 类型+零法币字段〔§五.4 双保险〕；参数数值与正式命名=[needs-CEO] 呈批件不越权）；lobby-websocket-spec.md 升 v0.2（R2 遗留闭项：§〇/§五「永禁迁上」句按服务器律 v2 改写=必要性闸+默认不迁+禁写 world `:ro`）；P-47-2b 骨架半件+P-47-1c 城市面扩展两增量排 backlog 顶两行；P-32 日清=当日无新集团面 open 项不写 HQ-FEEDBACK（代币参数/命名已入 spec 呈批面·零膨胀）",
-    "2026-09-24 R3 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（三问门未涉）"
+    "2026-09-24 R3 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（三问门未涉）",
+    "2026-09-24 R4 开轮扫描回执：ledger @BigDomain 四行（P-42/47/52/53）全已回执·无新增；decisions.md=17 行（UTF-8 口径）持平；司级 orders.md 顶行 13:57 持平；集团 docs/orders.md 尾行 15:30「对 先干能本地干的事，节省token，沉淀本地能力，对外支出只在必要的时候去」=token 经济锚定语（集团面已 executed·三增补入 token-economy §〇.1）——知悉回执一行：本司工作模式即其范式（本地沙箱先行/零外采/判据预注册），无需新立法零新动作；树净无锁；五静不全过（backlog 顶行 P-47-2b 可认领）→转全任务书",
+    "2026-09-24 R4 实况：认领 P-47-2b 并完成——src/sandbox/ledger/ 五件落盘（schema.sql[DDL+触发器 T0-T3+视图 V1]+ledger.py[单写者记账 API·BEGIN IMMEDIATE]+reconcile.py[八查·exit0/2]+test_ledger.py+config.json[参数全标 needs-CEO]）；判据自验 11/11 全过：AC-L1 应用层+库层双验（raw SQL 绕应用注不平衡笔=关账触发器拒+整笔回滚）·AC-L2 超额花费拒且余额不变+equity:auth=−300 恒负·AC-L3 同笔重放拒（内容寻址 tx_id·SQLite 先报 UNIQUE(ref,ref_type)·幂等同源 rows-kept=1）·AC-L4 同源二发拒·AC-L7 cap=用户×动作×日口径 −1/0/+1 三点踩界·AC-L8 未过闸 ref 拒+闸未接线 serve 拒启 E_GATE_OFFLINE（引用 lobby sec_gate 不复制）·AC-L9 source_ai 服务端权威+账单「AI 判定」·AC-L10 disclaimer 常驻·AC-L11 无 census 绑定不建户不发放·AC-L5/6 reconcile 八查干净 PASS exit0+篡改注入→check3/4/6 FAIL exit2；过程如实记两处修：ensure_account 绑定校验次序 bug（已存在账户误拒）+AC-L7 边界用例改单动作（score1/cap11 精确踩界）——修后全绿；双板同步标 done（P-47-2 全件毕）；下轮顶行=P-47-1c 城市面扩展",
+    "2026-09-24 R4 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（账本纯标准库实现·三问门未涉·合 15:30 锚定语「先干能本地干的事」）"
   ],
   "last_order": "2026-09-24 13:57",
   "last_decision_rows": 17
