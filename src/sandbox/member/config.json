@@ -1,0 +1,51 @@
+{
+  "protocol_version": 1,
+  "compliance": {
+    "disclaimer": "非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠）",
+    "disclaimer_persistent": true,
+    "ai_label": "AI 生成",
+    "note": "AC-M8：ai_generated=服务端权威字段（客户端伪造忽略）；居民陪伴台词等 AI 产出呈现面全带 ai_label 显著标注（BLUEPRINT §五.7 全呈现面律·BigLife M4 开门帧同源引用）；AC-M9：disclaimer 常驻会员页/权益说明/回测观测特权说明面"
+  },
+  "gate": {
+    "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
+    "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"],
+    "note": "msgSecCheck 前置闸沙箱 mock（生产接线 blocked on CEO 账号域物理件·未接线拒启 E_GATE_OFFLINE·第五件同源：lobby AC-S4/ledger AC-L8/ugc AC-U2/pay AC-Y8/member AC-M7）；闸件 import 复用 lobby sec_gate"
+  },
+  "copy_ban_words": ["荐股", "买入点", "卖出点", "目标价", "点位预测", "翻倍", "保本", "收益承诺"],
+  "tiers": {
+    "experience": {
+      "monthly_credits": 3,
+      "period_days": 30,
+      "grace_days": 0,
+      "privileges": ["basic_badge", "emoji_pack_standard"],
+      "copy": "体验卡：3 次算力包+基础身份+大厅普通表情（¥19.9/月·19.9 已锁价委托决策令 v2；档内数值与正式命名=[needs-CEO] 开闸前呈批）"
+    },
+    "mayor": {
+      "monthly_credits": 10,
+      "period_days": 30,
+      "grace_days": 0,
+      "privileges": ["chat_highlight", "resident_companion", "building_naming_voucher"],
+      "copy": "城主卡：10 次算力包+专属居民陪伴+发言高亮+1 次/月建筑署名券（¥49.9/月初版正典 BLUEPRINT §四 C2·开闸前 [needs-CEO] 呈批；居民陪伴呈现面=BigLife 台词管线引用【blocked】；署名券消费=FluxVerse DevLoop【blocked M2-M3】）"
+    },
+    "cocreator": {
+      "monthly_credits": 30,
+      "period_days": 30,
+      "grace_days": 0,
+      "privileges": ["priority_queue", "cocreation_priority", "private_room", "skin_free"],
+      "copy": "共创者卡：30 次算力包+加急通道+共创优先筛选+私人房间+皮肤自由换（¥99/月初版正典 BLUEPRINT §四 C2·开闸前 [needs-CEO] 呈批；加急=排队优先位非投资建议优先产出；优先筛选=ugc 入池排序权重·永不绕 msgSecCheck/灰区人工复核/CEO 终审三层；房间/皮肤池=FluxVerse/参观端件【blocked】）"
+    }
+  },
+  "products": {
+    "tier:experience": {"tier": "experience"},
+    "tier:mayor": {"tier": "mayor"},
+    "tier:cocreator": {"tier": "cocreator"}
+  },
+  "products_note": "[needs-CEO] entitlement 目录键=pay_grants.entitlement 读键（激活面 §〇）；pay 价目表正式三档商品条目（price_cent/channel/copy）=开闸前呈批后落 pay config·本件不预录防重复；沙箱对接面验证=测试以临时 pay config 加档位商品（entitlement 同键）走真实订单→granted→激活链",
+  "vouchers": {
+    "building_naming": {
+      "privilege": "building_naming_voucher",
+      "note": "[needs-CEO] 券型目录初版=建筑署名券 1 次/月（UNIQUE 化身×周期×券型 AC-M16）；后续券型入目录再扩；券文本=msgSecCheck 过闸后落（未过闸零开券）·消费面=FluxVerse DevLoop 承建引用"
+    }
+  },
+  "params_status": "[needs-CEO] 全部数值为占位：三档定价终值（19.9 已锁·49.9/99 初版正典开闸前呈批 AC-MP5）/月次数 3/10/30（§四 C2 初版）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）"
+}

@@ -19,3 +19,5 @@ src/sandbox/ugc/data/
 src/sandbox/ugc/export-ac-*/
 # sandbox runtime artifacts (src/sandbox/pay: sqlite dbs from CLI readiness runs)
 src/sandbox/pay/data/
+# sandbox runtime artifacts (src/sandbox/member: sqlite dbs from CLI readiness runs)
+src/sandbox/member/data/

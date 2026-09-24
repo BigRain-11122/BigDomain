@@ -602,18 +602,38 @@ class PayOrders:
             raise PayError(E_UNKNOWN_ORDER, str(order_id))
         return self._face(dict(order))
 
+    def grant_row(self, grant_id):
+        """Single-grant read face for the entitlement domain (member
+        piece activation, AC-M2 source authenticity): the member store
+        verifies every activation against this face; a forged grant id
+        resolves to None. Additive read face, zero criteria change."""
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT grant_id, order_id, census_avatar_id, entitlement,"
+                " granted_utc FROM pay_grants WHERE grant_id = ?",
+                (str(grant_id or ""),)).fetchone()
+        if row is None:
+            return None
+        return {"grant_id": row[0], "order_id": row[1],
+                "census_avatar_id": row[2], "entitlement": row[3],
+                "granted_utc": row[4]}
+
     def grants_for(self, census_avatar_id):
         """Grants query face: the lobby E_ENTRANCE_REQUIRED judgement
         source (birthright/any grant = entrance credential; enforcement
-        lives in the lobby piece, referenced not copied)."""
+        lives in the lobby piece, referenced not copied). Items carry
+        grant_id so the member activation face can address real grants
+        (additive field, judgement semantics unchanged)."""
         with self._lock:
             rows = self._conn.execute(
-                "SELECT order_id, entitlement, granted_utc FROM pay_grants"
+                "SELECT grant_id, order_id, entitlement, granted_utc"
+                " FROM pay_grants"
                 " WHERE census_avatar_id = ? ORDER BY granted_utc",
                 (str(census_avatar_id),)).fetchall()
         return {"census_avatar_id": str(census_avatar_id),
-                "items": [{"order_id": r[0], "entitlement": r[1],
-                           "granted_utc": r[2]} for r in rows]}
+                "items": [{"grant_id": r[0], "order_id": r[1],
+                           "entitlement": r[2],
+                           "granted_utc": r[3]} for r in rows]}
 
 
 def main():
