@@ -1,13 +1,14 @@
 # 硅基域交易大厅 WebSocket 规格 v0.1（业务 API 五件之一·判据预注册版）
 
-> 溯源：ledger P-2026-09-24-47 ②@BigDomain（业务 API 五件之一）；BLUEPRINT §三（智能体1 聊天挖掘）、§四 C0-C3（入城门票/大厅增值）、§五合规护栏（生死线）、§七（零服务器红线=已裁决 B 自建后端）；事件方言=集团 `cph4/research/R-20260924-infra-2-events.md` §4 P3（公共面事件=内部六字段核+evt_id 超集·SQLite WAL 主案）。
+> 溯源：ledger P-2026-09-24-47 ②@BigDomain（业务 API 五件之一）+P-2026-09-24-52①（城市运行面吸收：参观 read API/census 查询/化身注册 intake 并入既有 AC·勿另起炉灶）+P-2026-09-24-53①（全速五件·自报 AC 证据随 commit）；BLUEPRINT §三（智能体1 聊天挖掘）、§四 C0-C3（入城门票/大厅增值）、§五合规护栏（生死线）、§七（服务器律 v2——2026-09-24 午后 CEO 令废止死命令）；事件方言=集团 `cph4/research/R-20260924-infra-2-events.md` §4 P3（公共面事件=内部六字段核+evt_id 超集·SQLite WAL 主案）；城市面引用=`cph4/research/R-20260924-server-city.md`（§0 三律/§1 六面/§4 白名单·引用不复制）。
 > 本件性质=设计先行（服务器未购/CEO 物理件未到·BLUEPRINT §七：开发与物理件并行）；沙箱骨架代码=P-47-1b（次件）。**判据预注册=先定验收判据再动手（诚实律·本 §一 先于一切实现存在）**。
 
 ## 〇、定位与边界
 
 - 大厅=交易大厅实时消息面（聊天/行情讨论/灵感/氛围/共创入口），**非投顾**（§五.1 生死线：卖的是 AI 算力与验证服务·不是投资建议·结果=历史回测研究展示）。
 - **免费围观，付费入城**（§四 C0）：围观=只读连接（收广播）；入城（19.9 算力包或任意付费件=出生证）→ 才可发言/共创/交易。入城户籍=census 注册面复用（引用 BigLife census 正典·不复制）。
-- 红线护栏（§七裁决 B）：公共商业面自建后端允许；**内部面功能永禁迁上本服务**（FluxVerse world/ 直写/内部总线/内部件一律不进）。
+- 红线护栏（§七=服务器律 v2·2026-09-24 改写）：公共商业后端已过必要性闸（infra-6+ledger P-47 依据在册）；内部件（FluxVerse world/ 直写/内部总线）**默认不迁**——需要才建、建须一行用途依据（server-governance §〇.1·原「永禁迁上」条款已随死命令一并废止）；本服务零内部面功能=最简形态选择+**禁写 world/**（数据挂载 `:ro` 结构性保证·server-city §0 三律）。
+- **城市运行面吸收（ledger P-2026-09-24-52①·2026-09-24 落）**：本服务=城市公面承载点——参观只读 read API/census 查询/化身注册 intake 并入本规格既有框架（§一 AC-S11~S13+§二「城市运行面」节）·勿另起炉灶；数据入服=git 只读通道（零新增采集·快照延迟≤20min）·回城走摘要 inbox（六字段+evt_id·server-city §2 引用）。
 - 无服务器期=本地沙箱（docker-compose）先行实现与验证；生产开闸另过 §六 前置清单（P1 级=只呈批）。
 
 ## 一、判据预注册（验收判据先于实现——实现轮按本表逐条对验·失败如实记负）
@@ -26,6 +27,9 @@
 | AC-S8 | 心跳 ping/pong 30s；60s 无 pong 服务端断开；100 并发连接 5 分钟稳定，广播 p95 ≤200ms（本机口径） | 压测脚本 |
 | AC-S9 | 单连接 chat 限速 5 条/10s：超限→`E_RATE_LIMIT`；连续超限 3 次→临时禁言 60s（`sec.reject` 告知） | 限速用例 |
 | AC-S10 | 消息分流：`chat`（大厅聊天）/`idea`（脑洞→提案池队列 stub·三层共创筛选第一入口）；沙箱=关键词路由 | 分流用例 |
+| AC-S11 | census 查询：`census.query`→`census.snapshot`（按 id）——返回字段 ⊆ server-city §4 白名单初版（recent_ring/hook 留深水区**不出**·荣誉市民席 C-00001~09 空席零渲染）；白名单外字段请求→`E_FORBIDDEN_FIELD`；数据源=git 只读导入件（零新增采集） | 白名单正反例断言（命中/拒收） |
+| AC-S12 | 化身注册 intake：`avatar.register`→闸1 内容安全+闸2 非投顾词表→落 intake 队列（公共面事件行）→回 `avatar.intake_receipt`（含 evt_id 受理回执）；受理与户籍写入归 BigLife T-04（引用不复制·本服务只 intake+回执）；未经闸内容不落队列不回执 | intake 正反例断言 |
+| AC-S13 | 参观只读 read API：HTTP GET 只读端点（`/city/snapshot`·`/census/<id>`）数据源=world-public 快照包 git 只读通道（响应带 `as_of` 时间戳·延迟≤20min 异步生活感）；城市数据目录 `:ro`（写试=拒）；intake 面外无任何写端点（405/404） | 快照断言+写试拒绝断言 |
 
 ### 生产判据（P 系·预注册不预执行·blocked on CEO 物理件）
 
@@ -42,8 +46,8 @@
 ### 传输与帧
 - RFC 6455 WebSocket；生产 wss·沙箱 ws；JSON 单行帧·UTF-8。
 - 消息封套：`{v, type, ts_utc, room, actor, payload, ai_generated, evt_id?, trace_id?}`。`ai_generated` 与 `actor` 为服务端权威字段（客户端传值忽略）。
-- type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`。
-- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE`。
+- type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`+城市面（P-52①）：`census.query / census.snapshot / avatar.register / avatar.intake_receipt`。
+- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE / E_FORBIDDEN_FIELD`。
 
 ### 房间模型
 - `lobby`（大厅主频道·默认）/`quant`（QUANT 城围观·回测演出事件流）/`cocreate`（共创房）；订阅制，跨房间消息不串流。
@@ -69,6 +73,12 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 - 公共面事件行=内部六字段核 `ts_utc / type / actor / repo / zone / summary` 超集+`evt_id`（内容寻址去重）；`repo` 固定 `domain/BigDomain`·`zone`=房间名。
 - 存储=SQLite WAL 单写者+UNIQUE(evt_id)+按日导出 jsonl 兼容层——与 P-47-2 代币双式账本同一存储纪律（本仓单库分表·账本 schema 归 P-47-2 件定）。
 
+### 城市运行面（P-2026-09-24-52① 吸收·引用 server-city 不复制）
+- 本服务承载城市公面三件：①参观只读=read API（AC-S13）②census 查询=白名单只读（AC-S11·白名单定稿归 BigLife 转办②）③共创化身注册= intake 队列+受理回执（AC-S12·T-04 受理程序归 BigLife）。
+- 数据流=server-city §2 单向双通道引用：城→服=git 只读 pull（每 10min·快照=tick 轮末产出）；服→城=用户行为摘要增量 inbox（六字段+evt_id）——本服务落盘事件（§事件方言）按日导出 jsonl 即回流件源。
+- 零 token 服务器律（server-city §3 引用）：本服务永禁跑 LLM；居民智能=本地生成→git→只读投喂现成件（台词池/spotlight/census digest）。
+- 界面敏感面律+泄密红线适用参观端全部呈现面（金融视觉面永不出任何用户界面）。
+
 ## 三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）
 - 选型：首选 Python 3.11+ `websockets` 库（零编译·单文件可读·集团 Python 工具链亲和）；备选 Node `ws`。定夺判据=实现轮本机运行时可用性实勘。
 - 件清单：`src/sandbox/lobby/server.py`（入口/闸/限速/心跳）、`sec_gate.py`（沙箱词表闸+非投顾词表）、`store.py`（SQLite WAL+evt_id+日导出）、`docker-compose.yml`（沙箱编排·可选）、`test_client.py`（AC-S1~S10 逐条断言）。
@@ -86,7 +96,7 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 ## 五、红线与不做清单（Non-goals）
 - 不代客实盘·不承诺收益（§五.1/2）；围观=看研究过程不是跟单。
 - 代币不提现不外流（§五.4）——大厅内代币消息面归 P-47-2 设计件。
-- 内部面功能永禁迁上本服务（§七护栏）。
+- 内部件默认不迁（§七服务器律 v2 必要性闸）；禁写 world/（`:ro`）；不做实时同屏 MMO（异步生活感·server-city §2）；实时对话 LLM 后路=CEO 授权过三问门（零 token 服务器律·server-city §3）。
 - 真金执行面=BigCompute 唯一出口（ledger P-47 ③）·本件零触碰。
 - 公网开门=P1 级只呈批（HQ-FEEDBACK/backlog 标 [needs-CEO]）·不自行上线。
 
@@ -94,4 +104,4 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 ICP 备案 → wss/域名 → msgSecCheck 真实接线 → 支付回执凭证（P-47-4）→ 日志留存/等保测评呈报 → 云上压测（AC-P5）→ **呈批开门（CEO 一句话）**。
 
 ---
-版本：v0.1（2026-09-24·OSLoop R1·判据预注册版）；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
+版本：v0.2（2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版）；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。

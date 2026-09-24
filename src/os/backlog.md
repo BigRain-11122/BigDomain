@@ -7,7 +7,9 @@
 - [x] P-47-1b 大厅 WebSocket 沙箱骨架（docker-compose 本地沙箱·按 `docs/spec/lobby-websocket-spec.md` 判据 AC-S1~S10 逐条实现+自验·Python websockets 首选）[done 2026-09-24] 判据自验 10/10 全过（AC-S3 往返 0.1/0.3ms≤500ms；AC-S4 闸配置缺失=rc2 拒启 E_GATE_OFFLINE+命中不广播不落公共流；AC-S5 ai_generated 服务端权威；AC-S8a 心跳 30/60 配置+无 pong 断开机制 3.0s 验；AC-S8b 100 并发×300s 全窗压测 p95=32.3ms≤200ms·0 断连）；docker 本机缺位=按判据表原生 Python 同判据直跑·compose 可选件未落（docker 到机再补）；未验路径如实记：60s 解禁不等待（muted_until 未来时戳断言）；件=src/sandbox/lobby/{server,sec_gate,store,test_client}.py+config.json（闸词表/风险文案/AI 标识=JSON 数据件·遵编码律）；依赖：无；来源=ledger P-2026-09-24-47；落点=src/sandbox/lobby/
 - [x] P-2026-09-24-42 转办半项①：BLUEPRINT §四价目「成交执行面」分工注记（全部价目=店内闭环+外部成交与算力经济归 BigCompute·引用其 BLUEPRINT 边界节不复制）——扫描步入板即执行 [done 2026-09-24]
 - [x] P-47-1 业务 API 五件之一：大厅 WebSocket 规格+骨架（判据预注册先行）——规格半件 [done 2026-09-24]（`docs/spec/lobby-websocket-spec.md`·判据预注册 AC-S1~S10+AC-P1~P5+合规四件套齐）；骨架半件 [done 2026-09-24]（P-47-1b·判据自验 10/10 全过）；来源=ledger P-2026-09-24-47
-- [ ] P-47-2 代币双式账本 schema+对账脚本设计（纯内循环·不提现不外流·BLUEPRINT §五.4）——来源=ledger P-2026-09-24-47；落点=docs/spec/
+- [ ] P-47-2b 代币双式账本沙箱骨架（`src/sandbox/ledger/`：schema.sql+ledger.py+reconcile.py+test_ledger.py·按 `docs/spec/token-ledger-spec.md` AC-L1~L11 逐条实现+自验·原生 Python 直跑；config.json 参数占位值全标 [needs-CEO]；AC-L8 闸引用=大厅闸产物 AC-S4）——来源=P-47-2 规格；落点=src/sandbox/ledger/
+- [ ] P-47-1c 大厅沙箱城市面扩展（AC-S11~S13：census 查询白名单断言/化身注册 intake 队列+受理回执/参观只读 read API+`:ro` 写试拒——ledger P-2026-09-24-52① 吸收件的实现增量）——来源=lobby spec v0.2；落点=src/sandbox/lobby/
+- [x] P-47-2 代币双式账本 schema+对账脚本设计（纯内循环·不提现不外流·BLUEPRINT §五.4）——规格半件 [done 2026-09-24]（`docs/spec/token-ledger-spec.md`·AC-L1~L11+AC-LP1~LP4 判据预注册先行+合规四件套齐；双式=equity:auth 权益账户法·零和+授权两恒等式可机验；结构性禁令=无 withdraw/transfer-out/法币动词双保险；身份绑定 AC-L11=census 化身 ID 引用·P-52① 吸收；骨架半件=P-47-2b 拆细顶行）；来源=ledger P-2026-09-24-47+P-53①；落点=docs/spec/
 - [ ] P-47-3 UGC+msgSecCheck 管道设计（前置闸合规面·未接内容安全=大厅禁开门·BLUEPRINT §五.3）——来源=ledger P-20260924-47；落点=docs/spec/
 - [ ] P-47-4 19.9 支付对接设计（微信支付商户 API·商户号=CEO 物理件未到=设计先行·类目已代决 D2=非游戏类目小程序+虚拟支付）——来源=ledger P-2026-09-24-47；落点=docs/spec/
 - [ ] P-47-5 权益/月卡面设计（体验卡 ¥19.9/城主卡 ¥49.9/共创者卡 ¥99 三档·BLUEPRINT §四 C2）——来源=ledger P-2026-09-24-47；落点=docs/spec/

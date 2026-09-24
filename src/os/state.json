@@ -1,5 +1,5 @@
 {
-  "tick": 2,
+  "tick": 3,
   "log": [
     "2026-09-24 R1 首轮定基线：decisions.md=17 行（UTF-8 口径）——既有行均早于骨架安装=知悉回执不动作；其中 D-20260924-02「其余司 backlog 自评采纳」自评=骨架 mandate 已内建（空转快道/token 轮账本/反重复引用不复制/单执行体锁退避/编码律/判据预注册），无新增采纳项；orders.md 顶行 2026-09-24 13:57 记为 last_order 基线——此后只比增量",
     "2026-09-24 R1 收讫 P-2026-09-24-47（业务 API 五件=已在板 P-47-1~5·无未回执行项；本轮开工 P-47-1 规格半件）",
@@ -10,7 +10,10 @@
     "2026-09-24 R2 开轮扫描回执：ledger @BigDomain 两行（P-2026-09-24-42/47）均已回执·无新增；decisions.md=17 行（UTF-8 口径）持平基线；orders.md 顶行 2026-09-24 13:57 持平——无新转办/无新决策行/无新令；五静不全过（backlog 顶行 P-47-1b 可认领）→ 转全任务书照走",
     "2026-09-24 R2 实况：认领 P-47-1b 并完成——src/sandbox/lobby/ 骨架落盘（server/sec_gate/store/test_client.py+config.json；闸词表/风险文案/AI 标识文本=JSON 数据件·遵编码律）；判据自验 10/10 全过：套件 AC-S1~S7/S9/S10 + AC-S8a PASS + AC-S8b 压测 100 并发×300s 全窗 p95=32.3ms≤200ms·0 断连（AC-S3 往返 0.1/0.3ms；AC-S4 闸配置缺失=rc2 拒启 E_GATE_OFFLINE·命中不广播不落公共流；AC-S5 ai_generated 服务端权威覆写）；docker 本机缺位=按判据表原生 Python 同判据直跑（compose 可选件未落·docker 到机再补）；未验路径如实记：60s 解禁不等待（muted_until 未来时戳断言）、心跳生产值 30/60 以配置+banner 断言（无 pong 负路径以短间隔实例验机制 3.0s 断）；websockets 17.1 装于仓内 .venv（.gitignore 已排除·本地库非 API 触点·三问门未涉）；双板同步标 done（P-47-1 全件毕）",
     "2026-09-24 R2 退避核查如实记录：收账前发现本仓 BLUEPRINT.md 出现非本轮改动——§七被改写为「服务器律 v2」（引 2026-09-24 午后 CEO 令「去掉不做服务器的死命令，需要就做，但要最小化最简化」·正典=cph4/server-governance.md·「内部面不变/永禁迁上」两护栏同令废止）+§十条目1追记——判定=另一执行体（巡检批口径）在本轮中写入·改动完整自洽·无 index.lock；本轮未触碰该文件·未代提交（留其自提）；连带如实记：docs/spec/lobby-websocket-spec.md §〇「内部面功能永禁迁上」护栏句已过时（非判据行）——下轮随集团新令扫描一并修订；本轮产出不受影响（沙箱本就=最小化路线：SQLite+单文件+零外采）",
-    "2026-09-24 R2 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（websockets=本地库安装非 API 触点）"
+    "2026-09-24 R2 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（websockets=本地库安装非 API 触点）",
+    "2026-09-24 R3 开轮扫描回执：ledger @BigDomain 新增两行均照转办执行毕——P-2026-09-24-52①（P-47 五件规格吸收城市运行面·勿另起炉灶：lobby spec v0.2 并入 AC-S11~S13=census 白名单/化身注册 intake/参观只读 read API+§二城市运行面节·三律与零 token 服务器律全引用 server-city 不复制；P-47-2 件落 AC-L11 身份绑定=census 化身 ID·零新增身份系统）+P-2026-09-24-53①（全速五件·自报 AC 证据随 commit：本轮交付 P-47-2 规格件·判据表随 commit 在案）；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平（集团 docs/orders.md 新行 15:00/15:25 已由 P-52/P-53 转办覆盖·15:15 购买卡=CPH4 直办不涉本司）；树净无锁",
+    "2026-09-24 R3 实况：认领 P-47-2 规格半件并完成——docs/spec/token-ledger-spec.md 落盘（双式记账=equity:auth 权益账户法：铸出唯一对手方恒负·零和恒等 Σ全账户=0+授权恒等 Σ(usr+池)=Σmint 两式可机验；AC-L1~L11 沙箱判据+AC-LP1~LP4 生产判据先于实现注册；合规四件套齐：AIGC=source_ai 服务端权威+账单「AI 判定」标识·msgSecCheck=共创奖励 ref 过闸核+闸未接线拒启（与 AC-S4 同源）·非投顾=bill disclaimer 常驻字段；结构性禁令=无 withdraw/transfer-out 类型+零法币字段〔§五.4 双保险〕；参数数值与正式命名=[needs-CEO] 呈批件不越权）；lobby-websocket-spec.md 升 v0.2（R2 遗留闭项：§〇/§五「永禁迁上」句按服务器律 v2 改写=必要性闸+默认不迁+禁写 world `:ro`）；P-47-2b 骨架半件+P-47-1c 城市面扩展两增量排 backlog 顶两行；P-32 日清=当日无新集团面 open 项不写 HQ-FEEDBACK（代币参数/命名已入 spec 呈批面·零膨胀）",
+    "2026-09-24 R3 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（三问门未涉）"
   ],
   "last_order": "2026-09-24 13:57",
   "last_decision_rows": 17
