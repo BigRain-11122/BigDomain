@@ -1,5 +1,5 @@
 {
-  "tick": 9,
+  "tick": 10,
   "log": [
     "2026-09-24 R1 首轮定基线：decisions.md=17 行（UTF-8 口径）——既有行均早于骨架安装=知悉回执不动作；其中 D-20260924-02「其余司 backlog 自评采纳」自评=骨架 mandate 已内建（空转快道/token 轮账本/反重复引用不复制/单执行体锁退避/编码律/判据预注册），无新增采纳项；orders.md 顶行 2026-09-24 13:57 记为 last_order 基线——此后只比增量",
     "2026-09-24 R1 收讫 P-2026-09-24-47（业务 API 五件=已在板 P-47-1~5·无未回执行项；本轮开工 P-47-1 规格半件）",
@@ -31,8 +31,12 @@
     "2026-09-24 R8 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 接线（微信支付=设计件内触点·三问门如实过门=过门但 blocked on 商户号物理件·沙箱 mock 未接·合 15:30/15:45 锚定语）",
     "2026-09-24 R9 开轮扫描回执：ledger @BigDomain 四行（P-42/47/52/53）全已回执·无新增未回；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平；集团 docs/orders.md 尾三新行（荣誉市民席命名令/中期目标正典 autonomy-target/勘误令）=BigLife P-58 制卡+集团治理面·非本司执行面（server-city 白名单注记更新归 FluxVerse 随其批·家人身份细节脱敏律知悉）=知悉回执不动作；树净无锁；五静不全过（backlog 顶行 P-47-4b 可认领）→转全任务书照走",
     "2026-09-24 R9 实况：认领 P-47-4b 并完成——src/sandbox/pay/ 五件落盘（orders.py 单写者订单域：状态机 T1 合法迁移表触发器+T2 下单锁价+order_id 内容寻址=化身×商品×序数桶〔closed 重购桶递增〕+需求文本过闸+回调处理序=同收据重放幂等先行→四坏验签→nonce 新鲜→状态校验→金额比对→回执+paid 单事务→发放单事务；adapters.py mock 双通道 HMAC 验签四坏可造；reconcile.py 六查 exit0/2；test_pay.py 判据断言；config.json 价目/换算/违禁词全标 [needs-CEO]）；判据自验 16/16 全过（逐条证据见 backlog done 行·要点：Y6 账本 E_NEGATIVE_BALANCE 中途失败注入=整笔回滚订单留 paid+重放愈复=重试入口幂等；Y7 账本四表 PRAGMA 零法币列+amount_cent 列注入库层拒；Y8 闸未接线拒启=三件同源第四件；Y12 reconcile 干净 exit0+四篡改族各 exit2 点名；Y14 pay.success 六字段+evt_id UNIQUE 重复直插拒）；CLI readiness rc0+无闸 rc2；AC-LP1 对接面=ledger.py 加法性 API share_from_pool（判据零变更·test_ledger 回归 11/11+test_ugc 回归 12/12 零回归·token-ledger §二已注记）；跨三库同笔口径如实记（spec §六交付注记：订单域单事务+换算笔事务内先序+事件笔 deterministic ts 去重）+schema 增量 pay_status_edges 注记；四 py 实测纯 ASCII（闸词/违禁词测试串改 config 加载·遵编码律）；.gitignore 补 pay/data/；双板同步标 done（P-47-4 全件毕）·P-47 五件进度=四件毕·余 P-47-5 权益/月卡面设计（下轮顶行可认领）；P-32 日清=当日无新集团面 open 项（呈批件已入 spec 呈批面·零膨胀不写）",
-    "2026-09-24 R9 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 接线（微信支付=mock 网关本地显式假钥·真钥只 .env·三问门如实过门=过门但 blocked on 商户号物理件·未接·合 15:30/15:45 锚定语）"
+    "2026-09-24 R9 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 接线（微信支付=mock 网关本地显式假钥·真钥只 .env·三问门如实过门=过门但 blocked on 商户号物理件·未接·合 15:30/15:45 锚定语）",
+    "2026-09-24 R10 开轮扫描回执：ledger @BigDomain 四行（P-42/47/52/53）全已回执·无新增未回；decisions.md=17 行（UTF-8 口径）持平基线；司级 orders.md 顶行 13:57 持平；集团 docs/orders.md 尾行兜底扫描检出未回执行五条——**P-2026-09-24-56 全球视野令=照转办执行**（转办列点名本司=微信生态·@七线群发不带 @BigDomain 字样故 @ 扫描不中·orders 兜底中·R9 未及见如实记为上轮遗漏本轮补录·回执见实况行）＋委托决策令 v2（19.9 锁定/参观端=微信小程序/B 端价目正典化=知悉：pay config 19.9 占位随下次触碰 pay 件按锁定注记更新+回归·P-47-5 定价锚=19.9 已锁+月卡三档 BLUEPRINT §四 C2 初版正典·开闸前呈批面保留）＋禁空泛律 ~16:15（知悉·本轮基准面即按三件齐备+数字化判据+落地指针执行）＋本地大模型律 ~16:35（知悉·本司沙箱产物零 LLM=零 token 服务器律在册·本 OSLoop=既有宿主机制非新增云端子代理波·轮内零新云端触点）＋P-59 唯一观测窗令 ~16:45（知悉不动作·本司无观测面板非其数据源面）；树净无锁",
+    "2026-09-24 R10 实况：认领 P-2026-09-24-56 转办项并完成——docs/global-benchmarks.md v0.1 首版落盘（global-vision §二四节齐备：①视野面=微信生态规则/支付合规/会员共创对标三域+对标 3 家〔Roblox Premium/Discord Nitro/蛋仔派对·M 待证标注〕带日期动态②执行标准表 8 条〔§六判据②≥5 超额〕每条三件齐备+L 层标注+生效状态③源清单 10 行 A/B/C/M 分级+三态标注·零 key 100%④更新记录首行在册·下次到期 2026-10-01）；诚实记：首轮采集通道=集团既有外部锚引用链·web 直采未做=下轮刷新首项（M 在册）；周期项入 mandate=iteration_prompt.txt 开轮五步②增基准面 7 天条件项+空转快道①同口径+orders 兜底注记（P-56 明令·非自我立法）；state.json 增 benchmarks_refreshed=2026-09-24 stale 时钟；P-47-5 权益/月卡面设计=下轮顶行可认领（本轮预算让位集团转办·P-56 一周期限近）；P-32 日清=当日无新集团面 open 项不写 HQ-FEEDBACK（零膨胀）",
+    "2026-09-24 R10 tokens: local=unmeasured api=unmeasured api_reason=宿主会话无 token 计量出口·如实记录；轮内零新外部 API 触点（基准面首轮=既有外部锚引用链零直采零付费源·web 直采=下轮刷新项·三问门未涉·合 15:30/16:35 锚定语）"
   ],
   "last_order": "2026-09-24 13:57",
-  "last_decision_rows": 17
+  "last_decision_rows": 17,
+  "benchmarks_refreshed": "2026-09-24"
 }
