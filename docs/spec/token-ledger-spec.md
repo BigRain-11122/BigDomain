@@ -81,7 +81,7 @@ CREATE TABLE ledger_entries (
 
 - **记账范式**（每笔=纯账户间转移·零和内生）：授权铸出（mint）=`equity:auth debit → pool:*/usr:* credit`（铸出唯一对手方·授权户恒负）；发放/分成（share）=`pool:share/reward debit → usr:* credit`；消费（spend）=`usr:* debit → pool:reserve credit`（回池·再发行受 reserve 余额硬约束）。恒等式：**Σ全部账户=0**（复式零和）+**Σ(usr+池)=Σmint**（=−equity:auth·AC-L6）。
 - **配置数据件**：`src/sandbox/ledger/config.json`（编码律：中文文案外置 JSON）——动作分值/每日上限/分成比例初版占位值·全标 `[needs-CEO]`·开闸前呈批锁定（AC-LP4）。
-- **API 面**（沙箱 stub）：`ledger.balance` / `ledger.bill`（含 disclaimer 字段·AC-L10）/ `token.grant_sandbox`（mock 挖矿/分成/消费入口）——生产触发源接 P-47-4 后全换（AC-LP1）。
+- **API 面**（沙箱 stub）：`ledger.balance` / `ledger.bill`（含 disclaimer 字段·AC-L10）/ `token.grant_sandbox`（mock 挖矿/分成/消费入口）——生产触发源接 P-47-4 后全换（AC-LP1）。**AC-LP1 对接写入口已落**（P-47-4b·2026-09-24）：加法性 API `Ledger.share_from_pool`（pool:* debit→usr credit·ref=order_id·ref_type='order'·代币数=支付侧价目表换算值显式传入·判据零变更）——账本回归 test_ledger 11/11 全绿在案。
 
 ## 三、对账脚本设计（reconcile·诚实律的自检机核）
 

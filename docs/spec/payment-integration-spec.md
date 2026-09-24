@@ -123,5 +123,7 @@ CREATE TABLE pay_grants (
 
 `src/sandbox/pay/`：`orders.py`（状态机+下单/回调/发放 API·单写者）·`adapters.py`（mock_virtual/mock_standard 双适配器·回调签名与四坏用例可造）·`reconcile.py`（§三六查）·`test_pay.py`（AC-Y1~Y14 逐条断言·含四坏回调/改价/中途失败注入组）·`config.json`（价目表/换算比例/违禁词表占位值全标 [needs-CEO]）。闸件 import 复用 lobby `sec_gate`（先例=ledger/ugc）；跨件联验 import ledger（换算笔+法币隔离断言·AC-Y7）。依赖零外采：标准库为限（真实通道接线日才评估官方 SDK·三问门再过）。
 
+**交付注记 [done 2026-09-24·OSLoop R9]**：五件落盘+判据自验 16/16 全过（AC-Y1~Y14 逐条证据见 `src/os/backlog.md` done 行；CLI readiness rc0/无闸 rc2；reconcile 干净 exit0+四篡改族 exit2）。AC-LP1 对接面=账本件加法性 API `Ledger.share_from_pool`（token-ledger §二已注记·账本回归 11/11 绿）。跨三库「同笔」的实现口径如实记：订单域单事务（状态+权益行）+换算笔在事务内先序提交于 COMMIT 前（账本失败=整笔回滚）+事件笔 deterministic ts（evt_id 去重）——AC-Y6 判据以中途失败注入+重试愈复机验，不改判据表。schema 实现增量=`pay_status_edges` 合法迁移表（T1 数据源·orders.py 内有注记）。
+
 ---
 版本：v0.1（2026-09-24·OSLoop R8·判据预注册版）；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。

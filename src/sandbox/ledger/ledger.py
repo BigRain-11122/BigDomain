@@ -277,6 +277,26 @@ class Ledger:
         entries = [(pool_id, "debit", amount), (account_id, "credit", amount)]
         return self._write_tx("share", action, ref, ref_type, source_ai, entries)
 
+    def share_from_pool(self, pool_id, account_id, amount, ref,
+                        ref_type="order", action="pay_conversion", source_ai=False):
+        """AC-LP1 dock face (P-47-4 pay piece): order-receipt-triggered
+        share entry, the one-way fiat->token conversion bridge. The
+        token count comes from the pay price table (server-side); this
+        ledger books token counts only - fiat amounts have no field
+        anywhere here (BLUEPRINT 5.4 double insurance). Same serve-gate
+        requirement as every other payout."""
+        self.serve_check()
+        if pool_id not in POOL_ACCOUNTS:
+            raise LedgerError(E_BAD_ACCOUNT, pool_id)
+        if not account_id.startswith("usr:"):
+            raise LedgerError(E_BAD_ACCOUNT, account_id)
+        if not isinstance(amount, int) or isinstance(amount, bool) or amount <= 0:
+            raise LedgerError(E_BAD_AMOUNT, str(amount))
+        self.ensure_account(pool_id)
+        self.ensure_account(account_id, census_avatar_id=account_id[4:])
+        entries = [(pool_id, "debit", amount), (account_id, "credit", amount)]
+        return self._write_tx("share", action, ref, ref_type, source_ai, entries)
+
     def spend(self, account_id, amount, ref, ref_type="order", memo=None):
         """Privilege consumption: usr debit -> pool:reserve credit. Tokens
         never leave the loop (BLUEPRINT 5.4); re-issuance stays bound by

@@ -17,3 +17,5 @@ src/sandbox/lobby/data/
 # the real export/ reflux dir stays tracked - it is the git read-only channel)
 src/sandbox/ugc/data/
 src/sandbox/ugc/export-ac-*/
+# sandbox runtime artifacts (src/sandbox/pay: sqlite dbs from CLI readiness runs)
+src/sandbox/pay/data/

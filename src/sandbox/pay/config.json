@@ -1,0 +1,71 @@
+{
+  "protocol_version": 1,
+  "compliance": {
+    "disclaimer": "非投顾常驻提示：本商品为 AI 生成工具与历史回测研究展示服务，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；历史回测数据仅作研究展示，不代表未来表现；虚拟商品一经发放不可退款的部分以购买页明示为准；请独立判断，风险自担。（常驻展示·不可折叠）",
+    "disclaimer_persistent": true,
+    "note": "AI 生成标识=响应体固定 ai_service:1 字段（服务端权威）；履约产物 source_ai 标识由既有管线承接（引用不复制）"
+  },
+  "gate": {
+    "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
+    "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"]
+  },
+  "copy_ban_words": ["荐股", "买入点", "卖出点", "目标价", "点位预测", "翻倍", "保本", "收益承诺"],
+  "channels": {
+    "virtual": {
+      "signer": "mock_virtual",
+      "mock_key": "sandbox-mock-key-virtual-not-a-secret",
+      "ts_window_seconds": 300,
+      "note": "[needs-CEO] 真实虚拟支付专用商户号/AppID/OfferID/AppKey=CEO 账号域物理件·密钥只进 .env 不入 git；沙箱 mock 钥为显式假钥；iOS 支付开关须 MP 后台手动开启（AC-YP4）"
+    },
+    "standard": {
+      "signer": "mock_standard",
+      "mock_key": "sandbox-mock-key-standard-not-a-secret",
+      "ts_window_seconds": 300,
+      "note": "[needs-CEO] 标准商户号/商户密钥/对公结算=CEO 账号域物理件·密钥只进 .env 不入 git；沙箱 mock 钥为显式假钥"
+    }
+  },
+  "order": {
+    "expire_window_minutes": 15,
+    "note": "[needs-CEO] 超窗关单数值占位；created/pending 超窗自动 closed·closed 单重购=新 order_id 序数桶递增"
+  },
+  "conversion": {
+    "pool": "pool:share",
+    "action": "pay_conversion",
+    "note": "[needs-CEO] 换算比例占位·单向法币→代币不可逆（share 笔 ref=order_id·ref_type=order·AC-LP1 对接面）；直购返代币默认不做（如需另呈批）"
+  },
+  "products": {
+    "pack_compute_19_9": {
+      "channel": "virtual",
+      "price_cent": 1990,
+      "share_tokens": 0,
+      "entitlement": "compute_pack",
+      "copy": "19.9 算力包：AI 生成工具验证服务（次数明细=[needs-CEO]）",
+      "note": "[needs-CEO] 定价确认权归 CEO·次数/命名占位"
+    },
+    "birthright_entry": {
+      "channel": "virtual",
+      "price_cent": 1990,
+      "share_tokens": 0,
+      "entitlement": "birthright",
+      "copy": "入城出生证：付费即入城资格（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "note": "[needs-CEO] 定价占位"
+    },
+    "report_data_b": {
+      "channel": "standard",
+      "price_cent": 199900,
+      "share_tokens": 0,
+      "entitlement": "report:data",
+      "copy": "B 端真实服务：数据报告（标准商户通道·对公结算）",
+      "note": "[needs-CEO] 定价占位"
+    },
+    "share_observation": {
+      "channel": "standard",
+      "price_cent": 100000,
+      "share_tokens": 30000,
+      "entitlement": "obs:credit",
+      "copy": "观测费分成单：30% 代币分成示意（换算桥演示件）",
+      "note": "[needs-CEO] 换算比例与面额占位·MVP 面=共创分成类"
+    }
+  },
+  "params_status": "[needs-CEO] 全部数值为占位值，定价确认/退款政策/换算比例/道具正式命名=CEO 呈批面不越权（BLUEPRINT §十.4）；权益目录（三档卡内容/次数/有效期）=P-47-5 件定·本件不预录防重复；外部成交通道归 BigCompute 引用不复制；真实通道接线=AC-YP1 blocked on 物理件"
+}
