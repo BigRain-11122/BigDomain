@@ -1,0 +1,12 @@
+# BigDomain — product repo local exclusions
+# runtime artifacts from the OS loop (src/os/iteration_loop.ps1 writes logs/)
+logs/
+*.log
+__pycache__/
+*.pyc
+# secrets (account domain = CEO physical items; keys never enter git)
+.env
+.env.*
+# codely runtime
+.codely-cli/scheduled_tasks.json
+.codely-cli/auto-saves/
