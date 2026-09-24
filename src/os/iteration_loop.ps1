@@ -53,6 +53,15 @@ Set-Content -Path $lock -Value $stamp -Encoding UTF8
 try {
     Log "iteration round start $stamp"
 
+    # Head-of-round pull, group cadence law P-2026-09-24-77 item 3 (git
+    # round-trip: head pull --ff-only + agent tail-of-round push <= 10 min,
+    # cadence.md 7). Fail-soft: an unreachable origin is only logged and
+    # never blocks the round. Runs under the lock so it cannot race a
+    # parallel round's working tree.
+    $pullRaw = & git pull --ff-only 2>&1
+    $pullOut = ($pullRaw | Where-Object { $_ } | ForEach-Object { "$_" }) -join ' | '
+    Log "head pull exit=$($LASTEXITCODE): $pullOut"
+
     $codelyPath = (Get-Command codely -ErrorAction SilentlyContinue).Source
     if (-not $codelyPath) { Log 'FATAL: codely not on PATH for this context'; Beat 'error codely missing'; exit 2 }
     Log "codely=$codelyPath"
