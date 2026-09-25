@@ -10,6 +10,7 @@ __pycache__/
 # codely runtime
 .codely-cli/scheduled_tasks.json
 .codely-cli/auto-saves/
+.codely-cli/skills/
 # sandbox runtime artifacts (src/sandbox/lobby: venv, sqlite db, jsonl export)
 src/sandbox/lobby/.venv/
 src/sandbox/lobby/data/
