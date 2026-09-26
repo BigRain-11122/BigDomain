@@ -51,12 +51,23 @@ try {
   }
 } catch { Write-Output '[DEC] FLAG read_failed' }
 
-# --- [GORD] group docs/orders.md tail (bottom-line new-order safety net) ---
+# --- [GORD] group docs/orders.md FULL-FILE scan (D-20260927-05(2) adopted 2026-09-27: active-order rows land in the head table region and mid-table, tail-only scan had blind spots) ---
 try {
-  $O = [System.IO.File]::ReadAllLines((Join-Path $group 'docs\orders.md'), $utf8)
-  $last = $O[$O.Count - 1]
-  $t = $last; if ($t.Length -gt 260) { $t = $t.Substring(0, 260) + '...' }
-  Write-Output "[GORD] INFO lines=$($O.Count) last_L$($O.Count): $t"
+  $gordPath = Join-Path $group 'docs\orders.md'
+  $gordRaw = [System.IO.File]::ReadAllText($gordPath, $utf8)
+  $O = [System.IO.File]::ReadAllLines($gordPath, $utf8)
+  $shaProv = [System.Security.Cryptography.SHA256]::Create()
+  $sha16 = [System.BitConverter]::ToString($shaProv.ComputeHash($utf8.GetBytes($gordRaw))).Replace('-','').Substring(0,16)
+  $shaProv.Dispose()
+  $tbl = @($O | Select-String -Pattern '^\|\s*\d{2}-\d{2}')
+  $atbd = @($O | Select-String -SimpleMatch '@BigDomain').Count
+  $lastTbl = [string]($tbl | Select-Object -Last 1)
+  $t = $lastTbl; if ($t.Length -gt 200) { $t = $t.Substring(0, 200) + '...' }
+  $lastLine = [string]$O[$O.Count - 1]
+  $u = $lastLine; if ($u.Length -gt 200) { $u = $u.Substring(0, 200) + '...' }
+  Write-Output "[GORD] INFO lines=$($O.Count) tbl_rows=$($tbl.Count) atbd=$atbd sha16=$sha16"
+  Write-Output "  gord_last_table_row: $t"
+  Write-Output "  gord_last_line: $u"
 } catch { Write-Output '[GORD] FLAG read_failed' }
 
 # --- [ORD] own orders.md top timestamp vs baseline ---
@@ -128,5 +139,6 @@ if (Test-Path $lockPath) {
 #   $L=[IO.File]::ReadAllLines('<group>\cph4\evolution-ledger.md',[Text.Encoding]::UTF8)
 #   $D=[IO.File]::ReadAllLines('<group>\docs\decisions.md',[Text.Encoding]::UTF8)
 #   $O=[IO.File]::ReadAllLines('<group>\docs\orders.md',[Text.Encoding]::UTF8)
-#   -> report counts; compare with state.json baselines; git status --short;
+#   -> GORD fallback = full-file digest (SHA-256 over whole text, first 16 hex chars) + line/table-row/@BigDomain counts; any change anywhere flips the digest (D-20260927-05(2)).
+#      report counts; compare with state.json baselines; git status --short;
 #      Test-Path .git\index.lock. Paths: <repo>=domain\BigDomain, <group>=FluxGroup.
