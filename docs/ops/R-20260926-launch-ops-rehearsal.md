@@ -107,6 +107,8 @@
 - [ ] release-gate 预扫：secret-scan P0=0+`Tools/release-scan.ps1` 全 PASS（集团件·引用）
 - [ ] 对账脚本 dry-run 干净（reconcile 八查/六查）
 
+> **〔预演复跑注记 2026-09-27·R420·P-2026-09-27-07 常设承接「队列空→拉常设议程」〕** D-7 五行中本地可执行三项本窗提前预演（先做律 R418 先例·**预演≠过门**：`[ ]` 勾选位保持 launch 窗门位不预勾）：①五沙箱判据复跑 **68/68 全绿**（lobby SUITE PASS 13/13〔AC-S1..S13·.venv python 3.14.4〕+ledger SUITE PASS 11/11+ugc SUITE PASS 12/12+pay 16/16 passed+member 16 判据 25 断言 failed=none·五套 exit 0 实测 2026-09-27 ~14:4x +08:00）；②对账 dry-run 干净内含=ledger reconcile 八查 clean rc=0/篡改 rc=2（AC-L5）+pay reconcile 6/6 clean/四篡改族 exit 2（AC-Y12）+member reconcile 六查 clean rc=0/篡改 12 findings exit 2（AC-M14）；③release-gate 预扫半项=secret-scan **P0=0**（`Tools/secret-scan.ps1` 集团件引用·20260927-1446 窗 1d·7 仓·hits 0·exit 0）·release-scan 半项=**待打包树**（gate 1 白名单包=bootstrap 期产物·现无包·源码树直扫必 FAIL 非有效预扫=如实注留窗）。未预演两行如实注=「IF-1..IF-12 抽查」+「§二 五场景桌面推演」=launch 窗原位执行（本窗 25min 预算内未动·零假勾选）。
+
 ### D-1（上线前一日）
 
 - [ ] 服务器律 v2 入册：每台服务器登记一行（`cph4/server-governance.md` §〇.1/§〇.2·部署=只拉私库镜像禁 clone 源码）
