@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-28T07:20:09+08:00",
+  "export_ts": "2026-09-28T07:39:04+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -195,7 +195,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "518",
+      "520",
       "OSLoop 轮次 tick"
     ],
     [
@@ -429,6 +429,14 @@
     [
       "1",
       "板规执法第二十三刀（R518·R514 过当轮 done 行 state.json 再整编 R25+板规执法第二十二刀 1 条 verbatim 迁 docs/archive/backlog-done-2026-09.md §R518 节·既有节零覆写纯 append〔167,026B→170,549B〕·主板只留规约头+当轮行+bootstrap 行·tmp_r518_compact.py 先验后写断言全过·AC-K23a..e 全过·P-2026-09-27-07 常设承接窗项）"
+    ],
+    [
+      "1",
+      "state.json 再整编 R27（R520 触线轮·轮首实测 81,128B scan/81,131B getsize 越 80,000B 十进制线=R519 承传注记应验·单窗 R518..R519 4 行推算 81,459B 越线→amend 扩窗（R477 AC-R212b 同构）=窗 R514..R519 6 轮 7 行 6,747B〔内容口径〕压汇总 1 行+pre-op 全量快照 logs/state-log-archive-2026-09.md §R520 append 节〔2,552,559B→2,634,084B 纯 append·prefix 断言·marker 25→26〕·81,131B→77,800B·log 68→64 项·AC-R271..R275 全过·P-2026-09-25-18 ④第二十七刀+P-2026-09-27-07 常设承接窗项）"
+    ],
+    [
+      "1",
+      "板规执法第二十四刀（R520·R518 过当轮 done 行 state.json 再整编 R26+板规执法第二十三刀 1 条 verbatim 迁 docs/archive/backlog-done-2026-09.md §R520 节·既有 22 Supplement 节零覆写纯 append〔170,549B→174,313B〕·主板只留规约头+当轮行+bootstrap 行·tmp_r520_compact.py 先验后写断言全过·AC-K24a..e 全过·P-2026-09-27-07 常设承接窗项）"
     ]
   ]
 }
