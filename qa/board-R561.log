@@ -1,0 +1,47 @@
+# qa/board-R561.log - R561 standing-carry + board-law knife 39 closeout evidence (R559-pattern)
+# 判据预注册（AC-K39a..e·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-K39a=R560 过当轮 done 行 verbatim 迁 docs/archive/backlog-done-2026-09.md §R561 节（行内容逐字节同一·既有节零覆写）
+# AC-K39b=archive 纯 append（pre-op 前缀字节断言·size delta=append 块长度·尾随换行保全）
+# AC-K39c=主板收口=规约头+bootstrap open 行（R560 行移除·bootstrap verbatim 保留·无滞板陈 done 行）
+# AC-K39d=heartbeat.txt R561 行落盘（R532 每轮常设律·纯 append prefix 断言）
+# AC-K39e=state/export 收账面——state tick 560->561+log 62 项 parse 过；export self_drive 四计数机械重派（W/idle/nop/sub）+results tick 行 560->561+第三十九刀件 +1 行+export_ts ISO8601；A1..A21+B1..B12 双段断言全过
+# 来源=P-2026-09-25-18 ④板规执法（第三十九刀）+R532 停摆令 heartbeat 每轮常设律
+
+PASS A1 state round-start size anchor 76,414B (actual 76414)
+PASS A2 state BOM-free 
+PASS A3 state tick 560 (got 560)
+PASS A4 state log 60 items (actual 60)
+PASS A5 state round-trip identity (dump+trailing-nl) 
+PASS A6 archive size anchor 214,328B (actual 214328)
+PASS A7 archive ends with newline 
+PASS A8 no pre-existing R561 section (no duplicate) 
+PASS A9 exactly one R560 done row on main board (found 1, row 1601B)
+PASS A10 bootstrap row present exactly once 
+PASS A11 export BOM present 
+PASS A12 export round-trip identity 
+PASS A13 pre W recount 25 == register (W0=25 reg=25)
+PASS A14 pre idle recount 8 == register (I0=8)
+PASS A15 pre no-pull recount 0 == register (N0=0)
+PASS A16 pre substantive recount 14 == register (S0=14 T0=10 P0=1)
+PASS A17 proposals recount 1/1 == register (1/1)
+PASS A18 queue recount 10/4/10 == register (10/4/10)
+PASS A19 heartbeat ends with newline 
+PASS A20 round line keeps counters clean 
+PASS A21 tokens line matches tokens pattern + round line nonparen round format 
+PASS B1 archive pure append prefix assertion (214328B -> 216028B)
+PASS B1b archive on-disk re-read matches 
+PASS B2 R560 row removed from main board 
+PASS B3 bootstrap row retained verbatim 
+PASS B4 main board = header + bootstrap open row only (rows 1)
+PASS B5 backlog ends with newline 
+PASS B6 placeholder width stable (6 chars) (fmt 78,381)
+PASS B6b placeholder converged, size stable (final 78381B)
+PASS B6c post-closeout under 80000B waterline (n=78381 margin=1619B)
+PASS B7 post W recount 27 (W1=27)
+PASS B8 post idle/no-pull recount 8/0 (8/0)
+PASS B9 post substantive recount 15 (S1=15 T1=11 P1=1)
+PASS B10 state log 62 items after append + parse ok (items 62)
+PASS B11a results tick row found once (found 1)
+PASS B11b export new bytes parse + BOM preserved 
+PASS B12 heartbeat pure append prefix assertion + ascii 
+final_state_bytes=78381 archive_bytes=216028 export_ts=2026-09-29T07:25:24+08:00
