@@ -1,6 +1,6 @@
 ---
 name: bigdomain-loop-scan
-description: BigDomain OSLoop 自迭代轮的五静扫描与收账作业规程（idle-fast 快道与全任务书两态共用）。触发场景：作为 BigDomain 宿主 OSLoop 执行者开轮扫描（state/转办/decisions/双 orders/任务板/git 五静判定）、每 ~10 分钟 tick 轮启动、用户要求跑一轮 OSLoop/巡检/收账/回执集团转办/P-32 日清判定；集团层与兄弟司文件一律只读（跨仓写禁令），回执只落本仓 src/os/state.json log。
+description: BigDomain OSLoop 自迭代轮的五静扫描与收账作业规程（五静检出改道与全任务书两态共用·idle-fast 空转路径已废止 P-2026-09-28-02）。触发场景：作为 BigDomain 宿主 OSLoop 执行者开轮扫描（state/转办/decisions/双 orders/任务板/git 五静判定）、每 ~10 分钟 tick 轮启动、用户要求跑一轮 OSLoop/巡检/收账/回执集团转办/P-32 日清判定；集团层与兄弟司文件一律只读（跨仓写禁令），回执只落本仓 src/os/state.json log。
 ---
 
 # BigDomain OSLoop 五静扫描与收账

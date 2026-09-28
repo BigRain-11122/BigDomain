@@ -19,7 +19,7 @@
 | 9 | 激励分配层（参数+公示+协议三面·20/30/10 呈批） | `docs/spec/incentive-agent-spec.md` | AC-I1..I13 结构 13/13·参数 [needs-CEO] |
 | 10 | 调研律（面声明/结论应用表/源分级） | `docs/research/README.md`+R-件 3 份 | 引用 `cph4/research-protocol.md` v1.0·存量指针 7 |
 | 11 | 全球基准面（微信生态/支付合规/会员对标） | `docs/global-benchmarks.md` | 下次刷新 2026-09-29（P-74）·U195 四列口径吸收=刷新轮待办 |
-| 12 | 自迭代 mandate（开轮五步/空转快道/铁律/P-32 两步） | `src/os/iteration_prompt.txt` | 现役（L6/L19 两处回落标记见 §四） |
+| 12 | 自迭代 mandate（开轮五步/五静检出+改道〔idle-fast 废止 P-2026-09-28-02〕/创新提案轨/铁律/P-32 两步） | `src/os/iteration_prompt.txt` | 现役（L6/L19 两处回落标记见 §四·R529 v2.1 两步适配） |
 | 13 | 单实例锁（D-20260925-03 PID 范式） | `src/os/iteration_loop.ps1`+`src/os/test_lock.ps1` | 接管窗 30min=1.2×轮预算·AC-D03 10/10 |
 | 14 | 计划任务注册（BigDomain-OSLoop·:x4 车道） | `src/os/register_loop_task.ps1` | 幂等 -Force·10min beat |
 | 15 | 任务双板（正典板+认领板·双板律） | `tasks.md`+`src/os/backlog.md` | 六件同源起版·完成态两板同步 |
@@ -77,3 +77,4 @@
 ## 六、更新记录
 
 - 2026-09-25 v1.0 首版（GL204 执行·OSLoop R158·提前 4 天）：索引 20+簇 7+终谳 5+回落 7+四计数；新检出=「六智能体」计数残留 2 处（BLUEPRINT §八/§九）；09-30 治理日呈报=当日轮随行呈送本件 §五。
+- 2026-09-28 v1.1 增补（P-2026-09-28-02 v2.1 增补令两步适配·R529）：①mandate idle-fast 空转路径废止改道（队列空→补队列+转提案轨·真无活=一行声明）+创新提案轨设立（司提案面 `docs/proposals.md`·每窗 ≥1 条三句式·首条 BD-PROP-001）；②技能件 SKILL.md（tools 源件+.codely-cli 装件双同步）§0 改道行；③§一 12 行 mandate 面描述同步。
