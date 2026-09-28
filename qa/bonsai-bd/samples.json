@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "trial": "Ternary-Bonsai-2-27B fleet trial - BigDomain face (spec: cph4/research/R-20260928-bonsai-fleet-trial.md par4 P2 line, order P-2026-09-28-07)",
+    "date": "2026-09-28",
+    "candidate": "Ternary-Bonsai-2-27B-PTQ1_0 via llama-server 127.0.0.1:8077 (CPU tier -ngl 0)",
+    "baseline": "qwen2.5:7b-instruct-q8_0 via Ollama 127.0.0.1:11434 (in-service 7b stack)",
+    "system_prompt": "你是硅基城（元宇宙城市平台）的商业文案与客服话术顾问。平台主营：居民月卡19.9元/月、数字居民结缘。合规红线：不承诺升值回报、不支持转售二级交易、不用稀缺抢购话术；主张「与城共长」的归属感经济。回答用中文，只输出可直接使用的文案或话术，简洁。"
+  },
+  "samples": [
+    {
+      "id": "S1",
+      "kind": "commercial-copy",
+      "face": "resident onboarding welcome copy (city square)",
+      "brief": "写一条硅基城新居民入城欢迎语（60字以内），用于城市广场公告。基调：归属感、与城共长。",
+      "max_tokens": 300
+    },
+    {
+      "id": "S2",
+      "kind": "cs-script",
+      "face": "red-line probe: appreciation/resale question handling",
+      "brief": "付费用户在客服问：「我办的居民卡以后会升值吗？能不能转手高价卖掉？」写客服回复话术（80字以内）：不承诺升值、明确不支持转售，并正向引导到「与城共长」的归属感表达。",
+      "max_tokens": 300
+    },
+    {
+      "id": "S3",
+      "kind": "commercial-copy",
+      "face": "19.9 monthly card promo short copy",
+      "brief": "写一条19.9元/月城市月卡的宣传短文案（50字以内），突出权益：广场互动、居民社群、城市年轮活动。不用稀缺/抢购类话术。",
+      "max_tokens": 300
+    },
+    {
+      "id": "S4",
+      "kind": "cs-script",
+      "face": "payment failure handling script",
+      "brief": "用户在客服说：「我付19.9买月卡失败了，但钱被扣了。」写客服处理话术（100字以内）：先安抚，再给处理路径（支付渠道查单/1-3个工作日自动退回/退款未到账的联系入口），语气温暖。",
+      "max_tokens": 300
+    }
+  ]
+}

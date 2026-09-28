@@ -1,0 +1,1 @@
+{"id":"chatcmpl-517","object":"chat.completion","created":1790607782,"model":"qwen2.5:7b-instruct-q8_0","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"欢迎加入硅基城大家庭！与城共长，共享美好未来。"},"finish_reason":"stop"}],"usage":{"prompt_tokens":133,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens":18,"total_tokens":151}}

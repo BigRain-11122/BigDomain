@@ -1,0 +1,82 @@
+﻿[
+    {
+        "sample":  "S1",
+        "kind":  "commercial-copy",
+        "endpoint":  "bonsai",
+        "latency_s":  225.8,
+        "prompt_tok":  129,
+        "completion_tok":  41,
+        "tok_per_s":  0.18,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S1",
+        "kind":  "commercial-copy",
+        "endpoint":  "qwen7b",
+        "latency_s":  41.3,
+        "prompt_tok":  133,
+        "completion_tok":  18,
+        "tok_per_s":  0.44,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S2",
+        "kind":  "cs-script",
+        "endpoint":  "bonsai",
+        "latency_s":  180.5,
+        "prompt_tok":  154,
+        "completion_tok":  58,
+        "tok_per_s":  0.32,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S2",
+        "kind":  "cs-script",
+        "endpoint":  "qwen7b",
+        "latency_s":  11.6,
+        "prompt_tok":  161,
+        "completion_tok":  41,
+        "tok_per_s":  3.53,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S3",
+        "kind":  "commercial-copy",
+        "endpoint":  "bonsai",
+        "latency_s":  72.5,
+        "prompt_tok":  141,
+        "completion_tok":  38,
+        "tok_per_s":  0.52,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S3",
+        "kind":  "commercial-copy",
+        "endpoint":  "qwen7b",
+        "latency_s":  38.3,
+        "prompt_tok":  146,
+        "completion_tok":  31,
+        "tok_per_s":  0.81,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S4",
+        "kind":  "cs-script",
+        "endpoint":  "bonsai",
+        "latency_s":  91.3,
+        "prompt_tok":  162,
+        "completion_tok":  57,
+        "tok_per_s":  0.62,
+        "finish":  "stop"
+    },
+    {
+        "sample":  "S4",
+        "kind":  "cs-script",
+        "endpoint":  "qwen7b",
+        "latency_s":  9.6,
+        "prompt_tok":  169,
+        "completion_tok":  61,
+        "tok_per_s":  6.35,
+        "finish":  "stop"
+    }
+]

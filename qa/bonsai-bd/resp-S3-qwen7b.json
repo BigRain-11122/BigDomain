@@ -1,0 +1,1 @@
+{"id":"chatcmpl-101","object":"chat.completion","created":1790608087,"model":"qwen2.5:7b-instruct-q8_0","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"畅游硅基城，19.9元享月卡，参与广场互动，加入居民社群，共襄城市年轮活动。"},"finish_reason":"stop"}],"usage":{"prompt_tokens":146,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens":31,"total_tokens":177}}
