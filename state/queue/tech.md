@@ -8,6 +8,6 @@
 - [ ] 支付 V3 回调验签沙箱实测件（benchmarks 4012791902/4012075249 采集面→pay 沙箱验签器接线）
 - [x] blind_watermark 鲁棒性扩展三例（缩放/椒盐/二次重压缩·P-47-3c 后继·判负留痕合法）——[done 2026-09-29]（R552 落成·扩展套件 src/sandbox/watermark/test_watermark_robust.py 复用既有套件 helpers·AC-EX0..4 预注册先于执行〔backlog R552 行〕：控制锚干净往返 exact 前提下四扰动例全测量〔SUITE PASS 6/6·exit=0〕·判负读数=缩放 0.5×/2.0× ber=0.5195/0.5000〔DCT 块同步双双向毁伤〕·椒盐 d=5% ber=0.0273〔近存活〕·二次重压缩 q90×2 ber=0.0156〔近存活·vs W1b 单次 q90 exact=漂移由二次量化引入〕·证据 qa/watermark-robust-R552.log·首跑 harness bug〔AC-EX4 证据面取值错〕修复后净跑·两跑测量逐位一致=确定性复验在案）
 - [ ] release-gate 三器打包预演（secret-scan+release-scan+白名单产物树·bootstrap 前置留窗项）
-- [ ] scan_five_still.ps1 判读面回归用例固化（[ORD]/[TREE]/[QA] 三新面用例·R531/R530 改型后继）
+- [x] scan_five_still.ps1 判读面回归用例固化（[ORD]/[TREE]/[QA] 三新面用例·R531/R530 改型后继）——[done 2026-09-29]（R554 落成·harness=src/os/test_scan_faces.ps1〔test_lock.ps1 同律：预注册头注+temp 沙箱+子进程+exit 0/2〕·运行时自真身复制 scan 脚本入沙箱=单一事实源零漂移〔sha256 断言过〕：AC-SC1..SC10 全过 17 断言 exit=0——[ORD] 面=底部追加新表行 FLAG+ord_last 明细〔R530/R531 盲检面直接反证〕+令牌持平 PASS+state 不可解析时 INFO 降级不崩〔[STATE] FLAG 退避面同测〕；[TREE] 面=index.lock 退避+树净 PASS+脏树 dirty=1+`?? ` 明细+ahead 1 分歧 diverged=` ## …[ahead 1]`+`note: remote moved` 非本地他执行体注记；[QA] 面=当日 png+log+bench_today=True PASS+证据缺 bench_today=False FLAG+`charter daily crawl round due` 尾注；harness 纯 ASCII 断言过；证据=qa/scan-faces-R554.log 17 PASS 行在册）
 - [ ] status-export self_drive 派生面回归维护（BD-PROP-001 实施后继·F3 零写死校验复跑）
 - [ ] logs/ 整编工具链复用维护（压缩脚本族先例沿用·R31 起继续·archive append marker 链）
