@@ -1,0 +1,15 @@
+[ WARN:0@0.448] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-EX0: control anchor: embed=True wm_bits=256 clean-roundtrip-exact=True
+PASS AC-EX1-down0.5x: write=True extract-exact=False ber=0.5195 (honest negative, lawful per AC-EX4)
+PASS AC-EX1-up2.0x: write=True extract-exact=False ber=0.5000 (honest negative, lawful per AC-EX4)
+PASS AC-EX2-d5: write=True extract-exact=False ber=0.0273 (honest negative, lawful per AC-EX4)
+PASS AC-EX3-q90x2: write=True extract-exact=False ber=0.0156 (honest negative, lawful per AC-EX4)
+PASS AC-EX4: measured=4/4 ber-on-every-case-line=True zero-silent-skip (non-exact verdicts lawful per pre-registration)
+SUITE PASS (6/6 criteria pass)
+exit=0 

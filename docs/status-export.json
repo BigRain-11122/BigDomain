@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-29T04:05:56+08:00",
+  "export_ts": "2026-09-29T04:23:35+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -200,7 +200,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "551",
+      "552",
       "OSLoop 轮次 tick"
     ],
     [
@@ -534,21 +534,25 @@
     [
       "1",
       "R550 收账残留收口件（R551：R550 会话 03:49 写完 state log 后截断·收账六面〔板面标记/tech 队列/export/heartbeat/commit/push〕未落盘·其收账行宣称与盘面不符=write-before-verify 违例如实注〔R413/R461 先例〕·R551 检出补齐全部兑现：backlog 两行 done+tech #4 done+静机复测件入队+qa 日志验真入册+heartbeat backfill R550 行〔R541 先例〕+板规执法第三十三刀〔R545/R549 过当轮 done 行 verbatim 迁档 §R551 节〕+export 实刷 tick 551+self_drive 机械派生 35/8/0/19）"
+    ],
+    [
+      "1",
+      "blind_watermark 鲁棒性扩展三例件（tech 队列·R552：扩展套件 test_watermark_robust.py SUITE PASS 6/6 exit=0·AC-EX0..4 预注册先于执行·控制锚 exact+四扰动例全判负留痕（缩放 0.5x/2.0x ber=0.5195/0.5000+椤盐 d5% 0.0273+二次重压缩 q90x2 0.0156）·证据 qa/watermark-robust-R552.log·首跑 harness bug 修复后净跑两跑测量逐位一致=from 确定性复验·queue_tech_open 8→7）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-23..2026-09-29",
     "window_days": 7,
-    "log_lines_in_window": 35,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 10,
-    "queue_tech_open": 8,
+    "queue_tech_open": 7,
     "queue_explore_open": 10,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled) - R542 recount same criterion (R542 standing-carry round line + tokens line added; R542 log wording deliberately avoids abolished-tag substrings so idle_fast/no_pullable counters stay clean) - R543 recount same criterion (R543 standing-carry round line + tokens line added; R543 log wording keeps counters clean) - R544 recount same criterion (R544 standing-carry round line + tokens line added; W/idle/no-pullable mechanically re-verified 39/12/3 pre-append then +2/+0/+0 per R541-R543 incremental rule; R544 log wording keeps counters clean) - R545 recount (R33 window compression: 20 round-level window lines R536..R544 -> 1 paren-format summary line excluded by anchored criterion; W 41->23 recomputed anchored [-20 removed +2 added]; idle 12->8 and no-pullable 3->0 [removed lines substring-verified mechanically]; substantive recomputed same legacy formula [round-level minus tokens-lines minus P2-report receipt lines; formula re-verified to reproduce in-register 23 on pre-compaction log] -> 23->13 [-11 removed +1 R545 line]; R545 log wording keeps counters clean) - R546 recount same criterion (R546 standing-carry round line + tokens line added: W +2 23->25, substantive +1 13->14; idle/no-pullable unchanged, R546 log wording keeps counters clean; queue row stale-value fix only, no window change) - R547 recount same criterion (R547 standing-carry round line + tokens line added: W +2 25->27, substantive +1 14->15; idle/no-pullable counters unchanged, R547 log wording keeps counters clean; no window-boundary change) - R548 recount same criterion (R548 standing-carry round line + tokens line added: W +2 27->29, substantive +1 15->16; idle/no-pullable counters unchanged, R548 log wording keeps counters clean; no window-boundary change) - R549 recount same criterion (R549 substantive queue-pull round line + tokens line added: W +2 29->31, substantive +1 16->17; idle/no-pullable counters unchanged, R549 log wording keeps counters clean; queue_tech_open 10->8 per tech queue #1/#2 closure; results row appended for tech #2 five-sandbox re-run; no window-boundary change) - R551 recount (R550+R551 round lines and tokens lines appended after the R549 register: W 31->35, substantive 17->19, idle/no-pullable mention counters unchanged 8/0 [R550/R551 wording keeps counters clean]; queue_tech_open 8->8 [tech #4 done -1, quiet-machine control re-test +1; R550 pre-registration said 8->7, honest delta note]; P2-report receipt exclusion tightened to round-tag adjacency ^R-digits-space-P2 - the R265 gord knowledge line mentions a past P2 report mid-line and the loose substring filter over-excluded it, caught by R551 probe, adjacent filter reproduces the R549 register 31/13/1 -> 17; R550 in-log export-refresh claim was not persisted due to session cut right after the state-log write - export actually refreshed at R551, write-before-verify violation honestly re-landed [R413/R461 precedent])"
+    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled) - R542 recount same criterion (R542 standing-carry round line + tokens line added; R542 log wording deliberately avoids abolished-tag substrings so idle_fast/no_pullable counters stay clean) - R543 recount same criterion (R543 standing-carry round line + tokens line added; R543 log wording keeps counters clean) - R544 recount same criterion (R544 standing-carry round line + tokens line added; W/idle/no-pullable mechanically re-verified 39/12/3 pre-append then +2/+0/+0 per R541-R543 incremental rule; R544 log wording keeps counters clean) - R545 recount (R33 window compression: 20 round-level window lines R536..R544 -> 1 paren-format summary line excluded by anchored criterion; W 41->23 recomputed anchored [-20 removed +2 added]; idle 12->8 and no-pullable 3->0 [removed lines substring-verified mechanically]; substantive recomputed same legacy formula [round-level minus tokens-lines minus P2-report receipt lines; formula re-verified to reproduce in-register 23 on pre-compaction log] -> 23->13 [-11 removed +1 R545 line]; R545 log wording keeps counters clean) - R546 recount same criterion (R546 standing-carry round line + tokens line added: W +2 23->25, substantive +1 13->14; idle/no-pullable unchanged, R546 log wording keeps counters clean; queue row stale-value fix only, no window change) - R547 recount same criterion (R547 standing-carry round line + tokens line added: W +2 25->27, substantive +1 14->15; idle/no-pullable counters unchanged, R547 log wording keeps counters clean; no window-boundary change) - R548 recount same criterion (R548 standing-carry round line + tokens line added: W +2 27->29, substantive +1 15->16; idle/no-pullable counters unchanged, R548 log wording keeps counters clean; no window-boundary change) - R549 recount same criterion (R549 substantive queue-pull round line + tokens line added: W +2 29->31, substantive +1 16->17; idle/no-pullable counters unchanged, R549 log wording keeps counters clean; queue_tech_open 10->8 per tech queue #1/#2 closure; results row appended for tech #2 five-sandbox re-run; no window-boundary change) - R551 recount (R550+R551 round lines and tokens lines appended after the R549 register: W 31->35, substantive 17->19, idle/no-pullable mention counters unchanged 8/0 [R550/R551 wording keeps counters clean]; queue_tech_open 8->8 [tech #4 done -1, quiet-machine control re-test +1; R550 pre-registration said 8->7, honest delta note]; P2-report receipt exclusion tightened to round-tag adjacency ^R-digits-space-P2 - the R265 gord knowledge line mentions a past P2 report mid-line and the loose substring filter over-excluded it, caught by R551 probe, adjacent filter reproduces the R549 register 31/13/1 -> 17; R550 in-log export-refresh claim was not persisted due to session cut right after the state-log write - export actually refreshed at R551, write-before-verify violation honestly re-landed [R413/R461 precedent]) - R552 recount same criterion (R552 substantive round line + tokens line added: W 35->37, substantive 19->20; idle/no-pullable counters unchanged 8/0 [R552 wording keeps counters clean]; queue_tech_open 8->7 [watermark robustness extension item done -1, no successor queued this round]; results row appended for R552 watermark extension piece)"
   }
 }
