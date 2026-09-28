@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-29T00:30:21+08:00",
+  "export_ts": "2026-09-29T01:10:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -510,21 +510,25 @@
     [
       "1",
       "QA charter 每日 crawl D 片件（R537·2 A 级官方全文直采〔深度合成规定令12+生成式AI办法令15〕·AIGC 标识合规链四件齐·benchmarks §①③④+benchmarks_refreshed=2026-09-29·信号 W6/W7 入墙+smoke 证据·charter 清单四项全过）"
+    ],
+    [
+      "1",
+      "R541 常设项补账件（main 队列尾项「heartbeat.txt 每轮更新」认领·R532 停摆令常设律 R537..R540 四轮漏更债务收口：heartbeat.txt 四行 backfill〔commit 时戳锚 00:31/00:38/00:47/00:58·内容派生 state log〕+R541 当轮行+runbook 常设项补记防复发·R538..R540 声明轮「零可拉」漏扫无门控常设项=误判面如实注·export self_drive 计数随实况刷 35/12/3/20）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-23..2026-09-29",
     "window_days": 7,
-    "log_lines_in_window": 27,
-    "idle_fast_mention_lines": 9,
-    "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "log_lines_in_window": 35,
+    "idle_fast_mention_lines": 12,
+    "no_pullable_mention_lines": 3,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 10,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric)"
+    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled)"
   }
 }
