@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-29T02:23:18+08:00",
+  "export_ts": "2026-09-29T02:38:07+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -200,7 +200,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "545",
+      "546",
       "OSLoop 轮次 tick"
     ],
     [
@@ -527,16 +527,16 @@
   "self_drive": {
     "window": "2026-09-23..2026-09-29",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 10,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled) - R542 recount same criterion (R542 standing-carry round line + tokens line added; R542 log wording deliberately avoids abolished-tag substrings so idle_fast/no_pullable counters stay clean) - R543 recount same criterion (R543 standing-carry round line + tokens line added; R543 log wording keeps counters clean) - R544 recount same criterion (R544 standing-carry round line + tokens line added; W/idle/no-pullable mechanically re-verified 39/12/3 pre-append then +2/+0/+0 per R541-R543 incremental rule; R544 log wording keeps counters clean) - R545 recount (R33 window compression: 20 round-level window lines R536..R544 -> 1 paren-format summary line excluded by anchored criterion; W 41->23 recomputed anchored [-20 removed +2 added]; idle 12->8 and no-pullable 3->0 [removed lines substring-verified mechanically]; substantive recomputed same legacy formula [round-level minus tokens-lines minus P2-report receipt lines; formula re-verified to reproduce in-register 23 on pre-compaction log] -> 23->13 [-11 removed +1 R545 line]; R545 log wording keeps counters clean)"
+    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled) - R542 recount same criterion (R542 standing-carry round line + tokens line added; R542 log wording deliberately avoids abolished-tag substrings so idle_fast/no_pullable counters stay clean) - R543 recount same criterion (R543 standing-carry round line + tokens line added; R543 log wording keeps counters clean) - R544 recount same criterion (R544 standing-carry round line + tokens line added; W/idle/no-pullable mechanically re-verified 39/12/3 pre-append then +2/+0/+0 per R541-R543 incremental rule; R544 log wording keeps counters clean) - R545 recount (R33 window compression: 20 round-level window lines R536..R544 -> 1 paren-format summary line excluded by anchored criterion; W 41->23 recomputed anchored [-20 removed +2 added]; idle 12->8 and no-pullable 3->0 [removed lines substring-verified mechanically]; substantive recomputed same legacy formula [round-level minus tokens-lines minus P2-report receipt lines; formula re-verified to reproduce in-register 23 on pre-compaction log] -> 23->13 [-11 removed +1 R545 line]; R545 log wording keeps counters clean) - R546 recount same criterion (R546 standing-carry round line + tokens line added: W +2 23->25, substantive +1 13->14; idle/no-pullable unchanged, R546 log wording keeps counters clean; queue row stale-value fix only, no window change)"
   }
 }
