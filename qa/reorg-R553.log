@@ -1,0 +1,23 @@
+=== MUTATION-RUN CONSOLE RECORD (bd_reorg_r553.py, first pass; script crashed AFTER all mutations landed,
+at a mis-set W assertion - judged below; console output preserved verbatim as mutation record):
+  PRE state_bytes=81928
+  WINDOW rounds 546..552 x (round+tokens) = 14 lines, continuity asserted, zero gaps
+  WINDOW removed-lines mentions: idle-fast=0 no-pullable=0 (wording kept counters clean)
+  PD catalog deduped 4: P-32/P-2026-09-28-02/P-2026-09-28-04/P-47
+  ARCHIVE pre=3038928B post=3121288B delta=+82360B (pure append, prefix asserted)
+  POST state_bytes=70378 (under 80000B line: True, margin 9622B)
+  POST log_lines=57 (70-14+1=57) head_block=56 verbatim identical (item-level asserted)
+  RECOUNT anchored W=23 idle=38 no_pullable=2 (pre-reorg W=37/idle=8/no-pullable=0; expected post W=25)
+  AssertionError: 23  <- script bug: asserted post-closeout figure 25 at pre-closeout stage,
+  and idle/no-pullable were counted over ALL log lines (incl. day-summary paren lines) instead of
+  round-level anchored lines only. Mutation itself unaffected: assertions ran after all writes.
+PRE-OP (git HEAD) state_bytes=81928 tick=552 log=70; window 546..552 continuity re-asserted (14 lines, zero gaps)
+POST state_bytes=70378 (under 80000B: True, margin 9622B)
+POST log_lines=57 (70-14+1), head_block 56 items verbatim identical vs git HEAD, top fields unchanged, summary line in place
+ARCHIVE post=3121288B; R553 marker found at byte 3038928 == mutation-run recorded pre-op size 3,038,928B (prefix untouched); appended region = marker+comment+snapshot(81928B byte-identical to git HEAD state.json)+1 separator NL; total delta +82360B pure append
+PRE-OP recount reproduction: W=37 tokens=16 P2-receipt=1 substantive=20 idle=8 no-pullable=0 (in-register self_drive 37/8/0 -> 20)
+POST recount (pre-closeout, round-level anchored): W=23 tokens=9 P2-receipt=1 substantive=13 idle=8 no-pullable=0
+EXPECTED at closeout after R553 round+tokens lines appended: W=25 substantive=14 idle=8 no-pullable=0 (R553 wording keeps counters clean)
+PD catalog in summary line: P-32/P-2026-09-28-02/P-2026-09-28-04/P-47 (4 tokens, matches mutation-run record)
+SUITE PASS (verify-only v2): AC-R341 trigger 81,928B>80,000B in-register / AC-R342 archive marker-at-recorded-offset + snapshot byte-identical to git HEAD / AC-R343 window 14->1 rounds 546..552 zero-gap + head 56 items verbatim + P/D catalog 4 / AC-R344 dual-criteria (JSON parse + line count 70->57) + post 70,378B <80,000B / AC-R345 closing in round closeout
+FIRST-PASS JUDGMENT MISS honestly noted: W assertion set to post-closeout 25 at pre-closeout stage (correct 23); idle/no-pullable counted over all-lines scope instead of round-level anchored scope (correct 8/0). Mutation unaffected (assertions ran after writes); evidence chain = this verify pass + mutation console record above.
