@@ -1,0 +1,14 @@
+[A] pre-asserts OK: state 80,529B==git HEAD, log=65, tick=556, counters 31/8/0/17 == export; arch 3,121,288B noBOM; done 208,358B BOM; board 3 rows (R557 open + R556 done + bootstrap); export results 101 tick 556; hb endsNL
+[B/PROBE] candidate A window R554..R556: 6 lines 7,528B -> built final 79,960B margin 40B gate<=78,500B FAIL; counters W/idle/nop/sub=27/8/0/15; catalog P-32
+[B/PROBE] candidate B window R553..R556: 8 lines 10,084B -> built final 78,405B margin 1,595B gate<=78,500B PASS; counters W/idle/nop/sub=25/8/0/14; catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47
+[B/SELECT] gate-passers=B -> selected B (largest margin, pre-registered rule); final 78,405B margin 1,595B; next trigger projected ~R559
+[B] in-memory build OK: selected B state 78,405B margin 1,595B log 65->60; arch->3,202,316B; done->211,055B; board 2 rows; export results 101->103; hb row 1705 chars
+[C1/R352] state-log archive 3,121,288B -> 3,202,316B pure append OK (marker at 3,121,288B, snapshot=git HEAD bytes)
+[C2/K37a/K37c] done archive 208,358B -> 211,055B pure append OK (BOM preserved; R556 row verbatim 2,598B; SS-sections now 8)
+[C3/R353/R354] state 80,529B -> 78,405B OK (log 65->60; header 57 verbatim; dual-parse py OK; fixed-point final bytes embedded)
+[C4/K37b/K37d] board = header + R557 done row + bootstrap row OK (5,217B)
+[C5/EXPORT] ts=2026-09-29T06:08:34+08:00 tick 556->557; results 101->103; self_drive W/idle/nop/sub=25/8/0/14 mechanically re-derived OK
+[C6/HB] heartbeat row appended OK (endsNL convention preserved)
+[D/VERIFY] read-only re-read pass: state/archive/done/board/export/heartbeat all re-parse and re-assert OK
+[D/VERIFY] AC-R351 trigger-first-measure PASS (80,529B>80,000B, ==git HEAD); AC-R352 snapshot PASS; AC-R353 window probe+lock PASS (sel=B); AC-R354 dual-parse+margin PASS (78,405B<=78,500B); AC-R355 verify-then-write PASS; AC-K37a..e PASS
+[CLOSEOUT] ALL AC-R351..R355 + AC-K37a..e PASSED; nothing failed; commit next
