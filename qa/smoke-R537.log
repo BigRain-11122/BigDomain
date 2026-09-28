@@ -1,0 +1,61 @@
+BigDomain QA Smoke Test - round R537 - 2026-09-29 ~00:4x +08:00
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate
+charter: group docs/qa-smoke-test-charter.md v1.0 - Build > Smoke > Screenshot > Log > Self-judge
+charter BigDomain checklist: 4 items, judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False -> daily crawl round due
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only, 2 attempts / 2 hits / 0 miss):
+    - cac.gov.cn/2022-12/11/c_1672221949354811.htm   [A-grade, NEW source] -> HIT
+      "Internet Information Service Deep Synthesis Provisions"
+      (CAC/MIIT/MPS joint order no.12, effective 2023-01-10, official full text):
+      art.10  = duty to review BOTH input data and synthesis results (technical or
+                manual), illegal-info feature library + network log retention
+      art.16  = technical labeling of generated/edited content + log retention
+      art.17  = prominent labeling for 5 confusion-prone service classes
+                (incl. smart dialogue/writing and immersive realistic scenes)
+      art.18  = no organization or individual may delete/alter/hide the labels
+      art.23  = "deep synthesis" definition covers 3D reconstruction / digital
+                humans / virtual scenes (applicable to this company's metaverse face)
+    - cac.gov.cn/2023-07/13/c_1690898327029107.htm   [A-grade, NEW source] -> HIT
+      "Interim Measures for the Management of Generative AI Services"
+      (7-ministry joint order no.15, effective 2023-08-15, official full text):
+      art.9   = provider bears network information content producer responsibility
+                + must sign service agreements with users
+      art.10  = publish applicable users/scenarios; prevent minors over-dependence
+      art.12  = generated content must be labeled per the Deep Synthesis Provisions
+                (upstream statutory source for the AIGC marking four-piece set)
+      art.14  = on illegal content: stop generating/transmitting, eliminate,
+                rectify, report to authorities (fail-closed, same shape as the
+                msgSecCheck pre-gate design)
+    => AIGC labeling compliance chain now 4-for-4 direct-fetched:
+       deep-synthesis provisions -> gen-AI interim measures
+       -> labeling measures (2025-09-01) -> GB 45438-2025 mandatory standard
+
+[2] benchmark table updated today, not stale >15h: PASS
+    docs/global-benchmarks.md updated this round:
+    - sec.1 dynamics line: two upstream regulations appended (chain note)
+    - sec.3 source rows: 2 new A-grade rows (order no.12 / order no.15)
+    - sec.4 record row: 2026-09-29 D-slice (daily crawl round R537)
+    src/os/state.json benchmarks_refreshed = 2026-09-29 (was 2026-09-28)
+
+[3] research conclusions carry data sources, not fabricated: PASS
+    both conclusions cite A-grade official cac.gov.cn full-text pages with fetch
+    timestamps; external content treated as untrusted input, zero assertion;
+    two-state honesty maintained (confirmed items labeled as confirmed; nothing
+    speculative entered into the canon)
+
+[4] signals written into intelligence-wall: PASS
+    docs/research/intelligence-wall.md:
+    - W6 deep-synthesis provisions: labeling 3 duties + art.10 review duty
+      consumption: AIGC marking set AC-S5/L9/U7/Y9 + ugc spec AC-U2 (msgSecCheck gate)
+    - W7 gen-AI interim measures: art.12 labeling link + art.9 producer duty +
+      art.14 illegal-content disposal + art.10 minors protection
+      consumption: AIGC marking set + ugc pipeline fail-closed + lobby agreement
+      face + membership/benefits design piece (P-47 item 5)
+    - conclusion application table: +1 row (W6/W7 -> benchmarks sec.1/sec.3, closed)
+
+self-judge: 4/4 PASS, evidence on disk (this log + qa/smoke-R537.png rendered from it)
+round notes: [DEC] 3 new lines judged -> C-20260928-02 acknowledged (zero BigDomain
+    mention, committee channel T1); [TREE] ahead-1 = R536 push leftover, not a local
+    other-writer, pushed together with this round's commit
