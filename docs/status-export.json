@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-29T01:10:00+08:00",
+  "export_ts": "2026-09-29T01:27:09+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -200,7 +200,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "537",
+      "542",
       "OSLoop 轮次 tick"
     ],
     [
@@ -519,16 +519,16 @@
   "self_drive": {
     "window": "2026-09-23..2026-09-29",
     "window_days": 7,
-    "log_lines_in_window": 35,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 12,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 21,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 10,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled)"
+    "method": "F3 mechanical line counts (log line date-prefix anchored ^2026-09-23..29 match; R536 figure 55 counted pre-R32-compression body dates - switched to anchored prefix match at R537, delta = R32 window-summary compression + criterion tightening, honestly labeled; round-level exact count limited by window-summary compression = line-level metric; R541 recount same criterion (round-level anchored ^2026-09-2[3-9] R<digit>, full-width-paren window summaries excluded) - R538..R540 declaration lines cite the abolished idle-fast path in-body so idle_fast counter +3 alongside no_pullable +3, double-count honestly labeled) - R542 recount same criterion (R542 standing-carry round line + tokens line added; R542 log wording deliberately avoids abolished-tag substrings so idle_fast/no_pullable counters stay clean)"
   }
 }
