@@ -1,4 +1,4 @@
-# BigDomain — product repo local exclusions
+﻿# BigDomain — product repo local exclusions
 # runtime artifacts from the OS loop (src/os/iteration_loop.ps1 writes logs/)
 logs/
 *.log
@@ -25,3 +25,7 @@ src/sandbox/ugc/export-ac-*/
 src/sandbox/pay/data/
 # sandbox runtime artifacts (src/sandbox/member: sqlite dbs from CLI readiness runs)
 src/sandbox/member/data/
+# CEO safe-cleanup amendment (group orders 09-28 ~10:xx): auto-saves/temp moved here, 7d observation then delete
+docs/_trash/
+# Codely CLI local data (installed skill copy + session trash; committed source of truth = tools/skills/)
+.codely-cli/

@@ -1,4 +1,4 @@
-# BigDomain backlog done rows archive: 2026-09-24/25
+﻿# BigDomain backlog done rows archive: 2026-09-24/25
 
 > Migrated from src/os/backlog.md on 2026-09-26 by OSLoop R193 (token-bleeding order cut 4, AC-T3).
 > Rows preserved verbatim below; the live board keeps open items plus a pointer line.
@@ -154,3 +154,7 @@
 ## R531 Supplement (2026-09-28 R531 board-law knife 29: R530 done row verbatim migrated)
 
 - [x] R530 承令单件（2026-09-28 认领）：集团 orders L254 QA Smoke Test 自验令承令执行（charter=集团 docs/qa-smoke-test-charter.md v1.0·@每司全量=本司执行面·R529 基线 253 行后新到本轮首检）——①清单四项（每日 crawl web 直采 3 试 2 得 1 判负+benchmark 表当日刷新〔15h 律〕+调研来源链复核+intelligence-wall 建面 W1..W5）②qa/ 证据面（smoke-R530.log+png=真实 log 渲染·render_smoke_png.ps1 在册）③机制件（scan [QA] 判读面+SKILL.md §2 处置行源件装件双同步+顺手修复 R529 源件 §0 idle-fast 旧文双同步缺口如实注+.gitignore !qa/*.log 白名单）④canon-index §一 21 行+11 行翻新+§六 v1.2。AC-QA1..QA5（QA1=当日直采 ≥1 新源落 §③〔openstd A 级新源·GB 45438-2025 强标收口·三问门过门在案〕·QA2=benchmark 表当日更新〔§① 两行+§③ 两行+§④ C 片行+benchmarks_refreshed=2026-09-28〕·QA3=信号墙在盘 5 条全带源链接+分级+消费落点+应用表·QA4=qa/smoke-R530.log+png 在盘可复核〔png 渲染自真实 log·零伪造〕·QA5=commit 含 QA Smoke Test L254 引用+charter 判据面〔明日复查 qa/ 新截图+日志〕）[done 2026-09-28]
+
+## §R532（板规执法第三十刀·R531 过当轮 done 行 verbatim 迁档·2026-09-28）
+
+- [x] R531 承令件（2026-09-28 认领）：PT-20260928-02 集团巡检整改派单承令执行（orders.md 新令·bm-c ec6936e 09:40:24 推入=origin/main ahead1/behind1 分歧=R530 push 拒绝回执链·RUN_ID=20260928-092301·P1·截止 2026-10-01·72h 窗）——①tasks.md 落 BD-PROP-001 实施件 open 自可执行行 ②提案轨常设锚 open 常设行 ③blocked-on-CEO 物理件单（M2 物理件族+开号族）单列行 ④收口回执=patrol-ledger.md 属集团层文件·跨仓写禁令不可直书→回执三载体=state log R531 行+HQ-FEEDBACK R531 行+commit 令号引用·集团面转登裁量呈报；同轮=分歧合流（git merge origin/main ec6936e·仅 orders.md +1 行零重叠·ort·非 rebase 不改写本司序列）+scan 机制修复（[ORD] 末行令牌比对改型+[TREE] ahead/behind 分歧 FLAG·源件+装件双同步+canon-index §六 v1.3）。AC-O1..O5（O1=tasks.md 三行锚在盘可 grep·≥1 open 自可执行行兑现；O2=backlog 镜像①顶行可认领+bootstrap 单列保持；O3=④回执三载体齐+通道张力如实呈报零越权；O4=merge commit 在册零冲突+orders.md 新行实勘；O5=commit 含 PT-20260928-02/RUN_ID〔P-51 口径〕+源件装件双同步实勘）[done 2026-09-28]
