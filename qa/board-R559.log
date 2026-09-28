@@ -1,0 +1,59 @@
+PASS A1 state round-start size anchor 79978B (actual 79978)
+PASS A2 state BOM-free
+PASS A3 state tick 558 (got 558)
+PASS A4 state log 62 items (actual 62)
+PASS A5 state round-trip identity (tail repr ok)
+PASS A6 archive size anchor 211055B (actual 211055)
+PASS A7 archive ends with newline
+PASS A8 R557 row not yet archived (no duplicate)
+PASS A9 exactly one R557 done row on main board (found 1)
+PASS A10 bootstrap row present once (found 1)
+PASS A11 export BOM present
+PASS A12 export round-trip identity
+PASS A13 pre W recount 27 == register (W0=27 reg=27)
+PASS A14 pre idle recount 8 == register (I0=8 reg=8)
+PASS A15 pre no-pull recount 0 == register (N0=0 reg=0)
+PASS A16 register substantive 15 (got 15)
+PASS A17 derived P2-receipt count >= 0 (P2=1 tokens0=11)
+PASS A18 proposals total recount 1 == register (1/1)
+PASS A19 proposals open recount 1 == register (1/1)
+PASS A20 queue recount 10/4/10 == register (10/4/10)
+PASS A21 round line keeps counters clean
+PASS A22 tokens line keeps counters clean
+PASS A23 tokens line matches tokens pattern
+PASS A24 round line nonparen round format
+PASS A25 post-state fixed-width placeholder present in round line
+PASS B1 archive pure append prefix assertion
+PASS B2 R557 row removed from main board
+PASS B3 bootstrap row retained verbatim
+PASS B4 main board = header + bootstrap open row only
+PASS B5 backlog ends with newline
+PASS B6 post-state fixed-width placeholder converged (final=82,217B)
+PASS B7 post-closeout state over 80000B waterline (n=82217)
+PASS B8 post W 29 (actual 29)
+PASS B9 post idle/no-pull 8/0 (actual 8/0)
+PASS B10 post substantive 16 (actual 16 T1=12 P2=1)
+PASS B11 state log 64 items after append (actual 64)
+PASS B12 results tick row found once (found 1)
+PASS B13 export new text parses
+PASS B14 heartbeat ends with newline
+PASS B15 heartbeat pure append prefix assertion
+PASS B16 heartbeat row pure ASCII
+PASS Z1 script source pure ASCII
+
+ALL PRE-WRITE ASSERTIONS PASS - writing 5 files
+PASS C1 state on-disk size == predicted (82217 vs 82217)
+PASS C2 state on-disk tick 559 log 64
+PASS C3 archive on-disk prefix+size (214328)
+PASS C4 backlog on-disk bytes == predicted
+PASS C5 export on-disk bytes == predicted (75030)
+PASS C6 export self_drive 29/16 on disk
+PASS C7 heartbeat on-disk bytes == predicted
+
+SUMMARY archive 211055 -> 214328 (+3273)
+SUMMARY backlog 5217 -> 2042
+SUMMARY state 79978 -> 82217 (over-80000-line=True)
+SUMMARY export 73971 -> 75030
+SUMMARY heartbeat 27835 -> 29500
+SUMMARY self_drive W/idle/no-pull/substantive 27/8/0/15 -> 29/8/0/16
+SUMMARY results tick row 558->559; knife-38 results row appended; export_ts refreshed
