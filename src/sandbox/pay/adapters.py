@@ -126,6 +126,12 @@ def from_config(config):
         key = str(spec.get("mock_key", "")).strip()
         if not signer or not key:
             raise AdapterError("channels.%s signer/mock_key missing" % name)
+        if str(spec.get("callback_style", "")).strip() == "v3":
+            # V3 callback contract (v3.py): optional per-channel face,
+            # absent key keeps the flat legacy contract above.
+            import v3 as v3_mod
+            out[name] = v3_mod.V3Channel.from_spec(name, spec)
+            continue
         out[name] = MockChannel(name, signer, key,
                                 int(spec.get("ts_window_seconds", 300)))
     return out
