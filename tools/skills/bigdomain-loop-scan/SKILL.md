@@ -28,12 +28,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/skills/bigdomain-loop-
 - `[LEDGER]`：lastp 与 state.json log 已回执行比对（同号=已回执非新行；状态列变化=集团面闭口更新如实记）；未回执行=照转办执行+新项排 backlog 顶行+毕 log 记回执一行（引用该编号）。八线群发令可不带 @BigDomain 字样→按派工面判本司执行面/知悉（P-56 教训）。conflict>0=FLAG。
 - `[DEC] FLAG`（行数≠last_decision_rows）：新决策行=科学判断闸逐行——过审→执行+回执（log 一行·引用决策号）；存疑→驳回写理由（log 一行）；非本司执行面→知悉不动作（log 一行）；毕更新 last_decision_rows 基线。
 - `[GORD] INFO`：集团 orders 尾新行与既往扫描态比对=新令兜底检出；新司令照令执行（新令推翻旧模式·集团律）；按派工面判本司执行面/知悉。
-- `[ORD] FLAG`（司级 orders 顶行时间戳≠last_order）：新司令=照令执行；毕更新 last_order。
+- `[ORD] FLAG`（司级 orders 末行令牌≠last_order〔append-newest 约定·R531 改型=末行首 cell trimmed 令牌比对——原首行读法+HH:MM 正则对 bottom 追加 RUN_ID 格式行盲检·PT-20260928-02 派单实证〕）：新司令=照令执行；毕更新 last_order（=新末行首 cell trimmed 令牌）。
 - `[BENCH] FLAG`（benchmarks_refreshed 距今>7 天）：排刷新轮（刷新项排 backlog 顶行·web 直采优先·毕更新该字段+`docs/global-benchmarks.md` ④更新记录行）；硬约束域（法规/平台规则变更类集团令）=事件即时刷。
 - `[QA] FLAG`（当日 qa/ 证据缺或 benchmark 非当日刷新·charter v1.0=集团 orders L254 2026-09-28）：=charter 每日 crawl 轮——web 直采 ≥1 新源（三问门=QA 令+P-56/P-74 既有授权链·宿主 web_fetch 只读零 key）→基准面刷新（`docs/global-benchmarks.md` §①/§③/§④+state.json `benchmarks_refreshed`=当日）→信号入 `docs/research/intelligence-wall.md`（带源链接+分级+消费落点）→`qa/smoke-R<轮>.log`+`qa/smoke-R<轮>.png` 落盘（png=`tools/skills/bigdomain-loop-scan/scripts/render_smoke_png.ps1` 渲染真实 log·禁 P 图伪造）→自验清单四项对照（每日 crawl/benchmark 15h 律/调研来源链/信号墙）→收账 commit 含令引用；连续两轮不过=CPH4 接管重写（charter 红灯）；轻轮自验=收账行引用当日 smoke 证据集。
 - `[TASKS] INFO`：backlog 顶行可认领=认领执行（认领动作落 backlog 行）；全部依赖 CEO 物理件=不可认领·如实记录待物理件不造活。
 - `[EXPORT] FLAG`（export_ts ≥24h）：刷新 `docs/status-export.json`（export_ts ISO8601+do/depts/outs/results 全派生自实际状态·F3 律禁写死）。
-- `[TREE] FLAG`（脏树/index.lock）：index.lock 或他执行体写盘=同仓单执行体退避（只读不动如实记录）；脏树仅本 loop 自身收账产物=正常收账不退避。
+- `[TREE] FLAG`（脏树/index.lock/ahead-behind 分歧）：index.lock 或他执行体写盘=同仓单执行体退避（只读不动如实记录）；脏树仅本 loop 自身收账产物=正常收账不退避；ahead/behind 分歧（远端他写者如 bm-c 巡检推入·或上轮 push 拒绝遗留）=非本地他执行体写盘不退避——下轮首项=分歧合流（合流方式当轮裁量·零重叠可期 merge）→合流后照新令走 `[ORD]`/`[GORD]` 判读。
 
 ## 3 收账（两态同律·毕必全走）
 

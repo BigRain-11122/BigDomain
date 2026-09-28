@@ -70,19 +70,20 @@ try {
   Write-Output "  gord_last_line: $u"
 } catch { Write-Output '[GORD] FLAG read_failed' }
 
-# --- [ORD] own orders.md top timestamp vs baseline ---
+# --- [ORD] own orders.md LAST table-row token vs baseline (append-newest convention; R531 rework: first-row+HH:MM regex was blind to bottom-appended RUN_ID-format rows) ---
 try {
   $OO = [System.IO.File]::ReadAllLines((Join-Path $repo 'orders.md'), $utf8)
-  $top = @($OO | Where-Object { $_ -match '^\|\s*2026-' } | Select-Object -First 1)
+  $orows = @($OO | Where-Object { $_ -match '^\|\s*2026-' })
+  $lastRow = [string]($orows | Select-Object -Last 1)
   $topTs = ''
-  if ($top.Count -gt 0 -and $top[0] -match '^\|\s*(2026-\d{2}-\d{2}\s+\d{2}:\d{2})') { $topTs = $Matches[1] }
+  if ($lastRow -match '^\|\s*([^|]+?)\s*\|') { $topTs = $Matches[1].Trim() }
   if ($st -eq $null) {
-    Write-Output "[ORD] INFO top=$topTs (state unavailable)"
+    Write-Output "[ORD] INFO last=$topTs (state unavailable)"
   } elseif ($topTs -eq $st.last_order) {
-    Write-Output "[ORD] PASS top=$topTs baseline=$($st.last_order)"
+    Write-Output "[ORD] PASS last=$topTs baseline=$($st.last_order)"
   } else {
-    Write-Output "[ORD] FLAG top=$topTs baseline=$($st.last_order)"
-    if ($top.Count -gt 0) { Write-Output "  ord_top: $($top[0])" }
+    Write-Output "[ORD] FLAG last=$topTs baseline=$($st.last_order)"
+    if ($lastRow.Length -gt 0) { Write-Output "  ord_last: $lastRow" }
   }
 } catch { Write-Output '[ORD] FLAG read_failed' }
 
@@ -147,7 +148,17 @@ if (Test-Path $lockPath) {
     $gs | Select-Object -First 8 | ForEach-Object { Write-Output "  git: $_" }
   } else {
     $sb = @(git -C $repo status -sb)
-    Write-Output "[TREE] PASS clean=1 lock=0 $(@($sb)[0])"
+    $head = [string]@($sb)[0]
+    $div = 0
+    if ($head -match '\[ahead (\d+), behind (\d+)\]') { $div = [int]$Matches[1] + [int]$Matches[2] }
+    elseif ($head -match '\[ahead (\d+)\]') { $div = [int]$Matches[1] }
+    elseif ($head -match '\[behind (\d+)\]') { $div = [int]$Matches[1] }
+    if ($div -gt 0) {
+      Write-Output "[TREE] FLAG clean=1 lock=0 diverged=$head"
+      Write-Output '  note: remote moved (e.g. bm-c dispatch) or prior push rejected; NOT a local other-writer; next round first item = merge, then judge new orders'
+    } else {
+      Write-Output "[TREE] PASS clean=1 lock=0 $head"
+    }
   }
 }
 
