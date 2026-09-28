@@ -2,6 +2,9 @@
 # runtime artifacts from the OS loop (src/os/iteration_loop.ps1 writes logs/)
 logs/
 *.log
+# QA smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28): the group
+# reviews each repo's qa/ dir for a fresh screenshot + log, keep them tracked despite *.log.
+!qa/*.log
 __pycache__/
 *.pyc
 # secrets (account domain = CEO physical items; keys never enter git)

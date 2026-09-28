@@ -4,7 +4,7 @@
 > 范围=本司流程/规则/协议文档全集；台账/日志/工作板类（state.json log、orders.md、HQ-FEEDBACK 行、backlog done 行）=append-only 数据件·历史提及=记录非规则·豁免清理（指针见 §一 15~18）。
 > 判据预注册（开工前先定·`src/os/backlog.md` GL204 行在册）：**AC-C1** 索引落盘=域入口一屏各规则→权威指针｜**AC-C2** 过时回落清单逐文档过闸点名｜**AC-C3** 冲突终谳清单同件两说逐条｜**AC-C4** 四计数报告行落盘｜**AC-C5** 原文保全零违（git diff 可证）。
 
-## 一、速查正典索引（AC-C1·20 规则域·每域唯一权威面）
+## 一、速查正典索引（AC-C1·21 规则域·每域唯一权威面）
 
 | # | 规则域 | 权威文件（唯一） | 现役状态 |
 |---|---|---|---|
@@ -18,7 +18,7 @@
 | 8 | 会员权益/月卡（两域隔离/出生证永久/手动续费 MVP） | `docs/spec/membership-spec.md` | AC-M1..M16+MP1..MP6 沙箱 16/16 |
 | 9 | 激励分配层（参数+公示+协议三面·20/30/10 呈批） | `docs/spec/incentive-agent-spec.md` | AC-I1..I13 结构 13/13·参数 [needs-CEO] |
 | 10 | 调研律（面声明/结论应用表/源分级） | `docs/research/README.md`+R-件 3 份 | 引用 `cph4/research-protocol.md` v1.0·存量指针 7 |
-| 11 | 全球基准面（微信生态/支付合规/会员对标） | `docs/global-benchmarks.md` | 下次刷新 2026-09-29（P-74）·U195 四列口径吸收=刷新轮待办 |
+| 11 | 全球基准面（微信生态/支付合规/会员对标） | `docs/global-benchmarks.md` | 2026-09-28 C 片刷新在册（7 天周期下次 10-05）·charter v1.0 每日 crawl 节律（15h 律·scan [QA] 面） |
 | 12 | 自迭代 mandate（开轮五步/五静检出+改道〔idle-fast 废止 P-2026-09-28-02〕/创新提案轨/铁律/P-32 两步） | `src/os/iteration_prompt.txt` | 现役（L6/L19 两处回落标记见 §四·R529 v2.1 两步适配） |
 | 13 | 单实例锁（D-20260925-03 PID 范式） | `src/os/iteration_loop.ps1`+`src/os/test_lock.ps1` | 接管窗 30min=1.2×轮预算·AC-D03 10/10 |
 | 14 | 计划任务注册（BigDomain-OSLoop·:x4 车道） | `src/os/register_loop_task.ps1` | 幂等 -Force·10min beat |
@@ -28,6 +28,7 @@
 | 18 | 司令台账 | `orders.md` | 只追加（顶行基线 2026-09-24 13:57） |
 | 19 | 观测窗接口（P-61） | `docs/status-export.json` | F3 律全派生·export_ts 24h 新鲜度闸 |
 | 20 | 用户增长部（L1·P-76 设立） | `BLUEPRINT.md` §六注记+`docs/research/R-20260924-fan-growth-funnel.md` | 三线分工+漏斗四段承接映射在案 |
+| 21 | QA 自验面（每轮 commit 后自验/每日 crawl/qa 证据） | `qa/`（证据面）+`docs/research/intelligence-wall.md`（信号墙） | 引用集团 `docs/qa-smoke-test-charter.md` v1.0（orders L254·2026-09-28 承令建面 R530） |
 
 ## 二、同义簇归并（U188 判例一·7 簇）
 
@@ -78,3 +79,4 @@
 
 - 2026-09-25 v1.0 首版（GL204 执行·OSLoop R158·提前 4 天）：索引 20+簇 7+终谳 5+回落 7+四计数；新检出=「六智能体」计数残留 2 处（BLUEPRINT §八/§九）；09-30 治理日呈报=当日轮随行呈送本件 §五。
 - 2026-09-28 v1.1 增补（P-2026-09-28-02 v2.1 增补令两步适配·R529）：①mandate idle-fast 空转路径废止改道（队列空→补队列+转提案轨·真无活=一行声明）+创新提案轨设立（司提案面 `docs/proposals.md`·每窗 ≥1 条三句式·首条 BD-PROP-001）；②技能件 SKILL.md（tools 源件+.codely-cli 装件双同步）§0 改道行；③§一 12 行 mandate 面描述同步。
+- 2026-09-28 v1.2 增补（集团 QA Smoke Test 自验令承令·orders L254 ~10:xx·R530）：①§一 新增 21 行「QA 自验面」（charter v1.0 引用不复制·qa/ 证据面+intelligence-wall 信号墙·每日 crawl 节律）；②§一 11 行基准面现役态翻新（09-28 C 片刷新·charter 15h 律注）；③scan_five_still.ps1 新增 [QA] 判读面+SKILL.md §2 [QA] 处置行（源件+装件双同步·顺手修复 R529 源件 §0 idle-fast 旧文双同步缺口如实注）；④§五 计数快照（2026-09-25 GL204 时点）原行保全·现值指针化计数=40（§一 21+§二 7+§三 5+§四 7）。

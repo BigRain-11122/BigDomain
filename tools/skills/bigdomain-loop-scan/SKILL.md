@@ -10,7 +10,7 @@ description: BigDomain OSLoop 自迭代轮的五静扫描与收账作业规程�
 - 只写本仓 `domain/BigDomain`；集团层与兄弟司仓只读引用（跨仓写禁令）；回执只落 `src/os/state.json` log。
 - 一切行数计数=UTF-8 口径（`[System.Text.Encoding]::UTF8`；PowerShell 5.1 默认 GBK 少读中文行=R131 教训）。
 - 诚实律：一切宣称带证据；判据预注册先行；完成态=文件在盘+可验证。
-- 空转快速路径：开轮先走五静判定；五静全过=一行收账即出不进全任务书；任一异常=转全任务书 `src/os/iteration_prompt.txt` 照走。
+- 五静检出与改道（idle-fast 空转路径已废止·P-2026-09-28-02 ②）：开轮先走五静判定（检出步）；五静全过≠跳轮——队列空→先补队列（常设承接/可认领项）→仍无活可拉=转创新提案轨（司提案面 `docs/proposals.md`·每窗 ≥1 条三句式）；真无活可拉=一行声明合法（state log 记「no-pullable（一行声明）」一行）；任一异常=转全任务书 `src/os/iteration_prompt.txt` 照走。
 - 禁自我膨胀式立法；空转轮不为凑工作量造活。
 
 ## 1 机械扫描（先跑脚本·禁再手写逐项命令）
@@ -30,6 +30,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/skills/bigdomain-loop-
 - `[GORD] INFO`：集团 orders 尾新行与既往扫描态比对=新令兜底检出；新司令照令执行（新令推翻旧模式·集团律）；按派工面判本司执行面/知悉。
 - `[ORD] FLAG`（司级 orders 顶行时间戳≠last_order）：新司令=照令执行；毕更新 last_order。
 - `[BENCH] FLAG`（benchmarks_refreshed 距今>7 天）：排刷新轮（刷新项排 backlog 顶行·web 直采优先·毕更新该字段+`docs/global-benchmarks.md` ④更新记录行）；硬约束域（法规/平台规则变更类集团令）=事件即时刷。
+- `[QA] FLAG`（当日 qa/ 证据缺或 benchmark 非当日刷新·charter v1.0=集团 orders L254 2026-09-28）：=charter 每日 crawl 轮——web 直采 ≥1 新源（三问门=QA 令+P-56/P-74 既有授权链·宿主 web_fetch 只读零 key）→基准面刷新（`docs/global-benchmarks.md` §①/§③/§④+state.json `benchmarks_refreshed`=当日）→信号入 `docs/research/intelligence-wall.md`（带源链接+分级+消费落点）→`qa/smoke-R<轮>.log`+`qa/smoke-R<轮>.png` 落盘（png=`tools/skills/bigdomain-loop-scan/scripts/render_smoke_png.ps1` 渲染真实 log·禁 P 图伪造）→自验清单四项对照（每日 crawl/benchmark 15h 律/调研来源链/信号墙）→收账 commit 含令引用；连续两轮不过=CPH4 接管重写（charter 红灯）；轻轮自验=收账行引用当日 smoke 证据集。
 - `[TASKS] INFO`：backlog 顶行可认领=认领执行（认领动作落 backlog 行）；全部依赖 CEO 物理件=不可认领·如实记录待物理件不造活。
 - `[EXPORT] FLAG`（export_ts ≥24h）：刷新 `docs/status-export.json`（export_ts ISO8601+do/depts/outs/results 全派生自实际状态·F3 律禁写死）。
 - `[TREE] FLAG`（脏树/index.lock）：index.lock 或他执行体写盘=同仓单执行体退避（只读不动如实记录）；脏树仅本 loop 自身收账产物=正常收账不退避。

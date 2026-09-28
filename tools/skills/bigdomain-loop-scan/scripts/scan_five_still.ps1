@@ -96,6 +96,23 @@ try {
   }
 } catch { Write-Output '[BENCH] INFO refresh_age_unmeasured' }
 
+# --- [QA] daily smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28: daily crawl + qa/ evidence + 15h benchmark staleness cap) ---
+try {
+  $today = (Get-Date).ToString('yyyy-MM-dd')
+  $qaDir = Join-Path $repo 'qa'
+  $qaPng = 0; $qaLog = 0
+  if (Test-Path $qaDir) {
+    $qaPng = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.png' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
+    $qaLog = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.log' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
+  }
+  $benchToday = ('' + $st.benchmarks_refreshed) -eq $today
+  if ($qaPng -ge 1 -and $qaLog -ge 1 -and $benchToday) {
+    Write-Output "[QA] PASS today_png=$qaPng today_log=$qaLog bench_today=$benchToday"
+  } else {
+    Write-Output "[QA] FLAG today_png=$qaPng today_log=$qaLog bench_today=$benchToday (charter daily crawl round due)"
+  }
+} catch { Write-Output '[QA] FLAG check_failed' }
+
 # --- [TASKS] canonical board + claim board ---
 try {
   $T = [System.IO.File]::ReadAllLines((Join-Path $repo 'tasks.md'), $utf8)

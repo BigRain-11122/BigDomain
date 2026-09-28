@@ -1,0 +1,47 @@
+BigDomain QA Smoke Test - round R530 - 2026-09-28 ~09:45 +08:00
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate
+charter: group docs/qa-smoke-test-charter.md v1.0 - Build > Smoke > Screenshot > Log > Self-judge
+charter BigDomain checklist: 4 items, judged below with on-disk evidence
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web_fetch, zero-key, read-only, 3 attempts / 3 hits / 1 logged miss):
+    - openstd.samr.gov.cn/bzgk/gb/std_list?p.p2=45438   [A-grade, NEW source channel] -> HIT
+      GB 45438-2025 "AI-generated content labeling method" mandatory national standard
+      status=current, published 2025-02-28, effective 2025-09-01 (same day as CAC measures)
+      closes the M-pending item in global-benchmarks sec.3 (two 2026-09-27 attempts had failed)
+    - pay.weixin.qq.com/doc/v3/merchant/llms.txt   [A-grade index, page updated 2026.09.23] -> HIT
+      mini-program payment 14-API tree; order-query APIs 4012791899 / 4012791900; close 4012791901
+    - pay.weixin.qq.com/doc/v3/merchant/4012075249.md   [A-grade best-practice, NEW page] -> HIT
+      callback+query guidance: query on every frontend return; re-pay must reuse original
+      out_trade_no; polling gradients 5s/30s/1m/3m/5m/10m/30m or 30s-scan of 10min unpaid
+      orders, 10 tries then close; T+1 bill reconciliation after 10:00, four cases;
+      paid verdict = signature ok + trade_state=SUCCESS
+    - bing.com/search?q="GB 45438-2025"   -> MISS (query parsed as storage unit gigabyte,
+      irrelevant results; honest negative, future standard lookups go via openstd channel)
+
+[2] benchmark table updated today, not stale >15h: PASS
+    docs/global-benchmarks.md (16,320B at round start, mtime 2026-09-27 14:39 -> updated now):
+    - sec.1 AIGC row: GB 45438-2025 confirmed via openstd, effective 2025-09-01
+    - sec.1 payment row: callback+query best-practice guidance appended (4012075249)
+    - sec.3 source rows: GB 45438-2025 M->confirmed; new row 4012075249; llms.txt re-crawl note
+    - sec.4 new record row: 2026-09-28 C-slice (daily crawl round R530)
+    src/os/state.json benchmarks_refreshed = 2026-09-28 (was 2026-09-27)
+
+[3] research conclusions carry data sources, not fabricated: PASS
+    global-benchmarks sec.3 = 12 source rows, each with named source + grade + two-state status
+    http-link spot check (Select-String -Pattern 'http', 2026-09-28 ~09:43):
+      docs/research/R-20260926-cold-start-strategy.md http_links=4
+      docs/research/R-20260927-venue-flow-benchmark.md http_links=2
+      (global-benchmarks sources are recorded as bare domain paths per its sec.3 table format)
+    all 6 R-files in docs/research/ carry verification statements (what was read, when, grades)
+
+[4] discovered signals written to intelligence-wall: PASS
+    docs/research/intelligence-wall.md created this round: signals W1..W5,
+    each with source link + grade + consumer landing point (P-65 application table included)
+
+self-judge: 4/4 checklist items PASS.
+evidence set = this log + qa/smoke-R530.png (PNG rendered verbatim from this log by
+  tools/skills/bigdomain-loop-scan/scripts/render_smoke_png.ps1 - no screenshot fabrication,
+  the image content is the actual log text produced by the real commands above)
+per charter: no self-declared "done" - checklist all checked + files on disk + commit as proof.
+scheduled task check: schtasks BigDomain-OSLoop = Running, next 2026-09-28 09:44 (no self-heal needed)
