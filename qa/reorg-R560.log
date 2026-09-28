@@ -1,0 +1,15 @@
+[A] pre-asserts OK: state 82,217B==git HEAD, log=64, tick=559, counters 29/8/0/16 == export; tokens=12 P2=1; arch 3,202,316B sep=b'\n'; board rows open=2 done=0; export results 104 tick 559; hb endsNL; export roundtrip+NL
+[B/PROBE] candidate A window R558..R559: 4 lines 3780B -> built final 81,954B margin -1,954B gate<=78,500B FAIL over-80,000-line; counters W/idle/nop/sub=27/8/0/15; catalog P-32
+[B/PROBE] candidate B window R557..R559: 6 lines 6629B -> built final 80,057B margin -57B gate<=78,500B FAIL over-80,000-line; counters W/idle/nop/sub=25/8/0/14; catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47
+[B/AMEND] A/B both failed the margin gate -> amend-extension per R523/R525 fold precedent, probing C=R553..R559 (folds prior window line)
+[B/PROBE] candidate C window R553..R559: 7 lines 11780B -> built final 76,414B margin 3,586B gate<=78,500B PASS; counters W/idle/nop/sub=25/8/0/14; catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47
+[B/SELECT] gate-passers=C -> selected C (largest margin, pre-registered rule); final 76,414B margin 3,586B; next round-start first-measure per R536 rule
+[B] in-memory build OK: selected C state 76,414B margin 3,586B log 64->60; arch->3,285,116B; export results 104->105; hb row pending
+[C1/R362] state-log archive 3,202,316B -> 3285116B pure append OK (marker at 3,202,316B, snapshot 82,217B == git HEAD bytes)
+[C3/R363/R364] state 82,217B -> 76,414B OK (log 64->60; retained 57 items verbatim; round anchors zero-gap; P/D catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47; json parse OK; line count 68)
+[C4] board = header + R560 done row + bootstrap row OK (3644B)
+[C5/EXPORT] ts=2026-09-29T07:03:45+08:00 tick 559->560; results 104->105; self_drive W/idle/nop/sub=25/8/0/14 mechanically re-derived OK
+[C6/HB] heartbeat row appended OK (endsNL convention preserved)
+[D/VERIFY] read-only re-read pass: state/archive/board/export/heartbeat all re-parse and re-assert OK
+[D/VERIFY] AC-R362 snapshot PASS; AC-R363 window probe+lock PASS (sel=C, 3 candidates measured); AC-R364 dual-parse+anchors+catalog PASS; AC-R365 verify-then-write PASS
+[CLOSEOUT] ALL AC-R362..R365 PASSED; nothing failed; commit next
