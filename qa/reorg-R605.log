@@ -1,0 +1,19 @@
+R605 closeout run log (tmp_r605_closeout.py, verify-then-write, console output verbatim)
+Run: 2026-09-29 ~18:25 +08:00
+Pre-registered criteria: AC-R471..R475 + AC-K64a..e = src/os/backlog.md R605 row (written before any mutation)
+Product face evidence: qa/venue-R605.log (suite 7/7 exit=0) + qa/venue-runner-R605.log (RUNNER PASS 16/16 suites green, 151 criteria, reconcile controls 6/6, 24.3s)
+
+[A] pre-asserts OK: state 80,276B no-BOM log=63 window 8L/12694B rounds-ok cat=4; counters 29/8/0/16; arch/done/bl/exp/hb/expq loaded; snapshot==git HEAD
+[B] in-memory build OK: state 73,407B margin 6,593B log 63->58; arch->4,179,619B done->264,055B; counters 29/8/0/16 -> 23/8/0/13
+[C1/R471] archive 4,098,927B -> 4,179,619B pure append OK
+[C2/K64] done archive 262,160B -> 264,055B pure append OK; R604 row verbatim 1796B
+[C3/R472..R474] state 80,276B -> 73,407B OK (margin 6,593B; log 58; header 55 verbatim; dual-parse py OK)
+[C4/K64b] board = header + R605 done row + D-03 gated row + bootstrap row; 5,792B OK
+[C5/VN-queue] explore queue venue row marked done OK (3,914B)
+[C6/EXPORT] ts=2026-09-29T18:25:25+08:00 tick 604->605; results total 149; self_drive W/idle/nop/sub=23/8/0/13; queue_explore 5->4 OK
+[C7/HB] heartbeat row appended (1984B) OK
+[CLOSEOUT] ALL AC-R471..R475 + AC-K64a..e PASSED; commit next
+
+Window compressed: R601..R604 (8 lines, 12,694B content) -> 1 paren-format summary line; pre-op full snapshot (80,276B, byte-identical to git HEAD) appended to logs/state-log-archive-2026-09.md section R605 (pure append, prefix-asserted).
+P/D catalog (regex mechanical dedup, zero hand-dropping): 4 order tokens, embedded in the summary line.
+Post-closeout state waterline: 73,407B under the 80,000B line (margin 6,593B); next re-org R48 projected ~R610 at measured ~1.9KB/round pace.

@@ -1,7 +1,7 @@
 # P3 新方向探索线队列（state/queue/explore.md·Self-Drive v2.0·常备 ≥10 条·2026-09-28 R532 建面）
 
 - [ ] 会员订阅定价带后续调研（19.9 锚定档过会落地后的定价心理面/档位梯度·判负留痕合法）
-- [ ] 虚拟场景租赁与店面招商模式探索（m4 参观端转化后继·P1 呈批面探索稿）
+- [x] 虚拟场景租赁与店面招商模式探索（m4 参观端转化后继·P1 呈批面探索稿）——[done 2026-09-29]（R605 VenueFace 落地件 src/sandbox/ledger/venue.py+test_venue.py：场地租赁〔容量窗占】+店面招商【独占租约】两域·租费=term×单价一笔 spend 唯一 token 触点·容量门/独占门/同租幂等全拒零扣费·窗到失效·提前终止零 token 面·占用行全带 spend tx 溯源·test_venue.py 7/7 全绿+reconcile_all 扩十六套件 RUNNER PASS 151 判据·qa/venue-R605.log+qa/venue-runner-R605.log·AC-VN1..VN7 预注册先行全过·定价/期限参数值全 [needs-CEO] P1 呈批不执行）
 - [x] UGC 创作者激励梯度探索（incentive-agent-spec 分配层参数面后继·参数=[needs-CEO]）——[done 2026-09-29]（R600 IncentiveFace 梯度分配器 src/sandbox/ledger/incentive.py+test_incentive.py：递减边际带状梯度+窗项圈+窗预算帽确定性 pro-rata·每笔=恰一条 share 出账·窗幂等·SUITE 7/7 exit=0·reconcile_all 扩十二套件 RUNNER PASS 123 判据·qa/incentive-R600.log+qa/incentive-runner-R600.log·AC-IG1..IG7 预注册先行全过·参数数值 [needs-CEO] 采纳面 P1 呈批）
 - [ ] 慢直播转化件合规运营模式（以 BigCompute 风控为准引用·launch-ops-rehearsal §一 承）
 - [ ] 微信小程序虚拟支付合规路径跟进（benchmarks B 片官方文档面·商户号到位后接线）

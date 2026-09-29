@@ -1,0 +1,8 @@
+PASS AC-VN1: term 10 x price 5 = fee 50 via one spend (300->250); occupancy active inside [100,109]
+PASS AC-VN2: capacity 2 filled by [200,209]+[205,214]; third overlapping rental rejected E_VN_FULL with zero charge (200==200)
+PASS AC-VN3: is_rented(110)=False after end 109; bob re-rents the freed slot [110,114] fee 20; alice audit rows=2 with tx provenance
+PASS AC-VN4: identical re-rent [110,114] rejected E_VN_DUP with zero charge (30==30)
+PASS AC-VN5: alice leases [300,309] fee 30; bob's overlapping lease rejected E_VN_LEASE_ACTIVE zero charge (30==30); bob leases the next window [310,314] fee 15; tenant flip at 309->310
+PASS AC-VN6: termination at 305: effective through 305, free from 306; alice balance unchanged (170==170); spend-tx count unchanged (6==6) - no refund face exists in the mechanism
+PASS AC-VN7: all 6 occupancy rows bind a real spend tx for their own account: venue/plaza@db1b4501df; venue/plaza@42e91647d1; venue/plaza@5e287063d1; venue/plaza@f1c4be242d;...; source scan banned-hits=[] non-ascii=0
+SUITE PASS 7/7
