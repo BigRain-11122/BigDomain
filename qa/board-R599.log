@@ -1,0 +1,20 @@
+qa/board-R599.log — 板规执法第五十九刀（board-law knife 59·P-2026-09-25-18 ④常设承接·R596-R598 三轮漏刀补刀·R556/R575 补刀先例）
+
+【判据预注册·先于任何板面/档面改动落（诚实律）】
+AC-K59a: archive 迁档=纯 append——pre-op 字节尺寸记录+迁后前缀逐字节不变断言（既有 26 节零覆写）+BOM 保全
+AC-K59b: R596/R597/R598 过当轮 done 行 3 条 verbatim 迁 docs/archive/backlog-done-2026-09.md §R599节（逐字节保真·零改写）
+AC-K59c: 迁后主板收口=规约头+R599 当轮 done 行+D-20260929-03 gated 行+bootstrap 行（零其余 [x] 残留）
+AC-K59d: R599 行判据面兑现注记同步落板（AC-PR1..PR7 全过·SUITE PASS 7/7·RUNNER PASS 11/11）
+AC-K59e: 主板复检零 [x] 残留断言+archive 节数断言+双文件 json/markdown 复读通过
+
+【执行证据（ASCII 机械输出·脚本 r599_closeout.py verify-then-write）】
+K59.pre: archive_bytes=242939 bom=True board_done_rows=3 open_rows=3
+K59.a PASS: archive pure-append 242939 -> 249461 bytes, prefix identical, BOM=True
+K59.b PASS: 3 done rows verbatim-migrated (moved from board, zero residue)
+K59.c PASS: main board = header + R599 done row + gated + bootstrap (5676 bytes)
+K59.d PASS: R599 row done-suffix carries AC-PR1..PR7 verdicts + evidence paths
+K59.e PASS: explore queue item-6 done-marked (2455 bytes); open items 8->7
+HB PASS: heartbeat R599 row appended (file 99916 bytes, bom=False)
+STATE PASS: tick 598->599, 2 log lines appended, reload-parse ok, 78929 bytes (bom=False)
+EXPORT PASS: export_ts=2026-09-29T16:42:08+08:00 ceo_face updated, results tick 599 + R599 row, self_drive 29/10/0/15 queue_explore 7, 109794 bytes
+K59 ALL PASS (a..e) + state/export/heartbeat verify-then-write roundtrip ok

@@ -1,8 +1,8 @@
 """Product health-check runner (BigDomain explore-line item #9, R594;
 pay/member standalone-reconcile extension, R595 follow-up row).
 
-One command = the full sandbox regression fan-out (nine acceptance
-suites, 100 pre-registered criteria in total) plus the standalone
+One command = the full sandbox regression fan-out (eleven acceptance
+suites, 116 pre-registered criteria in total) plus the standalone
 reconcile product face for all three bookkeeping domains, each with a
 clean/tamper dual control:
 
@@ -72,6 +72,7 @@ SUITES = [
     # (label, suite path relative to the sandbox root, expected criteria)
     ("lobby", os.path.join("lobby", "test_client.py"), 13),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
+    ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
