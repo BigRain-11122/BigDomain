@@ -1,0 +1,32 @@
+== R617 re-org R50 phase1: probe + snapshot + compress ==
+pre-op state.json bytes=80878
+git HEAD blob bytes=80878
+AC-R501a PASS: pre-op byte-identical to git HEAD blob
+file lines=75
+log entries=66
+candidate A: remove 6 lines, summary 933B, compressed 75341B, +reserve 4600 final_est 79941B, margin_est -1441B
+  catalog_A=D-20260929-03,P-2026-09-25-18
+candidate B: remove 8 lines, summary 1048B, compressed 73251B, +reserve 4600 final_est 77851B, margin_est 649B
+  catalog_B=P-2026-09-25-18,D-20260929-03
+candidate C: remove 9 lines, summary 1453B, compressed 72225B, +reserve 4600 final_est 76825B, margin_est 1675B
+  catalog_C=P-2026-09-25-18,D-20260929-03,D-20260924-08
+SELECTED candidate C: remove 9 lines -> 1 summary line (largest margin among <=78500B gate passers)
+AC-R501b PASS: archive pure append 4341331B -> 4422309B (prefix asserted; snapshot bytes == pre-op)
+AC-R503a PASS: header lines verbatim + top fields preserved + python parse OK
+AC-R502a PASS: window 9 lines -> 1 summary line; log 66 -> 58 entries
+AC-R502b PASS: mechanical round sequence R608,R609,R610,R611,R612,R613,R614,R615,R616 zero-gap in summary line
+compressed state.json bytes=72225 (pre-closeout)
+== R617 phase1b: catalog regex defect fix (first-pass missed O-YYYY-MMDD-NNN tokens) ==
+snapshot tail9 entries re-extracted from archive section
+fixed catalog=P-2026-09-25-18,O-2026-0929-023,D-20260929-03,D-20260924-08,O-2026-0929-028
+AC-R502c PASS: catalog re-derived mechanically from archived window (zero hand-drop), 5 tokens
+state.json bytes now=72257 (catalog-substring surgical replace only)
+== R617 re-org R50 phase2: closeout (tick 616->617, two log lines, heartbeat) ==
+pre-closeout bytes=72257, log entries=58
+FINAL converged: final=75270B margin=3230B (iterations=2)
+AC-R503b PASS: dual-parse (python) + header verbatim + top fields preserved (tick 616->617)
+AC-R504 PASS: post-compact 72257B + closeout two lines = final 75270B <= 78500B (margin 3230B)
+AC-R505a PASS: state log carrier line + tokens line landed
+state.json written: 75270B
+heartbeat R617 row appended (ts=21:10, final=75270B margin=3230B)
+AC-R505b PASS: heartbeat standing law R532 closed same-window
