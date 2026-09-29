@@ -337,3 +337,8 @@
 ## R651
 
 - [x] [done 2026-09-30] R648 触线整编 R58 承做轮（**水位线触发**：轮首首测 80,488B scan 越 80,000B 十进制线=R647 承接注记「本轮收账后预计越线=R58 整编同构承接」兑现〔R536 轮首首测为准律·R640/R644 先例同构〕·P-2026-09-25-18 项④主线·第六十刀·AC-R581..R585 预注册本行先行于任何盘面变更）：AC-R581 pre-op state.json==git HEAD blob 逐字节（树净前置）+pre-op 全量快照 logs/state-log-archive-2026-09.md §R648 append 节纯 append prefix 断言〔快照==HEAD blob〕；AC-R582 窗 L57..65=R57 窗汇总行随窗折叠+R644..R647 四轮 8 行压 1 汇总行〔9 行〕·机械轮号列 R644..R647 连续 4 轮零缺·P/D/O 编目 regex 机械去重零手工；AC-R583 头部块 L0..56 verbatim（57 项）+顶置四字段全保〔tick 647→648·last_order/last_decision_rows/benchmarks_refreshed 持平〕+json.loads+PS ConvertFrom-Json 双口径过〔UTF-8 口径〕+log 末项无尾逗号〔R189 承传〕+roundtrip 先验（再序列化==原文·零漂移前置）；AC-R584 终态 ≤78,500B 余量闸〔固定点收敛 FINALB/MARGIN 数字〕+on-disk 实测==宣称终态；AC-R585 证据=qa/reorg-R648.log 全 AC 行+heartbeat R648 行承做〔R532·R647 行在册无补账〕·板行 done 标记随收账
+
+
+## R653
+
+- [x] R652 state.json 再整编 R59（P-2026-09-25-18 ④主刀第六十一刀·轮首首测 81,249B scan 越 80,000B 十进制线=R651 承传注记「本轮收账后预计越线」兑现·compress 先例 R536/R545/R553/R596/R601/R608/R636/R640/R644/R648）：AC-R591=pre-op 81,249B 全量快照逐字节==git HEAD src/os/state.json+archive §R652 append 节纯 append prefix 断言既有 51 节零覆写；AC-R592=窗〔R58 窗汇总行+R648..R651 四轮 8 行〕9 行压 1 汇总行〔轮型注记+机械轮号列 R648..R651 连续 4 轮零缺+P/D/O 编目 regex 机械去重零手落+头部块 57 项 verbatim 零改〕；AC-R593=顶置四字段全保+json.loads 脚本断言+PS ConvertFrom-Json 独立复验双口径过；AC-R594=整编后实测 ≤80,000B 十进制线（收账后终态 ≤78,500B 余量闸）；AC-R595=本行+backlog 行 done+commit 含 P-2026-09-25-18〔P-51 口径〕 [done 2026-09-30]
