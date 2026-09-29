@@ -1,0 +1,11 @@
+=== qa/board-R625.log (R625 closeout chain, knife 70) ===
+R625 board-law knife 70 preregistered criteria (written before any mutation):
+AC-K70a = stale done row R624 extracted verbatim (line-exact) from the live board
+AC-K70b = done-archive pure append (prefix-asserted, existing sections untouched, BOM state recorded)
+AC-K70c = live board keeps header + R625 claim rows + D-03 gated row + bootstrap row
+AC-K70d = migrated row byte-counted and re-read identical from the archive
+AC-K70e = evidence = this log
+PASS AC-K70a extraction: found 1/1 stale R624 done rows
+PASS AC-K70b archive pure append: old 289090B is a prefix of new 291976B
+PASS AC-K70c live board: R624 row removed, R625 claim rows + D-03 + bootstrap kept (4 bullet lines)
+PASS AC-K70d archive re-read: row verbatim present (2784B migrated, archive BOM=True)

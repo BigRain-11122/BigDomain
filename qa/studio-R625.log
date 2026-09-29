@@ -1,0 +1,8 @@
+﻿PASS AC-SB1: registry = studio_products only (['studio_products']); re-register idempotent; kind-drift E_ST_KIND_MISMATCH; bad kind E_ST_BAD_ARGS; module source has zero direct INSERT INTO venue_occupancy and zero row-mutation verb surface
+PASS AC-SB2: year window [26,26] one spend 9800 (bal delta 9800); replay E_ST_DUP zero charge; other-account E_ST_TAKEN zero charge; renewal year 27 legal (window [27, 27], delta 9800); tenant 26/27 = alice, 28 = None
+PASS AC-SB3: same account holds game (pixelforge) + quant (quantworks) seats in year 26 legally (delta 19800); parallel same-kind studio indienest onboarded by carol legally (delta 9800); each onboarding exactly one spend
+PASS AC-SB4: unknown studio E_ST_UNKNOWN; bad account E_ST_BAD_ARGS; bad price E_ST_BAD_ARGS; bad year E_ST_BAD_ARGS; empty ref E_ST_BAD_ARGS; benefits-on-unknown E_ST_UNKNOWN; bob balance flat at 50000 (all rejects zero charge)
+PASS AC-SB5: canon bundles B1 ['idea_pool_access', 'player_traffic_boost', 'studio_floor'] / B2 ['stock_inspiration_feed', 'co_create_observation_entry', 'quant_screen_spotlight']; alice profile at 26 = ['studio:pixelforge', 'studio:quantworks'] (all rows carry spend tx, year 26); reads move zero tokens; empty profile for bob; year-28 profile empty
+PASS AC-SB6: spends alice 39400 = 9800+9800+19800, bob 0 = 0, carol 9800 = 9800; total fees 49200; pool:reserve 99200 = 50,000 seeded + fees recirculated (conservation); 3 registry rows immutable, 4 venue occupancy rows; zero banned verbs in module source
+PASS AC-SB7: config.json byte-identical before/after (zero new keys, prices arrive only as caller arguments, production anchors 9800/19800 CNY stay [needs-CEO] P1 approval-only); studio.py pure ASCII (0 non-ascii bytes)
+SUITE PASS (7/7 criteria green)

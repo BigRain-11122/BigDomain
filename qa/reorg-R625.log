@@ -1,0 +1,13 @@
+=== qa/reorg-R625.log (R625 re-org knife 52, round-start 81,533B, window R621..R624 / fold candidate R617..R624) ===
+PASS AC-R521 pre-op anchor: disk 81533B == git HEAD 81533B
+PASS pre-state: tick=624 log=66 items
+PASS AC-R522 window pairing: last 8 items are the R621..R624 round+tokens pairs in order
+PASS AC-R522 candidate-B fold anchor: item -9 is the R51 window summary (R617..R620)
+candidates built-and-measured: A (window R621..R624 8 rows) final 76390B margin 2110B / B (window R617..R624 9 rows, R51 summary folded) final 75511B margin 2989B
+PASS AC-R522 gate <=78,500B: at least one candidate passes
+PASS AC-R522 selection: B selected (largest margin among gate passers)
+PASS AC-R524 final size 75511B <= 78,500B gate (margin 2989B, post-compact 72228B, log 66->60 items)
+PASS AC-R521 archive pure append: old 4504729B prefix of new 4586600B
+PASS AC-R523 top fields kept (tick 624->625, last_order/last_decision_rows/benchmarks_refreshed unchanged) + header block verbatim + json.loads pass (PowerShell ConvertFrom-Json dual check appended after this run); AC-R525 = commit carries P-2026-09-25-18; catalog 8 tokens: P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10
+chain result: ALL GREEN
+PS-PARSE PASS tick=625 logitems=60 last_order=2026-09-28 22:1x dec=82 bench=2026-09-29

@@ -1,8 +1,8 @@
 # P3 新方向探索线队列（state/queue/explore.md·Self-Drive v2.0·常备 ≥10 条·2026-09-28 R532 建面）
 
 - [x] 元宇宙身份付费面（C5 价目行·私人房间 ¥9.9/月+化身皮肤 ¥29.9 永久+共创者铭牌 ¥49.9 永久+高级入驻楼层铭牌 ¥199 永久·props 装扮域邻界=先查重后建·venue 场地面邻界同）——[done 2026-09-29]（R624 IdentityFace 落地件 src/sandbox/ledger/identity.py+test_identity.py：参照非双建=永久三品类写路径全走 PropsFace.buy_prop(kind='cosmetic') entitlement 行落 props_inventory·私人房间写路径全走 VenueFace.lease_storefront 月窗租约占用行落 venue_occupancy·本件仅新增 identity_products 品类注册表一张·四品类门全拒在 spend 前零扣费〔同户同房同月 E_ID_DUP/异户同月 E_ID_TAKEN/重复购 E_ID_DUP/注册门 E_ID_UNKNOWN+E_ID_KIND_MISMATCH〕·identity_profile 派生读面全带 spend tx 溯源·零 UPDATE 面·AC-ID1..ID7 预注册=板行先于代码·SUITE 7/7 全绿〔首跑两处测试件缺陷修复后净跑·模块本体首验即净〕·reconcile_all 扩二十二套件 RUNNER PASS 196 判据+对账双控 6/6 18.6s 零回归·qa/identity-R624.log+qa/identity-runner-R624.log·价目全 [needs-CEO] P1 呈批不执行）
-- [ ] 小游戏工作室入驻年费面（B1 价目行 ¥9,800/年·游戏脑洞提案池+精准玩家流量+虚拟工作室楼层三权益束·年费窗幂等）
-- [ ] 量化工作室入驻年费面（B2 价目行 ¥19,800/年·股民灵感数据+策略共创观测入口+QUANT 城大屏露出三权益束·与 B1 同构可并件）
+- [x] 小游戏工作室入驻年费面（B1 价目行 ¥9,800/年·游戏脑洞提案池+精准玩家流量+虚拟工作室楼层三权益束·年费窗幂等）——[done 2026-09-29]（R625 与 B2 同构并件：StudioFace 落地件 src/sandbox/ledger/studio.py+test_studio.py·AC-SB1..SB7 预注册先行全过·SUITE 7/7 首跑全绿+reconcile_all 扩二十三套件 RUNNER PASS 203 判据零回归·qa/studio-R625.log+qa/studio-runner-R625.log·价目 [needs-CEO] P1 呈批）
+- [x] 量化工作室入驻年费面（B2 价目行 ¥19,800/年·股民灵感数据+策略共创观测入口+QUANT 城大屏露出三权益束·与 B1 同构可并件）——[done 2026-09-29]（R625 与 B1 同构并件同件收口·证据同上=qa/studio-R625.log+qa/studio-runner-R625.log）
 - [ ] 企业版 AI 算力验证 API 计量计费面（B5 价目行 ¥0.5/次起·按调用量计量+计费+对账·BigMoney 引擎引用面·非投顾定性常驻）
 - [ ] 城市数据报告付费面（B6 价目行·季度报告 ¥99/份+定制行业洞察 ¥999/份·脱敏真实运营数据·交付=权限门+下载凭证）
 - [x] 策略共创围观付费面（C4 价目行·D-20260924-10 观测付费产品归本司〔核心收入〕·单策略 ¥9.9 永久观测/¥19.9 月卡无限观测·只看结果不看源码〔安全+合规〕）——[done 2026-09-29]（R623 ObservationFace 落地件 src/sandbox/ledger/observation.py+test_observation.py：结果-only 注册表〔零 source 列〕+单策略永久权跨月长效+月卡窗幂等〔同月重购拒付在 spend 前〕+闸门 fail-closed+observe 视图键集恰四键零 token 变动·SUITE 7/7 全绿〔首跑一处测试件断言时点缺陷修复后净跑·模块本体首验即净〕·reconcile_all 扩二十一套件 RUNNER PASS 189 判据+对账双控 6/6 18.4s 零回归·qa/obs-R623.log+qa/obs-runner-R623.log·AC-OB1..OB7 预注册先行全过·创作者 30% 分成=分配层引用非双建·价目 [needs-CEO] P1 呈批不执行）
