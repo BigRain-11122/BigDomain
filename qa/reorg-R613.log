@@ -1,0 +1,18 @@
+qa/reorg-R613.log - state.json re-org R49 evidence (round R613, 2026-09-29)
+AC-R491..R495 pre-registered in src/os/backlog.md R613 row before any mutation.
+--- preconditions ---
+data lines loaded (4), zero ASCII dquote/backslash: PASS
+pre-state 81,185B on disk, log 67 entries, tick 612: PASS
+R491a working state == git HEAD blob (sha1 872920d4f04b682ae4ea9641435030b1e77f3c36): PASS
+line anchors (75 lines, window lines 61..70, close at 71): PASS
+R492a window rounds 608..612 each main+tokens pair, zero gap: PASS
+R492b P/D/O catalog mechanical dedup set-match (D-20260924-08,D-20260929-03,O-2026-0929-023,O-2026-0929-028,P-2026-09-25-18): PASS
+window 10 lines removed = 10420B -> post-compact 70765B
+R494 calc final 74400B <= 78,500B (margin 4100B): convergence PASS
+R491b archive pure append 4,260,046B -> 4341331B (prefix intact, tail == marker+blank+snapshot): PASS
+R494 final on-disk 74400B <= 78,500B (margin 4100B): PASS
+R493 head block 57 entries verbatim + top three fields preserved + dual parse (raw + ConvertFrom-Json): PASS
+--- summary ---
+removed=10420B post=70765B final=74400B margin=4100B log=67->60 tick=612->613
+R495 closes at round commit: state log line + backlog done row + commit message carries P-2026-09-25-18.
+ALL AC-R491..R495 PASS
