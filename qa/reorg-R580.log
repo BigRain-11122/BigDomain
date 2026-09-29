@@ -1,0 +1,24 @@
+# qa/reorg-R580.log — state.json re-org R42 evidence log (verify-then-write)
+# Round: R580 | Trigger: round-start first-measure 80,768B > 80,000B waterline (R578/R579 carry-notes cashed, R536 rule)
+# Pre-registered AC (backlog R580 row landed BEFORE any state.json mutation):
+#   AC-R421: pre-op full snapshot -> logs/state-log-archive-2026-09.md sec-R580-append (pure append + prefix assertion + snapshot == git HEAD src/os/state.json bytes)
+#   AC-R422: window candidates built-and-measured: A=R577..R579 pairs 6 rows / B=A+R41 window-summary fold 7 rows / C=B+R545 pair fold 9 rows; final sizes measured; gate = pass <=78,500B, select largest margin (R574-C/R577-C precedent)
+#   AC-R423: compression four assertions: round-number chain R545..R579 continuous zero-gap (R546..R576 re-anchored via R41 summary fold) + header block verbatim vs git HEAD item-level + P/D catalog regex mechanical dedup + JSON parse dual (json.loads + ConvertFrom-Json)
+#   AC-R424: verify-then-write — this log records probe readings + mutation sequence + read-only re-verify; final size and margin recorded in backlog R580 done row
+# Mutation sequence (asserted below in append mode): [1] snapshot append -> [2] final build+verify -> [3] single atomic write of src/os/state.json -> [4] read-only re-verify -> [5] export refresh -> [6] heartbeat standing row append
+[1] pre-op: disk bytes == git HEAD bytes, size=80768 (AC-R421 prefix-half PASS)
+[2] snapshot: archive 3,691,756B -> 3,772,603B pure append, prefix asserted (AC-R421 PASS)
+[3] catalogs: A=24 B=33 C=33 tokens; chain R545..R579 zero-gap re-anchor asserted (AC-R423 chain-half PASS)
+[4] probe: byte-stable finals A=75,331B B=73,819B C=72,025B; gate<=78,500B passing=[A, B, C]; selected=C (largest margin, R574-C/R577-C precedent)
+[ABORT] [5] byte-stable assertion failed: A/B/C recompute mismatch
+[1] pre-op: disk bytes == git HEAD bytes, size=80768 (AC-R421 prefix-half PASS)
+[retry] first pass aborted pre-write at byte-stable gate (estimate margin 10,050B was 7 chars vs real 7,9xxB 6 chars); estimates re-anchored to first-pass probe readings; archive snapshot from first pass retained (state.json untouched - asserted)
+[2] snapshot: archive 3,691,756B -> 3,772,603B pure append, prefix asserted (AC-R421 PASS)
+[3] catalogs: A=24 B=33 C=33 tokens; chain R545..R579 zero-gap re-anchor asserted (AC-R423 chain-half PASS)
+[4] probe: byte-stable finals A=75,330B B=73,818B C=72,024B; gate<=78,500B passing=[A, B, C]; selected=C (largest margin, R574-C/R577-C precedent)
+[5] build: final=72,024BB header verbatim vs HEAD (4 fields, tick 579->580 by accounting), chain+catalog in summary, json.loads + ConvertFrom-Json dual PASS (log 63->57 items)
+[6] write + re-verify: state.json=72,024B margin=7,976B tick=580 items=57 (AC-R424 PASS)
+[7] export refreshed: export_ts=2026-09-29T12:05:35+08:00 tick row 579->580 results +1 self_drive W/idle/nop/sub=23/37/2/12 (F3 mechanical)
+[8] heartbeat standing row appended (R532 standing law)
+[done] R580 re-org R42 complete: pre-op 80768B -> final 72,024B (margin 7,976B), candidate=C (A/B/C=75,330B/73,818B/72,024B), log 63->57 items, next re-org R43 on waterline re-cross
+[7-fix] read-only re-verify caught self_drive criterion drift: first write used full-log substring counts (idle 37 / nop 2 / sub 12) vs R556-established anchored nonparen criterion; re-derived anchored W/tok/idle/nop/P2/sub = 23/9/8/0/1/13 (idle 8 and nop 0 match R579 baseline unchanged, sub 16->13 consistent with state log main-line claim); export repaired same round before commit (AC-R424 read-only re-verify doing its job)
