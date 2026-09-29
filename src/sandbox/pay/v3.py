@@ -18,19 +18,23 @@ A-grade direct crawl 2026-09-27/28):
     criterion = signature verified AND trade_state == SUCCESS; amounts
     are in fen (cents).
 
-Sandbox honesty (stand-in primitives, explicit, wiring-day swap faces):
-  - Production verifies RSA-SHA256 with the WeChat Pay platform public
-    key / platform certificate. The Python stdlib has no RSA and real
-    keys are CEO account-domain physical items (keys only in .env,
-    never in git), so the stand-in is HMAC-SHA256 over the REAL V3
-    verification string. The input-string rule itself is
-    production-faithful; only the signature primitive is a stand-in.
+Sandbox honesty (R598: real primitives live behind opt-in; the HMAC /
+base64 stand-ins remain the no-config default):
+  - Production verifies RSA-SHA256 (PKCS#1 v1.5) with the WeChat Pay
+    platform public key / platform certificate. Channel spec keys
+    "verify_mode": "rsa" + "platform_public_key_pem" switch the
+    verifier to the REAL RSA-SHA256 primitive (cryptography package,
+    local library, zero network). Without them the explicit HMAC-SHA256
+    stand-in over the REAL V3 verification string stays the default;
+    the input-string rule itself is production-faithful either way.
+    Real platform keys are CEO account-domain physical items (keys
+    only in .env, never in git); tests self-generate throwaway fixture
+    keys at runtime and never persist them.
   - Production decrypts resource with AES-256-GCM under the APIv3 key
-    (algorithm AEAD_AES_256_GCM). The stdlib has no AEAD and the sandbox
-    must not fake one, so the stand-in is a reversible base64 envelope
-    carrying the same field contract (algorithm / ciphertext /
-    associated_data / nonce); wiring day swaps the primitive behind the
-    same field contract.
+    (algorithm AEAD_AES_256_GCM). The rsa mode does the REAL AEAD
+    decrypt via "apiv3_key_b64" (base64, exactly 32 bytes); the default
+    keeps the reversible base64 envelope carrying the same field
+    contract (algorithm / ciphertext / associated_data / nonce).
   - The timestamp window is parameterized (benchmarks note: the
     official page does not state the window; parameterized-M stands).
   - No real payment API is called anywhere; no new external touchpoint.
@@ -54,10 +58,21 @@ import re
 
 import adapters
 
+try:  # real-primitive path (verify_mode "rsa"); local lib, no network
+    from cryptography.exceptions import InvalidSignature, InvalidTag
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import padding
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    _CRYPTO = True
+except ImportError:  # pragma: no cover - envs without cryptography
+    _CRYPTO = False
+
 _HEADERS = ("Wechatpay-Serial", "Wechatpay-Signature",
             "Wechatpay-Timestamp", "Wechatpay-Nonce")
 _SERIAL_PUBKEY_RE = re.compile(r"^PUB_KEY_ID_[0-9]+$")
 STANDIN_ALGORITHM = "AEAD_AES_256_GCM_SANDBOX_STANDIN"
+REAL_ALGORITHM = "AEAD_AES_256_GCM"  # production literal (4012791902)
+VERIFY_MODES = ("standin", "rsa")
 PAYMENT_SUCCESS = "SUCCESS"  # 4012075249 criterion, literal state value
 # 4012791902: upstream retry semantics (15 attempts max) live upstream;
 # the sandbox side owes idempotent re-entry, handled by orders.py.
@@ -80,12 +95,6 @@ def _unix_to_iso(ts_unix):
         int(ts_unix), datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _encode_resource(resource):
-    raw = json.dumps(resource, ensure_ascii=False, sort_keys=True,
-                     separators=(",", ":")).encode("utf-8")
-    return base64.b64encode(raw).decode("ascii")
-
-
 def _decode_resource(ciphertext):
     raw = base64.b64decode(str(ciphertext), validate=True)
     out = json.loads(raw.decode("utf-8"))
@@ -102,9 +111,33 @@ class V3Channel(adapters.MockChannel):
     so the shipped config and the AC-Y baseline stay untouched."""
 
     def __init__(self, channel, signer, key, ts_window_seconds=300,
-                 serials=None):
+                 serials=None, verify_mode="standin",
+                 platform_public_key_pem=None, apiv3_key=None):
         super().__init__(channel, signer, key, ts_window_seconds)
         self.serials = tuple(str(s) for s in (serials or []))
+        mode = str(verify_mode or "standin").strip().lower()
+        if mode not in VERIFY_MODES:
+            raise adapters.AdapterError(
+                "bad verify_mode: %s (want %s)"
+                % (verify_mode, "|".join(VERIFY_MODES)))
+        self.verify_mode = mode
+        if mode == "rsa":
+            if not _CRYPTO:
+                raise adapters.AdapterError(
+                    "verify_mode rsa needs the cryptography package")
+            if not str(platform_public_key_pem or "").strip():
+                raise adapters.AdapterError(
+                    "verify_mode rsa needs platform_public_key_pem")
+            self.platform_public_key = serialization.load_pem_public_key(
+                str(platform_public_key_pem).encode("ascii"))
+            key_b = apiv3_key if isinstance(apiv3_key, bytes) else (
+                base64.b64decode(str(apiv3_key or ""), validate=True))
+            if len(key_b) != 32:
+                raise adapters.AdapterError("apiv3 key must be 32 bytes")
+            self.apiv3_key = key_b
+        else:
+            self.platform_public_key = None
+            self.apiv3_key = None
 
     @classmethod
     def from_spec(cls, name, spec):
@@ -116,7 +149,10 @@ class V3Channel(adapters.MockChannel):
         raw = spec.get("v3_serials")
         serials = [str(s) for s in raw] if isinstance(raw, list) else []
         return cls(name, signer, key,
-                   int(spec.get("ts_window_seconds", 300)), serials)
+                   int(spec.get("ts_window_seconds", 300)), serials,
+                   str(spec.get("verify_mode", "standin") or "standin"),
+                   spec.get("platform_public_key_pem"),
+                   spec.get("apiv3_key_b64"))
 
     # ---- builder (sandbox stand-in for the real gateway pushing a
     # notification; tests construct good and bad cases with it) --------
@@ -124,7 +160,8 @@ class V3Channel(adapters.MockChannel):
     def make_v3_callback(self, order_id, amount_cent, nonce,
                          ts_unix=None, serial=None, trade_state=None,
                          event_type="TRANSACTION.SUCCESS", key=None,
-                         mchid="sandbox-mchid", appid="sandbox-appid"):
+                         mchid="sandbox-mchid", appid="sandbox-appid",
+                         private_key_pem=None):
         ts = int(ts_unix) if ts_unix is not None else int(
             datetime.datetime.now(datetime.timezone.utc).timestamp())
         sg_serial = str(serial or (self.serials[0] if self.serials
@@ -137,20 +174,46 @@ class V3Channel(adapters.MockChannel):
             "trade_state": str(trade_state or PAYMENT_SUCCESS),
             "amount": {"total": int(amount_cent), "currency": "CNY"},
         }
+        raw_resource = json.dumps(resource, ensure_ascii=False,
+                                  sort_keys=True,
+                                  separators=(",", ":")).encode("utf-8")
+        if self.verify_mode == "rsa":
+            if not _CRYPTO or not str(private_key_pem or "").strip():
+                raise adapters.AdapterError(
+                    "rsa builder needs private_key_pem (fixture in tests;"
+                    " production gateway holds the real one, never us)")
+            res_nonce = hashlib.sha256(
+                ("res|%s" % nonce).encode("utf-8")).hexdigest()[:12]
+            ct = AESGCM(self.apiv3_key).encrypt(
+                res_nonce.encode("ascii"), raw_resource, b"transaction")
+            res_env = {"algorithm": REAL_ALGORITHM,
+                       "ciphertext": base64.b64encode(ct).decode("ascii"),
+                       "associated_data": "transaction",
+                       "nonce": res_nonce}
+        else:
+            res_env = {"algorithm": STANDIN_ALGORITHM,
+                       "ciphertext": base64.b64encode(raw_resource)
+                       .decode("ascii"),
+                       "associated_data": "transaction",
+                       "nonce": "%s-res" % nonce}
         body = json.dumps({
             "id": "evt-%s" % hashlib.sha256(
                 ("%s|%s|%s" % (order_id, nonce, ts)).encode("utf-8")
             ).hexdigest()[:16],
             "event_type": str(event_type),
             "summary": "payment notification (sandbox stand-in)",
-            "resource": {"algorithm": STANDIN_ALGORITHM,
-                         "ciphertext": _encode_resource(resource),
-                         "associated_data": "transaction",
-                         "nonce": "%s-res" % nonce},
+            "resource": res_env,
         }, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        sig = hmac.new(str(key or self.key).encode("utf-8"),
-                       ("%d\n%s\n%s\n" % (ts, nonce, body))
-                       .encode("utf-8"), hashlib.sha256).hexdigest()
+        verify_input = ("%d\n%s\n%s\n" % (ts, nonce, body)).encode("utf-8")
+        if self.verify_mode == "rsa":
+            sk = serialization.load_pem_private_key(
+                str(private_key_pem).encode("ascii"), password=None)
+            sig = base64.b64encode(sk.sign(
+                verify_input, padding.PKCS1v15(),
+                hashes.SHA256())).decode("ascii")
+        else:
+            sig = hmac.new(str(key or self.key).encode("utf-8"),
+                           verify_input, hashlib.sha256).hexdigest()
         headers = {"Wechatpay-Serial": sg_serial,
                    "Wechatpay-Signature": sig,
                    "Wechatpay-Timestamp": str(ts),
@@ -163,6 +226,26 @@ class V3Channel(adapters.MockChannel):
                 "v3": {"headers": headers, "body": body}}
 
     # ---- verifier (adapter face called by orders.handle_callback) ----
+
+    def _decrypt_resource(self, env):
+        """Real AEAD_AES_256_GCM resource decrypt (verify_mode rsa,
+        4012791902 envelope contract). Raises ValueError family on any
+        bad input so verify() maps it to 'malformed resource'."""
+        try:
+            if str(env.get("algorithm", "")) != REAL_ALGORITHM:
+                raise ValueError("algorithm mismatch")
+            nonce12 = str(env["nonce"]).encode("ascii")
+            aad = str(env.get("associated_data",
+                              "transaction")).encode("utf-8")
+            ct = base64.b64decode(str(env["ciphertext"]), validate=True)
+            plain = AESGCM(self.apiv3_key).decrypt(nonce12, ct, aad)
+            out = json.loads(plain.decode("utf-8"))
+        except (KeyError, TypeError, ValueError, InvalidTag,
+                json.JSONDecodeError) as exc:
+            raise ValueError("resource not an object: %s" % exc) from None
+        if not isinstance(out, dict):
+            raise ValueError("resource not an object")
+        return out
 
     def verify(self, payload):
         env = payload.get("v3") if isinstance(payload, dict) else None
@@ -191,16 +274,34 @@ class V3Channel(adapters.MockChannel):
                 "ts outside +-%ds window (delta=%.0fs)"
                 % (self.ts_window, delta))
         nonce = str(headers["Wechatpay-Nonce"]).strip()
-        expect = hmac.new(self.key.encode("utf-8"),
-                          ("%d\n%s\n%s\n" % (ts, nonce, body))
-                          .encode("utf-8"), hashlib.sha256).hexdigest()
-        if not hmac.compare_digest(expect, str(headers["Wechatpay-Signature"])):
-            raise adapters.AdapterError("signature mismatch")
+        verify_input = ("%d\n%s\n%s\n" % (ts, nonce, body)).encode("utf-8")
+        if self.verify_mode == "rsa":  # real RSA-SHA256 (PKCS#1 v1.5)
+            try:
+                sig_bytes = base64.b64decode(
+                    str(headers["Wechatpay-Signature"]), validate=True)
+            except (ValueError, TypeError):
+                raise adapters.AdapterError(
+                    "signature mismatch") from None
+            try:
+                self.platform_public_key.verify(
+                    sig_bytes, verify_input,
+                    padding.PKCS1v15(), hashes.SHA256())
+            except InvalidSignature:
+                raise adapters.AdapterError(
+                    "signature mismatch") from None
+        else:
+            expect = hmac.new(self.key.encode("utf-8"), verify_input,
+                              hashlib.sha256).hexdigest()
+            if not hmac.compare_digest(expect, str(headers["Wechatpay-Signature"])):
+                raise adapters.AdapterError("signature mismatch")
         try:  # AC-V35: envelope decode + field contract
             msg = json.loads(body)
             if not isinstance(msg, dict):
                 raise ValueError("body not an object")
-            res = _decode_resource(msg.get("resource", {}).get("ciphertext", ""))
+            if self.verify_mode == "rsa":
+                res = self._decrypt_resource(msg.get("resource", {}))
+            else:
+                res = _decode_resource(msg.get("resource", {}).get("ciphertext", ""))
             out_trade_no = str(res["out_trade_no"])
             trade_state = str(res["trade_state"])
             total_cent = int(res["amount"]["total"])

@@ -75,6 +75,7 @@ SUITES = [
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
+    ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
