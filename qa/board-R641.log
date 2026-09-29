@@ -1,0 +1,19 @@
+# qa/board-R641.log - board-law knife 77 (standing-carry round R641, R632/R637 pattern)
+# Round: 2026-09-30 ~04:1x +08:00 | ten-face scan all PASS | main item = knife 77 migration targets pre-registered at R640 closeout ("刀 77 迁档标的=R639/R640 done 行")
+# Targets: src/os/backlog.md done rows "- [x] R640 触线轮整编 R56..." and "- [x] R639 P0 夹具污染缺口收口..." -> docs/archive/backlog-done-2026-09.md section "## R641"
+# Standing source: P-2026-09-25-18 clause-4 board-law enforcement (knife 77) + R532 heartbeat every-round standing law
+#
+# === PRE-REGISTERED CRITERIA (written BEFORE any mutation, honesty law) ===
+# AC-K77a: pre-op anchors recorded below before mutation (backlog.md bytes+sha256, archive bytes+sha256, both target rows present on board with done marks, board [x] row count == 2)
+# AC-K77b: archive append is pure append (new archive bytes == old bytes + appended section, prefix byte-asserted; BOM bytes at file head unchanged; section header exactly "## R641")
+# AC-K77c: verbatim migration (the two rows inside the archive section are byte-identical to the pre-op extracted board rows; board loses exactly those two lines, every other board line byte-identical)
+# AC-K77d: main board end-state = header + exactly 3 open rows (R640+ AC-RG4 / D-20260929-03 / bootstrap), zero "- [x]" rows on board
+# AC-K77e: heartbeat R641 row appended (prior rows byte-untouched, trailing-newline handled); knife script itself pure ASCII; all check results appended to this log
+# === END PRE-REGISTRATION ===
+PASS AC-K77a: pre-op anchors: board 7682B sha256=c1979bdf772959a5 (BOM=True), archive 312243B sha256=c9bfd43da08264b8 (BOM=True); board [x] rows=2 [ ] rows=3; both migration targets present (R640 row + R639 row)
+PASS AC-K77b: archive pure append: old 312243B -> new 315743B (+3500B), prefix byte-asserted, BOM head unchanged (True), section header '## R641' present
+PASS AC-K77c: verbatim: R639 row 896 chars + R640 row 1336 chars byte-identical inside archive section; board byte math 7682 - 3490 == 4192 (exact line removal, all other lines byte-identical)
+PASS AC-K77d: board end-state: 0 [x] rows, 3 [ ] rows (AC-RG4 re-verify / D-03 gated / bootstrap), header intact, 4192B
+PASS AC-K77e: heartbeat R641 row appended (prior 168270B untouched, trailing-newline handled, new 170034B, pure ASCII), knife script source pure ASCII (8425B)
+PASS POST-WRITE: re-read equals intended bytes for all three files; archive prefix intact; heartbeat tail row anchored
+KNIFE77 DONE: AC-K77a..e + POST-WRITE all green; board 7682B -> 4192B, archive 312243B -> 315743B, heartbeat 168270B -> 170034B, tick 640->641 closeout to follow
