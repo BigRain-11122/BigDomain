@@ -1,25 +1,38 @@
-"""Product health-check runner (BigDomain explore-line item #9, R594).
+"""Product health-check runner (BigDomain explore-line item #9, R594;
+pay/member standalone-reconcile extension, R595 follow-up row).
 
 One command = the full sandbox regression fan-out (nine acceptance
 suites, 100 pre-registered criteria in total) plus the standalone
-ledger reconcile product face: a canonical demo state built via the
-ledger public API (reuse, zero schema duplication), the eight-check
-reconcile script must PASS clean, and a tampered copy (materialized
-balance +1) must FAIL with exit 2. Process exit code 0 iff every
-suite exits 0 and both reconcile controls land as expected.
+reconcile product face for all three bookkeeping domains, each with a
+clean/tamper dual control:
+
+  ledger  demo built via the ledger public API  -> reconcile exit 0,
+          tampered copy (materialized balance +1) -> exit 2
+  pay     demo built via the pay public API (orders + mock-callback
+          grant chain + ledger conversion bridge) -> reconcile exit 0,
+          tampered copy (granted order amount_cent +1) -> exit 2
+  member  demo built via the member public API (activate / consume /
+          refund / voucher lifecycle on a real pay grant) ->
+          reconcile exit 0, tampered copy (one credits audit row
+          deleted) -> exit 2
+
+Live-db passthrough evaluation (R595 AC-RA10, honest conclusion): all
+three reconcile CLIs already accept external database paths (ledger
+and pay via positional argv, member via argparse flags); the demo dual
+controls below run them against throwaway tmp-dir databases, which is
+the passthrough proof - production bootstrap passes real db paths
+through the same arguments, no new CLI surface is needed now.
 
 Suite scenario logic stays inside each acceptance suite - this
 runner orchestrates, it does not duplicate (no-reinvent-wheel law).
-Pre-registered criteria AC-RA1..RA5: src/os/backlog.md R594 row.
-Pay/member standalone-reconcile demo builders and live-db passthrough
-args are honestly split to a follow-up row: this round proves the
-pattern end-to-end on the ledger domain (the token-ledger core).
+Pre-registered criteria: AC-RA1..RA5 = src/os/backlog.md R594 row;
+AC-RA6..RA10 = src/os/backlog.md R595 row.
 
 Usage:
     python reconcile_all.py [evidence_log_path]
 (the optional path makes this runner tee its own utf-8 evidence log
 while still streaming to the console; pass e.g.
-qa/reconcile-all-R594.log)
+qa/reconcile-all-R595.log)
 """
 
 import json
@@ -34,6 +47,26 @@ import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 LEDGER = os.path.join(BASE, "ledger")
+PAY = os.path.join(BASE, "pay")
+MEMBER = os.path.join(BASE, "member")
+LOBBY = os.path.join(BASE, "lobby")
+
+
+def _wire_paths():
+    """Put every product dir on sys.path (deterministic front order:
+    lobby, member, pay, ledger). No module-name collisions among the
+    in-process imports (store/sec_gate resolve to lobby only, catalog
+    and member to member only, orders and adapters to pay only, ledger
+    to ledger only); the per-domain reconcile scripts are never
+    imported in-process - they run as child processes below."""
+    for d in (LEDGER, PAY, MEMBER, LOBBY):
+        if d not in sys.path:
+            sys.path.insert(0, d)
+
+
+def _load_json(path):
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)
 
 SUITES = [
     # (label, suite path relative to the sandbox root, expected criteria)
@@ -163,6 +196,156 @@ def phase_reconcile(tmp):
          "reconcile tamper-control exit=%d (expect 2, FAIL detected)" % code2)
 
 
+def _pay_grant_chain(pay, chans, product_id, avatar, nonce):
+    """create -> place -> valid mock callback -> granted (public API
+    only); returns the granted order_id (AC-RA6 happy leg)."""
+    resp = pay.create_order(product_id, avatar)
+    oid = resp["order_id"]
+    pay.place_order(oid)
+    amount = pay.order_detail(oid)["amount_cent"]
+    cb = chans[resp["channel"]].make_callback(oid, amount, nonce)
+    pay.handle_callback(cb)
+    return oid
+
+
+def build_pay_demo_state(tmp):
+    """Canonical pay demo state via the pay/ledger/lobby public APIs
+    only (AC-RA6): two granted orders (the share_observation order
+    drives a real conversion-bridge share entry, pack_compute_19_9 a
+    plain grant) plus one order left in 'created'."""
+    _wire_paths()
+    import orders as O                                  # pay product
+    import adapters as A                                # pay product
+    import store as lobby_store                         # lobby product
+    from ledger import Ledger                           # ledger product
+    cfg = _load_json(os.path.join(PAY, "config.json"))
+    led_cfg = _load_json(os.path.join(LEDGER, "config.json"))
+    events = lobby_store.EventStore(os.path.join(tmp, "pay-events.db"))
+    led = Ledger(os.path.join(tmp, "pay-ledger.db"), led_cfg)
+    led.mint_to_pool("pool:share", 1000000, "SETTLE-PAY-1", "settlement")
+    pay = O.PayOrders(cfg, os.path.join(tmp, "pay.db"), events, led)
+    chans = A.from_config(cfg)
+    oid_share = _pay_grant_chain(pay, chans, "share_observation",
+                                 "AV-PAY-DEMO-1", "n-pay-demo-1")
+    oid_pack = _pay_grant_chain(pay, chans, "pack_compute_19_9",
+                                "AV-PAY-DEMO-2", "n-pay-demo-2")
+    pay.create_order("pack_compute_19_9", "AV-PAY-DEMO-3")  # stays created
+    pay.close()
+    led.close()
+    return {"pay_db": os.path.join(tmp, "pay.db"),
+            "ledger_db": os.path.join(tmp, "pay-ledger.db"),
+            "config": os.path.join(PAY, "config.json"),
+            "tamper_order": oid_pack}
+
+
+def phase_pay_reconcile(tmp):
+    world = build_pay_demo_state(tmp)
+    code, out = run_cmd([sys.executable, os.path.join(PAY, "reconcile.py"),
+                         world["pay_db"], world["config"], world["ledger_db"]],
+                        cwd=PAY)
+    echo(out)
+    note(code == 0 and "reconcile: PASS checks=6/6" in out,
+         "reconcile pay-demo exit=%d (expect 0, clean six checks)" % code)
+    tampered = os.path.join(tmp, "pay-tampered.db")
+    shutil.copyfile(world["pay_db"], tampered)
+    conn = sqlite3.connect(tampered)
+    # tamper posture per the suite's AC-Y12 amount family: the amount
+    # lock trigger is dropped first (injection posture), then the
+    # granted order's locked price is bumped
+    conn.execute("DROP TRIGGER trg_order_amount_lock")
+    conn.execute("UPDATE pay_orders SET amount_cent = amount_cent + 1"
+                 " WHERE order_id = ?", (world["tamper_order"],))
+    conn.commit()
+    conn.close()
+    code2, out2 = run_cmd([sys.executable, os.path.join(PAY, "reconcile.py"),
+                           tampered, world["config"], world["ledger_db"]],
+                          cwd=PAY)
+    echo(out2)
+    note(code2 == 2 and "reconcile: FAIL" in out2,
+         "reconcile pay-tamper exit=%d (expect 2, FAIL detected)" % code2)
+
+
+def _tier_products(pcfg):
+    """Sandbox dock face (same three rows as the member suite): pay
+    price rows whose entitlement keys are the member catalog product
+    keys - real tier prices stay a [needs-CEO] approval face."""
+    for key, cents in (("tier_experience", 1990), ("tier_mayor", 4990),
+                       ("tier_cocreator", 9900)):
+        pcfg["products"][key] = {
+            "channel": "virtual", "price_cent": cents, "share_tokens": 0,
+            "entitlement": "tier:" + key.split("_", 1)[1],
+            "copy": "sandbox dock product: %s tier" % key}
+    return pcfg
+
+
+def build_member_demo_state(tmp):
+    """Canonical member demo state via the member/pay/ledger public
+    APIs only (AC-RA8): mayor-tier activation on a real pay grant,
+    consume 7 + refund 5 (journal discipline), voucher text-set and
+    use (voucher lifecycle + audit faces)."""
+    _wire_paths()
+    import member as MB                                # member product
+    import orders as O                                 # pay product
+    import adapters as A                               # pay product
+    import store as lobby_store                        # lobby product
+    from ledger import Ledger                          # ledger product
+    mcfg = _load_json(os.path.join(MEMBER, "config.json"))
+    pcfg = _tier_products(_load_json(os.path.join(PAY, "config.json")))
+    led_cfg = _load_json(os.path.join(LEDGER, "config.json"))
+    events = lobby_store.EventStore(os.path.join(tmp, "member-events.db"))
+    led = Ledger(os.path.join(tmp, "member-ledger.db"), led_cfg)
+    led.mint_to_pool("pool:share", 1000000, "SETTLE-MEMBER-1", "settlement")
+    pay = O.PayOrders(pcfg, os.path.join(tmp, "member-pay.db"), events, led)
+    chans = A.from_config(pcfg)
+    store = MB.MemberStore(mcfg, os.path.join(tmp, "member.db"), pay)
+    oid = _pay_grant_chain(pay, chans, "tier_mayor", "AV-MEMBER-DEMO-1",
+                           "n-member-demo-1")
+    gid = pay.grants_for("AV-MEMBER-DEMO-1")["items"][-1]["grant_id"]
+    activated = store.activate(gid, "AV-MEMBER-DEMO-1")
+    store.consume_credits("AV-MEMBER-DEMO-1", 7, ref="svc-1",
+                          ref_type="service_ticket")
+    store.refund_credits("AV-MEMBER-DEMO-1", 5,
+                         activated["period_id"], ref="svc-1")
+    store.set_voucher_text("AV-MEMBER-DEMO-1", "building_naming",
+                           "harbor gate")
+    store.use_voucher("AV-MEMBER-DEMO-1", "building_naming")
+    store.close()
+    pay.close()
+    led.close()
+    return {"member_db": os.path.join(tmp, "member.db"),
+            "pay_db": os.path.join(tmp, "member-pay.db"),
+            "ledger_db": os.path.join(tmp, "member-ledger.db"),
+            "config": os.path.join(MEMBER, "config.json")}
+
+
+def phase_member_reconcile(tmp):
+    world = build_member_demo_state(tmp)
+    args = ["--member-db", world["member_db"], "--pay-db", world["pay_db"],
+            "--ledger-db", world["ledger_db"], "--config", world["config"]]
+    code, out = run_cmd([sys.executable, os.path.join(MEMBER, "reconcile.py")]
+                        + args, cwd=MEMBER)
+    echo(out)
+    note(code == 0 and "PASS: 6 checks clean" in out,
+         "reconcile member-demo exit=%d (expect 0, clean six checks)" % code)
+    tampered = os.path.join(tmp, "member-tampered.db")
+    shutil.copyfile(world["member_db"], tampered)
+    conn = sqlite3.connect(tampered)
+    victim = conn.execute("SELECT audit_id FROM member_audit WHERE"
+                          " kind = 'credits' LIMIT 1").fetchone()
+    conn.execute("DELETE FROM member_audit WHERE audit_id = ?",
+                 (victim[0],))
+    conn.commit()
+    conn.close()
+    code2, out2 = run_cmd([sys.executable, os.path.join(MEMBER, "reconcile.py")]
+                          + ["--member-db", tampered, "--pay-db",
+                             world["pay_db"], "--ledger-db",
+                             world["ledger_db"], "--config",
+                             world["config"]], cwd=MEMBER)
+    echo(out2)
+    note(code2 == 2 and "FAIL:" in out2,
+         "reconcile member-tamper exit=%d (expect 2, FAIL detected)" % code2)
+
+
 def main(argv):
     tee = None
     if len(argv) > 1:
@@ -173,10 +356,12 @@ def main(argv):
     tmp = tempfile.mkdtemp(prefix="reconcile-all-")
     try:
         phase_reconcile(tmp)
+        phase_pay_reconcile(tmp)
+        phase_member_reconcile(tmp)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     if FAILS == 0 and suites_ok:
-        print("RUNNER PASS (%d/%d suites green, reconcile controls 2/2, %.1fs)"
+        print("RUNNER PASS (%d/%d suites green, reconcile controls 6/6, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
         code = 0
     else:

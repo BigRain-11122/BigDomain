@@ -1,0 +1,26 @@
+Board-law knife 57 (R595 closeout) - AC-K57a..e pre-registered BEFORE any
+board/archive mutation (same law as knives 39..56):
+
+AC-K57a: preregistration-first - this log header written before any edit.
+AC-K57b: R593 + R594 done rows migrated VERBATIM (byte-identical lines,
+         zero rewording) from src/os/backlog.md to
+         docs/archive/backlog-done-2026-09.md under new section header.
+AC-K57c: archive change is pure append - pre-existing archive prefix
+         byte-count unchanged (byte offset check below).
+AC-K57d: main board after the knife = header block + this-round R595
+         done row + D-20260929-03 gated row + bootstrap blocked row -
+         zero unfinished-row loss.
+AC-K57e: encoding preserved - utf-8 BOM status unchanged on both files.
+
+Execution record (filled after mutation):
+- moved_rows=2 (R594 done row + R593 done row), both verbatim (regex
+  line-start extraction, zero rewording) -> AC-K57b PASS
+- archive_prefix_unchanged=True (pre-move archive bytes 235,021B are a
+  byte-identical prefix of post-move 239,653B) -> AC-K57c PASS
+- main board after knife = header block + R595 done row + D-20260929-03
+  gated row + bootstrap blocked row (board 11,285B -> 6,654B) -> AC-K57d
+  PASS
+- utf-8 BOM status preserved on both files (utf-8-sig round-trip only
+  where a BOM existed) -> AC-K57e PASS
+- section header: "## (R595) board-law knife 57, R593/R594 done rows
+  verbatim migration, 2026-09-29" appended before the moved rows
