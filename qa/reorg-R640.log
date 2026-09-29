@@ -1,0 +1,15 @@
+[AC-R561a] PASS pre-op state.json == git HEAD blob, 82099 bytes (round-start first-measure over the 80,000B waterline per R639 carry-note, R536 rule)
+[AC-R561b] PASS parsed pre-op tick=639 log_len=67 bom=False trailing_nl=True roundtrip=True HEAD=8daf07f
+[AC-R562a] PASS window L57..66 = R55 window summary + R636..R639 round pairs (10 lines)
+[AC-R562b] PASS mechanical round column R636..R639 continuous, 4 rounds zero-missing
+[AC-R562c] PASS P/D/O catalog regex dedup 12 tokens: P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033,D-20260929-06,D-20260925-09
+[AC-R562d] PASS tokens lines 4 all unmeasured wording (official session no metering outlet)
+[AC-R564a] post-fold (no closing lines) size 72410 bytes
+[AC-R564] PASS final state 75178 bytes, margin 3322 bytes under the 78500B gate
+[AC-R562e] PASS header block L0..56 verbatim (57 items), top four fields preserved (tick 639->640, last_order/last_decision_rows/benchmarks_refreshed kept)
+[AC-R563a] PASS json.loads re-parse: tick=640 log_len=60, last log item is tokens line (no trailing comma by construction, R189 lesson honored)
+[AC-R561d] PASS archive section R640 pure-append 4829949 -> 4912375 bytes, prefix asserted, snapshot byte-identical to git HEAD
+[AC-R563b] PASS on-disk write verified: 75178 bytes == stated final size
+[HB] PASS heartbeat R640 row appended, pure append prefix-asserted
+[AC-R565] backlog R640 row done-marker + commit message carry P-2026-09-25-18 item-4 (completed in closeout phase of this round)
+[NOTE] first-run harness defect honestly recorded: over-broad placeholder assertion matched the literal @Biggame content token, aborted BEFORE any disk write (zero damage, R631/R636 first-run precedent); this is the corrected re-run
