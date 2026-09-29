@@ -1,0 +1,21 @@
+qa/board-R615.log - board-law knife 67 + heartbeat standing-law debt closure
+Round R615, 2026-09-29. PREREGISTRATION (written to disk BEFORE any mutation this round, judgment-criteria-first honest law):
+
+- AC-K67a: target row = the single "- [x] R613 ..." done row in src/os/backlog.md (round-start check: marker "- [x] R613 " occurs exactly once; row body carries AC-R491..R495 and "[done 2026-09-29]").
+- AC-K67b: verbatim migration of that row into docs/archive/backlog-done-2026-09.md under new section header (exact bytes from logs/knife67_header_r615.txt); pure byte append: pre-state 275,190B full-file SHA256 must equal post-state first-275,190B prefix SHA256; UTF-8 BOM (EF BB BF) preserved; all prior bytes untouched.
+- AC-K67c: main board after migration = header block + D-20260929-03 gated row + bootstrap blocked row; zero "- [x]" rows remain; removal span covers exactly the one row + its line terminator; board encoding/BOM state preserved; all other bytes identical.
+- AC-K67d: heartbeat.txt gains exactly 2 appended rows this round: (1) R614 backfill row anchored to per-round commit d75308e timestamp 2026-09-29 20:35:47 +08:00 with facts from state log + honest late-filing note (R541 precedent; R614 state-log queue note said heartbeat closed but no row landed = judgment miss), (2) R615 current-round row stamped at run time; both pure ASCII; existing rows byte-untouched; no BOM introduced.
+- AC-K67e: receipt three carriers = state.json R615 log line + this evidence log + same-window commit message containing P-2026-09-25-18 (item-4 board-law source) and R532 (heartbeat every-round standing law).
+
+Missed-item honest notes (pre-registered): R614 waiting-declaration round left (a) the R613 done row unmigrated (missed knife) and (b) no heartbeat row; both = this round catch-up per R554/R555->R556 and R541 precedents. Round type = standing-law carry + waiting-state declaration (reform clause-2 protected exemption); queue otherwise all gated (direct-read re-verified this round from state/queue files, not copied from prior round).
+
+EXECUTION RECORD (appended by script run below):
+
+=== script-run record (mutation + assertions) ===
+run_stamp=2026-09-29 20:48 +08:00
+archive_before len=275190B sha256=07E0CC3C6421C500 eol=LF ends_nl=True bom=239,187,191
+AC-K67a=PASS target_row_chars=827 board_bom=True
+AC-K67b=PASS archive_after len=276510B delta=1320B prefix_sha256_match=True bom_preserved=True
+AC-K67c=PASS removal_span=828 chars board_bom_preserved=True remaining_done_rows=0 gated_rows=2
+AC-K67d=PASS heartbeat_before=125098B after=129100B rows_appended=2 ascii=True r614_backfill_rows=1 r615_rows=1 eol=CRLF bom_absent=True
+SUMMARY: AC-K67a..d=PASS on disk; AC-K67e=pending commit carrier; archive_new_len=276510
