@@ -1,0 +1,15 @@
+qa/board-R578.log - board-law knife 45 (R577 stale done rows migration) + C-20260929-01 seat-opinion receipt evidence
+Pre-registered AC (written to disk BEFORE any mutation):
+AC-K45a: pre-registration before mutation (this header + backlog R578 claim row AC-C1a..d)
+AC-K45b: verbatim migration - two R577 done rows byte-identical into done archive sec R578
+AC-K45c: main board post-state = header + R578 done row + D-03 gated row + bootstrap row (open rows = 2)
+AC-K45d: archive pure-append (existing content prefix byte-identical)
+AC-K45e: three-carrier receipt (state log line + commit message + HQ-FEEDBACK row)
+--- execution record (appended after mutations) ---
+pre counters (mechanical): {"W": 25, "idle": 8, "nop": 0, "p2": 1, "sub": 14, "tokens": 10} | register: {"W": 25, "idle": 8, "nop": 0, "sub": 13}
+register delta honestly noted: register {"W": 25, "idle": 8, "nop": 0, "sub": 13} vs recomputed {"W": 25, "idle": 8, "nop": 0, "p2": 1, "sub": 14, "tokens": 10} (recomputed written per F3/R556 precedent)
+R577 done rows captured: 1120 / 868 chars
+state.json final size: 77888 B (embedded note verified)
+backlog post-state: 1 done row (R578) + 2 open rows; archive prefix-asserted; HQ + heartbeat appended
+export: tick row 578, results 120, self_drive W/idle/nop/sub = 27/8/0/15
+ALL AC-K45b/c/d mechanical checks PASS; AC-K45a pre-registration on disk; AC-K45e = state log + commit + HQ row (commit follows script exit)
