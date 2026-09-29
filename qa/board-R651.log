@@ -1,0 +1,20 @@
+# qa/board-R651.log - board-law knife 79 (standing-carry round R651, R632/R637/R641/R645 pattern)
+# Round: 2026-09-30 06:25 +08:00 | round-start first-measure 78,655B under the 80,000B waterline, no re-org R59 trigger | ten-face scan all PASS
+# Targets: src/os/backlog.md done row "- [x] [done 2026-09-30] R648 ..." (1 row, pre-registered at R648 closeout as next-round board-law migration target; R649/R650 declaration rounds missed it, honestly noted) -> docs/archive/backlog-done-2026-09.md section "## R651"
+# Standing source: P-2026-09-25-18 clause-4 board-law enforcement (knife 79) + R532 heartbeat every-round standing law
+#
+# === PRE-REGISTERED CRITERIA (written BEFORE any mutation, honesty law) ===
+# AC-K79a: pre-op anchors recorded below before mutation (backlog.md bytes+sha256, archive bytes+sha256, the one target row present on board with done mark, board [x] row count == 1, board [ ] row count == 3)
+# AC-K79b: archive append is pure append (new archive bytes == old bytes + appended section, prefix byte-asserted; BOM bytes at file head unchanged; section header exactly "## R651")
+# AC-K79c: verbatim migration (the R648 done row inside the archive section is byte-identical to the pre-op extracted board row; board loses exactly that one line, every other board line byte-identical)
+# AC-K79d: main board end-state = header + exactly 3 open rows (R640+ AC-RG4 re-verify / D-20260929-03 gated / bootstrap), zero "- [x]" rows on board
+# AC-K79e: heartbeat R651 row appended (prior bytes untouched, trailing-newline handled); knife script itself pure ASCII; all check results appended to this log
+# === END PRE-REGISTRATION ===
+PASS AC-K79a: pre-op anchors: board 5651B sha256=08d8b4af5fdef054a598bb0237d8498284d9c3649cdf70b669f3026371b67d62 (BOM=True), archive 317059B sha256=7e80061907dc211ca5c24b6752baca228034dc6e4bd73dee31fe60fa2c79e9e7, heartbeat 188062B; board [x] rows=1 [ ] rows=3; migration target present (R648 done row 1306B sha256=cc7676c42356de04d3420df59b7287c4ce71a43f559e1f63271d9f69ea517108)
+PASS AC-K79b: archive pure append: old 317059B -> new 318377B (+1318B), prefix byte-asserted, section header "## R651" present
+PASS AC-K79c: verbatim: R648 row 1306B byte-identical inside archive section; board byte math 5651 - 1307 == 4344 (exact line removal, all other board lines byte-identical)
+PASS AC-K79d: board end-state: 0 [x] rows, 3 [ ] rows (AC-RG4 re-verify / D-03 gated / bootstrap), header intact, 4344B
+PASS AC-K79e: heartbeat R651 row appended (prior 188062B untouched, trailing-newline handled, new 190339B); knife script source pure ASCII
+PASS POST-WRITE: re-read equals intended bytes for all three files; archive prefix intact; board [x]=0 [ ]=3; heartbeat tail row anchored
+KNIFE79 DONE: AC-K79a..e + POST-WRITE all green; board 5651B -> 4344B, archive 317059B -> 318377B, heartbeat 188062B -> 190339B, tick 650->651 closeout to follow
+PASS ENCODING: knife script pure ASCII (11140B, non-ascii bytes=0)
