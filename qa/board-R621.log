@@ -1,0 +1,14 @@
+== R621 board-law knife-68 prereg (before any mutation) ==
+targets: R617/R619/R620 three stale done rows verbatim-migrated to docs/archive/backlog-done-2026-09.md sec R621 (pure append, prefix asserted, BOM preserved)
+main board after knife: header + R621 row (marked done this round, stays as knife-69 target per R560/R566 precedent) + D-03 gated row + bootstrap row
+AC preregistered in src/os/backlog.md R621 row BEFORE any mutation: AC-K68a..e
+AC-K68a PASS: 3 stale done rows (R617/R619/R620) removed from main board verbatim, R621 row marked done (stays as knife-69 target per R560/R566 precedent)
+AC-K68c PASS: main board = header + R621 done row + open rows: - [ ] D-20260929-03 归属感经 | - [ ] bootstrap 对外打包件（**
+AC-K68b PASS: done-archive pure append 276510B -> 281887B, prefix asserted, BOM preserved, existing sections zero-overwrite
+AC-K68d PASS: 3 migrated rows byte-identical to source rows
+heartbeat R621 row appended (ts=22:09, final=75268B margin=3232B)
+heartbeat standing law R532 closed same-window
+export roundtrip byte-identity PASS (BOM preserved, R556 precedent)
+results tick row drift closed: 619 -> 621
+export refreshed: export_ts=2026-09-29T22:09:19+08:00, ceo_face.current updated, results tick row 621 + R621 row appended, self_drive W/idle/nop/sub=23/8/0/12, queue 9/3/4
+AC-K68e PASS: carrier = round log line + this evidence log + commit (message carries P-2026-09-25-18)

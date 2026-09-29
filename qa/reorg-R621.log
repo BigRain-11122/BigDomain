@@ -1,0 +1,41 @@
+== R621 re-org R51 prereg (before any mutation) ==
+waterline law R536: round-start first-measure 82321B crossed the 80000B line (R620 carry-note cashed)
+claim: re-org R51 = state.json knife 51 (P-2026-09-25-18 item-4 main knife 51)
+AC preregistered in src/os/backlog.md R621 row BEFORE any mutation: AC-R511..R515
+candidates to build-and-measure: A=window R617..R620 8 lines / B=A + R50 window-summary fold 9 lines / C=window R618..R620 6 lines
+gate: final (incl. closeout two lines) <= 78500B, largest-margin selection among passers (R523 fold-in precedent)
+archive: pre-op full snapshot appended pure to logs/state-log-archive-2026-09.md sec R621 (prefix asserted, snapshot == git HEAD bytes)
+== R621 re-org R51 phase1: pre-op verify + archive snapshot + probe ==
+pre-op state.json bytes=82321
+git HEAD blob bytes=82321
+AC-R511a PASS: pre-op byte-identical to git HEAD blob
+file lines=75 log entries=66
+window anchors verified: [-9]=R50 window summary, [-8..-1]=R617/R618/R619/R620 (round+tokens x2 each)
+AC-R511b PASS: archive pure append 4422309B -> 4504729B (prefix asserted; snapshot bytes == pre-op)
+first-run defect honest note: candidate-loop round-anchor assertion used doubled R-prefix literal (RR617), run aborted AFTER archive append BEFORE any state.json mutation; defect fixed same-round, rerun is idempotent on the archive append (refuses double-write, R602 precedent; R552/R563 first-run-fix precedent)
+== R621 re-org R51 phase1: pre-op verify + archive snapshot + probe ==
+pre-op state.json bytes=82321
+git HEAD blob bytes=82321
+AC-R511a PASS: pre-op byte-identical to git HEAD blob
+file lines=75 log entries=66
+window anchors verified: [-9]=R50 window summary, [-8..-1]=R617/R618/R619/R620 (round+tokens x2 each)
+note: archive sec R621 already appended by first run (aborted post-append on the fixed assertion defect) - idempotent skip, no double-write
+AC-R511b PASS: archive pure append 4504729B -> 4504729B (prefix asserted; snapshot bytes == pre-op)
+candidate A: remove 8 lines (4 tokens lines), summary 1028B, postB 73283B, closeout est 3184B, final_est 76467B, catalog 4 tokens P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030
+candidate B: remove 9 lines (4 tokens lines), summary 1286B, postB 72048B, closeout est 3184B, final_est 75232B, catalog 7 tokens P-2026-09-25-18,O-2026-0929-023,D-20260929-03,D-20260924-08,O-2026-0929-028,O-2026-0929-027,O-2026-0929-030
+candidate C: remove 6 lines (3 tokens lines), summary 819B, postB 76087B, closeout est 3184B, final_est 79271B, catalog 3 tokens D-20260929-03,O-2026-0929-027,O-2026-0929-030
+SELECTED candidate B: R617..R620 9 lines -> 1 summary line (largest margin among <=78500B gate passers)
+== R621 re-org R51 phase2: true build with convergence + verify-then-write ==
+FINAL converged: final=75268B margin=3232B (iterations=2, est was 75232B)
+AC-R512a PASS: window 9 lines -> 1 summary line; log 66 -> 58 -> 60 entries; round anchors R617,R618,R619,R620 zero-gap in summary
+AC-R512b PASS: catalog re-derived mechanically from window, 7 tokens, zero hand-drop
+AC-R513a PASS: header block verbatim (kept 57 items byte-equal) + top fields preserved + python parse OK
+state.json written: 75268B (post-compact 72048B + closeout two lines)
+AC-R514 PASS: final 75268B <= 78500B (margin 3232B)
+AC-R515a PASS: state log carrier line + tokens line landed (R621 round line + tokens line in log)
+self_drive pre-op counters: {'W': 29, 'idle': 8, 'nop': 0, 'tokens': 12, 'p2': 2, 'sub_a': 17, 'sub_b': 15}
+self_drive post-op counters: {'W': 23, 'idle': 8, 'nop': 0, 'tokens': 9, 'p2': 2, 'sub_a': 14, 'sub_b': 12}
+substantive formula validation vs in-register 15: sub_b (pre W/idle/nop validation vs 29/8/0: True)
+facts + counters written to tmp for closeout script; phase2 done
+AC-R513b PASS: dual-parse (python json.loads + PowerShell ConvertFrom-Json UTF-8) both OK: tick=621 log=60 last_order/dec/bench top fields preserved
+R621 re-org R51 execution complete: final 75268B margin 3232B, window 9 lines -> 1 summary line, catalog 7 tokens, board knife-68 + heartbeat + export closed same-window
