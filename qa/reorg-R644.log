@@ -1,0 +1,13 @@
+[AC-R571a] PASS pre-op state.json == git HEAD blob, 81788 bytes (round-start first-measure over the 80,000B waterline per R643 carry-note, R536 rule)
+[AC-R571b] PASS parsed pre-op tick=643 log_len=66 bom=False trailing_nl=True
+[AC-R571b-2] PASS roundtrip pre-check: re-serialize unchanged dict == original bytes, zero drift
+[AC-R572a] PASS window L57..65 = R56 window summary + R640..R643 round pairs (9 lines)
+[AC-R572b] PASS mechanical round column R640..R643 continuous, 4 rounds zero-missing
+[AC-R572d] PASS tokens lines 4 all unmeasured wording (official session no metering outlet)
+[AC-R572c] PASS P/D/O catalog regex dedup 12 tokens: P-2026-09-25-18,D-20260929-06,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033,D-20260925-09
+[AC-R571c] PASS archive sec R644 pure append 4912375 -> 4994489 bytes, prefix asserted
+[AC-R574a] post-fold (no closing lines) size 72330 bytes
+[AC-R574] PASS final state 74828 bytes, margin 3672 bytes under the 78,500B gate
+[AC-R573a] PASS json.loads re-parse: tick=644 log_len=60 header L0..56 verbatim, top fields preserved (last_order/last_decision_rows/benchmarks_refreshed), last item tokens line, on-disk 74828 == stated
+[AC-R573b] PASS PowerShell ConvertFrom-Json independent re-verify: tick=644 log=60 decisions=82 (UTF-8 codepath)
+[HB] PASS heartbeat R644 row appended (standing law R532, R643 row on record, no backfill needed), pure append prefix-asserted
