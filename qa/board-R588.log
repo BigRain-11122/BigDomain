@@ -1,0 +1,22 @@
+qa/board-R588.log — R588 pre-registered acceptance criteria (written BEFORE any mutation this round)
+Round scope: (1) board-law knife 54 migration; (2) status-export CEO three-line visibility face (group order P-2026-09-29-07 clause-5); (3) waiting-state declaration mode switch for D-20260929-03 (clause-2); (4) DEC L82 + GORD P-2026-09-29-07 receipts.
+
+AC-K54a: backlog contains exactly 1 line starting "- [done 2026-09-29] R587 触线整编轮预注册行" before mutation; script asserts count==1.
+AC-K54b: archive pure append — pre-op prefix byte-identical (232,096B baseline), BOM preserved, new section "## §R588（板规执法第五十四刀·R587 过当轮 done 行 verbatim 迁档·2026-09-29）" appended.
+AC-K54c: migrated line byte-identical to source line (string equality asserted in script).
+AC-K54d: post-op main board = header block + D-20260929-03 gated row + bootstrap blocked row only; zero stale done rows.
+AC-K54e: knife script touches only src/os/backlog.md + docs/archive/backlog-done-2026-09.md; state.json byte-unchanged by the script.
+
+AC-CF1: status-export gains top-level "ceo_face" object with three non-empty one-line fields (current / latest_artifact / next_milestone), each derived from actual on-disk state; next_milestone target window <=48h from round time (before 2026-10-01 13:37 +08:00).
+AC-CF2: edited export parses via ConvertFrom-Json (utf-8 BOM preserved); export_ts ISO8601 with timezone.
+AC-CF3: self_drive mechanically re-derived from state.json log: log_lines_in_window 23->25, substantive_non_idle_mention_lines 13->14, idle_fast 8 / no_pullable 0 unchanged; queue/proposal fields disk-recount flat (10/4/10, 1/1); round log wording avoids abolished-tag substrings (counters stay clean).
+AC-CF4: results tick row 587->588 + one R588 results row added; state log round line carries P-2026-09-29-07 (P-51 carrier) + waiting declaration "waiting: D-20260929-03 legal-review-20260929-bigdomain-belonging.md 外件未达 ETA 2026-09-30 12:00"; decisions baseline last_decision_rows 81->82 (UTF-8 count).
+
+Execution record (appended after mutations below):
+
+2026-09-29 13:41 +08:00 — all mutations complete, read-only verification green:
+- Knife 54 (tmp_r588_knife.py, deleted after use): AC-K54a..e all PASS — backlog R587 done row (exactly 1) removed; archive pure append 232,096B -> 233,127B, BOM preserved, prefix byte-identical, row verbatim; main board = header + D-20260929-03 gated row + bootstrap row.
+- state.json: tick 587->588; last_decision_rows 81->82 (DEC L82 bm-c closure note acked knowledge-only, C-20260927-02 seat opinion already filed R407); R588 round line + tokens line appended (log 57->59 items; round line carries P-2026-09-29-07 receipt + GORD sha16 baseline EC1B6B0ED6A326B5 + waiting declaration for D-20260929-03, counters-clean wording).
+- status-export.json: ceo_face object mounted (current / latest_artifact=src/sandbox/pay/v3.py+test_pay_v3.py 14/14 green 09-29 05:28 / next_milestone D-20260929-03 legal->BLUEPRINT sec-5.8 revision window <=09-30 12:00 + S8b quiet-machine window 09-30 13:00); export_ts 2026-09-29T13:39:00+08:00; results tick row 588 + R588 row; self_drive mechanically re-derived.
+- Post-edit verify (tmp_r588_verify.py, deleted after use): ALL GREEN — state.json parses (tick=588, dec_rows=82, log=59), F3 recount W=25/tok=10/p2=1/sub=14/idle=8/nop=0 field-identical to export, export BOM preserved + parses + export_ts ISO8601+tz, board 2 open rows, archive sec R588 verbatim row present. One first-pass negative honestly noted: p2-line heuristic over-matched ('P2 上报' substring matched 2 lines); settled criterion = round-level line whose round-segment IS the P2 report (R556 enumeration), fixed and re-run green.
+- Round score (Executive Protocol v1.1): export ceo_face interface artifact = 1 point (actual file change, CEO-visible face); bookkeeping actions within <=5 budget (DEC receipt / GORD receipt / knife 54 / heartbeat / waiting declaration).
