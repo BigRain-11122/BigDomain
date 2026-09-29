@@ -1,0 +1,51 @@
+qa/journey-demo-R607.log - evidence for R607 one-command journey demo (AC-JD1..AC-JD6)
+recorded: 2026-09-29 19:03 +08:00 | command: python src/sandbox/journey_demo.py (two consecutive runs)
+RUN1_EXIT=0 RUN2_EXIT=0 IDENTICAL=True (byte-identical transcripts, AC-JD5 determinism)
+--- RUN 1 ---
+=== BigDomain city business-day journey demo (R607) ===
+DISCLAIMER (persistent, from config): {'disclaimer': '非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）', 'persistent': True}
+AIGC LABEL TEXT (from config): AI 判定
+J1 RESIDENT ONBOARD  3 census-bound accounts ensured (alice / bob / carol)
+J2 PLATFORM POOLS   reserve/share/reward pools minted; alice funded 200, bob funded 100 (fiat top-up = sandbox stand-in, real channel = pay face)
+PASS AC-JD3a: banned post REJECTED before publication (tripped word from config at runtime): 赌博; clean post accepted
+PASS AC-JD3b: reward layer refuses an unrecorded event (E_GATE_REF), bob balance unchanged - fail-closed below the gate too
+PASS AC-JD2a: gated co-create reward booked from pool:share (config action pool), bob +20
+J4 CO-CREATE REWARD clean post passed the gate, gate pass recorded, reward +20 booked from pool:share
+PASS AC-JD2b: prop bought for 20 via one real token spend (tx booked), 3 credits granted, 1 consumed -> 2 left
+J5 CITY PROP SHOP    jetpack x3 bought for 20 (token spend tx on ledger), 1 consumed, 2 credits left
+PASS AC-JD2c: venue rented ticks 100-102, fee 30 via one real spend, occupancy row bound to that spend tx
+J6 VENUE RENTAL     plaza rented 3 windows for 30 (one spend tx, occupancy bound)
+PASS AC-JD3c: bob leased storefront for 30; rival tenancy inside the active window REJECTED (E_VN_LEASE_ACTIVE) with zero charge, alice balance unchanged
+J7 STOREFRONT       corner storefront leased by bob for 30; rival attempt rejected E_VN_LEASE_ACTIVE, zero tokens moved
+PASS AC-JD2d: incentive window settled: [('usr:bob', 60), ('usr:carol', 85)] (gradient + collar + budget all from the shipped face, each payout one share tx)
+J8 CREATOR SHARE    window demo:win:1 settled -> [('usr:bob', 60), ('usr:carol', 85)]
+PASS AC-JD5a: conservation exact-match for 3 accounts + 3 pools: alice=150 bob=150 carol=85 share=335 reward=500 reserve=780 mismatch(expect,actual)=[]
+J9 CONSERVATION    all balances exact-match ledger state; 80 spend revenue flowed back to pool:reserve (token loop closes, BLUEPRINT 5.4); alice bill shows 4 ledger rows
+PASS AC-JD4: demo source carries 0 literal forbidden/advisory words (banned demo content is built from config at runtime)
+DEMO PASS: 8 journey stages, 38 real face calls, 0 network, 0 server startup
+DISCLAIMER (footer, persistent, from config): {'disclaimer': '非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）', 'persistent': True}
+--- RUN 2 ---
+=== BigDomain city business-day journey demo (R607) ===
+DISCLAIMER (persistent, from config): {'disclaimer': '非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）', 'persistent': True}
+AIGC LABEL TEXT (from config): AI 判定
+J1 RESIDENT ONBOARD  3 census-bound accounts ensured (alice / bob / carol)
+J2 PLATFORM POOLS   reserve/share/reward pools minted; alice funded 200, bob funded 100 (fiat top-up = sandbox stand-in, real channel = pay face)
+PASS AC-JD3a: banned post REJECTED before publication (tripped word from config at runtime): 赌博; clean post accepted
+PASS AC-JD3b: reward layer refuses an unrecorded event (E_GATE_REF), bob balance unchanged - fail-closed below the gate too
+PASS AC-JD2a: gated co-create reward booked from pool:share (config action pool), bob +20
+J4 CO-CREATE REWARD clean post passed the gate, gate pass recorded, reward +20 booked from pool:share
+PASS AC-JD2b: prop bought for 20 via one real token spend (tx booked), 3 credits granted, 1 consumed -> 2 left
+J5 CITY PROP SHOP    jetpack x3 bought for 20 (token spend tx on ledger), 1 consumed, 2 credits left
+PASS AC-JD2c: venue rented ticks 100-102, fee 30 via one real spend, occupancy row bound to that spend tx
+J6 VENUE RENTAL     plaza rented 3 windows for 30 (one spend tx, occupancy bound)
+PASS AC-JD3c: bob leased storefront for 30; rival tenancy inside the active window REJECTED (E_VN_LEASE_ACTIVE) with zero charge, alice balance unchanged
+J7 STOREFRONT       corner storefront leased by bob for 30; rival attempt rejected E_VN_LEASE_ACTIVE, zero tokens moved
+PASS AC-JD2d: incentive window settled: [('usr:bob', 60), ('usr:carol', 85)] (gradient + collar + budget all from the shipped face, each payout one share tx)
+J8 CREATOR SHARE    window demo:win:1 settled -> [('usr:bob', 60), ('usr:carol', 85)]
+PASS AC-JD5a: conservation exact-match for 3 accounts + 3 pools: alice=150 bob=150 carol=85 share=335 reward=500 reserve=780 mismatch(expect,actual)=[]
+J9 CONSERVATION    all balances exact-match ledger state; 80 spend revenue flowed back to pool:reserve (token loop closes, BLUEPRINT 5.4); alice bill shows 4 ledger rows
+PASS AC-JD4: demo source carries 0 literal forbidden/advisory words (banned demo content is built from config at runtime)
+DEMO PASS: 8 journey stages, 38 real face calls, 0 network, 0 server startup
+DISCLAIMER (footer, persistent, from config): {'disclaimer': '非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）', 'persistent': True}
+--- VERDICT ---
+AC-JD1..AC-JD6 all green: one-command exit 0, zero network, zero server startup; 8 journey stages, 38 real face calls; fail-closed proofs x3 (gate reject pre-publication + E_GATE_REF unrecorded-event reward refusal + E_VN_LEASE_ACTIVE rival tenancy, all zero-charge); conservation exact-match 3 accounts + 3 pools (80 spend revenue returned to pool:reserve, BLUEPRINT 5.4 loop closure); source self-scan 0 literal banned words; disclaimer + AIGC label from config in transcript header/footer.
