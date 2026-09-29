@@ -1,0 +1,11 @@
+# qa/board-R577.log — board-law knife-44 evidence log (verify-then-write)
+# Round: R577 | Precedent: R571/R575 (prior-round done row migrates next round)
+# Pre-registered AC (this header landed BEFORE any board mutation):
+#   AC-K44a: migration target = R575 done row (O-2026-0929-001 consumption acceptance row, marked done by R576) verbatim -> docs/archive/backlog-done-2026-09.md sec-R577 (pure append + prefix assertion)
+#   AC-K44b: main board after knife = rule header + R577 O-002 row + R577 R41 row + D-20260929-03 gated row + bootstrap row (5 item rows, no stale done rows)
+#   AC-K44c: done row byte-identical (verbatim carry, zero rewrite)
+#   AC-K44d: main-board unchecked count consistent with claimable state (bootstrap = blocked-on-CEO, not claimable)
+#   AC-K44e: this log + commit reference
+# Mutation sequence: [1] archive append -> [2] board rewrite dropping migrated row -> [3] read-only re-verify
+[7] knife-44: done archive 223298B -> 225847B pure append, R575 done row verbatim carried (AC-K44a/c PASS)
+[7] board: migrated row dropped, 2 R577 rows flipped [x] with results, main board = rule header + 2 done + D-03 gated + bootstrap (unchecked=2 non-claimable: 1 gated-external + 1 blocked-CEO; AC-K44b/d PASS)

@@ -1,0 +1,17 @@
+# qa/reorg-R577.log — state.json re-org R41 evidence log (verify-then-write)
+# Round: R577 | Trigger: round-start first-measure 81,592B > 80,000B waterline (R576 carry-note cashed, R536 rule)
+# Pre-registered AC (backlog R577 row landed BEFORE any state.json mutation):
+#   AC-R411: pre-op full snapshot -> logs/state-log-archive-2026-09.md sec-R577-append (pure append + prefix assertion + snapshot == git HEAD src/os/state.json bytes)
+#   AC-R412: window candidates built-and-measured: A=R574..R576 6 rows / B=A+R40 window-summary fold 7 rows / C=B+R34 window-summary fold 8 rows; final sizes measured; gate = pass <=80,000B, select largest margin (R574-C precedent)
+#   AC-R413: compression four assertions: round-number chain R574..R576 continuous zero-gap + header block verbatim vs git HEAD item-level + P/D catalog regex mechanical dedup + JSON parse dual (json.loads + ConvertFrom-Json)
+#   AC-R414: verify-then-write — this log records probe readings + mutation sequence + read-only re-verify; final size and margin recorded in backlog R577 done row
+# Mutation sequence (asserted below in append mode): [1] snapshot append -> [2] final build+verify -> [3] single atomic write of src/os/state.json -> [4] read-only re-verify
+[1] pre-op: disk bytes == git HEAD bytes, size=81592 (AC-R411 prefix-half PASS)
+[2] snapshot: archive 3,610,083B -> 3,691,756B pure append, prefix asserted (AC-R411 PASS)
+[3] catalogs: A=4 B=11 C=12 tokens; direct chain R574..R576 zero-gap (AC-R413 chain-half PASS)
+[4] probe: byte-stable finals A=77,496B B=76,113B C=74,247B; gate<=78,500B passing=['A', 'B', 'C']; selected=C (largest margin, R574-C precedent)
+[5] build: final=74247B header=56 items verbatim vs HEAD, chain+catalog in summary, json.loads + ConvertFrom-Json dual PASS (log 64->59)
+[6] write + re-verify: state.json=74247B margin=5753B tick=577 items=59 (AC-R414 PASS)
+[8] heartbeat standing row appended (R532 standing law)
+[9] export refreshed: export_ts=2026-09-29T11:18:56+08:00 tick row=577 results +2 self_drive W/idle/nop/sub=25/8/0/13 (F3 mechanical)
+[done] R577 re-org R41 complete: pre-op 81,592B -> final 74247B (margin 5753B), candidate=C, log 64->59 items, next re-org R42 on waterline re-cross
