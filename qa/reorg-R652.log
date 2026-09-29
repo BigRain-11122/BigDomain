@@ -1,0 +1,17 @@
+[AC-R591a] PASS pre-op state.json == git HEAD blob, 81249 bytes (round-start first-measure over the 80,000B waterline per R651 carry-note, R536 rule)
+[AC-R591b] PASS parsed pre-op tick=651 log_len=66 bom=False trailing_nl=True
+[AC-R591b-2] PASS roundtrip pre-check: re-serialize unchanged dict == original bytes, zero drift
+[AC-R592a] PASS window L57..65 = R58 window summary + R648..R651 round pairs (9 lines)
+[AC-R592b] PASS mechanical round column R648..R651 continuous, 4 rounds zero-missing (pair check: each round exactly 1 status line + 1 tokens line)
+[AC-R592c] PASS tokens lines 4 all unmeasured wording (official session no metering outlet)
+[AC-R592d] PASS P/D/O catalog regex dedup 13 tokens: P-2026-09-25-18,D-20260929-06,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033,D-20260925-09,O-20260929-002
+[AC-R592e] PASS head block L0..56 verbatim 57 items zero-change
+[AC-R591c] PASS archive sec R652 pure append 5075303 -> 5156878 bytes, prefix asserted (51 pre-existing sections untouched)
+[AC-R594a] post-fold (no accounting lines) size 72459 bytes
+[AC-R594] PASS final state 75039 bytes, margin 3461 bytes under the 78,500B gate
+[AC-R593a] PASS json.loads re-parse: tick=652 log_len=60 head L0..56 verbatim, no trailing comma, top fields preserved (last_order/last_decision_rows/benchmarks_refreshed), on-disk 75039 == stated
+[AC-R593b] PASS PowerShell ConvertFrom-Json independent re-verify: tick=652 log=60 decisions=82 ord=2026-09-28 22:1x bench=2026-09-30 (UTF-8 codepath)
+[PROCESS] one aborted run before any write: round-column check originally used raw regex count over prose (37 false hits), fixed to pair-per-round check, verify-then-write held, zero partial writes
+[HB] PASS heartbeat R651 row duplicate-date-prefix hygiene fix (1 occurrence, R189 precedent) + heartbeat R652 row appended (standing law R532, R651 row on record, no backfill needed), pure append prefix-asserted
+[AC-R595] PASS this log + backlog R652 row done + commit carries P-2026-09-25-18 (P-51 triple-carrier)
+[WATERLINE-CARRY] next-round round-start first-measure decides; over the 80,000B line = R60 fold same-pattern
