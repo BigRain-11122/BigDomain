@@ -1,0 +1,60 @@
+# qa/board-R575.log - R575 group-order receipt + board-law knife 43 closeout evidence (R571-pattern)
+# 判据预注册（AC-K43a..e·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-K43a=R574 过当轮 done 行 verbatim 迁 docs/archive/backlog-done-2026-09.md §R575 节（行内容逐字节同一·既有节零覆写）
+# AC-K43b=archive 纯 append（pre-op 前缀字节断言·size delta=append 块长度·尾随换行保全·BOM 保全）+主板收口=规约头+R575 集团令承接行（open·gated on R-2026-0929-001 终稿外件）+bootstrap open 行（R574 行移除·bootstrap verbatim 保留·无滞板陈 done 行）
+# AC-K43c=heartbeat.txt R575 行落盘（R532 每轮常设律·纯 append prefix 断言·ASCII·措辞保持计数器净）
+# AC-K43d=state 收账面——tick 574->575+log 60→62 项 parse 过+回执行引用 O-2026-0929-001+GORD 新 sha16 基线 3CCA419FC678D5A5 入册+轮账本 tokens 行+措辞保持计数器净
+# AC-K43e=export 收账面——export_ts ISO8601+self_drive 四计数机械重派（W/idle/nop/sub=25/8/0/14→27/8/0/15·F3 零写死·队列/提案计数持平）+results tick 行 574→575+第四十三刀件+O-2026-0929-001 承接件 +2 行+method 尾注
+# 来源=P-2026-09-25-18 ④板规执法（第四十三刀）+R532 停摆令 heartbeat 每轮常设律+集团 orders 尾新行 O-2026-0929-001 治理域开源借力专项切片承接（P-56 派工面口径）
+PASS A1 state round-start size anchor 74,930B (actual 74930)
+PASS A2 state BOM-free
+PASS A3 state tick 574 (got 574)
+PASS A4 state log 60 items (actual 60)
+PASS A5 state round-trip identity (dump indent2 + trailing-nl, ensure_ascii=false)
+PASS A5b state baselines flat (ord/dec/bench)
+PASS A13-A16 pre W/idle/nop/sub recount 25/8/0/14 == register (got 25/8/0/14)
+PASS A13b pre tokens/P2-receipt 10/1 (got 10/1)
+PASS A6 archive size anchor 221,824B (actual 221824)
+PASS A7 archive BOM present + ends with newline
+PASS A8 no pre-existing R575 section
+PASS A9z backlog BOM-free
+PASS A9 exactly one R574 done row on main board (found 1)
+PASS A9b R574 row done-mark present, 1375B
+PASS A10 one done row total on board
+PASS A10b bootstrap open row present exactly once
+PASS A11 export BOM present
+PASS A12 export round-trip identity (dump indent2 + trailing-nl, BOM preserved)
+PASS A12b export register pre 25/8/0/14
+PASS A17 proposals recount 1/1 == register (got 1/1)
+PASS A18 queue recount 10/4/10 == register (got 10/4/10)
+PASS A19 heartbeat ends with newline
+PASS A20 new round+tokens lines keep counters clean
+PASS A21 tokens line matches tokens pattern
+PASS A20b heartbeat line keeps counters clean
+PASS B1 archive append block built, delta 1474B (old 221,824B -> new 223298B)
+PASS B3a backlog R574 row removed + R575 acceptance row inserted at top
+PASS B3b board rows = R575 acceptance + bootstrap (2 open rows)
+PASS B3c no stale done rows on main board
+PASS B3d bootstrap row verbatim kept
+PASS B6a first-60 log prefix unchanged
+PASS B6b state new object tick 575, log 60->62, round-trip stable
+PASS B8 recount from built state: W=27 idle=8 nop=0 sub=15 tokens=11 (got 27/8/0/15/11)
+PASS B8b P2-receipt count unchanged (1 -> 1)
+PASS B9 results tick row found once (574->575)
+PASS B10 export new object round-trip stable
+PASS B2 archive re-read: prefix byte-identical, BOM kept, trailing newline kept, row verbatim in place (223298B)
+PASS B4 backlog re-read byte-identity, BOM-free (3809B)
+PASS B5 heartbeat re-read prefix-asserted (57748B -> 59439B)
+PASS B7 state re-read byte-identity (78131B)
+PASS B7b state re-read: parse ok, tick 575, log 62, appended pair verbatim
+PASS B7c first-60 log items unchanged vs pre-op
+PASS B12a export re-read byte-identity with BOM (87712B)
+PASS B12b export re-read: register 27/8/0/15
+PASS B12c export_ts ISO8601 with timezone
+PASS B12d results tick row = 575 (found 1)
+PASS B12e knife-43 + O-2026-0929-001 receipt rows present
+PASS B13 F3 cross-check: export register == mechanical recount from state.json (zero hardcode)
+
+# closeout summary 2026-09-29T10:43:04+08:00
+# state 78131 (tick 575, log 62) | backlog 3809 | archive 223298 (+1474) | heartbeat 59439 | export 87712
+# AC-K43a..e all pass. Temp file tmp_r575_closeout.py removed by operator after commit staging.
