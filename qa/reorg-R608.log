@@ -1,0 +1,9 @@
+=== qa/reorg-R608.log (R608 re-org knife 48, window R605..R607) ===
+PASS AC-R481 pre-op anchor: disk 80089B == git HEAD 80089B
+PASS pre-state: tick=607 log=62 items
+PASS AC-R482 window pairing: last 6 items are the R605/R606/R607 round+tokens pairs in order
+PASS AC-R482 P/D/O catalog regex dedup: 11 tokens (P-2026-09-25-18,O-2026-0929-017,D-20260929-03,O-2026-0929-016,O-2026-0929-018,O-2026-0929-019,O-2026-0929-020,O-2026-0929-021,O-2026-0929-022,P-2026-09-29-07,O-2026-0929-027)
+PASS AC-R484 final size 73534B <= 78,500B gate (margin 4966B, log 62->59 items)
+PASS AC-R481 archive pure append: old 4179619B prefix of new 4260046B
+PASS AC-R483 header block 56 items verbatim (string-level, json roundtrip) + top fields kept (tick 607->608, last_order/last_decision_rows/benchmarks_refreshed unchanged); post-compact 70,764B margin 9,236B; AC-R485 = commit carries P-2026-09-25-18
+chain result: ALL GREEN

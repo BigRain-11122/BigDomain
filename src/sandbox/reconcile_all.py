@@ -1,8 +1,8 @@
 """Product health-check runner (BigDomain explore-line item #9, R594;
 pay/member standalone-reconcile extension, R595 follow-up row).
 
-One command = the full sandbox regression fan-out (sixteen
-acceptance suites, 151 pre-registered criteria in total) plus the
+One command = the full sandbox regression fan-out (seventeen
+acceptance suites, 161 pre-registered criteria in total) plus the
 standalone reconcile product face for all three bookkeeping domains,
 each with a clean/tamper dual control:
 
@@ -89,6 +89,7 @@ SUITES = [
      os.path.join("watermark", "test_watermark_robust.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
+    ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
 ]
 
 FAILS = 0

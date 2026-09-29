@@ -1,0 +1,11 @@
+﻿PASS AC-LR1: unattended open rejected E_LIVE_UNATTENDED; attended with empty risk-control ref rejected E_LIVE_BAD_ARGS; sessions table rows=0 after both rejects
+PASS AC-LR1: attended session opens only with a non-empty risk-control citation (bigcompute-risk-control-ref)
+PASS AC-LR2: 5 anonymous enters: funnel entered=5 registered=0 converted=0; spend-tx count 0==0
+PASS AC-LR3: banned word (赌博) rejected at gate 1 and advisory word (保本) rejected at gate 2 before any row (rows 0==0); anonymous danmaku rejected E_LIVE_NOT_RESIDENT (rows 0); clean AI-flagged danmaku lands (rows 1)
+PASS AC-LR4: registered viewer converts price 1990: balance 3000->1010 (exact -1990), spend-tx 0->1 (+1), bound tx is a real spend with a 1990 debit for usr:amy
+PASS AC-LR4: unregistered (anonymous) viewer convert rejected E_LIVE_NOT_RESIDENT with zero charge (2000==2000)
+PASS AC-LR5: second conversion same viewer same session rejected E_LIVE_CONV_DUP zero charge (10==1000-990); after close_session: convert rejected E_LIVE_CLOSED, danmaku rejected E_LIVE_CLOSED
+PASS AC-LR6: funnel counts match an independent SQL recount (entered=4/4 registered=2/2 converted=2/2 total=800/800); transcript first+last lines are the config disclaimer verbatim; the AI danmaku row carries [AI 判定]
+PASS AC-LR6: conversion audit rows 2 each bind a real debit entry; bound debit sum 800== conversion_total 800
+PASS AC-LR7: whole-suite token touches: spend-tx 4 == conversion rows 4 (enter/register/danmaku/close moved zero tokens); source banned-verb hits=[] non-ascii=0; prices arrive as caller arguments only ([needs-CEO] P1 face)
+SUITE PASS 10/10

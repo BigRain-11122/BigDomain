@@ -1,0 +1,11 @@
+=== qa/board-R608.log (R608 closeout chain, knife 65) ===
+R608 board-law knife 65 preregistered criteria (written before any mutation):
+AC-K65a = 3 stale done rows R605/R606/R607 extracted verbatim (line-exact) from the live board
+AC-K65b = done-archive pure append (prefix-asserted, existing sections untouched, BOM state recorded)
+AC-K65c = live board keeps header + R608 claim rows + D-03 gated row + bootstrap row
+AC-K65d = migrated rows byte-counted and re-read identical from the archive
+AC-K65e = evidence = this log
+PASS AC-K65a extraction: found 3/3 stale done rows
+PASS AC-K65b archive pure append: old 264055B is a prefix of new 271210B
+PASS AC-K65c live board: stale rows removed, R608 claim rows + D-03 + bootstrap kept (4 lines)
+PASS AC-K65d archive re-read: all 3 rows verbatim present (sizes [2323, 2413, 2300] B, archive BOM=True)
