@@ -1,0 +1,13 @@
+[AC-R551a] PASS pre-op state.json == git HEAD blob, 81360 bytes
+[AC-R551b] PASS parsed pre-op tick=635 log_len=68 bom=False trailing_nl=True
+[AC-R552a] PASS window L57..67 = R54 window summary + R631..R635 round pairs (11 lines)
+[AC-R552b] PASS mechanical round column R631..R635 continuous, 5 rounds zero-missing
+[AC-R552c] PASS tokens lines 5 all unmeasured wording (official session no metering outlet)
+[AC-R552d] PASS P/D/O catalog regex dedup 10 tokens: P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033
+[AC-R551c] PASS archive sec R636 verified idempotent skip (first run appended the pre-op node then a catalog-regex defect was caught post-write - disk writes reverted to git HEAD, honest note, R631/R552 first-run-defect precedent; rerun skips zero-damage, section bytes = pre-op snapshot unchanged)
+[AC-R554a] post-fold (no closing lines) size 72415 bytes
+[AC-R554] PASS final state 74655 bytes, margin 3845 bytes under the 78,500B gate
+[AC-R543a] PASS json.loads re-parse: tick=636 log_len=60 header L0..56 verbatim, top fields preserved (last_order/last_decision_rows/benchmarks_refreshed), on-disk 74655 == stated
+[AC-R543b] PASS PowerShell ConvertFrom-Json independent re-verify: tick=636 log=60 decisions=82, last log item no trailing comma (R189 lesson), heartbeat tail row R636 at 02:56 on disk
+[HB] PASS heartbeat rows appended: R634 backfill (anchor commit 717317e) + R635 backfill (anchor 0ba6e1c) + R636 row, pure append prefix-asserted, missed-row honest note per R631/R614/R541 precedent
+[AC-R555] backlog R636 row done-marker + commit message carry P-2026-09-25-18 item-4 (completed in closeout phase of this round)
