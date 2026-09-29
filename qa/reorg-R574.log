@@ -1,0 +1,77 @@
+PASS A1 state round-start size anchor 81661B (actual 81661) actual 81661
+PASS A2 state BOM-free
+PASS A3 state tick 573
+PASS A4 state log 66 items (actual 66)
+PASS A5 state byte-identical to git HEAD
+PASS A6 state round-trip identity (indent2 + trailing-nl)
+PASS A7 archive size anchor 3527890B (actual 3527890) actual 3527890
+PASS A8 archive ends with newline; no pre-existing R574 section
+PASS A9-pre board CR-free (python-written pure LF)
+PASS A9 board = header + bootstrap row only (rows=1) rows=1
+PASS A10 board ends with newline, BOM-free
+PASS A11 heartbeat ends with newline, last row pure ASCII, is tick-573 row
+PASS A12 export BOM present
+PASS A12b export round-trip identity
+PASS A13 pre self_drive recount W/I/N/S=31/8/0/17 (got 31/8/0/17; T=13 P=1) T=13 P=1
+PASS A14 export self_drive fields match recount (31/17/8/0) + queues 10/4/10 + proposals 1/1
+PASS A15 queue recount from files 10/4/10 got 10/4/10
+PASS A16 proposals recount 1/1 from proposals.md got 1/1
+FAIL A17 export results tick row 573 found exactly once; results 111 rows rows=112
+PASS A18 tail chain contiguous: R39 summary + R570..R573 pairs at idx 57..65
+PASS A19 window bytes A=6,401B B=9,496B C=11,211B (got 6401/9496/11211) got A=6401 B=9496 C=11211
+PASS A20 window nesting C superset B superset A
+CLOSEOUT FAILED - A-series pre-checks failed: A17 export results tick row 573 found exactly once; results 111 rows; DO NOT COMMIT; investigate
+# --- RESTART after pre-mutation abort (honest note): prior attempt failed A-series gate before any file mutation; A1-A20 re-verify the untouched pre-state below ---
+PASS A1 state round-start size anchor 81661B (actual 81661) actual 81661
+PASS A2 state BOM-free
+PASS A3 state tick 573
+PASS A4 state log 66 items (actual 66)
+PASS A5 state byte-identical to git HEAD
+PASS A6 state round-trip identity (indent2 + trailing-nl)
+PASS A7 archive size anchor 3527890B (actual 3527890) actual 3527890
+PASS A8 archive ends with newline; no pre-existing R574 section
+PASS A9-pre board CR-free (python-written pure LF)
+PASS A9 board = header + bootstrap row only (rows=1) rows=1
+PASS A10 board ends with newline, BOM-free
+PASS A11 heartbeat ends with newline, last row pure ASCII, is tick-573 row
+PASS A12 export BOM present
+PASS A12b export round-trip identity
+PASS A13 pre self_drive recount W/I/N/S=31/8/0/17 (got 31/8/0/17; T=13 P=1) T=13 P=1
+PASS A14 export self_drive fields match recount (31/17/8/0) + queues 10/4/10 + proposals 1/1
+PASS A15 queue recount from files 10/4/10 got 10/4/10
+PASS A16 proposals recount 1/1 from proposals.md got 1/1
+PASS A17 export results tick row 573 found exactly once; results 112 rows (R571 knife row +1 vs R570 baseline 111) rows=112
+PASS A18 tail chain contiguous: R39 summary + R570..R573 pairs at idx 57..65
+PASS A19 window bytes A=6,401B B=9,496B C=11,211B (got 6401/9496/11211) got A=6401 B=9496 C=11211
+PASS A20 window nesting C superset B superset A
+# qa/reorg-R574.log - R574 watermark-trigger re-org knife 40 evidence (R570-pattern)
+# 判据预注册（AC-R401..R404·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-R401=pre-op 全量快照 append 入档 logs/state-log-archive-2026-09.md §R574 append 节（纯 append·prefix 断言过·快照与 git HEAD state.json 逐字节同一）
+# AC-R402=窗位 probe 三候选全量构建实测（A=窗 R571..R573 6 行/B=窗 R570..R573 8 行/C=B+R39 汇总行折叠 9 行→终态 ≤78,500B 余量律过闸取余量最大·零过闸=amend 扩窗照 R523 折叠先例·序贯实测=先建候选取自身读数·后建候选取先建读数承行嵌入·定点迭代收敛）
+# AC-R403=压缩窗执行四断言（轮号前缀锚 R570..R573 连续 4 轮零缺+头部块 57 项 verbatim vs git HEAD 项级断言+P/D 编目 regex 去重真令号+JSON parse/行数双口径过 log 66→60）
+# AC-R404=verify-then-write（qa/reorg-R574.log：probe 读数+变更序贯+只读复验在册）
+# 来源=P-2026-09-25-18 ④主刀（第四十刀）+R532 heartbeat 常设律（同窗闭环）+R573 尾注承传注记（轮首首测 81,661B 越 80,000B 线）
+PASS P0 board claim row inserted (rows=2, header prefix intact, ends newline)
+PASS PROBE A window A=窗 R571..R573 6 行 6,401B: 6 lines 6401B -> built final 79198B margin 802B gate<=78500B FAIL; catalog 3 items
+PASS PROBE B window B=窗 R570..R573 8 行 9,496B: 8 lines 9496B -> built final 76393B margin 3607B gate<=78500B PASS; catalog 3 items
+PASS PROBE C window C=B+R39 汇总行折叠 9 行 11,211B: 9 lines 11211B -> built final 74930B margin 5070B gate<=78500B PASS; catalog 9 items
+PASS PROBE-SELECT gate-passers=B,C -> selected C (largest margin, pre-registered rule); final 74930B margin 5070B
+PASS FINAL-REBUILD byte-identical to probe build (fixed point, no delta); final 74930B margin 5070B
+PASS C1/AC-R401 archive pure append 3,527,890B -> 3,610,083B (prefix asserted; snapshot=git HEAD bytes 81661B)
+PASS C2/AC-R403 state 81,661B -> 74,930B (log 66->60; retained 57 items verbatim vs git HEAD; round-anchor 570..573 zero-gap; json parse ok; tick 574; fixed-point final embedded)
+PASS C2b post-build self_drive recount W/I/N/S=25/8/0/14 (T=10 P=1) got 25/10/1/8/0/14
+PASS C2c new summary+round+tokens lines keep counters clean (no idle-fast / no no-pullable substrings)
+PASS C3-pre claim row present exactly once
+PASS C3 board done-flip (exactly one row replaced, claim row gone)
+PASS C5-pre heartbeat row pure ASCII
+PASS C4-pre method tail ends with ')'
+PASS D1 on-disk state == built buffer; parse ok; tick 574; log 60 items
+PASS D2 on-disk retained header verbatim vs git HEAD
+PASS D3 on-disk self_drive recount W/I/N/S=25/8/0/14 (T=10 P=1) got 25/10/1/8/0/14
+PASS D4 on-disk archive pure append prefix + size 3,610,083B
+PASS D5 on-disk board = header + R574 done row + bootstrap row
+PASS D6 on-disk heartbeat pure binary append + ends newline + ASCII tail row == built row
+PASS D7 on-disk export parse + BOM + tick row 574 + 113 results + self_drive 25/8/0/14
+PASS D8 waterline: final 74,930B <= 78500B gate, margin 5,070B; next trigger projected ~R577
+CLOSEOUT AC-R401..R404 all passed; commit next
+final_state_bytes=74930 archive_bytes=3610083 export_ts=2026-09-29T10:24:26+08:00 selected=C
