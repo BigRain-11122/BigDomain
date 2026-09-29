@@ -1,0 +1,48 @@
+# qa/board-R571.log - R571 standing-carry + board-law knife 42 closeout evidence (R567-pattern)
+# 判据预注册（AC-K42a..e·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-K42a=R570 过当轮 done 行 verbatim 迁 docs/archive/backlog-done-2026-09.md §R571 节（行内容逐字节同一·既有节零覆写）
+# AC-K42b=archive 纯 append（pre-op 前缀字节断言·size delta=append 块长度·尾随换行保全·BOM 保全）
+# AC-K42c=主板收口=规约头+bootstrap open 行（R570 行移除·bootstrap verbatim 保留·无滞板陈 done 行）
+# AC-K42d=heartbeat.txt R571 行落盘（R532 每轮常设律·纯 append prefix 断言·ASCII）
+# AC-K42e=state/export 收账面——state tick 570->571+log 60→62 项 parse 过；export self_drive 四计数机械重派（W/idle/nop/sub）+results tick 行 570→571+第四十二刀件 +1 行+export_ts ISO8601；A1..A21+B1..B13 双段断言全过
+# 来源=P-2026-09-25-18 ④板规执法（第四十二刀）+R532 停摆令 heartbeat 每轮常设律
+PASS A1 state round-start size anchor 75,212B (actual 75212)
+PASS A2 state BOM-free
+PASS A3 state tick 570 (got 570)
+PASS A4 state log 60 items (actual 60)
+PASS A5 state round-trip identity (dump indent2 + trailing-nl, ensure_ascii=false)
+PASS A6 archive size anchor 220,311B (actual 220311)
+PASS A7 archive BOM present + ends with newline
+PASS A8 no pre-existing R571 section
+PASS A9 exactly one R570 done row on main board (found 1)
+PASS A9b R570 row done-mark present, row 1,414B (actual 1414)
+PASS A10 bootstrap open row present exactly once, one done row total
+PASS A11 export BOM present
+PASS A12 export round-trip identity (dump indent2 + trailing-nl, BOM preserved)
+PASS A13 pre W recount 25 == register (W0=25)
+PASS A14 pre idle recount 8 == register (I0=8)
+PASS A15 pre no-pull recount 0 == register (N0=0)
+PASS A16 pre substantive recount 14 == register (S=14 T=10 P=1)
+PASS A17 proposals recount 1/1 == register
+PASS A18 queue recount 10/4/10 == register (10/4/10)
+PASS A19 heartbeat ends with newline
+PASS A20 new round+tokens lines keep counters clean
+PASS A20b heartbeat line keeps counters clean
+PASS A21 tokens line matches tokens pattern
+PASS B1 archive append block built, delta 1513B (old 220311B -> new 221824B)
+PASS B2 archive re-read: prefix byte-identical, BOM kept, trailing newline kept, row verbatim in place (221824B)
+PASS B3 backlog R570 row removed, board = header + bootstrap row (3,457B -> 2,042B)
+PASS B4 backlog re-read: no stale done rows, bootstrap verbatim kept, BOM-free (2042B)
+PASS B5 heartbeat R571 row appended, prefix-asserted (49012B -> 51423B)
+PASS B6 state new object built: tick 571, log 60->62, first-60 prefix unchanged, round-trip stable
+PASS B7 state re-read: parse ok, tick 571, log 62 items, appended pair verbatim (77468B)
+PASS B8 recount from written state: W=27 idle=8 nop=0 sub=15 (T=11 P2=1)
+PASS B9 results tick row found once (570->571) (found 1)
+PASS B11 method tail note appended
+PASS B10 export new object round-trip stable
+PASS B12 export re-read: register 27/8/0/15, tick row 571, knife-42 results row present, export_ts ISO8601
+PASS B13 F3 cross-check: export register == mechanical recount from state.json (zero hardcode)
+
+# closeout summary 2026-09-29T09:47:47+08:00
+# state 77468 (tick 571, log 62) | backlog 2042 | archive 221824 (+1513) | heartbeat 51423 | export 84406
+# AC-K42a..e all pass. Temp files (tmp_probe_r571.py, tmp_r571_payload.json, tmp_r571_closeout.py) removed by operator after commit staging.
