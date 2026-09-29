@@ -1,0 +1,40 @@
+# qa/reorg-R563.log — state.json 再整编 R37 证据件（R563 触线轮·2026-09-29）
+
+轮次=R563（~0744 beat）·触发=R562 尾注承传注记兑现（收账后实测 80,068B 越 80,000B 十进制线→R563 轮首首测越线即按 R536 律开刀）·预注册=AC-R371..R374 先立（src/os/backlog.md R563 行先落·先立后动）·主刀=P-2026-09-25-18 ④第三十七刀·伴项=heartbeat 常设律（R532）+板规第四十刀对象查（无对象）
+
+## A. probe 读数（AC-R372·窗位双候选全量构建实测·修复后口径）
+
+- 轮首首测：state_bytes=80068（scan 口径同）>80,000B 线 → R37 触发
+- 基线身份：git HEAD blob 998b132ace662923050b7f640cb0d00180f8f0c8 == 工作盘 blob（identity=True·hash-object 双向断言）
+- 窗内容字节（UTF-8）：items 58..64 = 9,634B（item58 R560 汇总行 3,500B paren + R560 实况 2,302B + tokens 210B + R561 实况 1,741B + tokens 210B + R562 实况 1,461B + tokens 210B）；items 61..64 = 3,622B
+- P/D 编目 regex 去重（机械·零手落）：窗 B（items 58..64）=5 真令号=P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47（锚验：item58 单行提取=R560 在册编目逐一同）；窗 A（items 61..64）=1 真令号=P-32
+- 候选 A=窗 R561..R562（4 行 3,622B 压 1 行·汇总行 1,608B）：终态 78,030B·margin 1,970B·≤78,500B 闸 PASS（贴线）·parse OK·log 64→61
+- 候选 B=窗 R560..R562（7 行 9,634B 压 1 行·汇总行 3,088B·R523 汇总行并入先例=R560 窗汇总行折叠并入）：终态 73,474B·margin 6,526B·≤78,500B 闸 PASS·parse OK·log 64→58
+- 选择律：双过闸→≤78,500B 余量律取余量最大=B 选中（无 amend 扩窗）
+- 首跑读数作废如实注（编码面判读失误·R553 先例型）：首跑 probe/突变脚本为 PS 5.1 无 BOM 脚本且内嵌中文汇总行字面量→源码按 GBK 误解码致汇总行内存态乱码，首写末项乱码由前缀断言（StartsWith '2026-09-29（'）当场检出 False；首跑读数（A=78,478B/B=74,220B 及旧措辞 B=74,265B）为乱码膨胀口径，全部作废。同轮改道修复=①汇总行文本经工具写 UTF-8 数据文件外置（bd-r563-sumA/sumB.txt）②执行脚本纯 ASCII 化③基线字节改自 archive §R563 append 节切片提取（offset 3,285,195·len 80,068·免编码往返）+切片回读 hash-object 复验与 HEAD blob 同一。修复后读数以上行为准。
+
+## B. 变更序贯（AC-R373·verify-then-write）
+
+1. AC-R371 pre-op 全量快照 append 入档：logs/state-log-archive-2026-09.md 3,285,116B→3,365,263B 纯 append·marker='# --- R563 append (pre re-org round 37, tick 562, 2026-09-29, 80068 bytes) ---'（marker_len=79·snapshot offset=3,285,195·snap_len=80,068）·prefix 断言过（stride 997 采样+边界 3 逐字节）·快照与 git HEAD blob 逐字节同一（998b132ace）+archive 切片回读 blob 复验同一
+2. 轮号前缀锚零缺断言：item58 头部窗界 R553..R559 + 移除行轮号 R560（item59）/R561（item61）/R562（item63）→覆盖集=553..562 连续 10 轮零缺（missing=[]）；前接 item57 窗界尾 R552→553 连续（contiguity=True）
+3. 压缩执行：窗 B 7 行压汇总 1 行（头部块 lines[0..59] 保留+汇总行插入+尾部 lines[67..72] 保留）·UTF-8 无 BOM 写盘（原文件无 BOM·保真）
+4. 四断言：①JSON parse 过（log 64→58）②头部块 57 项 verbatim vs git HEAD 项级断言过（逐项 -ceq）③P/D 编目 5 真令号（入汇总行）④行数双口径过（raw_lines 73→67·log 58）；末项与源数据文件逐字符同一断言过（-ceq sumB=True·mojibake 免疫）
+5. 尾置四字段保全：last_order=2026-09-28 22:1x·last_decision_rows=75·benchmarks_refreshed=2026-09-29·tick=562（收账步再 562→563）
+
+## C. 收账段
+
+- tick 562→563·R563 实况行（2,925B）+tokens 行（210B）append·POST 尺寸迭代收敛=76,623B（iter1 76,623=iter2 76,623）·log 58→60·parse 复验过·末项=tokens 行
+- 收账后实测 76,623B<80,000B 线（margin 3,377B）→下轮轮首首测照 R536 律走
+- self_drive 机械复算（R556 口径·in-memory pre-write 断言拦截后修正）：W=25/idle_fast=8/no_pullable=0/sub=14（tokens=10·P2 回执=1）
+  - 判读失误如实注（第二处·R553 先例型）：首算 idle 用裸 'idle' 子串得 10 vs 在册 8、P2 用 'P2 上' 子串得 2 vs 在册 1→in-memory 断言拦截（写盘零发生）→反推在册口径=idle_fast 判据锚 'idle-fast' 字面子串（R541/R542「避免废除标签子串」注记即此·export 字段名 idle_fast_mention_lines 同证）+P2 回执行=行头 '^R\d+ P2 ' 专行式（item13 唯一命中）→修正后 25/8/0/14 与在册连续性逐字段吻合
+- export 实刷（docs/status-export.json·Python json roundtrip 字节同一断言过 rt_plus_nl·BOM 保全）：export_ts=2026-09-29T08:00:07+08:00·results tick 行 562→563·R37 件 +1 行·self_drive 四计数 25/8/0/14·method 追加 R563 recount 注（含双失误如实注）
+- heartbeat R563 行 append（07:59·纯 ASCII 断言过）
+- 板规第四十刀对象查：主板无陈旧 done 行=无对象（R561 迁 R560 行后 R562/R563 板面唯一 open=bootstrap blocked on CEO；R563 done 行当轮留板=R564 第四十一刀迁档对象·板规惯例）
+- 自愈查：schtasks BigDomain-OSLoop Status=Running·Next Run 2026/9/29 8:04:00=无需自愈
+- P-32 日清：当日零本司面新增 open 项=不写（零膨胀）
+
+## D. 伴项与余队
+
+- heartbeat 常设律 R532 同窗闭环（本行）
+- OSS 第二窗 09-29 21:40 未开（下窗常设承接面）·提案窗 09-28~10-05 配额已交（BD-PROP-001 open·首回访 10-05）·QA 当日已毕（R537 crawl）·tech 线余 4 项全门控（静机复测 09-30 13:00 后/docker 缺位/release-gate 留窗/logs 整编留队）·bootstrap 待 CEO 物理件
+- archive 保真注：logs/ 整目录 gitignore（.gitignore:3）·快照=磁盘保全完成态（历轮同构）
