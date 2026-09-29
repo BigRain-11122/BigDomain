@@ -1,7 +1,8 @@
 """Acceptance suite for the AIGC implicit watermark capability sandbox
 (BigDomain P-47-3c; task source = P-2026-09-26-08 OSS first-window
 adoption of guofei9987/blind_watermark, MIT; OH evidence chain at
-docs/oss-harvest/OH-20260926-bigdomain.md).
+cph4/oss-harvest/OH-20260926-bigdomain.md, the group ledger path
+per decision D-20260927-03 - sole ledger location, no local mirror).
 
 Pre-registered criteria (backlog line / tasks.md P-47-3c), asserted
 here in mechanical form; each criterion prints PASS/FAIL with
@@ -51,7 +52,10 @@ from blind_watermark.recover import estimate_crop_parameters, recover_crop
 BASE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(BASE, "..", "..", ".."))
 DOC = os.path.join(ROOT, "docs", "spec", "implicit-watermark-verify.md")
-OH = os.path.join(ROOT, "docs", "oss-harvest", "OH-20260926-bigdomain.md")
+# D-20260927-03 moved the OH slice to the group ledger path (sole
+# ledger location, local mirrors banned) - read-only cross-repo ref
+OH = os.path.join(ROOT, "..", "..", "cph4", "oss-harvest",
+                  "OH-20260926-bigdomain.md")
 REG = os.path.join(ROOT, "docs", "oss-harvest", "README.md")
 UGC_CFG = os.path.join(ROOT, "src", "sandbox", "ugc", "config.json")
 UGC_PIPE = os.path.join(ROOT, "src", "sandbox", "ugc", "pipeline.py")
