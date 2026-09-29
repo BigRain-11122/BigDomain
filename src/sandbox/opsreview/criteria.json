@@ -1,0 +1,80 @@
+{
+  "default_spec": "../../../../../gaming/MiniGame/Design/evidence/uiforge/U279/吸嘟嘟运营层规格v1.md",
+  "criteria": [
+    {
+      "id": "XD1",
+      "desc": "IAA five insertion points present, all rewarded-style, non-forced",
+      "require_all": ["结算双倍", "败局复活", "补给", "解锁加速", "离线收益"],
+      "min_count": [{"pattern": "看视频", "count": 5}],
+      "forbid": ["强制观看", "必须看广告", "不看广告不能"],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD2",
+      "desc": "paid-user ad-reduction tiering principle inherited",
+      "require_all": ["付费用户降广告"],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD3",
+      "desc": "pass free/ad/paid tracks coexist; no streak-reset FOMO punishment",
+      "require_all": ["免费轨", "广告轨", "付费轨"],
+      "forbid": ["断签清零", "断签重置"],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD4",
+      "desc": "6-CNY tier payment channel note (minigame virtual payment mandatory)",
+      "require_all": [],
+      "require_any": [["支付通道", "商户号", "米大师", "虚拟支付专用"]],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD5",
+      "desc": "IAA rewards are coins/items/fragments only; zero cash faces",
+      "require_all": ["金币/道具/图鉴碎片"],
+      "forbid": ["提现", "现金奖励"],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD6",
+      "desc": "AIGC labeling note for AI-generated assets on all render faces",
+      "require_all": [],
+      "require_any": [["AIGC", "AI 生成", "深度合成"]],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD7",
+      "desc": "content-security gate note for user-visible UGC text faces",
+      "require_all": [],
+      "require_any": [["msgSecCheck", "内容安全", "安全审核"]],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD8",
+      "desc": "minor / real-name compliance note hooked to payment finalization",
+      "require_all": [],
+      "require_any": [["未成年人", "防沉迷", "实名"]],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD9",
+      "desc": "subscription messages use one-time authorization wording",
+      "require_all": ["一次性订阅消息"],
+      "forbid": [],
+      "on_missing": "GAP"
+    },
+    {
+      "id": "XD10",
+      "desc": "zero finance/investment wording (non-advisory red line, zero-coupling check)",
+      "require_all": [],
+      "forbid": ["投资", "荐股", "理财", "基金", "回测"],
+      "on_missing": "GAP"
+    }
+  ]
+}

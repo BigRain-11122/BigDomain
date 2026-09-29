@@ -87,6 +87,7 @@ SUITES = [
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
+    ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
 ]
 
 FAILS = 0

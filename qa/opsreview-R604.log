@@ -1,0 +1,30 @@
+SPEC: C:\Users\sjs20\Desktop\FluxGroup\gaming\MiniGame\Design\evidence\uiforge\U279\吸嘟嘟运营层规格v1.md (4729 bytes, sha256[:16]=6b4206d35ee3aa92)
+GATE: criteria=10, pre-registered in criteria.json (backlog R604 row, registered before implementation)
+PASS XD1 IAA five insertion points present, all rewarded-style, non-forced
+  evidence: require '结算双倍' hit L8
+  evidence: require '败局复活' hit L9
+  evidence: require '补给' hit L10
+  evidence: require '解锁加速' hit L11
+  evidence: require '离线收益' hit L12
+  evidence: count '看视频' 5>=5
+PASS XD2 paid-user ad-reduction tiering principle inherited
+  evidence: require '付费用户降广告' hit L51
+PASS XD3 pass free/ad/paid tracks coexist; no streak-reset FOMO punishment
+  evidence: require '免费轨' hit L16
+  evidence: require '广告轨' hit L17
+  evidence: require '付费轨' hit L17
+GAP XD4 6-CNY tier payment channel note (minigame virtual payment mandatory)
+  evidence: missing: any(支付通道|商户号|米大师|虚拟支付专用)
+PASS XD5 IAA rewards are coins/items/fragments only; zero cash faces
+  evidence: require '金币/道具/图鉴碎片' hit L48
+GAP XD6 AIGC labeling note for AI-generated assets on all render faces
+  evidence: missing: any(AIGC|AI 生成|深度合成)
+GAP XD7 content-security gate note for user-visible UGC text faces
+  evidence: missing: any(msgSecCheck|内容安全|安全审核)
+GAP XD8 minor / real-name compliance note hooked to payment finalization
+  evidence: missing: any(未成年人|防沉迷|实名)
+PASS XD9 subscription messages use one-time authorization wording
+  evidence: require '一次性订阅消息' hit L41
+PASS XD10 zero finance/investment wording (non-advisory red line, zero-coupling check)
+SUMMARY: PASS=6 GAP=4 FAIL=0 criteria=10
+VERDICT: exit=1 NOTE_GAPS (no red line; patch note-level gaps then re-run)
