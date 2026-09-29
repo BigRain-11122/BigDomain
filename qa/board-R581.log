@@ -1,0 +1,34 @@
+qa/board-R581.log - BigDomain OSLoop R581 closeout evidence (board-law knife 47 + dec/gord receipts + trigger check)
+pre-registered AC (written BEFORE any mutation of bookkeeping files):
+
+AC-K47a: pre-op backlog.md read; R580 done row (line starting "- [x] state.json" + "R42") located uniquely; row captured verbatim
+AC-K47b: done-archive pure append: post-write archive bytes start with pre-write bytes (prefix-identical); BOM state preserved (BOM=True)
+AC-K47c: migrated row byte-identical to captured source row (verbatim law), inside new section "## <R581 section header>" per R578/R579 section style
+AC-K47d: post-op main board = header block + D-20260929-03 gated row (with R581 trigger-check annotation) + bootstrap row; zero "- [x]" rows remain; no other content change
+AC-K47e: state.json dual-parse PASS (python json.loads pre/post + PowerShell ConvertFrom-Json post), tick 580->581, two appended log lines (round line + tokens line), last_decision_rows 77->81, log tail = R581 tokens line, no trailing comma
+
+supporting checks:
+- DEC gate: C-20260929-03 new number -> judged (approved case, non-BigDomain execution face, knowledge-only); C-20260929-02 at L78 same-number re-presentation (R579 receipt in register, row shift = C-20260928-02 backfill insertion at L76) -> zero re-judgment; L80 blank + L81 closed bm-c note -> zero action
+- GORD: tail order 09-29 ~12:0x CEO committee-constitution order (ledger P-20260929-05, case C-20260929-03 same-window executed) -> group L3 face, knowledge-only; L150/L151 = P-2026-09-29-03/-04 receipted R579/R580 (grep-verified in state log)
+- TASKS: D-20260929-03 trigger check = group + local docs/audits dual-path glob "legal-review-20260929*" zero hits -> external file not arrived, window <=09-30 12:00, backlog row annotated, no fabricated activity
+- roundtrip-stable gate: json.dumps(json.loads(x)) == original text asserted for state.json and status-export.json BEFORE mutation (R580 byte-stable gate precedent); abort on mismatch
+- counter-clean law: appended round/tokens lines contain no "idle-fast" / "no-pullable" substrings (R542-R546 precedent)
+- export: export_ts ISO8601, results tick row 580->581, +1 R581 receipt row, self_drive W/idle/nop/sub mechanically recounted post-append (formula: round-level anchored ^2026-09-2[3-9] R<digit>, paren window summaries excluded, sub = W - tokens-lines - P2-report-receipt-lines), queue/proposal fields recounted, method tail note appended
+- script: tmp_r581_closeout.py (ASCII-only; Chinese content via tmp_r581_payload.json UTF-8 data file per R563 lesson)
+
+--- execution log ---
+gate: state.json roundtrip-stable PASS (72024B, trailing-newline=True)
+gate: status-export.json roundtrip-stable PASS (95682B)
+recount pre-append: computed W/idle/nop/sub=23/8/0/12 (tok=9 p2=2) vs export (23, 8, 0, 13) -> DRIFT
+AC-K47a PASS: R580 done row located verbatim (968 chars)
+AC-K47b PASS: archive pure append prefix-identical=True BOM-preserved=True (230432B -> 232096B)
+AC-K47c PASS: migrated row verbatim-in-archive=True
+AC-K47d PASS: board no-done-row=True two-open-rows=True d03-annotated=True bootstrap-present=True
+AC-K47e PASS: state tick=581 baseline=81 log-tail=tokens-line loglen=59 python-parse=OK (73681B)
+heartbeat: R581 row appended (70377B -> 72100B)
+export: refreshed export_ts=2026-09-29T12:19:48+08:00 tick-row=581 results-len=124 self_drive W/idle/nop/sub=25/8/0/13 proposals=1/1 queues=10/4/10
+R581 closeout: ALL STEPS GREEN
+refined-pattern pre-append validation: W/tok/p2=23/9/1 -> sub=13 (register was 13 -> MATCH)
+p2-pattern refinement: substring-match 2 lines vs round-prefix-adjacent 1 line; post-append sub=14 (W=25 tok=10)
+export corrected: sub 13 -> 14; W/idle/nop/sub=25/8/0/14; parse OK; export_ts=2026-09-29T12:19:48+08:00
+R581 same-round correction: GREEN
