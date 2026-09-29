@@ -1,0 +1,83 @@
+BigDomain QA Smoke Test - round R628 - 2026-09-30 +08:00 (resume-session closeout)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate
+charter: group docs/qa-smoke-test-charter.md v1.0 - Build > Smoke > Screenshot > Log > Self-judge
+charter BigDomain checklist: 4 items, judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due)
+round note: the prior R628 session broke off mid-round (dirty tree = its own products: benchmarks
+E-slice rows + wall W9 + the backlog R628 claim row with preregistered AC-R531..R535 + AC-QA).
+This session resumed the SAME round: verified the prior session's crawl claims instead of
+trusting them, corrected two misreadings honestly (see [1]), executed the preregistered re-org
+knife 53, and closed the round out (R550/R551 interrupted-round precedent).
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch + search, zero-key, read-only; resume session 3 attempts /
+    3 hits / 0 miss, plus the prior session's 1 recorded fetch on the same round):
+    - developers.weixin.qq.com/miniprogram/product/index.html  [A-grade, re-verify] -> HIT
+      the main operations-spec rendering carries sec-5.26 (deposit) as a SUMMARY paragraph
+      only: platform may require a deposit when a mini-program runs network transactions and
+      operates specific-category goods/services, uses specific functions, or has many user
+      complaints, with a pointer to the dedicated regulation; sec-5.22 ties deposits to the
+      trade-experience-score management rules. Two prior-session readings are corrected
+      honestly per the two-state law: (a) the detail clauses are NOT in this page's main
+      rendering - they live on the dedicated page below; (b) the annex-1 amount table IS
+      rendered - on the dedicated page (the prior "annex-1 not rendered = M pending" note
+      applied to this main page only and is withdrawn for the dedicated page).
+    - developers.weixin.qq.com/miniprogram/product/jiaoyilei/bangzhengjin95.html
+      [A-grade, NEW source] -> HIT
+      "Mini-program Transaction Deposit Management Regulations" official full text
+      (annex-1 clause 7: rule updated and published effective 2025-11-06):
+      art.2.1  = category-deposit trigger: operating specific-category goods/services OR
+                 enabling the trade-assurance badge, SUBSCRIPTION or other platform special
+                 functions (subscription explicitly listed - direct note for our monthly-card
+                 face)
+      art.2.2  = dispute-liability deposit (unpaid => payouts unprotected)
+      art.2.3  = experience-score deposit (score cut to 80 points or below, 80 included,
+                 per the trade-service violation management rules)
+      art.3    = multiple simultaneous deposit types -> HIGHEST-AMOUNT rule (annex-1
+                 clause 6 worked example: category 1000 + score-deposit 30000 -> pay 30000)
+      sec.5    = balance warning and top-up ladder: 0 balance 15 natural days = limit
+                 trade-assurance badge / search visibility, 30 days = user-facing
+                 trade-risk notice; below 50% of required: 10 days = limit badge, 15 days =
+                 limit search visibility; balance zero or negative = up to service
+                 termination
+      sec.6    = refund gate: six conditions (all complaints mediation-closed, platform
+                 advances repaid, last trade 90+ natural days old, no on-sale goods,
+                 suspended-service state, no unresolved violations); excess over the
+                 required amount is not refundable
+      annex-1  = FULLY RENDERED on this page: category deposits 1000-2000 CNY per category
+                 row; dispute/score deposits banded by prior-30-day GMV 1000 -> 100000 CNY;
+                 MEMBERSHIP AUTO-RENEWAL SERVICE = 10000 CNY flat (direct cost line for the
+                 monthly-card face P-47-5); virtual-item / electronic-entertainment trades
+                 banded by GMV (applies to the token / virtual-benefit face P-47-2);
+                 pre-sale and blind-box behaviors banded by GMV; physical-trade
+                 mini-programs = 100000 CNY
+      annex-2  = dynamic adjustment rule (90-day complaint amounts above schedule -> raised)
+    - search engine (read-only, 1 attempt) -> HIT: located the dedicated regulation URL
+
+[2] benchmark table updated today, not stale >15h: PASS
+    docs/global-benchmarks.md updated this round:
+    - sec-1 payment-compliance deposit row: rewritten with the dedicated-page citation, the
+      full trigger clauses, highest-amount rule, warning ladder, refund gate, and the
+      annex-1 amounts (prior "annex-1 M pending" note corrected)
+    - sec-3 source row: dedicated regulation page (A-grade), annex-1 rendered with amounts
+    - sec-4 record row: 2026-09-30 E-slice (daily crawl round R628) with the resume-session
+      correction note appended
+    src/os/state.json benchmarks_refreshed = 2026-09-30 (was 2026-09-29; 7-day cycle next
+    due 2026-10-07; 15h charter law satisfied same-day)
+
+[3] research source chain (every signal carries source link + grade + consumer landing): PASS
+    intelligence-wall W9 updated: source = dedicated regulation page (A-grade) + main-page
+    sec-5.26 re-verify note; grade A; consumer landings = pay spec P-47-4 budget note,
+    membership/monthly-card spec P-47-5 (subscription trigger + auto-renewal 10000-CNY cost
+    line), token-ledger P-47-2 (virtual-item GMV-banded deposit note), benchmarks sec-1/sec-3
+
+[4] signal wall: PASS
+    W9 on docs/research/intelligence-wall.md with source links, grade, and consumer landing
+    points (updated this round with the dedicated-page citation and annex-1 amounts)
+
+self-judge: charter checklist 4/4 PASS; evidence set = this log + qa/smoke-R628.png rendered
+from this log (render_smoke_png.ps1, real-log rendering, zero fabrication) + qa/reorg-R628.log
+(re-org knife 53) + qa/board-R628.log (knife 72); zero keys used, zero new external API
+touchpoints (host web fetch/search only, pre-authorized by the QA order + charter chain);
+two-state honesty enforced on the two corrected readings; external content treated as
+untrusted input, zero assertions beyond the fetched text.

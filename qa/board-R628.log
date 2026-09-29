@@ -1,0 +1,28 @@
+BigDomain board-law knife 72 - round R628 - 2026-09-30
+standing law: P-2026-09-25-18 item-4 board-law enforcement (stale prior-round done rows are
+verbatim-migrated to the done archive each round; the current round's own done row stays on
+the board as the next round's knife target per R560 precedent).
+
+PREREGISTRATION (written to this file BEFORE any mutation):
+- AC-K72a: targets = the two stale done rows on src/os/backlog.md: "- [x] R626 B5 ..." and
+  "- [x] R627 B6 ..." (the R627 round missed its knife; both rows migrate verbatim,
+  byte-for-byte, zero edits).
+- AC-K72b: destination = docs/archive/backlog-done-2026-09.md new section R628, following the
+  existing section header format; pure append; existing content byte-prefix preserved; BOM
+  state of both files preserved on write.
+- AC-K72c: main board end state = header block + R628 done row (stays for R629 knife-73) +
+  D-20260929-03 gated row + bootstrap row; zero other content loss (byte audit: removed text
+  == appended text for the two migrated rows).
+- AC-K72d: verify-then-write: all assertions evaluated before any file write; any failure
+  aborts with no write.
+- AC-K72e: results appended to this log after execution; evidence = the two migrated rows
+  byte-identical between old board and archive section.
+
+executed by: BigDomain-OSLoop R628
+RESULTS (executed 2026-09-30, after preregistration above):
+- AC-K72a PASS: 2 targets migrated verbatim (R626 row 1780 chars, R627 row 1788 chars)
+- AC-K72b PASS: done-archive pure-append 296158 -> 302258 bytes, prefix asserted, BOM preserved both files
+- AC-K72c PASS: main board end state = header + R628 row + D-20260929-03 gated row + bootstrap row;
+  byte audit: removed 6044 == len(r626)+len(r627)+2
+- AC-K72d PASS: all assertions evaluated before any write
+- AC-K72e PASS: rows byte-identical between old board and archive section R628

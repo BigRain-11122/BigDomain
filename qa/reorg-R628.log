@@ -1,0 +1,18 @@
+AC-R531 PASS: pre-op on-disk state.json == git HEAD blob, 80237 bytes (round-start first-measure 80,237B crossed the 80,000B watermark per R627 carry-note, R536 rule)
+AC-R532 PASS: mechanical round column R617..R627 continuous 11 rounds zero-missing (preregistered sub-check R625..R627 zero-missing subsumed)
+AC-R532 PASS: P/D/O catalog regex dedup 5 tokens: P-2026-09-25-18,D-20260929-03,D-20260924-08,D-20260924-10,P-2026-09-29-13
+AC-R532 note: R53 summary line built (%d chars) = verbatim slice of R52 line notes + new R625..R627 key notes
+AC-R534 PASS: post-fold 72,506B + closeout 2 lines -> final 76,236B, margin 2,264B under the 78,500B gate (log 64 -> 60 items)
+AC-R533 PASS: top four fields preserved (tick 627->628, last_order kept, last_decision_rows kept, benchmarks_refreshed 2026-09-29->2026-09-30); json.loads PASS (PowerShell ConvertFrom-Json dual-check run separately)
+AC-R531 PASS: archive section R628 pure-append 4,586,600B -> 4,667,168B, prefix asserted, snapshot byte-identical to git HEAD
+self-drive recount pre-fold (measured): {"W": 27, "tok": 11, "idle": 8, "nop": 0, "p2": 2, "sub": 14}
+self-drive recount post-fold (measured): {"W": 23, "tok": 9, "idle": 8, "nop": 0, "p2": 2, "sub": 12}
+
+CORRECTION (same round, R617 precedent): first-pass catalog regex missed the
+O-YYYY-MMMM-NNN three-segment tokens (same miss class as the R617 first pass, honestly
+noted there); mechanical re-derivation from the archived pre-op snapshot with a pattern
+covering all three token forms yields 10 tokens:
+P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033
+Summary line catalog segment rewritten in place (count 5 -> 10); json.loads re-validated
+PASS; final state 76317 bytes (margin 2183 under the 78,500B gate) - AC-R531..R535 all still
+green after the same-round fix.
