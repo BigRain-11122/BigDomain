@@ -1,0 +1,52 @@
+PASS A1 state round-start size anchor 80,752B (actual 80752)
+PASS A2 state BOM-free
+PASS A3 state tick 569
+PASS A4 state log 66 items (actual 66)
+PASS A5 state byte-identical to git HEAD
+PASS A6 state round-trip identity (indent2 + trailing-nl)
+PASS A7 archive size anchor 3,446,605B (actual 3446605)
+PASS A8 archive ends with newline; no pre-existing R570 section
+PASS A9 board = header + bootstrap row only (rows=1)
+PASS A10 board ends with newline, BOM-free
+PASS A11 heartbeat ends with newline, last line pure ASCII
+PASS A12 export BOM present + round-trip identity
+PASS A13 pre self_drive recount W/I/N/S=31/8/0/17 (got 31/8/0/17; T=13 P=1)
+PASS A14 export results tick row 569 found exactly once
+PASS A15 export results 110 rows (got 110)
+PASS A16 tail chain contiguous: R38 summary + R566..R569 pairs at idx 57..65
+PASS A17 window D = 9 lines 10,302B (got 10,302)
+PASS A18 window sub-segments A=3,746B B=5,839B C=8,818B
+PASS A19 queue recount 10/4/10 (got 10/4/10)
+PASS A20 proposals recount 1/1 (got 1/1)
+# qa/reorg-R570.log - R570 watermark-trigger re-org knife 39 evidence (R566-pattern)
+# 判据预注册（AC-R391..R394·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-R391=pre-op 全量快照 append 入档 logs/state-log-archive-2026-09.md §R570 append 节（纯 append·prefix 断言过·快照与 git HEAD state.json 逐字节同一）
+# AC-R392=窗位 probe 四候选全量构建实测（A=窗 R568..R569 4 行/B=窗 R567..R569 6 行/C=窗 R566..R569 8 行/D=C+R38 汇总行折叠 9 行→终态 ≤78,500B 余量律过闸取余量最大·零过闸=amend 扩窗照 R523 折叠先例·序贯实测=先建候选取自身读数·后建候选取先建读数承行嵌入）
+# AC-R393=压缩窗执行四断言（轮号前缀锚 R566..R569 连续 4 轮零缺+头部块 57 项 verbatim vs git HEAD 项级断言+P/D 编目 regex 去重真令号+JSON parse/行数双口径过 log 66→60）
+# AC-R394=verify-then-write（qa/reorg-R570.log：probe 读数+变更序贯+只读复验在册）
+# 来源=P-2026-09-25-18 ④主刀（第三十九刀）+R532 heartbeat 常设律（同窗闭环）+R569 尾注承传注记（轮首首测 80,752B 越 80,000B 线）
+FAIL P0 board claim row inserted (rows=1, pure insert, prefix intact, ends newline)
+PASS PROBE A window R568..R569: 4 lines 3,746B -> built final 80,953B margin -953B gate<=78,500B FAIL; catalog 2 items
+PASS PROBE B window R567..R569: 6 lines 5,839B -> built final 79,137B margin 863B gate<=78,500B FAIL; catalog 2 items
+PASS PROBE C window R566..R569: 8 lines 8,818B -> built final 76,533B margin 3,467B gate<=78,500B PASS; catalog 7 items
+PASS PROBE D window R566..R569: 9 lines 10,302B -> built final 75,212B margin 4,788B gate<=78,500B PASS; catalog 9 items
+PASS PROBE-SELECT gate-passers=C,D -> selected D (largest margin, pre-registered rule); final 75,212B margin 4,788B
+PASS C1/AC-R391 archive pure append 3,446,605B -> 3,527,890B (prefix asserted; snapshot=git HEAD bytes 80,752B)
+PASS C2/AC-R393 state 80,752B -> 75,212B (log 66->60; retained 57 items verbatim vs git HEAD; json parse ok; tick 570; fixed-point final embedded)
+PASS C2b post-build self_drive recount W/I/N/S=25/8/0/14 (got 25/8/0/14; T=10 P=1)
+PASS C2c new round+tokens lines keep counters clean (no idle-fast / no-pullable substrings)
+PASS C3 board done-flip (exactly one row replaced, claim row gone)
+PASS C5/AC-R394 heartbeat line pure ASCII + append
+PASS C4/EXPORT ts=2026-09-29T09:41:30+08:00 tick 569->570; results 110->111; self_drive 31/8/0/17 -> 25/8/0/14; BOM preserved
+PASS D1 on-disk state == built buffer; parse ok; tick 570; log 60 items
+PASS D2 on-disk retained header verbatim vs git HEAD
+PASS D3 on-disk self_drive recount W/I/N/S=25/8/0/14 (T=10 P=1)
+PASS D4 on-disk archive pure append prefix + size 3,527,890B
+FAIL D5 on-disk board = header + R570 done row + bootstrap row
+PASS D6 on-disk heartbeat pure append + ends newline + ASCII tail
+PASS D7 on-disk export parse + BOM + tick row 570 + 111 results
+PASS D8 waterline: final 75,212B <= 78,500B gate, margin 4,788B; next trigger projected ~R574
+CLOSEOUT FAILED - at least one assert failed; DO NOT COMMIT; investigate
+final_state_bytes=75212 archive_bytes=3527890 export_ts=2026-09-29T09:41:30+08:00
+PASS FIX P0/D5 同轮修复如实注（R563 判读失误同轮修复先例）：根因=board_row 模板 {DONE_MARK} 填值误带前导连字符（claim「- - [ ]」/done「- - [x]」双横线畸形·脚本填值缺陷·P0/D5 两断言如实 FAIL 拦截于 commit 前）→板面单行前缀修复为正典「- [x] R570」行（纯单点替换·零他改）；修复后只读复验=2 行（R570 done 行+bootstrap 行·序正确·尾随换行在·前缀断言过）；state/archive/export/heartbeat 四件未涉该缺陷零返工（D1-D4/D6-D8 全过在册）
+CLOSEOUT(post-fix) AC-R391..R394 全过+P0/D5 同轮修复在册（verify-then-write 断言拦截缺陷于 commit 前=AC-R394 机制生效实证）；修复后全盘只读复验绿；commit next
