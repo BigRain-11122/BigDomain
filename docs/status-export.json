@@ -1,5 +1,5 @@
 ﻿{
-  "export_ts": "2026-09-29T08:32:33+08:00",
+  "export_ts": "2026-09-29T08:59:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "depts": [
     {
@@ -200,7 +200,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "565",
+      "566",
       "OSLoop 轮次 tick"
     ],
     [
@@ -582,15 +582,19 @@
     [
       "1",
       "板规执法第四十刀（R564·R563 过当轮 done 行（state.json 再整编 R37+heartbeat 常设项双项行）verbatim 迁 docs/archive/backlog-done-2026-09.md §R564 节·既有节零覆写纯 append（216,028B→218,301B·prefix 断言）·主板收口=规约头+bootstrap 行·tmp_r564_closeout.py 先验后写断言全过·AC-K40a..e 全过·证据=qa/board-R564.log·P-2026-09-25-18 ②常设承接窗项）"
+    ],
+    [
+      "1",
+      "state.json 再整编 R38 件（R566 触线轮·轮首实测 80,843B 越 80,000B 线=R565 尾注承传注记应验·窗位 probe 双候选实测 A=窗 R564..R565 4 行 4,188B→终态 80,678B FAIL 闸/B=窗 R563..R565 7 行 10,409B→终态 74,865B 余量 5,135B PASS·≤78,500B 余量律=B 选中〔单过闸无 amend·R523 折叠并入先例〕·窗压汇总 1 行+pre-op 全量快照 logs/state-log-archive-2026-09.md §R566 append 节〔3,365,263B→3,446,605B 纯 append·prefix 断言·快照与 git HEAD blob 逐字节同一〕·80,843B→74,865B〔margin 5,135B〕·log 64→60 项·头部块 57 项 verbatim·P/D 编目 5 真令号·AC-R381..R384 全过·P-2026-09-25-18 ④主刀第三十八刀·证据 qa/reorg-R566.log）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-23..2026-09-29",
     "window_days": 7,
-    "log_lines_in_window": 29,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 10,

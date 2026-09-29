@@ -1,0 +1,13 @@
+[A] pre-asserts OK: state 80,843B==git HEAD, log=64, tick=565, counters 29/8/0/16 == export; arch 3,365,263B noBOM; board 2 rows (R566 claim + bootstrap); export results 108 tick 565; hb endsNL
+[B/PROBE] candidate A window R564..R565: 4 lines 4,188B -> built final 80,678B margin -678B gate<=78,500B FAIL; counters W/idle/nop/sub=27/8/0/15; catalog P-32
+[B/PROBE] candidate B window R563..R565: 7 lines 10,409B -> built final 74,865B margin 5,135B gate<=78,500B PASS; counters W/idle/nop/sub=25/8/0/14; catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47
+[B/SELECT] gate-passers=B -> selected B (largest margin, pre-registered rule); final 74,865B margin 5,135B; next trigger projected ~R570
+[B] in-memory build OK: selected B state 74,865B margin 5,135B log 64->60; arch->3,446,605B; board 2 rows (R566 done + bootstrap); export results 108->109; hb row 1789 chars
+[C1/AC-R381] state-log archive 3,365,263B -> 3,446,605B pure append OK (marker at 3,365,263B, snapshot=git HEAD bytes)
+[C2/AC-R383] state 80,843B -> 74,865B OK (log 64->60; header 57 verbatim; json.loads OK; fixed-point final bytes embedded)
+[C3] board = header + R566 done row (stays on board = R567 knife-41 target) + bootstrap row OK (3,954B)
+[C4/EXPORT] ts=2026-09-29T08:59:22+08:00 tick 565->566; results 108->109; self_drive W/idle/nop/sub=25/8/0/14 mechanically re-derived OK
+[C5/HB] heartbeat R566 row appended OK (endsNL convention preserved, R532 standing law same-window closed)
+[D/VERIFY] read-only re-read pass: state/archive/board/export/heartbeat all re-parse and re-assert OK
+[D/VERIFY] AC-R381 trigger-first-measure+snapshot PASS (80,843B>80,000B, ==git HEAD, archive pure append); AC-R382 window probe+gate PASS (sel=B, dual-candidate full build, single passer no amend); AC-R383 four asserts PASS (contig rounds R563..R565, header 57 verbatim, catalog P-2026-09-25-18/P-2026-09-28-02/P-2026-09-28-04/P-32/P-47, dual-parse log 64->60); AC-R384 verify-then-write PASS; final 74,865B margin 5,135B
+[CLOSEOUT] ALL AC-R381..R384 PASSED; nothing failed; commit next
