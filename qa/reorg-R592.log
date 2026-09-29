@@ -1,0 +1,18 @@
+# qa/reorg-R592.log - state.json re-org R44 evidence log (verify-then-write)
+# Round: R592 | Trigger: round-start first-measure 80,906B > 80,000B waterline (R591 carry-note cashed, R536 rule)
+# Pre-registered AC (backlog R592 row landed BEFORE any state.json mutation):
+#   AC-R441: pre-op full snapshot -> logs/state-log-archive-2026-09.md sec-R592-append (pure append + prefix assertion + snapshot == git HEAD src/os/state.json bytes)
+#   AC-R442: window candidates built-and-measured: A=R588..R591 pairs 8 rows / B=A+R587 pair 10 rows / C=B+R43 window-summary fold 11 rows; byte-stable finals measured; gate = pass <=78,500B, select largest margin (R574-C/R577-C/R587-C precedent)
+#   AC-R443: compression four assertions: round-number chain R545..R591 continuous zero-gap (R545..R586 re-anchored via R43 summary fold) + header block verbatim vs git HEAD item-level + P/D catalog regex mechanical dedup + JSON parse dual (json.loads + ConvertFrom-Json) + header fields preserved + no trailing comma (R189)
+#   AC-R444: verify-then-write - this log records probe readings + mutation sequence + read-only re-verify; final size and margin recorded in backlog R592 done row + R592 state log line
+# Mutation sequence (asserted below in append mode): [1] snapshot append -> [2] catalogs+chain -> [3] probe A/B/C -> [4] build+verify selected -> [5] single atomic write -> [6] read-only re-verify -> [7] export refresh + self_drive re-derive -> [8] heartbeat standing row append
+[0] pre-op: disk bytes == git HEAD blob (6f882fa5f08a3327), size=80906 BOM=False items=65
+[1] snapshot: archive 3854167B -> 3935152B pure append, prefix asserted, snapshot == git HEAD bytes (AC-R441 PASS)
+[2] catalogs: A=6 B=12 C=43 tokens; chain R587..R591 zero-gap asserted in folded raw lines + R545..R586 re-anchor via R43 summary (AC-R443 chain-half PASS)
+[3] probe: byte-stable finals A=78,493B B=75,698B C=72,237B; gate<=78,500B passing=['A', 'B', 'C']; selected=C (largest margin, margin=7,763B)
+[4] build: sel=C final=72,237B header verbatim vs HEAD, chain+catalog in summary, json.loads PASS (log 65->57 items) (AC-R442/AC-R443 PASS)
+[5] write + re-verify: state.json=72,237B margin=7,763B tick=592 items=57; json roundtrip PASS; self_drive recount W/tok/sub/idle/nop=23/9/12/8/0 (AC-R443/AC-R444 PASS)
+[7] export refreshed: export_ts=2026-09-29T14:24:17+08:00 tick row 588->592 (drift-fix per R556 precedent), results +1 R592 row, self_drive W/tok/sub/idle/nop=23/9/12/8/0, queue 10/4/10, proposals 1/1 (F3 mechanical recount asserted, roundtrip byte-stable)
+[8] heartbeat standing row appended (R532 standing law)
+[done] R592 re-org R44 complete: pre-op 80,906B -> final 72,237B (margin 7,763B), candidate=C (A/B/C=78,493B/75,698B/72,237B), log 65->57 items, catalog 43 tokens, archive 3935152B; board knife-55 waived (zero stale done rows at round start), R592 done row stays for R593 knife-56; next re-org R45 on waterline re-cross
+[7b] correction: self_drive substantive 12->13 - P2-receipt criterion tightened to receipt-line-itself (line body starts with P2 after round anchor; reproduces in-register 13 basis at R587/R588); first-pass wide rule (P2+HQ substring) over-matched the R265 closing line; fixed same-round per R553 honest-note precedent
