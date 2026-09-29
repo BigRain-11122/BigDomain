@@ -1,5 +1,11 @@
 # P3 新方向探索线队列（state/queue/explore.md·Self-Drive v2.0·常备 ≥10 条·2026-09-28 R532 建面）
 
+- [ ] 元宇宙身份付费面（C5 价目行·私人房间 ¥9.9/月+化身皮肤 ¥29.9 永久+共创者铭牌 ¥49.9 永久+高级入驻楼层铭牌 ¥199 永久·props 装扮域邻界=先查重后建·venue 场地面邻界同）
+- [ ] 小游戏工作室入驻年费面（B1 价目行 ¥9,800/年·游戏脑洞提案池+精准玩家流量+虚拟工作室楼层三权益束·年费窗幂等）
+- [ ] 量化工作室入驻年费面（B2 价目行 ¥19,800/年·股民灵感数据+策略共创观测入口+QUANT 城大屏露出三权益束·与 B1 同构可并件）
+- [ ] 企业版 AI 算力验证 API 计量计费面（B5 价目行 ¥0.5/次起·按调用量计量+计费+对账·BigMoney 引擎引用面·非投顾定性常驻）
+- [ ] 城市数据报告付费面（B6 价目行·季度报告 ¥99/份+定制行业洞察 ¥999/份·脱敏真实运营数据·交付=权限门+下载凭证）
+- [x] 策略共创围观付费面（C4 价目行·D-20260924-10 观测付费产品归本司〔核心收入〕·单策略 ¥9.9 永久观测/¥19.9 月卡无限观测·只看结果不看源码〔安全+合规〕）——[done 2026-09-29]（R623 ObservationFace 落地件 src/sandbox/ledger/observation.py+test_observation.py：结果-only 注册表〔零 source 列〕+单策略永久权跨月长效+月卡窗幂等〔同月重购拒付在 spend 前〕+闸门 fail-closed+observe 视图键集恰四键零 token 变动·SUITE 7/7 全绿〔首跑一处测试件断言时点缺陷修复后净跑·模块本体首验即净〕·reconcile_all 扩二十一套件 RUNNER PASS 189 判据+对账双控 6/6 18.4s 零回归·qa/obs-R623.log+qa/obs-runner-R623.log·AC-OB1..OB7 预注册先行全过·创作者 30% 分成=分配层引用非双建·价目 [needs-CEO] P1 呈批不执行）
 - [ ] 会员订阅定价带后续调研（19.9 锚定档过会落地后的定价心理面/档位梯度·判负留痕合法）
 - [x] 虚拟场景租赁与店面招商模式探索（m4 参观端转化后继·P1 呈批面探索稿）——[done 2026-09-29]（R605 VenueFace 落地件 src/sandbox/ledger/venue.py+test_venue.py：场地租赁〔容量窗占】+店面招商【独占租约】两域·租费=term×单价一笔 spend 唯一 token 触点·容量门/独占门/同租幂等全拒零扣费·窗到失效·提前终止零 token 面·占用行全带 spend tx 溯源·test_venue.py 7/7 全绿+reconcile_all 扩十六套件 RUNNER PASS 151 判据·qa/venue-R605.log+qa/venue-runner-R605.log·AC-VN1..VN7 预注册先行全过·定价/期限参数值全 [needs-CEO] P1 呈批不执行）
 - [x] UGC 创作者激励梯度探索（incentive-agent-spec 分配层参数面后继·参数=[needs-CEO]）——[done 2026-09-29]（R600 IncentiveFace 梯度分配器 src/sandbox/ledger/incentive.py+test_incentive.py：递减边际带状梯度+窗项圈+窗预算帽确定性 pro-rata·每笔=恰一条 share 出账·窗幂等·SUITE 7/7 exit=0·reconcile_all 扩十二套件 RUNNER PASS 123 判据·qa/incentive-R600.log+qa/incentive-runner-R600.log·AC-IG1..IG7 预注册先行全过·参数数值 [needs-CEO] 采纳面 P1 呈批）

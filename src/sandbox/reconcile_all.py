@@ -84,6 +84,8 @@ SUITES = [
      os.path.join("ledger", "test_expedite.py"), 7),
     ("ledger-ads",
      os.path.join("ledger", "test_ads.py"), 7),
+    ("ledger-observation",
+     os.path.join("ledger", "test_observation.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
