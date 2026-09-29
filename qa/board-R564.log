@@ -1,0 +1,46 @@
+# qa/board-R564.log - R564 standing-carry + board-law knife 40 closeout evidence (R561-pattern)
+# 判据预注册（AC-K40a..e·先立后动·本头注先于一切变异段落落盘·2026-09-29）：
+# AC-K40a=R563 过当轮 done 行 verbatim 迁 docs/archive/backlog-done-2026-09.md §R564 节（行内容逐字节同一·既有节零覆写）
+# AC-K40b=archive 纯 append（pre-op 前缀字节断言·size delta=append 块长度·尾随换行保全）
+# AC-K40c=主板收口=规约头+bootstrap open 行（R563 行移除·bootstrap verbatim 保留·无滞板陈 done 行）
+# AC-K40d=heartbeat.txt R564 行落盘（R532 每轮常设律·纯 append prefix 断言）
+# AC-K40e=state/export 收账面——state tick 563->564+log 62 项 parse 过；export self_drive 四计数机械重派（W/idle/nop/sub）+results tick 行 563->564+第四十刀件 +1 行+export_ts ISO8601；A1..A21+B1..B13 双段断言全过
+# 来源=P-2026-09-25-18 ④板规执法（第四十刀）+R532 停摆令 heartbeat 每轮常设律
+PASS A1 state round-start size anchor 76,623B (actual 76623)
+PASS A2 state BOM-free
+PASS A3 state tick 563 (got 563)
+PASS A4 state log 60 items (actual 60)
+PASS A5 state round-trip identity (dump indent2 + trailing-nl, ensure_ascii=false)
+PASS A6 archive size anchor 216,028B (actual 216028)
+PASS A7 archive ends with newline
+PASS A8 no pre-existing R564 section (no duplicate)
+PASS A9 exactly one R563 done row on main board (found 1, row 2177B)
+PASS A10 bootstrap row present exactly once
+PASS A11 export BOM present
+PASS A12 export round-trip identity (dump indent2 + trailing-nl, BOM preserved)
+PASS A13 pre W recount 25 == register (W0=25)
+PASS A14 pre idle recount 8 == register (I0=8)
+PASS A15 pre no-pull recount 0 == register (N0=0)
+PASS A16 pre substantive recount 14 == register (S0=14 T0=10 P0=1)
+PASS A17 proposals recount 1/1 == register (1/1)
+PASS A18 queue recount 10/4/10 == register (10/4/10)
+NOTE A19 heartbeat lacks trailing newline (R563 append defect, inherited) - this round repairs by prefixing one newline to the append block per R526 repair precedent
+PASS A20 round line keeps counters clean (no abolished-path substrings)
+PASS A21 tokens line matches tokens pattern + round line nonparen round format
+PASS B1 archive pure append prefix assertion (216,028B -> 218,301B)
+PASS B2 R563 row removed from main board
+PASS B3 bootstrap row retained verbatim
+PASS B4 main board = header + bootstrap open row only (rows 1)
+PASS B5 backlog ends with newline
+PASS B6 state log 62 items after append + parse ok + size converged (final 78,830B)
+PASS B6b post-closeout under 80000B waterline (n=78830 margin=1170B)
+PASS B7 post W recount 27 (W1=27)
+PASS B8 post idle/no-pull recount 8/0 (8/0)
+PASS B9 post substantive recount 15 (S1=15 T1=11 P1=1)
+PASS B12 heartbeat pure append prefix assertion + ascii (R563 trailing-newline miss repaired, file now ends with newline)
+PASS B10 export self_drive counters mechanically re-derived (W/idle/nop/sub 25/8/0/14 -> 27/8/0/15; proposals 1/1; queues 10/4/10)
+PASS B11a results tick row found once (563->564)
+PASS B11b export new bytes parse + BOM preserved
+PASS B1c all five on-disk re-reads match in-memory buffers
+PASS B13 on-disk state/export parse ok (utf-8 / utf-8-sig)
+final_state_bytes=78830 archive_bytes=218301 export_ts=2026-09-29T08:17:55+08:00
