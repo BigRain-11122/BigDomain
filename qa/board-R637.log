@@ -1,0 +1,45 @@
+BigDomain board-law knife 76 - round R637 - 2026-09-30
+standing law: P-2026-09-25-18 item-4 board-law enforcement (stale prior-round done rows are
+verbatim-migrated to the done archive each round; the current round's own done row stays on
+the board as the next round's knife target per R560 precedent). Target this round = the R636
+done row, pre-registered on the board itself at R636 closeout ("ben liu ban = R637 knife-76
+migration target"), R632-pattern standing-carry round.
+
+PREREGISTRATION (written to this file BEFORE any mutation):
+- AC-K76a: target = the one stale done row on src/os/backlog.md: "- [ ] R636 ..." (the R636
+  round's own done row, per its own carry-note = this round's knife-76 target; carries the
+  "[done 2026-09-30]" marker). The R636 closeout flipped the [done] marker but missed the
+  checkbox (row still "- [ ]"): per R526 knife-27 precedent the missed checkbox is corrected
+  [ ] -> [x] as part of this knife, honest note; all other bytes identical (one-char fix).
+- AC-K76b: destination = docs/archive/backlog-done-2026-09.md new section R637 (format follows
+  existing section headers: "## R637" + blank line + row); pure append; existing content
+  byte-prefix preserved; BOM state of both files preserved on write (both True).
+- AC-K76c: main board end state = header block + D-20260929-03 gated row + bootstrap row;
+  zero other content loss (byte audit: removed bytes == UTF-8 encoding of the migrated row
+  text including its trailing newline; expected end state 3748 bytes = R632 post-knife-75
+  parity).
+- AC-K76d: verify-then-write: all assertions evaluated before any file write; any failure
+  aborts with no write.
+- AC-K76e: results appended to this log after execution; evidence = archived row
+  byte-identical to the old-board row modulo the one-char checkbox fix (sha256 of both forms
+  recorded).
+
+executed by: BigDomain-OSLoop R637
+
+RESULTS (executed 2026-09-30, after preregistration above; clean single run, zero aborts):
+AC-K76a PASS: 1 target migrated (R636 row 1651 chars / 2442 UTF-8 bytes; carries
+  [done 2026-09-30]; R636-closeout missed checkbox [ ] corrected to [x] per R526 knife-27
+  precedent - one-char diff at byte offset 3 (space->x), zero other byte changes;
+  old-form sha256[:16]=679c274b6f8d165e fixed-form sha256[:16]=d4ea826b581cc1a6)
+AC-K76b PASS: done-archive pure-append 309791 -> 312243 bytes (+2452 =
+  9 bytes section header "## R637" + blank line + 2442-byte row + trailing LF),
+  byte-prefix asserted pre-write and re-asserted on-disk post-write, BOM preserved both files
+  (board=True archive=True)
+AC-K76c PASS: main board end state = header + D-20260929-03 gated row + bootstrap row
+  (6191 -> 3748 bytes, removed 2443 = row incl trailing LF;
+  3748 bytes = R632 post-knife-75 parity; this standing-carry round lands no own done row,
+  so knife-77 next round has no target unless a substantive round lands one)
+AC-K76d PASS: all assertions evaluated before any write (verify-then-write; results appended
+  to this log only after on-disk post-write re-verification)
+AC-K76e PASS: archived row byte-identical to old-board row modulo the one-char checkbox fix
+  (both sha256 forms recorded above; on-disk re-read post-write matches)
