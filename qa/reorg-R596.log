@@ -1,0 +1,28 @@
+R596 re-org R45 console record - 2026-09-29 16:01:01
+AC-R451 round-start: on-disk state.json = 82448B (scan 82,448B; waterline 80,000B crossed; R595 carry-note honored)
+AC-R452 precheck: state.json clean vs git HEAD (pre-op snapshot source byte-identical)
+state parse OK: tick=595 log=66 last_order=2026-09-28 22:1x dec=82 bench=2026-09-29
+catalog mechanical regex dedupe: 48 tokens
+fold window bytes: A(R592..R595, 11 lines)=13283B / B(+R44 summary, 12 lines)=16836B
+current-log recount W/idle/nop/sub = 32/8/0/17 (export carried 32/8/0/19)
+AC-R453 candidates built-and-measured (placeholder-round stage): A=75001B / B=72666B
+gate <=78,500B: A pass=True margin=4999B / B pass=True margin=7334B
+selected: B (largest margin among gate-passers; R44-summary fold per R592 precedent)
+new-log recount W/idle/nop/sub = 23/9/0/12 (R45 fold delta: -11 folded nonparen lines +2 new pair)
+AC-R452 PASS: snapshot archived 3935152B -> 4017702B pure append, prefix asserted, snapshot == git HEAD state.json (82448B)
+AC-R454 final post-substitution measured: 72659B (margin 7341B under 80,000B waterline; next re-org R46 per-round first-measure)
+AC-R453/454 PASS: header 54 lines verbatim, baselines unchanged, tick=596, log 66->57, ConvertFrom-Json ok, no trailing comma (R189)
+export refreshed: export_ts=2026-09-29T16:01:05+08:00, ceo_face.current replaced, results tick row 595->596, R596 results row appended, self_drive W/idle/nop/sub = 23/9/0/12 mechanically re-derived, parse ok
+heartbeat R596 row appended (standing law R532)
+AC-K58 archive pure append: 239653B -> 242939B prefix-asserted, R595 done row verbatim migrated to sec R596
+board: R45 claim row flipped done with results; R595 stale done row removed from board (knife 58)
+git status porcelain after mutations:
+   M docs/archive/backlog-done-2026-09.md
+   M docs/status-export.json
+   M heartbeat.txt
+   M src/os/backlog.md
+   M src/os/state.json
+  ?? qa/incident-R596.log
+state.json on-disk final: 72659B; log items 57; tick 596
+P-32 daily clear: zero new company-face open items, no HQ write (local sync event self-healed; recurrence policy in incident log)
+supplement: round-line self_drive note made explicit post-write (idle 8->9 = this round line mentions idle per mechanical mention-rule; sub baseline recount drift -2 old-carried 19 vs mechanical 17, fold -7, new pair +2 -> 12; per R556/R592 honest-drift precedent) | state.json final 72902B

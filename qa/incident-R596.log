@@ -1,0 +1,61 @@
+BigDomain OSLoop R596 - sync-tool conflict clobber: detection, adjudication, byte-faithful repair
+(pre-registration = backlog R596 row AC clause; this file = incident evidence per honesty law)
+
+== Detection (round-start five-still scan ~15:41-15:45) ==
+[TREE] FLAG dirty=12: 6 tracked docs files deleted at original path + 6 untracked conflict-named copies
+[EXPORT] FLAG read_or_parse_failed (docs/status-export.json missing at scan time)
+Event window (conflict-copy name timestamps): 2026-09-29 15:35:19.693771 .. 15:36:15.121139
+(56s burst; silent afterwards; round-start re-checks 15:44+ found no new copies)
+
+== Affected inventory (9 conflict copies, full-tree scan docs/src/logs/qa/state/tools) ==
+  docs/archive/backlog-done-2026-09.md                 original deleted  [restored from copy]
+  docs/global-benchmarks.md                            original deleted  [restored from copy]
+  docs/oss-harvest/README.md                           original deleted  [restored from copy]
+  docs/research/README.md                              original deleted  [restored from copy]
+  docs/research/intelligence-wall.md                   original deleted  [restored from copy]
+  docs/status-export.json (CEO-visible face)           original deleted  [restored from copy]
+  logs/state-log-archive-2026-09.md (3,935,152B, sole local snapshot archive, logs/ gitignored)
+                                                       original deleted  [restored from copy]
+  logs/probe-heartbeat.txt                             canonical overwritten by foreign 50B
+                                                       single-row version ("2026-09-29 15:37:39
+                                                       osloop: round done exit=0"); local 28,712B
+                                                       full-history version preserved in copy
+                                                       [local version restored over foreign row]
+  logs/round.lock                                     conflict stray 5B stale 15:34:09 snapshot;
+                                                       live lock 15:44:02 held by launcher
+                                                       untouched per task-book law [stray deleted]
+
+== Adjudication: NOT another executor writing this repo ==
+  - .git/index.lock absent at every check
+  - origin/main == HEAD (R595 push 15:31:22 landed; zero remote divergence at round start)
+  - conflict-copy mtimes match this loop's own write timestamps:
+      status-export copy mtime 15:30:53.622 == R595 export refresh
+      archive copy mtime 14:24:17 == R592 snapshot append
+      probe-heartbeat copy mtime 15:31:45.118 == R595 closeout probe append
+  - => sync-tool conflict/propagation event; other-side origin = second machine or cloud
+    snapshot (foreign probe row 15:37:39 round-done marker has no counterpart in this
+    machine's round sequence; no remote git divergence)
+  - phantom-M note: git-checkout CRLF restore + LF move-back left stale index stat cache;
+    content compare empty diff; cleared via targeted git add (core.autocrlf=true,
+    git ls-files --eol: i/lf w/lf for all six)
+
+== Repair (byte-faithful) ==
+  Move-Item each conflict copy back over its canonical filename (pre-clobber bytes
+  preserved, LF endings kept). Per-pair LF-normalized SHA256 vs git-HEAD-restored content:
+    LOGICALLY-IDENTICAL: docs/archive/backlog-done-2026-09.md
+    LOGICALLY-IDENTICAL: docs/global-benchmarks.md
+    LOGICALLY-IDENTICAL: docs/oss-harvest/README.md
+    LOGICALLY-IDENTICAL: docs/research/README.md
+    LOGICALLY-IDENTICAL: docs/research/intelligence-wall.md
+    LOGICALLY-IDENTICAL: docs/status-export.json
+  (byte deltas -9B..-715B == per-file line counts; differences CRLF-vs-LF only)
+  docs/status-export.json parses OK after restore (export_ts 2026-09-29T15:30:37+08:00,
+  R595 refresh content, <24h freshness gate)
+  logs/state-log-archive-2026-09.md restored 3,935,152B (sole local archive copy)
+  logs/probe-heartbeat.txt local 28,712B full history restored (foreign 50B row documented
+  here then superseded)
+
+== Result ==
+  zero content loss; tracked tree == HEAD after targeted git add; CEO-visible export back
+  online. Recurrence policy: next-round TREE/EXPORT scan faces auto-detect (this round's
+  detection proves the net); if recurring -> escalate via HQ-FEEDBACK per P-32.
