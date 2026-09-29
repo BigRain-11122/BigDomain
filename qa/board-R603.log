@@ -1,0 +1,17 @@
+# board-R603.log - board-law knife 63 (board-law enforcement, P-2026-09-25-18 item-4 standing carry)
+# Round: R603 | Date: 2026-09-29 | Target: R603 current-round done row (cost-anchor item) verbatim migration
+# PRE-REGISTERED CRITERIA (written BEFORE any board mutation this round, honesty law):
+#   AC-K63a: main board pre-migration state = header block + exactly one [x] done row (R603 cost-anchor row)
+#            + D-20260929-03 gated row + bootstrap blocked row; done row captured verbatim (byte-exact)
+#   AC-K63b: done-archive append = pure append (prefix bytes asserted unchanged, existing sections zero-rewrite,
+#            BOM preserved); new section header = "## §R603节（板规执法第六十三刀·R603 当轮 done 行 1 条 verbatim 迁档·2026-09-29）"
+#   AC-K63c: migrated line == captured line verbatim (byte-exact comparison, zero rewrite)
+#   AC-K63d: main board post-migration = header block + D-20260929-03 gated row + bootstrap row,
+#            zero done rows remaining (board keeps only unfinished items per P-2026-09-25-18 item-4)
+#   AC-K63e: this evidence log on disk with pre-registration block above + execution results below
+# EXECUTION RESULTS:
+AC-K63a PASS: pre-migration board = header + 1 done row (R603 cost-anchor) + D-03 gated + bootstrap; row captured verbatim (544 chars)
+AC-K63b PASS: archive pure append (prefix 160350B unchanged, section header verbatim, BOM preserved, idempotency guard held)
+AC-K63c PASS: migrated line byte-identical to captured line
+AC-K63d PASS: post-migration board = header + D-20260929-03 gated + bootstrap, zero done rows, open rows=2
+AC-K63e PASS: evidence log on disk; archive size 261126B -> 262157B

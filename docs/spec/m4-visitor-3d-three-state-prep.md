@@ -26,7 +26,7 @@
 
 - **为什么**：48 包现状=淘宝转售零商业授权（pivot §一 红线：原型/风格验证容忍·**禁入商用面**）；参观端=商用面→G1 唯一解锁件=CEO 批准正版采购。
 - **买什么**：Synty 48 包正版授权（参观端商用口径；与 BigCompute 商业内容面共用前置=O-007 ④a 同一决策面）。
-- **预算**：[待采]——下轮调研部 web 直采 Synty 官方渠道价锚双源互证回填（本件零编数·诚实律）；tourstate.py 假想批准腿已验：purchase_approved=True→两 pack 态 G1 确定性翻 PASS。
+- **预算**：[已采 R603]——Synty 官方店（syntystore.com·A 级直采 2026-09-29）现行价锚：POLYGON 系列 84 件·单包 $9.99–$499.99（畅销锚 FANTASY KINGDOM $349.99/SCI-FI WORLDS $499.99/MILITARY $299.99）·官方自估均值锚 ≈$50/包（Humble 22 包 $1,100 口径）→**48 包全量单购粗锚 ≈ $2,400+**（48×$50 均值口径·精确数=名目清单逐包加总·清单在 CEO 侧随呈批核精）；更优路线=**SyntyPass 全库订阅**（150+ 包 One Pass Every Pack·订阅价 ⬜待询证）建议 D-A 呈批同步询价商用条款；EULA Store 定义原文=Synty Store/UE Marketplace·排除 Unity Asset Store·淘宝=零授权通道确认。数据源+判负留痕详见 `docs/research/R-20260929-synty-48pack-cost-anchor.md`+信号墙 W8；tourstate.py 假想批准腿已验：purchase_approved=True→两 pack 态 G1 确定性翻 PASS。
 - **批准解锁**：offline_frames/realtime3d 的 G1 翻格（G2/G3 闸门独立推进不受阻）；未批=dataface 仍 ready_now=参观端唯一可先行态。
 
 ## 四、形象面同源切换锚（orders L131 咬合令消费·09-28 22:46 令）
@@ -45,4 +45,4 @@
 - Q1 授权：该态是否在采购 gate 清前就把 pack 派生像素放上商用面？（G1）
 - Q2 类目：该态是否契合 D2 非游戏类目小程序承载？（G2）
 - Q3 供给：外部依赖是否都能在开窗内交付？（G3）
-- **呈批两件（[needs-CEO]·P1）**：D-A=48 包正版采购 gate 批准/否（预算行待采回填）；D-B=三态选型（或分阶段组合）拍板——本件只 prep 不决策（选型=商业化决策=CEO 面）。
+- **呈批两件（[needs-CEO]·P1）**：D-A=48 包正版采购 gate 批准/否（预算行已采回填 R603·粗锚 ≈$2,400+ 全量单购/SyntyPass 订阅询证两口径）；D-B=三态选型（或分阶段组合）拍板——本件只 prep 不决策（选型=商业化决策=CEO 面）。

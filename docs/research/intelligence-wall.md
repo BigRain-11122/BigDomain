@@ -15,6 +15,7 @@
 | W5 | 2026-09-28 | bing 检索「GB 45438-2025」判负：查询词被解析为存储单位 GB·返回 gigabyte 无关结果 → 国标类检索须走标准号直查通道（W4）非通用搜索 | bing.com/search?q=%22GB+45438-2025%22（D·2026-09-28 实测） | 采集方法面负面结论（判负留痕合法·research-protocol） | 🟡判负留痕 |
 | W6 | 2026-09-29 | 《互联网信息服务深度合成管理规定》（令第12号·施行 2023-01-10）标识三义务+审核律：第16条=生成/编辑内容技术标识+日志留存·第17条=五类混淆误认服务〔含智能对话写作·沉浸式拟真场景〕显著标识·第18条=任何组织个人不得删改隐匿标识·第10条=输入数据与合成结果双审核+违法不良信息特征库 | cac.gov.cn/2022-12/11/c_1672221949354811.htm（A·国家网信办官网全文·2026-09-29 ~00:3x 直采） | AIGC 四件套标识面（AC-S5/L9/U7/Y9：第16隐式+第17显著双标识+第18删改禁律）+ugc spec AC-U2 msgSecCheck 前置闸（第10条审核律同构）+benchmarks §①/§③ | ✓已验证 |
 | W7 | 2026-09-29 | 《生成式人工智能服务管理暂行办法》（七部门令第15号·施行 2023-08-15）：第12条=生成内容标识须按深度合成规定执行（AIGC 标识面上位法源）·第9条=提供者承担网络信息内容生产者责任+与使用者签订服务协议·第14条=违法内容停止生成/传输/消除+整改报告·第10条=防未成年人过度依赖沉迷 | cac.gov.cn/2023-07/13/c_1690898327029107.htm（A·国家网信办官网全文·2026-09-29 ~00:3x 直采） | AIGC 四件套标识面（第12条=四件套法源链补全）+ugc pipeline fail-closed（第14条同构）+lobby 服务协议面/权益月卡面设计件（P-47⑤·第9/10条）+benchmarks §①/§③ | ✓已验证 |
+| W8 | 2026-09-29 | Synty 官方现行价锚（O-007 ②研究线·48 包采购 gate 预算面）：官方店=syntystore.com（判负纠偏：synty.com=域名售卖页·synty.itch.io=社区面）·POLYGON 系列 84 件单包 $9.99–$499.99·官方自估均值 ≈$50/包（Humble 22包 $1,100 口径）·48 包全量单购粗锚 ≈$2,400+·全库订阅 SyntyPass 制在售（One Pass Every Pack·150+ 包·价 ⬜待询证）·EULA Store 定义原文=Synty Store/UE Marketplace 排除 Unity Asset Store·Product 定义=videogame 恒覆盖+其他须书面另约 | syntystore.com/collections/polygon+/collections/bundles+licences 概览（A·官方店直采 2026-09-29 ~17:5x）+assetstore.unity.com SyntyPass 挂页（B·存在性确认）；判负=fab.com 403（现价 ⬜）/SyntyPass 订阅价两渠道页未出价（⬜） | 呈报件 m4 §三预算行回填（D-A 48 包采购 gate 呈批面·`docs/research/R-20260929-synty-48pack-cost-anchor.md` 全量件）+采集方法面（官方店渠道纠偏锚） | ✓已验证 |
 
 ## 本墙结论应用表（P-65 律·dogfood·无表=未交付）
 
@@ -24,3 +25,4 @@
 | W2/W3→pay spec 生产判据锚（原单号律/查单梯度/对账四情况） | ②规格：`docs/spec/payment-integration-spec.md` 生产判据面（YP 系列·blocked on 商户号物理件·接线日按锚对齐） | 接线中 |
 | W4/W5→采集方法面（标准号直查通道+通用搜索判负注） | ①任务单：`docs/global-benchmarks.md` §③ 通道注（后续国标核验走 openstd） | 已闭环 |
 | W6/W7→AIGC 标识合规链上位两件收口（深度合成规定+生成式AI办法直采·四件齐） | ②法文修改指针：`docs/global-benchmarks.md` §①/§③（已翻新 R537） | 已闭环 |
+| W8→Synty 官方价锚（84 件价带+均值锚 ≈$50/包+SyntyPass 订阅制+EULA 渠道律） | ②法文修改指针：`docs/spec/m4-visitor-3d-three-state-prep.md` §三预算行（[待采]→[已采 R603]）+③决策呈报 D-A 48 包采购 gate | 已闭环（预算行回填·D-A 待 CEO 呈批） |

@@ -1,0 +1,68 @@
+# cost-anchor-R603.log — Synty 48 包正版采购成本锚直采证据（O-2026-0929-007 ②研究线）
+# Round: R603 | Date: 2026-09-29 ~17:5x +08:00 | Executor: BigDomain-OSLoop
+# Claimed item: backlog R603 顶项「48 包正版采购成本锚 web 直采件」（R602 承传预告项）
+# Judging criteria (pre-registered in backlog R603 line): 官方渠道价锚直采+双源互证+判负留痕+零编数
+
+[FETCH-1] syntystore.com/collections/polygon — A级官方店直采 PASS
+  POLYGON series = 84 products (Unity 82 / Unreal Engine 82 / Godot 18)
+  Page-1 observed prices (USD): FROG SHRINE 9.99 | GINGERBREAD 9.99 | WEREWOLF 19.99
+  DWARVEN DUNGEON MAP 19.99 | SHOPPING PLAZA MAP 19.99 | MAP packs 29.99 (x6 observed)
+  KAIJU PACK 69.99 | POLICE STATION 69.99 | HORROR ASYLUM 99.99
+  SCI-FI HORROR 149.99 | VIKING REALM 149.99 | ANCIENT EGYPT 149.99
+  GOBLIN WAR CAMP 179.99 | SAMURAI EMPIRE 199.99 | PRO RACER 199.99
+  PIRATE REALM 249.99 | DARK FORTRESS 249.99 | FANTASY VILLAGE 299.99 | PALM CITY 299.99
+  APOCALYPSE WASTELAND 379.99 | (best-seller rail) FANTASY KINGDOM 349.99 |
+  SCI-FI WORLDS 499.99 | MILITARY 299.99 | ANIMATION BASE LOCOMOTION 69.99
+  => price band anchor: single pack 9.99..499.99 USD (page 1 of 4, band established)
+
+[FETCH-2] syntystore.com/collections/bundles — A级官方店直采 PASS
+  10 bundles: SCI-FI OUTPOST MAP BUNDLE 584.99 | WOODLAND APOCALYPSE MAP BUNDLE 434.99 |
+  MILITARY WAREHOUSE MAP BUNDLE 329.99 | SHOPS PACK+SHOPPING PLAZA 219.99 |
+  WAR PACK+WWI 124.99 | DUNGEON PACK+FANTASY DUNGEON 169.99 |
+  DUNGEON REALMS+DWARVEN DUNGEON 219.99 | ANIMATION COLLECTION 409.99 |
+  NATURE BIOMES S1 82.49 (reg 164.99, 50% off) | NATURE BIOMES S2 82.49 (reg 164.99)
+  => sales are a standing practice; no single 48-pack SKU exists (honest note)
+
+[FETCH-3] syntystore.com licences/SyntyPass pages — A级官方 EULA 原文直读 PASS
+  One Time Purchase Licence (formerly Standard EULA), verbatim anchors:
+  "Product means any videogame (which will always be covered by your licence), or any
+   other product or production that we agree with you in writing as being covered"
+  "Store means the Synty Store, Unreal Marketplace, or any other store ... (excluding
+   the Unity Asset Store)"
+  "Assets from the Humble Bundle may be used in commercial games and projects, as long
+   as they follow the terms of the One Time Purchase Licence."
+  => cross-verified with pivot 件一 + synty-usage-doctrine (both A-grade direct reads)
+
+[FETCH-4] assetstore.unity.com/packages/3d/environments/syntypass-one-pass-every-pack-372622
+  — B级渠道确认 PASS (existence confirmed: SyntyPass on Unity Asset Store,
+    "One Pass. Every Pack.", latest release 2026-06-15, FREE signup entry listing)
+  — subscription price NOT captured (dynamic pricing) => grade: ⬜待证
+
+[SEARCH-1] Synty official blog (syntystore.com/blogs) snippet — B级官方口径
+  "Best of Synty Humble Bundle 3 Remix ... 22 game development asset packs worth over
+   $1,100 USD for $25" => Synty self-estimated average ~ $50/pack
+
+[FAIL-1] synty.com — 判负: DomainMarket premium domain for sale page, NOT Synty's store
+[FAIL-2] synty.itch.io — 判负: community profile, empty store listing (jams/Discord)
+[FAIL-3] fab.com seller page + listing pages — 判负: HTTP 403 anti-bot; Fab current
+         prices NOT collected => ⬜待证 (human-browser pass recommended before D-A)
+[FAIL-4] syntystore.com/pages/syntypass — 判负: 404 (product lives at /products/syntypass)
+
+[DUAL-SOURCE VERDICT]
+  Key conclusion 1 (price band 9.99..499.99 + 84 packs): A-source direct + official blog
+    average-value cross-check (~$50/pack) => ✓已验证
+  Key conclusion 2 (EULA Product/Store definitions): syntystore.com direct read +
+    pivot/synty-usage-doctrine A-grade reads => ✓已验证 (double-file consistent)
+  Key conclusion 3 (SyntyPass subscription exists, 150+ pack library): syntystore.com
+    product slot + Unity Asset Store listing => existence ✓已验证; price ⬜待证
+
+[BUDGET ROW FILL] m4-visitor-3d-three-state-prep.md §三: [待采] -> [已采 R603]
+  48-pack full single-purchase rough anchor: 48 x ~$50 = ~$2,400+ USD (mean-value basis;
+  exact total requires CEO-side pack manifest, honest note recorded)
+  Better route surfaced: SyntyPass all-library subscription (price TBD) — recommend
+  bundling price inquiry into D-A 呈批.
+
+[EVIDENCE SET] this log + R-20260929-synty-48pack-cost-anchor.md + intelligence-wall W8
+  + prep-doc budget row diff. Zero keys used; read-only fetches; three-question gate
+  satisfied (QA order + P-56/P-74 authorization chain, host web_fetch read-only).
+RESULT: PASS (判据预注册四项全过: 官方渠道价锚直采 ✓ | 双源互证 ✓ (k1/k2; k3 存在性) | 判负留痕 ✓ (4 处) | 零编数 ✓)
