@@ -1,0 +1,27 @@
+BigDomain release-gate packaging rehearsal R606
+ts=2026-09-30T03:31:18+08:00
+repo=BigDomain  group tools (read-only ref):
+  release-scan.ps1 sha256=73ca41fc1259bab54162b01c582f798f5bb59b0bd1c2c74b3e33232b87d8efe6
+  secret-scan.ps1 sha256=3ceb8d58f12d9b63842aa87fec5db5f7362d34d65c6d14c6f139fb4f024b9efc
+REHEARSAL != GATE-PASS: gate 3 (CEO explicit approval) NOT exercised; bootstrap door stays unchecked. Image/compose faces = bootstrap-window real artifacts.
+AC-RG1 PASS whitelist build: staged files == explicit allow-list (2 files)
+AC-RG5 PASS staged metadata check: no .git face / no secret pattern / no local path leak (independent sweep, second judgment)
+  [release-scan] release-scan: PASS (no banned face / secret / path leak) in C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\.codely-cli\tmp\releasegate-R606\pkg
+AC-RG2 PASS clean-tree release-scan: exit 0 PASS
+  [release-scan/injected] release-scan: FAIL (3 findings) in C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\.codely-cli\tmp\releasegate-R606\pkg-injected
+  [release-scan/injected]   SECRET(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY): key.txt
+  [release-scan/injected]   PATH-LEAK(C:\\Users\\): notes.md
+  [release-scan/injected]   BANNED-NAME: orders.md
+AC-RG3 PASS injection rehearsal: exit 2 FAIL, all three finding classes enumerated: BANNED-NAME=1 SECRET=1 PATH-LEAK=1
+  [secret-scan] secret-scan 20260930-0331 | window=1 day(s) | repos scanned: 7 | hits: 1 | P0: 1 P2: 0
+  [secret-scan] [P0] BigDomain | private-key-blk | +        "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA rehearsal\n"
+FAIL AC-RG4 secret-scan exit=2 (P0 hits or error, see group report)
+VERDICT FAIL (rehearsal of gate mechanics only; real package gate run happens at bootstrap)
+
+=== R639 fixture-defang verification (night-shift 2026-09-30 03:07 P0 closure) ===
+AC-FD1 PASS source scan-face zero contiguous P0 literals: pem_hits=0 aws_hits=0 (regex 'BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY' + 'AKIA[0-9A-Z]{16}' over rehearse.py)
+AC-FD2 PARTIAL honest record: AC-RG1/RG2/RG3/RG5 PASS with defanged source (injected fixture still enumerates all three finding classes); AC-RG4 FAIL root cause = pre-fix historical commit e9bb677 (2026-09-29 18:46, R606 landing) still inside the date-based -Days 1 window (since 2026-09-29 00:00, clears 2026-10-01 00:00) = the exact remediation target, not a regression of this change; verdict FAIL follows AC-RG4; full-green re-verify split to backlog top row post 10-01 00:00
+AC-FD3 PASS injected key.txt byte-identity vs original design output: sha256 A2AAB0B26D0ECB2E71B03BC4D2ABD8A510D3957F26B3847AC3AE006062A99C9C (CRLF = write_text newline translation, same write path as R606 original run)
+supplementary secret-scan -Days 0 (today window 2026-09-30): repos scanned 7, hits 0, P0 0 = post-fix commit face clean
+AC-FD4 PASS this verification block on disk in qa/release-gate-R639.log
+VERDICT R639: fixture moved out of scan face at HEAD (FD1/FD3/FD4 + RG1/RG2/RG3/RG5 green); AC-RG4 history-window residue honestly open until 2026-10-01 00:00
