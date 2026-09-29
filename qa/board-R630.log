@@ -1,0 +1,37 @@
+BigDomain board-law knife 74 - round R630 - 2026-09-30
+standing law: P-2026-09-25-18 item-4 board-law enforcement (stale prior-round done rows are
+verbatim-migrated to the done archive each round; the current round's own done row stays on
+the board as the next round's knife target per R560 precedent).
+
+PREREGISTRATION (written to this file BEFORE any mutation):
+- AC-K74a: target = the one stale done row on src/os/backlog.md: "- [x] R629 ..." (the R629
+  round's own done row, per knife-73 carry logic = this round's knife-74 target; migrates
+  verbatim, byte-for-byte, zero edits).
+- AC-K74b: destination = docs/archive/backlog-done-2026-09.md new section R630 (format follows
+  existing section headers: "## R630" + blank line + row); pure append; existing content
+  byte-prefix preserved; BOM state of both files preserved on write (both True).
+- AC-K74c: main board end state = header block + D-20260929-03 gated row + bootstrap row;
+  zero other content loss (byte audit: removed bytes == UTF-8 encoding of the migrated row
+  text including its trailing newline).
+- AC-K74d: verify-then-write: all assertions evaluated before any file write; any failure
+  aborts with no write.
+- AC-K74e: results appended to this log after execution; evidence = the migrated row
+  byte-identical between old board and archive section (sha256 compare).
+
+executed by: BigDomain-OSLoop R630
+
+RESULTS (executed 2026-09-30, after preregistration above; clean single run, zero aborts):
+AC-K74a PASS: 1 target migrated verbatim (R629 row 1544 chars / 2502 UTF-8 bytes)
+AC-K74b PASS: done-archive pure-append 305126 -> 307637 bytes (+2511 = 9 bytes section header
+  "## R630" + blank line + 2502-byte row), byte-prefix asserted, BOM preserved both files
+  (board=True archive=True)
+AC-K74c PASS: main board end state = header + D-20260929-03 gated row + bootstrap row (this
+  round has no own done row - waiting-state round, board carries no done rows for R631 knife);
+  byte audit: removed 2502 bytes == UTF-8 row incl. trailing newline (6080 -> 3578 content
+  bytes; on-disk sizes with BOM 6083 -> 3581)
+AC-K74d PASS: all assertions evaluated before any write (verify-then-write)
+AC-K74e PASS: row byte-identical old-board == archive section (sha256[:16]=47fb5c52260a804b)
+
+note: this round adds a follow-up annotation to the D-20260929-03 gated row AFTER the knife
+(R630 trigger-check result), which does not affect the knife assertions above (they concern
+the done-row migration only).
