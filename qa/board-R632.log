@@ -1,0 +1,36 @@
+BigDomain board-law knife 75 - round R632 - 2026-09-30
+standing law: P-2026-09-25-18 item-4 board-law enforcement (stale prior-round done rows are
+verbatim-migrated to the done archive each round; the current round's own done row stays on
+the board as the next round's knife target per R560 precedent). Target this round = the R631
+done row, pre-registered on the board itself at R631 closeout ("R632 knife-75 migration
+target"), R630-pattern standing-carry round.
+
+PREREGISTRATION (written to this file BEFORE any mutation):
+- AC-K75a: target = the one stale done row on src/os/backlog.md: "- [x] R631 ..." (the R631
+  round's own done row, per its own carry-note = this round's knife-75 target; migrates
+  verbatim, byte-for-byte, zero edits).
+- AC-K75b: destination = docs/archive/backlog-done-2026-09.md new section R632 (format follows
+  existing section headers: "## R632" + blank line + row); pure append; existing content
+  byte-prefix preserved; BOM state of both files preserved on write (both True).
+- AC-K75c: main board end state = header block + D-20260929-03 gated row + bootstrap row;
+  zero other content loss (byte audit: removed bytes == UTF-8 encoding of the migrated row
+  text including its trailing newline).
+- AC-K75d: verify-then-write: all assertions evaluated before any file write; any failure
+  aborts with no write.
+- AC-K75e: results appended to this log after execution; evidence = the migrated row
+  byte-identical between old board and archive section (sha256 compare).
+
+executed by: BigDomain-OSLoop R632
+
+RESULTS (executed 2026-09-30, after preregistration above; clean single run, zero aborts):
+AC-K75a PASS: 1 target migrated verbatim (R631 row 1413 chars / 2145 UTF-8 bytes incl trailing
+  newline)
+AC-K75b PASS: done-archive pure-append 307637 -> 309791 bytes (+2154 = 9 bytes section header
+  "## R632" + blank line + 2145-byte row), byte-prefix asserted on-disk post-write, BOM
+  preserved both files (board=True archive=True)
+AC-K75c PASS: main board end state = header + D-20260929-03 gated row + bootstrap row (this
+  round has no own done row - standing-carry round, board carries no done rows for R633 knife
+  unless this round lands one); board on-disk 5893 -> 3748 bytes (removed 2145 = row incl.
+  trailing newline)
+AC-K75d PASS: all assertions evaluated before any write (verify-then-write)
+AC-K75e PASS: row byte-identical old-board == archive section (sha256[:16]=efa7f7d79c76f4c4)
