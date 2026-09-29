@@ -1,0 +1,7 @@
+AC-K56a backlog-rows count=4
+AC-K56a PASS: order R593(done) R592(done) D-03(gated) bootstrap(blocked)
+AC-K56b PASS: archive has no prior R593 section
+AC-K56c PASS: pure append (prefix sha16=af988b40c4f58e9d..) + R592 row verbatim
+AC-K56d PASS: backlog post-state = header + R593(done, stays for R594 knife) + gated + bootstrap
+AC-K56e PASS: sizes backlog 7460B->5771B, archive 233127B->234916B, BOM preserved
+KNIFE-56 SUITE PASS (all AC-K56a..e green)
