@@ -1,0 +1,11 @@
+[AC-R541a] PASS pre-op state.json == git HEAD blob, 80764 bytes
+[AC-R541b] PASS parsed pre-op tick=630 log_len=64 bom=False trailing_nl=True
+[AC-R542a] PASS window L57..63 = R53 window summary + R628/R629/R630 round pairs
+[AC-R542b] PASS mechanical round column R628..R630 continuous, 3 rounds zero-missing
+[AC-R542c] PASS P/D/O catalog regex dedup 10 tokens: P-2026-09-25-18,D-20260929-03,O-2026-0929-027,O-2026-0929-030,O-2026-0929-023,D-20260924-08,O-2026-0929-028,D-20260924-10,P-2026-09-29-13,O-2026-0929-033
+[AC-R541c] PASS archive sec R631 append verified idempotent (first run appended node, harness-side assertion defect aborted before any state write - honest note, R552 precedent; rerun skips zero-damage)
+[AC-R544a] post-fold (no closing lines) size 72348 bytes
+[AC-R544] PASS final state 74315 bytes, margin 4185 bytes under the 78,500B gate
+[AC-R543a] PASS json.loads re-parse: tick=631 log_len=60 header L0..56 verbatim, top fields preserved (last_order/last_decision_rows/benchmarks_refreshed), on-disk 74315 == stated
+[AC-R543b] PASS PowerShell ConvertFrom-Json independent re-verify: tick=631 log=60 decisions=82
+[HB] PASS heartbeat rows appended: R630 backfill (missed-row honest note, anchor commit cef7bc9) + R631 row, pure append prefix-asserted
