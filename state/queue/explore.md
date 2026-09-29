@@ -2,7 +2,7 @@
 
 - [ ] 会员订阅定价带后续调研（19.9 锚定档过会落地后的定价心理面/档位梯度·判负留痕合法）
 - [ ] 虚拟场景租赁与店面招商模式探索（m4 参观端转化后继·P1 呈批面探索稿）
-- [ ] UGC 创作者激励梯度探索（incentive-agent-spec 分配层参数面后继·参数=[needs-CEO]）
+- [x] UGC 创作者激励梯度探索（incentive-agent-spec 分配层参数面后继·参数=[needs-CEO]）——[done 2026-09-29]（R600 IncentiveFace 梯度分配器 src/sandbox/ledger/incentive.py+test_incentive.py：递减边际带状梯度+窗项圈+窗预算帽确定性 pro-rata·每笔=恰一条 share 出账·窗幂等·SUITE 7/7 exit=0·reconcile_all 扩十二套件 RUNNER PASS 123 判据·qa/incentive-R600.log+qa/incentive-runner-R600.log·AC-IG1..IG7 预注册先行全过·参数数值 [needs-CEO] 采纳面 P1 呈批）
 - [ ] 慢直播转化件合规运营模式（以 BigCompute 风控为准引用·launch-ops-rehearsal §一 承）
 - [ ] 微信小程序虚拟支付合规路径跟进（benchmarks B 片官方文档面·商户号到位后接线）
 - [x] 城内道具/装扮经济面探索（token-ledger 扩展面·次数≠代币两域隔离律内）——[done 2026-09-29]（R599 PropsFace 扩展件 src/sandbox/ledger/props.py+test_props.py 7/7 全绿 exit=0·reconcile_all 扩十一套件 RUNNER PASS 116 判据 19.9s·qa/props-R599.log+qa/props-runner-R599.log·AC-PR1..PR7 预注册先行全过·次数≠代币两域隔离律内·采纳面=P1 呈批）
