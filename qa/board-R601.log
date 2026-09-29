@@ -1,0 +1,8 @@
+== R601 board-law knife 61 (pre-registered AC-K61a..e) ==
+AC-K61a: target = the stale R600 done row (UGC incentive), exactly one match expected on the main board
+AC-K61a: found 1 row, 2258B
+AC-K61b: archive section already present (idempotent rerun), append skipped, prefix untouched
+AC-K61b: archive final size 254124B, prefix asserted
+AC-K61c: appended row byte-identical to the removed row (verbatim, sha256=8c1ef7e345ea0dcbcf1af7e7f26dd3af38d8703a009a572dab909cac7a5bf7cf)
+AC-K61d: main board = header + 2 R601 done rows + gated row + bootstrap row (4 item rows, R600 row gone), 7288B
+AC-K61e: evidence log on disk, zero other rows touched

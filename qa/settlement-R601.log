@@ -1,0 +1,8 @@
+﻿PASS AC-ST1: fen totals preserved exactly: {'bigdomain-product': 3834, 'bigmoney-engine': 2091, 'bigcompute-outlet': 1045} == 6970; odd 199 -> {'a': 110, 'b': 60, 'c': 29}; zero-window -> 0
+PASS AC-ST2: two independent faces build identical canonical manifests, id=93a0a75fe5f4a7e2...
+PASS AC-ST3: id recomputes; prev chain links (903ff738f03b->903ff738f03b); amount tamper rejected (E_ST_TAMPER)
+PASS AC-ST4: genuine verify True; amount-tamper and party-tamper both rejected E_ST_TAMPER
+PASS AC-ST5: dup window E_ST_PERIOD_DUP (windows=1); dup claim E_ST_PERIOD_DUP; over-limit claim E_ST_BAD_INPUT
+PASS AC-ST6: banned-verb hits=[]; pure-ascii 6983B; random-import absent; config.json sha unchanged
+PASS AC-ST7: no settlement key in shipped config; no canonical ratio constant; engine/outlet reference anchors present in module docstring
+SUITE PASS 7/7 criteria

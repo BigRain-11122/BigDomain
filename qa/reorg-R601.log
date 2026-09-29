@@ -1,0 +1,10 @@
+== R601 reorg knife R46 (pre-registered AC-R461..R465, backlog R601 row) ==
+AC-R461 trigger: round-start bytes=81124 waterline=80000 crossed=True
+AC-R463 candidate A: removes log items 55..64 (10 lines), final=70618B, gate-margin=7882B, gate-pass=True, head+fields-verified=True
+AC-R463 candidate B: removes log items 54..64 (11 lines), final=67518B, gate-margin=10982B, gate-pass=True, head+fields-verified=True
+AC-R463 selected candidate B (largest gate margin among passers)
+AC-R462 snapshot==git-HEAD bytes verified (sha256=165994229ee407063bc55333e6862d0a2947ceafa7b981f43adedaad101bea28)
+AC-R462 archive pure append: 4017702B -> 4098927B (+81225B), prefix asserted
+AC-R464 post-write dual-decode OK: tick=600, log 65->55 items, header fields verbatim
+AC-R464 final size=67518B (waterline margin=12482B, gate margin=10982B)
+REORG R46 DONE candidate=B final=67518B

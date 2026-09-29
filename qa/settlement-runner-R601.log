@@ -1,0 +1,229 @@
+  | PASS AC-S1: first frame type=sys.hello payload keys=['risk_doc', 'rooms', 'v']
+  | PASS AC-S6: frame2 type=sys.risk_warning persistent=True text_len=115
+  | PASS AC-S2: spectator-rejected=True not-broadcast=True spectator-receives=True
+  | PASS AC-S3: rtt self=0.1ms other=0.5ms lobby-isolation=True quant-recv-room=quant
+  | PASS AC-S4: refusal[empty-wordlist-config rc=2 offline=True; missing-config rc=2 offline=True; port-8093-never-bound=True]; gate1=True gate2=True no-broadcast=True clean-passed=True rejected-in-stream=0/0
+  | PASS AC-S5: spoof overwritten: ai_generated=False actor=res-ce945ada; ai-notice ai_generated=True label-set=True
+  | PASS AC-S7: last row repo=domain/BigDomain zone=lobby all-fields-set=True; replay-rejected=True; jsonl-export=True evt_id=51912e056f999f9d
+  | PASS AC-S9: violations-err.rate_limit=True; 3rd-violation-mute-sec.reject=sec.reject muted_until-in-future=True; muted-hold=True (60s unmute path not awaited in suite; window asserted via muted_until)
+  | PASS AC-S10: chat->chat.broadcast(room=lobby); idea->pool-stub idea_id=True; store-types=['chat.broadcast', 'idea.submit']
+  | PASS AC-S8a: config-30/60=True banner-ok=True; server disconnected the no-pong client after 3.0s (test instance interval=1s timeout=2s)
+  | PASS AC-S11: full: keys=12 subset=True name-match=True deep-water-leak=[]; subset=True forbidden=True honorary-zero-render=True unknown=True
+  | PASS AC-S12: receipt-evt_id=True queued-row=True gate-rejects=True ungated-rows=0
+  | PASS AC-S13: snapshot-200-as_of=True census-subset=True 404=404/404 405=405/405/405 ro-write-refused=True files-unchanged=True
+  | SUITE PASS (13/13 criteria pass)
+PASS suite lobby exit=0 pass-lines=13 fail-lines=0 criteria=13 8.6s
+  | PASS AC-L11: unbound-create=True(E_NO_BINDING) unbound-payout=True(E_NO_BINDING)
+  | PASS AC-L7: score=1 cap=11: below/at-cap booked, +1-over rejected=True(E_TOKEN_CAP) balance=11=cap
+  | PASS AC-L9: ai-action source_ai=1 ai_label=['AI 判定']; client-spoof stored source_ai=0
+  | PASS AC-L8: unpassed-ref-rejected=True(E_GATE_REF) payout-after-pass=True; serve-refusal ['empty-wordlist=True', 'no-gate-section=True'] (E_GATE_OFFLINE: gate section missing from config)
+  | PASS AC-L4: re-grant-same-source=True(E_REF_DUPLICATE) re-mint-same-ref=True(E_REF_DUPLICATE)
+  | PASS AC-L3: identical-replay rejected=True(E_REF_DUPLICATE) rows-kept=1 (content-addressed tx_id)
+  | PASS AC-L2: overspend rejected=True(E_NEGATIVE_BALANCE) balance-unchanged=True equity=-300(<=0)
+  | PASS AC-L1: app-imbalance=True(E_TX_IMBALANCE) min-entries=True(E_TX_MIN_ENTRIES) db-close-refused=True rolled-back-rows=0
+  | PASS AC-L5: clean rc=0; tampered rc=2 check3-fail=True last=RECONCILE FAIL (3/8 checks failed)
+  | PASS AC-L6: sum-all=0 issued=300 equity=-300 identity=True; check4 clean=True tampered=True gate-check6-fail=True
+  | PASS AC-L10: balance.disclaimer=True bill.disclaimer=True persistent=True len=116
+  | SUITE PASS (11/11 criteria pass)
+PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.5s
+  | PASS AC-PR1: buy moved tokens by price only (300->280), consume moved 0 (280->280); credits 3->2
+  | PASS AC-PR2: cosmetic granted; duplicate buy rejected E_PROP_DUP with zero charge (265==265); consume path rejected E_PROP_BAD_KIND
+  | PASS AC-PR3: 3->2->0 then over-consume rejected E_PROP_INSUFFICIENT; re-purchase stacks credits back to 2
+  | PASS AC-PR4: source scan banned-hits=[] non-ascii=0; lifecycle token delta = purchases only, bal=245
+  | PASS AC-PR5: every grant bound to a real spend tx: hat_gold->5394b63c75:spend; jetpack->2d3b93842f:spend
+  | PASS AC-PR6: bob started empty, bought his own hat_gold; alice inventory unaffected (cosmetics=1, jetpack credits=2)
+  | PASS AC-PR7: insufficient funds rejected E_NEGATIVE_BALANCE with zero charge (85==85) and zero grant; unknown kind rejected E_PROP_BAD_KIND
+  | SUITE PASS 7/7
+PASS suite ledger-props exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+  | PASS AC-IG1: payout(0)=0 mono=True marg=[10, 5, 2] det=True seq=[0, 10, 30, 50, 55, 100, 102, 150, 270]
+  | PASS AC-IG2: dave 1,000,000 units -> [('usr:dave', 150)] (collar 150); W1 payouts [('usr:alice', 147), ('usr:bob', 127), ('usr:carol', 126)] all <= collar
+  | PASS AC-IG3: W1 raw 410 > budget 400 -> pro-rata lands exactly 400 ([('usr:alice', 147), ('usr:bob', 127), ('usr:carol', 126)]); W2 150 <= budget
+  | PASS AC-IG4: pool:share -550 == total paid 550; balances exact; join rows 4 refs ['incentive:W1:usr:alice', 'incentive:W1:usr:bob', 'incentive:W1:usr:carol', 'incentive:W2:usr:dave']
+  | PASS AC-IG5: re-settle W1 -> E_INC_WINDOW_DUP; balances unchanged pool=True usr={'alice': 147, 'bob': 127, 'carol': 126, 'dave': 150}
+  | PASS AC-IG6: banned-verb hits=[] ascii=True no-rng=True
+  | PASS AC-IG7: config.json sha unchanged=True; no incentive param key in shipped config=True
+  | SUITE PASS (7/7)
+PASS suite ledger-incentive exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+  | PASS AC-ST1: fen totals preserved exactly: {'bigdomain-product': 3834, 'bigmoney-engine': 2091, 'bigcompute-outlet': 1045} == 6970; odd 199 -> {'a': 110, 'b': 60, 'c': 29}; zero-window -> 0
+  | PASS AC-ST2: two independent faces build identical canonical manifests, id=93a0a75fe5f4a7e2...
+  | PASS AC-ST3: id recomputes; prev chain links (903ff738f03b->903ff738f03b); amount tamper rejected (E_ST_TAMPER)
+  | PASS AC-ST4: genuine verify True; amount-tamper and party-tamper both rejected E_ST_TAMPER
+  | PASS AC-ST5: dup window E_ST_PERIOD_DUP (windows=1); dup claim E_ST_PERIOD_DUP; over-limit claim E_ST_BAD_INPUT
+  | PASS AC-ST6: banned-verb hits=[]; pure-ascii 6983B; random-import absent; config.json sha unchanged
+  | PASS AC-ST7: no settlement key in shipped config; no canonical ratio constant; engine/outlet reference anchors present in module docstring
+  | SUITE PASS 7/7 criteria
+PASS suite ledger-settlement exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+  | PASS AC-U2: serve-refusals no-gate-section=True,empty-forbidden=True,no-gray-words=True,no-disclaimer=True,escape-export=True; cli rc2-with-E_GATE_OFFLINE=True cli-ready=True; gate1-hit=True(E_CONTENT_REJECTED) gate2-hit=True(E_CONTENT_REJECTED) gate-hits-landed-rows=0
+  | PASS AC-U1: direct=2ad68814cd286525 entrance-neg=True(E_ENTRANCE_REQUIRED) danmaku-reserved=True(E_SOURCE_BLOCKED) unknown-src=True(E_BAD_SOURCE) empty=True(E_BAD_FRAME) public-intake=True rate-6th=True(E_RATE_LIMIT) ingest-lobby_idea=True ingest-avatar=True receipts-carry-evt_id=True
+  | PASS AC-U8: gate2 direct=True(E_CONTENT_REJECTED) public-face=True ingest-rejected-no-land=True; pool+chronicle disclaimer-resident=True persistent=True len=92
+  | PASS AC-U3: suspended=True no-verdict-NULL=True not-pooled=True pass-enters-flow=True double-verdict=True(E_REVIEW_DONE) risky-rejects=True(E_CONTENT_REJECTED) trace-kept=True risky-never-pooled=True bad-verdict=True unknown-case=True no-verdict-suspended-forever=True
+  | PASS AC-U4: six-lines-routed=True unsorted-fallback=True config-reroute=True (biggame->bigmoney code-untouched)
+  | PASS AC-U5: emoji-only=True too-short=True rows-kept-not-destroyed=True no-items=True no-draft=True flood(6-ingests)=True pooled=5 noise=1 rows-kept=6
+  | PASS AC-U6: same-source-replay=True(E_DUPLICATE) cross-source-two-rows=True duplicate_of=True re-ingest-dedup=True
+  | PASS AC-U7: client-spoof-ignored=True (stored producer=rule_template ai_generated=0) draft-face producer=rule_template ai_generated=False label=True state=True
+  | PASS AC-U9: small-L0-adopt=True landfall-auto-marked=True app-refuse=True(E_CEO_RECEIPT_REQUIRED) trigger-force-adopt=True flag-freeze=True pooled-jump=True terminal-immutable=True raw-insert=True ceo-approved-adopt=True ceo-rejected=True bad-decision=True
+  | PASS AC-U10: receipts=2 adopted=2 only-adopted=True bad-receipt-insert=True; ledger bad-ref=True(E_GATE_REF) receipt-ref-pays=True
+  | PASS AC-U11: feed-lines=['bigdomain.jsonl', 'biggame.jsonl', 'biglife.jsonl', 'bigmoney.jsonl', 'bigstream.jsonl', 'fluxverse.jsonl', 'unsorted.jsonl'] all-inside-repo=True hot-sorted-desc=True rejected->chronicled=True path-gate-refusal-proven-in-AC-U2
+  | PASS AC-U12: chronicle-rows=3 fields=True adopted-named=True rejected-record-only=True all-terminal-exported=True rejected-zero-receipt=True note=True
+  | SUITE PASS (12/12 criteria pass)
+PASS suite ugc exit=0 pass-lines=12 fail-lines=0 criteria=12 0.8s
+  | PASS AC-Y13: unbound create rejected=True rows=0 birthright grant=birthright
+  | PASS AC-Y1: skip=REJ revert=REJ terminal=REJ closed-absorbing=REJ amount=E_AMOUNT_LOCKED
+  | PASS AC-Y2: tainted=E_PRICE_TAINTED (detail=1990) unknown=E_PRODUCT_UNKNOWN (detail=no_such_product) server_price=1990==price_table
+  | PASS AC-Y3: replay same id=True rows=1; closed re-buy new bucket=True
+  | PASS AC-Y4: bad_sig=E_CALLBACK_REJECTED bad_signer=E_CALLBACK_REJECTED bad_ts=E_CALLBACK_REJECTED nonce_replay=E_CALLBACK_REJECTED price=E_AMOUNT_MISMATCH; status stayed pending, grants=0, good cb then granted=True
+  | PASS AC-Y5: redelivery idempotent=True conversion=1 event=1 grant=1; second distinct valid receipt rejected=E_BAD_STATE (detail=callback needs pending, got granted)
+  | PASS AC-Y7: conversion share credits usr:AV-106 +30000 tokens; fiat columns=none; fiat-field injection into ledger rejected: table ledger_tx has no column named amount_cent
+  | PASS AC-Y8: gate1=E_CONTENT_REJECTED gate2=E_CONTENT_REJECTED clean=True rows_after_rejections=1
+  | PASS AC-Y9: client hint ai_service=0 ignored; four faces all carry ai_service=1
+  | PASS AC-Y10: confirm/detail/receipt faces all carry the resident disclaimer
+  | PASS AC-Y14: six fields + evt_id=88a5c7323e1c... repo/zone ok; duplicate evt_id rejected=True
+  | PASS AC-Y12-clean: reconcile exit=0 line1=reconcile: PASS checks=6/6
+  | PASS AC-Y12-tamper: amount=True grant=True receipt=True phantom=True (all exit 2, named check fails)
+  | PASS AC-Y6: mid-grant ledger failure (E_NEGATIVE_BALANCE) rolled back whole grant: status=paid grants=0 conversions=0; retry healed to granted=granted
+  | PASS AC-Y11: banned copy refuses construction (E_GATE_OFFLINE: E_GATE_OFFLINE: product copy banned (AC-Y11): rogue_pack word=荐股); nothing listed on disk=True
+  | PASS CLI: readiness rc=0 (pay orders ready: products=4 channels=virtual,standard gate=ok db=C:\Users\sjs20\AppData\Local\Temp\pay-cli-l78oje2l\pay.db); unwired-gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+  | ---- pay acceptance: 16/16 passed
+PASS suite pay exit=0 pass-lines=16 fail-lines=0 criteria=16 1.9s
+  | PASS AC-V34a: sig == HMAC-SHA256(key, ts\nnonce\nbody\n) canonical string
+  | PASS AC-V34b: tampered signature rejected: E_CALLBACK_REJECTED (detail=signature mismatch)
+  | PASS AC-V31: missing header rejected + bad receipt row: E_CALLBACK_REJECTED (detail=missing header: Wechatpay-Signature)
+  | PASS AC-V32a: unknown serial rejected: E_CALLBACK_REJECTED (detail=unknown serial: NOT-A-KNOWN-SERIAL)
+  | PASS AC-V32b: PUB_KEY_ID_<digits> serial accepted, order granted: granted
+  | PASS AC-V33: stale Wechatpay-Timestamp rejected: E_CALLBACK_REJECTED (detail=ts outside +-300s window (delta=400s))
+  | PASS AC-V35a: valid-sig corrupt ciphertext rejected: E_CALLBACK_REJECTED (detail=malformed resource: Only base64 data is allowed)
+  | PASS AC-V35b: translation-injection rejected: E_CALLBACK_REJECTED (detail=uniform/body mismatch)
+  | PASS AC-V36a: signed but non-SUCCESS rejected: E_CALLBACK_REJECTED (detail=trade_state=REFUND not SUCCESS (4012075249 criterion))
+  | PASS AC-V36b: later SUCCESS callback on same order still pays: granted
+  | PASS AC-V37: ok=200 no body / fail=400 {code:FAIL,message}
+  | PASS AC-V38a: redelivery idempotent, 1 grant, 1 pay.success event (15-retry gradient re-entry)
+  | PASS AC-V38b: nonce replay (bad 4) rejected: E_CALLBACK_REJECTED (detail=nonce replay)
+  | PASS AC-V39: STANDIN marks present, pure ASCII, zero network imports
+  | SUITE PASS: 14/14
+PASS suite pay-v3 exit=0 pass-lines=14 fail-lines=0 criteria=14 0.4s
+  | PASS AC-V3R1a OK: standard=V3Channel(rsa), virtual stays legacy MockChannel
+  | PASS AC-V3R1b OK: shipped config.json carries no rsa keys (byte diff at commit)
+  | PASS AC-V3R1c OK: spec validation: AdapterError (E_CALLBACK_REJECTED: bad verify_mode: bogus (want standin|rsa)) / AdapterError (E_CALLBACK_REJECTED: verify_mode rsa needs platform_public_key_pem)
+  | PASS AC-V3R2 OK: manual RSA-SHA256 verify ok; tampered body (no re-sign) rejected: E_CALLBACK_REJECTED (detail=signature mismatch)
+  | PASS AC-V3R3 OK: good AEAD path settles (granted); flipped ct w/ valid re-sign E_CALLBACK_REJECTED (detail=malformed resource: resource not an object: ); wrong apiv3 key AdapterError (E_CALLBACK_REJECTED: malformed resource: resource not an object: )
+  | PASS AC-V3R4 OK: rsa rejects standin cb (AdapterError (E_CALLBACK_REJECTED: signature mismatch)); standin rejects rsa cb (AdapterError (E_CALLBACK_REJECTED: signature mismatch))
+  | PASS AC-V3R5 OK: serial E_CALLBACK_REJECTED (detail=unknown serial: NOT-A-KNOWN-SERIAL) | ts E_CALLBACK_REJECTED (detail=ts outside +-300s window (delta=401s)) | injection E_CALLBACK_REJECTED (detail=uniform/body mismatch) | state E_CALLBACK_REJECTED (detail=trade_state=REFUND not SUCCESS (4012075249 criterion))
+  | PASS AC-V3R8 OK: redelivery idempotent, 1 grant, 1 pay.success event
+  | PASS AC-V3R7 OK: v3.py ASCII + real/stand-in marks + zero network imports + fixture keys never hit disk
+  | SUITE PASS: 9/9
+PASS suite pay-v3-real exit=0 pass-lines=9 fail-lines=0 criteria=9 0.6s
+  | PASS AC-M1: bad-configs no-tiers:refused,negative-credits:refused,unknown-priv:refused,no-copy:refused,no-disclaimer:refused; client tier claim ignored (activated tier=experience)
+  | PASS AC-M2: mayor opened v=['building_naming']; replay same-period=True regrant=0; stack p2 start==p1.end=True; forged=True owner-mismatch=True
+  | PASS AC-M13: public-stream rows before=5 after=5 (zero double writes); audit kinds=['credits', 'period', 'voucher']
+  | PASS AC-M4: 30-7-23+5=balance 5; overdraw refused=True balance-untouched=True; refund-cap refused=True; drain->0; zero-draw refused=True; no-period refused=True; journal sums={'consume': -35, 'grant': 35}
+  | PASS AC-M5: forged client tier/privileges ignored (got ['basic_badge', 'emoji_pack_standard']); forged privilege claim refused=True
+  | PASS AC-M6: experience->cocreator privilege refused=True; no-period refused=True; mayor chat_highlight granted tier=mayor
+  | PASS AC-M7: gate hit refused=True zero-writes (text=None); clean text set; readiness rc=0; unwired gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+  | PASS AC-M8: machine faces ai_generated=0 (activation=0); AI copy face ai_generated=1 label=AI 生成; client 0-forgery ignored
+  | PASS AC-M9: disclaimer resident on 3 sampled faces, persistent=True
+  | PASS AC-M10: fiat/token-named columns=none; raw fiat-column inject refused=table member_periods has no column named price_cent
+  | PASS AC-M11: member db has zero ledger tables; ledger db has zero member tables; ledger quota-named columns=none; cross-domain raw writes both refused (no such table: ledger_entries / no such table: member_periods)
+  | PASS AC-M16: use=used; duplicate voucher UNIQUE-refused=True; experience-tier voucher request refused=True; no-period voucher request refused=True (reuse/expiry legs on world two)
+  | PASS AC-M12: born-expired/rollback REJ=True/True/True; sweep expired=4 re-run=0 journal-stable=True; expire events=3 (AV-103 balance already 0 - nothing to forfeit) audits=4; post-sweep active=False balance103=0
+  | PASS AC-M3: paid non-tier product birth-cert=True permanent=True; no-binding refused=True; after tier expiry birth-cert=True marker=True judgement-source items=1 (privileges closed=True)
+  | PASS AC-M14: clean world: findings=none cli-rc=0 (PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Te)
+  | PASS AC-M16: use=used; re-use refused=True; no-voucher avatar refused=True; expired-with-period refused=True (status=expired, audit rows=1); sweep cli rc=0 out=sweep done: periods_expired=3 now=2030-0
+  | PASS AC-M14: fake-period -> check1: period FAKE-PERIOD-1: grant FAKE-GRANT-1 absent from pay_grants
+  | PASS AC-M14: credits-out-of-thin-air -> check2: orphan credit journal rows: 1
+  | PASS AC-M14: deleted-audit-row -> check5: period FAKE-PERIOD-1: open audit row missing
+  | PASS AC-M14: privilege-row-overreach -> check3: voucher FAKE-V-1: privilege building_naming_voucher not granted by tier experience
+  | PASS AC-M14: forged-grant-source -> check1: period 8479c881ef87f4c8: grant FORGED-9 absent from pay_grants
+  | PASS AC-M14: fiat-column-injected -> check4: member member_periods.price_cent carries a price-named column
+  | PASS AC-M14: past-due-active-residue -> check6: past-due active period residue: FAKE-PERIOD-2
+  | PASS AC-M14: tampered world cli rc=2 (FAIL: 12 finding(s); first: check1: period 8479c881ef87f4c8:)
+  | PASS AC-M15: banned tier copy refused: E_GATE_OFFLINE: tier experience copy banned (AC-M15): 荐股
+  | suite: 25 assertions over 16 criteria; failed=none
+PASS suite member exit=0 pass-lines=25 fail-lines=0 criteria=16 1.5s
+  | [ WARN:0@0.442] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+  | 
+  | Welcome to use blind-watermark, version = 0.4.4
+  | Make sure the version is the same when encode and decode
+  | Your star means a lot: https://github.com/guofei9987/blind_watermark
+  | This message only show once. To close it: `blind_watermark.bw_notes.close()`
+  |             
+  | PASS AC-W1a: local pip import ok; embed=True wm_bits=256 clean-roundtrip-exact=True
+  | PASS AC-W1b: compression case: jpeg-resave q=90 write=True exact=True ber=0.0000
+  | PASS AC-W1c: crop case: keep=0.85 direct-extract-exact=False (ber=0.5195, honest negative) -> recover.py locate-score=1.000 loc=(48, 36, 592, 444) recovered-extract-exact=True
+  | PASS AC-W2: explicit track: ugc config.json L63 ai_label_text set=True + pipeline.py L332 ai_label draft field; implicit track doc present=True with dual-track + bootstrap-deferred note
+  | PASS AC-W3: OH five-gate rows 1..5=True candidate+MIT=True registry P-47-3c adoption row=True
+  | SUITE PASS (5/5 criteria pass)
+PASS suite watermark exit=0 pass-lines=5 fail-lines=0 criteria=5 1.6s
+  | [ WARN:0@0.408] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+  | 
+  | Welcome to use blind-watermark, version = 0.4.4
+  | Make sure the version is the same when encode and decode
+  | Your star means a lot: https://github.com/guofei9987/blind_watermark
+  | This message only show once. To close it: `blind_watermark.bw_notes.close()`
+  |             
+  | PASS AC-EX0: control anchor: embed=True wm_bits=256 clean-roundtrip-exact=True
+  | PASS AC-EX1-down0.5x: write=True extract-exact=False ber=0.5195 (honest negative, lawful per AC-EX4)
+  | PASS AC-EX1-up2.0x: write=True extract-exact=False ber=0.5000 (honest negative, lawful per AC-EX4)
+  | PASS AC-EX2-d5: write=True extract-exact=False ber=0.0273 (honest negative, lawful per AC-EX4)
+  | PASS AC-EX3-q90x2: write=True extract-exact=False ber=0.0156 (honest negative, lawful per AC-EX4)
+  | PASS AC-EX4: measured=4/4 ber-on-every-case-line=True zero-silent-skip (non-exact verdicts lawful per pre-registration)
+  | SUITE PASS (6/6 criteria pass)
+PASS suite watermark-robust exit=0 pass-lines=6 fail-lines=0 criteria=6 2.3s
+  | PASS AC-DT2-pre: explicit label from ugc config, len=5 font=msyh.ttc
+  | PASS AC-DT2: badge box=(507, 423, 632, 472) bottom-right=True region-mean-abs-diff=101.9 text-h=29px (param>=24)
+  | [ WARN:0@0.490] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+  | 
+  | Welcome to use blind-watermark, version = 0.4.4
+  | Make sure the version is the same when encode and decode
+  | Your star means a lot: https://github.com/guofei9987/blind_watermark
+  | This message only show once. To close it: `blind_watermark.bw_notes.close()`
+  |             
+  | PASS AC-DT1: seal order badge->watermark(pixel-last)->tEXt(container-last); AIGC-Attr roundtrip exact=True receipt-sha16=17e0cf6c41760b9e triple=(provider,content_no,label_text)
+  | PASS AC-DT3: binding bits=SHA-256(provider:content_no:ai_label_text) sha16=5b150f2956debcf9 nbits=256 clean-extract ber=0.0000 (exact required)
+  | PASS AC-DT4: label-strip region-restore case: implicit extract ber=0.0000 (pre-registered threshold <= 0.05 = provenance survives)
+  | PASS AC-DT5: forgery case: wrong-content_no expectation ber=0.5508 (floor >= 0.40 = correctly non-matching)
+  | PASS AC-DT6: JPEG q90 re-save extract ber=0.0000 (W1b-precedent exact required); suite source pure-ascii=True
+  | SUITE PASS: 7/7 PASS
+PASS suite dual-track exit=0 pass-lines=7 fail-lines=0 criteria=7 1.6s
+PASS suites 13/13 green, expected criteria total=130
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived PASS
+  | 4 zero-sum-and-mint-identity PASS
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE PASS (8/8 checks)
+PASS reconcile ledger-demo exit=0 (expect 0, clean eight checks)
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived FAIL n=1 
+  | 4 zero-sum-and-mint-identity FAIL n=1 sum=1 issued=801 equity=-800
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE FAIL (2/8 checks failed)
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=6/6
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+PASS reconcile pay-demo exit=0 (expect 0, clean six checks)
+  | reconcile: FAIL checks=5/6
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-4n6lp51a\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-4n6lp51a\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-4n6lp51a\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (13/13 suites green, reconcile controls 6/6, 21.1s)
