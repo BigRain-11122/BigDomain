@@ -1,0 +1,15 @@
+R626 board knife 71 pre-registration (written BEFORE any mutation)
+AC-K71a: target rows = all backlog.md lines starting '- [x] R625 ' (expected exactly 2)
+AC-K71b: archive append pure (existing bytes prefix-asserted; rows verbatim under new heading)
+AC-K71c: main board post = header + R626 done row + D-20260929-03 gated row + bootstrap row
+AC-K71d: state.json + status-export.json both re-parse via json.loads after edits
+AC-K71e: evidence = this log on disk
+AC-K71a PASS: 2 target rows identified (1260 / 1153 chars)
+AC-K71b PASS: archive 291976B -> 296158B pure append, rows verbatim in (prefix asserted)
+AC-K71c PASS: main board = header + R626 done + D-03 gated + bootstrap (zero stale R625 rows)
+state.json: tick 626, log 60->62, json.loads PASS
+export refreshed: export_ts=2026-09-29T23:38:37+08:00, tick row 626, results +1 row, self_drive W=25 sub=13 explore=4, re-parse PASS
+heartbeat R626 row appended
+AC-K71d PASS: both state.json and status-export.json re-parsed via json.loads after edits
+AC-K71e PASS: evidence log on disk = qa/board-R626.log
+CLOSEOUT OK
