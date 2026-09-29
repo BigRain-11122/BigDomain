@@ -1,0 +1,11 @@
+
+# --- execution record (appended after mutation, both verifications green) ---
+# run: python -X utf8 logs/r579_close.py (script logs/r579_close.py, data logs/r579_data.json, both gitignored per logs/ rule)
+# AC-K46a PASS: board contained exactly 1 stale done row (- [x] R578 ...), 2 unchecked rows pre-op
+# AC-K46b PASS: done row moved verbatim (byte-identical content line); archive append-only prefix-asserted (pre 224,978B raw read basis -> post 230,432B incl. new section)
+# AC-K46c PASS: section header "## §R579（板规执法第四十六刀·R578 过当轮 done 行 verbatim 迁档·2026-09-29）" appended after existing §R578 section at EOF
+# AC-K46d PASS: post-migration main board = header block + D-20260929-03 gated row + bootstrap blocked row (done_rows=0, unchecked=2, 2,665B)
+# AC-K46e PASS: both files re-read post-write (python in-script + independent PowerShell ConvertFrom-Json / raw-match); board R578 remnant=False
+# same-window: state.json tick 579 (log 61->63, last_decision_rows 75->77), heartbeat R579 row appended (ASCII, trailing newline ok),
+# export refreshed (export_ts 2026-09-29T11:50:02+08:00 second-precision per R411 format, results 120->122, tick row 578->579,
+# self_drive recounted 29 lines / tokens 12 / substantive 16 / idle 8 / nop 0, proposals F3 drift 0/0 -> 1/1 per BD-PROP-001 open)
