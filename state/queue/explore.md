@@ -1,6 +1,6 @@
 # P3 新方向探索线队列（state/queue/explore.md·Self-Drive v2.0·常备 ≥10 条·2026-09-28 R532 建面）
 
-- [ ] 元宇宙身份付费面（C5 价目行·私人房间 ¥9.9/月+化身皮肤 ¥29.9 永久+共创者铭牌 ¥49.9 永久+高级入驻楼层铭牌 ¥199 永久·props 装扮域邻界=先查重后建·venue 场地面邻界同）
+- [x] 元宇宙身份付费面（C5 价目行·私人房间 ¥9.9/月+化身皮肤 ¥29.9 永久+共创者铭牌 ¥49.9 永久+高级入驻楼层铭牌 ¥199 永久·props 装扮域邻界=先查重后建·venue 场地面邻界同）——[done 2026-09-29]（R624 IdentityFace 落地件 src/sandbox/ledger/identity.py+test_identity.py：参照非双建=永久三品类写路径全走 PropsFace.buy_prop(kind='cosmetic') entitlement 行落 props_inventory·私人房间写路径全走 VenueFace.lease_storefront 月窗租约占用行落 venue_occupancy·本件仅新增 identity_products 品类注册表一张·四品类门全拒在 spend 前零扣费〔同户同房同月 E_ID_DUP/异户同月 E_ID_TAKEN/重复购 E_ID_DUP/注册门 E_ID_UNKNOWN+E_ID_KIND_MISMATCH〕·identity_profile 派生读面全带 spend tx 溯源·零 UPDATE 面·AC-ID1..ID7 预注册=板行先于代码·SUITE 7/7 全绿〔首跑两处测试件缺陷修复后净跑·模块本体首验即净〕·reconcile_all 扩二十二套件 RUNNER PASS 196 判据+对账双控 6/6 18.6s 零回归·qa/identity-R624.log+qa/identity-runner-R624.log·价目全 [needs-CEO] P1 呈批不执行）
 - [ ] 小游戏工作室入驻年费面（B1 价目行 ¥9,800/年·游戏脑洞提案池+精准玩家流量+虚拟工作室楼层三权益束·年费窗幂等）
 - [ ] 量化工作室入驻年费面（B2 价目行 ¥19,800/年·股民灵感数据+策略共创观测入口+QUANT 城大屏露出三权益束·与 B1 同构可并件）
 - [ ] 企业版 AI 算力验证 API 计量计费面（B5 价目行 ¥0.5/次起·按调用量计量+计费+对账·BigMoney 引擎引用面·非投顾定性常驻）
