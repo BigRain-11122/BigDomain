@@ -1,0 +1,36 @@
+BigDomain board-law knife 73 - round R629 - 2026-09-30
+standing law: P-2026-09-25-18 item-4 board-law enforcement (stale prior-round done rows are
+verbatim-migrated to the done archive each round; the current round's own done row stays on
+the board as the next round's knife target per R560 precedent).
+
+PREREGISTRATION (written to this file BEFORE any mutation):
+- AC-K73a: target = the one stale done row on src/os/backlog.md: "- [x] R628 ..." (the R628
+  round's own done row, per its carry-note = this round's knife-73 target; migrates verbatim,
+  byte-for-byte, zero edits).
+- AC-K73b: destination = docs/archive/backlog-done-2026-09.md new section R629, following the
+  existing section header format; pure append; existing content byte-prefix preserved; BOM
+  state of both files preserved on write.
+- AC-K73c: main board end state = header block + R629 row + D-20260929-03 gated row +
+  bootstrap row; zero other content loss (byte audit: removed text == the migrated row plus
+  its newline).
+- AC-K73d: verify-then-write: all assertions evaluated before any file write; any failure
+  aborts with no write.
+- AC-K73e: results appended to this log after execution; evidence = the migrated row
+  byte-identical between old board and archive section.
+
+executed by: BigDomain-OSLoop R629
+
+FIRST-RUN HONEST NOTE (R552/R622 first-run-defect precedent): the first run of the migration
+script aborted with FileNotFoundError before any file write (ROOT resolved one directory
+short: .codely-cli instead of the repo root, so src/os/backlog.md was not found). Zero
+side effects: board and archive untouched, verified on disk. The defect was fixed in the
+script (ROOT = three dirnames up) and the migration rerun clean; results below are from the
+successful rerun. A mixed-encoding console append (PowerShell UTF-16 >> into this UTF-8
+file) from the failed run was also normalized when this log was rewritten.
+
+RESULTS (executed 2026-09-30, after preregistration above; clean rerun):
+AC-K73a PASS: 1 target migrated verbatim (R628 row 1796 chars)
+AC-K73b PASS: done-archive pure-append 302258 -> 305126 bytes, prefix asserted, BOM preserved both files (board=True archive=True)
+AC-K73c PASS: main board end state = header + R629 row + D-20260929-03 gated row + bootstrap row; byte audit: removed 2859 bytes == row 1796 chars + newline in UTF-8 (first print mislabeled bytes as chars, corrected here; harness wording flaw, migration invariants unaffected)
+AC-K73d PASS: all assertions evaluated before any write
+AC-K73e PASS: row byte-identical old-board == archive section (sha256[:16]=4c82f4fd3b3aa28a)

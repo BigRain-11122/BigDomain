@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-09-30T01:00:51+08:00",
+  "export_ts": "2026-09-30T01:14:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R628 触线整编 R53（state.json 轮首 80,237B 越 80,000B 水位线→窗 L57..63 压 1 汇总行·终态 76,317B）+QA charter 09-30 每日 crawl 承做（《小程序交易保证金管理规定》官方专门页直采+基准面 E 片翻新+信号墙 W9+smoke 证据四件）；等待态维持：法务外件 ETA 09-30 12:00 收取随今日决策轮；bootstrap 待 CEO 物理件",
-    "latest_artifact": "docs/global-benchmarks.md 交易保证金律行（《小程序交易保证金管理规定》 A 级专门页直采 product/jiaoyilei/bangzhengjin95.html·规则 2025-11-06 更新公示：订阅制+交易保障标=类目保证金显式触发·体验分 80 分含 80·就高原则附件例1 例证·余额警示 15/30 日+50%/10/15 日阶梯·退还节六条件门·附件全渲染［会员自动续费功能 10000 元+虚拟物品交易 GMV 六档 1000→100000 元］·消费落点 P-47②④⑤）+信号墙 W9+qa/smoke-R628.log+png·2026-09-30T01:00:51+08:00",
-    "next_milestone": "D-20260929-03 法务外件收取随 09-30 决策轮（ETA 09-30 12:00）→归属感经济律随批修订承接；S8b 静机复测 09-30 13:00 后；OSS 稣 3 10-02 21:40；explore 队列余行=下轮产品储备（会员订阅定价带=过会后·微信小程序虚拟支付=商户号后）；BD-PROP-001 提案首回访 10-05 周轮"
+    "current": "R629 C3 交易大厅增值特效消费面落地轮（三轮列全门控后补队列拉正典价目余面·O-2026-0929-027 零闲置令+R619 restock 先例）：LobbyEffectsFace 四品类特效 credits 面落地·套件 7/7+reconcile_all 26 套件 224 判据零回归·板规刀 73 随轮；等待态维持：法务外件 ETA 09-30 12:00 收取随今日决策轮；bootstrap 待 CEO 物理件",
+    "latest_artifact": "src/sandbox/ledger/effects.py EffectsFace（C3 交易大厅增值特效消费面：动态表情/涨停特效/刷屏特效/单条置顶四品类 credits·购/用双幂等·一券一效双向溯源·spend=唯一代币触点·effect 行不可变）+test_effects.py SUITE 7/7+reconcile_all RUNNER PASS 224 判据+对账 6/6·qa/effects-R629.log+qa/effects-runner-R629.log·2026-09-30T01:14+08:00",
+    "next_milestone": "D-20260929-03 法务外件收取随 09-30 决策轮（ETA 09-30 12:00）→归属感经济律随批修订承接；S8b 静机复测 09-30 13:00 后；OSS 窗 3 10-02 21:40；正典价目面盘点收口（C1..C7/B1..B6 全落地）→产品储备转 explore 余行（会员订阅定价带=过会后·微信小程序虚拟支付=商户号后）；BD-PROP-001 提案首回访 10-05 周轮"
   },
   "depts": [
     {
@@ -220,7 +220,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "628",
+      "629",
       "OSLoop 轮次 tick"
     ],
     [
@@ -842,15 +842,23 @@
     [
       "1",
       "板规执法第七十二刀（R626/R627 两滞板 done 行 verbatim 迁 done 档 §R628 节·纯 append prefix 断言·AC-K72a..e 全过·qa/board-R628.log·R628）"
+    ],
+    [
+      "2",
+      "C3 交易大厅增值特效消费面沙箱件（explore 补队列·正典价目余面=BLUEPRINT §四 C 端 3 特效消费行·O-2026-0929-027 零闲置令+R619 restock 先例：src/sandbox/ledger/effects.py EffectsFace 四品类〔动态表情/涨停特效/刷屏特效/单条置顶〕·一 spend 绑一 credit 绑 tx 溯源·use_ref 幂等·跨户 replay 拒 E_EFF_DUP_USE·一券一效双向回绑·consumption=唯一 UPDATE 面·effect 行不可变·message_ref=已过 lobby 内容闸消息引用零第二通道·服务端裁权 IF-9 引用·member 档位特权面引用不双建·AC-LE1..LE7 预注册=板行先于代码·SUITE 7/7 首跑全绿 exit=0·reconcile_all 扩二十六套件 RUNNER PASS 224 判据+对账控制 6/6 20.7s 零回归·qa/effects-R629.log+qa/effects-runner-R629.log·价目锚全 [needs-CEO] P1 呈批·R629）"
+    ],
+    [
+      "1",
+      "板规执法第七十三刀（R628 滞板 done 行 1796 chars verbatim 迁 done 档 §R629 节·302,258B→305,126B 纯 append prefix 断言·sha16=4c82f4fd3b3aa28a·AC-K73a..e 全过·刀首跑两处工具件缺陷如实注〔ROOT 少升一层 FileNotFoundError 零写盘中止+sanity 断言 ASCII 括号误判全角括号·修后净跑全过〕·qa/board-R629.log·R629）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-24..2026-09-30",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 9,
