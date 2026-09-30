@@ -1,0 +1,46 @@
+R693 state fold R72 (cut 74) + closeout | P-2026-09-25-18 item-5 mainline
+pre-op bytes: 81947
+AC-R721a pre-op byte-identical to git HEAD blob                  -> PASS
+pre-op tick == 692                                               -> PASS
+pre-op log items: 63
+AC-R722w0 window[0] prefix '607+R685..R689'                      -> PASS
+AC-R722w1 window[1] prefix '26-09-30 R690（'                      -> PASS
+AC-R722w2 window[2] prefix '0 R690 tokens:'                      -> PASS
+AC-R722w3 window[3] prefix '26-09-30 R691（'                      -> PASS
+AC-R722w4 window[4] prefix '0 R691 tokens:'                      -> PASS
+AC-R722w5 window[5] prefix '26-09-30 R692（'                      -> PASS
+AC-R722w6 window[6] prefix '0 R692 tokens:'                      -> PASS
+P/D/O/XL catalog (35 tokens, regex dedup): P-2026-09-25-18,P-2026-09-29-07,O-2026-0930-001,D-20260930-19,O-2026-0930-002,O-2026-0930-1435,D-06,D-16,D-20260929-03,D-20260930-03,D-20260930-18,D-20260930-20,D-20260930-22,D-22,D-31,O-2026-0929-016,O-2026-0929-017,O-2026-0929-018,O-2026-0929-019,O-2026-0929-020,O-2026-0929-021,O-2026-0929-022,O-2026-0929-027,P-001,P-32,XL-16,D-20260930-35,D-34,D-35,D-20260930-36,O-20260930-1500,O-2026-0930-1521,D-36,D-20260930-25,D-18
+AC-R721b archive markers before == 64 (actual 64)                -> PASS
+AC-R721c archive pure-append prefix assertion                    -> PASS
+AC-R721d archive markers after == 65 (actual 65)                 -> PASS
+AC-R721e archive re-read == intended bytes                       -> PASS
+AC-R722a head block verbatim (56 items)                          -> PASS
+AC-R722b window 7 -> 1 (log 63 -> 57)                            -> PASS
+INFO round-trip byte identity of untouched file: True
+post-fold bytes: 73072
+AC-R723a folded parses, tick 692 preserved, log 57               -> PASS
+AC-R724 final 76510B <= 78500B gate (margin 1990B)               -> PASS
+AC-R723b final parses, tick 693, log 59, tail tokens line        -> PASS
+AC-R723c top fields preserved (order/rows/bench/dec_tokens)      -> PASS
+final bytes: 76510 | margin: 1990
+self_drive recount: W=21 tokens=8 idle=37 nop=0 decl=0 p2=2 substantive=11
+export self_drive prev: W=25 idle=8 nop=0 sub=14
+export re-parse OK, tick row 693, results +1 (187)               -> PASS
+heartbeat R693 row appended (2298 bytes line)                    -> PASS
+AC-R725 receipt carriers: state log line + backlog done row + commit msg (commit follows script) -> PASS
+post-fold 73072B | final 76510B | margin 1990B | W/idle/nop/sub 21/37/0/11
+ALL PASS
+
+== self_drive counter correction (pre-commit, probe-caught) ==
+first closeout pass wrote W=21 idle=37 nop=0 sub=11 -> two criterion bugs:
+bug-a: window date anchor ^2026-09-2[4-9] missed all 2026-09-30 round lines
+  (R690/R691/R692 pairs at R691-refresh time, R693 pair this round)
+bug-b: idle counter counted paren window-summary mentions (idle=37 > W, broken)
+probe evidence: logs/probe_r693.py output - 21 head-block round lines listed,
+  idle flags on R256/R265/R266/R267/R268/R450/R460/R468 = 8 = prior export value
+corrected criterion (round-level population, dates 2026-09-24..30 inclusive):
+  W=23 tokens=9 idle=8 nop=0 decl=0 p2=1 substantive=13
+drift vs prior export (25/8/0/14): W -2, substantive -1 = fold delta only,
+  idle 8=8 nop 0=0 reproduced exactly, zero unexplained drift
+export self_drive patched pre-commit; state.json closeout wording unaffected
