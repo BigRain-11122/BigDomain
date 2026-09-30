@@ -1,0 +1,8 @@
+﻿XL-16 cleanup R711 evidence (D-20260930-06 audit improvement list)
+before: docs/_trash=661.6MB (1064 files), .codely-cli/auto-saves=607.8MB
+action: removed docs/_trash entirely (git-ignored, 7d-observation face, oldest 09-24); removed auto-saves with LastWriteTime < 09/30/2026 00:00:00 (closed sessions, all committed)
+kept: today's auto-saves 261.7MB (active-session recovery)
+after: docs/_trash=absent, .codely-cli/auto-saves=261.7MB
+freed: 1007.7MB
+repo total (no .git) after: 0.28GB
+
