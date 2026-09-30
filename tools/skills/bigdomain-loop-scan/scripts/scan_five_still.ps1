@@ -89,6 +89,12 @@ try {
 } catch { Write-Output '[DEC] FLAG read_failed' }
 
 # --- [GORD] group docs/orders.md FULL-FILE scan (D-20260927-05(2) adopted 2026-09-27: active-order rows land in the head table region and mid-table, tail-only scan had blind spots) ---
+# R763 multi-row batch blind-spot fix (R709 evidence: a 3-row order batch landed right after
+# the scan window; the single-last-row display surfaced only the newest row O-017, the older
+# two batch rows needed a manual tail re-read): display the LAST 3 table rows plus a
+# mechanical new-row count vs the state baseline last_gord_tbl_rows (kept at ack/judgment
+# closeout, same discipline as last_dec_tokens). Absent baseline -> baseline_missing (INFO),
+# negative count -> rows were removed (honest display, formatting drift).
 try {
   $gt = Get-GroupFile 'docs/orders.md'
   $gordRaw = $gt.raw
@@ -98,12 +104,24 @@ try {
   $shaProv.Dispose()
   $tbl = @($O | Select-String -Pattern '^\|\s*\d{2}-\d{2}')
   $atbd = @($O | Select-String -SimpleMatch '@BigDomain').Count
-  $lastTbl = [string]($tbl | Select-Object -Last 1)
-  $t = $lastTbl; if ($t.Length -gt 200) { $t = $t.Substring(0, 200) + '...' }
+  $gordBaseRows = $null
+  if ($st -ne $null -and @($st.PSObject.Properties.Name) -contains 'last_gord_tbl_rows') { $gordBaseRows = [int]$st.last_gord_tbl_rows }
+  if ($null -ne $gordBaseRows) {
+    $newRows = [string]($tbl.Count - $gordBaseRows)
+  } else {
+    $newRows = 'baseline_missing (init state.json last_gord_tbl_rows at ack closeout)'
+  }
+  Write-Output "[GORD] INFO lines=$($O.Count) tbl_rows=$($tbl.Count) atbd=$atbd sha16=$sha16 gord_new_rows=$newRows"
+  $lastN = @($tbl | Select-Object -Last 3)
+  $pos = $lastN.Count
+  foreach ($row in $lastN) {
+    $s = [string]$row
+    if ($s.Length -gt 200) { $s = $s.Substring(0, 200) + '...' }
+    Write-Output "  gord_tbl_last3[-$pos]: $s"
+    $pos--
+  }
   $lastLine = [string]$O[$O.Count - 1]
   $u = $lastLine; if ($u.Length -gt 200) { $u = $u.Substring(0, 200) + '...' }
-  Write-Output "[GORD] INFO lines=$($O.Count) tbl_rows=$($tbl.Count) atbd=$atbd sha16=$sha16"
-  Write-Output "  gord_last_table_row: $t"
   Write-Output "  gord_last_line: $u"
 } catch { Write-Output '[GORD] FLAG read_failed' }
 

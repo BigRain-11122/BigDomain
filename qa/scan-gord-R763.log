@@ -1,0 +1,56 @@
+﻿== qa/scan-gord-R763.log - scan GORD multi-row blind-spot fix (tech queue top item, R709 evidence) ==
+PREREG: src/os/backlog.md R763 row (AC-G1..G6) written BEFORE code change; harness pre-reg AC-SC11/SC12 in header.
+
+-- [1] harness test_scan_faces.ps1 full run (installed copy under test) --
+PASS AC-SC1 (bottom-appended new row flagged with last/baseline tokens)
+PASS AC-SC1 (ord_last detail line names the bottom row)
+PASS AC-SC2 (matching last-row token -> ORD PASS)
+PASS AC-SC3 (broken state -> STATE FLAG back-off signal)
+PASS AC-SC3 (ORD degrades to INFO when state unavailable)
+PASS AC-SC3 (scan child exits 0 on degraded state (no crash))
+PASS AC-SC4 (index.lock -> TREE FLAG back-off)
+PASS AC-SC5 (clean tree -> TREE PASS)
+PASS AC-SC6 (dirty tree -> TREE FLAG with count)
+PASS AC-SC6 (git detail line lists the dirty entry)
+PASS AC-SC7 (ahead-1 divergence detected)
+PASS AC-SC7 (not-a-local-other-writer note present)
+PASS AC-SC8 (today evidence + today benchmarks -> QA PASS)
+PASS AC-SC9 (missing evidence + stale benchmarks -> QA FLAG)
+PASS AC-SC9 (charter due note present)
+PASS AC-SC11 (last3 block shows the newest batch row)
+PASS AC-SC11 (last3 block shows both older batch rows (R709 blind-spot face))
+PASS AC-SC11 (no baseline field -> baseline_missing (INFO, no crash))
+PASS AC-SC12 (new-row count = tbl_rows - baseline (4-2=2))
+PASS AC-SC12 (scan child exits 0 with GORD baseline math active)
+PASS AC-SC10 (sandbox scan copy byte-identical to real script (sha256 match))
+PASS AC-SC10 (harness pure ASCII (non-ascii bytes=0))
+ALL CRITERIA PASS (AC-SC1..SC12, 23 checks)
+HARNESS EXIT CODE: 0
+
+-- [2] live scan re-run on real repo (state.json now carries last_gord_tbl_rows=141) --
+[STATE] PASS tick=762 last_order=2026-09-28 22:1x last_decision_rows=192 benchmarks_refreshed=2026-10-01 log_lines=60 state_bytes=79599
+[LEDGER] PASS lines=262 atbd_rows=26 conflict=0 lastp=P-2026-09-29-10,P-2026-09-29-13,P-2026-09-29-13
+[DEC] PASS rows=192 known_tokens=112 (content-addressed; row baseline=192 secondary)
+[GORD] INFO lines=260 tbl_rows=141 atbd=7 sha16=D978090E216C436D gord_new_rows=0
+  gord_tbl_last3[-3]: | 09-30 ~20:5x | 「游戏子公司全力推进项目的研发。已经准备上建的，上线的游戏全部回去走一遍流程。我现在的研究标准非常的高，不要轻易的就让我看。」（判读注记：「上建」按「上线」STT 邻位误写读取；「研究标准」判读=CEO 验收/呈审标准·原话一字不改锚定） | **Biggame 全速研发+存量游戏全量回流程+CEO 呈审门自律令**（registry O-20260930-192...
+  gord_tbl_last3[-2]: | 09-30 ~20:5x | 「量化金融公司一定要确保利用好机队的 CPU 效率。」 | **O-20260930-2054 机队 CPU 效率确保令（O-1858 修正案·总动员即刻生效+低效诊断律）**（@BigMoney 承接·GM 直执·双面传播）：①**实况承认**=09-30 20:54 本机 CPU 实测 9.9%=夜间低效窗实证（O-1858「10-01 起」排程缺陷·GM 自...
+  gord_tbl_last3[-1]: | 09-30 ~22:2x | 「决策委员会要牵头，让各子公司不停的迭代自己的工作流，让他们的工作流更加顺畅、高效、简洁。然后还要先进和创新。」 | **工作流持续迭代令（委员会牵头·各司不停自我迭代·四标+双翼）**（registry O-2026-0930-025·CEO 直令点名委员会通道·四环周期律执法升格·承接 C-20260928-02 梳理批+流程瘦身日 §8.5）：①**牵头面*...
+  gord_last_line: | 09-30 ~22:2x | 「决策委员会要牵头，让各子公司不停的迭代自己的工作流，让他们的工作流更加顺畅、高效、简洁。然后还要先进和创新。」 | **工作流持续迭代令（委员会牵头·各司不停自我迭代·四标+双翼）**（registry O-2026-0930-025·CEO 直令点名委员会通道·四环周期律执法升格·承接 C-20260928-02 梳理批+流程瘦身日 §8.5）：①**牵头面*...
+[GROUPSRC] cph4/evolution-ledger.md=origin-main docs/decisions.md=origin-main docs/orders.md=origin-main | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only
+[ORD] PASS last=2026-09-28 22:1x baseline=2026-09-28 22:1x
+[BENCH] PASS days=0 refreshed=2026-10-01
+[QA] PASS today_png=1 today_log=1 bench_today=True
+[TASKS] INFO tasks_unchecked=2 backlog_open=4 blocked_on_ceo=1 claimable=3
+[EXPORT] PASS age_h=0.6 export_ts=2026-10-01T06:30:36+08:00
+[TREE] FLAG dirty=5
+  git:  M src/os/backlog.md
+  git:  M src/os/state.json
+  git:  M src/os/test_scan_faces.ps1
+  git:  M tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1
+  git: ?? qa/scan-gord-R763.log
+LIVE SCAN EXIT CODE: 0
+
+-- [3] dual-copy sha256 (AC-G3) --
+source    sha256=556E7FF34A697AFA6BFE602A19E7E9F7BAAC12D8C44CF8F1DCA6516C753D5360
+installed sha256=556E7FF34A697AFA6BFE602A19E7E9F7BAAC12D8C44CF8F1DCA6516C753D5360
+AC-G3 PASS: byte-identical dual copies

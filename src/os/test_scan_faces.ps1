@@ -1,11 +1,15 @@
 # test_scan_faces.ps1 - regression harness for scan_five_still.ps1 judgment faces.
-# Scope = the three newer faces (tech queue item, R531/R530 rework successor):
+# Scope = the newer faces (tech queue items, R531/R530 rework + R763 GORD extension):
 #   [ORD]  own orders.md LAST table-row first-cell token vs state.last_order
 #          baseline (R531 rework: bottom-appended rows must be seen; the old
 #          first-row + HH:MM read was blind to them).
 #   [TREE] single-writer check: index.lock / dirty / ahead-behind divergence
 #          with the "NOT a local other-writer" note.
 #   [QA]   daily smoke evidence charter face (png + log + benchmarks today).
+#   [GORD] group orders multi-row batch face (R763: last-3 table rows visible
+#          + mechanical new-row count vs state.last_gord_tbl_rows; R709
+#          evidence: a 3-row batch hid two rows behind a single-last-row
+#          display and needed a manual tail re-read).
 # Other faces get minimal fixtures so the real scan script runs end to end;
 # they are deliberately NOT asserted (scope control).
 #
@@ -30,6 +34,13 @@
 #           today_log=1 bench_today=True".
 #   AC-SC9  no qa evidence + stale benchmarks -> "[QA] FLAG today_png=0
 #           today_log=0 bench_today=False" + "(charter daily crawl round due)".
+#   AC-SC11 GORD multi-row batch (4 table rows, 3-row batch at the tail)
+#           -> all three "gord_tbl_last3[-1..-3]" lines present naming the
+#           batch rows (R709 blind-spot face: no manual tail re-read needed);
+#           state without last_gord_tbl_rows -> "gord_new_rows=baseline_missing"
+#           (INFO, no crash).
+#   AC-SC12 GORD new-row count math: state last_gord_tbl_rows=2 vs 4 table
+#           rows -> "gord_new_rows=2"; scan child still exits 0.
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -201,6 +212,37 @@ try {
     Assert ($r.text -match '\[QA\] FLAG today_png=0 today_log=0 bench_today=False') 'AC-SC9' 'missing evidence + stale benchmarks -> QA FLAG'
     Assert ($r.text -match '\(charter daily crawl round due\)') 'AC-SC9' 'charter due note present'
 
+    # --- [GORD] face (R763 extension) -------------------------------------
+    # AC-SC11: a 3-row order batch at the tail must be fully visible in the
+    # last3 block; state without last_gord_tbl_rows -> baseline_missing INFO.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-Group 'docs\orders.md' @(
+        '| 09-28 | old group order fixture row | dispatched |',
+        '| 09-30 ~21:0x | batch row one O-015 | dispatched |',
+        '| 09-30 ~21:1x | batch row two O-016 | dispatched |',
+        '| 09-30 ~21:2x | batch row three O-017 | dispatched |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match 'gord_tbl_last3\[-1\]: .*batch row three O-017') 'AC-SC11' 'last3 block shows the newest batch row'
+    Assert ($r.text -match 'gord_tbl_last3\[-2\]: .*batch row two O-016' -and $r.text -match 'gord_tbl_last3\[-3\]: .*batch row one O-015') 'AC-SC11' 'last3 block shows both older batch rows (R709 blind-spot face)'
+    Assert ($r.text -match '\[GORD\] INFO lines=\d+ tbl_rows=4 atbd=\d+ sha16=[0-9A-F]{16} gord_new_rows=baseline_missing') 'AC-SC11' 'no baseline field -> baseline_missing (INFO, no crash)'
+
+    # AC-SC12: new-row count = current tbl_rows - state baseline (4 - 2 = 2).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') ('{"tick":9,"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '","last_gord_tbl_rows":2,"log":["a","b"]}') $false
+    Write-Group 'docs\orders.md' @(
+        '| 09-28 | old group order fixture row | dispatched |',
+        '| 09-30 ~21:0x | batch row one O-015 | dispatched |',
+        '| 09-30 ~21:1x | batch row two O-016 | dispatched |',
+        '| 09-30 ~21:2x | batch row three O-017 | dispatched |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match 'gord_new_rows=2(?!\d)') 'AC-SC12' 'new-row count = tbl_rows - baseline (4-2=2)'
+    Assert ($r.code -eq 0) 'AC-SC12' 'scan child exits 0 with GORD baseline math active'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -219,7 +261,7 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-$checks = 17
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC10, " + $checks + " checks)"); exit 0 }
+$checks = 23
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC12, " + $checks + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2
