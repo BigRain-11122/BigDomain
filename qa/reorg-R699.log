@@ -1,0 +1,41 @@
+BigDomain OSLoop R699 - state.json reorg R74 (76th cut) AC verification
+mandate: P-2026-09-25-18 cut-5 waterline law; trigger: round-start 82050B > 80000B (R698 handover note)
+window folded: R695/R696/R697/R698 four round-pairs, 8 lines, 9555B content -> 1 window summary row
+P/D catalog (regex mechanical dedup): D-06,D-18,D-19,D-20,D-20260929-03,D-20260930-05,D-20260930-19,D-20260930-20,D-20260930-38,D-20260930-39,D-20260930-40,D-36,D-39,P-001,P-2026-09-25-18,P-32
+pre-op size: 82050 bytes; post closeout: 76522 bytes (margin 1978B vs 78500B gate)
+archive: pre markers=66 post markers=67, prefix intact, backup logs/state-preop-R699.bak byte-identical
+log items: 64 -> 59 (head 56 verbatim + 1 window summary + R699 pair)
+self_drive recount (anchored criterion): W=23 idle=8 no-pullable=0 substantive=13
+p2 receipt-line criterion: 'P2 shangbao HQ-FEEDBACK' receipt form only; passing mentions excluded (diagnostic: R265 gord line mentions a closed P2 report, is not a receipt; first pre-write run aborted on loose marker, zero writes)
+
+[PASS] AC-R741 preop-bytes-82050 bytes=82050
+[PASS] AC-R741 no-BOM-first3 [123, 10, 32]
+[PASS] AC-R742 canonical-roundtrip trailing_nl=False
+[PASS] AC-R742 log-len-64 len=64
+[PASS] AC-R742 window-8-prefixes R695..R698 pairs
+[PASS] AC-R742 folded-9555B folded=9555B
+[PASS] AC-R744 final-le-78500 final=76522 margin=1978
+[PASS] AC-R743 tick-699 699
+[PASS] AC-R743 dec-tokens-101 n=101
+[PASS] AC-R743 rows-164 164
+[PASS] AC-R743 last-order 2026-09-28 22:1x
+[PASS] AC-R743 bench-refreshed 2026-09-30
+[PASS] AC-R744 log-len-59 len=59
+[PASS] AC-R742 head-56-verbatim head preserved
+[PASS] AC-R744 selfdrive-W-23 W=23
+[PASS] AC-R744 selfdrive-idle-8 idle=8
+[PASS] AC-R744 selfdrive-nop-0 nop=0
+[PASS] AC-R744 selfdrive-subst-13 subst=13
+[PASS] AC-R741 archive-marker-baseline-66 markers=66
+[PASS] AC-R741 backup-identical state-preop-R699.bak
+[PASS] AC-R741 archive-prefix-intact len 6294688 -> 6376818
+[PASS] AC-R741 archive-marker-66-to-67 markers=67
+[PASS] AC-R744 on-disk-equals-claim disk=76522 claim=76522
+[PASS] AC-R744 state-reparse 
+[PASS] export-has-BOM [239, 187, 191]
+[PASS] export-canonical-roundtrip trailing=True
+[PASS] export-tick-row-698-to-699 results tick row
+[PASS] export-reparse 2026-09-30T17:02:39+08:00
+[PASS] heartbeat-appended 2026-09-30 17:02 +08:00 
+
+VERDICT: PASS (AC-R741..R745 all pass; PS ConvertFrom-Json dual-parse leg run separately)
