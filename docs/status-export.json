@@ -1,9 +1,9 @@
 ﻿{
-  "export_ts": "2026-09-30T22:07:30+08:00",
+  "export_ts": "2026-09-30T22:18:36+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R727 R84 水位整编轮（计分 1=机制实改）：state.json 轮首首测 82,365B 越 80,000B 线=R726 承传注记兑现→R84 整编第八十六刀（窗〔R83 前窗摘要+R723..R726 四轮对〕9 行 13,322B 压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档 archive §R727 append 节 marker 76→77+备份件 logs/state-preop-R727.bak·post-fold 73,371B·终态 76,019B 余量 2,481B·AC-R841..R845 全过=qa/reorg-R727.log·首跑净跑零拦截）；九面 scan 持平零新令（GORD sha16 同 R721..R726 基线·DEC 102 token 集持平〔行数 165 辅证〕）；D-20260930-19 双消费步 ≤15min 窗免重扫（机械证据=token 集/sha16 双持平）；heartbeat R727 行（cpu3/ram94/lanes3 CIM 实测·R532 常设律）；backlog 四 open 全 gated（10-01 00:00 AC-RG4+O-013 每日核对·10-02 12:00 法务外件+D-19 验收窗·bootstrap 待 CEO 物理件）",
-    "latest_artifact": "qa/reorg-R727.log（R84 fold 证据件·2026-09-30 ~22:1x·AC-R841..R845 全过+heartbeat R727 行）；CEO 可开前台=preview/index.html v0.2（R698·qa/preview-v02-R698.log 8/8·服务器物理件到位后升 http URL）",
+    "current": "R728 XL-16 前台升级 v0.3（轮计分 2=能看实物·D-20260930-06③ 切片·D-20260930-08② 再生律）：preview v0.2 file:// 静态面→本地活体 HTTP URL http://127.0.0.1:8093/（src/sandbox/frontdoor.py 纯组合零改既有面：city 真数据+journey_demo 实跑 DEMO PASS 证据嵌入+lobby/pay config 合规三常驻面运行时派生·8 断言全过+全页截图）；auto-saves 复清 320,637,331B→0（R711 后宿主自动存档再蓄积·复发性注）；D-20260930-19①② 双消费步新读零新本司行（通告板 D-05..15 全旧令+CEO 物理件区商户号仍最高优先零变化）；D-20260929-03 触发查双路径零命中续候（新窗 10-02 12:00）；勘误如实记：XL-16 主体 R683/R711 已回执在案（本轮初判「未认领」=fold 后 log 零 XL 字样误读·export results 实锚当场纠偏）；九面 scan 持平零新令（GORD 尾行 O-20260930-2054 R721 已回执）",
+    "latest_artifact": "http://127.0.0.1:8093/ 本地活体沙箱前门 v0.3（src/sandbox/frontdoor.py·2026-09-30 22:18·qa/xl16-R728.log 8 断言全过+qa/xl16-frontdoor-R728.png 全页截图·一键重启器 src/sandbox/frontdoor_start.bat）——CEO 可开前台=浏览器直达 URL；preview/index.html v0.2（file://）仍在盘",
     "next_milestone": "10-01 00:00 首轮三并：AC-RG4 全绿复验出窗（backlog 顶行·OSLoop 自动承接）+O-013 每日核对+token 执法机内首报（并入 O-2026-0930-017 口径）；10-02 12:00 法务外件窗+D-20260930-19 验收窗；10-02 21:40 OSS 窗 3 切片；10-07 benchmark 刷新+token 判据回访（O-014 五判据+O-017 质量对照+1）+T2 否决窗（长假窗内全部自治处置）；R-D2/R-D3 翻绿=CEO 物理件到位后 bootstrap 填登记面即机械翻绿；预览件 http URL 升级=服务器物理件到位后 48h 内（v0.2 内容面已交 R698）"
   },
   "depts": [
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·自包含 file:// 可开·http URL 升级 gated on 服务器物理件"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "727",
+      "728",
       "OSLoop 轮次 tick"
     ],
     [
@@ -985,15 +985,19 @@
     [
       "1",
       "state.json 再整编 R84（R727·轮首实测 82,365B 越 80,000B 线=R726 承传注记兑现·窗〔R83 前窗摘要+R723..R726 四轮对〕9 行 13,322B 压 1 滚窗汇总行·pre-op==git HEAD blob 入档 archive §R727 append 节（marker 76→77·pure-append 断言）+备份件 logs/state-preop-R727.bak·post-fold 73,371B 终态 76,019B（margin 2,481B）≤78,500B 闸·AC-R841..R845 全过=qa/reorg-R727.log·P-2026-09-25-18 ⓕ主线第八十六刀）+heartbeat R727 行（cpu3/ram94/lanes3 CIM 实测·R532 常设律）"
+    ],
+    [
+      "1",
+      "XL-16 前台升级 v0.3 件（D-20260930-06③ 切片·D-20260930-08② 再生律·R728）：src/sandbox/frontdoor.py+frontdoor_start.bat=本地活体 HTTP URL http://127.0.0.1:8093/（preview v0.2 file:// 静态面→活体 URL 面·纯组合零改既有面：city 真数据+journey_demo 实跑 DEMO PASS 证据嵌入+lobby/pay config 运行时派生合规三常驻面·localhost 绑定零新外部 API 触点）·8 断言全过+全页截图=qa/xl16-R728.log+qa/xl16-frontdoor-R728.png·auto-saves 复清 320,637,331B→0（R711 后再蓄积）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-24..2026-09-30",
     "window_days": 7,
-    "log_lines_in_window": 54,
+    "log_lines_in_window": 56,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 2,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

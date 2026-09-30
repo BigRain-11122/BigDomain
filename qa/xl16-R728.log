@@ -1,0 +1,33 @@
+XL-16 frontdoor verification log (R728, 2026-09-30 ~22:2x +08:00)
+Group dispatch: D-20260930-06 / XL-16 (window 10-07), BigDomain slice.
+Deliverable: 1 openable URL assembled from the existing lobby/pay sandbox.
+
+URL: http://127.0.0.1:8093/  (local, bound to 127.0.0.1)
+Relauncher: src/sandbox/frontdoor_start.bat (one click)
+Composer: src/sandbox/frontdoor.py (pure composition: 0 new business
+faces, 0 modifications to existing sandbox files; all Chinese runtime
+text loaded from real config/data artifacts)
+
+Verification (Invoke-WebRequest, live server):
+  healthz: 200 ok
+  root:    200, 8351 bytes
+  ai_label present:       True  (from lobby config ai_label_text)
+  lobby persistent warn:  True  (non-advisory, non-collapsible footer)
+  pay persistent warn:    True  (non-advisory, non-collapsible footer)
+  city population 1024:   True  (world-public.json real snapshot)
+  journey DEMO PASS:      True  (real subprocess run of journey_demo.py
+                                at server start, exit code checked)
+  journey J9 CONSERVATION: True (exact-match balance conservation)
+  sku 19.90 CNY:          True  (pay config real SKU)
+
+Browser check (Playwright): page loads, title correct; console has 1
+benign error only (favicon.ico 404), 0 JS errors.
+Screenshot: qa/xl16-frontdoor-R728.png (full page).
+
+Bloat cleanup (XL-16 piece 2):
+  docs/_trash: already absent on this round (previously cleaned).
+  .codely-cli/auto-saves: see round log for before/after bytes
+  (.codely-cli/skills preserved: in-use loop skill asset; tmp kept).
+
+Physical-item blocking list (XL-16 piece 3): presented to CEO via
+HQ-FEEDBACK.md line (P1), same round.
