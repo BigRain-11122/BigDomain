@@ -1,0 +1,49 @@
+qa/reorg-R710.log - state.json fold R78 (80th cut) evidence - P-2026-09-25-18 main line
+generated: 2026-09-30T19:09:56
+
+== AC pre-registration (written to disk BEFORE any state/archive/export write; trigger = R709 carry-note: next-round round-start first-measure over 80000B line -> R78 fold same-pattern, R707 precedent) ==
+AC-R781: pre-op byte-identical to git HEAD blob; full snapshot appended to logs/state-log-archive-2026-09.md as R710 append section (marker 70->71, pure-append prefix assertion) + backup logs/state-preop-R710.bak
+AC-R782: window 7 lines [R77 prior window-summary + R707/R708/R709 three pairs, exactly 1 status + 1 tokens line each (probe)] -> 1 rolling paren summary; mechanical round list R707..R709 complete; P/D/O catalog regex mechanical dedup; head block 55 items verbatim
+AC-R783: top fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens); json.loads script assertion + PowerShell ConvertFrom-Json independent re-verification
+AC-R784: post-fold <= 80000B + final (with closeout pair) <= 78500B margin gate; verify-then-write: all gates checked in memory before any disk write
+AC-R785: receipt triple = R710 status line + commit message contains P-2026-09-25-18 + O-2026-0930-06/1856/1858/1901 (P-51 carrier law, D-20260930-20 numbered reference)
+
+== execution log ==
+pre-op size = 83953 B; BOM=False; roundtrip fmt: indent=2 trailing_newline=False
+HEAD blob = 83953 B; pre-op == HEAD blob: True
+window structure ok = True ; 7 lines content = 14927 B ; head block = 55 items
+pre-op mechanical counters = {'W': 27, 'tokens': 11, 'idle': 8, 'nop': 0, 'sub': 16} (in-export W27/tok11/idle8/nop0/sub16)
+P/D/O catalog (regex mechanical dedup) = 110 tokens
+post-fold size (projected) = 73151 B
+final size (projected) = 77286 B ; margin vs 78500B gate = 1214 B
+post-closeout counters = {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14}
+archive append markers found = 70 (expect 70)
+archive appended: 6618587 B -> 6702620 B (pure-append ok, marker 70->71)
+state.json written: 83953 B -> 73151 B -> final 77286 B
+post-write: json.loads ok, tick=710, log items=58, head block verbatim, top fields preserved
+PowerShell ConvertFrom-Json: PS_OK tick=710 logcount=58
+export: 162350 B, BOM=True, roundtrip trailing_newline=True
+export refreshed: 162350 B -> 162585 B (tick 710, results R710 row, self_drive recount {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14})
+heartbeat R710 row appended
+
+== probe (logs/probe_r710_out.txt) ==
+win[0] startswith(2026-09-30（R704..R706 窗·R7...) = True ; len=3816B
+win[1] startswith(2026-09-30 R707（...) = True ; len=3081B
+win[2] startswith(2026-09-30 R707 tokens...) = True ; len=239B
+win[3] startswith(2026-09-30 R708（...) = True ; len=2963B
+win[4] startswith(2026-09-30 R708 tokens...) = True ; len=281B
+win[5] startswith(2026-09-30 R709（...) = True ; len=4241B
+win[6] startswith(2026-09-30 R709 tokens...) = True ; len=306B
+window content bytes = 14927 ; head block items = 55 ; total log items = 62
+R707: shikuang=1 tokens=1
+R708: shikuang=1 tokens=1
+R709: shikuang=1 tokens=1
+pre-op counters (criterion: anchored round-level; tokens=R-line "tokens:"; idle=contains "idle-fast"; nop=contains "no-pullable"; sub=W-tokens-nop): {'W': 27, 'tokens': 11, 'idle': 8, 'nop': 0, 'sub': 16}
+post-closeout counters: {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14}
+
+== AC verdicts ==
+AC-R781 PASS: pre-op 83953B == HEAD blob; archive 6618587B -> 6702620B pure-append; marker count 70 -> 71; backup written
+AC-R782 PASS: window 14927B content folded to summary 4173B; head block 55 items verbatim; catalog 110 tokens mechanical
+AC-R783 PASS: json.loads ok (tick 710, log 58 items); PS ConvertFrom-Json ok; top fields byte-identical
+AC-R784 PASS: post-fold 73151B <= 80000B; final 77286B <= 78500B (margin 1214B)
+AC-R785 PENDING-COMMIT: state line + this log on disk; commit to carry P-2026-09-25-18 + O-2026-0930-06/1856/1858/1901
