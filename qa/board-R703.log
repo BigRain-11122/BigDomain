@@ -1,0 +1,6 @@
+AC-K94a PASS: 3 stale done rows located, each exactly once, done-markers present
+  row byte lengths: R702=2041 R699=1918 R695=1670
+AC-K94b PASS: archive pure-append built, ## R703 section, 3 rows verbatim in memory
+AC-K94c PASS: 0 [x] rows remain; 3 gated open rows intact; header lines kept=4
+AC-K94d PASS: on-disk re-read verified, BOM state preserved (archive=True backlog=True)
+AC-K94e PENDING: evidence carriers = this log + state log line + commit message
