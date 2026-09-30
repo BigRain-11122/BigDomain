@@ -1,0 +1,13 @@
+QA evidence log - R673 subscription pricing band research piece
+Date: 2026-09-30 ~11:0x +08:00
+Artifact: docs/research/R-20260930-subscription-pricing-band.md (50 lines, 6548 bytes - measured Get-Content UTF8 / Get-Item)
+
+AC-PB1 PASS - research file on disk, 50 lines <= 80 limit; three-section structure (S1 pricing psychology mechanism face / S2 five-tier gradient mapping face / S3 compliance and approval face) + P-65 consumption landing table (sec 4); measured lines=50 bytes=6548
+AC-PB2 PASS - 2 new web sources collected via host fetch_content, both grade A: S1 https://en.wikipedia.org/wiki/Decoy_effect and S2 https://en.wikipedia.org/wiki/Anchoring_(cognitive_bias), collected 2026-09-30 ~10:58 +08:00, URL+grade+timestamp recorded in doc sec 1 table; zero overlap with existing sources (R266 market-band 4 sources = market prices; benchmarks = platform rules; these 2 = psychology mechanisms); failure face honestly recorded: first web_fetch run returned off-target content (Ariely book page / paper fragment), re-collected via fetch_content, 4 requests 2 hits
+AC-PB3 PASS - five-tier ladder 9.9/19.9/29.9/49.9/99 each has one psychological-role row in sec 2 table; benefit semantics quoted from canon BLUEPRINT L61-L65 (full read this round, L55-L72 window); 29.9 row cites seat4 exclusive-benefit >=1 + seat6 segregation + pre-registered revisit criteria (19.9 displacement <15% and 29.9 conversion >0) as in-canon anchors; relative step sizes computed (x2.0 / x1.5 / x1.67 / x1.98)
+AC-PB4 PASS - all pricing conclusions = [needs-CEO] pricing-confirmation evidence face (veto window to 10-04, P1 zero overreach); compliance four-piece present in sec 3 (AIGC labeling / msgSecCheck not-involved note / non-advisory wording rule / minor top-up limit); falsification tests = in-canon revisit criteria, negative-conclusion-allowed clause kept
+AC-PB5 PASS - delivery three carriers = state log line + backlog done row + commit (this commit); three-questions-gate record = research necessity + no local alternative + standing authorization chain (Self-Drive v2.0 R532 queue item + P-2026-09-26-03 self-drive lineage), read-only host tool, zero code integration zero keys
+
+Round score claim: 1 (actual file changes: research md + qa log + queue/board updates, R603 research-round same-type precedent); not claiming 2 (no runnable/visible product artifact this round).
+
+Waiting items NOT re-scanned this round (per reform clause 2): D-20260929-03 legal external ETA 09-30 12:00 rescan-ban holds; S8b quiet retest window 09-30 13:00 not yet open; AC-RG4 window 10-01 00:00; OSS window3 10-02 21:40; bootstrap CEO physicals.
