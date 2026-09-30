@@ -33,6 +33,14 @@ Usage:
 (the optional path makes this runner tee its own utf-8 evidence log
 while still streaming to the console; pass e.g.
 qa/reconcile-all-R595.log)
+
+Interpreter: run under the full-assembly python (the system install
+carrying cv2, cryptography, blind_watermark, numpy and websockets).
+The lobby suite's minimal .venv (pip + websockets only) is a
+single-suite assembly: it lacks the watermark / pay-v3-real
+dependencies, and on this machine it is denied writes to the system
+temp dir so tempfile.gettempdir() falls back to CWD (R684 triage
+verdict; qa/runner-triage-R684.log).
 """
 
 import json

@@ -1,0 +1,26 @@
+PASS suite lobby exit=0 pass-lines=13 fail-lines=0 criteria=13 8.8s
+PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 1.1s
+PASS suite tourstate exit=0 pass-lines=37 fail-lines=0 criteria=7 0.1s
+  | FAIL AC-U2: serve-refusals no-gate-section=True,empty-forbidden=True,no-gray-words=True,no-disclaimer=True,escape-export=False; cli rc2-with-E_GATE_OFFLINE=True cli-ready=True; gate1-hit=True(E_CONTENT_REJECTED) gate2-hit=True(E_CONTENT_REJECTED) gate-hits-landed-rows=0
+  | PASS AC-U11: feed-lines=['bigdomain.jsonl', 'biggame.jsonl', 'biglife.jsonl', 'bigmoney.jsonl', 'bigstream.jsonl', 'fluxverse.jsonl', 'unsorted.jsonl'] all-inside-repo=True hot-sorted-desc=True rejected->chronicled=True path-gate-refusal-proven-in-AC-U2
+FAIL suite ugc exit=1 pass-lines=11 fail-lines=1 criteria=12 2.3s
+PASS suite pay exit=0 pass-lines=16 fail-lines=0 criteria=16 3.7s
+  | Traceback (most recent call last):
+  | ModuleNotFoundError: No module named 'cryptography'
+PASS suite member exit=0 pass-lines=25 fail-lines=0 criteria=16 2.5s
+  | Traceback (most recent call last):
+  | ModuleNotFoundError: No module named 'cv2'
+FAIL suite watermark exit=1 pass-lines=0 fail-lines=0 criteria=5 0.2s
+  | Traceback (most recent call last):
+  | ModuleNotFoundError: No module named 'cv2'
+  | Traceback (most recent call last):
+  | ModuleNotFoundError: No module named 'cv2'
+PASS suite opsreview exit=0 pass-lines=7 fail-lines=0 criteria=7 1.0s
+PASS suite liveroom exit=0 pass-lines=10 fail-lines=0 criteria=10 0.5s
+RUNNER FAIL (6 failed assertions)
+
+--- R684 triage probes (reproduction + root-cause evidence) ---
+[system python 3.14.4] gettempdir=C:\\Users\\sjs20\\AppData\\Local\\Temp -> escape probe outside repo -> GateOfflineError refusal -> AC-U2 green as designed
+[lobby .venv python 3.14.4] write probe to TEMP dir -> PermissionError(13); tempfile.gettempdir() falls back to CWD = repo root -> escape probe lands INSIDE repo -> no refusal -> AC-U2 escape-export=False (the R681 red)
+[venv pip list] pip + websockets only -> ModuleNotFoundError cv2 (watermark x3) + cryptography (pay-v3-real)
+verdict: product path-gate correct under both interpreters; R681 reds = environment-dependent probe fragility + venv assembly gap. Fix = canonical runner interpreter = system full-assembly python (R321/R598 precedent); escape probe hardened to deterministic parent-of-repo path; full re-run RUNNER PASS 27/27 (qa/runner-triage-R684.log)

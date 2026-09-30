@@ -139,8 +139,13 @@ def run_suite(pipe, cfg, db, tmp, lobby, ls, fw, ab, gw, rules, lk, adv_actor, a
         ("empty-forbidden", lambda c: c["gate"].__setitem__("forbidden_words", [])),
         ("no-gray-words", lambda c: c["gate"].pop("gray_words")),
         ("no-disclaimer", lambda c: c["compliance"].__setitem__("disclaimer", "")),
+        # deterministic outside-repo path: tempfile.gettempdir() can
+        # fall back to CWD (the repo root) on interpreters that are
+        # denied writes to the system temp dir, which silently moves
+        # this "escape" probe inside the repo (R684 triage)
         ("escape-export", lambda c: c.__setitem__(
-            "export", {"dir": os.path.join(tempfile.gettempdir(), "esc")})),
+            "export", {"dir": os.path.realpath(os.path.join(
+                BASE, "..", "..", "..", "..", "ugc-escape-probe"))})),
     ):
         bad = json.loads(json.dumps(cfg))
         mutate(bad)
