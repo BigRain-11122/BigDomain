@@ -1,0 +1,28 @@
+R70 fold (cut 72) evidence - verify-then-write, all checks pre-write
+standing law: P-2026-09-25-18 (5) waterline gate; precedent R685 fold
+AC pre-registered in src/os/backlog.md R687 row BEFORE any disk mutation
+[PASS] AC-R701a pre-op size 80327B
+[PASS] AC-R701b pre-op == git HEAD blob a0182c45fd15
+[PASS] AC-R701f json.dumps round-trip parity indent=2 ensure_ascii=False canonical
+[PASS] AC-R702a log 62 items pre-fold 62
+[PASS] AC-R702b window structure 5 window items anchored
+[PASS] AC-R702c window 8169B content 8169B
+[PASS] AC-R702d P/D/O/XL catalog regex 9 tokens
+[PASS] AC-R703b counter-clean no abolished-tag substrings, catalog resolved
+[PASS] AC-R703b counter-clean no abolished-tag substrings, catalog resolved
+[PASS] AC-R703b counter-clean no abolished-tag substrings, catalog resolved
+[PASS] AC-R704a final <= 78500B margin gate final=77217B margin=1283B postfold=74562B
+[PASS] AC-R703a top fields tick 686->687, others verbatim, log 60 items
+[PASS] AC-R702e head block verbatim 57 items identical
+[PASS] AC-R702f round column R685..R686 consecutive 2 rounds, 1 live + 1 tokens each
+[PASS] AC-R701c archive marker baseline new-format markers=62
+[PASS] AC-R701d archive pure-append prefix 5971181B prefix untouched
+[PASS] AC-R701e marker +1 62->63
+[PASS] AC-R704b on-disk == claimed 77217B == 77217B
+window: 5 lines (8169B) -> 1 summary (R69 window-summary + R685/R686 2 pairs)
+pre-op 80327B archived at archive R687 append section (marker 62->63)
+post-fold 74562B + closeout pair final 77217B (margin 1283B <= 78500B gate)
+P/D/O/XL catalog (9 tokens, regex mechanical dedup): D-20260929-03,D-20260930-03,D-20260930-18,D-20260930-19,D-20260930-20,O-2026-0930-001,P-001,P-32,XL-16
+log items 62 -> 60 (57 head verbatim + 1 window summary + R687 closeout pair)
+tick 686 -> 687; last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens verbatim
+json.dumps canonical: last log item no trailing comma (structural guarantee)
