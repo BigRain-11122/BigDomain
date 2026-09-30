@@ -1,0 +1,171 @@
+{
+    "generated_utc":  "2026-09-30T05:17:06Z",
+    "probe":  "deliverable-probe.ps1 v1.1 (XL-7)",
+    "law_ref":  "D-20260930-06 XL-7 / docs/audits/group-wide-audit-improvement-list-20260930.md",
+    "engine":  "5.1.26100.9168",
+    "units":  [
+                  {
+                      "unit":  "Biggame",
+                      "path":  "gaming\\MiniGame",
+                      "status":  "OK",
+                      "accessible_fronts":  2,
+                      "front_samples":  [
+                                            "硅基生命元宇宙.html",
+                                            "像素小镇看板.html"
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  0,
+                      "evidence_scanned":  [
+                                               "docs\\status-export.json"
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  566,
+                                      "overhead_48h":  164,
+                                      "overhead_pct":  29
+                                  }
+                  },
+                  {
+                      "unit":  "FluxVerse",
+                      "path":  "gaming\\FluxVerse",
+                      "status":  "OK",
+                      "accessible_fronts":  3,
+                      "front_samples":  [
+                                            "city-plan.html",
+                                            "concept-shanghai.html",
+                                            "template.html"
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  0,
+                      "evidence_scanned":  [
+
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  22,
+                                      "overhead_48h":  0,
+                                      "overhead_pct":  0
+                                  }
+                  },
+                  {
+                      "unit":  "BigMoney",
+                      "path":  "quant\\bigmoney",
+                      "status":  "OK",
+                      "accessible_fronts":  10,
+                      "front_samples":  [
+                                            "bigmoney.html",
+                                            "beat_market.html",
+                                            "daily_scorecard.html",
+                                            "guorn_home_raw.html",
+                                            "hibor_microns18_raw.html",
+                                            "jisilu_470708.html",
+                                            "jisilu_504636.html",
+                                            "jisilu_516222.html"
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  0,
+                      "evidence_scanned":  [
+
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  647,
+                                      "overhead_48h":  527,
+                                      "overhead_pct":  81.5
+                                  }
+                  },
+                  {
+                      "unit":  "BigStream",
+                      "path":  "media\\BigStream",
+                      "status":  "OK",
+                      "accessible_fronts":  0,
+                      "front_samples":  [
+
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  7,
+                      "evidence_scanned":  [
+                                               "output\\finished.md",
+                                               "docs\\accounts.md",
+                                               "output\\analytics.md",
+                                               "output\\schedule.md",
+                                               "output\\readiness.md",
+                                               "docs\\status-export.json",
+                                               "output\\reports\\weekly-2026-W40.md"
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  92,
+                                      "overhead_48h":  43,
+                                      "overhead_pct":  46.7
+                                  }
+                  },
+                  {
+                      "unit":  "BigDomain",
+                      "path":  "domain\\BigDomain",
+                      "status":  "OK",
+                      "accessible_fronts":  1,
+                      "front_samples":  [
+                                            "index.html"
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  1,
+                      "evidence_scanned":  [
+                                               "docs\\status-export.json"
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  147,
+                                      "overhead_48h":  123,
+                                      "overhead_pct":  83.7
+                                  }
+                  },
+                  {
+                      "unit":  "BigLife",
+                      "path":  "life\\BigLife",
+                      "status":  "OK",
+                      "accessible_fronts":  0,
+                      "front_samples":  [
+
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  1,
+                      "evidence_scanned":  [
+                                               "docs\\status-export.json"
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  579,
+                                      "overhead_48h":  7,
+                                      "overhead_pct":  1.2
+                                  }
+                  },
+                  {
+                      "unit":  "BigCompute",
+                      "path":  "compute\\BigCompute",
+                      "status":  "OK",
+                      "accessible_fronts":  0,
+                      "front_samples":  [
+
+                                        ],
+                      "published_items":  0,
+                      "real_receipts":  0,
+                      "negative_markers":  1,
+                      "evidence_scanned":  [
+                                               "docs\\status-export.json",
+                                               "state\\month-end-202609.json"
+                                           ],
+                      "commits":  {
+                                      "commits_48h":  38,
+                                      "overhead_48h":  6,
+                                      "overhead_pct":  15.8
+                                  }
+                  }
+              ],
+    "totals":  {
+                   "accessible_fronts":  16,
+                   "published_items":  0,
+                   "real_receipts":  0
+               },
+    "note":  "published_items/real_receipts are EVIDENCE-HIT counts over declared files, not audited truths; 0 = not found (negative evidence, governance 10). accessible_fronts counts product HTML entry files only (report/snapshot/dashboard names excluded)."
+}

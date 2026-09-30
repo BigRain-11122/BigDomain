@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>硅基域 BigDomain · 产品预览 v0.1</title>
+<style>
+  :root { --ink:#182033; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --accent:#3b5bdb; --ok:#2f9e44; --warn:#e8590c; --ceo:#a61e4d; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.65; padding:0 0 48px; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 20px; }
+  header { background:linear-gradient(135deg,#1f2b4d,#3b5bdb); color:#fff; padding:36px 0 28px; }
+  header h1 { font-size:26px; letter-spacing:1px; }
+  header .sub { margin-top:6px; font-size:14px; opacity:.92; }
+  .badges { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+  .badge { font-size:12px; border:1px solid rgba(255,255,255,.55); border-radius:999px; padding:2px 10px; }
+  .badge.ai { background:#fff; color:#1f2b4d; font-weight:700; border-color:#fff; }
+  h2 { font-size:18px; margin:34px 0 12px; padding-left:10px; border-left:4px solid var(--accent); }
+  .note { font-size:12px; color:var(--muted); margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); font-size:14px; }
+  th,td { border-bottom:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top; }
+  th { background:#eef1f6; font-size:13px; }
+  .tag { display:inline-block; font-size:11px; border-radius:4px; padding:1px 6px; margin:1px 2px 1px 0; white-space:nowrap; }
+  .tag.ok { background:#e6f4ea; color:var(--ok); border:1px solid #b7e0c2; }
+  .tag.ceo { background:#fde8ef; color:var(--ceo); border:1px solid #f4b8cc; }
+  .tag.warn { background:#fff3e6; color:var(--warn); border:1px solid #ffd8a8; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:14px; }
+  .card h3 { font-size:15px; margin-bottom:8px; }
+  .stats { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .stat { flex:1 1 150px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px; text-align:center; }
+  .stat .n { font-size:26px; font-weight:700; color:var(--accent); }
+  .stat .t { font-size:12px; color:var(--muted); margin-top:2px; }
+  .disclaimer { background:#fffbe6; border:1px solid #ffe58f; border-radius:8px; padding:14px 16px; font-size:13px; }
+  .disclaimer b { color:#8a6d00; }
+  .gate { background:#eef3ff; border:1px solid #bac8ff; border-radius:8px; padding:14px 16px; font-size:13px; }
+  .phys { background:#fde8ef; border:1px solid #f4b8cc; border-radius:8px; padding:14px 16px; font-size:13px; }
+  ul { padding-left:20px; }
+  li { margin:4px 0; }
+  footer { margin-top:40px; font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; }
+  code { background:#eef1f6; border-radius:3px; padding:1px 5px; font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>硅基域 BigDomain</h1>
+    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.1 · 2026-09-30</div>
+    <div class="badges">
+      <span class="badge ai">AI 生成标识：本页由 AI 参与生成并整理</span>
+      <span class="badge">数据派生：本仓沙箱真实读数</span>
+      <span class="badge">自包含零外链 · file:// 可开</span>
+      <span class="badge">生产 http 入口 = 服务器物理件到位后开放</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2>会员价目档（四档 · 全部数值 [needs-CEO] 开闸前呈批）</h2>
+  <div class="note">数据源：src/sandbox/member/config.json（沙箱正典配置·2026-09-30 读数）。「次数」为服务配额，非代币（两域隔离律：次数≠代币）。</div>
+  <table>
+    <tr><th>档位</th><th>价格</th><th>月算力包</th><th>权益键</th><th>状态</th></tr>
+    <tr>
+      <td><b>体验卡</b></td><td>¥19.9/月 <span class="tag ok">已锁价</span></td><td>3 次</td>
+      <td>basic_badge · emoji_pack_standard</td>
+      <td><span class="tag ceo">档内数值与命名 [needs-CEO]</span></td>
+    </tr>
+    <tr>
+      <td><b>入门订阅卡</b></td><td>¥29.9/月 <span class="tag ok">票档归档 C-20260927-01</span></td><td>5 次</td>
+      <td>cocreation_block_seat · growth_archive_slot</td>
+      <td><span class="tag ceo">定价确认批 [needs-CEO]</span></td>
+    </tr>
+    <tr>
+      <td><b>城主卡</b></td><td>¥49.9/月</td><td>10 次</td>
+      <td>chat_highlight · resident_companion · building_naming_voucher</td>
+      <td><span class="tag ceo">开闸前呈批 [needs-CEO]</span></td>
+    </tr>
+    <tr>
+      <td><b>共创者卡</b></td><td>¥99/月</td><td>30 次</td>
+      <td>priority_queue · cocreation_priority · private_room · skin_free</td>
+      <td><span class="tag ceo">开闸前呈批 [needs-CEO]</span></td>
+    </tr>
+  </table>
+
+  <h2>沙箱工程读数（2026-09-30 · R681 全量实跑）</h2>
+  <div class="note">数据源：qa/entry-tier-R681.log（本仓 QA 证据档）。5 项未绿分诊在板：4 项既有环境装配缺口（venv 缺 cv2/cryptography）+ 1 项既有疑点，均非当日回归面，分诊窗 ≤2026-10-02。</div>
+  <div class="stats">
+    <div class="stat"><div class="n">27</div><div class="t">沙箱套件</div></div>
+    <div class="stat"><div class="n">231</div><div class="t">预注册判据</div></div>
+    <div class="stat"><div class="n">22/27</div><div class="t">RUNNER 全绿套件</div></div>
+    <div class="stat"><div class="n">14</div><div class="t">业务面模块</div></div>
+  </div>
+  <div class="card">
+    <h3>模块面（本仓 src/sandbox/ 实存）</h3>
+    <div>
+      <span class="tag ok">lobby 大厅</span><span class="tag ok">liveroom 直播间</span><span class="tag ok">ledger 双式账本</span><span class="tag ok">member 会员权益</span><span class="tag ok">pay 支付 v3</span><span class="tag ok">ugc UGC 管道</span><span class="tag ok">tourstate 访客三态</span><span class="tag ok">props 道具/装扮</span><span class="tag ok">venue 场地租赁</span><span class="tag ok">incentive 创作者激励</span><span class="tag ok">settlement 跨司结算</span><span class="tag ok">compliance 合规</span><span class="tag ok">opsreview 运营复核</span><span class="tag ok">releasegate 发布闸</span>
+    </div>
+  </div>
+
+  <h2>合规三面（常驻 · 不可折叠）</h2>
+  <div class="card">
+    <h3>① AIGC 生成标识面</h3>
+    <ul>
+      <li>全呈现面标识：居民陪伴台词、生成内容、本页等 AI 产出呈现面均带「AI 生成」显著标注。</li>
+      <li>服务端权威字段 <code>ai_generated</code>：客户端伪造标识一律忽略（AC-M8）。</li>
+    </ul>
+  </div>
+  <div class="disclaimer">
+    <b>② 非投顾常驻提示（常驻展示 · 不可折叠 · AC-M9）</b><br>
+    会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。
+  </div>
+  <div class="gate">
+    <b>③ msgSecCheck 前置闸（内容安全未接禁开门）</b><br>
+    平台一切用户/生成内容落库前过微信 msgSecCheck 前置闸；生产接线 <b>blocked on CEO 账号域物理件</b>；<b>未接线拒启（E_GATE_OFFLINE）</b>，六业务面同源同闸（lobby / liveroom / ledger / ugc / pay / member）。禁词与投顾禁词双闸沙箱已就位（赌博/色情/洗钱等 6 禁词 + 保本/稳赚等 8 投顾禁词）。
+  </div>
+
+  <h2>物理件单直呈（blocked on CEO · 到位即开下一段）</h2>
+  <div class="phys">
+    <ul>
+      <li><b>服务器</b>（部署物理底座 · 到位后 bootstrap 对外打包启动）</li>
+      <li><b>域名</b>（对外 http 入口 · 本静态预览届时升级为可访问 URL）</li>
+      <li><b>ICP 备案</b>（合规前置 · 大陆对公众服务必需）</li>
+      <li><b>微信支付商户号（含密钥）</b>（19.9/29.9/49.9/99 支付对接生产接线 · 密钥只进 .env 不入 git）</li>
+    </ul>
+    <div style="margin-top:6px">以上均为 CEO 账号域物理件，本司永不代办（铁律）；设计面与沙箱已先行，物理件到位即可接线开窗。</div>
+  </div>
+
+  <footer>
+    硅基域 BigDomain · 产品静态预览 v0.1 · 生成=BigDomain-OSLoop R683 · 2026-09-30 ·<br>
+    本页为 XL-16 改进项 ①交付件：真实数据派生（member/config.json + qa/entry-tier-R681.log）· 自包含零外链 · file:// 可开 · 服务器物理件到位后升 http URL。
+  </footer>
+</div>
+</body>
+</html>

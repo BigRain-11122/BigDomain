@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-09-30T13:10:55+08:00",
+  "export_ts": "2026-09-30T13:19:20+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R682 D-20260930-19 投递层统一单执行+R68 水位整编轮：集团外审会话 29 新决策行两批判毕（D-03..D-25 批+轮内活跃追加 D-26..30 批）——本司执行面三件=D-19 机制件两落地（scan [DEC] 内容寻址+轮首两行消费步·ack 三要素 commit）+D-20260930-18③ 提前落地+D-20260930-06 XL-16 回执首片（自领计划入板）；R68 state fold 毕（81,771B→76,697B·AC-R681..R685 全过）",
-    "latest_artifact": "R682 机制件双落地（2026-09-30 13:10）：scan_five_still.ps1 [DEC] 内容寻址（D-/C- token 集合差集·state last_dec_tokens 91 token 基线·实弹抓取轮内新增 D-20260930-30 实证）+iteration_prompt.txt 轮首两行消费步·qa/reorg-R682.log",
-    "next_milestone": "XL-16 前台 v0.1 静态预览件（1 个可打开 URL·D-20260930-06 自领·窗 10-07·下轮开工首项）；AC-RG4 全绿复验 10-01 00:00 后；法务外件窗/D-19 验收窗/RUNNER 分诊窗 10-02 12:00；OSS 窗 3 10-02 21:40；D-20260930-26 六律（附录 A）=本司审计件前置步遵行面"
+    "current": "R683 XL-16 执行件轮（计分 2=可看实物·本司首个可打开前台落地）：五静③破转全任务书·主件 preview/index.html v0.1 静态预览件（真实数据派生=四档价目 verbatim+R681 套件读数+合规三面+物理件单直呈·file:// 可开）+_trash 清毕（694MB 口径差 P2 上报）+deliverable-probe 复跑对照 accessible_fronts 0→1（写面先核零跨仓写·TOTAL=16）·XL-16 自领回执窗 10-07 提前 ~7 天兑现",
+    "latest_artifact": "preview/index.html v0.1 静态预览件（2026-09-30 13:19·1 个可打开前台=file:// 直开·服务器物理件到位后升 http URL）+qa/xl16-R683.log+qa/deliverable-metrics-R683.json（R683）",
+    "next_milestone": "RUNNER 既有失败分诊（4 环境缺口装配+1 既有疑点复现·窗 10-02 12:00）；AC-RG4 全绿复验 10-01 00:00 后；法务外件窗/D-19 验收窗 10-02 12:00；OSS 窗 3 10-02 21:40；预览件 v0.2（http URL+生产数据接线）=服务器物理件到位后 48h 内"
   },
   "depts": [
     {
@@ -226,7 +226,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "682",
+      "683",
       "OSLoop 轮次 tick"
     ],
     [
@@ -886,15 +886,16 @@
       "state.json 再整编 R67+板规执法第八十七刀+DEC 审核批随轮件（R680：轮首 80,830B 越线触发=R679 承传注记兑现·窗〔R66 窗汇总行+R677..R679 三轮对 6 行〕7 行压 1 汇总行·pre-op 逐字节==git HEAD 入档 archive §R680 节〔marker 59→60〕·收账两行终态 ≤78,500B 余量闸·AC-R671..R675 全过=qa/reorg-R680.log·P-2026-09-25-18 ⑤主线第六十九刀+R677 done 行 verbatim 迁 done 档 §R680 节+D-20260930-03 延窗重派知悉（新窗 10-02 12:00·backlog D-03 行更新）+D-20260930-04 知悉·decisions 基线 82→86）"
     ],
     ["2", "C-20260927-01 执行面收口件（member 沙箱权益目录 ¥29.9 入门档：patron 档+两独占权限键 cocreation_block_seat/growth_archive_slot+席4 独占 ≥1+席6 双向区隔硬判据套件 AC-E1..E7 7/7+member 25 断言 16 判据零回归+reconcile_all 注册 27 套件 231 判据·RUNNER 22/27 绿 4 环境缺口（venv 缺 cv2/cryptography）+1 既有疑点如实注分诊在板·qa/entry-tier-R681.log·R681）"],
-    ["1", "state.json 再整编 R68+D-20260930-19 投递层统一单执行件（R682·轮首 81,771B 越 80,000B 线=R681 承传注记兑现·窗〔R67 汇总+R680..R681 对 4 行〕5 压 1·pre-op==HEAD blob mod 3 CRLF〔R681 编辑残留如实注〕·archive §R682 节 marker 60→61·post 76,697B〔margin 1,803B〕·AC-R681..R685 全过=qa/reorg-R682.log+scan [DEC] 内容寻址升级〔last_dec_tokens 91 token 基线·实弹抓轮内新增 D-20260930-30〕+prompt 轮首两行消费步〔D-20260930-19①〕+D-20260930-26..30 追加批判毕+ack 三要素 commit〔D-20260930-19②〕+self_drive 机械重派 W 25→23/实质 13→12〔fold 漂移如实注〕·P-2026-09-25-18 ⑤主线第七十刀）"]
+    ["1", "state.json 再整编 R68+D-20260930-19 投递层统一单执行件（R682·轮首 81,771B 越 80,000B 线=R681 承传注记兑现·窗〔R67 汇总+R680..R681 对 4 行〕5 压 1·pre-op==HEAD blob mod 3 CRLF〔R681 编辑残留如实注〕·archive §R682 节 marker 60→61·post 76,697B〔margin 1,803B〕·AC-R681..R685 全过=qa/reorg-R682.log+scan [DEC] 内容寻址升级〔last_dec_tokens 91 token 基线·实弹抓轮内新增 D-20260930-30〕+prompt 轮首两行消费步〔D-20260930-19①〕+D-20260930-26..30 追加批判毕+ack 三要素 commit〔D-20260930-19②〕+self_drive 机械重派 W 25→23/实质 13→12〔fold 漂移如实注〕·P-2026-09-25-18 ⑤主线第七十刀）"],
+    ["2", "XL-16 执行件四面毕（D-20260930-06③·D-20260930-08②再生律·R683）：preview/index.html v0.1 静态预览件=CEO 首个可打开前台（真实数据派生：member/config 四档价目 verbatim+R681 读数 27 套件 231 判据 22/27 绿+合规三面〔AIGC 标识/非投顾常驻/msgSecCheck 前置闸〕+物理件单直呈·自包含零外链 file:// 可开）+_trash-20260928 清毕（删前抽验 6 文件 11,617,976B·XL 称 694MB 实测 11.1MB 口径差 P2 上报）+deliverable-probe 复跑对照 accessible_fronts 0→1·TOTAL=16（写面先核单写点 -Out 重定向零跨仓写）·qa/xl16-R683.log+qa/deliverable-metrics-R683.json·XL-16 回执窗 10-07 提前 ~7 天"]
   ],
   "self_drive": {
     "window": "2026-09-24..2026-09-30",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

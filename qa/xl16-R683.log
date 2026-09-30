@@ -1,0 +1,37 @@
+XL-16 execution round R683 evidence log (2026-09-30 ~14:1x +08:00)
+Sources: decisions.md D-20260930-06 (XL-16) + D-20260930-08 (ruling-2 regeneration law); backlog XL-16 line (R682 first-slice receipt)
+
+[FACE-1] preview/index.html v0.1 static CEO-openable frontend (XL-16 item-1)
+  PASS artifact on disk: preview/index.html (self-contained, zero external links, file:// openable)
+  PASS real-data derivation: member price tiers verbatim from src/sandbox/member/config.json
+       (experience CNY19.9/3cr, patron CNY29.9/5cr [C-20260927-01], mayor CNY49.9/10cr, cocreator CNY99/30cr)
+  PASS suite readings from qa/entry-tier-R681.log: 27 suites / 231 criteria / 22 of 27 green (R681 full run)
+  PASS compliance three faces: AIGC label (ai_generated server-authoritative, AC-M8),
+       non-advisory persistent disclaimer verbatim (AC-M9, non-collapsible),
+       msgSecCheck front gate (offline refuse E_GATE_OFFLINE, six business faces same gate)
+  PASS CEO physical-items panel embedded: server / domain / ICP filing / merchant-id (keys only to .env)
+  PASS probe-naming check: index.html does not match probe exclusion regex (daily/snapshot/dashboard/kanban/template/tmp/bak)
+
+[FACE-2] _trash-20260928 cleanup (XL-16 item-2)
+  PASS pre-delete spot-check: 6 files, 11,617,976 bytes, all 2026-09-28 chat auto-save JSON/MD exports (superseded trash state since 09-28)
+  PASS deleted: Remove-Item -Recurse -Force; Test-Path -> False
+  NOTE (honesty): XL claim "694MB" vs measured 11.1MB = scope discrepancy reported P2 to HQ-FEEDBACK (R683 line);
+       auto-saves 509.4MB = live Codely CLI data, not named by XL-16, untouched; tmp 0.5MB; skills 0.0MB
+
+[FACE-3] physical-items direct-present panel (XL-16 item-3)
+  PASS embedded as persistent block in preview/index.html (server/domain/ICP-filing/merchant-id + never-delegate law)
+
+[FACE-4] deliverable-probe rerun comparison (XL-16 item-4, D-20260930-08 ruling-2)
+  PASS write-face check BEFORE run: Tools/deliverable-probe.ps1 v1.1 single write point = $Out JSON (redirectable); all unit repos read-only
+  PASS zero cross-repo writes: -Out redirected to qa/deliverable-metrics-R683.json (this repo)
+  PASS comparison: BigDomain accessible_fronts 0 (group audit D-20260930-06) -> 1 (this round); TOTAL fronts=16
+  probe stdout: XL-7 probe 2026-09-30T05:17:06Z engine=5.1.26100.9168
+                BigDomain row: fronts=1 pubbed=0 receipts=0 neg=1 ovh%=83.7
+
+[CLOSEOUT]
+  state.json tick 682->683, dual-parser pass (json.loads + PS ConvertFrom-Json, log 62 items), 78,830B
+  backlog: XL-16 row + XL group-receipt row both marked done 2026-09-30
+  export refreshed (tick 683, ceo_face three rows, results R683 row, self_drive W 23->24 substantive 12->13)
+  heartbeat R683 row (R532 standing law); HQ-FEEDBACK P2 line (P-32 daily clear)
+  XL-16 self-claim receipt window 10-07 delivered ~7 days early
+  P-51 three carriers: state log R683 line + backlog done rows + commit refs D-20260930-06/D-20260930-08/XL-16
