@@ -1,0 +1,82 @@
+﻿python : test_gate_closed_while_cosign_pending (test_sku_compliance_map.BillingGateTest.test_gate_closed_while_cosign_p
+ending) ... ok
+At line:1 char:1
++ python -X utf8 -m unittest test_sku_compliance_map -v 2>&1 | Out-File ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_gate_close...pending) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_gate_opens_only_after_cosign_signs (test_sku_compliance_map.BillingGateTest.test_gate_opens_only_after_cosign_sign
+s) ... ok
+test_tampered_pending_cell_blocks_gate (test_sku_compliance_map.BillingGateTest.test_tampered_pending_cell_blocks_gate)
+ ... ok
+test_all_32_ids_present (test_sku_compliance_map.RenderTest.test_all_32_ids_present) ... ok
+test_five_column_labels_and_cosign_header (test_sku_compliance_map.RenderTest.test_five_column_labels_and_cosign_header
+) ... ok
+test_gate_status_line_rendered_closed (test_sku_compliance_map.RenderTest.test_gate_status_line_rendered_closed) ... ok
+test_a_tier_aigc_cells_carry_marking (test_sku_compliance_map.VerifyATierTest.test_a_tier_aigc_cells_carry_marking) ...
+ ok
+test_a_tier_cosign_is_pending (test_sku_compliance_map.VerifyATierTest.test_a_tier_cosign_is_pending) ... ok
+test_a_tier_is_exactly_case_a_skus (test_sku_compliance_map.VerifyATierTest.test_a_tier_is_exactly_case_a_skus) ... ok
+test_a_tier_refund_cells_carry_refund_and_prepaid (test_sku_compliance_map.VerifyATierTest.test_a_tier_refund_cells_car
+ry_refund_and_prepaid) ... ok
+test_a_tier_rows_fully_filled (test_sku_compliance_map.VerifyATierTest.test_a_tier_rows_fully_filled) ... ok
+test_every_row_has_five_columns_and_cosign_key (test_sku_compliance_map.VerifyRegistryTest.test_every_row_has_five_colu
+mns_and_cosign_key) ... ok
+test_family_counts_match_canon (test_sku_compliance_map.VerifyRegistryTest.test_family_counts_match_canon) ... ok
+test_in_force_count_is_32 (test_sku_compliance_map.VerifyRegistryTest.test_in_force_count_is_32) ... ok
+test_pending_pool_lists_n_series (test_sku_compliance_map.VerifyRegistryTest.test_pending_pool_lists_n_series) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.007s
+
+OK
+VERIFY PASS: registry=32 in-force rows, a-tier=C2-B,C2-C
+BILLING GATE: CLOSED (2 blocking reasons)
+
+| id | paid point | price ref | AIGC 标识 | 续订退费与预收负债 | 未成年人限额 | 概率公示 N8 | 文案 56 号令自查 | BigCompute 联办列 |
+|---|---|---|---|---|---|---|---|---|
+| C0 | 入城门票（直播购物门槛：先购付费件才获入城资格=出生证+户籍分配·免费围观付费入城） | 载体=任意付费件（主=C1 19.9 算力包） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C1 | 单次 AI 算力包（一句话→量化策略回测/小游戏 Demo/短视频） | 19.9/次 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C2-A | 会员体验卡（3 次算力包+基础身份+大厅普通表情） | 19.9/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C2-B | 入门订阅卡（案 A·月度算力返还>3 次+共创区块优先位+成长档案存储位·席4 独占权益 ≥1+席6 与 19.9 体验卡权益区隔） | 29.9/月〔定价值 [needs-CEO] 定价确认批〕 | 呈现面双轨=显式 ai_label+隐式盲水印（R321/R593 能力件·生产接线=bootstrap 期） | 续费页退费先核验+预收负债台账（收款出口=BigCompute 归口 D-09） | 未成年人充值限额门（§五红线族+包装规范六条引用） | 不涉概率玩法（N8=收入启动后置件） | 广告法禁用语自扫+「算力返还」表述=权益非收益承诺（禁收益性宣称） | PENDING_BIGCOMPUTE |
+| C2-C | 居民成长档案订阅（N2·C-20260927-01 采纳序首位·年轮/台词精选/城市故事月报/生日纪念页） | 9.9/月〔定价值 [needs-CEO] 定价确认批〕 | 档案页 AIGC 生成标识+真实行为派生注记（真实行为派生非编造） | 续费页退费先核验+预收负债台账（订阅族通用·收款出口=BigCompute 归口 D-09） | 未成年人充值限额门（§五红线族+包装规范六条引用） | 不涉概率玩法（N8=收入启动后置件） | 禁编造禁意识宣称（数字投影诚实边界律·广告法禁用语自扫） | PENDING_BIGCOMPUTE |
+| C2-D | 城主卡（10 次算力包+专属居民陪伴+发言高亮+1 次/月建筑署名权） | 49.9/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C2-E | 共创者卡（30 次算力包+加急通道+共创优先筛选+私人房间+皮肤自由换） | 99/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C3 | 交易大厅增值（动态表情/涨停特效/刷屏特效/发言高亮置顶/策略提报加急通道） | 提报加急 9.9/次；余=会员权益内 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C4-A | 策略共创观测权·单策略永久（只看结果不看源码） | 9.9 永久 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C4-B | 策略共创观测权·月卡无限观测 | 19.9/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C5-A | 私人房间 | 9.9/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C5-B | 化身皮肤 | 29.9 永久 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C5-C | 共创者铭牌 | 49.9 永久 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C5-D | 高级入驻（楼层铭牌） | 199 永久 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C6 | 数字收藏品（落成纪念数字证书/限量居民联名卡/编年史回放权·纯内循环不交易） | 证书=平台授予；联名卡=会员可领；回放权=付费件 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C7-A | 策略回测加急（10 分钟出结果） | 9.9/次 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C7-B | 游戏 Demo 排产插队 | 49.9/次 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| C7-C | 居民点名单独对话（本地 LLM 零成本） | 4.9/次 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B1 | 小游戏工作室入驻年费（提案池+精准玩家流量+虚拟工作室楼层） | 9,800/年 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B2 | 量化工作室/研究者入驻年费（股民灵感数据+策略共创观测入口+QUANT 城大屏露出） | 19,800/年 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B3-A | QUANT 城巨屏轮播 | 2,000/周 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B3-B | 建筑冠名权（街区名/地铁站名） | 10,000/年 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B3-C | 大厅开屏广告 | 5,000/周 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B4 | 线上活动场地（发布会/沙龙/共创赛事包场·含居民主持+自动剪辑素材包） | 5,000/场 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B5 | 企业版 AI 算力与验证 API（一句话→回测→可视化 SaaS·按调用量计费·非投顾定位） | 0.5/次起 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B6-A | 季度《一人 AI 公司生态报告》付费下载（脱敏真实运营数据） | 99/份 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| B6-B | 定制行业洞察报告 | 999/份 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| LV1 | 居民互动直播付费连麦（弹幕入城·居民点评策略/脑洞·本地 LLM） | 9.9/次 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| LV2 | 品牌冠名直播间 | 5,000/场 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| LV3 | 付费专场（闭门回测复盘/共创评审会） | 49.9/场 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| KP1 | 《一人+AI 无人开公司》系列课（Build-in-public 真实实录·产品定义=BigStream·收款出口=BigCompute） | 99/套 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+| KP2 | 行业报告付费专栏（AI 创业/量化/小游戏实战·与 BigStream 内容线一体两面） | 19.9/月 | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | [pending] 待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐） | NOT_YET_REQUESTED |
+
+## Pending pool (not in-force yet; no compliance row due)
+- N1 城市时刻纪念品 -- 排期池（C-20260927-01 过会·随 M2-M4）
+- N3 算力透明凭证 -- 已转 BigCompute（P-67 批吸收·非本司执行面）
+- N4 小额城市命名权（街区/车站/公园众筹命名） -- 排期池
+- N5 共创作品发行分成 -- 排期池
+- N7 城市经济实况报告（月报档） -- 排期池
+- N8 盲盒合规件 -- 收入启动后置（席3）
+
+BILLING GATE: CLOSED -- no billing before table pass
+- reason: C2-B: BigCompute co-sign pending
+- reason: C2-C: BigCompute co-sign pending

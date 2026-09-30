@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "id": "sku-compliance-map",
+    "version": "v1",
+    "round": "R675",
+    "source_of_truth": [
+      "BLUEPRINT.md §四 价目正典（in-force 付费点全量）",
+      "docs/spec/price-canon-amendment-spec.md §五 席7 附款映射表雏形（A 档两行五列 verbatim 语义）"
+    ],
+    "rider": "席7 附款（C-20260927-02 随案护栏）：A 档上线前门=付费点×合规义务映射表五列过表；未过表不得开单收款；BigCompute 联办列待其面补齐（派工=BigCompute SKU+漏斗配额+合规列联办）",
+    "a_tier_skus": ["C2-B", "C2-C"],
+    "in_force_count": 32,
+    "family_counts": {"C": 18, "B": 9, "live": 3, "kp": 2},
+    "column_keys": ["aigc_mark", "renewal_refund_prepaid", "minor_limit", "probability_n8", "copy_56"],
+    "column_labels": {
+      "aigc_mark": "AIGC 标识",
+      "renewal_refund_prepaid": "续订退费与预收负债",
+      "minor_limit": "未成年人限额",
+      "probability_n8": "概率公示 N8",
+      "copy_56": "文案 56 号令自查"
+    },
+    "cosign_label": "BigCompute 联办列",
+    "pending_cell_default": "待过表（A 档上线前门毕后随 M2-M4 排期逐族补齐）",
+    "invariants": {
+      "a_tier_refund_keywords": ["退费", "预收"],
+      "a_tier_aigc_keywords_any": ["标识", "ai_label", "双轨"],
+      "a_tier_copy_keywords_any": ["宣称", "承诺", "禁用语"],
+      "cosign_pending_token": "PENDING_BIGCOMPUTE"
+    }
+  },
+  "in_force_skus": [
+    {"id": "C0", "family": "C", "name": "入城门票（直播购物门槛：先购付费件才获入城资格=出生证+户籍分配·免费围观付费入城）", "price_ref": "载体=任意付费件（主=C1 19.9 算力包）", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C1", "family": "C", "name": "单次 AI 算力包（一句话→量化策略回测/小游戏 Demo/短视频）", "price_ref": "19.9/次", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C2-A", "family": "C", "name": "会员体验卡（3 次算力包+基础身份+大厅普通表情）", "price_ref": "19.9/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C2-B", "family": "C", "name": "入门订阅卡（案 A·月度算力返还>3 次+共创区块优先位+成长档案存储位·席4 独占权益 ≥1+席6 与 19.9 体验卡权益区隔）", "price_ref": "29.9/月〔定价值 [needs-CEO] 定价确认批〕", "cells": {"aigc_mark": {"status": "filled", "obligation": "呈现面双轨=显式 ai_label+隐式盲水印（R321/R593 能力件·生产接线=bootstrap 期）", "anchor": "price-canon-amendment-spec §五；implicit-watermark-verify 件"}, "renewal_refund_prepaid": {"status": "filled", "obligation": "续费页退费先核验+预收负债台账（收款出口=BigCompute 归口 D-09）", "anchor": "price-canon-amendment-spec §五；D-20260924-09"}, "minor_limit": {"status": "filled", "obligation": "未成年人充值限额门（§五红线族+包装规范六条引用）", "anchor": "BLUEPRINT §五红线族"}, "probability_n8": {"status": "filled", "obligation": "不涉概率玩法（N8=收入启动后置件）", "anchor": "C-20260927-01 席3 N8 后置"}, "copy_56": {"status": "filled", "obligation": "广告法禁用语自扫+「算力返还」表述=权益非收益承诺（禁收益性宣称）", "anchor": "包装规范六条；56 号令"}}, "bigcompute_cosign": {"status": "PENDING_BIGCOMPUTE", "note": "联办列待其面补齐（C-20260927-02 护栏派工=BigCompute SKU+漏斗配额+合规列联办）"}},
+    {"id": "C2-C", "family": "C", "name": "居民成长档案订阅（N2·C-20260927-01 采纳序首位·年轮/台词精选/城市故事月报/生日纪念页）", "price_ref": "9.9/月〔定价值 [needs-CEO] 定价确认批〕", "cells": {"aigc_mark": {"status": "filled", "obligation": "档案页 AIGC 生成标识+真实行为派生注记（真实行为派生非编造）", "anchor": "price-canon-amendment-spec §二/§五"}, "renewal_refund_prepaid": {"status": "filled", "obligation": "续费页退费先核验+预收负债台账（订阅族通用·收款出口=BigCompute 归口 D-09）", "anchor": "price-canon-amendment-spec §五；D-20260924-09"}, "minor_limit": {"status": "filled", "obligation": "未成年人充值限额门（§五红线族+包装规范六条引用）", "anchor": "BLUEPRINT §五红线族"}, "probability_n8": {"status": "filled", "obligation": "不涉概率玩法（N8=收入启动后置件）", "anchor": "C-20260927-01 席3 N8 后置"}, "copy_56": {"status": "filled", "obligation": "禁编造禁意识宣称（数字投影诚实边界律·广告法禁用语自扫）", "anchor": "price-canon-amendment-spec §二；升华律诚实边界"}}, "bigcompute_cosign": {"status": "PENDING_BIGCOMPUTE", "note": "联办列待其面补齐（同上）"}},
+    {"id": "C2-D", "family": "C", "name": "城主卡（10 次算力包+专属居民陪伴+发言高亮+1 次/月建筑署名权）", "price_ref": "49.9/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C2-E", "family": "C", "name": "共创者卡（30 次算力包+加急通道+共创优先筛选+私人房间+皮肤自由换）", "price_ref": "99/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C3", "family": "C", "name": "交易大厅增值（动态表情/涨停特效/刷屏特效/发言高亮置顶/策略提报加急通道）", "price_ref": "提报加急 9.9/次；余=会员权益内", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C4-A", "family": "C", "name": "策略共创观测权·单策略永久（只看结果不看源码）", "price_ref": "9.9 永久", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C4-B", "family": "C", "name": "策略共创观测权·月卡无限观测", "price_ref": "19.9/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C5-A", "family": "C", "name": "私人房间", "price_ref": "9.9/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C5-B", "family": "C", "name": "化身皮肤", "price_ref": "29.9 永久", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C5-C", "family": "C", "name": "共创者铭牌", "price_ref": "49.9 永久", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C5-D", "family": "C", "name": "高级入驻（楼层铭牌）", "price_ref": "199 永久", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C6", "family": "C", "name": "数字收藏品（落成纪念数字证书/限量居民联名卡/编年史回放权·纯内循环不交易）", "price_ref": "证书=平台授予；联名卡=会员可领；回放权=付费件", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C7-A", "family": "C", "name": "策略回测加急（10 分钟出结果）", "price_ref": "9.9/次", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C7-B", "family": "C", "name": "游戏 Demo 排产插队", "price_ref": "49.9/次", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "C7-C", "family": "C", "name": "居民点名单独对话（本地 LLM 零成本）", "price_ref": "4.9/次", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B1", "family": "B", "name": "小游戏工作室入驻年费（提案池+精准玩家流量+虚拟工作室楼层）", "price_ref": "9,800/年", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B2", "family": "B", "name": "量化工作室/研究者入驻年费（股民灵感数据+策略共创观测入口+QUANT 城大屏露出）", "price_ref": "19,800/年", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B3-A", "family": "B", "name": "QUANT 城巨屏轮播", "price_ref": "2,000/周", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B3-B", "family": "B", "name": "建筑冠名权（街区名/地铁站名）", "price_ref": "10,000/年", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B3-C", "family": "B", "name": "大厅开屏广告", "price_ref": "5,000/周", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B4", "family": "B", "name": "线上活动场地（发布会/沙龙/共创赛事包场·含居民主持+自动剪辑素材包）", "price_ref": "5,000/场", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B5", "family": "B", "name": "企业版 AI 算力与验证 API（一句话→回测→可视化 SaaS·按调用量计费·非投顾定位）", "price_ref": "0.5/次起", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B6-A", "family": "B", "name": "季度《一人 AI 公司生态报告》付费下载（脱敏真实运营数据）", "price_ref": "99/份", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "B6-B", "family": "B", "name": "定制行业洞察报告", "price_ref": "999/份", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "LV1", "family": "live", "name": "居民互动直播付费连麦（弹幕入城·居民点评策略/脑洞·本地 LLM）", "price_ref": "9.9/次", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "LV2", "family": "live", "name": "品牌冠名直播间", "price_ref": "5,000/场", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "LV3", "family": "live", "name": "付费专场（闭门回测复盘/共创评审会）", "price_ref": "49.9/场", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "KP1", "family": "kp", "name": "《一人+AI 无人开公司》系列课（Build-in-public 真实实录·产品定义=BigStream·收款出口=BigCompute）", "price_ref": "99/套", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}},
+    {"id": "KP2", "family": "kp", "name": "行业报告付费专栏（AI 创业/量化/小游戏实战·与 BigStream 内容线一体两面）", "price_ref": "19.9/月", "cells": {"aigc_mark": {"status": "pending"}, "renewal_refund_prepaid": {"status": "pending"}, "minor_limit": {"status": "pending"}, "probability_n8": {"status": "pending"}, "copy_56": {"status": "pending"}}, "bigcompute_cosign": {"status": "NOT_YET_REQUESTED", "note": "随上线窗"}}
+  ],
+  "pending_pool": [
+    {"id": "N1", "name": "城市时刻纪念品", "status": "排期池（C-20260927-01 过会·随 M2-M4）"},
+    {"id": "N3", "name": "算力透明凭证", "status": "已转 BigCompute（P-67 批吸收·非本司执行面）"},
+    {"id": "N4", "name": "小额城市命名权（街区/车站/公园众筹命名）", "status": "排期池"},
+    {"id": "N5", "name": "共创作品发行分成", "status": "排期池"},
+    {"id": "N7", "name": "城市经济实况报告（月报档）", "status": "排期池"},
+    {"id": "N8", "name": "盲盒合规件", "status": "收入启动后置（席3）"}
+  ]
+}
