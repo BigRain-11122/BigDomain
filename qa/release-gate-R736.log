@@ -1,0 +1,18 @@
+BigDomain release-gate packaging rehearsal R606
+ts=2026-10-01T00:06:54+08:00
+repo=BigDomain  group tools (read-only ref):
+  release-scan.ps1 sha256=73ca41fc1259bab54162b01c582f798f5bb59b0bd1c2c74b3e33232b87d8efe6
+  secret-scan.ps1 sha256=78c17b2aa6068178b8027d21f7064be011edc48697f0588571e99226dcf19d0c
+REHEARSAL != GATE-PASS: gate 3 (CEO explicit approval) NOT exercised; bootstrap door stays unchecked. Image/compose faces = bootstrap-window real artifacts.
+AC-RG1 PASS whitelist build: staged files == explicit allow-list (2 files)
+AC-RG5 PASS staged metadata check: no .git face / no secret pattern / no local path leak (independent sweep, second judgment)
+  [release-scan] release-scan: PASS (no banned face / secret / path leak) in C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\.codely-cli\tmp\releasegate-R606\pkg
+AC-RG2 PASS clean-tree release-scan: exit 0 PASS
+  [release-scan/injected] release-scan: FAIL (3 findings) in C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\.codely-cli\tmp\releasegate-R606\pkg-injected
+  [release-scan/injected]   SECRET(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY): key.txt
+  [release-scan/injected]   PATH-LEAK(C:\\Users\\): notes.md
+  [release-scan/injected]   BANNED-NAME: orders.md
+AC-RG3 PASS injection rehearsal: exit 2 FAIL, all three finding classes enumerated: BANNED-NAME=1 SECRET=1 PATH-LEAK=1
+  [secret-scan] secret-scan 20261001-0006 | window=1 day(s) | repos scanned: 7 | hits: 0 | P0: 0 P2: 0
+AC-RG4 PASS secret-scan -Days 1: exit 0, P0=0 (group-wide recent commits; report -> group gitignored tool face, R420 precedent)
+VERDICT PASS (rehearsal of gate mechanics only; real package gate run happens at bootstrap)

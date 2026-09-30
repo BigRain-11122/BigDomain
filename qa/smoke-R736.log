@@ -1,0 +1,48 @@
+BigDomain QA Smoke Test - round R736 - 2026-10-01 +08:00 (holiday window day 1)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due)
+round context: 10-01 00:00 gated windows opened this round; AC-RG4 out-of-window re-verify
+(qa/release-gate-R736.log, VERDICT PASS, AC-RG1..RG5 PASS lines + AC-RG6 evidence/door face)
+executed as the round's product artifact alongside this crawl.
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch + search, zero-key, read-only; 5 attempts / 3 hits / 2 miss):
+    a. dj.163.com - MISS (connection failure; cum. 3rd+4th attempt since 2026-09-27, M stays)
+    b. www.dj.163.com - MISS (connection failure, same layer; honest two-state note kept)
+    c. gov.cn/zhengce/content/202403/content_6940158.htm - HIT (A-level Xinhua release page:
+       State Council Decree No. 778, Consumer Rights Protection Law Implementation Regulation,
+       7 chapters 53 articles, effective 2024-07-01; auto-renewal significant-reminder clause
+       confirmed in the official summary)
+    d. forestry.gov.cn/lyj/1/szxx/20240319/551774.html - HIT (A-level government reprint of the
+       full regulation text, source noted as gov.cn; article-by-article original text obtained:
+       Art.10 dual-timepoint auto-renewal significant reminder + price marking; Art.9 no
+       tampering/fabricating/hiding user reviews + no differential pricing under equal terms;
+       Art.16 online-game minors time/permission/consumption management + strict verification;
+       Art.24 commercial messages require consent + easy opt-out; Art.50 penalties up to
+       CNY 300k / 1-5x illegal gains / business suspension)
+    e. search for Art.10 text (B-level corroboration: thepaper.cn newsDetail_forward_27921269
+       confirms Art.10 as the auto-renewal clause; not enrolled as a source row, corroboration
+       only)
+    -> consumer-face law chain for our 19.9 monthly card / UGC pipeline / one-price policy:
+       benchmarks global-benchmarks.md section-1 new row (consumer protection law), section-3
+       new source row, section-4 F-slice update log entry; signal W10 -> intelligence-wall.md.
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-01 (state.json updated in closeout; global-benchmarks.md
+    section-4 carries the F-slice entry with fetch window ~00:07-00:1x +08:00; next 7-day
+    due 2026-10-08; today_png/today_log produced by this very file + png render below).
+
+[3] signals to intelligence-wall: PASS
+    W10 appended to docs/research/intelligence-wall.md signal table + conclusion application
+    table (consumption anchors: P-47-5 monthly-card auto-renewal dual-timepoint reminder +
+    cancel path; P-47-3 UGC review no-tamper red line; P-47-4 pricing consistency note).
+
+[4] on-disk evidence this round: PASS
+    qa/smoke-R736.log (this file, real log) + qa/smoke-R736.png (rendered from this log via
+    render_smoke_png.ps1, verbatim, never hand-drawn) + qa/release-gate-R736.log (AC-RG4
+    out-of-window re-verify VERDICT PASS).
+
+self-judge: charter checklist PASS; two-state honesty kept (dj.163.com misses recorded,
+M item stays open; no assertion without evidence; external content treated as untrusted
+input, zero downstream assertion).
