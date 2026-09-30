@@ -1,0 +1,39 @@
+PASS AC-R746a pre-op size 80478B measured actual=80478
+PASS AC-R746b no BOM (first3 123,10,32) actual=[123, 10, 32]
+PASS AC-R746c pre-op parses, tick=701 tick=701
+PASS AC-R746d pre-op log 63 items actual=63
+PASS AC-R746e archive marker baseline 67 actual=67
+PASS AC-R747a window 6-item prefix assertions
+PASS AC-R747b round numbers R699..R701 continuous
+INFO window content bytes = 6416
+INFO mechanical catalog = D-06,D-18,D-20260929-03,D-20260930-05,D-20260930-19,O-2026-0930-006,O-20260930-1654,O-20260930-1710,P-001,P-2026-09-25-18,P-32
+PASS struct line0 {
+PASS struct line1 tick
+PASS struct line2 log[
+PASS struct log item lines 3..65
+PASS struct close ]
+PASS AC-R749a new content parses json.loads
+PASS AC-R748a tick 701->702
+PASS AC-R748b last_dec_tokens 101->102 (+D-20260930-41 sorted union) count=102
+PASS AC-R748c last_decision_rows 164->165
+PASS AC-R748d last_order unchanged
+PASS AC-R748e benchmarks_refreshed unchanged
+PASS AC-R749b log 60 items actual=60
+PASS AC-R749c head block items 0..56 verbatim
+PASS AC-R749d item57 == summary
+PASS AC-R749e item58 == R702 entry
+PASS AC-R749f item59 == R702 tokens
+PASS AC-R749g final size <= 78500B margin gate actual=77355 margin=1145
+PASS AC-R747c canonical round-trip identity
+INFO calibration R699-time log: W=8 idle=7 nop=0 light0=0 (registered 23/8/0, sub 13)
+INFO post-fold recount: W=8 idle=7 nop=0 light0=0 -> sub(W-idle-nop)=1
+PASS W1 backup byte-identical
+INFO separator bytes before R699 header: b'"\n}\n'
+PASS W2 archive pure-append prefix assertion
+PASS W2b archive marker 67->68
+PASS W3 state.json written == built
+PASS W4 heartbeat R702 row appended
+INFO final state size = 77355B (pre-op 80478B, delta -3123B)
+DONE R702 fold cut-77: window 6 lines 6416B -> 1 summary line; markers 67->68; log 63->60
+PS-dual-parse PASS tick=702 log=60 dec_tokens=102 dec_rows=165 last_log=2026-09-30 R702 tokens: local=unmeasured
+SUMMARY AC-R746..R750 all pass, FAIL count=0 (self_drive calibration ambiguity honestly labeled, registered values kept)
