@@ -1,0 +1,50 @@
+qa/reorg-R707.log - state.json fold R77 (79th cut) evidence - P-2026-09-25-18 main line
+generated: 2026-09-30T18:41:26
+
+== AC pre-registration (registered before any write; trigger = R706 carry-note: next-round round-start first-measure over 80000B line -> R77 fold same-pattern) ==
+AC-R771: pre-op byte-identical to git HEAD blob; full snapshot appended to logs/state-log-archive-2026-09.md as R707 append section (marker 69->70, pure-append prefix assertion) + backup logs/state-preop-R707.bak
+AC-R772: window 7 lines [R76 prior window-summary + R704/R705/R706 three pairs, exactly 1 status + 1 tokens line each (probe)] -> 1 rolling paren summary; mechanical round list R704..R706 complete; P/D/O catalog regex mechanical dedup; head block 55 items verbatim
+AC-R773: top fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens); json.loads script assertion + PowerShell ConvertFrom-Json independent re-verification
+AC-R774: post-fold <= 80000B + final (with closeout pair) <= 78500B margin gate; verify-then-write: all gates checked in memory before any disk write
+AC-R775: receipt triple = R707 status line + commit message contains P-2026-09-25-18 + O-2026-0930-1835 (P-51 carrier law, D-20260930-20 numbered reference)
+
+== execution log ==
+pre-op size = 80827 B; BOM=False; roundtrip fmt: indent=2 trailing_newline=False
+HEAD blob = 80827 B; pre-op == HEAD blob: True
+window structure ok = True ; 7 lines content = 11801 B ; head block = 55 items
+pre-op mechanical counters = {'W': 27, 'tokens': 11, 'idle': 8, 'nop': 1, 'sub': 15} (in-register W27/idle8/nop1/sub15)
+P/D/O catalog (regex mechanical dedup) = 95 tokens
+post-fold size (projected) = 72794 B
+final size (projected) = 76106 B ; margin vs 78500B gate = 2394 B
+post-closeout counters = {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14}
+archive append markers found = 69 (expect 69)
+archive appended: 6537680 B -> 6618587 B (pure-append ok, marker 69->70)
+state.json written: 80827 B -> 72794 B -> final 76106 B
+post-write: json.loads ok, tick=707, log items=58, head block verbatim, top fields preserved
+PowerShell ConvertFrom-Json: PS_OK tick=707 logcount=58
+export: 159434 B, BOM=True, roundtrip trailing_newline=True
+export refreshed: 159434 B -> 160547 B (tick 707, results R707 row, self_drive recount {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14})
+heartbeat R707 row appended
+
+== probe (logs/probe_r707_out.txt) ==
+win[0] startswith(2026-09-30（R601..R604+R693...) = True ; len=3752B
+win[1] startswith(2026-09-30 R704（...) = True ; len=3159B
+win[2] startswith(2026-09-30 R704 tokens...) = True ; len=239B
+win[3] startswith(2026-09-30 R705（...) = True ; len=1891B
+win[4] startswith(2026-09-30 R705 tokens...) = True ; len=211B
+win[5] startswith(2026-09-30 R706（...) = True ; len=2315B
+win[6] startswith(2026-09-30 R706 tokens...) = True ; len=234B
+window content bytes = 11801 ; head block items = 55 ; total log items = 62
+R704: shikuang=1 tokens=1
+R705: shikuang=1 tokens=1
+R706: shikuang=1 tokens=1
+pre-op counters (criterion: anchored round-level; tokens=R-line "tokens:"; idle=contains "idle-fast"; nop=contains "no-pullable"; sub=W-tokens-nop): {'W': 27, 'tokens': 11, 'idle': 8, 'nop': 1, 'sub': 15}
+post-closeout counters: {'W': 23, 'tokens': 9, 'idle': 8, 'nop': 0, 'sub': 14}
+
+== AC verdicts ==
+AC-R771 PASS: pre-op 80827B == HEAD blob; archive 6537680B -> 6618587B pure-append; marker count 69 -> 70; backup written
+AC-R772 PASS: window 11801B content folded to summary 3816B; head block 55 items verbatim; catalog 95 tokens mechanical
+AC-R773 PASS: json.loads ok (tick 707, log 58 items); PS ConvertFrom-Json ok; top fields byte-identical
+AC-R774 PASS: post-fold 72794B <= 80000B; final 76106B <= 78500B (margin 2394B)
+AC-R775 PENDING-COMMIT: state line + this log on disk; commit to carry P-2026-09-25-18 + O-2026-0930-1835
+erratum (in-round correction, honest-label law): closeout wording initially drafted idle 8->7 single-line drift; actual mechanical recount = pre-op idle 8 == in-register 8 (criterion reproduces exactly, zero drift), post-closeout idle=8 flat; state log row + export method note + heartbeat row corrected in-round before commit; probe/evidence counter values were correct from generation.
