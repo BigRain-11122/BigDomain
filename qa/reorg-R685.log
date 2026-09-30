@@ -1,0 +1,27 @@
+R69 fold (cut 71) evidence - verify-then-write, all checks pre-write
+[PASS] AC-R691a pre-op size 81778B
+[PASS] AC-R691b pre-op == git HEAD blob cd538ef6f4b5
+[PASS] AC-R692a log 64 items pre-fold 64
+[PASS] AC-R692b window structure 7 window items anchored
+[PASS] AC-R692c P/D/O/XL catalog regex 35 tokens
+[PASS] AC-S8 evidence parse AC-S8b record line found
+[PASS] AC-S8R3 stability alive=100 closed=0
+[PASS] AC-R693b counter-clean no abolished-tag substrings
+[PASS] AC-R693b counter-clean no abolished-tag substrings
+[PASS] AC-R693b counter-clean no abolished-tag substrings
+[PASS] AC-R694a final <= 78500B margin gate final=78079B margin=421B postfold=74773B
+[PASS] AC-R693a top fields tick 684->685, others verbatim, log 60 items
+[PASS] AC-R692d head block verbatim 57 items identical
+[PASS] AC-R692e round column R682..R684 consecutive 3 rounds in folded window
+[PASS] AC-R691c archive marker baseline new-format markers=61
+[PASS] AC-R691d archive pure-append prefix 5889322B prefix untouched
+[PASS] AC-R691e marker +1 61->62
+[PASS] AC-R694b on-disk == claimed 78079B == 78079B
+window: 7 lines -> 1 summary (R68 window-summary + R682..R684 3 pairs)
+pre-op 81778B archived at archive R685 append section (marker 61->62)
+post-fold 74773B + closeout pair final 78079B (margin 421B <= 78500B gate)
+P/D/O/XL catalog (35 tokens, regex mechanical dedup): D-03,D-06,D-07,D-08,D-13,D-19,D-20260929-03,D-20260930-03,D-20260930-04,D-20260930-05,D-20260930-06,D-20260930-08,D-20260930-09,D-20260930-11,D-20260930-15,D-20260930-18,D-20260930-19,D-20260930-20,D-20260930-21,D-20260930-22,D-20260930-26,D-20260930-30,D-20260930-31,D-20260930-32,D-20260930-33,D-20260930-34,D-25,D-26,D-27,D-28,D-29,D-30,O-20260930-1250,P-32,XL-16
+S8b rerun reading: n=100 p50=20.5ms p95=29.5ms max=85.3ms alive=100 closed=0 msgs=1360 deltas=136000
+S8b verdict: 漂移主因定谭=共驻活跃 CPU 调度（R550 负载期）非并发数——近静机控制（共驻空闲）下 N=100 p95=29.5ms 回收闸内≈R2 纯净基线 32.3ms 量级、vs R550 活跃共驻 304.0ms→R550 判负行归因闭口
+log items 64 -> 60 (57 head verbatim + 1 window summary + R685 closeout pair)
+tick 684 -> 685; last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens verbatim

@@ -1,0 +1,12 @@
+load progress: 270s left, frames=14000
+load progress: 240s left, frames=28000
+load progress: 210s left, frames=41000
+load progress: 180s left, frames=55000
+load progress: 150s left, frames=68000
+load progress: 120s left, frames=82000
+load progress: 90s left, frames=96000
+load progress: 60s left, frames=109000
+load progress: 30s left, frames=123000
+load progress: 0s left, frames=136000
+PASS AC-S8b: load n=100 secs=300 senders=10 msgs=1360 deltas=136000 p50=20.5ms p95=29.5ms max=85.3ms alive=100 closed=0
+SUITE PASS (1/1 criteria pass)
