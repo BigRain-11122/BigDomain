@@ -7,6 +7,32 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repo = (Resolve-Path (Join-Path $here '..\..\..\..')).Path
 $group = (Resolve-Path (Join-Path $repo '..\..')).Path
 
+# --- group-ledger read-only consumption canon (D-20261001-03): git fetch + git show origin/main:<path> ---
+# Working-tree pull/rebase/checkout against the group tree are FORBIDDEN by the same canon.
+# A direct working-tree read survives ONLY as an explicit fallback when git show is unavailable;
+# per-file mode is reported on the [GROUPSRC] line so any fallback use stays visible (honesty law).
+try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
+$grpMode = @{}
+try { & git -C $group fetch origin --quiet 2>$null } catch { }
+$grpFetchOk = ($LASTEXITCODE -eq 0)
+function Get-GroupFile([string]$rel) {
+  $out = & git -C $group show "origin/main:$rel" 2>$null
+  if ($LASTEXITCODE -eq 0 -and $null -ne $out) {
+    $raw = (@($out) -join "`n") + "`n"
+    if ($raw.Length -gt 1 -and $raw[0] -eq [char]0xFEFF) { $raw = $raw.Substring(1) }
+    $m = 'origin-main'
+    if (-not $grpFetchOk) { $m = 'origin-main(stale-fetch)' }
+    $script:grpMode[$rel] = $m
+    return @{ raw = $raw }
+  }
+  $p = Join-Path $group ($rel -replace '/', '\')
+  if (Test-Path $p) {
+    $script:grpMode[$rel] = 'worktree-fallback'
+    return @{ raw = [System.IO.File]::ReadAllText($p, $utf8) }
+  }
+  throw "group file unreadable both ways: $rel"
+}
+
 # --- [STATE] own state.json ---
 $st = $null
 $raw = $null
@@ -22,7 +48,8 @@ try {
 
 # --- [LEDGER] group evolution ledger (group-level, read-only) ---
 try {
-  $L = [System.IO.File]::ReadAllLines((Join-Path $group 'cph4\evolution-ledger.md'), $utf8)
+  $gt = Get-GroupFile 'cph4/evolution-ledger.md'
+  $L = @(($gt.raw.TrimEnd("`r", "`n")) -split "\r?\n")
   $atbd = @($L | Select-String -SimpleMatch '@BigDomain')
   $conf = @($L | Select-String -Pattern '<<<<<<<|>>>>>>>')
   $pnums = @($L | Select-String -Pattern 'P-\d{4}-\d{2}-\d{2}-\d{2}' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value })
@@ -36,9 +63,9 @@ try {
 
 # --- [DEC] group decisions.md (content-addressed D-/C- token set diff vs state baseline; D-20260930-18/19: pure row-count is drift-prone and forbidden) ---
 try {
-  $decPath = Join-Path $group 'docs\decisions.md'
-  $D = [System.IO.File]::ReadAllLines($decPath, $utf8)
-  $draw = [System.IO.File]::ReadAllText($decPath, $utf8)
+  $gt = Get-GroupFile 'docs/decisions.md'
+  $draw = $gt.raw
+  $D = @(($draw.TrimEnd("`r", "`n")) -split "\r?\n")
   $tok = @([regex]::Matches($draw, '(?:D|C)-\d{8}-\d{2}') | ForEach-Object { $_.Value } | Sort-Object -Unique)
   $baseStr = ''
   if ($st -ne $null) { $baseStr = [string]$st.last_dec_tokens }
@@ -63,9 +90,9 @@ try {
 
 # --- [GORD] group docs/orders.md FULL-FILE scan (D-20260927-05(2) adopted 2026-09-27: active-order rows land in the head table region and mid-table, tail-only scan had blind spots) ---
 try {
-  $gordPath = Join-Path $group 'docs\orders.md'
-  $gordRaw = [System.IO.File]::ReadAllText($gordPath, $utf8)
-  $O = [System.IO.File]::ReadAllLines($gordPath, $utf8)
+  $gt = Get-GroupFile 'docs/orders.md'
+  $gordRaw = $gt.raw
+  $O = @(($gordRaw.TrimEnd("`r", "`n")) -split "\r?\n")
   $shaProv = [System.Security.Cryptography.SHA256]::Create()
   $sha16 = [System.BitConverter]::ToString($shaProv.ComputeHash($utf8.GetBytes($gordRaw))).Replace('-','').Substring(0,16)
   $shaProv.Dispose()
@@ -79,6 +106,14 @@ try {
   Write-Output "  gord_last_table_row: $t"
   Write-Output "  gord_last_line: $u"
 } catch { Write-Output '[GORD] FLAG read_failed' }
+
+# --- [GROUPSRC] consumption-mode report (D-20261001-03 canon: git fetch + git show origin/main:<path>; worktree = fallback only) ---
+$modes = @()
+foreach ($k in @('cph4/evolution-ledger.md', 'docs/decisions.md', 'docs/orders.md')) {
+  if ($grpMode.ContainsKey($k)) { $modes += ($k + '=' + $grpMode[$k]) }
+}
+if ($modes.Count -eq 0) { $modes += 'no-group-read' }
+Write-Output ("[GROUPSRC] " + ($modes -join ' ') + " | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only")
 
 # --- [ORD] own orders.md LAST table-row token vs baseline (append-newest convention; R531 rework: first-row+HH:MM regex was blind to bottom-appended RUN_ID-format rows) ---
 try {
@@ -174,11 +209,11 @@ if (Test-Path $lockPath) {
 
 # ---------------------------------------------------------------------------
 # FALLBACK (script failed -> run these manually, same metrics):
-#   $L=[IO.File]::ReadAllLines('<group>\cph4\evolution-ledger.md',[Text.Encoding]::UTF8)
-#   $D=[IO.File]::ReadAllLines('<group>\docs\decisions.md',[Text.Encoding]::UTF8)
+#   group reads (D-20261001-03 canon) = git -C <group> fetch origin; git -C <group> show origin/main:<path>
+#     $L = git show origin/main:cph4/evolution-ledger.md (split lines)
 #   -> DEC fallback = extract (?:D|C)-\d{8}-\d{2} token set from full text, diff vs state.json last_dec_tokens
 #      (content-addressed per D-20260930-19(1); pure row-count forbidden per D-20260930-18; report each new token's row)
-#   $O=[IO.File]::ReadAllLines('<group>\docs\orders.md',[Text.Encoding]::UTF8)
 #   -> GORD fallback = full-file digest (SHA-256 over whole text, first 16 hex chars) + line/table-row/@BigDomain counts; any change anywhere flips the digest (D-20260927-05(2)).
+#      NOTE: digest is over the origin/main blob text as served by git show (LF-normalized, BOM-stripped) - one-time rebase vs the pre-D-03 worktree-read baseline is expected at the mode switch.
 #      report counts; compare with state.json baselines; git status --short;
 #      Test-Path .git\index.lock. Paths: <repo>=domain\BigDomain, <group>=FluxGroup.
