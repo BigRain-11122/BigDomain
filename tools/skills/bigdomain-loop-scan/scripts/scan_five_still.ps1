@@ -34,20 +34,30 @@ try {
   }
 } catch { Write-Output '[LEDGER] FLAG read_failed' }
 
-# --- [DEC] group decisions.md (UTF-8 row count vs baseline) ---
+# --- [DEC] group decisions.md (content-addressed D-/C- token set diff vs state baseline; D-20260930-18/19: pure row-count is drift-prone and forbidden) ---
 try {
-  $D = [System.IO.File]::ReadAllLines((Join-Path $group 'docs\decisions.md'), $utf8)
-  $base = 0
-  if ($st -ne $null) { $base = [int]$st.last_decision_rows }
-  if ($D.Count -ne $base) {
-    Write-Output "[DEC] FLAG rows=$($D.Count) baseline=$base"
-    $from = [Math]::Max(0, $base)
-    for ($i = $from; $i -lt $D.Count; $i++) {
-      $t = $D[$i]; if ($t.Length -gt 300) { $t = $t.Substring(0, 300) + '...' }
-      Write-Output "  dec_new_L$($i + 1): $t"
-    }
+  $decPath = Join-Path $group 'docs\decisions.md'
+  $D = [System.IO.File]::ReadAllLines($decPath, $utf8)
+  $draw = [System.IO.File]::ReadAllText($decPath, $utf8)
+  $tok = @([regex]::Matches($draw, '(?:D|C)-\d{8}-\d{2}') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+  $baseStr = ''
+  if ($st -ne $null) { $baseStr = [string]$st.last_dec_tokens }
+  if ($baseStr -eq '') {
+    Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) baseline_missing (init state.json last_dec_tokens from full token set, then only diff)"
   } else {
-    Write-Output "[DEC] PASS rows=$($D.Count) baseline=$base"
+    $baseTok = @($baseStr -split ',' | Where-Object { $_ })
+    $newTok = @($tok | Where-Object { $baseTok -notcontains $_ })
+    if ($newTok.Count -gt 0) {
+      Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) new_tokens=$($newTok.Count) (content-addressed; row baseline=$($st.last_decision_rows) secondary)"
+      foreach ($n in $newTok) {
+        $hit = @($D | Select-String -SimpleMatch $n) | Select-Object -First 1
+        $t = ''
+        if ($hit) { $t = [string]$hit.Line; if ($t.Length -gt 300) { $t = $t.Substring(0, 300) + '...' } }
+        Write-Output "  dec_new_tok $n : $t"
+      }
+    } else {
+      Write-Output "[DEC] PASS rows=$($D.Count) known_tokens=$($tok.Count) (content-addressed; row baseline=$($st.last_decision_rows) secondary)"
+    }
   }
 } catch { Write-Output '[DEC] FLAG read_failed' }
 
@@ -166,6 +176,8 @@ if (Test-Path $lockPath) {
 # FALLBACK (script failed -> run these manually, same metrics):
 #   $L=[IO.File]::ReadAllLines('<group>\cph4\evolution-ledger.md',[Text.Encoding]::UTF8)
 #   $D=[IO.File]::ReadAllLines('<group>\docs\decisions.md',[Text.Encoding]::UTF8)
+#   -> DEC fallback = extract (?:D|C)-\d{8}-\d{2} token set from full text, diff vs state.json last_dec_tokens
+#      (content-addressed per D-20260930-19(1); pure row-count forbidden per D-20260930-18; report each new token's row)
 #   $O=[IO.File]::ReadAllLines('<group>\docs\orders.md',[Text.Encoding]::UTF8)
 #   -> GORD fallback = full-file digest (SHA-256 over whole text, first 16 hex chars) + line/table-row/@BigDomain counts; any change anywhere flips the digest (D-20260927-05(2)).
 #      report counts; compare with state.json baselines; git status --short;

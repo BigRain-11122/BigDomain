@@ -14,7 +14,8 @@
 1. 读状态与正典：src/os/state.json → BLUEPRINT.md 定位节（§四价目/§五合规护栏/§七零服务器红线〔已裁决 2026-09-24=方案 B 自建后端〕/§十二集团双螺旋）→ tasks.md（正典任务板）→ src/os/backlog.md（认领工作板）
 2. 集团转办扫描步（P-32 决策审核步内嵌·集团层文件一律只读——跨仓写禁令，回执只落 state.json log）：
    - C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md 扫 @BigDomain 行（带编号如 P-2026-09-24-42/47·内容寻址勿全文重读）→与 state.json log 已记回执行比对（回执行须引用该编号）→未回执行=照转办执行并把新项排入 backlog 顶行（已入板项不重复排）；执行毕 log 记回执一行
-   - C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md 行数比对 state.json last_decision_rows（**必须 UTF-8 口径计数**——PowerShell 5.1 默认 GBK 会少读中文行，BigStream R131 在案教训）→新决策行=科学判断闸：过审→执行+回执（log 一行·引用决策号）；存疑→驳回写理由（log 一行·引用决策号）；非本司执行面→知悉不动作（log 一行）
+   - 轮首固定两行消费步（D-20260930-19 ①必做·验收窗 10-02 12:00）：①读集团 docs/decisions.md 顶部「派工通告板」块=只取本司行对号；②读集团 docs/orders.md「CEO 待办物理件区」=本司 blocked-on-CEO 物理件对号。送达律（D-20260930-20：既有律 cph4/evolution.md 转办送达判据延伸至 decisions 派工行）=ack/回执须在 state log 行或 commit 消息引用完整编号（D-/C-/P-/O-/T-/XL- 等价号）——无编号引用的「已处理」宣称不算送达；48h 无编号引用=夜轮点名
+   - C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md 水位比对 state.json last_dec_tokens（**内容寻址：D-YYYYMMDD-NN 与 C-YYYYMMDD-NN 集合差集·禁用纯行数**——D-20260930-18 实证行数对排版编辑漂移致漏派工；scan_five_still.ps1 [DEC] 面已实现·UTF-8 口径；last_decision_rows 行数仅作辅证）→新决策行=科学判断闸：过审→执行+回执（log 一行·引用决策号）；存疑→驳回写理由（log 一行·引用决策号）；非本司执行面→知悉不动作（log 一行）；毕更新 last_dec_tokens 基线（新 token 集=旧集∪本轮新判毕 token）
    - orders.md 顶行时间戳比对 state.json last_order→新司令=照令执行（新令推翻旧模式·集团律）；集团 docs/orders.md 尾新行同扫兜底（P-56 教训 2026-09-24：@七线群发转办可不带 @BigDomain 字样·@ 扫描不中·集团令尾行按派工面判本司执行面/知悉）
    - docs/global-benchmarks.md 周期条件项（P-2026-09-24-56·global-vision §三司级 7 天）：state.json `benchmarks_refreshed` 距今 >7 天=排刷新轮（刷新项排 backlog 顶行·毕=更新该字段+文件④更新记录行·源 web 直采优先）；硬约束域（法规/平台规则变更类集团令）=事件即时刷
    - 基线缺失（首轮：last_order 为空或 last_decision_rows=0）=全读一次定基线：既有行按历史行处理（时间早于骨架安装=知悉回执一行入 log·非本司执行面不动），把现行 decisions.md 行数（UTF-8 口径）与 orders.md 最新时间记入 state.json 作基线——此后只比增量

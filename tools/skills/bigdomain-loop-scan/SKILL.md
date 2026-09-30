@@ -26,7 +26,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/skills/bigdomain-loop-
 
 - `[STATE] FLAG`：state.json 解析失败=他执行体写盘迹象→单执行体退避，本轮只读不动、如实记录。
 - `[LEDGER]`：lastp 与 state.json log 已回执行比对（同号=已回执非新行；状态列变化=集团面闭口更新如实记）；未回执行=照转办执行+新项排 backlog 顶行+毕 log 记回执一行（引用该编号）。八线群发令可不带 @BigDomain 字样→按派工面判本司执行面/知悉（P-56 教训）。conflict>0=FLAG。
-- `[DEC] FLAG`（行数≠last_decision_rows）：新决策行=科学判断闸逐行——过审→执行+回执（log 一行·引用决策号）；存疑→驳回写理由（log 一行）；非本司执行面→知悉不动作（log 一行）；毕更新 last_decision_rows 基线。
+- `[DEC] FLAG`（内容寻址：D-/C-YYYYMMDD-NN token 集合差集 vs state.json last_dec_tokens·**禁纯行数**〔D-20260930-18/19〕·last_decision_rows 行数仅辅证）：新 token 行=科学判断闸逐行——过审→执行+回执（log 一行·引用决策号）；存疑→驳回写理由（log 一行）；非本司执行面→知悉不动作（log 一行）；毕更新 last_dec_tokens 基线（新集=旧集∪本轮判毕 token）。baseline_missing=先以全 token 集初始化基线，此后只比差集。
 - `[GORD] INFO`：集团 orders 尾新行与既往扫描态比对=新令兜底检出；新司令照令执行（新令推翻旧模式·集团律）；按派工面判本司执行面/知悉。
 - `[ORD] FLAG`（司级 orders 末行令牌≠last_order〔append-newest 约定·R531 改型=末行首 cell trimmed 令牌比对——原首行读法+HH:MM 正则对 bottom 追加 RUN_ID 格式行盲检·PT-20260928-02 派单实证〕）：新司令=照令执行；毕更新 last_order（=新末行首 cell trimmed 令牌）。
 - `[BENCH] FLAG`（benchmarks_refreshed 距今>7 天）：排刷新轮（刷新项排 backlog 顶行·web 直采优先·毕更新该字段+`docs/global-benchmarks.md` ④更新记录行）；硬约束域（法规/平台规则变更类集团令）=事件即时刷。
@@ -37,7 +37,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/skills/bigdomain-loop-
 
 ## 3 收账（两态同律·毕必全走）
 
-1. `src/os/state.json`：tick+1；log 追加本轮实况一行+轮账本一行「tokens: local=N api=N api_reason=<一行理由>」；基线字段随实况更新（last_order/last_decision_rows/benchmarks_refreshed）；编辑后必过 ConvertFrom-Json 校验·log 末项禁尾逗号（R189 教训）。
+1. `src/os/state.json`：tick+1；log 追加本轮实况一行+轮账本一行「tokens: local=N api=N api_reason=<一行理由>」；基线字段随实况更新（last_order/last_decision_rows/last_dec_tokens/benchmarks_refreshed）；编辑后必过 ConvertFrom-Json 校验·log 末项禁尾逗号（R189 教训）。
 2. `docs/status-export.json`：实况有变即刷；无变且 <24h 新鲜度闸可跳。
 3. backlog 完成项标 `[done 日期]`+`tasks.md` 对应项勾选（tasks.md=正典板）。
 4. 定向 git add 相关文件（禁全量 add）→commit（一行英文 ≤500 字符·尾标 `[via BigDomain-OSLoop]`·含当轮回执令号=P-51 送达判据）→push；push 失败=只记录不修下轮再看。
