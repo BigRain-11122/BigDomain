@@ -38,6 +38,8 @@ from sec_gate import GateOfflineError, SecGate  # lobby gate product
 KNOWN_PRIVILEGES = (
     "basic_badge",              # experience: base identity badge
     "emoji_pack_standard",      # experience: standard lobby emoji pack
+    "cocreation_block_seat",    # patron: co-creation block priority seat (C-20260927-01 seat-4 exclusive)
+    "growth_archive_slot",      # patron: resident growth archive storage slot (N2 supply face, blocked on BigLife)
     "chat_highlight",           # mayor: lobby envelope highlight field
     "resident_companion",       # mayor: BigLife companion line dock (blocked face)
     "building_naming_voucher",  # mayor: 1/month building naming voucher

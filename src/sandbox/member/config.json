@@ -20,6 +20,13 @@
       "privileges": ["basic_badge", "emoji_pack_standard"],
       "copy": "体验卡：3 次算力包+基础身份+大厅普通表情（¥19.9/月·19.9 已锁价委托决策令 v2；档内数值与正式命名=[needs-CEO] 开闸前呈批）"
     },
+    "patron": {
+      "monthly_credits": 5,
+      "period_days": 30,
+      "grace_days": 0,
+      "privileges": ["cocreation_block_seat", "growth_archive_slot"],
+      "copy": "入门订阅卡：5 次算力包+共创区块优先位+成长档案存储位（¥29.9/月·C-20260927-01 决议③案 A·票档归档 2026-09-29 12:00 赞成 6/7·执行司=BigDomain 价目正典增补·定价值与正式命名 [needs-CEO] 定价确认批；算力 5 次=设计占位·>19.9 档 3 次=溢价叙事；成长档案存储位=N2 居民成长档案同层供给面=BigLife N2 供给【blocked】；共创区块优先位=共创入池排序权重·永不绕 msgSecCheck/灰区人工复核/CEO 终审三层）"
+    },
     "mayor": {
       "monthly_credits": 10,
       "period_days": 30,
@@ -37,6 +44,7 @@
   },
   "products": {
     "tier:experience": {"tier": "experience"},
+    "tier:patron": {"tier": "patron"},
     "tier:mayor": {"tier": "mayor"},
     "tier:cocreator": {"tier": "cocreator"}
   },
@@ -47,5 +55,5 @@
       "note": "[needs-CEO] 券型目录初版=建筑署名券 1 次/月（UNIQUE 化身×周期×券型 AC-M16）；后续券型入目录再扩；券文本=msgSecCheck 过闸后落（未过闸零开券）·消费面=FluxVerse DevLoop 承建引用"
     }
   },
-  "params_status": "[needs-CEO] 全部数值为占位：三档定价终值（19.9 已锁·49.9/99 初版正典开闸前呈批 AC-MP5）/月次数 3/10/30（§四 C2 初版）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）"
+  "params_status": "[needs-CEO] 全部数值为占位：四档定价终值（19.9 已锁·29.9 入门档=C-20260927-01 决议③案 A 票档归档·49.9/99 初版正典开闸前呈批 AC-MP5）/月次数 3/5/10/30（§四 C2 初版+29.9 档设计占位 5）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）"
 }
