@@ -1,0 +1,36 @@
+{
+  "gate": "D-20260930-36 BigDomain line",
+  "verdicts": [
+    {
+      "rule": "R-D1",
+      "status": "PASS",
+      "fronts": 1,
+      "detail": "accessible fronts=1 (local file:// era; external reachability face is R-D2)",
+      "evidence": [
+        "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html",
+        "qa/deliverable-metrics-R683.json (group probe: BigDomain accessible_fronts 0 -> 1)"
+      ]
+    },
+    {
+      "rule": "R-D2",
+      "status": "FAIL",
+      "reason": "blocked-on-CEO-physicals",
+      "detail": "no front-urls.json registry; server/domain/ICP-filing are CEO physical items (backlog bootstrap row); current front is local file:// only",
+      "evidence": [
+        "src/os/backlog.md bootstrap row",
+        "criteria.json R-D2 future_wiring"
+      ]
+    },
+    {
+      "rule": "R-D3",
+      "status": "FAIL",
+      "reason": "blocked-on-CEO-physicals",
+      "detail": "no external-loop.json; the loop needs an externally reachable front (R-D2 dependency); sandbox ugc loop exists but rule text forbids sandbox substitution",
+      "evidence": [
+        "src/sandbox/ugc/ (sandbox - NOT a substitute)",
+        "src/os/backlog.md bootstrap row"
+      ]
+    }
+  ],
+  "overall": "FAIL"
+}

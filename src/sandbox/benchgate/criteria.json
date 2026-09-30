@@ -1,0 +1,34 @@
+{
+  "decision": "D-20260930-36",
+  "registered": "2026-09-30 R691, backlog claim row, BEFORE implementation (honesty law: pre-register criteria first)",
+  "source": "docs/audits/global-benchmark-and-check-rules-20260930.md section 5 (BigDomain line) + decisions.md D-20260930-36 verdict clause 3 (one machine criterion per rule, merged into the company-line gate, output pass/fail + evidence pointers)",
+  "rules": {
+    "R-D1": {
+      "rule": "North-star = accessible front count. >=1 front counts as open for business; documents/sandboxes do not substitute.",
+      "machine_criterion": "A front = an HTML file under preview/ that (a) size >= 4096 bytes, (b) contains ALL four real-data/compliance markers: 'AIGC', 'msgSecCheck', '非投顾' face marker '投顾', price point '19.9', (c) zero external http:// or https:// resource references (self-contained). fronts >= 1 => PASS else FAIL.",
+      "threshold": "fronts >= 1",
+      "evidence_pointers": ["preview/index.html (R683 front)", "qa/deliverable-metrics-R683.json (group probe: BigDomain accessible_fronts 0 -> 1)"]
+    },
+    "R-D2": {
+      "rule": "Every shipped feature needs an externally reachable URL (public or local tunnel) plus one real click capture.",
+      "machine_criterion": "Registry preview/front-urls.json exists AND for every front found by R-D1 it has an entry {front, url(http/https), clickcast_evidence} whose clickcast_evidence path exists on disk. Missing registry or missing entry => FAIL.",
+      "threshold": "coverage: every front has url + clickcast evidence",
+      "fail_reason_today": "blocked-on-CEO-physicals: server/domain/ICP-filing are CEO physical items (backlog bootstrap row); current front is local file:// only.",
+      "future_wiring": "bootstrap fills front-urls.json when physical items arrive; gate flips to PASS mechanically.",
+      "evidence_pointers": ["src/os/backlog.md bootstrap row (blocked on CEO physical items)"]
+    },
+    "R-D3": {
+      "rule": "Creator side: run ONE external-person closed loop (register -> produce -> be seen) before any scale talk.",
+      "machine_criterion": "Evidence file preview/external-loop.json exists AND has all three stages register/produce/be-seen each with external_participant=true. Missing => FAIL.",
+      "threshold": "one external loop, three stages complete",
+      "fail_reason_today": "blocked-on-CEO-physicals: the loop requires an externally reachable front (R-D2 dependency); sandbox ugc loop exists but the rule text forbids sandbox substitution - noted, not counted.",
+      "evidence_pointers": ["src/sandbox/ugc/ (sandbox loop - explicitly NOT a substitute per rule text)"]
+    }
+  },
+  "exit_codes": {
+    "0": "all rules PASS",
+    "1": "one or more rules FAIL (including blocked-on-CEO-physicals) - honest red, no fabrication",
+    "3": "preview/ directory missing (SKIP)"
+  },
+  "runner_integration": "standalone by design: verdict may stay red while CEO physical items are pending (honest-fail law); reconcile_all.py (RUNNER) integration deferred to bootstrap when fronts go external, to avoid a permanently-red standing suite."
+}

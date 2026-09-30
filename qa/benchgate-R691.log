@@ -1,0 +1,13 @@
+D-20260930-36 BigDomain line gate (criteria pre-registered 2026-09-30 R691, backlog claim row, BEFORE implementation (honesty law: pre-register criteria first))
+[R-D1] PASS - accessible fronts=1 (local file:// era; external reachability face is R-D2)
+    evidence: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\preview\index.html
+    evidence: qa/deliverable-metrics-R683.json (group probe: BigDomain accessible_fronts 0 -> 1)
+[R-D2] FAIL - no front-urls.json registry; server/domain/ICP-filing are CEO physical items (backlog bootstrap row); current front is local file:// only
+    reason: blocked-on-CEO-physicals
+    evidence: src/os/backlog.md bootstrap row
+    evidence: criteria.json R-D2 future_wiring
+[R-D3] FAIL - no external-loop.json; the loop needs an externally reachable front (R-D2 dependency); sandbox ugc loop exists but rule text forbids sandbox substitution
+    reason: blocked-on-CEO-physicals
+    evidence: src/sandbox/ugc/ (sandbox - NOT a substitute)
+    evidence: src/os/backlog.md bootstrap row
+VERDICT: FAIL
