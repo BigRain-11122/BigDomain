@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>硅基域 BigDomain · 产品预览 v0.1</title>
+<title>硅基域 BigDomain · 产品预览 v0.2</title>
 <style>
   :root { --ink:#182033; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --accent:#3b5bdb; --ok:#2f9e44; --warn:#e8590c; --ceo:#a61e4d; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -38,13 +38,20 @@
   li { margin:4px 0; }
   footer { margin-top:40px; font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; }
   code { background:#eef1f6; border-radius:3px; padding:1px 5px; font-size:12px; }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .step { background:#fff; border:1px solid var(--line); border-radius:8px; padding:12px 14px; }
+  .step .no { display:inline-block; background:var(--accent); color:#fff; border-radius:50%; width:22px; height:22px; text-align:center; line-height:22px; font-size:12px; margin-bottom:6px; }
+  .step b { display:block; font-size:13px; margin-bottom:4px; }
+  .step .d { font-size:12px; color:var(--ink); }
+  .step .ac { font-size:11px; color:var(--accent); margin-top:4px; }
+  .step .gate { font-size:11px; color:var(--warn); margin-top:3px; }
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <h1>硅基域 BigDomain</h1>
-    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.1 · 2026-09-30</div>
+    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.2 · 2026-09-30</div>
     <div class="badges">
       <span class="badge ai">AI 生成标识：本页由 AI 参与生成并整理</span>
       <span class="badge">数据派生：本仓沙箱真实读数</span>
@@ -81,6 +88,19 @@
       <td><span class="tag ceo">开闸前呈批 [needs-CEO]</span></td>
     </tr>
   </table>
+
+  <h2>19.9 算力包 · 用户旅程八步（JV-1 ~ JV-8）</h2>
+  <div class="note">数据源：docs/spec/journey-19.9-v2-spec.md §一（正典规格 · R405 定稿 · ¥29.9 入门档案 A 已过会 C-20260927-01）。每步均带在册判据号与合规闸，非示意稿。</div>
+  <div class="steps">
+    <div class="step"><span class="no">1</span><b>JV-1 围观触点</b><div class="d">直播间挂 19.9 购物车，免费围观、付费入城</div><div class="gate">闸：直播间非投顾风险提示常驻</div></div>
+    <div class="step"><span class="no">2</span><b>JV-2 购买决策</b><div class="d">19.9 算力包下单（单次爆款 · 三形态一句话）</div><div class="ac">判据：pay AC-Y1..Y14</div><div class="gate">闸：充值页代币三不可条款常驻</div></div>
+    <div class="step"><span class="no">3</span><b>JV-3 支付到账</b><div class="d">回调 · 幂等 · 对账</div><div class="ac">判据：pay 沙箱幂等+对账 dry-run</div><div class="gate">闸：法币/代币双域隔离 AC-Y7</div></div>
+    <div class="step"><span class="no">4</span><b>JV-4 账本登记</b><div class="d">双式账本入账</div><div class="ac">判据：token ledger AC-L1..L11</div><div class="gate">闸：双域隔离对账复验</div></div>
+    <div class="step"><span class="no">5</span><b>JV-5 入城激活</b><div class="d">出生证=入城资格 + 户籍分配</div><div class="ac">判据：AC-L11 census 绑定 + lobby AC-S1..S13</div><div class="gate">闸：入城呈现面 AIGC 生成标识</div></div>
+    <div class="step"><span class="no">6</span><b>JV-6 算力消耗</b><div class="d">一句话→量化策略回测 / 小游戏 Demo / 短视频（三形态）</div><div class="ac">判据：ugc AC-U1..U12</div><div class="gate">闸：AIGC 双轨标识（显式 ai_label + 隐式盲水印）</div></div>
+    <div class="step"><span class="no">7</span><b>JV-7 共创分流</b><div class="d">优质创意→过闸采纳→署名 / 分成</div><div class="gate">闸：msgSecCheck 前置闸（未接线拒启）+ 三层筛选 + 违规追回</div></div>
+    <div class="step"><span class="no">8</span><b>JV-8 续购/升档</b><div class="d">余额不足提示→续购 19.9 或升档订阅（29.9 / 49.9 / 99）</div><div class="ac">判据：member AC-M1..M16</div><div class="gate">闸：续费页非投顾常驻 + 调价走 T1 否决窗公告</div></div>
+  </div>
 
   <h2>沙箱工程读数（2026-09-30 · R681 全量实跑）</h2>
   <div class="note">数据源：qa/entry-tier-R681.log（本仓 QA 证据档）。5 项未绿分诊在板：4 项既有环境装配缺口（venv 缺 cv2/cryptography）+ 1 项既有疑点，均非当日回归面，分诊窗 ≤2026-10-02。</div>
@@ -126,8 +146,9 @@
   </div>
 
   <footer>
-    硅基域 BigDomain · 产品静态预览 v0.1 · 生成=BigDomain-OSLoop R683 · 2026-09-30 ·<br>
-    本页为 XL-16 改进项 ①交付件：真实数据派生（member/config.json + qa/entry-tier-R681.log）· 自包含零外链 · file:// 可开 · 服务器物理件到位后升 http URL。
+    硅基域 BigDomain · 产品静态预览 v0.2 · 生成=BigDomain-OSLoop R683/R698 · 2026-09-30 ·<br>
+    本页为 XL-16 改进项 ①交付件：真实数据派生（member/config.json + qa/entry-tier-R681.log）· 自包含零外链 · file:// 可开 · 服务器物理件到位后升 http URL。<br>
+    v0.2 新增（R698）：19.9 用户旅程八步节（JV-1..JV-8 · 派生自 docs/spec/journey-19.9-v2-spec.md §一 正典规格）。
   </footer>
 </div>
 </body>

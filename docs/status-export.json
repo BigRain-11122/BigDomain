@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-09-30T15:33:33+08:00",
+  "export_ts": "2026-09-30T16:53:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R693 O-2026-0930-1540 十一长假 24h 就绪检查令执行轮（计分 2）：GORD 三新令判读——O-2026-0930-1530 司域清理回执（>10MB 文件=0+__pycache__ 0.01MB 清除·窗 10-02 内提前 ~2 天）+O-2026-0930-1535 知悉（@Biggame）+O-2026-0930-1540 本司切片七面真跑全绿〔schtasks Running 全日循环/git 树净同步/state.json 解析过/C 盘余 768.3GB/docker 非阻塞/域零大文件/junk 清〕→就绪报告 verdict READY·P0=0·长假窗 10-01~10-08 八项全 OSLoop 自治可处置（无需 CEO 在线）；R72 水位整编毕（81,947B→76510B）",
-    "latest_artifact": "docs/ops/R-20260930-holiday-24h-readiness.md（十一长假 24h 就绪报告·O-2026-0930-1540 本司切片·verdict READY）+qa/holiday-readiness-R693.log（七面真跑证据·2026-09-30 ~15:27）+qa/reorg-R693.log（R72 fold 断言）+heartbeat R693 行",
-    "next_milestone": "10-01 00:00 AC-RG4 全绿复验出窗（backlog 顶行·OSLoop 自动承接）；10-02 12:00 法务外件窗+D-20260930-19 验收窗；10-02 21:40 OSS 窗 3 切片；10-07 benchmark 刷新+T2 否决窗（长假窗内全部自治处置）；R-D2/R-D3 翻绿=CEO 物理件到位后 bootstrap 填登记面即机械翻绿；预览件 v0.2=服务器物理件到位后 48h 内"
+    "current": "R698 产品轮（计分 2）：产品面 preview/index.html v0.1→v0.2——新增 19.9 算力包用户旅程八步节（JV-1..JV-8·journey-19.9-v2-spec §一 正典派生·每步在册判据号+合规闸·自包含 file:// 可开·机械自验 8/8）；CEO 09-30 16:13 可视化口径令已知悉对齐（「可视化」=gaming/MiniGame/硅基生命元宇宙.html·Biggame 单位面·本司汇报口径即日沿用）；GORD O-2026-0930-005 BigHouse 令知悉（非本司执行面）；backlog 三项全 gated（AC-RG4 出窗 10-01 00:00+法务外件 10-02 12:00+bootstrap 待 CEO 物理件）",
+    "latest_artifact": "preview/index.html v0.2（产品静态预览·新增 19.9 用户旅程 JV-1..JV-8 节·2026-09-30 ~16:5x）+qa/preview-v02-R698.log（机械自验 8/8 证据）",
+    "next_milestone": "10-01 00:00 AC-RG4 全绿复验出窗（backlog 顶行·OSLoop 自动承接）；10-02 12:00 法务外件窗+D-20260930-19 验收窗；10-02 21:40 OSS 窗 3 切片；10-07 benchmark 刷新+T2 否决窗（长假窗内全部自治处置）；R-D2/R-D3 翻绿=CEO 物理件到位后 bootstrap 填登记面即机械翻绿；预览件 http URL 升级=服务器物理件到位后 48h 内（v0.2 内容面已交 R698）"
   },
   "depts": [
     {
@@ -178,6 +178,11 @@
       "C-20260927-01 沙箱权益目录入门档（¥29.9 入门订阅卡）",
       "on",
       "member patron 档+席4/席6 硬判据套件 AC-E1..E7 7/7+member 25 断言零回归+RUNNER 27 套件 231 判据（22/27 绿·4 环境缺口+1 既有疑点分诊在板）·qa/entry-tier-R681.log·R681"
+    ],
+    [
+      "产品面前台静态预览（preview/index.html）",
+      "on",
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·自包含 file:// 可开·http URL 升级 gated on 服务器物理件"
     ]
   ],
   "results": [
@@ -230,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "693",
+      "698",
       "OSLoop 轮次 tick"
     ],
     [
@@ -928,6 +933,10 @@
     [
       "2",
       "十一长假 24h 运转就绪自检件+司域清理回执+R72 整编 三件一轮（O-2026-0930-1540 执行面切片：docs/ops/R-20260930-holiday-24h-readiness.md 七面真跑全绿 verdict READY·P0=0+长假窗日程八项全自治+O-2026-0930-1530 司域 >10MB=0+__pycache__ 清·回执窗 10-02 内提前+state fold R72 81,947B→76510B AC-R721..R725·AC-HR1..HR4/AC-SW1..SW3 全过=qa/holiday-readiness-R693.log+qa/reorg-R693.log·R693）"
+    ],
+    [
+      "2",
+      "产品面前台 v0.2 件（R698·preview/index.html 新增 19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生零写死·机械自验 qa/preview-v02-R698.log 8/8·CEO 可视化口径令知悉随轮）"
     ]
   ],
   "self_drive": {
