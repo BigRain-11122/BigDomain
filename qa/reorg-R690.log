@@ -1,0 +1,33 @@
+R71 fold (cut 73) evidence - verify-then-write, all checks pre-write
+standing law: P-2026-09-25-18 (5) waterline gate; precedent R685/R687 fold
+AC pre-registered in src/os/backlog.md R690 row BEFORE any disk mutation
+amend note: first run single-window [R70 summary + R687/R688/R689 pairs] -> final 78,813B over 78,500B margin gate, intercepted zero-write -> window extended per R477/R520/R523/R577 precedent (R48 window-summary folded along, dual-window merge)
+[PASS] AC-R711a pre-op size 81555B measured=81555
+[PASS] AC-R711b pre-op == git HEAD blob 6b738c16b2417b11a4436c986bb74440cf17aa4b
+[PASS] AC-R711f json.dumps round-trip parity bom=False
+[PASS] AC-R712a log 64 items pre-fold n=64
+[PASS] AC-R712b window structure 8 items anchored (amend dual-window R577 precedent)
+[PASS] AC-R712d P/D/O/XL catalog regex mechanical dedup 26 tokens: D-06,D-16,D-20260929-03,D-20260930-03,D-20260930-18,D-20260930-19,D-20260930-20,D-20260930-22,D-22,D-31,O-2026-0929-016,O-2026-0929-017,O-2026-0929-018,O-2026-0929-019,O-2026-0929-020,O-2026-0929-021,O-2026-0929-022,O-2026-0929-027,O-2026-0930-001,O-2026-0930-002,O-2026-0930-1435,P-001,P-2026-09-25-18,P-2026-09-29-07,P-32,XL-16
+[PASS] AC-R712f round column R685..R689 consecutive, pairs 1 live + 1 tokens
+[PASS] AC-R713b counter-clean summary row no 'idle-fast'
+[PASS] AC-R713b counter-clean summary row no 'no-pullable'
+[PASS] AC-R713b counter-clean closeout no 'idle-fast'
+[PASS] AC-R713b counter-clean closeout no 'no-pullable'
+[PASS] AC-R713 last_dec_tokens baseline 95 tokens (scan known=96 = decisions.md full-set incl. new) n=95
+[PASS] AC-R713 D-20260930-35 is new token
+[PASS] AC-R713 last_dec_tokens 95->96 (== decisions.md full set)
+[PASS] AC-R714a closeout final <= 78500B margin gate final=77060B margin=1440B postfold=74058B
+[PASS] AC-R712e head block verbatim 56 items
+[PASS] AC-R711c archive new-format markers baseline 63 found=63
+[PASS] AC-R711d archive pure-append prefix
+[PASS] AC-R711e marker 63->64
+[PASS] self_drive mechanical recount flat 23/8/0/13 W=23 idle=8 nop=0 sub=13 toks=9 p2=1
+[PASS] AC-R714b on-disk == claimed 77060 == 77060
+window: 8 lines (10248B) -> 1 summary (R48 window-summary + R70 window-summary + R687/R688/R689 3 pairs)
+pre-op 81555B archived at archive R690 append section (marker 63->64)
+post-fold 74058B + closeout pair final 77060B (margin 1440B <= 78500B gate)
+P/D/O/XL catalog (26 tokens, regex mechanical dedup): D-06,D-16,D-20260929-03,D-20260930-03,D-20260930-18,D-20260930-19,D-20260930-20,D-20260930-22,D-22,D-31,O-2026-0929-016,O-2026-0929-017,O-2026-0929-018,O-2026-0929-019,O-2026-0929-020,O-2026-0929-021,O-2026-0929-022,O-2026-0929-027,O-2026-0930-001,O-2026-0930-002,O-2026-0930-1435,P-001,P-2026-09-25-18,P-2026-09-29-07,P-32,XL-16
+log items 64 -> 59 (56 head verbatim + 1 window summary + R690 closeout pair)
+tick 689 -> 690; last_order verbatim; last_decision_rows 152->154; benchmarks_refreshed verbatim; last_dec_tokens 95->96 (+D-20260930-35, == decisions.md full set)
+self_drive recount on post-fold log: W=23 idle=8 no-pullable=0 substantive=13 (flat 23/8/0/13 zero drift; P2-receipt = line-level signature 'P2 上报 HQ-FEEDBACK' - the R265 gord line merely mentions P2 and is not a receipt, criterion probe-fixed this round, honestly noted; R48 summary line is paren-format so W unaffected; R688/R689 pairs never entered counters per no-reflush law, honestly labeled)
+json.dumps canonical: last log item no trailing comma (structural guarantee)
