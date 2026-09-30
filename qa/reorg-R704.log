@@ -1,0 +1,26 @@
+R704 state.json re-org cut-78 (round 76 fold) evidence log
+mandate: P-2026-09-25-18 5th-line waterline fold; trigger = round-start 80224B over 80000B line (R703 carry-note cashed)
+AC-R751: pre-op snapshot archived, byte-identical to git HEAD blob; pure-append prefix assertion; archive markers 68 -> 69; backup logs/state-preop-R704.bak
+AC-R752: window 7 lines 11198B (R73/R74/R75 paren window-summaries + R702 pair + R703 pair) -> 1 rolling summary line; head block 55 items verbatim; catalog 83 tokens regex-deduped
+AC-R753: top fields preserved (last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens); json.loads pass in-script (PowerShell ConvertFrom-Json re-check at closeout)
+AC-R754: post-fold 72730B + closeout budget 3200B <= 78500B margin gate (final measured at closeout)
+AC-R755: receipt = state log R704 line + commit message carries P-2026-09-25-18
+AC-R751 probe: pre-op size=80224 bom=False
+AC-R751 probe: pre-op sha256 == git HEAD blob (byte-identical)
+AC-R753 probe: pre-op json round-trip identity ok (indent=2, ensure_ascii=False)
+AC-R752 probe: window composition ok (3 paren summaries + R702 pair + R703 pair)
+AC-R752 probe: window content bytes=11198
+AC-R752 probe: head block 55 items (IDX 000..054) captured verbatim
+AC-R752 probe: mechanical catalog 83 tokens
+AC-R752 probe: rolling summary line 3752 bytes (catalog spliced)
+AC-R754 probe: post-fold size=72730 (margin gate final 75930 with closeout budget 3200)
+AC-R751 probe: archive pure-append ok, markers 68 -> 69
+WRITE DONE (verify-then-write passed)
+on-disk re-verify ok: size=72730
+
+-- closeout addendum --
+AC-R754 final: closeout pair appended, on-disk final state.json = 76144B (margin 2356B under the 78500B gate)
+AC-R753 dual-parser: python json.loads on-disk pass (tick 704, log 58 items) + PowerShell ConvertFrom-Json -Encoding UTF8 pass (tick 704, log_n 58)
+self_drive mechanical recount post-closeout: W=23 idle=8 nop=0 tok=9 p2=1 sub=13 == registered, zero drift (probe logs/tmp_r704_sdprobe.py)
+export refreshed: export_ts 2026-09-30T18:10:53+08:00, results tick row 702->704, R704 results row appended (188->189), self_drive flat, BOM preserved
+P-32 daily clear: HQ-FEEDBACK P2 line appended (O-2026-0930-012 registry collision, R157 precedent)
