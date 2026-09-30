@@ -1,0 +1,38 @@
+R695 R73 fold (cut 75) evidence - verify-then-write, all checks pre-write passed
+standing law: P-2026-09-25-18 (5) waterline gate; precedent R685/R687/R690/R693 same-structure
+AC pre-registered in src/os/backlog.md R695 row BEFORE any disk mutation (amended in place with amend note before second run)
+amend note: first run single-window [R72 window-summary + R693/R694 two pairs] -> final 78,881B over 78,500B margin gate, verify-then-write intercepted ZERO writes -> window extended per R690/R577 precedent (R47 window-summary folded along, dual-window merge)
+honest adaptation: pre-op tree dirty (R694 session died pre-commit; closeout pair inherited on tree) -> pre-op==HEAD-blob compare N/A this round; replaced by full pre-op snapshot into archive R695 section + backup logs/state-preop-R695.bak
+consumption receipts carried in R695 live line: D-20260930-38/39 knowledge-only (BigMoney faces); GORD O-2026-0930-1555/1601/1556 judged (zero @BigDomain dispatch, new sha16 baseline DA4E56C1E0E58137); O-2026-0930-1556 skill-gap self-check compliant (source-of-truth git-tracked, installed copies hash-identical)
+[PASS] AC-R731a pre-op size 79357B (round-start first-measure basis) | measured=79357
+[PASS] AC-R731b dirty-tree inheritance on record (R694 corpse accounting; HEAD-blob compare N/A honestly adapted) | 'M src/os/state.json'
+[PASS] AC-R731b2 no BOM (raw head bytes 123,10,32)
+[PASS] AC-R731c canonical round-trip parity (json.dumps indent=2 ensure_ascii=False == raw)
+[PASS] AC-R732a log 61 items pre-fold | n=61
+[PASS] AC-R732b window 6 items anchored (amend dual-window: R47 window-summary + R72 window-summary + R693 pair + R694 pair)
+[PASS] AC-R732c P/D/O/XL catalog regex mechanical dedup | 56 tokens
+[PASS] AC-R732d round column R693..R694 consecutive, pairs 1 live + 1 tokens
+[PASS] AC-R734b counter-clean summary no 'idle-fast'
+[PASS] AC-R734b counter-clean summary no 'no-pullable'
+[PASS] AC-R734b counter-clean live/tok no idle-fast/no-pullable
+[PASS] AC-R733a last_dec_tokens baseline 98 (field-measured) | n=98
+[PASS] AC-R733b D-20260930-38/39 are new tokens
+[PASS] AC-R733c last_dec_tokens 98->100 sorted union (== decisions.md full set)
+[PASS] AC-R731d archive new-format markers baseline 65 | found=65
+[PASS] AC-R734a closeout final <= 78500B margin gate | final=77220B margin=1280B postfold=72389B win=10395B
+[PASS] AC-R734d post-parse: tick 695 / log 58 / head 55 verbatim / tail = R695 tokens line
+[PASS] AC-R734e top fields: last_order verbatim / rows 162 / bench verbatim / tokens 100
+[PASS] AC-R731e archive pure-append prefix
+[PASS] AC-R731f archive appended region == intended snapshot bytes
+[PASS] AC-R731g marker 65->66 | found=66
+[PASS] AC-HB1 heartbeat idempotency (no existing tick 695 row)
+[PASS] AC-R734c on-disk == claimed final | 77220 == 77220
+window: 6 lines (10395B) -> 1 summary (R47 window-summary + R72 window-summary + R693/R694 two pairs)
+pre-op 79357B archived at archive R695 append section (marker 65->66) + backup file
+post-fold 72389B + closeout pair final 77220B (margin 1280B <= 78500B gate)
+P/D/O/XL catalog (56 tokens, regex mechanical dedup): D-05,D-06,D-11,D-12,D-13,D-16,D-18,D-20260924,D-20260929,D-20260929-03,D-20260930-03,D-20260930-18,D-20260930-19,D-20260930-20,D-20260930-22,D-20260930-25,D-20260930-35,D-20260930-36,D-20260930-37,D-22,D-31,D-34,D-35,D-36,O-007,O-2026-0929-007,O-2026-0929-013,O-2026-0929-014,O-2026-0929-016,O-2026-0929-017,O-2026-0929-018,O-2026-0929-019,O-2026-0929-020,O-2026-0929-021,O-2026-0929-022,O-2026-0929-027,O-2026-0930-001,O-2026-0930-002,O-2026-0930-1435,O-2026-0930-1521,O-2026-0930-1530,O-2026-0930-1531,O-2026-0930-1532,O-2026-0930-1535,O-2026-0930-1540,O-2026-0930-1543,O-2026-0930-1544,O-2026-0930-1550,O-20260930-1500,P-001,P-2026-09-25-18,P-2026-09-29-07,P-32,P-56,P-74,XL-16
+log items 61 -> 58 (55 head verbatim + 1 window summary + R695 closeout pair); tick 694 -> 695
+last_dec_tokens 98->100 (+D-20260930-38/39 sorted union == decisions.md full set); last_decision_rows 158->162 secondary; last_order/benchmarks_refreshed verbatim
+heartbeat R695 row appended (3259B line)
+export NOT refreshed this round (0.3h fresh at scan, zero CEO-visible change, waiting-round law) - self_drive recount not applicable
+AC-R735 receipt carriers: state log line + this qa evidence + commit msg with law numbers (commit follows script)
