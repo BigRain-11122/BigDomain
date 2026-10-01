@@ -1,0 +1,15 @@
+AC-R1211a pre-op == git HEAD blob byte-identical (81147B) + backup logs/state-preop-R836.bak byte-preserved (re-verified from disk post-write)
+AC-R1211b round-start first-measure 81147B (scan/getsize dual gauge) over 80000B line by 1147B = R835 carry-note cashed; tick 835->836, log 62->58 items
+AC-R1211c archive pure-append markers 113 -> 114 (pre-op full text filed, prefix assertion, prior 113 sections untouched) - re-verified from disk
+AC-R1212a window = [R120 prior summary + R833..R835 three pairs] 7 lines 11881B (content gauge)
+AC-R1212b P/D/O catalog recomputed from backup, 142 tokens; summary-on-disk endswith(catalog) asserted (snowball identical)
+AC-R1212c head block 55 items verbatim (re-verified identical to pre-op backup); window coverage R833..R835 continuous 3 pairs, each exactly 1 status + 1 tokens line
+AC-R1213a top fields preserved (tick 836; last_dec_tokens 117 flat, DEC zero new rows; ORD/GORD/BENCH baselines flat per scan PASS faces)
+AC-R1213b state.json written, no trailing LF; post-fold 72179B + closeout pair final 75497B margin 3003B under 78500B gate
+AC-R1213c re-read: json.loads + PowerShell ConvertFrom-Json dual-gauge parse pass (tick 836, log 58); head verbatim; summary/closeout byte-asserted
+AC-R1214 final size 75497B, margin 3003B under 78500B gate
+probe post: {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 2, "paren": 33, "round": 23, "sub": 6, "tokens": 9}
+symmetric law vs R833/R830 post counters: W 56 / tokens 9 / sub 6 = symmetric flat
+export refreshed: export_ts 2026-10-01T20:22:31+08:00, results tick 833->836, R121 results row appended, self_drive re-derived W 56 / sub 6, idle 37 / nop 2, queues 6/2/2 + proposals 1/1 disk-recounted
+heartbeat row appended ts=2026-10-01T20:22:31+08:00 (cpu9/ram42/lanes2 CIM measured 20:1x)
+AC-R1215 delivery = state log line + backlog done row + commit contains P-2026-09-25-18 (P-51); board cut-111 tag in commit (AC-K111e)

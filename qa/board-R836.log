@@ -1,0 +1,6 @@
+AC-K111a stale-board census = exactly 1 done row [R833 at cut time] + 4 open rows pre-cut (asserted in run 1); board header block intact (BOM preserved)
+AC-K111b R833 row verbatim to 10-month done-archive ## R836 section (sections 16 -> 17, md5 identical pre/post, pure-append prefix assertion); 09-archive zero-touch == git HEAD blob pre/post (dual gauge)
+AC-K111c main board final = header + R836 current row (flipped done with closure note) + 3 open rows; zero stale done rows (post-write re-read asserted, BOM preserved)
+AC-K111d evidence qa/board-R836.log (verify-then-write all assertions passed before write + post-write re-read assertion)
+AC-K111e delivery = board row + state log line + commit tag "board cut-111" (P-51)
+HONEST-RECORD: run 1 (tmp_r836_fold.py) aborted at board-header BOM-encoding assert AFTER board write; zero state corruption (fold/archive/backup all committed and re-verified from disk); run 2 = this fixup: BOM-tolerant re-read + done-archive append + export + heartbeat + evidence logs
