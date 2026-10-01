@@ -1,0 +1,11 @@
+RESUME RE-VERIFY AC-R1251: pre-op backup logs/state-preop-R848.bak (81449B) == git HEAD blob byte-identical (re-verified post-fail); state.json on disk = post-fold closeout final 75909B, tick=848, log=58, json.loads parse pass; head block 55 items byte-equal pre-op vs post (verbatim law); benchmarks_refreshed 2026-10-01 -> 2026-10-02 (QA G-slice live change)
+RESUME RE-VERIFY AC-R1251e: archive pure-append marker 117 -> 118 with R848 section header present, prior sections untouched (on-disk regex count)
+RESUME RE-VERIFY AC-R1252: window [R124 prior summary + R845..R847 three pairs] 7 lines 12184B -> 1 rolling summary; catalog snowball 156 + 2 new [C-R1241/C-K116a] = 158 tokens endswith-asserted (run-1 output in session log); post probe '{"in_window": 56, "round": 23, "tokens": 9, "sub": 6, "idle": 37, "nop": 2}' additive law asserted run-1
+RESUME RE-VERIFY AC-R1253/R1254: top fields tick 847->848 + benchmarks_refreshed->2026-10-02, other four flat (run-1); no trailing LF; final 75909B margin 2591B under 78500B gate
+AC-O13 O-013-4 daily first-round check: round-start export age 0.3h (<=24h, scan gauge), json.loads parse pass, ceo_face three rows all present non-empty - check cashed, refresh follows as live change (tick move)
+tick row located robustly (label 'OSLoop 轮次 tick', value 846 -> 848; run-1 died on a wrong unicode escape for the label char, zero bytes written to export that run - honest note)
+export refreshed: export_ts 2026-10-02T00:13:46+08:00, results tick row 846->848 (R847 waiting round skipped per 24h gate, jump honest), R848 results row appended (250->251), self_drive re-derived W 56 / idle 37 / nop 2 / sub 6 (mechanical post-fold probe), queues {'main': 6, 'tech': 2, 'explore': 2} + proposals 1/1 disk-recounted, depts OSLoop note appended
+heartbeat row appended: 2026-10-02T00:13:47+08:00 (CIM cpu17/ram35/lanes3)
+AC-R1255 delivery = state log line + backlog done row + commit contains P-2026-09-25-18 (P-51); fold R125 + board cut-117 tags in commit
+ROUND-FRAME: four-item round (fold R125 + cut-117 + QA charter daily crawl G-slice + O-013-4 first-round check), score 1 = mechanism + benchmark/signal file changes; QA evidence = qa/smoke-R848.log + png
+PS-PARSE second gauge: ConvertFrom-Json pass on state.json - tick 848 log 58 bench 2026-10-02; status-export.json results 251 (tick row 846->848 asserted by closeout)

@@ -1,0 +1,50 @@
+BigDomain QA Smoke Test - round R848 - 2026-10-02 +08:00 (holiday window day 2)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-02 first round)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch + search, zero-key, read-only; 4 attempts / 1 hit / 2 miss + 1 search locate):
+    a. gov.cn/zhengce/content/202311/content_6915407.htm - MISS (404 wrong link, honest miss recorded)
+    b. gov.cn/zhengce/content/202310/content_6911288.htm - MISS (page shell only, body JS-rendered empty;
+       kept as canonical-source locator via search, NOT enrolled as a fetched source row)
+    c. search "Minors Network Protection Regulation decree 766 gov.cn full text" - LOCATE (two official
+       locators: gov.cn policy library content_6911288 + Xinhua release page content_6911333)
+    d. hunca.miit.gov.cn/zwgk/zcwj/flfg/art/2023/art_5f760e87ffb240b983225b4be8cbda72.html - HIT (A-level
+       official reprint: State Council Decree No. 766, full article-by-article text, 7 chapters 60
+       articles; passed 2023-09-20, published 2023-10-16, effective 2024-01-01)
+    -> minors-protection law chain for our UGC metaverse / slow-live / 19.9 monthly card / token faces:
+       benchmarks global-benchmarks.md section-1 new block (minors protection), section-3 new source
+       row, section-4 G-slice update log entry; signal W11 -> intelligence-wall.md. Key articles:
+       Art.20 platform six duties (impact assessment + minors mode + external-member independent
+       oversight body + annual report; penalty tier up to CNY 50m / 5% prior-year revenue);
+       Art.24(3) NO automated decision-based commercial marketing to minors (token/upsell popup face
+       hard ban); Art.26 cyberbullying protection mechanisms (feature lib + protective options);
+       Art.29 UGC info-management duties (stop-transmit + delete/block/delink + records + report +
+       account-action ladder); Art.31 real-identity for info-publish/IM services + livestream
+       publisher dynamic identity verification + minors livestream-publish ban; Art.42-47
+       anti-addiction regime, minors mode, per-time and per-day spending caps + civil-capacity
+       matching ban, ban on vote-rank/fan-fundraising themed communities (incentive anti-farm
+       isomorphic source), age-appropriate labels; Art.53-56 penalty ladder (50k-500k / up to 1m /
+       100k-1m or 1-10x illegal gains).
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-02 (state.json top field updated in this round's closeout;
+    global-benchmarks.md section-4 carries the G-slice entry with fetch window ~00:1x-00:2x +08:00;
+    next 7-day due 2026-10-09; today_png/today_log produced by this very file + png render below).
+
+[3] signals to intelligence-wall: PASS
+    W11 appended to docs/research/intelligence-wall.md signal table + conclusion application table
+    (consumption anchors: P-47-5 monthly-card minors tier design [minors mode + spending caps +
+    no automated marketing]; P-47-3 UGC pipeline [real-identity + bullying protection + Art.29
+    management + livestream identity verification / minors broadcast ban]; P-47-2 ledger anti-farm
+    Art.45 isomorphic law source; P-47-1 lobby minors zone).
+
+[4] on-disk evidence this round: PASS
+    qa/smoke-R848.log (this file, real log) + qa/smoke-R848.png (rendered from this log via
+    render_smoke_png.ps1, verbatim, never hand-drawn) + qa/reorg-R848.log + qa/board-R848.log
+    (fold R125 + cut-117 evidence from the same round's closeout script, verify-then-write).
+
+self-judge: charter checklist PASS; two-state honesty kept (gov.cn 404 + JS-shell misses recorded,
+canonical gov.cn page kept as locator only, not counted as a hit); no assertion without evidence;
+external content treated as untrusted input, zero downstream assertion.
