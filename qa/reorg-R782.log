@@ -1,0 +1,30 @@
+R782 fold R102 evidence log (P-2026-09-25-18 mainline waterline knife 104; window R779..R781; executed 2026-10-01 ~10:4x beat +08:00)
+AC preregistration: AC-R1021..R1025 standing template per R779/R776 precedent (archive verbatim + fold window + dual-parser + margin gate + P-51 three-carrier).
+--- AC-R1021 (archive + backup + pre-op identity) ---
+AC-R1021a pre-op == git HEAD blob: 81327 bytes (byte-identical, verify-before-write gate)
+AC-R1021b backup logs/state-preop-R782.bak written byte-identical (81327B)
+AC-R1021c archive pure-append: 8580579 -> 8661987 B; markers 94 -> 95 (last = R782 append header; prefix assertion passed; temp+replace write)
+--- AC-R1022 (fold window) ---
+AC-R1022a window = [R101 prior window-summary + R779..R781 three pairs] 7 lines 12140B (content); head block 55 items verbatim 66941B
+AC-R1022b removed lines substring-verified clean: idle-fast 0 / no-pullable 0
+AC-R1022c P/D/O catalog (regex mechanical dedup, order of first appearance): 194 tokens (recorded in state summary row; includes prior-summary embedded catalog snowball, zero hand-picked)
+AC-R1022d mechanical round-number list: R779..R781 continuous 3 rounds (pairs) zero-missing
+--- AC-R1023 (fields + parsers) ---
+AC-R1023a serialization audit: pre-op file differed from canonical json.dumps(indent=2) only on 4 tail item lines (2-space indent from R780/R781 closeout appends) - all inside fold window; head+R101+R779 region byte-canonical
+AC-R1023b head region (through item 54) proven byte-identical to canonical serialization; tail replaced with canonical 4-space rows; whole file converged to canonical form
+AC-R1023c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical (tick digit only); top fields verbatim; canonical == json.dumps(indent=2); PowerShell ConvertFrom-Json re-verified independently after write
+--- AC-R1024 (waterline) ---
+AC-R1024 final size 76652B, margin 1848B under 78500B gate; post-fold (pre-closeout) 73879B; vs round-start first-measure 81327B = -5.7%
+--- AC-R1025 (P-51 three-carrier) ---
+AC-R1025 this log + state.json R782 live row + backlog done row + commit message contains P-2026-09-25-18
+--- self_drive probe (R744-registered criterion) ---
+probe pre-op : {'in_window': 60, 'paren': 32, 'round': 28, 'tokens': 11, 'idle': 37, 'idle_round': 9, 'nop': 2}
+probe post   : {'in_window': 56, 'paren': 32, 'round': 24, 'tokens': 9, 'idle': 37, 'idle_round': 9, 'nop': 2}
+post sub by R744 formula (round-tokens-idle_round) = 6
+incremental-register law: W 60->56 (60-7+1+2); sub 8->6 [R779 closeout 6 + R780/R781 pair lives +2, minus 3 removed, plus R782 live]; tokens 11->9; idle/nop flat (removed lines substring-clean)
+--- queue/proposals recount ---
+queue open 6/2/2 (main/tech/explore) + proposals 1/1 flat vs R779 register
+--- closeout ---
+window content: R779 = R101 fold round (score 1); R780/R781 = waiting-state declaration rounds (score 0, protected exemption); tokens rows 3x unmeasured (official session has no token metering outlet; zero new external API touchpoints; zero cloud generation)
+next fold R103: est R785 band (growth ~2.4KB/pair measured band: R780 closeout delta 2469B, R781 closeout delta 2370B); decided by round-start first-measure per standing law
+waiting faces unchanged: legal-external 10-02 12:00 + D-19/20 acceptance 10-02 12:00 + OSS window3 10-02 21:40 + proposal revisit 10-05 + benchmark 10-08 + bootstrap CEO-physicals no ETA
