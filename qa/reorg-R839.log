@@ -1,0 +1,19 @@
+AC-R1221a round-start first-measure 82068B (scan/getsize dual gauge) over 80000B line by 2068B = R838 carry-note cashed
+AC-R1221b tick=838, log 62 items, json.loads parse ok (pre-op)
+AC-R1221c pre-op == git HEAD blob byte-identical (blob OID c7e4a7070961 dual gauge)
+AC-R1221d backup logs/state-preop-R839.bak byte-preserved (82068B, re-verified from disk post-write)
+AC-R1221e archive pure-append markers 114 -> 115 already filed by run 1 (tail == marker+pre-op text byte-equal, prefix 114 sections untouched, pure-append verified) - idempotent re-entry skip
+AC-R1222a window = [R121 prior summary + R836..R838 three pairs] 7 lines identified (each round exactly 1 status + 1 tokens line)
+AC-R1222b window content gauge 12803B (7 lines)
+AC-R1222c P/D/O catalog recomputed from window (snowball: R121 prior summary embedded catalog included), 146 tokens, summary endswith(catalog) asserted below
+AC-R1223a top fields preserved (tick 838->839; last_dec_tokens 117 flat, DEC zero new rows; last_gord_tbl_rows 141->143 GORD two-new-row knowledge-receipt baseline close; ORD/DEC-rows/BENCH flat)
+AC-R1223b state.json serialized, no trailing LF (R761 round-trip law); post-fold 73240B + closeout pair final 77005B margin 1495B under 78500B gate
+AC-R1223c re-read: json.loads + PowerShell ConvertFrom-Json dual-gauge parse pass (tick=839 log=58 gord=143 tokens=117)
+AC-R1224 final size 77005B, margin 1495B under 78500B gate
+AC-R1225 delivery = state log line + backlog done row + commit contains P-2026-09-25-18 (P-51); board cut-112 tag in commit (AC-K112e)
+HONEST-RECORD: run 1 aborted at state.json layout assert (trailing-LF assumption wrong: file ends with } per R761 no-trailing-LF round-trip law) AFTER archive append; run 2 aborted at archive idempotency check (byte-equality recomputed off already-appended base); run 3 wrote state.json with a mechanically deficient catalog (wrong regex class [PCDO]-[0-9]+[a-z]* -> 64 tokens, missing C-R/C-K letter-dash shapes, snowball law violated) - caught by post-run probe vs R121 embedded 142-token catalog, state.json rolled back from logs/state-preop-R839.bak byte-verified (blob==HEAD, zero git contamination, nothing committed); run 4 = this clean run, regex corrected to [PCDO]-[A-Za-z0-9]+ reproducing the R121 embedded catalog as a set (missing=[] extra=[])
+probe post: {"in_window": 56, "round": 23, "tokens": 9, "idle_mention_round": 8, "sub": 6, "idle": 37, "nop": 2}
+probe pre-op (backup): {"in_window": 60, "round": 27, "tokens": 11, "idle_mention_round": 8, "sub": 8, "idle": 37, "nop": 2}
+symmetric law vs R836/R833 post counters: W 56 / tokens 9 / sub 6 = symmetric flat; idle 37 / nop 2 flat
+export refreshed: export_ts 2026-10-01T21:31:25+08:00, results tick 838->839, R122 results row appended (246 rows), self_drive re-derived W 56 / sub 6, idle 37 / nop 2, queues 6/2/2 + proposals 1/1 disk-recounted
+heartbeat row appended ts=2026-10-01T21:31:25+08:00 (cpu23/ram43/lanes2 CIM measured ~21:2x, composition llama-server+ollama+ollama app, prod_lanes=2 per R753..R836 convention)

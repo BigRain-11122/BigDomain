@@ -1,0 +1,6 @@
+AC-K112a stale-board census (re-derived from git HEAD pre-round board): exactly 3 stale done rows [R837/R836/R838] + 3 open rows; board header block intact (BOM preserved)
+AC-K112b 3 stale done rows verbatim to 10-month done-archive ## R839 section (sections 17 -> 18, md5 identical HEAD-board vs migrated, pure-append prefix vs git HEAD blob); 09-archive zero-touch == git HEAD blob (dual gauge)
+AC-K112c main board final = header + R839 current row (flipped done with closure note) + 3 open rows; zero stale done rows besides the current row (post-write re-read asserted from disk, BOM preserved, 12-line layout)
+AC-K112d evidence qa/board-R839.log (verify-then-write asserts of run 1 passed through the archive append; run 1 died only at a post-board off-by-one layout assert (12 expected, 11 coded); this run 2 = pure disk+HEAD re-verification, zero re-writes, all assertions green before evidence write)
+AC-K112e delivery = board row + state log line + commit tag "board cut-112" (P-51)
+HONEST-RECORD: run 1 (tmp_r839_board.py) died at the board post-layout assert (off-by-one: 12-line final layout asserted as 11) AFTER both writes completed correctly on disk (archive 17->18 + board rewrite); zero corruption - every artifact re-verified byte-level from disk and git HEAD in this run 2 before any evidence write
