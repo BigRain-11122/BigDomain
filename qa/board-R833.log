@@ -1,0 +1,7 @@
+AC-K110b 09-month archive zero-touch == git HEAD blob re-verified (run 2)
+HONEST-RECORD: run 1 (r833_fold.py) committed prereg+backup+archive-append+fold+10mo-migration+board-rewrite but left the R833 checkbox unflipped (template-inherited flipped=prereg+closure bug, r830 run-2 lineage; caught by post-write re-read assert = zero unverified claims); run 2 = flip fix + closeout. All committed writes re-verified byte-level this run.
+AC-K110a stale-board count pre-flip = exactly 1 stale done row [R830] migrated + 4 open rows [R833+O-013-4+legal gated+bootstrap], header intact [run 1]
+AC-K110b md5 of R830 row identical across migration (10mo archive section ## R833, re-verified run 2)
+AC-K110c main board final: header + R833 current-round done row (checkbox flipped in run 2, closure note from run 1 intact) + 3 open rows, zero stale done rows
+AC-K110d backlog.md written (temp+replace, re-read asserted both runs)
+AC-K110e delivery = board row + state log line + commit marker 'board cut-110' (P-51)

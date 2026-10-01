@@ -1,0 +1,16 @@
+AC-R1201b backup logs/state-preop-R833.bak byte-preserved (81032B, tick 832, log 62) [run 1 committed, re-verified]
+AC-R1202a window recomputed from backup = [R119 prior summary + R830..R832 three pairs] 7 lines 11766 B (content); head block 55 items verbatim 66941 B [run 1 committed, re-verified]
+AC-R1202d P/D/O catalog recomputed from backup, 239 tokens; summary-on-disk endswith(catalog) asserted (snowball identical)
+AC-R1201c archive pure-append markers 112 -> 113 [run 1 committed, re-verified]
+AC-K110b 10-month archive pure-append sections 15 -> 16; R830 row migrated under ## R833 [run 1 committed, re-verified]
+HONEST-RECORD: run 1 aborted at main-board post-write re-read assert (unflipped checkbox, zero prior state corrupted; fold/archive/migration writes all committed and re-verified); run 2 = flip fix + closeout
+AC-R1203b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 832->833 only
+AC-R1204 final size: 77138 B, margin 1362 B under 78,500B gate; post-fold 73740 B
+AC-R1203c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical; summary identical; canonical form == json.dumps(indent=2)
+state closeout write committed (temp+replace, re-parsed after write)
+probe post   : {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 2, "paren": 33, "round": 23, "sub": 6, "tokens": 9}
+B. incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 (symmetric law vs R827/R830 post counters 56/9/23 + sub 6; drift-if-any honestly printed above)
+C. export derived: tick 830->833, R120 results row appended, self_drive W 56 / sub 6, idle 37 / nop 2, queues 6/2/2, proposals 1/1 disk-recounted
+C. export written, export_ts = 2026-10-01T19:51:46+08:00 , results rows = 242
+D. heartbeat row appended ts= 2026-10-01T19:51:46+08:00
+E. qa/board-R833.log written, 7 lines
