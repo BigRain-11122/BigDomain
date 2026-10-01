@@ -1,0 +1,7 @@
+AC-K109a stale-board count = exactly 1 done row [R827] + exactly 4 open rows [R830+O-013-4+legal gated+bootstrap], header intact (run 2, pre-migration)
+AC-K109b md5 of R827 row (pre-migration): 187eb97078bdfe4390cb3409ad0960b3 (== migrated-line md5, identical)
+AC-K109b 10-month archive pure-append: sections 14 -> 15 (counting basis '^## R<digits>$'); md5 of migrated line identical; committed in run 2, re-verified run 3
+AC-K109b 09-month archive zero-touch pre/post == git HEAD blob re-verified
+AC-K109c main board final: header + R830 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows (flip bug in run 2 left '[ ]' unflipped - fixed in run 3, honest record)
+AC-K109d backlog.md written (temp+replace, re-read asserted)
+AC-K109d 10-month archive written (temp+replace, prefix + md5 re-verified post-write, run 2)

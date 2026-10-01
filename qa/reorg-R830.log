@@ -1,0 +1,28 @@
+AC-R1191a pre-op == git HEAD blob: 82410 bytes (round-start first-measure 82410B cashed, scan/getsize dual-gauge) [run 1]
+AC-R1193a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form [run 1 + re-verified on fold state]
+AC-R1191b backup logs/state-preop-R830.bak written byte-identical (== git HEAD blob re-verified)
+AC-R1192a window = [R118 prior summary + R827..R829 three pairs] 7 lines 13144 B (content); head block 55 items verbatim 66941 B
+AC-R1192b window line prefixes verified R827..R829 continuous 3 rounds (pairs) zero-missing [run 1]
+AC-R1192c removed lines substring-verified: idle-fast 0 (expected 0) / no-pullable 0 (expected 0) / tokens 3 (expected 3) [run 1]
+AC-R1192d P/D/O catalog (regex dedup, order of first appearance), 237 tokens (includes R118 prior-summary embedded catalog snowball, zero hand-picked) [run 1]
+probe pre-op : {"idle": 37, "idle_round": 8, "in_window": 60, "nop": 2, "paren": 33, "round": 27, "sub": 8, "tokens": 11} [run 1]
+AC-R1191c archive pure-append: 9967646 -> 10050137 B; markers 111 -> 112 (re-verified on disk)
+archive write committed (temp+replace, prefix re-verified) [run 1 + re-verified]
+post-fold (pre-closeout) size: 73786 B (re-verified on disk)
+state fold write committed (temp+replace, re-parsed after write) [run 1 + re-verified]
+HONEST-RECORD: run 1 aborted at 10-month-archive section-count expected-value assertion (my error: expected 15 sections, on-disk basis '^## R<digits>$' = 14; precedent '14->15' counting included one extra non-section line); run 2 committed 10-month append + board rewrite but left the R830 checkbox unflipped (my bug, caught by post-write re-read assert = zero unverified claims); run 3 = flip fix + closeout. All committed writes re-verified byte-level.
+B. probe criterion note: round counts date+R-prefixed lines incl. tokens-prefixed lines; precedent probe raw round/idle_round differ by 1 classified line (27/8 vs 28/9), round-minus-idle_round invariant 19=19, derived sub by R744 formula identical 8 -> 6
+AC-R1193b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 829->830 only
+AC-R1194 final size: 77151 B, margin 1349 B under 78,500B gate; post-fold 73786 B
+AC-R1193c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical; top fields verbatim; canonical form == json.dumps(indent=2)
+state closeout write committed (temp+replace, re-parsed after write)
+probe post   : {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 2, "paren": 33, "round": 23, "sub": 6, "tokens": 9}
+B. incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 (derived sub matches in-register R821/R824/R827 law 8 -> 6; raw round/idle_round intermediates differ 1 classified line from precedent probe, invariant round-minus-idle_round 19=19, honestly labeled)
+AC-K109a stale-board count = exactly 1 done row [R827] + exactly 4 open rows [R830+O-013-4+legal gated+bootstrap], header intact
+AC-K109b md5 of R827 row (pre-migration): 187eb97078bdfe4390cb3409ad0960b3 (migrated-line md5 identical)
+AC-K109b 10-month archive pure-append: sections 14 -> 15; md5 of migrated line identical
+AC-K109b 09-month archive zero-touch pre-op == git HEAD blob verified
+C. export derived: tick 827->830, R119 results row appended, self_drive W 56 / sub 6, idle 37 / nop 2, queues 6/2/2, proposals 1/1 disk-recounted
+C. export written, export_ts = 2026-10-01T19:13:42+08:00 , results rows = 241
+D. heartbeat row appended ts= 2026-10-01T19:13:42+08:00
+E. qa/board-R830.log written, 7 lines
