@@ -1,0 +1,32 @@
+AC-R1111a pre-op == git HEAD blob: 80585 bytes (round-start first-measure 80585B cashed)
+AC-R1113a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form
+AC-R1111b backup logs/state-preop-R807.bak written byte-identical
+AC-R1112a window = [R110 prior summary + R804..R806 three pairs] 7 lines 11319 B (content); head block 55 items verbatim 66941 B
+AC-R1112b window line prefixes verified R804..R806 continuous 3 rounds (pairs) zero-missing
+AC-R1112c removed lines substring-verified: idle-fast 0 (expected 0) / no-pullable 0 (expected 0; the 2 in-register no-pullable lines live in the head, untouched) / tokens 3 (expected 3)
+AC-R1112d P/D/O catalog (regex dedup, order of first appearance), 220 tokens (includes R110 prior-summary embedded catalog snowball, zero hand-picked)
+CATALOG_HEAD=P-2026-09-25-18,C-R1091,C-K99a,C-R1081,C-K98a,D-20260930-19,C-R1071,C-K97,C-R1061,C-K96,C-R1051,C-20261001-03 ...
+AC-R1113b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 806->807 only
+post-fold (pre-closeout) size: 73896 B
+AC-K101a stale-board count = exactly 1 done row [R804] + exactly 4 open rows [R807+O-013-4+legal gated+bootstrap], header intact
+AC-K101b md5 of R804 row (pre-migration): 5898d4663b2a220ff3c5527ce7d03f56
+AC-K101b 10-month archive pure-append: 21850 -> 24297 B; sections 7 -> 8 ; md5 of migrated line identical
+AC-K101b 09-month archive zero-touch pre-op == git HEAD blob verified
+AC-R1114 final size: 77195 B, margin 1305 B under 78,500B gate; post-fold 73896 B
+AC-R1113c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical (tick digit only); top fields verbatim; canonical form == json.dumps(indent=2)
+AC-K101c main board final: header + R807 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+AC-K101d backlog.md written (temp+replace, re-read asserted)
+AC-K101d 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K101d 09-month archive zero-touch post-op == git HEAD blob re-verified
+AC-R1111c archive pure-append: 9314083 -> 9394749 B; markers 103 -> 104
+archive write committed (temp+replace, prefix re-verified)
+state.json write committed (temp+replace, re-parsed after write)
+probe pre-op : {'in_window': 60, 'paren': 32, 'round': 28, 'tokens': 11, 'idle': 37, 'idle_round': 9, 'nop': 2}
+probe post   : {'in_window': 56, 'paren': 32, 'round': 24, 'tokens': 9, 'idle': 37, 'idle_round': 9, 'nop': 2}
+post sub by R744 formula (round-tokens-idle_round) = 6
+incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 (symmetric with R804 fold counters 56/9/37/2)
+export derived: tick 804->807, R111 results row appended, self_drive W 56 symmetric-flat / sub 8 -> 6 fold-derived, idle 37 / nop 2 flat, queues 6/2/2 disk-recounted, proposals 1/1 disk-recounted
+export written, export_ts = 2026-10-01T15:21:34+08:00 , results rows = 233
+heartbeat row appended ts= 2026-10-01T15:21:34+08:00
+qa/board-R807.log written, 12 lines
+AC-R1113d independent PowerShell ConvertFrom-Json re-parse: PSOK tick=807 log=58
