@@ -177,6 +177,24 @@ try {
   }
 } catch { Write-Output '[QA] FLAG check_failed' }
 
+# --- [HB] repo-root heartbeat.txt row freshness (standing law R532; detection face added R851 after 2nd recurrence R537..R540 + R849/R850; backfill precedent R541) ---
+try {
+  $hbPath = Join-Path $repo 'heartbeat.txt'
+  $hbTick = -1
+  if (Test-Path $hbPath) {
+    $hbLast = @(Get-Content -LiteralPath $hbPath -Tail 1)
+    if (@($hbLast).Count -gt 0 -and $hbLast[0] -match 'tick (\d+)') { $hbTick = [int]$Matches[1] }
+  }
+  $stTick = [int]$st.tick
+  if ($hbTick -lt 0) {
+    Write-Output '[HB] FLAG heartbeat_missing_or_unparsed'
+  } elseif (($stTick - $hbTick) -gt 0) {
+    Write-Output "[HB] FLAG hb_tick=$hbTick state_tick=$stTick lag=$($stTick - $hbTick) (heartbeat row debt: backfill due in this round closeout)"
+  } else {
+    Write-Output "[HB] PASS hb_tick=$hbTick state_tick=$stTick lag=0"
+  }
+} catch { Write-Output '[HB] FLAG check_failed' }
+
 # --- [TASKS] canonical board + claim board ---
 try {
   $T = [System.IO.File]::ReadAllLines((Join-Path $repo 'tasks.md'), $utf8)
