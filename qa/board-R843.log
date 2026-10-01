@@ -1,0 +1,7 @@
+AC-K115a stale-board census (git HEAD pre-round board): exactly 1 stale done row [R842, cut-114 own-round natural staleness] + 3 open rows [O-013-4 standing + D-20260929-03 gated 10-02 12:00 + bootstrap blocked-on-CEO]; header intact (BOM preserved); disk board == phase-0 pre-registration state (R843 claim row [ ] on disk before any migration byte moved)
+AC-K115b 1 stale done row verbatim to 10-month done-archive ## R843 section (sections 20 -> 21, md5 identical HEAD-board vs migrated, pure-append prefix vs git HEAD blob at byte level)
+AC-K115c main board final = header + R843 current row (flipped done with closure note) + 3 open rows; zero stale done rows besides the current row (post-write re-read asserted from disk, 12-element layout, BOM preserved)
+09-archive zero-touch == git HEAD blob (post dual gauge: rev-parse vs hash-object)
+AC-K115d evidence qa/board-R843.log (verify-then-write: every assert ran and passed before this evidence write; post-write re-read from disk + git HEAD)
+AC-K115e delivery = board row + state log line + commit message containing O-20260930-026 (P-51 three carriers)
+ROUND-FRAME: receipt round, score 1 = real file changes (research report + board + archive sec 21 + state/export/heartbeat bookkeeping per standing law)

@@ -1,0 +1,14 @@
+qa/research-R843.log - AC verification for docs/research/R-20261001-domestic-market-fit.md (O-2026-0930-026 BigDomain slice, R843, pre-registered in src/os/backlog.md R843 claim row)
+PASS AC-MF1 line-cap<=60 lines=47
+PASS AC-MF1 value-points>=8 V rows=9
+PASS AC-MF1 six-columns-per-V-row
+PASS AC-MF2 landing-path-in-every-V-row
+PASS AC-MF2 app-table-four-choice
+PASS AC-MF2 risk-mapping-in-every-V-row
+PASS AC-MF3 cited-files-on-disk cited=22 missing=[]
+PASS AC-MF3 yellow-unproven-marked
+PASS AC-MF3 P-65-three-piece
+PASS AC-MF3 zero-new-fetch-declared
+PASS AC-RC1 order-id-referenced
+PASS AC-RC2 P-51-receipt-carriers-noted
+ALL PASS

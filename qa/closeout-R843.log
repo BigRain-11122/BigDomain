@@ -1,0 +1,8 @@
+R843 closeout evidence (board cut-115 + state.json + status-export + heartbeat)
+board: cut-115 migrated the R842 done row verbatim to the 10-month done-archive ## R843 section (sections 20->21, md5 identical, pure-append vs git HEAD blob, 09-archive zero-touch dual gauge); main board terminal = header + R843 done row + 3 open rows
+state: tick 842->843, log 58->60 (R843 status line + tokens line), last_gord_tbl_rows 143->145 (new sha16 baseline B010F15B9DF484D7 recorded in the status line), last_decision_rows 201->202 (aux drift only - DEC token-flat 117 by standing content-addressed regex)
+probe post: {"in_window": 58, "round": 25, "tokens": 10, "sub": 7, "idle": 37, "nop": 2}
+queues {'main': 6, 'tech': 2, 'explore': 2}, proposals 1/1 disk-recounted (unchanged)
+export: export_ts 2026-10-01T22:47:04+08:00, ceo_face 3 rows updated (current/latest_artifact/next_milestone), results tick row 842->843, R843 results row appended (248->249), self_drive re-derived 58/37/2/7, depts OSLoop note appended
+heartbeat row appended: 2026-10-01 22:47 +08:00
+receipt carriers: state log R843 line + backlog done row + commit message containing O-20260930-026 (P-51; D-20260930-20 numbered-reference law)
