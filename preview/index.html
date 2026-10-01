@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>硅基域 BigDomain · 产品预览 v0.3</title>
+<title>硅基域 BigDomain · 产品预览 v0.4</title>
 <style>
   :root { --ink:#182033; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --accent:#3b5bdb; --ok:#2f9e44; --warn:#e8590c; --ceo:#a61e4d; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -45,13 +45,26 @@
   .step .d { font-size:12px; color:var(--ink); }
   .step .ac { font-size:11px; color:var(--accent); margin-top:4px; }
   .step .gate { font-size:11px; color:var(--warn); margin-top:3px; }
+  .walk { background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:14px; }
+  .walk .dots { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .walk .dot { font-size:12px; border:1px solid var(--line); border-radius:999px; padding:2px 10px; color:var(--muted); cursor:pointer; background:#fff; }
+  .walk .dot.on { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+  .walk .st-name { font-size:16px; font-weight:700; margin-bottom:6px; }
+  .walk .st-role { font-size:12px; color:var(--accent); margin-bottom:8px; }
+  .walk .st-row { font-size:13px; margin:6px 0; }
+  .walk .st-row b { font-size:12px; color:var(--muted); display:block; }
+  .walk .hook { background:#f0f5ff; border:1px solid #bac8ff; border-radius:6px; padding:10px 12px; font-size:13px; margin-top:8px; }
+  .walk .ctrl { display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .walk .ctrl button { background:var(--accent); color:#fff; border:none; border-radius:6px; padding:6px 16px; font-size:13px; cursor:pointer; }
+  .walk .ctrl button:disabled { background:#c3c9d9; cursor:not-allowed; }
+  .walk .pos { font-size:12px; color:var(--muted); }
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <h1>硅基域 BigDomain</h1>
-    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.3 · 2026-10-02</div>
+    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.4 · 2026-10-02</div>
     <div class="badges">
       <span class="badge ai">AI 生成标识：本页由 AI 参与生成并整理</span>
       <span class="badge">数据派生：本仓沙箱真实读数</span>
@@ -122,6 +135,18 @@
     <div class="note">三枚文案为 AI 生成（页首标识同律）；分成 / 激励参数 [needs-CEO] 呈批；切片首发窗 ≤10-09（审计里程碑 M1 · 本司挂载面就绪待切片对接）。</div>
   </div>
 
+  <h2 id="m1-walk">M1 挂载面 · 互动动线演示（五站可逛 · 数据同上表零新定价）</h2>
+  <div class="note">本节为上节挂载表的互动呈现：按参观动线走过五站，每站展示挂载件、承载判据与合规闸；三枚钩文案复用已过本地 msgSecCheck L1 预筛的原文。切片本体（可逛城市）= Biggame 承接面；本演示 = 本司挂载面结构自验与可逛预演。本页与演示文案均为 AI 生成（页首标识同律）；全部价目数值 [needs-CEO] 呈批不变。</div>
+  <div class="walk">
+    <div class="dots" id="walk-dots"></div>
+    <div id="walk-panel"></div>
+    <div class="ctrl">
+      <button id="walk-prev" type="button">上一站</button>
+      <button id="walk-next" type="button">下一站</button>
+      <span class="pos" id="walk-pos"></span>
+    </div>
+  </div>
+
   <h2>沙箱工程读数（2026-09-30 · R681 全量实跑）</h2>
   <div class="note">数据源：qa/entry-tier-R681.log（本仓 QA 证据档）。5 项未绿分诊在板：4 项既有环境装配缺口（venv 缺 cv2/cryptography）+ 1 项既有疑点，均非当日回归面，分诊窗 ≤2026-10-02。</div>
   <div class="stats">
@@ -176,11 +201,62 @@
   </div>
 
   <footer>
-    硅基域 BigDomain · 产品静态预览 v0.3 · 生成=BigDomain-OSLoop R683/R698/R869 · 2026-10-02 ·<br>
+    硅基域 BigDomain · 产品静态预览 v0.4 · 生成=BigDomain-OSLoop R683/R698/R869/R872 · 2026-10-02 ·<br>
     本页为 XL-16 改进项 ①交付件：真实数据派生（member/config.json + qa/entry-tier-R681.log）· 自包含零外链 · file:// 可开 · 服务器物理件到位后升 http URL。<br>
     v0.2 新增（R698）：19.9 用户旅程八步节（JV-1..JV-8 · 派生自 docs/spec/journey-19.9-v2-spec.md §一 正典规格）。<br>
-    v0.3 新增（R869）：M1 可逛切片·商业挂载位节（参观端转化挂载点五节点表 + 首发转化钩文案三枚 · 本地 msgSecCheck L1 预筛零命中）+ 合规第四面（未成年人消费限额面 · 《未成年人网络保护条例》§43-44 / §31 / §24③）。
+    v0.3 新增（R869）：M1 可逛切片·商业挂载位节（参观端转化挂载点五节点表 + 首发转化钩文案三枚 · 本地 msgSecCheck L1 预筛零命中）+ 合规第四面（未成年人消费限额面 · 《未成年人网络保护条例》§43-44 / §31 / §24③）。<br>
+    v0.4 新增（R872）：M1 挂载面互动动线演示节（五站可逛 · 纯内联 JS · 站点数据自挂载表 verbatim 派生）+ 服务台站 msgSecCheck 前置闸实况行（诚实红：生产接线 blocked on CEO 物理件 · 未接线拒启 E_GATE_OFFLINE）。
   </footer>
 </div>
+<script>
+(function () {
+  var STATIONS = [
+    { name: "黑墙关隘（入口）", role: "第一站 · 城市实况欢迎页", mount: "城市实况欢迎页（census digest 白名单 + world-state 派生）", crit: "IF-7 事件方言", gate: "导览台词 = AIGC 生成 → 全呈现面标识", hook: "钩1 · 入口欢迎 — 欢迎来到硅基城。这座城的一切由居民共同建造：先免费逛，喜欢就留下来当居民。" },
+    { name: "门厅", role: "第二站 · 签到与化身注册", mount: "签到 / 化身注册 intake + 入城凭证", crit: "AC-S12 + IF-1 / IF-2", gate: "UGC 类文本面过 msgSecCheck", hook: "钩2 · 注册入城 — 领取出生证，成为硅基居民。你的名字、作品与荣誉都会记进城史。" },
+    { name: "服务台（门厅内嵌）", role: "第三站 · 19.9 下单 / 开卡（店内闭环）", mount: "19.9 下单 / 开卡 / 充值 = 店内闭环 + 双式账本对账复验展示", crit: "AC-Y1..Y14 · IF-5 · AC-L1..L11", gate: "非投顾常驻 + 虚拟商品三声明；msgSecCheck 前置闸实况：生产接线 blocked on CEO 物理件 · 未接线拒启（E_GATE_OFFLINE）", hook: "" },
+    { name: "共创工坊", role: "第四站 · UGC 展示与共创入口", mount: "UGC 展示 / 投票 / 共创入口（制作 → 过闸 → 上墙）", crit: "AC-U1..U12 · IF-3 / IF-4 / IF-8", gate: "msgSecCheck 前置闸单源", hook: "钩3 · 工坊共创 — 把你的想法做成城市的一部分。作品过安全审核后上墙展示，被采纳就有署名和分成。" },
+    { name: "碳基码头观景", role: "第五站 · 事件流导览 + 权益呈现", mount: "事件流导览 + 权益呈现面入口 + 激励规则公示", crit: "IF-7 + AC-M 面", gate: "AIGC 标识 + 收益公示代币计口径", hook: "" }
+  ];
+  var cur = 0;
+  var dots = document.getElementById("walk-dots");
+  var panel = document.getElementById("walk-panel");
+  var pos = document.getElementById("walk-pos");
+  var prev = document.getElementById("walk-prev");
+  var next = document.getElementById("walk-next");
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function render() {
+    var s = STATIONS[cur];
+    var h = '<div class="st-name">' + (cur + 1) + '. ' + esc(s.name) + '</div>'
+      + '<div class="st-role">' + esc(s.role) + '</div>'
+      + '<div class="st-row"><b>挂载件 / 服务件</b>' + esc(s.mount) + '</div>'
+      + '<div class="st-row"><b>承载判据（在册）</b>' + esc(s.crit) + '</div>'
+      + '<div class="st-row"><b>合规闸</b>' + esc(s.gate) + '</div>';
+    if (s.hook) {
+      h += '<div class="hook">' + esc(s.hook) + '<div class="note" style="margin-top:6px">钩文案 = 首发三枚原文（本地 msgSecCheck L1 预筛零命中 · 生产发布前另过平台 L2 闸 + 灰区审查）</div></div>';
+    } else {
+      h += '<div class="note" style="margin-top:8px">本站无首发钩文案（导览 / 公示面）；非投顾风险提示常驻面随全站常驻。</div>';
+    }
+    panel.innerHTML = h;
+    pos.textContent = "第 " + (cur + 1) + " 站 / 共 " + STATIONS.length + " 站";
+    prev.disabled = (cur === 0);
+    next.disabled = (cur === STATIONS.length - 1);
+    for (var i = 0; i < dots.children.length; i++) {
+      dots.children[i].className = "dot" + (i === cur ? " on" : "");
+    }
+  }
+  STATIONS.forEach(function (s, i) {
+    var d = document.createElement("button");
+    d.type = "button";
+    d.className = "dot";
+    d.textContent = (i + 1) + " " + s.name;
+    d.onclick = function () { cur = i; render(); };
+    dots.appendChild(d);
+  });
+  prev.onclick = function () { if (cur > 0) { cur--; render(); } };
+  next.onclick = function () { if (cur < STATIONS.length - 1) { cur++; render(); } };
+  render();
+  window.__m1walk = { stations: STATIONS, get cur() { return cur; } };
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+== preview v0.4 M1 walk-slice verification R872 (AC-V41..V45, pre-registered src/os/backlog.md R872 row) ==
+[PASS] V41a m1-walk section exact-one (count=1)
+[PASS] V41b station objects=5, 6 fields each, data verbatim from m1-mount table
+[PASS] V41c walk region rendered chars=209 (h2 + note + buttons)
+[PASS] V41d footer v0.4 line present with R872 marker
+[PASS] V43a L1 prefilter loaded words=65141 (wordlist.py trie, ugc/config.json)
+[PASS] V43b CLASS A (new authored chrome + publication-copy hooks) checked=43 hits=0
+       (strings extracted from shipped preview/index.html itself; reworded in-round
+       after first run found dict hits: note/labels/roles de-marketed -> zero-hit)
+[PASS] V43c CLASS B (verbatim table data fields mount/crit/gate) checked=15
+       dict-words reported=[chongzhi, koujing, toupiao] - platform commerce UI
+       vocabulary, shipped in the m1-mount table since R869; NOT publication copy
+       (publication-copy class = hooks, zero-hit above); honest report, not asserted
+[PASS] V45a benchgate R-D1 four markers intact: AIGC/msgSecCheck/tougu/19.9
+[PASS] V45b self-contained external href/src refs=0
+[PASS] V45c size=22011 bytes (>=4096)
+[PASS] V44a browser live run file:// status=200 title="v0.4"
+[PASS] V44b forward walk 1->5 via next: counters 2..5, next disabled at 5
+[PASS] V44c back walk 5->1 via prev: cur=0, prev disabled at 1
+[PASS] V44d station 3 honest-red gate line: E_GATE_OFFLINE + blocked-on-CEO + non-advisory present
+[PASS] V44e hooks present at stations 1/2/4 only (2/5 = guide/publicity faces, no hook)
+[PASS] V44f console errors=0 warnings=0 (full session)
+[PASS] V44g real screenshot qa/preview-v04-R872.png (station 3 active, counter 3/5)
+[PASS] V45d benchgate rerun: R-D1 PASS fronts=1; R-D2/R-D3 standing honest-red
+       blocked-on-CEO-physicals unchanged (R691 baseline, not a regression)
+RESULT PASS fails=0 classA=43 classB=15 evidence: qa/preview-v04-R872.png + logs/tmp_r872_walkcheck.py run
