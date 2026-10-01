@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T04:38:20+08:00",
+  "export_ts": "2026-10-02T04:52:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R868 R131 水位整编+板规执法第一百二十三刀双项轮（轮计分 1=机制实改·余面全平）：轮首首测 80,325B 越 80,000B 线 325B=R867 carry-note 兑现→fold 窗［R130 前窗摘要+R865..R867 三轮对］7 行压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档（marker 123→124）+备份件·post-fold 73247B 终态 76053B｛margin 2447B｝·AC-R1311..R1315 全过=qa/reorg-R868.log+AC-K123a..e 全过=qa/board-R868.log；九面 scan 余面全平（LEDGER conflict=0·DEC 121 token 持平·GORD 147 行零新集团令）；等待面：法务外件窗 10-02 12:00·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "产品实物面=src/sandbox/citymodel/scenario.py 城市商业双轨场景推演模型 v0.1（2026-10-02 ~00:4x·P-2026-10-02-02 审计 L76 缺口#2 落地件·AC-CCM1..CCM6 全过 10/10=qa/citymodel-R850.log·P1 模型只算不裁）；机制实物=state.json 水位整编 R131（logs/state-log-archive-2026-09.md §R868 append 节+logs/state-preop-R868.bak+qa/reorg-R868.log+qa/board-R868.log·2026-10-02 ~04:3x beat）",
-    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗闭口（D-20260929-03 席7 第二窗）+D-20260930-19/20 送达验收窗；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001）+OSS 借力窗 4（10-02 21:40 起）；10-07 治理日委员会聚合审；10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；10-09 benchmark 7 天刷新+M1 可逛切片窗（审计里程碑≤10-09）；fold R132 由后续轮轮首首测裁定（水位增速 ~2.1KB/对实测带）"
+    "current": "R869 M1 商业挂载首切片产品轮（轮计分 2=可看实物 preview v0.3）：五静九面 scan=八面全平+双 gated 行按律零重扫（O-013④ 当日首轮 R848 已毕·法务外件窗 10-02 12:00 日内后段轮判）→转 export 已声明下里程碑 M1 前置件：preview/index.html v0.2→v0.3 新增「M1 可逛切片·商业挂载位」节（参观端转化挂载点 5 节点表·判据号 12 锚全引在册）+首发转化钩文案三枚全过本地 msgSecCheck L1 预筛（wordlist.py trie·hit=None×3）+合规第四面未成年人消费限额面落位（§43-44/单次单日限额/§31/§24③）——AC-M1a..f 全过=qa/preview-v03-R869.log（8 断言 exit=0）；边界：价目全 [needs-CEO]·切片本体=Biggame 承接（O-20261001-2209 资产 SOP 本司只消费）·生产 L2 msgSecCheck=CEO 物理件；等待面：法务外件窗 10-02 12:00·bootstrap 待 CEO 物理件（商户号+服务器/域名/备案/ICP）",
+    "latest_artifact": "产品实物面=preview/index.html v0.3「M1 可逛切片·商业挂载位」节（2026-10-02 ~04:5x·审计 P-2026-10-02-02 承接·参观端转化挂载点 5 节点表+首发转化钩文案三枚过本地 L1 预筛零命中+合规第四面未成年人消费限额面·AC-M1a..f 8 断言全过=qa/preview-v03-R869.log·file:// 可开）；前实物=src/sandbox/citymodel/scenario.py 城市商业双轨场景推演模型 v0.1（2026-10-02 ~00:4x·R850）",
+    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗闭口判（D-20260929-03 席7 第二窗·日内后段轮定点查）+D-20260930-19/20 送达验收窗；10-02 21:40 OSS 借力窗 4 起；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001）+10-07 治理日委员会聚合审+10-08 token 审计判据回访；M1 可逛切片窗 ≤10-09（本司商业挂载面已就绪待 Biggame 切片对接·合规四件套随切片常驻）+benchmark 7 天刷新 10-09；fold R132 由后续轮轮首首测裁定（水位增速 ~2.1KB/对实测带）"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "868",
+      "869",
       "OSLoop 轮次 tick"
     ],
     [
@@ -1221,15 +1221,19 @@
     [
       "1",
       "state.json 水位整编 R131+板规执法第一百二十三刀（R868 双项一轮·R865/R862 同构）：80,325B 越 80,000B 线 325B=R867 carry-note 承接兑现→窗［R130 前窗摘要+R865..R867 三轮对］7 行 11004B 压 1 滚窗汇总行（marker 123→124+备份件 logs/state-preop-R868.bak+头部块 55 项 verbatim 66,941B+双口径解析过）·post-fold 73247B 终态 76053B｛margin 2447B｝·AC-R1311..R1315 全过=qa/reorg-R868.log·cut-123 R865 滞板 done 行 verbatim 迁 10 月档 §R868 节·AC-K123a..e 全过=qa/board-R868.log·P-2026-09-25-18 ④第一百三十三刀+板规执法第一百二十三刀"
+    ],
+    [
+      "2",
+      "M1 可逛切片·商业挂载位首切片件（R869·preview v0.3：参观端转化挂载点 5 节点表+首发转化钩文案三枚全过本地 msgSecCheck L1 预筛零命中+合规第四面未成年人消费限额面落位·AC-M1a..f 全过=qa/preview-v03-R869.log 8 断言 exit=0·审计 P-2026-10-02-02 承接续作）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
