@@ -1,0 +1,25 @@
+AC-R1261a tree clean pre-op: git status --porcelain empty
+AC-R1261a pre-op == git HEAD blob: 82445 bytes (round-start first-measure 82445B cashed, scan/getsize dual-gauge)
+AC-R1263a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form
+AC-R1262a window = [R125 prior summary + R848..R851 four pairs] 9 lines 13108 B (content); head block 55 items verbatim 66941 B
+AC-R1262b window line prefixes verified R848..R851 continuous 4 rounds (pairs) zero-missing
+AC-R1262c removed lines substring-verified: idle-fast 2 (expected 2) / no-pullable 0 (expected 0) / tokens 4 (expected 4)
+AC-R1262d P/D/O catalog (regex dedup, order of first appearance): 169 tokens = R125 prior-summary embedded catalog 158 snowball + 11 new ['C-R1251', 'C-K117a', 'C-QA8', 'C-20261002', 'D-20261002', 'C-CC1', 'C-20260927', 'C-CCM1', 'C-HB1', 'C-HB2', 'C-HB3']; missing=[] asserted, zero hand-picked
+probe pre-op : {"idle": 39, "idle_round": 10, "in_window": 62, "nop": 2, "paren": 32, "round": 29, "sub": 7, "tokens": 12}
+post-fold (pre-closeout) size: 74384 B
+AC-R1263b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 851->852 only; last_dec_tokens 121 flat
+AC-R1264 final size: 77067 B, margin 1433 B under 78,500B gate; post-fold 74384 B
+AC-R1263c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical; canonical form == json.dumps(indent=2)
+probe post   : {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 2, "paren": 32, "round": 23, "sub": 6, "tokens": 9}
+B. incremental-register law: W 62 -> 56 ; tokens 12 -> 9 ; sub 7 -> 6 (symmetric law vs R848 post counters 56/9/23 + sub 6, all asserted pre-write)
+C. export derived: tick 850->852, R126 results row appended, self_drive W 56 / sub 6, idle 37 / nop 2, queues 6/2/2, proposals 1/1 disk-recounted
+C. export composed, export_ts = 2026-10-02T01:08:39+08:00 , results rows = 254
+AC-K118b md5 of migrated rows (pre): 780f2aee91c9e99cb3cbea1d96dad0d9,2606e549ff59e281b94cacf9c03ce616,33fc5e4e95f9f4b7e5ed67196cd1078c
+AC-R1261c archive pure-append: 10541598 -> 10624125 B; markers 118 -> 119
+D. heartbeat row composed ts= 2026-10-02T01:08:39+08:00
+E. qa/board-R852.log composed, 5 lines
+AC-R1261b backup logs/state-preop-R852.bak written byte-identical
+archive write committed (temp+replace, prefix re-verified, markers 118->119)
+AC-K118b 10-month archive pure-append: %d -> %d B; sections 23 -> 24; md5 of all 3 migrated lines identical
+AC-K110e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-118 tags (P-51)
+D. heartbeat row appended ts= 2026-10-02T01:08:39+08:00
