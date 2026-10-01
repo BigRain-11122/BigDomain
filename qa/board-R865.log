@@ -1,0 +1,9 @@
+AC-K122b 09-month archive zero-touch pre-op == git HEAD blob verified
+AC-K122a stale-board count = exactly 1 done row [R862, R863/R864 rounds carried no cut] + exactly 3 open rows [O-013-4 + legal gated + bootstrap], header intact
+AC-K122b md5 of migrated rows (pre): 0fc6191ece5cbb9ced7b6c054de198f1
+AC-K122c main board final: header + R865 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+AC-K122b 10-month archive pure-append: %d -> %d B; sections 27 -> 28; md5 of migrated line identical
+AC-K122d backlog.md pre-registered row written (temp+replace, re-read asserted)
+AC-K122d 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K122b 09-month archive zero-touch post-op == git HEAD blob re-verified
+AC-K122d backlog.md written (temp+replace, re-read asserted)

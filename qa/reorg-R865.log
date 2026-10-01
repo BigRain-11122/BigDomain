@@ -1,0 +1,24 @@
+AC-R1301a tree clean pre-op: git status --porcelain empty
+AC-R1301a pre-op == git HEAD blob: 80019 bytes (round-start first-measure 80019B cashed, scan/getsize dual-gauge)
+AC-R1303a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form
+AC-R1302a window = [R129 prior summary + R862..R864 three pairs] 7 lines 10698 B (content); head block 55 items verbatim 66941 B
+AC-R1302b window line prefixes verified R862..R864 continuous 3 rounds (pairs) zero-missing
+AC-R1302c removed lines substring-verified: idle-fast 0 (expected 0) / no-pullable 3 (expected 3 = R129 summary tag + R863/R864 declaration lines) / tokens 3 (expected 3)
+AC-R1302d P/D/O catalog (regex dedup, order of first appearance): 178 tokens = R129 prior-summary embedded catalog 175 snowball + 3 new ['C-R1291', 'C-K121a', 'C-HB862'] (mechanical AC- prefix substring hits, zero hand-picked); missing=[] asserted
+probe pre-op : {"idle": 37, "idle_round": 8, "in_window": 60, "nop": 5, "paren": 33, "round": 27, "sub": 8, "tokens": 11}
+AC-HB865a heartbeat pre-op tail = tick 864 (lag 0, single current row this round)
+post-fold (pre-closeout) size: 72764 B
+AC-R1303b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 864->865 only; last_dec_tokens 121 flat
+AC-R1304 final size: 75915 B, margin 2585 B under 78,500B gate; post-fold 72764 B
+AC-R1303c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical; canonical form == json.dumps(indent=2)
+probe post   : {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 3, "paren": 33, "round": 23, "sub": 6, "tokens": 9}
+B. incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 ; round 27 -> 23 all landing on R862 post register values; idle 37 / idle_round 8 flat; nop 5 -> 3 (window folded two declaration lines + prior-summary tag -3, new summary re-embeds honest tag +1, net 5-3+1=3 equals register) ; paren 33 -> 33 (pure-date-prefix summary replaced 1:1, zero drift) - registered, asserted pre-write
+C. export derived: tick 862->865, R130 results row appended, self_drive W 56 / sub 6, idle 37 / nop 3, queues 6/2/2, proposals 1/1 disk-recounted
+C. export composed, export_ts = 2026-10-02T03:56:21+08:00 , results rows = 258
+AC-R1301c archive pure-append: 10866880 -> 10946981 B; markers 122 -> 123
+D. heartbeat row composed x1 (tick 865 current, lag 0 kept) ts= 2026-10-02T03:56:21+08:00
+E. qa/board-R865.log composed, 5 lines
+AC-R1301b backup logs/state-preop-R865.bak written byte-identical
+archive write committed (temp+replace, prefix re-verified, markers 122->123)
+AC-R1305e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-122 tags (P-51)
+D. heartbeat row appended x1 (tick 865 current, lag 0 kept) ts= 2026-10-02T03:56:21+08:00
