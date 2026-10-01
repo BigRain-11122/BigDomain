@@ -8,3 +8,4 @@
 
 > 消费记录面：集团 OSS 调研波终稿的本司消费承接件（触发查+五门承转复核+应用表落点四选一）随本目录存档——现行件=`consumption-O-2026-0929-001.md`（O-2026-0929-001 治理域三切片·R576）。学习参照/入池≠采用不入上表；入池件接线时逐件许可原文核验后加行。
 > 入池记录面：OH-20260929-bigdomain.md（窗 2 切片·R597·2026-09-29）入池 minibear2021/wechatpayv3（微信支付 API v3 Python SDK·MIT·1338★·pushed 2026-09-11·issues=1）=bootstrap pay 真钥接线候选；入池≠采用不入上表，接线轮 LICENSE raw 原文复验+五门复验前置。
+> 入池记录面（二）：OH-20261002-bigdomain.md（窗 3 切片·R837·2026-10-01 窗开前 ~24.8h 提前交付·R597/R320 先例链）入池 houbb/sensitive-word（敏感词过滤框架·词库数据面+DFA 设计参照·Apache-2.0〔API spdx+raw LICENSE.txt 原文双源验〕·6,063★·pushed 2026-03-23〔类内最活跃例外注记〕·issues=12）=ugc L1 msgSecCheck 本地预筛接线候选（src/sandbox/ugc/config.json L14 词表 mock→生产预筛缺口·本地提效类候选）；入池≠采用不入上表，接线轮词库数据文件定位+Apache-2.0 attribution 携带+五门复验+判据预注册四前置。
