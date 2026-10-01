@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T00:13:46+08:00",
+  "export_ts": "2026-10-02T00:31:27+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R848 四项一轮（轮计分 1=机制实改+基准/信号面文件改动）：①QA charter 每日 crawl G 片=《未成年人网络保护条例》A 级官方全文直采（令第766号·hunca.miit.gov.cn·4 试 1 得 2 判负如实记）→benchmarks §①③④ 翻新+intelligence-wall W11+benchmarks_refreshed=2026-10-02〔10-02 首轮 [QA] FLAG 承接·charter 清单四项全过=qa/smoke-R848.log+png〕②fold R125 水位整编（81,449B 越 1,449B=R847 carry-note 兑现·窗 7 行压 1·marker 117→118·qa/reorg-R848.log）③cut-117 板规刀（R845 滞板行迁 10 月档 §R848 节）④O-013④ 每日首轮核对毕（export age 0.3h+解析+ceo_face 三行在位）；等待面：法务外件窗 10-02 12:00·提案回访+OSS w4 10-05·benchmarks 10-09·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "docs/global-benchmarks.md §①③④ G 片翻新+docs/research/intelligence-wall.md W11 信号（2026-10-02 ~00:2x·QA charter 每日 crawl·《未成年人网络保护条例》A 级全文直采·§20 平台义务/§24③ 禁自动化营销/§31 直播实名核验+未成年人禁播/§43-44 消费限额=月卡与 UGC 面法源增补候选）；机制实物=fold R125（qa/reorg-R848.log）+cut-117（§R848 节）；产品实物面=preview/index.html v0.3 直连前台 http://127.0.0.1:8093/（R728）+RUNNER 27 套件 231 判据全绿（R684）+ugc wordlist 预筛 65,141 词（R838）",
-    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗（D-20260929-03 触发查次窗起）+D-20260930-19/20 送达验收窗；10-03 首轮 O-013④/QA 每日轮；10-05 提案回访（BD-PROP-001）+OSS 借力窗 4（21:40 开）；10-07 治理日委员会聚合审（O-2026-0930-026 落地清单呈报）；10-09 benchmark 7 天刷新；fold R126 由后续轮轮首首测裁定（水位增速 ~2.2KB/对实测带）"
+    "current": "R849 审核批+审计缺口自驱件：DEC 四 token 判毕（C-20261002-01 委员会 token 审计案知悉·D-20261002-01 回执核销批过审执行=R783/R789 两 P2 上报行闭口·D-20261002-02/03 BigMoney 知悉）+GORD 两新令知悉（token 三面审计续执令+硅基城问题审计令）；主产出=《城市商业方案 v0.1 骨架件》docs/spec/city-commerce-plan-v0.md（审计 L76「BigDomain 城市商业方案=零」缺口回应）；等待面：法务外件窗 10-02 12:00·提案回访+OSS w4 10-05·benchmarks 10-09·bootstrap 待 CEO 物理件（商户号/服务器/域名/备案）",
+    "latest_artifact": "docs/spec/city-commerce-plan-v0.md 城市商业方案 v0.1 骨架件（2026-10-02 ~00:3x·硅基城问题审计〔ledger P-2026-10-02-02〕L76 缺口回应件：审计五缺口映射表+四层商业分层模型+定价双轨对标呈批面〔C:S1 买断+DLC×城内订阅带〕+demo 参观端承接+工坊 UGC 三件套+M1..M4 里程碑咬合表+合规四件套常驻〔未成年人 §43-44 新法源〕·AC-CC1..CC5 全过·定价/开闸全 [needs-CEO] 只呈批零执行）；机制面=R783/R789 P2 上报行闭口（D-20261002-01 拍板①核销·HQ-FEEDBACK 收口注记·[LEDGER] conflict=0 实证）",
+    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗闭口（D-20260929-03 席7 第二窗·到窗未达=违例升 E1 由集团裁量）+D-20260930-19/20 验收窗；10-03 首轮 O-013④/QA 每日轮；10-05 提案回访（BD-PROP-001）+OSS 借力窗 4（21:40 开）；10-07 治理日委员会聚合审；10-08 token 审计判据回访（P-2026-10-02-01/02 六条）+硅基城审计判据回访；10-09 benchmark 7 天刷新+M1 可逛切片窗（审计里程碑≤10-09·商业面前置=参观端素材复用+合规四件套）；fold R126 由下轮轮首首测裁定"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "848",
+      "849",
       "OSLoop 轮次 tick"
     ],
     [
@@ -1189,6 +1189,10 @@
     [
       "1",
       "state.json 水位整编 R125+板规执法第一百一十七刀+QA charter 每日 crawl G 片+O-013④ 每日首轮核对（R848 四项一轮·81,449B 越 1,449B=R847 carry-note 兑现·fold 窗［R124 前窗摘要+R845..R847 三轮对］7 行 12184B 压 1 滚窗汇总行·pre-op==HEAD blob+备份 state-preop-R848.bak·marker 117→118·post-fold 72317B 终态 75909B｛margin 2591B｝·AC-R1251..R1255=qa/reorg-R848.log；cut-117=R845 滞板 done 行 verbatim 迁 10 月档 §R848 节=AC-K117a..e〔qa/board-R848.log〕；QA G 片=《未成年人网络保护条例》A 级全文直采〔令第766号·4 试 1 得 2 判负〕→§①③④+wall W11+benchmarks_refreshed=2026-10-02=AC-QA8〔qa/smoke-R848.log+png〕；O-013④ 核对毕=export 0.3h+解析+三行在位；P-2026-09-25-18 ④第一百二十七刀）"
+    ],
+    [
+      "1",
+      "城市商业方案 v0.1 骨架件（硅基城审计 L76 缺口回应·docs/spec/city-commerce-plan-v0.md·AC-CC1..CC5·审计五缺口映射+四层分层+定价双轨 [needs-CEO]+M1..M4 咬合+合规四件套·R849）"
     ]
   ],
   "self_drive": {
