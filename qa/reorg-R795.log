@@ -1,0 +1,45 @@
+PASS AC-R1071 round-start size 81668 (got 81668)
+PASS AC-R1071 pre-op tree clean for state.json (porcelain='')
+PASS AC-R1071 pre-op text == HEAD blob text (CRLF-normalized, file=81668B blob=81668B)
+backup written logs/state-preop-R795.bak (81668 bytes)
+PASS AC-R1071 pre-op tick==794
+PASS AC-R1071 pre-op log items==62 (got 62)
+PASS serializer roundtrip convention detect nobom/tail_lf
+PASS AC-R1072 window line 0 prefix ok (2026-10-01（R789..R...)
+PASS AC-R1072 window line 1 prefix ok (2026-10-01 R792（...)
+PASS AC-R1072 window line 2 prefix ok (2026-10-01 R792 to...)
+PASS AC-R1072 window line 3 prefix ok (2026-10-01 R793（...)
+PASS AC-R1072 window line 4 prefix ok (2026-10-01 R793 to...)
+PASS AC-R1072 window line 5 prefix ok (2026-10-01 R794（...)
+PASS AC-R1072 window line 6 prefix ok (2026-10-01 R794 to...)
+PASS AC-R1072 R106 summary at index 55
+PASS AC-R1072 window 7 lines content bytes==12402 (got 12402)
+window 7 lines content bytes=12402; head block 55 items=66941 bytes
+P/D/O catalog mechanical dedupe: 211 tokens
+post-fold size (tick still 794, no closeout lines): 73259 bytes
+PASS fixpoint final size stable 76503
+PASS AC-R1074 final size 76503 <= 78500 margin gate (margin 1997)
+PASS final parse tick 795
+PASS final log items==58 (got 58)
+PASS last log item is R795 tokens line
+PASS head item 0 verbatim
+PASS AC-R1072 head block 55 items verbatim zero-change
+PASS AC-R1073 top fields preserved: last_dec_tokens 117 flat (DEC zero new rows this round)
+PASS AC-R1073 top fields preserved: last_decision_rows/last_order/benchmarks_refreshed/last_gord_tbl_rows flat
+state.json written 76503 bytes
+PASS AC-R1072 archive pure-append prefix assertion
+PASS AC-R1072 archive marker 99->100
+archive appended 8987696 -> 9069446 bytes
+PASS disk re-read parse ok (tick 795, log 58)
+final figures: WBYTES=12402 HEADB=66941 PF=73259 FIN=76503 MARGIN=1997
+PASS export results tick row 792->795
+self_drive recount on new log: in_window=56 round=23 tokens=9 idle=37 idle_rnd=8 nop=2 sub=6
+PASS self_drive in_window==56 (got 56)
+PASS self_drive tokens==9 (got 9)
+PASS self_drive idle==37 nop==2 (got 37/2)
+PASS self_drive substantive==6 (got 6)
+PASS removed window lines substring-verified clean 7/7
+PASS queue disk-recount 6/2/2 (got 6/2/2)
+PASS proposals disk-recount total=1 (got 1)
+PASS export re-read parse ok, ceo_face updated
+heartbeat R795 line appended

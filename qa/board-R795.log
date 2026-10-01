@@ -1,0 +1,26 @@
+=== board cut-97 evidence (R795) ===
+pre-op board: 7342B, 12 lines
+pre-op 10-month archive: 12876B
+[PASS] pre-op 10-month archive == git HEAD blob (round-start clean on this file)
+[PASS] pre-op 09-month archive == git HEAD blob
+[PASS] AC-K97a stale done rows == 1, identity R793, [done 2026-10-01] marker - count=1
+[PASS] AC-K97a open rows == 4 (R795 claim + O-013-4 + legal gated + bootstrap) - count=4
+
+md5 ledger (pre-op stale done row):
+  - [x] R793 认领：板规执法第九十六刀（boar ...8 清后宿主再蓄积·复发性如实注〕）  37b00d1f637c8b5f49d04fb3d4bafa65
+[PASS] AC-K97b pure-append prefix (10-month archive)
+[PASS] AC-K97b exactly one new '## R795' section header
+[PASS] AC-K97b row present in new section, md5-identical
+[PASS] AC-K97c own R795 claim row flipped exactly once
+[PASS] AC-K97c post-cut board: done rows == 1 (own R795 current-round row only)
+[PASS] AC-K97c post-cut board: open rows == 3 preserved (O-013-4 + legal gated + bootstrap)
+[PASS] AC-K97c header unchanged by cut
+
+post-op board: 6431B, 11 lines (pre 7342B)
+post-op 10-month archive: 14473B (+1597B appended section)
+[PASS] post-write re-read: board on-disk == built post board
+[PASS] post-write re-read: 10-archive on-disk == built post archive
+[PASS] post-write re-read: 09-archive untouched on-disk
+WROTE: src/os/backlog.md, docs/archive/backlog-done-2026-10.md
+
+board cut-97 verdict: AC-K97a..e ALL PASS (a=count, b=verbatim md5+pure-append+09 zero-touch, c=final board flip+migrate, d=this log verify-then-write, e=state log line + commit marker 'board cut-97')
