@@ -1,0 +1,20 @@
+PHASE-0 PRE-REGISTRATION: claim row [R842 fold R123 + cut-114] written to board as [ ] (AC text fixed on disk) before any state.json byte moved - phase-0 re-read asserted (13-line layout, BOM preserved, R840 stale row + 3 open rows intact)
+AC-R1231a round-start first-measure 82420B (scan/getsize dual gauge) over 80000B line by 2420B = R841 carry-note cashed
+AC-R1231b tick=841, log 62 items, json.loads parse ok (pre-op)
+AC-R1231c pre-op == git HEAD blob byte-identical (blob OID 8371f531e1de dual gauge)
+AC-R1231d backup logs/state-preop-R842.bak byte-preserved (82420B, re-verified from disk post-write)
+AC-R1231e archive pure-append markers 115 -> 116 (pre-op full text filed, prefix assertion, prior 115 sections untouched) - re-verified from disk
+AC-R1232a window = [R122 prior summary + R839..R841 three pairs] 7 lines identified (each round exactly 1 status + 1 tokens line)
+AC-R1232b window content gauge 13155B (7 lines)
+AC-R1232c P/D/O catalog recomputed from window (snowball: R122 prior summary embedded catalog reproduced as superset, prior 146 tokens missing=[] + 4 new window tokens), 150 tokens, summary endswith(catalog) asserted below
+AC-R1233a top fields preserved (tick 841->842; last_order / last_decision_rows 201 / benchmarks_refreshed 2026-10-01 / last_gord_tbl_rows 143 / last_dec_tokens 117 all flat - five-field zero-drift round)
+AC-R1233b state.json serialized, no trailing LF (R761 round-trip law); post-fold 72309B + closeout pair final 75577B margin 2923B under 78500B gate
+AC-R1233c re-read: json.loads + PowerShell ConvertFrom-Json dual-gauge parse pass (tick=842 log=58 gord=143 tokens=117)
+AC-R1234 final size 75577B, margin 2923B under 78500B gate
+AC-R1235 delivery = state log line + backlog done row (cut phase flips claim) + commit contains P-2026-09-25-18 (P-51); fold R123 + board cut-114 tags in commit
+probe post: {"in_window": 56, "round": 23, "tokens": 9, "idle_mention_round": 8, "sub": 6, "idle": 37, "nop": 2}
+probe pre-op (backup): {"in_window": 60, "round": 27, "tokens": 11, "idle_mention_round": 8, "sub": 8, "idle": 37, "nop": 3}
+window counter-contribution: idle-fast mentions 0, no-pullable mentions 1 (R841 declaration line) - removed with the window, nop 3->2, idle 37 flat
+symmetric law vs R839 post counters: W 56 / tokens 9 / sub 6 = symmetric flat; idle 37 / nop 2 flat
+export refreshed: export_ts 2026-10-01T22:12:56+08:00, results tick 840->842, R123 results row appended (247->248 rows), self_drive re-derived W 56 / sub 6, idle 37 / nop 2, queues 6/2/2 + proposals 1/1 disk-recounted
+heartbeat row appended ts=2026-10-01T22:12:56+08:00 (cpu5/ram44/lanes2 CIM measured ~22:09 this round, composition llama-server+ollama, prod_lanes=2 per R753..R839 convention)

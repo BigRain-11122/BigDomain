@@ -1,0 +1,7 @@
+AC-K114a stale-board census (git HEAD pre-round board): exactly 1 stale done row [R840, cut-113 own-round natural staleness] + 3 open rows [O-013-4 standing + D-20260929-03 gated 10-02 12:00 + bootstrap blocked-on-CEO]; header block intact (BOM preserved); disk board == fold phase-0 pre-registration state (claim row [ ] on disk at line 8 before any migration byte moved)
+AC-K114b 1 stale done row verbatim to 10-month done-archive ## R842 section (sections 19 -> 20, md5 identical HEAD-board vs migrated, pure-append prefix vs git HEAD blob at byte level)
+AC-K114c main board final = header + R842 current row (flipped done with closure note) + 3 open rows; zero stale done rows besides the current row (post-write re-read asserted from disk, 12-line layout, BOM preserved)
+09-archive zero-touch == git HEAD blob (post dual gauge: rev-parse vs hash-object)
+AC-K114d evidence qa/board-R842.log (verify-then-write: every assert ran and passed before this evidence write; post-write re-read from disk + git HEAD)
+AC-K114e delivery = board row + state log line + commit tag "fold R123 + board cut-114" (P-51)
+ROUND-FRAME: dual-item round R839/R836 isomorph, score 1 = mechanism file changes (fold: state.json + archive marker 116 + backup; cut: board + 10-month archive section 20); catalog snowball 150 tokens (prior 146 missing=[] + 4 new)
