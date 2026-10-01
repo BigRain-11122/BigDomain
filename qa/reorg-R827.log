@@ -1,0 +1,44 @@
+AC-R1181a pre-op == git HEAD blob: 81938 bytes (round-start first-measure 81938B cashed)
+AC-R1183a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form
+AC-R1181b backup logs/state-preop-R827.bak written byte-identical
+AC-R1182a window = [R117 prior summary + R824..R826 three pairs] 7 lines 12672 B (content); head block 55 items verbatim 66941 B
+AC-R1182b window line prefixes verified R824..R826 continuous 3 rounds (pairs) zero-missing
+AC-R1182c removed lines substring-verified: idle-fast 0 (expected 0) / no-pullable 0 (expected 0; the 2 in-register no-pullable lines live in the head, untouched) / tokens 3 (expected 3)
+AC-R1182d P/D/O catalog (regex dedup, order of first appearance), 235 tokens (includes R117 prior-summary embedded catalog snowball, zero hand-picked)
+CATALOG_HEAD=P-2026-09-25-18,C-R1161,C-K106a,C-R1151,C-K105a,D-20260930-1,D-20260930-18,D-20260930-1x,C-R1141,C-K104,C-R1131,C-K103 ...
+AC-R1183b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 826->827 only
+post-fold (pre-closeout) size: 74050 B
+AC-K108a stale-board count = exactly 1 done row [R824] + exactly 4 open rows [R827+O-013-4+legal gated+bootstrap], header intact
+AC-K108b md5 of R824 row (pre-migration): 8364b8b5d855a6bc6cbd35b34bd4f249
+AC-K108b 10-month archive pure-append: 39687 -> 42262 B; sections 14 -> 15 ; md5 of migrated line identical
+AC-K108b 09-month archive zero-touch pre-op == git HEAD blob verified
+AC-R1184 final size: 77526 B, margin 974 B under 78,500B gate; post-fold 74050 B
+AC-R1183c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical (tick digit only); top fields verbatim; canonical form == json.dumps(indent=2)
+AC-K108c main board final: header + R827 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+AC-K108d backlog.md written (temp+replace, re-read asserted)
+AC-K108d 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K108d 09-month archive zero-touch post-op == git HEAD blob re-verified
+AC-R1181c archive pure-append: 9885627 -> 9967646 B; markers 110 -> 111
+archive write committed (temp+replace, prefix re-verified)
+state.json write committed (temp+replace, re-parsed after write)
+HONEST-RECORD: run 1 aborted at probe expected-value assertion (my error: probe round field counts tokens lines too); all writes 1-11 were already committed before the abort; zero write-impact, corrected expectations in run 2 = R824-symmetric post counters
+probe pre-op : {'in_window': 60, 'paren': 32, 'round': 28, 'tokens': 11, 'idle': 37, 'idle_round': 9, 'nop': 2}
+probe post   : {'in_window': 56, 'paren': 32, 'round': 24, 'tokens': 9, 'idle': 37, 'idle_round': 9, 'nop': 2}
+A. disk end-state re-verified: tick 827, log 58 items, head 55 == pre-op head, R118 summary + R827 closeout pair in place, top fields verbatim
+A. canonical form == json.dumps(indent=2)+LF; final size 77526 B
+A. post-fold 74050 B; final 77526 B; margin 974 B under 78,500B gate (AC-R1184 re-verified from disk)
+A. AC-R1182 window re-verified from backup: [R117 prior summary + R824..R826 three pairs] 7 lines 12672B, tokens 3, idle-fast 0, no-pullable 0
+A. committed R118 summary row == mechanically derived row, 235 catalog tokens, zero hand-picked
+A. AC-K108c board re-verified: header + R827 flipped done row (closure embedded) + 3 open rows, R824 row migrated off main board
+A. AC-K108b 10-month archive re-verified: 15 sections, R824 row md5 8364b8b5d855a6bc6cbd35b34bd4f249 identical, R827 section in place
+A. AC-K108b 09-month archive zero-touch == git HEAD blob re-verified
+A. AC-R1181c archive re-verified: markers 110->111, pure-append tail == pre-op bytes (81,938B)
+B. probe pre-op : {'in_window': 60, 'paren': 32, 'round': 28, 'tokens': 11, 'idle': 37, 'idle_round': 9, 'nop': 2}
+B. probe post   : {'in_window': 56, 'paren': 32, 'round': 24, 'tokens': 9, 'idle': 37, 'idle_round': 9, 'nop': 2}
+B. post sub by R744 formula (round-tokens-idle_round) = 6
+B. incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 (fully symmetric with R821/R824 fold post counters 56/9/37/2 + sub 6; run-1 abort = my expected-value error on the round field, corrected, zero write-impact: writes 1-11 already committed and re-verified above)
+C. export derived: tick 824->827, R118 results row appended, self_drive W 56 symmetric-flat / sub 8 -> 6 fold-derived, idle 37 / nop 2 flat, queues 6/2/2 disk-recounted, proposals 1/1 disk-recounted
+C. export written, export_ts = 2026-10-01T18:37:49+08:00 , results rows = 240
+D. heartbeat row appended ts= 2026-10-01T18:37:49+08:00
+E. qa/board-R827.log written, 12 lines
+F. AC-R1183d independent PowerShell ConvertFrom-Json re-parse: PSOK tick=827 log=58
