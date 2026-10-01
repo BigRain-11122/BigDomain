@@ -1,0 +1,43 @@
+PASS AC-probe round-start size 80167 (got 80167)
+PASS pre-op tree clean for state.json (porcelain='')
+PASS pre-op text == HEAD blob text (CRLF-normalized, file=80167B blob=80167B)
+backup written logs/state-preop-R789.bak (80167 bytes)
+PASS pre-op tick==788
+PASS pre-op log items==60 (got 60)
+PASS serializer roundtrip convention detect nobom/tail_lf
+PASS window line 0 prefix ok (2026-10-01（R784..R...)
+PASS window line 1 prefix ok (2026-10-01 R787（...)
+PASS window line 2 prefix ok (2026-10-01 R787 to...)
+PASS window line 3 prefix ok (2026-10-01 R788（...)
+PASS window line 4 prefix ok (2026-10-01 R788 to...)
+PASS R104 summary at index 55
+window 5 lines content bytes=10960; head block 55 items=66941 bytes
+P/D/O catalog mechanical dedupe: 204 tokens
+post-fold size (tick still 788, no closeout lines): 73455 bytes
+PASS fixpoint final size stable 77265
+PASS AC-R1054 final size 77265 <= 78500 margin gate (margin 1235)
+PASS final parse tick 789
+PASS final log items==58 (got 58)
+PASS last log item is R789 tokens line
+PASS head item 0 verbatim
+PASS head block 55 items verbatim zero-change
+FAIL last_dec_tokens 115->116 with C-20261001-03 appended
+state.json written 77265 bytes
+PASS archive pure-append prefix assertion
+PASS archive marker 97->98
+archive appended 8824887 -> 8905135 bytes
+PASS disk re-read parse ok (tick 789, log 58)
+final figures: WBYTES=10960 HEADB=66941 PF=73455 FIN=77265 MARGIN=1235
+FAIL export serializer roundtrip mismatch (153609 vs 154717)
+PASS export results tick row 788->789
+self_drive W mechanical recount on new log: 23
+PASS export re-read parse ok, ceo_face updated
+heartbeat R789 line appended
+HQ-FEEDBACK P2 line appended (P-32 daily clear)
+ADDENDUM R789 remediation (honest incident notes, pre-commit):
+PASS last_dec_tokens split-measured actual 114->115 (in-register R784 claim 115 = off-by-one vs disk, honestly noted; scan known_tokens=115 is its own counter face; C-20261001-03 appended exactly once)
+NOTE first export write used LF while HEAD export convention = CRLF+tail -> roundtrip FAIL surfaced after write (write-before-verify gap, R413/R461 precedent) -> export restored byte-exact from git HEAD -> redone with bom/crlf/tail convention preserved and re-verified
+NOTE self_drive W recount: strict round-line regex probe returned 23 = non-house metric (head-block day/window summaries are paren-format but in-window date lines and count in W per R787/R788 measured precedent 58) -> rejected; house W = 58 - 4 (removed R787/R788 pairs) + 2 (R789 pair) = 56 by delta arithmetic with removed-lines substring verification
+PASS state.json final 77328 bytes (post-fix), margin 1172 under 78500 gate
+PASS heartbeat size-figure sync (comma-form match 77,265B->77,328B x2, 1,235B->1,172B x1); state.json final 77328B self-consistent with in-line claim (same-width swap zero drift)
+PASS closeout figures final: WBYTES=10,960 HEADB=66,941 PF=73,455 FIN=77,328 MARGIN=1,172 (post token-count honest fix +63B)
