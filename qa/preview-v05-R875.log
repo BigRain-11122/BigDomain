@@ -1,0 +1,19 @@
+== preview v0.5 readout-refresh slice verification R875 (AC-V51..V55, pre-registered src/os/backlog.md R875 row) ==
+[PASS] V53a L1 prefilter loaded words=65141 (wordlist.py trie, ugc/config.json)
+[PASS] V53b CLASS A (v0.5 authored chrome/copy) checked=14 hits=0
+[PASS] V52a live log parsed: 27/27 suites, 231 criteria
+[PASS] V52b html stats carry 27 / 231 / 27/27 / 20
+[PASS] V52c stale R681 readout & expired triage note removed
+[PASS] V52d module tags=20 (R875 inventory: 13 dirs + 3 service files + ledger sub-faces) tags=20
+[PASS] V52e version bump title/header/footer (v0.5 x>=4) count=4
+[PASS] V54a benchgate marker present: AIGC
+[PASS] V54a benchgate marker present: msgSecCheck
+[PASS] V54a benchgate marker present: 投顾
+[PASS] V54a benchgate marker present: 19.9
+[PASS] V54b self-contained: external http/https href/src refs=0 []
+[PASS] V54c size=22911 bytes (>=4096)
+RESULT PASS fails=0 classA=14
+[PASS] V55a browser live run file:// title=v0.5 (playwright page.goto; nav tool parse-fail worked around via run_code)
+[PASS] V55b h2 sections=7; readout h2 carries R875; stats rendered [27, 231, 27/27, 20]
+[PASS] V55c console errors=0 warnings=0 (full session on file:// page)
+[PASS] V55d real screenshot qa/preview-v05-R875.png (fullPage css)

@@ -137,9 +137,25 @@ async def make_resident(ws):
     return await recv_until(ws, lambda f: f.get("type") == "pay.grant_sandbox")
 
 
+def _free_port():
+    """Reserve-and-release an ephemeral port for refusal probes.
+
+    Why: frontdoor.py (R728 XL-16 live face) holds 8093 as a standing
+    service, so probing that fixed port reports 'bound' regardless of the
+    lobby server (R875 collision). An ephemeral port keeps the criterion
+    semantics: the refusing server must leave ITS assigned port closed.
+    """
+    sock = socket.socket()
+    sock.bind(("127.0.0.1", 0))
+    port = sock.getsockname()[1]
+    sock.close()
+    return port
+
+
 def startup_refusal_cases():
     """AC-S4 half: a missing/unwired gate config must refuse startup."""
     tmp = tempfile.mkdtemp(prefix="lobby-refusal-")
+    probe_port = _free_port()
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
     broken = os.path.join(tmp, "broken.json")
@@ -152,7 +168,7 @@ def startup_refusal_cases():
     ev = []
     for cfg_path, label in ((broken, "empty-wordlist-config"), (missing, "missing-config")):
         proc = subprocess.Popen(
-            [sys.executable, SERVER, "--host", "127.0.0.1", "--port", "8093",
+            [sys.executable, SERVER, "--host", "127.0.0.1", "--port", str(probe_port),
              "--config", cfg_path, "--db", os.path.join(tmp, "refusal.db")],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8")
         try:
@@ -168,11 +184,11 @@ def startup_refusal_cases():
             ok_missing = ok
         ev.append("%s rc=%s offline=%s" % (label, proc.returncode, "E_GATE_OFFLINE" in (err or "")))
     try:
-        socket.create_connection(("127.0.0.1", 8093), timeout=1).close()
+        socket.create_connection(("127.0.0.1", probe_port), timeout=1).close()
         bound_ok = False
     except OSError:
         bound_ok = True  # nothing ever bound = door stayed shut
-    ev.append("port-8093-never-bound=%s" % bound_ok)
+    ev.append("port-%d-never-bound=%s" % (probe_port, bound_ok))
     return ok_broken and ok_missing and bound_ok, "; ".join(ev)
 
 

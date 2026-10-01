@@ -1,0 +1,6 @@
+== R875 closeout evidence (verify-then-write) ==
+[first run] full pre-write assertions PASS + post-write re-read PASS (17+5 checks, console output in round; state 78266B->81054B, tick 874->875, log 58->60)
+[second run for log capture] correctly ABORTED by pre-op assertions K126a/K126b (row already flipped) - zero double-write, idempotence guard verified
+-- second run output below --
+[FAIL] K126a exactly one open R875 claim row 
+[FAIL] K126b exactly one stale R874 done row on board 

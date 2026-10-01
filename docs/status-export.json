@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T05:51:27+08:00",
+  "export_ts": "2026-10-02T06:08:15+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R874 R133 水位整编+板规执法第一百二十五刀双项轮（轮计分 1=机制实改·余面全平）：轮首首测 81,358B 越 80,000B 线 1,358B=R873 收账 carry-note 兑现→fold 窗［R132 前窗摘要+R871..R873 三轮对］7 行 12037B 压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档（marker 125→126）+备份件·post-fold 75306B 终态 78266B｛margin 234B｝·AC-R1331..R1335 全过=qa/reorg-R874.log+AC-K125a..e 全过=qa/board-R874.log；九面 scan 余面全平（LEDGER conflict=0·DEC 121 token 持平·GORD 147 行零新集团令）；等待面：法务外件窗 10-02 12:00（日内后段轮判）·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "产品实物面=preview/index.html v0.4「M1 挂载面·互动动线演示」节（2026-10-02 ~05:2x·P-2026-10-02-02 审计 M1 承接·五站可逛动线+prev/next 计数器+站三 msgSecCheck 诚实红 E_GATE_OFFLINE·AC-V41..V45 全过=qa/preview-v04-R872.log+真截图 qa/preview-v04-R872.png·file:// 可开）；机制实物=state.json 水位整编 R133（logs/state-log-archive-2026-09.md §R874 append 节+logs/state-preop-R874.bak+qa/reorg-R874.log+qa/board-R874.log·2026-10-02 05:5x beat）",
-    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗闭口判（D-20260929-03 席7 第二窗·日内后段轮定点查）+D-20260930-19/20 送达验收窗；10-02 21:40 OSS 借力窗界翻转（第三窗切片已提前交付 OH-20261002 在册）；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001）+10-07 治理日委员会聚合审+10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；M1 可逛切片窗 ≤10-09（本司商业挂载面已就绪待 Biggame 切片对接·合规四件套随切片常驻）+benchmark 7 天刷新 10-09；fold R134 由后续轮轮首首测裁定（水位增速 ~2KB/对实测带）"
+    "current": "R875 M1 第三切片双件产品轮（轮计分 2=可看实物·审计 P-2026-10-02-02 承接）：①lobby AC-S4 端口探针撞车修复——全量 RUNNER live 复跑检出 26/27 假阳判负（frontdoor 8093 常驻服务·R684 后潜伏），最小修=拒绝态用例改运行时取号空闲端口，frontdoor 在跑环境复跑 RUNNER PASS 27/27 套件 231 判据 controls 6/6（qa/reconcile-live-R875.log 判负留痕+R875b.log 复绿）；②preview v0.4→v0.5 工程读数实时刷新（陈旧 22/27 与到期分诊注记撤换为 live 读数 27/231/27/27/20 面·模块标签 14→20·Class A 14 串 L1 预筛零命中·benchgate R-D1 PASS·真截图 file:// title v0.5）；等待面：法务外件窗 10-02 12:00·bootstrap 待 CEO 物理件",
+    "latest_artifact": "产品实物面=preview/index.html v0.5「工程读数实时刷新」（2026-10-02 ~06:0x·R875 live 全量实跑读数 27/27 套件·231 判据全绿·20 模块面·AC-V51..V55 全过=qa/preview-v05-R875.log+真截图 qa/preview-v05-R875.png·file:// 可开）+工程实物=lobby AC-S4 探针撞车修复件（src/sandbox/lobby/test_client.py 拒绝态用例改运行时取号空闲端口·RUNNER 27/27 复绿双证 qa/reconcile-live-R875.log 与 R875b.log·2026-10-02 ~06:0x）",
+    "next_milestone": "下个轮次窗：10-02 12:00 法务外件窗闭口判（D-20260929-03 席7 第二窗·日内后段轮定点查）+D-20260930-19/20 送达验收窗；10-02 21:40 OSS 借力窗4 开窗（第三窗切片已提前交付 OH-20261002 在册）；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001）+10-07 治理日委员会聚合审+10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；M1 可逛切片窗 ≤10-09（本司商业挂载面+互动动线+工程读数面三切片就绪待 Biggame 切片对接·合规四件套随切片常驻）+benchmark 7 天刷新 10-09；fold R134 下轮轮首首测裁定（本轮收账后水位预计越 80,000B 线）"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "874",
+      "875",
       "OSLoop 轮次 tick"
     ],
     [
@@ -1237,15 +1237,19 @@
     [
       "1",
       "state.json 水位整编 R133+板规执法第一百二十五刀（R874 双项一轮·R871/R868 同构）：81,358B 越 80,000B 线 1,358B=R873 收账 carry-note 承接兑现→窗［R132 前窗摘要+R871..R873 三轮对］7 行 12037B 压 1 滚窗汇总行（marker 125→126+备份件 logs/state-preop-R874.bak+头部块 55 项 verbatim 66,941B+双口径解析过）·post-fold 75306B 终态 78266B｛margin 234B｝·AC-R1331..R1335 全过=qa/reorg-R874.log·cut-125 R871+R872 滞板 done 行 2 条 verbatim 迁 10 月档 §R874 节·AC-K125a..e 全过=qa/board-R874.log"
+    ],
+    [
+      "2",
+      "M1 第三切片双件（R875·审计 P-2026-10-02-02 承接：lobby AC-S4 端口探针撞车修复=RUNNER live 复跑检出 26/27 假阳判负〔frontdoor 8093 常驻服务〕→运行时取号空闲端口最小修→27/27 套件 231 判据复绿=qa/reconcile-live-R875.log 与 R875b.log+preview v0.4→v0.5 工程读数实时刷新〔live 读数 27/231/27/27/20 面·模块标签 14→20·Class A 14 串 L1 预筛零命中·AC-V51..V55=qa/preview-v05-R875.log+真截图 qa/preview-v05-R875.png〕）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
