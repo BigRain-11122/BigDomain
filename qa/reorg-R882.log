@@ -1,0 +1,26 @@
+AC-R1361a tree clean pre-op: git status --porcelain empty
+AC-R1361a pre-op == git HEAD blob: 82063 bytes (round-start first-measure 82063B, scan/getsize dual-gauge)
+AC-R1363a serializer roundtrip convention detect: no BOM, trailing-LF=False, canonical json.dumps(indent=2) form
+AC-R1362a window = [R135 prior summary + R879..R881 three pairs] 7 lines 12742 B (content); head block 55 items verbatim (content 66941 B)
+AC-R1362b head block 55 items content = 66941 B == R879 register (head file-region 67408 B incl. JSON framing); window line prefixes verified R879..R881 continuous 3 pairs zero-missing
+AC-R1362c removed lines substring-verified (register-metric inputs): no-pullable 1 (expected 1 = R135 prior-summary honest tag, accounting line re-embeds +1) / tokens 3 (expected 3) / idle-fast 0 (expected 0 = abolished-path tag, window and new lines carry zero)
+AC-R1362d P/D/O catalog (regex dedup, order of first appearance): 207 tokens = R135 prior-summary embedded catalog 202 snowball + 5 new ['C-R1354', 'C-R1351', 'C-K128a', 'C-HB879', 'P-02'] (mechanical AC- prefix substring hits, zero hand-picked); missing=[] asserted
+probe pre-op : {"W": 60, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 27, "tokens": 11, "sub": 8}
+AC-HB882a heartbeat pre-op tail = tick 881 (lag 0, single current row this round)
+post-fold (pre-closeout) size: 74810 B
+AC-R1362e statutory gate: two-pair window final budget 82217 B > 80,000B trigger line (kept R881 pair 2694 B + window delta 2694 B - summary delta 928 B) = AC-R1364 gate unsatisfied -> three-pair window statutory (R879 precedent)
+AC-R1363b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 881->882 only; last_dec_tokens 121 flat
+AC-R1364 final size: 77757 B, margin 743 B under 78,500B gate; post-fold 74810 B
+AC-R1363c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head region byte-identical except tick digit; canonical form == json.dumps(indent=2)
+probe post   : {"W": 56, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 23, "tokens": 9, "sub": 6}
+B. incremental-register law: W 60->56 (window 7 out, summary+closeout+tokens 3 in); round 27->23 (window 6 R-regex hits out: 3 closeout + 3 tokens lines; own closeout + tokens pair in); tokens 11->9 (window 3 out, own 1 in); sub 8->6 (R880/R881 declaration-pair increments +1 each consumed at fold landing, landing back on the R879 post register 6); idle 37 flat / idle_round 8 flat (abolished-path tag, window and new lines carry zero); nop 3 flat (R135 prior-summary honest tag folded away -1, accounting line re-embeds the same tag +1, one-out-one-in); paren 33 flat (1:1 date-prefix summary replacement) - registered, asserted pre-write (definitions calibrated against archived R868 pre-op snapshot: idle=idle-fast substring, paren=whole-log, sub=round-tokens-idle_round)
+D. heartbeat row composed x1 (tick 882 current, lag 0 kept) ts= 2026-10-02T07:32:43+08:00
+C. export derived: tick 879->882, R136 results row appended, self_drive W 56 / sub 6, idle 37 / nop 3, queues 6/2/2, proposals 1/1 disk-recounted; window label 2026-09-25..2026-10-02 kept
+C. export composed, export_ts = 2026-10-02T07:32:43+08:00 , results rows = 267
+AC-R1361c archive pure-append: 11352334 -> 11434478 B; markers 128 -> 129
+AC-R1361b backup logs/state-preop-R882.bak written byte-identical
+archive write committed (temp+replace, prefix re-verified, markers 128->129)
+state.json written (temp+replace, re-read asserted: tick 882, log 58 items, probe in-register, PS ConvertFrom-Json dual-gauge tick=882)
+D. heartbeat row appended x1 (tick 882 current, lag 0 kept) ts= 2026-10-02T07:32:43+08:00
+export written (temp+replace, re-read asserted: export_ts + results 267 rows + tick row 882)
+AC-R1365e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-129 tags (P-51)
