@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-01T20:33:55+08:00",
+  "export_ts": "2026-10-01T21:06:39+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R837 OSS 借力第三窗切片件提前交付轮（轮计分 1=文件改动·产品优先律「结果早点出」承接·提前 ~24.8h）：九面 scan 轮首全平唯一 [TASKS] 机械计数真判全门控→补队列零可拉=转 OSS 借力窗 3 切片提前交付——判据预注册 AC-OH11..OH15 先于外部请求（backlog R837 行）；实搜面 13 次外部请求全录（2 MCP 解析失败+2 零命中死面〔slice2 健康预警「该类仓普遍停更」经验证实〕+1 FACE2 污染面+2 404+6 实质得）；houbb/sensitive-word（Apache-2.0 spdx+原文双源验·6,063★）五门全过=入池 ugc L1 msgSecCheck 本地预筛词库面（config L14 词表 mock→生产预筛·本地提效类候选）；adlered/DangerousSpamWords 判负留痕（停更 ~7.5 年）；OH-20261002-bigdomain.md 落集团台账位+司级登记簿入池记录行+结论应用表四行；等待面：法务外件窗 10-02 12:00·O-013④ 10-02 首轮·提案回访 10-05·基准 10-08·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "OSS 借力窗 3 切片件 cph4/oss-harvest/OH-20261002-bigdomain.md（2026-10-01 ~20:3x·提前 ~24.8h·AC-OH11..OH15 全过：houbb/sensitive-word 词库面五门入池〔Apache-2.0·6,063★〕+司级登记簿入池记录行+13 次外部请求全录）+docs/status-export.json 本轮实刷（tick 837）；产品实物面=preview/index.html v0.3 直连前台 http://127.0.0.1:8093/（R728）+RUNNER 27 套件 231 判据全绿（R684）",
-    "next_milestone": "下个轮次窗：10-02 首轮 O-013④ 每日核对+10-02 12:00 法务外件窗（D-20260929-03）+D-20260930-19/20 送达验收窗（窗内 ≤48h）；10-05 提案回访（BD-PROP-001）+OSS 借力窗 4（10-05 21:40 开·下窗指针=城市共创图像素材工具线/真钥到位双接线实测/Python DFA 匹配器线）；10-08 benchmark 7 天刷新；fold R122 由后续轮轮首首测裁定（水位增速 ~2.2KB/对实测带）"
+    "current": "R838 houbb/sensitive-word 词库接线采用轮（轮计分 2=可跑实物）：OH-20260929...窗 3 入池件四前置全兑现→采用——词库定位收口（git trees→src/test/resources/dict_v20240407.txt·verbatim 1,180,575B==源尺寸·commit b86249d 锚）+Apache-2.0 §4 携带（NOTICE+源 LICENSE verbatim）+五门复验（qa/prefilter-R838.log）+判据预注册（AC-SW1..SW8 先于外部请求）；接线=ugc L1 真词库本地预筛（wordlist.py 自写 trie·config gate.pre_filter 数据驱动·L1→L2 生产序·local_hit_count 省配额计数器·allow_words 灰区/业务词豁免降级）；test_prefilter 18/18+test_ugc 12/12 零回归；登记簿采用表加行（入池→采用）；6 次外部请求全录。等待面：法务外件窗 10-02 12:00·O-013④ 10-02 首轮·提案回访+OSS w4 10-05·基准 10-08·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
+    "latest_artifact": "houbb/sensitive-word 词库接线采用件（2026-10-01 ~21:1x·AC-SW1..SW8 全过=qa/prefilter-R838.log）：src/sandbox/ugc/wordlist.py+wordlist_data/（65,141 词真词库+NOTICE+LICENSE）+config gate.pre_filter+test_prefilter.py 18/18（ugc L1 mock→真词库生产预筛·降 msgSecCheck 真实调用配额）+docs/oss-harvest/README.md 采用表行；产品实物面=preview/index.html v0.3 直连前台 http://127.0.0.1:8093/（R728）+RUNNER 27 套件 231 判据全绿（R684）",
+    "next_milestone": "下个轮次窗：10-02 首轮 O-013④ 每日核对+10-02 12:00 法务外件窗（D-20260929-03）+D-20260930-19/20 送达验收窗；10-05 提案回访（BD-PROP-001）+OSS 借力窗 4（10-05 21:40 开·下窗指针=城市共创图像素材工具线/真钥到位双接线实测）；10-08 benchmark 7 天刷新；fold R122 由下轮轮首首测裁定（收账后水位预计越线）"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "837",
+      "838",
       "OSLoop 轮次 tick"
     ],
     [
@@ -1161,15 +1161,19 @@
     [
       "1",
       "OSS 借力第三窗切片件（cph4/oss-harvest/OH-20261002-bigdomain.md·houbb/sensitive-word msgSecCheck 本地预筛词库面五门入池〔Apache-2.0 spdx+原文双源验·6,063★〕+adlered/DangerousSpamWords 判负留痕+13 次外部请求全录·AC-OH11..OH15 预注册先行全过·提前 ~24.8h·R837）"
+    ],
+    [
+      "1",
+      "houbb/sensitive-word 词库接线采用件（R838·OH-20261002 四前置兑现：词库定位+Apache-2.0 §4 携带+五门复验+判据预注册 AC-SW1..SW8=qa/prefilter-R838.log·src/sandbox/ugc/wordlist.py 自写 trie 65,141 词+allow_words 豁免+local_hit_count 省配额计数器·test_prefilter 18/18+test_ugc 12/12 零回归·登记簿采用表加行·6 次外部请求全录）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-01",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 2,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

@@ -11,7 +11,13 @@
     "forbidden_words": ["赌博", "色情", "洗钱", "代币提现", "外挂", "诈骗"],
     "advisory_ban_words": ["保本", "稳赚", "保证收益", "收益承诺", "必涨", "包赚", "翻倍"],
     "gray_words": ["政治", "宗教", "医疗", "维权", "集资"],
-    "note": "沙箱=词表 mock（生产=msgSecCheck 三态 pass/review/risky·AC-UP1 blocked on 平台资质=CEO 物理件）；闸件 import 复用 lobby sec_gate·灰区词表为本管道扩展面"
+    "note": "闸序=生产序：L1=真词库本地预筛（pre_filter·houbb/sensitive-word 词库数据面 Apache-2.0·命中本地先拦=降 msgSecCheck 真实调用配额）→L2=词表 mock（msgSecCheck 三态替身·AC-UP1 blocked on 平台资质=CEO 物理件）→灰区词表 review 档；闸件 import 复用 lobby sec_gate·灰区词表为本管道扩展面",
+    "pre_filter": {
+      "file": "wordlist_data/sensitive_words_dict.txt",
+      "allow_words": ["政治", "宗教", "维权", "视频", "建筑", "月卡", "会员"],
+      "source": "houbb/sensitive-word (Apache-2.0) src/test/resources/dict_v20240407.txt @ commit b86249d · 65,143 行 verbatim",
+      "note": "L1 本地预筛接线（OH-20261002 入池件采用·R838）：自写 trie 匹配器 wordlist.py·命中=ContentRejectedError(1) 同族+本地点计数（省配额可观测）；allow_words=字典命中豁免→降级走 L2 闸与灰区审查非放行（灰区词+业务词面碰撞实测集：政治/宗教/维权〔灰区〕+视频/建筑/月卡/会员〔路由词面内含〕）；NOTICE+LICENSE=wordlist_data/·登记=docs/oss-harvest/README.md 采用表"
+    }
   },
   "rate_limit": {
     "max_submissions": 5,

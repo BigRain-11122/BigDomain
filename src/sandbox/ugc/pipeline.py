@@ -52,6 +52,7 @@ from sec_gate import (ContentRejectedError, GateOfflineError,  # lobby gate prod
                       SecGate)
 import store as UGC
 from review import ReviewDesk
+from wordlist import PreFilter  # L1 local pre-filter (OH-20261002 wiring)
 
 REPO_ROOT = os.path.realpath(os.path.join(BASE, "..", "..", ".."))
 SOURCES = ("direct", "lobby_idea", "avatar_intake", "live_danmaku")
@@ -89,6 +90,8 @@ class UGCPipeline:
         if not isinstance(gray, list) or not [w for w in gray if str(w)]:
             raise GateOfflineError("gate.gray_words missing or empty (AC-U2/AC-U3)")
         self.gray_words = [str(w) for w in gray if str(w)]
+        self.prefilter = PreFilter.from_config(config)  # L1; None = unwired
+        self.local_hit_count = 0  # platform calls saved by the local trie
         noise_cfg = config.get("noise") or {}
         try:
             self.emoji_re = re.compile(str(noise_cfg.get("emoji_pattern", "")))
@@ -222,6 +225,11 @@ class UGCPipeline:
         if not text:
             raise UGC.PipelineError(UGC.E_BAD_FRAME, "content empty")
         try:
+            if self.prefilter is not None:
+                hit = self.prefilter.check(text)  # production L1: local
+                if hit is not None:                # catch before the paid
+                    self.local_hit_count += 1     # platform call (quota)
+                    raise ContentRejectedError(1, hit)
             self.gate.check_text(text)  # gate 1 risky + gate 2 non-advisory
         except ContentRejectedError as exc:
             # gate hits never land and never receipt (lobby AC-S4 same origin)
@@ -501,8 +509,10 @@ def main():
     except GateOfflineError as exc:
         print(str(exc), file=sys.stderr)  # serve refusal, same family as lobby/ledger
         return 2
-    print("ugc pipeline ready: gate=ok gray_words=%d export=%s db=%s sources=%s"
-          % (len(pipe.gray_words), pipe.export_dir, args.db,
+    pf = pipe.prefilter
+    print("ugc pipeline ready: gate=ok pre_filter=%s gray_words=%d export=%s db=%s sources=%s"
+          % ("%d words" % pf.word_count if pf is not None else "off",
+             len(pipe.gray_words), pipe.export_dir, args.db,
              ",".join(sorted(pipe.enabled))), flush=True)
     pipe.close()
     return 0

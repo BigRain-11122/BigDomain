@@ -1,0 +1,38 @@
+﻿PASS SW1a-dict-verbatim: dict file 1180575 bytes == source trees API size
+PASS SW1b-notice: NOTICE (Apache-2.0 s4 attribution) in wordlist_data/
+PASS SW1c-license: source LICENSE.txt verbatim (20966 B) in wordlist_data/
+PASS SW1d-format: 65143 non-blank lines, 2 exact dups -> 65141 unique words (plain one-per-line format, 0 blanks)
+PASS SW4a-legacy-none: gate.pre_filter absent -> None (backward compatible)
+PASS SW4b-missing-refuse: missing wordlist -> GateOfflineError (no gate, no door)
+PASS SW4c-empty-refuse: empty wordlist -> GateOfflineError
+PASS SW4d-load: pre-filter loaded: 65141 words, source=houbb/sensitive-word (Apache-2.0) src/test/resources/dict_v20240407.txt @ commit b86249d �� 65,143 �� verbatim
+PASS SW4e-trie-hit: trie catches dict word at inner position (probe len=5)
+PASS SW4f-clean-pass: clean text -> no hit
+PASS SW4g-allow-gray: gray word #0 (len=2) -> allow fall-through (review, not reject)
+PASS SW4h-allow-mask: allowed word never masks a later real hit
+PASS SW5a-clean-flow: clean content passes L1+L2, local_hit_count=0
+PASS SW5b-dict-hit-reject: dict-only word -> E_CONTENT_REJECTED via L1, counter=1 (one platform call saved)
+PASS SW5c-l2-still-catches: advisory word (not in dict) -> L2 mock gate catches, counter unchanged (layered defense)
+PASS SW5d-gray-review-intact: gray word falls through L1 -> review suspension, not reject
+PASS SW5e-forbidden-local-first: mock forbidden word also in dict -> caught at L1 locally (counter=2), same rejection family
+PASS SW6-zero-regression: test_ugc.py exit=0, 12/12 unchanged file
+prefilter suite: 18/18 PASS
+
+== Five-gate re-verification at adoption (R838, OH-20261002 adoption path) ==
+1 fit: ugc L1 wordlist-mock -> real-dict production pre-filter gap closed (config gate note now states production order L1 real trie -> L2 mock stand-in); quota-saving observable = pipeline.local_hit_count (SW5b: dict-only word caught locally = one msgSecCheck call saved)
+2 anti-repeat: referenced-not-copied (wordlist.py imports GateOfflineError from lobby sec_gate; trie = new L1 layer, mock gate untouched); zero sibling-slice duplicates (R837 registry grep re-cited, no new face this round)
+3 license: Apache-2.0 re-verified at adoption = REQ4 repo metadata license.spdx_id=Apache-2.0 (2026-10-01 ~21:0x +08:00) + source LICENSE.txt verbatim 20966B carried in wordlist_data/ (s4: NOTICE + LICENSE + pinned commit b86249ddfa381b426359a420623486e099c2092d)
+4 health: pushed_at=2026-03-23T10:35:47Z re-fetched same value (REQ4); R837 exception note re-cited (most-active dominant repo in class, 6063 stars, search faces proved zero active alternatives)
+5 cost/safety: local data file + stdlib-only trie, zero deps zero network zero keys (wordlist.py import audit: os + sec_gate only); Java library itself NOT adopted (zero stack pollution); 1.18MB data file = routine git data carriage
+
+== External request ledger (all read-only, zero login walls, zero keys, 2026-10-01 ~20:5x-21:0x +08:00) ==
+REQ1 api.github.com contents pkg tree (word package: api/bs/collection/constant/core/exception/support/utils)
+REQ2 api.github.com git/trees recursive=1 -> located dict src/test/resources/dict_v20240407.txt (1180575B) + allow-file concept sensitive_word_allow.txt
+REQ3 raw /main 404 x2 (branch mismatch: default=master) + one PS Range-header restriction abort -> merged into REQ5 full download
+REQ4 api.github.com repo metadata: default_branch=master, license=Apache-2.0, pushed_at=2026-03-23T10:35:47Z (adoption-time re-verification)
+REQ5 api.github.com commits/master -> sha b86249ddfa381b426359a420623486e099c2092d pinned; raw dict verbatim download 1180575B == trees API size (integrity)
+REQ6 raw LICENSE.txt verbatim 20966B == R837 tree observation (integrity)
+
+== Format scan (loader input analysis) ==
+65143 non-blank lines / 0 blanks / 2 exact duplicate lines (loader dedupes -> 65141 unique) / longest word 70 chars / plain one-word-per-line, no annotations
+Collision probe (config vocabulary vs dict, substring semantics): forbidden 5/6 in dict (local-first catch intended); gray 3/5 (political/religious/rights-defense -> allow set); route keywords 4 hits (video/architecture/monthly-card/membership -> allow set); landfall 0; advisory 0 (L2 still catches = SW5c layered-defense evidence)
