@@ -1,0 +1,71 @@
+qa/recovery-R846.log - BigDomain OSLoop R846 verification evidence
+Date: 2026-10-01 ~23:52 +08:00 | Round type: R845 interrupted-closeout recovery (R578/R551 precedent) + queues-all-gated declaration
+
+[1] Five-still scan snapshot (tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1, ~23:35)
+    STATE PASS tick=845 last_order=2026-09-28 22:1x last_decision_rows=202 benchmarks_refreshed=2026-10-01
+    LEDGER PASS lines=264 atbd_rows=26 conflict=0 (all @BigDomain rows receipted)
+    DEC PASS rows=201 known_tokens=117 content-addressed (zero new company dispatch rows)
+    GORD INFO tbl_rows=145 gord_new_rows=0 (last-3 judged in-register: O-20261001-2106 @BigMoney / O-2026-0930-026 delivered R843 / O-20261001-2209 @Biggame)
+    ORD PASS / BENCH PASS (refreshed 10-01, next 10-08) / QA PASS (today smoke png+log in place, crawl done R736) / EXPORT PASS (age 0.8h)
+    TASKS INFO tasks_unchecked=2 backlog_open=3 blocked_on_ceo=1 (mechanical claimable=2 overruled by in-register gating, see [5])
+    TREE FLAG dirty=3 -> attribution in [2]
+
+[2] Dirty-tree attribution (single-executor backoff check)
+    HEAD = 980cb46 (R844 closeout). Dirty: docs/archive/backlog-done-2026-10.md, src/os/backlog.md, src/os/state.json
+    state.json working diff contains zero "R846" strings (no other writer); mtimes all 23:28:18; round.lock 23:34:01 = this session launcher
+    heartbeat tail at scan time = R844 line 22:58:28 (no R845 line); export mtime 22:47:04 (R843's write, tick row 843)
+    VERDICT: R845 session died 23:28:18 right after writing its state log pair, before export/heartbeat/commit.
+    Own-loop closeout products -> no backoff; recovery per R578/R551 precedent.
+
+[3] R845 claim-vs-disk audit (write-before-verify gap, R550/R577 precedent)
+    CLAIMED in R845 log pair                          ON DISK AT R846 START
+    fold R124 executed                                DONE - state.json post-fold 76111B, window summary line in place
+    pre-op backup == git HEAD blob                    VERIFIED - git hash-object logs/state-preop-R845.bak
+                                                      = 1f990296fe0add4bc93ab7ac52e649991823724b
+                                                      git rev-parse HEAD:src/os/state.json
+                                                      = 1f990296fe0add4bc93ab7ac52e649991823724b (byte-identical PASS)
+    board cut-116 executed                            DONE - R845 row flipped done, archive sec R845 +3 lines pure append
+    AC evidence qa/reorg-R845.log                     ABSENT on disk
+    AC evidence qa/board-R845.log                      ABSENT on disk
+    export refresh tick 845                           ABSENT (mtime 22:47:04 = R843, tick row 843)
+    heartbeat R845 line                               ABSENT (tail = R844)
+    commit + push                                     ABSENT (HEAD 980cb46 at round start)
+
+[4] Recovery actions executed by R846
+    commit 1 = 55d587b "R845 recovery ..." (state.json + backlog.md + 10-month archive), push 980cb46..55d587b direct PASS
+    heartbeat: R845 backfill line (ts anchored state.json mtime 23:28:18, cpu/mem/lanes derived from R845 log, R541 precedent)
+               + R846 line (CIM measured cpu_util_pct=85 mem_used_pct=45 prod_lanes=2, frontdoor 8093 listening)
+    export refresh: export_ts 2026-10-01T23:45:29+08:00, ceo_face.current -> R846 text, results tick row 843 -> 846,
+                    fold-R124 results row added (notes R845 truncation + absent qa logs honestly),
+                    self_drive incremental recount: W 58->60, sub 7->8, tokens 10->11, idle/no-pullable unchanged 37/2
+                    (R846 log wording keeps counters clean)
+
+[5] Queue truth-check (no-pullable judgment)
+    backlog open 3: O-013-4 daily data-freshness check (done today R736, next 10-02 first round) /
+                   D-20260929-03 legal external (window 10-02 12:00, anti-rescan law in force) /
+                   bootstrap (blocked on CEO physicals)
+    queue/main.md 6 open: bootstrap (CEO physicals) / M2 open-day ops (CEO P1 gate) / proposal track (quota met, visit 10-05) /
+                   QA charter daily crawl (done today R736) / M4 visitor landing (post-M2) / heartbeat standing law (carried THIS round)
+    queue/tech.md 2 open: docker-compose five-sandbox one-shot (docker ABSENT - 'docker' not recognized, native-run baseline in force) /
+                   logs fold toolchain (carried with folds)
+    queue/explore.md 2 open: wechat miniapp virtual-payment compliance (merchant-ID gated) / OSS harvest rolling (w4 opens 10-05 21:40, no window-jumping)
+    tasks.md unchecked 2: proposal-track standing anchor + blocked-on-CEO physicals list (standing/waiting rows)
+    VERDICT: zero pullable new work -> one-line declaration legal (P-2026-09-28-02 (2), protected exemption)
+
+[6] D-20260930-19 (1)(2) consumption steps
+    (1) group docs/decisions.md dispatch board: scan-derived DEC token set flat (117) = zero new rows for this company
+    (2) group docs/orders.md CEO physical-items area (git -C <FluxGroup root> show origin/main, group-repo read): zero change -
+        wechat-pay merchant ID + corporate entity/server/domain/ICP filing blockers stand; BigHouse repo row in-register, not our wiring item
+
+[7] Post-edit validation (dual-caliber)
+    PS ConvertFrom-Json state: tick=846 log=60
+    python json.loads state: tick 846 log 60 PASS
+    PS ConvertFrom-Json export: ts=2026-10-01T23:45:29+08:00, current starts "R846", results tick row = 846, self_drive 60/37/2/8
+    python json.loads export: PASS (results 250 rows)
+    export results rows containing "R124": exactly 1 (row index 249 = the new fold-R124 row; authoritative python check -
+        an earlier PS Measure-Object count of 2 was a PS 5.1 pipeline array-unrolling artifact, python enumeration is definitive)
+    state size final: 78,912B (pair +2,801B from 76,111B; under the 80,000B fold line; fold R125 decided by next round first measure)
+    heartbeat tail after append: R845 backfill line + R846 line present (last line ts 2026-10-01T23:47:53+08:00)
+
+[8] tokens ledger: local=unmeasured api=unmeasured (official session has no token metering; zero new external API
+    touchpoints this round; three-gate not implicated; zero cloud generation)
