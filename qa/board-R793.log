@@ -1,0 +1,31 @@
+=== board cut-96 evidence (R793) ===
+pre-op board: 9834B, 14 lines
+pre-op 10-month archive: 7997B
+[PASS] pre-op 10-month archive == git HEAD blob (round-start clean tree)
+[PASS] pre-op 09-month archive == git HEAD blob
+[PASS] AC-K96a stale done rows == 3, identities R792/R789/R788, each [done 2026-10-01] - count=3
+[PASS] AC-K96a open rows == 4 (R793 claim + O-013-4 + legal gated + bootstrap) - count=4
+
+md5 ledger (pre-op done rows):
+  - [x] R792 认领：state.json 再整编 ...n 1,951B｝·双口径解析过〕）  915986fe7ca41563549d027a3cb4e676
+  - [x] R789 认领：state.json 再整编 ...beat 逗号口径二次断言修复）〕）  8c777aeb71b799feaa46d7d3072a3158
+  - [x] R788 认领：板规执法第九十五刀（boar ...en-write 全断言先过后写〕）  f3c20f72d2c53e0005387a354bfbacc3
+[PASS] AC-K96b pure-append prefix (10-month archive)
+[PASS] AC-K96b exactly one new '## R793' section header
+[PASS] AC-K96b all 3 rows present in new section, md5-identical
+[PASS] AC-K96c post-cut board: zero stale done rows
+[PASS] AC-K96c post-cut board: open rows == 4 preserved (R793 claim + 3 standing)
+[PASS] AC-K96c header unchanged by cut
+
+post-op board: 4965B, 11 lines (pre 9834B)
+post-op 10-month archive: 12876B (+4879B appended section)
+[PASS] post-write re-read: board on-disk == built post board
+[PASS] post-write re-read: 10-archive on-disk == built post archive
+[PASS] post-write re-read: 09-archive untouched on-disk
+WROTE: src/os/backlog.md, docs/archive/backlog-done-2026-10.md
+
+=== auto-saves re-clean (side item) ===
+removed 134 files, 201585141B freed; remaining files=0
+recurrence note: R711 (346MB) and R728 (320MB) cleaned before; host auto-archive regrowth again
+
+board cut-96 verdict: AC-K96a..d ALL PASS (a=count, b=verbatim md5+pure-append+09 zero-touch, c=final board, d=this log verify-then-write)
