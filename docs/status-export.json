@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-01T12:12:04+08:00",
+  "export_ts": "2026-10-01T12:28:46+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R789 R105 水位整编轮（轮计分 1=机制实改·R758..R787 fold 先例）：轮首首测 80,167B 越 80,000B 线 167B=R788 carry-note 兑现→fold 窗［R104 前窗摘要+R787..R788 两轮对］5 行 10,960B 压 1 滚窗汇总行·marker 97→98+备份件+头部块 55 项 verbatim·AC-R1051..R1055 全过=qa/reorg-R789.log；DEC 新 token C-20261001-03 机队生产力闲置根治案科学闸判毕=非本司执行面知悉回执（根治四条全落机队台账/备货池/值守轮探测/秘书处派工·本司零机队在册·被动面=周产出分 ≥3 既有承接）；九面余面全平零新转办零新集团令；集团缺陷续报=origin/main docs/decisions.md 亦含未解 stash 冲突标记（P2 上报）·余待面持立（法务外件 10-02 12:00·OSS 窗3 10-02 21:40·bootstrap CEO 物理件）",
-    "latest_artifact": "logs/state-log-archive-2026-09.md §R789 append 节 + logs/state-preop-R789.bak + qa/reorg-R789.log（2026-10-01 state fold R105·80,167B 触线→post-fold 73,455B 终态 77,328B｛margin 1,172B｝）",
-    "next_milestone": "下个轮窗（按序）：10-02 12:00 法务外件窗到期触发查（D-20260929-03）+D-20260930-19/20 送达验收窗；10-02 21:40 OSS 借力窗3 片刻；10-02 首轮 O-013④ 每日核对；10-05 提案回访（BD-PROP-001）；10-08 benchmark 7 天刷新+C-20261001-01/02/03 判据回访窗（周产出分 ≥3·规则面占比 ≤30%·机队台账/备货池/停跳探测/0 分司判据）；R790 起轮首首测裁定 fold R106（R789 终态 77,328B·~2.4KB/对增速带）"
+    "current": "R790 DEC 审核批收账轮（轮计分 0=簿记类）：新 token 2 枚科学闸判毕全非本司面知悉回执（D-20261001-08 BigStream 回执核销批 12·执行司=HQ+C-20260101-01=该行⑤并发委员会窗三票档编号引用）；正向注记=集团已手术清除 decisions.md 冲突标记污染四行（内容行零改动）=R789 P2 上报件闭口；evolution-ledger conflict=2 持平未解两报在册（R783/R789·反重扫零新报）；九面余面全平零新转办零新集团令；余待面持立（法务外件 10-02 12:00·OSS 窗3 10-02 21:40·bootstrap CEO 物理件：商户号+企业主体+服务器/域名/备案/ICP）",
+    "latest_artifact": "docs/status-export.json 本轮实刷（2026-10-01 12:2x·tick 790）；最近机制实物=R105 水位整编件（logs/state-log-archive-2026-09.md §R789 append 节+logs/state-preop-R789.bak+qa/reorg-R789.log·2026-10-01 ~12:1x）；产品实物面=preview/index.html v0.3 活体前台 http://127.0.0.1:8093/（R728）+RUNNER 27 套件 231 判据全绿（R684）",
+    "next_milestone": "下个轮窗（按序）：10-02 首轮 O-013④ 每日核对+10-02 12:00 法务外件窗触发查（D-20260929-03）+D-20260930-19/20 送达验收窗；10-02 21:40 OSS 借力窗3；10-05 提案回访（BD-PROP-001）；10-08 benchmark 7 天刷新+C-20261001-01/02/03 判据回访窗（周产出分 ≥3·规则面占比 ≤30%）；R791 轮首首测裁定 fold R106（R790 收账终态见 heartbeat 实测·增速 ~2.4KB/对带）"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "789",
+      "790",
       "OSLoop 轮次 tick"
     ],
     [
@@ -1098,10 +1098,10 @@
   "self_drive": {
     "window": "2026-09-25..2026-10-01",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 2,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
