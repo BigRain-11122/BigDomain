@@ -1,0 +1,178 @@
+# qa/reorg-R779.log - R101 fold (state.json re-org knife 103, P-2026-09-25-18 item-5 mainline)
+# Round R779, 2026-10-01. AC pre-registered to disk BEFORE any state write (R776 precedent).
+# Trigger = round-start first-measure 81441B over the 80000B line by 1441B = R778 carry-note cashed (point estimate 81.4KB, actual +41B over, honest note).
+[AC-PRE] AC-R1011: pre-op identity = on-disk src/os/state.json (81441B, tick 778, log 62 items, no BOM, roundtrip no-trailing-LF asserted inline) byte-identical to git HEAD blob; full pre-op text appended to logs/state-log-archive-2026-09.md as section '# --- R779 append (pre re-org round 101, tick 778, 2026-10-01, 81441 bytes) ---'; pure-append assertion (old archive bytes = exact prefix of new archive; separator newline prepended per no-LF tail convention); backup logs/state-preop-R779.bak; '# --- R' section marker count +1 (expect 93 -> 94).
+[AC-PRE] AC-R1012: fold window head-matched, base = last 7 log items [R100 prior window-summary | R776 live | R776 tokens | R777 live | R777 tokens | R778 live | R778 tokens] folded to exactly 1 rolling paren window-summary line; single-window candidate built first, if final size over 78500B gate then amend window with verify-then-write zero-write interception, selection = passing candidate with max margin (margin law, R525/R557/R560/R690/R753/R755/R758/R761/R764/R767/R770/R773/R776 precedent); folded prior summary (R100) named in the new summary chain-carrier clause + preserved verbatim in section-R779 pre-op snapshot; head block 55 items verbatim (content-bytes 66941B register, R738..R776 convention); P/D/O catalog = regex [PCDO]-[A-Z0-9][A-Z0-9-]* mechanical dedup from the selected window items only, embedded == dedup join asserted; summary single line, wording keeps idle-fast / no-pullable counters clean (asserted in-script).
+[AC-PRE] AC-R1013: top fields preserved verbatim except tick 778->779 (5 top fields incl. last_gord_tbl_rows=141); round-trip assertion json.dumps(json.loads(pre-op), ensure_ascii=False, indent=2) == pre-op bytes EXACTLY (no trailing LF, R738 serialization convention); dual-parser pass = python json.loads in-script + PowerShell ConvertFrom-Json run separately after write (R731 GBK-console lesson).
+[AC-PRE] AC-R1014: post-fold size (head + summary, tick 779) <= 78500B reserve gate; final size (post-fold + R779 live line + R779 tokens line) <= 78500B; pre-op counter probe asserted vs incremental-register arithmetic (in_window=60, tokens=11, sub=8, idle=37, nop=2 = R776 closeout 56/9/6/37/2 + R777 pair +2/+1/+1 + R778 pair +2/+1/+1) and post-closeout recount asserted (in_window 60-7+1+2=56, sub 8-3+1=6, tokens 11-3+1=9, idle/nop flat 37/2, removed window lines substring-verified clean); queue open main/tech/explore recounted from disk = 6/2/2 flat vs R776 register; proposals open = 1 (BD-PROP-001 single-id convention).
+[AC-PRE] AC-R1015: receipt carriers = this log + state log R779 lines + commit message carries P-2026-09-25-18 (D-20260930-20 numbered-reference law).
+[PROBE-RUN] logs/tmp_r779_fold.py probe-only (zero writes) 2026-10-01 R779, all checks PASS, catalog=193:
+PASS texts key present: win0_marker
+PASS texts key present: summary_head
+PASS texts key present: catalog_suffix
+PASS texts key present: summary
+PASS texts key present: live
+PASS texts key present: tok
+PASS texts key present: hb_row
+PASS texts key present: acpre
+PASS pre-op state.json has no BOM
+PASS pre-op bytes == 81441B (got 81441)
+PASS pre-op tick == 778
+PASS pre-op log items == 62
+PASS pre-op roundtrip exact (no trailing LF, canonical indent-2)
+PASS pre-op byte-identical to git HEAD blob
+PASS window[0] head-match = R100 prior window-summary
+PASS window[1] head-match ok
+PASS window[2] head-match ok
+PASS window[3] head-match ok
+PASS window[4] head-match ok
+PASS window[5] head-match ok
+PASS window[6] head-match ok
+PASS head block == 55 items
+HEAD REGION BYTES: content=66941B
+PASS head content bytes == 66941B register (R738..R776, content-bytes convention)
+PRE-OP PROBE: {"in_window": 60, "tokens": 11, "idle": 37, "nop": 2, "paren": 33, "p2": 3, "sub": -25, "sub_union": 6, "idle_in_w": 37, "nop_in_w": 2, "tokens_in_w": 11, "paren_in_w": 32, "p2_in_w": 3}
+PASS pre-op in_window == 60 (R776 closeout 56 + R777 pair +2 + R778 pair +2)
+PASS pre-op substantive == 8 (incremental-register law: R776 closeout 6 + R777 pair live +1 + R778 pair live +1, R776 register precedent; naive closed-form -25 and union-form 6 info-only, category overlaps honestly noted)
+PASS pre-op idle-fast mention lines == 37 (whole-log register)
+PASS pre-op no-pullable mention lines == 2 (whole-log register)
+PASS pre-op tokens lines == 11 (9 + 2)
+PASS removed window[0] substring-clean (idle-fast/no-pullable)
+PASS removed window[1] substring-clean (idle-fast/no-pullable)
+PASS removed window[2] substring-clean (idle-fast/no-pullable)
+PASS removed window[3] substring-clean (idle-fast/no-pullable)
+PASS removed window[4] substring-clean (idle-fast/no-pullable)
+PASS removed window[5] substring-clean (idle-fast/no-pullable)
+PASS removed window[6] substring-clean (idle-fast/no-pullable)
+CATALOG TOKENS: 193
+PASS embedded catalog == mechanical dedup join
+PASS SUMMARY wording keeps counters clean
+PASS SUMMARY is a single line
+PASS SUMMARY is paren window-summary format (not round-level)
+PASS SUMMARY chain-carrier names R100 prior summary + archive section
+PASS LIVE(clean) wording keeps counters clean
+PASS LIVE(clean) is a single line
+PASS TOK(clean) wording keeps counters clean
+PASS TOK(clean) is a single line
+SIZE: window=12246B post-fold=73949B final=76488B margin=2012B est-next-overline=R781 (fixpoint iter 2, growth 2500B/pair)
+PASS post-fold size <= 78500B reserve gate (single-window candidate passes, no amend needed)
+PASS final size (with closeout pair) <= 78500B margin gate
+PASS LIVE placeholders all filled (no residual braces)
+PASS LIVE carries actual measured WB/PF/FB/MB/EST
+PASS HEARTBEAT row placeholders all filled
+PASS HEARTBEAT row is ASCII
+PASS new line frame 0/2 verbatim
+PASS new total lines == 68 (3 + 58 log + 7 tail)
+PASS head block 55 items string-identical in new log
+PASS summary line serialized at index 58
+PASS R779 live line at index 59
+PASS R779 tokens line at index 60 (no trailing comma)
+PASS tail block verbatim (log close + 5 top fields + brace)
+POST-CLOSEOUT PROBE: {"in_window": 56, "tokens": 9, "idle": 37, "nop": 2, "paren": 33, "p2": 3, "sub": -27, "sub_union": 4, "idle_in_w": 37, "nop_in_w": 2, "tokens_in_w": 9, "paren_in_w": 32, "p2_in_w": 3}
+PASS post-closeout in_window == 56 (60-7+1+2, new paren summary itself in-window)
+PASS post-closeout substantive == 6 (8-3+1, incremental-register law; naive -27 / union 4 info-only)
+PASS post-closeout idle/nop flat 37/2 (removed lines substring-verified clean)
+PASS post-closeout tokens lines == 9 (11-3+1)
+PASS removed window sub-class lines == 3 (R776/R777/R778 lives)
+PASS added R779 live line is sub-class
+PASS final re-parse tick 779
+PASS final roundtrip exact (no trailing LF)
+QUEUE/PROPOSALS: {'main': 6, 'tech': 2, 'explore': 2} proposals open: 1
+PASS queue open recounted 6/2/2 (flat vs R776 register)
+PASS proposals open recounted 1 (BD-PROP-001 single-id convention)
+PROBE RESULT: ALL PASS (probe-only mode, no writes done)
+[WRITE-RUN] logs/tmp_r779_fold.py --write (archive append + backup + state + heartbeat + metrics) 2026-10-01 R779, exit 0:
+PASS texts key present: win0_marker
+PASS texts key present: summary_head
+PASS texts key present: catalog_suffix
+PASS texts key present: summary
+PASS texts key present: live
+PASS texts key present: tok
+PASS texts key present: hb_row
+PASS texts key present: acpre
+PASS pre-op state.json has no BOM
+PASS pre-op bytes == 81441B (got 81441)
+PASS pre-op tick == 778
+PASS pre-op log items == 62
+PASS pre-op roundtrip exact (no trailing LF, canonical indent-2)
+PASS pre-op byte-identical to git HEAD blob
+PASS window[0] head-match = R100 prior window-summary
+PASS window[1] head-match ok
+PASS window[2] head-match ok
+PASS window[3] head-match ok
+PASS window[4] head-match ok
+PASS window[5] head-match ok
+PASS window[6] head-match ok
+PASS head block == 55 items
+HEAD REGION BYTES: content=66941B
+PASS head content bytes == 66941B register (R738..R776, content-bytes convention)
+PRE-OP PROBE: {"in_window": 60, "tokens": 11, "idle": 37, "nop": 2, "paren": 33, "p2": 3, "sub": -25, "sub_union": 6, "idle_in_w": 37, "nop_in_w": 2, "tokens_in_w": 11, "paren_in_w": 32, "p2_in_w": 3}
+PASS pre-op in_window == 60 (R776 closeout 56 + R777 pair +2 + R778 pair +2)
+PASS pre-op substantive == 8 (incremental-register law: R776 closeout 6 + R777 pair live +1 + R778 pair live +1, R776 register precedent; naive closed-form -25 and union-form 6 info-only, category overlaps honestly noted)
+PASS pre-op idle-fast mention lines == 37 (whole-log register)
+PASS pre-op no-pullable mention lines == 2 (whole-log register)
+PASS pre-op tokens lines == 11 (9 + 2)
+PASS removed window[0] substring-clean (idle-fast/no-pullable)
+PASS removed window[1] substring-clean (idle-fast/no-pullable)
+PASS removed window[2] substring-clean (idle-fast/no-pullable)
+PASS removed window[3] substring-clean (idle-fast/no-pullable)
+PASS removed window[4] substring-clean (idle-fast/no-pullable)
+PASS removed window[5] substring-clean (idle-fast/no-pullable)
+PASS removed window[6] substring-clean (idle-fast/no-pullable)
+CATALOG TOKENS: 193
+PASS embedded catalog == mechanical dedup join
+PASS SUMMARY wording keeps counters clean
+PASS SUMMARY is a single line
+PASS SUMMARY is paren window-summary format (not round-level)
+PASS SUMMARY chain-carrier names R100 prior summary + archive section
+PASS LIVE(clean) wording keeps counters clean
+PASS LIVE(clean) is a single line
+PASS TOK(clean) wording keeps counters clean
+PASS TOK(clean) is a single line
+SIZE: window=12246B post-fold=73949B final=76488B margin=2012B est-next-overline=R781 (fixpoint iter 2, growth 2500B/pair)
+PASS post-fold size <= 78500B reserve gate (single-window candidate passes, no amend needed)
+PASS final size (with closeout pair) <= 78500B margin gate
+PASS LIVE placeholders all filled (no residual braces)
+PASS LIVE carries actual measured WB/PF/FB/MB/EST
+PASS HEARTBEAT row placeholders all filled
+PASS HEARTBEAT row is ASCII
+PASS new line frame 0/2 verbatim
+PASS new total lines == 68 (3 + 58 log + 7 tail)
+PASS head block 55 items string-identical in new log
+PASS summary line serialized at index 58
+PASS R779 live line at index 59
+PASS R779 tokens line at index 60 (no trailing comma)
+PASS tail block verbatim (log close + 5 top fields + brace)
+POST-CLOSEOUT PROBE: {"in_window": 56, "tokens": 9, "idle": 37, "nop": 2, "paren": 33, "p2": 3, "sub": -27, "sub_union": 4, "idle_in_w": 37, "nop_in_w": 2, "tokens_in_w": 9, "paren_in_w": 32, "p2_in_w": 3}
+PASS post-closeout in_window == 56 (60-7+1+2, new paren summary itself in-window)
+PASS post-closeout substantive == 6 (8-3+1, incremental-register law; naive -27 / union 4 info-only)
+PASS post-closeout idle/nop flat 37/2 (removed lines substring-verified clean)
+PASS post-closeout tokens lines == 9 (11-3+1)
+PASS removed window sub-class lines == 3 (R776/R777/R778 lives)
+PASS added R779 live line is sub-class
+PASS final re-parse tick 779
+PASS final roundtrip exact (no trailing LF)
+QUEUE/PROPOSALS: {'main': 6, 'tech': 2, 'explore': 2} proposals open: 1
+PASS queue open recounted 6/2/2 (flat vs R776 register)
+PASS proposals open recounted 1 (BD-PROP-001 single-id convention)
+PROBE RESULT: ALL PASS -> proceeding to writes
+PASS archive bytes pre-write == 8499057
+PASS archive marker count pre-write == 93 (got 93)
+PASS archive no-LF tail convention
+PASS archive R776 section separator convention byte-verified
+PASS archive pure-append prefix assertion
+PASS archive marker count post-append == 94
+BACKUP written: logs/state-preop-R779.bak 81441B
+ARCHIVE appended: 8499057 -> 8580579B
+STATE written: 76488B
+PASS heartbeat tail is CRLF
+HEARTBEAT row appended (2623B row + CRLF)
+METRICS written: logs/tmp_r779_metrics.json
+PASS post-write state.json on disk == computed bytes
+PASS post-write re-parse tick 779
+PASS post-write archive prefix still exact
+PASS post-write archive markers == 94
+R101 FOLD COMPLETE: pre-op 81441B -> post-fold 73949B -> final 76488B; log 62->58 items; archive marker 93->94
+
+[DUAL-PARSER] DUAL-PARSER PASS tick=779 log_items=58 bytes=76488 (PS ConvertFrom-Json separate run 2026-10-01 ~10:13)
+[PS-EXPORT-PARSE] PS-EXPORT-PARSE PASS export_ts=2026-10-01T10:14:41+08:00 ceo_face 3 lines in place, self_drive counters 56/37/2/6 flat (fold-cycle symmetry), results tick row 779 + R101 row appended (first-run post-write predicate miss honestly noted: count-column row + one pre-existing R101 forward-mention row also matched, tightened predicate re-verified)
