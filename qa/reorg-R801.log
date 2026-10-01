@@ -1,0 +1,56 @@
+PASS AC-R1091 round-start size 81978 (got 81978)
+PASS AC-R1091 pre-op tree clean for state.json (porcelain='')
+PASS AC-R1091 pre-op text == HEAD blob text (CRLF-normalized, file=81978B blob=81978B)
+backup will be written logs/state-preop-R801.bak (81978 bytes)
+PASS AC-R1091 pre-op tick==800
+PASS AC-R1091 pre-op log items==62 (got 62)
+PASS AC-R1091 serializer roundtrip convention detect nobom/tail_lf (file canonical dumps form)
+PASS AC-R1092 window line 0 prefix ok (2026-10-01（R795..R797 窗·...)
+PASS AC-R1092 window line 1 prefix ok (2026-10-01 R798（~13:5x b...)
+PASS AC-R1092 window line 2 prefix ok (2026-10-01 R798 tokens:...)
+PASS AC-R1092 window line 3 prefix ok (2026-10-01 R799（~13:5x b...)
+PASS AC-R1092 window line 4 prefix ok (2026-10-01 R799 tokens:...)
+PASS AC-R1092 window line 5 prefix ok (2026-10-01 R800（~14:0x b...)
+PASS AC-R1092 window line 6 prefix ok (2026-10-01 R800 tokens:...)
+PASS AC-R1092 R108 summary at index 55
+PASS AC-R1092 window 7 lines content bytes==12712 (got 12712)
+window 7 lines content bytes=12712; head block 55 items=66941 bytes
+PASS AC-R1092 removed window lines substring-verified clean 7/7 (idle/nop hits=0)
+P/D/O catalog mechanical dedupe: 215 tokens (includes R108 prior-summary embedded catalog snowball, zero hand-picked)
+CATALOG_HEAD=P-2026-09-25-18,C-R1071,C-K97,C-R1061,C-K96,C-R1051,C-20261001-03,D-20261001-08,C-20260101-01,C-R1031,C-20261001-02,D-19 ...
+post-fold (pre-closeout) size: 73510 B
+PASS fixpoint final size stable 76339
+PASS AC-R1094 final size 76339 <= 78500 margin gate (margin 2161)
+PASS final parse tick 801
+PASS final log items==58 (got 58)
+PASS last log item is R801 tokens line
+PASS head item 0 verbatim
+PASS AC-R1092 head block 55 items verbatim zero-change
+PASS AC-R1092 folded summary at index 55
+PASS closeout account line at index 56
+PASS AC-R1093 top fields preserved: last_dec_tokens 117 flat (DEC zero new rows this round)
+PASS AC-R1093 top fields preserved: last_decision_rows/last_order/benchmarks_refreshed/last_gord_tbl_rows flat
+probe pre-op : {'in_window': 60, 'round': 27, 'tokens': 11, 'idle': 37, 'idle_round': 8, 'nop': 2}
+probe post  : {'in_window': 56, 'round': 23, 'tokens': 9, 'idle': 37, 'idle_round': 8, 'nop': 2}
+incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6
+PASS self_drive post in_window==56 (got 56)
+PASS self_drive post tokens==9 (got 9)
+PASS self_drive post idle==37 nop==2 (got 37/2)
+PASS self_drive post sub==6 (got 6)
+PASS AC-R1092 archive pure-append prefix assertion
+PASS AC-R1092 archive marker 101->102 (expect 101->102)
+PASS AC-R1092 archive pre-op marker count==101 (got 101)
+PASS export results tick row 798->801 (found 1)
+PASS queue disk-recount 6/2/2 (got 6/2/2)
+PASS proposals disk-recount total=1 (got 1)
+backup written logs/state-preop-R801.bak (81978 bytes)
+state.json written 76339 bytes (temp+replace)
+archive appended 9151183 -> 9233242 bytes (markers 101->102)
+export written, export_ts = 2026-10-01T14:19:18+08:00 , results rows = 231
+heartbeat R801 line appended
+post-write re-read: state.json parse ok (tick 801, log 58 items) PASS
+post-write re-read: export parse ok, ceo_face R801 PASS
+post-write re-read: archive prefix intact PASS
+
+final figures: WBYTES=12712 HEADB=66941 PF=73510 FIN=76339 MARGIN=2161
+PASS AC-R1093 dual-path: PowerShell ConvertFrom-Json independent re-verify ok (tick=801, log 58 items, last=R801 tokens; export ts=2026-10-01T14:19:18+08:00, ceo_face R801, results 231, self_drive W=56/sub=6)

@@ -1,0 +1,22 @@
+=== board cut-99 evidence (R801) ===
+pre-op board: 8182B, done/open counts below
+PASS AC-K99b pre-op 10-month archive == git HEAD blob (round-start clean on this file)
+PASS AC-K99b pre-op 09-month archive == git HEAD blob
+PASS AC-K99a stale done rows == 1, identity R798, [done 2026-10-01] marker (count=1)
+PASS AC-K99a open rows == 4 (R801 claim + O-013-4 + legal gated + bootstrap) (count=4)
+md5 of R798 row (pre-migration): badd511e0fdb76a97f6512102703fa0d
+PASS AC-K99b pure-append prefix (10-month archive)
+PASS AC-K99b exactly one new '## R801' section header
+PASS AC-K99b row present in new section, md5-identical (badd511e0fdb76a97f6512102703fa0d)
+PASS AC-K99b 10-month archive sections 4 -> 5
+PASS AC-K99c own R801 claim row flipped exactly once
+PASS AC-K99c post-cut board: done rows == 1 (own R801 current-round row only)
+PASS AC-K99c post-cut board: open rows == 3 preserved (count=3)
+PASS AC-K99c header unchanged by cut
+post-op board: 6409B (pre 8182B); post-op 10-month archive: 19397B (+2449B section)
+WROTE: src/os/backlog.md, docs/archive/backlog-done-2026-10.md
+post-write re-read: board on-disk == built post board PASS
+post-write re-read: 10-archive on-disk == built post archive PASS
+post-write re-read: 09-archive untouched on-disk PASS
+
+board cut-99 verdict: AC-K99a..e ALL PASS (a=count, b=verbatim md5+pure-append+09 zero-touch, c=final board flip+migrate, d=this log verify-then-write, e=state log line + commit marker 'board cut-99')
