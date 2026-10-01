@@ -1,0 +1,13 @@
+BOARD CUT-95 (R788) - stale done rows migration to monthly archive
+criteria pre-registered: backlog R788 claim row AC-K95a..e (board row landed before execution)
+AC-K95a PASS: pre-op board 12916 bytes 18 lines; rows region = 6 done + 4 open (claim+daily standing+legal gated+bootstrap); header intact
+  done[1] md5=8489c0c0f73034366c91c402e19171b9 | - [x] R787 认领：state.json 水位整编 R104（P-2026-09-25-18 ④主线第一百零六刀·R786 carr
+  done[2] md5=031d9c10c0e3fd2153654205bf24cea0 | - [x] R784 认领：state.json 水位整编 R103（P-2026-09-25-18 ④主线第一百零五刀·R783 carr
+  done[3] md5=c8ac7645555fbedadaff6c08f343eb1c | - [x] R782 认领：state.json 水位整编 R102（P-2026-09-25-18 ④主线第一百零四刀·R781 carr
+  done[4] md5=bfec848361dfd2530d2f4c645372ac80 | - [x] XL-16 前台升级 v0.3（D-20260930-06③ 本司切片·D-20260930-08② 再生律·R728 当轮闭环
+  done[5] md5=3397916ab7cdf6f397660e9eb977a244 | - [x] R763 认领：scan GORD 面多行新增盲区改进（state/queue/tech.md 顶行·R709 实证=扫描窗后三
+  done[6] md5=ae79682c9da5d30c01f1b3642dd2a9a0 | - [x] R640+ AC-RG4 全绿复验（gated on 10-01 00:00 出窗：R736 轮首即窗后首轮兑现——`pytho
+AC-K95b PASS: 09 archive byte-identical to git HEAD blob (pre-op and post-op); 10 archive created with section R788 + 6 rows verbatim (md5 pre==post each)
+AC-K95c PASS: post-cut board 5191 bytes = header + 4 open rows (claim row + 3 standing open); zero stale done rows remain; header archive pointer updated to 2026-10 file
+AC-K95d PASS: this evidence log (verify-then-write: all asserts passed before any disk write)
+ALL ASSERTIONS PASS
