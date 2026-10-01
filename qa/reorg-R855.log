@@ -1,0 +1,23 @@
+AC-R1271a tree clean pre-op: git status --porcelain empty
+AC-R1271a pre-op == git HEAD blob: 80609 bytes (round-start first-measure 80609B cashed, scan/getsize dual-gauge)
+AC-R1273a serializer roundtrip convention detect: whole file already canonical json.dumps(indent=2)+LF form
+AC-R1272a window = [R126 prior summary + R852..R854 three pairs] 7 lines 11288 B (content); head block 55 items verbatim 66941 B
+AC-R1272b window line prefixes verified R852..R854 continuous 3 rounds (pairs) zero-missing
+AC-R1272c removed lines substring-verified: idle-fast 0 (expected 0) / no-pullable 2 (expected 2) / tokens 3 (expected 3)
+AC-R1272d P/D/O catalog (regex dedup, order of first appearance): 171 tokens = R126 prior-summary embedded catalog 169 snowball + 2 new ['C-R1261', 'C-K118a']; missing=[] asserted, zero hand-picked
+probe pre-op : {"idle": 37, "idle_round": 8, "in_window": 60, "nop": 4, "paren": 32, "round": 27, "sub": 8, "tokens": 11}
+post-fold (pre-closeout) size: 72722 B
+AC-R1273b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 854->855 only; last_dec_tokens 121 flat
+AC-R1274 final size: 75373 B, margin 3127 B under 78,500B gate; post-fold 72722 B
+AC-R1273c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head file-bytes identical; canonical form == json.dumps(indent=2)
+probe post   : {"idle": 37, "idle_round": 8, "in_window": 56, "nop": 3, "paren": 33, "round": 23, "sub": 6, "tokens": 9}
+B. incremental-register law: W 60 -> 56 ; tokens 11 -> 9 ; sub 8 -> 6 identical to in-register R852/R848 post counters; idle 37 flat; nop 4 -> 3 (-2 folded declarations +1 summary-embedded honest tag) ; paren 32 -> 33 (+1 pure-date-prefix summary line vs R126 date-range prefix) - both registered drift, asserted pre-write
+C. export derived: tick 852->855, R127 results row appended, self_drive W 56 / sub 6, idle 37 / nop 3, queues 6/2/2, proposals 1/1 disk-recounted
+C. export composed, export_ts = 2026-10-02T02:05:48+08:00 , results rows = 255
+AC-R1271c archive pure-append: 10624125 -> 10704816 B; markers 119 -> 120
+D. heartbeat row composed ts= 2026-10-02T02:05:48+08:00
+E. qa/board-R855.log composed, 5 lines
+AC-R1271b backup logs/state-preop-R855.bak written byte-identical
+archive write committed (temp+replace, prefix re-verified, markers 119->120)
+AC-R1275e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-119 tags (P-51)
+D. heartbeat row appended ts= 2026-10-02T02:05:48+08:00
