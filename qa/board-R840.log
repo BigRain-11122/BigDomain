@@ -1,0 +1,13 @@
+AC-K113a stale-board census (git HEAD pre-round board): exactly 1 stale done row [R839, cut-112 own-round natural staleness] + 3 open rows [O-013-4 standing + D-20260929-03 gated 10-02 12:00 + bootstrap blocked-on-CEO]; header block intact (BOM preserved); disk == HEAD blob on both files (clean-tree precondition)
+PRE-REGISTRATION: claim row written to board as [ ] (AC text fixed on disk) before any migration byte moved - phase-1 re-read asserted
+AC-K113b 1 stale done row verbatim to 10-month done-archive ## R840 section (sections 18 -> 19, md5 identical HEAD-board vs migrated, pure-append prefix vs git HEAD blob at byte level)
+AC-K113c main board final = header + R840 current row (flipped done with closure note) + 3 open rows; zero stale done rows besides the current row (post-write re-read asserted from disk, BOM preserved, 12-line layout)
+09-archive zero-touch == git HEAD blob (post dual gauge: rev-parse vs hash-object)
+AC-K113d evidence qa/board-R840.log (verify-then-write: every assert ran and passed before this evidence write; post-write re-read from disk + git HEAD)
+AC-K113e delivery = board row + state log line + commit tag "board cut-113" (P-51)
+ROUND-FRAME: knife short round R526/R788 isomorph, score 1 = real file changes (board + 10-month archive); queue-fill true judgment zero pullable elsewhere (fold R123 not triggered 77005B under line; OSS w4 window 10-05 21:40 not pulled; legal/D-19/20/O-013-4 windows open 10-02)
+probe pre-op (live): {"in_window": 56, "round": 23, "tokens": 9, "idle_mention_round": 8, "sub": 6, "idle": 37, "nop": 2}
+probe post-closeout: {"in_window": 58, "round": 25, "tokens": 10, "idle_mention_round": 8, "sub": 7, "idle": 37, "nop": 2}
+state.json appended: round line + tokens line, tick 839->840, log 58->60, dual-parser pass (json.loads + PS ConvertFrom-Json), no trailing LF, serializer round-trip asserted, post-write bytes=79956
+export refreshed: export_ts 2026-10-01T21:44:04+08:00, results tick 839->840, cut-113 results row appended (246->247), self_drive re-derived W 58 / sub 7 / idle 37 / nop 2, queues 6/2/2 + proposals 1/1 disk-recounted, ceo_face three rows refreshed
+heartbeat row appended ts=2026-10-01T21:44:05+08:00 (cpu6/mem43/lanes2 CIM measured ~21:4x, composition llama-server+ollama, prod_lanes=2 per convention)
