@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T22:41:37+08:00",
+  "export_ts": "2026-10-02T23:02:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R955 fold R167 水位整编轮（轮计分 1=台账维护机制件）：state.json 滚窗水位整编第一百七十一刀执行毕（轮首首测 81,615B 越 80,000B 线 1,615B=R954 carry-note 承接·AC-R1671..R1675 全过=qa/reorg-R955.log·fold 窗=［R166 滚窗摘要+R951..R953 三轮对］7 行压 1 滚窗汇总行·R954 对保留·pre-op 逐字节入档 archive §R955 append 节 marker 159→160+备份件·终态 76089B margin 2411B ≤78,500B 闸内·probe 八键零漂移·双口径解析过 tick 955）；GORD sha16=5B9922F6B3C3059D 同基线零新集团令·CEO 物理件区零变化（商户号/服务器/域名/备案仍待件）；产品面=frontdoor v0.9 发行面研究卡（R946）现役在页·审计 P2-9 四面已收口；waiting 面：法务外件 chronic（秘书处初稿窗 10-03 12:00）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计判据回访 10-08+benchmarks 10-09+bootstrap CEO 物理件",
-    "latest_artifact": "产品实物=frontdoor v0.9 发行面研究卡（2026-10-02 ~20:4x·R946）：活体页 http://127.0.0.1:8093/ 新增发行面研究卡（三面结构基线表〔Steam 页面六件骨架/demo 策略 AtS/W&R 在架参照/工坊生态 C:S1 十年护城河参照〕+决策点 4 行〔2 [needs-CEO] 呈批+2 CEO 物理件 blocked〕+合规四件套+CEO 物理件阻塞注）·研究正典 docs/research/R-20261002-publishing-face-research.md 同窗新件·数据件 preview/publishing-face-nodes.json verbatim 单源（AC-FD9b 同步闸 35 串机检 missing=0）·frontdoor.py 纯 ASCII（中文零硬编码）·test_wiring 70/70+全量回归 27/27 套件 231 判据（qa/wiring-R946.log+qa/reconcile-all-R946.log）·随本轮重启上线（旧实例终止→healthz=200 首探即过·11 卡在页）·审计 P2-9 残余三面「Steam 页面/demo 策略/工坊生态=零在册」的本司可看回应件（与 v0.6 五站卡/v0.7 方案卡/v0.8 实算卡同链）",
-    "next_milestone": "下个里程碑（≤10-04）：10-03 首轮=O-013④ 值守核对+QA charter 每日 crawl 轮+法务外件 D-20260929-03 秘书处初稿窗 10-03 12:00 到点查；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·本司商业挂载面已就绪=v0.6 五站卡+v0.7 方案卡+v0.8 实算卡+v0.9 发行面研究卡四面）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访（含硅基城审计行动六条回访）；benchmarks 7 天刷 10-09；bootstrap CEO 物理件无 ETA"
+    "current": "R957 GORD 两新令判读+调研部采用自决留痕轮（轮计分 1=实际文件改动）：P-2026-10-02-08 AI 技能包分拨子公司采用令（CEO 10-02 ~22:4x「是给相关子公司去使用，他们科学决策」·正典位 cph4/skills/ccgs/ 11 件+INDEX 采用协议）判=分拨面零 @BigDomain·执行司=Biggame/FluxVerse/BigLife=非本司执行面知悉+按司级自决律完成本司价值面自查；P-2026-10-02-09 GitHub 收获机制立制令（实验室主责=CPH4·赋能面=各司调研部双腿）=本司调研部双腿接线声明（线索腿=既有 intelligence-wall+QA crawl 通道在役·采用腿=本件首例）；主件=docs/research/R-20261002-ccgs-adoption-verdict.md（11 件逐件判负留痕·采用 0 安装 0=「无价值=如实判负合法·禁装而不用」·随司周报窗 10-05 呈报）；GORD 基线 150→152（sha16 257A6CC1056A1759）·CEO 物理件区零变化（商户号/服务器/域名/备案仍待件）；产品面=frontdoor v0.9 发行面研究卡（R946）现役在页·审计 P2-9 四面已收口；waiting 面：法务外件 chronic（秘书处初稿窗 10-03 12:00）+O-013④/QA 每日轮 10-03 首轮+提案回访+ccgs 自决留痕随司周报 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计判据回访 10-08+benchmarks 10-09+bootstrap CEO 物理件",
+    "latest_artifact": "最近实物=docs/research/R-20261002-ccgs-adoption-verdict.md（2026-10-02 ~23:0x·R957·GORD P-2026-10-02-08/09 两令承接件：11 件技能包采用自决全判负留痕+调研部双腿接线声明+验证声明+结论应用表·调研部编目第 12 件·随司周报窗 10-05 呈报）；活体产品面前台 frontdoor v0.9 发行面研究卡续在役（http://127.0.0.1:8093/ ·11 卡在页·2026-10-02 ~20:4x R946 上线·test_wiring 70/70+回归 27/27 套件 231 判据·审计 P2-9 残余三面「Steam 页面/demo 策略/工坊生态」回应件）",
+    "next_milestone": "下个里程碑（≤10-04）：10-03 首轮=O-013④ 值守核对+QA charter 每日 crawl 轮+法务外件 D-20260929-03 秘书处初稿窗 10-03 12:00 到点查；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·本司商业挂载面已就绪=v0.6 五站卡+v0.7 方案卡+v0.8 实算卡+v0.9 发行面研究卡四面）；10-05 提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访（含硅基城审计行动六条回访）；benchmarks 7 天刷 10-09；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "n": "商业化前沿调研部（虚席·P-2026-09-26-18 建制·集团章程 v1.0）",
-      "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 6 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）",
+      "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）",
       "s": 1
     }
   ],
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "955",
+      "957",
       "OSLoop 执行 tick"
     ],
     [
@@ -1413,15 +1413,19 @@
     [
       "1",
       "state.json 水位整编 R167（R955·81,615B 越 80,000B 线 1,615B=R954 carry-note 承接兑现·窗［R166 滚窗摘要+R951..R953 三轮对］7 行压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档 archive §R955 append 节 marker 159→160+备份件 logs/state-preop-R955.bak·头部块 55 项 verbatim·终态 76089B margin 2411B ≤78,500B 闸·AC-R1671..R1675 全过=qa/reorg-R955.log·GORD 基线 5B9922F6B3C3059D 持平零新集团令·P-2026-09-25-18 ④第一百七十一刀"
+    ],
+    [
+      "1",
+      "R957 GORD 两新令判读+调研部 ccgs 采用自决留痕件（docs/research/R-20261002-ccgs-adoption-verdict.md·P-2026-10-02-08 分拨采用令=分拨面零 @BigDomain 非本司执行面知悉+INDEX 协议价值面自查 11 件全判负零安装·P-2026-10-02-09 收获机制立制令=调研部双腿接线声明〔线索腿既有通道+采用腿本件首例〕·GORD 基线 150→152 sha16 257A6CC1056A1759·随司周报窗 10-05 呈报）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 4,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
