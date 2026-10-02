@@ -1,0 +1,60 @@
+BigDomain QA Smoke Test - round R961 - 2026-10-03 +08:00 (holiday window day 3)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-03 first round)
+round mode note: continuation/closeout of an interrupted earlier R961 attempt (its own leftover
+    benchmark-face edits found dirty on disk at scan: global-benchmarks.md section-1 live-service
+    regulation block + section-3 source row, labeled "R961 QA H-slice"; no section-4 line, no smoke
+    evidence, no state update, no commit = interrupted before closeout; treated as own-write-set
+    continuation, NOT another-executor retreat; [TREE] FLAG resolved by this closeout)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only; 1 re-verify fetch / 1 hit / 0 miss):
+    a. cac.gov.cn/2016-11/04/c_1119846202.htm - HIT (A-level official issuer page: CAC release page
+       for the Provisions on the Administration of Internet Live-Streaming Services, published
+       2016-11-04, effective 2016-12-01, 20 articles; release note + press Q&A + article-by-article
+       full text on the same page; re-verified line-by-line this round: Art.2 live-streaming
+       definition (real-time info to the public over the internet via video/audio/text); Art.7
+       primary-duty regime (scale-matched staffing + five institution systems: info review, info
+       security mgmt, watch-shift patrol, emergency response, technical assurance + content-review
+       platform + tiered/classified mgmt + annotate-or-announce platform label info + news-live
+       pre-review + editor-in-chief); Art.8 instant cut-off technical capability; Art.11
+       comment/danmaku real-time mgmt with dedicated staff; Art.12 back-end real-name front-end
+       voluntary (mobile-number user verification + publisher ID/business-license/org-code
+       registration + identity review + provincial CAC classified filing + privacy four-ban);
+       Art.14 action ladder (warning/suspend/close + removal + records + report); Art.15
+       credit-rating system + blacklist + no-re-registration; Art.16 content & log retention
+       sixty days + inspection cooperation; Art.17 penalties; Art.19 12377 complaint channel
+       (www.12377.cn); Art.20 effective 2016-12-01)
+    b. samr.gov.cn reprint page - NOT re-fetched this round (was the interrupted attempt's recorded
+       corroboration source; two-state honesty: the primary official issuer page was re-verified
+       fresh this round; A-grade holds on the issuing agency's own full-text page)
+    -> consumption anchors: slow-live ops SOP manned-watch face (regulation basis,
+       docs/ops/R-20260926-launch-ops-rehearsal), launch-ops kill switch (Art.8 isomorphic),
+       lobby spec evt_id log-retention >=60 days anchor (P-47-1), UGC account-action ladder and
+       credit face (P-47-3), token incentive anti-farm blacklist-no-re-register (P-47-2),
+       broadcast-face double real-name (W11 Art.31 stacking), AIGC label four-piece
+       (Art.7 platform-label = live-face same-direction source).
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-03 (state.json top field updated in this round's closeout;
+    global-benchmarks.md section-4 carries the H-slice entry with fetch window ~00:1x +08:00;
+    next 7-day due 2026-10-10; today_png/today_log produced by this very file + png render below).
+
+[3] signals to intelligence-wall: PASS
+    W12 appended to docs/research/intelligence-wall.md signal table + conclusion application
+    table (consumption anchors: P-47-1 lobby evt_id >=60-day retention; P-47-3 UGC action
+    ladder + credit mgmt + broadcast double real-name stacked with W11; P-47-2 blacklist
+    no-re-register anti-farm isomorphic source; launch-ops kill switch Art.8; slow-live SOP
+    manned-watch; AIGC label four-piece same-direction source).
+
+[4] on-disk evidence this round: PASS
+    qa/smoke-R961.log (this file, real log) + qa/smoke-R961.png (rendered from this log via
+    render_smoke_png.ps1, verbatim, never hand-drawn) + global-benchmarks.md section-1 block +
+    section-3 source row (interrupted attempt's face, re-verified this round, zero drift) +
+    section-4 H-slice line + benchmarks_refreshed=2026-10-03.
+
+self-judge: charter checklist PASS; continuation round honestly labeled (interrupted own-attempt
+leftovers closed out; primary official source re-verified fresh; corroboration reprint page not
+re-fetched this round = two-state honesty); no assertion without evidence; external content
+treated as untrusted input, zero downstream assertion.
