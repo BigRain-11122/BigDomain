@@ -417,13 +417,73 @@ def ac_w7_pay_grant_commit():
         shutil.rmtree(w["tmp"], ignore_errors=True)
 
 
+def ac_w8_frontdoor_card():
+    """R940b remainder of the declared row (AC-W8, pre-registered in
+    the R939b/R940b backlog rows before this code existed): the
+    frontdoor live page mounts the minors compliance face -- real
+    guard readings computed at render time (not canned), AIGC label
+    + non-investment-advisory + [needs-CEO] + msgSecCheck gate note
+    all persistent on the card."""
+    _sandbox = os.path.normpath(os.path.join(BASE, ".."))
+    if _sandbox not in sys.path:
+        sys.path.insert(0, _sandbox)
+    import frontdoor  # noqa: E402 (sandbox root, journey runs at import)
+    page = frontdoor.render().decode("utf-8")
+
+    # compliance four-piece, all imported from the guard module
+    for needle in ("AI-GENERATED LABEL", "NON-INVESTMENT-ADVISORY",
+                   "[needs-CEO]", "msgSecCheck"):
+        record("AC-W8", needle in page,
+               "frontdoor card carries %r" % needle)
+    record("AC-W8", "Decree No.766" in page and "sec.31" in page
+           and "sec.43" in page,
+           "law citation rendered (Decree No.766 sec.31/43-44/24(3))")
+
+    # real readings at render time, matching a fresh probe
+    probe = frontdoor.minor_guard_probe()
+    expect = ("probe summary: registered=%d calls=%d refusals=%d "
+              "allowed=%d spent_cent=%d events=%d replays=%d"
+              % (probe["registered"], probe["calls"], probe["refusals"],
+                 probe["allowed"], probe["spent_cent"], probe["events"],
+                 probe["replays"]))
+    record("AC-W8", expect in page and probe["spent_cent"] > 0,
+           "rendered readings equal a fresh in-process probe run: %s"
+           % expect)
+
+    # live-computation control: shrink the daily limit below the buy
+    # amount -> the same render flips to refusal readings (proves the
+    # numbers are computed by the guard, never canned strings)
+    old_daily = frontdoor.PROBE["daily_cent"]
+    try:
+        frontdoor.PROBE["daily_cent"] = 990
+        page2 = frontdoor.render().decode("utf-8")
+        p2 = frontdoor.minor_guard_probe()
+        record("AC-W8",
+               "spent_cent=0" in page2
+               and "spent_cent=%d" % probe["spent_cent"] not in page2
+               and p2["spent_cent"] == 0
+               and p2["refusals"] == probe["refusals"] + 3,
+               "shrinking daily_cent flips the rendered readings "
+               "(live compute, no canned numbers): spent 0, refusals "
+               "%d" % p2["refusals"])
+    finally:
+        frontdoor.PROBE["daily_cent"] = old_daily
+
+    # wiring points mounted from the guard module (single source)
+    record("AC-W8",
+           all(wp.split("->")[0].strip() in page for wp in MG.WIRING_POINTS),
+           "WIRING_POINTS mounted from minors module: %d points"
+           % len(MG.WIRING_POINTS))
+
+
 def main():
-    print("=== MinorGuard three-call-site wiring suite (R939) ===",
-          flush=True)
+    print("=== MinorGuard three-call-site wiring suite "
+          "(R939/R940/R940b) ===", flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
     ac_w2_w4_member()
     ac_w7_pay_grant_commit()
+    ac_w8_frontdoor_card()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

@@ -1,0 +1,27 @@
+=== cut-166 board surgery R941 (R940b close + R777 gated row + 5-row batch migration) ===
+PASS stale row found exactly once: '- [x] R938 认领：'
+PASS stale row found exactly once: '- [x] R940 认领甲：'
+PASS stale row found exactly once: '- [x] R940 认领乙：'
+PASS stale row found exactly once: '- [x] R939b '
+PASS stale row found exactly once: '- [x] R939 认领：'
+PASS R940b row found exactly once
+PASS open rows before surgery = 4 (R940b + 3 standing; got 4)
+PASS header anchor present once
+NOTE first run appended R941 already (partial run, board untouched); idempotent resume
+NOTE archive append already present (first run partial); idempotent skip
+PASS archive pure-append prefix
+PASS 5 rows verbatim in archive (md5 identical, 5 rows)
+PASS archive R-sections 71 +1 (R941)
+PASS R940b flipped to done
+PASS 3 open rows classified
+PASS main board keeps only the current done row (R940b)
+PASS main board open rows = 4 (O-013/R777/D-20260929-03/bootstrap)
+PASS R777 gated row mounted
+PASS stale row left the main board: '- [x] R938 认领：'
+PASS stale row left the main board: '- [x] R940 认领甲：'
+PASS stale row left the main board: '- [x] R940 认领乙：'
+PASS stale row left the main board: '- [x] R939b '
+PASS stale row left the main board: '- [x] R939 认领：'
+board md5 pre=eddaf0a4f488fd777edd8069736fc456
+board md5 post=a337874ae30fd045472ee1f9063fde35
+SUITE PASS 25/25

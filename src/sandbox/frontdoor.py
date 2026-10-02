@@ -24,6 +24,16 @@ the quality face (suite inventory imported from reconcile_all.py plus
 the newest qa/reconcile-all-*.log verdict read from disk at render
 time). Still pure composition: every displayed string is loaded at
 runtime from real config/data/evidence artifacts, never hardcoded.
+
+v0.5 (2026-10-02, R940b row of the R937 scope amendment, AC-W8):
+mounts the minors guardian compliance card. The guard face runs live
+in-process at render time with deterministic caller-supplied probe
+inputs and the page shows its real readings (registered / guard
+calls / refusals / day ledger), the WIRING_POINTS imported from the
+guard module, and the compliance block: AIGC label, persistent
+non-investment-advisory note, [needs-CEO] limit note, msgSecCheck
+front-gate note, law citation. Pure composition: the guard module
+is imported, never copied.
 """
 
 import glob
@@ -46,6 +56,11 @@ QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
 JOURNEY = os.path.join(HERE, "journey_demo.py")
+
+MINORS_DIR = os.path.join(HERE, "minors")
+if MINORS_DIR not in sys.path:
+    sys.path.insert(0, MINORS_DIR)
+import minors as minors_mod  # guard face module (reuse, no copy)
 
 HOST, PORT = "127.0.0.1", 8093
 
@@ -104,6 +119,77 @@ def suite_groups():
         cnt, total = groups.get(key, (0, 0))
         groups[key] = (cnt + 1, total + crit)
     return groups
+
+
+# Deterministic probe fixtures for the minors guardian card. These
+# are PROBE inputs (caller-supplied clock/limits, no wall time),
+# not platform defaults: platform-side default limit VALUES stay
+# [needs-CEO] and are never invented here (minors.py fail-closed).
+PROBE = {
+    "date": "2026-10-02",
+    "window": (600, 900),
+    "in_window_min": 700,
+    "outside_min": 1200,
+    "single_cent": 1990,
+    "daily_cent": 4980,
+    "buy_cent": 1990,
+    "over_single_cent": 2990,
+}
+
+
+def minor_guard_probe():
+    """Run the REAL MinorGuardFace in-process with the PROBE fixtures
+    and return live readings (F3 law: every number below is computed
+    by the guard at render time, never canned in this source)."""
+    g = minors_mod.MinorGuardFace()
+    g.register_resident("probe-adult", False)
+    g.register_resident("probe-kid", True, guardian_id="probe-guardian")
+    g.set_guardian_limits(
+        "probe-guardian", "probe-kid",
+        allowed_windows=[tuple(PROBE["window"])],
+        single_cent=PROBE["single_cent"],
+        daily_cent=PROBE["daily_cent"])
+    readings = {"registered": len(g.residents_readout()), "calls": 0,
+                "refusals": 0, "codes": [], "replays": 0}
+
+    def call(fn, commit=False):
+        readings["calls"] += 1
+        try:
+            out = fn()
+            if commit and out.get("idempotent"):
+                readings["replays"] += 1
+        except minors_mod.GuardError as exc:
+            readings["refusals"] += 1
+            readings["codes"].append(exc.code)
+
+    # sec.31 live ban + sec.24(3) marketing ban + sec.43 time windows
+    call(lambda: g.check_live("probe-kid"))
+    call(lambda: g.check_marketing("probe-kid"))
+    call(lambda: g.check_time("probe-kid", PROBE["in_window_min"],
+                              PROBE["date"]))
+    call(lambda: g.check_time("probe-kid", PROBE["outside_min"],
+                              PROBE["date"]))
+    # sec.44 spend faces: one in-limit pass, one over-single refusal
+    call(lambda: g.check_spend("probe-kid", PROBE["buy_cent"],
+                               PROBE["date"]))
+    call(lambda: g.check_spend("probe-kid", PROBE["over_single_cent"],
+                               PROBE["date"]))
+    # adults pass through the same gates (minors-only face law)
+    call(lambda: g.check_live("probe-adult"))
+    call(lambda: g.check_time("probe-adult", PROBE["outside_min"],
+                              PROBE["date"]))
+    call(lambda: g.check_spend("probe-adult", PROBE["buy_cent"],
+                               PROBE["date"]))
+    # commit face: same-ref replay records zero extra spend (AC-W7)
+    for _ in range(2):
+        call(lambda: g.record_spend("probe-kid", PROBE["buy_cent"],
+                                    PROBE["date"], "probe-order-1"),
+             commit=True)
+    day = g.day_readout("probe-kid", PROBE["date"])
+    readings["allowed"] = readings["calls"] - readings["refusals"]
+    readings["spent_cent"] = day["spent_cent"]
+    readings["events"] = len(day["events"])
+    return readings
 
 
 def render():
@@ -165,6 +251,26 @@ def render():
                esc(tier.get("copy", ""))))
     member_disclaimer = esc(member["compliance"]["disclaimer"])
 
+    mg = minor_guard_probe()
+    mg_summary = esc(
+        "probe summary: registered=%d calls=%d refusals=%d allowed=%d "
+        "spent_cent=%d events=%d replays=%d"
+        % (mg["registered"], mg["calls"], mg["refusals"], mg["allowed"],
+           mg["spent_cent"], mg["events"], mg["replays"]))
+    mg_codes = esc(", ".join(mg["codes"]) or "-")
+    mg_limits = esc(
+        "probe fixtures: window=%04d-%04d single_cent=%d daily_cent=%d "
+        "(caller-supplied inputs; platform default limit VALUES stay "
+        "[needs-CEO], unconfigured limits refuse billing)"
+        % (PROBE["window"][0], PROBE["window"][1], PROBE["single_cent"],
+           PROBE["daily_cent"]))
+    mg_wp = esc(" ; ".join(minors_mod.WIRING_POINTS))
+    mg_msgsec = ("CONTENT GATE: every UGC/text surface in this stack "
+                 "keeps the msgSecCheck front gate (sandbox = wordlist "
+                 "mock per P-47-3b; production wiring stays fail-closed "
+                 "until the platform key arrives).")
+    mg_compliance = esc(minors_mod.COMPLIANCE_HEADER.rstrip("\n"))
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -219,12 +325,16 @@ border-top:2px solid var(--warn);padding:10px 16px;font-size:12.5px;
 line-height:1.55;color:#e6edf3;z-index:9}
 footer .badge{margin-right:8px}
 .kv{color:var(--dim);font-size:13px;margin:4px 0}
+.mgcompliance{white-space:pre-wrap;background:#0d1117;border:1px
+solid var(--line);border-radius:8px;padding:10px;font-size:12px;
+color:var(--dim);margin:8px 0}
 </style></head><body><div class="wrap">
 <header><h1>BigDomain Sandbox Front Door</h1>
 <span class="badge">AIGC: __AI__</span>
 <span class="sub">XL-16 / D-20260930-06 &middot; pure composition of
-existing sandbox faces &middot; no new business face &middot; v0.4 adds
-membership + quality cards</span></header>
+existing sandbox faces &middot; no new business face &middot; v0.4
+membership + quality cards &middot; v0.5 minors guardian card
+(R940b)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -265,6 +375,25 @@ __TIERS__</table>
 <p class=kv>__MEMDIS__</p>
 <p class="kv">numbers are sandbox placeholders; all tier pricing stays
 a [needs-CEO] approval face until the gate order arrives.</p></div>
+
+<div class="card"><h2>Minor Guardian Face (minor-protection wiring,
+sandbox probe)</h2>
+<div class="grid">
+<div class="kpi"><b>__MG_REG__</b>residents probed</div>
+<div class="kpi"><b>__MG_CALLS__</b>guard calls</div>
+<div class="kpi"><b>__MG_REF__</b>refusals (fail-closed)</div></div>
+<p class=kv>__MG_SUMMARY__</p>
+<p class=kv>refusal codes seen: __MG_CODES__</p>
+<p class=kv>__MG_LIMITS__</p>
+<p class=kv>production wiring points (imported from the guard
+module, single source): __MG_WP__</p>
+<p class=kv>__MG_MSGSEC__</p>
+<pre class=mgcompliance>__MG_COMPLIANCE__</pre>
+<p class=kv>Readings above are executed at render time against the
+REAL MinorGuardFace: R939 wired the three call sites (member / pay /
+liveroom) opt-in fail-closed, R940 wired the pay grant commit face
+(record_spend, exactly-once per order ref); this page mount closes
+the R940b remainder of the declared row.</p></div>
 
 <div class="card"><h2>Quality Face (suite inventory + last full
 regression)</h2>
@@ -308,6 +437,15 @@ __PAYWARN__</footer>
         "__SKUS__": sku_rows,
         "__TIERS__": tier_rows,
         "__MEMDIS__": member_disclaimer,
+        "__MG_REG__": esc(mg["registered"]),
+        "__MG_CALLS__": esc(mg["calls"]),
+        "__MG_REF__": esc(mg["refusals"]),
+        "__MG_SUMMARY__": mg_summary,
+        "__MG_CODES__": mg_codes,
+        "__MG_LIMITS__": mg_limits,
+        "__MG_WP__": mg_wp,
+        "__MG_MSGSEC__": mg_msgsec,
+        "__MG_COMPLIANCE__": mg_compliance,
         "__NSUITE__": esc(total_suites),
         "__NCRIT__": esc(total_crit),
         "__QUALROWS__": qual_rows,

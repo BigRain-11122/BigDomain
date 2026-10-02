@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T19:22:28+08:00",
+  "export_ts": "2026-10-02T19:32:38+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R940 双项轮（轮计分 2=能跑实物）：主件=R939b① pay grant 提交面 record_spend 挂接毕（orders._grant COMMIT 前入账·ref=order_id 幂等·GuardError 回滚自愈·AC-W7 预注册·test_wiring 22/22+六套件回归零回归=qa/wiring-R940.log）+fold R162 水位整编（80,627B→74,473B·AC-R1631..R1635=qa/reorg-R940.log）；余项=R940b frontdoor 活体页挂面（AC-W8）；waiting 面：法务外件 chronic 达件即触发+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
-    "latest_artifact": "产品实物=MinorGuard 守护闸 grant 提交面收口（2026-10-02 ~19:2x·R940）：src/sandbox/pay/orders.py _grant 提交面挂 guard.record_spend（日账键=（居民,grant-UTC 日期）·ref=order_id·GuardError 回滚整个 grant 单留 paid·回调查单重试自愈入账）+src/sandbox/minors/minors.py record_spend ref 幂等去重（同 ref 重放零双记）+test_wiring.py AC-W7 五记录 SUITE PASS 22/22+六套件回归零回归（minors 19/19+pay 16/16+pay_v3 14/14+member 25 断言+entry_tier 7/7+liveroom 10/10）=qa/wiring-R940.log·AC-W7 预注册在册；M1 接线面三面+提交面全闭合（审计 P-2026-10-02-02 M1 ≤10-09 前置面）；机制实物=fold R162（本轮·详见 state log R162 汇总行）；当前活体面=preview v0.6+minors 守护沙箱（R937）+三面接线（R939）+提交面（R940）·frontdoor 8093 v0.4 双口径",
-    "next_milestone": "下个里程碑（≤10-04）：R940b frontdoor 活体页挂面（minors 合规面·AC-W8）收口=MinorGuard M1 接线全闭合+O-013④/QA 每日轮 10-03 首轮；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访；M1 可走切片 ≤10-09（审计 P-2026-10-02-02·frontdoor 挂面后接线面全毕·Biggame 切片对接）；benchmarks 7 天刷 10-09；法务外件 D-20260929-03 chronic 达件即触发；bootstrap CEO 物理件无 ETA"
+    "current": "R941 产品轮（轮计分 2=能跑实物）：主件=R940b② frontdoor v0.5 minors 守护合规卡面挂载毕（AC-W8 八记录=qa/wiring-R941.log·守护面真实读数 render 时实算非写死+合规四件套常驻〔AIGC 标识+非投顾+[needs-CEO] 限额面注+msgSecCheck 前置闸注〕——MinorGuard M1 接线面全闭合）+cut-166 板规执法五滞行批迁（§R941 节=qa/board-R941.log）；waiting 面：法务外件 chronic 达件即触发+R777 复核档 chronic（10-02 13:39 BigLife 复启条件令·本司=常务班复核面·达件即触发）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
+    "latest_artifact": "产品实物=frontdoor v0.5 Minor Guardian Face 守护合规卡（2026-10-02 ~19:4x·R941）：src/sandbox/frontdoor.py 活体页挂载 minors 守护合规面（守护面真实读数 render 时实算非写死：probe summary registered=2 calls=11 refusals=4 allowed=7 spent_cent=1990 events=1 replays=1·daily_cent 收缩对照读数翻转=活算实证）+合规四件套常驻（AIGC 标识+非投顾+[needs-CEO] 限额面注+msgSecCheck 前置闸注）+条例引用（Decree No.766 §31/§43-44/§24③）+WIRING_POINTS 单源挂载+src/sandbox/minors/test_wiring.py AC-W8 八记录（test_wiring 30/30+六套件回归零回归=qa/wiring-R941.log）·MinorGuard M1 接线面全闭合（三面 R939+提交面 R940+活体页 R941·审计 P-2026-10-02-02 M1 ≤10-09 前置面毕）·8093 活体页 v0.4 在跑=宿主产线·v0.5 卡面下次重启起效（R908 先例·render 面套件内直验）",
+    "next_milestone": "下个里程碑（≤10-04）：O-013④/QA 每日轮 10-03 首轮+M1 可逛切片对接窗（MinorGuard 前置面已全毕·Biggame 切片对接·审计 P-2026-10-02-02 M1 ≤10-09）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访；benchmarks 7 天刷 10-09；法务外件 D-20260929-03 chronic 达件即触发；R777 复核档 chronic 达件即触发；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "940",
+      "941",
       "OSLoop 执行 tick"
     ],
     [
@@ -1381,15 +1381,19 @@
     [
       "2",
       "R940 双实物轮：R939b① pay grant 提交面 record_spend 挂接毕（AC-W7·ref=order_id 幂等去重·GuardError 回滚自愈·test_wiring 22/22+六套件回归零回归=qa/wiring-R940.log）+fold R162 水位整编（AC-R1631..R1635=qa/reorg-R940.log）〔R940〕"
+    ],
+    [
+      "2",
+      "R941 产品收口轮（R940b② 毕）：frontdoor v0.5 Minor Guardian Face 守护合规卡面挂载（AC-W8 八记录全过=qa/wiring-R941.log：真实读数 render 时实算〔registered=2 calls=11 refusals=4 spent_cent=1990 replays=1·daily_cent 收缩对照读数翻转=活算实证〕+合规四件套常驻〔AIGC+非投顾+[needs-CEO] 限额注+msgSecCheck 前置闸注〕+Decree No.766 条例引用+WIRING_POINTS 单源挂载）+test_wiring 30/30〔22+8〕+六套件回归零回归——MinorGuard M1 接线面全闭合；cut-166 五滞行批迁 §R941 节+R777 复核档 gated 行（10-02 13:39 BigLife 复启条件令·常务班复核面回执）·R941"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
