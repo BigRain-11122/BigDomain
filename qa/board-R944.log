@@ -1,0 +1,28 @@
+=== cut-167 board surgery R944 final verification (4-row batch migration, HEAD-anchored md5) ===
+PASS archive pure-append prefix vs git HEAD (208656 -> 215854 bytes)
+PASS 09-month archive byte-identical to HEAD
+PASS archive section R944 present once
+PASS R944 section carries exactly 4 rows
+PASS row on HEAD board once + in section once: '- [x] R943 frontdoor'
+PASS verbatim md5 identical vs HEAD: '- [x] R943 frontdoor'
+PASS row on HEAD board once + in section once: '- [x] R942 frontdoor'
+PASS verbatim md5 identical vs HEAD: '- [x] R942 frontdoor'
+PASS row on HEAD board once + in section once: '- [x] R940b MinorGua'
+PASS verbatim md5 identical vs HEAD: '- [x] R940b MinorGua'
+PASS row on HEAD board once + in section once: '- [x] BigLife R777'
+PASS verbatim md5 identical vs HEAD: '- [x] BigLife R777'
+PASS board keeps only current done row (R944)
+PASS board open rows = 3 (O-013/D-20260929-03/bootstrap; got 3)
+PASS 3 open rows classified
+PASS stale row absent from board: '- [x] R943 frontdoor'
+PASS stale row absent from board: '- [x] R942 frontdoor'
+PASS stale row absent from board: '- [x] R940b MinorGua'
+PASS stale row absent from board: '- [x] BigLife R777'
+PASS header anchor once
+PASS header migration note inserted once
+PASS no leftover open R944 claim row
+PASS R944 closure note present
+NOTE first run partial-write remediation: cut167_r944.py partition anchor left the pre-registered claim row inside header_part -> duplicate claim row; post-write check 'open rows = 3' intercepted (4 found); leftover open claim row removed same round, archive append idempotent-safe (## R944 written once, pure-append), board rewritten to terminal state; R941/R916 first-run-bug precedent
+board md5 now=f885e0c6eaad107849ecc7748a3b30c1
+archive md5 now=a67ef72fe5301e8b5ce4e836a5c7c9c0
+SUITE PASS 26/26
