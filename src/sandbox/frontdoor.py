@@ -17,19 +17,32 @@ hardcoded in this source. Chinese text lives only in data files.
 
 Usage: python src/sandbox/frontdoor.py   (serves http://127.0.0.1:8093/)
 One-click relaunch: frontdoor_start.bat
+
+v0.4 (2026-10-02, product-first self-driven round): adds two more
+composed cards -- the membership tier face (member/config.json) and
+the quality face (suite inventory imported from reconcile_all.py plus
+the newest qa/reconcile-all-*.log verdict read from disk at render
+time). Still pure composition: every displayed string is loaded at
+runtime from real config/data/evidence artifacts, never hardcoded.
 """
 
+import glob
 import html
 import json
 import os
 import subprocess
 import sys
+from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+import reconcile_all  # suite inventory single source (reuse, no copy)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
+MEMBER_CFG = os.path.join(HERE, "member", "config.json")
+QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
 JOURNEY = os.path.join(HERE, "journey_demo.py")
@@ -63,9 +76,40 @@ def run_journey_once():
 JOURNEY_OK, JOURNEY_LINES, JOURNEY_ERR = run_journey_once()
 
 
+def latest_regression_evidence():
+    """Newest full-regression log in qa/ (rendered from disk, F3 law:
+    no canned numbers; honest empty face when no evidence exists)."""
+    best = None
+    for path in glob.glob(os.path.join(QA_DIR, "reconcile-all-*.log")):
+        if best is None or os.path.getmtime(path) > os.path.getmtime(best):
+            best = path
+    if best is None:
+        return None, "", ""
+    verdict = ""
+    with open(best, encoding="utf-8", errors="replace") as fh:
+        for raw in fh:
+            line = raw.strip()
+            if line.startswith("RUNNER "):
+                verdict = line  # last RUNNER line wins
+    stamp = datetime.fromtimestamp(os.path.getmtime(best))
+    return best, verdict, stamp.strftime("%Y-%m-%d %H:%M")
+
+
+def suite_groups():
+    """Group the real suite inventory by product dir (reuse law:
+    imported from reconcile_all.SUITES, never duplicated here)."""
+    groups = {}
+    for _label, rel, crit in reconcile_all.SUITES:
+        key = os.path.dirname(rel)
+        cnt, total = groups.get(key, (0, 0))
+        groups[key] = (cnt + 1, total + crit)
+    return groups
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
+    member = load_json(MEMBER_CFG)
     world = load_json(WORLD)
     citizens = []
     if os.path.exists(CITIZENS):
@@ -107,6 +151,39 @@ def render():
     rl = lobby["rate_limit"]
     hb = lobby["heartbeat"]
 
+    tier_rows = ""
+    for key in ("experience", "patron", "mayor", "cocreator"):
+        tier = member.get("tiers", {}).get(key)
+        if not tier:
+            continue
+        tier_rows += (
+            "<tr><td><b>%s</b></td><td>%s / %sd</td><td>%s</td>"
+            "<td>%s</td></tr>"
+            % (esc(key), esc(tier.get("monthly_credits", "-")),
+               esc(tier.get("period_days", "-")),
+               esc(", ".join(tier.get("privileges", []))),
+               esc(tier.get("copy", ""))))
+    member_disclaimer = esc(member["compliance"]["disclaimer"])
+
+    groups = suite_groups()
+    total_suites = len(reconcile_all.SUITES)
+    total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
+    qual_rows = "".join(
+        "<tr><td><b>%s</b></td><td>%d</td><td>%d</td></tr>"
+        % (esc(name), cnt, crit)
+        for name, (cnt, crit) in sorted(groups.items()))
+    ev_path, ev_verdict, ev_stamp = latest_regression_evidence()
+    if ev_verdict:
+        ev_cls = "qok" if "RUNNER PASS" in ev_verdict else "qfail"
+        ev_html = ("<p class=\"%s\">%s</p>"
+                   "<p class=kv>last full run finished %s &middot; "
+                   "evidence: qa/%s</p>"
+                   % (ev_cls, esc(ev_verdict), esc(ev_stamp),
+                      esc(os.path.basename(ev_path))))
+    else:
+        ev_html = ("<p class=fail>no reconcile-all evidence log on "
+                   "disk (honest empty face, no fake PASS)</p>")
+
     page = """<!DOCTYPE html><html lang="zh-CN"><head>
 <meta charset="utf-8"><meta name="viewport"
 content="width=device-width,initial-scale=1">
@@ -135,6 +212,8 @@ ul{margin:0;padding-left:18px}.proof{font-family:Consolas,monospace;
 font-size:12.5px;max-height:340px;overflow:auto}
 .ts{color:var(--dim);font-size:12px}
 .fail{color:#f85149}
+.qok{color:var(--ok);font-family:Consolas,monospace;font-size:13px}
+.qfail{color:#f85149;font-family:Consolas,monospace;font-size:13px}
 footer{position:fixed;bottom:0;left:0;right:0;background:#1a1f26;
 border-top:2px solid var(--warn);padding:10px 16px;font-size:12.5px;
 line-height:1.55;color:#e6edf3;z-index:9}
@@ -144,7 +223,8 @@ footer .badge{margin-right:8px}
 <header><h1>BigDomain Sandbox Front Door</h1>
 <span class="badge">AIGC: __AI__</span>
 <span class="sub">XL-16 / D-20260930-06 &middot; pure composition of
-existing sandbox faces &middot; no new business face</span></header>
+existing sandbox faces &middot; no new business face &middot; v0.4 adds
+membership + quality cards</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -178,6 +258,26 @@ __SKUS__</table>
 physical items (merchant IDs) arrive; keys never enter git.
 Conversion is one-way fiat-&gt;token into pool:share.</p></div>
 
+<div class="card"><h2>Membership Face (tier table sandbox)</h2>
+<table><tr><th>tier</th><th>credits / period</th><th>privileges</th>
+<th>copy (real config text, [needs-CEO] notes included)</th></tr>
+__TIERS__</table>
+<p class=kv>__MEMDIS__</p>
+<p class="kv">numbers are sandbox placeholders; all tier pricing stays
+a [needs-CEO] approval face until the gate order arrives.</p></div>
+
+<div class="card"><h2>Quality Face (suite inventory + last full
+regression)</h2>
+<div class="grid">
+<div class="kpi"><b>__NSUITE__</b>suites</div>
+<div class="kpi"><b>__NCRIT__</b>pre-registered criteria</div></div>
+<table><tr><th>product dir</th><th>suites</th><th>criteria</th></tr>
+__QUALROWS__</table>
+__EVIDENCE__
+<p class="kv">inventory imported at render time from
+reconcile_all.SUITES; verdict read from the newest evidence log in
+qa/ -- nothing canned.</p></div>
+
 </div>
 <footer><span class="badge">AIGC: __AI__</span>__WARN__<br>
 __PAYWARN__</footer>
@@ -206,6 +306,12 @@ __PAYWARN__</footer>
         "__PTIME__": esc(hb.get("ping_timeout", "-")),
         "__MAXT__": esc(lobby.get("max_text_len", "-")),
         "__SKUS__": sku_rows,
+        "__TIERS__": tier_rows,
+        "__MEMDIS__": member_disclaimer,
+        "__NSUITE__": esc(total_suites),
+        "__NCRIT__": esc(total_crit),
+        "__QUALROWS__": qual_rows,
+        "__EVIDENCE__": ev_html,
         "__WARN__": warn,
         "__PAYWARN__": pay_warn,
     }

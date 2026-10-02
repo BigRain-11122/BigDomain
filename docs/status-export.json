@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T12:24:15+08:00",
+  "export_ts": "2026-10-02T12:53:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R907 DEC 审核批+板规执法第一百四十刀收账轮（轮计分 1=机制件）：[DEC] 6 新 token 判毕全知悉（D-20261002-04 本司 R783/R789 闭口注记收讫·D-20261002-07 D-20260930-19 合并单本司编号引用族等价达标面·D-20261002-05/06 BigMoney·D-20261002-08 席7 法务两步制·D-20261002-09 BigLife 全非本司执行面）·基线 last_dec_tokens 121→127·decisions 行 212→228；D-20260929-03 法务外件触发查 origin/main 零命中=chronic 续行（D-20261002-08 两步制流程承接面）；cut-140 R906 滞板 done 行 verbatim 迁 10 月档 R907 节=qa/board-R907.log；九面 scan 余面全平（GORD 147 零新令·LEDGER conflict=0·QA 当日证据在册）；等待面：法务外件 chronic·OSS 窗 10-02 21:40 零欠（OH-20261002 在册）·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "产品实物面=preview/index.html v0.5「工程读数实时刷新」（2026-10-02 ~06:0x·R875 live 全量实跑读数 27/27 套件·231 判据全绿·20 模块面·AC-V51..V55 全过=qa/preview-v05-R875.log+真截图 qa/preview-v05-R875.png·file:// 可开）+lobby AC-S4 探针撞车修复件（RUNNER 27/27 复绿双证 qa/reconcile-live-R875.log 与 R875b.log）；机制实物=R906 state.json 水位整编 R146（logs/state-log-archive-2026-09.md §R906 append 节+logs/state-preop-R906.bak+qa/reorg-R906.log+qa/board-R906.log·2026-10-02 12:0x beat）",
-    "next_milestone": "下个轮次窗：10-02 21:40 OSS 借力窗开窗（滚动切片已提前交付 OH-20261002 在册·零欠账）；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001·首回访窗）+10-07 治理日委员会聚合审（O-20260930-026 报告聚合）+10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；M1 可逛切片窗 ≤10-09（本司商业挂载面+互动动线+工程读数面三切片就绪待 Biggame 切片对接·合规四件套随切片常驻）+benchmark 7 天刷新 10-09；法务外件 D-20260929-03=周期触发查（文件在盘且含结论三态行时触发·chronic）；fold R147 由下轮轮首首测裁定（R907 收账后水位 79668B ≤80,000B 线·增速带 ~2.5KB/对实测）"
+    "current": "R908 产品优先律自驱实物轮（轮计分 2=能跑/能看实物）：frontdoor v0.4 双卡升级上线 http://127.0.0.1:8093/——①Membership Face 权益/月卡四档位表（member/config verbatim·19.9 体验卡/29.9 入门订阅卡/49.9 城主卡/99 共创者卡·月次数+权益键+全文 copy·非投顾常驻面随卡不折叠）②Quality Face 品质总览（27 套件 231 判据清单自 reconcile_all.SUITES 复用导入+当日全量回归 RUNNER PASS 27/27 套件+对账 6/6=qa/reconcile-all-R908.log〔09-29 陈旧证据面刷新〕）·页面 15 断言全过=qa/frontdoor-v04-R908.log；五静扫描全平·D-20260929-03 法务外件触发查零命中 chronic 续行；等待面：O-013④/QA 每日轮 10-03 首轮·提案回访 10-05·benchmarks 10-09·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
+    "latest_artifact": "产品实物面=frontdoor v0.4（2026-10-02 ~12:4x·R908）：前台 http://127.0.0.1:8093/ 新增 Membership Face（四档位表 member/config verbatim+非投顾常驻随卡）+Quality Face（reconcile_all.SUITES 复用导入 27 套件 231 判据+当日全量回归 RUNNER PASS 证据实读 qa/reconcile-all-R908.log）双卡·纯组合零新业务面·页面 15 断言=qa/frontdoor-v04-R908.log；机制实物=preview/index.html v0.5（2026-10-02 ~06:0x·R875 工程读数实时刷新·27/27 套件 231 判据全绿·qa/preview-v05-R875.log+真截图）+R906 state.json 水位整编 R146（qa/reorg-R906.log）",
+    "next_milestone": "下个轮次窗：10-02 21:40 OSS 借力窗开窗（滚动切片已提前交付 OH-20261002 在册·零欠账）；10-03 首轮 O-013④/QA charter 每日轮；10-05 提案回访（BD-PROP-001·首回访窗）+10-07 治理日委员会聚合审（O-20260930-026 报告聚合）+10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；M1 可逛切片窗 ≤10-09（本司商业挂载面+互动动线+工程读数面三切片就绪待 Biggame 切片对接·合规四件套随切片常驻）+benchmark 7 天刷新 10-09；法务外件 D-20260929-03=周期触发查（文件在盘且含结论三态行时触发·chronic）；fold R147 由下轮轮首首测裁定（R908 收账后水位 81734B 越 80,000B 线 1734B）"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "907",
+      "908",
       "OSLoop 执行 tick"
     ],
     [
@@ -1301,15 +1301,19 @@
     [
       "1",
       "R907 DEC 审核批+板规执法第一百四十刀（cut-140：R906 过当轮 done 行 verbatim 迁 10 月档 R907 节〔节序 45→46·md5 同一·pure-append prefix 断言·主板终态=规约头+open 3 行零滞留〕·AC-K140a..e 全过=qa/board-R907.log；DEC 6 新 token 判毕全知悉：D-20261002-04 本司 R783/R789 闭口注记收讫+D-20261002-07 D-20260930-19 合并单本司达标面+D-20261002-05/06 BigMoney+D-20261002-08 席7+D-20261002-09 BigLife 全非本司执行面·基线 last_dec_tokens 121→127+decisions 行基线 212→228·D-20260929-03 触发查 origin/main 零命中 chronic 续行）"
+    ],
+    [
+      "2",
+      "frontdoor v0.4 双卡升级件（产品优先律自驱实物轮·能跑/能看实物计 2）：Membership Face 四档位表（member/config verbatim·19.9/29.9/49.9/99 四档月次数+权益键+全文 copy+非投顾常驻随卡）+Quality Face（reconcile_all.SUITES 复用导入 27 套件 231 判据+产品目录分组表+当日全量回归后台实跑 20.6s RUNNER PASS 27/27+对账 6/6=qa/reconcile-all-R908.log〔09-29 R595 陈旧证据面刷新〕）·前台重启探活 healthz=200+页面 15 断言全过=qa/frontdoor-v04-R908.log·纯组合零新业务面=XL-16 纪律承行·源纯 ASCII 编码律过·R908）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

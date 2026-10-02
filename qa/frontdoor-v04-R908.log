@@ -1,0 +1,17 @@
+﻿HTTP 200 bytes=11267 ts=2026-10-02 12:37:37
+PASS contains: Membership Face (tier table sandbox)
+PASS contains: >experience<
+PASS contains: >patron<
+PASS contains: >mayor<
+PASS contains: >cocreator<
+PASS contains: Quality Face (suite inventory
+PASS contains: RUNNER PASS (27/27 suites green
+PASS contains: reconcile-all-R908.log
+PASS contains: >231<
+PASS contains: AI 生成
+PASS contains: 非投顾
+FAIL contains: journey_ok
+INFO len(tier_rows block)=1
+PASS journey face: no honest-failure banner
+PASS journey face: real transcript list rendered
+PASS journey face: J-step lines present
