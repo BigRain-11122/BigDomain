@@ -1,0 +1,27 @@
+R918 reorg evidence log (verify-then-write)
+PASS tree clean + no index.lock (excluded per self-closeout precedent: qa evidence logs + backlog pre-reg row + state.json autocrlf eol artifact - git diff content-empty, real integrity = HEAD blob byte-compare asserted next)
+PASS pre-op == git HEAD blob byte-identical; round-start first-measure=81650B (scan/getsize dual gauge)
+PASS parse: tick=917 log=60 entries; window tail = entry56(R150 summary) + entries57-60 (R916..R917 pairs)
+PASS probe calibration vs state-preop-R916.bak: {W60/idle37/idle_round10/nop5/paren33/round27/sub8/tokens11} == in-register pre {W60/idle37/idle_round10/nop5/paren33/round27/sub8/tokens11} (all 8 keys reproduced)
+PASS probe pre-op live: {W58/idle37/idle_round9/nop4/paren33/round25/sub7/tokens10}
+PASS two-pair window projection: [R150 summary + R916..R917 pairs] projected post register {W56/idle37/idle_round8/nop3/paren33/round23/sub6/tokens9} == canonical in-register post register -> zero-drift gate pass = two-pair window statutory (R895/R897 isomorph, R893 family)
+PASS queue/proposal disk recount flat: queues 6/2/2 + proposals 1/1 (stored values reproduced)
+INFO viz probe: frontdoor 8093=200 + data.js not-found
+PASS catalog: base=251 tokens; window new first-appearances=4 [C-HB913,C-R1511,C-K145a,C-R1515] -> new total=255
+PASS missing=[] assertion: all 251 base tokens present in new catalog
+PASS S_new built: 4818B text; structural constraints (date+FWparen prefix / nop tag in / sub tag in / no beat / no idle-fast / no tokens:local / no ASCII quote / no backslash) all pass
+PASS window geometry: 5 lines (idx 59..63, entries 56..60) removedBytes=12300B (incl LF each); head entries = lines idx 4..58 (entries 1..55)
+INFO post-fold measure (pre pair): 74175B
+PASS final fixed-point: final=77556B margin=944B (<=78500B gate); beat=14:5x; isots=2026-10-02T14:52:24
+PASS head block 55 entries verbatim (lines idx 4..58 byte-same) + tail fields (log-close/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens) byte-same; tick 917->918 only
+PASS W1 backup logs/state-preop-R918.bak = 81650B (round-start bytes)
+PASS W2 archive append: marker 143->144, pure-append prefix asserted, pre-op full text 81650B archived, section # --- R918 append (pre re-org round 151, tick 917, 2026-10-02, 81650 bytes) ---
+PASS W4 state fold written: post-fold=74175B final=77556B {margin 944B}; re-read: tick=918 log=58; head 55 entries byte-same; probe post {W56/idle37/idle_round8/nop3/paren33/round23/sub6/tokens9} == canonical in-register post register (zero drift)
+PASS dual-gauge parse: PS ConvertFrom-Json OK + python json.loads OK
+PASS W7 export refresh: EXPORT_OK results=286 export_ts=2026-10-02T14:52:24+08:00; self_drive binding counters {W56/idle37/nop3/sub6} == probe post register (asserted in-script); queues 6/2/2 + proposals 1/1 disk-recounted; results row appended (R151)
+PASS AC-R1521 pre-op triple check (81650B + tick 917 + log 60 + tree clean + pre-op==HEAD blob + backup + archive marker 143->144)
+PASS AC-R1522 fold window [R150 summary + R916..R917 two pairs] 5 lines 12300B -> 1 rolling summary; catalog 251+4=255 missing=[]; probe pre->post zero drift
+PASS AC-R1523 top fields zero drift (tick 917->918 only) + dual-gauge parse + head bytes same
+PASS AC-R1524 final 77556B <= 78500B margin gate (margin 944B)
+INFO AC-R1525 delivery: state log row + backlog done row + commit message carriers = P-2026-09-25-18 + P-51 (executed at commit step)
+R918 REORG DONE: pre 81650B -> post-fold 74175B -> final 77556B {margin 944B}; probe pre {W58/idle37/idle_round9/nop4/paren33/round25/sub7/tokens10} -> post {W56/idle37/idle_round8/nop3/paren33/round23/sub6/tokens9} (canonical, zero drift)

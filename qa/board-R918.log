@@ -1,0 +1,11 @@
+R918 board cut-146 evidence log (verify-then-write)
+PASS pre-registration row inserted before R916 stale row (verify: prereg on board, R916 row intact, standing open=3, stale done=1)
+PASS W5a R916 stale done row verbatim migrated to 10-month archive section R918: md5 identical (F875891B8961F5F5), pure-append prefix asserted, section count 51->52
+PASS W5b terminal main board: header intact (BOM preserved), R918 current row flipped done with closure note, standing open=3, zero stale done rows
+PASS 09-month archive zero-touch: disk == git HEAD blob byte-identical pre/post
+PASS W6 heartbeat: R918 row appended tick 918, lag 0->0 kept (hb tick 918 == state tick 918)
+PASS AC-K146a stale-row census: exactly 1 done row (R916) + standing open 3 + header intact (BOM=True)
+PASS AC-K146b R916 row verbatim to 10mo archive section R918 (md5 same, prefix asserted, 51->52), 09mo zero-touch
+PASS AC-K146c terminal main board = header + R918 current row (done + closure) + open 3, zero stale done
+PASS AC-K146d evidence = this log (verify-then-write, all asserts before writes + post-write re-read asserts)
+PASS AC-HB918 heartbeat R918 row tick 918, lag 0->0
