@@ -1,0 +1,6 @@
+PRE-OP PASS AC-K157a: stale done rows=1 (R928); standing open=3; BOM byte-calibrated; archive sections=62; 09-archive md5=19783a35cfc4e57eb24eda5916a07702 == HEAD blob
+POST-OP PASS AC-K157b: R928 row verbatim migrated to Oct archive section R929; md5 identical d696c89c27a3f49ff71201fe30247559; pure-append prefix byte-identical; sections 62->63; 09-month archive zero-touch (disk pre==post==HEAD blob)
+POST-OP PASS AC-K157c: main board final = header + R929 current done row + 3 standing open rows; zero stale done rows
+BOARD-STATE PASS AC-K157d: all assertions verify-then-write, computed before any disk write; post-write re-read re-verified
+SIZES: board 7119 -> 5162 bytes; archive10 182747 -> 184871 bytes; archive09 untouched 358597 bytes
+STATE CLOSEOUT: state.json post-write = 80887B (over the 80000B line by 887B), fold R157 by next round round-start first-measure (R927 isomorph)
