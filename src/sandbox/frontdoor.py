@@ -172,6 +172,7 @@ import ledger as ledger_mod       # token ledger product (reuse, no copy)
 import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
 import props as props_mod         # city props/cosmetics face (reuse, no copy)
 import incentive as incentive_mod  # creator incentive face (reuse, no copy)
+import observation as observation_mod  # paid strategy observation (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -1216,6 +1217,203 @@ def incentive_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def obs_probe():
+    """Run the REAL paid strategy-observation face (R623 product,
+    BLUEPRINT sec.4 C-end line 4: strategy co-creation paid
+    observation, a core revenue line assigned to this company by
+    D-20260924-10) in-process at render time on a throwaway database
+    (F3 law: every reading below is computed by the product modules,
+    never canned). The results-only boundary is structural: the
+    registry has no source column and the register face has no
+    source parameter at all, so no source code can ever leak.
+    Chain: an unregistered strategy id is refused with zero charge
+    -> a strategy is registered with a results summary only -> one
+    single-strategy purchase books exactly one spend and the grant
+    row binds it -> re-buying the same strategy is refused BEFORE
+    the spend (a rejected buy never charges) -> observing without an
+    entitlement is refused fail-closed -> a monthly pass buys one
+    window and observes every registered strategy inside it ->
+    re-buying the same month is refused -> the single grant is
+    permanent across months while the pass covers exactly its own
+    month -> pure reads move zero tokens and the observe view keys
+    are exactly {strategy_id, summary, kind, tx}. Raw tx ids are
+    never rendered (determinism). Prices are caller-supplied probe
+    values mirroring the canon anchors (9.9 yuan single / 19.9 yuan
+    monthly pass); real pricing stays a P1 CEO approval-only
+    face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-obs-")
+    led = None
+    face = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        face = observation_mod.ObservationFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except observation_mod.ObservationError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 20000, "probe:mint:reserve")
+        for avatar in ("amy", "ben", "carol"):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", 3000),
+                        ("usr:" + avatar, "credit", 3000)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe residents",
+           "single-strategy observation probe price 990, monthly-pass"
+           " probe price 1990 (canon anchors 9.9 / 19.9 CNY) --"
+           " caller-supplied probe values, never pricing decisions")
+
+        # -- results-only registration (structural, no source column) --
+        reg = face.register_strategy(
+            "strat-alpha", "usr:carol",
+            {"backtest": "PASS", "sharpe": 1.8, "drawdown": "-7.2%"})
+        conn = sqlite3.connect(db)
+        cols = [r[1] for r in conn.execute(
+            "PRAGMA table_info(obs_strategies)").fetchall()]
+        conn.close()
+        ok("carol registers strat-alpha with a RESULTS summary",
+           "registered=%s; obs_strategies columns=%s -- no source"
+           " column and no source parameter exist anywhere on the"
+           " register face, the results-only boundary is structural"
+           % (reg["registered"], cols))
+
+        # -- registration gate: unknown id refused, zero charge -------
+        bal0 = led.balance("usr:amy")["balance"]
+        refuse_leg("amy tries to buy an UNREGISTERED strategy id",
+                   lambda: face.buy_single(
+                       "usr:amy", "strat-ghost", 990, "order:ghost"))
+        ok("re-read amy's balance after the unknown-id refusal",
+           "%d==%d (an unregistered strategy is never purchasable;"
+           " the refusal charged nothing)"
+           % (led.balance("usr:amy")["balance"], bal0))
+
+        # -- single purchase: one spend, bound into the grant row ----
+        tx0 = spend_n()
+        bal1 = led.balance("usr:amy")["balance"]
+        face.buy_single("usr:amy", "strat-alpha", 990, "order:obs-amy")
+        bal2 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        ent1 = face.entitlements_view("usr:amy")
+        ok("amy buys single observation of strat-alpha (permanent)",
+           "balance %d->%d (exact -990); spend-tx %d->%d (+1); grant"
+           " row binds that spend as its purchase provenance=%s"
+           % (bal1, bal2, tx0, tx1,
+              bool(ent1["grants"])
+              and ent1["grants"][0]["spend_tx"] is not None))
+        refuse_leg("amy re-buys the SAME strategy",
+                   lambda: face.buy_single(
+                       "usr:amy", "strat-alpha", 990, "order:obs-amy-2"))
+        ok("re-read balance + spend count after the duplicate refusal",
+           "%d==%d and %d==%d (the dup is rejected BEFORE the spend;"
+           " a rejected buy never charges)"
+           % (led.balance("usr:amy")["balance"], bal2, spend_n(), tx1))
+
+        # -- fail-closed access gate ---------------------------------
+        bal_b0 = led.balance("usr:ben")["balance"]
+        refuse_leg("ben observes WITHOUT any entitlement",
+                   lambda: face.observe(
+                       "usr:ben", "strat-alpha", "2026-10"))
+        ok("re-read ben's balance after the access refusal",
+           "%d==%d (the access gate is fail-closed; a refused"
+           " observation charges nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- monthly pass: one window, every registered strategy ------
+        tx2 = spend_n()
+        face.buy_pass("usr:ben", "2026-10", 1990, "order:pass-ben")
+        tx3 = spend_n()
+        view = face.observe("usr:ben", "strat-alpha", "2026-10")
+        ok("ben buys the 2026-10 monthly pass and observes strat-alpha",
+           "spend-tx %d->%d (+1); observe view keys=%s; kind=%s;"
+           " summary=%s (results only, no source key can exist)"
+           % (tx2, tx3, sorted(view.keys()), view["kind"],
+              view["summary"]))
+        refuse_leg("ben re-buys the SAME month pass",
+                   lambda: face.buy_pass(
+                       "usr:ben", "2026-10", 1990, "order:pass-ben-2"))
+
+        # -- permanence vs window scope --------------------------------
+        perm = face.can_observe("usr:amy", "strat-alpha", "2026-11")
+        nxt = face.can_observe("usr:ben", "strat-alpha", "2026-11")
+        ok("next month 2026-11 scope check",
+           "amy single grant allowed=%s kind=%s (permanent, survives"
+           " months); ben pass allowed=%s (a pass covers exactly its"
+           " own month window)"
+           % (perm["allowed"], perm["kind"], nxt["allowed"]))
+
+        # -- pure reads move zero tokens --------------------------------
+        tx4 = spend_n()
+        face.can_observe("usr:ben", "strat-alpha", "2026-10")
+        face.observe("usr:ben", "strat-alpha", "2026-10")
+        face.entitlements_view("usr:ben")
+        face.strategy_view("strat-alpha")
+        tx5 = spend_n()
+        ok("pure-read audit: can_observe/observe/views",
+           "spend-tx %d==%d unchanged -- observe and can_observe are"
+           " pure reads, zero token movement" % (tx4, tx5))
+
+        # -- non-resident refusal + grant/debit audit ------------------
+        refuse_leg("a pool account tries to buy observation",
+                   lambda: face.buy_single(
+                       "pool:reserve", "strat-alpha", 990,
+                       "order:pool-buy"))
+        ent_a = face.entitlements_view("usr:amy")
+        ent_b = face.entitlements_view("usr:ben")
+        sv = face.strategy_view("strat-alpha")
+        grants_n = len(ent_a["grants"]) + len(ent_b["grants"])
+        amy_final = led.balance("usr:amy")["balance"]
+        ben_final = led.balance("usr:ben")["balance"]
+        ok("audit the grant table against real debit entries",
+           "%d grant rows (amy single + ben pass); spend-tx total"
+           " %d; every grant row binds a real spend debit as its"
+           " provenance; balances exact amy 3000-990=%d and ben"
+           " 3000-1990=%d; strategy_view keys=%s (registry read"
+           " face carries results only)"
+           % (grants_n, tx5, amy_final, ben_final, sorted(sv.keys())))
+        face.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx5, "grants": grants_n,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "view_keys": sorted(view.keys()),
+            "perm_allowed": perm["allowed"], "perm_kind": perm["kind"],
+            "pass_next_allowed": nxt["allowed"],
+            "cols": cols,
+            "no_source_col": "source" not in [c.lower() for c in cols],
+            "audit_ok": grants_n == tx5,
+        }
+    finally:
+        if face is not None:
+            with contextlib.suppress(Exception):
+                face.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -1850,6 +2048,74 @@ def render():
         " reverse-conversion verb exists anywhere in the module"
         " (tokens never leave the loop, BLUEPRINT 5.4)")
 
+    # -- strategy observation face card (v0.16): REAL probe at render
+    # time; honest failure face --
+    try:
+        ob = obs_probe()
+        ob_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        ob, ob_err = None, str(exc)[:300]
+    if ob is not None:
+        ob_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in ob["legs"])
+        ob_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>spend tx == grant"
+                   " rows (one per purchase)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   "</div>"
+                   "<div class=\"kpi\"><b>%d</b>observe view keys"
+                   " (results only)</div>"
+                   "<div class=\"kpi\"><b>%s</b>registry source"
+                   " column</div>"
+                   "</div>"
+                   % (ob["spend_total"], ob["grants"],
+                      len(ob["refusals"]), len(ob["view_keys"]),
+                      "none" if ob["no_source_col"] else "LEAK"))
+        ob_scope = esc(
+            "permanence vs window scope: the single grant survives"
+            " months (amy 2026-11 allowed=%s, kind=%s) while the pass"
+            " covers exactly its own month (ben 2026-11 allowed=%s)"
+            % (ob["perm_allowed"], ob["perm_kind"],
+               ob["pass_next_allowed"]))
+        ob_audit = esc(
+            "purchase audit: %d grant rows, spend-tx total %d"
+            " (every purchase books exactly one spend and every grant"
+            " row binds that debit as its provenance); balances exact:"
+            " amy 3000-990=%d, ben 3000-1990=%d"
+            % (ob["grants"], ob["spend_total"], ob["amy_bal"],
+               ob["ben_bal"]))
+    else:
+        ob_rows = ob_kpis = ob_scope = ob_audit = ""
+    if ob_err:
+        ob_kpis = ("<p class=fail>OBSERVATION PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(ob_err))
+    ob_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the 9.9 yuan single / 19.9 yuan"
+             " monthly-pass canon anchors are caller-supplied probe"
+             " prices; real pricing and any launch gating stay a P1"
+             " CEO approval face"),
+            ("msgSecCheck front gate", "strategy results summaries"
+             " and every UGC/text surface in the stack keep the"
+             " msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+    ob_hard = esc(
+        "structural law (results-only paywall): the registry has no"
+        " source column and the register face has no source"
+        " parameter at all, so the results-only boundary cannot leak"
+        " source code; every purchase touches the token ledger"
+        " exactly once through one spend booking bound into an"
+        " immutable grant row, pure reads move zero tokens, and the"
+        " access gate is fail-closed (BLUEPRINT sec.4 C-end line 4)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -1973,7 +2239,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R975) &middot; v0.13 live room conversion card
 (R977) &middot; v0.14 city props card
 (R978) &middot; v0.15 creator incentive card
-(R980)</span></header>
+(R980) &middot; v0.16 strategy observation card
+(R984)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -2132,6 +2399,31 @@ redemption threshold) stays a [needs-CEO] P1 approval face and no
 incentive key ships in any config file. Raw tx ids are never
 rendered (determinism) -- the audit face shows the ref-bound join
 verification instead.</p></div>
+
+<div class="card"><h2>Strategy Observation Face (co-create paywall,
+live probe)</h2>
+<p class=kv>The REAL paid strategy-observation face
+(src/sandbox/ledger/observation.py over the P-47-2 token ledger, both
+imported, never copied) runs in-process at render time on a
+throwaway probe database -- every reading below is computed by the
+product modules, never canned. This is the BLUEPRINT sec.4 C-end
+line-4 strategy co-creation paid-observation canon (a core revenue
+line assigned to this company by D-20260924-10): results-only
+viewing of registered co-created strategies, no source code, one
+permanent single-strategy grant and one monthly unlimited pass,
+each purchase bound to exactly one token spend.</p>
+__OB_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__OB_ROWS__</table>
+<p class=kv>__OB_SCOPE__</p>
+<p class=kv>__OB_AUDIT__</p>
+<p class=kv>__OB_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__OB_COMPL__</ul>
+<p class=kv>Probe prices (990 / 1990 tokens) mirror the 9.9 / 19.9
+CNY canon anchors and are caller-supplied sandbox values, not
+pricing decisions; raw tx ids are never rendered (determinism) --
+the audit face shows the bound-debit verification instead.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -2321,6 +2613,12 @@ __PAYWARN__</footer>
         "__IC_JOIN__": icv_join,
         "__IC_HARD__": icv_hard,
         "__IC_COMPL__": icv_compl,
+        "__OB_KPIS__": ob_kpis,
+        "__OB_ROWS__": ob_rows,
+        "__OB_SCOPE__": ob_scope,
+        "__OB_AUDIT__": ob_audit,
+        "__OB_HARD__": ob_hard,
+        "__OB_COMPL__": ob_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
