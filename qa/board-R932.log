@@ -1,0 +1,6 @@
+﻿# qa/board-R932.log - board cut-160 (R932, 2026-10-02T17:46:42+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+board-side R931 row md5 (persisted before any write): 94d1a4a3cca974f7819e651502c2be59
+cut-160 migration verified then written: Oct archive append section R932 (65->66, pure-append prefix, md5 identical), board R931 row removed, 09-month archive zero-touch
+AC-K160c PASS (final): board = BOM + header + R932 done row (closure note appended) + 3 open rows; zero stale done rows; header byte-stable
+post-closeout state.json size = 78462B (fold R159 by next-round round-start first-measure ruling, R929 isomorph carry-note)

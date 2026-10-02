@@ -1,0 +1,97 @@
+﻿# qa/reorg-R932.log - state water-line fold R158 (R932, 2026-10-02T17:46:42+08:00)
+# mandate: P-2026-09-25-18 (board/fold discipline) seq-4; verify-then-write: all assertions pass before any state write
+PASS AC-R1591a no index.lock
+PASS AC-HB932 heartbeat readable pre-op
+PASS AC-R1591a no BOM (first byte 0x7B)
+PASS AC-R1591a no CR
+PASS AC-R1591a trailing-LF=False
+PASS AC-R1591a round-start first-measure 81080B scan/getsize dual-gauge, measured 81080B over the 80000B line by 1080B = R931 closeout carry-note cashed
+PASS AC-R1591a state.json == git HEAD blob byte-identical (664a9e6063)
+PASS AC-R1591a parses, tick 931 pre-op
+PASS AC-R1591a log 60 items pre-op
+PASS AC-R1591a state file layout 70 lines
+PASS AC-R1591a line0 brace
+PASS AC-R1591a line1 tick 931
+PASS AC-R1591a line2 log open
+PASS AC-R1591a line63 log close
+PASS AC-R1591a line69 brace close
+PASS AC-R1592a window 5 lines anchored: [R157 prior summary + R930..R931 two pairs]
+PASS AC-R1592a window[0] = R157 prior summary signature
+PASS AC-R1592a window pair R930
+PASS AC-R1592a window pair R931
+PASS AC-R1591a calibration backup present: logs/state-preop-R928.bak
+PASS AC-R1591a calibration backup present: logs/state-preop-R930.bak
+CALIBRATION state-preop-R930.bak: window content gauge = 11498B (registered 11498B); head content gauge = 66941B (registered 66941B)
+GAUGE live window content = 11691B (content-gauge); window file-line bytes = 11730B; head content = 66941B
+PASS AC-R1592b head block 55 items verbatim content = 66941 B == R928/R930 register
+INFO two-pair = minimal continuous window: whole tail after head block, all pairs since prior fold included, no smaller candidate (R848 rolling-window law)
+PASS probe-cal calibration logs/state-preop-R928.bak = W58/idle37/idle_round8/nop3/paren33/round25/sub7/tokens10 == era in-register pre register exactly (all 8 keys)
+PASS probe-cal calibration logs/state-preop-R930.bak = W58/idle37/idle_round8/nop3/paren33/round25/sub7/tokens10 == era in-register pre register exactly (all 8 keys)
+PASS AC-R1592f probe pre-op W58/idle37/idle_round8/nop3/paren33/round25/sub7/tokens10 == registered pre register, structural symmetry zero drift (criterion R744-registered, regex boundary carried from R848)
+PASS probe-cons W == paren + round identity
+PASS AC-R1592d prior-embedded catalog parsed from R157 summary
+PASS AC-R1592d prior catalog = 275 tokens
+PASS AC-R1592d prior catalog set-unique 275
+PASS AC-R1592d new first-appearance tokens (mechanical scan-order, zero hand-picked) = [C-R1581,C-K158a,C-K159a,C-HB931]
+PASS AC-R1592d catalog 275+4=279, missing=[] asserted (set-equality, order = prior embedded order + new, R890 composition law)
+INFO viz probe: healthz 200, data.js 560677B mtime 17:44:32 (+5806B vs R931 probe 554871B), viz html 92687B mtime 17:38; CIM cpu0/ram38/lanes3
+INFO S_new built 5872 B text; E_new 2854B; T_new 363B; window file-bytes 11730B; post-fold 75230B; projected final 78462B
+PASS AC-R1594 final size budget 78462 B <= 78,500B gate (margin 38 B) satisfied in-fold; post-fold 75230B
+PASS S/E/T-struct no ASCII quote / no backslash
+PASS S/E/T-struct no ASCII quote / no backslash
+PASS S/E/T-struct no ASCII quote / no backslash
+PASS S-struct pure-date+FW-paren prefix
+PASS S-struct nop accounting tag embedded exactly once
+PASS S-struct idle_round accounting key present
+PASS S-struct no abolished-path tag
+PASS S-struct no tokens-line marker
+PASS S-struct no beat-stamp
+PASS entry-struct no idle-fast / no no-pullable tags
+PASS tokens-struct no idle-fast / no no-pullable tags
+PASS AC-R1592f window statutory: two-pair window projected post register W56/idle37/idle_round8/nop3/paren33/round23/sub6/tokens9 == canonical in-register zero drift on first candidate (R895/R897/R920/R922/R924/R926/R928/R930 isomorph, R893 family)
+B. incremental-register law: W 58->56 (window 5 out, summary+closeout+tokens 3 in); round 25->23 (window 4 R-regex hits out: 2 closeout + 2 tokens lines; own closeout + tokens pair in); tokens 10->9 (window 2 out, own 1 in); idle_round 8->8 flat (window zero carry, own pair zero); idle 37 flat (abolished-path tag, window and new lines carry zero); nop 3->3 flat (R157 prior-summary accounting-embedded tag out -1, new summary accounting re-embeds +1, net 0); sub 7->6 (prior summary 1:1 swap + two pair closeout lines out -2, own closeout in +1); paren 33->33 flat (pure-date-prefix summary replaced 1:1) - registered, asserted pre-write
+PASS AC-R1593 head region byte-identical (constructed from pre-op head, verbatim)
+PASS AC-R1593b new tail (log close + top fields) byte-identical to pre-op tail; tick 931->932 single move; top fields zero drift (DEC/ORD/GORD/BENCH all flat this round, scan PASS faces)
+PASS AC-R1593c pre-write parse: PS parse pass, tick 932, log 58 items = 55 verbatim head + 1 summary + 2 closeout
+INFO python dual-parse availability probe (pre-op file): exit=0
+PHASE A COMPLETE: all read-only assertions passed; entering write phase (claim -> cut-160 -> fold R158 -> heartbeat -> export -> board flip)
+PASS AC-K160a stale done row found: exactly the R931 row at board line 8 (R931 mechanism-round natural stale row, not a miss)
+PASS AC-K160a board pre-state: exactly 1 done row (R931) + 3 open rows; header byte-stable, single BOM=True
+PASS claim preregistration landed (R932 unchecked row) on disk, re-read verified
+PASS AC-K160b Oct archive pre-state: R sections = 65 (last=## R931)
+PASS AC-K160b pure-append prefix assertion (original bytes are byte-prefix of new archive)
+PASS AC-K160b archive sections 65->66 (last=## R932)
+PASS AC-K160b migrated row present verbatim in Oct archive section R932
+PASS AC-K160b migrated row md5 re-derived from Oct archive = 94d1a4a3cca974f7819e651502c2be59 == board-side pre-op md5
+PASS AC-K160b 09 archive zero-touch md5=19783a35cfc4e57eb24eda5916a07702
+PASS AC-K160c-i R931 row removed from main board (intermediate: header + R932 unchecked row + 3 open rows)
+PASS AC-K160c-i intermediate verified: board has 0 done rows + 1 unchecked R932 row + 3 open rows; header byte-stable
+PASS AC-R1591a fold pre-op porcelain dirty-paths subset of own pre-registered write set (claim+cut writes) dirty=[docs/archive/backlog-done-2026-10.md, src/os/backlog.md, qa/board-R932.log, qa/reorg-R932.log]; round-start tree clean per scan (scan TREE PASS, nine-face scan output in-register)
+PASS AC-R1591b backup logs/state-preop-R932.bak written byte-identical (md5 acde2ad055fdc8c29091a47a26de4a90)
+PASS AC-R1591c archive marker baseline 150
+PASS AC-R1591c archive pure-append prefix assertion
+PASS AC-R1591c archive markers 150 -> 151
+PASS AC-R1593 state.json written (temp+replace), re-read asserted == built
+PASS AC-R1594 final size on disk: 78462 B, margin 38 B under 78,500B gate; post-fold 75230 B
+PASS AC-R1593 PS ConvertFrom-Json dual-parse pass (tick 932, log 58) out=[932,58]
+PASS AC-R1593 python json.loads dual-parse pass: 932 58
+PASS probe-post probe post on written file W56/idle37/idle_round8/nop3/paren33/round23/sub6/tokens9 == registered post register zero drift
+PASS AC-HB932 heartbeat pre-op tail = tick 931 single ts prefix (lag 0, no repair needed this round)
+PASS AC-HB932 heartbeat row appended x1 (tick 932 current, lag 0 kept, single ts) ts=2026-10-02T17:46:42+08:00
+PASS AC-HB932 2026-10-02T17:46:42+08:00
+INFO export tick row located and drift-fixed 930 -> 932: "930",
+PASS export-method method line ends with quote
+PASS export-edit export edit counters ts/current/latest/milestone/method/tick = 1/1/1/1/1/1 (each exactly 1)
+PASS export-results R930 fold results row located
+PASS export-results R930 row close located, next line = results array close
+PASS export-write export written (temp+replace), re-read asserted: export_ts + results 293 rows (was 292) + tick row 932 + zero dict-shaped rows (0)
+PASS export-write ceo_face three-line panel in place (current / latest_artifact / next_milestone)
+PASS export-write export_ts refreshed
+PASS export latest_artifact: mechanism-marker split 2 parts (FW-semicolon form preserved), product head kept verbatim per R930 precedent
+PASS export next_milestone: fold carry-note updated R158-pending -> R159-pending
+INFO self_drive re-derived from actual state (F3 zero hardcode): W 56 / sub 6 / idle 37 / nop 3, queues 6/2/2, proposals 1 disk-recounted; window label kept (stored self_drive counters land on fixed-point values, numerically flat vs stored per fold arithmetic, honestly labeled)
+PASS AC-K160c R932 unchecked row present pre-flip
+PASS AC-K160c checkbox flip verified by post-write re-read (R931 first-run bug guarded): board = BOM + header + R932 done row (closure note) + 3 open rows; zero stale done rows (done rows = 1 = 1, the current-round row only)
+DONE R932 fold R158: window 5 lines 11691B content-gauge -> 1 rolling summary; markers 150->151; log 60->58; final 78462B margin 38B; cut-160 sections 65->66
+AC-R1595 delivery carriers: board R932 row (flip) + state log S_new/E_new lines + commit message carries P-2026-09-25-18 + P-51 (P-51 delivery criterion)
+INFO post-write porcelain: docs/archive/backlog-done-2026-10.md, docs/status-export.json, heartbeat.txt, src/os/backlog.md, src/os/state.json, qa/board-R932.log, qa/reorg-R932.log
