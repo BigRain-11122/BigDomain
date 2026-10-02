@@ -1,0 +1,33 @@
+AC-R1741 pre-op gauges:
+  dual gauge: file=80592B utf8=80592B bom=False endslf=False
+  tick=975 log=64
+  canonical round-trip: byte-identical re-dump PASS
+  HEAD==disk byte-identical: 2544cef86629
+  own write set (claim row pre-registered): ['M src/os/backlog.md']
+  probe pre: {"W": 62, "idle": 37, "idle_round": 8, "nop": 4, "wait": 3, "round": 29, "tokens": 12, "sub": 9}
+  calibration: R973-preop backup probe reproduced exactly {"W": 62, "idle": 37, "idle_round": 8, "nop": 5, "wait": 4, "round": 29, "tokens": 12, "sub": 9} (== qa/reorg-R973.log recorded pre-op register)
+AC-R1742 window = [R173 rolling summary + R972..R974 three pairs] 7 rows; R975 pair kept (next-window object); head 55 items verbatim; window=8942B head=66941B
+AC-R1742 catalog chain walk-back: 290 <- 294 <- 297 <- 303 <- 309 <- 326 <- 347 <- 373 <- 407 <- 441 <- 485 <- 498 <- 500 (13 links = 12 archive + live 500, arithmetic continuous, per-link list length verified)
+  base full list: 286 tokens (tail C-K163a); R160 entry (283+3=286) new tokens verified inside base list
+  token-regex + catalog-exclusion calibration replay (R973 window vs retained + catalog-set): PASS exact-set 2 tokens O-2026-0930-013/AC-R1721 (live entry 498)
+  window new tokens: 2 O-013-4/AC-R1731 (folded-line extraction vs retained + catalog-set, missing=[] asserted); catalog 500 -> 502
+  window contributions: nop -2 (R972+R974 declaration lines), wait -3 (R972/R973/R974 lines), idle/idle_round/round/tokens/W as projected
+AC-R1742 post-fold+closeout register (pre-registered, computed mechanically): {"W": 58, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 25, "tokens": 10, "sub": 7}
+  rendered-roll register re-check: zero drift
+AC-R1744 in-fold projection: post-fold 73656B, final 76325B, margin 2175B (<= 78500B gate satisfied in-fold)
+S_new 2054B / E_new 2378B / T_new 275B structural constraints pass (prefixes, tag accounting, no beat/quote/backslash/forbidden tags)
+  self_drive projection on composed log: 25/8/0/13 (tokens=10 p2=2)
+AC-R1743b top fields flat (DEC 131 tokens / ORD 2026-09-28 22:1x / GORD 152 flat / BENCH 2026-10-03), tick 975->976 only, head region byte-identical except tick digit
+AC-R1741 archive pre-op markers = 166; backup target logs/state-preop-R976.bak
+PHASE B (--write): verify-then-write sequence
+AC-R1741 backup logs/state-preop-R976.bak written byte-identical (80592B)
+AC-R1743c archive pure-append: 14437673 -> 14518346 B; markers 166 -> 167
+probe post : {"W": 58, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 25, "tokens": 10, "sub": 7}  (== pre-registered register, zero drift asserted post-write)
+AC-R1743d state.json written (temp+replace, re-read asserted: tick 976, log 60 items = 55 head + 1 roll + 2 kept-pair + 2 closeout)
+AC-R1744 final size: 76325B, margin 2175B under 78500B gate; post-fold 73656B
+AC-R1745 backlog R976 row closed with measured values (checkbox flipped, claim + done in one row, pre-registration honored)
+export self_drive re-derived from post-fold log: window_lines=25 idle=8 nop=0 substantive=13 proposals=1/1 queues=6/2/2
+export refreshed: export_ts=2026-10-03T05:09:17+08:00 tick-row 976, R174 result row appended, self_drive 25/8/0/13 zero drift, method note appended, BOM utf-8-sig parse-back PASS
+heartbeat R976 row appended (1998 B)
+AC-R1745 delivery: state log R976 lines + backlog R976 done row + commit contains P-2026-09-25-18 (P-51 protocol)
+GORD flat companion note: canonical scan sha16 257A6CC1056A1759 same baseline gord_new_rows=0, last_gord_tbl_rows 152 unchanged, CEO physicals zone unchanged (merchant-id/server/domain/filing still pending). D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 131 tokens flat), (2) group orders CEO-physicals zone zero change. Fold-round write set discipline: backlog + state.json + archive + backup + qa log + export + heartbeat only.
