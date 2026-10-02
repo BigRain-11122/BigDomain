@@ -1,0 +1,20 @@
+AC-R1491a pre-op round-start first-measure: 80078 bytes (scan/getsize dual-gauge, HEAD==disk byte-identical, sha1 1f87f21b06ed5312b90a5f0fccbcabdc70662b75)
+AC-R1491a serializer roundtrip convention detect: no BOM, trailing-LF=False, canonical json.dumps(indent-2) form
+probe pre-op : {"in_window": 58, "round": 25, "paren": 33, "tokens": 10, "idle": 37, "idle_round": 8, "nop": 4, "sub": 7}
+probe calibration: state-preop-R911.bak reproduces documented R911 pre-op register all 8 keys byte-exact this round (in_window58/round25/paren33/tokens10/idle37/idle_round8/nop3/sub7); boundary widening 10-0[12]->10-0[1-9]|10-[12]\d count-neutral on existing data
+AC-R1492a window = [R148 prior summary + R911..R912 two pairs] 5 lines 10689 B (content); two-pair = minimal continuous window (all pairs since prior fold included, no smaller candidate exists); head block 55 items verbatim (content 66941 B)
+AC-R1492d P/D/O catalog (regex dedup, prior-embedded snowball + new first-appearance): 248 tokens = R148 prior-summary embedded catalog 246 snowball + 2 new ['C-R1481', 'C-K143a'] (mechanical AC- prefix substring hits, zero hand-picked); missing=[] asserted
+AC-R1492e compress-precedent list carried mechanically from R148 prior summary + R911 appended (55 entries)
+AC-R1492f window statutory: two-pair window = minimal continuous window, final budget 77168 B <= 78,500B gate satisfied in-fold (R895/R897/R904/R906/R911 isomorph)
+post-fold (pre-closeout) size: 74237 B
+probe post   : {"in_window": 56, "round": 23, "paren": 33, "tokens": 9, "idle": 37, "idle_round": 8, "nop": 3, "sub": 6}
+incremental-register law: W 58->56 (window 5 out, summary+closeout pair 3 in); round 25->23 (window 4 out, own pair 2 in); tokens 10->9 (window 2 out, own 1 in); sub 7->6 (window two pair-lines folded away -2, own pair net +1); idle 37 / idle_round 8 flat (abolished-path tag zero carried); nop 4->3 (R148 prior-summary embedded tag + R912 live tag out -2, new summary re-embeds +1); paren 33 flat (pure-date-prefix summary replaced 1:1) - registered, asserted pre-write
+AC-R1493b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces), zero field drift, tick 912->913 only; last_dec_tokens 127 flat
+AC-R1493c head block 55 items verbatim: head region byte-identical except tick digit; log 58 items = 55 head + 1 summary + 2 closeout
+AC-R1491b backup logs/state-preop-R913.bak written byte-identical
+AC-R1491c archive pure-append: 12408836 -> 12488995 B; markers 141 -> 142
+archive write committed (single wb write + prefix re-verified, markers 141->142)
+state.json written (temp+replace, re-read asserted: tick 913, log 58 items [55 head + 1 summary + 2 closeout], probe in-register, head == pre-op head 55 items byte-equal except tick digit)
+AC-R1494 final size: 77168 B, margin 1332 B under 78,500B gate; post-fold 74237 B
+AC-R1495 delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-144 tags (P-51)
+window content 10689 B -> summary 4880 B; winB=10689 postfoldB=74237 finalB=77168 marginB=1332 catalog=248

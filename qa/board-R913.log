@@ -1,0 +1,10 @@
+AC-K144b 09-month archive zero-touch pre-op == git HEAD blob verified (16f207ab99e03a33)
+AC-K144a stale-board count = exactly 1 done row [R911 = R911 mechanism round natural stale, not a missed-cut patch] + exactly 4 open rows pre-flip [R913 claim + O-013-4 + legal gated + bootstrap], header intact (BOM=True)
+AC-K144b md5 of migrated row (pre): R911=9acd3d779abd6a96fdc5e49beb583216
+AC-K144d R913 current-round row composed with closure note (flip [ ]->[x], done 2026-10-02)
+AC-K144b 10-month archive pure-append: 154237 -> 157506 B; sections 49 -> 50; md5 of migrated line identical
+AC-K144c main board final: header + R913 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+AC-K144b 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K144c backlog.md written (temp+replace, re-read asserted: done row count=1 [R913 current], open rows=3)
+AC-K144b 09-month archive zero-touch post-op == git HEAD blob re-verified (16f207ab99e03a33)
+AC-K144e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-144 tags (P-51)
