@@ -170,6 +170,7 @@ if LEDGER_DIR not in sys.path:
     sys.path.insert(0, LEDGER_DIR)
 import ledger as ledger_mod       # token ledger product (reuse, no copy)
 import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
+import props as props_mod         # city props/cosmetics face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -832,6 +833,195 @@ def liveroom_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def props_probe():
+    """Run the REAL city props/cosmetics inventory face (R599 product,
+    BLUEPRINT sec.4.5 metaverse identity/props price lines) in-process
+    at render time on a throwaway database (F3 law: every reading
+    below is computed by the product modules, never canned). The
+    counts-vs-tokens isolation law: a purchase touches the token
+    ledger exactly once (one spend booking bound into the grant row);
+    consuming credits and every refusal move zero tokens, and no verb
+    anywhere in the module converts credits back into tokens or moves
+    inventory between accounts (any such face is a P1 CEO approval
+    item). Chain: a cosmetic buys as a permanent entitlement with
+    exactly one spend; re-buying the held cosmetic is refused BEFORE
+    the spend (a rejected buy never charges); prop credits buy and
+    stack on re-purchase; consuming credits leaves the spend-tx count
+    untouched; over-hold, cosmetic-consume, unknown-item, non-resident,
+    kind-drift, empty-ref and zero-count faces are all refused
+    fail-closed; a second resident holds his own entitlement (no
+    cross-account verb exists); the inventory read shows entitlements,
+    credit balances and the purchase provenance binding; the audit
+    face verifies every inventory row against a real debit entry and
+    the exact balance arithmetic. Raw tx ids are never rendered
+    (determinism). Prices are caller-supplied probe values; catalog
+    pricing stays a [needs-CEO] approval face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-props-")
+    led = None
+    pf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        pf = props_mod.PropsFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except props_mod.PropError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 200000, "probe:mint:reserve")
+        for avatar in ("amy", "ben"):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", 5000),
+                        ("usr:" + avatar, "credit", 5000)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund two probe residents",
+           "cosmetic probe price 2990, prop refills 500/300, credits"
+           " 5+3 -- all caller-supplied probe values, never pricing"
+           " decisions")
+
+        # -- cosmetic: permanent entitlement, one spend, dup refused --
+        tx0 = spend_n()
+        bal0 = led.balance("usr:amy")["balance"]
+        pf.buy_prop("usr:amy", "skin-neon", "cosmetic", 2990,
+                    "order:skin-amy")
+        bal1 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        ok("resident amy buys the cosmetic (permanent entitlement)",
+           "balance %d->%d (exact -2990); spend-tx %d->%d (+1); the"
+           " grant row binds that spend as its purchase provenance"
+           % (bal0, bal1, tx0, tx1))
+        refuse_leg("amy re-buys the SAME cosmetic",
+                   lambda: pf.buy_prop("usr:amy", "skin-neon",
+                                       "cosmetic", 2990,
+                                       "order:skin-amy-2"))
+        bal2 = led.balance("usr:amy")["balance"]
+        tx2 = spend_n()
+        ok("re-read balance + spend count after the duplicate refusal",
+           "%d==%d and %d==%d (the dup is rejected BEFORE the spend;"
+           " a rejected buy never charges)" % (bal2, bal1, tx2, tx1))
+
+        # -- prop credits: buy, stack, consume (zero token touch) -----
+        p1 = pf.buy_prop("usr:amy", "boost-charge", "prop", 500,
+                         "order:boost-amy", count=5)
+        p2 = pf.buy_prop("usr:amy", "boost-charge", "prop", 300,
+                         "order:boost-amy-2", count=3)
+        ok("amy buys prop credits 5 then re-buys 3 (re-purchasable)",
+           "credits %d then %d (stack on re-purchase; two spends"
+           " booked, one per purchase)"
+           % (p1["count_credits"], p2["count_credits"]))
+        tx3 = spend_n()
+        cu = pf.consume_prop("usr:amy", "boost-charge", 2)
+        tx4 = spend_n()
+        ok("amy consumes 2 credits",
+           "credits %d->%d; spend-tx %d==%d (consuming credits never"
+           " books a token tx -- the counts-vs-tokens isolation law)"
+           % (cu["count_credits"] + 2, cu["count_credits"], tx4, tx3))
+        refuse_leg("amy consumes more credits than held",
+                   lambda: pf.consume_prop("usr:amy", "boost-charge",
+                                           10))
+        refuse_leg("amy consumes the cosmetic (permanent, not"
+                   " consumable)",
+                   lambda: pf.consume_prop("usr:amy", "skin-neon", 1))
+        refuse_leg("amy consumes an item never purchased",
+                   lambda: pf.consume_prop("usr:amy", "ghost-item", 1))
+
+        # -- fail-closed purchase refusals ----------------------------
+        refuse_leg("a pool account tries to buy (non-resident)",
+                   lambda: pf.buy_prop("pool:reserve", "skin-neon",
+                                       "cosmetic", 2990, "order:pool"))
+        refuse_leg("kind drift: buy the held cosmetic as a prop",
+                   lambda: pf.buy_prop("usr:amy", "skin-neon", "prop",
+                                       300, "order:drift", count=1))
+        refuse_leg("buy with an empty purchase ref",
+                   lambda: pf.buy_prop("usr:amy", "boost-charge",
+                                       "prop", 300, "   ", count=1))
+        refuse_leg("buy prop credits with count=0",
+                   lambda: pf.buy_prop("usr:amy", "boost-charge",
+                                       "prop", 300, "order:zero",
+                                       count=0))
+
+        # -- second resident: own entitlement, no cross-account verb --
+        pf.buy_prop("usr:ben", "skin-neon", "cosmetic", 2990,
+                    "order:skin-ben")
+        inv_b = pf.inventory("usr:ben")
+        ok("resident ben buys the same cosmetic for himself",
+           "ben holds his own entitlement (cosmetics=%s) --"
+           " entitlements bind to the purchasing account and no verb"
+           " moves inventory between accounts (any such face is a P1"
+           " CEO approval item)" % inv_b["cosmetics"])
+
+        # -- inventory read + audit + isolation ----------------------
+        inv = pf.inventory("usr:amy")
+        ok("read amy's inventory (entitlements + balances +"
+           " provenance)",
+           "cosmetics=%s; props=%s; every row carries its bound"
+           " origin-purchase spend tx"
+           % (inv["cosmetics"],
+              ", ".join("%s x%d" % (p["item_id"], p["count_credits"])
+                        for p in inv["props"])))
+        conn = sqlite3.connect(db)
+        spend_all = spend_n()
+        landed_buys = 4
+        bound_ok = True
+        for _item, tx in inv["bound_spend_tx"].items():
+            leg = conn.execute(
+                "SELECT direction FROM ledger_entries"
+                " WHERE tx_id = ? AND account_id = ?",
+                (tx, "usr:amy")).fetchone()
+            bound_ok = bound_ok and leg is not None \
+                and leg[0] == "debit"
+        total_debit = int(conn.execute(
+            "SELECT COALESCE(SUM(amount), 0) FROM ledger_entries"
+            " WHERE account_id = ? AND direction = 'debit'",
+            ("usr:amy",)).fetchone()[0])
+        conn.close()
+        bal_final = led.balance("usr:amy")["balance"]
+        ok("inventory audit + isolation law",
+           "amy rows=%d each binding a real origin-purchase spend"
+           " debit=%s; amy total debits=%d; balance 5000 - %d = %d"
+           " exact; whole-probe spend-tx=%d == landed purchases=%d"
+           " (consume/refusal legs moved zero tokens; the buy spend"
+           " is the ONLY token touch)"
+           % (len(inv["bound_spend_tx"]), bound_ok, total_debit,
+              total_debit, bal_final, spend_all, landed_buys))
+        pf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "cosmetics": inv["cosmetics"], "props": inv["props"],
+            "bound_ok": bound_ok, "total_debit": total_debit,
+            "spend_tx": spend_all, "landed_buys": landed_buys,
+        }
+    finally:
+        if pf is not None:
+            with contextlib.suppress(Exception):
+                pf.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -1324,6 +1514,75 @@ def render():
         " exists; the room only ever opens attended, with a non-empty"
         " risk-control citation")
 
+    # -- city props face card (v0.14): REAL probe at render time;
+    # honest failure face --
+    try:
+        pp = props_probe()
+        pp_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        pp, pp_err = None, str(exc)[:300]
+    if pp is not None:
+        ppv_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in pp["legs"])
+        ppv_credits = (pp["props"][0]["count_credits"]
+                       if pp["props"] else 0)
+        ppv_kpis = ("<div class=\"grid\">"
+                    "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                    "</div>"
+                    "<div class=\"kpi\"><b>%d</b>landed purchases (one"
+                    " spend each)</div>"
+                    "<div class=\"kpi\"><b>%d</b>credit balance after"
+                    " consume</div>"
+                    "<div class=\"kpi\"><b>%d==%d</b>spend-tx =="
+                    " purchases (isolation)</div>"
+                    "</div>"
+                    % (len(pp["refusals"]), pp["landed_buys"],
+                       ppv_credits, pp["spend_tx"], pp["landed_buys"]))
+        ppv_inv = esc(
+            "amy's live inventory: cosmetics=%s; props=%s --"
+            " entitlements and credits bind to the purchasing"
+            " account; every row carries its origin-purchase spend"
+            % (",".join(pp["cosmetics"]) or "none",
+               ", ".join("%s x%d" % (p["item_id"], p["count_credits"])
+                         for p in pp["props"]) or "none"))
+        ppv_audit = esc(
+            "audit: every inventory row binds a real origin-purchase"
+            " spend debit=%s; balance arithmetic exact (5000 - %d"
+            " debits); raw tx ids are never rendered (determinism)"
+            % (pp["bound_ok"], pp["total_debit"]))
+    else:
+        ppv_rows = ppv_kpis = ppv_inv = ppv_audit = ""
+    if pp_err:
+        ppv_kpis = ("<p class=fail>PROPS PROBE FAILED (honest"
+                    " failure, no fake PASS): %s</p>" % esc(pp_err))
+    ppv_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "probe prices (2990/500/300) are"
+             " caller-supplied sandbox values; catalog pricing stays"
+             " a CEO approval face; no verb converts credits back"
+             " into tokens and none moves inventory between accounts"
+             " -- any such face is P1 CEO approval-only"),
+            ("msgSecCheck front gate", "this card has no free-text"
+             " face; item copy and purchase refs stay config/probe"
+             " driven; every UGC/text surface in the stack keeps the"
+             " msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+    ppv_hard = esc(
+        "structural law (counts-vs-tokens two-domain rule): the"
+        " token ledger is touched exactly once per purchase by one"
+        " spend booking; credits are never tokens, consume never"
+        " books a token tx, and no reverse-conversion or transfer"
+        " verb exists in the module (BLUEPRINT 5.4 posture extended"
+        " to the counts domain)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -1445,7 +1704,8 @@ card (R945) &middot; v0.9 publishing research card (R946) &middot;
 v0.10 token ledger core card (R965) &middot; v0.11 UGC pipeline core
 card (R968) &middot; v0.12 AIGC implicit watermark card
 (R975) &middot; v0.13 live room conversion card
-(R977)</span></header>
+(R977) &middot; v0.14 city props card
+(R978)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -1556,6 +1816,28 @@ __LR_TRANS__
 sandbox values, not pricing decisions; raw spend tx ids contain
 timestamps and are never rendered -- the audit face shows the
 bound-debit verification instead.</p></div>
+
+<div class="card"><h2>City Props Face (cosmetic + consumable inventory,
+live probe)</h2>
+<p class=kv>The REAL city props/cosmetics product (src/sandbox/ledger/
+props.py over the P-47-2 token ledger, both imported, never copied)
+runs in-process at render time on a throwaway probe database --
+every reading below is computed by the product modules, never canned.
+This is the in-city economy face behind the BLUEPRINT sec.4.5 price
+lines: a cosmetic buys as a permanent entitlement (one per account),
+a prop buys as consumable credits (re-purchasable).</p>
+__PP_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__PP_ROWS__</table>
+<p class=kv>__PP_INV__</p>
+<p class=kv>__PP_AUDIT__</p>
+<p class=kv>__PP_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__PP_COMPL__</ul>
+<p class=kv>Probe prices are caller-supplied sandbox values, not
+pricing decisions; raw spend tx ids contain timestamps and are never
+rendered -- the audit face shows the bound-debit verification
+instead.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -1733,6 +2015,12 @@ __PAYWARN__</footer>
         "__LR_TRANS__": lrv_trans,
         "__LR_HARD__": lrv_hard,
         "__LR_COMPL__": lrv_compl,
+        "__PP_KPIS__": ppv_kpis,
+        "__PP_ROWS__": ppv_rows,
+        "__PP_INV__": ppv_inv,
+        "__PP_AUDIT__": ppv_audit,
+        "__PP_HARD__": ppv_hard,
+        "__PP_COMPL__": ppv_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

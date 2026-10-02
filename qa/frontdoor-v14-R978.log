@@ -1,0 +1,34 @@
+PASS FD14e healthz=200 on live server (pid 40724)
+PASS FD14e card count = 16: got 16
+PASS FD14e props card title on live page
+PASS FD14e page has no probe-failure face
+PASS FD14d zero unfilled placeholders page-wide
+PASS FD14e props card block present: 5129 chars
+PASS FD14b sixteen probe legs rendered: n=16
+PASS FD14b cosmetic buy: exactly one spend, exact balance delta
+PASS FD14b duplicate cosmetic re-buy refused before the spend
+PASS FD14b rejected buy never charges
+PASS FD14b prop credits stack on re-purchase (5 then 8)
+PASS FD14b consume moves zero tokens (spend-tx unchanged)
+PASS FD14b over-hold consume refused
+PASS FD14b cosmetic consume refused (permanent)
+PASS FD14b unknown-item consume refused
+PASS FD14b non-resident / kind-drift purchases refused
+PASS FD14b empty-ref purchase refused
+PASS FD14b zero-count prop purchase refused
+PASS FD14b second resident holds his own entitlement
+PASS FD14b inventory read face rendered
+PASS FD14b audit binds real origin-purchase debits
+PASS FD14b balance arithmetic exact (5000 - 3790 = 1210)
+PASS FD14b isolation: whole-probe spend-tx == landed purchases
+PASS FD14b eight fail-closed refusals in the KPI face
+PASS FD14c AIGC label verbatim from ledger config
+PASS FD14c disclaimer verbatim from ledger config
+PASS FD14c [needs-CEO] price note present
+PASS FD14c msgSecCheck front-gate note present
+PASS FD14c structural isolation-law note present
+PASS FD14d determinism: two renders, props block byte-identical
+PASS FD14a frontdoor source pure ASCII: 100447 bytes
+PASS FD14a write set under src/sandbox = frontdoor.py only
+PASS FD14a product tree files untouched
+SUITE PASS (33/33 checks pass)

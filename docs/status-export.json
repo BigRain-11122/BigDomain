@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-03T05:28:04+08:00",
+  "export_ts": "2026-10-03T05:47:36+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R977 frontdoor v0.13 直播房转化件面卡产品实物轮（轮计分 2=可看可用实物）：前台第 15 卡上线（http://127.0.0.1:8093/ 15 卡在页）=渲染时进程内真探针（R608 liveroom 产品=27 套件中判据最多〔10〕且唯一零前台的核心产品面·BLUEPRINT §四「直播间挂购物车=19.9 直转化」）全链实算：无人值守开播拒 E_LIVE_UNATTENDED+空风控引用拒 fail-closed 零行→有人值守带 BigCompute 风控引用→匿名观众进房零代币（spend-tx 0==0）→弹幕双门拒+匿名拒+清洁 AI 弹幕带标识→购物车转化恰一 spend（余额精确 -1990+绑定真借记）→二次转化拒零扣费→闭播双拒→funnel 4/3/2/2980 独立 SQL 复核→transcript 免责声明首尾+AI 行标识→审计绑借记和=总额+隔离律；P-47 五核心面+守护/商业/研究/水印面后直播转化面收口；自验 36/36+全量回归 RUNNER PASS 27/27 零回归；九面 scan 静（GORD 持平零新令·DEC 131 token 持平）；waiting 面：法务外件 chronic（D-20260929-03·HQ 秘书处初稿窗 10-03 12:00）+BigLife R777 chronic（D-20261003-02）+提案回访 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计判据回访 10-08+benchmarks 10-10+bootstrap CEO 物理件",
-    "latest_artifact": "最近实物=frontdoor v0.13 Live Room Conversion Face 直播房转化件面卡（src/sandbox/frontdoor.py·2026-10-03 ~05:2x R977 上线·http://127.0.0.1:8093/ 15 卡在页·R608 直播房转化件产品 CEO 可见面=真探针 20 腿实算〔无人值守硬法 fail-closed+弹幕双门+恰一 spend 转化+闭播拒+funnel 独立 SQL 复核+transcript 合规脊柱+审计绑借记+隔离律〕+合规四件套 ledger config verbatim+渲染自检 36/36）+证据件 qa/frontdoor-v13-R977.log+qa/reconcile-all-R977.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）；判据预注册=src/os/backlog.md R977 行（AC-FD13a..f·先落再动手）",
-    "next_milestone": "下个里程碑（≤10-05）：10-03 12:00 D-20260929-03 HQ 秘书处初稿窗到点查（两步制·席7 复核 +24h·D-20261002-08）；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 第四窗 21:40；10-07 治理日聚合审；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 15 卡=五核心面+守护+M1 挂载+方案+实算+发行研究+质量+水印+直播房转化九类面在页）"
+    "current": "R978 frontdoor v0.14 城内道具/装扮经济面卡产品实物轮（轮计分 2=可看可用实物）：前台第 16 卡上线（http://127.0.0.1:8093/ 16 卡在页）=渲染时进程内真探针（R599 props 产品件=§四.5 价目面〔道具消耗+装扮永久〕零前台核心产品件·R977 liveroom=入城转化入口挂载后城内消费经济面自然续件）全链实算：装扮永久 entitlement 购买恰一 spend+绑定借记（余额精确 -2990）→同装扮复购拒 E_PROP_DUP 先于 spend 拒买零扣费→道具 credits 购买+复购叠加→消耗零代币触碰（spend-tx 3==3）→超持/装扮消耗/未持/非居民/kind 漂移/空 ref/zero-count 七族拒 fail-closed→第二居民独立 entitlement（无账户间转移动词）→inventory 溯源读面+隔离律审计（spend-tx 4==4==成交购买数·余额 5000-3790=1210 精确）；次数≠代币隔离律结构法注常驻+合规四件套 ledger config verbatim；自验 33/33+全量回归 RUNNER PASS 27/27 零回归；九面 scan 静（GORD 持平零新令·DEC 131 token 持平）；waiting 面：法务外件 chronic（D-20260929-03·HQ 秘书处初稿窗 10-03 12:00）+BigLife R777 chronic（D-20261003-02）+提案回访 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计判据回访 10-08+benchmarks 10-10+bootstrap CEO 物理件",
+    "latest_artifact": "最近实物=frontdoor v0.14 City Props Face 城内道具/装扮经济面卡（src/sandbox/frontdoor.py·2026-10-03 ~05:4x R978 上线·http://127.0.0.1:8093/ 16 卡在页·R599 props 产品件 CEO 可见面=真探针 16 腿实算〔装扮永久 entitlement+复购拒买零扣费+道具 credits 叠加+消耗零代币+七族 fail-closed 拒+第二居民独立持有+inventory 溯源读面+审计绑真借记+隔离律 spend-tx==购买数〕+合规四件套 ledger config verbatim+渲染自检 33/33）+证据件 qa/frontdoor-v14-R978.log+qa/reconcile-all-R978.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）；判据预注册=src/os/backlog.md R978 行（AC-FD14a..f·先落再动手）",
+    "next_milestone": "下个里程碑（≤10-05）：10-03 12:00 D-20260929-03 HQ 秘书处初稿窗到点查（两步制·席7 复核 +24h·D-20261002-08）；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 第四窗 21:40；10-07 治理日聚合审；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 16 卡=五核心面+守护+M1 挂载+方案+实算+发行研究+质量+水印+直播房转化+城内道具装扮十类面在页）"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "977",
+      "978",
       "OSLoop 执行 tick"
     ],
     [
@@ -1465,15 +1465,19 @@
     [
       "2",
       "frontdoor v0.13 直播房转化件面卡（P-47 直播间转化件 CEO 可见面收口·AC-FD13a..f 判据预注册=板行先落·真探针渲染时实算 20 腿〔无人值守硬法 fail-closed+弹幕双门+恰一 spend+闭播拒+funnel 独立 SQL 复核+transcript 首尾免责声明+审计绑借记+隔离律〕+合规四件套 ledger config verbatim·自验 36/36=qa/frontdoor-v13-R977.log+全量回归 RUNNER PASS 27/27 零回归=qa/reconcile-all-R977.log·活体重启 15 卡·R977）"
+    ],
+    [
+      "2",
+      "frontdoor v0.14 城内道具/装扮经济面卡（§四.5 价目面前台收口·AC-FD14a..f 判据预注册=板行先落·真探针渲染时实算 16 腿〔装扮永久 entitlement 恰一 spend 绑借记+复购拒买零扣费+道具 credits 复购叠加+消耗零代币+七族 fail-closed 拒+第二居民独立持有+inventory 溯源读面+审计绑真借记+隔离律 spend-tx==购买数〕+合规四件套 ledger config verbatim+次数≠代币结构法注常驻·自验 33/33=qa/frontdoor-v14-R978.log+全量回归 RUNNER PASS 27/27 零回归=qa/reconcile-all-R978.log·活体重启 16 卡·R978）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-26..2026-10-03",
     "window_days": 7,
-    "log_lines_in_window": 27,
+    "log_lines_in_window": 29,
     "idle_fast_mention_lines": 8,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
