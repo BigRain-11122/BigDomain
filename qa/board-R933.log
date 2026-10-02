@@ -1,0 +1,13 @@
+# qa/board-R933.log - board cut-161 (R933, 2026-10-02T17:59:42+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+board-side R932 row md5 (persisted before any write): b1e4f401152430a71700760df9aaeefe
+pre-checks: stale done rows == 1 (R932 row, natural staleness from R932 mechanism round, not a miss); standing open rows == 3; R933 pre-registered claim row landed unchecked before any write; board BOM present; Oct archive R-sections 66 (last R932)
+cut-161 migration verified then written: Oct archive append section R933 (66->67, pure-append prefix byte-identical, md5 identical), board R932 row removed, 09-month archive zero-touch (post hash == pre hash)
+post-write re-read: board = BOM + header + R933 unchecked row + 3 standing open rows; header byte-stable; zero stale done rows; archive re-read: 67 sections last R933, migrated row md5 identical
+heartbeat R933 line appended: tick 933, cpu56/ram40/lanes3 CIM (lanes carried R709..R932 in-register baseline)
+state.json pre-closeout: tick 932, log items 58, size 78462B (round-start scan gauge 78462B)
+[final-phase assertions appended after done-flip + state closeout]
+AC-K161c PASS (final): board = BOM + header + R933 done row (closure note appended) + 3 open rows; zero stale done rows; header byte-stable
+AC-HB933 PASS (final): heartbeat tail = tick 933 single drop, state tick 933, lag 0 kept
+state closeout verified: json.loads OK, tick 932->933, log items 58->60 (+2 = R933 round line + tokens line)
+post-closeout state.json size = 81313B (fold R159 by next-round round-start first-measure ruling, R931 isomorph carry-note)
