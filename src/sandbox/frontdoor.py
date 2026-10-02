@@ -183,6 +183,14 @@ WM_DOC = os.path.join(ROOT, "docs", "spec",
                       "implicit-watermark-verify.md")
 WM_PIPE = os.path.join(HERE, "ugc", "pipeline.py")
 
+LIVEROOM_DIR = os.path.join(HERE, "liveroom")
+LOBBY_DIR = os.path.join(HERE, "lobby")
+for _d in (LIVEROOM_DIR, LOBBY_DIR):
+    if _d not in sys.path:
+        sys.path.insert(0, _d)
+import liveroom as liveroom_mod  # slow-live cart face (reuse, no copy)
+import sec_gate as secgate_mod   # lobby wordlist gate (reuse family law)
+
 HOST, PORT = "127.0.0.1", 8093
 
 
@@ -555,6 +563,273 @@ def ugc_probe():
     }
     pipe.close()
     return readings
+
+
+def liveroom_probe():
+    """Run the REAL slow-live room conversion-piece face (P-47 cart
+    face, R608 product, BLUEPRINT sec.4 "the live room carries the
+    cart") in-process at render time on a throwaway database (F3 law:
+    every reading below is computed by the product modules, never
+    canned). Division of labor (D-20260924-08): the live account is a
+    BigStream asset face and broadcast ops belong to BigCompute risk
+    control -- this card shows only this company's in-room conversion
+    supply face. Chain: the unattended open form is platform-banned
+    and refused before any row exists (patrol-4 E2-3 hard law, coded
+    fail-closed); an attended session opens only with a non-empty
+    risk-control citation; anonymous cohort entry moves zero tokens;
+    the danmaku front gate (SecGate wordlist, msgSecCheck-style
+    fail-closed) rejects banned and advisory wording before any row
+    lands and refuses anonymous viewers outright; a clean AI-flagged
+    danmaku lands with the label; cart_convert books exactly ONE token
+    spend for a census-registered viewer and binds the spend tx; a
+    second conversion for the same viewer is rejected with zero
+    charge; after close_session every writer face refuses; funnel
+    counts match an independent SQL recount; the transcript keeps the
+    config disclaimer first and last; the conversion audit binds a
+    real debit entry per conversion. Raw tx ids contain timestamps
+    and are never rendered (determinism); the audit face shows the
+    bound-debit verification instead. Prices are caller-supplied probe
+    values only -- 19.9-style pricing stays a [needs-CEO] approval
+    face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-liveroom-")
+    led = None
+    lf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        gate = secgate_mod.SecGate(cfg["gate"]["forbidden_words"],
+                                   cfg["gate"]["advisory_ban_words"])
+        disc = str(cfg["token"]["disclaimer"])
+        ai_label = str(cfg["token"]["ai_label_text"])
+        lf = liveroom_mod.LiveRoomFace(led, gate, disc, ai_label)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except secgate_mod.ContentRejectedError as exc:
+                refusals.append("gate%d" % exc.gate)
+                ok(action, "refused at gate %d (wordlist hit, row never"
+                   " landed)" % exc.gate)
+            except liveroom_mod.LiveRoomError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorize a reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 100000, "probe:mint:reserve")
+        for avatar, amount in (("amy", 3000), ("ben", 2000), ("cyd", 1000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+
+        # -- hard law + attended open ---------------------------------
+        refuse_leg("open session with attended=False (unattended"
+                   " streaming form)",
+                   lambda: lf.open_session("s-ghost", "room-cart", False,
+                                           "bigcompute-risk-control-ref"))
+        refuse_leg("open attended session with an EMPTY risk-control"
+                   " citation",
+                   lambda: lf.open_session("s-noref", "room-cart", True,
+                                          "  "))
+        conn = sqlite3.connect(db)
+        sess0 = conn.execute("SELECT COUNT(*) FROM"
+                             " live_sessions").fetchone()[0]
+        conn.close()
+        ok("count session rows after both refusals",
+           "rows=%d (fail-closed: the banned form and the uncited"
+           " form leave nothing behind)" % sess0)
+        s = lf.open_session("s-front", "room-cart", True,
+                            "bigcompute-risk-control-ref")
+        ok("open attended session with the BigCompute risk-control"
+           " citation",
+           "attended=%s risk_control=%s (broadcast strategy belongs"
+           " to BigCompute risk control, cited here, never decided"
+           " here)" % (s["attended"], s["risk_control_ref"]))
+
+        # -- anonymous cohort: zero token touch ------------------------
+        tx0 = spend_n()
+        for i in range(4):
+            lf.viewer_enter("s-front", "anon-%d" % i)
+        f0 = lf.funnel("s-front")
+        tx1 = spend_n()
+        ok("four anonymous viewers enter the cohort",
+           "funnel entered=%d registered=%d converted=%d; spend-tx"
+           " count %d==%d (watching is free, zero token touch)"
+           % (f0["entered"], f0["registered"], f0["converted"], tx0, tx1))
+        for viewer, avatar in (("anon-0", "amy"), ("anon-1", "ben"),
+                               ("anon-2", "cyd")):
+            lf.viewer_register("s-front", viewer, avatar)
+        f1 = lf.funnel("s-front")
+        ok("register three viewers to census avatars (city identity"
+           " gate)",
+           "funnel entered=%d registered=%d (census binding is the"
+           " interaction + conversion gate)" % (f1["entered"],
+                                                f1["registered"]))
+
+        # -- danmaku front gate ----------------------------------------
+        bad_word = str(cfg["gate"]["forbidden_words"][0])
+        advisory_word = str(cfg["gate"]["advisory_ban_words"][0])
+        refuse_leg("post danmaku with a banned word (gate 1)",
+                   lambda: lf.post_danmaku("s-front", "anon-0",
+                                           "hello " + bad_word))
+        refuse_leg("post danmaku with an advisory-ban word (gate 2,"
+                   " non-advisory law)",
+                   lambda: lf.post_danmaku("s-front", "anon-0",
+                                           "hello " + advisory_word))
+        conn = sqlite3.connect(db)
+        dm0 = conn.execute("SELECT COUNT(*) FROM"
+                           " live_danmaku").fetchone()[0]
+        conn.close()
+        ok("count danmaku rows after both gate rejections",
+           "rows=%d (both rejections landed nothing)" % dm0)
+        refuse_leg("post danmaku as an anonymous (unregistered) viewer",
+                   lambda: lf.post_danmaku("s-front", "anon-3",
+                                           "clean hello"))
+        dm_ok = lf.post_danmaku("s-front", "anon-0",
+                                "clean hello city cart",
+                                ai_generated=True)
+        conn = sqlite3.connect(db)
+        dm1 = conn.execute("SELECT COUNT(*) FROM"
+                           " live_danmaku").fetchone()[0]
+        conn.close()
+        ok("post a clean AI-generated danmaku from a registered viewer",
+           "ai_generated=%s, rows %d==%d+1 (the row lands with the"
+           " label)" % (dm_ok["ai_generated"], dm1, dm0))
+
+        # -- the conversion piece: exactly one spend -------------------
+        bal0 = led.balance("usr:amy")["balance"]
+        tx2 = spend_n()
+        c1 = lf.cart_convert("s-front", "anon-0", 1990,
+                             "order:cart-amy")
+        bal1 = led.balance("usr:amy")["balance"]
+        tx3 = spend_n()
+        conn = sqlite3.connect(db)
+        head = conn.execute("SELECT type FROM ledger_tx WHERE tx_id ="
+                            " ?", (c1["spend_tx_id"],)).fetchone()
+        leg_row = conn.execute(
+            "SELECT direction, amount FROM ledger_entries"
+            " WHERE tx_id = ? AND account_id = ?",
+            (c1["spend_tx_id"], "usr:amy")).fetchone()
+        conn.close()
+        ok("cart_convert for the registered viewer at the probe price"
+           " 1990",
+           "account=%s balance %d->%d (exact -1990); spend-tx %d->%d"
+           " (+1); the bound tx is a real %s with a %s %d for the"
+           " account" % (c1["account_id"], bal0, bal1, tx2, tx3,
+                         head[0], leg_row[0], leg_row[1]))
+        bal2 = led.balance("usr:amy")["balance"]
+        refuse_leg("cart_convert the SAME viewer a second time in the"
+                   " same session",
+                   lambda: lf.cart_convert("s-front", "anon-0", 990,
+                                           "order:cart-amy-2"))
+        bal3 = led.balance("usr:amy")["balance"]
+        ok("re-read the balance after the duplicate refusal",
+           "%d==%d (the dup is rejected BEFORE the spend, a rejection"
+           " never charges)" % (bal3, bal2))
+        c2 = lf.cart_convert("s-front", "anon-1", 990, "order:cart-ben")
+        ok("cart_convert a second REGISTERED viewer at probe price 990"
+           " (one per viewer per session)",
+           "account=%s price=%d (a different viewer may convert once)"
+           % (c2["account_id"], c2["price"]))
+
+        # -- close + post-close refuses ---------------------------------
+        lf.close_session("s-front")
+        refuse_leg("cart_convert after close_session",
+                   lambda: lf.cart_convert("s-front", "anon-2", 500,
+                                           "order:late-cart"))
+        refuse_leg("post danmaku after close_session",
+                   lambda: lf.post_danmaku("s-front", "anon-0",
+                                          "after close"))
+
+        # -- funnel vs independent recount ------------------------------
+        f = lf.funnel("s-front")
+        conn = sqlite3.connect(db)
+        ent = conn.execute("SELECT COUNT(*) FROM live_cohort WHERE"
+                           " session_id = 's-front'").fetchone()[0]
+        reg = conn.execute("SELECT COUNT(*) FROM live_cohort WHERE"
+                           " session_id = 's-front' AND"
+                           " census_avatar_id IS NOT NULL").fetchone()[0]
+        conv = conn.execute("SELECT COUNT(*), COALESCE(SUM(price), 0)"
+                            " FROM live_conversions WHERE session_id ="
+                            " 's-front'").fetchone()
+        conn.close()
+        ok("read the funnel vs an independent SQL recount",
+           "entered=%d/%d registered=%d/%d converted=%d/%d"
+           " conversion_total=%d/%d (derived from real rows, zero"
+           " fabricated numbers)"
+           % (f["entered"], ent, f["registered"], reg,
+              f["converted"], conv[0], f["conversion_total"],
+              int(conv[1])))
+
+        # -- transcript compliance spine ---------------------------------
+        lines = lf.transcript("s-front")
+        ai_rows = [ln for ln in lines if "clean hello city cart" in ln]
+        ok("read the session transcript (compliance spine)",
+           "%d lines; first+last are the config disclaimer verbatim"
+           " (%s); the AI danmaku row carries [%s]"
+           % (len(lines),
+             "yes" if (lines[0] == disc and lines[-1] == disc) else
+             "NO", ai_label if ai_rows and
+             ("[" + ai_label + "]") in ai_rows[0] else "-"))
+
+        # -- conversion audit + isolation --------------------------------
+        audit = lf.conversion_ledger("s-front")
+        conn = sqlite3.connect(db)
+        debit_sum = 0
+        bound_ok = len(audit) == 2
+        for row in audit:
+            leg = conn.execute(
+                "SELECT direction, amount FROM ledger_entries"
+                " WHERE tx_id = ? AND account_id = ?",
+                (row["bound_spend_tx"], row["account_id"])).fetchone()
+            bound_ok = bound_ok and leg is not None \
+                and leg[0] == "debit"
+            debit_sum += leg[1] if leg else 0
+        tx_all = spend_n()
+        conn.close()
+        ok("conversion audit + isolation law",
+           "audit rows=%d each binding a real spend debit=%s; bound"
+           " debit sum=%d == conversion_total=%d; whole-probe"
+           " spend-tx=%d == conversion rows=%d (enter/register/"
+           "danmaku/close moved zero tokens; the cart spend is the"
+           " ONLY token touch)"
+           % (len(audit), bound_ok, debit_sum, f["conversion_total"],
+              tx_all, f["converted"]))
+        lf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "entered": f["entered"], "registered": f["registered"],
+            "converted": f["converted"],
+            "conversion_total": f["conversion_total"],
+            "transcript": lines, "audit_ok": bound_ok,
+            "debit_sum": debit_sum, "spend_tx": tx_all,
+            "disclaimer": disc, "ai_label": ai_label,
+        }
+    finally:
+        if lf is not None:
+            with contextlib.suppress(Exception):
+                lf.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def wm_probe():
@@ -988,6 +1263,67 @@ def render():
         % str(ucfg.get("gate", {}).get("pre_filter", {}).get(
             "source", "")))
 
+    # -- live room conversion face card (v0.13): REAL probe at
+    # render time; honest failure face --
+    try:
+        lr = liveroom_probe()
+        lr_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        lr, lr_err = None, str(exc)[:300]
+    if lr is not None:
+        lrv_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in lr["legs"])
+        lrv_kpis = ("<div class=\"grid\">"
+                    "<div class=\"kpi\"><b>%d</b>gate/policy refusals"
+                    " (fail-closed)</div>"
+                    "<div class=\"kpi\"><b>%d</b>conversions booked"
+                    "</div>"
+                    "<div class=\"kpi\"><b>%d</b>probe conversion_total"
+                    " (cents)</div>"
+                    "<div class=\"kpi\"><b>%d==%d</b>spend-tx =="
+                    " conversions (isolation)</div>"
+                    "</div>"
+                    % (len(lr["refusals"]), lr["converted"],
+                       lr["conversion_total"], lr["spend_tx"],
+                       lr["converted"]))
+        lrv_funnel = esc(
+            "funnel (live tables): entered=%d -> registered=%d ->"
+            " converted=%d, conversion_total=%d cents; session runs"
+            " attended with the BigCompute risk-control citation"
+            % (lr["entered"], lr["registered"], lr["converted"],
+               lr["conversion_total"]))
+        lrv_trans = ("<pre class=\"proof qok\">%s</pre>"
+                     % esc("\n".join(lr["transcript"])))
+    else:
+        lrv_rows = lrv_kpis = lrv_funnel = lrv_trans = ""
+    if lr_err:
+        lrv_kpis = ("<p class=fail>LIVE ROOM PROBE FAILED (honest"
+                    " failure, no fake PASS): %s</p>" % esc(lr_err))
+    lrv_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "prices are caller-supplied probe values"
+             " only; 19.9-style pricing stays a CEO approval face;"
+             " broadcast strategy belongs to BigCompute risk control"
+             " (cited, never decided here)"),
+            ("msgSecCheck front gate", "danmaku runs the wordlist gate"
+             " BEFORE any row lands (sandbox = wordlist mock per"
+             " P-47-3b; production wiring stays fail-closed until the"
+             " platform key arrives)"),
+        ])
+    lrv_hard = esc(
+        "platform hard law: unattended streaming is banned outright"
+        " (patrol-4 E2-3 + BigCompute risk-register E1) --"
+        " open_session with attended=False is refused before any row"
+        " exists; the room only ever opens attended, with a non-empty"
+        " risk-control citation")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -1108,7 +1444,8 @@ commerce plan card (R943) &middot; v0.8 city commerce scenario
 card (R945) &middot; v0.9 publishing research card (R946) &middot;
 v0.10 token ledger core card (R965) &middot; v0.11 UGC pipeline core
 card (R968) &middot; v0.12 AIGC implicit watermark card
-(R975)</span></header>
+(R975) &middot; v0.13 live room conversion card
+(R977)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -1194,6 +1531,31 @@ __WM_ROWS__</table>
 <h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
 <ul>__WM_COMPL__</ul>
 <p class=kv>__WM_DEFER__</p></div>
+
+<div class="card"><h2>Live Room Conversion Face (slow-live cart,
+live probe)</h2>
+<p class=kv>The REAL conversion-piece product (src/sandbox/liveroom/
+liveroom.py over the P-47-2 ledger + the lobby SecGate wordlist gate,
+all imported, never copied) runs in-process at render time on a
+throwaway probe database -- every reading below is computed by the
+product modules, never canned. Division of labor: the live account is
+a BigStream asset face and broadcast ops belong to BigCompute risk
+control; this card shows only this company's in-room conversion
+supply face (BLUEPRINT sec.4: the live room carries the cart).</p>
+__LR_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__LR_ROWS__</table>
+<p class=kv>__LR_FUNNEL__</p>
+<h3 style="margin:14px 0 8px">Session transcript (compliance spine:
+config disclaimer first and last, AI rows labeled)</h3>
+__LR_TRANS__
+<p class=kv>__LR_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__LR_COMPL__</ul>
+<p class=kv>Probe prices (1990 / 990 cents) are caller-supplied
+sandbox values, not pricing decisions; raw spend tx ids contain
+timestamps and are never rendered -- the audit face shows the
+bound-debit verification instead.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -1365,6 +1727,12 @@ __PAYWARN__</footer>
         "__WM_DUAL__": wm_dual,
         "__WM_COMPL__": wm_compl,
         "__WM_DEFER__": wm_defer,
+        "__LR_KPIS__": lrv_kpis,
+        "__LR_ROWS__": lrv_rows,
+        "__LR_FUNNEL__": lrv_funnel,
+        "__LR_TRANS__": lrv_trans,
+        "__LR_HARD__": lrv_hard,
+        "__LR_COMPL__": lrv_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
