@@ -1,0 +1,11 @@
+# qa/board-R936.log - board cut-164 (R936, 2026-10-02T18:40:08+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+# qa/board-R936.log - board cut-164 (R936, 2026-10-02T18:40:36+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+# qa/board-R936.log - board cut-164 (R936, 2026-10-02T18:41:20+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+board-side R935 row md5 (persisted before any write): e6caa3b244eb244084d2038c9c31c9eb
+AC-K164d claim preregistration landed (R936 unchecked row) on disk, re-read verified
+cut-164 migration verified then written: Oct archive append section R936 (69->70, pure-append prefix, md5 identical e6caa3b244eb244084d2038c9c31c9eb), board R935 row removed, 09-month archive zero-touch
+AC-K164c PASS (final): board = BOM + header + R936 done row (closure note appended) + 3 open rows; zero stale done rows; header byte-stable
+post-closeout state.json size = 78410B (fold R161 by next-round round-start first-measure ruling, R933/R935 isomorph carry-note)
