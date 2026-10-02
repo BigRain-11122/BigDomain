@@ -1,0 +1,17 @@
+AC-R1661 PASS: pre-op 81,590B (scan/getsize dual) == git HEAD blob byte-identical; tick 951; log 64 items; canonical no-BOM no-trailing-LF; round-start tree clean; write set = backlog+fold(+closeout)
+AC-R1661 note: first-run intercept #1 - archive tail had no trailing LF, append-header would merge into previous line (^ anchor miss) -> separator fix, ZERO writes on failed run (verify-then-write held)
+AC-R1662 PASS: fold window = [R165 roll + R948/R949/R950 three pairs] 7 rows (9774 content bytes) -> 1 rolling summary; R951 pair kept; head block 55 items verbatim asserted
+AC-R1662 PASS: probe 8 pre-registered keys pre->post zero drift vs register (W/round/tokens/sub/idle_round/idle/nop/wait)
+probe pre  = {"W": 33, "round": 29, "tokens": 12, "sub": 33, "idle_round": 11, "idle": 38, "nop": 6, "wait": 4}
+probe post = {"W": 33, "round": 25, "tokens": 10, "sub": 29, "idle_round": 11, "idle": 38, "nop": 4, "wait": 2}
+register   = {"W": 33, "round": 25, "tokens": 10, "sub": 29, "idle_round": 11, "idle": 38, "nop": 4, "wait": 2}
+AC-R1662 PASS: catalog 309+17=326 mechanical regex zero-hand; new: AC-FD8a/AC-FD9a/AC-K168a/AC-R1651/AD-011/AD-042/C-FD8/C-FD8a/C-FD9/C-FD9a/C-K168a/C-R1741/D-20261002-08/O-020/O-20261002-2124-bm-c/P-2026-10-02-04/R-20261002-publishing-face-research; missing=[] asserted
+AC-R1662 note: compress precedent chain carried (R758..R949 anchor verified on R165 roll)
+AC-R1663 PASS: pre-op archived verbatim to archive # --- R952 append section (markers 158->159, matches in-register R949 baseline claim); pure-append prefix asserted on first run before write; backup logs/state-preop-R952.bak = 81,590B == git HEAD blob
+AC-R1664 PASS: terminal (post-fold + closeout pair) = 76,228B, margin 2,272B <= 78,500B gate
+AC-R1663 PASS: dual-parser - python json.loads OK (tick 952, log 60); PowerShell ConvertFrom-Json external re-verify OK (tick 952, log 60, size 76,228B, separate shell run)
+export refreshed (BOM preserved utf-8-sig, R556 precedent): export_ts + tick 952 + R166 results row + self_drive mechanical recount + ceo_face.current R952
+self_drive recount: log_lines_in_window=58 idle_fast=37 no_pullable=4 substantive=14 queue main/tech/explore=6/2/2
+AC-R1665 delivery: state log R952 lines + backlog R952 done row + commit message carries P-2026-09-25-18 (P-51 protocol)
+GORD knowledge batch (fold-round companion): new sha16 baseline F87649E5EEDBE3FD, tbl rows 148->152, four new rows all non-company faces: 00:37 FluxVerse release eval + 16:49 FluxVerse urge (FluxVerse face); 13:39 BigLife conditional restart order (BigDomain reviewer face boarded R941, closed R942 per committee D-20261002-09, in register); 21:38 BigLife urge (22:37 no-file -> P1 to Jason = HQ/BigLife face). CEO physicals zone unchanged: merchant-id/server/domain/filing still pending. D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 127 tokens flat, new=[] measured), (2) CEO physicals zone unchanged.
+first-run intercept #2 recorded honestly: export read as plain utf-8 raised BOM error AFTER state/archive/backup/heartbeat writes - export untouched by that run (zero partial export write), completed here with utf-8-sig; verify-then-write held on all assertions before each write
