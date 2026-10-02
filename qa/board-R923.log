@@ -1,0 +1,12 @@
+R923 board cut-151 evidence log (verify-then-write, three-pass honest narrative)
+PASS-3 PRE: git status = backlog.md + archive10 + state.json modified only; heartbeat + 09mo archive untouched
+PASS-3 PRE: HEAD blob extracted raw 78465B tick=922 log=58 parse=PASS
+PASS-3 PRE: expected state reconstructed deterministically from HEAD blob (tick 922->923 + correct two-entry insert)
+REPAIR PASS: disk == expected except exactly one comma (double-comma site count=1, string-equality after repair = full byte-level verification of tick+insert-only delta)
+WRITE state PASS: tick 922->923 single-action, log 58->60 with entries[0..57] byte-identical to HEAD, all baselines zero-drift, no BOM, final 81168B
+NOTE waterline: state final 81168B -> fold R154 ruled by next-round round-start first-measure (R921->R922 pattern)
+WRITE heartbeat PASS: R922 doubled-ts repaired to single (R917/R921 isomorph), R923 row appended ts=2026-10-02T15:43:42+08:00, state/hb tick 923 -> lag 0 kept
+WRITE AC-K151c PASS: terminal main board = header + R923 current row (done + closure) + open 3, zero stale done, single BOM, CR=0, 5793B
+POST re-read PASS: board 5793B, state 81168B tick=923 log=60, arch10 h2=57 174542B, hb 763492B last-row tick 923 lag 0
+CLOSE AC-K151a..d + AC-HB923 all PASS; R923 waiting-state declaration closed with one state log line + tokens line
+NARRATIVE: pass-1 phases A-D PASS + phase-E search bug; EOL incident git-checkout smudge renormalized; pass-2 resume re-verified disk, insert wrote double comma caught by post-write parse; pass-3 repaired vs HEAD-reconstructed expectation (string-equality) and finished F..I
