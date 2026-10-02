@@ -1,0 +1,16 @@
+qa/board-R925.log - cut-153 board-knife evidence (verify-then-write; R910/R919/R923 standing-carry isomorph)
+[PRE] board_bytes=6205 bom_single=PASS stale_done_rows=1(R924) open_rows=3
+[PRE] oct_archive_bytes=176167 r_sections=58 ends_single_newline=PASS
+[PRE] r924_row_len=1363 r924_row_md5=ef1809f1f1ef971fe0a2b6c20c930c5e
+[PRE] state tick=924 log_entries=58; heartbeat double-ts count=1
+[AC-K153a] PASS stale-count exactly 1 done row (R924) + 3 standing open rows + canonical header single-BOM byte-level check
+[WRITE] oct archive pure-append 176167 -> 178204 bytes (prefix byte-identical PASS)
+[WRITE] board rewrite 6205 -> 5639 bytes (header prefix byte-identical PASS)
+[POST] oct archive r_sections=59 (58->59 PASS); migrated row md5 == original PASS (ef1809f1f1ef971fe0a2b6c20c930c5e)
+[POST] board [x]-rows=1 (R925) open-rows=3 stale-done=0 PASS
+[POST] sep archive bytes pre==post == 358597 PASS (zero-touch)
+[AC-K153b] PASS verbatim migration md5 identical + pure-append prefix + 58->59 + 09-month zero-touch
+[AC-K153c] PASS main board final = canonical header + R925 current row + 3 open rows, zero stale done rows
+[POST] state.json json.loads PASS tick 924->925 log 58->60 (78370 -> 81319 bytes); heartbeat double-ts fixed + R925 row appended
+[AC-K153d] PASS evidence = this log (verify-then-write all assertions pre-checked before writes + post-write re-read)
+SUMMARY cut-153 AC-K153a..d ALL PASS exit=0 | state final 81319 bytes (carry-note: next fold R155 by next round-start first-measure)
