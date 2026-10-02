@@ -1,0 +1,11 @@
+PRE board_bytes=6203
+PRE AC-K149a partial PASS: single BOM, done_rows=1 (R920 row), open_rows=3, r920_row_len=1361 md5=0A2DAF2EDB8D31010D5C193D0AA45079
+PRE arch10_bytes=169185
+PRE arch10 ok: h2=54 last=R920 eol=LF sep=blank-line
+WRITE AC-K149b partial PASS: arch10 pure-append, h2 54->55, last=R921, migrated row md5 identical
+PASS AC-K149b tail: 09-month archive zero-touch (pre/post bytes identical)
+WRITE AC-K149c PASS: main board = header + R921 current row + 3 open rows, zero stale done rows, single BOM preserved
+WRITE heartbeat PASS: R920 doubled-timestamp prefix repaired to single (R917 isomorph), R921 row appended ts=2026-10-02T15:18:49+08:00 bom=False
+PRE state_bytes=78121
+WRITE state PASS: tick 920->921 single-action, log 58->60, other top-level fields zero-drift, no trailing LF
+NOTE waterline: state final 80578 B >= 80000 line -> fold R153 ruled by next-round round-start first-measure
