@@ -1,0 +1,17 @@
+AC-R1651a pre-op: 81591B dual-gauge, HEAD==disk byte-identical, tick 948, log 64 items, no BOM, canonical form; round-start tree clean per scan; own write set (claim+fold pair) = ['M src/os/backlog.md']
+AC-R1652a window = [R164 rolling summary + R945..R947 three pairs] 7 lines 10089 B (content); three-pair window (R948 pair kept); head block 55 items verbatim (content 66941 B)
+AC-R1653a head block file-region 67408 B located at line idx 58
+AC-R1652d P/D/O catalog snowball: prior 303 (archive R160 embedded 286 + R161 new ['C-R1611', 'C-K164a', 'C-MG1', 'C-PV6a'] + R162 new ['C-R1621', 'C-K165a', 'C-W1', 'C-W5'] + R163 new ['C-R1631', 'C-W7', 'C-W8'] [archive R946 recovery] + R164 new ['C-FD6a', 'C-FD6', 'C-R1641', 'C-FD7a', 'C-FD7', 'C-K167a']) + 6 new ['C-FD8a', 'C-FD8', 'C-R1741', 'C-FD9a', 'C-FD9', 'C-K168a'] = 309, regex mechanical zero hand-picked, missing=[]
+probe pre  : {"W": 62, "idle": 37, "idle_round": 8, "nop": 5, "paren": 33, "round": 29, "tokens": 12, "sub": 9}  (== R946 pre register identity, structural symmetry of the 3-round fold cycle: R947+R948 pairs here vs R944+R945 pairs there, zero drift; round counter includes tokens-line prefixes) 
+AC-R1652e compress-precedent list carried mechanically (range end R758..R943 -> R758..R946, archive pointer kept truthful)
+AC-R1651b archive pre-op markers = 157; backup target logs/state-preop-R949.bak
+AC-R1654-window: post-fold 71743 B, projected final 76342 B margin 2158 B (<= 78,500B gate satisfied in-fold)
+S_new 2386 B / E_new / T_new structural constraints all pass (prefix, accounting tags, no beat/quote/backslash)
+AC-R1653b top fields flat (DEC 127 tokens / ORD / GORD 147 / BENCH 10-02), tick 948->949 only
+probe post : {"W": 58, "idle": 37, "idle_round": 8, "nop": 4, "paren": 33, "round": 25, "tokens": 10, "sub": 7}
+B. incremental-register law: W 62->58 (7 out, 3 in); round 29->25 (three pairs = six R-prefixed rows out, close pair = two in); tokens 12->10 (3 out, 1 in); sub 9->7; idle_round 8 flat; idle 37 flat; nop 5->4 (R164 summary embedded tag -1, R947 declaration-row tag -1, new summary embedded tag +1); paren 33->33 (pure-date-prefix summary 1:1) - asserted pre-write
+AC-R1651b backup logs/state-preop-R949.bak written byte-identical
+AC-R1653c archive pure-append: 13705278 -> 13786950 B; markers 157 -> 158
+AC-R1653d state.json written (temp+replace, re-read asserted: tick 949, log 60 items = 55 head + 1 summary + 2 kept-pair + 2 closeout, probe in-register, dual-gauge parse pass, head byte-identical except tick digit)
+AC-R1654 final size: 76342 B, margin 2158 B under 78,500B gate; post-fold 71743 B
+AC-R1655 delivery: state log line + backlog R949 row + commit contains P-2026-09-25-18 + P-51
