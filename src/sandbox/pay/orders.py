@@ -188,7 +188,8 @@ class PayOrders:
     """Single-writer order domain: one connection guarded by one lock;
     every write opens with BEGIN IMMEDIATE (SQLite WAL discipline)."""
 
-    def __init__(self, config, db_path, event_store, ledger):
+    def __init__(self, config, db_path, event_store, ledger,
+                 minor_guard=None):
         self._startup_checks(config, event_store, ledger)
         self.db_path = db_path
         parent = os.path.dirname(os.path.abspath(db_path))
@@ -201,6 +202,12 @@ class PayOrders:
         self.event_store = event_store
         self.ledger = ledger
         self._adapters = adapters.from_config(config)
+        # R939 wiring (WIRING_POINTS[1]): optional MinorGuardFace.
+        # Wired = create_order runs check_spend on the server-table
+        # amount before any billing row exists (minor gate before
+        # billing); resident ids ARE the census avatar ids; the
+        # caller supplies the ledger date (fail-closed if missing).
+        self.minor_guard = minor_guard
 
     def close(self):
         with self._lock:
@@ -303,12 +310,17 @@ class PayOrders:
     # ---- order faces ---------------------------------------------------------
 
     def create_order(self, product_id, census_avatar_id, demand_text=None,
-                     client_amount_cent=None, client_ai_service=None):
+                     client_amount_cent=None, client_ai_service=None,
+                     minor_date=None):
         """Create (or idempotently replay) one order. Client-supplied
         amount is refused outright (AC-Y2: the server price table is the
         only amount source, locked at creation); client ai_service hints
         are ignored (AC-Y9). Demand text, when carried, must pass the
-        content gate before anything is accepted (AC-Y8)."""
+        content gate before anything is accepted (AC-Y8).
+        R939 wiring (WIRING_POINTS[1]): when a minor_guard is wired,
+        check_spend runs on the server-table amount before any order
+        row exists; the caller supplies minor_date (fail-closed if
+        missing)."""
         del client_ai_service  # server authority only (AC-Y9)
         if not str(census_avatar_id or "").strip():
             raise PayError(E_NO_BINDING, "census avatar binding required (AC-Y13)")
@@ -317,6 +329,15 @@ class PayOrders:
         product = self.products.get(str(product_id))
         if product is None:
             raise PayError(E_PRODUCT_UNKNOWN, str(product_id))
+        avatar = str(census_avatar_id).strip()
+        if self.minor_guard is not None:
+            if not str(minor_date or "").strip():
+                raise PayError(E_BAD_STATE,
+                              "minor guard wired: minor_date required"
+                              " (fail-closed)")
+            # guard refusal raises GuardError with zero rows written
+            self.minor_guard.check_spend(avatar, int(product["price_cent"]),
+                                         str(minor_date).strip())
         text = str(demand_text or "").strip()
         if text:
             try:

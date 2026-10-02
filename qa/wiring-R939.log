@@ -1,0 +1,40 @@
+﻿=== MinorGuard three-call-site wiring suite (R939) ===
+PASS AC-W2: liveroom guard wired, opener id missing -> E_LIVE_BAD_ARGS (detail=E_LIVE_BAD_ARGS: opener_resident_id required when minor guard is wired (sec.31 fail-closed))
+PASS AC-W1: minor opener refused (E_MG_LIVE_BAN (detail=E_MG_LIVE_BAN: minor live-stream opening prohibited (sec.31))); live_sessions rows=0
+PASS AC-W1: adult opener opens; rows=1
+PASS AC-W1: legacy face (no guard) opens without opener id (unchanged)
+PASS AC-W2: pay guard wired, minor_date missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_date required (fail-closed))
+PASS AC-W3: minor without limits refused (E_MG_NO_LIMIT (detail=E_MG_NO_LIMIT: minor has no guardian limits configured: fail-closed, refuse billing until guardian configures (sec.43-44; limit values [needs-CEO], never defaulted))); zero orders
+PASS AC-W3: minor over single limit refused (E_MG_SPEND_SINGLE (detail=E_MG_SPEND_SINGLE: minor single-purchase limit exceeded (sec.44))); zero orders
+PASS AC-W3: minor within limits creates 1 order (replay idempotent)
+PASS AC-W3: adult pass-through creates; orders=2
+PASS AC-W3: unregistered resident refused (E_MG_UNKNOWN (detail=E_MG_UNKNOWN: resident not registered)); orders stay 2
+PASS AC-W3: legacy pay (no guard) creates without minor_date (unchanged)
+PASS AC-W2: member guard wired, minor_now_min missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_now_min required (fail-closed))
+PASS AC-W2: member guard wired, minor_date missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_date required (fail-closed))
+PASS AC-W4: minor outside window refused (E_MG_TIME (detail=E_MG_TIME: minor outside guardian time windows (sec.43))); zero periods
+PASS AC-W4: minor inside window activates a real grant
+PASS AC-W4: adult pass-through activates (guard wired)
+PASS AC-W4: legacy store (no guard) activates without gate inputs (unchanged)
+SUITE PASS 17/17
+
+=== regression: minors/test_minors.py ===
+PASS AC-MG7 - test_minors.py pure ASCII (0 non-ASCII bytes)
+
+SUITE PASS - 19/19 green
+exit=0
+=== regression: liveroom/test_liveroom.py ===
+PASS AC-LR6: conversion audit rows 2 each bind a real debit entry; bound debit sum 800== conversion_total 800
+PASS AC-LR7: whole-suite token touches: spend-tx 4 == conversion rows 4 (enter/register/danmaku/close moved zero tokens); source banned-verb hits=[] non-ascii=0; prices arrive as caller arguments only ([needs-CEO] P1 face)
+SUITE PASS 10/10
+exit=0
+=== regression: pay/test_pay.py ===
+PASS AC-Y11: banned copy refuses construction (E_GATE_OFFLINE: E_GATE_OFFLINE: product copy banned (AC-Y11): rogue_pack word=荐股); nothing listed on disk=True
+PASS CLI: readiness rc=0 (pay orders ready: products=4 channels=virtual,standard gate=ok db=C:\Users\sjs20\AppData\Local\Temp\pay-cli-nh5kgkpi\pay.db); unwired-gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+---- pay acceptance: 16/16 passed
+exit=0
+=== regression: member/test_member.py ===
+PASS AC-M14: tampered world cli rc=2 (FAIL: 12 finding(s); first: check1: period 8479c881ef87f4c8:)
+PASS AC-M15: banned tier copy refused: E_GATE_OFFLINE: tier experience copy banned (AC-M15): 荐股
+suite: 25 assertions over 16 criteria; failed=none
+exit=0

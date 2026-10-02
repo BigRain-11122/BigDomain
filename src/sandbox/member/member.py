@@ -226,11 +226,18 @@ class MemberStore:
     Underscore-prefixed query helpers are lock-free: the CALLER holds
     the lock (un-nested acquisition would deadlock, plain Lock)."""
 
-    def __init__(self, config, db_path, pay):
+    def __init__(self, config, db_path, pay, minor_guard=None):
         self.catalog = catalog.Catalog.from_config(config)  # AC-M1 refusal
         if pay is None:
             raise GateOfflineError("pay dock is mandatory (AC-M2 grant source)")
         self.pay = pay
+        # R939 wiring (WIRING_POINTS[0]): optional MinorGuardFace.
+        # Wired = activate runs the read-only check_time window gate
+        # before the grant lookup (the money gate lives single-source
+        # at the pay create_order entry; member never re-records a
+        # spend); resident ids ARE the census avatar ids; the caller
+        # supplies minute-of-day and date (fail-closed if missing).
+        self.minor_guard = minor_guard
         self.db_path = db_path
         parent = os.path.dirname(os.path.abspath(db_path))
         os.makedirs(parent, exist_ok=True)
@@ -327,16 +334,34 @@ class MemberStore:
 
     # ---- activation (AC-M2/M3/M16 dock face) ------------------------------
 
-    def activate(self, grant_id, census_avatar_id, client_hints=None):
+    def activate(self, grant_id, census_avatar_id, client_hints=None,
+                 minor_now_min=None, minor_date=None):
         """Activate one real pay grant: tier products open a period (+ the
         monthly credit grant + voucher rows for voucher tiers), every
         paid product stamps the permanent birth-cert marker. Client hints
-        are ignored (AC-M5 server authority)."""
+        are ignored (AC-M5 server authority).
+        R939 wiring (WIRING_POINTS[0]): when a minor_guard is wired,
+        the read-only check_time window gate runs BEFORE the grant
+        lookup; the caller supplies minor_now_min / minor_date
+        (fail-closed if missing)."""
         if isinstance(client_hints, dict):
             pass  # server authority only: nothing is ever read from here
         avatar = str(census_avatar_id or "").strip()
         if not avatar:
             raise MemberError(E_NO_BINDING, "census avatar binding required (AC-M3)")
+        if self.minor_guard is not None:
+            try:
+                now_min = int(minor_now_min)
+            except (TypeError, ValueError):
+                raise MemberError(E_BAD_STATE,
+                                  "minor guard wired: minor_now_min"
+                                  " required (fail-closed)") from None
+            if not str(minor_date or "").strip():
+                raise MemberError(E_BAD_STATE,
+                                  "minor guard wired: minor_date"
+                                  " required (fail-closed)")
+            # guard refusal raises GuardError with zero rows written
+            self.minor_guard.check_time(avatar, now_min, str(minor_date).strip())
         grant = self.pay.grant_row(str(grant_id or ""))
         if grant is None:
             raise MemberError(E_BAD_GRANT_SOURCE,

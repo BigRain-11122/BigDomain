@@ -12,9 +12,11 @@ face, wall W11, G slice 2026-10-02):
 
 This module is the GUARD, not the three business faces. The three
 production call sites (member subscribe/activate, pay order
-creation, liveroom open) are listed in WIRING_POINTS and wire in a
-follow-up row / bootstrap window; this face ships the gates they
-will call (honest note: not yet wired into their code paths).
+creation, liveroom open) are listed in WIRING_POINTS; R939 wired
+them as opt-in constructor args (minor_guard=...) with fail-closed
+caller-supplied gate inputs (honest note: the pay grant commit
+face record_spend and the frontdoor page mount are the declared
+row remainder, follow-up).
 
 Fail-closed discipline (mirrors citymodel/scenario.py R850 law):
 - Spend limits and time windows are guardian/caller-supplied.

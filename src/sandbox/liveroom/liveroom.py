@@ -123,11 +123,18 @@ class LiveRoomFace:
     instance plus a SecGate wordlist gate (lobby sec_gate reuse,
     the ugc/venue family precedent)."""
 
-    def __init__(self, ledger, gate, disclaimer_text, ai_label_text):
+    def __init__(self, ledger, gate, disclaimer_text, ai_label_text,
+                 minor_guard=None):
         self.led = ledger
         self.gate = gate
         self.disclaimer_text = str(disclaimer_text)
         self.ai_label_text = str(ai_label_text)
+        # R939 wiring (WIRING_POINTS[2]): optional MinorGuardFace.
+        # Wired = every open_session must pass check_live first
+        # (sec.31 minors live-stream hard ban); resident ids ARE the
+        # census avatar ids. Fail-closed: guard wired but opener id
+        # missing refuses before any row exists.
+        self.minor_guard = minor_guard
         self.db_path = ledger.db_path
         self._lock = threading.RLock()
         self._conn = sqlite3.connect(self.db_path, check_same_thread=False,
@@ -173,11 +180,15 @@ class LiveRoomFace:
 
     # -- writer faces ---------------------------------------------------------
 
-    def open_session(self, session_id, room_id, attended, risk_control_ref):
+    def open_session(self, session_id, room_id, attended, risk_control_ref,
+                     opener_resident_id=None):
         """Register one broadcast session. The unattended FORM is
         platform-banned and refused outright; an attended session
         must cite the risk-control owner reference (BigCompute
-        risk control is the citation, never a decision made here)."""
+        risk control is the citation, never a decision made here).
+        R939 wiring (WIRING_POINTS[2]): when a minor_guard is wired,
+        the opener resident id is mandatory and check_live runs
+        BEFORE any row exists (sec.31 minors hard ban)."""
         if not str(session_id).strip() or not str(room_id).strip():
             raise LiveRoomError(E_LIVE_BAD_ARGS, "session_id/room_id required")
         if attended is not True:
@@ -188,6 +199,13 @@ class LiveRoomFace:
             raise LiveRoomError(E_LIVE_BAD_ARGS,
                                 "risk_control_ref required (BigCompute"
                                 " risk control citation)")
+        if self.minor_guard is not None:
+            if not str(opener_resident_id or "").strip():
+                raise LiveRoomError(
+                    E_LIVE_BAD_ARGS,
+                    "opener_resident_id required when minor guard is"
+                    " wired (sec.31 fail-closed)")
+            self.minor_guard.check_live(str(opener_resident_id).strip())
         with self._lock:
             dup = self._conn.execute(
                 "SELECT COUNT(*) FROM live_sessions WHERE session_id = ?",
