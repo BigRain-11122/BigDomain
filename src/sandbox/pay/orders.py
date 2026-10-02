@@ -207,6 +207,8 @@ class PayOrders:
         # amount before any billing row exists (minor gate before
         # billing); resident ids ARE the census avatar ids; the
         # caller supplies the ledger date (fail-closed if missing).
+        # R940: wired = _grant also books the minors day ledger via
+        # record_spend (commit face, exactly-once per order ref).
         self.minor_guard = minor_guard
 
     def close(self):
@@ -580,6 +582,24 @@ class PayOrders:
                             pass  # prior attempt already booked this conversion
                         else:
                             raise
+                if self.minor_guard is not None:
+                    rec = self.minor_guard.residents_readout().get(
+                        order["census_avatar_id"])
+                    if rec is not None and rec.get("minor"):
+                        # R940 wiring (WIRING_POINTS[1] commit face,
+                        # AC-W7): the minors day ledger books the
+                        # granted amount exactly once per order
+                        # (ref=order_id heals the crash-window retry
+                        # with zero double-record); the grant-UTC date
+                        # is the day-ledger key. A GuardError here
+                        # rolls the whole grant back (order stays
+                        # 'paid'; the callback retry re-enters), and
+                        # the re-gate keeps the guardian limit the
+                        # authority at commit time, not just at create.
+                        self.minor_guard.record_spend(
+                            order["census_avatar_id"],
+                            int(order["amount_cent"]), ts[:10],
+                            order["order_id"])
                 self._conn.execute("COMMIT")
             except BaseException:
                 self._conn.execute("ROLLBACK")

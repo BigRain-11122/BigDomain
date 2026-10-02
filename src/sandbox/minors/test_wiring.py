@@ -20,6 +20,7 @@ faces with missing caller-supplied gate inputs refuse likewise.
 Usage: python test_wiring.py
 """
 
+import datetime
 import json
 import os
 import shutil
@@ -318,12 +319,111 @@ def ac_w2_w4_member():
         shutil.rmtree(w["tmp"], ignore_errors=True)
 
 
+def ac_w7_pay_grant_commit():
+    """AC-W7 (pre-registered R939b, executed R940): the pay grant
+    commit face books the minors day ledger exactly once per order,
+    idempotent on ref, zero-record on refusal, adults untouched.
+
+    Order ids are content-addressed by (avatar, product, bucket), so
+    the two concurrent kid orders use two distinct products."""
+    g = build_guard()
+    w = build_pay(g)
+    pay, db = w["pay"], w["db"]
+    chans = A.from_config(w["cfg"])
+    prods = sorted(w["cfg"]["products"])
+    p1 = w["cfg"]["products"][prods[0]]["price_cent"]
+    p2 = w["cfg"]["products"][prods[1]]["price_cent"]
+    grant_day = datetime.datetime.now(
+        datetime.timezone.utc).strftime("%Y-%m-%d")
+    try:
+        g.set_guardian_limits("g1", "kid", allowed_windows=[(600, 900)],
+                              single_cent=max(p1, p2),
+                              daily_cent=p1 + p2)
+
+        # (a) granted order books exactly one day-ledger entry (ref=oid)
+        res = pay.create_order(prods[0], "kid", minor_date=grant_day)
+        oid = res["order_id"]
+        pay.place_order(oid)
+        cb = chans[res["channel"]].make_callback(
+            oid, p1, "NONCE-W7-A")
+        out = pay.handle_callback(cb)
+        day = g.day_readout("kid", grant_day)
+        grant_rows = count_rows(db, "pay_grants", "order_id = ?", (oid,))
+        record("AC-W7", out.get("status") == "granted"
+               and day["spent_cent"] == p1
+               and day["events"] == [oid] and grant_rows == 1,
+               "granted minor order books day ledger once: spent=%d "
+               "events=%s grant_rows=%d"
+               % (day["spent_cent"], day["events"], grant_rows))
+
+        # (b) ref replay (crash-window retry entry) double-records zero
+        again = g.record_spend("kid", p1, grant_day, oid)
+        day = g.day_readout("kid", grant_day)
+        record("AC-W7", again.get("idempotent") is True
+               and day["spent_cent"] == p1 and day["events"] == [oid],
+               "same-ref record_spend replay is a no-op (zero double-"
+               "record): spent=%d events=%s" % (day["spent_cent"],
+                                                day["events"]))
+
+        # (c) refusal at grant time records zero and rolls the grant
+        res2 = pay.create_order(prods[1], "kid", minor_date=grant_day)
+        oid2 = res2["order_id"]
+        pay.place_order(oid2)
+        g.set_guardian_limits("g1", "kid", allowed_windows=[(600, 900)],
+                              single_cent=max(p1, p2), daily_cent=p1)
+        cb2 = chans[res2["channel"]].make_callback(
+            oid2, p2, "NONCE-W7-C")
+        ok, ev = expect_codes(lambda: pay.handle_callback(cb2), "E_MG_SPEND_DAILY")
+        day = g.day_readout("kid", grant_day)
+        st2 = pay.order_detail(oid2)["status"]
+        record("AC-W7", ok and oid2 not in day["events"]
+               and day["spent_cent"] == p1
+               and count_rows(db, "pay_grants", "order_id = ?", (oid2,)) == 0
+               and st2 == "paid",
+               "grant-time limit refusal (%s) records zero, rolls back: "
+               "spent=%d events=%s status=%s grant_rows2=%d"
+               % (ev, day["spent_cent"], day["events"], st2,
+                  count_rows(db, "pay_grants", "order_id = ?", (oid2,))))
+
+        # guardian restores budget -> identical callback retries, grant
+        # heals and books the one entry (paid->granted heal path)
+        g.set_guardian_limits("g1", "kid", allowed_windows=[(600, 900)],
+                              single_cent=max(p1, p2),
+                              daily_cent=p1 + p2)
+        out2 = pay.handle_callback(cb2)
+        day = g.day_readout("kid", grant_day)
+        record("AC-W7", out2.get("status") == "granted" and out2.get("idempotent") is True
+               and day["events"] == [oid, oid2]
+               and day["spent_cent"] == p1 + p2,
+               "retry heals the refused grant and books its one entry: "
+               "spent=%d events=%s" % (day["spent_cent"], day["events"]))
+
+        # (d) adult grant books nothing on the minors day ledger
+        res3 = pay.create_order(prods[0], "amy", minor_date=grant_day)
+        oid3 = res3["order_id"]
+        pay.place_order(oid3)
+        cb3 = chans[res3["channel"]].make_callback(
+            oid3, p1, "NONCE-W7-D")
+        out3 = pay.handle_callback(cb3)
+        amy_day = g.day_readout("amy", grant_day)
+        record("AC-W7", out3.get("status") == "granted"
+               and amy_day["spent_cent"] == 0 and amy_day["events"] == [],
+               "adult grant pass-through books no day-ledger entry "
+               "(minors-only face)")
+    finally:
+        pay.close()
+        w["legacy"].close()
+        w["led"].close()
+        shutil.rmtree(w["tmp"], ignore_errors=True)
+
+
 def main():
     print("=== MinorGuard three-call-site wiring suite (R939) ===",
           flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
     ac_w2_w4_member()
+    ac_w7_pay_grant_commit()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

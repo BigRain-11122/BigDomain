@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T19:10:03+08:00",
+  "export_ts": "2026-10-02T19:22:28+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R939 产品轮（轮计分 2=能跑实物·R937 cc76e8c 接线拆细后继行落板兑现）：MinorGuard 三面接线第一刀=判据预注册先行（AC-W1..W6 板行先落）→liveroom 开播闸（§31 未成年硬禁·拒时零行）+pay 创建前消费闸（WIRING_POINTS ②·服务器定价额·拒时零单）+member 激活窗闸（只读·拒时零 period 行）三面 opt-in minor_guard 接入完成·fail-closed 参数面·legacy guard=None 零变化零回归；新套件 test_wiring.py 17/17 首跑全绿+四在册套件回归（minors 19/19+liveroom 10/10+pay 16/16+member 25 断言 exit 全 0）=qa/wiring-R939.log；余项=pay grant 提交面 record_spend+活体页挂面（backlog 顶行 R939b）；等待面：法务外件 D-20260929-03=周期触发查（chronic·达件即触发）·O-013④/QA 每日轮 10-03 首轮·提案回访 10-05·治理日聚合审 10-07·token 审计判据回访 10-08·OSS 下窗 10-05 21:40·benchmarks 10-09·bootstrap 待 CEO 物理件（商户号+企业主体/服务器/域名/备案/ICP）",
-    "latest_artifact": "产品实物面=MinorGuard 三面接线第一刀（2026-10-02 ~19:4x·R939）：src/sandbox/{liveroom,pay,member} 三面生产调用点接入 opt-in minor_guard 守护闸（liveroom open_session §31 开播禁+pay create_order 创建前 check_spend+member activate check_time 只读窗闸·三面 fail-closed 缺参拒·legacy 零变化）+src/sandbox/minors/test_wiring.py 新套件 SUITE PASS 17/17 首跑全绿+四在册套件回归零回归（minors 19/19+liveroom 10/10+pay 16/16+member 25 断言）=qa/wiring-R939.log（AC-W1..W6 判据预注册先行）；余项（pay grant 提交面 record_spend+frontdoor 活体页挂面）=backlog 顶行 R939b 后续行；前件在册=preview v0.6+minors 守护沙箱（R937）·frontdoor http://127.0.0.1:8093/（v0.4 双卡面）·机制实物=R938 state.json 水位整编 R161+cut-165（在册）",
-    "next_milestone": "下个轮次窗：10-03 首轮 O-013④/QA charter 每日轮+水位 fold R162 轮首首测裁定；R939b 接线余项（pay grant 提交面 record_spend+frontdoor 活体页挂面·AC-W7/W8 预注册已落）窗 ≤10-04；10-05 提案回访（BD-PROP-001·首回访窗）+OSS 借力下窗 21:40；10-07 治理日聚合审+10-08 token 审计判据回访（P-2026-10-02-01/02 六条）；M1 可逛切片窗 ≤10-09——本司商业挂载面+互动动线+工程读数面三切片就绪+未成年人守护面沙箱+三面接线第一刀就位（接线余项 R939b M1 收口前完成）·待 Biggame 切片对接；benchmark 7 天刷新 10-09；法务外件 D-20260929-03=周期触发查（chronic）"
+    "current": "R940 双项轮（轮计分 2=能跑实物）：主件=R939b① pay grant 提交面 record_spend 挂接毕（orders._grant COMMIT 前入账·ref=order_id 幂等·GuardError 回滚自愈·AC-W7 预注册·test_wiring 22/22+六套件回归零回归=qa/wiring-R940.log）+fold R162 水位整编（80,627B→74,473B·AC-R1631..R1635=qa/reorg-R940.log）；余项=R940b frontdoor 活体页挂面（AC-W8）；waiting 面：法务外件 chronic 达件即触发+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
+    "latest_artifact": "产品实物=MinorGuard 守护闸 grant 提交面收口（2026-10-02 ~19:2x·R940）：src/sandbox/pay/orders.py _grant 提交面挂 guard.record_spend（日账键=（居民,grant-UTC 日期）·ref=order_id·GuardError 回滚整个 grant 单留 paid·回调查单重试自愈入账）+src/sandbox/minors/minors.py record_spend ref 幂等去重（同 ref 重放零双记）+test_wiring.py AC-W7 五记录 SUITE PASS 22/22+六套件回归零回归（minors 19/19+pay 16/16+pay_v3 14/14+member 25 断言+entry_tier 7/7+liveroom 10/10）=qa/wiring-R940.log·AC-W7 预注册在册；M1 接线面三面+提交面全闭合（审计 P-2026-10-02-02 M1 ≤10-09 前置面）；机制实物=fold R162（本轮·详见 state log R162 汇总行）；当前活体面=preview v0.6+minors 守护沙箱（R937）+三面接线（R939）+提交面（R940）·frontdoor 8093 v0.4 双口径",
+    "next_milestone": "下个里程碑（≤10-04）：R940b frontdoor 活体页挂面（minors 合规面·AC-W8）收口=MinorGuard M1 接线全闭合+O-013④/QA 每日轮 10-03 首轮；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访；M1 可走切片 ≤10-09（审计 P-2026-10-02-02·frontdoor 挂面后接线面全毕·Biggame 切片对接）；benchmarks 7 天刷 10-09；法务外件 D-20260929-03 chronic 达件即触发；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "939",
+      "940",
       "OSLoop 执行 tick"
     ],
     [
@@ -1377,15 +1377,19 @@
     [
       "2",
       "M1 前置未成年人守护三面接线第一刀（R937 cc76e8c scope amendment 承接·R939）：liveroom §31 开播闸+pay 创建前 check_spend 闸+member 激活只读窗闸三面 opt-in minor_guard 接入（fail-closed 缺参拒·legacy 零变化）·AC-W1..W6 预注册先行全过=test_wiring 17/17+四套件回归零回归（qa/wiring-R939.log）·余项（pay grant 提交面+活体页挂面）=R939b 顶行·审计 P-2026-10-02-02 M1 前置面"
+    ],
+    [
+      "2",
+      "R940 双实物轮：R939b① pay grant 提交面 record_spend 挂接毕（AC-W7·ref=order_id 幂等去重·GuardError 回滚自愈·test_wiring 22/22+六套件回归零回归=qa/wiring-R940.log）+fold R162 水位整编（AC-R1631..R1635=qa/reorg-R940.log）〔R940〕"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 56,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

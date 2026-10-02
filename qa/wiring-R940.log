@@ -1,0 +1,144 @@
+﻿=== R940 MinorGuard grant commit face (AC-W7) evidence 2026-10-02T19:18:45.4115625+08:00 ===
+
+--- python minors\test_wiring.py (exit code below) ---
+=== MinorGuard three-call-site wiring suite (R939) ===
+PASS AC-W2: liveroom guard wired, opener id missing -> E_LIVE_BAD_ARGS (detail=E_LIVE_BAD_ARGS: opener_resident_id required when minor guard is wired (sec.31 fail-closed))
+PASS AC-W1: minor opener refused (E_MG_LIVE_BAN (detail=E_MG_LIVE_BAN: minor live-stream opening prohibited (sec.31))); live_sessions rows=0
+PASS AC-W1: adult opener opens; rows=1
+PASS AC-W1: legacy face (no guard) opens without opener id (unchanged)
+PASS AC-W2: pay guard wired, minor_date missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_date required (fail-closed))
+PASS AC-W3: minor without limits refused (E_MG_NO_LIMIT (detail=E_MG_NO_LIMIT: minor has no guardian limits configured: fail-closed, refuse billing until guardian configures (sec.43-44; limit values [needs-CEO], never defaulted))); zero orders
+PASS AC-W3: minor over single limit refused (E_MG_SPEND_SINGLE (detail=E_MG_SPEND_SINGLE: minor single-purchase limit exceeded (sec.44))); zero orders
+PASS AC-W3: minor within limits creates 1 order (replay idempotent)
+PASS AC-W3: adult pass-through creates; orders=2
+PASS AC-W3: unregistered resident refused (E_MG_UNKNOWN (detail=E_MG_UNKNOWN: resident not registered)); orders stay 2
+PASS AC-W3: legacy pay (no guard) creates without minor_date (unchanged)
+PASS AC-W2: member guard wired, minor_now_min missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_now_min required (fail-closed))
+PASS AC-W2: member guard wired, minor_date missing -> E_BAD_STATE (detail=E_BAD_STATE: minor guard wired: minor_date required (fail-closed))
+PASS AC-W4: minor outside window refused (E_MG_TIME (detail=E_MG_TIME: minor outside guardian time windows (sec.43))); zero periods
+PASS AC-W4: minor inside window activates a real grant
+PASS AC-W4: adult pass-through activates (guard wired)
+PASS AC-W4: legacy store (no guard) activates without gate inputs (unchanged)
+PASS AC-W7: granted minor order books day ledger once: spent=1990 events=['fad042f9d051040a'] grant_rows=1
+PASS AC-W7: same-ref record_spend replay is a no-op (zero double-record): spent=1990 events=['fad042f9d051040a']
+PASS AC-W7: grant-time limit refusal (E_MG_SPEND_DAILY (detail=E_MG_SPEND_DAILY: minor daily spend limit exceeded (sec.44))) records zero, rolls back: spent=1990 events=['fad042f9d051040a'] status=paid grant_rows2=0
+PASS AC-W7: retry heals the refused grant and books its one entry: spent=3980 events=['fad042f9d051040a', '066fe69b4bc67689']
+PASS AC-W7: adult grant pass-through books no day-ledger entry (minors-only face)
+SUITE PASS 22/22
+EXIT=0
+
+--- python minors\test_minors.py (exit code below) ---
+PASS AC-MG1 - minor without guardian refused (want E_MG_GUARDIAN, got E_MG_GUARDIAN)
+PASS AC-MG1 - duplicate refused (want E_MG_DUP, got E_MG_DUP)
+PASS AC-MG1 - kid1 bound to guardianA; adult1 guardian-free
+PASS AC-MG2 - in-window pass (18:20)
+PASS AC-MG2 - outside window refused (sec.43) (want E_MG_TIME, got E_MG_TIME)
+PASS AC-MG2 - no guardian limits configured -> fail-closed (want E_MG_NO_LIMIT, got E_MG_NO_LIMIT)
+PASS AC-MG3 - single-purchase over limit refused, zero billed (want E_MG_SPEND_SINGLE, got E_MG_SPEND_SINGLE)
+PASS AC-MG3 - daily accumulation over limit refused, zero billed (want E_MG_SPEND_DAILY, got E_MG_SPEND_DAILY)
+PASS AC-MG3 - unconfigured limits refuse billing ([needs-CEO] no defaults) (want E_MG_NO_LIMIT, got E_MG_NO_LIMIT)
+PASS AC-MG3 - refusals mutated nothing: 800/tx-sub-1 only
+PASS AC-MG4 - minor live opening banned (sec.31) (want E_MG_LIVE_BAN, got E_MG_LIVE_BAN)
+PASS AC-MG4 - automated marketing push to minor banned (sec.24(3)) (want E_MG_MARKETING_BAN, got E_MG_MARKETING_BAN)
+PASS AC-MG5 - adult pass-through on all four gates
+PASS AC-MG5 - guardian limits are minors-only scope (want E_MG_NOT_MINOR, got E_MG_NOT_MINOR)
+PASS AC-MG6 - daily counter resets on date rollover
+PASS AC-MG6 - same inputs -> byte-identical report
+PASS AC-MG7 - compliance header: 4-piece + law cites
+PASS AC-MG7 - minors.py pure ASCII (0 non-ASCII bytes)
+PASS AC-MG7 - test_minors.py pure ASCII (0 non-ASCII bytes)
+
+SUITE PASS - 19/19 green
+EXIT=0
+
+--- python pay\test_pay.py (exit code below) ---
+PASS AC-Y13: unbound create rejected=True rows=0 birthright grant=birthright
+PASS AC-Y1: skip=REJ revert=REJ terminal=REJ closed-absorbing=REJ amount=E_AMOUNT_LOCKED
+PASS AC-Y2: tainted=E_PRICE_TAINTED (detail=1990) unknown=E_PRODUCT_UNKNOWN (detail=no_such_product) server_price=1990==price_table
+PASS AC-Y3: replay same id=True rows=1; closed re-buy new bucket=True
+PASS AC-Y4: bad_sig=E_CALLBACK_REJECTED bad_signer=E_CALLBACK_REJECTED bad_ts=E_CALLBACK_REJECTED nonce_replay=E_CALLBACK_REJECTED price=E_AMOUNT_MISMATCH; status stayed pending, grants=0, good cb then granted=True
+PASS AC-Y5: redelivery idempotent=True conversion=1 event=1 grant=1; second distinct valid receipt rejected=E_BAD_STATE (detail=callback needs pending, got granted)
+PASS AC-Y7: conversion share credits usr:AV-106 +30000 tokens; fiat columns=none; fiat-field injection into ledger rejected: table ledger_tx has no column named amount_cent
+PASS AC-Y8: gate1=E_CONTENT_REJECTED gate2=E_CONTENT_REJECTED clean=True rows_after_rejections=1
+PASS AC-Y9: client hint ai_service=0 ignored; four faces all carry ai_service=1
+PASS AC-Y10: confirm/detail/receipt faces all carry the resident disclaimer
+PASS AC-Y14: six fields + evt_id=05e78e19e202... repo/zone ok; duplicate evt_id rejected=True
+PASS AC-Y12-clean: reconcile exit=0 line1=reconcile: PASS checks=6/6
+PASS AC-Y12-tamper: amount=True grant=True receipt=True phantom=True (all exit 2, named check fails)
+PASS AC-Y6: mid-grant ledger failure (E_NEGATIVE_BALANCE) rolled back whole grant: status=paid grants=0 conversions=0; retry healed to granted=granted
+PASS AC-Y11: banned copy refuses construction (E_GATE_OFFLINE: E_GATE_OFFLINE: product copy banned (AC-Y11): rogue_pack word=����); nothing listed on disk=True
+PASS CLI: readiness rc=0 (pay orders ready: products=4 channels=virtual,standard gate=ok db=C:\Users\sjs20\AppData\Local\Temp\pay-cli-dyvsqbu0\pay.db); unwired-gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+---- pay acceptance: 16/16 passed
+EXIT=0
+
+--- python pay\test_pay_v3.py (exit code below) ---
+PASS AC-V34a: sig == HMAC-SHA256(key, ts\nnonce\nbody\n) canonical string
+PASS AC-V34b: tampered signature rejected: E_CALLBACK_REJECTED (detail=signature mismatch)
+PASS AC-V31: missing header rejected + bad receipt row: E_CALLBACK_REJECTED (detail=missing header: Wechatpay-Signature)
+PASS AC-V32a: unknown serial rejected: E_CALLBACK_REJECTED (detail=unknown serial: NOT-A-KNOWN-SERIAL)
+PASS AC-V32b: PUB_KEY_ID_<digits> serial accepted, order granted: granted
+PASS AC-V33: stale Wechatpay-Timestamp rejected: E_CALLBACK_REJECTED (detail=ts outside +-300s window (delta=400s))
+PASS AC-V35a: valid-sig corrupt ciphertext rejected: E_CALLBACK_REJECTED (detail=malformed resource: Only base64 data is allowed)
+PASS AC-V35b: translation-injection rejected: E_CALLBACK_REJECTED (detail=uniform/body mismatch)
+PASS AC-V36a: signed but non-SUCCESS rejected: E_CALLBACK_REJECTED (detail=trade_state=REFUND not SUCCESS (4012075249 criterion))
+PASS AC-V36b: later SUCCESS callback on same order still pays: granted
+PASS AC-V37: ok=200 no body / fail=400 {code:FAIL,message}
+PASS AC-V38a: redelivery idempotent, 1 grant, 1 pay.success event (15-retry gradient re-entry)
+PASS AC-V38b: nonce replay (bad 4) rejected: E_CALLBACK_REJECTED (detail=nonce replay)
+PASS AC-V39: STANDIN marks present, pure ASCII, zero network imports
+SUITE PASS: 14/14
+EXIT=0
+
+--- python member\test_member.py (exit code below) ---
+PASS AC-M1: bad-configs no-tiers:refused,negative-credits:refused,unknown-priv:refused,no-copy:refused,no-disclaimer:refused; client tier claim ignored (activated tier=experience)
+PASS AC-M2: mayor opened v=['building_naming']; replay same-period=True regrant=0; stack p2 start==p1.end=True; forged=True owner-mismatch=True
+PASS AC-M13: public-stream rows before=5 after=5 (zero double writes); audit kinds=['credits', 'period', 'voucher']
+PASS AC-M4: 30-7-23+5=balance 5; overdraw refused=True balance-untouched=True; refund-cap refused=True; drain->0; zero-draw refused=True; no-period refused=True; journal sums={'consume': -35, 'grant': 35}
+PASS AC-M5: forged client tier/privileges ignored (got ['basic_badge', 'emoji_pack_standard']); forged privilege claim refused=True
+PASS AC-M6: experience->cocreator privilege refused=True; no-period refused=True; mayor chat_highlight granted tier=mayor
+PASS AC-M7: gate hit refused=True zero-writes (text=None); clean text set; readiness rc=0; unwired gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+PASS AC-M8: machine faces ai_generated=0 (activation=0); AI copy face ai_generated=1 label=AI ����; client 0-forgery ignored
+PASS AC-M9: disclaimer resident on 3 sampled faces, persistent=True
+PASS AC-M10: fiat/token-named columns=none; raw fiat-column inject refused=table member_periods has no column named price_cent
+PASS AC-M11: member db has zero ledger tables; ledger db has zero member tables; ledger quota-named columns=none; cross-domain raw writes both refused (no such table: ledger_entries / no such table: member_periods)
+PASS AC-M16: use=used; duplicate voucher UNIQUE-refused=True; experience-tier voucher request refused=True; no-period voucher request refused=True (reuse/expiry legs on world two)
+PASS AC-M12: born-expired/rollback REJ=True/True/True; sweep expired=4 re-run=0 journal-stable=True; expire events=3 (AV-103 balance already 0 - nothing to forfeit) audits=4; post-sweep active=False balance103=0
+PASS AC-M3: paid non-tier product birth-cert=True permanent=True; no-binding refused=True; after tier expiry birth-cert=True marker=True judgement-source items=1 (privileges closed=True)
+PASS AC-M14: clean world: findings=none cli-rc=0 (PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Te)
+PASS AC-M16: use=used; re-use refused=True; no-voucher avatar refused=True; expired-with-period refused=True (status=expired, audit rows=1); sweep cli rc=0 out=sweep done: periods_expired=3 now=2030-0
+PASS AC-M14: fake-period -> check1: period FAKE-PERIOD-1: grant FAKE-GRANT-1 absent from pay_grants
+PASS AC-M14: credits-out-of-thin-air -> check2: orphan credit journal rows: 1
+PASS AC-M14: deleted-audit-row -> check5: period FAKE-PERIOD-1: open audit row missing
+PASS AC-M14: privilege-row-overreach -> check3: voucher FAKE-V-1: privilege building_naming_voucher not granted by tier experience
+PASS AC-M14: forged-grant-source -> check1: period 8479c881ef87f4c8: grant FORGED-9 absent from pay_grants
+PASS AC-M14: fiat-column-injected -> check4: member member_periods.price_cent carries a price-named column
+PASS AC-M14: past-due-active-residue -> check6: past-due active period residue: FAKE-PERIOD-2
+PASS AC-M14: tampered world cli rc=2 (FAIL: 12 finding(s); first: check1: period 8479c881ef87f4c8:)
+PASS AC-M15: banned tier copy refused: E_GATE_OFFLINE: tier experience copy banned (AC-M15): ����
+suite: 25 assertions over 16 criteria; failed=none
+EXIT=0
+
+--- python member\test_entry_tier.py (exit code below) ---
+PASS AC-E1 | catalog tiers=cocreator,experience,mayor,patron
+PASS AC-E2 | patron monthly_credits=5 vs experience=3
+PASS AC-E3 | patron-exclusive=['cocreation_block_seat', 'growth_archive_slot']
+PASS AC-E4 | experience-exclusive=['basic_badge', 'emoji_pack_standard']; sets differ=True
+PASS AC-E5 | tier:patron -> patron
+PASS AC-E6 | price anchor 29.9=True; needs-CEO marker=True
+PASS AC-E7 | params_status carries 29.9=True + decision ref=True
+SUITE PASS: 7/7
+EXIT=0
+
+--- python liveroom\test_liveroom.py (exit code below) ---
+PASS AC-LR1: unattended open rejected E_LIVE_UNATTENDED; attended with empty risk-control ref rejected E_LIVE_BAD_ARGS; sessions table rows=0 after both rejects
+PASS AC-LR1: attended session opens only with a non-empty risk-control citation (bigcompute-risk-control-ref)
+PASS AC-LR2: 5 anonymous enters: funnel entered=5 registered=0 converted=0; spend-tx count 0==0
+PASS AC-LR3: banned word (�Ĳ�) rejected at gate 1 and advisory word (����) rejected at gate 2 before any row (rows 0==0); anonymous danmaku rejected E_LIVE_NOT_RESIDENT (rows 0); clean AI-flagged danmaku lands (rows 1)
+PASS AC-LR4: registered viewer converts price 1990: balance 3000->1010 (exact -1990), spend-tx 0->1 (+1), bound tx is a real spend with a 1990 debit for usr:amy
+PASS AC-LR4: unregistered (anonymous) viewer convert rejected E_LIVE_NOT_RESIDENT with zero charge (2000==2000)
+PASS AC-LR5: second conversion same viewer same session rejected E_LIVE_CONV_DUP zero charge (10==1000-990); after close_session: convert rejected E_LIVE_CLOSED, danmaku rejected E_LIVE_CLOSED
+PASS AC-LR6: funnel counts match an independent SQL recount (entered=4/4 registered=2/2 converted=2/2 total=800/800); transcript first+last lines are the config disclaimer verbatim; the AI danmaku row carries [AI �ж�]
+PASS AC-LR6: conversion audit rows 2 each bind a real debit entry; bound debit sum 800== conversion_total 800
+PASS AC-LR7: whole-suite token touches: spend-tx 4 == conversion rows 4 (enter/register/danmaku/close moved zero tokens); source banned-verb hits=[] non-ascii=0; prices arrive as caller arguments only ([needs-CEO] P1 face)
+SUITE PASS 10/10
+EXIT=0

@@ -14,9 +14,9 @@ This module is the GUARD, not the three business faces. The three
 production call sites (member subscribe/activate, pay order
 creation, liveroom open) are listed in WIRING_POINTS; R939 wired
 them as opt-in constructor args (minor_guard=...) with fail-closed
-caller-supplied gate inputs (honest note: the pay grant commit
-face record_spend and the frontdoor page mount are the declared
-row remainder, follow-up).
+caller-supplied gate inputs. R940 wired the pay grant commit face
+(record_spend, exactly-once per order ref); the frontdoor page
+mount stays the declared row remainder (follow-up).
 
 Fail-closed discipline (mirrors citymodel/scenario.py R850 law):
 - Spend limits and time windows are guardian/caller-supplied.
@@ -206,7 +206,14 @@ class MinorGuardFace(object):
                 "spent_after_cent": spent + amt}
 
     def record_spend(self, resident_id, amount_cent, date, ref):
-        """Commit one spend AFTER check_spend passed (idempotent-ref)."""
+        """Commit one spend AFTER check_spend passed (idempotent-ref).
+
+        AC-W7 (pre-registered R939b/R940): exactly-once per ref - a
+        replay of the SAME ref records zero additional spend, so the
+        pay grant crash-window retry (pay tx rolled back after this
+        face ran) cannot double-count. The re-gate still runs first:
+        a replay may refuse when the budget state changed, which is
+        the conservative fail-closed direction for the minor."""
         r = self._residents[resident_id]
         if not r["minor"]:
             raise GuardError(
@@ -218,10 +225,13 @@ class MinorGuardFace(object):
         key = (resident_id, date)
         day = self._day_ledger.setdefault(
             key, {"spent_cent": 0, "events": []})
+        if ref in day["events"]:
+            return {"resident_id": resident_id, "date": date, "ref": ref,
+                    "spent_cent": day["spent_cent"], "idempotent": True}
         day["spent_cent"] += amt
         day["events"].append(ref)
         return {"resident_id": resident_id, "date": date, "ref": ref,
-                "spent_cent": day["spent_cent"]}
+                "spent_cent": day["spent_cent"], "idempotent": False}
 
     def check_live(self, resident_id):
         r = self._residents.get(resident_id)
