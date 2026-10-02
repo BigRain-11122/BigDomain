@@ -1,0 +1,26 @@
+# board cut-155 evidence, round R927, generated 2026-10-02T08:26:42Z (verify-then-write: all assertions below ran before/after the write; any failure would have aborted with zero writes to board)
+PASS AC-K155a board canonical single BOM byte-level
+PASS AC-K155a stale-board count = exactly 1 done row (R926 natural stale), got 1
+PASS AC-K155a the 1 done row is the R926 row
+PASS AC-K155a claim row present (R927), got 1
+PASS AC-K155a standing open rows = exactly 3 (O-013-4 daily + legal gated + bootstrap), got 3
+PASS AC-K155b md5 of migrated row (pre) = aa009ea69dedfe0982032d1b4b3fca7a
+PASS AC-K155b 09-month archive zero-touch pre-op == git HEAD blob (size match)
+PASS AC-K155b 09-month archive zero-touch pre-op == git HEAD blob (byte match)
+PASS AC-K155b 10-month archive pre sections = 60, got 60
+PASS AC-K155b 10-month archive has no BOM (byte-level)
+PASS AC-K155b 10-month archive ends with final newline (pure-append precondition)
+AC-K155b 10-month archive pre bytes = 179675
+AC-K155d claim row lands before cut writes (write order held: claim inserted via targeted replace prior to this script)
+AC-K155b 10-month archive written (temp+replace); AC-K155c board written (temp+replace, R926 done line removed)
+PASS AC-K155b 10-month archive grew (pure-append): 179675 -> 181774
+PASS AC-K155b 10-month archive pure-append prefix byte-identical
+PASS AC-K155b 10-month archive sections 60 -> 61, got 61
+PASS AC-K155b section R927 header found on re-read
+PASS AC-K155b md5 of migrated line (post re-read) identical: aa009ea69dedfe0982032d1b4b3fca7a
+PASS AC-K155c board post-cut done rows = 0 (pre-flip), got 0
+PASS AC-K155c board post-cut open rows = 4 (claim + 3 standing), got 4
+PASS AC-K155c board canonical single BOM intact after write
+PASS AC-K155b 09-month archive zero-touch post-op (disk bytes pre==post)
+AC-K155d evidence composed (qa/board-R927.log on disk)
+PASS AC-K155c main board final (post-flip re-read): done rows=1 [R927 current with closure note], open rows=3, canonical single BOM=True
