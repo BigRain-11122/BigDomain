@@ -102,6 +102,26 @@ re-run through the same engine shows its FAIL lines honestly. Every
 number is computed by the ledger at render time, never canned; the
 sandbox keeps mock keys until CEO physical items arrive; pricing and
 gate decisions stay [needs-CEO] approval-only.
+
+v0.11 (2026-10-03, R968 product-first round, AC-FD11a..f): mounts the
+UGC + msgSecCheck pipeline core face card -- the P-47-3 intake product
+was the last of the five P-47 core faces with zero front-door presence
+(lobby / ledger / pay / membership cards were already mounted). The
+REAL pipeline (src/sandbox/ugc/pipeline.py, SecGate referenced from the
+lobby product, L1 local wordlist per OH-20261002 adoption) is imported,
+never copied; the card runs an in-process probe pipeline at render time
+on a throwaway database: fail-closed entrance, the two-layer content
+gate (L1 real local wordlist hit with the quota counter, then the L2
+wordlist-mock gate incl. the non-advisory ban), gray-word human review
+re-entry, six-line routing, honest noise triage, content-addressed
+replay refusal plus the cross-actor duplicate_of marker, the
+rule-template draft (zero LLM on server faces), the small-idea L0
+self-decide adoption, and the landfall needs_ceo_review path where
+adoption is refused without the CEO receipt and granted after it. The
+export face is shown as its config contract only: the probe never
+writes the product export dir (AC-U11) with throwaway rows. Probe
+fixtures live in preview/ugc-pipeline-nodes.json; compliance strings
+are loaded from the ugc config at runtime; this source stays ASCII.
 """
 
 import contextlib
@@ -150,6 +170,14 @@ if LEDGER_DIR not in sys.path:
     sys.path.insert(0, LEDGER_DIR)
 import ledger as ledger_mod       # token ledger product (reuse, no copy)
 import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
+
+UGC_DIR = os.path.join(HERE, "ugc")
+if UGC_DIR not in sys.path:
+    sys.path.insert(0, UGC_DIR)
+import pipeline as ugc_mod        # UGC intake pipeline product (reuse, no copy)
+
+UGC_CFG = os.path.join(HERE, "ugc", "config.json")
+UGC_JSON = os.path.join(ROOT, "preview", "ugc-pipeline-nodes.json")
 
 HOST, PORT = "127.0.0.1", 8093
 
@@ -384,6 +412,147 @@ def ledger_probe():
     }
 
 
+def ugc_probe():
+    """Run the REAL UGC + msgSecCheck intake pipeline (P-47-3 face)
+    in-process on caller-supplied probe fixtures loaded from the data
+    file (F3 law: every outcome below is computed by the pipeline at
+    render time, never canned in this source). The probe walks the
+    intake chain end to end on a throwaway database: fail-closed
+    entrance, the two-layer content gate (L1 real local wordlist hit
+    with the quota counter, then the L2 wordlist-mock gate incl. the
+    non-advisory ban), gray-word human review re-entry, six-line
+    routing, honest noise triage, the content-addressed replay refusal
+    plus the cross-actor duplicate_of marker, the rule-template draft
+    (zero LLM on server faces), the small-idea L0 self-decide
+    adoption, and the landfall needs_ceo_review path where adoption
+    is refused without the CEO receipt and granted after it. The
+    export face is NOT executed: the probe database is throwaway and
+    writing its rows into the product export dir (AC-U11 in-repo path)
+    would pollute the product face -- the card shows the export
+    contract from config instead."""
+    cfg = load_json(UGC_CFG)
+    fx = load_json(UGC_JSON)["probe"]
+    a_main, a_gray, a_later = (fx["actor_main"], fx["actor_gray"],
+                               fx["actor_later"])
+    tmp = tempfile.mkdtemp(prefix="frontdoor-ugc-")
+    pipe = ugc_mod.UGCPipeline(cfg, os.path.join(tmp, "ugc.db"))
+    legs = []
+    refusals = []
+
+    def ok(action, outcome):
+        legs.append({"n": len(legs) + 1, "action": action,
+                     "outcome": outcome})
+
+    def refuse_leg(action, fn):
+        try:
+            out = fn()  # design says refuse; accepted = honest display
+            ok(action, "unexpectedly accepted: %s" % out)
+        except ugc_mod.UGC.PipelineError as exc:
+            refusals.append(str(exc.code))
+            ok(action, "refused: %s" % exc)
+
+    def submit(actor, content):
+        return lambda: pipe.submit("direct", actor, content)
+
+    refuse_leg("submit before any entrance grant (fail-closed)",
+               submit(a_main, fx["content_pre_entrance"]))
+    grant = pipe.grant_entrance_sandbox(a_main)
+    pipe.grant_entrance_sandbox(a_gray)
+    pipe.grant_entrance_sandbox(a_later)
+    ok("grant sandbox entrance for the three probe residents",
+       "entrance granted (mock=%s, ttl=%ss; production = P-47-4 payment"
+       " receipt, account domain never self-served)"
+       % (grant.get("mock"), grant.get("ttl_seconds")))
+    refuse_leg("submit the L1 fixture (real local wordlist)",
+               submit(a_main, fx["content_l1_wordlist"]))
+    ok("read the L1 local-hit counter (msgSecCheck quota saved)",
+       "local L1 hits = %d (caught locally before any platform call)"
+       % pipe.local_hit_count)
+    refuse_leg("submit the L2 fixture (advisory-ban wording the L1 dict"
+               " does not carry)",
+               submit(a_main, fx["content_l2_advisory"]))
+    out_gray = pipe.submit("direct", a_gray, fx["content_gray"])
+    ok("submit the gray-word fixture",
+       "received evt=%s, gate=review, suspended (human desk; AC-U3 no"
+       " verdict = suspended forever)" % out_gray.get("evt_id"))
+    rev = pipe.review_verdict(out_gray["evt_id"], "pass",
+                              reviewer="probe-reviewer")
+    ok("review verdict: pass (the only exit from review)",
+       "re-entered the flow: pooled=%s, line=%s (AC-U3)"
+       % (rev.get("pooled"), rev.get("line")))
+    clean = pipe.submit("direct", a_gray, fx["content_clean"])
+    ok("submit the clean route fixture",
+       "pooled=%s, line=%s (six-line router, config-driven)"
+       % (clean.get("pooled"), clean.get("line")))
+    noise = pipe.submit("direct", a_later, fx["content_noise"])
+    ok("submit the noise fixture (too short)",
+       "kept but never pooled: noise_reason=%s, pooled=%s (AC-U5 honest"
+       " triage, the row survives)" % (noise.get("noise_reason"),
+                                       noise.get("pooled")))
+    refuse_leg("replay the same source + actor + content",
+               submit(a_gray, fx["content_clean"]))
+    dup = pipe.submit("direct", a_later, fx["content_clean"])
+    ok("submit the same content from another resident",
+       "pooled=%s, duplicate_of marker set=%s (AC-U6 cross-actor dedup)"
+       % (dup.get("pooled"), bool(dup.get("duplicate_of"))))
+    draft = pipe.draft(clean["evt_id"])
+    ok("draft the clean item (rule template)",
+       "producer=%s, ai_generated=%s (zero LLM on any server face)"
+       % (draft.get("producer"), draft.get("ai_generated")))
+    fr = pipe.final_review(clean["evt_id"])
+    ok("final review the small idea",
+       "state=%s, needs_ceo=%s (L0 self-decide path)"
+       % (fr.get("state"), fr.get("needs_ceo")))
+    ad = pipe.final_decide(clean["evt_id"], "adopt")
+    ok("decide: adopt the small idea",
+       "state=%s (L0 self-decide, AC-U9)" % ad.get("state"))
+    land = pipe.submit("direct", a_later, fx["content_landfall"])
+    ok("submit the landfall-scale fixture (over the length threshold)",
+       "pooled=%s, line=%s" % (land.get("pooled"), land.get("line")))
+    pipe.draft(land["evt_id"])
+    fr2 = pipe.final_review(land["evt_id"])
+    ok("draft + final review the landfall-scale item",
+       "state=%s, needs_ceo=%s (CEO approval only, never auto-adopted)"
+       % (fr2.get("state"), fr2.get("needs_ceo")))
+    refuse_leg("decide: adopt the landfall item WITHOUT the CEO receipt",
+               lambda: pipe.final_decide(land["evt_id"], "adopt"))
+    pipe.record_ceo_decision(land["evt_id"], "approved")
+    fin = pipe.final_decide(land["evt_id"], "adopt")
+    ok("record the CEO receipt, then adopt",
+       "state=%s with receipt (AC-U10 receipt at adoption)"
+       % fin.get("state"))
+    chron = pipe.chronicle_query()
+    chron_states = {}
+    for row in chron.get("items", []):
+        key = str(row.get("state"))
+        chron_states[key] = chron_states.get(key, 0) + 1
+    ok("read the city chronicle",
+       "terminal rows: %d (%s) -- every terminal state lands (AC-U12)"
+       % (len(chron.get("items", [])),
+          ", ".join("%s x%d" % kv
+                    for kv in sorted(chron_states.items())) or "none"))
+    pool = pipe.pool_query()
+    pool_lines = {}
+    for item in pool.get("items", []):
+        key = str(item.get("line"))
+        pool_lines[key] = pool_lines.get(key, 0) + 1
+    ok("read the live pool",
+       "pooled/drafted items: %d (%s); disclaimer persistent=%s"
+       % (len(pool.get("items", [])),
+          ", ".join("%s x%d" % kv
+                    for kv in sorted(pool_lines.items())) or "none",
+          pool.get("persistent")))
+    readings = {
+        "legs": legs, "refusals": refusals,
+        "local_hits": pipe.local_hit_count,
+        "pooled": len(pool.get("items", [])),
+        "chronicle": len(chron.get("items", [])),
+        "pool_lines": pool_lines, "chron_states": chron_states,
+    }
+    pipe.close()
+    return readings
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
@@ -615,6 +784,63 @@ def render():
              " platform key arrives"),
         ])
 
+    # -- ugc pipeline core face card (v0.11): REAL probe at render time --
+    ucfg = load_json(UGC_CFG)
+    unodes = load_json(UGC_JSON)
+    try:
+        up = ugc_probe()
+        up_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        up, up_err = None, str(exc)[:300]
+    if up is not None:
+        ug_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in up["legs"])
+        ug_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d</b>gate refusals"
+                   " (fail-closed)</div>"
+                   "<div class=\"kpi\"><b>%d</b>local L1 hits (quota"
+                   " saved)</div>"
+                   "<div class=\"kpi\"><b>%d</b>items pooled live</div>"
+                   "<div class=\"kpi\"><b>%d</b>chronicle rows</div>"
+                   "</div>"
+                   % (len(up["refusals"]), up["local_hits"],
+                      up["pooled"], up["chronicle"]))
+        ug_pool = esc(
+            "live pool: %d pooled/drafted items (%s); chronicle terminal"
+            " states: %s"
+            % (up["pooled"],
+               ", ".join("%s x%d" % kv
+                         for kv in sorted(up["pool_lines"].items()))
+               or "none",
+               ", ".join("%s x%d" % kv
+                         for kv in sorted(up["chron_states"].items()))
+               or "none"))
+        ug_export = ("<p class=kv>%s</p><p class=kv>%s</p>"
+                     % (esc(str(ucfg.get("export", {}).get("note", ""))),
+                        esc(str(unodes.get("export_note", "")))))
+    else:
+        ug_rows = ug_kpis = ug_pool = ug_export = ""
+    if up_err:
+        ug_kpis = ("<p class=fail>UGC PROBE FAILED (honest failure, no"
+                   " fake PASS): %s</p>" % esc(up_err))
+    ug_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(ucfg.get("compliance", {}).get(
+                "ai_label_text", ""))),
+            ("disclaimer", str(ucfg.get("compliance", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", str(ucfg.get("params_status", ""))),
+            ("msgSecCheck front gate", str(ucfg.get("gate", {}).get(
+                "note", ""))),
+        ])
+    ug_prov = esc(
+        "L1 local pre-filter source (from config, verbatim): %s"
+        % str(ucfg.get("gate", {}).get("pre_filter", {}).get(
+            "source", "")))
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -681,7 +907,8 @@ membership + quality cards &middot; v0.5 minors guardian card
 (R940b) &middot; v0.6 M1 walk card (R942) &middot; v0.7 city
 commerce plan card (R943) &middot; v0.8 city commerce scenario
 card (R945) &middot; v0.9 publishing research card (R946) &middot;
-v0.10 token ledger core card (R965)</span></header>
+v0.10 token ledger core card (R965) &middot; v0.11 UGC pipeline core
+card (R968)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -725,6 +952,32 @@ __TL_TAMPER__
 three-pool mint (equity:auth counterparty) &gt; fiat-side stand-in
 funding &gt; gated reward (refused then granted) &gt; spend closing
 the loop into pool:reserve &gt; reconcile &gt; tamper control.</p></div>
+
+<div class="card"><h2>UGC + msgSecCheck Pipeline Core Face (P-47-3
+intake, live probe)</h2>
+<p class=kv>The REAL intake pipeline (src/sandbox/ugc/pipeline.py;
+SecGate referenced from the lobby product; L1 local wordlist per the
+OH-20261002 adoption) is imported and run in-process at render time on
+a throwaway database -- every outcome below is computed by the
+pipeline, never canned.</p>
+__UG_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__UG_ROWS__</table>
+<p class=kv>state machine (constitutional order): intake &gt; gate 1
+(pass | review | risky) &gt; gate 2 (non-advisory) &gt; routing &gt;
+noise triage &gt; pooled &gt; drafted (rule template, zero LLM) &gt;
+final_review (small ideas: L0 self-decide; landfall scale:
+needs_ceo_review, CEO approval only) &gt; adopted | rejected &gt;
+chronicle.</p>
+<p class=kv>__UG_POOL__</p>
+__UG_EXPORT__
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__UG_COMPL__</ul>
+<p class=kv>__UG_PROV__</p>
+<p class=kv>Probe fixtures: preview/ugc-pipeline-nodes.json
+(caller-supplied, single source); the sandbox keeps the wordlist-mock
+gate until the platform credentials (CEO physical items) arrive -- the
+production door stays closed until then (AC-UP1).</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -885,6 +1138,12 @@ __PAYWARN__</footer>
         "__TL_RECON__": tl_recon_html,
         "__TL_TAMPER__": tl_tamper_html,
         "__TL_COMPL__": tl_compl,
+        "__UG_KPIS__": ug_kpis,
+        "__UG_ROWS__": ug_rows,
+        "__UG_POOL__": ug_pool,
+        "__UG_EXPORT__": ug_export,
+        "__UG_COMPL__": ug_compl,
+        "__UG_PROV__": ug_prov,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

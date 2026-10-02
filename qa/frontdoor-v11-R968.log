@@ -1,0 +1,25 @@
+PASS FD11a-source-pure-ascii: 57867 bytes, 0 non-ascii
+PASS FD11a-card-count-13: 13 cards on page
+PASS FD11a-fixtures-in-data-file-only: probe fixtures live in preview/ugc-pipeline-nodes.json, zero of them in the frontdoor source
+PASS FD11b-no-unfilled-placeholders: []
+PASS FD11b-legs-20: 20 probe legs rendered in order (full intake chain)
+PASS FD11b-entrance-fail-closed: pre-entrance refusal code rendered from the live probe
+PASS FD11b-l1-gate-1-live: L1 real-wordlist refusal + local quota counter on page
+PASS FD11b-l2-gate-2-live: L2 wordlist-mock non-advisory refusal rendered (dict word caught only by gate 2)
+PASS FD11b-replay-duplicate-refusal: content-addressed replay refusal (AC-U6)
+PASS FD11b-ceo-receipt-fail-closed: landfall adopt refused without the CEO receipt, adopted after it (P1 never self-served)
+PASS FD11b-honest-failure-face-absent: probe succeeded, no fake PASS face
+PASS FD11b-determinism: UGC card block byte-identical across two renders
+PASS FD11c-state-machine-chain: constitutional order line resident on the card
+PASS FD11c-pool-chronicle-live: live pool / chronicle counts rendered from the probe run
+PASS FD11d-compliance-four-piece: label/disclaimer/[needs-CEO]/gate-note all on the card
+PASS FD11d-config-sourced: all four strings verbatim from the ugc config, zero hardcode
+RENDER CHECK: 16/16 pass
+
+--- live restart probe (AC-FD11e) ---
+killed previous listener PID 104712 on 127.0.0.1:8093
+relaunched frontdoor detached: healthz=200 ok
+served page: UGC + msgSecCheck Pipeline Core Face card present, 13 cards, 48295 bytes
+
+--- full regression zero-regression (AC-FD11f input) ---
+RUNNER PASS (27/27 suites green, reconcile controls 6/6, 19.9s)

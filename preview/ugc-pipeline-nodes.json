@@ -1,0 +1,17 @@
+{
+  "probe": {
+    "actor_main": "probe-res-a",
+    "actor_gray": "probe-res-b",
+    "actor_later": "probe-res-c",
+    "content_pre_entrance": "any content submitted before the entrance grant (fail-closed leg)",
+    "content_l1_wordlist": "这条提案内容夹带了赌博推广话术",
+    "content_l2_advisory": "这个策略保本又稳赚，收益承诺翻倍速来",
+    "content_gray": "想认真讨论一下政治话题的城市治理面",
+    "content_clean": "建议大厅增加月卡权益专享的共创提案池入口",
+    "content_noise": "好",
+    "content_landfall": "上线新玩法：大厅共创提案池正式开张，全体居民可提交城建设计案并参与月度评审，落地级提案直达 CEO 呈批面"
+  },
+  "source_note": "探针中文串=本数据件单源（探针输入为调用方供给 fixture·F3 律）；合规四件套全部自 src/sandbox/ugc/config.json 运行时派生，前台源零硬编码。",
+  "review_verdict_note": "灰区复审通过后复流入池（AC-U3：无裁决=永久悬置·人审是唯一出口）",
+  "export_note": "导出面（产品契约·本探针不实跑）：探针库为一次性临时库，实跑导出会把探针行灌进产品导出目录=污染产品面；本卡只呈现 AC-U11 契约（导出件三面只落本仓内目录·越仓路径拒启），不执行导出。"
+}
