@@ -1,0 +1,17 @@
+# qa/board-R931.log - board cut-159 standing-carry (R931, 2026-10-02)
+# mandate family: P-2026-09-25-18 (board/fold discipline); verify-then-write: all assertions passed before any write
+# round-start facts: nine-face scan exit 0 zero FLAG; round-start state 78305B under 80000B line (fold R158 not triggered);
+# CIM cpu=4 ram=36 lanes=3 (lanes carried per in-register baseline); viz probe: frontdoor 8093 healthz 200, data.js 554871B mtime 17:19:31 (+3418B vs R929 551453B), viz html 92687B mtime 17:18 (Biggame face active)
+# first run (17:2x): AC-K159a PASS (1 done row R930 + 3 open rows + single BOM; R930 row md5=see second-run archive-side md5 line); archive pre sections=64;
+#   preregistration landed (R931 unchecked row) -> migration wrote archive R931 section + removed R930 row;
+#   POST-WRITE RE-READ ABORTED: checkbox marker flip omitted ('- [ ] ' not '- [x] ') -> assertion 'done rows 0 != 1' -> state.json/heartbeat NOT written (zero dirty write);
+#   first-run board-side R930 row md5 was computed in-memory only and not persisted (qa log write comes after assertions); authoritative migrated-row md5 = second-run archive-side measurement below
+# second run (repair+continue): marker repaired, ALL assertions re-passed, state.json + heartbeat written.
+17:22:45 intermediate verified: board has 0 done rows + 1 unchecked R931 row (closure note already appended by first run) + 4 open rows incl R931; header 7 lines
+17:22:45 repair: checkbox marker flipped '- [ ] ' -> '- [x] ' on R931 row (first-run bug: marker flip omitted; caught by post-write re-read assertion, zero write to state.json/heartbeat in first run)
+17:22:45 AC-K159c PASS (repair): board = BOM + header + R931 done row (closure note) + 3 open rows; zero stale done rows; header byte-stable
+17:22:45 AC-K159b PASS: archive sections 64->65 (last=## R931); migrated R930 row md5=2bbd28e3c9db830165fc5fcef05a00e2 (board-side pre-op md5 was recorded in first-run log below)
+17:22:45 Sep archive zero-touch md5=19783a35cfc4e57eb24eda5916a07702
+17:22:45 state.json: tick 930->931 + 2 log lines appended (log 58->60); json.loads PASS; top fields unchanged; post-closeout size=81080B
+17:22:45 AC-HB931 PASS: heartbeat tick 931 single row appended at 2026-10-02T17:22:45+08:00; lag 0->0 kept
+17:22:45 post-closeout state.json size = 81080B (fold R158 by next-round round-start first-measure ruling, R929 isomorph carry-note)
