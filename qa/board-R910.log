@@ -1,0 +1,34 @@
+=== board cut-142 verify-then-write log (R910) ===
+run_ts: 2026-10-02T12:58:51+08:00
+archive EOL convention: LF, trailing EOL: True; board EOL convention: LF
+[PASS] K142a-1 (preregistered R910 claim rows == 1 (found 1))
+[PASS] K142a-2 (stale done rows == 1 and is the R909 row (found 1))
+[PASS] K142a-3 (standing open rows == 3 (found 3))
+[PASS] K142a-4 (header block == 7 lines starting with board title, BOM-tolerant (found 7))
+[PASS] K142b-2 (archive R-section count == 47 (found 47))
+[PASS] K142b-1 (archive last R-section == '## R909' (found '## R909'))
+K142b-3 R909 row md5 (line content): f93c58f33d5b7c40e6dd907b467332a0
+K142b-3 R909 row length: 1893 chars
+K142b-8 09-month archive md5 before: 19783a35cfc4e57eb24eda5916a07702
+--- all pre-write assertions passed, writing ---
+[WRITE] archive appended section '## R910' + R909 row verbatim
+[WRITE] board rewritten (R909 row removed, R910 row flipped to done)
+[PASS] K142b-5 (archive pure-append: existing 150070 bytes are an unchanged prefix)
+[PASS] K142b-6 (migrated row md5 in archive == original (f93c58f33d5b7c40e6dd907b467332a0))
+[PASS] K142b-7 (archive R-section count 47 -> 48, last == '## R910' (found 48, last '## R910'))
+[PASS] K142b-8 (09-month archive bytes untouched (md5 same))
+[PASS] K142c-1 (board has zero stale done rows (only current-round R910 row is [x]))
+[PASS] K142c-2 (board 3 standing open rows byte-identical)
+[PASS] K142c-3 (board header block byte-identical)
+[PASS] K142c-4 (board total rows == header(7) + 1 done(current) + 3 open (found 11))
+[PASS] K142c-5 (flipped R910 row present on board with closure note)
+[PASS] K142d (qa log written by verify-then-write sequence (pre-write asserts all passed before any write))
+VERDICT: cut-142 PASS (AC-K142a..e all pass)
+=== heartbeat R910 append log ===
+run_ts: 2026-10-02T13:00:30+08:00
+[PASS] HB910-1 (no BOM introduced (first bytes b'202'))
+[PASS] HB910-2 (previous last row is tick 909 (lag 0 precondition))
+[PASS] HB910-3 (heartbeat pure-append (existing 733613 bytes prefix intact))
+[PASS] HB910-4 (row count 546 -> 547)
+[PASS] HB910-5 (new last row is tick 910 R910)
+VERDICT: HB910 PASS
