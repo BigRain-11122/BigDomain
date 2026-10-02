@@ -1,0 +1,14 @@
+AC-K132b 09-month archive zero-touch pre-op == git HEAD blob verified
+AC-K132a stale-board count = exactly 1 done row [R888 = R888 mechanism round natural stale, not a missed-cut patch] + exactly 3 open rows pre-claim [O-013-4 + legal gated + bootstrap], header intact (BOM=True)
+AC-K132b md5 of migrated row (pre): R888=d95df0efeeda40b9ac9db1916cc6afa3
+AC-K132d backlog.md pre-registered claim row composed (write order: claim lands before fold writes)
+AC-K132a post-claim open rows = exactly 4 [R890 claim + O-013-4 + legal gated + bootstrap]
+AC-K132c main board final: header + R890 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+E. qa/board-R890.log composed
+AC-K132d backlog.md pre-registered claim row written (temp+replace, re-read asserted)
+AC-K132b 10-month archive pure-append: 120460 -> 123371 B; sections 37 -> 38; md5 of migrated line identical
+AC-K132b 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K132c backlog.md written (temp+replace, re-read asserted: done row count=1 [R890 current], open rows=3)
+AC-K132b 09-month archive zero-touch post-op == git HEAD blob re-verified
+AC-K132d evidence composed (qa/board-R890.log on disk)
+AC-K132e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-132 tags (P-51)
