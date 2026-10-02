@@ -178,6 +178,10 @@ import pipeline as ugc_mod        # UGC intake pipeline product (reuse, no copy)
 
 UGC_CFG = os.path.join(HERE, "ugc", "config.json")
 UGC_JSON = os.path.join(ROOT, "preview", "ugc-pipeline-nodes.json")
+WM_DIR = os.path.join(HERE, "watermark")
+WM_DOC = os.path.join(ROOT, "docs", "spec",
+                      "implicit-watermark-verify.md")
+WM_PIPE = os.path.join(HERE, "ugc", "pipeline.py")
 
 HOST, PORT = "127.0.0.1", 8093
 
@@ -553,6 +557,149 @@ def ugc_probe():
     return readings
 
 
+def wm_probe():
+    """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
+    in-process on a deterministic throwaway image (F3 law: every
+    verdict below is computed by the local pip blind_watermark library
+    at probe time, never canned in this source). The probe composes
+    the adopted library directly and reuses the watermark suite
+    calibration fixtures (make_img / label_bits) by import -- the
+    suite files themselves stay untouched. Chain: 256-bit label embed
+    > clean extract > JPEG re-save extract > honest negative (85%
+    central crop degrades the direct extract) > library recover
+    locate + canvas rebuild > extract exact."""
+    import cv2
+    import numpy as np
+    from blind_watermark import WaterMark
+    from blind_watermark.recover import (estimate_crop_parameters,
+                                         recover_crop)
+    if WM_DIR not in sys.path:
+        sys.path.insert(0, WM_DIR)
+    import test_watermark as wm_suite  # calibration fixtures (reuse)
+
+    jpeg_q = 90       # robustness case 1, locked at suite calibration
+    keep = 0.85       # robustness case 2, locked at suite calibration
+    legs = []
+
+    def ok(leg, outcome):
+        legs.append({"n": len(legs) + 1, "leg": leg,
+                     "outcome": outcome})
+
+    tmp = tempfile.mkdtemp(prefix="frontdoor-wm-")
+    try:
+        bits = wm_suite.label_bits().astype(int)
+        nbits = int(bits.size)
+        orig = os.path.join(tmp, "orig.png")
+        emb = os.path.join(tmp, "embedded.png")
+        cv2.imwrite(orig, wm_suite.make_img())
+        bwm = WaterMark(password_wm=1, password_img=1, mode="common")
+        bwm.read_img(orig)
+        bwm.read_wm(bits, mode="bit")
+        bwm.embed(emb)
+        emb_ok = os.path.exists(emb) and os.path.getsize(emb) > 0
+        ok("import the capability + embed the 256-bit label (SHA-256 "
+           "of the fixed label string) into a deterministic 640x480 "
+           "throwaway image",
+           "local pip blind_watermark imported in-process; embedded "
+           "ok=%s bits=%d (suite calibration fixtures imported, zero "
+           "suite file touched)" % (emb_ok, nbits))
+
+        def extract(path):
+            w = WaterMark(password_wm=1, password_img=1, mode="common")
+            got = w.extract(filename=path, wm_shape=[nbits],
+                            mode="bit")
+            return np.asarray(got).astype(int).clip(0, 1)
+
+        got_clean = extract(emb)
+        clean_exact = bool(np.array_equal(got_clean, bits))
+        ok("clean extract roundtrip",
+           "bit-exact=%s (ber=%.4f vs the embedded label)"
+           % (clean_exact, float(np.mean(got_clean != bits))))
+
+        img_e = cv2.imread(emb, cv2.IMREAD_COLOR)
+        jpg = os.path.join(tmp, "embedded_q%d.jpg" % jpeg_q)
+        ok_write = img_e is not None and cv2.imwrite(
+            jpg, img_e, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_q])
+        got_jpg = extract(jpg) if ok_write else None
+        jpg_exact = ok_write and bool(np.array_equal(got_jpg, bits))
+        ok("robustness case 1: JPEG re-save q=%d, then extract"
+           % jpeg_q,
+           "write=%s bit-exact=%s (ber=%.4f)"
+           % (bool(ok_write), jpg_exact,
+              float(np.mean(got_jpg != bits))
+              if got_jpg is not None else 1.0))
+
+        h, w = img_e.shape[:2]
+        ch, cw = int(h * keep), int(w * keep)
+        y0, x0 = (h - ch) // 2, (w - cw) // 2
+        crop = os.path.join(tmp, "crop_%d.png" % int(keep * 100))
+        cv2.imwrite(crop, img_e[y0:y0 + ch, x0:x0 + cw])
+        got_direct = extract(crop)
+        direct_degrades = not np.array_equal(got_direct, bits)
+        ok("robustness case 2: %d%% central crop, direct extract "
+           "(honest negative)" % int(keep * 100),
+           "direct extract degrades=%s (ber=%.4f, honest negative "
+           "displayed -- the library needs the canvas rebuilt first)"
+           % (direct_degrades, float(np.mean(got_direct != bits))))
+
+        loc, shape, score, _scale = estimate_crop_parameters(
+            original_file=emb, template_file=crop, scale=(1, 1),
+            search_num=1)
+        rec = os.path.join(tmp, "recovered.png")
+        recover_crop(template_file=crop, output_file_name=rec,
+                     loc=loc, image_o_shape=shape)
+        got_rec = extract(rec)
+        rec_exact = bool(np.array_equal(got_rec, bits))
+        ok("recover.py template-match locate + canvas rebuild, then "
+           "extract",
+           "locate score=%.3f loc=%s recovered bit-exact=%s"
+           % (float(score), tuple(int(v) for v in loc), rec_exact))
+
+        # dual-track anchors: the explicit track is read live from the
+        # ugc product files; the implicit spec presence shows honestly
+        with open(UGC_CFG, encoding="utf-8") as fh:
+            cfg_text = fh.read()
+        explicit = str((json.loads(cfg_text).get("compliance") or {})
+                       .get("ai_label_text", ""))
+        cfg_line = next((i + 1 for i, ln in enumerate(cfg_text
+                                                     .splitlines())
+                         if '"ai_label_text"' in ln), -1)
+        with open(WM_PIPE, encoding="utf-8") as fh:
+            pipe_text = fh.read()
+        pipe_line = next((i + 1 for i, ln in enumerate(pipe_text
+                                                       .splitlines())
+                          if '"ai_label"' in ln), -1)
+        ok("dual-track anchor read (explicit track live from the ugc "
+           "product files)",
+           "explicit label set=%s (ugc config.json L%d); pipeline.py "
+           "L%d ai_label draft field; implicit spec on disk=%s"
+           % (explicit != "", cfg_line, pipe_line,
+              os.path.exists(WM_DOC)))
+
+        return {
+            "legs": legs, "nbits": nbits, "clean": clean_exact,
+            "jpeg": jpg_exact, "crop_degrades": direct_degrades,
+            "recovered": rec_exact, "explicit": explicit,
+            "cfg_line": cfg_line, "pipe_line": pipe_line,
+            "doc_on_disk": os.path.exists(WM_DOC),
+        }
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def run_wm_probe_once():
+    """Server-start isomorph of the journey pattern: run the
+    watermark probe once and keep the transcript; a restart re-runs
+    it. Honest failure face on any probe error, never a fake PASS."""
+    try:
+        return wm_probe(), ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        return None, str(exc)[:300]
+
+
+WM_RES, WM_ERR = run_wm_probe_once()
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
@@ -841,6 +988,58 @@ def render():
         % str(ucfg.get("gate", {}).get("pre_filter", {}).get(
             "source", "")))
 
+    # -- AIGC implicit watermark face card (v0.12): REAL probe run
+    # once at server start (journey isomorph); honest failure face --
+    if WM_RES is not None:
+        wm_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["leg"]), esc(lg["outcome"]))
+            for lg in WM_RES["legs"])
+        wm_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d</b>label bits embedded"
+                   "</div>"
+                   "<div class=\"kpi\"><b>%s</b>clean roundtrip exact"
+                   "</div>"
+                   "<div class=\"kpi\"><b>%s</b>exact after JPEG q90"
+                   "</div>"
+                   "<div class=\"kpi\"><b>%s</b>exact after crop "
+                   "recover</div>"
+                   "</div>"
+                   % (WM_RES["nbits"], WM_RES["clean"], WM_RES["jpeg"],
+                      WM_RES["recovered"]))
+    else:
+        wm_rows = wm_kpis = ""
+    if WM_ERR:
+        wm_kpis = ("<p class=fail>WATERMARK PROBE FAILED (honest "
+                   "failure, no fake PASS): %s</p>" % esc(WM_ERR))
+    wm_dual = esc(
+        "dual-track AIGC labeling: explicit track = ugc config.json "
+        "L%d ai_label_text (rendered verbatim below) + pipeline.py "
+        "L%d ai_label draft field; implicit track = this card's "
+        "embedded 256-bit label, spec on disk = %s "
+        "(docs/spec/implicit-watermark-verify.md)"
+        % ((WM_RES or {}).get("cfg_line", -1),
+           (WM_RES or {}).get("pipe_line", -1),
+           bool((WM_RES or {}).get("doc_on_disk"))))
+    wm_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(ucfg.get("compliance", {}).get(
+                "ai_label_text", ""))),
+            ("disclaimer", str(ucfg.get("compliance", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", str(ucfg.get("params_status", ""))),
+            ("msgSecCheck front gate", str(ucfg.get("gate", {}).get(
+                "note", ""))),
+        ])
+    wm_defer = esc(
+        "production wiring stays deferred to the bootstrap window "
+        "(R321 AC-W2 note): the implicit track is proven here in the "
+        "sandbox; wiring generated-content surfaces to the embed call "
+        "starts only when the CEO physical items (server / platform "
+        "credentials) arrive -- the account domain is never "
+        "self-served.")
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -908,7 +1107,8 @@ membership + quality cards &middot; v0.5 minors guardian card
 commerce plan card (R943) &middot; v0.8 city commerce scenario
 card (R945) &middot; v0.9 publishing research card (R946) &middot;
 v0.10 token ledger core card (R965) &middot; v0.11 UGC pipeline core
-card (R968)</span></header>
+card (R968) &middot; v0.12 AIGC implicit watermark card
+(R975)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -978,6 +1178,22 @@ __UG_EXPORT__
 (caller-supplied, single source); the sandbox keeps the wordlist-mock
 gate until the platform credentials (CEO physical items) arrive -- the
 production door stays closed until then (AC-UP1).</p></div>
+
+<div class="card"><h2>AIGC Implicit Watermark Face (P-47-3c, live
+probe)</h2>
+<p class=kv>The REAL implicit-labeling capability (local pip
+guofei9987/blind_watermark, MIT, OH-20260926 five-gate adoption) runs
+once in-process at server start on a deterministic throwaway image --
+every verdict below is computed by the library, never canned; a
+server restart re-runs the probe. The watermark suite files stay
+untouched (suite calibration fixtures are imported, not copied).</p>
+__WM_KPIS__
+<table><tr><th>#</th><th>probe leg</th><th>computed outcome</th></tr>
+__WM_ROWS__</table>
+<p class=kv>__WM_DUAL__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__WM_COMPL__</ul>
+<p class=kv>__WM_DEFER__</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -1144,6 +1360,11 @@ __PAYWARN__</footer>
         "__UG_EXPORT__": ug_export,
         "__UG_COMPL__": ug_compl,
         "__UG_PROV__": ug_prov,
+        "__WM_KPIS__": wm_kpis,
+        "__WM_ROWS__": wm_rows,
+        "__WM_DUAL__": wm_dual,
+        "__WM_COMPL__": wm_compl,
+        "__WM_DEFER__": wm_defer,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
