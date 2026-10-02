@@ -1,0 +1,17 @@
+=== cut-168 board surgery R947 final verification (3-row batch migration, HEAD-anchored md5) ===
+PASS AC-K168a census: 3 stale done rows (R946/R945/R944) + pre-registered [ ] R947 claim + 3 open (O-013/D-20260929-03/bootstrap); single BOM; LF-only
+NOTE AC-K168a: R944 row stale 2 rounds (R945/R946 product/fold rounds ran no cut), batch-migrated this round, R554/R555 missed-cut precedent honestly noted
+PASS AC-K168a 3 stale rows present exactly once each on git HEAD board
+PASS AC-K168b archive pure-append prefix vs HEAD (215854 -> 222016 bytes)
+PASS AC-K168b section R947 present once, carries exactly 3 rows (R946/R945/R944)
+PASS AC-K168b row verbatim md5 identical vs HEAD: ee371e7eff43 R946
+PASS AC-K168b row verbatim md5 identical vs HEAD: 62769b0afe1b R945
+PASS AC-K168b row verbatim md5 identical vs HEAD: 6fab3c9a4229 R944
+PASS AC-K168c board terminal: header + cut-168 record once + R947 current row [x]+done + 3 open rows; stale rows absent
+PASS AC-K168c pre-write all-assertions green (verify-then-write honored, zero partial-write risk)
+WROTE archive 222016 bytes, board 6705 bytes
+PASS post-write archive re-read: section once, 3 rows md5-identical
+PASS 09-month archive byte-identical to HEAD (zero-touch)
+board md5 now=be652cd994edad6bf8be6dedac29c6a5
+archive md5 now=69db7eb0cf1d656e5e227934204ed082
+SUITE PASS 11/11 assertions
