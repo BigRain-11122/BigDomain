@@ -637,8 +637,112 @@ def ac_fd7_city_commerce_card():
            "bite-row visible (live page zero-regression check)")
 
 
+def ac_fd8_citymodel_card():
+    """R945 frontdoor v0.8 citymodel scenario card mount (criteria
+    AC-FD8a..e were pre-registered in the R945 backlog row before
+    this code existed; AC-FD8f receipt = state log line + backlog
+    done mark + commit). The model is src/sandbox/citymodel/
+    scenario.py (R850 dual-track scenario, audit P-2026-10-02-02
+    L76 "pricing model = zero on file" answered by a runnable
+    face); the card runs the REAL module in-process at render time
+    with the caller-supplied probe params from the data file --
+    the model computes, never decides; pricing stays [needs-CEO]."""
+    _sandbox = os.path.normpath(os.path.join(BASE, ".."))
+    if _sandbox not in sys.path:
+        sys.path.insert(0, _sandbox)
+    _cm = os.path.normpath(os.path.join(BASE, "..", "citymodel"))
+    if _cm not in sys.path:
+        sys.path.insert(0, _cm)
+    import frontdoor  # noqa: E402 (sandbox root, journey at import)
+    import scenario as CM  # noqa: E402 (citymodel product)
+
+    data = frontdoor.CM_PROBE
+    params, months = data["params"], int(data["months"])
+    record("AC-FD8a",
+           tuple(params["track_b"]["tier_prices"]) == CM.TIER_PRICES
+           and months == 12 and len(data["compliance"]) == 4
+           and len(data["price_steps"]) >= 3
+           and float(data["fixed_cost"]) > 0,
+           "probe data integrity: track_b band == scenario.TIER_PRICES"
+           " (in-canon 9.9/19.9/29.9, C-20260927-01 case A), months=%d,"
+           " compliance 4-piece, %d price steps, fixed_cost>0"
+           % (months, len(data["price_steps"])))
+
+    fa = CM.project_track_a(params, months)
+    fb = CM.project_track_b(params, months)
+    grid = CM.sensitivity_grid(params, months, data["price_steps"])
+    be = CM.breakeven_month(fa, data["fixed_cost"])
+    report = CM.render_report(params, months)
+    page = frontdoor.render().decode("utf-8")
+
+    nums = (["%.2f" % fa["gross_total"], "%.2f" % fb["mrr_total"],
+             "%.2f" % round(fa["gross_total"] + fb["mrr_total"], 2),
+             ("month %d" % be) if be else "none"]
+            + ["%.2f" % g["gross_total"] for g in grid])
+    record("AC-FD8b", all(n in page for n in nums),
+           "rendered KPIs + breakeven + %d sensitivity totals equal "
+           "a fresh in-process model recompute (%d numbers, zero "
+           "canned)" % (len(grid), len(nums)))
+
+    rep_html = html.escape(report.rstrip("\n"), quote=True)
+    record("AC-FD8c", rep_html in page,
+           "deterministic render_report block mounted byte-identical "
+           "under the HTML-escape lens (%d chars, same inputs -> "
+           "same text)" % len(rep_html))
+
+    old_units = params["track_a"]["units_per_month"]
+    try:
+        params["track_a"]["units_per_month"] = old_units + 7
+        page2 = frontdoor.render().decode("utf-8")
+        fa2 = CM.project_track_a(params, months)
+        rep2_html = html.escape(
+            CM.render_report(params, months).rstrip("\n"), quote=True)
+        record("AC-FD8b",
+               ("%.2f" % fa2["gross_total"]) in page2
+               and ("%.2f" % fa["gross_total"]) not in page2
+               and rep_html not in page2 and rep2_html in page2,
+               "probe param flip re-render flips every rendered "
+               "number + the report block (live-compute control, "
+               "AC-W8 pattern): track A gross %.2f -> %.2f"
+               % (fa["gross_total"], fa2["gross_total"]))
+    finally:
+        params["track_a"]["units_per_month"] = old_units
+
+    for needle in ("AI-GENERATED LABEL", "NON-INVESTMENT-ADVISORY",
+                   "[needs-CEO]", "msgSecCheck"):
+        record("AC-FD8d", needle in page,
+               "scenario card carries %r (compliance four-piece)"
+               % needle)
+    compl_rendered = [data["card_title"], data["probe_note"],
+                      data["tail_note"]] \
+        + [c["text"] for c in data["compliance"]]
+    record("AC-FD8d",
+           all(html.escape(s, quote=True) in page
+               for s in compl_rendered),
+           "Chinese compliance four-piece + probe-declaration + "
+           "blocked note rendered from the data file (%d strings, "
+           "escape-aware compare; P1 pricing approval-only, zero "
+           "execution)" % len(compl_rendered))
+
+    with open(frontdoor.__file__, "rb") as fh:
+        src = fh.read()
+    record("AC-FD8e", max(src) < 0x80,
+           "frontdoor.py stays pure ASCII: zero hardcoded business "
+           "copy, all Chinese lives in data files (%d bytes checked)"
+           % len(src))
+    record("AC-FD8e",
+           page.count('class="card"') >= 9
+           and all(marker in page for marker in (
+               "City Live", "Business-day Journey", "Lobby Face",
+               "Pay Face", "Membership Face", "Minor Guardian Face",
+               "Quality Face")),
+           "prior v0.1..v0.7 faces all still mounted + scenario card "
+           "in place (%d cards, live page zero-regression check)"
+           % page.count('class="card"'))
+
+
 def main():
-    print("=== MinorGuard wiring suite (R939/R940/R940b/R942/R943) ===",
+    print("=== MinorGuard wiring suite (R939/R940/R940b/R942/R943/R945) ===",
           flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
@@ -647,6 +751,7 @@ def main():
     ac_w8_frontdoor_card()
     ac_fd6_m1_walk_card()
     ac_fd7_city_commerce_card()
+    ac_fd8_citymodel_card()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

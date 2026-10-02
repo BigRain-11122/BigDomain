@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T20:06:27+08:00",
+  "export_ts": "2026-10-02T20:30:16+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R943 双项一轮（轮计分 2=能看实物）：主件=frontdoor v0.7 城市商业方案卡挂载毕（AC-FD7a..f=qa/wiring-R943.log·数据件 preview/city-commerce-plan-nodes.json 自 R849 spec docs/spec/city-commerce-plan-v0.md verbatim 抽取单源〔四层商业分层+审计缺口映射 5 行+定价两参照+里程碑咬合 M1..M4+合规四件套〕·纯组合 frontdoor.py 纯 ASCII·F3 零写死·定价/发行开闸全 [needs-CEO] 呈批零执行 P1 律·CEO 物理件阻塞注诚实直呈）+机制件=fold R163 水位整编（轮首首测 80,426B 越 426B=R942 carry-note 承接·AC-R1641..R1645=qa/reorg-R943.log·终态 76,909B）；test_wiring SUITE PASS 44/44+六套件回归零回归+活体重启探活 healthz=200 首探即过（v0.7 卡随重启上线·卡面标题在服务页实证）；审计 P-2026-10-02-02 P2-9「BigCompute/BigDomain 城市商业方案=零」缺口回应呈现面就绪（判据回访 10-08 治理日前置补位）；waiting 面：法务外件 chronic（D-20260929-03·秘书处初稿窗 10-03 12:00）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 下窗 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
-    "latest_artifact": "产品实物=frontdoor v0.7 城市商业方案卡（2026-10-02 ~20:0x·R943）：活体页 http://127.0.0.1:8093/ 新增城市商业方案卡（四层商业分层表+审计 L76 缺口映射 5 行表〔缺口→应答→状态〕+定价模型两参照〔C:S1 买断+DLC×Anno 季票〕+裁决点 [needs-CEO]+Demo 策略/工坊生态位+里程碑咬合表 M1..M4+合规四件套+CEO 物理件阻塞注）·数据件 preview/city-commerce-plan-nodes.json（spec verbatim 抽取单源·AC-FD7a 同步闸 63 串机检）·frontdoor.py 纯 ASCII（中文零硬编码）·test_wiring 44/44+六套件回归零回归（qa/wiring-R943.log）·随本轮重启上线（旧实例终止→v0.7 新卡面 healthz=200 首探即过）·硅基城审计 P2-9 缺口「城市商业方案=零」的本司回应件呈现面（spec R849+推演模型 R850+活体卡 R943 三件链）",
-    "next_milestone": "下个里程碑（≤10-04）：10-03 首轮=O-013④ 值守核对+QA charter 每日 crawl 轮+法务外件 D-20260929-03 秘书处初稿窗 10-03 12:00 到点查；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·本司商业挂载面已就绪=frontdoor v0.6 五站卡+v0.7 城市商业方案卡双面）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访（含硅基城审计行动六条回访）；benchmarks 7 天刷 10-09；bootstrap CEO 物理件无 ETA"
+    "current": "R945 产品轮（轮计分 2=能跑/能看实物）：主件=frontdoor v0.8 城市商业双轨场景推演模型实算卡挂载毕（AC-FD8a..f=qa/wiring-R945.log·数据件 preview/citymodel-scenario-nodes.json 探针假设参数单源〔track_b 档位带与正典档 9.9/19.9/29.9 同步·合规四件套中文全进数据件〕·真模型 src/sandbox/citymodel/scenario.py import 进程内渲染时实算〔买断+DLC 推演/订阅带流失新增流/漏斗/敏感性网格/回本月/确定性 ASCII 报告〕·F3 零写死=参数翻转复渲染读数翻转实算控制过·frontdoor.py 纯 ASCII 32,107B）+test_wiring SUITE PASS 55/55+全量回归 RUNNER PASS 27/27 套件 231 判据零回归（qa/reconcile-all-R945.log·Quality Face 证据面随刷）+活体重启探活 healthz=200 首探即过（http://127.0.0.1:8093/ 十卡在页·v0.8 卡面标题在服务页实证）；审计 P-2026-10-02-02 L76「定价模型=零在册」缺口回应=方案卡（R943 v0.7）+实算卡（R945 v0.8）双面就绪；九面 scan 八 PASS+TASKS 常设两行 gated/timed 承 R944 判；waiting 面：法务外件 chronic（D-20260929-03·秘书处初稿窗 10-03 12:00）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计 10-08+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
+    "latest_artifact": "产品实物=frontdoor v0.8 城市商业双轨场景推演模型实算卡（2026-10-02 ~20:4x·R945）：活体页 http://127.0.0.1:8093/ 新增模型实算卡（Track A 买断+DLC 12 月推演表+Track B 订阅带 12 月推演表+免费层漏斗+买断价敏感性网格五档+回本月 KPI+模型确定性 ASCII 报告逐字节同挂+合规四件套+探针假设声明+CEO 物理件阻塞注）·数字全部由 R850 模型渲染时实算零写死（参数翻转实算控制过）·定价/开闸全 [needs-CEO] 呈批零执行 P1 律·数据件 preview/citymodel-scenario-nodes.json（探针参数+中文文案单源）·frontdoor.py 纯 ASCII（中文零硬编码）·test_wiring 55/55+全量回归 27/27 套件 231 判据零回归（qa/wiring-R945.log+qa/reconcile-all-R945.log）·随本轮重启上线（旧实例终止→healthz=200 首探即过·34,444B 服务页·十卡在页）·审计 L76「定价模型=零」缺口可运行回应（R849 方案+R850 模型+R943 方案卡+R945 实算卡四件链）",
+    "next_milestone": "下个里程碑（≤10-04）：10-03 首轮=O-013④ 值守核对+QA charter 每日 crawl 轮+法务外件 D-20260929-03 秘书处初稿窗 10-03 12:00 到点查；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·本司商业挂载面已就绪=v0.6 五站卡+v0.7 方案卡+v0.8 实算卡三面）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访（含硅基城审计行动六条回访）；benchmarks 7 天刷 10-09；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）"
     ]
   ],
   "results": [
@@ -1393,15 +1393,19 @@
     [
       "2",
       "R943 frontdoor v0.7 city-commerce-plan card mounted (audit P-2026-10-02-02 P2-9 \"city commercial scheme = zero\" gap face): preview/city-commerce-plan-nodes.json verbatim single data source from docs/spec/city-commerce-plan-v0.md (four business layers + 5-row audit-gap map + dual pricing references with [needs-CEO] verdict + M1..M4 milestone bite-table + compliance four-piece + CEO-physicals blocked notes; bold-normalized string-by-string sync gate) + live card pure composition, frontdoor.py pure ASCII, pricing/gate decisions approval-only; test_wiring +AC-FD7 SUITE PASS 44/44 + six-suite regression zero-regression (minors 19/19 pay 16/16 pay_v3 14/14 member 25 asserts entry_tier 7/7 liveroom 10/10) = qa/wiring-R943.log; live restart healthz=200 first probe, card title verified on served page; fold R163 water-level same round (80426B over-line 426B cashed, final 76909B margin 1591B, AC-R1641..R1645 = qa/reorg-R943.log) ·R943"
+    ],
+    [
+      "2",
+      "R945 frontdoor v0.8 citymodel scenario card mounted (audit P-2026-10-02-02 L76 'pricing model = zero on file' runnable answer; the REAL R850 model src/sandbox/citymodel/scenario.py imported and computed in-process at render time): preview/citymodel-scenario-nodes.json probe-params single data source (track_b band synced with scenario.TIER_PRICES in-canon 9.9/19.9/29.9; Chinese compliance four-piece lives in the data file) + live card (track A buyout+DLC 12-month projection + track B subscription decay/inflow + free-layer funnel + buyout-price sensitivity grid + breakeven month + deterministic ASCII report mounted byte-identical; F3 zero-canned = param-flip re-render flips readings control passed; frontdoor.py pure ASCII 32107B) + test_wiring +AC-FD8 eleven records SUITE PASS 55/55 + full regression RUNNER PASS 27/27 suites 231 criteria controls 6/6 zero-regression (qa/wiring-R945.log + qa/reconcile-all-R945.log) + live restart healthz=200 first probe, card title verified, 10 cards on served page; pricing/gates stay [needs-CEO] approval-only ·R945"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

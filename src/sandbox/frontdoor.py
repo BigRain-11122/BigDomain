@@ -54,6 +54,22 @@ bite-table, the compliance four-piece, the CEO-physicals blocked
 notes) is loaded at render time from the data file
 preview/city-commerce-plan-nodes.json extracted verbatim from that
 spec, sync-gated by the wiring suite; source stays pure ASCII.
+
+v0.8 (2026-10-02, R945 product round, AC-FD8a..f): mounts the
+city-commerce dual-track SCENARIO card -- the runnable face of the
+R850 model src/sandbox/citymodel/scenario.py (the v0.7 plan card
+carries the canon; this card carries the computed numbers, closing
+audit P-2026-10-02-02 L76 "pricing model = zero on file"). The REAL
+model is imported and runs in-process at render time on the
+caller-supplied probe params loaded from the data file
+preview/citymodel-scenario-nodes.json: track A buyout+DLC monthly
+projection, track B subscription-band decay/inflow, free-layer
+funnel, buyout-price sensitivity grid, breakeven month, and the
+deterministic ASCII report mounted byte-identical. Every displayed
+number is computed by the model, never canned; scenario params are
+labeled probe assumptions and the model computes without deciding
+(fail-closed); pricing stays [needs-CEO] approval-only; Chinese
+strings live only in the data file; source stays pure ASCII.
 """
 
 import glob
@@ -74,6 +90,7 @@ PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
 M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
 CC_JSON = os.path.join(ROOT, "preview", "city-commerce-plan-nodes.json")
+CM_JSON = os.path.join(ROOT, "preview", "citymodel-scenario-nodes.json")
 QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
@@ -83,6 +100,11 @@ MINORS_DIR = os.path.join(HERE, "minors")
 if MINORS_DIR not in sys.path:
     sys.path.insert(0, MINORS_DIR)
 import minors as minors_mod  # guard face module (reuse, no copy)
+
+CITYMODEL_DIR = os.path.join(HERE, "citymodel")
+if CITYMODEL_DIR not in sys.path:
+    sys.path.insert(0, CITYMODEL_DIR)
+import scenario as citymodel_mod  # dual-track model (reuse, no copy)
 
 HOST, PORT = "127.0.0.1", 8093
 
@@ -94,6 +116,12 @@ def load_json(path):
 
 def esc(value):
     return html.escape(str(value), quote=True)
+
+
+# Caller-supplied scenario probe params (single source: the data
+# file). The card runs the REAL model on these; the model computes
+# and never decides -- pricing stays a [needs-CEO] approval face.
+CM_PROBE = load_json(CM_JSON)
 
 
 def run_journey_once():
@@ -214,6 +242,22 @@ def minor_guard_probe():
     return readings
 
 
+def citymodel_card():
+    """Run the REAL dual-track scenario model in-process on the
+    probe params (F3 law: every number below is computed by the
+    model at render time, never canned in this source)."""
+    d = CM_PROBE
+    params, months = d["params"], int(d["months"])
+    fa = citymodel_mod.project_track_a(params, months)
+    fb = citymodel_mod.project_track_b(params, months)
+    fu = citymodel_mod.funnel(params)
+    grid = citymodel_mod.sensitivity_grid(params, months,
+                                          d["price_steps"])
+    be = citymodel_mod.breakeven_month(fa, d["fixed_cost"])
+    report = citymodel_mod.render_report(params, months)
+    return d, fa, fb, fu, grid, be, report
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
@@ -332,6 +376,33 @@ def render():
     cc_ws = "".join(
         "<p class=kv>%s</p>" % esc(b) for b in cc["workshop_bullets"])
 
+    cmd, cm_fa, cm_fb, cm_fu, cm_grid, cm_be, cm_report = citymodel_card()
+    cm_ta_rows = "".join(
+        "<tr><td>%d</td><td>%d</td><td>%.2f</td><td>%.2f</td></tr>"
+        % (r["month"], r["units"], r["gross"], r["cumulative"])
+        for r in cm_fa["rows"])
+    cm_tb_rows = "".join(
+        "<tr><td>%d</td><td>%.2f</td><td>%.2f</td><td>%.2f</td></tr>"
+        % (r["month"], r["subs_total"], r["mrr"], r["cumulative"])
+        for r in cm_fb["rows"])
+    cm_ta_head = "".join("<th>%s</th>" % esc(h)
+                         for h in cmd["track_a_headers"])
+    cm_tb_head = "".join("<th>%s</th>" % esc(h)
+                         for h in cmd["track_b_headers"])
+    cm_sens_rows = "".join(
+        "<tr><td>%.2f</td><td>%.2f</td></tr>"
+        % (g["buyout_price"], g["gross_total"]) for g in cm_grid)
+    cm_sens_head = "".join("<th>%s</th>" % esc(h)
+                           for h in cmd["sens_headers"])
+    cm_be_txt = ("month %d" % cm_be) if cm_be else "none"
+    cm_comb = round(cm_fa["gross_total"] + cm_fb["mrr_total"], 2)
+    cm_funnel = esc(
+        "funnel (probe): visitors=%(visitors).2f -> registered="
+        "%(registered).2f -> paid=%(paid).2f" % cm_fu)
+    cm_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>"
+        % (esc(c["name"]), esc(c["text"])) for c in cmd["compliance"])
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -396,7 +467,8 @@ color:var(--dim);margin:8px 0}
 existing sandbox faces &middot; no new business face &middot; v0.4
 membership + quality cards &middot; v0.5 minors guardian card
 (R940b) &middot; v0.6 M1 walk card (R942) &middot; v0.7 city
-commerce plan card (R943)</span></header>
+commerce plan card (R943) &middot; v0.8 city commerce scenario
+card (R945)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -484,6 +556,26 @@ the R940b remainder of the declared row.</p></div>
 <p class=fail>__CC_BLOCKED__</p>
 <p class=kv>__CC_BLOCKED2__</p></div>
 
+<div class="card"><h2>__CM_TITLE__</h2>
+<p class=kv>__CM_SOURCE__</p>
+<p class=kv>__CM_PROBENOTE__</p>
+<div class="grid">
+<div class="kpi"><b>__CM_A__</b>track A gross total CNY</div>
+<div class="kpi"><b>__CM_B__</b>track B MRR total CNY</div>
+<div class="kpi"><b>__CM_COMB__</b>combined gross CNY</div>
+<div class="kpi"><b>__CM_BE__</b>track A breakeven</div></div>
+<h3 style="margin:10px 0 8px">__CM_TA_TITLE__</h3>
+<table><tr>__CM_TA_HEAD__</tr>__CM_TA_ROWS__</table>
+<h3 style="margin:14px 0 8px">__CM_TB_TITLE__</h3>
+<table><tr>__CM_TB_HEAD__</tr>__CM_TB_ROWS__</table>
+<p class=kv>__CM_FUNNEL__</p>
+<h3 style="margin:14px 0 8px">__CM_SENS_TITLE__</h3>
+<table><tr>__CM_SENS_HEAD__</tr>__CM_SENS_ROWS__</table>
+<h3 style="margin:14px 0 8px">__CM_REP_TITLE__</h3>
+<pre class=proof>__CM_REPORT__</pre>
+<h3 style="margin:14px 0 8px">__CM_COMPL_TITLE__</h3><ul>__CM_COMPL__</ul>
+<p class=kv>__CM_TAIL__</p></div>
+
 <div class="card"><h2>Quality Face (suite inventory + last full
 regression)</h2>
 <div class="grid">
@@ -567,6 +659,28 @@ __PAYWARN__</footer>
         "__CC_COMPL__": cc_compl,
         "__CC_BLOCKED__": esc(cc["blocked_note"]),
         "__CC_BLOCKED2__": esc(cc["blocked_note_2"]),
+        "__CM_TITLE__": esc(cmd["card_title"]),
+        "__CM_SOURCE__": esc(cmd["source_note"]),
+        "__CM_PROBENOTE__": esc(cmd["probe_note"]),
+        "__CM_A__": esc("%.2f" % cm_fa["gross_total"]),
+        "__CM_B__": esc("%.2f" % cm_fb["mrr_total"]),
+        "__CM_COMB__": esc("%.2f" % cm_comb),
+        "__CM_BE__": esc(cm_be_txt),
+        "__CM_TA_TITLE__": esc(cmd["track_a_title"]),
+        "__CM_TA_HEAD__": cm_ta_head,
+        "__CM_TA_ROWS__": cm_ta_rows,
+        "__CM_TB_TITLE__": esc(cmd["track_b_title"]),
+        "__CM_TB_HEAD__": cm_tb_head,
+        "__CM_TB_ROWS__": cm_tb_rows,
+        "__CM_FUNNEL__": cm_funnel,
+        "__CM_SENS_TITLE__": esc(cmd["sens_title"]),
+        "__CM_SENS_HEAD__": cm_sens_head,
+        "__CM_SENS_ROWS__": cm_sens_rows,
+        "__CM_REP_TITLE__": esc(cmd["report_title"]),
+        "__CM_REPORT__": esc(cm_report.rstrip("\n")),
+        "__CM_COMPL_TITLE__": esc(cmd["compliance_title"]),
+        "__CM_COMPL__": cm_compl,
+        "__CM_TAIL__": esc(cmd["tail_note"]),
         "__NSUITE__": esc(total_suites),
         "__NCRIT__": esc(total_crit),
         "__QUALROWS__": qual_rows,

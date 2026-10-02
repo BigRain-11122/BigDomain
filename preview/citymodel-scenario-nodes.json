@@ -1,0 +1,55 @@
+{
+  "card_title": "城市商业双轨场景推演（模型实算卡）",
+  "source_note": "模型=src/sandbox/citymodel/scenario.py（R850·确定性实算·沙箱 stdlib 零外联）；方案正典=docs/spec/city-commerce-plan-v0.md（v0.7 方案卡与本卡实算面同窗咬合）；审计锚=P-2026-10-02-02「定价模型=零在册」缺口的可运行回应面。页内一切数字由模型在渲染时实算，零写死。",
+  "probe_note": "探针假设声明：下列参数为演示模型行为的调用方供参假设（track A 买断/DLC 价、月销、附着率；track B 月流失、月新增、起始订阅；漏斗三率；回本固定成本与敏感性步长），全部非定价决定——模型只算不裁（缺参即拒 fail-closed）；一切真实定价与开闸决定保持 [needs-CEO] 呈批面零执行。",
+  "months": 12,
+  "fixed_cost": 500000.0,
+  "price_steps": [98.0, 128.0, 158.0, 188.0, 218.0],
+  "params": {
+    "track_a": {
+      "buyout_price": 128.0,
+      "dlc_price": 38.0,
+      "attach_rate": 0.25,
+      "units_per_month": 1200
+    },
+    "track_b": {
+      "tier_prices": [9.9, 19.9, 29.9],
+      "tier_mix": [0.5, 0.3, 0.2],
+      "monthly_churn": 0.06,
+      "new_subs_per_month": 800,
+      "starting_subs": 3000
+    },
+    "funnel": {
+      "visitors": 50000,
+      "register_rate": 0.12,
+      "paid_rate": 0.04
+    }
+  },
+  "track_a_title": "Track A：买断+DLC 月度推演（C:S1 型参照轨·探针假设）",
+  "track_a_headers": ["月", "月销量", "月毛收（元）", "累计（元）"],
+  "track_b_title": "Track B：城市订阅带月度推演（正典档 9.9/19.9/29.9·流失+新增流）",
+  "track_b_headers": ["月", "订阅总数", "MRR（元）", "累计（元）"],
+  "sens_title": "Track A 买断价敏感性网格（同余法·五档探针）",
+  "sens_headers": ["买断价（元）", "12 月毛收合计（元）"],
+  "report_title": "模型确定性 ASCII 报告（同输入逐字节同一）",
+  "compliance_title": "合规四件套（常驻）",
+  "compliance": [
+    {
+      "name": "AIGC 标识",
+      "text": "本卡输出面=确定性代码生成，呈现面常驻 AI 生成标识（BLUEPRINT §五 生死线）。"
+    },
+    {
+      "name": "非投顾声明",
+      "text": "本卡数字=参数化场景推演，非投资建议、非预测、非承诺，仅供内部裁决证据面。"
+    },
+    {
+      "name": "[needs-CEO] 定价呈批",
+      "text": "模型只算不裁：一切定价/开闸/上线决定保持 P1 呈批面零执行；Track B 默认价仅引正典档 9.9/19.9/29.9（C-20260927-01 案 A），Track A 无正典锚价全由调用方供参。"
+    },
+    {
+      "name": "msgSecCheck 前置闸",
+      "text": "本卡为数字呈现面零 UGC 通道；平台一切内容面上线前须过 msgSecCheck 前置闸（沙箱=词库 mock，生产接线 fail-closed 至平台密钥到位）。"
+    }
+  ],
+  "tail_note": "CEO 物理件阻塞注：商户号/服务器/平台账号未到位前一切商业闭环不启动（与 v0.7 卡阻塞注同源）；模型参数首档=席4 硬判据过会后的 [needs-CEO] 呈批输入件，本卡探针参数不预设立场。"
+}
