@@ -1,0 +1,34 @@
+AC-R1621a round-start tree clean per scan (only own pre-registered qa evidence files from this script start in porcelain) + no index.lock
+AC-R1621a pre-op == git HEAD blob: 80570 bytes (round-start first-measure 80570B, scan/getsize dual-gauge, HEAD==disk byte-identical; R937 closeout carry-note cashed, over the 80000B line by 570B)
+AC-R1623a serializer roundtrip convention detect: no BOM, trailing-LF=False, canonical json.dumps(indent-2) form
+AC-R1622a window = [R160 prior summary + R936..R937 two pairs] 5 lines 11181 B (content); two-pair = minimal continuous window (all pairs since prior fold included, no smaller candidate exists, R848 rolling-window law); head block 55 items verbatim (content 66941 B)
+AC-R1622b head block 55 items content = 66941 B == R930..R936 register (head file-region 67408 B incl. JSON framing); window line prefixes verified R936..R937 continuous 2 pairs zero-missing
+AC-R1622c removed-lines substring-verified (register-metric inputs): no-pullable 1 (R160 prior-summary accounting-embedded tag only; R936/R937 pairs carry zero declaration tag; new summary accounting re-embeds +1) / tokens 2 / idle-fast 0 (abolished-path tag, window and new lines carry zero)
+AC-R1622d P/D/O catalog (regex dedup, prior-embedded snowball + new first-appearance): 290 tokens = R160 prior-summary embedded catalog 286 snowball + 4 new ['C-R1611', 'C-K164a', 'C-MG1', 'C-PV6a'] (mechanical AC- prefix substring hits, zero hand-picked); missing=[] asserted (set-equality, order = prior embedded order + new, R890 composition law)
+probe pre-op : {"W": 58, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 25, "tokens": 10, "sub": 7}  (== R936-post register + R937 pair +2/+1, structural symmetry zero drift; criterion = R744-registered, regex boundary carried from R848)
+probe calibration: 2 backups all 8 keys reproduce their era in-register values exactly (state-preop-R934.bak = R934-era pre; state-preop-R936.bak = R936-era pre; live pre at same structural position, zero binding effect)
+AC-R1622e compress-precedent list carried mechanically from R160 prior summary (range R758..R934 -> R758..R936, section anchor R934/R159 -> R936/R160, deterministic transform)
+AC-HB938 heartbeat pre-op tail = tick 937 single ts prefix (lag 0, no repair needed this round)
+INFO viz probe: healthz 200, data.js 577991B mtime 18:59:30 (R936 probe 573107B -> host production line active, freshness face held); CIM cpu21/ram40
+INFO self-heal check: schtasks BigDomain-OSLoop present=True - no re-register needed
+INFO nine-face scan (round-start probe_r938.py evidence): LEDGER @BigDomain 26 rows == register conflict=0 zero unreplied (file mtime 15:18 predates R936 scan window); DEC content-addressed 127 tokens flat (new=[] missing=[] both empty, rows 228 secondary); GORD flat (file mtime 16:49:45 predates R936 scan 18:41, tail rows FluxVerse/BigLife faces, own pipe-row recount metric 152 vs register 147 = metric difference not file change, honestly noted); ORD own ledger flat via clean tree; BENCH 0d refreshed 10-02; QA same-day multi evidence R908+R937; TASKS 2 unchecked = standing anchors; D-20260929-03 legal external trigger-check dual-path zero hits; D-20260930-19 consumption steps derived (dispatch board zero new company rows, CEO physicals zone zero change)
+AC-R1624/AC-R1622f window statutory: two-pair window = minimal continuous window, projected post register == canonical in-register zero drift on first candidate (R895..R936 isomorph, R893 family), final budget 78183 B <= 78,500B gate satisfied in-fold
+post-fold (pre-closeout) size: 75002 B
+S_new built: 5645 B text; structural constraints (date+FWparen prefix / nop tag exactly once / idle_round+sub keys in / no beat / no idle-fast / no tokens:local / no ASCII quote / no backslash) all pass
+AC-R1623b top fields: DEC/ORD/GORD/BENCH baselines all flat this round (scan PASS faces, mtime disk evidence), zero field drift, tick 937->938 only; last_dec_tokens 127 flat
+AC-R1624 final size: 78183 B, margin 317 B under 78,500B gate; post-fold 75002 B
+AC-R1623c final: json.loads pass; log 58 items = 55 verbatim head + 1 summary + 2 closeout; head region byte-identical except tick digit; canonical form == json.dumps(indent-2)
+probe post   : {"W": 56, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 23, "tokens": 9, "sub": 6}
+B. incremental-register law: W 58->56 (window 5 out, summary+closeout+tokens 3 in); round 25->23 (window 4 R-regex hits out: 2 closeout + 2 tokens lines; own closeout + tokens pair in); tokens 10->9 (window 2 out, own 1 in); idle_round 8->8 flat (window zero carry, own pair zero); idle 37 flat (abolished-path tag, window and new lines carry zero); nop 3->3 flat (R160 prior-summary accounting-embedded tag out -1, new summary accounting re-embeds +1, net 0); sub 7->6 (two pair closeout lines out -2, own closeout in +1, net -1); paren 33->33 flat (pure-date-prefix summary replaced 1:1) - registered, asserted pre-write (definitions calibrated byte-exact against state-preop-R934.bak and state-preop-R936.bak this round, both backups all 8 keys reproducing their era in-register values exactly)
+D. heartbeat row composed x1 (tick 938 current, lag 0 kept) ts= 2026-10-02T19:02:25+08:00
+C. export latest_artifact: R937 product head kept verbatim (product-first law, most recent product artifact face preserved), mechanism suffix appended once (R930/R932 precedent form restored)
+C. export derived: tick row 937->938 stale-value drift-fix (R556/R542 precedent), R161 results row appended, self_drive W 56 / sub 6, idle 37 / nop 3, queues 6/2/2, proposals 1/1 disk-recounted; window label 2026-09-25..2026-10-02 kept
+C. export composed, export_ts = 2026-10-02T19:02:25+08:00 , results rows = 297
+AC-R1621c archive pure-append: 13381285 -> 13461936 B; markers 153 -> 154
+AC-R1621a fold pre-op porcelain dirty-paths subset of own pre-registered write set (claim+cut writes) dirty=['M src/os/backlog.md']
+AC-R1621b backup logs/state-preop-R938.bak written byte-identical
+archive write committed (single wb write + prefix re-verified, markers 153->154)
+state.json written (temp+replace, re-read asserted: tick 938, log 58 items [55 head + 1 summary + 2 closeout], probe in-register; head == pre-op head 55 items byte-equal except tick digit)
+AC-HB938 heartbeat row appended x1 (tick 938 current, single ts, lag 0 kept) ts= 2026-10-02T19:02:25+08:00
+export written (temp+replace, re-read asserted: export_ts + results 297 rows + tick row 938 + zero dict-shaped rows)
+AC-R1625 delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-165 tags (P-51)
