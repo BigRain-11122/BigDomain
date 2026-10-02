@@ -1,0 +1,35 @@
+# board cut-158 + flip evidence, round R930 (verify-then-write; order: claim -> cut -> fold -> flip -> commit)
+[PASS] board canonical single BOM byte-level
+[PASS] board has no CR bytes
+[PASS] board stale done rows == 1 (R929 natural stale)
+[PASS] board open rows == 3 pre-claim
+[PASS] no prior R930 claim row
+[PASS] R929 stale done row found at top of item list
+[PASS] board post-write single BOM preserved
+[PASS] board header prefix byte-identical
+[PASS] board post-claim open rows == 4 (claim + 3 standing)
+[PASS] board done rows still == 1 (R929)
+[PASS] claim row landed verbatim (pre-registration before any fold writes)
+[DONE] claim landed; board 5162 -> 7087 bytes
+PRE-OP PASS AC-K158a: stale done rows=1 (R929); standing open=3; BOM byte-calibrated; archive sections=63; 09-archive md5=19783a35cfc4e57eb24eda5916a07702 == HEAD blob
+POST-OP PASS AC-K158b: R929 row verbatim migrated to Oct archive section R930; md5 identical 55ede74794b23d810e4dc5e36f35059e; pure-append prefix byte-identical; sections 63->64; 09-month archive zero-touch (disk pre==post==HEAD blob)
+POST-OP PASS AC-K158c (interim): main board = header + R930 claim row + 3 standing open rows; zero stale done rows (flip to done at step 4)
+BOARD-STATE PASS AC-K158d: all assertions verify-then-write, computed before any disk write; post-write re-read re-verified
+SIZES: board 7087 -> 6103 bytes; archive10 184871 -> 185865 bytes; archive09 untouched 358597 bytes
+PASS cited evidence on disk pre-flip: qa/reorg-R930.log (AC-R1581..R1585)
+PASS cited evidence on disk pre-flip: qa/board-R930.log (AC-K158a..d)
+PASS cited evidence on disk pre-flip: logs/state-preop-R930.bak (backup)
+PASS cited evidence on disk pre-flip: logs/state-log-archive-2026-09.md (archive)
+PASS heartbeat tick 930 row on disk pre-flip (AC-HB930)
+PASS state.json tick 930 + R930 closeout pair on disk pre-flip
+PASS board canonical single BOM pre-flip
+PASS board done rows = 0 pre-flip
+PASS board open rows = 4 pre-flip (R930 claim + 3 standing)
+PASS R930 claim row found
+PASS board post-flip canonical single BOM intact
+PASS board header prefix byte-identical post-flip
+PASS AC-K158c main board final (post-flip re-read): done rows=1 [R930 current with closure note]
+PASS AC-K158c open rows=3 post-flip
+PASS closure note cites both evidence logs
+PASS AC-R1585/AC-K158d delivery tags in board row (P-51)
+INFO claim md5 (pre-flip body) = 59cbe951f043619715eff6d2f5aeb863; done row len=2120
