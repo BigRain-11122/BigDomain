@@ -1,0 +1,22 @@
+AC-R1761 pre-op: 81318B dual-gauge, HEAD==disk byte-identical (sha16 4994a278f9daef07), tick 980, log 62 items, no BOM no trailing LF, canonical form; round-start tree = ['M src/os/backlog.md'] (backlog.md single dirty = own R981 pre-registration row, own write set)
+AC-R1762 window = [R175 rolling summary + R978..R980 three pairs] 7 rows identified; kept=0 (window extends to log tail, no fourth pair, R966 isomorph); head block 55 items verbatim; window content bytes = 11857, head content bytes = 66941
+probe pre  : {"W": 60, "idle": 37, "idle_round": 8, "nop": 2, "wait": 3, "round": 27, "tokens": 11, "sub": 8}  (== R981 read-only probe calibration this round, register method computed before writing; round counter includes tokens-line prefixes; wait 3 carries R978/R979/R980 closeout tags; nop 2 head-declaration lines flat)
+AC-R1762 post-fold+closeout projection: probe register = {"W": 56, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 23, "tokens": 9, "sub": 6}  (asserted pre-write; W 60-7+1+2; round 27-6+2; tokens 11-3+1; sub 8-3+1; wait 3-3+1 = folded R978/R979/R980 closeout tags out + R981 closeout tag in; nop/idle/idle_round head-anchored flat)
+catalog base: archive R938 section R160 roll summary embedded full list = 286 tokens (tail C-K163a)
+AC-R1762 catalog chain: R160 286 + R161 4 + R162 4 + R163 3 + R164 6 + R165 6 + R166 17 + R167 21 + R168 26 + R169 34 + R170 34 + R171 44 = 485 (archive-section mechanical recovery, R161..R165 exact-list asserted, R166..R171 count-asserted)
+catalog + snapshot rolls: R172 13 + R173 2 (O-2026-0930-013/AC-R1721) + R174 2 (O-013-4/AC-R1731) = 502 (pre-op snapshots of R973/R976/R979 archive nodes, exact lists asserted)
+catalog + R175 roll live embedded 3 new (winA[0]) = 505 total (in-register)
+AC-R1762 window new tokens: 4 'AC-FD14a/AC-R1751/AC-FD15a/AC-IG7' (regex mechanical zero hand-picked, folded-line extraction vs retained-set diff + catalog-set exclusion), catalog 505 -> 509, missing=[] asserted
+token-regex + catalog-exclusion calibration replay (R979 window vs its pre-op backup + catalog-at-502): PASS exact-set 3 tokens AC-WM1a/AC-R1741/AC-FD13a (recorded entry 505)
+AC-R1762 compress-precedent list carried mechanically (range end R758..R976 -> R758..R979, latest completed fold before this round, archive pointer kept truthful)
+AC-R1761 archive pre-op markers = 168 (in-register expectation per R979 fold close); backup target logs/state-preop-R981.bak
+AC-R1764 in-fold projection: post-fold 73374 B, projected final 75867 B margin 2633 B (<= 78,500B gate satisfied in-fold)
+S_new 3961 B / E_new 2205 B / T_new 272 B structural constraints all pass (prefixes, tag accounting, no beat/quote/backslash/forbidden tags)
+AC-R1763b top fields flat (DEC 131 tokens / ORD 2026-09-28 22:1x / GORD 152 flat round / BENCH 10-03), tick 980->981 only, head region byte-identical except tick digit
+probe post : {"W": 56, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 23, "tokens": 9, "sub": 6}  (== pre-registered register, zero drift asserted pre-write)
+AC-R1761 backup logs/state-preop-R981.bak written byte-identical
+AC-R1763c archive pure-append: 14600328 -> 14681727 B; markers 168 -> 169
+AC-R1763d state.json written (temp+replace, re-read asserted: tick 981, log 58 items = 55 head + 1 roll + 2 closeout, probe in-register, dual-gauge parse pass)
+AC-R1764 final size: 75867 B, margin 2633 B under 78,500B gate; post-fold 73374 B
+AC-R1765 delivery: state log R981 lines + backlog R981 done row + commit contains P-2026-09-25-18 (P-51 protocol)
+GORD flat companion note: canonical scan sha16 257A6CC1056A1759 same baseline gord_new_rows=0, last_gord_tbl_rows 152 unchanged, CEO physicals zone unchanged (merchant-id/server/domain/filing still pending). D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 131 tokens flat), (2) group orders CEO-physicals zone zero change. Gated-file trigger check this round: legal-review draft not on disk (window 10-03 12:00) + BigLife R777 review file not presented - both zero hits, chronic continuation. Fold-round write set discipline: backlog + state.json + archive + backup + qa log + export + heartbeat only.
