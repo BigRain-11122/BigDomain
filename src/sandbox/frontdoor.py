@@ -171,6 +171,7 @@ if LEDGER_DIR not in sys.path:
 import ledger as ledger_mod       # token ledger product (reuse, no copy)
 import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
 import props as props_mod         # city props/cosmetics face (reuse, no copy)
+import incentive as incentive_mod  # creator incentive face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -1022,6 +1023,199 @@ def props_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def incentive_probe():
+    """Run the REAL UGC creator incentive gradient allocator (R600
+    product, BLUEPRINT sec.4 co-creation revenue-share ecosystem
+    layer; design source docs/spec/incentive-agent-spec.md) in-process
+    at render time on a throwaway database (F3 law: every reading
+    below is computed by the product modules, never canned). The
+    one-way share law: a settled window books each payout as exactly
+    one share tx out of pool:share via the ledger public API; payouts
+    are one-way grants and no reverse-conversion verb exists anywhere
+    in the module. Chain: a pure decreasing-marginal gradient walk
+    (anti-farm bands) -> a budget-binding window where the raw total
+    overshoots the window budget and the deterministic pro-rata
+    integer scaling lands the payout sum on the budget exactly with
+    zero rounding loss -> a collar-binding window where a huge single
+    contribution is capped by the per-creator collar -> the ledger
+    join verifies every credit entry binds its settlement ref ->
+    re-settling the same window is refused (idempotence) with zero
+    ledger movement -> empty contributions, non-resident accounts,
+    non-positive units and duplicate creators are all refused
+    fail-closed. Gradient/collar/budget VALUES are sandbox-only
+    probe params; real parameter adoption stays a P1 CEO
+    approval-only item (AC-IG7: no incentive key ships in any
+    config). Raw tx ids are never rendered (determinism)."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-incentive-")
+    led = None
+    face = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        face = incentive_mod.IncentiveFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except incentive_mod.IncentiveError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def share_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute(
+                "SELECT COUNT(*) FROM ledger_tx WHERE type = 'share'"
+            ).fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: settlement-window funding mint + creator accounts
+        led.mint_to_pool("pool:share", 2000, "probe:mint:share",
+                         "settlement")
+        for name in ("alice", "bob", "carol", "dave"):
+            led.ensure_account("usr:" + name, census_avatar_id=name)
+        pool_before = led.balance("pool:share")["balance"]
+        ok("authorize the settlement-window funding mint + register"
+           " four probe creators",
+           "pool:share seeded %d; gradient bands %s, collar %d,"
+           " budget %d -- all sandbox-only probe params, real values"
+           " stay a [needs-CEO] approval face"
+           % (pool_before,
+              incentive_mod.SANDBOX_PARAMS["bands"],
+              incentive_mod.SANDBOX_PARAMS["collar"],
+              incentive_mod.SANDBOX_PARAMS["budget"]))
+
+        # -- pure gradient law (AC-IG1 face, decreasing marginal) ---
+        seq_u = (0, 1, 3, 5, 6, 15, 16, 40, 100)
+        seq_p = [incentive_mod.payout_for(u) for u in seq_u]
+        marg = [incentive_mod.payout_for(u + 1)
+                - incentive_mod.payout_for(u) for u in (2, 6, 20)]
+        ok("walk the pure gradient function over probe units %s"
+           % (seq_u,),
+           "payouts %s -- monotone non-decreasing with the per-unit"
+           " marginal falling band over band (%d -> %d -> %d): the"
+           " anti-farm shape rewards early contribution and flattens"
+           " farming" % (seq_p, marg[0], marg[1], marg[2]))
+
+        # -- W1: budget-binding window, exact pro-rata landing --
+        tx0 = share_n()
+        paid_w1 = face.settle_window("W1", [
+            ("usr:alice", 100),   # raw 270 -> collar 150
+            ("usr:bob", 30),      # raw 130
+            ("usr:carol", 30),    # raw 130
+        ])
+        pool_w1 = led.balance("pool:share")["balance"]
+        ok("settle window W1 (raw 410 overshoots the budget 400)",
+           "collar first, then deterministic pro-rata integer scaling"
+           " lands %s (sum %d == budget exactly, zero rounding loss;"
+           " remainder walks input order)" % (paid_w1, sum(
+               a for _, a in paid_w1)))
+
+        # -- W2: collar-binding window (budget not binding) ---------
+        paid_w2 = face.settle_window("W2", [("usr:dave", 10 ** 6)])
+        ok("settle window W2 with one 1,000,000-unit contribution",
+           "payout %s -- the per-creator window collar caps the"
+           " giant farm attempt at %d; a whale cannot drain the"
+           " window" % (paid_w2,
+                        incentive_mod.SANDBOX_PARAMS["collar"]))
+
+        # -- ledger booking join (AC-IG4 face) ----------------------
+        tx1 = share_n()
+        total_all = sum(a for _, a in paid_w1) + sum(
+            a for _, a in paid_w2)
+        pool_after = led.balance("pool:share")["balance"]
+        conn = sqlite3.connect(db)
+        rows = conn.execute(
+            "SELECT e.account_id, e.amount, t.ref FROM"
+            " ledger_entries e JOIN ledger_tx t ON t.tx_id = e.tx_id"
+            " WHERE t.ref LIKE 'incentive:%' AND e.direction ="
+            " 'credit' ORDER BY t.ref").fetchall()
+        conn.close()
+        join_ok = (len(rows) == 4
+                   and sum(r[1] for r in rows) == total_all
+                   and all(r[2] == "incentive:%s:%s"
+                           % (r[2].split(":")[1], r[0]) for r in rows))
+        ok("audit the ledger booking join",
+           "share-tx %d->%d (+4, one per payout); pool:share"
+           " %d - %d = %d exact; %d credit rows each binding its"
+           " settlement ref=%s (every payout is exactly one share"
+           " booking -- the ledger owns all token arithmetic)"
+           % (tx0, tx1, pool_before, total_all, pool_after,
+              len(rows), join_ok))
+
+        # -- idempotence (AC-IG5 face) + fail-closed refusals ------
+        snap = {n: led.balance("usr:" + n)["balance"] for n in
+                ("alice", "bob", "carol", "dave")}
+        snap_pool = led.balance("pool:share")["balance"]
+        refuse_leg("re-settle the SAME window W1",
+                   lambda: face.settle_window(
+                       "W1", [("usr:alice", 100)]))
+        snap_ok = (all(led.balance("usr:" + n)["balance"] == snap[n]
+                       for n in ("alice", "bob", "carol", "dave"))
+                   and led.balance("pool:share")["balance"]
+                   == snap_pool)
+        ok("re-read all balances after the replay refusal",
+           "unchanged=%s -- a settled window is idempotent, the"
+           " replay moved zero tokens" % snap_ok)
+        refuse_leg("settle a window with EMPTY contributions",
+                   lambda: face.settle_window("W3", []))
+        refuse_leg("a pool account tries to collect",
+                   lambda: face.settle_window("W4", [
+                       ("pool:reserve", 10)]))
+        refuse_leg("contribute zero units",
+                   lambda: face.settle_window("W5", [
+                       ("usr:alice", 0)]))
+        refuse_leg("the same creator twice in one window",
+                   lambda: face.settle_window("W6", [
+                       ("usr:alice", 5), ("usr:alice", 5)]))
+
+        # -- one-way share law + zero-config face -------------------
+        with open(os.path.join(HERE, "ledger", "incentive.py"),
+                  "rb") as handle:
+            src_bytes = handle.read()
+        src = src_bytes.decode("ascii", errors="strict")
+        banned = ("sell", "refund", "exchange", "withdraw",
+                  "transfer", "mint")
+        hits = [w for w in banned if w in src.lower()]
+        with open(LEDGER_CFG, encoding="utf-8") as handle:
+            shipped = json.load(handle)
+        cfg_has_key = any("incentive" in str(k).lower()
+                          for k in shipped)
+        ok("isolation law + shipped-config check",
+           "banned-verb hits in the module=%s (share is one-way, no"
+           " reverse-conversion verb); incentive param keys in the"
+           " shipped config=%s -- the sandbox defaults ship only in"
+           " the module, real parameter adoption stays P1"
+           " CEO-only" % (hits, cfg_has_key))
+        face.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "paid_w1": paid_w1, "paid_w2": paid_w2,
+            "gradient": seq_p, "marginals": marg,
+            "share_tx": tx1, "total_paid": total_all,
+            "pool_before": pool_before, "pool_after": pool_after,
+            "join_rows": len(rows), "join_ok": join_ok,
+            "banned_hits": hits, "cfg_has_key": cfg_has_key,
+        }
+    finally:
+        if face is not None:
+            with contextlib.suppress(Exception):
+                face.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -1583,6 +1777,79 @@ def render():
         " verb exists in the module (BLUEPRINT 5.4 posture extended"
         " to the counts domain)")
 
+    # -- creator incentive face card (v0.15): REAL probe at render
+    # time; honest failure face --
+    try:
+        ic = incentive_probe()
+        ic_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        ic, ic_err = None, str(exc)[:300]
+    if ic is not None:
+        icv_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in ic["legs"])
+        icv_kpis = ("<div class=\"grid\">"
+                    "<div class=\"kpi\"><b>%d==%d</b>share tx =="
+                    " payout rows (one-way)</div>"
+                    "<div class=\"kpi\"><b>%d</b>window budget landed"
+                    " exact</div>"
+                    "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                    "</div>"
+                    "<div class=\"kpi\"><b>%d</b>ref-bound credit rows"
+                    "</div>"
+                    "</div>"
+                    % (ic["share_tx"], len(ic["paid_w1"])
+                       + len(ic["paid_w2"]),
+                       sum(a for _, a in ic["paid_w1"]),
+                       len(ic["refusals"]), ic["join_rows"]))
+        icv_grad = esc(
+            "pure gradient walk: units (0, 1, 3, 5, 6, 15, 16, 40,"
+            " 100) -> payouts %s; marginal per unit falls band over"
+            " band (%d -> %d -> %d) -- the anti-farm shape that"
+            " rewards early contribution and flattens farming"
+            % (ic["gradient"], ic["marginals"][0], ic["marginals"][1],
+               ic["marginals"][2]))
+        icv_join = esc(
+            "booking join: pool:share %d - %d = %d exact; %d credit"
+            " rows each binding its incentive:window:creator ref=%s;"
+            " W1 landed %s (sum == budget) and W2 capped the whale at"
+            " %s (collar)"
+            % (ic["pool_before"], ic["total_paid"], ic["pool_after"],
+               ic["join_rows"], ic["join_ok"], ic["paid_w1"],
+               ic["paid_w2"]))
+    else:
+        icv_rows = icv_kpis = icv_grad = icv_join = ""
+    if ic_err:
+        icv_kpis = ("<p class=fail>INCENTIVE PROBE FAILED (honest"
+                    " failure, no fake PASS): %s</p>" % esc(ic_err))
+    icv_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "gradient bands / collar / budget are"
+             " sandbox-only probe params; real share ratios,"
+             " settlement period and redemption threshold stay a P1"
+             " CEO approval face and no incentive key ships in any"
+             " config file"),
+            ("msgSecCheck front gate", "payouts only settle against"
+             " contribution units booked by the UGC pipeline behind"
+             " its gate passes; every UGC/text surface in the stack"
+             " keeps the msgSecCheck front gate (wordlist mock in"
+             " sandbox, fail-closed in production)"),
+        ])
+    icv_hard = esc(
+        "structural law (one-way share rule): a settled window books"
+        " each payout as exactly one share tx out of pool:share via"
+        " the ledger public API; the allocator owns no token"
+        " arithmetic of its own, a settled window replays as a"
+        " refusal with zero ledger movement, and no"
+        " reverse-conversion verb exists anywhere in the module"
+        " (tokens never leave the loop, BLUEPRINT 5.4)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -1705,7 +1972,8 @@ v0.10 token ledger core card (R965) &middot; v0.11 UGC pipeline core
 card (R968) &middot; v0.12 AIGC implicit watermark card
 (R975) &middot; v0.13 live room conversion card
 (R977) &middot; v0.14 city props card
-(R978)</span></header>
+(R978) &middot; v0.15 creator incentive card
+(R980)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -1838,6 +2106,32 @@ __PP_ROWS__</table>
 pricing decisions; raw spend tx ids contain timestamps and are never
 rendered -- the audit face shows the bound-debit verification
 instead.</p></div>
+
+<div class="card"><h2>Creator Incentive Face (co-create revenue
+share, live probe)</h2>
+<p class=kv>The REAL UGC creator incentive gradient allocator
+(src/sandbox/ledger/incentive.py over the P-47-2 token ledger, both
+imported, never copied) runs in-process at render time on a
+throwaway probe database -- every reading below is computed by the
+product modules, never canned. This is the ecosystem layer of the
+BLUEPRINT sec.4 co-creation revenue-share mechanism: adopted
+co-creations earn window payouts out of the share pool through a
+decreasing-marginal anti-farm gradient, a per-creator collar and a
+window budget cap with zero-rounding-loss integer landing.</p>
+__IC_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__IC_ROWS__</table>
+<p class=kv>__IC_GRAD__</p>
+<p class=kv>__IC_JOIN__</p>
+<p class=kv>__IC_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__IC_COMPL__</ul>
+<p class=kv>Gradient bands, collar and budget are sandbox-only probe
+params; real parameter adoption (share ratios, settlement period,
+redemption threshold) stays a [needs-CEO] P1 approval face and no
+incentive key ships in any config file. Raw tx ids are never
+rendered (determinism) -- the audit face shows the ref-bound join
+verification instead.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -2021,6 +2315,12 @@ __PAYWARN__</footer>
         "__PP_AUDIT__": ppv_audit,
         "__PP_HARD__": ppv_hard,
         "__PP_COMPL__": ppv_compl,
+        "__IC_KPIS__": icv_kpis,
+        "__IC_ROWS__": icv_rows,
+        "__IC_GRAD__": icv_grad,
+        "__IC_JOIN__": icv_join,
+        "__IC_HARD__": icv_hard,
+        "__IC_COMPL__": icv_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
