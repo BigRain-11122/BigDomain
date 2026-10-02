@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>硅基域 BigDomain · 产品预览 v0.5</title>
+<title>硅基域 BigDomain · 产品预览 v0.6</title>
 <style>
   :root { --ink:#182033; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa; --accent:#3b5bdb; --ok:#2f9e44; --warn:#e8590c; --ceo:#a61e4d; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -64,7 +64,7 @@
 <header>
   <div class="wrap">
     <h1>硅基域 BigDomain</h1>
-    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.5 · 2026-10-02</div>
+    <div class="sub">公众共创元宙平台 · 商业化子公司（FLUX 集团）— 产品静态预览 v0.6 · 2026-10-02</div>
     <div class="badges">
       <span class="badge ai">AI 生成标识：本页由 AI 参与生成并整理</span>
       <span class="badge">数据派生：本仓沙箱真实读数</span>
@@ -153,12 +153,12 @@
     <div class="stat"><div class="n">27</div><div class="t">沙箱套件</div></div>
     <div class="stat"><div class="n">231</div><div class="t">预注册判据</div></div>
     <div class="stat"><div class="n">27/27</div><div class="t">RUNNER 全绿套件</div></div>
-    <div class="stat"><div class="n">20</div><div class="t">业务面模块</div></div>
+    <div class="stat"><div class="n">21</div><div class="t">业务面模块</div></div>
   </div>
   <div class="card">
-    <h3>模块面（本仓 src/sandbox/ 实存 · R875 盘点）</h3>
+    <h3>模块面（本仓 src/sandbox/ 实存 · R937 盘点）</h3>
     <div>
-      <span class="tag ok">lobby 大厅</span><span class="tag ok">liveroom 直播间</span><span class="tag ok">ledger 双式账本</span><span class="tag ok">member 会员权益</span><span class="tag ok">pay 支付 v3</span><span class="tag ok">ugc UGC 管道</span><span class="tag ok">tourstate 访客三态</span><span class="tag ok">props 道具/装扮</span><span class="tag ok">venue 场地租赁</span><span class="tag ok">incentive 创作者激励</span><span class="tag ok">settlement 跨司结算</span><span class="tag ok">compliance 合规</span><span class="tag ok">opsreview 运营复核</span><span class="tag ok">releasegate 发布闸</span><span class="tag ok">watermark 盲水印</span><span class="tag ok">benchgate 基准闸</span><span class="tag ok">citymodel 城市推演</span><span class="tag ok">journey_demo 全链演示</span><span class="tag ok">frontdoor 前台服务</span><span class="tag ok">reconcile_all 对账总闸</span>
+      <span class="tag ok">lobby 大厅</span><span class="tag ok">liveroom 直播间</span><span class="tag ok">ledger 双式账本</span><span class="tag ok">member 会员权益</span><span class="tag ok">pay 支付 v3</span><span class="tag ok">ugc UGC 管道</span><span class="tag ok">tourstate 访客三态</span><span class="tag ok">props 道具/装扮</span><span class="tag ok">venue 场地租赁</span><span class="tag ok">incentive 创作者激励</span><span class="tag ok">settlement 跨司结算</span><span class="tag ok">compliance 合规</span><span class="tag ok">opsreview 运营复核</span><span class="tag ok">releasegate 发布闸</span><span class="tag ok">watermark 盲水印</span><span class="tag ok">benchgate 基准闸</span><span class="tag ok">citymodel 城市推演</span><span class="tag ok">journey_demo 全链演示</span><span class="tag ok">frontdoor 前台服务</span><span class="tag ok">reconcile_all 对账总闸</span><span class="tag ok">minors 未成年人守护</span>
     </div>
   </div>
 
@@ -180,12 +180,12 @@
   </div>
 
   <div class="card" id="minor-face">
-    <h3>④ 未成年人消费限额面（M1 前置 · 常驻 · 《未成年人网络保护条例》）</h3>
+    <h3>④ 未成年人守护面（M1 前置 · 常驻 · 《未成年人网络保护条例》· v0.6 沙箱承载件在册）</h3>
     <ul>
-      <li>监护人管理：§43-44 未成年人时间 / 权限 / 消费管理面接入——订阅 / 内购 / 直播三面接线 = M1 前置。</li>
-      <li>消费限额：单次与单日消费限额随档位配置，数值 [needs-CEO] 呈批；未配置不开单收款。</li>
-      <li>禁开播：§31 未成年人禁开直播——直播面接线 = M1 前置（liveroom 沙箱承载面在册 · 生产参数 [needs-CEO]）。</li>
-      <li>禁自动化营销：§24③ 对未成年人禁自动化商业营销推送。</li>
+      <li>监护人管理：§43-44 未成年人时间 / 权限 / 消费管理面——沙箱承载件 <code>src/sandbox/minors/</code>（MinorGuardFace）判据 AC-MG1..MG7 · 19 断言全绿（qa/minors-R937.log · R937）。</li>
+      <li>四道守护闸：时间窗闸（窗外拒）+ 消费单次/单日双闸（超限拒零扣费）+ §31 禁开播 + §24③ 禁自动化营销推送——全部 fail-closed：限额未配置 = 拒开单，数值全 [needs-CEO] 呈批、零发明默认。</li>
+      <li>三面接线（订阅 / 内购 / 直播）：member / pay / liveroom 生产调用点清单随件（WIRING_POINTS）；调用点接线 = 拆细后继行（本件交付守护闸面 · 诚实注记）。</li>
+      <li>守护面 = 未成年人作用域：成年人四面直通，监护人限额仅对未成年人生效（AC-MG5）。</li>
     </ul>
   </div>
 
@@ -201,12 +201,13 @@
   </div>
 
   <footer>
-    硅基域 BigDomain · 产品静态预览 v0.5 · 生成=BigDomain-OSLoop R683/R698/R869/R872/R875 · 2026-10-02 ·<br>
+    硅基域 BigDomain · 产品静态预览 v0.6 · 生成=BigDomain-OSLoop R683/R698/R869/R872/R875/R937 · 2026-10-02 ·<br>
     本页为 XL-16 改进项 ①交付件：真实数据派生（member/config.json + qa/entry-tier-R681.log）· 自包含零外链 · file:// 可开 · 服务器物理件到位后升 http URL。<br>
     v0.2 新增（R698）：19.9 用户旅程八步节（JV-1..JV-8 · 派生自 docs/spec/journey-19.9-v2-spec.md §一 正典规格）。<br>
     v0.3 新增（R869）：M1 可逛切片·商业挂载位节（参观端转化挂载点五节点表 + 首发转化钩文案三枚 · 本地 msgSecCheck L1 预筛零命中）+ 合规第四面（未成年人消费限额面 · 《未成年人网络保护条例》§43-44 / §31 / §24③）。<br>
     v0.4 新增（R872）：M1 挂载面互动动线演示节（五站可逛 · 纯内联 JS · 站点数据自挂载表 verbatim 派生）+ 服务台站 msgSecCheck 前置闸实况行（诚实红：生产接线 blocked on CEO 物理件 · 未接线拒启 E_GATE_OFFLINE）。<br>
-    v0.5 刷新（R875）：工程读数实时刷新（R875 live 全量实跑 27/27 套件 · 231 判据全绿 = qa/reconcile-live-R875b.log）+ lobby AC-S4 端口探针撞车修复（frontdoor 8093 常驻服务 · 判负留痕 qa/reconcile-live-R875.log）+ 模块面标签补齐（20 面 · R875 盘点）。
+    v0.5 刷新（R875）：工程读数实时刷新（R875 live 全量实跑 27/27 套件 · 231 判据全绿 = qa/reconcile-live-R875b.log）+ lobby AC-S4 端口探针撞车修复（frontdoor 8093 常驻服务 · 判负留痕 qa/reconcile-live-R875.log）+ 模块面标签补齐（20 面 · R875 盘点）。<br>
+    v0.6 新增（R937）：合规第四面升级=未成年人守护沙箱承载件在册（src/sandbox/minors/ · MinorGuardFace 四道守护闸 · AC-MG1..MG7 19 断言全绿 = qa/minors-R937.log）+ 模块面标签 20→21（minors 未成年人守护 · R937 盘点）。M1 前置《未成年人网络保护条例》三面接线守护面就位，调用点接线=拆细后继行。
   </footer>
 </div>
 <script>

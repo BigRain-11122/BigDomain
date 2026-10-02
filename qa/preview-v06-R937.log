@@ -1,0 +1,17 @@
+﻿PASS AC-PV6a - title + header sub carry v0.6
+PASS AC-PV6a - minors module tag present (21st face)
+PASS AC-PV6a - module-face stat 20 -> 21
+PASS AC-PV6a - minor-face card upgraded with sandbox carrier readout
+PASS AC-PV6a - footer v0.6 changelog line
+PASS AC-PV6b - four header badges intact
+PASS AC-PV6b - benchgate marker present: 'AIGC'
+PASS AC-PV6b - benchgate marker present: 'msgSecCheck'
+PASS AC-PV6b - benchgate marker present: '投顾'
+PASS AC-PV6b - benchgate marker present: '19.9'
+PASS AC-PV6b - zero external http(s) refs (self-contained)
+PASS AC-PV6c - new copy 7 strings: remainder zero hits; statute-title proper-noun gray hits=2 (law name verbatim, never rewritten)
+PASS AC-PV6d - interactive walk 5 stations intact: 黑墙关隘（入口）|门厅|服务台（门厅内嵌）|共创工坊|碳基码头观景
+PASS AC-PV6b - benchgate R-D1 re-run PASS on v0.6 (R-D2/R-D3 honest red unchanged = blocked on CEO physicals)
+
+PREVIEW-V06 SUITE PASS - 14/14 green
+benchgate: [R-D1] PASS - accessible fronts=1 (local file:// era; external reachability face is R-D2) / [R-D2] FAIL - no front-urls.json registry; server/domain/ICP-filing are CEO physical items (backlog bootstrap row); current front is local file:// only / [R-D3] FAIL - no external-loop.json; the loop needs an externally reachable front (R-D2 dependency); sandbox ugc loop exists but rule text forbids sandbox substitution / VERDICT: FAIL

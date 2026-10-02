@@ -1,0 +1,21 @@
+﻿PASS AC-MG1 - minor without guardian refused (want E_MG_GUARDIAN, got E_MG_GUARDIAN)
+PASS AC-MG1 - duplicate refused (want E_MG_DUP, got E_MG_DUP)
+PASS AC-MG1 - kid1 bound to guardianA; adult1 guardian-free
+PASS AC-MG2 - in-window pass (18:20)
+PASS AC-MG2 - outside window refused (sec.43) (want E_MG_TIME, got E_MG_TIME)
+PASS AC-MG2 - no guardian limits configured -> fail-closed (want E_MG_NO_LIMIT, got E_MG_NO_LIMIT)
+PASS AC-MG3 - single-purchase over limit refused, zero billed (want E_MG_SPEND_SINGLE, got E_MG_SPEND_SINGLE)
+PASS AC-MG3 - daily accumulation over limit refused, zero billed (want E_MG_SPEND_DAILY, got E_MG_SPEND_DAILY)
+PASS AC-MG3 - unconfigured limits refuse billing ([needs-CEO] no defaults) (want E_MG_NO_LIMIT, got E_MG_NO_LIMIT)
+PASS AC-MG3 - refusals mutated nothing: 800/tx-sub-1 only
+PASS AC-MG4 - minor live opening banned (sec.31) (want E_MG_LIVE_BAN, got E_MG_LIVE_BAN)
+PASS AC-MG4 - automated marketing push to minor banned (sec.24(3)) (want E_MG_MARKETING_BAN, got E_MG_MARKETING_BAN)
+PASS AC-MG5 - adult pass-through on all four gates
+PASS AC-MG5 - guardian limits are minors-only scope (want E_MG_NOT_MINOR, got E_MG_NOT_MINOR)
+PASS AC-MG6 - daily counter resets on date rollover
+PASS AC-MG6 - same inputs -> byte-identical report
+PASS AC-MG7 - compliance header: 4-piece + law cites
+PASS AC-MG7 - minors.py pure ASCII (0 non-ASCII bytes)
+PASS AC-MG7 - test_minors.py pure ASCII (0 non-ASCII bytes)
+
+SUITE PASS - 19/19 green
