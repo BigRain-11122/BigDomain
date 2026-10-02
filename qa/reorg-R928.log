@@ -1,0 +1,20 @@
+# R928 fold R156 evidence (verify-then-write; step-3 run passed all pre-write assertions visible in run output - two composition-phase aborts with zero state writes: trailing-comma form + P-51 carrier-scope wording, then export FW-semicolon split fixed in resume; state/backup/archive/heartbeat writes each asserted post-write)
+PASS resume: state.json on disk parses, tick=928, log 58 items [55 head + 1 summary + 2 closeout]
+PASS resume: canonical form == json.dumps(indent-2)
+PASS resume: closeout pair anchored (R928 entry + R928 tokens)
+PASS AC-R1574 final size on disk: 78079 B, margin 421 B under 78,500B gate
+AC-R1574 post-fold (convention: pre 80514B - window 11125B+40B framing + S_new 5522B+8B framing) = 74879 B
+PASS resume: probe post {"W": 56, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 23, "sub": 6, "tokens": 9} == registered post register zero drift
+PASS resume: AC-R1575 state log lines carry P-2026-09-25-18 (S_new) and cut-156 (E_new) (P-51)
+PASS resume: backup logs/state-preop-R928.bak == pre-op bytes (80514B, == git HEAD blob)
+PASS resume: archive markers 149, R928 append section present, pre-op snapshot tail intact
+PASS resume: heartbeat tick 928 row on disk, single ts, lag 0 kept, ts= 2026-10-02T16:45:37+08:00
+PASS resume: cut-156 evidence + migrated row on disk (Oct archive section R928)
+PASS export pre-write parse (BOM utf-8-sig), results 290 rows, tick row stale 926
+PASS export latest_artifact: mechanism-marker split 2 parts (FW-semicolon, R920 separator-loss repair form preserved), product head kept verbatim
+PASS export next_milestone: fold carry-note updated R156-pending -> R157-pending
+PASS export derived: tick row 926->928 stale-value drift-fix (R556/R542 precedent)
+PASS export self_drive re-derived from actual state (F3 zero hardcode): W 56 / sub 6 / idle 37 / nop 3, queues 6/2/2, proposals 1/1 disk-recounted; window label kept
+PASS export written (temp+replace), re-read asserted: export_ts + results 291 rows + tick row 928 + zero dict-shaped rows
+PASS export written re-read: ceo_face three-line panel in place (current / latest_artifact / next_milestone)
+DONE R928 fold R156 closeout complete: window 5 lines 11125B -> 1 rolling summary; markers 148->149; log 60->58; final 78079 B; export_ts 2026-10-02T16:45:37+08:00

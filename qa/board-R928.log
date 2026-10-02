@@ -1,0 +1,54 @@
+# board cut-156 + flip evidence, round R928 (verify-then-write; order: claim -> cut -> fold -> flip -> commit)
+[PASS] board canonical single BOM byte-level
+[PASS] board has no CR bytes
+[PASS] board stale done rows == 1 (R927 natural stale)
+[PASS] board open rows == 3 pre-claim
+[PASS] no prior R928 claim row
+[PASS] R927 stale done row found at top of item list
+[PASS] board post-write single BOM preserved
+[PASS] board header prefix byte-identical
+[PASS] board post-claim open rows == 4 (claim + 3 standing)
+[PASS] board done rows still == 1 (R927)
+[PASS] claim row landed verbatim (pre-registration before any fold writes)
+[DONE] claim landed; board 5141 -> 7059 bytes
+PASS AC-K156a board canonical single BOM byte-level
+PASS board has no CR bytes
+PASS AC-K156a stale-board count = exactly 1 done row (R927 natural stale, not a missed cut)
+PASS AC-K156a the 1 done row is the R927 row
+PASS AC-K156a post-claim open rows = exactly 4 [R928 claim + O-013-4 + legal gated + bootstrap]
+PASS AC-K156d claim row present before cut writes (write order held: claim landed prior to this script)
+AC-K156b md5 of migrated row (pre): R927=ad2ffbb10ffe7713fb8dbddb0c3545b0
+PASS AC-K156b 10-month archive pre sections = 61
+PASS AC-K156b 10-month archive has no R928 section yet
+PASS AC-K156b 10-month archive ends with single newline (pure-append precondition)
+PASS AC-K156b 10-month archive has no BOM (byte-level)
+PASS AC-K156b 09-month archive zero-touch pre-op == git HEAD blob (byte match)
+PASS AC-K156b 10-month archive pure-append prefix byte-identical
+PASS AC-K156b 10-month archive sections 61 -> 62
+PASS AC-K156b section R928 header found on re-read
+PASS AC-K156b md5 of migrated line (post re-read) identical: ad2ffbb10ffe7713fb8dbddb0c3545b0
+PASS AC-K156c board post-cut canonical single BOM intact
+PASS AC-K156c board canonical header prefix byte-identical (claim kept at top)
+PASS AC-K156c R927 stale row removed from main board
+PASS AC-K156c board post-cut done rows = 0 (pre-flip)
+PASS AC-K156c board post-cut open rows = 4 (R928 claim + 3 standing)
+PASS AC-K156b 09-month archive zero-touch post-op (disk bytes pre==post)
+INFO oct archive pure-append 181774 -> 182747 B; board 7059 -> 6096 B
+INFO flip deferred to step 4 (after fold writes; closure note cites fold evidence on disk = zero forward reference)
+PASS cited evidence on disk pre-flip: qa/reorg-R928.log (AC-R1571..R1575)
+PASS cited evidence on disk pre-flip: qa/board-R928.log (AC-K156a..d)
+PASS cited evidence on disk pre-flip: logs/state-preop-R928.bak (backup)
+PASS cited evidence on disk pre-flip: logs/state-log-archive-2026-09.md (archive)
+PASS heartbeat tick 928 row on disk pre-flip (AC-HB928)
+PASS state.json tick 928 + R928 closeout pair on disk pre-flip
+PASS board canonical single BOM pre-flip
+PASS board done rows = 0 pre-flip
+PASS board open rows = 4 pre-flip (R928 claim + 3 standing)
+PASS R928 claim row found
+PASS board post-flip canonical single BOM intact
+PASS board header prefix byte-identical post-flip
+PASS AC-K156c main board final (post-flip re-read): done rows=1 [R928 current with closure note]
+PASS AC-K156c open rows=3 post-flip
+PASS closure note cites both evidence logs
+PASS AC-R1575/AC-K156d delivery tags in board row (P-51)
+INFO claim md5 (pre-flip body) = 7bb4eeb95380742e97980f44b23d6ccd; done row len=2113
