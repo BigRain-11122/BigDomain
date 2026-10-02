@@ -1,0 +1,5 @@
+AC-K131a stale-board count: exactly 1 done row [R885 mechanism-round natural stale] + open rows exactly 3 + rule header untouched (UTF-8 BOM preserved)
+AC-K131b R885 row verbatim migrated to docs/archive/backlog-done-2026-10.md R886 section (md5 8cb181d420a6b51e6864e889a465193f identical pre/post, pure-append prefix asserted, sections 36->37); 09-archive byte-identical pre/post
+AC-K131c main board final = rule header + R888 current row [done flip with closure note] + 3 open rows; zero stale done rows (current row excepted)
+AC-K131d verify-then-write: all assertions passed before write + post-write re-read asserted (board - [x] count == 1, - [ ] count == 3, BOM preserved)
+AC-K131e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and board cut-131 tags (P-51)
