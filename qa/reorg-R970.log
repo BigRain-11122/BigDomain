@@ -1,0 +1,20 @@
+AC-R1721 pre-op: 81644B dual-gauge, HEAD==disk byte-identical, tick 969, log 64 items, no BOM no trailing LF, canonical form; round-start tree clean per scan; own write set (claim+fold pair) = ['M src/os/backlog.md']
+AC-R1722 window = [R171 rolling summary + R966..R968 three pairs] 7 rows identified; R969 pair kept (next-window object, R964 pattern); head block 55 items verbatim; window content bytes = 9809, head content bytes = 66941
+probe pre  : {"W": 62, "idle": 37, "idle_round": 8, "nop": 5, "wait": 2, "round": 29, "tokens": 12, "sub": 9}  (== R949-pre-register structural symmetry of the 3-pair+kept-pair fold cycle: R966..R968 pairs here vs R945..R947 pairs there; round counter includes tokens-line prefixes; nop 5 carries R967 declaration + R968 in-body citation + kept R969)
+AC-R1722 post-fold+closeout projection: probe register = {"W": 58, "idle": 37, "idle_round": 8, "nop": 3, "wait": 2, "round": 25, "tokens": 10, "sub": 7}  (asserted pre-write; W 62-7+1+2; round 29-6+2; tokens 12-3+1; sub 9-3+1; nop 5-2 window R967/R968 tag lines out +0 new; wait 2-1 R966 closeout tag out +1 R970 closeout tag in)
+catalog base: archive R938 section R160 roll summary embedded full list = 286 tokens (tail C-K163a)
+AC-R1722 catalog chain: R160 286 + R161 4 + R162 4 + R163 3 + R164 6 + R165 6 + R166 17 + R167 21 + R168 26 + R169 34 + R170 34 = 441 (archive-section mechanical recovery, R161..R165 exact-list asserted, R166..R170 count-asserted)
+catalog + R171 roll live embedded 44 new (winA[0]) = 485 total (in-register)
+AC-R1722 window new tokens: 13 'AC-R1711/D-20260930-06/P-47-3/OH-20261002/AC-U3/AC-U5/AC-U6/AC-U7/AC-U9/AC-U10/AC-U12/AC-FD11a/AC-U11' (regex mechanical zero hand-picked, folded-line extraction vs retained-set diff), catalog 485 -> 498, missing=[] asserted
+AC-R1722 compress-precedent list carried mechanically (range end R758..R964 -> R758..R966, latest completed fold before this round, archive pointer kept truthful)
+AC-R1721 archive pre-op markers = 164 (in-register expectation per R966 fold close); backup target logs/state-preop-R970.bak
+AC-R1724 in-fold projection: post-fold 71793 B, projected final 77020 B margin 1480 B (<= 78,500B gate satisfied in-fold)
+S_new 2380 B / E_new 2565 B / T_new 272 B structural constraints all pass (prefixes, tag accounting, no beat/quote/backslash/forbidden tags)
+AC-R1723b top fields flat (DEC 131 tokens / ORD 2026-09-28 22:1x / GORD 152 flat round / BENCH 10-03), tick 969->970 only, head region byte-identical except tick digit
+probe post : {"W": 58, "idle": 37, "idle_round": 8, "nop": 3, "wait": 2, "round": 25, "tokens": 10, "sub": 7}  (== pre-registered register, zero drift asserted pre-write)
+AC-R1721 backup logs/state-preop-R970.bak written byte-identical
+AC-R1723c archive pure-append: 14274785 -> 14356509 B; markers 164 -> 165
+AC-R1723d state.json written (temp+replace, re-read asserted: tick 970, log 60 items = 55 head + 1 roll + 2 kept-pair + 2 closeout, probe in-register, dual-gauge parse pass)
+AC-R1724 final size: 77020 B, margin 1480 B under 78,500B gate; post-fold 71793 B
+AC-R1725 delivery: state log R970 lines + backlog R970 done row + commit contains P-2026-09-25-18 (P-51 protocol)
+GORD flat companion note: canonical scan sha16 257A6CC1056A1759 same baseline gord_new_rows=0, last_gord_tbl_rows 152 unchanged, CEO physicals zone unchanged (merchant-id/server/domain/filing still pending). D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 131 tokens flat), (2) CEO physicals zone unchanged. Fold-round write set discipline: backlog + state.json + archive + backup + qa log only.
