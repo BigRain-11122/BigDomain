@@ -81,16 +81,40 @@ every displayed string is loaded at render time from the data file
 preview/publishing-face-nodes.json extracted verbatim from it
 (sync-gated by the wiring suite); structural baseline research only
 -- no invented price numbers, no web fetch this round; publish /
-listing / gate decisions stay [needs-CEO] approval-only; source
-stays pure ASCII.
+listing / gate decisions stay [needs-CEO] approval-only; source stays
+pure ASCII.
+
+v0.10 (2026-10-03, R965 product-first round, AC-FD10a..f): mounts the
+token-ledger core face card -- the P-47-2 dual-entry ledger is the
+company's economic core (15 ledger-domain suites, 100+ pre-registered
+criteria) and until now the only core product with zero front-door
+card. The REAL ledger product (src/sandbox/ledger/ledger.py) and the
+REAL reconcile engine (reconcile.py check_lines) are imported, never
+copied; the card runs an in-process probe ledger at render time:
+census-bound onboarding, three-pool authorized mint (equity:auth
+counterparty), fiat-side stand-in funding, the AC-L8 content-gate
+reward face (unrecorded event refused / gate-passed event granted),
+one spend closing the token loop back into pool:reserve (BLUEPRINT
+5.4), live balances for all six accounts, and the eight-check
+reconcile verdict computed on the probe database -- plus a tamper
+control: a copy of the database with one entry amount bumped by +1
+re-run through the same engine shows its FAIL lines honestly. Every
+number is computed by the ledger at render time, never canned; the
+sandbox keeps mock keys until CEO physical items arrive; pricing and
+gate decisions stay [needs-CEO] approval-only.
 """
 
+import contextlib
 import glob
 import html
+import io
 import json
 import os
+import shutil
+import sqlite3
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -101,6 +125,7 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
+LEDGER_CFG = os.path.join(HERE, "ledger", "config.json")
 M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
 CC_JSON = os.path.join(ROOT, "preview", "city-commerce-plan-nodes.json")
 CM_JSON = os.path.join(ROOT, "preview", "citymodel-scenario-nodes.json")
@@ -119,6 +144,12 @@ CITYMODEL_DIR = os.path.join(HERE, "citymodel")
 if CITYMODEL_DIR not in sys.path:
     sys.path.insert(0, CITYMODEL_DIR)
 import scenario as citymodel_mod  # dual-track model (reuse, no copy)
+
+LEDGER_DIR = os.path.join(HERE, "ledger")
+if LEDGER_DIR not in sys.path:
+    sys.path.insert(0, LEDGER_DIR)
+import ledger as ledger_mod       # token ledger product (reuse, no copy)
+import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
 
 HOST, PORT = "127.0.0.1", 8093
 
@@ -270,6 +301,87 @@ def citymodel_card():
     be = citymodel_mod.breakeven_month(fa, d["fixed_cost"])
     report = citymodel_mod.render_report(params, months)
     return d, fa, fb, fu, grid, be, report
+
+
+def ledger_probe():
+    """Run the REAL dual-entry token ledger in-process on caller-supplied
+    probe fixtures and return live readings (F3 law: every number below
+    is computed by the ledger at render time, never canned in this
+    source). The probe walks the P-47-2 core face end to end: census-
+    bound onboarding, authorized three-pool mint with the equity:auth
+    counterparty, fiat-side stand-in funding, the AC-L8 content-gate
+    reward face (unrecorded event refused, gate-passed event granted),
+    and one spend closing the token loop back into pool:reserve
+    (BLUEPRINT 5.4). The reconcile engine then runs its eight checks
+    against the live probe database; a tamper control (database copy
+    with one entry amount bumped +1) re-runs the same engine and its
+    FAIL lines are reported honestly -- detection is computed, not
+    claimed."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-ledger-")
+    db = os.path.join(tmp, "ledger.db")
+    led = ledger_mod.Ledger(db, cfg)
+    score = int(cfg["actions"]["cocreate"]["score"])
+    led.ensure_account("usr:probe-a", census_avatar_id="probe-a")
+    led.ensure_account("usr:probe-b", census_avatar_id="probe-b")
+    led.mint_to_pool("pool:reserve", 1000, "probe:mint:reserve")
+    led.mint_to_pool("pool:share", 500, "probe:mint:share")
+    led.mint_to_pool("pool:reward", 500, "probe:mint:reward")
+    led.adjust([("pool:reserve", "debit", 120),
+                ("usr:probe-a", "credit", 120)],
+               "probe:fund:a",
+               "frontdoor probe fiat-side stand-in funding")
+    refused = None
+    try:
+        led.grant_reward("usr:probe-b", "cocreate",
+                         "evt:probe:not-recorded", "event")
+    except ledger_mod.LedgerError as exc:
+        refused = exc.code
+    led.record_gate_pass("evt:probe:gate:1")
+    led.grant_reward("usr:probe-b", "cocreate",
+                     "evt:probe:gate:1", "event")
+    spend_tx = led.spend("usr:probe-a", 30, "probe:spend:1", "order",
+                         memo="frontdoor probe privilege spend")
+    led.close()
+    accounts = ["usr:probe-a", "usr:probe-b", "pool:reserve",
+                "pool:share", "pool:reward", "equity:auth"]
+    conn = sqlite3.connect(db)
+    balances = {a: int(conn.execute(
+        "SELECT balance FROM ledger_accounts WHERE account_id = ?",
+        (a,)).fetchone()[0]) for a in accounts}
+    tx_n = int(conn.execute("SELECT COUNT(*) FROM ledger_tx").fetchone()[0])
+    entry_n = int(conn.execute(
+        "SELECT COUNT(*) FROM ledger_entries").fetchone()[0])
+    conn.close()
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        recon_fails = recon_mod.check_lines(sqlite3.connect(db), cfg)
+    recon_lines = [ln.strip() for ln in buf.getvalue().splitlines()
+                   if ln.strip()]
+    tampered = os.path.join(tmp, "tampered.db")
+    shutil.copyfile(db, tampered)
+    conn = sqlite3.connect(tampered)
+    entry_id = conn.execute(
+        "SELECT entry_id FROM ledger_entries WHERE direction = 'debit'"
+        " ORDER BY entry_id LIMIT 1").fetchone()[0]
+    conn.execute("UPDATE ledger_entries SET amount = amount + 1"
+                 " WHERE entry_id = ?", (entry_id,))
+    conn.commit()
+    conn.close()
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        tamper_fails = recon_mod.check_lines(
+            sqlite3.connect(tampered), cfg)
+    tamper_lines = [ln.strip() for ln in buf.getvalue().splitlines()
+                    if "FAIL" in ln]
+    return {
+        "balances": balances, "tx": tx_n, "entries": entry_n,
+        "score": score, "refused": refused,
+        "spend_tx": spend_tx, "recon_lines": recon_lines,
+        "recon_fails": recon_fails, "tamper_fails": tamper_fails,
+        "tamper_lines": tamper_lines,
+        "issued": -balances["equity:auth"],
+    }
 
 
 def render():
@@ -432,6 +544,77 @@ def render():
         "<li><b>%s</b>&#65306;%s</li>"
         % (esc(c["name"]), esc(c["text"])) for c in pb["compliance"])
 
+    # -- token ledger core face card (v0.10): REAL probe at render time --
+    lcfg = load_json(LEDGER_CFG)
+    try:
+        lp = ledger_probe()
+        lp_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        lp, lp_err = None, str(exc)[:300]
+    tl_label = esc(str(lcfg.get("token", {}).get("ai_label_text", "")))
+    tl_disc = esc(str(lcfg.get("token", {}).get("disclaimer", "")))
+    if lp is not None:
+        tl_roles = [("usr:probe-a", "resident account (census-bound, funded, spent)"),
+                    ("usr:probe-b", "resident account (census-bound, gated reward)"),
+                    ("pool:reserve", "platform reserve pool (fiat stand-in source, spend sink)"),
+                    ("pool:share", "platform share pool (co-create reward source)"),
+                    ("pool:reward", "platform reward pool"),
+                    ("equity:auth", "mint counterparty (negative by construction, AC-L6)")]
+        tl_rows = "".join(
+            "<tr><td><b>%s</b></td><td>%d</td><td>%s</td></tr>"
+            % (esc(a), lp["balances"][a], esc(r)) for a, r in tl_roles)
+        tl_sum = esc("zero-sum identity (AC-L6): sum of the six balances = %d"
+                     % sum(lp["balances"].values()))
+        tl_gate = esc(
+            "content-gate reward face (AC-L8): unrecorded event refused (%s),"
+            " gate-passed event granted +%d booked from the %s pool"
+            % (lp["refused"], lp["score"],
+               str(lcfg["actions"]["cocreate"]["pool"])))
+        tl_spend = esc(
+            "spend loop closure (BLUEPRINT 5.4): one spend tx %s booked,"
+            " 30 debited from usr:probe-a and credited back into"
+            " pool:reserve -- tokens never leave the loop"
+            % str(lp["spend_tx"])[:16])
+        verdict = ("VERDICT: RECONCILE PASS (8/8 checks)"
+                   if lp["recon_fails"] == 0 else
+                   "VERDICT: RECONCILE FAIL (%d/8 checks failed)"
+                   % lp["recon_fails"])
+        tl_recls = "qok" if lp["recon_fails"] == 0 else "qfail"
+        tl_recon_html = ("<pre class=\"proof %s\">%s\n%s</pre>"
+                         % (tl_recls, esc("\n".join(lp["recon_lines"])),
+                            esc(verdict)))
+        tl_tamper_html = ("<pre class=\"proof qfail\">%s\n%s</pre>"
+                          % (esc("\n".join(lp["tamper_lines"])),
+                             esc("VERDICT: RECONCILE FAIL (%d/8 checks"
+                                 " failed)" % lp["tamper_fails"])))
+        tl_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d</b>probe tx booked</div>"
+                   "<div class=\"kpi\"><b>%d</b>double entries</div>"
+                   "<div class=\"kpi\"><b>%d</b>issued = -equity:auth</div>"
+                   "<div class=\"kpi\"><b>%s</b>gate refusal code</div>"
+                   "</div>"
+                   % (lp["tx"], lp["entries"], lp["issued"], lp["refused"]))
+    else:
+        tl_rows = ""
+        tl_sum = tl_gate = tl_spend = ""
+        tl_recon_html = tl_tamper_html = tl_kpis = ""
+    if lp_err:
+        tl_kpis = ("<p class=fail>LEDGER PROBE FAILED (honest failure,"
+                   " no fake PASS): %s</p>" % esc(lp_err))
+    tl_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", tl_label),
+            ("disclaimer", tl_disc),
+            ("[needs-CEO]", "sandbox keeps mock keys; real channel keys"
+             " and platform credentials are CEO physical items and never"
+             " enter git; pricing/gate decisions stay approval-only"),
+            ("msgSecCheck front gate", "content rewards only book behind"
+             " a recorded gate pass (AC-L8); the sandbox gate is the"
+             " wordlist mock, production stays fail-closed until the"
+             " platform key arrives"),
+        ])
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -497,7 +680,8 @@ existing sandbox faces &middot; no new business face &middot; v0.4
 membership + quality cards &middot; v0.5 minors guardian card
 (R940b) &middot; v0.6 M1 walk card (R942) &middot; v0.7 city
 commerce plan card (R943) &middot; v0.8 city commerce scenario
-card (R945) &middot; v0.9 publishing research card (R946)</span></header>
+card (R945) &middot; v0.9 publishing research card (R946) &middot;
+v0.10 token ledger core card (R965)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -516,6 +700,31 @@ __JOURNEY__
 <p class="kv">Executed once at server start against the REAL dual-entry
 ledger, content gate, props, venue and incentive faces. Exit code
 verified; no canned output.</p></div>
+
+<div class="card"><h2>Token Ledger Core Face (P-47-2 dual-entry, live
+probe)</h2>
+<p class=kv>The REAL ledger product and reconcile engine are imported
+from src/sandbox/ledger/ and run in-process at render time on a
+throwaway probe database -- every number below is computed by the
+ledger, never canned.</p>
+__TL_KPIS__
+<table><tr><th>account</th><th>balance</th><th>role in the probe</th></tr>
+__TL_ROWS__</table>
+<p class=kv>__TL_SUM__</p>
+<p class=kv>__TL_GATE__</p>
+<p class=kv>__TL_SPEND__</p>
+<h3 style="margin:14px 0 8px">Reconcile engine verdict (eight checks on
+the probe database)</h3>
+__TL_RECON__
+<h3 style="margin:14px 0 8px">Tamper control (database copy, one entry
+amount +1, same engine re-run)</h3>
+__TL_TAMPER__
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__TL_COMPL__</ul>
+<p class=kv>Probe chain: census-bound onboarding &gt; authorized
+three-pool mint (equity:auth counterparty) &gt; fiat-side stand-in
+funding &gt; gated reward (refused then granted) &gt; spend closing
+the loop into pool:reserve &gt; reconcile &gt; tamper control.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -668,6 +877,14 @@ __PAYWARN__</footer>
         "__MG_WP__": mg_wp,
         "__MG_MSGSEC__": mg_msgsec,
         "__MG_COMPLIANCE__": mg_compliance,
+        "__TL_KPIS__": tl_kpis,
+        "__TL_ROWS__": tl_rows,
+        "__TL_SUM__": tl_sum,
+        "__TL_GATE__": tl_gate,
+        "__TL_SPEND__": tl_spend,
+        "__TL_RECON__": tl_recon_html,
+        "__TL_TAMPER__": tl_tamper_html,
+        "__TL_COMPL__": tl_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
