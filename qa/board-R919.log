@@ -1,0 +1,9 @@
+R919 board cut-147 evidence log (verify-then-write)
+PASS AC-K147a stale-row census: exactly 1 done row (R918) + standing open 3 + header located (triple-BOM recurrence on disk, calibration staged next)
+PASS header byte-level calibration: triple BOM -> canonical single BOM (R917-isomorph recurrence repair, naive BOM=True blind spot -> byte-count assertion)
+PASS pre-registration row inserted before R918 stale row (verify: prereg on board, R918 row intact md5 same, standing open=3, stale done=1)
+PASS AC-K147b R918 row verbatim to 10mo archive section R919 (md5 identical 74E2D7FA95F0AE7949E2215F678A0703, pure-append prefix asserted, 52->53), 09mo zero-touch
+PASS AC-K147c terminal main board = header (single canonical BOM) + R919 current row (done + closure) + open 3, zero stale done
+PASS state.json tick 918->919 + two log lines appended (58->60), json.loads verify pass, baselines intact
+PASS AC-HB919/W6 heartbeat R919 row appended tick 919, state tick 919, lag 0->0 kept
+PASS 09-month archive zero-touch confirmed (disk bytes pre == post)
