@@ -43,6 +43,17 @@ first-launch hook copies (audit P-2026-10-02-02 M1 face, milestone
 data file preview/m1-mount-nodes.json (extracted verbatim from the
 preview page M1 sections, sync-gated by the wiring suite); this
 source stays pure ASCII so no business copy can hide in code.
+
+v0.7 (2026-10-02, R943 product round, AC-FD7a..f): mounts the
+city-commerce-plan card -- the audit P-2026-10-02-02 L76 gap face
+("BigCompute/BigDomain city commercial scheme = zero") answered by
+the R849 spec docs/spec/city-commerce-plan-v0.md. Every displayed
+string (four business layers, the 5-row audit-gap map, dual pricing
+references with the [needs-CEO] verdict line, the M1..M4 milestone
+bite-table, the compliance four-piece, the CEO-physicals blocked
+notes) is loaded at render time from the data file
+preview/city-commerce-plan-nodes.json extracted verbatim from that
+spec, sync-gated by the wiring suite; source stays pure ASCII.
 """
 
 import glob
@@ -62,6 +73,7 @@ LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
 M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
+CC_JSON = os.path.join(ROOT, "preview", "city-commerce-plan-nodes.json")
 QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
@@ -293,6 +305,33 @@ def render():
         "<li><code>%s</code> &mdash; %s</li>"
         % (esc(h["code"]), esc(h["copy"])) for h in m1["hooks"])
 
+    cc = load_json(CC_JSON)
+    cc_lrows = "".join(
+        "<tr><td><b>%s</b></td><td>%s</td></tr>"
+        % (esc(l["name"]), esc(l["desc"])) for l in cc["layers"])
+    cc_grows = "".join(
+        "<tr><td>%s</td><td>%s</td><td>%s</td></tr>"
+        % (esc(g["gap"]), esc(g["answer"]), esc(g["status"]))
+        for g in cc["gaps"])
+    cc_ghead = "".join("<th>%s</th>" % esc(h)
+                       for h in cc["gap_headers"])
+    cc_prows = "".join(
+        "<li><b>%s</b> &mdash; %s</li>"
+        % (esc(p["ref"]), esc(p["note"])) for p in cc["pricing"])
+    cc_mrows = "".join(
+        "<tr><td><b>%s</b></td><td>%s</td><td>%s</td></tr>"
+        % (esc(m["m"]), esc(m["pre"]), esc(m["win"]))
+        for m in cc["milestones"])
+    cc_mhead = "".join("<th>%s</th>" % esc(h)
+                       for h in cc["milestone_headers"])
+    cc_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>"
+        % (esc(c["name"]), esc(c["text"])) for c in cc["compliance"])
+    cc_demo = "".join(
+        "<p class=kv>%s</p>" % esc(b) for b in cc["demo_bullets"])
+    cc_ws = "".join(
+        "<p class=kv>%s</p>" % esc(b) for b in cc["workshop_bullets"])
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -356,7 +395,8 @@ color:var(--dim);margin:8px 0}
 <span class="sub">XL-16 / D-20260930-06 &middot; pure composition of
 existing sandbox faces &middot; no new business face &middot; v0.4
 membership + quality cards &middot; v0.5 minors guardian card
-(R940b) &middot; v0.6 M1 walk card (R942)</span></header>
+(R940b) &middot; v0.6 M1 walk card (R942) &middot; v0.7 city
+commerce plan card (R943)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -428,6 +468,22 @@ the R940b remainder of the declared row.</p></div>
 <p class=fail>__M1_GATE__</p>
 <p class=kv>__M1_WALKNOTE__</p></div>
 
+<div class="card"><h2>__CC_TITLE__</h2>
+<p class=kv>__CC_SOURCE__</p>
+<h3 style="margin:10px 0 8px">__CC_LTITLE__</h3>
+<table>__CC_LROWS__</table>
+<h3 style="margin:14px 0 8px">__CC_GTITLE__</h3>
+<table><tr>__CC_GHEAD__</tr>__CC_GROWS__</table>
+<h3 style="margin:14px 0 8px">__CC_PTITLE__</h3><ul>__CC_PROWS__</ul>
+<p class=kv>__CC_PVERDICT__</p>
+<h3 style="margin:14px 0 8px">__CC_DTITLE__</h3>__CC_DEMO__
+<h3 style="margin:14px 0 8px">__CC_WTITLE__</h3>__CC_WS__
+<h3 style="margin:14px 0 8px">__CC_MTITLE__</h3>
+<table><tr>__CC_MHEAD__</tr>__CC_MROWS__</table>
+<h3 style="margin:14px 0 8px">__CC_CTITLE__</h3><ul>__CC_COMPL__</ul>
+<p class=fail>__CC_BLOCKED__</p>
+<p class=kv>__CC_BLOCKED2__</p></div>
+
 <div class="card"><h2>Quality Face (suite inventory + last full
 regression)</h2>
 <div class="grid">
@@ -490,6 +546,27 @@ __PAYWARN__</footer>
         "__M1_HOOKNOTE__": esc(m1["hooks_note"]),
         "__M1_GATE__": esc(m1["service_gate"]["note"]),
         "__M1_WALKNOTE__": esc(m1["walk_note"]),
+        "__CC_TITLE__": esc(cc["card_title"]),
+        "__CC_SOURCE__": esc(cc["source_note"]),
+        "__CC_LTITLE__": esc(cc["layer_title"]),
+        "__CC_LROWS__": cc_lrows,
+        "__CC_GTITLE__": esc(cc["gap_title"]),
+        "__CC_GHEAD__": cc_ghead,
+        "__CC_GROWS__": cc_grows,
+        "__CC_PTITLE__": esc(cc["pricing_title"]),
+        "__CC_PROWS__": cc_prows,
+        "__CC_PVERDICT__": esc(cc["pricing_verdict"]),
+        "__CC_DTITLE__": esc(cc["demo_title"]),
+        "__CC_DEMO__": cc_demo,
+        "__CC_WTITLE__": esc(cc["workshop_title"]),
+        "__CC_WS__": cc_ws,
+        "__CC_MTITLE__": esc(cc["milestone_title"]),
+        "__CC_MHEAD__": cc_mhead,
+        "__CC_MROWS__": cc_mrows,
+        "__CC_CTITLE__": esc(cc["compliance_title"]),
+        "__CC_COMPL__": cc_compl,
+        "__CC_BLOCKED__": esc(cc["blocked_note"]),
+        "__CC_BLOCKED2__": esc(cc["blocked_note_2"]),
         "__NSUITE__": esc(total_suites),
         "__NCRIT__": esc(total_crit),
         "__QUALROWS__": qual_rows,

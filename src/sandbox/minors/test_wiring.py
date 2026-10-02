@@ -21,6 +21,7 @@ Usage: python test_wiring.py
 """
 
 import datetime
+import html
 import json
 import os
 import shutil
@@ -536,8 +537,108 @@ def ac_fd6_m1_walk_card():
            "zero-regression check)")
 
 
+def ac_fd7_city_commerce_card():
+    """R943 frontdoor v0.7 city-commerce-plan card mount (criteria
+    AC-FD7a..e were pre-registered in the R943 backlog row before
+    this code existed; AC-FD7f receipt = state log line + backlog
+    done mark + commit). The canon is docs/spec/city-commerce-plan
+    v0.md (R849 skeleton answering audit P-2026-10-02-02 L76); the
+    card data file is extracted verbatim from it and this suite
+    gates the sync string-by-string. frontdoor.py must stay pure
+    ASCII so no business copy can hide in code."""
+    _sandbox = os.path.normpath(os.path.join(BASE, ".."))
+    if _sandbox not in sys.path:
+        sys.path.insert(0, _sandbox)
+    import frontdoor  # noqa: E402 (sandbox root, journey runs at import)
+    data = load_json(frontdoor.CC_JSON)
+    layers, gaps = data["layers"], data["gaps"]
+    pricing, miles = data["pricing"], data["milestones"]
+    compl = data["compliance"]
+    record("AC-FD7a",
+           len(layers) == 4 and len(gaps) == 5 and len(pricing) == 3
+           and len(miles) == 4 and len(compl) == 4,
+           "data file carries 4 business layers + 5 audit-gap rows + "
+           "3 pricing references + 4 milestones + 4 compliance items")
+    spec_path = os.path.join(frontdoor.ROOT, "docs", "spec",
+                             "city-commerce-plan-v0.md")
+    with open(spec_path, encoding="utf-8") as fh:
+        spec = fh.read()
+    # markdown bold markers are presentation-only; the sync gate
+    # compares content strings against the marker-stripped canon
+    spec_norm = spec.replace("**", "")
+    extracted = [data["card_title"], data["layer_title"],
+                 data["gap_title"], data["pricing_title"],
+                 data["demo_title"], data["workshop_title"],
+                 data["milestone_title"], data["compliance_title"],
+                 data["pricing_verdict"], data["blocked_note"],
+                 data["blocked_note_2"]]
+    extracted += [s for l in layers for s in (l["name"], l["desc"])]
+    extracted += [s for g in gaps
+                  for s in (g["gap"], g["answer"], g["status"])]
+    extracted += [s for p in pricing for s in (p["ref"], p["note"])]
+    extracted += [s for m in miles for s in (m["m"], m["pre"], m["win"])]
+    extracted += [s for c in compl for s in (c["name"], c["text"])]
+    extracted += data["demo_bullets"] + data["workshop_bullets"]
+    missing = [s for s in extracted if s not in spec_norm]
+    record("AC-FD7a", not missing,
+           "every extracted string verbatim-synced with the canon "
+           "spec (bold-marker-normalized, mechanical drift gate, "
+           "%d strings, missing=%d)" % (len(extracted), len(missing)))
+
+    page = frontdoor.render().decode("utf-8")
+
+    def on_page(s):
+        # the card escapes for HTML context (e.g. "AtS/W&R" -> amp),
+        # so compare the escaped form - what the browser displays
+        # back as the literal string
+        return html.escape(s, quote=True) in page
+
+    rendered = [data["card_title"], data["source_note"],
+                data["pricing_verdict"], data["blocked_note"],
+                data["blocked_note_2"]]
+    rendered += [s for l in layers for s in (l["name"], l["desc"])]
+    rendered += [s for g in gaps
+                 for s in (g["gap"], g["answer"], g["status"])]
+    rendered += [s for p in pricing for s in (p["ref"], p["note"])]
+    rendered += [s for m in miles for s in (m["m"], m["pre"], m["win"])]
+    rendered += [c["text"] for c in compl]
+    rendered += data["demo_bullets"] + data["workshop_bullets"]
+    record("AC-FD7b",
+           all(on_page(s) for s in rendered),
+           "card title + 4 layers + 5 gap rows + 3 pricing refs + "
+           "verdict + 4 milestones + compliance texts + blocked "
+           "notes all rendered from the data file (%d strings, "
+           "HTML-escape-aware compare)" % len(rendered))
+    with open(frontdoor.__file__, "rb") as fh:
+        src = fh.read()
+    record("AC-FD7b", max(src) < 0x80,
+           "frontdoor.py stays pure ASCII: zero hardcoded business "
+           "copy, all Chinese lives in data files (%d bytes checked)"
+           % len(src))
+    record("AC-FD7c",
+           data["pricing_verdict"] in page
+           and "[needs-CEO]" in page
+           and data["gaps"][1]["answer"] in page,
+           "P1 pricing/gate decision faces stay [needs-CEO] "
+           "approval-only (verdict line + gap-2 answer rendered "
+           "from data, zero execution)")
+    record("AC-FD7d",
+           data["blocked_note_2"] in page
+           and page.count('class="card"') >= 8,
+           "CEO-physicals blocked note rendered honest (merchant "
+           "IDs / server family / platform accounts = blocked, no "
+           "fake-online, no nagging)")
+    record("AC-FD7e",
+           all(marker in page for marker in (
+               "City Live", "Business-day Journey", "Lobby Face",
+               "Pay Face", "Membership Face", "Minor Guardian Face",
+               "Quality Face", data["milestones"][0]["m"])),
+           "prior v0.1..v0.6 faces all still mounted + M1 milestone "
+           "bite-row visible (live page zero-regression check)")
+
+
 def main():
-    print("=== MinorGuard wiring suite (R939/R940/R940b/R942) ===",
+    print("=== MinorGuard wiring suite (R939/R940/R940b/R942/R943) ===",
           flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
@@ -545,6 +646,7 @@ def main():
     ac_w7_pay_grant_commit()
     ac_w8_frontdoor_card()
     ac_fd6_m1_walk_card()
+    ac_fd7_city_commerce_card()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

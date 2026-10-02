@@ -1,0 +1,17 @@
+AC-R1641a pre-op: 80426B dual-gauge, HEAD==disk byte-identical, tick 942, log 62 items, no BOM, canonical form; round-start tree clean per scan; own write set (product+claim+qa) = ['M src/os/backlog.md', 'M src/sandbox/frontdoor.py', 'M src/sandbox/minors/test_wiring.py', '?? preview/city-commerce-plan-nodes.json', '?? qa/wiring-R943.log']
+AC-R1642a window = [R162 prior summary + R940..R941 two pairs] 5 lines 8328 B (content); two-pair = minimal continuous window (R848 rolling-window law); R942 pair kept; head block 55 items verbatim (content 66941 B)
+AC-R1643a head block file-region 67408 B located at line idx 58
+AC-R1642d P/D/O catalog snowball: prior 294 (archive R160 embedded 286 + R161 new ['C-R1611', 'C-K164a', 'C-MG1', 'C-PV6a'] + R162 new ['C-R1621', 'C-K165a', 'C-W1', 'C-W5']) + 3 new ['C-R1631', 'C-W7', 'C-W8'] = 297, regex mechanical zero hand-picked, missing=[]
+probe pre  : {"W": 60, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 27, "tokens": 11, "sub": 8}  (== R940 post register + R941 pair + R942 pair +2 W/+2 round/+2 tokens, structural symmetry zero drift)
+AC-R1642e compress-precedent list carried mechanically (range end R758..R938 -> R758..R940, archive pointer kept truthful)
+AC-R1641b archive pre-op markers = 155; backup target logs/state-preop-R943.bak
+AC-R1644-window: post-fold 71377 B, projected final 76909 B margin 1591 B (<= 78,500B gate satisfied in-fold)
+S_new 2020 B / E_new / T_new structural constraints all pass (prefix, accounting tags, no beat/quote/backslash)
+AC-R1643b top fields flat (DEC 127 tokens / ORD / GORD 147 / BENCH 10-02), tick 942->943 only
+probe post : {"W": 58, "idle": 37, "idle_round": 8, "nop": 3, "paren": 33, "round": 25, "tokens": 10, "sub": 7}
+B. incremental-register law: W 60->58 (5 out, 3 in); round 27->25 (4 out, 2 in); tokens 11->10 (2 out, 1 in); sub 8->7 (4 out, 3 in); idle_round 8 flat; idle 37 flat; nop 3->3 (prior-summary embedded tag -1, new +1); paren 33->33 (pure-date-prefix summary 1:1) - asserted pre-write
+AC-R1641b backup logs/state-preop-R943.bak written byte-identical
+AC-R1641c archive pure-append: 13542644 -> 13623151 B; markers 155 -> 156
+AC-R1643c state.json written (temp+replace, re-read asserted: tick 943, log 60 items = 55 head + 1 summary + 2 kept-pair + 2 closeout, probe in-register, dual-gauge parse pass, head byte-identical except tick digit)
+AC-R1644 final size: 76909 B, margin 1591 B under 78,500B gate; post-fold 71377 B
+AC-R1645 delivery: state log line + backlog R943 row + commit contains P-2026-09-25-18 + P-51

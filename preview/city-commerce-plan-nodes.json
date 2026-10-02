@@ -1,0 +1,57 @@
+{
+  "version": "city-commerce-plan-nodes v1 (R943)",
+  "provenance": "extracted verbatim from docs/spec/city-commerce-plan-v0.md (R943 product round; the spec is the R849 skeleton answering silicon-city audit P-2026-10-02-02 L76 'BigCompute/BigDomain 城市商业方案=零'). Single data source for the frontdoor v0.7 live card; the spec file stays the canon. Test AC-FD7a gates this file against the spec string-by-string.",
+  "card_title": "城市商业方案 v0.1（骨架件·硅基城审计缺口回应件）",
+  "source_note": "数据源：docs/spec/city-commerce-plan-v0.md（R849 落盘）。触发锚=集团《硅基城问题审计件》L76 实锤缺口：BigCompute/BigDomain 城市商业方案=零。本卡=纯呈现面：全部文案自本数据件渲染；一切定价/开闸/采购/发行决策 [needs-CEO] 只呈批零执行（P1 边界）。",
+  "layer_title": "商业分层模型（四层·内循环→外发行）",
+  "layers": [
+    {"name": "L-免费层（参观端）", "desc": "M4 参观端承载（m4-visitor-end-spec·转化挂载点 5 节点）→注册转化钩。载体已活：preview/index.html v0.3+`http://127.0.0.1:8093/`（frontdoor.py·R728）。"},
+    {"name": "L-城内订阅层", "desc": "三档梯 ¥9.9 居民成长档案/¥19.9 算力包/¥29.9 入门订阅卡（C-20260927-01 案 A 过会·BLUEPRINT §四 C2/N2 正典行+席7 映射表 A 档两行=BILLING GATE 机关死执法）。"},
+    {"name": "L-创作者经济层", "desc": "UGC 管道（msgSecCheck 前置闸三层筛选）+激励梯度（incentive.py 反刷农场带状梯度·反 farm 与《未成年人保护条例》§45 禁诱导控评刷量同构法源）+跨司结算（settlement.py manifest 哈希链）——=工坊经济三件套。"},
+    {"name": "L-发行面层（Steam 预研）", "desc": "审计 M4≤12-31 Steam 发行预研——页面/定价/demo 三面由本件 §一/§三/§四 供给证据面；发行开闸=P1 [needs-CEO]。"}
+  ],
+  "gap_title": "缺口映射表（审计 L76 五项 → 本司应答）",
+  "gap_headers": ["审计缺口（L76 原旨）", "本司应答（在册件/呈批位）", "状态"],
+  "gaps": [
+    {"gap": "Steam 页面模型=零在册", "answer": "§二.4 发行面层：页面素材三源=合规 AIGC 标识资产+真实 build 截图+数据件派生（M4 前置·发行为 P1）", "status": "v0.1 定位"},
+    {"gap": "定价模型对标（Anno 季票 vs C:S1 买断+DLC）", "answer": "§三：双轨=城内订阅带（本司互证在册）×发行面买断+DLC（参照制）·采纳 [needs-CEO]", "status": "呈批面"},
+    {"gap": "demo 策略（AtS/W&R demo 在架=转化工具实证）", "answer": "§四：参观端=城市 demo 载体（m4-visitor-end-spec+frontdoor 8093 活体已跑）", "status": "在册可扩"},
+    {"gap": "工坊生态（C:S1 十年护城河）", "answer": "§五：UGC 三件套在册（管道+激励梯度+跨司结算）·工坊化接线=M3+ 窗", "status": "在册待接"},
+    {"gap": "CEO 物理件阻塞一切商业闭环", "answer": "§八 阻塞注：商户号/平台账号/服务器族常驻直呈·零催办", "status": "blocked·如实"}
+  ],
+  "pricing_title": "定价模型对标（P1 呈批面·[needs-CEO]）",
+  "pricing": [
+    {"ref": "参照 A（C:S1 买断+DLC）", "note": "城市主体买断制+DLC 内容包——契合「可发布产品」升格路线（O-2026-0930-023 产品化令）；护城河=工坊十年生态（缺口#4 同源）。"},
+    {"ref": "参照 B（Anno 季票制）", "note": "年度内容通行证——与本司 N 系池（订阅带）结构同构，但城内已走月订阅梯，季票=潜在叠加位。"},
+    {"ref": "本司建议（呈批证据面）", "note": "双轨制=城内月订阅带（现役互证：视频核心会员 22-25 元四家/音乐社区 15 元四家/入门档 8 元三家——R-20260926-cold-start-strategy §三）×发行面买断+DLC（参照 A）。"}
+  ],
+  "pricing_verdict": "裁决点 [needs-CEO]：①双轨制采纳与否②发行定价档位③29.9 档溢价叙事 vs 降价拉客（R382 待裁面④不变）。定价确认前 BLUEPRINT §四 正典零改动（P1 律）。",
+  "demo_title": "Demo 策略（参观端=城市 demo 载体）",
+  "demo_bullets": [
+    "审计实证：AtS/W&R demo 在架=转化工具（audit 差距矩阵引用）→本司对应物=M4 参观端（m4-visitor-end-spec §六 转化挂载点+3D 三态选型 prep·G1..G5 门阵·真包验证律恒在）。",
+    "本地活体已跑：frontdoor 8093（合规三常驻面嵌入·journey_demo 实跑证据嵌入）——服务器物理件到位后升公网 demo URL（bootstrap 接线点·front-urls.json 登记面在位 R691）。"
+  ],
+  "workshop_title": "工坊生态位（UGC 三件套→工坊化）",
+  "workshop_bullets": [
+    "在册：ugc 沙箱（三层筛选·msgSecCheck 前置闸 fail-closed）+wordlist.py 本地预筛 65,141 词（省配额·houbb/sensitive-word Apache-2.0 采用登记）+incentive 梯度+settlement 结算。",
+    "工坊化接线（M3+ 窗·不抢建）：居民共创产物→可浏览/可引用/可分成三面（共创区块 B9 案已呈总规 v1.1）；创作分成 30% 观测费=分配层引用非双建（observation.py）。",
+    "红线：工坊内容全呈现面 AIGC 标识（深度合成规定→生成式AI办法→标识办法→GB 45438 合规链四件齐·benchmarks §①）；共治权/归属权永不售卖（BLUEPRINT §五.8）。"
+  ],
+  "milestone_title": "里程碑咬合表（审计里程碑 → 商业面前置件）",
+  "milestone_headers": ["审计里程碑", "商业面前置件（本司）", "窗"],
+  "milestones": [
+    {"m": "M1 可逛切片", "pre": "参观端素材复用+合规四件套随切片常驻+首发转化钩文案（过 msgSecCheck）", "win": "≤10-09"},
+    {"m": "M2（城内体验）", "pre": "in-store-experience-v2+token-loop 沙盘+ugc 首演三件（R406 已毕·M2 物理件待 CEO）", "win": "待物理件"},
+    {"m": "M3（内容生态）", "pre": "UGC 工坊化接线+激励参数呈批（incentive [needs-CEO]）", "win": "呈批后"},
+    {"m": "M4 Steam 发行预研", "pre": "§一/§三/§四 证据面+release-gate 真包过闸（R736 全绿复验在册）+发行开闸 P1", "win": "≤12-31·P1"}
+  ],
+  "compliance_title": "合规四件套常驻面（一切商业面硬前置）",
+  "compliance": [
+    {"name": "AIGC 生成标识", "text": "全呈现面标识（显式徽章+PNG tEXt+隐式盲水印三轨·dual_track R593 在册）；Steam 页面素材同律。"},
+    {"name": "msgSecCheck 前置闸", "text": "内容安全未接禁开门（BLUEPRINT §五生死线）；本地预筛先行省配额。"},
+    {"name": "非投顾风险提示", "text": "常驻面（全商业呈现页首尾）；零金融词族（词族门自验惯例）。"},
+    {"name": "未成年人面", "text": "《未成年人网络保护条例》§43-44 监护人时间/权限/消费管理+单次单日消费限额+§31 未成年人禁开播+§24③ 禁自动化商业营销（benchmarks §① G 片 2026-10-02 新法源·W11 信号）——订阅/内购/直播三面接线=M1 前置。"}
+  ],
+  "blocked_note": "[needs-CEO] 呈批清单：①双轨制定价裁决（§三）②29.9 档叙事（R382 面④）③激励/分成参数族④Steam 发行开闸与定价档⑤48 包采购 gate D-A/D-B（m4-visitor-3d-three-state-prep·已呈）。",
+  "blocked_note_2": "CEO 物理件（阻塞一切商业闭环·审计 L76 同注）：微信支付商户号+生产服务器/域名/备案/ICP+平台账号族——到位即 bootstrap（release-gate v1.0 闸 0~3+CEO 明示批准门·P-66）。"
+}
