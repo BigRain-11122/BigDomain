@@ -1,0 +1,7 @@
+# qa/board-R934.log - board cut-162 (R934, 2026-10-02T18:17:48+08:00)
+# mandate family: P-2026-09-25-18; verify-then-write; post-write re-read assertions enforced
+board-side R933 row md5 (persisted before any write): 82880466d0c9e537289c179db11bd43f
+AC-K162d claim preregistration landed (R934 unchecked row) on disk, re-read verified
+cut-162 migration verified then written: Oct archive append section R934 (67->68, pure-append prefix, md5 identical 82880466d0c9e537289c179db11bd43f), board R933 row removed, 09-month archive zero-touch
+AC-K162c PASS (final): board = BOM + header + R934 done row (closure note appended) + 3 open rows; zero stale done rows; header byte-stable
+post-closeout state.json size = 78395B (fold R160 by next-round round-start first-measure ruling, R931/R933 isomorph carry-note)
