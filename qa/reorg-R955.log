@@ -1,0 +1,19 @@
+AC-R1671 pre-op bytes=81615 (getsize same by definition; scan reported 81615 at round start)
+AC-R1671 pre-op == git HEAD blob byte-identical
+AC-R1671 tick=954 log=64 items, canonical form, round-trip stable, tree clean at round start, write set = backlog+fold+closeout
+AC-R1672 window = [R166 roll + R951/R952/R953 three pairs] 7 rows identified; R954 pair kept; head block 55 items verbatim
+window content bytes (7 rows) = 9891
+probe pre: {"W": 33, "round": 29, "tokens": 12, "sub": 33, "idle_round": 11, "idle": 38, "nop": 6, "wait": 4}
+AC-R1672 catalog 326+21=347, new tokens: AC-FD8a/AC-FD9a/AC-K168a/AC-R1651/AC-R1661/AD-011/AD-042/C-FD8/C-FD8a/C-FD9/C-FD9a/C-K168a/C-R1741/D-20261001-03/D-20261002-08/D-20261002-09/O-020/O-20261002-2124-bm-c/OH-20261002-CPH4/P-2026-10-02-04/R-20261002-publishing-face-research, missing=[] asserted
+compress precedent chain carried: R758..R952 (mechanical check on R166 roll anchor)
+AC-R1672 post-fold+closeout projection: probe register = {"W": 33, "round": 25, "tokens": 10, "sub": 29, "idle_round": 11, "idle": 38, "nop": 4, "wait": 2}
+AC-R1674 terminal size = 76089B, margin 2411B <= 78,500B gate
+AC-R1672 probe pre->post zero drift vs register asserted
+AC-R1673 head block 55 items verbatim; log 60 items; tick 955; top fields preserved (last_order/last_decision_rows/benchmarks_refreshed/last_dec_tokens unchanged; last_gord_tbl_rows 149 unchanged - GORD flat round)
+archive markers before = 159 (in-register expectation 159 per R952 log line; actual recorded honestly)
+AC-R1673 pre-op archived to archive R955 append section (markers 159->160, pure-append prefix asserted) + backup logs/state-preop-R955.bak
+state.json written and re-parsed (json.loads) OK
+heartbeat R955 row appended
+export refreshed (BOM preserved utf-8-sig inline this run, R556 precedent): export_ts/tick 955/R167 results row/self_drive recount (log_win=58 idle_fast=37 nop=4 substantive=14 main=6 tech=2 explore=2)
+AC-R1675 delivery: state log R955 lines + backlog R955 done row + commit message carries P-2026-09-25-18 (P-51 protocol)
+GORD flat companion note: sha16 5B9922F6B3C3059D same R953/R954 baseline, gord_new_rows=0, last_gord_tbl_rows 149 unchanged, CEO physicals zone unchanged (merchant-id/server/domain/filing still pending). D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 127 tokens flat), (2) CEO physicals zone unchanged.
