@@ -1,0 +1,9 @@
+AC-K133b md5 of migrated row: R890=af8ffcab77b1015746a00b92e4aecbc5 (== probe register)
+AC-K133a stale-board count = exactly 1 done row [R890 mechanism round natural stale] + 3 standing open rows + 1 current claim row (pre-claim write already landed in pass-2); claim-row window wording amended in-round to three-pair statutory outcome before flip (honest note in qa log)
+AC-K133c main board final: header + R893 current-round done row (flipped with closure note) + 3 open rows, zero stale done rows
+AC-K133b 10-month archive pure-append: 123371 -> 126405 B; sections 38 -> 39; md5 of migrated line identical
+AC-K133b 10-month archive written (temp+replace, prefix + md5 re-verified post-write)
+AC-K133c backlog.md written (temp+replace, re-read asserted: done row count=1 [R893 current], open rows=3)
+AC-K133b 09-month archive zero-touch post-op == git HEAD blob re-verified
+AC-K133d evidence composed (qa/board-R893.log on disk)
+AC-K133e-equivalent delivery: state log line + board row + commit contains P-2026-09-25-18 and cut-133 tags (P-51)
