@@ -197,3 +197,4 @@ PASS AC-K164c checkbox flip verified by post-write re-read: board = BOM + header
 DONE R936 fold R160: window 5 lines 11502B content-gauge -> 1 rolling summary; markers 152->153; log 60->58; final 78410B margin 90B; cut-164 sections 69->70
 AC-R1615 delivery carriers: board R936 row (flip) + state log S/E/T lines + commit message carries P-2026-09-25-18 + P-51 (P-51 delivery criterion)
 INFO post-write porcelain: ocs/archive/backlog-done-2026-10.md, docs/status-export.json, heartbeat.txt, src/os/backlog.md, src/os/state.json, qa/board-R936.log, qa/reorg-R936.log
+CORRECTION INFO R936 post-commit: commit e0a3276 message subject measures 520 chars, 20 over the 500-char taskbook line limit (minor formatting slip, caught at closeout verification; commit already pushed so no amend/force-push per published-history safety; delivery carriers P-2026-09-25-18 + P-51 + tag [via BigDomain-OSLoop] all present; recorded honestly per honesty-law)
