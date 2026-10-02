@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-02T19:32:38+08:00",
+  "export_ts": "2026-10-02T19:43:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R941 产品轮（轮计分 2=能跑实物）：主件=R940b② frontdoor v0.5 minors 守护合规卡面挂载毕（AC-W8 八记录=qa/wiring-R941.log·守护面真实读数 render 时实算非写死+合规四件套常驻〔AIGC 标识+非投顾+[needs-CEO] 限额面注+msgSecCheck 前置闸注〕——MinorGuard M1 接线面全闭合）+cut-166 板规执法五滞行批迁（§R941 节=qa/board-R941.log）；waiting 面：法务外件 chronic 达件即触发+R777 复核档 chronic（10-02 13:39 BigLife 复启条件令·本司=常务班复核面·达件即触发）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
-    "latest_artifact": "产品实物=frontdoor v0.5 Minor Guardian Face 守护合规卡（2026-10-02 ~19:4x·R941）：src/sandbox/frontdoor.py 活体页挂载 minors 守护合规面（守护面真实读数 render 时实算非写死：probe summary registered=2 calls=11 refusals=4 allowed=7 spent_cent=1990 events=1 replays=1·daily_cent 收缩对照读数翻转=活算实证）+合规四件套常驻（AIGC 标识+非投顾+[needs-CEO] 限额面注+msgSecCheck 前置闸注）+条例引用（Decree No.766 §31/§43-44/§24③）+WIRING_POINTS 单源挂载+src/sandbox/minors/test_wiring.py AC-W8 八记录（test_wiring 30/30+六套件回归零回归=qa/wiring-R941.log）·MinorGuard M1 接线面全闭合（三面 R939+提交面 R940+活体页 R941·审计 P-2026-10-02-02 M1 ≤10-09 前置面毕）·8093 活体页 v0.4 在跑=宿主产线·v0.5 卡面下次重启起效（R908 先例·render 面套件内直验）",
-    "next_milestone": "下个里程碑（≤10-04）：O-013④/QA 每日轮 10-03 首轮+M1 可逛切片对接窗（MinorGuard 前置面已全毕·Biggame 切片对接·审计 P-2026-10-02-02 M1 ≤10-09）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访；benchmarks 7 天刷 10-09；法务外件 D-20260929-03 chronic 达件即触发；R777 复核档 chronic 达件即触发；bootstrap CEO 物理件无 ETA"
+    "current": "R942 产品轮（轮计分 2=能跑/能看实物）：主件=frontdoor v0.6 M1 可逛切片商业挂载位五站卡面挂载毕（AC-FD6a..f=qa/wiring-R942.log·数据件 preview/m1-mount-nodes.json verbatim 单源+纯组合 frontdoor.py 纯 ASCII 23,111B·F3 零写死+test_wiring 37/37+六套件回归零回归+活体重启探活 healthz=200 首探即过——v0.4 旧实例终止→v0.5 守护卡+v0.6 M1 卡双卡面随重启上线〔R941「下次重启起效」兑现〕·服务台站 msgSecCheck 前置闸诚实红 E_GATE_OFFLINE）；集团面=D-20261002-09 BigLife 复启回执（R777 常务班复核面收口=委员会兑现·backlog 行闭口）+D-20261002-08 法务第三窗两步制注记；waiting 面：法务外件 chronic（D-20260929-03·秘书处初稿窗 10-03 12:00）+O-013④/QA 每日轮 10-03 首轮+提案回访 10-05+治理日 10-07+token 审计 10-08+OSS 10-05 21:40+benchmarks 10-09+bootstrap CEO 物理件（服务器/域名/备案/商户号/主体资质/ICP）",
+    "latest_artifact": "产品实物=frontdoor v0.6 M1 可逛切片商业挂载位卡面（2026-10-02 ~19:4x·R942）：活体页 http://127.0.0.1:8093/ 新增 M1 五站卡（黑墙关隘/门厅/服务台/共创工坊/碳基码头观景五站表=挂载件/承载判据/合规闸全渲染+首发转化钩文案三枚+服务台站 msgSecCheck 前置闸诚实红 E_GATE_OFFLINE+合规注记三件〔[needs-CEO] 价目/AI 生成文案/≤10-09 里程碑窗〕）·数据件 preview/m1-mount-nodes.json（preview M1 节 verbatim 抽取单源·AC-FD6a 同步闸逐串机检）·frontdoor.py 纯 ASCII（中文零硬编码）·test_wiring 37/37+六套件回归零回归（qa/wiring-R942.log）·随本轮重启 v0.5 Minor Guardian 守护卡同窗上线（MinorGuard M1 接线全闭合后的活体呈现）·审计 P-2026-10-02-02 M1 ≤10-09 本司挂载面就绪待切片对接",
+    "next_milestone": "下个里程碑（≤10-04）：10-03 首轮=O-013④ 值守核对+QA charter 每日 crawl 轮；M1 可逛切片对接窗持续（Biggame 切片对接·审计 P-2026-10-02-02 M1 ≤10-09·本司商业挂载面已就绪=frontdoor v0.6 五站卡+preview v0.6 双面）；10-05 提案回访（BD-PROP-001）+OSS 下窗 21:40；10-07 治理日聚合审；10-08 token 审计判据回访；benchmarks 7 天刷 10-09；法务外件 D-20260929-03 chronic（D-20261002-08 两步制·秘书处初稿 10-03 12:00）达件即触发；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "941",
+      "942",
       "OSLoop 执行 tick"
     ],
     [
@@ -1385,15 +1385,19 @@
     [
       "2",
       "R941 产品收口轮（R940b② 毕）：frontdoor v0.5 Minor Guardian Face 守护合规卡面挂载（AC-W8 八记录全过=qa/wiring-R941.log：真实读数 render 时实算〔registered=2 calls=11 refusals=4 spent_cent=1990 replays=1·daily_cent 收缩对照读数翻转=活算实证〕+合规四件套常驻〔AIGC+非投顾+[needs-CEO] 限额注+msgSecCheck 前置闸注〕+Decree No.766 条例引用+WIRING_POINTS 单源挂载）+test_wiring 30/30〔22+8〕+六套件回归零回归——MinorGuard M1 接线面全闭合；cut-166 五滞行批迁 §R941 节+R777 复核档 gated 行（10-02 13:39 BigLife 复启条件令·常务班复核面回执）·R941"
+    ],
+    [
+      "2",
+      "R942 frontdoor v0.6 M1 walk card mounted (AC-FD6a..f pre-registered): preview/m1-mount-nodes.json verbatim single data source (5 stations + 3 launch hooks, string-by-string sync gate vs preview/index.html) + live page M1 commerce-mount card (pure composition, frontdoor.py pure ASCII 23111B, F3 zero canned, service-desk gate honest-red E_GATE_OFFLINE); test_wiring +AC-FD6 seven records SUITE PASS 37/37 + six-suite regression zero-regression (minors 19/19 pay 16/16 pay_v3 14/14 member 25 asserts entry_tier 7/7 liveroom 10/10) = qa/wiring-R942.log; live restart healthz=200 first probe, v0.5 minors card + v0.6 M1 card both live on 8093 (R941 next-restart note cashed); audit P-2026-10-02-02 M1 mount face milestone <=10-09; group face: D-20261002-09 R777 reviewer row closed (committee review cashed) + D-20261002-08 legal two-step note ·R942"
     ]
   ],
   "self_drive": {
     "window": "2026-09-25..2026-10-02",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 37,
     "no_pullable_mention_lines": 3,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

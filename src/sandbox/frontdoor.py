@@ -34,6 +34,15 @@ guard module, and the compliance block: AIGC label, persistent
 non-investment-advisory note, [needs-CEO] limit note, msgSecCheck
 front-gate note, law citation. Pure composition: the guard module
 is imported, never copied.
+
+v0.6 (2026-10-02, R942 product round, AC-FD6a..f): mounts the M1
+walkable-slice commerce-mount card -- the five visitor-journey
+stations with their mount/consumer/judgement/gate rows and the three
+first-launch hook copies (audit P-2026-10-02-02 M1 face, milestone
+<=10-09). Every displayed string is loaded at render time from the
+data file preview/m1-mount-nodes.json (extracted verbatim from the
+preview page M1 sections, sync-gated by the wiring suite); this
+source stays pure ASCII so no business copy can hide in code.
 """
 
 import glob
@@ -52,6 +61,7 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
+M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
 QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
@@ -271,6 +281,18 @@ def render():
                  "until the platform key arrives).")
     mg_compliance = esc(minors_mod.COMPLIANCE_HEADER.rstrip("\n"))
 
+    m1 = load_json(M1_JSON)
+    m1_rows = "".join(
+        "<tr><td><b>%s</b><br><span class=kv>%s</span></td><td>%s</td>"
+        "<td>%s</td><td>%s</td></tr>"
+        % (esc(st["name"]), esc(st["role"]), esc(st["mount"]),
+           esc(st["crit"]), esc(st["gate"]))
+        for st in m1["stations"])
+    m1_head = "".join("<th>%s</th>" % esc(h) for h in m1["table_headers"])
+    m1_hooks = "".join(
+        "<li><code>%s</code> &mdash; %s</li>"
+        % (esc(h["code"]), esc(h["copy"])) for h in m1["hooks"])
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -334,7 +356,7 @@ color:var(--dim);margin:8px 0}
 <span class="sub">XL-16 / D-20260930-06 &middot; pure composition of
 existing sandbox faces &middot; no new business face &middot; v0.4
 membership + quality cards &middot; v0.5 minors guardian card
-(R940b)</span></header>
+(R940b) &middot; v0.6 M1 walk card (R942)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -395,6 +417,17 @@ liveroom) opt-in fail-closed, R940 wired the pay grant commit face
 (record_spend, exactly-once per order ref); this page mount closes
 the R940b remainder of the declared row.</p></div>
 
+<div class="card"><h2>__M1_TITLE__</h2>
+<p class=kv>__M1_SOURCE__</p>
+<div class="grid">
+<div class="kpi"><b>__M1_N__</b>stations on the walk</div>
+<div class="kpi"><b>__M1_NH__</b>first-launch hooks</div></div>
+<table><tr>__M1_HEAD__</tr>__M1_ROWS__</table>
+<h3 style="margin:14px 0 8px">__M1_HOOKTITLE__</h3><ul>__M1_HOOKS__</ul>
+<p class=kv>__M1_HOOKNOTE__</p>
+<p class=fail>__M1_GATE__</p>
+<p class=kv>__M1_WALKNOTE__</p></div>
+
 <div class="card"><h2>Quality Face (suite inventory + last full
 regression)</h2>
 <div class="grid">
@@ -446,6 +479,17 @@ __PAYWARN__</footer>
         "__MG_WP__": mg_wp,
         "__MG_MSGSEC__": mg_msgsec,
         "__MG_COMPLIANCE__": mg_compliance,
+        "__M1_TITLE__": esc(m1["card_title"]),
+        "__M1_SOURCE__": esc(m1["source_note"]),
+        "__M1_N__": esc(len(m1["stations"])),
+        "__M1_NH__": esc(len(m1["hooks"])),
+        "__M1_HEAD__": m1_head,
+        "__M1_ROWS__": m1_rows,
+        "__M1_HOOKTITLE__": esc(m1["hooks_title"]),
+        "__M1_HOOKS__": m1_hooks,
+        "__M1_HOOKNOTE__": esc(m1["hooks_note"]),
+        "__M1_GATE__": esc(m1["service_gate"]["note"]),
+        "__M1_WALKNOTE__": esc(m1["walk_note"]),
         "__NSUITE__": esc(total_suites),
         "__NCRIT__": esc(total_crit),
         "__QUALROWS__": qual_rows,

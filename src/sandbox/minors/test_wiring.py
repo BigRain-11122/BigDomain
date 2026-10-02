@@ -476,14 +476,75 @@ def ac_w8_frontdoor_card():
            % len(MG.WIRING_POINTS))
 
 
+def ac_fd6_m1_walk_card():
+    """R942 frontdoor v0.6 M1 walk mount (criteria AC-FD6a..e were
+    pre-registered in the R942 backlog row before this code existed;
+    AC-FD6f receipt = state log line + backlog done mark + commit).
+    The five-station commerce-mount data lives in a single JSON data
+    file extracted verbatim from the preview page; the live card is
+    pure composition and frontdoor.py must stay pure ASCII so no
+    business copy can hide in code."""
+    _sandbox = os.path.normpath(os.path.join(BASE, ".."))
+    if _sandbox not in sys.path:
+        sys.path.insert(0, _sandbox)
+    import frontdoor  # noqa: E402 (sandbox root, journey runs at import)
+    data = load_json(frontdoor.M1_JSON)
+    stations, hooks = data["stations"], data["hooks"]
+    record("AC-FD6a", len(stations) == 5 and len(hooks) == 3,
+           "data file carries 5 walk stations + 3 first-launch hooks")
+    with open(os.path.join(frontdoor.ROOT, "preview", "index.html"),
+              encoding="utf-8") as fh:
+        prev_html = fh.read()
+    synced = all(str(st[k]) in prev_html for st in stations
+                 for k in ("name", "role", "mount", "crit", "gate"))
+    synced = synced and all(h["copy"] in prev_html for h in hooks)
+    record("AC-FD6a", synced,
+           "every station row + hook copy verbatim-synced with "
+           "preview/index.html (mechanical drift gate)")
+
+    page = frontdoor.render().decode("utf-8")
+    record("AC-FD6b",
+           data["card_title"] in page
+           and all(str(st[k]) in page for st in stations
+                   for k in ("name", "role", "mount", "crit", "gate"))
+           and all(h["copy"] in page for h in hooks),
+           "card title + 5 stations (name/role/mount/crit/gate) + "
+           "3 hook copies rendered from the data file")
+    with open(frontdoor.__file__, "rb") as fh:
+        src = fh.read()
+    record("AC-FD6b", max(src) < 0x80,
+           "frontdoor.py stays pure ASCII: zero hardcoded business "
+           "copy, all Chinese lives in data files (%d bytes checked)"
+           % len(src))
+    record("AC-FD6c",
+           data["service_gate"]["code"] in page
+           and data["service_gate"]["note"] in page
+           and "class=fail" in page,
+           "service-desk gate honest-red row rendered: %s (blocked "
+           "on CEO physical items, no fake online)"
+           % data["service_gate"]["code"])
+    record("AC-FD6d",
+           data["hooks_note"] in page and "[needs-CEO]" in page
+           and "AI 生成" in page and "≤10-09" in page,
+           "card compliance notes rendered from data: [needs-CEO] "
+           "pricing + AI-generated copy + M1 milestone window")
+    record("AC-FD6e",
+           all(marker in page for marker in (
+               "Minor Guardian Face", "Quality Face", "Membership Face",
+               "Business-day Journey", "Lobby Face", "Pay Face")),
+           "prior v0.1..v0.5 faces all still mounted (live page "
+           "zero-regression check)")
+
+
 def main():
-    print("=== MinorGuard three-call-site wiring suite "
-          "(R939/R940/R940b) ===", flush=True)
+    print("=== MinorGuard wiring suite (R939/R940/R940b/R942) ===",
+          flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
     ac_w2_w4_member()
     ac_w7_pay_grant_commit()
     ac_w8_frontdoor_card()
+    ac_fd6_m1_walk_card()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

@@ -1,0 +1,71 @@
+{
+  "version": "m1-mount-nodes v1 (R942)",
+  "provenance": "extracted verbatim from preview/index.html M1 sections (mount table v0.3 R869 + interactive walk STATIONS v0.4 R872); single data source for the frontdoor v0.6 live card; preview page stays the self-contained file:// face per the R937 scope amendment (cc76e8c). Test AC-FD6a gates this file against preview/index.html string-by-string.",
+  "card_title": "M1 可逛切片 · 商业挂载位（参观端转化 · 审计里程碑 ≤10-09）",
+  "source_note": "数据源：docs/spec/m4-visitor-end-spec.md §二（转化挂载点沿参观动线 · 正典规格）+ docs/spec/city-commerce-plan-v0.md §六 M1 行（硅基城审计 P-2026-10-02-02 缺口回应）。切片本体（可逛城市切片）= Biggame 承接面；本司 = 商业挂载面（资产标准化 SOP O-20261001-2209 · 本司只消费）。本节零新定价：价目数值全 [needs-CEO] 呈批。",
+  "table_headers": ["动线节点", "挂载转化件 / 服务件", "承载判据（在册）", "合规闸"],
+  "stations": [
+    {
+      "name": "黑墙关隘（入口）",
+      "role": "第一站 · 城市实况欢迎页",
+      "mount": "城市实况欢迎页（census digest 白名单 + world-state 派生）",
+      "crit": "IF-7 事件方言",
+      "gate": "导览台词 = AIGC 生成 → 全呈现面标识",
+      "hook": "钩1 · 入口欢迎 — 欢迎来到硅基城。这座城的一切由居民共同建造：先免费逛，喜欢就留下来当居民。"
+    },
+    {
+      "name": "门厅",
+      "role": "第二站 · 签到与化身注册",
+      "mount": "签到 / 化身注册 intake + 入城凭证",
+      "crit": "AC-S12 + IF-1 / IF-2",
+      "gate": "UGC 类文本面过 msgSecCheck",
+      "hook": "钩2 · 注册入城 — 领取出生证，成为硅基居民。你的名字、作品与荣誉都会记进城史。"
+    },
+    {
+      "name": "服务台（门厅内嵌）",
+      "role": "第三站 · 19.9 下单 / 开卡（店内闭环）",
+      "mount": "19.9 下单 / 开卡 / 充值 = 店内闭环 + 双式账本对账复验展示",
+      "crit": "AC-Y1..Y14 · IF-5 · AC-L1..L11",
+      "gate": "非投顾常驻 + 虚拟商品三声明；msgSecCheck 前置闸实况：生产接线 blocked on CEO 物理件 · 未接线拒启（E_GATE_OFFLINE）",
+      "hook": ""
+    },
+    {
+      "name": "共创工坊",
+      "role": "第四站 · UGC 展示与共创入口",
+      "mount": "UGC 展示 / 投票 / 共创入口（制作 → 过闸 → 上墙）",
+      "crit": "AC-U1..U12 · IF-3 / IF-4 / IF-8",
+      "gate": "msgSecCheck 前置闸单源",
+      "hook": "钩3 · 工坊共创 — 把你的想法做成城市的一部分。作品过安全审核后上墙展示，被采纳就有署名和分成。"
+    },
+    {
+      "name": "碳基码头观景",
+      "role": "第五站 · 事件流导览 + 权益呈现",
+      "mount": "事件流导览 + 权益呈现面入口 + 激励规则公示",
+      "crit": "IF-7 + AC-M 面",
+      "gate": "AIGC 标识 + 收益公示代币计口径",
+      "hook": ""
+    }
+  ],
+  "hooks_title": "首发转化钩文案（三枚 · 已过本地 msgSecCheck L1 预筛 · 零命中；生产发布前另过平台 L2 闸 + 灰区审查）",
+  "hooks": [
+    {
+      "code": "钩1 · 入口欢迎",
+      "copy": "欢迎来到硅基城。这座城的一切由居民共同建造：先免费逛，喜欢就留下来当居民。"
+    },
+    {
+      "code": "钩2 · 注册入城",
+      "copy": "领取出生证，成为硅基居民。你的名字、作品与荣誉都会记进城史。"
+    },
+    {
+      "code": "钩3 · 工坊共创",
+      "copy": "把你的想法做成城市的一部分。作品过安全审核后上墙展示，被采纳就有署名和分成。"
+    }
+  ],
+  "hooks_note": "三枚文案为 AI 生成（页首标识同律）；分成 / 激励参数 [needs-CEO] 呈批；切片首发窗 ≤10-09（审计里程碑 M1 · 本司挂载面就绪待切片对接）。",
+  "no_hook_note": "本站无首发钩文案（导览 / 公示面）；非投顾风险提示常驻面随全站常驻。",
+  "service_gate": {
+    "code": "E_GATE_OFFLINE",
+    "note": "服务台站 msgSecCheck 前置闸实况：生产接线 blocked on CEO 物理件 · 未接线拒启（E_GATE_OFFLINE）——诚实红 · 禁假在线"
+  },
+  "walk_note": "本卡为挂载表的活体页呈现：按参观动线五站，每站展示挂载件、承载判据与合规闸；三枚钩文案复用已过本地 msgSecCheck L1 预筛的原文。切片本体（可逛城市）= Biggame 承接面；本卡 = 本司挂载面结构自验与可逛预演。本页与演示文案均为 AI 生成（页首标识同律）；全部价目数值 [needs-CEO] 呈批不变。"
+}
