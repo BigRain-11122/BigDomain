@@ -1,0 +1,40 @@
+== R907 qa evidence (pre-registered criteria first, verify-then-write) ==
+AC-K140a: board census pre-op = exactly 1 stale done row (R906) + 3 open rows + header intact
+AC-K140b: R906 done row verbatim -> 2026-10 archive new section R907 (md5 identical, pure-append prefix, section count +1, 2026-09 archive zero-touch)
+AC-K140c: board end-state = header + 3 open rows, zero stale done rows
+AC-K140d: verify-then-write = all in-memory assertions pass before any disk write + post-write re-read
+AC-K140e: delivery = state log line + commit message carry board cut-140 marker (P-51)
+AC-SE1: state pre-op parses tick=906 log=58 tokens=121 rows=212; touched files blob == git HEAD
+AC-SE2: state edits (tick 907, rows 228, tokens +6, log +2) each anchor count==1; new text parses PS+python tick=907 log=60 tokens=127 rows=228
+AC-SE3: export refresh (ts/current/milestone fold clause/tick row/results row/self_drive mechanical) parses PS+python
+AC-SE4: heartbeat single R907 row appended, last row tick 907, lag 0
+AC-SE5: P-32 daily-clear zero new group-level open items (no HQ-FEEDBACK write)
+AC-SE1 pre: tick=906 log=58 tokens=121 rows=212; 5 touched files blob==HEAD; 09-archive hash 16f207ab
+AC-K140a pre: done=1 open=3; R906 row len=2127ch md5=966E6C3CD74C91ACED6A46C4CB7809DF
+AC-K140b pre: archive 2026-10 sections=45 last=## R906
+probes: frontdoor=200 data.js=硅基生命元宇宙-data.js 525006B mtime=12:19:32 cpu=71% mem=43%
+pre-op self_drive recount: win=56 rl=0 tokenslines=9 p2resid=-15 -> W=0 sub=6 idle=37 nop=3 (in-register 56/6/37/3)
+WARN: pre-op recount differs from in-register values, incremental fallback will apply
+AC-SE2 in-mem: tick=907 log=60 tokens=127 rows=228 stateBytes=79668 (under 80000 line)
+AC-K140c in-mem: board end-state done=0 open=3, removal=2128ch
+AC-K140b in-mem: archive pure-append prefix OK, sections 45->46
+fallback: incremental values 58/7/37/3 applied
+self_drive post recount: win=58 rl=0 tokenslines=10 -> W=58 sub=7 idle=37 nop=3
+AC-SE3 in-mem: export parses, sd=58/7/37/3, results 278->279
+AC-SE4 in-mem: hb R907 row appended (single row, lag stays 0: hb tick 907 == state tick 907)
+WRITE PHASE DONE (verify-then-write honored)
+AC-SE2 post: state re-read byte-identical, tick=907 log=60 tokens=127 rows=228 fileBytes=79668
+AC-K140a/c post: board done=0 open=3
+AC-K140b post: archive row md5 identical 966E6C3CD74C91ACED6A46C4CB7809DF, sections=46, 09-archive zero-touch blob=16f207ab
+AC-SE3 post: export re-read byte-identical, PS parse OK
+AC-SE4 post: hb re-read byte-identical
+AC-SE2 python: PY_OK 907 60 127 228
+AC-SE3 python: PY_OK 58 7 37 3 279
+git status post-write: M docs/archive/backlog-done-2026-10.md
+ M docs/status-export.json
+ M heartbeat.txt
+ M src/os/backlog.md
+ M src/os/state.json
+?? qa/board-R907.log
+AC-SE5: P-32 daily-clear - zero new group-level open items today (legal-external SLA violation already group-recorded via D-20261002-08 E1 escalation; P2 duty lifted per D-20260930-03 chronic review-only) - no HQ-FEEDBACK write
+VERDICT: PASS (all pre-registered AC-K140a..e + AC-SE1..SE5 passed; round score 1 = mechanism file changes per R840/R788 cut-round precedent)
