@@ -24,6 +24,7 @@ import datetime
 import html
 import json
 import os
+import re
 import shutil
 import sqlite3
 import sys
@@ -741,8 +742,114 @@ def ac_fd8_citymodel_card():
            % page.count('class="card"'))
 
 
+def ac_fd9_publishing_card():
+    """R946 frontdoor v0.9 publishing-research card mount (criteria
+    AC-FD9a..f were pre-registered in the R946 backlog row before
+    this code existed; AC-FD9f receipt = state log line + backlog
+    done mark + commit). The canon is the same-window research piece
+    docs/research/R-20261002-publishing-face-research.md answering
+    the audit P-2026-10-02-02 P2-9 residual three faces (Steam store
+    page / demo strategy / workshop ecosystem); the card data file is
+    extracted verbatim from it and this suite gates the sync
+    string-by-string. frontdoor.py must stay pure ASCII so no
+    business copy can hide in code."""
+    _sandbox = os.path.normpath(os.path.join(BASE, ".."))
+    if _sandbox not in sys.path:
+        sys.path.insert(0, _sandbox)
+    import frontdoor  # noqa: E402 (sandbox root, journey runs at import)
+    data = load_json(frontdoor.PB_JSON)
+    faces, decs = data["faces"], data["decisions"]
+    compl = data["compliance"]
+    record("AC-FD9a",
+           len(faces) == 3 and len(decs) == 4 and len(compl) == 4
+           and len(data["decision_headers"]) == 2,
+           "data file carries 3 research faces + 4 decision rows + "
+           "2 table headers + 4 compliance items")
+    canon_path = os.path.join(frontdoor.ROOT, "docs", "research",
+                              "R-20261002-publishing-face-research.md")
+    with open(canon_path, encoding="utf-8") as fh:
+        canon = fh.read()
+    # presentation-only markers are stripped mechanically: bold
+    # markers, inline code backticks and per-line md/quote prefixes
+    canon_norm = canon.replace("**", "").replace("`", "")
+    canon_norm = "\n".join(
+        re.sub(r"^(?:> |#+ )+", "", ln) for ln in canon_norm.split("\n"))
+    # canon self-gate: pre-registration + compliance four-piece in
+    # the research canon itself (AC-FD9a research-side face)
+    for needle in ("AC-FD9a..f", "AIGC", "msgSecCheck",
+                   "[needs-CEO]"):
+        record("AC-FD9a", needle in canon_norm,
+               "research canon carries %r (pre-registration + "
+               "compliance four-piece on file)" % needle)
+    extracted = [data["card_title"], data["source_note"],
+                 data["honest_note"], data["decision_title"],
+                 data["compliance_title"], data["blocked_note"]]
+    extracted += data["decision_headers"]
+    extracted += [s for f in faces for s in [f["name"]] + f["blocks"]]
+    extracted += [s for d in decs for s in (d["m"], d["status"])]
+    extracted += [s for c in compl for s in (c["name"], c["text"])]
+    missing = [s for s in extracted if s not in canon_norm]
+    record("AC-FD9b", not missing,
+           "every extracted string verbatim-synced with the research "
+           "canon (bold/backtick/heading-quote-normalized, mechanical "
+           "drift gate, %d strings, missing=%d)"
+           % (len(extracted), len(missing)))
+
+    page = frontdoor.render().decode("utf-8")
+
+    def on_page(s):
+        return html.escape(s, quote=True) in page
+
+    rendered = [data["card_title"], data["source_note"],
+                data["honest_note"], data["decision_title"],
+                data["compliance_title"], data["blocked_note"]]
+    rendered += [s for f in faces for s in [f["name"]] + f["blocks"]]
+    rendered += [s for d in decs for s in (d["m"], d["status"])]
+    rendered += [c["text"] for c in compl]
+    record("AC-FD9c",
+           all(on_page(s) for s in rendered),
+           "card title + source/honest notes + 3 faces with all "
+           "blocks + 4 decision rows + compliance texts + blocked "
+           "note all rendered from the data file (%d strings, "
+           "HTML-escape-aware compare)" % len(rendered))
+    with open(frontdoor.__file__, "rb") as fh:
+        src = fh.read()
+    record("AC-FD9c", max(src) < 0x80,
+           "frontdoor.py stays pure ASCII: zero hardcoded business "
+           "copy, all Chinese lives in data files (%d bytes checked)"
+           % len(src))
+    record("AC-FD9d",
+           page.count("[needs-CEO]") >= 2
+           and sum(1 for d in decs if d["status"] == "[needs-CEO] 呈批") == 2
+           and sum(1 for d in decs if "blocked" in d["status"]) == 2
+           and on_page(data["blocked_note"]),
+           "P1 publish/listing decisions stay [needs-CEO] "
+           "approval-only (2 approval rows + 2 CEO-physical blocked "
+           "rows rendered from data, zero execution, honest blocked "
+           "face, no fake-online)")
+    for needle in ("AI-GENERATED LABEL", "NON-INVESTMENT-ADVISORY",
+                   "[needs-CEO]", "msgSecCheck"):
+        record("AC-FD9e", needle in page,
+               "publishing card page carries %r (compliance "
+               "four-piece live on the page)" % needle)
+    record("AC-FD9e",
+           all(on_page(c["text"]) for c in compl),
+           "Chinese compliance four-piece rendered from the data "
+           "file (%d strings, escape-aware compare)"
+           % len(compl))
+    record("AC-FD9c",
+           page.count('class="card"') >= 10
+           and all(marker in page for marker in (
+               "City Live", "Business-day Journey", "Lobby Face",
+               "Pay Face", "Membership Face", "Minor Guardian Face",
+               "Quality Face")),
+           "prior v0.1..v0.8 faces all still mounted + publishing "
+           "card in place (%d cards, live page zero-regression "
+           "check)" % page.count('class="card"'))
+
+
 def main():
-    print("=== MinorGuard wiring suite (R939/R940/R940b/R942/R943/R945) ===",
+    print("=== MinorGuard wiring suite (R939/R940/R940b/R942/R943/R945/R946) ===",
           flush=True)
     ac_w1_w2_liveroom()
     ac_w2_w3_pay()
@@ -752,6 +859,7 @@ def main():
     ac_fd6_m1_walk_card()
     ac_fd7_city_commerce_card()
     ac_fd8_citymodel_card()
+    ac_fd9_publishing_card()
     failed = [ac for ac, ok in RESULTS if not ok]
     print("SUITE PASS %d/%d" % (len(RESULTS) - len(failed), len(RESULTS)),
           flush=True)

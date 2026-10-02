@@ -70,6 +70,19 @@ number is computed by the model, never canned; scenario params are
 labeled probe assumptions and the model computes without deciding
 (fail-closed); pricing stays [needs-CEO] approval-only; Chinese
 strings live only in the data file; source stays pure ASCII.
+
+v0.9 (2026-10-02, R946 product round, AC-FD9a..f): mounts the
+publishing-research card -- the remaining three faces of audit
+P-2026-10-02-02 P2-9 ("Steam store page / demo strategy / workshop
+ecosystem = zero on file" after the v0.7 plan card and the v0.8
+scenario card closed the other two). The canon is the same-window
+research piece docs/research/R-20261002-publishing-face-research.md;
+every displayed string is loaded at render time from the data file
+preview/publishing-face-nodes.json extracted verbatim from it
+(sync-gated by the wiring suite); structural baseline research only
+-- no invented price numbers, no web fetch this round; publish /
+listing / gate decisions stay [needs-CEO] approval-only; source
+stays pure ASCII.
 """
 
 import glob
@@ -91,6 +104,7 @@ MEMBER_CFG = os.path.join(HERE, "member", "config.json")
 M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
 CC_JSON = os.path.join(ROOT, "preview", "city-commerce-plan-nodes.json")
 CM_JSON = os.path.join(ROOT, "preview", "citymodel-scenario-nodes.json")
+PB_JSON = os.path.join(ROOT, "preview", "publishing-face-nodes.json")
 QA_DIR = os.path.join(ROOT, "qa")
 WORLD = os.path.join(HERE, "lobby", "city_data", "world-public.json")
 CITIZENS = os.path.join(HERE, "lobby", "city_data", "citizens-light.jsonl")
@@ -403,6 +417,21 @@ def render():
         "<li><b>%s</b>&#65306;%s</li>"
         % (esc(c["name"]), esc(c["text"])) for c in cmd["compliance"])
 
+    pb = load_json(PB_JSON)
+    pb_face_html = "".join(
+        "<h3 style=\"margin:14px 0 8px\">%s</h3>%s"
+        % (esc(f["name"]),
+           "".join("<p class=kv>%s</p>" % esc(b) for b in f["blocks"]))
+        for f in pb["faces"])
+    pb_dec_head = "".join("<th>%s</th>" % esc(h)
+                          for h in pb["decision_headers"])
+    pb_dec_rows = "".join(
+        "<tr><td><b>%s</b></td><td>%s</td></tr>"
+        % (esc(d["m"]), esc(d["status"])) for d in pb["decisions"])
+    pb_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>"
+        % (esc(c["name"]), esc(c["text"])) for c in pb["compliance"])
+
     groups = suite_groups()
     total_suites = len(reconcile_all.SUITES)
     total_crit = sum(c for _l, _r, c in reconcile_all.SUITES)
@@ -468,7 +497,7 @@ existing sandbox faces &middot; no new business face &middot; v0.4
 membership + quality cards &middot; v0.5 minors guardian card
 (R940b) &middot; v0.6 M1 walk card (R942) &middot; v0.7 city
 commerce plan card (R943) &middot; v0.8 city commerce scenario
-card (R945)</span></header>
+card (R945) &middot; v0.9 publishing research card (R946)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -576,6 +605,18 @@ the R940b remainder of the declared row.</p></div>
 <h3 style="margin:14px 0 8px">__CM_COMPL_TITLE__</h3><ul>__CM_COMPL__</ul>
 <p class=kv>__CM_TAIL__</p></div>
 
+<div class="card"><h2>__PB_TITLE__</h2>
+<p class=kv>__PB_SOURCE__</p>
+<p class=kv>__PB_HONEST__</p>
+__PB_FACES__
+<h3 style="margin:14px 0 8px">__PB_DTITLE__</h3>
+<table><tr>__PB_DHEAD__</tr>__PB_DROWS__</table>
+<p class=fail>__PB_BLOCKED__</p>
+<h3 style="margin:14px 0 8px">__PB_CTITLE__</h3><ul>__PB_COMPL__</ul>
+<p class=kv>audit P-2026-10-02-02 P2-9 residual three faces answered
+[needs-CEO]; structural baseline research, zero invented numbers,
+zero execution; sync-gated verbatim from the research canon.</p></div>
+
 <div class="card"><h2>Quality Face (suite inventory + last full
 regression)</h2>
 <div class="grid">
@@ -681,6 +722,16 @@ __PAYWARN__</footer>
         "__CM_COMPL_TITLE__": esc(cmd["compliance_title"]),
         "__CM_COMPL__": cm_compl,
         "__CM_TAIL__": esc(cmd["tail_note"]),
+        "__PB_TITLE__": esc(pb["card_title"]),
+        "__PB_SOURCE__": esc(pb["source_note"]),
+        "__PB_HONEST__": esc(pb["honest_note"]),
+        "__PB_FACES__": pb_face_html,
+        "__PB_DTITLE__": esc(pb["decision_title"]),
+        "__PB_DHEAD__": pb_dec_head,
+        "__PB_DROWS__": pb_dec_rows,
+        "__PB_BLOCKED__": esc(pb["blocked_note"]),
+        "__PB_CTITLE__": esc(pb["compliance_title"]),
+        "__PB_COMPL__": pb_compl,
         "__NSUITE__": esc(total_suites),
         "__NCRIT__": esc(total_crit),
         "__QUALROWS__": qual_rows,
