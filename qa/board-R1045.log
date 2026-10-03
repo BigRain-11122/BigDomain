@@ -1,0 +1,7 @@
+AC-K186a pre-state (recorded from probe before any write): 1 stale done row (R1044, 3153B, md5 dbe6cbf356dd09d48ab2cca70f0c0d4c), claim row pre-registered with AC-K186a..e before migration, standing open 4, rule header intact, done10 434352B/91 sections, done09 md5 19783a35cfc4e57eb24eda5916a07702
+AC-K186b verbatim migration verified: pure-append 434352 -> 437517B, sections 91 -> 92, migrated line md5 identical dbe6cbf356dd09d48ab2cca70f0c0d4c, prefix byte-identical, 09 archive zero-touch
+AC-K186c board after knife verified: rule header [cut-186 record exactly once] + R1045 current-round row [done 2026-10-03] + standing open 4, board 9740 -> 9020
+AC-K186d knife result file written: {"bopre": 9740, "board_after": 9020, "d10o": 434352, "d10n": 437517, "sections_before": 91, "sections_after": 92, "stale_md5": "dbe6cbf356dd09d48ab2cca70f0c0d4c"}
+AC-K186e delivery: commit message carries the cut-186 record (P-51 protocol)
+SUITE PASS 5/5 (AC-K186a..e)
+NOTE (honest record): closeout script wrote the R1045 heartbeat row with a literal percent-s timestamp placeholder (string-format slip, caught by the post-write assertion after the append); repaired in place same round to real timestamp 2026-10-03 21:25 +08:00, all other bytes identical; export/state writes had already passed their post-write verification before this defect, zero impact there
