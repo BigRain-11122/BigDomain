@@ -1,0 +1,42 @@
+PASS AC-K188a board canonical single BOM byte-level
+PASS board has no CR bytes
+PASS AC-K188a stale-board count = exactly 1 done row (R1046 natural stale, not a missed cut)
+PASS AC-K188a the 1 done row is the R1046 row
+PASS AC-K188a post-claim open rows = exactly 5 [R1047 claim + O-013-4 + legal gated + R777 gated + bootstrap]
+PASS AC-K188d claim row present before cut writes (write order held: claim landed prior to this script)
+PASS AC-K188a migrated row byte length = 2140 (pre-registered)
+PASS AC-K188b md5 of migrated row (pre) identical to pre-registered: d071ef53c80f4b2b667e06695f26055b
+PASS AC-K188b 10-month archive pre sections = 93
+PASS AC-K188b 10-month archive pre bytes = 439883
+PASS AC-K188b 10-month archive has no R1047 section yet
+PASS AC-K188b 10-month archive ends with single newline (pure-append precondition)
+PASS AC-K188b 10-month archive has no BOM (byte-level)
+PASS AC-K188b 09-month archive zero-touch pre-op == git HEAD blob (byte match)
+PASS AC-K188b 09-month archive md5 baseline in place
+PASS AC-K188b 10-month archive pure-append prefix byte-identical
+PASS AC-K188b 10-month archive sections 93 -> 94
+PASS AC-K188b section R1047 header found on re-read
+PASS AC-K188b md5 of migrated line (post re-read) identical: d071ef53c80f4b2b667e06695f26055b
+INFO oct archive pure-append 439883 -> 442035 B
+PASS AC-K188c board canonical header prefix byte-identical (claim kept at top)
+PASS AC-K188c R1046 stale row removed from main board
+PASS AC-K188c board post-cut pre-flip done rows = 0
+PASS AC-K188c board post-cut pre-flip open rows = 5 (R1047 claim + 4 standing)
+PASS AC-K188c rule header cut anchor occurs exactly once pre-edit
+PASS AC-K188c rule header carries cut-188 record exactly once
+PASS AC-K188c claim row anchor occurs exactly once pre-flip
+PASS AC-K188c board final canonical single BOM intact
+PASS AC-K188c board final has no CR bytes
+PASS AC-K188c board final done rows = 1 (R1047 current-round)
+PASS AC-K188c board final open rows = 4 standing
+PASS AC-K188c rule header cut-188 record exactly once final
+PASS AC-K188b 09-month archive zero-touch post-op (disk bytes pre==post)
+INFO board 10823 -> 9153 B (claim landed 10823 -> post-cut 8682 -> final 9153)
+
+AC-K188a pre-state (recorded from probe before any write): 1 stale done row (R1046, 2140B, md5 d071ef53c80f4b2b667e06695f26055b), claim row pre-registered with AC-K188a..e before migration, standing open 4, rule header intact, done10 439883B/93 sections, done09 md5 19783a35cfc4e57eb24eda5916a07702
+AC-K188b verbatim migration verified: pure-append 439883 -> 442035B, sections 93 -> 94, migrated line md5 identical d071ef53c80f4b2b667e06695f26055b, prefix byte-identical, 09 archive zero-touch 19783a35cfc4e57eb24eda5916a07702
+AC-K188c board after knife verified: rule header [cut-188 record exactly once] + R1047 current-round row [done 2026-10-03] + standing open 4, board 10823 -> 9153
+AC-K188d knife result file written: {"bopre": 10823, "board_after": 9153, "d10o": 439883, "d10n": 442035, "sections_before": 93, "sections_after": 94, "stale_md5": "d071ef53c80f4b2b667e06695f26055b"}
+AC-K188e delivery: commit message carries the cut-188 record (P-51 protocol)
+SUITE PASS 5/5 (AC-K188a..e)
+NOTE post-script repair (verify-then-fix, in-register like R1045 hb ts slip): closure self-cite figure initially carried placeholder off-by-one (9154 vs on-disk 9153) + house-style thousands separators added (+3B) -> final on-disk board = 9156B, closure self-cite iterated to fixed point 9,156B; all other suite figures unchanged (archive pure-append 439,883->442,035B sections 93->94, md5 d071ef53c80f4b2b667e06695f26055b identical, 09 archive zero-touch 19783a35cfc4e57eb24eda5916a07702); final board bytes re-measured post-repair = 9156B
