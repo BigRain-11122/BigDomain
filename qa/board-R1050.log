@@ -1,0 +1,6 @@
+AC-K191a PASS claim_row=1 stale_row=1(R1049, chars=1193, bytes=1831, md5=162964bb0e29d90e1d876f1fe3ea22d7) open_rows=4 header=1
+AC-K191b PASS arc10 448095->449937 bytes pure-append, sec 96->97, line md5 identical 162964bb0e29d90e1d876f1fe3ea22d7, 09-archive zero-touch md5 19783a35cfc4e57eb24eda5916a07702
+AC-K191c PASS board 11059->9307 bytes = header[cut-191 x1] + R1050 current row + open 4 rows, stale rows=0
+POST-WRITE PASS arc10==plan board==plan 09-archive md5 unchanged 19783a35cfc4e57eb24eda5916a07702
+SUITE PASS AC-K191a..d (AC-K191e = done flip + commit, delivered at closeout)
+R1050 cut-191: R1049 stale done row (1831B md5 162964bb0e29d90e1d876f1fe3ea22d7) verbatim -> 2026-10 archive sec R1050 (pure-append 448095->449937, sec 96->97); board 11059->9307
