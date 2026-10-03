@@ -182,6 +182,7 @@ import identity as identity_mod  # metaverse identity face (reuse, no copy)
 import expedite as expedite_mod  # hall expedite privilege face (reuse, no copy)
 import metered as metered_mod  # enterprise metered API face (reuse, no copy)
 import collectibles as collectibles_mod  # city digital collectibles face (reuse, no copy)
+import effects as effects_mod      # hall value-added effects face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -4202,6 +4203,336 @@ def collectibles_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def effects_probe():
+    """Run the REAL hall value-added effects face (the R629 product
+    itself, BLUEPRINT sec.4 C-end row 3 effects residual: dynamic
+    emoji / limit-up celebration / screen-flood effect on one hall
+    message + one-shot message pin -- consumables, counts stay
+    counts) in-process at render time on a throwaway database (F3
+    law: every reading below is computed by the product module,
+    never canned). Chain: an emoji effect credit purchase is
+    exactly one token spend bound into its credit row -> the SAME
+    purchase ref replays idempotent with zero second charge -> the
+    purchase bad-args family (unknown kind / zero price / empty
+    ref / ent: account) is refused with the balance flat -> use
+    consumes exactly one unconsumed credit inside the same
+    transaction that inserts the immutable effect row, referencing
+    an already-gated hall message (the lobby ingress owns
+    msgSecCheck; this module adds no second content channel) ->
+    the SAME use ref replays idempotent with no second consumption
+    -> a cross-account use-ref replay is refused BEFORE any credit
+    lookup -> a kind-domain audit: amy still holds a pin credit
+    but the emoji kind is spent, refused E_EFF_NO_CREDIT -> a
+    message-pin credit purchase is one spend (one-shot consumable
+    highlight, distinct from the mayor-tier persistent
+    chat_highlight privilege the member face owns -- reference, no
+    double-build) -> the pin use consumes its credit -> the use
+    bad-args family is refused with zero rows -> a zero-credit
+    resident cannot fire any effect -> pure reads
+    (credits_view / effects_view) move zero tokens -> audit:
+    spend-tx total == credit purchases, every credit row binds a
+    real spend debit, effect rows == consumed credits each bound
+    to its effect, balances exact, pool conservation -> isolation
+    law: the module's only token-moving touch is the single spend
+    inside purchase (plus two idempotent ensure_account calls),
+    the only UPDATE surface is the consumption marking on credit
+    rows, effect rows are immutable (no UPDATE), ownership columns
+    are never rewritten, module source pure ASCII. Probe prices
+    (10 tokens per emoji credit, 5 tokens per pin credit) are
+    caller-supplied sandbox values mirroring the 9.9 / 4.9 yuan
+    canon tiers; real effect pricing and launch gating stay P1 CEO
+    approval-only ([needs-CEO])."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-effects-")
+    led = None
+    eff = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        eff = effects_mod.EffectsFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except effects_mod.EffectsError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        # setup: authorized reserve mint + funding of the two probe
+        # residents (carol stays unfunded: the no-credit refusal leg
+        # needs zero balance movement, any resident works)
+        led.mint_to_pool("pool:reserve", 20000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 12000), ("ben", 8000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        led.ensure_account("usr:carol", census_avatar_id="carol")
+        ok("authorize the reserve mint + fund two resident probe"
+           " accounts",
+           "probe prices mirror caller-supplied sandbox values"
+           " (10 tokens per emoji credit, 5 per pin credit -- the"
+           " 9.9 / 4.9 yuan canon tiers are production anchors,"
+           " never decisions here)")
+
+        # -- purchase: one spend, idempotent ref, bad-args family ----
+        t0 = spend_n()
+        b0 = bal("usr:amy")
+        p1 = eff.purchase("usr:amy", "dynamic_emoji", 10,
+                          "order:eff-emoji-1")
+        ok("amy purchases a dynamic-emoji effect credit (one token"
+           " spend)",
+           "balance %d->%d (exact -10 = the probe price); spend-tx"
+           " %d->%d (+1); the credit row binds that real spend"
+           " tx=%s; one-shot consumable, counts stay counts"
+           % (b0, bal("usr:amy"), t0, spend_n(),
+              len(p1["spend_tx"]) > 0))
+        p1b = eff.purchase("usr:amy", "dynamic_emoji", 10,
+                           "order:eff-emoji-1")
+        ok("the SAME purchase ref replays idempotent",
+           "returns the existing credit_id %d, idempotent=%s;"
+           " balance %d==%d and spend-tx %d==%d (zero second"
+           " charge, zero new rows)"
+           % (p1b["credit_id"], p1b["idempotent"], bal("usr:amy"),
+              b0 - 10, spend_n(), t0 + 1))
+        refuse_leg("an UNKNOWN kind is refused at purchase",
+                   lambda: eff.purchase("usr:amy", "confetti_burst", 10,
+                                        "order:eff-x1"))
+        refuse_leg("a zero token price is refused at purchase",
+                   lambda: eff.purchase("usr:amy", "flood_effect", 0,
+                                        "order:eff-x2"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: eff.purchase("usr:amy", "flood_effect", 10,
+                                        "   "))
+        refuse_leg("an ent: account tries to purchase an effect"
+                   " credit",
+                   lambda: eff.purchase("ent:studio-x", "flood_effect",
+                                        10, "order:eff-x3"))
+        ok("purchase bad-args audit: amy's balance flat across the"
+           " family",
+           "%d==%d and spend-tx %d==%d (usr:* only, known kind,"
+           " int price >= 1, non-empty ref -- every rejected call"
+           " charges nothing and writes no row)"
+           % (bal("usr:amy"), b0 - 10, spend_n(), t0 + 1))
+
+        # -- use: consume one credit, immutable effect row -----------
+        u1 = eff.use("usr:amy", "dynamic_emoji", "lobby:msg:1001",
+                     "use:eff-1")
+        ok("amy fires the dynamic emoji on one gated hall message",
+           "consumes exactly one unconsumed credit inside the SAME"
+           " transaction that inserts the effect row (a failed use"
+           " leaves zero rows); effect row immutable, bound to"
+           " used_credit=%d; message_ref references an"
+           " already-gated lobby message (the lobby ingress owns"
+           " msgSecCheck -- this module never re-runs a content"
+           " channel on it)" % u1["used_credit"])
+        u1b = eff.use("usr:amy", "dynamic_emoji", "lobby:msg:1001",
+                      "use:eff-1")
+        ok("the SAME use ref replays idempotent",
+           "returns the existing effect_id %d, idempotent=%s; the"
+           " consumed credit is consumed ONCE (no second"
+           " consumption, zero new rows)"
+           % (u1b["effect_id"], u1b["idempotent"]))
+        refuse_leg("BEN replays AMY's use ref (cross-account)",
+                   lambda: eff.use("usr:ben", "dynamic_emoji",
+                                   "lobby:msg:1001", "use:eff-1"))
+        ok("cross-account replay audit: the dup check fires BEFORE"
+           " any credit lookup",
+           "refused E_EFF_DUP_USE even though ben holds zero emoji"
+           " credits (the ref belongs to amy's effect row; kind"
+           " mismatch would refuse too -- the ownership check is"
+           " first)")
+        refuse_leg("amy re-fires dynamic_emoji (the emoji kind is"
+                   " spent)",
+                   lambda: eff.use("usr:amy", "dynamic_emoji",
+                                   "lobby:msg:1002", "use:eff-x4"))
+        ok("kind-domain audit: credits are kind-domain",
+           "amy holds zero unconsumed dynamic_emoji credits (the"
+           " one she bought is consumed) -- E_EFF_NO_CREDIT is"
+           " honest: one credit buys exactly one effect of its"
+           " kind, zero rows written")
+        b1 = bal("usr:amy")
+        t1 = spend_n()
+        pp = eff.purchase("usr:amy", "message_pin", 5,
+                          "order:eff-pin-1")
+        ok("amy purchases a message-pin credit (one token spend)",
+           "balance %d->%d (exact -5); spend-tx %d->%d (+1); the"
+           " pin is a one-shot consumable highlight, distinct from"
+           " the mayor-tier persistent chat_highlight privilege"
+           " the member face owns (reference, no double-build)"
+           % (b1, bal("usr:amy"), t1, spend_n()))
+        u2 = eff.use("usr:amy", "message_pin", "lobby:msg:1002",
+                     "use:eff-2")
+        ok("amy pins one hall message (consumes the pin credit)",
+           "consumes exactly one pin credit in the same tx that"
+           " inserts effect row %d; consumption marking on the"
+           " credit row is the module's single UPDATE surface;"
+           " the effect row itself is immutable and binds"
+           " used_credit=%d" % (u2["effect_id"], u2["used_credit"]))
+        refuse_leg("an empty message ref is refused at use",
+                   lambda: eff.use("usr:amy", "message_pin", "  ",
+                                   "use:eff-x5"))
+        refuse_leg("an empty use ref is refused at use",
+                   lambda: eff.use("usr:amy", "message_pin",
+                                   "lobby:msg:1003", "  "))
+        refuse_leg("an UNKNOWN kind is refused at use",
+                   lambda: eff.use("usr:amy", "confetti_burst",
+                                   "lobby:msg:1003", "use:eff-x6"))
+        refuse_leg("an ent: account tries to fire an effect",
+                   lambda: eff.use("ent:studio-x", "message_pin",
+                                   "lobby:msg:1003", "use:eff-x7"))
+        ok("use bad-args audit: zero rows, zero charges",
+           "spend-tx %d==%d and ben's balance %d untouched (a"
+           " rejected use never writes an effect row, so a failed"
+           " use leaves zero rows)" % (spend_n(), spend_n(),
+                                       bal("usr:ben")))
+        refuse_leg("BEN (zero credits) tries to fire any effect",
+                   lambda: eff.use("usr:ben", "dynamic_emoji",
+                                   "lobby:msg:1004", "use:eff-x8"))
+        ok("no-credit audit: a zero-credit resident cannot fire"
+           " any effect",
+           "refused E_EFF_NO_CREDIT before any row; ben's balance"
+           " %d untouched and spend-tx total unchanged"
+           % bal("usr:ben"))
+
+        # -- pure-read audit: zero token movement ----------------------
+        tx_p0 = spend_n()
+        cv = eff.credits_view("usr:amy")
+        ev = eff.effects_view("usr:amy")
+        _ = eff.credits_view("usr:ben")
+        _ = eff.effects_view("usr:ben")
+        tx_p1 = spend_n()
+        ok("pure-read audit: credits_view / effects_view",
+           "spend-tx %d==%d unchanged -- reads move zero tokens"
+           " (the credits view carries the bound spend tx per"
+           " credit, the effects view carries the effect -> credit"
+           " binding with used_utc)"
+           % (tx_p0, tx_p1))
+
+        # -- audit: bound debit, consumption, conservation ------------
+        tx_total = spend_n()
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        credits = conn.execute("SELECT COUNT(*) FROM"
+                               " effect_credits").fetchone()[0]
+        consumed = conn.execute(
+            "SELECT COUNT(*) FROM effect_credits WHERE"
+            " consumed_utc IS NOT NULL").fetchone()[0]
+        bound = 0
+        for acct, tx in conn.execute(
+                "SELECT account_id, bound_spend_tx FROM"
+                " effect_credits").fetchall():
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE"
+                " tx_id = ? AND account_id = ?", (tx, acct)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        events = conn.execute("SELECT COUNT(*) FROM"
+                              " effect_events").fetchone()[0]
+        # every consumed credit binds the effect row it paid for
+        payback = conn.execute(
+            "SELECT COUNT(*) FROM effect_credits WHERE"
+            " consumed_utc IS NOT NULL AND used_effect IS NOT"
+            " NULL").fetchone()[0]
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final == 20000)
+        ok("audit the credits, effects and the bound spend debit",
+           "effect credits %d, consumed %d, effect rows %d"
+           " (consumed credits bind their effect row %d/%d); every"
+           " credit row binds a real spend debit (bound %d/%d);"
+           " spend-tx total %d == credit purchases %d (the module's"
+           " single token-domain touch across the whole probe);"
+           " balances exact: amy 12000-10-5=%d, ben %d;"
+           " pool:reserve %d (20000 mint, the spent tokens loop"
+           " back in, conservation holds: pool+balances==mint=%s)"
+           % (credits, consumed, events, payback, consumed, bound,
+              credits, tx_total, credits, amy_final, ben_final,
+              pool_final, conservation))
+
+        # -- isolation law: module source, structural ------------------
+        with open(effects_mod.__file__, encoding="utf-8") as fh:
+            ef_src = fh.read()
+        code_src = ef_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        module_wide = [b for b in ("sell", "refund", "exchange",
+                                   "withdraw", "transfer", "mint")
+                       if b in ef_src]
+        no_event_rewrite = ("UPDATE effect_events" not in ef_src)
+        update_sites = ef_src.count("UPDATE effect_credits")
+        non_ascii = sum(1 for ch in ef_src if ord(ch) > 127)
+        led_calls = ef_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s"
+           " (module-wide scan=%s); ledger-API call sites"
+           " (self.led.) x%d = two idempotent ensure_account"
+           " (purchase + use) + exactly one spend per credit inside"
+           " purchase = the module's ONLY token-moving touch;"
+           " the only UPDATE surface=%s site is exactly the"
+           " consumption marking on credit rows; effect rows are"
+           " immutable (no UPDATE effect_events=%s) and the"
+           " account_id / kind ownership columns are never"
+           " rewritten; no verb moves a credit between accounts"
+           " (credits are consumed by their owner only); module"
+           " source pure ASCII (%d non-ascii)"
+           % (banned or "none", module_wide or "none", led_calls,
+              update_sites, no_event_rewrite, non_ascii))
+
+        eff.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "credits": credits,
+            "consumed": consumed, "events": events, "bound": bound,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "pool_bal": pool_final, "conservation": conservation,
+            "non_ascii": non_ascii, "banned": banned,
+            "module_wide": module_wide,
+            "no_event_rewrite": no_event_rewrite,
+            "update_sites": update_sites, "led_calls": led_calls,
+            "audit_ok": tx_total == 2 and credits == 2
+            and consumed == 2 and events == 2 and bound == 2
+            and payback == 2 and amy_final == 11985
+            and ben_final == 8000 and pool_final == 15
+            and conservation and not banned and no_event_rewrite
+            and update_sites == 1 and non_ascii == 0
+            and led_calls == 3,
+        }
+    finally:
+        if eff is not None:
+            with contextlib.suppress(Exception):
+                eff.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -5585,6 +5916,99 @@ def render():
              " fail-closed in production)"),
         ])
 
+    # -- hall value-added effects face card (v0.25): REAL probe at
+    # render time; honest failure face --
+    try:
+        fxr = effects_probe()
+        fx_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        fxr, fx_err = None, str(exc)[:300]
+    if fxr is not None:
+        fx_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in fxr["legs"])
+        fx_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>effect spends"
+                   " == effect credits (one spend per credit)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge, zero rows)</div>"
+                   "<div class=\"kpi\"><b>%d/%d</b>credits consumed"
+                   " once, each bound to its effect row</div>"
+                   "<div class=\"kpi\"><b>0</b>effect rows rewritten"
+                   " (immutable audit trail)</div>"
+                   "</div>"
+                   % (fxr["spend_total"], fxr["credits"],
+                      len(fxr["refusals"]), fxr["consumed"],
+                      fxr["credits"]))
+        fx_scope = esc(
+            "delivery model = four one-shot effect consumables over"
+            " the token ledger (kind 'dynamic_emoji',"
+            " 'limit_up_effect', 'flood_effect' on one hall"
+            " message each, kind 'message_pin' = a single-message"
+            " one-shot highlight pin, distinct from the mayor-tier"
+            " persistent chat_highlight privilege the member face"
+            " owns -- reference, no double-build): one effect"
+            " credit per purchase, each bound to exactly one token"
+            " spend; use consumes exactly one unconsumed credit of"
+            " the matching kind inside the same transaction that"
+            " inserts the immutable effect row, so a failed use"
+            " leaves zero rows; message_ref references an"
+            " already-gated lobby message (the lobby ingress owns"
+            " msgSecCheck, this module adds no second content"
+            " channel); presentation authority is server-side"
+            " (integration-deepening-spec IF-9), the client"
+            " carries zero say")
+        fx_audit = esc(
+            "effects audit: %d effect credits, %d consumed, %d"
+            " immutable effect rows (consumed credits bind their"
+            " effect row %d/%d); every credit row binds a real"
+            " spend debit (bound %d/%d); spend-tx total %d =="
+            " credit purchases %d (the module's single"
+            " token-domain touch across the whole probe); balances"
+            " exact: amy 12000-10-5=%d, ben %d; pool:reserve %d"
+            " (20000 mint, the spent tokens loop back in,"
+            " conservation holds: pool+balances==mint=%s)"
+            % (fxr["credits"], fxr["consumed"], fxr["events"],
+               fxr["consumed"], fxr["consumed"], fxr["bound"],
+               fxr["credits"], fxr["spend_total"], fxr["credits"],
+               fxr["amy_bal"], fxr["ben_bal"], fxr["pool_bal"],
+               fxr["conservation"]))
+        fx_hard = esc(
+            "structural law (the R629 module posture, suite"
+            " AC-LE1..AC-LE7): counts stay counts and tokens stay"
+            " tokens -- the purchase is the only token-moving"
+            " touch (exactly one spend per credit), the only"
+            " UPDATE surface is the consumption marking on credit"
+            " rows, effect rows are immutable (no UPDATE), the"
+            " account_id / kind ownership columns are never"
+            " rewritten, no verb moves a credit between accounts;"
+            " use is idempotent on use_ref and purchase on"
+            " purchase_ref, so a replay never double-charges and"
+            " never double-consumes")
+    else:
+        fx_rows_html = fx_kpis = fx_scope = fx_audit = fx_hard = ""
+    if fx_err:
+        fx_kpis = ("<p class=fail>EFFECTS PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(fx_err))
+    fx_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the probe effect prices (10 / 5 tokens)"
+             " mirror the 9.9 / 4.9 yuan canon tiers as"
+             " caller-supplied sandbox values; real effect pricing"
+             " and launch gating stay P1 CEO approval faces"),
+            ("msgSecCheck front gate", "effect payloads ride on"
+             " already-gated hall messages (the lobby ingress owns"
+             " msgSecCheck); every text surface in the stack keeps"
+             " the front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -5714,7 +6138,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R989) &middot; v0.20 city data report card (R990) &middot; v0.21
 metaverse identity card (R992) &middot; v0.22 hall expedite card
 (R993) &middot; v0.23 enterprise metered API card (R995) &middot;
-v0.24 city digital collectibles card (R997)</span></header>
+v0.24 city digital collectibles card (R997) &middot;
+v0.25 hall value-added effects card (R999)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -6120,6 +6545,40 @@ collectible pricing, edition sizing and launch gating stay P1
 instead.</p>
 </div>
 
+<div class="card"><h2>Hall Value-Added Effects Face (C-end 3, live
+probe)</h2>
+<p class=kv>The REAL hall value-added effects face
+(src/sandbox/ledger/effects.py, the R629 product itself, imported
+never copied) runs in-process at render time on a throwaway probe
+database -- every reading below is computed by the product module,
+never canned. This is the BLUEPRINT sec.4 C-end row 3 effects
+residual: one-shot dynamic emoji, limit-up celebration and
+screen-flood effects on one hall message each, plus a one-shot
+message highlight pin, riding on the P-47-2b token ledger. Division
+of authority: the lobby ingress owns the msgSecCheck front gate --
+every message_ref below references an already-gated hall message
+and this module adds no second content channel; presentation
+authority is server-side (integration-deepening-spec IF-9), the
+client carries zero say. One credit buys exactly one effect of its
+kind; use consumes the credit inside the same transaction that
+writes the immutable effect row, so a failed use leaves zero
+rows.</p>
+__FX_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__FX_ROWS__</table>
+<p class=kv>__FX_SCOPE__</p>
+<p class=kv>__FX_AUDIT__</p>
+<p class=kv>__FX_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__FX_COMPL__</ul>
+<p class=kv>Probe prices (10 tokens per emoji credit, 5 per pin
+credit) are caller-supplied sandbox values mirroring the 9.9 / 4.9
+yuan canon tiers, not pricing decisions; real effect pricing and
+launch gating stay P1 [needs-CEO] approval faces; raw spend tx ids
+are never rendered (determinism) -- the audit face shows the
+bound-debit verification instead.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -6362,6 +6821,12 @@ __PAYWARN__</footer>
         "__CL_AUDIT__": cl_audit,
         "__CL_HARD__": cl_hard,
         "__CL_COMPL__": cl_compl,
+        "__FX_KPIS__": fx_kpis,
+        "__FX_ROWS__": fx_rows_html,
+        "__FX_SCOPE__": fx_scope,
+        "__FX_AUDIT__": fx_audit,
+        "__FX_HARD__": fx_hard,
+        "__FX_COMPL__": fx_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

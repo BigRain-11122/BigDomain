@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-03T11:32:13+08:00",
+  "export_ts": "2026-10-03T11:40:33+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R998 fold R182 水位整编轮（轮计分 1=台账维护机制件）：state.json 滚窗水位整编第一百八十六刀执行毕（轮首首测 80,381B 越 80,000B 线 381B=R997 死轮接管收账推越线·本窗首测裁定承接·AC-R1821..R1825 全过=qa/reorg-R998.log·fold 窗=［R181 滚窗摘要+R996..R997 两轮对］5 行压 1 滚窗汇总行·pre-op 逐字节入档 archive §R998 append 节 marker 174→175+备份件 logs/state-preop-R998.bak·头部块 55 项 verbatim·终态 76199B margin 2301B ≤78,500B 闸内·probe 八键 pre→post 零漂移·编目 529+2=531 机械零手落·export self_drive 漂移机械校正（R997 记 56/35/2/10→post 重派 54/35/2/9）·双口径解析过 tick 998）；产品面=frontdoor v0.24 城市数字收藏品面卡（R997）现役在页 http://127.0.0.1:8093/ 26 卡·P-47 五核心面+守护/商业/研究面全挂载；XL-16 零前台套件池余 4 件（settlement/effects/tourstate/opsreview）列下轮补队列扫描面最高价面认领（effects=R629 C 端 3 残余子面次选）；scan=八面 PASS+GORD INFO 持平（sha16 257A6CC1056A1759 零新集团令）+TASKS INFO；waiting 面：法务外件 chronic（HQ 秘书处初稿窗 10-03 12:00 到点后周期触发查）+BigLife R777 复核档 chronic 无 ETA+提案回访 10-05+OSS 下窗 10-05 21:40+治理日聚合审 10-07+token 审计判据回访 10-08+benchmarks 10-10+bootstrap CEO 物理件无 ETA",
-    "latest_artifact": "最近实物=frontdoor v0.24 City Digital Collectibles Face 城市数字收藏品面卡（src/sandbox/frontdoor.py·2026-10-03 R997 上线·http://127.0.0.1:8093/ 26 卡在页·collectibles 产品件=R619 导入不复制〔write set=frontdoor.py 单文件〕·CEO 可见面=真探针 21 腿实算〔证书授予零代币绑 creation event 溯源+同人同事件重授拒 E_CL_DUP 零行+ent: 边界拒+联名卡会员凭证闸免费领取确定性编号（amy no.1）+漂移 cap 参数仍按首领锁 cap（ben no.2）+carol no.3 填满 3/3+同人同版重领拒+第四人满版拒 E_CL_SOLD_OUT 计数器不动+空凭证拒 E_CL_MEMBERSHIP_REQUIRED fail-closed+回放权购买恰一 spend 绑 tx（ben 8000→7990）+重购先于 spend 拒零二次扣费+零价/空 ref/ent: 购买三拒+纯读零代币+审计 1 证书+3 卡编号 1/2/3+1 回放·bound 1/1·守恒 20000〕+隔离律〔self.led. x2=唯一代币触点（ensure_account+spend 同在 buy_replay_right）·唯一 UPDATE=cl_editions 计数器·所有权列永不重写·纯内循环永不转手=代码级硬律·未来交换/转手面=P1 [needs-CEO] 呈批〕+合规四件套 ledger config verbatim+双渲染逐字节同一 9197 chars〕+证据件 qa/frontdoor-v24-R997.log+qa/reconcile-all-R997.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）+自检件 qa/fd24_selfcheck_r997.py；判据预注册=src/os/backlog.md R997 行（AC-FD24a..f·上轮会话先落·本轮接管验证）",
-    "next_milestone": "下个里程碑（≤10-05）：XL-16 零前台套件池余 4 件〔settlement/effects/tourstate/opsreview〕逐轮补队列扫描面最高价面认领（effects=R629 C 端 3 残余子面次选）·窗 10-07 收口；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 下窗 21:40；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；法务外件 chronic〔HQ 秘书处初稿窗 10-03 12:00 到点后周期触发查〕；10-07 治理日聚合审；10-08 token 审计判据回访；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 26 卡）"
+    "current": "R999 产品实物轮（轮计分 2）：frontdoor v0.25 大厅增值特效面卡上线（R998 滚窗承诺兑现·effects=R629 建制件导入不复制·write set=frontdoor.py 单文件）——http://127.0.0.1:8093/ 27 卡在页·真探针 26 腿实算〔一 credit 一 spend 绑真 tx+购用双幂等+跨账户重放拒先于 credit 查+kind 域拒+一次性置顶与 member 持久特权区分+纯读零代币+借记审计 bound 2/2+守恒 20000+隔离律 self.led. x3/唯一 UPDATE=消耗标记/effect 行不可变〕+11 fail-closed 拒码+合规四件套 config verbatim；自检 SUITE PASS 8/8+全量回归 RUNNER PASS 27/27 套件 231 判据零回归+活体重启 healthz=200；scan=八面 PASS+GORD INFO 持平（sha16 257A6CC1056A1759 零新集团令）；XL-16 零前台池余 3 件（settlement/tourstate/opsreview·后两者 R993 实勘非价目面）；waiting 面：法务外件 chronic（HQ 秘书处初稿窗 10-03 12:00 到点后周期触发查）+BigLife R777 复核档 chronic 无 ETA+提案回访 10-05+OSS 下窗 10-05 21:40+治理日聚合审 10-07+token 审计判据回访 10-08+benchmarks 10-10+bootstrap CEO 物理件无 ETA",
+    "latest_artifact": "最近实物=frontdoor v0.25 Hall Value-Added Effects Face 大厅增值特效面卡（src/sandbox/frontdoor.py·2026-10-03 R999 上线·http://127.0.0.1:8093/ 27 卡在页·effects 产品件=R629 导入不复制〔write set=frontdoor.py 单文件〕·CEO 可见面=真探针 26 腿实算〔emoji credit 购买恰一 spend 10 绑真 tx+同 purchase_ref 幂等重放零二次扣费+购买 bad-args 四族拒余额持平+use 同事务耗一 credit 落不可变 effect 行〔引用已过闸大厅消息=lobby 拥 msgSecCheck 无第二内容通道〕+同 use_ref 幂等+跨账户重放拒 E_EFF_DUP_USE 先于 credit 查+kind 域审计 E_EFF_NO_CREDIT+message_pin 购买恰一 spend 5〔一次性消耗=与 member 面 chat_highlight 持久特权区分引用不双建〕+置顶 use 耗 credit+use 面 bad-args 四族拒零行+零 credit 居民 use 拒+纯读面零代币+审计 spend-tx 2==credit 2·bound 2/2·余额 amy 11985/ben 8000·池 15 守恒 20000〕+隔离律〔self.led. x3=唯一动代币触点·唯一 UPDATE 面=credit 消耗标记·effect 行不可变·所有权列永不重写·模块源纯 ASCII〕+11 fail-closed 拒码+合规四件套 ledger config verbatim+双渲染逐字节同一 10082 chars〕+证据件 qa/frontdoor-v25-R999.log（SUITE PASS 8/8）+qa/reconcile-all-R999.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）+自检件 qa/fd25_selfcheck_r999.py；判据预注册=src/os/backlog.md R999 行（AC-FD25a..f·本轮先落）",
+    "next_milestone": "下个里程碑（≤10-05）：XL-16 零前台套件池余 3 件〔settlement/tourstate/opsreview〕补队列扫描面判定（R993 实勘：tourstate/opsreview=非价目面·settlement=跨司协议面无价目锚→池判定面如实记）·XL-16 窗 10-07 收口；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 下窗 21:40；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；法务外件 chronic〔HQ 秘书处初稿窗 10-03 12:00 到点后周期触发查〕；10-07 治理日聚合审；10-08 token 审计判据回访；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 27 卡）"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "998",
+      "999",
       "OSLoop 执行 tick"
     ],
     [
@@ -1545,15 +1545,19 @@
     [
       "1",
       "R998 fold R182 水位整编（80,381B 越 80,000B 线 381B=R997 carry-note 承接兑现·窗［R181 滚窗摘要+R996..R997 两轮对］5 行 10,936B 压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档 archive §R998 append 节 marker 174→175+备份件 logs/state-preop-R998.bak·头部块 55 项 verbatim·终态 76199B margin 2301B ≤78,500B 闸·AC-R1821..R1825 全过=qa/reorg-R998.log·GORD 基线 257A6CC1056A1759 持平零新集团令·P-2026-09-25-18 ④第一百八十六刀）"
+    ],
+    [
+      "2",
+      "frontdoor v0.25 大厅增值特效面卡（§四 C 端 3 特效消费价目线前台收口·AC-FD25a..f 判据预注册=板行先落·真探针 26 腿〔一 credit 一 spend 绑真 tx+购用双幂等+跨账户重放拒先于 credit 查+kind 域拒+一次性置顶与 member 持久特权区分引用不双建+纯读零代币+借记审计 bound 2/2 守恒 20000+隔离律 self.led. x3/唯一 UPDATE=消耗标记/effect 行不可变〕+11 fail-closed 拒码+合规四件套·自检 SUITE PASS 8/8=qa/frontdoor-v25-R999.log+全量回归 RUNNER PASS 27/27 零回归=qa/reconcile-all-R999.log·活体重启 27 卡·R999）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-26..2026-10-03",
     "window_days": 7,
-    "log_lines_in_window": 54,
-    "idle_fast_mention_lines": 35,
+    "log_lines_in_window": 56,
+    "idle_fast_mention_lines": 36,
     "no_pullable_mention_lines": 2,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,
