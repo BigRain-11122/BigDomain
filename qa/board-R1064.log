@@ -1,0 +1,11 @@
+== qa/board-R1064.log board-rule knife cut-202 ==
+AC-K202a PASS stale-board census: exactly 1 stale done row (R1063, 2277 bytes, md5 7a821bc08e6e4f81e006584fb0e1104a) + 4 standing open rows + rule header intact + claim row pre-registered before action (board pre 10130 bytes, arc10 pre 478264 bytes sections 107, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K202b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1064 (pure-append prefix assertion, per-line md5 identical, arc10 478264 -> 480612 bytes, sections 107 -> 108)
+AC-K202c PASS board final state = rule header (archive-history cut-202 record exactly once) + R1064 current-round done row + 4 open rows + 0 stale rows (board 10130 -> 10028 bytes)
+AC-K202d PASS evidence = this log SUITE PASS
+AC-K202e PASS delivery = R1064 row done flip + commit message contains cut-202 record (P-51 rule)
+SUITE PASS 5/5
+NOTE: executed in two script runs (round_r1064.py crashed at the board-header find AFTER the
+state.json pair write and the arc10 sec-R1064 append, BEFORE any board/export/heartbeat/qa write;
+round_r1064_resume.py re-verified both landed writes byte-exact via idempotence gates and
+completed the knife - final states identical to a single clean run, single lineage)
