@@ -1,0 +1,7 @@
+AC-K181a stale-board count: exactly 1 stale done row [R1039 mechanically listed] + standing open 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap] + R1040 claim row pre-registered first (phase-1 insert, AC-K181a..e tokens verified in-row)
+AC-K181b compose: 1 row verbatim to 2026-10 archive sec R1040 (pure-append prefix asserted; 86 -> 87 sections; 09 archive file = separate file untouched by construction)
+AC-K181b write: archive 2026-10 file pure-append, migrated row md5-identical pre/post (662dcd248cc9c430eadcb94767610894), sections 86 -> 87
+AC-K181b 09-archive zero-touch md5 verified: 19783a35cfc4e57eb24eda5916a07702
+AC-K181c board final state: rule header [archive-history cut-181 appended exactly once] + R1040 current-round row [closed] + open 4 standing rows; board 8004 B
+AC-K181d evidence: this qa/board-R1040.log SUITE PASS (all asserts above)
+AC-K181e delivery: commit carries the knife record (cut-181, P-51 protocol)
