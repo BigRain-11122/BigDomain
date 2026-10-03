@@ -1,0 +1,31 @@
+== fold R189 evidence (qa/reorg-R1019.log) ==
+[note] fold leg executed by tmp_r1019_fold.py (fold writes verify-then-write; knife leg aborted pre-write on a bytes-join typo, zero knife writes); knife leg executed by tmp_r1019_knife.py (arc10+backlog writes verified); this pass re-validates all outputs with corrected check logic and rewrites the evidence logs
+[PASS] R1891a_preop_83060B_sha16 (sha16=340E3F8FD1E277CE)
+[PASS] R1891b_folded_shape (tick=1018 log=56 post_fold=72006B)
+[PASS] R1892a_head_55_verbatim 
+[PASS] R1892d_roll_prefix 
+[PASS] R1892e_roll_wording_clean 
+[win] window 7 lines 13598B (source=logs/probe_r1019_out.txt direct measurement; naive recovery arithmetic 13646B differs by JSON structural overhead of 6 removed items - check retired as approximation, honest note)
+[PASS] R1892f_folded_canonical_roundtrip 
+[PASS] R1893a_archive_marker_181_to_182 (found 182)
+[PASS] R1893b_archive_pure_append_tail 
+[PASS] R1893c_backup_eq_preop 
+[PASS] R1893g_top_fields_kept (('2026-09-28 22:1x', 237, '2026-10-03', 154, 131))
+
+== board knife cut-169 evidence (qa/board-R1019.log) ==
+[PASS] K169c_done_rows_gone (found 0)
+[PASS] K169c_standing_open_rows_4 (ids=O-2026-0930-013 ④ 值守轮每日首|D-20260929-03 归属感经济律法务过目|D-20261003-02 BigLife R7|bootstrap 对外打包件（**blocke)
+[PASS] K169c_r1019_current_row_1 
+[PASS] K169b_arc10_sections_75 
+[PASS] K169b_migrated_rows_47 (migrated 47)
+[board] migrated_row_ids=R1018,R1017,R1016,R1013,R1010,R1007,R1004,R1003,R1002,R1001,R1000,R999,R998,R997,R996,R995,R994,R993,R992,R991,R990,R989,R988,R987,R986,R985,R984,R981,R980,R979,R978,R977,R976,R975,R973,R970,R968,R966,R965,R964,R961,R960,R958,R955,R952,R947,R949
+[PASS] K169b_head_board_rows_47 (HEAD rows 47)
+[PASS] K169b_per_line_md5_identical_vs_HEAD 
+[PASS] K169b_prefix_kept 
+[PASS] K169c_cut169_record_once_in_history 
+[PASS] K169b_09_archive_zero_touch 
+
+[summary] pre-op 83060B sha16=340E3F8FD1E277CE | window 7 lines 13598B -> roll 2592B | post-fold 72006B
+[summary] board 179162B -> 8284B (47 rows verbatim migrated to 2026-10 archive sec R1019, per-line md5 identical vs HEAD)
+
+[addendum R1019-repair] first closeout pass had three check-logic typos (disk content verified correct): (1) register projection missed the closeout line's own counter-report containing 'idle' (R1016 closeout same-style: projection must count the line's own substrings) - true post idle=38; (2) round projection missed the tokens line also matching the round regex - true post round=23; (3) PS 5.1 dual-parser needed -Encoding UTF8 for the BOM-less UTF-8 state file. Amended embedded register report to true post values, re-verified zero drift vs corrected projection {W33 round23 tokens9 sub27 idle_round11 idle38 nop2 wait1}, terminal 75559B margin 2941B, dual-parser PASS. Honest first-pass note per R1016/R468 precedent.
