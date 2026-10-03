@@ -1,0 +1,7 @@
+AC-K170a stale-board count: exactly 2 stale done rows [R1019/R1022 mechanically listed] + standing open 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap] + R1025 claim row present + rule header intact
+AC-K170b compose: 2 rows verbatim to 2026-10 archive sec R1025 (pure-append prefix asserted; 09 archive file = separate file untouched by construction)
+AC-K170c board final state: rule header [archive-history cut-170 appended exactly once] + R1025 current-round row [claim, closes at fold closeout] + open 4 standing rows; board 15830B -> 8666B
+AC-K170b write: archive 2026-10 file 392958 -> 400215 B pure-append, migrated rows md5-identical pre/post
+AC-K170c write: board 15830B -> 8666B (rule header + R1025 current row + open 4)
+AC-K170d evidence: this qa/board-R1025.log SUITE PASS (all asserts above)
+AC-K170e delivery: commit carries the order number (P-51 protocol) via fold-round commit set
