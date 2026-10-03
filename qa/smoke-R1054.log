@@ -1,0 +1,73 @@
+BigDomain QA Smoke Test - round R1054 - 2026-10-04 +08:00 (holiday window day 4)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-04 first round)
+round mode: dual-item round = QA charter daily crawl (I-slice, R961 isomorph) + fold R200 waterline reorg
+    (round-start gauge state.json 80,761B over the 80,000B line 761B = R1053 carry-note cashed)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only; 2 attempts / 1 hit / 1 miss-404 + search positioning):
+    a. cac.gov.cn/2022-11/16/c_1670253725725039.htm - HIT (A-level official issuer full-text page:
+       《互联网跟帖评论服务管理规定》 (Internet Follow-up Comment Service Management Provisions, 2022 revision),
+       National Cyberspace Administration, published 2022-11-16, effective 2022-12-15, 16 articles,
+       supersedes the 2017-08-25 version. Verified article-by-article this round:
+       Art.2 covered service forms = comment / reply / leave-message / danmaku / like (chat NOT listed in the
+       2022 revision - two-state honesty note: lobby real-time chat not directly covered; like/danmaku/comment
+       forms directly applicable); Art.4 eight provider duties (backstage-real-name via mobile/ID/unified-
+       social-credit-code, no service to unverified or impersonating users; personal-info protection regime;
+       review-before-publish for news info; danmaku static-version on same platform and page; audit + real-time
+       patrol + emergency + complaint-acceptance info-security systems with CAC reporting; security tech with
+       defect/vulnerability remediation; auditor-editor team matched to service scale; inspection cooperation);
+       Art.5 security assessment for new products / new apps / new functions with public-opinion or
+       social-mobilization attributes; Art.7 seven-step disposal ladder (warn / refuse-publish / delete /
+       limit-function / pause-update / close-account / ban-re-register, records kept); Art.8 user tiering +
+       credit evaluation + blacklist + ban-re-register; Art.12 ban on presentation manipulation incl. software
+       and hired-agency dissemination (anti-water-army); Art.13 public complaint + user appeal channels with
+       convenient entries; Art.15 CAC enforcement; Art.16 effective date + 2017 version repeal)
+    b. cac.gov.cn/2022-11/25/c_1670927526869671.htm - MISS 404 (initial URL guess, wrong publish-date path;
+       negative recorded per two-state law; search located official full-text page + announcement page
+       c_1670253725643572 as dual evidence)
+    -> consumption anchors: lobby interaction face P-47-1 (like/danmaku/comment forms + danmaku static-version
+       duty + new-function security assessment gate = launch-ops SOP candidate), UGC pipeline P-47-3 (real-name
+       + disposal ladder + complaint/appeal channel), token ledger P-47-2 (Art.12 anti-water-army + Art.8
+       credit blacklist = anti-farm legal source, W11 Art.45 / W12 Art.15 same-direction), bootstrap
+       auditor-team staffing budget row candidate.
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-04 (state.json top field updated this round);
+    docs/global-benchmarks.md on-disk deltas = section-1 new block "跟帖评论服务法规" (8 bullet rows, A-grade
+    direct-crawl confirmation line) + section-3 new source row (follow-up comment regulation domain) +
+    section-4 refresh record line "2026-10-04 web 直采刷新 I 片"; 7-day cycle next due 2026-10-11.
+
+[3] research source chain (zero-key, graded, two-state): PASS
+    source = cac.gov.cn official full-text page, grade A, zero key, read-only host web_fetch; initial-URL
+    404 negative on record; search positioning recorded; external content treated as untrusted input,
+    zero downstream assertions.
+
+[4] signal wall: PASS
+    W13 appended to docs/research/intelligence-wall.md signal table (date / signal / source link + grade +
+    fetch time / consumption landing points / status) + conclusion-application table row appended
+    (W13 -> benchmarks section-1/section-3 filed, spec consumption = bootstrap wiring window).
+
+[5] O-2026-0930-013 item-4 daily first-round data check: PASS
+    docs/status-export.json refreshed this round (age < 1h); JSON parse OK (Python + ConvertFrom-Json
+    round-trip in closeout); ceo_face three lines in place (current / latest_artifact / next_milestone).
+
+[6] fold R200 (state waterline carry-note cashed): PASS
+    round-start gauge 80,761B > 80,000B line (R1053 carry-note);
+    window [R199 roll + R1051..R1053 three pairs] 7 lines 11,299B -> 1 paren rolling summary + R1054
+    closeout pair; pre-op form archived byte-exact = logs/state-preop-R1054.bak (80,761B, HEAD blob
+    content-identical per R1051 precedent); final size 72,814B under the line, 58 log lines;
+    state.json re-parses OK; scan next round re-gauges fold R201.
+
+[7] self_drive derived face (F3 mechanical law): PASS
+    calibration probe on pre-op window 2026-09-26..2026-10-03 reproduced the stored register 58/35/2/11
+    exactly (W-idle-tokens-P2 family formula carried); 7-day window rolled to 2026-09-27..2026-10-04;
+    counters mechanically re-derived from the post-fold log: W=33 idle=24 no-pullable=2 tokens=4 p2=0 sub=5
+    (idle delta = 2026-09-26 head-block summary lines carrying historical mention tags rolled out of the
+    window, not new activity; honestly labeled per F3 mechanical-wins law);
+    queue open 6/2/2 + proposals 1/1 disk-recounted flat; probe = logs/tmp_r1054_fold.py.
+
+self-verify summary: [1]..[7] all PASS -> charter daily round green; round score = 1
+    (file changes: benchmarks + signal wall + evidence set + fold mechanism; no new runnable artifact;
+    latest product artifact unchanged = frontdoor v0.29 N2 card, qa/frontdoor-v29-R1018.log).
