@@ -1,0 +1,7 @@
+== qa/board-R1059.log board-rule knife cut-198 ==
+AC-K198a PASS stale-board census: exactly 1 stale done row (R1058, 2923 bytes, md5 64bcbacf81f3fc6709b44a997f2cd8e0) + 4 standing open rows + rule header intact + claim row pre-registered before action (board pre 10466 bytes, arc10 pre 467509 bytes sections 103, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K198b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1059 (pure-append prefix assertion, per-line md5 identical, arc10 467509 -> 470506 bytes, sections 103 -> 104)
+AC-K198c PASS board final state = rule header (archive-history cut-198 record exactly once) + R1059 current-round done row + 4 open rows + 0 stale rows (board 10466 -> 9753 bytes)
+AC-K198d PASS evidence = this log SUITE PASS
+AC-K198e PASS delivery = R1059 row done flip + commit message contains cut-198 record (P-51 rule)
+SUITE PASS 5/5
