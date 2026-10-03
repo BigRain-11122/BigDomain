@@ -1,0 +1,6 @@
+AC-K187a pre-state (recorded from probe before any write): 1 stale done row (R1045, 2355B, md5 38a7759e95e5b0cae31181b02c275afc), claim row pre-registered with AC-K187a..e before migration, standing open 4, rule header intact, done10 437517B/92 sections, done09 md5 19783a35cfc4e57eb24eda5916a07702
+AC-K187b verbatim migration verified: pure-append 437517 -> 439883B, sections 92 -> 93, migrated line md5 identical 38a7759e95e5b0cae31181b02c275afc, prefix byte-identical, 09 archive zero-touch 19783a35cfc4e57eb24eda5916a07702
+AC-K187c board after knife verified: rule header [cut-187 record exactly once] + R1046 current-round row [done 2026-10-03] + standing open 4, board 10769 -> 8883
+AC-K187d knife result file written: {"bopre": 10769, "board_after": 8883, "d10o": 437517, "d10n": 439883, "sections_before": 92, "sections_after": 93, "stale_md5": "38a7759e95e5b0cae31181b02c275afc"}
+AC-K187e delivery: commit message carries the cut-187 record (P-51 protocol)
+SUITE PASS 5/5 (AC-K187a..e)
