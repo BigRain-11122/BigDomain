@@ -184,6 +184,11 @@ import metered as metered_mod  # enterprise metered API face (reuse, no copy)
 import collectibles as collectibles_mod  # city digital collectibles face (reuse, no copy)
 import effects as effects_mod      # hall value-added effects face (reuse, no copy)
 
+TOURSTATE_DIR = os.path.join(HERE, "tourstate")
+if TOURSTATE_DIR not in sys.path:
+    sys.path.insert(0, TOURSTATE_DIR)
+import tourstate as tourstate_mod  # visitor-end M4 three-state prep face (reuse, no copy)
+
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
     sys.path.insert(0, UGC_DIR)
@@ -4533,6 +4538,242 @@ def effects_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def tourstate_probe():
+    """Run the REAL visitor-end M4 three-state selection prep face
+    (the R602 product itself, group order O-2026-0929-007 BigDomain
+    slice: visitor-end 3D three-state selection prep -- the sole
+    precondition of visitor-end commercialization) in-process at
+    render time (F3 law: every reading below is computed by the
+    product module, never canned). Chain: the packet builds
+    deterministically from canon facts at purchase_approved=False
+    (the live posture -- the CEO L1 48-pack purchase gate has NOT
+    cleared) with verdicts dataface=ready_now, offline_frames and
+    realtime3d=not_ready -> a re-build is byte-identical with the
+    same sha256 packet id (zero RNG) -> verify_packet re-derives
+    every gate and verdict from the packet's own facts -> a
+    gate-status tamper is refused E_TS_TAMPER (id chain) -> a
+    purchase_approved tamper with the id RECOMPUTED is still
+    refused E_TS_TAMPER (gate-drift family) -> the bad-input
+    family (unknown state / unknown gate / non-bool build flag /
+    non-packet object / packet missing its id) is refused
+    E_TS_BAD_INPUT -> the hypothetical leg purchase_approved=True
+    flips ONLY the two pack-derived license gates from BLOCKED to
+    PASS and touches nothing else (render_supply stays TBD, the
+    verdicts stay, the selection itself stays a needs-CEO P1
+    approval face) -> audit: at the live posture the 15-cell gate
+    matrix holds PASS=9 / BLOCKED=2 / TBD=4 with dataface the
+    only ready_now state -> the packet carries three
+    pre-registered selection questions and two open CEO decision
+    items with cost anchors left None (price anchors belong to a
+    separate research item, never invented here) -> isolation law:
+    module source pure ASCII, stdlib only (hashlib + json), zero
+    network, zero money movement, zero pricing constants -- the
+    module prepares, never decides."""
+    legs = []
+    refusals = []
+
+    def ok(action, outcome):
+        legs.append({"n": len(legs) + 1, "action": action,
+                     "outcome": outcome})
+
+    def refuse_leg(action, fn):
+        try:
+            out = fn()  # design says refuse; accepted = honest show
+            ok(action, "unexpectedly accepted: %s" % out)
+        except tourstate_mod.TourStateError as exc:
+            refusals.append(str(exc.code))
+            ok(action, "refused: %s" % exc.code)
+
+    # -- live-posture packet: canon facts, L1 gate uncleared --------
+    pk = tourstate_mod.build_packet(False)
+    verdicts = dict((st["id"], st["verdict"]) for st in pk["states"])
+    ok("build the three-state decision-prep packet at the live"
+       " posture (purchase_approved=False)",
+       "three states: dataface=%s, offline_frames=%s,"
+       " realtime3d=%s; the L1 red line rides the matrix: the two"
+       " pack-derived states hold license_l1 BLOCKED (48 packs ="
+       " zero commercial grant until the CEO legitimate-purchase"
+       " gate clears)"
+       % (verdicts["dataface"], verdicts["offline_frames"],
+          verdicts["realtime3d"]))
+
+    # -- determinism: re-build byte-identical, same id ---------------
+    pk2 = tourstate_mod.build_packet(False)
+    same_text = (tourstate_mod.canonical(pk)
+                 == tourstate_mod.canonical(pk2))
+    same_id = pk["packet_id"] == pk2["packet_id"]
+    ok("re-build the packet: deterministic, zero RNG",
+       "canonical payload byte-identical=%s and packet_id equal=%s"
+       " (sha256 %s..%s over the sorted-key payload)"
+       % (same_text, same_id, pk["packet_id"][:12],
+          pk["packet_id"][-8:]))
+
+    # -- verify: re-derive every gate from the packet's own facts ---
+    v_ok = tourstate_mod.verify_packet(pk)
+    ok("verify_packet re-derives every gate and verdict",
+       "recomputed sha256 matches and all %d gate cells re-derive"
+       " from the packet's own facts -> %s (no canned status: any"
+       " field drift raises E_TS_TAMPER)"
+       % (len(tourstate_mod.STATES) * len(tourstate_mod.GATES),
+          v_ok))
+
+    # -- tamper control: gate-status flip (id chain) -----------------
+    bad_gate = json.loads(json.dumps(pk))
+    bad_gate["states"][1]["gates"]["license_l1"]["status"] = "PASS"
+    refuse_leg("a gate-status tamper (offline_frames license_l1"
+               " flipped BLOCKED->PASS) is refused",
+               lambda: tourstate_mod.verify_packet(bad_gate))
+    ok("tamper audit: the stored id no longer covers the payload",
+       "the flip changes the canonical payload, so the stored"
+       " packet_id mismatches first (hash-chain detection); even a"
+       " recomputed id would still fail the gate re-derivation"
+       " below -- two independent tamper nets")
+
+    # -- tamper control: purchase flip + recomputed id (gate drift) --
+    bad_flag = json.loads(json.dumps(pk))
+    bad_flag["purchase_approved"] = True
+    payload = dict((k, v) for k, v in bad_flag.items()
+                   if k != "packet_id")
+    bad_flag["packet_id"] = tourstate_mod.digest(
+        tourstate_mod.canonical(payload))
+    refuse_leg("a purchase_approved tamper WITH the id recomputed"
+               " is still refused",
+               lambda: tourstate_mod.verify_packet(bad_flag))
+    ok("tamper audit: gate drift catches the recomputed-id family",
+       "the id now matches, but re-deriving the gates at"
+       " purchase_approved=True yields PASS for the pack-derived"
+       " license gates while the stored rows still say BLOCKED --"
+       " E_TS_TAMPER fires on gate drift (the packet's facts and"
+       " its claims cannot diverge)")
+
+    # -- bad-input family ---------------------------------------------
+    refuse_leg("an UNKNOWN state is refused at evaluate_gate",
+               lambda: tourstate_mod.evaluate_gate(
+                   "hologram_room", "license_l1", False))
+    refuse_leg("an UNKNOWN gate is refused at evaluate_gate",
+               lambda: tourstate_mod.evaluate_gate(
+                   "dataface", "battery_gate", False))
+    refuse_leg("a non-bool purchase flag is refused at build",
+               lambda: tourstate_mod.build_packet("yes"))
+    refuse_leg("a non-packet object is refused at verify",
+               lambda: tourstate_mod.verify_packet([1, 2, 3]))
+    refuse_leg("a packet missing its id is refused at verify",
+               lambda: tourstate_mod.verify_packet(
+                   {"schema": tourstate_mod.SCHEMA}))
+    ok("bad-input audit: five E_TS_BAD_INPUT refusals, zero rows",
+       "unknown state / unknown gate / non-bool build flag /"
+       " non-packet object / missing packet_id -- every rejected"
+       " call writes nothing and decides nothing (fail-closed"
+       " prep face)")
+
+    # -- hypothetical leg: the CEO approval flips ONLY license -------
+    pk_true = tourstate_mod.build_packet(True)
+    tv = dict((st["id"], st["verdict"]) for st in pk_true["states"])
+    flips = []
+    for st_false, st_true in zip(pk["states"], pk_true["states"]):
+        for gid in tourstate_mod.GATES:
+            if (st_false["gates"][gid]["status"]
+                    != st_true["gates"][gid]["status"]):
+                flips.append("%s/%s %s->%s"
+                             % (st_false["id"], gid,
+                                st_false["gates"][gid]["status"],
+                                st_true["gates"][gid]["status"]))
+    ok("hypothetical leg: purchase_approved=True flips only the"
+       " pack-derived license gates",
+       "flipped cells=%s; dataface unchanged=%s, render_supply"
+       " stays TBD=%s, verdicts stay (dataface=%s,"
+       " offline_frames=%s, realtime3d=%s) -- clearing the L1"
+       " purchase gate alone does NOT make a state ready: the"
+       " selection stays a needs-CEO P1 approval face"
+       % (flips,
+          pk["states"][0] == json.loads(json.dumps(
+              pk_true["states"][0])),
+          pk_true["states"][1]["gates"]["render_supply"]["status"]
+          == "TBD",
+          tv["dataface"], tv["offline_frames"], tv["realtime3d"]))
+    v_true = tourstate_mod.verify_packet(pk_true)
+
+    # -- live-posture matrix audit ------------------------------------
+    cells = [st["gates"][g]["status"] for st in pk["states"]
+             for g in tourstate_mod.GATES]
+    n_pass = sum(1 for s in cells if s == "PASS")
+    n_blocked = sum(1 for s in cells if s == "BLOCKED")
+    n_tbd = sum(1 for s in cells if s == "TBD")
+    blocked_cells = ["%s/%s" % (st["id"], g) for st in pk["states"]
+                     for g in tourstate_mod.GATES
+                     if st["gates"][g]["status"] == "BLOCKED"]
+    ready_states = [st["id"] for st in pk["states"]
+                    if st["verdict"] == "ready_now"]
+    ok("audit the 15-cell gate matrix at the live posture",
+       "PASS=%d / BLOCKED=%d / TBD=%d of %d cells; the BLOCKED"
+       " cells are exactly the pack-derived license gates %s"
+       " (the L1 red line); ready_now states=%s (dataface is the"
+       " only launch-ready posture, zero pack-derived pixels)"
+       % (n_pass, n_blocked, n_tbd, len(cells), blocked_cells,
+          ready_states))
+
+    # -- decision-prep payload: questions + CEO items -----------------
+    n_q = len(pk["selection_questions"])
+    ceo_items = pk["ceo_decisions"]
+    anchors_none = all(item.get("cost_anchor") is None
+                       for item in ceo_items)
+    ok("the packet carries the pre-registered selection questions"
+       " and the open CEO decision items",
+       "%d selection questions (license / category / supply); %d"
+       " open CEO decision items (%s); every cost_anchor is"
+       " None=%s -- the cost anchors belong to a separate research"
+       " item, never invented here; verify_packet on the"
+       " hypothetical packet also passes=%s"
+       % (n_q, len(ceo_items),
+          "; ".join(item["id"] for item in ceo_items),
+          anchors_none, v_true))
+
+    # -- isolation law: module source, structural ----------------------
+    with open(tourstate_mod.__file__, encoding="utf-8") as fh:
+        ts_src = fh.read()
+    non_ascii = sum(1 for ch in ts_src if ord(ch) > 127)
+    imports = [ln.strip() for ln in ts_src.splitlines()
+               if ln.strip().startswith("import ")]
+    stdlib_only = sorted(imports) == ["import hashlib", "import json"]
+    net_hits = [w for w in ("socket", "urllib", "http", "requests")
+                if w in ts_src]
+    money_hits = [w for w in ("spend", "mint_to_pool", "charge",
+                              "refund", "withdraw") if w in ts_src]
+    price_hits = [w for w in ("CNY", "yuan", "9.9", "19.9")
+                  if w in ts_src]
+    ok("isolation law audit on the REAL module source",
+       "module source pure ASCII (%d non-ascii); imports=%s"
+       " (stdlib only=%s); network verbs=%s; money-movement"
+       " verbs=%s; pricing constants=%s -- the module prepares the"
+       " CEO decision, never decides it (no config keys shipped,"
+       " zero RNG, canon facts only)"
+       % (non_ascii, imports, stdlib_only, net_hits or "none",
+          money_hits or "none", price_hits or "none"))
+
+    return {
+        "legs": legs, "refusals": refusals,
+        "verdicts": verdicts, "packet_id": pk["packet_id"],
+        "n_pass": n_pass, "n_blocked": n_blocked, "n_tbd": n_tbd,
+        "blocked_cells": blocked_cells, "ready_states": ready_states,
+        "flips": flips, "n_q": n_q, "n_ceo": len(ceo_items),
+        "anchors_none": anchors_none,
+        "non_ascii": non_ascii, "stdlib_only": stdlib_only,
+        "net_hits": net_hits, "money_hits": money_hits,
+        "price_hits": price_hits,
+        "audit_ok": (verdicts["dataface"] == "ready_now"
+                     and verdicts["offline_frames"] == "not_ready"
+                     and verdicts["realtime3d"] == "not_ready"
+                     and same_text and same_id and v_ok and v_true
+                     and n_pass == 9 and n_blocked == 2
+                     and n_tbd == 4 and len(flips) == 2
+                     and len(refusals) == 7 and n_q == 3
+                     and len(ceo_items) == 2 and anchors_none
+                     and non_ascii == 0 and stdlib_only
+                     and not net_hits and not money_hits
+                     and not price_hits),
+    }
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -6009,6 +6250,119 @@ def render():
              " fail-closed in production)"),
         ])
 
+    # -- visitor-end M4 three-state decision-prep card (v0.26):
+    # REAL probe at render time; honest failure face --
+    try:
+        tsr = tourstate_probe()
+        ts_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        tsr, ts_err = None, str(exc)[:300]
+    if tsr is not None:
+        ts_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in tsr["legs"])
+        ts_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d/%d/%d</b>gate cells"
+                   " PASS / BLOCKED / TBD</div>"
+                   "<div class=\"kpi\"><b>%d</b>ready_now state(s)"
+                   " (dataface, zero pack pixels)</div>"
+                   "<div class=\"kpi\"><b>%d</b>L1-blocked states"
+                   " (pack-derived license gate)</div>"
+                   "<div class=\"kpi\"><b>%d</b>open CEO decision"
+                   " items (cost anchors None)</div>"
+                   "</div>"
+                   % (tsr["n_pass"], tsr["n_blocked"], tsr["n_tbd"],
+                      len(tsr["ready_states"]), tsr["n_blocked"],
+                      tsr["n_ceo"]))
+        gate_names = {"license_l1": "G1 license", "category_d2":
+                      "G2 category", "render_supply": "G3 supply",
+                      "aigc_mark": "G4 AIGC", "msgsec_check":
+                      "G5 msgsec"}
+        pk_now = tourstate_mod.build_packet(False)
+        matrix_rows = "".join(
+            "<tr><td>%s</td><td>%s</td>%s<td><b>%s</b></td></tr>"
+            % (esc(st["id"]),
+               "pack-derived" if st["pack_derived"] else
+               "zero pack pixels",
+               "".join("<td>%s</td>" % esc(
+                   st["gates"][g]["status"])
+                   for g in tourstate_mod.GATES),
+               esc(st["verdict"]))
+            for st in pk_now["states"])
+        ts_matrix = ("<table><tr><th>state</th><th>pixels</th>"
+                     + "".join("<th>%s</th>" % esc(gate_names[g])
+                               for g in tourstate_mod.GATES)
+                     + "<th>verdict</th></tr>" + matrix_rows
+                     + "</table>")
+        ts_scope = esc(
+            "delivery model = a deterministic decision-prep packet"
+            " (sha256 over the sorted-key payload, zero RNG): three"
+            " candidate visitor-end states -- dataface (live data"
+            " face: census digest 11-field public whitelist, zero"
+            " city-scene rendering, the current M4 spec posture),"
+            " offline_frames (stills / panorama / short clips from"
+            " the BigCompute offline-render batch, visitor-end"
+            " approval window 10-07), realtime3d (real-time 3D"
+            " roam, WebGL pitfall record + D2 category question,"
+            " unverified) -- each scored against five hard gates"
+            " (G1 license_l1 / G2 category_d2 / G3 render_supply /"
+            " G4 aigc_mark / G5 msgsec_check) evaluated from canon"
+            " facts only; the packet id covers the whole payload,"
+            " so any field tamper is detectable by verify_packet")
+        ts_audit = esc(
+            "prep audit: live posture (purchase_approved=False)"
+            " gate matrix = %d PASS / %d BLOCKED / %d TBD of 15"
+            " cells; BLOCKED cells are exactly the pack-derived"
+            " license gates %s (the L1 red line: 48 packs = zero"
+            " commercial grant until the CEO legitimate-purchase"
+            " gate clears); ready_now states = %s; the hypothetical"
+            " approved leg flips exactly %d cells (the two"
+            " pack-derived license gates BLOCKED->PASS) and leaves"
+            " every other gate and verdict untouched -- clearing L1"
+            " alone never makes a state ready; verdicts:"
+            " dataface=%s, offline_frames=%s, realtime3d=%s"
+            % (tsr["n_pass"], tsr["n_blocked"], tsr["n_tbd"],
+               tsr["blocked_cells"], tsr["ready_states"],
+               len(tsr["flips"]), tsr["verdicts"]["dataface"],
+               tsr["verdicts"]["offline_frames"],
+               tsr["verdicts"]["realtime3d"]))
+        ts_hard = esc(
+            "structural law (the R602 module posture, suite"
+            " AC-TS1..AC-TS7): the module PREPARES the CEO"
+            " decision, never decides it -- selection stays a"
+            " needs-CEO P1 approval face; gate evaluation derives"
+            " from canon facts only, the packet id is a hash chain"
+            " over the canonical payload (tamper-evident two-net:"
+            " id mismatch + gate re-derivation drift); all cost"
+            " anchors stay None (price anchors belong to a separate"
+            " research item, never invented here); stdlib only"
+            " (hashlib + json), zero network, zero money movement,"
+            " zero pricing constants, no config keys shipped")
+    else:
+        ts_rows_html = ts_kpis = ts_matrix = ts_scope = ""
+        ts_audit = ts_hard = ""
+    if ts_err:
+        ts_kpis = ("<p class=fail>TOURSTATE PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(ts_err))
+    ts_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the 48-pack legitimate-purchase gate"
+             " (L1) and the visitor-end three-state selection (or"
+             " phased combo) stay P1 CEO approval-only faces; all"
+             " cost anchors stay needs-CEO (a separate research"
+             " item, never invented here)"),
+            ("msgSecCheck front gate", "the visitor-end"
+             " user-visible text faces ride the ugc-pipeline IF-8"
+             " single-source gate per the module's own G5 reason"
+             " text (reference, no second gate built)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -6139,7 +6493,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 metaverse identity card (R992) &middot; v0.22 hall expedite card
 (R993) &middot; v0.23 enterprise metered API card (R995) &middot;
 v0.24 city digital collectibles card (R997) &middot;
-v0.25 hall value-added effects card (R999)</span></header>
+v0.25 hall value-added effects card (R999) &middot;
+v0.26 visitor-end M4 three-state card (R1000)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -6579,6 +6934,38 @@ are never rendered (determinism) -- the audit face shows the
 bound-debit verification instead.</p>
 </div>
 
+<div class="card"><h2>Visitor-End M4 Three-State Face (selection
+prep, live probe)</h2>
+<p class=kv>The REAL visitor-end three-state selection prep face
+(src/sandbox/tourstate/tourstate.py, the R602 product itself,
+imported never copied; group order O-2026-0929-007 BigDomain
+slice -- the sole precondition of visitor-end commercialization)
+runs in-process at render time: every reading below is computed
+by the product module, never canned. The module PREPARES the CEO
+decision, never decides it: three candidate states (dataface /
+offline_frames / realtime3d) each scored against five hard gates
+(G1 license_l1 / G2 category_d2 / G3 render_supply / G4 aigc_mark
+/ G5 msgsec_check) evaluated from canon facts only, plus three
+pre-registered selection questions and the open CEO decision
+items with cost anchors left None.</p>
+__TS_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__TS_ROWS__</table>
+<h3 style="margin:14px 0 8px">Gate matrix at the live posture
+(purchase_approved=False, the L1 purchase gate uncleared)</h3>
+__TS_MATRIX__
+<p class=kv>__TS_SCOPE__</p>
+<p class=kv>__TS_AUDIT__</p>
+<p class=kv>__TS_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__TS_COMPL__</ul>
+<p class=kv>Open CEO decisions stay P1 approval-only: the 48-pack
+legitimate-purchase gate (L1) and the three-state selection (or
+phased combo); all cost anchors stay needs-CEO (collected by a
+separate research item, never invented here); the selection
+itself never happens inside this module.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -6827,6 +7214,13 @@ __PAYWARN__</footer>
         "__FX_AUDIT__": fx_audit,
         "__FX_HARD__": fx_hard,
         "__FX_COMPL__": fx_compl,
+        "__TS_KPIS__": ts_kpis,
+        "__TS_ROWS__": ts_rows_html,
+        "__TS_MATRIX__": ts_matrix,
+        "__TS_SCOPE__": ts_scope,
+        "__TS_AUDIT__": ts_audit,
+        "__TS_HARD__": ts_hard,
+        "__TS_COMPL__": ts_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
