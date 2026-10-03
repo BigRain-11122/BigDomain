@@ -1,0 +1,6 @@
+AC-K190a pre-state: exactly 1 stale done row [R1048] (3,703B, md5 be014536bfe7f00239573e622ec155d0) + claim row pre-registered (open, 1,744B) + standing open 4 + rule header anchor unique + archive pre 444381B sections 95 + 09-archive md5 19783a35cfc4e57eb24eda5916a07702
+AC-K190b verbatim migration: pure-append 444381B -> 448095B, prefix assertion pass, migrated line md5 identical be014536bfe7f00239573e622ec155d0, sections 95 -> 96, deterministic tail byte-check pass, 09 archive zero-touch
+AC-K190c board cut: rule header [cut-190 record exactly once] + R1049 claim row (open, closes at closeout) + standing open 4 + 0 done rows; board 12350B -> 8720B (stale 3,703B + 2LF removed, hist record +75B)
+AC-K190d knife result file written: {"bopre": 12350, "board_after_knife": 8720, "d10o": 444381, "d10n": 448095, "sections_before": 95, "sections_after": 96, "stale_md5": "be014536bfe7f00239573e622ec155d0"}
+AC-K190e delivery: board done row closes at closeout; commit message carries the cut-190 record (P-51 protocol)
+SUITE PASS
