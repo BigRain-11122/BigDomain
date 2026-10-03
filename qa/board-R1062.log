@@ -1,0 +1,7 @@
+== qa/board-R1062.log board-law knife cut-200 (200th knife, R1061 stale done row migration) ==
+AC-K200a PASS stale-row census = exactly 1 stale done row (R1061, 2223 bytes, md5 218b5ee6cea281ae86bdb823436eee55) + 4 standing open rows + intact governance header + claim row landed first (pre-op board 9928B, arc10 472709B 105 sections, 09-archive md5 19783a35cfc4e57eb24eda5916a07702)
+AC-K200b PASS 1 row verbatim-migrated to docs/archive/backlog-done-2026-10.md sec R1062 (pure-append prefix assertion + per-line md5 identical; arc10 472709 -> 474997 bytes, sections 105 -> 106; 09 archive untouched, md5p09 19783a35cfc4e57eb24eda5916a07702)
+AC-K200c PASS main-board final = governance header (archive-history cut-200 record exactly once) + R1062 current row (claim flipped done with measured values) + 4 open rows + 0 stale rows (board 10973 bytes)
+AC-K200d PASS evidence = qa/board-R1062.log SUITE PASS + qa/reorg-R1062.log SUITE PASS
+AC-K200e PASS delivery = this row done-flip + commit message contains cut-200 record (P-51 rule)
+SUITE PASS 5/5
