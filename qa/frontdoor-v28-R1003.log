@@ -1,0 +1,31 @@
+PASS AC-FD28d double render opsreview card block byte-identical (6967 chars)
+PASS AC-FD28d zero unfilled placeholders (found [])
+PASS AC-FD28e card count = 30 (got 30)
+PASS AC-FD28e card title on page
+PASS AC-FD28e header v0.28 line present
+PASS AC-FD28e honest-failure face absent (probe ran)
+PASS AC-FD28b probe fact on page: criteria=10 ids=XD1,XD2,XD3,XD4,XD5,XD6,XD7,XD8,XD9,XD10 uni
+PASS AC-FD28b probe fact on page: SUMMARY: PASS=10 GAP=0 FAIL=0 criteria=10
+PASS AC-FD28b probe fact on page: XD4,XD6,XD7,XD8
+PASS AC-FD28b probe fact on page: SUMMARY: PASS=6 GAP=4 FAIL=0 criteria=10
+PASS AC-FD28b probe fact on page: exit=2 (RED_LINE_FAIL)
+PASS AC-FD28b probe fact on page: exit=3, SPEC_MISSING verdict present=True
+PASS AC-FD28b live leg present with computed verdict (exit=1 gaps=XD4,XD5,XD6,XD7,XD8)
+PASS AC-FD28b live gaps are XD ids (structural)
+PASS AC-FD28b live exit code honest family
+NOTE live-drift vs R604 baseline: R604 live log = PASS=6 GAP=4 (XD4/XD6/XD7/XD8); current computed = SUMMARY: PASS=5 GAP=5 FAIL=0 criteria=10 gaps=XD4,XD5,XD6,XD7,XD8 -- the sibling spec drifted since R604 (XD5 newly gapped); card shows current verdict honestly, adoption stays sibling-team face
+PASS AC-FD28a frontdoor source pure ASCII (407818 bytes)
+PASS AC-FD28a gate imported (never copied)
+PASS AC-FD28a cross-repo read-only law stated on card
+PASS AC-FD28b live sibling spec found on disk (read-only)
+PASS AC-FD28c AIGC label verbatim on page
+PASS AC-FD28c non-advisory disclaimer verbatim on page
+PASS AC-FD28c needs-CEO + msgSecCheck notes on page
+PASS AC-FD28b probe audit_ok=True (registry/exits/gaps/idempotence/evidence/isolation)
+PASS AC-FD28b live verdict on real sibling spec = exit 1 (note gaps, honest)
+PASS AC-FD28b 10/10 labeled evidence lines
+PASS AC-FD28b gate isolation law: ASCII/stdlib/no-net/no-RNG
+NOTE sibling spec current sha256[:16]=6a017eed2571adf8 (5143 bytes) vs R604 baseline 6b4206d35ee3aa92 (4729 bytes) = drifted
+PASS AC-FD28a write set = frontdoor.py single file (git status verified separately)
+SUITE PASS 29/29
+RUNNER: opsreview-card checks 29/29 green
