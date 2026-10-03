@@ -1,0 +1,9 @@
+AC-K193a stale-board count = exactly 1 stale done row [R1051, 3926B, md5p 4cc1b53138caf083] + standing open 4 rows + rule header intact (4 rule lines) + R1052 claim row pre-registered on disk before migration (board pre 11064B, done-10 452400B sections 98, done-09 md5p 19783a35cfc4e57e)
+AC-K193b 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md sec R1052 (pure-append 452400B -> 456337B, prefix assertion pass, row md5 identical, sections 98 -> 99, 09 archive zero-touch md5p 19783a35cfc4e57e)
+AC-K193c board final state = rule header [cut-193 appended exactly once] + R1052 current row (claim flipped done with measured values) + open 4 rows; 9415B
+AC-K193d evidence = qa/board-R1052.log SUITE PASS
+AC-K193e delivery = commit contains cut-193 record (P-51 protocol)
+SUITE PASS 5/5 (AC-K193a..e)
+CHECK state tick 1051->1052 final 78433B under the 80000B line, json round-trip + parse pass
+CHECK export tick row 1051->1052, results 380 rows, self_drive re-derived 54/35/2/9 -> 56/35/2/10 (calibration probe reproduced the stored register pre-append), ceo_face three lines in place
+CHECK heartbeat R1052 row appended, HBTS real value 2026-10-03 23:35
