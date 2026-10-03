@@ -1,0 +1,7 @@
+== qa/reorg-R1066.log fold R204 (207th compression knife, P-2026-09-25-18 item-6 mainline) ==
+AC-R2041 PASS pre-op byte-identical backup logs/state-preop-R1066.bak (80830 bytes; identical to git HEAD blob, tree clean pre-op; round-start first-measure over the 80000B line by 830B = R1065 carry-note honored)
+AC-R2042 PASS window [R202 rolling summary + R1062..R1065 four pairs] 9 lines -> 1 rolling summary line, kept=0, round types: fold-R202+cut-200 dual / reconcile_all-fanout+cut-201 dual / cut-202 / cut-203; scores 1/2/1/1; mechanical round list R1062..R1065 continuous 4/4; P/D catalog mechanical-dedup (boundary-guarded, BD-PROP-001 false-positive P-00 caught and fixed with byte-identical restore before re-run, honestly noted): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+AC-R2043 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); json.loads + PowerShell ConvertFrom-Json dual-parser pass (tick 1066, log 58 items)
+AC-R2044 PASS post-fold measured 70738 bytes, under the 80000B line by 9262 bytes; round closeout 73238 bytes under by 6762 bytes
+AC-R2045 PASS receipt = state R204 rolling summary + R1066 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5

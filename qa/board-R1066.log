@@ -1,0 +1,8 @@
+== qa/board-R1066.log board-rule knife cut-204 ==
+AC-K204a PASS stale-board census: exactly 1 stale done row (R1065, 2132 bytes, md5 9a7ff7c6faebe494f3f4006335a05ff3) + 4 standing open rows + rule header intact + claim row pre-registered before action (board pre-op 10141 bytes, arc10 pre 482780 bytes sections 109, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K204b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1066 (pure-append prefix assertion, per-line md5 identical, arc10 482780 -> 484982 bytes, sections 109 -> 110)
+AC-K204c PASS board final state = rule header (archive-history cut-204 record exactly once) + R1066 current-round done row + 4 open rows + 0 stale rows (board 10141 -> 10844 bytes)
+AC-K204d PASS evidence = this log SUITE PASS
+AC-K204e PASS delivery = R1066 row done flip + commit message contains fold R204 + cut-204 record (P-51 rule)
+SUITE PASS 5/5
+NOTE: dual-item round with fold R204 (AC-R2041..R2045 = qa/reorg-R1066.log); single-pass clean run, verify-then-write held throughout (k204 step scripts all assertions passed before any disk write). Round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1.
