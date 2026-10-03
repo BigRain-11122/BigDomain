@@ -1,0 +1,11 @@
+AC-K194a stale-board count = exactly 1 stale done row [R1052, 2196B, md5 0c74028bf9942b16e16c6efaafa64f7a] + standing open 4 rows + rule header intact (4 rule lines) + R1053 claim row pre-registered on disk before migration (board pre 9415B, done-10 456337B sections 99, done-09 md5p 19783a35cfc4e57e)
+AC-K194b 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md sec R1053 (pure-append 456337B -> 458543B, prefix assertion pass, row md5 identical, sections 99 -> 100, 09 archive zero-touch md5p 19783a35cfc4e57e)
+AC-K194c board final state = rule header [cut-194 appended exactly once] + R1053 current row (claim flipped done with measured values) + open 4 rows; 9862B
+AC-K194d evidence = qa/board-R1053.log SUITE PASS
+AC-K194e delivery = commit contains cut-194 record (P-51 protocol)
+SUITE PASS 5/5 (AC-K194a..e)
+CHECK state tick 1052->1053 final 80761B, json round-trip + parse pass
+CHECK export tick row 1052->1053, results rows 381, self_drive re-derived 56/35/2/10 -> 58/35/2/11 (pre-append probe: W=56 idle=35 nop=2 exact reproduction; sub pair-increment +1, R1052 isomorph 9->10), ceo_face three lines in place
+CHECK heartbeat R1053 row appended, HBTS real value 23:56
+CHECK nine-face scan exit 0 at round start; claimable 3 real-judged gated/chronic/blocked-on-CEO; dual external trigger-checks cite R1052 in-register zero-hit (anti-rescan law R1037); fold R200 no-trigger at 78433B round-start first-measure
+CHECK export writer defect caught by verify-before-write: first-run results-append anchor swallowed the last row closing bracket (nested-array imbalance, parse abort BEFORE export write, zero bad bytes on disk); fixed anchor keeps row close then appends; R413/R1050 defect family, honestly recorded
