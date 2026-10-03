@@ -1,0 +1,66 @@
+PASS AC-K212a board canonical single BOM byte-level
+PASS AC-K212a board has no CR bytes
+PASS AC-K212a stale-board count = exactly 1 done row (R1073 natural stale)
+PASS AC-K212a migrated row byte length = 2530 (pre-registered)
+PASS AC-K212a md5 of migrated row (pre) identical to pre-registered: 51b94f3a5bcc2e6c103e0a750093e508
+PASS AC-K212a claim row pre-landed on disk before cut action (write order held)
+PASS AC-K212a post-claim open rows = exactly 5 [claim + O-013-4 + legal gated + R777 gated + bootstrap]
+PASS AC-K212a rule header anchor occurs exactly once
+PASS AC-K212a board claim-landed = 14004 B (11166 + claim 2838 + LF 1)
+PASS AC-K212a claim line byte-content == pre-registered CLAIM payload
+PASS AC-K212b 10-month archive pre sections = 117
+PASS AC-K212b 10-month archive pre bytes = 504843
+PASS AC-K212b 10-month archive has no R1074 section yet
+PASS AC-K212b 10-month archive ends with single newline (pure-append precondition)
+PASS AC-K212b 10-month archive has no BOM (byte-level)
+PASS AC-K212b 09-month archive zero-touch pre-op == git HEAD blob (byte match)
+PASS AC-K212b 09-month archive md5 baseline in place
+PASS AC-K212a state pre-closeout = folded 70844 B (fold R212 output; untouched by claim/knife steps)
+PASS AC-K212a state closeout tail anchor (R212 rolling summary tail) unique
+PASS AC-K212a claim line on disk == payload (verbatim)
+INFO FIN/ST cross fixed-point converged in 2 iterations (FIN=12390 ST=73688)
+PASS AC-K212c pre-write FIN self-check 12390
+PASS AC-K212c pre-write ST self-check 73688
+PASS AC-K212c pre-write state parse (tick 1074, log 56->58)
+PASS AC-K212c counter hygiene: state lines free of 'idle' substring
+PASS AC-K212c counter hygiene: state lines free of 'no-pullable' substring
+PASS AC-K212c counter hygiene: state lines free of 'no_pullable' substring
+PASS AC-K212b 10-month archive pure-append prefix byte-identical
+PASS AC-K212b 10-month archive 504843 -> 507385 B (pre-registered 507385)
+PASS AC-K212b 10-month archive sections 117 -> 118
+PASS AC-K212b section R1074 header found on re-read
+PASS AC-K212b md5 of migrated line (post re-read) identical: 51b94f3a5bcc2e6c103e0a750093e508
+INFO oct archive pure-append 504843 -> 507385 B
+PASS AC-K212c board final = FIN 12390 B (fixed-point honored)
+PASS AC-K212c board canonical header prefix byte-identical with cut-212 record (rule header intact)
+PASS AC-K212c R1073 stale row removed from main board
+PASS AC-K212c board post-cut done rows = 1 (R1074 current-round)
+PASS AC-K212c board post-cut open rows = 4 standing
+PASS AC-K212c rule header carries cut-212 record exactly once
+PASS AC-K212c R1074 claim flipped to done exactly once
+PASS AC-K212c board final canonical single BOM intact, no CR bytes
+PASS AC-K212c board final ends with single newline
+PASS AC-K212c 4 standing open rows byte-identical to claim-landed baseline (b_post restored lossless, k208-repair pattern)
+PASS AC-K212c flipped closure carries measured FIN/ST values
+PASS AC-K212b 09-month archive zero-touch post-op (disk bytes pre==post)
+PASS AC-K212b 09-month archive md5 unchanged post-op
+INFO board 11166 -> 12390 B (claim-landed 14004 -> final 12390)
+
+== qa/board-R1074.log board-rule knife cut-212 (dual round: fold R212 pre-executed) ==
+AC-K212a PASS stale-board census: exactly 1 stale done row (R1073, 2530 bytes, md5 51b94f3a5bcc2e6c103e0a750093e508) + 4 standing open rows + rule header intact + claim row pre-landed before the knife (board claim-landed 14004 bytes, arc10 pre 504843 bytes sections 117, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch, state = folded 70844 B from fold R212)
+AC-K212b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1074 (pure-append prefix assertion, per-line md5 identical, arc10 504843 -> 507385 bytes, sections 117 -> 118)
+AC-K212c PASS board final state = rule header (archive-history cut-212 record exactly once) + R1074 current-round done row (flip carries measured values FIN=12390 ST=73688 FOLDED=70844) + 4 open rows + 0 stale rows (board 14004 -> 12390 bytes)
+AC-K212d PASS evidence = this log SUITE PASS
+AC-K212e PENDING delivery = R1074 row done flip (done) + commit message carries cut-212 record (verified at commit)
+SUITE PASS 5/5 (K212e delivery leg verified at commit; post-closeout cross-verify appended below)
+NOTE: dual-round R1074 (R1070 isomorph): fold R212 + board knife cut-212 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout (k212 step script all assertions passed before any disk write; composition = pre + flipped claim + closure + LF + b_post per the k208-repair corrected pattern, b_post-loss defect class pre-empted; FIN/ST cross fixed-point converged bf=12390 sf=73688).
+PREDICT: state 70844 -> 73688 B (tick 1073->1074; log 56->58 via closeout pair), export tick row 1073->1074 + R1074 results row (399->400) + sd recount 39/24/2/7 -> 31/24/2/3 -> 33/24/2/4, heartbeat R1074 row (LF, no BOM)
+MINOR (honest record, R1073 k211 MINOR same class): the claim-landing step script (tmp_r1074_claim.py) ran its post-write prefix/suffix byte-offset assertions with char offsets against CJK text (suffix assert failed after a character-level-correct insertion); disk state immediately re-verified green by a fresh read-only byte-level probe (tmp_r1074_claimverify.py: single BOM/no CR/claim row == payload verbatim exactly once/stale row md5 51b94f3a5bcc2e6c103e0a750093e508 intact/open rows 5/board 11166+2838=14004 B/prefix+suffix byte-identical vs git HEAD blob with byte-level arithmetic). Zero pollution; write-then-verify did not reach state/export/heartbeat; the k212 knife below re-asserted every one of those invariants pre-write.
+
+== POST-CLOSEOUT CROSS-VERIFY ==
+PASS state.json final = 73688 B (== ST cited in board closure 73688); tick 1073->1074; log 58 items; json.loads ok; top fields preserved
+PASS sd zero-drift chain: fold pre mechanical (39,24,2,7) == stored; post-fold (31,24,2,3); post mechanical 33/24/2/4 == export self_drive (F3 machine-derived)
+PASS export: tick row 1073->1074; results 399->400 (+R1074 dual-round row, score 1); sd 39/24/2/7->33/24/2/4; ceo_face.current=R1074; next_milestone fold chain (R212 executed at R1074, R213=R1075 next); export_ts refreshed 2026-10-04T07:37:29.142338+08:00; latest_artifact unchanged
+PASS heartbeat R1074 row appended (pure-append, LF tail, no BOM)
+PASS board closure citations materialized on disk: FIN=12390 (board 12390B), ST=73688 (state 73688B), FOLDED=70844 (fold), arc10 504843->507385 B sections 117->118
+SUITE PASS - AC-K212a..e all green; delivery AC-K212e completed by commit carrying cut-212 record

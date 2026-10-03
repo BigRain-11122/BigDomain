@@ -1,0 +1,65 @@
+PASS AC-R2121 state pre-op = 81688 B (round-start first-measure over the 80000B line by 1688B = R1073 carry-note honored)
+PASS AC-R2121 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2121 state has no CR bytes
+PASS AC-R2121 state pre-op byte-identical to git HEAD blob (state untouched by claim landing; tree carries claim-landed backlog only)
+PASS AC-R2121 pre-parse tick 1073
+PASS AC-R2121 pre-parse log items 64
+PASS AC-R2121 backup logs/state-preop-R1074.bak byte-identical (81688 B)
+PASS export stored sd == pre-registered (39, 24, 2, 7)
+PASS PRE sd mechanical recount (39, 24, 2, 7) == stored (zero drift)
+PASS AC-R2122 R208 rolling summary located at file line idx 58 (log item 55)
+PASS AC-R2122 window line 0 = R208 rolling summary
+PASS AC-R2122 window line 1 = R1070 round line
+PASS AC-R2122 window line 2 = R1070 tokens line
+PASS AC-R2122 window line 3 = R1071 round line
+PASS AC-R2122 window line 4 = R1071 tokens line
+PASS AC-R2122 window line 5 = R1072 round line
+PASS AC-R2122 window line 6 = R1072 tokens line
+PASS AC-R2122 window line 7 = R1073 round line
+PASS AC-R2122 window line 8 = R1073 tokens line
+PASS AC-R2122 window line 0 closes with comma
+PASS AC-R2122 window line 1 closes with comma
+PASS AC-R2122 window line 2 closes with comma
+PASS AC-R2122 window line 3 closes with comma
+PASS AC-R2122 window line 4 closes with comma
+PASS AC-R2122 window line 5 closes with comma
+PASS AC-R2122 window line 6 closes with comma
+PASS AC-R2122 window line 7 closes with comma
+PASS AC-R2122 window tail line = final log item (no comma)
+PASS AC-R2122 log array closes right after window
+INFO window 9 lines = 12244 B (content measure)
+PASS AC-R2122 P/D catalog carried key tokens (boundary-guarded, no BD-PROP false positive: True)
+INFO P/D catalog (13 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+PASS AC-R2122 counter hygiene: summary free of 'idle' substring
+PASS AC-R2122 counter hygiene: summary free of 'no-pullable' substring
+PASS AC-R2122 counter hygiene: summary free of 'no_pullable' substring
+PASS AC-R2123 composed parses, tick 1073 preserved
+PASS AC-R2123 log items 64 -> 56 (9 -> 1, kept=0)
+PASS AC-R2123 log item 55 = R212 rolling summary (verbatim in register)
+PASS AC-R2123 top-level field preserved: last_order
+PASS AC-R2123 top-level field preserved: last_decision_rows
+PASS AC-R2123 top-level field preserved: benchmarks_refreshed
+PASS AC-R2123 top-level field preserved: last_gord_tbl_rows
+PASS AC-R2123 top-level field preserved: last_dec_tokens
+PASS AC-R2124 post-fold window-line recount (31, 24, 2, 3) == predicted (31, 24, 2, 3)
+PASS AC-R2124 post-fold composed 70844 B, under the 80000B line by 9156 B
+PASS AC-R2124 state on disk = 70844 B (BOM-less write verified)
+PASS AC-R2123 re-read parses (tick 1073, log 56, summary item intact)
+PASS AC-R2123 PowerShell ConvertFrom-Json dual-parser pass (tick 1073)
+
+== qa/reorg-R1074.log fold R212 (212th compression knife, P-2026-09-25-18 item-6 mainline) ==
+AC-R2121 PASS pre-op byte-identical backup logs/state-preop-R1074.bak (81688 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure over the 80000B line by 1688B = R1073 carry-note honored; fold R208=210th ordinal chain, R209/R210/R211 reserved-not-triggered at R1071..R1073)
+AC-R2122 PASS window [R208 rolling summary + R1070..R1073 four pairs] 9 lines -> 1 rolling summary line, kept=0, round types: fold-R208+cut-208 dual / cut-209 / cut-210 / cut-211; scores 1/1/1/1; mechanical round list R1070..R1073 continuous 4/4; P/D catalog mechanical-dedup (boundary-guarded): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+AC-R2123 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); json.loads pass (tick 1073, log 64->56 items, item 55 = R212 rolling summary verbatim); PowerShell ConvertFrom-Json dual-parser verified (see POST-CLOSEOUT section)
+AC-R2124 PASS post-fold measured 70844 bytes, under the 80000B line by 9156 bytes; window-line recount 39/24/2/7 -> 31/24/2/3 (stored sd zero-drift pre-check held)
+AC-R2125 PENDING receipt = state R212 rolling summary + R1074 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 (R2125 delivery leg verified at commit; post-closeout cross-verify appended below)
+NOTE: dual-round R1074 (R1070 isomorph): fold R212 + board knife cut-212 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout (composed text fully verified before the single state write).
+PREDICT: round closeout appends R1074 pair -> final ST bytes (k212 FIN/ST cross fixed-point), export tick row 1073->1074 + R1074 results row (399->400) + sd recount 31/24/2/3 -> 33/24/2/4, heartbeat R1074 row (LF, no BOM)
+
+== POST-CLOSEOUT CROSS-VERIFY (R1074 dual round) ==
+PASS state.json final = 73688 B (== ST cited in board closure); tick 1073->1074; log 64->56 (fold) ->58 (closeout pair); json.loads + PowerShell ConvertFrom-Json dual-parser pass; top fields preserved (last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2125 receipt legs: R212 rolling summary in register (item 55, 70844 window lines folded 9->1 kept=0) + R1074 log lines in register (items 56/57); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start 39/24/2/7 == stored (fold pre-check); post-fold 31/24/2/3; post-closeout 33/24/2/4 == export self_drive (F3 machine-derived, zero drift)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1074.bak 81688 B byte-identical; post-fold 70844 B under the 80000B line
+SUITE PASS 5/5 - AC-R2121..R2125 all green; delivery AC-R2125 completed by commit carrying P-2026-09-25-18
