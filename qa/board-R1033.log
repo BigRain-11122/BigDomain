@@ -1,0 +1,10 @@
+AC-K176a stale-board count: exactly 1 stale done row [R1032] + standing open 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap] + rule header intact (title + 4 rule paragraphs)
+AC-K176a claim row pre-registered on disk before mutation (AC-K176a..e tokens verified in-row, phase-1 insert)
+AC-K176b compose: 1 row verbatim to 2026-10 archive sec R1033 (pure-append prefix asserted; 81 -> 82 sections; 09 archive = separate file untouched by construction)
+AC-K176c board final state: rule header [archive-history cut-176 appended exactly once] + R1033 current-round row + open 4 standing rows; board 7641B -> 6969B
+AC-K176b write: archive 2026-10 file 415623 -> 416702 B pure-append, migrated row md5-identical pre/post (0f81da2b448540b008ca102de88d0806), sections 81 -> 82
+AC-K176c write: board 7641B -> 6969B (rule header + R1033 current row + open 4)
+AC-K176b 09-archive zero-touch md5 verified: 19783a35cfc4e57eb24eda5916a07702
+AC-K176d evidence: this qa/board-R1033.log SUITE PASS (all asserts above)
+AC-K176e delivery: commit carries the order number (P-51 protocol) [P-2026-09-25-18]
+SUITE PASS
