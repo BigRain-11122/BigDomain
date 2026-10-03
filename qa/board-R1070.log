@@ -1,0 +1,56 @@
+PASS REPAIR HEAD board canonical (single BOM, no CR)
+PASS REPAIR HEAD board = round-start 11298 B
+PASS REPAIR HEAD has R1069 stale row
+PASS REPAIR HEAD stale row = 2977 B md5 4052b01711f51299a15be82adf52c9b9
+PASS REPAIR b_post segment recovered from HEAD (starts after stale row)
+PASS REPAIR HEAD header anchor occurs exactly once
+PASS REPAIR broken interim board canonical (single BOM, no CR)
+PASS REPAIR broken interim board 8798 B on record == expected first-run composition (transform inputs verified)
+PASS REPAIR broken interim size == first-run FIN 8798 B
+PASS REPAIR b_post loss confirmed on record (0 open rows in broken interim)
+PASS AC-K208b 10-month archive = 495882 B (first-run append kept)
+PASS AC-K208b 10-month archive sections = 114 (exactly one R1070 append)
+PASS AC-K208b section R1070 migrated line md5 identical (kept from first run)
+PASS AC-K208b 09-month archive zero-touch (== HEAD)
+PASS REPAIR state untouched by incident = folded 70829 B
+PASS REPAIR state closeout tail anchor unique
+INFO FIN/ST cross fixed-point v2 converged in 2 iterations (FIN=12286 ST=73757)
+PASS REPAIR FIN v2 12286 != broken FIN 8798 (composition corrected)
+PASS AC-K208c pre-write FIN v2 self-check 12286
+PASS AC-K208c pre-write ST v2 self-check 73757
+PASS AC-K208c pre-write state parse v2 (tick 1070, log 58)
+PASS AC-K208c counter hygiene: state lines free of 'idle' substring
+PASS AC-K208c counter hygiene: state lines free of 'no-pullable' substring
+PASS AC-K208c counter hygiene: state lines free of 'no_pullable' substring
+PASS AC-K208c board final = FIN 12286 B (fixed-point v2 honored)
+PASS AC-K208c board canonical header prefix byte-identical with cut-208 record (rule header intact)
+PASS AC-K208c R1069 stale row removed from main board
+PASS AC-K208c board post-cut done rows = 1 (R1070 current-round)
+PASS AC-K208c board post-cut open rows = 4 standing
+PASS AC-K208c rule header carries cut-208 record exactly once
+PASS AC-K208c R1070 claim flipped to done exactly once
+PASS AC-K208c board final canonical single BOM no CR
+PASS AC-K208c board final ends with single newline
+PASS AC-K208c 4 standing open rows byte-identical to HEAD (b_post restored lossless)
+PASS AC-K208c flipped closure carries measured FIN/ST v2 values
+PASS AC-K208b 09-month archive zero-touch post-op
+INFO board repaired 8798 -> 12286 B (FIN v2=12286 ST v2=73757)
+
+== qa/board-R1070.log board-rule knife cut-208 (repair run, single-pass clean) ==
+AC-K208a PASS stale-board census: exactly 1 stale done row (R1069, 2977 bytes, md5 4052b01711f51299a15be82adf52c9b9) + 4 standing open rows + rule header intact + claim row pre-landed before cut action (board claim-landed 14341 B = 11298 + claim 3042 + LF 1, arc10 pre 492893 bytes sections 113, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K208b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1070 (pure-append prefix assertion, per-line md5 identical, arc10 492893 -> 495882 bytes, sections 113 -> 114; first-run append verified kept, no double-append)
+AC-K208c PASS board final state = rule header (archive-history cut-208 record exactly once) + R1070 current-round done row (flip carries measured values FIN=12286 ST=73757 FOLDED=70829) + 4 open rows + 0 stale rows (board 14341 claim-landed -> broken interim 8798 -> repaired final 12286 bytes)
+AC-K208d PASS evidence = this log SUITE PASS
+AC-K208e PENDING delivery = R1070 row done flip (done) + commit message carries cut-208 record (verified at commit)
+SUITE PASS 5/5 (K208e delivery leg verified at commit; post-closeout cross-verify appended below)
+INCIDENT (honest record, R1069-k207-parallel): first k208 run composed the final board WITHOUT the b_post segment (rows after the stale row), wrote 8798 B, and its post-write startswith assertion caught the loss before ANY state/export/heartbeat write (zero pollution downstream). Root cause = the defective composition pattern inherited verbatim from the ORIGINAL tmp_r1069_k207.py - the same write-before-verify-class defect that run hit on R1069 (qa/board-R1069.log INCIDENT section) and which its repair run fixed; the repaired tmp_r1069_repair.py was the corrected pattern but the original file kept the bug on disk and was the one templated here. Repair same-round: HEAD baseline (header + b_post byte-identical recovery), broken interim verified as the deterministic first-run transform before any touch, FIN/ST fixed-point re-run v2 WITH b_post, single corrected board write, full post-write composition suite green. No data lost: archive append from first run verified kept; 4 standing open rows byte-identical to HEAD; state (folded 70829 B) / export / heartbeat untouched at incident time.
+NOTE: dual-round R1070 (R1062/R1066 isomorph) = fold R208 + cut-208; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Verify-then-write held throughout the repair (full composition verified BEFORE the single board re-write).
+PREDICT: state 70829 -> 73757 B (tick 1069->1070; log 64->56 via fold, 56->58 via closeout pair), export tick row 1069->1070 + R1070 results row (395->396) + sd recount 31/24/2/3 -> 33/24/2/4, heartbeat R1070 row (LF, no BOM)
+
+== POST-CLOSEOUT CROSS-VERIFY ==
+PASS state.json final = 73757 B (== ST cited in board closure 73757); tick 1069->1070; log 58 items; json.loads ok; top fields preserved
+PASS sd zero-drift chain: fold pre mechanical (39,24,2,7) == stored; post-fold (31,24,2,3); post mechanical 33/24/2/4 == export self_drive (F3 machine-derived)
+PASS export: tick row 1069->1070; results 395->396 (+R1070 dual-round row, score 1); sd 39/24/2/7->33/24/2/4; ceo_face.current=R1070; next_milestone fold chain (R208 executed at R1070, R209=R1071 next); export_ts refreshed 2026-10-04T06:25:28.717466+08:00; latest_artifact unchanged
+PASS heartbeat R1070 row appended (pure-append, LF tail, no BOM)
+PASS board closure citations materialized on disk: FIN=12286 (board 12286B), ST=73757 (state 73757B), FOLDED=70829 (fold), arc10 492893->495882 B sections 113->114
+SUITE PASS - AC-K208a..e all green; delivery AC-K208e completed by commit carrying cut-208 record
