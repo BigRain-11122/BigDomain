@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-03T09:31:08+08:00",
+  "export_ts": "2026-10-03T09:44:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R991 fold R179 水位整编轮（轮计分 1=台账维护机制件）：state.json 滚窗水位整编第一百八十三刀执行毕（轮首首测 84,225B 越 80,000B 线 4,225B=R990 产品轮收账推越线·本窗首测裁定承接·AC-R1791..R1795 全过=qa/reorg-R991.log·fold 窗=［R178 滚窗摘要+R988..R990 三轮对］7 行压 1 滚窗汇总行·pre-op 逐字节入档 archive §R991 append 节 marker 171→172+备份件 logs/state-preop-R991.bak·头部块 55 项 verbatim·终态 77507 B margin 993 B ≤78,500B 闸内·probe 八键 pre→post 零漂移·编目 518+5=523 机械零手落·双口径解析过 tick 991）；产品面=frontdoor v0.20 城市数据报告面卡（R990）现役在页 http://127.0.0.1:8093/ 22 卡·P-47 五核心面+守护/商业/研究面全挂载；XL-16 零前台套件池余 8 件列下轮补队列扫描面；九面 scan=八面 PASS（LEDGER 零新转办·DEC 237 持平·GORD 零新令·BENCH 0 天〔下次 10-10〕·QA 当日证在盘〔R961〕·HB lag=0）；waiting 面：法务外件 chronic（HQ 秘书处初稿窗 10-03 12:00）+BigLife R777 复核档 chronic（P1 待 Jason 物理介入）+提案回访 10-05+OSS 下窗 10-05 21:40+治理日 10-07+token 审计回访 10-08+benchmarks 10-10+bootstrap CEO 物理件",
-    "latest_artifact": "最近实物=frontdoor v0.20 Reports Face 城市数据报告面卡（src/sandbox/frontdoor.py·2026-10-03 ~09:2x R990 上线·http://127.0.0.1:8093/ 22 卡在页·reports 产品件 CEO 可见面=真探针 25 腿实算〔quarterly 发布聚合描述符+sha256 digest 幂等+价格漂移重发布拒 E_RPT_DUP+custom 定制报告发布+未发布购买拒 E_RPT_UNPUBLISHED 零扣费+amy 购买恰一 spend -9900 绑权限门行+凭证+purchase_ref 重放拒+同 buyer 同报告复购拒双拒先于 spend+carol 定制购买 -99900+ent:acme 企业直购代币层拒 E_BAD_ACCOUNT 零扣费零行=组合栈 fail-closed〔生产企业采购走 BigCompute 收款网关 D-20260924-11〕+bad-args 四族拒+凭证下载 descriptor 九键集+非投顾注记首尾常驻=结构脱敏零原始行数据+同 download_ref 重放拒+ben 撞凭证拒 E_RPT_NOT_OWNER+未知凭证拒 E_RPT_UNKNOWN_VOUCHER+同凭证二下载 distinct ref 合法+纯读零代币〔reconcile balanced·billed 9900/99900〕+审计〔spend-tx 2==2==成交购买数·2/2 purchase 行绑真 spend 借记·余额 amy 5100/ben 12000/carol 20100 精确·pool 122800 守恒 160000〕+隔离律〔reports.py 源零 sell/refund/exchange/withdraw/transfer/mint+self.led. 触点=1+纯 ASCII〕〕+合规四件套 ledger config verbatim〔AIGC 标识+非投顾 disclaimer+[needs-CEO] 价格注 99/999 CNY 正典锚=探针参数+msgSecCheck 前置闸注〕+渲染自检 8/8〕+证据件 qa/frontdoor-v20-R990.log+qa/reconcile-all-R990.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）+自检件 qa/fd20_selfcheck_r990.py；判据预注册=src/os/backlog.md R990 行（AC-FD20a..f·先落再动手）",
-    "next_milestone": "下个里程碑（≤10-05）：10-03 12:00 D-20260929-03 HQ 秘书处初稿窗到点查（两步制·席7 复核 +24h·D-20261002-08）；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 第四窗 21:40；10-07 治理日聚合审+XL-16 前台组合令窗收口；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 22 卡）；XL-16 零前台套件池余 8 件〔settlement/collectibles/expedite/identity/metered/effects/tourstate/opsreview〕逐轮补队列扫描面认领"
+    "current": "R992 frontdoor v0.21 元宇宙身份付费面卡产品轮（轮计分 2=活体实物）：identity.py（R624 产品件单源）导入不复制·26 腿真探针渲染时实算〔注册幂等+房间月窗租约恰一 spend 绑 occupancy+重放/异户双拒先于 spend+次月续租+皮肤/铭牌/楼层铭牌永久 claim 各恰一 spend 绑 props entitlement+ent: 模块门拒+纯读零代币+审计 5==5·5/5 绑真借记·pool 守恒+隔离律 self.led. x0 零 UPDATE 零直接 INSERT〕+合规四件套 ledger config verbatim〔AIGC+非投顾+[needs-CEO] 9.9/29.9/49.9/199 探针参数+msgSecCheck 前置闸注〕——AC-FD21a..f 判据预注册板行先行全过=qa/frontdoor-v21-R992.log SUITE PASS 8/8+全量回归 RUNNER PASS 27/27 套件 231 判据+对账双控 6/6 27.8s 零回归=qa/reconcile-all-R992.log+活体重启〔新 PID 94088 healthz=200·23 卡在页〕〔D-20260930-06 XL-16 窗 10-07〕；产品面=frontdoor v0.21 Identity Face 元宇宙身份付费面卡现役在页 http://127.0.0.1:8093/ 23 卡·P-47 五核心面+守护/商业/研究面全挂载·XL-16 零前台套件池余 7 件〔settlement/collectibles/expedite/metered/effects/tourstate/opsreview〕列下轮补队列扫描面；九面 scan=八面 PASS（LEDGER 零新转办·DEC 237 持平·GORD 零新令·BENCH 0 天〔下次 10-10〕·QA 当日证在盘〔R961〕·HB lag=0）；waiting 面：法务外件 chronic（HQ 秘书处初稿窗 10-03 12:00）+BigLife R777 复核档 chronic+提案回访 10-05+治理日 10-07+token 审计回访 10-08+benchmarks 10-10+bootstrap CEO 物理件",
+    "latest_artifact": "最近实物=frontdoor v0.21 Identity Face 元宇宙身份付费面卡（src/sandbox/frontdoor.py·2026-10-03 ~09:4x R992 上线·http://127.0.0.1:8093/ 23 卡在页·identity 产品件 CEO 可见面=真探针 26 腿实算〔注册幂等+kind 漂移拒 E_ID_KIND_MISMATCH+房间月窗租约恰一 spend 15000→14010 绑 occupancy 行〔同户同月重放拒 E_ID_DUP 先于 spend·异户同月拒 E_ID_TAKEN 零扣费〕+次月续租独立 spend+holder 读面 m10/m11=amy m12=None+未注册房间/产品拒 E_ID_UNKNOWN+跨 kind 双向拒+皮肤永久 claim 恰一 spend 13020→10030 绑 props entitlement〔复购拒先于 spend 零扣费〕+铭牌 49.9+楼层铭牌 199 两 claim 独立 entitlement〔amy skin/ben plaque/carol floor 各一件〕+ent:acme 模块门拒 E_ID_BAD_ARGS〔buyers usr:* only·企业采购走 BigCompute 收款网关 D-20260924-11〕+bad-args 三族拒+纯读零代币〔identity_profile m10 房+皮肤/m12 窗过期/ben 仅自铭牌=registry join 防外件渗漏〕+审计〔spend-tx 5==2 月窗+3 永久·5/5 行绑真 spend 借记·余额 amy 10030/ben 5010/carol 2100 精确·pool 29860 守恒 47000〕+隔离律〔code surface 零禁词·module-wide transfer x1=docstring P1 边界注·self.led. x0+零 UPDATE+零直接 INSERT INTO props_inventory/venue_occupancy·纯 ASCII〕〕+合规四件套 ledger config verbatim〔AIGC 标识+非投顾 disclaimer+[needs-CEO] 价格注 9.9/29.9/49.9/199 CNY 正典锚=探针参数+msgSecCheck 前置闸注〕+双渲染逐字节同一+零未填占位）+证据件 qa/frontdoor-v21-R992.log+qa/reconcile-all-R992.log（RUNNER PASS 27/27 套件 231 判据+对账双控 6/6）+自检件 qa/fd21_selfcheck_r992.py；判据预注册=src/os/backlog.md R992 行（AC-FD21a..f·先落再动手）",
+    "next_milestone": "下个里程碑（≤10-05）：10-03 12:00 D-20260929-03 HQ 秘书处初稿窗到点查（两步制·席7 复核 +24h·D-20261002-08）；BigLife R777 三条件复核档到达即启本司常务班复核（D-20261003-02）；10-05 周轮=提案回访（BD-PROP-001）+ccgs 自决留痕随司周报呈报+OSS 第四窗 21:40；10-07 治理日聚合审+XL-16 前台组合令窗收口；benchmarks 7 天刷 10-10；bootstrap CEO 物理件无 ETA；M1 可逛切片对接窗持续（审计 P-2026-10-02-02 M1 ≤10-09·前台 23 卡）；XL-16 零前台套件池余 7 件〔settlement/collectibles/expedite/metered/effects/tourstate/opsreview〕逐轮补队列扫描面认领"
   },
   "depts": [
     {
@@ -182,7 +182,7 @@
     [
       "产品面前台静态预览（preview/index.html）",
       "on",
-      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）·frontdoor v0.15=R980（Creator Incentive Face 创作者激励梯度面卡·AC-FD15a..f·真探针 12 腿〔梯度+预算窗+项圈+join+幂等〕+合规四件套+单向 share 结构法注·活体重启上线 17 卡）·frontdoor v0.16=R984（Strategy Observation Face 策略共创围观付费面卡·AC-FD16a..f·真探针 15 腿+合规四件套·活体重启上线 18 卡）·frontdoor v0.17=R986（Studio Onboarding Face 工作室入驻年费面卡·AC-FD17a..f·真探针 21 腿+合规四件套+注册行不可变结构法注·活体重启上线 19 卡）·frontdoor v0.18=R987（Ad Slot Face 虚拟展厅/广告位面卡·AC-FD18a..f·真探针 23 腿+合规四件套+venue 引用律结构法注·活体重启上线 20 卡）·frontdoor v0.19=R989（Venue Face 线上活动场地/店面租约面卡·AC-FD19a..f·真探针 26 腿+合规四件套+占用引擎单源引用律结构法注·活体重启上线 21 卡）·frontdoor v0.20=R990（Reports Face 城市数据报告面卡·AC-FD20a..f·真探针 25 腿+结构脱敏九键 descriptor+ent: 企业直购代币层拒诚实结构边界+合规四件套·活体重启上线 22 卡）"
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）·frontdoor v0.15=R980（Creator Incentive Face 创作者激励梯度面卡·AC-FD15a..f·真探针 12 腿〔梯度+预算窗+项圈+join+幂等〕+合规四件套+单向 share 结构法注·活体重启上线 17 卡）·frontdoor v0.16=R984（Strategy Observation Face 策略共创围观付费面卡·AC-FD16a..f·真探针 15 腿+合规四件套·活体重启上线 18 卡）·frontdoor v0.17=R986（Studio Onboarding Face 工作室入驻年费面卡·AC-FD17a..f·真探针 21 腿+合规四件套+注册行不可变结构法注·活体重启上线 19 卡）·frontdoor v0.18=R987（Ad Slot Face 虚拟展厅/广告位面卡·AC-FD18a..f·真探针 23 腿+合规四件套+venue 引用律结构法注·活体重启上线 20 卡）·frontdoor v0.19=R989（Venue Face 线上活动场地/店面租约面卡·AC-FD19a..f·真探针 26 腿+合规四件套+占用引擎单源引用律结构法注·活体重启上线 21 卡）·frontdoor v0.20=R990（Reports Face 城市数据报告面卡·AC-FD20a..f·真探针 25 腿+结构脱敏九键 descriptor+ent: 企业直购代币层拒诚实结构边界+合规四件套·活体重启上线 22 卡）·frontdoor v0.21=R992（Identity Face 元宇宙身份付费面卡·AC-FD21a..f·真探针 26 腿+props/venue 引擎引用律结构法注+合规四件套·活体重启上线 23 卡）"
     ]
   ],
   "results": [
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "991",
+      "992",
       "OSLoop 执行 tick"
     ],
     [
@@ -1517,15 +1517,19 @@
     [
       "1",
       "R991 fold R179 水位整编（84,225B 越 80,000B 线 4,225B=R990 carry-note 承接兑现·窗［R178 滚窗摘要+R988..R990 三轮对］7 行压 1 滚窗汇总行·pre-op==git HEAD blob 逐字节入档 archive §R991 append 节 marker 171→172+备份件 logs/state-preop-R991.bak·头部块 55 项 verbatim·终态 77507 B margin 993 B ≤78,500B 闸·AC-R1791..R1795 全过=qa/reorg-R991.log·GORD 基线 257A6CC1056A1759 持平零新集团令·P-2026-09-25-18 ④第一百八十三刀"
+    ],
+    [
+      "2",
+      "frontdoor v0.21 元宇宙身份付费面卡（§四 C 端 5 价目线前台收口·AC-FD21a..f 判据预注册=板行先落·真探针 26 腿〔单注册表+月窗租约恰一 spend+双拒先于 spend+续租+跨 kind 拒+永久 claim 绑 entitlement+ent: 模块门拒+纯读零代币+借记审计+隔离律 self.led. x0〕+合规四件套·自验 8/8=qa/frontdoor-v21-R992.log+全量回归 RUNNER PASS 27/27 零回归·活体重启 23 卡·R992）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-26..2026-10-03",
     "window_days": 7,
-    "log_lines_in_window": 54,
+    "log_lines_in_window": 56,
     "idle_fast_mention_lines": 35,
     "no_pullable_mention_lines": 2,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 1,
     "proposals_open": 1,
     "queue_main_open": 6,

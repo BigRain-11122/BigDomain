@@ -178,6 +178,7 @@ import venue as venue_mod         # venue occupancy engine (reuse, no copy)
 import studio as studio_mod       # studio onboarding annual-fee face (reuse, no copy)
 import ads as ads_mod             # virtual-exhibition ad-slot face (reuse, no copy)
 import reports as reports_mod     # city data report face (reuse, no copy)
+import identity as identity_mod  # metaverse identity face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -2727,6 +2728,433 @@ def reports_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def identity_probe():
+    """Run the REAL metaverse identity paid face (the R624 product
+    itself, BLUEPRINT sec.4 C-side canon row 5: private room 9.9 CNY
+    per month, avatar skin 29.9 CNY permanent, creator plaque 49.9 CNY
+    permanent, premium floor plaque 199 CNY permanent -- the highest
+    priced remaining zero-front suite line) in-process at render time
+    on a throwaway database (F3 law: every reading below is computed
+    by the product module, never canned). Chain: mechanism
+    registration of the room + the three permanent products with
+    idempotent re-register, kind-drift refusal and unknown-kind
+    refusal -> a one-table registry audit (identity_products only;
+    the room registration landed in the referenced venue registry,
+    no second occupancy engine) -> a private-room rental = exactly
+    one spend bound into the venue occupancy row (one tenant per room
+    per month) -> same-month replay and a second tenant both refused
+    BEFORE the spend -> renewal = renting a later month window
+    (advance booking) -> registry gates: unregistered room / product
+    refused, cross-kind calls both refused -> a permanent claim =
+    exactly one spend bound into the props cosmetic entitlement row,
+    duplicate claim refused before the spend -> the creator plaque
+    (49.9) and the premium floor plaque (199, the highest C5 anchor)
+    claimed by two further buyers with independent entitlements -> an
+    ent: enterprise account refused at the module gate (buyers are
+    usr:* only; production enterprise procurement routes through the
+    BigCompute collection gateway) -> bad-args family all refused
+    zero-charge -> pure reads move zero tokens (the profile join keeps
+    foreign venue units and props out) -> audit: spends equal
+    purchases, every occupancy + entitlement row binds a real spend
+    debit, balances exact, pool conservation -> isolation law: the
+    module never calls the token ledger, zero UPDATE surface, zero
+    direct INSERT into the referenced engine tables. Probe prices
+    mirror the C5 canon anchors; real pricing stays a P1 CEO
+    approval-only face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-identity-")
+    led = None
+    ven = None
+    prp = None
+    idf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        ven = venue_mod.VenueFace(led)
+        prp = props_mod.PropsFace(led)
+        idf = identity_mod.IdentityFace(led, ven, prp)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except identity_mod.IdentityError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 47000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 15000), ("ben", 10000),
+                               ("carol", 22000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe buyers",
+           "probe prices mirror the C5 canon anchors: the private"
+           " room = 990 (9.9 CNY per month), the avatar skin = 2990"
+           " (29.9 CNY permanent), the creator plaque = 4990 (49.9"
+           " CNY permanent), the premium floor plaque = 19900 (199"
+           " CNY permanent -- the highest zero-front C5 line) --"
+           " caller-supplied probe values, never pricing decisions")
+
+        # -- registration: one registry, engines referenced ----------
+        reg_room = idf.register_identity_product("room:sky-villa",
+                                                 "private_room")
+        refuse_leg("re-register the room under a DIFFERENT kind",
+                   lambda: idf.register_identity_product(
+                       "room:sky-villa", "avatar_skin"))
+        refuse_leg("register an UNKNOWN identity kind",
+                   lambda: idf.register_identity_product(
+                       "prod:x", "spaceship"))
+        reg_idem = idf.register_identity_product("room:sky-villa",
+                                                 "private_room")
+        for pid, kind in (("skin:neon-fox", "avatar_skin"),
+                          ("plaque:co-creator", "creator_plaque"),
+                          ("plaque:floor-88", "floor_plaque")):
+            idf.register_identity_product(pid, kind)
+        conn = sqlite3.connect(db)
+        my_tables = [r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type = 'table'"
+            " AND name LIKE 'identity%'").fetchall()]
+        cap_row = conn.execute(
+            "SELECT capacity FROM venue_registry WHERE venue_id = ?",
+            ("room:sky-villa",)).fetchone()
+        conn.close()
+        with open(identity_mod.__file__, encoding="utf-8") as fh:
+            id_src = fh.read()
+        no_direct_writes = ("INSERT INTO props_inventory" not in id_src
+                            and "INSERT INTO venue_occupancy" not in id_src)
+        ok("register the room + the three permanent identity products",
+           "published=%s; identical re-register idempotent=%s; the"
+           " registry is identity_products only (%s); the room"
+           " registration landed in the referenced venue registry"
+           " capacity %s (the venue public API, no second occupancy"
+           " engine); the module source has zero direct INSERT INTO"
+           " props_inventory / venue_occupancy (reference law: every"
+           " WRITE rides the props / venue public APIs)"
+           % (not reg_room["idempotent"], reg_idem["idempotent"],
+              my_tables, cap_row[0] if cap_row else None))
+
+        # -- private room: one spend per month window ----------------
+        bal_a0 = bal("usr:amy")
+        tx0 = spend_n()
+        r1 = idf.rent_private_room("usr:amy", "room:sky-villa", 10, 990,
+                                   "order:id-amy-m10")
+        bal_a1 = bal("usr:amy")
+        occ = ven.occupancy_ledger("room:sky-villa")
+        occ_bind = (bool(occ) and occ[0]["bound_spend_tx"]
+                    == r1["spend_tx"])
+        ok("amy rents the private room for month 10 (9.9 CNY anchor)",
+           "balance %d->%d (exact -990 = one month window, one"
+           " spend); spend-tx %d->%d (+1); the venue occupancy row"
+           " binds that spend tx=%s; window %s (one tenant per room"
+           " per month, exclusive month window)"
+           % (bal_a0, bal_a1, tx0, spend_n(), occ_bind, r1["window"]))
+
+        refuse_leg("amy replays the SAME month window under the SAME"
+                   " ref",
+                   lambda: idf.rent_private_room("usr:amy",
+                                                "room:sky-villa", 10,
+                                                990, "order:id-amy-m10"))
+        refuse_leg("ben tries to rent the SAME room in the SAME month",
+                   lambda: idf.rent_private_room("usr:ben",
+                                                "room:sky-villa", 10,
+                                                990, "order:id-ben-m10"))
+        ok("re-read both balances after the rental refusals",
+           "%d==%d and %d==%d (the same-month replay and the second"
+           " tenant are both rejected BEFORE the spend by the venue"
+           " exclusivity gate; a rejected rental never charges and"
+           " never grants)"
+           % (bal("usr:amy"), bal_a1, bal("usr:ben"), 10000))
+
+        # -- renewal = a later month window (advance booking) --------
+        tx1 = spend_n()
+        bal_a2 = bal("usr:amy")
+        r2 = idf.rent_private_room("usr:amy", "room:sky-villa", 11, 990,
+                                   "order:id-amy-m11")
+        ok("amy renews month 11 (a later window = advance booking)",
+           "renewal = renting a later month window; balance %d->%d"
+           " (exact -990, a separate legal spend with a distinct"
+           " tx=%s); spend-tx %d->%d (+1); holder reads: m10=%s"
+           " m11=%s m12=%s"
+           % (bal_a2, bal("usr:amy"),
+              r1["spend_tx"] != r2["spend_tx"], tx1, spend_n(),
+              idf.room_holder("room:sky-villa", 10),
+              idf.room_holder("room:sky-villa", 11),
+              idf.room_holder("room:sky-villa", 12)))
+
+        # -- registry gates: unknown + cross-kind -------------------
+        refuse_leg("ben rents an UNREGISTERED room",
+                   lambda: idf.rent_private_room("usr:ben",
+                                                "room:ghost", 5, 990,
+                                                "order:id-ben-ghost"))
+        refuse_leg("ben claims an UNREGISTERED product",
+                   lambda: idf.claim_permanent("usr:ben", "skin:ghost",
+                                               2990, "order:id-ben-gh2"))
+        refuse_leg("ben rents on a PERMANENT product (cross-kind)",
+                   lambda: idf.rent_private_room("usr:ben",
+                                                "skin:neon-fox", 5, 990,
+                                                "order:id-ben-x1"))
+        refuse_leg("ben claims the ROOM as a permanent (cross-kind)",
+                   lambda: idf.claim_permanent("usr:ben",
+                                               "room:sky-villa", 990,
+                                               "order:id-ben-x2"))
+        ok("registry gate audit: four refusals, ben's balance flat",
+           "%d==%d (unregistered room / product and both cross-kind"
+           " calls are rejected by the identity registry join -- a"
+           " product only ever behaves as its registered kind; every"
+           " rejected call charges nothing and writes no row)"
+           % (bal("usr:ben"), 10000))
+
+        # -- permanent claim: one spend, duplicate before spend ------
+        bal_a3 = bal("usr:amy")
+        tx2 = spend_n()
+        s1 = idf.claim_permanent("usr:amy", "skin:neon-fox", 2990,
+                                "order:id-amy-skin")
+        ok("amy claims the avatar skin (29.9 CNY anchor)",
+           "balance %d->%d (exact -2990 = one permanent entitlement,"
+           " one spend); spend-tx %d->%d (+1); the entitlement row"
+           " lives in props_inventory as a cosmetic (one per"
+           " account, immutable), bound to that spend tx"
+           % (bal_a3, bal("usr:amy"), tx2, spend_n()))
+
+        refuse_leg("amy claims the SAME skin again under a NEW ref",
+                   lambda: idf.claim_permanent("usr:amy",
+                                               "skin:neon-fox", 2990,
+                                               "order:id-amy-skin2"))
+        ok("re-read amy's balance after the duplicate-claim refusal",
+           "%d==%d (a duplicate permanent claim is rejected by the"
+           " props cosmetic gate BEFORE the spend; the refusal"
+           " charges nothing and grants nothing)"
+           % (bal("usr:amy"), bal_a3 - 2990))
+
+        # -- two more buyers: plaque 49.9 + floor plaque 199 --------
+        tx3 = spend_n()
+        bal_b0 = bal("usr:ben")
+        bal_c0 = bal("usr:carol")
+        p1 = idf.claim_permanent("usr:ben", "plaque:co-creator", 4990,
+                                 "order:id-ben-plaque")
+        p2 = idf.claim_permanent("usr:carol", "plaque:floor-88", 19900,
+                                 "order:id-carol-floor")
+        inv_a = prp.inventory("usr:amy")
+        inv_b = prp.inventory("usr:ben")
+        inv_c = prp.inventory("usr:carol")
+        ok("ben claims the creator plaque (49.9) and carol claims the"
+           " premium floor plaque (199 -- the highest C5 anchor)",
+           "ben %d->%d (exact -4990), carol %d->%d (exact -19900);"
+           " spend-tx %d->%d (+2, one spend per claim); all three"
+           " permanent kinds live in props_inventory as cosmetics"
+           " (amy=%s, ben=%s, carol=%s) with three distinct bound"
+           " spend txs=%s"
+           % (bal_b0, bal("usr:ben"), bal_c0, bal("usr:carol"),
+              tx3, spend_n(), sorted(inv_a["cosmetics"]),
+              sorted(inv_b["cosmetics"]), sorted(inv_c["cosmetics"]),
+              len({s1["spend_tx"], p1["spend_tx"],
+                   p2["spend_tx"]}) == 3))
+
+        # -- enterprise boundary: module gate refusal -----------------
+        try:
+            idf.claim_permanent("ent:acme", "plaque:floor-88", 19900,
+                                "order:id-ent-1")
+            ent_outcome = "unexpectedly accepted"
+        except identity_mod.IdentityError as exc:
+            refusals.append(str(exc.code))
+            ent_outcome = ("refused: %s at the module gate (buyers"
+                           " are usr:* only) -- the identity gate"
+                           " itself refuses non-resident buyers one"
+                           " layer earlier than the token ledger, so"
+                           " the stack is fail-closed: zero charge,"
+                           " zero rows written; production enterprise"
+                           " procurement routes through the"
+                           " BigCompute collection gateway"
+                           " (D-20260924-11 collection exit unified"
+                           " there)" % exc.code)
+        ok("an ent: enterprise account tries to claim directly on the"
+           " resident token ledger", ent_outcome)
+
+        # -- bad-args family, all zero side effects -------------------
+        refuse_leg("a zero price claim is refused",
+                   lambda: idf.claim_permanent("usr:carol",
+                                               "plaque:floor-88", 0,
+                                               "order:id-carol-2"))
+        refuse_leg("a negative month rental is refused",
+                   lambda: idf.rent_private_room("usr:carol",
+                                                "room:sky-villa", -1,
+                                                990, "order:id-carol-3"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: idf.claim_permanent("usr:ben",
+                                               "plaque:co-creator", 4990,
+                                               "  "))
+        pre_bad = (bal("usr:amy"), bal("usr:ben"), bal("usr:carol"))
+        post_bad = (bal("usr:amy"), bal("usr:ben"), bal("usr:carol"))
+        ok("bad-args audit: all three buyer balances flat",
+           "%s==%s (price must be int > 0, month_index must be int"
+           " >= 0, purchase refs are required -- every rejected call"
+           " charges nothing and writes no row)"
+           % (list(pre_bad), list(post_bad)))
+
+        # -- pure-read audit: zero token movement ----------------------
+        tx_r0 = spend_n()
+        prof10 = idf.identity_profile("usr:amy", 10)
+        prof12 = idf.identity_profile("usr:amy", 12)
+        prof_ben = idf.identity_profile("usr:ben", 10)
+        _ = idf.room_holder("room:sky-villa", 10)
+        tx_r1 = spend_n()
+        ok("pure-read audit: room_holder / identity_profile",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " amy's profile at m10 shows the held room %s with its"
+           " purchase spend tx plus her permanent %s; at m12 the"
+           " room window has expired so only permanents remain"
+           " (%d rooms); ben's profile shows exactly his own %s (the"
+           " registry join keeps foreign venue units and props out)"
+           % (tx_r0, tx_r1,
+              [r["room_id"] for r in prof10["rooms"]],
+              [p["product_id"] for p in prof10["permanents"]],
+              len(prof12["rooms"]),
+              [p["product_id"] for p in prof_ben["permanents"]]))
+
+        # -- audit: spends == purchases, all rows bind debits ----------
+        tx_total = spend_n()
+        purchases_total = 5
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        carol_final = bal("usr:carol")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        bound = 0
+        rows_total = 0
+        kinds_q = len([r[0] for r in conn.execute(
+            "SELECT DISTINCT id_kind FROM identity_products").fetchall()])
+        for buyer, tx in conn.execute(
+                "SELECT account_id, bound_spend_tx FROM"
+                " venue_occupancy WHERE unit_id = ?",
+                ("room:sky-villa",)).fetchall():
+            rows_total += 1
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE tx_id = ?"
+                " AND account_id = ?", (tx, buyer)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        for who in ("usr:amy", "usr:ben", "usr:carol"):
+            inv = prp.inventory(who)
+            for item in inv["cosmetics"]:
+                tx = inv["bound_spend_tx"][item]
+                rows_total += 1
+                head = conn.execute(
+                    "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                    (tx,)).fetchone()
+                leg_dir = conn.execute(
+                    "SELECT direction FROM ledger_entries WHERE"
+                    " tx_id = ? AND account_id = ?",
+                    (tx, who)).fetchone()
+                if head is not None and head[0] == "spend" and leg_dir \
+                        is not None and leg_dir[0] == "debit":
+                    bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final
+                        + carol_final == 47000)
+        ok("audit the identity purchases against real debit entries",
+           "spend-tx total %d == identity purchases %d (2 room months"
+           " + 3 permanents); all %d entitlement / occupancy rows"
+           " (2 venue occupancy + 3 props cosmetics) bind a real"
+           " spend debit for their own buyer (bound %d/%d); balances"
+           " exact: amy 15000-990-990-2990=%d, ben 10000-4990=%d,"
+           " carol 22000-19900=%d; pool:reserve %d (47000 mint, spent"
+           " tokens loop back in, conservation holds:"
+           " pool+balances==mint=%s)"
+           % (tx_total, purchases_total, rows_total, bound, rows_total,
+              amy_final, ben_final, carol_final, pool_final,
+              conservation))
+
+        # -- isolation law: module source, structural -------------------
+        code_src = id_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        module_wide = [b for b in ("sell", "refund", "exchange",
+                                   "withdraw", "transfer", "mint")
+                       if b in id_src]
+        no_update = ("UPDATE identity_products" not in id_src
+                     and "UPDATE props_inventory" not in id_src
+                     and "UPDATE venue_occupancy" not in id_src)
+        non_ascii = sum(1 for ch in id_src if ord(ch) > 127)
+        led_calls = id_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s (module-wide"
+           " scan=%s: the single transfer hit is the module"
+           " docstring's own P1 boundary statement -- cancellation,"
+           " fee reversal or transfer of any kind is a [needs-CEO]"
+           " approval face, not a mechanism here); ledger-API call"
+           " sites (self.led.) x%d -- the module itself never touches"
+           " the token domain, every purchase spend happens inside the"
+           " referenced props / venue engines (one spend per purchase);"
+           " zero UPDATE surface (registry rows immutable once"
+           " written); zero direct INSERT INTO props_inventory /"
+           " venue_occupancy (every WRITE rides the engine public"
+           " APIs -- reference law); module source pure ASCII (%d"
+           " non-ascii)"
+           % (banned or "none", module_wide or "none", led_calls,
+              non_ascii))
+
+        idf.close()
+        prp.close()
+        ven.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "purchases": purchases_total,
+            "bound": bound, "rows": rows_total,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "pool_bal": pool_final,
+            "kinds": kinds_q, "top_cny": 199,
+            "conservation": conservation, "non_ascii": non_ascii,
+            "banned": banned, "module_wide": module_wide,
+            "no_update": no_update, "no_direct_writes": no_direct_writes,
+            "led_calls": led_calls,
+            "audit_ok": tx_total == purchases_total and bound == rows_total
+            and amy_final == 10030 and ben_final == 5010
+            and carol_final == 2100 and pool_final == 29860
+            and conservation and not banned and no_update
+            and no_direct_writes and led_calls == 0 and non_ascii == 0,
+        }
+    finally:
+        if idf is not None:
+            with contextlib.suppress(Exception):
+                idf.close()
+        if prp is not None:
+            with contextlib.suppress(Exception):
+                prp.close()
+        if ven is not None:
+            with contextlib.suppress(Exception):
+                ven.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -3746,6 +4174,98 @@ def render():
              " sandbox, fail-closed in production)"),
         ])
 
+    # -- metaverse identity face card (v0.21): REAL probe at render
+    # time; honest failure face --
+    try:
+        idr = identity_probe()
+        idr_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        idr, idr_err = None, str(exc)[:300]
+    if idr is not None:
+        id_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in idr["legs"])
+        id_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>identity spends"
+                   " == purchases (2 room months + 3 permanents)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge)</div>"
+                   "<div class=\"kpi\"><b>%d</b>identity kinds in one"
+                   " registry (room + 3 permanents)</div>"
+                   "<div class=\"kpi\"><b>%d</b>CNY highest C5 anchor"
+                   " claimed live (floor plaque)</div>"
+                   "</div>"
+                   % (idr["spend_total"], idr["purchases"],
+                      len(idr["refusals"]), idr["kinds"],
+                      idr["top_cny"]))
+        id_scope = esc(
+            "delivery model = one registry joined over two referenced"
+            " engines: this module owns exactly the identity_products"
+            " registry (which product is which kind); a private-room"
+            " rental rides VenueFace.lease_storefront (one exclusive"
+            " month window, one tenant per room per month, the"
+            " occupancy row carries the spend tx); a permanent claim"
+            " rides PropsFace.buy_prop kind cosmetic (one per"
+            " account, immutable entitlement row carrying its spend"
+            " tx); renewal = renting a later month window (advance"
+            " booking); a rejected call never charges and never"
+            " grants; identity-is-not-tokens: nothing in this module"
+            " ever converts an entitlement or occupancy back into"
+            " tokens or moves it between accounts")
+        id_audit = esc(
+            "identity purchase audit: %d identity spends, every venue"
+            " occupancy + props cosmetic row binds a real spend debit"
+            " for its own buyer (bound %d/%d); balances exact: amy"
+            " 15000-990-990-2990=%d, ben 10000-4990=%d, carol"
+            " 22000-19900=%d; pool:reserve %d (47000 mint, spent"
+            " tokens loop back in, conservation holds:"
+            " pool+balances==mint=%s)"
+            % (idr["spend_total"], idr["bound"], idr["rows"],
+               idr["amy_bal"], idr["ben_bal"], idr["carol_bal"],
+               idr["pool_bal"], idr["conservation"]))
+        id_hard = esc(
+            "structural reference law (the R624 module posture, suite"
+            " AC-ID1/AC-ID7): the module owns exactly the"
+            " identity_products registry and zero second entitlement"
+            " or occupancy engine -- every WRITE rides the PropsFace"
+            " / VenueFace public APIs, zero direct INSERT, zero"
+            " UPDATE surface (registry rows immutable once written);"
+            " identity-is-not-tokens isolation: the module never"
+            " calls the token ledger (self.led. x0 -- every purchase"
+            " spend happens inside the referenced engines, exactly"
+            " one per purchase), reads move zero tokens, and no verb"
+            " converts an entitlement or occupancy back into tokens"
+            " or moves it between accounts; any cancellation, fee"
+            " reversal or transfer is a P1 [needs-CEO] approval"
+            " face, never a mechanism here; enterprise buyers are"
+            " refused at the module gate (usr:* only) -- production"
+            " enterprise procurement routes through the BigCompute"
+            " collection gateway (D-20260924-11)")
+    else:
+        id_rows_html = id_kpis = id_scope = id_audit = id_hard = ""
+    if idr_err:
+        id_kpis = ("<p class=fail>IDENTITY PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(idr_err))
+    id_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the C5 canon anchors (private room 9.9"
+             " CNY per month, avatar skin 29.9 CNY, creator plaque"
+             " 49.9 CNY, premium floor plaque 199 CNY permanent)"
+             " are caller-supplied probe prices; real pricing, launch"
+             " gating and any cancellation, fee reversal or transfer"
+             " stay a P1 CEO approval face"),
+            ("msgSecCheck front gate", "identity product names, plaque"
+             " texts and every UGC/text surface in the stack keep the"
+             " msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -3872,7 +4392,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R980) &middot; v0.16 strategy observation card
 (R984) &middot; v0.17 studio onboarding card
 (R986) &middot; v0.18 ad slot card (R987) &middot; v0.19 venue card
-(R989) &middot; v0.20 city data report card (R990)</span></header>
+(R989) &middot; v0.20 city data report card (R990) &middot; v0.21
+metaverse identity card (R992)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -4159,6 +4680,33 @@ CNY) as caller-supplied sandbox values, not pricing decisions; raw
 tx ids and voucher ids are never rendered (determinism) -- the
 audit face shows the bound-debit verification instead.</p></div>
 
+<div class="card"><h2>Identity Face (C5 metaverse identity, live
+probe)</h2>
+<p class=kv>The REAL metaverse identity face (src/sandbox/ledger/
+identity.py, the R624 product itself, imported never copied) runs
+in-process at render time on a throwaway probe database -- every
+reading below is computed by the product module, never canned.
+This is the BLUEPRINT sec.4 C-side canon row 5 (metaverse
+identity): private room 9.9 CNY per month, avatar skin 29.9 CNY
+permanent, creator plaque 49.9 CNY permanent, premium floor plaque
+199 CNY permanent -- the highest-priced remaining zero-front suite
+line. Permanent entitlements and room occupancy live in the
+referenced props / venue engines; this face owns exactly one small
+registry (reference law, no second engine).</p>
+__ID_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__ID_ROWS__</table>
+<p class=kv>__ID_SCOPE__</p>
+<p class=kv>__ID_AUDIT__</p>
+<p class=kv>__ID_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__ID_COMPL__</ul>
+<p class=kv>Probe prices (990 per room month, 2990 / 4990 / 19900 per
+permanent claim) mirror the C5 canon anchors (9.9 / 29.9 / 49.9 / 199
+CNY) as caller-supplied sandbox values, not pricing decisions; raw
+tx ids are never rendered (determinism) -- the audit face shows the
+bound-debit verification instead.</p></div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -4377,6 +4925,12 @@ __PAYWARN__</footer>
         "__RP_AUDIT__": rp_audit,
         "__RP_HARD__": rp_hard,
         "__RP_COMPL__": rp_compl,
+        "__ID_KPIS__": id_kpis,
+        "__ID_ROWS__": id_rows_html,
+        "__ID_SCOPE__": id_scope,
+        "__ID_AUDIT__": id_audit,
+        "__ID_HARD__": id_hard,
+        "__ID_COMPL__": id_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

@@ -1,0 +1,16 @@
+[ WARN:0@0.496] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FD21a: frontdoor source pure ASCII: 248568 bytes=True; write set under src/sandbox = ['src/sandbox/frontdoor.py'] (identity/props/venue/ledger product tree untouched)
+PASS AC-FD21b: twenty-six probe legs rendered in order=True (positions [1204, 1615, 1722, 1814, 2296, 2595, 2701, 2806, 3080, 3361, 3450, 3543, 3653, 3765, 4077, 4365, 4466, 4705, 5139, 5608, 5697, 5791, 5883, 6145, 6595, 7088])
+PASS AC-FD21b-chain: one-registry=True one-spend-month=True rental-refusals=True renewal=True registry-gates=True skin-claim=True dup-before-spend=True plaque-199=True ent-gate=True bad-args=True pure-reads=True debit-audit=True isolation=True
+PASS AC-FD21b-refusals: thirteen fail-closed refusal codes on the card (BAD_ARGS x5 incl. the ent: boundary, KIND_MISMATCH x3, DUP x2, TAKEN x1, UNKNOWN x2 -- every rejection zero charge)
+PASS AC-FD21c: AIGC label verbatim=True; disclaimer verbatim=True; [needs-CEO] price note=True; msgSecCheck gate note=True; probe-price law=True
+PASS AC-FD21d: determinism: two renders, identity block byte-identical=True (11014 chars); unfilled placeholders page-wide=none
+PASS AC-FD21e: healthz=ok on live server; card count = 23: got 23; identity card title on live page=True; page has no probe-failure face=True; live identity card block 11014 chars
+PASS AC-FD21f: this log = qa/frontdoor-v21-R992.log (FD21 full record); full regression log = qa/reconcile-all-R992.log (RUNNER PASS 27 suites expected); state log row + commit with D-20260930-06 follow at closeout
+SUITE PASS (8/8 checks pass)
