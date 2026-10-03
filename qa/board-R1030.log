@@ -1,0 +1,97 @@
+R1030 board knife cut-173 closeout log (verify-then-write; ASCII script + externalized UTF-8 payload data)
+AC-K173a stale done row [R1029] + standing open 4 + rule header intact
+AC-K173b 1 row verbatim -> 2026-10 archive sec R1030 (pure-append prefix, per-line md5 identical, 09 archive zero-touch)
+AC-K173c board final = rule header [cut-173 record once] + R1030 current row + standing open 4
+AC-K173d evidence = this qa/board-R1030.log SUITE verdict
+AC-K173e delivery = state log R1030 row + commit carries cut-173 record (P-51 protocol)
+
+PHASE A: pre-op checks (read-only)
+NOTE first-run interception artifact qa/board-R1030.log present (overwritten by this run; R1029 first-run-sanity precedent)
+PASS git tree clean pre-op (porcelain empty or own first-run qa artifact only; script+data live in gitignored logs/)
+PASS HEAD==disk byte-identical pre-op: src/os/state.json
+PASS HEAD==disk byte-identical pre-op: src/os/backlog.md
+PASS HEAD==disk byte-identical pre-op: docs/archive/backlog-done-2026-10.md
+PASS HEAD==disk byte-identical pre-op: docs/status-export.json
+PASS HEAD==disk pre-op (git filter-aware view): heartbeat.txt [core.autocrlf=true, ls-files --eol = i/lf w/mixed; raw byte compare intercepted first run with zero writes]
+PASS state.json no-BOM (pre)
+PASS state.json canonical round-trip byte-identical (no trailing LF)
+PASS state tick pre == 1029
+PASS state log pre == 60 items
+PASS last log item pre = R1029 tokens line
+pre-op state.json 79086B (round-start gauge class)
+PASS self_drive pre full-recount (W,idle,nop)=(56,35,2) == stored register
+PASS self_drive sub register pre == 10 (register-maintained; window-summary compression limits round-level recount, family formula per R1029 precedent)
+PASS export queue counters pre == 6/2/2 (three queue files untouched this round)
+PASS export proposals counters pre == 1/1 (window 09-28..10-05 BD-PROP-001 quota met)
+PASS board BOM present (pre)
+PASS AC-K173a stale-board count: exactly 1 stale done row [R1029]
+PASS AC-K173a standing open rows == 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap]
+PASS AC-K173a rule header intact (title + 4 rule lines)
+AC-K173a open rows mechanically listed: - [ ] O-2026-0930-013 ④ 值守轮每日首行 data 新鲜度 | - [ ] D-20260929-03 归属感经济律法务过目路由·结论落修订承接 | - [ ] D-20261003-02 BigLife R777 复核档到达后的 | - [ ] bootstrap 对外打包件（**blocked on CEO 物
+PASS archive-2026-10 no-BOM (pre)
+PASS archive-2026-10 ends with LF (pre)
+PASS archive-2026-10 pre == 78 sections, last == R1029
+PASS heartbeat last row = tick 1029 (HB lag=0 pre)
+PASS export ceo_face.current pre == R1029 row
+PASS export results tick row pre == 1029 (exactly one)
+PASS export results last row pre == cut-172 row
+PASS export milestone fold clause pre == R1029 final 79086B
+PHASE B: verify-then-write sequence
+PASS claim substitution anchor: R1029 row appears exactly once
+PASS claim row substituted exactly once
+PASS claim row on disk as open checkbox (pre-registered before knife work)
+PASS AC-K173b pure-append prefix byte-identical vs pre-op disk
+PASS AC-K173b compose: sections 78 -> 79, last == R1030
+PASS AC-K173b compose: migrated row present exactly once in archive
+PASS AC-K173b write: archive on disk, last section == R1030
+PASS AC-K173b write: migrated row md5-identical pre/post
+PASS AC-K173b write: archive 409677B -> 411081B pure-append
+PASS AC-K173b write: 09 archive md5-identical zero-touch
+PASS archive-history tail anchor found exactly once
+PASS AC-K173c archive-history cut-173 record appended exactly once (header line scoped)
+AC-K173c board knife state: 6968B -> 6623B (rule header + R1030 claim row + standing open 4)
+PASS state composed: R1030 round line + tokens line appended
+PASS state composed parse-back: tick 1030, log 62 items
+PASS state composed: top baseline fields all flat (no new orders/decisions/gord rows this round)
+PASS state written re-read: tick 1030, log 62 items
+state.json written: 79086B -> 82572B
+PASS self_drive post full-recount (W,idle,nop)=(58,35,2) = W+2, idle/nop flat
+PASS board flip anchor: claim row found exactly once
+PASS board flip composed: [x]+done closure, no open R1030 row remains
+PASS AC-K173c write: board final = rule header + R1030 done row + standing open 4
+PASS AC-K173c write: standing open rows still 4, untouched
+board flip written: 6623B -> 7063B
+PASS export milestone anchor present pre-write
+PASS export results tick row anchor found exactly once
+PASS export composed parse-back: ceo_face.current = R1030 row
+PASS export composed: tick row 1030 exactly one
+PASS export composed: milestone fold clause -> R1030 final 82572B
+PASS export written re-read: self_drive 58/35/2/11 (W/idle/nop full recount, sub register family formula)
+PASS export written re-read: ceo_face.current on disk = R1030
+PASS heartbeat appended: R1030 row (tick 1030), CRLF preserved=False
+FAIL AC-K173e own write set = exactly 5 modified files (state/board/archive/export/heartbeat)
+ABORT: zero further writes (verify-then-write gate)
+
+FAIL :: AC-K173e own write set = exactly 5 modified files (state/board/archive/export/heartbeat)
+CORRECTION B8 rerun: porcelain parser fixed (unstaged = " M" two-char state, not "M ")
+B8 write set: modified=['docs/status-export.json', 'heartbeat.txt', 'src/os/backlog.md', 'src/os/state.json']
+B8 untracked=['qa/board-R1030.log']
+FAIL AC-K173e write set mismatch
+FAIL state end-state
+PASS end-state board: rule header [cut-173 record once] + R1030 done row + open 4, 7063B
+PASS end-state archive: 79 sections, last == R1030, 411081B
+PASS end-state export: ceo_face R1030 + self_drive 58/35/2/11 + tick row 1030
+PASS end-state heartbeat: R1030 row (tick 1030) appended, LF tail consistent with R1029 predecessor row
+
+SUITE FAIL: end-state mismatch remains
+CORRECTION attempt 3: porcelain parsed via splitlines (no whole-output strip); unstaged filter = " M"
+B8 write set: modified=['docs/archive/backlog-done-2026-10.md', 'docs/status-export.json', 'heartbeat.txt', 'src/os/backlog.md', 'src/os/state.json']
+B8 untracked=['qa/board-R1030.log'] staged=[]
+PASS AC-K173e own write set = exactly 5 modified (unstaged) + qa evidence untracked + zero staged
+PASS end-state state.json: tick 1030, log 62, last two = R1030 round + tokens lines, top baseline fields flat
+PASS end-state board: rule header [cut-173 record once] + R1030 done row + open 4, 7063B
+PASS end-state archive: 79 sections, last == R1030, 411081B pure-append
+PASS end-state export: ceo_face R1030 + self_drive 58/35/2/11 + tick row 1030 + milestone fold clause R1030 final
+PASS end-state heartbeat: R1030 row (tick 1030) appended, tail LF consistent with R1029 predecessor row
+
+SUITE PASS (corrected, attempt 3): AC-K173a..e all green - attempt 2 completed every data write B1..B7 with all in-run asserts PASS; both attempt-2/3 initial FAILs were verification-side parsing defects only (porcelain strip + prefix filter + phantom-space assert), zero data rewrites needed; this attempt re-asserted the full end state read-only: archive 409677->411081B sec R1030, board 6968->6623->7063B, state 79086->82572B tick 1030, export self_drive 58/35/2/11, heartbeat R1030 row
