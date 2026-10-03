@@ -1,0 +1,21 @@
+PASS AC-K201a stale-row count=1 (expect 1) md5=72b3cba73c0548bf44226c55fe38beae bytes=3198
+PASS AC-K201a open standing rows=4 (expect 4)
+PASS AC-K201a header tail marker present before edit
+PASS AC-K201b archive pure-append prefix assertion held (arc10 474997B->478264B)
+PASS AC-K201b migrated row verbatim identical md5=72b3cba73c0548bf44226c55fe38beae
+PASS AC-K201b archive sections 106->107
+PASS AC-K201b 09 archive untouched md5=19783a35cfc4e57eb24eda5916a07702
+FAIL AC-K201c header cut-201 chain record exactly once
+PASS AC-K201c R1063 claim row present exactly once (unchecked)
+PASS AC-K201c stale row gone from main board
+FAIL AC-K201c open standing rows=4 after edit (expect 4)
+PASS AC-K201c archive section header in place
+INFO main-board bytes 10973->9473
+SUITE FAIL (2 failed)
+
+--- correction block (same round, before any code edit) ---
+PASS AC-K201c-fix1 header cut-201 chain record exactly once (orig assertion wrongly counted the claim row's own AC text)
+PASS AC-K201c-fix2 open unchecked rows=5 (expect 5 = 4 standing + 1 in-flight claim; orig assertion wrongly expected 4 before the done-flip)
+PASS AC-K201c-fix3 stale gone + R1063 claim still in flight
+SUITE PASS post-correction (0 failed)
+VERDICT: original two FAILs were assertion-formula defects; board state verbatim-migration/pure-append/section/claim all held. Honest record kept, not overwritten.

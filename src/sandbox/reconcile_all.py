@@ -1,8 +1,11 @@
 """Product health-check runner (BigDomain explore-line item #9, R594;
-pay/member standalone-reconcile extension, R595 follow-up row).
+pay/member standalone-reconcile extension, R595 follow-up row;
+five-suite fan-out expansion, R1063 - benchgate/citymodel/compliance/
+minors wiring, closing the drift between this runner's fan-out and the
+shipped modules).
 
-One command = the full sandbox regression fan-out (twenty-eight
-acceptance suites, 238 pre-registered criteria in total) plus the
+One command = the full sandbox regression fan-out (thirty-three
+acceptance suites, 363 pre-registered criteria in total) plus the
 standalone reconcile product face for all three bookkeeping domains,
 each with a clean/tamper dual control:
 
@@ -119,6 +122,18 @@ SUITES = [
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
+    # R1063 fan-out expansion: five suites shipped after R595 but never
+    # wired into this runner (the fan-out had drifted behind the shipped
+    # modules). Pure wiring - the suite files themselves are unchanged.
+    # benchgate/compliance run unittest-style (exit 0 + "OK", zero
+    # PASS-lines by design); their criteria counts are their test-method
+    # counts. citymodel/minors/minors-wiring use the PASS-line convention.
+    ("benchgate", os.path.join("benchgate", "test_bench_gate.py"), 11),
+    ("citymodel", os.path.join("citymodel", "test_scenario.py"), 10),
+    ("compliance",
+     os.path.join("compliance", "test_sku_compliance_map.py"), 15),
+    ("minors", os.path.join("minors", "test_minors.py"), 19),
+    ("minors-wiring", os.path.join("minors", "test_wiring.py"), 70),
 ]
 
 FAILS = 0
