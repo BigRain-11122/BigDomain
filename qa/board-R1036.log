@@ -1,0 +1,8 @@
+AC-K178a stale-board count: exactly 1 stale done row [R1034 from git HEAD pre-op, md5 959accc51054d92a51d594ad456164ef] + standing open 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap] + R1036 claim row present (AC-K178a..e tokens verified in-row; phase-1 insert size 10324 B) + rule header intact
+first-run honest note: phase-1 assertion miscounted open rows as 4 (claim row itself makes 5); all composed writes were byte-correct, end-state re-verified in full against git HEAD pre-op bytes (R1029/R1030/R1032/R1034 first-run intercept precedents, here post-write verify)
+AC-K178b compose: 1 row verbatim to 2026-10 archive sec R1036 (pure-append prefix asserted vs git HEAD; 83 -> 84 sections; 09 archive file = separate file untouched by construction)
+AC-K178b write: archive 2026-10 file 417795 -> 421317 B pure-append, migrated row md5-identical pre/post (959accc51054d92a51d594ad456164ef), sections 83 -> 84
+AC-K178b 09-archive zero-touch md5 verified: 19783a35cfc4e57eb24eda5916a07702
+AC-K178c write: board 10324 -> 7210 B (rule header + R1036 current row + open 4)
+AC-K178d evidence: this qa/board-R1036.log SUITE PASS (all asserts above)
+AC-K178e delivery: commit carries the order number (P-51 protocol) via knife-round commit set [P-2026-09-25-18]
