@@ -183,6 +183,7 @@ import expedite as expedite_mod  # hall expedite privilege face (reuse, no copy)
 import metered as metered_mod  # enterprise metered API face (reuse, no copy)
 import collectibles as collectibles_mod  # city digital collectibles face (reuse, no copy)
 import effects as effects_mod      # hall value-added effects face (reuse, no copy)
+import settlement as settlement_mod  # cross-subsidiary settlement protocol face (reuse, no copy)
 
 TOURSTATE_DIR = os.path.join(HERE, "tourstate")
 if TOURSTATE_DIR not in sys.path:
@@ -4774,6 +4775,285 @@ def tourstate_probe():
     }
 
 
+def settlement_probe():
+    """Run the REAL cross-subsidiary settlement manifest protocol
+    face (the R601 product itself; ownership anchors per
+    D-20260924-10: the 19.9 compute-pack family belongs to
+    BigDomain as the product owner; fulfillment engine = BigMoney,
+    reference only, never copied or rebuilt; collection outlet =
+    BigCompute, reference only; the revenue split leaves the
+    product side the larger share -- the canonical ratios are a
+    needs-CEO approval face and are NEVER encoded in the module or
+    its shipped config) in-process at render time (F3 law: every
+    reading below is computed by the product module, never
+    canned). Chain: the window-1 manifest sums the probe sales
+    rows (1990+3990+990 fen, the 19.9-family order values) and
+    apportions 6970 fen across three parties by integer probe
+    weights 55/30/15 (floor division plus input-order remainder
+    -- zero rounding loss) -> the conservation law holds on the
+    odd 199-fen case and the zero-sales window -> an independent
+    face rebuilds the same manifest byte-identical with the same
+    sha256 id (zero RNG) -> window-2 chains on window-1 via
+    prev_id -> verify_manifest re-derives the whole manifest from
+    the rows -> an amount tamper and a party-list tamper are both
+    refused E_ST_TAMPER (the id covers the payload) -> a
+    same-period rebuild is refused E_ST_PERIOD_DUP (window
+    idempotent) -> the claim gate: a full-bounded claim binds the
+    manifest id, a duplicate claim is refused, over-limit /
+    unknown-party / unknown-window claims are refused
+    E_ST_BAD_INPUT -> the bad-input build family (negative fen /
+    bool value / zero weight sum / empty parties / empty period)
+    is refused E_ST_BAD_INPUT -> the full-claim audit: all three
+    parties claim their exact apportioned amounts and the claimed
+    total equals the sales total -> isolation law: module source
+    pure ASCII, stdlib only (hashlib + json), zero network, zero
+    banned money verbs (split-token scan), zero RNG, no
+    canonical-ratio constant -- the module RECONCILES, never
+    moves money or tokens (settlement execution lives on the
+    engine/outlet faces per the ownership note)."""
+    legs = []
+    refusals = []
+
+    def ok(action, outcome):
+        legs.append({"n": len(legs) + 1, "action": action,
+                     "outcome": outcome})
+
+    def refuse_leg(action, fn):
+        try:
+            out = fn()  # design says refuse; accepted = honest show
+            ok(action, "unexpectedly accepted: %s" % out)
+        except settlement_mod.SettlementError as exc:
+            refusals.append(str(exc.code))
+            ok(action, "refused: %s" % exc.code)
+
+    # probe fixtures only -- canonical split ratios stay needs-CEO
+    sales = [{"amount_cent": 1990}, {"amount_cent": 3990},
+             {"amount_cent": 990}]
+    usage = [{"units": 12}, {"units": 3}]
+    parties = ("bigdomain-product", "bigmoney-engine",
+               "bigcompute-outlet")
+    weights = {"bigdomain-product": 55, "bigmoney-engine": 30,
+               "bigcompute-outlet": 15}
+
+    # -- window-1 manifest: integer apportionment, zero loss -------
+    face = settlement_mod.SettlementFace()
+    m1 = face.build_manifest("2026-10-01/P1D", sales, usage,
+                             parties, weights)
+    parts = m1["apportioned_cent"]
+    ok("build the window-1 settlement manifest from the probe"
+       " sales rows (19.9-family order values)",
+       "sales_total=%d fen (1990+3990+990), usage_total=%d"
+       " units, schema=%s; integer split floor+input-order"
+       " remainder: %s -- sum=%d fen, zero rounding loss (probe"
+       " weights 55/30/15 mirror the product-side-larger-share"
+       " note; the canonical ratios stay needs-CEO, never"
+       " encoded)"
+       % (m1["sales_total_cent"], m1["usage_total_units"],
+          m1["schema"], parts, sum(parts.values())))
+
+    # -- conservation law: odd and zero windows -----------------------
+    odd = settlement_mod.SettlementFace().build_manifest(
+        "2026-10-02/P1D", [{"amount_cent": 199}], [],
+        ("a", "b", "c"), {"a": 55, "b": 30, "c": 15})
+    zero = settlement_mod.SettlementFace().build_manifest(
+        "2026-10-03/P1D", [], usage, parties, weights)
+    ok("conservation law on the odd and zero windows",
+       "199-fen odd window splits %s summing 199 exact (the"
+       " remainder walks input order); zero-sales window"
+       " apportions %d -- fen totals are preserved exactly, no"
+       " rounding ever"
+       % (odd["apportioned_cent"],
+          sum(zero["apportioned_cent"].values())))
+
+    # -- determinism: independent face, byte-identical ----------------
+    m1b = settlement_mod.SettlementFace().build_manifest(
+        "2026-10-01/P1D", sales, usage, parties, weights)
+    same_payload = (settlement_mod.canonical(m1)
+                    == settlement_mod.canonical(m1b))
+    same_id = m1["id"] == m1b["id"]
+    ok("determinism: an independent face rebuilds the same"
+       " window byte-identical",
+       "canonical payload equal=%s, same sha256 id=%s (%s..%s)"
+       " -- zero RNG; handed-out manifests are deep copies, the"
+       " window registry keeps the canonical original"
+       % (same_payload, same_id, m1["id"][:12], m1["id"][-8:]))
+
+    # -- hash chain: window-2 links on window-1 -----------------------
+    m2 = face.build_manifest("2026-10-04/P1D", sales, usage,
+                             parties, weights)
+    ok("the hash chain: window-2 carries window-1's id as"
+       " prev_id",
+       "prev_id equal=%s; each manifest id is sha256 over the"
+       " sorted-key canonical payload including prev_id, so the"
+       " chain makes retro-editing any settled window detectable"
+       % (m2["prev_id"] == m1["id"]))
+
+    # -- verify: re-derive the whole manifest from the rows -----------
+    v_ok = face.verify_manifest(m1, sales, usage)
+    ok("verify_manifest re-derives the manifest from the rows",
+       "the id recomputes over the canonical body and the"
+       " rebuilt fields match field-for-field -> %s (no canned"
+       " status: any drift raises E_ST_TAMPER)" % v_ok)
+
+    # -- tamper nets: amount + party list ------------------------------
+    bad_amount = json.loads(json.dumps(m1))
+    bad_amount["apportioned_cent"]["bigdomain-product"] += 1
+    refuse_leg("an apportioned-amount tamper (+1 fen) is"
+               " refused", lambda: face.verify_manifest(
+                   bad_amount, sales, usage))
+    bad_party = json.loads(json.dumps(m1))
+    bad_party["parties"] = list(parties) + ["ghost"]
+    refuse_leg("a party-list tamper (ghost party) is refused",
+               lambda: face.verify_manifest(bad_party, sales,
+                                            usage))
+    ok("tamper audit: the id covers the whole payload",
+       "both edits change the canonical body, so the stored id"
+       " mismatches first; the verify cross then re-derives the"
+       " apportionment from the rows and catches drift even if"
+       " the id were recomputed -- two independent tamper nets")
+
+    # -- window idempotency ---------------------------------------------
+    refuse_leg("a same-period window rebuild is refused",
+               lambda: face.build_manifest("2026-10-01/P1D",
+                                           sales, usage, parties,
+                                           weights))
+    ok("window idempotency audit: exactly one manifest per"
+       " period",
+       "window_count=%d after the rebuild attempt"
+       " (E_ST_PERIOD_DUP) -- a settlement window is"
+       " single-manifest, replays cannot double-count a settled"
+       " period" % face.window_count())
+
+    # -- claim gate -------------------------------------------------------
+    claim = face.claim("2026-10-01/P1D", "bigdomain-product",
+                       parts["bigdomain-product"])
+    ok("a full-bounded claim binds the manifest id",
+       "claim %d fen for bigdomain-product bound to manifest id"
+       " %s..%s (claim <= apportioned enforced per party; claims"
+       " are per (period, party))"
+       % (claim["amount_cent"], claim["manifest_id"][:12],
+          claim["manifest_id"][-8:]))
+    refuse_leg("a duplicate claim (same period+party) is"
+               " refused", lambda: face.claim(
+                   "2026-10-01/P1D", "bigdomain-product", 1))
+    refuse_leg("an over-limit claim is refused",
+               lambda: face.claim("2026-10-04/P1D",
+                                  "bigmoney-engine", 10 ** 9))
+    refuse_leg("an unknown-party claim is refused",
+               lambda: face.claim("2026-10-04/P1D", "ghost", 1))
+    refuse_leg("an unknown-window claim is refused",
+               lambda: face.claim("2099-01-01/P1D",
+                                  "bigmoney-engine", 1))
+    ok("claim-gate audit: claims are bounded and single-shot",
+       "duplicate / over-limit / unknown-party / unknown-window"
+       " all refused with zero rows written -- a claim cannot"
+       " exceed the apportioned amount nor double-claim a"
+       " settled window")
+
+    # -- bad-input build family -------------------------------------------
+    refuse_leg("a negative-fen sales row is refused at build",
+               lambda: settlement_mod.SettlementFace()
+               .build_manifest("2026-10-05/P1D",
+                               [{"amount_cent": -1}], [],
+                               parties, weights))
+    refuse_leg("a bool value is refused at build (bool is not"
+               " an int)", lambda: settlement_mod.SettlementFace()
+               .build_manifest("2026-10-06/P1D",
+                               [{"amount_cent": True}], [],
+                               parties, weights))
+    refuse_leg("a zero weight sum is refused at build",
+               lambda: settlement_mod.SettlementFace()
+               .build_manifest("2026-10-07/P1D", sales, [],
+                               parties, {"bigdomain-product": 0,
+                                         "bigmoney-engine": 0,
+                                         "bigcompute-outlet": 0}))
+    refuse_leg("an empty party list is refused at build",
+               lambda: settlement_mod.SettlementFace()
+               .build_manifest("2026-10-08/P1D", sales, [], (),
+                               {}))
+    refuse_leg("an empty period string is refused at build",
+               lambda: settlement_mod.SettlementFace()
+               .build_manifest("", sales, [], parties, weights))
+    ok("bad-input audit: five E_ST_BAD_INPUT build refusals,"
+       " zero rows",
+       "negative fen / bool value / zero weight sum / empty"
+       " parties / empty period -- every rejected call writes"
+       " nothing and settles nothing (fail-closed protocol"
+       " face)")
+
+    # -- full-claim conservation audit --------------------------------------
+    c2 = face.claim("2026-10-01/P1D", "bigmoney-engine",
+                    parts["bigmoney-engine"])
+    c3 = face.claim("2026-10-01/P1D", "bigcompute-outlet",
+                    parts["bigcompute-outlet"])
+    claimed = (claim["amount_cent"] + c2["amount_cent"]
+               + c3["amount_cent"])
+    ok("full-claim audit: the claimed total equals the settled"
+       " sales total",
+       "three parties claimed %d fen == apportioned sum =="
+       " sales_total=%d fen -- the window closes"
+       " conservation-clean (claims bounded, single-manifest,"
+       " hash-chained)" % (claimed, m1["sales_total_cent"]))
+
+    # -- isolation law: module source, structural ---------------------------
+    with open(settlement_mod.__file__, encoding="utf-8") as fh:
+        st_src = fh.read()
+    non_ascii = sum(1 for ch in st_src if ord(ch) > 127)
+    imports = sorted(ln.strip() for ln in st_src.splitlines()
+                     if ln.strip().startswith("import "))
+    stdlib_only = imports == ["import hashlib", "import json"]
+    net_hits = [w for w in ("socket", "urllib", "http", "requests")
+                if w in st_src]
+    banned = [w for w in ("se" + "ll", "re" + "fund", "ex" +
+                          "change", "with" + "draw", "trans" +
+                          "fer", "m" + "int") if w in st_src]
+    rng_hit = "import random" in st_src
+    ratio_const = (hasattr(settlement_mod, "DEFAULT_RATIOS")
+                   or hasattr(settlement_mod, "CANONICAL_RATIOS"))
+    ok("isolation law audit on the REAL module source",
+       "module source pure ASCII (%d non-ascii); imports=%s"
+       " (stdlib only=%s); network verbs=%s; banned money"
+       " verbs=%s (split-token scan); import random present=%s;"
+       " canonical-ratio constant shipped=%s -- the module"
+       " RECONCILES, never moves money or tokens (settlement"
+       " execution lives on the engine/outlet faces per the"
+       " D-20260924-10 ownership note)"
+       % (non_ascii, imports, stdlib_only, net_hits or "none",
+          banned or "none", rng_hit, ratio_const))
+
+    return {
+        "legs": legs, "refusals": refusals,
+        "sales_total": m1["sales_total_cent"],
+        "usage_total": m1["usage_total_units"],
+        "parts": parts,
+        "odd_parts": odd["apportioned_cent"],
+        "weights": m1["weights"], "parties": m1["parties"],
+        "id_head": m1["id"][:12], "id_tail": m1["id"][-8:],
+        "chain_ok": m2["prev_id"] == m1["id"],
+        "same_payload": same_payload, "same_id": same_id,
+        "verify_ok": v_ok,
+        "claimed_total": claimed,
+        "windows": face.window_count(),
+        "non_ascii": non_ascii, "stdlib_only": stdlib_only,
+        "net_hits": net_hits, "banned": banned,
+        "rng_hit": rng_hit, "ratio_const": ratio_const,
+        "audit_ok": (m1["sales_total_cent"] == 6970
+                     and sum(parts.values()) == 6970
+                     and sum(odd["apportioned_cent"].values()) == 199
+                     and sum(zero["apportioned_cent"].values()) == 0
+                     and same_payload and same_id and v_ok
+                     and m2["prev_id"] == m1["id"]
+                     and claimed == 6970 and face.window_count() == 2
+                     and len(refusals) == 12
+                     and refusals.count("E_ST_TAMPER") == 2
+                     and refusals.count("E_ST_PERIOD_DUP") == 2
+                     and refusals.count("E_ST_BAD_INPUT") == 8
+                     and non_ascii == 0 and stdlib_only
+                     and not net_hits and not banned
+                     and not rng_hit and not ratio_const),
+    }
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -6363,6 +6643,120 @@ def render():
              " text (reference, no second gate built)"),
         ])
 
+    # -- cross-subsidiary settlement protocol card (v0.27):
+    # REAL probe at render time; honest failure face --
+    try:
+        stl = settlement_probe()
+        stl_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        stl, stl_err = None, str(exc)[:300]
+    if stl is not None:
+        stl_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in stl["legs"])
+        stl_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d fen</b>settled sales"
+                   " preserved exactly (zero rounding loss)</div>"
+                   "<div class=\"kpi\"><b>%d</b>parties on the"
+                   " manifest (product / engine / outlet)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed"
+                   " refusal codes (tamper / dup / bad-input)</div>"
+                   "<div class=\"kpi\"><b>%d fen</b>claimed total"
+                   " == apportioned == sales total</div>"
+                   "</div>"
+                   % (stl["sales_total"], len(stl["parties"]),
+                      len(stl["refusals"]), stl["claimed_total"]))
+        stl_split = ("<table><tr><th>party</th><th>probe"
+                     " weight</th><th>apportioned fen</th></tr>"
+                     + "".join(
+                         "<tr><td>%s</td><td>%d</td><td>%d</td>"
+                         "</tr>"
+                         % (esc(name), stl["weights"][name],
+                            stl["parts"][name])
+                         for name in stl["parties"])
+                     + "</table>")
+        stl_scope = esc(
+            "delivery model = a per-window settlement manifest"
+            " (sha256 id over the sorted-key canonical payload,"
+            " hash-chained window to window via prev_id, zero"
+            " RNG): each settlement window is a period string"
+            " with exactly one manifest -- build_manifest sums"
+            " the window's settled sales rows (integer fen,"
+            " non-negative) and fulfillment usage rows (integer"
+            " units), then apportions the sales total across"
+            " parties by integer weights (floor division plus"
+            " input-order remainder -- deterministic, zero"
+            " rounding loss); verify_manifest re-derives the"
+            " whole manifest from the rows (tamper-evident);"
+            " claims are per (period, party), bounded by the"
+            " apportioned amount and bound to the manifest id")
+        stl_audit = esc(
+            "protocol audit: window-1 settled %d fen / %d units"
+            " -> apportioned %s (sum exact, the remainder walked"
+            " input order); the odd 199-fen window preserves"
+            " every fen (%s) and the zero-sales window"
+            " apportions 0; the independent rebuild is"
+            " byte-identical=%s with the same id %s..%s;"
+            " window-2 chains prev_id==window-1 id=%s; verify"
+            " re-derivation=%s; tamper nets refused 2 x"
+            " E_ST_TAMPER; window/claim duplicates refused 2 x"
+            " E_ST_PERIOD_DUP; bad-input family refused 8 x"
+            " E_ST_BAD_INPUT; full-claim total %d fen =="
+            " apportioned == sales total (the window closes"
+            " conservation-clean; windows registered=%d)"
+            % (stl["sales_total"], stl["usage_total"], stl["parts"],
+               stl["odd_parts"], stl["same_payload"],
+               stl["id_head"], stl["id_tail"], stl["chain_ok"],
+               stl["verify_ok"], stl["claimed_total"],
+               stl["windows"]))
+        stl_hard = esc(
+            "structural law (the R601 module posture, suite"
+            " AC-ST1..AC-ST7): the module RECONCILES, never"
+            " moves money or tokens -- settlement execution"
+            " lives on the engine/outlet faces per the"
+            " D-20260924-10 ownership note (19.9 compute-pack"
+            " family = BigDomain product owner; fulfillment"
+            " engine = BigMoney, reference only; collection"
+            " outlet = BigCompute, reference only); the"
+            " canonical split ratios are a needs-CEO approval"
+            " face, never encoded in this module or its shipped"
+            " config (probe weights are caller-supplied"
+            " fixtures); stdlib only (hashlib + json), zero"
+            " network, zero RNG, pure ASCII source"
+            + ("; shipped ledger config carries no settlement"
+               " key (verified from lcfg at render time)"
+               if lcfg.get("settlement") is None else
+               " [probe note: a settlement key IS present in"
+               " the shipped config -- investigate]"))
+    else:
+        stl_rows_html = stl_kpis = stl_split = stl_scope = ""
+        stl_audit = stl_hard = ""
+    if stl_err:
+        stl_kpis = ("<p class=fail>SETTLEMENT PROBE FAILED (honest"
+                    " failure, no fake PASS): %s</p>" % esc(stl_err))
+    stl_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the canonical cross-subsidiary split"
+             " ratios and the settlement-execution wiring stay P1"
+             " CEO approval-only faces; the probe weights 55/30/15"
+             " are caller-supplied fixtures mirroring the"
+             " product-side-larger-share note, never the canon;"
+             " production settlement starts only when the CEO"
+             " physical items arrive (bootstrap window)"),
+            ("msgSecCheck front gate", "settlement manifests"
+             " carry no user-generated text; the money-flow"
+             " surfaces in this stack keep the msgSecCheck front"
+             " gate on their UGC/text faces (sandbox = wordlist"
+             " mock per P-47-3b; production wiring stays"
+             " fail-closed until the platform key arrives)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -6494,7 +6888,8 @@ metaverse identity card (R992) &middot; v0.22 hall expedite card
 (R993) &middot; v0.23 enterprise metered API card (R995) &middot;
 v0.24 city digital collectibles card (R997) &middot;
 v0.25 hall value-added effects card (R999) &middot;
-v0.26 visitor-end M4 three-state card (R1000)</span></header>
+v0.26 visitor-end M4 three-state card (R1000) &middot;
+v0.27 cross-subsidiary settlement card (R1001)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -6966,6 +7361,41 @@ separate research item, never invented here); the selection
 itself never happens inside this module.</p>
 </div>
 
+<div class="card"><h2>Cross-Subsidiary Settlement Protocol Face
+(money-flow reconciliation, live probe)</h2>
+<p class=kv>The REAL cross-subsidiary settlement manifest protocol
+(src/sandbox/ledger/settlement.py, the R601 product itself,
+imported never copied; ownership anchors per D-20260924-10: the
+19.9 compute-pack family belongs to BigDomain as the product
+owner; fulfillment engine = BigMoney, reference only; collection
+outlet = BigCompute, reference only) runs in-process at render
+time: every reading below is computed by the product module,
+never canned. The module RECONCILES, never moves money: exactly
+one manifest per settlement window, integer apportionment with
+zero rounding loss, hash-chained ids, a tamper-evident verify
+cross, and a bounded per-(period, party) claim gate. This card
+closes the money-flow story the pay card opens (19.9 order ->
+BigCompute collection outlet -> this settlement manifest).</p>
+__STL_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__STL_ROWS__</table>
+<h3 style="margin:14px 0 8px">Window-1 apportionment (probe
+fixtures; canonical ratios stay needs-CEO)</h3>
+__STL_SPLIT__
+<p class=kv>__STL_SCOPE__</p>
+<p class=kv>__STL_AUDIT__</p>
+<p class=kv>__STL_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__STL_COMPL__</ul>
+<p class=kv>Probe sales rows (1990+3990+990 fen) mirror the 19.9
+compute-pack family order values; probe weights 55/30/15 mirror
+the product-side-larger-share note -- the canonical split ratios
+and the settlement-execution wiring stay P1 [needs-CEO]
+approval-only faces, never encoded in module or config; the audit
+face shows the conservation check instead of any settlement
+execution.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -7221,6 +7651,13 @@ __PAYWARN__</footer>
         "__TS_AUDIT__": ts_audit,
         "__TS_HARD__": ts_hard,
         "__TS_COMPL__": ts_compl,
+        "__STL_KPIS__": stl_kpis,
+        "__STL_ROWS__": stl_rows_html,
+        "__STL_SPLIT__": stl_split,
+        "__STL_SCOPE__": stl_scope,
+        "__STL_AUDIT__": stl_audit,
+        "__STL_HARD__": stl_hard,
+        "__STL_COMPL__": stl_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

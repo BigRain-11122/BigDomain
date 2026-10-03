@@ -1,0 +1,16 @@
+[ WARN:0@0.310] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FD27a: frontdoor source pure ASCII: 390867 bytes=True; write set under src/sandbox = ['src/sandbox/frontdoor.py'] (settlement/ledger product tree untouched); header v0.27 (R1001) on page=True
+PASS AC-FD27b: twenty-four probe legs rendered in order=True (positions [1376, 1872, 2145, 2428, 2688, 2921, 3026, 3127, 3426, 3527, 3768, 4002, 4112, 4203, 4297, 4392, 4654, 4759, 4873, 4971, 5071, 5174, 5434, 5699])
+PASS AC-FD27b-chain: window-build=True conservation=True determinism=True hash-chain=True verify-cross=True tamper-nets=True window-idempotency=True claim-bind=True claim-gate=True bad-input=True full-claim=True isolation=True split-table=True
+PASS AC-FD27b-refusals: twelve fail-closed refusal codes on the card (E_ST_TAMPER x2 amount tamper + party-list tamper, E_ST_PERIOD_DUP x2 same-period rebuild + duplicate claim, E_ST_BAD_INPUT x8 over-limit / unknown-party / unknown-window claims + negative fen / bool value / zero weight sum / empty parties / empty period -- every rejection writes nothing and settles nothing)
+PASS AC-FD27c: AIGC label verbatim=True; disclaimer verbatim=True; [needs-CEO] note=True; msgSecCheck gate note=True; P1-approval-face law=True; shipped ledger config carries no settlement key=True
+PASS AC-FD27d: determinism: two renders, settlement block byte-identical=True (10096 chars); unfilled placeholders page-wide=none
+PASS AC-FD27e: healthz=ok on live server; card count = 29: got 29; settlement card title on live page=True; page has no probe-failure face=True; live settlement card block 10096 chars
+PASS AC-FD27f: this log = qa/frontdoor-v27-R1001.log (FD27 full record); full regression log = qa/reconcile-all-R1001.log (RUNNER PASS 27 suites expected); state log row + commit with D-20260930-06 follow at closeout
+SUITE PASS (8/8 checks pass)
