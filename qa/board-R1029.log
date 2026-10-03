@@ -1,0 +1,18 @@
+AC-K172a stale-board count: exactly 1 stale done row [R1028 mechanically listed] + standing open 4 [O-013(4)/D-20260929-03/D-20261003-02/bootstrap] + R1029 claim row present (pre-registered) + rule header intact
+AC-K172b compose: 1 row verbatim to 2026-10 archive sec R1029 (pure-append prefix asserted; 77 -> 78 sections; 09 archive file md5 19783a35cfc4 captured, zero-touch by construction + post-check)
+AC-K172c board final state: rule header [archive-history cut-172 appended exactly once] + R1029 current-round claim row [flips to [x]+done at closeout] + standing open 4; board 11114B -> 6549B (projected, pre-closure-note)
+AC-K172b write: archive 2026-10 file 405024 -> 409677 B pure-append, migrated row md5-identical pre/post, sections 77 -> 78, 09 archive md5-identical zero-touch
+AC-K172c write: board 11114B -> 6549B (rule header + R1029 claim row + standing open 4)
+AC-K172d evidence: this qa/board-R1029.log SUITE PASS (all asserts above)
+AC-K172e delivery: state log R1029 row + commit carries the cut-172 record (P-51 protocol) via this round commit set
+
+pre-op: state.json 76238B-class HEAD==disk byte-identical, tick 1028, log 58 items, canonical round-trip PASS, self_drive derivation (54,35,2,9) matches stored; round tree = ['?? qa/board-R1029.log', 'M docs/archive/backlog-done-2026-10.md', 'M src/os/backlog.md'] (claim row + knife pair + board evidence = own R1029 write set)
+state composed: tick 1028->1029, log 58 -> 60 items (R1029 round line + tokens line appended), final 79086B, self_drive mechanical re-derivation (56,35,2,10) = W+2 / sub+1 / idle,nop flat, pre-registered projection PASS
+board flip composed: R1029 claim row -> [x] + [done 2026-10-03] closure note (verbatim body preserved, prefix-only flip + tail append); final board = rule header + R1029 done row + standing open 4
+export pre-checks: tick row 1028, no cut-172 row, self_drive stored 54/35/2/9, milestone fold clause present, queue 6/2/2, proposals 1/1
+heartbeat pre-checks: last row = tick 1028 (HB lag=0), R1029 row to be appended in write phase
+PHASE B (--write): verify-then-write sequence
+state.json written (temp+replace, re-read asserted: tick 1029, log 60 items, top fields flat, self_drive (56,35,2,10), PS dual-gauge parse PASS, final 79086B)
+board written: R1029 row flipped [x]+done closure (6549 -> 6968 B)
+export refreshed: export_ts=2026-10-03T17:51:25+08:00, tick-row 1028->1029, R1029 cut-172 result row appended, self_drive 56/35/2/10 family-formula re-derived (zero hardcode), milestone fold clause -> R1029 final 79086B, BOM utf-8-sig parse-back PASS
+heartbeat appended: R1029 row (tick 1029, 2026-10-03 17:51 +08:00)
