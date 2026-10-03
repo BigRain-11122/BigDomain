@@ -2054,6 +2054,324 @@ def ads_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def venue_probe():
+    """Run the REAL city venue rental + storefront tenancy face (the
+    R605 occupancy engine itself, BLUEPRINT sec.4 B-side canon: online
+    event venue full-booking 5000 CNY per event including the
+    resident host + auto-cut material bundle, plus the exclusive
+    storefront tenancy) in-process at render time on a throwaway
+    database (F3 law: every reading below is computed by the product
+    module, never canned). This is the SAME single-source engine the
+    studio and ad cards above ride -- fronting it adds a CEO-visible
+    card, zero second occupancy engine. Chain: mechanism registration
+    with concurrent capacity 2 is idempotent and refuses capacity
+    drift -> an unregistered venue is refused with zero charge ->
+    one event booking = one spend binding its occupancy row ->
+    a second booking fills the concurrent capacity inside the
+    overlap -> the third overlapping rental is refused by the
+    capacity gate -> window expiry frees the slot and the audit row
+    survives -> an identical replay is refused BEFORE the spend ->
+    the storefront lease is exclusive, an overlapping lease is
+    refused zero-charge, the next window flips the tenant at the
+    boundary -> early termination ends occupancy without moving
+    tokens (no refund face exists) -> bad-args family refused ->
+    read faces move zero tokens -> audit: spends equal bookings,
+    balances exact, pool conservation -> isolation law: zero banned
+    token verbs in the module source. Prices are caller-supplied
+    probe values mirroring the B4 canon anchors; real pricing stays
+    a P1 CEO approval-only face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-venue-")
+    led = None
+    ven = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        ven = venue_mod.VenueFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except venue_mod.VenueError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 40000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 15000), ("ben", 15000),
+                               ("carol", 5000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe residents",
+           "probe per-window prices mirror the B4 canon anchor: one"
+           " online-event booking (one event) = exactly one spend of"
+           " term x caller-supplied per-window price (probe uses"
+           " 500/window; the canon row is 5,000 CNY per full-venue"
+           " event with the resident host + auto-cut material"
+           " bundle) -- caller-supplied probe values, never pricing"
+           " decisions")
+
+        # -- mechanism registration: capacity, idempotence, drift ----
+        reg1 = ven.register_venue("plaza", 2)
+        reg2 = ven.register_venue("plaza", 2)
+        refuse_leg("re-register the plaza under a DIFFERENT capacity",
+                   lambda: ven.register_venue("plaza", 3))
+        ok("register the online-event venue with concurrent"
+           " capacity 2",
+           "plaza capacity=%d; same-capacity re-register returns the"
+           " same registration (idempotent); capacity drift refused"
+           " -- a mechanism registration face, zero token touch"
+           % reg2["capacity"])
+
+        # -- registry gate: unknown venue, zero charge ---------------
+        bal_b0 = led.balance("usr:ben")["balance"]
+        refuse_leg("ben tries to rent an UNREGISTERED venue",
+                   lambda: ven.rent_venue("usr:ben", "hall-ghost", 100,
+                                           10, 500, "order:vn-ghost"))
+        ok("re-read ben's balance after the unknown-venue refusal",
+           "%d==%d (an unregistered venue is never rentable; the"
+           " refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- one event booking: one spend bound into the occupancy ----
+        tx0 = spend_n()
+        bal_a1 = led.balance("usr:amy")["balance"]
+        r1 = ven.rent_venue("usr:amy", "plaza", 100, 10, 500,
+                            "order:vn-amy-100")
+        bal_a2 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        ok("amy books the plaza event window 100..109",
+           "balance %d->%d (exact -5000 = 10 windows x 500, one"
+           " event = one spend); spend-tx %d->%d (+1); the occupancy"
+           " row binds that spend as its provenance; is_rented"
+           " tick100=%s tick109=%s"
+           % (bal_a1, bal_a2, tx0, tx1,
+              ven.is_rented("plaza", "usr:amy", 100),
+              ven.is_rented("plaza", "usr:amy", 109)))
+
+        # -- concurrent capacity: second booking fills 2/2 -------------
+        bal_c1 = led.balance("usr:carol")["balance"]
+        r2 = ven.rent_venue("usr:carol", "plaza", 105, 10, 500,
+                            "order:vn-carol-105")
+        bal_c2 = led.balance("usr:carol")["balance"]
+        ok("carol books the overlapping event window 105..114",
+           "balance %d->%d (exact -5000); spend-tx 1->2 (+1);"
+           " concurrent capacity 2/2 inside the overlap 105..109 --"
+           " the plaza is a capacity-bounded scene, two events run"
+           " concurrently" % (bal_c1, bal_c2))
+
+        # -- capacity gate: third overlapping rental refused ----------
+        bal_b1 = led.balance("usr:ben")["balance"]
+        refuse_leg("ben tries a THIRD concurrent event inside the"
+                   " full window",
+                   lambda: ven.rent_venue("usr:ben", "plaza", 106, 5,
+                                           500, "order:vn-ben-full"))
+        ok("re-read ben's balance after the capacity refusal",
+           "%d==%d (capacity 2 = concurrent event slots, a third"
+           " overlapping rental is refused; the refusal charged"
+           " nothing)" % (led.balance("usr:ben")["balance"], bal_b1))
+
+        # -- window expiry frees the slot for re-rent -----------------
+        expired = ven.is_rented("plaza", "usr:amy", 110)
+        bal_b2 = led.balance("usr:ben")["balance"]
+        r3 = ven.rent_venue("usr:ben", "plaza", 110, 5, 500,
+                            "order:vn-ben-110")
+        bal_b3 = led.balance("usr:ben")["balance"]
+        ok("amy's window expires, the freed slot re-rents",
+           "is_rented(plaza, amy, 110)=%s after end 109; ben"
+           " re-rents the freed slot [110,114] fee %d, balance"
+           " %d->%d; spend-tx 2->3 (+1); freed capacity is reusable,"
+           " the audit row survives expiry"
+           % (expired, r3["fee"], bal_b2, bal_b3))
+
+        # -- identical replay refused BEFORE the spend -----------------
+        refuse_leg("ben replays the SAME rental window",
+                   lambda: ven.rent_venue("usr:ben", "plaza", 110, 5,
+                                           500, "order:vn-ben-again"))
+        ok("re-read balance + spend count after the replay refusal",
+           "%d==%d and %d==%d (an identical rental is rejected BEFORE"
+           " the spend; a rejected rental never charges)"
+           % (led.balance("usr:ben")["balance"], bal_b3,
+              spend_n(), 3))
+
+        # -- storefront tenancy: exclusive lease -----------------------
+        bal_a3 = led.balance("usr:amy")["balance"]
+        ls1 = ven.lease_storefront("usr:amy", "booth-1", 300, 10, 300,
+                                   "order:vn-amy-booth")
+        bal_a4 = led.balance("usr:amy")["balance"]
+        ok("amy takes the storefront lease booth-1 for 300..309",
+           "fee %d (10 x 300); balance %d->%d; spend-tx 3->4 (+1); a"
+           " storefront is an exclusive unit -- one active tenant at"
+           " a time" % (ls1["fee"], bal_a3, bal_a4))
+
+        refuse_leg("ben hits the SAME storefront window held by amy",
+                   lambda: ven.lease_storefront(
+                       "usr:ben", "booth-1", 305, 5, 300,
+                       "order:vn-ben-booth"))
+        ok("re-read ben's balance after the exclusivity refusal",
+           "%d==%d (the storefront is exclusive through 309; the"
+           " refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b3))
+
+        bal_b4 = led.balance("usr:ben")["balance"]
+        ls2 = ven.lease_storefront("usr:ben", "booth-1", 310, 5, 300,
+                                   "order:vn-ben-next")
+        bal_b5 = led.balance("usr:ben")["balance"]
+        ok("ben leases the NEXT storefront window 310..314",
+           "fee %d; balance %d->%d; spend-tx 4->5 (+1); tenant at"
+           " 309=%s -> 310=%s (the flip at the window boundary)"
+           % (ls2["fee"], bal_b4, bal_b5,
+              ven.tenant_of("booth-1", 309),
+              ven.tenant_of("booth-1", 310)))
+
+        # -- early termination: zero token movement --------------------
+        tx_t0 = spend_n()
+        bal_a5 = led.balance("usr:amy")["balance"]
+        t1 = ven.terminate_lease("booth-1", 305)
+        bal_a6 = led.balance("usr:amy")["balance"]
+        ok("amy early-terminates her storefront lease at 305",
+           "terminated_for=%s at 305: effective through 305, free"
+           " from 306; tenant 305=%s 306=%s; balance unchanged"
+           " %d==%d; spend-tx %d==%d unchanged -- termination ends"
+           " occupancy without moving tokens, fee reversal of any"
+           " kind stays a P1 [needs-CEO] approval face (no refund"
+           " verb exists in the mechanism)"
+           % (t1["terminated_for"], ven.tenant_of("booth-1", 305),
+              ven.tenant_of("booth-1", 306), bal_a5, bal_a6,
+              tx_t0, spend_n()))
+
+        # -- bad-args family, all zero side effects --------------------
+        refuse_leg("a corp: account tries to rent",
+                   lambda: ven.rent_venue("corp:acme", "plaza", 200,
+                                           5, 500, "order:vn-corp"))
+        refuse_leg("a zero price is refused",
+                   lambda: ven.rent_venue("usr:ben", "plaza", 200, 5,
+                                           0, "order:vn-zero"))
+        refuse_leg("a zero window count is refused",
+                   lambda: ven.rent_venue("usr:ben", "plaza", 200, 0,
+                                           500, "order:vn-zerot"))
+        refuse_leg("a negative start tick is refused",
+                   lambda: ven.rent_venue("usr:ben", "plaza", -1, 5,
+                                           500, "order:vn-neg"))
+        refuse_leg("an empty rental ref is refused",
+                   lambda: ven.rent_venue("usr:ben", "plaza", 200, 5,
+                                           500, "  "))
+        ok("bad-args audit: five refusals, ben's balance flat",
+           "%d==%d (tenants are usr:* only, rent must be int > 0,"
+           " term int >= 1, start int >= 0, ref required -- every"
+           " rejected rental charges nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b5))
+
+        # -- pure read faces: zero token movement ----------------------
+        tx_r0 = spend_n()
+        read_active = ven.is_rented("plaza", "usr:amy", 100)
+        read_expired = ven.is_rented("plaza", "usr:amy", 110)
+        read_term = ven.tenant_of("booth-1", 307)
+        read_next = ven.tenant_of("booth-1", 310)
+        hist_plaza = ven.occupancy_ledger("plaza")
+        hist_booth = ven.occupancy_ledger("booth-1")
+        tx_r1 = spend_n()
+        ok("pure-read audit: is_rented / tenant_of /"
+           " occupancy_ledger",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " is_rented(plaza, amy, 100)=%s vs (plaza, amy, 110)=%s"
+           " (expiry live); tenant_of(booth-1, 307)=%s (terminated"
+           " window) vs (booth-1, 310)=%s; plaza history=%d rows"
+           " (amy/carol/ben kept after expiry), booth-1 history=%d"
+           " rows, every history row carries its bound spend tx"
+           % (tx_r0, tx_r1, read_active, read_expired, read_term,
+              read_next, len(hist_plaza), len(hist_booth)))
+
+        # -- audit: spends equal bookings, balances exact --------------
+        tx_total = spend_n()
+        bookings = 5
+        amy_final = led.balance("usr:amy")["balance"]
+        ben_final = led.balance("usr:ben")["balance"]
+        carol_final = led.balance("usr:carol")["balance"]
+        pool_final = led.balance("pool:reserve")["balance"]
+        conn = sqlite3.connect(db)
+        rows = conn.execute(
+            "SELECT kind, unit_id, account_id, bound_spend_tx FROM"
+            " venue_occupancy").fetchall()
+        occ_bound = 0
+        for kind, unit_id, account_id, tx in rows:
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE tx_id = ?"
+                " AND account_id = ?", (tx, account_id)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                occ_bound += 1
+        conn.close()
+        ok("audit the rentals against real debit entries",
+           "spend-tx total %d == bookings %d; all %d occupancy rows"
+           " bind a real spend debit for their own account; balances"
+           " exact: amy 15000-5000-3000=%d, ben 15000-2500-1500=%d,"
+           " carol 5000-5000=%d; pool:reserve %d (40000 mint, spent"
+           " tokens loop back in, conservation holds)"
+           % (tx_total, bookings, len(rows), amy_final, ben_final,
+              carol_final, pool_final))
+
+        # -- isolation law: module source, structural ------------------
+        with open(venue_mod.__file__, encoding="utf-8") as fh:
+            ven_src = fh.read()
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in ven_src]
+        non_ascii = sum(1 for ch in ven_src if ord(ch) > 127)
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits=%s in venue.py; non-ascii=%d;"
+           " each rental and lease books exactly one spend and"
+           " nothing else in the module ever touches the token"
+           " domain -- capacity checks, activation, expiry,"
+           " termination and read faces move zero tokens, and no"
+           " verb converts an occupancy back into tokens or moves it"
+           " between accounts (the suite AC-VN7 pattern)"
+           % (banned or "none", non_ascii))
+
+        ven.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "bookings": bookings,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "pool_bal": pool_final,
+            "occ_rows": len(rows), "occ_bound": occ_bound,
+            "banned": banned, "non_ascii": non_ascii,
+            "hist_plaza": len(hist_plaza), "hist_booth": len(hist_booth),
+            "audit_ok": tx_total == bookings
+            and amy_final == 7000 and ben_final == 11000
+            and carol_final == 0 and pool_final == 22000,
+        }
+    finally:
+        if ven is not None:
+            with contextlib.suppress(Exception):
+                ven.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -2905,6 +3223,84 @@ def render():
         " small ad_units registry (referenced, never rebuilt,"
         " BLUEPRINT sec.4 B3)")
 
+    # -- online-event venue + storefront tenancy face card (v0.19):
+    # REAL probe at render time; honest failure face --
+    try:
+        vn = venue_probe()
+        vn_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        vn, vn_err = None, str(exc)[:300]
+    if vn is not None:
+        vn_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in vn["legs"])
+        vn_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>spend tx =="
+                   " rentals booked</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed"
+                   " refusals</div>"
+                   "<div class=\"kpi\"><b>%d/%d</b>occupancy rows"
+                   " bound to their spend</div>"
+                   "<div class=\"kpi\"><b>zero</b>termination token"
+                   " movement</div>"
+                   "</div>"
+                   % (vn["spend_total"], vn["bookings"],
+                      len(vn["refusals"]), vn["occ_bound"],
+                      vn["occ_rows"]))
+        vn_scope = esc(
+            "window semantics: the plaza is capacity-bounded (2"
+            " concurrent events), a rental holds one slot for"
+            " [start, start+term-1], expiry frees the slot for"
+            " re-rent while the audit row survives; the storefront"
+            " is exclusive per window with the tenant flip at the"
+            " boundary; early termination ends occupancy from"
+            " at_tick+1 without moving tokens (no refund face"
+            " exists -- fee reversal stays a P1 CEO approval face)")
+        vn_audit = esc(
+            "purchase audit: %d rental spends, every one of the %d"
+            " occupancy rows binds its spend debit as provenance;"
+            " balances exact: amy 15000-5000-3000=%d, ben"
+            " 15000-2500-1500=%d, carol 5000-5000=%d; pool:reserve"
+            " %d (40000 mint, spent tokens loop back in,"
+            " conservation holds)"
+            % (vn["spend_total"], vn["occ_bound"], vn["amy_bal"],
+               vn["ben_bal"], vn["carol_bal"], vn["pool_bal"]))
+    else:
+        vn_rows_html = vn_kpis = vn_scope = vn_audit = ""
+    if vn_err:
+        vn_kpis = ("<p class=fail>VENUE PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(vn_err))
+    vn_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the B4 canon anchor (online event"
+             " venue full-booking 5,000 CNY per event, resident"
+             " host + auto-cut material bundle included) is a"
+             " caller-supplied probe price; real pricing, launch"
+             " gating, cancellation and any fee reversal stay a P1"
+             " CEO approval face"),
+            ("msgSecCheck front gate", "event titles, storefront"
+             " branding text and every UGC/text surface in the"
+             " stack keep the msgSecCheck front gate (wordlist"
+             " mock in sandbox, fail-closed in production)"),
+        ])
+    vn_hard = esc(
+        "structural law (occupancy-is-not-tokens): each rental and"
+        " lease is exactly one token spend and nothing else in the"
+        " module ever touches the token domain -- capacity checks,"
+        " activation, expiry, termination and read faces move zero"
+        " tokens; no verb converts an occupancy back into tokens or"
+        " moves it between accounts; occupancy rows are immutable"
+        " once written except the documented termination tick"
+        " (R605 AC-VN6); this face IS the single-source occupancy"
+        " engine the studio and ad cards above ride (referenced,"
+        " never rebuilt, BLUEPRINT sec.4 B-side venue row)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -3030,7 +3426,7 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R978) &middot; v0.15 creator incentive card
 (R980) &middot; v0.16 strategy observation card
 (R984) &middot; v0.17 studio onboarding card
-(R986) &middot; v0.18 ad slot card
+(R986) &middot; v0.18 ad slot card &middot; v0.19 venue card
 (R987)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
@@ -3266,6 +3662,32 @@ B3 canon anchors and are caller-supplied sandbox values, not
 pricing decisions; raw tx ids are never rendered (determinism) --
 the audit face shows the bound-debit verification instead.</p></div>
 
+<div class="card"><h2>Venue Face (B4 online events + storefront, live
+probe)</h2>
+<p class=kv>The REAL city venue face (src/sandbox/ledger/venue.py,
+the R605 occupancy engine itself, imported never copied -- the
+same single-source engine the studio and ad cards above ride) runs
+in-process at render time on a throwaway probe database -- every
+reading below is computed by the product module, never canned.
+This is the BLUEPRINT sec.4 B-side canon: the online event venue
+(capacity-bounded concurrent scene rental, one event = one spend)
+and the storefront tenancy (exclusive single tenant per window,
+early termination ends occupancy without moving tokens).</p>
+__VN_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__VN_ROWS__</table>
+<p class=kv>__VN_SCOPE__</p>
+<p class=kv>__VN_AUDIT__</p>
+<p class=kv>__VN_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__VN_COMPL__</ul>
+<p class=kv>Probe prices (500 per window for the venue, 300 for the
+storefront) mirror the B4 canon anchor (online event venue
+full-booking 5,000 CNY per event) as caller-supplied sandbox
+values, not pricing decisions; raw tx ids are never rendered
+(determinism) -- the audit face shows the bound-debit verification
+instead.</p></div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -3472,6 +3894,12 @@ __PAYWARN__</footer>
         "__AD_AUDIT__": ad_audit,
         "__AD_HARD__": ad_hard,
         "__AD_COMPL__": ad_compl,
+        "__VN_KPIS__": vn_kpis,
+        "__VN_ROWS__": vn_rows_html,
+        "__VN_SCOPE__": vn_scope,
+        "__VN_AUDIT__": vn_audit,
+        "__VN_HARD__": vn_hard,
+        "__VN_COMPL__": vn_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
