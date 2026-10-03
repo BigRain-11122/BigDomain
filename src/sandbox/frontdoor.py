@@ -173,6 +173,8 @@ import reconcile as recon_mod     # ledger reconcile engine (reuse, no copy)
 import props as props_mod         # city props/cosmetics face (reuse, no copy)
 import incentive as incentive_mod  # creator incentive face (reuse, no copy)
 import observation as observation_mod  # paid strategy observation (reuse, no copy)
+import venue as venue_mod         # venue occupancy engine (reuse, no copy)
+import studio as studio_mod       # studio onboarding annual-fee face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -1414,6 +1416,301 @@ def obs_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def st_probe():
+    """Run the REAL studio-onboarding annual-fee face (R625 product,
+    BLUEPRINT sec.4 B-side rows B1 game-studio 9,800 CNY/year + B2
+    quant-studio / researcher 19,800 CNY/year, joint delivery in one
+    registry) in-process at render time on a throwaway database
+    (F3 law: every reading below is computed by the product modules,
+    never canned). The seat rides the venue storefront exclusivity
+    gate (venue = the R605 occupancy engine, referenced never
+    rebuilt); every onboarding books exactly one token spend bound
+    into the occupancy row, and the registry is immutable once
+    written. Chain: mechanism registration is idempotent and refuses
+    kind drift -> onboarding an unregistered studio is refused with
+    zero charge -> one onboarding = one spend, window [year, year]
+    -> the same studio-year replays as a refusal BEFORE the spend
+    -> another account on the same studio-year is refused by the
+    venue exclusivity gate -> renewal = onboarding a later year
+    window (advance booking) -> two kinds are independent products
+    and parallel same-kind studios are legal -> bad-args family
+    refused -> canon three-benefit bundles -> profile reads bind the
+    purchase spend and move zero tokens -> audit: spends equal
+    onboardings, balances exact, pool conservation -> isolation law:
+    zero banned verbs and zero row-mutation surface in the module
+    source. Prices are caller-supplied probe values mirroring the
+    canon anchors (9,800 / 19,800 CNY per year); real pricing stays
+    a P1 CEO approval-only face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-st-")
+    led = None
+    ven = None
+    face = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        ven = venue_mod.VenueFace(led)
+        face = studio_mod.StudioFace(led, ven)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except studio_mod.StudioError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 200000, "probe:mint:reserve",
+                         "settlement")
+        for avatar in ("amy", "ben", "carol"):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", 50000),
+                        ("usr:" + avatar, "credit", 50000)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe residents",
+           "game-studio probe price 9800, quant-studio probe price"
+           " 19800 per year window (canon anchors B1 9,800 / B2"
+           " 19,800 CNY per year) -- caller-supplied probe values,"
+           " never pricing decisions")
+
+        # -- mechanism registration: idempotent + kind-drift gate ---
+        reg_g = face.register_studio("studio:pixelforge",
+                                     "game_studio")
+        reg_i = face.register_studio("studio:pixelforge",
+                                     "game_studio")
+        refuse_leg("re-register pixelforge under a DIFFERENT kind",
+                   lambda: face.register_studio(
+                       "studio:pixelforge", "quant_studio"))
+        reg_q = face.register_studio("studio:quantworks",
+                                     "quant_studio")
+        with open(studio_mod.__file__, encoding="utf-8") as fh:
+            st_src = fh.read()
+        conn = sqlite3.connect(db)
+        tables = [r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type = 'table'"
+            " AND name LIKE 'studio%'").fetchall()]
+        conn.close()
+        ok("register the two studios under their kinds",
+           "first=%s idempotent=%s quant=%s; registry tables=%s --"
+           " one small registry only, the module source has zero"
+           " direct INSERT INTO venue_occupancy (the venue stays the"
+           " engine, this face is the API)"
+           % (reg_g["idempotent"] is False,
+              reg_i["idempotent"] is True,
+              reg_q["idempotent"] is False, tables))
+
+        # -- registry gate: unknown studio, zero charge -------------
+        bal_b0 = led.balance("usr:ben")["balance"]
+        refuse_leg("ben tries to onboard an UNREGISTERED studio",
+                   lambda: face.onboard_studio(
+                       "usr:ben", "studio:ghostworks", 26, 9800,
+                       "order:st-ghost"))
+        ok("re-read ben's balance after the unknown-studio refusal",
+           "%d==%d (an unregistered studio is never onboardable; the"
+           " refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- one onboarding: one spend bound into the occupancy row --
+        tx0 = spend_n()
+        bal_a1 = led.balance("usr:amy")["balance"]
+        r1 = face.onboard_studio("usr:amy", "studio:pixelforge", 26,
+                                 9800, "order:st-amy-26")
+        bal_a2 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        occ = ven.occupancy_ledger("studio:pixelforge")
+        ok("amy onboards pixelforge for year-window 26",
+           "balance %d->%d (exact -9800); spend-tx %d->%d (+1);"
+           " window=%s; occupancy rows=%d, bound spend provenance=%s"
+           % (bal_a1, bal_a2, tx0, tx1, r1["window"], len(occ),
+              bool(occ) and occ[0]["bound_spend_tx"] is not None))
+
+        # -- same studio-year replay refused BEFORE the spend --------
+        refuse_leg("amy replays the SAME studio-year window",
+                   lambda: face.onboard_studio(
+                       "usr:amy", "studio:pixelforge", 26, 9800,
+                       "order:st-amy-26-again"))
+        ok("re-read balance + spend count after the replay refusal",
+           "%d==%d and %d==%d (the replay is rejected BEFORE the"
+           " spend; a rejected onboarding never charges)"
+           % (led.balance("usr:amy")["balance"], bal_a2,
+              spend_n(), tx1))
+
+        # -- venue exclusivity: another account, same studio-year ----
+        refuse_leg("ben hits the SAME studio-year held by amy",
+                   lambda: face.onboard_studio(
+                       "usr:ben", "studio:pixelforge", 26, 9800,
+                       "order:st-ben-26"))
+        ok("re-read ben's balance after the exclusivity refusal",
+           "%d==%d (the venue storefront gate is single-tenant per"
+           " window; the refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- renewal = a later year window (advance booking) ---------
+        tx2 = spend_n()
+        bal_a3 = led.balance("usr:amy")["balance"]
+        r2 = face.onboard_studio("usr:amy", "studio:pixelforge", 27,
+                                 9800, "order:st-amy-27")
+        tx3 = spend_n()
+        tenant26 = face.studio_tenant("studio:pixelforge", 26)
+        tenant27 = face.studio_tenant("studio:pixelforge", 27)
+        tenant28 = face.studio_tenant("studio:pixelforge", 28)
+        ok("amy renews pixelforge for year-window 27 in advance",
+           "balance %d->%d (exact -9800); spend-tx %d->%d (+1);"
+           " window=%s; tenants year26=%s year27=%s year28=%s (each"
+           " year window is its own seat, 28 is open)"
+           % (bal_a3, led.balance("usr:amy")["balance"], tx2, tx3,
+              r2["window"], tenant26, tenant27, tenant28))
+
+        # -- two kinds independent + parallel same-kind studio -------
+        tx4 = spend_n()
+        bal_a4 = led.balance("usr:amy")["balance"]
+        rq = face.onboard_studio("usr:amy", "studio:quantworks", 26,
+                                 19800, "order:st-amy-q26")
+        tx5 = spend_n()
+        face.register_studio("studio:indienest", "game_studio")
+        tx6 = spend_n()
+        bal_c1 = led.balance("usr:carol")["balance"]
+        rc = face.onboard_studio("usr:carol", "studio:indienest", 26,
+                                 9800, "order:st-carol-26")
+        tx7 = spend_n()
+        ok("kinds are independent: amy holds game + quant seats the"
+           " same year, carol onboards a parallel game studio",
+           "amy balance %d->%d (exact -19800, quant seat legal next"
+           " to the game seat); carol balance %d->%d (exact -9800,"
+           " second game studio legal); spend-tx %d->%d->%d (one per"
+           " seat); kinds=%s/%s"
+           % (bal_a4, led.balance("usr:amy")["balance"], bal_c1,
+              led.balance("usr:carol")["balance"], tx4, tx5, tx7,
+              rq["st_kind"], rc["st_kind"]))
+
+        # -- bad-args family, all zero side effects ------------------
+        refuse_leg("a corp: account tries to onboard",
+                   lambda: face.onboard_studio(
+                       "corp:acme", "studio:pixelforge", 26, 9800,
+                       "order:st-corp"))
+        refuse_leg("zero-price onboarding is refused",
+                   lambda: face.onboard_studio(
+                       "usr:ben", "studio:pixelforge", 28, 0,
+                       "order:st-zero"))
+        refuse_leg("a negative year window is refused",
+                   lambda: face.onboard_studio(
+                       "usr:ben", "studio:pixelforge", -1, 9800,
+                       "order:st-neg"))
+        refuse_leg("an empty onboarding ref is refused",
+                   lambda: face.onboard_studio(
+                       "usr:ben", "studio:pixelforge", 28, 9800,
+                       "   "))
+        ok("bad-args audit: four refusals, ben's balance flat",
+           "%d==%d (owners are usr:* only, price must be int > 0,"
+           " year must be int >= 0, ref required -- every rejected"
+           " onboarding charges nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- canon benefit bundles, read at runtime -------------------
+        ben_g = face.studio_benefits("studio:pixelforge")
+        ben_q = face.studio_benefits("studio:quantworks")
+        ok("read the canon three-benefit bundles B1 / B2",
+           "B1 game bundle=%s; B2 quant bundle=%s (BLUEPRINT sec.4"
+           " B1/B2 rows, static per kind, derived at runtime)"
+           % (ben_g["benefits"], ben_q["benefits"]))
+
+        # -- profile read faces: bound spends, zero token movement ---
+        tx8 = spend_n()
+        prof_a = face.studio_profile("usr:amy", 26)
+        prof_b = face.studio_profile("usr:ben", 26)
+        prof_a28 = face.studio_profile("usr:amy", 28)
+        face.studio_tenant("studio:pixelforge", 26)
+        tx9 = spend_n()
+        a_ids = sorted(s["studio_id"] for s in prof_a["subscriptions"])
+        ok("profile reads are pure and bind the purchase spends",
+           "spend-tx %d==%d unchanged -- profile/tenant reads move"
+           " zero tokens; amy@26 subscriptions=%s (every row carries"
+           " spend_tx=%s and year=26); ben@26=%s (no seat, no"
+           " leak); amy@28=%s (window scope only)"
+           % (tx8, tx9, a_ids,
+              all(s["spend_tx"] for s in prof_a["subscriptions"]),
+              [s["studio_id"] for s in prof_b["subscriptions"]],
+              [s["studio_id"] for s in prof_a28["subscriptions"]]))
+
+        # -- audit: spends equal onboardings, balances exact ---------
+        tx_total = spend_n()
+        onboardings = 4
+        amy_final = led.balance("usr:amy")["balance"]
+        ben_final = led.balance("usr:ben")["balance"]
+        carol_final = led.balance("usr:carol")["balance"]
+        pool_final = led.balance("pool:reserve")["balance"]
+        conn = sqlite3.connect(db)
+        reg_rows = conn.execute(
+            "SELECT COUNT(*) FROM studio_products").fetchone()[0]
+        occ_bound = conn.execute(
+            "SELECT COUNT(*) FROM venue_occupancy WHERE"
+            " bound_spend_tx IS NOT NULL").fetchone()[0]
+        conn.close()
+        ok("audit the seats against real debit entries",
+           "spend-tx total %d == onboardings %d; every one of the"
+           " %d occupancy rows binds a real spend debit as its"
+           " provenance; balances exact: amy 50000-9800-9800-19800"
+           "=%d, ben 50000==%d untouched, carol 50000-9800=%d;"
+           " pool:reserve %d (conservation); registry rows=%d"
+           % (tx_total, onboardings, occ_bound, amy_final,
+              ben_final, carol_final, pool_final, reg_rows))
+
+        # -- isolation law: module source, structural -----------------
+        banned = [w for w in ("refund", "withdraw", "convert",
+                              "transfer") if w in st_src]
+        no_direct_write = ("INSERT INTO venue_occupancy" not in st_src
+                           and "UPDATE" not in st_src)
+        ok("isolation law audit on the REAL module source",
+           "banned verbs found=%s; zero direct INSERT INTO"
+           " venue_occupancy and zero UPDATE surface=%s (the registry"
+           " is immutable once written, cancellation or fee reversal"
+           " of any kind stays a P1 [needs-CEO] approval face, and"
+           " no verb turns a subscription back into tokens)"
+           % (banned or "none", no_direct_write))
+        face.close()
+        ven.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "onboards": onboardings,
+            "ben_g": ben_g["benefits"], "ben_q": ben_q["benefits"],
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "reg_rows": reg_rows,
+            "occ_bound": occ_bound,
+            "banned": banned, "no_mutation": no_direct_write,
+            "tenant26": tenant26, "tenant27": tenant27,
+            "audit_ok": tx_total == onboardings
+            and ben_final == 50000 and amy_final == 10600
+            and carol_final == 40200,
+        }
+    finally:
+        if face is not None:
+            with contextlib.suppress(Exception):
+                face.close()
+        if ven is not None:
+            with contextlib.suppress(Exception):
+                ven.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -2116,6 +2413,79 @@ def render():
         " immutable grant row, pure reads move zero tokens, and the"
         " access gate is fail-closed (BLUEPRINT sec.4 C-end line 4)")
 
+    # -- studio onboarding face card (v0.17): REAL probe at render
+    # time; honest failure face --
+    try:
+        st = st_probe()
+        st_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        st, st_err = None, str(exc)[:300]
+    if st is not None:
+        st_rows = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in st["legs"])
+        st_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>spend tx =="
+                   " onboarded seats</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed"
+                   " refusals</div>"
+                   "<div class=\"kpi\"><b>%d+%d</b>canon benefits"
+                   " B1 + B2</div>"
+                   "<div class=\"kpi\"><b>%s</b>registry row-mutation"
+                   " surface</div>"
+                   "</div>"
+                   % (st["spend_total"], st["onboards"],
+                      len(st["refusals"]), len(st["ben_g"]),
+                      len(st["ben_q"]),
+                      "none" if st["no_mutation"] else "LEAK"))
+        st_scope = esc(
+            "window semantics: each year index is its own seat --"
+            " year 26 held by %s, the year-27 renewal books in"
+            " advance as its own seat (%s), year 28 stays open;"
+            " two kinds are independent products (one account may"
+            " hold a game seat and a quant seat the same year) and"
+            " parallel same-kind studios are legal"
+            % (st["tenant26"], st["tenant27"]))
+        st_audit = esc(
+            "purchase audit: %d onboarding spends, every one of the"
+            " %d occupancy rows binds its spend debit as provenance;"
+            " balances exact: amy 50000-9800-9800-19800=%d, ben"
+            " 50000==%d untouched, carol 50000-9800=%d; registry"
+            " rows=%d immutable"
+            % (st["spend_total"], st["occ_bound"], st["amy_bal"],
+               st["ben_bal"], st["carol_bal"], st["reg_rows"]))
+    else:
+        st_rows = st_kpis = st_scope = st_audit = ""
+    if st_err:
+        st_kpis = ("<p class=fail>STUDIO PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(st_err))
+    st_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the B1 9,800 / B2 19,800 CNY-per-year"
+             " canon anchors are caller-supplied probe prices; real"
+             " pricing, launch gating, cancellation and any fee"
+             " reversal stay a P1 CEO approval face"),
+            ("msgSecCheck front gate", "studio storefront branding"
+             " and every UGC/text surface in the stack keep the"
+             " msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+    st_hard = esc(
+        "structural law (onboarding-is-not-tokens): each onboarding"
+        " is exactly one token spend and nothing else in the module"
+        " ever touches the token domain -- profile, benefit and"
+        " tenant faces move zero tokens, no verb turns a"
+        " subscription back into tokens or moves it between"
+        " accounts, and the registry is immutable once written; the"
+        " occupancy engine stays the venue (referenced, never"
+        " rebuilt, BLUEPRINT sec.4 B1/B2)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -2240,7 +2610,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R977) &middot; v0.14 city props card
 (R978) &middot; v0.15 creator incentive card
 (R980) &middot; v0.16 strategy observation card
-(R984)</span></header>
+(R984) &middot; v0.17 studio onboarding card
+(R986)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -2424,6 +2795,31 @@ __OB_ROWS__</table>
 CNY canon anchors and are caller-supplied sandbox values, not
 pricing decisions; raw tx ids are never rendered (determinism) --
 the audit face shows the bound-debit verification instead.</p></div>
+
+<div class="card"><h2>Studio Onboarding Face (B1/B2 annual fee,
+live probe)</h2>
+<p class=kv>The REAL studio-onboarding annual-fee face
+(src/sandbox/ledger/studio.py over the venue occupancy engine and
+the P-47-2 token ledger, all imported, never copied) runs
+in-process at render time on a throwaway probe database -- every
+reading below is computed by the product modules, never canned.
+This is the BLUEPRINT sec.4 B-side onboarding canon: B1 game-studio
+9,800 CNY/year and B2 quant-studio / researcher 19,800 CNY/year,
+joint delivery in one registry -- each onboarding books exactly one
+token spend and the seat rides the venue storefront exclusivity
+gate.</p>
+__ST_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__ST_ROWS__</table>
+<p class=kv>__ST_SCOPE__</p>
+<p class=kv>__ST_AUDIT__</p>
+<p class=kv>__ST_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__ST_COMPL__</ul>
+<p class=kv>Probe prices (9800 / 19800 tokens) mirror the B1 / B2
+canon anchors and are caller-supplied sandbox values, not pricing
+decisions; raw tx ids are never rendered (determinism) -- the audit
+face shows the bound-debit verification instead.</p></div>
 
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
@@ -2619,6 +3015,12 @@ __PAYWARN__</footer>
         "__OB_AUDIT__": ob_audit,
         "__OB_HARD__": ob_hard,
         "__OB_COMPL__": ob_compl,
+        "__ST_KPIS__": st_kpis,
+        "__ST_ROWS__": st_rows,
+        "__ST_SCOPE__": st_scope,
+        "__ST_AUDIT__": st_audit,
+        "__ST_HARD__": st_hard,
+        "__ST_COMPL__": st_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
