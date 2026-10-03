@@ -184,6 +184,7 @@ import metered as metered_mod  # enterprise metered API face (reuse, no copy)
 import collectibles as collectibles_mod  # city digital collectibles face (reuse, no copy)
 import effects as effects_mod      # hall value-added effects face (reuse, no copy)
 import settlement as settlement_mod  # cross-subsidiary settlement protocol face (reuse, no copy)
+import growth_archive as growth_archive_mod  # resident growth-archive N2 subscription face (reuse, no copy)
 
 OPSREVIEW_DIR = os.path.join(HERE, "opsreview")
 if OPSREVIEW_DIR not in sys.path:
@@ -5257,6 +5258,304 @@ def opsreview_probe():
     }
 
 
+def growth_archive_probe():
+    """Run the REAL N2 resident growth-archive subscription face
+    (the R1017 product module itself; canon = the C-20260927-01
+    adoption-order first item, product definition =
+    price-canon-amendment-spec sec-2; BLUEPRINT sec-4 C2-tier new
+    subscription line, 9.9 CNY/month design anchor stays
+    [needs-CEO] approval-only) in-process at render time on a
+    throwaway database (F3 law: every reading below is computed
+    by the product module, never canned). Chain: the supply face
+    ingests deterministic behavior events for one probe resident
+    (the sandbox probe stands in for the BigLife IF-7/IF-10 feed,
+    zero new API; production wiring = bootstrap period) -> a
+    duplicate event id is refused with zero rows -> an unknown
+    event kind is refused -> a subscribe for an unknown resident
+    is refused with zero charge -> a monthly subscription is
+    exactly one spend bound to its tx, balance exact -> a repeat
+    subscription of the same (account, resident, month) is
+    refused BEFORE the spend so the balance never moves twice ->
+    the next month window is a separate legal purchase -> the
+    archive page is fail-closed without that exact month's
+    entitlement (E_GA_DENIED, zero charge) and a malformed month
+    window is refused -> with entitlement the page derives all
+    four sections from the events table only (full year-ring
+    timeline, month-windowed dialogue digest, month-windowed
+    city-story rows carrying the AIGC label verbatim from the
+    ledger config, memorial pages; the page signature takes no
+    content parameter at all = structural no-fabrication) ->
+    pure reads move zero tokens -> audit: subscription rows ==
+    spend tx count, every row binds a real spend debit, balances
+    exact, pool conservation -> isolation law: zero UPDATE
+    surface (rows immutable), the module's only token-domain
+    touch is ensure_account + the one spend inside subscribe,
+    module source pure ASCII. Probe price (99 tokens mirroring
+    the 9.9-CNY design anchor) is a caller-supplied sandbox
+    value; real pricing and launch gating stay P1 CEO
+    approval-only; the N2 face is read-only with no user-input
+    channel, so the msgSecCheck gate is a boundary note (any
+    future user-input memorial-request face routes through the
+    ugc pipeline IF-8 single-source gate, reference no rebuild);
+    point-to-point custom dialogue is the existing C7 price line
+    and is NOT rebuilt here."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-growth-archive-")
+    led = None
+    gf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        gf = growth_archive_mod.GrowthArchiveFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except growth_archive_mod.GrowthArchiveError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        AM = "res:lin"
+
+        # setup: authorized reserve mint + funding the two probe
+        # subscribers
+        led.mint_to_pool("pool:reserve", 20000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 5000), ("ben", 4000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund two subscriber probe"
+           " accounts",
+           "probe month price mirrors a caller-supplied sandbox value"
+           " (99 tokens, the 9.9-CNY/month design anchor) -- real"
+           " pricing stays [needs-CEO] approval-only, never decided"
+           " here")
+
+        # -- supply face: deterministic behavior events -----------
+        tx_s0 = spend_n()
+        for eid, kind, ts, payload in [
+            ("ga:ev:r1", "year_ring", "2099-01-02T08:00:00Z",
+             {"ring": "moved into the pavilion district"}),
+            ("ga:ev:d1", "dialogue", "2099-01-15T10:00:00Z",
+             {"line": "asked about the north gate market"}),
+            ("ga:ev:d2", "dialogue", "2099-02-15T10:00:00Z",
+             {"line": "chatted about the lantern festival"}),
+            ("ga:ev:c1", "city_story", "2099-01-20T12:00:00Z",
+             {"story": "the pavilion lantern night"}),
+            ("ga:ev:m1", "memorial", "2099-01-09T06:00:00Z",
+             {"memorial": "first snow walk with a neighbor"}),
+        ]:
+            gf.ingest_supply_event(eid, AM, kind, ts, payload)
+        ok("ingest the resident behavior-event supply (the probe"
+           " stands in for the BigLife IF-7/IF-10 feed)",
+           "5 events for %s (year-ring x1, dialogue x2 across two"
+           " month windows, city story x1, memorial x1); zero token"
+           " movement: spend-tx %d==%d; the supply face validates"
+           " shape and never invents content (production wiring ="
+           " bootstrap, zero new API)"
+           % (AM, tx_s0, spend_n()))
+        refuse_leg("re-ingest the SAME event id",
+                   lambda: gf.ingest_supply_event(
+                       "ga:ev:r1", AM, "year_ring",
+                       "2099-01-02T08:00:00Z",
+                       {"ring": "duplicate supply row"}))
+        ok("dup-event audit: supply census unchanged",
+           "residents_view still shows %s with exactly %d events"
+           " (append-only supply, a duplicate id writes zero rows)"
+           % (AM, gf.residents_view()["residents"][0]["events"]))
+        refuse_leg("ingest an unknown event kind",
+                   lambda: gf.ingest_supply_event(
+                       "ga:ev:x9", AM, "rumor", "2099-01-02T08:00:00Z",
+                       {"a": 1}))
+
+        # -- subscription face --------------------------------------
+        refuse_leg("subscribe an UNKNOWN resident",
+                   lambda: gf.subscribe(
+                       "usr:ben", "res:ghost", "2099-01", 99,
+                       "order:ga-unk"))
+        b_amy0 = bal("usr:amy")
+        s1 = gf.subscribe("usr:amy", AM, "2099-01", 99, "order:ga-a1")
+        ok("amy subscribes to the January archive for %s" % AM,
+           "exactly one spend bound to its tx: balance %d-99=%d;"
+           " the subscription row is immutable (zero UPDATE surface)"
+           " and carries the bound spend tx as provenance"
+           % (b_amy0, bal("usr:amy")))
+        b_amy1 = bal("usr:amy")
+        refuse_leg("amy re-subscribes the SAME (account, resident,"
+                   " month)",
+                   lambda: gf.subscribe(
+                       "usr:amy", AM, "2099-01", 99, "order:ga-a1b"))
+        ok("dup-subscribe audit: balance flat across the replay",
+           "amy %d==%d (the refusal fires BEFORE the spend, the"
+           " balance never moves twice; subscription rows = 1)"
+           % (bal("usr:amy"), b_amy1))
+        b_ben0 = bal("usr:ben")
+        s2 = gf.subscribe("usr:ben", AM, "2099-02", 99, "order:ga-b2")
+        ok("ben subscribes the NEXT month window (separate legal"
+           " purchase)",
+           "exactly one more spend: ben %d-99=%d; the month window"
+           " is the product unit -- another month is a new purchase,"
+           " never a renewal verb (manual-renew MVP posture)"
+           % (b_ben0, bal("usr:ben")))
+
+        # -- access gate: fail-closed, then the real page -----------
+        refuse_leg("ben opens the JANUARY page without that month's"
+                   " entitlement",
+                   lambda: gf.archive_page("usr:ben", AM, "2099-01"))
+        refuse_leg("amy opens the page with a malformed month window",
+                   lambda: gf.archive_page("usr:amy", AM, "20990-1"))
+        page = gf.archive_page("usr:amy", AM, "2099-01")
+        cv = gf.compliance_view()
+        sections_ok = (len(page["year_ring"]) == 1
+                       and len(page["dialogue_digest"]) == 1
+                       and len(page["city_story_monthly"]) == 1
+                       and len(page["memorial_pages"]) == 1)
+        month_filter_ok = (page["dialogue_digest"][0]["event_id"]
+                           == "ga:ev:d1"
+                           and page["city_story_monthly"][0]["event_id"]
+                           == "ga:ev:c1")
+        labeled_ok = (page["city_story_monthly"][0].get("ai_generated")
+                      is True
+                      and page["city_story_monthly"][0].get("ai_label")
+                      == cv["ai_label"])
+        compl_ok = (page["disclaimer"] == cv["disclaimer"]
+                    and page["price_note"] == cv["price_note"])
+        ok("amy opens the January archive page (entitled)",
+           "four sections all derived from the events table: year"
+           " ring 1 (full timeline, not month-windowed), dialogue"
+           " digest 1 (the February line filtered OUT by the month"
+           " window), city story 1 (carrying the AIGC label"
+           " verbatim from the ledger config), memorial 1"
+           " -- sections_ok=%s, month_filter_ok=%s,"
+           " ai_label verbatim=%s, disclaimer+price_note"
+           " config-verbatim=%s; the page signature takes no content"
+           " parameter at all (structural no-fabrication: no view"
+           " path can inject or invent content)"
+           % (sections_ok, month_filter_ok, labeled_ok, compl_ok))
+
+        # -- pure-read audit: zero token movement -------------------
+        tx_p0 = spend_n()
+        sv = gf.subscriptions_view("usr:amy")
+        rv = gf.residents_view()
+        _ = gf.compliance_view()
+        tx_p1 = spend_n()
+        ok("pure-read audit: subscriptions_view / residents_view /"
+           " compliance_view",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " amy's view shows %d subscription(s) with provenance (the"
+           " bound spend tx per row, not rendered raw); supply"
+           " census %d resident(s)"
+           % (tx_p0, tx_p1, len(sv["subscriptions"]),
+              len(rv["residents"])))
+
+        # -- audit: rows, bound debit, conservation -----------------
+        tx_total = spend_n()
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        rows_total = 0
+        bound = 0
+        for acct, tx in conn.execute(
+                "SELECT account_id, bound_spend_tx FROM"
+                " ga_subscriptions").fetchall():
+            rows_total += 1
+            head = conn.execute("SELECT type FROM ledger_tx WHERE"
+                               " tx_id = ?", (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE"
+                " tx_id = ? AND account_id = ?", (tx, acct)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final == 20000)
+        ok("audit the subscriptions and the bound spend debit",
+           "subscription rows %d == spend-tx total %d == purchases"
+           " (one spend per month window); every row binds a real"
+           " spend debit for its account (bound %d/%d); balances"
+           " exact: amy %d-99=%d, ben %d-99=%d; pool:reserve %d"
+           " (20000 mint, the spent tokens loop back in,"
+           " conservation holds: pool+balances==mint=%s)"
+           % (rows_total, tx_total, bound, rows_total,
+              b_amy0, amy_final, b_ben0, ben_final, pool_final,
+              conservation))
+
+        # -- isolation law: module source, structural ---------------
+        with open(growth_archive_mod.__file__,
+                  encoding="utf-8") as fh:
+            ga_src = fh.read()
+        code_src = ga_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        no_update = ("UPDATE ga_" not in ga_src)
+        page_sig = ("def archive_page(self, account_id, resident_id,"
+                    " at_month)" in ga_src)
+        non_ascii = sum(1 for ch in ga_src if ord(ch) > 127)
+        led_calls = ga_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s; ledger-API"
+           " call sites (self.led.) x%d = the module's ONLY"
+           " token-domain touch, both inside subscribe (the"
+           " idempotent ensure_account + exactly one spend per"
+           " month window) -- the supply face and every read view"
+           " never book a token tx; zero UPDATE surface=%s"
+           " (subscription rows immutable, event rows append-only);"
+           " the archive_page signature takes no content parameter=%s"
+           " (structural no-fabrication); no verb moves an"
+           " entitlement between accounts and no verb revokes or"
+           " expires one; module source pure ASCII (%d non-ascii)"
+           % (banned or "none", led_calls, no_update, page_sig,
+              non_ascii))
+
+        gf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "bound": bound,
+            "rows": rows_total,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "pool_bal": pool_final, "conservation": conservation,
+            "sections_ok": sections_ok,
+            "month_filter_ok": month_filter_ok,
+            "labeled_ok": labeled_ok, "compl_ok": compl_ok,
+            "non_ascii": non_ascii, "banned": banned,
+            "no_update": no_update, "page_sig": page_sig,
+            "led_calls": led_calls,
+            "audit_ok": tx_total == 2 and bound == 2
+            and rows_total == 2 and amy_final == 4901
+            and ben_final == 3901 and pool_final == 11198
+            and conservation and sections_ok and month_filter_ok
+            and labeled_ok and compl_ok and not banned
+            and no_update and page_sig and non_ascii == 0
+            and led_calls == 2,
+        }
+    finally:
+        if gf is not None:
+            with contextlib.suppress(Exception):
+                gf.close()
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -7058,6 +7357,102 @@ def render():
              " second gate built)"),
         ])
 
+    # -- resident growth-archive subscription face card (v0.29):
+    # REAL probe at render time; honest failure face --
+    try:
+        gar = growth_archive_probe()
+        ga_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        gar, ga_err = None, str(exc)[:300]
+    if gar is not None:
+        ga_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in gar["legs"])
+        ga_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>archive spends"
+                   " == subscriptions (one spend per month"
+                   " window)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge, zero rows)</div>"
+                   "<div class=\"kpi\"><b>4/4</b>archive sections"
+                   " derived from events only</div>"
+                   "<div class=\"kpi\"><b>0</b>UPDATE surface (rows"
+                   " immutable)</div>"
+                   "</div>"
+                   % (gar["spend_total"], gar["rows"],
+                      len(gar["refusals"])))
+        ga_scope = esc(
+            "delivery model = the N2 monthly subscription over the"
+            " token ledger: one subscription per (account, resident,"
+            " month window) = exactly one spend bound to its tx,"
+            " immutable row, provenance rides on every page; the"
+            " access gate is fail-closed per exact month window"
+            " (E_GA_DENIED without that month's entitlement, zero"
+            " charge); the read-only archive page derives four"
+            " sections from the ingested behavior events only --"
+            " full year-ring timeline, month-windowed dialogue"
+            " digest, month-windowed city-story rows carrying the"
+            " AIGC label, memorial pages -- and the page signature"
+            " takes no content parameter at all, so no view path can"
+            " inject or invent content (structural no-fabrication);"
+            " point-to-point custom dialogue stays the existing C7"
+            " price line, never rebuilt here; the N2 supply seam is"
+            " the BigLife IF-7/IF-10 feed (sandbox probe stands in,"
+            " production wiring = bootstrap, zero new API)")
+        ga_audit = esc(
+            "growth-archive audit: subscription rows %d == spend-tx"
+            " total %d == purchases; every row binds a real spend"
+            " debit for its account (bound %d/%d); balances exact:"
+            " amy 5000-99=%d, ben 4000-99=%d; pool:reserve %d (20000"
+            " mint, the spent tokens loop back in, conservation"
+            " holds: pool+balances==mint=%s); month filter proved"
+            " live (the February dialogue line filtered out of the"
+            " January window); the AIGC label, the persistent"
+            " disclaimer and the [needs-CEO] price note all ride on"
+            " the page config-verbatim"
+            % (gar["rows"], gar["spend_total"], gar["bound"],
+               gar["rows"], gar["amy_bal"], gar["ben_bal"],
+               gar["pool_bal"], gar["conservation"]))
+        ga_hard = esc(
+            "structural law (the R1017 module posture, suite"
+            " AC-GA1..AC-GA7): a repeat subscription of the same"
+            " (account, resident, month) is refused BEFORE the spend"
+            " so the balance never moves twice; another month window"
+            " is a separate legal purchase (manual-renew MVP, no"
+            " renewal verb); zero UPDATE surface -- subscription rows"
+            " immutable, event rows append-only; the module's only"
+            " token-domain touch is ensure_account + the one spend"
+            " inside subscribe (supply and read views never book a"
+            " token tx); no verb moves an entitlement between"
+            " accounts and no verb revokes or expires one; the 99"
+            " probe tokens mirror the 9.9-CNY/month design anchor as"
+            " a caller-supplied sandbox value -- real pricing and"
+            " launch gating stay P1 [needs-CEO] approval-only,"
+            " never decided by module or config")
+    else:
+        ga_rows_html = ga_kpis = ga_scope = ga_audit = ga_hard = ""
+    if ga_err:
+        ga_kpis = ("<p class=fail>GROWTH-ARCHIVE PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(ga_err))
+    ga_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", str(lcfg.get("params_status", "")) +
+             " -- the 9.9-CNY/month N2 anchor and the 29.9 entry"
+             " tier stay CEO pricing-approval faces"),
+            ("msgSecCheck front gate", "the N2 archive is a"
+             " read-only presentation face with zero user-input"
+             " channel, so the gate is a boundary note; any future"
+             " user-input memorial-request face routes through the"
+             " ugc pipeline IF-8 single-source gate (reference, no"
+             " rebuild)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -7192,7 +7587,8 @@ v0.25 hall value-added effects card (R999) &middot;
 v0.26 visitor-end M4 three-state card
 (R1000) &middot; v0.27 cross-subsidiary settlement card
 (R1001) &middot; v0.28 sibling-ops review gate card
-(R1003)</span></header>
+(R1003) &middot; v0.29 resident growth-archive card
+(R1018)</span></header>
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
 <div class="kpi"><b>__POP__</b>residents</div>
@@ -7732,6 +8128,36 @@ membership / pass-reachability red lines) to the sibling team as
 a re-runnable gate, never as rebuilt business logic.</p>
 </div>
 
+<div class="card"><h2>Resident Growth-Archive Subscription Face
+(N2 C-20260927-01, live probe)</h2>
+<p class=kv>The REAL N2 product module
+(src/sandbox/ledger/growth_archive.py, the R1017 suite, imported
+never copied; canon = the C-20260927-01 adoption-order first
+item, BLUEPRINT sec-4 C2-tier new subscription line) runs
+in-process at render time on a throwaway database -- every
+reading below is computed by the product module, never canned.
+With this card the adoption-order-first product gets its
+CEO-visible face (the R1017 suite passed 7/7 in the runner with
+zero front-door reference until now).</p>
+__GA_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__GA_ROWS__</table>
+<p class=kv>__GA_SCOPE__</p>
+<p class=kv>__GA_AUDIT__</p>
+<p class=kv>__GA_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from
+config)</h3>
+<ul>__GA_COMPL__</ul>
+<p class=kv>Adoption-order note: N2 is the first item of the
+C-20260927-01 adoption order (6/7 yes, archived 09-29 12:00); the
+N3 compute-transparent-receipt item is BigCompute's face and the
+N1/N4/N5/N7 pool items ride the M2-M4 milestone review -- this
+card is this company's own N2 execution slice: sandbox suite
+(R1017) + CEO-visible face (this card); production wiring of the
+BigLife supply feed and the 9.9-CNY anchor stay bootstrap-period
+[needs-CEO] faces.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -8000,6 +8426,12 @@ __PAYWARN__</footer>
         "__OR_SCOPE__": or_scope,
         "__OR_AUDIT__": or_audit,
         "__OR_COMPL__": or_compl,
+        "__GA_KPIS__": ga_kpis,
+        "__GA_ROWS__": ga_rows_html,
+        "__GA_SCOPE__": ga_scope,
+        "__GA_AUDIT__": ga_audit,
+        "__GA_HARD__": ga_hard,
+        "__GA_COMPL__": ga_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

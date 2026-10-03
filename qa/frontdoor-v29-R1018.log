@@ -1,0 +1,33 @@
+PASS AC-FD29d double render N2 card block byte-identical (8471 chars)
+PASS AC-FD29d zero unfilled placeholders (found [])
+PASS AC-FD29e card count = 31 (got 31)
+PASS AC-FD29e card title on page
+PASS AC-FD29e header v0.29 line present
+PASS AC-FD29e honest-failure face absent (probe ran)
+PASS AC-FD29b probe fact on page: spend-tx 0==0
+PASS AC-FD29b probe fact on page: refused: E_GA_DUP_EVENT
+PASS AC-FD29b probe fact on page: refused: E_GA_BAD_EVENT
+PASS AC-FD29b probe fact on page: refused: E_GA_UNKNOWN
+PASS AC-FD29b probe fact on page: refused: E_GA_DUP
+PASS AC-FD29b probe fact on page: refused: E_GA_DENIED
+PASS AC-FD29b probe fact on page: refused: E_GA_BAD_MONTH
+PASS AC-FD29b probe fact on page: balance 5000-99=4901
+PASS AC-FD29b probe fact on page: ben 4000-99=3901
+PASS AC-FD29b probe fact on page: conservation holds: pool+balances==mint=True
+PASS AC-FD29b probe audit_ok=True (rows==spends==purchases, bound debits, balances, conservation, month filter, ai-label verbatim, isolation)
+PASS AC-FD29b four sections derived + February line filtered out (live, not canned)
+PASS AC-FD29b AIGC label + disclaimer + price note config-verbatim on the page payload
+PASS AC-FD29b one spend per month window: 2 spends == 2 subscription rows, both bound to real spend debits
+PASS AC-FD29a frontdoor source pure ASCII (429885 bytes)
+PASS AC-FD29a module imported (never copied)
+PASS AC-FD29a module isolation law: ASCII, zero banned verbs, zero UPDATE surface, no-content-param page signature, exactly 2 ledger call sites
+PASS AC-FD29c AIGC label verbatim on page
+PASS AC-FD29c non-advisory disclaimer verbatim on page
+PASS AC-FD29c [needs-CEO] price note (params_status) verbatim on page
+PASS AC-FD29c msgSecCheck front-gate boundary note + IF-8 single-source reference on page
+PASS AC-FD29a write set = frontdoor.py single file (git status verified separately)
+SUITE PASS 28/28
+RUNNER: growth-archive-card checks 28/28 green
+PASS AC-FD29e liveness: old PID 47092 terminated, new PID 3796 serving, healthz=200
+PASS AC-FD29e live page fetch: status=200, cards=31, N2 title=True, header v0.29=True
+PASS AC-FD29f full regression: RUNNER PASS 28/28 suites 238 criteria, reconcile controls 6/6 (qa/reconcile-all-R1018.log, 20.3s, zero regression)
