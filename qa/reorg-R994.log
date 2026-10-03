@@ -1,0 +1,21 @@
+AC-R1801 pre-op: 83181B dual-gauge, HEAD==disk byte-identical (sha16 c17498706a59df35), tick 993, log 62 items, no BOM no trailing LF, canonical round-trip PASS; round-start tree = ['M src/os/backlog.md'] (backlog.md single dirty = own R994 pre-registration row)
+AC-R1802 window = [R179 rolling summary + R991..R993 three pairs] 7 rows identified (13720B content); kept=0 (window extends to log tail, no fourth pair, R985/R988/R991 isomorph); head block 55 items verbatim (66941B content)
+probe pre  : {"W": 60, "idle": 37, "idle_round": 8, "nop": 2, "wait": 2, "round": 27, "tokens": 11, "sub": 8}  (== read-only calibration this round, register method computed before writing)
+AC-R1802 catalog chain: R160 base 286 (tail C-K163a) + 17 archive links R940..R988 + R991 link = 518, arithmetic continuous, per-link list length verified (base exact-tail asserted, links count-asserted; R991 link extracts the R178 roll embedded 4=AC-R1771/AC-FD17a/AC-FD18a/AC-AD7)
+AC-R1802 catalog: live R179 roll embedded 5 new (518->523) + window new 3 'AC-R1791/AC-FD21a/AC-FD22a' (folded-line extraction vs retained-set diff + catalog-set exclusion, R979 wide-engine criterion) = 523->526; win[0] zero-new verified; missing=[] asserted
+AC-R1802 compress-precedent list carried mechanically (range end R758..R988 -> R758..R991, latest completed fold before this round; canonical single-paren output, R179 double-paren artifact normalized)
+probe post projection: {"W": 56, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 23, "tokens": 9, "sub": 6}  (asserted pre-write); export self_drive pre-op re-derivation (58, 35, 2, 11) == stored register
+export self_drive post projection: W/idle/nop/sub = 54/35/2/9 (W 58-7+3, nop 2 flat R179-roll carries no tag, sub = W-idle-tokens-P2 formula carried)
+AC-R1804 in-fold projection: post-fold 74411 B, final 77329 B margin 1171 B (<= 78,500B gate satisfied in-fold)
+S_new 4998 B / E_new 2633 B / T_new 269 B structural constraints all pass (prefixes, tag accounting, no forbidden tags)
+AC-R1803b top fields flat (DEC 131 tokens / ORD 2026-09-28 22:1x / GORD 152 flat / BENCH 2026-10-03), tick 993->994 only, head region byte-identical except tick digit
+gated-file trigger check: legal-review draft (HQ window 10-03 12:00 not yet due) + BigLife R777 review file double-path zero hits = not delivered, chronic continuation (backlog open rows carry)
+PHASE B (--write): verify-then-write sequence
+AC-R1801 backup logs/state-preop-R994.bak written byte-identical (83181B)
+AC-R1803c archive pure-append: 14929531 -> 15012793 B; markers 172 -> 173
+AC-R1803d state.json written (temp+replace, re-read asserted: tick 994, log 58 items = 55 head + 1 roll + 2 closeout, probe in-register, dual-gauge parse pass)
+AC-R1804 final size: 77329 B, margin 1171 B under 78,500B gate; post-fold 74411 B
+export refreshed: export_ts=2026-10-03T10:22:35+08:00 tick-row 994, R180 result row appended, self_drive 54/35/2/9 zero-hardcode re-derived, method note appended, BOM utf-8-sig parse-back PASS
+heartbeat R994 row appended
+AC-R1805 delivery: state log R994 lines + backlog R994 done row + commit contains P-2026-09-25-18 (P-51 protocol)
+GORD flat companion note: canonical scan sha16 257A6CC1056A1759 same baseline gord_new_rows=0, last_gord_tbl_rows 152 unchanged, CEO physicals zone unchanged. D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 131 tokens flat), (2) group orders CEO-physicals zone zero change. Fold-round write set discipline: backlog + state.json + archive + backup + qa log + export + heartbeat only (git set: 5 files, logs/ gitignored disk-side double insurance).
