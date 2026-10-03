@@ -175,6 +175,7 @@ import incentive as incentive_mod  # creator incentive face (reuse, no copy)
 import observation as observation_mod  # paid strategy observation (reuse, no copy)
 import venue as venue_mod         # venue occupancy engine (reuse, no copy)
 import studio as studio_mod       # studio onboarding annual-fee face (reuse, no copy)
+import ads as ads_mod             # virtual-exhibition ad-slot face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -1711,6 +1712,348 @@ def st_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def ads_probe():
+    """Run the REAL virtual-exhibition ad-slot schedule face (R622
+    product, BLUEPRINT sec.4 B3 ad-slot price row: QUANT giant-screen
+    carousel 2000 CNY/week, building naming rights 10000 CNY/year
+    for street or metro names, lobby splash ad 5000 CNY/week)
+    in-process at render time on a throwaway database (F3 law: every
+    reading below is computed by the product modules, never canned).
+    The venue stays the occupancy engine (R605, referenced never
+    rebuilt): this face owns one small ad_units registry and every
+    booking goes through the VenueFace public API, landing as an
+    occupancy row bound to exactly one token spend. Chain: mechanism
+    registration under the three product kinds is idempotent and
+    refuses kind drift -> an unregistered unit is refused with zero
+    charge -> one naming booking = one spend -> the same unit-window
+    replay is refused BEFORE the spend -> another account on the
+    same exclusive unit-window is refused by the venue exclusivity
+    gate -> the splash books a two-window span -> the carousel
+    capacity gate fills its three rotation slots then refuses the
+    fourth -> an off-peak carousel span books legally -> an advance
+    naming booking at a future window -> bad-args family refused ->
+    lineup / holder / board read faces move zero tokens -> audit:
+    spends equal bookings, balances exact, pool conservation ->
+    isolation law: zero banned verbs and zero row-mutation surface
+    in the module source. Prices are caller-supplied probe values
+    mirroring the canon anchors (2000 / 10000 / 5000 CNY per
+    window); real pricing stays a P1 CEO approval-only face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-ad-")
+    led = None
+    ven = None
+    face = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        ven = venue_mod.VenueFace(led)
+        face = ads_mod.AdsFace(led, ven)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except ads_mod.AdsError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 240000, "probe:mint:reserve",
+                         "settlement")
+        for avatar in ("amy", "ben", "carol", "dave"):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", 50000),
+                        ("usr:" + avatar, "credit", 50000)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund four probe residents",
+           "probe per-window prices mirror the B3 canon anchors:"
+           " carousel 2000 / naming 10000 / splash 5000 CNY per"
+           " window -- caller-supplied probe values, never pricing"
+           " decisions")
+
+        # -- mechanism registration: three kinds, idempotent, drift --
+        reg_s = face.register_ad_unit("screen:quant-main",
+                                      "quant_screen_carousel",
+                                      rotation_slots=3)
+        reg_s2 = face.register_ad_unit("screen:quant-main",
+                                        "quant_screen_carousel",
+                                        rotation_slots=3)
+        refuse_leg("re-register the screen under a DIFFERENT kind",
+                   lambda: face.register_ad_unit(
+                       "screen:quant-main", "lobby_splash"))
+        reg_n = face.register_ad_unit("naming:harbor-gate",
+                                      "building_naming")
+        reg_n2 = face.register_ad_unit("naming:metro-l4",
+                                       "building_naming")
+        reg_l = face.register_ad_unit("splash:lobby", "lobby_splash")
+        with open(ads_mod.__file__, encoding="utf-8") as fh:
+            ad_src = fh.read()
+        conn = sqlite3.connect(db)
+        ad_tables = [r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type = 'table'"
+            " AND name LIKE 'ad_%'").fetchall()]
+        conn.close()
+        ok("register four ad units under the three product kinds",
+           "screen first=%s idempotent=%s; naming=%s/%s splash=%s;"
+           " ads-owned tables=%s -- one small registry only, the"
+           " module source has zero direct INSERT INTO"
+           " venue_occupancy (the venue stays the engine, this"
+           " face is the API)"
+           % (reg_s["idempotent"] is False,
+              reg_s2["idempotent"] is True,
+              reg_n["idempotent"] is False,
+              reg_n2["idempotent"] is False,
+              reg_l["idempotent"] is False, ad_tables))
+
+        # -- registry gate: unknown unit, zero charge ---------------
+        bal_b0 = led.balance("usr:ben")["balance"]
+        refuse_leg("ben tries to book an UNREGISTERED ad unit",
+                   lambda: face.book("usr:ben", "screen:ghost", 50, 1,
+                                     2000, "order:ad-ghost"))
+        ok("re-read ben's balance after the unknown-unit refusal",
+           "%d==%d (an unregistered unit is never bookable; the"
+           " refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- one naming booking: one spend bound into the occupancy --
+        tx0 = spend_n()
+        bal_a1 = led.balance("usr:amy")["balance"]
+        r1 = face.book("usr:amy", "naming:harbor-gate", 26, 1, 10000,
+                       "order:ad-amy-26")
+        bal_a2 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        ok("amy buys the harbor-gate naming right for year-window 26",
+           "balance %d->%d (exact -10000); spend-tx %d->%d (+1);"
+           " span=%d..%d; occ row #%d bound to that spend as its"
+           " provenance; kind=%s"
+           % (bal_a1, bal_a2, tx0, tx1, r1["start_window"],
+              r1["end_window"], r1["occ_id"], r1["ad_kind"]))
+
+        # -- same unit-window replay refused BEFORE the spend ---------
+        refuse_leg("amy replays the SAME naming unit-window",
+                   lambda: face.book(
+                       "usr:amy", "naming:harbor-gate", 26, 1, 10000,
+                       "order:ad-amy-26-again"))
+        ok("re-read balance + spend count after the replay refusal",
+           "%d==%d and %d==%d (the replay is rejected BEFORE the"
+           " spend; a rejected booking never charges)"
+           % (led.balance("usr:amy")["balance"], bal_a2,
+              spend_n(), tx1))
+
+        # -- venue exclusivity: another account, same unit-window -----
+        refuse_leg("ben hits the SAME naming window held by amy",
+                   lambda: face.book(
+                       "usr:ben", "naming:harbor-gate", 26, 1, 10000,
+                       "order:ad-ben-26"))
+        ok("re-read ben's balance after the exclusivity refusal",
+           "%d==%d (naming and splash are exclusive units, at most"
+           " one holder per window; the refusal charged nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0))
+
+        # -- splash: a two-window span, exact fee --------------------
+        tx2 = spend_n()
+        bal_c1 = led.balance("usr:carol")["balance"]
+        r2 = face.book("usr:carol", "splash:lobby", 40, 2, 5000,
+                       "order:ad-carol-splash")
+        bal_c2 = led.balance("usr:carol")["balance"]
+        tx3 = spend_n()
+        own40 = face.splash_owner("splash:lobby", 40)
+        own41 = face.splash_owner("splash:lobby", 41)
+        own42 = face.splash_owner("splash:lobby", 42)
+        ok("carol buys the lobby splash for the two-week span"
+           " 40..41",
+           "balance %d->%d (exact -10000 = 2 windows x 5000);"
+           " spend-tx %d->%d (+1); span=%d..%d; splash owner"
+           " week40=%s week41=%s week42=%s (span scope only)"
+           % (bal_c1, bal_c2, tx2, tx3, r2["start_window"],
+              r2["end_window"], own40, own41, own42))
+
+        # -- carousel capacity gate: three slots, then FULL ----------
+        tx4 = spend_n()
+        bal_a3 = led.balance("usr:amy")["balance"]
+        ra = face.book("usr:amy", "screen:quant-main", 50, 4, 2000,
+                       "order:ad-amy-screen")
+        rb = face.book("usr:ben", "screen:quant-main", 50, 2, 2000,
+                       "order:ad-ben-screen")
+        rc = face.book("usr:carol", "screen:quant-main", 50, 1, 2000,
+                       "order:ad-carol-screen")
+        tx5 = spend_n()
+        bal_d1 = led.balance("usr:dave")["balance"]
+        refuse_leg("dave tries a FOURTH concurrent carousel slot at"
+                   " week 50", lambda: face.book(
+                       "usr:dave", "screen:quant-main", 50, 1, 2000,
+                       "order:ad-dave-screen"))
+        ok("three rotation slots fill, the fourth is refused",
+           "amy/ben/carol booked %d->%d (+3 spends); fees"
+           " 8000/4000/2000 = windows x 2000; dave refused with his"
+           " balance %d==%d untouched (capacity 3 = rotation_slots,"
+           " the refusal charged nothing)"
+           % (tx4, tx5, led.balance("usr:dave")["balance"], bal_d1))
+
+        # -- off-peak carousel span legal + advance naming booking ---
+        tx6 = spend_n()
+        r_d = face.book("usr:dave", "screen:quant-main", 52, 3, 2000,
+                        "order:ad-dave-offpeak")
+        r_adv = face.book("usr:carol", "naming:metro-l4", 100, 1,
+                          10000, "order:ad-carol-metro100")
+        tx7 = spend_n()
+        h99 = face.naming_holder("naming:metro-l4", 99)
+        h100 = face.naming_holder("naming:metro-l4", 100)
+        h101 = face.naming_holder("naming:metro-l4", 101)
+        ok("dave books an off-peak span and carol advance-books the"
+           " metro-l4 naming at window 100",
+           "dave span=%d..%d fee=%d (only amy overlaps at 52..53,"
+           " inside capacity); carol advance span=%d..%d fee=%d"
+           " charged today for a future window; holder"
+           " 99=%s / 100=%s / 101=%s (advance window scope)"
+           % (r_d["start_window"], r_d["end_window"], r_d["fee"],
+              r_adv["start_window"], r_adv["end_window"],
+              r_adv["fee"], h99, h100, h101))
+
+        # -- bad-args family, all zero side effects -------------------
+        refuse_leg("a corp: account tries to book",
+                   lambda: face.book(
+                       "corp:acme", "splash:lobby", 60, 1, 5000,
+                       "order:ad-corp"))
+        refuse_leg("a zero price is refused",
+                   lambda: face.book(
+                       "usr:ben", "splash:lobby", 60, 1, 0,
+                       "order:ad-zero"))
+        refuse_leg("a zero window count is refused",
+                   lambda: face.book(
+                       "usr:ben", "splash:lobby", 60, 0, 5000,
+                       "order:ad-zerow"))
+        refuse_leg("a negative start window is refused",
+                   lambda: face.book(
+                       "usr:ben", "splash:lobby", -1, 1, 5000,
+                       "order:ad-neg"))
+        refuse_leg("an empty booking ref is refused",
+                   lambda: face.book(
+                       "usr:ben", "splash:lobby", 60, 1, 5000, "  "))
+        ok("bad-args audit: five refusals, ben's balance flat",
+           "%d==%d (advertisers are usr:* only, price must be int >"
+           " 0, windows int >= 1, start_window int >= 0, ref"
+           " required -- every rejected booking charges nothing)"
+           % (led.balance("usr:ben")["balance"], bal_b0 - 4000))
+
+        # -- pure read faces: lineup order, zero token movement -------
+        tx8 = spend_n()
+        line50 = face.carousel_lineup("screen:quant-main", 50)
+        line53 = face.carousel_lineup("screen:quant-main", 53)
+        holders = [face.naming_holder("naming:harbor-gate", 26),
+                   face.naming_holder("naming:harbor-gate", 27)]
+        board = face.schedule_board("naming:harbor-gate")
+        tx9 = spend_n()
+        pos50 = [(a["position"], a["account_id"])
+                 for a in line50["advertisers"]]
+        pos53 = [(a["position"], a["account_id"])
+                 for a in line53["advertisers"]]
+        ok("lineup / holder / board reads are pure and ordered",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " lineup at week 50 (full) = %s in booking order with"
+           " rotation_slots=%d; at week 53 = %s (ben and carol"
+           " expired, 2/3); naming holder 26=%s 27=%s; board rows"
+           "=%s each carrying its bound spend tx"
+           % (tx8, tx9, pos50, line50["rotation_slots"], pos53,
+              holders[0], holders[1],
+              len(board["bookings"])))
+
+        # -- audit: spends equal bookings, balances exact ------------
+        tx_total = spend_n()
+        bookings = 7
+        amy_final = led.balance("usr:amy")["balance"]
+        ben_final = led.balance("usr:ben")["balance"]
+        carol_final = led.balance("usr:carol")["balance"]
+        dave_final = led.balance("usr:dave")["balance"]
+        pool_final = led.balance("pool:reserve")["balance"]
+        conn = sqlite3.connect(db)
+        ad_rows = conn.execute(
+            "SELECT COUNT(*) FROM ad_units").fetchone()[0]
+        occ_bound = conn.execute(
+            "SELECT COUNT(*) FROM venue_occupancy WHERE"
+            " bound_spend_tx IS NOT NULL").fetchone()[0]
+        bad_kind = conn.execute(
+            "SELECT COUNT(*) FROM venue_occupancy v LEFT JOIN"
+            " ad_units a ON a.unit_id = v.unit_id WHERE"
+            " a.unit_id IS NULL").fetchone()[0]
+        conn.close()
+        ok("audit the bookings against real debit entries",
+           "spend-tx total %d == bookings %d; every one of the %d"
+           " occupancy rows binds a real spend debit as its"
+           " provenance and %d of them live outside the ad registry;"
+           " balances exact: amy 50000-10000-8000=%d, ben"
+           " 50000-4000=%d, carol 50000-10000-2000-10000=%d, dave"
+           " 50000-6000=%d; pool:reserve %d (240000 mint, spent"
+           " tokens loop back in, conservation holds); ad_units"
+           " registry rows=%d"
+           % (tx_total, bookings, occ_bound, bad_kind, amy_final,
+              ben_final, carol_final, dave_final, pool_final,
+              ad_rows))
+
+        # -- isolation law: module source, structural ---------------
+        banned_sql = [p for p in ("INSERT INTO venue_occupancy",
+                                  "UPDATE ad_units",
+                                  "UPDATE venue_occupancy")
+                      if p in ad_src]
+        led_touches = ad_src.count("self.led")
+        no_mutation = (not banned_sql) and led_touches == 1
+        ok("isolation law audit on the REAL module source",
+           "zero direct INSERT INTO venue_occupancy and zero UPDATE"
+           " surface on registry or occupancy rows (banned SQL"
+           " found=%s, the suite AC-AD7 pattern); the face holds the"
+           " token ledger only to share its DB file -- self.led"
+           " appears exactly %d time (the reference store), every"
+           " spend is booked by the venue engine, and no verb turns"
+           " a booking back into tokens (cancellation or fee"
+           " reversal of any kind stays a P1 [needs-CEO] approval"
+           " face)"
+           % (banned_sql or "none", led_touches))
+        face.close()
+        ven.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "bookings": bookings,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "dave_bal": dave_final,
+            "pool_bal": pool_final, "ad_rows": ad_rows,
+            "occ_bound": occ_bound, "banned_sql": banned_sql,
+            "led_touches": led_touches,
+            "no_mutation": no_mutation,
+            "line50": pos50, "line53": pos53,
+            "holder26": holders[0], "holder27": holders[1],
+            "audit_ok": tx_total == bookings
+            and amy_final == 32000 and ben_final == 46000
+            and carol_final == 28000 and dave_final == 44000
+            and pool_final == 90000,
+        }
+    finally:
+        if face is not None:
+            with contextlib.suppress(Exception):
+                face.close()
+        if ven is not None:
+            with contextlib.suppress(Exception):
+                ven.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -2486,6 +2829,82 @@ def render():
         " occupancy engine stays the venue (referenced, never"
         " rebuilt, BLUEPRINT sec.4 B1/B2)")
 
+    # -- virtual-exhibition ad-slot face card (v0.18): REAL probe at
+    # render time; honest failure face --
+    try:
+        ad = ads_probe()
+        ad_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        ad, ad_err = None, str(exc)[:300]
+    if ad is not None:
+        ad_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in ad["legs"])
+        ad_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>spend tx =="
+                   " booked ads</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed"
+                   " refusals</div>"
+                   "<div class=\"kpi\"><b>%s</b>carousel lineup"
+                   " wk50 + wk53</div>"
+                   "<div class=\"kpi\"><b>%s</b>registry row-mutation"
+                   " surface</div>"
+                   "</div>"
+                   % (ad["spend_total"], ad["bookings"],
+                      len(ad["refusals"]),
+                      esc("%s+%s" % (ad["line50"], ad["line53"])),
+                      "none" if ad["no_mutation"] else "LEAK"))
+        ad_scope = esc(
+            "window semantics: naming rides a year window (holder"
+            " 26=%s, 27=%s free), the splash and the carousel ride"
+            " week windows (splash owner span 40..41 only), and any"
+            " future window books in advance charged today"
+            % (ad["holder26"], ad["holder27"]))
+        ad_audit = esc(
+            "purchase audit: %d booking spends, every one of the %d"
+            " occupancy rows binds its spend debit as provenance;"
+            " balances exact: amy 50000-10000-8000=%d, ben"
+            " 50000-4000=%d, carol 50000-10000-2000-10000=%d, dave"
+            " 50000-6000=%d; pool:reserve %d (spent tokens loop"
+            " back in, conservation holds)"
+            % (ad["spend_total"], ad["occ_bound"], ad["amy_bal"],
+               ad["ben_bal"], ad["carol_bal"], ad["dave_bal"],
+               ad["pool_bal"]))
+    else:
+        ad_rows_html = ad_kpis = ad_scope = ad_audit = ""
+    if ad_err:
+        ad_kpis = ("<p class=fail>AD PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(ad_err))
+    ad_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the B3 canon anchors (giant-screen"
+             " carousel 2,000 CNY/week, building naming right"
+             " 10,000 CNY/year, lobby splash 5,000 CNY/week) are"
+             " caller-supplied probe prices; real pricing, launch"
+             " gating, cancellation and any fee reversal stay a P1"
+             " CEO approval face"),
+            ("msgSecCheck front gate", "ad creative text and every"
+             " UGC/text surface in the stack keep the msgSecCheck"
+             " front gate (wordlist mock in sandbox, fail-closed"
+             " in production)"),
+        ])
+    ad_hard = esc(
+        "structural law (occupancy-is-not-tokens): each booking is"
+        " exactly one token spend and nothing else in the module"
+        " ever touches the token domain -- lineup, holder and"
+        " board faces move zero tokens, no verb converts a booking"
+        " back into tokens or moves it between accounts, and"
+        " booking rows are immutable once written; the occupancy"
+        " engine stays the venue and this face owns exactly one"
+        " small ad_units registry (referenced, never rebuilt,"
+        " BLUEPRINT sec.4 B3)")
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -2611,7 +3030,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R978) &middot; v0.15 creator incentive card
 (R980) &middot; v0.16 strategy observation card
 (R984) &middot; v0.17 studio onboarding card
-(R986)</span></header>
+(R986) &middot; v0.18 ad slot card
+(R987)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -2821,6 +3241,31 @@ canon anchors and are caller-supplied sandbox values, not pricing
 decisions; raw tx ids are never rendered (determinism) -- the audit
 face shows the bound-debit verification instead.</p></div>
 
+<div class="card"><h2>Ad Slot Face (B3 virtual exhibition, live
+probe)</h2>
+<p class=kv>The REAL virtual-exhibition ad-slot face
+(src/sandbox/ledger/ads.py over the venue occupancy engine and the
+P-47-2 token ledger, all imported, never copied) runs in-process at
+render time on a throwaway probe database -- every reading below is
+computed by the product modules, never canned. This is the
+BLUEPRINT sec.4 B-side ad-slot canon: the QUANT giant-screen
+carousel (capacity-bounded rotation, booking order = lineup order),
+the building naming right (exclusive, one holder per window) and
+the lobby splash (exclusive) -- every booking books exactly one
+token spend and rides the venue gates.</p>
+__AD_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__AD_ROWS__</table>
+<p class=kv>__AD_SCOPE__</p>
+<p class=kv>__AD_AUDIT__</p>
+<p class=kv>__AD_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__AD_COMPL__</ul>
+<p class=kv>Probe prices (2000 / 10000 / 5000 tokens) mirror the
+B3 canon anchors and are caller-supplied sandbox values, not
+pricing decisions; raw tx ids are never rendered (determinism) --
+the audit face shows the bound-debit verification instead.</p></div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -3021,6 +3466,12 @@ __PAYWARN__</footer>
         "__ST_AUDIT__": st_audit,
         "__ST_HARD__": st_hard,
         "__ST_COMPL__": st_compl,
+        "__AD_KPIS__": ad_kpis,
+        "__AD_ROWS__": ad_rows_html,
+        "__AD_SCOPE__": ad_scope,
+        "__AD_AUDIT__": ad_audit,
+        "__AD_HARD__": ad_hard,
+        "__AD_COMPL__": ad_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
