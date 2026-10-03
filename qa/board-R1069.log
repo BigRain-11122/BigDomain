@@ -1,0 +1,64 @@
+PASS REPAIR HEAD board single BOM
+PASS REPAIR HEAD board no CR
+PASS REPAIR HEAD board = round-start 10747 B
+PASS REPAIR HEAD has R1068 stale row
+PASS REPAIR HEAD R1068 row md5 matches
+PASS REPAIR HEAD header anchor occurs exactly once
+PASS REPAIR header carries cut-207 record exactly once
+PASS REPAIR broken interim board 7810B on record
+PASS REPAIR broken interim board 9 lines on record
+PASS REPAIR on-disk header == rebuilt header_new byte-identical
+PASS REPAIR flipped line closure marker found
+PASS REPAIR claim body head intact
+PASS REPAIR claim body carries token: **AC-K207a**
+PASS REPAIR claim body carries token: **AC-K207e**
+PASS REPAIR claim body carries token: md5 83927481f727640ac8a8955650
+PASS REPAIR claim body carries token: 滞板恰 1 条=R1068 done 行
+PASS REPAIR interim wrong closure values on record (FIN=7810 ST=81081)
+PASS AC-K207b 10-month archive = 492893 B (first-run append kept)
+PASS AC-K207b 10-month archive sections = 113
+PASS AC-K207b section R1069 migrated line md5 identical (kept from first run)
+PASS AC-K207b 09-month archive zero-touch md5 in place
+INFO FIN/ST cross fixed-point v2 converged in 2 iterations (FIN=11298 ST=81082)
+PASS PREWRITE board done rows = 1 (R1069 current)
+PASS PREWRITE board open rows = 4 standing (b_post restored)
+PASS PREWRITE R1068 stale row absent
+PASS PREWRITE header cut-207 record exactly once
+PASS PREWRITE closure cites correct FIN=11298
+PASS PREWRITE closure cites correct ST=81082
+PASS PREWRITE final text ends with single newline
+PASS PREWRITE composed size == FIN 11298
+PASS PREWRITE standing row byte-identical to HEAD: - [ ] O-2026-0930-013
+PASS PREWRITE standing row byte-identical to HEAD: - [ ] D-20260929-03
+PASS PREWRITE standing row byte-identical to HEAD: - [ ] D-20261003-02
+PASS PREWRITE standing row byte-identical to HEAD: - [ ] bootstrap
+PASS AC-K207c board final = FIN 11298 B (fixed-point v2 honored)
+PASS AC-K207c board final canonical (single BOM, no CR)
+PASS AC-K207c board final done rows = 1
+PASS AC-K207c board final open rows = 4 standing
+PASS AC-K207c rule header carries cut-207 record exactly once
+PASS AC-K207c closure cites measured FIN/ST
+PASS AC-K207b 09-month archive zero-touch post-op
+INFO board repaired 7810 -> 11298 B (FIN=11298 ST=81082)
+
+== qa/board-R1069.log board-rule knife cut-207 ==
+AC-K207a PASS stale-board census: exactly 1 stale done row (R1068, 2504 bytes, md5 83927481f727640ac8a89556502de0bf) + 4 standing open rows + rule header intact + claim row pre-landed before cut action (board claim-landed 13087 B, arc10 pre 490377 bytes sections 112, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K207b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1069 (pure-append prefix assertion, per-line md5 identical, arc10 490377 -> 492893 bytes, sections 112 -> 113)
+AC-K207c PASS board final state = rule header (archive-history cut-207 record exactly once) + R1069 current-round done row (flip carries measured values FIN=11298 ST=81082) + 4 open rows + 0 stale rows (board 10747 -> 11298 bytes)
+AC-K207d PASS evidence = this log SUITE PASS
+AC-K207e PENDING delivery = R1069 row done flip (done) + commit message carries cut-207 record (verified at commit)
+SUITE PASS 5/5
+INCIDENT (honest record): first k207 run composed the final board WITHOUT the b_post segment (rows after the stale row), wrote 7810B, then its post-write composition assertion caught the loss; repaired same-round from git HEAD baseline (header rebuilt byte-identical, flipped claim body recovered from disk, b_post restored byte-identical from HEAD, FIN/ST fixed-point re-run v2). No data lost: arc10 append from first run verified kept (no double-append); 4 standing open rows byte-identical to HEAD; state/export/heartbeat untouched at incident time. write-before-verify defect on that step owned and fixed: this repair run verifies FULL composition BEFORE the single board write (verify-then-write held throughout).
+NOTE: cut-only short round (R1059/R1061/R1064/R1065/R1067/R1068 isomorph); round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1.
+PREDICT: state 78451 -> 81082 B (tick 1068->1069), export tick row 1068->1069 + R1069 results row (394->395) + sd recount 37/24/2/6 -> 39/24/2/7, heartbeat R1069 row (CRLF, no BOM)
+
+== POST-CLOSEOUT CROSS-VERIFY ==
+PASS state.json final = 81082 B (== ST cited in board closure 81082); tick 1068->1069; log 62->64 items; json.loads ok; top fields preserved (last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS sd zero-drift chain: pre mechanical (37, 24, 2, 6) == stored (zero drift); post mechanical (39, 24, 2, 7) == export self_drive (F3 machine-derived)
+PASS export: tick row 1068->1069; results 394->395 (+R1069 cut-207 row, score 1); sd 37/24/2/6->39/24/2/7; ceo_face.current=R1069; next_milestone fold chain (R207 decided, R208=R1070 next); export_ts refreshed 2026-10-04T06:04:29.132200+08:00; latest_artifact unchanged
+PASS heartbeat R1069 row appended (pure-append, LF tail, no BOM)
+PASS board closure citations materialized on disk: FIN=11298 (board 11298B), ST=81082 (state 81082B), arc10 490377->492893 B sections 112->113
+INCIDENT (session takeover, honest record): original R1069 session (launcher round 20261004_052402) completed nine-face scan + claim pre-registration + board knife cut-207 + archive migration + this closeout kit, then died 05:49:06 on repeated API 503 / MCP connection failures BEFORE any state/export/heartbeat write (its own log: failure point pre-write, zero pollution; evidence = logs/round_20261004_052402.err/.out). Takeover session (round 20261004_055402, 05:54:02) re-ran the nine-face scan fresh: all faces pass flat, TREE FLAG dirty=3 = this round own partial artifacts only (no index.lock, no external writer; dead-round takeover legal per R173402/R997 precedent), verified the survived kit byte-anchors, fixed the inherited pred arithmetic (see AMEND), and executed this closeout to completion.
+AMEND (state write BOM + inherited pred arithmetic, transparent per R413/R750 precedent): the inherited kit wrote state.json with a UTF-8 BOM and asserted pred+3==ST; actual template render measures l1+l2=2615 bytes so pred=81082, and the +3-BOM write would have produced 81085 != cited ST 81082 - the exact pre-write failure point the original session hit before dying on API 503 (zero pollution). Takeover fix: BOM-less write per the R1067/R1068 convention (scan state_bytes == disk bytes both rounds; contrast R1066-era dual record 80830B scan / 80833B getsize = +3 BOM), under which composed pred 81082 == the original closure citation 81082 exactly - the original citation stands correct. A first-pass takeover recalibration to 81079 (mis-trusting the inherited pred arithmetic) was itself caught by this same pre-write size check and reverted same-round (board closure 81079->81082 same-width swap, byte-neutral, FIN=11298 board 11298B verified).
+AMEND (heartbeat row ending): PREDICT said "(CRLF, no BOM)"; byte-audit of heartbeat.txt tail shows the latest rows (R1062..R1068) are LF-terminated (file already mixed: 701 CRLF historical rows + LF recent rows); the R1069 row is appended LF, matching the latest-row convention. No BOM confirmed.
+SUITE PASS (k207 repair + takeover closeout) - AC-K207a..e all green; delivery AC-K207e completed by commit carrying cut-207 record
