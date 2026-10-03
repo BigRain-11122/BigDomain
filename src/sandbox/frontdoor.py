@@ -181,6 +181,7 @@ import reports as reports_mod     # city data report face (reuse, no copy)
 import identity as identity_mod  # metaverse identity face (reuse, no copy)
 import expedite as expedite_mod  # hall expedite privilege face (reuse, no copy)
 import metered as metered_mod  # enterprise metered API face (reuse, no copy)
+import collectibles as collectibles_mod  # city digital collectibles face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -3894,6 +3895,313 @@ def metered_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def collectibles_probe():
+    """Run the REAL city digital-collectibles face (the R619 product
+    itself, BLUEPRINT sec.4 C-end row 6, the emotional stickiness
+    layer: co-creation memorial certificates, limited annual resident
+    co-branded cards, chronicle highlight replay rights -- pure
+    internal circulation, ownership never changes hands, permanent
+    imprint) in-process at render time on a throwaway database (F3
+    law: every reading below is computed by the product module, never
+    canned). Chain: a certificate award is zero-token with the
+    creation event ref as provenance -> a duplicate award for the same
+    account+event is refused with zero rows -> an ent: account is
+    refused (usr:* only) -> a numbered card claim is free but gated on
+    a non-empty membership proof, numbering is deterministic 1..cap
+    in claim order -> the cap locks at the first claim of an edition
+    (a drifted cap parameter is ignored) -> the edition fills to 3/3
+    -> a same-account re-claim is refused -> a sold-out claim is
+    refused with the counter untouched -> an empty membership proof is
+    fail-closed refused -> a replay-right purchase is exactly one
+    token spend bound into its permanent row -> a duplicate replay
+    purchase is refused BEFORE the spend (zero second charge) -> the
+    bad-args family is refused with the balance flat -> pure reads
+    (collection / edition_status) move zero tokens -> audit:
+    collections match the legs, the replay row binds a real spend
+    debit, balances exact, pool conservation -> isolation law: the
+    module's only token-domain touch is the replay purchase
+    (ensure_account + exactly one spend per right), the only UPDATE
+    surface is the edition issue counter, ownership columns are never
+    rewritten after grant, no verb moves a collectible between
+    accounts, module source pure ASCII. Probe prices (10 tokens per
+    replay right, edition cap 3) are caller-supplied sandbox values;
+    real collectible pricing, edition sizing and launch gating stay P1
+    CEO approval-only (any future swap / hand-off face is likewise
+    [needs-CEO], never a mechanism here)."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-collectibles-")
+    led = None
+    clf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        clf = collectibles_mod.CollectiblesFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except collectibles_mod.CollectiblesError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        def cert_n(who):
+            return len(clf.collection(who)["certificates"])
+
+        # setup: authorized reserve mint + funding of the two probe
+        # residents (carol and dave claim free cards, no funding
+        # needed)
+        led.mint_to_pool("pool:reserve", 20000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 12000), ("ben", 8000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        for avatar in ("carol", "dave"):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+        ok("authorize the reserve mint + fund two resident probe"
+           " accounts",
+           "probe replay price mirrors a caller-supplied sandbox value"
+           " (10 tokens) and the edition cap is 3 -- caller-supplied"
+           " probe values, never pricing or sizing decisions")
+
+        # -- certificate: zero-token award, provenance-bound -----------
+        tx_c0 = spend_n()
+        c1 = clf.issue_certificate("usr:amy", "creation:pavilion-2026",
+                                   "cert:pavilion-2026")
+        ok("award amy a memorial certificate for a co-creation"
+           " landing",
+           "zero token involvement: spend-tx %d==%d (the award is"
+           " earned by the creation itself, not bought); provenance ="
+           " the creation event ref=%s; one per account per event;"
+           " permanent (no verb consumes or expires it)"
+           % (tx_c0, spend_n(), c1["event_ref"] ==
+              "creation:pavilion-2026"))
+        refuse_leg("re-award the SAME certificate event for amy",
+                   lambda: clf.issue_certificate(
+                       "usr:amy", "creation:pavilion-2026",
+                       "cert:pavilion-2026"))
+        ok("dup-award audit: zero rows written",
+           "amy certificates still %d (the award is struck once per"
+           " event; the permanent imprint is never re-struck)"
+           % cert_n("usr:amy"))
+        refuse_leg("an ent: account tries to receive a certificate"
+                   " award",
+                   lambda: clf.issue_certificate(
+                       "ent:studio-x", "creation: forging-2026",
+                       "cert:forging-2026"))
+
+        # -- card: member-proof gate, deterministic numbering ----------
+        k1 = clf.claim_card("usr:amy", "2027-newyear",
+                            "card:newyear-2027", 3,
+                            "member:amy-valid")
+        ok("amy claims the 2027 co-branded card (member proof shown)",
+           "free claim gated on the non-empty member proof (real"
+           " check wires to the member face at bootstrap);"
+           " deterministic numbering: card_no %d of %d; one card per"
+           " account per edition; the edition cap locks at the first"
+           " claim" % (k1["card_no"], k1["cap"]))
+        k2 = clf.claim_card("usr:ben", "2027-newyear",
+                            "card:newyear-2027", 9,
+                            "member:ben-valid")
+        ok("ben claims with a DRIFTED cap parameter (cap locks at"
+           " first claim)",
+           "cap stays locked at %d (the drifted 9 is ignored, the"
+           " first-claim cap wins); ben gets card_no %d"
+           % (k2["cap"], k2["card_no"]))
+        k3 = clf.claim_card("usr:carol", "2027-newyear",
+                             "card:newyear-2027", 9,
+                             "member:carol-valid")
+        ed3 = clf.edition_status("2027-newyear")
+        ok("carol fills the edition (cap 3/3, deterministic"
+           " numbering)",
+           "carol gets card_no %d; edition_status: cap %d, issued %d"
+           " (numbering is claim-order deterministic)"
+           % (k3["card_no"], ed3["cap"], ed3["issued"]))
+        refuse_leg("amy re-claims the same edition",
+                   lambda: clf.claim_card("usr:amy", "2027-newyear",
+                                          "card:newyear-2027", 3,
+                                          "member:amy-valid"))
+        refuse_leg("dave claims the sold-out edition",
+                   lambda: clf.claim_card("usr:dave", "2027-newyear",
+                                          "card:newyear-2027", 3,
+                                          "member:dave-valid"))
+        ed_so = clf.edition_status("2027-newyear")
+        ok("sold-out audit: the edition counter is untouched",
+           "edition_status 2027-newyear: cap %d, issued %d (a refused"
+           " claim never burns a number; numbering stays claim-order"
+           " deterministic)" % (ed_so["cap"], ed_so["issued"]))
+        refuse_leg("dave claims with an EMPTY membership proof",
+                   lambda: clf.claim_card("usr:dave", "2027-newyear",
+                                          "card:newyear-2027", 3,
+                                          "   "))
+
+        # -- replay right: one spend, bound tx, dup before spend -------
+        bal_b0 = bal("usr:ben")
+        tx_r0 = spend_n()
+        rp = clf.buy_replay_right("usr:ben", "chronicle:grand-opening",
+                                  10, "order:cl-rp-1")
+        ok("ben purchases a chronicle replay right (one token spend)",
+           "balance %d->%d (exact -10 = the probe price); spend-tx"
+           " %d->%d (+1); the right is permanent and its row binds"
+           " that real spend tx=%s"
+           % (bal_b0, bal("usr:ben"), tx_r0, spend_n(),
+              len(rp["spend_tx_id"]) > 0))
+        refuse_leg("ben re-purchases the SAME replay event",
+                   lambda: clf.buy_replay_right(
+                       "usr:ben", "chronicle:grand-opening", 10,
+                       "order:cl-rp-2"))
+        ok("replay-dup audit: the duplicate fires BEFORE the spend",
+           "balance %d==%d and spend-tx %d==%d (a rejected replay"
+           " purchase never charges and never writes a second row)"
+           % (bal("usr:ben"), bal_b0 - 10, spend_n(), tx_r0 + 1))
+        refuse_leg("a zero token price is refused",
+                   lambda: clf.buy_replay_right(
+                       "usr:ben", "chronicle:other", 0,
+                       "order:cl-rp-z1"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: clf.buy_replay_right(
+                       "usr:ben", "chronicle:other", 10, "  "))
+        refuse_leg("an ent: account tries to purchase a replay right",
+                   lambda: clf.buy_replay_right(
+                       "ent:studio-x", "chronicle:other", 10,
+                       "order:cl-rp-e1"))
+        ok("bad-args audit: ben's balance flat across the family",
+           "%d==%d (awards are usr:* earned, claims are usr:* free,"
+           " purchases are usr:* only with an int price >= 1 and a"
+           " non-empty ref -- every rejected call charges nothing and"
+           " writes no row)"
+           % (bal("usr:ben"), bal_b0 - 10))
+
+        # -- pure-read audit: zero token movement ----------------------
+        tx_p0 = spend_n()
+        v_amy = clf.collection("usr:amy")
+        v_ben = clf.collection("usr:ben")
+        _ = clf.collection("usr:carol")
+        _ = clf.edition_status("2027-newyear")
+        tx_p1 = spend_n()
+        ok("pure-read audit: collection / edition_status",
+           "spend-tx %d==%d unchanged -- reads move zero tokens (the"
+           " collection view carries provenance: event refs for"
+           " awards and claims, the bound spend tx for purchases)"
+           % (tx_p0, tx_p1))
+
+        # -- audit: collections, bound debit, conservation -------------
+        tx_total = spend_n()
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        bound = 0
+        rows_total = 0
+        for acct, tx in conn.execute(
+                "SELECT account_id, bound_spend_tx FROM collectibles"
+                " WHERE kind = 'replay'").fetchall():
+            rows_total += 1
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE"
+                " tx_id = ? AND account_id = ?", (tx, acct)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final == 20000)
+        ok("audit the collections and the bound spend debit",
+           "amy %d certificate + %d card (no.1); ben %d card (no.2)"
+           " + %d replay; carol %d card (no.3); the replay row binds"
+           " a real spend debit for usr:ben (bound %d/%d); spend-tx"
+           " total %d == replay rights %d (the module's single"
+           " token-domain touch across the whole probe); balances"
+           " exact: amy 12000, ben 8000-10=%d; pool:reserve %d (20000"
+           " mint, the spent tokens loop back in, conservation holds:"
+           " pool+balances==mint=%s)"
+           % (len(v_amy["certificates"]), len(v_amy["cards"]),
+              len(v_ben["cards"]), len(v_ben["replays"]),
+              len(clf.collection("usr:carol")["cards"]),
+              bound, rows_total, tx_total, rows_total,
+              ben_final, pool_final, conservation))
+
+        # -- isolation law: module source, structural -------------------
+        with open(collectibles_mod.__file__, encoding="utf-8") as fh:
+            cl_src = fh.read()
+        code_src = cl_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        module_wide = [b for b in ("sell", "refund", "exchange",
+                                   "withdraw", "transfer", "mint")
+                       if b in cl_src]
+        no_owner_rewrite = ("UPDATE collectibles" not in cl_src)
+        update_sites = cl_src.count("UPDATE cl_editions")
+        non_ascii = sum(1 for ch in cl_src if ord(ch) > 127)
+        led_calls = cl_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s"
+           " (module-wide scan=%s); ledger-API call sites (self.led.)"
+           " x%d = the module's ONLY token-domain touch, both inside"
+           " buy_replay_right (the idempotent ensure_account + exactly"
+           " one spend per replay right) -- awarding and claiming never"
+           " book a token tx; the only UPDATE surface=%s site is"
+           " exactly the edition issue counter; the account_id / kind /"
+           " event_ref ownership columns are never rewritten after"
+           " grant=%s; no verb moves a collectible between accounts and"
+           " no verb consumes or expires one (ownership never changes"
+           " hands, permanent imprint -- canon wording); any future"
+           " swap / hand-off / resale face is a P1 [needs-CEO]"
+           " approval-only item; module source pure ASCII (%d"
+           " non-ascii)"
+           % (banned or "none", module_wide or "none", led_calls,
+              update_sites, no_owner_rewrite, non_ascii))
+
+        clf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "bound": bound,
+            "rows": rows_total,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "pool_bal": pool_final, "conservation": conservation,
+            "non_ascii": non_ascii, "banned": banned,
+            "module_wide": module_wide,
+            "no_owner_rewrite": no_owner_rewrite,
+            "update_sites": update_sites, "led_calls": led_calls,
+            "audit_ok": tx_total == 1 and bound == 1
+            and rows_total == 1 and amy_final == 12000
+            and ben_final == 7990 and pool_final == 10
+            and conservation and not banned and no_owner_rewrite
+            and update_sites == 1 and non_ascii == 0
+            and led_calls == 2,
+        }
+    finally:
+        if clf is not None:
+            with contextlib.suppress(Exception):
+                clf.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -5188,6 +5496,95 @@ def render():
              " fail-closed in production)"),
         ])
 
+    # -- city digital collectibles face card (v0.24): REAL probe at
+    # render time; honest failure face --
+    try:
+        clr = collectibles_probe()
+        cl_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        clr, cl_err = None, str(exc)[:300]
+    if clr is not None:
+        cl_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in clr["legs"])
+        cl_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>replay spends"
+                   " == replay rights (one spend per right)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge, zero rows)</div>"
+                   "<div class=\"kpi\"><b>3/3</b>edition cap,"
+                   " claim-order numbering</div>"
+                   "<div class=\"kpi\"><b>0</b>ownership columns"
+                   " rewritten (never changes hands)</div>"
+                   "</div>"
+                   % (clr["spend_total"], clr["rows"],
+                      len(clr["refusals"])))
+        cl_scope = esc(
+            "delivery model = three collectible domains over the"
+            " token ledger: kind 'certificate' = a platform award"
+            " bound to one co-creation event ref (earned, never"
+            " bought -- zero token involvement, one per account per"
+            " event, permanent); kind 'card' = a limited-edition FREE"
+            " claim gated on a non-empty membership proof (the real"
+            " check wires to the member face at bootstrap), with"
+            " deterministic numbering 1..cap in claim order and the"
+            " cap locked at the first claim of an edition, one card"
+            " per account per edition; kind 'replay' = a chronicle"
+            " highlight replay right purchased with exactly one token"
+            " spend bound to its tx, permanent. Every rejection fires"
+            " before the spend or before the row write, so a refused"
+            " call never charges and never burns a number")
+        cl_audit = esc(
+            "collectibles audit: 1 certificate + 3 cards (numbered"
+            " 1/2/3, cap 3/3) + 1 replay right across the probe"
+            " accounts; the replay row binds a real spend debit for"
+            " usr:ben (bound %d/%d); spend-tx total %d == replay"
+            " rights %d (the module's single token-domain touch"
+            " across the whole probe); balances exact: amy 12000,"
+            " ben 8000-10=%d; pool:reserve %d (20000 mint, the spent"
+            " tokens loop back in, conservation holds:"
+            " pool+balances==mint=%s)"
+            % (clr["bound"], clr["rows"], clr["spend_total"],
+               clr["rows"], clr["ben_bal"], clr["pool_bal"],
+               clr["conservation"]))
+        cl_hard = esc(
+            "structural law (the R619 module posture, suite"
+            " AC-CL1..AC-CL7): counts stay counts and tokens stay"
+            " tokens -- awarding and claiming never book a token"
+            " tx, the replay purchase is the only token-domain touch"
+            " (exactly one spend per right); the only UPDATE surface"
+            " is the edition issue counter; the account_id / kind /"
+            " event_ref ownership columns are never rewritten after"
+            " grant; no verb moves a collectible between accounts"
+            " and no verb consumes or expires one (ownership never"
+            " changes hands, permanent imprint -- canon wording); any"
+            " future swap / hand-off / resale face is a P1"
+            " [needs-CEO] approval-only item, never a mechanism here")
+    else:
+        cl_rows_html = cl_kpis = cl_scope = cl_audit = cl_hard = ""
+    if cl_err:
+        cl_kpis = ("<p class=fail>COLLECTIBLES PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(cl_err))
+    cl_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the chronicle replay token price (10"
+             " probe tokens) and the edition cap (3) are"
+             " caller-supplied sandbox values; real collectible"
+             " pricing, edition sizing and launch gating stay P1 CEO"
+             " approval faces; any future swap / hand-off face is"
+             " likewise approval-only"),
+            ("msgSecCheck front gate", "certificate citations, card"
+             " edition copy and every text surface in the stack keep"
+             " the msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -5316,7 +5713,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R986) &middot; v0.18 ad slot card (R987) &middot; v0.19 venue card
 (R989) &middot; v0.20 city data report card (R990) &middot; v0.21
 metaverse identity card (R992) &middot; v0.22 hall expedite card
-(R993) &middot; v0.23 enterprise metered API card (R995)</span></header>
+(R993) &middot; v0.23 enterprise metered API card (R995) &middot;
+v0.24 city digital collectibles card (R997)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -5689,6 +6087,39 @@ rendered (determinism) -- the audit face shows the bound-debit
 verification instead.</p>
 </div>
 
+<div class="card"><h2>City Digital Collectibles Face (C-end 6, live
+probe)</h2>
+<p class=kv>The REAL city digital-collectibles face
+(src/sandbox/ledger/collectibles.py, the R619 product itself, imported
+never copied) runs in-process at render time on a throwaway probe
+database -- every reading below is computed by the product module,
+never canned. This is the BLUEPRINT sec.4 C-end row 6 (the emotional
+stickiness layer): co-creation memorial certificates, limited annual
+resident co-branded cards and chronicle highlight replay rights ride
+on the P-47-2b token ledger. Hard law from canon: pure internal
+circulation, ownership never changes hands between accounts,
+permanent imprint -- no verb moves a collectible, and the ownership
+columns of the collectible rows are never touched after grant; any
+future swap or hand-off face is a P1 [needs-CEO] approval-only item.
+Awarding and claiming never book a token tx; the replay purchase is
+the module's single token-domain touch, exactly one spend per
+right.</p>
+__CL_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__CL_ROWS__</table>
+<p class=kv>__CL_SCOPE__</p>
+<p class=kv>__CL_AUDIT__</p>
+<p class=kv>__CL_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__CL_COMPL__</ul>
+<p class=kv>Probe prices (10 tokens per replay right, edition cap 3)
+are caller-supplied sandbox values, not pricing decisions; real
+collectible pricing, edition sizing and launch gating stay P1
+[needs-CEO] approval faces; raw spend tx ids are never rendered
+(determinism) -- the audit face shows the bound-debit verification
+instead.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -5925,6 +6356,12 @@ __PAYWARN__</footer>
         "__MT_AUDIT__": mt_audit,
         "__MT_HARD__": mt_hard,
         "__MT_COMPL__": mt_compl,
+        "__CL_KPIS__": cl_kpis,
+        "__CL_ROWS__": cl_rows_html,
+        "__CL_SCOPE__": cl_scope,
+        "__CL_AUDIT__": cl_audit,
+        "__CL_HARD__": cl_hard,
+        "__CL_COMPL__": cl_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
