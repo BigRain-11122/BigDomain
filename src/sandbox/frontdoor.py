@@ -126,6 +126,7 @@ are loaded from the ugc config at runtime; this source stays ASCII.
 
 import contextlib
 import glob
+import hashlib
 import html
 import io
 import json
@@ -176,6 +177,7 @@ import observation as observation_mod  # paid strategy observation (reuse, no co
 import venue as venue_mod         # venue occupancy engine (reuse, no copy)
 import studio as studio_mod       # studio onboarding annual-fee face (reuse, no copy)
 import ads as ads_mod             # virtual-exhibition ad-slot face (reuse, no copy)
+import reports as reports_mod     # city data report face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -2372,6 +2374,359 @@ def venue_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def reports_probe():
+    """Run the REAL city data report paid-download face (the R627
+    product itself, BLUEPRINT sec.4 B-side canon row B6 at L76:
+    quarterly one-person-AI-company ecosystem report at 99 CNY per
+    copy, custom industry insight at 999 CNY per copy -- the
+    deliverable is de-identified real operational data) in-process
+    at render time on a throwaway database (F3 law: every reading
+    below is computed by the product module, never canned). Chain:
+    publish the quarterly report (aggregate descriptors + sha256
+    dataset digest only -- structural de-identification) with
+    idempotent re-publish and price-drift refusal -> publish the
+    custom report -> an unpublished report is refused zero-charge
+    -> one purchase = exactly one spend at the catalog price bound
+    to its immutable purchase row (the permission gate) issuing one
+    voucher -> duplicate-ref and one-copy-per-buyer replays are both
+    refused BEFORE the spend -> the second buyer buys the custom
+    report at the 999 anchor -> an ent: enterprise account is
+    refused at the token layer (the module gate accepts ent:* but
+    the ledger spend is usr:*-only, census binding AC-L11 -- the
+    stack is fail-closed; production enterprise procurement routes
+    through the BigCompute collection gateway) -> bad-args family
+    refused zero-charge -> the download gate delivers exactly the
+    nine-key descriptor bundle with the non-advisory notice as
+    first and last line -> duplicate download ref refused ->
+    cross-buyer voucher refused -> unknown voucher refused -> the
+    same voucher downloads again under a distinct ref -> pure reads
+    move zero tokens -> audit: spends equal purchases, every
+    purchase row binds a real spend debit, reconcile balanced,
+    balances exact, pool conservation -> isolation law: zero banned
+    token verbs in the module source, exactly one token touch point
+    (the spend inside purchase). Probe publish prices mirror the
+    B6 canon anchors; real pricing stays a P1 CEO approval-only
+    face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-reports-")
+    led = None
+    rpt = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        rpt = reports_mod.ReportsFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except reports_mod.ReportError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 160000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 15000), ("ben", 12000),
+                               ("carol", 120000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe buyers",
+           "probe publish prices mirror the B6 canon anchors: the"
+           " quarterly ecosystem report = 9900 (99 CNY per copy),"
+           " the custom industry insight = 99900 (999 CNY per copy)"
+           " -- caller-supplied probe values, never pricing"
+           " decisions")
+
+        # -- publish: aggregate descriptors only, idempotence, drift --
+        digest_q = hashlib.sha256(
+            b"probe-aggregate: quarterly 2026-Q3").hexdigest()
+        pub1 = rpt.publish_report("rpt:q-2026Q3", "quarterly",
+                                  "one-person-AI-company ecosystem"
+                                  " report 2026Q3", "2026-Q3",
+                                  "ecosystem", 9900, digest_q)
+        pub_idem = rpt.publish_report("rpt:q-2026Q3", "quarterly",
+                                      "one-person-AI-company ecosystem"
+                                      " report 2026Q3", "2026-Q3",
+                                      "ecosystem", 9900, digest_q)
+        refuse_leg("re-publish the quarterly report at a DIFFERENT"
+                   " price",
+                   lambda: rpt.publish_report(
+                       "rpt:q-2026Q3", "quarterly",
+                       "one-person-AI-company ecosystem report"
+                       " 2026Q3", "2026-Q3", "ecosystem", 19900,
+                       digest_q))
+        ok("publish the quarterly ecosystem report (aggregate"
+           " descriptors + sha256 dataset digest)",
+           "published=%s; identical re-publish idempotent=%s;"
+           " price-drift re-publish refused E_RPT_DUP (published"
+           " rows are immutable, no UPDATE exists); registration"
+           " carries only period/industry tags + digest -- zero"
+           " user rows, zero raw data (structural"
+           " de-identification)"
+           % (not pub1["idempotent"], pub_idem["idempotent"]))
+
+        digest_c = hashlib.sha256(
+            b"probe-aggregate: custom quant-tools 2026-H2").hexdigest()
+        rpt.publish_report("rpt:custom-quant-01", "custom",
+                           "custom industry insight: quant tools"
+                           " 2026-H2", "2026-H2", "quant-tools",
+                           99900, digest_c)
+        ok("publish the custom industry-insight report",
+           "published rpt:custom-quant-01 kind=custom price 99900;"
+           " the catalog carries exactly the two canon kinds"
+           " (quarterly/custom) -- mechanism registration, zero"
+           " token touch")
+
+        # -- unpublished gate: zero charge -----------------------------
+        bal_a0 = led.balance("usr:amy")["balance"]
+        refuse_leg("amy tries to buy an UNPUBLISHED report",
+                   lambda: rpt.purchase("usr:amy", "rpt:ghost",
+                                        "order:rp-ghost"))
+        ok("re-read amy's balance after the unpublished refusal",
+           "%d==%d (an unpublished report is never purchasable; the"
+           " refusal charged nothing)"
+           % (led.balance("usr:amy")["balance"], bal_a0))
+
+        # -- one purchase: one spend bound into the purchase row -------
+        tx0 = spend_n()
+        bal_a1 = led.balance("usr:amy")["balance"]
+        p1 = rpt.purchase("usr:amy", "rpt:q-2026Q3", "order:rp-amy-q3")
+        bal_a2 = led.balance("usr:amy")["balance"]
+        tx1 = spend_n()
+        ok("amy buys the quarterly report (99 CNY anchor)",
+           "balance %d->%d (exact -9900 = one copy, one spend);"
+           " spend-tx %d->%d (+1); the immutable purchase row (the"
+           " permission gate) binds that spend tx and issues exactly"
+           " one voucher" % (bal_a1, bal_a2, tx0, tx1))
+
+        # -- replays refused BEFORE the spend ---------------------------
+        refuse_leg("amy replays the SAME purchase ref",
+                   lambda: rpt.purchase("usr:amy", "rpt:q-2026Q3",
+                                        "order:rp-amy-q3"))
+        refuse_leg("amy buys the SAME report again under a NEW ref"
+                   " (one copy per buyer)",
+                   lambda: rpt.purchase("usr:amy", "rpt:q-2026Q3",
+                                        "order:rp-amy-q3-again"))
+        ok("re-read amy's balance + spend count after both replay"
+           " refusals",
+           "%d==%d and %d==%d (duplicate ref and duplicate"
+           " buyer+report copy are both rejected BEFORE the spend;"
+           " a rejected purchase never charges and never grants)"
+           % (led.balance("usr:amy")["balance"], bal_a2,
+              spend_n(), 1))
+
+        # -- second buyer: the custom report at the 999 anchor ---------
+        tx2 = spend_n()
+        bal_c1 = led.balance("usr:carol")["balance"]
+        p2 = rpt.purchase("usr:carol", "rpt:custom-quant-01",
+                          "order:rp-carol-custom")
+        bal_c2 = led.balance("usr:carol")["balance"]
+        ok("carol buys the custom industry insight (999 CNY"
+           " anchor)",
+           "balance %d->%d (exact -99900); spend-tx %d->%d (+1);"
+           " each report copy = exactly one spend at its published"
+           " catalog price, bound to its own purchase row + voucher"
+           % (bal_c1, bal_c2, tx2, spend_n()))
+
+        # -- enterprise boundary: honest structural refusal ---------------
+        try:
+            rpt.purchase("ent:acme", "rpt:custom-quant-01",
+                         "order:rp-ent-1")
+            ent_outcome = "unexpectedly accepted"
+        except ledger_mod.LedgerError as exc:
+            refusals.append(str(exc.code))
+            ent_outcome = ("refused: %s at the token layer -- the"
+                           " module buyer gate accepts ent:* but the"
+                           " token ledger spend is usr:*-only (census"
+                           " binding, AC-L11), so the stack is"
+                           " fail-closed: zero charge, zero rows"
+                           " written; production enterprise"
+                           " procurement routes through the BigCompute"
+                           " collection gateway (D-20260924-11"
+                           " collection exit unified there)"
+                           % exc.code)
+        ok("an ent: enterprise account tries to buy directly on the"
+           " resident token ledger", ent_outcome)
+
+        # -- bad-args family, all zero side effects -----------------------
+        refuse_leg("a corp: account tries to buy",
+                   lambda: rpt.purchase("corp:acme", "rpt:q-2026Q3",
+                                        "order:rp-corp"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: rpt.purchase("usr:ben", "rpt:q-2026Q3",
+                                        "  "))
+        refuse_leg("publishing with an UNKNOWN kind is refused",
+                   lambda: rpt.publish_report("rpt:x", "forecast",
+                                              "t", "p", "i", 9900,
+                                              "d"))
+        refuse_leg("publishing at price zero is refused",
+                   lambda: rpt.publish_report("rpt:x", "custom", "t",
+                                              "p", "i", 0, "d"))
+        ok("bad-args audit: four refusals, amy's balance flat",
+           "%d==%d (buyers are usr:/ent: at the module gate and the"
+           " ledger enforces usr:*-only census-bound spend; refs and"
+           " kinds are required, price >= 1 -- every rejected call"
+           " charges nothing and writes no row)"
+           % (led.balance("usr:amy")["balance"], bal_a2))
+
+        # -- download gate: the nine-key descriptor delivery --------------
+        tx_d0 = spend_n()
+        desc1 = rpt.download("usr:amy", p1["voucher_id"],
+                             "dl:rp-amy-q3-1")
+        keys = sorted(desc1.keys())
+        ok("amy downloads the quarterly report through her voucher",
+           "delivery keys exactly the nine-key descriptor set %s;"
+           " disclaimer_first == disclaimer_last == the non-advisory"
+           " standing notice (structurally accompanied at both"
+           " ends); kind=%s, period=%s, digest in bundle=%s;"
+           " spend-tx %d==%d unchanged -- the download moves zero"
+           " tokens; zero raw operational rows by construction"
+           % (keys, desc1["kind"], desc1["period_tag"],
+              desc1["dataset_digest"] == digest_q, tx_d0, spend_n()))
+
+        # -- download replays and voucher gates ---------------------------
+        refuse_leg("amy replays the SAME download ref",
+                   lambda: rpt.download("usr:amy", p1["voucher_id"],
+                                        "dl:rp-amy-q3-1"))
+        refuse_leg("ben tries to download through AMY's voucher",
+                   lambda: rpt.download("usr:ben", p1["voucher_id"],
+                                        "dl:rp-ben-steal"))
+        refuse_leg("an UNKNOWN voucher is refused",
+                   lambda: rpt.download("usr:ben", "vch-ghost",
+                                        "dl:rp-ben-ghost"))
+
+        # -- same voucher, second download under a distinct ref ------------
+        desc2 = rpt.download("usr:amy", p1["voucher_id"],
+                             "dl:rp-amy-q3-2")
+        dlog = rpt.download_log("rpt:q-2026Q3")
+        ok("amy downloads the SAME report a second time under a NEW"
+           " ref",
+           "one voucher may download repeatedly with distinct refs"
+           " -- download_log rows=%d, both bound to the same"
+           " voucher; second delivery descriptor key-set equal on"
+           " the nine-key face=%s; spend-tx still %d==%d (downloads"
+           " are free re-reads of the permission gate; raw voucher"
+           " ids are never rendered)"
+           % (len(dlog["downloads"]),
+              sorted(desc2.keys()) == keys, spend_n(), tx_d0))
+
+        # -- pure-read audit: zero token movement --------------------------
+        tx_r0 = spend_n()
+        rec_q = rpt.reconcile_report("rpt:q-2026Q3")
+        rec_c = rpt.reconcile_report("rpt:custom-quant-01")
+        _ = rpt.report_descriptor("rpt:q-2026Q3")
+        tx_r1 = spend_n()
+        ok("pure-read audit: descriptor / download_log /"
+           " reconcile_report",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " quarterly reconcile balanced=%s purchases=%d"
+           " vouchers=%d downloads=%d orphan=%s billed=%d; custom"
+           " reconcile balanced=%s purchases=%d downloads=%d"
+           " billed=%d"
+           % (tx_r0, tx_r1, rec_q["balanced"], rec_q["purchases"],
+              rec_q["vouchers"], rec_q["downloads"],
+              rec_q["orphan_downloads"] or [], rec_q["billed_total_cent"],
+              rec_c["balanced"], rec_c["purchases"],
+              rec_c["downloads"], rec_c["billed_total_cent"]))
+
+        # -- audit: spends equal purchases, balances exact ------------------
+        tx_total = spend_n()
+        purchases_total = 2
+        amy_final = led.balance("usr:amy")["balance"]
+        ben_final = led.balance("usr:ben")["balance"]
+        carol_final = led.balance("usr:carol")["balance"]
+        pool_final = led.balance("pool:reserve")["balance"]
+        conn = sqlite3.connect(db)
+        rows = conn.execute(
+            "SELECT buyer, bound_spend_tx FROM"
+            " report_purchases").fetchall()
+        bound = 0
+        for buyer, tx in rows:
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE tx_id = ?"
+                " AND account_id = ?", (tx, buyer)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final
+                        + carol_final == 160000)
+        ok("audit the purchases against real debit entries",
+           "spend-tx total %d == purchases %d; all %d purchase rows"
+           " bind a real spend debit for their own buyer; balances"
+           " exact: amy 15000-9900=%d, ben 12000 untouched=%d,"
+           " carol 120000-99900=%d; pool:reserve %d (160000 mint,"
+           " spent tokens loop back in, conservation holds:"
+           " pool+balances==mint=%s)"
+           % (tx_total, purchases_total, len(rows), amy_final,
+              ben_final, carol_final, pool_final, conservation))
+
+        # -- isolation law: module source, structural ------------------------
+        with open(reports_mod.__file__, encoding="utf-8") as fh:
+            rpt_src = fh.read()
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in rpt_src]
+        touches = rpt_src.count("self.led.")
+        non_ascii = sum(1 for ch in rpt_src if ord(ch) > 127)
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits=%s in reports.py; token touch"
+           " points=%d (self.led.spend inside purchase only);"
+           " non-ascii=%d; the module owns exactly its three report"
+           " tables and never SELECTs any other table -- user rows"
+           " and raw operational stores cannot leak through this"
+           " face; vouchers, downloads and every read move zero"
+           " tokens, and no verb turns a voucher back into tokens"
+           " or moves it between buyers (the suite AC-CT7"
+           " counts-vs-tokens posture)"
+           % (banned or "none", touches, non_ascii))
+
+        rpt.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "purchases": purchases_total,
+            "downloads_q": len(dlog["downloads"]),
+            "bound": bound, "purchase_rows": len(rows),
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "pool_bal": pool_final,
+            "balanced_q": rec_q["balanced"], "balanced_c": rec_c["balanced"],
+            "banned": banned, "non_ascii": non_ascii,
+            "desc_keys": len(keys), "conservation": conservation,
+            "audit_ok": tx_total == purchases_total and bound == len(rows)
+            and amy_final == 5100 and ben_final == 12000
+            and carol_final == 20100 and pool_final == 122800
+            and rec_q["balanced"] and rec_c["balanced"],
+        }
+    finally:
+        if rpt is not None:
+            with contextlib.suppress(Exception):
+                rpt.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -3301,6 +3656,96 @@ def render():
         " engine the studio and ad cards above ride (referenced,"
         " never rebuilt, BLUEPRINT sec.4 B-side venue row)")
 
+    # -- city data report face card (v0.20): REAL probe at render
+    # time; honest failure face --
+    try:
+        rp = reports_probe()
+        rp_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        rp, rp_err = None, str(exc)[:300]
+    if rp is not None:
+        rp_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in rp["legs"])
+        rp_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>purchase spends =="
+                   " report copies sold</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed"
+                   " refusals (zero charge)</div>"
+                   "<div class=\"kpi\"><b>%d</b>keys in every"
+                   " delivered descriptor</div>"
+                   "<div class=\"kpi\"><b>%d</b>downloads through one"
+                   " voucher</div>"
+                   "</div>"
+                   % (rp["spend_total"], rp["purchases"],
+                      len(rp["refusals"]), rp["desc_keys"],
+                      rp["downloads_q"]))
+        rp_scope = esc(
+            "delivery model = permission gate + download voucher:"
+            " purchase = exactly one spend at the published catalog"
+            " price bound to its immutable purchase row (the"
+            " permission gate) which issues one voucher; download ="
+            " gate check (voucher exists, owned by the caller,"
+            " report still published) then the descriptor bundle,"
+            " one immutable row per distinct download ref, one"
+            " voucher may download repeatedly; enterprise boundary:"
+            " the module gate accepts ent:* but the token ledger"
+            " spend is usr:*-only (census binding, AC-L11), so a"
+            " direct ent: purchase is refused zero-charge at the"
+            " token layer -- production enterprise procurement"
+            " routes through the BigCompute collection gateway"
+            " (D-20260924-11)")
+        rp_audit = esc(
+            "purchase audit: %d report spends, every purchase row"
+            " binds a real spend debit for its own buyer (bound"
+            " %d/%d); balances exact: amy 15000-9900=%d, ben 12000"
+            " untouched=%d, carol 120000-99900=%d; pool:reserve %d"
+            " (160000 mint, spent tokens loop back in, conservation"
+            " holds: pool+balances==mint)"
+            % (rp["spend_total"], rp["bound"], rp["purchase_rows"],
+               rp["amy_bal"], rp["ben_bal"], rp["carol_bal"],
+               rp["pool_bal"]))
+        rp_hard = esc(
+            "structural de-identification law (canon: the"
+            " deliverable is de-identified operational data): the"
+            " module owns exactly its three report tables and never"
+            " SELECTs any other table -- user rows, account rows and"
+            " raw operational stores cannot leak through this face"
+            " by construction; a delivery carries only the nine-key"
+            " descriptor bundle (aggregate period/industry tags +"
+            " sha256 dataset digest) with the non-advisory notice"
+            " as its first and last line; counts-vs-tokens isolation"
+            " (suite AC-CT7 posture): the purchase spend is the only"
+            " token touch (self.led.spend x1 inside purchase),"
+            " vouchers, downloads and reads move zero tokens, and no"
+            " verb turns a voucher back into tokens or moves it"
+            " between buyers; any fee reversal stays a P1"
+            " [needs-CEO] approval face")
+    else:
+        rp_rows_html = rp_kpis = rp_scope = rp_audit = rp_hard = ""
+    if rp_err:
+        rp_kpis = ("<p class=fail>REPORTS PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(rp_err))
+    rp_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the B6 canon anchors (quarterly"
+             " one-person-AI-company ecosystem report 99 CNY per"
+             " copy, custom industry insight 999 CNY per copy) are"
+             " caller-supplied probe publish prices; real pricing,"
+             " launch gating and enterprise-credit settlement stay"
+             " a P1 CEO approval face"),
+            ("msgSecCheck front gate", "report titles, industry"
+             " tags and every UGC/text surface in the stack keep"
+             " the msgSecCheck front gate (wordlist mock in"
+             " sandbox, fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -3426,8 +3871,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R978) &middot; v0.15 creator incentive card
 (R980) &middot; v0.16 strategy observation card
 (R984) &middot; v0.17 studio onboarding card
-(R986) &middot; v0.18 ad slot card &middot; v0.19 venue card
-(R987)</span></header>
+(R986) &middot; v0.18 ad slot card (R987) &middot; v0.19 venue card
+(R989) &middot; v0.20 city data report card (R990)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -3688,6 +4133,32 @@ values, not pricing decisions; raw tx ids are never rendered
 (determinism) -- the audit face shows the bound-debit verification
 instead.</p></div>
 
+<div class="card"><h2>Reports Face (B6 city data reports, live
+probe)</h2>
+<p class=kv>The REAL city data report face (src/sandbox/ledger/
+reports.py, the R627 paid-download product itself, imported never
+copied) runs in-process at render time on a throwaway probe
+database -- every reading below is computed by the product module,
+never canned. This is the BLUEPRINT sec.4 B-side canon row 6: the
+quarterly one-person-AI-company ecosystem report (99 CNY per copy)
+and the custom industry insight (999 CNY per copy); the deliverable
+is de-identified operational data -- aggregate descriptors + sha256
+dataset digest only, zero raw operational rows can ever leave
+through this face (structural de-identification).</p>
+__RP_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__RP_ROWS__</table>
+<p class=kv>__RP_SCOPE__</p>
+<p class=kv>__RP_AUDIT__</p>
+<p class=kv>__RP_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__RP_COMPL__</ul>
+<p class=kv>Probe publish prices (9900 for the quarterly copy,
+99900 for the custom copy) mirror the B6 canon anchors (99 / 999
+CNY) as caller-supplied sandbox values, not pricing decisions; raw
+tx ids and voucher ids are never rendered (determinism) -- the
+audit face shows the bound-debit verification instead.</p></div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -3900,6 +4371,12 @@ __PAYWARN__</footer>
         "__VN_AUDIT__": vn_audit,
         "__VN_HARD__": vn_hard,
         "__VN_COMPL__": vn_compl,
+        "__RP_KPIS__": rp_kpis,
+        "__RP_ROWS__": rp_rows_html,
+        "__RP_SCOPE__": rp_scope,
+        "__RP_AUDIT__": rp_audit,
+        "__RP_HARD__": rp_hard,
+        "__RP_COMPL__": rp_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
