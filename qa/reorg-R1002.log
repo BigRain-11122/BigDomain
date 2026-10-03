@@ -1,0 +1,22 @@
+AC-R1831 pre-op: 87010B dual-gauge, HEAD==disk byte-identical (sha16 245fd4cf68325549), tick 1001, log 64 items, no BOM no trailing LF, canonical round-trip PASS; round-start tree = ['M src/os/backlog.md'] (backlog.md single dirty = own R1002 pre-registration row)
+AC-R1832 window = [R182 rolling summary + R998..R1001 four pairs] 9 rows identified (17532B content); kept=0 (window extends to log tail, no fifth pair, R988/R991/R994/R996/R998 isomorph); head block 55 items verbatim (66941B content)
+probe pre  : {"W": 62, "idle": 39, "idle_round": 10, "nop": 2, "wait": 1, "round": 29, "tokens": 12, "sub": 7}  (== read-only calibration logs/tmp_r1002_probe.py, register method computed before writing)
+AC-R1832 catalog chain: R160 base 286 (tail C-K163a) + 17 archive links R940..R988 + R991 link + R994 link + R996 archive-section link (R180 roll embedded 3) + R998 archive-section link (R181 roll embedded 3=AC-R1801/AC-FD23a/AC-XP1) + live R182 roll link 2=AC-R1811/AC-FD24a = 531, arithmetic continuous, per-link list verified
+AC-R1832 catalog: live R182 roll embedded 2 in prior + window new 9 ['AC-R1821', 'AC-LE1', 'AC-FD25a', 'AC-TS1', 'O-2026-0929-007', 'AC-FD26a', 'AC-ST1', 'AC-FD27a', 'P-2026-09-29-07'] (folded-line extraction vs retained-set diff + catalog-set exclusion, R979 engine criterion) + win[0] zero-new residual check = [] clean = 531->540; missing=[] asserted
+AC-R1832 compress-precedent list carried mechanically (range end R758..R996 -> R758..R998, latest completed fold before this round)
+probe post projection: {"W": 56, "idle": 37, "idle_round": 8, "nop": 2, "wait": 1, "round": 23, "tokens": 9, "sub": 6}  (asserted pre-write); export self_drive pre-op mechanical re-derivation (60, 37, 2, 10) == R1001-recorded stored register (60,37,2,10) zero drift this round (R1001 re-derivation accurate)
+export self_drive post projection: W/idle/nop/sub = 54/35/2/9 (W 60-9+3, idle head-only after window removal, nop 2 flat as R182 roll carries no nop tag, sub = W-idle-tokens-P2 formula carried)
+AC-R1834 in-fold projection: post-fold 74605 B, final 78155 B margin 345 B (<= 78,500B gate satisfied in-fold)
+S_new 5191 B / E_new 3264 B / T_new 270 B structural constraints all pass (prefixes, tag accounting, no forbidden tags)
+AC-R1833b top fields: ORD/DEC 131 tokens/BENCH flat carried verbatim; GORD baseline 152 -> 153 deliberate update (fleet order row acknowledged non-own-face, scan sha16 7B5DB0AC422EC9A5 new baseline, R381/R479 fleet-order precedent); tick 1001->1002 only, head region byte-identical except tick digit
+gated-file trigger check: legal-review draft (HQ window point 10-03 12:00 passed, R1001 at-point recheck zero-hit recorded; periodic trigger continues on delivery) + BigLife R777 review file double-path zero hits = not delivered, chronic continuation (backlog open rows carry)
+PHASE B (--write): verify-then-write sequence
+AC-R1831 backup logs/state-preop-R1002.bak written byte-identical (87010B)
+AC-R1833c archive pure-append: 15174246 -> 15261339 B; markers 175 -> 176
+AC-R1833d state.json written (temp+replace, re-read asserted: tick 1002, log 58 items = 55 head + 1 roll + 2 closeout, GORD 153, probe in-register, dual-gauge parse pass)
+AC-R1834 final size: 78155 B, margin 345 B under 78,500B gate; post-fold 74605 B
+export refreshed: export_ts=2026-10-03T12:20:17+08:00 tick-row 1002, R183 result row appended, self_drive 54/35/2/9 zero-hardcode re-derived (pre stored register 60/37/2/10 == mechanical, zero drift), method note appended, BOM utf-8-sig parse-back PASS
+heartbeat R1002 row appended
+AC-R1835 backlog R1002 row closed with measured values (checkbox flipped, claim + done in one row, pre-registration honored)
+AC-R1835 delivery: state log R1002 lines + backlog R1002 done row + commit contains P-2026-09-25-18 (P-51 protocol)
+GORD companion note: canonical scan sha16 7B5DB0AC422EC9A5 new baseline, gord_new_rows=1 fleet order row (10-03 ~11:5x, dispatch face C-machine self-done + bm-a/bm-b O-20261003-1210-bm-c + R0 diagnostics) judged non-own-execution face -> acknowledged no action, last_gord_tbl_rows 152->153 updated with closeout. D-20260930-19 consumption steps derived pass: (1) decisions dispatch board zero new company rows (DEC 237 flat, 131 tokens), (2) group orders CEO-physicals zone zero change (bootstrap still blocked). O-013-4 daily duty covered by day-first round R961 (not re-scanned, anti-rescan law). Fold-round write set discipline: backlog + state.json + qa log + export + heartbeat only (git set: 5 files, logs/ gitignored disk-side double insurance).
