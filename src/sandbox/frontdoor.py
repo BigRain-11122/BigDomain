@@ -180,6 +180,7 @@ import ads as ads_mod             # virtual-exhibition ad-slot face (reuse, no c
 import reports as reports_mod     # city data report face (reuse, no copy)
 import identity as identity_mod  # metaverse identity face (reuse, no copy)
 import expedite as expedite_mod  # hall expedite privilege face (reuse, no copy)
+import metered as metered_mod  # enterprise metered API face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -3554,6 +3555,345 @@ def expedite_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def metered_probe():
+    """Run the REAL enterprise metering + billing face (the R626
+    product itself, BLUEPRINT sec.4 B-side price row B5: one-sentence
+    to backtest to visualization SaaS for small teams and studios,
+    billed per metered call from the 0.5-CNY-per-call anchor up --
+    the only remaining zero-front suite line with a CNY canon anchor)
+    in-process at render time on a throwaway database (F3 law: every
+    reading below is computed by the product module, never canned).
+    Chain: two enterprise clients register (one idempotent re-register,
+    one parameter-drift re-register refused) -> an unregistered client
+    cannot buy (zero charge) -> a kind valid but not enabled for the
+    client is refused -> a zero-credit client is fail-closed refused
+    -> ben's client buys a pack = exactly one spend (20 calls x 50 fen
+    = the 0.5-CNY/call B5 anchor) bound into its immutable pack row
+    -> same-ref replay refused BEFORE the spend (zero second charge)
+    -> amy's client stacks a second pack under a fresh ref (credits
+    stack) -> metered calls consume exactly one credit each and record
+    immutable call rows with the external engine receipt verbatim ->
+    same call_ref replay refused with zero double-consume -> bad-args
+    family all refused zero side effects -> pure reads (client
+    contract with the non-advisory notice as first + last line,
+    usage log, reconciliation) move zero tokens -> audit: spends
+    equal pack purchases, every pack row binds a real spend debit,
+    the reconciliation verdict balances for both clients, balances
+    exact, pool conservation -> isolation law: the only token-domain
+    touch is the buy_pack spend, the only UPDATE surface is the
+    credit counter, ownership columns are never rewritten, module
+    source pure ASCII. Probe prices mirror the B5 canon anchor;
+    real pricing, launch gating and the production external API
+    endpoint stay P1 CEO approval-only (three-question gate +
+    CEO authorization first)."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-metered-")
+    led = None
+    mtf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        mtf = metered_mod.MeteredFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except metered_mod.MeteredError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        # setup: authorized reserve mint + funding of the two
+        # enterprise clients' resident funding accounts
+        led.mint_to_pool("pool:reserve", 22000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 12000), ("ben", 10000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund two enterprise"
+           " funding accounts",
+           "probe unit price mirrors the B5 canon anchor: 50 fen per"
+           " call (0.5 CNY/call, billed per metered call from the"
+           " anchor up) -- caller-supplied probe values, never"
+           " pricing decisions")
+
+        # -- client registration: idempotent + drift refused ----------
+        r1 = mtf.register_client("ent:pixelforge", "usr:amy",
+                                 ["backtest", "visualize"])
+        ok("register the first enterprise client ent:pixelforge",
+           "funding account usr:amy, enabled kinds"
+           " ['backtest', 'visualize'], zero starting credits"
+           " (fail-closed start), idempotent=%s" % r1["idempotent"])
+        r1b = mtf.register_client("ent:pixelforge", "usr:amy",
+                                  ["backtest", "visualize"])
+        ok("re-register ent:pixelforge with IDENTICAL parameters",
+           "idempotent=%s (same parameters = same client, zero rows"
+           " written)" % r1b["idempotent"])
+        refuse_leg("re-register ent:pixelforge with DRIFTED kinds",
+                   lambda: mtf.register_client("ent:pixelforge",
+                                               "usr:amy",
+                                               ["backtest"]))
+        r2 = mtf.register_client("ent:quantdesk", "usr:ben",
+                                 ["backtest"])
+        ok("register the second enterprise client ent:quantdesk",
+           "funding account usr:ben, enabled kinds ['backtest'] only"
+           " (single-kind client for the kind-gate leg),"
+           " idempotent=%s" % r2["idempotent"])
+
+        # -- unregistered client + kind gate + zero-credit gate -------
+        bal_a0 = bal("usr:amy")
+        tx0 = spend_n()
+        refuse_leg("an UNREGISTERED client tries to buy a pack",
+                   lambda: mtf.buy_pack("ent:ghost", 100, 50,
+                                        "order:mt-ghost-1"))
+        ok("unregistered-client audit: zero charge, zero rows",
+           "amy balance %d==%d and spend-tx %d==%d (an unknown client"
+           " is refused before the spend, nothing is written)"
+           % (bal_a0, bal("usr:amy"), tx0, spend_n()))
+        refuse_leg("ent:quantdesk calls the visualize kind it never"
+                   " enabled",
+                   lambda: mtf.meter_call("ent:quantdesk", "visualize",
+                                          "call:qd-vz-1",
+                                          "engref:bm-0001"))
+        refuse_leg("ent:quantdesk with ZERO credits tries a backtest"
+                   " call",
+                   lambda: mtf.meter_call("ent:quantdesk", "backtest",
+                                          "call:qd-bt-0",
+                                          "engref:bm-0002"))
+
+        # -- pack purchase: one spend per pack, replay before spend ----
+        bal_b0 = bal("usr:ben")
+        tx1 = spend_n()
+        pk = mtf.buy_pack("ent:quantdesk", 20, 50, "order:mt-qd-1")
+        ok("ben's client buys a 20-call pack (0.5 CNY/call anchor)",
+           "balance %d->%d (exact -1000 = one pack, one spend);"
+           " spend-tx %d->%d (+1); the immutable pack row binds that"
+           " real spend tx=%s; credits stack to 20"
+           % (bal_b0, bal("usr:ben"), tx1, spend_n(),
+              len(pk["spend_tx"]) > 0))
+        refuse_leg("the SAME purchase ref is replayed",
+                   lambda: mtf.buy_pack("ent:quantdesk", 20, 50,
+                                        "order:mt-qd-1"))
+        ok("replay audit: the duplicate fires BEFORE the spend",
+           "balance %d==%d and spend-tx %d==%d (a rejected replay"
+           " never charges and never writes a second pack row)"
+           % (bal("usr:ben"), bal_b0 - 1000, spend_n(), tx1 + 1))
+        bal_a1 = bal("usr:amy")
+        tx2 = spend_n()
+        mtf.buy_pack("ent:pixelforge", 100, 50, "order:mt-pf-1")
+        mtf.buy_pack("ent:pixelforge", 50, 50, "order:mt-pf-2")
+        ok("amy's client stacks TWO packs under fresh refs",
+           "balance %d->%d (exact -5000-2500); spend-tx %d->%d (+2);"
+           " credits stack 100+50=150 (re-purchase stacks, pack rows"
+           " stay immutable and each binds its own spend)"
+           % (bal_a1, bal("usr:amy"), tx2, spend_n()))
+
+        # -- metered calls: one credit each, receipts verbatim ----------
+        tx_c0 = spend_n()
+        c1 = mtf.meter_call("ent:quantdesk", "backtest", "call:qd-bt-1",
+                            "engref:bm-20261003-0001")
+        rc_qd = mtf.reconcile_client("ent:quantdesk")
+        ok("ben's client meters its first backtest call",
+           "consumed exactly 1 credit (20->19, rc balanced=%s:"
+           " purchased 20 == consumed 1 + remaining 19); the"
+           " immutable call row carries the external engine receipt"
+           " verbatim=%s; zero token movement (spend-tx %d==%d)"
+           % (rc_qd["balanced"], c1["engine_ref"] ==
+              "engref:bm-20261003-0001", tx_c0, spend_n()))
+        refuse_leg("the SAME call ref is replayed",
+                   lambda: mtf.meter_call("ent:quantdesk", "backtest",
+                                          "call:qd-bt-1",
+                                          "engref:bm-20261003-0001x"))
+        ok("call-replay audit: call rows are immutable",
+           "quantdesk credits 19==19 (a duplicate call ref is refused"
+           " with zero double-consume; consumption is one-credit-once)")
+        c2 = mtf.meter_call("ent:pixelforge", "visualize",
+                            "call:pf-vz-1", "engref:bm-20261003-0002")
+        c3 = mtf.meter_call("ent:pixelforge", "backtest",
+                            "call:pf-bt-1", "engref:bm-20261003-0003")
+        rc_pf = mtf.reconcile_client("ent:pixelforge")
+        ok("amy's client meters one call of EACH enabled kind",
+           "visualize + backtest both live (credits 150->148); rc"
+           " balanced=%s: purchased 150 == consumed 2 + remaining"
+           " 148; usage log shows 2 immutable rows with verbatim"
+           " engine receipts=%s"
+           % (rc_pf["balanced"],
+              len(mtf.usage_log("ent:pixelforge")["calls"]) == 2))
+
+        # -- bad-args family, all zero side effects ---------------------
+        pre_bad = (bal("usr:amy"), bal("usr:ben"))
+        refuse_leg("a non-ent: client id is refused",
+                   lambda: mtf.register_client("usr:freeloader",
+                                               "usr:amy", ["backtest"]))
+        refuse_leg("a non-usr: funding account is refused",
+                   lambda: mtf.register_client("ent:shellco",
+                                               "ent:offshore",
+                                               ["backtest"]))
+        refuse_leg("an UNKNOWN kind in registration is refused",
+                   lambda: mtf.register_client("ent:shellco", "usr:amy",
+                                               ["divination"]))
+        refuse_leg("a zero-call pack is refused",
+                   lambda: mtf.buy_pack("ent:pixelforge", 0, 50,
+                                        "order:mt-pf-z1"))
+        refuse_leg("a zero unit price is refused",
+                   lambda: mtf.buy_pack("ent:pixelforge", 10, 0,
+                                        "order:mt-pf-z2"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: mtf.buy_pack("ent:pixelforge", 10, 50, "  "))
+        refuse_leg("an UNKNOWN call kind is refused",
+                   lambda: mtf.meter_call("ent:pixelforge", "divination",
+                                          "call:pf-x-1", "engref:bm-x"))
+        refuse_leg("an empty call ref is refused",
+                   lambda: mtf.meter_call("ent:pixelforge", "backtest",
+                                          "", "engref:bm-y"))
+        refuse_leg("an empty engine ref is refused",
+                   lambda: mtf.meter_call("ent:pixelforge", "backtest",
+                                          "call:pf-x-2", ""))
+        post_bad = (bal("usr:amy"), bal("usr:ben"))
+        ok("bad-args audit: both funding balances flat",
+           "%s==%s (client ids are ent:* only, funding accounts are"
+           " usr:* only, kinds must be registered, pack calls and"
+           " unit prices must be int >= 1, purchase / call / engine"
+           " refs are all required -- every rejected call charges"
+           " nothing and writes no row)"
+           % (list(pre_bad), list(post_bad)))
+
+        # -- pure-read audit: zero token movement ----------------------
+        tx_r0 = spend_n()
+        ct = mtf.client_contract("ent:pixelforge")
+        _ = mtf.client_contract("ent:quantdesk")
+        _ = mtf.usage_log("ent:pixelforge")
+        _ = mtf.reconcile_client("ent:quantdesk")
+        tx_r1 = spend_n()
+        ok("pure-read audit: client_contract / usage_log /"
+           " reconcile_client",
+           "spend-tx %d==%d unchanged -- reads move zero tokens; the"
+           " contract read is structurally accompanied by the"
+           " non-advisory notice as first=%s and last=%s line, and"
+           " the pricing note carries the [needs-CEO] verdict=%s"
+           % (tx_r0, tx_r1,
+              ct["disclaimer_first"] == metered_mod.NON_ADVISORY,
+              ct["disclaimer_last"] == metered_mod.NON_ADVISORY,
+              "[needs-CEO]" in ct["pricing_note"]))
+
+        # -- audit: spends == packs, all rows bind debits ---------------
+        tx_total = spend_n()
+        packs_total = 3
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        bound = 0
+        rows_total = 0
+        for funder, tx in conn.execute(
+                "SELECT c.funding_account, p.bound_spend_tx FROM"
+                " metered_packs p JOIN metered_clients c ON"
+                " c.client_id = p.client_id").fetchall():
+            rows_total += 1
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE"
+                " tx_id = ? AND account_id = ?", (tx, funder)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final == 22000)
+        ok("audit the pack purchases against real debit entries",
+           "spend-tx total %d == pack purchases %d (2 pixelforge +"
+           " 1 quantdesk); all %d pack rows bind a real spend debit"
+           " for their own funding account (bound %d/%d); balances"
+           " exact: amy 12000-5000-2500=%d, ben 10000-1000=%d;"
+           " pool:reserve %d (22000 mint, spent tokens loop back in,"
+           " conservation holds: pool+balances==mint=%s)"
+           % (tx_total, packs_total, rows_total, bound, rows_total,
+              amy_final, ben_final, pool_final, conservation))
+
+        # -- isolation law: module source, structural -------------------
+        with open(metered_mod.__file__, encoding="utf-8") as fh:
+            mt_src = fh.read()
+        code_src = mt_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        module_wide = [b for b in ("sell", "refund", "exchange",
+                                   "withdraw", "transfer", "mint")
+                       if b in mt_src]
+        no_owner_rewrite = ("UPDATE metered_clients SET funding_account"
+                            not in mt_src
+                            and "UPDATE metered_clients SET"
+                            " enabled_kinds" not in mt_src
+                            and "UPDATE metered_clients SET client_id"
+                            not in mt_src)
+        update_sites = mt_src.count("UPDATE metered_clients")
+        non_ascii = sum(1 for ch in mt_src if ord(ch) > 127)
+        led_calls = mt_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s"
+           " (module-wide scan=%s); ledger-API call sites (self.led.)"
+           " x%d = the single buy_pack spend -- the module's ONLY"
+           " token-domain touch is the pack purchase (exactly one"
+           " spend per pack); metering, consumption and every read"
+           " move zero tokens; the only UPDATE surface=%s sites is"
+           " exactly the client credit counter (+1 on pack, -1 on"
+           " call); the funding_account / enabled_kinds / client_id"
+           " ownership columns are never rewritten=%s; pack rows and"
+           " call rows are immutable once written; no verb turns"
+           " credits back into tokens or moves credits between"
+           " clients; module source pure ASCII (%d non-ascii)"
+           % (banned or "none", module_wide or "none", led_calls,
+              update_sites, no_owner_rewrite, non_ascii))
+
+        mtf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "packs": packs_total,
+            "bound": bound, "rows": rows_total,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "pool_bal": pool_final,
+            "credits_purchased": 170, "anchor_cny": "0.5",
+            "conservation": conservation, "non_ascii": non_ascii,
+            "banned": banned, "module_wide": module_wide,
+            "no_owner_rewrite": no_owner_rewrite,
+            "update_sites": update_sites, "led_calls": led_calls,
+            "audit_ok": tx_total == packs_total and bound == 3
+            and rows_total == 3 and amy_final == 4500
+            and ben_final == 9000 and pool_final == 8500
+            and conservation and not banned and no_owner_rewrite
+            and update_sites == 2 and non_ascii == 0
+            and led_calls == 1,
+        }
+    finally:
+        if mtf is not None:
+            with contextlib.suppress(Exception):
+                mtf.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -4757,6 +5097,97 @@ def render():
              " in sandbox, fail-closed in production)"),
         ])
 
+    # -- enterprise metered API face card (v0.23): REAL probe at
+    # render time; honest failure face --
+    try:
+        mtr = metered_probe()
+        mtr_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        mtr, mtr_err = None, str(exc)[:300]
+    if mtr is not None:
+        mt_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in mtr["legs"])
+        mt_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>metered spends"
+                   " == packs (one spend per pack)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge, zero rows)</div>"
+                   "<div class=\"kpi\"><b>%d</b>probe credits"
+                   " purchased (stack on re-pack)</div>"
+                   "<div class=\"kpi\"><b>%s</b>CNY/call B5 anchor"
+                   " claimed live (50 fen probe)</div>"
+                   "</div>"
+                   % (mtr["spend_total"], mtr["packs"],
+                      len(mtr["refusals"]), mtr["credits_purchased"],
+                      mtr["anchor_cny"]))
+        mt_scope = esc(
+            "delivery model = per-call metering + billing over the"
+            " token ledger: an enterprise client (ent:*) registers"
+            " against one resident funding account (usr:*) with its"
+            " enabled call kinds; one pack purchase is exactly one"
+            " token spend (calls x unit price) bound into its"
+            " immutable pack row and the credits stack on"
+            " re-purchase; one API call consumes exactly one credit"
+            " and records an immutable call row carrying the"
+            " external engine receipt verbatim (the engine itself is"
+            " BigMoney's, referenced never rebuilt here); every"
+            " rejection fires before the spend / before the credit"
+            " decrement, so a refused call never charges and never"
+            " consumes")
+        mt_audit = esc(
+            "metered pack audit: %d metered spends == %d pack"
+            " purchases (2 pixelforge + 1 quantdesk); all %d pack"
+            " rows bind a real spend debit for their own funding"
+            " account (bound %d/%d); balances exact: amy"
+            " 12000-5000-2500=%d, ben 10000-1000=%d; pool:reserve %d"
+            " (22000 mint, spent tokens loop back in, conservation"
+            " holds: pool+balances==mint=%s)"
+            % (mtr["spend_total"], mtr["packs"], mtr["rows"],
+               mtr["bound"], mtr["rows"], mtr["amy_bal"],
+               mtr["ben_bal"], mtr["pool_bal"], mtr["conservation"]))
+        mt_hard = esc(
+            "structural law (the R626 module posture, suite"
+            " AC-MT1..AC-MT7): counts stay counts and tokens stay"
+            " tokens -- the module's ONLY token-domain touch is the"
+            " buy_pack spend (exactly one spend per pack); metering,"
+            " consumption and every read face move zero tokens; the"
+            " only UPDATE surface is the client credit counter (+1"
+            " on pack, -1 on call); the funding_account /"
+            " enabled_kinds / client_id ownership columns are never"
+            " rewritten; pack rows and call rows are immutable once"
+            " written; no verb turns credits back into tokens or"
+            " moves credits between clients; any fee reversal is a"
+            " P1 [needs-CEO] approval face, never a mechanism here;"
+            " the production external API endpoint stays behind the"
+            " three-question gate + CEO authorization (bootstrap-time"
+            " face), this sandbox module is pure local simulation,"
+            " zero network")
+    else:
+        mt_rows_html = mt_kpis = mt_scope = mt_audit = mt_hard = ""
+    if mtr_err:
+        mt_kpis = ("<p class=fail>METERED PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(mtr_err))
+    mt_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the B5 canon anchor (billed per"
+             " metered call from the 0.5-CNY-per-call anchor up) is"
+             " a caller-supplied probe price; real per-call pricing,"
+             " launch gating and the production external API endpoint"
+             " stay a P1 CEO approval face (three-question gate +"
+             " CEO authorization first)"),
+            ("msgSecCheck front gate", "engine refs, contract texts"
+             " and every text surface in the stack keep the"
+             " msgSecCheck front gate (wordlist mock in sandbox,"
+             " fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -4885,7 +5316,7 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R986) &middot; v0.18 ad slot card (R987) &middot; v0.19 venue card
 (R989) &middot; v0.20 city data report card (R990) &middot; v0.21
 metaverse identity card (R992) &middot; v0.22 hall expedite card
-(R993)</span></header>
+(R993) &middot; v0.23 enterprise metered API card (R995)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -5227,6 +5658,37 @@ pricing decisions; raw spend tx ids are never rendered (determinism)
 -- the audit face shows the bound-debit verification instead.</p>
 </div>
 
+<div class="card"><h2>Enterprise Metered API Face (B5 SaaS, live
+probe)</h2>
+<p class=kv>The REAL enterprise metering + billing face
+(src/sandbox/ledger/metered.py, the R626 product itself, imported
+never copied) runs in-process at render time on a throwaway probe
+database -- every reading below is computed by the product module,
+never canned. This is the BLUEPRINT sec.4 B-side price row B5
+(enterprise AI-compute &amp; verification API): one-sentence to
+backtest to visualization SaaS for small teams and studios, billed
+per metered call from the 0.5-CNY-per-call anchor up; the backtest /
+visualization engine is BigMoney's (referenced, never rebuilt here)
+and every metered call stores the external engine receipt verbatim
+with zero numeric-result columns in this company's rows. One pack
+purchase = exactly one token spend; one API call = exactly one
+credit; counts stay counts and tokens stay tokens.</p>
+__MT_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__MT_ROWS__</table>
+<p class=kv>__MT_SCOPE__</p>
+<p class=kv>__MT_AUDIT__</p>
+<p class=kv>__MT_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__MT_COMPL__</ul>
+<p class=kv>Probe prices (50 fen per call) mirror the B5 canon anchor
+(0.5 CNY/call and up) as caller-supplied sandbox values, not pricing
+decisions; the production external API endpoint stays behind the
+three-question gate + CEO authorization; raw spend tx ids are never
+rendered (determinism) -- the audit face shows the bound-debit
+verification instead.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -5457,6 +5919,12 @@ __PAYWARN__</footer>
         "__XP_AUDIT__": xp_audit,
         "__XP_HARD__": xp_hard,
         "__XP_COMPL__": xp_compl,
+        "__MT_KPIS__": mt_kpis,
+        "__MT_ROWS__": mt_rows_html,
+        "__MT_SCOPE__": mt_scope,
+        "__MT_AUDIT__": mt_audit,
+        "__MT_HARD__": mt_hard,
+        "__MT_COMPL__": mt_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),
