@@ -1,0 +1,13 @@
+== BigDomain OSLoop board-rule knife cut-196 (R1056) evidence log ==
+TS: 2026-10-04T00:54:06.241200+08:00
+[AC-K196a] stale-done census: exactly 1 stale done row on board at round start (R1055, 3237 bytes, md5 2f39d76a4d03f5b0e7223db85da3064a); standing open rows=4; header intact; claim line pre-landed OPEN at line index 7 before any migration write (board on-disk 10618B -> claim-inserted 13027B).
+[AC-K196b] verbatim migration: R1055 row 3237B md5-identical appended to docs/archive/backlog-done-2026-10.md under section "## R1056" (arc10 461115B -> 464362B on disk; R-section headers 101 -> 102; pure-append prefix assertion PASS; migrated line appears exactly once; per-line md5 identical; Sep archive untouched md5 19783a35cfc4e57eb24eda5916a07702). Deviation honestly noted: first write emitted a 3-byte UTF-8 BOM on the append segment (+3250B vs +2572B precedent delta check caught it), re-serialized BOM-less same round; final on-disk first-3-bytes are NOT EF BB BF.
+[AC-K196c] board final state: header (archive-history cut-196 record exactly once) + R1056 current-round row (flipped done with measured values) + open 4 rows + stale done rows 0; board on-disk bytes 13027 -> 10535.
+[AC-K196d] this evidence log on disk = qa/board-R1056.log.
+[AC-K196e] delivery: R1056 row flipped done in board + commit message contains cut-196 record (P-51 basis).
+Round score: 1 (real file change = ledger-maintenance mechanism file, R1049/R1050/R1052/R1053/R1055 isomorph family).
+Fold R201: round-start first-measure 76147B under the 80000B line -> not triggered; state closeout final 78467B (margin 33B under the 78500B gate, honestly noted).
+State: tick 1055 -> 1056, log 60 -> 62 items, 78467B, BOM-less, json roundtrip + ConvertFrom-Json dual-parser basis (python side verified).
+Export: export_ts refreshed, results tick row 1055 -> 1056 + R1056 results row appended, self_drive 35/24/2/6 -> 37/24/2/7, ceo_face three rows in place.
+Heartbeat: R1056 line appended (2250 bytes, HBTS real value).
+SUITE PASS
