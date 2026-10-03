@@ -1,0 +1,5 @@
+AC-K182a stale-board count = exactly 1 stale done row [R1040] + standing open 4 rows + rule header intact + R1041 claim row pre-registered on disk (board 9886B, done-10 427925B sections 88, done-09 md5p 19783a35cfc4e57e)
+AC-K182b 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md sec R1041 (verified on resume: 426,184B -> 427,925B, row md5 94187ec80482f51121347f106735b3ee identical, sections 87 -> 88, 09 archive zero-touch md5p 19783a35cfc4e57e)
+AC-K182c board final state = rule header [cut-182 appended exactly once] + R1041 current row (claim flipped done with measured values) + open 4 rows; 8824B
+AC-K182d evidence = qa/board-R1041.log SUITE PASS
+AC-K182e delivery = commit contains cut-182 record (P-51 protocol)
