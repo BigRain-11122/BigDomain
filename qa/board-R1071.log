@@ -1,0 +1,8 @@
+== qa/board-R1071.log board-rule knife cut-209 ==
+AC-K209a PASS stale-board census: exactly 1 stale done row (R1070, 3887 bytes, md5 ee932a6965650830cb973a95d567670b) + 4 standing open rows + rule header intact + claim row pre-registered before action (board pre-op 12286 bytes, arc10 pre 495882 bytes sections 114, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K209b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1071 (pure-append prefix assertion, per-line md5 identical, arc10 495882 -> 499781 bytes, sections 114 -> 115)
+AC-K209c PASS board final state = rule header (archive-history cut-209 record exactly once) + R1071 current-round done row + 4 open rows + 0 stale rows (board 12286 -> 10993 bytes)
+AC-K209d PASS evidence = this log SUITE PASS
+AC-K209e PASS delivery = R1071 row done flip + commit message contains cut-209 record (P-51 rule)
+SUITE PASS 5/5
+NOTE: cut-only short round (R1059/R1061/R1064/R1065/R1067/R1068/R1069 isomorph); single-pass clean run, verify-then-write held throughout (k209 step script all assertions passed before any disk write; claim row inserted to disk before the migration step per pre-registration law; FIN/ST cross fixed-point converged in 2 iterations). Round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1.
