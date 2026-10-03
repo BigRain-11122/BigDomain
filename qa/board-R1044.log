@@ -1,0 +1,6 @@
+AC-K185a pre-state (recorded from first run): 1 stale done row (R1043, 2095B, md5 c37c864fad124f2b7d139c16ca0b9428), claim row pre-registered, standing open 4, rule header intact, done10 432245B/90 sections, done09 zero-touch
+AC-K185b verbatim migration verified on resume: pure-append 432245B -> 434352B, sections 90 -> 91, migrated line md5 identical c37c864fad124f2b7d139c16ca0b9428, deterministic tail byte-check pass
+AC-K185c board after knife verified on resume: rule header [cut-185 record exactly once] + R1044 claim row (open, flips in fold Phase B) + standing open 4, board 10937B -> 8918B
+NOTE (honest record): first run performed both writes then tripped on a miscounted trailing assertion (expected standing open 4, actual 5 = claim row + 4 standing at knife phase; claim flips only in fold Phase B); zero re-write performed on resume, on-disk post-state re-verified zero-drift
+AC-K185d knife result file written: {"bopre": 10937, "board_after_knife": 8918, "d10o": 432245, "d10n": 434352, "sections_before": 90, "sections_after": 91, "stale_md5": "c37c864fad124f2b7d139c16ca0b9428", "resume": true}
+AC-K185e delivery: board done row closes in fold Phase B; commit message carries the cut-185 record (P-51 protocol)
