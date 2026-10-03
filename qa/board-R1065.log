@@ -1,0 +1,10 @@
+== qa/board-R1065.log board-rule knife cut-203 ==
+AC-K203a PASS stale-board census: exactly 1 stale done row (R1064, 2097 bytes, md5 18663f227850018c2fc04ed2de48dfc9) + 4 standing open rows + rule header intact + claim row pre-registered before action (board pre-op 10028 bytes, arc10 pre 480612 bytes sections 108, 09-archive md5 19783a35cfc4e57eb24eda5916a07702 zero-touch)
+AC-K203b PASS 1 row verbatim migrated to docs/archive/backlog-done-2026-10.md section R1065 (pure-append prefix assertion, per-line md5 identical, arc10 480612 -> 482780 bytes, sections 108 -> 109)
+AC-K203c PASS board final state = rule header (archive-history cut-203 record exactly once) + R1065 current-round done row + 4 open rows + 0 stale rows (board 10028 -> 10141 bytes)
+AC-K203d PASS evidence = this log SUITE PASS
+AC-K203e PASS delivery = R1065 row done flip + commit message contains cut-203 record (P-51 rule)
+SUITE PASS 5/5
+NOTE: single-pass clean run, verify-then-write held throughout (cut203_r1065.py all assertions passed
+before any disk write; no resume needed). Round score 1 = ledger-maintenance mechanism file per
+Executive Protocol v1.1.
