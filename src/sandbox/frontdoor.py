@@ -179,6 +179,7 @@ import studio as studio_mod       # studio onboarding annual-fee face (reuse, no
 import ads as ads_mod             # virtual-exhibition ad-slot face (reuse, no copy)
 import reports as reports_mod     # city data report face (reuse, no copy)
 import identity as identity_mod  # metaverse identity face (reuse, no copy)
+import expedite as expedite_mod  # hall expedite privilege face (reuse, no copy)
 
 UGC_DIR = os.path.join(HERE, "ugc")
 if UGC_DIR not in sys.path:
@@ -3155,6 +3156,404 @@ def identity_probe():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def expedite_probe():
+    """Run the REAL trading-hall expedite-privilege face (the R620
+    product itself, BLUEPRINT sec.4 C-side canon rows 3 + 7: strategy
+    submit expedite 9.9 CNY, backtest expedite 9.9 CNY, game demo
+    queue jump 49.9 CNY -- the highest priced remaining zero-front
+    suite line -- resident named dialogue 4.9 CNY) in-process at
+    render time on a throwaway database (F3 law: every reading below
+    is computed by the product module, never canned). Chain: an
+    authorized reserve mint funds three probe buyers -> a
+    demo_queuejump purchase = exactly one spend bound into its
+    credit row, same-ref replay idempotent with no second charge ->
+    the other three kinds purchased (all four C3/C7 anchors live) ->
+    an expedited submit with zero credits refused leaving zero rows
+    and zero charge -> a plain ungated submit joins the normal tier
+    with no token movement -> two normal + two expedited submissions
+    show the two-tier ordering (a later expedited job still ranks
+    ahead of every normal job, FIFO inside each tier, live position
+    receipts) -> a third demo jump refused (one credit = one job,
+    consumed once) -> kind-domain mismatch refused with the credit
+    left unconsumed -> every kind consumes its own subject domain
+    (idea: / talk: / backtest:), every consumed credit binds the
+    exact job it jumped -> an ent: enterprise account refused at the
+    module gate (buyers are usr:* only; production enterprise
+    procurement routes through the BigCompute collection gateway) ->
+    bad-args family all refused zero-charge -> pure reads move zero
+    tokens -> audit: spends equal purchases, every credit row binds
+    a real spend debit, balances exact, pool conservation ->
+    isolation law: the single UPDATE surface is the consumption
+    marking on credit rows (ownership columns never rewritten),
+    submits and reads never touch the token domain, module source
+    pure ASCII. Probe prices mirror the C3/C7 canon anchors; real
+    pricing stays a P1 CEO approval-only face."""
+    cfg = load_json(LEDGER_CFG)
+    tmp = tempfile.mkdtemp(prefix="frontdoor-expedite-")
+    led = None
+    xpf = None
+    try:
+        db = os.path.join(tmp, "ledger.db")
+        led = ledger_mod.Ledger(db, cfg)
+        xpf = expedite_mod.ExpediteFace(led)
+        legs = []
+        refusals = []
+
+        def ok(action, outcome):
+            legs.append({"n": len(legs) + 1, "action": action,
+                         "outcome": outcome})
+
+        def refuse_leg(action, fn):
+            try:
+                out = fn()  # design says refuse; accepted = honest show
+                ok(action, "unexpectedly accepted: %s" % out)
+            except expedite_mod.ExpediteError as exc:
+                refusals.append(str(exc.code))
+                ok(action, "refused: %s" % exc.code)
+
+        def spend_n():
+            conn = sqlite3.connect(db)
+            n = conn.execute("SELECT COUNT(*) FROM ledger_tx"
+                             " WHERE type = 'spend'").fetchone()[0]
+            conn.close()
+            return int(n)
+
+        def bal(who):
+            return led.balance(who)["balance"]
+
+        # setup: authorized reserve mint + fiat-side stand-in funding
+        led.mint_to_pool("pool:reserve", 33000, "probe:mint:reserve",
+                         "settlement")
+        for avatar, amount in (("amy", 15000), ("ben", 10000),
+                               ("carol", 8000)):
+            led.ensure_account("usr:" + avatar, census_avatar_id=avatar)
+            led.adjust([("pool:reserve", "debit", amount),
+                        ("usr:" + avatar, "credit", amount)],
+                       "probe:fund:" + avatar,
+                       "frontdoor probe fiat-side stand-in funding")
+        ok("authorize the reserve mint + fund three probe buyers",
+           "probe prices mirror the C3/C7 canon anchors: submit"
+           " expedite = 990 (9.9 CNY), backtest expedite = 990 (9.9"
+           " CNY), demo queue jump = 4990 (49.9 CNY, the highest"
+           " zero-front C7 line), resident named dialogue = 490 (4.9"
+           " CNY) -- caller-supplied probe values, never pricing"
+           " decisions")
+
+        # -- purchase: one spend per credit, replay idempotent -------
+        bal_a0 = bal("usr:amy")
+        tx0 = spend_n()
+        p1 = xpf.purchase("usr:amy", "demo_queuejump", 4990,
+                          "order:xp-amy-d1")
+        ok("amy buys a demo queue jump (49.9 CNY anchor)",
+           "balance %d->%d (exact -4990 = one priority credit, one"
+           " spend); spend-tx %d->%d (+1); the credit row binds that"
+           " real spend tx"
+           % (bal_a0, bal("usr:amy"), tx0, spend_n()))
+        p2 = xpf.purchase("usr:amy", "demo_queuejump", 4990,
+                          "order:xp-amy-d1")
+        ok("amy replays the SAME purchase ref",
+           "idempotent=%s: the replay returned the SAME credit #%d"
+           " with the SAME bound spend tx=%s; balance %d==%d (zero"
+           " second charge, zero second row)"
+           % (p2["idempotent"], p2["credit_id"],
+              p1["spend_tx"] == p2["spend_tx"], bal("usr:amy"),
+              bal_a0 - 4990))
+        for kind, price, ref in (
+                ("submit_expedite", 990, "order:xp-amy-s1"),
+                ("backtest_expedite", 990, "order:xp-amy-b1"),
+                ("resident_dialogue", 490, "order:xp-amy-r1")):
+            xpf.purchase("usr:amy", kind, price, ref)
+        cv = xpf.credits_view("usr:amy")["credits"]
+        txs = [c["spend_tx"] for c in cv]
+        ok("amy buys the other three kinds (all four anchors live)",
+           "balance %d->%d (exact -990-990-490); credits_view shows"
+           " %d credits across kinds %s with %d distinct bound spend"
+           " txs=%s (every credit row binds its own real spend)"
+           % (bal_a0 - 4990, bal("usr:amy"), len(cv),
+              sorted(c["kind"] for c in cv), len(set(txs)),
+              len(set(txs)) == 4))
+
+        # -- zero-credit gate + ungated normal submit ------------------
+        jobs0 = len(xpf.queue_snapshot()["jobs"])
+        bal_b0 = bal("usr:ben")
+        refuse_leg("ben with ZERO credits tries an expedited submit",
+                   lambda: xpf.submit("usr:ben", "demo:build-9",
+                                      expedite_kind="demo_queuejump"))
+        jobs1 = len(xpf.queue_snapshot()["jobs"])
+        ok("zero-credit refusal audit: zero rows, zero charge",
+           "jobs %d==%d and ben %d==%d (a failed jump leaves zero"
+           " rows behind and never charges)"
+           % (jobs0, jobs1, bal("usr:ben"), bal_b0))
+        tx_n0 = spend_n()
+        r_norm = xpf.submit("usr:ben", "demo:build-9")
+        ok("ben submits a PLAIN hall job (no expedite kind)",
+           "ungated, no token movement (spend-tx %d==%d); job #%d"
+           " joins the normal tier at live position %d, expedited=%s"
+           % (tx_n0, spend_n(), r_norm["job_id"], r_norm["position"],
+              r_norm["expedited"]))
+
+        # -- two-tier ordering with live position receipts --------------
+        r_n1 = xpf.submit("usr:amy", "idea:tower-mk2")
+        tx_c0 = spend_n()
+        r_e1 = xpf.submit("usr:amy", "demo:build-3",
+                          expedite_kind="demo_queuejump")
+        cv_e1 = xpf.credits_view("usr:amy")["credits"]
+        d1_credit = [c for c in cv_e1
+                     if c["purchase_ref"] == "order:xp-amy-d1"][0]
+        ok("amy jumps a demo job ahead of the whole normal tier",
+           "submitted AFTER ben's and her own normal jobs yet live"
+           " position=%d (the expedited tier ranks ahead of every"
+           " normal job); consumption is pure bookkeeping (spend-tx"
+           " %d==%d, zero token movement); the demo credit #%d is"
+           " consumed once and binds the exact job it jumped=%s"
+           % (r_e1["position"], tx_c0, spend_n(),
+              d1_credit["credit_id"],
+              d1_credit["consumed_job"] == r_e1["job_id"]))
+        r_n2 = xpf.submit("usr:amy", "idea:tower-mk3")
+        bal_a1 = bal("usr:amy")
+        tx1 = spend_n()
+        xpf.purchase("usr:amy", "demo_queuejump", 4990,
+                     "order:xp-amy-d2")
+        ok("amy buys a SECOND demo credit under a fresh ref",
+           "balance %d->%d (exact -4990, a fresh ref = a fresh legal"
+           " spend); spend-tx %d->%d (+1)"
+           % (bal_a1, bal("usr:amy"), tx1, spend_n()))
+        r_e2 = xpf.submit("usr:amy", "demo:build-4",
+                          expedite_kind="demo_queuejump")
+        snap = xpf.queue_snapshot()["jobs"]
+        order = [(j["subject"], j["expedited"]) for j in snap]
+        want = [("demo:build-3", True), ("demo:build-4", True),
+                ("demo:build-9", False), ("idea:tower-mk2", False),
+                ("idea:tower-mk3", False)]
+        ok("queue snapshot: two-tier ordering, FIFO inside tiers",
+           "snapshot order %s == %s with positions %s (a later"
+           " expedited job still outranks all normal jobs; inside"
+           " each tier jobs stay FIFO by submission order); submit"
+           " receipts returned live positions normal %d/%d,"
+           " expedited %d/%d"
+           % (order, want, [j["position"] for j in snap],
+              r_norm["position"], r_n2["position"],
+              r_e1["position"], r_e2["position"]))
+
+        # -- one credit = one job; mismatch leaves credit intact --------
+        jobs_pre = len(xpf.queue_snapshot()["jobs"])
+        refuse_leg("a THIRD demo jump with zero unconsumed demo"
+                   " credits",
+                   lambda: xpf.submit("usr:amy", "demo:build-6",
+                                      expedite_kind="demo_queuejump"))
+        refuse_leg("a submit_expedite credit tries to jump a demo:*"
+                   " job (kind-domain mismatch)",
+                   lambda: xpf.submit("usr:amy", "demo:build-5",
+                                      expedite_kind="submit_expedite"))
+        cv_mm = xpf.credits_view("usr:amy")["credits"]
+        s_credit = [c for c in cv_mm
+                    if c["kind"] == "submit_expedite"][0]
+        jobs_post = len(xpf.queue_snapshot()["jobs"])
+        ok("one-credit-one-job + mismatch audit",
+           "jobs %d==%d (both refusals leave zero rows); the"
+           " submit_expedite credit is still unconsumed=%s (a"
+           " mismatched kind never burns a credit; a consumed"
+           " credit is consumed once and only ever jumps its own"
+           " subject domain)"
+           % (jobs_pre, jobs_post, not s_credit["consumed"]))
+
+        # -- every kind consumes its own domain ------------------------
+        r_s = xpf.submit("usr:amy", "idea:tower-mk4",
+                         expedite_kind="submit_expedite")
+        r_r = xpf.submit("usr:amy", "talk:ask-mentor",
+                         expedite_kind="resident_dialogue")
+        ok("the submit and dialogue credits consume their own"
+           " domains (idea:* / talk:*)",
+           "tower-mk4 jumped at live position %d, ask-mentor at %d"
+           " (both inside the expedited tier, FIFO by submission"
+           " order)"
+           % (r_s["position"], r_r["position"]))
+        bal_c0 = bal("usr:carol")
+        tx2 = spend_n()
+        xpf.purchase("usr:carol", "resident_dialogue", 490,
+                     "order:xp-carol-r1")
+        r_rc = xpf.submit("usr:carol", "talk:ask-mayor",
+                          expedite_kind="resident_dialogue")
+        ok("carol buys + consumes her own dialogue credit",
+           "carol balance %d->%d (exact -490, one spend for one"
+           " credit); spend-tx %d->%d (+1); her talk job joins the"
+           " expedited tier at live position %d -- a second buyer's"
+           " credit never touches amy's"
+           % (bal_c0, bal("usr:carol"), tx2, spend_n(),
+              r_rc["position"]))
+        r_b = xpf.submit("usr:amy", "backtest:fast-1",
+                         expedite_kind="backtest_expedite")
+        snap_f = xpf.queue_snapshot()["jobs"]
+        cv_f = xpf.credits_view("usr:amy")["credits"] \
+            + xpf.credits_view("usr:carol")["credits"]
+        consumed = [c for c in cv_f if c["consumed"]]
+        job_ids = {j["job_id"] for j in snap_f}
+        all_bound = all(c["consumed_job"] in job_ids for c in consumed)
+        ok("the backtest credit consumes backtest:* -- all %d credits"
+           " consumed, each bound to the exact job it jumped"
+           % len(cv_f),
+           "fast-1 jumped at live position %d; final snapshot = %d"
+           " jobs (%d expedited + %d normal, positions %s);"
+           " consumed credits %d/%d, every consumed_job is a real"
+           " queued job=%s"
+           % (r_b["position"], len(snap_f),
+              sum(1 for j in snap_f if j["expedited"]),
+              sum(1 for j in snap_f if not j["expedited"]),
+              [j["position"] for j in snap_f], len(consumed),
+              len(cv_f), all_bound))
+
+        # -- enterprise boundary: module gate refusal -------------------
+        try:
+            xpf.purchase("ent:acme", "demo_queuejump", 4990,
+                         "order:xp-ent-1")
+            ent_outcome = "unexpectedly accepted"
+        except expedite_mod.ExpediteError as exc:
+            refusals.append(str(exc.code))
+            ent_outcome = ("refused: %s at the module gate (buyers"
+                           " are usr:* only) -- the expedite gate"
+                           " itself refuses non-resident buyers one"
+                           " layer earlier than the token ledger, so"
+                           " the stack is fail-closed: zero charge,"
+                           " zero rows written; production enterprise"
+                           " procurement routes through the"
+                           " BigCompute collection gateway"
+                           " (D-20260924-11 collection exit unified"
+                           " there)" % exc.code)
+        ok("an ent: enterprise account tries to buy a credit"
+           " directly on the resident token ledger", ent_outcome)
+
+        # -- bad-args family, all zero side effects ---------------------
+        pre_bad = (bal("usr:amy"), bal("usr:ben"), bal("usr:carol"))
+        refuse_leg("a zero price purchase is refused",
+                   lambda: xpf.purchase("usr:amy", "submit_expedite",
+                                        0, "order:xp-amy-z1"))
+        refuse_leg("an empty purchase ref is refused",
+                   lambda: xpf.purchase("usr:amy", "submit_expedite",
+                                        990, "  "))
+        refuse_leg("an empty submit subject is refused",
+                   lambda: xpf.submit("usr:amy", "  "))
+        refuse_leg("an UNKNOWN expedite kind is refused",
+                   lambda: xpf.submit("usr:amy", "idea:x",
+                                      expedite_kind="magic"))
+        post_bad = (bal("usr:amy"), bal("usr:ben"), bal("usr:carol"))
+        ok("bad-args audit: all three buyer balances flat",
+           "%s==%s (price must be int > 0, purchase refs are"
+           " required, submit subjects are required, expedite kinds"
+           " must be one of the four registered kinds -- every"
+           " rejected call charges nothing and writes no row)"
+           % (list(pre_bad), list(post_bad)))
+
+        # -- pure-read audit: zero token movement ----------------------
+        tx_r0 = spend_n()
+        _ = xpf.queue_snapshot()
+        _ = xpf.credits_view("usr:amy")
+        _ = xpf.credits_view("usr:carol")
+        tx_r1 = spend_n()
+        ok("pure-read audit: queue_snapshot / credits_view",
+           "spend-tx %d==%d unchanged -- reads move zero tokens;"
+           " the queue view is deterministic (expedited tier first"
+           " FIFO, then the normal tier FIFO, positions 1-based)"
+           % (tx_r0, tx_r1))
+
+        # -- audit: spends == purchases, all rows bind debits -----------
+        tx_total = spend_n()
+        purchases_total = 6
+        amy_final = bal("usr:amy")
+        ben_final = bal("usr:ben")
+        carol_final = bal("usr:carol")
+        pool_final = bal("pool:reserve")
+        conn = sqlite3.connect(db)
+        bound = 0
+        rows_total = 0
+        for buyer, tx in conn.execute(
+                "SELECT account_id, bound_spend_tx FROM"
+                " expedite_credits").fetchall():
+            rows_total += 1
+            head = conn.execute(
+                "SELECT type FROM ledger_tx WHERE tx_id = ?",
+                (tx,)).fetchone()
+            leg_dir = conn.execute(
+                "SELECT direction FROM ledger_entries WHERE"
+                " tx_id = ? AND account_id = ?", (tx, buyer)).fetchone()
+            if head is not None and head[0] == "spend" and leg_dir \
+                    is not None and leg_dir[0] == "debit":
+                bound += 1
+        conn.close()
+        conservation = (pool_final + amy_final + ben_final
+                        + carol_final == 33000)
+        ok("audit the expedite purchases against real debit entries",
+           "spend-tx total %d == expedite purchases %d (5 amy"
+           " credits + 1 carol credit); all %d credit rows bind a"
+           " real spend debit for their own buyer (bound %d/%d);"
+           " balances exact: amy 15000-4990-990-990-490-4990=%d, ben"
+           " %d flat, carol 8000-490=%d; pool:reserve %d (33000 mint,"
+           " spent tokens loop back in, conservation holds:"
+           " pool+balances==mint=%s)"
+           % (tx_total, purchases_total, rows_total, bound, rows_total,
+              amy_final, ben_final, carol_final, pool_final,
+              conservation))
+
+        # -- isolation law: module source, structural -------------------
+        with open(expedite_mod.__file__, encoding="utf-8") as fh:
+            xp_src = fh.read()
+        code_src = xp_src.split('"""', 2)[2]
+        banned = [b for b in ("sell", "refund", "exchange", "withdraw",
+                              "transfer", "mint") if b in code_src]
+        module_wide = [b for b in ("sell", "refund", "exchange",
+                                   "withdraw", "transfer", "mint")
+                       if b in xp_src]
+        no_owner_rewrite = ("UPDATE expedite_credits SET account_id"
+                            not in xp_src
+                            and "UPDATE expedite_credits SET kind"
+                            not in xp_src)
+        single_update = xp_src.count("UPDATE expedite_credits") == 1
+        non_ascii = sum(1 for ch in xp_src if ord(ch) > 127)
+        led_calls = xp_src.count("self.led.")
+        ok("isolation law audit on the REAL module source",
+           "banned token-verb hits on the code surface=%s"
+           " (module-wide scan=%s); ledger-API call sites"
+           " (self.led.) x%d = account onboarding + the single"
+           " purchase spend -- the module's ONLY token-domain touch"
+           " is the purchase spend (exactly one spend per credit);"
+           " submits and reads move zero tokens; the single UPDATE"
+           " surface=%s is exactly the consumption marking on credit"
+           " rows (consumed once, carries the job it jumped); the"
+           " account_id / kind ownership columns are never"
+           " rewritten=%s; no verb moves a credit between accounts;"
+           " module source pure ASCII (%d non-ascii)"
+           % (banned or "none", module_wide or "none", led_calls,
+              single_update, no_owner_rewrite, non_ascii))
+
+        xpf.close()
+        led.close()
+        return {
+            "legs": legs, "refusals": refusals,
+            "spend_total": tx_total, "purchases": purchases_total,
+            "bound": bound, "rows": rows_total,
+            "amy_bal": amy_final, "ben_bal": ben_final,
+            "carol_bal": carol_final, "pool_bal": pool_final,
+            "kinds": 4, "top_cny": 49.9,
+            "conservation": conservation, "non_ascii": non_ascii,
+            "banned": banned, "module_wide": module_wide,
+            "no_owner_rewrite": no_owner_rewrite,
+            "single_update": single_update, "led_calls": led_calls,
+            "audit_ok": tx_total == purchases_total and bound == 6
+            and rows_total == 6 and amy_final == 2550
+            and ben_final == 10000 and carol_final == 7510
+            and pool_final == 12940 and conservation and not banned
+            and no_owner_rewrite and single_update and non_ascii == 0
+            and led_calls == 3,
+        }
+    finally:
+        if xpf is not None:
+            with contextlib.suppress(Exception):
+                xpf.close()
+        if led is not None:
+            with contextlib.suppress(Exception):
+                led.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def wm_probe():
     """Run the REAL AIGC implicit-watermark capability (P-47-3c face)
     in-process on a deterministic throwaway image (F3 law: every
@@ -4266,6 +4665,98 @@ def render():
              " fail-closed in production)"),
         ])
 
+    # -- trading-hall expedite privilege face card (v0.22): REAL
+    # probe at render time; honest failure face --
+    try:
+        xpr = expedite_probe()
+        xpr_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        xpr, xpr_err = None, str(exc)[:300]
+    if xpr is not None:
+        xp_rows_html = "".join(
+            "<tr><td>%d</td><td>%s</td><td>%s</td></tr>"
+            % (lg["n"], esc(lg["action"]), esc(lg["outcome"]))
+            for lg in xpr["legs"])
+        xp_kpis = ("<div class=\"grid\">"
+                   "<div class=\"kpi\"><b>%d==%d</b>expedite spends"
+                   " == purchases (one spend per credit)</div>"
+                   "<div class=\"kpi\"><b>%d</b>fail-closed refusals"
+                   " (zero charge, zero rows)</div>"
+                   "<div class=\"kpi\"><b>%d</b>expedite kinds in one"
+                   " two-tier queue</div>"
+                   "<div class=\"kpi\"><b>%s</b>CNY highest C7 anchor"
+                   " claimed live (demo queue jump)</div>"
+                   "</div>"
+                   % (xpr["spend_total"], xpr["purchases"],
+                      len(xpr["refusals"]), xpr["kinds"],
+                      xpr["top_cny"]))
+        xp_scope = esc(
+            "delivery model = one two-tier priority queue over the"
+            " token ledger: a purchase is exactly one token spend"
+            " bound into its credit row (idempotent on the caller"
+            " ref, a replay returns the existing credit with no"
+            " second charge); a plain submit is ungated and costs"
+            " nothing; an expedited submit consumes exactly one"
+            " unconsumed credit of the matching kind -- the kind must"
+            " match the subject domain (idea: / backtest: / demo: /"
+            " talk:) -- and the job joins the expedited tier, which"
+            " ranks ahead of every normal job, FIFO inside each"
+            " tier; a consumed credit is consumed once and carries"
+            " the job it jumped; a failed or mismatched jump leaves"
+            " zero rows and never burns a credit")
+        xp_audit = esc(
+            "expedite purchase audit: %d expedite spends == %d"
+            " purchases (5 amy credits + 1 carol credit); all %d"
+            " credit rows bind a real spend debit for their own"
+            " buyer (bound %d/%d); balances exact: amy"
+            " 15000-4990-990-990-490-4990=%d, ben %d flat, carol"
+            " 8000-490=%d; pool:reserve %d (33000 mint, spent tokens"
+            " loop back in, conservation holds: pool+balances==mint"
+            "=%s)"
+            % (xpr["spend_total"], xpr["purchases"], xpr["rows"],
+               xpr["bound"], xpr["rows"], xpr["amy_bal"],
+               xpr["ben_bal"], xpr["carol_bal"], xpr["pool_bal"],
+               xpr["conservation"]))
+        xp_hard = esc(
+            "structural law (the R620 module posture, suite"
+            " AC-XP1/AC-XP7): counts stay counts and tokens stay"
+            " tokens -- the module's ONLY token-domain touch is the"
+            " purchase spend (exactly one spend per credit); submits"
+            " and reads move zero tokens; the single UPDATE surface"
+            " is exactly the consumption marking on credit rows"
+            " (consumed once, carries the job it jumped); the"
+            " account_id / kind ownership columns are never"
+            " rewritten and no verb moves a credit between accounts;"
+            " any cancellation, fee reversal or credit transfer is a"
+            " P1 [needs-CEO] approval face, never a mechanism here;"
+            " enterprise buyers are refused at the module gate"
+            " (usr:* only) -- production enterprise procurement"
+            " routes through the BigCompute collection gateway"
+            " (D-20260924-11)")
+    else:
+        xp_rows_html = xp_kpis = xp_scope = xp_audit = xp_hard = ""
+    if xpr_err:
+        xp_kpis = ("<p class=fail>EXPEDITE PROBE FAILED (honest"
+                   " failure, no fake PASS): %s</p>" % esc(xpr_err))
+    xp_compl = "".join(
+        "<li><b>%s</b>&#65306;%s</li>" % (esc(n), esc(t))
+        for n, t in [
+            ("AIGC", str(lcfg.get("token", {}).get("ai_label_text",
+                                                   ""))),
+            ("disclaimer", str(lcfg.get("token", {}).get(
+                "disclaimer", ""))),
+            ("[needs-CEO]", "the C3/C7 canon anchors (strategy submit"
+             " expedite 9.9 CNY, backtest expedite 9.9 CNY, game"
+             " demo queue jump 49.9 CNY, resident named dialogue 4.9"
+             " CNY) are caller-supplied probe prices; real pricing,"
+             " launch gating and any cancellation, fee reversal or"
+             " credit transfer stay a P1 CEO approval face"),
+            ("msgSecCheck front gate", "expedited job subjects,"
+             " dialogue texts and every UGC/text surface in the"
+             " stack keep the msgSecCheck front gate (wordlist mock"
+             " in sandbox, fail-closed in production)"),
+        ])
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -4393,7 +4884,8 @@ card (R968) &middot; v0.12 AIGC implicit watermark card
 (R984) &middot; v0.17 studio onboarding card
 (R986) &middot; v0.18 ad slot card (R987) &middot; v0.19 venue card
 (R989) &middot; v0.20 city data report card (R990) &middot; v0.21
-metaverse identity card (R992)</span></header>
+metaverse identity card (R992) &middot; v0.22 hall expedite card
+(R993)</span></header>
 
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
@@ -4707,6 +5199,34 @@ CNY) as caller-supplied sandbox values, not pricing decisions; raw
 tx ids are never rendered (determinism) -- the audit face shows the
 bound-debit verification instead.</p></div>
 
+<div class="card"><h2>Expedite Face (C3/C7 hall privileges, live
+probe)</h2>
+<p class=kv>The REAL trading-hall expedite-privilege face
+(src/sandbox/ledger/expedite.py, the R620 product itself, imported
+never copied) runs in-process at render time on a throwaway probe
+database -- every reading below is computed by the product module,
+never canned. This is the BLUEPRINT sec.4 C-side canon rows 3 + 7
+(hall value-added / expedite privileges): strategy submit expedite
+9.9 CNY, backtest expedite 9.9 CNY, game demo queue jump 49.9 CNY
+-- the highest-priced remaining zero-front suite line -- resident
+named dialogue 4.9 CNY. Two-tier priority queue: a purchase is
+exactly one token spend bound into its credit row; consumption is
+pure bookkeeping -- counts stay counts and tokens stay tokens.</p>
+__XP_KPIS__
+<table><tr><th>#</th><th>probe action</th><th>live outcome</th></tr>
+__XP_ROWS__</table>
+<p class=kv>__XP_SCOPE__</p>
+<p class=kv>__XP_AUDIT__</p>
+<p class=kv>__XP_HARD__</p>
+<h3 style="margin:14px 0 8px">Compliance (persistent, from config)</h3>
+<ul>__XP_COMPL__</ul>
+<p class=kv>Probe prices (990 submit / 990 backtest / 4990 demo queue
+jump / 490 resident dialogue) mirror the C3/C7 canon anchors
+(9.9 / 9.9 / 49.9 / 4.9 CNY) as caller-supplied sandbox values, not
+pricing decisions; raw spend tx ids are never rendered (determinism)
+-- the audit face shows the bound-debit verification instead.</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -4931,6 +5451,12 @@ __PAYWARN__</footer>
         "__ID_AUDIT__": id_audit,
         "__ID_HARD__": id_hard,
         "__ID_COMPL__": id_compl,
+        "__XP_KPIS__": xp_kpis,
+        "__XP_ROWS__": xp_rows_html,
+        "__XP_SCOPE__": xp_scope,
+        "__XP_AUDIT__": xp_audit,
+        "__XP_HARD__": xp_hard,
+        "__XP_COMPL__": xp_compl,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

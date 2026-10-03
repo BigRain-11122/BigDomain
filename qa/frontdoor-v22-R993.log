@@ -1,0 +1,23 @@
+python : [ WARN:0@0.300] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallback
+ed to CV_8U.
+At line:1 char:1
++ python qa/fd22_selfcheck_r993.py 2>&1 | Out-File -Encoding utf8 qa/fr ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ WARN:0@0.300]...acked to CV_8U.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FD22a: frontdoor source pure ASCII: 275997 bytes=True; write set under src/sandbox = ['src/sandbox/frontdoor.py'] (expedite/ledger product tree untouched)
+PASS AC-FD22b: twenty-five probe legs rendered in order=True (positions [1222, 1587, 1796, 2015, 2350, 2458, 2632, 2824, 3176, 3348, 3917, 4030, 4170, 4457, 4681, 4952, 5283, 5763, 5858, 5950, 6048, 6144, 6463, 6703, 7141])
+PASS AC-FD22b-chain: one-spend-credit=True replay-idempotent=True four-kinds=True zero-credit-gate=True ungated-normal=True jump-position=True fresh-ref=True two-tier-snapshot=True one-credit-one-job=True own-domains=True second-buyer=True final-audit=True ent-gate=True bad-args=True pure-reads=True debit-audit=True isolation=True
+PASS AC-FD22b-refusals: eight fail-closed refusal codes on the card (NO_CREDIT x2, KIND_MISMATCH x1, BAD_ACCOUNT x1 incl. the ent: boundary, BAD_AMOUNT x1, BAD_REF x1, BAD_SUBJECT x1, BAD_KIND x1 -- every rejection zero charge)
+PASS AC-FD22c: AIGC label verbatim=True; disclaimer verbatim=True; [needs-CEO] price note=True; msgSecCheck gate note=True; probe-price law=True
+PASS AC-FD22d: determinism: two renders, expedite block byte-identical=True (10914 chars); unfilled placeholders page-wide=none
+PASS AC-FD22e: healthz=ok on live server; card count = 24: got 24; expedite card title on live page=True; page has no probe-failure face=True; live expedite card block 10914 chars
+PASS AC-FD22f: this log = qa/frontdoor-v22-R993.log (FD22 full record); full regression log = qa/reconcile-all-R993.log (RUNNER PASS 27 suites expected); state log row + commit with D-20260930-06 follow at closeout
+SUITE PASS (8/8 checks pass)
