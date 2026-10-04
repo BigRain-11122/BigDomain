@@ -1,0 +1,8 @@
+PASS AC-K247a stale row located verbatim on main board: R1170 done row, 2436 B, md5-16 2bc6b2dae89ef259
+PASS AC-K247b pure-append to Oct archive section R1171 (sections 152->153, prefix 607882 B unchanged + appendix 2447 B)
+PASS AC-K247c migrated row per-line md5 identical (2bc6b2dae89ef259) vs board original; single occurrence in Oct archive
+PASS AC-K247d 09-archive md5 lock unchanged (19783a35cfc4e57e)
+INFO measured layout: 3 blank lines between stale row and open rows (original convention)
+PASS AC-K247e main board end-state = spec header + R1171 current row + 5 open rows + 0 stale done rows (three-blank separator convention held; header and trailing bytes preserved)
+NOTE terminal-state cross-verify (current R1171 row done-marking at closeout) appended by closeout stage
+PASS AC-K247e post-closeout terminal state: R1171 current row done-marked [x] with in-register evidence; main board = spec header + R1171 done row + 5 open rows + 0 stale
