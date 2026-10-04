@@ -1,0 +1,83 @@
+# BigDomain fold R218 + board-law knife cut-218 closeout evidence log (R1088, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K218a); fold evidence in qa/reorg-R1088.log
+# criteria: AC-K218a..e + closeout legs of AC-R2181..R2185; all checks verify-then-write
+
+PASS pre.board.claim.landed | - [ ] R1088 ???fold R218
+PASS pre.board.stale.isR1083
+PASS pre.board.stale.bytes | bytes=2539
+PASS pre.board.stale.md5
+PASS pre.board.rows | done R1083=1, unchecked=5 (4 open + 1 claim), claim=1
+PASS pre.board.open4
+PASS pre.board.hdr.anchor
+PASS pre.board.claim.matches.data
+PASS pre.arc10.size | bytes=520128
+PASS pre.arc10.nobom
+PASS pre.arc10.endslf
+PASS pre.arc10.sections | secs=123
+PASS pre.arc09.md5untouched
+PASS s2.prefix.intact
+PASS s2.tail.layout
+PASS s2.row.verbatim.once
+PASS s2.size | arc10 520128B->522679B
+PASS s2.sections.124 | secs=124
+PASS s2.arc09.stilluntouched
+INFO s2.migration | R1083 stale row 2539B verbatim pure-appended as oct archive sec R1088 (123->124)
+PASS s3.stale.removed
+PASS s3.hdr.anchor.once
+PASS s3.flip.prefix
+PASS s3.board1.fixedpoint | board1=11759
+PASS s3.board1.stable | board1=11759
+PASS s3.stale.gone
+PASS s3.done.flip.once
+PASS s3.header.cut218.once
+PASS s3.open4.intact
+PASS s3.linecount | n=17
+PASS s3.done.row.pos
+PASS s3.open.pos
+INFO s3.board.final | header + R1088 done row + 4 open rows, stale rows=0, board 11661B->11759B
+PASS s4.state.roundtrip | len rt=70571 raw=70571
+PASS s4.pre.tick
+PASS s4.pre.logcount | n=56
+PASS s4.pre.lastlog.summary
+PASS s4.round.clean.idlefast
+PASS s4.round.clean.nopullable
+PASS s4.round.clean.idle
+PASS s4.tokens.clean.idlefast
+PASS s4.tokens.clean.nopullable
+PASS s4.tokens.clean.idle
+PASS s4.round.anchored
+PASS s4.notraillf
+PASS s4.post.tick
+PASS s4.post.logcount
+PASS s4.post.lastround
+PASS s4.post.lasttokens
+PASS s4.fin.margingate | final 73213B margin 5287B under the 78500B gate
+PASS s4.baseline.kept.last_order | val='2026-09-28 22:1x'
+PASS s4.baseline.kept.last_decision_rows | val=246
+PASS s4.baseline.kept.benchmarks_refreshed | val='2026-10-04'
+PASS s4.baseline.kept.last_gord_tbl_rows | val=154
+PASS s4.baseline.kept.last_dec_tokens | val='C-20260927-01,C-20260927-02,C-20260928-02,C-20260929-01,C-20260929-02,C-20260929-03,D-20260924-01,D-20260924-02,D-20260924-03,D-20260924-04,D-20260924-05,D-20260924-06,D-20260924-07,D-20260924-08,D-20260924-09,D-20260924-10,D-20260924-11,D-20260925-01,D-20260925-02,D-20260925-03,D-20260925-04,D-20260925-05,D-20260925-06,D-20260925-07,D-20260925-08,D-20260925-09,D-20260925-10,D-20260925-11,D-20260926-01,D-20260926-02,D-20260926-03,D-20260926-04,D-20260926-05,D-20260926-06,D-20260926-07,D-20260926-08,D-20260926-09,D-20260926-10,D-20260926-11,D-20260927-01,D-20260927-02,D-20260927-03,D-20260927-04,D-20260927-05,D-20260927-06,D-20260927-07,D-20260927-08,D-20260927-09,D-20260927-10,D-20260928-01,D-20260928-02,D-20260928-03,D-20260928-04,D-20260928-05,D-20260928-06,D-20260929-01,D-20260929-02,D-20260929-03,D-20260929-04,D-20260929-05,D-20260929-06,D-20260929-07,D-20260930-01,D-20260930-02,D-20260930-03,D-20260930-04,D-20260930-05,D-20260930-06,D-20260930-07,D-20260930-08,D-20260930-09,D-20260930-11,D-20260930-12,D-20260930-13,D-20260930-14,D-20260930-15,D-20260930-16,D-20260930-17,D-20260930-18,D-20260930-19,D-20260930-20,D-20260930-21,D-20260930-22,D-20260930-23,D-20260930-24,D-20260930-25,D-20260930-26,D-20260930-27,D-20260930-28,D-20260930-29,D-20260930-30,D-20260930-31,D-20260930-32,D-20260930-33,D-20260930-34,D-20260930-35,D-20260930-36,D-20260930-37,D-20260930-38,D-20260930-39,D-20260930-40,D-20260930-41,C-20260930-04,C-20260930-05,C-20260930-06,D-20261001-01,D-20261001-02,D-20261001-03,D-20261001-04,D-20261001-05,D-20261001-06,D-20261001-07,C-20261001-01,C-20261001-02,C-20261001-03,C-20260101-01,D-20261001-08,C-20261002-01,D-20261002-01,D-20261002-02,D-20261002-03,D-20261002-04,D-20261002-05,D-20261002-06,D-20261002-07,D-20261002-08,D-20261002-09,D-20261003-01,D-20261003-02,D-20261003-03,D-20261003-04,D-20261004-01,D-20261004-02'
+INFO s4.state.json | tick 1087->1088, log 56->58 items, final 73213B (margin 5287B under 78500B gate), roundtrip-verified serialization
+PASS s5.pre.endslf
+PASS s5.hb.ascii
+PASS s5.hb.appended
+INFO s5.heartbeat | R1088 line appended (ascii, LF, 653 bytes)
+PASS s6.pre.bom
+PASS s6.export.roundtrip | len rt=377460 raw=377460
+PASS s6.nm.anchor.once
+PASS s6.tickrow.found
+PASS s6.tickrow.pre | val=1083
+PASS s6.sd.window
+PASS s6.sd.pre
+PASS s6.sd.recount.post | live (33, 24, 2, 4) == predicted (33, 24, 2, 4)
+PASS s6.post.tickrow
+PASS s6.post.lastresult
+PASS s6.post.sd
+PASS s6.post.nm
+PASS s6.post.current
+INFO s6.export | export_ts refreshed, ceo_face.current=R1088, nm fold R218 closed, results tick 1088 + R218/cut-218 row, sd recount 33/24/2/4 -> 33/24/2/4
+PASS final.state.parse
+INFO final.metrics | arc10 520128B->522679B (123->124 sections), board 11661B(with claim landed) -> 11759B final, state 81120B -> 70571B fold -> 73213B final, qa logs: qa/reorg-R1088.log + qa/board-R1088.log
+INFO commit.template | R1088: fold R218 water-level reorg + board knife cut-218 dual round (R1083 isomorph, score 1); window [R217 roll + R1083..R1087 five pairs] 11->1 kept=0, state 81120B->73213B final (fold 70571B margin 9429B); R1083 stale row 2539B verbatim to oct archive sec R1088 (123->124); board final header+R1088 row+4 open; export tick 1088 + sd 41/24/6/8->33/24/2/4; AC-R2181..R2185+AC-K218a..e = qa/reorg-R1088.log+qa/board-R1088.log (P-2026-09-25-18) [via BigDomain-OSLoop]
+
+SUITE PASS (AC-K218a..e all green; AC-R2185 delivery legs verified: state pair in register, commit follows with P-2026-09-25-18)
