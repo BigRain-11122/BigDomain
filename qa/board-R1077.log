@@ -1,0 +1,95 @@
+# BigDomain board-law knife cut-215 evidence log (R1077, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K215a)
+# criteria: AC-K215a..e (see backlog R1077 row); all checks verify-then-write
+
+PASS pre.board.size | bytes=11082
+PASS pre.board.bom
+PASS pre.board.lf
+PASS pre.board.linestruct | n=17
+PASS pre.board.donecount | done rows=1
+PASS pre.board.opencount | open rows=4
+PASS pre.board.l8.md5 | len=2203
+PASS pre.board.l8.done
+PASS pre.board.open4
+PASS pre.board.open.len.L12 | got=746
+PASS pre.board.open.len.L13 | got=1436
+PASS pre.board.open.len.L14 | got=608
+PASS pre.board.open.len.L16 | got=689
+PASS pre.board.hdr.anchor.once
+PASS pre.arc10.size | bytes=513321
+PASS pre.arc10.nobom
+PASS pre.arc10.endslf
+PASS pre.arc10.sections | newline-anchored sections=120 (matches PS line-anchored 120)
+PASS pre.arc09.md5untouched
+PASS claim.fresh.checkbox
+PASS claim.acset
+PASS claim.nocrlf
+PASS claim.clean.idlefast
+PASS claim.clean.nopullable
+PASS s1.claim.ondisk
+PASS s1.stale.still.ondisk
+PASS s1.claim.above.stale
+INFO s1.claim.dropped | claim row on disk before migration (pre-registration honored)
+PASS s2.prefix.intact
+PASS s2.tail.layout
+PASS s2.row.verbatim.md5
+PASS s2.size | arc10 513321B->515536B
+PASS s2.sections.121 | newline-anchored=121
+PASS s2.arc09.stilluntouched
+PASS s3.flip.prefix
+PASS s3.board1.fixedpoint | board1=11169 iterations ok
+PASS s3.board1.stable | board1=11169
+PASS s3.stale.gone
+PASS s3.done.flip.once
+PASS s3.header.cut215.once
+PASS s3.open4.intact
+PASS s3.linecount | n=17
+PASS s3.done.row.pos
+PASS s3.open.pos
+PASS s3.open.len.L12 | got=746
+PASS s3.open.len.L13 | got=1436
+PASS s3.open.len.L14 | got=608
+PASS s3.open.len.L16 | got=689
+PASS s3.done.row.md5.recorded
+INFO s3.board.final | header + R1077 done row + 4 open rows, stale rows=0, board 11082B->11169B
+PASS s4.state.roundtrip | len rt=78760 raw=78760
+PASS s4.pre.tick
+PASS s4.pre.logcount | n=62
+PASS s4.pre.lastlog.tokens
+PASS s4.round.clean.idlefast
+PASS s4.round.clean.nopullable
+PASS s4.tokens.clean.idlefast
+PASS s4.tokens.clean.nopullable
+PASS s4.round.anchored
+PASS s4.notraillf
+PASS s4.post.tick
+PASS s4.post.logcount
+PASS s4.post.lastround
+PASS s4.post.lasttokens
+PASS s4.baseline.kept.last_order | val='2026-09-28 22:1x'
+PASS s4.baseline.kept.last_decision_rows | val=246
+PASS s4.baseline.kept.benchmarks_refreshed | val='2026-10-04'
+PASS s4.baseline.kept.last_gord_tbl_rows | val=154
+INFO s4.state.json | tick 1076->1077, log 62->64 items, baselines kept, roundtrip-verified serialization
+PASS s5.pre.endslf
+PASS s5.hb.ascii
+PASS s5.hb.appended
+PASS s5.hb.tail
+INFO s5.heartbeat | R1077 line appended (ascii, LF, 588 bytes)
+PASS s6.pre.bom
+PASS s6.export.roundtrip | len rt=374859 raw=374859
+PASS s6.nm.anchor.once
+PASS s6.tickrow.found
+PASS s6.tickrow.pre | val=1076
+PASS s6.sd.window
+PASS s6.sd.pre
+PASS s6.post.tickrow
+PASS s6.post.lastresult
+PASS s6.post.sd
+PASS s6.post.nm
+PASS s6.post.current
+INFO s6.export | export_ts refreshed, ceo_face.current=R1077, nm fold R215 closed, results tick 1077 + cut-215 row, sd 37/24/2/6->39/24/2/7
+PASS final.board.md5.recorded | board final md5=a15574cd10cdbfce5479f5ad335a4043
+INFO final.metrics | arc10 513321B->515536B (120->121 sections), board 11082B->11169B, state 78760B->81305B
+
+SUITE PASS (AC-K215a..e all green)
