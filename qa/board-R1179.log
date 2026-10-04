@@ -1,0 +1,10 @@
+PASS AC-K255a pre-op: stale R1178 done row located on board, 2744 B, md5 bbd590e8876fcd8b1e0761441537d5c7
+PASS AC-K255b pre-op dual-caliber strict 150 register 160; 09-archive locked 358597 B
+PASS AC-K255c board row byte-identical to git HEAD backlog row (committed at cc0ebca)
+PASS AC-K255d pure-append 630067B+2755B; archive row verbatim md5 identical bbd590e8876fcd8b1e0761441537d5c7; dual-caliber strict 150->151 register 160->161
+PASS AC-K255e 09-archive locked 358597 B untouched
+PASS board final state: header + R1179 current claim row + 5 open rows + 0 stale rows
+== qa/board-R1179.log board knife cut-255 (255th board knife) ==
+AC-K255a..e PASS: R1178 stale done row 2744B verbatim migrated to Oct archive section R1179 (strict 150->151, register 160->161, dual-caliber per R1178 board-log convention); board row pre-migration byte-identical to git HEAD backlog row; archive pure-append prefix 630067B + 2755B; migrated-row md5 identical bbd590e8876fcd8b1e0761441537d5c7; 09-archive locked 358597B untouched; board final state = header + R1179 current row + 5 open rows + 0 stale rows
+SUITE PASS cut-255 single clean run (verify-then-write, zero intercepts)
+PASS post-closeout cross-verify: board = header + R1179 done row (closeout evidence appended in-place) + 5 open rows + 0 stale rows

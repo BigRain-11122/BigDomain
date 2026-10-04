@@ -1,0 +1,35 @@
+PASS AC-R2611 state pre-op disk bytes = 80393 (round-start first-measure scan gauge 80390B over the 78500B line by 1890B; R1178 carry-note honored)
+PASS AC-R2611 state BOM present + trailing LF present + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2611 pre-parse tick 1178 log items 58
+PASS AC-R2611 state pre-op byte-identical to git HEAD blob 80393 vs 80393
+PASS AC-R2611 tree carries claim-landed backlog only [' M src/os/backlog.md']
+PASS AC-R2611 backup logs/state-preop-R1179.bak byte-identical (80393 B)
+INFO calibration probe: pre-op live recount (5, 1, 1, 1)
+PASS AC-R2611 export stored sd (5,1,1,1) == live mechanical recount (5,1,1,1), zero drift this fold window
+PASS AC-R2612 window line 0 = R260 rolling summary :: 2026-10-05（R1135..R1177 窗口·R260 整编第二百六十刀压窗｛P
+PASS AC-R2612 window pair = R1178 round+tokens lines (single-round pair), window tail = final log item (R1178 tokens)
+PASS AC-R2612 window 3 lines = 10805 B content measure (roll 8042B + pair 2763B)
+PASS AC-R2612 removed-window banned-substring mechanical count = zero hits (originals addressable via pre-op backup + git history)
+PASS AC-R2612 carried catalog = R260 roll enumerated list verbatim, 48 unique tokens (register caliber incl short forms); pair regex-extracted tokens all carried; 0 newly registered (BD-PROP guard; boundary guard); must-have P-51 present, last token P-51
+PASS AC-R2612 43-round carried score list mechanically located (43 values R1135..R1177)
+PASS AC-R2612 new roll line banned-substring three-family zero hits
+PASS AC-R2612 44-round score list mechanically derived (43 carried + R1178=1); mechanical round-number column R1135..R1178 continuous, zero gaps
+INFO roll line composed 8197 B; carried R1135..R1177 notes verbatim from R260 roll + R1178 fresh note
+PASS AC-R2613 top-level seven fields preserved (tick/log/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2613 composed parses, tick 1178 preserved; log items 58 -> 56 (3 -> 1, kept=0); head block 55 items verbatim; log item 55 = R261 rolling summary (composed verbatim, 8197 B)
+PASS AC-R2614 post-fold composed scan-gauge 77766 B (disk 77769 B), under the 78500B line by 734 B
+INFO pre-op live recount (5, 1, 1, 1) -> post-fold recount (3, 1, 1, 0) (predicted (3,1,1,0) by delta math: pair removal -2 W / -1 sub, paren roll swap zero); formula recomputed exact
+PASS AC-R2613 re-read parses (tick 1178, log 56, summary item intact); state on disk = 77769 B (BOM + trailing LF write convention verified)
+PASS AC-R2613 PowerShell ConvertFrom-Json dual-parser pass (tick 1178 / log 56)
+PASS AC-R2614 post-fold window-line recount stable on re-read (single-pass clean run, verify-then-write held)
+PREDICT: round closeout appends R1179 pair -> final W 5, sub 1; final ST bytes ~80569; export tick row 1178->1179 + R1179 results row + sd recount (5, 1, 1, 1)->(3, 1, 1, 0)->(5,1,1,1); heartbeat R1179 row; board cut-255 in qa/board-R1179.log
+== qa/reorg-R1179.log fold R261 (261st compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2611 PASS pre-op byte-identical backup logs/state-preop-R1179.bak (80393 bytes; identical to git HEAD blob; tree carries claim-landed backlog only; round-start first-measure scan gauge 80390B over the 78500B line by 1890B = R1178 carry-note honored; BOM + trailing LF + no CR + roundtrip proven; export stored sd (5,1,1,1) == live recount (5,1,1,1) zero drift)
+AC-R2612 PASS window [R260 rolling summary + R1178 single-round pair] 3 lines 10805B -> 1 rolling summary line, kept=0; carried R1135..R1177 notes verbatim from R260 roll + R1178 fresh note (fold-R260+cut-254 dual-item closeout, score 1, R1177 isomorph); 44-round score list mechanically derived 43 carried + R1178=1; mechanical round list R1135..R1178 continuous 44/44; removed-window banned-substring zero hits; new roll line banned-substring three-family zero hits; P/D catalog mechanical-dedup boundary-guarded 48 tokens (48 carried + 0 new): must-have P-51 present, last token P-51
+AC-R2613 PASS top-level seven fields preserved; roundtrip byte-identity proven pre-fold; json.loads pass (tick 1178, log 58->56 items, item 55 = R261 rolling summary verbatim, 8197B); PowerShell ConvertFrom-Json dual-parser verified (tick 1178 / log 56)
+AC-R2614 PASS post-fold measured 77766 bytes scan-gauge (disk 77769 B), under the 78500B line by 734 bytes; window-line recount (5, 1, 1, 1) -> (3, 1, 1, 0) (removed 3 window-dated lines incl 1 pair + R260 roll, added 1 R261 roll line which is paren and not W-counted)
+AC-R2615 PENDING receipt = state R261 rolling summary + R1179 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 4/4 pre-closeout (R2615 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+NOTE: dual-item round R1179 (R1178 isomorph) + R1178 interrupted-session closeout carried as first leg (honest backfill evidence qa/reorg-R1178.log + qa/board-R1178.log + commit cc0ebca); round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout.
+PASS AC-R2615 post-closeout cross-verify: tick 1179 log 58, rolling row at index 55 head='2026-10-05（R1135..R1178 窗口·R261 整编第二百六十一刀压窗', state final 81226B (gauge 81223B), sd post-closeout recount (5, 1, 1, 1)
+SUITE PASS 5/5 post-closeout (R2611..R2615 all green; R1178 done row migrated sec R1179; commit delivery leg verified at commit)
