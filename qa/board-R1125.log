@@ -1,0 +1,35 @@
+# BigDomain fold R234 + board-law knife cut-229 closeout evidence log (R1125, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K229a); fold evidence in qa/reorg-R1125.log
+# criteria: AC-K229a..e + closeout legs of AC-R2341..R2345; all checks verify-then-write
+# NOTE: first close run aborted at s4.pre.lastlog.summary (stale R233-prefix template from R1122; folded register tail is the R234 summary) after stage-2/3 writes; second run aborted at rv.board.suffix.selfref (ASCII/Chinese check-string mismatch, board bytes correct) and final.commit.len (verbose template 602B > 500B cap; condensed per r1122_commit.txt precedent) - both check-only, zero extra disk writes; this finish pass re-verifies every end state byte-level
+
+PASS fin.state.tick
+PASS fin.state.logcount
+PASS fin.state.lastround
+PASS fin.state.lasttokens
+PASS fin.state.summary.item
+PASS fin.state.margingate | final 73902B margin 4598B
+PASS fin.state.roundtrip
+PASS fin.board.done.once
+PASS fin.board.header.once
+PASS fin.board.open4
+PASS fin.board.stale.gone
+PASS fin.board.selfref
+PASS fin.arc10.sections
+PASS fin.arc09.untouched
+PASS fin.hb.endscrlf
+PASS fin.hb.lastr
+PASS fin.hb.once
+PASS fin.export.tickrow
+PASS fin.export.resultsn
+PASS fin.export.lastresult
+PASS fin.export.sd
+PASS fin.export.current
+PASS fin.export.nm
+PASS fin.export.ts
+PASS fin.commit.len | len=459
+PASS fin.commit.carrier
+
+SUITE PASS (AC-K229a..e all green; AC-R2345 delivery legs verified: state R234 rolling summary + R1125 pair in register, commit follows with P-2026-09-25-18)
+INFO final.metrics | arc10 551466B->554078B (134->135 sections), board 15455B(with claim landed) -> 13536B final, state 78604B -> 70705B fold -> 73902B final, heartbeat: R1125 row, qa logs: qa/reorg-R1125.log + qa/board-R1125.log
+INFO commit.template | R1125: fold R234 water-level reorg + board knife cut-229 (R1122 isomorph, score 1); window [R233 roll + R1122..R1124 three pairs] 7->1 kept=0; state 78604B->70705B fold->73902B final; R1122 stale row 2600B verbatim to oct archive sec R1125 (134->135); board 15455B->13536B final; heartbeat R1125 row; export tick 1122->1125 + sd 37/24/2/6->33/24/2/4; AC-R2341..R2345+AC-K229a..e = qa/reorg-R1125.log+qa/board-R1125.log (P-2026-09-25-18) [via BigDomain-OSLoop]
