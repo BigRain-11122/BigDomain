@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-05T00:31:11+08:00",
+  "export_ts": "2026-10-05T00:38:58+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1155 pyahocorasick bench 接线评估轮（OH-20261005-bigdomain.md 第四窗入池件指针②提前兑现·轮计分 2=可跑实物·判负留痕=诚实负面产出）：AC-PB1..PB6 预注册判据全过——2889 探针语义等价 divergences=0·12,000 条真实语料吞吐对照（3 跑中位）trie 709,895 msg/s vs AC 523,940 msg/s=x0.74·对抗面四面 AC ≤trie×1.5 内（ascii-filler 长文本 trie 病态 ×66.6 实证=逐位 Python 环成本）·采纳判据 ≥2× 不达→NOT-ADOPTED 入池件转 parked（短语料主面 trie 快 1.37×=省一笔无谓 C 扩展依赖·长文本面 bootstrap 期再评注记落 README（三））·wordlist.py/pipeline.py 零改动·BSD-3 归属注记随件·证据=qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py；R1155 会话于 export 刷新前中断→本刷新+commit 由 R1156 补全如仪（诚实律注记）",
-    "latest_artifact": "最近实物=pyahocorasick Aho-Corasick 前置过滤 bench 评估件（qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py·2026-10-05 R1155·OH-20261005-bigdomain.md 第四窗入池件指针②·判负留痕 NOT-ADOPTED 入池件 parked〔≥2× 采纳门槛不达·AC-PB1..PB6 全过·语义等价 2889 探针零分歧·12,000 条语料吞吐双列如实·对抗四面全测·长文本 66× 差=bootstrap 期长文 UGC 面再评注〕；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
-    "next_milestone": "下个里程碑（≤10-06）：10-05 12:00 法务两步制初稿窗开（HQ 秘书处代理出具·席7 复核 10-06 12:00·D-20261004-06·§五.8 修订与 A 档收款面维持挂起）；10-05 周轮=提案回访（本窗 09-28~10-05 BD-PROP-001+002 两条在册·v2.1 ④ 判据已满足）+BigLife R777 复核档到达即启本司常务班复核（D-20261003-02 chronic）；SOP 补建缺口 2 对账日常化 runbook=10-05..10-11 窗首件（O-2026-0930-027 滚动窗每窗 ≥1 件·夜窗/自驱轨）；OSS 第五窗 10-08 21:40；游客端三态选型决策包在页待 CEO 拍板（O-2026-0929-007·审批窗 10-07·dataface=ready_now）；XL-16 窗 10-07（31 卡活体在页）；benchmarks 7 天刷 10-11；10-07 治理日=SOP 盘点清单聚合审；10-08 token 审计判据回访；fold R245=R1155 轮首首测裁定；bootstrap CEO 物理件无 ETA"
+    "current": "R1156 R1155 中断收账补全+QA charter 每日 crawl J 片+fold R245 水位整编+板刀 cut-239 多项一轮（轮计分 1）：R1155 会话中断残件由本轮补收账毕（export 补刷+定向 commit d0c5b17+push·score-2 bench 实物落地）；集团决策新五行 D-20261005-01..05 全判读知悉（O-029 本司逐日核销行=0 核销·卡点全外件待达如实；D-05 OSS 欠七实体不含本司）；QA J 片=《互联网群组信息服务管理规定》A 级官方全文直采——第二条群组定义直接命中大厅聊天房〔补 W13 两态注〕+群主/管理员责任+处置阶梯黑名单+日志 ≥6 个月留存键升级候选；benchmarks 三处翻新+墙 W14；fold R245 兑现（79,714B 越线→73,320B·margin 5,183B·AC 全绿）+cut-239 板刀（R1154 行迁 10 月档 §R1156）",
+    "latest_artifact": "最近实物=pyahocorasick Aho-Corasick 前置过滤 bench 评估件（qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py·2026-10-05 R1155·定向 commit d0c5b17 落地=R1156 中断收账补全·OH-20261005-bigdomain.md 第四窗入池件指针②·判负留痕 NOT-ADOPTED 入池件 parked〔≥2× 采纳门槛不达·AC-PB1..PB6 全过·语义等价 2889 探针零分歧·12,000 条语料吞吐双列如实·对抗四面全测·长文本 66× 差=bootstrap 期长文 UGC 面再评注〕；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
+    "next_milestone": "下个里程碑（≤10-07）：10-05 12:00 法务两步制初稿窗开（HQ 秘书处代理出具·席7 复核 10-06 12:00·D-20261004-06·§五.8 修订与 A 档收款面维持挂起）+BigLife R777 复核档到达即启本司常务班复核（D-20261003-02 chronic）+提案新窗 10-06 起（本窗 09-28..10-05 BD-PROP-001/002 足额）；SOP 补建缺口 2 对账日常化 runbook=10-05..10-11 窗首件（O-2026-0930-027 滚动窗每窗 ≥1 件）；10-07 治理日=SOP 盘点清单聚合审+O-029 卡点案复核窗+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07·dataface=ready_now）+XL-16 窗（31 卡活体在页）；OSS 第五窗 10-08 21:40+10-08 token 审计判据回访；benchmarks 7 天刷 10-12；fold R246=R1157 轮首首测裁定；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -1909,14 +1909,18 @@
     [
       "2",
       "pyahocorasick 前置过滤 bench 接线评估件（OH-20261005-bigdomain.md 入池件指针②·判负留痕 NOT-ADOPTED parked：≥2× 采纳门槛不达〔trie 709,895 vs AC 523,940 msg/s=x0.74〕·2889 探针语义等价 divergences=0·对抗四面 AC ≤trie×1.5·ascii-filler 面 trie 病态 ×66.6 实证·wordlist.py/pipeline.py 零改动·BSD-3 注记·qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py+README（三）行注记·AC-PB1..PB6 全过·R1155）"
+    ],
+    [
+      "1",
+      "QA charter 每日 crawl J 片+fold R245+cut-239 多项一轮（R1054 I 片同构·J 片=《互联网群组信息服务管理规定》A 级官方全文直采〔cac.gov.cn/2017-09/07/c_1121623889.htm·大厅聊天房=群组定义直接命中补 W13 两态注·日志 ≥6 月留存键升级候选〕·benchmarks §①③④ 三处翻新+benchmarks_refreshed=2026-10-05+墙 W14 双表行+qa/smoke-R1156.log+png；fold R245=79,714B 越线触发兑现→73,320B·AC-R2451..R2455 全绿=qa/reorg-R1156.log；cut-239=R1154 滞板行 verbatim 迁 10 月档 §R1156·AC-K239a..e 全绿=qa/board-R1156.log·R1156）"
     ]
   ],
   "self_drive": {
-    "window": "2026-09-28..2026-10-04",
+    "window": "2026-09-29..2026-10-05",
     "window_days": 7,
-    "log_lines_in_window": 11,
-    "idle_fast_mention_lines": 7,
-    "no_pullable_mention_lines": 2,
+    "log_lines_in_window": 5,
+    "idle_fast_mention_lines": 1,
+    "no_pullable_mention_lines": 1,
     "substantive_non_idle_mention_lines": 1,
     "proposals_total": 2,
     "proposals_open": 2,

@@ -1,0 +1,9 @@
+PASS AC-K239a located stale R1154 done row on main board: line index 7, 4142 B, md5 b13f5febe3eb299685353b11067178b0
+PASS AC-K239b archive tail = section R1154 (cut-238), sections 144 -> new section R1156 = 145
+PASS AC-K239c board final state = header + R1155 current row + R1156 current row + 5 open rows + 0 stale done rows
+PASS AC-K239c 09 archive untouched by construction (read-only md5 lock 19783a35cfc4)
+PASS AC-K239d archive pure-append verified (prefix byte-identical 583460 B + appendix 4154 B)
+PASS AC-K239d migrated row verbatim (md5 b13f5febe3eb299685353b11067178b0 identical in archive)
+PASS AC-K239e re-read verified: board + archive on disk, section count 144 -> 145, last section R1156, 09 archive md5 unchanged 19783a35cfc4
+PASS AC-K239e evidence -> qa/board-R1156.log; receipt = state log R1156 line + commit (P-51 three-carrier rule)
+SUITE PASS 5/5 (K239a locate / K239b archive tail / K239c board final state / K239d pure-append verbatim / K239e re-read + 09-lock)

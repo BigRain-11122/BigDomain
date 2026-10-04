@@ -1,0 +1,91 @@
+BigDomain QA Smoke Test - round R1156 - 2026-10-05 +08:00 (holiday window day 5)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-05 first round;
+  R1155 midnight round deferred this day's crawl to the next round per its log line)
+round mode: multi-item round = R1155 interrupted-closeout completion (score-2 artifact landed via commit
+  d0c5b17) + QA charter daily crawl J-slice (R1054 I-slice isomorph) + fold R245 waterline reorg + knife cut-239
+    (round-start gauge state.json 79714B over the 78500B line 1214B = R1155 carry-note cashed)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only; 2 attempts / 1 hit / 1 miss-404 + search positioning):
+    a. cac.gov.cn/2017-09/07/c_1121623889.htm - HIT (A-level official issuer full-text page:
+       "Internet Group Information Service Management Provisions" (Hulianwang Qunzu Xinxi Fuwu Guanli Guiding),
+       National Cyberspace Administration, published 2017-09-07 18:00 (source: China Cyberspace Affairs Net),
+       effective 2017-10-08, 15 articles. Verified article-by-article this round:
+       Art.2 group definition = "network space for group online exchange of information established by
+       internet users via websites/mobile apps" -> lobby WebSocket real-time chat room = DIRECT HIT
+       (closes the W13 two-state honesty note: chat not listed in the 2022 comment-provisions revision
+       forms; this provision = the directly applicable frame for lobby chat); users classified =
+       group founder / manager / member (our room-host / room-mod / guest roles).
+       Art.5 main-responsibility = professional staffing + tech capability matched to service scale
+       (second legal source for the bootstrap auditor-team budget row, W12-aligned) + four systems
+       (user registration / info review / emergency response / security protection) + public rules
+       and platform convention + service agreement.
+       Art.6 backstage-real-name front-voluntary (no real-name = no publish service) + personal-info
+       protection (no leak/tamper/destroy, no illegal sale or provision).
+       Art.7/8 tiered-category management by nature/category/member-scale/activity + filing with
+       national or provincial CAC + credit-grade management system (P-47-2 anti-farm legal source);
+       member-count / group-creation / group-join caps + unique group ID code + group info page
+       (name/count/category) + tiered founder qualification review + in-group identity labeling.
+       Art.9 founder/manager group-management responsibility + provider must grant them necessary
+       functional permissions (lobby host/mod permission keys - kick/mute face).
+       Art.11 disposal ladder for groups = warn-rectify / suspend-publish / close-group, records kept
+       + report; for founders/managers = lower credit grade / suspend management / cancel founding
+       qualification; blacklist system incl. members (P-47-3 UGC disposal ladder isomorphic).
+       Art.12 complaint/report channels with convenient entries + timely handling.
+       Art.13 network logs retained >= 6 MONTHS (lobby evt_id log-retention key UPGRADE candidate:
+       above the 60-day anchor of the live-provisions W12; production-criteria amendment candidate).
+       Art.15 effective 2017-10-08.
+    b. cac.gov.cn/2016-08/08/c_1119351969.htm - MISS 404 (initial URL guess, wrong year - the writer
+       misremembered the 2017 publication as 2016; negative recorded per two-state law; search located
+       the official full-text page c_1121623889 + announcement page c_1121624277 as dual evidence)
+    -> consumption anchors: lobby chat face P-47-1 (group definition direct hit + host/mod duty +
+       member caps + unique room ID + log >= 6mo key), UGC pipeline P-47-3 (disposal ladder +
+       blacklist), token ledger P-47-2 (credit-grade system as anti-farm legal source, W11/W12/W13
+       same-direction), bootstrap auditor-team staffing budget row second legal source.
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-05 (state.json top field updated this round at closeout);
+    docs/global-benchmarks.md on-disk deltas = section-1 new block "群组信息服务法规" (7 bullet rows,
+       A-grade direct-crawl confirmation line) + section-3 new source row (group information service
+       regulation domain) + section-4 refresh record line "2026-10-05 web 直采刷新 J 片";
+       7-day cycle next due 2026-10-12.
+
+[3] research source chain (zero-key, graded, two-state): PASS
+    source = cac.gov.cn official full-text page, grade A, zero key, read-only host web_fetch; initial-URL
+    404 negative on record (wrong-year guess, honestly noted); search positioning recorded; external
+    content treated as untrusted input, zero downstream assertions.
+
+[4] signal wall: PASS
+    W14 appended to docs/research/intelligence-wall.md signal table (date / signal / source link +
+    grade + fetch time / consumption landing points / status) + conclusion-application table row
+    appended (W14 -> benchmarks section-1/section-3 filed, spec consumption = production-criteria
+    amendment window, lobby log-retention key >= 6 months upgrade candidate).
+
+[5] O-2026-0930-013 item-4 daily first-round data check: PASS
+    R1155 midnight round performed the 10-05 first-round duty check (age 0.2h + parse + ceo_face three
+    lines, per its log line); this round refreshed docs/status-export.json twice (R1155 completion
+    refresh 00:31 + closeout refresh), age < 1h; JSON parse OK; ceo_face three lines in place
+    (current / latest_artifact / next_milestone).
+
+[6] fold R245 (state waterline carry-note cashed): PASS
+    round-start gauge 79714B > 78500B line by 1214B (R1155 carry-note);
+    window [R244 roll + R1154..R1155 two pairs] 5 lines 10183B -> 1 rolling summary (kept=0);
+    pre-op form archived byte-exact = logs/state-preop-R1156.bak (79717B, HEAD blob content-identical);
+    post-fold 73320B under the line, margin 5183B; 56 log lines; state.json re-parses OK;
+    calibration probe reproduced export stored sd (11,7,2,1) exactly; post-fold recount (8,7,2,0)
+    == prediction; P/D catalog 37 tokens (31 carried + 6 newly, O-027 alias honestly registered);
+    AC-R2451..R2454 all green first-run = qa/reorg-R1156.log; scan next round re-gauges fold R246.
+
+[7] self_drive derived face (F3 mechanical law): PASS
+    calibration probe on pre-op window 2026-09-28..2026-10-04 reproduced the stored register 11/7/2/1
+    exactly (zero drift this window); 7-day window rolls to 2026-09-29..2026-10-05 at the closeout
+    export refresh with counters mechanically re-derived from the post-fold log (values recorded
+    there per F3 mechanical-wins law); queue counters + proposals 2/2 disk-recounted at closeout;
+    probe = .codely-cli/tmp/probe_r1156_fold.py.
+
+self-verify summary: [1]..[7] all PASS -> charter daily round green; round score = 1
+    (file changes: benchmarks + signal wall + evidence set + fold mechanism + knife archive; no new
+    runnable artifact this round - the score-2 bench artifact belongs to R1155 and was landed this
+    round via commit d0c5b17 as interrupted-closeout completion).
