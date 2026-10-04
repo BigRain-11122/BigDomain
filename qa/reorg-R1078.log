@@ -1,0 +1,56 @@
+PASS AC-R2161 state pre-op = 81305 B (round-start first-measure over the 80000B line by 1305B = R1077 carry-note honored)
+PASS AC-R2161 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2161 state has no CR bytes
+PASS AC-R2161 state has no trailing LF
+PASS AC-R2161 state pre-op byte-identical to git HEAD blob (state untouched by claim landing)
+PASS AC-R2161 pre-parse tick 1077 | tick=1077
+PASS AC-R2161 pre-parse log items 64 | n=64
+PASS AC-R2161 backup logs/state-preop-R1078.bak byte-identical (81305 B)
+PASS AC-R2161 export roundtrip (BOM + indent2, no trailing LF)
+PASS AC-R2161 export stored sd == pre-registered (39, 24, 2, 7) | (39, 24, 2, 7)
+PASS AC-R2161 PRE sd mechanical recount == stored (zero drift) | (39, 24, 2, 7) == (39, 24, 2, 7)
+PASS AC-R2162 R212 rolling summary located at log item 55 | len=917
+PASS AC-R2162 window line 0 = R212 rolling summary
+PASS AC-R2162 window line 1 = R1074 round line
+PASS AC-R2162 window line 2 = R1074 tokens line
+PASS AC-R2162 window line 3 = R1075 round line
+PASS AC-R2162 window line 4 = R1075 tokens line
+PASS AC-R2162 window line 5 = R1076 round line
+PASS AC-R2162 window line 6 = R1076 tokens line
+PASS AC-R2162 window line 7 = R1077 round line
+PASS AC-R2162 window line 8 = R1077 tokens line
+PASS AC-R2162 window tail line = final log item (no comma)
+INFO window 9 lines = 11799 B (content measure)
+PASS AC-R2162 P/D catalog carried key tokens (boundary-guarded, no BD-PROP false positive: True)
+INFO P/D catalog (13 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+INFO removed-window sd contribution: W=9 idle=0 nop=0 substantive=4
+PASS AC-R2162 counter hygiene: summary free of 'idle' substring
+PASS AC-R2162 counter hygiene: summary free of 'no-pullable' substring
+PASS AC-R2162 counter hygiene: summary free of 'no_pullable' substring
+PASS AC-R2163 composed parses, tick 1077 preserved
+PASS AC-R2163 log items 64 -> 56 (9 -> 1, kept=0) | n=56
+PASS AC-R2163 log item 55 = R216 rolling summary (verbatim in register)
+PASS AC-R2163 top-level field preserved: tick
+PASS AC-R2163 top-level field preserved: last_order
+PASS AC-R2163 top-level field preserved: last_decision_rows
+PASS AC-R2163 top-level field preserved: benchmarks_refreshed
+PASS AC-R2163 top-level field preserved: last_gord_tbl_rows
+PASS AC-R2163 top-level field preserved: last_dec_tokens
+PASS AC-R2164 post-fold window-line recount (31, 24, 2, 3) == predicted (31, 24, 2, 3)
+PASS AC-R2164 post-fold composed 70782 B, under the 80000B line by 9218 B
+PASS AC-R2164 state on disk = 70782 B (BOM-less write verified)
+PASS AC-R2163 re-read parses (tick 1077, log 56, summary item intact)
+== qa/reorg-R1078.log fold R216 (216th compression knife, P-2026-09-25-18 item-6 mainline) ==
+AC-R2161 PASS pre-op byte-identical backup logs/state-preop-R1078.bak (81305 bytes; identical to git HEAD blob; round-start first-measure over the 80000B line by 1305B = R1077 carry-note honored)
+AC-R2162 PASS window [R212 rolling summary + R1074..R1077 four pairs] 9 lines -> 1 rolling summary line, kept=0, round types: fold-R212+cut-212 dual / cut-213 / cut-214 / cut-215; scores 1/1/1/1; mechanical round list R1074..R1077 continuous 4/4; P/D catalog mechanical-dedup (boundary-guarded): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+AC-R2163 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); json.loads pass (tick 1077, log 64->56 items, item 55 = R216 rolling summary verbatim)
+AC-R2164 PASS post-fold measured 70782 bytes, under the 80000B line by 9218 bytes; window-line recount (39, 24, 2, 7) -> (31, 24, 2, 3) (stored sd zero-drift pre-check held)
+AC-R2165 PENDING receipt = state R216 rolling summary + R1078 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+NOTE: dual-round R1078 (R1074 isomorph): fold R216 + board knife cut-216 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout (composed text fully verified before the single state write).
+PREDICT: round closeout appends R1078 pair -> final ST bytes (k216 FIN/ST cross fixed-point), export tick row 1077->1078 + R1078 results row + sd recount (31, 24, 2, 3) -> (33, 24, 2, 4) + closeout pair, heartbeat R1078 row (LF, no BOM)
+== POST-CLOSEOUT CROSS-VERIFY (R1078 dual round) ==
+PASS state.json final = 73356 B; tick 1077->1078; log 64->56 (fold) ->58 (closeout pair); dual-parser pass
+PASS AC-R2165 receipt legs: R216 rolling summary in register (item 55) + R1078 log lines in register (items 56/57); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start 39/24/2/7 == stored; post-fold (31, 24, 2, 3); post-closeout (33, 24, 2, 4) == export self_drive (F3, zero drift)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1078.bak 81305 B byte-identical; post-fold 70782 B under the 80000B line by 9218 B
+SUITE PASS - AC-R2161..R2165 all green; delivery AC-R2165 completed by commit carrying P-2026-09-25-18
