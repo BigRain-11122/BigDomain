@@ -1,0 +1,8 @@
+R1089 board cut-219 (R1029..R1088 knife-debt cadence, AC-K219a..e pre-registered)
+pre: main board 13144 B, arc10 522679 B (md5 54e656798eed3108c6355c1fbb70a5ea), sections 124, arc09 md5 19783a35cfc4e57eb24eda5916a07702 (untouched)
+stale done rows found: 1 (R1088 only) = AC-K219a PASS
+migrated row: 2556 B, md5 09a1fcb3dac67fa99060534349407b2a
+post: main board 10585 B, arc10 525247 B, sections 124->125
+pure-append prefix assertion PASS; row md5 identical in archive; 09 archive zero-touch PASS
+main board open unchecked rows: 5 (R1089 claim + 4 standing); done rows after cut: 0
+VERDICT: PASS
