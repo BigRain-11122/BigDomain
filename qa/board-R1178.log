@@ -1,0 +1,4 @@
+== qa/board-R1178.log board knife cut-254 (254th board knife) ==
+NOTE: HONEST BACKFILL written at R1179 — original log missing due to the interrupted R1178 session (see qa/reorg-R1178.log note); all values RE-MEASURED from disk/git at 2026-10-05 ~07:2x.
+AC-K254a..e re-verified: R1177 stale done row 2749B present verbatim in Oct archive section R1178 (md5 bea6a398d2a0231b0de28f48067791bb == md5 of the identical row in git HEAD src/os/backlog.md = verbatim migration proven); dual-caliber section counts strict ^## R\d+$ = 150 and register ^## R\d+ = 160 == claimed 149->150 / 159->160; pure-append delta +2760B exact (HEAD blob 627307B -> disk 630067B); 09-archive locked 358597B untouched; board final state = header + R1178 current row + 5 open rows + 0 stale rows
+SUITE PASS (backfill re-verification, R1179): cut-254 operations verified REAL on disk
