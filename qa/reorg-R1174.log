@@ -1,0 +1,25 @@
+PASS AC-R2561 state BOM + trailing LF + no CR + pre-op disk bytes = 79791 byte-identical to git HEAD blob (sha16 A8301D5E6FFBB7C9)
+PASS AC-R2561 roundtrip byte-identity (indent2, BOM-less content 79788B + trailing LF); round-start first-measure scan gauge 79788B over the 78500B line by 1288B = R1173 carry-note honored
+PASS AC-R2561 backup logs/state-preop-R1174.bak byte-identical (79791 B)
+PASS AC-R2561 round-start tree face: only claim row (src/os/backlog.md) as pre-registered
+INFO export stored self_drive = (5, 1, 1, 1) ; formula live recount = (5, 1, 1, 1) ; pair delta since last refresh = (0,0,0,0) (log 58 items byte-identical to R1173 closeout commit = zero drift by construction)
+PASS AC-R2561 calibration probe: export stored sd (5,1,1,1) + pair delta (+0,+0,+0,+0) == live (5,1,1,1) (zero drift this fold window)
+PASS AC-R2562 window line 0 = R255 rolling summary :: 2026-10-05（R1135..R1172 窗口·R255 整编第二百五十五刀压窗｛P-
+PASS AC-R2562 window pair = R1173 round+tokens lines (single-round pair), window tail = final log item (R1173 tokens)
+PASS AC-R2562 window 3 lines = 10203 B content measure (probe-measured exact value)
+PASS AC-R2562 removed-window banned-substring mechanical count = zero hits {'idle-fast': 0, 'no-pullable': 0, 'nop': 0} (originals addressable via pre-op backup + git history)
+PASS AC-R2562 38-round carried score list mechanically located (38 values)
+PASS AC-R2562 carried token catalog == 48 (R255 carry verbatim; must-have P-51 present; last token P-51)
+PASS AC-R2562 P/D catalog mechanical dedup == 48 carried + 0 newly registered (BD-PROP guard; boundary guard) zero new tokens, dual-window zero new order numbers
+PASS AC-R2562 new roll line banned-substring three-family zero hits
+PASS AC-R2562 39-round score list mechanically derived (38 carried + R1173=1); mechanical round-number column R1135..R1173 continuous, zero gaps
+INFO roll line composed 7444 B; carried R1135..R1172 notes verbatim from R255 roll + R1173 fresh note
+INFO naive predicted gauge 77013B (window 10203B out, roll 7444B in, item-structure -16B for 2 removed items); exact serialized prediction 77013B; margin 1487B under the 78500B line
+INFO predicted post-fold recount (3, 1, 1, 0) by delta math (pair removal -2 w / -1 sub, paren roll swap zero); formula recomputed (3, 1, 1, 0)
+PASS AC-R2563 top-level seven fields preserved (tick/log/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2563 composed parses, tick 1173 preserved; log items 58 -> 56 (3 -> 1, kept=0); head block 55 items verbatim; log item 55 = R256 rolling summary (composed verbatim, 7444 B)
+PASS AC-R2564 post-fold measured 77013 bytes scan-gauge (disk 77016 B), under the 78500B line by 1487 B
+PASS AC-R2564 dual-parser pass (json.loads + PS ConvertFrom-Json, tick 1173, log 56 items)
+AC-R2565 PENDING receipt = state R256 rolling summary + R1174 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2565 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+PASS AC-R2565 post-closeout cross-verify: state log carries R256 rolling summary (item 55) + R1174 round+tokens lines in register (log 58 items, tick 1174, final 79811B / gauge 79808B); commit message carries P-2026-09-25-18 (P-51 three-carrier rule closed at commit)

@@ -1,0 +1,7 @@
+PASS AC-K250a pre-op board read: stale R1173 done row located, 3049 B verbatim (md5 f088a0cb9b82e60df8ccc5ef8fbce98b); board BOM=True preserved byte-for-byte
+PASS AC-K250a migrated to Oct archive section R1174: register-convention section count (^## R headers incl suffixed knife headers R1058..R1068) 155 -> 156; strict ^## R\d+$ caliber counts 145 -> 146, delta = 10 suffixed knife headers, dual-caliber honestly labeled
+PASS AC-K250b post-removal board state: R1174 claim row + 5 open rows + 0 stale done rows (dones=0); final [x] don-marking lands at closeout stage
+PASS AC-K250c pure-append prefix byte-identical (615985 B) + appendix 3060 B (## R1174 header + blank line + row + trailing LF)
+PASS AC-K250d migrated row per-line md5 identical (f088a0cb9b82e60df8ccc5ef8fbce98b)
+PASS AC-K250e 09-archive locked untouched (md5 19783a35cfc4e57e, 358597 B)
+SUITE PASS cut-250 single clean run (verify-then-write, one BOM-caliber intercept at first run honestly recorded, zero state/board writes on the intercepted run; net clean pass second run)
