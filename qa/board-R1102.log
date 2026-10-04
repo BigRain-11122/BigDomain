@@ -1,0 +1,22 @@
+== qa/board-R1102.log cut-222 + closeout (AC-K222a..e, R1097-row migration, s1-s6) ==
+PASS pre.board.claimrow | L07 R1102 claim fresh checkbox (pre-registration honored, landed first)
+PASS pre.board.stale | L08 stale R1097 done row 3017 B md5 495af4b3ef65975d9d580417015125bb (exactly 1 stale done row)
+PASS pre.board.opencount | standing open rows=4 (746B/2359B/608B/689B), done rows=1 (stale only)
+PASS pre.board.hdr.anchor.once | rule-header anchor in place, knife-222 mentions = claim row only (2 in-row), header zero
+PASS pre.arc10.size | bytes=530118, sections=127, lastsec=R1097, ends-LF, no-BOM
+PASS pre.arc09.md5untouched | md5=19783a35cfc4e57eb24eda5916a07702 (pre-registered value reproduced)
+PASS s2.arc10.append | pure-append prefix asserted, sections 127->128, lastsec=R1102, row verbatim in-sec (md5 same), 533146 B
+PASS s3.board1.fixedpoint | board1=13576 B iterations ok (embedded == actual, converged in 2 passes)
+PASS s3.stale.gone | R1097 stale row removed, R1102 row flipped done once, 4 open rows intact, knife-222 note in header exactly once, 16 lines
+PASS s4.round.clean (banned substrings zero-hit on final board)
+PASS s5.heartbeat | R1102 line appended (ascii, CRLF, 1871 bytes)
+
+== SUITE (AC-K222a..e) ==
+AC-K222a PASS stale-row census = exactly 1 stale done row (R1097, 3017 B, md5 495af4b3ef65975d9d580417015125bb) + 4 standing open rows (746/2359/608/689 B) + header intact + claim row landed first (this round) [board 15795B with claim, arc10 530118B, 127 sections, arc09 md5 verified]
+AC-K222b PASS R1097 row verbatim to docs/archive/backlog-done-2026-10.md sec R1102 (pure-append prefix asserted, per-line md5 same, 09 archive untouched, sections 127->128, arc10 530118B->533146B)
+AC-K222c PASS board fixed point = rule header (knife-222 record exactly once) + R1102 done row (claim flipped with measured values) + 4 open rows + 0 stale rows (15795B->13576B, 16 lines)
+AC-K222d PASS evidence = qa/reorg-R1102.log + qa/board-R1102.log (this file) SUITE
+AC-K222e PENDING receipt = done flip on board + commit carrying P-2026-09-25-18 (P-51 rule; completed at commit)
+SUITE PASS (AC-K222a..e; e-delivery completed by commit)
+INFO final.metrics | arc10 530118B->533146B (127->128 sections), board 15795B->13576B, state 81341B->73644B (fold 70741 -> closeout 73644), export sd 35/24/2/5 -> 33/24/2/4
+PASS postwrite.dualparser (PS leg): state tick=1102 logn=58; export tickrow=1102 sd=33/24/2/4; heartbeat R1102 row 1871B CRLF in place
