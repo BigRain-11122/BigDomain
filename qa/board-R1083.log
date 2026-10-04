@@ -1,0 +1,78 @@
+PASS pre.board.size | bytes=13359 (claim landed)
+PASS pre.board.bom
+PASS pre.board.lf
+PASS pre.board.linestruct | n=18
+PASS pre.board.claimrow | L07 R1083 claim fresh checkbox
+PASS s1.stale identification | L08 stale R1078 done row
+PASS pre.board.donecount | done rows=1
+PASS pre.board.opencount | open rows=4 (claim excluded)
+PASS pre.board.l8.len | got=1583 chars / 2359 B
+PASS pre.board.l8.md5 | 81d1db05d796e4628615a5c502df7d14
+PASS pre.board.hdr.anchor.once
+PASS pre.board.hdr.cut217.absent
+INFO pre.board.open.len.L12 | got=746
+INFO pre.board.open.len.L13 | got=1436
+INFO pre.board.open.len.L14 | got=608
+INFO pre.board.open.len.L16 | got=689
+PASS claim.clean (three banned substrings zero-hit)
+INFO s1.claim.landed | claim row on disk before migration (pre-registration honored)
+PASS s1.claim.above.stale
+PASS pre.arc10.size | bytes=517757
+PASS pre.arc10.nobom
+PASS pre.arc10.endslf
+PASS pre.arc10.sections | newline-anchored sections=122
+PASS pre.arc10.lastsec == R1078
+PASS pre.arc09.md5untouched | md5=19783a35cfc4e57eb24eda5916a07702
+PASS s2.prefix.intact (pure append)
+PASS s2.sections.123 | newline-anchored=123
+PASS s2.row.verbatim.md5
+PASS s2.arc09.stilluntouched (compose-time)
+PASS s3.header.cut217 compose check
+PASS s3.board1.fixedpoint | board1=11661 iterations ok (embedded == actual)
+PASS s3.linecount | n=17
+PASS s3.stale.gone
+PASS s3.done.flip.once
+PASS s3.header.cut217.once
+PASS s3.open4.intact
+PASS s3.done.row.pos
+INFO s3.done.row.md5.recorded | cb79e022cf1a557b994c2d6b450fa940
+INFO s3.board.final | header + R1083 done row + 4 open rows, stale rows=0, board 13359B->11661B
+PASS s5.pre.endslf
+PASS s4.post.tick | val=1083
+PASS s4.post.logcount | n=58
+PASS s4.post.lasttokens
+PASS s4.post.lastround
+PASS s4.pre.lastlog.roll (dual-round: post-fold tail = R217 rolling summary, kept=0)
+PASS s4.baseline.kept.last_order | val=2026-09-28 22:1x
+PASS s4.baseline.kept.last_decision_rows | val=246
+PASS s4.baseline.kept.benchmarks_refreshed | val=2026-10-04
+PASS s4.baseline.kept.last_gord_tbl_rows | val=154
+PASS s4.baseline.kept.last_dec_tokens
+PASS s4.sd.postcloseout == predicted | (33, 24, 2, 4) == (33, 24, 2, 4)
+PASS s4.final.underline | 73118B under 80000B by 6882B
+PASS s4.round.clean (banned substrings zero-hit)
+PASS s4.notraillf
+INFO s4.state.json | tick 1082->1083, log 66->56 (fold) ->58 (closeout pair), baselines kept, roundtrip-verified serialization, final 73118B
+PASS s6.nm.anchor.once
+PASS s6.tickrow.pre | val=1078
+PASS s6.post.tickrow | val=1083
+PASS s6.post.lastresult
+PASS s6.post.sd | (33,24,2,4)
+PASS s6.post.sd.liverecount == stored | (33,24,2,4) == (33,24,2,4)
+PASS s6.post.nm | fold R218 gauge opened
+PASS s6.post.current | ceo_face.current=R1083
+PASS s6.post.notraillf
+INFO s6.export | export_ts refreshed, ceo_face.current=R1083, nm fold R217 closed + fold R218 gauge opened, results tick 1083 + R1083 row, sd 41/24/6/8->33/24/2/4
+PASS postwrite.state.bytes | 73118B
+PASS postwrite.state.dualparser | tick=1083 logn=58
+PASS postwrite.export.dualparser | tickrow=1083
+INFO s5.heartbeat | R1083 line appended (ascii, LF, 815 bytes)
+postcloseout.board | board final md5=4d74529e2745c94c2076e39de32eb72b (11661 B); arc10 520128 B (123 sections); 09 archive md5 unchanged (19783a35cfc4e57eb24eda5916a07702)
+== qa/board-R1083.log cut-217 + closeout (AC-K217a..e, R1078-row migration, s1-s6) ==
+AC-K217a PASS stale-row census = exactly 1 stale done row (R1078, 1583 chars / 2359 B, md5 81d1db05d796e4628615a5c502df7d14) + 4 standing open rows + header intact + claim row landed first (this round) [board 13359B with claim, arc10 517757B, 122 sections, arc09 md5 verified]
+AC-K217b PASS R1078 row verbatim to docs/archive/backlog-done-2026-10.md sec R1083 (pure-append prefix asserted, per-line md5 same, 09 archive untouched, sections 122->123, arc10 517757B->520128B)
+AC-K217c PASS board fixed point = rule header (cut-217 record exactly once) + R1083 done row (claim flipped with measured values) + 4 open rows + 0 stale rows (13359B->11661B, 17 lines)
+AC-K217d PASS evidence = qa/reorg-R1083.log + qa/board-R1083.log (this file) SUITE
+AC-K217e PENDING receipt = done flip on board + commit carrying P-2026-09-25-18 (P-51 rule; completed at commit)
+SUITE PASS (AC-K217a..e; e-delivery completed by commit)
+INFO final.metrics | arc10 517757B->520128B (122->123 sections), board 13359B->11661B, state 81225B->73118B (fold 70565B -> closeout 73118B), export sd ->33/24/2/4, hb +815B
