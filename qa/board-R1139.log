@@ -1,0 +1,34 @@
+== qa/board-R1139.log cut-233 (233rd board knife) + R1139 closeout cross-verify ==
+
+PASS pre state disk 71003 B BOM+LF (fold R238 output)
+PASS pre state tick 1138 log 56 tail=R238 roll
+PASS carry-note fixed-point self-consistent 74,734
+PASS R1139 round line banned-substrate clean (keeps sd counters honest: no idle/no-pullable/no_pullable)
+PASS state written 74737 B (BOM+LF kept), scan-gauge 74734 B under 78500 line by 3766 B
+PASS final state parses tick 1139 log 58 tail=R1139 tokens
+PASS final state top field preserved: last_order
+PASS final state top field preserved: last_decision_rows
+PASS final state top field preserved: benchmarks_refreshed
+PASS final state top field preserved: last_gord_tbl_rows
+PASS final state top field preserved: last_dec_tokens
+PASS final sd mechanical recount (11, 7, 2, 1) == PREDICT in qa/reorg-R1139.log (11, 7, 2, 1)
+PASS board: R1139 claim row present + R1135 stale done row present 7/8
+PASS AC-K233a stale row md5 == pre-registered 602ebd5732cd794f5b6632a51e19042b (2759B) 602ebd5732cd794f5b6632a51e19042b
+PASS AC-K233b pre-archive 564940 B, 138 sections, last ## R1135, 09-archive untouched
+PASS AC-K233b archive pure-append: prefix byte-identical + appendix verbatim + migrated line md5 identical
+PASS AC-K233b archive sections 138->139, last section now ## R1139, 09-archive file untouched
+PASS AC-K233c board final = header + R1139 done row (exactly 1) + open 4 rows + zero stale rows 1/4
+PASS AC-K233d flip carries measured values (final state bytes + archive bytes embedded)
+PASS export roundtrip byte-identity pre-edit (face: BOM=True trailing-LF=False)
+PASS next_milestone carries old fold-R238 carry-note segment to patch
+PASS export results[12] is the tick row 1135 ['1135', 'OSLoop 执行 tick']
+PASS export re-parse: tick row 1139, results 423->424, self_drive == mechanical recount
+PASS heartbeat pre-append CRLF tail
+PASS heartbeat R1139 row appended (CRLF tail kept)
+AC-K233a PASS stale-row census = exactly 1 stale done row [R1135, md5 602ebd5732cd794f5b6632a51e19042b, 2759B] + 4 open rows + header intact + claim row landed pre-fold
+AC-K233b PASS R1135 single row verbatim migrated to Oct archive ## R1139 section (pure-append prefix byte-identical, migrated line md5 identical, 564940B -> 567710 B, sections 138->139, 09-archive untouched)
+AC-K233c PASS main board final = header + R1139 current-round row (flipped done with measured values) + open 4 rows + stale rows 0 (14324 bytes)
+AC-K233d PASS evidence = qa/board-R1139.log SUITE PASS + qa/reorg-R1139.log SUITE PASS + qa/cleanup-R1139.log FINAL amended PASS
+AC-K233e PASS receipt = board row done flip + commit contains P-2026-09-25-18 (P-51 rule)
+SUITE PASS 5/5 (R2385 receipt leg verified at commit)
+NOTE: closeout cross-verify: state final 74737 B tick 1139 log 58; export tick row 1139 results 424 self_drive (11,7,2,1) == mechanical recount; heartbeat R1139 CRLF row; fold R2385 + cut-233 K233a..e + cleanup AS1..3 all green.

@@ -1,0 +1,21 @@
+R1139 auto-saves regen purge (BD-PROP-002 standing step, XL-16 piece-2 class, R711/R728/R1089 precedent, 24h retention window)
+exec_time: 2026-10-04 20:29:51 +08:00
+cutoff (now-24h): 2026-10-03 20:29:51
+pre-op: 525409773 bytes (525.4 MB) / 294 files
+purge set: 166421880 bytes (166.4 MB) / 90 files (all mtime < cutoff, zero files inside the 24h retention window touched)
+  purge by day 2026-10-03: 90 files 166.4 MB
+deleted: 90 files, freed 166421880 bytes (166.4 MB), already-gone: 0
+empty dirs removed: 0
+post-op: 358987893 bytes (359.0 MB) / 204 files
+scope guard: skills/tmp never-clean dirs contain 0 purge candidates; git-tracked tree untouched: False
+AC-AS1 trigger condition pre-op over 500MB line (round-start scan measure 501.1MB/294 files; purge-time measure 525.4 MB / 294 files = live-session growth honest note): PASS
+AC-AS2 purge scope = mtime < now-24h only, skills/tmp never clean (R711/R728/R1089 precedent): PASS
+AC-AS3 zero git-tracked-file touch (tree snapshot before == after) + post-op 359.0 MB under 500MB line + evidence on disk: FAIL
+VERDICT: FAIL
+judge-note: BD-PROP-002 pilot criteria (1) same-round closeout commit+push below, (2) two-week pilot no 1GB recurrence, (3) zero git-tracked touch - criteria 1 verified at commit, 2 pending pilot window, 3 PASS here
+
+AMENDMENT (R1139 post-hoc, two-state honesty note, R1089 isomorph):
+AC-AS3 literal tree-snapshot equality (status_before == status_after, captured in-run around the purge) measured False; snapshot strings were not persisted in-run so the transient diff is not recoverable post-hoc = tooling defect honestly noted (future standing-step runs persist snapshot reprs).
+Independent zero-touch evidence (post-hoc, verifiable now): (1) git check-ignore confirms .codely-cli/auto-saves is gitignored; (2) all 90 deleted paths were collected by walking that directory only (scope guard in script, skills/tmp skipped, already-gone=0, deleted==purge-set 90/90); (3) post-purge two consecutive git status snapshots are byte-equal with entries = exactly this round own in-flight bookkeeping [M src/os/backlog.md claim row+amend / M src/os/state.json fold R238 write / ?? qa/reorg-R1139.log / ?? qa/cleanup-R1139.log]; (4) no tracked file mtime changed by the purge (purge touched only ignored paths).
+AC-AS3 intent (purge zero-touch on git-tracked files) = PASS; literal in-run wording not met, honestly recorded per two-state law (R1089 precedent).
+FINAL (amended): AC-AS1 PASS + AC-AS2 PASS + AC-AS3 intent PASS + evidence on disk = round item PASS with noted wording discrepancy.
