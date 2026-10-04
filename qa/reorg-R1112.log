@@ -1,0 +1,33 @@
+== qa/reorg-R1112.log fold R230 (230th compression knife, P-2026-09-25-18 item-5 mainline) ==
+PASS AC-R2301 state pre-op = 78593 B (round-start first-measure over the 78500B line by 93B = R1111 carry-note honored)
+PASS AC-R2301 state has no BOM (R1067+ BOM-less convention); no CR bytes; no trailing LF
+PASS AC-R2301 state pre-op byte-identical to git HEAD blob (OID dual-verify; state untouched by claim landing)
+PASS AC-R2301 tree carries claim-landed backlog only (content-level git diff --name-only)
+PASS AC-R2301 pre-parse tick 1111 | log items 62 | six top-level fields in canonical order
+PASS AC-R2301 backup logs/state-preop-R1112.bak byte-identical (78593 B)
+PASS AC-R2301 export roundtrip byte-identity (BOM + indent2, no trailing LF)
+PASS AC-R2301 export stored sd == (33, 24, 2, 4); live mechanical recount == (37, 24, 2, 6); delta reconciliation stored + R1110..R1111 two-pair increments (4,0,0,2) exact
+PASS AC-R2302 R229 rolling summary located at log item 56; window lines 57..62 = R1109..R1111 three pairs (round numbers consecutive 3/3, tail = final log item, no comma)
+PASS AC-R2302 window 7 lines = 9047 B content measure (utf-8 byte caliber, R1109 9164B precedent) | got 9047
+PASS AC-R2302 removed-window 7 lines substring-verified clean (three banned substrings zero-hit 7/7)
+PASS AC-R2302 mechanical round list R1109..R1111 consecutive 3/3 zero missing (pair criterion: 1 round + 1 tokens line each; three round types score 1/0/0)
+PASS AC-R2302 P/D catalog mechanical dedup == pre-registered 19 tokens (boundary-guarded, BD-PROP embedded excluded; R229 set 19 with window-absorbed 0 new = zero-new honestly noted)
+INFO P/D catalog (19 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,P-32,P-56,P-74,D-20260930-05
+PASS AC-R2302 rolling summary composed: counter hygiene three banned substrings zero-hit (and window-P2 counter protected)
+PASS AC-R2304 post-fold composed 70683 B, under the 78500B line by 7817 B
+PASS s4.fin.margingate | final 73851 B margin 4649 B under the 78500B gate
+PASS closeout fixed-point converged in 2 passes (ROUND embeds board-pre/board-final 16294/13764 B, CLOSURE embeds state-final 73851 B), single-clean lineage, zero repo writes before all asserts green
+PASS AC-R2304 post-fold window-line recount (31, 24, 2, 3) == predicted (roll line in-window W+1, R1109 isomorph)
+PASS AC-R2303 composed parses: tick 1111->1112, log 62->56 (fold, 7->1 kept=0) ->58 (closeout pair), item 56 = R230 rolling summary verbatim, six top-level fields preserved
+PASS s4.post.closeout recount (33, 24, 2, 4) == family-predicted (W -7 +1 roll +2 pair; sub -4 removed round lines +1 R1112 line)
+PASS s6.export | export_ts ISO8601 refreshed, tick row 1109->1112, R1112 results row, sd 33/24/2/4 -> 33/24/2/4 symmetric flat, ceo_face.current=R1112, nm fold-chain updated, 386469 B
+PASS postwrite.state | 73851 B (fold 70683 -> closeout 73851); json.loads leg verified (tick=1112 logn=58 sd=33/24/2/4)
+PASS postwrite.export.reparse (json.loads leg; PS dual-parser leg follows in shell)
+
+== POST-CLOSEOUT CROSS-VERIFY (R1112 dual round) ==
+PASS state.json final = 73851 B; tick 1111->1112; log 62->56 (fold) ->58 (closeout pair); json.loads pass (tick=1112 logn=58)
+PASS AC-R2305 receipt legs: R230 rolling summary in register (item 56) + R1112 log lines in register (items 57/58); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start stored (33,24,2,4) + two-pair drift (4,0,0,2) == live (37,24,2,6); post-fold (31,24,2,3); post-closeout (33,24,2,4) == export self_drive (F3, zero drift, symmetric flat vs R1109 register)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1112.bak 78593 B byte-identical; post-fold 70683 B under the 78500B line by 7817 B; final 73851 B margin 4649 B under the 78500B gate
+NOTE dual-round R1112 (R1109 isomorph): fold R230 + board knife cut-225 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Closeout fixed-point iteration converged in 2 passes, single-clean lineage, zero repo writes before all asserts green (verify-then-write held).
+SUITE PASS - AC-R2301..R2305 all green; delivery AC-R2305 completed by commit carrying P-2026-09-25-18
