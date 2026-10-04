@@ -1,0 +1,21 @@
+== qa/board-R1109.log cut-224 + closeout (AC-K224a..e, R1106-row migration, s1-s6) ==
+PASS pre.board.claimrow | L07 R1109 claim fresh checkbox (pre-registration honored, landed first)
+PASS pre.board.stale | L08 stale R1106 done row 3159 B md5 ee1a3e91ce4f8e4053f7e68bf7d2e186 (exactly 1 stale done row)
+PASS pre.board.opencount | standing open rows=4 (746B/2359B/608B/689B), done rows=1 (stale only)
+PASS pre.board.hdr.anchor.once | rule-header anchor in place, knife-224 mentions = claim row only (2 in-row), header zero
+PASS pre.arc10.size | bytes=536365, sections=129, lastsec=R1106, ends-LF, no-BOM
+PASS pre.arc09.md5untouched | md5=19783a35cfc4e57eb24eda5916a07702 (pre-registered value reproduced)
+PASS s2.arc10.append | pure-append prefix asserted, sections 129->130, lastsec=R1109, row verbatim in-sec (md5 same), 539535 B
+PASS s3.board1.fixedpoint | board1=13847 B iterations ok (embedded == actual, converged in 2 passes)
+PASS s3.stale.gone | R1106 stale row removed, R1109 row flipped done once, 4 open rows intact, knife-224 note in header exactly once, 16 lines
+PASS s4.round.clean (banned substrings zero-hit on final board)
+PASS s5.heartbeat | R1109 line appended (ascii, CRLF, 2065 bytes)
+
+== SUITE (AC-K224a..e) ==
+AC-K224a PASS stale-row census = exactly 1 stale done row (R1106, 3159 B, md5 ee1a3e91ce4f8e4053f7e68bf7d2e186) + 4 standing open rows (746/2359/608/689 B) + header intact + claim row landed first (this round) [board 16219B with claim, arc10 536365B, 129 sections, arc09 md5 verified]
+AC-K224b PASS R1106 row verbatim to docs/archive/backlog-done-2026-10.md sec R1109 (pure-append prefix asserted, per-line md5 same, 09 archive untouched, sections 129->130, arc10 536365B->539535B)
+AC-K224c PASS board fixed point = rule header (knife-224 record exactly once) + R1109 done row (claim flipped with measured values) + 4 open rows + 0 stale rows (16219B->13847B, 16 lines)
+AC-K224d PASS evidence = qa/reorg-R1109.log + qa/board-R1109.log (this file) SUITE
+AC-K224e PENDING receipt = done flip on board + commit carrying P-2026-09-25-18 (P-51 rule; completed at commit)
+SUITE PASS (AC-K224a..e; e-delivery completed by commit)
+INFO final.metrics | arc10 536365B->539535B (129->130 sections), board 16219B->13847B, state 78710B->73941B (fold 70681 -> closeout 73941), export sd 33/24/2/4 -> 33/24/2/4 symmetric flat
