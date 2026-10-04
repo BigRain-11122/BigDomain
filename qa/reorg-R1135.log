@@ -1,0 +1,52 @@
+PASS AC-R2371 state pre-op = 78922 B (round-start first-measure over the 78500B line by 422B = R1134 carry-note honored; carry-note predicted ~79.3KB, -378B drift honestly noted)
+PASS AC-R2371 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2371 state has no CR bytes
+PASS AC-R2371 state has no trailing LF
+PASS AC-R2371 pre-parse tick 1134
+PASS AC-R2371 pre-parse log items 62
+PASS AC-R2371 roundtrip byte-identity (indent2, BOM-less, no trailing LF)
+PASS AC-R2371 state pre-op byte-identical to git HEAD blob 78922 vs 78922
+PASS AC-R2371 tree carries claim-landed backlog only [' M src/os/backlog.md']
+PASS AC-R2371 backup logs/state-preop-R1135.bak byte-identical (78922 B)
+INFO AC-R2371 export stored sd (11, 7, 2, 1) vs live mechanical recount (15, 7, 3, 3) = R1133/R1134 fresh-gate non-refresh drift honestly noted (R1037 precedent; recalibrated at this round closeout)
+PASS AC-R2371 RECOUNT-CRITERION AMENDMENT: first pass double-counted the cross-day paren line 2026-09-27/28 via either-date membership (16, 8, 3, 3); corrected to leading-date anchor per R556 cross-day correction + R1132 register evidence -> live (15, 7, 3, 3); zero state rewrites, fold numbers unaffected, amendment honestly logged (R413/R893 two-pass calibration precedent)
+PASS AC-R2372 window line 0 = R236 rolling summary (log item 55) 2026-10-04（R1129..R1131 窗口·R23
+PASS AC-R2372 window pair round line = R1132 2026-10-04 R1132（~19:03 
+PASS AC-R2372 window pair tokens line = R1132 2026-10-04 R1132 tokens:
+PASS AC-R2372 window pair round line = R1133 2026-10-04 R1133（~19:15 
+PASS AC-R2372 window pair tokens line = R1133 2026-10-04 R1133 tokens:
+PASS AC-R2372 window pair round line = R1134 2026-10-04 R1134（~19:25 
+PASS AC-R2372 window pair tokens line = R1134 2026-10-04 R1134 tokens:
+PASS AC-R2372 window tail = final log item (R1134 tokens)
+INFO window 7 lines = 9376 B content measure
+INFO removed-window banned-substring mechanical count (honest display, legal negative delta at recount): {5: {'no-pullable': 1}} (R1134 round line carries the abolished nop tag once; other 6 lines zero hits)
+PASS AC-R2372 P/D catalog mechanical dedup == 22 tokens (22 carried + 0 newly registered, flat honestly noted; boundary guard no BD-PROP false positive)
+PASS AC-R2372 boundary guard: no BD-PROP false positive
+PASS AC-R2372 mechanical round list R1132..R1134 continuous 3/3
+INFO removed-window sd contribution: W=7 sub=3 nop=1 idle=0 (fold-R236+cut-231 dual R1132 / waiting-declaration R1133 / queue-empty-declaration R1134; scores 1/0/0)
+PASS AC-R2372 counter hygiene: summary free of 'idle' substring
+PASS AC-R2372 counter hygiene: summary free of 'no-pullable' substring
+PASS AC-R2372 counter hygiene: summary free of 'no_pullable' substring
+PASS AC-R2373 top-level field preserved: tick
+PASS AC-R2373 top-level field preserved: last_order
+PASS AC-R2373 top-level field preserved: last_decision_rows
+PASS AC-R2373 top-level field preserved: benchmarks_refreshed
+PASS AC-R2373 top-level field preserved: last_gord_tbl_rows
+PASS AC-R2373 top-level field preserved: last_dec_tokens
+PASS AC-R2373 composed parses, tick 1134 preserved
+PASS AC-R2373 log items 62 -> 56 (7 -> 1, kept=0)
+PASS AC-R2373 log item 55 = R237 rolling summary (composed verbatim, 1478 B content measure)
+PASS AC-R2374 post-fold window-line recount (9, 7, 2, 0) == predicted (9, 7, 2, 0) (leading-date anchored criterion; nop negative delta = removed R1134 line carried the abolished tag, legal)
+PASS AC-R2374 post-fold composed 70976 B, under the 78500B line by 7524 B
+PASS AC-R2374 state on disk = 70976 B (BOM-less write verified)
+PASS AC-R2373 re-read parses (tick 1134, log 56, summary item intact)
+
+== qa/reorg-R1135.log fold R237 (237th compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2371 PASS pre-op byte-identical backup logs/state-preop-R1135.bak (78922 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure 78922B over the 78500B line by 422B = R1134 carry-note honored, -378B drift vs predicted ~79.3KB honestly noted; export stored sd (11,7,2,1) vs live recount (15,7,3,3) = two fresh-gate rounds non-refresh drift honestly noted, recalibrated at closeout; RECOUNT-CRITERION AMENDMENT = first pass double-counted cross-day paren line via either-date membership, corrected to leading-date anchor per R556 + R1132 register evidence, zero state rewrites, fold numbers unaffected, two-pass calibration honestly logged per R413/R893 precedent)
+AC-R2372 PASS window [R236 rolling summary + R1132..R1134 three pairs] 7 lines 9376B -> 1 rolling summary line, kept=0; round types: fold-R236+cut-231 dual (R1132, score 1) / waiting-declaration protected-exemption (R1133, score 0) / queue-empty one-line declaration (R1134, score 0, original line carries the abolished nop tag = legal negative delta at recount, originals addressable via pre-op backup + git history); scores 1/0/0; mechanical round list R1132..R1134 continuous 3/3; removed-window banned-substring count honest display {5: no-pullable x1}; new roll line banned-substring zero hits; P/D catalog mechanical-dedup boundary-guarded 22 tokens (22 carried + 0 new, flat honestly noted): P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,P-32,P-56,P-74,D-20260930-05
+AC-R2373 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); roundtrip byte-identity proven pre-fold; json.loads pass (tick 1134, log 62->56 items, item 55 = R237 rolling summary verbatim, 1478B content measure); PowerShell ConvertFrom-Json dual-parser verified in closeout script
+AC-R2374 PASS post-fold measured 70976 bytes, under the 78500B line by 7524 bytes; window-line recount (9,7,2,0) == predicted (leading-date anchored; pre (15,7,3,3); removed 7 window-dated lines incl 3 pairs + R236 roll, added 1 R237 roll line; nop 3->2 legal negative delta; idle 7 preserved; sub 3->0 mechanical)
+AC-R2375 PENDING receipt = state R237 rolling summary + R1135 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 4/4 pre-closeout (R2375 delivery leg verified at commit; post-closeout cross-verify in qa/board-R1135.log)
+NOTE: dual-item round R1135 (R1132 isomorph): fold R237 + board knife cut-232; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Two-pass recount calibration (cross-day paren criterion defect caught before any consumer read, zero state rewrites, verify-then-write held throughout).
+PREDICT: round closeout appends R1135 pair -> final ST bytes, export tick row 1134->1135 + R1135 results row + sd recount (15,7,3,3) -> (9,7,2,0) -> (11,7,2,1) (closeout wording keeps counters clean; stored values numerically unchanged), heartbeat R1135 row (CRLF), board cut-232 in qa/board-R1135.log

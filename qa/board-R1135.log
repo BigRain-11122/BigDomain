@@ -1,0 +1,10 @@
+PASS AC-K232a stale-board census = exactly 1 stale done row [R1132, 3001B, md5 2880d0420471bfc22ed8d59c7761ca1d] + 4 standing open rows (O-2026-0930-013-4 / D-20260929-03 gated / D-20261003-02 gated / bootstrap blocked-on-CEO) + header intact + claim row landed first (pre-registered AC on the row); claim-landed board 16020B
+PASS AC-K232b R1132 single row verbatim to oct archive sec R1135 (pure-append prefix assertion 561927B->564940B, sections 137->138, line md5 identity 2880d0420471bfc22ed8d59c7761ca1d, sep-09 untouched 358597B)
+PASS AC-K232c board final = header [cut-232 record exactly once] + R1135 current row [claim flipped done with measured values] + open 4 rows + stale rows 0; 16020B claim-landed -> 13938B final (LF endings, trailing LF preserved)
+PASS AC-K232d evidence = qa/reorg-R1135.log + qa/board-R1135.log SUITE PASS
+PENDING AC-K232e receipt = this row done-flip + commit contains P-2026-09-25-18 (P-51 carrier; verified at commit)
+
+== qa/board-R1135.log closeout cross-verify (R1135 dual-item round: fold R237 + cut-232) ==
+state closeout: tick 1134->1135, log 56->58 items, final 74336B (margin 4164B under the 78500B gate), fixed-point FIN/ST cross-stable; window-line recount post-closeout (11, 7, 2, 1) == predicted (closeout pair wording keeps counters clean; banned-substring sweep on both appended lines zero hits); json.loads parse verified
+delivery legs: state R237 rolling summary in register (item 55) + R1135 log pair appended + commit message to carry P-2026-09-25-18 (AC-R2375 + AC-K232e, P-51 three-carrier rule); heartbeat R1135 row appended (CRLF tail held); export refresh executed as separate closeout step (sd recount 15/7/3/3 -> 9/7/2/0 -> 11/7/2/1)
+SUITE PASS 4/5 pre-commit (K232e delivery leg verified at commit)
