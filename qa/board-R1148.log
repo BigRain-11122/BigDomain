@@ -1,0 +1,9 @@
+== qa/board-R1148.log cut-236 (board-enforcement knife #236, P-2026-09-25-18 standing-carry) - single clean pass ==
+AC-K236a PASS true stale row from HEAD backlog: R1145 done row, 3180 B content, md5 04d7dd8283c330150227bff38253f963, tail byte intact (efbc89 full-width close paren, R1142 first-pass defect guard held)
+PASS AC-K236a true R1145 row from HEAD backlog: 3180 B content, md5 04d7dd8283c330150227bff38253f963, tail byte intact (efbc89)
+PASS AC-K236b arc10 pure-append prefix assertion + verbatim row md5 identical 04d7dd8283c330150227bff38253f963; sections 141 -> 142; full-file UTF-8 decode pass (576891 B)
+PASS AC-K236c 09-month archive untouched (== git HEAD blob)
+PASS AC-K236d(2) final board composition: header + R1148 claim row + open 4 rows (O-013/D-20260929-03/D-20261003-02/bootstrap), stale-row zero-residue, unchecked 5 = 1 claim + 4 standing open
+PASS AC-K236e post-write re-verify: arc10 573700 -> 576891 B (+3191 B), board 16731 -> 13550 B (R1145 stale row removed), migrated-row md5 identical, full-file decode pass both files
+PASS AC-K236e receipt leg = commit message contains P-2026-09-25-18 (P-51 three-carrier rule; verified at commit)
+NOTE single clean pass with the R1142 lesson pre-baked: row slice is marker..newline with explicit tail-byte assertion and post-write full-decode re-verify on both files; no second pass needed. Round score unchanged: 1 = ledger-maintenance mechanism file (fold R242 + cut-236 dual item, R1145 isomorph).
