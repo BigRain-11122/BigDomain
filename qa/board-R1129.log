@@ -1,0 +1,34 @@
+# BigDomain fold R235 + board-law knife cut-230 closeout evidence log (R1129, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K230a); fold evidence in qa/reorg-R1129.log
+# criteria: AC-K230a..e + closeout legs of AC-R2351..R2355; all checks verify-then-write
+
+PASS fin.state.tick 1129
+PASS fin.state.logcount 58
+PASS fin.state.lastround R1129 round line in register (item 56)
+PASS fin.state.lasttokens R1129 tokens line in register (item 57)
+PASS fin.state.summary.item R235 rolling summary intact (item 55)
+PASS fin.state.margingate | final 73950B margin 4550B
+PASS fin.state.roundtrip (on-disk == composed, BOM-less, json.dumps indent2 identity)
+PASS fin.board.done.once (exactly one - [x] R1129 row)
+PASS fin.board.header.once (archive-history chain carries cut-230 entry exactly once)
+PASS fin.board.open4 (four - [ ] rows)
+PASS fin.board.stale.gone (R1125 row migrated, zero stale done rows)
+PASS fin.board.selfref (R1129 row self-references)
+PASS fin.arc10.sections (135->136, last = ## R1129, pure-append prefix asserted, row verbatim md5 cd918ea99dd4c8f24f3dd067c604b378)
+PASS fin.arc09.untouched (md5 19783a35cfc4e57eb24eda5916a07702)
+PASS fin.hb.endscrlf (CRLF separator, no trailing CRLF at EOF)
+PASS fin.hb.lastr (last row = R1129)
+PASS fin.hb.once (R1129: appears exactly once)
+PASS fin.export.tickrow (results[12] = 1129 OSLoop tick row)
+PASS fin.export.resultsn (419 -> 420)
+PASS fin.export.lastresult (R1129 fold round, score 1)
+PASS fin.export.sd (11/7/2/1, window 2026-09-28..2026-10-04, method note appended, queue 6/2/2 + proposals 2/2 flat)
+PASS fin.export.current (ceo_face current = R1129 round summary)
+PASS fin.export.nm (fold chain entry R235=R1126 replaced by R235=R1129 executed)
+PASS fin.export.ts (2026-10-04T18:28:31.839672+08:00)
+PASS fin.commit.len | len=450
+PASS fin.commit.carrier (P-2026-09-25-18 + [via BigDomain-OSLoop])
+
+SUITE PASS (AC-K230a..e all green; AC-R2355 delivery legs verified: state R235 rolling summary + R1129 pair in register, commit follows with P-2026-09-25-18)
+INFO final.metrics | arc10 554078B->556691B (135->136 sections), board 15566B(with claim landed) -> 13665B final, state 80654B -> 70720B fold -> 73950B final, heartbeat: R1129 row, qa logs: qa/reorg-R1129.log + qa/board-R1129.log
+INFO commit.template | R1129: fold R235 water-level reorg + board knife cut-230 (R1125 isomorph, score 1); window [R234 roll + R1125..R1128 four pairs] 9->1 kept=0; state 80654B->70720B fold->73950B final; R1125 stale row 2601B verbatim to oct archive sec R1129 (135->136); board 15566B->13665B; heartbeat R1129 row; export tick 1126->1129 + sd 17/7/2/4->11/7/2/1; AC-R2351..R2355+AC-K230a..e = qa/reorg-R1129.log+qa/board-R1129.log (P-2026-09-25-18) [via BigDomain-OSLoop]

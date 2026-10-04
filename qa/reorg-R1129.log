@@ -1,0 +1,82 @@
+PASS AC-R2351 state pre-op = 80654 B (round-start first-measure over the 78500B line by 2154B = R1128 carry-note honored)
+PASS AC-R2351 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2351 state has no CR bytes
+PASS AC-R2351 state has no trailing LF
+PASS AC-R2351 state pre-op byte-identical to git HEAD blob (state untouched by claim landing; tree carries claim-landed backlog only)
+PASS AC-R2351 tree carries claim-landed backlog only (got 'M src/os/backlog.md')
+PASS AC-R2351 pre-parse tick 1128
+PASS AC-R2351 pre-parse log items 64
+PASS AC-R2351 backup logs/state-preop-R1129.bak byte-identical (80654 B)
+PASS AC-R2351 export roundtrip byte-identity (BOM + indent2, no trailing LF)
+PASS export stored sd == pre-registered (13, 7, 2, 2) (got (13, 7, 2, 2))
+PASS PRE sd mechanical recount (17, 7, 2, 4) == live pre-registered (17, 7, 2, 4) (stored (13, 7, 2, 2) + R1127..R1128 pair increments (4, 0, 0, 2))
+PASS sd delta reconciliation: stored (13, 7, 2, 2) + increments (4, 0, 0, 2) == live recount (17, 7, 2, 4)
+PASS AC-R2352 window line 0 = R234 rolling summary (log item 55)
+PASS AC-R2352 window pair 0 round line = R1125
+PASS AC-R2352 window pair 0 tokens line = R1125
+PASS AC-R2352 window pair 1 round line = R1126
+PASS AC-R2352 window pair 1 tokens line = R1126
+PASS AC-R2352 window pair 2 round line = R1127
+PASS AC-R2352 window pair 2 tokens line = R1127
+PASS AC-R2352 window pair 3 round line = R1128
+PASS AC-R2352 window pair 3 tokens line = R1128
+PASS AC-R2352 window tail = final log item (R1128 tokens)
+PASS AC-R2352 window 9 lines = 11092 B content measure (pre-registered 11092)
+PASS AC-R2352 removed-window line 0 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 0 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 0 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 1 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 1 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 1 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 2 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 2 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 2 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 3 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 3 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 3 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 4 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 4 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 4 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 5 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 5 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 5 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 6 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 6 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 6 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 7 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 7 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 7 clean of 'no_pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 8 clean of 'idle' (9/9 sweep)
+PASS AC-R2352 removed-window line 8 clean of 'no-pullable' (9/9 sweep)
+PASS AC-R2352 removed-window line 8 clean of 'no_pullable' (9/9 sweep)
+INFO removed-window sd contribution: W=9 sub=4 nop=0 idle=0 (R1125 fold-round pair + three waiting-declaration pairs)
+PASS AC-R2352 P/D catalog mechanical dedup == pre-registered 19 tokens (snowball zero-new, got 19 tokens)
+PASS AC-R2352 boundary guard: no BD-PROP false positive
+INFO P/D catalog (19 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,P-32,P-56,P-74,D-20260930-05
+PASS AC-R2352 counter hygiene: summary free of 'idle' substring
+PASS AC-R2352 counter hygiene: summary free of 'no-pullable' substring
+PASS AC-R2352 counter hygiene: summary free of 'no_pullable' substring
+PASS AC-R2353 composed parses, tick 1128 preserved
+PASS AC-R2353 log items 64 -> 56 (9 -> 1, kept=0)
+PASS AC-R2353 log item 55 = R235 rolling summary (verbatim in register)
+PASS AC-R2353 top-level field preserved: last_order
+PASS AC-R2353 top-level field preserved: last_decision_rows
+PASS AC-R2353 top-level field preserved: benchmarks_refreshed
+PASS AC-R2353 top-level field preserved: last_gord_tbl_rows
+PASS AC-R2353 top-level field preserved: last_dec_tokens
+PASS AC-R2353 top-level field preserved: tick
+PASS AC-R2354 post-fold window-line recount (9, 7, 2, 0) == predicted (9, 7, 2, 0)
+PASS AC-R2354 post-fold composed 70720 B, under the 78500B line by 7780 B
+PASS AC-R2354 state on disk = 70720 B (BOM-less write verified)
+PASS AC-R2353 re-read parses (tick 1128, log 56, summary item intact)
+PASS AC-R2353 PowerShell ConvertFrom-Json dual-parser pass (tick 1128)
+
+== qa/reorg-R1129.log fold R235 (235th compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2351 PASS pre-op byte-identical backup logs/state-preop-R1129.bak (80654 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure 80654B over the 78500B line by 2154B = R1128 carry-note honored; export stored sd (13,7,2,2) + R1127..R1128 pair increments (4,0,0,2) == live recount (17,7,2,4))
+AC-R2352 PASS window [R234 rolling summary + R1125..R1128 four pairs] 9 lines 11092B -> 1 rolling summary line, kept=0, round types: fold-R234+cut-229 dual (R1125) / waiting-declaration x3 (R1126/R1127/R1128, protected-state exemption, score 0); scores 1/0/0/0; mechanical round list R1125..R1128 continuous 4/4; removed-window banned-substring sweep 9/9 clean; P/D catalog mechanical-dedup (boundary-guarded, snowball zero-new 19 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,P-32,P-56,P-74,D-20260930-05
+AC-R2353 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); json.loads pass (tick 1128, log 64->56 items, item 55 = R235 rolling summary verbatim); PowerShell ConvertFrom-Json dual-parser verified (tick 1128)
+AC-R2354 PASS post-fold measured 70720 bytes, under the 78500B line by 7780 bytes; window-line recount 17/7/2/4 -> 9/7/2/0 (stored sd 13/7/2/2 + R1127..R1128 increments 4/0/0/2 == live 17/7/2/4 zero-drift pre-check held)
+AC-R2355 PENDING receipt = state R235 rolling summary + R1129 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 4/4 pre-closeout (R2355 delivery leg verified at commit; post-closeout cross-verify in qa/board-R1129.log)
+NOTE: dual-item round R1129 (R1125 isomorph): fold R235 + board knife cut-230; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout (composed text fully verified before the single state write).
+PREDICT: round closeout appends R1129 pair -> final ST bytes (k230 FIN/ST cross fixed-point), export tick row 1126->1129 + R1129 results row (419->420) + sd recount 9/7/2/0 -> 11/7/2/1, heartbeat R1129 row (CRLF)
