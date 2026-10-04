@@ -1,0 +1,90 @@
+# BigDomain fold R232 + board-law knife cut-227 closeout evidence log (R1119, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K227a); fold evidence in qa/reorg-R1119.log
+# criteria: AC-K227a..e + closeout legs of AC-R2321..R2325; all checks verify-then-write
+PASS pre.board.claim.landed | - [ ] R1119 fold R232
+PASS pre.board.stale.isR1115
+PASS pre.board.stale.bytes | bytes=2794
+PASS pre.board.stale.md5
+PASS pre.board.rows | done R1115=1, unchecked=5 (4 open + 1 claim), claim=1
+PASS pre.board.open4
+PASS pre.board.hdr.anchor.once
+PASS pre.board.bytes | bytes=15490
+PASS pre.arc10.size | bytes=546028
+PASS pre.arc10.nobom
+PASS pre.arc10.endslf
+PASS pre.arc10.sections | secs=132
+PASS pre.arc09.md5untouched
+PASS s2.prefix.intact
+PASS s2.sections.133 | secs=133
+PASS s2.row.verbatim.once
+PASS s2.row.md5.same
+PASS s2.size | arc10 546028B->548833B
+PASS s2.roundtrip
+PASS s2.arc09.stilluntouched
+INFO s2.migration | R1115 stale row 2794B verbatim pure-appended as oct archive sec R1119 (132->133)
+PASS s3.k227 fixed-point converged (pass 2): board1=13394 fin=73842
+PASS s3.stale.removed
+PASS s3.header.cut227.once
+PASS s3.flip.prefix
+PASS s3.done.flip.once
+PASS s3.open4.intact
+PASS s3.linecount | n=16
+PASS s3.done.row.pos
+PASS s3.open.pos
+PASS s3.board1.fixedpoint | board1=13394
+PASS s3.board1.stable | board1=13394
+INFO s3.board.final | header + R1119 done row + 4 open rows, stale rows=0, board 15490B->13394B
+PASS s4.pre.size | 70702
+PASS s4.pre.tick
+PASS s4.pre.logcount | n=56
+PASS s4.pre.lastlog.summary
+PASS s4.round.clean.idle
+PASS s4.tokens.clean.idle
+PASS s4.round.clean.no-pullable
+PASS s4.tokens.clean.no-pullable
+PASS s4.round.clean.nopullable
+PASS s4.tokens.clean.nopullable
+PASS s4.round.anchored
+PASS s4.notraillf
+PASS s4.baseline.kept.last_order | val='2026-09-28 22:1x'
+PASS s4.baseline.kept.last_decision_rows | val=256
+PASS s4.baseline.kept.benchmarks_refreshed | val='2026-10-04'
+PASS s4.baseline.kept.last_gord_tbl_rows | val=154
+PASS s4.baseline.kept.last_dec_tokens (content spot)
+PASS s4.state.roundtrip | len rt=73842 raw=73842
+PASS s4.post.tick
+PASS s4.post.logcount
+PASS s4.post.lastround
+PASS s4.post.lasttokens
+PASS s4.post.summary.intact
+PASS s4.fin.margingate | final 73842B margin 4658B under the 78500B gate
+PASS s4.baseline.kept.last_dec_tokens (verbatim)
+INFO s4.state.json | tick 1118->1119, log 56->58 items, final 73842B (margin 4658B under 78500B gate), roundtrip-verified serialization
+PASS s5.pre.endscrlf
+PASS s5.r1119.ascii
+PASS s5.r1119.crlf.free
+PASS s5.hb.appended
+PASS s5.hb.prefix.intact
+PASS s5.hb.last.isR1119
+INFO s5.heartbeat | R1119 row appended (ascii, CRLF, 764 bytes)
+PASS s6.pre.bom
+PASS s6.export.roundtrip | len rt=387654 raw=387654
+PASS s6.nm.anchor.once
+PASS s6.tickrow.found
+PASS s6.tickrow.pre | val=1115
+PASS s6.sd.window
+PASS s6.sd.pre
+PASS s6.sd.recount.post | live (33, 24, 2, 4) == predicted (33, 24, 2, 4)
+PASS s6.post.tickrow
+PASS s6.post.lastresult
+PASS s6.post.results | 415->416
+PASS s6.post.sd
+PASS s6.post.nm
+PASS s6.post.current
+INFO s6.export | export_ts refreshed, ceo_face.current=R1119, nm fold R232 closed, results tick 1119 + R232/cut-227 row (415->416), sd recount 31/24/2/3 -> 33/24/2/4
+PASS final.state.parse
+PASS final.commitmsg | 499 chars ascii
+NOTE: closeout first pass measured the draft commit message at 525 chars over the 500-char cap; trimmed to 499 chars before any commit attempt (verify-then-write held; all disk mutations of the first pass re-verified green here before evidence write)
+INFO final.metrics | arc10 546028B->548833B (132->133 sections), board 15490B(with claim landed) -> 13394B final, state 80709B -> 70702B fold -> 73842B final, heartbeat: R1119 row, qa logs: qa/reorg-R1119.log + qa/board-R1119.log
+INFO commit.template | R1119: fold R232 water-level reorg + board knife cut-227 (R1115 isomorph, score 1); window [R231 roll + R1115..R1118 four pairs] 9 lines 11147B -> 1 kept=0; state 80709B->70702B fold->73842B final; R1115 stale row 2794B to oct archive sec R1119 (132->133); board 15490B->13394B final = header + R1119 row + 4 open rows; heartbeat R1119 row; export tick 1115->1119 + sd 39/24/2/7->33/24/2/4; AC-R2321..R2325+AC-K227a..e = qa/reorg-R1119.log+qa/board-R1119.log (P-2026-09-25-18) [via BigDomain-OSLoop]
+SUITE PASS (AC-K227a..e all green; AC-R2325 delivery legs verified: state pair in register, commit follows with P-2026-09-25-18)
