@@ -1,0 +1,10 @@
+PASS AC-K240a located stale R1155 done row on main board: line index 9, 2235 B, md5 8b1bc3c779b95a0a4f737c4594221857
+PASS AC-K240a located stale R1156 done row on main board: line index 11, 2474 B, md5 21eb99c3239b402d0430962a0b12c09a
+PASS AC-K240b archive tail = section R1156 (cut-239), sections 145 -> new section R1158 = 146
+PASS AC-K240c board final state = header + R1158 current claim row + 5 open rows + 0 stale done rows (R1158 row flips [x] at closeout)
+PASS AC-K240c 09 archive untouched by construction (read-only md5 lock 19783a35cfc4)
+PASS AC-K240d archive pure-append verified (prefix byte-identical 587614 B + appendix 4723 B)
+PASS AC-K240d migrated rows verbatim (md5s 8b1bc3c779b9,21eb99c3239b identical in archive)
+PASS AC-K240e re-read verified: board + archive on disk, section count 145 -> 146, last section R1158, 09 archive md5 unchanged 19783a35cfc4
+PASS AC-K240e evidence -> qa/board-R1158.log; receipt = state log R1158 line + commit (P-51 three-carrier rule)
+SUITE PASS 5/5 (K240a locate x2 / K240b archive tail / K240c board final state / K240d pure-append verbatim / K240e re-read + 09-lock)
