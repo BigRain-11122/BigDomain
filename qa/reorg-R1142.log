@@ -1,0 +1,34 @@
+PASS AC-R2401 state pre-op disk bytes = 79600 (round-start first-measure scan gauge 79597B over the 78500B line by 1097B; R1141 carry-note honored)
+PASS AC-R2401 state BOM present + trailing LF present (R1136+ disk convention) + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2401 pre-parse tick 1141 log items 62
+PASS AC-R2401 state pre-op byte-identical to git HEAD blob 79600 vs 79600
+PASS AC-R2401 tree carries claim-landed backlog only [' M src/os/backlog.md']
+PASS AC-R2401 backup logs/state-preop-R1142.bak byte-identical (79600 B)
+PASS AC-R2401 export stored sd (13, 7, 2, 2) vs live mechanical recount (15, 7, 2, 3) = one fresh-gate round (R1141) non-refresh drift honestly noted (recalibrated at closeout)
+PASS AC-R2402 window line 0 = R238 rolling summary :: 2026-10-04（R1135..R1138 窗口·R238 整编第二百三十八
+PASS AC-R2402 window pair = R1139/R1140/R1141 round+tokens lines, window tail = final log item (R1141 tokens)
+PASS AC-R2402 window 7 lines = 10050 B content measure
+PASS AC-R2402 removed-window banned-substring mechanical count = honest display {} (all 7 lines zero hits; originals addressable via pre-op backup + git history)
+PASS AC-R2402 P/D catalog mechanical dedup == 22 carried + 1 newly registered ['D-20260930-19']
+INFO P/D catalog (23 tokens): D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,D-20260930-19
+PASS AC-R2402 boundary guard: no BD-PROP false positive (BD-PROP-002 in window lines excluded mechanically)
+PASS AC-R2402 mechanical round list R1135..R1141 continuous 7/7 (scores 1/0/0/1/0/0/0) ['R1135', 'R1136', 'R1137', 'R1138', 'R1139', 'R1140', 'R1141']
+INFO removed-window sd contribution: 7 window-dated lines (1 paren roll + 3 pairs), 3 substantive round lines, banned hits 0
+PASS AC-R2402 new roll line banned-substring three-family zero hits
+PASS AC-R2403 top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2403 composed parses, tick 1141 preserved; log items 62 -> 56 (7 -> 1, kept=0); log item 55 = R240 rolling summary (composed verbatim, 1800B)
+PASS AC-R2404 post-fold composed scan-gauge 71299 B (disk 71302 B), under the 78500B line by 7201 B
+INFO pre-op live recount (15, 7, 2, 3) -> post-fold recount (9, 7, 2, 0) (predicted W 9, idle 7, nop 2, sub 0)
+PASS AC-R2403 re-read parses (tick 1141, log 56, summary item intact); state on disk = 71302 B (BOM + trailing LF write convention verified)
+PASS AC-R2403 PowerShell ConvertFrom-Json dual-parser pass (tick 1141 / log 56)
+PASS AC-R2404 post-fold window-line recount (9, 7, 2, 0) == recomputed (single-pass clean run, verify-then-write held: composed text fully verified before the single state write)
+PREDICT: round closeout appends R1142 pair -> final W 11, sub 1; final ST bytes ~73702; export tick row 1140->1142 + R1142 results row + sd recount (15, 7, 2, 3)->(9, 7, 2, 0)->(11,7,2,1), heartbeat R1142 row (CRLF), board cut-234 in qa/board-R1142.log
+== qa/reorg-R1142.log fold R240 (240th compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2401 PASS pre-op byte-identical backup logs/state-preop-R1142.bak (79597 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure scan gauge 79597B over the 78500B line by 1097B (disk 79600B) = R1141 carry-note honored; BOM + trailing LF = R1136+ disk writer convention kept, roundtrip proven on BOM-less content + trailing LF; export stored sd (13,7,2,2) vs live recount (15, 7, 2, 3) = one fresh-gate round (R1141) non-refresh drift honestly noted, recalibrated at closeout)
+AC-R2402 PASS window [R238 rolling summary + R1139..R1141 three pairs] 7 lines 10050B -> 1 rolling summary line, kept=0; round types: fold-R238+cut-233+auto-saves-cleanup triple (R1139, score 1) / waiting-declaration protected-exemption (R1140, score 0) / waiting-declaration protected-exemption with GORD dual-read (R1141, score 0); carried R1135..R1138 notes from R238 roll verbatim (fold-R237+cut-232 R1135 score 1 / queue-empty declaration R1136 / waiting R1137 / waiting R1138); scores 1/0/0/1/0/0/0; mechanical round list R1135..R1141 continuous 7/7; removed-window banned-substring count honest display {}; new roll line banned-substring zero hits; P/D catalog mechanical-dedup boundary-guarded 23 tokens (22 carried + 1 new·新入册=D-20260930-19): D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,D-20260930-19
+AC-R2403 PASS top-level six fields preserved; roundtrip byte-identity proven pre-fold; json.loads pass (tick 1141, log 62->56 items, item 55 = R240 rolling summary verbatim, 1800B); PowerShell ConvertFrom-Json dual-parser verified (tick 1141 / log 56)
+AC-R2404 PASS post-fold measured 71299 bytes scan-gauge (disk 71302 B, BOM 3B + trailing LF 1B kept), under the 78500B line by 7201 bytes; window-line recount (15, 7, 2, 3) -> (9, 7, 2, 0) (removed 7 window-dated lines incl 3 pairs + R238 roll, added 1 R240 roll line which is paren and not W-counted)
+AC-R2405 PENDING receipt = state R240 rolling summary + R1142 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 4/4 pre-closeout (R2405 delivery leg verified at commit; post-closeout cross-verify in qa/board-R1142.log)
+NOTE: dual-item round R1142 (R1139 isomorph): fold R240 + board knife cut-234; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout.
+PREDICT: round closeout appends R1142 pair -> final ST bytes ~73702, export tick row 1140->1142 + R1142 results row + sd recount (15, 7, 2, 3) -> (9, 7, 2, 0) -> (11,7,2,1), heartbeat R1142 row (CRLF), board cut-234 in qa/board-R1142.log

@@ -1,0 +1,13 @@
+PASS AC-K234a(2p) true R1139 row from HEAD backlog: 3145 B content, md5 e678a75499912a9913f60038cbc176ba, tail byte intact (EF BC 89)
+PASS AC-K234d(2p) board == expected composition byte-identical (HEAD + R1142 claim insert + R1139 row removal), 13199 B; claim row 2020 B; unchecked rows 5 (recounted post-fix display defect) = 1 claim + 4 standing open (O-013/D-20260929-03/D-20261003-02/bootstrap); R1139 row zero-residue
+PASS defect-proof first-pass arc10 == HEAD + section + row-minus-last-byte (570865 B) = slicing defect confirmed, exactly one byte (0x89) short in migrated row
+PASS AC-K234b(2p) repaired arc10 pure-append prefix assertion + verbatim row md5 identical e678a75499912a9913f60038cbc176ba; sections 139 -> 140; full-file UTF-8 decode pass (570866 B)
+PASS AC-K234c(2p) 09-month archive untouched (== git HEAD blob)
+PASS AC-K234e(2p) post-write re-verify: arc10 567710 -> 570866 B (+3156 B), board 13199 B unchanged this pass, migrated-row md5 identical, full-file decode pass
+== qa/board-R1142.log cut-234 (board-enforcement knife #234, P-20260-09-25-18 standing-carry) - second pass ==
+AC-K234a PASS true stale row from HEAD backlog: R1139 done row, 3145 B content, md5 e678a75499912a9913f60038cbc176ba, tail byte intact
+AC-K234b PASS arc10 pure-append: prefix byte-identical to git HEAD (567710 B); appended section ## R1142 + verbatim row (md5 identical e678a75499912a9913f60038cbc176ba); sections 139 -> 140; full-file UTF-8 decode pass
+AC-K234c PASS 09-month archive zero-touch (== git HEAD blob)
+AC-K234d PASS board final shape byte-identical to expected composition (HEAD + R1142 claim insert + R1139 row removal): header + R1142 claim row + open 4 rows, stale-row zero
+AC-K234e PASS post-write re-verify both files; receipt = commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+NOTE two-pass honest record: first pass had a slicing defect in the migration tool (line slice already excluded the LF, an extra [:-1] chopped the final byte 0x89 of the row-closing full-width paren), caught by the post-write full-decode re-verify; the defective arc10 write was exactly one byte short and was rebuilt from the HEAD blob with the full verbatim row (R1139/R1115 two-pass calibration precedent). Round score unchanged: 1 = ledger-maintenance mechanism file (fold R240 + cut-234 dual item).
