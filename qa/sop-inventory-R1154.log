@@ -1,0 +1,4 @@
+PASS AC-SOPa all 29 on-disk pointers verified present (16 in-register items, 29 distinct paths)
+PASS AC-SOPa counts: docs/spec = 17 files, src/sandbox = 14 modules, qa smoke log=7 png=7 evidence chain present
+PASS AC-SOPc light gate: SOP inventory = 47 lines / 8030 B (limits 200 lines / 25600 B)
+PASS AC-SOPb gap face: 4 gaps each with benchmark anchor + schedule window (window-1 reconcile runbook 10-05..10-11); gap-1 gated-on-CEO-physicals honestly noted

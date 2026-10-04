@@ -1,0 +1,33 @@
+PASS AC-R2441 state BOM present + trailing LF present + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2441 state pre-op disk bytes = 81477 byte-identical to git HEAD blob (sha16 353F25EBAB158163)
+PASS AC-R2441 pre-parse tick 1153 log items 62 (round-start first-measure scan gauge 81474B over the 78500B line by 2974B = R1153 carry-note honored; disk 81477B)
+PASS AC-R2441 backup logs/state-preop-R1154.bak byte-identical (81477 B)
+PASS AC-R2441 round-start tree face: only claim row (src/os/backlog.md) + SOP inventory doc (untracked) as pre-registered
+PASS AC-R2441 export stored sd (11, 7, 2, 1) vs live mechanical recount (15, 7, 4, 3) = two fresh-gate rounds (R1152/R1153) non-refresh drift honestly noted (recalibrated at closeout); claim-row pre-registered (15,7,2,3) first-run intercepted zero-write, amended honestly per R1151 precedent
+PASS AC-R2442 window line 0 = R243 rolling summary :: 2026-10-04（R1135..R1150 窗口·R243 整编第二百四十三刀压窗［P-2026-09-25-18 
+PASS AC-R2442 window pair = R1151/R1152/R1153 round+tokens lines, window tail = final log item (R1153 tokens)
+PASS AC-R2442 window 7 lines = 11927 B content measure (pre-registered bounded range 8000..12000)
+PASS AC-R2442 removed-window banned-substring mechanical count = honest display {'idle-fast': [], 'no-pullable': [(3, 2), (5, 2)], 'nop': [(1, 1)]} (nop hits in R1152/R1153 lines = declaration-round quoted wording, not round-type tags; originals addressable via pre-op backup + git history)
+PASS AC-R2442 P/D catalog mechanical dedup == 24 carried + 7 newly registered (pre-registered must-have trio present) ['D-20260930-20', 'O-2026-0929-013', 'O-20261004-2300', 'P-02', 'P-2026-09-29-06', 'P-2026-10-04-01', 'P-2026-10-04-02']
+INFO P/D catalog (31 tokens): D-20260930-19,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,O-2026-0930-013,D-20260930-20,O-2026-0929-013,O-20261004-2300,P-02,P-2026-09-29-06,P-2026-10-04-01,P-2026-10-04-02
+PASS AC-R2442 new roll line banned-substring three-family zero hits
+INFO roll line composed 3269 B; carried R1135..R1150 notes verbatim from R243 roll + R1151..R1153 fresh notes; 19-round score list mechanically derived (R1135/1139/1142/1145/1148/1151 = score 1)
+PASS AC-R2443 top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2443 composed parses, tick 1153 preserved; log items 62 -> 56 (7 -> 1, kept=0); head block 55 items verbatim; log item 55 = R244 rolling summary (composed verbatim, 3269 B)
+PASS AC-R2444 post-fold measured 72768 bytes scan-gauge (disk 72771 B), under the 78500B line by 5732 B
+INFO pre-op live recount (15, 7, 2, 3) -> post-fold recount (9, 7, 2, 0) (removed 7 window-dated lines incl 3 pairs + R243 roll, added 1 R244 roll line)
+PASS AC-R2444 re-read parses (tick 1153, log 56, roll item intact); state on disk = 72771 B (BOM + trailing LF write convention verified)
+AC-R2445 PENDING receipt = state R244 rolling summary + R1154 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2445 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+NOTE multi-item round R1154 (R1151 isomorph): GORD five-row judgment + O-2026-0930-027 SOP inventory first-window receipt + fold R244 + board knife cut-238; round score 1 = group-order receipt artifact per Executive Protocol v1.1.
+
+----- CLOSEOUT ADDENDUM (R1154 closeout stage) -----
+PASS closeout compose: tick 1153->1154, log 56->58 (R244 roll + R1154 pair), last_gord_tbl_rows 157->162, final gauge 76880B (margin 1620B under 78500)
+PASS export compose: export_ts=2026-10-04T23:42:02+08:00, tick row 1151->1154, results +2 rows (total 430), ceo_face three lines refreshed, sd 11/7/2/1, depts[0] R1154 note appended
+PASS heartbeat line composed (1697 B), file ends CRLF preserved, append with CRLF
+PASS backlog final compose: R1154 claim row -> [x] + done tail, radar standing row R1154 note appended, open rows = 5 (radar/duty/legal/R777/bootstrap)
+PASS state written: tick 1154, log 58 items (R244 roll + R1154 pair), last_gord 162; re-read parses; disk 76883 B
+PASS export written and re-read parses (BOM preserved, export_ts 2026-10-04T23:42:02+08:00)
+PASS heartbeat appended (CRLF tail preserved)
+PASS AC-R2445 delivery leg closed: state R244 rolling summary + R1154 log lines in register; commit message to carry O-2026-0930-027 + P-2026-09-25-18 (P-51 three-carrier)
+SUITE PASS 6/6 (fold 5/5 + closeout addendum) - R1154 multi-item round closed

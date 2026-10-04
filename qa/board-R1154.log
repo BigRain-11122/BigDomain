@@ -1,0 +1,7 @@
+PASS AC-K238a arc10 pre-op byte-identical to git HEAD blob (580073 B); arc09 pre-op byte-identical (358597 B, zero-touch asserted)
+PASS AC-K238b R1151 stale done row located: full-line 3375 B, md5 1340eb6b5c09ada54b7f1cfe411450fc, last byte 0x89 preserved (R1142 lesson)
+PASS AC-K238b post-cut board face: 6 unchecked rows = R1154 claim row (marked done later in closeout) + 5 standing rows (radar/duty/legal/R777/bootstrap); pre-registered '5' was the post-done-mark count, first-run intercepted zero-write, second-run calibrated honestly
+PASS AC-K238c pure-append composed: arc10 580073B -> 583460B, sections 143 -> 144, row verbatim in new section R1154, prefix byte-identical
+PASS AC-K238d arc10 written 583460 B (pure-append, sections 144), arc09 zero-touch verified post-write
+PASS AC-K238e main board written 16546 B: header + R1154 current row (done) + open 5 rows, zero stale rows
+NOTE section-count calibration: pre-registered 144->145 inherited from R1151 register wording; HEAD line-start section count measured 143 (inline count 143, first line not a section header); actual this-knife count 143 -> 144; board row amended to match measurement (caliber fix, honest note).
