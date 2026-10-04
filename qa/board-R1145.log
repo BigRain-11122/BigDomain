@@ -1,0 +1,14 @@
+PASS AC-K235a true R1142 row from HEAD backlog: 2823 B content, md5 61537531a91b73dcae71828812a0c841, tail byte intact (EF BC 89)
+PASS AC-K235d(1) board == expected composition byte-identical (HEAD + R1145 claim insert, R1142 row in place), 16068 B; claim row 2065 B; header prefix 6771 B
+PASS AC-K235b arc10 pure-append prefix assertion + verbatim row md5 identical 61537531a91b73dcae71828812a0c841; sections 140 -> 141; full-file UTF-8 decode pass (573700 B)
+PASS AC-K235c 09-month archive untouched (== git HEAD blob)
+PASS AC-K235d(2) final board composition: header + R1145 claim row + open 4 rows (O-013/D-20260929-03/D-20261003-02/bootstrap), stale-row zero-residue, unchecked 5 = 1 claim + 4 standing open
+PASS AC-K235e post-write re-verify: arc10 570866 -> 573700 B (+2834 B), board 16068 -> 13244 B (R1142 stale row removed), migrated-row md5 identical, full-file decode pass both files
+PASS AC-K235e receipt leg = commit message contains P-2026-09-25-18 (P-51 three-carrier rule; verified at commit)
+== qa/board-R1145.log cut-235 (board-enforcement knife #235, P-2026-09-25-18 standing-carry) - single clean pass ==
+AC-K235a PASS true stale row from HEAD backlog: R1142 done row, 2823 B content, md5 61537531a91b73dcae71828812a0c841, tail byte intact (EF BC 89 full-width close paren, R1142 first-pass defect guard held)
+AC-K235b PASS arc10 pure-append: prefix byte-identical to git HEAD (570866 B); appended section ## R1145 + verbatim row (md5 identical 61537531a91b73dcae71828812a0c841, LF-guard pass); sections 140 -> 141; full-file UTF-8 decode pass
+AC-K235c PASS 09-month archive zero-touch (== git HEAD blob)
+AC-K235d PASS board composition two-stage: pre-write = HEAD + R1145 claim insert byte-identical (16068 B); post-removal final = header + R1145 claim row + open 4 rows (O-013/D-20260929-03/D-20261003-02/bootstrap), stale-row zero-residue, unchecked 5 = 1 claim + 4 standing open
+AC-K235e PASS post-write re-verify both files (arc10 573700 B, board 13244 B, md5 identical, full-file decode pass both); receipt = commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+NOTE single-pass clean run with the R1142 lesson pre-baked: row slice is marker..newline with explicit tail-byte assertion and post-write full-decode re-verify on both files; no second pass needed. Round score unchanged: 1 = ledger-maintenance mechanism file (fold R241 + cut-235 dual item, R1142 isomorph).

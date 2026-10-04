@@ -1,0 +1,37 @@
+PASS AC-R2411 state pre-op disk bytes = 78652 (round-start first-measure scan gauge 78649B over the 78500B line by 149B; R1144 carry-note honored)
+PASS AC-R2411 state BOM present + trailing LF present (R1136+ disk convention) + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2411 pre-parse tick 1144 log items 62
+PASS AC-R2411 state pre-op byte-identical to git HEAD blob 78652 vs 78652
+PASS AC-R2411 tree carries claim-landed backlog only [' M src/os/backlog.md']
+PASS AC-R2411 backup logs/state-preop-R1145.bak byte-identical (78652 B)
+PASS AC-R2411 export stored sd (11, 7, 2, 1) vs live mechanical recount (15, 7, 2, 3) = two fresh-gate rounds (R1143/R1144) non-refresh drift honestly noted (recalibrated at closeout)
+PASS AC-R2412 window line 0 = R240 rolling summary :: 2026-10-04（R1135..R1141 窗口·R240 整编第二百四十刀
+PASS AC-R2412 window pair = R1142/R1143/R1144 round+tokens lines, window tail = final log item (R1144 tokens)
+PASS AC-R2412 window 7 lines = 9102 B content measure
+PASS AC-R2412 removed-window banned-substring mechanical count = honest display {} (all 7 lines zero hits; originals addressable via pre-op backup + git history)
+PASS AC-R2412 P/D catalog mechanical dedup == 23 carried + 1 newly registered ['O-2026-0930-013']
+INFO P/D catalog (24 tokens): D-20260930-19,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,O-2026-0930-013
+PASS AC-R2412 boundary guard: no BD-PROP false positive (BD-PROP-002 in window lines excluded mechanically)
+PASS AC-R2412 mechanical round list R1135..R1144 continuous 10/10 (scores 1/0/0/1/0/0/0/1/0/0) ['R1135', 'R1136', 'R1137', 'R1138', 'R1139', 'R1140', 'R1141', 'R1142', 'R1143', 'R1144']
+INFO removed-window sd contribution: 7 window-dated lines (1 paren roll + 3 pairs), 3 substantive round lines, banned hits 0
+PASS AC-R2412 new roll line banned-substring three-family zero hits
+PASS AC-R2413 top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2413 composed parses, tick 1144 preserved; log items 62 -> 56 (7 -> 1, kept=0); log item 55 = R241 rolling summary (composed verbatim, 2059B)
+PASS AC-R2414 post-fold composed scan-gauge 71558 B (disk 71561 B), under the 78500B line by 6942 B
+INFO pre-op live recount (15, 7, 2, 3) -> post-fold recount (9, 7, 2, 0) (predicted W 9, idle 7, nop 2, sub 0)
+PASS AC-R2413 re-read parses (tick 1144, log 56, summary item intact); state on disk = 71561 B (BOM + trailing LF write convention verified)
+PASS AC-R2413 PowerShell ConvertFrom-Json dual-parser pass (tick 1144 / log 56)
+PASS AC-R2414 post-fold window-line recount (9, 7, 2, 0) == recomputed (single-pass clean run, verify-then-write held: composed text fully verified before the single state write)
+PREDICT: round closeout appends R1145 pair -> final W 11, sub 1; final ST bytes ~74061; export tick row 1142->1145 + R1145 results row + sd recount (15, 7, 2, 3)->(9, 7, 2, 0)->(11,7,2,1), heartbeat R1145 row (CRLF), board cut-235 in qa/board-R1145.log
+== qa/reorg-R1145.log fold R241 (241st compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2411 PASS pre-op byte-identical backup logs/state-preop-R1145.bak (78652 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure scan gauge 78649B over the 78500B line by 149B (disk 78652B) = R1144 carry-note honored; BOM + trailing LF = R1136+ disk writer convention kept, roundtrip proven on BOM-less content + trailing LF; export stored sd (11,7,2,1) vs live recount (15, 7, 2, 3) = two fresh-gate rounds (R1143/R1144) non-refresh drift honestly noted, recalibrated at closeout)
+AC-R2412 PASS window [R240 rolling summary + R1142..R1144 three pairs] 7 lines 9102B -> 1 rolling summary line, kept=0; round types: carried R1135..R1141 notes from R240 roll verbatim (fold-R237+cut-232 R1135 score 1 / queue-empty declaration R1136 / waiting R1137 / waiting R1138 / fold-R238+cut-233+auto-saves R1139 score 1 / waiting R1140 / waiting R1141 GORD dual-read) + fold-R240+cut-234 dual-item closeout (R1142, score 1) / waiting-declaration protected-exemption (R1143, score 0) / waiting-declaration protected-exemption (R1144, score 0); scores 1/0/0/1/0/0/0/1/0/0; mechanical round list R1135..R1144 continuous 10/10; removed-window banned-substring count honest display {} (all 7 lines zero hits); new roll line banned-substring zero hits; P/D catalog mechanical-dedup boundary-guarded 24 tokens (23 carried + 1 new·新入册=O-2026-0930-013): D-20260930-19,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,O-2026-0930-013
+AC-R2413 PASS top-level six fields preserved; roundtrip byte-identity proven pre-fold; json.loads pass (tick 1144, log 62->56 items, item 55 = R241 rolling summary verbatim, 2059B); PowerShell ConvertFrom-Json dual-parser verified (tick 1144 / log 56)
+AC-R2414 PASS post-fold measured 71558 bytes scan-gauge (disk 71561 B, BOM 3B + trailing LF 1B kept), under the 78500B line by 6942 bytes; window-line recount (15, 7, 2, 3) -> (9, 7, 2, 0) (removed 7 window-dated lines incl 3 pairs + R240 roll, added 1 R241 roll line which is paren and not W-counted)
+AC-R2415 PENDING receipt = state R241 rolling summary + R1145 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 4/4 pre-closeout (R2415 delivery leg verified at commit; post-closeout cross-verify in qa/board-R1145.log)
+NOTE: dual-item round R1145 (R1142 isomorph): fold R241 + board knife cut-235; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Single-pass clean run, verify-then-write held throughout.
+PREDICT: round closeout appends R1145 pair -> final ST bytes ~74061, export tick row 1142->1145 + R1145 results row + sd recount (15, 7, 2, 3) -> (9, 7, 2, 0) -> (11,7,2,1), heartbeat R1145 row (CRLF), board cut-235 in qa/board-R1145.log
+
+== closeout addendum (R1145, appended by r1145_closeout2.py) ==
+First closeout pass (r1145_closeout.py) wrote ONLY the state pair then halted at the heartbeat tail assertion (verify-then-write caught the defect before any heartbeat/export write): disk evidence = heartbeat R1144 row unterminated (write-side CRLF-tail miss; 787 line-endings, all rows terminated except the last). Repair this pass: (a) state RLINE amended pre-commit to record the defect + repair (RLINE is the R1145 receipt line, amendment keeps the log honest); (b) heartbeat R1144 row terminated + R1145 row appended, endings 787 -> 789; (c) export refreshed with final gauge 75062 B. Fold assertions unaffected (state pre-op == git HEAD held; the defect is in a standing-law ledger file, not the state). Round score unchanged: 1 = ledger-maintenance mechanism file.
