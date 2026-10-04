@@ -1,0 +1,4 @@
+PASS AC-K252a..e board knife cut-252 pre-op: state-class board read clean, stale R1175 row 2826B verbatim migrated to Oct archive section R1176 (strict 147->148, register 157->158, dual-caliber per R1175 board-log convention)
+PASS board final state: header + R1176 current row + 5 open rows + 0 stale rows
+PASS archive pure-append prefix assertion (621707B + 2837B); migrated-row md5 identical 6c20bf162fcec20e74696ec415884609; 09-archive locked 358597B-class untouched
+SUITE PASS cut-252 single clean run (verify-then-write, zero intercepts)
