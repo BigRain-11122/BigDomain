@@ -1,0 +1,9 @@
+PASS AC-K249a R1172 stale done row located on main board (line 8, 2989 B, md5 e2bb3c58f99a640b20980fca1ca77e10 verbatim == git HEAD row)
+PASS AC-K249b 09-month archive locked (disk bytes == git HEAD blob, 358597 B untouched)
+PASS AC-K249d main board final = header + R1173 current-round claim row + 5 open rows + 0 stale rows (pre-write verify)
+PASS AC-K249c 10mo archive pure-append (prefix 612985 B byte-identical + appendix 3000 B = section header + verbatim row + LF, total 615985 B)
+PASS AC-K249c section R1173 appended (count 154 -> 155), migrated row per-line identical to HEAD row (md5 e2bb3c58f99a640b20980fca1ca77e10)
+PASS AC-K249d board write verified (14904 B disk)
+PASS AC-K249e receipt: cut-249 evidence = qa/board-R1173.log + R1173 register line + commit contains P-2026-09-25-18
+SUITE PASS AC-K249a..e (cut-249 done)
+PASS AC-R2555 post-closeout cross-verify: state log carries R255 rolling summary (item 55) + R1173 round+tokens lines in register (log 58 items, tick 1173, final 79791B / gauge 79788B); commit message carries P-2026-09-25-18 (P-51 three-carrier rule closed at commit)
