@@ -1,0 +1,54 @@
+# BigDomain fold R236 + board-law knife cut-231 closeout evidence log (R1132, 2026-10-04)
+# claim row pre-registered on src/os/backlog.md before migration (AC-K231a); fold evidence in qa/reorg-R1132.log
+# criteria: AC-K231a..e + closeout legs of AC-R2361..R2365; all checks verify-then-write
+PASS AC-K231b pre-migration arc10 = 556691 B, 136 sections, ends LF 556691
+PASS AC-K231b pure-append prefix asserted (new[0:old] == old)
+PASS AC-K231b sections 136 -> 137
+PASS AC-K231b last section header = ## R1132 (anl[-6]) ['', '## R1132', '', '- [x] R1129 认领：fold R235 水位整编+板规执法第二百三十刀 cut-230 双项一轮（R1125 同构·轮计分 1=台账维护机制件·P-2026-09-25-18 ⑤第二百三十五刀+板规刀 230·判据预注册=本行先落再动手·R1128 carry-note 兑现＝轮首首测 80654B 越 78,500B 线 2154B 触发）：**AC-R2351** pre-op=轮首首测 80654B+无 BOM 无 CR 无尾 LF+逐字节==HEAD blob［认领落板零触 state］+pre-op 备份 logs/state-preop-R1129.bak 逐字节同一+export sd 存值增量对账=存值 13/7/2/2+R1127..R1128 两轮对增量 4/0/0/2==live 机械复算 17/7/2/4；**AC-R2352** fold 窗［R234 滚窗摘要+R1125..R1128 四轮对］9 行 11092B 压 1 滚窗汇总行 kept=0+P/D 编目 regex 机械去重边界守卫（19 token 滚雪球零新增）+新滚窗行禁词三族词卫零命中+removed-window 9 行禁词逐行零命中 9/9；**AC-R2353** 顶层六字段保全［tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens］+json.loads 过 log 64→56+ConvertFrom-Json 双口径过；**AC-R2354** 压后实测 ≤78,500B 线+窗行机械复算==预测值 post-fold 9/7/2/0→收账终态 11/7/2/1+收账终态 ≤78,500B 余量闸；**AC-R2355** 送达=state R235 滚窗行+R1129 log 行在册+commit 含 P-2026-09-25-18［P-51 三载体］；**AC-K230a** 滞板清点=恰 1 条滞板 done 行［R1125·2601B·md5 cd918ea99dd4c8f24f3dd067c604b378］+常设 open 4 行+规约头完整+认领行先落（本行）［主板 13536B·arc10 554078B 节 135·09 档 md5 19783a35cfc4e57eb24eda5916a07702］；**AC-K230b** R1125 行 verbatim 迁 10 月档 §R1129 节（pure-append prefix 断言+逐行 md5 同一·09 档零触·节 135→136）；**AC-K230c** 主板终态=规约头［归档史 cut-230 记录恰一次］+R1129 当轮行［认领翻转 done 带实测值］+open 4 行+滞板行 0；**AC-K230d** 证据=qa/reorg-R1129.log+qa/board-R1129.log SUITE PASS；**AC-K230e** 送达=本行 done 翻转+commit 含 P-2026-09-25-18［P-51 口径］——[done 2026-10-04]（R1129 当轮闭环：AC-R2351..R2355+AC-K230a..e 全过=qa/reorg-R1129.log+qa/board-R1129.log·实测：fold 窗［R234 滚窗摘要+R1125..R1128 四轮对］9 行 11092B 压 1 滚窗汇总行 kept=0·state 80654B→70720B〔margin 7780B〕→收账终态 73950B·pre-op 备份逐字节同一；R1125 滞板行 2601B verbatim 迁 10 月档 §R1129 节〔arc10 554078B→556691B·节 135→136·pure-append prefix 断言+逐行 md5 同一·09 档零触〕·主板 15566B→13665B 终态=规约头〔归档史 cut-230 记录恰一次〕+R1129 当轮行+open 4 行+滞板行 0；heartbeat=R1129 行）', '', '- [x] R1131 认领：OSS 借力第四窗切片件（P-2026-09-26-08+P-2026-09-28-01 承传·slice3 OH-20261002 下窗指针三线·提前交付 R837 ~24.8h 先例带内·队列自然可拉零项后常设承接面拉单非造活）：判据预注册先于外部请求——**AC-OH16** 台位=cph4/oss-harvest/OH-20261005-bigdomain.md（D-20260927-03 ③唯一台账位·本仓镜像零新建）+窗锚=第四窗 10-05 21:40 开窗前交付·交付时点实记；**AC-OH17** 主候选 pyahocorasick（WojciechMula）五门全过=许可双源（GitHub API spdx+raw LICENSE 原文·MIT 直用类）+健康字段实测入册（stars/pushed_at/open_issues/archived）+外部请求次数全录；**AC-OH18** 反重复三面查证=集团切片面 grep 零他司同题入池行+cph4/README 能力注册表零命中+司内 R838 自写 trie 现役注记=入池≠采用·接线轮 bench 对照判据预注册·非双建；**AC-OH19** slice-3 三指针线全收口=①城市共创区块图像素材工具线判负留痕（cv2 在栈自足·两次顺延线闭口）②真钥双接线维持 gated 注记③DFA 词库接线配套线=本切片主承+应用表 ≥4 行含状态列（research-protocol §二.1）；**AC-OH20** 司级登记簿 docs/oss-harvest/README.md 入池记录行纯追加（既有行零改）+收账三载体（state log 行引用令号+backlog done 行+commit 消息含令号）——[done 2026-10-04]（R1131 当轮闭环：AC-OH16..OH20 全过——主件 cph4/oss-harvest/OH-20261005-bigdomain.md 落集团台账位（第四窗 10-05 21:40 开窗前 ~26.8h 提前交付·R837 先例带内）；入池 WojciechMula/pyahocorasick=BSD-3-Clause〔API spdx+raw LICENSE 原文双源验〕·1,126★·pushed 2026-04-27 半年活跃线内·archived=false·接线轮 bench 对照判据预注册五前置（R838 trie 现役保持·入池≠采用）；外部请求 4 次全录=①MCP search 解析失败如实计（R597/R837 同型）+②GitHub API 元数据 A 级+③raw LICENSE 原文+④PyPI JSON 259,801 字符超内联上限死面（轮子面=接线轮复验前置）；反重复三面查证零命中（cph4/README 注册表+集团切片面 grep 仅本司指针行+司内 R838 trie 在册注记）；slice3 三指针线全收口=①图像素材工具线判负（cv2 在栈自足·两次顺延线闭口）②真钥双接线维持 gated③DFA 线主承+limits 频控类判负（AC-S9 E_RATE_LIMIT+ugc rate_limit 在栈自研=双建面）；登记簿入池记录面（三）行纯追加；三载体=本行+state R1131 行+commit 含 P-2026-09-26-08/P-2026-09-28-01）', '']
+PASS AC-K231b migrated rows verbatim tail (anl[-4]=R1129 row, anl[-2]=R1131 row)
+PASS AC-K231b migrated rows line-md5 identity
+PASS AC-K231b sep-09 archive untouched (md5 19783a35cfc4e57eb24eda5916a07702)
+PASS AC-R2364 new-pair counter hygiene: pair lines clean of 'idle'
+PASS AC-R2364 new-pair counter hygiene: pair lines clean of 'no-pullable'
+PASS AC-R2364 new-pair counter hygiene: pair lines clean of 'no_pullable'
+PASS AC-R2364 final state 74307 B under 78500B line (margin 4193 B)
+PASS AC-R2364 final sd recount (11, 7, 2, 1) == predicted (11, 7, 2, 1)
+PASS fin.arc10 on-disk == composed
+PASS fin.board on-disk == composed
+PASS fin.state on-disk == composed (BOM-less single write)
+PASS fin.state.tick 1132
+PASS fin.state.logcount 58
+PASS fin.state.summary.item R236 rolling summary intact (item 55)
+PASS fin.state.lastround R1132 round line in register (item 56)
+PASS fin.state.lasttokens R1132 tokens line in register (item 57)
+PASS fin.state.margingate | final 74307B margin 4193B
+PASS fin.state.roundtrip (on-disk == composed, BOM-less, json.dumps indent2 identity)
+PASS fin.board.done.once (exactly one - [x] R1132 row)
+PASS fin.board.header.once (archive-history chain carries cut-231 entry exactly once)
+PASS fin.board.open4 (four - [ ] rows)
+PASS fin.board.stale.gone (R1129+R1131 rows migrated, zero stale done rows)
+PASS fin.board.selfref (R1132 row self-references qa/reorg-R1132.log)
+PASS fin.board.header.chain (cut-230 predecessor entry preserved)
+PASS fin.hb pre-append ends CRLF (R1130 fix convention held)
+PASS fin.hb.endscrlf (CRLF separator, trailing CRLF at EOF per R1130 fix)
+PASS fin.hb.lastr (last row = R1132)
+PASS fin.hb.once (R1132: appears exactly once)
+PASS fin.export.roundtrip pre-check (dumps identity)
+PASS fin.export.resultsn pre (421)
+PASS fin.export.tickrow pre (results[12] = 1131)
+PASS fin.export.queue counts flat (6/2/2) (6, 2, 2)
+PASS fin.export.proposals flat (2/2) (2, 2)
+PASS fin.export.nm pre (fold chain entry = fold R236 pending)
+PASS fin.export.tickrow (results[12] = 1132 OSLoop tick row)
+PASS fin.export.resultsn (421 -> 422)
+PASS fin.export.lastresult (R1132 fold round, score 1)
+PASS fin.export.sd (11/7/2/1, window 2026-09-28..2026-10-04, method note appended, queue 6/2/2 + proposals 2/2 flat)
+PASS fin.export.current (ceo_face current = R1132 round summary)
+PASS fin.export.nm (fold chain entry R236=R1131 replaced by R237 carry-note)
+PASS fin.export.ts (2026-10-04T19:03:52+08:00)
+PASS fin.export BOM preserved, no trailing LF, LF-only
+PASS fin.commit.len <= 500 ASCII 465
+PASS fin.commit.carrier (P-2026-09-25-18 + [via BigDomain-OSLoop])
+SUITE PASS (AC-K231a..e all green; AC-R2365 delivery legs verified: state R236 rolling summary + R1132 pair in register, commit follows with P-2026-09-25-18)
+INFO final.metrics | arc10 556691B->561927B (136->137 sections), board 18578B(with claim landed) -> 14099B final, state 78925B -> 71135B fold -> 74307B final (margin 4193B), heartbeat: R1132 row (CRLF), qa logs: qa/reorg-R1132.log + qa/board-R1132.log, fixed-point iters=1
+INFO commit.template | R1132: fold R236 water-level reorg + board knife cut-231 (R1129 isomorph, score 1); window [R235 roll + R1129..R1131 three pairs] 7->1 kept=0; state 78925B->71135B fold->74307B; R1129+R1131 stale rows 5222B verbatim to oct archive sec R1132 (136->137); board 18578B claim-landed->14099B; heartbeat R1132 row; export tick 1131->1132 + sd 15/7/2/3->11/7/2/1; AC-R2361..R2365+AC-K231a..e = qa/reorg-R1132.log+qa/board-R1132.log (P-2026-09-25-18) [via BigDomain-OSLoop]
