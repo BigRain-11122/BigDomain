@@ -1,0 +1,28 @@
+PASS AC-R2541 state BOM + trailing LF + no CR + disk == HEAD blob byte-identical (sha16 920101AB208BEB04, 79285 B)
+PASS AC-R2541 roundtrip byte-identity (indent2, BOM-less content 79282B + trailing LF)
+PASS AC-R2541 round-start tree face: only claim row (src/os/backlog.md) as pre-registered
+PASS AC-R2541 calibration probe: export stored sd (5, 1, 1, 1) + pair delta (+0, +0, +0, +0) == live recount (5, 1, 1, 1) exactly (zero drift)
+PASS AC-R2542 window line 0 = R253 rolling summary :: 2026-10-05（R1135..R1170 窗口·R253 整编第二百五
+PASS AC-R2542 window pair = R1171 round+tokens lines (single-round pair), window tail = final log item (R1171 tokens)
+PASS AC-R2542 window 3 lines = 9697 B content measure (probe-measured exact value)
+PASS AC-R2542 removed-window banned-substring mechanical count = zero hits {idle-fast}
+PASS AC-R2542 removed-window banned-substring mechanical count = zero hits {no-pullable}
+PASS AC-R2542 removed-window banned-substring mechanical count = zero hits {nop}
+PASS AC-R2542 carried token catalog == 47 (R253 carry 47 verbatim; must-have present; last token D-0929-03)
+PASS AC-R2542 P/D catalog mechanical dedup == 47 carried + 0 newly registered (BD-PROP guard) []
+INFO P/D catalog (47 tokens): D-20260930-19,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,O-2026-0930-013,D-20260930-20,O-2026-0929-013,O-20261004-2300,P-02,P-2026-09-29-06,P-2026-10-04-01,P-2026-10-04-02,O-027,O-2026-0930-027,O-2026-0930-028,O-2026-0930-029,O-2026-0930-030,O-20261004-2255,D-01,D-02,D-03,D-04,D-05,D-20261005-01,O-013,O-029,D-19,D-0929-03
+PASS AC-R2542 new roll line banned-substring three-family zero hits
+PASS AC-R2542 37-round score list mechanically derived (36 carried + R1171=1)
+INFO roll line composed 7113 B; carried R1135..R1170 notes verbatim from R253 roll + R1171 fresh note
+INFO predicted post-fold gauge 76682B (naive 76698B -16B item-structure; margin 1818B under the 78500B line)
+INFO predicted post-fold recount (3, 1, 1, 0)
+PASS AC-R2541 backup logs/state-preop-R1172.bak byte-identical (79285 B)
+PASS AC-R2543 top-level seven fields preserved (tick/log/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2543 composed parses, tick 1171 preserved; log items 58 -> 56 (3 -> 1, kept=0); head block 55 items verbatim; log item 55 = R254 rolling summary (composed verbatim, 7113 B)
+PASS AC-R2544 post-fold measured 76682 bytes scan-gauge (disk 76685 B), under the 78500B line by 1818 B
+INFO pre-op live recount (5, 1, 1, 1) -> post-fold recount (3, 1, 1, 0) (removed 3 window lines incl R253 roll + R1171 pair, added 1 R254 roll line dated 10-05 inside window)
+PASS AC-R2544 re-read parses (tick 1171, log 56, roll item intact); state on disk = 76685 B (BOM + trailing LF write convention verified)
+PASS AC-R2544 dual-parser pass (json.loads + PS ConvertFrom-Json, tick 1171, log 56 items)
+AC-R2545 PENDING receipt = state R254 rolling summary + R1172 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2545 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+PASS AC-R2545 post-closeout cross-verify: state log carries R254 rolling summary (item 55) + R1172 round+tokens lines in register (log 58 items, tick 1172, final 79683B / gauge 79680B); commit message carries P-2026-09-25-18 (P-51 three-carrier rule closed at commit)

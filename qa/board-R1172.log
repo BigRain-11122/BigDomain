@@ -1,0 +1,9 @@
+PASS AC-K248a R1171 stale done row located on main board (line 11, 2645 B, md5 347a1b68f05e552143a7899fa999cdeb verbatim == git HEAD row)
+PASS AC-K248b 09-month archive locked (disk bytes == git HEAD blob, 358597 B untouched)
+PASS AC-K248d main board final = header + R1172 current-round claim row + 5 open rows + 0 stale rows (pre-write verify)
+PASS AC-K248c 10mo archive pure-append (prefix 610329 B byte-identical + appendix 2656 B = section header + verbatim row + LF, total 612985 B)
+PASS AC-K248c section R1172 appended (count 153 -> 154), migrated row per-line identical to HEAD row (md5 347a1b68f05e552143a7899fa999cdeb)
+PASS AC-K248d board write verified (14668 B disk)
+PASS AC-K248e receipt: cut-248 evidence = qa/board-R1172.log + R1172 register line + commit contains P-2026-09-25-18
+SUITE PASS AC-K248a..e (cut-248 done)
+PASS AC-R2545 post-closeout cross-verify: state log carries R254 rolling summary (item 55) + R1172 round+tokens lines in register (log 58 items, tick 1172, final 79683B / gauge 79680B); commit message carries P-2026-09-25-18 (P-51 three-carrier rule closed at commit)
