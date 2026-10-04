@@ -1,0 +1,33 @@
+== qa/reorg-R1106.log fold R228 (228th compression knife, P-2026-09-25-18 item-5 mainline) ==
+PASS AC-R2281 state pre-op = 80006 B (round-start first-measure over the 80000B line by 6B = R1105 carry-note honored)
+PASS AC-R2281 state has no BOM (R1067+ BOM-less convention); no CR bytes; no trailing LF
+PASS AC-R2281 state pre-op byte-identical to git HEAD blob (OID dual-verify; state untouched by claim landing)
+PASS AC-R2281 tree carries claim-landed backlog only (content-level git diff --name-only; status M-flags on byte-identical restored files = eol-expectation stat artifacts, content clean, honest note)
+PASS AC-R2281 pre-parse tick 1105 | log items 64 | six top-level fields in canonical order
+PASS AC-R2281 backup logs/state-preop-R1106.bak byte-identical (80006 B)
+PASS AC-R2281 export roundtrip byte-identity (BOM + indent2, no trailing LF)
+PASS AC-R2281 export stored sd == (33, 24, 2, 4); live mechanical recount == (39, 24, 2, 7); delta reconciliation stored + R1103..R1105 three-pair increments (6,0,0,3) exact
+PASS AC-R2282 R227 rolling summary located at log item 56; window lines 57..64 = R1102..R1105 four pairs (round numbers consecutive 4/4, tail = final log item, no comma)
+PASS AC-R2282 window 9 lines = 10444 B content measure (utf-8 byte caliber, R1097 10834B / R1102 11763B precedents) | got 10444
+PASS AC-R2282 removed-window 9 lines substring-verified clean (three banned substrings zero-hit 9/9)
+PASS AC-R2282 mechanical round list R1102..R1105 consecutive 4/4 zero missing (pair criterion: 1 round + 1 tokens line each; four round types score 1/0/0/0)
+PASS AC-R2282 P/D catalog mechanical dedup == pre-registered 18 tokens (boundary-guarded, BD-PROP embedded excluded, zero new tokens vs R227 roll catalog)
+INFO P/D catalog (18 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,P-32,P-56,P-74
+PASS AC-R2282 rolling summary composed: counter hygiene three banned substrings zero-hit (and window-P2 counter protected)
+PASS AC-R2284 post-fold composed 70668 B, under the 80000B line by 9332 B
+PASS s4.fin.margingate | final 73788 B margin 4712 B under the 78500B gate
+PASS closeout fixed-point converged in 2 passes (ROUND embeds board-pre/board-final 16028/13608 B, FLIP embeds state-final 73788 B), single-clean lineage, zero repo writes before all asserts green
+PASS AC-R2284 post-fold window-line recount (31, 24, 2, 3) == predicted (roll line in-window W+1, R1083/R1088/R1093/R1097/R1102 isomorph)
+PASS AC-R2283 composed parses: tick 1105->1106, log 64->56 (fold, 9->1 kept=0) ->58 (closeout pair), item 56 = R228 rolling summary verbatim, six top-level fields preserved
+PASS s4.post.closeout recount (33, 24, 2, 4) == family-predicted (W -9 +1 roll +2 pair; sub -4 removed round lines +1 R1106 line)
+PASS s6.export | export_ts ISO8601 refreshed, tick row 1102->1106, R1106 results row, sd 33/24/2/4 -> 33/24/2/4 symmetric flat, ceo_face.current=R1106, nm fold-chain updated, 383454 B
+PASS postwrite.state | 73788 B (fold 70668 -> closeout 73788); json.loads leg verified (tick=1106 logn=58 sd=33/24/2/4)
+PASS postwrite.export.reparse (json.loads leg; PS dual-parser leg follows in shell)
+
+== POST-CLOSEOUT CROSS-VERIFY (R1106 dual round) ==
+PASS state.json final = 73788 B; tick 1105->1106; log 64->56 (fold) ->58 (closeout pair); json.loads pass (tick=1106 logn=58)
+PASS AC-R2285 receipt legs: R228 rolling summary in register (item 56) + R1106 log lines in register (items 57/58); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start stored (33,24,2,4) + three-pair drift (6,0,0,3) == live (39,24,2,7); post-fold (31,24,2,3); post-closeout (33,24,2,4) == export self_drive (F3, zero drift, symmetric flat vs R1097/R1102 register)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1106.bak 80006 B byte-identical; post-fold 70668 B under the 80000B line by 9332 B; final 73788 B margin 4712 B under the 78500B gate
+NOTE dual-round R1106 (R1097/R1102 isomorph): fold R228 + board knife cut-223 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Closeout fixed-point iteration (ROUND embeds board-final, FLIP embeds state-final) converged in 2 passes, single-clean lineage, zero repo writes before all asserts green (verify-then-write held).
+SUITE PASS - AC-R2281..R2285 all green; delivery AC-R2285 completed by commit carrying P-2026-09-25-18
