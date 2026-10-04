@@ -1,0 +1,37 @@
+PASS AC-R2431 state BOM present + trailing LF present + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2431 state pre-op disk bytes = 78742 byte-identical to git HEAD blob (78742 vs 78742, sha16 FDB0518D3BD462E4)
+PASS AC-R2431 pre-parse tick 1150 log items 62 (round-start first-measure scan gauge 78739B over the 78500B line by 239B = R1150 carry-note honored)
+PASS AC-R2431 backup logs/state-preop-R1151.bak byte-identical (78742 B)
+PASS AC-R2431 round-start tree face: only src/os/backlog.md modified (claim row landed + score-list amend, both honestly noted; board = HEAD + R1151 claim insert)
+PASS AC-R2431 export stored sd (11, 7, 2, 1) vs live mechanical recount (15, 7, 2, 3) = two fresh-gate rounds (R1149/R1150) non-refresh drift honestly noted (recalibrated at closeout)
+PASS AC-R2432 window line 0 = R242 rolling summary :: 2026-10-04（R1135..R1147 窗口·R242 整编第二百四十二刀压窗［P-2026-09-25-18 
+PASS AC-R2432 window pair = R1148/R1149/R1150 round+tokens lines, window tail = final log item (R1150 tokens)
+PASS AC-R2432 window 7 lines = 9192 B content measure
+PASS AC-R2432 removed-window banned-substring mechanical count = honest display {'idle-fast': [], 'no-pullable': [], 'nop': [(1, 1)]} (nop x1 in R1148 line = quoted wording of the previous round's honest display label, not a round-type tag; originals addressable via pre-op backup + git history)
+PASS AC-R2432 P/D catalog mechanical dedup == 24 carried + 0 newly registered []
+INFO P/D catalog (24 tokens): D-20260930-19,D-20260927-03,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,D-20261004-03,D-20261004-04,D-20261004-05,D-20261004-06,D-20260930-05,P-2026-09-25-18,P-2026-09-26-08,P-2026-09-28-01,P-2026-10-02-09,P-2026-10-03-01,P-2026-10-03-02,P-32,P-56,P-74,O-2026-0930-013
+PASS AC-R2432 boundary guard: no BD-PROP false positive (BD-PROP-001/002 in window lines excluded mechanically)
+PASS AC-R2432 new roll line banned-substring three-family zero hits
+INFO roll line composed 2860 B; carried R1135..R1147 notes verbatim from R242 roll + R1148..R1150 fresh notes; scores 1/0/0/0/1/0/0/1/0/0/1/0/0/1/0/0
+NOTE inherited 13-round score list misalignment (R1138/R1139) discovered at first survey in carried R242 text; carried text verbatim untouched; new 16-round list mechanically derived from per-round notes (R1135/1139/1142/1145/1148 = score 1); claim-row amend precedent logged in register
+PASS AC-R2433 top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens)
+PASS AC-R2433 composed parses, tick 1150 preserved; log items 62 -> 56 (7 -> 1, kept=0); head block 55 items verbatim; log item 55 = R243 rolling summary (composed verbatim, 2860 B)
+PASS AC-R2434 post-fold measured 72359 bytes scan-gauge (disk 72362 B), under the 78500B line by 6141 B
+INFO pre-op live recount (15, 7, 2, 3) -> post-fold recount (9, 7, 2, 0) (removed 7 window-dated lines incl 3 pairs + R242 roll, added 1 R243 roll line)
+PASS AC-R2434 post-fold window-line recount (9, 7, 2, 0) == recomputed (single-pass clean run, verify-then-write held: composed text fully verified before the single state write)
+PASS AC-R2434 re-read parses (tick 1150, log 56, roll item intact); state on disk = 72362 B (BOM + trailing LF write convention verified)
+AC-R2435 PENDING receipt = state R243 rolling summary + R1151 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2435 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+NOTE dual-item round R1151 (R1148 isomorph): fold R243 + board knife cut-237; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1.
+PASS closeout state pair appended (R1151 closeout line + tokens line), tick 1150 -> 1151, log 56 -> 58 items; final ST gauge 75607 B (disk 75610 B).
+PASS closeout heartbeat: R1151 row appended (rows 794 -> 795, CRLF tail convention held).
+PASS closeout export refreshed: export_ts + ceo_face.current (R1151) + next_milestone fold R244 carry-note (final gauge 75607 B) + results tick row 1148 -> 1151 + R1151 results row + sd recount (15,7,2,3) -> (11,7,2,1) mechanical (R1149/R1150 fresh-gate drift recalibrated); queues re-derived 6/2/2.
+PASS closeout board: R1151 claim row marked [done 2026-10-04] with round-closure suffix; unchecked = 4 standing open rows.
+
+== closeout addendum (R1151, appended by r1151_closeout.py) ==
+State pair appended (R1151 closeout line + tokens line), tick 1150 -> 1151, log 56 -> 58 items; final ST gauge 75607 B (disk 75610 B).
+Heartbeat: R1151 row (rows 794 -> 795), CRLF tail convention held.
+Export refreshed: export_ts + ceo_face.current (R1151) + next_milestone fold R244 note (R1151 closeout final 75607 B) + results tick row 1148 -> 1151 + R1151 results row + sd recount (15,7,2,3) -> (11,7,2,1) mechanical (R1149/R1150 fresh-gate drift recalibrated).
+Board: R1151 claim row marked [done 2026-10-04] with round-closure suffix; unchecked = 4 standing open rows.
+AC-R2435 receipt leg verified at closeout (state R243 roll + R1151 log lines in register; commit carries P-2026-09-25-18 = P-51 three-carrier rule).
+Round score 1 = ledger-maintenance mechanism file (fold R243 + cut-237 dual item, R1148 isomorph). Honest notes: fold first run aborted pre-write twice (porcelain strip defect in tree-face assertion; catalog parse needed cut at the evidence-pointer suffix in the carried R242 roll trailer) - both verify-then-write catches, zero state writes before the clean pass; board knife first run aborted post-write on a wrong intermediate unchecked-count expectation (5 = claim + 4 standing at that stage, not 4) - read-side expectation defect only, arc10/board each written exactly once, continuation verify script confirmed disk state without re-write.

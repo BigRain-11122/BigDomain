@@ -1,0 +1,3 @@
+PASS AC-K237d main board stage state = header block + R1151 claim row + open 4 standing rows + stale rows 0 (13698 B, 13 lines; claim row done-marking lands at closeout, after which unchecked = 4) - first-run count assertion defect honestly noted, zero re-write
+PASS AC-K237d arc10 on-disk re-verify: prefix byte-identical to HEAD blob, 144 sections, migrated R1148 row 3171 B md5 197113dfd4c871b666149eaf7362f620
+NOTE cut-237 single clean pass on disk (arc10 and board each written exactly once; verify-then-write held on both writes; the aborted assertion was a read-side expectation defect, not a data defect)
