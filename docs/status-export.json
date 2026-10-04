@@ -1,9 +1,9 @@
-﻿{
-  "export_ts": "2026-10-04T23:42:02+08:00",
+{
+  "export_ts": "2026-10-05T00:31:11+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1154 GORD 五新行判读+O-2026-0930-027 SOP 建制令本司执行回执（轮计分 1=集团令承接呈递件）：表行 157→162＝O-2026-0930-027~030 四行回填批+O-20261004-2255——O-027 本司执行面→《SOP 盘点与补建清单》首窗回执落盘（在册 16 项+缺口 4 项带对标与排期·AC-SOPa..d 全过）；余四令委员会/HQ 派工面知悉；雷达 10-04 恢复窗候选清单过目零 @BigDomain 强契合件零认领；fold R244 水位整编（81474B gauge 越 78,500B 线 2,974B·窗 7 行 11927B 压 1·post-fold margin 5732B·AC-R2441..R2445）+板规执法第二百三十八刀 cut-238（R1151 滞板行 verbatim 迁 10 月档 §R1154 节·AC-K238a..e）；export tick 1153→1154+sd 复算 11/7/2/1 机械；last_gord 基线 157→162",
-    "latest_artifact": "最近实物=《BigDomain SOP 盘点与补建清单》（docs/ops/sop-inventory-20261004.md·2026-10-04 R1154·O-2026-0930-027 全集团 SOP 建制令九司承接面首窗回执件·在册三级盘点 16 项全带盘上指针机械验+缺口 4 项带对标依据+排期〔缺口 2 对账日常化 runbook=10-05..10-11 窗首件〕·10-07 治理日聚合审呈报面；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
+    "current": "R1155 pyahocorasick bench 接线评估轮（OH-20261005-bigdomain.md 第四窗入池件指针②提前兑现·轮计分 2=可跑实物·判负留痕=诚实负面产出）：AC-PB1..PB6 预注册判据全过——2889 探针语义等价 divergences=0·12,000 条真实语料吞吐对照（3 跑中位）trie 709,895 msg/s vs AC 523,940 msg/s=x0.74·对抗面四面 AC ≤trie×1.5 内（ascii-filler 长文本 trie 病态 ×66.6 实证=逐位 Python 环成本）·采纳判据 ≥2× 不达→NOT-ADOPTED 入池件转 parked（短语料主面 trie 快 1.37×=省一笔无谓 C 扩展依赖·长文本面 bootstrap 期再评注记落 README（三））·wordlist.py/pipeline.py 零改动·BSD-3 归属注记随件·证据=qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py；R1155 会话于 export 刷新前中断→本刷新+commit 由 R1156 补全如仪（诚实律注记）",
+    "latest_artifact": "最近实物=pyahocorasick Aho-Corasick 前置过滤 bench 评估件（qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py·2026-10-05 R1155·OH-20261005-bigdomain.md 第四窗入池件指针②·判负留痕 NOT-ADOPTED 入池件 parked〔≥2× 采纳门槛不达·AC-PB1..PB6 全过·语义等价 2889 探针零分歧·12,000 条语料吞吐双列如实·对抗四面全测·长文本 66× 差=bootstrap 期长文 UGC 面再评注〕；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
     "next_milestone": "下个里程碑（≤10-06）：10-05 12:00 法务两步制初稿窗开（HQ 秘书处代理出具·席7 复核 10-06 12:00·D-20261004-06·§五.8 修订与 A 档收款面维持挂起）；10-05 周轮=提案回访（本窗 09-28~10-05 BD-PROP-001+002 两条在册·v2.1 ④ 判据已满足）+BigLife R777 复核档到达即启本司常务班复核（D-20261003-02 chronic）；SOP 补建缺口 2 对账日常化 runbook=10-05..10-11 窗首件（O-2026-0930-027 滚动窗每窗 ≥1 件·夜窗/自驱轨）；OSS 第五窗 10-08 21:40；游客端三态选型决策包在页待 CEO 拍板（O-2026-0929-007·审批窗 10-07·dataface=ready_now）；XL-16 窗 10-07（31 卡活体在页）；benchmarks 7 天刷 10-11；10-07 治理日=SOP 盘点清单聚合审；10-08 token 审计判据回访；fold R245=R1155 轮首首测裁定；bootstrap CEO 物理件无 ETA"
   },
   "depts": [
@@ -1905,6 +1905,10 @@
     [
       "1",
       "state.json 水位整编 R244+板规执法第二百三十八刀 cut-238（R1151 同构·轮计分 1：fold 窗［R243 滚窗摘要+R1151..R1153 三轮对］7 行 11927B 压 1 kept=0·post-fold gauge 72768B margin 5732B·编目 31 token·AC-R2441..R2445 全过=qa/reorg-R1154.log；cut-238=R1151 滞板 done 行 verbatim 迁 10 月档 §R1154 节·AC-K238a..e 全过=qa/board-R1154.log·P-2026-09-25-18 ⓔ第二百四十四刀+板规刀 238·R1154）"
+    ],
+    [
+      "2",
+      "pyahocorasick 前置过滤 bench 接线评估件（OH-20261005-bigdomain.md 入池件指针②·判负留痕 NOT-ADOPTED parked：≥2× 采纳门槛不达〔trie 709,895 vs AC 523,940 msg/s=x0.74〕·2889 探针语义等价 divergences=0·对抗四面 AC ≤trie×1.5·ascii-filler 面 trie 病态 ×66.6 实证·wordlist.py/pipeline.py 零改动·BSD-3 注记·qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py+README（三）行注记·AC-PB1..PB6 全过·R1155）"
     ]
   ],
   "self_drive": {
