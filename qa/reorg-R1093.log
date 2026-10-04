@@ -1,0 +1,49 @@
+PASS AC-R2231 state pre-op = 81322 B (round-start first-measure over the 80000B line by 1322B = R1092 carry-note honored; adjudication chain R1090..R1092 three under-line rounds in register)
+PASS AC-R2231 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2231 state has no CR bytes
+PASS AC-R2231 state has no trailing LF
+PASS AC-R2231 state pre-op byte-identical to git HEAD blob (state untouched by claim landing; tree carries claim-landed backlog only)
+PASS AC-R2231 pre-parse tick 1092 | tick=1092
+PASS AC-R2231 pre-parse log items 66 | n=66
+PASS AC-R2231 backup logs/state-preop-R1093.bak byte-identical (81322 B)
+PASS AC-R2231 tree carries claim-landed backlog only (got 'M src/os/backlog.md')
+PASS AC-R2231 export has BOM (utf-8-sig convention)
+PASS AC-R2231 export roundtrip (BOM + indent2, no trailing LF)
+PASS AC-R2231 export no trailing LF
+PASS AC-R2231 export stored sd == (35, 24, 2, 5) | got (35, 24, 2, 5)
+PASS AC-R2231 sd delta reconciliation: stored (35,24,2,5) + R1090..R1092 pair increments (6,0,0,3) == live mechanical recount (41,24,2,8) | got (41, 24, 2, 8)
+PASS AC-R2232 R218 rolling summary located at log item 55
+PASS AC-R2232 window line 0 = R218 rolling summary
+PASS AC-R2232 window lines 1..10 = R1088..R1092 five pairs (round numbers consecutive 5/5)
+PASS AC-R2232 window tail line = final log item (no comma)
+PASS AC-R2232 window 11 lines = 11800 B content measure | got 11800
+INFO removed-window sd contribution: W=11 sub=5 nop=0 idle=0 (R1088 dual-round + R1089 triple-round + three waiting-declaration pairs)
+PASS AC-R2232 P/D catalog mechanical dedup == pre-registered 13 tokens (boundary-guarded, snowball zero-new, got 13 tokens)
+INFO P/D catalog (13 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+PASS AC-R2232 counter hygiene: summary free of 'idle' substring
+PASS AC-R2232 counter hygiene: summary free of 'no-pullable'/'no_pullable' substrings
+PASS AC-R2233 composed parses, tick 1092 preserved
+PASS AC-R2233 log items 66 -> 56 (11 -> 1, kept=0) | n=56
+PASS AC-R2233 log item 55 = R223 rolling summary (verbatim in register)
+PASS AC-R2233 top-level field preserved: tick
+PASS AC-R2233 top-level field preserved: last_order
+PASS AC-R2233 top-level field preserved: last_decision_rows
+PASS AC-R2233 top-level field preserved: benchmarks_refreshed
+PASS AC-R2233 top-level field preserved: last_gord_tbl_rows
+PASS AC-R2233 top-level field preserved: last_dec_tokens
+PASS AC-R2234 post-fold window-line recount (31, 24, 2, 3) == predicted (roll line in-window W+1, R1083/R1088 isomorph) | got (31, 24, 2, 3)
+PASS AC-R2234 post-fold composed 70769 B, under the 80000B line by 9231 B
+== qa/reorg-R1093.log fold R223 (223rd compression knife, P-2026-09-25-18 item-5 mainline) ==
+AC-R2231 PASS pre-op byte-identical backup logs/state-preop-R1093.bak (81322 bytes; identical to git HEAD blob; state untouched by claim landing, tree carries claim-landed backlog only; round-start first-measure over the 80000B line by 1322B = R1092 carry-note honored; adjudication chain R1090..R1092 three under-line rounds in register)
+AC-R2232 PASS window [R218 rolling summary + R1088..R1092 five pairs] 11 lines 11800B -> 1 rolling summary line, kept=0, round types: fold-R218+cut-218 dual / auto-saves-cleanup+BD-PROP-002+cut-219 triple / waiting-declaration x3 (protected-state exemption, score 0); scores 1/1/0/0/0; mechanical round list R1088..R1092 continuous 5/5; P/D catalog mechanical-dedup (boundary-guarded, snowball zero-new): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74
+AC-R2233 PASS top-level six fields preserved (tick/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); json.loads pass (tick 1092, log 66->56 items, item 55 = R223 rolling summary verbatim); PowerShell ConvertFrom-Json dual-parser verified (tick 1093)
+AC-R2234 PASS post-fold measured 70769 bytes, under the 80000B line by 9231 bytes; window-line recount (41,24,2,8) -> (31, 24, 2, 3) (predicted hold, roll line in-window W+1)
+AC-R2235 PENDING receipt = state R223 rolling summary + R1093 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+NOTE: dual-round R1093 (R1088 isomorph): fold R223 + board knife cut-220 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Two-pass calibration recorded honestly (R468 precedent): first pass aborted at AC-R2234 (facts probe omitted the roll line in-window W+1 contribution: predicted 30 vs actual 31), zero repo writes before abort (verify-then-write held), claim pre-registration calibrated on-disk 30->31 (same byte length, board 13394B unchanged); second pass single-clean.
+PREDICT cashed: round closeout appended R1093 pair -> final ST 73505 bytes, export tick row 1089->1093 + R1093 results row + sd recount (31,24,2,3) -> (33,24,2,4) + closeout pair, heartbeat R1093 row (LF, no BOM)
+== POST-CLOSEOUT CROSS-VERIFY (R1093 dual round) ==
+PASS state.json final = 73505 B; tick 1092->1093; log 66->56 (fold) ->58 (closeout pair); dual-parser pass (tick=1093 logn=58)
+PASS AC-R2235 receipt legs: R223 rolling summary in register (item 55) + R1093 log lines in register (items 56/57); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start stored (35,24,2,5) + increments (6,0,0,3) == live (41,24,2,8); post-fold (31, 24, 2, 3); post-closeout (33, 24, 2, 4) == export self_drive (F3, zero drift)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1093.bak 81322 B byte-identical; post-fold 70769 B under the 80000B line by 9231 B
+SUITE PASS - AC-R2231..R2235 all green; delivery AC-R2235 completed by commit carrying P-2026-09-25-18
