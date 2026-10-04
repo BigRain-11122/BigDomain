@@ -1,0 +1,24 @@
+== qa/board-R1097.log cut-221 + closeout (AC-K221a..e, R1093-row migration, s1-s6) ==
+PASS pre.board.claimrow | L08 R1097 claim fresh checkbox (pre-registration honored, landed first)
+PASS pre.board.stale | L09 stale R1093 done row 2617 B md5 6d52a346e1ce6faa56343d0d50eb76d7 (exactly 1 stale done row)
+PASS pre.board.opencount | standing open rows=4 (746B/1781B/608B/689B), done rows=1 (stale only)
+PASS pre.board.hdr.anchor.once | rule-header anchor in place, knife-221 mentions = claim row only (2 in-row), header zero
+PASS pre.arc10.size | bytes=527490, sections=126, lastsec=R1093, ends-LF, no-BOM
+PASS pre.arc09.md5untouched | md5=19783a35cfc4e57eb24eda5916a07702 (pre-registered value reproduced)
+PASS s2.arc10.append | pure-append prefix asserted, sections 126->127, lastsec=R1097, row verbatim in-sec (md5 same), 530118 B
+PASS s3.board1.fixedpoint | board1=12729 B iterations ok (embedded == actual, converged in 2 passes)
+PASS s3.stale.gone | R1093 stale row removed, R1097 row flipped done once, 4 open rows intact, knife-221 note in header exactly once, 15 lines
+PASS s4.round.clean (banned substrings zero-hit on final board)
+PASS postwrite.board | board 14546B->12729 B; arc10 527490B->530118 B (127 sections)
+PASS s2.arc09.stilluntouched (post-write)
+INFO s5.heartbeat | R1097 line appended (ascii, CRLF, 977 bytes)
+
+== SUITE (AC-K221a..e) ==
+AC-K221a PASS stale-row census = exactly 1 stale done row (R1093, 2617 B, md5 6d52a346e1ce6faa56343d0d50eb76d7) + 4 standing open rows (746/1781/608/689 B) + header intact + claim row landed first (this round) [board 14546B with claim, arc10 527490B, 126 sections, arc09 md5 verified]
+AC-K221b PASS R1093 row verbatim to docs/archive/backlog-done-2026-10.md sec R1097 (pure-append prefix asserted, per-line md5 same, 09 archive untouched, sections 126->127, arc10 527490B->530118B)
+AC-K221c PASS board fixed point = rule header (knife-221 record exactly once) + R1097 done row (claim flipped with measured values) + 4 open rows + 0 stale rows (14546B->12729B, 15 lines)
+AC-K221d PASS evidence = qa/reorg-R1097.log + qa/board-R1097.log (this file) SUITE
+AC-K221e PENDING receipt = done flip on board + commit carrying P-2026-09-25-18 (P-51 rule; completed at commit)
+SUITE PASS (AC-K221a..e; e-delivery completed by commit)
+INFO final.metrics | arc10 527490B->530118B (126->127 sections), board 14546B->12729B, state 80340B->73308B (fold 70640 -> closeout 73308), export sd 39/24/2/7 -> 33/24/2/4, hb +977B
+PASS postwrite.dualparser (PS leg): state tick=1097 logn=58; export tickrow=1097 sd=33/24/2/4; heartbeat R1097 row 977B CRLF in place

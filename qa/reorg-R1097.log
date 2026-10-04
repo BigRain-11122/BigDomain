@@ -1,0 +1,39 @@
+== qa/reorg-R1097.log fold R226 (226th compression knife, P-2026-09-25-18 item-5 mainline) ==
+PASS AC-R2261 state pre-op = 80340 B (round-start first-measure over the 80000B line by 340B = R1096 carry-note honored)
+PASS AC-R2261 state has no BOM (R1067+ BOM-less convention)
+PASS AC-R2261 state has no CR bytes
+PASS AC-R2261 state has no trailing LF
+PASS AC-R2261 state pre-op byte-identical to git HEAD blob (OID dual-verify; state untouched by claim landing)
+PASS AC-R2261 tree carries claim-landed backlog only (got ['M src/os/backlog.md'])
+PASS AC-R2261 pre-parse tick 1096
+PASS AC-R2261 pre-parse log items 64
+PASS AC-R2261 backup logs/state-preop-R1097.bak byte-identical (80340 B)
+PASS AC-R2261 export stored sd == live mechanical recount (39, 24, 2, 7) zero drift (R1096 reflush round)
+PASS AC-R2262 R223 rolling summary located at log item 55; window lines 1..8 = R1093..R1096 four pairs (tail = final log item, no comma)
+PASS AC-R2262 removed-window 9 lines substring-verified clean (three banned substrings zero-hit 9/9)
+PASS AC-R2262 window 9 lines = 10834 B content measure | got 10834
+PASS AC-R2262 mechanical round list R1093..R1096 consecutive 4/4 zero missing (pair criterion: 1 round + 1 tokens line each; four round types score 1/0/0/0)
+PASS AC-R2262 P/D catalog mechanical dedup == pre-registered 14 tokens (boundary-guarded, BD-PROP embedded excluded, snowball +1 new P-2026-10-03-02)
+INFO P/D catalog (14 tokens): P-2026-09-25-18,D-20260929-03,D-20260930-18,D-20261001-03,D-20261002-08,D-20261003-02,D-20261004-01,D-20261004-02,P-2026-10-02-09,P-2026-10-03-01,P-32,P-56,P-74,P-2026-10-03-02
+PASS AC-R2262 rolling summary composed: counter hygiene three banned substrings zero-hit
+PASS AC-R2264 post-fold composed 70640 B, under the 80000B line by 9360 B
+PASS AC-R2264 post-fold window-line recount (31, 24, 2, 3) == predicted (roll line in-window W+1, R1083/R1088/R1093 isomorph)
+PASS AC-R2263 composed parses, tick 1096 preserved, log 64 -> 56 (9 -> 1, kept=0), item 55 = R226 rolling summary verbatim, six top-level fields preserved
+PASS s4.post.closeout recount (33, 24, 2, 4) == family-predicted (W -9 +1 roll +2 pair; sub -4 removed round lines +1 R1097 line)
+PASS s4.fin.margingate | final 73308 B margin 5192 B under the 78500B gate
+PASS s4.state.json | tick 1096->1097, log 64->56 (fold) ->58 (closeout pair), baselines kept, json.loads leg verified
+PASS postwrite.state.bytes | 73308 B (fold 70640 -> closeout 73308)
+PASS export pre-op roundtrip byte-identity (BOM + indent2, no trailing LF)
+PASS s6.export | export_ts ISO8601 refreshed, tick row 1096->1097, R1097 results row, sd 39/24/2/7 -> 33/24/2/4, ceo_face.current=R1097, nm fold-chain updated, 380290 B
+PASS postwrite.export.reparse (json.loads leg; PS dual-parser leg follows in shell)
+
+== POST-CLOSEOUT CROSS-VERIFY (R1097 dual round) ==
+PASS state.json final = 73308 B; tick 1096->1097; log 64->56 (fold) ->58 (closeout pair); json.loads pass (tick=1097 logn=58)
+PASS AC-R2265 receipt legs: R226 rolling summary in register (item 55) + R1097 log lines in register (items 56/57); commit leg verified at commit (P-2026-09-25-18 carried per P-51)
+PASS sd chain: round-start stored (39,24,2,7) == live recount zero drift; post-fold (31,24,2,3); post-closeout (33,24,2,4) == export self_drive (F3, zero drift)
+PASS fold citations materialized: pre-op backup logs/state-preop-R1097.bak 80340 B byte-identical; post-fold 70640 B under the 80000B line by 9360 B; final 73308 B margin 5192 B under the 78500B gate
+NOTE dual-round R1097 (R1093 isomorph): fold R226 + board knife cut-221 in the same round; round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1. Closeout fixed-point iteration (ROUND embeds board-final size, FLIP embeds state-final size) converged in 2 passes, single-clean lineage, zero repo writes before all asserts green (verify-then-write held).
+SUITE PASS - AC-R2261..R2265 all green; delivery AC-R2265 completed by commit carrying P-2026-09-25-18
+PASS postwrite.state.dualparser (PS ConvertFrom-Json leg): tick=1097 logn=58, items 55/56/57 = R226 rolling summary / R1097 round / R1097 tokens
+PASS postwrite.export.dualparser (PS leg): tickrow=1097, last results row = fold-R226+knife-221 row, sd=33/24/2/4, export_ts=2026-10-04T12:13:32+08:00 refreshed
+NOTE honest record: first commit message measured 636 chars (over the 500-char closing rule), caught at post-push verification; same-window amend shortened to 497 chars, content identical, push --force-with-lease on own tip commit only; law-compliant end state.
