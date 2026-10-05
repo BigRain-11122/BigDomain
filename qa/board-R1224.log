@@ -1,0 +1,6 @@
+﻿AC-K289a board: stale_done=1 claim_row=1 open_rows=7 backlog_bytes=19136 bom=True
+AC-K289a board head 4 lines verbatim check len=[27, 1, 159, 52]
+AC-K289b archive pre-append: strict=194 register=271 tail_lf=True bytes=737921 bom=False (expect 194/271 per cut-288 close)
+AC-K289c 09 archive lock bytes=358597 (unchanged)
+AC-K289c pure-append: +bytes=3010 strict 194->195 register 271->272 (+1 measured)
+AC-K289d main board post: lines=15 stale_done=0 open=7 claim_kept=True

@@ -29,3 +29,5 @@ src/sandbox/member/data/
 docs/_trash/
 # Codely CLI local data (installed skill copy + session trash; committed source of truth = tools/skills/)
 .codely-cli/
+# Codely browser-tool session artifacts (page snapshots/console logs; evidence lives in qa/)
+.playwright-mcp/

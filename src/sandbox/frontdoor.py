@@ -7453,6 +7453,70 @@ def render():
              " rebuild)"),
         ])
 
+    # -- live status self-drive face card (v0.30): render-time
+    # read of docs/status-export.json; honest failure face --
+    try:
+        with open(os.path.join(ROOT, "docs", "status-export.json"),
+                  "rb") as _f:
+            sd30 = json.loads(_f.read().decode("utf-8-sig"))
+        for _k in ("export_ts", "do", "ceo_face", "depts", "outs",
+                   "results", "self_drive"):
+            if _k not in sd30:
+                raise KeyError("missing key: %s" % _k)
+        sd30_err = ""
+    except Exception as exc:  # honest failure face, never fake PASS
+        sd30 = None
+        sd30_err = str(exc)[:300]
+    if sd30 is not None:
+        sd30_ts = str(sd30["export_ts"])
+        _cf = sd30["ceo_face"]
+        sd30_ceo_txt = ("current:\n%s\n\nlatest artifact:\n%s\n\n"
+                        "next milestone:\n%s"
+                        % (str(_cf.get("current", "")),
+                           str(_cf.get("latest_artifact", "")),
+                           str(_cf.get("next_milestone", ""))))
+        _sdr = sd30["self_drive"]
+        sd30_sd_txt = ("self_drive register (re-derived by the "
+                       "loop closeout from the actual state "
+                       "ledger): " + ", ".join(
+                           "%s=%s" % (_k, _sdr[_k])
+                           for _k in sorted(_sdr)))
+        sd30_kpis = ("<div class=\"grid\">"
+                     "<div class=\"kpi\"><b>%s</b>export_ts"
+                     " (render-time read)</div>"
+                     "<div class=\"kpi\"><b>%d</b>depts rows</div>"
+                     "<div class=\"kpi\"><b>%d</b>outs rows</div>"
+                     "<div class=\"kpi\"><b>%d</b>results rows</div>"
+                     "</div>"
+                     % (esc(sd30_ts), len(sd30["depts"]),
+                        len(sd30["outs"]), len(sd30["results"])))
+        sd30_do_html = esc("company mandate line (do): %s"
+                           % str(sd30["do"]))
+        sd30_ceolines = esc(sd30_ceo_txt)
+        sd30_sd_html = esc(sd30_sd_txt)
+        sd30_hard = esc(
+            "structural law (R1223 pre-registered AC-FD30a..f): "
+            "this card is a pure consumption face over the export "
+            "data file -- every display string is derived at "
+            "render time from docs/status-export.json (ceo_face "
+            "three lines verbatim + export_ts + do + "
+            "depts/outs/results/self_drive derived counts), zero "
+            "hardcoded business copy in this source file (source "
+            "stays pure ASCII; Chinese business copy rides only "
+            "in the data file); a missing or corrupt export file "
+            "yields an explicit honest-failure line on this card "
+            "while healthz stays 200 and every other card keeps "
+            "rendering (fail-closed, never silent); the "
+            "render-time disk read (not a startup cache) is what "
+            "makes the CEO-visible process status live")
+    else:
+        sd30_kpis = sd30_do_html = sd30_ceolines = ""
+        sd30_sd_html = sd30_hard = ""
+    if sd30_err:
+        sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
+                     "(honest failure, no fake PASS): %s</p>"
+                     % esc(sd30_err))
+
     # -- AIGC implicit watermark face card (v0.12): REAL probe run
     # once at server start (journey isomorph); honest failure face --
     if WM_RES is not None:
@@ -7588,7 +7652,8 @@ v0.26 visitor-end M4 three-state card
 (R1000) &middot; v0.27 cross-subsidiary settlement card
 (R1001) &middot; v0.28 sibling-ops review gate card
 (R1003) &middot; v0.29 resident growth-archive card
-(R1018)</span></header>
+(R1018) &middot; v0.30 live status self-drive card
+(R1224)</span></header>
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
 <div class="kpi"><b>__POP__</b>residents</div>
@@ -8158,6 +8223,27 @@ BigLife supply feed and the 9.9-CNY anchor stay bootstrap-period
 [needs-CEO] faces.</p>
 </div>
 
+<div class="card"><h2>Live Status Self-Drive Face (v0.30,
+render-time status-export read)</h2>
+<p class=kv>This card renders the company silicon-watch data
+interface (docs/status-export.json) by reading the file from disk
+on EVERY page render -- never at server start, never canned: the
+CEO opening this page sees this company's real process status,
+and touching the export file changes this card on the next GET
+with zero restart. All Chinese business copy below rides verbatim
+from the data file; this card adds zero hardcoded copy (F3 law).
+The export itself is produced by the OS loop closeout from the
+actual state ledger -- this page is the consumption face, never a
+producer.</p>
+__SD30_KPIS__
+<p class=kv>__SD30_DO__</p>
+<h3 style="margin:14px 0 8px">CEO face (three lines, verbatim
+from export)</h3>
+<p class="mgcompliance">__SD30_CEOLINES__</p>
+<p class=kv>__SD30_SD__</p>
+<p class=kv>__SD30_HARD__</p>
+</div>
+
 <div class="card"><h2>Lobby Face (WebSocket sandbox)</h2>
 <p class="kv">rooms: __ROOMS__ &middot; ws port __WSPORT__ &middot;
 rate limit __RL__ msgs/__RLW__s (mute after __MUTE__ violations,
@@ -8432,6 +8518,11 @@ __PAYWARN__</footer>
         "__GA_AUDIT__": ga_audit,
         "__GA_HARD__": ga_hard,
         "__GA_COMPL__": ga_compl,
+        "__SD30_KPIS__": sd30_kpis,
+        "__SD30_DO__": sd30_do_html,
+        "__SD30_CEOLINES__": sd30_ceolines,
+        "__SD30_SD__": sd30_sd_html,
+        "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),
         "__M1_SOURCE__": esc(m1["source_note"]),
         "__M1_N__": esc(len(m1["stations"])),

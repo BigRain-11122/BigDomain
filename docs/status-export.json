@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-05T18:17:58+08:00",
+  "export_ts": "2026-10-05T18:36:15+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1223 产品轨预注册轮：五静扫描全 PASS（零新转办/决策/令）+O-013④ 每日 data 核对毕（export 三行在位+解析过+8093 活体 healthz=200·31 卡在役）+frontdoor v0.30 活体状态自驱卡预注册落板 backlog 顶行（AC-FD30a..f·纯组合 status-export.json 渲染时读盘·CEO 开页即见过程实况）·下轮产品轮实现挂载；等待态四件零变化不重扫（雷达 10-06/法务复核 10-06 12:00/BigLife R777/CEO 物理件）",
-    "latest_artifact": "最近实物=frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役（healthz=200）+对账日常化 runbook 三件（docs/ops/reconcile-daily-runbook.md+src/sandbox/reconcile_daily.py+qa/reconcile-daily-20261005.log·RUNNER PASS 33/33 套件 363 判据）维持；本轮=v0.30 预注册件（backlog 顶行 AC-FD30a..f 判据预注册先行·实际文件改动·轮计分 1）",
-    "next_milestone": "下个里程碑（≤48h）：frontdoor v0.30 活体状态自驱卡实现挂载轮（下轮产品轮·RUNNER 全量回归+活体重启+qa 证据）+雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）+提案新窗 10-06 起（每窗 ≥1 三句式）+对账日常化常设行首日执行 10-06 首轮+法务两步制常务复核窗 10-06 12:00 定稿→窗后首轮落 BLUEPRINT §五.8 修条款列修订；10-07 治理日=SOP 盘点清单聚合审+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07）；benchmarks 7 天刷 10-12；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
+    "current": "R1224 产品轮三项收账：frontdoor v0.30 活体状态自驱卡实现挂载（第 32 卡·8093 活体 healthz=200·渲染时读盘 docs/status-export.json·AC-FD30a..f 全过·CEO 开页即见本司过程实况）+fold R297 水位整编（九行扩窗裁定·80859B→75391B）+cut-289 板规刀+HB R1223 欠行 backfill；等待态四件 10-06 到窗（雷达清单/法务复核 12:00/BigLife R777/CEO 物理件）窗到即查不预扫",
+    "latest_artifact": "最近实物=frontdoor v0.30 活体状态自驱卡（第 32 卡·http://127.0.0.1:8093/ 活体 healthz=200·渲染时读盘零写死·CEO 开页即见过程实况·SUITE 41/41+RUNNER 33/33 零回归+全页截图=qa/frontdoor-v30-R1224.log+png·R1224）+fold R297 水位整编（80859B→75391B=qa/reorg-R1224.log）+对账日常化 runbook 三件维持",
+    "next_milestone": "下个里程碑（≤48h）：雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）+法务两步制常务复核窗 10-06 12:00 定稿→窗后首轮落 BLUEPRINT §五.8 修条款列修订+提案新窗 10-06 起（每窗 ≥1 三句式）+对账日常化常设行首日执行 10-06 首轮（src/sandbox/reconcile_daily.py 按 runbook §一）+10-07 治理日（SOP 盘点清单聚合审+游客端三态选型决策包 O-2026-0929-007 审批窗）；benchmarks 7 天刷 10-12；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1223",
+      "1224",
       "OSLoop 执行 tick"
     ],
     [
@@ -2117,6 +2117,10 @@
     [
       "1",
       "fold R296 水位整编（扩窗裁定）+cut-288 板规执法第二百八十八刀（R1222 两项一轮·R1221 单对窗预测 78948B 越线 448B 触扩窗裁定 R1192/R1215/R1220 先例·轮首首测 disk 79029B/gauge 79026B 越 78,500B 线 526B 承传兑现·窗｛R477 滚窗摘要冷段行 1133B 并折+R295 滚窗摘要+R1221 单轮对｝4 行 25115B 压 1 滚窗行 24422B kept=0·八十七轮计分 sum 61·tokens 8 行·P/D 编目 72→72 零丢失（冷段 4 token 随注记3 承载）·post-fold 78309B gauge margin 191B·log 50→47→49·AC-R2961..R2965 全绿=qa/reorg-R1222.log〔首跑单对窗预测 78948B 越线 448B=verify-then-write 闸写盘前截获·判据修订先行如实注〕；cut-288 R1221 滞板行 3196B verbatim 迁 10 月档 §R1222 节 strict/register 193→194/270→271（+1 单标记实测）；export 刷 tick 1222+results 483+sd (3,0,0,1) 同步"
+    ],
+    [
+      "2",
+      "frontdoor v0.30 活体状态自驱卡（第 32 卡·产品优先律第一问驱动·渲染时读盘 docs/status-export.json 派生 ceo_face 三行+export_ts+do+depts/outs/results/self_drive 计数·F3 零写死·活体探针触值→GET 即反映→还原·fail-closed 缺损/坏 JSON 双态显式错误行 healthz 仍 200 他卡零影响·AC-FD30a..f 全过=qa/frontdoor-v30-R1224.log SUITE 41/41+qa/reconcile-all-R1224.log RUNNER PASS 33/33 套件 363 判据零回归+全页截图 qa/frontdoor-v30-R1224.png 1265×74458·8093 活体 PID 104252 healthz=200 卡数 31→32·R1224）+fold R297 水位整编（九行扩窗裁定·两度 probe 截获·80859B→75391B·AC-R2971..R2975 全绿=qa/reorg-R1224.log）+cut-289（R1222 滞板行迁 10 月档 §R1224·strict/register 194→195/271→272=qa/board-R1224.log）+HB R1223 心跳欠行 backfill（lag 1→0）"
     ]
   ],
   "self_drive": {
