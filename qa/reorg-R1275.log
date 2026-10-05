@@ -1,0 +1,23 @@
+AC-R3061 pre-op disk_bytes=79073 bom=False eol=LF index_lock=False tick=1274 log_count=35
+AC-R3061b serializer round-trip byte-exact trailing_newline=True
+AC-R3061 preop_backup=logs/state-preop-R1275.bak bytes=79073
+AC-R3062 cold lines=16 content_bytes=17173 expected=17173:True
+AC-R3062 cold[0] pre=2026-10-06 R1267 waiting:
+AC-R3062 cold[15] pre=2026-10-06 R1274 tokens: local
+AC-R3062 census tokens=7
+AC-R3062 census list=O-013,D-20260930-19,P-32,P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01,O-20261004-2255
+AC-R3062 rounds=8 scores_sum=0 waiting_decl_lines=8 tokens_lines=8 nop_in_cold=0
+auto-saves standing measure=425.6MB/240 files under 500MB line no clean
+AC-R3063 summary content_bytes=2818
+AC-R3063 census zero-loss missing_count=0
+AC-R3064 predicted_final_bytes=67909 over_line=-10591 gate_pass=True
+AC-R3064 parser1 py pre-write ok: tick=1275 log_count=22 expect 35-16+1+2=22:True
+AC-R3064 WRITTEN post_bytes=67909 margin=10591 under_line=True
+AC-R3064 parser2 py post-write ok: tick=1275 log_count=22
+AC-R3064 parser2 PS post-write ok: tick=1275 log_count=22 (Get-Content -Encoding UTF8 + ConvertFrom-Json)
+AC-R3065 archive verbatim lines_found=16/16
+AC-R3066 sd rederive: W=19 idle=0 nop=1 substantive=8
+AC-R3066 export flush: ts=2026-10-06T04:06:00+08:00 results=494 sd=(19,0,1,8) tick_row_fixed=1 bom_preserved=True
+AC-R3066 HB row appended (lag=0, R1275 same-round)
+AC-R3066 post-scan: STATE PASS tick=1275 log_lines=22 bytes=67909 / HB PASS lag=0 / EXPORT PASS ts=2026-10-06T04:06:00+08:00 / TREE dirty=6 own-round changes pre-commit
+AC-R3060 in-round rollback note: first pass census regex over-matched BD-PROP substrings (P-002/P-003 artifacts) and export post-write verify hit BOM decode error before HB/QA write; state.json restored from preop bak byte-exact + archive append truncated within the uncommitted atomic window; fixes = regex lookbehind (?<![A-Za-z]) + BOM-preserving export writer; second pass all-green (honest-note precedent R551)
