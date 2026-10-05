@@ -1,0 +1,27 @@
+qa/hb-R1194.log - BigDomain OSLoop R1194 standing-acceptance round evidence (2026-10-05)
+Round: R1194 (tick 1193->1194) | claim: HB heartbeat row debt backfill + R1191 finb placeholder fix (backlog R1194 row)
+
+Pre-op scan (round start, ~11:34 local):
+  [HB] FLAG hb_tick=1192 state_tick=1193 lag=1 (heartbeat row debt: backfill due in this round closeout)
+  Other faces flat: LEDGER 289 conflict=0 / DEC 264 known 142 / GORD new_rows=0 sha16 E79E15F98C47C406 / ORD 09-28 22:1x / BENCH days=0 / QA daily evidence on disk / EXPORT 0.3h / TREE clean
+  [TASKS] claimable=4 all gated per R1192/R1193 in-register judgment (no-rescan rule held)
+
+Ops:
+  1. heartbeat.txt R1191 row in-place fix: "state closeout final @@FINB@@B" -> "state closeout final 81252B (finb placeholder leak fixed R1194)"
+     - value evidence = R1192 round-start first-measure gauge 81252B (disk 81255B), i.e. the state size R1191 left behind
+     - precedent R1145 (in-row defect fix); repo-wide grep for @@FINB@@ hits only heartbeat.txt (fixed) + archived verbatim copy docs/archive/backlog-done-2026-10.md (left as historical record, archive not touched)
+     - no script template source found => R1191 author one-off slip, no recurrence vector
+  2. heartbeat.txt append (CRLF caliber, ASCII): R1193 backfill row ts 2026-10-05T11:24:00+08:00 (per state log "~1124 beat", marked "HB row backfilled by R1194") + R1194 row ts 2026-10-05T11:37:20+08:00
+  3. src/os/state.json: tick 1193->1194, log 54->56 (R1194 pair appended), ConvertFrom-Json parse OK, post-closeout 78,068B (gauge 78,065B) under 78,500B line => fold R275 ruling deferred to R1195 round-start first-measure
+  4. src/os/backlog.md: R1194 claim+done row added at top (R1192 done row left for next fold-round board knife)
+  5. docs/status-export.json: export_ts 2026-10-05T11:37:49+08:00, tick anchor row 1192->1194, ceo_face.current updated to R1194 (R1193 waiting + R1192 fold pointer kept), parse OK, ceo_face three lines present (current/artifact/milestone)
+
+Post-op scan (~11:44 local):
+  [STATE] PASS tick=1194 log_lines=56 state_bytes=78065
+  [HB] PASS hb_tick=1194 state_tick=1194 lag=0  <== debt cleared (pre-op lag=1)
+  [EXPORT] PASS age_h=0 export_ts=2026-10-05T11:37:49+08:00
+  [TREE] dirty=4 = this round's own closeout products only (normal closeout, not another writer; no index.lock)
+
+Waiting faces carried unchanged (no-rescan rule): radar cph4 slice OH-20261005-cph4.md ETA 10-06 / D-20260929-03 legal two-step draft window 10-05 12:00 (seat7 review 10-06 12:00) / D-20261003-02 BigLife R777 review file / bootstrap awaiting CEO physicals.
+D-20260930-19 two consumption steps scan-derived zero new; O-2026-0930-013 daily first-round face done by R1184 today; P-32 daily zero new group-level open items (no HQ-FEEDBACK line, zero-bloat).
+tokens: local=unmeasured api=unmeasured (no new external API touchpoints this round; three-gate not involved)
