@@ -1,0 +1,19 @@
+PASS CLOSEOUT state face already closed (tick 1209, log 52, R1209 rows in place, final gauge 78582 resumed)
+PASS CLOSEOUT sd recount W=4 (composition preserved: cold-paren + roll-paren + live-nonparen + tokens, tuple (4,1,1,1) carried)
+PASS K275a AC-K275a main board BOM + trailing LF
+PASS K275a stale-board inventory: exactly 1 stale done row (R1208) + 5 standing open rows + claim row pre-registered (open total 6 incl. claim) done=[7] claim=[6]
+PASS K275a stale row contains [done 2026-10-05] marker (3085 B)
+PASS K275b pre-append archive face: strict 180 / register 250 recount + trailing LF
+PASS K275c pure-append + prefix md5 identical + strict/register 180->181 / 250->251 + 09-file lock untouched
+PASS K275d main board end state: R1209 claim row [x]+done + 5 open rows + stale rows 0 + header first four lines verbatim zero-change
+PASS HB heartbeat trailing CRLF convention
+PASS HB R1209 row appended (lag=0)
+PASS EXPORT BOM present
+PASS EXPORT export_ts updated
+PASS EXPORT ceo_face.current updated
+PASS EXPORT ceo_face.latest_artifact updated
+PASS EXPORT results tick row synced to 1209
+PASS EXPORT results tail located
+PASS EXPORT json.loads green + results 470 + self_drive tuple (4,1,1,1) zero drift
+PASS EXPORT roundtrip byte-identical on re-read
+SUITE PASS (cut-275, R1208 row verbatim migrated to done-archive-2026-10.md SS R1209); closeout legs: state tick 1209 + R1209 log rows, HB row lag=0, export refreshed (results 470, tick 1209, sd zero drift); final gauge 78582 over-line 82B -> fold R284 = R1210 first-measure ruling

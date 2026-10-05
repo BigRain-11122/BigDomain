@@ -1,0 +1,28 @@
+PASS PRE-OP AC-R2831 BOM + trailing LF + zero CR
+PASS PRE-OP AC-R2831 disk 79011 == HEAD blob byte-identical 79011 vs 79011
+PASS PRE-OP AC-R2831 tree face = claim row only (backlog.md) ' M src/os/backlog.md\n'
+PASS PRE-OP AC-R2831 backup logs/state-preop-R1209.bak written byte-identical (79011 B)
+PASS PRE-OP AC-R2831 top-level 7 fields intact (tick 1208, log 52)
+PASS PRE-OP AC-R2831 window 3 lines 19545 B (roll 16821 + R1208 pair 2724)
+PASS PRE-OP AC-R2831 sd probe stored (4, 1, 1, 1) vs pre-window W=4 (R1208 post-closeout caliber, composition [cold-paren, roll-paren, live-nonparen, tokens])
+PASS FOLD AC-R2832 surgical replacement unique (R1135..R1207 窗口·R282 整编第二百八十二刀压窗...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (水位闸 79519B（轮首首测越 78,500B 线 1019B=R12...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (）：窗｛R281 滚窗摘要+R1206..R1207 两单轮对｝5 行 ...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (·七十三轮计分=承 71 位+R1206=1+R1207=0（sum 4...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (tokens 22 行...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (R1185..R1206 轮内零新外部 API 触点...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (机械轮号列 R1135..R1206 连续 72 轮零缺...) count=1
+PASS FOLD AC-R2832 catalog header located
+FOLD AC-R2832 new-token regex derivation: extracted 7 candidates, new = 1 (catalog 57 carried)
+PASS FOLD AC-R2832 surgical replacement unique (=57 token（R281 承窗 57 token+新入册 0=R12...) count=1
+PASS FOLD AC-R2832 surgical replacement unique (D-20261005-06,D-20261005-11·盘证据 qa/r...) count=1
+PASS FOLD AC-R2832 inserted segments banned three-family zero new hits (inherited R1194 @@FINB@@ note carried verbatim) {'idle-fast': 0, 'no-pullable': 0, '@@FINB@@': 1}
+PASS FOLD AC-R2833 tail window lines located contiguously [52, 53, 54]
+PASS FOLD AC-R2833 closing bracket after window
+PASS FOLD AC-R2834 verify-then-write: predicted post gauge 76427 <= 78500 line (margin 2073 B)
+PASS FOLD AC-R2833 json.loads green (tick 1208, log 50) + head idx 000..048 verbatim + idx 049 = new roll 16976 B
+PASS FOLD AC-R2833 top fields other than log unchanged
+PASS FOLD AC-R2834 post disk 76430 == prediction byte-exact (written == assembled)
+PASS ARCHIVE trailing LF in place
+PASS ARCHIVE AC-R2832 pure-append + prefix md5 identical (fb34ea35df29cde7fba1c12599fb5676); section R1209 = header + 3 window lines verbatim (172798 B)
+SUITE PASS fold R283 (AC-R2831..R2834 legs green; AC-R2835 delivery leg = commit message carrier, pending at commit); single primary run, zero AMEND
