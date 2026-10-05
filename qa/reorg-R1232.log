@@ -1,0 +1,39 @@
+REGISTERED AC-R3011 pre-op: tree clean + no index.lock + state disk byte-identical to HEAD blob (dual hash) + predecessor bak present + export sd calibration probe (stored vs live, drift explained)
+REGISTERED AC-R3012 window+cold: 5 window lines by unique anchors + window bytes == 31933 + cold 3 lines by anchors + cold bytes == 3268 + cold P/D census (8 tokens, cold-only 2 survive in summary) + standard-window first-run prediction gate-blocked (recorded)
+REGISTERED AC-R3013 roll+cold compose: scoring fragment swap exactly once + chain carry verbatim + banned-family zero hits in composed parts + head block log[3..40] preserved verbatim + catalog zero-loss + sd post-fold probe (1,0,0,0)
+REGISTERED AC-R3013b archive: pure-append prefix byte-identical + two sections verbatim (main 5 lines + cold 3 lines)
+REGISTERED AC-R3014 verify-then-write: predicted extended final == actual byte-exact + final <= 78500 + dual-parser pass + log count 46->42 + tick 1232 + sd (3,0,0,1)
+REGISTERED AC-R3015 receipt = R301 rolling summary + R1232 log pair in register + commit contains P-2026-09-25-18 (P-51 three-carrier rule)
+R1232 fold R301 probe start, apply=True
+AC-R3011 pre-op disk_bytes=79631 gauge=79628 over_line=1128
+AC-R3011 disk==HEAD=True dual-hash=True
+AC-R3011 predecessor bak chain present (state-preop-R1230.bak)
+tick=1231 log_count=46
+win[0] bytes=29283 PRE=2026-10-05（R1135..R1229 窗口·R300 整编第三百刀压窗ｻR12
+win[1] bytes=1217 PRE=2026-10-05 R1230 fold R300 水位整编+cut-290 板规执法
+win[2] bytes=250 PRE=2026-10-05 R1230 tokens: local=unmeasured ap
+win[3] bytes=991 PRE=2026-10-05 R1231 waiting: 五静全过零可拉＝保护态豁免一行声明收
+win[4] bytes=192 PRE=2026-10-05 R1231 tokens: local=unmeasured ap
+cold[0] bytes=1947 PRE=2026-09-24（R1-R48·分日汇总行·R193 token 止血 ④热冷整编压
+cold[1] bytes=1321 PRE=2026-09-25（R49-R162·分日汇总行·原文保全=logs/state-lo
+cold[2] bytes=0 PRE=
+AC-R3012 window 5 lines bytes=31933 exact==31933:True
+AC-R3012 cold 3 lines bytes=3268 exact==3268:True
+AC-R3012 cold census tokens=8 cold_only=D-20260924-02,D-20260925-01
+AC-R3011 sd probe live=(5, 0, 0, 2) stored=(3, 0, 0, 1) drift=R1231 pair appended under export-skip gate, reconciled this round (R1230 isomorph)
+AC-R3013 scoring chain swap: 95->97 rounds, sum 67->68 (+16 bytes)
+AC-R3012 std-window first-run prediction final=79095B over_line=595B gate=True BLOCKED (no write; R1192 two-run isomorph, computed in-memory)
+AC-R3013 new roll bytes=30777 (header=887 chain=28532 digest=1358) cold_summary bytes=933 banned-clean
+auto-saves standing step: 452.6 MB / 230 files (R1231 register precedent)
+AC-R3012 cold surgical block (3 lines) found=True indent='    '
+AC-R3012 window surgical block (5 lines) found=True
+AC-R3014 predicted post-fold gauge=76092
+AC-R3013 catalog 72 -> 72 lost=[]
+AC-R3014 predicted closeout final gauge=77675 margin=825 gate_pass=True
+AC-R3014 predicted final disk=77675 (no-BOM format preserved) log 46->42
+AC-R3013b log archive pure-append +bytes=35430 (2 headers + 5 + 3 verbatim lines)
+queue disk-recount main=6 tech=2 explore=2 proposals total=2 open=1
+export refreshed: ts=2026-10-05T20:20:09+08:00 tick_row=1232 results=488 sd=(3,0,0,1) queue 6/2/2 proposals 2/1
+heartbeat row appended for R1232 at 20:20
+AC-R3014 WRITTEN: state gauge=76092 final=77675 margin=825; log-archive/export/heartbeat written
+post-write dual parse: tick=1232 log=42 sd=(3,0,0,1) PASS
