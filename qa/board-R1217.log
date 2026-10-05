@@ -1,0 +1,9 @@
+PASS K283a main board BOM + trailing LF
+PASS K283a stale-board inventory: exactly 1 stale done row (R1216, 2871 B, 2 done-markers) + 5 standing open rows + claim row pre-registered (open total 6 incl. claim)
+PASS K283b pre-append archive face: strict 188 / register 262 recount + trailing LF (caliber: ## section face / [done 2026- marker face occurrence count) - pre-registered values measured exact
+PASS K283c pure-append + prefix md5 identical (4d6aaa362977) + strict/register 188->189 / 262->264 (+2 = migrated row dual done-markers mechanical)
+PASS K283c 09-file lock untouched (md5 19783a35cfc4e57e)
+PASS K283c reverify: archive strict 189 / register 264 + trailing LF (722441 B)
+PASS K283c reverify: section R1217 = ## header + R1216 row verbatim at archive tail
+PASS K283d main board mid-state: stale rows 0 + open 6 (5 standing + 1 un-completed claim row; end-state 5-open reverify lands after closeout [x] marking per R1216 K282d caliber) + header first lines verbatim zero-change
+NOTE first-run assertion-timing defect in C: end-state check ran pre-closeout (claim still [ ] -> open 6 vs expected 5), caught in-round, no re-append performed, zero loss

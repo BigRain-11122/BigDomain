@@ -1,0 +1,28 @@
+AC-R2913 pre-check head block idx 000..047 == pre-op backup verbatim
+AC-R2912 pure-append + prefix md5 identical (3d1da1ac9505); section R1217 = header + 3 window lines verbatim (346339 B)
+AC-R2912 catalog 61 -> 62, new-in register = [D-20260930-19] (regex mechanical, zero hand placement)
+AC-R2912 surgical replacement unique (R1135..R1215 窗口·R290 整编第二百九十刀压窗...) count=1
+AC-R2912 surgical replacement unique (水位闸 81227B（轮首首测 disk 81230B 越 78,500B 线 ...) count=1
+AC-R2912 surgical replacement unique (窗｛R289 滚窗摘要+R1215 单轮对｝3 行 23893B 压 1 滚窗汇...) count=1
+AC-R2912 surgical replacement unique (（R1214 同构基座+扩窗先例 R477）·八十一轮计分=承 80 位+R12...) count=1
+AC-R2912 surgical replacement unique (tokens 30 行 unmeasured 口径｛官方会话无 token 计量...) count=1
+AC-R2912 surgical replacement unique (机械轮号列 R1135..R1215 连续 81 轮零缺...) count=1
+AC-R2912 surgical replacement unique (=61 token（R289 承窗 60 token+新入册 1=D-20260...) count=1
+AC-R2912 surgical replacement unique (盘证据 qa/reorg-R1216·冷段并折注记...) count=1
+AC-R2912 surgical replacement unique (logs/state-preop-R1216.bak（HEAD blob 同一内...) count=1
+AC-R2912 inserted segments banned three-family zero new hits (inherited @@FINB@@ note carried verbatim) {'idle-fast': 0, 'no-pullable': 0, '@@FINB@@': 1}
+AC-R2914 verify-then-write: predicted post gauge 77588 <= 78500 line (margin 912 B)
+AC-R2914 post disk 77591 == prediction byte-exact (written == assembled)
+AC-R2913 json.loads green (tick 1216, log 51->49) + head idx 000..047 verbatim + idx 048 = new roll 12615 B
+AC-R2913 top fields other than log unchanged (7 fields preserved)
+post-fold probe (1,0,0,0) == predicted (1,0,0,0)
+post-fold gauge 77588 B (disk 77591 B), over-line check margin 912 B
+AC-R2912fix first-run catalog-boundary defect (extract offset +4 vs correct +5, leading U+FF1A pollution -> false-new D-20260930-19 duplicate appended + header count drift) intercepted by post-write pre-commit recount, corrected by byte-surgical substitution (R1203 precedent)
+AC-R2912 corrected: catalog 61 -> 61, new-in register = [] (regex mechanical, zero hand placement, 6 candidates all in register; pre-registered 7 vetoed by first-run evidence, honest amendment)
+AC-R2912fix banned three-family recheck {'idle-fast': 0, 'no-pullable': 0, '@@FINB@@': 1} zero new hits
+AC-R2914 reverify: predicted post gauge 77574 <= 78500 line (margin 926 B)
+AC-R2914 reverify: post disk 77577 == prediction byte-exact
+AC-R2913 reverify: json.loads green (tick 1216, log 49) + head idx 000..047 verbatim + idx 048 = corrected roll 12601 B
+AC-R2913 reverify: top 7 fields preserved, scalars unchanged
+post-fix probe (1,0,0,0) == predicted (1,0,0,0)
+post-fold gauge 77574 B (disk 77577 B), margin 926 B

@@ -1,0 +1,20 @@
+R1218 export repair evidence (pre-commit interception, R1203/R412 substitution-then-reverify precedent)
+work bytes total: 432894
+leading UTF-8 BOM count in work file: 2
+work last byte: b'}'
+raw control chars escaped inside strings: 2
+  escaped at char 209100: '\n'
+  escaped at char 209589: '\n'
+post-fix strict json.loads: OK
+HEAD BOM count: 1; HEAD last byte: b'}'
+HEAD strict json.loads: OK
+field-walk diff HEAD -> fixed work: 7 entries
+  /ceo_face/current | CHANGED | old='R1216 fold R290 \u6c34\u4f4d\u6574\u7f16+\u677f\u89c4\u6267\u6cd5\u7b2c\u4e8c\u767e\u516b\u5341\u4e8c\u5200 cut-282 \u4 | new='R1217 fold R291 \u6c34\u4f4d\u6574\u7f16+\u677f\u89c4\u6267\u6cd5\u7b2c\u4e8c\u767e\u516b\u5341\u4e09\u5200 cut-283 \u4
+  /ceo_face/latest_artifact | CHANGED | old='\u6700\u8fd1\u5b9e\u7269=\u5bf9\u8d26\u65e5\u5e38\u5316 runbook \u4e09\u4ef6\uff08docs/ops/reconcile-daily-runbook.md 5 | new='\u6700\u8fd1\u5b9e\u7269=\u5bf9\u8d26\u65e5\u5e38\u5316 runbook \u4e09\u4ef6\uff08docs/ops/reconcile-daily-runbook.md 5
+  /export_ts | CHANGED | old='2026-10-05T16:10:48+08:00' | new='2026-10-05T16:37:22+08:00'
+  /results | LEN | old=477 | new=478
+  /results[12][0] | CHANGED | old='1216' | new='1217'
+  /results[477] | APPEND | old= | new=['1', '\nstate.json \u6c34\u4f4d\u6574\u7f16 R291+\u677f\u89c4\u6267\u6cd5\u7b2c\u4e8c\u767e\u516b\u5341\u4e09\u5200 cut-283\uff08R1217 \u53cc\u9879\u4e00\u8f6e\xb7R1216 \u5355\u5bf9\u7a97\u540c\u6784
+  /self_drive/method | APPEND-TEXT | old= | new=plus 225 chars: ' - R1217 recount (fold R291: window [R290 roll + R1216 pair] 3 lines -> 1 roll; pre stored (3,0,0,1) == live zero drift; post-fold probe (1,0,0,0); post-closeout (3,0,0,1) synced; export tick row 1216'
+written: 432893 bytes = single BOM + escaped content
+post-write re-verify from disk: strict json.loads OK, single BOM confirmed
