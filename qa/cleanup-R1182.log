@@ -1,0 +1,8 @@
+PASS AC-AS1 pre-op measure: 502.5MB / 290 files, over the 500MB standing line (BD-PROP-002 trigger honored; R1181 measured 499.2MB/288 under line, this round crossed)
+PASS AC-AS2 purge executed oldest-first (mtime asc) until <=360MB band (R1089 landing 356.7MB / R1139 landing 359.0MB precedent band): purged 66 files, released 145.5MB -> post 357.0MB / 224 files, under the 500MB line
+PASS AC-AS3 scope = .codely-cli/auto-saves tree only; skills dir present=True untouched, tmp dir present=True untouched; evidence log on disk
+== qa/cleanup-R1182.log auto-saves purge (BD-PROP-002 standing step, triple-item round R1182) ==
+AC-AS1 PASS pre 502.5MB/290 files over the 500MB line (trigger honored; measured at round start via r1182_probe.py)
+AC-AS2 PASS oldest-first purge 66 files released 145.5MB -> post 357.0MB / 224 files (under 500MB line; landing inside R1089/R1139 precedent band <=360MB)
+AC-AS3 PASS scope = auto-saves tree only; skills/tmp zero-touch; purge rule = mtime ascending, expendable auto-save snapshots by design
+SUITE PASS (single clean run; post-state re-walked and verified)
