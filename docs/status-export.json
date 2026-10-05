@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-05T18:04:34+08:00",
+  "export_ts": "2026-10-05T18:17:58+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1222 fold R296 水位整编（扩窗裁定）+cut-288 两项一轮（R1221 收账承传注记兑现·轮首首测 79029B disk/gauge 79026B 越 78,500B 线 526B）：首跑单对窗预测 78948B 越线 448B=verify-then-write 闸写盘前截获→扩窗裁定（R1192/R1215/R1220 先例）·窗｛R477 滚窗摘要冷段行 1133B 并折+R295 滚窗摘要+R1221 单轮对｝4 行 25115B 压 1 滚窗行 24422B kept=0·冷段并折注记3 前档保全·log 50→47→49·P/D 编目 72→72 零丢失·post gauge 78309B margin 191B·AC-R2961..R2965 全绿=qa/reorg-R1222.log+cut-288 板规执法第二百八十八刀（R1221 滞板行 3196B verbatim 迁 10 月档 §R1222 节 strict/register 193→194/270→271）=qa/board-R1222.log",
-    "latest_artifact": "最近实物=对账日常化 runbook 三件（docs/ops/reconcile-daily-runbook.md 50 行+src/sandbox/reconcile_daily.py+qa/reconcile-daily-20261005.log·2026-10-05 R1186·O-2026-0930-027 滚动窗窗首件·RUNNER PASS 33/33 套件 363 判据+对账双控 6/6 双态 36.5s）维持；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役；本轮=fold R296/cut-288 台账轮（簿记面零新实物件·轮计分 1）",
-    "next_milestone": "下个里程碑（≤10-08）：雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）+提案新窗 10-06 起（每窗 ≥1 三句式）+对账日常化常设行首日执行 10-06 首轮（R1221 落板）+法务两步制常务复核窗 10-06 12:00 定稿→窗后首轮落 BLUEPRINT §五.8 修条款列修订（词表适用面限定一行·翻案即改）+10-07 治理日=SOP 盘点清单聚合审+O-029 卡点案复核窗+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07·dataface=ready_now）+OSS 第五窗 10-08 21:40；benchmarks 7 天刷 10-12；SOP 缺口 3 UGC 内容审核运营 runbook=10-12..10-18 窗件；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
+    "current": "R1223 产品轨预注册轮：五静扫描全 PASS（零新转办/决策/令）+O-013④ 每日 data 核对毕（export 三行在位+解析过+8093 活体 healthz=200·31 卡在役）+frontdoor v0.30 活体状态自驱卡预注册落板 backlog 顶行（AC-FD30a..f·纯组合 status-export.json 渲染时读盘·CEO 开页即见过程实况）·下轮产品轮实现挂载；等待态四件零变化不重扫（雷达 10-06/法务复核 10-06 12:00/BigLife R777/CEO 物理件）",
+    "latest_artifact": "最近实物=frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役（healthz=200）+对账日常化 runbook 三件（docs/ops/reconcile-daily-runbook.md+src/sandbox/reconcile_daily.py+qa/reconcile-daily-20261005.log·RUNNER PASS 33/33 套件 363 判据）维持；本轮=v0.30 预注册件（backlog 顶行 AC-FD30a..f 判据预注册先行·实际文件改动·轮计分 1）",
+    "next_milestone": "下个里程碑（≤48h）：frontdoor v0.30 活体状态自驱卡实现挂载轮（下轮产品轮·RUNNER 全量回归+活体重启+qa 证据）+雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）+提案新窗 10-06 起（每窗 ≥1 三句式）+对账日常化常设行首日执行 10-06 首轮+法务两步制常务复核窗 10-06 12:00 定稿→窗后首轮落 BLUEPRINT §五.8 修条款列修订；10-07 治理日=SOP 盘点清单聚合审+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07）；benchmarks 7 天刷 10-12；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1222",
+      "1223",
       "OSLoop 执行 tick"
     ],
     [
