@@ -1,0 +1,9 @@
+PASS pre-op state post-fold face (disk 76652B, tick 1184, log 55) + composed lines banned-substring clean (incl 'idle' kept out of own lines for sd caliber)
+INFO closeout pair growth 3106B (~3.0KB/round) -> final state 79753B disk / 79750B gauge (round-start next round adjudicates fold R268)
+PASS closeout recount (own lines in log before export refresh) (4, 1, 1, 1) (stored (4, 1, 1, 1) -> stays (4,1,1,1), zero drift, marked-distinct caliber)
+PASS queue counts mechanical re-derivation flat (main 6 / tech 2 / explore 2) + proposals 2/2 (window 09-28..10-05 met, new window 10-06)
+PASS state closeout written: tick 1184->1185, log 55->57 (R1185 pair appended), head 55 items verbatim, final 79753B disk / 79750B gauge
+PASS dual-parser: PowerShell ConvertFrom-Json tick=1185 green
+PASS export refreshed: export_ts 2026-10-05T09:14:59+08:00, tick row 1184->1185, results 453->454, sd (4,1,1,1) flat, ceo_face current+next_milestone updated
+PASS heartbeat R1185 row appended (LF-only, tick 1185, 1836B)
+PASS backlog: R1185 row done-marked (1 x row, %dB) + SOP queue row inserted at top of open rows (open 5->6: SOP runbook + 5 standing gated)

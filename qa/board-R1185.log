@@ -1,0 +1,11 @@
+PASS AC-K261a main board single done row located = R1184 row 3506B verbatim (line md5 f1fa3e917caa4e8e1a5c83fed6b43b3d)
+PASS AC-K261a archive pre-op: 645462B, strict 156 / register 166, last section R1184, pure-append face ready
+PASS AC-K261a 09 archive lock pre-op md5 19783a35cfc4e57eb24eda5916a07702
+PASS AC-K261c main board final-state preview: R1185 claim row + 5 standing open rows, stalled done rows = 1 -> 0 after cut
+PASS AC-K261b archive append composed: section R1185 + verbatim row (line md5 f1fa3e917caa4e8e1a5c83fed6b43b3d identical main/arc); strict 156->157, register 166->167; pure-append 645462B+3517B
+PASS AC-K261c/d main board cut composed: done row removed (0 x rows), claim row + 5 standing open rows intact, size 17959B -> 14452B
+PASS AC-K261b archive10 written 648979B; re-read: strict 157 / register 167; migrated line md5 f1fa3e917caa4e8e1a5c83fed6b43b3d identical
+PASS AC-K261d main board written 14452B; final state = R1185 claim row + 5 standing open rows + 0 stalled done rows
+PASS AC-K261e 09 archive lock unchanged (md5 19783a35cfc4e57eb24eda5916a07702)
+AC-K261e delivery leg: qa/board-R1185.log + backlog row done mark (closeout) + commit contains P-2026-09-25-18
+SUITE PASS 5/5 (K261a..e)
