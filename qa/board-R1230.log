@@ -1,0 +1,9 @@
+REGISTERED AC-K290a board: exactly 1 stale R1223 done row + main-board head verbatim
+REGISTERED AC-K290b archive baseline 195/272 pre-append
+REGISTERED AC-K290c pure-append +1 strict section +register delta measured
+REGISTERED AC-K290d main board post: stale removed + 6 open rows verbatim kept
+REGISTERED AC-K290e receipt = board archive sec R1230 + commit (delivery leg verified at commit)
+AC-K290a board: stale_done=1 open_rows=6 backlog_bytes=16854 bom=True
+AC-K290b archive baseline strict=195 register=272 bytes=740931 tail_lf=True
+AC-K290c pure-append +bytes=2045 strict 195->196 register 272->273 (+1 measured)
+AC-K290d main board post: lines=14 open=6 stale=0

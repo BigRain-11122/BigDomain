@@ -1,0 +1,44 @@
+REGISTERED AC-R3001 pre-op: tree clean + no index.lock + state disk byte-identical to HEAD blob (dual hash) + predecessor bak present + export sd calibration probe (stored vs live, drift explained)
+REGISTERED AC-R3002 window: 7 window lines located by unique anchors + window content bytes == 31761 exact + P/D catalog mechanical derivation (zero new registrations)
+REGISTERED AC-R3003 roll: scoring fragment swap exactly once + chain carry verbatim + banned-family zero hits in composed parts + head block byte-identical + catalog zero-loss + sd post-fold probe (1,0,0,0)
+REGISTERED AC-R3003b archive: pure-append prefix byte-identical + section R1230 = header + 7 window lines verbatim
+REGISTERED AC-R3004 verify-then-write: predicted post-fold and closeout final == actual byte-exact + final <= 78500B + dual-parser pass + log count 48->42->44 + tick 1230 + sd (3,0,0,1)
+REGISTERED AC-R3005 receipt = R300 rolling summary + R1230 log pair in register + commit contains P-2026-09-25-18 (P-51 three-carrier rule)
+REGISTERED AC-K290a board: exactly 1 stale R1223 done row + main-board head verbatim
+REGISTERED AC-K290b archive baseline 195/272 pre-append
+REGISTERED AC-K290c pure-append +1 strict section +register delta measured
+REGISTERED AC-K290d main board post: stale removed + 6 open rows verbatim kept
+REGISTERED AC-K290e receipt = board archive sec R1230 + commit (delivery leg verified at commit)
+R1230 fold R300 probe start, apply=True
+AC-R3001 pre-op disk_bytes=79475 gauge=79472 over_line=972
+AC-R3001 disk==HEAD blob=True dual-hash=True
+AC-R3001 predecessor bak chain present (state-preop-R1227.bak)
+tick=1229 log_count=48
+log[41] bytes=28531 PRE=2026-10-05（R1135..R1226 窗口·R299 整编第二百九十九刀压窗｛R1226 收账
+log[42] bytes=1463 PRE=2026-10-05 R1227 fold R299 水位整编+HB 欠账清偿收账（R1226 承传注记
+log[43] bytes=268 PRE=2026-10-05 R1227 tokens: local=unmeasured api=unmeas
+log[44] bytes=347 PRE=2026-10-05 R1228 waiting: 保护态一行声明收轮（九面全 PASS 抄 R1226
+log[45] bytes=161 PRE=2026-10-05 R1228 tokens: local=unmeasured api=unmeas
+log[46] bytes=811 PRE=2026-10-05 R1229 waiting: 保护态一行声明收轮（九面全 PASS 抄 R1228
+log[47] bytes=180 PRE=2026-10-05 R1229 tokens: local=unmeasured api=unmeas
+AC-R3002 window 7 lines bytes=31761 exact==31761:True
+AC-R3001 sd probe live=(7, 0, 0, 3) stored=(3, 0, 0, 1) drift=R1228/R1229 pairs appended under export-skip gate, reconciled this round (R1201 isomorph)
+AC-R3002 surgical block (7 lines) found=True indent='    '
+AC-R3003 head block entries 0..40 preserved verbatim by tail replacement (idx=28456)
+AC-R3003 scoring chain swap: 90->95 rounds, sum 65->67 (+11 bytes)
+AC-R3003 new roll bytes=29283 (header=767 chain=27685 digest=831) banned-clean
+AC-R3004 predicted post-fold gauge=76949
+AC-R3003 catalog 72 -> 72 lost=[]
+auto-saves standing step: 446.6 MB / 226 files (R1229 register 444.8MB/224)
+AC-R3004 predicted closeout final gauge=78432 margin=68 gate_pass=True
+AC-R3004 predicted final disk=78432 (no-BOM format preserved)
+AC-K290a board: stale_done=1 open_rows=6 backlog_bytes=16854 bom=True
+AC-K290b archive baseline strict=195 register=272 bytes=740931 tail_lf=True
+AC-K290c pure-append +bytes=2045 strict 195->196 register 272->273 (+1 measured)
+AC-K290d main board post: lines=14 open=6 stale=0
+AC-R3003b log archive pure-append +bytes=31881 (header + 7 verbatim lines)
+queue disk-recount main=6 tech=2 explore=2 proposals total=2 open=1
+export refreshed: ts=2026-10-05T20:01:41+08:00 tick_row=1230 results=487 sd=(3,0,0,1) queue 6/2/2 proposals 2/1
+heartbeat row appended for R1230 at 20:01
+AC-R3004 WRITTEN: state gauge=76949 final=78432 margin=68; board/log-archive/export/heartbeat written
+post-write dual parse: tick=1230 log=44 sd=(3,0,0,1) PASS
