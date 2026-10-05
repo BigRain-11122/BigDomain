@@ -1,0 +1,17 @@
+RESUME-PASS folded state face verified (disk 75566 B, gauge 75563, tick 1205, log 50, roll 16110 B parsed, recount (2,1,1,0))
+RESUME-PASS pre-op backup logs/state-preop-R1206.bak on disk (78889 B, byte-identical to HEAD blob per primary run)
+PASS AC-K273a stale-board inventory: exactly 1 stale done row (R1205, 4061 B) + 5 standing open rows + header intact + claim row pre-registered
+PASS AC-K273b pre-append archive face: strict 178 / register 248 recount caliber + trailing LF in place
+PASS AC-K273c pure-append + prefix md5 identical (a2b458163c60ef0af094b96cb31201f5) + strict/register 178->179 / 248->249 + 09-file lock untouched
+PASS AC-K273d main board end state: R1206 claim row + 5 open rows + stale rows 0 + header first four lines verbatim zero-change (claim row flips [done] at closeout appendix per two-stage convention)
+PASS AC-K273e evidence = qa/board-R1206.log
+SUITE PASS 5/5 (cut-273, R1205 row 4061 B verbatim migrated to done-archive-2026-10.md SS R1206; resume-run re-verified on-disk end state)
+--- closeout verify ---
+PASS closeout pair appended; final gauge 78311 / disk 78314; json.loads green (tick 1206, log 52)
+PASS closeout recount (4, 1, 1, 1) == prediction == stored export sd (zero drift)
+PASS AC-R2814 closeout final under the 78500B line by 189 B
+PASS HB R1206 row appended (hb_tick=state_tick=1206, lag=0 kept, no backfill debt)
+PASS export refreshed (export_ts + results 467->468 + tick row 1205->1206 + R1206 results row + sd recount (4,1,1,1) zero drift asserted)
+PASS claim row flipped [done 2026-10-05] with measured closeout appendix; board final = claim row + 5 open rows + stale rows 0
+PASS AC-R2813/R2814 closeout cross-verify complete; AC-R2815 delivery leg = commit message carrier (pending at commit)
+SUITE PASS (fold R281 5/5 + cut-273 5/5 + closeout verify)

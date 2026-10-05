@@ -1,0 +1,6 @@
+PASS AC-K273a stale-board inventory: exactly 1 stale done row (R1205, 4061 B) + 5 standing open rows + header intact + claim row pre-registered
+PASS AC-K273b pre-append archive face: strict 178 / register 248 recount caliber + trailing LF in place
+PASS AC-K273c pure-append + prefix md5 identical (a2b458163c60ef0af094b96cb31201f5) + strict/register 178->179 / 248->249 + 09-file lock untouched
+PASS AC-K273d main board end state: R1206 claim row + 5 open rows + stale rows 0 + header first four lines verbatim zero-change (claim row flips [done] at closeout appendix per two-stage convention)
+PASS AC-K273e evidence = qa/board-R1206.log
+SUITE PASS 5/5 (cut-273, R1205 row 4061 B verbatim migrated to done-archive-2026-10.md SS R1206; resume-run re-verified on-disk end state)
