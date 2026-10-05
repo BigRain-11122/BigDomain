@@ -1,0 +1,95 @@
+REGISTERED AC-R2991 pre-op: tree clean + no index.lock + state.json disk byte-identical to HEAD blob + backup logs/state-preop-R1227.bak byte-identical + predecessor bak present + export sd calibration probe (stored vs live, drift explained)
+REGISTERED AC-R2992 window: 6 window lines located by unique anchors + items 42..46 consecutive + H39 cold roll present + window bytes == 32013 exact + P/D catalog mechanical regex derivation subset of prior roll catalog (zero new)
+REGISTERED AC-R2993 roll: 2 short swaps + 2 span swaps each exactly once + EndsWith tail anchor + append once + banned-family (idle-fast / no-pullable) zero hits in composed roll + surviving head items byte-identical + tick swap exactly once
+REGISTERED AC-R2993b archive: pure-append prefix byte-identical + section R1227 = header + 6 window lines verbatim
+REGISTERED AC-R2994 verify-then-write: predicted post-fold and closeout final == actual byte-exact + final <= 78500B + dual-parser pass + log count 47->44 + tick 1227 + recount (3,0,0,1)
+REGISTERED AC-R2995 receipt = R299 rolling summary + R1227 log pair in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule; delivery leg verified at commit)
+PASS no git index.lock (single executor)
+PASS round-start tree face clean except own tooling files (1 self artifacts, loop-own-artifact law)
+PASS pre-op state.json byte-identical to HEAD blob (244bd5646562a3d64dad3bee37181c07c44a16c0)
+PASS disk 79719 B == gauge 79719 B + BOM 0
+PASS round-start first-measure 79719 B over the 78500B line (R1226 carry-note cashed)
+PASS tick == 1226 pre-op
+PASS log items == 47 pre-op
+PASS backup logs/state-preop-R1227.bak byte-identical to HEAD blob
+PASS pre-op chain predecessor state-preop-R1225.bak present
+INFO pre-op bak chain now 211 files (R1227 bak added)
+PASS export stored sd == (3,0,0,1)
+PASS live pre-op recount == (5,0,0,2); drift = R1226 pair appended under export-skip gate, reconciled this round (R1201 isomorph)
+PASS item 39 is the 09-27 cold roll (R451..R459 / R460 fold-18)
+PASS item 42 is the R298 roll
+PASS item 43 is R1225 round line
+PASS item 44 is R1225 tokens line
+PASS item 45 is R1226 round line
+PASS item 46 is R1226 tokens line
+PASS R298 roll == 27440 B
+PASS 09-27 cold roll == 1221 B
+PASS window 6 lines == 32013 B exact
+PASS P/D catalog mechanical derivation: pair candidates [P-2026-09-25-18] all in carrier roll (zero new registrations, zero hand placement)
+PASS roll range swap anchor exactly once
+PASS roll cut-number swap anchor exactly once
+PASS story start anchor present
+PASS story end anchor exactly once
+PASS window-meta start anchor present
+PASS window-meta end anchor exactly once
+PASS roll tail anchor EndsWith (verbatim R1224 fold-in segment preserved)
+PASS banned-family zero hits: idle-fast absent in composed roll
+PASS banned-family zero hits: no-pullable absent in composed roll
+PASS new roll segments carry no placeholders
+PASS roll @@ survivors == inherited historical mentions only (2 carried verbatim from R1194 account, zero new unresolved)
+PASS catalog carry zero-loss: all 15 carrier tokens survive in composed roll
+INFO composed R299 roll = 28531 B (from 27440 B base + fold-in segments + cold-roll digest)
+PASS unique anchor present: 2026-09-27（R451..R459 窗口·R460 触线轮整编
+PASS unique anchor present: （R1135..R1224 窗口·R298 整编第二百九十八刀压窗
+PASS unique anchor present: 2026-10-05 R1225 fold R298 水位整编轮
+PASS unique anchor present: 2026-10-05 R1225 tokens:
+PASS unique anchor present: 2026-10-05 R1226 保护态豁免
+PASS unique anchor present: 2026-10-05 R1226 tokens:
+PASS items 42 and 43 adjacent (consecutive window)
+PASS items 43 and 44 adjacent
+PASS items 44 and 45 adjacent
+PASS items 45 and 46 adjacent
+PASS cold roll line precedes window block
+PASS auto-saves standing step: 435.1 MB / 220 files under the 500MB line (no clean)
+PASS stage1 tick anchor exactly once
+PASS final tick anchor exactly once (iter 1)
+PASS final tick anchor exactly once (iter 2)
+PASS final tick anchor exactly once (iter 3)
+PASS verify-then-write gate: closeout final 77944 B margin 556 B under the 78500B line (fixed-point iteration converged)
+PASS R1227 round line placeholders fully resolved
+PASS composed state content: zero new @@ beyond inherited historical mentions
+PASS tick swap exactly once (1226 -> 1227)
+PASS pre-write parse: log count 47 -> 44
+PASS pre-write parse: tick 1227
+PASS surviving head items 000..038 byte-identical
+PASS surviving head items old-40/41 (R460 pair) byte-identical at new 39/40
+PASS log item 41 = R299 rolling summary
+PASS log item 42 = R1227 round line
+PASS log item 43 = R1227 tokens line
+PASS pre-write recount on composed content == (3,0,0,1) synced
+PASS post-write disk 77944 B == prediction 77944 B byte-exact
+PASS post-write dual-parse pass (PS leg): log 44, tick 1227
+PASS post-write dual-parse pass (python leg): 44 1227
+PASS post-write recount == (3,0,0,1)
+PASS archive pure-append: prefix byte-identical (zero overwrite of prior sections)
+PASS archive section R1227 = header + six window lines verbatim (ends with R1226 tokens line)
+PASS heartbeat tail row = tick 1225 (hb debt lag 1 confirmed)
+PASS heartbeat missing tick 1226 row (debt, backfill due)
+PASS HB backfill: tick 1226 row appended (R1226 debt cleared, timestamp = R1226 closeout commit 19:08)
+PASS HB current: tick 1227 row appended (hb_tick 1225 -> 1227, lag 0)
+PASS export_ts anchor exactly once
+PASS export tick row anchor exactly once
+PASS ceo_face.current old value exactly once
+PASS latest_artifact swap anchor exactly once
+PASS next_milestone radar swap anchor exactly once
+PASS results tail row anchor exactly once
+PASS method-note tail anchor exactly once
+PASS export: zero new @@ beyond any inherited historical mentions (insert strings carry no placeholders)
+PASS export parse: results count 486 (row appended)
+PASS export sd stored == (3,0,0,1) synced with live recount
+PASS ceo_face.current refreshed to R1227
+PASS post-write export parse: results 486
+PASS AC-R2994 full gate: post-fold 76197 B + closeout final 77944 B margin 556 B under the 78500B line; window 32013 B -> 1 roll 28531 B kept=0; log 47 -> 44; dual-parser PS+python
+PASS AC-R2991..R2994 all green (this log = qa/reorg-R1227.log)
+SUITE PASS pre-closeout; AC-R2995 PENDING receipt = state R299 rolling summary + R1227 log pair in register + commit message contains P-2026-09-25-18 (delivery leg verified at commit)
+SUMMARY postB=76197 finB=77944 marg=556 rollB=28531 asMB=435.1 asFiles=220 time=2026-10-05 19:26 +08:00 pyOk=True
