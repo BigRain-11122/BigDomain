@@ -1,0 +1,5 @@
+PASS AC-K269a source row identified: R1196 L8 3673 B (single stale done row, verbatim extraction)
+PASS AC-K269b pre-append archive face: 670914 B, 174 sections (register), 174 strict sections (bare R markers, reproducible caliber), tail LF present
+PASS AC-K269c pure-append 670914B -> 674599B (+3685 B block); strict 174->175, register 174->175; per-line md5 identical (f706daff7d105210a793aa1e5f53e524); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K269d board final state = claim row (R1198, unchecked until closeout) + 5 open rows + 0 stale done rows; head block first four lines untouched
+PASS AC-K269e evidence = qa/board-R1198.log (this file); SS R1198 in 2026-10 register (single section single row)
