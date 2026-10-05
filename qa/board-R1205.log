@@ -1,0 +1,5 @@
+PASS AC-K272a source row identified: R1203 L8 4485 B (single stale done row, verbatim extraction)
+PASS AC-K272b pre-append archive face: 682544 B, 177 sections (register), 177 strict sections (bare R markers, reproducible caliber), tail LF present
+PASS AC-K272c pure-append 682544B -> 687041B (+4497 B block); strict 177->178, register 177->178; per-line md5 identical (a20b791657dbd5d05d9a8b9715b5dd3f); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K272d board final state = claim row (R1205, unchecked until closeout) + 5 open rows + 0 stale done rows; head block first four lines untouched
+PASS AC-K272e evidence = qa/board-R1205.log (this file); SS R1205 in 2026-10 register (single section single row)

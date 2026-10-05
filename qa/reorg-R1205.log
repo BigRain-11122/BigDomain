@@ -1,0 +1,37 @@
+PASS AC-R2801 state BOM + trailing LF + no CR (disk 80263 B, gauge 80260 B)
+PASS AC-R2801 pre-op disk byte-identical to git HEAD blob (sha16 D2CB397DDE057A13)
+PASS AC-R2801 round-start tree face: only claim row (src/os/backlog.md) as pre-registered (self evidence artifact exempt)
+PASS AC-R2801 round-start first-measure gauge 80260 B over the 78500B line by 1760 B (R1204 carry-note cashed; R1203 closeout final 78211B gauge then R1204 declaration pair 2033B accumulated to the forecast point)
+PASS AC-R2801 backup logs/state-preop-R1205.bak byte-identical (80263 B)
+PASS AC-R2801 calibration probe: export stored sd (4, 1, 1, 1) [R1203 closeout refresh face held] vs live recount (6, 1, 2, 2) = drift fully explained by R1204 appended pair under legit export-skip gate (W+2 / nop+1 / sub+1 = one declaration pair; nop+1 = R1204 declaration line carries the honest tag in-body); this round IS a recount reconciliation round (R1203 isomorph)
+PASS AC-R2802 window = [R279 rolling summary + R1203..R1204 two pairs] (5 lines); window tail = final log item (R1204 tokens)
+PASS AC-R2802 window 5 lines = 20775 B content measure (probe-measured exact value, UTF-8 byte caliber)
+PASS AC-R2802 removed-window banned-substring per-line mechanical count = no-pullable x1 on the R1204 declaration line only, 4/5 lines zero hits (honest in-body tag face, R1198 zero-hit isomorph differs here by round type; recount budget subtracts W-5 / idle-0 / nop-1 / sub-2)
+PASS AC-R2802 carried token catalog == 57 verbatim (R279 carry; first D-20260930-19, last D-20261005-11) + 0 newly registered (two-pair window)
+PASS AC-R2802 P/D catalog mechanical dedup == 57 carried + 0 newly registered (window extraction subset check green, BD-PROP boundary guard)
+PASS AC-R2802 70-round score list mechanically derived (68 carried sum 44 [qa/reorg-R1203 probe evidence] + R1203=1 + R1204=0 = 70 rounds sum 45)
+PASS AC-R2802 new roll line banned three-family zero hits {'idle-fast' 'no-pullable' 'nop'}
+PASS AC-R2802 new roll line matches recount caliber (paren-format date prefix, W-count face not round-level)
+INFO new roll line composed 15930 B; carried R1135..R1202 notes verbatim from R279 roll + R1203..R1204 two fresh notes
+INFO predicted post-fold gauge 75383B / disk 75386B (window: removed 20814 B + added 15937 B); under the 78500B line by 3117 B
+INFO predicted post-fold recount (2, 1, 1, 0) (pre live (6,1,2,2) drift reconciled; removed 5 window lines incl. 2 substantive pairs and 1 no-pullable declaration line, added 1 roll line dated 10-05 inside window)
+PASS AC-R2803 top-level seven fields preserved; log 54 -> 50 (window 5 -> 1 kept=0); head block items 000..046 verbatim; item 47 = 09-28 cold digest verbatim; item 48 = 09-29 roll verbatim; item 49 = R280 rolling summary (15930 B)
+PASS AC-R2802 preservation archive logs/state-log-archive-2026-10.md SS R1205 appended: five lines verbatim in-file (mechanical substring verify), pure-additive (+20895 B), prefix md5 identical (5bb29774c1a82e4975bd8eb0d470e447), gitignored face
+PASS state written atomically (tmp + os.replace, read-back verified)
+PASS AC-R2804 post-fold measured 75383 bytes scan-gauge (disk 75386 B) == prediction; under the 78500B line by 3117 B
+PASS AC-R2804 post-fold recount (2, 1, 1, 0) == prediction; re-read parses (tick 1204 preserved, log 50, roll intact); dual-parser face = json.loads green (PS ConvertFrom-Json runs at closeout)
+NOTE two-item round R1205 (R1203 isomorph minus HB-backfill leg, recount reconciliation leg): fold R280 + board knife cut-272; round score 1 = ledger maintenance mechanism file per Executive Protocol v1.1.
+INFO closeout will append R1205 pair -> live recount (4,1,1,1)
+AC-R2805 PENDING receipt = state R280 rolling summary + R1205 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2805 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
+
+--- R1205 closeout fix note (honest incident record, R1203-isomorph defect case 2) ---
+Defect: the closeout fixed-point loop converged on iteration-2 serialized lengths (write caliber) while the
+substituted numbers embedded in the R1205 state row came from iteration 1 (placeholder-caliber pair_add,
+@@FMC@@=7B vs real fmc ~139B): row claimed 78754/78757/254B vs true closeout final 78886 gauge / 78889 disk / 386B over.
+Detection: PS dual-parser tail inspection post-write (R189 dual-caliber verification step), before commit.
+Heartbeat / backlog annotation / export all used measured variables and were already correct; only the state
+row text carried the stale three numbers. Fix: byte-neutral surgical replacement 78754->78886, 78757->78889,
+254B->386B (same digit count, zero content loss, file size unchanged 78889B), json.loads + row-face re-verified.
+Root cause differs from R1203 (post-write assert caught placeholder-caliber pair_add): here the assert pair
+(len(new_raw) vs final_disk_pred) was internally consistent, so only the embedded-number audit caught it.
