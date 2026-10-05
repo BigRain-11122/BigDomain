@@ -1,0 +1,44 @@
+REGISTERED AC-R3021 pre-op: tree clean + no index.lock + state disk byte-identical to HEAD blob (dual hash) + predecessor bak present + export EOL/round-trip pre-check + sd probes
+REGISTERED AC-R3022 window+cold: 5 window lines by unique anchors + window bytes == 34120 + cold 6 lines by anchors + cold bytes == 4625 + P/D censuses + std-window first-run prediction gate (blocked -> cold extension ruling; pass -> abort for honest rework)
+REGISTERED AC-R3023 compose: chain carry verbatim + scoring fragment swap exactly once + banned-family zero hits in composed fragments + kept lines preserved verbatim + catalog zero-loss
+REGISTERED AC-R3024 verify-then-write: predicted final == actual byte-exact + final <= 78500 + dual-parser pass + log count 44->37 + tick 1234 + sd (3,0,0,1)
+REGISTERED AC-R3025 receipt = R302 rolling summary + R1234 log pair in register + archive pure-append (5+6 verbatim) + HB R1233 backfill + R1234 row + export refresh + commit contains P-2026-09-25-18
+AC-R3021 pre-op disk_bytes=79467 gauge=79464 over_line=964
+AC-R3021 disk==HEAD=True dual-hash=1fc49414527c6d54/1fc49414527c6d54
+AC-R3021 tick=1233 log_count=44 EOL=LF
+AC-R3021 export pre-check: no BOM, LF, round-trip byte-stable, results=488, sd stored (3,0,0,1)
+win[0] bytes=30777 PRE=2026-10-05（R1135..R1231 窗口·R301 整编
+win[1] bytes=1308 PRE=2026-10-05 R1232 fold R301 水位整编+冷段
+win[2] bytes=259 PRE=2026-10-05 R1232 tokens: local=unm
+win[3] bytes=1565 PRE=2026-10-05 R1233 五静非全静转全任务书·六在板行三角
+win[4] bytes=211 PRE=2026-10-05 R1233 tokens: local=unm
+cold[0] bytes=617 PRE=2026-09-25（R163-R191 窗口·R256 再整编二次
+cold[1] bytes=1016 PRE=2026-09-26（R192-R225 窗口·R256 再整编二次
+cold[2] bytes=639 PRE=2026-09-26（R226-R255 窗口·R266 再整编三次
+cold[3] bytes=1523 PRE=2026-09-26 R256 非空转·台账维护（state.jso
+cold[4] bytes=206 PRE=2026-09-26 R256 tokens: local=unme
+cold[5] bytes=624 PRE=2026-09-26（R257..R264 冷段清扫窗·R486 整
+AC-R3022 window 5 lines bytes=34120 exact==34120:True
+AC-R3022 cold 6 lines bytes=4625 exact==4625:True
+AC-R3022 cold census tokens=24 list=P-42,D-20260925-07,D-03,P-09,P-74,P-32,D-07,P-05,P-08,P-19,P-16,P-04,P-06,P-07,P-13,D-20260926-01,D-01,D-20260925-03,D-02,D-04,P-61,D-20260926-04,P-15,P-17
+AC-R3022 pair census tokens=2 list=D-20261003-02,D-20260929-03
+auto-saves standing step: 459.6 MB / 234 files
+AC-R3023 scoring fragment swap exactly once: [九十七轮计分=承 90 位+R1225=1+R1226=0+R1227=1+R1228=0+R1229=0+R1230=1+R1231=0（sum 68）] -> [九十九轮计分=承 97 位+R1232=1+R1233=0（sum 69）]
+AC-R3023 new roll bytes=31547 (hdr=826 chain=29850 append=871) banned-clean
+AC-R3023 catalog zero-loss: old-roll 37 + pair 2 tokens all present in new roll
+AC-R3023 cold summary bytes=610 desc=R163-R191 窗口；R192-R225 窗口；R226-R255 窗口；R256 非空转·台账维护；R256 tokens: local=unmeasu；R257..R264 冷段清扫窗
+AC-R3022 std-window first-run prediction final=78787B over_line=287B gate_blocked=True (no write; R1184/R1192/R1232 cold-fold isomorph, computed in-memory)
+AC-R3024 predicted post-fold+closeout final=74732 margin=3768 gate_pass=True
+AC-R3024 pre-write parse pass: tick=1234 log=37 kept-lines verbatim (idx7..38 -> 2..33) roll/cold/pair in position
+AC-R3021 sd calibration probe: pre=(5,0,0,2) post=(3,0,0,1) expected post=(3,0,0,1)
+AC-R3024 WRITTEN: state final=74732 margin=3768; log 44->37
+AC-R3025 archive pure-append +bytes=38998 (2 headers + 5 + 6 verbatim lines)
+AC-R3025 heartbeat: R1233 backfill row (commit 97d17f6 ts anchor 20:29) + R1234 row appended, lag 1->0
+AC-R3025 export refreshed: ts=2026-10-05T20:43:28+08:00 tick_row=1234 results=489 sd=(3,0,0,1) unchanged-derived
+AC-R3024 post-write dual parse (python + ConvertFrom-Json): 1234 / 37
+DONE final=74732 margin=3768 std_blocked_at=78787
+AMEND AC-R3022/R3023 (R1234b same-round, R750 single-lineage precedent): census regex matched compact-form only; 12 dashed-form tokens (P-2026-09-24-82..P-2026-09-26-01) in the 6 cold lines were missing from the 24-token census claim; cold summary + decl census amended 24->36 both-form mechanical extraction; content itself was already carried verbatim (chain/cold-descriptors) - zero data loss, claim-list completeness fixed
+AMEND AC-R3021 (R1234b): pre-check log line "no BOM" was a static-string defect in the probe logger; actual: export BOM present (utf-8-sig read, BOM preserved on write per R556 convention, round-trip byte-stable) - corrected record
+AMEND verified: amended final=75098B margin=3402B census=36 both-form parse-pass tick=1234 log=37
+AMEND sync: export current 79467B->75098B + HB R1234 row final/margin sync to amended final (75098B/3402B) - parse-verified
+AMEND sync: HB R1233/R1234 row endings LF->CRLF per R1231 convention fix (same-round, tail verified)
