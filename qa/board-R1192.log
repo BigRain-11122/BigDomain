@@ -1,0 +1,6 @@
+PASS AC-K267a source row identified: L8 2317 B (R1191 claim row with closure annotation), verbatim extraction
+PASS AC-K267b pre-append archive face: 664109 B, 172 sections (register), 172 strict sections (bare R markers), tail LF present
+NOTE caliber fix (one-run honest note, R1187/R1190 precedent): historical cut-266/265/... log claims "strict 161->162" do not mechanically reproduce on any committed version of the 2026-10 archive (three-version probe HEAD~2/HEAD~1/HEAD = 170/170, 171/171, 172/172 reg/strict); all 2026-10 section markers are bare "## R<digits>" so strict == register structurally; the 09 archive keeps the mixed face (60 headers / 26 bare R markers, e.g. "## §R532..." style) which is the original intent of the two-caliber split; second data point corroborating the R1191-closeout checker-defect adjudication (FAIL[C] tick row anchor)
+PASS AC-K267c pure-append 664109B -> 666438B (+2329 B block); strict 172->173, register 172->173 (reproducible caliber); per-line md5 identical (ae6624fae4f875759afbe256974c4e4d); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K267d board final state = claim row (R1192, unchecked until closeout) + 5 open rows + 0 stale done rows; head block untouched
+PASS AC-K267e evidence = qa/board-R1192.log (this file); SS R1192 in 2026-10 register
