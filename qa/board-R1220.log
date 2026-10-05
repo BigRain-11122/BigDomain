@@ -1,0 +1,21 @@
+INFO repair idempotent re-entry: corrupted segment already fixed by prior in-round pass
+INFO second surgical fix idempotent: no @@FINAL@@ collateral present
+PASS third surgical fix: final-gauge figures restated to measured actual (FINB -1B width correction, fixpoint converged)
+PASS repair: round-line segment restored (Stage-B substitution marker-tail defect L@@ + swallowed prefix fixed in-round, byte-width fixpoint); stated final gauge == actual 79727 B (disk 79730 B); recount (3, 0, 0, 1)
+PASS AC-K286d board end-state = R1220 row [x] done note + 5 standing open rows + zero stale residue + header verbatim
+PASS export format round-trip byte-identical - safe to rewrite
+PASS export self_drive mechanically re-derived: sd (3, 0, 0, 1); queue 6/2/2; proposals 2/2 (disk-recounted)
+PASS ceo_face latest_artifact anchor replaced
+PASS export refreshed: export_ts 2026-10-05T17:26:10+08:00; results 480->481 (R1220 row); sd (3, 0, 0, 1); ceo_face current/latest_artifact updated
+PASS heartbeat row tick 1220 appended (HB lag=0 vs state tick 1220)
+AC-R2945 receipt: state R294 rolling summary + R1220 round/tokens lines in register + board done row + commit message contains P-2026-09-25-18 (P-51 three-carrier rule, delivery at commit)
+SUITE PASS repair + cut-286 closeout + export + heartbeat (dual-caliber ConvertFrom-Json cross-verify follows in shell)
+---- Stage A/B evidence carried from prior in-round passes (figures superseded by repair-stage restatement where noted) ----
+PASS AC-K286a stale-board count = exactly 1 (R1219 done row 2607 B, 2 literal done-marks = 1 actual + 1 quoted caliber string); standing open rows = 6 (claim row + 5 standing); header intact; claim row pre-registered first
+INFO mid-state repair: archive already appended by first failed run (board cut was not persisted); tail verified identical to board row -> cut board only, skip re-append
+PASS Stage-A board cut persisted + archive append persisted
+PASS AC-K286c pure-append + prefix identical + strict 191->192 + register 267->269 (+2 = migrated row carries 2 literal marks: 1 actual done mark + 1 quoted AC-K285b caliber string; first-run +1 prediction intercepted pre-commit and amended to measured +2 per record-as-measured law, honest note); Oct archive lock unchanged
+PASS claim-row AC-K286c figure amended to measured register 267->269 (pre-registered AC corrected in-round before done-marking, honest amendment)
+INFO closeout verify-then-write: predicted post-closeout gauge 79677 B (disk 79680 B) [pre-repair figure; post-repair final = 79727 B per Stage-B substitution defect fix]
+PASS post-closeout recount (3, 0, 0, 1) == criterion (W,idle,nop,subst); tick 1219->1220; log 48->50
+PASS state closeout written byte-verified (Stage-B substitution marker-tail defect L@@ + swallowed prefix + blanket-replace collateral @@FINB@@ mention intercepted by post-write verify and repaired in-round width-fixpoint, stated == actual 79727 B, zero loss)
