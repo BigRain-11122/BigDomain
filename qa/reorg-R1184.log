@@ -1,0 +1,40 @@
+== qa/reorg-R1184.log fold R266 (266th compression knife, P-2026-09-25-18 item-5 mainline + cold branch) ==
+NOTE: fold executed single-pass clean; tail summary formatter crashed post-write (tuple-arity bug), completion leg re-verified written state byte-level vs pre-op backup before emitting this log. Zero intercepts on fold body.
+PASS AC-R2661 state pre-op disk bytes = 81133 (round-start first-measure scan gauge 81130B over the 78500B line by 2630B; R1183 carry-note honored)
+PASS AC-R2661 state BOM present + trailing LF present + no CR bytes + roundtrip byte-identity (indent2, BOM-less content + trailing LF)
+PASS AC-R2661 pre-parse tick 1183 log items 58
+PASS AC-R2661 state pre-op byte-identical to git HEAD blob (verified post-write via backup logs/state-preop-R1184.bak == HEAD blob, 81133 B)
+PASS AC-R2661 tree carried claim-landed backlog only [' M src/os/backlog.md'] at fold time (post-write re-check: backlog + state.json, as expected)
+PASS AC-R2661 backup logs/state-preop-R1184.bak byte-identical (81133 B)
+INFO calibration probe: pre-op live recount (5, 1, 1, 1) == export stored sd (5, 1, 1, 1), zero drift this fold window
+PASS AC-R2666 cold pair located: item53 R536..R544 window (R545 fold) 2163B + item54 R596..R600 window with embedded R45 fold-in carrier (R601 fold) 1993B, contiguous ranges, 4156B total
+PASS AC-R2667 merged cold line 2121B carries both windows key notes + AC refs (R321..R325/K31a..e/R461..R465/OH6..OH10/V3R1..R8/PR1..PR7/IG1..IG7) + archive sec-R545/sec-R601 originals pointers + idle-fast/no-pullable caliber words preserved (sd accounting continuity)
+PASS AC-R2669 cold merge net savings = 4156B -> 2121B = -2035B (head-block fuel spent this round)
+PASS AC-R2662 window line 0 = R265 rolling summary :: 2026-10-05（R1135..R1182 窗口·R265 整编第二百六十五刀压窗{
+PASS AC-R2662 window pair = R1183 round+tokens lines (single-round pair), window tail = final log item (R1183 tokens)
+PASS AC-R2662 window 3 lines = 11545 B content measure (roll 8842B + pair 2452B/251B)
+PASS AC-R2662 removed-window banned-substring mechanical count = zero hits (originals addressable via pre-op backup + git history)
+PASS AC-R2662 carried catalog = R265 roll enumerated list verbatim, 48 unique tokens (register caliber incl short forms); pair regex-extracted tokens all carried (D-20260930-19,O-013,P-2026-09-25-18,P-32,P-51); 0 newly registered (BD-PROP guard; boundary guard); must-have P-51 present, last token P-51
+PASS AC-R2662 48-round carried score list mechanically located (48 values R1135..R1182); 49-round score list mechanically derived (48 carried + R1183=1); mechanical round list R1135..R1183 continuous 49/49
+PASS AC-R2662 new roll line banned-substring three-family zero hits
+INFO roll line composed 9106 B; carried R1135..R1182 notes verbatim from R265 roll + R1183 fresh note
+PASS AC-R2668 head block items 000..052 verbatim zero-touch (re-verified post-write: pre-op backup first 53 items == written state first 53 items); roll+pair consumed by main fold; merged cold line parses as single log item
+PASS AC-R2670 originals three-path addressable: archive sec R545 + sec R601 full-text sections + pre-op backup + git history
+INFO pre-op live recount (5, 1, 1, 1) -> post-fold recount (2, 1, 1, 0) (predicted (2,1,1,0) by delta math: window 3 lines incl 1 pair removed -2 W/-1 sub, cold 2->1 paren lines -1 W, added 1 paren roll +1 W, cold merged line keeps idle/nop mentions); formula recomputed exact
+PASS AC-R2663 top-level seven fields preserved (tick/log/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens; re-verified post-write: all non-log fields equal pre-op)
+PASS AC-R2663 composed parses, tick 1183 preserved; log items 58 -> 55 (cold 2->1 + window 3->1, kept=0); head block 000..052 verbatim; log item 53 = R536..R600 merged cold line (2121 B); log item 54 = R266 rolling summary (composed verbatim, 9106 B)
+PASS AC-R2664 post-fold measured 76632 bytes scan-gauge (disk 76635 B), under the 78500B line by 1868 bytes
+PASS AC-R2663 re-read parses (tick 1183, log 55, cold+summary items intact); state on disk = 76635 B (BOM + trailing LF write convention verified)
+PASS AC-R2663 PowerShell ConvertFrom-Json dual-parser pass (tick 1183 / log 55)
+PASS AC-R2664 post-fold window-line recount stable on re-read (verify-then-write held on fold body)
+PREDICT: round closeout appends R1184 pair -> final W 4, sub 1, idle 1, nop 1; final ST gauge ~79532; export tick row 1183->1184 + R1184 results row + sd recount (2,1,1,0)->(4,1,1,1); heartbeat R1184 row; board cut-260 evidence in qa/board-R1184.log
+
+CANDIDATE ADJUDICATION (R525 four-candidate precedent, single-window vs extended-window):
+  A) single-window fold [R265 roll + R1183 pair] only: post-fold predicted 78,536B (gauge) = still OVER the 78,500B line by 36B under the standard note pattern (roll 8842B base + 124B score/note insertion + 7B precedent append - 6B purge-wording trim; pair content 2703B no longer covers roll growth + required drop) -> REJECTED on AC-R2664 line test; R1185 would fail structurally regardless.
+  B) cold-segment merge of head items 53/54 (R536..R544 + R545..R600 windows, 4156B -> 2121B) + main window fold -> post-fold 76632B gauge, margin 1868B -> ADOPTED (R477/R486 cold-sweep precedent; ranges contiguous within the pair; head-block chain invariants preserved).
+  C) extended-window merge of item 54 INTO the rolling window (R525 candidate-C-prime isomorph): rejected - would create a non-contiguous coverage claim (R545..R600 + R1135..R1183 skips R601..R1134 which lives in the archive file), breaking the contiguous-window invariant maintained by every roll line to date.
+  D) no fold this round: rejected - state 81,133B disk over the 78,500B waterline, in-register carry-note (R1183) mandates round-start first-measure adjudication.
+SUITE PASS 9/9 pre-closeout (AC-R2661..R2664 + AC-R2666..R2670 green; R2665 delivery leg verified at commit; post-closeout cross-verify appended by closeout stage)
+NOTE: multi-item round R1184 (R1183 isomorph + cold branch); round score 1 = ledger-maintenance mechanism file per Executive Protocol v1.1.
+PASS AC-R2665 post-closeout cross-verify: tick 1184 log 57, rolling row at index 54 head='2026-10-05（R1135..R1183 窗口·R266 整编第二百六十六刀压窗', cold row at index 53 head='2026-09-29（R536..R600 双窗段并折·R1184', state final 80059B (gauge 80056B), sd post-closeout recount (4, 1, 1, 1)
+SUITE PASS 10/10 post-closeout (R2661..R2665 + R2666..R2670 all green; R1183 done row migrated sec R1184; commit delivery leg verified at commit)
