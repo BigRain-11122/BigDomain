@@ -1,0 +1,16 @@
+PASS AC-R2981 pre-op disk byte-identical to HEAD blob (sha16 566E3548D11F19EC, disk 78522 B, gauge 78519 B, over 78500 line by 19 B = R1224 carry-note cashed)
+PASS AC-R2981 round-start tree face clean (single executor, no foreign writer)
+PASS AC-R2981 calibration probe: export stored sd (3, 0, 0, 1) == live recount (3, 0, 0, 1) exactly (zero drift)
+PASS AC-R2981 backup logs/state-preop-R1225.bak byte-identical (78522 B); pre-op chain R1083..R1224 = 73 bak files (predecessor present, no dups, range-caliber report; R1223 closeout bak included per chain law)
+PASS window faces: [R297 roll + R1224 pair] 3 lines 29608 B content (roll 26493 + round 2819 + tokens 296); R1224 score 2 evidence in pair
+PASS P/D catalog mechanical derivation: candidates ['P-2026-09-25-18', 'P-32'] all in prior roll (zero new registrations, zero hand placement)
+PASS 4 in-place replacements pre-verified (each exactly once) + tail anchor present + carried aggregate sum 63 verified
+INFO single-pair probe converged: predicted post-fold gauge 76335 B (under 78500 line by 2165 B) - single-window ruling, zero interception
+PASS new roll composed 27440 B: header R298, single-window story, aggregate sum 63->65 (+2 = R1224 score), round column R1135..R1224 continuous 90 rounds, banned-family zero hits, R1224 fold-in segment once
+PASS ARCHIVE pure-append + prefix md5 identical (d69d5bf1ed3051e09acea6d5e298f4e5); section R1225 = header + 3 window lines verbatim (451025 B)
+PASS AC-R2984 verify-then-write: post gauge 76335 B == prediction byte-exact, under line by 2165 B; predicted recount (1, 0, 0, 0)
+PASS AC-R2983 top-level seven fields preserved; log 45 -> 43 (3 -> 1, kept=0); head block items 000..041 verbatim; log item 42 = R298 rolling summary (27440 B)
+PASS AC-R2984 post-fold measured 76335 bytes gauge (disk 76338 B) == prediction byte-exact; recount (1, 0, 0, 0) == prediction; under the 78500B line by 2165 B
+AC-R2985 PENDING receipt = state R298 rolling summary + R1225 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS pre-closeout (R2985 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
+NOTE single-item round R1225: fold R298 + five-silence adjudication + auto-saves standing step measurement; round score 1 = ledger maintenance per Executive Protocol v1.1; aggregate slot arithmetic normalized (86+4=90 rounds, 60+5=65 sum; prior line carried a 87+3=90-vs-label-89 restated-slot quirk from the R1224 three-probe fold, per-round score details preserved verbatim in fold-in segments, zero loss)
