@@ -55,5 +55,28 @@
       "note": "[needs-CEO] 券型目录初版=建筑署名券 1 次/月（UNIQUE 化身×周期×券型 AC-M16）；后续券型入目录再扩；券文本=msgSecCheck 过闸后落（未过闸零开券）·消费面=FluxVerse DevLoop 承建引用"
     }
   },
-  "params_status": "[needs-CEO] 全部数值为占位：四档定价终值（19.9 已锁·29.9 入门档=C-20260927-01 决议③案 A 票档归档·49.9/99 初版正典开闸前呈批 AC-MP5）/月次数 3/5/10/30（§四 C2 初版+29.9 档设计占位 5）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）"
+  "reminder": {
+    "channel": "subscribe_message",
+    "note": "W10+W15 信号消费（AC-M17·2026-10-06 修订）：W15=订阅消息官方页直采（模板 ID=公众平台配置审核制·wx.requestSubscribeMessage 一次性/长期两型授权·subscribeMessage.send 日限官方原文「开通支付能力的小程序下发上限是3kw/日，没开通的是1kw/日」·用户勾选「总是保持以上选择，不再询问」后不弹窗·popup/change/sent 三事件·沙箱=纯本地模拟零真实 API 触点·真实接线=bootstrap 窗三问门）；W10=消保条例第十条② 自动续费双时点显著提醒（接受服务前+续费日期前·自动续费态【待证】接线日核·MVP 手动续费=到期前单时点）；零静默丢失律=到期应发未发必落降级行入站内横幅队列",
+    "remind_days_before": 3,
+    "remind_days_before_status": "[needs-CEO] 到期前提醒提前天数（默认 3 占位·开闸前呈批）",
+    "daily_send_cap_default": 1000000,
+    "daily_send_cap_paid": 3000000,
+    "daily_send_cap_note": "[needs-CEO] 日发量上限沿用官方原文两档（未开通支付 1kw/开通支付 3kw·沙箱缩比=测试注入小值实测执法）",
+    "reason_templates": {
+      "renewal_due": "renewal_notice",
+      "first_service": "renewal_notice"
+    },
+    "templates": {
+      "renewal_notice": {
+        "approved": true,
+        "copy": "会员到期提醒：您的会员卡将于到期日到期，到期后特权与余次将按规则处理（出生证保留）；可随时在小程序内续费，续费=下一周期新订单，价格与权益以小程序内展示为准。本提醒为服务状态通知，非投资建议。"
+      },
+      "pending_review_example": {
+        "approved": false,
+        "copy": "沙箱用例占位：模拟公众平台模板审核未通过态（下发=拒 E_TEMPLATE_NOT_APPROVED 零落账）"
+      }
+    }
+  },
+  "params_status": "[needs-CEO] 全部数值为占位：四档定价终值（19.9 已锁·29.9 入门档=C-20260927-01 决议③案 A 票档归档·49.9/99 初版正典开闸前呈批 AC-MP5）/月次数 3/5/10/30（§四 C2 初版+29.9 档设计占位 5）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）/到期前提醒天数与日限档（reminder 节·默认 3 天·日限两档=官方原文 1kw/3kw）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）；到期前提醒=订阅消息授权制通道（W15 消费·AC-M17·自动续费态双时点【待证】）"
 }

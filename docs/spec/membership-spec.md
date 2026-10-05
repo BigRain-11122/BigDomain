@@ -14,6 +14,7 @@
 - **两域隔离律（次数≠代币）**：算力次数=**服务配额**（本域记账）；代币=**内循环消费型虚拟权益**（ledger 件记账·§五.4 生死线）。次数账零进代币账本·代币账本零次数字段（AC-M11 交叉断言）——与法币/代币双域隔离（AC-Y7）同为结构性双保险。代币奖励走 ugc/共创分成既有管线（引用·本域永不代发代币）。
 - **出生证=永久（C0）**：任意付费件（19.9 算力包/任一档月卡）首笔 granted→birth_cert 权益行·**会员到期不回收**（只回收特权与余次）——入城资格一旦授予永不因到期吊销（AC-M3 跨件联验）。
 - **订阅形态=按月手动续费（MVP）**：微信小程序虚拟支付之自动续费能力【待证·接线日核】——MVP=续费=下一周期新订单（订单序数桶防重开=AC-Y3 同法）；周期可叠（续费单激活 start=max(now, 当前活跃 end)·无缝连订）。
+- **到期前提醒（W10+W15 信号消费·2026-10-06 修订）**：提醒通道=微信小程序订阅消息（**用户授权制**——模板 ID=公众平台配置**审核制**；授权=wx.requestSubscribeMessage **一次性/长期两型**；服务端 subscribeMessage.send **日发量上限**官方原文「开通支付能力的小程序下发上限是3kw/日，没开通的是1kw/日」——W15 直采注=global-benchmarks §① 2026-10-06 行）；提醒义务=W10《消费者权益保护法实施条例》第十条② 自动展期/自动续费服务=**消费者接受服务前+续费日期前双时点显著提醒**——**MVP=手动续费=到期前单时点提醒**（「接受服务前」时点随自动续费态绑定·如实标注不虚设）；自动续费态双时点=【待证】接线日核（AC-MP1 同注·**判据面 AC-M17 先注册·执行面不预建**）；沙箱=纯本地模拟零真实 API 触点（真实接线=bootstrap 窗·三问门在案）。
 - **消费面诚实注记（blocked 引用不预建）**：①次数的实际执行面（一句话→策略/Demo/短视频）=BigMoney/Biggame 生产线引用（跨仓零复制）·沙箱只建配额账+消耗 API 预留位·零 LLM；②专属居民陪伴=BigLife 薄自我×共享城脑引用·呈现面随 lobby/参观端；③建筑署名券消费=FluxVerse DevLoop 承建面（M2-M3）；④私人房间/皮肤池=FluxVerse/参观端件。MVP=权益记录+券账+特权开关·下游系统到位即接线。
 - **优先筛选≠优先采纳**：共创者卡「共创优先筛选」=ugc 入池**排序权重与整理批次优先**·永不绕 msgSecCheck、永不绕灰区人工复核、永不绕 CEO 终审（needs_ceo_review 纪律·§五补三层筛选零变更）；「加急通道」=服务队列**排队优先位**·非投资建议优先产出（非投顾边界·§六）。
 - 物理件清单（账号域=CEO 永不代办·§十.2）：商户号/密钥只 .env（pay 件 §〇 同源）；服务器/域名/备案=部署前置（AC-MP2 cron 随其到）。
@@ -40,6 +41,7 @@
 | AC-M14 | 对账：reconcile 六查（§四）干净 PASS exit0；篡改注入（伪发放周期/次数凭空+/删审计行/越权特权行/伪造 grant 源）→FAIL exit2 | 干净跑+五类注入跑 |
 | AC-M15 | 文案违禁词表：档位权益文案/券文本模板配置过闸（荐股三要素禁律=个股买卖建议/点位目标价/收益承诺——AC-Y11 同源）；违禁文案=拒配置拒开档（fail-closed） | 违禁文案上架=拒用例 |
 | AC-M16 | 券账：建筑署名券 1 次/月=UNIQUE(化身,周期,券型)；无 active 城主卡周期领券=拒 E_NO_ACTIVE_PERIOD；重复用券=拒 E_VOUCHER_USED；券文本未过闸=零开券（AC-M7 联动）；未用券随周期到期作废留痕 | 领券/复用/过期三向用例 |
+| AC-M17 | 订阅消息提醒面（W10+W15 信号消费·2026-10-06 修订·先于本行实现注册）：①到期前提醒时点=服务端按周期 end−remind_days 计算（remind_days 配置 [needs-CEO] 默认 3·窗口=end−remind_days≤now<end）；自动续费态（【待证】接线日核·AC-MP1 同注·模拟参数旗非预建）=接受服务前+续费日期前**双时点**（W10 第十条② 硬义务）·MVP 手动续费=单时点（接受前面无义务·如实标注）②通道=订阅消息授权制（W15）：模板 ID=审核制目录（未过审模板下发=拒 E_TEMPLATE_NOT_APPROVED **零落账**）；授权=一次性（每次下发扣一·耗尽=拒发）与长期两型（拒收事件 change=沙箱注记）；日发量上限执法（官方原文两档 1kw/3kw·沙箱缩比注入小值实测）③**零静默丢失律**：到期应发而未发（预算耗尽/日限）=必落降级行入站内横幅队列（永不静默丢、永不伪 sent）；模板文案过违禁词表 fail-closed（AC-M15 同法·坏文案=拒配置拒启）；扫描幂等（同化身同时点同日零重复行）；提醒域表零法币零代币字段（AC-M10/M11 同律·独立库文件=测试面断言承载） | 时点用例（未到/窗内）+审核闸用例+违禁文案拒启用例+预算两型用例+日限用例+降级队列断言+幂等复扫用例+法币零字段断言 |
 
 ### 生产判据（MP 系·预注册不预执行·blocked on CEO 物理件/法务/呈批件）
 
@@ -98,11 +100,41 @@ CREATE TABLE member_vouchers (
 CREATE TABLE member_audit (
   audit_id         TEXT PRIMARY KEY,
   census_avatar_id TEXT NOT NULL,
-  kind             TEXT NOT NULL,        -- period/expire/credits/voucher
+  kind             TEXT NOT NULL,        -- 'period/expire/credits/voucher'
   detail           TEXT NOT NULL,
   ts_utc           TEXT NOT NULL
 );
 ```
+
+### §二.1 提醒域两表（订阅消息·W10/W15 消费·2026-10-06 修订·独立库文件 `member_reminder.db`）
+
+> 单写者纪律：member.db 单写者=member.py（sweep 先例=经 store 驱动）；提醒域独立库文件单写者=`reminder.py`（同 WAL 单写者纪律按文件执法）；due 扫描读 member_periods=**跨文件只读连接**（读面不破单写者·member.py 跨文件 dock 先例同法）；两表零法币零代币字段（AC-M10/M11 同律·独立文件=reconcile ④ 不及面=测试断言承载 AC-M17 ⑦验法）。
+
+```sql
+-- member_subscribe_grants：订阅消息授权预算账（W15·append-only·一次性=每次授权一行·长期=订阅期内一行不限）
+CREATE TABLE member_subscribe_grants (
+  grant_id         TEXT PRIMARY KEY,     -- 内容寻址（化身+模板+时点）
+  census_avatar_id TEXT NOT NULL,
+  template_id     TEXT NOT NULL,        -- 审核制目录内模板（AC-M17 ②）
+  grant_type       TEXT NOT NULL CHECK (grant_type IN ('once','longterm')),
+  ts_utc           TEXT NOT NULL
+);
+
+-- member_reminder_log：提醒发送账（append-only·日限计数源+降级横幅队列面·零静默丢失律）
+CREATE TABLE member_reminder_log (
+  send_id          TEXT PRIMARY KEY,     -- 内容寻址
+  census_avatar_id TEXT NOT NULL,
+  template_id      TEXT NOT NULL,
+  reason           TEXT NOT NULL CHECK (reason IN ('first_service','renewal_due')),
+  status           TEXT NOT NULL CHECK (status IN ('sent','skipped_no_budget','skipped_daily_cap')),
+  period_key       TEXT,                 -- 关联周期（renewal_due 面·幂等键组分）
+  ts_utc           TEXT NOT NULL
+);
+```
+
+- **发送处理序**（attempt·单写者 BEGIN IMMEDIATE）：模板审核闸（目录内+approved·否则拒 E_TEMPLATE_NOT_APPROVED 零落账）→幂等键（化身+reason+period_key+当日已有行=零重复）→日限（当日 sent 行数≥cap=skipped_daily_cap）→授权预算（长期有效行=过；一次性=Σ授权−Σsent 同化身同模板·耗尽=skipped_no_budget）→sent 落账；skipped 行=站内横幅降级队列面（banner_queue 读面）。
+- **降级面**：skipped_no_budget/skipped_daily_cap 行即横幅队列项（到期应发而未发永不静默丢·永无伪 sent）；MVP 手动续费 on_accept=not_required（无义务面零落账·如实标注）。
+
 
 - **激活处理序**：验 grant 真实性（pay_grants 存在+归属同化身·伪造拒）→查档位矩阵（AC-M1）→开周期（UNIQUE 幂等 AC-M2·叠续律）→发次数 grant 行→特权=查表派生（零特权表·active 周期即权·AC-M5/M6）→城主卡开署名券行→审计行（AC-M13）。
 - **到期扫描**：`sweep(now)`——end_utc 过点周期→expired（触发器单向）+余次作废 expire 行+未用券 expired 留痕+审计行；幂等可重跑（AC-M12）。
@@ -140,7 +172,7 @@ CREATE TABLE member_audit (
 
 | 件 | 本件落位 |
 |---|---|
-| ① 判据预注册 | §一 AC-M1~M16+AC-MP1~MP6（先于实现注册） |
+| ① 判据预注册 | §一 AC-M1~M17+AC-MP1~MP6（先于实现注册·AC-M17=W10/W15 信号消费 2026-10-06 修订·先改表后动实现） |
 | ② AIGC 生成标识面 | AC-M8+`ai_generated` 服务端权威字段（居民陪伴台词/权益说明 AI 文案全带）+BLUEPRINT §五.7 全呈现面律引用（BigLife M4 开门帧同源·截图即带标·不依赖后期补标） |
 | ③ msgSecCheck 前置闸 | AC-M7+会员文本输入面过闸受理+闸未接线拒启 `E_GATE_OFFLINE`（**四件同源第五件**·§五.3 生死线：未接内容安全=禁开门） |
 | ④ 非投顾风险提示常驻面 | AC-M9+AC-M15（会员权益文案荐股三要素禁律·「加急=排队优先位非投资建议优先产出」边界注记·AC-Y11 同源）+会员面锚定「AI 生成工具/历史回测研究展示」 |
@@ -157,7 +189,7 @@ CREATE TABLE member_audit (
 
 ## 七、实现件清单（P-47-5b·次件·下一轮自领）
 
-`src/sandbox/member/`：`catalog.py`（档位矩阵加载+校验·五坏配置拒启）·`member.py`（周期激活/次数消耗/特权查裁/券账 API·单写者·BEGIN IMMEDIATE）·`sweep.py`（到期扫描·幂等）·`reconcile.py`（§四六查）·`test_member.py`（AC-M1~M16 逐条断言·含伪造 grant/越权特权/次数守恒注入组）·`config.json`（档位矩阵/宽限/券型/文案/违禁词表占位全标 [needs-CEO]）。闸件 import 复用 lobby `sec_gate`（先例=ledger/ugc/pay）；跨件联验 import pay（grant 源真实性·AC-M2）+lobby（出生证判据源·AC-M3）；法币/代币双域断言 import ledger schema（AC-M10/M11）。依赖零外采：标准库为限。
+`src/sandbox/member/`：`catalog.py`（档位矩阵加载+校验·五坏配置拒启）·`member.py`（周期激活/次数消耗/特权查裁/券账 API·单写者·BEGIN IMMEDIATE）·`sweep.py`（到期扫描·幂等）·`reconcile.py`（§四六查）·`test_member.py`（AC-M1~M16 逐条断言·含伪造 grant/越权特权/次数守恒注入组）·`config.json`（档位矩阵/宽限/券型/文案/违禁词表/提醒模板目录与天数日限占位全标 [needs-CEO]）·`reminder.py`（订阅消息提醒面·W10/W15 消费·AC-M17·独立 `member_reminder.db` 单写者+跨文件只读 due 扫描）·`test_reminder.py`（AC-M17 逐条断言·复用 test_member 世界构建）。闸件 import 复用 lobby `sec_gate`（先例=ledger/ugc/pay）；跨件联验 import pay（grant 源真实性·AC-M2）+lobby（出生证判据源·AC-M3）；法币/代币双域断言 import ledger schema（AC-M10/M11）。依赖零外采：标准库为限。
 
 ---
-版本：v0.1（2026-09-24·OSLoop R11·判据预注册版）；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
+版本：v0.2（2026-10-06·R1254·W10/W15 信号消费修订：§〇 到期前提醒面 bullet+§一 AC-M17 判据预注册+§二.1 提醒域两表+§七 实现件两件——先改判据表再动实现·预注册纪律）；v0.1（2026-09-24·OSLoop R11·判据预注册版）；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。

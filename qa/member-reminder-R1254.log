@@ -1,0 +1,55 @@
+﻿=== test_reminder.py (AC-M17 suite, 2026-10-06 R1254) ===
+PASS AC-M17.1: not-due scan=0; due-window scan=7 all renewal_due
+PASS AC-M17.6: 7 due attempts -> 7 rows (sent=3 skipped=4); AV-R1 rows=1
+PASS AC-M17.4: day1: once-grant AV-R1 sent, longterm AV-R2 sent, no-grant AV-R3 skipped_no_budget
+PASS AC-M17.7: rescan=7 already_logged; rows unchanged=7
+PASS AC-M17.4: day2: sent=2 (longterm only), skipped_no_budget=5; once-grant AV-R1 exhausted -> skipped row=skipped_no_budget
+PASS AC-M17.6: banner_queue=9 == skipped rows=9 (zero silent loss)
+PASS AC-M17.2: unapproved refused: E_TEMPLATE_NOT_APPROVED: pending_review_example; unknown refused: E_UNKNOWN_TEMPLATE: no_such_template; log rows unchanged=14
+PASS AC-M17.3: banned copy refused: E_BANNED_TEMPLATE_COPY: template 'renewal_notice' copy contains banned word '����'
+PASS AC-M17.5: cap=2: sent=2, skipped_daily_cap=5; rescan already_logged
+PASS AC-M17.9: MVP on_accept=not_required_mvp (rows=0, no fake activity); auto-renewal sim on_accept=sent; coverage=['first_service', 'renewal_due']
+PASS AC-M17.8: fiat/token-named columns=none; raw fiat inject refused=table member_reminder_log has no column named price_cent
+PASS AC-M17.10: reconcile six checks clean=True
+suite: 12 assertions over 10 criteria; failed=none
+
+=== regression: test_member.py (AC-M1..M16) ===
+PASS AC-M1: bad-configs no-tiers:refused,negative-credits:refused,unknown-priv:refused,no-copy:refused,no-disclaimer:refused; client tier claim ignored (activated tier=experience)
+PASS AC-M2: mayor opened v=['building_naming']; replay same-period=True regrant=0; stack p2 start==p1.end=True; forged=True owner-mismatch=True
+PASS AC-M13: public-stream rows before=5 after=5 (zero double writes); audit kinds=['credits', 'period', 'voucher']
+PASS AC-M4: 30-7-23+5=balance 5; overdraw refused=True balance-untouched=True; refund-cap refused=True; drain->0; zero-draw refused=True; no-period refused=True; journal sums={'consume': -35, 'grant': 35}
+PASS AC-M5: forged client tier/privileges ignored (got ['basic_badge', 'emoji_pack_standard']); forged privilege claim refused=True
+PASS AC-M6: experience->cocreator privilege refused=True; no-period refused=True; mayor chat_highlight granted tier=mayor
+PASS AC-M7: gate hit refused=True zero-writes (text=None); clean text set; readiness rc=0; unwired gate rc=2 (E_GATE_OFFLINE: gate section missing from config)
+PASS AC-M8: machine faces ai_generated=0 (activation=0); AI copy face ai_generated=1 label=AI ����; client 0-forgery ignored
+PASS AC-M9: disclaimer resident on 3 sampled faces, persistent=True
+PASS AC-M10: fiat/token-named columns=none; raw fiat-column inject refused=table member_periods has no column named price_cent
+PASS AC-M11: member db has zero ledger tables; ledger db has zero member tables; ledger quota-named columns=none; cross-domain raw writes both refused (no such table: ledger_entries / no such table: member_periods)
+PASS AC-M16: use=used; duplicate voucher UNIQUE-refused=True; experience-tier voucher request refused=True; no-period voucher request refused=True (reuse/expiry legs on world two)
+PASS AC-M12: born-expired/rollback REJ=True/True/True; sweep expired=4 re-run=0 journal-stable=True; expire events=3 (AV-103 balance already 0 - nothing to forfeit) audits=4; post-sweep active=False balance103=0
+PASS AC-M3: paid non-tier product birth-cert=True permanent=True; no-binding refused=True; after tier expiry birth-cert=True marker=True judgement-source items=1 (privileges closed=True)
+PASS AC-M14: clean world: findings=none cli-rc=0 (PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Te)
+PASS AC-M16: use=used; re-use refused=True; no-voucher avatar refused=True; expired-with-period refused=True (status=expired, audit rows=1); sweep cli rc=0 out=sweep done: periods_expired=3 now=2030-0
+PASS AC-M14: fake-period -> check1: period FAKE-PERIOD-1: grant FAKE-GRANT-1 absent from pay_grants
+PASS AC-M14: credits-out-of-thin-air -> check2: orphan credit journal rows: 1
+PASS AC-M14: deleted-audit-row -> check5: period FAKE-PERIOD-1: open audit row missing
+PASS AC-M14: privilege-row-overreach -> check3: voucher FAKE-V-1: privilege building_naming_voucher not granted by tier experience
+PASS AC-M14: forged-grant-source -> check1: period 8479c881ef87f4c8: grant FORGED-9 absent from pay_grants
+PASS AC-M14: fiat-column-injected -> check4: member member_periods.price_cent carries a price-named column
+PASS AC-M14: past-due-active-residue -> check6: past-due active period residue: FAKE-PERIOD-2
+PASS AC-M14: tampered world cli rc=2 (FAIL: 12 finding(s); first: check1: period 8479c881ef87f4c8:)
+PASS AC-M15: banned tier copy refused: E_GATE_OFFLINE: tier experience copy banned (AC-M15): ����
+suite: 25 assertions over 16 criteria; failed=none
+
+=== regression: test_entry_tier.py ===
+PASS AC-E1 | catalog tiers=cocreator,experience,mayor,patron
+PASS AC-E2 | patron monthly_credits=5 vs experience=3
+PASS AC-E3 | patron-exclusive=['cocreation_block_seat', 'growth_archive_slot']
+PASS AC-E4 | experience-exclusive=['basic_badge', 'emoji_pack_standard']; sets differ=True
+PASS AC-E5 | tier:patron -> patron
+PASS AC-E6 | price anchor 29.9=True; needs-CEO marker=True
+PASS AC-E7 | params_status carries 29.9=True + decision ref=True
+SUITE PASS: 7/7
+
+=== readiness self-check: reminder.py CLI ===
+READY templates=['renewal_notice'] remind_days=3 daily_cap=1000000
