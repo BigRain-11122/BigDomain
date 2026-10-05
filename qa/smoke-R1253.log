@@ -1,0 +1,69 @@
+BigDomain QA Smoke Test - round R1253 - 2026-10-06 +08:00 (holiday window day 6, first round of the day 00:0x)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist (daily crawl >= 1 new source / benchmark 15h law / research source chain / signal wall), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-06 first round)
+round mode: multi-item round = daily crawl K-slice + reconcile-daily standing row FIRST-DAY execution
+    (runbook docs/ops/reconcile-daily-runbook.md §一, due 10-06 first round per backlog standing row)
+    + O-2026-0930-013 item-4 daily first-round data check (holiday window 10-01..10-08)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only; 1 attempt / 1 hit / zero miss):
+    a. developers.weixin.qq.com/miniprogram/dev/framework/open-ability/subscribe-message.html - HIT
+       (A-level official doc page: "小程序订阅消息（用户通过弹窗订阅）开发指南")
+       Key clauses verified verbatim this round:
+       - Template ID: configured manually at mp.weixin.qq.com; no suitable template -> apply for a new
+         one, usable only after review passes (审核通过后可使用).
+       - Send permission: wx.requestSubscribeMessage popup (one-time 一次性订阅 / long-term 长期订阅).
+       - Server-side send: subscribeMessage.send, verbatim quota line "次数限制：开通支付能力的小程序
+         下发上限是3kw/日，没开通的是1kw/日".
+       - "总是保持以上选择，不再询问" checkbox -> next wx.requestSubscribeMessage call does NOT popup;
+         changing the choice requires the mini-program settings page.
+       - Three event pushes: subscribe_msg_popup_event (accept/reject per template id),
+         subscribe_msg_change_event (official note: 目前只推送取消订阅的事件 = "拒收" only),
+         subscribe_msg_sent_event (final delivery result, ErrorCode=0 success).
+       - Voice reminder since base library 2.18.0 (state acceptWithAudio; listed example categories
+         金融业-银行、金融业-收单商户) + banner/alert reminder since 2.22.0 (acceptWithAlert,
+         long-term subscribe messages only).
+    -> consumption anchors: P-47-5 membership/monthly-card face (auto-renewal "before renewal date"
+       reminder = second time-point of W10 Consumer-Protection-Regulation Art.10 dual-reminder duty;
+       one-time subscribe = per-message authorization budget design constraint; long-term subscribe
+       category eligibility = wiring-day template application live-test item, M-note) + P-47-4
+       payment-integration spec (payment status notification face candidate).
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-06 (state.json top field updated at closeout this round);
+    docs/global-benchmarks.md on-disk deltas = section-1 new bullet "订阅消息通道" (subscribe-message
+    channel, monthly-card reminder implementation face) + section-3 new source row (official
+    subscribe-message guide page) + section-4 refresh record line "2026-10-06 web 直采刷新 K 片";
+    7-day cycle next due 2026-10-13.
+
+[3] research source chain (zero-key, graded, two-state): PASS
+    source = developers.weixin.qq.com official documentation page, grade A, zero key, read-only host
+    web_fetch; 1 attempt / 1 hit / zero negative this round; external content treated as untrusted
+    input, verbatim quotes recorded, zero downstream assertions.
+
+[4] signal wall: PASS
+    W15 appended to docs/research/intelligence-wall.md signal table (date / signal / source link +
+    grade + fetch time / consumption landing points / status) + conclusion-application table row
+    appended (W15 -> benchmarks section-1/section-3 filed, spec consumption = P-47-5 monthly-card
+    dual-time-point reminder implementation channel + P-47-4 notification face candidate,
+    production-criteria amendment window = next spec revision round).
+
+[5] reconcile-daily standing row FIRST-DAY execution (O-2026-0930-027 / R1221 board line): PASS - G0
+    python src/sandbox/reconcile_daily.py exit=0; RUNNER PASS (33/33 suites green, reconcile
+    controls 6/6, 34.1s); ledger clean 8/8 + tamper exit 2, pay clean 6/6 + tamper exit 2,
+    member clean + tamper exit 2 (dual-state all green, tamper line must-exit-2 defense held);
+    evidence auto-derived to qa/reconcile-daily-20261006.log (same-day-stamped file, old evidence
+    never overwritten); verdict line: RECONCILE-DAILY 20261006 verdict=PASS exit=0.
+    Per §二 judgement table = G0 green -> daily reconciliation loop closed for 10-06, no escalation
+    (HQ-FEEDBACK zero-add).
+
+[6] O-2026-0930-013 item-4 daily first-round data check (holiday window): PASS
+    scan-entry EXPORT age 0.4h (< 24h freshness gate) + JSON parse OK; ceo_face three lines
+    (current / latest_artifact / next_milestone) re-verified in place at the closeout export
+    refresh this round (tick 1252 -> 1253).
+
+self-verify summary: [1]..[6] all PASS -> charter daily round green; round score = 2
+    (run/see artifact: reconcile-daily standing row FIRST-DAY execution, RUNNER PASS 33/33 suites +
+    6/6 controls dual-state green, evidenced by qa/reconcile-daily-20261006.log; file changes:
+    benchmarks 3-place refresh + signal wall 2 rows + smoke evidence set + closeout bookkeeping).
