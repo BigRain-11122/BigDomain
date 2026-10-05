@@ -1,0 +1,25 @@
+PASS AC-R2701 state BOM + trailing LF + no CR + roundtrip exact (disk 80604 B, gauge 80601 B)
+PASS AC-R2701 pre-op disk byte-identical to git HEAD blob (sha16 6631B6D23D41991E)
+PASS AC-R2701 round-start tree face: only claim row (src/os/backlog.md) as pre-registered (self evidence artifact exempt)
+PASS AC-R2701 backup logs/state-preop-R1189.bak byte-identical (80604 B)
+PASS AC-R2701 calibration probe: export stored sd (4, 1, 1, 1) == live recount (4, 1, 1, 1) exactly (zero drift, marked-distinct caliber; R1170 closeout recount law)
+PASS AC-R2702 window = [R269 rolling summary + R1188 pair] (3 lines); window tail = final log item (R1188 tokens)
+PASS AC-R2702 window 3 lines = 13059 B content measure (probe-measured exact value)
+PASS AC-R2702 removed-window banned-substring mechanical count = zero hits {idle-fast}
+PASS AC-R2702 removed-window banned-substring mechanical count = zero hits {no-pullable}
+PASS AC-R2702 removed-window banned-substring mechanical count = zero hits {nop}
+PASS AC-R2702 new roll line banned three-family zero hits {'idle-fast' 'no-pullable' 'nop'}
+PASS AC-R2702 new roll line matches recount caliber (paren-format date prefix, excluded from round-level count)
+PASS AC-R2702 carried token catalog == 48 verbatim (R269 carry; first D-20260930-19 last P-51)
+PASS AC-R2702 P/D catalog mechanical dedup == 48 carried + 0 newly registered (BD-PROP boundary guard) []
+PASS AC-R2702 54-round score list mechanically derived (50 raw sum 31 + R1185=1 + R1186=2 = 52 carried sum 34; + R1187=1 -> 53 rounds sum 35; + R1188=1 -> 54 rounds sum 36)
+INFO new roll line composed 10618 B; carried R1135..R1187 notes verbatim from R269 roll + R1188 fresh note
+INFO predicted post-fold gauge 78144B / disk 78147B
+INFO predicted post-fold recount (2, 1, 1, 0) == prediction (pre (4, 1, 1, 1); removed 3 window lines, added 1 R270 roll line dated 10-05 inside window)
+PASS state written atomically (tmp + os.replace, read-back verified)
+PASS AC-R2703 top-level seven fields preserved (tick/log/last_order/last_decision_rows/benchmarks_refreshed/last_gord_tbl_rows/last_dec_tokens); log 57 -> 55 (3 -> 1, kept=0); head block items 000..053 verbatim; log item 54 = R270 rolling summary (10618 B)
+PASS AC-R2704 post-fold measured 78144 bytes scan-gauge (disk 78147 B) == prediction; under the 78500B line by 356 B
+PASS AC-R2704 post-fold recount (2, 1, 1, 0) == prediction; re-read parses (tick 1188 preserved, log 55, roll item intact); dual-parser face = json.loads green (PS ConvertFrom-Json runs at closeout)
+AC-R2705 PENDING receipt = state R270 rolling summary + R1189 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2705 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
+NOTE dual-item round R1189 (R1188 isomorph): fold R270 + board knife cut-264; round score 1 = ledger maintenance mechanism file per Executive Protocol v1.1.
