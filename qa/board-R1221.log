@@ -1,0 +1,10 @@
+qa/board-R1221.log - cut-287 board-law knife evidence (AC-K287a..e), R1221
+(mechanical extraction from qa/reorg-R1221.log same-round run + post-state verification below)
+AC-K287a board: stale_done=1 claim_row=1 open_rows=6 backlog_bytes=19929 bom=True
+AC-K287a board head 4 lines verbatim check len=[27, 1, 159, 52]
+AC-K287b archive pre-append: strict=192 register=269 tail_lf=True bytes=731460 bom=False (expect 192/269 per cut-286 close)
+AC-K287c 09 archive lock bytes=358597 (unchanged)
+AC-K287c pure-append: +bytes=3254 strict 192->193 register 269->270 (+1 measured)
+AC-K287d main board post: lines=14 stale_done=0 open=6 claim_kept=True
+WRITTEN: state fold R295 + cut-287 board migration done
+post-state verification: tick=1221 log=50 sd=(3,0,0,1) final gauge=79026B; main board = header + R1221 done row + 6 open rows (radar/O-013-4/legal/BigLife/reconcile-daily/bootstrap); archive sec R1221 strict=193 register=270 tail_lf=True; HB lag=0
