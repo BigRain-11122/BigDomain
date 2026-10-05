@@ -1,0 +1,7 @@
+RESUME-PASS folded state face verified on disk (disk 76275 B, gauge 76272, tick 1207, log 50, roll 16819 B, recount (2,1,1,0)); pre-op backup logs/state-preop-R1208.bak byte-identical to pre-fold state per primary run
+PASS AC-K274a stale-board inventory: exactly 1 stale done row (R1206, 2773 B) + 5 standing open rows + header intact + claim row pre-registered
+PASS AC-K274b pre-append archive face: strict 179 / register 249 recount caliber + trailing LF in place
+PASS AC-K274c pure-append + prefix md5 identical (463dd9a68f0ab83d1680e81765f90c2e) + strict/register 179->180 / 249->250 + 09-file lock untouched
+PASS AC-K274d main board end state: R1208 claim row + 5 open rows + stale rows 0 + header first four lines verbatim zero-change
+PASS AC-K274e evidence = qa/board-R1208.log
+SUITE PASS 5/5 (cut-274, R1206 row 2773 B verbatim migrated to done-archive-2026-10.md SS R1208); resume-run re-verified on-disk end state

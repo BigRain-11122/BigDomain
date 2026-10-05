@@ -1,0 +1,15 @@
+PRE-OP PASS AC-R2821 tree face = claim row only (backlog.md) [primary run]
+PRE-OP PASS AC-R2821 BOM + trailing LF + zero CR + disk 79522 == HEAD blob byte-identical [primary run]
+PRE-OP PASS AC-R2821 backup logs/state-preop-R1208.bak written byte-identical (79522 B) [primary run]
+PRE-OP PASS AC-R2821 top-level 7 fields intact (tick 1207, log 54) [primary run]
+PRE-OP PASS AC-R2821 sd probe stored (4, 1, 1, 1) vs live (6, 1, 1, 2) (drift = R1207 export-skip pair, W+2/sub+1, fully explained)
+PRE-OP PASS AC-R2821 window 5 lines 20034 B (roll 16110 + R1206 pair 2732 + R1207 pair 1192)
+FOLD PASS AC-R2822 seven surgical replacements each count==1
+FOLD PASS AC-R2822 inserted segments banned three-family zero hits (inherited R1194 @@FINB@@ note carried verbatim, count 1 == 1)
+FOLD PASS AC-R2822 new-token regex derivation: extracted 6 candidates, new = 0 (catalog 57 carried)
+FOLD PASS AC-R2823 tail entry lines round-trip byte-identical (escaping style verified; idx 49..52 carry trailing comma, idx 53 none)
+FOLD PASS AC-R2824 verify-then-write: predicted post gauge 76272 <= 78500 line (margin 2228 B)
+FOLD PASS AC-R2823 json.loads green (tick 1207, log 50) + head idx 000..048 verbatim (re-verified vs pre-op backup on resume) + idx 049 = new roll 16819 B
+FOLD PASS AC-R2824 post disk 76275 == prediction byte-exact + post-fold recount (2, 1, 1, 0) == predicted
+ARCHIVE PASS pure-append + prefix md5 identical (82f5784496a44ce943923bba81e43b9b); section R1208 = header + 5 window lines verbatim (20153 B)
+SUITE PASS fold R282 (AC-R2821..R2824 legs green; AC-R2825 delivery leg = commit message carrier, pending at commit); single-lineage primary run + read-only resume verify, zero AMEND
