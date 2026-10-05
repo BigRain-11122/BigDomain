@@ -1,0 +1,26 @@
+PASS AC-R2791 state BOM + trailing LF + no CR (disk 79479 B, gauge 79476 B)
+PASS AC-R2791 pre-op disk byte-identical to git HEAD blob (sha16 6DEA76B2A68E51B6)
+PASS AC-R2791 round-start tree face: only claim row (src/os/backlog.md) as pre-registered (self evidence artifact exempt)
+PASS AC-R2791 round-start first-measure gauge 79476 B over the 78500B line by 976 B (R1202 carry-note cashed; R1201 closeout final 77643B then R1202 waiting-declaration pair ~1.8KB accumulated to the forecast point)
+PASS AC-R2791 backup logs/state-preop-R1203.bak byte-identical (79479 B)
+PASS AC-R2791 calibration probe: export stored sd (4, 1, 1, 1) [R1201 closeout refresh face held] vs live recount (6, 1, 1, 2) = drift fully explained by R1202 appended pair under legit export-skip gate (W+2 / sub+1 = one waiting pair); this round IS a recount reconciliation round (R1201 isomorph)
+PASS AC-R2792 window = [R278 rolling summary + R1201..R1202 two pairs] (5 lines); window tail = final log item (R1202 tokens)
+PASS AC-R2792 window 5 lines = 19991 B content measure (probe-measured exact value, UTF-8 byte caliber)
+PASS AC-R2792 removed-window banned-substring per-line mechanical count = 0 hits across 5 lines (R1198 zero-hit face isomorph; window composition = pure ledger pairs, recount budget subtracts W-5 / idle-0 / nop-0 / sub-2)
+PASS AC-R2792 carried token catalog == 57 verbatim (R278 carry; first D-20260930-19, last D-20261005-11) + 0 newly registered (two-pair window)
+PASS AC-R2792 P/D catalog mechanical dedup == 57 carried + 0 newly registered (window extraction subset check green, BD-PROP boundary guard)
+PASS AC-R2792 68-round score list mechanically derived (66 carried sum 43 [qa/reorg-R1201 probe evidence] + R1201=1 + R1202=0 = 68 rounds sum 44)
+PASS AC-R2792 new roll line banned three-family zero hits {'idle-fast' 'no-pullable' 'nop'}
+PASS AC-R2792 new roll line matches recount caliber (paren-format date prefix, W-count face not round-level)
+INFO new roll line composed 15065 B; carried R1135..R1200 notes verbatim from R278 roll + R1201..R1202 two fresh notes
+INFO predicted post-fold gauge 74518B / disk 74521B (window: removed 20030 B + added 15072 B); under the 78500B line by 3982 B
+INFO predicted post-fold recount (2, 1, 1, 0) (pre live (6,1,1,2) drift reconciled; removed 5 window lines incl. 2 substantive pairs and 0 banned-word lines, added 1 roll line dated 10-05 inside window)
+PASS AC-R2793 top-level seven fields preserved; log 54 -> 50 (window 5 -> 1 kept=0); head block items 000..046 verbatim; item 47 = 09-28 cold digest verbatim; item 48 = 09-29 roll verbatim; item 49 = R279 rolling summary (15065 B)
+PASS AC-R2792 preservation archive logs/state-log-archive-2026-10.md SS R1203 appended: five lines verbatim in-file (mechanical substring verify), pure-additive (+20111 B), prefix md5 identical (3629be05abe423f60f7dc812b3ba65b8), gitignored face
+PASS state written atomically (tmp + os.replace, read-back verified)
+PASS AC-R2794 post-fold measured 74518 bytes scan-gauge (disk 74521 B) == prediction; under the 78500B line by 3982 B
+PASS AC-R2794 post-fold recount (2, 1, 1, 0) == prediction; re-read parses (tick 1202 preserved, log 50, roll intact); dual-parser face = json.loads green (PS ConvertFrom-Json runs at closeout)
+NOTE tri-item round R1203 (R1201 isomorph, recount reconciliation leg): fold R279 + board knife cut-271 + HB R1202 backfill; round score 1 = ledger maintenance mechanism file per Executive Protocol v1.1.
+INFO closeout will append R1203 pair -> live recount (4,1,1,1)
+AC-R2795 PENDING receipt = state R279 rolling summary + R1203 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2795 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
