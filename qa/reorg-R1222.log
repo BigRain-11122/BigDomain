@@ -1,0 +1,37 @@
+R1222 fold R296 probe start (expanded window), apply=True
+AC-R2961 pre-op: disk_bytes=79029
+AC-R2961 disk==HEAD blob=True hash-object dual-check=True
+AC-R2961 gauge=79026 over_78500=526
+tick=1221 log_count=50
+top_fields={"benchmarks_refreshed": "2026-10-05", "last_dec_tokens": "C-20260927-01,C-20260927-02,C-20260928-02,C-20260929-01,C-20260929-02,C-20260929-03,D-20260924-01,D-20260924-02,D-20260924-03,D-20260924-04,D-20260924-05,D-20260924-06,D-20260924-07,D-20260924-08,D-20260924-09,D-20260924-10,D-20260924-11,D-20260925-01,D-20260925-02,D-20260925-03,D-20260925-04,D-20260925-05,D-20260925-06,D-20260925-07,D-20260925-08,D-20260925-09,D-20260925-10,D-20260925-11,D-20260926-01,D-20260926-02,D-20260926-03,D-20260926-04,D-20260926-05,D-20260926-06,D-20260926-07,D-20260926-08,D-20260926-09,D-20260926-10,D-20260926-11,D-20260927-01,D-20260927-02,D-20260927-03,D-20260927-04,D-20260927-05,D-20260927-06,D-20260927-07,D-20260927-08,D-20260927-09,D-20260927-10,D-20260928-01,D-20260928-02,D-20260928-03,D-20260928-04
+log[-4] bytes=1133 PRE=2026-09-27/28（R474..R476 窗口·R477 触线轮整编 R21 第二十一次压缩〔P-2026-09-25-18 ④主刀第二十一刀·AC-R
+log[-3] bytes=22567 PRE=2026-10-05（R1135..R1220 窗口·R295 整编第二百九十五刀压窗｛R1220 收账承传注记「fold R295=R1221 轮首首测裁定」
+log[-2] bytes=1168 PRE=2026-10-05 R1221（~1742）首回访判定+fold R295 水位整编+cut-287 三项一轮（轮首首测 gauge 79727B 越线 12
+log[-1] bytes=247 PRE=2026-10-05 R1221 tokens: local=unmeasured api=unmeasured api_reason=官方会话无 token 
+AC-R2961 sd probe pre=(3, 0, 0, 1) register=(3, 0, 0, 1) zero_drift=True
+export_bytes=436842 results=482 export_ts=2026-10-05T17:44:00+08:00
+AC-R2962 surgical block (4 lines) found=True indent='    '
+AC-R2963 head block entries 0..45 verbatim preserved by byte-surgical tail replacement (idx=32457)
+AC-R2962 removed 4 lines bytes=25115 (cold=1133 roll=22567 shikuang=1168 tokens=247)
+old_roll header_len=201 window_desc_len=201 chain_len=22009
+AC-R2962 cold-line P/D tokens=['P-2026-09-25-18', 'P-2026-09-26-04', 'P-2026-09-27-03', 'P-2026-09-27-07']
+AC-R2962 chain with note3 inserted: 22009 -> 22384 (+375)
+AC-R2962 P/D catalog: total=72 removed-lines-candidates=33
+AC-R2962 new roll bytes=24422 (header=636 chain-carry=22384 digest=1402) banned-literals clean, FINB carry-only
+AC-R2964 verify-then-write: predicted post gauge=78309 margin=191 gate_pass=True
+AC-R2962 post-fold sd probe=(1, 0, 0, 0) expect (1,0,0,0)
+AC-R2962 P/D catalog 72 -> 72 lost=[]
+tokens-line count 9 -> 8 (R1221 tokens line folded out)
+AC-K288a board: stale_done=1 claim_row=1 open_rows=7 backlog_bytes=20030 bom=True
+AC-K288a board head 4 lines verbatim check len=[27, 1, 159, 52]
+AC-K288b archive pre-append: strict=193 register=270 tail_lf=True bytes=734714 bom=False (expect 193/270 per cut-287 close)
+AC-K288c 09 archive lock bytes=358597 (unchanged)
+AC-K288c pure-append: +bytes=3207 strict 193->194 register 270->271 (+1 measured)
+AC-K288d main board post: lines=15 stale_done=0 open=7 claim_kept=True
+AC-R2964 WRITTEN: post disk=78312B gauge=78309B == predicted=True margin=191
+WRITTEN: state fold R296 (expanded window) + cut-288 board migration done
+closeout part-1 (state/export/backlog) applied and verified pre-abort; hb %s-format defect caught in-round, fixed in part-2 zero loss
+state ground truth: tick=1222 log=49 gauge=79676
+export ground truth: results=483 tickrow=1222 ts=2026-10-05T18:04:34+08:00
+heartbeat appended: tick 1222 lag=0
+qa/board-R1222.log written
