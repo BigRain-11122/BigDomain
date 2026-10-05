@@ -1,0 +1,20 @@
+PASS K281b AC-K281b pre-append archive face: strict 186 / register 258 recount (calibers: strict=## section lines / register=[done 2026- dated markers) + trailing LF in place (711145 B)
+PASS K281a AC-K281a stale-board inventory: exactly 1 stale done row (R1214, 3394 B with [done 2026-10-05] marker, dual done-markers mechanical) + 5 standing open rows + R1215 claim row pre-registered (open total 6 incl. claim)
+PASS K281c AC-K281c pure-append 711145B -> 714551B (+3406 B block); strict 186->187, register 258->260 (+2 = dual markers in migrated row: closure + AC-K280b caliber literal, mechanical count honest note); prefix md5 identical (f30f9fd1dbcb25ef586553ff9e67cd74); 2026-09 archive lock held
+PASS K281d(1) AC-K281a main board: stale R1214 row removed verbatim-migrated; remaining = R1215 claim row (unchecked until closeout) + 5 open rows; header block untouched
+
+SKIP-B cut-281 already applied by first run (strict 187 / register 260 face verified; PASS evidence = qa/board-R1215.log head)
+PASS CLOSEOUT state.json tick 1214->1215, log 49->51, R1215 pair rows in place (shikuang + tokens, fixed-point embedded size == measured), head block items 000..048 verbatim, final gauge 81227 (disk 81230 B)
+PASS CLOSEOUT sd recount W=3 (roll-paren + R1215 round + tokens, tuple (3, 0, 0, 1); cold-seg line lawfully out of window per expanded fold, honest F3 sync follows)
+PASS CLOSEOUT state read-back: disk 81230 B == embedded finb, gauge 81227 == prediction byte-exact
+PASS K281d AC-K281d main board end state: R1215 claim row [x]+done with closure annotation + 5 open rows + stale rows 0; header first lines verbatim zero-change
+PASS K281e AC-K281e evidence = qa/board-R1215.log (this file); SS R1215 in 2026-10 register (strict 187 / register 260, +2 dual-marker honest note)
+PASS HB heartbeat CRLF-line convention; R1215 row appended (tick 1215, lag=0)
+PASS EXPORT export_ts updated -> 2026-10-05T16:02:54+08:00
+PASS EXPORT results tick row synced 1214 -> 1215 in-round
+PASS EXPORT self_drive fields F3 sync: log_lines_in_window 4->3, idle_fast 1->0, no_pullable 1->0 (cold-seg summary line folded out of window per expanded fold; substantive stays 1; honest derivation from live state)
+PASS EXPORT ceo_face.current updated (R1215)
+PASS EXPORT ceo_face.latest_artifact updated (R1186 runbook remains latest real artifact; this-round fold/cut/cleanup bookkeeping note refreshed)
+PASS EXPORT ceo_face three rows in place (current/latest_artifact/next_milestone) - O-2026-0930-013 daily check face
+PASS EXPORT json.loads green + results 475->476 + tick row 1215 + self_drive tuple (3,0,0,1) synced + roundtrip byte-identical on re-read
+SUITE PASS (cut-281, R1214 row verbatim migrated to done-archive-2026-10.md SS R1215, strict/register 186->187/258->260 dual-marker mechanical); closeout legs: state tick 1215 + R1215 pair, HB row lag=0, export refreshed (results 476, tick row synced 1215, sd (3,0,0,1) honest F3 sync); final gauge 81227 over-line 2727B -> fold R290 = R1216 first-measure ruling
