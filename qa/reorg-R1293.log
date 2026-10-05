@@ -1,0 +1,30 @@
+R1293 fold R310 probe start, apply=True
+AC-R3101 pre-op disk_bytes=79900 bom=False eol_lf=True cr=False
+AC-R3101 disk==HEAD dual-hash=True (ee386bcf25e3f67a)
+AC-R3101 predecessor bak chain present (state-preop-R1289.bak)
+AC-R3101 tick=1292 log_count=31
+AC-R3101b line-assembly round-trip byte-exact trailing_newline=False
+AC-R3102 std-window lines=4 bytes=3368 summary_est=999
+AC-R3102 std-probe predicted_final_bytes=80672 over_line=2172 gate_pass=False
+AC-R3102 exp-window lines=6 bytes=5223 summary_est=1019
+AC-R3102 exp-probe predicted_final_bytes=78821 over_line=321 gate_pass=False
+AC-R3102 rolling lines=9 content_bytes=11924
+AC-R3102 census tokens=8
+AC-R3102 census list=D-2026,O-013,O-2026,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32
+AC-R3102 removed-lines mention accounting idle=0 nop=0 (expect 0/0, new lines keep clean)
+AC-R3102 rounds_scope=17 scores_sum=3 waiting_decl_lines=3 tokens_lines=4 fold_round_lines=1 rolling_lines=1
+AC-R3103 rolling summary content_bytes=2951
+AC-R3103 census zero-loss missing_count=0 (D-2026,O-013,O-2026,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32)
+AC-R3103 new lines wording-clean (no abolished-path / no-pullable substrings)
+AC-R3104 predicted_final_bytes=74028 over_line=-4472 gate_pass=True
+AC-R3104 parser1 py pre-write ok: tick=1293 log_count=25 expect 31-9+1+2=25:True
+AC-R3101 preop_backup=logs/state-preop-R1293.bak bytes=79900 roundtrip=True
+AC-R3105 archive verbatim lines_found=9/9 prefix byte-identical=True
+AC-R3104 WRITTEN post_bytes=74028 margin=4472 under_line=True
+AC-R3104 parser2 py post-write ok: tick=1293 log_count=25
+AC-R3106 export format roundtrip compatible=True bom_preserved=True
+AC-R3106 sd rederive: W=22 idle=0 nop=1 paren=5 tokens=8 substantive=9
+AC-R3106 queue recount main=6 tech=2 explore=2 proposals_total=3 open=1
+AC-R3106 export flush: ts=2026-10-06T07:24:29+08:00 results=498 sd=(22,0,1,9) tick_row_fixed=1 bom_preserved=True
+AC-R3106 HB row appended (lag=0, R1293 same-round, CRLF, BOM preserved)
+AC-R3102b census regex correction (R1234b same-round precedent): first-run pattern \\b(?:P|D|C|O)-\\d{2,4}... truncated compact forms to fragments (D-2026/O-2026, count 8); corrected pattern \\b(?:P|D|C|O)-\\d{2,8}(?:-\\d{1,4})* against preop bak census_count=9 list=D-20260930-19,D-20261030-19,O-013,O-20261004-2255,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32 zero-loss missing_count=0
