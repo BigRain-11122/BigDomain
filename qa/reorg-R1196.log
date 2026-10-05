@@ -1,0 +1,26 @@
+PASS AC-R2761 state BOM + trailing LF + no CR (disk 80069 B, gauge 80066 B)
+PASS AC-R2761 pre-op disk byte-identical to git HEAD blob (sha16 9F6F8C5EFA61B424)
+PASS AC-R2761 round-start tree face: only claim row (src/os/backlog.md) as pre-registered (self evidence artifact exempt)
+PASS AC-R2761 round-start first-measure gauge 80066 B over the 78500B line by 1566 B (R1195 carry-note cashed)
+PASS AC-R2761 backup logs/state-preop-R1196.bak byte-identical (80069 B)
+PASS AC-R2761 calibration probe: export stored sd (4, 1, 1, 1) held; live recount (10, 1, 1, 4) == documented drift (R1194 deferred-reconcile note: three-round closeout pair growth); this round IS the recount reconciliation round
+PASS AC-R2762 window = [R273 rolling summary + R1192..R1195 four pairs] (9 lines); window tail = final log item (R1195 tokens)
+PASS AC-R2762 window 9 lines = 20633 B content measure (probe-measured exact value, UTF-8 byte caliber)
+PASS AC-R2762 removed-window banned-substring per-line mechanical count = zero hits 9/9 lines
+PASS AC-R2762 carried token catalog == 48 verbatim (R273 carry; first D-20260930-19 last P-51)
+PASS AC-R2762 P/D catalog mechanical dedup == 48 carried + 0 newly registered (BD-PROP boundary guard) []
+PASS AC-R2762 61-round score list mechanically derived (57 carried sum 39 [qa/reorg-R1192 probe evidence] + R1192=1 + R1193=0 + R1194=1 + R1195=0 = 61 rounds sum 41)
+PASS AC-R2762 new roll line banned three-family zero hits {'idle-fast' 'no-pullable' 'nop'}
+PASS AC-R2762 new roll line matches recount caliber (paren-format date prefix, W-count face not round-level)
+INFO new roll line composed 12334 B; carried R1135..R1191 notes verbatim from R273 roll + R1192..R1195 four fresh notes
+INFO predicted post-fold gauge 71703B / disk 71706B (window: removed 20704 B + added 12341 B); under the 78500B line by 6797 B
+INFO predicted post-fold recount (2, 1, 1, 0) (pre live (10,1,1,4); removed 9 window lines incl. 4 substantive pairs, added 1 roll line dated 10-05 inside window)
+PASS AC-R2763 top-level seven fields preserved; log 58 -> 50 (window 9 -> 1 kept=0); head block items 000..046 verbatim; item 47 = 09-28 cold digest verbatim; item 48 = 09-29 roll verbatim; item 49 = R276 rolling summary (12334 B)
+PASS AC-R2762 preservation archive logs/state-log-archive-2026-10.md SS R1196 appended: nine lines verbatim in-file (mechanical substring verify), pure-additive (+20758 B), prefix md5 identical (5ab7e9e156490c0f7665aee76ec3e257), gitignored face
+PASS state written atomically (tmp + os.replace, read-back verified)
+PASS AC-R2764 post-fold measured 71703 bytes scan-gauge (disk 71706 B) == prediction; under the 78500B line by 6797 B
+PASS AC-R2764 post-fold recount (2, 1, 1, 0) == prediction; re-read parses (tick 1195 preserved, log 50, roll intact); dual-parser face = json.loads green (PS ConvertFrom-Json runs at closeout)
+NOTE dual-item round R1196 (R1192 isomorph, no cold-segment leg): fold R276 + board knife cut-268; round score 1 = ledger maintenance mechanism file per Executive Protocol v1.1.
+INFO closeout will append R1196 pair -> live recount (4,1,1,1) == stored sd (R1194 deferred drift reconciled at this recount round)
+AC-R2765 PENDING receipt = state R276 rolling summary + R1196 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2765 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
