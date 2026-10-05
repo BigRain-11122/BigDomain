@@ -1,0 +1,20 @@
+PASS K276a AC-K276a main board BOM + trailing LF
+PASS K276a AC-K276a stale-board inventory: exactly 1 stale done row (R1209) + 5 standing open rows + claim row pre-registered (open total 6 incl. claim)
+PASS K276a AC-K276a stale row contains [done 2026-10-05] marker (2508 B)
+PASS K276b AC-K276b pre-append archive face: applied leg re-verified (strict 182 / register 252 + section content byte-match + trailing LF) [first-run append stood, zero re-write]
+PASS CLOSEOUT state closeout rows (first-run write) re-verified against deterministic template - zero data loss, idempotent finish [R784 honest note: first run died post-write on a tick-edit-order assert]
+PASS K276c AC-K276c applied leg carried (strict/register 181->182 / 251->252 verified above, zero re-write)
+PASS K276c AC-K276c 09-file lock untouched (md5 19783a35cfc4e57e)
+PASS CLOSEOUT state.json tick 1209->1210, log 50->52, R1210 rows in place, head verbatim, scalars unchanged, final gauge 78918 (disk 78921)
+PASS CLOSEOUT sd recount W=4 (composition preserved: cold-paren + roll-paren + live-nonparen + tokens, tuple (4,1,1,1) carried)
+PASS K276d AC-K276d main board end state: R1210 claim row [x]+done + 5 open rows + stale rows 0 + header first four lines verbatim zero-change
+PASS HB heartbeat trailing CRLF convention
+PASS HB R1210 row appended (lag=0)
+PASS EXPORT BOM present
+PASS EXPORT export_ts updated -> 2026-10-05T14:52:13+08:00
+PASS EXPORT ceo_face.current updated
+PASS EXPORT ceo_face.latest_artifact updated
+PASS EXPORT results tick row synced to 1210 (results 470->471)
+PASS EXPORT json.loads green + results 471 + self_drive tuple (4,1,1,1) zero drift
+PASS EXPORT roundtrip byte-identical on re-read
+SUITE PASS (cut-276, R1209 row verbatim migrated to done-archive-2026-10.md SS R1210); closeout legs: state tick 1210 + R1210 log rows, HB row lag=0, export refreshed (results 471, tick 1210, sd zero drift); final gauge 78918 over-line 418B -> fold R285 = R1211 first-measure ruling; honest note: stage2 first run died post-state-write on a tick-edit-order assert, idempotent finish pass re-verified all applied legs, zero data loss, single lineage per R784 precedent
