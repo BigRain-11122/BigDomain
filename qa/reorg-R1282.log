@@ -1,0 +1,27 @@
+R1282 fold R307 probe start, apply=True
+AC-R3071 pre-op disk_bytes=79380 bom=False eol_lf=True cr=False tick_check pending
+AC-R3071 disk==HEAD dual-hash=True (58180618fdf9a8ce)
+AC-R3071 predecessor bak chain present (state-preop-R1275.bak)
+AC-R3071b serializer round-trip byte-exact trailing_newline=True
+AC-R3071 tick=1281 log_count=34
+AC-R3072 cold lines=12 content_bytes=11375 expected=11375:True
+AC-R3072 cold[0] pre=2026-10-06 R1276 保护态豁免 waiti
+AC-R3072 cold[11] pre=2026-10-06 R1281 tokens: loc
+AC-R3072 census tokens=4
+AC-R3072 census list=D-20260930-19,O-013,O-20261004-2255,P-32
+AC-R3072 rounds=6 scores_sum=0 waiting_decl_lines=6 tokens_lines=6 nop_in_cold=0
+auto-saves standing measure=441.1MB/254 files under 500MB line no clean
+AC-R3073 summary content_bytes=2788
+AC-R3073 census zero-loss missing_count=0 (D-20260930-19,O-013,O-20261004-2255,P-32)
+AC-R3074 predicted_final_bytes=73813 over_line=-4687 gate_pass=True
+AC-R3074 parser1 py pre-write ok: tick=1282 log_count=25 expect 34-12+1+2=25:True
+AC-R3071 preop_backup=logs/state-preop-R1282.bak bytes=79380 roundtrip=True
+AC-R3075 archive verbatim lines_found=12/12 prefix byte-identical=True
+AC-R3074 WRITTEN post_bytes=73813 margin=4687 under_line=True
+AC-R3074 parser2 py post-write ok: tick=1282 log_count=25
+AC-R3074 parser2 PS post-write ok: tick=1282 log_count=25
+AC-R3076 sd rederive: W=22 idle=0 nop=1 substantive=9
+AC-R3076 export flush: ts=2026-10-06T05:19:43+08:00 results=495 sd=(22,0,1,9) tick_row_fixed=1 bom_preserved=True
+AC-R3076 HB row appended (lag=0, R1282 same-round, CRLF, BOM preserved)
+AC-R3076 post-scan: STATE PASS tick=1282 log_lines=25 bytes=73813 / LEDGER PASS 293 conflict=0 / DEC PASS 283 flat / GORD INFO gord_new_rows=0 / ORD PASS / BENCH PASS 0d / QA PASS today-in-disk / HB PASS lag=0 / EXPORT PASS ts=2026-10-06T05:19:43+08:00 age 0 / TREE dirty=4 own-round changes pre-commit (state.json+export+heartbeat+qa log; logs/ gitignored evidence on disk)
+AC-R3070 honest-note: none - single-pass all-green (census 4 tokens mechanical with lookbehind regex R1275 fix carried; BOM-preserving export writer R1275 fix carried)
