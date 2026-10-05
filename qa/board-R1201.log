@@ -1,0 +1,5 @@
+PASS AC-K270a source row identified: R1198 L8 3626 B (single stale done row, verbatim extraction)
+PASS AC-K270b pre-append archive face: 674599 B, 175 sections (register), 175 strict sections (bare R markers, reproducible caliber), tail LF present
+PASS AC-K270c pure-append 674599B -> 678237B (+3638 B block); strict 175->176, register 175->176; per-line md5 identical (f40210a6184ceea29f683eafda66eb68); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K270d board final state = claim row (R1201, unchecked until closeout) + 5 open rows + 0 stale done rows; head block first four lines untouched
+PASS AC-K270e evidence = qa/board-R1201.log (this file); SS R1201 in 2026-10 register (single section single row)
