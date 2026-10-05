@@ -1,0 +1,18 @@
+PASS K282a AC-K282a main board BOM + trailing LF
+PASS K282a AC-K282a stale-board inventory: exactly 1 stale done row (R1215, 4986 B, 2 done-markers) + 5 standing open rows + claim row pre-registered (open total 6 incl. claim)
+PASS K282b AC-K282b pre-append archive face: strict 187 / register 260 recount + trailing LF (caliber: ## section face / [done 2026- marker face)
+PASS K282c AC-K282c pure-append + prefix md5 identical + strict/register 187->188 / 260->262 (+2 = migrated row dual done-markers mechanical)
+PASS K282c AC-K282c 09-file lock untouched (md5 19783a35cfc4e57e)
+PASS CLOSEOUT state.json tick 1215->1216, log 49->51, R1216 rows in place, head verbatim, scalars unchanged, final gauge 80151 (disk 80154, over-line 1651)
+PASS CLOSEOUT sd recount W=3 (composition preserved: roll-paren + R1216 live + tokens, tuple (3,0,0,1) synced)
+PASS K282d AC-K282d main board end state: R1216 claim row [x]+done + 5 open rows + stale rows 0 + header first four lines verbatim zero-change
+PASS HB heartbeat trailing CRLF convention
+PASS HB R1216 row appended (lag=0)
+PASS EXPORT BOM present
+PASS EXPORT export_ts updated -> 2026-10-05T16:10:48+08:00
+PASS EXPORT ceo_face.current updated
+PASS EXPORT ceo_face.latest_artifact updated (R1216 segment)
+PASS EXPORT results 476->477 + tick row synced 1215 -> 1216
+PASS EXPORT json.loads green + self_drive tuple (3,0,0,1) zero drift
+PASS EXPORT roundtrip byte-identical on re-read
+SUITE PASS (cut-282, R1215 row verbatim migrated to done-archive-2026-10.md SS R1216 strict/register 187->188/260->262); closeout legs: state tick 1216 + R1216 log rows, HB row lag=0, export refreshed (results 477, tick 1216, sd zero drift); final gauge 80151 over-line 1651B -> fold R291 = R1217 first-measure ruling

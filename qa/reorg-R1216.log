@@ -1,0 +1,24 @@
+PASS PRE-OP AC-R2901 tree face = claim row only (backlog.md) ' M src/os/backlog.md'
+PASS PRE-OP AC-R2901 BOM + trailing LF + zero CR (disk 81230 B, gauge 81227 B, over-line 2727 B)
+PASS PRE-OP AC-R2901 disk 81230 == HEAD blob byte-identical 81230 (sha16 9281CFDFADDF9B1D)
+PASS PRE-OP AC-R2901 backup logs/state-preop-R1216.bak written byte-identical (81230 B)
+PASS PRE-OP AC-R2901 top-level 7 fields intact (tick 1215, log 51): tick,log,last_order,last_decision_rows,benchmarks_refreshed,last_gord_tbl_rows,last_dec_tokens
+PASS PRE-OP AC-R2901 window 3 lines 23893 B (R289 roll 20016 + R1215 pair 3877)
+PASS PRE-OP AC-R2901 raw window lines 52/53/54 contiguous 4-space indent comma pattern verified + array close at line 55
+PASS PRE-OP AC-R2901 sd probe stored (3, 0, 0, 1) == live (3, 0, 0, 1) zero drift (W composition ['2026-10-05 paren', '2026-10-05 live', '2026-10-05 live'], R1215 post-closeout caliber)
+PASS FOLD AC-R2902 surgical replacement unique (R1135..R1214 窗口·R289 整编第...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (水位闸 81687B（轮首首测 disk 816...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (·八十轮计分=承 79 位+R1214=1（su...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (tokens 29 行 unmeasured 口...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (R1185..R1214 轮内零新外部 API ...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (机械轮号列 R1135..R1214 连续 80...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (=60 token（R288 承窗 60 tok...) count=1
+PASS FOLD AC-R2902 surgical replacement unique (P-2026-10-05-01·盘证据 qa/r...) count=1
+PASS FOLD AC-R2902 catalog 60 -> 61, new-in register = [D-20260930-06] (regex mechanical, zero hand placement, 7 pair candidates 6 in-register)
+PASS FOLD AC-R2902 inserted segments banned three-family zero new hits (inherited @@FINB@@ note carried verbatim) {'idle-fast': 0, 'no-pullable': 0, '@@FINB@@': 1}
+PASS ARCHIVE AC-R2902 pure-append + prefix md5 identical (342cb924a8463072565eeb4371888562); section R1216 = header + 3 window lines verbatim (323426 B)
+PASS FOLD AC-R2904 verify-then-write: predicted post gauge 77432 <= 78500 line (margin 1068 B)
+PASS FOLD AC-R2903 json.loads green (tick 1215, log 51->49) + head idx 000..047 verbatim + idx 048 = new roll 20110 B
+PASS FOLD AC-R2903 top fields other than log unchanged (7 fields preserved)
+PASS FOLD AC-R2904 post disk 77435 == prediction byte-exact (written == assembled)
+PASS FOLD post-fold probe (1, 0, 0, 0) == predicted (1,0,0,0)
