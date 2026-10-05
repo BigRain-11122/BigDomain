@@ -1,0 +1,20 @@
+AC-R3051 pre-op disk_bytes=80070 bom=False eol=LF index_lock=False tick=1265 log_count=38
+AC-R3051 preop_backup=logs/state-preop-R1266.bak bytes=80070
+AC-R3052 cold lines=22 content_bytes=23699 expected=23699:True
+AC-R3052 cold[0] pre=2026-10-06 R1255 waiting: 
+AC-R3052 cold[21] pre=2026-10-06 R1265 tokens: local
+AC-R3052 census tokens=5
+AC-R3052 census list=D-20260929-03,D-20260930-19,O-013,O-20261004-2255,P-32
+AC-R3052 rounds=11 scores_sum=0 waiting_decl_lines=11 nop_in_cold=0
+auto-saves standing measure=408.9MB/222 files under 500MB line no clean
+AC-R3053 summary content_bytes=2796
+AC-R3053 census zero-loss missing_count=0
+AC-R3054 predicted_final_bytes=61899 over_line=-16601 gate_pass=True
+AC-R3054 parser1 py pre-write ok: tick=1266 log_count=19 expect 38-22+1+2=19:True
+AC-R3054 WRITTEN post_bytes=61899 margin=16601 under_line=True
+AC-R3054 parser2 py post-write ok: tick=1266 log_count=19
+AC-R3055 archive verbatim lines_found=22/22
+AC-R3056 HB row appended (lag=0, R1266 same-round)
+AC-R3056 export flush: ts=2026-10-06T02:31:00+08:00 results=493 sd=(16,0,1,7) tick_row_fixed=1
+AC-R3054 parser2 PS post-write ok: tick=1266 log_count=19 (Get-Content -Encoding UTF8 + ConvertFrom-Json; default-ANSI read fails no-BOM utf8 = read-side artifact not file defect)
+AC-R3056 post-scan: STATE PASS tick=1266 log_lines=19 bytes=61899 / HB PASS lag=0 / EXPORT PASS age 0 ts=2026-10-06T02:31:00+08:00 / TREE dirty=4 own-round changes pre-commit
