@@ -1,0 +1,30 @@
+AC-R2931 pre-op: disk=82170B==HEAD blob byte-identical True (sha16 6aa617d2f5090459)
+AC-R2931: BOM present, tail LF True, no CR True
+AC-R2931: backup logs/state-preop-R1219.bak written 82170 (byte-identical True)
+AC-R2931: sd probe pre stored(3, 0, 0, 1) == live(3, 0, 0, 1) zero-drift True
+AC-R2932: fold window {R292 roll + R1218 pair} 3 lines, byte-measured 24827B (20958+3549+320), log 51->49
+AC-R2932: 13 anchored replacements applied one-occurrence-each; R1218 entry inserted (score 1, same-isomorph base)
+AC-R2932: tokens ledger lines measured = 9 (R1219 measure; R1218 window-note 9 reproduced)
+AC-R2932: P/D catalog regex mechanical: candidates ['D-20260930-19', 'O-2026-0930-013', 'P-001', 'P-2026-09-25-18', 'P-32', 'P-51'], new-to-register 0, 61->61
+AC-R2932: banned 'idle-fast' count new=0 base=0 zero-new True
+AC-R2932: banned 'no-pullable' count new=0 base=0 zero-new True
+AC-R2932: banned '@@FINB@@' count new=1 base=1 zero-new True
+AC-R2934: predicted post gauge = 78454B vs 78,500B line, gate True
+AC-R2934: written; post recompute 78454B == prediction 78454: True
+AC-R2933: head block idx 000..047 verbatim; idx 048 = new rolling row; top 7 fields preserved True
+post-fold sd probe live(1, 0, 0, 0) (export sync deferred to closeout refresh)
+AC-R2935: delivery carriers - state rolling row on disk; R1219 log line to be appended at closeout; commit to carry P-2026-09-25-18
+R1a first-run defect note: json.loads BOM-primitive parse defect (utf-8 vs utf-8-sig) caught pre-write, zero state loss; decode fixed in-round, re-run clean (R1187/R1188 precedent)
+R1b state-log-archive pure-append: header + 3 verbatim lines; prefix md5 preserved True (369807B -> 394736B)
+R1c new rolling row measured 21130B
+R1a2 first-run defect note: base_round %-format placeholder-count defect caught pre-write, zero state loss; token-substitution fixed in-round, idempotent guards added
+R1b state-log-archive append already done (idempotent skip)
+R1c new rolling row measured 21130B
+R1d state closeout written: tick 1219, log 51 lines, final gauge 81496B (disk 81499B), quoted==actual True
+R1e post-closeout sd probe live(3, 0, 0, 1) (expect (3,0,0,1) for export sync)
+R5 pre-check: export round-trip format verified True (BOM + indent-2, no trailing LF)
+R5a: ceo_face.current -> R1219; latest_artifact stale round-clause (R1217 wording left over by R1218 refresh, honestly noted) fixed to R1219; base artifact (R1186 runbook trio) retained
+R5b: results tick row 1218->1219; results 479->480 (R1219 entry score 1)
+R5c: self_drive recomputed from live files: W=3 idle=0 nop=0 sub=1 queue 6/2/2 proposals 2/2 (F3 zero-hardcode)
+R5d: export written 433729B (no raw newlines in strings, single BOM), json.loads re-verified
+R6: heartbeat R1219 line appended (ASCII, tick 1219, lag 0)

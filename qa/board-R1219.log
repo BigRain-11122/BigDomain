@@ -1,0 +1,4 @@
+AC-K285a: board census - done rows 1 (exactly 1 stale R1218: True), standing open rows 5, claim row pre-dropped at line 7, header 4-line block intact True
+AC-K285b: pre-append archive recount strict=190 register=266 (criterion: strict=^## section face, register=[done 2026- marker face); trailing LF True; 09-file lock sha16 209f0972b0529d20
+AC-K285c: pure-append prefix md5 same True; migrated row 2504B verbatim, done-marks in row 1; strict 190->191 register 266->267 (+1 single-marker mechanical count, measured); 09-file lock unchanged 209f0972b0529d20
+AC-K285d: board final - R1219 row [x]+done True, standing open rows 5, stale rows left 0, header 4-line block verbatim True
