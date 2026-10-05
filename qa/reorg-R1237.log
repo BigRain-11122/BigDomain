@@ -1,0 +1,21 @@
+AC-R3031 pre-op disk_bytes=80744 bom=False
+AC-R3031 eol=LF
+AC-R3031 index_lock=False
+AC-R3031 tick=1237 log_count=43 (pre-op = post-closeout state incl R1237 pair; fold-only op)
+AC-R3031 preop_backup=logs/state-preop-R1237.bak bytes=80744
+AC-R3032 cold lines=32 content_bytes=37173 expected=37173:True
+AC-R3032 cold[0] pre=2026-09-26 R265 dec 审核批：D-20260926-05/06
+AC-R3032 cold[31] pre=2026-09-27 R460 tokens: local=unmeasured
+AC-R3032 cold[31] suffix=I 触点（再整编=纯本地脚本件+集团仓只读扫描·三问门未涉）
+AC-R3032 census tokens=58
+AC-R3032 census list=D-20260926-05,D-05,D-06,D-07,D-08,D-09,D-10,D-11,P-51,D-20260926-04,P-2026-09-26-03,D-20260926-11,P-2026-09-26-01,P-32,P-2026-09-25-18,P-47,D-20260924-08,D-7,D-1,P-04,P-05,P-08,P-09,P-10,P-47-3c,P-2026-09-26-04,P-2026-09-26-05,P-06,P-07,P-2026-09-26-08,P-2026-09-26-09,P-2026-09-26-10,P-2026-09-26-18,P-2026-09-26-19,D-20260927-03,D-20260927-05,D-01,P-2026-09-24-65,P-35,P-65,P-18,D-20260927-01,D-20260927-02,D-20260927-04,P-56,P-2026-09-27-01,P-2026-09-27-02,P-2026-09-27-03,P-2026-09-27-07,D-20260927-06,C-20260927-01,C-01,P-2026-09-27-06,D-20260927-08,P-74,P-2026-09-24-76,P-2026-09-24-56,P-20260927-02
+AC-R3033 summary content_bytes=1889
+AC-R3033 raw physical lines=54
+AC-R3034 predicted_final_bytes=45212 over_line=-33288 gate_pass=True
+AC-R3034 parser1 PS ok: tick=1237 log_count=12 expect 43-32+1=12:True
+AC-R3034 parser2 py: log 12 tick 1237
+AC-R3033 census zero-loss missing_count=0
+AC-R3033 kept verbatim (log0,log1,roll): True
+AC-R3033 kept verbatim (R1237 pair): True
+AC-R3034 WRITTEN post_bytes=45212 margin=33288 under_line=True
+AC-R3035 archive verbatim lines_found=32/32
