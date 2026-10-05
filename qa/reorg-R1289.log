@@ -1,0 +1,28 @@
+R1289 fold R309 probe start, apply=True
+AC-R3091 pre-op disk_bytes=78991 bom=False eol_lf=True cr=False
+AC-R3091 disk==HEAD dual-hash=True (7e96ffabef095817)
+AC-R3091 predecessor bak chain present (state-preop-R1286.bak)
+AC-R3091b serializer round-trip byte-exact trailing_newline=True
+AC-R3091 tick=1288 log_count=29
+AC-R3092 std-window lines=4 bytes=4621 expected=4621:True
+auto-saves standing measure=456.1MB/268 files under 500MB line no clean
+AC-R3092 std-probe predicted_final_bytes=79437 over_line=937 gate_pass=False
+AC-R3092 cold lines=7 content_bytes=11026 expected=11026:True
+AC-R3092 census tokens=9
+AC-R3092 census list=D-20260930-19,D-20261030-19,O-013,O-20261004-2255,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32
+AC-R3092 removed-lines mention accounting idle=0 nop=0 (expect 0/0, new lines keep clean)
+AC-R3092 rounds_scope=13 scores_sum=1 waiting_decl_lines=2 tokens_lines=3 fold_round_lines=1
+AC-R3093 summary content_bytes=3442
+AC-R3093 census zero-loss missing_count=0 (D-20260930-19,D-20261030-19,O-013,O-20261004-2255,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32)
+AC-R3093 new lines wording-clean (no abolished-path / no-pullable substrings)
+AC-R3094 predicted_final_bytes=74634 over_line=-3866 gate_pass=True
+AC-R3094 parser1 py pre-write ok: tick=1289 log_count=25 expect 29-7+1+2=25:True
+AC-R3091 preop_backup=logs/state-preop-R1289.bak bytes=78991 roundtrip=True
+AC-R3095 archive verbatim lines_found=7/7 prefix byte-identical=True
+AC-R3094 WRITTEN post_bytes=74634 margin=3866 under_line=True
+AC-R3094 parser2 py post-write ok: tick=1289 log_count=25
+AC-R3094 parser2 PS post-write ok: tick=1289 log_count=25
+AC-R3096 sd rederive: W=22 idle=0 nop=1 paren=5 tokens=8 substantive=9
+AC-R3096 queue recount main=6 tech=2 explore=2 proposals_total=3 open=1
+AC-R3096 export flush: ts=2026-10-06T06:41:25+08:00 results=497 sd=(22,0,1,9) tick_row_fixed=1 bom_preserved=True
+AC-R3096 HB row appended (lag=0, R1289 same-round, CRLF, BOM preserved)
