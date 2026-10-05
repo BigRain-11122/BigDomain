@@ -1,0 +1,9 @@
+R1 state size-numbers already fixed (idempotent skip)
+R1 state size-numbers fixed byte-neutral; disk=82170 gauge=82167; tokens=9; sd=(3,0,0,1); self-consistent
+R1a first-run defect note: placeholder-substitution loop false-converged (2nd-iter no-op replace), W3 post-write assert caught size mismatch, byte-neutral fix in-round (R1203 precedent)
+R2 archive append already done (idempotent skip): markers=17
+R3a R1217 row fetched verbatim from HEAD bea1ac8 (board exit already done in W1 first run)
+R3 done-archive: strict/register 189/264 -> 190/266 (+1/+2); R1217 row 3081B verbatim
+R4 board final: R1218 [x]+done row + 5 open rows; R1217 row migrated
+R5 export synced: results 479, tick row 1218, recount appended, sd (3, 0, 0, 1), queue 6/2/2
+R6 heartbeat appended

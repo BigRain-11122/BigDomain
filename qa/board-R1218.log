@@ -1,0 +1,5 @@
+R1218 cut-284 evidence
+stale row: R1217 done row 3081B, done-markers in row: 2
+done-archive strict/register: 189/264 -> 190/266
+board final: R1218 [x] row + 5 open rows; header preamble verbatim
+claim row pre-registration landed before fold writes (AC-K284a)
