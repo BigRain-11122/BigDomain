@@ -1,0 +1,18 @@
+AC-R3041 pre-op disk_bytes=80101 bom=False eol=LF index_lock=False tick=1250 log_count=38
+AC-R3041 preop_backup=logs/state-preop-R1251.bak bytes=80101
+AC-R3042 cold lines=32 content_bytes=40279 expected=40279:True
+AC-R3042 cold[0] pre=2026-10-05 R1235 waiting/no-pullab
+AC-R3042 cold[31] pre=2026-10-05 R1250 tokens: local=unm
+AC-R3042 census tokens=9
+AC-R3042 census list=O-20261004-2255,O-013,P-32,P-2026-09-25-18,P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01,D-20260930-19,D-20261005-05
+AC-R3042 rounds=16 scores sum=1 nop_mention_lines=14 idle_mention_lines=0 firstmeasures=14
+AC-R3043 summary content_bytes=4338
+AC-R3043 census zero-loss missing_count=0
+AC-R3043 kept verbatim (log0..log5 untouched): True
+AC-R3044 predicted_final_bytes=46945 over_line=-31555 gate_pass=True
+AC-R3044 parser1 py pre-write ok: tick=1251 log_count=9 expect 38-32+1+2=9:True
+AC-R3045 archive verbatim lines_found=32/32
+AC-R3044 WRITTEN post_bytes=46945 margin=31555 under_line=True
+AC-R3044 parser2 py post-write ok: tick=1251 log_count=9
+AC-R3044 parser2 PS post-write ok: tick=1251 log_count=9
+AC-R3046 export refresh: ts=2026-10-05T23:43:10+08:00 results=490 sd=(6,0,1,2) drift_pairs_reconciled=16
