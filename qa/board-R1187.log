@@ -1,0 +1,5 @@
+PASS AC-K262a source rows identified: L8 2668 B (R1185 claim row) + L9 1920 B (O-2026-0930-027 window-first row), adjacent, verbatim extraction
+PASS AC-K262b pre-append archive face: 648979 B, 167 sections (register), 157 strict sections, tail LF present
+PASS AC-K262c pure-append 648979B -> 653580B (+4601 B block); strict 157->158, register 167->168; per-line md5 identical (d103ac1f74121c780a501ed59a80fd39 / dd54d19d181cd04c7d7aa817dc53c568); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K262d board final state = claim row (R1187, unchecked until closeout) + 5 open rows + 0 stale done rows; head block untouched (process note: first run appended archive then failed board-face assertion caliber, archive rolled back to pre-op byte shape, assertion fixed, honest zero-concealment note)
+PASS AC-K262e evidence = qa/board-R1187.log (this file); SS R1187 in 2026-10 register
