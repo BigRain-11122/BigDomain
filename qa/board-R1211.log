@@ -1,0 +1,19 @@
+PASS K277a AC-K277a main board BOM + trailing LF
+PASS K277a AC-K277a stale-board inventory: exactly 1 stale done row (R1210) + 5 standing open rows + claim row pre-registered (open total 6 incl. claim)
+PASS K277a AC-K277a stale row contains [done 2026-10-05] marker (2514 B)
+PASS K277b AC-K277b pre-append archive face: strict 182 / register 252 recount + trailing LF
+PASS K277c AC-K277c pure-append + prefix md5 identical + strict/register 182->183 / 252->253
+PASS K277c AC-K277c 09-file lock untouched (md5 19783a35cfc4e57e)
+PASS CLOSEOUT state.json tick 1210->1211, log 50->52, R1211 rows in place, head verbatim, scalars unchanged, final gauge 79419 (disk 79422)
+PASS CLOSEOUT sd recount W=4 (composition preserved: cold-paren + roll-paren + live-nonparen + tokens, tuple (4,1,1,1) carried)
+PASS K277d AC-K277d main board end state: R1211 claim row [x]+done + 5 open rows + stale rows 0 + header first four lines verbatim zero-change
+PASS HB heartbeat trailing CRLF convention
+PASS HB R1211 row appended (lag=0)
+PASS EXPORT BOM present
+PASS EXPORT export_ts updated -> 2026-10-05T14:59:13+08:00
+PASS EXPORT ceo_face.current updated
+PASS EXPORT ceo_face.latest_artifact updated
+PASS EXPORT results tick row synced to 1211 (results 471->472)
+PASS EXPORT json.loads green + results 472 + self_drive tuple (4,1,1,1) zero drift
+PASS EXPORT roundtrip byte-identical on re-read
+SUITE PASS (cut-277, R1210 row verbatim migrated to done-archive-2026-10.md SS R1211); closeout legs: state tick 1211 + R1211 log rows, HB row lag=0, export refreshed (results 472, tick 1211, sd zero drift); final gauge 79419 over-line 919B -> fold R286 = R1212 first-measure ruling
