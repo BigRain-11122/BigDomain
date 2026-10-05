@@ -1,10 +1,10 @@
-{
-  "export_ts": "2026-10-05T09:14:59+08:00",
+﻿{
+  "export_ts": "2026-10-05T09:29:24+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1185 fold R267 水位整编+板规执法第二百六十一刀 cut-261 双项一轮（轮计分 1）：水位闸触发兑现（轮首首测 80,056B gauge 越 78,500B 线 1,556B=R1184 carry-note·余量预测 ~1.7KB 兑现＝margin 1851B）——fold R267 窗｛R266 滚窗摘要+R1184 单轮对｝3 行 12,514B 压 1 滚窗行 9123B·log 57→55·post-fold 76,649B margin 1,851B·承窗 48 token+新入册 0·五十轮计分=承 49 位+R1184=1（sum 31）·AC-R2671..R2675 全绿=qa/reorg-R1185.log；cut-261=R1184 滞板 done 行 3,506B verbatim 迁 10 月档 §R1185 节（strict 156→157·register 166→167）·AC-K261a..e 全绿=qa/board-R1185.log；补队列步=O-2026-0930-027 滚动窗窗首件（对账日常化 runbook·SOP 盘点缺口 2）入板=下轮开工首项（open 5→6）；auto-saves 常设步 373.0MB/230 件＜500MB 线免动作；九面 scan 余面全 PASS（零新转办/零新令/零新决策）+TASKS claimable=4 全 gated（雷达下窗 ETA 10-06·法务初稿窗 10-05 12:00·席7 复核 10-06 12:00）",
-    "latest_artifact": "最近实物=pyahocorasick Aho-Corasick 前置过滤 bench 评估件（qa/bench-pyahoco-R1155.log+src/sandbox/ugc/bench_prefilter_ac.py·2026-10-05 R1155·定向 commit d0c5b17 落地=R1156 中断收账补全·OH-20261005-bigdomain.md 第四窗入池件指针②·判负留痕 NOT-ADOPTED 入池件 parked〔≥2× 采纳门槛不达·AC-PB1..PB6 全过·语义等价 2889 探针零分歧·12,000 条语料吞吐双列如实·对抗四面全测·长文本 66× 差=bootstrap 期长文 UGC 面再评注〕；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
-    "next_milestone": "下个里程碑（≤10-07）：SOP 缺口 2 对账日常化 runbook=10-05..10-11 窗首件已入板（O-2026-0930-027 滚动窗每窗 ≥1 件·AC-RB1..RB4 预注册·下轮开工首项·窗内 ≤10-11 完成）+10-05 12:00 法务两步制初稿窗开（HQ 秘书处代理出具·席7 复核 10-06 12:00·D-20261004-06·§五.8 修订与 A 档收款面维持挂起）+BigLife R777 复核档到达即启本司常务班复核（D-20261003-02 chronic）+提案新窗 10-06 起（本窗 09-28..10-05 BD-PROP-001/002 足额）+雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）；10-07 治理日=SOP 盘点清单聚合审+O-029 卡点案复核窗+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07·dataface=ready_now）+XL-16 窗（31 卡活体在页）；OSS 第五窗 10-08 21:40+10-08 token 审计判据回访；benchmarks 7 天刷 10-12；fold R268=R1186 轮首首测裁定（R1185 收账终态 79750B gauge 预计越线＝窗未满 1 轮按 R577 单窗先例裁定即压）；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
+    "current": "R1186 O-2026-0930-027 滚动窗 10-05..10-11 窗首件（对账日常化 runbook）执行毕（轮计分 2=能跑实物·R1185 落板「下轮开工首项」兑现）：SOP 盘点缺口 2 两件收口——①runbook docs/ops/reconcile-daily-runbook.md（50 行 ≤120·§0 判据预注册 AC-RB1..RB4+§一3 双引用〔微信支付回调查单指引 4012075249+token-ledger-spec AC-L1..L11〕+§二 判读+§三 G0..G4 分级表〔分级/处置/升级〕+§四 当日闭环路径〔23:00 禁带红过夜〕）②沙箱日常跑入口 src/sandbox/reconcile_daily.py（日期化证据路径不覆写）；AC-RB2 当日实跑 qa/reconcile-daily-20261005.log=RUNNER PASS 33/33 套件 363 判据+reconcile controls 6/6（ledger 八查/pay 六查/member 六查 clean exit 0+tamper exit 2 双态·36.5s）·AC-RB1..RB4 全过·SOP 缺口 2 闭口（10-07 治理日聚合审）；v2.1 首回访日自评=提案 ≥1 达标（BD-PROP-001/002）+空转违规零；fold R268 轮首触发条件成立（gauge 79750B 越线 1250B）·产品优先律先行·顺延下轮首项；九面 scan 余面全 PASS+TASKS 窗首件认领执行",
+    "latest_artifact": "最近实物=对账日常化 runbook+日常跑入口+当日实跑证据（docs/ops/reconcile-daily-runbook.md 50 行+src/sandbox/reconcile_daily.py+qa/reconcile-daily-20261005.log·2026-10-05 R1186·O-2026-0930-027 滚动窗窗首件·G0..G4 异常分级表+当日闭环路径+微信支付 T+1 对单指引 4012075249 引用·RUNNER PASS 33/33 套件+reconcile controls 6/6 双态全绿 36.5s·SOP 盘点缺口 2 闭口；frontdoor v0.29 31 卡活体 http://127.0.0.1:8093/ 维持在役）",
+    "next_milestone": "下个里程碑（≤10-07）：fold R268 水位整编=下轮首项（轮首 gauge 79,750B 已越 78,500B 线 1,250B·R1186 收账增量后 82KB 档·R1185 承传注记兑现顺延一轮如实记）+10-05 12:00 法务两步制初稿窗（HQ 秘书处代理出具·席7 复核 10-06 12:00·D-20261004-06）+对账日常化例程转常设（每日首轮按 runbook §一 跑法执行·与 O-2026-0930-013 ④ 同段）+提案新窗 10-06 起（每窗 ≥1 三句式·本窗 BD-PROP-001/002 足额）+雷达下窗候选清单 ETA 10-06（OH-<date>-cph4.md 落库即过目·P-2026-10-04-01/02 收益透镜执法）；10-07 治理日=SOP 盘点清单聚合审（缺口 2 已闭口随审）+O-029 卡点案复核窗+游客端三态选型决策包（O-2026-0929-007 审批窗 10-07·dataface=ready_now）+XL-16 窗（31 卡活体在页）；OSS 第五窗 10-08 21:40+10-08 token 审计判据回访；benchmarks 7 天刷 10-12；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1185",
+      "1186",
       "OSLoop 执行 tick"
     ],
     [
@@ -2001,15 +2001,19 @@
     [
       "1",
       "state.json 水位整编 R267+板规执法第二百六十一刀 cut-261（R1185 双项一轮·R1184 同构·窗｛R266 滚窗摘要+R1184 单轮对｝3 行 12514B 压 1 滚窗行 9123B·post-fold 76649B margin 1851B·AC-R2671..R2675 全绿=qa/reorg-R1185.log·AC-K261a..e 全绿=qa/board-R1185.log）"
+    ],
+    [
+      "2",
+      "对账日常化 runbook+日常跑入口+当日实跑证据（docs/ops/reconcile-daily-runbook.md 50 行 §0 判据预注册+4012075249+AC-L1..L11 双引用+G0..G4 分级表+src/sandbox/reconcile_daily.py 日期化入口+qa/reconcile-daily-20261005.log RUNNER PASS 33/33 套件 363 判据+reconcile controls 6/6 双态·O-2026-0930-027 滚动窗窗首件·SOP 盘点缺口 2 闭口·AC-RB1..RB4 全过·R1186）"
     ]
   ],
   "self_drive": {
     "window": "2026-09-29..2026-10-05",
     "window_days": 7,
-    "log_lines_in_window": 4,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 1,
+    "substantive_non_idle_mention_lines": 2,
     "proposals_total": 2,
     "proposals_open": 2,
     "queue_main_open": 6,
