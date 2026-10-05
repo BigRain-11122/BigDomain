@@ -1,0 +1,5 @@
+PASS AC-K265a source row identified: L8 2584 B (R1189 claim row with closure annotation), verbatim extraction
+PASS AC-K265b pre-append archive face: 658937 B, 170 sections (register), 160 strict sections, tail LF present
+PASS AC-K265c pure-append 658937B -> 661533B (+2596 B block); strict 160->161, register 170->171; per-line md5 identical (64cb4f9c65abae391df88ecb48173e06); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K265d board final state = claim row (R1190, unchecked until closeout) + 5 open rows + 0 stale done rows; head block untouched
+PASS AC-K265e evidence = qa/board-R1190.log (this file); SS R1190 in 2026-10 register
