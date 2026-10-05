@@ -1,0 +1,52 @@
+R1286 fold R308 probe start, apply=True (second single-lineage run after width-gate abort; R750 AMEND precedent, honest note at tail)
+AC-R3081 pre-op disk_bytes=80523 bom=False eol_lf=True cr=False trailing_nl=True
+AC-R3081 disk==HEAD dual-hash=True (54556d3cc25fb456)
+AC-R3081 predecessor bak chain present (state-preop-R1282.bak)
+AC-R3081b serializer round-trip byte-exact trailing_newline=True
+AC-R3081 tick=1285 log_count=31
+AC-R3082 std cold lines=6 content_bytes=6662 expected=6662:True
+AC-R3082 std cold[0] pre=2026-10-06 R1283 waiting (first 30 chars)
+AC-R3082 std cold[5] pre=2026-10-06 R1285 tokens (first 30 chars)
+AC-R3082 std census tokens=7 list=P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01,O-20261004-2255,O-013,D-20260930-19,P-32
+AC-R3082 std rounds=3 scores_sum=0 waiting_decl_lines=3 tokens_lines=3 nop_in_cold=0 idle_in_cold=0
+AC-R3082 std-window probe predicted_final_bytes=79633 over_line=1133 gate_pass=False
+AC-R3082 expanded-window ruling per R1220/R1222/R1227 precedent (std probe over-line 1133B)
+AC-R3082 exp cold lines=9 content_bytes=12542 expected=12542:True
+AC-R3082 exp census tokens=8 list=D-20260930-19,O-013,P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01,O-20261004-2255,P-32,P-2026-09-25-18
+AC-R3082 exp rounds=10 scores_sum=1 (R1282 fold=1, nine waiting=0) waiting_decl_lines=9 tokens_lines=9 nop_in_cold=0 idle_in_cold=0
+AC-R3083 summary content_bytes=3166
+AC-R3083 census zero-loss missing_count=0 (D-20260930-19,O-013,P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01,O-20261004-2255,P-32,P-2026-09-25-18)
+AC-R3084 predicted_final_bytes=74338 over_line=-4162 gate_pass=True
+AC-R3084 parser1 py pre-write ok: tick=1286 log_count=25 expect 31-9+1+2=25:True
+AC-R3081 preop_backup=logs/state-preop-R1286.bak bytes=80523 roundtrip=True
+AC-R3085 archive verbatim lines_found=9/9 tail-identical=True
+AC-R3084 WRITTEN post_bytes=74338 margin=4162 under_line=True
+AC-R3084 parser2 py post-write ok: tick=1286 log_count=25
+AC-R3084 parser2 PS post-write ok: ps_parse tick=1286 log_count=25
+AC-R3086 sd rederive pre-op live=(28, 0, 1, 12) stored=(22,0,1,9) post=(22, 0, 1, 9) (W,idle,nop,sub)
+AC-R3086 sd detail post: W=22 tokens=8 paren=5 sub=9
+AC-R3086 queue recount main=6 tech=2 explore=2 proposals total=3 open=1
+AC-R3086 export pre-flush roundtrip byte-identical bom_preserved=True
+AC-R3086 export flush tick row 1282->1286
+AC-R3086 export flush: ts=2026-10-06T06:07:12+08:00 results=496 sd=(22,0,1,9)
+AC-R3086 export WRITTEN bytes=451255 bom_preserved=True roundtrip2=True
+AC-R3086 HB row appended (lag=0, R1286 same-round, CRLF, BOM preserved=True)
+AC-R3086 reverify state: bytes=74338 tick=1286 log_count=25 (post-write re-verified, R784 read-only finish)
+AC-R3086 reverify backup=80523B archive sec R1286 9 lines verbatim in file
+AC-R3086 reverify export: bytes=451255 tick_row=1286 results=496 ts=2026-10-06T06:07:12+08:00 sd=(22,0,1,9)
+AC-R3086 reverify HB: R1286 row in place CRLF BOM lag=0
+AC-R3086 post-scan (key faces):
+  [STATE] PASS tick=1286 last_order=2026-09-28 22:1x last_decision_rows=283 benchmarks_refreshed=2026-10-06 log_lines=25 state_bytes=74338
+  [LEDGER] PASS lines=293 atbd_rows=26 conflict=0 lastp=P-2026-10-05-03,P-2026-09-29-13,P-2026-10-05-01
+  [DEC] PASS rows=283 known_tokens=152 (content-addressed; row baseline=283 secondary)
+  [GORD] INFO lines=244 tbl_rows=117 atbd=7 sha16=2E73244B75F29587 gord_new_rows=0
+  [ORD] PASS last=2026-09-28 22:1x baseline=2026-09-28 22:1x
+  [BENCH] PASS days=0 refreshed=2026-10-06
+  [QA] PASS today_png=1 today_log=1 bench_today=True
+  [HB] PASS hb_tick=1286 state_tick=1286 lag=0
+  [TASKS] INFO tasks_unchecked=2 backlog_open=7 blocked_on_ceo=1 claimable=6
+  [EXPORT] PASS age_h=0 export_ts=2026-10-06T06:07:12+08:00
+  [TREE] FLAG dirty=3
+AC-R3080 honest-note pass-1: first script run aborted PRE-WRITE on the over-line width gate (probe 79632B/1132B = 4 digits vs 3-digit slot) - zero files touched, slot widened XXXB->XXXXB, clean single-lineage re-run (R750 AMEND precedent, amendment transparent)
+AC-R3080 honest-note pass-2: main run completed all verified writes (state/export/HB/backup/archive), then the post-scan reader thread crashed on GBK console decode (subprocess text default) - this read-only finish script re-verified all writes byte-level and wrote the QA log per R784 precedent, zero re-run of writes
+AC-R3080 honest-note: expanded-window ruling recorded in-round per R1220/R1222/R1227; census 8 tokens mechanical with lookbehind regex (R1275 fix carried); BOM-preserving export writer (R1275 fix carried)
