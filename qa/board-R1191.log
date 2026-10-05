@@ -1,0 +1,5 @@
+PASS AC-K266b pre-append archive face: 661533 B, 171 sections (register), 161 strict sections, tail LF present
+PASS AC-K266a source row identified: L8 2564 B (R1190 claim row with closure annotation), verbatim extraction
+PASS AC-K266c pure-append 661533B -> 664109B (+2576 B block); strict 161->162, register 171->172; per-line md5 identical (dd06f383baf8596e0c9c8eee02364eb0); existing sections zero-overwrite; 2026-09 archive untouched (lock held)
+PASS AC-K266d board final state = claim row (R1191, unchecked until closeout) + 5 open rows + 0 stale done rows; head block untouched
+PASS AC-K266e evidence = qa/board-R1191.log (this file); SS R1191 in 2026-10 register
