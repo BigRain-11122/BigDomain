@@ -1,0 +1,18 @@
+PASS K279b AC-K279b pre-append archive face: strict 184 / register 254 recount (calibers: strict=## section lines / register=[done 2026- dated markers) + trailing LF in place (704599 B)
+PASS K279a AC-K279a stale-board inventory: exactly 1 stale done row (R1212, 3064 B with [done 2026-10-05] marker) + 5 standing open rows + R1213 claim row pre-registered (open total 6 incl. claim)
+PASS K279c AC-K279c pure-append 704599B -> 707675B (+3076 B block); strict 184->185, register 254->256 (+2 = dual markers in migrated row: closure + AC-K278b caliber literal, mechanical count honest note); prefix md5 identical (a84539f1b4b24a819d6978dbe87ef701); 2026-09 archive lock held
+PASS K279d(1) AC-K279a main board: stale R1212 row removed verbatim-migrated; remaining = R1213 claim row (unchecked until closeout) + 5 open rows; header block untouched
+
+PASS CLOSEOUT state.json tick 1212->1213, log 50->52, R1213 pair rows in place (shikuang + tokens, fixed-point embedded size == measured), head block items 000..048 verbatim, final gauge 81378 (disk 81381 B)
+PASS CLOSEOUT sd recount W=4 (cold-paren + roll-paren + R1213 round + tokens, tuple (4, 1, 1, 1) carried, family formula)
+PASS CLOSEOUT state read-back: disk 81381 B == embedded finb, gauge 81378 == prediction byte-exact
+PASS K279d AC-K279d main board end state: R1213 claim row [x]+done with closure annotation + 5 open rows + stale rows 0; header first lines verbatim zero-change
+PASS K279e AC-K279e evidence = qa/board-R1213.log (this file); SS R1213 in 2026-10 register (strict 185 / register 256, +2 dual-marker honest note)
+PASS HB heartbeat CRLF-line convention; R1213 row appended (tick 1213, lag=0)
+PASS EXPORT export_ts updated -> 2026-10-05T15:31:50+08:00
+PASS EXPORT results tick row synced 1212 -> 1213 in-round
+PASS EXPORT ceo_face.current updated (R1213)
+PASS EXPORT ceo_face.latest_artifact updated (R1186 runbook remains latest real artifact; this-round fold/cut bookkeeping note refreshed)
+PASS EXPORT ceo_face three rows in place (current/latest_artifact/next_milestone) - O-2026-0930-013 daily check face
+PASS EXPORT json.loads green + results 473->474 + tick row 1213 + self_drive tuple (4,1,1,1) zero drift + roundtrip byte-identical on re-read
+SUITE PASS (cut-279, R1212 row verbatim migrated to done-archive-2026-10.md SS R1213, strict/register 184->185/254->256 dual-marker mechanical); closeout legs: state tick 1213 + R1213 pair, HB row lag=0, export refreshed (results 474, tick row synced 1213, sd zero drift); final gauge 81378 over-line 2878B -> fold R288 = R1214 first-measure ruling

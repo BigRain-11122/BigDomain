@@ -1,0 +1,19 @@
+PASS PRE-OP AC-R2871 pre-op disk byte-identical to git HEAD blob (sha16 3078978A76125E8F, disk 80714 B, gauge 80711 B)
+PASS PRE-OP AC-R2871 round-start tree face: only claim row (src/os/backlog.md)
+PASS PRE-OP AC-R2871 calibration probe: export stored sd (4, 1, 1, 1) == live recount (4, 1, 1, 1) exactly (zero drift)
+PASS PRE-OP AC-R2871 backup logs/state-preop-R1213.bak byte-identical (80714 B)
+PASS AC-R2872 window = [R286 rolling summary + R1212 pair] (3 lines) 21242 B (roll 18064 + pair 3178); window tail = final log item
+PASS AC-R2872 removed-window banned-substring mechanical count = zero hits (idle-fast/no-pullable/nop)
+PASS AC-R2872 carried token catalog == 59 verbatim (R285 carry; first D-20260930-19 last P-001)
+PASS AC-R2872 P/D catalog mechanical dedup == 59 carried + 0 newly registered (candidates ['D-20260930-19', 'P-2026-09-25-18', 'P-32'] all in register, zero hand placement)
+PASS AC-R2872 new roll line banned three-family zero new hits (idle-fast/no-pullable = 0; @@FINB@@ inherited carry = 1)
+PASS AC-R2872 new roll line matches recount caliber (paren-format date prefix, excluded from round-level count); composed 18499 B; carried R1135..R1211 notes verbatim + R1212 fresh note
+PASS AC-R2872 78-round score list mechanically derived (77 carried sum 51 + R1212=1 = 78 rounds sum 52)
+PASS ARCHIVE AC-R2872 pure-append + prefix md5 identical (cb98f719f68df7b129576088852e4800); section R1213 = header + 3 window lines verbatim (252960 B)
+INFO verify-then-write: predicted post-fold gauge 77952B / disk 77955B (removed 21260 B window lines incl LFs, added 18501 B roll line incl LF)
+PASS AC-R2874 verify-then-write: predicted post gauge 77952 <= 78500 line (margin 548 B); predicted recount (2, 1, 1, 0)
+PASS AC-R2873 top-level seven fields preserved; log 52 -> 50 (3 -> 1, kept=0); head block items 000..048 verbatim; log item 49 = R287 rolling summary (18499 B)
+PASS AC-R2874 post-fold measured 77952 bytes scan-gauge (disk 77955 B) == prediction byte-exact; recount (2, 1, 1, 0) == prediction; under the 78500B line by 548 B
+AC-R2875 PENDING receipt = state R287 rolling summary + R1213 log lines in register + commit message contains P-2026-09-25-18 (P-51 three-carrier rule)
+SUITE PASS 5/5 pre-closeout (R2875 delivery leg verified at commit; post-closeout cross-verify by closeout stage)
+NOTE dual-item round R1213 (R1212 isomorph): fold R287 + board knife cut-279; round score 1 = ledger maintenance mechanism file per Executive Protocol v1.1.
