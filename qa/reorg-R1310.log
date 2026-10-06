@@ -1,0 +1,8 @@
+AC-R3161 round-start first-measure: state.json 80114B > 78500B gate by 1614B (R1309 carry-note cashed) -> fold R316 triggered (P-2026-09-25-18 blade 316)
+AC-R3162 pre-op backup: logs/state-preop-R1310.bak (80114B) == git HEAD blob src/os/state.json byte-identical
+AC-R3163 verbatim archive: 8 lines 9686B appended to logs/state-log-archive-2026-10.md sec R1310 cold-fold append (per-line byte-sum 3248+246+2246+217+1326+217+1969+217=9686 verified, all 8 lines substring-verified in archive)
+AC-R3164 std-window probe: [R1308/R1309 waiting pairs] 4 lines 3729B predicted 81074B still over by 2574B; mid-window probe [+R1307 pair] 6 lines 6192B predicted 78646B still over by 146B -> expanded-window ruling per R1220/R1222/R1227/R1306 precedent (+ R1306 fold pair = 8 lines 9686B)
+AC-R3165 verify-then-write: predicted 76421B == actual 76421B byte-exact; dual parser pass (python json.loads + PowerShell ConvertFrom-Json -> tick 1310, log 26); log 31->26; tick 1309->1310
+AC-R3166 post-fold gate: final 76421B <= 78500B margin 2079B; HB R1310 row lag 0 (line 956); export flushed tick 1310 + results row 504 + sd (23/0/1/9) + queue 6/2/2 + proposals 3/1 disk-recounted
+census 13 tokens zero-loss: D-20260930-19,D-20261003-02,D-20261005-09,D-20261005-11,O-013,O-20261004-2255,P-002,P-003,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32
+banned-substring hygiene: folded 8 lines idle-fast=0 no-pullable=0; new 3 lines keep counters clean; nop=1 preserved via unfolded R1235..R1250 summary line
