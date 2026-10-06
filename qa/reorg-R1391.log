@@ -1,0 +1,20 @@
+# R1391 fold R350 water-level reorg + rolling-window fold closeout evidence log
+# run: 2026-10-07T01:44:14+08:00
+# AC-R3501..R3506 (fold R350, 350th knife P-2026-09-25-18; R1389 isomorph)
+
+PRE PASS roundtrip byte-identity 79227 B (json.dumps ensure_ascii=False indent=2 reproduces file, convention=plain)
+AC-R3501 PASS pre-op state.json 79227 B == git HEAD blob (sha256 0AAEA77E15CDFE07, git blob sha16 1CBBD141D194C5C9)
+AC-R3501b PASS backup logs/state-preop-R1391.bak 79227 B written
+AC-R3503 PRE window idx 23..27 = 5 lines 6963 B (R1382..R1387 roll line + R1388 waiting pair + R1389 fold closeout pair)
+SD-SANITY pre-fold W/idle/nop/sub = 27/0/1/11 (export current 25/0/1/10 stale from R1389 flush; pair drift R1390 noted)
+AC-R3502 PASS archive pure-append 1121925 -> 1129001 B (header + 5 verbatim lines, prefix byte-identical; markers 74 -> 75)
+AC-R3504 PRE window token catalog 46+0=46 mechanical (regex dedup, zero-loss; roll-B carried 46, new )
+SD post-fold W/idle/nop/sub = 25/0/1/10 (recount honestly noted; -5 window fold absorbed +1 roll line +2 R1391 pair; substantive -2 folded round lines +1 R1391 round line)
+EXPORT results rows pre = 540
+AC-R3505a PASS verify-then-write final 77281 B margin 1219 B <= 78500 B gate (predicted == actual byte-exact; post-fold gauge 74836 B)
+AC-R3504b PASS post-fold log 30 -> 28 items; head block idx 0..22 verbatim; window 5 lines -> 1 roll line + closeout pair (R1390 pair kept)
+AC-R3506 PASS baselines: tick 1391; last_order / last_decision_rows 204 / last_gord_tbl_rows 130 / last_dec_tokens flat (no new group rows this round)
+EXPORT refreshed: export_ts=2026-10-07T01:44:14+08:00, tick row 1389->1391 (pair drift R1390 reconciled at fold flush per R1201-isomorph), results 540 -> 541, ceo_face 3 rows, self_drive W/idle/nop/sub 25/0/1/10
+HB R1391 row appended (single CRLF; last tick=1391 parsed)
+AUTO-SAVES 433.6 MB / 334 files under 500 MB line (no clean)
+DUAL-PARSE PASS py json.loads on post-fold state.json (tick 1391, 28 log items) + post-fold export json.loads; PS ConvertFrom-Json verified post-round via scan_five_still.ps1
