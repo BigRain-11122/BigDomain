@@ -1,0 +1,14 @@
+AC-R3231 pre-op: 78946B dual-gauge, HEAD==disk byte-identical (sha16 aa3c78ba90d00128), tick 1326, log 28 items, no BOM no trailing LF, canonical round-trip PASS; round-start tree clean
+AC-R3232 window = [R322 roll line + R1325 fold closeout pair + R1326 declaration pair] 5 rows identified (8514B content); kept=0 (window extends to log tail); head block 23 items verbatim (67861B content)
+AC-R3232 census: 25 P/D tokens mechanically deduped, summary embedded list == census, all tokens retained in roll row census face (zero-loss); nop/idle substrings in removed window lines: 0/0
+AC-R3233 structural constraints pass (prefixes, tag accounting, no forbidden tags); probe pre {'W': 25, 'idle': 0, 'nop_h': 1, 'nop_u': 0, 'nop_z': 2, 'tokens': 9, 'paren': 6, 'round': 10, 'sub': 10, 'wait': 9}; nop register gauge = no-pullable-literal count 1 (alt substrings no_pullable 0 / CJK 2 reported); export self_drive pre-op live re-derivation W/idle/nop/sub = 25/0/1/10 (stored register 23/0/1/9 = R1325-flush-time value, R1326 declaration-pair drift honestly noted, reconciled at this flush per R1201-isomorph precedent)
+AC-R3234 probe post projection == register W/idle/nop/sub = 23/0/1/9; in-fold projection: post-fold 76672B, final 76672B margin 1828B (<= 78500B gate satisfied in-fold)
+AC-R3234b top fields flat (DEC 96 tokens / ORD 2026-09-28 22:1x / GORD 122 flat / BENCH 2026-10-06), tick 1326->1327 only, head region byte-identical (23 items asserted)
+PHASE B (--write): verify-then-write sequence
+AC-R3235 backup logs/state-preop-R1327.bak written byte-identical (78946B)
+AC-R3235 archive pure-append: 871674 -> 880329B; cold-fold markers 48 (R1327 section, 5 lines verbatim 8514B)
+AC-R3235 state.json written (temp+replace, re-read asserted: tick 1327, log 26 items = 23 head + 1 roll + 2 closeout, probe in-register, python parser pass; PS parser checked post-run)
+AC-R3236 final size: 76672B, margin 1828B under 78500B gate; post-fold 76672B
+AC-R3236 export flushed: ts=2026-10-06T14:02:00+08:00 tick-row 1325->1327, R1327 result row appended (results 511->512), self_drive 23/0/1/9 zero-hardcode re-derived (BOM utf-8-sig parse-back PASS), ceo_face.current refreshed R1327; frontdoor healthz=200
+AC-R3236 heartbeat R1327 row appended (lag=0 same-round, CRLF, no BOM preserved)
+AC-R3236 delivery: state log R1327 pair + qa/reorg-R1327.log + commit carries P-2026-09-25-18 (P-51 protocol); P-32 daily clear = zero new company-face group-level open items, no HQ write (zero bloat); fold-round write set = state.json + export + heartbeat + qa log (logs/ gitignored disk-side: preop bak + archive section + fold script)
