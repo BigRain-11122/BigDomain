@@ -1,0 +1,7 @@
+qa/reorg-R1410.log - fold R358 water-level reorg evidence (R1410, P-2026-09-25-18 358th knife)
+AC-R3581 PASS pre-op src/os/state.json byte-identical to git HEAD blob (git blob d2c13500f418ea4b90683e2018fb4716bd3f10a3; content sha16 4115F1DAC86ADEF8, 79700 bytes); backup logs/state-preop-R1410.bak written (local logs/ not in git)
+AC-R3582 PASS window [R1407 roll line + R1407 fold closeout pair + R1408 waiting declaration pair + R1409 waiting declaration pair] 7 lines 9195B -> 1 rolling summary kept=0; 7 lines verbatim preserved in logs/state-log-archive-2026-10.md section R1410 (byte-equal to pre-op log entries, markers 82->83)
+AC-R3583 PASS verify-then-write: predicted 76240B == actual 76240B on disk; final 76240B margin 2260B under the 78500B gate
+AC-R3584 PASS dual-parser: python json.loads OK (log 26 entries, tick 1410); PowerShell ConvertFrom-Json OK (external post-write check: tick 1410 logN 26)
+AC-R3585 PASS P/D catalog 58 -> 59 mechanical union zero-loss (AC-R3571 new register); 59-token listing embedded in roll line
+AC-R3586 PASS export flush: export_ts refreshed to 2026-10-07T06:13:13+08:00; tick row 1407 -> 1410; results 548 -> 549; sd re-derived 23/0/1/9 (window 23, idle 0, nop 1, sub 9); HB row R1410 appended lag=0; auto-saves standing step measured 491.5MB/374 items under line no cleanup
