@@ -1,0 +1,22 @@
+# R1386 fold R348 + HB false-positive root-fix + receipts round evidence log
+# run: 2026-10-07T00:38:28+08:00
+# AC-R3481..R3486 (fold) + HB-DATA-FIX + HB-SCAN-HARDEN
+
+PRE PASS roundtrip byte-identity 80459 B (json.dumps ensure_ascii=False indent=2 reproduces file)
+AC-R3481 PASS pre-op state.json 80459 B == git HEAD blob (sha256 D50F60FA4877E3D3)
+AC-R3481b PASS backup logs/state-preop-R1386.bak 80459 B written
+AC-R3483 PRE window idx 23..27 = 5 lines 10027 B (R1382..R1383 roll line + R1384 pair + R1385 pair)
+SD-SANITY pre-fold W/idle/nop/sub = 25/0/2/10 (export current 25/0/2/10)
+AC-R3482 PASS archive pure-append 1104593 -> 1114782 B (header + 5 verbatim lines, prefix byte-identical)
+AC-R3484 PRE window token catalog 42 tokens extracted (regex dedup, zero-loss)
+SD post-fold W/idle/nop/sub = 23/0/1/9 (fold drift honestly noted)
+EXPORT results rows pre = 538
+AC-R3485a PASS verify-then-write final 75670 B margin 2830 B <= 78500 B gate
+AC-R3484 PASS post-fold log 28 -> 26 items; head block idx 0..22 verbatim; window 5 lines -> 1 roll line + closeout pair
+AC-R3486 PASS baselines: tick 1386, last_dec_tokens 154 -> 158, last_decision_rows 196 -> 204, last_gord_tbl_rows 129 -> 130 (receipts C-20261006-01/D-20261007-01/02/03 + GORD 10-07 row)
+EXPORT refreshed: export_ts=2026-10-07T00:38:28+08:00, tick row 1385->1386, results 538 -> 539, ceo_face 3 rows, self_drive W/idle/nop/sub 23/0/1/9
+HB R1386 row appended 1303 B (single CRLF; file 1493473 -> 1494776 B; last tick=1386 parsed)
+
+HB-DATA-FIX PASS heartbeat.txt 1493475B (tail 5D 0D 0A 0D 0A double CRLF) -> 1493473B (tail 5D 0D 0A single CRLF), trailing blank line removed (root cause of [HB] FLAG missing_or_unparsed)
+HB-SCAN-HARDEN PASS scan_five_still.ps1 [HB] check: -Tail 1 -> -Tail 5 blank-skip last non-empty; source tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1 + installed .codely-cli copy sha256 276714BF07EB6DE0 identical
+DUAL-PARSE PASS py json.loads on post-fold state.json (tick 1386, 26 log items); PS ConvertFrom-Json verified by post-round scan_five_still.ps1 run

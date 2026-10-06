@@ -177,12 +177,12 @@ try {
   }
 } catch { Write-Output '[QA] FLAG check_failed' }
 
-# --- [HB] repo-root heartbeat.txt row freshness (standing law R532; detection face added R851 after 2nd recurrence R537..R540 + R849/R850; backfill precedent R541) ---
+# --- [HB] repo-root heartbeat.txt row freshness (standing law R532; detection face added R851 after 2nd recurrence R537..R540 + R849/R850; backfill precedent R541; R1386: skip trailing blank lines - trailing 0D0A0D0A gave false missing_or_unparsed) ---
 try {
   $hbPath = Join-Path $repo 'heartbeat.txt'
   $hbTick = -1
   if (Test-Path $hbPath) {
-    $hbLast = @(Get-Content -LiteralPath $hbPath -Tail 1)
+    $hbLast = @(Get-Content -LiteralPath $hbPath -Tail 5 | Where-Object { $_ -match '\S' } | Select-Object -Last 1)
     if (@($hbLast).Count -gt 0 -and $hbLast[0] -match 'tick (\d+)') { $hbTick = [int]$Matches[1] }
   }
   $stTick = [int]$st.tick
