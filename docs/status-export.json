@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-07T01:44:14+08:00",
+  "export_ts": "2026-10-07T02:15:15+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1391 fold R350 水位整编+滚窗并折收账轮（10-07 01:44·轮计分 1=台账维护机制件）：轮首首测 79,227B 越线 727B（R1390 承传注记兑现·P-2026-09-25-18 第350刀）→窗〔R1382..R1387 滚窗行+R1388 waiting 对+R1389 fold 对〕 5 行压 1 滚窗行·pre-op==HEAD 逐字节入档+备份件 state-preop-R1391.bak·终态 77281B margin 1219B·AC-R3501..R3506=qa/reorg-R1391.log；EXPORT tick 1389→1391 pair 漂移归一+results 540→541+sd 机械重派；九面扫描余面全 PASS 持平（LEDGER 零新未回·DEC 204/GORD 130 基线持平·BENCH 当日已刷·QA 当日证据在盘）；当日双常设（对账 RUNNER 全绿 G0+O-2026-0930-013④ 核对）R1385 已毕不重跑；可视化首检面=硁基生命元宙.html/data.js（MiniGame 司仓·宿主产线）非本司执行面零越俚；产品面=frontdoor http://127.0.0.1:8093/ 现役（端口实测 OPEN）；值守面：OSS 窗 5 切片 10-07 午后 15:07 认领窗〔带内 19:00-21:50·硬线 10-08 03:07〕+雷达第五窗清单 10-08 21:40+BigLife R777 chronic+bootstrap CEO 物理件无 ETA",
-    "latest_artifact": "最近实物=R1391 fold R350 水位整编件（state.json 窗 5 行压 1 滚窗行·pre-op==HEAD 逐字节·archive §R1391 节 5 行 verbatim+备份件 state-preop-R1391.bak·AC-R3501..R3506=qa/reorg-R1391.log）；前轮实物=R1389 fold R349 整编件+R1386 HB 假阳根修件+R1385 当日双件（qa/reconcile-daily-20261007.log 对账 RUNNER PASS 33/33 G0 绿+《互联网信息服务算法推荐管理规定》A 级直采入册 benchmarks §①§③§④+intelligence-wall W17+qa/smoke-R1385.log/png）",
-    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L15 实搜面 ≥2 全录+候选 ≥1 五门评估或如实零发现+L10 本地提效 ≥1 或如实零发现）+fold R351 水位=下轮轮首首测裁定+雷达第五窗候选清单 10-08 21:40 窗开到达即过目（P-2026-10-04-01/02 收益透镜执法）；提案窗 10-06..10-13 配额已清（BD-PROP-003 R1254）；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
+    "current": "R1393 fold R351 水位整编+滚窗并折收账轮（10-07 02:1x·轮计分 1=台账维护机制件）：轮首首测 78530B 越线 30B（R1392 承传注记兑现·P-2026-09-25-18 第351刀）→窗〔R1382..R1389 滚窗行+R1390 waiting 对+R1391 fold 对〕 5 行压 1 滚窗行·pre-op==HEAD 逐字节入档+备份件 state-preop-R1393.bak·终态 77016B margin 1484B·AC-R3511..R3516=qa/reorg-R1393.log；EXPORT tick 1391→1393 pair 漂移归一+results 541→542+sd 机械重派 25/0/1/10；九面扫描余面全 PASS 持平（LEDGER 零新未回·DEC 204/GORD 130 基线持平·BENCH 当日已刷·QA 当日证据在盘）；当日双常设（对账 RUNNER 全绿 G0+O-2026-0930-013④ 核对）R1385 已毕不重跑；产品面=frontdoor http://127.0.0.1:8093/ 现役（端口实测 OPEN）；值守面：OSS 窗 5 切片 10-07 午后 15:07 认领窗〔带内 19:00-21:50·硬线 10-08 03:07〕+雷达第五窗清单 10-08 21:40+BigLife R777 chronic+bootstrap CEO 物理件无 ETA",
+    "latest_artifact": "最近实物=R1393 fold R351 水位整编件（state.json 窗 5 行压 1 滚窗行·pre-op==HEAD 逐字节·archive §R1393 节 5 行 verbatim+备份件 state-preop-R1393.bak·AC-R3511..R3516=qa/reorg-R1393.log）；前轮实物=R1391 fold R350 整编件+R1386 HB 假阳根修件+R1385 当日双件（qa/reconcile-daily-20261007.log 对账 RUNNER PASS 33/33 G0 绿+《互联网信息服务算法推荐管理规定》A 级直采入册 benchmarks §①§③§④+intelligence-wall W17+qa/smoke-R1385.log/png）",
+    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L15 实搜面 ≥2 全录+候选 ≥1 五门评估或如实零发现+L10 本地提效 ≥1 或如实零发现）+fold R352 水位=下轮轮首首测裁定（收账后水位若再越 78,500B 时触发）+雷达第五窗候选清单 10-08 21:40 窗开到达即过目（P-2026-10-04-01/02 收益透镜执法）；提案窗 10-06..10-13 配额已清（BD-PROP-003 R1254）；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1391",
+      "1393",
       "OSLoop 执行 tick"
     ],
     [
@@ -2349,6 +2349,10 @@
     [
       "1",
       "R1391 fold R350 水位整编+滚窗并折收账（R1390 承传注记兑现·79227B 越线 727B·窗〔R1382..R1387 滚窗行+R1388 waiting 对+R1389 fold 对〕 5 行压 1·pre-op==HEAD 逐字节+archive §R1391 节+备份件·终态 77281B margin 1219B·AC-R3501..R3506=qa/reorg-R1391.log·EXPORT tick 1389→1391 归一+results 540→541+sd 机械重派）"
+    ],
+    [
+      "1",
+      "R1393 fold R351 水位整编+滚窗并折收账（R1392 承传注记兑现·78530B 越线 30B·窗〔R1382..R1389 滚窗行+R1390 waiting 对+R1391 fold 对〕 5 行压 1·pre-op==HEAD 逐字节+archive §R1393 节+备份件·终态 77016B margin 1484B·AC-R3511..R3516=qa/reorg-R1393.log·EXPORT tick 1391→1393 归一+results 541→542+sd 机械重派 25/0/1/10）"
     ]
   ],
   "self_drive": {
@@ -2364,6 +2368,6 @@
     "queue_tech_open": 2,
     "queue_explore_open": 2,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (R1391 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; W 27->25 [-5 window fold absorbed +1 roll line +2 R1391 pair; stale +2 pair drift from R1390 since R1389 flush], idle 0 flat, no-pullable 1 flat, substantive 11->10 [-2 folded round lines +1 R1391 round line; stale +1 drift from R1390 waiting pair vs R1389 flush 10], proposals 3/1 flat, queues 6/2/2 flat)"
+    "method": "F3 mechanical line counts (R1393 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; W 27->25 [-5 window fold absorbed +1 roll line +2 R1393 pair; stale +2 pair drift from R1392 since R1391 flush], idle 0 flat, no-pullable 1 flat, substantive 11->10 [-2 folded round lines +1 R1393 round line; stale +1 drift from R1392 waiting pair since R1391 flush], proposals 3/1 flat, queues 6/2/2 flat)"
   }
 }

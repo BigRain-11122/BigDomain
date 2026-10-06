@@ -1,0 +1,20 @@
+# R1393 fold R351 water-level reorg + rolling-window fold closeout evidence log
+# run: 2026-10-07T02:15:15+08:00
+# AC-R3511..R3516 (fold R351, 351st knife P-2026-09-25-18; R1391 isomorph)
+
+PRE PASS roundtrip byte-identity 78530 B (json.dumps ensure_ascii=False indent=2 reproduces file, convention=plain)
+AC-R3511 PASS pre-op state.json 78530 B == git HEAD blob (sha256 50FDE859659BF79A, git blob sha16 6741B662BE322B8B)
+AC-R3511b PASS backup logs/state-preop-R1393.bak 78530 B written
+AC-R3513 PRE window idx 23..27 = 5 lines 6793 B (R1382..R1389 roll line + R1390 waiting pair + R1391 fold closeout pair)
+SD-SANITY pre-fold W/idle/nop/sub = 27/0/1/11 (export current 25/0/1/10 stale from R1391 flush; pair drift R1392 noted)
+AC-R3512 PASS archive pure-append 1129001 -> 1135947 B (header + 5 verbatim lines, prefix byte-identical; markers 75 -> 76)
+AC-R3514 PASS window token catalog 46+0=46 mechanical (regex dedup, zero-loss; roll-B carried 46, new none)
+SD post-fold W/idle/nop/sub = 25/0/1/10 (recount honestly noted; -5 window fold absorbed +1 roll line +2 R1393 pair; substantive -2 folded round lines +1 R1393 round line; stale +1 drift from R1392 waiting pair since R1391 flush)
+EXPORT results rows pre = 541
+AC-R3515a PASS verify-then-write final 77016 B margin 1484 B <= 78500 B gate (predicted == actual byte-exact; post-fold gauge 74554 B)
+AC-R3514b PASS post-fold log 30 -> 28 items; head block idx 0..22 verbatim; window 5 lines -> 1 roll line + closeout pair (R1392 pair kept)
+AC-R3516 PASS baselines: tick 1393; last_order / last_decision_rows 204 / last_gord_tbl_rows 130 / last_dec_tokens flat (no new group rows this round)
+EXPORT refreshed: export_ts=2026-10-07T02:15:15+08:00, tick row 1391->1393 (pair drift R1392 reconciled at fold flush per R1201-isomorph), results 541 -> 542, ceo_face 3 rows, self_drive W/idle/nop/sub 25/0/1/10
+HB R1393 row appended (single CRLF; last tick=1393 parsed)
+AUTO-SAVES 440.2 MB / 338 files under 500 MB line (no clean)
+DUAL-PARSE PASS py json.loads on post-fold state.json (tick 1393, 28 log items) + post-fold export json.loads; PS ConvertFrom-Json verified post-round via scan_five_still.ps1
