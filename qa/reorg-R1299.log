@@ -1,0 +1,15 @@
+AC-R3121 pre-op: 79820B dual-gauge, HEAD==disk byte-identical (sha16 324f2c92c234c604), tick 1298, log 28 items, no BOM no trailing LF, canonical round-trip PASS; round-start tree clean
+AC-R3122 window = [R1297 fold pair + R1298 waiting pair] 4 rows identified (5674B content); kept=0 (minimal continuous window, extends to log tail); head block 24 items verbatim (71603B content)
+AC-R3122 census: 10 P/D/O tokens mechanically deduped, summary embedded list == census, all tokens retained in head (zero-loss, win-vs-head diff = [])
+AC-R3123 structural constraints pass (prefixes, tag accounting, no forbidden tags); probe pre {"W": 25, "idle": 0, "idle_round": 0, "nop": 1, "wait": 0, "round": 19, "tokens": 9, "sub": 10}; export self_drive pre-op live re-derivation {'W': 25, 'idle': 0, 'nop': 1, 'sub': 10} (stored register 23/0/1/9 = R1297-flush-time value, R1298 pair drift honestly noted, reconciled at this flush)
+AC-R3124 probe post projection == register {"W": 24, "idle": 0, "idle_round": 0, "nop": 1, "wait": 1, "round": 17, "tokens": 8, "sub": 9}; export self_drive post projection (24, 0, 1, 9) (W 25-4+3, paren +1, tokens 9-2+1)
+AC-R3124 in-fold projection: post-fold 75856 B, final 78249 B margin 251 B (<= 78,500B gate satisfied in-fold)
+AC-R3124b top fields flat (DEC 152 tokens / ORD 2026-09-28 22:1x / GORD 117 flat / BENCH 2026-10-06), tick 1298->1299 only, head region byte-identical except tick digit
+PHASE B (--write): verify-then-write sequence
+AC-R3125 backup logs/state-preop-R1299.bak written byte-identical (79820B)
+AC-R3125 archive pure-append: 765913 -> 771697 B; cold-fold markers 12 -> 13 (R1299 section, 4 lines verbatim 5674B)
+AC-R3125 state.json written (temp+replace, re-read asserted: tick 1299, log 27 items = 24 head + 1 roll + 2 closeout, probe in-register, dual-parser PS+py pass)
+AC-R3126 final size: 78249 B, margin 251 B under 78,500B gate; post-fold 75856 B
+AC-R3126 export flushed: ts=2026-10-06T08:36:32+08:00 tick-row 1297->1299, R312 result row appended, self_drive 24/0/1/9 zero-hardcode re-derived (BOM utf-8-sig parse-back PASS)
+AC-R3126 heartbeat R1299 row appended (lag=0 same-round, CRLF, BOM preserved)
+AC-R3126 delivery: state log R1299 pair + qa/reorg-R1299.log + commit carries P-2026-09-25-18 (P-51 protocol); P-32 daily clear = zero new company-face group-level open items, no HQ write (zero bloat); fold-round write set = state.json + export + heartbeat + qa log (logs/ gitignored disk-side: preop bak + archive section + fold script/data)
