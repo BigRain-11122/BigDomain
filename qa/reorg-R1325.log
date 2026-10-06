@@ -1,0 +1,15 @@
+AC-R3221 pre-op: 80562B dual-gauge, HEAD==disk byte-identical (sha16 A55B18970E5DAD3E), tick 1324, log 30 items, no BOM no trailing LF, canonical round-trip PASS; round-start tree clean
+AC-R3222 window = [R321 roll line + R1322 fold closeout pair + R1323 legal-verify declaration pair + R1324 declaration pair] 7 rows identified (10114B content); kept=0 (window extends to log tail); head block 23 items verbatim (67861B content)
+AC-R3222 census: 25 P/D tokens mechanically deduped, summary embedded list == census, all tokens retained in head+newlog (zero-loss, win-vs-newlog diff = []; 7 head-new tokens carried by the roll-row census list per R1319 precedent)
+AC-R3223 structural constraints pass (prefixes, tag accounting, no forbidden tags); probe pre {"W": 27, "idle": 0, "idle_round": 0, "nop": 1, "wait": 2, "round": 21, "tokens": 10, "sub": 11}; export self_drive pre-op live re-derivation {'W': 27, 'idle': 0, 'nop': 1, 'sub': 11} (stored register 23/0/1/9 = R1322-flush-time value, R1323/R1324 declaration-pair drift honestly noted, reconciled at this flush per R1201-isomorph precedent)
+AC-R3224 probe post projection == register {"W": 23, "idle": 0, "idle_round": 0, "nop": 1, "wait": 0, "round": 17, "tokens": 8, "sub": 9}; export self_drive post projection (23, 0, 1, 9) (W 27-7+3, tokens 10-3+1, nop 1-1+1, sub lands on stored 23/0/1/9 numerically flat - the move is the fold arithmetic, honestly labeled)
+AC-R3224 in-fold projection: post-fold 73699 B, final 77099 B margin 1401 B (<= 78,500B gate satisfied in-fold)
+AC-R3224b top fields flat (DEC 154 tokens / ORD 2026-09-28 22:1x / GORD 122 flat / BENCH 2026-10-06), tick 1324->1325 only, head region byte-identical except tick digit
+PHASE B (--write): verify-then-write sequence
+AC-R3225 backup logs/state-preop-R1325.bak written byte-identical (80562B)
+AC-R3225 archive pure-append: 861370 -> 871674 B; cold-fold markers 22 -> 23 (R1325 section, 7 lines verbatim 10114B)
+AC-R3225 state.json written (temp+replace, re-read asserted: tick 1325, log 26 items = 23 head + 1 roll + 2 closeout, probe in-register, dual-parser PS+py pass)
+AC-R3226 final size: 77099 B, margin 1401 B under 78,500B gate; post-fold 73699 B
+AC-R3226 export flushed: ts=2026-10-06T13:38:29+08:00 tick-row 1322->1325, R1325 result row appended (results 510->511), self_drive 23/0/1/9 zero-hardcode re-derived (BOM utf-8-sig parse-back PASS)
+AC-R3226 heartbeat R1325 row appended (lag=0 same-round, CRLF, no BOM preserved; tail-window sentinel check uses last-row parse per R1322 defect lesson, passes)
+AC-R3226 delivery: state log R1325 pair + qa/reorg-R1325.log + commit carries P-2026-09-25-18 (P-51 protocol); P-32 daily clear = zero new company-face group-level open items, no HQ write (zero bloat); fold-round write set = state.json + export + heartbeat + qa log (logs/ gitignored disk-side: preop bak + archive section + fold script/data)
