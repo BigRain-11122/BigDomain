@@ -1,0 +1,9 @@
+qa/reorg-R1319.log - R1319 fold R320 evidence (verify-then-write, all asserts pre-write)
+AC-R3201: PASS pre-op state.json 81659B, BOM=False tlf=False no-CR, roundtrip byte-identical, disk==HEAD blob, sha16 8B4431C8D746757C
+AC-R3202: PASS fold window = 5 contiguous tail entries [R319 roll line + R1317 pair + R1318 pair], 11227 B; kept=0; forbidden substrings (idle-fast/no-pullable/@@FINB@@) zero hits in new lines
+AC-R3203: PASS verbatim tri-guarantee: archive sec-R1319 pure-append (prefix identical, +11390 B) + pre-op backup logs/state-preop-R1319.bak (byte==HEAD) + git history cross-proof
+AC-R3204: PASS verify-then-write: post-fold predicted 72180 B <= 78500 gate (margin 6320); on-disk == predicted; closeout final 76066 B (margin 2434); carry-note recorded in state log
+AC-R3205: PASS dual-parser (py json.loads tick=1319 gord=122 log=26 + PS JavaScriptSerializer); export flushed tick-row 1314->1319 + results row 509 + sd 23/0/1/9
+AC-R3206: PASS delivery tri-carrier: state log R1319 line cites O-20261006-1215 + O-20261006-1218 (D-20260930-20 rule) + commit carries both order numbers and P-2026-09-25-18 (P-51 rule)
+sd recount transparency: pre-op live nonparen=(19, 0, 0, 9) all=(25, 0, 1, 9) vs stored 25/0/1/10; post-closeout live nonparen=(17, 0, 0, 8) all=(23, 0, 1, 8); export written delta-anchored 23/0/1/9 per R1318 precedent (fold -4W/-2sub, R1319 pair +2W/+1sub)
+window verbatim preserved: 5 lines 11227 B in logs/state-log-archive-2026-10.md sec R1319

@@ -1,0 +1,17 @@
+qa/board-R1319.log - R1319 board knife 291 + archive10 incident recovery evidence
+AC-K291a: PASS stale-board census = exactly 1 stale done row (D-20260929-03 legal finalize row, 2524 chars, [done 2026-10-06] marker present) + 6 open standing rows + header intact
+AC-K291b: PASS incident forensics: archive10 on disk = 14816B stale board snapshot (clobber signature: starts with board title header); git pins the clobber INSIDE commit 1b67457 (R1230, 10-05 20:01, blob 14803B) = cut-290 round amended-script misdirected write (board content written to archive path); undetected R1231..R1318 (89 rounds, zero board-knife touched the file); first detected this round by cut-291 preflight; last-good = 9019fda (R1224) 740125B
+AC-K291c: PASS zero-loss recovery: last-good 9019fda restored byte-faithfully (strict/register 195/272 verified); sec-R1230 re-attached from git history (row "- [x] R1223 " 772 chars from 9019fda:src/os/backlog.md, md5 68f760328c34280dd26f5e2173795d72) -> 196/273 == R1230 in-register claim; sec-R1319 appended -> strict/register 197/274; 09-month archive untouched (358597 B); clobbered snapshot had no unique content (board states fully preserved in git history of src/os/backlog.md)
+AC-K291d: PASS cut-291 migration: D-20260929-03 row verbatim (md5 c4ef5ba74cb675678d3382c4f844fe6d identical pre/post), pure-append prefix assertion, register/strict 273->274/196->197
+AC-K291e: PASS main board post-state: 13 lines, open 6 / stale-done 0, header 4 quote lines verbatim zero-change
+AC-K291f: PASS evidence = this log; root-cause and recovery recorded in state log R1319 line + commit message
+R1230 commit footprint (for the record):
+ docs/archive/backlog-done-2026-10.md | 825 +----------------------------------
+ docs/status-export.json              |  16 +-
+ heartbeat.txt                        |   1 +
+ qa/board-R1230.log                   |   9 +
+ qa/reorg-R1230.log                   |  44 ++
+ src/os/backlog.md                    |  27 +-
+ src/os/state.json                    |  12 +-
+ 7 files changed, 94 insertions(+), 840 deletions(-)
+
