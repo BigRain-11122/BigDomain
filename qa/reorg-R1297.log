@@ -1,0 +1,37 @@
+R1297 fold R311 probe start, apply=True
+AC-R3111 pre-op disk_bytes=81056 bom=False eol_lf=True cr=False
+AC-R3111 disk==HEAD dual-hash=True (74fed111855e9563)
+AC-R3111 predecessor bak chain present (state-preop-R1293.bak)=True
+AC-R3111 tick=1296 log_count=31
+AC-R3111b line-assembly round-trip byte-exact=True trailing_newline=False
+AC-R3112 window lines=6 bytes=6980
+AC-R3112 census tokens=10
+AC-R3112 census list=D-20260930-19,D-20261003-02,D-20261005-09,D-20261005-11,O-013,O-20261004-2255,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32
+AC-R3112 removed-lines mention accounting idle=0 nop=0 (expect 0/0, new lines keep clean)
+AC-R3112 rounds_scope=3 scores_sum=0 waiting_decl_lines=3 tokens_lines=3
+AC-R3113 summary content_bytes=2662
+AC-R3113 census zero-loss missing_count=0 (D-20260930-19,D-20261003-02,D-20261005-09,D-20261005-11,O-013,O-20261004-2255,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32)
+AC-R3113 new lines wording-clean (no abolished-path / no-pullable substrings)
+AC-R3114 predicted_final_bytes=80050 over_line=1550 gate_pass=False
+AC-R3112 exp-window lines=8 bytes=10125
+AC-R3112 census tokens=11
+AC-R3112 census list=D-20260930-19,D-20261003-02,D-20261005-09,D-20261005-11,O-013,O-20261004-2255,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32
+AC-R3112 removed-lines mention accounting idle=0 nop=0 (expect 0/0, new lines keep clean)
+AC-R3112 rounds_scope=4 scores_sum=1 waiting_decl_lines=3 tokens_lines=4 fold_round_lines=1
+AC-R3113 exp-summary content_bytes=3239
+AC-R3113 census zero-loss missing_count=0 (D-20260930-19,D-20261003-02,D-20261005-09,D-20261005-11,O-013,O-20261004-2255,P-2026-09-25-18,P-2026-09-29-13,P-2026-10-05-01,P-2026-10-05-03,P-32)
+AC-R3113 new lines wording-clean (no abolished-path / no-pullable substrings)
+AC-R3114 exp-probe predicted_final_bytes=77570 over_line=-930 gate_pass=True
+AC-R3114 parser1 py pre-write ok: tick=1297 log_count=26 expect 31-8+1+2=26:True
+AC-R3111 preop_backup=logs/state-preop-R1297.bak bytes=81056 roundtrip=True
+AC-R3115 archive verbatim lines_found=8/8 prefix byte-identical=True
+AC-R3114 WRITTEN post_bytes=77570 margin=930 under_line=True
+AC-R3114 parser2 py post-write ok: tick=1297 log_count=26
+AC-R3116 sd rederive: W=23 idle=0 nop=1 paren=6 tokens=8 substantive=9
+AC-R3116 queue recount main=6 tech=2 explore=2 proposals_total=3 open=1
+AC-R3116b same-round correction (R1293 AC-R3102b precedent): first close attempt export roundtrip compatible=False (assumed dump without trailing newline; export file uses dump+LF format) - assert tripped BEFORE any file write, clean retry with corrected format assumption
+AC-R3114 parser3 PS post-write ok: PS tick=1297 log_count=26
+AC-R3116 export format roundtrip compatible=True bom_preserved=True
+AC-R3116 export flush: ts=2026-10-06T08:11:52+08:00 results=499 sd=(23,0,1,9) tick_row_fixed=1 bom_preserved=True
+AC-R3116 export reparse ok: results=499 tick_row=1297
+AC-R3116 HB row appended (lag=0, R1297 same-round, CRLF=True, BOM preserved=True)
