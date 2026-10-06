@@ -1,0 +1,25 @@
+# R1399 fold R354 water-level reorg + rolling-window fold closeout evidence log
+# run: 2026-10-07T03:38:42+08:00
+# AC-R3541..R3546 (fold R354, 354th knife P-2026-09-25-18; R1391/R1393/R1395/R1397 isomorph; window extends to log tail kept=0 R966/R981 isomorph)
+
+PRE disk_bytes=79581 sha16=6E6D630A3A0DF40D
+AC-R3541 PASS pre-op state.json 79581 B == git HEAD blob (sha256 6E6D630A3A0DF40D)
+PRE roundtrip byte-identity 79581 B (json.dumps ensure_ascii=False indent=2, convention=plain, no BOM)
+AC-R3543 PRE window idx23..27 = 5 lines 9093 B (R1382..R1396 roll line + R1397 fold closeout pair + R1398 waiting declaration pair; window extends to log tail, kept=0)
+AC-R3544 PRE window token catalog 50 -> 53 mechanical (union law new=old∪window-extract, zero-loss by construction; window extract diff vs carried: AC-R3531,BD-PROP-003,O-2026; carried list parsed from old roll line explicit list 50 items; note: carried list contains legacy artifact D-PROP-003 = substring of BD-PROP-003 from an earlier mechanical extraction, window extract now adds BD-PROP-003 proper, union carries both - recorded honestly; carried in roll line catalog verbatim)
+SD-SANITY pre-fold recount W/idle/nop/sub = 25/0/1/9 (export current 23/0/1/9 from R1397 flush; pair drift R1398 noted, reconciled at this fold flush)
+AUTO-SAVES standing step measured 459.1MB/350 files under 500MB line (BD-PROP-002 pilot, no clean)
+AC-R3545a PASS verify-then-write predicted final 76304 B margin 2196 B <= 78500B gate (predicted == actual byte-exact fixed-point, iteration count 2)
+AC-R3541b PASS backup logs/state-preop-R1399.bak 79581 B written (byte-identical to pre-op)
+AC-R3542 PASS archive pure-append 1152542 -> 1161822 B (header + 5 verbatim lines, prefix byte-identical; markers 78 -> 79)
+AC-R3545b PASS post-fold disk re-read 76304 B == written 76304 B; log 28 -> 26 items
+AC-R3546 PASS baselines: tick 1399; last_order flat / last_decision_rows 204 / last_gord_tbl_rows 130 / benchmarks_refreshed 2026-10-07 / last_dec_tokens flat (no new group rows this round)
+SD post-fold recount W/idle/nop/sub = 23/0/1/9 (window fold: -5 window lines absorbed +1 roll line +2 R1399 pair; sub -1 folded round line R1397 +1 R1399 round line; nop 1 flat [mention lives in R1235..R1250 cold summary line, outside window]; idle 0 [idle-fast path abolished P-2026-09-28-02])
+AC-R3545c PASS final 76304 B margin 2196 B <= 78500B gate (closeout pair included, fixed-point stable)
+EXPORT refreshed: export_ts=2026-10-07T03:38:42+08:00, tick row 1397->1399 (R1398 pair folded drift reconciled at fold flush per R1201-isomorph), results 544 -> 545 (R1399 fold row appended), ceo_face 3 rows, self_drive W/idle/nop/sub 23/0/1/9 (window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7])
+HB R1399 row appended (single LF matching existing file convention, honest note: R1397 evidence claimed CRLF but disk measure shows LF endings; last header tick=1399 parsed, prior 1398)
+AUTO-SAVES 459.1 MB / 350 files under 500 MB line (BD-PROP-002 pilot, no clean)
+DUAL-PARSE py json.loads PASS on post-fold state.json (tick 1399, 26 log items) + post-flush export json.loads (545 results)
+Carry-note: post-close state if over 78500B line fold R355 = next-round first-measure decides
+ARTIFACT-NOTE O-2026 in the new catalog = regex substring artifact of the prose spelling O-20260930-013 (dash-less variant of O-2026-0930-013; the full real token is carried intact in the catalog, zero-loss holds); same class as legacy artifacts D-PROP-003 / O-1207 carried by prior folds; kept chain-carried per precedent, no redo (pre-op export had no byte backup, a redo would violate verify-then-write; diff recorded honestly above)
+DUAL-PARSE PS ConvertFrom-Json verified: STATE tick=1399 log=26 last=2026-10-07 R1399 tokens: local=unmeasure...; EXPORT ts=2026-10-07T03:38:42+08:00 results=545 W=23/idle=0/nop=1/sub=9
