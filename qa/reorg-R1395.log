@@ -1,0 +1,22 @@
+# R1395 fold R352 water-level reorg + rolling-window fold closeout evidence log
+# run: 2026-10-07T02:41:24+08:00
+# AC-R3521..R3526 (fold R352, 352nd knife P-2026-09-25-18; R1391/R1393 isomorph)
+
+PRE PASS roundtrip byte-identity 78747 B (json.dumps ensure_ascii=False indent=2 reproduces file, convention=plain)
+AC-R3521 PASS pre-op state.json 78747 B == git HEAD blob (sha256 6449C78F8657ED68, git blob sha16 317E05455C1392B7)
+AC-R3521b PASS backup logs/state-preop-R1395.bak 78747 B written
+AC-R3523 PRE window idx 23..27 = 5 lines 6528 B (R1382..R1391 roll line + R1392 waiting pair + R1393 fold closeout pair)
+SD-SANITY pre-fold recount W/idle/nop/sub = 27/0/1/11 (export current 25/0/1/10 from R1393 flush; pair drift R1394 noted, reconciled at this fold flush)
+AC-R3522 PASS archive pure-append 1135947 -> 1142736 B (header + 5 verbatim lines, prefix byte-identical; markers 76 -> 77)
+AC-R3524 PRE window token catalog 49 mechanical (regex dedup, zero-loss; carried in roll line catalog verbatim)
+SD post-fold recount W/idle/nop/sub = 25/0/1/10 (composition shift: -5 window fold absorbed +1 roll line +2 R1395 pair; sub -2 folded round lines +1 R1394 pair drift +1 R1395 round line; flat values, drift reconciled)
+EXPORT results rows pre = 542
+AC-R3525a PASS verify-then-write final 78134 B margin 366 B <= 78500 B gate (predicted == actual byte-exact fixed-point; post-fold gauge 75602 B)
+AC-R3525b PASS post-fold disk re-read 78134 B == written 78134 B; log 30 -> 28 items
+AC-R3524b PASS post-fold log 30 -> 28 items; head block idx 0..22 verbatim; window 5 lines -> 1 roll line + closeout pair (R1394 pair kept)
+AC-R3526 PASS baselines: tick 1395; last_order flat / last_decision_rows 204 / last_gord_tbl_rows 130 / last_dec_tokens flat (no new group rows this round)
+EXPORT refreshed: export_ts=2026-10-07T02:41:24+08:00, tick row 1393->1395 (pair drift R1394 reconciled at fold flush per R1201-isomorph), results 542 -> 543, ceo_face 3 rows, self_drive W/idle/nop/sub 25/0/1/10
+HB R1395 row appended (single CRLF; last header tick=1395 parsed, prior 1394)
+AUTO-SAVES 448.4 MB / 342 files under 500 MB line (no clean)
+DUAL-PARSE PASS py json.loads on post-fold state.json (tick 1395, 28 log items) + post-flush export json.loads; PS ConvertFrom-Json verified post-round via scan_five_still.ps1
+Carry-note: post-close state if over 78500B line fold R353 = next-round first-measure decides
