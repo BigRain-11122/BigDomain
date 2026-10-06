@@ -1,0 +1,23 @@
+# R1405 fold R356 water-level reorg + rolling-window fold closeout evidence log
+# run: 2026-10-07T05:00:28+08:00
+# AC-R3561..R3566 (fold R356, 356th knife P-2026-09-25-18; R1391/R1393/R1395/R1397/R1399/R1402 isomorph; window extends to log tail kept=0 R966/R981 isomorph)
+
+PRE disk_bytes=80474 sha16=22C050A2717C95D4
+AC-R3561 PASS pre-op state.json 80474 B == git HEAD blob (sha256 22C050A2717C95D4)
+PRE roundtrip byte-identity 80474 B (json.dumps ensure_ascii=False indent=2, convention=plain, no BOM)
+AC-R3563 PRE window idx23..29 = 7 lines 9970 B (R1402 roll line + R1402 fold closeout pair + R1403 waiting declaration pair + R1404 waiting declaration pair; window extends to log tail, kept=0)
+AC-R3564 PRE window token catalog 55 -> 57 mechanical (union law new=old∪window-extract, zero-loss by construction; window extract diff vs carried: AC-R3551,BD-PROP-002; carried list parsed from old roll line explicit list 55 items; new entries: AC-R3551 from R1402 fold AC-range head, BD-PROP-002 from R1402 fold auto-saves pilot standing-step mention, kept chain-carried)
+SD-SANITY pre-fold recount window/idle/nop/sub = 27/0/1/9 (export current 23/0/1/9 from R1402 flush; +4 = R1403/R1404 pair drift, reconciled at this fold flush)
+AUTO-SAVES standing step measured 476.1MB/362 items under 500MB line (BD-PROP-002 pilot, no clean; host-level churn noted: R1403 473.1MB/358 -> R1404 377.4MB/172 external drop -> now regrown, external effect not this-loop write)
+AC-R3565a PASS verify-then-write predicted final 76538 B margin 1962 B <= 78500B gate (predicted == actual byte-exact fixed-point, iteration count 3)
+AC-R3561b PASS backup logs/state-preop-R1405.bak 80474 B written (byte-identical to pre-op)
+AC-R3562 PASS archive pure-append 1171614 -> 1181799 B (header + 7 verbatim lines, prefix byte-identical; markers 80 -> 81)
+AC-R3565b PASS post-fold disk re-read 76538 B == written 76538 B; log 30 -> 26 items
+AC-R3565c PASS final 76538 B margin 1962 B <= 78500B gate (closeout pair included, fixed-point stable)
+EXPORT refreshed: export_ts=2026-10-07T05:00:28+08:00, results 546 -> 547, ceo_face 3 rows, self_drive window/idle/nop/sub 23/0/1/9 (window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7])
+HB R1405 row appended (ending convention CRLF)
+AC-R3566 PASS baselines: tick 1405; last_order flat / last_decision_rows 204 / last_gord_tbl_rows 130 / benchmarks_refreshed 2026-10-07 / last_dec_tokens flat (no new group rows this round)
+SD post-fold recount window/idle/nop/sub = 23/0/1/9 (window fold: -7 window lines absorbed +1 roll line +2 R1405 pair; sub -1 folded round line R1402 fold +1 R1405 round line; idle 0 [idle-fast path abolished P-2026-09-28-02]; nop 1 flat [mention lives in R1235..R1250 cold summary line, outside window-fold range])
+AUTO-SAVES 476.1 MB / 362 items under 500 MB line (BD-PROP-002 pilot, no clean)
+DUAL-PARSE py json.loads PASS on post-fold state.json (tick 1405, 26 log items) + post-flush export json.loads (547 results)
+Carry-note: post-close state if over 78500B line fold R357 = next-round first-measure decides
