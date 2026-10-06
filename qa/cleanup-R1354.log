@@ -1,0 +1,6 @@
+PASS CS2 pre-cleanup git tracked face clean (auto-saves/tmp untracked per .gitignore)
+PASS CS1 pre-op auto-saves measured: 334 files, 502.2 MB (purge boundary now-24h = 2026-10-05 18:45:53)
+PASS CS1 purged 74 aged files (before boundary), released 169.1 MB; per-day: 10-05 74 files 169.1MB
+PASS CS1 kept-window integrity: 260 kept before == 260 present after (24h-window files zero accidental deletion)
+PASS CS2 scope guard: only .codely-cli/auto-saves/** purged; skills 2->2 + tmp 1017->1017 zero-touch (before/after reconciliation)
+PASS CS2 post-op 333.2 MB / 260 files < 500MB gate; git tracked face still clean
