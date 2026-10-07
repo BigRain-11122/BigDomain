@@ -1,0 +1,21 @@
+AC-R3716-as PASS auto-saves standing step (BD-PROP-002 pilot) measured this round 417.1MB/312 items; queue recount 6/2/2; proposals 3 total 1 open (python open-checkbox recount)
+AC-R3711 PASS pre-op byte-identity to HEAD blob (sha16 640e3222865be3af, 79208B, no BOM, no trailing LF, indent=2 round-trip exact); backup state-preop-R1446.bak written
+AC-R3712 PASS window shape asserted [R1443 roll line + R1443/R1444/R1445 three pairs] 7 lines, log 30 entries pre-fold; archive section R1446 appended verbatim, markers 23->24; on-disk 1318842B (local logs/ not in git per .gitignore)
+AC-R3715 PASS P/D catalog 80 -> 87 mechanical union zero-loss (new registers: C-01,D-06,D-20261007-04,D-20261007-05,D-20261007-06,ROP-002,ROP-003; extraction regex [A-Z]{1,3}-[0-9][0-9A-Za-z-]* over all 7 window lines)
+AC-R3713a PASS fixed-point digit iteration for self-referential size fields converged in 2 passes (post-fold stage 74281B, closeout stage 76658B)
+AC-R3713b PASS final 76658B under the 78500B gate by 1842B (asserted before write; honest abort otherwise)
+AC-R3713c PASS sd mechanical recount over post-fold state log asserted in-script: window 23 / idle 0 / nop 1 / sub 9, log lines-in-window pre-fold 27 -> post-fold 23 [-7 window fold absorbed, +1 roll line, +2 R1446 pair], sub pre-fold 11 -> 9 [-3 folded round lines R1443/R1444/R1445, +1 R1446 fold round line; caliber = date+R#### lines excluding tokens lines]
+AC-R3713d PASS verify-then-write: predicted 76658B == actual 76658B on disk (byte-exact size check)
+AC-R3714a PASS python json.loads OK post-write re-read (log 26 entries, tick 1446, decRows 212 unchanged, baseline fields untouched)
+AC-R3714b PASS dual-parser: PowerShell ConvertFrom-Json external post-write check via explicit UTF8 read OK (tick 1446, log 26)
+AC-R3716a PASS export roundtrip probe asserted pre-write: BOM utf-8-sig + indent=2, no trailing newline
+AC-R3716b PASS export results 561 rows pre-flush, tick row 1443 -> 1446 (R1444/R1445 two-round pair drift resolved by this flush)
+AC-R3716c PASS queue/proposal recounts verified 6/2/2 and 3-total/1-open before sd write (python open-checkbox recount)
+AC-R3716e PASS export post-write probe byte-exact (BOM preserved, no trailing newline)
+AC-R3716f PASS export results 562 rows post-write, tick row [12] = 1446, last row = R1446 fold row
+AC-R3716d PASS HB R1446 row on-time lag=0 (splitlines caliber -> 1092 rows, last row tick 1446, CRLF file-tail caliber)
+AC-R3716g FAIL git tracked-dirty set == intended files pre-commit (M docs/status-export.json; M heartbeat.txt; M src/os/state.json) [logs/ gitignored per .gitignore; qa/*.log un-ignored]
+ROUND-CONTEXT INFO nine-face scan ran pre-fold ~12:44 zero FLAG (LEDGER 109 lines conflict=0 atbd_rows=0 lastp all-receipted; DEC 212 tokens flat; GORD 132 rows zero new order; ORD/BENCH flat; QA same-day evidence on disk smoke-R1385+reconcile-daily-20261007; HB lag 0; TREE clean in sync; TASKS queue gated: OSS window5 claim window opens 10-07 15:07 post-watchdog scan, hard line 10-08 03:07; fold R371 triggered by pre-fold watermark 79208B over 78500B line by 708B (R1445 carry-note honored)
+CARRY-NOTE INFO post-closeout state 76658B margin 1842B under gate; if post-closeout waterline again crosses 78500B then fold R372 = next-round first-measure ruling; window-byte caliber note: prior-roll inline calibers (6232B/5475B/6011B) not reproduced this session after multi-hypothesis calibration (raw UTF-8 content sums 9418/8075/8847 do not close against them); from R1446 the window byte figure is recorded as explicit UTF-8 content-sum with in-line annotation; historical lines preserved verbatim
+PROCESS-NOTE INFO single clean pass, zero honest-abort (rerun guards verified idempotent by design: archive marker + state tick + export row + HB row)
+AC-R3716gr PASS repair: external git status re-run shows full intended 4-item dirty set (M docs/status-export.json; M heartbeat.txt; M src/os/state.json; ?? qa/reorg-R1446.log); in-script FAIL was a transient untracked-detection miss at check time, kept honest above (R1443 same-form repair precedent AC-R3706d0->AC-R3706d0r)
