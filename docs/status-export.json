@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-07T14:20:27+08:00",
+  "export_ts": "2026-10-07T14:49:40+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1454 fold R374 水位整编+滚窗归并收账轮（10-07 14:20·轮计分 1=台账维护机制件）：轮首首测 79129B 越线 629B（R1453 收账后越线注记兑现·P-2026-09-25-18 第374刀）→窗〔R1452 滚窗行+R1452/R1453 两对〕5 行 8572B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 13a01fac3f20ebd0〕·archive §R1454 节 5 行 verbatim〔markers 98→99〕+备份件 logs/state-preop-R1454.bak·编目 91→91 零新入（66 提取全在册）·verify-then-write+双解析器过·AC-R3741..R3746=qa/reorg-R1454.log",
-    "latest_artifact": "最近实物=R1454 fold R374 水位整编件（state.json 窗 5 行 8572B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 13a01fac3f20ebd0〕·archive §R1454 节 5 行 verbatim+备份件 logs/state-preop-R1454.bak·P/D 编目 91→91 零新入·qa/reorg-R1454.log AC-R3741..R3746 全过·post-fold 74087B 终款 76623B margin 1877B 闸内·HB R1454 行 lag=0·时间戳 2026-10-07 14:20）",
-    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L18 72h 线=现役最新件 OH-20261005 mtime 10-04 18:50+72h=10-07 18:50）——fold 后下轮起窗内即认领执行·判据 AC-OH21..OH25 预注册在板"
+    "current": "R1457 fold R375 水位整编+滚窗归并收账轮（10-07 14:49·轮计分 1=台账维护机制件）：轮首首测 80048B 越线 1548B（R1456 收账后越线注记兑现·P-2026-09-25-18 第375刀）→窗〔R1454 滚窗行+R1454/R1455/R1456 三对〕7 行 9475B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 5fee3ba51bc614f4〕·archive §R1457 节 7 行 verbatim〔markers 99→100〕+备份件 logs/state-preop-R1457.bak·编目 91→91 零新入（66 提取全在册）·verify-then-write+双解析器过·AC-R3751..R3756=qa/reorg-R1457.log",
+    "latest_artifact": "最近实物=R1457 fold R375 水位整编件（state.json 窗 7 行 9475B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 5fee3ba51bc614f4〕·archive §R1457 节 7 行 verbatim+备份件 logs/state-preop-R1457.bak·P/D 编目 91→91 零新入·qa/reorg-R1457.log AC-R3751..R3756 全过·post-fold 74539B 终款 77117B margin 1383B 闸内·HB R1457 行 lag=0·时间戳 2026-10-07 14:49）",
+    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L18 72h 线=10-07 18:50）——15:07 后首轮即认领执行·判据 AC-OH21..OH25 预注册在板"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1454",
+      "1457",
       "OSLoop 执行 tick"
     ],
     [
@@ -2445,6 +2445,10 @@
     [
       "1",
       "R1454 fold R374 水位整编+滚窗归并收账件（R1453 收账后越线注记兑现·轮首首测 79129B 越线 629B＝P-2026-09-25-18 第三百七十四刀·窗〔R1452 滚窗行+R1452/R1453 两对〕5 行 8572B（UTF-8 内容字节和口径·R1446 注承续）折 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 13a01fac3f20ebd0〕·archive §R1454 节 5 行 verbatim〔markers 98→99〕+备份件 logs/state-preop-R1454.bak·P/D 编目 91→91 新入册 0〔窗内提取 66 token 全在册〕·verify-then-write 预测==实际·双解析器过〔py+PS〕·post-fold 74087B+收账两行终款 76623B margin 1877B 闸内·AC-R3741..R3746=qa/reorg-R1454.log）"
+    ],
+    [
+      "1",
+      "R1457 fold R375 水位整编+滚窗归并收账件（R1456 收账后越线注记兑现·轮首首测 80048B 越线 1548B＝P-2026-09-25-18 第三百七十五刀·窗〔R1454 滚窗行+R1454/R1455/R1456 三对〕7 行 9475B（UTF-8 内容字节和口径·R1446 注承续）折 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 5fee3ba51bc614f4〕·archive §R1457 节 7 行 verbatim〔markers 99→100〕+备份件 logs/state-preop-R1457.bak·P/D 编目 91→91 新入册 0〔窗内提取 66 token 全在册〕·verify-then-write 预测==实际·双解析器过〔py+PS〕·post-fold 74539B+收账两行终款 77117B margin 1383B 闸内·AC-R3751..R3756=qa/reorg-R1457.log）"
     ]
   ],
   "self_drive": {
@@ -2452,7 +2456,7 @@
     "window_days": 7,
     "log_lines_in_window": 23,
     "idle_fast_mention_lines": 0,
-    "no_pullable_mention_lines": 2,
+    "no_pullable_mention_lines": 1,
     "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
@@ -2460,6 +2464,6 @@
     "queue_tech_open": 2,
     "queue_explore_open": 2,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (R1454 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; window [R1452 roll line + R1452/R1453 two pairs] 5 lines 8572B (UTF-8 content-sum caliber, R1446 annotation carried) -> 1 rolling summary kept=0 (window extends to log tail, R966/R981 isomorph); window-line count 25 pre-fold -> 23 [-5 window fold absorbed, +1 roll line, +2 R1454 pair]; sub 10 pre-fold -> 9 [-2 folded round lines R1452 fold / R1453 no-pullable, +1 R1454 fold round line; caliber = date+R#### lines excluding tokens lines, window-anchored]; idle 0 flat [idle-fast path abolished P-2026-09-28-02; out-of-window 09-26/27 cold line carries a historical mention, window-anchored caliber excludes it per R1452]; nop 3 pre-fold -> 2 [-2 folded R1452 roll line + R1453 no-pullable line, +1 new roll line carries the term in its window summary; residual 1 = 2026-10-05 cold summary line])"
+    "method": "F3 mechanical line counts (R1457 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; window [R1454 roll line + R1454/R1455/R1456 three pairs] 7 lines 9475B (UTF-8 content-sum caliber, R1446 annotation carried) -> 1 rolling summary kept=0 (window extends to log tail, R966/R981 isomorph); window-line count 27 pre-fold -> 23 [-7 window fold absorbed, +1 roll line, +2 R1457 pair]; sub 11 pre-fold -> 9 [-3 folded round lines R1454 fold / R1455 waiting / R1456 waiting, +1 R1457 fold round line; caliber = date+R#### lines excluding tokens lines, window-anchored]; idle 0 flat [idle-fast path abolished P-2026-09-28-02]; nop 2 pre-fold -> 1 [-1 folded R1454 roll line carried the term; new roll line zero-mention honestly noted; residual 1 = 2026-10-05 cold summary line])"
   }
 }
