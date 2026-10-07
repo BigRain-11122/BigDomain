@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-07T08:59:14+08:00",
+  "export_ts": "2026-10-07T09:29:21+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1423 fold R363 水位整编+滚窗归并收账轮（10-07 08:59·轮计分 1=台账维护机制件）：轮首首测 79918B 越线 1418B（R1422 承传注记兑现·P-2026-09-25-18 第363刀）→窗〔R1420 滚窗行+R1420 对+R1421/R1422 两对〕7 行 9400B 压 1 滚窗行 kept=0·终款 76438B·EXPORT tick 行 1420→1423 两轮 pair 漂移归一·九面扫描实跑全 PASS 零 FLAG·队列门控零可拉维持（OSS 窗5 认领窗 15:07 值守扫后起·现刻窗前不提前）",
-    "latest_artifact": "最近实物=R1423 fold R363 水位整编件（state.json 窗 7 行 9400B 压 1 滚窗行·pre-op==HEAD 逐字节〔sha16 1CC084500E78DA07〕·archive §R1423 节 7 行 verbatim+备份件 state-preop-R1423.bak·AC-R3631..R3636=qa/reorg-R1423.log·EXPORT tick 1420→1423+results 553→554+sd 23/0/1/9·10-07 08:59）",
-    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L15 实搜面 ≥2 全录+候选 ≥1 五门评估或如实零发现+L10 本地提效 ≥1 或如实零发现）+雷达第五窗候选清单 10-08 21:40 窗开到达即过目（P-2026-10-04-01/02 收益透镜执法）+fold R364 水位=下轮轮首首测裁定；提案窗 10-06..10-13 配额已清（BD-PROP-003 R1254）；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
+    "current": "R1426 fold R364 水位整编+滚窗归并收账轮（10-07 09:29·轮计分 1=台账维护机制件）：轮首首测 79240B 越线 740B（R1425 承传注记兑现·P-2026-09-25-18 第364刀）→窗〔R1423 滚窗行+R1423 对+R1424/R1425 两对〕7 行 8750B 压 1 滚窗行 kept=0·终款 76005B·EXPORT tick 行 1423→1426 两轮 pair 漂移归一·九面扫描实跑全 PASS 零 FLAG·队列门控零可拉维持（OSS 窗5 认领窗 15:07 值守扫后起·现刻窗前不提前）",
+    "latest_artifact": "最近实物=R1426 fold R364 水位整编件（state.json 窗 7 行 8750B 压 1 滚窗行·pre-op==HEAD 逐字节〔sha16 30574E2865A4FDDA〕·archive §R1426 节 7 行 verbatim+备份件 state-preop-R1426.bak·AC-R3641..R3646=qa/reorg-R1426.log·EXPORT tick 1423→1426+results 554→555+sd 23/0/1/9·10-07 09:29）",
+    "next_milestone": "下个里程碑（≤48h）：OSS 窗 5 切片件生产（OH-20261008-bigdomain.md·认领窗 10-07 15:07 值守扫后起·带内提前交付 19:00-21:50·硬线 10-08 03:07 值守扫前必达·canon L15 实搜面 ≥2 全录+候选 ≥1 五门评估或如实零发现+L10 本地提效 ≥1 或如实零发现）+雷达第五窗候选清单 10-08 21:40 窗开到达即过目（P-2026-10-04-01/02 收益透镜执法）+fold R365 水位=下轮轮首首测裁定；提案窗 10-06..10-13 配额已清（BD-PROP-003 R1254）；bootstrap CEO 物理件（服务器/域名/备案/商户号）无 ETA"
   },
   "depts": [
     {
@@ -235,7 +235,7 @@
       "运营预演件落盘（docs/ops/·BD-SD3·AC-SD3a..e 全过·R268）"
     ],
     [
-      "1423",
+      "1426",
       "OSLoop 执行 tick"
     ],
     [
@@ -2401,6 +2401,10 @@
     [
       "1",
       "R1423 fold R363 水位整编+滚窗归并收账（R1422 承传注记兑现·轮首首测 79918B 越线 1418B＝P-2026-09-25-18 第三百六十三刀·窗〔R1420 滚窗行+R1420 对+R1421/R1422 两对〕7 行 9400B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 1CC084500E78DA07〕+备份件 logs/state-preop-R1423.bak·archive §R1423 节 7 行 verbatim markers 87→88·终款 76438B margin 2062B·AC-R3631..R3636=qa/reorg-R1423.log·EXPORT tick 行 1420→1423 两轮 pair 漂移归一+results 553→554+sd 23/0/1/9）"
+    ],
+    [
+      "1",
+      "R1426 fold R364 水位整编+滚窗归并收账（R1425 承传注记兑现·轮首首测 79240B 越线 740B＝P-2026-09-25-18 第三百六十四刀·窗〔R1423 滚窗行+R1423 对+R1424/R1425 两对〕7 行 8750B 压 1 滚窗行 kept=0·pre-op==HEAD 逐字节〔sha16 30574E2865A4FDDA〕+备份件 logs/state-preop-R1426.bak·archive §R1426 节 7 行 verbatim markers 88→89·终款 76005B margin 2495B·AC-R3641..R3646=qa/reorg-R1426.log·EXPORT tick 行 1423→1426 两轮 pair 漂移归一+results 554→555+sd 23/0/1/9）"
     ]
   ],
   "self_drive": {
@@ -2416,6 +2420,6 @@
     "queue_tech_open": 2,
     "queue_explore_open": 2,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "F3 mechanical line counts (R1423 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; window [R1420 roll line + R1420 fold closeout pair + R1421/R1422 waiting pairs] 7 lines 9400B -> 1 rolling summary kept=0 (window extends to log tail, R966/R981 isomorph); window-line count 23 -> 23 [+4 R1421/R1422 pair drift since R1420 flush, -7 window fold absorbed, +1 roll line, +2 R1423 pair]; sub 9 -> 9 [+2 R1421/R1422 waiting declaration lines = 11, -3 folded round lines R1420 fold / R1421 waiting / R1422 waiting, +1 R1423 fold round line]; idle 0 flat [idle-fast path abolished P-2026-09-28-02]; nop 1 flat [mention lives in R1235..R1250 cold summary line dated 2026-10-05, outside window-fold range]; queues/proposals read from board files unchanged this round [python open-checkbox recount 6/2/2 verified])"
+    "method": "F3 mechanical line counts (R1426 recount at fold flush: window 2026-10-01..2026-10-07 anchored ^2026-10-0[1-7] over post-fold state log; window [R1423 roll line + R1423 fold closeout pair + R1424/R1425 waiting pairs] 7 lines 8750B -> 1 rolling summary kept=0 (window extends to log tail, R966/R981 isomorph); window-line count 23 -> 23 [+4 R1424/R1425 pair drift since R1423 flush, -7 window fold absorbed, +1 roll line, +2 R1426 pair]; sub 9 -> 9 [+2 R1424/R1425 waiting declaration lines = 11, -3 folded round lines R1423 fold / R1424 waiting / R1425 waiting, +1 R1426 fold round line]; idle 0 flat [idle-fast path abolished P-2026-09-28-02]; nop 1 flat [mention lives in R1235..R1250 cold summary line dated 2026-10-05, outside window-fold range]; queues/proposals read from board files unchanged this round [python open-checkbox recount 6/2/2 verified])"
   }
 }
