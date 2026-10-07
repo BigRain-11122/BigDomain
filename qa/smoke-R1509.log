@@ -1,0 +1,14 @@
+[2026-10-08 00:0x +08:00] BigDomain OSLoop R1509 — QA charter N 片 每日 crawl 轮（10-08 首轮值守扫·对账日常化同段先行）
+来源令：集团 docs/qa-smoke-test-charter.md v1.0（每日 crawl+benchmark 表「不是停更 15h」）+集团 orders L254 2026-09-28；scan [QA] FLAG today_png=0 today_log=0 bench_today=False → 本轮承接
+同段先行件（O-2026-0930-027 对账日常化·每日首轮）：python src/sandbox/reconcile_daily.py → RUNNER PASS (33/33 suites green, reconcile controls 6/6, 40.2s) = G0 绿·证据 qa/reconcile-daily-20261008.log（clean exit 0/tamper exit 2 双态全过·ledger 8/8+pay 6/6+member 6/6 控制面）
+判据预注册（先于外部请求·诚实律·AC-QN1..QN4）：
+  AC-QN1 = 每日 crawl ≥1 新源直采（A 级官方源·原文级逐项确认·试/得/判负两态如实）
+  AC-QN2 = benchmarks 三处翻新（§① 周期扣费/委托扣款行+§③ 源行+§④ N 片记录行）
+  AC-QN3 = intelligence-wall W18 信号行+结论应用表行（带源链接+分级+消费落点）
+  AC-QN4 = 本证据件 qa/smoke-R1509.log + qa/smoke-R1509.png 在盘（render_smoke_png.ps1 真 log 渲染·禁 P 图伪造）
+本轮采集目标：微信支付「周期扣费」+「委托扣款模式」官方商户文档双页（P-47⑤ 月卡自动续费扣款通道面·W10 消保条例第十条双时点第二时点平台机制载体·W15 订阅消息=消息通道与本源扣款机制互补·benchmarks 在册零重复）
+[00:1x] 执行与两态：search 定位官方双页 1 试（pay.weixin.qq.com 官方商户文档中心域）；双页直采 2 试 2 得零失败——①「周期扣费」页 doc/v2/merchant/4011986682（页注更新 2026.09.18·原文级提取：扣费前通知强制律〔「周期扣费的服务特点为『基于规则而非用户行为触发』，因此扣费前，需要为用户下发扣费前通知，确保用户的支付意愿」+若用户拒绝续费可关闭扣费服务〕+两种模式只能二选一〔通知后 24 小时自动扣费/预扣费通知·扣款规则只适用 pay/pappayapply·支付中签约 pay/contractorder 独立接口〕+首次签约〔含解约重签〕12 小时内扣款立即执行+订单 24 小时持续处理中勿重复发起避免频率限制+预扣费通知示例节律〔1 号调预扣费通知→2 号扣费等待期商户不可扣费用户可随时关闭→3~9 号共 7 天可扣费期→扣费期内仅每天 7:00~22:00 可发起→可多次尝试→实时扣费→扣费失败用户无感知→扣费成功用户收到扣费凭证·当前周期提前结束〕）②「委托扣款模式」页 doc/v2/merchant/4012205799（页注更新 2025.03.21·原文级提取：纯签约模式 vs 支付中签约模式〔支付中签约=后端预签约+支付完成同时正式签约·未完成支付则签约也失败〕+委托扣款三模式〔自动续费模式=连续包月/包季/包年·首次签约 12 小时内立即扣款成功+续费场景申请扣款后 24 小时再扣款；授权扣款模式=即时消费实时扣款；免密支付模式=小额免密〕+小程序场景纯签约接口 4011987274）
+[00:2x] 落盘件：docs/global-benchmarks.md §① 周期扣费/委托扣款行+§③ 源行+§④ N 片记录行（三处翻新）；docs/research/intelligence-wall.md W18 信号行+结论应用表行；benchmarks_refreshed=2026-10-08（7 天周期下次 10-15）
+[00:2x] 自验清单四项对照（charter v1.0）：①每日 crawl >=1 新源=PASS（2 得 0 判负·A 级官方双页）②benchmark 表 15h 律=PASS（M 片 10-07 00:4x→N 片 10-08 00:2x 续跑·三处翻新在盘·当日刷新）③调研来源链=PASS（源行带 A 级链接+页注更新时间+采时+两态注）④信号墙=PASS（W18 带源链接+分级+消费落点+结论应用表行）
+[00:2x] AC-QN1..QN4 判定：AC-QN1=PASS（双页直采 2 得零失败）·AC-QN2=PASS（benchmarks 三处翻新）·AC-QN3=PASS（W18 信号行+结论应用表行）·AC-QN4=PASS（本 log+png 在盘·render_smoke_png.ps1 渲染本 log）
+[00:2x] 轮账附记：同段先行件=对账日常化每日首轮 G0 绿（qa/reconcile-daily-20261008.log·RUNNER PASS 33/33+controls 6/6·40.2s）；O-2026-0930-013④ 值守每日首行核对=EXPORT age 0.1h+解析过+ceo_face 三行在位（本轮收账 export 实刷）；P-32 日清=零新增不写（零膨胀）
