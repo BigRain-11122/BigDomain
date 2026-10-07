@@ -1,0 +1,11 @@
+[AC-R4151] PASS pre-op==HEAD byte-identical: blob b0ff7a273a1ff7ba match=True sha16=0AFC855DEF2A8B84 size=80917B (round-start first-measure over 78500B line by 2417B = fold R415 triggered, R1550 carry-note honored, R1545->R1546 precedent chain)
+[AC-R4152a] pre-op backup logs/state-preop-R1551.bak written 80917B byte-identical
+[WINDOW] 11 lines (R1546 roll line + R1546/R1547/R1548/R1549/R1550 five pairs) 14894B UTF-8 content-sum caliber
+[AC-R4153a] catalog 115->118 mechanical union: window-extracted new 3 (AC-R4141,O-20261008-0650,P-2026-10-08-01), old set carried byte-identical + tail append
+[AC-R4152b] archive section R1551 appended: 11 lines verbatim, markers 139->140
+[AC-R4154a] verify-then-write: predicted post-fold 70763B (gate 78500B, margin 7737B)
+[AC-R4154b] actual written 70763B == predicted 70763B: True
+[AC-R4155a] py parser pass (json.loads re-read post-fold)
+[AC-R4155b] PS parser pass (ConvertFrom-Json post-closeout re-read)
+[AC-R4156] PASS post-fold 70763B + closeout final 73469B margin 5031B <= 78500B gate
+[SUMMARY] fold R415 = P-2026-09-25-18 cut no.415; window 11 lines 14894B -> 1 roll line kept=0; catalog 115->118; log 32->24 entries; tick 1550->1551
