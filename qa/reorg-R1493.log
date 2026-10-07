@@ -1,0 +1,28 @@
+qa/reorg-R1493.log - fold R392 water-level reorg evidence (R1493, P-2026-09-25-18 392nd knife)
+PASS PRE-OP AC-R3921 tree face clean (in-sync with origin/main, no index.lock)
+PASS PRE-OP AC-R3921 no-BOM + trailing LF + zero CR (round-start first-measure disk 79515B, over the 78500B gate by 1015B = R1492 carry-note cashed, 392nd knife)
+PASS PRE-OP AC-R3921 disk 79515 == HEAD blob byte-identical (sha16 BFDB49DD341D05BD)
+PASS PRE-OP AC-R3921 HEAD commit face = state.json + heartbeat only
+PASS PRE-OP AC-R3921 backup logs/state-preop-R1493.bak written byte-identical (79515 B, local logs/ gitignored asserted)
+PASS PRE-OP AC-R3921 top-level 7 fields intact (tick 1492, log 27): tick,last_order,last_decision_rows,benchmarks_refreshed,last_gord_tbl_rows,last_dec_tokens,log
+PASS PRE-OP AC-R3921 window [R1491 roll line + R1491/R1492 two pairs] 5 lines 11413B (probe: 6660+2717+220+1625+191=11413)
+PASS PRE-OP AC-R3921 window line heads/tails anchored (R1491 fold pair + R1492 waiting pair, roll heng-tail at 2856)
+PASS PRE-OP AC-R3921 P/D catalog 96 tokens, window extraction 9 unique all-in-register -> 96->96 zero new (honest note; must-have P-2026-09-25-18 present, uniform regex [A-Z]{1,3}-[0-9][0-9A-Za-z-]* carried)
+PASS PRE-OP AC-R3921 sd probe: stored (22,0,1,9) at R1491 flush; live now (24,0,1,10) = R1492 pair drift carried, resolved at this flush (R1201-isomorph precedent)
+PASS PRE-OP AC-R3921 queue recount 6/2/2 open-checkbox + proposals 3 total / 1 open (BD-PROP-001/002/003 in-register, no 004)
+PASS PRE-OP AC-R3921 auto-saves standing step (BD-PROP-002 pilot) measured 380.1MB/174 件 under 500MB line no clean
+PASS PRE-OP AC-R3921 archive trailing LF + fold-append markers 116 (last = R1491), pure-append basis verified
+PASS FOLD AC-R3922 new roll line composed (window header R1491..R1492 11413B + R1491 fold section + R1492 waiting section + heng-tail carried; banned three-family zero hits, must-haves present)
+PASS ARCHIVE AC-R3922 pure-append + prefix md5 identical (2ac0425795b1da4925cfa49ca88935ad); section R1493 = header + 5 window lines verbatim (1522001 -> 1533524 B local; markers 116->117, fold-append subset 44->45)
+PASS FOLD AC-R3923 fold-stage assembled and simulated green: post-fold gauge 74860B (log 27 -> 23, head idx 000..021 verbatim, idx 022 = new roll, 7 scalar fields unchanged)
+PASS FOLD AC-R3924 verify-then-write fixed-point converged (post-fold stage 74860B + closeout pair -> final 77304B, margin 1196B under the 78500B gate); BOTH size gates simulated green before first byte written
+PASS FOLD AC-R3923 fold stage written byte-exact: disk 74860B == prediction, json.loads green (tick 1492, log 23)
+PASS CLOSEOUT AC-R3923 closeout written byte-exact: final disk 77304B == prediction (tick 1492->1493, log 25, tail trio = roll/R1493 round/tokens, scalars other than tick unchanged)
+PASS CLOSEOUT AC-R3923 sd post-closeout recount (22, 0, 1, 9) == stored terminal (22,0,1,9) net-zero drift (R1492 pair resolved)
+PASS CLOSEOUT AC-R3924 dual-parser: python json.loads OK + PowerShell ConvertFrom-Json external check green (state tick=1493 log=25 decRows=212 gord=133; export results=583 pre-flush)
+PASS AC-R3925 P/D catalog 96 -> 96 mechanical union zero-loss, zero new registers honestly noted (window-extracted unique 9, all already in catalog; register-diff empty asserted pre-write; must-have P-2026-09-25-18 present)
+PASS AC-R3926 HB R1493 row appended (LF-only disk form preserved, 1138 -> 1139 rows, lag=0)
+PASS AC-R3926 export flush: export_ts 2026-10-07T21:19:18+08:00; tick row 1491 -> 1493 (R1492 no-flush pair drift resolved by this flush, R1201-isomorph precedent); results 583 -> 584 (new fold row, score 1); sd re-derived 22/0/1/9 mechanical recount asserted; ceo_face current row updated to R1493 fold round, latest_artifact + next_milestone carried verbatim (R1460 OSS slice remains latest real artifact); roundtrip probe asserted pre-write and post-write; BOM utf-8-sig + indent=2 no trailing newline
+PROCESS-NOTE single clean run, zero verify-then-write gate interceptions this round (all assertions passed on first pass); window [R1491 roll + R1491/R1492 two pairs] 5 lines 11413B -> 1 roll line kept=0; original 5 lines verbatim preserved = archive section R1493 + preop backup logs/state-preop-R1493.bak + git history (triple insurance)
+ROUND-CONTEXT nine-face scan ran pre-fold ~21:1x zero FLAG (STATE 79515B over 78500B line by 1015B = fold R392 trigger, R1492 carry-note honored; LEDGER 112 lines conflict=0 atbd_rows=0 lastp all-receipted [P-2026-10-06-05/P-2026-10-07-01/P-2026-10-07-02]; DEC 212 rows content-addressed flat; GORD 133 rows gord_new_rows=0 zero new order [last-3 table rows 10-07 batch = R1428/R1448 judged anti-rescan]; ORD/BENCH flat (bench 1d refreshed 10-07); QA same-day evidence on disk smoke-R1385+reconcile-daily-20261007; HB lag 0; TREE clean in-sync no lock) and queue gated zero pullable (radar window-5 list ETA 10-08 21:40; BigLife R777 chronic anti-rescan R1468 interval recheck done today; bootstrap CEO physicals merchant-id/server/domain/filing/ICP unchanged; reconcile-daily + O-013(4) done today R1385 no rerun; OSS window-5 done R1460; proposal window 10-06..10-13 quota cleared BD-PROP-003 R1254); D-20260930-19 two consumption steps = scan mechanical coverage; P-32 daily clear zero-new no HQ write
+CARRY-NOTE post-closeout state 77304B margin 1196B under gate; if post-closeout waterline again crosses 78500B then fold R393 = next-round round-start first-measure decides; round score 1 = ledger maintenance mechanism item
