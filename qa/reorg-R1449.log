@@ -1,0 +1,20 @@
+AC-R3726-as PASS auto-saves standing step (BD-PROP-002 pilot) measured this round 425.9MB/318 items; queue recount 6/2/2; proposals 3 total 1 open (python open-checkbox recount)
+AC-R3721 PASS pre-op byte-identity to HEAD blob (sha16 805ef642da6caa77, 80679B, no BOM, no trailing LF, indent=2 round-trip exact); backup state-preop-R1449.bak written
+AC-R3722 PASS window shape asserted [R1446 roll line + R1446/R1447/R1448 three pairs] 7 lines, log 30 entries pre-fold; archive section R1449 appended verbatim, markers 96->97 (all-markers basis per R1443 94->95 / R1446 95->96 chain; fold-append-format subset 24->25 noted, QA-only caliber); on-disk 1329059B (local logs/ not in git per .gitignore)
+AC-R3725 PASS P/D catalog 87 -> 91 mechanical union zero-loss (new registers: C-20261007-03,FE-20261007-C-2,P-2026-10-07-02,UTF-8; UTF-8 = literal string from R1446 caliber annotation, not a dispatch token - mechanical regex caliber kept uniform, annotated in state text; extraction regex [A-Z]{1,3}-[0-9][0-9A-Za-z-]* over all 7 window lines)
+AC-R3723a PASS fixed-point digit iteration for self-referential size fields converged in 2 passes (post-fold stage 74837B, closeout stage 77331B)
+AC-R3723b PASS final 77331B under the 78500B gate by 1169B (asserted before write; honest abort otherwise)
+AC-R3723c PASS sd mechanical recount over post-fold state log asserted in-script: window 23 / idle 0 / nop 1 / sub 9, log lines-in-window pre-fold 27 -> post-fold 23 [-7 window fold absorbed, +1 roll line, +2 R1449 pair], sub pre-fold 11 -> post-fold 9 [-3 folded round lines R1446/R1447/R1448, +1 R1449 fold round line; caliber = date+R#### lines excluding tokens lines]
+AC-R3723d PASS verify-then-write: predicted 77331B == actual 77331B on disk (byte-exact size check)
+AC-R3724a PASS python json.loads OK post-write re-read (log 26 entries, tick 1449, decRows 212 unchanged, baseline fields untouched)
+AC-R3724b PASS dual-parser: PowerShell ConvertFrom-Json external post-write check via explicit UTF8 read OK (tick 1449, log 26)
+AC-R3726a PASS export roundtrip probe asserted pre-write: BOM utf-8-sig + indent=2, no trailing newline
+AC-R3726b PASS export results 562 rows pre-flush, tick row 1446 -> 1449 (R1447/R1448 two-round pair drift resolved by this flush)
+AC-R3726c PASS queue/proposal recounts verified 6/2/2 and 3-total/1-open before sd write (python open-checkbox recount)
+AC-R3726e PASS export post-write probe byte-exact (BOM preserved, no trailing newline)
+AC-R3726f PASS export results 563 rows post-write, tick row [12] = 1449, last row = R1449 fold row
+AC-R3726d PASS HB R1449 row on-time lag=0 (splitlines caliber -> 1095 rows, last row tick 1449, CRLF file-tail caliber)
+AC-R3726g PASS git tracked-dirty set == intended files pre-commit (?? qa/reorg-R1449.log; M docs/status-export.json; M heartbeat.txt; M src/os/state.json) [transient first-read miss, second read verified; logs/ gitignored per .gitignore; qa/*.log un-ignored]
+ROUND-CONTEXT INFO nine-face scan ran pre-fold ~13:24 zero FLAG (LEDGER 110 lines conflict=0 atbd_rows=0 lastp all-receipted [P-2026-10-06-05/P-2026-10-07-01/P-2026-10-07-02 incl. R1448 review-batch same-window receipt]; DEC 212 tokens flat; GORD 133 rows gord_new_rows=0 zero new order [last-3 table rows 10-07 batch = R1428/R1448 judged anti-rescan]; ORD/BENCH flat; QA same-day evidence on disk smoke-R1385+reconcile-daily-20261007; HB lag 0; TREE clean in sync; TASKS queue gated: OSS window5 claim window opens 10-07 15:07 post-watchdog scan (now 13:2x pre-window no early claim), hard line 10-08 03:07; fold R372 triggered by pre-fold watermark 80679B over 78500B line by 2179B (R1448 carry-note honored)
+CARRY-NOTE INFO post-closeout state 77331B margin 1169B under gate; if post-closeout waterline again crosses 78500B then fold R373 = next-round first-measure ruling; window-byte caliber carried: UTF-8 content-sum (10106B this window, R1446 annotation chain); marker caliber: all-markers basis 96->97 (fold-append-format subset 24->25 QA-only)
+PROCESS-NOTE INFO single clean pass, zero honest-abort (rerun guards verified idempotent by design: archive marker + state tick + export row + HB row)
