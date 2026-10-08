@@ -1,0 +1,61 @@
+BigDomain QA Smoke Test - round R1619 - 2026-10-09 +08:00 (daily first-round watch shift)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-09 first round)
+same-round standing rows cashed: reconcile-daily G0 green (see [4]), HB lag=1 backfill due in closeout, DEC 3 new tokens judged (D-20261008-09 = bm-c governance-day revisit reading, non-BigDomain execution face, acknowledged no-action, state log line cites the full number)
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web, zero-key, read-only; 1 search + 1 fetch / 1 hit / 0 miss):
+    a. web search "互联网用户账号信息管理规定 全文 cac.gov.cn" - HIT (located official full-text page
+       + release-Q&A page on cac.gov.cn + gov.cn policy library + State Council Gazette mirrors)
+    b. cac.gov.cn/2022-06/26/c_1657868775042841.htm - HIT (A-level official issuer full-text page: CAC
+       Decree No.10, Provisions on the Administration of Internet User Account Information, adopted
+       2022-06-09 (11th executive meeting), published 2022-06-27, effective 2022-08-01, 5 chapters
+       24 articles, full text rendered on-page; line-by-line verified this round: Art.23(1) account-info
+       definition = name/avatar/cover/blurb/signature/certification info; Art.23(2) provider definition
+       includes instant-messaging / interactive info services / live-streaming (lobby+UGC direct hit);
+       Art.9 three-mode real-identity auth = mobile number / ID number / unified social credit code,
+       refuse-if-missing-or-impersonated = fail-closed registration face; Art.8 eight prohibitions incl.
+       content-eco Art.6/7 lists + QR/URL/contact-stuffing + homophone/lookalike strings + exaggerated
+       claims; Art.7 profession/organization consistency; Art.10 verify at register AND at change,
+       stricter review for "中国/中华/中央/全国/国家" + party/state symbols, mandatory measures against
+       re-registration of closed accounts (anti-farm direct clause); Art.11 credential verification +
+       special labeling for licensed/professional-domain accounts; Art.12/13 IP-territory display on
+       account pages + public-account info-page display fields; Art.14 six management systems +
+       scale-matched staffing; Art.15 dynamic re-verification of existing accounts (suspend -> rectify
+       -> terminate ladder); Art.16 personal-info protection (anti unauthorized access/leak/tamper/loss);
+       Art.17 six-step disposal ladder incl. no-re-registration + records + report; Art.18 credit
+       management system; Art.19 complaint entry + response time limits; Art.21 risk = suspend info
+       updates / account registration; Art.22 penalties warning/criticism/rectify + 10k-100k CNY;
+       Art.24 effective 2022-08-01)
+    -> consumption anchors: P-47-3 UGC account face (Art.9 auth + Art.8 review-feature-library
+       account-face + Art.10/15 anti-re-register + dynamic re-verify + Art.17 ladder), P-47-1 lobby
+       (instant-messaging auth + Art.12/13 IP display), P-47-2 anti-farm (Art.10 re-register
+       prevention + Art.18 credit), bootstrap staffing fifth legal source (Art.14), AIGC label chain
+       adjacent (Art.11 special labeling same-direction), W13/W16/W12/W14 same-direction chain.
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-09 (state.json top field updated in this round's closeout;
+    global-benchmarks.md section-1 carries the new account-info regulation block, section-3 the new
+    source row, section-4 the O-slice entry with fetch window 2026-10-09 ~00:05-00:1x +08:00;
+    next 7-day due 2026-10-16; today_png/today_log produced by this very file + png render below).
+
+[3] signals to intelligence-wall: PASS
+    W19 appended to docs/research/intelligence-wall.md signal table + conclusion application table
+    (consumption anchors: P-47-3 UGC account face; P-47-1 lobby instant-messaging auth + IP display;
+    P-47-2 anti-farm credit + re-register prevention; bootstrap staffing fifth source; mirrors
+    recorded as corroboration sources not fetched this round = two-state honesty).
+
+[4] on-disk evidence this round: PASS
+    qa/smoke-R1619.log (this file, real log) + qa/smoke-R1619.png (rendered from this log via
+    render_smoke_png.ps1, verbatim, never hand-drawn) + global-benchmarks.md section-1 block +
+    section-3 source row + section-4 O-slice line + benchmarks_refreshed=2026-10-09 +
+    qa/reconcile-daily-20261009.log (daily reconcile standing row, RUNNER PASS 33/33 suites green
+    + reconcile controls 6/6, clean exit 0 / tamper exit 2 dual-state, G0 green, same-round evidence,
+    37.8s).
+
+self-judge: charter checklist PASS (daily crawl / benchmark 15h law / research source chain / signal
+wall four items all verified against on-disk evidence); primary official issuer full-text page fetched
+fresh this round; release-Q&A page + gov.cn/gazette mirrors located via search and recorded as
+corroboration, not re-fetched (two-state honesty); no assertion without evidence; external content
+treated as untrusted input, zero downstream assertion.
