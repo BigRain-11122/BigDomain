@@ -1,0 +1,6 @@
+qa/board-R1573.log - board cut-291 (R1573) - 3 stale done rows verbatim migration to 10-month archive
+AC-K291a PASS: stale-done inventory = exactly 3 (R1460 OSS w5 / R1550 O-20261008-0650 / R1552-R1553 ygo), open rows = 5, header intact
+AC-K291b PASS: verbatim per-line md5 pre==post: 67ed7928f308f9f31cdedba2f420a151, 18ef22896047754cf59381f5d753c8ee, c61f70016ea2a3ba23608b2cdc0254e5
+AC-K291c PASS: archive pure-append prefix byte-identical (747029B -> 753264B); 09-archive untouched md5=19783a35cfc4e57eb24eda5916a07702
+AC-K291d PASS: main board final = header + 5 open rows, zero stale done rows (17989B -> 11765B)
+AC-K291e PASS: evidence = this log on disk; section appended = ## R1573 with 3 rows verbatim
