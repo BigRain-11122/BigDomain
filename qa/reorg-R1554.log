@@ -1,0 +1,13 @@
+[AC-R4161] PASS pre-op==HEAD byte-identical: blob effc647c14060a3a match=True sha16=2030A370E644AFCF size=79828B (round-start first-measure over 78500B line by 1328B = fold R416 triggered, R1553 carry-note honored)
+[AC-R4162a] pre-op backup logs/state-preop-R1554.bak written 79828B byte-identical
+[WINDOW] 7 lines (R1551 roll line + R1551/R1552/R1553 three pairs) 13836B UTF-8 content-sum caliber
+[AC-R4163a] catalog 118->124 mechanical union: window-extracted new 6 (AC-R4151,AC-SY1,AC-YG1,AC-YG6a,AC-YG6c,AC-YG7), old set carried byte-identical + tail append
+[AC-R4163b] census zero-loss: before 270 tokens subset of after 272 tokens: True
+[AC-R4163c] post-log window recount (21,8,1,0) == claim 21/0/1/8 sub/nop/idle: True
+[AC-R4162b] archive section R1554 appended: 7 lines verbatim, markers 140->141
+[AC-R4164a] verify-then-write: predicted post-fold 72728B, closeout final 76066B (gate 78500B, margin 2434B)
+[AC-R4164b] actual written 76066B == predicted 76066B: True
+[AC-R4165a] py parser pass (json.loads re-read post-closeout)
+[AC-R4165b] PS parser pass (ConvertFrom-Json state+export post-closeout re-read)
+[AC-R4166] PASS post-fold 72728B + closeout final 76066B margin 2434B <= 78500B gate
+[SUMMARY] fold R416 = P-2026-09-25-18 cut no.416; window 7 lines 13836B -> 1 roll line kept=0; catalog 118->124; log 28->24 entries; tick 1553->1554; group-repo push-gap retry honored same round (merge bf8fe5e, zero-overlap, R1552+R1553 receipt commits now on origin/main)
