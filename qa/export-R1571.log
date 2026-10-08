@@ -1,0 +1,82 @@
+qa/export-R1571.log - R1571 evidence (2026-10-08 ~12:0x +08:00)
+================================================================
+[SCAN] nine-face scan (scan_five_still.ps1) exit 0:
+  STATE PASS tick=1570 state_bytes=78423 (under 78,500B fold gate at round start)
+  LEDGER PASS lines=130 atbd_rows=0 conflict=0 (lastp=P-2026-10-08-11/13/14 all receipted)
+  DEC PASS rows=224 content-addressed flat (zero new tokens)
+  GORD INFO tbl_rows=150 gord_new_rows=2 (baseline 148 -> 150 this round)
+  ORD PASS flat (2026-09-28 22:1x)
+  BENCH PASS days=0 (refreshed 2026-10-08)
+  QA PASS today evidence on disk (reconcile-daily-20261008.log + smoke-R1509.log/png)
+  HB PASS lag=0
+  TASKS INFO unchecked=2 backlog_open=5 blocked_on_ceo=1 claimable=4 (all gated/waiting real-judged)
+  TREE PASS clean, no index.lock, main==origin/main
+
+[GORD] two new order rows judged (origin/main git show full-text read, both zero BigDomain hits):
+  1) P-2026-10-08-13 council rationality re-audit + load/resilience upgrade order
+     (C-20261008-03 passed 7/7, council.md v2.1->v2.2; expert-panel per seat,
+     interest-declaration + recusal law, E3 emergency lane, absence=abstention,
+     secretariat backup) = non-company execution face, knowledge-only receipt.
+     Seat-4 application note: our opinion items from next issuance follow the
+     v2.2 interest-declaration + recusal law; zero in-flight opinion items now.
+  2) P-2026-10-08-14 top governance architecture ruling order
+     (C-20261008-04 passed 7/7, governance.md #0 one-page map v1.0; eight-principle
+     audit, law-entropy priority law, legislation freeze until 10-13/15 revisit)
+     = non-company execution face, knowledge-only receipt.
+  Receipt per D-20260930-20 numbered-reference law: state log R1571 line cites
+  P-2026-10-08-13 / C-20261008-03 / P-2026-10-08-14 / C-20261008-04 in full.
+  Baseline last_gord_tbl_rows: 148 -> 150.
+
+[EXPORT] ceo_face plain-language alignment (CEO 2026-10-08 10:52 ruling,
+  R1569 ledger backfill, R1570 carry-note cashed):
+  - whole-file roundtrip gate REFUSED (json.dumps output != on-disk bytes)
+    -> fell back to targeted text surgery; every replacement counted
+    exactly once before any write (first run aborted pre-write on count=0)
+  - export_ts -> 2026-10-08T12:05:53+08:00
+  - ceo_face.current / latest_artifact / next_milestone rewritten in plain
+    minimal language (conclusion first, zero jargon stacks)
+  - results tick row 1569 -> 1571; new R1571 results row appended (count 617)
+  - self_drive recount: window 10-02..10-08, lines 22->27, nop 1->2, sub 9->11
+    (R1570 pair + R1571 main+tokens pair merged, then +1 R1571 DEC batch judgment
+    line counted final per R1569 receipt-line-counted precedent; queue 6/2/2 flat;
+    proposals 3/1 flat)
+  - mid-flight defect honestly noted: first results-append swallowed the R1569
+    row closing bracket -> post-write python reparse CAUGHT it (parse error
+    line 2657) -> one targeted fix -> dual-parser reverify PASS
+  - reverify: python json.load PASS (export_ts/ceo_face/sd/tick-row/last-row
+    asserted) + PowerShell ConvertFrom-Json PASS (sd=26/0/2/10,
+    results_count=617, ceo_face keys=current,latest_artifact,next_milestone)
+
+[QUEUE] gated zero pullable (radar w5 list ETA 10-08 21:40 held per anti-rescan
+  law; OSS window-6 slice 10-11 21:40; BigLife R777 review file held; bootstrap
+  blocked on CEO physicals merchant-id/server/domain/filing/ICP; daily reconcile
+  + O-013(4) first-of-day check already done today - not rerun)
+
+[DEC] second-scan batch (mid-round, group 12:0x session landed 5 new tokens;
+  full rows read via origin/main git show, all judged knowledge-only):
+  C-20261008-04  top governance ruling council case (P-2026-10-08-14 same order)
+                 = already receipted-closed this round via GORD judgment (R1571
+                 state log line cites it); D-20261008-05 row clause 7 itself
+                 notes zero-duplicate disposition = baseline merge, no new action
+  D-20261008-05  receipt-closeout batch 23 + overruled rescan (HQ ledger)
+                 = zero new BigDomain rows in the closing set = knowledge-only
+                 (O-20261008-0650 share note: our domain slice delivered R1550)
+  D-20261008-06  machine-suffix naming law for multi-machine co-written repos
+                 = our compliance self-check: OSLoop ledger files are
+                 single-writer lane files (backoff law in force), zero new
+                 daemon/probe product files this round; future new product
+                 files follow the face_<id>.json machine-suffix paradigm
+  D-20261008-07  night-shift window-item batch = OSS E1 three faces
+                 (HQ/BigLife/FluxVerse) exclude this company (our
+                 OH-20261008-bigdomain.md slice on disk = catch-up channel live);
+                 orders long-aged dispatched rows special scan incl. the
+                 "BigDomain three-order family" = HQ executor face at the
+                 10-09 00:00 session (our receipt chain addressable, zero
+                 company execution face)
+  D-20261008-08  bm-c FleetLink adoption closeout = other-machine/HQ face
+                 knowledge-only
+  Baseline update: last_dec_tokens +5, last_decision_rows 224 -> 233;
+  numbered-reference law: state log R1571 DEC batch line cites all five in full.
+
+[P32] daily clear: zero new group-level open items -> no HQ-FEEDBACK write
+[P-51] commit message cites P-2026-10-08-13 and P-2026-10-08-14
