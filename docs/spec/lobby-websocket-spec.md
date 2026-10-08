@@ -84,11 +84,20 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 - 件清单：`src/sandbox/lobby/server.py`（入口/闸/限速/心跳）、`sec_gate.py`（沙箱词表闸+非投顾词表）、`store.py`（SQLite WAL+evt_id+日导出+census_cache 查询索引）、`docker-compose.yml`（沙箱编排·可选）、`test_client.py`（AC-S1~S13 逐条断言）；P-47-1c 城市面增件（2026-09-24 R5 落）：`city.py`（census 白名单查询/化身 intake 队列+受理回执/HTTP 只读 read API）+`city_data/`（git 只读通道沙箱样件：citizens-light.jsonl+world-public.json）。
 - 依赖零外采：标准库+websockets 为限；不接任何外部 API（三问门：无必要·无授权）。
 
+### 同步层选型（cocreate 房共创状态收敛·应用层 CRDT·2026-10-08 R1553 回写·评估行②）
+- 范围：仅 `cocreate` 房共享文档/画布状态收敛；`lobby`/`quant` 房广播流不经本层（传输层选型上条在册不破·非同层非双建）。
+- 候选对比（ygo PoC 实证引用=src/sandbox/ygo-poc/ 四件+qa/ygo-poc-20261008.log+OH-20261008-bigdomain.md §五）：
+  - **Deln0r/ygo+yserve**（Yjs CRDT 纯 Go 端口·MIT·单二进制+SQLite）：wire-compat 判负核心实测过（AC-YG1..YG5 全 PASS·yjs@13.6.33 V1/V2 语义吻合+状态向量逐字节相等=README byte-for-byte 宣称升 A 级）；**仅裸 y-websocket 信封可用**（AC-YG6a/b FAIL：@hocuspocus/provider 多文档信封被静默丢弃=README drop-in 宣称证伪；AC-YG6c/d PASS：裸信封客户端实时收敛+SQLite 重启持久化）。
+  - **Python 自建最小 y-websocket 信封服务端**（y-py/ypy-websocket 族）：集团工具链亲和+安全闸可内联；成熟度未验=下窗 OSS 五门评估候选（本节只注记不采用·五门纪律）。
+- Go 运维成本 vs Python 亲和同评（评估行③定谳）：黑盒单件运维成本本身低（静态二进制+SQLite），但本规格**安全闸管道=用户内容面宪法序**（闸1→闸2→闸3 串行），CRDT 更新流经黑盒即绕闸；为其挂闸须进 Go 源码定制=第二语言维护面=超集团 Python 工具链承载 → **判负条件②触发：ygo 降级「仅协议参照」**（不作生产/沙箱同步服务端）。
+- 保留价值：①协议参照件（已验信封规格：tag 0/1/3·docName=URL 末段·V1/V2 同步语义）=未来 Python 信封服务端实现参照基准；②互操作回归对手件（PoC 客户端 src/sandbox/ygo-poc/js/client-yws.mjs 复用）。
+- 判据预注册（未来同步层采用前逐条对验·先于实现）：AC-SY1=任何 CRDT/同步层候选采用前须过 OSS 五门评估（OH 切片件五门记录在案）；AC-SY2=CRDT 更新路径与安全闸管道接线证明（闸1 生产=msgSecCheck 真接线·沙箱=词表闸；未接线=cocreate 房禁开门·§五.3 生死线同律）；AC-SY3=共创文档内 AI 生成内容片段标识方案定稿先于呈现面上线（§五.7 全呈现面律延伸）。
+
 ## 四、合规四件套自检（每设计件必含·本件对照）
 
 | 件 | 本件落位 |
 |---|---|
-| ① 判据预注册 | §一 AC-S1~S10+AC-P1~P5（先于实现注册） |
+| ① 判据预注册 | §一 AC-S1~S10+AC-P1~P5+§三 AC-SY1~SY3（先于实现注册） |
 | ② AIGC 生成标识面 | §二 AIGC 节+`ai_generated` 服务端权威字段+AC-S5 |
 | ③ msgSecCheck 前置闸 | §二 安全闸管道闸1+AC-S4+生产未接线禁开门 |
 | ④ 非投顾风险提示常驻面 | §二 `sys.risk_warning` 常驻+AC-S6+闸2 禁收益承诺词表 |
@@ -104,4 +113,4 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 ICP 备案 → wss/域名 → msgSecCheck 真实接线 → 支付回执凭证（P-47-4）→ 日志留存/等保测评呈报 → 云上压测（AC-P5）→ **呈批开门（CEO 一句话）**。
 
 ---
-版本：v0.2（2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版）；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
+版本：v0.3（2026-10-08·OSLoop R1553·同步层选型节回写=ygo PoC 裁决落规格〔评估行②〕+Go/Python 同评=超承载→降级「仅协议参照」〔评估行③〕）；v0.2=2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
