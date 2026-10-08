@@ -1,0 +1,9 @@
+{
+  "name": "bd-ygo-poc-js",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@hocuspocus/provider": "^2.13.0",
+    "yjs": "13.6.33"
+  }
+}

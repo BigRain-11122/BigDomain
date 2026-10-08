@@ -25,6 +25,9 @@ src/sandbox/ugc/export-ac-*/
 src/sandbox/pay/data/
 # sandbox runtime artifacts (src/sandbox/member: sqlite dbs from CLI readiness runs)
 src/sandbox/member/data/
+# sandbox runtime artifacts (src/sandbox/ygo-poc: node deps, fixtures, go/yserve build outputs)
+src/sandbox/ygo-poc/js/node_modules/
+src/sandbox/ygo-poc/data/
 # CEO safe-cleanup amendment (group orders 09-28 ~10:xx): auto-saves/temp moved here, 7d observation then delete
 docs/_trash/
 # Codely CLI local data (installed skill copy + session trash; committed source of truth = tools/skills/)
