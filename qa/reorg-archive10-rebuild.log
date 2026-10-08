@@ -1,0 +1,230 @@
+qa/reorg-archive10-rebuild.log - archive10 zero-loss rebuild from git history (R1648, 2026-10-09)
+method: walk git commit chain of src/os/state.json since 2026-10-05 00:00 (497 commits), log-array multiset diff; window = single removed segment (or tail segment when multiple); roll = inserted span-line with largest span end; knife = ASCII fold R<n> in inserted lines
+events detected: 201 ; sections built: 168 ; excluded: 33
+
+excluded events (honest adjudication):
+  sep09-era event (archive09 face) (ctick=1156 fold_round=1156 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1158 fold_round=1158 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1160 fold_round=1160 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1162 fold_round=1162 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1164 fold_round=1164 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1166 fold_round=1166 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1168 fold_round=1168 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1170 fold_round=1170 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1171 fold_round=1171 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1172 fold_round=1172 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1173 fold_round=1173 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1174 fold_round=1174 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1175 fold_round=1175 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1176 fold_round=1176 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1177 fold_round=1177 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1178 fold_round=1178 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1179 fold_round=1179 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1180 fold_round=1180 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1181 fold_round=1181 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1182 fold_round=1182 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1183 fold_round=1183 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1184 fold_round=1184 knife=237 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1185 fold_round=1185 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1187 fold_round=1187 knife=268 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1188 fold_round=1188 knife=269 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1189 fold_round=1189 knife=270 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1190 fold_round=1190 knife=271 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1191 fold_round=1191 knife=272 removed_lines=3)
+  R1192 creation round (cold seed archived bare, window via git+bak per receipt AC-R2732c) (ctick=1192 fold_round=1192 knife=273 removed_lines=9)
+  in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1243 fold_round=1243 knife=303 removed_lines=1)
+  in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1446 fold_round=1446 knife=371 removed_lines=1)
+  in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1553 fold_round=1553 knife=None removed_lines=1)
+  R1646 fold R444 = intact tail preserved verbatim (ctick=1647 fold_round=1646 knife=444 removed_lines=9)
+
+seed: 6 lines from R1192 parent blob log[47:53] (receipt AC-R2732c six-line creation), content bytes=10405 (receipt claim 10405), all dated 2026-09-28: True
+cold-segment bare appends (dual-leg rounds, R1192-seed precedent): 3 blocks 9124B - see per-section cold notes below
+  cold at R1227: 1 lines appended bare before its section
+  cold at R1232: 3 lines appended bare before its section
+  cold at R1234: 6 lines appended bare before its section
+
+AC-AR1 section count vs in-register fold claims: FAIL
+  sections=168 (expect 168); knife sequence R276..R443 contiguous=False; receipts present=True; markers before R1642=167 (claim 167)
+AC-AR2 tail R1646 append + 9 lines verbatim: PASS
+  tail=13499B byte-preserved from damaged file offset 2186212; NUL region all-zero=True
+  tail sha256=ab71b10e6f679f4b2225ee5767299e30b28f8e7d9c962b42a0ba45526e7b260f
+  9 tail lines byte-equal git-derived fold R444 window: True
+AC-AR3 four sampled sections vs git pre-fold states (byte-exact contiguous slice + receipt size):
+  R1196: window-lines-git-contiguous=True sha16=bb9e431a559e76f3 receipt_chunk=None size_delta=20794
+  R1413: window-lines-git-contiguous=True sha16=bde828c466f526e8 receipt_chunk=None size_delta=9951
+  R1642: window-lines-git-contiguous=True sha16=1762152e89127229 receipt_chunk=13505 size_delta=0
+  R1237: window-lines-git-contiguous=True sha16=0c8b2ee1f2f5dd10 receipt_chunk=None size_delta=37374
+AC-AR4 sep09 archive zero-touch: sha256=406539fdac85da498ace112f8e080aee55788e367bfd7ce367ac21a46c0ff183 (opened read-only; byte-identical after)
+
+receipt chunk-size reconciliation (delta 0 = section header regenerated byte-exact; NONE = no size anchor in receipt):
+  R1196 n=9 mine=20794 receipt=NONE desc_src=receipt
+  R1198 n=5 mine=19512 receipt=NONE desc_src=receipt
+  R1201 n=7 mine=21241 receipt=NONE desc_src=receipt
+  R1203 n=5 mine=20147 receipt=NONE desc_src=receipt
+  R1205 n=5 mine=20931 receipt=NONE desc_src=receipt
+  R1206 n=3 mine=19565 receipt=NONE desc_src=derived
+  R1208 n=5 mine=20197 receipt=NONE desc_src=derived
+  R1209 n=3 mine=19693 receipt=NONE desc_src=receipt
+  R1210 n=3 mine=19261 receipt=NONE desc_src=derived
+  R1211 n=3 mine=19597 receipt=NONE desc_src=derived
+  R1212 n=3 mine=20092 receipt=NONE desc_src=receipt
+  R1213 n=3 mine=21384 receipt=NONE desc_src=receipt
+  R1214 n=3 mine=22051 receipt=NONE desc_src=receipt
+  R1215 n=4 mine=24503 receipt=NONE desc_src=receipt
+  R1216 n=3 mine=24035 receipt=NONE desc_src=derived
+  R1217 n=3 mine=22959 receipt=NONE desc_src=derived
+  R1218 n=3 mine=23523 receipt=NONE desc_src=derived
+  R1219 n=3 mine=24975 receipt=NONE desc_src=derived
+  R1220 n=4 mine=26618 receipt=NONE desc_src=derived
+  R1221 n=3 mine=24831 receipt=3254 delta=+21577 desc_src=derived
+  R1222 n=4 mine=25289 receipt=3207 delta=+22082 desc_src=derived
+  R1224 n=9 mine=32119 receipt=3010 delta=+29109 desc_src=derived
+  R1225 n=3 mine=29739 receipt=NONE desc_src=receipt
+  R1227 n=5 mine=30955 receipt=NONE desc_src=derived
+  R1230 n=7 mine=31932 receipt=NONE desc_src=derived
+  R1232 n=5 mine=32096 receipt=35430 delta=-3334 desc_src=derived
+  R1234 n=5 mine=34283 receipt=38998 delta=-4715 desc_src=derived
+  R1237 n=32 mine=37374 receipt=NONE desc_src=derived
+  R1251 n=32 mine=40531 receipt=NONE desc_src=derived
+  R1266 n=22 mine=23910 receipt=NONE desc_src=derived
+  R1275 n=16 mine=17232 receipt=NONE desc_src=derived
+  R1282 n=12 mine=11543 receipt=NONE desc_src=derived
+  R1286 n=9 mine=12720 receipt=NONE desc_src=derived
+  R1289 n=7 mine=11197 receipt=NONE desc_src=derived
+  R1293 n=9 mine=12102 receipt=NONE desc_src=derived
+  R1297 n=8 mine=10277 receipt=NONE desc_src=derived
+  R1299 n=4 mine=5811 receipt=NONE desc_src=derived
+  R1301 n=6 mine=9811 receipt=NONE desc_src=receipt
+  R1304 n=7 mine=9680 receipt=NONE desc_src=receipt
+  R1306 n=6 mine=11243 receipt=NONE desc_src=derived
+  R1306 n=6 mine=12182 receipt=NONE desc_src=derived
+  R1310 n=8 mine=9838 receipt=NONE desc_src=derived
+  R1312 n=5 mine=8357 receipt=NONE desc_src=derived
+  R1314 n=3 mine=9309 receipt=NONE desc_src=derived
+  R1317 n=7 mine=10109 receipt=NONE desc_src=derived
+  R1319 n=5 mine=11378 receipt=11390 delta=-12 desc_src=receipt
+  R1322 n=7 mine=9885 receipt=NONE desc_src=receipt
+  R1325 n=7 mine=10331 receipt=NONE desc_src=receipt
+  R1327 n=5 mine=8691 receipt=NONE desc_src=receipt
+  R1329 n=5 mine=8543 receipt=NONE desc_src=receipt
+  R1331 n=5 mine=9120 receipt=NONE desc_src=receipt
+  R1334 n=7 mine=11371 receipt=NONE desc_src=receipt
+  R1337 n=7 mine=9174 receipt=NONE desc_src=receipt
+  R1340 n=7 mine=8937 receipt=NONE desc_src=receipt
+  R1343 n=7 mine=9196 receipt=NONE desc_src=receipt
+  R1346 n=7 mine=9824 receipt=NONE desc_src=receipt
+  R1349 n=7 mine=9650 receipt=NONE desc_src=receipt
+  R1352 n=7 mine=9256 receipt=NONE desc_src=receipt
+  R1355 n=7 mine=9764 receipt=NONE desc_src=receipt
+  R1358 n=7 mine=11404 receipt=NONE desc_src=receipt
+  R1360 n=5 mine=8834 receipt=NONE desc_src=receipt
+  R1362 n=5 mine=8259 receipt=NONE desc_src=receipt
+  R1364 n=5 mine=8468 receipt=NONE desc_src=receipt
+  R1366 n=5 mine=9517 receipt=NONE desc_src=receipt
+  R1368 n=5 mine=8784 receipt=NONE desc_src=receipt
+  R1370 n=5 mine=9144 receipt=NONE desc_src=receipt
+  R1372 n=5 mine=8973 receipt=NONE desc_src=receipt
+  R1374 n=5 mine=8845 receipt=NONE desc_src=receipt
+  R1376 n=5 mine=8504 receipt=NONE desc_src=receipt
+  R1378 n=5 mine=9099 receipt=NONE desc_src=receipt
+  R1380 n=5 mine=10221 receipt=NONE desc_src=receipt
+  R1382 n=5 mine=10519 receipt=NONE desc_src=receipt
+  R1384 n=5 mine=9718 receipt=NONE desc_src=receipt
+  R1386 n=5 mine=10190 receipt=NONE desc_src=derived
+  R1389 n=5 mine=7153 receipt=NONE desc_src=derived
+  R1391 n=5 mine=7086 receipt=NONE desc_src=derived
+  R1393 n=5 mine=6956 receipt=NONE desc_src=derived
+  R1395 n=5 mine=6691 receipt=NONE desc_src=derived
+  R1397 n=7 mine=9556 receipt=NONE desc_src=derived
+  R1399 n=5 mine=9256 receipt=NONE desc_src=derived
+  R1402 n=7 mine=9748 receipt=NONE desc_src=derived
+  R1405 n=7 mine=10141 receipt=NONE desc_src=derived
+  R1407 n=5 mine=8215 receipt=NONE desc_src=receipt
+  R1410 n=7 mine=9416 receipt=NONE desc_src=receipt
+  R1413 n=7 mine=9951 receipt=NONE desc_src=receipt
+  R1415 n=5 mine=9975 receipt=NONE desc_src=receipt
+  R1417 n=5 mine=8248 receipt=NONE desc_src=receipt
+  R1420 n=7 mine=8631 receipt=NONE desc_src=receipt
+  R1423 n=7 mine=9583 receipt=NONE desc_src=receipt
+  R1426 n=7 mine=8917 receipt=NONE desc_src=receipt
+  R1429 n=7 mine=9752 receipt=NONE desc_src=receipt
+  R1432 n=7 mine=9690 receipt=NONE desc_src=receipt
+  R1435 n=7 mine=9176 receipt=NONE desc_src=receipt
+  R1438 n=7 mine=9030 receipt=NONE desc_src=receipt
+  R1440 n=5 mine=8249 receipt=NONE desc_src=receipt
+  R1443 n=7 mine=9578 receipt=NONE desc_src=receipt
+  R1446 n=7 mine=8795 receipt=NONE desc_src=receipt
+  R1449 n=7 mine=10266 receipt=NONE desc_src=receipt
+  R1452 n=7 mine=9260 receipt=NONE desc_src=receipt
+  R1454 n=5 mine=8722 receipt=NONE desc_src=receipt
+  R1457 n=7 mine=9635 receipt=NONE desc_src=receipt
+  R1459 n=5 mine=8318 receipt=NONE desc_src=receipt
+  R1462 n=7 mine=9628 receipt=NONE desc_src=receipt
+  R1464 n=5 mine=8494 receipt=NONE desc_src=receipt
+  R1466 n=5 mine=8852 receipt=NONE desc_src=receipt
+  R1468 n=5 mine=8163 receipt=NONE desc_src=receipt
+  R1470 n=5 mine=8319 receipt=NONE desc_src=receipt
+  R1474 n=5 mine=11134 receipt=NONE desc_src=receipt
+  R1476 n=5 mine=10945 receipt=NONE desc_src=receipt
+  R1479 n=7 mine=11374 receipt=NONE desc_src=receipt
+  R1481 n=5 mine=11716 receipt=NONE desc_src=receipt
+  R1483 n=5 mine=11165 receipt=NONE desc_src=receipt
+  R1485 n=5 mine=11313 receipt=NONE desc_src=receipt
+  R1487 n=5 mine=11434 receipt=NONE desc_src=receipt
+  R1489 n=5 mine=11545 receipt=NONE desc_src=receipt
+  R1491 n=5 mine=11522 receipt=NONE desc_src=receipt
+  R1493 n=5 mine=11563 receipt=NONE desc_src=receipt
+  R1496 n=7 mine=11835 receipt=NONE desc_src=receipt
+  R1498 n=5 mine=11097 receipt=NONE desc_src=receipt
+  R1500 n=5 mine=11010 receipt=NONE desc_src=receipt
+  R1502 n=5 mine=12936 receipt=NONE desc_src=receipt
+  R1504 n=5 mine=12495 receipt=NONE desc_src=receipt
+  R1506 n=5 mine=11481 receipt=NONE desc_src=receipt
+  R1508 n=5 mine=11582 receipt=NONE desc_src=receipt
+  R1510 n=5 mine=12459 receipt=NONE desc_src=receipt
+  R1512 n=5 mine=12273 receipt=NONE desc_src=receipt
+  R1514 n=5 mine=10558 receipt=NONE desc_src=receipt
+  R1517 n=7 mine=11882 receipt=NONE desc_src=receipt
+  R1519 n=5 mine=11725 receipt=NONE desc_src=receipt
+  R1522 n=7 mine=11627 receipt=NONE desc_src=receipt
+  R1524 n=5 mine=10592 receipt=NONE desc_src=receipt
+  R1527 n=7 mine=10925 receipt=NONE desc_src=receipt
+  R1529 n=5 mine=10637 receipt=NONE desc_src=receipt
+  R1532 n=7 mine=12197 receipt=NONE desc_src=receipt
+  R1534 n=5 mine=11664 receipt=NONE desc_src=receipt
+  R1537 n=9 mine=14660 receipt=NONE desc_src=receipt
+  R1540 n=7 mine=14471 receipt=NONE desc_src=receipt
+  R1543 n=7 mine=13865 receipt=NONE desc_src=receipt
+  R1546 n=7 mine=12899 receipt=NONE desc_src=receipt
+  R1551 n=11 mine=15081 receipt=NONE desc_src=derived
+  R1554 n=7 mine=14007 receipt=NONE desc_src=derived
+  R1557 n=7 mine=12768 receipt=NONE desc_src=derived
+  R1561 n=9 mine=13083 receipt=NONE desc_src=receipt
+  R1565 n=9 mine=13721 receipt=NONE desc_src=derived
+  R1569 n=10 mine=13608 receipt=NONE desc_src=receipt
+  R1572 n=9 mine=17380 receipt=NONE desc_src=derived
+  R1574 n=4 mine=6398 receipt=NONE desc_src=derived
+  R1576 n=6 mine=14265 receipt=NONE desc_src=receipt
+  R1578 n=5 mine=7151 receipt=NONE desc_src=derived
+  R1580 n=5 mine=7518 receipt=NONE desc_src=receipt
+  R1582 n=5 mine=6490 receipt=NONE desc_src=receipt
+  R1583 n=5 mine=14279 receipt=NONE desc_src=receipt
+  R1586 n=8 mine=15699 receipt=NONE desc_src=receipt
+  R1590 n=10 mine=14762 receipt=NONE desc_src=receipt
+  R1594 n=9 mine=16613 receipt=NONE desc_src=receipt
+  R1597 n=8 mine=13944 receipt=NONE desc_src=receipt
+  R1600 n=7 mine=14517 receipt=NONE desc_src=receipt
+  R1602 n=5 mine=13444 receipt=NONE desc_src=receipt
+  R1606 n=9 mine=13490 receipt=NONE desc_src=receipt
+  R1610 n=9 mine=14297 receipt=NONE desc_src=receipt
+  R1615 n=11 mine=13388 receipt=NONE desc_src=receipt
+  R1620 n=11 mine=18620 receipt=NONE desc_src=receipt
+  R1624 n=9 mine=14069 receipt=NONE desc_src=receipt
+  R1628 n=9 mine=14418 receipt=NONE desc_src=receipt
+  R1632 n=9 mine=14708 receipt=NONE desc_src=receipt
+  summary: exact=3 delta=6 no-receipt-size=159 of 168 sections
+receipt pre-op sha16 cross-checks: 102/126 match
+
+size accounting: rebuilt content region=2263233B (original clobbered region=2186212B, delta=+77021 = provenance header 1147B + cold bare appends 9124B + header-style drift)
+final file=2276732B sha256=8ccc887159c38572648231f77ca043fb03a4cfb1e0310e25ae09cba1de5eb4da
+hard_fail=True -> NO WRITE, manual review required
