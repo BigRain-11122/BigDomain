@@ -1,0 +1,13 @@
+[AC-R4171] PASS pre-op==HEAD byte-identical: blob c7f279298a535758 match=True sha16=2726D551067D2031 size=78589B (round-start first-measure over 78500B line by 89B = fold R417 triggered, R1556 carry-note honored)
+[AC-R4172a] pre-op backup logs/state-preop-R1557.bak written 78589B byte-identical
+[WINDOW] 7 lines (R1554 roll line + R1554/R1555/R1556 three pairs) 12597B UTF-8 content-sum caliber
+[AC-R4173a] catalog 124->127 mechanical union: window-extracted new 3 (AC-R4161,OH-20261008-bigmoney,P-2026-09-28-02), old set carried byte-identical + tail append
+[AC-R4173b] census zero-loss: before 383 tokens subset of after 384 tokens: True
+[AC-R4173c] post-log window recount (21,0,1,8) == predicted sd 21/0/1/8 / export sd 21/0/1/8 lines-idle-nop-sub: True
+[AC-R4172b] archive section R1557 appended: 7 lines verbatim, markers 141->142
+[AC-R4174a] verify-then-write: predicted post-fold 71393B, closeout final 73863B (gate 78500B, margin 4637B); window line-1 raw carries JSON-escaped backslash pair (removed_raw 12653B vs content-model 12652B, 1B escape-caliber delta absorbed by raw-byte accounting)
+[AC-R4174b] actual written 73863B == predicted 73863B: True
+[AC-R4175a] py parser pass (json.loads re-read post-closeout: log 24 entries, tick 1557)
+[AC-R4176] PASS post-fold 71393B + closeout final 73863B margin 4637B <= 78500B gate
+[SUMMARY] fold R417 = P-2026-09-25-18 cut no.417; window 7 lines 12597B -> 1 roll line kept=0; catalog 124->127; log 28->24 entries; tick 1556->1557; export tick row 1554->1557 + results 612->613 + sd 21/0/1/8
+[AC-R4175b] PS parser pass (ConvertFrom-Json state+export post-closeout re-read: state tick=1557 log=24; export results=613 sd=21/0/1/8 export_ts=2026-10-08T09:26:07+08:00)
