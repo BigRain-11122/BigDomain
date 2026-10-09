@@ -140,6 +140,15 @@ SUITES = [
     # pre-registered in state/queue/explore.md).
     ("ledger-showroom",
      os.path.join("ledger", "test_showroom.py"), 7),
+    # R1696 sister-city cross-city visit face: twin-pair schedule
+    # window registration + visit pass (one pass per resident per
+    # pairing, window edges inclusive, replay/dup gates before the
+    # spend) + merchant cross-city exposure with pair-wide slot cap +
+    # window settlement through the SettlementFace public API
+    # build/verify manifest reference (AC-SC1..SC7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-sistercity",
+     os.path.join("ledger", "test_sistercity.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
