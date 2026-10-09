@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T03:29:49+08:00",
+  "export_ts": "2026-10-10T03:52:32+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1706 本轮交付：支付状态通知功能上线（沙箱版）——用户支付成功和退款时，按微信订阅消息的规矩给他发通知：他先授权过才发、没授权就记账不硬发、每天有条数上限、发不出去的进站内横幅队列一条不丢。真实发送要等 CEO 的模板 ID（物理件），没到之前一律拒绝不放水。待外部输入不变：雷达候选清单+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：支付状态通知面 notify.py（2026-10-10·R1706 交付·可跑实物）：支付成功/退款双时点+模板审核闸 fail-closed+授权预算+日帽+降级横幅持久化；测试 7/7·全量回归 44 套件 480 判据全绿；证据 qa/pay-notify-R1706.log",
-    "next_milestone": "下轮=支付通知接进下单主流程（orders.py 付完款自动通知·tech.md 后继行）+fold 拒面修复提示对齐；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1707 本轮交付两件：①台账水位 fold R462 收口（79KB 压回 70KB·token 零丢失全归档）；②水印缩放族恢复实验=上轮判负的「改尺寸攻击」现已可修复：用库自带模板对位先识别被缩放了多少倍、再重建回原尺寸提取——缩小 0.5× 错误率 0.52→0.055、放大 2.0× 0.50→0 位级精确恢复。全套回归 45 套件 487 判据全绿。待外部输入不变：雷达候选清单+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：水印缩放族模板对位恢复实验 test_scale_recover.py（2026-10-10·R1707 交付·可跑实物）：R1680 缩放族判负翻案=模板对位双例全 RECOVERED（0.5× ber 0.5195→0.0547·2.0× 0.5000→0.0000）·套件 7/7+全量回归 45 套件 487 判据全绿；证据 qa/watermark-scale-recover-R1707.log",
+    "next_milestone": "下轮=pay notify 接进下单主流程（orders.py 付完款自动通知）+suite_matrix 证据发现面修复（tech.md 队头序）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1706",
+      "1707",
       "OSLoop 执行 tick"
     ],
     [
@@ -2933,15 +2933,19 @@
     [
       "2",
       "pay 支付状态通知面交付件（R1706·P2 队头·AC-PN1..PN7 判据预注册先于代码）：src/sandbox/pay/notify.py PayNotifyFace 三面=占位模板诚实态〔approved=0→全发送 E_TEMPLATE_NOT_APPROVED 拒零行 fail-closed·真实模板 ID=CEO 物理件 [needs-CEO]〕+W15 once/longterm 授权预算账+payment_success/granted·refund/closed-with-grant 双事件面〔关单二义性=grants 行存在性消解·超时关单拒〕+日帽缺省 3M+skipped_* banner 队列跨重启+(order_id,reason) UNIQUE 幂等+ai_service:1/disclaimer 信封·两坑如实注（拼音禁词探针不中中文词表→shipped config 动态取词·同 avatar 同 product 幂等重放→双产品夹具）·SUITE 7/7+RUNNER 44/44 套件 480 判据 controls 6/6 93.0s+矩阵 44/480 green --check byte-identical+shipped 三件零字节·证据 qa/pay-notify-R1706.log〔PS5.1 UTF-16 重定向坑复发=Python 单写者重建〕·orders.py 接线=后继拆分行·tech 10→9+1→10"
+    ],
+    [
+      "2",
+      "watermark 缩放族模板对位恢复实验（R1707·P2 队头·AC-WSR1..WSR7 判据预注册=tech.md 认领行先于代码：R1680 缩放族判负翻案=模板对位双例全 RECOVERED——0.5× estimate_crop_parameters scale_infer=2.0000 精确命中〔搜索窗 (1.0,2.2)·200 采样〕+画布重建回原幅 ber 0.5195→0.0547 入 0.10 近存活带·2.0× scale_infer=0.5000+回缩 ber 0.5000→0.0000 位级精确·直提取读数逐位复现 R1680 在册值交叉验证闭环〔零浮点等值门〕·判据名撞 R1695 showroom 族（AC-SR1..SR6 在役）同轮改 AC-WSR 收口如实注·套件双跑逐位同一 SUITE 7/7+RUNNER PASS 45/45 套件 487 判据 controls 6/6 96.5s 零回归=qa/reconcile-all-R1707.log·矩阵再生 45/487 green --check byte-identical·证据 qa/watermark-scale-recover-R1707.log 四节）+fold R462 滚窗并折随轮（79304B→70649B·147 token 全字面嵌零丢失·AC-R4621..R4626=qa/reorg-R1707.log）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,

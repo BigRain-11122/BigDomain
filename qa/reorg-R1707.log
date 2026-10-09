@@ -1,0 +1,35 @@
+# qa/reorg-R1707.log - fold R462 water-level reorg evidence (R1707 round-start, P-2026-09-25-18 knife 462)
+# Round-start gauge: 79304B disk > 78500B gate (margin -804B) -> fold R462 fires per R1706 carry-forward note.
+# Tool: src/os/logs_toolkit.py fold --round R1707 --fold-no 462 --window-tail 7 (positive-gate tool, R1699/R1704 precedent)
+
+## Section 1: window and token census (catalog mechanical, R1704 full-embed doctrine)
+window = log tail 7 lines (lines 21..27): R1704 fold R461 rolling-window row + R1704 delivery pair
+(ingest_lobby window-order) + R1705 delivery pair (closeout EOL fixer toolization) + R1706 delivery
+pair (pay notify face). window_content_bytes=14221.
+Draft summary first run: catalog --tail 7 -> tokens_total=147, missing_in_roll=130 (abbreviated-range
+draft rejected by literal-presence PAT, same as R1704 missing-127 case) -> full 147-token verbatim
+census appended to summary line -> catalog re-run: missing_in_roll=[], pass=true, exit 0.
+
+## Section 2: dry-run (zero mutation)
+window_start=21 window_end=27 window_lines=7, summary_head verified, preop_sha16=e94c9928e7fdacf8,
+token_missing=[] token_ok=true, gate_ok=true, predicted_bytes=70649, reserve_bytes=3000,
+gate=78500, would_fail=[] -> no E_STATE_LAYOUT reject this time (eol check clean at round start:
+layout_ok=true, R1705 eol tool keeps closeout writes CRLF-safe).
+
+## Section 3: execute (verify-then-write)
+post_bytes=70649 == predicted_bytes=70649 (predicted_eq_actual=true),
+appendix_bytes=14405, archive_appended=true (logs/state-log-archive-2026-10.md section
+"R1707 fold append ... 7 lines verbatim, pre-op sha16 e94c9928e7fdacf8"),
+backup_written=true (logs/state-preop-R1707.bak), log 27 -> 21 lines.
+
+## Section 4: post-verify
+gauge: disk_bytes=70649, margin_bytes=+7851, fold_needed=false, tick=1706.
+eol profile: layout_ok=true, lone_cr=0 (bare_lf=0), state file stays CRLF-consistent.
+
+## Section 5: acceptance summary (AC-R4621..AC-R4626)
+AC-R4621 fold executed predicted==actual 70649B               PASS
+AC-R4622 token census 147/147 embedded verbatim, missing=0   PASS
+AC-R4623 archive verbatim append (7 lines) + header          PASS
+AC-R4624 preop backup logs/state-preop-R1707.bak on disk      PASS
+AC-R4625 post gauge 70649B < 78500B gate (margin +7851B)      PASS
+AC-R4626 eol layout_ok=true (CRLF conservation held)          PASS

@@ -197,6 +197,10 @@ SUITES = [
     # state/queue/tech.md; AC-DS7 = round-carried, AC-W4 precedent).
     ("watermark-sweep",
      os.path.join("watermark", "test_watermark_sweep.py"), 6),
+    # R1707 scale-family template-alignment recovery experiment
+    # (R1680 negative-verdict successor; verdicts recorded in suite)
+    ("watermark-scale-recover",
+     os.path.join("watermark", "test_scale_recover.py"), 7),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
