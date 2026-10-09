@@ -158,6 +158,14 @@ SUITES = [
     # in state/queue/explore.md).
     ("ledger-apidev",
      os.path.join("ledger", "test_apidev.py"), 7),
+    # R1711 apidev key lifecycle: revocation fail-closed before the
+    # billing ring, rotation with contract + balance carry-over
+    # (same metered client) and anti-evasion window inheritance
+    # over the full rotate_in ancestry, lifecycle events in a
+    # separate sqlite file (zero ledger-schema touch)
+    # (AC-KR1..KR8 pre-registered in state/queue/tech.md).
+    ("ledger-apidev-lifecycle",
+     os.path.join("ledger", "test_apidev_lifecycle.py"), 8),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

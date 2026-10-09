@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T04:55:13+08:00",
+  "export_ts": "2026-10-10T08:52:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1710 交付：fold R463 滚窗并折（7 行压 1·159 token 全字面嵌零丢失·verify-then-write 71789B margin 6711B·archive §R463 verbatim+preop 备份）+state 正典布局外科恢复——R1707 收账 Python json.dump 全量重写把 27 条 log 行缩进毁为 8 空格逃逸三轮，本轮 fold 正门 E_STATE_LAYOUT 闸如实拦截后 27 行 8→16 空格字节外科恢复（内容字节零触碰·json 语义等价验证+原子写+复读一致）；收账纪律自本轮起=字节外科追加（16 空格+CRLF）禁 json.dump 全量重写。46 套件 502 判据基线不变。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：fold R463 滚窗并折+state 正典布局外科恢复件（2026-10-10·R1710 交付·台账维护机制件）：state.json 79614B→71789B（收账后 74532B margin 3968B·fold_needed=false）·窗=R1707 fold R462 滚窗行+R1707/R1708/R1709 三轮对 7 行 14852B 压 1·catalog 159 token 零丢失·archive §R463 节 7 行 verbatim+preop 备份 sha16 a2d20cb355381e24·布局外科 27 行 8→16 空格（json.loads 前后语义等价+tempfile 原子写+复读逐位一致）·post eol bare_lf=0 layout_ok=true·证据 qa/reorg-R1710.log",
-    "next_milestone": "下轮=apidev key 撤销/轮换面（tech.md 队头序·生命周期撤销 fail-closed+轮换余额承接零 UPDATE）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1711 交付：apidev key 生命周期撤销/轮换面（tech 队头编号项·判据 AC-KR1..KR8 预注册先于代码）——revoke=不可变事件+call/buy 全链 E_AD_REVOKED 先于计费环 fail-closed 零扣费；rotate=后继 key 承接契约+余额（同一 metered 客户端零 token 移动）+配额反规避继承（rotate 不重置月窗额度）；生命周期事件存独立 sqlite 件零 ledger schema 触摸（R1676 基线指纹保真）。套件 SUITE PASS 8/8+RUNNER 47/47 套件 510 判据全绿。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：apidev key 生命周期撤销/轮换面件（2026-10-10·R1711 交付·可跑实物计 2）：src/sandbox/ledger/apidev.py ring 4（revoke_key/rotate_key/配额祖先链继承/status 人读映射）+新套件 test_apidev_lifecycle.py SUITE PASS 8/8 exit 0+RUNNER PASS 47/47 套件 510 判据 controls 6/6 98.8s 零回归+矩阵再生 47/510 green --check byte-identical·证据 qa/apidev-lifecycle-R1711.log+qa/reconcile-all-R1711.log",
+    "next_milestone": "下轮=apidev 短窗频控面（tech 队头序·rate ring 分钟窗频控=quota ring 结构复用变体）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1710",
+      "1711",
       "OSLoop 执行 tick"
     ],
     [
@@ -2949,20 +2949,24 @@
     [
       "1",
       "fold R463 滚窗并折+state 正典布局外科恢复件（R1710·P-2026-09-25-18 第四百六十三刀·轮计分 1=台账维护机制件：轮首首测 79614B 越线 1114B·fold 首跑 E_STATE_LAYOUT item-line layout mismatch 拒=诚实检出——根因 git 史实锚=R1706 提交前 log 行全 16 空格正典·R1707 收账 Python json.dump 全量重写毁为 8 空格（R1708/R1709 沿袭）·eol 工具只守恒 CRLF 不查缩进=布局病逃逸三轮；正法=布局字节外科 27 行 8→16 空格〔json.loads 前后语义等价+预测==实际+原子写+复读逐位一致〕后正门过；fold R463=tail-7 窗〔R1707 fold R462 滚窗行+R1707/R1708/R1709 三轮对〕7 行 14852B 压 1 kept=0·catalog 159 token 全字面嵌零丢失·dry-run 全绿→execute verify-then-write post==predicted 71789B margin 6711B·archive §R463 节 7 行 verbatim+preop 备份 logs/state-preop-R1710.bak〔sha16 a2d20cb355381e24〕·post gauge fold_needed=false+eol layout_ok=true·AC-R4631..R4636=qa/reorg-R1710.log；收账纪律=字节外科追加（16 空格+CRLF）禁 json.dump 全量重写〔根因面执法〕）"
+    ],
+    [
+      "2",
+      "apidev key 生命周期撤销/轮换面件（R1711·tech 队头编号项·判据 AC-KR1..KR8 预注册先于代码：revoke=不可变事件+call/buy_credits 全链 E_AD_REVOKED 先于 billing 环 fail-closed 零扣费零行零 spend·双撤销 E_AD_ALREADY；rotate=后继 key 承接契约+同一 metered 客户端=余额承接零 token 移动零 register 重触+rotate_out/rotate_in 事件对单事务·旧 key 写面死读面 status=rotated_out；配额反规避继承=有效窗用量自身+全部祖先 rotate_in 链同窗行数和〔rotate 不重置月窗额度〕·A2→B 起点 2→满帽拒→C 继承 5 即拒多跳链实测；生命周期存储=独立 sqlite 件 api_lifecycle.db〔R1681/R1254 单写者先例·零 ledger schema 触摸=R1676 基线指纹保真〕·append-only 零 UPDATE 源级机检；套件 test_apidev_lifecycle.py SUITE PASS 8/8 exit 0〔status 人读映射首跑判负后修如实注〕+R1700 test_apidev 7/7 零回归+RUNNER PASS 47/47 套件 510 判据 controls 6/6 98.8s=qa/reconcile-all-R1711.log·SUITES 46→47 判据 502→510 接线·矩阵再生 47/510 green --check byte-identical；证据 qa/apidev-lifecycle-R1711.log·tech open 10→9）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 10,
+    "queue_tech_open": 9,
     "queue_explore_open": 10,
-    "method": "R1710 flush caliber (checker single-source law): window re-derived after the R1710 pair appended; tick row 1709 -> 1710; fold R463 collapsed 7 window lines into 1 roll line (W 24->20, sub 10->8); post-accounting state 74532B under the 78500B line, fold R464 = next round opening gauge ruling if over-line"
+    "method": "R1711 flush caliber (checker single-source law): window re-derived after the R1711 pair appended; tick row 1710 -> 1711; W 20->22 and sub 8->9 from the R1711 pair; queue_tech_open 10->9 (lifecycle row checked off); post-accounting state 76884B under the 78500B line, fold R464 = next round opening gauge ruling if over-line"
   }
 }

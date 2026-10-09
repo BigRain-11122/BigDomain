@@ -27,6 +27,21 @@ existed; honesty law):
                           a metered_* table directly; the only
                           token movement is the ledger spend
                           inside metered.buy_pack)
+  ring 4 lifecycle       : key revocation and rotation are
+                          immutable lifecycle events in a separate
+                          sqlite file (api_lifecycle.db, single
+                          writer, R1681 precedent; zero ledger-schema
+                          touch so the R1676 baseline fingerprints
+                          stay true). A revoked or rotated-out key
+                          fails closed on every write face before
+                          the billing ring; a rotated successor
+                          inherits the contract, the billing
+                          binding (balance carries over through
+                          the same metered client, zero token
+                          movement, zero register re-touch) and
+                          the window usage of its full ancestor
+                          chain (rotation never resets the monthly
+                          quota). Zero UPDATE, zero RNG.
 
 Call-chain order (AC-DK4): key gate -> kind gate -> quota gate ->
 local duplicate pre-check -> billing ring meter_call -> local
@@ -66,6 +81,7 @@ writer, same pattern as the ledger core). Zero UPDATE, zero RNG.
 
 import datetime
 import hashlib
+import os
 import sqlite3
 import threading
 
@@ -78,9 +94,15 @@ E_AD_KIND = "E_AD_KIND"               # kind not enabled on the key
 E_AD_DUP = "E_AD_DUP"                  # local call_ref replay
 E_AD_QUOTA = "E_AD_QUOTA"              # window cap reached, fail-closed
 E_AD_NO_DISCLAIMER = "E_AD_NO_DISCLAIMER"
+E_AD_REVOKED = "E_AD_REVOKED"          # key revoked or rotated out
+E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
 
 NON_ADVISORY = ("non-advisory notice: open API is a compute +"
                 " visualization interface, not investment advice")
+
+# read-face status names (human-facing) for terminal lifecycle
+# events; the event names themselves stay compact in the store
+_STATUS_BY_EVENT = {"revoke": "revoked", "rotate_out": "rotated_out"}
 
 apidev_posture_note = ("platform-side posture: key issuance, credit"
                        " purchase and metered calls carry zero"
@@ -108,6 +130,20 @@ CREATE TABLE IF NOT EXISTS api_calls (
     engine_ref TEXT NOT NULL,
     window TEXT NOT NULL,
     called_utc TEXT NOT NULL
+);
+"""
+
+# lifecycle event store: a separate sqlite file next to the ledger
+# db (R1681 single-writer precedent). Keeping it out of the ledger
+# DB leaves the R1676 schema_migrate baseline fingerprints true
+# (this module adds zero new tables there beyond its R1700 pair).
+_LC_SCHEMA = """
+CREATE TABLE IF NOT EXISTS key_events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key_id INTEGER NOT NULL,
+    event TEXT NOT NULL CHECK (event IN ('revoke', 'rotate_out', 'rotate_in')),
+    pair_key_id INTEGER,
+    event_utc TEXT NOT NULL
 );
 """
 
@@ -157,9 +193,18 @@ class DevKeyFace:
                                      isolation_level=None)
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.executescript(_SCHEMA)
+        self._lc_path = os.path.join(
+            os.path.dirname(os.path.abspath(self.db_path)),
+            "api_lifecycle.db")
+        self._lconn = sqlite3.connect(self._lc_path,
+                                      check_same_thread=False,
+                                      isolation_level=None)
+        self._lconn.execute("PRAGMA journal_mode=WAL")
+        self._lconn.executescript(_LC_SCHEMA)
 
     def close(self):
         with self._lock:
+            self._lconn.close()
             self._conn.close()
 
     # -- internal helpers ---------------------------------------------------
@@ -184,6 +229,54 @@ class DevKeyFace:
                 "SELECT COUNT(*) FROM api_calls"
                 " WHERE key_id = ? AND window = ?",
                 (key_id, window)).fetchone()[0]
+
+    def _terminal_event(self, key_id):
+        """The key's terminal lifecycle event, if any ('revoke' or
+        'rotate_out'). A key with a terminal event is dead: every
+        write face fails closed on it."""
+        with self._lock:
+            return self._lconn.execute(
+                "SELECT event FROM key_events"
+                " WHERE key_id = ? AND event IN"
+                " ('revoke', 'rotate_out')", (key_id,)).fetchone()
+
+    def _rotated_from(self, key_id):
+        """The predecessor key_id this key was rotated in from
+        (None for a freshly issued key)."""
+        with self._lock:
+            row = self._lconn.execute(
+                "SELECT pair_key_id FROM key_events"
+                " WHERE key_id = ? AND event = 'rotate_in'",
+                (key_id,)).fetchone()
+        return row[0] if row is not None else None
+
+    def _ancestry_key_ids(self, key_id):
+        """Full rotate_in lineage for one key: itself plus every
+        predecessor reachable through rotate_in events. A rotation
+        never resets the monthly window, so the successor's quota
+        is enforced over the whole chain."""
+        ids = [key_id]
+        seen = {key_id}
+        current = key_id
+        while True:
+            predecessor = self._rotated_from(current)
+            if predecessor is None or predecessor in seen:
+                break
+            seen.add(predecessor)
+            ids.append(predecessor)
+            current = predecessor
+        return ids
+
+    def _effective_window_count(self, key_id, window):
+        """Window usage of a key plus its full rotation ancestry
+        (anti-evasion: rotating does not reset the monthly cap)."""
+        ids = self._ancestry_key_ids(key_id)
+        marks = ",".join("?" for _ in ids)
+        with self._lock:
+            return self._conn.execute(
+                "SELECT COUNT(*) FROM api_calls"
+                " WHERE window = ? AND key_id IN (" + marks + ")",
+                [window] + list(ids)).fetchone()[0]
 
     # -- ring 1: key issuance --------------------------------------------------
 
@@ -260,6 +353,8 @@ class DevKeyFace:
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if self._terminal_event(row[0]) is not None:
+            raise ApiDevError(E_AD_REVOKED, str(api_key))
         result = self.metered.buy_pack(row[3], calls, unit_price, ref)
         return {"api_key": api_key, "credits": result["calls"],
                 "spend_tx": result["spend_tx"],
@@ -288,10 +383,12 @@ class DevKeyFace:
             raise ApiDevError(E_AD_UNKNOWN_KEY, api_key)
         key_id, metered_client, window_cap = row[0], row[3], int(row[4])
         enabled = row[5].split(",")
+        if self._terminal_event(key_id) is not None:
+            raise ApiDevError(E_AD_REVOKED, api_key)
         if kind not in enabled:
             raise ApiDevError(E_AD_KIND, kind)
         window = _window_utc()
-        if self._window_count(key_id, window) >= window_cap:
+        if self._effective_window_count(key_id, window) >= window_cap:
             raise ApiDevError(E_AD_QUOTA, window)
         with self._lock:
             dup = self._conn.execute(
@@ -319,27 +416,34 @@ class DevKeyFace:
                 raise
         return {"call_ref": call_ref, "kind": kind,
                 "engine_ref": engine_ref, "window": window,
-                "quota_used": self._window_count(key_id, window),
+                "quota_used": self._effective_window_count(key_id,
+                                                            window),
                 "quota_cap": window_cap,
                 "disclaimer": self.disclaimer}
 
     # -- read faces ------------------------------------------------------------
 
     def key_view(self, api_key):
-        """One key's contract view: declaration + quota state +
-        billing-ring binding. Read-only, zero token movement."""
+        """One key's contract view: declaration + lifecycle state +
+        quota state + billing-ring binding. Read-only, zero token
+        movement; a revoked or rotated-out key stays readable with
+        its status reported."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
         window = _window_utc()
+        terminal = self._terminal_event(row[0])
+        used = self._effective_window_count(row[0], window)
         return {"api_key": api_key, "dev_account": row[1],
                 "key_name": row[2], "metered_client": row[3],
                 "window_cap": int(row[4]), "enabled_kinds": row[5].split(","),
                 "ai_label": int(row[6]),
+                "status": _STATUS_BY_EVENT[terminal[0]]
+                          if terminal is not None else "active",
+                "rotated_from_key_id": self._rotated_from(row[0]),
                 "window": window,
-                "quota_used": self._window_count(row[0], window),
-                "quota_remaining": int(row[4]) -
-                                   self._window_count(row[0], window),
+                "quota_used": used,
+                "quota_remaining": int(row[4]) - used,
                 "disclaimer": self.disclaimer}
 
     def dev_board(self, dev_account):
@@ -358,12 +462,17 @@ class DevKeyFace:
                 " WHERE dev_account = ? ORDER BY key_id",
                 (dev_account,)).fetchall()
         for row in rows:
+            terminal = self._terminal_event(row[0])
             keys.append({"key_name": row[1], "api_key": row[3],
                          "metered_client": row[2],
                          "window_cap": int(row[4]),
                          "enabled_kinds": row[5].split(","),
                          "ai_label": int(row[6]),
-                         "quota_used": self._window_count(row[0], window),
+                         "status": _STATUS_BY_EVENT[terminal[0]]
+                                   if terminal is not None else "active",
+                         "rotated_from_key_id": self._rotated_from(row[0]),
+                         "quota_used": self._effective_window_count(
+                             row[0], window),
                          "billing": self.metered.reconcile_client(row[2])})
         return {"dev_account": dev_account, "keys": keys,
                 "window": window, "disclaimer": self.disclaimer}
@@ -384,4 +493,114 @@ class DevKeyFace:
                 "calls": [{"call_ref": r[0], "kind": r[1],
                            "engine_ref": r[2], "window": r[3],
                            "called_utc": r[4]} for r in rows],
+                "disclaimer": self.disclaimer}
+
+    # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
+
+    def revoke_key(self, api_key):
+        """Revoke one key by appending one immutable 'revoke' event
+        (zero UPDATE: the key row itself never changes). From that
+        moment every write face (call, buy_credits) fails closed
+        with E_AD_REVOKED before the billing ring: zero charge,
+        zero rows, zero spend. Read faces stay open and report
+        status='revoked'. Double revoke rejects E_AD_ALREADY with
+        zero new event rows; revoking an already rotated-out key
+        rejects E_AD_ALREADY the same way."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        key_id = row[0]
+        if self._terminal_event(key_id) is not None:
+            raise ApiDevError(E_AD_ALREADY, str(api_key))
+        with self._lock:
+            self._lconn.execute("BEGIN IMMEDIATE")
+            try:
+                self._lconn.execute(
+                    "INSERT INTO key_events (key_id, event,"
+                    " pair_key_id, event_utc)"
+                    " VALUES (?, 'revoke', NULL, ?)",
+                    (key_id, _now_utc()))
+                self._lconn.execute("COMMIT")
+            except BaseException:
+                self._lconn.execute("ROLLBACK")
+                raise
+        return {"api_key": api_key, "status": "revoked",
+                "disclaimer": self.disclaimer}
+
+    def rotate_key(self, api_key, new_key_name):
+        """Rotate one key: the old key is invalidated (a
+        'rotate_out' event; every write face fails closed on it
+        afterwards) and a successor key is issued that inherits
+        the contract (window_cap, enabled_kinds, ai_label) and the
+        billing binding -- the same metered client, so the credit
+        balance carries over with zero token movement and zero
+        register re-touch. The successor never resets the monthly
+        window: its effective quota usage counts its own call rows
+        plus every ancestor's rows in the same window. Both events
+        of the pair land in one lifecycle transaction; the name
+        conflict is pre-checked before any touch, so the successor
+        insert has no ordering hazard. Zero UPDATE, zero RNG: the
+        successor api_key is a fresh deterministic derivation."""
+        new_key_name = str(new_key_name or "").strip()
+        if not new_key_name:
+            raise ApiDevError(E_AD_BAD_ARGS, "new key name required")
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        key_id, dev_account, old_name = row[0], row[1], row[2]
+        metered_client, window_cap = row[3], int(row[4])
+        enabled_kinds, ai_label = row[5], int(row[6])
+        if self._terminal_event(key_id) is not None:
+            raise ApiDevError(E_AD_ALREADY, str(api_key))
+        if self._key_row_by_name(dev_account, new_key_name) is not None:
+            raise ApiDevError(E_AD_DUP_KEY,
+                              dev_account + "|" + new_key_name)
+        issued_utc = _now_utc()
+        api_key_new = ("sk_" + hashlib.sha256(
+            (dev_account + "|" + new_key_name + "|" + issued_utc)
+            .encode("utf-8")).hexdigest()[:40])
+        with self._lock:
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute(
+                    "INSERT INTO api_dev_keys (dev_account, key_name,"
+                    " metered_client, api_key, window_cap, enabled_kinds,"
+                    " ai_label, issued_utc) VALUES (?,?,?,?,?,?,?,?)",
+                    (dev_account, new_key_name, metered_client,
+                     api_key_new, window_cap, enabled_kinds, ai_label,
+                     issued_utc))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiDevError(E_AD_DUP_KEY,
+                                  dev_account + "|" + new_key_name)
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        new_row = self._key_row_by_apikey(api_key_new)
+        new_key_id = new_row[0]
+        with self._lock:
+            self._lconn.execute("BEGIN IMMEDIATE")
+            try:
+                self._lconn.execute(
+                    "INSERT INTO key_events (key_id, event,"
+                    " pair_key_id, event_utc)"
+                    " VALUES (?, 'rotate_out', ?, ?)",
+                    (key_id, new_key_id, _now_utc()))
+                self._lconn.execute(
+                    "INSERT INTO key_events (key_id, event,"
+                    " pair_key_id, event_utc)"
+                    " VALUES (?, 'rotate_in', ?, ?)",
+                    (new_key_id, key_id, _now_utc()))
+                self._lconn.execute("COMMIT")
+            except BaseException:
+                self._lconn.execute("ROLLBACK")
+                raise
+        return {"dev_account": dev_account, "key_name": new_key_name,
+                "api_key": api_key_new,
+                "metered_client": metered_client,
+                "window_cap": window_cap,
+                "enabled_kinds": enabled_kinds.split(","),
+                "ai_label": ai_label,
+                "rotated_from": old_name, "rotated_from_key_id": key_id,
                 "disclaimer": self.disclaimer}
