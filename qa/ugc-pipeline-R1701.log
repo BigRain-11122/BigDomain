@@ -1,0 +1,26 @@
+PASS AC-U2: serve-refusals no-gate-section=True,empty-forbidden=True,no-gray-words=True,no-disclaimer=True,escape-export=True; cli rc2-with-E_GATE_OFFLINE=True cli-ready=True; gate1-hit=True(E_CONTENT_REJECTED) gate2-hit=True(E_CONTENT_REJECTED) gate-hits-landed-rows=0
+PASS AC-U1: direct=2ad68814cd286525 entrance-neg=True(E_ENTRANCE_REQUIRED) danmaku-reserved=True(E_SOURCE_BLOCKED) unknown-src=True(E_BAD_SOURCE) empty=True(E_BAD_FRAME) public-intake=True rate-6th=True(E_RATE_LIMIT) ingest-lobby_idea=True ingest-avatar=True receipts-carry-evt_id=True
+PASS AC-U8: gate2 direct=True(E_CONTENT_REJECTED) public-face=True ingest-rejected-no-land=True; pool+chronicle disclaimer-resident=True persistent=True len=92
+PASS AC-U3: suspended=True no-verdict-NULL=True not-pooled=True pass-enters-flow=True double-verdict=True(E_REVIEW_DONE) risky-rejects=True(E_CONTENT_REJECTED) trace-kept=True risky-never-pooled=True bad-verdict=True unknown-case=True no-verdict-suspended-forever=True
+PASS AC-U4: six-lines-routed=True unsorted-fallback=True config-reroute=True (biggame->bigmoney code-untouched)
+PASS AC-U5: emoji-only=True too-short=True rows-kept-not-destroyed=True no-items=True no-draft=True flood(6-ingests)=True pooled=5 noise=1 rows-kept=6
+PASS AC-U6: same-source-replay=True(E_DUPLICATE) cross-source-two-rows=True duplicate_of=True re-ingest-dedup=True
+PASS AC-U7: client-spoof-ignored=True (stored producer=rule_template ai_generated=0) draft-face producer=rule_template ai_generated=False label=True state=True
+PASS AC-U9: small-L0-adopt=True landfall-auto-marked=True app-refuse=True(E_CEO_RECEIPT_REQUIRED) trigger-force-adopt=True flag-freeze=True pooled-jump=True terminal-immutable=True raw-insert=True ceo-approved-adopt=True ceo-rejected=True bad-decision=True
+PASS AC-U10: receipts=2 adopted=2 only-adopted=True bad-receipt-insert=True; ledger bad-ref=True(E_GATE_REF) receipt-ref-pays=True
+PASS AC-U11: feed-lines=['bigdomain.jsonl', 'biggame.jsonl', 'biglife.jsonl', 'bigmoney.jsonl', 'bigstream.jsonl', 'fluxverse.jsonl', 'unsorted.jsonl'] all-inside-repo=True hot-sorted-desc=True rejected->chronicled=True path-gate-refusal-proven-in-AC-U2
+PASS AC-U12: chronicle-rows=3 fields=True adopted-named=True rejected-record-only=True all-terminal-exported=True rejected-zero-receipt=True note=True
+PASS AC-PW1: same-gate-instance=True derived-queue-next-to-db=True bad-secbatch-refused=True cli-ready-with-sec_queue=True
+PASS AC-PW2: gate-hit-via-batch-face=True(E_CONTENT_REJECTED) hit-zero-row=True clean-submit=True; prefilter-face-untouched=prefilter-suite-in-RUNNER; AC-U1..U12-zero-regression=SUITE-line-below
+PASS AC-PW3: queued-receipt=True zero-ugc-row=True banner-row(gate_error)=True disclaimer-resident=True survives-restart=True
+PASS AC-PW4: direct-rate=5-passed/2-limited one-bad-text-no-abort=True mapping=pass,pass,bad-frame,queued budget-breach-row=True suffix-zero-row=True
+PASS AC-PW5: offline-receipts=True ingest-queued-marked=True drain1=6d/5p/1r recovered=5-events gate-hit-never-published=True still-offline-stays-queued=True x5-recovered=True second-run-idempotent=True
+PASS AC-PW6: degraded-total=7 published=6 drain-rejected=1 queued-left=0 counts={'drained_pass': 6, 'drained_rejected': 1} every-text-one-outcome=True banner-empty=True
+PASS AC-PW7: pipeline-ascii=True sec_batch-ascii=True net-import-hits=0 rows_by_status=read-only-addition full-regression=RUNNER-log
+SUITE PASS (19/19 criteria pass)
+
+== matrix regen (evidence=qa/reconcile-all-R1701.log) ==
+PASS generated docs/sandbox-suite-matrix.md (5878 bytes) - registry suites=43 criteria=455 evidence=qa/reconcile-all-R1701.log green=43/43
+PASS hygiene: pure-ascii source, zero network imports
+== matrix --check ==
+PASS check: docs/sandbox-suite-matrix.md byte-identical (5878 bytes, 43 suites, 455 criteria)

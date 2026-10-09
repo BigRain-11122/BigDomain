@@ -82,6 +82,25 @@ def inside_repo(path):
         return False
 
 
+class OfflineGate(object):
+    """Deterministic runtime-failure stub for degradation probes: every
+    check raises the gate-offline family (swapped into pipe.batch.gate)."""
+
+    def check_text(self, text):
+        raise GateOfflineError("offline probe")
+
+
+class StepClock(object):
+    """Deterministic clock for budget-breach injection: +1.0s per call."""
+
+    def __init__(self):
+        self.t = 0.0
+
+    def __call__(self):
+        self.t += 1.0
+        return self.t
+
+
 def main():
     tmp = tempfile.mkdtemp(prefix="ugc-ac-")
     with open(os.path.join(BASE, "config.json"), encoding="utf-8") as handle:
@@ -524,6 +543,222 @@ def run_suite(pipe, cfg, db, tmp, lobby, ls, fw, ab, gw, rules, lk, adv_actor, a
            " all-terminal-exported=%s rejected-zero-receipt=%s note=%s"
            % (len(chron), ok_fields, ok_adopted_row, ok_rejected_row,
               ok_all_terminal, ok_rejected_zero, ok_note))
+
+    # ---- AC-PW1: batch-face wiring + queue derivation (R1681 wiring) ------
+    queue_db = os.path.join(tmp, "sec_degraded.db")
+    ok_wired = (pipe.batch is not None and pipe.batch.gate is pipe.gate
+                and os.path.realpath(pipe.batch.db_path)
+                == os.path.realpath(queue_db))
+    bad_sb = json.loads(json.dumps(cfg))
+    bad_sb["sec_batch"] = {"budget_ms": -1}
+    ok_sb_refuse = False
+    try:
+        P.UGCPipeline(bad_sb, os.path.join(tmp, "bad-secbatch.db"))
+    except GateOfflineError:
+        ok_sb_refuse = True
+    proc_sb = subprocess.run(
+        [sys.executable, os.path.join(BASE, "pipeline.py"),
+         "--db", os.path.join(tmp, "cli-sb.db")],
+        capture_output=True, text=True, encoding="utf-8", timeout=60)
+    cli_sb = proc_sb.returncode == 0 and "sec_queue=" in (proc_sb.stdout or "")
+    record("AC-PW1", ok_wired and ok_sb_refuse and cli_sb,
+           "same-gate-instance=%s derived-queue-next-to-db=%s"
+           " bad-secbatch-refused=%s cli-ready-with-sec_queue=%s"
+           % (pipe.batch.gate is pipe.gate,
+              os.path.realpath(pipe.batch.db_path)
+              == os.path.realpath(queue_db), ok_sb_refuse, cli_sb))
+
+    # ---- AC-PW2: submit semantics preserved through the batch path -------
+    a_pw2 = "A-pw2"
+    ok_pw2_hit, code_pw2 = expect_error(
+        lambda: pipe.submit("avatar_intake", a_pw2, "forbidden probe " + fw),
+        UGC.E_CONTENT_REJECTED)
+    ok_pw2_norow = pipe.store.event_row(
+        P.compute_evt_id("avatar_intake", a_pw2, "forbidden probe " + fw)) is None
+    r_pw2 = pipe.submit("avatar_intake", "A-pw2c", "clean wired submit idea")
+    ok_pw2_clean = (r_pw2["received"] and r_pw2["pooled"]
+                    and not r_pw2.get("queued"))
+    record("AC-PW2", ok_pw2_hit and ok_pw2_norow and ok_pw2_clean,
+           "gate-hit-via-batch-face=%s(%s) hit-zero-row=%s clean-submit=%s;"
+           " prefilter-face-untouched=prefilter-suite-in-RUNNER;"
+           " AC-U1..U12-zero-regression=SUITE-line-below"
+           % (ok_pw2_hit, code_pw2, ok_pw2_norow, ok_pw2_clean))
+
+    # ---- AC-PW3: degradation persisted, never lost ------------------------
+    real_gate = pipe.batch.gate
+    pipe.batch.gate = OfflineGate()
+    deg_text = "degraded but never lost probe"
+    r_deg = pipe.submit("avatar_intake", "A-deg1", deg_text)
+    ok_deg_receipt = (r_deg.get("received") is False
+                      and r_deg.get("queued") is True and bool(r_deg.get("qid")))
+    ok_deg_norow = pipe.store.event_row(
+        P.compute_evt_id("avatar_intake", "A-deg1", deg_text)) is None
+    banner_deg = pipe.degraded_banner()
+    deg_rows = [q for q in banner_deg["queued"] if q["qid"] == r_deg["qid"]]
+    ok_banner_deg = (len(deg_rows) == 1
+                     and deg_rows[0]["reason"] == "gate_error"
+                     and deg_rows[0]["content"] == deg_text
+                     and banner_deg.get("disclaimer")
+                     == cfg["compliance"]["disclaimer"])
+    pipe2 = P.UGCPipeline(cfg, db)  # fresh instance on the same files
+    ok_restart = any(q["qid"] == r_deg["qid"]
+                     for q in pipe2.degraded_banner()["queued"])
+    pipe2.close()
+    pipe.batch.gate = real_gate
+    record("AC-PW3", ok_deg_receipt and ok_deg_norow and ok_banner_deg
+           and ok_restart,
+           "queued-receipt=%s zero-ugc-row=%s banner-row(gate_error)=%s"
+           " disclaimer-resident=%s survives-restart=%s"
+           % (ok_deg_receipt, ok_deg_norow, len(deg_rows) == 1,
+              banner_deg.get("disclaimer") == cfg["compliance"]["disclaimer"],
+              ok_restart))
+
+    # ---- AC-PW4: submit_batch real batch gate + budget degradation --------
+    a4 = "C-10004"
+    pipe.grant_entrance_sandbox(a4)
+    direct_texts = ["direct batch probe %d" % i
+                    for i in range(pipe.rate_max + 2)]
+    rdb = pipe.submit_batch("direct", a4, direct_texts)
+    ok_rate_batch = (sum(1 for r in rdb if r.get("received")) == pipe.rate_max
+                     and sum(1 for r in rdb
+                             if r.get("code") == UGC.E_RATE_LIMIT) == 2
+                     and all(r is not None and r.get("text_index") == i
+                             for i, r in enumerate(rdb)))
+    real_clock, real_budget = pipe.batch.clock, pipe.batch.budget_s
+    pipe.batch.clock = StepClock()
+    pipe.batch.budget_s = 1.5
+    sb_texts = ["clean batch idea one", "clean batch idea two", "",
+                "budget suffix four"]
+    rsb = pipe.submit_batch("avatar_intake", "A-pw4", sb_texts)
+    pipe.batch.clock, pipe.batch.budget_s = real_clock, real_budget
+    ok_map = (rsb[0].get("received") and rsb[0].get("pooled")
+              and rsb[1].get("received") and rsb[1].get("pooled")
+              and rsb[2].get("code") == UGC.E_BAD_FRAME
+              and rsb[3].get("queued") and rsb[3].get("text_index") == 3)
+    qids_sb = {r["qid"] for r in rsb if r.get("queued")}
+    rows_sb = [q for q in pipe.degraded_banner()["queued"]
+               if q["qid"] in qids_sb]
+    ok_budget = (len(rows_sb) == 1 and rows_sb[0]["reason"] == "budget_breach"
+                 and rows_sb[0]["content"] == "budget suffix four")
+    ok_suffix_norow = pipe.store.event_row(
+        P.compute_evt_id("avatar_intake", "A-pw4", "budget suffix four")) is None
+    record("AC-PW4", ok_rate_batch and ok_map and ok_budget and ok_suffix_norow,
+           "direct-rate=%d-passed/%d-limited one-bad-text-no-abort=%s"
+           " mapping=pass,pass,bad-frame,queued budget-breach-row=%s"
+           " suffix-zero-row=%s"
+           % (sum(1 for r in rdb if r.get("received")),
+              sum(1 for r in rdb if r.get("code") == UGC.E_RATE_LIMIT),
+              ok_map, ok_budget, ok_suffix_norow))
+
+    # ---- AC-PW5: drain_recover end-to-end ---------------------------------
+    pipe.batch.gate = OfflineGate()
+    x2 = "offline window text two"
+    x3 = "offline window text three"
+    x4 = "offline advisory probe " + ab  # gate-2 word OUTSIDE the L1 trie:
+    # the local prefilter still works while the paid gate is offline
+    # (correct), so the drain-rejection scenario needs a word only the
+    # real gate catches (all fw words sit in the prefilter file)
+    r_x2 = pipe.submit("avatar_intake", "A-deg2", x2)
+    r_x3 = pipe.submit("avatar_intake", "A-deg3", x3)
+    r_x4 = pipe.submit("avatar_intake", "A-deg4", x4)
+    lobby_off = "offline lobby idea unique probe"
+    ls.append(lobby.utc_now_iso(), "idea.submit", "C-10011", "cocreate",
+              lobby_off, payload={"text": lobby_off,
+                                  "pool": "proposal-queue-stub"})
+    recs_off = pipe.ingest_lobby()
+    r_lob = next((r for r in recs_off if r.get("queued")), None)
+    ok_lob = (r_lob is not None and r_lob.get("origin_evt_id") is not None
+              and r_x2.get("queued") and r_x3.get("queued")
+              and r_x4.get("queued"))
+    ingest_row = pipe.store.read_one(
+        "SELECT status FROM ugc_ingest_log WHERE origin_evt_id = ?",
+        (r_lob["origin_evt_id"],))
+    ok_lob_marked = (ingest_row is not None
+                     and ingest_row["status"] == "queued")
+    pipe.batch.gate = real_gate
+    rec1 = pipe.drain_recover()
+    evts_expected = {
+        P.compute_evt_id("avatar_intake", "A-deg1", deg_text),
+        P.compute_evt_id("avatar_intake", "A-pw4", "budget suffix four"),
+        P.compute_evt_id("avatar_intake", "A-deg2", x2),
+        P.compute_evt_id("avatar_intake", "A-deg3", x3),
+        P.compute_evt_id("lobby_idea", "C-10011", lobby_off),
+    }
+    ok_drain1 = (rec1["drained"] == 6 and rec1["passed"] == 5
+                 and rec1["rejected"] == 1 and rec1["still_queued"] == 0
+                 and set(rec1["recovered"]) == evts_expected
+                 and all(pipe.store.event_row(e) is not None
+                         for e in evts_expected))
+    ok_x4_never = pipe.store.event_row(
+        P.compute_evt_id("avatar_intake", "A-deg4", x4)) is None
+    ok_rec1_disc = (rec1.get("disclaimer")
+                    == cfg["compliance"]["disclaimer"])
+    pipe.batch.gate = OfflineGate()
+    x5 = "second offline window text five"
+    r_x5 = pipe.submit("avatar_intake", "A-deg5", x5)
+    rec_off = pipe.drain_recover()
+    ok_still_off = (rec_off["drained"] == 0 and rec_off["still_queued"] == 1
+                    and rec_off["recovered"] == []
+                    and pipe.store.event_row(
+                        P.compute_evt_id("avatar_intake", "A-deg5", x5)) is None)
+    pipe.batch.gate = real_gate
+    rec2 = pipe.drain_recover()
+    ok_x5_rec = (P.compute_evt_id("avatar_intake", "A-deg5", x5)
+                 in rec2["recovered"]
+                 and pipe.store.event_row(
+                     P.compute_evt_id("avatar_intake", "A-deg5", x5)) is not None)
+    rec3 = pipe.drain_recover()
+    ok_idem = (rec3["drained"] == 0 and rec3["recovered"] == []
+               and rec3["skipped_existing"] == 6)
+    record("AC-PW5", ok_lob and ok_lob_marked and ok_drain1 and ok_x4_never
+           and ok_rec1_disc and ok_still_off and ok_x5_rec and ok_idem,
+           "offline-receipts=%s ingest-queued-marked=%s drain1=6d/5p/1r"
+           " recovered=%d-events gate-hit-never-published=%s"
+           " still-offline-stays-queued=%s x5-recovered=%s"
+           " second-run-idempotent=%s"
+           % (ok_lob, ok_lob_marked, len(rec1["recovered"]), ok_x4_never,
+              ok_still_off, ok_x5_rec, ok_idem))
+
+    # ---- AC-PW6: zero-silent-loss ledger ----------------------------------
+    qcounts = pipe.batch.queue_counts()
+    published_evts = evts_expected | {
+        P.compute_evt_id("avatar_intake", "A-deg5", x5)}
+    ok_qcounts = (qcounts.get("queued", 0) == 0
+                  and qcounts.get("drained_pass", 0) == 6
+                  and qcounts.get("drained_rejected", 0) == 1)
+    ok_all_published = all(pipe.store.event_row(e) is not None
+                           for e in published_evts)
+    ok_banner_empty = pipe.degraded_banner()["queued"] == []
+    record("AC-PW6", ok_qcounts and ok_all_published and ok_banner_empty,
+           "degraded-total=7 published=%d drain-rejected=%d queued-left=%d"
+           " counts=%s every-text-one-outcome=%s banner-empty=%s"
+           % (len(published_evts), 1, 0, qcounts, ok_all_published,
+              ok_banner_empty))
+
+    # ---- AC-PW7: hygiene (regression = full suite + RUNNER evidence) -----
+    ok_ascii_pw = ok_ascii_sb = True
+    try:
+        with open(os.path.join(BASE, "pipeline.py"), encoding="ascii") as h:
+            h.read()
+    except UnicodeDecodeError:
+        ok_ascii_pw = False
+    try:
+        with open(os.path.join(BASE, "sec_batch.py"), encoding="ascii") as h:
+            h.read()
+    except UnicodeDecodeError:
+        ok_ascii_sb = False
+    net_hits = []
+    for name in ("pipeline.py", "sec_batch.py"):
+        with open(os.path.join(BASE, name), encoding="ascii") as handle:
+            for line in handle:
+                s = line.strip()
+                if (s.startswith("import ") or s.startswith("from ")) and any(
+                        w in s for w in ("urllib", "requests", "socket", "http")):
+                    net_hits.append(name + ": " + s)
+    record("AC-PW7", ok_ascii_pw and ok_ascii_sb and not net_hits,
+           "pipeline-ascii=%s sec_batch-ascii=%s net-import-hits=%d"
+           " rows_by_status=read-only-addition full-regression=RUNNER-log"
+           % (ok_ascii_pw, ok_ascii_sb, len(net_hits)))
 
     fails = [ac for ac, ok in RESULTS if not ok]
     total = len(RESULTS)

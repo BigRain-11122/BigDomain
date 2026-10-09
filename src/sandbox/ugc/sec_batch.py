@@ -253,6 +253,18 @@ class SecBatchFace(object):
             " FROM sec_degraded_queue WHERE status=? ORDER BY ts_utc",
             (ST_QUEUED,)).fetchall()
 
+    def rows_by_status(self, status):
+        """Read face for the recovery loop (R1681 wiring, AC-PW5):
+        queue rows at one status. Terminal rows are history - callers
+        treat them read-only; the single writer stays inside this
+        class."""
+        if status not in (ST_QUEUED, ST_DRAINED_PASS, ST_DRAINED_REJ):
+            raise ValueError("unknown queue status: %s" % status)
+        return self._exec(
+            "SELECT qid, source, actor, content, reason, status, ts_utc,"
+            " ts_drained FROM sec_degraded_queue WHERE status = ?"
+            " ORDER BY ts_utc", (status,)).fetchall()
+
     def queue_counts(self):
         rows = self._exec(
             "SELECT status, COUNT(*) FROM sec_degraded_queue"

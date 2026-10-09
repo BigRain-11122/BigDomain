@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T01:06:36+08:00",
+  "export_ts": "2026-10-10T01:30:45+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1700 本轮交付：API 开放平台开发者生态面沙箱件（apidev.py 三环=key 发放/限额/计费·RUNNER 43/43 套件 448 判据全绿）+队列常备线补种（tech 2→10+explore 4→10）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：API 开放平台开发者生态面（2026-10-10T01:06:36+08:00·R1700 交付·可跑实物）：src/sandbox/ledger/apidev.py（DevKeyFace 三环：确定性 key 发放经 MeteredFace 公有 API 绑定+UTC 月窗限额 COUNT 零 UPDATE+计费全权委托 metered 公有 API）+test_apidev.py SUITE 7/7+reconcile_all 43 套件 448 判据 RUNNER PASS+矩阵再生 --check byte-identical；证据 qa/apidev-R1700.log+qa/apidev-R1700-runner.log",
-    "next_milestone": "下轮=P3 队头（数字藏品展示橱窗面探索行·判据预注册先于代码·explore open 10）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）+fold R460 轮首首测按实况裁定"
+    "current": "R1701 本轮交付：UGC 管道 submit→SecBatchFace 接线（R1681 命名后继·AC-PW1..PW7 七判据预注册先于代码·RUNNER 43/43 套件 455 判据全绿）+tech 队列补种（open 10 持平）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：UGC 管道降级横幅持久化队列端到端（2026-10-10T01:30:45+08:00·R1701 交付·可跑实物）：src/sandbox/ugc/pipeline.py 接线（submit 门步走 SecBatchFace 批量门·门故障降级入持久队列零丢失+submit_batch 真批量门+drain_recover 端到端恢复〔queued→drained_pass→发布/drained_rejected 永拒/离线留队/二跑幂等〕+degraded_banner 常驻 disclaimer）+sec_batch.py rows_by_status 只读面；test_ugc.py 19/19 判据（AC-U1..U12+AC-PW1..PW7）+reconcile_all 43 套件 455 判据 RUNNER PASS+矩阵 --check byte-identical；证据 qa/ugc-pipeline-R1701.log+qa/reconcile-all-R1701.log",
+    "next_milestone": "下轮=P2 队头（tech 开项按序：pay 支付状态通知面/水印缩放族模板对位恢复/suite_matrix 证据发现面修复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）+fold R460 轮首首测按实况裁定"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1700",
+      "1701",
       "OSLoop 执行 tick"
     ],
     [
@@ -2909,20 +2909,24 @@
     [
       "2",
       "R1700 API 开放平台开发者生态面沙箱件（P3 队头·AC-DK1..DK7 预注册先于代码·种子=B5 metered R626）：apidev.py DevKeyFace 三环=key 发放（UNIQUE+确定性 sha256 派生零 RNG+MeteredFace.register_client 公有 API 绑定）+限额（UTC 月窗 COUNT 零 UPDATE·E_AD_QUOTA 前置计费环零消耗）+计费（metered 公有 API 全权委托·源零 metered_* 直写）+调用链六序双注入拒例零孤儿行·SUITE 7/7+RUNNER 43/43 套件 448 判据+矩阵 --check 绿·qa/apidev-R1700.log·R1700）+队列常备线补种（tech 2→10+explore 4→10·种子全取在册命名后继）"
+    ],
+    [
+      "2",
+      "R1701 UGC 管道 SecBatchFace 接线沙箱件（P2 队头·AC-PW1..PW7 预注册=tech.md 认领行先于代码·种子=sec_batch.py R1681 在册）：pipeline.py 门步接线（submit→check_batch 单文本片·AC-U1..U12 全套零回归）+门故障降级根治（旧行为裸抛=文本丢失→queued receipt 零 ugc.db 行+sec_degraded.db 持久+跨重启存活+ingest_lobby 消耗标记 status=queued 单径恢复防双发布）+submit_batch 真批量门（分片映射律 verdicts→前缀/degraded→后缀+预算击穿注入实证 budget_breach 零判定零发布）+drain_recover 端到端（三态实测：恢复→drained_pass→发布含 lobby_idea 源/命中→drained_rejected 永不发布 fail-closed 永拒/离线→留队下窗·二跑幂等 skipped_existing=6 零新事件行）+零丢失账（降级 7=发布 6+恢复期硬拒 1+队列余留 0 每文本恰一结局）+sec_batch.py rows_by_status 只读面（三态白名单·AC-SB 套件零回归）·test_ugc 12→19 判据 SUITE 19/19+RUNNER PASS 43/43 套件 448→455 判据 controls 6/6 85.4s 零回归=qa/ugc-pipeline-R1701.log+qa/reconcile-all-R1701.log·矩阵再生 43/455 --check byte-identical 绿（--evidence 显式指向新 RUNNER 证据=R1695 缺省发现面缺口注记）·tech open 10→9 后补种 1→10·R1701"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1699 flush caliber (checker single-source law): window re-derived by checker recompute = 2026-10-04..2026-10-10 (fold R459 via logs_toolkit fold --window-tail 7 = R1685 roll carry + fold R458 roll + R1697 trio + R1698 pair 7 lines -> 1 roll line, R1699 triple appended, W/sub re-derived mechanically); tick row 1698 -> 1699; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
+    "method": "R1701 flush caliber (checker single-source law): window re-derived by checker recompute = 2026-10-04..2026-10-10; R1701 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1700 -> 1701; tech queue UGC-wiring row done -1 + one named-successor seed (ingest_lobby batch gate wiring) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
   }
 }

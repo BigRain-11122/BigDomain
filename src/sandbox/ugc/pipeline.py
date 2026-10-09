@@ -53,6 +53,7 @@ from sec_gate import (ContentRejectedError, GateOfflineError,  # lobby gate prod
 import store as UGC
 from review import ReviewDesk
 from wordlist import PreFilter  # L1 local pre-filter (OH-20261002 wiring)
+from sec_batch import SecBatchFace, ST_DRAINED_PASS  # batch + degraded queue (R1681)
 
 REPO_ROOT = os.path.realpath(os.path.join(BASE, "..", "..", ".."))
 SOURCES = ("direct", "lobby_idea", "avatar_intake", "live_danmaku")
@@ -74,9 +75,21 @@ class UGCPipeline:
     def __init__(self, config, db_path):
         self._startup_checks(config)
         self.config = config
+        self.db_path = db_path
         self.store = UGC.UGCStore(db_path)
         self.desk = ReviewDesk(self.store)
         self._rate = defaultdict(deque)
+        # batch face wraps the SAME gate instance (referenced, not
+        # copied); the degraded queue rides next to ugc.db so every
+        # instance shares one recovery namespace (AC-PW1). Built last:
+        # refused constructions never open the queue file.
+        queue_db = os.path.join(
+            os.path.dirname(os.path.abspath(db_path)), "sec_degraded.db")
+        try:
+            self.batch = SecBatchFace(self.gate, queue_db, config=config)
+        except ValueError as exc:
+            self.store.close()
+            raise GateOfflineError("sec_batch config invalid: %s" % exc)
 
     # ---- startup self-checks (serve refusal family) -----------------------
 
@@ -141,6 +154,7 @@ class UGCPipeline:
         return real
 
     def close(self):
+        self.batch.close()
         self.store.close()
 
     @classmethod
@@ -191,6 +205,105 @@ class UGCPipeline:
             self._check_rate(actor)
         return self._process(source, actor, content)
 
+    def submit_batch(self, source, actor, texts):
+        """Batch intake face (AC-PW4): per-text prefilter and rate faces,
+        then ONE real batch gate call per max_batch chunk. The budget
+        face degrades the ungated suffix into the persistent queue
+        (fail-closed: never passed, never lost). One bad text never
+        aborts the batch - every text gets its own receipt."""
+        self._validate_source(source)
+        if source in self.entrance_required and not self.store.entrance_valid(actor):
+            raise UGC.PipelineError(UGC.E_ENTRANCE_REQUIRED, str(actor))
+        cleaned = [str(t or "").strip()[: self.max_len] for t in texts]
+        receipts = [None] * len(cleaned)
+        gate_idx = []
+        for i, text in enumerate(cleaned):
+            if not text:
+                receipts[i] = {"received": False, "queued": False,
+                               "code": UGC.E_BAD_FRAME, "text_index": i}
+                continue
+            hit = None
+            if self.prefilter is not None:
+                hit = self.prefilter.check(text)
+                if hit is not None:
+                    self.local_hit_count += 1
+            if hit is not None:
+                receipts[i] = {"received": False, "queued": False,
+                               "code": UGC.E_CONTENT_REJECTED, "text_index": i}
+            else:
+                gate_idx.append(i)
+        if source == "direct":
+            for i in list(gate_idx):
+                try:
+                    self._check_rate(actor)
+                except UGC.PipelineError as exc:
+                    receipts[i] = {"received": False, "queued": False,
+                                   "code": exc.code, "text_index": i}
+                    gate_idx.remove(i)
+        for start in range(0, len(gate_idx), self.batch.max_batch):
+            piece = gate_idx[start:start + self.batch.max_batch]
+            out = self.batch.check_batch(
+                [cleaned[i] for i in piece], source=source, actor=actor)
+            verdicts, degraded = out["verdicts"], out["degraded"]
+            # in-chunk mapping law: verdicts cover the piece prefix in
+            # order, the degraded qids cover the suffix in order
+            for j, (kind, gate_no, _word, _text) in enumerate(verdicts):
+                i = piece[j]
+                if kind == "rejected":
+                    receipts[i] = {"received": False, "queued": False,
+                                   "code": UGC.E_CONTENT_REJECTED,
+                                   "text_index": i}
+                    continue
+                try:
+                    rec = self._after_gate(source, actor, cleaned[i])
+                except UGC.PipelineError as exc:
+                    rec = {"received": False, "queued": False,
+                           "code": exc.code, "text_index": i}
+                rec["text_index"] = i
+                receipts[i] = rec
+            for k, (qid, _landed) in enumerate(degraded):
+                i = piece[len(verdicts) + k]
+                receipts[i] = {"received": False, "queued": True,
+                               "qid": qid, "text_index": i}
+        return receipts
+
+    def degraded_banner(self):
+        """Degraded in-app banner face: the persistent queue read side
+        (rows ARE the queue), disclaimer resident (AC-PW3/AC-PW6)."""
+        keys = ("qid", "source", "actor", "content", "reason",
+                "status", "ts_utc")
+        return self._disclaimer({"queued": [
+            dict(zip(keys, row)) for row in self.batch.banner_queue()]})
+
+    def drain_recover(self):
+        """End-to-end recovery (AC-PW5): re-gate the degraded queue
+        (face.drain), then re-enter the post-gate flow for every clean
+        row. Rows from other namespaces stay face-owned (source not in
+        SOURCES); rows whose event already exists are skipped - the
+        recovery is idempotent across restarts."""
+        stats = self.batch.drain()
+        recovered, skipped, failed = [], 0, 0
+        for row in self.batch.rows_by_status(ST_DRAINED_PASS):
+            q_source, q_actor, q_content = row[1], row[2], row[3]
+            if q_source not in SOURCES:
+                continue  # another namespace owns its own republish
+            evt_id = compute_evt_id(q_source, q_actor, q_content)
+            if self.store.event_row(evt_id) is not None:
+                skipped += 1
+                continue
+            try:
+                self._after_gate(q_source, q_actor, q_content)
+                recovered.append(evt_id)
+            except UGC.PipelineError:
+                failed += 1  # honest count; the queue row keeps its
+                # terminal drained_pass verdict either way
+        return self._disclaimer({
+            "drained": stats["drained"], "passed": stats["passed"],
+            "rejected": stats["rejected"],
+            "still_queued": stats["still_queued"],
+            "recovered": recovered, "skipped_existing": skipped,
+            "failed_publish": failed})
+
     def ingest_lobby(self):
         """Diverting reader: the real consumer of the lobby idea.submit
         (AC-S10) and avatar.intake (AC-S12) streams. One DB, tables
@@ -209,8 +322,15 @@ class UGCPipeline:
                 source, text = "avatar_intake", ((name + " - " + intro) if intro else name)
             try:
                 out = self._process(source, actor, text, origin_evt_id=origin)
-                status = ("noise" if out.get("noise")
-                          else ("review" if out.get("suspended") else "accepted"))
+                if out.get("queued"):
+                    # consumed by the reader, content persisted in the
+                    # degraded queue; single recovery path =
+                    # drain_recover, no silent loss (AC-PW3)
+                    status = "queued"
+                else:
+                    status = ("noise" if out.get("noise")
+                              else ("review" if out.get("suspended")
+                                    else "accepted"))
             except UGC.PipelineError as exc:
                 out = {"received": False, "code": exc.code, "origin_evt_id": origin}
                 status = "rejected" if exc.code == UGC.E_CONTENT_REJECTED else exc.code
@@ -230,11 +350,29 @@ class UGCPipeline:
                 if hit is not None:                # catch before the paid
                     self.local_hit_count += 1     # platform call (quota)
                     raise ContentRejectedError(1, hit)
-            self.gate.check_text(text)  # gate 1 risky + gate 2 non-advisory
         except ContentRejectedError as exc:
             # gate hits never land and never receipt (lobby AC-S4 same origin)
             raise UGC.PipelineError(
                 UGC.E_CONTENT_REJECTED, "gate %d wordlist hit" % exc.gate) from None
+        # gate 1 risky + gate 2 non-advisory ride the batch face (R1681
+        # wiring, AC-PW2): a runtime gate failure degrades the text into
+        # the persistent queue instead of losing it (AC-PW3)
+        out = self.batch.check_batch([text], source=source, actor=actor)
+        if out["degraded"]:
+            qid = out["degraded"][0][0]
+            return {"received": False, "queued": True, "qid": qid,
+                    "gate": None, "origin_evt_id": origin_evt_id}
+        kind, gate_no, _word, _text = out["verdicts"][0]
+        if kind == "rejected":
+            raise UGC.PipelineError(
+                UGC.E_CONTENT_REJECTED, "gate %d wordlist hit" % gate_no)
+        return self._after_gate(source, actor, text, origin_evt_id)
+
+    def _after_gate(self, source, actor, text, origin_evt_id=None):
+        """Post-gate flow (gray zone -> accept). Shared by submit,
+        submit_batch and drain_recover; the recovery resume point is
+        the gate: entrance and rate already passed on the original
+        submit (AC-PW5)."""
         evt_id = compute_evt_id(source, actor, text)
         ts = UGC.utc_now_iso()
         gray_hit = next((w for w in self.gray_words if w and w in text), None)
@@ -510,10 +648,10 @@ def main():
         print(str(exc), file=sys.stderr)  # serve refusal, same family as lobby/ledger
         return 2
     pf = pipe.prefilter
-    print("ugc pipeline ready: gate=ok pre_filter=%s gray_words=%d export=%s db=%s sources=%s"
+    print("ugc pipeline ready: gate=ok pre_filter=%s gray_words=%d export=%s db=%s sources=%s sec_queue=%s"
           % ("%d words" % pf.word_count if pf is not None else "off",
              len(pipe.gray_words), pipe.export_dir, args.db,
-             ",".join(sorted(pipe.enabled))), flush=True)
+             ",".join(sorted(pipe.enabled)), pipe.batch.db_path), flush=True)
     pipe.close()
     return 0
 
