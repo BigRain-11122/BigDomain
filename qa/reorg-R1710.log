@@ -1,0 +1,40 @@
+=== qa/reorg-R1710.log : fold R463 window reorg + canonical layout surgery ===
+round: R1710 | date: 2026-10-10 | knife: P-2026-09-25-18 No.463 | front door: logs_toolkit.py fold
+
+[S1] round-start gauge (scan STATE face PASS eol_ok=1):
+  disk_bytes=79614 gate=78500 margin=-1114 fold_needed=true (R1709 carry-note cashed)
+
+[S2] pre-step canonical layout surgery (first fold attempt refused E_STATE_LAYOUT: PS item-line layout mismatch):
+  root cause (git-archaeology anchor): items at 16 spaces through R1706 commit efbc520;
+    R1707 closeout Python json.dump full rewrite re-indented all 27 log items to 8 spaces;
+    R1708/R1709 closeouts preserved the corrupted 8-space layout; eol tool guards CRLF only.
+  surgery: 27 item lines 8-space -> 16-space inside log array only;
+    content bytes untouched; json.loads(before) == json.loads(after);
+    predicted 79830B == actual; tempfile + os.replace atomic write; readback identical.
+  post-surgery: all 27 items canonical 16-space; state parseable both parsers.
+
+[S3] catalog zero-loss check (window=last 7 lines):
+  window_lines=7 tokens_total=159 missing_in_roll=[] pass=true
+  roll summary line: 6926B (first draft 10098B overweight -> compact rewrite, all 159 tokens literal)
+
+[S4] fold dry-run (all gates green before any write):
+  window=lines 21..27 (R1707 fold-R462 roll line + R1707/R1708/R1709 three pairs), 7 lines, 14852B
+  pre_bytes=79830 new_log_len=21 token_missing=[] gate_ok=true predicted_bytes=71789 reserve=3000 gate=78500
+
+[S5] fold --execute (verify-then-write):
+  predicted_eq_actual=true post_bytes=71789 archive_appended=true (sec R463, 7 lines verbatim, 15167B)
+  backup_written=true logs/state-preop-R1710.bak preop_sha16=a2d20cb355381e24
+
+[S6] post verification:
+  gauge: disk_bytes=71789 margin_bytes=6711 fold_needed=false log_lines=21
+  eol check: bare_lf=0 lone_cr=0 crlf=30 layout_ok=true
+
+[S7] closeout discipline note (root-cause enforcement):
+  from this round on, state.json closeout = byte-surgical append (16-space indent + CRLF);
+  json.dump full rewrites are banned for closeout (this exact rewrite caused the layout corruption).
+  tech.md seed "fold E_STATE_LAYOUT refuse-message repair-hint alignment" annotated with the
+  indent-mismatch variant discovered live this round.
+
+verdict: AC-R4631 gauge-over-line | AC-R4632 surgery-verified | AC-R4633 catalog-zero-loss |
+  AC-R4634 dry-run-gates | AC-R4635 execute-predicted-eq-actual | AC-R4636 post-gauge-eol-green
+ALL PASS
