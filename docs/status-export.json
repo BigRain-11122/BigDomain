@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T07:01:22+08:00",
+  "export_ts": "2026-10-10T07:15:45+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1716 双件落地：fold R466 水位整编（79153B→69490B·tail-5 窗滚并折 170 token 零丢失·证据 qa/reorg-R1716.log）+ fold 拒面修复指令对齐件（E_STATE_LAYOUT 两拒面 hint 注修复路径+eol check 缩进守恒判据=R1710 缩进漂移病检出面闭合·SUITE PASS 125 checks·51 套件全量回归零回归）",
-    "latest_artifact": "最近实物：fold 拒面 hint+缩进守恒判据件（2026-10-10·R1716 交付·可跑实物计 2）：src/os/logs_toolkit.py fold 拒面修复指令注入（CRLF 病→eol --fix --execute 直修路径·缩进病→eol check 诊断+16 空格正典字节外科 R1710 先例）+eol check 新增缩进守恒五字段（R1710 json.dump 重写毁 16 空格缩进、逃逸三轮的检出面闭合·布局双绿才 exit 0）·套件 125 checks 全绿·证据 qa/logs-fold-hint-R1716.log",
-    "next_milestone": "下轮=tech 队头序推进（eol --fix-indent 缩进修复扩展窗〔R1710 手工手术工具化〕+pay notify orders.py 接线面〔付完款自动通知〕+watermark 未知缩放因子扩展面）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1717 eol --fix-indent 缩进修复工具化收口（P2 tech 队头·R1716 后继·AC-FI1..FI7 预注册先行）：logs_toolkit.py eol 子命令增 --fix-indent 旗（16 空格正典重缩进·内容字节零触碰·每行 EOL 保持=两病分修·三重验证先于写·原子写+幂等）+fold mismatch 拒面 hint 改指本旗；套件 SUITE PASS 139 checks（125→139）+RUNNER PASS 51/51 controls 6/6 90.7s 零回归+矩阵 51/547 green --check byte-identical",
+    "latest_artifact": "最近实物：eol --fix-indent 缩进修复工具件（2026-10-10·R1717 交付·可跑实物计 2）：src/os/logs_toolkit.py --fix-indent 旗（R1710 手工布局外科工具化——log item 行前导空白归一 16 空格正典·dry-run 缺省+--execute·与 --fix 互斥=两病分修·内容病行不修不误绿 fail-closed）+套件 14 新断言 139 checks 全绿+活体 23 行注入修复 roundtrip identity·证据 qa/logs-fix-indent-R1717.log+qa/reconcile-all-R1717.log",
+    "next_milestone": "下轮=tech 队头序推进（pay notify orders.py 接线面〔付完款自动通知·R1706 后继〕+watermark 未知缩放因子恢复扩展面〔R1707 后继〕+suite_matrix live mtime 归一态实证窗）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1716",
+      "1717",
       "OSLoop 执行 tick"
     ],
     [
@@ -2974,15 +2974,15 @@
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 10,
+    "queue_tech_open": 9,
     "queue_explore_open": 10,
-    "method": "R1716 flush caliber (checker single-source law): window re-derived after fold R466 (5 in-window lines rolled to 1) + R1716 pair appended; tick row 1715 -> 1716; queue_tech_open 10 -> 10 net-zero (hint-alignment item done [x] -1 + fix-indent seed +1)"
+    "method": "R1717 flush caliber (checker single-source law): R1717 pair appended (substantive + tokens), log_lines_in_window 20 -> 22, substantive 7 -> 8; tick row 1716 -> 1717; queue_tech_open 10 -> 9 (fix-indent item done [x])"
   }
 }

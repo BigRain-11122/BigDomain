@@ -333,7 +333,123 @@ def eol_content_lines(text):
     return re.split(r'\r\n|\n', text)
 
 
+def fix_indent_text(text):
+    """Re-indent log item lines to the 16-space canonical (R1710 manual
+    byte surgery toolized, AC-FI2). Only item lines whose stripped body
+    starts with a JSON string quote are touched; content bytes and each
+    line's own EOL terminator are preserved (EOL disease stays with
+    --fix; two diseases, two repairs). Returns (fixed_text, repaired)
+    or (None, 0) when no log block exists (non-state shape)."""
+    lines = text.splitlines(True)
+    log_start = None
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if s.startswith('"log"') and s.endswith('['):
+            log_start = i
+            break
+    if log_start is None:
+        return None, 0
+    out = list(lines)
+    repaired = 0
+    for j in range(log_start + 1, len(lines)):
+        s = lines[j].strip()
+        if s == ']':
+            break
+        if not s:
+            continue
+        body = lines[j]
+        eol = ''
+        if body.endswith('\r\n'):
+            body, eol = body[:-2], '\r\n'
+        elif body.endswith('\n'):
+            body, eol = body[:-1], '\n'
+        core = body.lstrip(' ')
+        if core.startswith('"') and len(body) - len(core) != 16:
+            out[j] = ' ' * 16 + core + eol
+            repaired += 1
+    return ''.join(out), repaired
+
+
+def eol_fix_indent(args, path, raw, prof):
+    """--fix-indent face: indent-only repair, dry-run default (AC-FI2..FI4)."""
+    text = raw.decode('utf-8')
+    out = {'file': path,
+           'mode': 'fix-indent-execute' if args.execute else 'fix-indent-dry-run'}
+    out.update(prof)
+    fixed, repaired = fix_indent_text(text)
+    if fixed is None:
+        out['written'] = False
+        out['note'] = 'no log block found (non-state shape): nothing to fix'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0
+    fixed_raw = fixed.encode('utf-8')
+    new_prof = eol_profile(fixed_raw)
+    out['repaired_lines'] = repaired
+    out['predicted_bytes'] = len(fixed_raw)
+    out['delta_bytes'] = len(fixed_raw) - len(raw)
+    # triple verification, all before any write (AC-FI3)
+    out['content_eq'] = ([l.strip() for l in eol_content_lines(text)]
+                         == [l.strip() for l in eol_content_lines(fixed)])
+    out['eol_eq'] = all(prof[k] == new_prof[k]
+                        for k in ('bare_lf', 'crlf', 'lone_cr'))
+    json_eq = None
+    try:
+        json_eq = json.loads(text) == json.loads(fixed)
+    except ValueError:
+        try:
+            json.loads(text)
+            json_eq = False  # raw parses, fixed does not: semantics broken
+        except ValueError:
+            json_eq = None   # non-JSON target (--file): equivalence n/a
+    out['json_eq'] = json_eq
+    out['verify_pass'] = (out['content_eq'] and out['eol_eq']
+                          and json_eq is not False)
+    if not out['verify_pass']:
+        out['error'] = 'E_EOL_VERIFY: content/eol/json equivalence broken (refusing)'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 2
+    if repaired == 0:
+        out['written'] = False
+        if prof['indent_ok']:
+            out['note'] = 'nothing to fix (indent already canonical)'
+            print(json.dumps(out, ensure_ascii=False, indent=2))
+            return 0
+        # anomaly lines exist but none is indent-repairable: content
+        # disease, not indent disease - fail-closed, no false green
+        out['note'] = ('no indent-repairable item line found while '
+                       'indent_anomaly > 0 (content disease?)')
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 2
+    if not args.execute:
+        out['note'] = 'dry-run: zero mutation'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0
+    dirname = os.path.dirname(path) or '.'
+    fd, tmp = tempfile.mkstemp(prefix='eol_fixindent_', dir=dirname)
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            f.write(fixed_raw)
+        os.replace(tmp, path)
+    except OSError:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+        raise
+    with open(path, 'rb') as f:
+        on_disk = f.read()
+    post = eol_profile(on_disk)
+    out['written'] = True
+    out['post_indent_anomaly'] = post['indent_anomaly']
+    out['post_indent_ok'] = post['indent_ok']
+    out['predicted_eq_actual'] = on_disk == fixed_raw
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0 if out['predicted_eq_actual'] and post['indent_ok'] else 2
+
+
 def cmd_eol(args):
+    if args.fix and args.fix_indent:
+        print('error: --fix and --fix-indent are mutually exclusive '
+              '(--fix is EOL-only, --fix-indent is indent-only)', file=sys.stderr)
+        return 2
     if args.file:
         path = os.path.abspath(args.file)
     else:
@@ -341,6 +457,8 @@ def cmd_eol(args):
     with open(path, 'rb') as f:
         raw = f.read()
     prof = eol_profile(raw)
+    if args.fix_indent:
+        return eol_fix_indent(args, path, raw, prof)
     text = raw.decode('utf-8')
     out = {'file': path, 'mode': 'check'}
     out.update(prof)
@@ -482,8 +600,7 @@ def cmd_fold(args):
     if layout is None:
         print('error: E_STATE_LAYOUT: PS item-line layout mismatch (refusing)',
               file=sys.stderr)
-        print('hint: run: python src/os/logs_toolkit.py eol (indent profile); '
-              'indent drift = 16-space canonical byte surgery (R1710 precedent)',
+        print('hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute',
               file=sys.stderr)
         return 2
     lines, log_start, item_idx, close_idx = layout
@@ -826,7 +943,10 @@ def main(argv=None):
     pe = sub.add_parser('eol', help='state.json closeout EOL repair (bare-LF report + CRLF surgery)')
     pe.add_argument('--file', default=None, help='target file (default: src/os/state.json)')
     pe.add_argument('--fix', action='store_true', help='perform CRLF surgery (default: read-only check)')
-    pe.add_argument('--execute', action='store_true', help='with --fix: actually write (default: dry-run)')
+    pe.add_argument('--fix-indent', action='store_true',
+                    help='re-indent log item lines to the 16-space canonical '
+                         '(mutually exclusive with --fix; default: dry-run)')
+    pe.add_argument('--execute', action='store_true', help='with --fix/--fix-indent: actually write (default: dry-run)')
     pf = sub.add_parser('fold', help='state.json fold surgery (verify-then-write)')
     pf.add_argument('--round', help='round label e.g. R1687 (backup + header naming)')
     pf.add_argument('--fold-no', help='fold knife number e.g. 455 (header)')

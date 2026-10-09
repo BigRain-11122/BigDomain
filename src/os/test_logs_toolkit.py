@@ -696,8 +696,8 @@ def main():
     rc, _, err = run(sf6, 'fold', '--round', 'R9006', '--fold-no', '460',
                      '--desc', 'x', '--window-tail', '1', '--summary-file', sfile6)
     ok(rc == 2 and 'PS item-line layout mismatch' in err
-       and 'indent drift = 16-space canonical byte surgery (R1710 precedent)' in err,
-       'fold indent refusal stderr carries indent hint (AC-LF1)')
+       and 'hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute' in err,
+       'fold indent refusal stderr carries --fix-indent hint (AC-LF1/AC-FI5)')
     ok(open(p6, 'rb').read() == bad6, 'fold indent refusal zero mutation')
     # eol check on the indent-disease fixture: exit 2 with CRLF face green
     # and indent face red (AC-LF2) - the R1710 three-round escape is closed
@@ -726,6 +726,77 @@ def main():
     e9 = json.loads(out)
     ok(rc == 0 and e9['log_block_found'] is False and e9['indent_ok'] is True,
        'eol check non-JSON --file: indent face n/a not red (AC-LF2)')
+
+    # ---- eol --fix-indent: indent-disease repair toolized ----
+    # (AC-FI1..FI7, pre-registered in state/queue/tech.md R1717 claim)
+    # AC-FI1: --fix and --fix-indent are mutually exclusive (scope law)
+    rc, _, err = run(sf6, 'eol', '--fix', '--fix-indent')
+    ok(rc == 2 and 'mutually exclusive' in err,
+       'eol --fix + --fix-indent mutually exclusive (AC-FI1)')
+    # AC-FI3: dry-run on the indent-disease fixture (sf6 still bad6):
+    # predicts both repairs, triple verify green, zero mutation
+    rc, out, _ = run(sf6, 'eol', '--fix-indent')
+    fi = json.loads(out)
+    ok(rc == 0 and fi['mode'] == 'fix-indent-dry-run'
+       and fi['repaired_lines'] == 2 and fi['verify_pass'] is True
+       and fi['content_eq'] is True and fi['eol_eq'] is True
+       and fi['json_eq'] is True,
+       'fix-indent dry-run: 2 repairs predicted + triple verify (AC-FI3)')
+    ok(open(p6, 'rb').read() == bad6, 'fix-indent dry-run zero mutation (AC-FI3)')
+    # AC-FI4: execute full chain - atomic write, post anomaly 0,
+    # predicted==actual, repaired bytes == original canonical (roundtrip)
+    rc, out, _ = run(sf6, 'eol', '--fix-indent', '--execute')
+    fi2 = json.loads(out)
+    ok(rc == 0 and fi2['written'] is True and fi2['repaired_lines'] == 2
+       and fi2['post_indent_anomaly'] == 0 and fi2['post_indent_ok'] is True
+       and fi2['predicted_eq_actual'] is True,
+       'fix-indent execute: post indent_ok + predicted==actual (AC-FI4)')
+    ok(open(p6, 'rb').read() == h6,
+       'repaired bytes == original canonical (indent roundtrip identity)')
+    rc, out, _ = run(sf6, 'eol')
+    ok(rc == 0 and json.loads(out)['indent_ok'] is True,
+       'eol check green after fix-indent (chain closure)')
+    # AC-FI4: idempotent second run - no-op zero write
+    rc, out, _ = run(sf6, 'eol', '--fix-indent', '--execute')
+    fi3 = json.loads(out)
+    ok(rc == 0 and fi3['written'] is False and fi3['repaired_lines'] == 0,
+       'fix-indent idempotent second run no-op (AC-FI4)')
+    # hinted repair unblocks fold (message chain semantics, R1716 CRLF analog)
+    rc, out, _ = run(sf6, 'fold', '--round', 'R9007', '--fold-no', '461',
+                     '--desc', 'x', '--window-tail', '1', '--summary-file', sfile6)
+    ok(rc == 0 and json.loads(out)['would_fail'] == [],
+       'fold dry-run unblocked after hinted fix-indent repair')
+    # AC-FI5: fresh indent-disease fixture - refusal hint names the flag
+    sf7 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf7, ['2026-10-10 R1717 line one D-20261010-04',
+                         '2026-10-10 R1717 tokens: local=1 api=0'])
+    sfile7 = os.path.join(sf7, 'summary.txt')
+    open(sfile7, 'w', encoding='utf-8').write('2026-10-10 roll line D-20261010-04\n')
+    p7 = os.path.join(sf7, 'src', 'os', 'state.json')
+    h7 = open(p7, 'rb').read()
+    bad7 = h7.replace(b'\r\n' + b' ' * 16 + b'"', b'\r\n' + b' ' * 8 + b'"')
+    with open(p7, 'wb') as f:
+        f.write(bad7)
+    rc, _, err = run(sf7, 'fold', '--round', 'R9008', '--fold-no', '462',
+                     '--desc', 'x', '--window-tail', '1', '--summary-file', sfile7)
+    ok(rc == 2 and 'PS item-line layout mismatch' in err
+       and 'hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute' in err,
+       'fold indent refusal hint names --fix-indent --execute (AC-FI5)')
+    ok(open(p7, 'rb').read() == bad7, 'fold indent refusal zero mutation (AC-FI5)')
+    # hinted repair chain actually unblocks fold (AC-FI5 semantics)
+    rc, out, _ = run(sf7, 'eol', '--fix-indent', '--execute')
+    ok(rc == 0 and json.loads(out)['written'] is True,
+       'hinted eol --fix-indent --execute repairs the indent disease')
+    ok(open(p7, 'rb').read() == h7, 'hinted repair roundtrip identity (AC-FI5)')
+    # AC-FI2: non-state --file no-op + healthy-state no-op
+    rc, out, _ = run(root, 'eol', '--fix-indent', '--execute', '--file', txtpath)
+    fin = json.loads(out)
+    ok(rc == 0 and fin['written'] is False,
+       'fix-indent non-state --file no-op not red (AC-FI2)')
+    rc, out, _ = run(sf5, 'eol', '--fix-indent', '--execute')
+    fin2 = json.loads(out)
+    ok(rc == 0 and fin2['written'] is False and fin2['repaired_lines'] == 0,
+       'fix-indent healthy state no-op zero write (AC-FI2)')
 
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):

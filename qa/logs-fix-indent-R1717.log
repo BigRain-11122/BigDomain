@@ -1,0 +1,24 @@
+
+=== SECTION 1: live state.json check (baseline, read-only) ===
+True live check exit==0: 0
+True live indent_ok: True indent16_lines: 23 indent_anomaly: 0 eol face layout_ok: True
+
+=== SECTION 2: live copy + injected indent disease (R1710 form) ===
+injected item lines: 23
+True diseased check exit==2: 2 indent_anomaly: 23 layout_ok (CRLF face untouched): True
+True dry-run exit==0: 0 mode: fix-indent-dry-run repaired_lines: 23 content_eq: True eol_eq: True json_eq: True verify_pass: True
+True dry-run zero mutation: True
+True execute exit==0: 0 written: True post_indent_anomaly: 0 post_indent_ok: True predicted_eq_actual: True
+True repaired bytes == live canonical bytes (roundtrip identity): True
+True json semantic equivalence vs live: True
+True post-repair check exit==0: 0 indent_ok: True
+True idempotent second run no-op: True
+
+=== SECTION 3: fold refusal hint on diseased fake-root + unblock chain ===
+fold refuses diseased fake-root (expected rc 2): 2
+True refusal stderr carries --fix-indent hint: True
+True hinted repair executes: True
+True fold dry-run unblocked after repair: True
+
+=== SUMMARY ===
+AC-FI live evidence complete; live state.json never written: True
