@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T18:00:55+08:00",
+  "export_ts": "2026-10-09T18:21:24+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "P2 队头 logs/ 整编工具链切片交付（18:00x）：logs_toolkit.py 五子命令+套件 38/38+live 实弹 logs/ 6998→884 件 ~42MB 回收+catalog R1685 折窗重检（2 token era 口径差发现·archive 保全零丢失）；下件=常设线后继切片（fold 手术段 write/archive-append 整编入工具件）或 explore 队头；等外部输入：radar w5 候选清单+OSS 窖6（10-11 窗开）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=src/os/logs_toolkit.py（logs/ 整编工具链复用件·2026-10-09 18:00x +08:00·R1686 交付）：gauge/inventory/tail/prune/catalog 五子命令·SUITE PASS 38/38·live 实弹 logs/ 6998→884 件（~42MB 回收）·catalog 对 R1685 折窗零丢失重检；证据=qa/logs-toolkit-R1686.log",
-    "next_milestone": "下轮=P2 队头连续产出（logs 整编工具链维护行·tech 队列在板·窗 ≤48h）+fold R455 水位裁定（收账后水位再越 78500B 时轮首首测）"
+    "current": "本轮交付：状态文件水位「自动手术刀」上线（logs_toolkit.py 新增 fold 命令：备份→原文归档→压缩→校验四步一次跑完，任何一步校验不过就整体不写盘=零破坏）；65 项自测全绿；下轮水位越线即用它自动压缩（fold R455）。等外部输入：radar 候选清单+OSS 窗（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=src/os/logs_toolkit.py fold 子命令（水位折叠手术全自动件·2026-10-09 18:21 +08:00·R1687 交付·五→六子命令）：pre-op 逐字节备份+归档原文追加（单写+前后实读比对）+state.json 文本手术（落盘格式逐字节保真·禁全文件重序列化）+verify-then-write 四步硬序（校验不过=exit 2 零盘面突变）；套件 65/65 全绿；证据=qa/logs-toolkit-R1687.log（live gauge+双面 dry-run 探测+套件三节）",
+    "next_milestone": "下轮=P2 队头连续产出（tech 队列在板·常设线后继切片候选=archive 反向对账件·窗 ≤48h）+fold R455 水位裁定（收账后水位 79448B 已越 78500B 线→下轮轮首首测即触发，fold 子命令为正门）"
   },
   "depts": [
     {
@@ -247,7 +247,7 @@
       "fold R454 水位整编收账轮（台账维护机制件·P-2026-09-25-18 第四百五十四刀·R1684 承传注记兑现：轮首首测 80297B 越线 1797B·probe A/B 取 B=7 行〔R1610..R1681 滚窗行+R1682/R1683/R1684 三 pair〕14355B 折 1 滚窗行 kept=0·pre-op==HEAD 逐字节 sha16 fbceaabf948be4cf·archive §R1685 节 7 行 verbatim markers 178→179+备份件 logs/state-preop-R1685.bak·P/D 编目 126 token 零丢失全录直载〔承前 119+新增 7〕·verify-then-write 预测==实际 74471B margin 4029B 闸内·双解析器过〔py+PS〕·九面扫描五静全过承 R1684 判读链·sd 重派 (21,0,1,7) 三 pair 漂移归一·checker RUN0+RUN1 双绿·AC-R4541..R4546=qa/reorg-R1685.log·R1685）"
     ],
     [
-      "1686",
+      "1687",
       "OSLoop 执行 tick"
     ],
     [
@@ -2853,21 +2853,25 @@
     [
       "2",
       "R1686 logs/ 整编工具链复用维护切片（P2 队头·tech.md 判据预注册 AC-LT1..LT7）：src/os/logs_toolkit.py 工具件〔gauge/inventory/tail/prune/catalog 五子命令·R1580 PAT 口径复用〕+套件 38/38 exit 0+live 实弹 logs/ 6998→884 件 ~42MB 回收〔两段执行·run_*.log 转录族补修=判据修正如实注〕+catalog R1685 折窗重检诚实发现 2 token era 口径差〔archive 保全零丢失〕·证据 qa/logs-toolkit-R1686.log"
+    ],
+    [
+      "2",
+      "R1687 logs fold 手术段切片（P2 队头·AC-LT8..LT14 预注册先于代码·tech.md 认领行在册）：logs_toolkit.py 增 fold 子命令（五→六）=pre-op 备份逐字节+archive verbatim 追加（单写+前后实读比对）+state.json 文本手术（PS5.1 落盘形逐字节保真·prefix/suffix 逐行不变·禁全文件重序列化=R1646 教训 write 面最小化）+verify-then-write 四步硬序（全校验绿才写·token 零丢失+gate+reserve 3000+缺件 fail-closed·任一失败 exit 2 零盘面突变）+summary 仿 PS5.1 转义（实测 \u003c 口径）·套件 38→65 全绿 exit 0（PS 形态 fixture+dry-run 零突变+execute 全链保真+gate/token/布局/缺件四 abort 面+--allow-create+无尾换行 prepend）·live 证据=qa/logs-toolkit-R1687.log 三节（gauge 76856B fold_needed=false 未越线不实跑 fold+fold dry-run 双面探测=token-loss exit 2 面/full-plan exit 0 面 predicted 74703B+reserve 3000=77703B 闸内·零盘面突变·live state 76856B 保真未动+套件节）·fold R455 触发时 fold 子命令为正门"
     ]
   ],
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
     "queue_explore_open": 10,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1685 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09; fold R454 absorbed the R1682/R1683/R1684 three pairs into one roll line: W 25 -> 21 (-4: three pairs + prior roll line -0 kept, roll line + closeout pair +2 = -6 +2), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, outside fold window, R1672 flush semantics), sub 9 -> 7 (-3 pair mains folded, +1 R1685 fold closeout main); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row still gated on absent docker, logs-tooling row open), queue_main_open 6 / queue_explore_open 10 flat; tick row 1684 -> 1685 = state.tick; results +1 fold row"
+    "method": "R1687 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1687 closeout pair added both dated 10-09: W 23 -> 25 (+2), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, outside fold window, R1672 flush semantics), sub 8 -> 9 (+1 R1687 slice-delivery main; tokens line excluded per caliber); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row still gated on absent docker, logs-tooling row open), queue_main_open 6 / queue_explore_open 10 flat; tick row 1686 -> 1687 = state.tick; results +1 R1687 slice row"
   }
 }

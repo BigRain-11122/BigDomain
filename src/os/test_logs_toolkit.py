@@ -5,7 +5,13 @@ AC-LT6 (pre-registered in state/queue/tech.md R1686 claim line, written
 before this code): sandbox fixture tree, subprocess CLI surface, asserts
 gauge/inventory/prune/catalog behaviors incl. protected-file survival,
 mtime floor, idempotence, and prune predicted==actual. Exit 0 = all green.
-ASCII-only source; stdlib only; zero network.
+
+AC-LT14 (R1687 fold slice, pre-registered before code): fold cases on a
+canonical PS 5.1 layout fixture - dry-run zero mutation, execute full
+chain fidelity (backup byte-exact, archive verbatim append, text-surgical
+state write, predicted==actual), gate/token fail-closed aborts with zero
+mutation, archive missing fail-closed + --allow-create, layout refusal,
+summary arity check. ASCII-only source; stdlib only; zero network.
 """
 
 import json
@@ -96,6 +102,28 @@ def split_json_blocks(out):
             blocks.append('\n'.join(buf))
             buf = []
     return [b for b in blocks if b.strip()]
+
+
+def build_ps_state(root, logs, archive_text='# archive\n'):
+    """Canonical PS 5.1 layout fixture: CRLF, 4-space indent, two spaces
+    after colon, 16-space log items, 12-space closing bracket, no trailing
+    newline (matches live src/os/state.json byte format)."""
+    import logs_toolkit as T
+    os.makedirs(os.path.join(root, 'src', 'os'), exist_ok=True)
+    os.makedirs(os.path.join(root, 'logs'), exist_ok=True)
+    lines = ['{', '    "tick":  42,', '    "log":  [']
+    for i, s in enumerate(logs):
+        comma = ',' if i < len(logs) - 1 else ''
+        lines.append(' ' * 16 + T.ps_escape(s) + comma)
+    lines.append('            ]')
+    lines.append('}')
+    path = os.path.join(root, 'src', 'os', 'state.json')
+    with open(path, 'wb') as f:
+        f.write('\r\n'.join(lines).encode('utf-8'))
+    if archive_text is not None:
+        with open(os.path.join(root, 'logs', 'state-log-archive-2026-10.md'), 'wb') as f:
+            f.write(archive_text.encode('utf-8'))
+    return path
 
 
 def main():
@@ -193,6 +221,155 @@ def main():
     cat3 = json.loads(out)
     ok(rc == 2 and 'AC-R9' in cat3['missing_in_roll'] and 'D-20260930-19' in cat3['missing_in_roll'],
        'catalog --tail mode window extraction (AC-R9 + D-20260930-19 missing)')
+
+    # ---- fold surgery (AC-LT8..LT14, R1687 slice) ----
+    PS_LOGS = [
+        '2026-10-09 R1670 dec batch D-20261009-01 ack + gord note, kept line with < sensitive',
+        '2026-10-09 R1670 tokens: local=1 api=0 api_reason=test',
+        '2026-10-09 R1671 fold window pair P-2026-09-25-18 AC-R4531 verbatim',
+        '2026-10-09 R1672 pair line D-20260930-19 O-20261009-1246 in window',
+    ]
+    SUMMARY = ('2026-10-09 roll window line: folds R1671+R1672 keeping '
+               'P-2026-09-25-18 AC-R4531 D-20260930-19 O-20261009-1246, < kept')
+    sfold = tempfile.mkdtemp(prefix='bd-fold-')
+    spath = build_ps_state(sfold, PS_LOGS)
+    sfile = os.path.join(sfold, 'summary.txt')
+    open(sfile, 'w', encoding='utf-8').write(SUMMARY + '\n')
+    arc = os.path.join(sfold, 'logs', 'state-log-archive-2026-10.md')
+    pre_state = open(spath, 'rb').read()
+    pre_arc = open(arc, 'rb').read()
+
+    # dry-run: plan + zero mutation (AC-LT9)
+    rc, out, err = run(sfold, 'fold', '--round', 'R9001', '--fold-no', '455',
+                       '--desc', 'R1671+R1672 two pairs', '--window-tail', '2',
+                       '--summary-file', sfile)
+    plan = json.loads(out)
+    ok(rc == 0, 'fold dry-run exit 0')
+    ok(plan['window_lines'] == 2 and plan['new_log_len'] == 3, 'fold plan window/new-log count')
+    ok(plan['token_ok'] is True and plan['gate_ok'] is True and plan['would_fail'] == [],
+       'fold plan verdicts green')
+    ok(plan['preop_sha16'] == __import__('hashlib').sha256(pre_state).hexdigest()[:16],
+       'fold plan preop sha16 exact')
+    ok(plan['archive_header'].startswith('# --- R9001 fold append (')
+       and 'fold R455 window' in plan['archive_header'], 'fold plan archive header format')
+    ok(open(spath, 'rb').read() == pre_state and open(arc, 'rb').read() == pre_arc,
+       'fold dry-run zero mutation (state + archive)')
+
+    # execute: full chain fidelity (AC-LT10/11)
+    rc, out, err = run(sfold, 'fold', '--round', 'R9001', '--fold-no', '455',
+                       '--desc', 'R1671+R1672 two pairs', '--window-tail', '2',
+                       '--summary-file', sfile, '--execute')
+    res = json.loads(out)
+    ok(rc == 0, 'fold execute exit 0')
+    ok(res['predicted_eq_actual'] is True and res['predicted_bytes'] == plan['predicted_bytes'],
+       'fold predicted==actual (dry-run plan == execute result)')
+    bak = os.path.join(sfold, 'logs', 'state-preop-R9001.bak')
+    ok(open(bak, 'rb').read() == pre_state, 'fold preop backup byte-exact')
+    post_arc = open(arc, 'rb').read()
+    appendix = (plan['archive_header'] + '\n'
+                + '\n'.join(PS_LOGS[-2:]) + '\n').encode('utf-8')
+    ok(post_arc == pre_arc + appendix, 'fold archive append verbatim (header + window)')
+    post_state = open(spath, 'rb').read()
+    ok(os.path.getsize(spath) == res['predicted_bytes'], 'fold disk size == predicted')
+    pst = json.loads(post_state.decode('utf-8'))
+    ok(pst['log'] == PS_LOGS[:2] + [SUMMARY], 'fold new log == kept + summary')
+    ok(pst['log'][0].count('<') == 1 and pst['log'][-1].count('<') == 1,
+       'fold escape round-trip (< restored by parser)')
+    ok(b'\\u003c' in post_state, 'fold PS-style escape written (\\u003c on disk)')
+    pre_lines = pre_state.decode('utf-8').split('\r\n')
+    post_lines = post_state.decode('utf-8').split('\r\n')
+    ok(post_lines[:5] == pre_lines[:5] and post_lines[-1] == pre_lines[-1]
+       and post_lines[-2] == pre_lines[-2],
+       'fold text surgery prefix+suffix lines byte-identical')
+    ok(post_state.count(b'\r\n') == pre_state.count(b'\r\n') - 1,
+       'fold CRLF layout preserved (one window line net removed)')
+
+    # token-missing abort: fail-closed, zero mutation (AC-LT13)
+    sf2 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf2, PS_LOGS)
+    sfile2 = os.path.join(sf2, 'summary.txt')
+    open(sfile2, 'w', encoding='utf-8').write('2026-10-09 roll line missing all tokens\n')
+    pre2 = open(os.path.join(sf2, 'src', 'os', 'state.json'), 'rb').read()
+    arc2 = os.path.join(sf2, 'logs', 'state-log-archive-2026-10.md')
+    prearc2 = open(arc2, 'rb').read()
+    rc, out, _ = run(sf2, 'fold', '--round', 'R9002', '--fold-no', '456',
+                     '--desc', 'x', '--window-tail', '2', '--summary-file', sfile2,
+                     '--execute')
+    j = json.loads(out)
+    ok(rc == 2 and 'token-missing' in j['would_fail'] and len(j['token_missing']) == 4,
+       'fold token-loss abort exit 2 (4 tokens missing)')
+    ok(open(os.path.join(sf2, 'src', 'os', 'state.json'), 'rb').read() == pre2
+       and open(arc2, 'rb').read() == prearc2
+       and not os.path.exists(os.path.join(sf2, 'logs', 'state-preop-R9002.bak')),
+       'fold abort zero mutation (no state/archive/backup writes)')
+
+    # gate abort: big KEPT line keeps predicted over gate, fail-closed (AC-LT12)
+    sf3 = tempfile.mkdtemp(prefix='bd-fold-')
+    big = 'x' * 76000
+    build_ps_state(sf3, ['2026-10-09 R1 big kept ' + big, '2026-10-09 R2 small window'])
+    sfile3 = os.path.join(sf3, 'summary.txt')
+    open(sfile3, 'w', encoding='utf-8').write('2026-10-09 roll summary line\n')
+    pre3 = open(os.path.join(sf3, 'src', 'os', 'state.json'), 'rb').read()
+    rc, out, _ = run(sf3, 'fold', '--round', 'R9003', '--fold-no', '457',
+                     '--desc', 'x', '--window-tail', '1', '--summary-file', sfile3,
+                     '--reserve-bytes', '3000')
+    j = json.loads(out)
+    ok(rc == 2 and j['would_fail'] == ['gate-exceed']
+       and j['predicted_bytes'] + 3000 > 78500,
+       'fold gate abort exit 2 (predicted+reserve over 78500)')
+    ok(open(os.path.join(sf3, 'src', 'os', 'state.json'), 'rb').read() == pre3,
+       'fold gate abort zero mutation')
+
+    # archive missing: fail-closed without --allow-create, created with it (AC-LT8/10)
+    sf4 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf4, PS_LOGS, archive_text=None)
+    sfile4 = os.path.join(sf4, 'summary.txt')
+    open(sfile4, 'w', encoding='utf-8').write(SUMMARY + '\n')
+    arc4 = os.path.join(sf4, 'logs', 'state-log-archive-2026-10.md')
+    rc, out, _ = run(sf4, 'fold', '--round', 'R9004', '--fold-no', '458',
+                     '--desc', 'x', '--window-tail', '2', '--summary-file', sfile4,
+                     '--execute')
+    j = json.loads(out)
+    ok(rc == 2 and j['would_fail'] == ['archive-missing'] and not os.path.exists(arc4),
+       'fold archive-missing fail-closed (no create without --allow-create)')
+    rc, out, _ = run(sf4, 'fold', '--round', 'R9004', '--fold-no', '458',
+                     '--desc', 'x', '--window-tail', '2', '--summary-file', sfile4,
+                     '--allow-create', '--execute')
+    ok(rc == 0 and os.path.exists(arc4), 'fold --allow-create creates archive + executes')
+    a4 = open(arc4, encoding='utf-8').read()
+    ok(a4.startswith('# logs/state-log-archive-2026-10.md (created by logs_toolkit.py fold')
+       and '# --- R9004 fold append (' in a4 and PS_LOGS[-1] in a4,
+       'fold created archive carries preamble + header + verbatim window')
+
+    # archive without trailing newline: prepend branch (AC-LT11 write fidelity)
+    sf5 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf5, PS_LOGS, archive_text='# archive no trailing newline')
+    sfile5 = os.path.join(sf5, 'summary.txt')
+    open(sfile5, 'w', encoding='utf-8').write(SUMMARY + '\n')
+    arc5 = os.path.join(sf5, 'logs', 'state-log-archive-2026-10.md')
+    pre5 = open(arc5, 'rb').read()
+    rc, _, _ = run(sf5, 'fold', '--round', 'R9005', '--fold-no', '459',
+                   '--desc', 'x', '--window-tail', '2', '--summary-file', sfile5,
+                   '--execute')
+    post5 = open(arc5, 'rb').read()
+    ok(rc == 0 and post5.startswith(pre5 + b'\n'),
+       'fold archive no-trailing-newline prepend branch')
+
+    # layout refusal on non-PS serialization (AC-LT11 fail-closed)
+    rc, _, err = run(root, 'fold', '--round', 'R9006', '--fold-no', '460',
+                     '--desc', 'x', '--window-tail', '2', '--summary-file', sfile)
+    ok(rc == 2 and 'E_STATE_LAYOUT' in err,
+       'fold layout refusal exit 2 on non-PS fixture (zero mutation)')
+
+    # summary arity + window bounds (AC-LT8)
+    two = os.path.join(sfold, 'two.txt')
+    open(two, 'w', encoding='utf-8').write('line one\nline two\n')
+    rc, _, err = run(sfold, 'fold', '--round', 'R9007', '--fold-no', '461',
+                     '--desc', 'x', '--window-tail', '2', '--summary-file', two)
+    ok(rc == 2 and 'exactly one non-empty line' in err, 'fold summary arity check exit 2')
+    rc, _, err = run(sfold, 'fold', '--round', 'R9008', '--fold-no', '462',
+                     '--desc', 'x', '--window-tail', '99', '--summary-file', sfile)
+    ok(rc == 2 and 'exceeds log length' in err, 'fold window-tail bounds check exit 2')
 
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):

@@ -1,0 +1,155 @@
+# qa/logs-toolkit-R1687.log - logs_toolkit fold slice live evidence (R1687)
+# Section 1: live gauge (state.json water report, no mutation)
+# Section 2: live fold dry-run probes against live state.json (zero mutation by design)
+# Section 3: suite output (test_logs_toolkit.py, 65 checks)
+
+=== SECTION 1: live gauge ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 76856,
+  "gate": 78500,
+  "log_lines": 26,
+  "log_content_bytes": 74152,
+  "margin_bytes": 1644,
+  "fold_needed": false,
+  "tick": 1686
+}
+exit=0
+
+=== SECTION 2: live fold dry-run probes (window = last 2 live log lines, R1686 pair) ===
+--- probe 1 (token-loss face, expect exit 2) ---
+{
+  "mode": "dry-run",
+  "round": "R1687PROBE",
+  "fold_no": "455",
+  "window_lines": 2,
+  "window_content_bytes": 2329,
+  "summary_head": "PROBE roll line deliberately carrying zero tokens (machinery",
+  "preop_sha16": "13cb9f9dab6aa5d8",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1687PROBE.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1687PROBE fold append (2026-10-09, 2 lines verbatim: PROBE ONLY - live dry-run machinery check, R1686 pair, fold R455 window, pre-op sha16 13cb9f9dab6aa5d8)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 76856,
+  "new_log_len": 25,
+  "token_missing": [
+    "AC-LT1",
+    "AC-LT4",
+    "BD-PROP-002",
+    "BD-PROP-003",
+    "C-20260929",
+    "C-20261009-03",
+    "D-20260930-19",
+    "D-20260930-20",
+    "O-20261009-1715",
+    "O-20261009-1740",
+    "O-20261009-1750",
+    "P-32"
+  ],
+  "token_ok": false,
+  "gate_ok": true,
+  "predicted_bytes": 74572,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [
+    "token-missing"
+  ]
+}
+exit=2
+
+--- probe 2 (full plan face, expect exit 0) ---
+{
+  "mode": "dry-run",
+  "round": "R1687PROBE",
+  "fold_no": "455",
+  "window_lines": 2,
+  "window_content_bytes": 2329,
+  "summary_head": "PROBE roll line embedding all window tokens verbatim: AC-LT1",
+  "preop_sha16": "13cb9f9dab6aa5d8",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1687PROBE.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1687PROBE fold append (2026-10-09, 2 lines verbatim: PROBE ONLY - live dry-run machinery check, R1686 pair, fold R455 window, pre-op sha16 13cb9f9dab6aa5d8)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 76856,
+  "new_log_len": 25,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 74703,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+exit=0
+
+=== SECTION 3: suite (test_logs_toolkit.py) ===
+PASS unknown subcommand exit 2
+PASS gauge exit 0
+PASS gauge disk bytes exact
+PASS gauge log count/tick
+PASS gauge content byte sum
+PASS gauge verdict under gate
+PASS inventory exit 0
+PASS inventory archive-md protected (md glob)
+PASS inventory lock protected
+PASS inventory preop count/prunable
+PASS inventory tmp count 81 (md-named tmp counted protected)
+PASS inventory transcript count (320 round_*.out + 40 run_*.log)
+PASS inventory other protected
+PASS tail 3 rows
+PASS tail classification main/tokens/declaration
+PASS prune dry-run exit 0
+PASS prune dry-run default no-delete
+PASS prune dry-run predicted counts (keep 12/300/60; fresh floor-skipped out of bucket)
+PASS prune class-level protection handles md/lock before plan guard (0 in-plan skips)
+PASS dry-run deleted nothing (file count unchanged)
+PASS prune execute exit 0
+PASS prune predicted==actual 88
+PASS prune per-class deleted counts
+PASS protected archive survived
+PASS protected lock survived
+PASS protected md-named tmp survived
+PASS other class untouched
+PASS mtime floor protected in-flight file
+PASS preop keep-newest 12
+PASS tmp remaining 60+fresh
+PASS transcript keep-newest 300
+PASS prune second execute 0 further deletes
+PASS catalog zero-loss pass exit 0
+PASS catalog token count {P-2026-09-25-18,AC-R4541,AC-R4546} == 3 (PAT is dash-form only, bare R1685/R454 out)
+PASS catalog missing-token fail exit 2
+PASS catalog --tail mode window extraction (AC-R9 + D-20260930-19 missing)
+PASS fold dry-run exit 0
+PASS fold plan window/new-log count
+PASS fold plan verdicts green
+PASS fold plan preop sha16 exact
+PASS fold plan archive header format
+PASS fold dry-run zero mutation (state + archive)
+PASS fold execute exit 0
+PASS fold predicted==actual (dry-run plan == execute result)
+PASS fold preop backup byte-exact
+PASS fold archive append verbatim (header + window)
+PASS fold disk size == predicted
+PASS fold new log == kept + summary
+PASS fold escape round-trip (< restored by parser)
+PASS fold PS-style escape written (\u003c on disk)
+PASS fold text surgery prefix+suffix lines byte-identical
+PASS fold CRLF layout preserved (one window line net removed)
+PASS fold token-loss abort exit 2 (4 tokens missing)
+PASS fold abort zero mutation (no state/archive/backup writes)
+PASS fold gate abort exit 2 (predicted+reserve over 78500)
+PASS fold gate abort zero mutation
+PASS fold archive-missing fail-closed (no create without --allow-create)
+PASS fold --allow-create creates archive + executes
+PASS fold created archive carries preamble + header + verbatim window
+PASS fold archive no-trailing-newline prepend branch
+PASS fold layout refusal exit 2 on non-PS fixture (zero mutation)
+PASS fold summary arity check exit 2
+PASS fold window-tail bounds check exit 2
+PASS ASCII-only source: logs_toolkit.py
+PASS ASCII-only source: test_logs_toolkit.py
+SUITE PASS 65 checks
+exit=0
+
+# zero-mutation assertion for probes: both probes ran in dry-run mode (no --execute);
+# live state.json and archive untouched - asserted by suite fold-dry-run case in sandbox.
