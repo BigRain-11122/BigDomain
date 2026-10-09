@@ -42,6 +42,25 @@ existed; honesty law):
                           the window usage of its full ancestor
                           chain (rotation never resets the monthly
                           quota). Zero UPDATE, zero RNG.
+  ring 5 rate            : per-key per-UTC-minute call cap
+                          (minute_cap, 0 = off, backward
+                          compatible: the legacy five-argument
+                          issue_key form keeps working with the
+                          ring dark). A structural reuse of the
+                          quota ring: the count is immutable call
+                          rows in the current minute window
+                          (called_utc prefix match), and like the
+                          monthly ring it is enforced over the
+                          full rotate_in ancestry (rotation never
+                          resets the minute ring either). The
+                          rate gate sits between the kind gate and
+                          the monthly quota gate and fires before
+                          the billing ring: an over-rate call is
+                          rejected E_AD_RATE with zero charge and
+                          zero rows. The minute and monthly
+                          readings stay separate in every envelope
+                          (minute_window/minute_used/minute_cap
+                          next to quota_used/quota_cap).
 
 Call-chain order (AC-DK4): key gate -> kind gate -> quota gate ->
 local duplicate pre-check -> billing ring meter_call -> local
@@ -93,6 +112,7 @@ E_AD_UNKNOWN_KEY = "E_AD_UNKNOWN_KEY"
 E_AD_KIND = "E_AD_KIND"               # kind not enabled on the key
 E_AD_DUP = "E_AD_DUP"                  # local call_ref replay
 E_AD_QUOTA = "E_AD_QUOTA"              # window cap reached, fail-closed
+E_AD_RATE = "E_AD_RATE"                # minute-window rate cap, fail-closed
 E_AD_NO_DISCLAIMER = "E_AD_NO_DISCLAIMER"
 E_AD_REVOKED = "E_AD_REVOKED"          # key revoked or rotated out
 E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
@@ -118,6 +138,7 @@ CREATE TABLE IF NOT EXISTS api_dev_keys (
     metered_client TEXT NOT NULL,
     api_key TEXT NOT NULL UNIQUE,
     window_cap INTEGER NOT NULL CHECK (window_cap >= 1),
+    minute_cap INTEGER NOT NULL DEFAULT 0 CHECK (minute_cap >= 0),
     enabled_kinds TEXT NOT NULL,
     ai_label INTEGER NOT NULL CHECK (ai_label IN (0, 1)),
     issued_utc TEXT NOT NULL,
@@ -155,6 +176,11 @@ def _now_utc():
 
 def _window_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m")
+
+
+def _minute_utc():
+    return datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M")
 
 
 def _is_int(value):
@@ -220,8 +246,9 @@ class DevKeyFace:
         with self._lock:
             return self._conn.execute(
                 "SELECT key_id, dev_account, key_name, metered_client,"
-                " window_cap, enabled_kinds, ai_label FROM api_dev_keys"
-                " WHERE api_key = ?", (api_key,)).fetchone()
+                " window_cap, enabled_kinds, ai_label, minute_cap"
+                " FROM api_dev_keys WHERE api_key = ?",
+                (api_key,)).fetchone()
 
     def _window_count(self, key_id, window):
         with self._lock:
@@ -278,17 +305,32 @@ class DevKeyFace:
                 " WHERE window = ? AND key_id IN (" + marks + ")",
                 [window] + list(ids)).fetchone()[0]
 
+    def _effective_minute_count(self, key_id, minute):
+        """Minute-window usage of a key plus its full rotation
+        ancestry (the rate ring reuses the quota ring's structure:
+        immutable call rows counted over the rotate_in chain; the
+        minute window key is the called_utc minute prefix)."""
+        ids = self._ancestry_key_ids(key_id)
+        marks = ",".join("?" for _ in ids)
+        with self._lock:
+            return self._conn.execute(
+                "SELECT COUNT(*) FROM api_calls"
+                " WHERE substr(called_utc, 1, 16) = ?"
+                " AND key_id IN (" + marks + ")",
+                [minute] + list(ids)).fetchone()[0]
+
     # -- ring 1: key issuance --------------------------------------------------
 
     def issue_key(self, dev_account, key_name, window_cap, kinds,
-                  ai_generated):
+                  ai_generated, minute_cap=0):
         """One developer key per (dev_account, key_name). The key
         value is deterministic (sha256 over account|name|issued
         timestamp, zero RNG). The billing ring binds through the
         metered register_client public API: one per-key enterprise
         client. Same (dev, name) re-issue rejects before any
         metered touch (zero rows both sides); bad arguments reject
-        with zero rows."""
+        with zero rows. minute_cap is the per-UTC-minute rate cap
+        (ring 5); 0 keeps the ring dark (legacy callers unchanged)."""
         dev_account = str(dev_account or "").strip()
         key_name = str(key_name or "").strip()
         if not dev_account.startswith("usr:"):
@@ -297,6 +339,8 @@ class DevKeyFace:
             raise ApiDevError(E_AD_BAD_ARGS, "key name required")
         if not _is_int(window_cap) or window_cap < 1:
             raise ApiDevError(E_AD_BAD_ARGS, "window_cap must be int >= 1")
+        if not _is_int(minute_cap) or minute_cap < 0:
+            raise ApiDevError(E_AD_BAD_ARGS, "minute_cap must be int >= 0")
         if not isinstance(ai_generated, bool):
             raise ApiDevError(E_AD_BAD_ARGS, "ai_generated must be bool")
         if not kinds:
@@ -325,10 +369,11 @@ class DevKeyFace:
             try:
                 self._conn.execute(
                     "INSERT INTO api_dev_keys (dev_account, key_name,"
-                    " metered_client, api_key, window_cap, enabled_kinds,"
-                    " ai_label, issued_utc) VALUES (?,?,?,?,?,?,?,?)",
+                    " metered_client, api_key, window_cap, minute_cap,"
+                    " enabled_kinds, ai_label, issued_utc)"
+                    " VALUES (?,?,?,?,?,?,?,?,?)",
                     (dev_account, key_name, metered_client, api_key,
-                     window_cap, ",".join(kind_list),
+                     window_cap, minute_cap, ",".join(kind_list),
                      1 if ai_generated else 0, issued_utc))
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
@@ -340,7 +385,8 @@ class DevKeyFace:
                 raise
         return {"dev_account": dev_account, "key_name": key_name,
                 "api_key": api_key, "metered_client": metered_client,
-                "window_cap": window_cap, "enabled_kinds": kind_list,
+                "window_cap": window_cap, "minute_cap": minute_cap,
+                "enabled_kinds": kind_list,
                 "ai_label": 1 if ai_generated else 0,
                 "disclaimer": self.disclaimer}
 
@@ -361,15 +407,16 @@ class DevKeyFace:
                 "total_price": result["total_price"],
                 "disclaimer": self.disclaimer}
 
-    # -- the call chain: key gate -> kind gate -> quota gate -> dup
-    #    pre-check -> billing ring -> local append --------------------------
+    # -- the call chain: key gate -> kind gate -> rate gate -> quota
+    #    gate -> dup pre-check -> billing ring -> local append --------
 
     def call(self, api_key, kind, call_ref, engine_ref):
-        """One metered API call through the three rings. Rejects
-        fire before the billing ring (zero charge, zero local
-        rows); a billing-ring reject fires before the local append
-        (zero orphan local rows). engine_ref is stored verbatim,
-        zero engine logic here."""
+        """One metered API call through the rings. Rejects fire
+        before the billing ring (zero charge, zero local rows);
+        a billing-ring reject fires before the local append (zero
+        orphan local rows). The minute rate gate (ring 5) sits
+        between the kind gate and the monthly quota gate. engine_ref
+        is stored verbatim, zero engine logic here."""
         api_key = str(api_key or "").strip()
         kind = str(kind or "").strip()
         call_ref = str(call_ref or "").strip()
@@ -382,11 +429,17 @@ class DevKeyFace:
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, api_key)
         key_id, metered_client, window_cap = row[0], row[3], int(row[4])
+        minute_cap = int(row[7])
         enabled = row[5].split(",")
         if self._terminal_event(key_id) is not None:
             raise ApiDevError(E_AD_REVOKED, api_key)
         if kind not in enabled:
             raise ApiDevError(E_AD_KIND, kind)
+        minute = _minute_utc()
+        if (minute_cap > 0
+                and self._effective_minute_count(key_id, minute)
+                >= minute_cap):
+            raise ApiDevError(E_AD_RATE, minute)
         window = _window_utc()
         if self._effective_window_count(key_id, window) >= window_cap:
             raise ApiDevError(E_AD_QUOTA, window)
@@ -419,6 +472,10 @@ class DevKeyFace:
                 "quota_used": self._effective_window_count(key_id,
                                                             window),
                 "quota_cap": window_cap,
+                "minute_window": minute,
+                "minute_used": self._effective_minute_count(key_id,
+                                                             minute),
+                "minute_cap": minute_cap,
                 "disclaimer": self.disclaimer}
 
     # -- read faces ------------------------------------------------------------
@@ -432,18 +489,22 @@ class DevKeyFace:
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
         window = _window_utc()
+        minute = _minute_utc()
         terminal = self._terminal_event(row[0])
         used = self._effective_window_count(row[0], window)
+        minute_used = self._effective_minute_count(row[0], minute)
         return {"api_key": api_key, "dev_account": row[1],
                 "key_name": row[2], "metered_client": row[3],
                 "window_cap": int(row[4]), "enabled_kinds": row[5].split(","),
-                "ai_label": int(row[6]),
+                "ai_label": int(row[6]), "minute_cap": int(row[7]),
                 "status": _STATUS_BY_EVENT[terminal[0]]
                           if terminal is not None else "active",
                 "rotated_from_key_id": self._rotated_from(row[0]),
                 "window": window,
                 "quota_used": used,
                 "quota_remaining": int(row[4]) - used,
+                "minute_window": minute,
+                "minute_used": minute_used,
                 "disclaimer": self.disclaimer}
 
     def dev_board(self, dev_account):
@@ -454,11 +515,13 @@ class DevKeyFace:
         if not dev_account.startswith("usr:"):
             raise ApiDevError(E_AD_BAD_ARGS, "dev accounts are usr:* only")
         window = _window_utc()
+        minute = _minute_utc()
         keys = []
         with self._lock:
             rows = self._conn.execute(
                 "SELECT key_id, key_name, metered_client, api_key,"
-                " window_cap, enabled_kinds, ai_label FROM api_dev_keys"
+                " window_cap, enabled_kinds, ai_label, minute_cap"
+                " FROM api_dev_keys"
                 " WHERE dev_account = ? ORDER BY key_id",
                 (dev_account,)).fetchall()
         for row in rows:
@@ -468,11 +531,15 @@ class DevKeyFace:
                          "window_cap": int(row[4]),
                          "enabled_kinds": row[5].split(","),
                          "ai_label": int(row[6]),
+                         "minute_cap": int(row[7]),
                          "status": _STATUS_BY_EVENT[terminal[0]]
                                    if terminal is not None else "active",
                          "rotated_from_key_id": self._rotated_from(row[0]),
                          "quota_used": self._effective_window_count(
                              row[0], window),
+                         "minute_window": minute,
+                         "minute_used": self._effective_minute_count(
+                             row[0], minute),
                          "billing": self.metered.reconcile_client(row[2])})
         return {"dev_account": dev_account, "keys": keys,
                 "window": window, "disclaimer": self.disclaimer}
@@ -531,7 +598,8 @@ class DevKeyFace:
         """Rotate one key: the old key is invalidated (a
         'rotate_out' event; every write face fails closed on it
         afterwards) and a successor key is issued that inherits
-        the contract (window_cap, enabled_kinds, ai_label) and the
+        the contract (window_cap, minute_cap, enabled_kinds,
+        ai_label) and the
         billing binding -- the same metered client, so the credit
         balance carries over with zero token movement and zero
         register re-touch. The successor never resets the monthly
@@ -550,6 +618,7 @@ class DevKeyFace:
         key_id, dev_account, old_name = row[0], row[1], row[2]
         metered_client, window_cap = row[3], int(row[4])
         enabled_kinds, ai_label = row[5], int(row[6])
+        minute_cap = int(row[7])
         if self._terminal_event(key_id) is not None:
             raise ApiDevError(E_AD_ALREADY, str(api_key))
         if self._key_row_by_name(dev_account, new_key_name) is not None:
@@ -564,11 +633,12 @@ class DevKeyFace:
             try:
                 self._conn.execute(
                     "INSERT INTO api_dev_keys (dev_account, key_name,"
-                    " metered_client, api_key, window_cap, enabled_kinds,"
-                    " ai_label, issued_utc) VALUES (?,?,?,?,?,?,?,?)",
+                    " metered_client, api_key, window_cap, minute_cap,"
+                    " enabled_kinds, ai_label, issued_utc)"
+                    " VALUES (?,?,?,?,?,?,?,?,?)",
                     (dev_account, new_key_name, metered_client,
-                     api_key_new, window_cap, enabled_kinds, ai_label,
-                     issued_utc))
+                     api_key_new, window_cap, minute_cap,
+                     enabled_kinds, ai_label, issued_utc))
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
                 self._conn.execute("ROLLBACK")
@@ -599,7 +669,7 @@ class DevKeyFace:
         return {"dev_account": dev_account, "key_name": new_key_name,
                 "api_key": api_key_new,
                 "metered_client": metered_client,
-                "window_cap": window_cap,
+                "window_cap": window_cap, "minute_cap": minute_cap,
                 "enabled_kinds": enabled_kinds.split(","),
                 "ai_label": ai_label,
                 "rotated_from": old_name, "rotated_from_key_id": key_id,

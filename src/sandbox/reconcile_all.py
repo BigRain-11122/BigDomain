@@ -166,6 +166,16 @@ SUITES = [
     # (AC-KR1..KR8 pre-registered in state/queue/tech.md).
     ("ledger-apidev-lifecycle",
      os.path.join("ledger", "test_apidev_lifecycle.py"), 8),
+    # R1712 apidev minute-window rate ring: per-key per-UTC-minute
+    # cap (minute_cap, 0 = dark, legacy issue_key form unchanged),
+    # rate gate between the kind gate and the monthly quota gate,
+    # fired before the billing ring; minute/monthly readings stay
+    # separate; ancestry (rotate_in chain) counted on the minute
+    # ring too (rotation never resets it); rate gate precedes the
+    # dup pre-check (AC-RT1..RT7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-apidev-rate",
+     os.path.join("ledger", "test_apidev_rate.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order
