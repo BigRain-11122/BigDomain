@@ -1,0 +1,50 @@
+R1673 export derived-face consistency check evidence (AC-EC4)
+Caliber note (honest): first-pass sub exclusion hypothesis (daily-report clause) was over-broad (7/8 candidate lines carry it as a routine closeout clause) and was corrected same-round pre-final to: round-anchored non-tokens lines minus no-pullable mentions minus declaration-close lines; the corrected caliber reproduces the R1672 flush stored values exactly.
+RUN 1 (pre-registration cross-validation vs R1672 stored values):
+PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=27
+PASS self_drive.no_pullable_mention_lines stored=4
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=10
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=10
+PASS self_drive.substantive_non_idle_mention_lines stored=7
+PASS self_drive.window stored='2026-10-03..2026-10-09'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1672'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-09T13:18:21+08:00' (age 0.2h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1672 window=2026-10-03..2026-10-09 W=27 idle=0 nop=4 sub=7 proposals=3/1 queues=6/10/10
+VERDICT PASS
+
+RUN 2 (post-closeout-flush verification):PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=29
+PASS self_drive.no_pullable_mention_lines stored=4
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=10
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=9
+PASS self_drive.substantive_non_idle_mention_lines stored=8
+PASS self_drive.window stored='2026-10-03..2026-10-09'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1673'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-09T13:29:22+08:00' (age 0.0h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1673 window=2026-10-03..2026-10-09 W=29 idle=0 nop=4 sub=8 proposals=3/1 queues=6/9/10
+VERDICT PASS

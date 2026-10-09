@@ -1,0 +1,6 @@
+{
+  "tick_row_label": "OSLoop 执行 tick",
+  "proposal_open_marker": "状态 open",
+  "declaration_close_marker": "声明收轮",
+  "_comment": "Chinese match patterns externalized from the ASCII checker per encoding law (R563 data-externalization precedent). Keys are load-bearing for src/os/check_export_consistency.py; do not rename."
+}
