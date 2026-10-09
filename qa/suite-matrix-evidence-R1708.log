@@ -1,0 +1,39 @@
+===== suite test_suite_matrix.py (R1708) ===== 
+PASS fixture-gap-replay: new face picked showroom-R1700.log, old glob face would have picked reconcile-all-R1699.log (naming-gap difference proven)
+PASS fixture-none-eligible: default None + main exit=2
+PASS fixture-runner-fail-fallback: skipped z-newest-fail.log, picked a-older-pass.log
+PASS fixture-self-evidence-skip: skipped suite-matrix-self-R9999.log, picked a-other.log
+PASS fixture-duplicate-labels-refused: fell to a-clean.log
+PASS fixture-count-mismatch-refused: fell to a-clean.log
+PASS live-default-discovery: newest eligible = reconcile-all-R1707.log
+PASS explicit-evidence-lenient: runner-only log accepted, 46 suites no-evidence
+PASS check-roundtrip-tmp: identical exit 0, tamper exit 2
+PASS hygiene-self-checks: pure-ascii, zero network imports
+SUITE PASS (10/10 cases)
+===== full regression evidence: qa/reconcile-all-R1708.log ===== 
+RUNNER PASS (46/46 suites green, reconcile controls 6/6, 99.7s)
+===== suite-matrix-discovery rows in regression log ===== 
+PASS suite suite-matrix-discovery exit=0 pass-lines=10 fail-lines=0 criteria=10 0.7s
+===== matrix regenerate (default discovery face) ===== 
+PASS generated docs/sandbox-suite-matrix.md (6100 bytes) - registry suites=46 criteria=497 evidence=qa/reconcile-all-R1708.log green=46/46
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6100 bytes, 46 suites, 497 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6100 bytes, 46 suites, 497 criteria)
+===== hygiene: git status --short ===== 
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/suite_matrix.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1708.log
+?? qa/suite-matrix-evidence-R1708.log
+?? src/sandbox/test_suite_matrix.py
+===== evidence log tail (regen + checks) ===== 
+
+===== live eligibility probe: qa/watermark-scale-recover-R1707.log (AC-SM2 check-2 necessity) =====
+mtime-newest file by wall clock; four conditions evaluated:
+  check-1 RUNNER exactly-one PASS: PASS (findall=1)
+  check-2 SUITE lines >= 1: FAIL (matches=0)
+  verdict: INELIGIBLE -> discovery falls through to next-newest
+  (without check-2 the matrix would pick this file and all 46
+   registry suites would degrade to no-evidence)
+live default_evidence() now returns: reconcile-all-R1708.log

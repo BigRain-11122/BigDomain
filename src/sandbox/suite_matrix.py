@@ -13,9 +13,10 @@ Single sources of truth, zero hardcoding (F3 law):
     every Chinese doc label lives in that data file, not here - the
     encoding law keeps this source pure ASCII)
   * per-suite last-run status           -> parsed from a regression
-    evidence log (--evidence PATH; default = the highest-numbered
-    qa/reconcile-all-R*.log). A suite absent from the evidence is
-    labeled no-evidence - fail-closed, status never fabricated.
+    evidence log (--evidence PATH; default = the newest eligible
+    qa/*.log: exactly one RUNNER PASS plus a complete consistent
+    suite block, R1695 naming-gap fix). A suite absent from the
+    evidence is labeled no-evidence - fail-closed, never fabricated.
 
 Usage:
     python suite_matrix.py                    # write the doc
@@ -32,7 +33,6 @@ Evidence: qa/suite-matrix-R1683.log.
 """
 
 import argparse
-import glob
 import json
 import os
 import re
@@ -64,13 +64,51 @@ def load_patterns():
         return json.load(handle)
 
 
+def _evidence_eligible(path):
+    """Default-discovery eligibility (AC-SM2, four fail-closed checks;
+    runner_profile AC-RP2 exactly-one precedent). Explicit --evidence
+    stays lenient (absent suites are labeled no-evidence by design);
+    only the default face requires a complete, consistent regression
+    record, because picking a log that cannot back the matrix would
+    degrade every suite row to no-evidence (live anchor: R1707's
+    watermark-scale-recover log carries one RUNNER line but zero
+    suite lines - the newest-by-mtime file is NOT the best evidence).
+    """
+    try:
+        text = read_text(path)
+    except OSError:
+        return False
+    runner = RUNNER_RE.findall(text)
+    if len(runner) != 1 or runner[0][0] != "PASS":
+        return False
+    suites = SUITE_RE.findall(text)
+    if not suites:
+        return False
+    labels = [row[1] for row in suites]
+    if len(set(labels)) != len(labels):
+        return False
+    return len(suites) == int(runner[0][2])
+
+
 def default_evidence():
-    best, best_round = None, -1
-    for path in glob.glob(os.path.join(QA_DIR, "reconcile-all-R*.log")):
-        match = EVID_ROUND_RE.search(os.path.basename(path))
-        if match and int(match.group(1)) > best_round:
-            best, best_round = path, int(match.group(1))
-    return best
+    """Newest eligible evidence log under qa/, by mtime then name
+    (R1695 naming-gap fix: the old face globbed reconcile-all-R*.log
+    only, so the freshest regression record was invisible whenever it
+    shipped inside a suite evidence log - R1695/R1703 both had to pass
+    --evidence explicitly. The new face walks every qa/*.log newest-
+    first, skipping this tool's own suite-matrix-* evidence files to
+    avoid self-pointing, and takes the first one that parses as one
+    RUNNER PASS + a complete consistent suite block."""
+    names = [name for name in os.listdir(QA_DIR)
+             if name.endswith(".log")
+             and not name.startswith("suite-matrix-")]
+    paths = [os.path.join(QA_DIR, name) for name in names]
+    paths.sort(key=lambda path: (-os.path.getmtime(path),
+                                 os.path.basename(path)))
+    for path in paths:
+        if _evidence_eligible(path):
+            return path
+    return None
 
 
 def read_text(path):

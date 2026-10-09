@@ -220,6 +220,11 @@ SUITES = [
     # (PRAGMA user_version chain, ALTER-free rebuild, dual-phase verify;
     # AC-LM1..LM11 pre-registered in state/queue/tech.md).
     ("schema-migrate", "test_schema_migrate.py", 21),
+    # R1708 suite-matrix default-evidence discovery-face fix (R1695
+    # naming gap: old face globbed reconcile-all-R*.log only; new face
+    # walks qa/*.log newest-first with four fail-closed eligibility
+    # checks; AC-SM1..SM7 pre-registered in state/queue/tech.md).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 10),
 ]
 
 FAILS = 0
