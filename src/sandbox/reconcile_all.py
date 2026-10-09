@@ -4,8 +4,8 @@ five-suite fan-out expansion, R1063 - benchgate/citymodel/compliance/
 minors wiring, closing the drift between this runner's fan-out and the
 shipped modules).
 
-One command = the full sandbox regression fan-out (thirty-three
-acceptance suites, 363 pre-registered criteria in total) plus the
+One command = the full sandbox regression fan-out (thirty-nine
+acceptance suites, 420 pre-registered criteria in total) plus the
 standalone reconcile product face for all three bookkeeping domains,
 each with a clean/tamper dual control:
 
@@ -115,6 +115,14 @@ SUITES = [
     # (AC-CP1..CP7 pre-registered in state/queue/explore.md).
     ("ledger-companion",
      os.path.join("ledger", "test_companion.py"), 7),
+    # R1691 UGC template marketplace face: listing idempotency +
+    # msgSecCheck pre-gate (injected SecGate, reference not copy) +
+    # integer-law revenue split (exactly one creator share tx per
+    # purchase, floor+ordered-remainder zero loss, DB CHECK) +
+    # purchaser-only immutable rating (AC-TM1..TM7 pre-registered
+    # in state/queue/explore.md).
+    ("ledger-tmarket",
+     os.path.join("ledger", "test_tmarket.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
