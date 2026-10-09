@@ -1,0 +1,310 @@
+# logs_toolkit live evidence R1686 (AC-LT7)
+# note: first live attempt executed prune (6998 -> 2622 files, policy-legal) then
+# failed at the catalog stage before evidence write; the run_*.log transcript family
+# miss was found, TRANSCRIPT_RE amended (see tech.md AC-LT4 honest amendment),
+# suite re-greened; this file = final run evidence. Idempotence held across attempts.
+=== SUITE test_logs_toolkit.py (exit=0) ===
+PASS unknown subcommand exit 2
+PASS gauge exit 0
+PASS gauge disk bytes exact
+PASS gauge log count/tick
+PASS gauge content byte sum
+PASS gauge verdict under gate
+PASS inventory exit 0
+PASS inventory archive-md protected (md glob)
+PASS inventory lock protected
+PASS inventory preop count/prunable
+PASS inventory tmp count 81 (md-named tmp counted protected)
+PASS inventory transcript count (320 round_*.out + 40 run_*.log)
+PASS inventory other protected
+PASS tail 3 rows
+PASS tail classification main/tokens/declaration
+PASS prune dry-run exit 0
+PASS prune dry-run default no-delete
+PASS prune dry-run predicted counts (keep 12/300/60; fresh floor-skipped out of bucket)
+PASS prune class-level protection handles md/lock before plan guard (0 in-plan skips)
+PASS dry-run deleted nothing (file count unchanged)
+PASS prune execute exit 0
+PASS prune predicted==actual 88
+PASS prune per-class deleted counts
+PASS protected archive survived
+PASS protected lock survived
+PASS protected md-named tmp survived
+PASS other class untouched
+PASS mtime floor protected in-flight file
+PASS preop keep-newest 12
+PASS tmp remaining 60+fresh
+PASS transcript keep-newest 300
+PASS prune second execute 0 further deletes
+PASS catalog zero-loss pass exit 0
+PASS catalog token count {P-2026-09-25-18,AC-R4541,AC-R4546} == 3 (PAT is dash-form only, bare R1685/R454 out)
+PASS catalog missing-token fail exit 2
+PASS catalog --tail mode window extraction (AC-R9 + D-20260930-19 missing)
+PASS ASCII-only source: logs_toolkit.py
+PASS ASCII-only source: test_logs_toolkit.py
+SUITE PASS 38 checks
+=== LIVE gauge (exit=0) ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 74471,
+  "gate": 78500,
+  "log_lines": 24,
+  "log_content_bytes": 71823,
+  "margin_bytes": 4029,
+  "fold_needed": false,
+  "tick": 1685
+}
+=== LIVE inventory BEFORE (exit=0) ===
+{
+  "logs_dir": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs",
+  "classes": {
+    "archive-md": {
+      "count": 3,
+      "mb": 20.2,
+      "protected": true,
+      "prunable": false
+    },
+    "lock": {
+      "count": 1,
+      "mb": 0.0,
+      "protected": true,
+      "prunable": false
+    },
+    "other": {
+      "count": 501,
+      "mb": 4.01,
+      "protected": true,
+      "prunable": false
+    },
+    "preop-bak": {
+      "count": 12,
+      "mb": 0.91,
+      "protected": false,
+      "prunable": true
+    },
+    "round-transcript": {
+      "count": 2044,
+      "mb": 1.33,
+      "protected": false,
+      "prunable": true
+    },
+    "tmp-script": {
+      "count": 61,
+      "mb": 0.52,
+      "protected": false,
+      "prunable": true
+    }
+  },
+  "total_files": 2622
+}
+=== LIVE prune dry-run (exit=0) ===
+{
+  "mode": "dry-run",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {
+    "round-transcript": 1738
+  },
+  "to_delete_total": 1738,
+  "floor_skipped": 7,
+  "protected_skipped": 0
+}
+=== LIVE prune execute (exit=0) ===
+{
+  "mode": "execute",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {
+    "round-transcript": 1738
+  },
+  "to_delete_total": 1738,
+  "floor_skipped": 7,
+  "protected_skipped": 0
+}
+{
+  "deleted": {
+    "round-transcript": 1738
+  },
+  "deleted_total": 1738,
+  "failed": 0,
+  "predicted_total": 1738,
+  "prediction_match": true,
+  "mismatch_classes": []
+}
+=== LIVE inventory AFTER (exit=0) ===
+{
+  "logs_dir": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs",
+  "classes": {
+    "archive-md": {
+      "count": 3,
+      "mb": 20.2,
+      "protected": true,
+      "prunable": false
+    },
+    "lock": {
+      "count": 1,
+      "mb": 0.0,
+      "protected": true,
+      "prunable": false
+    },
+    "other": {
+      "count": 501,
+      "mb": 4.01,
+      "protected": true,
+      "prunable": false
+    },
+    "preop-bak": {
+      "count": 12,
+      "mb": 0.91,
+      "protected": false,
+      "prunable": true
+    },
+    "round-transcript": {
+      "count": 306,
+      "mb": 0.46,
+      "protected": false,
+      "prunable": true
+    },
+    "tmp-script": {
+      "count": 61,
+      "mb": 0.52,
+      "protected": false,
+      "prunable": true
+    }
+  },
+  "total_files": 884
+}
+=== LIVE prune second execute (idempotence) (exit=0) ===
+{
+  "mode": "execute",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {},
+  "to_delete_total": 0,
+  "floor_skipped": 7,
+  "protected_skipped": 0
+}
+{
+  "deleted": {},
+  "deleted_total": 0,
+  "failed": 0,
+  "predicted_total": 0,
+  "prediction_match": true,
+  "mismatch_classes": []
+}
+=== LIVE catalog: R1685 archive window vs state roll line (fold embed recheck) (exit=2) ===
+{
+  "window_lines": 7,
+  "tokens_total": 80,
+  "tokens": [
+    "AC-AR1",
+    "AC-DS1",
+    "AC-DS2",
+    "AC-DS3",
+    "AC-DS4",
+    "AC-DS5",
+    "AC-DS6",
+    "AC-DS7",
+    "AC-EC1",
+    "AC-EC2",
+    "AC-EC3",
+    "AC-EC4",
+    "AC-EC5",
+    "AC-EC6",
+    "AC-EC7",
+    "AC-LM1",
+    "AC-LM10",
+    "AC-LM11",
+    "AC-LM2",
+    "AC-LM3",
+    "AC-LM4",
+    "AC-LM5",
+    "AC-LM6",
+    "AC-LM7",
+    "AC-LM8",
+    "AC-LM9",
+    "AC-MX1",
+    "AC-R4371",
+    "AC-R4491",
+    "AC-R4501",
+    "AC-R4502",
+    "AC-R4503",
+    "AC-R4504",
+    "AC-R4505",
+    "AC-R4506",
+    "AC-R4511",
+    "AC-R4512",
+    "AC-R4513",
+    "AC-R4514",
+    "AC-R4515",
+    "AC-R4516",
+    "AC-R4521",
+    "AC-R4522",
+    "AC-R4523",
+    "AC-R4524",
+    "AC-R4525",
+    "AC-R4526",
+    "AC-R4531",
+    "AC-RP1",
+    "AC-S8",
+    "AC-S8c",
+    "AC-S8d",
+    "AC-S8e",
+    "AC-SB1",
+    "AC-SB2",
+    "AC-SB3",
+    "AC-SB4",
+    "AC-SB5",
+    "AC-SB6",
+    "AC-SB7",
+    "AC-V3W1",
+    "AC-V3W6",
+    "BD-PROP-002",
+    "BD-PROP-003",
+    "C-20260929",
+    "C-20261008-06",
+    "C-20261009-02",
+    "D-20260930-19",
+    "D-20261003-02",
+    "O-20261009-1227",
+    "O-20261009-1246",
+    "O-20261009-1257",
+    "O-20261009-1315",
+    "O-20261009-1430",
+    "P-2026-09-25-18",
+    "P-2026-10-08-01",
+    "P-2026-10-08-17",
+    "P-32",
+    "R-free",
+    "T-CLEAN"
+  ],
+  "missing_in_roll": [
+    "BD-PROP-002",
+    "C-20260929"
+  ],
+  "pass": false
+}
+=== LIVE summary ===
+window_lines=7 tokens_total=80 catalog_exit=2
+caliber-variance finding: 2 window token(s) not embedded in roll (R1685 fold embed caliber = carried-catalog subset 126 vs R1580 full-embed caliber; verbatim archive preservation intact = no data loss): BD-PROP-002, C-20260929
+logs/ files 2622 -> 884 (deleted 1738), approx 27.0MB -> 26.1MB
+prune policy keep-newest tmp=60 preop=12 transcript=300, floor=1800s
+

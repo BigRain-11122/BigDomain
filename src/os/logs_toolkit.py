@@ -1,0 +1,287 @@
+#!/usr/bin/env python3
+"""logs_toolkit.py - BigDomain OSLoop logs/ toolchain reuse + hygiene.
+
+Consolidates the mechanical pieces historically rewritten as one-off
+scripts each fold round (water gauge, log-tail inventory, catalog token
+extraction with zero-loss presence check) plus logs/ retention
+enforcement (dry-run default).
+
+Calibers (R1580 fold precedent):
+  - content byte sums are UTF-8; waterline gate = 78500B disk size
+    (P-2026-09-25-18 chain);
+  - token regex = R1580 PAT (AC/BD/C/D/O/P/T/XL/OH/R families);
+  - archive .md files and *.lock are PROTECTED classes: never deletable,
+    even when a name also matches a prune class;
+  - mtime floor: files modified within --floor-seconds (default 1800)
+    are never deleted (in-flight writer protection).
+
+Subcommands (all accept --root, default = repo root two levels up):
+  gauge                  water report for src/os/state.json
+  inventory              logs/ class breakdown (counts + MB)
+  tail [-n N]            state.json log tail inventory (class + bytes)
+  prune [--execute]      retention enforcement (dry-run default)
+  catalog                window token extraction + presence check
+                         (--tail N | --window-file F) --roll-file R
+
+Exit codes: 0 pass, 2 fail/unknown subcommand, 3 IO error.
+Source is ASCII-only per encoding law; stdlib only; zero network.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime, timezone, timedelta
+
+CST = timezone(timedelta(hours=8))
+GATE = 78500
+PAT = re.compile(r'(?:AC|BD|C|D|O|P|T|XL|OH|R)-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*')
+
+# prune classes -> keep-newest counts (retention policy, R1686 AC-LT4)
+PRUNE_KEEP = {'tmp-script': 60, 'preop-bak': 12, 'round-transcript': 300}
+DEFAULT_FLOOR = 1800
+# launcher transcript family has two naming forms: round_<ts>.out/.err and
+# run_<ts>.log (first live run discovered the run_*.log family miss)
+TRANSCRIPT_RE = re.compile(r'^(round|run)_.*\.(out|err|log)$')
+
+
+def default_root():
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def ser_state(st):
+    return json.dumps(st, ensure_ascii=False, indent=2) + '\n'
+
+
+def classify(name):
+    """Classify a logs/ filename. Returns class tag."""
+    if 'state-log-archive' in name or name.endswith('.md'):
+        return 'archive-md'
+    if name.endswith('.lock'):
+        return 'lock'
+    if name.startswith('state-preop-') and name.endswith('.bak'):
+        return 'preop-bak'
+    if name.startswith('tmp_') or name.startswith('tmp-'):
+        return 'tmp-script'
+    if TRANSCRIPT_RE.match(name):
+        return 'round-transcript'
+    return 'other'
+
+
+def classify_log_line(line):
+    """Classify a state.json log entry for tail inventory."""
+    if 'tokens:' in line:
+        return 'tokens'
+    if re.match(r'^\d{4}-\d{2}-\d{2}\uff08', line):
+        return 'roll-window'
+    if 'no-pullable' in line or 'waiting' in line:
+        return 'declaration'
+    return 'round-main'
+
+
+def load_state(root):
+    path = os.path.join(root, 'src', 'os', 'state.json')
+    with open(path, 'rb') as f:
+        raw = f.read()
+    st = json.loads(raw.decode('utf-8'))
+    return path, raw, st
+
+
+def cmd_gauge(args):
+    path, raw, st = load_state(args.root)
+    disk = os.path.getsize(path)
+    content = sum(len(x.encode('utf-8')) for x in st['log'])
+    out = {
+        'state_path': path,
+        'disk_bytes': disk,
+        'gate': GATE,
+        'log_lines': len(st['log']),
+        'log_content_bytes': content,
+        'margin_bytes': GATE - disk,
+        'fold_needed': disk > GATE,
+        'tick': st.get('tick'),
+    }
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_inventory(args):
+    d = os.path.join(args.root, 'logs')
+    stats = {}
+    for entry in os.scandir(d):
+        if not entry.is_file():
+            continue
+        c = classify(entry.name)
+        s = stats.setdefault(c, {'count': 0, 'bytes': 0})
+        s['count'] += 1
+        try:
+            s['bytes'] += entry.stat().st_size
+        except OSError:
+            pass
+    out = {'logs_dir': d, 'classes': {}}
+    total = 0
+    for c in sorted(stats):
+        s = stats[c]
+        total += s['count']
+        out['classes'][c] = {
+            'count': s['count'], 'mb': round(s['bytes'] / 1048576.0, 2),
+            'protected': c in ('archive-md', 'lock') or c == 'other',
+            'prunable': c in PRUNE_KEEP,
+        }
+    out['total_files'] = total
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0
+
+
+def cmd_tail(args):
+    _, _, st = load_state(args.root)
+    lines = st['log'][-args.n:]
+    base = len(st['log']) - len(lines)
+    for i, line in enumerate(lines):
+        print(json.dumps({
+            'index': base + i,
+            'class': classify_log_line(line),
+            'utf8_bytes': len(line.encode('utf-8')),
+            'head': line[:60],
+        }, ensure_ascii=False))
+    return 0
+
+
+def prune_plan(root, floor):
+    """Compute the prune plan. Returns (plan, notes).
+
+    plan: {class: [paths to delete]} ; files beyond keep-newest, excluding
+    protected names and files newer than the mtime floor.
+    """
+    d = os.path.join(root, 'logs')
+    now = time.time()
+    buckets = {c: [] for c in PRUNE_KEEP}
+    notes = {'floor_skipped': 0, 'protected_skipped': 0}
+    for entry in os.scandir(d):
+        if not entry.is_file():
+            continue
+        name = entry.name
+        c = classify(name)
+        if c not in PRUNE_KEEP:
+            continue
+        if 'state-log-archive' in name or name.endswith('.md') or name.endswith('.lock'):
+            notes['protected_skipped'] += 1
+            continue
+        try:
+            mtime = entry.stat().st_mtime
+        except OSError:
+            continue
+        if (now - mtime) < floor:
+            notes['floor_skipped'] += 1
+            continue
+        buckets[c].append((mtime, os.path.join(d, name)))
+    plan = {}
+    for c, items in buckets.items():
+        items.sort(reverse=True)  # newest first
+        victims = [p for _, p in items[PRUNE_KEEP[c]:]]
+        if victims:
+            plan[c] = victims
+    return plan, notes
+
+
+def cmd_prune(args):
+    plan, notes = prune_plan(args.root, args.floor_seconds)
+    total = sum(len(v) for v in plan.values())
+    summary = {c: len(v) for c, v in sorted(plan.items())}
+    print(json.dumps({
+        'mode': 'execute' if args.execute else 'dry-run',
+        'policy': {'keep_newest': PRUNE_KEEP, 'floor_seconds': args.floor_seconds},
+        'to_delete': summary,
+        'to_delete_total': total,
+        **notes,
+    }, ensure_ascii=False, indent=2))
+    if not args.execute:
+        return 0
+    deleted = {}
+    failed = 0
+    for c, paths in plan.items():
+        n = 0
+        for p in paths:
+            try:
+                os.remove(p)
+                n += 1
+            except OSError:
+                failed += 1
+        if n:
+            deleted[c] = n
+    actual_total = sum(deleted.values())
+    mismatch = [c for c in summary if deleted.get(c, 0) != summary[c]]
+    print(json.dumps({
+        'deleted': deleted, 'deleted_total': actual_total,
+        'failed': failed, 'predicted_total': total,
+        'prediction_match': not mismatch and actual_total == total,
+        'mismatch_classes': mismatch,
+    }, ensure_ascii=False, indent=2))
+    if mismatch or actual_total != total:
+        return 2
+    return 0
+
+
+def cmd_catalog(args):
+    if bool(args.tail) == bool(args.window_file):
+        print('error: exactly one of --tail or --window-file is required', file=sys.stderr)
+        return 2
+    if not args.roll_file:
+        print('error: --roll-file is required', file=sys.stderr)
+        return 2
+    if args.tail:
+        _, _, st = load_state(args.root)
+        window = st['log'][-args.tail:]
+    else:
+        with open(args.window_file, encoding='utf-8') as f:
+            window = [l for l in (x.rstrip('\n').rstrip('\r') for x in f) if l.strip()]
+    toks = set()
+    for line in window:
+        toks |= set(PAT.findall(line))
+    with open(args.roll_file, encoding='utf-8') as f:
+        roll = f.read()
+    missing = sorted(t for t in toks if t not in roll)
+    out = {
+        'window_lines': len(window),
+        'tokens_total': len(toks),
+        'tokens': sorted(toks),
+        'missing_in_roll': missing,
+        'pass': not missing,
+    }
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0 if not missing else 2
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(prog='logs_toolkit.py', description=__doc__)
+    p.add_argument('--root', default=default_root(), help='repo root (default: auto)')
+    sub = p.add_subparsers(dest='cmd', required=True)
+
+    sub.add_parser('gauge', help='water report for src/os/state.json')
+    sub.add_parser('inventory', help='logs/ class breakdown')
+    pt = sub.add_parser('tail', help='state.json log tail inventory')
+    pt.add_argument('-n', type=int, default=10)
+    pp = sub.add_parser('prune', help='logs/ retention enforcement')
+    pp.add_argument('--execute', action='store_true', help='actually delete (default: dry-run)')
+    pp.add_argument('--floor-seconds', type=int, default=DEFAULT_FLOOR)
+    pc = sub.add_parser('catalog', help='window token extraction + presence check')
+    pc.add_argument('--tail', type=int, help='window = last N state log lines')
+    pc.add_argument('--window-file', help='window = non-empty lines of this file')
+    pc.add_argument('--roll-file', required=False, help='roll/summary text to check presence against')
+
+    args = p.parse_args(argv)
+    handlers = {'gauge': cmd_gauge, 'inventory': cmd_inventory, 'tail': cmd_tail,
+                'prune': cmd_prune, 'catalog': cmd_catalog}
+    if args.cmd not in handlers:
+        return 2
+    try:
+        return handlers[args.cmd](args)
+    except (OSError, ValueError, json.JSONDecodeError) as e:
+        print('error: %s' % e, file=sys.stderr)
+        return 3
+
+
+if __name__ == '__main__':
+    sys.exit(main())
