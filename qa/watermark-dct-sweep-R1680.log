@@ -1,0 +1,104 @@
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+[ WARN:0@0.419] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+COMBO d1=18 d2=10 wm_size=256 rep/ch=18.75 total-rep=56.25 psnr=43.66
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5078
+  CASE scale-up2.0x     ber=0.5273
+  CASE saltpepper-d5    ber=0.2266
+  CASE jpeg-q90x2       ber=0.0547
+  COMBO-TIME 2.0s
+COMBO d1=18 d2=10 wm_size=128 rep/ch=37.50 total-rep=112.50 psnr=43.74
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5000
+  CASE scale-up2.0x     ber=0.4844
+  CASE saltpepper-d5    ber=0.1406
+  CASE jpeg-q90x2       ber=0.0156
+  COMBO-TIME 2.3s
+COMBO d1=18 d2=10 wm_size=64 rep/ch=75.00 total-rep=225.00 psnr=43.71
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.4062
+  CASE scale-up2.0x     ber=0.5312
+  CASE saltpepper-d5    ber=0.0938
+  CASE jpeg-q90x2       ber=0.0156
+  COMBO-TIME 2.4s
+COMBO d1=36 d2=20 wm_size=256 rep/ch=18.75 total-rep=56.25 psnr=37.80
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5195
+  CASE scale-up2.0x     ber=0.5000
+  CASE saltpepper-d5    ber=0.0273
+  CASE jpeg-q90x2       ber=0.0156
+  NOTE R552-baseline cross-check d1=36 n=256: on-file 0.5195/0.5000/0.0273/0.0156 vs this-run 0.5195/0.5000/0.0273/0.0156 (honest re-measure, no float-equality gate)
+  COMBO-TIME 2.6s
+COMBO d1=36 d2=20 wm_size=128 rep/ch=37.50 total-rep=112.50 psnr=37.81
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5312
+  CASE scale-up2.0x     ber=0.4609
+  CASE saltpepper-d5    ber=0.0078
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.6s
+COMBO d1=36 d2=20 wm_size=64 rep/ch=75.00 total-rep=225.00 psnr=37.81
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5625
+  CASE scale-up2.0x     ber=0.5469
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.6s
+COMBO d1=72 d2=40 wm_size=256 rep/ch=18.75 total-rep=56.25 psnr=31.83
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5391
+  CASE scale-up2.0x     ber=0.5039
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0039
+  COMBO-TIME 2.6s
+COMBO d1=72 d2=40 wm_size=128 rep/ch=37.50 total-rep=112.50 psnr=31.85
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5234
+  CASE scale-up2.0x     ber=0.5156
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.6s
+COMBO d1=72 d2=40 wm_size=64 rep/ch=75.00 total-rep=225.00 psnr=31.90
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.5156
+  CASE scale-up2.0x     ber=0.5312
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.6s
+COMBO d1=144 d2=80 wm_size=256 rep/ch=18.75 total-rep=56.25 psnr=25.94
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.4766
+  CASE scale-up2.0x     ber=0.5352
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.6s
+COMBO d1=144 d2=80 wm_size=128 rep/ch=37.50 total-rep=112.50 psnr=25.86
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.4531
+  CASE scale-up2.0x     ber=0.5156
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.5s
+COMBO d1=144 d2=80 wm_size=64 rep/ch=75.00 total-rep=225.00 psnr=26.17
+  CASE clean            ber=0.0000
+  CASE scale-down0.5x   ber=0.4375
+  CASE scale-up2.0x     ber=0.4219
+  CASE saltpepper-d5    ber=0.0000
+  CASE jpeg-q90x2       ber=0.0000
+  COMBO-TIME 2.5s
+PASS AC-DS1: grid 4 steps x 3 sizes = 12 combos enumerated, measured=12/12
+PASS AC-DS2: default combo (d1=36 d2=20 n=256) clean roundtrip exact=True (anchor gate; R552 cross-check note printed above)
+PASS AC-DS3: measured=60/60 case BERs (clean + 4 perturbation families per combo), ber= on every case line, zero silent skip
+PASS AC-DS4: psnr per combo on embed lines; default combo psnr=37.80 dB
+VERDICT scale-down0.5x   best=d1=18 n=64 ber=0.4062 psnr=43.71 band(ber<=0.10)=NO (no rescue inside the swept grid - honest negative, lawful per AC-DS5)
+VERDICT scale-up2.0x     best=d1=144 n=64 ber=0.4219 psnr=26.17 band(ber<=0.10)=NO (no rescue inside the swept grid - honest negative, lawful per AC-DS5)
+VERDICT saltpepper-d5    best=d1=36 n=64 ber=0.0000 psnr=37.81 band(ber<=0.10)=YES
+VERDICT jpeg-q90x2       best=d1=36 n=128 ber=0.0000 psnr=37.81 band(ber<=0.10)=YES
+PASS AC-DS5: 4/4 family verdicts produced; families with a ber<=0.10 band in-grid: ['saltpepper-d5', 'jpeg-q90x2']
+PASS AC-DS6: source pure-ascii=True network-imports=none (import-statement scan); no shipped config or sibling-suite touched this round
+SWEEP-WALL 29.8s total
+SUITE PASS (6/6 criteria pass)

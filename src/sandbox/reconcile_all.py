@@ -124,6 +124,12 @@ SUITES = [
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),
+    # R1680 DCT-domain parameter sweep: quantization-step (d1) x
+    # repetition-factor (wm_size) grid, BER profile + PSNR cost +
+    # near-survival band map (AC-DS1..DS6 pre-registered in
+    # state/queue/tech.md; AC-DS7 = round-carried, AC-W4 precedent).
+    ("watermark-sweep",
+     os.path.join("watermark", "test_watermark_sweep.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
