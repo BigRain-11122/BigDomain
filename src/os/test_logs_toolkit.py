@@ -371,6 +371,109 @@ def main():
                      '--desc', 'x', '--window-tail', '99', '--summary-file', sfile)
     ok(rc == 2 and 'exceeds log length' in err, 'fold window-tail bounds check exit 2')
 
+    # ---- fold mid-window slice (AC-LT20..LT23, R1690 slice) ----
+    import logs_toolkit as T
+    MS_LOGS = [
+        '2026-10-09 R800 pair A P-2026-09-25-18 kept-line-one',
+        '2026-10-09 R800 tokens: local=1 api=0 api_reason=t',
+        '2026-10-09 R801 mid window line D-20260930-19 O-20261009-1246',
+        '2026-10-09 R801 tokens: local=1 api=0 api_reason=t',
+        '2026-10-09 R802 pair C AC-R4541 tail-side',
+    ]
+    MS_SUMMARY = ('2026-10-09 mid roll: folds R801 pair keeping '
+                  'D-20260930-19 O-20261009-1246 verbatim')
+    ms = tempfile.mkdtemp(prefix='bd-mslice-')
+    mspath = build_ps_state(ms, MS_LOGS)
+    mfile = os.path.join(ms, 'summary.txt')
+    open(mfile, 'w', encoding='utf-8').write(MS_SUMMARY + '\n')
+    marc = os.path.join(ms, 'logs', 'state-log-archive-2026-10.md')
+    pre_ms = open(mspath, 'rb').read()
+    pre_marc = open(marc, 'rb').read()
+    mbase = ['fold', '--round', 'R9010', '--fold-no', '470', '--desc', 'x',
+             '--summary-file', mfile]
+    # misuse faces (AC-LT20): selector arity, format, bounds
+    rc, _, err = run(ms, *mbase)
+    ok(rc == 2 and 'exactly one of --window-tail / --window-slice' in err,
+       'slice mutual-exclusion: no selector exit 2')
+    rc, _, err = run(ms, *(mbase + ['--window-tail', '2', '--window-slice', '3:4']))
+    ok(rc == 2 and 'exactly one of --window-tail / --window-slice' in err,
+       'slice mutual-exclusion: both selectors exit 2')
+    rc, _, err = run(ms, *(mbase + ['--window-slice', '2-3']))
+    ok(rc == 2 and 'START:END' in err, 'slice malformed format exit 2')
+    rc, _, err = run(ms, *(mbase + ['--window-slice', '0:3']))
+    ok(rc == 2 and 'E_WINDOW_RANGE' in err, 'slice bounds start<1 exit 2')
+    rc, _, err = run(ms, *(mbase + ['--window-slice', '4:3']))
+    ok(rc == 2 and 'E_WINDOW_RANGE' in err, 'slice bounds end<start exit 2')
+    rc, _, err = run(ms, *(mbase + ['--window-slice', '2:99']))
+    ok(rc == 2 and 'E_WINDOW_RANGE' in err, 'slice bounds end>len exit 2')
+    ok(open(mspath, 'rb').read() == pre_ms and open(marc, 'rb').read() == pre_marc,
+       'slice misuse faces zero mutation (state + archive)')
+    # dry-run: plan fields + zero mutation (AC-LT20/22)
+    rc, out, _ = run(ms, 'fold', '--round', 'R9010', '--fold-no', '470',
+                     '--desc', 'mid probe', '--window-slice', '3:4',
+                     '--summary-file', mfile)
+    plan = json.loads(out)
+    ok(rc == 0, 'slice dry-run exit 0')
+    ok(plan['window_mode'] == 'slice' and plan['window_start'] == 3
+       and plan['window_end'] == 4, 'slice plan window_mode/bounds fields')
+    ok(plan['window_lines'] == 2 and plan['new_log_len'] == 4,
+       'slice plan window/new-log count')
+    ok(plan['token_ok'] is True and plan['would_fail'] == [],
+       'slice plan verdicts green')
+    ok('fold R470 mid-window' in plan['archive_header'],
+       'slice archive header mid-window wording')
+    ok(open(mspath, 'rb').read() == pre_ms and open(marc, 'rb').read() == pre_marc,
+       'slice dry-run zero mutation (state + archive)')
+    # execute: full-chain fidelity (AC-LT21)
+    rc, out, _ = run(ms, 'fold', '--round', 'R9010', '--fold-no', '470',
+                     '--desc', 'mid probe', '--window-slice', '3:4',
+                     '--summary-file', mfile, '--execute')
+    res = json.loads(out)
+    ok(rc == 0 and res['predicted_eq_actual'] is True,
+       'slice execute exit 0, predicted==actual')
+    pst = json.loads(open(mspath, 'rb').read().decode('utf-8'))
+    ok(pst['log'] == MS_LOGS[:2] + [MS_SUMMARY] + MS_LOGS[4:],
+       'slice new log order: prefix + summary + suffix')
+    pre_lines = pre_ms.decode('utf-8').split('\r\n')
+    exp_lines = (pre_lines[:5]
+                 + [' ' * 16 + T.ps_escape(MS_SUMMARY) + ','] + pre_lines[7:])
+    ok(open(mspath, 'rb').read().decode('utf-8').split('\r\n') == exp_lines,
+       'slice surgery: prefix+suffix byte-identical, summary comma in place')
+    ok(open(os.path.join(ms, 'logs', 'state-preop-R9010.bak'), 'rb').read()
+       == pre_ms, 'slice preop backup byte-exact')
+    post_marc = open(marc, 'rb').read()
+    marc_txt = post_marc.decode('utf-8')
+    ok(post_marc.startswith(pre_marc) and MS_LOGS[2] in marc_txt
+       and MS_LOGS[3] in marc_txt, 'slice archive append verbatim window lines')
+    # census re-read: mid-window appendix stays census-parseable (AC-LT21)
+    rc, out, _ = run(ms, 'census')
+    cen = json.loads(out)
+    ok(rc == 0 and cen['pass'] is True and cen['sections_total'] == 1,
+       'slice census re-read green (mid-window section declared==actual)')
+    # abort faces in slice mode (AC-LT22)
+    ms2 = tempfile.mkdtemp(prefix='bd-mslice2-')
+    mspath2 = build_ps_state(ms2, MS_LOGS)
+    bad = os.path.join(ms2, 'summary.txt')
+    open(bad, 'w', encoding='utf-8').write('2026-10-09 summary with no window tokens\n')
+    pre2 = open(mspath2, 'rb').read()
+    marc2 = os.path.join(ms2, 'logs', 'state-log-archive-2026-10.md')
+    pre_marc2 = open(marc2, 'rb').read()
+    rc, out, _ = run(ms2, 'fold', '--round', 'R9011', '--fold-no', '471',
+                     '--desc', 'x', '--window-slice', '3:4', '--summary-file', bad,
+                     '--execute')
+    ok(rc == 2 and 'token-missing' in out, 'slice token-loss abort exit 2')
+    ok(open(mspath2, 'rb').read() == pre2 and open(marc2, 'rb').read() == pre_marc2
+       and not os.path.exists(os.path.join(ms2, 'logs', 'state-preop-R9011.bak')),
+       'slice token-loss abort zero mutation (state+archive+no backup)')
+    good2 = os.path.join(ms2, 'good.txt')
+    open(good2, 'w', encoding='utf-8').write(MS_SUMMARY + '\n')
+    rc, out, _ = run(ms2, 'fold', '--round', 'R9012', '--fold-no', '472',
+                     '--desc', 'x', '--window-slice', '3:4', '--summary-file', good2,
+                     '--reserve-bytes', '78500', '--execute')
+    ok(rc == 2 and 'gate-exceed' in out, 'slice gate abort exit 2')
+    ok(open(mspath2, 'rb').read() == pre2 and open(marc2, 'rb').read() == pre_marc2,
+       'slice gate abort zero mutation')
+
     # ---- census (AC-LT15..LT17, R1688 slice; non-ASCII markers via escapes) ----
     SEC = '\u00a7'   # section pointer marker
     YUAN = '\u539f'  # original-archive marker

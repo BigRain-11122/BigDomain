@@ -1,0 +1,163 @@
+
+=== R1690 fold mid-window slice live evidence (AC-LT24; AC-LT20..LT23 suite-covered)
+
+=== live gauge (pre)
+exit=0
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 76218,
+  "gate": 78500,
+  "log_lines": 25,
+  "log_content_bytes": 73535,
+  "margin_bytes": 2282,
+  "fold_needed": false,
+  "tick": 1689
+}
+
+=== probe window 10:11 heads + mechanical token embed
+w10: 2026-10-05 R1252 auto-saves 常设步清置+队列空一行声明收轮（九面扫描全 PASS/INFO 零变化承 R1251：STATE 轮首水
+w11: 2026-10-05 R1252 tokens: local=unmeasured api=unmeasured api_reason=会话无计量出口如实记·零
+probe summary (11 tokens): 2026-10-09 R1690 fold slice dry-run probe (no execute): window lines 10:11 tokens AC-C1 AC-C3 BD-PROP-001 BD-PROP-002 D-20260930-19 O-013 O-20261004-2255 P-2026-09-29-13 P-2026-10-05-01 P-2026-10-05-0
+
+=== live mid-window dry-run plan (--window-slice 10:11, zero mutation)
+exit=0
+{
+  "mode": "dry-run",
+  "round": "R1690",
+  "fold_no": "456",
+  "window_mode": "slice",
+  "window_start": 10,
+  "window_end": 11,
+  "window_lines": 2,
+  "window_content_bytes": 2254,
+  "summary_head": "2026-10-09 R1690 fold slice dry-run probe (no execute): wind",
+  "preop_sha16": "0fb4feeef1c2ae50",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1690.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1690 fold append (2026-10-09, 2 lines verbatim: R1252 pair mid-window probe, fold R456 mid-window, pre-op sha16 0fb4feeef1c2ae50)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 76218,
+  "new_log_len": 24,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 74144,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+zero-mutation proof: state sha16 pre=0fb4feeef1c2ae50 post=0fb4feeef1c2ae50 equal=True
+
+=== live bounds-error face (--window-slice 0:3)
+exit=2
+stderr: error: E_WINDOW_RANGE: --window-slice out of log bounds
+
+=== suite final run (test_logs_toolkit.py)
+exit=0
+PASS unknown subcommand exit 2
+PASS gauge exit 0
+PASS gauge disk bytes exact
+PASS gauge log count/tick
+PASS gauge content byte sum
+PASS gauge verdict under gate
+PASS inventory exit 0
+PASS inventory archive-md protected (md glob)
+PASS inventory lock protected
+PASS inventory preop count/prunable
+PASS inventory tmp count 81 (md-named tmp counted protected)
+PASS inventory transcript count (320 round_*.out + 40 run_*.log)
+PASS inventory other protected
+PASS tail 3 rows
+PASS tail classification main/tokens/declaration
+PASS prune dry-run exit 0
+PASS prune dry-run default no-delete
+PASS prune dry-run predicted counts (keep 12/300/60; fresh floor-skipped out of bucket)
+PASS prune class-level protection handles md/lock before plan guard (0 in-plan skips)
+PASS dry-run deleted nothing (file count unchanged)
+PASS prune execute exit 0
+PASS prune predicted==actual 88
+PASS prune per-class deleted counts
+PASS protected archive survived
+PASS protected lock survived
+PASS protected md-named tmp survived
+PASS other class untouched
+PASS mtime floor protected in-flight file
+PASS preop keep-newest 12
+PASS tmp remaining 60+fresh
+PASS transcript keep-newest 300
+PASS prune second execute 0 further deletes
+PASS catalog zero-loss pass exit 0
+PASS catalog token count {P-2026-09-25-18,AC-R4541,AC-R4546} == 3 (PAT is dash-form only, bare R1685/R454 out)
+PASS catalog missing-token fail exit 2
+PASS catalog --tail mode window extraction (AC-R9 + D-20260930-19 missing)
+PASS fold dry-run exit 0
+PASS fold plan window/new-log count
+PASS fold plan verdicts green
+PASS fold plan preop sha16 exact
+PASS fold plan archive header format
+PASS fold dry-run zero mutation (state + archive)
+PASS fold execute exit 0
+PASS fold predicted==actual (dry-run plan == execute result)
+PASS fold preop backup byte-exact
+PASS fold archive append verbatim (header + window)
+PASS fold disk size == predicted
+PASS fold new log == kept + summary
+PASS fold escape round-trip (< restored by parser)
+PASS fold PS-style escape written (\u003c on disk)
+PASS fold text surgery prefix+suffix lines byte-identical
+PASS fold CRLF layout preserved (one window line net removed)
+PASS fold token-loss abort exit 2 (4 tokens missing)
+PASS fold abort zero mutation (no state/archive/backup writes)
+PASS fold gate abort exit 2 (predicted+reserve over 78500)
+PASS fold gate abort zero mutation
+PASS fold archive-missing fail-closed (no create without --allow-create)
+PASS fold --allow-create creates archive + executes
+PASS fold created archive carries preamble + header + verbatim window
+PASS fold archive no-trailing-newline prepend branch
+PASS fold layout refusal exit 2 on non-PS fixture (zero mutation)
+PASS fold summary arity check exit 2
+PASS fold window-tail bounds check exit 2
+PASS slice mutual-exclusion: no selector exit 2
+PASS slice mutual-exclusion: both selectors exit 2
+PASS slice malformed format exit 2
+PASS slice bounds start<1 exit 2
+PASS slice bounds end<start exit 2
+PASS slice bounds end>len exit 2
+PASS slice misuse faces zero mutation (state + archive)
+PASS slice dry-run exit 0
+PASS slice plan window_mode/bounds fields
+PASS slice plan window/new-log count
+PASS slice plan verdicts green
+PASS slice archive header mid-window wording
+PASS slice dry-run zero mutation (state + archive)
+PASS slice execute exit 0, predicted==actual
+PASS slice new log order: prefix + summary + suffix
+PASS slice surgery: prefix+suffix byte-identical, summary comma in place
+PASS slice preop backup byte-exact
+PASS slice archive append verbatim window lines
+PASS slice census re-read green (mid-window section declared==actual)
+PASS slice token-loss abort exit 2
+PASS slice token-loss abort zero mutation (state+archive+no backup)
+PASS slice gate abort exit 2
+PASS slice gate abort zero mutation
+PASS census clean case exit 0
+PASS census sections parsed (10 two + 09 one)
+PASS census declared==actual all sections
+PASS census legacy 09 header (no declared) exempt from mismatch face
+PASS census pointer + orig-file-ref extraction, zero dangling
+PASS census full-embed not_embedded empty
+PASS census roll_native = evidence-pointer class only
+PASS census archive_only lists unreferenced-section tokens
+PASS census PAT single-source: bare R9999 never counted (5 dash-form tokens)
+PASS census read-only zero mutation (state)
+PASS census dangling pointer exit 2
+PASS census declared!=actual mismatch exit 2 (clobber class)
+PASS census not_embedded informational (listed, still exit 0)
+PASS census known mismatch adjudicated: listed + reason, exit 0
+PASS census known dangling adjudicated: raw count kept, verdict green
+PASS census non-listed finding still fails with known-file present
+PASS ASCII-only source: logs_toolkit.py
+PASS ASCII-only source: test_logs_toolkit.py
+SUITE PASS 104 checks
+
+EOF

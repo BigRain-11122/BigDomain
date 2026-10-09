@@ -309,9 +309,28 @@ def split_ps_layout(text, log_len):
 
 
 def cmd_fold(args):
-    if args.window_tail < 1:
-        print('error: --window-tail must be >= 1', file=sys.stderr)
+    # window selector: exactly one of --window-tail / --window-slice
+    # (mid-window support; AC-LT20 pre-registered in tech.md R1690 claim)
+    has_tail = args.window_tail > 0
+    has_slice = args.window_slice is not None
+    if has_tail == has_slice:
+        print('error: exactly one of --window-tail / --window-slice is required',
+              file=sys.stderr)
         return 2
+    window_mode = 'slice' if has_slice else 'tail'
+    w_start = w_end = None
+    if has_slice:
+        parts = str(args.window_slice).split(':')
+        if len(parts) != 2:
+            print('error: --window-slice must be START:END integers',
+                  file=sys.stderr)
+            return 2
+        try:
+            w_start, w_end = int(parts[0]), int(parts[1])
+        except ValueError:
+            print('error: --window-slice must be START:END integers',
+                  file=sys.stderr)
+            return 2
     for req, val in (('--round', args.round), ('--fold-no', args.fold_no),
                      ('--desc', args.desc), ('--summary-file', args.summary_file)):
         if not val:
@@ -336,14 +355,21 @@ def cmd_fold(args):
               file=sys.stderr)
         return 2
     lines, log_start, item_idx, close_idx = layout
-    if args.window_tail > len(st['log']):
-        print('error: --window-tail exceeds log length', file=sys.stderr)
-        return 2
+    if window_mode == 'tail':
+        if args.window_tail > len(st['log']):
+            print('error: --window-tail exceeds log length', file=sys.stderr)
+            return 2
+        w_start = len(st['log']) - args.window_tail + 1  # 1-based inclusive
+        w_end = len(st['log'])
+    else:
+        if w_start < 1 or w_end < w_start or w_end > len(st['log']):
+            print('error: E_WINDOW_RANGE: --window-slice out of log bounds',
+                  file=sys.stderr)
+            return 2
 
-    n = args.window_tail
-    window = st['log'][-n:]
-    keep_count = len(st['log']) - n
-    new_log = st['log'][:-n] + [summary]
+    n = w_end - w_start + 1
+    window = st['log'][w_start - 1:w_end]
+    new_log = st['log'][:w_start - 1] + [summary] + st['log'][w_end:]
 
     # verifications (all BEFORE any write; R1157 write-before-verify lesson)
     toks = set()
@@ -352,9 +378,11 @@ def cmd_fold(args):
     missing = sorted(t for t in toks if t not in summary)
 
     summary_literal = ' ' * 16 + ps_escape(summary)
-    first_window_idx = log_start + 1 + keep_count
+    if w_end < len(st['log']):
+        summary_literal += ','  # mid-window: item lines follow the summary
+    first_window_idx = log_start + 1 + (w_start - 1)
     new_lines = (lines[:first_window_idx] + [summary_literal]
-                 + lines[close_idx:])
+                 + lines[first_window_idx + n:])
     new_text = '\r\n'.join(new_lines)
     predicted = len(new_text.encode('utf-8'))
     gate_ok = predicted + args.reserve_bytes <= GATE
@@ -366,8 +394,9 @@ def cmd_fold(args):
         args.root, 'logs', 'state-log-archive-%s.md' % now.strftime('%Y-%m'))
     date = now.strftime('%Y-%m-%d')
     header = ('# --- %s fold append (%s, %d lines verbatim: %s, '
-              'fold R%s window, pre-op sha16 %s)') % (
-        args.round, date, len(window), args.desc, args.fold_no, sha16)
+              'fold R%s %s, pre-op sha16 %s)') % (
+        args.round, date, len(window), args.desc, args.fold_no,
+        'mid-window' if window_mode == 'slice' else 'window', sha16)
     archive_exists = os.path.exists(archive)
     appendix = (header + '\n' + '\n'.join(window) + '\n').encode('utf-8')
     preamble = None
@@ -391,6 +420,8 @@ def cmd_fold(args):
     plan = {
         'mode': 'execute' if args.execute else 'dry-run',
         'round': args.round, 'fold_no': args.fold_no,
+        'window_mode': window_mode, 'window_start': w_start,
+        'window_end': w_end,
         'window_lines': len(window),
         'window_content_bytes': sum(len(x.encode('utf-8')) for x in window),
         'summary_head': summary[:60],
@@ -665,6 +696,8 @@ def main(argv=None):
     pf.add_argument('--fold-no', help='fold knife number e.g. 455 (header)')
     pf.add_argument('--desc', help='window description for the archive header')
     pf.add_argument('--window-tail', type=int, default=0, help='window = last N log lines')
+    pf.add_argument('--window-slice', default=None,
+                    help='window = log lines START:END (1-based inclusive, mid-array)')
     pf.add_argument('--summary-file', help='file holding exactly one non-empty summary line')
     pf.add_argument('--reserve-bytes', type=int, default=3000)
     pf.add_argument('--archive-file', help='override archive path (default: logs/state-log-archive-<month>.md)')

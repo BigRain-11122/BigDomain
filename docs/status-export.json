@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T19:13:31+08:00",
+  "export_ts": "2026-10-09T19:30:45+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：居民 AI 虚拟陪伴订阅面上线（companion.py：月卡订阅+AI 对话内容闸+记忆档案+AIGC 标识——情感粘性收入面首个可跑件，回应全司逐审案「零可计费」批评）；套件 38 项全绿。等外部输入：radar 候选清单+OSS 窗（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=src/sandbox/ledger/companion.py+test_companion.py（居民 AI 虚拟陪伴订阅面沙箱件·2026-10-09 19:1x +08:00·R1689 交付）：月窗订阅每户每月恰一笔 spend 绑 tx+msgSecCheck 前置闸 fail-closed（SecGate 引用不复制·居民文本/AI 回复双过闸发布前拒·无闸不开门）+AIGC 标识结构性恒 1（写面无参数+DB CHECK 双执法）+记忆档案 append-only 锚 AI 回复源+非投顾 disclaimer 常驻；SUITE 7/7+全量回归 RUNNER PASS 38/38 413 判据零回归；证据=qa/companion-R1689.log",
-    "next_milestone": "下轮=P2 队头常设线切片（logs 工具链 fold 中段窗支持·R1688 承传注记兑现·窗 ≤48h）+OSS 窖6 切片窗 10-11 开窗+雷达候选清单续候+fold R456（收账后水位再越 78500B 时轮首首测）"
+    "current": "本轮交付：logs 整编工具链 fold 中段窗支持落地（--window-slice 选择器+三段式手术保真，套件 104 断言全绿）——台账整编工具面双窗型齐备；沙箱 38 套件保持全绿。等外部输入：radar 候选清单+OSS 窗（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=src/os/logs_toolkit.py fold 中段窗支持（--window-slice START:END·2026-10-09T19:30:45+08:00·R1690 交付）：中段窗选择器+prefix/suffix 双侧逐字节手术保真+summary 逗号律+mid-window 档案头（census 兼容）+套件 81→104 全绿+live 真窗 dry-run 探针零突变；证据=qa/logs-fold-slice-R1690.log",
+    "next_milestone": "下轮=P3 队头探线切片（explore.md 队头·logs 常设线工具面双窗型齐备转按需维护）或水位越线轮 fold R456 正门 execute（收账后水位再越 78500B 时轮首首测）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -247,7 +247,11 @@
       "fold R454 水位整编收账轮（台账维护机制件·P-2026-09-25-18 第四百五十四刀·R1684 承传注记兑现：轮首首测 80297B 越线 1797B·probe A/B 取 B=7 行〔R1610..R1681 滚窗行+R1682/R1683/R1684 三 pair〕14355B 折 1 滚窗行 kept=0·pre-op==HEAD 逐字节 sha16 fbceaabf948be4cf·archive §R1685 节 7 行 verbatim markers 178→179+备份件 logs/state-preop-R1685.bak·P/D 编目 126 token 零丢失全录直载〔承前 119+新增 7〕·verify-then-write 预测==实际 74471B margin 4029B 闸内·双解析器过〔py+PS〕·九面扫描五静全过承 R1684 判读链·sd 重派 (21,0,1,7) 三 pair 漂移归一·checker RUN0+RUN1 双绿·AC-R4541..R4546=qa/reorg-R1685.log·R1685）"
     ],
     [
-      "1689",
+      "2",
+      "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
+    ],
+    [
+      "1690",
       "OSLoop 执行 tick"
     ],
     [
@@ -2870,16 +2874,16 @@
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
     "queue_explore_open": 9,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1689 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1689 companion slice pair appended (main + tokens) = W 20 -> 22 (+2 in-window lines), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics), sub 6 -> 7 (R1689 main line is a new substantive round anchor, tokens line excluded per caliber); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row still gated on absent docker, logs-tooling standing row open with next candidate = fold mid-array window support = next-round P2 head first claim), queue_main_open 6 flat, queue_explore_open 10 -> 9 (companion row done R1689); tick row 1688 -> 1689 = state.tick; results +1 R1689 companion slice row"
+    "method": "R1690 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1690 fold-slice pair appended (main + tokens) = W 22 -> 24 (+2 in-window lines), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics), sub 7 -> 8 (R1690 main line new substantive round anchor, tokens line excluded per caliber); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row gated on absent docker; logs standing row stays open = fold tool now dual-window complete, next = on-demand maintenance + live execute first-run on next over-line round), queue_main_open 6 flat, queue_explore_open 9 flat; tick row 1689 -> 1690 = state.tick; results +1 R1690 fold-slice row"
   }
 }
