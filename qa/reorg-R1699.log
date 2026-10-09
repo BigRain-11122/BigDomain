@@ -1,0 +1,57 @@
+# qa/reorg-R1699.log — fold R459 水位整编+滚窗并折收账轮证据（2026-10-10 R1699·P-2026-09-25-18 第四百五十九刀）
+# 判据预注册（AC-R4591..R4596·先于收账宣称）：
+#   AC-R4591 轮首首测越线检出（81733B > 78500B 线 3233B）
+#   AC-R4592 首跑尾窗被闸拒如实记（gate-exceed fail-closed 执法实证·零写入）
+#   AC-R4593 扩窗后 115 token catalog token_missing=0 全嵌
+#   AC-R4594 verify-then-write 预测==实际 71120B
+#   AC-R4595 archive §R1699 节 7 行 verbatim+pre-op 备份 sha16 4ccb1829dd550699
+#   AC-R4596 收账后 gauge+census+export checker 全绿
+# 工具面=logs_toolkit.py fold（正门·R1688/R1690 落件·P2 常设线 live 切片）·摘要文件 logs/tmp-summary-R1699.txt
+
+=== [1] 轮首首测（AC-R4591）===
+pre_bytes(disk)=81733  gate=78500  over_line=3233  → fold R459 触发（R1698 承传注记兑现·专列刀轮先例 R1674/R1694/R1697）
+
+=== [2] 首跑尾 5 行窗 dry-run 闸拒（AC-R4592·诚实负如实记）===
+window=tail 5 (lines 24..28)  window_content_bytes=6054  summary=3254B
+token_missing=[]  token_ok=true  preop_sha16=4ccb1829dd550699
+predicted_bytes=78933  reserve_bytes=3000  gate=78500  gate_ok=false
+would_fail=["gate-exceed"]  exit=1  零写入=闸执法实证（78933+3000 > 78500）
+压缩后摘要 v2（2012B）→predicted 77691 仍 77691+3000=80691>78500 闸拒二连=结构性不可过（窗太浅）
+→ 按 R1697 窗先例扩窗滚窗并折（滚窗行承前起窗）
+
+=== [3] 扩窗 7 行 dry-run（AC-R4593 前置）===
+window=tail 7 (lines 22..28)  = R1685 滚窗行承前(5865B) + fold R458 滚窗行(3855B) + R1697 收账三行(1838+587+321) + R1698 收账对(2987+321)
+window_content_bytes=15774  window_tokens=115（catalog --tail 7 机械提取）
+滚窗累计计分 sum 12（R1685 滚窗行段 sum 5〔承前注 6 滑差 1 原档保全〕+fold R458 滚窗行段 sum 4+R1697 fold 轮计 1+R1698 可跑实物 2）
+token_missing=[]  token_ok=true  gate_ok=true  predicted_bytes=71120  reserve=3000  would_fail=[]
+
+=== [4] execute 手术（AC-R4594/AC-R4595）===
+mode=execute  window_lines=7  post_bytes=71120  predicted_eq_actual=true
+archive_appended=true（logs/state-log-archive-2026-10.md §R1699 节·7 行 verbatim·appendix_bytes=16001）
+backup_written=true（logs/state-preop-R1699.bak·pre-op sha16=4ccb1829dd550699）
+pre_bytes=81733 → post 71120（-8.3%·kept=0）
+
+=== [5] 术后验证 ===
+gauge: disk_bytes=71120  log_lines=22  margin_bytes=7380  fold_needed=false
+census: pass=true（PYTHONIOENCODING=utf-8 后跑通·GBK 控制台打印坑在册）
+catalog 复核：窗 token 115 全嵌滚窗行=零丢失
+
+=== [6] 收账（closeout·tmp_closeout_r1699.py 先验后写）===
+state.json 追加 R1699 三行（fold 收账行+DEC/GORD 判读行+tokens 行）+基线四字段更新
+（tick 1698→1699·last_dec_tokens +6〔C-20261008-05,C-20261009-04,D-20260909-05,D-20261010-01,D-20261010-02,D-20261010-03〕·last_decision_rows=281·last_gord_tbl_rows=198）
+bare_lf before=0 after=0（CRLF 布局保全·R1697 closeout EOL 病防复发）
+json.loads round-trip 过（log_lines=25 tick=1699）·收账后 disk=74147B
+DEC 批判读：DEC 268→281 六新 token 全判毕（C-20261009-04 同号已回执补登+D-20261010-01 知悉+D-20261010-02 本司三连令挂起随复产窗核验知悉+D-20261010-03 HQ 工具面知悉+C-20261008-05/D-20260909-05 行内引用 token 注记入基线）
+GORD 判读：gord 197→198·O-20261010-0025 机队并行算力令=@bm-c 派单非本司执行面知悉不动作
+P-32 日清=当日零新增集团层 open 项不写（零膨胀）
+
+=== [7] export 实刷+checker（AC-R4596）===
+export_ts=2026-10-10T00:38:47+08:00·tick 行 1698→1699·self_drive W=22/sub=8/window=2026-10-04..2026-10-10（checker 重算口径）
+ceo_face 三行实刷（current=fold R459+DEC/GORD 收口/latest_artifact=fold 证据组/next_milestone=explore 队头+常设轮+fold R460 裁定）
+results 增行 R1699（680 行）·方法行=R1699 flush caliber
+check_export_consistency.py：SUMMARY pass=21 fail=0 → VERDICT PASS
+verify-then-write 执法实录：export 首跑 results_row 尾段缺闭合被 json.loads 拦截零写入→盘面验证 INTACT→修数据件重跑净绿（闸再证）
+
+=== [8] 承传注记 ===
+收账后水位 74147B < 78500B 线（margin 4353B）→ fold R460=下轮轮首首测裁定（正门工具族在役）
+轮计分 1=台账维护机制件
