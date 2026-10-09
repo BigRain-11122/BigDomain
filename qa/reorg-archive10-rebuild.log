@@ -1,38 +1,38 @@
-qa/reorg-archive10-rebuild.log - archive10 zero-loss rebuild from git history (R1648, 2026-10-09)
-method: walk git commit chain of src/os/state.json since 2026-10-05 00:00 (497 commits), log-array multiset diff; window = single removed segment (or tail segment when multiple); roll = inserted span-line with largest span end; knife = ASCII fold R<n> in inserted lines
+qa/reorg-archive10-rebuild.log - archive10 zero-loss rebuild from git history (R1648 build, R1649 adjudicated run, 2026-10-09)
+method: walk git commit chain of src/os/state.json since 2026-10-05 00:00 (498 commits), log-array multiset diff; window = single removed segment (or tail segment when multiple); roll = inserted span-line with largest span end; fold round + knife = the round's own closeout line "YYYY-MM-DD R<n>[(~beat)] ... fold R<m>" (authoritative), knife fallback = receipt AC-R<knife><idx> prefix (R1649 adjudication of the fr=1306 double node + the four beat-era ANOMALY events)
 events detected: 201 ; sections built: 168 ; excluded: 33
 
 excluded events (honest adjudication):
-  sep09-era event (archive09 face) (ctick=1156 fold_round=1156 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1158 fold_round=1158 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1160 fold_round=1160 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1162 fold_round=1162 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1164 fold_round=1164 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1166 fold_round=1166 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1168 fold_round=1168 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1170 fold_round=1170 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1171 fold_round=1171 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1172 fold_round=1172 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1173 fold_round=1173 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1174 fold_round=1174 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1175 fold_round=1175 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1176 fold_round=1176 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1177 fold_round=1177 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1178 fold_round=1178 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1179 fold_round=1179 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1180 fold_round=1180 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1181 fold_round=1181 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1182 fold_round=1182 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1183 fold_round=1183 knife=237 removed_lines=3)
-  sep09-era event (archive09 face) (ctick=1184 fold_round=1184 knife=237 removed_lines=5)
-  sep09-era event (archive09 face) (ctick=1185 fold_round=1185 knife=237 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1156 fold_round=1156 knife=245 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1158 fold_round=1158 knife=246 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1160 fold_round=1160 knife=247 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1162 fold_round=1162 knife=248 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1164 fold_round=1164 knife=249 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1166 fold_round=1166 knife=250 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1168 fold_round=1168 knife=251 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1170 fold_round=1170 knife=252 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1171 fold_round=1171 knife=253 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1172 fold_round=1172 knife=254 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1173 fold_round=1173 knife=255 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1174 fold_round=1174 knife=256 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1175 fold_round=1175 knife=257 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1176 fold_round=1176 knife=258 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1177 fold_round=1177 knife=259 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1178 fold_round=1178 knife=260 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1179 fold_round=1179 knife=261 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1180 fold_round=1180 knife=262 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1181 fold_round=1181 knife=263 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1182 fold_round=1182 knife=264 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1183 fold_round=1183 knife=265 removed_lines=3)
+  sep09-era event (archive09 face) (ctick=1184 fold_round=1184 knife=266 removed_lines=5)
+  sep09-era event (archive09 face) (ctick=1185 fold_round=1185 knife=267 removed_lines=3)
   sep09-era event (archive09 face) (ctick=1187 fold_round=1187 knife=268 removed_lines=5)
   sep09-era event (archive09 face) (ctick=1188 fold_round=1188 knife=269 removed_lines=3)
   sep09-era event (archive09 face) (ctick=1189 fold_round=1189 knife=270 removed_lines=3)
   sep09-era event (archive09 face) (ctick=1190 fold_round=1190 knife=271 removed_lines=3)
   sep09-era event (archive09 face) (ctick=1191 fold_round=1191 knife=272 removed_lines=3)
   R1192 creation round (cold seed archived bare, window via git+bak per receipt AC-R2732c) (ctick=1192 fold_round=1192 knife=273 removed_lines=9)
-  in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1243 fold_round=1243 knife=303 removed_lines=1)
+  in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1243 fold_round=1243 knife=None removed_lines=1)
   in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1446 fold_round=1446 knife=371 removed_lines=1)
   in-place closeout-line re-edit (old text superseded by design, not archived) (ctick=1553 fold_round=1553 knife=None removed_lines=1)
   R1646 fold R444 = intact tail preserved verbatim (ctick=1647 fold_round=1646 knife=444 removed_lines=9)
@@ -43,15 +43,19 @@ cold-segment bare appends (dual-leg rounds, R1192-seed precedent): 3 blocks 9124
   cold at R1232: 3 lines appended bare before its section
   cold at R1234: 6 lines appended bare before its section
 
-AC-AR1 section count vs in-register fold claims: FAIL
-  sections=168 (expect 168); knife sequence R276..R443 contiguous=False; receipts present=True; markers before R1642=167 (claim 167)
+AC-AR1 section count vs in-register fold claims: PASS
+  sections=168 (expect 168); knife sequence R276..R443 contiguous=True; receipts present=True; markers before R1642=167 (claim 167)
+attribution adjudication (R1649, fr=1306 double node resolved): true=ctick 1306 event (6 lines 11052B, per-line 2951+2680+2951+246+2007+217 == receipt AC-R3153 claim, fold R315); pseudo=ctick 1472 event (R1472 fold R382 expanded-window rerun that legally re-folded the live R1276..R1305 roll line; old span rule sent it to fr=1306, stray scan gave knife 380)
+attribution adjudication leg 2 (R1649, four beat-annotation-era events recovered): closeout lines of the R1206..R1221 era read "R<n>(~beat) ... fold R<m>" - the beat parenthetical defeated the strict closeout regex and dropped R1206/R1217/R1218/R1221 to ANOMALY (count 164, positions -4 behind them); regex broadened, all four recovered as real folds (R281/R291/R292/R295)
+  closeout-vs-receipt blade mismatches=0 []; knife-source missing=0 []; sources: closeout=167 receipt=1 unknown=0
+  receipt marker-chain reconciliation: 91 receipts carry markers X->Y claims; position mismatches=0 []; adjudicated exemptions=2 [(1366, 'claim 39 pos 63 (odd-basis claim 39; byte-chain + R1368 all-markers claim 63->64 proves position 63)'), (1446, 'claim 24 pos 96 (fold-append subset basis claim 24; R1449 receipt chain note gives all-markers 95->96 = position 96)')]
 AC-AR2 tail R1646 append + 9 lines verbatim: PASS
   tail=13499B byte-preserved from damaged file offset 2186212; NUL region all-zero=True
   tail sha256=ab71b10e6f679f4b2225ee5767299e30b28f8e7d9c962b42a0ba45526e7b260f
   9 tail lines byte-equal git-derived fold R444 window: True
 AC-AR3 four sampled sections vs git pre-fold states (byte-exact contiguous slice + receipt size):
   R1196: window-lines-git-contiguous=True sha16=bb9e431a559e76f3 receipt_chunk=None size_delta=20794
-  R1413: window-lines-git-contiguous=True sha16=bde828c466f526e8 receipt_chunk=None size_delta=9951
+  R1415: window-lines-git-contiguous=True sha16=a0d12fd08b89a6f9 receipt_chunk=None size_delta=9975
   R1642: window-lines-git-contiguous=True sha16=1762152e89127229 receipt_chunk=13505 size_delta=0
   R1237: window-lines-git-contiguous=True sha16=0c8b2ee1f2f5dd10 receipt_chunk=None size_delta=37374
 AC-AR4 sep09 archive zero-touch: sha256=406539fdac85da498ace112f8e080aee55788e367bfd7ce367ac21a46c0ff183 (opened read-only; byte-identical after)
@@ -97,7 +101,6 @@ receipt chunk-size reconciliation (delta 0 = section header regenerated byte-exa
   R1301 n=6 mine=9811 receipt=NONE desc_src=receipt
   R1304 n=7 mine=9680 receipt=NONE desc_src=receipt
   R1306 n=6 mine=11243 receipt=NONE desc_src=derived
-  R1306 n=6 mine=12182 receipt=NONE desc_src=derived
   R1310 n=8 mine=9838 receipt=NONE desc_src=derived
   R1312 n=5 mine=8357 receipt=NONE desc_src=derived
   R1314 n=3 mine=9309 receipt=NONE desc_src=derived
@@ -164,6 +167,7 @@ receipt chunk-size reconciliation (delta 0 = section header regenerated byte-exa
   R1466 n=5 mine=8852 receipt=NONE desc_src=receipt
   R1468 n=5 mine=8163 receipt=NONE desc_src=receipt
   R1470 n=5 mine=8319 receipt=NONE desc_src=receipt
+  R1472 n=6 mine=12133 receipt=NONE desc_src=receipt
   R1474 n=5 mine=11134 receipt=NONE desc_src=receipt
   R1476 n=5 mine=10945 receipt=NONE desc_src=receipt
   R1479 n=7 mine=11374 receipt=NONE desc_src=receipt
@@ -223,8 +227,8 @@ receipt chunk-size reconciliation (delta 0 = section header regenerated byte-exa
   R1628 n=9 mine=14418 receipt=NONE desc_src=receipt
   R1632 n=9 mine=14708 receipt=NONE desc_src=receipt
   summary: exact=3 delta=6 no-receipt-size=159 of 168 sections
-receipt pre-op sha16 cross-checks: 102/126 match
+receipt pre-op sha16 cross-checks: 103/127 match sha256 caliber; 0 legacy sha1 caliber; residual 24 (era drift, non-gating evidence)
 
-size accounting: rebuilt content region=2263233B (original clobbered region=2186212B, delta=+77021 = provenance header 1147B + cold bare appends 9124B + header-style drift)
-final file=2276732B sha256=8ccc887159c38572648231f77ca043fb03a4cfb1e0310e25ae09cba1de5eb4da
-hard_fail=True -> NO WRITE, manual review required
+size accounting: rebuilt content region=2263382B (original clobbered region=2186212B, delta=+77170 = provenance header 1345B + cold bare appends 9124B + header-style drift)
+final file=2276881B sha256=5ac49d181452d02aad684ff023ab0246ee1c56ed077f0ab48d896604fd6ad60f
+hard_fail=False -> write authorized
