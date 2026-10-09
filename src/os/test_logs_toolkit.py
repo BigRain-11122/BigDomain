@@ -371,6 +371,128 @@ def main():
                      '--desc', 'x', '--window-tail', '99', '--summary-file', sfile)
     ok(rc == 2 and 'exceeds log length' in err, 'fold window-tail bounds check exit 2')
 
+    # ---- census (AC-LT15..LT17, R1688 slice; non-ASCII markers via escapes) ----
+    SEC = '\u00a7'   # section pointer marker
+    YUAN = '\u539f'  # original-archive marker
+
+    def build_census_fixture(state_logs, arc10, arc09=None):
+        cf = tempfile.mkdtemp(prefix='bd-census-')
+        os.makedirs(os.path.join(cf, 'src', 'os'))
+        os.makedirs(os.path.join(cf, 'logs'))
+        stpath = os.path.join(cf, 'src', 'os', 'state.json')
+        with open(stpath, 'wb') as f:
+            f.write((json.dumps({'tick': 7, 'log': state_logs},
+                                ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
+        with open(os.path.join(cf, 'logs', 'state-log-archive-2026-10.md'), 'wb') as f:
+            f.write(arc10.encode('utf-8'))
+        if arc09 is not None:
+            with open(os.path.join(cf, 'logs', 'state-log-archive-2026-09.md'), 'wb') as f:
+                f.write(arc09.encode('utf-8'))
+        return cf, stpath
+
+    ARC10 = ('# --- R10 fold append (2026-10-09, 2 lines verbatim: pair, fold R1 window)\n'
+             '2026-10-09 R10 line one with P-2026-09-25-18 and D-20260930-19\n'
+             '2026-10-09 R10 tokens: local=1 api=0\n'
+             '# --- R11 fold append (2026-10-09, 3 lines verbatim: trio, fold R2 window)\n'
+             '2026-10-09 R11 a O-20261009-1246\n'
+             '2026-10-09 R11 b C-20261009-03 R9999\n'
+             '2026-10-09 R11 tokens: local=1 api=0\n')
+    ARC09 = ('# --- R300 append (pre re-org round 1, tick 299, 2026-09-26, 81000 bytes) ---\n'
+             '2026-09-26 R300 legacy line with P-2026-09-24-47\n')
+    LINE_OK = ('2026-10-09 roll window: archive ' + SEC + 'R10 section 2 lines verbatim '
+               'keeping P-2026-09-25-18 D-20260930-19, evidence AC-R9001, plus '
+               'logs/state-log-archive-2026-09.md ' + YUAN + ' P-2026-09-24-47')
+
+    # (i) clean case: declared==actual, pointers resolve, full embed, orig file ref
+    cf1, cpath1 = build_census_fixture([LINE_OK], ARC10, ARC09)
+    pre_c = open(cpath1, 'rb').read()
+    rc, out, _ = run(cf1, 'census')
+    cen = json.loads(out)
+    ok(rc == 0 and cen['pass'] is True, 'census clean case exit 0')
+    ok(cen['sections_total'] == 3 and cen['files']['2026-09']['sections'] == 1
+       and cen['files']['2026-10']['sections'] == 2, 'census sections parsed (10 two + 09 one)')
+    ok(cen['section_line_mismatches'] == [], 'census declared==actual all sections')
+    ok(all(m['file'] != '2026-09' for m in cen['section_line_mismatches']),
+       'census legacy 09 header (no declared) exempt from mismatch face')
+    pl = cen['pointer_lines'][0]
+    ok(len(cen['pointer_lines']) == 1 and pl['pointers'] == ['R10']
+       and pl['file_refs'] == ['2026-09'] and pl['dangling'] == [],
+       'census pointer + orig-file-ref extraction, zero dangling')
+    ok(pl['not_embedded'] == {}, 'census full-embed not_embedded empty')
+    ok(pl['roll_native'] == ['AC-R9001'], 'census roll_native = evidence-pointer class only')
+    ok(cen['archive_only_tokens'] == ['C-20261009-03', 'O-20261009-1246'],
+       'census archive_only lists unreferenced-section tokens')
+    ok('R9999' not in cen['archive_only_tokens']
+       and cen['archive_tokens_total'] == 5,
+       'census PAT single-source: bare R9999 never counted (5 dash-form tokens)')
+    ok(open(cpath1, 'rb').read() == pre_c, 'census read-only zero mutation (state)')
+
+    # (ii) dangling pointer -> exit 2
+    cf2, _ = build_census_fixture(
+        ['2026-10-09 line refs archive ' + SEC + 'R99 missing section'],
+        '# --- R10 fold append (2026-10-09, 1 lines verbatim: x, fold R1 window)\n'
+        '2026-10-09 R10 a D-20260930-19\n')
+    rc, out, _ = run(cf2, 'census')
+    cen2 = json.loads(out)
+    ok(rc == 2 and cen2['pass'] is False and cen2['dangling_total'] == 1
+       and cen2['pointer_lines'][0]['dangling'] == ['R99'],
+       'census dangling pointer exit 2')
+
+    # (iii) declared vs actual mismatch (NUL-clobber class) -> exit 2
+    cf3, _ = build_census_fixture(
+        ['2026-10-09 line refs archive ' + SEC + 'R10 verbatim D-20260930-19'],
+        '# --- R10 fold append (2026-10-09, 9 lines verbatim: clobbered, fold R1 window)\n'
+        '2026-10-09 R10 a D-20260930-19\n'
+        '2026-10-09 R10 b\n'
+        '2026-10-09 R10 c\n'
+        '2026-10-09 R10 d\n')
+    rc, out, _ = run(cf3, 'census')
+    cen3 = json.loads(out)
+    ok(rc == 2 and cen3['section_line_mismatches'] ==
+       [{'round': 'R10', 'file': '2026-10', 'declared': 9, 'actual': 4,
+         'adjudicated': False}],
+       'census declared!=actual mismatch exit 2 (clobber class)')
+
+    # (iv) not_embedded census is informational: exit 0 with listing
+    cf4, _ = build_census_fixture(
+        ['2026-10-09 line refs archive ' + SEC + 'R10 verbatim D-20260930-19 only'],
+        '# --- R10 fold append (2026-10-09, 2 lines verbatim: pair, fold R1 window)\n'
+        '2026-10-09 R10 a D-20260930-19\n'
+        '2026-10-09 R10 b C-3 extra token not embedded\n')
+    rc, out, _ = run(cf4, 'census')
+    cen4 = json.loads(out)
+    ok(rc == 0 and cen4['pass'] is True
+       and cen4['pointer_lines'][0]['not_embedded'] == {'R10': ['C-3']},
+       'census not_embedded informational (listed, still exit 0)')
+
+    # (vii) known-findings adjudication: visible but not failing (AC-LT15 amend)
+    KNOWN = {'section_line_mismatches': [
+                 {'round': 'R10', 'reason': 'adjudicated fixture', 'adjudicated': 'x'}],
+             'dangling_pointers': [
+                 {'pointer': 'R99', 'reason': 'adjudicated fixture', 'adjudicated': 'x'}]}
+    kfile = os.path.join(cf3, 'known.json')
+    open(kfile, 'w', encoding='utf-8').write(json.dumps(KNOWN))
+    rc, out, _ = run(cf3, 'census', '--known-file', kfile)
+    cen5 = json.loads(out)
+    ok(rc == 0 and cen5['pass'] is True and cen5['unknown_mismatch_count'] == 0
+       and cen5['section_line_mismatches'][0]['adjudicated'] is True
+       and 'reason' in cen5['section_line_mismatches'][0],
+       'census known mismatch adjudicated: listed + reason, exit 0')
+    rc, out, _ = run(cf2, 'census', '--known-file', kfile)
+    cen6 = json.loads(out)
+    ok(rc == 0 and cen6['pass'] is True and cen6['unknown_dangling_count'] == 0
+       and cen6['dangling_known'] == [{'pointer': 'R99', 'reason': 'adjudicated fixture'}]
+       and cen6['dangling_total'] == 1,
+       'census known dangling adjudicated: raw count kept, verdict green')
+    kfile2 = os.path.join(cf3, 'known_other.json')
+    open(kfile2, 'w', encoding='utf-8').write(json.dumps(
+        {'section_line_mismatches': [{'round': 'R77'}], 'dangling_pointers': []}))
+    rc, out, _ = run(cf3, 'census', '--known-file', kfile2)
+    cen7 = json.loads(out)
+    ok(rc == 2 and cen7['unknown_mismatch_count'] == 1
+       and cen7['section_line_mismatches'][0]['adjudicated'] is False,
+       'census non-listed finding still fails with known-file present')
+
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):
         b = open(src, 'rb').read()

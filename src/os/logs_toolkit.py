@@ -27,6 +27,11 @@ Subcommands (all accept --root, default = repo root two levels up):
                          window replacement, verify-then-write; window =
                          last --window-tail N log lines, mid-array
                          windows stay manual per precedent)
+  census                 archive reverse reconciliation (read-only):
+                         section integrity (declared vs actual lines),
+                         live-log section pointer resolution, and the
+                         informational token census (not_embedded /
+                         roll_native / archive_only)
 
 Fold targets the canonical on-disk PS 5.1 serialization (CRLF, 4-space
 indent, two spaces after colon, 16-space log items, 12-space closing
@@ -475,6 +480,167 @@ def cmd_fold(args):
     return 0
 
 
+# --- census (archive reverse reconciliation, R1688 slice, AC-LT15..LT19
+# pre-registered in state/queue/tech.md) ---
+
+# section pointer marker (U+00A7) and original-archive marker (U+539F)
+# kept as ASCII \u escapes in patterns per encoding law
+CEN_PTR = re.compile(r'\u00a7R([0-9]{2,})')
+CEN_FILE_ORIG = re.compile(r'state-log-archive-(\d{4}-\d{2})\.md(.{0,4})\u539f')
+CEN_HEADER = re.compile(r'^# --- (R\d+) (.*)$')
+CEN_DECLARED = re.compile(r'(\d+) lines verbatim')
+
+
+def parse_archives(root):
+    """Parse all logs/state-log-archive-*.md into (files, sections).
+
+    files: {month: {'path','bytes','sections': [section dicts]}}
+    sections: {'R####': first section dict with that round tag}
+    section dict: {'round','file','header','declared'(int|None),'lines'}
+    """
+    ldir = os.path.join(root, 'logs')
+    files, sections = {}, {}
+    if not os.path.isdir(ldir):
+        return files, sections
+    for entry in sorted(os.scandir(ldir), key=lambda e: e.name):
+        m = re.match(r'^state-log-archive-(\d{4}-\d{2})\.md$', entry.name)
+        if not m or not entry.is_file():
+            continue
+        month = m.group(1)
+        with open(entry.path, 'rb') as f:
+            raw = f.read()
+        text = raw.decode('utf-8')
+        cur = None
+        secs = []
+        for ln in text.split('\n'):
+            hm = CEN_HEADER.match(ln)
+            if hm:
+                cur = {'round': hm.group(1), 'file': month, 'header': ln,
+                       'declared': None, 'lines': []}
+                dm = CEN_DECLARED.search(hm.group(2))
+                if dm:
+                    cur['declared'] = int(dm.group(1))
+                secs.append(cur)
+                if cur['round'] not in sections:
+                    sections[cur['round']] = cur
+            elif cur is not None:
+                cur['lines'].append(ln)
+        files[month] = {'path': entry.path, 'bytes': len(raw), 'sections': secs}
+    return files, sections
+
+
+def load_known_findings(path):
+    """Load adjudicated known-findings data file (may be absent = none).
+
+    Returns ({known mismatch rounds -> reason}, {known dangling ptrs -> reason}).
+    Known findings stay visible in output but are excluded from the FAIL
+    verdict; every entry requires an evidence-backed adjudication (R1688).
+    """
+    if not path or not os.path.exists(path):
+        return {}, {}
+    with open(path, encoding='utf-8') as f:
+        d = json.load(f)
+    mm = {e['round']: e.get('reason', '') for e in d.get('section_line_mismatches', [])}
+    dg = {e['pointer']: e.get('reason', '') for e in d.get('dangling_pointers', [])}
+    return mm, dg
+
+
+def cmd_census(args):
+    _, _, st = load_state(args.root)
+    files, sections = parse_archives(args.root)
+    known_path = args.known_file or os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'census_known_findings.json')
+    known_mm, known_dg = load_known_findings(known_path)
+
+    # (1) section integrity: declared vs actual non-empty verbatim lines
+    # (fold-append headers only; legacy 09-format headers carry no declared)
+    mismatches = []
+    sec_tokens = {}
+    all_archive_toks = set()
+    for month, finfo in sorted(files.items()):
+        for s in finfo['sections']:
+            toks = set()
+            for l in s['lines']:
+                toks |= set(PAT.findall(l))
+            sec_tokens[s['round']] = toks
+            all_archive_toks |= toks
+            if s['declared'] is None:
+                continue
+            actual = len([l for l in s['lines'] if l.strip()])
+            if s['declared'] != actual:
+                e = {'round': s['round'], 'file': month,
+                     'declared': s['declared'], 'actual': actual,
+                     'adjudicated': s['round'] in known_mm}
+                if e['adjudicated']:
+                    e['reason'] = known_mm[s['round']]
+                mismatches.append(e)
+
+    # (2)+(3) pointer resolution + informational token census
+    pointer_lines = []
+    dangling_total = 0
+    live_toks = set()
+    for line in st['log']:
+        live_toks |= set(PAT.findall(line))
+        ptrs = ['R' + p for p in CEN_PTR.findall(line)]
+        origs = sorted(set(m.group(1) for m in CEN_FILE_ORIG.finditer(line)))
+        if not ptrs and not origs:
+            continue
+        line_toks = set(PAT.findall(line))
+        dangling = [p for p in ptrs if p not in sections]
+        dangling_total += len(dangling)
+        union_toks = set()
+        not_embedded = {}
+        for p in ptrs:
+            if p not in sections:
+                continue
+            t = sec_tokens.get(p, set())
+            union_toks |= t
+            miss = sorted(t - line_toks)
+            if miss:
+                not_embedded[p] = miss
+        for month in origs:
+            if month in files:
+                for s in files[month]['sections']:
+                    union_toks |= sec_tokens.get(s['round'], set())
+        pointer_lines.append({
+            'head': line[:60],
+            'pointers': ptrs,
+            'file_refs': origs,
+            'dangling': dangling,
+            'not_embedded': not_embedded,
+            'roll_native': sorted(line_toks - union_toks),
+        })
+
+    archive_only = sorted(all_archive_toks - live_toks)
+    unknown_mismatches = [m for m in mismatches if not m['adjudicated']]
+    live_dangling = set()
+    for pl in pointer_lines:
+        live_dangling |= set(pl['dangling'])
+    dangling_known = [{'pointer': p, 'reason': known_dg[p]}
+                      for p in sorted(live_dangling & set(known_dg))]
+    unknown_dangling_total = len(live_dangling - set(known_dg))
+    out = {
+        'files': {m: {'path': f['path'], 'bytes': f['bytes'],
+                      'sections': len(f['sections'])}
+                  for m, f in sorted(files.items())},
+        'sections_total': sum(len(f['sections']) for f in files.values()),
+        'section_line_mismatches': mismatches,
+        'pointer_lines': pointer_lines,
+        'dangling_total': dangling_total,
+        'known_findings_file': known_path if os.path.exists(known_path) else None,
+        'dangling_known': dangling_known,
+        'unknown_mismatch_count': len(unknown_mismatches),
+        'unknown_dangling_count': unknown_dangling_total,
+        'archive_tokens_total': len(all_archive_toks),
+        'live_tokens_total': len(live_toks),
+        'archive_only_count': len(archive_only),
+        'archive_only_tokens': archive_only,
+        'pass': not unknown_mismatches and unknown_dangling_total == 0,
+    }
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0 if out['pass'] else 2
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog='logs_toolkit.py', description=__doc__)
     p.add_argument('--root', default=default_root(), help='repo root (default: auto)')
@@ -491,6 +657,9 @@ def main(argv=None):
     pc.add_argument('--tail', type=int, help='window = last N state log lines')
     pc.add_argument('--window-file', help='window = non-empty lines of this file')
     pc.add_argument('--roll-file', required=False, help='roll/summary text to check presence against')
+    cn = sub.add_parser('census', help='archive reverse reconciliation census (read-only)')
+    cn.add_argument('--known-file', help='adjudicated known-findings data file '
+                    '(default: census_known_findings.json alongside this tool)')
     pf = sub.add_parser('fold', help='state.json fold surgery (verify-then-write)')
     pf.add_argument('--round', help='round label e.g. R1687 (backup + header naming)')
     pf.add_argument('--fold-no', help='fold knife number e.g. 455 (header)')
@@ -504,7 +673,8 @@ def main(argv=None):
 
     args = p.parse_args(argv)
     handlers = {'gauge': cmd_gauge, 'inventory': cmd_inventory, 'tail': cmd_tail,
-                'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold}
+                'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
+                'census': cmd_census}
     if args.cmd not in handlers:
         return 2
     try:

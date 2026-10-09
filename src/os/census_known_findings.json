@@ -1,0 +1,22 @@
+{
+  "_comment": "Adjudicated known findings for logs_toolkit.py census (archive reverse reconciliation, R1688 slice). Entries here remain visible in census output but are excluded from the FAIL verdict. Every entry requires an evidence-backed adjudication recorded in state.json log + qa/ evidence; adding entries without adjudication is prohibited (诚实律).",
+  "section_line_mismatches": [
+    {
+      "round": "R1317",
+      "reason": "R1314 window line was split into two physical lines at archive write (573+1196 chars, one logical line) - pre-fix line-layer splice-defect era artifact (R1257/R1303/R1312 family; the fragment itself cites the same-type repair). Content byte-preserved, zero data loss. Evidence: qa/logs-census-R1688.log section 2c probe.",
+      "adjudicated": "2026-10-09 R1688"
+    }
+  ],
+  "dangling_pointers": [
+    {
+      "pointer": "R1192",
+      "reason": "R1192 cold-segment seed was archived bare (headerless) by creation-era form; rebuild log documents content bytes=10405 == roll-line claim 10,405B. Content preserved headerless. Evidence: qa/reorg-archive10-rebuild.log R1192 lines, quoted in qa/logs-census-R1688.log section 2c.",
+      "adjudicated": "2026-10-09 R1688"
+    },
+    {
+      "pointer": "R601",
+      "reason": "2026-09 archive sections are full-state re-org snapshots tagged by re-org round (R536..R592 then R605..R608; no R601 append ever existed). R601 was a fold between snapshots R592 and R605; its product survives inside the R605 snapshot (tick 604, post-fold state) and in the R1215 cold-seg summary (10 archive). Pointer-name drift, content preserved. Evidence: 09 archive header sequence probe in qa/logs-census-R1688.log section 2c.",
+      "adjudicated": "2026-10-09 R1688"
+    }
+  ]
+}
