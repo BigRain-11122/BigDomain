@@ -149,6 +149,15 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-sistercity",
      os.path.join("ledger", "test_sistercity.py"), 7),
+    # R1700 API open-platform developer-ecosystem face: the three
+    # rings (per-developer deterministic key issuance through the
+    # metered register_client public API, per-key UTC-month call
+    # quota counted over immutable rows with zero UPDATE, billing
+    # delegated wholesale to the metered public API) with every
+    # reject firing before the charge (AC-DK1..DK7 pre-registered
+    # in state/queue/explore.md).
+    ("ledger-apidev",
+     os.path.join("ledger", "test_apidev.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent

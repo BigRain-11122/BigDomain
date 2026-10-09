@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T00:38:47+08:00",
+  "export_ts": "2026-10-10T01:06:36+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：fold R459 水位整编（state.json 81,733B→71,120B·经正门工具 logs_toolkit.py fold --window-tail 7 实弹·archive §R1699 节 7 行 verbatim 保全·滚窗累计计分 sum 12）+DEC/GORD 批判读收口（DEC 268→281 六 token 判毕全知悉·GORD 新令 O-20261010-0025=@bm-c 派单知悉）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：fold R459 证据组（2026-10-10T00:38:47+08:00·R1699 交付·台账维护机制件）：qa/reorg-R1699.log（首跑闸拒+7 行窗 dry-run/execute+gauge/census 四节）+logs/state-preop-R1699.bak（pre-op sha16 4ccb1829dd550699）+logs/state-log-archive-2026-10.md §R1699 节（7 行 verbatim·115 token 零丢失·滚窗累计计分 sum 12）+export checker 21/21 PASS；对账日常化+QA crawl 当日证据（R1698·qa/reconcile-daily-20261010.log+qa/smoke-R1698.log）在盘",
-    "next_milestone": "下轮=explore 队头认领（API 开放平台开发者生态面探索行·B5 metered 种子·AC 判据预注册先于代码·explore open 5）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）+fold R460 轮首首测按实况裁定"
+    "current": "R1700 本轮交付：API 开放平台开发者生态面沙箱件（apidev.py 三环=key 发放/限额/计费·RUNNER 43/43 套件 448 判据全绿）+队列常备线补种（tech 2→10+explore 4→10）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：API 开放平台开发者生态面（2026-10-10T01:06:36+08:00·R1700 交付·可跑实物）：src/sandbox/ledger/apidev.py（DevKeyFace 三环：确定性 key 发放经 MeteredFace 公有 API 绑定+UTC 月窗限额 COUNT 零 UPDATE+计费全权委托 metered 公有 API）+test_apidev.py SUITE 7/7+reconcile_all 43 套件 448 判据 RUNNER PASS+矩阵再生 --check byte-identical；证据 qa/apidev-R1700.log+qa/apidev-R1700-runner.log",
+    "next_milestone": "下轮=P3 队头（数字藏品展示橱窗面探索行·判据预注册先于代码·explore open 10）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）+fold R460 轮首首测按实况裁定"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1699",
+      "1700",
       "OSLoop 执行 tick"
     ],
     [
@@ -2905,20 +2905,24 @@
     [
       "1",
       "R1699 fold R459 水位整编+滚窗并折收账轮（专列刀轮·R1698 承传注记兑现·P-2026-09-25-18 第四百五十九刀·经正门工具 logs_toolkit.py fold --window-tail 7 实弹）：轮首首测 81733B 越线 3233B·首跑尾 5 行窗被 gate-exceed 闸拒〔predicted 78933B+预留 3000>78500B=闸执法实证〕→按 R1697 窗先例扩窗滚窗并折 7 行〔R1685 滚窗行承前+fold R458 滚窗行+R1697 收账三行+R1698 收账对〕15774B 压 1 kept=0·115 token catalog missing=0 全嵌·verify-then-write 预测==实际 71120B〔margin 7380B·gauge fold_needed=false〕·archive §R1699 节 7 行 verbatim+pre-op logs/state-preop-R1699.bak〔sha16 4ccb1829dd550699〕·census pass=true·AC-R4591..R4596=qa/reorg-R1699.log；DEC/GORD 批判读收口〔DEC 268→281 六 token：C-20261009-04 同号补登+D-20261010-01/02/03 全知悉〔D-02 本司三连令挂起随复产窗核验=复产证据续积 R1683 矩阵件在册〕·GORD O-20261010-0025 @bm-c 派单知悉·gord 197→198〕·tick 1698→1699·export checker 21/21 PASS"
+    ],
+    [
+      "2",
+      "R1700 API 开放平台开发者生态面沙箱件（P3 队头·AC-DK1..DK7 预注册先于代码·种子=B5 metered R626）：apidev.py DevKeyFace 三环=key 发放（UNIQUE+确定性 sha256 派生零 RNG+MeteredFace.register_client 公有 API 绑定）+限额（UTC 月窗 COUNT 零 UPDATE·E_AD_QUOTA 前置计费环零消耗）+计费（metered 公有 API 全权委托·源零 metered_* 直写）+调用链六序双注入拒例零孤儿行·SUITE 7/7+RUNNER 43/43 套件 448 判据+矩阵 --check 绿·qa/apidev-R1700.log·R1700）+队列常备线补种（tech 2→10+explore 4→10·种子全取在册命名后继）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 2,
-    "queue_explore_open": 5,
+    "queue_tech_open": 10,
+    "queue_explore_open": 10,
     "method": "R1699 flush caliber (checker single-source law): window re-derived by checker recompute = 2026-10-04..2026-10-10 (fold R459 via logs_toolkit fold --window-tail 7 = R1685 roll carry + fold R458 roll + R1697 trio + R1698 pair 7 lines -> 1 roll line, R1699 triple appended, W/sub re-derived mechanically); tick row 1698 -> 1699; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
   }
 }
