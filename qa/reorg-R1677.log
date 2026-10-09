@@ -1,0 +1,10 @@
+AC-R4511 round-start measure 78687B over 78500B line by 187B = P-2026-09-25-18 cut 451;
+AC-R4511 probes (pair-only caliber): A=2 lines 3792B proj 78472B / B=4 lines 6676B proj 75588B / C=6 lines 9603B proj 72661B / D=7 lines 12745B proj below = max-margin gate pass -> D chosen (R557 max-margin rule)
+AC-R4514 catalog presence: 57 window tokens all carried in roll line (zero loss)
+AC-R4513 archive R1677 section: 7 lines verbatim, markers 175 -> 176, pure-append prefix assertion
+AC-R4515 verify-then-write: stage-1 post-fold 74573B, stage-2 closeout final 77669B, margin 831B under 78500B gate
+AC-R4515 py-parser pass: json.loads OK, tick 1677, log 24 entries, roll line at index 21
+AC-R4516 RUN0 (pre-fold): checker 21/21 PASS recorded earlier this round; RUN1 line appended after export flush
+recount window 2026-10-03..2026-10-09: W=21 idle=0 nop=1 sub=7
+AC-R4515 PS-parser pass: ConvertFrom-Json (Get-Content -Raw -Encoding UTF8) OK, tick 1677, log 24 entries, gord_rows 184; encoding note: default Get-Content -Raw decodes no-BOM UTF-8 as ANSI/GBK (pre-existing file property, pre-op backup fails the same way), UTF8 switch is the canonical read
+AC-R4516 RUN1 (post-flush): checker VERDICT PASS 21/21, state_tick=1677, W=21 idle=0 nop=1 sub=7, proposals 3/1, queues 6/7/10 - matches fold-script recount exactly (two-caliber closure); RUN0+RUN1 double-run green; HB row appended; honest fix: R1677 main log line BENCH 0tian -> 1tian byte-equal swap to match scan days=1 reading, final size unchanged 77669B, re-parse OK
