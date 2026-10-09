@@ -2,12 +2,14 @@
 
 Asserts the pre-registered criteria AC-S1..AC-S13 from
 docs/spec/lobby-websocket-spec.md section 1 (AC-S11..S13 = city running
-face: census whitelist reads, avatar intake, read-only HTTP API). Each
-criterion prints PASS/FAIL with evidence; the process exits non-zero on
-any FAIL.
+face: census whitelist reads, avatar intake, read-only HTTP API) plus the
+client reconnect semantics face AC-S8c/S8d/S8e (spec v0.4: keepalive dead
+detection, backoff reconnect with exact room-set restoration, idempotent
+replay via client_msg_id). Each criterion prints PASS/FAIL with evidence;
+the process exits non-zero on any FAIL.
 
 Usage (run with the repo venv python that has websockets installed):
-    python test_client.py            # AC-S1..S7, S9..S13 + startup refusal + heartbeat mechanism
+    python test_client.py            # AC-S1..S7, S8a..S8e, S9..S13 + startup refusal
     python test_client.py --load     # AC-S8 load: LOAD_N conns for LOAD_SECS (default 100 x 300s)
 """
 
@@ -36,6 +38,8 @@ try:
     from websockets.asyncio.client import connect
 except ImportError:
     from websockets import connect
+
+from websockets.exceptions import ConnectionClosed  # noqa: E402
 
 RESULTS = []
 
@@ -238,6 +242,558 @@ def heartbeat_mechanism_case():
             % elapsed)
     finally:
         srv.stop()
+
+
+# ---------------------------------------------------------------------------
+# Client reconnect semantics face (spec v0.4, AC-S8c/S8d/S8e)
+# ---------------------------------------------------------------------------
+
+RC_PORT = 8098
+RC_CITY_PORT = 8099
+RC_PROXY_A = 8100
+RC_PROXY_B = 8101
+RC_PORT2 = 8102
+RC_CITY_PORT2 = 8103
+
+
+class CutProxy:
+    """Byte-pump TCP relay with a freeze switch: a frozen proxy reads and
+    drops both directions but keeps both sockets open, so the client never
+    sees FIN/RST (dead-network simulation).
+
+    Armed mode (marker set): the c2s side runs a minimal RFC6455 frame
+    parser and raises the freeze while forwarding the masked TEXT frame
+    whose unmasked payload carries the marker - the server processes the
+    send while its reply is deterministically lost (send-arrived-ack-
+    lost). Byte matching would never see the marker: client->server
+    frames are always masked, and with permessage-deflate also
+    compressed; the reconnecting client therefore connects with
+    compression=None so unmasked text payloads are plain UTF-8. A pump
+    blocked inside read() bypasses any loop-top flag, so frozen-ness is
+    re-checked after every read returns.
+    """
+
+    def __init__(self, listen_port, target_port, marker=None):
+        self.listen_port = listen_port
+        self.target_port = target_port
+        self.marker = marker
+        self.armed = marker is not None
+        self.frozen = False
+        self.server = None
+        self.sessions = 0
+        self._sockets = []  # live session writer pairs (force-close set)
+
+    async def start(self):
+        self.server = await asyncio.start_server(
+            self._handle, "127.0.0.1", self.listen_port)
+
+    async def close(self):
+        # Close the listener, then force both ends of every live session
+        # so the handlers finish: on Python >= 3.12 wait_closed() waits
+        # for ALL handlers, and a still-healthy leaked client would
+        # otherwise hang the teardown forever.
+        if self.server is not None:
+            self.server.close()
+        for pair in list(self._sockets):
+            for sock in pair:
+                try:
+                    sock.close()
+                except Exception:
+                    pass
+        self._sockets = []
+        if self.server is not None:
+            await self.server.wait_closed()
+            self.server = None
+
+    def _parse_frame(self, buf):
+        """Return (end_offset, is_marker_text_frame) for the first whole
+        frame in buf, or (None, False) when more bytes are needed."""
+        if len(buf) < 2:
+            return None, False
+        opcode = buf[0] & 0x0F
+        masked = buf[1] & 0x80
+        length = buf[1] & 0x7F
+        offset = 2
+        if length == 126:
+            if len(buf) < offset + 2:
+                return None, False
+            length = int.from_bytes(buf[offset:offset + 2], "big")
+            offset += 2
+        elif length == 127:
+            if len(buf) < offset + 8:
+                return None, False
+            length = int.from_bytes(buf[offset:offset + 8], "big")
+            offset += 8
+        mask_key = b""
+        if masked:
+            if len(buf) < offset + 4:
+                return None, False
+            mask_key = buf[offset:offset + 4]
+            offset += 4
+        if len(buf) < offset + length:
+            return None, False
+        payload = buf[offset:offset + length]
+        trigger = False
+        if self.armed and opcode == 0x1 and masked and mask_key:
+            plain = bytes(b ^ mask_key[i % 4] for i, b in enumerate(payload))
+            trigger = self.marker.encode("utf-8") in plain
+        return offset + length, trigger
+
+    async def _pump_c2s_frames(self, src, dst):
+        """Frame-aware c2s pump (armed mode). Phase 1 forwards the RFC6455
+        opening handshake byte-transparent up to its \r\n\r\n end - frame
+        parsing must not start mid-handshake, or a misaligned parse can
+        synthesize a huge bogus length and stall the stream (first-run
+        root cause). Phase 2 parses frames from the clean boundary,
+        forwards byte-exact, raises the freeze on the marker text frame
+        before forwarding it, and drops everything after the freeze
+        (client pings die in the void)."""
+        buf = b""
+        seen_handshake = False
+        while True:
+            if not seen_handshake:
+                idx = buf.find(b"\r\n\r\n")
+                if idx < 0:
+                    forward = buf[:-3] if len(buf) > 3 else b""
+                    if forward:
+                        dst.write(forward)
+                        await dst.drain()
+                        buf = buf[len(forward):]
+                    data = await src.read(4096)
+                    if not data:
+                        break
+                    buf += data
+                    continue
+                head, buf = buf[:idx + 4], buf[idx + 4:]
+                dst.write(head)
+                await dst.drain()
+                seen_handshake = True
+            while True:
+                frame_end, trigger = self._parse_frame(buf)
+                if frame_end is None:
+                    break
+                raw, buf = buf[:frame_end], buf[frame_end:]
+                if trigger:
+                    self.frozen = True  # before the forward: reply is lost
+                if self.frozen and not trigger:
+                    continue  # dead network: parsed and dropped
+                dst.write(raw)
+                await dst.drain()
+            data = await src.read(4096)
+            if not data:
+                break
+            buf += data
+
+    async def _handle(self, reader, writer):
+        self.sessions += 1
+        try:
+            upstream_reader, upstream_writer = await asyncio.open_connection(
+                "127.0.0.1", self.target_port)
+        except OSError:
+            writer.close()
+            return
+        self._sockets.append((writer, upstream_writer))
+
+        async def pump(src, dst):
+            try:
+                while True:
+                    data = await src.read(4096)
+                    if not data:
+                        break
+                    if self.frozen:
+                        continue  # dead network: read and drop
+                    dst.write(data)
+                    await dst.drain()
+            except (ConnectionError, asyncio.CancelledError):
+                pass
+
+        if self.armed:
+            t_c2s = asyncio.create_task(self._pump_c2s_frames(reader, upstream_writer))
+        else:
+            t_c2s = asyncio.create_task(pump(reader, upstream_writer))
+        t_s2c = asyncio.create_task(pump(upstream_reader, writer))
+        try:
+            await asyncio.gather(t_c2s, t_s2c)
+        finally:
+            for task in (t_c2s, t_s2c):
+                task.cancel()
+            for sock in (writer, upstream_writer):
+                sock.close()
+            if (writer, upstream_writer) in self._sockets:
+                self._sockets.remove((writer, upstream_writer))
+
+
+class ReconnectingClient:
+    """Reference client with reconnect semantics (AC-S8c/S8d/S8e):
+    keepalive-based dead detection, bounded-backoff reconnect, exact
+    room-set restoration, idempotent replay of unacked sends."""
+
+    def __init__(self, url, rooms=("lobby",), ping_interval=1.0, ping_timeout=1.0,
+                 backoff_base=0.2, backoff_cap=2.0):
+        self.url = url
+        self.rooms = set(rooms)
+        self.ping_interval = ping_interval
+        self.ping_timeout = ping_timeout
+        self.backoff_base = backoff_base
+        self.backoff_cap = backoff_cap
+        self.ws = None
+        self.actor = None
+        self.server_rooms = []
+        self.attempts = 0
+        self.dead_events = []
+        self.pending = {}  # client_msg_id -> text (sent, not yet acked)
+
+    def _note_dead(self, reason):
+        self.dead_events.append((time.perf_counter(), reason))
+
+    async def connect_once(self):
+        # A reference client never leaks the previous socket, and never
+        # serializes the reconnect behind its teardown: close() on a
+        # connection whose closing handshake can't complete (peer gone)
+        # ignores cancellation and blocks past any wait_for cap
+        # (measured ~2s on websockets 17, which swallowed the whole
+        # restart-downtime window in first runs). Close it in the
+        # background and dial immediately.
+        if self.ws is not None:
+            old_ws = self.ws
+            self.ws = None
+
+            async def _close_old():
+                try:
+                    await old_ws.close()
+                except Exception:
+                    pass
+
+            asyncio.get_running_loop().create_task(_close_old())
+        self.attempts += 1
+        # compression=None: keeps client->server text payloads plain when
+        # unmasked (the armed proxy matches the marker on the wire);
+        # close_timeout=0.5: after a keepalive ping timeout the library
+        # tears the dead connection down promptly instead of waiting out
+        # a 10s close handshake that a dead network can never finish.
+        ws = await connect(self.url, open_timeout=5, compression=None,
+                           ping_interval=self.ping_interval,
+                           ping_timeout=self.ping_timeout,
+                           close_timeout=0.5)
+        hello = await recv_json(ws)
+        risk = await recv_json(ws)
+        self.ws = ws
+        self.server_rooms = list(hello.get("payload", {}).get("rooms") or [])
+        return hello, risk
+
+    async def recover_state(self):
+        """Re-acquire the resident grant and restore the exact room set:
+        rooms in self.rooms -> subscribe, everything else -> unsubscribe
+        (a fresh connection defaults to the first room, so the default
+        must be explicitly undone for exact restoration)."""
+        await self.ws.send(frame("pay.grant_sandbox", payload={}))
+        grant = await recv_until(self.ws, lambda f: f.get("type") == "pay.grant_sandbox")
+        self.actor = grant.get("payload", {}).get("actor", "")
+        for room in self.server_rooms:
+            if room in self.rooms:
+                await self.ws.send(frame("room.subscribe", payload={"room": room}))
+            else:
+                await self.ws.send(frame("room.unsubscribe", payload={"room": room}))
+        for _ in self.server_rooms:
+            await recv_until(self.ws, lambda f: f.get("type") == "sys.notice")
+        return grant
+
+    async def connect_recovered(self):
+        await self.connect_once()
+        await self.recover_state()
+
+    async def reconnect_until(self, budget_s=15.0):
+        """Backoff reconnect loop: any failure (refused, timeout, protocol
+        error) retries with exponential backoff capped at backoff_cap.
+        Returns True on recovery, False when the budget runs out."""
+        end = time.perf_counter() + budget_s
+        delay = self.backoff_base
+        while time.perf_counter() < end:
+            try:
+                await self.connect_recovered()
+                return True
+            except Exception as exc:  # reference-loop semantics: retry anything
+                self._note_dead("reconnect attempt: %s" % type(exc).__name__)
+                remain = end - time.perf_counter()
+                if remain <= 0:
+                    return False
+                await asyncio.sleep(min(delay, remain))
+                delay = min(delay * 2, self.backoff_cap)
+        return False
+
+    async def send_tracked(self, room, text):
+        """Chat send carrying an idempotency key; the pair stays in
+        pending until its own broadcast (matched by actor+text) or a
+        chat.duplicate re-ack clears it."""
+        mid = uuid.uuid4().hex
+        self.pending[mid] = text
+        await self.ws.send(frame("chat.send", room=room,
+                                 payload={"text": text}, client_msg_id=mid))
+        return mid
+
+    def reconcile(self, f):
+        kind = f.get("type")
+        if kind == "chat.broadcast" and f.get("actor") == self.actor:
+            text = f.get("payload", {}).get("text")
+            for mid, pending_text in list(self.pending.items()):
+                if pending_text == text:
+                    del self.pending[mid]
+                    break
+        elif kind == "chat.duplicate":
+            mid = f.get("payload", {}).get("client_msg_id")
+            if mid in self.pending:
+                del self.pending[mid]
+
+    async def recv_until_rc(self, pred, timeout=5.0):
+        end = time.perf_counter() + timeout
+        while True:
+            remain = end - time.perf_counter()
+            if remain <= 0:
+                raise TimeoutError("no matching frame within %.1fs" % timeout)
+            f = await recv_json(self.ws, remain)
+            self.reconcile(f)
+            if pred(f):
+                return f
+
+    async def replay_pending(self):
+        """Idempotent recovery: resend every unacked send with the SAME
+        client_msg_id (server-side dedup makes the outcome exactly-once)."""
+        room = sorted(self.rooms)[0] if self.rooms else "lobby"
+        for mid, text in list(self.pending.items()):
+            await self.ws.send(frame("chat.send", room=room,
+                                     payload={"text": text}, client_msg_id=mid))
+
+    async def wait_dead(self, bound_s=6.0):
+        """Dead-detection probe: with the client keepalive armed (its own
+        ping/pong timers), a frozen peer is aborted by the library within
+        ping_interval + ping_timeout and recv raises ConnectionClosed.
+        A frame arriving, or this bound timing out instead, means the
+        keepalive did NOT fire (criterion failure)."""
+        t0 = time.perf_counter()
+        try:
+            f = await asyncio.wait_for(self.ws.recv(), bound_s)
+            self._note_dead("unexpected frame while probing: %r" % (f,))
+            return False, time.perf_counter() - t0, "frame-arrived"
+        except ConnectionClosed as exc:
+            elapsed = time.perf_counter() - t0
+            self._note_dead(type(exc).__name__)
+            return True, elapsed, type(exc).__name__
+        except asyncio.TimeoutError:
+            return False, time.perf_counter() - t0, "bound-timeout"
+
+
+async def reconnect_cases():
+    """AC-S8c/S8d/S8e: client reconnect semantics face (R1675)."""
+    srv = ServerProc(RC_PORT, extra=["--ping-interval", "0.5", "--ping-timeout", "1.0",
+                                      "--city-http-port", str(RC_CITY_PORT)])
+    srv.start()
+    proxy_a = proxy_b = None
+    cli = cli2 = cli3 = observer = probe = None
+    srv2 = srv3 = None
+    try:
+        # ---- AC-S8c: keepalive heartbeat timeout behind a dead network ----
+        proxy_a = CutProxy(RC_PROXY_A, RC_PORT)
+        await proxy_a.start()
+        cli = ReconnectingClient("ws://127.0.0.1:%d/ws" % RC_PROXY_A, rooms=("quant",),
+                                 ping_interval=1.0, ping_timeout=1.0)
+        await cli.connect_recovered()
+        await cli.send_tracked("quant", "s8c baseline ping")
+        await cli.recv_until_rc(lambda f: f.get("type") == "chat.broadcast"
+                                and f.get("payload", {}).get("text") == "s8c baseline ping")
+        baseline_ok = len(cli.pending) == 0
+        proxy_a.frozen = True
+        dead, elapsed, how = await cli.wait_dead(6.0)
+        no_fin_premise = proxy_a.frozen and proxy_a.sessions >= 1
+        cli.url = "ws://127.0.0.1:%d/ws" % RC_PORT
+        rec_ok = await cli.reconnect_until(10.0)
+        await cli.send_tracked("quant", "s8c after recovery")
+        after = await cli.recv_until_rc(
+            lambda f: f.get("type") == "chat.broadcast"
+            and f.get("payload", {}).get("text") == "s8c after recovery")
+        ok_c = (baseline_ok and dead and how != "bound-timeout" and elapsed <= 6.0
+                and no_fin_premise and rec_ok and after is not None
+                and len(cli.pending) == 0)
+        record("AC-S8c", ok_c,
+               "baseline-acked=%s; dead=%s via=%s in %.1fs (keepalive 1s+1s, bound 6s); "
+               "proxy-frozen=%s sessions=%d (no-FIN premise); reconnect-direct=%s; "
+               "post-recovery-roundtrip=%s pending=%d"
+               % (baseline_ok, dead, how, elapsed, proxy_a.frozen, proxy_a.sessions,
+                  rec_ok, after is not None, len(cli.pending)))
+        try:
+            await cli.ws.close()
+        except Exception:
+            pass
+        cli = None
+        await proxy_a.close()
+        proxy_a = None
+
+        # ---- AC-S8e: idempotent recovery (send arrived, ack lost) ----
+        marker = "s8e race " + uuid.uuid4().hex[:8]
+        proxy_b = CutProxy(RC_PROXY_B, RC_PORT, marker=marker)
+        await proxy_b.start()
+        observer, _, _ = await open_client(RC_PORT)
+        await make_resident(observer)
+        cli2 = ReconnectingClient("ws://127.0.0.1:%d/ws" % RC_PROXY_B, rooms=("lobby",),
+                                  ping_interval=1.0, ping_timeout=1.0)
+        await cli2.connect_recovered()
+        mid = await cli2.send_tracked("lobby", marker)
+        bcast = await recv_until(observer, lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == marker)
+        orig_evt = bcast.get("evt_id")
+        armed_ok = proxy_b.frozen and len(cli2.pending) == 1
+        dead2, elapsed2, how2 = await cli2.wait_dead(6.0)
+        cli2.url = "ws://127.0.0.1:%d/ws" % RC_PORT
+        rec2 = await cli2.reconnect_until(10.0)
+        await cli2.replay_pending()
+        dup = await cli2.recv_until_rc(lambda f: f.get("type") == "chat.duplicate")
+        n_rows = db_query(srv.db, "SELECT COUNT(*) FROM events WHERE type='chat.broadcast' "
+                          "AND summary = ?", (marker,))[0][0]
+        silent_obs = await expect_silence(observer, 0.5)  # no second broadcast ever
+        await cli2.send_tracked("lobby", "s8e post-recovery ping")
+        post = await cli2.recv_until_rc(
+            lambda f: f.get("type") == "chat.broadcast"
+            and f.get("payload", {}).get("text") == "s8e post-recovery ping")
+        ok_e = (armed_ok and dead2 and how2 != "bound-timeout" and rec2
+                and dup is not None
+                and dup.get("payload", {}).get("evt_id") == orig_evt
+                and dup.get("payload", {}).get("client_msg_id") == mid
+                and dup.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                and n_rows == 1 and silent_obs and len(cli2.pending) == 0
+                and post is not None)
+        record("AC-S8e", ok_e,
+               "armed=%s frozen=%s pending-after-cut=%d; observer-once evt=%s; dead=%s "
+               "via=%s in %.1fs; reconnect=%s; duplicate-ack evt-match=%s id-match=%s "
+               "code=%s; store-rows=%d; no-rebroadcast=%s; pending=%d; post-roundtrip=%s"
+               % (armed_ok, proxy_b.frozen, 1, orig_evt, dead2, how2, elapsed2, rec2,
+                  dup.get("payload", {}).get("evt_id") == orig_evt,
+                  dup.get("payload", {}).get("client_msg_id") == mid,
+                  dup.get("payload", {}).get("code"), n_rows, silent_obs,
+                  len(cli2.pending), post is not None))
+        try:
+            await cli2.ws.close()
+        except Exception:
+            pass
+        cli2 = None
+        try:
+            await observer.close()
+        except Exception:
+            pass
+        observer = None
+        await proxy_b.close()
+        proxy_b = None
+    finally:
+        for client_obj in (cli, cli2):
+            if client_obj is not None and client_obj.ws is not None:
+                try:
+                    await client_obj.ws.close()
+                except Exception:
+                    pass
+        if observer is not None:
+            try:
+                await observer.close()
+            except Exception:
+                pass
+        for proxy in (proxy_a, proxy_b):
+            if proxy is not None:
+                await proxy.close()
+        srv.stop()
+
+    # ---- AC-S8d: server restart -> backoff reconnect -> exact state ----
+    srv2 = ServerProc(RC_PORT2,
+                      db=os.path.join(tempfile.mkdtemp(prefix="lobby-rc2-"), "events.db"),
+                      extra=["--city-http-port", str(RC_CITY_PORT2)])
+    srv2.start()
+    loop_task = None
+    srv3 = None
+    probe = cli3 = None
+    try:
+        cli3 = ReconnectingClient("ws://127.0.0.1:%d/ws" % RC_PORT2, rooms=("quant",),
+                                  ping_interval=1.0, ping_timeout=1.0)
+        await cli3.connect_recovered()
+        await cli3.send_tracked("quant", "s8d baseline")
+        await cli3.recv_until_rc(lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == "s8d baseline")
+        attempts_before = cli3.attempts
+        srv2.stop()  # hard kill: FIN face, no proxy
+        dead3, elapsed3, how3 = await cli3.wait_dead(6.0)
+        # Refusal drill (deterministic retry-path evidence): dialing a
+        # bound-but-not-listening port refuses every time on this host
+        # (measured 2.03s per refusal, 3/3). The restart phase below
+        # cannot rely on refusals: a freshly-terminated listener's kernel
+        # backlog still accepts dials (measured: TCP connect succeeds in
+        # 0.00s against a corpse), so the first dial can bridge the
+        # whole restart - genuine loopback semantics, recorded honestly.
+        drill_sock = socket.socket()
+        drill_sock.bind(("127.0.0.1", 0))
+        drill_port = drill_sock.getsockname()[1]
+        cli3.url = "ws://127.0.0.1:%d/ws" % drill_port
+        drill_rec = await cli3.reconnect_until(3.0)
+        drill_refusals = sum(1 for _t, reason in cli3.dead_events
+                             if reason.startswith("reconnect attempt"))
+        drill_sock.close()
+        cli3.url = "ws://127.0.0.1:%d/ws" % RC_PORT2
+        attempts_before = cli3.attempts  # restart-phase count starts here
+        loop_task = asyncio.create_task(cli3.reconnect_until(15.0))
+        # 1.5s downtime window: the client retries while the server is
+        # provably down (whether those dials refuse or bridge via the
+        # corpse backlog is the loopback behavior under measurement).
+        await asyncio.sleep(1.5)
+        srv3 = ServerProc(RC_PORT2, db=srv2.db,
+                          extra=["--city-http-port", str(RC_CITY_PORT2)])
+        srv3.start()
+        rec3 = await asyncio.wait_for(loop_task, 20.0)
+        retries = cli3.attempts - attempts_before
+        probe, _, _ = await open_client(RC_PORT2)
+        await make_resident(probe)
+        await probe.send(frame("chat.send", room="lobby", payload={"text": "s8d lobby probe"}))
+        await recv_until(probe, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s8d lobby probe")
+        silent_lobby = await expect_silence(cli3.ws, 0.5)
+        # the probe needs a quant subscription of its own or the server
+        # rejects its send with E_ROOM_UNKNOWN (spectators default to lobby)
+        await probe.send(frame("room.subscribe", payload={"room": "quant"}))
+        await recv_until(probe, lambda f: f.get("type") == "sys.notice")
+        await probe.send(frame("chat.send", room="quant", payload={"text": "s8d quant probe"}))
+        quant_recv = await cli3.recv_until_rc(
+            lambda f: f.get("type") == "chat.broadcast"
+            and f.get("payload", {}).get("text") == "s8d quant probe")
+        ok_d = (dead3 and how3 != "bound-timeout" and rec3
+                and drill_rec is False and drill_refusals >= 1
+                and 1 <= retries <= 10
+                and silent_lobby and quant_recv is not None)
+        record("AC-S8d", ok_d,
+               "dead=%s via=%s in %.1fs; refusal-drill budget-out=%s "
+               "drill-refusals=%d (retry loop caught+backed off real "
+               "refusals); restart: reconnect=%s retries=%d (>=1, <=10: "
+               "not busy-spinning; a corpse-backlog dial may bridge the "
+               "restart on Windows loopback - honest count); room-set "
+               "restored exactly: lobby-isolated=%s quant-received=%s"
+               % (dead3, how3, elapsed3, drill_rec, drill_refusals,
+                  rec3, retries, silent_lobby, quant_recv is not None))
+        try:
+            await probe.close()
+        except Exception:
+            pass
+        try:
+            await cli3.ws.close()
+        except Exception:
+            pass
+    finally:
+        if loop_task is not None and not loop_task.done():
+            loop_task.cancel()
+        if probe is not None:
+            try:
+                await probe.close()
+            except Exception:
+                pass
+        if cli3 is not None and cli3.ws is not None:
+            try:
+                await cli3.ws.close()
+            except Exception:
+                pass
+        srv2.stop()
+        if srv3 is not None:
+            srv3.stop()
 
 
 CITY_HTTP_PORT = 8096
@@ -649,6 +1205,9 @@ async def suite():
         ok_mech, ev_mech = heartbeat_mechanism_case()
         record("AC-S8a", ok_cfg_hb and ok_banner and ok_mech,
                "config-30/60=%s banner-ok=%s; %s" % (ok_cfg_hb, ok_banner, ev_mech))
+
+        # AC-S8c/S8d/S8e: client reconnect semantics face (spec v0.4)
+        await reconnect_cases()
     finally:
         for ws in clients:
             try:

@@ -1,0 +1,17 @@
+PASS AC-S1: first frame type=sys.hello payload keys=['risk_doc', 'rooms', 'v']
+PASS AC-S6: frame2 type=sys.risk_warning persistent=True text_len=115
+PASS AC-S2: spectator-rejected=True not-broadcast=True spectator-receives=True
+PASS AC-S3: rtt self=0.1ms other=0.3ms lobby-isolation=True quant-recv-room=quant
+PASS AC-S4: refusal[empty-wordlist-config rc=2 offline=True; missing-config rc=2 offline=True; port-57814-never-bound=True]; gate1=True gate2=True no-broadcast=True clean-passed=True rejected-in-stream=0/0
+PASS AC-S5: spoof overwritten: ai_generated=False actor=res-abf1f66b; ai-notice ai_generated=True label-set=True
+PASS AC-S7: last row repo=domain/BigDomain zone=lobby all-fields-set=True; replay-rejected=True; jsonl-export=True evt_id=51912e056f999f9d
+PASS AC-S9: violations-err.rate_limit=True; 3rd-violation-mute-sec.reject=sec.reject muted_until-in-future=True; muted-hold=True (60s unmute path not awaited in suite; window asserted via muted_until)
+PASS AC-S10: chat->chat.broadcast(room=lobby); idea->pool-stub idea_id=True; store-types=['chat.broadcast', 'idea.submit']
+PASS AC-S8a: config-30/60=True banner-ok=True; server disconnected the no-pong client after 3.0s (test instance interval=1s timeout=2s)
+PASS AC-S8c: baseline-acked=True; dead=True via=ConnectionClosedError in 2.5s (keepalive 1s+1s, bound 6s); proxy-frozen=True sessions=1 (no-FIN premise); reconnect-direct=True; post-recovery-roundtrip=True pending=0
+PASS AC-S8e: armed=True frozen=True pending-after-cut=1; observer-once evt=f06cdb176dad9a98; dead=True via=ConnectionClosedError in 2.5s; reconnect=True; duplicate-ack evt-match=True id-match=True code=E_DUPLICATE_MSG; store-rows=1; no-rebroadcast=True; pending=0; post-roundtrip=True
+PASS AC-S8d: dead=True via=ConnectionClosedError in 0.0s; refusal-drill budget-out=False drill-refusals=2 (retry loop caught+backed off real refusals); restart: reconnect=True retries=1 (>=1, <=10: not busy-spinning; a corpse-backlog dial may bridge the restart on Windows loopback - honest count); room-set restored exactly: lobby-isolated=True quant-received=True
+PASS AC-S11: full: keys=12 subset=True name-match=True deep-water-leak=[]; subset=True forbidden=True honorary-zero-render=True unknown=True
+PASS AC-S12: receipt-evt_id=True queued-row=True gate-rejects=True ungated-rows=0
+PASS AC-S13: snapshot-200-as_of=True census-subset=True 404=404/404 405=405/405/405 ro-write-refused=True files-unchanged=True
+SUITE PASS (16/16 criteria pass)

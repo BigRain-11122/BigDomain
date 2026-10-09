@@ -25,6 +25,9 @@
 | AC-S6 | 连接建立即下发 `sys.risk_warning`（非投顾定性+风险提示常驻文案）；本规格要求前端常驻渲染非折叠（生产验收项·本机验消息到位） | 首帧序列断言 |
 | AC-S7 | 一切公共面事件落 SQLite WAL 单写者（BEGIN IMMEDIATE）；行=六字段核超集 `ts_utc/type/actor/repo/zone/summary`+`evt_id`（内容寻址·UNIQUE 去重）；按日导出 jsonl 兼容层可读 | 落盘行核验+重复 evt_id 二次插入被拒 |
 | AC-S8 | 心跳 ping/pong 30s；60s 无 pong 服务端断开；100 并发连接 5 分钟稳定，广播 p95 ≤200ms（本机口径） | 压测脚本 |
+| AC-S8c | 客户端重连语义-心跳超时：死网仿真（冻结代理双流持 socket·无 FIN 达客户端）下客户端保活（ping 1s+pong 等待 1s）≤6s 自检死连并断开；重连后 chat 广播往返复证 | CutProxy 冻结+wait_for recv 断言 |
+| AC-S8d | 客户端重连语义-断线重连：服务器进程硬停→客户端退避重连（实测 ≥1 次 ≤10 次=非忙旋自证）；恢复序列=重 grant+房间集精确恢复（对 hello.rooms 逐房 ∈订阅/∉退订），quant 广播收到+lobby 广播隔离不收 | 服务器同端口重启用例 |
+| AC-S8e | 客户端重连语义-幂等恢复：send 达而 ack 丢失（armed 代理标记帧过即冻）→观察者直连恰收 1 次→客户端重连后同 `client_msg_id` 同文本重放→`chat.duplicate`（`E_DUPLICATE_MSG`·原 evt_id 回带）→store 恰 1 行+无二次广播+pending 清空 | armed 代理+重放断言 |
 | AC-S9 | 单连接 chat 限速 5 条/10s：超限→`E_RATE_LIMIT`；连续超限 3 次→临时禁言 60s（`sec.reject` 告知） | 限速用例 |
 | AC-S10 | 消息分流：`chat`（大厅聊天）/`idea`（脑洞→提案池队列 stub·三层共创筛选第一入口）；沙箱=关键词路由 | 分流用例 |
 | AC-S11 | census 查询：`census.query`→`census.snapshot`（按 id）——返回字段 ⊆ server-city §4 白名单初版（recent_ring/hook 留深水区**不出**·荣誉市民席 C-00001~09 空席零渲染）；白名单外字段请求→`E_FORBIDDEN_FIELD`；数据源=git 只读导入件（零新增采集） | 白名单正反例断言（命中/拒收） |
@@ -46,8 +49,8 @@
 ### 传输与帧
 - RFC 6455 WebSocket；生产 wss·沙箱 ws；JSON 单行帧·UTF-8。
 - 消息封套：`{v, type, ts_utc, room, actor, payload, ai_generated, evt_id?, trace_id?}`。`ai_generated` 与 `actor` 为服务端权威字段（客户端传值忽略）。
-- type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`+城市面（P-52①）：`census.query / census.snapshot / avatar.register / avatar.intake_receipt`。
-- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE / E_FORBIDDEN_FIELD`。
+- type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / chat.duplicate / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`+城市面（P-52①）：`census.query / census.snapshot / avatar.register / avatar.intake_receipt`。
+- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE / E_FORBIDDEN_FIELD / E_DUPLICATE_MSG`。
 
 ### 房间模型
 - `lobby`（大厅主频道·默认）/`quant`（QUANT 城围观·回测演出事件流）/`cocreate`（共创房）；订阅制，跨房间消息不串流。
@@ -65,6 +68,11 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 → chat.broadcast（全房间）→ 落盘（§事件方言）
 ```
 - **闸 1 生产未接线=serve 拒绝启动**（自检 `E_GATE_OFFLINE`）——§五.3 生死线：未接内容安全=大厅/直播间禁上线。
+
+### 客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）
+- 参考客户端=`test_client.py` 内 `ReconnectingClient`：客户端保活（自设 ping/pong 计时）死连自检→指数退避重连（base 0.2s·cap 2s）→恢复序列（重 grant+对 hello.rooms 逐房精确恢复订阅集：∈订阅/∉退订）→未确认发送幂等重放。
+- `chat.send` 可带可选 `client_msg_id`（≤64 字符）；服务端幂等闸位置=**闸1/闸2 之后、闸3 之前**（重放不过内容闸=安全闸管道序不可绕；重放不耗速率预算）；命中→回 `chat.duplicate`（`payload.evt_id`=原事件 id·零再广播零再落盘）。去重键=`client_msg_id`+文本摘要（防跨用户碰撞抑制他人消息面）·TTL 缓存（config `idempotency` 节）。
+- 无会话恢复/断点续传承诺（Non-goal）：重连=新身份新订阅，恢复全由客户端恢复序列重建——与入城凭证生命周期（§身份与入城）正交。
 
 ### AIGC 生成标识（§五.7 全呈现面律）
 - 居民台词/AI 整理产物/AI 系统发言一律 `ai_generated:true`+呈现层显著标识（「AI 生成」）；**标识从源头带**（消息级字段·服务端权威），不依赖前端后期补标；CityWatch/切片外流画面同源带标。
@@ -97,7 +105,7 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 
 | 件 | 本件落位 |
 |---|---|
-| ① 判据预注册 | §一 AC-S1~S10+AC-P1~P5+§三 AC-SY1~SY3（先于实现注册） |
+| ① 判据预注册 | §一 AC-S1~S13（含 S8c~S8e 重连三例）+AC-P1~P5+§三 AC-SY1~SY3（先于实现注册） |
 | ② AIGC 生成标识面 | §二 AIGC 节+`ai_generated` 服务端权威字段+AC-S5 |
 | ③ msgSecCheck 前置闸 | §二 安全闸管道闸1+AC-S4+生产未接线禁开门 |
 | ④ 非投顾风险提示常驻面 | §二 `sys.risk_warning` 常驻+AC-S6+闸2 禁收益承诺词表 |
@@ -113,4 +121,4 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 ICP 备案 → wss/域名 → msgSecCheck 真实接线 → 支付回执凭证（P-47-4）→ 日志留存/等保测评呈报 → 云上压测（AC-P5）→ **呈批开门（CEO 一句话）**。
 
 ---
-版本：v0.3（2026-10-08·OSLoop R1553·同步层选型节回写=ygo PoC 裁决落规格〔评估行②〕+Go/Python 同评=超承载→降级「仅协议参照」〔评估行③〕）；v0.2=2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
+版本：v0.4（2026-10-09·OSLoop R1675·客户端重连语义节入册：`chat.duplicate` 帧+`client_msg_id` 幂等闸〔闸位=闸1/2 后、闸3 前〕+AC-S8c/S8d/S8e 三例〔预注册先于实现·state/queue/tech.md R1675 板行〕）；v0.3=2026-10-08·OSLoop R1553·同步层选型节回写=ygo PoC 裁决落规格〔评估行②〕+Go/Python 同评=超承载→降级「仅协议参照」〔评估行③〕；v0.2=2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。

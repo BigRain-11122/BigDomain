@@ -16,6 +16,7 @@ config is missing or unwired: no content safety = no door (BLUEPRINT 5.3).
 
 import argparse
 import asyncio
+import hashlib
 import json
 import os
 import sys
@@ -91,6 +92,13 @@ class Lobby:
         heartbeat = cfg["heartbeat"]
         self.ping_interval = float(heartbeat["ping_interval"])
         self.ping_timeout = float(heartbeat["ping_timeout"])
+        # idempotent replay cache for chat.send client_msg_id (AC-S8e):
+        # key = client_msg_id + text digest so a guessed id from another
+        # client cannot suppress someone else's message; TTL-bounded.
+        idem = cfg.get("idempotency", {})
+        self.idem_ttl = float(idem.get("ttl_seconds", 300))
+        self.idem_cap = int(idem.get("max_keys", 4096))
+        self.idem_seen = {}  # cache key -> (evt_id, expires_at monotonic)
 
     # ---- server frames ----
 
@@ -175,6 +183,29 @@ class Lobby:
         text = str(payload.get("text", "")) if isinstance(payload, dict) else ""
         return text.strip()[: self.max_text]
 
+    def _idem_key(self, client_msg_id, text):
+        """Dedup key binds the client-supplied id to the exact text so a
+        foreign client guessing the id cannot suppress the original."""
+        digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+        return str(client_msg_id).strip()[:64] + ":" + digest
+
+    def _idem_hit(self, client_msg_id, text):
+        """Return the original evt_id when this (id, text) pair was already
+        processed within the TTL; lazy-prunes expired entries."""
+        now = time.monotonic()
+        if self.idem_seen:
+            stale = [k for k, v in self.idem_seen.items() if v[1] <= now]
+            for k in stale:
+                del self.idem_seen[k]
+        hit = self.idem_seen.get(self._idem_key(client_msg_id, text))
+        return hit[0] if hit is not None else None
+
+    def _idem_remember(self, client_msg_id, text, evt_id):
+        key = self._idem_key(client_msg_id, text)
+        self.idem_seen[key] = (evt_id, time.monotonic() + self.idem_ttl)
+        while len(self.idem_seen) > self.idem_cap:  # FIFO evict, insertion order
+            del self.idem_seen[next(iter(self.idem_seen))]
+
     async def handle_chat(self, client, msg):
         # identity: spectator = read-only (section 4 C0)
         if not client.resident:
@@ -195,6 +226,34 @@ class Lobby:
         except ContentRejectedError as exc:
             await self.send_reject(client, exc.code, "gate %d wordlist hit" % exc.gate)
             return
+        # idempotency gate (AC-S8e): a replayed send (reconnect recovery)
+        # with the same client_msg_id + text re-acks the original evt_id
+        # instead of double-broadcasting / double-landing in the store.
+        # Position: after the content gates (replays stay gated, no
+        # bypass), before the rate limit (replay costs no budget).
+        client_msg_id = msg.get("client_msg_id")
+        if isinstance(client_msg_id, str) and client_msg_id.strip():
+            client_msg_id = client_msg_id.strip()[:64]
+            hit_evt = self._idem_hit(client_msg_id, text)
+            if hit_evt is not None:
+                await send_frame(
+                    client.ws,
+                    {
+                        "v": 1,
+                        "type": "chat.duplicate",
+                        "ts_utc": utc_now_iso(),
+                        "room": room,
+                        "actor": "system",
+                        "payload": {
+                            "code": "E_DUPLICATE_MSG",
+                            "reason": "client_msg_id already processed (idempotent replay)",
+                            "client_msg_id": client_msg_id,
+                            "evt_id": hit_evt,
+                        },
+                        "ai_generated": False,
+                    },
+                )
+                return
         # gate 3 (rate limit): 5 msgs / 10s; 3 consecutive violations = 60s mute
         now = time.monotonic()
         if now < client.muted_until:
@@ -228,6 +287,8 @@ class Lobby:
         evt_id = self.store.append(
             ts_utc, "chat.broadcast", client.actor, room, text, payload={"text": text}
         )
+        if isinstance(client_msg_id, str) and client_msg_id.strip():
+            self._idem_remember(client_msg_id, text, evt_id)
         await self.broadcast(
             room,
             {

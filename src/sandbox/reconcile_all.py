@@ -81,7 +81,7 @@ def _load_json(path):
 
 SUITES = [
     # (label, suite path relative to the sandbox root, expected criteria)
-    ("lobby", os.path.join("lobby", "test_client.py"), 13),
+    ("lobby", os.path.join("lobby", "test_client.py"), 16),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
