@@ -1,0 +1,26 @@
+R1650 fold R445 water-level reorg evidence log (v2 write + v2b independent verify)
+date=2026-10-09  pre-op sha16=ce6742c959b5aaa3  pre-op=82767B  final=71700B  margin=6800B  gate=78500B
+window: [R1610-R1645 roll line + R1646/R1647/R1648/R1649 four pairs] 9 lines content-sum=17362B
+candidates: A=2 lines 3222B proj 83695B FAIL | B=4 lines 5582B proj 81635B FAIL | C=6 lines 8244B proj 79273B FAIL | D=8 lines 11534B proj 76483B PASS | E=9 lines 17362B proj 71700B PASS (max margin -> R557 takes E)
+pre-op backup: logs/state-preop-R1650.bak (82767B)
+archive: 2294416B (pre-append anchor 2276881B sha256 5ac49d181452d02a.. verified at restore) + section 17535B
+census: prev_roll_mech=168 pairs_mech=15 mech_new_literal=5 semantic_new=12 catalog=177+12=189
+mech literal new: AC-AR1 AC-R AC-R3032 AC-R3153 AC-R4441
+placeholder note: literal 'AC-R' extracted from R1649 line = method template 'AC-R<blade><seq>' - annotated, NOT counted
+semantic new (range-expanded): AC-R4441..R4446 (6) + AC-AR1..AR4 (4, in-text AR2/AR3/AR4 shorthand) + AC-R3032 + AC-R3153 = 12
+source-expression presence in archive: AC-R4441..R4446 AC-AR1 AR2 AR3 AR4 AC-R3032 AC-R3153 -> missing=0
+INCIDENT RECORD (honesty law): v1 script gate-order defect - archive append ran BEFORE the state-size assert.
+  Three v1 runs each appended one section (runs 2/3 aborted at the state assert AFTER the leak; run 4 completed with a third).
+  Restoration: archive truncated to 2,276,881B == R1649 sha256 anchor (byte-exact, full-hash match);
+  state.json restored from logs/state-preop-R1650.bak == git HEAD blob. v2 rewrote the fold with correct order
+  (state write first, archive append last); v2 census presence-check used a self-coined range string and aborted;
+  v2b (this run) verified via source expressions and corrected the incident clause x2->x3 in the state main line
+  with FIN/MAR reconvergence. All ACs below re-verified independently against pre-op backup + current disk.
+AC-R4451 pre-op==HEAD blob: PASS (HEAD b6ba22a1e52589d4 == preop b6ba22a1e52589d4)
+AC-R4452 window 9 lines content-byte-sum: PASS (sum=17362)
+AC-R4456 archive: NUL=0 + knife chain R276..R445 contiguous 169->170: PASS (size=2294416B NUL=0 hdrs=170 chain=276..445 contiguous=True)
+AC-R4456b archive section verbatim == 9 pre-op lines: PASS (tail-match=True)
+AC-R4453 census zero-loss: PASS (prev_roll_mech=168 pairs_mech=15 mech_new=5 semantic_new=12 catalog=177+12=189 missing=0)
+AC-R4454 verify-then-write size + claims==actual: PASS (final=71700B margin=6800B claims=(71700,6800))
+AC-R4454b json parse + 24 lines + tick 1650: PASS (tick=1650 log=24)
+note: candidate A-D projections use estimated summary sizes (est collection pair 3450B); E exact by measured serialization fixed-point (content+JSON separators in caliber)
