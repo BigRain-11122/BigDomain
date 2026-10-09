@@ -1,0 +1,75 @@
+BigDomain QA Smoke Test - round R1698 - 2026-10-10 +08:00 (daily first-round watch shift)
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due, 10-10 first round)
+same-round standing rows cashed: reconcile-daily G0 green (see [4], RUNNER PASS 42/42 suites + reconcile
+controls 6/6, first-round execution of the daily standing row; runbook section-1 entry point, evidence
+qa/reconcile-daily-20261010.log, 115.2s); five-still scan all other faces PASS/INFO zero new items
+(LEDGER 138 lines atbd=0 conflict=0 / DEC 268 rows token-addressed flat / GORD gord_new_rows=0 /
+ORD flat / BENCH 1 day / HB lag=0 / TREE clean no lock, in sync with origin/main).
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web, zero-key, read-only; 1 fetch / 1 hit / 0 miss, direct URL from the
+    developers.weixin.qq.com docs tree, no search needed):
+    a. developers.weixin.qq.com/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html - HIT
+       (A-level official developer doc: "小程序隐私协议开发指南" / Mini-Program Privacy Protocol
+       Development Guide, the platform privacy-authorization gate page; page-borne update notes
+       2023.08.22 and 2023.09.14 on-file; line-by-line verified this round:
+       declaration law = official text "仅有在指引中声明所处理的用户信息，才可以调用平台提供
+       的对应接口或组件。若未声明，对应接口或组件将直接禁用" (only user-info kinds declared in
+       the MP-admin "User Privacy Protection Guideline" may call the matching API/component; undeclared
+       = directly disabled) - a platform-side fail-closed hard gate in addition to msgSecCheck;
+       full-enablement timeline = originally 2023-09-15, official 2023-09-14 update DELAYED to
+       2023-10-17, after which privacy features enable regardless of the app.json __usePrivacyCheck__
+       flag; base-library 2.32.3 is the version line (below = not integrated, no interception);
+       three API faces = wx.getPrivacySetting (active query needAuthorization + privacyContractName),
+       wx.onNeedPrivacyAuthorization (passive listen, eventInfo.referrer = triggering API),
+       wx.requirePrivacyAuthorize (simulated trigger); consent component = <button
+       open-type="agreePrivacyAuthorization"> with bindagreeprivacyauthorization callback, couplable
+       with getPhoneNumber / getRealtimePhoneNumber / getUserInfo in one tap (open-type union);
+       official privacy popup fallback = when the developer does not respond to the listen event,
+       WeChat itself pops the official dialog; after a user REFUSAL, calls within 10 seconds do not
+       re-pop and fail directly (anti-nag throttle); two styles = coupled style (checkbox required,
+       refusal error code 103) vs direct style (refusal error code 104);
+       incremental re-sync law = after a guideline update, previously-declared APIs need no re-consent
+       while NEWLY-added APIs/components do (official example: chooseLocation callable vs
+       getWeRunData not); user deleting the mini-program from the recent list clears the sync state;
+       error codes = errno 112 "api scope is not declared in the privacy agreement" (declaration
+       supplement takes effect after 5 minutes) + "appid privacy api banned" (checking
+       "no privacy collection" at review or never declaring = platform revokes the API permission);
+       nickname-input special case = <input type="nickname"> degrades to type="text" on focus when
+       consent is missing, no listen event fired.)
+    -> consumption anchors: P-47-1 visitor mini-program front (privacy popup + consent-component
+       design face; getUserProfile / chooseMedia / clipboard-family APIs are privacy-gated), P-47-3
+       UGC pipeline (media-upload API declaration face in the MP-admin guideline), bootstrap (MP-admin
+       guideline configuration = launch hard-prerequisite; errno 112 / 103 / 104 = sandbox mock
+       error-code alignment candidates; stacks with W11 real-identity and W19 account-info into a
+       three-layer personal-info gate).
+
+[2] benchmark table refreshed today (15h law): PASS
+    benchmarks_refreshed = 2026-10-10 (state.json top field updated in this round's closeout;
+    global-benchmarks.md section-1 carries the new mini-program privacy-authorization gate block,
+    section-3 the new source row, section-4 the P-slice entry with fetch window 2026-10-10 ~00:1x
+    +08:00; next 7-day due 2026-10-17; today_png/today_log produced by this very file + png render
+    below).
+
+[3] signals to intelligence-wall: PASS
+    W20 appended to docs/research/intelligence-wall.md signal table + conclusion application table
+    (consumption anchors: P-47-1 privacy popup design; P-47-3 UGC media-upload declaration face;
+    bootstrap MP-admin guideline hard-prerequisite + errno alignment candidates; three-layer
+    personal-info gate stack with W11/W19; benchmarks section-1/section-3 recorded).
+
+[4] on-disk evidence this round: PASS
+    qa/smoke-R1698.log (this file, real log) + qa/smoke-R1698.png (rendered from this log via
+    render_smoke_png.ps1, verbatim, never hand-drawn) + global-benchmarks.md section-1 block +
+    section-3 source row + section-4 P-slice line + benchmarks_refreshed=2026-10-10 (closeout) +
+    qa/reconcile-daily-20261010.log (daily reconcile standing row, RUNNER PASS 42/42 suites green
+    + reconcile controls 6/6, clean exit 0 / tamper exit 2 dual-state, G0 green, same-round
+    evidence, 115.2s).
+
+self-judge: charter checklist PASS (daily crawl / benchmark 15h law / research source chain / signal
+wall four items all verified against on-disk evidence); official developer-doc page fetched fresh
+this round at its canonical URL (1 try, 0 failure); suite count drift vs runbook section-1 wording
+(33 -> 42 suites after the sibling product suites shipped) recorded honestly here, runbook judgment
+table keys on the RUNNER verdict not the suite count; no assertion without evidence; external content
+treated as untrusted input, zero downstream assertion.
