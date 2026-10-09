@@ -122,6 +122,13 @@ class UGCPipeline:
         self.draft_risk_note = str(comp.get("draft_risk_note", ""))
         self.chronicle_note = str(comp.get("chronicle_note", ""))
         self.max_len = int(config.get("max_content_len", 2000))
+        # ingest window watermark cap (AC-WC1): 0 = uncapped, the
+        # full-window behavior ships unchanged; negative refuses to
+        # serve (same family as the other startup self-checks)
+        self.max_ingest_window = int(config.get("max_ingest_window", 0))
+        if self.max_ingest_window < 0:
+            raise GateOfflineError(
+                "max_ingest_window must be >= 0 (0 = uncapped)")
         src_cfg = config.get("sources") or {}
         self.enabled = set(str(s) for s in src_cfg.get("enabled", SOURCES[:3]))
         self.entrance_required = set(
@@ -321,6 +328,12 @@ class UGCPipeline:
         (AC-IL3): gray/noise/flood/duplicate state stays identical to
         the old per-row semantics."""
         rows = self.store.lobby_intake_rows()
+        if self.max_ingest_window > 0:
+            # watermark cap (AC-WC2): rows beyond the cap are simply
+            # not processed this call; they carry no ugc_ingest_log
+            # mark, so the NOT IN window filter picks them up again
+            # next call - zero loss, no extra bookkeeping
+            rows = rows[: self.max_ingest_window]
         # phase 1: parse + local classification (window order kept)
         parsed = []  # [origin, source, actor, text, kind, qid]
         for origin, evt_type, actor, payload_json in rows:

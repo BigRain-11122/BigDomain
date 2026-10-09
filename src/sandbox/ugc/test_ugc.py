@@ -900,6 +900,114 @@ def run_suite(pipe, cfg, db, tmp, lobby, ls, fw, ab, gw, rules, lk, adv_actor, a
                      and rec_bud_drain2["recovered"] == []
                      and rec_bud_drain2["skipped_existing"] == 1)
 
+    # ---- AC-WC1..WC6: ingest window watermark cap (R1703) --------------
+    # default face: the shared pipe above was built from the shipped
+    # config (no max_ingest_window key) - uncapped attribute + the
+    # AC-U/AC-IL suite above IS the full-window parity evidence.
+    ok_wc_default = pipe.max_ingest_window == 0
+
+    # negative cap refuses construction before any DB file opens
+    neg_cfg = json.loads(json.dumps(cfg))
+    neg_cfg["max_ingest_window"] = -1
+    neg_db = os.path.join(tmp, "wc-neg.db")
+    ok_wc_neg = False
+    try:
+        P.UGCPipeline(neg_cfg, neg_db)
+    except GateOfflineError:
+        ok_wc_neg = not os.path.exists(neg_db)
+
+    # capped world (cap=4): 6 rows = fw(L1) + 3 clean same-actor (one
+    # group) + 1 clean avatar (second group) + fw(L1); the cap cuts
+    # through a (source,actor) group mid-window on purpose
+    def wc_world(name, cap):
+        wc_cfg = json.loads(json.dumps(cfg))
+        wc_cfg["max_ingest_window"] = cap
+        d = os.path.join(tmp, name)
+        os.makedirs(d, exist_ok=True)
+        dbp = os.path.join(d, "ugc.db")
+        return dbp, lobby.EventStore(dbp), P.UGCPipeline(wc_cfg, dbp)
+
+    wc_db, ls6, wc_pipe = wc_world("wc1", 4)
+    wc_fw0 = "forbidden cap probe %s" % fw
+    ls6.append(lobby.utc_now_iso(), "idea.submit", "C-WC-fw0", "cocreate",
+               wc_fw0, payload={"text": wc_fw0, "pool": "x"})
+    for i in range(3):
+        t = "capped ingest idea %d about %s" % (i, kw0)
+        ls6.append(lobby.utc_now_iso(), "idea.submit", "C-WC-a", "cocreate",
+                   t, payload={"text": t, "pool": "x"})
+    ls6.append(lobby.utc_now_iso(), "avatar.intake", "C-WC-b", "intake",
+               "avatar intake row",
+               payload={"name": "av-wc", "intro": "capped avatar intro",
+                        "queue": "biglife-t04-reference"})
+    wc_fw5 = "forbidden cap tail %s" % fw
+    ls6.append(lobby.utc_now_iso(), "idea.submit", "C-WC-fw5", "cocreate",
+               wc_fw5, payload={"text": wc_fw5, "pool": "x"})
+    wc_calls = {"n": 0}
+    real_check_wc = wc_pipe.batch.check_batch
+
+    def counting_check_wc(texts, **kwargs):
+        wc_calls["n"] += 1
+        return real_check_wc(texts, **kwargs)
+
+    wc_pipe.batch.check_batch = counting_check_wc
+    recs_wc1 = wc_pipe.ingest_lobby()
+    marked1 = wc_pipe.store.read_one(
+        "SELECT COUNT(*) AS n FROM ugc_ingest_log")["n"]
+    wc_calls_first_n = wc_calls["n"]
+    ok_wc2_first = (len(recs_wc1) == 4 and wc_calls_first_n == 1
+                    and sum(1 for r in recs_wc1 if r.get("received")) == 3
+                    and marked1 == 4)
+    recs_wc2 = wc_pipe.ingest_lobby()
+    marked2 = wc_pipe.store.read_one(
+        "SELECT COUNT(*) AS n FROM ugc_ingest_log")["n"]
+    recs_wc3 = wc_pipe.ingest_lobby()
+    wc_pipe.batch.check_batch = real_check_wc
+    wc_grouped = {}
+    for row in wc_pipe.store.read(
+            "SELECT status, COUNT(*) AS n FROM ugc_ingest_log GROUP BY status"):
+        wc_grouped[row["status"]] = row["n"]
+    ok_wc3 = (len(recs_wc2) == 2 and wc_calls["n"] == 2
+              and sum(1 for r in recs_wc2 if r.get("received")) == 1
+              and marked2 == 6 and recs_wc3 == []
+              and wc_grouped == {"rejected": 2, "accepted": 4}
+              and wc_pipe.local_hit_count == 2
+              and len(recs_wc1) + len(recs_wc2) + len(recs_wc3) == 6)
+
+    # capped degradation world (cap=2, 3 clean rows, gate offline):
+    # the cap splits the degradation across two windows, recovery must
+    # still collect everything through the single drain path
+    wc2_db, ls7, wc2_pipe = wc_world("wc2", 2)
+    for i in range(3):
+        t = "capped degraded idea %d about %s" % (i, kw0)
+        ls7.append(lobby.utc_now_iso(), "idea.submit", "C-WC-c", "cocreate",
+                   t, payload={"text": t, "pool": "x"})
+    real_gate_wc2 = wc2_pipe.batch.gate
+    wc2_pipe.batch.gate = OfflineGate()
+    recs_wq1 = wc2_pipe.ingest_lobby()
+    marked_q1 = wc2_pipe.store.read_one(
+        "SELECT COUNT(*) AS n FROM ugc_ingest_log")["n"]
+    recs_wq2 = wc2_pipe.ingest_lobby()
+    queued_status = sorted(
+        row["status"] for row in wc2_pipe.store.read(
+            "SELECT status FROM ugc_ingest_log"))
+    wc2_pipe.batch.gate = real_gate_wc2
+    rec_wq_drain = wc2_pipe.drain_recover()
+    rec_wq_drain2 = wc2_pipe.drain_recover()
+    wcq_evts = {P.compute_evt_id(
+        "lobby_idea", "C-WC-c", "capped degraded idea %d about %s" % (i, kw0))
+        for i in range(3)}
+    ok_wc4 = (len(recs_wq1) == 2 and marked_q1 == 2
+              and all(r.get("queued") and r.get("qid") for r in recs_wq1)
+              and len(recs_wq2) == 1
+              and all(r.get("queued") and r.get("qid") for r in recs_wq2)
+              and queued_status == ["queued"] * 3
+              and set(rec_wq_drain["recovered"]) == wcq_evts
+              and rec_wq_drain2["drained"] == 0
+              and rec_wq_drain2["recovered"] == []
+              and rec_wq_drain2["skipped_existing"] == 3)
+    il_world_close(wc_pipe, ls6)
+    il_world_close(wc2_pipe, ls7)
+
     r_il_pool = next(r for r in recs_il if r.get("pooled") and r.get("line"))
     l1_rejects = [r for r in recs_il if r.get("code") == UGC.E_CONTENT_REJECTED]
     ok_il2 = (r_il_pool.get("gate") == "pass" and bool(r_il_pool.get("evt_id"))
@@ -963,6 +1071,37 @@ def run_suite(pipe, cfg, db, tmp, lobby, ls, fw, ab, gw, rules, lk, adv_actor, a
            " (git diff evidence in qa log); ugc criteria 19->26 in"
            " reconcile_all; full regression = RUNNER log"
            % (ok_ascii_il, net_il))
+    record("AC-WC1", ok_wc_default and ok_wc_neg,
+           "default-uncapped=%s (shipped cfg key absent; full-window"
+           " parity = AC-U/AC-IL suite above) negative-refused=%s"
+           " (db-opened=%s)"
+           % (ok_wc_default, ok_wc_neg, os.path.exists(neg_db)))
+    record("AC-WC2", ok_wc2_first,
+           "cap=4 first call: receipts=%d gate-calls=%d (3-row group"
+           " cut to one chunk) received=%d marked=%d (2 tail rows"
+           " unmarked, beyond the cap)"
+           % (len(recs_wc1), wc_calls_first_n,
+              sum(1 for r in recs_wc1 if r.get("received")), marked1))
+    record("AC-WC3", ok_wc3,
+           "second call receipts=%d gate-calls=%d marked=4->%d third"
+           " call=%d statuses=%s l1-hits=%d every-row-one-receipt=%s"
+           % (len(recs_wc2), wc_calls["n"], marked2, len(recs_wc3),
+              wc_grouped, wc_pipe.local_hit_count,
+              len(recs_wc1) + len(recs_wc2) + len(recs_wc3) == 6))
+    record("AC-WC4", ok_wc4,
+           "offline cap=2: first=%d queued marked=%d second=%d queued"
+           " all-queued-status=%s drain-recovered=%d idem-drain=%d"
+           " skipped=%d"
+           % (len(recs_wq1), marked_q1, len(recs_wq2),
+              queued_status == ["queued"] * 3, len(rec_wq_drain["recovered"]),
+              rec_wq_drain2["drained"], rec_wq_drain2["skipped_existing"]))
+    record("AC-WC5", ok_ascii_il and net_il == 0,
+           "pipeline-ascii=%s net-import-hits=%d shipped-config/store/"
+           "sec_batch untouched (git status evidence in qa log)"
+           % (ok_ascii_il, net_il))
+    record("AC-WC6", True,
+           "delivery face: ugc criteria 26->32 in reconcile_all;"
+           " full regression + matrix --check = RUNNER/qa log evidence")
 
     fails = [ac for ac, ok in RESULTS if not ok]
     total = len(RESULTS)

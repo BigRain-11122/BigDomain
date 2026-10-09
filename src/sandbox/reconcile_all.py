@@ -162,7 +162,10 @@ SUITES = [
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order
     # replay (AC-IL1..IL7 pre-registered in state/queue/tech.md)
-    ("ugc", os.path.join("ugc", "test_ugc.py"), 26),
+    # R1703 ingest window watermark cap: max_ingest_window config
+    # cap, beyond-cap rows stay unmarked and re-read next window
+    # (AC-WC1..WC6 pre-registered in state/queue/tech.md)
+    ("ugc", os.path.join("ugc", "test_ugc.py"), 32),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent)
     ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 7),

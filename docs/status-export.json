@@ -1,10 +1,10 @@
-﻿{
-  "export_ts": "2026-10-10T01:57:30+08:00",
+{
+  "export_ts": "2026-10-10T02:14:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1702 本轮交付：fold R460 水位整编+UGC ingest_lobby 批量门接线（AC-IL1..IL7 判据预注册先于代码·RUNNER 43/43 套件 462 判据全绿·同窗门调 8→2 省额实测）+tech 队列补种（open 10 持平）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：UGC ingest_lobby 批量门接线（2026-10-10T01:57:30+08:00·R1702 交付·可跑实物）：src/sandbox/ugc/pipeline.py ingest_lobby 三段重构（L1 本地预筛先行省付费调用+按 (source,actor) 分组每片单 check_batch 批调〔同窗门调 8→2〕+窗序重放语义保真+降级跨组元数据保真+drain_recover 单径恢复）；test_ugc 26/26+RUNNER 43/43 套件 462 判据+矩阵 --check byte-identical；证据 qa/ugc-ingest-R1702.log+qa/reconcile-all-R1702.log",
-    "next_milestone": "下轮=fold R461 轮首首测按实况裁定+P2 队头（tech 开项按序：ingest_lobby 窗口水位帽/pay 支付状态通知面/水印缩放族模板对位恢复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
+    "current": "R1703 本轮交付：ingest_lobby 窗口水位帽（AC-WC1..WC6 判据预注册先于代码·RUNNER 43/43 套件 468 判据全绿·帽切片+超帽行留窗下轮天然续读零丢失）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：ingest_lobby 窗口水位帽（2026-10-10T02:14:22+08:00·R1703 交付·可跑实物）：src/sandbox/ugc/pipeline.py max_ingest_window 配置帽（帽>0 窗读 [:cap] 切片·超帽行零 mark_ingest→NOT IN 窗过滤天然下窗续读零丢失·负值拒构造·缺省 0=全窗现行行为保真）+降级恢复穿插帽（cap 两窗降级→门恢复 drain_recover 全收）；test_ugc 32/32+RUNNER 43/43 套件 468 判据+矩阵 43/468 --check byte-identical；证据 qa/ugc-window-cap-R1703.log+qa/reconcile-all-R1703.log",
+    "next_milestone": "下轮=fold R461 轮首首测按实况裁定+P2 队头（tech 开项按序：ingest_lobby 窗序显式化稳序面/pay 支付状态通知面/水印缩放族模板对位恢复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1702",
+      "1703",
       "OSLoop 执行 tick"
     ],
     [
@@ -2917,20 +2917,24 @@
     [
       "2",
       "ingest_lobby 批量门接线交付件（R1702·P2 队头=R1701 命名后继·AC-IL1..IL7 预注册=tech.md 认领行先于代码：src/sandbox/ugc/pipeline.py ingest_lobby 三段重构=L1 先行逐行筛〔本地 trie 拦 fw 零门调省付费调用〕+按 (source,actor) 分组 face.max_batch 分片每片单 check_batch 批调〔同窗门调 8→2 实测·分组律=降级队列元数据保真〕+窗序重放〔gray/noise/flood/duplicate 语义逐位一致·flood/reingest/cross 三锚零改动过〕+降级跨组保真+drain_recover 单径恢复+窗二读空每行恰一 receipt；test_ugc 19→26 SUITE 26/26+RUNNER PASS 43/43 套件 455→462 判据 86.9s 零回归+矩阵 43/462 --check byte-identical+fold R460 水位整编随轮〔80432B→73626B·AC-R4601..R4606=qa/reorg-R1702.log〕；证据 qa/ugc-ingest-R1702.log+qa/reconcile-all-R1702.log·R1702）"
+    ],
+    [
+      "2",
+      "ingest_lobby 窗口水位帽交付件（R1703·P2 队头=R1702 命名后继·AC-WC1..WC6 预注册=tech.md 认领行先于代码：src/sandbox/ugc/pipeline.py max_ingest_window 配置帽=帽>0 窗读行截 [:cap]〔切片先于 phase 1〕+超帽行零 mark_ingest→NOT IN 窗过滤天然下窗续读〔零丢失·三调 4+2+0 receipt 恰一〕+负值 startup 拒构造+缺省 0=全窗现行行为保真〔shipped config.json 零改动〕+降级恢复穿插帽〔cap=2 门离线两窗降级→drain_recover 全收 3+二跑幂等〕；test_ugc 26→32 SUITE 32/32+RUNNER PASS 43/43 套件 462→468 判据 86.4s 零回归+矩阵 43/468 --check byte-identical；证据 qa/ugc-window-cap-R1703.log+qa/reconcile-all-R1703.log·R1703）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1702 flush caliber (checker single-source law): window re-derived by checker recompute; fold R460 folded the R1699..R1701 window (7 lines -> 1 rolling line) and the R1702 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1701 -> 1702; tech queue ingest-batch row done -1 + one named-successor seed (ingest_lobby window cap) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
+    "method": "R1703 flush caliber (checker single-source law): window re-derived by checker recompute; the R1703 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1702 -> 1703; tech queue window-cap row done -1 + one named-successor seed (rowid stable window order) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
   }
 }
