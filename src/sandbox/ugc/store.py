@@ -237,7 +237,7 @@ class UGCStore:
             "SELECT evt_id, type, actor, payload_json FROM events"
             " WHERE type IN ('idea.submit','avatar.intake')"
             " AND evt_id NOT IN (SELECT origin_evt_id FROM ugc_ingest_log)"
-            " ORDER BY ts_utc")
+            " ORDER BY ts_utc, rowid")
 
     def mark_ingest(self, origin_evt_id, status, ts):
         self.write("INSERT OR REPLACE INTO ugc_ingest_log (origin_evt_id, status, ts_utc)"

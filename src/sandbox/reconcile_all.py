@@ -165,7 +165,10 @@ SUITES = [
     # R1703 ingest window watermark cap: max_ingest_window config
     # cap, beyond-cap rows stay unmarked and re-read next window
     # (AC-WC1..WC6 pre-registered in state/queue/tech.md)
-    ("ugc", os.path.join("ugc", "test_ugc.py"), 32),
+    # R1704 window-order stabilization: explicit rowid tiebreak on the
+    # intake reader, deterministic cap slicing under ts ties
+    # (AC-OS1..OS5 pre-registered in state/queue/tech.md)
+    ("ugc", os.path.join("ugc", "test_ugc.py"), 37),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent)
     ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 7),

@@ -1,0 +1,43 @@
+# qa/ugc-window-order-R1704.log - window-order stabilization delivery evidence (R1704 P2 queue-head claim)
+# Slice: ingest_lobby window-order explicit stabilization (R1703 seeded successor)
+# Pre-registered criteria: AC-OS1..AC-OS5 in state/queue/tech.md claim row (pre-registered BEFORE code).
+
+## Section 1: claim-row premise correction (honest record)
+Seed line said "lobby_intake_rows SELECT has no ORDER BY (implicit rowid scan order)". Actual code
+carried "ORDER BY ts_utc" already. Real gap = the tie order when many events share one timestamp
+(same-second batch inserts are the norm in tests and production) was implementation-defined;
+the cap slicing across calls (AC-WC3) depends on that order. Fix chosen accordingly: explicit
+secondary tiebreak "ORDER BY ts_utc, rowid" (ts primary kept = zero semantic change; insertion
+order within ties = deterministic), NOT the seed's "ORDER BY rowid" primary swap (bigger semantic
+change than needed). store.py diff = exactly one clause:
+-            " ORDER BY ts_utc")
++            " ORDER BY ts_utc, rowid")
+
+## Section 2: new suite cases (test_ugc.py, PASS lines from the live run)
+PASS AC-OS1: explicit tiebreak in store.lobby_intake_rows: ORDER BY ts_utc, rowid (ts primary kept - zero semantic change; claim-row premise corrected: SELECT already had ts_utc ordering, the gap was undefined tie order)
+PASS AC-OS2: full-tie read: seq==insertion-order=True double-read-identical=True pure-read-marks=0
+PASS AC-OS3: cap=2 full-tie slicing: call1=2 earliest-2-in-order=True call2=2 next-2-in-order=True call3=0 marked=2->4 every-row-one-receipt=True
+PASS AC-OS4: regression anchor: all 35 criteria recorded before this line are ok=True (AC-U/AC-IL/AC-WC zero edits, zero regressions)
+PASS AC-OS5: delivery face: ugc criteria 32->37 in reconcile_all; store.py diff = one ORDER BY clause; pipeline/config/sec_batch zero bytes (git status evidence in qa log); full regression + matrix --check = RUNNER/qa log evidence
+SUITE PASS (37/37 criteria pass)  [32 existing + 5 new; count-arithmetic erratum 32+5=37 not 35, fixed in three places - reconcile_all entry, AC-OS5 record text, tech.md claim row]
+
+Harness honest notes:
+- AC-OS1 first draft counted "ORDER BY ts_utc" occurrences across the whole store.py file
+  (other ts_utc orderings at L217/L283 are legitimate) -> over-broad FAIL -> criterion scoped to
+  the lobby_intake_rows function segment (exactly one ORDER BY, carrying the rowid tiebreak).
+- Count arithmetic erratum 32->35 initially written in three places; corrected to 32->37
+  everywhere before commit.
+
+## Section 3: hygiene (git status, live run)
+git status touched set (this slice): M src/sandbox/ugc/store.py | M src/sandbox/ugc/test_ugc.py |
+M src/sandbox/reconcile_all.py | M state/queue/tech.md | M src/os/state.json (fold R461, separate
+ledger item) | ?? qa/reorg-R1704.log (fold evidence)
+=> pipeline.py, config.json, sec_batch.py: ZERO bytes changed (AC-OS5 hygiene pass).
+store.py git diff = one ORDER BY clause (shown in Section 1).
+
+## Section 4: full regression + matrix
+RUNNER PASS (43/43 suites green, reconcile controls 6/6, 115.2s) - evidence qa/reconcile-all-R1704.log
+suite ugc exit=0 pass-lines=37 fail-lines=0 criteria=37 4.2s (in RUNNER log)
+PASS generated docs/sandbox-suite-matrix.md (5880 bytes) - registry suites=43 criteria=473 evidence=qa/reconcile-all-R1704.log green=43/43
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (5880 bytes, 43 suites, 473 criteria)

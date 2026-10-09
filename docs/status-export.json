@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T02:14:22+08:00",
+  "export_ts": "2026-10-10T02:43:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1703 本轮交付：ingest_lobby 窗口水位帽（AC-WC1..WC6 判据预注册先于代码·RUNNER 43/43 套件 468 判据全绿·帽切片+超帽行留窗下轮天然续读零丢失）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：ingest_lobby 窗口水位帽（2026-10-10T02:14:22+08:00·R1703 交付·可跑实物）：src/sandbox/ugc/pipeline.py max_ingest_window 配置帽（帽>0 窗读 [:cap] 切片·超帽行零 mark_ingest→NOT IN 窗过滤天然下窗续读零丢失·负值拒构造·缺省 0=全窗现行行为保真）+降级恢复穿插帽（cap 两窗降级→门恢复 drain_recover 全收）；test_ugc 32/32+RUNNER 43/43 套件 468 判据+矩阵 43/468 --check byte-identical；证据 qa/ugc-window-cap-R1703.log+qa/reconcile-all-R1703.log",
-    "next_milestone": "下轮=fold R461 轮首首测按实况裁定+P2 队头（tech 开项按序：ingest_lobby 窗序显式化稳序面/pay 支付状态通知面/水印缩放族模板对位恢复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
+    "current": "R1704 本轮交付：ingest_lobby 窗序显式化稳序（AC-OS1..OS5 判据预注册先于代码·前提更正=SELECT 实况已带 ts_utc 主序·真实缺口=并列 tie 序未定义→显式 rowid tiebreak·RUNNER 43/43 套件 473 判据全绿）+fold R461 水位整编（R1697/R1704 closeout EOL 病复发面如实注·eol 字节外科）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：ingest_lobby 窗序显式化稳序（2026-10-10T02:43:30+08:00·R1704 交付·可跑实物）：src/sandbox/ugc/store.py lobby_intake_rows() ORDER BY ts_utc, rowid（ts 主序保零语义变化+ts_utc 并列时插入序确定=帽切片跨调用确定性根治·store.py 单子句 diff）+test_ugc 32→37 SUITE 37/37+RUNNER 43/43 套件 468→473 判据+矩阵 43/473 --check byte-identical；证据 qa/ugc-window-order-R1704.log+qa/reconcile-all-R1704.log",
+    "next_milestone": "下轮=fold R462 轮首首测按实况裁定+P2 队头（tech 开项按序：pay 支付状态通知面/水印缩放族模板对位恢复/closeout EOL 修复器工具化·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1703",
+      "1704",
       "OSLoop 执行 tick"
     ],
     [
@@ -2921,20 +2921,24 @@
     [
       "2",
       "ingest_lobby 窗口水位帽交付件（R1703·P2 队头=R1702 命名后继·AC-WC1..WC6 预注册=tech.md 认领行先于代码：src/sandbox/ugc/pipeline.py max_ingest_window 配置帽=帽>0 窗读行截 [:cap]〔切片先于 phase 1〕+超帽行零 mark_ingest→NOT IN 窗过滤天然下窗续读〔零丢失·三调 4+2+0 receipt 恰一〕+负值 startup 拒构造+缺省 0=全窗现行行为保真〔shipped config.json 零改动〕+降级恢复穿插帽〔cap=2 门离线两窗降级→drain_recover 全收 3+二跑幂等〕；test_ugc 26→32 SUITE 32/32+RUNNER PASS 43/43 套件 462→468 判据 86.4s 零回归+矩阵 43/468 --check byte-identical；证据 qa/ugc-window-cap-R1703.log+qa/reconcile-all-R1703.log·R1703）"
+    ],
+    [
+      "2",
+      "ingest_lobby 窗序显式化稳序（R1704·P2 队头=R1703 命名后继·AC-OS1..OS5 预注册=tech.md 认领行先于代码·前提更正如实注=实况 SELECT 已带 ORDER BY ts_utc 非种子行所述「无 ORDER BY」·真实缺口=ts_utc 并列 tie 序实现定义未定→正法=显式次键 ORDER BY ts_utc, rowid〔ts 主序保零语义变化〕·store.py 单子句 diff；AC-OS2 全并列读序=6 行同一 fixed ts 批插→读序==插入序+双读逐位同一+纯读零 mark marks=0；AC-OS3 cap=2 全并列切片=2+2+0 按插入序 evt_id 逐位·marked 2→4·每行恰一 receipt；AC-OS4 套件内回归锚=前置 35 判据全 ok 机械核；AC-OS5 卫生=pipeline/config/sec_batch 零字节+reconcile_all ugc 判据 32→37+RUNNER 43/43 套件 468→473 判据 controls 6/6 115.2s 零回归+矩阵 43/473 green --check byte-identical；套件自检两修如实注〔AC-OS1 全文件计数写宽→函数段域单 ORDER BY 断言+计数勘误 32+5=37 非 35 三处同步〕·证据=qa/ugc-window-order-R1704.log+qa/reconcile-all-R1704.log+fold R461 水位整编（轮首 78723B 越线·E_STATE_LAYOUT 首跑拒=R1703 收账写盘全文件 LF 化→eol 字节外科 LF→CRLF 36 处〔R1697 病复发面如实注〕·tail-4 gate-exceed 拒→扩窗 tail-7〔R1699 先例〕·7 行 13705B 压 1 kept=0·token 范围缩写拒→136 token 全字面嵌·verify-then-write 70022B margin 8478B·post-hoc catalog 136/136 零丢失·AC-R4611..R4616=qa/reorg-R1704.log）·R1704"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1703 flush caliber (checker single-source law): window re-derived by checker recompute; the R1703 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1702 -> 1703; tech queue window-cap row done -1 + one named-successor seed (rowid stable window order) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
+    "method": "R1704 flush caliber (checker single-source law): window re-derived by checker recompute; the R1704 pair appended (substantive + tokens) and the R1704 fold roll line folded seven window lines into one, W/sub re-derived mechanically (W 24->20, sub 8->7 per checker run1 evidence); tick row 1703 -> 1704; tech queue order-stabilization row done -1 + one named-successor seed (closeout EOL repair tool-ification) +1 = 10 flat"
   }
 }
