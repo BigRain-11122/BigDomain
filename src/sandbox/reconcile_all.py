@@ -134,6 +134,10 @@ SUITES = [
      os.path.join("compliance", "test_sku_compliance_map.py"), 15),
     ("minors", os.path.join("minors", "test_minors.py"), 19),
     ("minors-wiring", os.path.join("minors", "test_wiring.py"), 70),
+    # R1676 schema-migrate: sandbox-wide schema versioning migrator
+    # (PRAGMA user_version chain, ALTER-free rebuild, dual-phase verify;
+    # AC-LM1..LM11 pre-registered in state/queue/tech.md).
+    ("schema-migrate", "test_schema_migrate.py", 21),
 ]
 
 FAILS = 0
