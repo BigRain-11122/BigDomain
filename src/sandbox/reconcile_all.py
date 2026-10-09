@@ -114,6 +114,11 @@ SUITES = [
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
     ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),
+    # R1678 V3 window boundary: inclusive delta==W both edges, one-past
+    # rejects, per-channel parameterized boundary, in-window burned-
+    # nonce replay gate, same boundary under verify_mode rsa
+    # (AC-V3W1..W6 pre-registered in state/queue/tech.md).
+    ("pay-v3-window", os.path.join("pay", "test_pay_v3_window.py"), 6),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
