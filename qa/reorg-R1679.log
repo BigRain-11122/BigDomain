@@ -1,0 +1,11 @@
+AC-R4522 pre-op byte-identical to git HEAD blob sha16 51c1e708e5445411; backup logs/state-preop-R1679.bak written
+AC-R4521 round-start measure 80409B over 78500B line by 1909B = P-2026-09-25-18 cut 452;
+AC-R4521 probes (final-size caliber, pair-fold summary ~1400B + closeout pair ~3100B est): A=2 lines [R1677 pair] 3054B proj-final 81855B over FAIL / B=4 lines [R1677..R1678 two pairs] 5752B proj-final 79157B over FAIL / C=5 lines [R1610-R1676 roll line + R1677/R1678 two pairs] 14509B proj-final below gate = max-margin gate pass -> C chosen (R557 max-margin rule)
+AC-R4524 catalog presence: 64 window tokens all carried in roll line (zero loss; explicit census list embedded)
+AC-R4523 archive R1679 section: 5 lines verbatim, markers 176 -> 177, pure-append prefix assertion
+AC-R4525 verify-then-write: stage-1 post-fold 71002B (roll line 5186B), stage-2 closeout final 73711B, margin 4789B under 78500B gate
+AC-R4525 py-parser pass: json.loads OK, tick 1679, log 24 entries, roll line at index 21
+AC-R4526 RUN0 (pre-fold): checker run recorded in qa/export-consistency-R1679.log; RUN1 line appended after export flush
+recount window 2026-10-03..2026-10-09: W=21 idle=0 nop=1 sub=7
+AC-R4525 PS-parser pass: ConvertFrom-Json (Get-Content -Raw -Encoding UTF8) OK, tick 1679, log 24 entries, gord_rows 184; encoding note: default Get-Content -Raw decodes no-BOM UTF-8 as ANSI/GBK (pre-existing file property), UTF8 switch is the canonical read (R1677 note carried)
+AC-R4526 RUN1 (post-flush): checker VERDICT PASS 21/21, state_tick=1679, W=21 idle=0 nop=1 sub=7, proposals 3/1, queues 6/6/10 - matches fold-script recount exactly (two-caliber closure); RUN0 (pre-fold, tick 1678, 23/0/1/8) + RUN1 double-run green; evidence qa/export-consistency-R1679.log two sections (RUN0 + RUN1)
