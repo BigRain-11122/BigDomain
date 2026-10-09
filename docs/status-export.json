@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T07:15:45+08:00",
+  "export_ts": "2026-10-10T07:38:41+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1717 eol --fix-indent 缩进修复工具化收口（P2 tech 队头·R1716 后继·AC-FI1..FI7 预注册先行）：logs_toolkit.py eol 子命令增 --fix-indent 旗（16 空格正典重缩进·内容字节零触碰·每行 EOL 保持=两病分修·三重验证先于写·原子写+幂等）+fold mismatch 拒面 hint 改指本旗；套件 SUITE PASS 139 checks（125→139）+RUNNER PASS 51/51 controls 6/6 90.7s 零回归+矩阵 51/547 green --check byte-identical",
-    "latest_artifact": "最近实物：eol --fix-indent 缩进修复工具件（2026-10-10·R1717 交付·可跑实物计 2）：src/os/logs_toolkit.py --fix-indent 旗（R1710 手工布局外科工具化——log item 行前导空白归一 16 空格正典·dry-run 缺省+--execute·与 --fix 互斥=两病分修·内容病行不修不误绿 fail-closed）+套件 14 新断言 139 checks 全绿+活体 23 行注入修复 roundtrip identity·证据 qa/logs-fix-indent-R1717.log+qa/reconcile-all-R1717.log",
-    "next_milestone": "下轮=tech 队头序推进（pay notify orders.py 接线面〔付完款自动通知·R1706 后继〕+watermark 未知缩放因子恢复扩展面〔R1707 后继〕+suite_matrix live mtime 归一态实证窗）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1718 pay notify orders.py 接线面当轮闭环（P2 tech 队头·R1706 后继·AC-NW1..NW7 预注册先行）：orders.py 四点接线——构造 notify=None 尾参（face 调用方所有·shipped 缺省回执无 notify 键=零改面）+_attempt_notify 降级助手（post-commit 通知尝试·未过审模板→template_not_approved 诚实待件态·零回滚零中断支付流）+_grant 毕自动付款成功通知（fresh+heal 双路径 envelope 证据）+close_refund 新 face（granted→closed 唯一合法边承载 W10 第二时点·timeout 闭单零通知保真）；套件 SUITE PASS 7/7+RUNNER PASS 52/52 套件 554 判据 controls 6/6 92.1s 零回归+矩阵 52/554 green --check byte-identical",
+    "latest_artifact": "最近实物：pay notify orders.py 接线件（2026-10-10·R1718 交付·可跑实物计 2）：src/sandbox/pay/orders.py 付款双时点自动通知接线——_grant 毕自动 notify_payment_success+close_refund 退款闭单 face（W10 第二时点）+_attempt_notify 降级助手（未过审模板=诚实待件态不伪通道·日帽/预算击穿落 banner 队列·异常零中断支付流）+套件 test_pay_notify_wiring.py 7/7 全绿·证据 qa/pay-notify-wiring-R1718.log（套件+卫生+回归+矩阵四节）",
+    "next_milestone": "下轮=tech 队头序推进（watermark 缩放族未知缩放因子恢复扩展面〔R1707 后继·非整数因子 {0.7/0.85/1.1/1.5}×模板对位实测〕+suite_matrix live mtime 归一态实证窗〔R1709 后继〕+apidev 拒因分类计数读面）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1717",
+      "1718",
       "OSLoop 执行 tick"
     ],
     [
@@ -2969,20 +2969,24 @@
     [
       "2",
       "fold 拒面修复指令对齐+缩进守恒判据件（R1716·P2 队头=R1705 eol 收口后继〔R1710 实证注扩展面〕·判据 AC-LF1..LF5 预注册=tech.md 认领行先于代码：logs_toolkit.py fold 两拒面 hint 注入〔CRLF 变体=eol --fix --execute 修复指令+mismatch 变体=eol check 诊断+16-space canonical byte surgery R1710 先例·fail-closed return 2 零突变〕+eol_profile 缩进守恒五字段〔log_block_found/log_item_lines/indent16_lines/indent_anomaly/indent_ok·^ {16} 正则口径〕+check 退出码扩 layout_ok∧indent_ok 双绿〔R1710 缩进漂移病 eol check 即红·三轮逃逸面闭合〕+fix 面 EOL-only 零改动·套件 11 新断言 SUITE PASS 125 checks〔115→125〕+RUNNER PASS 51/51 controls 6/6 90.5s 零回归=qa/reconcile-all-R1716.log+矩阵 51/547 --check byte-identical+活体剖面 21/21 正典缩进·收账纪律同轮立=字节外科追加禁 json.dump 全量重写〔本轮收账即按此执行〕·证据 qa/logs-fold-hint-R1716.log 三节·fold R466 随轮〔79153B→69490B·170 token 全字面嵌·preop sha16 b40f18074fa7c651·AC-R4661..R4666=qa/reorg-R1716.log〕·tech open 10→9+1 后继种子=10）"
+    ],
+    [
+      "2",
+      "pay notify orders.py 接线件（P2 队头·AC-NW1..NW7 预注册=tech.md 认领行先于代码：构造 notify=None 尾参 caller-built face·PayOrders.close() 不关 face·shipped 缺省回执无 notify 键=零改面+_attempt_notify 降级助手〔post-commit 通知尝试·E_TEMPLATE_NOT_APPROVED→template_not_approved 诚实待件态·余码 off:<code|ExcName>·零回滚零中断支付流〕+_grant 毕自动 notify_payment_success〔fresh+heal envelope 合并〕+close_refund 新 face〔granted→closed 唯一合法边承载 W10 第二时点·timeout 闭单零通知=AC-PN3 保真〕·套件 7/7〔首跑两修如实注〕+RUNNER PASS 52/52 套件 554 判据 controls 6/6 92.1s 零回归+矩阵 52/554 green --check byte-identical·证据 qa/pay-notify-wiring-R1718.log 四节·R1718"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 9,
+    "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1717 flush caliber (checker single-source law): R1717 pair appended (substantive + tokens), log_lines_in_window 20 -> 22, substantive 7 -> 8; tick row 1716 -> 1717; queue_tech_open 10 -> 9 (fix-indent item done [x])"
+    "method": "R1718 flush caliber (checker single-source law): R1718 pair appended (substantive + tokens), log_lines_in_window 22 -> 24, substantive 8 -> 9; tick row 1717 -> 1718; queue_tech_open 9 -> 8 (pay-notify-wiring done [x]) then +2 successor seeds -> 10"
   }
 }

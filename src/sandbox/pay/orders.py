@@ -189,7 +189,7 @@ class PayOrders:
     every write opens with BEGIN IMMEDIATE (SQLite WAL discipline)."""
 
     def __init__(self, config, db_path, event_store, ledger,
-                 minor_guard=None):
+                 minor_guard=None, notify=None):
         self._startup_checks(config, event_store, ledger)
         self.db_path = db_path
         parent = os.path.dirname(os.path.abspath(db_path))
@@ -210,6 +210,12 @@ class PayOrders:
         # R940: wired = _grant also books the minors day ledger via
         # record_spend (commit face, exactly-once per order ref).
         self.minor_guard = minor_guard
+        # R1718 wiring (notify.py R1706 successor): optional payment-
+        # state notify face. None = not wired, shipped behavior
+        # byte-stable (AC-NW1). The face is caller-built and caller-
+        # owned: this class only holds the reference and never builds,
+        # configures, or closes it.
+        self.notify = notify
 
     def close(self):
         with self._lock:
@@ -433,6 +439,42 @@ class PayOrders:
                 raise
         return int(n)
 
+    def close_refund(self, order_id):
+        """Refund close face (R1718, W10 second timepoint carrier for
+        the notify wiring): granted -> closed on the ONLY legal refund
+        edge (trigger T1 validates; the pre-check answers unknown and
+        non-granted states fail-closed with zero writes). After the
+        COMMIT the refund notice fires post-commit (best-effort, never
+        breaks the close; envelope evidence, AC-NW3). Honest scope: the
+        fiat refund money-flow belongs to the channel adapters domain
+        and entitlement/ledger clawback is NOT part of this face;
+        timeout closes (no grant row) never pass through here and get
+        no notice (AC-PN3 semantics unchanged)."""
+        order = self._order_row(order_id)
+        if order is None:
+            raise PayError(E_UNKNOWN_ORDER, str(order_id))
+        if order["status"] != "granted":
+            raise PayError(E_BAD_STATE,
+                           "refund close needs granted, got " + order["status"])
+        with self._lock:
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute(
+                    "UPDATE pay_orders SET status = 'closed' WHERE order_id = ?",
+                    (order_id,))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError as exc:
+                self._conn.execute("ROLLBACK")
+                raise PayError(E_BAD_TRANSITION, str(exc)) from None
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        notify_out = self._attempt_notify(order_id, "refund")
+        out = {"order_id": order_id, "status": "closed"}
+        if notify_out is not None:
+            out["notify"] = notify_out
+        return self._face(out)
+
     # ---- callback processing (AC-Y4/Y5/Y6) ---------------------------------
 
     def _record_bad_receipt(self, payload, reason):
@@ -481,15 +523,21 @@ class PayOrders:
             if not seen[0]:
                 raise PayError(E_CALLBACK_REJECTED, "evidence row: previously rejected")
             current = self._order_row(order_id)
+            notify_out = None
             if current["status"] == "paid":
-                self._grant(current)          # crash-window heal = retry entry
+                # crash-window heal = retry entry (R1718: heal grant
+                # carries its own notify attempt, AC-NW2)
+                notify_out = self._grant(current)
             elif current["status"] == "granted":
                 self._emit_pay_success(order_id)  # deterministic ts -> dedup
             elif current["status"] not in ("paid", "granted"):
                 raise PayError(E_BAD_STATE, "receipt exists but status=" + current["status"])
-            return self._face({"receipt_id": receipt_id, "order_id": order_id,
-                               "status": self._order_row(order_id)["status"],
-                               "idempotent": True})
+            replay = {"receipt_id": receipt_id, "order_id": order_id,
+                      "status": self._order_row(order_id)["status"],
+                      "idempotent": True}
+            if notify_out is not None:
+                replay["notify"] = notify_out
+            return self._face(replay)
         # signature family (AC-Y4 bads 1-3)
         adapter = self._adapters[order["channel"]]
         try:
@@ -543,12 +591,50 @@ class PayOrders:
             except BaseException:
                 self._conn.execute("ROLLBACK")
                 raise
-        # grant transaction (AC-Y6)
-        self._grant(self._order_row(order_id))
-        return self._face({"receipt_id": receipt_id, "order_id": order_id,
-                           "status": "granted"})
+        # grant transaction (AC-Y6); R1718: the completed grant fires
+        # the payment-success notice (envelope evidence, AC-NW2)
+        notify_out = self._grant(self._order_row(order_id))
+        fresh = {"receipt_id": receipt_id, "order_id": order_id,
+                 "status": "granted"}
+        if notify_out is not None:
+            fresh["notify"] = notify_out
+        return self._face(fresh)
 
     # ---- grant + conversion bridge (AC-Y6/Y7) --------------------------------
+
+    def _attempt_notify(self, order_id, reason):
+        """Post-commit notify attempt (R1718 wiring, notify.py R1706
+        successor): the notice is compliance evidence on a payment that
+        has ALREADY completed, so a notify failure never rolls anything
+        back and never breaks the payment flow (R1681->R1701 degraded
+        pipeline precedent). Outcomes land in the response envelope:
+          sent / skipped_no_budget / skipped_daily_cap / already_logged
+              - the face's own row-backed statuses (skips double as the
+                banner queue; rows ARE the record)
+          template_not_approved - honest pending state: real template
+              ids are CEO physical items; the face raised fail-closed
+              with zero rows (AC-PN5), the envelope carries the state
+          off:<code|ExcName> - unexpected refusal; payment stands,
+              evidence in the envelope.
+        notify=None (not wired) returns None and the caller keeps the
+        envelope key absent (AC-NW1 zero-change face)."""
+        if self.notify is None:
+            return None
+        try:
+            if reason == "payment_success":
+                out = self.notify.notify_payment_success(order_id)
+            else:
+                out = self.notify.notify_refund(order_id)
+            return {"reason": reason, "status": str(out.get("status", ""))}
+        except ValueError as exc:
+            code = str(exc).split(":", 1)[0].strip()
+            if code == "E_TEMPLATE_NOT_APPROVED":
+                status = "template_not_approved"
+            else:
+                status = "off:" + code
+            return {"reason": reason, "status": status}
+        except Exception as exc:  # never break a completed payment
+            return {"reason": reason, "status": "off:" + type(exc).__name__}
 
     def _grant(self, order):
         """paid -> granted: entitlement row + status inside ONE pay-DB
@@ -605,6 +691,7 @@ class PayOrders:
                 self._conn.execute("ROLLBACK")
                 raise
         self._emit_pay_success(order["order_id"])
+        return self._attempt_notify(order["order_id"], "payment_success")
 
     def _emit_pay_success(self, order_id):
         """pay.success onto the public stream (AC-Y14): six-field core +

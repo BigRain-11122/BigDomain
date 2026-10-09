@@ -204,6 +204,11 @@ SUITES = [
     # daily cap, skipped_* banner queue; AC-PN1..PN7 pre-registered
     # in state/queue/tech.md)
     ("pay-notify", os.path.join("pay", "test_pay_notify.py"), 7),
+    # R1718 orders.py notify wiring (R1706 successor): post-commit
+    # payment-success + refund-close notice attempts, never-break
+    # degradation with envelope evidence, close_refund face
+    # (AC-NW1..NW7 pre-registered in state/queue/tech.md).
+    ("pay-notify-wiring", os.path.join("pay", "test_pay_notify_wiring.py"), 7),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
