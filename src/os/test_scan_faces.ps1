@@ -41,6 +41,13 @@
 #           (INFO, no crash).
 #   AC-SC12 GORD new-row count math: state last_gord_tbl_rows=2 vs 4 table
 #           rows -> "gord_new_rows=2"; scan child still exits 0.
+#   AC-SC13 state.json parseable but written with bare-LF terminators
+#           (closeout LF disease, R1697/R1704 recurrences) -> "[STATE] FLAG
+#           eol_bare_lf=N" carrying the logs_toolkit eol repair hint; scan
+#           child still exits 0 (detection lands BEFORE fold's
+#           E_STATE_LAYOUT refusal - R1705 AC-EO5).
+#   AC-SC14 healthy CRLF state -> "[STATE] PASS ... eol_ok=1" (CRLF
+#           conservation gate positive face).
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -59,9 +66,10 @@ $repo = (Resolve-Path (Join-Path $here '..\..')).Path
 $realScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $script:fail = 0
+$script:pass = 0
 
 function Assert([bool]$cond, [string]$name, [string]$detail) {
-    if ($cond) { Write-Output "PASS $name ($detail)" }
+    if ($cond) { Write-Output "PASS $name ($detail)"; $script:pass = $script:pass + 1 }
     else { Write-Output "FAIL $name ($detail)"; $script:fail = $script:fail + 1 }
 }
 
@@ -154,6 +162,23 @@ try {
     Assert ($r.text -match '\[STATE\] FLAG parse_failed') 'AC-SC3' 'broken state -> STATE FLAG back-off signal'
     Assert ($r.text -match '\[ORD\] INFO last=2026-09-28 22:1x \(state unavailable\)') 'AC-SC3' 'ORD degrades to INFO when state unavailable'
     Assert ($r.code -eq 0) 'AC-SC3' 'scan child exits 0 on degraded state (no crash)'
+
+    # AC-SC13: parseable but bare-LF state.json -> eol FLAG + repair hint.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    $sickState = '{"tick":9,' + "`n" + '"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '",' + "`n" + '"log":["a","b"]}'
+    [System.IO.File]::WriteAllText((Join-Path $sbxRepo 'src\os\state.json'), $sickState, $utf8NoBom)
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[STATE\] FLAG eol_bare_lf=2 \(closeout wrote bare LF; repair first: python src/os/logs_toolkit.py eol --fix --execute') 'AC-SC13' 'bare-LF state -> eol_bare_lf=2 FLAG with repair hint'
+    Assert ($r.code -eq 0) 'AC-SC13' 'scan child exits 0 on eol FLAG (no crash)'
+
+    # AC-SC14: healthy CRLF state -> PASS carries eol_ok=1.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[STATE\] PASS .*eol_ok=1') 'AC-SC14' 'healthy CRLF state -> eol_ok=1 on STATE PASS'
 
     # --- [TREE] face ------------------------------------------------------
     # AC-SC4: index.lock present -> back-off FLAG.
@@ -261,7 +286,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-$checks = 23
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC12, " + $checks + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC14, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

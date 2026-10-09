@@ -41,7 +41,16 @@ try {
   $st = $raw | ConvertFrom-Json
   $logN = @($st.log).Count
   $bytes = $utf8.GetByteCount($raw)
-  Write-Output "[STATE] PASS tick=$($st.tick) last_order=$($st.last_order) last_decision_rows=$($st.last_decision_rows) benchmarks_refreshed=$($st.benchmarks_refreshed) log_lines=$logN state_bytes=$bytes"
+  # CRLF conservation gate (R1705 AC-EO5): closeout LF write must surface
+  # here BEFORE fold refuses with E_STATE_LAYOUT (R1697/R1704 recurrences).
+  $lfN = [regex]::Matches($raw, "`n").Count
+  $crlfN = [regex]::Matches($raw, "`r`n").Count
+  $bareLf = $lfN - $crlfN
+  if ($bareLf -gt 0) {
+    Write-Output "[STATE] FLAG eol_bare_lf=$bareLf (closeout wrote bare LF; repair first: python src/os/logs_toolkit.py eol --fix --execute; fold would refuse E_STATE_LAYOUT)"
+  } else {
+    Write-Output "[STATE] PASS tick=$($st.tick) last_order=$($st.last_order) last_decision_rows=$($st.last_decision_rows) benchmarks_refreshed=$($st.benchmarks_refreshed) log_lines=$logN state_bytes=$bytes eol_ok=1"
+  }
 } catch {
   Write-Output '[STATE] FLAG parse_failed (other writer may be active - back off, read-only round)'
 }

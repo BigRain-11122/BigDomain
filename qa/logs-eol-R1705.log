@@ -1,0 +1,94 @@
+# qa/logs-eol-R1705.log - R1705 closeout EOL repairer slice evidence
+# AC-EO1..EO6 pre-registered in state/queue/tech.md R1705 claim row BEFORE code.
+# Seed: R1704 fold first-run E_STATE_LAYOUT refusal (36 bare-LF endings) + R1697 recurrence.
+
+## Section 1: live check on real state.json (AC-EO2 healthy face)
+$ python src/os/logs_toolkit.py eol
+exit=0
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 73958,
+  "total_lf": 32,
+  "crlf": 32,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": true
+}
+verdict: layout_ok=True bare_lf=0 -> exit 0 (0 expected, CRLF-conserved live state)
+
+## Section 2: live LF-disease repair demo on a copy (AC-EO3/EO4 full chain)
+$ python src/os/logs_toolkit.py eol --file <lf_copy>   # after LF-ifying a copy of live state
+exit=2
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\.codely-cli\\tmp\\eol_demo_lf_state.json",
+  "mode": "check",
+  "bytes": 73926,
+  "total_lf": 32,
+  "crlf": 0,
+  "bare_lf": 32,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": false
+}
+verdict: bare_lf=32 detected -> exit 2 FLAG (matches R1704 live incident signature)
+
+$ python src/os/logs_toolkit.py eol --file <lf_copy> --fix --execute
+exit=0
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\.codely-cli\\tmp\\eol_demo_lf_state.json",
+  "mode": "fix-execute",
+  "bytes": 73926,
+  "total_lf": 32,
+  "crlf": 0,
+  "bare_lf": 32,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": false,
+  "predicted_bytes": 73958,
+  "delta_bytes": 32,
+  "content_eq": true,
+  "json_eq": true,
+  "verify_pass": true,
+  "written": true,
+  "post_bare_lf": 0,
+  "predicted_eq_actual": true
+}
+verdict: written=True post_bare_lf=0 predicted_eq_actual=True content_eq=True json_eq=True
+roundtrip identity: repaired copy == original live CRLF bytes: True
+idempotent second execute: exit=0 written=False
+demo copy removed; real state.json untouched this section (bare_lf was already 0 live)
+
+## Section 3: sandbox suite (AC-EO6)
+$ python src/os/test_logs_toolkit.py   (eol-relevant lines)
+PASS eol check healthy CRLF state exit 0
+PASS eol profile fields (crlf==total_lf, lone_cr 0, bytes exact)
+PASS eol fix no-op on healthy file (nothing to fix)
+PASS eol check bare-LF file exit 2 FLAG
+PASS eol fix dry-run: plan + content_eq + json_eq, delta == bare_lf count
+PASS eol dry-run zero mutation (bytes unchanged)
+PASS eol fix execute: written + post bare_lf 0 + predicted==actual
+PASS eol repaired bytes == original healthy CRLF bytes (roundtrip identity)
+PASS eol json semantics preserved (deep-equal objects)
+PASS eol fix idempotent second run no-op
+PASS eol non-JSON --file target: json_eq None + CRLF repair
+SUITE PASS 115 checks
+exit=0
+
+## Section 4: scan faces harness (AC-SC13/SC14 + live count fix)
+$ powershell -NoProfile -ExecutionPolicy Bypass -File src\os\test_scan_faces.ps1
+PASS AC-SC13 (bare-LF state -> eol_bare_lf=2 FLAG with repair hint)
+PASS AC-SC13 (scan child exits 0 on eol FLAG (no crash))
+PASS AC-SC14 (healthy CRLF state -> eol_ok=1 on STATE PASS)
+ALL CRITERIA PASS (AC-SC1..SC14, 25 checks)
+exit=0
+
+## Section 5: live scan rerun - [STATE] face now carries eol_ok (AC-EO5)
+$ powershell ... scan_five_still.ps1   ([STATE] line)
+[STATE] PASS tick=1704 last_order=2026-09-28 22:1x last_decision_rows=281 benchmarks_refreshed=2026-10-10 log_lines=23 state_bytes=73958 eol_ok=1
+exit=0
+
+## Verdict
+AC-EO1..EO6 all green; AC-SC13/SC14 green; suite 104->115 checks; harness 23->25 checks (live-counted).
+The R1697/R1704 manual byte surgery is now: eol --check (scan-side FLAG) -> eol --fix --execute.

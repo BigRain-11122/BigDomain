@@ -596,6 +596,65 @@ def main():
        and cen7['section_line_mismatches'][0]['adjudicated'] is False,
        'census non-listed finding still fails with known-file present')
 
+    # ---- closeout EOL repair (AC-EO1..EO6, R1705 slice) ----
+    # fresh canonical PS-layout state (CRLF) so this section is self-contained
+    build_ps_state(root, ['2026-10-10 R1705 eol case line one D-20261010-01',
+                          '2026-10-10 R1705 tokens: local=1 api=0',
+                          '2026-10-10 R1705 eol case line three'],
+                   archive_text=None)
+    spath_eo = os.path.join(root, 'src', 'os', 'state.json')
+    healthy = open(spath_eo, 'rb').read()
+    # healthy check: exit 0, full profile fields (AC-EO2)
+    rc, out, _ = run(root, 'eol')
+    eo = json.loads(out)
+    ok(rc == 0 and eo['mode'] == 'check' and eo['layout_ok'] and eo['bare_lf'] == 0,
+       'eol check healthy CRLF state exit 0')
+    ok(eo['crlf'] == eo['total_lf'] and eo['lone_cr'] == 0
+       and eo['bytes'] == os.path.getsize(spath_eo),
+       'eol profile fields (crlf==total_lf, lone_cr 0, bytes exact)')
+    # fix no-op on healthy file: zero write (AC-EO4)
+    rc, out, _ = run(root, 'eol', '--fix', '--execute')
+    ok(rc == 0 and json.loads(out)['written'] is False,
+       'eol fix no-op on healthy file (nothing to fix)')
+    # LF-ified copy: check exits 2 with bare_lf FLAG (AC-EO2)
+    lfpath = os.path.join(root, 'lf_state.json')
+    with open(lfpath, 'wb') as f:
+        f.write(healthy.replace(b'\r\n', b'\n'))
+    rc, out, _ = run(root, 'eol', '--file', lfpath)
+    eo3 = json.loads(out)
+    ok(rc == 2 and eo3['bare_lf'] > 0 and eo3['layout_ok'] is False,
+       'eol check bare-LF file exit 2 FLAG')
+    # dry-run: zero mutation + plan with content_eq/json_eq (AC-EO1/EO3)
+    rc, out, _ = run(root, 'eol', '--file', lfpath, '--fix')
+    eo4 = json.loads(out)
+    ok(rc == 0 and eo4['mode'] == 'fix-dry-run' and eo4['content_eq'] is True
+       and eo4['json_eq'] is True and eo4['delta_bytes'] == eo3['bare_lf'],
+       'eol fix dry-run: plan + content_eq + json_eq, delta == bare_lf count')
+    ok(open(lfpath, 'rb').read() == healthy.replace(b'\r\n', b'\n'),
+       'eol dry-run zero mutation (bytes unchanged)')
+    # execute: full chain fidelity (AC-EO3/EO4)
+    rc, out, _ = run(root, 'eol', '--file', lfpath, '--fix', '--execute')
+    eo5 = json.loads(out)
+    ok(rc == 0 and eo5['written'] is True and eo5['post_bare_lf'] == 0
+       and eo5['predicted_eq_actual'] is True,
+       'eol fix execute: written + post bare_lf 0 + predicted==actual')
+    ok(open(lfpath, 'rb').read() == healthy,
+       'eol repaired bytes == original healthy CRLF bytes (roundtrip identity)')
+    ok(json.load(open(lfpath, encoding='utf-8')) == json.load(open(spath_eo, encoding='utf-8')),
+       'eol json semantics preserved (deep-equal objects)')
+    # idempotent second execute: no-op (AC-EO4)
+    rc, out, _ = run(root, 'eol', '--file', lfpath, '--fix', '--execute')
+    ok(rc == 0 and json.loads(out)['written'] is False, 'eol fix idempotent second run no-op')
+    # non-JSON target via --file: json_eq None, content surgery still valid (AC-EO3)
+    txtpath = os.path.join(root, 'plain.txt')
+    with open(txtpath, 'wb') as f:
+        f.write('alpha\nbeta\n'.encode('utf-8'))
+    rc, out, _ = run(root, 'eol', '--file', txtpath, '--fix', '--execute')
+    eo7 = json.loads(out)
+    ok(rc == 0 and eo7['json_eq'] is None and eo7['post_bare_lf'] == 0
+       and open(txtpath, 'rb').read() == b'alpha\r\nbeta\r\n',
+       'eol non-JSON --file target: json_eq None + CRLF repair')
+
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):
         b = open(src, 'rb').read()

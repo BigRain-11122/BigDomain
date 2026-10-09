@@ -270,6 +270,102 @@ def cmd_catalog(args):
     return 0 if not missing else 2
 
 
+# --- closeout EOL repair (R1705 slice, AC-EO1..EO6 pre-registered in tech.md) ---
+# R1697/R1704 both hit fold's E_STATE_LAYOUT refusal because a round's
+# closeout wrote state.json with bare-LF line endings. This subcommand
+# toolizes the manual byte surgery done in those rounds: report the EOL
+# profile, and repair bare-LF terminators to CRLF with content bytes and
+# JSON semantics untouched (verify-then-write).
+
+BARE_LF = re.compile(r'(?<!\r)\n')
+
+
+def eol_profile(raw):
+    """Count terminator classes in raw (utf-8 bytes) without mutating."""
+    text = raw.decode('utf-8')
+    total_lf = text.count('\n')
+    crlf = text.count('\r\n')
+    bare_lf = total_lf - crlf
+    lone_cr = text.count('\r') - crlf
+    return {
+        'bytes': len(raw),
+        'total_lf': total_lf,
+        'crlf': crlf,
+        'bare_lf': bare_lf,
+        'lone_cr': lone_cr,
+        'ends_with_eol': text.endswith('\n') or text.endswith('\r'),
+        'layout_ok': bare_lf == 0 and lone_cr == 0,
+    }
+
+
+def eol_content_lines(text):
+    """Terminator-insensitive line-content sequence (CRLF and LF both split)."""
+    return re.split(r'\r\n|\n', text)
+
+
+def cmd_eol(args):
+    if args.file:
+        path = os.path.abspath(args.file)
+    else:
+        path = os.path.join(args.root, 'src', 'os', 'state.json')
+    with open(path, 'rb') as f:
+        raw = f.read()
+    prof = eol_profile(raw)
+    text = raw.decode('utf-8')
+    out = {'file': path, 'mode': 'check'}
+    out.update(prof)
+    if not args.fix:
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0 if prof['layout_ok'] else 2
+    fixed_text = BARE_LF.sub('\r\n', text)
+    fixed_raw = fixed_text.encode('utf-8')
+    out['mode'] = 'fix-execute' if args.execute else 'fix-dry-run'
+    out['predicted_bytes'] = len(fixed_raw)
+    out['delta_bytes'] = len(fixed_raw) - len(raw)
+    out['content_eq'] = eol_content_lines(text) == eol_content_lines(fixed_text)
+    json_eq = None
+    try:
+        json_eq = json.loads(text) == json.loads(fixed_text)
+    except ValueError:
+        try:
+            json.loads(text)
+            json_eq = False  # raw parses, fixed does not: semantics broken
+        except ValueError:
+            json_eq = None   # non-JSON target (--file): equivalence n/a
+    out['json_eq'] = json_eq
+    out['verify_pass'] = out['content_eq'] and json_eq is not False
+    if not out['verify_pass']:
+        out['error'] = 'E_EOL_VERIFY: content or json equivalence broken (refusing)'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 2
+    if prof['bare_lf'] == 0:
+        out['written'] = False
+        out['note'] = 'nothing to fix (no bare-LF terminator)'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0
+    if not args.execute:
+        out['note'] = 'dry-run: zero mutation'
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0
+    dirname = os.path.dirname(path) or '.'
+    fd, tmp = tempfile.mkstemp(prefix='eol_fix_', dir=dirname)
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            f.write(fixed_raw)
+        os.replace(tmp, path)
+    except OSError:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+        raise
+    with open(path, 'rb') as f:
+        on_disk = f.read()
+    out['written'] = True
+    out['post_bare_lf'] = eol_profile(on_disk)['bare_lf']
+    out['predicted_eq_actual'] = on_disk == fixed_raw
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0 if out['post_bare_lf'] == 0 and out['predicted_eq_actual'] else 2
+
+
 # --- fold surgery (R1687 slice, AC-LT8..LT14 pre-registered in tech.md) ---
 
 def ps_escape(s):
@@ -691,6 +787,10 @@ def main(argv=None):
     cn = sub.add_parser('census', help='archive reverse reconciliation census (read-only)')
     cn.add_argument('--known-file', help='adjudicated known-findings data file '
                     '(default: census_known_findings.json alongside this tool)')
+    pe = sub.add_parser('eol', help='state.json closeout EOL repair (bare-LF report + CRLF surgery)')
+    pe.add_argument('--file', default=None, help='target file (default: src/os/state.json)')
+    pe.add_argument('--fix', action='store_true', help='perform CRLF surgery (default: read-only check)')
+    pe.add_argument('--execute', action='store_true', help='with --fix: actually write (default: dry-run)')
     pf = sub.add_parser('fold', help='state.json fold surgery (verify-then-write)')
     pf.add_argument('--round', help='round label e.g. R1687 (backup + header naming)')
     pf.add_argument('--fold-no', help='fold knife number e.g. 455 (header)')
@@ -707,7 +807,7 @@ def main(argv=None):
     args = p.parse_args(argv)
     handlers = {'gauge': cmd_gauge, 'inventory': cmd_inventory, 'tail': cmd_tail,
                 'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
-                'census': cmd_census}
+                'census': cmd_census, 'eol': cmd_eol}
     if args.cmd not in handlers:
         return 2
     try:
