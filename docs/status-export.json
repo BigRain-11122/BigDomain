@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T20:01:32+08:00",
+  "export_ts": "2026-10-09T20:13:05+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：fold R456 水位整编+滚窗并折收账（state.json 81,118B 越线→fold 正门 execute·窗 7 行 9,276B 折 1·31 token 零丢失·verify-then-write 预测==实际 75,301B·终态 77,883B）+O-20261009-1845 机队记忆并集同步令知悉回执（机器层基建·非本司执行面）。沙箱矩阵 39 套件 420 判据在册全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=logs_toolkit.py fold R456 滚窗并折手术（2026-10-09T20:01:32+08:00·R1692 交付）：R1688 滚窗行承前+R1689/R1690/R1691 三队头对折 1 滚窗行·archive §R1692 节 7 行 verbatim 全量保全+pre-op 备份 logs/state-preop-R1692.bak〔sha16 1886ede938cef0bd〕·token 31/31 零丢失·预测==实际；证据=qa/reorg-R1692.log（dry-run+execute 双节）",
-    "next_milestone": "下轮=P3 队头认领（城市节气/节日限定活动引擎探索行·AC 判据预注册先于代码·explore open 8）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
+    "current": "本轮交付：城市节气/节日限定活动引擎沙箱件（P3 队头·AC-FE1..FE7 判据预注册先于代码·档期窗+限购门+限量帽+活动纪念 collectibles 联动·SUITE 7/7 首跑即净+全量回归 40/40 全绿）。沙箱矩阵 40 套件 427 判据在册全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=festival.py 城市节气/节日限定活动引擎（2026-10-09T20:13:05+08:00·R1693 交付）：档期窗注册〔UNIQUE event_key·int-tick 窗沿用 ads/venue 约定〕+窗内购买〔双沿恰界包容·窗外一刻拒 fail-closed 零扣费〕+限购门/限量帽/同 ref 重放三闸全前置于 spend+活动纪念 collectibles 公有 API 联动（首笔发证·预授不双发）+AIGC 标识恒带+非投顾 disclaimer 四信封常驻·test_festival.py SUITE 7/7 首跑即净+RUNNER PASS 40/40 套件 427 判据 对账双控 6/6 93.1s 零回归；证据=qa/festival-R1693.log（独立套件+回归两节）+矩阵再生 docs/sandbox-suite-matrix.md 40/427 byte-identical 绿",
+    "next_milestone": "下轮=explore 下队头认领（企业展厅 SaaS 化探索行·AC 判据预注册先于代码·explore open 7）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1692",
+      "1693",
       "OSLoop 执行 tick"
     ],
     [
@@ -2877,21 +2877,25 @@
     [
       "1",
       "fold R456 水位整编+滚窗并折收账轮（台账维护机制件·P-2026-09-25-18 第四百五十六刀·R1691 承传注记兑现：轮首首测 81,118B 越线 2,618B·窗=R1688 滚窗行承前+R1689/R1690/R1691 三队头对 6 行 9,276B 折 1 kept=0·原文全量保全=archive §R1692 节 7 行 verbatim+pre-op 备份件 logs/state-preop-R1692.bak〔sha16 1886ede938cef0bd〕·P/D 编目 31 token 随窗零丢失全录直载滚窗行·verify-then-write 预测==实际 75,301B·收账终态 77,883B·AC-R4561..R4566=qa/reorg-R1692.log）+O-20261009-1845 机队记忆并集同步令判读回执（GORD 尾行直显检出·计数基线已含行而 state 零记载=计数盲区实锚如实注·机器层基建令状态列 executed→非本司执行面知悉不动作·编号引用=送达律）·R1692"
+    ],
+    [
+      "2",
+      "R1693 城市节气/节日限定活动引擎沙箱件（P3 队头·AC-FE1..FE7 预注册=explore.md 认领行先于代码·种子=collectibles/ads 双面在册）：src/sandbox/ledger/festival.py FestivalFace 三域=档期窗注册〔UNIQUE event_key+int-tick 窗约定沿用 ads/venue CHECK end>start+声明面 ai_label 持久〕+窗内销售〔at_window 双沿恰界包容·窗外一刻拒 E_FE_WINDOW 零扣费零行 fail-closed·恰一笔 spend 绑 tx·price_paid 不可变拷贝〕+限购门/限量帽/重放三闸全前置〔E_FE_LIMIT 异买家独立计数/E_FE_SOLD_OUT 事件全局帽/E_FE_DUP_PURCHASE 同 (buyer,ref) 拒·全拒于 spend 前余额纹丝不动〕+活动纪念 collectibles 联动〔首笔购买经 CollectiblesFace.issue_certificate 公有 API 引用不复制·模块源零 collectibles/cl_editions 直写=零第二引擎·平台预授 E_CL_DUP 内化不双发·commemorative 每 (buyer,event) 恰一 1〕+AIGC 标识恒带呈现面〔直插 ai_label=2 DB CHECK 拒〕+非投顾 disclaimer 四信封常驻〔空拒构造〕·test_festival.py SUITE 7/7 exit 0 首跑即净+reconcile_all 39→40 套件 420→427 判据 RUNNER PASS 40/40 对账双控 6/6 93.1s 零回归=qa/festival-R1693.log〔独立套件+回归两节〕·docs/sandbox-suite-matrix.md 再生 40 套件 427 判据（--check byte-identical 绿）·queue_explore_open 8→7·价目/限购/限量参数全 [needs-CEO] P1 呈批不执行"
     ]
   ],
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
-    "queue_explore_open": 8,
+    "queue_explore_open": 7,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1692 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1692 pair appended (main + tokens) = W 24 -> 26, sub 8 -> 9 (R1692 main line new substantive round anchor, tokens line excluded per caliber), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics); queue_explore_open 9 -> 8 (UGC template-market row done in R1692); queue_main/tech flat; proposals flat"
+    "method": "R1693 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1693 pair appended (main + tokens) = W 22 -> 24, sub 7 -> 8 (R1693 main line new substantive round anchor, tokens line excluded per caliber), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics); queue_explore_open 8 -> 7 (festival limited-event row done in R1693); queue_main/tech flat; proposals flat"
   }
 }

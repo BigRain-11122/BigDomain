@@ -123,6 +123,14 @@ SUITES = [
     # in state/queue/explore.md).
     ("ledger-tmarket",
      os.path.join("ledger", "test_tmarket.py"), 7),
+    # R1693 solar-term / festival limited-event face: ads/venue
+    # schedule-window convention (inclusive on both edges) +
+    # per-account purchase-limit gate + event-wide edition cap (all
+    # reject BEFORE the spend) + event-commemorative collectibles
+    # linkage through the collectibles public API (AC-FE1..FE7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-festival",
+     os.path.join("ledger", "test_festival.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent

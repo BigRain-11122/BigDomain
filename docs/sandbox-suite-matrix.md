@@ -1,16 +1,16 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-09 19:40 +08:00
-- 生成命令: python src/sandbox/suite_matrix.py --evidence qa/tmarket-R1691.log
-- 状态证据: tmarket-R1691.log (RUNNER PASS 39/39 suites green, reconcile controls 6/6, 84.2s)
+- 生成时间: generated: 2026-10-09 20:10 +08:00
+- 生成命令: python src/sandbox/suite_matrix.py --evidence qa/festival-R1693.log
+- 状态证据: festival-R1693.log (RUNNER PASS 40/40 suites green, reconcile controls 6/6, 93.1s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
 ## 汇总
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 39 | 420 | 39/39 | R1691 |
+| 40 | 427 | 40/40 | R1693 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -37,9 +37,9 @@
 
 | # | 套件 | 路径 | 判据数 | 状态 | 证据耗时(s) |
 |---|---|---|---|---|---|
-| 1 | lobby | lobby/test_client.py | 16 | green | 22.3 |
+| 1 | lobby | lobby/test_client.py | 16 | green | 22.5 |
 | 2 | ledger | ledger/test_ledger.py | 11 | green | 0.6 |
-| 3 | ledger-props | ledger/test_props.py | 7 | green | 0.2 |
+| 3 | ledger-props | ledger/test_props.py | 7 | green | 0.4 |
 | 4 | ledger-incentive | ledger/test_incentive.py | 7 | green | 0.2 |
 | 5 | ledger-settlement | ledger/test_settlement.py | 7 | green | 0.1 |
 | 6 | ledger-venue | ledger/test_venue.py | 7 | green | 0.2 |
@@ -47,38 +47,39 @@
 | 8 | ledger-expedite | ledger/test_expedite.py | 7 | green | 0.2 |
 | 9 | ledger-ads | ledger/test_ads.py | 7 | green | 0.2 |
 | 10 | ledger-observation | ledger/test_observation.py | 7 | green | 0.2 |
-| 11 | ledger-identity | ledger/test_identity.py | 7 | green | 0.2 |
-| 12 | ledger-studio | ledger/test_studio.py | 7 | green | 0.4 |
-| 13 | ledger-metered | ledger/test_metered.py | 7 | green | 0.2 |
-| 14 | ledger-reports | ledger/test_reports.py | 7 | green | 0.2 |
+| 11 | ledger-identity | ledger/test_identity.py | 7 | green | 0.4 |
+| 12 | ledger-studio | ledger/test_studio.py | 7 | green | 0.2 |
+| 13 | ledger-metered | ledger/test_metered.py | 7 | green | 0.3 |
+| 14 | ledger-reports | ledger/test_reports.py | 7 | green | 0.3 |
 | 15 | ledger-effects | ledger/test_effects.py | 7 | green | 0.2 |
 | 16 | ledger-growth-archive | ledger/test_growth_archive.py | 7 | green | 0.2 |
 | 17 | ledger-companion | ledger/test_companion.py | 7 | green | 0.2 |
 | 18 | ledger-tmarket | ledger/test_tmarket.py | 7 | green | 0.2 |
-| 19 | tourstate | tourstate/test_tourstate.py | 7 | green | 0.1 |
-| 20 | ugc | ugc/test_ugc.py | 12 | green | 1.1 |
-| 21 | ugc-sec-batch | ugc/test_sec_batch.py | 7 | green | 0.2 |
-| 22 | pay | pay/test_pay.py | 16 | green | 1.7 |
-| 23 | pay-v3 | pay/test_pay_v3.py | 14 | green | 0.5 |
-| 24 | pay-v3-real | pay/test_pay_v3_real.py | 9 | green | 0.5 |
-| 25 | pay-v3-window | pay/test_pay_v3_window.py | 6 | green | 0.7 |
-| 26 | member | member/test_member.py | 16 | green | 1.9 |
-| 27 | member-entry | member/test_entry_tier.py | 7 | green | 0.1 |
-| 28 | watermark | watermark/test_watermark.py | 5 | green | 1.6 |
-| 29 | watermark-robust | watermark/test_watermark_robust.py | 6 | green | 1.9 |
-| 30 | watermark-sweep | watermark/test_watermark_sweep.py | 6 | green | 23.6 |
-| 31 | dual-track | watermark/test_dual_track.py | 7 | green | 1.2 |
-| 32 | opsreview | opsreview/test_opsreview.py | 7 | green | 0.9 |
-| 33 | liveroom | liveroom/test_liveroom.py | 10 | green | 0.3 |
-| 34 | benchgate | benchgate/test_bench_gate.py | 11 | green | 0.5 |
-| 35 | citymodel | citymodel/test_scenario.py | 10 | green | 0.2 |
-| 36 | compliance | compliance/test_sku_compliance_map.py | 15 | green | 0.2 |
-| 37 | minors | minors/test_minors.py | 19 | green | 0.1 |
-| 38 | minors-wiring | minors/test_wiring.py | 70 | green | 15.1 |
-| 39 | schema-migrate | test_schema_migrate.py | 21 | green | 4.9 |
-|  | 合计 |  | 420 | green 39 / FAIL 0 / no-evidence 0 |  |
+| 19 | ledger-festival | ledger/test_festival.py | 7 | green | 0.2 |
+| 20 | tourstate | tourstate/test_tourstate.py | 7 | green | 0.1 |
+| 21 | ugc | ugc/test_ugc.py | 12 | green | 1.5 |
+| 22 | ugc-sec-batch | ugc/test_sec_batch.py | 7 | green | 0.2 |
+| 23 | pay | pay/test_pay.py | 16 | green | 1.9 |
+| 24 | pay-v3 | pay/test_pay_v3.py | 14 | green | 0.5 |
+| 25 | pay-v3-real | pay/test_pay_v3_real.py | 9 | green | 0.5 |
+| 26 | pay-v3-window | pay/test_pay_v3_window.py | 6 | green | 0.7 |
+| 27 | member | member/test_member.py | 16 | green | 1.8 |
+| 28 | member-entry | member/test_entry_tier.py | 7 | green | 0.1 |
+| 29 | watermark | watermark/test_watermark.py | 5 | green | 2.0 |
+| 30 | watermark-robust | watermark/test_watermark_robust.py | 6 | green | 2.0 |
+| 31 | watermark-sweep | watermark/test_watermark_sweep.py | 6 | green | 27.3 |
+| 32 | dual-track | watermark/test_dual_track.py | 7 | green | 1.7 |
+| 33 | opsreview | opsreview/test_opsreview.py | 7 | green | 1.1 |
+| 34 | liveroom | liveroom/test_liveroom.py | 10 | green | 0.7 |
+| 35 | benchgate | benchgate/test_bench_gate.py | 11 | green | 0.3 |
+| 36 | citymodel | citymodel/test_scenario.py | 10 | green | 0.2 |
+| 37 | compliance | compliance/test_sku_compliance_map.py | 15 | green | 0.1 |
+| 38 | minors | minors/test_minors.py | 19 | green | 0.1 |
+| 39 | minors-wiring | minors/test_wiring.py | 70 | green | 17.0 |
+| 40 | schema-migrate | test_schema_migrate.py | 21 | green | 5.2 |
+|  | 合计 |  | 427 | green 40 / FAIL 0 / no-evidence 0 |  |
 
 ## 证据出处
 
-- tmarket-R1691.log (qa/tmarket-R1691.log)
+- festival-R1693.log (qa/festival-R1693.log)
 - 状态列解析自上述证据 log 的 suite 行（exit 码）与 RUNNER 终态行；证据中缺失的套件记 no-evidence（不捏造）。判据数为预注册口径，源自套件注册表。
