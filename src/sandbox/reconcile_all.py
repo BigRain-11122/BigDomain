@@ -109,6 +109,12 @@ SUITES = [
      os.path.join("ledger", "test_effects.py"), 7),
     ("ledger-growth-archive",
      os.path.join("ledger", "test_growth_archive.py"), 7),
+    # R1689 resident AI companion subscription face: monthly pass
+    # idempotency + msgSecCheck pre-gate (injected SecGate, reference
+    # not copy) + structural AIGC label + append-only memory archive
+    # (AC-CP1..CP7 pre-registered in state/queue/explore.md).
+    ("ledger-companion",
+     os.path.join("ledger", "test_companion.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T18:51:48+08:00",
+  "export_ts": "2026-10-09T19:13:31+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：archive 反向对账件 census 上线（logs_toolkit.py 第七子命令：371 节档案完整性+指针解析+三向 token 清点，历史档案机器可审计——一次抓出 3 处历史遗迹并全部查证定性为「指针名漂移/行层分裂·内容零丢失」带证据链入册）；水位 fold R455 同轮用工具正门兑现（82300B→73497B，R1687 承传注记兑现）；套件 81 项全绿。等外部输入：radar 候选清单+OSS 窗（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=src/os/logs_toolkit.py census 子命令+src/os/census_known_findings.json（archive 反向对账件·2026-10-09 18:51 +08:00·R1688 交付·六→七子命令）：节完整性 declared vs actual（R1646 NUL-clobber 事故类检出面）+§R 指针 dangling 判+not_embedded/roll_native/archive_only 三向 token census（era 口径差诚实分类）+已知发现采纳机制（三发现逐一查证定性：R1317 行层分裂遗迹/§R1192 裸档种子/§R601 快照序列漂移）；R1686 发现的 2 token（BD-PROP-002/C-20260929）机器复现=锚验证过；证据=qa/logs-census-R1688.log（含 fold R455 收据）",
-    "next_milestone": "下轮=P2 队头连续产出（tech 队列在板·常设线后继候选=fold 中段窗支持·窗 ≤48h）+OSS 窖6 切片窗 10-11 开窗+雷达 w5 候选清单续候+fold R456（收账后水位再越 78500B 时轮首首测）"
+    "current": "本轮交付：居民 AI 虚拟陪伴订阅面上线（companion.py：月卡订阅+AI 对话内容闸+记忆档案+AIGC 标识——情感粘性收入面首个可跑件，回应全司逐审案「零可计费」批评）；套件 38 项全绿。等外部输入：radar 候选清单+OSS 窗（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=src/sandbox/ledger/companion.py+test_companion.py（居民 AI 虚拟陪伴订阅面沙箱件·2026-10-09 19:1x +08:00·R1689 交付）：月窗订阅每户每月恰一笔 spend 绑 tx+msgSecCheck 前置闸 fail-closed（SecGate 引用不复制·居民文本/AI 回复双过闸发布前拒·无闸不开门）+AIGC 标识结构性恒 1（写面无参数+DB CHECK 双执法）+记忆档案 append-only 锚 AI 回复源+非投顾 disclaimer 常驻；SUITE 7/7+全量回归 RUNNER PASS 38/38 413 判据零回归；证据=qa/companion-R1689.log",
+    "next_milestone": "下轮=P2 队头常设线切片（logs 工具链 fold 中段窗支持·R1688 承传注记兑现·窗 ≤48h）+OSS 窖6 切片窗 10-11 开窗+雷达候选清单续候+fold R456（收账后水位再越 78500B 时轮首首测）"
   },
   "depts": [
     {
@@ -247,7 +247,7 @@
       "fold R454 水位整编收账轮（台账维护机制件·P-2026-09-25-18 第四百五十四刀·R1684 承传注记兑现：轮首首测 80297B 越线 1797B·probe A/B 取 B=7 行〔R1610..R1681 滚窗行+R1682/R1683/R1684 三 pair〕14355B 折 1 滚窗行 kept=0·pre-op==HEAD 逐字节 sha16 fbceaabf948be4cf·archive §R1685 节 7 行 verbatim markers 178→179+备份件 logs/state-preop-R1685.bak·P/D 编目 126 token 零丢失全录直载〔承前 119+新增 7〕·verify-then-write 预测==实际 74471B margin 4029B 闸内·双解析器过〔py+PS〕·九面扫描五静全过承 R1684 判读链·sd 重派 (21,0,1,7) 三 pair 漂移归一·checker RUN0+RUN1 双绿·AC-R4541..R4546=qa/reorg-R1685.log·R1685）"
     ],
     [
-      "1688",
+      "1689",
       "OSLoop 执行 tick"
     ],
     [
@@ -2861,21 +2861,25 @@
     [
       "2",
       "R1688 archive catalog 反向对账件（P2 队头·AC-LT15..LT19 预注册先于代码·tech.md 认领行在册）：logs_toolkit.py 增 census 子命令（六→七·只读零盘面突变）=节完整性 declared vs actual 逐节比对〔R1646 NUL-clobber 事故类检出面〕+§R 指针跨双档解析 dangling 判+not_embedded/roll_native/archive_only 三向 token census〔informational·era 嵌入口径差诚实分类=R1686「正行为」判读口径〕+已知发现采纳机制〔--known-file 覆写参+缺省件 census_known_findings.json·现场三发现逐一查证定性带证据链：R1317 节 declared 7/actual 8=R1314 行层分裂遗迹内容逐字节保全/§R1192=冷段种子裸档 10405B 与滚窗行宣称相符/§R601=09 档 re-org 快照序列无该节·产物存 R605 快照+§R1215 冷段摘要——全「指针名漂移/行层遗迹·内容保全」定性〕——live 读数 371 节〔10 版 179+09 版 192〕/mismatch 1（unknown 0）/dangling 2→4（unknown 0·新滚窗行 §R1192/§R601 引用入 known 面）exit 0·archive token 1864·live 260·archive_only 1620 informational·R1686 锚机械复现=R1685 节对滚窗行 not_embedded 恰=〔BD-PROP-002/C-20260929〕·套件 65→81 全绿〔census 16 新例含已知发现三态〕·证据 qa/logs-census-R1688.log〔census live 全输出+锚核+§2c 三发现查证探针+套件节+§4 fold R455 收据〕；fold R455 随轮兑现（R1687 承传注记·82300B→73497B·8 行折 1 滚窗行全嵌 25 token·verify-then-write 全绿·P-2026-09-25-18 第四百五十五刀）"
+    ],
+    [
+      "2",
+      "R1689 居民 AI 虚拟陪伴订阅面沙箱件（P3 队头·AC-CP1..CP7 预注册=explore.md 认领行先于代码·种子=C-20261009-02 情感粘性收入面缺口）：src/sandbox/ledger/companion.py CompanionFace 三域=月窗订阅档〔每 (account,YYYY-MM) 恰一笔 spend 绑 tx·订阅结构复用 observation pass 判读零双建〕+AI 陪伴对话〔msgSecCheck 前置闸 SecGate DI 引用不复制·居民文本/AI 回复双过闸发布前拒零行·无闸不开门+门运行时故障零静默放行〕+记忆档案〔append-only 零 UPDATE·AI 派生记忆必锚 companion 源 msg·AIGC 标识结构性=ai_label 恒 1 写面无参数+DB CHECK 双执法·直插错标 IntegrityError 拒实证〕+非投顾 disclaimer 常驻面〔空 disclaimer 拒构造〕·test_companion.py SUITE 7/7 exit 0+reconcile_all 37→38 套件 406→413 判据 RUNNER PASS 38/38+对账双控 6/6 146.0s 零回归=qa/companion-R1689.log·docs/sandbox-suite-matrix.md 再生 38 套件 413 判据（--check byte-identical 绿）·AI 引擎本体不建=回复调用方供给〔生产接线=bootstrap 窗〕·价目 [needs-CEO] P1 呈批"
     ]
   ],
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
-    "queue_explore_open": 10,
+    "queue_explore_open": 9,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1688 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; fold R455 executed this round (R1687 carry-note cashed, tool front door) = window [R1685 fold pair + R1686/R1687/R1688 three slice pairs] 8 lines -> 1 roll line: W 25 -> 20 (-4 pair lines +1 roll, roll line paren-form outside sub caliber), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics), sub 9 -> 6 (-3 slice mains R1685/R1686/R1687, R1688 main added-then-folded same round, tokens lines excluded per caliber); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row still gated on absent docker, logs-tooling standing row open with next candidate = fold mid-array window support), queue_main_open 6 / queue_explore_open 10 flat; tick row 1687 -> 1688 = state.tick; results +1 R1688 census slice row"
+    "method": "R1689 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1689 companion slice pair appended (main + tokens) = W 20 -> 22 (+2 in-window lines), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics), sub 6 -> 7 (R1689 main line is a new substantive round anchor, tokens line excluded per caliber); proposals 3 total / 1 open flat (window 10-06..10-13 quota cleared by BD-PROP-003); queue_tech_open 2 flat (docker-compose row still gated on absent docker, logs-tooling standing row open with next candidate = fold mid-array window support = next-round P2 head first claim), queue_main_open 6 flat, queue_explore_open 10 -> 9 (companion row done R1689); tick row 1688 -> 1689 = state.tick; results +1 R1689 companion slice row"
   }
 }
