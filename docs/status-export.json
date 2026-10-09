@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T05:34:52+08:00",
+  "export_ts": "2026-10-10T05:59:57+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1712 交付：apidev 短窗频控面（rate ring·tech 队头编号项·判据 AC-RT1..RT7 预注册先于代码）——minute_cap 键参（缺省 0=关·legacy 调用形零改动）+E_AD_RATE 门先于计费环 fail-closed 零扣费零行+分钟窗计数走不可变 call 行+rotate_in 祖先链（轮换不重置分钟环）+月窗/分钟窗判读分离全信封可见。套件 SUITE PASS 7/7+RUNNER 48/48 套件 517 判据全绿。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：apidev 短窗频控面件（2026-10-10·R1712 交付·可跑实物计 2）：src/sandbox/ledger/apidev.py ring 5（minute_cap/E_AD_RATE 门/祖先链分钟窗计数/三读面）+新套件 test_apidev_rate.py SUITE PASS 7/7 exit 0+RUNNER PASS 48/48 套件 517 判据 controls 6/6 101.9s 零回归+矩阵再生 48/517 green --check byte-identical·证据 qa/apidev-rate-R1712.log+qa/reconcile-all-R1712.log",
-    "next_milestone": "下轮=tech 队头序推进（schema_migrate 基线指纹再生器=五域构造器漂移检出面）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1713 交付：基线指纹再生器（tech 队头·判据 AC-BF1..BF7 预注册先于代码）——五域构造器现建库再取指纹 vs 冻结基线逐域比对，漂移即 FAIL；--update 再冻结（带 steps 的链拒改=真 schema 变更走迁移链）。套件 SUITE PASS 16/16+RUNNER 49/49 套件 533 判据全绿。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：基线指纹再生器件（2026-10-10·R1713 交付·可跑实物计 2）：src/sandbox/fingerprint_regen.py+test_fingerprint_regen.py（--check 漂移检出/--update 再冻结/五域活体再派生）+RUNNER PASS 49/49 套件 533 判据 controls 6/6 103.8s 零回归+矩阵再生 49/533 green --check byte-identical·证据 qa/fingerprint-regen-R1713.log+qa/reconcile-all-R1713.log",
+    "next_milestone": "下轮=tech 队头序推进（apidev 拒因分类计数读面 reject_tally+usage_log 读帽面）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1712",
+      "1713",
       "OSLoop 执行 tick"
     ],
     [
@@ -2957,20 +2957,24 @@
     [
       "2",
       "apidev 短窗频控面件（R1712·tech 队头编号项·判据 AC-RT1..RT7 预注册先于代码：minute_cap 键参〔缺省 0=ring dark·legacy 五参位置形零改动·坏参 E_AD_BAD_ARGS 零行零 metered 触碰〕+E_AD_RATE 门〔kind 门后月帽门前·先于计费环 fail-closed 零扣费零行〕+分钟窗计数=不可变 call 行 substr(called_utc,1,16) 前缀匹配·祖先链反规避〔rotate 不重置分钟环=R1711 月窗同律短窗面〕+信封/key_view/dev_board 全带 minute_window/minute_used/minute_cap 三读〔月窗/分钟窗判读分离·双帽键 3rd=E_AD_RATE 4th=E_AD_QUOTA〕+rotate 承接 minute_cap·套件时序坑如实注〔AC-RT2 首跑判负=断言取值点在滚动后成功调之后·修取证时点二跑绿〕·SUITE 7/7+RUNNER PASS 48/48 套件 517 判据 controls 6/6 101.9s=qa/reconcile-all-R1712.log·SUITES 47→48 判据 510→517·矩阵再生 48/517 green --check byte-identical 双跑·证据 qa/apidev-rate-R1712.log·tech open 9→8 后补种 2→10）"
+    ],
+    [
+      "2",
+      "schema_migrate 基线指纹再生器件（R1713·P2 队头〔docker 门控项跳过〕·判据 AC-BF1..BF7 预注册=tech.md 认领行先于代码：CLI src/sandbox/fingerprint_regen.py=五域构造器活体指纹再派生 vs migration_chains.json 冻结基线逐域比对〔指纹面引用不复制 from schema_migrate import fingerprint/read_chains/_fp_diff 单一事实源·构造接线=test_schema_migrate.py build_domain_db 同律孪生〕+--check 缺省只读〔域集自举·漂移 exit 2+E_BASELINE_MISMATCH 族+_fp_diff 细节·wiring 缺位 E_REGEN_NO_WIRING fail-closed〕+--update 再冻结〔steps 非空 E_REGEN_STEPS_PRESENT 拒=真 schema 变更走迁移链·read_chains 校验门·tempfile+os.replace 原子写+写后 post-check 自跑·无漂移逐字节 no-op〕·套件 test_fingerprint_regen.py SUITE PASS 16/16 exit 0〔R1676 交叉验证注记+确定性双跑逐位同一+漂移注入检出+愈合闭环+ghost 域+坏链传播+卫生三例〕·reconcile_all SUITES 48→49 判据 517→533·RUNNER PASS 49/49 controls 6/6 103.8s 零回归=qa/reconcile-all-R1713.log〔--out 旗误用 argv[1] 路径律如实注=陈件归位 qa/〕·矩阵再生 49/533 green --check byte-identical·证据 qa/fingerprint-regen-R1713.log 四节·tech open 10→9 后补种 1→10·fold R464 滚窗并折随轮〔78986B→75375B·164 token 全字面嵌·verify-then-write·preop sha16 63b6d3af72f29053·AC-R4641..R4646=qa/reorg-R1713.log〕）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1712 flush caliber (checker single-source law): window re-derived after the R1712 pair appended; tick row 1711 -> 1712; W 22->24 and sub 9->10 from the R1712 pair; queue_tech_open 9->10 (rate row checked off, +2 successor seeds: reject-tally read face + usage_log read cap); post-accounting state gauge over the 78500B line is expected, fold R464 = next round opening gauge ruling"
+    "method": "R1713 flush caliber (checker single-source law): window re-derived after the R1713 pair appended (post-fold base); tick row 1712 -> 1713; W recomputed 24->20 and sub 10->7 (fold R464 folded 7 in-window lines incl 4 substantive into one paren-form roll row, then the R1713 pair appended: 24-7+1+2=20 / 10-4+1=7 - fold-delta honestly noted, R1203 fold-compression precedent); queue_tech_open 10->9 (regen row checked off) +1 successor seed (daily-drift sentinel wiring) -> 10; fold R464 executed in-round (round-start 78986B over-line 486B, tail-7 -> 1, 164-token census, 75375B); post-closeout state gauge over the 78500B line is expected, fold R465 = next round opening gauge ruling"
   }
 }

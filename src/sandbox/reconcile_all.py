@@ -238,6 +238,10 @@ SUITES = [
     # (PRAGMA user_version chain, ALTER-free rebuild, dual-phase verify;
     # AC-LM1..LM11 pre-registered in state/queue/tech.md).
     ("schema-migrate", "test_schema_migrate.py", 21),
+    # R1713 fingerprint-regen: baseline fingerprint regenerator for
+    # migration_chains.json (live-constructor re-derivation, drift is
+    # FAIL; AC-BF1..BF7 pre-registered in state/queue/tech.md).
+    ("fingerprint-regen", "test_fingerprint_regen.py", 16),
     # R1708 suite-matrix default-evidence discovery-face fix (R1695
     # naming gap: old face globbed reconcile-all-R*.log only; new face
     # walks qa/*.log newest-first with four fail-closed eligibility

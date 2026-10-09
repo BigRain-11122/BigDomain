@@ -1,0 +1,86 @@
+=== fold R464 (R1713) - dry-run then execute; AC-R4641..R4646 evidence ===
+$ src/os/logs_toolkit.py fold --round R1713 --fold-no 464 --desc R1710 fold R463 roll row + R1710/R1711/R1712 three pairs, tail-7 window --window-tail 7 --summary-file .codely-cli/tmp/fold-r464-draft.txt
+{
+  "mode": "dry-run",
+  "round": "R1713",
+  "fold_no": "464",
+  "window_mode": "tail",
+  "window_start": 21,
+  "window_end": 27,
+  "window_lines": 7,
+  "window_content_bytes": 13995,
+  "summary_head": "2026-10-10��R1710..R1712 ��������ժҪ��fold R464 �� R1712 �д�ע�Ƕ��֡������ײ�",
+  "preop_sha16": "63b6d3af72f29053",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1713.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1713 fold append (2026-10-10, 7 lines verbatim: R1710 fold R463 roll row + R1710/R1711/R1712 three pairs, tail-7 window, fold R464 window, pre-op sha16 63b6d3af72f29053)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78986,
+  "new_log_len": 21,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 75375,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+
+$ src/os/logs_toolkit.py fold --round R1713 --fold-no 464 --desc R1710 fold R463 roll row + R1710/R1711/R1712 three pairs, tail-7 window --window-tail 7 --summary-file .codely-cli/tmp/fold-r464-draft.txt --execute
+{
+  "mode": "execute",
+  "round": "R1713",
+  "fold_no": "464",
+  "window_mode": "tail",
+  "window_start": 21,
+  "window_end": 27,
+  "window_lines": 7,
+  "window_content_bytes": 13995,
+  "summary_head": "2026-10-10��R1710..R1712 ��������ժҪ��fold R464 �� R1712 �д�ע�Ƕ��֡������ײ�",
+  "preop_sha16": "63b6d3af72f29053",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1713.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1713 fold append (2026-10-10, 7 lines verbatim: R1710 fold R463 roll row + R1710/R1711/R1712 three pairs, tail-7 window, fold R464 window, pre-op sha16 63b6d3af72f29053)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78986,
+  "new_log_len": 21,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 75375,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [],
+  "post_bytes": 75375,
+  "predicted_eq_actual": true,
+  "appendix_bytes": 14179,
+  "archive_appended": true,
+  "backup_written": true
+}
+
+$ src/os/logs_toolkit.py gauge
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 75375,
+  "gate": 78500,
+  "log_lines": 21,
+  "log_content_bytes": 72765,
+  "margin_bytes": 3125,
+  "fold_needed": false,
+  "tick": 1712
+}
+
+$ src/os/logs_toolkit.py eol
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 75375,
+  "total_lf": 30,
+  "crlf": 30,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": true
+}
+
+execute_exit=0
