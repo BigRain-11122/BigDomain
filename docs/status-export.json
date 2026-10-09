@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T19:43:19+08:00",
+  "export_ts": "2026-10-09T20:01:32+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：UGC 模板市场面沙箱件（模板上架/购买分账/评级三域·msgSecCheck 前置闸+分账整数律零舍入损失+评级门）——reconcile_all 39 套件 420 判据全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=src/sandbox/ledger/tmarket.py UGC 模板市场面（2026-10-09T19:43:19+08:00·R1691 交付）：模板上架幂等+每购买恰一 spend+创作者分账每笔恰一 share 出账〔整数律零舍入损失〕+仅购买者可评级+AIGC 标识恒带+非投顾常驻；套件 7/7+RUNNER 39/39；证据=qa/tmarket-R1691.log",
-    "next_milestone": "下轮=水位越线轮 fold R456 正门 execute（fold 工具面尾窗+中段双窗型齐备·轮首首测裁定）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
+    "current": "本轮交付：fold R456 水位整编+滚窗并折收账（state.json 81,118B 越线→fold 正门 execute·窗 7 行 9,276B 折 1·31 token 零丢失·verify-then-write 预测==实际 75,301B·终态 77,883B）+O-20261009-1845 机队记忆并集同步令知悉回执（机器层基建·非本司执行面）。沙箱矩阵 39 套件 420 判据在册全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=logs_toolkit.py fold R456 滚窗并折手术（2026-10-09T20:01:32+08:00·R1692 交付）：R1688 滚窗行承前+R1689/R1690/R1691 三队头对折 1 滚窗行·archive §R1692 节 7 行 verbatim 全量保全+pre-op 备份 logs/state-preop-R1692.bak〔sha16 1886ede938cef0bd〕·token 31/31 零丢失·预测==实际；证据=qa/reorg-R1692.log（dry-run+execute 双节）",
+    "next_milestone": "下轮=P3 队头认领（城市节气/节日限定活动引擎探索行·AC 判据预注册先于代码·explore open 8）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1691",
+      "1692",
       "OSLoop 执行 tick"
     ],
     [
@@ -2873,21 +2873,25 @@
     [
       "2",
       "R1691 UGC 模板市场面沙箱件（P3 队头·AC-TM1..TM7 预注册=explore.md 认领行先于代码·种子=创作者激励梯度后继+ugc 管道设计件在册）：src/sandbox/ledger/tmarket.py TMarketFace 三域=模板上架〔UNIQUE(creator,key) 幂等+title/description 双过 msgSecCheck 前置闸 SecGate DI 引用不复制+声明面 ai_label 持久〕+购买分账〔每 (buyer,template) 恰一笔 spend 绑 tx+重购拒于 spend 前+自购拒+每笔恰一 creator share 出账〔incentive.py 结构复用非双建〕+floor+输入序余数整数律 70/30 零舍入损失+DB CHECK 结构执法〕+评级〔仅购买者可评 append-only·stars 1..5〕+AIGC 标识恒带+非投顾 disclaimer 四视图常驻·test_tmarket.py SUITE 7/7 exit 0+reconcile_all 38→39 套件 413→420 判据 RUNNER PASS 39/39+对账双控 6/6 84.2s 零回归=qa/tmarket-R1691.log·docs/sandbox-suite-matrix.md 再生 39 套件 420 判据（--check byte-identical 绿）·分账权重与价目全 [needs-CEO] P1 呈批不执行"
+    ],
+    [
+      "1",
+      "fold R456 水位整编+滚窗并折收账轮（台账维护机制件·P-2026-09-25-18 第四百五十六刀·R1691 承传注记兑现：轮首首测 81,118B 越线 2,618B·窗=R1688 滚窗行承前+R1689/R1690/R1691 三队头对 6 行 9,276B 折 1 kept=0·原文全量保全=archive §R1692 节 7 行 verbatim+pre-op 备份件 logs/state-preop-R1692.bak〔sha16 1886ede938cef0bd〕·P/D 编目 31 token 随窗零丢失全录直载滚窗行·verify-then-write 预测==实际 75,301B·收账终态 77,883B·AC-R4561..R4566=qa/reorg-R1692.log）+O-20261009-1845 机队记忆并集同步令判读回执（GORD 尾行直显检出·计数基线已含行而 state 零记载=计数盲区实锚如实注·机器层基建令状态列 executed→非本司执行面知悉不动作·编号引用=送达律）·R1692"
     ]
   ],
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
     "queue_explore_open": 8,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1691 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1691 pair appended (main + tokens) = W 24 -> 26, sub 8 -> 9 (R1691 main line new substantive round anchor, tokens line excluded per caliber), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics); queue_explore_open 9 -> 8 (UGC template-market row done in R1691); queue_main/tech flat; proposals flat"
+    "method": "R1692 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1692 pair appended (main + tokens) = W 24 -> 26, sub 8 -> 9 (R1692 main line new substantive round anchor, tokens line excluded per caliber), idle 0 flat, nop 1 flat (source = 10-05 cold-roll line embed, R1672 flush semantics); queue_explore_open 9 -> 8 (UGC template-market row done in R1692); queue_main/tech flat; proposals flat"
   }
 }
