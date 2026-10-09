@@ -1,0 +1,4 @@
+PASS generated docs/sandbox-suite-matrix.md (5449 bytes) - registry suites=37 criteria=406 evidence=qa/sec-batch-R1681.log green=37/37
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (5449 bytes, 37 suites, 406 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (5449 bytes, 37 suites, 406 criteria)

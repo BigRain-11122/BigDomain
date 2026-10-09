@@ -1,0 +1,69 @@
+{
+  "header_note": "<!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->",
+  "labels": {
+    "title": "沙箱套件矩阵（对账可计费可见面）",
+    "stamp": "生成时间",
+    "command": "生成命令",
+    "evidence_line": "状态证据",
+    "response": "回应",
+    "response_text": "C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。",
+    "summary_title": "## 汇总",
+    "summary_cols": ["套件数", "判据总数", "证据全绿", "证据轮"],
+    "faces_title": "## 五域可计费/配置面（config.json 单一事实源）",
+    "faces_cols": ["域", "面", "计数", "键名"],
+    "matrix_title": "## 套件×判据×状态矩阵",
+    "matrix_cols": ["#", "套件", "路径", "判据数", "状态", "证据耗时(s)"],
+    "total_row": "合计",
+    "provenance_title": "## 证据出处",
+    "provenance_note": "- 状态列解析自上述证据 log 的 suite 行（exit 码）与 RUNNER 终态行；证据中缺失的套件记 no-evidence（不捏造）。判据数为预注册口径，源自套件注册表。",
+    "stamp_prefix": "generated: "
+  },
+  "domains": [
+    {
+      "key": "ledger",
+      "dir": "ledger",
+      "faces": [
+        {"path": "actions", "label": "可计费动作面（actions）"},
+        {"path": "share_ratios", "label": "分成比例面（share_ratios）"},
+        {"path": "token", "label": "代币参数面（token）"}
+      ]
+    },
+    {
+      "key": "lobby",
+      "dir": "lobby",
+      "faces": [
+        {"path": "rooms", "label": "房间面（rooms）"},
+        {"path": "rate_limit", "label": "限流面（rate_limit）"},
+        {"path": "idempotency", "label": "幂等闸面（idempotency）"}
+      ]
+    },
+    {
+      "key": "member",
+      "dir": "member",
+      "faces": [
+        {"path": "tiers", "label": "会员档位面（tiers·可计费）"},
+        {"path": "products", "label": "会员商品面（products·可计费）"},
+        {"path": "vouchers", "label": "权益券面（vouchers）"},
+        {"path": "reminder", "label": "提醒参数面（reminder）"}
+      ]
+    },
+    {
+      "key": "pay",
+      "dir": "pay",
+      "faces": [
+        {"path": "products", "label": "商品 SKU 面（products·可计费）"},
+        {"path": "channels", "label": "支付渠道面（channels）"},
+        {"path": "compliance", "label": "合规面（compliance）"}
+      ]
+    },
+    {
+      "key": "ugc",
+      "dir": "ugc",
+      "faces": [
+        {"path": "sources", "label": "内容来源面（sources）"},
+        {"path": "approval", "label": "审核流面（approval）"},
+        {"path": "export", "label": "导出面（export）"}
+      ]
+    }
+  ]
+}
