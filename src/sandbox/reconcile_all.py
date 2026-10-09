@@ -111,6 +111,9 @@ SUITES = [
      os.path.join("ledger", "test_growth_archive.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
+    # R1681 sec-gate batch + degradation face: p95 profile, persistent
+    # degraded banner queue (own sqlite file, R1254 precedent)
+    ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 7),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
     ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),
