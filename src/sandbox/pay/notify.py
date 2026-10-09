@@ -246,14 +246,29 @@ class PayNotifyFace(object):
         if grant_type not in ("once", "longterm"):
             raise ValueError("%s: %s" % (E_PN_BAD_GRANT_TYPE, grant_type))
         ts = now or now_utc()
-        gid = _h("pngrant", avatar, template_id, grant_type, ts)
-        self._exec("BEGIN IMMEDIATE")
-        self._exec(
-            "INSERT INTO pay_notify_grants"
-            " (grant_id, census_avatar_id, template_id, grant_type, ts_utc)"
-            " VALUES (?,?,?,?,?)", (gid, avatar, template_id, grant_type, ts))
-        self._exec("COMMIT")
-        return gid
+        # same-second re-accept (W15 once-type accumulation, or any two
+        # grants for one avatar+template+type inside one second) is a
+        # legitimate flow: the hash salt carries a deterministic attempt
+        # suffix so the grant id never collides (append-only, no RNG;
+        # discovered by the R1719 authorize suite first run).
+        attempt = 0
+        while True:
+            salt = ts if attempt == 0 else "%s#%d" % (ts, attempt)
+            gid = _h("pngrant", avatar, template_id, grant_type, salt)
+            try:
+                self._exec("BEGIN IMMEDIATE")
+                self._exec(
+                    "INSERT INTO pay_notify_grants"
+                    " (grant_id, census_avatar_id, template_id, grant_type, ts_utc)"
+                    " VALUES (?,?,?,?,?)",
+                    (gid, avatar, template_id, grant_type, ts))
+                self._exec("COMMIT")
+                return gid
+            except sqlite3.IntegrityError:
+                self._exec("ROLLBACK")
+                attempt += 1
+                if attempt > 64:
+                    raise
 
     def _budget(self, avatar, template_id):
         once = self._one(
@@ -347,6 +362,13 @@ class PayNotifyFace(object):
                                         "refund", now=now))
 
     # ---------------- read faces ----------------
+
+    def budget_face(self, avatar, template_id):
+        """Public read: W15 authorization budget for one avatar and
+        template (popup-suppression view; R1719 authorize face dock).
+        Reuses _budget - pure read, zero behavior drift elsewhere."""
+        once, longterm, consumed = self._budget(avatar, template_id)
+        return {"once": once, "longterm": longterm, "consumed": consumed}
 
     def banner_queue(self):
         """Degraded in-app fallback queue = all skipped_* rows."""

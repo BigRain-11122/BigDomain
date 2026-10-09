@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T07:38:41+08:00",
+  "export_ts": "2026-10-10T07:56:41+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1718 pay notify orders.py 接线面当轮闭环（P2 tech 队头·R1706 后继·AC-NW1..NW7 预注册先行）：orders.py 四点接线——构造 notify=None 尾参（face 调用方所有·shipped 缺省回执无 notify 键=零改面）+_attempt_notify 降级助手（post-commit 通知尝试·未过审模板→template_not_approved 诚实待件态·零回滚零中断支付流）+_grant 毕自动付款成功通知（fresh+heal 双路径 envelope 证据）+close_refund 新 face（granted→closed 唯一合法边承载 W10 第二时点·timeout 闭单零通知保真）；套件 SUITE PASS 7/7+RUNNER PASS 52/52 套件 554 判据 controls 6/6 92.1s 零回归+矩阵 52/554 green --check byte-identical",
-    "latest_artifact": "最近实物：pay notify orders.py 接线件（2026-10-10·R1718 交付·可跑实物计 2）：src/sandbox/pay/orders.py 付款双时点自动通知接线——_grant 毕自动 notify_payment_success+close_refund 退款闭单 face（W10 第二时点）+_attempt_notify 降级助手（未过审模板=诚实待件态不伪通道·日帽/预算击穿落 banner 队列·异常零中断支付流）+套件 test_pay_notify_wiring.py 7/7 全绿·证据 qa/pay-notify-wiring-R1718.log（套件+卫生+回归+矩阵四节）",
-    "next_milestone": "下轮=tech 队头序推进（watermark 缩放族未知缩放因子恢复扩展面〔R1707 后继·非整数因子 {0.7/0.85/1.1/1.5}×模板对位实测〕+suite_matrix live mtime 归一态实证窗〔R1709 后继〕+apidev 拒因分类计数读面）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1719 W15 authorization report face closed-loop (P2 tech queue head, R1718 successor; AC-AZ1..AZ7 pre-registered in tech.md claim row before code): src/sandbox/pay/authorize.py AuthorizeFace wraps the caller-built PayNotifyFace (pay-domain bearer; lobby forwarding rejected - ephemeral lobby actors key dead budget + forgeable identity). Gate order = identity E_AZ_BAD_ARGS -> template registered/approved fail-closed (unapproved = zero grant rows, honest pending) -> grant_type -> request_id idempotent replay (already_granted) -> longterm already-granted no-op (already_longterm = W15 always-keep popup suppression) -> grant via notify.grant_authorization; notify.py adds additive public read budget_face. Suite first run exposed a true defect and root-fixed it: same-second grant_id hash PK collision (W15 re-accept) -> deterministic salt-suffix retry (zero RNG, append-only). End-to-end closure (wired R1718 world): authorized avatar pays -> envelope notify sent (budget truly consumed = the W15 gap closed); unauthorized -> skipped_no_budget (banner queue); once-type second order exhausts the unit; longterm double orders both sent. SUITE 7/7 + RUNNER PASS 53/53 suites 561 criteria controls 6/6 93.9s zero-regression (pay-notify + pay-notify-wiring re-green) + matrix 53/561 --check byte-identical",
+    "latest_artifact": "最近实物：W15 授权动作面（2026-10-10·R1719 交付·可跑实物计 2）：src/sandbox/pay/authorize.py 授权报告 face+notify.py budget_face 公开读+同秒 grant_id 去撞根修（套件首跑揪出的真缺陷）——W15 授权→预算账→R1718 接线支付通知消费，授权流断点闭合端到端实证；套件 test_authorize.py 7/7 全绿·证据 qa/authorize-R1719.log（套件+回归+矩阵三节）",
+    "next_milestone": "下轮=tech 队头序推进（watermark 缩放族未知缩放因子恢复扩展面〔R1707 后继·非整数因子 {0.7/0.85/1.1/1.5}× 模板对位实测〕+suite_matrix live mtime 归一态实证窗〔R1709 后继〕+apidev 拒因分类计数读面）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1718",
+      "1719",
       "OSLoop 执行 tick"
     ],
     [
@@ -2973,20 +2973,24 @@
     [
       "2",
       "pay notify orders.py 接线件（P2 队头·AC-NW1..NW7 预注册=tech.md 认领行先于代码：构造 notify=None 尾参 caller-built face·PayOrders.close() 不关 face·shipped 缺省回执无 notify 键=零改面+_attempt_notify 降级助手〔post-commit 通知尝试·E_TEMPLATE_NOT_APPROVED→template_not_approved 诚实待件态·余码 off:<code|ExcName>·零回滚零中断支付流〕+_grant 毕自动 notify_payment_success〔fresh+heal envelope 合并〕+close_refund 新 face〔granted→closed 唯一合法边承载 W10 第二时点·timeout 闭单零通知=AC-PN3 保真〕·套件 7/7〔首跑两修如实注〕+RUNNER PASS 52/52 套件 554 判据 controls 6/6 92.1s 零回归+矩阵 52/554 green --check byte-identical·证据 qa/pay-notify-wiring-R1718.log 四节·R1718"
+    ],
+    [
+      "2",
+      "R1719 W15 授权动作面交付件（P2 队头·AC-AZ1..AZ7 预注册=tech.md 认领行先于代码：AuthorizeFace 包 PayNotifyFace〔引用不复制·零 sqlite3 导入=单写者纪律不变·notify.py 增 additive 公开只读 budget_face〕+门序=身份→模板注册/过审 fail-closed〔未过审零授权行=诚实待件态〕→grant_type→request_id 幂等重放〔lobby idem_seen 先例〕→longterm 已授 no-op〔W15「总是保持」弹窗抑制〕→落账经 notify.grant_authorization；**套件首跑真缺陷揪出并根修**=同秒 grant_id 哈希撞 PK〔W15 重接受合法流·R1706 隐性缺陷经首个产品面调用方暴露〕→notify.py 确定性去撞〔盐缀 #N 重试≤64·零 RNG·append-only 不变〕·AC-AZ7 notify.py diff 面如实更正=budget_face+同秒去撞两处；端到端闭合证=AC-AZ6 wired 世界：已授权 avatar 支付成功 notify=sent〔预算真消费〕·未授权=skipped_no_budget〔横幅队列〕·once 型二单耗尽算术·longterm 双单均 sent；同产品二单撞 order bucket 单开单语义→二单换产品如实注；SUITE 7/7+RUNNER PASS 53/53 套件 561 判据 controls 6/6 93.9s 零回归〔pay-notify 7/7+pay-notify-wiring 7/7 复跑绿=notify.py 改动零回归实证〕+矩阵再生 53/561 green --check byte-identical 双跑·shipped config.json/test_pay_notify{,_wiring}.py 零字节（git status 证据面=七件净）·证据 qa/authorize-R1719.log·tech open 10→9+1 后继种子〔notify longterm 授权撤销面〕→10"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1718 flush caliber (checker single-source law): R1718 pair appended (substantive + tokens), log_lines_in_window 22 -> 24, substantive 8 -> 9; tick row 1717 -> 1718; queue_tech_open 9 -> 8 (pay-notify-wiring done [x]) then +2 successor seeds -> 10"
+    "method": "R1719 flush caliber (checker single-source law): R1719 pair appended (substantive + tokens), log_lines_in_window 24 -> 26, substantive 9 -> 10; tick row 1718 -> 1719; queue_tech_open 10 -> 9 (pay-authorize done [x]) then +1 successor seed (notify longterm revoke face) -> 10"
   }
 }

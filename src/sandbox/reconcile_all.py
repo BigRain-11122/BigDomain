@@ -209,6 +209,16 @@ SUITES = [
     # degradation with envelope evidence, close_refund face
     # (AC-NW1..NW7 pre-registered in state/queue/tech.md).
     ("pay-notify-wiring", os.path.join("pay", "test_pay_notify_wiring.py"), 7),
+    # R1719 W15 authorization report face: closes the grant_authorization
+    # zero-caller gap (pay-domain bearer; lobby forwarding rejected -
+    # ephemeral lobby actors cannot key budget the pay send path
+    # consumes). authorize.py wraps the notify face (single-writer
+    # discipline unchanged); notify.py gains the additive budget_face
+    # read + deterministic same-second grant-id disambiguation
+    # (R1719 suite first-run discovery). End-to-end: authorized budget
+    # is truly consumed by the R1718-wired send path (AC-AZ1..AZ7
+    # pre-registered in state/queue/tech.md).
+    ("pay-authorize", os.path.join("pay", "test_authorize.py"), 7),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
