@@ -19,3 +19,11 @@
 - [x] 交易大厅增值与加急特权面探索（C3/C7 价目行·提报加急 ¥9.9/次+回测加急 ¥9.9+Demo 排产插队 ¥49.9+居民点名对话 ¥4.9/次——机制面=优先队列幂等购买/消耗·参数全 [needs-CEO]）——[done 2026-09-29]（R620 ExpediteFace 落地件 src/sandbox/ledger/expedite.py+test_expedite.py：四品类两档优先队列+幂等购买/消耗〔同 ref 复购零双扣·恰一笔 spend 绑 tx·一 credit 恰一 job·品类-域门〕·AC-XP1..XP7 预注册先行全过·SUITE 7/7 全绿+reconcile_all 十九套件 175 判据+对账双控 6/6 零回归·qa/expedite-R620.log·价目参数 [needs-CEO] P1 呈批不执行）
 - [x] 虚拟展厅与广告位档期面探索（B3 价目行·QUANT 巨屏轮播 ¥2,000/周+建筑冠名权 ¥10,000/年+大厅开屏广告 ¥5,000/周——机制面=档期窗预订/轮播排期/独占门·venue 结构参照非双建·参数全 [needs-CEO]）——[done 2026-09-29]（R622 AdsFace 落地件 src/sandbox/ledger/ads.py+test_ads.py：三品类〔QUANT 巨屏轮播=rotation_slots 容量门+按订序轮播单 carousel_lineup/建筑冠名权=独占门/大厅开屏=独占门·holder 读面窗内=订户·窗外=None〕·venue 参照非双建=写路径全走 VenueFace 公有 API〔rent_venue/lease_storefront〕占用行落 venue 表·本件仅新增 ad_units 品类注册表一张·每订恰一笔 spend=windows×price 绑 tx 溯源·档期窗预订〔远期窗〕/同订幂等 E_AD_DUP/满员 E_AD_FULL/独占 E_AD_TAKEN/注册门 E_AD_UNKNOWN+E_AD_KIND_MISMATCH 全拒零扣费·AC-AD1..AD7 预注册=板行先于代码·SUITE 7/7 全绿〔首跑两处测试件缺陷修复后净跑·模块本体首验即净〕·reconcile_all 扩二十套件 RUNNER PASS 182 判据+对账双控 6/6 18.8s 零回归·qa/ads-R622.log+qa/ads-runner-R622.log·价目参数 [needs-CEO] P1 呈批不执行）
 - [ ] 开源借力持续收获面（OSS 72h 收获轮正典滚动·与 main 线切片项同源）
+- [ ] 居民 AI 虚拟陪伴订阅面探索（情感粘性层 C 系后继：AI 陪伴对话/记忆档案订阅档·AIGC 标识面+msgSecCheck 前置闸必含·沙箱面=ledger 订阅结构复用判读——种子=C-20261009-02 情感粘性收入面缺口·价目 [needs-CEO] 呈批·入列 2026-10-09）
+- [ ] UGC 模板市场面探索（创作者激励梯度后继：模板上架/分账/评级三域·分配层=incentive.py 结构复用非双建·分账参数 [needs-CEO]——种子=BD-PROP 窗口+ugc 管道设计件在册·入列 2026-10-09）
+- [ ] 城市节气/节日限定活动引擎探索（ads 档期/venue 窗结构复用：限定活动=档期窗预订+限购门+活动纪念 collectibles 联动——种子=collectibles/ads 双面在册·参数 [needs-CEO]·入列 2026-10-09）
+- [ ] 企业展厅 SaaS 化探索（venue+ads B 系结构复用：企业年费展厅套餐=租约+巨屏轮播+参观动线打包·合规判读先行（广告法 56 号令自查）——种子=B3 档期面 R622 在册·入列 2026-10-09）
+- [ ] 姐妹城跨城互访面探索（跨城经济：互访通行证+跨城商圈露出·结算协议=settlement.py 引用面非双建——种子=BLUEPRINT §十二集团双螺旋城际面·入列 2026-10-09）
+- [ ] API 开放平台开发者生态面探索（B5 metered 计量计费后继：第三方开发者 key 发放/限额/计费三环设计·三问门+CEO 授权前置——种子=metered.py R626 在册·入列 2026-10-09）
+- [ ] 数字藏品展示橱窗面探索（collectibles 不交易硬律内：公开展示橱窗/编年史导览域·零交易动词源扫律沿用——种子=R619 三域在册·入列 2026-10-09）
+- [ ] 市民行为积分面探索（非代币域：次数≠代币隔离律内市民行为积分=公益面合规判读先行·积分兑权益=props 域邻界先查重后建——种子=props.py 两域隔离律 R599 在册·入列 2026-10-09）

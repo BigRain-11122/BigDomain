@@ -10,7 +10,7 @@ description: BigDomain OSLoop 自迭代轮的五静扫描与收账作业规程�
 - 只写本仓 `domain/BigDomain`；集团层与兄弟司仓只读引用（跨仓写禁令）；回执只落 `src/os/state.json` log。
 - 一切行数计数=UTF-8 口径（`[System.Text.Encoding]::UTF8`；PowerShell 5.1 默认 GBK 少读中文行=R131 教训）。
 - 诚实律：一切宣称带证据；判据预注册先行；完成态=文件在盘+可验证。
-- 五静检出与改道（idle-fast 空转路径已废止·P-2026-09-28-02 ②）：开轮先走五静判定（检出步）；五静全过≠跳轮——队列空→先补队列（常设承接/可认领项）→仍无活可拉=转创新提案轨（司提案面 `docs/proposals.md`·每窗 ≥1 条三句式）；真无活可拉=一行声明合法（state log 记「no-pullable（一行声明）」一行）；任一异常=转全任务书 `src/os/iteration_prompt.txt` 照走。
+- 五静检出与改道（idle-fast 空转路径已废止·P-2026-09-28-02 ②）：开轮先走五静判定（检出步）；五静全过≠跳轮——P1 空/阻塞→自动抽 P2 队头（`state/queue/tech.md` 最上开项·门控项跳过）→P3 队头（`state/queue/explore.md` 同律）→三线全空=先填队列（self-drive v2.0 §1 常备线：main ≥5/tech ≥10/explore ≥10）再干活（O-20261009-1246 修复派单 b 接线 2026-10-09）→提案窗配额欠账=转创新提案轨（司提案面 `docs/proposals.md`·每窗 ≥1 条三句式）→三线真空+配额已清=一行声明合法（state log 记「no-pullable（一行声明）」一行）——**队列有货仍声明空转=违例点名（O-20261009-1246 c·self-drive §5 红线 2：纯声明空转轮计入违例面）**；任一异常=转全任务书 `src/os/iteration_prompt.txt` 照走。
 - 禁自我膨胀式立法；空转轮不为凑工作量造活。
 
 ## 1 机械扫描（先跑脚本·禁再手写逐项命令）
