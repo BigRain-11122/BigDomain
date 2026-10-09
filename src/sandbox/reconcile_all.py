@@ -253,6 +253,11 @@ SUITES = [
     # checks; AC-SM1..SM7 pre-registered in state/queue/tech.md).
     # R1709 AC-TIE1..TIE7: same-mtime tie-break coverage (+5 cases).
     ("suite-matrix-discovery", "test_suite_matrix.py", 15),
+    # R1715 runner-profile daily variant: --daily face (discovery
+    # restricted to reconcile-daily-*.log evidence, separate
+    # runner-profile-daily-baseline.json; sentinel-section parser
+    # inertia; AC-RD1..RD6 pre-registered in state/queue/tech.md).
+    ("runner-profile-daily", "test_runner_profile_daily.py", 8),
 ]
 
 FAILS = 0

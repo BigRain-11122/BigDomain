@@ -26,6 +26,13 @@ Usage:
     python runner_profile.py                    # profile newest
                                                 # eligible evidence
                                                 # + drift compare
+    python runner_profile.py --daily            # daily variant:
+                                                # discovery restricted
+                                                # to reconcile-daily-*
+                                                # logs, baseline kept
+                                                # in a separate
+                                                # runner-profile-daily
+                                                # -baseline.json
     python runner_profile.py --update-baseline  # (re)write baseline
     python runner_profile.py --check            # stale-baseline
                                                 # detector
@@ -34,8 +41,19 @@ Usage:
     python runner_profile.py --log <path>       # explicit target
     (any mode accepts --out <path> to append a utf-8 evidence copy)
 
+R1715 daily variant (criteria AC-RD1..RD6 pre-registered in
+state/queue/tech.md before this change): the daily wrapper
+(reconcile_daily.py) tees the same runner sections into its dated
+evidence logs plus an appended sentinel section; parse_log is already
+inert to those sentinel lines (they match no suite/runner regex), so
+the daily face is purely a discovery restriction + a separate baseline
+file. Render/compare/threshold family are reused byte-identical
+(AC-RD3); without --daily the existing behavior is unchanged.
+
 Discovery default: newest qa/*.log (skipping runner-profile-* self
 evidence) that parses as one RUNNER PASS + consistent suite lines.
+Daily discovery: same eligibility walk restricted to
+reconcile-daily-*.log names.
 
 Exit codes: 0 profile/clean, 2 drift-flagged or stale check, 3
 parse/eligibility refusal (fail-closed).
@@ -51,7 +69,14 @@ import tempfile
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(BASE, os.pardir, os.pardir))
 QA_DIR = os.path.join(REPO, "qa")
-BASELINE_PATH = os.path.join(QA_DIR, "runner-profile-baseline.json")
+BASELINE_NAME = "runner-profile-baseline.json"
+DAILY_BASELINE_NAME = "runner-profile-daily-baseline.json"
+DAILY_LOG_PREFIX = "reconcile-daily-"
+
+
+def baseline_path(daily=False):
+    name = DAILY_BASELINE_NAME if daily else BASELINE_NAME
+    return os.path.join(QA_DIR, name)
 
 sys.path.insert(0, BASE)
 import reconcile_all  # noqa: E402 (single fact source, reuse-not-copy)
@@ -135,6 +160,22 @@ def discover_target():
         except (Refusal, OSError):
             continue
     raise Refusal("no eligible RUNNER PASS evidence under qa/")
+
+
+def discover_daily():
+    """AC-RD1: daily-face discovery - same eligibility walk restricted
+    to reconcile-daily-*.log names; newer non-daily evidence never
+    leaks into the daily population (face isolation)."""
+    names = [n for n in os.listdir(QA_DIR)
+             if n.startswith(DAILY_LOG_PREFIX) and n.endswith(".log")]
+    paths = [os.path.join(QA_DIR, n) for n in names]
+    paths.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+    for path in paths:
+        try:
+            return parse_log(path)
+        except (Refusal, OSError):
+            continue
+    raise Refusal("no eligible daily RUNNER PASS evidence under qa/")
 
 
 def registry_note(parsed_count):
@@ -245,11 +286,13 @@ def baseline_bytes(data):
             + "\n").encode("ascii")
 
 
-def load_baseline():
-    if not os.path.exists(BASELINE_PATH):
+def load_baseline(path=None):
+    if path is None:
+        path = baseline_path(False)
+    if not os.path.exists(path):
         raise Refusal("baseline missing: %s (run --update-baseline)"
-                      % BASELINE_PATH)
-    with open(BASELINE_PATH, "rb") as handle:
+                      % path)
+    with open(path, "rb") as handle:
         return json.loads(handle.read().decode("ascii"))
 
 
@@ -362,8 +405,13 @@ def main(argv):
     parser = argparse.ArgumentParser(
         description="reconcile_all wall-time profile + drift tracker")
     parser.add_argument("--log", help="explicit evidence log target")
+    parser.add_argument("--daily", action="store_true",
+                        help="daily-variant face: discovery restricted "
+                             "to reconcile-daily-*.log evidence; "
+                             "baseline kept separately in "
+                             "runner-profile-daily-baseline.json")
     parser.add_argument("--update-baseline", action="store_true",
-                        help="(re)write qa/runner-profile-baseline.json")
+                        help="(re)write the face's baseline file")
     parser.add_argument("--check", action="store_true",
                         help="stale-baseline detector (byte compare vs "
                              "recorded source log)")
@@ -389,35 +437,39 @@ def main(argv):
         sys.stdout = _Tee()
 
     try:
+        bpath = baseline_path(args.daily)
         if args.selftest:
             return selftest()
         if args.check:
-            baseline = load_baseline()
+            baseline = load_baseline(bpath)
             data = parse_log(os.path.join(REPO, baseline["source_log"]))
-            ok = baseline_bytes(data) == open(BASELINE_PATH, "rb").read()
+            ok = baseline_bytes(data) == open(bpath, "rb").read()
             print("== stale-baseline check ==")
             print("baseline source: %s" % baseline["source_log"])
             print("check: %s"
                   % ("byte-identical PASS" if ok else
                      "STALE/DIVERGED (regenerate with --update-baseline)"))
             return 0 if ok else 2
-        data = parse_log(args.log) if args.log else discover_target()
+        if args.daily:
+            print("face: daily (population: reconcile-daily-*.log)")
+        data = parse_log(args.log) if args.log else (
+            discover_daily() if args.daily else discover_target())
         out = render_profile(data)
         sys.stdout.write(out)
         if args.update_baseline:
-            with open(BASELINE_PATH, "wb") as handle:
+            with open(bpath, "wb") as handle:
                 handle.write(baseline_bytes(data))
-            rel = os.path.relpath(BASELINE_PATH, REPO)
+            rel = os.path.relpath(bpath, REPO)
             print("baseline written: %s (source: %s, suites=%d)"
                   % (rel.replace(os.sep, "/"),
                      os.path.relpath(data["path"], REPO).replace(os.sep,
                                                                 "/"),
                      len(data["suites"])))
             return 0
-        if not os.path.exists(BASELINE_PATH):
+        if not os.path.exists(bpath):
             print("baseline: ABSENT (init with --update-baseline)")
             return 0
-        text, flagged = render_compare(data, load_baseline())
+        text, flagged = render_compare(data, load_baseline(bpath))
         sys.stdout.write(text)
         return 2 if flagged else 0
     except Refusal as exc:

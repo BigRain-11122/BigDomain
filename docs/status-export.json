@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T06:20:56+08:00",
+  "export_ts": "2026-10-10T06:40:28+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1714 交付：schema 漂移哨兵接线进每日对账（tech 队头·判据 AC-FS1..FS6 预注册先于代码）——reconcile_daily.py 每日全量对账毕后自动跑 fingerprint_regen --check 并把五域漂移检查追加进同一当日证据 log（分节行+exit 尾行）·漂移即当日 FAIL（构造器漂移从此日检化·不再依赖人工跑 regen）·runner 失败日哨兵仍跑不漏检。live 全量复跑=RUNNER PASS 50/50 套件 539 判据+哨兵节五域 CLEAN+RECONCILE-DAILY verdict=PASS sentinel=ok。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：reconcile_daily 哨兵步接线件（2026-10-10·R1714 交付·可跑实物计 2）：src/sandbox/reconcile_daily.py 增 run_sentinel（fingerprint_regen --check 追加进当日证据 log·判定聚合 runner 非零传播/runner 0 时哨兵 exit 承接+RECONCILE-DAILY 终行扩 runner_exit/sentinel 字段）+套件 test_reconcile_daily_sentinel.py SUITE PASS 6/6（live 真哨兵+stub 三态聚合+argv 接线+卫生+同日后缀）+reconcile_all SUITES 49→50 套件 533→539 判据·live 全量复跑 RUNNER PASS 50/50 controls 6/6 94.5s=qa/reconcile-daily-20261010-2.log（哨兵节五域 CLEAN+sentinel=ok）+矩阵再生 50/539 green --check byte-identical·证据 qa/reconcile-daily-sentinel-R1714.log+qa/reorg-R1714.log（fold R465：state 水位 78963B→73609B·164 token 零丢失）",
-    "next_milestone": "下轮=tech 队头序推进（reconcile-daily runbook 哨兵节补文+reconcile_daily 运行时长剖面接线+fold E_STATE_LAYOUT 拒面修复指令对齐）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1715 双件落地：runbook 哨兵节补文（每日对账操作手册把 R1714 的 schema 漂移哨兵步写进正册：跑法/判读/分级三处，值守轮按册跑日对账不再缺读法）+ runner_profile 日对账时长剖面变体（--daily 旗：日对账证据单独发现+独立基线，51 套件全量回归 90.6s 零回归·漂移阈值预注册在册）。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：runner_profile --daily 日对账剖面件（2026-10-10·R1715 交付·可跑实物计 2）：src/sandbox/runner_profile.py 增 --daily 旗（discovery 限定 reconcile-daily-*.log 面隔离+runner-profile-daily-baseline.json 独立基线）+套件 test_runner_profile_daily.py SUITE PASS 8/8+live 四步绿（发现当日 daily 件 50 套件→落基线→DRIFT-CLEAN 50/0→--check byte-identical）·SUITES 50→51 判据 539→547·RUNNER PASS 51/51 controls 6/6 90.6s 零回归=qa/reconcile-all-R1715.log·证据 qa/runner-profile-daily-R1715.log 四节；配套 docs/ops/reconcile-daily-runbook.md 哨兵节补文（§一3/4 哨兵步+聚合+§二 双绿判读+§三 G5 漂移处置行·55 行≤120）",
+    "next_milestone": "下轮=tech 队头序推进（reconcile_daily 运行时长剖面接线后继=daily 剖面对账日常化接线+哨兵段时长入证面+fold E_STATE_LAYOUT 拒面修复指令对齐）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1714",
+      "1715",
       "OSLoop 执行 tick"
     ],
     [
@@ -2970,10 +2970,10 @@
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
