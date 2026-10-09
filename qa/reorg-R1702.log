@@ -1,0 +1,28 @@
+# qa/reorg-R1702.log - fold R460 water-level reorg evidence (R1702 round-start, P-2026-09-25-18 knife 460)
+# Round-start gauge: 80432B disk > 78500B gate (margin -1932B) -> fold R460 fires per R1701 carry-forward note.
+# Tool: src/os/logs_toolkit.py fold --round R1702 --fold-no 460 --window-tail 7 (positive-gate tool, R1688/R1690 artifact)
+
+## Section 1: first dry-run (gate pass, token catalog check FAIL -> honest record)
+window=tail 7 lines (R1699 closing x3 + R1700 pair + R1701 pair), window_content_bytes=9081
+preop_sha16=c5c01187c54614b7  backup=logs/state-preop-R1702.bak
+gate_ok=true  predicted_bytes=73264  reserve=3000
+token_missing(9)=AC-SB,AC-U1,BD-PROP-003,C-20260909-02,D-20260930-20,OH-20261009-cph4,P-2026-09-25-18,P-32,R-20260928-bigdomain-belonging-economy
+would_fail=["token-missing"] -> summary rewritten to embed all 9 tokens (catalog-first-run-reject precedent R1699 gate-exceed reject)
+
+## Section 2: dry-run recheck (all gates green)
+{"token_ok": true, "gate_ok": true, "predicted_bytes": 73626, "reserve_bytes": 3000, "gate": 78500, "would_fail": [], "new_log_len": 23}
+
+## Section 3: execute
+{"mode": "execute", "post_bytes": 73626, "predicted_eq_actual": true, "appendix_bytes": 9267, "archive_appended": true, "backup_written": true}
+archive=logs/state-log-archive-2026-10.md (append verbatim 7 lines, header: R1702 fold append, pre-op sha16 c5c01187c54614b7)
+
+## Section 4: post-fold gauge
+{"disk_bytes": 73626, "gate": 78500, "log_lines": 23, "log_content_bytes": 70901, "margin_bytes": 4874, "fold_needed": false, "tick": 1701}
+
+## Section 5: post-hoc catalog zero-loss (window from pre-op backup vs roll line)
+{"window_lines": 7, "tokens_total": 21, "missing_in_roll": [], "pass": true}
+tokens: AC-DK1,AC-PW1,AC-R4591,AC-SB,AC-U1,BD-PROP-003,C-20261008-05,C-20261009-02,C-20261009-04,D-20260909-05,D-20260930-20,D-20261010-01,D-20261010-02,D-20261010-03,O-2026-0928-015,O-20261010-0025,O-20261010-0040,OH-20261009-cph4,P-2026-09-25-18,P-32,R-20260928-bigdomain-belonging-economy
+
+## Note
+Console display mojibake on Chinese summary_head field = GBK console rendering only; state.json/archive/backup files are UTF-8 on disk (byte-verified by predicted_eq_actual + gauge re-read).
+AC-R4601 first-dry-run token reject recorded honestly; AC-R4602 recheck green; AC-R4603 execute predicted==actual; AC-R4604 post gauge margin 4874B; AC-R4605 catalog zero-loss pass; AC-R4606 evidence=this file.

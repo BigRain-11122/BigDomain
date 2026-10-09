@@ -760,6 +760,210 @@ def run_suite(pipe, cfg, db, tmp, lobby, ls, fw, ab, gw, rules, lk, adv_actor, a
            " rows_by_status=read-only-addition full-regression=RUNNER-log"
            % (ok_ascii_pw, ok_ascii_sb, len(net_hits)))
 
+    # ---- AC-IL1..IL7: ingest_lobby batched gate window (R1702) ---------
+    # fresh-instance family in per-test subdirs: the degraded queue
+    # rides next to ugc.db (AC-PW1), so separate dirs = separate queue
+    # namespaces; the shared pipe above stays untouched.
+    il_cfg = json.loads(json.dumps(cfg))
+    il_cfg["export"] = dict(il_cfg.get("export") or {}, dir="export-ac-test")
+
+    def il_world(name):
+        d = os.path.join(tmp, name)
+        os.makedirs(d, exist_ok=True)
+        dbp = os.path.join(d, "ugc.db")
+        lsp = lobby.EventStore(dbp)
+        return dbp, lsp, P.UGCPipeline(il_cfg, dbp)
+
+    def il_zones_ok(p, evts):
+        zones = set()
+        for e in evts:
+            row = p.store.event_row(e)
+            if row is None:
+                return False
+            zones.add(row["zone"])
+        return zones == {"lobby_idea", "avatar_intake"}
+
+    def il_world_close(p, lsp):
+        p.close()
+        lsp.close()
+
+    # window: 2 fw rows (L1 catches, zero gate calls) + 7 clean rows
+    # from one actor (one group -> ONE call) + 1 clean row from a
+    # second actor+source (second group -> second call). Old per-row
+    # behavior = 8 gate calls for these 8 gate-needing rows.
+    il_db, ls3, il_pipe = il_world("il1")
+    for i in range(2):
+        t = "forbidden ingest probe %d %s" % (i, fw)
+        ls3.append(lobby.utc_now_iso(), "idea.submit", "C-IL-fw", "cocreate", t,
+                   payload={"text": t, "pool": "x"})
+    for i in range(7):
+        t = "batched ingest idea %02d about %s" % (i, kw0)
+        ls3.append(lobby.utc_now_iso(), "idea.submit", "C-IL-a", "cocreate", t,
+                   payload={"text": t, "pool": "x"})
+    ls3.append(lobby.utc_now_iso(), "avatar.intake", "C-IL-b", "intake",
+               "avatar intake row",
+               payload={"name": "av-il", "intro": "clean intro second actor",
+                        "queue": "biglife-t04-reference"})
+    gate_calls = {"n": 0}
+    real_check_batch = il_pipe.batch.check_batch
+
+    def counting_check_batch(texts, **kwargs):
+        gate_calls["n"] += 1
+        return real_check_batch(texts, **kwargs)
+
+    il_pipe.batch.check_batch = counting_check_batch
+    recs_il = il_pipe.ingest_lobby()
+    il_pipe.batch.check_batch = real_check_batch
+    grouped = {}
+    for row in il_pipe.store.read(
+            "SELECT status, COUNT(*) AS n FROM ugc_ingest_log GROUP BY status"):
+        grouped[row["status"]] = row["n"]
+    ok_il1 = (gate_calls["n"] == 2 and il_pipe.local_hit_count == 2
+              and len(recs_il) == 10
+              and sum(1 for r in recs_il if r.get("received")) == 8
+              and grouped == {"rejected": 2, "accepted": 8})
+
+    # bad-frame window on the same world (receipt + status parity)
+    ls3.append(lobby.utc_now_iso(), "idea.submit", "C-IL-e", "cocreate",
+               "empty frame row", payload={"text": "", "pool": "x"})
+    recs_bad = il_pipe.ingest_lobby()
+    grouped2 = {}
+    for row in il_pipe.store.read(
+            "SELECT status, COUNT(*) AS n FROM ugc_ingest_log GROUP BY status"):
+        grouped2[row["status"]] = row["n"]
+    ok_badframe = (len(recs_bad) == 1
+                   and recs_bad[0].get("code") == UGC.E_BAD_FRAME
+                   and recs_bad[0].get("origin_evt_id") is not None
+                   and grouped2.get("E_BAD_FRAME") == 1)
+
+    # cross-group degradation: two sources x two actors, gate offline
+    il2_db, ls4, il2_pipe = il_world("il2")
+    ls4.append(lobby.utc_now_iso(), "idea.submit", "C-IL-x", "cocreate",
+               "cross group lobby idea",
+               payload={"text": "cross group lobby idea", "pool": "x"})
+    ls4.append(lobby.utc_now_iso(), "avatar.intake", "C-IL-y", "intake",
+               "avatar intake row",
+               payload={"name": "av-il2", "intro": "cross group avatar intro",
+                        "queue": "biglife-t04-reference"})
+    real_gate_il2 = il2_pipe.batch.gate
+    il2_pipe.batch.gate = OfflineGate()
+    recs_off_il = il2_pipe.ingest_lobby()
+    banner_off = il2_pipe.degraded_banner()["queued"]
+    off_meta = sorted((q["source"], q["actor"], q["reason"]) for q in banner_off)
+    il2_text_av = "av-il2 - cross group avatar intro"
+    ok_il5_queued = (len(recs_off_il) == 2
+                     and all(r.get("queued") and r.get("qid")
+                             and r.get("origin_evt_id") for r in recs_off_il))
+    ok_il5_meta = off_meta == [
+        ("avatar_intake", "C-IL-y", "gate_error"),
+        ("lobby_idea", "C-IL-x", "gate_error")]
+    off_status = sorted(
+        row["status"] for row in il2_pipe.store.read(
+            "SELECT status FROM ugc_ingest_log"))
+    ok_il5_marked = off_status == ["queued", "queued"]
+    il2_pipe.batch.gate = real_gate_il2
+    rec_il2_drain = il2_pipe.drain_recover()
+    evts_il2 = {P.compute_evt_id("lobby_idea", "C-IL-x", "cross group lobby idea"),
+                P.compute_evt_id("avatar_intake", "C-IL-y", il2_text_av)}
+    ok_il5_recover = (set(rec_il2_drain["recovered"]) == evts_il2
+                      and il_zones_ok(il2_pipe, evts_il2))
+    rec_il2_drain2 = il2_pipe.drain_recover()
+    ok_il5_idem = (rec_il2_drain2["drained"] == 0
+                   and rec_il2_drain2["recovered"] == []
+                   and rec_il2_drain2["skipped_existing"] == 2)
+
+    # budget-breach injection: 3 same-actor rows, one chunk, suffix degrades
+    il3_db, ls5, il3_pipe = il_world("il3")
+    for i in range(3):
+        t = "budget ingest idea %d about %s" % (i, kw0)
+        ls5.append(lobby.utc_now_iso(), "idea.submit", "C-IL-c", "cocreate", t,
+                   payload={"text": t, "pool": "x"})
+    real_clock3, real_budget3 = il3_pipe.batch.clock, il3_pipe.batch.budget_s
+    il3_pipe.batch.clock = StepClock()
+    il3_pipe.batch.budget_s = 1.5
+    recs_bud = il3_pipe.ingest_lobby()
+    il3_pipe.batch.clock, il3_pipe.batch.budget_s = real_clock3, real_budget3
+    suffix3 = "budget ingest idea 2 about " + kw0
+    banner_bud = il3_pipe.degraded_banner()["queued"]
+    ok_il5_budget = (sum(1 for r in recs_bud if r.get("received")) == 2
+                     and sum(1 for r in recs_bud if r.get("queued")) == 1
+                     and len(banner_bud) == 1
+                     and banner_bud[0]["reason"] == "budget_breach"
+                     and banner_bud[0]["content"] == suffix3
+                     and il3_pipe.store.event_row(P.compute_evt_id(
+                         "lobby_idea", "C-IL-c", suffix3)) is None)
+    rec_bud_drain = il3_pipe.drain_recover()
+    rec_bud_drain2 = il3_pipe.drain_recover()
+    ok_il6_budget = (P.compute_evt_id("lobby_idea", "C-IL-c", suffix3)
+                     in rec_bud_drain["recovered"]
+                     and rec_bud_drain2["drained"] == 0
+                     and rec_bud_drain2["recovered"] == []
+                     and rec_bud_drain2["skipped_existing"] == 1)
+
+    r_il_pool = next(r for r in recs_il if r.get("pooled") and r.get("line"))
+    l1_rejects = [r for r in recs_il if r.get("code") == UGC.E_CONTENT_REJECTED]
+    ok_il2 = (r_il_pool.get("gate") == "pass" and bool(r_il_pool.get("evt_id"))
+              and all(r.get("origin_evt_id") and not r.get("evt_id")
+                      for r in l1_rejects)
+              and all(r.get("origin_evt_id") for r in recs_off_il)
+              and ok_badframe)
+
+    # window fully consumed: a re-read returns an empty list
+    recs_again = il_pipe.ingest_lobby()
+    ok_il6 = (recs_again == [] and len(recs_il) == 10 and len(recs_bad) == 1)
+
+    il_world_close(il_pipe, ls3)
+    il_world_close(il2_pipe, ls4)
+    il_world_close(il3_pipe, ls5)
+
+    ok_ascii_il = True
+    try:
+        with open(os.path.join(BASE, "pipeline.py"), encoding="ascii") as h:
+            h.read()
+    except UnicodeDecodeError:
+        ok_ascii_il = False
+    net_il = 0
+    with open(os.path.join(BASE, "pipeline.py"), encoding="ascii") as handle:
+        for line in handle:
+            s = line.strip()
+            if (s.startswith("import ") or s.startswith("from ")) and any(
+                    w in s for w in ("urllib", "requests", "socket", "http")):
+                net_il += 1
+    record("AC-IL1", ok_il1,
+           "gate-calls=%d (2 groups; old per-row=8) l1-hits=%d receipts=%d"
+           " received=%d statuses=%s"
+           % (gate_calls["n"], il_pipe.local_hit_count, len(recs_il),
+              sum(1 for r in recs_il if r.get("received")), grouped))
+    record("AC-IL2", ok_il2,
+           "pooled-shape=%s l1-reject-shape=%s degraded-shape=%s"
+           " bad-frame={code:E_BAD_FRAME,origin}=%s"
+           % (bool(r_il_pool.get("evt_id")),
+              all(r.get("origin_evt_id") for r in l1_rejects),
+              all(r.get("origin_evt_id") for r in recs_off_il), ok_badframe))
+    record("AC-IL3", ok_flood and ok_reingest and ok_cross,
+           "order-parity anchors through the batched path: flood=%s"
+           " reingest-dedup=%s cross-source-dup=%s (zero test edits)"
+           % (ok_flood, ok_reingest, ok_cross))
+    record("AC-IL4", gate_calls["n"] == 2 and il_pipe.local_hit_count == 2,
+           "gate-calls new=2 vs old=8 (7-row group=1 call + 1-row group=1"
+           " call); L1 caught 2 rows with zero gate calls")
+    record("AC-IL5", ok_il5_queued and ok_il5_meta and ok_il5_marked
+           and ok_il5_recover and ok_il5_budget,
+           "offline cross-group queued=%s meta-per-group=%s marked-queued=%s"
+           " recover-zones=%s budget-breach-suffix=%s"
+           % (ok_il5_queued, ok_il5_meta, ok_il5_marked, ok_il5_recover,
+              ok_il5_budget))
+    record("AC-IL6", ok_il6 and ok_il5_idem and ok_il6_budget,
+           "re-read-empty=%s every-row-one-receipt=%s drain-idempotent=%s/%s"
+           " budget-recovery-single-path=%s"
+           % (recs_again == [], len(recs_il) + len(recs_bad) == 11,
+              ok_il5_idem, ok_il6_budget, ok_il6_budget))
+    record("AC-IL7", ok_ascii_il and net_il == 0,
+           "pipeline-ascii=%s net-import-hits=%d sec_batch-untouched"
+           " (git diff evidence in qa log); ugc criteria 19->26 in"
+           " reconcile_all; full regression = RUNNER log"
+           % (ok_ascii_il, net_il))
+
     fails = [ac for ac, ok in RESULTS if not ok]
     total = len(RESULTS)
     print("SUITE %s (%d/%d criteria pass)" % ("PASS" if not fails else "FAIL",

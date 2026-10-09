@@ -1,10 +1,10 @@
-{
-  "export_ts": "2026-10-10T01:30:45+08:00",
+﻿{
+  "export_ts": "2026-10-10T01:57:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1701 本轮交付：UGC 管道 submit→SecBatchFace 接线（R1681 命名后继·AC-PW1..PW7 七判据预注册先于代码·RUNNER 43/43 套件 455 判据全绿）+tech 队列补种（open 10 持平）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：UGC 管道降级横幅持久化队列端到端（2026-10-10T01:30:45+08:00·R1701 交付·可跑实物）：src/sandbox/ugc/pipeline.py 接线（submit 门步走 SecBatchFace 批量门·门故障降级入持久队列零丢失+submit_batch 真批量门+drain_recover 端到端恢复〔queued→drained_pass→发布/drained_rejected 永拒/离线留队/二跑幂等〕+degraded_banner 常驻 disclaimer）+sec_batch.py rows_by_status 只读面；test_ugc.py 19/19 判据（AC-U1..U12+AC-PW1..PW7）+reconcile_all 43 套件 455 判据 RUNNER PASS+矩阵 --check byte-identical；证据 qa/ugc-pipeline-R1701.log+qa/reconcile-all-R1701.log",
-    "next_milestone": "下轮=P2 队头（tech 开项按序：pay 支付状态通知面/水印缩放族模板对位恢复/suite_matrix 证据发现面修复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）+fold R460 轮首首测按实况裁定"
+    "current": "R1702 本轮交付：fold R460 水位整编+UGC ingest_lobby 批量门接线（AC-IL1..IL7 判据预注册先于代码·RUNNER 43/43 套件 462 判据全绿·同窗门调 8→2 省额实测）+tech 队列补种（open 10 持平）。待外部输入：radar 候选清单（OSS 窗）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：UGC ingest_lobby 批量门接线（2026-10-10T01:57:30+08:00·R1702 交付·可跑实物）：src/sandbox/ugc/pipeline.py ingest_lobby 三段重构（L1 本地预筛先行省付费调用+按 (source,actor) 分组每片单 check_batch 批调〔同窗门调 8→2〕+窗序重放语义保真+降级跨组元数据保真+drain_recover 单径恢复）；test_ugc 26/26+RUNNER 43/43 套件 462 判据+矩阵 --check byte-identical；证据 qa/ugc-ingest-R1702.log+qa/reconcile-all-R1702.log",
+    "next_milestone": "下轮=fold R461 轮首首测按实况裁定+P2 队头（tech 开项按序：ingest_lobby 窗口水位帽/pay 支付状态通知面/水印缩放族模板对位恢复·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1701",
+      "1702",
       "OSLoop 执行 tick"
     ],
     [
@@ -2913,20 +2913,24 @@
     [
       "2",
       "R1701 UGC 管道 SecBatchFace 接线沙箱件（P2 队头·AC-PW1..PW7 预注册=tech.md 认领行先于代码·种子=sec_batch.py R1681 在册）：pipeline.py 门步接线（submit→check_batch 单文本片·AC-U1..U12 全套零回归）+门故障降级根治（旧行为裸抛=文本丢失→queued receipt 零 ugc.db 行+sec_degraded.db 持久+跨重启存活+ingest_lobby 消耗标记 status=queued 单径恢复防双发布）+submit_batch 真批量门（分片映射律 verdicts→前缀/degraded→后缀+预算击穿注入实证 budget_breach 零判定零发布）+drain_recover 端到端（三态实测：恢复→drained_pass→发布含 lobby_idea 源/命中→drained_rejected 永不发布 fail-closed 永拒/离线→留队下窗·二跑幂等 skipped_existing=6 零新事件行）+零丢失账（降级 7=发布 6+恢复期硬拒 1+队列余留 0 每文本恰一结局）+sec_batch.py rows_by_status 只读面（三态白名单·AC-SB 套件零回归）·test_ugc 12→19 判据 SUITE 19/19+RUNNER PASS 43/43 套件 448→455 判据 controls 6/6 85.4s 零回归=qa/ugc-pipeline-R1701.log+qa/reconcile-all-R1701.log·矩阵再生 43/455 --check byte-identical 绿（--evidence 显式指向新 RUNNER 证据=R1695 缺省发现面缺口注记）·tech open 10→9 后补种 1→10·R1701"
+    ],
+    [
+      "2",
+      "ingest_lobby 批量门接线交付件（R1702·P2 队头=R1701 命名后继·AC-IL1..IL7 预注册=tech.md 认领行先于代码：src/sandbox/ugc/pipeline.py ingest_lobby 三段重构=L1 先行逐行筛〔本地 trie 拦 fw 零门调省付费调用〕+按 (source,actor) 分组 face.max_batch 分片每片单 check_batch 批调〔同窗门调 8→2 实测·分组律=降级队列元数据保真〕+窗序重放〔gray/noise/flood/duplicate 语义逐位一致·flood/reingest/cross 三锚零改动过〕+降级跨组保真+drain_recover 单径恢复+窗二读空每行恰一 receipt；test_ugc 19→26 SUITE 26/26+RUNNER PASS 43/43 套件 455→462 判据 86.9s 零回归+矩阵 43/462 --check byte-identical+fold R460 水位整编随轮〔80432B→73626B·AC-R4601..R4606=qa/reorg-R1702.log〕；证据 qa/ugc-ingest-R1702.log+qa/reconcile-all-R1702.log·R1702）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1701 flush caliber (checker single-source law): window re-derived by checker recompute = 2026-10-04..2026-10-10; R1701 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1700 -> 1701; tech queue UGC-wiring row done -1 + one named-successor seed (ingest_lobby batch gate wiring) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
+    "method": "R1702 flush caliber (checker single-source law): window re-derived by checker recompute; fold R460 folded the R1699..R1701 window (7 lines -> 1 rolling line) and the R1702 pair appended (substantive + tokens), W/sub re-derived mechanically; tick row 1701 -> 1702; tech queue ingest-batch row done -1 + one named-successor seed (ingest_lobby window cap) +1 = 10 flat; P1 board all gated; benchmarks_refreshed unchanged 2026-10-10"
   }
 }

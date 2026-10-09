@@ -159,7 +159,10 @@ SUITES = [
     ("ledger-apidev",
      os.path.join("ledger", "test_apidev.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
-    ("ugc", os.path.join("ugc", "test_ugc.py"), 19),
+    # R1702 ingest_lobby batched gate window: L1-first per row, one
+    # check_batch call per (source, actor) group chunk, window-order
+    # replay (AC-IL1..IL7 pre-registered in state/queue/tech.md)
+    ("ugc", os.path.join("ugc", "test_ugc.py"), 26),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent)
     ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 7),

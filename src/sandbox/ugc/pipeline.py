@@ -308,9 +308,22 @@ class UGCPipeline:
         """Diverting reader: the real consumer of the lobby idea.submit
         (AC-S10) and avatar.intake (AC-S12) streams. One DB, tables
         split. The lobby already enforced entrance + gates upstream; this
-        face re-runs its own gates anyway (defense in depth)."""
-        receipts = []
-        for origin, evt_type, actor, payload_json in self.store.lobby_intake_rows():
+        face re-runs its own gates anyway (defense in depth).
+
+        Batched gate window (AC-IL1..IL6): rows are parsed in window
+        order, the local L1 pre-filter runs per row BEFORE any gate
+        call (paid-call saving), then the surviving rows reach the
+        gate as ONE check_batch call per (source, actor) group chunk
+        instead of one call per row. The face takes a single
+        source/actor pair per call, so rows are grouped by that pair -
+        mixing groups would mislabel degraded queue rows with the
+        wrong metadata. Post-gate flow still replays in window order
+        (AC-IL3): gray/noise/flood/duplicate state stays identical to
+        the old per-row semantics."""
+        rows = self.store.lobby_intake_rows()
+        # phase 1: parse + local classification (window order kept)
+        parsed = []  # [origin, source, actor, text, kind, qid]
+        for origin, evt_type, actor, payload_json in rows:
             try:
                 payload = json.loads(payload_json) if payload_json else {}
             except json.JSONDecodeError:
@@ -320,20 +333,64 @@ class UGCPipeline:
             else:  # avatar.intake (household registration itself = BigLife T-04)
                 name, intro = str(payload.get("name", "")), str(payload.get("intro", ""))
                 source, text = "avatar_intake", ((name + " - " + intro) if intro else name)
-            try:
-                out = self._process(source, actor, text, origin_evt_id=origin)
-                if out.get("queued"):
-                    # consumed by the reader, content persisted in the
-                    # degraded queue; single recovery path =
-                    # drain_recover, no silent loss (AC-PW3)
-                    status = "queued"
-                else:
+            text = text.strip()[: self.max_len]
+            if not text:
+                kind = "bad"
+            elif (self.prefilter is not None
+                  and self.prefilter.check(text) is not None):
+                self.local_hit_count += 1  # local catch, zero gate calls
+                kind = "l1"
+            else:
+                kind = "gate"
+            parsed.append([origin, source, actor, text, kind, None])
+        # phase 2: batched gate - one call per (source, actor) chunk
+        groups = {}
+        for i, row in enumerate(parsed):
+            if row[4] == "gate":
+                groups.setdefault((row[1], row[2]), []).append(i)
+        for (source, actor), idxs in groups.items():
+            for start in range(0, len(idxs), self.batch.max_batch):
+                piece = idxs[start:start + self.batch.max_batch]
+                out = self.batch.check_batch(
+                    [parsed[i][3] for i in piece], source=source, actor=actor)
+                verdicts, degraded = out["verdicts"], out["degraded"]
+                # in-chunk mapping law: verdicts cover the piece prefix
+                # in order, the degraded qids cover the suffix in order
+                for j, (kind, _gate_no, _word, _text) in enumerate(verdicts):
+                    parsed[piece[j]][4] = "rejected" if kind == "rejected" else "pass"
+                for k, (qid, _landed) in enumerate(degraded):
+                    target = parsed[piece[len(verdicts) + k]]
+                    target[4], target[5] = "degraded", qid
+        # phase 3: window-order replay (old per-row loop semantics)
+        receipts = []
+        for origin, source, actor, text, kind, qid in parsed:
+            if kind == "degraded":
+                # consumed by the reader, content persisted in the
+                # degraded queue; single recovery path = drain_recover,
+                # no silent loss (AC-PW3/AC-IL5)
+                out = {"received": False, "queued": True, "qid": qid,
+                       "gate": None, "origin_evt_id": origin}
+                status = "queued"
+            elif kind in ("l1", "rejected"):
+                out = {"received": False, "code": UGC.E_CONTENT_REJECTED,
+                       "origin_evt_id": origin}
+                status = "rejected"
+            elif kind == "bad":
+                out = {"received": False, "code": UGC.E_BAD_FRAME,
+                       "origin_evt_id": origin}
+                status = UGC.E_BAD_FRAME
+            else:  # pass: full post-gate flow, window order preserved
+                try:
+                    out = self._after_gate(source, actor, text,
+                                           origin_evt_id=origin)
                     status = ("noise" if out.get("noise")
                               else ("review" if out.get("suspended")
                                     else "accepted"))
-            except UGC.PipelineError as exc:
-                out = {"received": False, "code": exc.code, "origin_evt_id": origin}
-                status = "rejected" if exc.code == UGC.E_CONTENT_REJECTED else exc.code
+                except UGC.PipelineError as exc:
+                    out = {"received": False, "code": exc.code,
+                           "origin_evt_id": origin}
+                    status = ("rejected" if exc.code == UGC.E_CONTENT_REJECTED
+                              else exc.code)
             self.store.mark_ingest(origin, status, UGC.utc_now_iso())
             receipts.append(out)
         return receipts
