@@ -1,0 +1,64 @@
+=== R1709 evidence log: suite_matrix same-mtime tie-break coverage ===
+Seed: state/queue/tech.md R1709 claim row (AC-TIE1..TIE7 pre-registered
+BEFORE code - honesty law). AC-MT prefix collision (metered/frontdoor
+family) -> renamed AC-TIE (R1707 AC-WSR precedent), repo scan: no owner.
+
+--- Section 1: suite run (src/sandbox/test_suite_matrix.py, 15/15) ---
+$ python src/sandbox/test_suite_matrix.py
+PASS fixture-gap-replay: new face picked showroom-R1700.log, old glob face would have picked reconcile-all-R1699.log (naming-gap difference proven)
+PASS fixture-none-eligible: default None + main exit=2
+PASS fixture-runner-fail-fallback: skipped z-newest-fail.log, picked a-older-pass.log
+PASS fixture-self-evidence-skip: skipped suite-matrix-self-R9999.log, picked a-other.log
+PASS fixture-duplicate-labels-refused: fell to a-clean.log
+PASS fixture-count-mismatch-refused: fell to a-clean.log
+PASS fixture-tie-name-asc: 3-way same-mtime tie -> a-ace.log
+PASS fixture-tie-ineligible-mix: skipped a-fail.log inside tie, picked z-tie-pass.log (older m-old-pass.log not reached)
+PASS fixture-all-flattened: 4 files one mtime -> a-ace.log x3
+PASS listdir-order-independence: reversed enumeration -> same winner a-ace.log
+PASS live-tie-probe: reconcile-all-R1708.log x3 identical, tie_peers=1 (no live tie)
+PASS live-default-discovery: newest eligible = reconcile-all-R1708.log
+PASS explicit-evidence-lenient: runner-only log accepted, 46 suites no-evidence
+PASS check-roundtrip-tmp: identical exit 0, tamper exit 2
+PASS hygiene-self-checks: pure-ascii, zero network imports
+SUITE PASS (15/15 cases)
+exit=0
+
+AC-TIE1 fixture-tie-name-asc: three eligible files share one mtime
+(os.utime identical value) -> (mtime desc, name asc) key pair falls
+through to the name key; a-ace.log (smallest name) wins.
+AC-TIE2 fixture-tie-ineligible-mix: one same-mtime group holds an
+ineligible file (RUNNER FAIL, smallest name) and an eligible one
+(z-tie-pass.log, largest name) plus an older eligible file
+(m-old-pass.log) -> discovery continues INSIDE the tie group past the
+ineligible file; the older group is never reached.
+AC-TIE3 fixture-all-flattened: git-checkout simulation - all four
+fixture files share one mtime (eligible + ineligible + prose) ->
+winner = a-ace.log (smallest eligible name), three consecutive calls
+return the identical path.
+AC-TIE4 listdir-order-independence: os.listdir monkeypatched to
+return entries in REVERSE order -> same winner (sort key fully
+absorbs enumeration order; no directory-enumeration luck).
+AC-TIE5 live-tie-probe: live qa/ three consecutive calls identical;
+tie_peers=1 at the winner's exact mtime -> honest no-live-tie note
+(no fabricated tie). Live winner this round: reconcile-all-R1708.log.
+
+--- Section 2: full regression excerpt (qa/reconcile-all-R1709.log) ---
+PASS suite suite-matrix-discovery exit=0 pass-lines=15 fail-lines=0 criteria=15 0.8s
+PASS suites 46/46 green, expected criteria total=502
+RUNNER PASS (46/46 suites green, reconcile controls 6/6, 104.2s)
+(exit=0; criteria 497 -> 502 via suite-matrix-discovery 10 -> 15)
+
+--- Section 3: matrix regen + --check roundtrip ---
+$ python src/sandbox/suite_matrix.py
+PASS generated docs/sandbox-suite-matrix.md (6101 bytes) - registry suites=46 criteria=502 evidence=qa/reconcile-all-R1709.log green=46/46
+PASS hygiene: pure-ascii source, zero network imports
+$ python src/sandbox/suite_matrix.py --check   (x2)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6101 bytes, 46 suites, 502 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6101 bytes, 46 suites, 502 criteria)
+(default discovery face picked the mtime-newest eligible log = this
+round's own RUNNER record qa/reconcile-all-R1709.log; the R1707
+watermark log, mtime-older now, falls behind correctly)
+
+--- Section 4: hygiene (git status, live face) ---
+delivery: state log R1709 line + tech.md done note + commit message
+carrying the seed (R1708 discovery-face two-key pair on record).

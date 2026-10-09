@@ -224,7 +224,8 @@ SUITES = [
     # naming gap: old face globbed reconcile-all-R*.log only; new face
     # walks qa/*.log newest-first with four fail-closed eligibility
     # checks; AC-SM1..SM7 pre-registered in state/queue/tech.md).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 10),
+    # R1709 AC-TIE1..TIE7: same-mtime tie-break coverage (+5 cases).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 15),
 ]
 
 FAILS = 0

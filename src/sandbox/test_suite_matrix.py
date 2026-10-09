@@ -15,6 +15,15 @@ live qa/ directory is never touched by the fixture cases; the live
 case (case 7) is read-only and asserted as "newest eligible", not
 against a pinned filename, so it survives future rounds.
 
+R1709 (AC-TIE1..TIE7, pre-registered in state/queue/tech.md before
+these cases existed): the four fixture states never covered the
+same-mtime tie shape a git checkout produces - every qa/ file then
+gets one restoration mtime and discovery falls entirely onto the
+name key. Five cases pin the tie semantics: name-asc resolution,
+in-tie-group skip past an ineligible file, a fully flattened tree
+with repeated-call determinism, enumeration-order independence
+(reversed os.listdir), and a live determinism/tie probe.
+
 Explicit --evidence stays lenient by design (AC-SM4): absent suites
 are labeled no-evidence instead of refused; validation lives only
 in the default discovery face.
@@ -183,6 +192,127 @@ def case_fixture_count_mismatch_refused(tmp):
         os.path.basename(other))
 
 
+def case_fixture_tie_name_asc(tmp):
+    """AC-TIE1: three eligible files share ONE mtime -> the (mtime
+    desc, name asc) key pair falls through to the name key; the
+    lexicographically smallest name must win (post-checkout shape
+    where every file gets the same restoration mtime)."""
+    tie = 1_700_000_400
+    for name in ("z-zed.log", "m-mid.log", "a-ace.log"):
+        _write(os.path.join(tmp, name), MINI_EVIDENCE, mtime=tie)
+    saved = _with_qa_dir(tmp)
+    try:
+        picked = SM.default_evidence()
+        assert picked == os.path.join(tmp, "a-ace.log"), \
+            "tie group must resolve to the smallest name"
+    finally:
+        SM.QA_DIR = saved
+    return "PASS fixture-tie-name-asc: 3-way same-mtime tie -> %s" % (
+        os.path.basename(picked))
+
+
+def case_fixture_tie_ineligible_mix(tmp):
+    """AC-TIE2: within ONE same-mtime group an ineligible file
+    (RUNNER FAIL, smallest name) is skipped and discovery continues
+    INSIDE the tie group to the eligible file - it must not fall
+    through to the older mtime group."""
+    tie = 1_700_000_400
+    fail_first = os.path.join(tmp, "a-fail.log")
+    tie_pass = os.path.join(tmp, "z-tie-pass.log")
+    old_pass = os.path.join(tmp, "m-old-pass.log")
+    _write(fail_first, _runner_fail_evidence(), mtime=tie)
+    _write(tie_pass, MINI_EVIDENCE, mtime=tie)
+    _write(old_pass, MINI_EVIDENCE, mtime=tie - 100)
+    saved = _with_qa_dir(tmp)
+    try:
+        picked = SM.default_evidence()
+        assert picked == tie_pass, \
+            "must continue inside the tie group past ineligible file"
+    finally:
+        SM.QA_DIR = saved
+    return "PASS fixture-tie-ineligible-mix: skipped %s inside tie," \
+           " picked %s (older %s not reached)" % (
+               os.path.basename(fail_first), os.path.basename(tie_pass),
+               os.path.basename(old_pass))
+
+
+def case_fixture_all_flattened(tmp):
+    """AC-TIE3: git-checkout simulation - EVERY file in the fixture
+    dir shares one mtime (mixed eligible/ineligible). Discovery must
+    stay deterministic: the unique winner is the smallest-named
+    eligible file, and three consecutive calls return the same path
+    (os.listdir order is not stable across calls)."""
+    flat = 1_700_000_400
+    _write(os.path.join(tmp, "z-fail.log"), _runner_fail_evidence(),
+           mtime=flat)
+    _write(os.path.join(tmp, "m-mid.log"), MINI_EVIDENCE, mtime=flat)
+    _write(os.path.join(tmp, "a-ace.log"), MINI_EVIDENCE, mtime=flat)
+    _write(os.path.join(tmp, "notes.log"), "prose, no runner\n",
+           mtime=flat)
+    saved = _with_qa_dir(tmp)
+    try:
+        picks = [SM.default_evidence() for _ in range(3)]
+        assert picks[0] == os.path.join(tmp, "a-ace.log"), \
+            "flattened tree must resolve to smallest eligible name"
+        assert picks[0] == picks[1] == picks[2], \
+            "three consecutive calls must agree byte-for-byte"
+    finally:
+        SM.QA_DIR = saved
+    return "PASS fixture-all-flattened: 4 files one mtime -> %s x3" \
+        % os.path.basename(picks[0])
+
+
+def case_listdir_order_independence(tmp):
+    """AC-TIE4: os.listdir is monkeypatched to return entries in
+    REVERSE order - the discovery sort key must fully absorb the
+    enumeration order (the winner must not depend on directory
+    enumeration luck)."""
+    tie = 1_700_000_400
+    expected = os.path.join(tmp, "a-ace.log")
+    _write(expected, MINI_EVIDENCE, mtime=tie)
+    _write(os.path.join(tmp, "z-zed.log"), MINI_EVIDENCE, mtime=tie)
+    saved_dir = _with_qa_dir(tmp)
+    saved_listdir = os.listdir
+    try:
+        def reversed_listdir(path):
+            return list(reversed(saved_listdir(path)))
+        os.listdir = reversed_listdir
+        picked = SM.default_evidence()
+        assert picked == expected, \
+            "reversed listdir must not change the tie winner"
+    finally:
+        os.listdir = saved_listdir
+        SM.QA_DIR = saved_dir
+    return "PASS listdir-order-independence: reversed enumeration ->" \
+           " same winner %s" % os.path.basename(expected)
+
+
+def case_live_tie_probe(tmp):
+    """AC-TIE5: live determinism - three consecutive live calls agree
+    byte-for-byte; tie status is reported honestly (if eligible files
+    share the winner's exact mtime, the winner must be the smallest
+    name among them; otherwise reported as no-live-tie)."""
+    picks = [SM.default_evidence() for _ in range(3)]
+    assert picks[0] is not None, "live qa/ must hold eligible evidence"
+    assert picks[0] == picks[1] == picks[2], "live calls must agree"
+    winner = picks[0]
+    names = [name for name in os.listdir(SM.QA_DIR)
+             if name.endswith(".log")
+             and not name.startswith("suite-matrix-")]
+    win_mtime = os.path.getmtime(winner)
+    tie_peers = [name for name in names
+                 if os.path.getmtime(os.path.join(SM.QA_DIR, name))
+                 == win_mtime
+                 and SM._evidence_eligible(
+                     os.path.join(SM.QA_DIR, name))]
+    if len(tie_peers) > 1:
+        assert os.path.basename(winner) == min(tie_peers), \
+            "live tie: winner must be smallest name among tie peers"
+    return "PASS live-tie-probe: %s x3 identical, tie_peers=%d%s" % (
+        os.path.basename(winner), len(tie_peers),
+        "" if len(tie_peers) > 1 else " (no live tie)")
+
+
 def case_live_default_discovery(tmp):
     """AC-SM5 live face: on the real qa/ the default must return the
     NEWEST ELIGIBLE log (recomputed here independently), not any
@@ -267,6 +397,11 @@ def main():
         case_fixture_self_evidence_skip,
         case_fixture_duplicate_labels_refused,
         case_fixture_count_mismatch_refused,
+        case_fixture_tie_name_asc,
+        case_fixture_tie_ineligible_mix,
+        case_fixture_all_flattened,
+        case_listdir_order_independence,
+        case_live_tie_probe,
         case_live_default_discovery,
         case_explicit_evidence_lenient,
         case_check_roundtrip_tmp,
