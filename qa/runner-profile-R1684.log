@@ -1,0 +1,231 @@
+== runner wall-time profile ==
+target: qa/sec-batch-R1681.log
+runner: RUNNER PASS (37/37 suites green, reconcile controls 6/6, 148.7s)
+parsed: suites=37 criteria_total=406 suite_seconds_sum=146.5 runner_total=148.7
+registry: ALIGNED (SUITES has 37 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 minors-wiring 34.6 70 0.49
+  2 lobby 33.3 16 2.08
+  3 watermark-sweep 31.6 6 5.27
+  4 schema-migrate 7.8 21 0.37
+  5 pay 6.1 16 0.38
+  6 member 5.5 16 0.34
+  7 watermark 4.7 5 0.94
+  8 dual-track 3.1 7 0.44
+  9 watermark-robust 2.6 6 0.43
+  10 opsreview 2.1 7 0.30
+  11 ugc 1.9 12 0.16
+  12 pay-v3 1.7 14 0.12
+  13 pay-v3-real 1.2 9 0.13
+  14 ledger-identity 1.1 7 0.16
+  15 pay-v3-window 1.0 6 0.17
+  16 liveroom 0.9 10 0.09
+  17 ledger 0.7 11 0.06
+  18 ledger-ads 0.6 7 0.09
+  19 ledger-effects 0.5 7 0.07
+  20 ledger-growth-archive 0.5 7 0.07
+  21 ledger-props 0.5 7 0.07
+  22 ledger-reports 0.5 7 0.07
+  23 ledger-studio 0.5 7 0.07
+  24 ledger-collectibles 0.4 7 0.06
+  25 benchgate 0.3 11 0.03
+  26 citymodel 0.3 10 0.03
+  27 ledger-expedite 0.3 7 0.04
+  28 ledger-incentive 0.3 7 0.04
+  29 ledger-metered 0.3 7 0.04
+  30 ledger-observation 0.3 7 0.04
+  31 ledger-venue 0.3 7 0.04
+  32 ugc-sec-batch 0.3 7 0.04
+  33 compliance 0.2 15 0.01
+  34 tourstate 0.2 7 0.03
+  35 ledger-settlement 0.1 7 0.01
+  36 member-entry 0.1 7 0.01
+  37 minors 0.1 19 0.01
+top5-hotspots: minors-wiring 34.6s, lobby 33.3s, watermark-sweep 31.6s, schema-migrate 7.8s, pay 6.1s
+baseline: ABSENT (init with --update-baseline)
+== runner wall-time profile ==
+target: qa/sec-batch-R1681.log
+runner: RUNNER PASS (37/37 suites green, reconcile controls 6/6, 148.7s)
+parsed: suites=37 criteria_total=406 suite_seconds_sum=146.5 runner_total=148.7
+registry: ALIGNED (SUITES has 37 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 minors-wiring 34.6 70 0.49
+  2 lobby 33.3 16 2.08
+  3 watermark-sweep 31.6 6 5.27
+  4 schema-migrate 7.8 21 0.37
+  5 pay 6.1 16 0.38
+  6 member 5.5 16 0.34
+  7 watermark 4.7 5 0.94
+  8 dual-track 3.1 7 0.44
+  9 watermark-robust 2.6 6 0.43
+  10 opsreview 2.1 7 0.30
+  11 ugc 1.9 12 0.16
+  12 pay-v3 1.7 14 0.12
+  13 pay-v3-real 1.2 9 0.13
+  14 ledger-identity 1.1 7 0.16
+  15 pay-v3-window 1.0 6 0.17
+  16 liveroom 0.9 10 0.09
+  17 ledger 0.7 11 0.06
+  18 ledger-ads 0.6 7 0.09
+  19 ledger-effects 0.5 7 0.07
+  20 ledger-growth-archive 0.5 7 0.07
+  21 ledger-props 0.5 7 0.07
+  22 ledger-reports 0.5 7 0.07
+  23 ledger-studio 0.5 7 0.07
+  24 ledger-collectibles 0.4 7 0.06
+  25 benchgate 0.3 11 0.03
+  26 citymodel 0.3 10 0.03
+  27 ledger-expedite 0.3 7 0.04
+  28 ledger-incentive 0.3 7 0.04
+  29 ledger-metered 0.3 7 0.04
+  30 ledger-observation 0.3 7 0.04
+  31 ledger-venue 0.3 7 0.04
+  32 ugc-sec-batch 0.3 7 0.04
+  33 compliance 0.2 15 0.01
+  34 tourstate 0.2 7 0.03
+  35 ledger-settlement 0.1 7 0.01
+  36 member-entry 0.1 7 0.01
+  37 minors 0.1 19 0.01
+top5-hotspots: minors-wiring 34.6s, lobby 33.3s, watermark-sweep 31.6s, schema-migrate 7.8s, pay 6.1s
+baseline written: qa/runner-profile-baseline.json (source: qa/sec-batch-R1681.log, suites=37)
+== runner wall-time profile ==
+target: qa/sec-batch-R1681.log
+runner: RUNNER PASS (37/37 suites green, reconcile controls 6/6, 148.7s)
+parsed: suites=37 criteria_total=406 suite_seconds_sum=146.5 runner_total=148.7
+registry: ALIGNED (SUITES has 37 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 minors-wiring 34.6 70 0.49
+  2 lobby 33.3 16 2.08
+  3 watermark-sweep 31.6 6 5.27
+  4 schema-migrate 7.8 21 0.37
+  5 pay 6.1 16 0.38
+  6 member 5.5 16 0.34
+  7 watermark 4.7 5 0.94
+  8 dual-track 3.1 7 0.44
+  9 watermark-robust 2.6 6 0.43
+  10 opsreview 2.1 7 0.30
+  11 ugc 1.9 12 0.16
+  12 pay-v3 1.7 14 0.12
+  13 pay-v3-real 1.2 9 0.13
+  14 ledger-identity 1.1 7 0.16
+  15 pay-v3-window 1.0 6 0.17
+  16 liveroom 0.9 10 0.09
+  17 ledger 0.7 11 0.06
+  18 ledger-ads 0.6 7 0.09
+  19 ledger-effects 0.5 7 0.07
+  20 ledger-growth-archive 0.5 7 0.07
+  21 ledger-props 0.5 7 0.07
+  22 ledger-reports 0.5 7 0.07
+  23 ledger-studio 0.5 7 0.07
+  24 ledger-collectibles 0.4 7 0.06
+  25 benchgate 0.3 11 0.03
+  26 citymodel 0.3 10 0.03
+  27 ledger-expedite 0.3 7 0.04
+  28 ledger-incentive 0.3 7 0.04
+  29 ledger-metered 0.3 7 0.04
+  30 ledger-observation 0.3 7 0.04
+  31 ledger-venue 0.3 7 0.04
+  32 ugc-sec-batch 0.3 7 0.04
+  33 compliance 0.2 15 0.01
+  34 tourstate 0.2 7 0.03
+  35 ledger-settlement 0.1 7 0.01
+  36 member-entry 0.1 7 0.01
+  37 minors 0.1 19 0.01
+top5-hotspots: minors-wiring 34.6s, lobby 33.3s, watermark-sweep 31.6s, schema-migrate 7.8s, pay 6.1s
+== drift compare vs qa/sec-batch-R1681.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite minors-wiring base=34.6s cur=34.6s delta=+0.0s slack=17.30s OK
+suite lobby base=33.3s cur=33.3s delta=+0.0s slack=16.65s OK
+suite watermark-sweep base=31.6s cur=31.6s delta=+0.0s slack=15.80s OK
+suite schema-migrate base=7.8s cur=7.8s delta=+0.0s slack=3.90s OK
+suite pay base=6.1s cur=6.1s delta=+0.0s slack=3.05s OK
+suite member base=5.5s cur=5.5s delta=+0.0s slack=2.75s OK
+suite watermark base=4.7s cur=4.7s delta=+0.0s slack=2.35s OK
+suite dual-track base=3.1s cur=3.1s delta=+0.0s slack=2.00s OK
+suite watermark-robust base=2.6s cur=2.6s delta=+0.0s slack=2.00s OK
+suite opsreview base=2.1s cur=2.1s delta=+0.0s slack=2.00s OK
+suite ugc base=1.9s cur=1.9s delta=+0.0s slack=2.00s OK
+suite pay-v3 base=1.7s cur=1.7s delta=+0.0s slack=2.00s OK
+suite pay-v3-real base=1.2s cur=1.2s delta=+0.0s slack=2.00s OK
+suite ledger-identity base=1.1s cur=1.1s delta=+0.0s slack=2.00s OK
+suite pay-v3-window base=1.0s cur=1.0s delta=+0.0s slack=2.00s OK
+suite liveroom base=0.9s cur=0.9s delta=+0.0s slack=2.00s OK
+suite ledger base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite ledger-ads base=0.6s cur=0.6s delta=+0.0s slack=2.00s OK
+suite ledger-effects base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-growth-archive base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-props base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-reports base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-studio base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-collectibles base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite benchgate base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite citymodel base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-expedite base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-incentive base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-metered base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-observation base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-venue base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ugc-sec-batch base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite compliance base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite tourstate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-settlement base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite member-entry base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite minors base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+total-shared base=146.5s cur=146.5s delta=+0.0s slack=73.25s OK (shared=37 labels)
+verdict: DRIFT-CLEAN (37 compared, 0 flagged)
+selftest hygiene: PASS
+== drift compare vs qa/sec-batch-R1681.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite lobby base=33.3s cur=50.0s delta=+16.7s slack=16.65s FLAG
+suite minors-wiring base=34.6s cur=34.6s delta=+0.0s slack=17.30s OK
+suite watermark-sweep base=31.6s cur=31.6s delta=+0.0s slack=15.80s OK
+suite schema-migrate base=7.8s cur=7.8s delta=+0.0s slack=3.90s OK
+suite pay base=6.1s cur=6.1s delta=+0.0s slack=3.05s OK
+suite member base=5.5s cur=5.5s delta=+0.0s slack=2.75s OK
+suite watermark base=4.7s cur=4.7s delta=+0.0s slack=2.35s OK
+suite dual-track base=3.1s cur=3.1s delta=+0.0s slack=2.00s OK
+suite watermark-robust base=2.6s cur=2.6s delta=+0.0s slack=2.00s OK
+suite opsreview base=2.1s cur=2.1s delta=+0.0s slack=2.00s OK
+suite ugc base=1.9s cur=1.9s delta=+0.0s slack=2.00s OK
+suite pay-v3 base=1.7s cur=1.7s delta=+0.0s slack=2.00s OK
+suite pay-v3-real base=1.2s cur=1.2s delta=+0.0s slack=2.00s OK
+suite ledger-identity base=1.1s cur=1.1s delta=+0.0s slack=2.00s OK
+suite pay-v3-window base=1.0s cur=1.0s delta=+0.0s slack=2.00s OK
+suite selftest-new NEW-SUITE (no baseline entry)
+suite liveroom base=0.9s cur=0.9s delta=+0.0s slack=2.00s OK
+suite ledger base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite ledger-ads base=0.6s cur=0.6s delta=+0.0s slack=2.00s OK
+suite ledger-effects base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-growth-archive base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-props base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-reports base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-studio base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-collectibles base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite benchgate base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite citymodel base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-expedite base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-incentive base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-metered base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-observation base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-venue base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ugc-sec-batch base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite compliance base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite tourstate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-settlement base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite member-entry base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite minors base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+total-shared base=146.5s cur=163.2s delta=+16.7s slack=73.25s OK (shared=37 labels)
+verdict: DRIFT-FLAG (1 flagged: lobby)
+selftest drift-demo (edge+0.05 + new-suite): PASS
+selftest boundary (cur==base+slack -> OK): PASS
+selftest clean-demo: PASS
+selftest render-determinism: PASS
+selftest verdict: PASS
+== stale-baseline check ==
+baseline source: qa/sec-batch-R1681.log
+check: byte-identical PASS
+== process dual-run determinism ==
+run1 sha256: 8668c54da6aee773d0b32314f2fd30b1e42276e4e6d1a20aee992514475cff6b
+run2 sha256: 8668c54da6aee773d0b32314f2fd30b1e42276e4e6d1a20aee992514475cff6b
+exits: run1=0 run2=0 byte-identical: PASS
+REFUSAL: expected exactly one RUNNER PASS line, found 0
