@@ -131,6 +131,15 @@ SUITES = [
     # pre-registered in state/queue/explore.md).
     ("ledger-festival",
      os.path.join("ledger", "test_festival.py"), 7),
+    # R1695 enterprise-showroom SaaS package face: the annual bundle
+    # (storefront lease + giant-screen carousel rotation + visitor-
+    # tour stop) granted through the venue/ads public APIs (two fee
+    # rails, one spend each), replay/active-contract/subscriber-cap/
+    # rotation-pre-read gates all before the first spend, platform-
+    # side posture per Advertising-Law Article 56 (AC-SR1..SR7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-showroom",
+     os.path.join("ledger", "test_showroom.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     ("ugc", os.path.join("ugc", "test_ugc.py"), 12),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-09T20:33:33+08:00",
+  "export_ts": "2026-10-09T20:52:47+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮交付：fold R457 水位整编+滚窗并折收账轮（台账维护机制件·P-2026-09-25-18 第四百五十七刀·轮首首测 80291B 越线 1791B·窗=R1689..R1691 滚窗行承前+R1692/R1693 两队头对 5 行 8491B 压 1·34 token 随窗零丢失·verify-then-write 预测==实际 75587B·收账终态 77756B 线下 margin 744B）。沙箱矩阵 40 套件 427 判据在册全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物=festival.py 城市节气/节日限定活动引擎（2026-10-09T20:13:05+08:00·R1693 交付）：档期窗注册〔UNIQUE event_key·int-tick 窗沿用 ads/venue 约定〕+窗内购买〔双沿恰界包容·窗外一刻拒 fail-closed 零扣费〕+限购门/限量帽/同 ref 重放三闸全前置于 spend+活动纪念 collectibles 公有 API 联动（首笔发证·预授不双发）+AIGC 标识恒带+非投顾 disclaimer 四信封常驻·test_festival.py SUITE 7/7 首跑即净+RUNNER PASS 40/40 套件 427 判据 对账双控 6/6 93.1s 零回归；证据=qa/festival-R1693.log（独立套件+回归两节）+矩阵再生 docs/sandbox-suite-matrix.md 40/427 byte-identical 绿",
-    "next_milestone": "下轮=explore 下队头认领（企业展厅 SaaS 化探索行·AC 判据预注册先于代码·explore open 7）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
+    "current": "本轮交付：showroom.py 企业展厅 SaaS 化套餐面（P3 队头·可跑实物：企业年费展厅套餐=租约+巨屏轮播+参观动线三组件打包·租约/轮播两费轨走 venue/ads 公有 API 各恰一笔 spend 绑 tx·四前置门全 spend 前〔重放/活跃合约/订户帽/轮播预读〕·广告法 56 号令判读先行=平台广告发布者姿态+企业资质核验 needs-CEO 门）。沙箱矩阵 41 套件 434 判据在册全绿。等外部输入：radar 候选清单+OSS 窗6（10-11 开窗）+CEO 物理件（商户号/服务器/域名/备案，到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物=showroom.py 企业展厅 SaaS 化套餐面（2026-10-09T20:52:47+08:00·R1695 交付）：套餐注册〔UNIQUE pkg_key+租约/轮播双费轨声明+参观动线条数+可选订户帽〕+打包授予〔租约走 VenueFace.lease_storefront 公有 API·轮播走 AdsFace.book 公有 API·每订阅恰两笔 spend 各绑 tx·模块源零 venue/ads 表直写〕+四前置门全 spend 前〔E_SR_DUP_SUB/E_SR_ACTIVE_CONTRACT/E_SR_SOLD_OUT/E_SR_ROTATION_FULL 余额纹丝不动〕+AIGC 标识恒带+非投顾 disclaimer 五信封常驻·test_showroom.py SUITE 7/7+RUNNER PASS 41/41 套件 434 判据 对账双控 6/6 88.7s 零回归；证据=qa/showroom-R1695.log（独立套件+回归两节）+矩阵再生 docs/sandbox-suite-matrix.md 41/434 byte-identical 绿",
+    "next_milestone": "下轮=explore 下队头认领（姐妹城跨城互访面探索·AC 判据预注册先于代码·explore open 6）+OSS 窗6 切片 10-11 开窗+雷达候选清单续候（窗 ≤48h）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1694",
+      "1695",
       "OSLoop 执行 tick"
     ],
     [
@@ -2885,21 +2885,25 @@
     [
       "1",
       "R1694 fold R457 水位整编+滚窗并折收账轮（台账维护机制件·P-2026-09-25-18 第四百五十七刀·R1693 承传注记兑现）：轮首首测 80291B 越线 1791B→logs_toolkit fold 正门手术〔窗=R1689..R1691 滚窗行承前+R1692/R1693 两队头对·5 行 8491B 压 1 滚窗行 kept=0·archive §R1694 节 5 行 verbatim+pre-op logs/state-preop-R1694.bak〔sha16 eb9c0964d8c91ef4〕〕·catalog 34 token 机械零缺嵌直载滚窗行·verify-then-write 预测==实际 75587B〔预留校准 3000→2600=默认会使 gate 预检超 87B·按收账两行实况规模如实校准〕·双解析器过〔py+PS〕·log 27→23→25·收账终态 77756B 线下 margin 744B·AC-R4571..R4576=qa/reorg-R1694.log〔catalog+dry-run×2+execute 四节〕"
+    ],
+    [
+      "2",
+      "R1695 企业展厅 SaaS 化套餐面沙箱件（P3 队头·AC-SR1..SR7 预注册=explore.md 认领行先于代码·种子=B3 档期面 R622 在册）：src/sandbox/ledger/showroom.py ShowroomFace 三域=套餐注册〔UNIQUE pkg_key+租约/轮播双费轨声明〔term×价+windows×价〕+参观动线条数+可选订户帽+声明面 ai_label 持久〕+打包授予〔租约走 VenueFace.lease_storefront 公有 API〔showroom:<pkg>:<ent> 单位占用行绑 spend tx〕+轮播走 AdsFace.book 公有 API〔quant_screen_carousel 槽·carousel_lineup 含企业〕+参观动线本地 stop 行〔每 circuit 恰一·零 token〕·套餐总扣=租约费+轮播费恰两笔 spend 各绑 tx·模块源零 venue_occupancy/ad_units/venue_registry 直写=零第二引擎〕+四前置门全 spend 前〔同 (enterprise,ref) 重放 E_SR_DUP_SUB/租约窗重叠活跃合约 E_SR_ACTIVE_CONTRACT/包全局订户帽 E_SR_SOLD_OUT/轮播预读门〔容量+重叠读含 terminated_tick 生效尾语义·E_SR_ROTATION_FULL/缺单位 E_SR_ROTATION_UNIT〕余额纹丝不动〕+广告法 56 号令判读先行入册〔平台=广告发布者姿态→企业广告主资质核验=bootstrap 窗 needs-CEO 门+平台侧零居民文本无 SecGate 接入点·festival/ads 先例·后继企业内容面先接 SecGate 前置闸〕+AIGC 标识恒带呈现面〔直插 ai_label=2 DB CHECK 拒〕+非投顾 disclaimer 五信封常驻〔空拒构造〕·test_showroom.py SUITE 7/7 exit 0〔首跑两处诚实修：package_view pkg_id 类型校验缺口=模块侧修+AC-SR6 自扫断言 SecGate 命中自家 docstring=自指假阳性改 check_text 机械扫〕+reconcile_all 40→41 套件 427→434 判据 RUNNER PASS 41/41 对账双控 6/6 88.7s 零回归=qa/showroom-R1695.log〔独立套件+回归两节〕·docs/sandbox-suite-matrix.md 再生 41 套件 434 判据（--check byte-identical 绿）·queue_explore_open 7→6·价目（租约价/轮播价/订户帽/动线条数）全 [needs-CEO] P1 呈批不执行"
     ]
   ],
   "self_drive": {
     "window": "2026-10-03..2026-10-09",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 2,
-    "queue_explore_open": 7,
+    "queue_explore_open": 6,
     "derived_from": "src/os/state.json#log + docs/proposals.md + state/queue/{main,tech,explore}.md",
-    "method": "R1694 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; fold R457 collapsed 5 window lines (R1691 roll line + R1692/R1693 pairs) to 1 roll line, then R1694 pair appended = W 24 -> 22, sub 8 -> 7 (checker-recomputed; fold absorbs prior substantive lines); tick_row 1693 -> 1694; queues unchanged (P2 docker gated, P3 explore open 7)"
+    "method": "R1695 flush caliber (checker single-source law): window = [max_log_date - 6 .. max_log_date] = 2026-10-03..2026-10-09 unchanged; R1695 pair appended = W 22 -> 24, sub 7 -> 8 (R1695 showroom substantive line); tick_row 1694 -> 1695; queue_explore_open 7 -> 6 (showroom row done); P2 queues unchanged (docker gated + logs standing line)"
   }
 }
