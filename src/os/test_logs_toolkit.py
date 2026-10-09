@@ -655,6 +655,78 @@ def main():
        and open(txtpath, 'rb').read() == b'alpha\r\nbeta\r\n',
        'eol non-JSON --file target: json_eq None + CRLF repair')
 
+    # ---- fold refusal hints + indent conservation (AC-LF1..LF3, R1716) ----
+    # fold CRLF-disease fixture: LF-ified canonical state -> fold refuses;
+    # stderr hint names the eol --fix repair path; zero mutation (AC-LF1)
+    sf5 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf5, ['2026-10-10 R1716 line one D-20261010-01',
+                         '2026-10-10 R1716 tokens: local=1 api=0'])
+    sfile5 = os.path.join(sf5, 'summary.txt')
+    open(sfile5, 'w', encoding='utf-8').write('2026-10-10 roll line\n')
+    p5 = os.path.join(sf5, 'src', 'os', 'state.json')
+    h5 = open(p5, 'rb').read()
+    with open(p5, 'wb') as f:
+        f.write(h5.replace(b'\r\n', b'\n'))
+    rc, _, err = run(sf5, 'fold', '--round', 'R9005', '--fold-no', '459',
+                     '--desc', 'x', '--window-tail', '1', '--summary-file', sfile5)
+    ok(rc == 2 and 'E_STATE_LAYOUT: CRLF layout not found' in err
+       and 'hint: run: python src/os/logs_toolkit.py eol --fix --execute' in err,
+       'fold CRLF refusal stderr carries eol --fix repair hint (AC-LF1)')
+    ok(open(p5, 'rb').read() == h5.replace(b'\r\n', b'\n'),
+       'fold CRLF refusal zero mutation')
+    # the hinted repair actually unblocks fold (message chain semantics)
+    rc, out, _ = run(sf5, 'eol', '--fix', '--execute')
+    ok(rc == 0 and json.loads(out)['written'] is True,
+       'hinted eol --fix --execute repairs the CRLF disease')
+    ok(open(p5, 'rb').read() == h5,
+       'repaired bytes == original canonical CRLF (roundtrip identity)')
+    # fold indent-disease fixture (R1710 form: a json.dump re-write
+    # collapsed the 16-space item indent to 8) (AC-LF1): mismatch refusal
+    # + indent hint + zero mutation
+    sf6 = tempfile.mkdtemp(prefix='bd-fold-')
+    build_ps_state(sf6, ['2026-10-10 R1716 line one D-20261010-02',
+                         '2026-10-10 R1716 tokens: local=1 api=0'])
+    sfile6 = os.path.join(sf6, 'summary.txt')
+    open(sfile6, 'w', encoding='utf-8').write('2026-10-10 roll line D-20261010-02\n')
+    p6 = os.path.join(sf6, 'src', 'os', 'state.json')
+    h6 = open(p6, 'rb').read()
+    bad6 = h6.replace(b'\r\n' + b' ' * 16 + b'"', b'\r\n' + b' ' * 8 + b'"')
+    with open(p6, 'wb') as f:
+        f.write(bad6)
+    rc, _, err = run(sf6, 'fold', '--round', 'R9006', '--fold-no', '460',
+                     '--desc', 'x', '--window-tail', '1', '--summary-file', sfile6)
+    ok(rc == 2 and 'PS item-line layout mismatch' in err
+       and 'indent drift = 16-space canonical byte surgery (R1710 precedent)' in err,
+       'fold indent refusal stderr carries indent hint (AC-LF1)')
+    ok(open(p6, 'rb').read() == bad6, 'fold indent refusal zero mutation')
+    # eol check on the indent-disease fixture: exit 2 with CRLF face green
+    # and indent face red (AC-LF2) - the R1710 three-round escape is closed
+    rc, out, _ = run(sf6, 'eol')
+    e6 = json.loads(out)
+    ok(rc == 2 and e6['layout_ok'] is True and e6['log_block_found'] is True
+       and e6['indent_anomaly'] == 2 and e6['indent16_lines'] == 0
+       and e6['indent_ok'] is False,
+       'eol check indent-disease exit 2 (CRLF green, indent red) (AC-LF2)')
+    # eol fix scope law (AC-LF3): fix is EOL-only, indent bytes untouched
+    rc, out, _ = run(sf6, 'eol', '--fix', '--execute')
+    e7 = json.loads(out)
+    ok(rc == 0 and e7['written'] is False
+       and open(p6, 'rb').read() == bad6,
+       'eol fix no-op on indent-only disease (scope law, AC-LF3)')
+    # eol check on the repaired canonical fixture: both faces green plus
+    # the new profile fields (AC-LF2)
+    rc, out, _ = run(sf5, 'eol')
+    e8 = json.loads(out)
+    ok(rc == 0 and e8['indent_ok'] is True and e8['indent_anomaly'] == 0
+       and e8['indent16_lines'] == 2 and e8['log_item_lines'] == 2
+       and e8['log_block_found'] is True,
+       'eol check healthy canonical: indent face green + profile fields (AC-LF2)')
+    # non-JSON --file: no log block -> indent face n/a, not red (AC-LF2)
+    rc, out, _ = run(root, 'eol', '--file', txtpath)
+    e9 = json.loads(out)
+    ok(rc == 0 and e9['log_block_found'] is False and e9['indent_ok'] is True,
+       'eol check non-JSON --file: indent face n/a not red (AC-LF2)')
+
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):
         b = open(src, 'rb').read()

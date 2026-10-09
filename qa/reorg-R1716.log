@@ -1,0 +1,12 @@
+=== qa/reorg-R1716.log: fold R466 evidence (P-2026-09-25-18 knife #466) ===
+AC-R4661 window: tail-5 lines 21..25 of preop (R1714 fold R465 roll + R1714/R1715 pairs), 14216B content bytes
+AC-R4661 dry-run: token_ok=true (170 PAT tokens, zero missing), gate_ok=true, predicted=69490B reserve=3000B gate=78500B
+AC-R4662 execute: verify-then-write, post_bytes=69490, predicted_eq_actual=true, would_fail=[]
+AC-R4663 archive verbatim: preop tail-5 == archive section R466 5/5 lines -> True
+AC-R4663 archive_header present: True
+AC-R4664 dual parser: py json.load OK (log=21, tick=1715)
+AC-R4665 gauge: disk_bytes=69490 fold_needed=False margin=9010 log_lines=21
+AC-R4665 eol: layout_ok=True bare_lf=0 lone_cr=0
+AC-R4666 preop backup: logs/state-preop-R1716.bak sha16=b40f18074fa7c651 (disk 79153B pre-op)
+roll line head: 2026-10-10（R1714..R1715 滚窗并折摘要·fold R466 承 R1715 承传注
+ALL AC-R4661..R4666: PASS

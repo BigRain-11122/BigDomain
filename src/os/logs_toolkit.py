@@ -287,6 +287,31 @@ def eol_profile(raw):
     crlf = text.count('\r\n')
     bare_lf = total_lf - crlf
     lone_cr = text.count('\r') - crlf
+    # indent conservation (R1710 lesson: a closeout json.dump re-write
+    # destroyed the 16-space log-item canonical indent while CRLF stayed
+    # healthy, escaping the eol check for three rounds). Same regex class
+    # as split_ps_layout's item-line gate: '^ {16}"'.
+    lines = re.split(r'\r\n|\n', text)
+    log_start = None
+    for i, ln in enumerate(lines):
+        s = ln.strip()
+        if s.startswith('"log"') and s.endswith('['):
+            log_start = i
+            break
+    log_block_found = log_start is not None
+    log_item_lines = indent16 = indent_anomaly = 0
+    if log_block_found:
+        for ln in lines[log_start + 1:]:
+            s = ln.strip()
+            if s == ']':
+                break
+            if not s:
+                continue
+            log_item_lines += 1
+            if re.match(r'^ {16}"', ln):
+                indent16 += 1
+            else:
+                indent_anomaly += 1
     return {
         'bytes': len(raw),
         'total_lf': total_lf,
@@ -295,6 +320,11 @@ def eol_profile(raw):
         'lone_cr': lone_cr,
         'ends_with_eol': text.endswith('\n') or text.endswith('\r'),
         'layout_ok': bare_lf == 0 and lone_cr == 0,
+        'log_block_found': log_block_found,
+        'log_item_lines': log_item_lines,
+        'indent16_lines': indent16,
+        'indent_anomaly': indent_anomaly,
+        'indent_ok': (not log_block_found) or indent_anomaly == 0,
     }
 
 
@@ -316,7 +346,9 @@ def cmd_eol(args):
     out.update(prof)
     if not args.fix:
         print(json.dumps(out, ensure_ascii=False, indent=2))
-        return 0 if prof['layout_ok'] else 2
+        # AC-LF2: exit green only when both the CRLF face (layout_ok) and
+        # the indent conservation face (indent_ok) are green.
+        return 0 if prof['layout_ok'] and prof['indent_ok'] else 2
     fixed_text = BARE_LF.sub('\r\n', text)
     fixed_raw = fixed_text.encode('utf-8')
     out['mode'] = 'fix-execute' if args.execute else 'fix-dry-run'
@@ -444,10 +476,14 @@ def cmd_fold(args):
     text = raw.decode('utf-8')
     if '\r\n' not in text:
         print('error: E_STATE_LAYOUT: CRLF layout not found (refusing)', file=sys.stderr)
+        print('hint: run: python src/os/logs_toolkit.py eol --fix --execute', file=sys.stderr)
         return 2
     layout = split_ps_layout(text, len(st['log']))
     if layout is None:
         print('error: E_STATE_LAYOUT: PS item-line layout mismatch (refusing)',
+              file=sys.stderr)
+        print('hint: run: python src/os/logs_toolkit.py eol (indent profile); '
+              'indent drift = 16-space canonical byte surgery (R1710 precedent)',
               file=sys.stderr)
         return 2
     lines, log_start, item_idx, close_idx = layout

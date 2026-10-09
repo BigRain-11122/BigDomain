@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T06:40:28+08:00",
+  "export_ts": "2026-10-10T07:01:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1715 双件落地：runbook 哨兵节补文（每日对账操作手册把 R1714 的 schema 漂移哨兵步写进正册：跑法/判读/分级三处，值守轮按册跑日对账不再缺读法）+ runner_profile 日对账时长剖面变体（--daily 旗：日对账证据单独发现+独立基线，51 套件全量回归 90.6s 零回归·漂移阈值预注册在册）。待外部输入不变：雷达候选清单（OH-20261009/10 未落库）+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：runner_profile --daily 日对账剖面件（2026-10-10·R1715 交付·可跑实物计 2）：src/sandbox/runner_profile.py 增 --daily 旗（discovery 限定 reconcile-daily-*.log 面隔离+runner-profile-daily-baseline.json 独立基线）+套件 test_runner_profile_daily.py SUITE PASS 8/8+live 四步绿（发现当日 daily 件 50 套件→落基线→DRIFT-CLEAN 50/0→--check byte-identical）·SUITES 50→51 判据 539→547·RUNNER PASS 51/51 controls 6/6 90.6s 零回归=qa/reconcile-all-R1715.log·证据 qa/runner-profile-daily-R1715.log 四节；配套 docs/ops/reconcile-daily-runbook.md 哨兵节补文（§一3/4 哨兵步+聚合+§二 双绿判读+§三 G5 漂移处置行·55 行≤120）",
-    "next_milestone": "下轮=tech 队头序推进（reconcile_daily 运行时长剖面接线后继=daily 剖面对账日常化接线+哨兵段时长入证面+fold E_STATE_LAYOUT 拒面修复指令对齐）+pay notify orders.py 接线面（付完款自动通知）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1716 双件落地：fold R466 水位整编（79153B→69490B·tail-5 窗滚并折 170 token 零丢失·证据 qa/reorg-R1716.log）+ fold 拒面修复指令对齐件（E_STATE_LAYOUT 两拒面 hint 注修复路径+eol check 缩进守恒判据=R1710 缩进漂移病检出面闭合·SUITE PASS 125 checks·51 套件全量回归零回归）",
+    "latest_artifact": "最近实物：fold 拒面 hint+缩进守恒判据件（2026-10-10·R1716 交付·可跑实物计 2）：src/os/logs_toolkit.py fold 拒面修复指令注入（CRLF 病→eol --fix --execute 直修路径·缩进病→eol check 诊断+16 空格正典字节外科 R1710 先例）+eol check 新增缩进守恒五字段（R1710 json.dump 重写毁 16 空格缩进、逃逸三轮的检出面闭合·布局双绿才 exit 0）·套件 125 checks 全绿·证据 qa/logs-fold-hint-R1716.log",
+    "next_milestone": "下轮=tech 队头序推进（eol --fix-indent 缩进修复扩展窗〔R1710 手工手术工具化〕+pay notify orders.py 接线面〔付完款自动通知〕+watermark 未知缩放因子扩展面）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1715",
+      "1716",
       "OSLoop 执行 tick"
     ],
     [
@@ -2965,20 +2965,24 @@
     [
       "2",
       "reconcile_daily 哨兵步接线件（R1714·P2 队头=R1713 直系后继·判据 AC-FS1..FS6 预注册=tech.md 认领行先于代码：src/sandbox/reconcile_daily.py run_sentinel=fingerprint_regen --chain BASE 派生+--check 子进程输出追加进同一当日证据 log〔分节行 --- sentinel 先行+sentinel exit=N 尾行·append 模式零覆写〕+判定聚合〔runner exit 非零传播=失败日哨兵仍跑仍记账；runner 0 时哨兵 exit 承接=漂移即当日 FAIL〕+RECONCILE-DAILY 终行扩 runner_exit/sentinel 字段·套件 test_reconcile_daily_sentinel.py SUITE PASS 6/6〔live 真哨兵五域 CLEAN exit 0+stub 三态聚合（(0,2)→exit 2 FAIL drift/(3,0)→exit 3 传播哨兵节仍在）+argv BASE 派生+卫生+同日 -2 后缀〕+reconcile_all SUITES 增一行 reconcile-daily-sentinel 判据 6〔49→50 套件 533→539·git diff 5 insertions〕·live 全量 reconcile_daily 复跑=RUNNER PASS 50/50 controls 6/6 94.5s+RECONCILE-DAILY verdict=PASS runner_exit=0 sentinel=ok=qa/reconcile-daily-20261010-2.log〔同日 -2 后缀=R1698 当日件零覆写·新管线首跑非重跑〕·矩阵再生 50/539 green --check byte-identical·证据 qa/reconcile-daily-sentinel-R1714.log 三节·R1714）"
+    ],
+    [
+      "2",
+      "fold 拒面修复指令对齐+缩进守恒判据件（R1716·P2 队头=R1705 eol 收口后继〔R1710 实证注扩展面〕·判据 AC-LF1..LF5 预注册=tech.md 认领行先于代码：logs_toolkit.py fold 两拒面 hint 注入〔CRLF 变体=eol --fix --execute 修复指令+mismatch 变体=eol check 诊断+16-space canonical byte surgery R1710 先例·fail-closed return 2 零突变〕+eol_profile 缩进守恒五字段〔log_block_found/log_item_lines/indent16_lines/indent_anomaly/indent_ok·^ {16} 正则口径〕+check 退出码扩 layout_ok∧indent_ok 双绿〔R1710 缩进漂移病 eol check 即红·三轮逃逸面闭合〕+fix 面 EOL-only 零改动·套件 11 新断言 SUITE PASS 125 checks〔115→125〕+RUNNER PASS 51/51 controls 6/6 90.5s 零回归=qa/reconcile-all-R1716.log+矩阵 51/547 --check byte-identical+活体剖面 21/21 正典缩进·收账纪律同轮立=字节外科追加禁 json.dump 全量重写〔本轮收账即按此执行〕·证据 qa/logs-fold-hint-R1716.log 三节·fold R466 随轮〔79153B→69490B·170 token 全字面嵌·preop sha16 b40f18074fa7c651·AC-R4661..R4666=qa/reorg-R1716.log〕·tech open 10→9+1 后继种子=10）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1714 flush caliber (checker single-source law): window re-derived after fold R465 (3 in-window lines rolled to 1) + R1714 pair appended; tick row 1713 -> 1714; W 20 and sub 7 net-zero (fold -3+roll 1+pair 2); queue_tech_open 10 -> 10 net-zero (sentinel item done [x] -1 + runbook seed +1)"
+    "method": "R1716 flush caliber (checker single-source law): window re-derived after fold R466 (5 in-window lines rolled to 1) + R1716 pair appended; tick row 1715 -> 1716; queue_tech_open 10 -> 10 net-zero (hint-alignment item done [x] -1 + fix-indent seed +1)"
   }
 }
