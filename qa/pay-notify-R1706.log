@@ -1,0 +1,18 @@
+=== SECTION 1: suite (test_pay_notify.py fresh run) ===
+PASS AC-PN1: shipped default constructs with approved=[], send raises E_TEMPLATE_NOT_APPROVED (E_TEMPLATE_NOT_APPROVED: tpl_pay_success_pending_ceo); empty-disclaimer/banned-copy/bad-cap/missing-paydb all refuse construction
+PASS AC-PN2: once grant: first=sent second=skipped_no_budget (unit consumed), longterm avatar=sent; bad type/unknown template refuse
+PASS AC-PN3: success=sent replay=already_logged refund=sent replay=already_logged rows 1->2; timeout-close/pending/granted-not-closed/closed-not-granted/unknown all raise zero-row
+PASS AC-PN4: cap=1: first=sent second=skipped_daily_cap (sent=1 cap-skips=1)
+PASS AC-PN5: unapproved template raises on 3 calls rows=0 (template gate before idempotency); bogus reason template raises; envelope ai_service=1 disclaimer=present
+PASS AC-PN6: attempts=2 rows=2 banner=1 survives reopen=1; coverage ok1=['payment_success'] refund=['refund']
+PASS AC-PN7: ascii=True net-imports=none update-free=True (imports: import argparse; import hashlib; import json; import os; import sqlite3; import sys; import datetime)
+---- pay-notify acceptance: 7/7 passed
+
+=== SECTION 2: hygiene (git status on shipped pay files: config.json / orders.py / adapters.py) ===
+(empty = byte-stable, zero shipped-config/core touches)
+
+=== SECTION 3: full regression (qa/reconcile-all-R1706.log runner line) ===
+RUNNER PASS (44/44 suites green, reconcile controls 6/6, 93.0s)
+
+=== SECTION 4: matrix regen + --check ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (5941 bytes, 44 suites, 480 criteria)

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T03:08:48+08:00",
+  "export_ts": "2026-10-10T03:29:49+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1705 本轮交付：state.json 行尾修复工具（eol 子命令）上线——收账把行尾写坏（裸 LF）会被扫描当场点名，一条命令直接修好，不用再像 R1697/R1704 那样手工修。行尾健康时扫描显示 eol_ok=1。待外部输入不变：雷达候选清单+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
-    "latest_artifact": "最近实物：closeout EOL 修复器工具（2026-10-10T03:08:48+08:00·R1705 交付·可跑实物）：src/os/logs_toolkit.py eol 子命令（check 剖面+fix 字节外科·内容与 JSON 语义零漂移·verify-then-write）+scan [STATE] CRLF 守恒门+harness AC-SC13/SC14+套件 115/115；证据 qa/logs-eol-R1705.log",
-    "next_milestone": "下轮=fold R462 轮首首测按实况裁定+P2 队头按序认领（pay 支付状态通知面/水印缩放族模板对位恢复/suite_matrix 缺省证据发现面·判据预注册先于代码）+对账日常化+QA charter crawl 常设轮（10-11）+OSS 雷达候选清单续候（窗 ≤48h）"
+    "current": "R1706 本轮交付：支付状态通知功能上线（沙箱版）——用户支付成功和退款时，按微信订阅消息的规矩给他发通知：他先授权过才发、没授权就记账不硬发、每天有条数上限、发不出去的进站内横幅队列一条不丢。真实发送要等 CEO 的模板 ID（物理件），没到之前一律拒绝不放水。待外部输入不变：雷达候选清单+CEO 物理件（商户号/服务器/域名/备案·到位即 bootstrap 开工）",
+    "latest_artifact": "最近实物：支付状态通知面 notify.py（2026-10-10·R1706 交付·可跑实物）：支付成功/退款双时点+模板审核闸 fail-closed+授权预算+日帽+降级横幅持久化；测试 7/7·全量回归 44 套件 480 判据全绿；证据 qa/pay-notify-R1706.log",
+    "next_milestone": "下轮=支付通知接进下单主流程（orders.py 付完款自动通知·tech.md 后继行）+fold 拒面修复提示对齐；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1705",
+      "1706",
       "OSLoop 执行 tick"
     ],
     [
@@ -2929,20 +2929,24 @@
     [
       "2",
       "closeout EOL 修复器工具化交付件（R1705·P2 队头=tech.md L28 种子·AC-EO1..EO6 预注册=tech.md 认领行先于代码·种子=R1704 fold 首跑 E_STATE_LAYOUT 拒〔36 行尾全 LF〕+R1697 病先例两复发正法收口）：logs_toolkit.py 增 eol 子命令（七→八）=缺省 check 只读剖面〔bytes/total_lf/crlf/bare_lf/lone_cr/ends_with_eol/layout_ok 七字段·bare_lf>0→exit 2〕+--fix CRLF 布局字节外科〔regex (?<!\\r)\\n→\\r\\n·content_eq 行内容序列逐位相等+json_eq 语义零漂移双验证先于写·dry-run 缺省零突变+--execute tempfile+os.replace 原子写·写后复读==预测+post_bare_lf==0·no-op/幂等〕+scan_five_still [STATE] 面 CRLF 守恒 FLAG 接线〔bare_lf>0→FLAG eol_bare_lf=N+修复指令注入=先于 fold 拒的检出面·健康→PASS 行 eol_ok=1·源件装件双同步 sha 同一〕+harness AC-SC13/SC14〔bare-LF→FLAG/健康→eol_ok=1·摘要 23 硬编码→活性计数 25〕+套件 104→115 SUITE PASS 115/115〔eol 11 例含 roundtrip identity+非 JSON --file json_eq=None〕+live 证据 qa/logs-eol-R1705.log〔活体 check bare_lf=0+LF 拷贝 32→修复 post 0+幂等+scan 复跑 eol_ok=1〕·tech open 10→9 后补种 1（fold 拒面修复指令对齐）→10"
+    ],
+    [
+      "2",
+      "pay 支付状态通知面交付件（R1706·P2 队头·AC-PN1..PN7 判据预注册先于代码）：src/sandbox/pay/notify.py PayNotifyFace 三面=占位模板诚实态〔approved=0→全发送 E_TEMPLATE_NOT_APPROVED 拒零行 fail-closed·真实模板 ID=CEO 物理件 [needs-CEO]〕+W15 once/longterm 授权预算账+payment_success/granted·refund/closed-with-grant 双事件面〔关单二义性=grants 行存在性消解·超时关单拒〕+日帽缺省 3M+skipped_* banner 队列跨重启+(order_id,reason) UNIQUE 幂等+ai_service:1/disclaimer 信封·两坑如实注（拼音禁词探针不中中文词表→shipped config 动态取词·同 avatar 同 product 幂等重放→双产品夹具）·SUITE 7/7+RUNNER 44/44 套件 480 判据 controls 6/6 93.0s+矩阵 44/480 green --check byte-identical+shipped 三件零字节·证据 qa/pay-notify-R1706.log〔PS5.1 UTF-16 重定向坑复发=Python 单写者重建〕·orders.py 接线=后继拆分行·tech 10→9+1→10"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1705 flush caliber (checker single-source law): window re-derived by checker recompute after the R1705 pair appended (substantive + tokens); tick row 1704 -> 1705; tech queue eol-repairer row done -1 + one named-successor seed (fold E_STATE_LAYOUT refusal-message repair-hint alignment) +1 = 10 flat"
+    "method": "R1706 flush caliber (checker single-source law): window re-derived by checker recompute after the R1706 pair appended (substantive + tokens); tick row 1705 -> 1706; tech queue pay-notify row done -1 + one named-successor seed (orders.py wiring) +1 = 10 flat; post-accounting state gauge 79304B over the 78500B line -> fold R462 = next round's opening gauge ruling (carry-note in log)"
   }
 }

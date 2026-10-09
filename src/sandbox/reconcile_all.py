@@ -180,6 +180,12 @@ SUITES = [
     # nonce replay gate, same boundary under verify_mode rsa
     # (AC-V3W1..W6 pre-registered in state/queue/tech.md).
     ("pay-v3-window", os.path.join("pay", "test_pay_v3_window.py"), 6),
+    # R1706 payment-state notification face: W15/W10 channel consumption
+    # (payment-success/refund dual timepoints, template-review gate
+    # fail-closed pending CEO template ids, authorization budget,
+    # daily cap, skipped_* banner queue; AC-PN1..PN7 pre-registered
+    # in state/queue/tech.md)
+    ("pay-notify", os.path.join("pay", "test_pay_notify.py"), 7),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
