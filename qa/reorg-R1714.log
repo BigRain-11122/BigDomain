@@ -1,0 +1,39 @@
+# qa/reorg-R1714.log - fold R465 evidence (R1714, window-tail 3)
+# AC-R4651 dry-run gate: token_missing=[] token_ok=true gate_ok=true predicted_bytes=73609 reserve_bytes=3000 gate=78500 would_fail=[]
+# AC-R4652 execute: predicted_eq_actual=true post_bytes=73609 appendix_bytes=14202 archive_appended=true backup_written=true preop_sha16=06575bbac8e0d092
+# AC-R4653 pre-op state bytes=78963 (over gate 78500 by 463B) -> fold R465 triggered per R1713 handoff note
+
+## S2 verbatim check (preop tail-3 == archive section tail-3)
+window_lines=3 archive_lines=3
+verbatim_equal=True
+
+## S3 post gauge (live)
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 73609,
+  "gate": 78500,
+  "log_lines": 21,
+  "log_content_bytes": 71001,
+  "margin_bytes": 4891,
+  "fold_needed": false,
+  "tick": 1713
+}
+
+## S4 eol check (live)
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 73609,
+  "total_lf": 30,
+  "crlf": 30,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": true
+}
+
+## S5 catalog zero-loss (window from preop backup vs live roll line)
+tokens_total=164 missing=0 pass=True
+
+# AC-R4654 gauge fold_needed=false margin>0; AC-R4655 eol layout_ok=true;
+# AC-R4656 archive verbatim 3/3 + backup in disk; end of evidence.

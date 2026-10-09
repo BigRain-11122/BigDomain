@@ -242,6 +242,11 @@ SUITES = [
     # migration_chains.json (live-constructor re-derivation, drift is
     # FAIL; AC-BF1..BF7 pre-registered in state/queue/tech.md).
     ("fingerprint-regen", "test_fingerprint_regen.py", 16),
+    # R1714 reconcile-daily-sentinel: schema-drift sentinel wired into
+    # the daily wrapper (fingerprint_regen --check appended to the dated
+    # evidence log; daily exit aggregation; AC-FS1..FS6 pre-registered in
+    # state/queue/tech.md).
+    ("reconcile-daily-sentinel", "test_reconcile_daily_sentinel.py", 6),
     # R1708 suite-matrix default-evidence discovery-face fix (R1695
     # naming gap: old face globbed reconcile-all-R*.log only; new face
     # walks qa/*.log newest-first with four fail-closed eligibility

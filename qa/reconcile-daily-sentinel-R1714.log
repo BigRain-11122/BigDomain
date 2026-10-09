@@ -1,0 +1,30 @@
+﻿# qa/reconcile-daily-sentinel-R1714.log - AC-FS1..FS6 evidence (R1714, pre-registered in state/queue/tech.md before code)
+
+## S1 suite output (re-run, deterministic)
+PASS fs1-live-sentinel exit=0 marker+CLEAN+5-domains
+PASS fs2-aggregate-drift (0,2)->exit=2 FAIL drift
+PASS fs3-aggregate-runner-fail (3,0)->exit=3 sentinel kept
+PASS fs4-sentinel-argv BASE-derived chain+check cwd=BASE
+PASS fs5-hygiene ascii=True net-imports=0 shipped-clean=True
+PASS fs6-same-day-suffix second=reconcile-daily-20261010-2.log distinct no-overwrite
+SUITE PASS 6/6
+
+## S2 hygiene: real-git status shipped pathspec (expect empty) + reconcile_all.py diff
+(status empty above = shipped clean)
+ src/sandbox/reconcile_all.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+## S3 live daily (qa/reconcile-daily-20261010-2.log tail)
+| PASS fs6-same-day-suffix second=reconcile-daily-20261010-2.log distinct no-overwrite
+PASS suite reconcile-daily-sentinel exit=0 pass-lines=6 fail-lines=0 criteria=6 0.5s
+RUNNER PASS (50/50 suites green, reconcile controls 6/6, 94.5s)
+RECONCILE-DAILY 20261010 verdict=PASS exit=0 log=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-daily-20261010-2.log runner_exit=0 sentinel=ok
+RUNNER PASS (50/50 suites green, reconcile controls 6/6, 94.5s)
+--- sentinel: fingerprint-regen --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0
