@@ -19,6 +19,9 @@ Domains:
   - themed tour: the member showcases' current on-display tours
     concatenated in registered order with GLOBAL stop numbering
     1..N across showcases (a walkable theme route).
+  - theme heat board: a pure-read derived ranking of every
+    curation by its members' live on-display totals (successor
+    row R1753; sort is fully deterministic, zero RNG).
 
 Hard laws (canon wording: pure-read grouping, zero token face,
 zero UPDATE carried over from the showcase line):
@@ -264,3 +267,47 @@ class CurationFace:
                   "member_count": int(counts.get(r[0], 0))}
                  for r in rows]
         return {"curations": board, "disclaimer": self.disclaimer}
+
+    def hot_board(self):
+        """Theme heat board (R1753): every curation ranked by the sum
+        of its member showcases' live on-display counts. Pure read
+        with zero token movement and zero writes; each member count
+        is derived through the ShowcaseFace public read face (the
+        same derivation source curation_view uses - reference, not
+        copy; zero direct showcase-table reads). The sort key is
+        fully deterministic with zero RNG, zero time keys and zero
+        insertion-order keys: displayed_total DESC, then
+        curation_id ASC as the tie-break (the PRIMARY KEY gives a
+        total order, so exactly one board order exists). A board
+        over zero curations is an honest empty list."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT curation_id, title, ai_label FROM curations"
+            ).fetchall()
+            members_by = {}
+            for cid, sid in self._conn.execute(
+                    "SELECT curation_id, showcase_id FROM"
+                    " curation_members ORDER BY curation_id,"
+                    " position").fetchall():
+                members_by.setdefault(cid, []).append(sid)
+        entries = []
+        for cid, title, ai_label in rows:
+            heat = 0
+            for sid in members_by.get(cid, []):
+                view = self.showcase.showcase_view(sid)
+                heat += len(view["displayed"])
+            entries.append({"curation_id": cid, "title": title,
+                            "ai_label": int(ai_label),
+                            "member_count": len(members_by.get(cid, [])),
+                            "displayed_total": heat})
+        entries.sort(key=lambda e: (-e["displayed_total"],
+                                    e["curation_id"]))
+        board = []
+        for rank, entry in enumerate(entries, start=1):
+            board.append({"rank": rank,
+                          "curation_id": entry["curation_id"],
+                          "title": entry["title"],
+                          "ai_label": entry["ai_label"],
+                          "member_count": entry["member_count"],
+                          "displayed_total": entry["displayed_total"]})
+        return {"hot_board": board, "disclaimer": self.disclaimer}

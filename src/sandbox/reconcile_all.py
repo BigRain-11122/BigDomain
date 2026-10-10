@@ -406,9 +406,13 @@ SUITES = [
     # facts read exclusively through the ShowcaseFace public API
     # (reference, not copy), member existence fail-closed, zero
     # token movement, zero UPDATE (AC-CU1..CU7 pre-registered in
-    # state/queue/explore.md).
+    # state/queue/explore.md). R1753 adds the theme heat board
+    # hot_board pure-read derived ranking (heat = member on-display
+    # sums, deterministic (-displayed_total, curation_id) sort,
+    # zero RNG, zero writes) - AC-HB1..HB5 same row, criteria
+    # 7 -> 12.
     ("ledger-curation",
-     os.path.join("ledger", "test_curation.py"), 7),
+     os.path.join("ledger", "test_curation.py"), 12),
     # R1752 citizen civic-behavior points face: earned-only points
     # inside the counts-vs-tokens isolation law (constructor takes
     # NO ledger reference - token domain structurally out of reach),

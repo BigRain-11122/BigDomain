@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-10T21:45:00+08:00",
+ "export_ts": "2026-10-10T22:09:36+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1752 市民行为积分面交付轮（P3 explore 队头认领·轮计分 2=可跑实物）：公益面合规判读定谳三裁先于代码〔积分=赚取唯一源零 money/token 入口+零回流零转移结构禁令+props 域先查重=授予路径 token-spend 绑定不可复用→civic_grants 自建邻界裁定〕；CivicPointsFace=行为注册 UNIQUE+ai_label CHECK+赚取幂等+日帽前置异日重置+严格历法日校验〔strptime 往返=首跑抓 '2026-10-1' 宽松解析真缺口当场补严〕+注册价不可变拷贝+兑换 fail-closed 门序〔未知→余额→cosmetic 已授〕+构造零 ledger 参=代币域结构性不可达〔R599 两域隔离律升格〕+零回流/流通动词〔AC-CV1..CV7 预注册先于代码·SUITE 7/7 双跑逐位同一+RUNNER 67→68 套件 667→674 零回归+矩阵 68/674 --check 双过+哨兵 CLEAN domains=5〕·GORD 新行【@bm-c】mv0001 全曲批=非本司面知悉·基线 247→248",
-  "latest_artifact": "最近实物：R1752 市民行为积分面沙箱件（src/sandbox/ledger/civicpoints.py+test_civicpoints.py·SUITE 7/7 双跑逐位同一+reconcile_all SUITES 67→68 判据 667→674〔ledger-civicpoints〕+RUNNER PASS 68/68 controls 7/7 176.9s 零回归·证据=qa/civicpoints-R1752.log+qa/reconcile-all-R1752.log+docs/sandbox-suite-matrix.md 68 套件 674 判据全 green）",
-  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗=首个含 elapsed 尾行真 daily 证据落盘后 --daily --update-baseline 收养 sentinel_seconds）+P2 tech 队列再判/P3 explore 队头（策展主题热度榜面）——窗 ≤48h=2026-10-12"
+  "current": "R1753 策展主题热度榜交付轮（P3 explore 队头认领·轮计分 2=可跑实物）：判据 AC-HB1..HB5 先落板后写码（诚实律）；hot_board 公有纯读面=curation.py 扩面〔热度=编组成员橱窗在展计数之和·逐成员经 ShowcaseFace 公有读面派生零第二引擎〕+确定性排序（-displayed_total, curation_id）双键零 RNG〔同热 id 升序 tie-break·逆注册序世界实测零插入序键〕+聚合跨模块交叉验证+活态派生零缓存计数器〔place×3 热度 0→3 榜序随变·retract 回 2 平热按 id 再解析〕+纯读律〔ledger_tx 恒定+行数不变+方法体零写语句〕·SUITE 12/12 首跑全绿+RUNNER PASS 68/68 controls 7/7 150.5s 零回归+矩阵 68/679 green --check 双过=qa/curation-hotboard-R1753.log·fold R477 水位整编 76,268B→70,628B token 零丢失",
+  "latest_artifact": "最近实物：R1753 策展主题热度榜读面沙箱件（src/sandbox/ledger/curation.py hot_board 扩面+test_curation.py 判据 7→12·SUITE PASS 12/12+reconcile_all ledger-curation 判据 7→12〔总 674→679〕+RUNNER PASS 68/68 controls 7/7 150.5s 零回归·证据=qa/curation-hotboard-R1753.log+docs/sandbox-suite-matrix.md 68 套件 679 判据全 green）",
+  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗=首个含 elapsed 尾行真 daily 证据落盘后 --daily --update-baseline 收养 sentinel_seconds）+P3 explore 队头（策展热度榜位次变动差分面）——窗 ≤48h=2026-10-12"
  },
  "depts": [
   {
@@ -187,6 +187,10 @@
  ],
  "results": [
   [
+   "2",
+   "策展主题热度榜读面沙箱件（explore 队头认领·AC-HB1..HB5 预注册先于代码：curation.py hot_board 公有纯读面=全主题榜热度〔编组成员橱窗在展计数之和·逐成员经 ShowcaseFace 公有读面派生零第二引擎〕+确定性排序（-displayed_total, curation_id）双键零 RNG 零插入序键+聚合跨模块交叉验证+活态派生零缓存计数器〔place×3 热度 0→3 榜序随变+retract 回 2 四路平热按 id 再解析〕+纯读律〔ledger_tx 恒定+五计数前后同一+方法体零写语句〕+ai_label 持久/纯 ASCII/零网络 import/config 字节稳·test_curation.py 判据 7→12 SUITE PASS 12/12 exit 0 首跑即净·reconcile_all SUITES ledger-curation 判据 7→12〔总 674→679〕RUNNER PASS 68/68 controls 7/7 150.5s 零回归·矩阵再生 68/679 green --check byte-identical 双跑·qa/curation-hotboard-R1753.log·R1753）"
+  ],
+  [
    "9",
    "设计件落盘（docs/spec/·P-47 五件+激励智能体分配层件+跨件集成深化件+T2 传承商业线承接件+隐式标识能力验证件）"
   ],
@@ -262,7 +266,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1752",
+   "1753",
    "OSLoop 执行 tick"
   ],
   [
@@ -3113,15 +3117,15 @@
  "self_drive": {
   "window": "2026-10-04..2026-10-10",
   "window_days": 7,
-  "log_lines_in_window": 22,
+  "log_lines_in_window": 21,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 6,
   "queue_explore_open": 10,
-  "method": "R1752 civic-points delivery round (score 2 = runnable artifact): P3 explore-queue head claimed per the R1751 carry note (P1 board all-gated; P2 tech head = sentinel-adoption window opens 10-11 plus daily reconcile next due 10-11 = both gated for tomorrow); public-welfare compliance verdict registered in the explore.md claim row BEFORE code (earned-only points with zero money/token entrance, zero backflow/transfer structural ban, props-domain check-first verdict: the props.py grant path is token-spend-bound so this module builds its own civic_grants table - adjacency ruling on file); AC-CV1..CV7 pre-registered before code; CivicPointsFace (src/sandbox/ledger/civicpoints.py, own civic.db WAL single writer, zero ledger-schema touch, fingerprint sentinel CLEAN domains=5) = behavior registry (UNIQUE, ai_label DB CHECK) + append-only idempotent earn rows (UNIQUE account/behavior/event_ref) with per-day anti-farming cap gated before any row lands (reset across days tested) + strict calendar-day validation (strptime round-trip; first run caught the lenient '2026-10-1' parse as a real module gap, hardened same round with honest note) + immutable registered-point copy on rows + reward registry (cosmetic one-grant-per-account / count stacks) + fail-closed redemption gate order (unknown reward, derived balance with zero rows on refusal, cosmetic-already-granted checked before any write) + constructor takes NO ledger reference (token domain structurally out of reach, R599 two-domain law elevated; ledger_tx count constant across the full cycle) + zero backflow APIs by hasattr scan + zero circulation verbs by source scan + AIGC ai_label and resident disclaimer on all seven envelopes; test_civicpoints.py SUITE 7/7 after three first-run fixes (module day-validation hardening + suite codes-unpacking bug + INSERT column count), double-run byte-identical; reconcile_all SUITES 67->68 criteria 667->674 (ledger-civicpoints), RUNNER PASS 68/68 controls 7/7 176.9s zero-regression = qa/reconcile-all-R1752.log; matrix regen 68/674 --check byte-identical; GORD new row (bm-c mv0001 full-song batch) = non-BigDomain dispatch acknowledged, baseline last_gord_tbl_rows 247->248; queue_explore_open 10->9 then restock 1->10 (civic annual honor-board seed); daily reconcile already evidenced for 10-10 (R1698) not re-run; P-32 day-close = zero new group-level open items, nothing written; tick row 1751 -> 1752"
+  "method": "R1753 curation hot-board delivery round (score 2 = runnable artifact): P3 explore-queue head claimed (curation successor, R1752 carried-note cashed; P2 tech head = daily-baseline sentinel adoption window opens 10-11 + daily reconcile standing row already evidenced for 10-10 = both gated); AC-HB1..HB5 pre-registered in the explore row before any code (honesty law); curation.py gains the hot_board public pure-read face: heat = sum of member showcases' live on-display counts, derived per member through the ShowcaseFace public read face (reference-not-copy, zero direct showcase-table reads, zero second engine), with a fully deterministic sort key (-displayed_total, curation_id), zero RNG, zero time keys, zero insertion-order keys (equal-heat world ranks alpha-route before the earlier-registered zeta-route by id); aggregation cross-verified against manual ShowcaseFace sums per curation; live derivation with zero cached counters (three placements lift alpha/zeta 0 -> 3 and reorder the board, one retraction re-ties at heat 2 and the tie re-resolves by id); pure-read law (ledger_tx constant, curation/showcase row counts unchanged across reads, zero write statements in the method body); test_curation.py 7 -> 12 criteria, SUITE PASS 12/12 exit 0 first-run green; reconcile_all SUITES ledger-curation criteria 7 -> 12 (total 674 -> 679); RUNNER PASS 68/68 controls 7/7 150.5s zero-regression; matrix regenerated 68 suites 679 criteria green 68/68 with default evidence discovery resolving this round's evidence log, --check byte-identical twice = qa/curation-hotboard-R1753.log (suite + runner + matrix + hygiene sections); fold R477 water-level reorg before closeout (76,268B -> 70,628B, window tail-4, all window tokens embedded zero-loss, archive verbatim + preop backup); queue_explore_open 10 -> 9 then restock 1 -> 10 (hot-board rank-movement diff seed); tick row 1752 -> 1753"
  }
 }

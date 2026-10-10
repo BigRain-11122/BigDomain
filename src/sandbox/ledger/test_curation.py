@@ -4,7 +4,9 @@ curation = multi-showcase grouping + themed tour ordering; pure
 read grouping, zero token face, zero UPDATE carried over).
 Asserts the pre-registered criteria AC-CU1..CU7 from the R1751
 explore-queue row (criteria were registered before this code
-existed; honesty law). Each criterion prints PASS/FAIL with
+existed; honesty law) plus the R1753 theme heat board criteria
+AC-HB1..HB5 (hot_board pure-read derived ranking, registered
+before the face existed). Each criterion prints PASS/FAIL with
 evidence; the process exits non-zero on any FAIL.
 
 Usage: python test_curation.py
@@ -333,6 +335,147 @@ def main():
           " (%s); zero RNG; shipped config.json byte-stable"
           % (len(bad7), "; ".join(bad7), counts0, non_ascii,
              len(net_imports), banned_hits, update_hits))
+
+    # -- AC-HB1..HB5 theme heat board (R1753) -------------------------------
+    cu_empty = CU.CurationFace(sh, DISCLAIMER, os.path.join(
+        tmp, "curation-hb-empty.db"))
+    empty_board = cu_empty.hot_board()
+    cu_empty.close()
+    ok_hb_empty = empty_board == {"hot_board": [],
+                                  "disclaimer": DISCLAIMER}
+
+    sh.register_showcase("west-wing", "West Wing Window", 3, False)
+    cu.register_curation("zeta-route", "Zeta Route",
+                         ["west-wing"], False)
+    cu.register_curation("alpha-route", "Alpha Route",
+                         ["west-wing"], True)
+    board0 = cu.hot_board()
+    rows0 = [(b["rank"], b["curation_id"], b["displayed_total"])
+             for b in board0["hot_board"]]
+    key_ok = all(set(b.keys()) == {"rank", "curation_id", "title",
+                                   "ai_label", "member_count",
+                                   "displayed_total"}
+                 for b in board0["hot_board"])
+    ok_hb1 = (ok_hb_empty and set(board0.keys()) ==
+              {"hot_board", "disclaimer"} and key_ok
+              and rows0 == [(1, "heritage-route", 4),
+                            (2, "ai-route", 2),
+                            (3, "night-route", 2),
+                            (4, "alpha-route", 0),
+                            (5, "zeta-route", 0)])
+    record("AC-HB1", ok_hb1, "hot board lists every curation ranked"
+          " by member on-display totals %s with a fixed row key set;"
+          " envelope carries only hot_board + disclaimer; a face"
+          " over an empty registry returns an honest empty board"
+          " (%s)" % (rows0, ok_hb_empty))
+
+    board0b = cu.hot_board()
+    dump_a = json.dumps(board0, sort_keys=True, ensure_ascii=True)
+    dump_b = json.dumps(board0b, sort_keys=True, ensure_ascii=True)
+    ok_hb2 = (dump_a == dump_b
+              and [r[1] for r in rows0] == [
+                  "heritage-route", "ai-route", "night-route",
+                  "alpha-route", "zeta-route"]
+              and [r[2] for r in rows0] == [4, 2, 2, 0, 0])
+    record("AC-HB2", ok_hb2, "deterministic sort key (-displayed"
+          "_total, curation_id): heat DESC with curation_id ASC"
+          " tie-break (ai-route before night-route at heat 2;"
+          " alpha-route before zeta-route at heat 0 although zeta"
+          " was registered first - zero insertion-order keys); two"
+          " calls serialize byte-identical (%s)"
+          % ("identical" if dump_a == dump_b else "DRIFT"))
+
+    manual = {
+        "heritage-route": (
+            len(sh.showcase_view("city-hall")["displayed"])
+            + len(sh.showcase_view("east-wing")["displayed"])),
+        "ai-route": len(sh.showcase_view("city-hall")["displayed"]),
+        "night-route": len(
+            sh.showcase_view("east-wing")["displayed"]),
+        "alpha-route": len(
+            sh.showcase_view("west-wing")["displayed"]),
+        "zeta-route": len(
+            sh.showcase_view("west-wing")["displayed"])}
+    cross0 = all(b["displayed_total"] == manual[b["curation_id"]]
+                 for b in board0["hot_board"])
+    led.ensure_account("usr:dave", census_avatar_id="dave")
+    cl_d1 = cf.issue_certificate("usr:dave", "evt-gate",
+                                 "gate-cert-1")["cl_id"]
+    cl_d2 = cf.issue_certificate("usr:dave", "evt-bell",
+                                 "gate-cert-2")["cl_id"]
+    cl_d3 = cf.issue_certificate("usr:dave", "evt-sign",
+                                 "gate-cert-3")["cl_id"]
+    sh.place_exhibit("usr:dave", "west-wing", cl_d1, "gate lamp")
+    sh.place_exhibit("usr:dave", "west-wing", cl_d2, "gate bell")
+    sh.place_exhibit("usr:dave", "west-wing", cl_d3, "gate sign")
+    board1 = cu.hot_board()
+    rows1 = [(b["rank"], b["curation_id"], b["displayed_total"])
+             for b in board1["hot_board"]]
+    sh.retract_exhibit("usr:dave", "west-wing", cl_d2)
+    board2 = cu.hot_board()
+    rows2 = [(b["rank"], b["curation_id"], b["displayed_total"])
+             for b in board2["hot_board"]]
+    ok_hb3 = (cross0
+              and rows1 == [(1, "heritage-route", 4),
+                            (2, "alpha-route", 3),
+                            (3, "zeta-route", 3),
+                            (4, "ai-route", 2),
+                            (5, "night-route", 2)]
+              and rows2 == [(1, "heritage-route", 4),
+                            (2, "ai-route", 2),
+                            (3, "alpha-route", 2),
+                            (4, "night-route", 2),
+                            (5, "zeta-route", 2)])
+    record("AC-HB3", ok_hb3, "heat equals the manual ShowcaseFace"
+          " on-display sums per curation (cross-module check %s);"
+          " live derivation with zero cached counters: placements"
+          " lift alpha/zeta 0 -> 3 and reorder the board %s; one"
+          " retraction drops them back to 2 and the four-way tie"
+          " re-resolves by id %s" % (cross0, rows1, rows2))
+
+    counts_a = (_count(conn, "ledger_tx"),
+                _count(cuconn, "curations"),
+                _count(cuconn, "curation_members"),
+                _count(shconn, "showcases"),
+                _count(shconn, "exhibit_events"))
+    board3 = cu.hot_board()
+    board4 = cu.hot_board()
+    counts_b = (_count(conn, "ledger_tx"),
+                _count(cuconn, "curations"),
+                _count(cuconn, "curation_members"),
+                _count(shconn, "showcases"),
+                _count(shconn, "exhibit_events"))
+    hb_seg = cu_src[cu_src.index("def hot_board"):]
+    write_words = [w for w in ("INSERT INTO", "UPDATE ", "DELETE ")
+                   if w in hb_seg]
+    ok_hb4 = (counts_a == counts_b and not write_words
+              and board3 == board4)
+    record("AC-HB4", ok_hb4, "pure read: repeated board reads leave"
+          " ledger_tx and every showcase/curation row count"
+          " unchanged %s == %s; the hot_board method body carries"
+          " zero write statements (%s)"
+          % (counts_a, counts_b, write_words))
+
+    labels = {b["curation_id"]: b["ai_label"]
+              for b in board4["hot_board"]}
+    expected_labels = {"heritage-route": 0, "ai-route": 1,
+                       "night-route": 1, "alpha-route": 1,
+                       "zeta-route": 0}
+    non_ascii_hb = sum(1 for ch in cu_src if ord(ch) > 127)
+    banned_hits_hb = [w for w in BANNED_VERBS if w in cu_src]
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_final = h.read()
+    ok_hb5 = (labels == expected_labels
+              and board4["disclaimer"] == DISCLAIMER
+              and non_ascii_hb == 0 and not net_imports
+              and not banned_hits_hb and "random" not in cu_src
+              and cfg_final == cfg_bytes)
+    record("AC-HB5", ok_hb5, "board rows carry the registered"
+          " ai_label persistently %s; envelope disclaimer resident;"
+          " module stays pure ASCII (%d non-ascii chars), zero"
+          " network imports, zero circulation verbs, zero RNG, zero"
+          " UPDATE surface, shipped config.json byte-stable"
+          % (labels, non_ascii_hb))
 
     conn.close()
     shconn.close()
