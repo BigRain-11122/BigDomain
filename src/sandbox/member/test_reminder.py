@@ -93,7 +93,7 @@ def main():
                       + datetime.timedelta(seconds=5))
         now_due2 = fmt(M.parse_iso(now_due) + datetime.timedelta(days=1))
 
-        face = RM.ReminderFace(mcfg, rdb, member_db=mdb)
+        face = RM.ReminderFace(mcfg, rdb, expiring_face=store.expiring_soon)
         face.grant_authorization("AV-R1", "renewal_notice", "once")
         face.grant_authorization("AV-R2", "renewal_notice", "longterm")
         face.grant_authorization("AV-R4", "renewal_notice", "longterm")
@@ -204,7 +204,8 @@ def main():
         # ---- AC-M17.5: daily send cap (scaled injection) ---------------
         capcfg = json.loads(json.dumps(mcfg))
         capcfg["reminder"]["daily_send_cap_default"] = 2
-        face2 = RM.ReminderFace(capcfg, rdb2, member_db=mdb)
+        face2 = RM.ReminderFace(capcfg, rdb2,
+                                expiring_face=store.expiring_soon)
         for av in avatars:
             face2.grant_authorization(av, "renewal_notice", "once")
         capped = face2.scan(now=now_due)

@@ -1,0 +1,80 @@
+R1779 reminder due-scan read-face wiring - evidence log
+=====================================================
+Claim: state/queue/tech.md line "reminder 到期扫描 expiring_soon 读面
+接线窗" (R1779 claim, AC-RW1..RW7 pre-registered BEFORE code).
+Subject: ReminderFace.scan rewired from its own SQL + window
+arithmetic (second derivation) to the member pre-expiry read face
+(MemberStore.expiring_soon, R1774) through an injected callable.
+
+--- section 1: wiring suite (test_reminder_scan_wire.py) ---
+first run (after two harness-probing fixes, honestly noted below):
+PASS AC-RW1: face-less scan refused=True zero-rows=0; scan source
+      free of SQL/window tokens; old member dock gone
+PASS AC-RW2: three sources equal=True; scan=3 board=3 manual=3
+PASS AC-RW3: boundary row on board=True zero-attempt=0; not-due=0;
+      due-window fired=3
+PASS AC-RW4: rescan=3 all already_logged rows 3==3 dup-groups=0;
+      no-grant row=skipped_no_budget banner=True
+PASS AC-RW5: injected-face calls=[(3, '...')] results=3; module
+      free of direct member dock tokens=True
+PASS AC-RW6: suites-registry-line=True prior-criteria=5 expected=7
+PASS AC-RW7: ascii=True network-imports=0 update-tokens=0
+SUITE PASS: 7/7  exit 0
+Honest harness notes (first-pass reds = suite probing-side bugs,
+NOT product defects; fixed in-suite before the green runs above):
+  1. AC-RW4 banner check indexed send_id (r[0]) instead of the
+     avatar column (r[1]) of banner_queue rows.
+  2. AC-RW6 drift self-check counted prior criteria as 6; the
+     delivery face is criterion 6 of 7, so prior==EXPECTED-2.
+second run (determinism, identical readings): SUITE PASS 7/7 exit 0
+
+--- section 2: existing reminder suite zero-regression ---
+python src/sandbox/member/test_reminder.py
+12 assertions over 10 criteria; failed=none  exit 0
+(constructor calls updated single-point: member_db=mdb ->
+expiring_face=store.expiring_soon; all AC-M17.x semantics green
+over the wired path, including cap/idempotent/banner/dual-timepoint)
+
+--- section 3: full regression (RUNNER) ---
+python src/sandbox/reconcile_all.py  ->  qa/reconcile-all-R1779.log
+PASS suite member-reminder-scanwire exit=0 pass-lines=7
+     fail-lines=0 criteria=7 0.5s
+RUNNER PASS (80/80 suites green, reconcile controls 7/7, 180.7s)
+(suites 79->80, criteria 785->792)
+
+--- section 4: suite matrix regen + staleness check ---
+python src/sandbox/suite_matrix.py            (default discovery face)
+python src/sandbox/suite_matrix.py --check
+PASS check: docs/sandbox-suite-matrix.md byte-identical
+     (8712 bytes, 80 suites, 792 criteria)
+
+--- section 5: fingerprint sentinel (schema drift) ---
+python src/sandbox/fingerprint_regen.py --chain ... --check
+verdict CLEAN domains=5   -> qa/fingerprint-R1779.log
+(member/reminder dbs: zero schema touch; member.py zero-byte change)
+
+--- section 6: hygiene face (git evidence) ---
+git status --short:
+  M docs/sandbox-suite-matrix.md        (regenerated matrix)
+  M src/sandbox/member/reminder.py     (wiring: header bullet,
+        import line, constructor, scan body; 56 lines touched)
+  M src/sandbox/member/test_reminder.py(5 lines: two constructor
+        call sites, single-point update)
+  M src/sandbox/reconcile_all.py       (SUITES registration comment
+        + 3 lines)
+  M state/queue/tech.md                (R1779 claim annotation)
+  ?? src/sandbox/member/test_reminder_scan_wire.py (new suite)
+  ?? qa/*R1779* evidence logs
+NOT in status (zero-byte changes, criteria evidence):
+  src/sandbox/member/member.py         (read face only referenced)
+  src/sandbox/member/config.json       (shipped config untouched)
+reminder.py source: pure ASCII (suite AC-RW7), true import lines
+carry zero network libraries, zero UPDATE tokens (append-only
+journals unchanged).
+
+--- section 7: verdict ---
+AC-RW1..RW7 all PASS. Delivery complete: the renewal-due scan is
+driven by the member pre-expiry read face (single window-derivation
+source); the second derivation and the direct member read dock are
+cleared; cross-file read-only discipline strengthened (zero direct
+member.db access from the reminder module).

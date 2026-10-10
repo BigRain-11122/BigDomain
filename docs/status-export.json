@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T07:23:29+08:00",
+ "export_ts": "2026-10-11T07:47:54+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1778 一件事：账本大整理（fold R486·73,612B 回线下）+水印绑定位独立性探针交付——把隐藏水印的『防伪指纹』按位检验：改动一个比特指纹全变（雪崩）、伪造就对不上原密封；79 件自检 785 判据全量回归零回归，判据先注册后写码，全程证据在 qa/。",
-  "latest_artifact": "最近实物：qa/watermark-bindbit-R1778.log（探针证据五节：套件 7/7 双跑绿+79 套件 785 判据全量回归 RUNNER PASS+矩阵 byte-identical+指纹哨兵 CLEAN）+ src/sandbox/watermark/test_bind_bit.py（2026-10-11）",
-  "next_milestone": "下轮实物：tech 队头下一项『reminder 到期扫描 expiring_soon 读面接线』当窗交付（48h 内·至 10-13）；账本收账后余量仅 1,035B，下轮首件事=fold R487 再整理；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
+  "current": "R1779 一件事：把会员到期提醒的扫描接到统一读面（expiring_soon）——以前提醒器自己算一遍到期窗（SQL+算术两处算），现在直接吃 member 域的到期预测榜：同窗三源逐位相等、恰到期边界行榜上零误发、幂等重扫零重发；80 件自检 792 判据全量回归零回归，判据先注册后写码，全程证据在 qa/。",
+  "latest_artifact": "最近实物：qa/reminder-scanwire-R1779.log（接线证据七节：套件 7/7 双跑绿+test_reminder 12 断言复绿+80 套件 792 判据全量回归 RUNNER PASS+矩阵 byte-identical+指纹哨兵 CLEAN）+ src/sandbox/member/test_reminder_scan_wire.py（2026-10-11）",
+  "next_milestone": "下轮实物：tech 队头下一项『qa 证据件可解码性探针窗』当窗交付（48h 内·至 10-13）；账本水位近线（收账后 ~79KB），越 78,500B 时下轮首件事=fold R487 再整理；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
  },
  "depts": [
   {
@@ -188,6 +188,10 @@
  "results": [
   [
    "2",
+   "reminder 到期扫描 expiring_soon 读面接线交付（R1779·P2 tech 队头·AC-RW1..RW7 预注册先于代码：reminder.py 构造尾参 member_db→expiring_face〔注入 callable·约定=store.expiring_soon 绑定方法〕+scan 改由 expiring_soon(R,ts) 榜驱动〔due=榜内 end_utc>as_of 仍运行子集·恰到期边界行榜在 due 无〕·二次派生清除〔scan 源零 SQL 零窗算术·模块零 member.db 直连=跨文件只读纪律强化〕·三源等价〔scan fired period_key 集==board 子集==manual SQL 旧 due 公式集逐位等〕+幂等重扫 already_logged 零新行+无授权行 skipped_no_budget 入 banner 队列·套件 test_reminder_scan_wire.py SUITE 7/7 双跑绿〔首跑两红=取证口径 bug 两修如实注〕+test_reminder.py 12 断言复绿〔构造调用单点更新〕+RUNNER PASS 80/80 套件 792 判据 controls 7/7 180.7s 零回归=qa/reconcile-all-R1779.log·矩阵再生 80/792 green --check byte-identical 8712B·指纹哨兵 CLEAN domains=5=qa/fingerprint-R1779.log·member.py/config.json 零字节〔git status 证据〕·证据 qa/reminder-scanwire-R1779.log 七节·queue_tech_open 7→6·R1779）"
+  ],
+  [
+   "2",
    "fold R486 水位整编+watermark 绑定位独立性探针交付（R1778·轮首首测 81,671B 越 3,171B 承 R1777 承传注记＝P-2026-09-25-18 第四百八十六刀·tail-7 窗〔fold R485 滚窗行+R1775/R1776/R1777 三收账对·10,824B〕压 1 滚窗行 kept=0·74 token 全字面嵌零丢失·verify-then-write post==predicted 73,612B·archive verbatim+preop 备份·证据 qa/reorg-R1778.log 六节）＋AC-BI1..BI7 预注册先于代码：test_bind_bit.py=双轨密封 SHA-256 绑定位独立性检验——控制锚 clean 往返 ber=0.0〔256 位〕+三轨单比特扰动雪崩带〔provider 0.4414/content_no 0.4961/label 0.4844 全落 [0.35,0.65]〕+content_no 首字节 8 位扫描〔vs-base 8 读数+成对 28 读数 36/36 全带内零静默跳〕+提取侧伪造地板 0.40 单比特粒度成立∧三扰动密封对自身 ber=0.0 全往返+确定性双跑逐位同一+卫生全过〔纯 ASCII/零网络 import/config sha16 不变〕·reconcile_all SUITES 78→79 判据 778→785+RUNNER PASS 79/79 controls 7/7 167.7s 零回归=qa/reconcile-all-R1778.log+矩阵 79/785 green --check byte-identical 双跑 8624B+指纹哨兵 CLEAN domains=5·证据 qa/watermark-bindbit-R1778.log 五节·queue_tech_open 8→7·R1778）"
   ],
   [
@@ -339,7 +343,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1778",
+   "1779",
    "OSLoop 执行 tick"
   ],
   [
@@ -3214,15 +3218,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 23,
+  "log_lines_in_window": 25,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 7,
+  "queue_tech_open": 6,
   "queue_explore_open": 10,
-  "method": "R1778 fold R486 water-level compaction (first-gauge ruling fulfilled: 81671B over gate by 3171B, tail-7 10824B to one roll line kept=0, 74 tokens zero-loss, verify-then-write post==predicted 73612B, archive verbatim + preop backup) + watermark binding-bit independence probe delivered (P2 tech head; AC-BI1..BI7 pre-registered before code: 1-bit preimage perturbations avalanche [0.4414/0.4961/0.4844 in band 0.35-0.65], 8-bit sweep + 28 pairwise readings all in band, R593 forgery floor 0.40 holds at single-bit granularity while perturbed seals roundtrip exact, double-run bitwise identical; suite 7/7 x2; RUNNER PASS 79/79 suites 785 criteria zero-regression; matrix 79/785 green --check byte-identical; sentinel CLEAN domains=5; evidence qa/watermark-bindbit-R1778.log; queue_tech 8->7)"
+  "method": "R1779 reminder due-scan read-face wiring (tech queue head claimed, criteria pre-registered before code): the renewal-due scan now consumes the member pre-expiry board through an injected callable (single window-derivation source, due = still-running subset, boundary row honest superset) - second derivation cleared, zero direct member.db access; suite 7/7 double-run green, 80 suites 792 criteria full regression RUNNER PASS, matrix byte-identical, fingerprint sentinel CLEAN."
  }
 }

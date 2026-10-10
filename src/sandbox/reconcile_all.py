@@ -334,6 +334,15 @@ SUITES = [
     # state/queue/tech.md).
     ("member-expiring",
      os.path.join("member", "test_expiring_soon.py"), 7),
+    # R1779 reminder due-scan read-face wiring (R1774 successor): the
+    # renewal-due scan consumes the member pre-expiry board through
+    # an injected callable (single window-derivation source; due =
+    # the board's still-running subset, boundary row honest-superset)
+    # - the reminder module's own SQL + window arithmetic (second
+    # derivation) is cleared and its direct member read dock is
+    # gone (AC-RW1..RW7 pre-registered in state/queue/tech.md).
+    ("member-reminder-scanwire",
+     os.path.join("member", "test_reminder_scan_wire.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

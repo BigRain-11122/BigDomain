@@ -39,9 +39,12 @@ Single-writer discipline:
     drives it through the store); this module owns its OWN sqlite
     file (member_reminder.db) and is that file's single writer
     (BEGIN IMMEDIATE, house WAL discipline per file).
-  - Due-scan reads member_periods through a READ-ONLY connection
-    (reads never break the writer discipline; cross-file dock
-    precedent documented in member.py header).
+  - Due-scan is wired to the member pre-expiry read face
+    (MemberStore.expiring_soon, R1774) through an injected callable:
+    the face owns the window derivation (single source - zero second
+    derivation here) and this module performs ZERO direct member.db
+    access (reads flow through the face holder's connection; the
+    member single-writer discipline is untouched).
 
 Schema (spec section 2.1): member_subscribe_grants (authorization
 budget journal, append-only), member_reminder_log (send/skip journal,
@@ -78,7 +81,7 @@ for _p in (BASE,):
         sys.path.remove(_p)
     sys.path.insert(0, _p)
 
-from member import _h, now_utc, parse_iso, add_days  # noqa: E402
+from member import _h, now_utc  # noqa: E402
 
 # error codes (ASCII)
 E_TEMPLATE_NOT_APPROVED = "E_TEMPLATE_NOT_APPROVED"
@@ -123,7 +126,7 @@ class TemplateNotApproved(ValueError):
 class ReminderFace(object):
     """Single writer of member_reminder.db (W10/W15 reminder face)."""
 
-    def __init__(self, config, db_path, member_db=None):
+    def __init__(self, config, db_path, expiring_face=None):
         cfg = (config or {}).get("reminder", {})
         self.days = int(cfg.get("remind_days_before", 3))
         if self.days <= 0:
@@ -155,7 +158,7 @@ class ReminderFace(object):
             raise ConfigRejected("no approved template in registry")
         for reason in ("renewal_due", "first_service"):
             self.reason_templates.setdefault(reason, approved[0])
-        self.member_db = member_db
+        self.expiring_face = expiring_face
         self.db_path = db_path
         fresh = not os.path.exists(db_path)
         self.conn = sqlite3.connect(db_path)
@@ -281,29 +284,28 @@ class ReminderFace(object):
     def scan(self, now=None, auto_renewal=False):
         """Timepoint 2 (before the renewal date) due-scan.
 
-        Reads active periods from member.db through a read-only
-        connection; due window = end-remind_days <= now < end. Every
-        due period yields exactly one attempt (idempotent per day).
-        auto_renewal is a simulation flag only (real capability stays
-        [pending-verify]; scan itself always runs the renewal-due
-        timepoint, which is the MVP binding face).
+        Wired to the member pre-expiry read face (expiring_soon,
+        R1774) through the injected callable: the face owns the
+        window derivation (single source - zero second derivation
+        here). Due set = board rows whose end_utc is strictly past
+        as_of (the exactly-expired boundary row rides the board but
+        is NOT due - AC-ES5 honest superset note). Reads flow through
+        the face holder's connection: this module performs ZERO
+        direct member.db access (the member single-writer discipline
+        is untouched). auto_renewal is a simulation flag only (real
+        capability stays [pending-verify]; scan itself always runs
+        the renewal-due timepoint, the MVP binding face). Every due
+        period yields exactly one attempt (idempotent per day).
         """
-        if not self.member_db:
-            raise ValueError("member_db path required for scan")
+        if self.expiring_face is None:
+            raise ValueError("expiring_face required for scan"
+                             " (member pre-expiry read-face wiring)")
         ts = now or now_utc()
-        ro = sqlite3.connect("file:%s?mode=ro" % self.member_db, uri=True)
-        try:
-            rows = ro.execute(
-                "SELECT period_id, census_avatar_id, end_utc"
-                " FROM member_periods WHERE status='active'").fetchall()
-        finally:
-            ro.close()
-        due = []
-        for period_id, avatar, end_utc in rows:
-            window_start = add_days(end_utc, -self.days)
-            if (parse_iso(window_start) <= parse_iso(ts)
-                    < parse_iso(end_utc)):
-                due.append((period_id, avatar))
+        board = self.expiring_face(self.days, ts)
+        as_of = board["as_of"]
+        due = [(row["period_id"], row["census_avatar_id"])
+               for row in board["expiring_soon"]
+               if row["end_utc"] > as_of]
         results = []
         for period_id, avatar in due:
             template_id = self.reason_templates["renewal_due"]
