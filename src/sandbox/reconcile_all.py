@@ -474,6 +474,19 @@ SUITES = [
     # (AC-DSB1..DSB7 pre-registered in state/queue/explore.md).
     ("ledger-datasub",
      os.path.join("ledger", "test_datasub.py"), 7),
+    # R1766 resident proposal co-signature face: proposal registry
+    # with msgSecCheck pre-gate on resident free text (injected
+    # SecGate, reference not copy) + one-sign-per-resident window
+    # gate (inclusive both edges, ads/venue convention, self-sign
+    # and re-sign rejected before any row) + read-time derived
+    # qualification with the threshold-crossing sign awarding the
+    # proposer one memorial certificate through the collectibles
+    # public API (E_CL_DUP internalized, platform pre-award does
+    # not double-issue) - zero token movement by structure (no
+    # ledger reference exists in the module at all)
+    # (AC-PP1..PP7 pre-registered in state/queue/explore.md).
+    ("ledger-proposal",
+     os.path.join("ledger", "test_proposal.py"), 7),
 ]
 
 FAILS = 0

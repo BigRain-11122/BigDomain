@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T02:53:05+08:00",
+ "export_ts": "2026-10-11T03:06:58+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1765 一件事：台账水位维护——把轮账本从 83,482B 压回 73,713B（60 个编号记录零丢失、8 行原文全量归档），顺手补上 R1764 轮漏记的 export 成果行。72 个沙箱套件 713 条判据保持全绿（本轮纯台账维护零产品面改动）。",
-  "latest_artifact": "最近实物：qa/reorg-R1765.log（fold R482 六节证据）+logs/state-log-archive-2026-10.md §R1765 节（8 行原文保全）+上轮产品件 src/sandbox/ledger/datasub.py 仍可跑（test_datasub.py 7/7）",
-  "next_milestone": "下轮起：P3 探索队列续挖（居民提案联署/活动门票/开发者免费试用等 7 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
+  "current": "R1766 一件事：居民提案联署面上线——提案发起→居民联署→达标自动发纪念证书，全套沙箱可跑（test_proposal 7/7 全绿）。沙箱总量升到 73 套件 720 条判据全绿（本轮零回归）。",
+  "latest_artifact": "最近实物：src/sandbox/ledger/proposal.py+test_proposal.py（R1766 提案联署面·qa/proposal-R1766.log+qa/reconcile-all-R1766.log）",
+  "next_milestone": "下轮起：P3 探索队列续挖（活动门票/开发者免费试用/荣誉榜并列名次等 6 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
  },
  "depts": [
   {
@@ -187,6 +187,10 @@
  ],
  "results": [
   [
+   "2",
+   "居民提案联署面沙箱件（R1766·P3 explore 队头·AC-PP1..PP7 预注册先于代码：ProposalFace=注册/联署/达标派生三域〔proposal.db 独立单写者+注册 UNIQUE+title/body 双过 SecGate fail-closed+联署窗双沿包容+每(proposal,account) 恰一签+自签拒+达标读时派生零 UPDATE+跨阈签名恰发提案人纪念证书〔issue_certificate 公有 API·E_CL_DUP 内化幂等·非跨阈零授予 stub 实测〕+零 ledger 参=零 token 结构〔ledger_tx 恒定〕+六信封 disclaimer+ai_label CHECK〕·test_proposal.py SUITE 7/7 exit 0 首跑即净·reconcile_all SUITES 72→73 判据 713→720 RUNNER PASS 73/73 controls 7/7 139.7s 零回归=qa/reconcile-all-R1766.log·矩阵再生 73/720 green --check byte-identical·证据 qa/proposal-R1766.log·生产值全 [needs-CEO] P1 呈批不执行·queue_explore_open 7→6·R1766）"
+  ],
+  [
    "1",
    "R1765 fold R482 水位整编+tail-8 扩窗工具正门收账（P2 tech 队头=logs 常设线·R1762 行承传注记兑现·轮计分 1=台账维护机制件）：轮首首测 83,482B disk 越线 4,982B＝P-2026-09-25-18 第四百八十二刀·tail-4/tail-6 数学无解→闸forced 扩窗 tail-8（R1758 先例）·窗=R1758..R1759 fold R480 滚窗行+R1760..R1761 fold R481 滚窗行+R1762 fold 收账对+R1763 API 市场收账对+R1764 城市数据集订阅收账对·8 行 12,614B 压 1 滚窗行 kept=0·原文全量保全=archive §R1765 节 8 行 verbatim+preop logs/state-preop-R1765.bak sha16 69c2925c44b8c85d·dry-run 全绿（token 60/60 全嵌零丢失·gate 过 predicted 73,713B）→--execute verify-then-write post==predicted 73,713B 逐字节+archive 追加 12,854B·census 后验 pass=true（mismatch=在册已知 R1317 单·dangling=在册已知 R1192/R601 双·§R1765 节净）+post gauge margin +4,787B fold_needed=false·证据 qa/reorg-R1765.log 六节（术前 live 捕获+术后新鲜复跑双段=诚实证据面·首版 [1][2] 节术后复跑误导面检出同轮重写）·九面扫描全 PASS/INFO 零变化·P1 四行全门控→P2 fold 触发燃=本轮正业→P3 头项门控/今日切片已毕·R1765"
   ],
@@ -311,7 +315,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1765",
+   "1766",
    "OSLoop 执行 tick"
   ],
   [
@@ -3162,15 +3166,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 22,
+  "log_lines_in_window": 24,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 8,
+  "substantive_non_idle_mention_lines": 9,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 5,
-  "queue_explore_open": 7,
-  "method": "R1765 fold R482 water reorg via logs_toolkit fold tail-8 forced expansion (dry-run token 60/60 gate green, execute post==predicted 73713B byte-exact, census pass, qa/reorg-R1765.log)"
+  "queue_explore_open": 6,
+  "method": "R1766 resident proposal co-signature face delivery (suite 7/7 first-run clean, RUNNER PASS 73/73 suites 720 criteria zero-regression, matrix regen --check byte-identical, qa/proposal-R1766.log)"
  }
 }

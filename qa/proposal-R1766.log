@@ -1,0 +1,24 @@
+BigDomain R1766 resident proposal co-signature face - evidence log. Canonical full-regression evidence = qa/reconcile-all-R1766.log (kept separate so the suite-matrix default discovery face resolves it; this log carries no runner-eligible lines).
+--- [1] suite: test_proposal.py (exit=0) ---
+PASS AC-PP1: registry UNIQUE (1 row; dup E_PP_DUP_PROPOSAL rows 1); ai_label persistent (quiet-hours=1); bad args all rejected zero rows (none -> rows 2); unknown read E_PP_UNKNOWN_PROPOSAL
+PASS AC-PP2: forbidden word in title -> E_PP_CONTENT_REJECTED; advisory word in body -> E_PP_CONTENT_REJECTED; zero rows stored (2 -> 2); fault gate -> E_PP_GATE_ERROR with 0 rows; unwired gate -> E_PP_NO_GATE / E_PP_NO_GATE
+PASS AC-PP3: window edges inclusive (tick 100 -> 1, tick 200 -> 2); outside rejected zero rows (E_PP_WINDOW / E_PP_WINDOW); self-sign E_PP_SELF_SIGN; re-sign E_PP_DUP_SIGN; bad account E_PP_BAD_ARGS; bad tick E_PP_BAD_ARGS; signs 2 rows; ledger_tx constant (0 == 0)
+PASS AC-PP4: non-crossing sign zero award calls (0); crossing sign awards (memorial=issued, calls 1, cert rows 1); over-threshold sign no award (1 calls); platform pre-award internalized (memorial=already, certs 1 -> 1, signs 2); unwired collectibles E_PP_BAD_ARGS / E_PP_BAD_ARGS
+PASS AC-PP5: view count == SQL COUNT (3 == 3), qualified derived; live derivation (new sign 3 -> 4); board counts (4); read methods zero write statements (none); ledger_tx constant (0 == 0)
+PASS AC-PP6: empty disclaimer refused construction (E_PP_NO_DISCLAIMER/E_PP_NO_DISCLAIMER); disclaimer rides every envelope (register/sign/view/board); ai_label persistent on views (quiet-hours=1, night-lights=0); direct ai_label=2 INSERT rejected by DB CHECK (True)
+PASS AC-PP7: module pure ASCII (0 non-ascii); zero network imports (0); zero UPDATE surface (none); zero collectibles/ledger direct SQL (none); zero ledger import (False); zero RNG; shipped config.json byte-stable
+SUITE PASS 7/7
+--- [2] schema fingerprint sentinel: fingerprint_regen --check (exit=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- [3] matrix regen (--evidence qa/reconcile-all-R1766.log, exit=0) ---
+PASS generated docs/sandbox-suite-matrix.md (8184 bytes) - registry suites=73 criteria=720 evidence=qa/reconcile-all-R1766.log green=73/73
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [4] matrix --check stale probe, default discovery face (exit=0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8184 bytes, 73 suites, 720 criteria)
+
