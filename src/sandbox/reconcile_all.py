@@ -487,6 +487,17 @@ SUITES = [
     # (AC-PP1..PP7 pre-registered in state/queue/explore.md).
     ("ledger-proposal",
      os.path.join("ledger", "test_proposal.py"), 7),
+    # R1767 explore-queue row: virtual event ticket face - the
+    # liveroom paid-admission variant over the festival schedule-
+    # window convention: session registry (UNIQUE key, declared
+    # AIGC label), in-window ticket purchase with replay /
+    # per-account-limit / capacity gates all before the one spend,
+    # and the admission check-in gate (no ticket = no entry, the
+    # liveroom unattended-admission law; check-in appends one row
+    # per (session, account) and moves zero tokens)
+    # (AC-ET1..ET7 pre-registered in state/queue/explore.md).
+    ("ledger-eventtickets",
+     os.path.join("ledger", "test_eventtickets.py"), 7),
 ]
 
 FAILS = 0

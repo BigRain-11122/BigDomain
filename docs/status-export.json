@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T03:06:58+08:00",
+ "export_ts": "2026-10-11T03:23:53+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1766 一件事：居民提案联署面上线——提案发起→居民联署→达标自动发纪念证书，全套沙箱可跑（test_proposal 7/7 全绿）。沙箱总量升到 73 套件 720 条判据全绿（本轮零回归）。",
-  "latest_artifact": "最近实物：src/sandbox/ledger/proposal.py+test_proposal.py（R1766 提案联署面·qa/proposal-R1766.log+qa/reconcile-all-R1766.log）",
-  "next_milestone": "下轮起：P3 探索队列续挖（活动门票/开发者免费试用/荣誉榜并列名次等 6 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
+  "current": "R1767 一件事：虚拟活动门票面上线——场次注册→窗内购票（限购/容量帽全前置）→入场检票（无票不放进），全套沙箱可跑（test_eventtickets 7/7 全绿）。沙箱总量升到 74 套件 727 条判据全绿（本轮零回归）。",
+  "latest_artifact": "最近实物：src/sandbox/ledger/eventtickets.py+test_eventtickets.py（R1767 活动门票面·qa/eventtickets-R1767.log+qa/reconcile-all-R1767.log）",
+  "next_milestone": "下轮起：P3 探索队列续挖（开发者免费试用配额/荣誉榜并列名次/热度榜差分面等 4 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
  },
  "depts": [
   {
@@ -315,7 +315,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1766",
+   "1767",
    "OSLoop 执行 tick"
   ],
   [
@@ -3161,20 +3161,24 @@
   [
    "2",
    "市民行为积分面沙箱件（R1752·P3 explore 队头·R1751 承传点名兑现·AC-CV1..CV7 预注册=explore.md 认领行先于代码：公益面合规判读定谳三裁〔赚取唯一源=零 money/token 入口·零回流零转移·props 域先查重=授予路径 token-spend 绑定不可复用→civic_grants 自建〕；CivicPointsFace=行为注册 UNIQUE+ai_label CHECK+赚取幂等〔UNIQUE(account,behavior,event_ref)〕+日帽前置于行落〔异日重置实测〕+严格历法日校验〔strptime 往返=首跑抓 '2026-10-1' 宽松解析真模块缺口当场补严〕+注册价不可变拷贝+权益注册 cosmetic 一户一授/count 叠堆+兑换 fail-closed 门序〔未知→余额→已授〕+构造零 ledger 参=代币域结构性不可达〔R599 升格·ledger_tx 恒定〕+零回流动词零流通动词源扫+独立 civic.db 零 schema 触碰；套件首跑三病修〔模块日校验补严+套件 codes 解包 bug+INSERT 列数〕后 SUITE 7/7 双跑逐位同一；reconcile_all SUITES 67→68 判据 667→674〔ledger-civicpoints〕·RUNNER PASS 68/68 controls 7/7 176.9s 零回归=qa/reconcile-all-R1752.log·矩阵再生 68/674 green --check byte-identical〔7835B〕·指纹哨兵 CLEAN domains=5·证据 qa/civicpoints-R1752.log 三节·queue_explore_open 10→9 后补种 1→10〔市民公益年度荣誉榜面种子〕·R1752）"
+  ],
+  [
+   "2",
+   "虚拟活动门票面沙箱件（R1767·P3 explore 队头·AC-ET1..ET7 预注册先于代码：EventTicketFace 三域=场次注册〔UNIQUE+ai_label 持久+capacity None 合法〕+窗内购票〔双沿包容+门外一刻拒零扣费+每笔恰一 spend 绑 tx〕+检票门〔liveroom 无人值守禁入律=无票拒 E_ET_NO_TICKET 零行零 token 动+append-only 检入+重检票拒〕·AIGC/disclaimer 六信封常驻·SUITE 7/7 首跑即净+RUNNER PASS 74/74 套件 727 判据零回归·矩阵 74/727 --check byte-identical·证据 qa/eventtickets-R1767.log 三节·票价/限购/容量 [needs-CEO] 呈批不执行·R1767）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 5,
-  "queue_explore_open": 6,
-  "method": "R1766 resident proposal co-signature face delivery (suite 7/7 first-run clean, RUNNER PASS 73/73 suites 720 criteria zero-regression, matrix regen --check byte-identical, qa/proposal-R1766.log)"
+  "queue_explore_open": 5,
+  "method": "R1767 virtual event ticket face delivery (suite 7/7 first-run clean, RUNNER PASS 74/74 suites 727 criteria zero-regression, matrix regen --check byte-identical, qa/eventtickets-R1767.log)"
  }
 }
