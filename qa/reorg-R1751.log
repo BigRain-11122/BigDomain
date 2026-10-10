@@ -1,0 +1,88 @@
+﻿== qa/reorg-R1751.log fold R476 evidence == run 2026-10-10 21:10:47
+[1] pre-state (scan [STATE] PASS tick=1750 log_lines=31 eol_ok=1; execute record pre_bytes=80223 gate=78500 over=1723B)
+
+[2] catalog presence check (pre-fold, recorded run output)
+{"window_lines": 11, "tokens_total": 15, "missing_in_roll": [], "pass": true, "tokens": [AC-EF1, AC-RVC1, AC-SH1, AC-UKR1, AC-VR3, AC-WA1, AC-Y12, D-20260930-20, O-20260930-1901, O-20261009-1315, O-20261010-1705, O-20261010-1815, O-20261010-1955, O-20261010-2006, O-RAISE(false-positive from NO-RAISE, mechanically embedded, R1253 precedent)]}
+
+[3] fold execute record
+{
+  "mode": "execute",
+  "round": "R1751",
+  "fold_no": "476",
+  "window_mode": "tail",
+  "window_start": 21,
+  "window_end": 31,
+  "window_lines": 11,
+  "window_content_bytes": 12635,
+  "summary_head": "2026-10-10��R1746..R1750 ��������ժҪ��fold R476 �� R1750 �д�ע�Ƕ��֡������ײ�",
+  "preop_sha16": "bd4ec426423cddd1",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1751.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1751 fold append (2026-10-10, 11 lines verbatim: R1746..R1750 wu round closing pairs tail-11, fold R476 window, pre-op sha16 bd4ec426423cddd1)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 80223,
+  "new_log_len": 21,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 69847,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [],
+  "post_bytes": 69847,
+  "predicted_eq_actual": true,
+  "appendix_bytes": 12796,
+  "archive_appended": true,
+  "backup_written": true
+}
+
+[4] post gauge
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 69847,
+  "gate": 78500,
+  "log_lines": 21,
+  "log_content_bytes": 67072,
+  "margin_bytes": 8653,
+  "fold_needed": false,
+  "tick": 1750
+}
+[5] post eol check
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 69847,
+  "total_lf": 31,
+  "crlf": 31,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": true,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 21,
+  "indent16_lines": 21,
+  "indent_anomaly": 0,
+  "indent_ok": true
+}
+[6] census (archive section integrity)
+python : error: 'gbk' codec can't encode character '\uff7b' in position 7235: illegal multibyte sequence
+At line:3 char:648
++ ... end -Encoding utf8; python src/os/logs_toolkit.py census 2>&1 | Selec ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: 'gbk' co...tibyte sequence:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+{
+  "files": {
+    "2026-09": {
+      "path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-09.md",
+      "bytes": 16565173,
+      "sections": 192
+    },
+    "2026-10": {
+      "path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+      "bytes": 2723095,
+      "sections": 201
+    }
+  },
+  "sections_total": 393,
