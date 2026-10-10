@@ -3,6 +3,11 @@
 Pre-registered criteria AC-PN1..AC-PN7 (state/queue/tech.md R1706
 claim line, registered 2026-10-10 BEFORE this code; pre-registration
 law: criteria line first, implementation second).
+R1740 revocation extension (AC-VR1..VR7, state/queue/tech.md R1740
+claim line, registered BEFORE this code): W15 user-side unsubscribe
+is an append-only cutoff event - live-only budget semantics, the
+whole (avatar, template) subscription dies (longterm + remaining
+once units), re-subscribe cycle re-arms via post-cutoff grants.
 
 Consumes the registered research signals into the pay design:
   W15 (WeChat subscribe-message official doc, global-benchmarks
@@ -100,6 +105,12 @@ CREATE TABLE IF NOT EXISTS pay_notify_grants (
   census_avatar_id TEXT NOT NULL,
   template_id      TEXT NOT NULL,
   grant_type       TEXT NOT NULL CHECK (grant_type IN ('once','longterm')),
+  ts_utc           TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS pay_notify_revokes (
+  revoke_id        TEXT PRIMARY KEY,
+  census_avatar_id TEXT NOT NULL,
+  template_id      TEXT NOT NULL,
   ts_utc           TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS pay_notify_log (
@@ -271,19 +282,94 @@ class PayNotifyFace(object):
                     raise
 
     def _budget(self, avatar, template_id):
-        once = self._one(
-            "SELECT COUNT(*) FROM pay_notify_grants"
-            " WHERE census_avatar_id=? AND template_id=? AND grant_type='once'",
-            (avatar, template_id))
-        longterm = self._one(
-            "SELECT COUNT(*) FROM pay_notify_grants"
-            " WHERE census_avatar_id=? AND template_id=?"
-            " AND grant_type='longterm'", (avatar, template_id))
-        consumed = self._one(
-            "SELECT COUNT(*) FROM pay_notify_log"
-            " WHERE census_avatar_id=? AND template_id=? AND status='sent'",
-            (avatar, template_id))
+        """Live-authorization budget (R1740 revocation semantics): the
+        latest revoke event for (avatar, template) is a cutoff - grant
+        rows and consumed sends at or before the cutoff are dead, only
+        post-cutoff rows count. Same-second grant-after-revoke lands on
+        the dead side (conservative fail-closed: a re-subscribe never
+        over-sends; production re-subscribes are human-paced - honest
+        note, pre-registered as ruling 2 in the tech.md claim line)."""
+        cutoff = self._latest_revoke_ts(avatar, template_id)
+        if cutoff is None:
+            once = self._one(
+                "SELECT COUNT(*) FROM pay_notify_grants"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND grant_type='once'", (avatar, template_id))
+            longterm = self._one(
+                "SELECT COUNT(*) FROM pay_notify_grants"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND grant_type='longterm'", (avatar, template_id))
+            consumed = self._one(
+                "SELECT COUNT(*) FROM pay_notify_log"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND status='sent'", (avatar, template_id))
+        else:
+            once = self._one(
+                "SELECT COUNT(*) FROM pay_notify_grants"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND grant_type='once' AND ts_utc>?",
+                (avatar, template_id, cutoff))
+            longterm = self._one(
+                "SELECT COUNT(*) FROM pay_notify_grants"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND grant_type='longterm' AND ts_utc>?",
+                (avatar, template_id, cutoff))
+            consumed = self._one(
+                "SELECT COUNT(*) FROM pay_notify_log"
+                " WHERE census_avatar_id=? AND template_id=?"
+                " AND status='sent' AND ts_utc>?",
+                (avatar, template_id, cutoff))
         return int(once or 0), int(longterm or 0), int(consumed or 0)
+
+    def _latest_revoke_ts(self, avatar, template_id):
+        return self._one(
+            "SELECT MAX(ts_utc) FROM pay_notify_revokes"
+            " WHERE census_avatar_id=? AND template_id=?",
+            (avatar, template_id))
+
+    def revoke_authorization(self, avatar, template_id, now=None):
+        """W15 user-side unsubscribe report (R1740): the user turned
+        the template subscription off on the WeChat settings side.
+        Ruling 1: the kill is the WHOLE (avatar, template)
+        subscription - longterm and remaining once units both die
+        (the user said stop; pre-revoke sent rows stay immutable
+        history). A revoke row is appended only when live budget
+        exists to kill; otherwise honest nothing_to_revoke with zero
+        rows (decline-needs-no-row principle, R1719 same source) -
+        an immediate re-revoke is therefore a zero-row no-op."""
+        if template_id not in self.templates:
+            raise ValueError("%s: %s" % (E_PN_UNKNOWN_TEMPLATE, template_id))
+        ts = now or now_utc()
+        once, longterm, consumed = self._budget(avatar, template_id)
+        if longterm <= 0 and once - consumed <= 0:
+            return self._face({"status": "nothing_to_revoke",
+                               "revoke_id": None,
+                               "template_id": template_id,
+                               "ts_utc": ts,
+                               "budget": self.budget_face(avatar,
+                                                          template_id)})
+        attempt = 0
+        while True:
+            salt = ts if attempt == 0 else "%s#%d" % (ts, attempt)
+            rid = _h("pnrevoke", avatar, template_id, salt)
+            try:
+                self._exec("BEGIN IMMEDIATE")
+                self._exec(
+                    "INSERT INTO pay_notify_revokes"
+                    " (revoke_id, census_avatar_id, template_id, ts_utc)"
+                    " VALUES (?,?,?,?)",
+                    (rid, avatar, template_id, ts))
+                self._exec("COMMIT")
+                break
+            except sqlite3.IntegrityError:
+                self._exec("ROLLBACK")
+                attempt += 1
+                if attempt > 64:
+                    raise
+        return self._face({"status": "revoked", "revoke_id": rid,
+                           "template_id": template_id, "ts_utc": ts,
+                           "budget": self.budget_face(avatar,
+                                                      template_id)})
 
     # ---------------- send attempt (enforcement order) ----------------
 
@@ -366,9 +452,26 @@ class PayNotifyFace(object):
     def budget_face(self, avatar, template_id):
         """Public read: W15 authorization budget for one avatar and
         template (popup-suppression view; R1719 authorize face dock).
-        Reuses _budget - pure read, zero behavior drift elsewhere."""
+        Reuses _budget - pure read, zero behavior drift elsewhere.
+        Key set stays exactly {once, longterm, consumed} (live-only
+        semantics internalized, R1740 ruling 3: zero key drift for
+        existing consumers)."""
         once, longterm, consumed = self._budget(avatar, template_id)
         return {"once": once, "longterm": longterm, "consumed": consumed}
+
+    def authorization_state(self, avatar, template_id):
+        """Revocation-aware read face (R1740): live budget + revoked
+        flag + cutoff provenance. revoked = a cutoff exists and zero
+        live grants remain after it - an exhausted once set with no
+        revoke is NOT revoked (honest state distinction, AC-VR5).
+        Plain read face, budget_face family (no compliance wrapper)."""
+        once, longterm, consumed = self._budget(avatar, template_id)
+        cutoff = self._latest_revoke_ts(avatar, template_id)
+        return {"avatar": avatar, "template_id": template_id,
+                "once": once, "longterm": longterm, "consumed": consumed,
+                "remaining_once": once - consumed,
+                "revoked": cutoff is not None and (once + longterm) == 0,
+                "revoke_ts": cutoff}
 
     def banner_queue(self):
         """Degraded in-app fallback queue = all skipped_* rows."""

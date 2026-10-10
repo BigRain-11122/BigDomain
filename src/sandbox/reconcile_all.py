@@ -278,6 +278,15 @@ SUITES = [
     # is truly consumed by the R1718-wired send path (AC-AZ1..AZ7
     # pre-registered in state/queue/tech.md).
     ("pay-authorize", os.path.join("pay", "test_authorize.py"), 7),
+    # R1740 W15 revocation face (R1719 successor): the user-side
+    # settings unsubscribe is an append-only cutoff event - live-only
+    # budget semantics (whole (avatar,template) subscription dies:
+    # longterm + remaining once units), re-subscribe cycle re-arms via
+    # post-cutoff grants, nothing_to_revoke honest zero-row no-op,
+    # additive authorization_state read face, authorize.revoke report
+    # face with approved-not-gated stop semantics
+    # (AC-VR1..VR7 pre-registered in state/queue/tech.md).
+    ("pay-notify-revoke", os.path.join("pay", "test_notify_revoke.py"), 7),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,

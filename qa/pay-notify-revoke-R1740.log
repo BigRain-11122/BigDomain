@@ -1,0 +1,44 @@
+--- section 1: suite (test_notify_revoke.py, AC-VR1..VR7) ---
+PASS AC-VR1: schema=True no-UPDATE=True az-no-db=True receipt=非投顾常驻提示：本商品为 AI 生成工具与历史回测研究展示服务，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；历史回测数据仅作研究展示，不代表未来表现；虚拟商品一经发放不可退款的部分以购买页明示为准；请独立判断，风险自担。（常驻展示·不可折叠） row=True
+PASS AC-VR2: pre={'once': 2, 'longterm': 0, 'consumed': 0} revoke=revoked post={'once': 0, 'longterm': 0, 'consumed': 0} rearm={'once': 1, 'longterm': 0, 'consumed': 0} none=nothing_to_revoke rows=0
+PASS AC-VR4: reg1=True cycle=True once-rearm=True (pre={'once': 2, 'longterm': 1, 'consumed': 0} whole-kill longterm 1->0) same-second-edge=True
+PASS AC-VR5: fresh=True live=True dead=True exhausted-not-revoked=True
+PASS AC-VR3: pre-sent=1 dead-budget={'once': 0, 'longterm': 0, 'consumed': 0} skipped=skipped_no_budget granted=True banner=1 rearm={'once': 1, 'longterm': 0, 'consumed': 0} resend=sent immutable-sent=2
+PASS AC-VR6: empty=True(E_AZ_BAD_ARGS) none=True(E_AZ_BAD_ARGS) blank=True(E_AZ_BAD_ARGS) unknown-tpl=True(E_PN_UNKNOWN_TEMPLATE) rows=7->7; grant-refused=True revoke-on-unapproved=revoked rows=1
+PASS AC-VR7: ascii=True net-imports=none budget-keys=['consumed', 'longterm', 'once'] registered=True no-UPDATE=True
+---- pay-notify-revoke acceptance: 7/7 passed
+suite exit=0
+
+--- section 2: fingerprint sentinel (shipped chains, read-only --check) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0
+
+--- section 3: RUNNER full regression excerpt (qa/reconcile-all-R1740.log, RUNNER PASS 63/63 controls 6/6 139.0s; controls verdict block) ---
+  | reconcile: FAIL checks=5/6
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-31b1topg\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-31b1topg\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-31b1topg\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (63/63 suites green, reconcile controls 6/6, 139.0s)
+
+--- section 4: suite matrix regen + double --check (default evidence discovery face) ---
+PASS generated docs/sandbox-suite-matrix.md (7459 bytes) - registry suites=63 criteria=639 evidence=qa/reconcile-all-R1740.log green=63/63
+PASS hygiene: pure-ascii source, zero network imports
+regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7459 bytes, 63 suites, 639 criteria)
+check1 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7459 bytes, 63 suites, 639 criteria)
+check2 exit=0

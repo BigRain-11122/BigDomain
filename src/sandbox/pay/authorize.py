@@ -3,6 +3,9 @@
 Pre-registered criteria AC-AZ1..AC-AZ7 (state/queue/tech.md R1719
 claim line, registered 2026-10-10 BEFORE this code; honesty law:
 criteria line first, implementation second).
+R1740 revocation extension (AC-VR6, state/queue/tech.md R1740 claim
+line, registered BEFORE this code): revoke() report face + state()
+read dock - writes still only through the notify face.
 
 Bearer decision (R1719 proposal): the authorization report face
 lives in the pay domain (AuthorizeFace wrapping a caller-built
@@ -145,6 +148,27 @@ class AuthorizeFace(object):
     def budget(self, avatar, template_id):
         """Popup-suppression read: what the caller should show."""
         return self.notify.budget_face(avatar, template_id)
+
+    def revoke(self, avatar, template_id):
+        """W15 revocation report face (R1740, AC-VR6): the user turned
+        the template subscription off on the WeChat settings side
+        (dead budget - longterm AND remaining once units). Gates:
+        identity -> template registered. Template approval is
+        deliberately NOT gated here: a stop action must never fail
+        closed on the review state (honest asymmetry - grants fail
+        closed on unapproved, revocations proceed). Writes go only
+        through the notify face (single-writer discipline)."""
+        if not isinstance(avatar, str) or not avatar.strip():
+            raise ValueError("%s: avatar required" % E_AZ_BAD_ARGS)
+        avatar = avatar.strip()
+        if template_id not in self.notify.templates:
+            raise ValueError("%s: %s" % (N.E_PN_UNKNOWN_TEMPLATE,
+                                        template_id))
+        return self.notify.revoke_authorization(avatar, template_id)
+
+    def state(self, avatar, template_id):
+        """Revocation-aware read dock (R1740): authorization_state."""
+        return self.notify.authorization_state(avatar, template_id)
 
     def close(self):
         """No-op: the notify face is caller-built and caller-owned
