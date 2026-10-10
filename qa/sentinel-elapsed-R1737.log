@@ -1,0 +1,91 @@
+ 
+--- section 1: suite reconcile-daily-sentinel (criteria 6-goes-8; fs7/fs8 new) --- 
+PASS fs1-live-sentinel exit=0 marker+CLEAN+5-domains
+PASS fs7-elapsed-tail-live (R1737 AC-SN1)
+PASS fs2-aggregate-drift (0,2)->exit=2 FAIL drift
+PASS fs8-elapsed-tail-stub (R1737 AC-SN1)
+PASS fs3-aggregate-runner-fail (3,0)->exit=3 sentinel kept
+PASS fs4-sentinel-argv BASE-derived chain+check cwd=BASE
+PASS fs5-hygiene ascii=True net-imports=0 shipped-clean=True
+PASS fs6-same-day-suffix second=reconcile-daily-20261010-2.log distinct no-overwrite
+SUITE PASS 8/8
+ 
+--- section 2: suite runner-profile-daily (criteria 8-goes-12; sn1..sn4 new) --- 
+PASS rd2-sentinel-section-inert (suites=2)
+PASS rd1-discovery-face-isolation (daily=reconcile-daily-20260999.log main=reconcile-all-R9999.log)
+face: daily (population: reconcile-daily-*.log)
+== runner wall-time profile ==
+target: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log
+runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+parsed: suites=2 criteria_total=2 suite_seconds_sum=14.5 runner_total=14.5
+registry: REGISTRY-GREW (log predates current fan-out) (SUITES has 62 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 pay 9.5 1 9.50
+  2 lobby 5.0 1 5.00
+top5-hotspots: pay 9.5s, lobby 5.0s
+baseline written: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/runner-profile-daily-baseline.json (source: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log, suites=2)
+PASS rd1-baseline-split (daily-baseline=True main=False)
+face: daily (population: reconcile-daily-*.log)
+== runner wall-time profile ==
+target: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260998.log
+runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+parsed: suites=2 criteria_total=2 suite_seconds_sum=17.5 runner_total=17.5
+registry: REGISTRY-GREW (log predates current fan-out) (SUITES has 62 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 pay 9.5 1 9.50
+  2 lobby 8.0 1 8.00
+top5-hotspots: pay 9.5s, lobby 8.0s
+== drift compare vs ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite pay base=9.5s cur=9.5s delta=+0.0s slack=4.75s OK
+suite lobby base=5.0s cur=8.0s delta=+3.0s slack=2.50s FLAG
+total-shared base=14.5s cur=17.5s delta=+3.0s slack=7.25s OK (shared=2 labels)
+verdict: DRIFT-FLAG (1 flagged: lobby)
+PASS rd3-drift-flag-exit2 (exit=2)
+== stale-baseline check ==
+baseline source: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log
+check: byte-identical PASS
+== stale-baseline check ==
+baseline source: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log
+check: STALE/DIVERGED (regenerate with --update-baseline)
+PASS rd3-check-stale-detect (clean=0 tampered=2)
+face: daily (population: reconcile-daily-*.log)
+REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+PASS rd4-runner-fail-refusal-exit3 (exit=3)
+== runner wall-time profile ==
+target: ../../../../AppData/Local/Temp/runner-profile-daily-suite-gdqa5kzs/reconcile-daily-20260999.log
+runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+parsed: suites=2 criteria_total=2 suite_seconds_sum=14.5 runner_total=14.5
+registry: REGISTRY-GREW (log predates current fan-out) (SUITES has 62 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 pay 9.5 1 9.50
+  2 lobby 5.0 1 5.00
+top5-hotspots: pay 9.5s, lobby 5.0s
+baseline: ABSENT (init with --update-baseline)
+PASS rd1-main-face-zero-drift (exit=0)
+PASS sn1-tail-parse-3states (new=3.2 legacy=None main=None)
+PASS sn2-sentinel-drift-flag-exit2 (exit=2)
+PASS sn3-new-segment-info-not-flag (exit=0)
+PASS sn4-absent-info+double-tail-refusal (absent=0 refusal=3)
+PASS rd5-hygiene-ascii-no-net (clean)
+SUITE PASS 12/12
+ 
+--- section 3: baseline round-trip byte-identity both faces (AC-SN5, pre-commit rerun post 1cf34f5) --- 
+== stale-baseline check ==
+baseline source: qa/sec-batch-R1681.log
+check: byte-identical PASS
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261010-2.log
+check: byte-identical PASS
+ 
+--- section 4: full RUNNER regression evidence = qa/reconcile-all-R1737.log --- 
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+RUNNER PASS (62/62 suites green, reconcile controls 6/6, 129.7s)
+ 
+--- section 5: matrix regen + --check --- 
+PASS generated docs/sandbox-suite-matrix.md (7386 bytes) - registry suites=62 criteria=630 evidence=qa/reconcile-all-R1737.log green=62/62
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7386 bytes, 62 suites, 630 criteria)
