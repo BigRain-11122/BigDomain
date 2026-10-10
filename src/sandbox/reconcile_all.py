@@ -534,6 +534,12 @@ SUITES = [
     # (AC-FT1..FT7 pre-registered in state/queue/explore.md).
     ("ledger-freetrial",
      os.path.join("ledger", "test_freetrial.py"), 7),
+    # R1777 UGC noise/review pool water-level read face: pure-read
+    # derivation over payload noise flags + review-desk verdicts
+    # (zero stored counters, live per call; store envelope carries
+    # the standing non-advisory disclaimer)
+    # (AC-NP1..NP7 pre-registered in state/queue/tech.md)
+    ("ugc-pool-water", os.path.join("ugc", "test_pool_water.py"), 7),
 ]
 
 FAILS = 0

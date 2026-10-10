@@ -1,0 +1,45 @@
+=== [1] suite double-run (determinism) === 
+PASS AC-NP1: empty-state=True legacy-refused=True bad-construct=[]
+PASS AC-NP2: world-ok=True noise-sql-cross=True review-sql-cross=True total=4
+PASS AC-NP3: events=10 items=5 noise=3 gray-in-noise=0 suspended=1 verdicted=2 total-invariant=True
+PASS AC-NP4: dml-hits=0 five-tables-stable=True double-call-identical=True
+PASS AC-NP5: noise 3->4 suspended 1->2->1 verdict-pass 1->2
+PASS AC-NP6: ascii=True subjects=2 network-imports=0 additive=True pipeline-zero-touch=True
+PASS AC-NP7: suites-registry-line=True prior-criteria=6 expected=7
+SUITE PASS: 7/7
+ 
+=== [2] hygiene: git status + diff stat === 
+--- git status --short --- 
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/store.py
+ M state/queue/tech.md
+?? qa/ugc-poolwater-R1777.log
+?? src/sandbox/ugc/test_pool_water.py
+--- git diff --stat (touched files) --- 
+ src/sandbox/reconcile_all.py |  6 ++++
+ src/sandbox/ugc/store.py     | 65 +++++++++++++++++++++++++++++++++++++++++++-
+ state/queue/tech.md          |  2 +-
+ 3 files changed, 71 insertions(+), 2 deletions(-)
+
+=== [3] RUNNER full regression (tee: qa/reconcile-all-R1777.log) ===
+PASS suite ugc-pool-water exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suites 78/78 green, expected criteria total=778
+RUNNER PASS (78/78 suites green, reconcile controls 7/7, 153.2s)
+
+=== [4] suite matrix regen + --check x2 ===
+regen exit=0
+PASS generated docs/sandbox-suite-matrix.md (8549 bytes) - registry suites=78 criteria=778 evidence=qa/reconcile-all-R1777.log green=78/78
+PASS hygiene: pure-ascii source, zero network imports
+--check run 1 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8549 bytes, 78 suites, 778 criteria)
+--check run 2 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8549 bytes, 78 suites, 778 criteria)
+
+=== [5] fingerprint sentinel ===
+sentinel exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

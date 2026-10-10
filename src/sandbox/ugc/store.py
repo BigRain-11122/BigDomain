@@ -45,6 +45,7 @@ E_ITEM_MUST_ENTER_POOLED = "E_ITEM_MUST_ENTER_POOLED"
 E_CEO_RECEIPT_REQUIRED = "E_CEO_RECEIPT_REQUIRED"
 E_NEEDS_CEO_IMMUTABLE = "E_NEEDS_CEO_IMMUTABLE"
 E_RECEIPT_REQUIRES_ADOPTED = "E_RECEIPT_REQUIRES_ADOPTED"
+E_STORE_NO_DISCLAIMER = "E_STORE_NO_DISCLAIMER"  # R1777 read-face envelope
 
 _TRIGGER_CODES = (E_BAD_TRANSITION, E_ITEM_MUST_ENTER_POOLED,
                   E_CEO_RECEIPT_REQUIRED, E_NEEDS_CEO_IMMUTABLE,
@@ -142,8 +143,19 @@ class UGCStore:
     """Single-writer store: one connection guarded by one lock; every
     multi-statement write opens with BEGIN IMMEDIATE (SQLite WAL)."""
 
-    def __init__(self, db_path):
+    def __init__(self, db_path, disclaimer=None):
         self.db_path = db_path
+        # R1777 pool-water read face: the standing non-advisory
+        # disclaimer carried by the read-face envelope. Legacy callers
+        # construct without it (backward compatible); the read face
+        # itself refuses fail-closed until a non-empty one is wired.
+        # An EXPLICITLY provided empty/whitespace/non-str value is a
+        # bad argument and rejected at construction (R1773 precedent).
+        if disclaimer is not None and (
+            not isinstance(disclaimer, str) or not disclaimer.strip()
+        ):
+            raise ValueError(E_STORE_NO_DISCLAIMER)
+        self.disclaimer = disclaimer
         parent = os.path.dirname(os.path.abspath(db_path))
         os.makedirs(parent, exist_ok=True)
         self._lock = threading.Lock()
@@ -357,3 +369,54 @@ class UGCStore:
 
     def gate_receipts_count(self):
         return int(self.read_one("SELECT COUNT(*) FROM gate_receipts")[0])
+
+    # -- pool water levels (R1777 read face) -------------------------------
+
+    def pool_water_levels(self):
+        """R1777 noise/review pool water-level read face: pure-read
+        derivation for pipeline monitoring. The noise pool = intake
+        events whose payload carries a truthy noise flag (honest
+        triage: the row is kept, never pooled - AC-U5); the review
+        pool = gray-zone cases parked at the review desk (verdict
+        pending = suspended; a decided case stays visible in the
+        verdicted tally). Every call re-derives live from the two
+        tables: no counters are stored, no cache is held. Reasons
+        sort ascending, the verdict tally always shows both
+        closed-set cells with zero counts explicit. Envelope carries
+        the standing non-advisory disclaimer (resident face)."""
+        if self.disclaimer is None:
+            raise ValueError(E_STORE_NO_DISCLAIMER)
+        by_reason = {}
+        noise_total = 0
+        for row in self.read("SELECT payload_json FROM ugc_events"):
+            raw = row["payload_json"]
+            try:
+                payload = json.loads(raw) if raw else {}
+            except ValueError:
+                payload = {}
+            if not isinstance(payload, dict) or not payload.get("noise"):
+                continue
+            noise_total += 1
+            reason = str(payload.get("noise_reason") or "unknown")
+            by_reason[reason] = by_reason.get(reason, 0) + 1
+        verdicted = {"pass": 0, "risky": 0}
+        suspended = 0
+        for row in self.read("SELECT verdict FROM review_queue"):
+            verdict = row["verdict"]
+            if verdict is None:
+                suspended += 1
+            else:
+                key = str(verdict)
+                verdicted[key] = verdicted.get(key, 0) + 1
+        return {
+            "pool_water_levels": {
+                "noise": {
+                    "total": noise_total,
+                    "by_reason": {k: by_reason[k] for k in sorted(by_reason)},
+                },
+                "review": {"suspended": suspended, "verdicted": verdicted},
+            },
+            "total": noise_total + suspended,
+            "disclaimer": self.disclaimer,
+            "persistent": True,
+        }
