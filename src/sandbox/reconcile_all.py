@@ -287,6 +287,13 @@ SUITES = [
     # face with approved-not-gated stop semantics
     # (AC-VR1..VR7 pre-registered in state/queue/tech.md).
     ("pay-notify-revoke", os.path.join("pay", "test_notify_revoke.py"), 7),
+    # R1746 pay reconcile control-plane revokes coverage (R1740
+    # successor): revoke_ref dangling-reference check + revoke_dead
+    # dead-account discipline in the pay reconcile, notify-db
+    # three-state resolution (explicit > sibling auto > six-check
+    # mode), fail-closed on an explicitly named missing db
+    # (AC-RVC1..RVC7 pre-registered in state/queue/tech.md).
+    ("pay-revoke-reconcile", os.path.join("pay", "test_pay_revoke_recon.py"), 7),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,
@@ -528,8 +535,23 @@ def build_pay_demo_state(tmp):
     pay.create_order("pack_compute_19_9", "AV-PAY-DEMO-3")  # stays created
     pay.close()
     led.close()
+    # R1746 notify leg (public API only): one grant-then-revoke pair -
+    # shipped config stays byte-identical (default template registry
+    # approved=0 = honest pending state: grants/revoke faces exercise,
+    # the send face stays zero-row); the same-second grant lands dead
+    # per R1740 ruling 2, so the demo pair is a dead account the
+    # revoke checks verify against.
+    import notify as N                                  # pay product
+    nface = N.PayNotifyFace(cfg, os.path.join(tmp, "pay_notify.db"),
+                            pay_db=os.path.join(tmp, "pay.db"))
+    nface.grant_authorization("AV-PAY-DEMO-1",
+                              "tpl_pay_success_pending_ceo", "once")
+    nface.revoke_authorization("AV-PAY-DEMO-1",
+                               "tpl_pay_success_pending_ceo")
+    nface.close()
     return {"pay_db": os.path.join(tmp, "pay.db"),
             "ledger_db": os.path.join(tmp, "pay-ledger.db"),
+            "notify_db": os.path.join(tmp, "pay_notify.db"),
             "config": os.path.join(PAY, "config.json"),
             "tamper_order": oid_pack}
 
@@ -537,11 +559,11 @@ def build_pay_demo_state(tmp):
 def phase_pay_reconcile(tmp):
     world = build_pay_demo_state(tmp)
     code, out = run_cmd([sys.executable, os.path.join(PAY, "reconcile.py"),
-                         world["pay_db"], world["config"], world["ledger_db"]],
-                        cwd=PAY)
+                         world["pay_db"], world["config"], world["ledger_db"],
+                         world["notify_db"]], cwd=PAY)
     echo(out)
-    note(code == 0 and "reconcile: PASS checks=6/6" in out,
-         "reconcile pay-demo exit=%d (expect 0, clean six checks)" % code)
+    note(code == 0 and "reconcile: PASS checks=8/8" in out,
+         "reconcile pay-demo exit=%d (expect 0, clean eight checks)" % code)
     tampered = os.path.join(tmp, "pay-tampered.db")
     shutil.copyfile(world["pay_db"], tampered)
     conn = sqlite3.connect(tampered)
@@ -554,11 +576,38 @@ def phase_pay_reconcile(tmp):
     conn.commit()
     conn.close()
     code2, out2 = run_cmd([sys.executable, os.path.join(PAY, "reconcile.py"),
-                           tampered, world["config"], world["ledger_db"]],
-                          cwd=PAY)
+                           tampered, world["config"], world["ledger_db"],
+                           world["notify_db"]], cwd=PAY)
     echo(out2)
     note(code2 == 2 and "reconcile: FAIL" in out2,
          "reconcile pay-tamper exit=%d (expect 2, FAIL detected)" % code2)
+    # R1746 revokes tamper leg: clean pay db + tampered notify copy with
+    # both postures injected - a dangling revoke (pair with zero grant
+    # history) and a dead-account sent row (post-cutoff 'sent' on the
+    # demo's dead pair) - both revoke checks must FAIL and be named.
+    tampered_notify = os.path.join(tmp, "pay-notify-tampered.db")
+    shutil.copyfile(world["notify_db"], tampered_notify)
+    nconn = sqlite3.connect(tampered_notify)
+    nconn.execute(
+        "INSERT INTO pay_notify_revokes (revoke_id, census_avatar_id,"
+        " template_id, ts_utc) VALUES ('rv-dangling-demo',"
+        " 'AV-NO-GRANT-DEMO', 'tpl_pay_success_pending_ceo',"
+        " '2026-10-10T00:00:00Z')")
+    nconn.execute(
+        "INSERT INTO pay_notify_log (send_id, census_avatar_id, order_id,"
+        " template_id, reason, status, ts_utc) VALUES ('sn-dead-demo',"
+        " 'AV-PAY-DEMO-1', 'ORD-DEMO', 'tpl_pay_success_pending_ceo',"
+        " 'payment_success', 'sent', '2999-01-01T00:00:00Z')")
+    nconn.commit()
+    nconn.close()
+    code3, out3 = run_cmd([sys.executable, os.path.join(PAY, "reconcile.py"),
+                           world["pay_db"], world["config"],
+                           world["ledger_db"], tampered_notify], cwd=PAY)
+    echo(out3)
+    note(code3 == 2 and "revoke_ref" in out3 and "revoke_dead" in out3
+         and "[FAIL] revoke_ref" in out3 and "[FAIL] revoke_dead" in out3,
+         "reconcile pay-tamper-revokes exit=%d (expect 2, revoke FAILs"
+         " detected and named)" % code3)
 
 
 def _tier_products(pcfg):
@@ -657,7 +706,7 @@ def main(argv):
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     if FAILS == 0 and suites_ok:
-        print("RUNNER PASS (%d/%d suites green, reconcile controls 6/6, %.1fs)"
+        print("RUNNER PASS (%d/%d suites green, reconcile controls 7/7, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
         code = 0
     else:

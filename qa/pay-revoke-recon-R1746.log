@@ -1,0 +1,30 @@
+﻿--- suite: test_pay_revoke_recon.py (R1746 revokes coverage, AC-RVC1..RVC7) ---
+PASS AC-RVC1: clean exit=0 head=reconcile: PASS checks=8/8
+PASS AC-RVC2: dangling exit=2 revoke_ref FAIL named, revoke_dead still ok
+PASS AC-RVC3: dead-account exit=2 revoke_dead FAIL named, revoke_ref still ok
+PASS AC-RVC5: explicit-missing exit=2 both revoke checks FAIL, no silent six-check downgrade
+PASS AC-RVC6: auto-discovery exit=0 sibling pay_notify.db bound
+PASS AC-RVC4: six-check mode exit=0 skip line present, 6/6 preserved
+PASS AC-RVC7: ascii=True net-imports=[] reconcile-write-kw=[] thawed=[]
+---- pay revoke-reconcile acceptance: 7/7 passed
+--- fingerprint sentinel: schema zero-touch ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- full regression: reconcile_all RUNNER (qa/reconcile-all-R1746.log) ---
+467:PASS suite pay-revoke-reconcile exit=0 pass-lines=7 fail-lines=0 criteria=7 1.0s
+984:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+996:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+1018:  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+1022:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+1079:PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+1090:PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+1101:PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+1107:RUNNER PASS (64/64 suites green, reconcile controls 7/7, 145.5s)
+--- matrix regen + check ---
+PASS generated docs/sandbox-suite-matrix.md (7538 bytes) - registry suites=64 criteria=646 evidence=qa/reconcile-all-R1746.log green=64/64
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7538 bytes, 64 suites, 646 criteria)
