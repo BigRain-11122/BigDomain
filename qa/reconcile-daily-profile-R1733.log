@@ -1,0 +1,36 @@
+﻿=== [1] suite test_reconcile_daily_profile.py (fixed-glob run) ===
+PASS pd1-step-append exit=0 marker+tail+preserve argv
+PASS pd2-observation (0,0,2)->exit=0 PASS flag recorded
+PASS pd3-sentinel-gate (0,2,0)->exit=2 gating intact
+PASS pd4-runner-fail (3,0,2)->exit=3 profile kept
+pd5 live exit=0 (newest daily: reconcile-daily-20261010-2.log)
+PASS pd5-live-step real --daily --check exit=0 (expected 0)
+PASS pd6-hygiene ascii=True net-imports=0 shipped-clean=True obs=True
+PASS pd7-registration SUITES row reconcile-daily-profile=7
+SUITE PASS 7/7
+EXIT-NEW=0
+
+=== [2] sentinel regression test_reconcile_daily_sentinel.py (AC-PD4 stub routing) ===
+PASS fs1-live-sentinel exit=0 marker+CLEAN+5-domains
+PASS fs2-aggregate-drift (0,2)->exit=2 FAIL drift
+PASS fs3-aggregate-runner-fail (3,0)->exit=3 sentinel kept
+PASS fs4-sentinel-argv BASE-derived chain+check cwd=BASE
+PASS fs5-hygiene ascii=True net-imports=0 shipped-clean=True
+PASS fs6-same-day-suffix second=reconcile-daily-20261010-2.log distinct no-overwrite
+SUITE PASS 6/6
+EXIT-SENT=0
+
+=== [3] RUNNER full regression tail (qa/reconcile-all-R1733.log) ===
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (61/61 suites green, reconcile controls 6/6, 131.6s)
+
+=== [4] suite_matrix regen + --check ===
+PASS generated docs/sandbox-suite-matrix.md (7300 bytes) - registry suites=61 criteria=617 evidence=qa/reconcile-all-R1733.log green=61/61
+PASS hygiene: pure-ascii source, zero network imports
+MATRIX-REGEN-EXIT=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7300 bytes, 61 suites, 617 criteria)
+MATRIX-CHECK-EXIT=0
+
+=== [5] notes ===
+pd5 glob fix noted: first run matched reconcile-daily-sentinel-R1714.log (non-daily evidence); fixed to reconcile-daily-20*.log, second run targets reconcile-daily-20261010-2.log (real daily evidence, R1714 same-day -2 suffix file). Live --daily --check exit=0 = daily baseline byte-consistent.

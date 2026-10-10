@@ -343,6 +343,11 @@ SUITES = [
     # runner-profile-daily-baseline.json; sentinel-section parser
     # inertia; AC-RD1..RD6 pre-registered in state/queue/tech.md).
     ("runner-profile-daily", "test_runner_profile_daily.py", 8),
+    # R1733 reconcile-daily profile step: runner_profile --daily --check
+    # appended to the dated evidence log after the sentinel; observation
+    # window records the profile exit without gating the day (AC-PD1..PD7
+    # pre-registered in state/queue/tech.md).
+    ("reconcile-daily-profile", "test_reconcile_daily_profile.py", 7),
 ]
 
 FAILS = 0

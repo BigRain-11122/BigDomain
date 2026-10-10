@@ -50,8 +50,14 @@ class FakeProc(object):
         self.stderr = err
 
 
-def stub_world(qa_dir, runner_code, sentinel_code, sentinel_out):
-    """Install subprocess stubs + QA sandbox; return captured dict."""
+def stub_world(qa_dir, runner_code, sentinel_code, sentinel_out,
+               profile_code=0, profile_out=""):
+    """Install subprocess stubs + QA sandbox; return captured dict.
+
+    R1733 (AC-PD4): fake_run routes by command content - the sentinel
+    command contains fingerprint_regen.py, the profile step command
+    contains runner_profile.py. Existing assertion faces untouched.
+    """
     captured = {}
 
     def fake_call(cmd, *a, **kw):
@@ -59,9 +65,12 @@ def stub_world(qa_dir, runner_code, sentinel_code, sentinel_out):
         return runner_code
 
     def fake_run(cmd, **kw):
-        captured["sentinel_cmd"] = cmd
-        captured["sentinel_kwargs"] = kw
-        return FakeProc(sentinel_code, sentinel_out)
+        if "fingerprint_regen.py" in cmd[1]:
+            captured["sentinel_cmd"] = cmd
+            captured["sentinel_kwargs"] = kw
+            return FakeProc(sentinel_code, sentinel_out)
+        captured["profile_cmd"] = cmd
+        return FakeProc(profile_code, profile_out)
 
     subprocess.call = fake_call
     subprocess.run = fake_run

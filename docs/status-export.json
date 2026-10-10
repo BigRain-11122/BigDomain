@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T12:46:14+08:00",
+  "export_ts": "2026-10-10T13:07:10+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1732 apidev usage_log 窗过滤读面交付（P2 技术队头兑现·R1731 承传点名·轮计分 2=可跑实物·判据 AC-UW1..UW7 预注册先于代码）：开发者面板调用日志面 usage_log(api_key, limit=0, window=None) 增显式月窗过滤——缺省行为零漂移（三键 envelope 逐位保真）+11 坏窗形态 fail-closed+历史/未来月窗诚实读（不可变行永可查）+窗×读帽正交（溢出块 total=窗内行数）+死键读面开；套件 7/7 双跑逐位同一+全量回归 RUNNER PASS 60/60（套件 59→60 判据 603→610·controls 6/6·179.4s 零回归）+套件矩阵 60/610 green --check byte-identical；证据 qa/apidev-usagewin-R1732.log 五节；轮内集团面批判读毕：DEC +7 token 全知悉（D-20261010-04..10 完整编号引用·本司三连令 O-015/016/017 按决议挂起至复产窗）+GORD +2 他司令知悉；基线三更新（dec_tokens +7/dec_rows 281→255 分卷波二/gord_rows 204→206）；tech 队列 10→9→补种 1→10（后继种子=apidev usage by-kind 窗计数读面·读面族三对称）；九面扫描余面全 PASS（LEDGER conflict=0/ORD/BENCH/QA/HB/TREE 全绿）；auto-saves 411.7MB/238 件线下不清",
-    "latest_artifact": "最近实物：apidev usage_log 窗过滤读面（2026-10-10·R1732·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py usage_log 尾参 window=None 显式月窗过滤读（缺省 None=全窗现行行为零漂移+键门→限参门→窗参门三重 fail-closed+窗×读帽正交〔溢出块 total=窗内行数非全窗〕+死键读面开）+套件 test_apidev_usagewin.py 7/7 exit 0 双跑逐位同一+reconcile_all 注册 60 套件 610 判据 RUNNER PASS 60/60 controls 6/6 零回归——证据 qa/apidev-usagewin-R1732.log+qa/reconcile-all-R1732.log+docs/sandbox-suite-matrix.md（60 套件 610 判据全 green）",
-    "next_milestone": "下轮=P2 队头=daily 剖面对账日常化接线（R1715 后继·tech.md 次开项：reconcile_daily.py 哨兵步旁增 runner_profile --daily --check 段=当日 daily 剖面漂移面日检化〔观察窗期漂移只记账不 FAIL 当日·转正窗=漂移阈值回访定夺〕）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R472（本轮收账后水位 76775B 在线下=未触发即跳过）·tech 后继族=窗参数格式锚硬化/哨兵时长入证/notify longterm 撤销/0.7x refine/usage by-kind 窗计数读面"
+    "current": "R1733 daily 剖面对账日常化接线交付（P2 技术队头兑现·R1732 承传点名·轮计分 2=可跑实物·判据 AC-PD1..PD7 预注册先于代码）：reconcile_daily.py 哨兵步旁增 runner_profile --daily --check 段=当日 daily 剖面基线 staleness 日检化（输出追加同一当日证据 log 分节·观察窗期 profile exit 只记账不 FAIL 当日·PROFILE_OBSERVATION_WINDOW=True·转正=漂移阈值回访窗定夺）；聚合律零回归+既有套件契约跟随零回归（fs1..fs6 6/6）+新套件 7/7+RUNNER PASS 61/61（套件 60→61 判据 610→617·controls 6/6·131.6s 零回归）+矩阵 61/617 green --check byte-identical；pd5 live 实弹=真 daily 件拷贝真子进程 --daily --check exit=0（daily 基线字节一致）；runbook §一3b 消费者面补文；轮内集团面批判读毕：DEC +1（C-20261010-01 委员会自查案知悉·HQ 执行面）+GORD +5 他司令知悉（O-20261010-1240/1245 完整编号引用）；基线三更新（dec_tokens +1/dec_rows 255→261/gord_rows 206→211）；tech 队列 10→9→补种 1→10（后继种子=观察窗转正判据预注册窗）",
+    "latest_artifact": "最近实物：daily 剖面对账日常化接线（2026-10-10·R1733·轮计分 2=可跑实物）：src/sandbox/reconcile_daily.py run_profile_step（runner_profile --daily --check 子进程·分节追加同一当日证据 log·观察窗 profile exit 记账不门控）+套件 test_reconcile_daily_profile.py 7/7 exit 0+reconcile_all 注册 61 套件 617 判据 RUNNER PASS 61/61 controls 6/6 零回归+runbook §一3b 补文——证据 qa/reconcile-daily-profile-R1733.log+qa/reconcile-all-R1733.log+docs/sandbox-suite-matrix.md（61 套件 617 判据全 green）",
+    "next_milestone": "下轮=P2 队头=apidev usage by-kind 窗计数读面（R1732 后继·tech.md 次开项：usage_kind_tally(api_key, window=None) 读时 GROUP BY kind COUNT=开发者面板「本月按 API kind 计数」可见面·读面族三对称补全·坏窗参 11 形态 fail-closed 同律+嵌入面缺省当月不动）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R472（R1732 收账后水位 76775B 线下=未触发即跳过·R1733 收账后水位以 gauge 实测为准·越线则 fold R472=下轮轮首首测裁定）·tech 后继族=窗参数格式锚硬化/哨兵时长入证/notify longterm 撤销/0.7x refine/观察窗转正判据预注册"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1732",
+      "1733",
       "OSLoop 执行 tick"
     ],
     [
@@ -3025,20 +3025,24 @@
     [
       "2",
       "apidev usage_log 窗过滤读面（R1732·P2 队头·R1731 承传点名兑现·AC-UW1..UW7 预注册=tech.md 认领行先于代码：usage_log(api_key, limit=0, window=None) 尾参窗过滤读——缺省 None=全窗现行行为零漂移〔三键 envelope set 等断言+行序行集 manual SQL 逐位同一〕+键门先于窗参门〔未知键+坏窗→E_AD_UNKNOWN_KEY〕+限参门先于窗参门〔双坏→limit 消息 detail 实证〕+11 坏窗形态全拒 E_AD_BAD_ARGS 零读副作用〔api_calls 10==10〕+历史窗 fixture 注入读==注入集+未来窗诚实空+两窗互不渗透+窗×帽正交〔溢出块 total=窗内行数非全窗：limit=3 over 窗内 6/全窗 10→total=6 returned=3 truncated=True 尾窗==镜像 SQL==升序尾〕+显式窗读 envelope additive window 键〔缺省面零键漂移〕+边界态〔零行窗/limit=1〕+只读律+revoked/rotated_out 死键窗过滤读开〔AC-UL6/RJW5 同源〕；套件 test_apidev_usagewin.py 7/7 exit 0 双跑逐位同一+R1729 usagelog 套件签名正则单行同步〔contract-check 跟随产品面·回归全绿实证〕+RUNNER PASS 60/60〔套件 59→60 判据 603→610〕controls 6/6 179.4s 零回归+矩阵再生 60/610 green --check byte-identical〔7216B〕+证据 qa/apidev-usagewin-R1732.log 五节〔套件×2+IDENTICAL+卫生 git status 六件面+回归+矩阵〕）"
+    ],
+    [
+      "2",
+      "daily 剖面对账日常化接线件（R1733·P2 队头·R1732 承传点名兑现·AC-PD1..PD7 预注册=tech.md 认领行先于代码：reconcile_daily.py 哨兵步后增 run_profile_step=runner_profile --daily --check 段〔分节追加同一当日证据 log·观察窗尾行 profile exit=N (observation-window: recorded, not gating)·argv=profile_command() BASE 派生〕+PROFILE_OBSERVATION_WINDOW=True 非门控〔profile exit 恒记账不参聚合·聚合律零回归=runner≠0 传播/runner==0 sentinel 承接〕+RECONCILE-DAILY 行 additive 扩 profile=ok|flag(exit=N) 字段〔原六字段语义保持〕+既有套件契约跟随〔test_reconcile_daily_sentinel.py fake_run 按命令路由分流·fs1..fs6 零回归 SUITE PASS 6/6〕+新套件 test_reconcile_daily_profile.py 7/7 exit 0 双跑绿〔pd1 步接线 argv/markers/尾行+pd2 观察窗非门控 (0,0,2)→exit 0 PASS flag recorded+pd3 sentinel 门控零回归 (0,2,0)→exit 2+pd4 败日不跳检 (3,0,2)→exit 3 profile 节在+pd5 live 实弹真 daily 件拷贝真子进程 exit=0=daily 基线字节一致〔首跑 glob 误捕 sentinel 证据件修=如实注〕+pd6 卫生+pd7 SUITES 注册面源检〕+reconcile_all SUITES 60→61 判据 610→617·RUNNER PASS 61/61 controls 6/6 131.6s 零回归=qa/reconcile-all-R1733.log+矩阵再生 61/617 green --check byte-identical+runbook §一3b/§二4 消费者面补文〔AC-RB1 行数线内〕·证据 qa/reconcile-daily-profile-R1733.log 五节·tech open 10→9+1 后继种子→10·R1733）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1732 flush caliber: R1732 delivery round appended its closeout trio (round line + DEC/GORD batch judgment line + tokens line, all dated 2026-10-10, in window; substantive +2 = delivery line and batch judgment line, tokens line excluded by caliber); queues 6/10/10 flat (tech done row -> successor seed re-added: apidev usage by-kind window tally, read-face family three-way symmetry); baselines updated (dec_tokens +7, dec_rows 281->255 archive wave two, gord_rows 204->206); window stays 2026-10-04..2026-10-10 (max log date 2026-10-10); tick row 1731 -> 1732"
+    "method": "R1733 flush caliber: R1733 delivery round appended its closeout trio (round line + DEC/GORD batch judgment line + tokens line, all dated 2026-10-10, in window; substantive +2 = delivery line and batch judgment line, tokens line excluded by caliber); tech queue 10 -> 9 (daily-profile wiring row done) + 1 successor seed (observation-window promotion criteria pre-registration) -> 10; baselines updated (dec_tokens +1, dec_rows 255->261, gord_rows 206->211); window stays 2026-10-04..2026-10-10 (max log date 2026-10-10); tick row 1732 -> 1733"
   }
 }
