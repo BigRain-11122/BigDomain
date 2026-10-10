@@ -1,0 +1,434 @@
+=== sentinel segment adoption window (tech.md row, R1737 successor) ===
+claim round: R1761  date: 2026-10-11
+trigger verified: qa/reconcile-daily-20261011-4.log is the first REAL daily
+evidence carrying the sentinel elapsed tail row (sentinel exit=0 elapsed=0.3s)
+-- pre-adoption baseline (source: qa/reconcile-daily-20261010-2.log) lacks
+sentinel_seconds -> NEW-SEGMENT state in force (adoption gap confirmed)
+sections: [1] pre-adoption compare (NEW-SEGMENT + first real sentinel reading)
+[2] adoption (--daily --update-baseline)  [3] stale check byte-identical
+[4] post-adoption dual-presence compare re-run
+
+[1] pre-adoption compare (vs baseline source qa/reconcile-daily-20261010-2.log)
+----------------------------------------------------------------------
+face: daily (population: reconcile-daily-*.log)
+== runner wall-time profile ==
+target: qa/reconcile-daily-20261011-4.log
+runner: RUNNER PASS (70/70 suites green, reconcile controls 7/7, 153.4s)
+parsed: suites=70 criteria_total=699 suite_seconds_sum=152.1 runner_total=153.4
+registry: ALIGNED (SUITES has 70 entries)
+sentinel-segment: 0.3s (daily sentinel subprocess elapsed)
+profile (rank label seconds criteria sec-per-criterion):
+  1 watermark-sweep 24.6 6 4.10
+  2 lobby 23.3 16 1.46
+  3 watermark-scale-refine 16.2 6 2.70
+  4 minors-wiring 15.7 70 0.22
+  5 watermark-scale-unknown 13.3 6 2.22
+  6 watermark-scale-recover 7.5 7 1.07
+  7 schema-migrate 5.7 21 0.27
+  8 pay-notify-revoke 5.5 7 0.79
+  9 ugc 4.8 37 0.13
+  10 fingerprint-regen 4.1 16 0.26
+  11 watermark-robust 2.0 6 0.33
+  12 pay-notify-wiring 1.7 7 0.24
+  13 pay 1.6 16 0.10
+  14 watermark 1.6 5 0.32
+  15 member 1.5 16 0.09
+  16 ledger-clawback 1.4 8 0.17
+  17 dual-track 1.2 7 0.17
+  18 member-refund-recovery 1.1 7 0.16
+  19 ledger-apidev-rejectwin 1.0 7 0.14
+  20 suite-matrix-discovery 1.0 16 0.06
+  21 opsreview 0.9 7 0.13
+  22 pay-revoke-reconcile 0.9 7 0.13
+  23 ledger 0.7 11 0.06
+  24 ledger-apidev-usagelog 0.7 7 0.10
+  25 pay-v3-window 0.7 6 0.12
+  26 ledger-tmarket 0.6 7 0.09
+  27 ledger-apidev-reject 0.5 7 0.07
+  28 ledger-studio 0.5 7 0.07
+  29 pay-authorize 0.5 7 0.07
+  30 pay-notify 0.5 7 0.07
+  31 pay-v3 0.5 14 0.04
+  32 pay-v3-real 0.5 9 0.06
+  33 reconcile-daily-sentinel 0.5 8 0.06
+  34 ledger-apidev-rate 0.4 7 0.06
+  35 ledger-apidev-usagewin 0.4 8 0.05
+  36 ledger-effects 0.4 7 0.06
+  37 ledger-identity 0.4 7 0.06
+  38 ledger-observation 0.4 7 0.06
+  39 ledger-apidev 0.3 7 0.04
+  40 ledger-apidev-lifecycle 0.3 8 0.04
+  41 ledger-apidev-usagekind 0.3 8 0.04
+  42 ledger-civicpoints 0.3 13 0.02
+  43 ledger-companion 0.3 7 0.04
+  44 ledger-curation 0.3 12 0.02
+  45 ledger-devshare 0.3 7 0.04
+  46 ledger-festival 0.3 7 0.04
+  47 ledger-honorcert 0.3 7 0.04
+  48 ledger-reports 0.3 7 0.04
+  49 ledger-showroom 0.3 7 0.04
+  50 ledger-sistercity 0.3 7 0.04
+  51 liveroom 0.3 10 0.03
+  52 reconcile-daily-profile 0.3 7 0.04
+  53 benchgate 0.2 11 0.02
+  54 citymodel 0.2 10 0.02
+  55 ledger-ads 0.2 7 0.03
+  56 ledger-collectibles 0.2 7 0.03
+  57 ledger-expedite 0.2 7 0.03
+  58 ledger-growth-archive 0.2 7 0.03
+  59 ledger-incentive 0.2 7 0.03
+  60 ledger-metered 0.2 7 0.03
+  61 ledger-props 0.2 7 0.03
+  62 ledger-showcase 0.2 7 0.03
+  63 ledger-venue 0.2 7 0.03
+  64 runner-profile-daily 0.2 12 0.02
+  65 ugc-sec-batch 0.2 7 0.03
+  66 compliance 0.1 15 0.01
+  67 ledger-settlement 0.1 7 0.01
+  68 member-entry 0.1 7 0.01
+  69 minors 0.1 19 0.01
+  70 tourstate 0.1 7 0.01
+top5-hotspots: watermark-sweep 24.6s, lobby 23.3s, watermark-scale-refine 16.2s, minors-wiring 15.7s, watermark-scale-unknown 13.3s
+== drift compare vs qa/reconcile-daily-20261010-2.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite watermark-sweep base=21.3s cur=24.6s delta=+3.3s slack=10.65s OK
+suite lobby base=22.2s cur=23.3s delta=+1.1s slack=11.10s OK
+suite watermark-scale-refine NEW-SUITE (no baseline entry)
+suite minors-wiring base=13.2s cur=15.7s delta=+2.5s slack=6.60s OK
+suite watermark-scale-unknown NEW-SUITE (no baseline entry)
+suite watermark-scale-recover base=7.7s cur=7.5s delta=-0.2s slack=3.85s OK
+suite schema-migrate base=4.5s cur=5.7s delta=+1.2s slack=2.25s OK
+suite pay-notify-revoke NEW-SUITE (no baseline entry)
+suite ugc base=3.6s cur=4.8s delta=+1.2s slack=2.00s OK
+suite fingerprint-regen base=3.0s cur=4.1s delta=+1.1s slack=2.00s OK
+suite watermark-robust base=1.9s cur=2.0s delta=+0.1s slack=2.00s OK
+suite pay-notify-wiring NEW-SUITE (no baseline entry)
+suite pay base=1.6s cur=1.6s delta=+0.0s slack=2.00s OK
+suite watermark base=1.8s cur=1.6s delta=-0.2s slack=2.00s OK
+suite member base=1.3s cur=1.5s delta=+0.2s slack=2.00s OK
+suite ledger-clawback NEW-SUITE (no baseline entry)
+suite dual-track base=1.2s cur=1.2s delta=+0.0s slack=2.00s OK
+suite member-refund-recovery NEW-SUITE (no baseline entry)
+suite ledger-apidev-rejectwin NEW-SUITE (no baseline entry)
+suite suite-matrix-discovery base=0.8s cur=1.0s delta=+0.2s slack=2.00s OK
+suite opsreview base=0.9s cur=0.9s delta=+0.0s slack=2.00s OK
+suite pay-revoke-reconcile NEW-SUITE (no baseline entry)
+suite ledger base=0.5s cur=0.7s delta=+0.2s slack=2.00s OK
+suite ledger-apidev-usagelog NEW-SUITE (no baseline entry)
+suite pay-v3-window base=0.5s cur=0.7s delta=+0.2s slack=2.00s OK
+suite ledger-tmarket base=0.2s cur=0.6s delta=+0.4s slack=2.00s OK
+suite ledger-apidev-reject NEW-SUITE (no baseline entry)
+suite ledger-studio base=0.2s cur=0.5s delta=+0.3s slack=2.00s OK
+suite pay-authorize NEW-SUITE (no baseline entry)
+suite pay-notify base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite pay-v3 base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-v3-real base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite reconcile-daily-sentinel base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-rate base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-usagewin NEW-SUITE (no baseline entry)
+suite ledger-effects base=0.2s cur=0.4s delta=+0.2s slack=2.00s OK
+suite ledger-identity base=0.2s cur=0.4s delta=+0.2s slack=2.00s OK
+suite ledger-observation base=0.2s cur=0.4s delta=+0.2s slack=2.00s OK
+suite ledger-apidev base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-lifecycle base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-usagekind NEW-SUITE (no baseline entry)
+suite ledger-civicpoints NEW-SUITE (no baseline entry)
+suite ledger-companion base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-curation NEW-SUITE (no baseline entry)
+suite ledger-devshare NEW-SUITE (no baseline entry)
+suite ledger-festival base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-honorcert NEW-SUITE (no baseline entry)
+suite ledger-reports base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-showroom base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-sistercity base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite liveroom base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite reconcile-daily-profile NEW-SUITE (no baseline entry)
+suite benchgate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite citymodel base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-ads base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-collectibles base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-expedite base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-growth-archive base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-incentive base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-metered base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-props base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-showcase NEW-SUITE (no baseline entry)
+suite ledger-venue base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite runner-profile-daily NEW-SUITE (no baseline entry)
+suite ugc-sec-batch base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite compliance base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite ledger-settlement base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite member-entry base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite minors base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite tourstate base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+total-shared base=93.7s cur=106.7s delta=+13.0s slack=46.85s OK (shared=50 labels)
+sentinel-segment 0.3s NEW-SEGMENT (no baseline entry)
+verdict: DRIFT-CLEAN (50 compared, 0 flagged)
+
+[2] adoption: --daily --update-baseline (source = first real evidence with elapsed tail)
+----------------------------------------------------------------------
+face: daily (population: reconcile-daily-*.log)
+== runner wall-time profile ==
+target: qa/reconcile-daily-20261011-4.log
+runner: RUNNER PASS (70/70 suites green, reconcile controls 7/7, 153.4s)
+parsed: suites=70 criteria_total=699 suite_seconds_sum=152.1 runner_total=153.4
+registry: ALIGNED (SUITES has 70 entries)
+sentinel-segment: 0.3s (daily sentinel subprocess elapsed)
+profile (rank label seconds criteria sec-per-criterion):
+  1 watermark-sweep 24.6 6 4.10
+  2 lobby 23.3 16 1.46
+  3 watermark-scale-refine 16.2 6 2.70
+  4 minors-wiring 15.7 70 0.22
+  5 watermark-scale-unknown 13.3 6 2.22
+  6 watermark-scale-recover 7.5 7 1.07
+  7 schema-migrate 5.7 21 0.27
+  8 pay-notify-revoke 5.5 7 0.79
+  9 ugc 4.8 37 0.13
+  10 fingerprint-regen 4.1 16 0.26
+  11 watermark-robust 2.0 6 0.33
+  12 pay-notify-wiring 1.7 7 0.24
+  13 pay 1.6 16 0.10
+  14 watermark 1.6 5 0.32
+  15 member 1.5 16 0.09
+  16 ledger-clawback 1.4 8 0.17
+  17 dual-track 1.2 7 0.17
+  18 member-refund-recovery 1.1 7 0.16
+  19 ledger-apidev-rejectwin 1.0 7 0.14
+  20 suite-matrix-discovery 1.0 16 0.06
+  21 opsreview 0.9 7 0.13
+  22 pay-revoke-reconcile 0.9 7 0.13
+  23 ledger 0.7 11 0.06
+  24 ledger-apidev-usagelog 0.7 7 0.10
+  25 pay-v3-window 0.7 6 0.12
+  26 ledger-tmarket 0.6 7 0.09
+  27 ledger-apidev-reject 0.5 7 0.07
+  28 ledger-studio 0.5 7 0.07
+  29 pay-authorize 0.5 7 0.07
+  30 pay-notify 0.5 7 0.07
+  31 pay-v3 0.5 14 0.04
+  32 pay-v3-real 0.5 9 0.06
+  33 reconcile-daily-sentinel 0.5 8 0.06
+  34 ledger-apidev-rate 0.4 7 0.06
+  35 ledger-apidev-usagewin 0.4 8 0.05
+  36 ledger-effects 0.4 7 0.06
+  37 ledger-identity 0.4 7 0.06
+  38 ledger-observation 0.4 7 0.06
+  39 ledger-apidev 0.3 7 0.04
+  40 ledger-apidev-lifecycle 0.3 8 0.04
+  41 ledger-apidev-usagekind 0.3 8 0.04
+  42 ledger-civicpoints 0.3 13 0.02
+  43 ledger-companion 0.3 7 0.04
+  44 ledger-curation 0.3 12 0.02
+  45 ledger-devshare 0.3 7 0.04
+  46 ledger-festival 0.3 7 0.04
+  47 ledger-honorcert 0.3 7 0.04
+  48 ledger-reports 0.3 7 0.04
+  49 ledger-showroom 0.3 7 0.04
+  50 ledger-sistercity 0.3 7 0.04
+  51 liveroom 0.3 10 0.03
+  52 reconcile-daily-profile 0.3 7 0.04
+  53 benchgate 0.2 11 0.02
+  54 citymodel 0.2 10 0.02
+  55 ledger-ads 0.2 7 0.03
+  56 ledger-collectibles 0.2 7 0.03
+  57 ledger-expedite 0.2 7 0.03
+  58 ledger-growth-archive 0.2 7 0.03
+  59 ledger-incentive 0.2 7 0.03
+  60 ledger-metered 0.2 7 0.03
+  61 ledger-props 0.2 7 0.03
+  62 ledger-showcase 0.2 7 0.03
+  63 ledger-venue 0.2 7 0.03
+  64 runner-profile-daily 0.2 12 0.02
+  65 ugc-sec-batch 0.2 7 0.03
+  66 compliance 0.1 15 0.01
+  67 ledger-settlement 0.1 7 0.01
+  68 member-entry 0.1 7 0.01
+  69 minors 0.1 19 0.01
+  70 tourstate 0.1 7 0.01
+top5-hotspots: watermark-sweep 24.6s, lobby 23.3s, watermark-scale-refine 16.2s, minors-wiring 15.7s, watermark-scale-unknown 13.3s
+baseline written: qa/runner-profile-daily-baseline.json (source: qa/reconcile-daily-20261011-4.log, suites=70)
+
+[3] stale-baseline check (byte-identical regen from recorded source)
+----------------------------------------------------------------------
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+
+[4] post-adoption dual-presence compare re-run (sentinel now in baseline)
+----------------------------------------------------------------------
+face: daily (population: reconcile-daily-*.log)
+== runner wall-time profile ==
+target: qa/reconcile-daily-20261011-4.log
+runner: RUNNER PASS (70/70 suites green, reconcile controls 7/7, 153.4s)
+parsed: suites=70 criteria_total=699 suite_seconds_sum=152.1 runner_total=153.4
+registry: ALIGNED (SUITES has 70 entries)
+sentinel-segment: 0.3s (daily sentinel subprocess elapsed)
+profile (rank label seconds criteria sec-per-criterion):
+  1 watermark-sweep 24.6 6 4.10
+  2 lobby 23.3 16 1.46
+  3 watermark-scale-refine 16.2 6 2.70
+  4 minors-wiring 15.7 70 0.22
+  5 watermark-scale-unknown 13.3 6 2.22
+  6 watermark-scale-recover 7.5 7 1.07
+  7 schema-migrate 5.7 21 0.27
+  8 pay-notify-revoke 5.5 7 0.79
+  9 ugc 4.8 37 0.13
+  10 fingerprint-regen 4.1 16 0.26
+  11 watermark-robust 2.0 6 0.33
+  12 pay-notify-wiring 1.7 7 0.24
+  13 pay 1.6 16 0.10
+  14 watermark 1.6 5 0.32
+  15 member 1.5 16 0.09
+  16 ledger-clawback 1.4 8 0.17
+  17 dual-track 1.2 7 0.17
+  18 member-refund-recovery 1.1 7 0.16
+  19 ledger-apidev-rejectwin 1.0 7 0.14
+  20 suite-matrix-discovery 1.0 16 0.06
+  21 opsreview 0.9 7 0.13
+  22 pay-revoke-reconcile 0.9 7 0.13
+  23 ledger 0.7 11 0.06
+  24 ledger-apidev-usagelog 0.7 7 0.10
+  25 pay-v3-window 0.7 6 0.12
+  26 ledger-tmarket 0.6 7 0.09
+  27 ledger-apidev-reject 0.5 7 0.07
+  28 ledger-studio 0.5 7 0.07
+  29 pay-authorize 0.5 7 0.07
+  30 pay-notify 0.5 7 0.07
+  31 pay-v3 0.5 14 0.04
+  32 pay-v3-real 0.5 9 0.06
+  33 reconcile-daily-sentinel 0.5 8 0.06
+  34 ledger-apidev-rate 0.4 7 0.06
+  35 ledger-apidev-usagewin 0.4 8 0.05
+  36 ledger-effects 0.4 7 0.06
+  37 ledger-identity 0.4 7 0.06
+  38 ledger-observation 0.4 7 0.06
+  39 ledger-apidev 0.3 7 0.04
+  40 ledger-apidev-lifecycle 0.3 8 0.04
+  41 ledger-apidev-usagekind 0.3 8 0.04
+  42 ledger-civicpoints 0.3 13 0.02
+  43 ledger-companion 0.3 7 0.04
+  44 ledger-curation 0.3 12 0.02
+  45 ledger-devshare 0.3 7 0.04
+  46 ledger-festival 0.3 7 0.04
+  47 ledger-honorcert 0.3 7 0.04
+  48 ledger-reports 0.3 7 0.04
+  49 ledger-showroom 0.3 7 0.04
+  50 ledger-sistercity 0.3 7 0.04
+  51 liveroom 0.3 10 0.03
+  52 reconcile-daily-profile 0.3 7 0.04
+  53 benchgate 0.2 11 0.02
+  54 citymodel 0.2 10 0.02
+  55 ledger-ads 0.2 7 0.03
+  56 ledger-collectibles 0.2 7 0.03
+  57 ledger-expedite 0.2 7 0.03
+  58 ledger-growth-archive 0.2 7 0.03
+  59 ledger-incentive 0.2 7 0.03
+  60 ledger-metered 0.2 7 0.03
+  61 ledger-props 0.2 7 0.03
+  62 ledger-showcase 0.2 7 0.03
+  63 ledger-venue 0.2 7 0.03
+  64 runner-profile-daily 0.2 12 0.02
+  65 ugc-sec-batch 0.2 7 0.03
+  66 compliance 0.1 15 0.01
+  67 ledger-settlement 0.1 7 0.01
+  68 member-entry 0.1 7 0.01
+  69 minors 0.1 19 0.01
+  70 tourstate 0.1 7 0.01
+top5-hotspots: watermark-sweep 24.6s, lobby 23.3s, watermark-scale-refine 16.2s, minors-wiring 15.7s, watermark-scale-unknown 13.3s
+== drift compare vs qa/reconcile-daily-20261011-4.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite watermark-sweep base=24.6s cur=24.6s delta=+0.0s slack=12.30s OK
+suite lobby base=23.3s cur=23.3s delta=+0.0s slack=11.65s OK
+suite watermark-scale-refine base=16.2s cur=16.2s delta=+0.0s slack=8.10s OK
+suite minors-wiring base=15.7s cur=15.7s delta=+0.0s slack=7.85s OK
+suite watermark-scale-unknown base=13.3s cur=13.3s delta=+0.0s slack=6.65s OK
+suite watermark-scale-recover base=7.5s cur=7.5s delta=+0.0s slack=3.75s OK
+suite schema-migrate base=5.7s cur=5.7s delta=+0.0s slack=2.85s OK
+suite pay-notify-revoke base=5.5s cur=5.5s delta=+0.0s slack=2.75s OK
+suite ugc base=4.8s cur=4.8s delta=+0.0s slack=2.40s OK
+suite fingerprint-regen base=4.1s cur=4.1s delta=+0.0s slack=2.05s OK
+suite watermark-robust base=2.0s cur=2.0s delta=+0.0s slack=2.00s OK
+suite pay-notify-wiring base=1.7s cur=1.7s delta=+0.0s slack=2.00s OK
+suite pay base=1.6s cur=1.6s delta=+0.0s slack=2.00s OK
+suite watermark base=1.6s cur=1.6s delta=+0.0s slack=2.00s OK
+suite member base=1.5s cur=1.5s delta=+0.0s slack=2.00s OK
+suite ledger-clawback base=1.4s cur=1.4s delta=+0.0s slack=2.00s OK
+suite dual-track base=1.2s cur=1.2s delta=+0.0s slack=2.00s OK
+suite member-refund-recovery base=1.1s cur=1.1s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-rejectwin base=1.0s cur=1.0s delta=+0.0s slack=2.00s OK
+suite suite-matrix-discovery base=1.0s cur=1.0s delta=+0.0s slack=2.00s OK
+suite opsreview base=0.9s cur=0.9s delta=+0.0s slack=2.00s OK
+suite pay-revoke-reconcile base=0.9s cur=0.9s delta=+0.0s slack=2.00s OK
+suite ledger base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-usagelog base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite pay-v3-window base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite ledger-tmarket base=0.6s cur=0.6s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-reject base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-studio base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-authorize base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-notify base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-v3 base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-v3-real base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite reconcile-daily-sentinel base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-rate base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-usagewin base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-effects base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-identity base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-observation base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-apidev base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-lifecycle base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-usagekind base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-civicpoints base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-companion base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-curation base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-devshare base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-festival base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-honorcert base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-reports base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showroom base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-sistercity base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite liveroom base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite reconcile-daily-profile base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite benchgate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite citymodel base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-ads base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-collectibles base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-expedite base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-growth-archive base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-incentive base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-metered base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-props base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-showcase base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-venue base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite runner-profile-daily base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ugc-sec-batch base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite compliance base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite ledger-settlement base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite member-entry base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite minors base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+suite tourstate base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+total-shared base=152.1s cur=152.1s delta=+0.0s slack=76.05s OK (shared=70 labels)
+sentinel-segment base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+verdict: DRIFT-CLEAN (70 compared, 0 flagged)
+
+================================================================================
+[5] verdict summary (R1761 adoption-window close)
+- trigger verified: qa/reconcile-daily-20261011-4.log is the first REAL daily
+  evidence carrying the sentinel elapsed tail (sentinel exit=0 elapsed=0.3s;
+  RUNNER PASS 70/70, controls 7/7, G0 green per R1760 day-close)
+- [1] pre-adoption compare: sentinel-segment 0.3s NEW-SEGMENT (no baseline
+  entry) = adoption gap confirmed; drift-clean verdict (50 shared compared,
+  0 flagged; total-shared +13.0s within slack); first real sentinel reading
+  captured (0.3s)
+- [2] adoption: --daily --update-baseline -> baseline rewritten
+  (source=qa/reconcile-daily-20261011-4.log, suites=70, sentinel_seconds=0.3)
+- [3] stale-baseline check: byte-identical PASS (deterministic regen)
+- [4] post-adoption re-run: sentinel-segment base=0.3s cur=0.3s OK =
+  NEW-SEGMENT -> dual-presence compare promoted (70 compared, 0 flagged,
+  DRIFT-CLEAN); NEW-SEGMENT line gone
+- hygiene: main baseline untouched (runner-profile-baseline.json source
+  unchanged, no sentinel key = daily/main isolation preserved); shipped
+  config zero-change; zero code changes (measurement face, R1727 probe
+  precedent); observation-window law (R1733) preserved - profile exit stays
+  recorded-not-gating until the promotion window ruling (tech row: daily
+  observation-window promotion, R1733 successor)

@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-11T01:10:30+08:00",
+ "export_ts": "2026-10-11T01:35:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1760 一轮干了三件事（有实物）：①软著材料做好了——70 个沙箱套件的源代码分页成册+设计说明书草稿，名字先标「定名待定」，等 CEO 定名和服务器到位就能正式申请；②每天的对账自检今早连跑两次都报错，查清是检查脚本自己的老毛病（把另一套件的正常输出误判成违规），修好后重跑：70 项检查全绿，当天问题当天闭环；③台账日志例行压缩一次，缺的验证记录补齐。",
-  "latest_artifact": "最近实物：docs/copyright/name-pending/（软著源程序 60 页成册+设计说明书草稿+机读清单·2026-10-11 01:0x）+tools/generate_copyright_materials.py（定名后一键重出材料）+qa/reconcile-daily-20261011-4.log（对账 70/70 全绿证据）",
-  "next_milestone": "下轮起：软著正式申请等两个前置（平台名 CEO 定+服务器到位）；每日对账常设照跑；雷达下窗清单与 BigLife R777 复核档续候——窗 ≤48h=2026-10-13"
+  "current": "R1761 一轮两件事：①修好了一个文件格式小毛病（台账文件有 35 行换行符不规范，机械修复并加了自动检查）；②每日对账的耗时监控段正式入底：今天的真实对账证据首次带上哨兵段耗时（0.3 秒），已收进基线——以后每天的对账都会自动监控这一段的耗时漂移（四步验证全绿）。",
+  "latest_artifact": "最近实物：qa/sentinel-adopt-R1761.log（哨兵段收养四节证据·双在比对转正坐实）+qa/runner-profile-daily-baseline.json（sentinel_seconds=0.3 入日基线·2026-10-11 01:3x）；软著材料 docs/copyright/name-pending/ 仍等 CEO 定名后正式申请",
+  "next_milestone": "下轮起：软著正式申请等两个前置（平台名 CEO 定+服务器到位）；每日对账常设照跑（哨兵段已入基线=明日起双在比对）；雷达下窗清单与 BigLife R777 复核档续候——窗 ≤48h=2026-10-13"
  },
  "depts": [
   {
@@ -187,6 +187,10 @@
  ],
  "results": [
   [
+   "1",
+   "R1761 哨兵段收养窗收口（P2 tech 队头·R1737 后续触发兑现：qa/reconcile-daily-20261011-4.log=首个含 elapsed 尾行真实 daily 证据→预收养比对 NEW-SEGMENT 态实锚+首笔真实哨兵段读数 0.3s+drift-clean 50/0→--daily --update-baseline 收养（sentinel_seconds=0.3 入日基线·source=-4 证据）→--check byte-identical→双在比对转正复跑 DRIFT-CLEAN 70/0 NEW-SEGMENT 消失·主基线零触碰·测量面零代码·证据 qa/sentinel-adopt-R1761.log 五节+[STATE] eol_bare_lf=35 修复（logs_toolkit eol --fix·verify 过）·R1761）"
+  ],
+  [
    "2",
    "R1760 三件收口轮（fold R480 后验闭证 qa/reorg-R1760.log+软著材料预备交付 D-20261011-03〔AC-SR1..SR7 全过·产物三件 docs/copyright/name-pending/·确定性双跑 byte-identical·qa/copyright-prep-R1760.log〕+每日对账 pd5-live-step 潜伏缺陷修复+当日 G0 闭环〔根因=全文本禁词扫描撞 runner-profile-daily fixture 渲染行·修复=追加分节收窄+marker 相对计数 AC-PD5F1/F2·第三跑 RUNNER PASS 70/70 套件 699 判据 controls 7/7=qa/reconcile-daily-20261011-4.log·晨跑两 FAIL 证据 -2/-3 在盘〕+W21 小程序登录官方页直采入册〔benchmarks+intelligence-wall·benchmarks_refreshed=2026-10-11〕·R1760）"
   ],
@@ -291,7 +295,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1760",
+   "1761",
    "OSLoop 执行 tick"
   ],
   [
@@ -3142,15 +3146,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 22,
+  "log_lines_in_window": 24,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 8,
+  "substantive_non_idle_mention_lines": 9,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 6,
+  "queue_tech_open": 5,
   "queue_explore_open": 9,
-  "method": "R1760 fold-R480 post-verified + copyright-prep materials delivered (D-20261011-03, AC-SR1..SR7, deterministic double-run) + daily-reconcile pd5 latent-bug fixed, third run RUNNER PASS 70/70 suites 699 criteria controls 7/7, day closed G0 green (qa/reconcile-daily-20261011-4.log); tick row 1759 -> 1760"
+  "method": "R1761 sentinel-segment adoption window closed (first real daily evidence with elapsed tail -> baseline sentinel_seconds=0.3 adopted, NEW-SEGMENT -> dual-presence compare promoted, DRIFT-CLEAN 70/0, main baseline untouched, qa/sentinel-adopt-R1761.log) + state.json EOL repair (bare_lf 35->0)"
  }
 }
