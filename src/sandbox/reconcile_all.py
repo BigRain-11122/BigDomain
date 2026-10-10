@@ -452,6 +452,16 @@ SUITES = [
     # (AC-DS1..DS7 pre-registered in state/queue/explore.md).
     ("ledger-devshare",
      os.path.join("ledger", "test_devshare.py"), 7),
+    # R1763 explore-queue row: developer API marketplace face -
+    # listing idempotence + registry gate (DevKeyFace.dev_board
+    # public read face, before the content gate so off-register
+    # publishers burn zero msgSecCheck calls), purchase with the
+    # integer split law (incentive per-entry one-share structure
+    # reuse), purchaser-only rating; SecGate pre-gate on
+    # title/description (AC-AM1..AM7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-apimarket",
+     os.path.join("ledger", "test_apimarket.py"), 7),
 ]
 
 FAILS = 0

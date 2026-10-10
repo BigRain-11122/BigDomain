@@ -1,0 +1,14 @@
+PASS AC-AM1: listing t1=1 ai t1/t2=0/1 dup=True rows 1->3->3 badargs=8/8 unknown=True badid=True
+PASS AC-AM2: non-dev E_AM_NOT_DEV (gate calls 8->8->8 zero burn, worded probe still registry-rejected) rows 3==3 no-direct-read=True non-dev purchase ok (1 spend tx)
+PASS AC-AM3: title hit=True desc hit=True rows 3==3==3 no-gate=True fault=True (fail-closed, zero rows on every path)
+PASS AC-AM4: bob -10 (spend 1->2 share 1->2) row=(10,7,3) dup-before-spend=True self=True unknown=True badref=True badacct=True splits 10->(7,3) 3->(3,0) 7->(5,2) custom60/40=(6,4) badsplit=True/True db-check=True
+PASS AC-AM5: non-buyer=True dup=True stars-bad=3/3 rows=2 agg=(2,4.5) ledger_tx 13==13 (zero token movement)
+PASS AC-AM6: empty-disclaimer=True envelopes=True ai_view=0 ai_board dual-label=True ai_label=2 db-check=True
+PASS AC-AM7: ascii=True upd/del-execute-lines=0 net-import=True rng=True config-sha-stable=True independent-db=True (ledger tables untouched)
+
+SUITE PASS 7/7
+  
+--- regression: RUNNER PASS 71/71 suites 706 criteria controls 7/7 155.5s (full tee = qa/reconcile-all-R1763.log) --- 
+PASS generated docs/sandbox-suite-matrix.md (8048 bytes) - registry suites=71 criteria=706 evidence=qa/reconcile-all-R1763.log green=71/71
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8048 bytes, 71 suites, 706 criteria)
