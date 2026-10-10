@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-10T19:40:10+08:00",
+ "export_ts": "2026-10-10T19:59:41+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1746 pay 对账控制面 revokes 覆盖例交付轮（P2 队头·R1745 承传点名兑现）：reconcile.py 两查入位=check7 revoke_ref〔悬空引用 FAIL 点名〕+check8 revoke_dead〔死账纪律：活账==0 态零 cutoff 后 sent 行=FAIL 点名〕+notify db 三态解析〔显式>auto>六查模式 skip 行·显式缺件 fail-closed〕；runner demo 世界 notify 腿〔公共 API grant→revoke 死账对〕断言升 checks=8/8+revokes 篡改腿 exit 2 两查点名+controls 7/7；套件 test_pay_revoke_recon.py 7/7 首跑绿·RUNNER PASS 64/64 判据 646 零回归〔test_pay AC-Y12 六查模式保真〕·矩阵 64/646 --check byte-identical·指纹哨兵 CLEAN domains=5；fold R475 同窗落地〔82,424B→65,882B·catalog 271 token 零丢失·verify-then-write 逐字节〕",
-  "latest_artifact": "最近实物：R1746 pay 对账控制面 revokes 覆盖例三件（src/sandbox/pay/reconcile.py 两查+src/sandbox/pay/test_pay_revoke_recon.py 套件 7/7+src/sandbox/reconcile_all.py demo/篡改/controls 7/7 接线·证据=qa/pay-revoke-recon-R1746.log+qa/reconcile-all-R1746.log）+R1746 fold R475 水位整编（qa/reorg-R1746.log）+R1745 定价生效接线三件（BLUEPRINT §四/§十+price-canon-spec v0.3+member config 四档注记）",
-  "next_milestone": "下轮首=P2 tech 队列再判（门控行跳过：docker 行缺位跳过·收养窗 gated 10-11 首笔 elapsed daily 证据）+每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗随首笔真实读数开窗）——窗 ≤48h=2026-10-12"
+  "current": "R1747 watermark 0.7× 恢复精化面判负定谳轮（P2 队头·R1746 承传点名兑现·轮计分 2=可跑实物）：套件 test_scale_refine.py SUITE PASS 6/6——基线逐位复现 R1725 在册值（0.4883/0.2891 交叉验证闭环）·search_num 扩阶 {500,1000} 全域零增益（读数与 200 档逐位同一=搜索粒度已收敛）·两轮窗收窄反劣化（0.3516>0.2891·窄窗细采样 loc 一像素偏移）→0.7× 残余=缩小插值信息损失面坐实·不可经搜索精化入 0.10 带〔判负留痕合法=预注册本意〕；RUNNER PASS 65/65 判据 652 controls 7/7 193.6s 零回归·矩阵 65/652 --check byte-identical·消费落点=implicit-watermark-verify.md §六 生产调参注记（强缩小档恢复边界·不为该档配置精化搜索成本）",
+  "latest_artifact": "最近实物：R1747 watermark 0.7× 恢复精化实验三件（src/sandbox/watermark/test_scale_refine.py 套件 6/6+src/sandbox/reconcile_all.py SUITES 64→65 接线+docs/spec/implicit-watermark-verify.md §六 生产调参注记·证据=qa/watermark-scale-refine-R1747.log+qa/reconcile-all-R1747.log+docs/sandbox-suite-matrix.md 65 套件 652 判据全 green）",
+  "next_milestone": "下轮首=P2 tech 队列再判（次队头=apidev 窗参数格式锚硬化面〔regex 尾锚容尾随换行的 fail-closed 缺口硬化〕·收养窗 gated 10-11 首笔 elapsed daily 证据）+每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗随首笔真实读数开窗）——窗 ≤48h=2026-10-12"
  },
  "depts": [
   {
@@ -251,7 +251,7 @@
    "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
   ],
   [
-   "1746",
+   "1747",
    "OSLoop 执行 tick"
   ],
   [
@@ -3081,20 +3081,24 @@
   [
    "1",
    "fold R475 水位整编收口件（R1745 承传注记兑现·轮首首测 82,424B 越线 3,924B＝P-2026-09-25-18 第四百七十五刀·tail-11 窗=fold R473/R474 产物行+R1736 postfold 三行+R1743..R1745 六行 20,282B 压 1 滚窗行 kept=0·catalog 271 token 全字面嵌零丢失〔预校验+post archive 对 state.json 复校 271/271〕·verify-then-write post==predicted 65,882B margin 12,618B·archive §R1746 11 行 verbatim+preop 备份·post gauge/eol/catalog 三面过·证据 qa/reorg-R1746.log 六节）"
+  ],
+  [
+   "2",
+   "watermark 0.7× 缩小例恢复精化面判负定谳件（R1747·P2 队头·R1725 后继·AC-UKR1..UKR7 预注册先于代码：test_scale_refine.py 四路径精化实测——基线逐位复现 R1725 在册值（direct 0.4883/recovered 0.2891 交叉验证）+search_num 扩阶 {500,1000} 全域零增益（与 200 档逐位同一=搜索粒度已收敛）+两轮窗收窄反劣化（est2 1.4275 带内·ber 0.3516>0.2891·loc 一像素偏移）→FINAL-VERDICT NO·0.7× 残余=缩小插值信息损失面（信息论性）判负留痕合法；reconcile_all SUITES 64→65〔判据 646→652〕·RUNNER PASS 65/65 controls 7/7 193.6s 零回归·矩阵再生 65/652 green --check byte-identical；消费落点=implicit-watermark-verify.md §六 生产调参注记（强缩小档 ≤0.7× 类恢复边界·不为该档配置精化搜索成本）；顺手簿记=tech.md R1740 撤销面陈旧复选框翻正〔29d63c9 在册〕·tech open 10→8；证据 qa/watermark-scale-refine-R1747.log 三节）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-04..2026-10-10",
   "window_days": 7,
-  "log_lines_in_window": 19,
+  "log_lines_in_window": 22,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 8,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 10,
+  "queue_tech_open": 8,
   "queue_explore_open": 10,
-  "method": "R1745 pricing-wiring round (score 1 = real file change): C-20261010-03 clause-4 canon wiring landed across BLUEPRINT + price-canon-amendment-spec v0.3 (seat-7 BILLING GATE co-gate column, three-gate serial enforcement) + member config four-tier annotations; scope per bill = case A ladder 19.9/29.9/49.9 effective + N1-N7 additions effective with batch + deployment-prep unlocked, billing gate stays CLOSED on merchant-account physical; three suites direct-run zero regression with AC-E6/E7 anchors preserved; in-window lines +2 (R1745 pair dated 2026-10-10); tick row 1744 -> 1745; fold R475 carried (round-start gauge 79527B over line, next round-start gauge)"
+  "method": "R1747 watermark refine verdict round (score 2 = runnable artifact): 0.7x case search-refinement experiment (search_num expansion + two-round window narrowing) measured NOT-IMPROVED with full readings (in-book baseline reproduced bit-exact; search granularity converged at 200; interpolation information loss confirmed as the residual) per AC-UKR1..UKR7 pre-registered; RUNNER 65/65 criteria 652 zero-regression, matrix 65/652 --check byte-identical; spec consumption = implicit-watermark-verify sec 6 production-tuning note; in-window lines +2 (R1747 pair); tick row 1746 -> 1747"
  }
 }

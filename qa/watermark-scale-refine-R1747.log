@@ -1,0 +1,34 @@
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-UKR1: control anchor: clean-roundtrip-exact=True wm_bits=256; baseline repro: direct-ber=0.4883 (in-book 0.4883) recovered-ber=0.2891 (in-book 0.2891) scale_infer=1.4286 true=1.4286 - cross-check note, no float-equality gate
+PASS AC-UKR2: search_num expansion grid: search500: ber=0.2891 scale_infer=1.4286 score=0.636746 loc=(0, 0, 640, 480) cover=True; search1000: ber=0.2891 scale_infer=1.4286 score=0.636746 loc=(0, 0, 640, 480) cover=True
+PASS AC-UKR3: two-round: est1=1.4286 window2=(1.4000,1.4571) est2=1.4275 band=(1.2857,1.5714) band-ok=True cover=True ber=0.3516 score=0.636746
+  VERDICT baseline-repro NOT-IMPROVED (ber=0.2891 baseline=0.2891)
+  VERDICT search500 NOT-IMPROVED (ber=0.2891 baseline=0.2891)
+  VERDICT search1000 NOT-IMPROVED (ber=0.2891 baseline=0.2891)
+  VERDICT two-round NOT-IMPROVED (ber=0.3516 baseline=0.2891)
+BEST-PATH baseline-repro ber=0.2891 verdict=NOT-IMPROVED
+FINAL-VERDICT 0.7x refinement reached 0.10 band: NO
+  | baseline-repro ber=0.2891 verdict=NOT-IMPROVED scale_infer=1.4286 score=0.636746 loc=(0, 0, 640, 480)
+  | search500 ber=0.2891 verdict=NOT-IMPROVED scale_infer=1.4286 score=0.636746 loc=(0, 0, 640, 480)
+  | search1000 ber=0.2891 verdict=NOT-IMPROVED scale_infer=1.4286 score=0.636746 loc=(0, 0, 640, 480)
+  | two-round ber=0.3516 verdict=NOT-IMPROVED scale_infer=1.4275 score=0.636746 loc=(0, 0, 639, 479)
+PASS AC-UKR4: verdict surface: 4/4 VERDICT lines + best-path=baseline-repro (ber=0.2891) + final=not-reached (negative lawful per pre-registration)
+PASS AC-UKR5: determinism: baseline-repro rerun-identical=True; search500 rerun-identical=True; search1000 rerun-identical=True; two-round rerun-identical=True
+PASS AC-UKR6: hygiene: source-ascii=True bad-imports=none; suite writes only temp-dir artifacts (zero repo/config touch)
+SUITE PASS (6/6 criteria pass)
+[ WARN:0@0.433] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+--- section: full regression RUNNER (qa/reconcile-all-R1747.log) ---
+RUNNER PASS (65/65 suites green, reconcile controls 7/7, 193.6s)
+PASS suite watermark-scale-refine exit=0 pass-lines=6 fail-lines=0 criteria=6 20.1s
+zero regression: all 64 prior suites green, expected criteria total=652
+
+--- section: matrix regen + --check roundtrip ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7622 bytes, 65 suites, 652 criteria)
+double --check byte-identical (fc: no differences encountered)
+evidence face: reconcile-all-R1747.log (default discovery, watermark-scale-refine row green 20.1s)

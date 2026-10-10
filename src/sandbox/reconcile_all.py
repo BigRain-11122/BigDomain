@@ -336,6 +336,13 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("watermark-scale-unknown",
      os.path.join("watermark", "test_scale_unknown.py"), 6),
+    # R1747 search-refinement experiment on the R1725 IMPROVED 0.7x
+    # case: search_num expansion {500,1000} + two-round window
+    # narrowing; negative verdict (refinement cannot reach the 0.10
+    # band; residual = interpolation information loss) lawful per
+    # pre-registration (AC-UKR1..UKR6 in state/queue/tech.md).
+    ("watermark-scale-refine",
+     os.path.join("watermark", "test_scale_refine.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
