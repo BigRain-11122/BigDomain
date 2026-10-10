@@ -1,0 +1,6 @@
+auto-saves cleanup R1757 (BD-PROP-002 standing step, R1252/R1139 precedent)
+cut-off: files older than 2026-10-09 23:21:55 (now minus 24h)
+pre:  files=286 size=517.3MB (over 500MB line, purge triggered)
+del:  files=168 size=257.3MB
+post: files=118 size=260MB (back under 500MB line: True)
+scope: auto-saves only; skills/tmp untouched; zero git-tracked files touched (dir is gitignored)
