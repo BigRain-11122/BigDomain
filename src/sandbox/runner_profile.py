@@ -89,6 +89,15 @@ RUNNER_RE = re.compile(
     r"reconcile controls (\d+)/(\d+), ([0-9.]+)s\)")
 FAIL_SUITE_RE = re.compile(r"(?m)^FAIL suite ")
 
+# R1737 (AC-SN2, pre-registered in tech.md before this change): daily
+# evidence logs carry the sentinel subprocess elapsed in their tail
+# line ("sentinel exit=N elapsed=X.Xs" - reconcile_daily.py AC-SN1).
+# Exactly one such line is expected; the pre-R1737 legacy form
+# ("sentinel exit=N", no elapsed) parses as sentinel_seconds=None and
+# logs without any sentinel section (the main face) stay inert.
+SENTINEL_TAIL_RE = re.compile(
+    r"(?m)^sentinel exit=(\d+) elapsed=([0-9.]+)s$")
+
 DRIFT_ABS_FLOOR = 2.0
 DRIFT_REL = 0.5
 
@@ -141,12 +150,18 @@ def parse_log(path):
     if len(suites) != green:
         raise Refusal("suite lines %d != RUNNER green %d"
                       % (len(suites), green))
+    tails = SENTINEL_TAIL_RE.findall(text)
+    if len(tails) > 1:
+        raise Refusal("multiple sentinel tail lines (inconsistent "
+                      "evidence)")
+    sentinel_seconds = float(tails[0][1]) if tails else None
     return {"path": path,
             "runner_line": runner_line,
             "runner_total": runner_total,
             "suites": suites,
             "criteria_total": sum(s["criteria"] for s in suites),
-            "seconds_sum": sum(s["seconds"] for s in suites)}
+            "seconds_sum": sum(s["seconds"] for s in suites),
+            "sentinel_seconds": sentinel_seconds}
 
 
 def discover_target():
@@ -198,8 +213,11 @@ def render_profile(data):
                 data["seconds_sum"], data["runner_total"]),
              "registry: %s (SUITES has %d entries)"
              % (registry_note(len(data["suites"])),
-                len(reconcile_all.SUITES)),
-             "profile (rank label seconds criteria sec-per-criterion):"]
+                len(reconcile_all.SUITES))]
+    if data.get("sentinel_seconds") is not None:
+        lines.append("sentinel-segment: %.1fs (daily sentinel "
+                     "subprocess elapsed)" % data["sentinel_seconds"])
+    lines.append("profile (rank label seconds criteria sec-per-criterion):")
     ordered = sorted(data["suites"],
                      key=lambda s: (-s["seconds"], s["label"]))
     for rank, s in enumerate(ordered, 1):
@@ -258,6 +276,28 @@ def render_compare(cur, baseline):
                  "slack=%.2fs %s (shared=%d labels)"
                  % (base_shared, cur_shared, cur_shared - base_shared,
                     slack_t, "FLAG" if over_t else "OK", len(shared)))
+    # R1737 AC-SN4 (pre-registered): sentinel-segment drift, same
+    # threshold family as suites (drift iff cur > base +
+    # max(2.0s, 0.5*base)). Three states: both present -> compare;
+    # current-only -> NEW-SEGMENT info (NEW-SUITE family, never a
+    # flag); baseline-only -> ABSENT info (pre-R1737 log, never a
+    # flag). Both absent -> no line (legacy output byte-identical).
+    cur_sent = cur.get("sentinel_seconds")
+    base_sent = baseline.get("sentinel_seconds")
+    if cur_sent is not None and base_sent is not None:
+        slack_s = drift_slack(base_sent)
+        over_s = cur_sent > base_sent + slack_s
+        if over_s:
+            flagged.append("SENTINEL-SEGMENT")
+        lines.append("sentinel-segment base=%.1fs cur=%.1fs "
+                     "delta=%+.1fs slack=%.2fs %s"
+                     % (base_sent, cur_sent, cur_sent - base_sent,
+                        slack_s, "FLAG" if over_s else "OK"))
+    elif cur_sent is not None:
+        lines.append("sentinel-segment %.1fs NEW-SEGMENT (no baseline "
+                     "entry)" % cur_sent)
+    elif base_sent is not None:
+        lines.append("sentinel-segment ABSENT (pre-R1737 log)")
     if flagged:
         lines.append("verdict: DRIFT-FLAG (%d flagged: %s)"
                      % (len(flagged), ", ".join(sorted(flagged))))
@@ -269,7 +309,7 @@ def render_compare(cur, baseline):
 
 def baseline_dict(data):
     rel = os.path.relpath(data["path"], REPO).replace(os.sep, "/")
-    return {
+    out = {
         "source_log": rel,
         "runner_line": data["runner_line"],
         "suites_count": len(data["suites"]),
@@ -279,6 +319,13 @@ def baseline_dict(data):
         "suite_seconds": dict((s["label"], s["seconds"])
                               for s in data["suites"]),
     }
+    # R1737 AC-SN5: key present only when the source log carried the
+    # elapsed-form sentinel tail - existing baselines (written from
+    # legacy or main-face logs) round-trip byte-identically under
+    # --check with zero re-freezing.
+    if data.get("sentinel_seconds") is not None:
+        out["sentinel_seconds"] = data["sentinel_seconds"]
+    return out
 
 
 def baseline_bytes(data):

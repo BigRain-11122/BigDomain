@@ -9,6 +9,8 @@ mirror the real daily-log shape; QA_DIR is monkeypatched to a temp
 dir so the live qa/ population is never touched.
 """
 
+import contextlib
+import io
 import os
 import shutil
 import sys
@@ -20,7 +22,7 @@ import runner_profile as RP  # noqa: E402 (module under test)
 
 
 def write_log(dirpath, name, suites, runner_secs, sentinel=True,
-              runner_fail=False):
+              runner_fail=False, sentinel_secs=None, double_tail=False):
     lines = []
     for label, secs in suites:
         lines.append("PASS suite %s exit=0 pass-lines=1 fail-lines=0 "
@@ -32,7 +34,14 @@ def write_log(dirpath, name, suites, runner_secs, sentinel=True,
         lines.append("RUNNER PASS (%d/%d suites green, reconcile "
                      "controls 6/6, %.1fs)"
                      % (len(suites), len(suites), runner_secs))
-    if sentinel and not runner_fail:
+    if sentinel_secs is not None:
+        # R1737 AC-SN2: elapsed-form sentinel tail line
+        lines.append("--- sentinel: fingerprint-regen --check ---")
+        lines.append("verdict CLEAN domains=5")
+        lines.append("sentinel exit=0 elapsed=%.1fs" % sentinel_secs)
+        if double_tail:
+            lines.append("sentinel exit=0 elapsed=%.1fs" % sentinel_secs)
+    elif sentinel and not runner_fail:
         lines.append("--- sentinel: fingerprint-regen --check ---")
         lines.append("PASS domain=ledger baseline matches live "
                      "constructor (R1676 cross-validation)")
@@ -134,6 +143,100 @@ def main():
               % ("PASS" if ok else "FAIL", code))
         if not ok:
             problems.append("rd1-main-face")
+        # R1737 AC-SN2/SN3: tail-line three-state parse + render face
+        newer_form = write_log(tmp, "reconcile-daily-20260996.log",
+                               [("lobby", 5.0), ("pay", 9.5)], 14.5,
+                               sentinel=False, sentinel_secs=3.2)
+        legacy_form = write_log(tmp, "reconcile-daily-20260995.log",
+                                [("lobby", 5.0), ("pay", 9.5)], 14.5)
+        main_form = write_log(tmp, "reconcile-all-R9900.log",
+                              [("ledger", 3.0)], 3.0, sentinel=False)
+        p_new = RP.parse_log(newer_form)
+        p_leg = RP.parse_log(legacy_form)
+        p_main = RP.parse_log(main_form)
+        ok = (p_new["sentinel_seconds"] == 3.2
+              and p_leg["sentinel_seconds"] is None
+              and p_main["sentinel_seconds"] is None
+              and "sentinel-segment: 3.2s"
+              in RP.render_profile(p_new)
+              and "sentinel-segment"
+              not in RP.render_profile(p_main)
+              and "sentinel_seconds" in RP.baseline_dict(p_new)
+              and "sentinel_seconds" not in RP.baseline_dict(p_main))
+        print("%s sn1-tail-parse-3states (new=%.1f legacy=%s main=%s)"
+              % ("PASS" if ok else "FAIL",
+                 p_new["sentinel_seconds"],
+                 p_leg["sentinel_seconds"], p_main["sentinel_seconds"]))
+        if not ok:
+            problems.append("sn1-parse")
+        # R1737 AC-SN4: sentinel drift FLAG (base 3.0 vs cur 9.5,
+        # slack max(2.0, 1.5)=2.0 -> past threshold)
+        base_el = write_log(tmp, "reconcile-daily-20260994.log",
+                            [("lobby", 5.0), ("pay", 9.5)], 14.5,
+                            sentinel=False, sentinel_secs=3.0)
+        with open(RP.baseline_path(True), "wb") as handle:
+            handle.write(RP.baseline_bytes(RP.parse_log(base_el)))
+        cur_el = write_log(tmp, "reconcile-daily-20260993.log",
+                           [("lobby", 5.0), ("pay", 9.5)], 14.5,
+                           sentinel=False, sentinel_secs=9.5)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = RP.main(["runner_profile.py", "--daily", "--log",
+                            cur_el])
+        out = buf.getvalue()
+        ok = (code == 2 and "SENTINEL-SEGMENT" in out
+              and "sentinel-segment base=3.0s cur=9.5s" in out
+              and "DRIFT-FLAG" in out)
+        print("%s sn2-sentinel-drift-flag-exit2 (exit=%d)" % ("PASS" if ok
+                                                              else "FAIL",
+                                                              code))
+        if not ok:
+            problems.append("sn2-drift")
+        # R1737 AC-SN4: NEW-SEGMENT info (legacy baseline, current
+        # carries elapsed) - never a drift flag
+        base_leg = write_log(tmp, "reconcile-daily-20260992.log",
+                             [("lobby", 5.0), ("pay", 9.5)], 14.5)
+        with open(RP.baseline_path(True), "wb") as handle:
+            handle.write(RP.baseline_bytes(RP.parse_log(base_leg)))
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = RP.main(["runner_profile.py", "--daily", "--log",
+                            cur_el])
+        out = buf.getvalue()
+        ok = (code == 0 and "NEW-SEGMENT (no baseline entry)" in out
+              and "DRIFT-FLAG" not in out)
+        print("%s sn3-new-segment-info-not-flag (exit=%d)"
+              % ("PASS" if ok else "FAIL", code))
+        if not ok:
+            problems.append("sn3-new-seg")
+        # R1737 AC-SN4: ABSENT info (baseline has sentinel, current
+        # log is pre-R1737 legacy) + double-tail Refusal
+        with open(RP.baseline_path(True), "wb") as handle:
+            handle.write(RP.baseline_bytes(RP.parse_log(base_el)))
+        legacy_cur = write_log(tmp, "reconcile-daily-20260991.log",
+                               [("lobby", 5.0), ("pay", 9.5)], 14.5)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = RP.main(["runner_profile.py", "--daily", "--log",
+                            legacy_cur])
+        out = buf.getvalue()
+        double = write_log(tmp, "reconcile-daily-20260990.log",
+                           [("lobby", 5.0), ("pay", 9.5)], 14.5,
+                           sentinel=False, sentinel_secs=1.0,
+                           double_tail=True)
+        buf2 = io.StringIO()
+        with contextlib.redirect_stdout(buf2):
+            code2 = RP.main(["runner_profile.py", "--daily", "--log",
+                             double])
+        ok = (code == 0
+              and "sentinel-segment ABSENT (pre-R1737 log)" in out
+              and "DRIFT-FLAG" not in out
+              and code2 == 3
+              and "multiple sentinel tail lines" in buf2.getvalue())
+        print("%s sn4-absent-info+double-tail-refusal (absent=%d "
+              "refusal=%d)" % ("PASS" if ok else "FAIL", code, code2))
+        if not ok:
+            problems.append("sn4-absent-refusal")
         # AC-RD5: hygiene - ascii source, no network imports
         hyg = RP.hygiene_report()
         ok = not hyg
@@ -147,7 +250,7 @@ def main():
     if problems:
         print("SUITE FAIL (%s)" % ",".join(problems))
         return 1
-    print("SUITE PASS 8/8")
+    print("SUITE PASS 12/12")
     return 0
 
 

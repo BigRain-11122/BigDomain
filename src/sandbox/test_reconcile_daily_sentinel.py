@@ -9,6 +9,8 @@ Checks:
   fs4-sentinel-argv   captured argv == sentinel_command(), cwd=BASE (FS1)
   fs5-hygiene         ASCII + no-net imports + shipped files clean
   fs6-same-day-suffix two stub runs -> -2 suffix, no overwrite (AC-FS3)
+  fs7-elapsed-tail-live  live tail line carries elapsed (R1737 AC-SN1)
+  fs8-elapsed-tail-stub  stub-world tail line carries elapsed (AC-SN1)
 """
 
 import contextlib
@@ -108,6 +110,10 @@ def main():
               and text.count(RD.SENTINEL_MARKER) == 1
               and len(re.findall(r"(?m)^PASS domain=", text)) == 5)
         check(ok, "fs1-live-sentinel exit=%d marker+CLEAN+5-domains" % code)
+        # R1737 AC-SN1: the live tail line now carries elapsed
+        ok7 = re.search(r"(?m)^sentinel exit=%d elapsed=[0-9.]+s$"
+                       % code, text) is not None
+        check(ok7, "fs7-elapsed-tail-live (R1737 AC-SN1)")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -128,6 +134,10 @@ def main():
               and "baseline drift" in text
               and "sentinel exit=2" in text)
         check(ok, "fs2-aggregate-drift (0,2)->exit=%d FAIL drift" % code)
+        # R1737 AC-SN1: stub world still measures + writes elapsed
+        ok8 = re.search(r"(?m)^sentinel exit=2 elapsed=[0-9.]+s$",
+                        text) is not None
+        check(ok8, "fs8-elapsed-tail-stub (R1737 AC-SN1)")
     finally:
         restore(real_call, real_run, real_qa)
         shutil.rmtree(tmp, ignore_errors=True)

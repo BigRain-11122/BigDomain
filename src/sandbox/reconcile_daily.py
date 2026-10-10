@@ -42,6 +42,7 @@ Run under the same full-assembly python used for reconcile_all.py
 import os
 import subprocess
 import sys
+import time
 from datetime import datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -81,10 +82,19 @@ def run_sentinel(log_path):
 
     Returns the sentinel exit code. Append mode only - the runner
     section written earlier in the same file is never rewritten.
+
+    R1737 (AC-SN1, pre-registered in tech.md before this change): the
+    tail line now carries the sentinel subprocess elapsed time
+    ("sentinel exit=N elapsed=X.Xs") so the daily profile face
+    (runner_profile.py --daily) can consume the sentinel segment
+    duration; the marker line, captured output lines and the
+    RECONCILE-DAILY verdict line are unchanged.
     """
+    t0 = time.monotonic()
     proc = subprocess.run(sentinel_command(), capture_output=True,
                           text=True, encoding="utf-8", errors="replace",
                           timeout=600, cwd=BASE)
+    elapsed = time.monotonic() - t0
     with open(log_path, "a", encoding="utf-8", newline="\n") as handle:
         handle.write(SENTINEL_MARKER + "\n")
         out = (proc.stdout or "").strip()
@@ -93,7 +103,8 @@ def run_sentinel(log_path):
         err = (proc.stderr or "").strip()
         if err:
             handle.write(err + "\n")
-        handle.write("sentinel exit=%d\n" % proc.returncode)
+        handle.write("sentinel exit=%d elapsed=%.1fs\n"
+                     % (proc.returncode, elapsed))
     return proc.returncode
 
 

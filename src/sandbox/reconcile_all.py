@@ -345,8 +345,9 @@ SUITES = [
     # R1714 reconcile-daily-sentinel: schema-drift sentinel wired into
     # the daily wrapper (fingerprint_regen --check appended to the dated
     # evidence log; daily exit aggregation; AC-FS1..FS6 pre-registered in
-    # state/queue/tech.md).
-    ("reconcile-daily-sentinel", "test_reconcile_daily_sentinel.py", 6),
+    # state/queue/tech.md). R1737 extends with the elapsed-tail checks
+    # (fs7/fs8, AC-SN1) -> criteria 6->8.
+    ("reconcile-daily-sentinel", "test_reconcile_daily_sentinel.py", 8),
     # R1708 suite-matrix default-evidence discovery-face fix (R1695
     # naming gap: old face globbed reconcile-all-R*.log only; new face
     # walks qa/*.log newest-first with four fail-closed eligibility
@@ -357,7 +358,9 @@ SUITES = [
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser
     # inertia; AC-RD1..RD6 pre-registered in state/queue/tech.md).
-    ("runner-profile-daily", "test_runner_profile_daily.py", 8),
+    # R1737 extends with the sentinel-elapsed consumption checks
+    # (sn1..sn4, AC-SN2..SN4) -> criteria 8->12.
+    ("runner-profile-daily", "test_runner_profile_daily.py", 12),
     # R1733 reconcile-daily profile step: runner_profile --daily --check
     # appended to the dated evidence log after the sentinel; observation
     # window records the profile exit without gating the day (AC-PD1..PD7
