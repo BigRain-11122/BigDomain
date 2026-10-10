@@ -441,6 +441,17 @@ SUITES = [
     # R1755 explore-queue row).
     ("ledger-honorcert",
      os.path.join("ledger", "test_honorcert.py"), 7),
+    # R1759 developer revenue-share gradient face: settlement chain
+    # composed onto the IncentiveFace proper (band walk / collar /
+    # budget pro-rata / window idempotence - structure reuse, zero
+    # reimplementation) with the developer-ecosystem layers on top:
+    # registry gate through the DevKeyFace.dev_board public read
+    # face, usage-attribution intake from quota_used, devshare-
+    # prefix window namespace (cross-face idempotence through the
+    # shared incentive_windows table), read-only dock history face
+    # (AC-DS1..DS7 pre-registered in state/queue/explore.md).
+    ("ledger-devshare",
+     os.path.join("ledger", "test_devshare.py"), 7),
 ]
 
 FAILS = 0

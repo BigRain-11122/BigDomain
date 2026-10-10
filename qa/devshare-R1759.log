@@ -1,0 +1,34 @@
+=== devshare acceptance suite (R1759, AC-DS1..DS7 pre-registered in state/queue/explore.md before code) === 
+PASS AC-DS1: rejects=E_DS_BAD_ARGS/E_DS_BAD_ARGS/E_DS_BAD_ARGS/E_DS_NO_DISCLAIMER default-params-distinct=True table-set-stable=True
+PASS AC-DS2: ghost=True non-usr=True zero-movement=True (codes E_DS_NOT_DEV/E_AD_BAD_ARGS)
+PASS AC-DS3: gradient-ref-shared=True readings=34/15 paid=[('usr:ada', 34), ('usr:lin', 15)] share-tx +3 collar-flow=True
+PASS AC-DS4: re-settle=True zero-move=True cross-face-same-id-ok=True prefix-filter=True snap={'w-cap': 7, 'w1': 49} (code E_INC_WINDOW_DUP)
+PASS AC-DS5: derived-units(ada)=12 paid-order=[('usr:lin', 15), ('usr:ada', 34)] no-usage=True mixed=True bad-args=True/True (codes E_DS_NO_USAGE/E_DS_BAD_ARGS/E_DS_BAD_ARGS)
+PASS AC-DS6: empty=True totals={'w-cap': 7, 'w1': 49, 'w2': 49, 'w3': 34} row-keys=True source-select-only=True dock-read-only=True
+PASS AC-DS7: ascii=True net-imports=0 random=0 sql-writes=0 suite-wired=True config-sha-stable=True
+SUITE PASS 7/7 criteria
+  
+=== determinism second run === 
+PASS AC-DS1: rejects=E_DS_BAD_ARGS/E_DS_BAD_ARGS/E_DS_BAD_ARGS/E_DS_NO_DISCLAIMER default-params-distinct=True table-set-stable=True
+PASS AC-DS2: ghost=True non-usr=True zero-movement=True (codes E_DS_NOT_DEV/E_AD_BAD_ARGS)
+PASS AC-DS3: gradient-ref-shared=True readings=34/15 paid=[('usr:ada', 34), ('usr:lin', 15)] share-tx +3 collar-flow=True
+PASS AC-DS4: re-settle=True zero-move=True cross-face-same-id-ok=True prefix-filter=True snap={'w-cap': 7, 'w1': 49} (code E_INC_WINDOW_DUP)
+PASS AC-DS5: derived-units(ada)=12 paid-order=[('usr:lin', 15), ('usr:ada', 34)] no-usage=True mixed=True bad-args=True/True (codes E_DS_NO_USAGE/E_DS_BAD_ARGS/E_DS_BAD_ARGS)
+PASS AC-DS6: empty=True totals={'w-cap': 7, 'w1': 49, 'w2': 49, 'w3': 34} row-keys=True source-select-only=True dock-read-only=True
+PASS AC-DS7: ascii=True net-imports=0 random=0 sql-writes=0 suite-wired=True config-sha-stable=True
+SUITE PASS 7/7 criteria
+  
+=== fingerprint sentinel (zero schema touch, R1676 baseline fingerprints) === 
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+  
+=== matrix staleness double check (default evidence face = reconcile-all-R1759.log) === 
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7978 bytes, 70 suites, 699 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7978 bytes, 70 suites, 699 criteria)
+  
+=== full regression reference ===  
+RUNNER PASS (70/70 suites green, reconcile controls 7/7, 184.2s) = qa/reconcile-all-R1759.log 
