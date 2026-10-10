@@ -1,0 +1,54 @@
+=== S0 post-hoc verification context ===
+R1760 fold R480 (tail-6 -> 1 roll line) was applied by the interrupted R1760
+session (state.json surgery completed; this evidence log was NOT written before
+the session was cut). This file is the post-hoc verification written by the
+resumed R1760 continuation, from durable artifacts only (preop backup + archive
++ live state). The fold's verify-then-write prediction equality was claimed in
+the roll line by the interrupted session and cannot be re-run retroactively;
+everything below is re-verified first-hand from disk.
+
+=== S1 preop backup verification ===
+preop file: logs/state-preop-R1760.bak
+sha256: 1AB68934E31ECEC162647A655A0D0F99A093DF3F51F2CE4B4D507A4589E9EC88
+sha16: 1ab68934e31ecec1  (== roll line claim in live state.json, match)
+parse: python json OK, preop log lines = 28
+S1 verdict: preop intact, sha matches roll-line claim
+
+=== S2 window reconciliation (current vs preop) ===
+current log lines = 23, preop log lines = 28
+check: current_log[:-1] == preop_log[:-6]  -> True
+folded window (preop tail-6, all six preserved verbatim in archive sec-R1760):
+  1. fold R478 roll line (R1753..R1755 window)
+  2. fold R479 roll line (R1756..R1757 window)
+  3. R1758 fold closeout line
+  4. R1758 tokens line
+  5. R1759 devshare delivery closeout line
+  6. R1759 tokens line
+new tail-1 = fold R480 roll line (2026-10-11 R1758..R1759 window, catalog embedded)
+S2 verdict: window replacement exact, zero mutation outside window
+
+=== S3 archive verbatim + census ===
+archive: logs/state-log-archive-2026-10.md sec-R1760 (section found)
+logs_toolkit census: section integrity PASS (R1760 NOT in section_line_mismatches;
+global census "pass": true; only known adjudicated artifact = R1317 splice-era,
+unchanged)
+S3 verdict: archive verbatim preserved, census green
+
+=== S4 live roll line + catalog ===
+roll line present as live log tail, embeds token catalog (AC-C3|AC-HB1|AC-HC|
+AC-HC1|AC-HN1|AC-S8c|BD-PROP-003|C-20260901-01|D-03|D-20260930-19|D-20260930-20|
+D-33|O-* family|OH-20261008|OH-20261011|OH-20261011-bigdomain|P-* family|P-32|P-47|
+R-ABSENT|R-RAN per roll line; full list embedded in the roll line itself)
+dual parser: python json OK + PowerShell ConvertFrom-Json OK (23 log lines both)
+S4 verdict: roll line in place, dual-parse green
+
+=== S5 post gauge ===
+disk bytes = 73317, gate = 78500, margin = +5183 (under gate)
+log lines = 23, eol_ok = 1 (scan_five_still [STATE] face)
+S5 verdict: post waterline under gate, layout clean
+
+=== SUMMARY ===
+fold R480 post-hoc verification: PASS (preop sha match + exact window swap +
+archive verbatim + census pass + dual-parse + under-gate gauge).
+Open item closed by this evidence: qa/reorg-R1760.log was the one missing
+artifact of the interrupted fold; fold chain R478/R479/R480 now fully evidenced.

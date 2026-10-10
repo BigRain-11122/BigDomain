@@ -14,7 +14,9 @@ Checks:
                       appended (failed day must not skip checks)
   pd5-live-step       real subprocess --daily --check on a temp copy of
                       the newest real daily log; real exit recorded
-                      (expected 0 = daily baseline byte-consistent)
+                      (expected 0 = daily baseline byte-consistent);
+                      string/marker checks scoped to the appended
+                      section, marker count relative (R1760)
   pd6-hygiene         ASCII + no-net imports + shipped files clean
   pd7-registration    reconcile_all SUITES row present (source scan)
 """
@@ -197,6 +199,14 @@ def main():
     # daily evidence log (closed originals never touched - append lands
     # on the copy only); real exit recorded, expected 0 (daily baseline
     # byte-consistent since R1715).
+    # R1760 scoping fix (pre-registered AC-PD5F1/F2): the forbidden-string
+    # and marker-count checks are scoped to the APPENDED tail section and
+    # made relative (markers_after == markers_before + 1). Root cause:
+    # whole-text scans failed on mid-run copies that legitimately carry
+    # "== runner wall-time profile ==" fixture renders printed by the
+    # earlier runner-profile-daily suite (added to the fan-out after the
+    # last daily run that validated pd5); a finished-log copy (already
+    # carrying one profile section) must also stay legal.
     dailies = sorted(glob.glob(os.path.join(QA_REAL,
                                              "reconcile-daily-20*.log")),
                      key=os.path.getmtime, reverse=True)
@@ -207,15 +217,20 @@ def main():
         try:
             copy = os.path.join(tmp, os.path.basename(dailies[0]))
             shutil.copyfile(dailies[0], copy)
+            with open(copy, encoding="utf-8") as f:
+                before = f.read()
+            before_markers = before.count(RD.PROFILE_MARKER)
             code = RD.run_profile_step(copy)
             with open(copy, encoding="utf-8") as f:
                 text = f.read()
+            # appended section = content after the marker this step wrote
+            tail = text.rsplit(RD.PROFILE_MARKER, 1)[-1]
             m = re.search(r"(?m)^profile exit=(\d+) "
-                          r"\(observation-window", text)
+                          r"\(observation-window", tail)
             ok = (m is not None
                   and int(m.group(1)) == code
-                  and text.count(RD.PROFILE_MARKER) == 1
-                  and "runner wall-time profile" not in text)
+                  and text.count(RD.PROFILE_MARKER) == before_markers + 1
+                  and "runner wall-time profile" not in tail)
             print("pd5 live exit=%d (newest daily: %s)"
                   % (code, os.path.basename(dailies[0])), flush=True)
             check(ok and code == 0,

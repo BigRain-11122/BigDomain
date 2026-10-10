@@ -1,0 +1,48 @@
+{
+  "_comment": "BigDomain copyright prep materials - Chinese string constants (data face, per repo encoding law; tool itself is pure ASCII). Loaded by tools/generate_copyright_materials.py. D-20261011-03 name-pending mode.",
+  "software_name_pending": "硅基域公众共创元宙平台（软件名称：定名待定，CEO 定谳前不入正式册位）",
+  "pending_short": "作品名称：定名待定（待CEO定谳）",
+  "version_line": "版本号：V0.1（沙箱预演版·零服务器自建后端方案B）",
+  "aigc_note": "AIGC标识：本软件及其材料含人工智能辅助生成内容，按《人工智能生成合成内容标识办法》及相关规定予以显著标识；生成内容呈现面均带标识。",
+  "disclaimer": "非投资顾问声明：本软件为公众共创元宙平台沙箱预演系统，不构成任何投资建议、金融顾问服务或收益承诺；平台一切权益均为模拟权益，与真实金融产品无关。",
+  "secgate_note": "内容安全前置闸声明：平台一切市民文本面（UGC/展签/奖状/策展/开发者文案等）接入前先过 msgSecCheck/SecGate 前置闸，违禁文案 fail-closed 拒绝落账；未接内容安全通道不得开门。",
+  "not_filed_note": "本材料为软著申请预备材料（材料预备可先行）：正式申请双前置=平台名 CEO 定谳+bootstrap 物理件到位；未定名前不入 32 款正式册位，定名后由 owner 机一键重出。",
+  "doc_title": "设计说明书（草稿·定名待定）",
+  "sections": {
+    "overview": "一、软件概述",
+    "features": "二、主要功能与技术特点",
+    "environment": "三、运行环境",
+    "language": "四、编程语言与框架结构",
+    "evidence": "五、鉴定材料与测试判据",
+    "compliance": "六、AIGC与合规声明"
+  },
+  "module_roles": {
+    "benchgate": "基准门禁：性能基准测试与门槛判读",
+    "citymodel": "城市模型：硅基城市空间与数据底座",
+    "compliance": "合规面：内容安全闸与 AIGC 标识信封",
+    "ledger": "双式账本：代币/现金双轨账本与结算族（含月卡、分成、积分、荣誉、橱窗、策展等面）",
+    "liveroom": "虚拟活动：付费入场与活动窗面",
+    "lobby": "大厅共创：WebSocket 规格与共创状态收敛层",
+    "member": "会员域：订阅梯、权益与月卡面",
+    "minors": "未成年人保护：适龄判读与限额面",
+    "opsreview": "运营复核：值守与运营审查面",
+    "pay": "支付面：支付对接设计（商户号未到=设计先行）",
+    "releasegate": "发布闸：对外打包发布门禁",
+    "tourstate": "导览态：参观导览与城市状态派生",
+    "ugc": "UGC 管道：用户生成内容与 msgSecCheck 前置闸",
+    "watermark": "水印面：生成内容标识与水印",
+    "ygo-poc": "共创状态收敛层 POC（Yjs/CRDT 族评估）"
+  },
+  "page_banner": "作品名称：定名待定（待CEO定谳）·软著源程序预备材料·AIGC标识在册",
+  "cover_lines": [
+    "计算机软件著作权登记——源程序材料（预备稿）",
+    "作品名称：定名待定（CEO 定谳前不入正式册位）",
+    "版本号：V0.1（沙箱预演版）",
+    "开发完成日期：（材料预备稿·待正式申请时按实际填写）",
+    "首次发表日期：（未发表）",
+    "AIGC标识：本材料含人工智能辅助生成内容，予以显著标识",
+    "非投资顾问声明：本软件不构成任何投资建议；平台权益均为模拟权益",
+    "内容安全前置闸：一切市民文本面接入前先过 msgSecCheck/SecGate 前置闸",
+    "本材料为预备材料，正式申请双前置（平台定名+bootstrap 物理件）齐备后一键重出"
+  ]
+}

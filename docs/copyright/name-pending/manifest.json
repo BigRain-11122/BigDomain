@@ -1,0 +1,226 @@
+{
+  "task": "D-20261011-03 copyright prep (name-pending)",
+  "criteria_face": "backlog claim row R1760 AC-SR1..AC-SR7",
+  "inventory": {
+    "files": 136,
+    "total_lines": 55308,
+    "total_bytes": 2543437
+  },
+  "outputs": {
+    "source-program.txt": {
+      "sha256": "085e9f84a88f755825f6ed6c57010b19ede9b8dd01832e65f1a9657e203cb810",
+      "bytes": 145440
+    },
+    "design-spec-draft.md": {
+      "sha256": "377967f6e5f6dfcff55857a0a0298f7ef95b4679cfa431306c21305ceedfd3e7",
+      "bytes": 5362
+    }
+  },
+  "imports_face": {
+    "stdlib_face_available": true,
+    "stdlib_imports": [
+      "__future__",
+      "argparse",
+      "asyncio",
+      "base64",
+      "collections",
+      "contextlib",
+      "copy",
+      "datetime",
+      "glob",
+      "hashlib",
+      "hmac",
+      "html",
+      "http",
+      "importlib",
+      "inspect",
+      "io",
+      "json",
+      "math",
+      "os",
+      "pathlib",
+      "random",
+      "re",
+      "shutil",
+      "socket",
+      "sqlite3",
+      "stat",
+      "statistics",
+      "subprocess",
+      "sys",
+      "tempfile",
+      "threading",
+      "time",
+      "types",
+      "unittest",
+      "urllib",
+      "uuid"
+    ],
+    "local_imports": [
+      "adapters",
+      "ads",
+      "apidev",
+      "authorize",
+      "bench_gate",
+      "catalog",
+      "city",
+      "civicpoints",
+      "collectibles",
+      "companion",
+      "curation",
+      "devshare",
+      "effects",
+      "expedite",
+      "festival",
+      "frontdoor",
+      "growth_archive",
+      "honorcert",
+      "identity",
+      "incentive",
+      "ledger",
+      "liveroom",
+      "member",
+      "metered",
+      "minors",
+      "notify",
+      "observation",
+      "orders",
+      "pipeline",
+      "props",
+      "reconcile",
+      "reconcile_all",
+      "reconcile_daily",
+      "reminder",
+      "reports",
+      "review",
+      "runner_profile",
+      "scenario",
+      "schema_migrate",
+      "sec_batch",
+      "sec_gate",
+      "settlement",
+      "showcase",
+      "showroom",
+      "sistercity",
+      "sku_compliance_map",
+      "store",
+      "studio",
+      "suite_matrix",
+      "test_member",
+      "test_pay",
+      "test_pay_notify",
+      "test_pay_notify_wiring",
+      "test_watermark",
+      "tmarket",
+      "tourstate",
+      "v3",
+      "venue",
+      "wordlist",
+      "xidudu_ops_compliance_gate"
+    ],
+    "external_thirdparty": [
+      "PIL",
+      "ahocorasick",
+      "blind_watermark",
+      "cryptography",
+      "cv2",
+      "numpy",
+      "websockets"
+    ],
+    "external_by_module": {
+      "(root)": [
+        "blind_watermark",
+        "cv2",
+        "numpy"
+      ],
+      "lobby": [
+        "websockets"
+      ],
+      "pay": [
+        "cryptography"
+      ],
+      "ugc": [
+        "ahocorasick"
+      ],
+      "watermark": [
+        "PIL",
+        "blind_watermark",
+        "cv2",
+        "numpy"
+      ]
+    },
+    "parse_failures": []
+  },
+  "ac_results": {
+    "AC-SR1": {
+      "inventory_count": 136,
+      "excluded_vendored_trees": [
+        "lobby\\.venv",
+        "ygo-poc\\data"
+      ],
+      "excluded_cache_parts": [
+        "__pycache__"
+      ],
+      "order": "lexicographic",
+      "zero_omission": true
+    },
+    "AC-SR2": {
+      "total_pages": 1109,
+      "selected_pages": 60,
+      "selection_mode": "front30+back30",
+      "lines_per_page": 50,
+      "listing_lines": 55444,
+      "file_markers_in_listing": 136,
+      "banner_on_every_page": true
+    },
+    "AC-SR3": {
+      "cover_pending_verbatim": true,
+      "banner_pending_on_every_page": true,
+      "output_dir": "docs/copyright/name-pending/",
+      "formal_filing_action": "none (prep only)"
+    },
+    "AC-SR6": {
+      "secret_hits": 0,
+      "patterns": [
+        "sk-[A-Za-z0-9]{16,}",
+        "AKIA[0-9A-Z]{16}",
+        "ghp_[A-Za-z0-9]{20,}",
+        "xoxb-[0-9A-Za-z-]{10,}",
+        "-----BEGIN [A-Z ]*PRIVATE KEY",
+        "Bearer\\s+[A-Za-z0-9._-]{30,}"
+      ],
+      "env_files_read": 0
+    },
+    "AC-SR7": {
+      "aigc_in_source": true,
+      "aigc_in_spec": true,
+      "disclaimer_in_source": true,
+      "disclaimer_in_spec": true,
+      "secgate_in_source": true,
+      "secgate_in_spec": true
+    },
+    "AC-SR4": {
+      "sections": 6,
+      "module_rows": 15,
+      "imports_derived": true,
+      "external_thirdparty": [
+        "PIL",
+        "ahocorasick",
+        "blind_watermark",
+        "cryptography",
+        "cv2",
+        "numpy",
+        "websockets"
+      ],
+      "parse_failures": [],
+      "stdlib_face_available": true,
+      "matrix_counts": {
+        "criteria_total": 699,
+        "suites_green": 70,
+        "suites_fail": 0,
+        "no_evidence": 0,
+        "runner_state": "n/a"
+      }
+    }
+  }
+}

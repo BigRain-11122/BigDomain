@@ -1,0 +1,38 @@
+BigDomain QA smoke evidence - round R1760 - 2026-10-11 +08:00
+day work: (1) copyright prep materials delivered (2) daily reconcile pd5 latent-bug fixed, day closed G0 green (3) W21 crawl registered (4) fold R480 post-verified
+
+--- (1) copyright prep materials (D-20261011-03; product = docs/copyright/name-pending/; tool = tools/generate_copyright_materials.py) ---
+inventory: 136 files, 55308 lines (vendored excluded: lobby venv + ygo-poc data)
+pages: 60 selected of 1109 total (front30+back30), banner+pending-name marker on every selected page
+AC-SR1..SR7 all PASS (zero omission 136/136; zero secrets; .env never read; AIGC + non-advisory + SecGate statements resident in both artifacts)
+determinism: two consecutive runs byte-identical at final state
+  sha256 source-program.txt = 085e9f84a88f755825f6ed6c57010b19ede9b8dd01832e65f1a9657e203cb810
+  sha256 design-spec-draft.md = 377967f6e5f6dfcff55857a0a0298f7ef95b4679cfa431306c21305ceedfd3e7
+  (pre-fix shas superseded honestly: the pd5 test-harness fix touched a file inside the source inventory, 55293 -> 55308 lines; addendum in qa/copyright-prep-R1760.log)
+formal filing stays gated on the two preconditions: platform name CEO ruling + bootstrap physical items
+
+--- (2) daily reconcile (three runs today; runbook G1 graded, closed same day) ---
+run 1  qa/reconcile-daily-20261011-2.log   RUNNER FAIL (2 failed assertions)
+run 2  qa/reconcile-daily-20261011-3.log   RUNNER FAIL (same 2, repro confirmed)
+root cause: pd5-live-step forbidden-string scan swept the WHOLE log copy; the mid-run daily log legitimately
+       carries "== runner wall-time profile ==" fixture renders printed by the earlier runner-profile-daily
+       suite (fan-out member since R1684/R1715 era; yesterday's daily predates the pd5 step - latent until today)
+fix:    scan scoped to the appended tail section + marker count made relative (after == before + 1);
+       AC-PD5F1/F2 pre-registered in the state log line before the code change
+run 3  qa/reconcile-daily-20261011-4.log   RUNNER PASS - 70/70 suites green, 699 criteria, reconcile controls 7/7,
+       153.4s, sentinel=ok, profile=ok, verdict=PASS exit=0 (G0 green; AC-PD5F3/F4)
+       pd5 self-proof inside run 3: pd suite 7/7, "pd5 live exit=0 (newest daily: reconcile-daily-20261011-4.log)"
+G1 disposition per runbook sec.3: single-suite red with controls green -> locate, fix, rerun green same day = closed
+
+--- (3) W21 crawl (docs/global-benchmarks.md + docs/research/intelligence-wall.md) ---
+W21 = wechat miniprogram login official doc (developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html, A-grade, 1 try 1 get, zero key)
+two hard rules captured verbatim: temporary code is one-time-use; session_key must never be sent down to the client
+consumption: P-47(2) member identity face + bootstrap plan-B backend (code2Session server-side exchange) + lobby unionid same-identity candidate
+benchmarks_refreshed = 2026-10-11 (7-day cycle next due 10-18)
+
+--- (4) fold R480 post-hoc verification (qa/reorg-R1760.log) ---
+interrupted-session surgery verified from durable artifacts: preop sha16 1ab68934e31ecec1 matches roll-line claim;
+window swap exact (current[:-1] == preop[:-6]); archive sec-R1760 verbatim 6/6; census pass; dual-parser green;
+post waterline 73317B under the 78500B gate; the one missing artifact of the interrupted fold (this evidence log) now closed
+
+checker: src/os/check_export_consistency.py 21/21 PASS, state_tick=1760 (qa/export-consistency-R1760.log)

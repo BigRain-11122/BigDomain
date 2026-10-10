@@ -1,0 +1,47 @@
+﻿BigDomain copyright-prep materials run - round R1760 - 2026-10-11 +08:00
+task: D-20261011-03 software copyright material prep (name-pending mode, scope ruling: includes Silicon-Domain platform)
+criteria face: backlog claim row R1760 AC-SR1..AC-SR7 pre-registered BEFORE the tool run (pre-registration honored: claim edit preceded tool build+runs)
+tool: tools/generate_copyright_materials.py (pure ASCII per encoding law; Chinese strings = docs/copyright/strings-zh.json data face)
+double-run determinism (AC-SR5): run5 vs run6 console outputs identical (Compare-Object empty), sha256 stable:
+  source-program.txt  sha256=a6e4ce6c3f85794116b94aee354ace14dda63e96f65fc1e62f6442b36d5518b7
+  design-spec-draft.md sha256=afe6df8673b3fa3f7fc920520b8d829ef7f8448645393079ae1e3ae03b542561
+
+copyright-prep run complete
+inventory: files=136 lines=55293 vendored_excluded=['lobby\\.venv', 'ygo-poc\\data']
+pages: total=1109 selected=60 mode=front30+back30
+imports: stdlib_face=True external_thirdparty=['PIL', 'ahocorasick', 'blind_watermark', 'cryptography', 'cv2', 'numpy', 'websockets'] parse_failures=0
+AC-SR1 zero_omission=True
+matrix: {'criteria_total': 699, 'suites_green': 70, 'suites_fail': 0, 'no_evidence': 0, 'runner_state': 'n/a'}
+AC-SR2 banner_on_every_page=True
+AC-SR3 cover_pending_verbatim=True
+AC-SR6 secret_hits=0 env_read=0
+AC-SR7 aigc=True/True disclaimer=True/True secgate=True/True
+sha256 source-program.txt=a6e4ce6c3f85794116b94aee354ace14dda63e96f65fc1e62f6442b36d5518b7
+sha256 design-spec-draft.md=afe6df8673b3fa3f7fc920520b8d829ef7f8448645393079ae1e3ae03b542561
+
+AC judge lines:
+AC-SR1 PASS inventory 136 files / 55293 lines, vendored excluded=lobby/.venv (453 third-party py) + ygo-poc/data (external Go toolchain snapshot), file_markers_in_listing==inventory 136/136 zero omission, lexicographic order
+AC-SR2 PASS 50 lines/page, total 1109 pages, selection=front30+back30 (60 pages), banner+pending marker on every selected page (60/60)
+AC-SR3 PASS cover pending-name line verbatim; output dir docs/copyright/name-pending/; zero formal filing action (prep only; dual precondition = CEO name ruling + bootstrap physical items)
+AC-SR4 PASS six sections; module table machine-derived from walk (16 module rows incl root); imports face via ast parse (parse_failures=0): stdlib/local/external three-way, external_by_module honestly listed in environment section (watermark=blind_watermark/cv2/numpy/PIL, lobby=websockets, ugc=ahocorasick, pay=cryptography); evidence counts derived from docs/sandbox-suite-matrix.md total row (699 criteria, green 70/FAIL 0/no-evidence 0)
+AC-SR5 PASS double-run byte-identical, zero RNG, zero wall-clock inside artifacts
+AC-SR6 PASS secret-pattern scan 0 hits (sk-/AKIA/ghp_/xoxb-/BEGIN PRIVATE KEY/Bearer-long), .env never read (read face = src/sandbox + strings-zh.json + suite matrix md only)
+AC-SR7 PASS AIGC note + non-advisory disclaimer + SecGate msgSecCheck prior-gate statement present in BOTH source-program cover and spec draft compliance section
+
+outputs:
+  docs/copyright/name-pending/source-program.txt (60-page listing, front 30 + back 30 of 1109)
+  docs/copyright/name-pending/design-spec-draft.md (six-section draft)
+  docs/copyright/name-pending/manifest.json (machine report incl per-AC results)
+formal-application preconditions (not met, per scope ruling): platform name = CEO ruling (name_pending, zero prompting); bootstrap physical items pending. Not entering the 32-title formal registry until name ruled; owner machine one-key regen after naming.
+
+=== R1760 continuation addendum (post-pd5-fix re-verification, 2026-10-11 01:0x +08:00) ===
+context: same round continuation. The pd5-live-step test-harness fix (test_reconcile_daily_profile.py,
+a file INSIDE the AC-SR1 source inventory) landed after the runs above, so the listing legitimately
+changed: inventory lines 55293 -> 55308 (+15, the pd5 fix block). Superseded sha256 from pre-fix runs:
+  source-program.txt  (superseded) a6e4ce6c3f85794116b94aee354ace14dda63e96f65fc1e62f6442b36d5518b7
+  design-spec-draft.md (superseded) afe6df8673b3fa3f7fc920520b8d829ef7f8448645393079ae1e3ae03b542561
+re-verified final state (two consecutive runs, byte-identical = AC-SR5 PASS at final state):
+  source-program.txt  sha256=085e9f84a88f755825f6ed6c57010b19ede9b8dd01832e65f1a9657e203cb810
+  design-spec-draft.md sha256=377967f6e5f6dfcff55857a0a0298f7ef95b4679cfa431306c21305ceedfd3e7
+  manifest.json carries the same new sha256 values; AC-SR1 zero_omission re-checked (136/136);
+  all other AC faces (SR2/SR3/SR6/SR7) re-run PASS in the addendum runs; no RNG, no timestamps.
