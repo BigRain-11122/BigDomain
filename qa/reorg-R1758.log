@@ -1,0 +1,153 @@
+
+=== S1 pre-surgery gauge ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 78567,
+  "gate": 78500,
+  "log_lines": 27,
+  "log_content_bytes": 75668,
+  "margin_bytes": -67,
+  "fold_needed": true,
+  "tick": 1757
+}
+S1 verdict: pre=78567B margin=-67B fold_needed=True
+
+=== S2 catalog pre-check (tail-4 window vs roll file) ===
+{
+  "window_lines": 4,
+  "tokens_total": 26,
+  "tokens": [
+    "AC-C3",
+    "AC-S8c",
+    "BD-PROP-003",
+    "C-20261001-01",
+    "D-20260927-03",
+    "D-20260930-19",
+    "D-33",
+    "O-RAISE",
+    "OH-20261008",
+    "OH-20261011",
+    "OH-20261011-bigdomain",
+    "P-2026-09-23-03",
+    "P-2026-09-25-18",
+    "P-2026-09-26-08",
+    "P-2026-09-28-01",
+    "P-2026-09-30-01",
+    "P-2026-10-01-01",
+    "P-2026-10-04-02",
+    "P-2026-10-06-05",
+    "P-2026-10-08-11",
+    "P-2026-10-09-01",
+    "P-2026-10-10-01",
+    "P-32",
+    "P-47",
+    "R-ABSENT",
+    "R-RAN"
+  ],
+  "missing_in_roll": [],
+  "pass": true
+}
+S2 exit=0
+
+=== S3 fold dry-run plan ===
+{
+  "mode": "dry-run",
+  "round": "R1758",
+  "fold_no": "479",
+  "window_mode": "tail",
+  "window_start": 24,
+  "window_end": 27,
+  "window_lines": 4,
+  "window_content_bytes": 6262,
+  "summary_head": "2026-10-10（R1756..R1757 滚窗并折摘要·fold R479 承 R1756 行承传注记兑现·轮首首",
+  "preop_sha16": "153e495efb3c2351",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1758.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1758 fold append (2026-10-10, 4 lines verbatim: R1756 fold-R478-closeout pair + R1757 OSS window-6 slice pair, fold R479 window, pre-op sha16 153e495efb3c2351)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78567,
+  "new_log_len": 24,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 75403,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+S3 exit=0
+S3 verdict: token_ok=True gate_ok=True predicted=75403B reserve=3000B
+
+=== S4 fold execute (backup + archive append + state surgery) ===
+{
+  "mode": "execute",
+  "round": "R1758",
+  "fold_no": "479",
+  "window_mode": "tail",
+  "window_start": 24,
+  "window_end": 27,
+  "window_lines": 4,
+  "window_content_bytes": 6262,
+  "summary_head": "2026-10-10（R1756..R1757 滚窗并折摘要·fold R479 承 R1756 行承传注记兑现·轮首首",
+  "preop_sha16": "153e495efb3c2351",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1758.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1758 fold append (2026-10-10, 4 lines verbatim: R1756 fold-R478-closeout pair + R1757 OSS window-6 slice pair, fold R479 window, pre-op sha16 153e495efb3c2351)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78567,
+  "new_log_len": 24,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 75403,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [],
+  "post_bytes": 75403,
+  "predicted_eq_actual": true,
+  "appendix_bytes": 6433,
+  "archive_appended": true,
+  "backup_written": true
+}
+S4 exit=0
+S4 verdict: post=75403B predicted_eq_actual=True preop_sha16=153e495efb3c2351 backup=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\logs\state-preop-R1758.bak archive=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\logs\state-log-archive-2026-10.md
+
+=== S5 post-surgery gauge + eol layout profile ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 75403,
+  "gate": 78500,
+  "log_lines": 24,
+  "log_content_bytes": 72567,
+  "margin_bytes": 3097,
+  "fold_needed": false,
+  "tick": 1757
+}
+S5 gauge verdict: post=75403B margin=3097B fold_needed=False log_lines=24
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 75403,
+  "total_lf": 33,
+  "crlf": 33,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 24,
+  "indent16_lines": 24,
+  "indent_anomaly": 0,
+  "indent_ok": true
+}
+S5 eol exit=0
+
+=== S6 post catalog re-check + archive verbatim window check ===
+S6 tokens=26 missing=0 missing_list=none
+S6 archive verbatim check: window_lines=4 absent=0
+S6 archive header R1758 present
+S6 log length: pre=27 post=24 (window 4 -> roll 1 kept=0)
+
+=== SUMMARY ===
+fold R479 tail-4 window: PASS all sections
+pre_bytes=78567 post_bytes=75403 predicted=75403 reserve=3000
