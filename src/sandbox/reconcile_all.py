@@ -188,6 +188,16 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-apidev-reject",
      os.path.join("ledger", "test_apidev_reject.py"), 7),
+    # R1729 apidev usage-log read cap: optional limit parameter
+    # (0 = full-log behavior byte-stable); limit>0 bounds the
+    # response to the most recent limit rows and adds the
+    # overflow block (limit/total/returned/truncated); the
+    # truncated window is the exact tail of the ascending
+    # (called_utc, call_ref) order; key gate before argument
+    # gate; dead keys stay readable (AC-UL1..UL7 pre-registered
+    # in state/queue/tech.md).
+    ("ledger-apidev-usagelog",
+     os.path.join("ledger", "test_apidev_usagelog.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

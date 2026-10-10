@@ -1,0 +1,35 @@
+=== apidev usage-log read-cap R1729 evidence: suite run 1 === 
+PASS AC-UL1: default envelope keys=['api_key', 'calls', 'disclaimer'] (3-key set), 10 rows in ascending order=True (manual SQL cross-check True), row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window'], window=2026-10, unknown key -> E_AD_UNKNOWN_KEY (plain) and E_AD_UNKNOWN_KEY with bad limit (key gate first)
+PASS AC-UL2: bad limits -1/True/'2'/2.5 -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 10==10, zero rows read)
+PASS AC-UL3: limit=50 over total=10: envelope keys=['api_key', 'calls', 'disclaimer', 'limit', 'returned', 'total', 'truncated'], limit=50 total=10 returned=10 truncated=False, rows identical to default read=True
+PASS AC-UL4: limit=3 over 10 rows: returned=3 truncated=True total=10, rows=['UL-A-08', 'UL-A-09', 'UL-A-10'] == default tail ['UL-A-08', 'UL-A-09', 'UL-A-10'], row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window']
+PASS AC-UL5: limit==total (10/10): truncated=False full set=True; empty key limit=3: calls=[] total=0 truncated=False; limit=1: returned=1 truncated=True tail=['UL-A-10']
+PASS AC-UL6: capped reads leave api_calls 10==10; revoked key capped read open (total=5 returned=2 truncated=True tail=['UL-R-04', 'UL-R-05']), rotated-out key capped read open (total=4 returned=2 tail=['UL-T-03', 'UL-T-04'])
+PASS AC-UL7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, capped face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-usagelog: 7/7 criteria pass
+
+=== suite run 2 (determinism double-run) === 
+PASS AC-UL1: default envelope keys=['api_key', 'calls', 'disclaimer'] (3-key set), 10 rows in ascending order=True (manual SQL cross-check True), row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window'], window=2026-10, unknown key -> E_AD_UNKNOWN_KEY (plain) and E_AD_UNKNOWN_KEY with bad limit (key gate first)
+PASS AC-UL2: bad limits -1/True/'2'/2.5 -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 10==10, zero rows read)
+PASS AC-UL3: limit=50 over total=10: envelope keys=['api_key', 'calls', 'disclaimer', 'limit', 'returned', 'total', 'truncated'], limit=50 total=10 returned=10 truncated=False, rows identical to default read=True
+PASS AC-UL4: limit=3 over 10 rows: returned=3 truncated=True total=10, rows=['UL-A-08', 'UL-A-09', 'UL-A-10'] == default tail ['UL-A-08', 'UL-A-09', 'UL-A-10'], row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window']
+PASS AC-UL5: limit==total (10/10): truncated=False full set=True; empty key limit=3: calls=[] total=0 truncated=False; limit=1: returned=1 truncated=True tail=['UL-A-10']
+PASS AC-UL6: capped reads leave api_calls 10==10; revoked key capped read open (total=5 returned=2 truncated=True tail=['UL-R-04', 'UL-R-05']), rotated-out key capped read open (total=4 returned=2 tail=['UL-T-03', 'UL-T-04'])
+PASS AC-UL7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, capped face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-usagelog: 7/7 criteria pass
+determinism byte-identical: True 
+
+=== hygiene: git status --short (touched files: apidev.py + suite + reconcile_all row + tech.md claim note only) === 
+ M src/sandbox/ledger/apidev.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? src/sandbox/ledger/test_apidev_usagelog.py
+
+=== regression: full RUNNER === 
+RUNNER PASS (58/58 suites green, reconcile controls 6/6, 131.8s)
+full log: qa/reconcile-all-R1729.log (RUNNER PASS (58/58 suites green, reconcile controls 6/6, 131.8s)) 
+
+=== matrix regeneration + --check === 
+PASS generated docs/sandbox-suite-matrix.md (7047 bytes) - registry suites=58 criteria=596 evidence=qa/reconcile-all-R1729.log green=58/58
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7047 bytes, 58 suites, 596 criteria)

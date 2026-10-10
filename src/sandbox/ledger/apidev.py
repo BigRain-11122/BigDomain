@@ -651,22 +651,54 @@ class DevKeyFace:
                 "window": window, "reject_tally_total": tally_total,
                 "disclaimer": self.disclaimer}
 
-    def usage_log(self, api_key):
+    def usage_log(self, api_key, limit=0):
         """One key's immutable call log (call rows with their
         external engine receipts stored verbatim). Read-only,
-        zero token movement."""
+        zero token movement. The optional limit parameterizes a
+        read cap for a growing log: limit=0 (the default) keeps
+        the full-log behavior byte-stable; limit>0 bounds the
+        response to the most recent limit rows and adds an
+        overflow block (limit/total/returned/truncated) to the
+        envelope, so a large log stays a bounded payload on the
+        developer panel. The key gate fires first (an unknown
+        key rejects before the argument gate, the call-chain
+        key-gate-first law); a bad limit (non-int, bool, or
+        negative) rejects E_AD_BAD_ARGS with zero rows read."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "limit must be an integer >= 0")
+        if limit == 0:
+            with self._lock:
+                rows = self._conn.execute(
+                    "SELECT call_ref, kind, engine_ref, window, called_utc"
+                    " FROM api_calls WHERE key_id = ?"
+                    " ORDER BY called_utc, call_ref", (row[0],)).fetchall()
+            return {"api_key": api_key,
+                    "calls": [{"call_ref": r[0], "kind": r[1],
+                               "engine_ref": r[2], "window": r[3],
+                               "called_utc": r[4]} for r in rows],
+                    "disclaimer": self.disclaimer}
         with self._lock:
+            total = int(self._conn.execute(
+                "SELECT COUNT(*) FROM api_calls WHERE key_id = ?",
+                (row[0],)).fetchone()[0])
             rows = self._conn.execute(
                 "SELECT call_ref, kind, engine_ref, window, called_utc"
                 " FROM api_calls WHERE key_id = ?"
-                " ORDER BY called_utc, call_ref", (row[0],)).fetchall()
+                " ORDER BY called_utc DESC, call_ref DESC"
+                " LIMIT ?", (row[0], limit)).fetchall()
+        rows = list(reversed(rows))
         return {"api_key": api_key,
                 "calls": [{"call_ref": r[0], "kind": r[1],
                            "engine_ref": r[2], "window": r[3],
                            "called_utc": r[4]} for r in rows],
+                "limit": limit, "total": total,
+                "returned": len(rows),
+                "truncated": total > limit,
                 "disclaimer": self.disclaimer}
 
     def reject_tally(self, api_key):
