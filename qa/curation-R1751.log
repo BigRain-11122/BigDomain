@@ -1,0 +1,27 @@
+﻿== qa/curation-R1751.log curation theme face evidence == run 2026-10-10 21:18:06 ==
+[1] acceptance suite (double-run determinism)
+PASS AC-CU1: register writes one registry row + member rows in registered order [(1, 'city-hall'), (2, 'east-wing')]; dup refused E_CU_DUP_CURATION; all 7 bad args rejected (empty id=E_CU_BAD_ARGS; empty title=E_CU_BAD_ARGS; str not list=E_CU_BAD_ARGS; empty list=E_CU_BAD_ARGS; dup entries=E_CU_BAD_ARGS; empty member id=E_CU_BAD_ARGS; non-bool ai flag=E_CU_BAD_ARGS); counts curations=1 members=2
+PASS AC-CU2: unknown showcase member refuses the whole registration E_CU_UNKNOWN_SHOWCASE with zero rows (curations 1==1, members for bad-route=0); showcase rows untouched (2==2); later valid registration succeeds (night-route)
+PASS AC-CU3: tour walks member showcases in registered order with GLOBAL stop numbering 1..N across showcases [(1, 'city-hall', 1), (2, 'city-hall', 2), (3, 'east-wing', 3)]; live derivation: a placement registered after the curation appears on the next tour (3 -> 4 stops); pure read zero token movement (ledger_tx 0==0==0)
+PASS AC-CU4: no member-removal/reorder/update/delete API on the face (True); membership immutable after all operations [(1, 'city-hall'), (2, 'east-wing')]; zero UPDATE surface in source ([])
+PASS AC-CU5: empty disclaimer refuses construction E_CU_NO_DISCLAIMER; declared ai_label persists (1 on row, shown in register and view envelopes); every envelope (register/view/tour/board) carries the resident disclaimer (True); direct SQL ai_label=2 refused by the CHECK ([True])
+PASS AC-CU6: view lists members with live on-display counts [(1, 'city-hall', 2), (2, 'east-wing', 2)]; board lists all curations ['heritage-route', 'night-route', 'ai-route'] with member counts [2, 1, 1]; unknown curation refused on view E_CU_UNKNOWN_CURATION and tour E_CU_UNKNOWN_CURATION; all reads pure (rows 3==3, 4==4)
+PASS AC-CU7: all 3 fault paths rejected (unknown curation register member=E_CU_UNKNOWN_SHOWCASE; unknown curation view=E_CU_UNKNOWN_CURATION; unknown curation tour=E_CU_UNKNOWN_CURATION); zero side effects (rows (3, 4) unchanged); module pure ASCII (0 non-ascii); zero network imports (0); zero banned circulation verbs in source ([]); zero UPDATE surface ([]); zero RNG; shipped config.json byte-stable
+SUITE PASS 7/7
+SUITE2_EXIT=0
+[2] hygiene: git status (shipped config.json untouched, only expected files)
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/explore.md
+?? qa/curation-R1751.log
+?? qa/reconcile-all-R1751.log
+?? src/sandbox/ledger/curation.py
+?? src/sandbox/ledger/test_curation.py
+[3] full RUNNER regression section (from qa/reconcile-all-R1751.log)
+PASS suite ledger-curation exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (67/67 suites green, reconcile controls 7/7, 181.2s)
+[4] fingerprint sentinel
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+[5] suite matrix regen + double --check
+regen_exit=0 check1_exit=0 check2_exit=0 (byte-identical)

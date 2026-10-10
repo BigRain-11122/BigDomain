@@ -400,6 +400,15 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-showcase",
      os.path.join("ledger", "test_showcase.py"), 7),
+    # R1751 showcase curation theme face: multi-showcase grouping
+    # register (append-only, immutable, position 1..N), themed tour
+    # with global stop numbering across member showcases, showcase
+    # facts read exclusively through the ShowcaseFace public API
+    # (reference, not copy), member existence fail-closed, zero
+    # token movement, zero UPDATE (AC-CU1..CU7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-curation",
+     os.path.join("ledger", "test_curation.py"), 7),
 ]
 
 FAILS = 0
