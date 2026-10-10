@@ -1,0 +1,36 @@
+=== section 1: acceptance suite (R1735 apidev usage by-kind window-count read face) ===
+PASS AC-UK1: default envelope keys=['api_key', 'by_kind', 'disclaimer', 'key_name', 'total', 'window'] (reject_tally mirror 6-key set), window=2026-10, by_kind={'backtest': 4, 'visualize': 2} (manual SQL equal=True), total=6; unknown key + bad window -> E_AD_UNKNOWN_KEY (key gate first)
+PASS AC-UK2: 11 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 9==9, zero rows read); empty string is NOT the default sentinel (only None is)
+PASS AC-UK3: fixture-injected 2026-09 rows read back={'backtest': 2, 'visualize': 1} (manual SQL equal=True total=3); future 2026-11 honest empty by_kind={} total=0; separation: default current-month by_kind={'backtest': 4, 'visualize': 2} (zero historical permeation), historical read excludes current rows
+PASS AC-UK4: single-kind key counts only its own kind: by_kind={'visualize': 2} (manual SQL equal=True, zero phantom backtest); zero-row key honest empty={} total=0; total==sum(by_kind) law on all four reads=True
+PASS AC-UK5: key_view usage_kind_tally={'backtest': 4, 'visualize': 2} additive (prior key set preserved=True), dev_board rows all carry usage_kind_tally (uk-full={'backtest': 4, 'visualize': 2}), board merged total={'backtest': 4, 'visualize': 4} (manual all-key SQL equal=True), zero historical penetration; source signatures window-free: key_view=True dev_board=True
+PASS AC-UK6: kind-tally reads leave api_calls 11==11; revoked key face open by_kind={'backtest': 2, 'visualize': 1} (explicit hist window 2026-09 open empty={}); rotated-out key face open by_kind={'backtest': 2}, successor tally={} (own rows only, zero ancestor inheritance)
+PASS AC-UK7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, kind face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-usagekind: 7/7 criteria pass
+SUITE_EXIT=0
+
+=== section 2: fingerprint sentinel (ledger DB baseline must stay CLEAN) ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+SENTINEL_EXIT=0
+
+=== section 3: matrix regen + byte-identical check (62 suites / 624 criteria regen proven exit 0; --check rerun below) ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7386 bytes, 62 suites, 624 criteria)
+MATRIX_CHECK_EXIT=0
+
+=== section 4: hygiene (git status scoped + full runner tail) ===
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/ledger/apidev.py
+ M src/sandbox/reconcile_all.py
+?? qa/apidev-usagekind-R1735.log
+?? qa/reconcile-all-R1735.log
+?? src/sandbox/ledger/test_apidev_usagekind.py
+GIT_STATUS_EXIT=0
+--- qa/reconcile-all-R1735.log tail ---
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (62/62 suites green, reconcile controls 6/6, 141.5s)

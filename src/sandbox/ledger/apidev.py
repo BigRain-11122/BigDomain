@@ -420,6 +420,22 @@ class DevKeyFace:
                 (key_id, window)).fetchall()
         return {r[0]: int(r[1]) for r in rows}
 
+    def _usage_kind_tally(self, key_id, window):
+        """Read-time COUNT aggregation of immutable call rows by
+        API kind for one key in one window (zero maintained
+        counters, zero UPDATE: the GROUP BY runs over the
+        append-only api_calls rows). Rows are attributed to the
+        exact key, so a rotated successor does not inherit
+        ancestor kinds -- panel face, not enforcement face, the
+        same honest attribution note as the R1728 reject tally."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT kind, COUNT(*) FROM api_calls"
+                " WHERE key_id = ? AND window = ?"
+                " GROUP BY kind ORDER BY kind",
+                (key_id, window)).fetchall()
+        return {r[0]: int(r[1]) for r in rows}
+
     # -- ring 1: key issuance --------------------------------------------------
 
     def issue_key(self, dev_account, key_name, window_cap, kinds,
@@ -617,6 +633,8 @@ class DevKeyFace:
                 "minute_window": minute,
                 "minute_used": minute_used,
                 "reject_tally": self._reject_tally(row[0], window),
+                "usage_kind_tally": self._usage_kind_tally(
+                    row[0], window),
                 "disclaimer": self.disclaimer}
 
     def dev_board(self, dev_account):
@@ -637,11 +655,15 @@ class DevKeyFace:
                 " WHERE dev_account = ? ORDER BY key_id",
                 (dev_account,)).fetchall()
         tally_total = {}
+        kinds_total = {}
         for row in rows:
             terminal = self._terminal_event(row[0])
             k_tally = self._reject_tally(row[0], window)
             for reason, count in k_tally.items():
                 tally_total[reason] = tally_total.get(reason, 0) + count
+            k_kinds = self._usage_kind_tally(row[0], window)
+            for kind, count in k_kinds.items():
+                kinds_total[kind] = kinds_total.get(kind, 0) + count
             keys.append({"key_name": row[1], "api_key": row[3],
                          "metered_client": row[2],
                          "window_cap": int(row[4]),
@@ -657,9 +679,11 @@ class DevKeyFace:
                          "minute_used": self._effective_minute_count(
                              row[0], minute),
                          "reject_tally": k_tally,
+                         "usage_kind_tally": k_kinds,
                          "billing": self.metered.reconcile_client(row[2])})
         return {"dev_account": dev_account, "keys": keys,
                 "window": window, "reject_tally_total": tally_total,
+                "usage_kind_tally_total": kinds_total,
                 "disclaimer": self.disclaimer}
 
     def usage_log(self, api_key, limit=0, window=None):
@@ -764,6 +788,41 @@ class DevKeyFace:
         return {"api_key": api_key, "key_name": row[2],
                 "window": window, "by_reason": by_reason,
                 "total": sum(by_reason.values()),
+                "disclaimer": self.disclaimer}
+
+    def usage_kind_tally(self, api_key, window=None):
+        """One key's per-kind usage profile: counts per API kind,
+        aggregated at read time over the immutable call rows (the
+        developer panel's "which kinds am I actually using this
+        month" face -- quota_used is a single total, so the
+        by-kind split is its own read). window=None (the default)
+        keeps the current-UTC-month behavior, the same _window_utc
+        source as the quota ring; an explicit "YYYY-MM" string
+        reads any month window at read time (rows are immutable
+        and stamped with their own record-time window, so a
+        historical month stays readable forever, and a future
+        month is an honest empty read); any other shape rejects
+        E_AD_BAD_ARGS fail-closed before the aggregation (the
+        key gate fires first, the call-chain key-gate-first law).
+        The embedded faces (key_view, dev_board) keep the
+        current-month default with no window parameter (the
+        AC-RJW4 embedded-face law). Read-only, zero token
+        movement; a revoked or rotated-out key stays readable
+        with its tally intact, and a rotated successor's tally
+        counts only its own rows."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if window is None:
+            window = _window_utc()
+        elif not (isinstance(window, str)
+                  and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
+        by_kind = self._usage_kind_tally(row[0], window)
+        return {"api_key": api_key, "key_name": row[2],
+                "window": window, "by_kind": by_kind,
+                "total": sum(by_kind.values()),
                 "disclaimer": self.disclaimer}
 
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
