@@ -410,9 +410,13 @@ SUITES = [
     # hot_board pure-read derived ranking (heat = member on-display
     # sums, deterministic (-displayed_total, curation_id) sort,
     # zero RNG, zero writes) - AC-HB1..HB5 same row, criteria
-    # 7 -> 12.
+    # 7 -> 12. R1770 adds the board rank-change diff hot_board_delta
+    # movement face over two caller-held snapshots (four states
+    # rise/fall/entered/dropped, steady rows omitted, zero storage,
+    # single hot_board() derivation source) - AC-HD1..HD7 same row,
+    # criteria 12 -> 19.
     ("ledger-curation",
-     os.path.join("ledger", "test_curation.py"), 12),
+     os.path.join("ledger", "test_curation.py"), 19),
     # R1752 citizen civic-behavior points face: earned-only points
     # inside the counts-vs-tokens isolation law (constructor takes
     # NO ledger reference - token domain structurally out of reach),

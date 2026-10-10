@@ -22,6 +22,15 @@ Domains:
   - theme heat board: a pure-read derived ranking of every
     curation by its members' live on-display totals (successor
     row R1753; sort is fully deterministic, zero RNG).
+  - board rank-change diff: a pure-read movement face over two
+    board snapshots (successor row R1770). The module never
+    stores a snapshot (zero storage); the caller holds the
+    previous hot_board() result and the current side is derived
+    from the live hot_board() read - the single derivation
+    source, no second aggregation engine. Four states: rise,
+    fall, entered, dropped; steady rows are omitted (a change
+    face lists changes, a fully-steady world yields an honest
+    empty delta).
 
 Hard laws (canon wording: pure-read grouping, zero token face,
 zero UPDATE carried over from the showcase line):
@@ -311,3 +320,94 @@ class CurationFace:
                           "member_count": entry["member_count"],
                           "displayed_total": entry["displayed_total"]})
         return {"hot_board": board, "disclaimer": self.disclaimer}
+
+    def hot_board_delta(self, prev_board):
+        """Board rank-change diff (R1770): pure-read movement face
+        over two heat-board snapshots. The previous snapshot is
+        caller-held (zero storage: this module never persists a
+        board); the current side is derived from the live
+        hot_board() read - the single derivation source, zero
+        second aggregation engine, zero direct showcase reads.
+        Four states: rise (current rank above prev, delta =
+        prev_rank - current_rank > 0), fall (delta < 0), entered
+        (registered after the snapshot: prev_rank None) and
+        dropped (in the snapshot but not on the current board:
+        current_rank None; the registry is append-only so an
+        in-world drop cannot occur - the state is still derived
+        honestly for a caller-supplied cross-world snapshot).
+        Steady rows are omitted: this is a change face, and a
+        fully-steady world returns an honest empty delta. Row
+        order is fully deterministic: state groups in the fixed
+        order rise, fall, entered, dropped; inside a group rows
+        sort by current_rank (dropped: prev_rank) ascending with
+        curation_id ascending as the never-firing total
+        tie-break. Zero token movement, zero writes, zero RNG."""
+        if isinstance(prev_board, dict):
+            rows_in = prev_board.get("hot_board")
+            src_rows = rows_in if isinstance(rows_in, list) else None
+        elif isinstance(prev_board, (list, tuple)):
+            src_rows = list(prev_board)
+        else:
+            src_rows = None
+        if not isinstance(src_rows, list):
+            raise CurationError(E_CU_BAD_ARGS,
+                               "prev board rows required")
+        prev = {}
+        for row in src_rows:
+            if not isinstance(row, dict):
+                raise CurationError(E_CU_BAD_ARGS,
+                                   "prev row must be a dict")
+            cid = row.get("curation_id")
+            if not isinstance(cid, str) or not cid.strip():
+                raise CurationError(E_CU_BAD_ARGS,
+                                   "prev row curation id required")
+            rank = row.get("rank")
+            if (isinstance(rank, bool) or not isinstance(rank, int)
+                    or rank < 1):
+                raise CurationError(E_CU_BAD_ARGS,
+                                   "prev rank must be int >= 1")
+            if cid in prev:
+                raise CurationError(E_CU_BAD_ARGS,
+                                   "duplicate prev curation id")
+            prev[cid] = (rank, row.get("ai_label"))
+        current = self.hot_board()
+        cur_by = {b["curation_id"]: b for b in current["hot_board"]}
+        rise, fall, entered, dropped = [], [], [], []
+        for cid, brow in cur_by.items():
+            if cid not in prev:
+                entered.append({"curation_id": cid,
+                                "ai_label": brow["ai_label"],
+                                "state": "entered",
+                                "prev_rank": None,
+                                "current_rank": brow["rank"],
+                                "delta": None})
+                continue
+            prank = prev[cid][0]
+            if brow["rank"] == prank:
+                continue  # steady: a change face lists changes
+            delta = prank - brow["rank"]
+            row = {"curation_id": cid, "ai_label": brow["ai_label"],
+                   "state": "rise" if delta > 0 else "fall",
+                   "prev_rank": prank,
+                   "current_rank": brow["rank"], "delta": delta}
+            (rise if delta > 0 else fall).append(row)
+        for cid, (prank, ai_label) in prev.items():
+            if cid not in cur_by:
+                dropped.append({"curation_id": cid,
+                                "ai_label": (ai_label if (
+                                    isinstance(ai_label, int)
+                                    and not isinstance(ai_label,
+                                                       bool))
+                                    else None),
+                                "state": "dropped",
+                                "prev_rank": prank,
+                                "current_rank": None,
+                                "delta": None})
+        rise.sort(key=lambda r: (r["current_rank"], r["curation_id"]))
+        fall.sort(key=lambda r: (r["current_rank"], r["curation_id"]))
+        entered.sort(key=lambda r: (r["current_rank"],
+                                    r["curation_id"]))
+        dropped.sort(key=lambda r: (r["prev_rank"], r["curation_id"]))
+        delta_rows = rise + fall + entered + dropped
+        return {"hot_board_delta": delta_rows,
+                "disclaimer": self.disclaimer}

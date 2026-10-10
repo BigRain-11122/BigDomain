@@ -1,0 +1,142 @@
+--- section 1: curation suite run1 (exit=0) ---
+PASS AC-CU1: register writes one registry row + member rows in registered order [(1, 'city-hall'), (2, 'east-wing')]; dup refused E_CU_DUP_CURATION; all 7 bad args rejected (empty id=E_CU_BAD_ARGS; empty title=E_CU_BAD_ARGS; str not list=E_CU_BAD_ARGS; empty list=E_CU_BAD_ARGS; dup entries=E_CU_BAD_ARGS; empty member id=E_CU_BAD_ARGS; non-bool ai flag=E_CU_BAD_ARGS); counts curations=1 members=2
+PASS AC-CU2: unknown showcase member refuses the whole registration E_CU_UNKNOWN_SHOWCASE with zero rows (curations 1==1, members for bad-route=0); showcase rows untouched (2==2); later valid registration succeeds (night-route)
+PASS AC-CU3: tour walks member showcases in registered order with GLOBAL stop numbering 1..N across showcases [(1, 'city-hall', 1), (2, 'city-hall', 2), (3, 'east-wing', 3)]; live derivation: a placement registered after the curation appears on the next tour (3 -> 4 stops); pure read zero token movement (ledger_tx 0==0==0)
+PASS AC-CU4: no member-removal/reorder/update/delete API on the face (True); membership immutable after all operations [(1, 'city-hall'), (2, 'east-wing')]; zero UPDATE surface in source ([])
+PASS AC-CU5: empty disclaimer refuses construction E_CU_NO_DISCLAIMER; declared ai_label persists (1 on row, shown in register and view envelopes); every envelope (register/view/tour/board) carries the resident disclaimer (True); direct SQL ai_label=2 refused by the CHECK ([True])
+PASS AC-CU6: view lists members with live on-display counts [(1, 'city-hall', 2), (2, 'east-wing', 2)]; board lists all curations ['heritage-route', 'night-route', 'ai-route'] with member counts [2, 1, 1]; unknown curation refused on view E_CU_UNKNOWN_CURATION and tour E_CU_UNKNOWN_CURATION; all reads pure (rows 3==3, 4==4)
+PASS AC-CU7: all 3 fault paths rejected (unknown curation register member=E_CU_UNKNOWN_SHOWCASE; unknown curation view=E_CU_UNKNOWN_CURATION; unknown curation tour=E_CU_UNKNOWN_CURATION); zero side effects (rows (3, 4) unchanged); module pure ASCII (0 non-ascii); zero network imports (0); zero banned circulation verbs in source ([]); zero UPDATE surface ([]); zero RNG; shipped config.json byte-stable
+PASS AC-HB1: hot board lists every curation ranked by member on-display totals [(1, 'heritage-route', 4), (2, 'ai-route', 2), (3, 'night-route', 2), (4, 'alpha-route', 0), (5, 'zeta-route', 0)] with a fixed row key set; envelope carries only hot_board + disclaimer; a face over an empty registry returns an honest empty board (True)
+PASS AC-HB2: deterministic sort key (-displayed_total, curation_id): heat DESC with curation_id ASC tie-break (ai-route before night-route at heat 2; alpha-route before zeta-route at heat 0 although zeta was registered first - zero insertion-order keys); two calls serialize byte-identical (identical)
+PASS AC-HB3: heat equals the manual ShowcaseFace on-display sums per curation (cross-module check True); live derivation with zero cached counters: placements lift alpha/zeta 0 -> 3 and reorder the board [(1, 'heritage-route', 4), (2, 'alpha-route', 3), (3, 'zeta-route', 3), (4, 'ai-route', 2), (5, 'night-route', 2)]; one retraction drops them back to 2 and the four-way tie re-resolves by id [(1, 'heritage-route', 4), (2, 'ai-route', 2), (3, 'alpha-route', 2), (4, 'night-route', 2), (5, 'zeta-route', 2)]
+PASS AC-HB4: pure read: repeated board reads leave ledger_tx and every showcase/curation row count unchanged (0, 5, 6, 3, 8) == (0, 5, 6, 3, 8); the hot_board method body carries zero write statements ([])
+PASS AC-HB5: board rows carry the registered ai_label persistently {'heritage-route': 0, 'ai-route': 1, 'alpha-route': 1, 'night-route': 1, 'zeta-route': 0}; envelope disclaimer resident; module stays pure ASCII (0 non-ascii chars), zero network imports, zero circulation verbs, zero RNG, zero UPDATE surface, shipped config.json byte-stable
+PASS AC-HD1: all 15 bad prev-board forms rejected with E_CU_BAD_ARGS (str input=E_CU_BAD_ARGS; int input=E_CU_BAD_ARGS; None input=E_CU_BAD_ARGS; envelope missing hot_board=E_CU_BAD_ARGS; envelope hot_board not list=E_CU_BAD_ARGS; row not dict=E_CU_BAD_ARGS; row missing curation_id=E_CU_BAD_ARGS; row empty curation_id=E_CU_BAD_ARGS; row non-str curation_id=E_CU_BAD_ARGS; row rank bool=E_CU_BAD_ARGS; row rank zero=E_CU_BAD_ARGS; row rank negative=E_CU_BAD_ARGS; row rank str=E_CU_BAD_ARGS; row rank missing=E_CU_BAD_ARGS; duplicate prev ids=E_CU_BAD_ARGS); zero side effects across the battery (counts (0, 5, 6, 3, 8) unchanged)
+PASS AC-HD2: four-state diff over the live tie world: rise rows [('alpha-route', 3, 2, 1), ('zeta-route', 5, 3, 2)]; fall rows [('ai-route', 2, 4, -2), ('night-route', 4, 6, -2)]; entered row newest-route; ghost snapshot rows derive dropped (in-world registry is append-only so a drop needs a caller cross-world snapshot - honest derivation, zero fabrication); steady heritage-route omitted; fully-steady world returns an honest empty delta (True); row key set exact
+PASS AC-HD3: every current-side delta row matches the live hot_board re-derivation (rank + ai_label) and rise/fall delta == prev_rank - current_rank (True); the method body carries the self.hot_board() call and zero direct showcase reads (True) - no second aggregation engine
+PASS AC-HD4: live derivation: after the retraction the same prev snapshot re-reads a changed board - zeta-route flips rise(+2) to fall(-1) and alpha/ai return to steady-omitted; two calls serialize byte-identical and the envelope/bare-list/tuple input forms agree; row order = state groups rise->fall->entered->dropped with ascending rank inside each group (True)
+PASS AC-HD5: pure read: the full delta battery leaves ledger_tx and every curation/showcase row count unchanged ((0, 6, 7, 3, 9) == (0, 6, 7, 3, 9); (0, 6, 7, 3, 10) == (0, 6, 7, 3, 10)); method source carries zero write statements ([]); zero new tables - the curation.db table set stays ['curation_members', 'curations'] (zero-storage face)
+PASS AC-HD6: every delta envelope carries the resident disclaimer (True); current-side rows carry the registered ai_label {'alpha-route': 1, 'zeta-route': 0, 'ai-route': 1, 'night-route': 1, 'newest-route': 1}; dropped rows carry the prev row's int ai_label and fall back to an honest None for missing/non-int labels [('ghost-route', 1), ('ghost-plain', None), ('ghost-badlabel', None)]
+PASS AC-HD7: hard laws carry over: module pure ASCII (0 non-ascii), zero UPDATE surface ([]), zero RNG, zero circulation verbs ([]), zero network imports, shipped config.json byte-stable, zero snapshot-persistence API on the face (True)
+SUITE PASS 19/19
+
+--- section 2: curation suite run2 determinism (exit=0) ---
+PASS AC-CU1: register writes one registry row + member rows in registered order [(1, 'city-hall'), (2, 'east-wing')]; dup refused E_CU_DUP_CURATION; all 7 bad args rejected (empty id=E_CU_BAD_ARGS; empty title=E_CU_BAD_ARGS; str not list=E_CU_BAD_ARGS; empty list=E_CU_BAD_ARGS; dup entries=E_CU_BAD_ARGS; empty member id=E_CU_BAD_ARGS; non-bool ai flag=E_CU_BAD_ARGS); counts curations=1 members=2
+PASS AC-CU2: unknown showcase member refuses the whole registration E_CU_UNKNOWN_SHOWCASE with zero rows (curations 1==1, members for bad-route=0); showcase rows untouched (2==2); later valid registration succeeds (night-route)
+PASS AC-CU3: tour walks member showcases in registered order with GLOBAL stop numbering 1..N across showcases [(1, 'city-hall', 1), (2, 'city-hall', 2), (3, 'east-wing', 3)]; live derivation: a placement registered after the curation appears on the next tour (3 -> 4 stops); pure read zero token movement (ledger_tx 0==0==0)
+PASS AC-CU4: no member-removal/reorder/update/delete API on the face (True); membership immutable after all operations [(1, 'city-hall'), (2, 'east-wing')]; zero UPDATE surface in source ([])
+PASS AC-CU5: empty disclaimer refuses construction E_CU_NO_DISCLAIMER; declared ai_label persists (1 on row, shown in register and view envelopes); every envelope (register/view/tour/board) carries the resident disclaimer (True); direct SQL ai_label=2 refused by the CHECK ([True])
+PASS AC-CU6: view lists members with live on-display counts [(1, 'city-hall', 2), (2, 'east-wing', 2)]; board lists all curations ['heritage-route', 'night-route', 'ai-route'] with member counts [2, 1, 1]; unknown curation refused on view E_CU_UNKNOWN_CURATION and tour E_CU_UNKNOWN_CURATION; all reads pure (rows 3==3, 4==4)
+PASS AC-CU7: all 3 fault paths rejected (unknown curation register member=E_CU_UNKNOWN_SHOWCASE; unknown curation view=E_CU_UNKNOWN_CURATION; unknown curation tour=E_CU_UNKNOWN_CURATION); zero side effects (rows (3, 4) unchanged); module pure ASCII (0 non-ascii); zero network imports (0); zero banned circulation verbs in source ([]); zero UPDATE surface ([]); zero RNG; shipped config.json byte-stable
+PASS AC-HB1: hot board lists every curation ranked by member on-display totals [(1, 'heritage-route', 4), (2, 'ai-route', 2), (3, 'night-route', 2), (4, 'alpha-route', 0), (5, 'zeta-route', 0)] with a fixed row key set; envelope carries only hot_board + disclaimer; a face over an empty registry returns an honest empty board (True)
+PASS AC-HB2: deterministic sort key (-displayed_total, curation_id): heat DESC with curation_id ASC tie-break (ai-route before night-route at heat 2; alpha-route before zeta-route at heat 0 although zeta was registered first - zero insertion-order keys); two calls serialize byte-identical (identical)
+PASS AC-HB3: heat equals the manual ShowcaseFace on-display sums per curation (cross-module check True); live derivation with zero cached counters: placements lift alpha/zeta 0 -> 3 and reorder the board [(1, 'heritage-route', 4), (2, 'alpha-route', 3), (3, 'zeta-route', 3), (4, 'ai-route', 2), (5, 'night-route', 2)]; one retraction drops them back to 2 and the four-way tie re-resolves by id [(1, 'heritage-route', 4), (2, 'ai-route', 2), (3, 'alpha-route', 2), (4, 'night-route', 2), (5, 'zeta-route', 2)]
+PASS AC-HB4: pure read: repeated board reads leave ledger_tx and every showcase/curation row count unchanged (0, 5, 6, 3, 8) == (0, 5, 6, 3, 8); the hot_board method body carries zero write statements ([])
+PASS AC-HB5: board rows carry the registered ai_label persistently {'heritage-route': 0, 'ai-route': 1, 'alpha-route': 1, 'night-route': 1, 'zeta-route': 0}; envelope disclaimer resident; module stays pure ASCII (0 non-ascii chars), zero network imports, zero circulation verbs, zero RNG, zero UPDATE surface, shipped config.json byte-stable
+PASS AC-HD1: all 15 bad prev-board forms rejected with E_CU_BAD_ARGS (str input=E_CU_BAD_ARGS; int input=E_CU_BAD_ARGS; None input=E_CU_BAD_ARGS; envelope missing hot_board=E_CU_BAD_ARGS; envelope hot_board not list=E_CU_BAD_ARGS; row not dict=E_CU_BAD_ARGS; row missing curation_id=E_CU_BAD_ARGS; row empty curation_id=E_CU_BAD_ARGS; row non-str curation_id=E_CU_BAD_ARGS; row rank bool=E_CU_BAD_ARGS; row rank zero=E_CU_BAD_ARGS; row rank negative=E_CU_BAD_ARGS; row rank str=E_CU_BAD_ARGS; row rank missing=E_CU_BAD_ARGS; duplicate prev ids=E_CU_BAD_ARGS); zero side effects across the battery (counts (0, 5, 6, 3, 8) unchanged)
+PASS AC-HD2: four-state diff over the live tie world: rise rows [('alpha-route', 3, 2, 1), ('zeta-route', 5, 3, 2)]; fall rows [('ai-route', 2, 4, -2), ('night-route', 4, 6, -2)]; entered row newest-route; ghost snapshot rows derive dropped (in-world registry is append-only so a drop needs a caller cross-world snapshot - honest derivation, zero fabrication); steady heritage-route omitted; fully-steady world returns an honest empty delta (True); row key set exact
+PASS AC-HD3: every current-side delta row matches the live hot_board re-derivation (rank + ai_label) and rise/fall delta == prev_rank - current_rank (True); the method body carries the self.hot_board() call and zero direct showcase reads (True) - no second aggregation engine
+PASS AC-HD4: live derivation: after the retraction the same prev snapshot re-reads a changed board - zeta-route flips rise(+2) to fall(-1) and alpha/ai return to steady-omitted; two calls serialize byte-identical and the envelope/bare-list/tuple input forms agree; row order = state groups rise->fall->entered->dropped with ascending rank inside each group (True)
+PASS AC-HD5: pure read: the full delta battery leaves ledger_tx and every curation/showcase row count unchanged ((0, 6, 7, 3, 9) == (0, 6, 7, 3, 9); (0, 6, 7, 3, 10) == (0, 6, 7, 3, 10)); method source carries zero write statements ([]); zero new tables - the curation.db table set stays ['curation_members', 'curations'] (zero-storage face)
+PASS AC-HD6: every delta envelope carries the resident disclaimer (True); current-side rows carry the registered ai_label {'alpha-route': 1, 'zeta-route': 0, 'ai-route': 1, 'night-route': 1, 'newest-route': 1}; dropped rows carry the prev row's int ai_label and fall back to an honest None for missing/non-int labels [('ghost-route', 1), ('ghost-plain', None), ('ghost-badlabel', None)]
+PASS AC-HD7: hard laws carry over: module pure ASCII (0 non-ascii), zero UPDATE surface ([]), zero RNG, zero circulation verbs ([]), zero network imports, shipped config.json byte-stable, zero snapshot-persistence API on the face (True)
+SUITE PASS 19/19
+suite-runs byte-identical: True
+
+--- section 3: fingerprint sentinel --check (exit=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- section 4: full RUNNER regression (exit=0) -> qa/reconcile-all-R1770.log ---
+PASS suite lobby exit=0 pass-lines=16 fail-lines=0 criteria=16 22.0s
+PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.4s
+PASS suite ledger-props exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-incentive exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+PASS suite ledger-settlement exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+PASS suite ledger-venue exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-collectibles exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+PASS suite ledger-expedite exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+PASS suite ledger-ads exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-observation exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-identity exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-studio exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-metered exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-reports exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-effects exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-growth-archive exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-companion exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-tmarket exit=0 pass-lines=7 fail-lines=0 criteria=7 0.6s
+PASS suite ledger-festival exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-showroom exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-sistercity exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-lifecycle exit=0 pass-lines=8 fail-lines=0 criteria=8 0.2s
+PASS suite ledger-apidev-rate exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-reject exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-usagelog exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-rejectwin exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-usagewin exit=0 pass-lines=8 fail-lines=0 criteria=8 0.2s
+PASS suite ledger-apidev-usagekind exit=0 pass-lines=8 fail-lines=0 criteria=8 0.2s
+PASS suite tourstate exit=0 pass-lines=37 fail-lines=0 criteria=7 0.1s
+PASS suite ugc exit=0 pass-lines=37 fail-lines=0 criteria=37 3.5s
+PASS suite ugc-sec-batch exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite pay exit=0 pass-lines=16 fail-lines=0 criteria=16 1.6s
+PASS suite pay-v3 exit=0 pass-lines=14 fail-lines=0 criteria=14 0.3s
+PASS suite pay-v3-real exit=0 pass-lines=9 fail-lines=0 criteria=9 0.7s
+PASS suite pay-v3-window exit=0 pass-lines=6 fail-lines=0 criteria=6 1.1s
+PASS suite pay-notify exit=0 pass-lines=7 fail-lines=0 criteria=7 0.7s
+PASS suite pay-notify-wiring exit=0 pass-lines=7 fail-lines=0 criteria=7 1.2s
+PASS suite pay-authorize exit=0 pass-lines=7 fail-lines=0 criteria=7 0.4s
+PASS suite pay-notify-revoke exit=0 pass-lines=7 fail-lines=0 criteria=7 5.3s
+PASS suite pay-revoke-reconcile exit=0 pass-lines=7 fail-lines=0 criteria=7 0.7s
+PASS suite ledger-clawback exit=0 pass-lines=8 fail-lines=0 criteria=8 1.7s
+PASS suite member exit=0 pass-lines=25 fail-lines=0 criteria=16 1.3s
+PASS suite member-entry exit=0 pass-lines=7 fail-lines=0 criteria=7 0.1s
+PASS suite member-refund-recovery exit=0 pass-lines=7 fail-lines=0 criteria=7 0.7s
+PASS suite watermark exit=0 pass-lines=5 fail-lines=0 criteria=5 1.2s
+PASS suite watermark-robust exit=0 pass-lines=6 fail-lines=0 criteria=6 1.8s
+PASS suite watermark-sweep exit=0 pass-lines=6 fail-lines=0 criteria=6 25.5s
+PASS suite watermark-scale-recover exit=0 pass-lines=7 fail-lines=0 criteria=7 7.6s
+PASS suite watermark-scale-unknown exit=0 pass-lines=6 fail-lines=0 criteria=6 13.1s
+PASS suite watermark-scale-refine exit=0 pass-lines=6 fail-lines=0 criteria=6 16.9s
+PASS suite dual-track exit=0 pass-lines=7 fail-lines=0 criteria=7 1.1s
+PASS suite opsreview exit=0 pass-lines=7 fail-lines=0 criteria=7 0.8s
+PASS suite liveroom exit=0 pass-lines=10 fail-lines=0 criteria=10 0.2s
+PASS suite benchgate exit=0 pass-lines=0 fail-lines=0 criteria=11 0.2s
+PASS suite citymodel exit=0 pass-lines=10 fail-lines=0 criteria=10 0.2s
+PASS suite compliance exit=0 pass-lines=0 fail-lines=0 criteria=15 0.1s
+PASS suite minors exit=0 pass-lines=19 fail-lines=0 criteria=19 0.1s
+PASS suite minors-wiring exit=0 pass-lines=70 fail-lines=0 criteria=70 13.2s
+PASS suite schema-migrate exit=0 pass-lines=21 fail-lines=0 criteria=21 4.3s
+PASS suite fingerprint-regen exit=0 pass-lines=16 fail-lines=0 criteria=16 3.1s
+PASS suite reconcile-daily-sentinel exit=0 pass-lines=8 fail-lines=0 criteria=8 0.5s
+PASS suite suite-matrix-discovery exit=0 pass-lines=16 fail-lines=0 criteria=16 0.7s
+PASS suite runner-profile-daily exit=0 pass-lines=12 fail-lines=0 criteria=12 0.2s
+PASS suite reconcile-daily-profile exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suite ledger-showcase exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-curation exit=0 pass-lines=19 fail-lines=0 criteria=19 0.2s
+PASS suite ledger-civicpoints exit=0 pass-lines=20 fail-lines=0 criteria=20 0.2s
+PASS suite ledger-honorcert exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suite ledger-devshare exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suite ledger-apimarket exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-datasub exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-proposal exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-eventtickets exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suite ledger-freetrial exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suites 75/75 green, expected criteria total=748
+RUNNER PASS (75/75 suites green, reconcile controls 7/7, 141.6s)
+
+--- section 5a: matrix regen default discovery (exit=0) ---
+[erratum, same-round rewrite for honest evidence: the first driver pass ran the matrix regen BEFORE writing qa/reconcile-all-R1770.log, so the default discovery face (mtime-desc eligibility) fell back to the previous round evidence qa/civic-comprank-R1769.log; this corrected regen runs with the round evidence on disk - discovery now resolves qa/curation-hotdelta-R1770.log whose section 4 embeds the 75 filtered PASS-suite lines + the one RUNNER line, the R1769 family precedent for the per-round matrix source]
+PASS generated docs/sandbox-suite-matrix.md (8348 bytes) - registry suites=75 criteria=748 evidence=qa/curation-hotdelta-R1770.log green=75/75
+PASS hygiene: pure-ascii source, zero network imports
+
+--- section 5b: matrix --check x2 (exit=0/0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8348 bytes, 75 suites, 748 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8348 bytes, 75 suites, 748 criteria)
+
+EVIDENCE-DRIVER DONE rc suites=0,0 sentinel=0 runner=0 matrix-regen=0,check=0,0

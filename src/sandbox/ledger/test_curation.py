@@ -6,12 +6,16 @@ Asserts the pre-registered criteria AC-CU1..CU7 from the R1751
 explore-queue row (criteria were registered before this code
 existed; honesty law) plus the R1753 theme heat board criteria
 AC-HB1..HB5 (hot_board pure-read derived ranking, registered
-before the face existed). Each criterion prints PASS/FAIL with
-evidence; the process exits non-zero on any FAIL.
+before the face existed) plus the R1770 board rank-change diff
+criteria AC-HD1..HD7 (hot_board_delta movement face over two
+caller-held snapshots, registered before the face existed).
+Each criterion prints PASS/FAIL with evidence; the process exits
+non-zero on any FAIL.
 
 Usage: python test_curation.py
 """
 
+import inspect
 import json
 import os
 import sqlite3
@@ -476,6 +480,315 @@ def main():
           " network imports, zero circulation verbs, zero RNG, zero"
           " UPDATE surface, shipped config.json byte-stable"
           % (labels, non_ascii_hb))
+
+    # -- AC-HD1..HD7 board rank-change diff (R1770) --------------------------
+    snap1 = cu.hot_board()
+    counts_hd0 = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+    bad_hd1 = []
+    raised_hd1 = True
+    for label, payload in (
+            ("str input", "a board"),
+            ("int input", 42),
+            ("None input", None),
+            ("envelope missing hot_board", {"title": "x"}),
+            ("envelope hot_board not list", {"hot_board": "x"}),
+            ("row not dict", ["x"]),
+            ("row missing curation_id", [{"rank": 1}]),
+            ("row empty curation_id", [{"curation_id": "  ",
+                                        "rank": 1}]),
+            ("row non-str curation_id", [{"curation_id": 7,
+                                          "rank": 1}]),
+            ("row rank bool", [{"curation_id": "x", "rank": True}]),
+            ("row rank zero", [{"curation_id": "x", "rank": 0}]),
+            ("row rank negative", [{"curation_id": "x",
+                                   "rank": -1}]),
+            ("row rank str", [{"curation_id": "x", "rank": "1"}]),
+            ("row rank missing", [{"curation_id": "x"}]),
+            ("duplicate prev ids", [{"curation_id": "x", "rank": 1},
+                                     {"curation_id": "x",
+                                      "rank": 2}])):
+        ok_one, got = expect_cu_error(
+            lambda p=payload: cu.hot_board_delta(p), CU.E_CU_BAD_ARGS)
+        if ok_one:
+            bad_hd1.append("%s=%s" % (label, got))
+        else:
+            bad_hd1.append("%s NOT-RAISED(%s)" % (label, got))
+            raised_hd1 = False
+    counts_hd1 = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+    ok_hd1 = (raised_hd1 and counts_hd0 == counts_hd1)
+    record("AC-HD1", ok_hd1, "all %d bad prev-board forms rejected"
+          " with %s (%s); zero side effects across the battery"
+          " (counts %s unchanged)" % (len(bad_hd1),
+                                      CU.E_CU_BAD_ARGS,
+                                      "; ".join(bad_hd1),
+                                      counts_hd0))
+
+    # world actions between snapshots: one placement (moves heat)
+    # plus one fresh registration (board entry)
+    led.ensure_account("usr:erin", census_avatar_id="erin")
+    cl_e = cf.issue_certificate("usr:erin", "evt-moon",
+                               "moon-cert")["cl_id"]
+    sh.place_exhibit("usr:erin", "west-wing", cl_e, "moon lamp")
+    cu.register_curation("newest-route", "Newest Route",
+                         ["city-hall"], True)
+    counts_hdA = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+    delta1 = cu.hot_board_delta(snap1)
+    delta1b = cu.hot_board_delta(snap1)
+    delta1_list = cu.hot_board_delta(snap1["hot_board"])
+    delta1_tuple = cu.hot_board_delta(tuple(snap1["hot_board"]))
+    ghost_rows = snap1["hot_board"] + [
+        {"curation_id": "ghost-route", "rank": 3, "ai_label": 1},
+        {"curation_id": "ghost-plain", "rank": 4},
+        {"curation_id": "ghost-badlabel", "rank": 5,
+         "ai_label": "x"}]
+    delta_ghost = cu.hot_board_delta({"hot_board": ghost_rows})
+    snap_now = cu.hot_board()
+    delta_steady = cu.hot_board_delta(snap_now)
+    delta_empty = cu.hot_board_delta({"hot_board": []})
+    counts_hdB = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+
+    def _row(cid, ai, state, prank, crank, dlt):
+        return {"curation_id": cid, "ai_label": ai, "state": state,
+                "prev_rank": prank, "current_rank": crank,
+                "delta": dlt}
+
+    expected1 = [
+        _row("alpha-route", 1, "rise", 3, 2, 1),
+        _row("zeta-route", 0, "rise", 5, 3, 2),
+        _row("ai-route", 1, "fall", 2, 4, -2),
+        _row("night-route", 1, "fall", 4, 6, -2),
+        _row("newest-route", 1, "entered", None, 5, None)]
+    keys_hd = {"curation_id", "ai_label", "state", "prev_rank",
+               "current_rank", "delta"}
+    key_ok_hd = all(set(r.keys()) == keys_hd
+                    for r in delta1["hot_board_delta"]
+                    + delta_ghost["hot_board_delta"]
+                    + delta_empty["hot_board_delta"])
+    steady_ok = delta_steady == {"hot_board_delta": [],
+                                 "disclaimer": DISCLAIMER}
+    omitted_ok = ("heritage-route" not in
+                  [r["curation_id"]
+                   for r in delta1["hot_board_delta"]])
+    expected_ghost = expected1 + [
+        _row("ghost-route", 1, "dropped", 3, None, None),
+        _row("ghost-plain", None, "dropped", 4, None, None),
+        _row("ghost-badlabel", None, "dropped", 5, None, None)]
+    expected_empty = [
+        _row("heritage-route", 0, "entered", None, 1, None),
+        _row("alpha-route", 1, "entered", None, 2, None),
+        _row("zeta-route", 0, "entered", None, 3, None),
+        _row("ai-route", 1, "entered", None, 4, None),
+        _row("newest-route", 1, "entered", None, 5, None),
+        _row("night-route", 1, "entered", None, 6, None)]
+    ok_hd2 = (delta1 == {"hot_board_delta": expected1,
+                         "disclaimer": DISCLAIMER}
+              and delta_ghost == {"hot_board_delta": expected_ghost,
+                                  "disclaimer": DISCLAIMER}
+              and delta_empty == {"hot_board_delta": expected_empty,
+                                  "disclaimer": DISCLAIMER}
+              and key_ok_hd and steady_ok and omitted_ok)
+    record("AC-HD2", ok_hd2, "four-state diff over the live tie"
+          " world: rise rows %s; fall rows %s; entered row newest-"
+          "route; ghost snapshot rows derive dropped (in-world"
+          " registry is append-only so a drop needs a caller"
+          " cross-world snapshot - honest derivation, zero"
+          " fabrication); steady heritage-route omitted; fully-"
+          "steady world returns an honest empty delta (%s); row"
+          " key set exact" % (
+              [(r["curation_id"], r["prev_rank"], r["current_rank"],
+                r["delta"]) for r in expected1 if r["state"] in
+               ("rise", "fall")][:2],
+              [(r["curation_id"], r["prev_rank"], r["current_rank"],
+                r["delta"]) for r in expected1 if r["state"] ==
+               "fall"],
+              steady_ok))
+
+    live_pre = cu.hot_board()
+    live_map = {b["curation_id"]: b for b in live_pre["hot_board"]}
+    cross_hd = True
+    for row in (delta1["hot_board_delta"]
+                + delta_ghost["hot_board_delta"]
+                + delta_empty["hot_board_delta"]):
+        cid = row["curation_id"]
+        if row["state"] == "dropped":
+            if cid in live_map:
+                cross_hd = False
+            continue
+        if (row["current_rank"] != live_map[cid]["rank"]
+                or row["ai_label"] != live_map[cid]["ai_label"]):
+            cross_hd = False
+        if row["state"] in ("rise", "fall"):
+            if row["delta"] != (row["prev_rank"]
+                                - row["current_rank"]):
+                cross_hd = False
+    src_hd = inspect.getsource(CU.CurationFace.hot_board_delta)
+    single_source = ("self.hot_board()" in src_hd
+                     and "showcase_view" not in src_hd
+                     and "displayed" not in src_hd)
+    ok_hd3 = cross_hd and single_source
+    record("AC-HD3", ok_hd3, "every current-side delta row matches"
+          " the live hot_board re-derivation (rank + ai_label) and"
+          " rise/fall delta == prev_rank - current_rank (%s); the"
+          " method body carries the self.hot_board() call and zero"
+          " direct showcase reads (%s) - no second aggregation"
+          " engine" % (cross_hd, single_source))
+
+    sh.retract_exhibit("usr:erin", "west-wing", cl_e)
+    delta2 = cu.hot_board_delta(snap1)
+    delta2b = cu.hot_board_delta(snap1)
+    counts_hdC = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+    delta2c = cu.hot_board_delta(snap1)
+    counts_hdD = (_count(conn, "ledger_tx"),
+                  _count(cuconn, "curations"),
+                  _count(cuconn, "curation_members"),
+                  _count(shconn, "showcases"),
+                  _count(shconn, "exhibit_events"))
+    live_post = cu.hot_board()
+    post_map = {b["curation_id"]: b
+                for b in live_post["hot_board"]}
+    expected2 = [
+        _row("night-route", 1, "fall", 4, 5, -1),
+        _row("zeta-route", 0, "fall", 5, 6, -1),
+        _row("newest-route", 1, "entered", None, 4, None)]
+    flip = None
+    for row in delta2["hot_board_delta"]:
+        if row["curation_id"] == "zeta-route":
+            flip = row["delta"]
+    states_ghost = [r["state"]
+                    for r in delta_ghost["hot_board_delta"]]
+    order_ok = (states_ghost == ["rise", "rise", "fall", "fall",
+                                 "entered", "dropped", "dropped",
+                                 "dropped"]
+                and [r["current_rank"] for r in
+                     delta_ghost["hot_board_delta"]
+                     if r["state"] == "rise"]
+                == sorted(r["current_rank"] for r in
+                          delta_ghost["hot_board_delta"]
+                          if r["state"] == "rise")
+                and [r["current_rank"] for r in
+                     delta_ghost["hot_board_delta"]
+                     if r["state"] == "fall"]
+                == sorted(r["current_rank"] for r in
+                          delta_ghost["hot_board_delta"]
+                          if r["state"] == "fall")
+                and [r["prev_rank"] for r in
+                     delta_ghost["hot_board_delta"]
+                     if r["state"] == "dropped"]
+                == sorted(r["prev_rank"] for r in
+                          delta_ghost["hot_board_delta"]
+                          if r["state"] == "dropped"))
+    dump_d1 = json.dumps(delta1, sort_keys=True, ensure_ascii=True)
+    dump_d1b = json.dumps(delta1b, sort_keys=True,
+                          ensure_ascii=True)
+    dump_d1l = json.dumps(delta1_list, sort_keys=True,
+                          ensure_ascii=True)
+    dump_d1t = json.dumps(delta1_tuple, sort_keys=True,
+                          ensure_ascii=True)
+    dump_d2 = json.dumps(delta2, sort_keys=True, ensure_ascii=True)
+    dump_d2b = json.dumps(delta2b, sort_keys=True,
+                          ensure_ascii=True)
+    ok_hd4 = (dump_d1 == dump_d1b == dump_d1l == dump_d1t
+              and dump_d2 == dump_d2b
+              and delta2 == {"hot_board_delta": expected2,
+                            "disclaimer": DISCLAIMER}
+              and flip == -1 and order_ok
+              and all(r["current_rank"] == post_map[
+                  r["curation_id"]]["rank"]
+                  for r in delta2["hot_board_delta"]
+                  if r["state"] != "dropped"))
+    record("AC-HD4", ok_hd4, "live derivation: after the retraction"
+          " the same prev snapshot re-reads a changed board - zeta-"
+          "route flips rise(+2) to fall(%s) and alpha/ai return to"
+          " steady-omitted; two calls serialize byte-identical and"
+          " the envelope/bare-list/tuple input forms agree; row"
+          " order = state groups rise->fall->entered->dropped with"
+          " ascending rank inside each group (%s)"
+          % (flip, order_ok))
+
+    write_words_hd = [w for w in ("INSERT INTO", "UPDATE ",
+                                  "DELETE ") if w in src_hd]
+    tables_hd = set(r[0] for r in cuconn.execute(
+        "SELECT name FROM sqlite_master WHERE type = 'table'"
+    ).fetchall())
+    ok_hd5 = (counts_hdA == counts_hdB and counts_hdC == counts_hdD
+              and not write_words_hd
+              and tables_hd == {"curations", "curation_members"})
+    record("AC-HD5", ok_hd5, "pure read: the full delta battery"
+          " leaves ledger_tx and every curation/showcase row count"
+          " unchanged (%s == %s; %s == %s); method source carries"
+          " zero write statements (%s); zero new tables - the"
+          " curation.db table set stays %s (zero-storage face)"
+          % (counts_hdA, counts_hdB, counts_hdC, counts_hdD,
+             write_words_hd, sorted(tables_hd)))
+
+    envelopes_hd = (delta1, delta1_list, delta_ghost, delta_steady,
+                    delta_empty, delta2)
+    all_disclaimer_hd = all(e.get("disclaimer") == DISCLAIMER
+                            for e in envelopes_hd)
+    dropped_rows = [r for r in delta_ghost["hot_board_delta"]
+                    if r["state"] == "dropped"]
+    label_map = {r["curation_id"]: r["ai_label"]
+                 for r in delta1["hot_board_delta"]}
+    ok_hd6 = (all_disclaimer_hd
+              and label_map == {"alpha-route": 1, "zeta-route": 0,
+                                "ai-route": 1, "night-route": 1,
+                                "newest-route": 1}
+              and dropped_rows == [
+                  _row("ghost-route", 1, "dropped", 3, None, None),
+                  _row("ghost-plain", None, "dropped", 4, None,
+                       None),
+                  _row("ghost-badlabel", None, "dropped", 5, None,
+                       None)])
+    record("AC-HD6", ok_hd6, "every delta envelope carries the"
+          " resident disclaimer (%s); current-side rows carry the"
+          " registered ai_label %s; dropped rows carry the prev"
+          " row's int ai_label and fall back to an honest None for"
+          " missing/non-int labels %s"
+          % (all_disclaimer_hd, label_map,
+             [(r["curation_id"], r["ai_label"])
+              for r in dropped_rows]))
+
+    non_ascii_hd = sum(1 for ch in cu_src if ord(ch) > 127)
+    banned_hits_hd = [w for w in BANNED_VERBS if w in cu_src]
+    update_hits_hd = [w for w in ("UPDATE curations",
+                                  "UPDATE curation_members")
+                      if w in cu_src]
+    no_snapshot_api = all(not hasattr(cu, m) for m in
+                          ("store_board", "save_snapshot",
+                           "snapshot"))
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_hd = h.read()
+    ok_hd7 = (non_ascii_hd == 0 and not banned_hits_hd
+              and not update_hits_hd and "random" not in cu_src
+              and not net_imports and cfg_hd == cfg_bytes
+              and no_snapshot_api)
+    record("AC-HD7", ok_hd7, "hard laws carry over: module pure"
+          " ASCII (%d non-ascii), zero UPDATE surface (%s), zero"
+          " RNG, zero circulation verbs (%s), zero network"
+          " imports, shipped config.json byte-stable, zero"
+          " snapshot-persistence API on the face (%s)"
+          % (non_ascii_hd, update_hits_hd, banned_hits_hd,
+             no_snapshot_api))
 
     conn.close()
     shconn.close()
