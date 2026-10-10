@@ -1,0 +1,23 @@
+PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=24
+PASS self_drive.no_pullable_mention_lines stored=1
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=10
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=9
+PASS self_drive.substantive_non_idle_mention_lines stored=9
+PASS self_drive.window stored='2026-10-05..2026-10-11'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1776'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-11T06:24:53+08:00' (age 0.0h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1776 window=2026-10-05..2026-10-11 W=24 idle=0 nop=1 sub=9 proposals=3/1 queues=6/9/10
+VERDICT PASS

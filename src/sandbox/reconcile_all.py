@@ -298,6 +298,12 @@ SUITES = [
     # mode), fail-closed on an explicitly named missing db
     # (AC-RVC1..RVC7 pre-registered in state/queue/tech.md).
     ("pay-revoke-reconcile", os.path.join("pay", "test_pay_revoke_recon.py"), 7),
+    # R1776 pay channel-status coverage matrix (read-face family; the
+    # reconcile control plane stays the independent enforcement face):
+    # dense per-channel x per-status cell counts, zero cells explicit,
+    # deterministic order, out-of-domain observed pairs appended not
+    # hidden (AC-CHM1..CHM7 pre-registered in state/queue/tech.md).
+    ("pay-channel-matrix", os.path.join("pay", "test_channel_matrix.py"), 7),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,

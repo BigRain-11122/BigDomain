@@ -860,6 +860,38 @@ class PayOrders:
                            "granted_utc": r[3],
                            "refunded": r[4] != "granted"} for r in rows]}
 
+    def channel_status_matrix(self):
+        """R1776 read face: per-channel x per-status dense coverage
+        matrix (pure derived view for reconciliation consumers; the
+        reconcile control plane stays the independent enforcement
+        face - this method never replaces its status_scan).
+
+        Every legal (channel, status) cell is always present, zero
+        counts included (full coverage, no phantom holes); cell order
+        = channel ascending x state-machine order; any observed pair
+        outside the legal domains (direct-DB tamper posture,
+        unreachable through this product because the schema constrains
+        both columns) is appended after the dense cells and counted in
+        the total instead of being hidden. Pure read: zero rows
+        written, zero caching (a fresh call re-derives)."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT channel, status, COUNT(*) FROM pay_orders"
+                " GROUP BY channel, status").fetchall()
+        observed = {}
+        for channel, status, count in rows:
+            observed[(str(channel), str(status))] = int(count)
+        cells = []
+        for channel in sorted(_CHANNELS):
+            for status in _STATUSES:
+                cells.append({"channel": channel, "status": status,
+                              "count": observed.pop((channel, status), 0)})
+        for pair in sorted(observed):
+            cells.append({"channel": pair[0], "status": pair[1],
+                          "count": observed[pair]})
+        return self._face({"channel_status_matrix": cells,
+                           "total": sum(c["count"] for c in cells)})
+
 
 def main():
     parser = argparse.ArgumentParser(
