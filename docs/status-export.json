@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-10T20:20:00+08:00",
+ "export_ts": "2026-10-10T20:35:37+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1748 apidev 窗参数格式锚硬化轮（P2 队头·R1747 承传点名兑现·轮计分 2=可跑实物·AC-WA1..WA5 预注册先于代码）：修复一个 fail-closed 缺口=窗口参数正则尾锚 $ 容尾随换行形态「2026-10\\n」（修前探针实测三面过门静默读空账不报错）→改 \\Z 严锚后三面全拒 E_AD_BAD_ARGS·尾空白双卫兵（尾空格/尾 CR）同入册；三套件坏参名单 11→14 形判据数不变全绿（rejectwin 7/7+usagewin 8/8+usagekind 8/8）·RUNNER PASS 65/65 controls 7/7 173.0s 零回归·矩阵 65/652 --check byte-identical·指纹哨兵 CLEAN domains=5·shipped config.json 零字节；GORD 20:0x 价值意义重申令（量化切片）=执法强化件零新法条·执行列全 GM 量化面=零本司派工知悉入册（引用 O-20261010-1705/O-20260930-1901）",
-  "latest_artifact": "最近实物：R1748 apidev 窗参数格式锚硬化件（src/sandbox/ledger/apidev.py _WINDOW_RE 尾锚 $→\\Z 单行+三套件坏参名单扩 11→14 形〔test_apidev_rejectwin/usagewin/usagekind〕·证据=qa/apidev-window-anchor-R1748.log+qa/reconcile-all-R1748.log+docs/sandbox-suite-matrix.md 65 套件 652 判据全 green）",
-  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗随首笔真实读数开窗）+P2 tech 队列再判（次队头=suite_matrix --check 证据面消息硬化面）——窗 ≤48h=2026-10-12"
+  "current": "R1749 suite_matrix --check 证据面消息硬化轮（P2 队头·R1748 承传点名兑现·轮计分 2=可跑实物·AC-EF1..EF6 预注册先于代码）：--check stale FAIL 消息硬化=evidence-face 对照行（doc-recorded vs check-resolved）+face-mismatch hint 行（R1739 同 run 同内容仅路径不同 stale ×2 实锚根治=操作者可从消息定位面错配 vs 真漂移）+faces agree 注·fail-closed 退出码零改动·套件例三态实测（mismatch 命名+hint/对齐即绿/tamper 红态 agree）SUITE 16/16 首跑绿·RUNNER PASS 65/65 controls 7/7 190.9s 零回归·矩阵 65/653 --check byte-identical·指纹哨兵 CLEAN domains=5；GORD O-20261010-2006 全员全面开工令（算力全解禁）=全司总广播零本司派工知悉入册（本司 OSLoop 无停摆面连续产品轮在班）·基线 245→246",
+  "latest_artifact": "最近实物：R1749 suite_matrix --check 证据面消息硬化件（src/sandbox/suite_matrix.py doc_evidence_face+_print_evidence_face 三态+test_suite_matrix.py 套件例 15→16〔判据 15→16〕·证据=qa/suite-matrix-staleface-R1749.log+qa/reconcile-all-R1749.log+docs/sandbox-suite-matrix.md 65 套件 653 判据全 green）",
+  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗）+P2 tech 队列再判（次队头=logs 常设线 fold 手术段 write/archive-append 整编入工具件）——窗 ≤48h=2026-10-12"
  },
  "depts": [
   {
@@ -251,7 +251,7 @@
    "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
   ],
   [
-   "1748",
+   "1749",
    "OSLoop 执行 tick"
   ],
   [
@@ -3089,20 +3089,24 @@
   [
    "2",
    "apidev 窗参数格式锚硬化件（R1748·P2 队头·R1747 承传点名兑现·AC-WA1..WA5 预注册=tech.md 认领行先于代码：apidev.py _WINDOW_RE 尾锚 $→\\Z 单行——Python regex $ 容尾随换行=fail-closed 缺口〔修前探针「2026-10\\n」三面 NO-RAISE 读空账实锚入证→修后探针三面全拒 E_AD_BAD_ARGS〕+三套件坏参名单 11→14 形〔rejectwin 7/7+usagewin 8/8+usagekind 8/8 判据数不变〕+RUNNER PASS 65/65 controls 7/7 173.0s 零回归=qa/reconcile-all-R1748.log·矩阵再生 65/652 --check byte-identical 双跑〔7622B〕·指纹哨兵 CLEAN domains=5·shipped config.json 零字节〔git status 证据〕·证据=qa/apidev-window-anchor-R1748.log〔修前探针+锚 diff+修后探针+三套件+回归+矩阵+哨兵+卫生节〕·tech open 8→7）"
+  ],
+  [
+   "2",
+   "suite_matrix --check 证据面消息硬化件（R1749·P2 队头·R1748 承传点名兑现·AC-EF1..EF6 预注册=tech.md 认领行先于代码：stale FAIL 消息增 evidence-face 对照行〔doc-recorded=N vs check-resolved=M·R1739 同 run 同内容仅路径不同 stale ×2 实锚〕+face-mismatch hint 行〔对齐 --evidence 重跑生成步指引〕+faces agree 注〔内容漂移定性〕·doc_evidence_face 提取面〔doc 命令行 --evidence 段·无段 None 诚实态〕·--check PASS 路径逐字节不变·套件例三态实测〔显式 regen+缺省 check mismatch→exit 2+两 basename 对照+hint·对齐 regen 后 exit 0·tamper 红态 agree+零 hint〕SUITE 16/16 首跑绿〔15 既有例零回归〕·reconcile_all SUITES suite-matrix-discovery 判据 15→16〔652→653〕·RUNNER PASS 65/65 controls 7/7 190.9s 零回归=qa/reconcile-all-R1749.log·矩阵再生 65/653 缺省发现面=evidence=qa/reconcile-all-R1749.log --check byte-identical 双跑〔7623B〕·指纹哨兵 CLEAN domains=5·shipped config.json/patterns 零字节〔git status 证据〕·证据=qa/suite-matrix-staleface-R1749.log〔套件+哨兵+再生+check×2+卫生五节〕·tech open 7→6·GORD O-20261010-2006 知悉基线 245→246）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-04..2026-10-10",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 11,
+  "substantive_non_idle_mention_lines": 12,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 7,
+  "queue_tech_open": 6,
   "queue_explore_open": 10,
-  "method": "R1748 apidev window-format anchor hardening round (score 2 = runnable artifact): _WINDOW_RE '$' tail anchor accepted a trailing newline (gap form '2026-10\\n' passed the gate and silently read empty accounts, pre-fix probe anchored in evidence) -> hardened to strict '\\Z', all three window faces now reject E_AD_BAD_ARGS fail-closed; three window-family suites' bad-shape lists 11->14 forms with criteria counts unchanged (7/8/8); RUNNER 65/65 controls 7/7 173.0s zero-regression, matrix 65/652 --check byte-identical, fingerprint sentinel CLEAN domains=5, shipped config.json untouched; GORD 20:0x value-significance row acknowledged (GM quant face, zero BigDomain dispatch, covers O-20261010-1705/O-20260930-1901, baseline 244->245); in-window lines +2 (R1748 pair); tick row 1747 -> 1748; tech queue open 8->7"
+  "method": "R1749 suite_matrix stale-check evidence-face hardening round (score 2 = runnable artifact): --check stale FAIL now prints an evidence-face comparison line (doc-recorded vs check-resolved) plus a face-mismatch hint with the alignment command when the two paths differ, and a faces-agree note when they match - the R1739 anchor (same-run, same-content, path-only stale FAIL x2) is closed; exit-code semantics unchanged (still 2, zero disk mutation, PASS path byte-stable); new suite case exercises all three states (explicit-regen vs default-discovery mismatch named + hint, aligned faces green, tamper red with agree note and no hint), SUITE 16/16 first-run green with 15 prior cases zero-regression; reconcile_all suite-matrix-discovery criteria 15->16 (total 652->653), RUNNER PASS 65/65 controls 7/7 190.9s zero-regression, matrix regen 65/653 default-discovery evidence=qa/reconcile-all-R1749.log --check byte-identical x2, fingerprint sentinel CLEAN domains=5, shipped config/patterns untouched; GORD O-20261010-2006 all-hands work order (compute unlocked) = fleet-wide broadcast, zero BigDomain dispatch, acknowledged (loop never paused, continuous product rounds on shift), baseline last_gord_tbl_rows 245->246; in-window lines +2 (R1749 pair); tick row 1748 -> 1749; tech queue open 7->6"
  }
 }

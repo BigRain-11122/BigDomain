@@ -382,6 +382,71 @@ def case_check_roundtrip_tmp(tmp):
     return "PASS check-roundtrip-tmp: identical exit 0, tamper exit 2"
 
 
+def case_stale_face_mismatch_hint(tmp):
+    """AC-EF1..EF4 (R1749, seed = R1739 anchor): a doc generated with
+    EXPLICIT --evidence (older fixture file) checked under DEFAULT
+    discovery (which resolves the newer fixture file) FAILS stale
+    WITH the evidence-face comparison line and a face-mismatch hint -
+    same-run same-content, only the path face differs, and the
+    operator can now tell. Aligning the faces turns the same content
+    green; a same-face tamper stays red with the faces-agree note and
+    no hint line."""
+    old_ev = os.path.join(tmp, "a-old.log")
+    new_ev = os.path.join(tmp, "z-new.log")
+    _write(old_ev, MINI_EVIDENCE, mtime=1_700_000_100)
+    _write(new_ev, MINI_EVIDENCE, mtime=1_700_000_200)
+    out_path = os.path.join(tmp, "doc-face.md")
+    saved = _with_qa_dir(tmp)
+    try:
+        import io
+        import contextlib
+
+        def run_main(argv):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                code = SM.main(argv)
+            return code, buf.getvalue()
+
+        code, _ = run_main(["suite_matrix.py", "--evidence", old_ev,
+                            "--out", out_path])
+        assert code == 0, "explicit generate must exit 0"
+        code, out = run_main(["suite_matrix.py", "--out", out_path,
+                              "--check"])
+        assert code == 2, "default-check face mismatch must exit 2"
+        assert "evidence-face: doc-recorded=" in out, \
+            "comparison line required on stale"
+        assert os.path.basename(old_ev) in out, \
+            "doc-recorded face must be named"
+        assert os.path.basename(new_ev) in out, \
+            "check-resolved face must be named"
+        assert "face-mismatch" in out, "hint line required on mismatch"
+        assert "faces agree" not in out, \
+            "agree note must not appear on mismatch"
+        # positive control: align faces -> byte-identical green
+        code, _ = run_main(["suite_matrix.py", "--evidence", new_ev,
+                            "--out", out_path])
+        assert code == 0, "regen against resolved face must exit 0"
+        code, _ = run_main(["suite_matrix.py", "--out", out_path,
+                            "--check"])
+        assert code == 0, "aligned faces must be byte-identical green"
+        # tamper under AGREEING faces -> red with agree note, no hint
+        with open(out_path, encoding="utf-8") as handle:
+            doc = handle.read()
+        with open(out_path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(doc.replace("| 1 |", "| 9 |", 1))
+        code, out = run_main(["suite_matrix.py", "--out", out_path,
+                              "--check"])
+        assert code == 2, "tampered doc must stay red"
+        assert "faces agree" in out, \
+            "agree note required when faces match"
+        assert "face-mismatch" not in out, \
+            "no mismatch hint when faces agree"
+    finally:
+        SM.QA_DIR = saved
+    return "PASS stale-face-mismatch-hint: mismatch named + hint,"\
+           " aligned faces green, tamper red with agree note"
+
+
 def case_hygiene_self_checks(tmp):
     """AC-SM6: self_checks() clean on the current source."""
     problems = SM.self_checks()
@@ -405,6 +470,7 @@ def main():
         case_live_default_discovery,
         case_explicit_evidence_lenient,
         case_check_roundtrip_tmp,
+        case_stale_face_mismatch_hint,
         case_hygiene_self_checks,
     ]
     failures = 0

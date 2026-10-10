@@ -377,7 +377,9 @@ SUITES = [
     # walks qa/*.log newest-first with four fail-closed eligibility
     # checks; AC-SM1..SM7 pre-registered in state/queue/tech.md).
     # R1709 AC-TIE1..TIE7: same-mtime tie-break coverage (+5 cases).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 15),
+    # R1749 AC-EF1..EF6: stale --check evidence-face comparison +
+    # face-mismatch hint (+1 case; seed = R1739 same-run stale x2).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 16),
     # R1715 runner-profile daily variant: --daily face (discovery
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser

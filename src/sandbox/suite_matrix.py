@@ -284,6 +284,46 @@ def doc_stamp(text, patterns):
     return None
 
 
+def doc_evidence_face(text, patterns):
+    """Extract the doc-recorded evidence path from the generation
+    command line (R1749 stale-face hardening, seed = R1739 anchor:
+    a doc regenerated with an EXPLICIT --evidence file then checked
+    under DEFAULT discovery failed stale twice on the very same run -
+    same content, only the resolved path differed, and the bare
+    'stale (registry/config/evidence drifted)' message gave the
+    operator no way to tell that face-mismatch from real drift).
+    Returns None when the doc carries no --evidence segment (honest
+    unknown, never a guess)."""
+    prefix = "- %s: " % patterns["labels"]["command"]
+    for line in text.splitlines():
+        if line.startswith(prefix):
+            match = re.search(r"--evidence (\S+)", line)
+            return match.group(1) if match else None
+    return None
+
+
+def _print_evidence_face(recorded, resolved):
+    """Evidence-face comparison + hint block for a stale --check
+    (AC-EF2/AC-EF3; exit-code semantics unchanged - diagnostics
+    only). The PASS path prints nothing here (byte-stable)."""
+    if recorded is None:
+        print("  evidence-face: doc-recorded=? (no --evidence line in"
+              " doc) check-resolved=%s" % resolved)
+        return
+    if recorded == resolved:
+        print("  evidence-face: doc-recorded=%s check-resolved=%s"
+              " (faces agree - drift is in content, not the evidence"
+              " face)" % (recorded, resolved))
+        return
+    print("  evidence-face: doc-recorded=%s check-resolved=%s"
+          % (recorded, resolved))
+    print("  hint: evidence face-mismatch - the doc was generated"
+          " against a different evidence file than this check"
+          " resolved; rerun: python src/sandbox/suite_matrix.py"
+          " --evidence %s  then re-run --check to judge true drift"
+          % resolved)
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", default=DEFAULT_OUT)
@@ -328,6 +368,8 @@ def main(argv):
             return 0
         print("FAIL check: %s stale (registry/config/evidence drifted)"
               % rel(args.out))
+        _print_evidence_face(doc_evidence_face(current, patterns),
+                             rel(evidence_path))
         return 2
 
     stamp = time.strftime("%Y-%m-%d %H:%M +08:00",
