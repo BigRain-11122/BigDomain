@@ -221,6 +221,15 @@ SUITES = [
     ("pay-authorize", os.path.join("pay", "test_authorize.py"), 7),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
+    # R1721 close_refund entitlement-recovery linkage (R1718 successor):
+    # pay read-face refunded annotation (status-derived, zero schema
+    # touch), member activation gate, revoke_refunded face (existing
+    # active->expired legal edge + refund-recovery audit provenance),
+    # birth-cert re-judge on non-refunded grants, caller-built recovery
+    # wiring with never-break degradation + crash-window heal
+    # (AC-RR1..RR7 pre-registered in state/queue/tech.md).
+    ("member-refund-recovery",
+     os.path.join("member", "test_refund_recovery.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

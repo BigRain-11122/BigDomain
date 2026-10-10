@@ -189,7 +189,7 @@ class PayOrders:
     every write opens with BEGIN IMMEDIATE (SQLite WAL discipline)."""
 
     def __init__(self, config, db_path, event_store, ledger,
-                 minor_guard=None, notify=None):
+                 minor_guard=None, notify=None, entitlement_recovery=None):
         self._startup_checks(config, event_store, ledger)
         self.db_path = db_path
         parent = os.path.dirname(os.path.abspath(db_path))
@@ -216,6 +216,13 @@ class PayOrders:
         # owned: this class only holds the reference and never builds,
         # configures, or closes it.
         self.notify = notify
+        # R1721 wiring (close_refund entitlement-recovery successor):
+        # optional member-domain refund recovery face. Same law as
+        # notify: caller-built and caller-owned, None = not wired,
+        # shipped behavior byte-stable; the post-commit attempt never
+        # breaks the close (degraded envelope evidence); the face is
+        # independently re-callable for the crash-window heal.
+        self.entitlement_recovery = entitlement_recovery
 
     def close(self):
         with self._lock:
@@ -445,11 +452,16 @@ class PayOrders:
         edge (trigger T1 validates; the pre-check answers unknown and
         non-granted states fail-closed with zero writes). After the
         COMMIT the refund notice fires post-commit (best-effort, never
-        breaks the close; envelope evidence, AC-NW3). Honest scope: the
-        fiat refund money-flow belongs to the channel adapters domain
-        and entitlement/ledger clawback is NOT part of this face;
-        timeout closes (no grant row) never pass through here and get
-        no notice (AC-PN3 semantics unchanged)."""
+        breaks the close; envelope evidence, AC-NW3). R1721: when an
+        entitlement_recovery face is wired the same post-commit block
+        also asks the member domain to revoke the entitlement this
+        refund just undid (best-effort, envelope evidence under the
+        'recovery' key; independently re-callable for the crash-window
+        heal). Honest scope: the fiat refund money-flow belongs to the
+        channel adapters domain and the ledger conversion-share
+        clawback is NOT part of this face (member entitlement recovery
+        only); timeout closes (no grant row) never pass through here
+        and get no notice (AC-PN3 semantics unchanged)."""
         order = self._order_row(order_id)
         if order is None:
             raise PayError(E_UNKNOWN_ORDER, str(order_id))
@@ -469,14 +481,22 @@ class PayOrders:
             except BaseException:
                 self._conn.execute("ROLLBACK")
                 raise
+        recovery_out = None
+        if self.entitlement_recovery is not None:
+            gid = compute_grant_id(order_id)
+            try:
+                recovery_out = self.entitlement_recovery.revoke_refunded(gid)
+            except Exception as exc:  # never break a completed close
+                recovery_out = {"status": "off:" + type(exc).__name__}
         notify_out = self._attempt_notify(order_id, "refund")
         out = {"order_id": order_id, "status": "closed"}
+        if recovery_out is not None:
+            out["recovery"] = recovery_out
         if notify_out is not None:
             out["notify"] = notify_out
         return self._face(out)
 
     # ---- callback processing (AC-Y4/Y5/Y6) ---------------------------------
-
     def _record_bad_receipt(self, payload, reason):
         """Best-effort evidence row (sig_ok=0, four-bad audit trail).
         The schema caps one bad-receipt row per order
@@ -734,34 +754,45 @@ class PayOrders:
         """Single-grant read face for the entitlement domain (member
         piece activation, AC-M2 source authenticity): the member store
         verifies every activation against this face; a forged grant id
-        resolves to None. Additive read face, zero criteria change."""
+        resolves to None. Additive read face, zero criteria change.
+        R1721: the additive 'refunded' flag derives from the order
+        status (granted->closed is the only post-grant close edge =
+        refund; an orphaned grant row fails closed as refunded)."""
         with self._lock:
             row = self._conn.execute(
-                "SELECT grant_id, order_id, census_avatar_id, entitlement,"
-                " granted_utc FROM pay_grants WHERE grant_id = ?",
+                "SELECT g.grant_id, g.order_id, g.census_avatar_id,"
+                " g.entitlement, g.granted_utc, o.status"
+                " FROM pay_grants g LEFT JOIN pay_orders o"
+                " ON o.order_id = g.order_id WHERE g.grant_id = ?",
                 (str(grant_id or ""),)).fetchone()
         if row is None:
             return None
         return {"grant_id": row[0], "order_id": row[1],
                 "census_avatar_id": row[2], "entitlement": row[3],
-                "granted_utc": row[4]}
+                "granted_utc": row[4],
+                "refunded": row[5] != "granted"}
 
     def grants_for(self, census_avatar_id):
         """Grants query face: the lobby E_ENTRANCE_REQUIRED judgement
         source (birthright/any grant = entrance credential; enforcement
         lives in the lobby piece, referenced not copied). Items carry
         grant_id so the member activation face can address real grants
-        (additive field, judgement semantics unchanged)."""
+        (additive field, judgement semantics unchanged). R1721: the
+        additive 'refunded' flag per item derives from the order
+        status (refund-closed grants stay visible as history; the
+        judgement faces - birth cert, activation gate - consume it)."""
         with self._lock:
             rows = self._conn.execute(
-                "SELECT grant_id, order_id, entitlement, granted_utc"
-                " FROM pay_grants"
-                " WHERE census_avatar_id = ? ORDER BY granted_utc",
+                "SELECT g.grant_id, g.order_id, g.entitlement, g.granted_utc,"
+                " o.status FROM pay_grants g LEFT JOIN pay_orders o"
+                " ON o.order_id = g.order_id"
+                " WHERE g.census_avatar_id = ? ORDER BY g.granted_utc",
                 (str(census_avatar_id),)).fetchall()
         return {"census_avatar_id": str(census_avatar_id),
                 "items": [{"grant_id": r[0], "order_id": r[1],
                            "entitlement": r[2],
-                           "granted_utc": r[3]} for r in rows]}
+                           "granted_utc": r[3],
+                           "refunded": r[4] != "granted"} for r in rows]}
 
 
 def main():

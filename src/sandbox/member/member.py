@@ -369,6 +369,13 @@ class MemberStore:
         if grant["census_avatar_id"] != avatar:
             raise MemberError(E_BAD_GRANT_SOURCE,
                               "grant belongs to another avatar (AC-M2)")
+        if grant.get("refunded"):
+            # R1721 refund recovery: a refund-closed order's grant is a
+            # dead source (the purchase was undone); both a fresh and
+            # an idempotent re-activation refuse fail-closed (gate sits
+            # before the idempotent lookup).
+            raise MemberError(E_BAD_GRANT_SOURCE,
+                              "grant refunded (R1721): %s" % grant_id)
         entitlement = str(grant["entitlement"])
         tier = self.catalog.products.get(entitlement)
         ts = now_utc()
@@ -467,10 +474,16 @@ class MemberStore:
     def birth_cert_face(self, census_avatar_id):
         """Permanent entrance qualification (C0): derives from the pay
         grants face - the lobby E_ENTRANCE_REQUIRED judgement source -
-        which never expires; member expiry can never revoke it."""
+        which never expires; member expiry can never revoke it.
+        R1721 refund recovery: a refund is not an expiry - it undoes
+        the purchase, so the judgement counts only non-refunded grants
+        (any live grant = entrance; the only-grant-refunded case loses
+        the cert honestly). first_granted_utc stays the historical
+        first grant moment (history is not rewritten)."""
         avatar = str(census_avatar_id or "").strip()
         grants = self.pay.grants_for(avatar)
         items = grants.get("items") or []
+        live = [i for i in items if not i.get("refunded")]
         with self._lock:
             row = self._conn.execute(
                 "SELECT audit_id FROM member_audit WHERE audit_id = ?",
@@ -478,7 +491,7 @@ class MemberStore:
             marker = row[0] if row else None
         return self._face({
             "census_avatar_id": avatar,
-            "birth_cert": bool(items), "permanent": True,
+            "birth_cert": bool(live), "permanent": True,
             "first_granted_utc": items[0]["granted_utc"] if items else None,
             "member_domain_marker": bool(marker),
             "judgement_source": "pay.grants_for (lobby E_ENTRANCE_REQUIRED face)",
@@ -665,6 +678,99 @@ class MemberStore:
                 raise
         return self._face({"census_avatar_id": avatar, "period_id": period_id,
                            "refunded": count, "balance_after": int(balance)})
+
+    # ---- refund recovery (R1721, orders.close_refund successor) ------------
+
+    def revoke_refunded(self, grant_id, now=None):
+        """Refund recovery face (R1721): after orders.close_refund
+        commits, the entitlement that purchase granted must not survive.
+        Design ruling (registered in the tech.md claim line before this
+        code): the period rides the EXISTING one-way active->expired
+        edge - the CHECK/trigger state machine is the law and a
+        distinct 'refunded' status state is a real schema-change
+        window (migration-chain step + fingerprint re-freeze,
+        registered as a follow-up seed), not this window; the
+        refund-recovery audit row carries the provenance (status names
+        are history-book readouts, the audit row records the WHY).
+        Same semantics as sweep_expired on the forced path: remaining
+        credits forfeit as an expire row (no carryover - honest
+        presentation), the period's unused vouchers expire with one
+        audit row each. Fail-closed gates: the grant must exist
+        (E_BAD_GRANT_SOURCE) and be refund-closed (E_BAD_STATE), the
+        avatar derives from the grant row (server authority).
+        Idempotent: a re-call finds no active period for the grant and
+        writes nothing new (the INSERT OR IGNORE audit row lands
+        exactly once); grants without a period row (birth-cert-only
+        activations, e.g. the compute pack) answer revoked=0 with the
+        provenance row still recorded. This face is also the
+        crash-window heal path: the close_refund wiring calls it
+        best-effort post-commit, and any operator/next-window re-call
+        converges the same way."""
+        gid = str(grant_id or "")
+        grant = self.pay.grant_row(gid)
+        if grant is None:
+            raise MemberError(E_BAD_GRANT_SOURCE,
+                              "unknown grant id: %s" % grant_id)
+        if not grant.get("refunded"):
+            raise MemberError(E_BAD_STATE,
+                              "grant not refund-closed: %s" % gid)
+        avatar = grant["census_avatar_id"]
+        ts = str(now or now_utc())
+        revoked = 0
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT period_id, census_avatar_id FROM member_periods"
+                " WHERE source_grant_id = ? AND status = 'active'",
+                (gid,)).fetchall()
+            for period_id, owner in rows:
+                if owner != avatar:
+                    # defensive: the grant row owns the avatar; a period
+                    # row claiming another owner is not ours to touch
+                    continue
+                self._conn.execute("BEGIN IMMEDIATE")
+                committed = False
+                try:
+                    self._conn.execute(
+                        "UPDATE member_periods SET status = 'expired'"
+                        " WHERE period_id = ?", (period_id,))
+                    balance = self._balance_of(period_id)
+                    if balance > 0:
+                        self._credit_event(avatar, period_id, -balance,
+                                           "expire", None, None, ts)
+                    vouchers = self._conn.execute(
+                        "SELECT voucher_id FROM member_vouchers"
+                        " WHERE period_id = ? AND status = 'unused'",
+                        (period_id,)).fetchall()
+                    for voucher_id, in vouchers:
+                        self._conn.execute(
+                            "UPDATE member_vouchers SET status = 'expired'"
+                            " WHERE voucher_id = ?", (voucher_id,))
+                        self._audit(avatar, "voucher",
+                                     "voucher=%s expired with period"
+                                     % voucher_id,
+                                     _h("audit", "voucher-expire",
+                                        voucher_id), ts)
+                    self._audit(avatar, "expire",
+                                "period=%s refund recovery grant=%s"
+                                " credits_forfeited=%d"
+                                % (period_id, gid, balance),
+                                _h("audit", "refund-recovery", gid), ts)
+                    self._conn.execute("COMMIT")
+                    committed = True
+                    revoked += 1
+                except BaseException:
+                    if not committed:
+                        self._conn.execute("ROLLBACK")
+                    raise
+            if revoked == 0:
+                # provenance for grants with no active period (never
+                # activated, birth-cert-only, or already expired):
+                # exactly-once audit row, zero other writes
+                self._audit(avatar, "expire",
+                            "grant=%s refund recovery revoked=0" % gid,
+                            _h("audit", "refund-recovery", gid), ts)
+        return self._face({"grant_id": gid, "census_avatar_id": avatar,
+                           "revoked": int(revoked), "idempotent": True})
 
     # ---- expiry sweep (AC-M12) ----------------------------------------------
 
