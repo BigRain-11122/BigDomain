@@ -1,0 +1,51 @@
+=== section 1: selftest (AC-LN6 fixtures + AC-LN7 hygiene) ===
+SELFTEST PASS: 16 checks, 16 pass, 0 fail
+  PASS f1 distinct==1
+  PASS f1 verdict NORMALIZED-FULL
+  PASS f1 winner==b-good.log
+  PASS f1 tie_peers==2
+  PASS f1 assertions pass
+  PASS f2 distinct==2
+  PASS f2 winner==z-tie.log (skip a-fail, not m-old)
+  PASS f2 verdict NO-LIVE-TIE
+  PASS f2 assertions pass
+  PASS f3 verdict TIE-EXERCISED
+  PASS f3 winner==s-one.log
+  PASS f3 tie_peers==1
+  PASS f3 assertions pass
+  PASS f4 verdict NO-ELIGIBLE-EVIDENCE
+  PASS hygiene pure-ascii source
+  PASS hygiene zero network imports
+selftest exit=0
+=== section 2: live qa/ reading (AC-LN2) ===
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+files: 940 (candidates 897)
+distinct_mtime: 899
+largest_tie_group: 2
+winner: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-all-R1725.log
+winner_calls_identical: True (3/3)
+tie_peers: 0
+verdict: NO-LIVE-TIE
+note: no live tie at winner mtime: tie-break not exercised this state (honest reading)
+PROBE PASS verdict=NO-LIVE-TIE
+live probe exit=0
+=== section 3: real git worktree checkout rebuild (AC-LN3) ===
+worktree add --detach <tmp> HEAD exit=0 (real tracked-relation rebuild, zero work-tree touch)
+dir: C:\Users\sjs20\AppData\Local\Temp\bd-wt-R1727b\qa
+files: 939 (candidates 897)
+distinct_mtime: 285
+largest_tie_group: 7
+winner: C:\Users\sjs20\AppData\Local\Temp\bd-wt-R1727b\qa\venue-runner-R605.log
+winner_calls_identical: True (3/3)
+tie_peers: 0
+verdict: NO-LIVE-TIE
+note: no live tie at winner mtime: tie-break not exercised this state (honest reading)
+PROBE PASS verdict=NO-LIVE-TIE
+checkout probe exit=0
+worktree remove exit=0
+=== reading: AC-LN4 pre-registered decision rule applied ===
+closure condition (distinct_mtime==1 full normalization) NOT met on either real state
+live qa/: per-round fresh evidence files keep mtimes spread (NO-LIVE-TIE, winner deterministic 3/3)
+real checkout rebuild: git worktree checkout does NOT flatten mtimes on NTFS for ~940 files (hundreds of distinct values, largest tie group single-digit)
+verdict: window stays open per pre-registered rule; probe = mechanical re-runnable closure face (any future rebuild/sync state: python src/os/qa_mtime_probe.py --dir <qa-dir>)
+fixture-live cross-verification: full-normalization + tie semantics hold on probe fixtures (R1709 AC-TIE1/TIE2 semantics re-verified by selftest f1/f2/f3)

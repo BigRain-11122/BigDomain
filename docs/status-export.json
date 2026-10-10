@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T09:49:09+08:00",
+  "export_ts": "2026-10-10T10:00:53+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1726 fold R470 watermark reorg (R1725 carry-note cashed; score 1 = ledger maintenance mechanism file): round-start first measure 79156B over the 78500B line by 656B = P-2026-09-25-18 470th cut; window tail-5 [R1714..R1723 roll 10035B + R1724/R1725 pairs 4164B] 14199B -> 1 rolling line kept=0, catalog 197 tokens zero-loss, verify-then-write post==predicted 69065B margin 9435B, log 25->21; AC-R4701..R4706 = qa/reorg-R1726.log (pre-gauge over-line + post-gauge fold_needed=false + eol layout_ok and indent_ok dual-green bare_lf=0 + dual parsers py+PS + archive verbatim 5/5 + post-hoc catalog 197 missing=[]); nine-face scan all PASS zero FLAG; P1 all gated (radar lists not landed, BigLife R777 chronic, bootstrap=CEO physicals, reconcile done today R1698+sentinel R1714); next P2 head = suite_matrix live-mtime normalization window (tech.md top non-gated item); closeout 1725 -> 1726, final state 71367B margin 7133B under the line",
-    "latest_artifact": "滠近实物：watermark 缩放族未知因子扩展面套件（2026-10-10·R1725 交付·轮计分 2=可跑实物）：src/sandbox/watermark/test_scale_unknown.py 四非整数因子 {0.7x/0.85x/1.1x/1.5x} 全域盲搜索域 (0.3,2.2) 200 采样零提示注入模板对位恢复实测——命中率 3/4 RECOVERED（down0.85x 0.5039→0.0703+up1.1x 0.4766→0.0117+up1.5x 0.5117→0.0078）·0.7x IMPROVED 0.2891 判负留痕合法（scale_infer 真值精确命中仍残余=0.7x 插值信息损失面）；SUITES 55→56 判据 576→582·RUNNER PASS 56/56 controls 6/6 110.0s·矩阵 56/582 green --check byte-identical；证据 qa/watermark-scale-unknown-R1725.log（套件+回归+矩阵三节）",
-    "next_milestone": "下轮=P2 队头=suite_matrix 发现面 live mtime 归一态实证窗（tech.md 次开非门控项·R1709 后继：git checkout/整备后 qa/ 全件 mtime 拉平的真实场景 live 实测——未归一如实注留窗=判负留痕合法）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1727 suite_matrix live-mtime normalization window delivered as runnable probe (P2 head cashed, R1726 carry-note; score 2 = runnable artifact; AC-LN1..LN8 pre-registered in tech.md claim row before code): src/os/qa_mtime_probe.py (pure ASCII stdlib zero-network; discovery face imported live from suite_matrix, single source zero copy, QA_DIR monkeypatch R1709 same law) - --selftest five-state fixtures 16/16 green (full-normalization winner==name-asc min among eligible + in-group skip never falling to old group [AC-TIE2 re-verified] + two-eligible tie TIE-EXERCISED + spread NO-LIVE-TIE + zero-eligible refusal exit 3 family; hygiene pure-ascii + zero net imports); live qa/ reading = 940 files 899 distinct mtimes, winner reconcile-all-R1725.log, 3/3 consecutive calls identical, tie_peers=0 NO-LIVE-TIE; real git worktree checkout rebuild (add --detach HEAD, zero work-tree touch, removed exit 0) = 939 files 285-305 distinct mtimes, largest tie group 7, winner venue-runner-R605.log, 3/3 identical, NO-LIVE-TIE - empirical finding: real git checkout does NOT flatten qa/ mtimes on NTFS; per pre-registered AC-LN4 rule = spread state, window stays open with honest reading (lawful negative), probe = mechanically re-runnable closure face for any future genuinely flattened state; evidence qa/suite-matrix-livemtime-R1727.log (three sections + reading); nine-face scan round-start all PASS zero FLAG; next P2 head = apidev reject-tally read face; closeout 1726 -> 1727",
+    "latest_artifact": "最近实物：QA 证据目录 mtime 归一态实证探针件（2026-10-10·R1727 交付·轮计分 2=可跑实物）：src/os/qa_mtime_probe.py（纯 ASCII stdlib 零网络·发现面 import suite_matrix 单一事实源引用不复制·QA_DIR monkeypatch R1709 同律·--selftest 五态夹具 16/16 全绿〔全归一/并列组/双合格并列/散布/零合格 refusal〕+纯 ASCII/零网络 import 卫生自检）——live qa/ 读数=940 件 899 distinct mtime·winner=reconcile-all-R1725.log·三连调逐位同一·NO-LIVE-TIE；真 git worktree checkout 重建实测〔--detach HEAD 零触碰实盘·毕即 remove exit 0〕=939 件 285-305 distinct mtime·最大并列组 7·winner=venue-runner-R605.log·NO-LIVE-TIE——实证结论=真 checkout 在 NTFS 不拉平 qa/ 全件 mtime·「全归一」前提未在真重建态复现·窗按 AC-LN4 预注册规则留开〔判负留痕合法〕·探针=机械可复跑闭口面；证据 qa/suite-matrix-livemtime-R1727.log（selftest+live+checkout 三节+读数节）",
+    "next_milestone": "下轮=P2 队头=apidev 拒因分类计数读面（tech.md 次开项·E_AD_* 各拒因读时 COUNT 聚合=dev_board/key_view「为何被拒」自诊剖面·零新表零 UPDATE 读时聚合优先）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1726",
+      "1727",
       "OSLoop 执行 tick"
     ],
     [
@@ -3001,20 +3001,24 @@
     [
       "1",
       "R1726 fold R470 水位整编+滚窗并折收账（R1725 承传注记兑现·轮首首测 79156B disk 越 78,500B 线 656B＝P-2026-09-25-18 第四百七十刀·窗=tail-5：R1714..R1723 滚窗行〔10035B〕+R1724/R1725 两轮对 4 行〔4164B〕5 行 14199B 压 1 滚窗行 kept=0·原文保全=archive §R470 节 5 行 verbatim+preop logs/state-preop-R1726.bak〔sha16 7c1982c4c2205cd7〕·catalog 197 token 全字面嵌零丢失·verify-then-write post==predicted 69065B margin 9435B·log 25→21；AC-R4701..R4706=qa/reorg-R1726.log 全过；九面扫描轮首全 PASS 零 FLAG·五静全过→线序拉活 P1 全门控→P2 队头=logs 整编常设线 fold R470 live execute 正门兑现·下窗 P2 队头=tech.md 次开项 suite_matrix live mtime 归一态实证窗；auto-saves 常设步 390.5MB/228 件 <500MB 线不清；轮计分 1=台账维护机制件·tick 1725→1726·export checker 刷新过）"
+    ],
+    [
+      "2",
+      "suite_matrix live mtime 归一态实证探针件（R1727·P2 队头·R1726 承传点名兑现·AC-LN1..LN8 预注册=tech.md 认领行先于代码：src/os/qa_mtime_probe.py 纯 ASCII stdlib 零网络·发现面 import suite_matrix 单一事实源引用不复制〔default_evidence/_evidence_eligible·QA_DIR monkeypatch R1709 同律〕·--selftest 五态夹具 16/16 全绿〔全归一态 winner==name 升序最小合格件+并列组组内跳过不坠旧组〔AC-TIE2 语义复证〕+双合格并列 TIE-EXERCISED+散布 NO-LIVE-TIE+零合格 refusal exit 3 族〕+纯 ASCII/零网络 import 卫生自检过；live qa/ 读数=940 件 899 distinct mtime·winner=reconcile-all-R1725.log·三连调逐位同一·tie_peers=0·NO-LIVE-TIE；真 checkout 重建实测〔git worktree add --detach HEAD 真追踪关系重建零触碰实盘·毕即 remove exit 0〕=939 件 285-305 distinct mtime·最大并列组 7·winner=venue-runner-R605.log·三连调同一·NO-LIVE-TIE——实证结论=真 git checkout 在 NTFS 不拉平 qa/ 全件 mtime·窗名「全归一」前提未在真重建态复现·按 AC-LN4 判定规则散布态=如实注留窗〔判负留痕合法〕·探针=机械可复跑闭口面〔未来真拉平态任轮 --dir 即判·全归一即闭口〕；不入 SUITES 注册表=测量面非产品套件〔check_export_consistency 先例〕·suite_matrix.py/shipped config 零字节改动；证据 qa/suite-matrix-livemtime-R1727.log 三节+读数节·tech open 10 持平〔窗留开〕）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1726 flush caliber: fold R470 removed 5 in-window lines (R1714..R1723 roll + R1724/R1725 pairs, all 10-10) and added the R470 roll (in W, not sub); closeout pair +1 substantive (R1726 line, tokens excluded) -> log_lines_in_window 20, substantive recomputed 7, nop 1 / idle 0 flat; tick row 1725 -> 1726; queues 6/10/10 flat (logs standing line stays open per standing-line law)"
+    "method": "R1727 flush caliber: R1727 closeout pair appended (both dated 2026-10-10, in window; substantive R1727 line +1, tokens excluded) -> log_lines_in_window 20 -> 22, substantive 7 -> 8, nop 1 / idle 0 flat; tick row 1726 -> 1727; queues 6/10/10 flat (live-mtime window stays open with R1727 empirical note per pre-registered AC-LN4 rule; probe = mechanical re-runnable closure face)"
   }
 }
