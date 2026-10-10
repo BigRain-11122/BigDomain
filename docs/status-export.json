@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T13:45:11+08:00",
+  "export_ts": "2026-10-10T14:10:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1735 apidev usage by-kind 窗计数读面交付轮（R1734 承传点名兑现·轮计分 2=可跑实物）：apidev.py 新增 usage_kind_tally(api_key, window=None) 公开面=读面族三对称补全（reject_tally 按拒因计数+usage_log 行日志+本面按 kind 计数——开发者面板「本月哪些 kind 在用」零可见缺口闭）；缺省 None=当月窗与 quota 环同源 _window_utc·显式 YYYY-MM 任意月窗读·11 坏窗形态 fail-closed·键门第一律·零新表零 UPDATE 读时聚合·exact-key 归属（轮换后继零祖先继承）；key_view/dev_board 嵌入面 additive（板级 usage_kind_tally_total merged==manual all-key SQL·签名 window-free=AC-RJW4 同律）；套件 test_apidev_usagekind.py 7/7（冻结钟+manual SQL 双交叉+死键双态）·reconcile_all SUITES 61→62 判据 617→624·RUNNER PASS 62/62 controls 6/6 141.5s 零回归·指纹哨兵 CLEAN domains=5（零 ledger schema 触碰）·矩阵再生 62/624 --check byte-identical；轮首九面扫描全 PASS（GORD +3 全他司域知悉：13:3x 全片满跑放手令+O-20261010-1325 P 系三基准设计令+13:3x jman LoRA 让位修订——本司沙箱纯 CPU 件零 GPU 占用不受机队让路面影响）；tech open 10→9 done→后补种 1→10；state 收账后 79110B 越 78,500B 线→fold R473=下轮轮首首测裁定；closeout 1734 -> 1735",
-    "latest_artifact": "最近实物：apidev usage by-kind 窗计数读面（2026-10-10·R1735·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py usage_kind_tally 公开面+_usage_kind_tally 聚合器+key_view/dev_board 嵌入面（板级 usage_kind_tally_total）+套件 src/sandbox/ledger/test_apidev_usagekind.py SUITE 7/7 exit 0——证据 qa/apidev-usagekind-R1735.log（套件+指纹哨兵+矩阵+卫生四节）+qa/reconcile-all-R1735.log（RUNNER PASS 62/62 套件 624 判据 controls 6/6 141.5s 零回归）+docs/sandbox-suite-matrix.md（62 套件 624 判据全 green）",
-    "next_milestone": "下轮=P2 队头=哨兵段时长入证面（R1715 后继·tech.md 次开项：run_sentinel 记录哨兵子进程 elapsed 入尾行〔sentinel exit=N elapsed=X.Xs〕+daily 剖面对哨兵段时长的消费面·阈值预注册先行）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R473（本轮收账后水位 79110B 越 78,500B 线 610B=必触发整编窗）·tech 后继族=by-kind 月滚动保真例/观察窗转正判据预注册/notify longterm 撤销/0.7x refine/窗参数格式锚硬化"
+    "current": "R1736 fold R473 水位整编+滚窗并折收账轮（R1735 承传注记兑现·轮计分 1=台账维护机制件）：state.json 轮首首测 79110B 越 78,500B 水位线 610B=承传注记兑现触发整编；tail-9 滚窗（R1266 tokens 遗行+R1267..R1274 滚窗行〔fold R306 产物〕+R1731..R1733 滚窗行〔fold R472 产物〕+R1734 三行对+R1735 三行对）9 行 17041B 压 1 滚窗行 kept=0·原文全量保全=archive §R1736 节 9 行 verbatim+preop 备份件 logs/state-preop-R1736.bak〔sha16 a91aa86bcfc9508b〕·catalog 240 token 全字面嵌零丢失·verify-then-write post==predicted 67580B margin 10920B·log 27→19→收账 22；AC-R4731..R4736=qa/reorg-R1736.log 六节复核〔dry-run+execute+post gauge/eol/catalog/census〕；滚窗行 fold 号勘正同轮 surgery（draft 误书 R305→正 R306·archive verbatim 原文为准）；HB R1735 行首字面 %s 缺陷顺手修复；GORD +1+3 两扫知悉=O-20261010-1330 全组合软著材料备齐令（32 款册·本司硅基域平台未入册=非本司执行面+P2 范围问询一行呈 HQ-FEEDBACK）+@bm-c MV 产线三进度回执行〔非本司面·O-20261010-1105/113x/115x 锚〕；下窗 P2 队头=哨兵段时长入证面；export 实刷 tick 1736+sd (19,0,1,8)+checker 21/21",
+    "latest_artifact": "最近实物：fold R473 水位整编机制件（2026-10-10 14:10·R1736·轮计分 1=台账维护机制件）：qa/reorg-R1736.log（六节复核：pre-gauge 越线注记+fold dry-run 全绿+execute verify-then-write post==predicted 67580B+post gauge margin 10920B+eol layout_ok+catalog 240 token 零丢失+census pass）+archive §R1736 节 9 行 verbatim（logs/state-log-archive-2026-10.md）+preop 备份件 logs/state-preop-R1736.bak+HB 修复（R1735 行 %s 缺陷）+HQ-FEEDBACK 软著令范围问询一行；上一件可跑产品实物=R1735 apidev usage_kind_tally 窗计数读面（qa/apidev-usagekind-R1735.log·RUNNER 62/62）",
+    "next_milestone": "下轮=P2 队头=哨兵段时长入证面（R1715 后继·tech.md 次开项：run_sentinel 记录哨兵子进程 elapsed 入尾行〔sentinel exit=N elapsed=X.Xs〕+daily 剖面对哨兵段时长的消费面·阈值预注册先行）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R474（本轮收账后水位 70744B·margin 7756B 线下）·tech 后继族=by-kind 月滚动保真例/member refunded 态真读面 schema 变更窗/suite_matrix live mtime 归一态/观察窗转正判据预注册/notify longterm 撤销/watermark 0.7x refine/apidev 窗参数格式锚硬化"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1735",
+      "1736",
       "OSLoop 执行 tick"
     ],
     [
@@ -3037,20 +3037,24 @@
     [
       "2",
       "apidev usage by-kind 窗计数读面交付件（R1735·P2 队头=tech.md 次开项·读面族三对称补全：src/sandbox/ledger/apidev.py usage_kind_tally(api_key, window=None) 公开面〔读时 GROUP BY kind COUNT·缺省 None=当月窗 _window_utc 与 quota 环同源·显式 YYYY-MM 任意月窗读·11 坏窗形态 E_AD_BAD_ARGS fail-closed·键门第一律·零新表零 UPDATE·exact-key 归属=轮换后继零祖先继承〕+_usage_kind_tally 聚合器+key_view/dev_board 嵌入面 additive〔板级 usage_kind_tally_total merged==manual all-key SQL·签名 window-free=AC-RJW4 同律〕·套件 test_apidev_usagekind.py SUITE 7/7〔冻结钟+manual SQL 双交叉验证+死键双态〕·reconcile_all SUITES 61→62 判据 617→624·RUNNER PASS 62/62 controls 6/6 141.5s 零回归=qa/reconcile-all-R1735.log·指纹哨兵 CLEAN domains=5·矩阵再生 62/624 --check byte-identical〔7386B〕·证据 qa/apidev-usagekind-R1735.log 四节〔套件+哨兵+矩阵+卫生 git status 七件清单〕·AC-UK1..UK7 预注册=tech.md 认领行先于代码·tech open 10→9 done→后补种 1〔by-kind 月滚动保真例〕→10）"
+    ],
+    [
+      "1",
+      "R1736 fold R473 水位整编+滚窗并折收账轮（台账维护机制件·P-2026-09-25-18 第四百七十三刀·R1735 承传注记兑现：轮首首测 79110B disk 越 78,500B 线 610B·tail-9 窗=R1266 tokens 遗行+R1267..R1274 滚窗行〔fold R306 产物〕+R1731..R1733 滚窗行〔fold R472 产物〕+R1734 三行对+R1735 三行对 9 行 17041B 压 1 滚窗行 kept=0·archive §R1736 节 9 行 verbatim+preop 备份件 state-preop-R1736.bak〔sha16 a91aa86bcfc9508b〕·catalog 240 token 全字面嵌零丢失·verify-then-write post==predicted 67580B margin 10920B·log 27→19→收账 22·AC-R4731..R4736=qa/reorg-R1736.log 六节复核·滚窗行 fold 号勘正 R305→R306 同轮 surgery·HB R1735 %s 缺陷修复+R1736 当行·GORD +1+3 两扫知悉 O-20261010-1330 软著材料令〔32 款册零本司·P2 范围问询 HQ-FEEDBACK〕+@bm-c MV 产线三进度回执行〔11:3x/11:5x/13:5x·非本司面〕·export 实刷 tick 1736+sd (19,0,1,8)·下窗 P2 队头=哨兵段时长入证面）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1735 flush caliber: product round (score 2) appended its closeout pair (both dated 2026-10-10, in window; substantive R1735 line +1); tech queue by-kind row flipped done (-1) + one successor seed appended (+1) = 10 flat; queues 6/10/10 caliber-recomputed; GORD +3 rows acked non-local (fleet full-throttle order + O-20261010-1325 P-series + jman-lane revision), baseline 215->218; DEC 269 flat; tick row 1734 -> 1735"
+    "method": "R1736 flush caliber: fold round (score 1) executed fold R473 (9 window lines pressed to 1 roll line -> in-window count 24->16, then closeout lines appended (+4, all dated 2026-10-10 in window) = 20; substantive +3 = 9); roll-line fold-number erratum R305->R306 fixed same round; GORD first scan +1 acked (O-20261010-1330 copyright-materials order, silicon-domain platform not in 32-title registry -> P2 scope question raised via HQ-FEEDBACK) + in-round second scan +3 acked (@bm-c MV production progress rows, non-local), baseline 218->219->222; DEC 269 flat; tick row 1735 -> 1736"
   }
 }
