@@ -1,0 +1,43 @@
+=== qa/reorg-R1724.log fold R469 evidence (2026-10-10, round R1724, tick 1723->1724) ===
+AC-R4691 pre-gauge (round-start water test, measured before surgery):
+  round-start disk measurement (pre-surgery): 79254B disk, over 78500B line by 754B -> fold R469 triggered (R1723 carry-note fulfilled)
+  preop sha16 3e44b0c0930bd49d; window tail-5 = R1714..R1721 roll line (9331B) + R1722/R1723 pairs (4981B) = 14312B
+AC-R4692 post-gauge:
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 74908,
+  "gate": 78500,
+  "log_lines": 21,
+  "log_content_bytes": 72280,
+  "margin_bytes": 3592,
+  "fold_needed": false,
+  "tick": 1723
+}
+AC-R4693 eol profile:
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 74908,
+  "total_lf": 30,
+  "crlf": 30,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": false,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 21,
+  "indent16_lines": 21,
+  "indent_anomaly": 0,
+  "indent_ok": true
+}
+AC-R4694 verify-then-write: execute report post_bytes=74908 == predicted_bytes=74908 (predicted_eq_actual); disk actual=74908B
+  py parser OK: tick=1723 log_lines=21
+  archive section check: header present=True; nonempty verbatim lines in section (no later header) -> 5 (expect 5)
+  archive appendix appended verbatim from tool window slice (tool-internal, pre-write verification chain)
+AC-R4695 catalog post-check (tail-1 roll line vs archived window source): {
+  "window_lines": 5,
+  "tokens_total": 193,
+  "missing": [],
+  "pass": True
+}
+AC-R4696 double-parser PS: PS parser OK tick=1723 log=21 (py parser AC-R4694 same values; both green)
