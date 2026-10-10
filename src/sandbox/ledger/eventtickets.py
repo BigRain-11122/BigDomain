@@ -471,3 +471,39 @@ class EventTicketFace:
                               "end_window": int(r[4]),
                               "ticket_price": int(r[5]),
                               "ai_label": int(r[6])} for r in rows]}
+
+    def event_audit_board(self):
+        """Cross-session audit board (BigDomain R1771; canon = the R1771
+        explore-queue audit-board line). Per-session derived sales and
+        admission accounting over the append-only tables - sold, admitted,
+        no-show, revenue (sum of immutable price_paid copies) and the
+        admission rate - all read-time COUNT/SUM faces with zero cached
+        counters and zero second aggregation engine. Rows come out in
+        session_key ascending order (deterministic, zero RNG, zero
+        insertion-order key); zero registered sessions is the honest
+        empty board. no_show = sold - admitted is structurally >= 0
+        because every check-in row requires a purchase by that account
+        and check-ins are UNIQUE per (session, account). Pure read,
+        zero token movement, zero schema touch (AC-EA1..EA7)."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT s.session_key, s.title, s.ai_label,"
+                " (SELECT COUNT(*) FROM ticket_purchases p"
+                "   WHERE p.session_id = s.session_id),"
+                " (SELECT COUNT(*) FROM ticket_checkins c"
+                "   WHERE c.session_id = s.session_id),"
+                " (SELECT COALESCE(SUM(p2.price_paid), 0) FROM"
+                "   ticket_purchases p2"
+                "   WHERE p2.session_id = s.session_id)"
+                " FROM ticket_sessions s ORDER BY s.session_key").fetchall()
+        board = []
+        for r in rows:
+            sold = int(r[3])
+            admitted = int(r[4])
+            board.append({
+                "session_key": r[0], "title": r[1], "ai_label": int(r[2]),
+                "sold": sold, "admitted": admitted,
+                "no_show": sold - admitted, "revenue": int(r[5]),
+                "admission_rate": round(admitted / sold, 4) if sold else 0.0,
+            })
+        return {"event_audit_board": board, "disclaimer": self.disclaimer}

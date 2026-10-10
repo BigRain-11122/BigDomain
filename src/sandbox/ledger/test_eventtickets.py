@@ -405,6 +405,164 @@ def main():
           % (len(bad7), "; ".join(bad7), counts0, non_ascii,
              len(net_imports)))
 
+    # -- AC-EA1..EA7 event_audit_board (R1771 explore-queue line) ---------
+    import inspect as _insp                        # local: source checks
+
+    # AC-EA1: fresh empty board on a brand-new face (honest empty, exact
+    # envelope/row key sets)
+    tmp_ea = tempfile.mkdtemp(prefix="eventtickets-ea-")
+    led_ea = L.Ledger(os.path.join(tmp_ea, "ledger.db"), cfg)
+    tf_ea = T.EventTicketFace(led_ea, DISCLAIMER)
+    empty_ea = tf_ea.event_audit_board()
+    tf_ea.close()
+    led_ea.close()
+    rowkeys_ea = {"session_key", "title", "ai_label", "sold", "admitted",
+                  "no_show", "revenue", "admission_rate"}
+    ok_ea1 = (set(empty_ea.keys()) ==
+              {"event_audit_board", "disclaimer"}
+              and empty_ea["event_audit_board"] == []
+              and empty_ea["disclaimer"] == DISCLAIMER)
+
+    # audit world: out-of-key-order registration (zeta before alpha),
+    # multi-buy single-checkin, full-checkin and zero-sales sessions
+    led.ensure_account("usr:frank", census_avatar_id="frank")
+    led.adjust([("pool:reserve", "debit", 300),
+                ("usr:frank", "credit", 300)],
+               "manual:fund-ea", "suite funding ea")
+    z_ea = tf.register_session("zeta-audit", "Zeta audit show",
+                               100, 200, 30, 5, True, None)
+    a_ea = tf.register_session("alpha-audit", "Alpha audit show",
+                               100, 200, 20, 5, False, None)
+    ns_ea = tf.register_session("noshow-audit", "No sales session",
+                                100, 200, 10, 3, False, None)
+    tf.buy_ticket("usr:frank", z_ea["session_id"], 110, "order:ea-z1")
+    tf.buy_ticket("usr:frank", z_ea["session_id"], 112, "order:ea-z2")
+    tf.buy_ticket("usr:frank", a_ea["session_id"], 120, "order:ea-a1")
+    tf.admit("usr:frank", z_ea["session_id"], 130)
+    tf.admit("usr:frank", a_ea["session_id"], 131)
+    board_ea1 = tf.event_audit_board()
+    board_ea2 = tf.event_audit_board()
+    ok_ea1 = ok_ea1 and set(board_ea1.keys()) == {"event_audit_board",
+                                                  "disclaimer"}
+    ok_ea1 = ok_ea1 and all(set(r.keys()) == rowkeys_ea
+                            for r in board_ea1["event_audit_board"])
+    record("AC-EA1", ok_ea1, "fresh face board == [] honest empty; envelope"
+          " keys exact {event_audit_board,disclaimer}; row keys exact 8"
+          " (%s)" % ", ".join(sorted(rowkeys_ea)))
+
+    # AC-EA2: global manual-SQL cross validation (all sessions incl. the
+    # pre-existing AC-ET world)
+    rows_ea = {r["session_key"]: r for r in board_ea1["event_audit_board"]}
+    cross_ea = []
+    for sid_ea, key_ea in conn.execute(
+            "SELECT session_id, session_key FROM"
+            " ticket_sessions").fetchall():
+        sold_ea, rev_ea = conn.execute(
+            "SELECT COUNT(*), COALESCE(SUM(price_paid), 0) FROM"
+            " ticket_purchases WHERE session_id = ?",
+            (sid_ea,)).fetchone()
+        adm_ea = conn.execute(
+            "SELECT COUNT(*) FROM ticket_checkins"
+            " WHERE session_id = ?", (sid_ea,)).fetchone()[0]
+        price_ea = conn.execute(
+            "SELECT ticket_price FROM ticket_sessions"
+            " WHERE session_key = ?", (key_ea,)).fetchone()[0]
+        row_ea = rows_ea.get(key_ea)
+        cross_ea.append(
+            row_ea is not None
+            and row_ea["sold"] == int(sold_ea)
+            and row_ea["admitted"] == int(adm_ea)
+            and row_ea["revenue"] == int(rev_ea)
+            and int(rev_ea) == int(sold_ea) * int(price_ea))
+    ok_ea2 = len(rows_ea) == len(cross_ea) and all(cross_ea)
+    record("AC-EA2", ok_ea2, "all %d board rows sold/admitted/revenue =="
+          " manual SQL (COUNT/SUM cross-code-path); revenue == sold x"
+          " registered price on every session (immutable price copies)"
+          % len(cross_ea))
+
+    # AC-EA3: derived semantics (multi-buy no-show / full check-in /
+    # zero-sales divide guard)
+    rz_ea = rows_ea.get("zeta-audit", {})
+    ra_ea = rows_ea.get("alpha-audit", {})
+    rn_ea = rows_ea.get("noshow-audit", {})
+    ok_ea3 = (rz_ea.get("sold") == 2 and rz_ea.get("admitted") == 1
+              and rz_ea.get("no_show") == 1 and rz_ea.get("revenue") == 60
+              and rz_ea.get("admission_rate") == 0.5
+              and ra_ea.get("sold") == 1 and ra_ea.get("admitted") == 1
+              and ra_ea.get("no_show") == 0 and ra_ea.get("revenue") == 20
+              and ra_ea.get("admission_rate") == 1.0
+              and rn_ea.get("sold") == 0 and rn_ea.get("admitted") == 0
+              and rn_ea.get("no_show") == 0 and rn_ea.get("revenue") == 0
+              and rn_ea.get("admission_rate") == 0.0)
+    record("AC-EA3", ok_ea3, "multi-buy one-checkin: sold=2 admitted=1"
+          " no_show=1 revenue=60 rate=0.5; full check-in: rate=1.0"
+          " no_show=0; zero-sales session: rate=0.0 no_show=0 (divide"
+          " guard)")
+
+    # AC-EA4: deterministic ordering (key-ascending despite registration
+    # order) + double-call byte identity
+    seq_ea = [r["session_key"] for r in board_ea1["event_audit_board"]]
+    ok_ea4 = (seq_ea == sorted(seq_ea)
+              and seq_ea.index("alpha-audit") < seq_ea.index("zeta-audit")
+              and json.dumps(board_ea1, sort_keys=True)
+              == json.dumps(board_ea2, sort_keys=True))
+    record("AC-EA4", ok_ea4, "session_key ascending total order (zeta"
+          " registered before alpha, board still key-ascending = zero"
+          " insertion-order key); double call json.dumps byte-identical;"
+          " zero RNG zero time keys")
+
+    # AC-EA5: pure-read law (table counts + ledger_tx constant across
+    # board reads; method source carries zero write statements)
+    pre_ea = (_count(conn, "ticket_sessions"),
+              _count(conn, "ticket_purchases"),
+              _count(conn, "ticket_checkins"))
+    pre_tx_ea = _tx_count(conn)
+    tf.event_audit_board()
+    post_ea = (_count(conn, "ticket_sessions"),
+               _count(conn, "ticket_purchases"),
+               _count(conn, "ticket_checkins"))
+    post_tx_ea = _tx_count(conn)
+    src_ea = _insp.getsource(T.EventTicketFace.event_audit_board)
+    writes_ea = [w for w in ("INSERT INTO", "UPDATE ", "DELETE FROM")
+                 if w in src_ea]
+    ok_ea5 = (pre_ea == post_ea and pre_tx_ea == post_tx_ea
+              and not writes_ea)
+    record("AC-EA5", ok_ea5, "three table row counts unchanged across"
+          " board reads %s -> %s; ledger_tx constant %d -> %d; method"
+          " source zero INSERT/UPDATE/DELETE (inspect machine check)"
+          % (pre_ea, post_ea, pre_tx_ea, post_tx_ea))
+
+    # AC-EA6: AIGC label persistence + resident disclaimer
+    decl_ea = {key_ea: int(lab_ea) for key_ea, lab_ea in conn.execute(
+        "SELECT session_key, ai_label FROM ticket_sessions").fetchall()}
+    ok_ea6 = (board_ea1["disclaimer"] == DISCLAIMER
+              and all(r["ai_label"] == decl_ea.get(r["session_key"], -1)
+                      for r in board_ea1["event_audit_board"])
+              and rz_ea.get("ai_label") == 1
+              and ra_ea.get("ai_label") == 0
+              and rn_ea.get("ai_label") == 0)
+    record("AC-EA6", ok_ea6, "envelope carries resident disclaimer; every"
+          " row ai_label equals its registered declaration (zeta=1,"
+          " alpha=0, noshow=0) - persistent presentation on the board")
+
+    # AC-EA7: hard laws (method source pure ASCII, zero UPDATE surface,
+    # zero network imports, shipped config byte-stable)
+    non_ascii_ea = sum(1 for ch in src_ea if ord(ch) > 127)
+    net_imports_ea = [
+        ln for ln in src_ea.splitlines()
+        if (ln.startswith("import ") or ln.startswith("from "))
+        and any(w in ln for w in
+                ("urllib", "requests", "socket", "http"))]
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_ea_after = h.read()
+    ok_ea7 = (non_ascii_ea == 0 and not net_imports_ea
+              and "UPDATE ticket_" not in src_ea
+              and cfg_ea_after == cfg_bytes)
+    record("AC-EA7", ok_ea7, "method source pure ASCII (%d non-ascii);"
+          " zero network imports (%d); zero UPDATE surface; shipped"
+          " config.json byte-stable"
+          % (non_ascii_ea, len(net_imports_ea)))
+
     conn.close()
     tf.close()
     led.close()

@@ -1,0 +1,34 @@
+R1771 eventtickets audit board evidence
+
+-------------------- eventtickets suite --------------------
+PASS AC-ET1: one row per session_key: 2 rows after 2 legal registrations; same-key re-registration rejected E_ET_DUP_SESSION with zero rows (1==2); declared labels persist (s1=0 s2=1); capacity None legal / capacity 2 legal; all 11 bad params rejected (empty key=E_ET_BAD_SESSION; none key=E_ET_BAD_SESSION; empty title=E_ET_BAD_SESSION; negative start=E_ET_BAD_SESSION; end==start=E_ET_BAD_SESSION; end<start=E_ET_BAD_SESSION; zero price=E_ET_BAD_PRICE; bool price=E_ET_BAD_PRICE; limit 0=E_ET_BAD_SESSION; capacity 0=E_ET_BAD_SESSION; non-bool ai flag=E_ET_BAD_SESSION); register envelope carries the disclaimer
+PASS AC-ET2: both window edges inclusive: bob bought at tick 10 and tick 20 (charged 100->90, price_paid=5 immutable copy of the registered price); one tick outside refuses fail-closed E_ET_WINDOW (tick 9) and E_ET_WINDOW (tick 21) with zero charge (100==100) and zero rows (2==2); each purchase bound to a real spend tx (type=spend, debit leg)
+PASS AC-ET3: bob at limit 2: third ticket rejected E_ET_LIMIT BEFORE the spend (90==90); carol's independent counter passes her own gate (two legal in-limit tickets, distinct txs); same-(buyer,ref) replay rejected E_ET_DUP_TICKET before the spend; carol's third ticket rejected E_ET_LIMIT at her own limit; only the two legal buys charged (100->90)
+PASS AC-ET4: cap-2 session: two distinct buyers (alice, dave) passed, a third buyer (carol) rejected E_ET_SOLD_OUT BEFORE the spend with zero charge (90==90) - the cap counts the session, not the buyer; the uncapped session legally holds 4 tickets (> the capped session's whole capacity)
+PASS AC-ET5: ticketless erin refused E_ET_NO_TICKET at the gate with zero check-in rows (liveroom unattended-admission law: no ticket, no entry); out-of-window admission refused E_ET_WINDOW zero rows; ticket holders bob+carol admitted (tickets_held=2 each, append-only rows in arrival order); re-check-in rejected E_ET_DUP_CHECKIN; admission moved zero tokens (ledger_tx 12==12)
+PASS AC-ET6: empty disclaimer refuses construction E_ET_NO_DISCLAIMER; every presentation face carries the declared label (session_view ai_label=1, buy returns 1/0, admit returns 0, active_sessions rows labeled); direct SQL ai_label=2 refused by the CHECK (True); all six view envelopes (session_view / session_board / attendees / active_sessions / buy return / admit return) carry the resident disclaimer; derived counts read pure (s1 tickets=4 buyers=2 attendees=2); pure reads move zero tokens (balances unchanged)
+PASS AC-ET7: all 14 bad args rejected (pool buyer=E_ET_BAD_ACCOUNT; empty ref=E_ET_BAD_ARGS; bool window buy=E_ET_BAD_ARGS; negative window buy=E_ET_BAD_ARGS; str session id=E_ET_BAD_ARGS; bool session id=E_ET_BAD_ARGS; unknown session buy=E_ET_UNKNOWN_SESSION; pool admit=E_ET_BAD_ACCOUNT; bool window admit=E_ET_BAD_ARGS; unknown session admit=E_ET_UNKNOWN_SESSION; bad active_sessions tick=E_ET_BAD_ARGS; unknown session_view=E_ET_UNKNOWN_SESSION; unknown board=E_ET_UNKNOWN_SESSION; unknown attendees=E_ET_UNKNOWN_SESSION); zero side effects (rows (2, 6, 2) unchanged, all balances unchanged); module pure ASCII (0 non-ascii); zero network imports (0); zero UPDATE surface (window/limit/capacity/has-ticket all COUNT faces); zero RNG (no random in source); config.json byte-stable
+PASS AC-EA1: fresh face board == [] honest empty; envelope keys exact {event_audit_board,disclaimer}; row keys exact 8 (admission_rate, admitted, ai_label, no_show, revenue, session_key, sold, title)
+PASS AC-EA2: all 5 board rows sold/admitted/revenue == manual SQL (COUNT/SUM cross-code-path); revenue == sold x registered price on every session (immutable price copies)
+PASS AC-EA3: multi-buy one-checkin: sold=2 admitted=1 no_show=1 revenue=60 rate=0.5; full check-in: rate=1.0 no_show=0; zero-sales session: rate=0.0 no_show=0 (divide guard)
+PASS AC-EA4: session_key ascending total order (zeta registered before alpha, board still key-ascending = zero insertion-order key); double call json.dumps byte-identical; zero RNG zero time keys
+PASS AC-EA5: three table row counts unchanged across board reads (5, 9, 4) -> (5, 9, 4); ledger_tx constant 16 -> 16; method source zero INSERT/UPDATE/DELETE (inspect machine check)
+PASS AC-EA6: envelope carries resident disclaimer; every row ai_label equals its registered declaration (zeta=1, alpha=0, noshow=0) - persistent presentation on the board
+PASS AC-EA7: method source pure ASCII (0 non-ascii); zero network imports (0); zero UPDATE surface; shipped config.json byte-stable
+SUITE PASS 14/14
+
+-------------------- fingerprint sentinel --------------------
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+-------------------- matrix regen (face realigned; run log now newest) --------------------
+PASS generated docs/sandbox-suite-matrix.md (8333 bytes) - registry suites=75 criteria=755 evidence=qa/reconcile-all-R1771.log green=75/75
+PASS hygiene: pure-ascii source, zero network imports
+
+-------------------- matrix check --------------------
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8333 bytes, 75 suites, 755 criteria)
+

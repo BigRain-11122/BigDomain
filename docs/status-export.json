@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T04:29:13+08:00",
+ "export_ts": "2026-10-11T04:47:46+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1770 一件事：策展热度榜现在能看「谁在涨、谁在跌」——拿上一张榜快照和现在的榜一比，四个状态：升、降、新上榜、掉榜；纯展示层新读面，不存任何快照。沙箱总量升到 75 套件 748 条判据全绿。",
-  "latest_artifact": "最近实物：src/sandbox/ledger/curation.py（hot_board_delta 位次变动差分面）+ test_curation.py 19 判据；证据 qa/curation-hotdelta-R1770.log（2026-10-11）",
-  "next_milestone": "下轮起：P3 explore 队列只剩 2 开项且均门控（虚拟支付合规=商户号物理件/OSS 收获=下窗清单）——队列常备线回补（explore 现 2 开项远低于 ≥10·下轮起种子回补）+P2 daily 转正观察窗续读；软著正式申请仍等两前置（平台名 CEO 定谳+服务器物理件到位）；每日对账+charter crawl 常设照跑（下窗=2026-10-12）"
+  "current": "R1771 一件事：虚拟活动的「场次对账单」能看了——每场卖出多少票、来检票多少人、没来多少人、收了多少钱、检票率多少，一张榜单全部列清；另把探索/技术两条任务队列补回了常备线（各自 10 个候选项）。纯看数据不动账，全部自验全绿。",
+  "latest_artifact": "最近实物：src/sandbox/ledger/eventtickets.py（event_audit_board 场次审计榜）+ test_eventtickets.py 14 判据；证据 qa/eventtickets-audit-R1771.log（2026-10-11）",
+  "next_milestone": "下轮实物：explore 新队头『免费试用转化漏斗读面』当窗交付（48h 内·至 10-13）；正式申请仍等两前置：平台名 CEO 定谅+服务器等物理件到位。"
  },
  "depts": [
   {
@@ -315,7 +315,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1770",
+   "1771",
    "OSLoop 执行 tick"
   ],
   [
@@ -3177,20 +3177,24 @@
   [
    "2",
    "策展热度榜位次变动差分面交付（R1770·P3 explore 队头·P1/P2 全门控〔雷达=下窗清单续候·对账=当日已毕 qa/reconcile-daily-20261011-4.log·BigLife R777=外件待达·bootstrap=CEO 物理件·docker 缺位·logs 无新切片·refunded 回访需读面·livemtime 待真实事件·daily 转正观察窗 1 笔〕：curation.py 增 hot_board_delta 位次变动差分纯读面=两榜快照四态差分〔rise/fall/entered/dropped·steady 行省略=change-only 语义·全稳世界诚实空 []·零存储调用方持 prev 两形输入·current 侧单源 hot_board() 派生零第二聚合引擎·state 组固序+组内 rank 升序+curation_id tie-break 确定性零 RNG〕·AC-HD1..HD7 预注册先于代码·test_curation 12→19 双跑逐位同一〔套件断言两处同轮修·产品本体首验即净〕·哨兵 CLEAN domains=5·RUNNER PASS 75/75 套件 748 判据 controls 7/7 141.6s 零回归=qa/reconcile-all-R1770.log·矩阵再生 75/748 green --check byte-identical〔evidence face 修正:驱动器序缺陷同轮 erratum 重跑·发现面解析 qa/curation-hotdelta-R1770.log=R1769 家族先例〕·证据=qa/curation-hotdelta-R1770.log·queue_explore_open 3→2〔低于常备线≥10·下轮回补种子〕）"
+  ],
+  [
+   "2",
+   "R1771 活动门票场次审计榜交付+队列常备线补种（五静全过→三线全空→先补种再拉活：explore 2→11+tech 5→10→认领新队头 eventtickets 审计榜·AC-EA1..EA7 预注册先于代码：eventtickets.py event_audit_board 跨场次纯读派生榜【售出/检入/未到/营收 SUM(price_paid)/检票率】·session_key 升序零 RNG·零新表零 UPDATE·SUITE PASS 14/14+RUNNER PASS 75/75 套件 755 判据零回归·哨兵 CLEAN domains=5·矩阵 75/755 --check byte-identical·证据 qa/eventtickets-audit-R1771.log 五节·queue_explore_open 10）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 25,
+  "log_lines_in_window": 27,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 5,
-  "queue_explore_open": 2,
-  "method": "R1770 curation hot-board rank-change delta face delivery (suite 19/19 double-run byte-identical, sentinel CLEAN domains=5, RUNNER PASS 75/75 suites 748 criteria zero-regression, matrix 75/748 --check byte-identical, qa/curation-hotdelta-R1770.log)"
+  "queue_tech_open": 10,
+  "queue_explore_open": 10,
+  "method": "R1771 eventtickets audit-board face delivery (suite 14/14, RUNNER PASS 75/75 suites 755 criteria, sentinel CLEAN domains=5, matrix 75/755 --check byte-identical, qa/eventtickets-audit-R1771.log) + queue seeding explore 2->11 / tech 5->10"
  }
 }

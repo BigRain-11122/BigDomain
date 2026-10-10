@@ -503,7 +503,7 @@ SUITES = [
     # per (session, account) and moves zero tokens)
     # (AC-ET1..ET7 pre-registered in state/queue/explore.md).
     ("ledger-eventtickets",
-     os.path.join("ledger", "test_eventtickets.py"), 7),
+     os.path.join("ledger", "test_eventtickets.py"), 14),
     # R1768 developer free-trial tier face: the zero-fee trial
     # window (lifetime cap, the apidev quota-ring variant -
     # immutable call rows, COUNT face, zero mutation) + the
