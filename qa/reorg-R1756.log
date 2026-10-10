@@ -1,0 +1,17 @@
+--- [1] pre-gauge (round-start first-test, R1755 carry-note cashed) ---
+round-start 79080B disk over 78500B gate by 580B = P-2026-09-25-18 blade 478 triggered at round head (R1755 carry-note: post-close water 78,932B estimated pre-commit; disk first-measure this round after R1755 interrupted-closeout files landed = 79,080B)
+
+--- [2] catalog pre-verification (window tokens vs summary roll) ---
+catalog --window-file fold-r478-window.txt --roll-file fold-r478-summary.txt: pass=True tokens=16 missing=[] exit 0 (summary 1 non-empty line, all 16 window tokens embedded verbatim; R-ABSENT pseudo-token mechanically embedded per R1746 O-RAISE precedent)
+
+--- [3] dry-run plan (zero mutation) ---
+window=tail-7 rows 23..29 (R1753 pair 1751+224B + R1754 pair 2403+205B + R1755 triple 2386+1133+203B), window_content_bytes=8305, pre_bytes=79080, predicted_bytes=72221, token_ok=True gate_ok=True would_fail=[] new_log_len=23 exit 0
+
+--- [4] execute (verify-then-write) ---
+preop backup logs/state-preop-R1756.bak (preop sha16 8cbe60bacee6c1e9) byte-verified; archive append logs/state-log-archive-2026-10.md sec-R1756 (7 lines verbatim, appendix 8442B byte-verified); state rewrite post==predicted 72221B byte-exact; post json parse OK tick=1755 log=23
+
+--- [5] post gauge + eol profile ---
+gauge: disk_bytes=72221 gate=78500 margin_bytes=6279 log_lines=23 fold_needed=False; eol: layout_ok=True bare_lf=0 lone_cr=0 crlf=32 indent_ok=True log_item_lines=23 indent16_lines=23 indent_anomaly=0 (16-space log-item canonical indent conserved)
+
+--- [6] catalog post-verification (archive verbatim window vs new state.json roll) ---
+catalog --window-file fold-r478-window.txt --roll-file src/os/state.json: pass=True tokens=16 missing=0 -> zero token loss across surgery
