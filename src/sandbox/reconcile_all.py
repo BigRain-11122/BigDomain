@@ -255,6 +255,12 @@ SUITES = [
     # (R1680 negative-verdict successor; verdicts recorded in suite)
     ("watermark-scale-recover",
      os.path.join("watermark", "test_scale_recover.py"), 7),
+    # R1725 unknown-factor grid: four non-integer factors {0.7x/0.85x/
+    # 1.1x/1.5x} through the full blind search domain (0.3, 2.2);
+    # hit-rate reading, negative verdicts lawful (AC-UKF1..UKF7
+    # pre-registered in state/queue/tech.md).
+    ("watermark-scale-unknown",
+     os.path.join("watermark", "test_scale_unknown.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),

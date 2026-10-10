@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T09:27:46+08:00",
+  "export_ts": "2026-10-10T09:40:47+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1724 fold R469 watermark reorg (P2 tech head = logs standing line, R1723 carry-note cashed; score 1 = mechanism file change): round-start 79254B over the 78500B line by 754B -> tail-5 window [R1714..R1721 roll line 9331B + R1722/R1723 pairs 4981B] 5 lines 14312B -> 1 rolling line kept=0; verbatim preserved archive R469 section + preop backup sha16 3e44b0c0930bd49d; catalog 193 tokens all-literal zero-loss; verify-then-write post==predicted 74908B margin 3592B, log 25->21; AC-R4691..R4696 = qa/reorg-R1724.log (post-gauge fold_needed=false + eol layout_ok and indent_ok both green bare_lf=0 23/23 + dual parser py+PS + archive verbatim 5/5 + catalog post-check 193 missing=[] pass=true); nine-face scan all PASS zero FLAG (GORD 199 flat, last-3 rows all other-company domain acknowledged); five-still pass -> line-order pull: P1 all gated (radar lists not landed, BigLife R777 chronic, bootstrap=CEO physicals) -> P2 head = logs standing fold line live execute (R1690/R1722 note family); closeout tick 1723 -> 1724, final state 77185B under the 78500B line; carry: post-closeout waterline over the 78500B line -> fold R470 = next-round round-start first-measure ruling",
-    "latest_artifact": "最近实物：fold R469 滚动摘要件（2026-10-10·R1724 交付·轮计分 1=台账维护机制件）：state.json 25→21 行、79254B→74908B（收账后 77185B）·tail-5 窗〔R1714..R1721 滚窗行+R1722/R1723 两轮对〕14312B 压 1 滚窗行·catalog 193 token 全字面嵌零丢失；证据 qa/reorg-R1724.log 六节（AC-R4691..R4696：gauge 双测+eol 双绿+双解析器 py+PS+archive verbatim 5/5+catalog 后验 pass=true）",
-    "next_milestone": "下轮=P2 队头=watermark 缩放族恢复未知缩放因子扩展面（tech.md 最上非门控开项·R1707 后继：非整数未知因子网格 {0.7x/0.85x/1.1x/1.5x} 模板对位恢复实测·搜索域 (0.3,2.2) 内命中率待证·判负留痕合法）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1725 watermark scaling-family unknown-factor grid delivery round (P2 tech head = R1707 successor, R1724 carry-note cashed; score 2 = runnable artifact): pre-registered AC-UKF1..UKF7 in the tech.md claim row before code; delivered src/sandbox/watermark/test_scale_unknown.py - four non-integer factors {0.7x/0.85x/1.1x/1.5x} through the FULL blind search domain (0.3,2.2) with 200 samples and zero hint injection (production simulation); reading: full-domain blind hit rate 3/4 RECOVERED (down0.85x 0.5039->0.0703, up1.1x 0.4766->0.0117, up1.5x 0.5117->0.0078), down0.7x 0.4883->0.2891 IMPROVED lawful negative (scale_infer exact-hit 1.4286 yet ber residual = 0.7x downsize interpolation info loss), scale_infer all four exact to true value, determinism double-run bit-identical; SUITES 55->56 criteria 576->582, RUNNER PASS 56/56 controls 6/6 110.0s zero regression, matrix 56/582 green --check byte-identical; evidence qa/watermark-scale-unknown-R1725.log (suite+regression+matrix sections); nine-face scan all PASS zero FLAG; P1 all gated (radar lists not landed, BigLife R777 chronic, bootstrap=CEO physicals, reconcile done today R1698+sentinel R1714); tech queue reseed 9->10 (0.7x refine successor seeded); closeout tick 1724->1725, final state 79156B over the 78500B line -> fold R470 = next-round round-start first-measure ruling",
+    "latest_artifact": "滠近实物：watermark 缩放族未知因子扩展面套件（2026-10-10·R1725 交付·轮计分 2=可跑实物）：src/sandbox/watermark/test_scale_unknown.py 四非整数因子 {0.7x/0.85x/1.1x/1.5x} 全域盲搜索域 (0.3,2.2) 200 采样零提示注入模板对位恢复实测——命中率 3/4 RECOVERED（down0.85x 0.5039→0.0703+up1.1x 0.4766→0.0117+up1.5x 0.5117→0.0078）·0.7x IMPROVED 0.2891 判负留痕合法（scale_infer 真值精确命中仍残余=0.7x 插值信息损失面）；SUITES 55→56 判据 576→582·RUNNER PASS 56/56 controls 6/6 110.0s·矩阵 56/582 green --check byte-identical；证据 qa/watermark-scale-unknown-R1725.log（套件+回归+矩阵三节）",
+    "next_milestone": "下轮=P2 队头=suite_matrix 发现面 live mtime 归一态实证窗（tech.md 次开非门控项·R1709 后继：git checkout/整备后 qa/ 全件 mtime 拉平的真实场景 live 实测——未归一如实注留窗=判负留痕合法）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1724",
+      "1725",
       "OSLoop 执行 tick"
     ],
     [
@@ -2993,15 +2993,19 @@
     [
       "1",
       "fold R469 水位整编+滚窗并折件（R1724·P-2026-09-25-18 第四百六十九刀·R1723 承传注记兑现：轮首 79,254B 越线 754B→tail-5 窗〔R1714..R1721 滚窗行 9,331B+R1722/R1723 两轮对 4,981B〕5 行 14,312B 压 1 滚窗行·catalog 193 token 全字面嵌零乂失·verify-then-write post==predicted 74,908B margin 3,592B；原文保全=archive §R469 verbatim+preop sha16 3e44b0c0930bd49d；AC-R4691..R4696=qa/reorg-R1724.log 全过）"
+    ],
+    [
+      "2",
+      "watermark 缩放族未知因子扩展面套件（P2 队头·AC-UKF1..UKF7 预注册=tech.md 认领行先于代码：src/sandbox/watermark/test_scale_unknown.py 四非整数因子 {0.7x/0.85x/1.1x/1.5x} 全域盲搜索域 (0.3,2.2) 200 采样零提示注入=生产面仿真·读数定谭=全域盲命中率 3/4 RECOVERED（down0.85x 0.5039→0.0703+up1.1x 0.4766→0.0117+up1.5x 0.5117→0.0078）·down0.7x 0.4883→0.2891 IMPROVED 判负留痕合法（scale_infer=1.4286 真值精确命中仍 ber 0.29=0.7x 缩小插值信息损失面）·scale_infer 四例全真值精确+loc 覆盖核验全过+确定性双跑逐位同一·SUITES 55→56 判据 576→582 接线·RUNNER PASS 56/56 controls 6/6 110.0s 零回归+矩阵 56/582 green --check byte-identical（6885B）·证据=qa/watermark-scale-unknown-R1725.log（套件+回归+矩阵三节）·消费落点=implicit-watermark-verify.md 生产调参注记候选［bootstrap 窗 spec 修订消费·R1680 同注先例］·R1725）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,

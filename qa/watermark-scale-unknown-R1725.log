@@ -1,0 +1,35 @@
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-UKF1: control anchor: embed=True wm_bits=256 clean-roundtrip-exact=True
+PASS AC-UKF2: unknown-factor grid reproduction: down0.7x fx=0.70 direct-ber=0.4883 degraded=yes; down0.85x fx=0.85 direct-ber=0.5039 degraded=yes; up1.1x fx=1.10 direct-ber=0.4766 degraded=yes; up1.5x fx=1.50 direct-ber=0.5117 degraded=yes
+PASS AC-UKF3: full-domain blind recovery: down0.7x scale_infer=1.4286 band=(1.2857,1.5714) true=1.4286 band-ok=True cover=True score=0.636746 recovered-ber=0.2891 direct-ber=0.4883; down0.85x scale_infer=1.1765 band=(1.0588,1.2941) true=1.1765 band-ok=True cover=True score=0.755546 recovered-ber=0.0703 direct-ber=0.5039; up1.1x scale_infer=0.9091 band=(0.8182,1.0000) true=0.9091 band-ok=True cover=True score=0.868597 recovered-ber=0.0117 direct-ber=0.4766; up1.5x scale_infer=0.6667 band=(0.6000,0.7333) true=0.6667 band-ok=True cover=True score=0.943140 recovered-ber=0.0078 direct-ber=0.5117
+  VERDICT down0.7x IMPROVED
+  VERDICT down0.85x RECOVERED
+  VERDICT up1.1x RECOVERED
+  VERDICT up1.5x RECOVERED
+HIT-RATE 3/4 RECOVERED (full-domain blind search (0.3,2.2) search_num=200)
+  | DIRECT   down0.7x fx=0.70 ber=0.4883
+  | RECOVERED down0.7x ber=0.2891 delta=-0.1992 score=0.636746 scale_infer=1.4285714285714286 band=(1.2857,1.5714) true=1.4286 loc=(0,0,640,480) canvas=640x480 verdict=IMPROVED
+  | DIRECT   down0.85x fx=0.85 ber=0.5039
+  | RECOVERED down0.85x ber=0.0703 delta=-0.4336 score=0.755546 scale_infer=1.1764705882352942 band=(1.0588,1.2941) true=1.1765 loc=(0,0,640,480) canvas=640x480 verdict=RECOVERED
+  | DIRECT   up1.1x fx=1.10 ber=0.4766
+  | RECOVERED up1.1x ber=0.0117 delta=-0.4648 score=0.868597 scale_infer=0.9090909090909091 band=(0.8182,1.0000) true=0.9091 loc=(0,0,640,480) canvas=640x480 verdict=RECOVERED
+  | DIRECT   up1.5x fx=1.50 ber=0.5117
+  | RECOVERED up1.5x ber=0.0078 delta=-0.5039 score=0.943140 scale_infer=0.6666666666666666 band=(0.6000,0.7333) true=0.6667 loc=(0,0,640,480) canvas=640x480 verdict=RECOVERED
+PASS AC-UKF4: verdict+hit-rate surface: 4/4 VERDICT lines + HIT-RATE line (3/4 RECOVERED) + 8/8 comparison rows on record (negative verdicts lawful per pre-registration)
+PASS AC-UKF5: determinism: down0.7x rerun-identical=True; down0.85x rerun-identical=True; up1.1x rerun-identical=True; up1.5x rerun-identical=True (comparison rows now 16 incl. re-run)
+PASS AC-UKF6: hygiene: source-ascii=True bad-imports=none; suite writes only temp-dir artifacts (zero repo/config touch)
+SUITE PASS (6/6 criteria pass)
+[ WARN:0@0.312] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+--- regression: reconcile_all full run (evidence qa/reconcile-all-R1725.log) ---
+PASS suite watermark-scale-unknown exit=0 pass-lines=6 fail-lines=0 criteria=6 12.0s
+RUNNER PASS (56/56 suites green, reconcile controls 6/6, 110.0s)
+
+--- matrix: docs/sandbox-suite-matrix.md regen + --check ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6885 bytes, 56 suites, 582 criteria)
+| 43 | watermark-scale-unknown | watermark/test_scale_unknown.py | 6 | green | 12.0 |
