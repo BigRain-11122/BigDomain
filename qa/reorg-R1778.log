@@ -1,0 +1,67 @@
+# qa/reorg-R1778.log - fold R486 water-level compaction evidence (P-2026-09-25-18 knife #486)
+# Round R1778 first-gauge ruling (carry-note from R1777 closeout fulfilled).
+# Preop sha16 4bef136c92b16fdf; window = tail-7 (fold R485 roll line + R1775/R1776/R1777 closeout pairs).
+
+--- section 1: round-start first gauge (pre-fold) ---
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 81671,
+  "gate": 78500,
+  "over_gate_by": 3171,
+  "log_lines": 29,
+  "log_content_bytes": 78658,
+  "ruling": "over gate -> fold R486 executes this round (R1777 carry-note)"
+}
+
+--- section 2: window token catalog (mechanical extraction, R1580 PAT) ---
+catalog --tail 7 --roll-file .codely-cli/tmp/roll-R1778.txt
+{
+  "window_lines": 7,
+  "window_content_bytes": 10824,
+  "tokens_total": 74,
+  "missing_in_roll": [],
+  "pass": true
+}
+(spliced mechanically by .codely-cli/tmp/build_roll_R1778.py - zero hand-copy;
+ summary_bytes=2891; full 74-token list embedded verbatim in the roll line)
+
+--- section 3: fold dry-run (verify-then-write prediction, zero mutation) ---
+{
+  "mode": "dry-run", "round": "R1778", "fold_no": "486",
+  "window_start": 23, "window_end": 29, "window_lines": 7,
+  "window_content_bytes": 10824,
+  "preop_sha16": "4bef136c92b16fdf",
+  "token_missing": [], "token_ok": true,
+  "gate_ok": true, "predicted_bytes": 73612,
+  "reserve_bytes": 3000, "gate": 78500,
+  "would_fail": []
+}
+
+--- section 4: fold --execute (backup + archive append + surgery) ---
+{
+  "mode": "execute", "round": "R1778", "fold_no": "486",
+  "backup_path": "logs/state-preop-R1778.bak", "backup_written": true,
+  "archive_file": "logs/state-log-archive-2026-10.md", "archive_appended": true,
+  "archive_header": "# --- R1778 fold append (2026-10-11, 7 lines verbatim: fold R485 roll line + R1775/R1776/R1777 closeout pairs, fold R486 window, pre-op sha16 4bef136c92b16fdf)",
+  "appendix_bytes": 10991,
+  "pre_bytes": 81671, "new_log_len": 23,
+  "predicted_bytes": 73612, "post_bytes": 73612, "predicted_eq_actual": true
+}
+(verbatim preservation: archive holds the 7 window lines word-for-word;
+ preop backup holds the full pre-op state blob)
+
+--- section 5: post-fold gauge ---
+{
+  "disk_bytes": 73612, "gate": 78500, "margin_bytes": 4888,
+  "log_lines": 23, "fold_needed": false, "tick": 1777
+}
+
+--- section 6: post-fold eol/indent/layout profile ---
+{
+  "total_lf": 33, "crlf": 33, "bare_lf": 0, "lone_cr": 0,
+  "ends_with_eol": true, "layout_ok": true,
+  "log_block_found": true, "log_item_lines": 23,
+  "indent16_lines": 23, "indent_anomaly": 0, "indent_ok": true
+}
+(closeout carry-note: post-closeout water level re-checked after R1778 lines are
+ appended; fold R487 = next-round first-gauge ruling if over gate again)

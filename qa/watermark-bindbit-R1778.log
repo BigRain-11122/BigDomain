@@ -1,0 +1,61 @@
+﻿--- round R1778 evidence: watermark binding-bit independence probe (AC-BI1..BI7 pre-registered in state/queue/tech.md before code) ---
+--- section 1: suite run 1 (exit=0) ---
+[ WARN:0@0.523] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-BI1: binding bits=SHA-256(provider:content_no:label_text) sha16=5b150f2956debcf9 nbits=256 clean-extract ber=0.0000 (exact required)
+PASS AC-BI2: 1-bit preimage flip per track vs base: provider ber=0.4414; content_no ber=0.4961; label ber=0.4844 (band [0.35, 0.65], 3/3 produced)
+PASS AC-BI3: content_no first byte 8-bit sweep: vs-base n=8 min=0.4531 max=0.4961; pairwise n=28 min=0.4375 max=0.5469; all-in-band=36/36 (zero silent skip)
+PASS AC-BI4: perturbed seals: provider vs-base ber=0.4414 (floor>=0.40) self ber=0.0000; content_no vs-base ber=0.4961 (floor>=0.40) self ber=0.0000; label vs-base ber=0.4844 (floor>=0.40) self ber=0.0000 (6/6 readings produced)
+PASS AC-BI5: double-run bitwise identity: bits=True base-extract=True provider-perturbed-extract=True
+PASS AC-BI6: ascii=True true-import-lines=9 network-imports=0 config-sha16-unchanged=True (read-only open, temp-dir-only writes)
+PASS AC-BI7: suites-registry-line=True prior-criteria=6 expected=7
+SUITE PASS: 7/7
+--- section 1b: suite run 2 determinism (exit=0) ---
+[ WARN:0@0.333] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-BI1: binding bits=SHA-256(provider:content_no:label_text) sha16=5b150f2956debcf9 nbits=256 clean-extract ber=0.0000 (exact required)
+PASS AC-BI2: 1-bit preimage flip per track vs base: provider ber=0.4414; content_no ber=0.4961; label ber=0.4844 (band [0.35, 0.65], 3/3 produced)
+PASS AC-BI3: content_no first byte 8-bit sweep: vs-base n=8 min=0.4531 max=0.4961; pairwise n=28 min=0.4375 max=0.5469; all-in-band=36/36 (zero silent skip)
+PASS AC-BI4: perturbed seals: provider vs-base ber=0.4414 (floor>=0.40) self ber=0.0000; content_no vs-base ber=0.4961 (floor>=0.40) self ber=0.0000; label vs-base ber=0.4844 (floor>=0.40) self ber=0.0000 (6/6 readings produced)
+PASS AC-BI5: double-run bitwise identity: bits=True base-extract=True provider-perturbed-extract=True
+PASS AC-BI6: ascii=True true-import-lines=9 network-imports=0 config-sha16-unchanged=True (read-only open, temp-dir-only writes)
+PASS AC-BI7: suites-registry-line=True prior-criteria=6 expected=7
+SUITE PASS: 7/7
+--- section 2: hygiene git evidence (shipped config zero-byte + other-suite sources) ---
+ src/sandbox/reconcile_all.py | 8 ++++++++
+ state/queue/tech.md          | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? --help
+?? qa/watermark-bindbit-R1778.log
+?? src/sandbox/watermark/test_bind_bit.py
+--- section 3: full regression RUNNER (qa/reconcile-all-R1778.log, default-discovery evidence face) ---
+PASS suite watermark-bindbit exit=0 pass-lines=7 fail-lines=0 criteria=7 3.4s
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+RUNNER PASS (79/79 suites green, reconcile controls 7/7, 167.7s)
+--- section 4: suite matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (8624 bytes) - registry suites=79 criteria=785 evidence=qa/reconcile-all-R1778.log green=79/79
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8624 bytes, 79 suites, 785 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8624 bytes, 79 suites, 785 criteria)
+--- section 5: schema fingerprint sentinel (fingerprint_regen --check) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

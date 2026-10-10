@@ -361,6 +361,14 @@ SUITES = [
     ("watermark-scale-refine",
      os.path.join("watermark", "test_scale_refine.py"), 6),
     ("dual-track", os.path.join("watermark", "test_dual_track.py"), 7),
+    # R1778 binding-bit independence probe: 1-bit preimage perturbations
+    # avalanche the SHA-256-bound payload (registered band [0.35, 0.65])
+    # with pairwise independence across the bit-position sweep, and the
+    # R593 forgery floor (0.40) holds at single-bit granularity while
+    # perturbed seals still roundtrip exactly (AC-BI1..BI7
+    # pre-registered in state/queue/tech.md).
+    ("watermark-bindbit",
+     os.path.join("watermark", "test_bind_bit.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
     # R1063 fan-out expansion: five suites shipped after R595 but never
