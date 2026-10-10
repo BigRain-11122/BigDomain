@@ -1,0 +1,39 @@
+﻿--- ledger conversion-share clawback (R1723, R1721 successor) evidence ---
+generated: 2026-10-10 09:04:56 by suite rerun + fingerprint + runner tail + matrix
+
+--- section 1: suite (AC-RC1..RC8) rerun ---
+PASS AC-RC1: blank=True unknown=True zero-writes=True (1==1) zero-token-product=True fwd-rows=0 schema-objects 9==9
+PASS AC-RC2: status=clawed clawed=100 fwd=100 bal 100->0 tx=a4585e2ae544c4f2 pool-entry=('pool:share', 'credit', 100)
+PASS AC-RC3: claw=min(100,bal40)=40 consumed=60 usr=0 conv=999940 reserve=60 pool-delta=0
+PASS AC-RC4: idem=True nothing=True race=True (txs 3==3, race-rows=1)
+PASS AC-RC5: reconcile exit=0 8 PASS/0 FAIL zero-sum=0 audit-line-named=True
+PASS AC-RC6: not-wired=True wired=True zero-tok=True broken=True ledgerr=True
+PASS AC-RC7: heal=True granted-refuse=True timeout-refuse=True unknown=True zero-token-heal=True
+PASS AC-RC8: ascii=True no-UPDATE=True net-imports=0 shipped-cfg-untouched=True
+SUITE PASS 8/8
+suite exit=0
+
+--- section 2: fingerprint-regen --check (zero schema touch) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- section 3: full regression tail (RUNNER + ledger-clawback suite line) ---
+PASS suite ledger-clawback exit=0 pass-lines=8 fail-lines=0 criteria=8 1.6s
+RUNNER PASS (55/55 suites green, reconcile controls 6/6, 107.5s)
+
+--- section 4: matrix regen + --check + hygiene git status ---
+PASS generated docs/sandbox-suite-matrix.md (6799 bytes) - registry suites=55 criteria=576 evidence=qa/reconcile-all-R1723.log green=55/55
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6799 bytes, 55 suites, 576 criteria)
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/ledger/ledger.py
+ M src/sandbox/pay/orders.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/ledger-clawback-R1723.log
+?? qa/reconcile-all-R1723.log
+?? src/sandbox/pay/test_clawback_wiring.py

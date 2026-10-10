@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T08:50:28+08:00",
+  "export_ts": "2026-10-10T09:11:56+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1722 fold R468 watermark reorganization (ledger-maintenance mechanism round, score 1; R1721 carry-note cashed, round-start water 79947B over the 78500B line by 1447B = P-2026-09-25-18 468th cut): window tail-6 (R1714..R1715 rolling line + R1716..R1719 rolling line + R1720/R1721 pairs) 14994B compressed to 1 rolling line, catalog 189 tokens embedded zero-loss; original 6 lines preserved verbatim in archive section R468 + pre-op backup state-preop-R1722.bak (sha16 f6ef89cf1368f3e4); verify-then-write post 74184B == predicted, margin 4316B under gate; evidence qa/reorg-R1722.log AC-R4681..R4686 all pass (gauge fold_needed=false, eol layout_ok and indent_ok, dual-parser py+PS, archive verbatim 6/6 byte-identical, catalog post-check pass); nine-face scan all PASS/INFO zero FLAG; P2 queue head served = logs reorg standing line (R1690 note: fold live-execute front door); next P2 head = ledger conversion share clawback design window (R1721 successor seed); tick 1721 -> 1722",
-    "latest_artifact": "最近实物：fold R468 水位整编+滚窗并折件（2026-10-10·R1722 交付·台账维护机制件计 1）：state.json 79,947B 越线 → 74,184B（margin 4,316B）·6 行 14,994B 压 1 滚窗行〔catalog 189 token 全字面嵌零丢失〕·原文全量保全=archive §R468 节 6 行 verbatim+preop 备份 sha16 f6ef89cf1368f3e4；证据 qa/reorg-R1722.log（AC-R4681..R4686 全过：gauge/eol/双解析器/archive 逐字节同一/catalog 后验）",
-    "next_milestone": "下轮=P2 队头=ledger conversion share 回冲账设计窗（R1721 后继种子：close_refund 后 share_from_pool 正向分录的 token 回冲账设计·判据预注册先行）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1723 ledger conversion-share refund clawback closed (P2 tech head = R1722 carry-note, R1721 successor seed; AC-RC1..RC8 pre-registered in tech.md before code; score 2 = runnable artifact): design ruling six clauses - (1) no overdraft ever, claw = min(forward, current balance), AC-L2 floor constitutional, consumed portion not chased (already pool-side via spend->pool:reserve, pool net-whole measured 999940+60-1000000=0); (2) forward tx is the amount authority (face takes zero caller amounts - no injection surface); (3) reverse namespace ref='refund:'+order_id, ref_type='order' (schema CHECK untouched, UNIQUE pair = idempotency key); (4) type='adjust' action='pay_conversion_refund' with provenance memo (reconcile check-8 audit line names it); (5) wiring = R1718/R1721 family: conversion_clawback=None default shipped byte-stable, post-commit best-effort never breaks the close, heal face clawback_conversion_share independently re-callable; (6) zero-token products (shipped all) -> no_forward_entry honest state; delivered: ledger.py clawback_conversion face + E_NO_FORWARD_ENTRY + orders.py wiring tail param + post-commit block + heal face + suite pay/test_clawback_wiring.py SUITE PASS 8/8 first-run green (deterministic race-window injection E_REF_DUPLICATE -> already_clawed); RUNNER PASS 55/55 suites 576 criteria controls 6/6 107.5s zero-regression + matrix 55/576 --check byte-identical + fingerprint-regen CLEAN domains=5; real conversion rates/refund policy stay [needs-CEO]; tick 1722 -> 1723",
+    "latest_artifact": "最近实物：退款回冲账沙箱件（2026-10-10·R1723 交付·轮计分 2=可跑实物）：ledger.py clawback_conversion face〔负欠帽=min(前向,余额)·前向 tx 权威额源零注入·反向分录 refund:<order_id>/order·UNIQUE 幂等〕+orders.py 接线〔conversion_clawback=None 缺省零改+post-commit never-break+heal 面 clawback_conversion_share〕+套件 test_clawback_wiring.py 8/8 首跑全绿；证据 qa/ledger-clawback-R1723.log 四节（套件+指纹 CLEAN domains=5+RUNNER 55/55+矩阵 byte-identical）+qa/reconcile-all-R1723.log",
+    "next_milestone": "下轮=P2 队头=member refunded 态真读面 schema 变更窗（R1721 后继种子：refund recovery 现走 active→expired 边+audit 保真——真 'refunded' 读面态=CHECK 扩状态+迁移链步〔AC-LM 机制〕+指纹再冻结全链·gated on 产品回访需读面区分退款与到期〔现读面 status='expired'+audit 行可判〕）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1722",
+      "1723",
       "OSLoop 执行 tick"
     ],
     [
@@ -2985,20 +2985,24 @@
     [
       "1",
       "fold R468 水位整编+滚窗并折件（R1722·P-2026-09-25-18 第四百六十八刀·R1721 承传注记兑现：轮首 79,947B 越 78,500B 线 1,447B→tail-6 窗〔R1714..R1715 滚窗行+R1716..R1719 滚窗行+R1720/R1721 两轮对〕6 行 14,994B 压 1 滚窗行·catalog 189 token 零丢失·verify-then-write post==predicted 74,184B margin 4,316B；原文保全=archive §R468 verbatim+preop sha16 f6ef89cf1368f3e4；AC-R4681..R4686=qa/reorg-R1722.log 全过）"
+    ],
+    [
+      "2",
+      "ledger conversion share 退款回冲账沙箱件（R1723·P2 队头·R1721 后继种子·判据 AC-RC1..RC8 预注册=tech.md 认领行先于代码·设计裁定六款：负欠帽=min(前向,余额)〔AC-L2 宪法触发器不破·已消费部分经 spend 落 pool:reserve=pool 全域净零 999940+60−1000000=0 实测〕+前向 tx 权威额源零调用方参数+反向命名空间 refund:<oid>/order〔UNIQUE=幂等键·already_clawed/nothing_to_claw/竞态窗 E_REF_DUPLICATE 确定性注入实测〕+type='adjust' 审计行+接线律 R1718/R1721 族〔缺省不接线 shipped 零改+never-break+坏 face off:<code>〕+heal 面〔崩溃窗补账+三态 fail-closed 拒〕：ledger.py face+orders.py 接线+套件 pay/test_clawback_wiring.py SUITE PASS 8/8 首跑全绿·RUNNER PASS 55/55 套件 576 判据 controls 6/6 107.5s 零回归+矩阵 55/576 --check byte-identical+fingerprint-regen CLEAN domains=5〔零 schema 触碰〕+shipped config 零字节〔git status 证据〕·证据 qa/ledger-clawback-R1723.log 四节+qa/reconcile-all-R1723.log·真实换算比/退款策略 [needs-CEO]·R1723）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1722 flush caliber: fold R468 tail-6 (R1714..R1715 roll + R1716..R1719 roll + R1720/R1721 pairs) -> 1 rolling line: log_lines_in_window 23 -> 18 at fold, +2 closeout pair -> 20; substantive 8 -> 6 at fold (R1720/R1721 anchors folded), +1 R1722 -> 7; nop 1 / idle 0 flat; tick row 1721 -> 1722; queues flat (main 6 / tech 11 / explore 10)"
+    "method": "R1723 flush caliber: +1 substantive closeout pair (R1723 line + tokens, both dated 10-10, in window) -> log_lines_in_window 20 -> 22, substantive 7 -> 8, nop 1 / idle 0 flat; tick row 1722 -> 1723; queue tech 11 -> 10 (ledger-clawback done, no successor seeds); main 6 / explore 10 flat"
   }
 }

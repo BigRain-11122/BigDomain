@@ -66,7 +66,8 @@ for _p in (_LOBBY, _LEDGER, BASE):
 
 from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # lobby product
 import store as lobby_store                                          # lobby product
-from ledger import Ledger, LedgerError, E_REF_DUPLICATE              # ledger product
+from ledger import Ledger, LedgerError, E_REF_DUPLICATE, \
+    E_NO_FORWARD_ENTRY                                          # ledger product
 import adapters
 
 REPO = "domain/BigDomain"
@@ -189,7 +190,8 @@ class PayOrders:
     every write opens with BEGIN IMMEDIATE (SQLite WAL discipline)."""
 
     def __init__(self, config, db_path, event_store, ledger,
-                 minor_guard=None, notify=None, entitlement_recovery=None):
+                 minor_guard=None, notify=None, entitlement_recovery=None,
+                 conversion_clawback=None):
         self._startup_checks(config, event_store, ledger)
         self.db_path = db_path
         parent = os.path.dirname(os.path.abspath(db_path))
@@ -223,6 +225,16 @@ class PayOrders:
         # breaks the close (degraded envelope evidence); the face is
         # independently re-callable for the crash-window heal.
         self.entitlement_recovery = entitlement_recovery
+        # R1723 wiring (ledger conversion-share clawback, R1721
+        # successor): optional face for the token-side reverse of the
+        # conversion share entry on a refund close. Same law as notify
+        # and entitlement_recovery: caller-built and caller-owned, None
+        # = not wired, shipped behavior byte-stable; the post-commit
+        # attempt never breaks the close (degraded envelope evidence
+        # under the 'clawback' key). The ledger's own
+        # clawback_conversion face is idempotent on re-call, so the
+        # crash-window heal is a plain re-attempt (AC-RC6/RC-RC7).
+        self.conversion_clawback = conversion_clawback
 
     def close(self):
         with self._lock:
@@ -457,11 +469,14 @@ class PayOrders:
         also asks the member domain to revoke the entitlement this
         refund just undid (best-effort, envelope evidence under the
         'recovery' key; independently re-callable for the crash-window
-        heal). Honest scope: the fiat refund money-flow belongs to the
-        channel adapters domain and the ledger conversion-share
-        clawback is NOT part of this face (member entitlement recovery
-        only); timeout closes (no grant row) never pass through here
-        and get no notice (AC-PN3 semantics unchanged)."""
+        heal). R1723: a wired conversion_clawback face books the ledger
+        conversion-share reverse entry in the same post-commit block
+        (best-effort, never breaks the close, envelope evidence under
+        the 'clawback' key; the independent heal face is
+        clawback_conversion_share). Honest scope: the fiat refund
+        money-flow belongs to the channel adapters domain; timeout
+        closes (no grant row) never pass through here and get no
+        notice (AC-PN3 semantics unchanged)."""
         order = self._order_row(order_id)
         if order is None:
             raise PayError(E_UNKNOWN_ORDER, str(order_id))
@@ -489,11 +504,62 @@ class PayOrders:
             except Exception as exc:  # never break a completed close
                 recovery_out = {"status": "off:" + type(exc).__name__}
         notify_out = self._attempt_notify(order_id, "refund")
+        claw_out = None
+        if self.conversion_clawback is not None:
+            try:
+                claw_out = self.conversion_clawback.clawback_conversion(order_id)
+            except LedgerError as exc:
+                if exc.code == E_NO_FORWARD_ENTRY:
+                    # share_tokens=0 world: nothing was ever converted
+                    claw_out = {"status": "no_forward_entry"}
+                else:
+                    claw_out = {"status": "off:" + str(exc.code)}
+            except Exception as exc:  # never break a completed close
+                claw_out = {"status": "off:" + type(exc).__name__}
         out = {"order_id": order_id, "status": "closed"}
         if recovery_out is not None:
             out["recovery"] = recovery_out
         if notify_out is not None:
             out["notify"] = notify_out
+        if claw_out is not None:
+            out["clawback"] = claw_out
+        return self._face(out)
+
+    def clawback_conversion_share(self, order_id):
+        """Crash-window heal / operator face for the refund clawback
+        (R1723, AC-RC7): books the ledger conversion-share reverse
+        entry for a refund-closed order. Gates fail-closed: unknown
+        order, non-closed status, or a timeout close (closed with no
+        grant row = nothing was ever converted) all refuse with zero
+        writes. E_NO_FORWARD_ENTRY from the ledger face maps to the
+        honest no_forward_entry read (a granted order on a
+        share_tokens=0 product has no forward entry to reverse); any
+        other ledger error propagates. Works in not-wired worlds too:
+        this is the operator explicitly re-attempting what a wired
+        close would have booked (the ledger face is idempotent, so the
+        heal re-call answers already_clawed)."""
+        order = self._order_row(order_id)
+        if order is None:
+            raise PayError(E_UNKNOWN_ORDER, str(order_id))
+        if order["status"] != "closed":
+            raise PayError(E_BAD_STATE,
+                           "clawback heal needs closed (refund) order, got "
+                           + order["status"])
+        with self._lock:
+            grant = self._conn.execute(
+                "SELECT 1 FROM pay_grants WHERE order_id = ?",
+                (order["order_id"],)).fetchone()
+        if grant is None:
+            raise PayError(E_BAD_STATE,
+                           "no grant row (timeout close): nothing to claw")
+        try:
+            out = dict(self.ledger.clawback_conversion(order["order_id"]))
+        except LedgerError as exc:
+            if exc.code == E_NO_FORWARD_ENTRY:
+                out = {"status": "no_forward_entry"}
+            else:
+                raise
+        out["order_id"] = order["order_id"]
         return self._face(out)
 
     # ---- callback processing (AC-Y4/Y5/Y6) ---------------------------------

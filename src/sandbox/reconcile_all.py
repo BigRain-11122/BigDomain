@@ -219,6 +219,18 @@ SUITES = [
     # is truly consumed by the R1718-wired send path (AC-AZ1..AZ7
     # pre-registered in state/queue/tech.md).
     ("pay-authorize", os.path.join("pay", "test_authorize.py"), 7),
+    # R1723 refund conversion-share clawback (R1721 successor): the
+    # token-side reverse of the pay_conversion forward entry on a
+    # refund close - no overdraft ever (claw capped at min(forward,
+    # current balance), the consumed portion stays pool-side via
+    # spend->pool:reserve so the pool is net-whole), forward tx is the
+    # amount authority (zero caller amounts), reverse books as
+    # ref='refund:'+order_id / ref_type='order' / type='adjust' with
+    # provenance memo, UNIQUE(ref,ref_type) = natural idempotency;
+    # caller-built caller-owned wiring (conversion_clawback=None =
+    # shipped byte-stable) + never-break post-commit + heal face
+    # (AC-RC1..RC8 pre-registered in state/queue/tech.md).
+    ("ledger-clawback", os.path.join("pay", "test_clawback_wiring.py"), 8),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     # R1721 close_refund entitlement-recovery linkage (R1718 successor):

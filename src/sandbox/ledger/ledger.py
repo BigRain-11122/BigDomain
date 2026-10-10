@@ -57,6 +57,7 @@ E_BAD_AMOUNT = "E_BAD_AMOUNT"
 E_BAD_TYPE = "E_BAD_TYPE"
 E_BAD_ACTION = "E_BAD_ACTION"
 E_ADJUST_MEMO = "E_ADJUST_MEMO"
+E_NO_FORWARD_ENTRY = "E_NO_FORWARD_ENTRY"  # AC-RC1 refund clawback source
 
 _TRIGGER_CODES = (E_NEGATIVE_BALANCE, E_TX_IMBALANCE, E_TX_MIN_ENTRIES,
                   E_TX_CLOSED, E_TX_IMMUTABLE)
@@ -296,6 +297,103 @@ class Ledger:
         self.ensure_account(account_id, census_avatar_id=account_id[4:])
         entries = [(pool_id, "debit", amount), (account_id, "credit", amount)]
         return self._write_tx("share", action, ref, ref_type, source_ai, entries)
+
+    def clawback_conversion(self, order_id, memo=None):
+        """Refund clawback of a conversion share entry (R1723, AC-RC1..RC5
+        pre-registered in state/queue/tech.md): the token-side reverse of
+        the one forward entry booked by share_from_pool for this order.
+        Design ruling: (a) no overdraft ever - the AC-L2 balance floor is
+        constitutional, so the claw is capped at min(forward amount,
+        current usr balance); the consumed portion is not chased (it
+        already sits on the pool side via spend -> pool:reserve, so the
+        pool is net-whole: -forward + claw + reserve-held). (b) the
+        forward tx itself is the amount authority - this face takes zero
+        caller amounts (AC-Y2 spirit: no injection surface). The forward
+        is the UNIQUE(ref, ref_type) row for ref=order_id. (c) the
+        reverse books under ref='refund:'+order_id, ref_type='order'
+        (schema CHECK domain untouched; the UNIQUE pair is the natural
+        idempotency key), type='adjust' (approved out-of-band correction;
+        the memo discipline carries the provenance). Idempotent on every
+        re-call: already-booked -> status dict, never a raise."""
+        oid = str(order_id or "").strip()
+        if not oid:
+            raise LedgerError(E_BAD_TYPE, "order_id")
+        rev_ref = "refund:" + oid
+        with self._lock:
+            fwd = self._conn.execute(
+                "SELECT tx_id FROM ledger_tx WHERE ref = ? AND ref_type = 'order'",
+                (oid,)).fetchone()
+            if fwd is None:
+                raise LedgerError(E_NO_FORWARD_ENTRY, oid)   # fail-closed
+            rev = self._conn.execute(
+                "SELECT tx_id FROM ledger_tx WHERE ref = ? AND ref_type = 'order'",
+                (rev_ref,)).fetchone()
+            rows = self._conn.execute(
+                "SELECT account_id, direction, amount FROM ledger_entries"
+                " WHERE tx_id = ?", (fwd[0],)).fetchall()
+        usr = None
+        pool = None
+        amount = 0
+        for account_id, direction, amt in rows:
+            if direction == "credit" and account_id.startswith("usr:"):
+                usr, amount = account_id, int(amt)
+            elif direction == "debit":
+                pool = account_id
+        if usr is None or pool is None:
+            raise LedgerError(E_BAD_TYPE, "forward shape")
+        if rev is not None:
+            with self._lock:
+                booked = self._conn.execute(
+                    "SELECT amount FROM ledger_entries WHERE tx_id = ?"
+                    " AND direction = 'debit'", (rev[0],)).fetchone()
+            return {"order_id": oid, "status": "already_clawed",
+                    "idempotent": True, "tx_id": rev[0], "ref": rev_ref,
+                    "clawed": int(booked[0]) if booked else 0,
+                    "forward_amount": amount}
+        with self._lock:
+            bal_row = self._conn.execute(
+                "SELECT balance FROM ledger_accounts WHERE account_id = ?",
+                (usr,)).fetchone()
+        balance_before = int(bal_row[0]) if bal_row else 0
+        claw = min(amount, max(balance_before, 0))
+        if claw <= 0:
+            return {"order_id": oid, "status": "nothing_to_claw",
+                    "idempotent": False, "clawed": 0,
+                    "forward_amount": amount,
+                    "unclawed_consumed": amount,
+                    "balance_before": balance_before}
+        memo_text = str(memo).strip() if memo else (
+            "conversion share clawback: order %s refunded" % oid)
+        entries = [(usr, "debit", claw), (pool, "credit", claw)]
+        try:
+            tx_id = self._write_tx("adjust", "pay_conversion_refund", rev_ref,
+                                    "order", False, entries, memo_text)
+        except LedgerError as exc:
+            if exc.code == E_REF_DUPLICATE:      # race window heal
+                with self._lock:
+                    rev2 = self._conn.execute(
+                        "SELECT tx_id FROM ledger_tx WHERE ref = ?"
+                        " AND ref_type = 'order'", (rev_ref,)).fetchone()
+                    booked = self._conn.execute(
+                        "SELECT amount FROM ledger_entries WHERE tx_id = ?"
+                        " AND direction = 'debit'",
+                        (rev2[0],)).fetchone() if rev2 else None
+                return {"order_id": oid, "status": "already_clawed",
+                        "idempotent": True, "tx_id": rev2[0] if rev2 else None,
+                        "ref": rev_ref,
+                        "clawed": int(booked[0]) if booked else 0,
+                        "forward_amount": amount}
+            raise
+        with self._lock:
+            after_row = self._conn.execute(
+                "SELECT balance FROM ledger_accounts WHERE account_id = ?",
+                (usr,)).fetchone()
+        return {"order_id": oid, "status": "clawed", "idempotent": False,
+                "clawed": claw, "forward_amount": amount,
+                "unclawed_consumed": amount - claw,
+                "balance_before": balance_before,
+                "balance_after": int(after_row[0]) if after_row else 0,
+                "tx_id": tx_id, "ref": rev_ref}
 
     def spend(self, account_id, amount, ref, ref_type="order", memo=None):
         """Privilege consumption: usr debit -> pool:reserve credit. Tokens
