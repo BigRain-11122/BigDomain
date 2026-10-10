@@ -51,6 +51,19 @@ festival/ads/showcase-register posture); no SecGate point exists
 here; a successor resident-text surface must wire a SecGate
 pre-gate first.
 
+Honor roll (R1754): the annual honor board is a pure-read
+derivation over the earn ledger (per-account year aggregation).
+The honor-certificate linkage CANDIDATE was judged PLATFORM-SIDE
+first: recipients derive from board order and zero resident free
+text enters the module, so no SecGate point exists (the
+festival/ads/showcase-register posture); its grant path is
+designed on the CollectiblesFace.issue_certificate public API
+(event_ref namespace civic-honor:<year>, one certificate per
+account per year via the E_CL_DUP idempotency, the R619
+platform-award zero-token precedent). The linkage is deliberately
+NOT implemented in this round: the judgment itself is the
+deliverable and the grant face is a named successor slice.
+
 AIGC labeling: registry rows carry a persistent ai_label (0/1,
 DB CHECK) shown on every listing surface; a resident standing
 disclaimer is required at construction and rides every envelope
@@ -61,7 +74,8 @@ Storage: one separate SQLite file (civic.db, WAL, single writer)
 stays clean. Stdlib only; pure ASCII.
 
 Pre-registered criteria AC-CV1..CV7 live in the R1752
-explore-queue row and were written before this code existed
+explore-queue row and AC-HN1..HN6 in the R1754 explore-queue
+row; both were written before this code existed
 (honesty law).
 """
 
@@ -463,3 +477,37 @@ class CivicPointsFace:
                   "grant_count": int(r[4]), "ai_label": int(r[5]),
                   "registered_utc": r[6]} for r in rows]
         return {"rewards": board, "disclaimer": self.disclaimer}
+
+    def honor_board(self, year):
+        """Annual honor board (R1754): per-account aggregation of
+        civic earn points inside one calendar year - a pure-read
+        derivation with zero writes and zero token movement (the
+        counts-vs-tokens isolation law is inherited; this face
+        adds no write surface at all). Honor semantics: the board
+        ranks annual CONTRIBUTION, the sum of earned points - a
+        redemption does not reduce a resident's honored
+        contribution. The sort key is fully deterministic with
+        zero RNG, zero time keys and zero insertion-order keys:
+        points DESC, then account_id ASC as the tie-break (the
+        GROUP BY account key is unique per row, so exactly one
+        board order exists). A year with zero earn rows is an
+        honest empty list."""
+        if (not isinstance(year, str) or len(year) != 4
+                or not (year.isascii() and year.isdigit())):
+            raise CivicError(E_CV_BAD_ARGS,
+                             "year must be exactly 4 ascii digits")
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT account_id, COALESCE(SUM(points), 0),"
+                " COUNT(*) FROM civic_earns WHERE at_day LIKE ?"
+                " GROUP BY account_id", (year + "-%",)).fetchall()
+        entries = [{"account_id": r[0], "points": int(r[1]),
+                    "events": int(r[2])} for r in rows]
+        entries.sort(key=lambda e: (-e["points"], e["account_id"]))
+        board = []
+        for rank, entry in enumerate(entries, start=1):
+            board.append({"rank": rank,
+                          "account_id": entry["account_id"],
+                          "points": entry["points"],
+                          "events": entry["events"]})
+        return {"honor_board": board, "disclaimer": self.disclaimer}

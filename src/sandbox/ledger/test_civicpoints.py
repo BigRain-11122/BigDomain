@@ -3,10 +3,11 @@
 points inside the counts-vs-tokens isolation law, public-welfare
 compliance judged first, points-redeem-entitlements on the
 props-domain adjacency verdict). Asserts the pre-registered
-criteria AC-CV1..CV7 from the R1752 explore-queue row (criteria
-were registered before this code existed; honesty law). Each
-criterion prints PASS/FAIL with evidence; the process exits
-non-zero on any FAIL.
+criteria AC-CV1..CV7 from the R1752 explore-queue row plus the
+annual honor board extension AC-HN1..HN6 from the R1754 row
+(criteria were registered before this code existed; honesty
+law). Each criterion prints PASS/FAIL with evidence; the process
+exits non-zero on any FAIL.
 
 Usage: python test_civicpoints.py
 """
@@ -421,6 +422,170 @@ def main():
           % (view7["earned_total"], view7["redeemed_total"],
              view7["balance"], len(view7["grants"]), counts0,
              non_ascii, len(net_imports), update_hits))
+
+    # -- AC-HN1 honor board: year gate + envelope + empty year ---------------
+    bad_years = []
+    raised_hn1 = True
+    for label, arg in (
+            ("int year", 2026),
+            ("bool year", True),
+            ("short year", "26"),
+            ("long year", "20261"),
+            ("alpha year", "abcd"),
+            ("signed year", "-026"),
+            ("space year", " 2026"),
+            ("empty year", ""),
+            ("unicode digits year", "\u0662\u0660\u0662\u0666")):
+        ok_one_y, got_y = expect_cv_error(
+            lambda a=arg: cv.honor_board(a), CV.E_CV_BAD_ARGS)
+        if ok_one_y:
+            bad_years.append("%s=%s" % (label, got_y))
+        else:
+            bad_years.append("%s NOT-RAISED(%s)" % (label, got_y))
+            raised_hn1 = False
+    hb_none = cv.honor_board("2030")
+    ok_hn1 = (raised_hn1
+              and hb_none == {"honor_board": [],
+                              "disclaimer": DISCLAIMER}
+              and set(hb_none.keys()) == {"honor_board",
+                                          "disclaimer"})
+    record("AC-HN1", ok_hn1, "honor_board year gate: all %d bad"
+          " year args rejected (%s); zero-earn year 2030 is the"
+          " honest empty board and the envelope keys are exactly"
+          " {honor_board, disclaimer}" % (len(bad_years),
+                                          "; ".join(bad_years)))
+
+    # -- AC-HN2 deterministic order: id-asc tie-break, zero insertion key ----
+    cv.earn_civic("usr:aaron", "city-poll", "2026-10-10", "aa-1")
+    cv.earn_civic("usr:aaron", "park-clean", "2026-10-10", "aa-pc1")
+    aaron_min_id = cvconn.execute(
+        "SELECT MIN(earn_id) FROM civic_earns WHERE"
+        " account_id = 'usr:aaron'").fetchone()[0]
+    bob_max_id = cvconn.execute(
+        "SELECT MAX(earn_id) FROM civic_earns WHERE"
+        " account_id = 'usr:bob'").fetchone()[0]
+    hb26 = cv.honor_board("2026")
+    dump_hn_a = json.dumps(hb26, sort_keys=True)
+    dump_hn_b = json.dumps(cv.honor_board("2026"), sort_keys=True)
+    order26 = [(r["account_id"], r["points"], r["events"])
+               for r in hb26["honor_board"]]
+    row_keys_ok = all(set(r.keys()) == {"rank", "account_id",
+                                        "points", "events"}
+                      for r in hb26["honor_board"])
+    ranks_ok = ([r["rank"] for r in hb26["honor_board"]]
+                == list(range(1, len(hb26["honor_board"]) + 1)))
+    ok_hn2 = (order26 == [("usr:alice", 18, 4),
+                          ("usr:aaron", 7, 2),
+                          ("usr:bob", 7, 2)]
+              and row_keys_ok and ranks_ok
+              and int(aaron_min_id) > int(bob_max_id)
+              and dump_hn_a == dump_hn_b)
+    record("AC-HN2", ok_hn2, "2026 board order %s: alice 18 leads;"
+          " the 7-point tie resolves by account_id ASC (aaron"
+          " before bob) although every aaron earn row (min id %d)"
+          " is newer than all of bob's (max id %d) - zero"
+          " insertion-order key; row keys exactly {rank,"
+          " account_id, points, events}; ranks 1..N; double"
+          " json.dumps byte-identical"
+          % (order26, int(aaron_min_id), int(bob_max_id)))
+
+    # -- AC-HN3 cross-validation + live derivation + year isolation ----------
+    manual26 = {}
+    for acc, pts, evs in cvconn.execute(
+            "SELECT account_id, SUM(points), COUNT(*) FROM"
+            " civic_earns WHERE at_day LIKE '2026-%' GROUP BY"
+            " account_id").fetchall():
+        manual26[acc] = (int(pts), int(evs))
+    cross_ok = (len(manual26) == len(hb26["honor_board"])
+                and all((r["points"], r["events"])
+                        == manual26[r["account_id"]]
+                        for r in hb26["honor_board"]))
+    cv.earn_civic("usr:bob", "city-poll", "2025-12-31", "bob-2025-1")
+    hb26_after25 = cv.honor_board("2026")
+    hb25 = cv.honor_board("2025")
+    cv.earn_civic("usr:bob", "city-poll", "2026-10-12", "bob-1012")
+    hb26_live = cv.honor_board("2026")
+    order_live = [(r["rank"], r["account_id"], r["points"],
+                   r["events"]) for r in hb26_live["honor_board"]]
+    ok_hn3 = (cross_ok
+              and hb26_after25 == hb26
+              and hb25["honor_board"] == [
+                  {"rank": 1, "account_id": "usr:bob", "points": 5,
+                   "events": 1}]
+              and order_live == [(1, "usr:alice", 18, 4),
+                                 (2, "usr:bob", 12, 3),
+                                 (3, "usr:aaron", 7, 2)])
+    record("AC-HN3", ok_hn3, "per-row aggregation equals a manual"
+          " GROUP BY cross-read on all %d rows; a 2025 earn leaves"
+          " the 2026 board byte-equal and lands only on the 2025"
+          " board %s; live derivation with zero cached counters:"
+          " one new 2026 earn moves bob 7->12 and the rank order"
+          " flips to %s" % (len(manual26),
+                           [(r["account_id"], r["points"])
+                            for r in hb25["honor_board"]],
+                           order_live))
+
+    # -- AC-HN4 pure-read law ---------------------------------------------------
+    counts_hn0 = (_count(cvconn, "civic_behaviors"),
+                 _count(cvconn, "civic_earns"),
+                 _count(cvconn, "civic_rewards"),
+                 _count(cvconn, "civic_redeems"),
+                 _count(cvconn, "civic_grants"))
+    n_tx_hn0 = _count(conn, "ledger_tx")
+    cv.honor_board("2026")
+    cv.honor_board("2025")
+    cv.honor_board("2030")
+    n_tx_hn1 = _count(conn, "ledger_tx")
+    counts_hn1 = (_count(cvconn, "civic_behaviors"),
+                  _count(cvconn, "civic_earns"),
+                  _count(cvconn, "civic_rewards"),
+                  _count(cvconn, "civic_redeems"),
+                  _count(cvconn, "civic_grants"))
+    src_hn = inspect.getsource(CV.CivicPointsFace.honor_board)
+    write_hits_hn = [w for w in ("INSERT", "UPDATE", "DELETE")
+                     if w in src_hn]
+    ok_hn4 = (counts_hn0 == counts_hn1
+              and n_tx_hn0 == n_tx_hn1 and not write_hits_hn)
+    record("AC-HN4", ok_hn4, "honor_board reads leave all five"
+          " civic tables unchanged (%s == %s) and ledger_tx"
+          " constant (%d==%d, constructor takes no ledger ref);"
+          " method source carries zero INSERT/UPDATE/DELETE"
+          " statements (%s)" % (counts_hn0, counts_hn1, n_tx_hn0,
+                               n_tx_hn1, write_hits_hn))
+
+    # -- AC-HN5 honor-certificate linkage candidate: posture judgment ----------
+    posture_hn = ("civic-honor:<year>" in cv_src
+                  and "PLATFORM-SIDE" in cv_src)
+    grant_absent = (not hasattr(cv, "honor_roll_grant")
+                    and not hasattr(cv, "grant_honor_certificates"))
+    init_params_hn = list(inspect.signature(
+        CV.CivicPointsFace.__init__).parameters)
+    ok_hn5 = (posture_hn and grant_absent
+              and "collectibles" not in init_params_hn)
+    record("AC-HN5", ok_hn5, "linkage candidate judged first: the"
+          " honor-certificate grant is PLATFORM-SIDE (recipients"
+          " derive from board order, zero resident free text ->"
+          " no SecGate point, festival/ads/showcase-register"
+          " posture); grant path designed on"
+          " CollectiblesFace.issue_certificate (event_ref"
+          " civic-honor:<year>, one cert per account per year via"
+          " E_CL_DUP); deliberately not implemented this round -"
+          " no grant verb (%s), constructor unchanged (%s); the"
+          " judgment is the deliverable, the grant face is a"
+          " named successor slice" % (grant_absent,
+                                      init_params_hn))
+
+    # -- AC-HN6 hard laws for the honor face ----------------------------------
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_hn = h.read()
+    non_ascii_hn = sum(1 for ch in src_hn if ord(ch) > 127)
+    banned_hn = [w for w in BANNED_VERBS if w in src_hn]
+    ok_hn6 = (non_ascii_hn == 0 and not banned_hn
+              and "random" not in src_hn and cfg_hn == cfg_bytes)
+    record("AC-HN6", ok_hn6, "honor_board method source pure ASCII"
+          " (%d non-ascii), zero circulation verbs (%s), zero"
+          " RNG; shipped config.json byte-stable across the suite"
+          % (non_ascii_hn, banned_hn))
 
     conn.close()
     cvconn.close()

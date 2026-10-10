@@ -421,9 +421,14 @@ SUITES = [
     # own civic_grants table on the props-domain adjacency verdict
     # (props grant path is token-spend-bound, never copied), zero
     # UPDATE, zero back-flow/transfer verbs (AC-CV1..CV7
-    # pre-registered in state/queue/explore.md).
+    # pre-registered in state/queue/explore.md). R1754 honor roll
+    # extension: annual honor_board(year) pure-read derivation with
+    # deterministic (-points, account_id) ordering, cross-year
+    # isolation and the platform-side honor-certificate linkage
+    # candidate judgment (AC-HN1..HN6 pre-registered in the R1754
+    # explore-queue row).
     ("ledger-civicpoints",
-     os.path.join("ledger", "test_civicpoints.py"), 7),
+     os.path.join("ledger", "test_civicpoints.py"), 13),
 ]
 
 FAILS = 0
