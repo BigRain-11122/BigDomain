@@ -1,0 +1,15 @@
+== R1743 fold R474 reorg evidence ==
+pre-gauge (drift-state): 83535B disk over 78500B line by 5035B (R1742 closeout watermark; session-interrupted writer left 33 indent-anomaly lines - first-move layout repair required); gauge after eol --fix-indent (33 repaired lines, +264B, json_eq verify pass): 83799B over by 5299B = fold R474 ruled (third carry honored)
+--[1] fold dry-run (tail-9 first attempt, honest refusals)--
+window tail-9: 9 lines 10100B; refused twice: token-missing 16 (AC-UK7/AC-UW7/BD-PROP-003/C-20261006-01/C-20261009-02/D-20260930-19/D-20260930-20/D-20261010-01/O-20261010-1520/1555/1645/1650/1705/1715/1725/P-32) + gate-exceed (predicted 76182 + reserve 3000 > 78500)
+--[2] window widened to tail-11 (R1736 tokens stray line absorbed, precedent R1736 fold) + catalog 18 token embedded verbatim--
+window: start 23 end 33, 11 lines 12107B (R1736 tokens stray 221B + R1737 pair 1988B + R1738 pair 1973B + R1739 pair 2030B + R1740 pair 3125B + R1742 pair 2770B); token_missing=[] token_ok=true; predicted 75412B + reserve 3000 = 78412 <= 78500 margin 88B; would_fail=[]
+--[3] execute--
+post_bytes 75412 == predicted 75412 (verify-then-write PASS byte-exact); new_log_len 23; archive appended verbatim (appendix 12340B, pre-op sha16 8a2bf5baefb85478, backup logs/state-preop-R1743.bak); archive_file logs/state-log-archive-2026-10.md section R1743
+--[4] post gauge--
+disk 75412B, margin +3088B under gate, fold_needed=false, log_content 72591B, json parse OK tick=1742 log_lines=23
+--[5] catalog + census--
+token catalog 18 embedded zero-loss (AC-RP4/AC-SN1/AC-UK7/AC-UK8/AC-UW7/AC-UW8/AC-VR1/BD-PROP-003/C-20261006-01/C-20261009-02/D-20260930-19/D-20260930-20/D-20261010-01/O-20261010-1520/O-20261010-1555/O-20261010-1645/O-20261010-1650/O-20261010-1705/O-20261010-1715/O-20261010-1725/P-32 + R-family refs); census pass=true (PYTHONIOENCODING=utf-8 required - GBK console first-refusal honest note)
+--[6] round notes--
+R1742 closeout landed first as clean-baseline commit f8dd43e (state tick 1742 + direction-review input + checker FAIL log + HB backfill); this fold surgery is the only state.json writer in this window; export flush with checker re-run deferred to this round closeout (R1741/R1742 flush claims both unlanded - erratum chain closed here)
+written 2026-10-10 18:35:13 by R1743
