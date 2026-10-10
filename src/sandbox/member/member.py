@@ -580,6 +580,49 @@ class MemberStore:
                                "unused credits forfeit at period end"
                                " ([needs-CEO] default: no carryover)"})
 
+    def expiring_soon(self, days, now=None):
+        """Pre-expiry prediction board (tech.md AC-ES1..ES7, criteria
+        registered before this code; honesty law). Pure-read derived
+        face over member_periods: every ACTIVE period whose end_utc
+        falls in the inclusive window [as_of, as_of + days] is listed
+        with its whole remaining days (floor). The reminder face's due
+        window (end - remind_days <= now < end) is exactly the
+        still-running subset of this board at days = remind_days
+        (AC-ES5): this face is the read-side candidate the renewal
+        reminder scan can consume with no second derivation. The
+        window keys on end_utc alone - no grace widening, same field
+        the due scan keys on."""
+        if isinstance(days, bool) or not isinstance(days, int):
+            raise MemberError(E_BAD_STATE, "days must be an int")
+        if days <= 0:
+            raise MemberError(E_BAD_STATE, "days must be positive")
+        if now is None:
+            as_of = now_utc()
+        else:
+            try:
+                as_of = parse_iso(str(now)).strftime("%Y-%m-%dT%H:%M:%SZ")
+            except ValueError:
+                raise MemberError(E_BAD_STATE,
+                                  "now not an ISO ts (YYYY-MM-DDTHH:MM:SSZ)"
+                                  ) from None
+        horizon = add_days(as_of, days)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT census_avatar_id, period_id, product_id, tier,"
+                " period_no, end_utc FROM member_periods"
+                " WHERE status = 'active' AND end_utc >= ? AND end_utc <= ?"
+                " ORDER BY end_utc, census_avatar_id, period_id",
+                (as_of, horizon)).fetchall()
+        board = []
+        for avatar, period_id, product, tier, no, end_utc in rows:
+            left = (parse_iso(end_utc) - parse_iso(as_of)).days
+            board.append({"census_avatar_id": avatar,
+                          "period_id": period_id, "product_id": product,
+                          "tier": tier, "period_no": int(no),
+                          "end_utc": end_utc, "days_left": int(left)})
+        return self._face({"expiring_soon": board, "days": int(days),
+                           "as_of": as_of, "count": len(board)})
+
     def consume_credits(self, census_avatar_id, count, ref=None, ref_type=None):
         """Draw service credits across active periods, soonest-expiring
         first (quota semantics). Refusal families: no active period =

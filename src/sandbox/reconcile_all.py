@@ -321,6 +321,13 @@ SUITES = [
     # (AC-RR1..RR7 pre-registered in state/queue/tech.md).
     ("member-refund-recovery",
      os.path.join("member", "test_refund_recovery.py"), 7),
+    # R1774 member expiring-soon board: pre-expiry prediction pure-read
+    # derived face (window-parameterized inclusive both edges, days_left
+    # floor, reminder due-window alignment = honest superset; reminder
+    # scan consumption candidate; AC-ES1..ES7 pre-registered in
+    # state/queue/tech.md).
+    ("member-expiring",
+     os.path.join("member", "test_expiring_soon.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

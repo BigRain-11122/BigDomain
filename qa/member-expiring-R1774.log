@@ -1,0 +1,40 @@
+PASS AC-ES1: env-keys=True row-keys=True days_left=5 count=1 cross=True left-floor=True
+PASS AC-ES2: days-refused=6/6 ts-refused=3/3 counts-stable=True
+PASS AC-ES3: board=[('ES-A', 0), ('ES-E', 0), ('ES-B', 3)] expected=[('ES-A', 0), ('ES-E', 0), ('ES-B', 3)] count=3 (expired ES-F and out-of-window ES-C/ES-D absent)
+PASS AC-ES4: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-ES5: remind_days=3 due=2 board-live=2 edge-at-as_of=1 (edge in board, not due: honest superset)
+PASS AC-ES6: boards-identical=True avatars=3 order=['ES-X3', 'ES-X1', 'ES-X2'] (tie ES-X1/ES-X2 resolved by census id)
+PASS AC-ES7: ascii=True subjects=2 network-imports=0 additive-face=True
+SUITE PASS: 7/7
+=== HYGIENE: git status --short ===
+ M src/sandbox/member/member.py
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/suite_matrix.py
+ M state/queue/tech.md
+?? qa/member-expiring-R1774.err
+?? qa/member-expiring-R1774.log
+?? qa/reconcile-all-R1774-firstfail.err
+?? qa/reconcile-all-R1774-firstfail.log
+?? qa/reconcile-all-R1774.err
+?? qa/reconcile-all-R1774.log
+?? src/sandbox/member/test_expiring_soon.py
+=== HYGIENE: git diff --stat (member.py additive / suite_matrix.py one-guard / config.json untouched) ===
+ src/sandbox/member/member.py | 43 +++++++++++++++++++++++++++++++++++++++++++
+ src/sandbox/suite_matrix.py  |  9 ++++++++-
+ 2 files changed, 51 insertions(+), 1 deletion(-)
+=== REGRESSION (rerun after discovery-walk skip-guard fix; first FAIL run preserved as qa/reconcile-all-R1774-firstfail.log) ===
+PASS suite member-expiring exit=0 pass-lines=7 fail-lines=0 criteria=7 1.5s
+PASS suite suite-matrix-discovery exit=0 pass-lines=16 fail-lines=0 criteria=16 1.0s
+RUNNER PASS (76/76 suites green, reconcile controls 7/7, 202.4s)
+=== MATRIX REGEN + CHECK x2 ===
+PASS generated docs/sandbox-suite-matrix.md (8408 bytes) - registry suites=76 criteria=764 evidence=qa/reconcile-all-R1774.log green=76/76
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8408 bytes, 76 suites, 764 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8408 bytes, 76 suites, 764 criteria)
+=== FINGERPRINT SENTINEL ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

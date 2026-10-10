@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T05:30:28+08:00",
+ "export_ts": "2026-10-11T05:50:47+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1773 一件事：大厅加了房间级消息读面——每个房间发了多少条聊天消息、多少活跃户在说话，一条命令读出（零改动写入路径，纯读派生；18/18 判据过，75 套件 757 判据全量回归零退化）。",
-  "latest_artifact": "最近实物：src/sandbox/lobby/store.py（room_message_board 房间级消息读面）+ test_client.py AC-S14/S15（判据 16→18）；证据 qa/lobby-roomboard-R1773.log（2026-10-11）",
-  "next_milestone": "下轮实物：tech 队头『member 到期前 N 天预测读面』当窗交付（48h 内·至 10-13）；账本水位 77,807B 贴近门线，下轮首测若越线先做 fold R485 再拉活；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
+  "current": "R1774 一件事：会员模块加了到期前预测读面——一条命令读出「未来 N 天内到期的会员期」（纯读、零写入），到期提醒扫描可以直接拿它当数据源；顺手修了一个真缺口：证据文件走查器遇到编码损坏的旧证据件会崩，已修为跳过该件继续找（不造数据、语义不变）。沙箱总量升到 76 套件 764 条判据全绿。",
+  "latest_artifact": "最近实物：src/sandbox/member/member.py（expiring_soon 到期前预测读面）+ test_expiring_soon.py AC-ES1..ES7；证据 qa/member-expiring-R1774.log（2026-10-11）",
+  "next_milestone": "下轮实物：tech 队头『pay 渠道对账覆盖矩阵读面』当窗交付（48h 内·至 10-13）；账本水位本轮收账后大概率越线，下轮首测若越线先做 fold R485 再拉活；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
  },
  "depts": [
   {
@@ -188,6 +188,10 @@
  "results": [
   [
    "2",
+   "member 到期前预测读面交付（R1774·P2 tech 队头·P1 板顶全门控承 R1773 判读·AC-ES1..ES7 预注册先于代码：MemberStore.expiring_soon(days, now=None) 纯读派生面=active 期 as_of<=end_utc<=as_of+days 双沿包容窗+days_left floor+行序 end_utc,census,period_id 零 RNG+信封 {expiring_soon,days,as_of,count}+_face 合规三件+坏参 6 形态与非 ISO now 全拒 E_BAD_STATE+边界=恰 as_of/horizon 入榜+越窗一刻/过终态/expired 排除+纯读律四表计数恒定+inspect 零 DML+双调逐字节同一+提醒 due 窗对齐=manual SQL due 集==榜内 end>as_of 子集（恰到期边界行超集诚实注）+全局榜异插入序双世界逐位同一·test_expiring_soon.py SUITE 7/7 exit 0 首跑全绿——同轮修如实注：全量回归首跑 75/76 一红=suite-matrix-discovery 两 live 例 UnicodeDecodeError（混合方言证据件解码失败逃逸坏件跳过闸 OSError-only 捕获=R1683 方言坑复发族）→正法=闸扩 (OSError, UnicodeDecodeError) 解码失败件不可作证据走查续行 fail-closed 零改动→套件单跑 16/16 复绿+二跑 RUNNER PASS 76/76 套件 764 判据 controls 7/7 202.4s 零回归（首跑红证据保全 qa/reconcile-all-R1774-firstfail.log）·reconcile_all SUITES 75→76 判据 757→764·矩阵再生 76/764 green --check byte-identical 双跑 8408B·指纹哨兵 CLEAN domains=5（member 4 表零 schema 触碰）·member.py +43/-0 additive+config.json 逐字节零改动·证据 qa/member-expiring-R1774.log 五节·queue_tech_open 9→8 补种 2→10·R1774）"
+  ],
+  [
+   "2",
    "lobby 房间级消息读面沙箱件（R1773·P2 tech 队头·AC-S14/S15 预注册先于代码：store.py EventStore.room_message_board=每房 chat.broadcast 计数+COUNT(DISTINCT actor) 活跃户聚合纯读派生〔zone 升序零 RNG·信封 {room_message_board,disclaimer} 常驻·空榜诚实态〕+manual SQL 交叉逐位等+scope 隔离〔非 chat 型零计入〕+异插入序双库逐位同一+活态派生零缓存+纯读律〔行数恒定+方法源 inspect 零写语句〕+legacy 无 disclaimer 面拒 E_STORE_NO_DISCLAIMER+显式空/空白/非 str 拒构造+live 交叉〔suite 真 db lobby+quant==manual SQL〕·test_client.py 判据 16→18〔首跑 AC-S15 一红=inspect 自指假阳性 R1678 族·docstring 措辞改写二跑全绿〕·reconcile_all SUITES lobby 16→18·RUNNER PASS 75/75 套件 757 判据 controls 7/7 144.3s 零回归=qa/reconcile-all-R1773.log·矩阵再生 75/757 green --check byte-identical 双跑·指纹哨兵 CLEAN domains=5=qa/fingerprint-R1773.log·证据 qa/lobby-roomboard-R1773.log 五节·server.py 零触碰·零价目面〔纯读派生零 token 动〕·queue_tech_open 10→9·R1773）"
   ],
   [
@@ -319,7 +323,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1773",
+   "1774",
    "OSLoop 执行 tick"
   ],
   [
@@ -3194,15 +3198,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 9,
+  "queue_tech_open": 10,
   "queue_explore_open": 10,
-  "method": "R1773 lobby room-level message read face delivered (room_message_board on the EventStore: per-room chat.broadcast COUNT + distinct-actor aggregation, pure read zero-UPDATE, standing-disclaimer envelope, fail-closed without a wired disclaimer; suite 16->18; RUNNER PASS 75/75 suites 757 criteria; matrix 75/757 --check byte-identical; sentinel CLEAN domains=5; evidence qa/lobby-roomboard-R1773.log; queue_tech 10->9)"
+  "method": "R1774 member expiring_soon pre-expiry board delivered (pure-read derived face, inclusive both edges, days_left floor, reminder due-window alignment as honest superset; suite 7/7; same-round fix: suite_matrix discovery skip-guard widened to UnicodeDecodeError after a mixed-dialect evidence file bricked the walk; RUNNER PASS 76/76 suites 764 criteria; matrix 76/764 --check byte-identical; sentinel CLEAN domains=5; evidence qa/member-expiring-R1774.log; queue_tech 9->8 reseeded 2->10)"
  }
 }

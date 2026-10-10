@@ -76,7 +76,14 @@ def _evidence_eligible(path):
     """
     try:
         text = read_text(path)
-    except OSError:
+    except (OSError, UnicodeDecodeError):
+        # OSError = unreadable file; UnicodeDecodeError = a mixed-
+        # dialect evidence file (UTF-16LE base with appended non-UTF16
+        # sections, the R1683 writer-dialect lesson recurring at
+        # R1774: lobby-roomboard-R1773.log bricks the walk otherwise).
+        # A candidate that cannot be decoded is not evidence-eligible;
+        # the discovery walk skips it and continues (fail-closed
+        # semantics unchanged - never fabricate, never crash).
         return False
     runner = RUNNER_RE.findall(text)
     if len(runner) != 1 or runner[0][0] != "PASS":
