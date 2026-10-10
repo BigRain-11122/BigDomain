@@ -392,6 +392,14 @@ SUITES = [
     # window records the profile exit without gating the day (AC-PD1..PD7
     # pre-registered in state/queue/tech.md).
     ("reconcile-daily-profile", "test_reconcile_daily_profile.py", 7),
+    # R1750 collectibles public-showcase face: append-only place/retract
+    # event ledger (zero UPDATE, derived display state, one item one
+    # window), dock-verified ownership over the collectibles rows,
+    # zero token movement, caption msgSecCheck pre-gate, permanent
+    # chronicle + derived tour (AC-SH1..SH7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase",
+     os.path.join("ledger", "test_showcase.py"), 7),
 ]
 
 FAILS = 0

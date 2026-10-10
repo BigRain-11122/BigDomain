@@ -1,0 +1,34 @@
+﻿--- showcase suite (test_showcase.py) ---
+PASS AC-SH1: one registry row (1) for a unique id; re-registration rejected E_SH_DUP_SHOWCASE with zero rows (1==1); all 6 bad args rejected (empty id=E_SH_BAD_ARGS; empty title=E_SH_BAD_ARGS; cap 0=E_SH_BAD_ARGS; cap bool=E_SH_BAD_ARGS; cap str=E_SH_BAD_ARGS; non-bool ai flag=E_SH_BAD_ARGS); unknown-showcase reads rejected (E_SH_UNKNOWN_SHOWCASE view / E_SH_UNKNOWN_SHOWCASE tour); declared ai_label persists (0) and rides the return envelope
+PASS AC-SH2: unknown cl_id rejected E_SH_UNKNOWN_ITEM; bob's item under alice rejected E_SH_NOT_OWNER; non-resident account rejected E_SH_BAD_ARGS; 3 bad cl_id forms rejected (bool cl id=E_SH_BAD_ARGS; str cl id=E_SH_BAD_ARGS; cl id 0=E_SH_BAD_ARGS); zero events stored (0==0); collectibles rows untouched (4==4); dock statements are SELECT-only (0 write lines)
+PASS AC-SH3: caption with a forbidden word rejected E_SH_CONTENT_REJECTED zero rows; caption with an advisory word rejected E_SH_CONTENT_REJECTED zero rows (0==0); unwired gate refuses construction E_SH_NO_GATE; gate runtime fault mapped E_SH_GATE_ERROR with zero rows (never a silent pass); exactly 1 clean place stored (1==0+1)
+PASS AC-SH4: duplicate place in the same window rejected E_SH_ALREADY_DISPLAYED; cross-window place of an already-displayed item rejected E_SH_ALREADY_DISPLAYED (one item one window); cap-2 window third place rejected E_SH_SHOWCASE_FULL; retract ok; double retract rejected E_SH_NOT_DISPLAYED; slot freed after a retract (carol placed in); re-place after retract ok (new event row); retract of an item placed elsewhere rejected E_SH_NOT_DISPLAYED; derived displayed list == [1, 2] in placement order; zero token rows across the whole cycle (0==0)
+PASS AC-SH5: chronicle keeps the full event order place/place/retract/place/retract/place (6 events, ids strictly ascending); retracted items stay in the permanent record; unfiltered chronicle == filtered length (6); tour stops == [(1, 1), (2, 2)] (displayed only, placement order, 1..N); view agrees with the tour
+PASS AC-SH6: empty disclaimer refuses construction E_SH_NO_DISCLAIMER; every envelope (register/place/retract/view/chronicle/tour) carries the resident disclaimer (True); declared ai_label persists on the showcase row (1) and the event row (1); direct SQL ai_label=2 refused by the CHECK on both tables ([True, True])
+PASS AC-SH7: all 5 bad args rejected (empty showcase id place=E_SH_BAD_ARGS; empty showcase id retract=E_SH_BAD_ARGS; non-str caption=E_SH_BAD_ARGS; non-bool ai flag=E_SH_BAD_ARGS; bad retract account=E_SH_BAD_ARGS); zero side effects (rows (2, 7) unchanged); module pure ASCII (0 non-ascii); zero network imports (0); zero banned circulation verbs in source ([]); zero UPDATE surface ([]); zero RNG; shipped config.json byte-stable
+SUITE PASS 7/7
+--- RUNNER regression (qa/reconcile-all-R1750.log) ---
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+PASS suite ledger-showcase exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+RUNNER PASS (66/66 suites green, reconcile controls 7/7, 153.4s)
+
+--- fingerprint sentinel ---
+
+verdict CLEAN domains=5
+
+
+
+--- matrix regen + check x2 ---
+
+PASS generated docs/sandbox-suite-matrix.md (7691 bytes) - registry suites=66 criteria=660 evidence=qa/reconcile-all-R1
+750.log green=66/66
+
+
+
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7691 bytes, 66 suites, 660 criteria)
+
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7691 bytes, 66 suites, 660 criteria)
+

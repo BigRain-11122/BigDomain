@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-10T20:35:37+08:00",
+ "export_ts": "2026-10-10T20:57:51+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1749 suite_matrix --check 证据面消息硬化轮（P2 队头·R1748 承传点名兑现·轮计分 2=可跑实物·AC-EF1..EF6 预注册先于代码）：--check stale FAIL 消息硬化=evidence-face 对照行（doc-recorded vs check-resolved）+face-mismatch hint 行（R1739 同 run 同内容仅路径不同 stale ×2 实锚根治=操作者可从消息定位面错配 vs 真漂移）+faces agree 注·fail-closed 退出码零改动·套件例三态实测（mismatch 命名+hint/对齐即绿/tamper 红态 agree）SUITE 16/16 首跑绿·RUNNER PASS 65/65 controls 7/7 190.9s 零回归·矩阵 65/653 --check byte-identical·指纹哨兵 CLEAN domains=5；GORD O-20261010-2006 全员全面开工令（算力全解禁）=全司总广播零本司派工知悉入册（本司 OSLoop 无停摆面连续产品轮在班）·基线 245→246",
-  "latest_artifact": "最近实物：R1749 suite_matrix --check 证据面消息硬化件（src/sandbox/suite_matrix.py doc_evidence_face+_print_evidence_face 三态+test_suite_matrix.py 套件例 15→16〔判据 15→16〕·证据=qa/suite-matrix-staleface-R1749.log+qa/reconcile-all-R1749.log+docs/sandbox-suite-matrix.md 65 套件 653 判据全 green）",
-  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗）+P2 tech 队列再判（次队头=logs 常设线 fold 手术段 write/archive-append 整编入工具件）——窗 ≤48h=2026-10-12"
+  "current": "R1750 数字藏品展示橱窗面交付轮（P3 队头认领·轮计分 2=可跑实物）：ShowcaseFace=公开展示橱窗/编年史导览两域 append-only 事件账〔place/retract 零 UPDATE·显示态派生·一物一窗·槽位帽〕+只读 dock 所有权门+caption msgSecCheck 前置闸+编年史永久记录+导览 stop 1..N+AIGC/disclaimer 六信封·SUITE 7/7+RUNNER 66/66 零回归+矩阵 66/660+指纹哨兵 CLEAN·五静全过后 P1/P2 全门控=tech 队列再判零可拉（次队头 logs 常设线已按需维护·R1749 承传点名兑现）",
+  "latest_artifact": "最近实物：R1750 数字藏品展示橱窗面沙箱件（src/sandbox/ledger/showcase.py+test_showcase.py·SUITE 7/7 双跑逐位同一+reconcile_all SUITES 65→66 判据 653→660〔ledger-showcase〕+RUNNER PASS 66/66 controls 7/7 153.4s 零回归·证据=qa/showcase-R1750.log+qa/reconcile-all-R1750.log+docs/sandbox-suite-matrix.md 66 套件 660 判据全 green）",
+  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗）+P2 tech 队列再判/P3 explore 队头（市民行为积分面）——窗 ≤48h=2026-10-12"
  },
  "depts": [
   {
@@ -251,7 +251,14 @@
    "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
   ],
   [
-   "1749",
+
+   "2",
+
+   "数字藏品展示橱窗面沙箱件（explore 队头认领·AC-SH1..SH7 预注册先于代码：src/sandbox/ledger/showcase.py ShowcaseFace 两域=公开展示橱窗〔平台注册 slot_cap+业主上架/撤展 append-only 事件账零 UPDATE·显示态=每 cl_id 最新事件派生·全局一物一窗·caption 居民文本过 SecGate 前置闸 fail-closed〕+编年史导览域〔chronicle 全事件永久记录零改写+chronicle_tour 在展上架序 stop 1..N 确定性导览〕+只读 dock 所有权门〔mode=ro 查 collectibles 行·零 collectibles 写〕+AIGC ai_label 0/1 双表 DB CHECK+六信封 disclaimer 常驻+零 token 动〔ledger_tx 恒定〕·独立 showcase.db 零 ledger schema 触碰〔指纹哨兵 CLEAN domains=5〕·test_showcase.py SUITE 7/7 exit 0 双跑逐位同一·reconcile_all SUITES 65→66 判据 653→660·RUNNER PASS 66/66 controls 7/7 153.4s 零回归·矩阵再生 66/660 green --check byte-identical·qa/showcase-R1750.log·R1750）"
+
+  ],
+  [
+   "1750",
    "OSLoop 执行 tick"
   ],
   [
@@ -3098,15 +3105,15 @@
  "self_drive": {
   "window": "2026-10-04..2026-10-10",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 28,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 12,
+  "substantive_non_idle_mention_lines": 13,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 6,
   "queue_explore_open": 10,
-  "method": "R1749 suite_matrix stale-check evidence-face hardening round (score 2 = runnable artifact): --check stale FAIL now prints an evidence-face comparison line (doc-recorded vs check-resolved) plus a face-mismatch hint with the alignment command when the two paths differ, and a faces-agree note when they match - the R1739 anchor (same-run, same-content, path-only stale FAIL x2) is closed; exit-code semantics unchanged (still 2, zero disk mutation, PASS path byte-stable); new suite case exercises all three states (explicit-regen vs default-discovery mismatch named + hint, aligned faces green, tamper red with agree note and no hint), SUITE 16/16 first-run green with 15 prior cases zero-regression; reconcile_all suite-matrix-discovery criteria 15->16 (total 652->653), RUNNER PASS 65/65 controls 7/7 190.9s zero-regression, matrix regen 65/653 default-discovery evidence=qa/reconcile-all-R1749.log --check byte-identical x2, fingerprint sentinel CLEAN domains=5, shipped config/patterns untouched; GORD O-20261010-2006 all-hands work order (compute unlocked) = fleet-wide broadcast, zero BigDomain dispatch, acknowledged (loop never paused, continuous product rounds on shift), baseline last_gord_tbl_rows 245->246; in-window lines +2 (R1749 pair); tick row 1748 -> 1749; tech queue open 7->6"
+  "method": "R1750 digital-collectibles public showcase delivery round (score 2 = runnable artifact): P3 explore-queue head claimed (P1 all-gated, P2 tech queue re-judged all-gated/as-needed); AC-SH1..SH7 pre-registered in the explore.md claim row before code; ShowcaseFace src/sandbox/ledger/showcase.py + test_showcase.py SUITE 7/7 exit 0 double-run identical - append-only place/retract event ledger (zero UPDATE, derived display state, one item one window globally, slot cap, retract frees a slot), read-only dock ownership gate into the collectibles rows (zero collectibles writes, ledger_tx constant = zero token movement), caption msgSecCheck pre-gate (SecGate by reference, wordlist hits rejected zero rows, unwired gate refuses construction, runtime fault -> E_SH_GATE_ERROR), permanent chronicle + derived tour stops 1..N, AIGC ai_label 0/1 DB CHECK on both tables + resident disclaimer on all six envelopes; separate showcase.db = zero ledger-schema touch (fingerprint sentinel CLEAN domains=5); reconcile_all SUITES 65->66 criteria 653->660 (ledger-showcase), RUNNER PASS 66/66 controls 7/7 153.4s zero-regression = qa/reconcile-all-R1750.log; matrix regen 66/660 --check byte-identical x2 (7691B); scanner window-fix honestly noted (dock-statement check widened to a 3-line window - SQL literal sits on the line after the execute call); evidence qa/showcase-R1750.log (4 sections); queue_explore_open 10->9 then restock 1->10 (curation-theme seed); in-window lines +2 (R1750 pair); tick row 1749 -> 1750; tech queue open unchanged 6"
  }
 }
