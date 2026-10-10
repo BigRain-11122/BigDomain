@@ -429,6 +429,18 @@ SUITES = [
     # explore-queue row).
     ("ledger-civicpoints",
      os.path.join("ledger", "test_civicpoints.py"), 13),
+    # R1755 annual civic honor certificate grant face: pure
+    # orchestration over two public faces (civic honor_board read +
+    # collectibles issue_certificate/collection) - zero own storage,
+    # zero SQL in the module, top-N slice derived from the board's
+    # deterministic order, one-per-account-per-year idempotency
+    # internalized by the collectibles duplicate law (E_CL_DUP
+    # converges to an already-skip), permanent certificates that
+    # survive board moves, platform-side posture with zero resident
+    # text, zero token movement (AC-HC1..HC7 pre-registered in the
+    # R1755 explore-queue row).
+    ("ledger-honorcert",
+     os.path.join("ledger", "test_honorcert.py"), 7),
 ]
 
 FAILS = 0
