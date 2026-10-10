@@ -409,6 +409,17 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-curation",
      os.path.join("ledger", "test_curation.py"), 7),
+    # R1752 citizen civic-behavior points face: earned-only points
+    # inside the counts-vs-tokens isolation law (constructor takes
+    # NO ledger reference - token domain structurally out of reach),
+    # idempotent earn rows with per-day anti-farming cap, fail-closed
+    # redemption (derived balance gate, cosmetic one-grant-per-account),
+    # own civic_grants table on the props-domain adjacency verdict
+    # (props grant path is token-spend-bound, never copied), zero
+    # UPDATE, zero back-flow/transfer verbs (AC-CV1..CV7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-civicpoints",
+     os.path.join("ledger", "test_civicpoints.py"), 7),
 ]
 
 FAILS = 0

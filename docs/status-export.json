@@ -1,10 +1,10 @@
 ﻿{
- "export_ts": "2026-10-10T21:24:11+08:00",
+ "export_ts": "2026-10-10T21:45:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1751 fold R476 水位整编+展示橱窗策展主题面交付轮（P3 队头认领·轮计分 2=可跑实物）：fold R476=轮首首测 80223B 越线 1723B→tail-11 五轮收账对 12635B 压 1 滚窗行·catalog 15/15 零丢失·predicted==actual 69847B·archive §R1751 verbatim；CurationFace 主题策展=多橱窗编组注册〔UNIQUE+成员 position 1..N append-only 不可变〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace 公有 API 引用不复制〕+成员存在门 fail-closed+零 token 零 UPDATE+AIGC/disclaimer 四信封〔AC-CU1..CU7 预注册先于代码·SUITE 7/7 首跑即净+RUNNER 66→67 套件 660→667 零回归+矩阵 67/667 --check 双过+哨兵 CLEAN domains=5〕·GORD O-20261010-2015 常设授权令=游戏项目研发面零 @BigDomain 派工知悉·基线 246→247",
-  "latest_artifact": "最近实物：R1751 展示橱窗策展主题面沙箱件（src/sandbox/ledger/curation.py+test_curation.py·SUITE 7/7 双跑逐位同一+reconcile_all SUITES 66→67 判据 660→667〔ledger-curation〕+RUNNER PASS 67/67 controls 7/7 181.2s 零回归·证据=qa/curation-R1751.log+qa/reconcile-all-R1751.log+qa/reorg-R1751.log+docs/sandbox-suite-matrix.md 67 套件 667 判据全 green）",
-  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗）+P2 tech 队列再判/P3 explore 队头（市民行为积分面）——窗 ≤48h=2026-10-12"
+  "current": "R1752 市民行为积分面交付轮（P3 explore 队头认领·轮计分 2=可跑实物）：公益面合规判读定谳三裁先于代码〔积分=赚取唯一源零 money/token 入口+零回流零转移结构禁令+props 域先查重=授予路径 token-spend 绑定不可复用→civic_grants 自建邻界裁定〕；CivicPointsFace=行为注册 UNIQUE+ai_label CHECK+赚取幂等+日帽前置异日重置+严格历法日校验〔strptime 往返=首跑抓 '2026-10-1' 宽松解析真缺口当场补严〕+注册价不可变拷贝+兑换 fail-closed 门序〔未知→余额→cosmetic 已授〕+构造零 ledger 参=代币域结构性不可达〔R599 两域隔离律升格〕+零回流/流通动词〔AC-CV1..CV7 预注册先于代码·SUITE 7/7 双跑逐位同一+RUNNER 67→68 套件 667→674 零回归+矩阵 68/674 --check 双过+哨兵 CLEAN domains=5〕·GORD 新行【@bm-c】mv0001 全曲批=非本司面知悉·基线 247→248",
+  "latest_artifact": "最近实物：R1752 市民行为积分面沙箱件（src/sandbox/ledger/civicpoints.py+test_civicpoints.py·SUITE 7/7 双跑逐位同一+reconcile_all SUITES 67→68 判据 667→674〔ledger-civicpoints〕+RUNNER PASS 68/68 controls 7/7 176.9s 零回归·证据=qa/civicpoints-R1752.log+qa/reconcile-all-R1752.log+docs/sandbox-suite-matrix.md 68 套件 674 判据全 green）",
+  "next_milestone": "下轮首=每日对账常设轮 10-11 首轮（qa/reconcile-daily-20261011.log·哨兵段收养窗开窗=首个含 elapsed 尾行真 daily 证据落盘后 --daily --update-baseline 收养 sentinel_seconds）+P2 tech 队列再判/P3 explore 队头（策展主题热度榜面）——窗 ≤48h=2026-10-12"
  },
  "depts": [
   {
@@ -262,7 +262,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1751",
+   "1752",
    "OSLoop 执行 tick"
   ],
   [
@@ -3104,20 +3104,24 @@
   [
    "2",
    "suite_matrix --check 证据面消息硬化件（R1749·P2 队头·R1748 承传点名兑现·AC-EF1..EF6 预注册=tech.md 认领行先于代码：stale FAIL 消息增 evidence-face 对照行〔doc-recorded=N vs check-resolved=M·R1739 同 run 同内容仅路径不同 stale ×2 实锚〕+face-mismatch hint 行〔对齐 --evidence 重跑生成步指引〕+faces agree 注〔内容漂移定性〕·doc_evidence_face 提取面〔doc 命令行 --evidence 段·无段 None 诚实态〕·--check PASS 路径逐字节不变·套件例三态实测〔显式 regen+缺省 check mismatch→exit 2+两 basename 对照+hint·对齐 regen 后 exit 0·tamper 红态 agree+零 hint〕SUITE 16/16 首跑绿〔15 既有例零回归〕·reconcile_all SUITES suite-matrix-discovery 判据 15→16〔652→653〕·RUNNER PASS 65/65 controls 7/7 190.9s 零回归=qa/reconcile-all-R1749.log·矩阵再生 65/653 缺省发现面=evidence=qa/reconcile-all-R1749.log --check byte-identical 双跑〔7623B〕·指纹哨兵 CLEAN domains=5·shipped config.json/patterns 零字节〔git status 证据〕·证据=qa/suite-matrix-staleface-R1749.log〔套件+哨兵+再生+check×2+卫生五节〕·tech open 7→6·GORD O-20261010-2006 知悉基线 245→246）"
+  ],
+  [
+   "2",
+   "市民行为积分面沙箱件（R1752·P3 explore 队头·R1751 承传点名兑现·AC-CV1..CV7 预注册=explore.md 认领行先于代码：公益面合规判读定谳三裁〔赚取唯一源=零 money/token 入口·零回流零转移·props 域先查重=授予路径 token-spend 绑定不可复用→civic_grants 自建〕；CivicPointsFace=行为注册 UNIQUE+ai_label CHECK+赚取幂等〔UNIQUE(account,behavior,event_ref)〕+日帽前置于行落〔异日重置实测〕+严格历法日校验〔strptime 往返=首跑抓 '2026-10-1' 宽松解析真模块缺口当场补严〕+注册价不可变拷贝+权益注册 cosmetic 一户一授/count 叠堆+兑换 fail-closed 门序〔未知→余额→已授〕+构造零 ledger 参=代币域结构性不可达〔R599 升格·ledger_tx 恒定〕+零回流动词零流通动词源扫+独立 civic.db 零 schema 触碰；套件首跑三病修〔模块日校验补严+套件 codes 解包 bug+INSERT 列数〕后 SUITE 7/7 双跑逐位同一；reconcile_all SUITES 67→68 判据 667→674〔ledger-civicpoints〕·RUNNER PASS 68/68 controls 7/7 176.9s 零回归=qa/reconcile-all-R1752.log·矩阵再生 68/674 green --check byte-identical〔7835B〕·指纹哨兵 CLEAN domains=5·证据 qa/civicpoints-R1752.log 三节·queue_explore_open 10→9 后补种 1→10〔市民公益年度荣誉榜面种子〕·R1752）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-04..2026-10-10",
   "window_days": 7,
-  "log_lines_in_window": 20,
+  "log_lines_in_window": 22,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 8,
+  "substantive_non_idle_mention_lines": 9,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 6,
   "queue_explore_open": 10,
-  "method": "R1751 fold-plus-curation delivery round (score 2 = runnable artifact): P3 explore-queue head claimed (curation-theme seed promoted to head by file order per R1750 restock; citizen-behavior-points face deferred to next head after P1 all-gated and P2 tech-queue re-judged all-gated/as-needed); AC-CU1..CU7 pre-registered in the explore.md claim row before code; CurationFace = multi-showcase grouping register (UNIQUE curation_id + members position 1..N append-only immutable, zero UPDATE, zero mutation API) + themed tour with GLOBAL stop numbering 1..N across member showcases via the ShowcaseFace public API (reference, not copy; live derivation: a placement registered after the curation appears on the next tour) + member-existence fail-closed (unknown showcase refuses the whole registration zero rows through the ShowcaseFace public read face) + zero token movement (ledger_tx constant) + AIGC ai_label 0/1 DB CHECK + resident disclaimer on all four envelopes + independent curation.db = zero showcase-db/ledger schema touch (fingerprint sentinel verdict CLEAN domains=5); test_curation.py SUITE 7/7 exit 0 first-run green, double-run identical; reconcile_all SUITES 66->67 criteria 660->667, RUNNER PASS 67/67 controls 7/7 181.2s zero-regression = qa/reconcile-all-R1751.log; matrix regen 67/667 --check byte-identical x2; fold R476 executed at round start (80223B over the 78500B line, tail-11 window of the R1746..R1750 closing pairs, catalog 15/15 zero-loss with O-RAISE false-positive mechanically embedded per R1253 precedent, predicted==actual 69847B, archive R1751 section verbatim + preop backup); GORD O-20261010-2015 standing R&D authorization order acknowledged = game-project face (radar shift/PROJECTS table/copyright rename pipeline = MiniGame domain), zero BigDomain dispatch, baseline last_gord_tbl_rows 246->247; evidence qa/curation-R1751.log (5 sections) + qa/reorg-R1751.log (6 sections); queue_explore_open 10->9 then restock 1->10 (curation popularity-board seed); tick row 1750 -> 1751"
+  "method": "R1752 civic-points delivery round (score 2 = runnable artifact): P3 explore-queue head claimed per the R1751 carry note (P1 board all-gated; P2 tech head = sentinel-adoption window opens 10-11 plus daily reconcile next due 10-11 = both gated for tomorrow); public-welfare compliance verdict registered in the explore.md claim row BEFORE code (earned-only points with zero money/token entrance, zero backflow/transfer structural ban, props-domain check-first verdict: the props.py grant path is token-spend-bound so this module builds its own civic_grants table - adjacency ruling on file); AC-CV1..CV7 pre-registered before code; CivicPointsFace (src/sandbox/ledger/civicpoints.py, own civic.db WAL single writer, zero ledger-schema touch, fingerprint sentinel CLEAN domains=5) = behavior registry (UNIQUE, ai_label DB CHECK) + append-only idempotent earn rows (UNIQUE account/behavior/event_ref) with per-day anti-farming cap gated before any row lands (reset across days tested) + strict calendar-day validation (strptime round-trip; first run caught the lenient '2026-10-1' parse as a real module gap, hardened same round with honest note) + immutable registered-point copy on rows + reward registry (cosmetic one-grant-per-account / count stacks) + fail-closed redemption gate order (unknown reward, derived balance with zero rows on refusal, cosmetic-already-granted checked before any write) + constructor takes NO ledger reference (token domain structurally out of reach, R599 two-domain law elevated; ledger_tx count constant across the full cycle) + zero backflow APIs by hasattr scan + zero circulation verbs by source scan + AIGC ai_label and resident disclaimer on all seven envelopes; test_civicpoints.py SUITE 7/7 after three first-run fixes (module day-validation hardening + suite codes-unpacking bug + INSERT column count), double-run byte-identical; reconcile_all SUITES 67->68 criteria 667->674 (ledger-civicpoints), RUNNER PASS 68/68 controls 7/7 176.9s zero-regression = qa/reconcile-all-R1752.log; matrix regen 68/674 --check byte-identical; GORD new row (bm-c mv0001 full-song batch) = non-BigDomain dispatch acknowledged, baseline last_gord_tbl_rows 247->248; queue_explore_open 10->9 then restock 1->10 (civic annual honor-board seed); daily reconcile already evidenced for 10-10 (R1698) not re-run; P-32 day-close = zero new group-level open items, nothing written; tick row 1751 -> 1752"
  }
 }
