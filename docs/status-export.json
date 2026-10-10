@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T12:25:27+08:00",
+  "export_ts": "2026-10-10T12:46:14+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1731 fold R471 water-level reorg closed out (standing logs line cashed; score 1 = ledger maintenance mechanism item; R1730 carry-note honored): first-move gauge 81146B over the 78,500B line by 2646B -> logs_toolkit fold front-door surgery on a tail-11 window (R1724-R1725 roll line 4217B + R1726 fold pair + R1727..R1730 four pairs 11863B; 11 lines 16080B pressed to 1 roll line kept=0); archive section R1731 holds the 11 lines verbatim + pre-op backup sha16 bf766fa71d84e2df; catalog 206 tokens fully embedded zero-loss; verify-then-write post==predicted 71502B; closeout pair byte-surgically appended, final state 73709B margin 4791B under the gate; evidence qa/reorg-R1731.log (post gauge/eol/catalog/census four re-verifications; census first run FAIL = new roll/closeout lines used fold numbers R466..R471 as section pointers while archive sections are round-keyed -> same-round honest repair to round keys R1716/R1720/R1722/R1724/R1726/R1731, re-run pass=True unknown 0/0; closeout append first run caught by parse gate = missing trailing comma on prior last item, fixed with zero mutation on fail); nine-face scan round-start all PASS zero FLAG (GORD 204 flat, last three rows all other-company domain); auto-saves standing step 411.7MB/238 files under the 500MB line no clean; next P2 head = apidev usage_log window-filtered read; fold R472 = next round-head first-move gauge; closeout 1730 -> 1731",
-    "latest_artifact": "最近实物：fold R471 水位整编+滚窗并折收账（2026-10-10·R1731·轮计分 1=台账维护机制件）：state.json 31 行滚窗压 21（tail-11 窗 16080B→1 滚窗行 kept=0·catalog 206 token 全字面嵌零丢失·verify-then-write post==predicted 71502B）+archive §R1731 节 11 行 verbatim 全量保全+preop 备份件 logs/state-preop-R1731.bak——台账水位线维护正业件（P-2026-09-25-18 第四百七十一刀）；证据 qa/reorg-R1731.log（gauge/eol/catalog/census 四复核+census 指针判负同轮修复复跑 pass 如实注）",
-    "next_milestone": "下轮=P2 队头=apidev usage_log 窗过滤读面（R1730 承传点名·tech.md 次开项：usage_log(api_key, window=None) 显式月窗过滤读〔缺省 None=全窗现行行为保真〕+未知窗格式拒读+窗过滤与读帽正交组合〔溢出块 total=窗内行数〕·后继族=reject_tally 窗参格式锚硬化/daily 剖面对账接线/哨兵时长入证/notify longterm 撤销）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R472（本轮收账后水位 73709B 在线下=未触发即跳过）"
+    "current": "R1732 apidev usage_log 窗过滤读面交付（P2 技术队头兑现·R1731 承传点名·轮计分 2=可跑实物·判据 AC-UW1..UW7 预注册先于代码）：开发者面板调用日志面 usage_log(api_key, limit=0, window=None) 增显式月窗过滤——缺省行为零漂移（三键 envelope 逐位保真）+11 坏窗形态 fail-closed+历史/未来月窗诚实读（不可变行永可查）+窗×读帽正交（溢出块 total=窗内行数）+死键读面开；套件 7/7 双跑逐位同一+全量回归 RUNNER PASS 60/60（套件 59→60 判据 603→610·controls 6/6·179.4s 零回归）+套件矩阵 60/610 green --check byte-identical；证据 qa/apidev-usagewin-R1732.log 五节；轮内集团面批判读毕：DEC +7 token 全知悉（D-20261010-04..10 完整编号引用·本司三连令 O-015/016/017 按决议挂起至复产窗）+GORD +2 他司令知悉；基线三更新（dec_tokens +7/dec_rows 281→255 分卷波二/gord_rows 204→206）；tech 队列 10→9→补种 1→10（后继种子=apidev usage by-kind 窗计数读面·读面族三对称）；九面扫描余面全 PASS（LEDGER conflict=0/ORD/BENCH/QA/HB/TREE 全绿）；auto-saves 411.7MB/238 件线下不清",
+    "latest_artifact": "最近实物：apidev usage_log 窗过滤读面（2026-10-10·R1732·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py usage_log 尾参 window=None 显式月窗过滤读（缺省 None=全窗现行行为零漂移+键门→限参门→窗参门三重 fail-closed+窗×读帽正交〔溢出块 total=窗内行数非全窗〕+死键读面开）+套件 test_apidev_usagewin.py 7/7 exit 0 双跑逐位同一+reconcile_all 注册 60 套件 610 判据 RUNNER PASS 60/60 controls 6/6 零回归——证据 qa/apidev-usagewin-R1732.log+qa/reconcile-all-R1732.log+docs/sandbox-suite-matrix.md（60 套件 610 判据全 green）",
+    "next_milestone": "下轮=P2 队头=daily 剖面对账日常化接线（R1715 后继·tech.md 次开项：reconcile_daily.py 哨兵步旁增 runner_profile --daily --check 段=当日 daily 剖面漂移面日检化〔观察窗期漂移只记账不 FAIL 当日·转正窗=漂移阈值回访定夺〕）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R472（本轮收账后水位 76775B 在线下=未触发即跳过）·tech 后继族=窗参数格式锚硬化/哨兵时长入证/notify longterm 撤销/0.7x refine/usage by-kind 窗计数读面"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1731",
+      "1732",
       "OSLoop 执行 tick"
     ],
     [
@@ -3021,20 +3021,24 @@
     [
       "1",
       "fold R471 水位整编+滚窗并折收账（R1731·台账维护机制件·R1730 承传注记兑现：轮首首测 81146B 越 78,500B 线 2646B→logs_toolkit fold 正门手术 tail-11 窗〔R1724..R1725 滚窗行 4217B+R1726 fold 收账对+R1727..R1730 四轮对 11863B〕11 行 16080B 压 1 kept=0·archive §R1731 节 11 行 verbatim+preop 备份 sha16 bf766fa71d84e2df·catalog 206 token 全字面嵌零丢失·verify-then-write post==predicted 71502B·收账字节外科追加终态 73709B margin 4791B·AC-R4711..R4716=qa/reorg-R1731.log〔gauge/eol/catalog/census 四复核+census 指针判负→轮节键修正复跑 pass 双如实注〕）"
+    ],
+    [
+      "2",
+      "apidev usage_log 窗过滤读面（R1732·P2 队头·R1731 承传点名兑现·AC-UW1..UW7 预注册=tech.md 认领行先于代码：usage_log(api_key, limit=0, window=None) 尾参窗过滤读——缺省 None=全窗现行行为零漂移〔三键 envelope set 等断言+行序行集 manual SQL 逐位同一〕+键门先于窗参门〔未知键+坏窗→E_AD_UNKNOWN_KEY〕+限参门先于窗参门〔双坏→limit 消息 detail 实证〕+11 坏窗形态全拒 E_AD_BAD_ARGS 零读副作用〔api_calls 10==10〕+历史窗 fixture 注入读==注入集+未来窗诚实空+两窗互不渗透+窗×帽正交〔溢出块 total=窗内行数非全窗：limit=3 over 窗内 6/全窗 10→total=6 returned=3 truncated=True 尾窗==镜像 SQL==升序尾〕+显式窗读 envelope additive window 键〔缺省面零键漂移〕+边界态〔零行窗/limit=1〕+只读律+revoked/rotated_out 死键窗过滤读开〔AC-UL6/RJW5 同源〕；套件 test_apidev_usagewin.py 7/7 exit 0 双跑逐位同一+R1729 usagelog 套件签名正则单行同步〔contract-check 跟随产品面·回归全绿实证〕+RUNNER PASS 60/60〔套件 59→60 判据 603→610〕controls 6/6 179.4s 零回归+矩阵再生 60/610 green --check byte-identical〔7216B〕+证据 qa/apidev-usagewin-R1732.log 五节〔套件×2+IDENTICAL+卫生 git status 六件面+回归+矩阵〕）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 23,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1731 flush caliber: fold R471 replaced an 11-line in-window tail (11 dated 2026-10-10) with 1 roll line + closeout pair appended (both dated 2026-10-10, in window; substantive R1731 line +1, roll summary excluded by caliber); fold = logs standing line, not a queue item; queues 6/10/10 flat; GORD 204 flat (last three rows other-company domain, no @BigDomain dispatch); census pointer defect (fold-number section refs vs round-keyed archive sections) repaired same-round honest note; tick row 1730 -> 1731"
+    "method": "R1732 flush caliber: R1732 delivery round appended its closeout trio (round line + DEC/GORD batch judgment line + tokens line, all dated 2026-10-10, in window; substantive +2 = delivery line and batch judgment line, tokens line excluded by caliber); queues 6/10/10 flat (tech done row -> successor seed re-added: apidev usage by-kind window tally, read-face family three-way symmetry); baselines updated (dec_tokens +7, dec_rows 281->255 archive wave two, gord_rows 204->206); window stays 2026-10-04..2026-10-10 (max log date 2026-10-10); tick row 1731 -> 1732"
   }
 }

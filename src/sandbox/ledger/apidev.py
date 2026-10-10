@@ -662,7 +662,7 @@ class DevKeyFace:
                 "window": window, "reject_tally_total": tally_total,
                 "disclaimer": self.disclaimer}
 
-    def usage_log(self, api_key, limit=0):
+    def usage_log(self, api_key, limit=0, window=None):
         """One key's immutable call log (call rows with their
         external engine receipts stored verbatim). Read-only,
         zero token movement. The optional limit parameterizes a
@@ -671,10 +671,21 @@ class DevKeyFace:
         response to the most recent limit rows and adds an
         overflow block (limit/total/returned/truncated) to the
         envelope, so a large log stays a bounded payload on the
-        developer panel. The key gate fires first (an unknown
-        key rejects before the argument gate, the call-chain
+        developer panel. The optional window parameter filters
+        the read to one "YYYY-MM" month at read time (rows are
+        immutable and stamped with their own record-time window,
+        so a historical month stays readable forever);
+        window=None (the default) keeps the all-months
+        behavior byte-stable. The window filter applies before
+        the COUNT/LIMIT, so the overflow block's total is the
+        in-window row count; an explicit-window envelope adds a
+        "window" key (additive, mirroring the overflow block's
+        additivity). The key gate fires first (an unknown
+        key rejects before the argument gates, the call-chain
         key-gate-first law); a bad limit (non-int, bool, or
-        negative) rejects E_AD_BAD_ARGS with zero rows read."""
+        negative) rejects E_AD_BAD_ARGS with zero rows read,
+        before a bad window shape (non-None non-"YYYY-MM"),
+        which rejects E_AD_BAD_ARGS the same way."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
@@ -682,35 +693,47 @@ class DevKeyFace:
                 or limit < 0:
             raise ApiDevError(E_AD_BAD_ARGS,
                               "limit must be an integer >= 0")
+        if window is None:
+            wfilter, wargs = "", ()
+        elif isinstance(window, str) and _WINDOW_RE.match(window):
+            wfilter, wargs = " AND window = ?", (window,)
+        else:
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
         if limit == 0:
             with self._lock:
                 rows = self._conn.execute(
                     "SELECT call_ref, kind, engine_ref, window, called_utc"
-                    " FROM api_calls WHERE key_id = ?"
-                    " ORDER BY called_utc, call_ref", (row[0],)).fetchall()
-            return {"api_key": api_key,
-                    "calls": [{"call_ref": r[0], "kind": r[1],
-                               "engine_ref": r[2], "window": r[3],
-                               "called_utc": r[4]} for r in rows],
-                    "disclaimer": self.disclaimer}
-        with self._lock:
-            total = int(self._conn.execute(
-                "SELECT COUNT(*) FROM api_calls WHERE key_id = ?",
-                (row[0],)).fetchone()[0])
-            rows = self._conn.execute(
-                "SELECT call_ref, kind, engine_ref, window, called_utc"
-                " FROM api_calls WHERE key_id = ?"
-                " ORDER BY called_utc DESC, call_ref DESC"
-                " LIMIT ?", (row[0], limit)).fetchall()
-        rows = list(reversed(rows))
-        return {"api_key": api_key,
-                "calls": [{"call_ref": r[0], "kind": r[1],
-                           "engine_ref": r[2], "window": r[3],
-                           "called_utc": r[4]} for r in rows],
-                "limit": limit, "total": total,
-                "returned": len(rows),
-                "truncated": total > limit,
-                "disclaimer": self.disclaimer}
+                    " FROM api_calls WHERE key_id = ?" + wfilter +
+                    " ORDER BY called_utc, call_ref",
+                    (row[0],) + wargs).fetchall()
+            envelope = {"api_key": api_key,
+                        "calls": [{"call_ref": r[0], "kind": r[1],
+                                   "engine_ref": r[2], "window": r[3],
+                                   "called_utc": r[4]} for r in rows],
+                        "disclaimer": self.disclaimer}
+        else:
+            with self._lock:
+                total = int(self._conn.execute(
+                    "SELECT COUNT(*) FROM api_calls WHERE key_id = ?"
+                    + wfilter, (row[0],) + wargs).fetchone()[0])
+                rows = self._conn.execute(
+                    "SELECT call_ref, kind, engine_ref, window, called_utc"
+                    " FROM api_calls WHERE key_id = ?" + wfilter +
+                    " ORDER BY called_utc DESC, call_ref DESC"
+                    " LIMIT ?", (row[0],) + wargs + (limit,)).fetchall()
+            rows = list(reversed(rows))
+            envelope = {"api_key": api_key,
+                        "calls": [{"call_ref": r[0], "kind": r[1],
+                                   "engine_ref": r[2], "window": r[3],
+                                   "called_utc": r[4]} for r in rows],
+                        "limit": limit, "total": total,
+                        "returned": len(rows),
+                        "truncated": total > limit,
+                        "disclaimer": self.disclaimer}
+        if wargs:
+            envelope["window"] = window
+        return envelope
 
     def reject_tally(self, api_key, window=None):
         """One key's reject-tally diagnostic profile: counts per

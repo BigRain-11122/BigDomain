@@ -208,6 +208,17 @@ SUITES = [
     # (AC-RJW1..RJW7 pre-registered in state/queue/tech.md).
     ("ledger-apidev-rejectwin",
      os.path.join("ledger", "test_apidev_rejectwin.py"), 7),
+    # R1732 apidev usage-log window-filtered read: optional
+    # explicit "YYYY-MM" window on the public usage_log face
+    # (None = all-months behavior byte-stable with R1729); the
+    # window filter applies before COUNT/LIMIT so the overflow
+    # block total is the in-window row count; explicit-window
+    # envelope adds an additive window key; strict format gate
+    # fail-closed after the key gate and the limit gate; dead
+    # keys stay readable (AC-UW1..UW7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-apidev-usagewin",
+     os.path.join("ledger", "test_apidev_usagewin.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

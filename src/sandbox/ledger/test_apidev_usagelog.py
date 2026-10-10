@@ -323,7 +323,7 @@ def main():
         is_ascii = all(ord(ch) < 128 for ch in source)
         has_rng = re.search(r"\brandom\b", source) is not None
         cap_face = re.search(r"def usage_log\(self, api_key,"
-                             r" limit=0\)", source) is not None
+                             r" limit=0, window=None\)", source) is not None
         with open(os.path.join(os.path.dirname(BASE),
                                "reconcile_all.py"), "r",
                   encoding="utf-8") as handle:

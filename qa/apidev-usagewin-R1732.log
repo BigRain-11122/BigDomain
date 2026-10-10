@@ -1,0 +1,41 @@
+﻿== BigDomain R1732 apidev usage_log window-filtered read face ==
+== Canon: tech-queue row (seed = usage_log read cap, R1729; criteria AC-UW1..UW7 pre-registered in tech.md claim line BEFORE the suite ran) ==
+
+--SECTION 1: suite run 1 (test_apidev_usagewin.py)--
+PASS AC-UW1: default envelope keys=['api_key', 'calls', 'disclaimer'] (3-key set), 10 rows in ascending order=True (manual SQL cross-check True), row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window']; unknown key + bad window -> E_AD_UNKNOWN_KEY (key gate first); double-bad limit+window -> E_AD_BAD_ARGS detail='limit must be an integer >= 0' (limit gate before window gate)
+PASS AC-UW2: 11 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 10==10, zero rows read); empty string is NOT the default sentinel (only None is)
+PASS AC-UW3: fixture-injected 2026-09 rows read back=True (manual SQL equal=True, all window=2026-09); future 2026-11 honest empty read calls=[]; separation: default full read keeps 10 rows (historical included=True), historical read has zero current-month rows
+PASS AC-UW4: window=2026-10 over 6 in-window rows (all-months=10): limit=3 -> total=6 (in-window, NOT 10) returned=3 truncated=True, rows=['UW-A-04', 'UW-A-05', 'UW-A-06'] == mirror SQL ['UW-A-04', 'UW-A-05', 'UW-A-06'] == ascending tail ['UW-A-04', 'UW-A-05', 'UW-A-06']; limit=50 -> returned=6 truncated=False; limit=6==total -> truncated=False; explicit-window envelope keys=['api_key', 'calls', 'disclaimer', 'limit', 'returned', 'total', 'truncated', 'window'] (additive window key)
+PASS AC-UW5: zero-row window + limit=3: calls=[] total=0 returned=0 truncated=False window=2026-10; zero-row window + limit=0: calls=[] keys=['api_key', 'calls', 'disclaimer', 'window']; limit=1: returned=1 truncated=True tail=['UW-A-06']
+PASS AC-UW6: window-filtered reads leave api_calls 10==10; revoked key window read open (3 rows, capped total=3 returned=2 truncated=True), rotated-out key window read open (2 rows, capped total=2 returned=1)
+PASS AC-UW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, window face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-usagewin: 7/7 criteria pass
+
+--SECTION 2: suite run 2 (determinism, byte-identical hash compare)--
+PASS AC-UW1: default envelope keys=['api_key', 'calls', 'disclaimer'] (3-key set), 10 rows in ascending order=True (manual SQL cross-check True), row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window']; unknown key + bad window -> E_AD_UNKNOWN_KEY (key gate first); double-bad limit+window -> E_AD_BAD_ARGS detail='limit must be an integer >= 0' (limit gate before window gate)
+PASS AC-UW2: 11 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 10==10, zero rows read); empty string is NOT the default sentinel (only None is)
+PASS AC-UW3: fixture-injected 2026-09 rows read back=True (manual SQL equal=True, all window=2026-09); future 2026-11 honest empty read calls=[]; separation: default full read keeps 10 rows (historical included=True), historical read has zero current-month rows
+PASS AC-UW4: window=2026-10 over 6 in-window rows (all-months=10): limit=3 -> total=6 (in-window, NOT 10) returned=3 truncated=True, rows=['UW-A-04', 'UW-A-05', 'UW-A-06'] == mirror SQL ['UW-A-04', 'UW-A-05', 'UW-A-06'] == ascending tail ['UW-A-04', 'UW-A-05', 'UW-A-06']; limit=50 -> returned=6 truncated=False; limit=6==total -> truncated=False; explicit-window envelope keys=['api_key', 'calls', 'disclaimer', 'limit', 'returned', 'total', 'truncated', 'window'] (additive window key)
+PASS AC-UW5: zero-row window + limit=3: calls=[] total=0 returned=0 truncated=False window=2026-10; zero-row window + limit=0: calls=[] keys=['api_key', 'calls', 'disclaimer', 'window']; limit=1: returned=1 truncated=True tail=['UW-A-06']
+PASS AC-UW6: window-filtered reads leave api_calls 10==10; revoked key window read open (3 rows, capped total=3 returned=2 truncated=True), rotated-out key window read open (2 rows, capped total=2 returned=1)
+PASS AC-UW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, window face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-usagewin: 7/7 criteria pass
+IDENTICAL=True (Get-FileHash run1 == run2)
+
+--SECTION 3: hygiene git status (changed files face)--
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/ledger/apidev.py
+ M src/sandbox/ledger/test_apidev_usagelog.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/apidev-usagewin-R1732.log
+?? qa/reconcile-all-R1732.log
+?? src/sandbox/ledger/test_apidev_usagewin.py
+
+--SECTION 4: full regression (reconcile_all.py, full output = qa/reconcile-all-R1732.log)--
+RUNNER PASS (60/60 suites green, reconcile controls 6/6, 179.4s)
+expected criteria total=610 (59 suites/603 -> 60/610, +1 suite/+7 criteria); amended R1729 suite (signature regex tracks product face) green in regression
+
+--SECTION 5: suite matrix regen + byte check--
+PASS generated docs/sandbox-suite-matrix.md (7216 bytes) - registry suites=60 criteria=610 evidence=qa/reconcile-all-R1732.log green=60/60
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7216 bytes, 60 suites, 610 criteria)
