@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T08:39:13+08:00",
+  "export_ts": "2026-10-10T08:50:28+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1721 close_refund entitlement recovery (product round, score 2 = runnable artifact; P2 tech-queue head, R1720 carry-forward cashed; AC-RR1..RR7 pre-registered in the tech.md claim row BEFORE code): design ruling = recovery rides the existing one-way active->expired edge (CHECK/trigger state machine is the law; a distinct refunded status = schema-change-window follow-up seed) + ledger share clawback ruled out of this window (follow-up seed) + provenance derived with zero schema touch (refund close is the only granted->closed edge -> LEFT JOIN status annotation); deliverables = orders.py grants_for/grant_row additive refunded flag + close_refund wiring entitlement_recovery=None tail param (caller-built caller-owned, post-commit best-effort never breaks the close, envelope recovery key) + member activation gate (refunded grant E_BAD_GRANT_SOURCE zero rows) + revoke_refunded face (credits forfeited as expire rows, unused vouchers expire, refund-recovery audit exactly once, dual fail-closed gates, crash-window heal idempotent) + birth-cert re-judge on non-refunded grants; suite 7/7 + RUNNER PASS 54/54 suites 568 criteria controls 6/6 94.5s zero-regression + matrix --check byte-identical; evidence qa/refund-recovery-R1721.log",
-    "latest_artifact": "最近实物：close_refund 权益回收联动件（2026-10-10·R1721 交付·可跑实物计 2）：refund 闭单后权益即刻回收——pay 读面 refunded 注记+member 激活门+revoke_refunded 回收 face（余 credits 作废+未用 vouchers 随期过期+audit provenance）+birth cert 重判+接线端到端（envelope recovery 键+崩溃窗 heal）；套件 member/test_refund_recovery.py SUITE PASS 7/7+全量回归 RUNNER PASS 54/54 controls 6/6 94.5s 零回归+矩阵 54/568 --check byte-identical；证据 qa/refund-recovery-R1721.log 五节（src/sandbox/pay/orders.py+src/sandbox/member/member.py+src/sandbox/member/test_refund_recovery.py）",
-    "next_milestone": "下轮=P2 队头=watermark 缩放族恢复未知缩放因子扩展面（R1707 后继：非整数未知因子 {0.7×/0.85×/1.1×/1.5×} 模板对位恢复实测·docker 门控项跳过·判据预注册先行）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1722 fold R468 watermark reorganization (ledger-maintenance mechanism round, score 1; R1721 carry-note cashed, round-start water 79947B over the 78500B line by 1447B = P-2026-09-25-18 468th cut): window tail-6 (R1714..R1715 rolling line + R1716..R1719 rolling line + R1720/R1721 pairs) 14994B compressed to 1 rolling line, catalog 189 tokens embedded zero-loss; original 6 lines preserved verbatim in archive section R468 + pre-op backup state-preop-R1722.bak (sha16 f6ef89cf1368f3e4); verify-then-write post 74184B == predicted, margin 4316B under gate; evidence qa/reorg-R1722.log AC-R4681..R4686 all pass (gauge fold_needed=false, eol layout_ok and indent_ok, dual-parser py+PS, archive verbatim 6/6 byte-identical, catalog post-check pass); nine-face scan all PASS/INFO zero FLAG; P2 queue head served = logs reorg standing line (R1690 note: fold live-execute front door); next P2 head = ledger conversion share clawback design window (R1721 successor seed); tick 1721 -> 1722",
+    "latest_artifact": "最近实物：fold R468 水位整编+滚窗并折件（2026-10-10·R1722 交付·台账维护机制件计 1）：state.json 79,947B 越线 → 74,184B（margin 4,316B）·6 行 14,994B 压 1 滚窗行〔catalog 189 token 全字面嵌零丢失〕·原文全量保全=archive §R468 节 6 行 verbatim+preop 备份 sha16 f6ef89cf1368f3e4；证据 qa/reorg-R1722.log（AC-R4681..R4686 全过：gauge/eol/双解析器/archive 逐字节同一/catalog 后验）",
+    "next_milestone": "下轮=P2 队头=ledger conversion share 回冲账设计窗（R1721 后继种子：close_refund 后 share_from_pool 正向分录的 token 回冲账设计·判据预注册先行）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1721",
+      "1722",
       "OSLoop 执行 tick"
     ],
     [
@@ -2981,20 +2981,24 @@
     [
       "2",
       "close_refund 权益回收联动件（R1721·P2 队头·AC-RR1..RR7 预注册=tech.md 认领行先于代码·设计裁定=回收走 member_periods 现行 active→expired 唯一合法边〔CHECK/trigger 状态机执法·真 refunded 态=schema 变更窗后继种子〕+share 回冲账不入本窗〔ledger 域后继种子〕+provenance 零 schema 派生〔LEFT JOIN 状态注记〕）：orders.py grants_for/grant_row 增补性 refunded 注记+close_refund 接线 entitlement_recovery=None 尾参〔R1718 notify 同律 caller-built caller-owned·best-effort post-commit never-break·envelope recovery 键 wired 才现〕+member.py 激活门〔refunded grant E_BAD_GRANT_SOURCE 零行·门位幂等查之前〕+revoke_refunded 回收 face〔余 credits 作废 expire 行+未用 vouchers 随期过期+refund-recovery audit INSERT OR IGNORE 恰一+双 fail-closed 门+birth-cert-only grant revoked=0 provenance+崩溃窗 heal 幂等重调〕+birth_cert_face 重判〔any 非 refunded·first_granted_utc 历史保真〕；套件 member/test_refund_recovery.py SUITE PASS 7/7〔三修如实注=AC-RR2 返回键名勘正/AC-RR6 误序块删/AC-RR3 face 契约键 ai_generated 勘正〔首版预注册误写 ai_service=pay 域契约·tech.md 同步勘正〕〕+reconcile_all SUITES 53→54 判据 561→568+RUNNER PASS 54/54 controls 6/6 94.5s 零回归+矩阵再生 54/568 --check byte-identical+指纹哨兵零 schema 触碰稳定+shipped config/notify.py 零字节〔git status 七件〕·证据 qa/refund-recovery-R1721.log·tech open 10→9 done→+2 后继种子〔ledger share 回冲账设计窗+member refunded 态 schema 变更窗〕→11"
+    ],
+    [
+      "1",
+      "fold R468 水位整编+滚窗并折件（R1722·P-2026-09-25-18 第四百六十八刀·R1721 承传注记兑现：轮首 79,947B 越 78,500B 线 1,447B→tail-6 窗〔R1714..R1715 滚窗行+R1716..R1719 滚窗行+R1720/R1721 两轮对〕6 行 14,994B 压 1 滚窗行·catalog 189 token 零丢失·verify-then-write post==predicted 74,184B margin 4,316B；原文保全=archive §R468 verbatim+preop sha16 f6ef89cf1368f3e4；AC-R4681..R4686=qa/reorg-R1722.log 全过）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10,
-    "method": "R1721 flush caliber: R1721 pair appended (substantive + tokens) -> log_lines_in_window +2, substantive +1; tick row 1720->1721; queue_tech_open 10 -> close_refund claimed+done (->9) -> +2 successor seeds (ledger share clawback design window + member refunded-state schema-change window) -> 11; main 6 / explore 10 flat"
+    "method": "R1722 flush caliber: fold R468 tail-6 (R1714..R1715 roll + R1716..R1719 roll + R1720/R1721 pairs) -> 1 rolling line: log_lines_in_window 23 -> 18 at fold, +2 closeout pair -> 20; substantive 8 -> 6 at fold (R1720/R1721 anchors folded), +1 R1722 -> 7; nop 1 / idle 0 flat; tick row 1721 -> 1722; queues flat (main 6 / tech 11 / explore 10)"
   }
 }
