@@ -215,10 +215,10 @@ SUITES = [
     # block total is the in-window row count; explicit-window
     # envelope adds an additive window key; strict format gate
     # fail-closed after the key gate and the limit gate; dead
-    # keys stay readable (AC-UW1..UW7 pre-registered in
+    # keys stay readable (AC-UW1..UW8 pre-registered in
     # state/queue/tech.md).
     ("ledger-apidev-usagewin",
-     os.path.join("ledger", "test_apidev_usagewin.py"), 7),
+     os.path.join("ledger", "test_apidev_usagewin.py"), 8),
     # R1735 apidev usage by-kind window-count read: the read-face
     # family's third symmetric member (reject_tally counts by
     # reason, usage_log returns rows, this counts by API kind) --

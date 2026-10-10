@@ -1,10 +1,10 @@
 """Acceptance suite for the apidev usage-log window-filtered
 read face (BigDomain R1732; canon = tech-queue "apidev usage_log
 window-filtered read" row, seed = usage_log read cap R1729).
-Asserts the pre-registered criteria AC-UW1..AC-UW7 from the
-R1732 tech-queue claim note (criteria were registered before
-this code ran; honesty law). Each criterion prints PASS/FAIL
-with evidence; the process exits non-zero on any FAIL.
+Asserts the pre-registered criteria AC-UW1..AC-UW8 from the
+R1732 and R1739 tech-queue claim notes (criteria were registered
+before this code ran; honesty law). Each criterion prints
+PASS/FAIL with evidence; the process exits non-zero on any FAIL.
 
 Covered semantics: usage_log(api_key, limit=0, window=None)
 keeps the all-months default behavior byte-stable (envelope
@@ -26,6 +26,17 @@ only None is the default sentinel); window-filtered reads
 stay read-only (zero api_calls rows written) and dead keys
 (revoked, rotated-out) keep the window-filtered read face open
 with identical semantics.
+
+Month rollover (AC-UW8, the R1739 symmetric case closing the
+window-family gap to the R1730 rejectwin / R1738 usagekind
+rollover precedents): the quota ring rolls with _window_utc so
+a capped-out October key accepts calls again after the frozen
+clock crosses the month boundary; the all-months default read
+then carries both months with the new rows record-time stamped
+into the new window; old-month explicit reads keep their exact
+row sets (the cap-rejected call left zero rows); immutable rows
+are never lost; and the window-x-cap orthogonal read after the
+roll counts its overflow total inside the new-month window.
 
 Historical rows enter through a direct fixture INSERT (the
 product record path stamps the window column at record time
@@ -403,6 +414,128 @@ def main():
                   rev_cap["returned"], rev_cap["truncated"],
                   rot_cap["total"], rot_cap["returned"]))
 
+        # -- AC-UW8 month-rollover truth-preservation (R1739) ---------
+        # quota-ring roll first (the same _window_utc source the
+        # window filter reads through): a key capped out in
+        # October must accept calls again after the frozen clock
+        # crosses the month boundary; the all-months default read
+        # then carries both months with the new rows record-time
+        # stamped into the new window.
+        kroll = dk.issue_key("usr:ada", "uw-roll", 3,
+                             ["backtest", "visualize"], False)
+        dk.buy_credits(kroll["api_key"], 10, 1, "PACK-UW-M")
+        refs_oct = _make_calls(dk, clock, kroll["api_key"],
+                               "UW-M", 3)
+        ok_oct_q, code_oct_q, _d3 = expect_ad_error(
+            lambda: dk.call(kroll["api_key"], "backtest",
+                            "UW-M-04", "e"),
+            D.E_AD_QUOTA)
+        kroll_id = conn.execute(
+            "SELECT key_id FROM api_dev_keys"
+            " WHERE dev_account = ? AND key_name = ?",
+            ("usr:ada", "uw-roll")).fetchone()[0]
+        clock.advance(23 * 86400)
+        dk.call(kroll["api_key"], "backtest", "UW-N-01", "e")
+        dk.call(kroll["api_key"], "visualize", "UW-N-02", "e")
+        nov_win = "2026-11"
+        refs_nov = ["UW-N-01", "UW-N-02"]
+        roll_def = dk.usage_log(kroll["api_key"])
+        manual_roll_all = _manual_refs(conn, kroll_id)
+        stamp_nov = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id = ? AND window = ?"
+            " AND call_ref LIKE 'UW-N-%'",
+            (kroll_id, nov_win)).fetchone()[0]
+        roll_oct = dk.usage_log(kroll["api_key"],
+                                window="2026-10")
+        roll_nov = dk.usage_log(kroll["api_key"],
+                               window=nov_win)
+        manual_oct = _manual_refs(conn, kroll_id, "2026-10")
+        manual_nov = _manual_refs(conn, kroll_id, nov_win)
+        k10_oct = dk.usage_log(k10["api_key"],
+                               window="2026-10")
+        k10_sep = dk.usage_log(k10["api_key"], window=HIST_WIN)
+        k10_all_after = dk.usage_log(k10["api_key"])
+        # window x cap orthogonal read after the roll: overflow
+        # total = new-month in-window row count (2, not 5).
+        cap_nov = dk.usage_log(kroll["api_key"], 1,
+                               window=nov_win)
+        mirror_nov = conn.execute(
+            "SELECT call_ref FROM api_calls"
+            " WHERE key_id = ? AND window = ?"
+            " ORDER BY called_utc DESC, call_ref DESC LIMIT ?",
+            (kroll_id, nov_win, 1)).fetchall()
+        mirror_nov_refs = [r[0] for r in reversed(mirror_nov)]
+        all_time = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id = ?", (kroll_id,)).fetchone()[0]
+        uw8 = (ok_oct_q and code_oct_q == D.E_AD_QUOTA
+               and set(roll_def.keys())
+               == {"api_key", "calls", "disclaimer"}
+               and len(roll_def["calls"]) == 5
+               and [c["call_ref"] for c in roll_def["calls"]]
+               == refs_oct + refs_nov
+               and [c["call_ref"] for c in roll_def["calls"]]
+               == manual_roll_all
+               and stamp_nov == 2
+               and [c["call_ref"] for c in roll_oct["calls"]]
+               == refs_oct
+               and [c["call_ref"] for c in roll_oct["calls"]]
+               == manual_oct
+               and all(c["window"] == "2026-10"
+                       for c in roll_oct["calls"])
+               and [c["call_ref"] for c in roll_nov["calls"]]
+               == refs_nov
+               and [c["call_ref"] for c in roll_nov["calls"]]
+               == manual_nov
+               and all(c["window"] == nov_win
+                       for c in roll_nov["calls"])
+               and len(k10_oct["calls"]) == 6
+               and len(k10_sep["calls"]) == 4
+               and len(k10_all_after["calls"]) == 10
+               and cap_nov["limit"] == 1
+               and cap_nov["total"] == 2
+               and cap_nov["returned"] == 1
+               and cap_nov["truncated"] is True
+               and cap_nov["window"] == nov_win
+               and [c["call_ref"] for c in cap_nov["calls"]]
+               == mirror_nov_refs
+               and all_time == 5)
+        record("AC-UW8", uw8,
+               "month roll (frozen clock +23d): October cap"
+               " exhausted first (%s on 4th call), November calls"
+               " succeed = quota ring rolled with _window_utc;"
+               " default all-months read carries both months"
+               " rows=%d (%s, manual SQL equal=%s, record-time"
+               " %s stamps=%d, envelope keys=%s); old 2026-10"
+               " explicit read intact rows=%s (quota-rejected"
+               " call left zero rows, manual equal=%s); new %s"
+               " explicit read rows=%s (manual equal=%s, zero"
+               " October penetration); k10 2026-10 rows=%d"
+               " unchanged, k10 %s fixture rows=%d unchanged,"
+               " k10 all-months=%d; orthogonal cap read after"
+               " roll: limit=1 window=%s -> total=%d"
+               " (in-window, NOT 5) returned=%d truncated=%s"
+               " tail=%s == mirror SQL %s; all-time rows=%d"
+               " (3+2, immutable rows never lost)"
+               % (code_oct_q, len(roll_def["calls"]),
+                  [c["call_ref"] for c in roll_def["calls"]],
+                  [c["call_ref"] for c in roll_def["calls"]]
+                  == manual_roll_all, nov_win, stamp_nov,
+                  sorted(roll_def.keys()),
+                  [c["call_ref"] for c in roll_oct["calls"]],
+                  [c["call_ref"] for c in roll_oct["calls"]]
+                  == manual_oct, nov_win,
+                  [c["call_ref"] for c in roll_nov["calls"]],
+                  [c["call_ref"] for c in roll_nov["calls"]]
+                  == manual_nov, len(k10_oct["calls"]),
+                  HIST_WIN, len(k10_sep["calls"]),
+                  len(k10_all_after["calls"]), nov_win,
+                  cap_nov["total"], cap_nov["returned"],
+                  cap_nov["truncated"],
+                  [c["call_ref"] for c in cap_nov["calls"]],
+                  mirror_nov_refs, all_time))
+
         # -- AC-UW7 hygiene + delivery carriers ----------------------
         source = open(os.path.join(BASE, "apidev.py"), "r",
                       encoding="ascii").read()
@@ -428,7 +561,7 @@ def main():
         registered = re.search(
             r'\("ledger-apidev-usagewin",\s*'
             r'os\.path\.join\("ledger",\s*'
-            r'"test_apidev_usagewin\.py"\),\s*7\)',
+            r'"test_apidev_usagewin\.py"\),\s*8\)',
             runner_src) is not None
         dk.close()
         closed = []
@@ -442,7 +575,7 @@ def main():
                and is_ascii and not has_update and not has_rng
                and len(imports_net) == 0 and win_face
                and registered
-               and len(RESULTS) == 6
+               and len(RESULTS) == 7
                and all(ok for _, ok in RESULTS)
                and closed == [True, True, True])
         record("AC-UW7", uw7,

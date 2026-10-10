@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T14:50:12+08:00",
+  "export_ts": "2026-10-10T15:17:48+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1738 apidev by-kind 月滚动保真例交付轮（P2 队头·R1737 承传点名兑现·轮计分 2=可跑实物）：AC-UK8 月滚动保真=新月窗执法先证〔kroll cap=3 十月满帽 E_AD_QUOTA+跨月 2 调成功=quota 环随 _window_utc 滚动清零〕+缺省读随钟入 2026-11〔by_kind==manual SQL·record-time 窗戳 2〕+旧月/历史月显式读原值保全+不可变行 5==3+2 永不丢失·AC-UK7 计数面跟随〔prior len 6→7+注册 regex 8〕·SUITE 8/8·判据 630→631·RUNNER PASS 62/62 controls 6/6 116.4s 零回归·哨兵 CLEAN domains=5·矩阵 62/631 --check byte-identical·tech open 10→9 后补种 1→10〔usage_log 窗过滤月滚例〕；export 实刷 tick 1738+sd (24,0,1,11)",
-    "latest_artifact": "最近实物：apidev by-kind 月滚动保真例（2026-10-10 14:48·R1738·轮计分 2=可跑实物）：src/sandbox/ledger/test_apidev_usagekind.py 新增 AC-UK8 月滚例（SUITE 8/8）+reconcile_all 判据 7→8〔总 631〕+qa/apidev-usagekind-roll-R1738.log 四节证据+qa/reconcile-all-R1738.log RUNNER PASS 62/62+docs/sandbox-suite-matrix.md 62 套件/631 判据矩阵再生；上一件可跑实物=R1737 哨兵段时长入证面（qa/sentinel-elapsed-R1737.log）",
-    "next_milestone": "下轮=P2 队头=apidev usage_log 窗过滤月滚动保真例（R1732 后继·tech.md 次开项：读面族窗参三成员月滚例对称补全——R1730 rejectwin 与 R1738 usagekind 两族在册·usage_log 独缺）；窗口 ≤48h（2026-10-12 前）·轮首 fold R474 首测裁定（本轮收账后水位 ~75.8KB 线下）·tech 后继族=notify longterm 撤销面/watermark 0.7x 恢复精化/apidev 窗参数格式锚硬化/daily 基线哨兵段收养窗（gated on 明日首个真实 elapsed daily 证据）"
+    "current": "R1739 apidev usage_log 窗过滤月滚动保真例交付轮（P2 队头·R1738 承传点名兑现·轮计分 2=可跑实物）：AC-UW8 月滚动保真=新月窗执法先证〔kroll cap=3 十月窗 3 调满帽第 4 调 E_AD_QUOTA+冻结钟 +23d 跨月后 2 调成功=quota 环随 _window_utc 滚动清零〕+缺省读（None=全窗）跨月后含两月行〔5==3+2==manual SQL·record-time 窗戳 2〕+旧月 2026-10 显式读原值保全+新月 2026-11 显式读==2 新行零渗透+不可变行 5 恒定+月滚后窗×帽正交读〔limit=1 window=2026-11→total=2=新月窗内行数非全窗〕·AC-UW7 计数面跟随〔prior len 6→7+注册 regex 8〕·SUITE 8/8·判据 631→632·RUNNER PASS 62/62 controls 6/6 137.8s 零回归·哨兵 CLEAN domains=5·矩阵 62/632 regen+--check byte-identical 双跑〔7414B·首轮矩阵面错配 FAIL stale ×2 如实注=regen 显式 --evidence vs check 缺省发现面·面齐平后绿〕·tech open 10→9 后补种 1→10〔suite_matrix --check 证据面消息硬化〕；export 实刷 tick 1739+sd (26,0,1,12)",
+    "latest_artifact": "最近实物：apidev usage_log 窗过滤月滚动保真例（2026-10-10 15:4x·R1739·轮计分 2=可跑实物）：src/sandbox/ledger/test_apidev_usagewin.py 新增 AC-UW8 月滚例（SUITE 8/8·读面族窗参三成员月滚例对称补全=R1730 rejectwin/R1738 usagekind 两族在册后usage_log 独缺闭口）+reconcile_all 判据 7→8〔总 632〕+qa/apidev-usagewin-roll-R1739.log 四节证据+qa/reconcile-all-R1739.log RUNNER PASS 62/62+docs/sandbox-suite-matrix.md 62 套件/632 判据矩阵再生；上一件可跑实物=R1738 apidev by-kind 月滚动保真例（qa/apidev-usagekind-roll-R1738.log）",
+    "next_milestone": "下轮=P2 队头候选族（tech.md 开项序）：apidev 窗参数格式锚硬化面（$→\\Z 严锚·「2026-10\\n」过门读空账 fail-closed 缺口实锚）/suite_matrix --check 证据面消息硬化面（R1739 面错配实锚种子）/notify longterm 授权撤销面/watermark 0.7× 恢复精化面；daily 基线哨兵段收养窗 gated on 明日首个真实 elapsed daily 证据；窗口 ≤48h（2026-10-12 前）·轮首 fold R474 首测裁定（本轮收账后水位 77,823B 线下 677B）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1738",
+      "1739",
       "OSLoop 执行 tick"
     ],
     [
@@ -3049,20 +3049,24 @@
     [
       "2",
       "apidev by-kind 月滚动保真例交付件（R1738·P2 队头·R1737 承传点名兑现·AC-UK8 预注册=tech.md 认领行先于代码：新月窗执法先证〔kroll cap=3 十月窗 3 调满帽第 4 调 E_AD_QUOTA·冻结钟 +23d 跨月后 backtest+visualize 2 调成功=quota 环随 _window_utc 滚动清零执法〕+缺省读（None）随钟入 2026-11 窗〔envelope 六键集沿 UK1 律·by_kind={backtest:1,visualize:1}==manual SQL 交叉验证·total==2·record-time 窗戳 SELECT 计 2〕+旧月 2026-10 显式读原值保全〔kroll={backtest:3} 帽拒调零行律·k10={backtest:4,visualize:2} total=6 零 11 月渗透〕+历史月 2026-09 fixture 原值保全〔k10={backtest:2,visualize:1}·不可变行永在〕+不可变行永不丢失〔kroll 全窗 api_calls 5==3+2 恒定〕·AC-UK7 计数面跟随〔prior len 6→7+注册面 regex criteria 7→8+docstring 族号〕·套件 test_apidev_usagekind.py SUITE 8/8 exit 0·reconcile_all SUITES ledger-apidev-usagekind 判据 7→8〔总 630→631〕·RUNNER PASS 62/62 controls 6/6 116.4s 零回归=qa/reconcile-all-R1738.log·指纹哨兵 verdict CLEAN domains=5·矩阵再生 62/631 green --check byte-identical〔7418B〕·证据 qa/apidev-usagekind-roll-R1738.log 四节·tech open 10→9 后补种 1→10〔usage_log 窗过滤月滚例=R1732 后继对称缺位〕）"
+    ],
+    [
+      "2",
+      "apidev usage_log 窗过滤月滚动保真例（R1739·P2 队头·R1738 承传点名兑现·读面族窗参三成员月滚例对称补全——R1730 rejectwin AC-RJW6 与 R1738 usagekind AC-UK8 两族在册·usage_log 独缺闭口）：test_apidev_usagewin.py 新增 AC-UW8〔判据预注册先于代码=tech.md 认领行在册：新月窗执法先证〔kroll cap=3 十月 3 调满帽第 4 调 E_AD_QUOTA·冻结钟 +23d 跨月后 2 调成功=quota 环随 _window_utc 滚动清零〕+缺省读（None=全窗）跨月后含两月行〔5==3+2 升序==manual SQL·record-time 窗戳 2〕+旧月 2026-10 显式读原值保全〔帽拒调零行律+k10 六行/2026-09 fixture 四行不变〕+新月 2026-11 显式读==2 新行〔manual SQL 等·零渗透〕+不可变行 5 恒定+月滚后窗×帽正交读〔limit=1 window=2026-11→total=2=新月窗内行数非全窗 5·镜像 SQL 等〕·AC-UW7 计数面跟随〔prior len 6→7+注册 regex 8〕〕·SUITE 8/8 exit 0·reconcile_all 判据 7→8〔总 632〕·RUNNER PASS 62/62 controls 6/6 137.8s 零回归=qa/reconcile-all-R1739.log·指纹哨兵 CLEAN domains=5·矩阵 62/632 green --check byte-identical 双跑〔7414B〕·证据 qa/apidev-usagewin-roll-R1739.log 四节〔首轮矩阵面错配 FAIL stale ×2 如实注：regen 显式 --evidence vs check 缺省发现面=两面解析不同证据件同内容不同路径·面齐平后绿·混合编码方言重建=PS5.1 *>> UTF-16LE 坑·单编码 ASCII 重建〕·tech open 10→9 后补种 1→10〔suite_matrix --check 证据面消息硬化〕·R1739"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1738 product round (score 2): apidev by-kind month-rollover truth-preservation case delivered (AC-UK8 pre-registered first: quota-ring roll proof + default read follows clock to 2026-11 + old/historical explicit reads intact + immutable rows 5=3+2, suite 7->8, RUNNER PASS 62/62 criteria 631, sentinel CLEAN, matrix regen byte-identical); in-window lines +2 (R1738 pair dated 2026-10-10) = 24; substantive +1 = 11; tech open 10->9 done -> reseed 1 (usage_log window month-rollover symmetric gap) -> 10; tick row 1737 -> 1738"
+    "method": "R1739 product round (score 2): apidev usage_log window month-rollover truth-preservation case delivered (AC-UW8 pre-registered first: quota-ring roll proof + all-months default read carries both months with record-time stamps + old/historical explicit reads intact + new-month explicit read zero-permeation + immutable rows 5=3+2 + window-x-cap orthogonal read counts inside the new-month window; suite 7->8, RUNNER PASS 62/62 criteria 632, sentinel CLEAN, matrix regen + --check byte-identical after an honest face-mismatch note); in-window lines +2 (R1739 pair dated 2026-10-10) = 26; substantive +1 = 12; tech open 10->9 done -> reseed 1 (suite_matrix --check evidence-face message hardening) -> 10; tick row 1738 -> 1739"
   }
 }
