@@ -1,0 +1,54 @@
+qa/reorg-R1772.log - fold R484 watermark compaction round evidence
+round: R1772 | fold: R484 | gate: 78500B | pre-op disk: 80640B (over by 2140B)
+window: tail-8 = fold-R482 roll line + fold-R483 roll line + R1769/R1770/R1771 pairs
+verbatim preservation: logs/state-log-archive-2026-10.md section R1772 (8 lines)
+pre-op backup: logs/state-preop-R1772.bak (sha16 b24993f9e2bec6c8)
+
+[1/6 dry-run plan]
+{
+ "mode": "dry-run",
+ "round": "R1772",
+ "fold_no": "484",
+ "window_start": 23,
+ "window_end": 30,
+ "window_lines": 8,
+ "window_content_bytes": 9772,
+ "token_ok": true,
+ "gate_ok": true,
+ "predicted_bytes": 73894,
+ "reserve_bytes": 3000,
+ "would_fail": [],
+ "pre_bytes": 80640,
+ "new_log_len": 23
+}
+
+[2/6 execute]
+{
+ "mode": "execute",
+ "window_lines": 8,
+ "predicted_bytes": 73894,
+ "token_ok": true,
+ "gate_ok": true,
+ "preop_sha16": "b24993f9e2bec6c8",
+ "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1772.bak",
+ "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md"
+}
+post-fold gauge: disk 73894B == predicted 73894B (byte-identical), margin 4606B, log 30->23 lines
+
+[3/6 token zero-loss]
+catalog direct-join 68 tokens embedded; mechanical recheck pass=True window_lines=8 tokens_total=68
+
+[4/6 census + eol]
+census: sections_total=401 mismatches(new)=0 (R1317 pre-adjudicated artifact only)
+eol post-closeout: bytes=75518 crlf=35 bare_lf=0 lone_cr=0 layout_ok=True indent_anomaly=0
+
+[5/6 closeout surgery]
+append R1772 main + tokens lines (CRLF, 16-space indent, comma discipline); tick 1771->1772
+verify-then-write: pre=73894 post=75514 predicted=75514 match=True tick=1772 log=25
+honesty fix: in-line margin estimate corrected to measured figures, length-neutral
+final gauge: disk=75518B margin=2982B fold_needed=false tick=1772
+
+[6/6 export flush + checker]
+export: tick row 1772, results +1 row (score 1), ceo_face refreshed, self_drive re-derived
+flush: tick=1772 rows=750 window=2026-10-05..2026-10-11 W=22 idle=0 nop=1 sub=8 proposals=3/1 queues=6/10/10
+checker: SUMMARY pass=21 fail=0 state_tick=1772 VERDICT PASS
