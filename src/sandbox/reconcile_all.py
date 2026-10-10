@@ -176,6 +176,18 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-apidev-rate",
      os.path.join("ledger", "test_apidev_rate.py"), 7),
+    # R1728 apidev reject-tally read face: key-attributed call-chain
+    # rejects (revoked/kind/rate/quota/dup gates + billing-ring
+    # metered codes) land one immutable diagnostic event each in a
+    # separate sqlite store (api_rejects.db, single writer, zero
+    # ledger-schema touch); recording is best-effort (primary
+    # reject contract sacred); tally read faces (reject_tally,
+    # key_view, dev_board) aggregate at read time GROUP BY reason
+    # over the current UTC month window; rotation attributes to
+    # the exact key (AC-RJ1..RJ7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-apidev-reject",
+     os.path.join("ledger", "test_apidev_reject.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

@@ -61,6 +61,30 @@ existed; honesty law):
                           readings stay separate in every envelope
                           (minute_window/minute_used/minute_cap
                           next to quota_used/quota_cap).
+  ring 6 reject tally    : every key-attributed call-chain reject
+                          (revoked, kind, rate, quota, duplicate
+                          and the billing ring's own business
+                          rejects) lands one immutable diagnostic
+                          event in a separate sqlite file
+                          (api_rejects.db, single writer, R1711
+                          precedent; zero ledger-schema touch).
+                          The developer-facing read faces
+                          (reject_tally, key_view, dev_board)
+                          aggregate those rows at read time with
+                          GROUP BY COUNT per reason over the
+                          current UTC month window -- the panel's
+                          "why was my call rejected" profile.
+                          Recording is best-effort: a diagnostic
+                          write failure is swallowed so the
+                          primary reject contract (correct code,
+                          zero charge, zero call rows) stays
+                          sacred. Rejects with no key attribution
+                          (bad arguments, unknown key) and
+                          issuance/purchase rejects stay
+                          unrecorded (the panel cannot reach a
+                          key that does not resolve). Zero
+                          UPDATE, zero RNG, zero maintained
+                          counters.
 
 Call-chain order (AC-DK4): key gate -> kind gate -> quota gate ->
 local duplicate pre-check -> billing ring meter_call -> local
@@ -104,7 +128,7 @@ import os
 import sqlite3
 import threading
 
-from metered import KINDS
+from metered import KINDS, MeteredError
 
 E_AD_BAD_ARGS = "E_AD_BAD_ARGS"
 E_AD_DUP_KEY = "E_AD_DUP_KEY"          # same (dev, key_name) re-issue
@@ -168,6 +192,23 @@ CREATE TABLE IF NOT EXISTS key_events (
 );
 """
 
+# reject-tally event store: another separate sqlite file next to
+# the ledger db (same single-writer precedent as the lifecycle
+# store). Keeping it out of the ledger DB leaves the R1676
+# schema_migrate baseline fingerprints true, and keeping it out of
+# the lifecycle store respects that file's event CHECK domain.
+_RJ_SCHEMA = """
+CREATE TABLE IF NOT EXISTS reject_events (
+    reject_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key_id INTEGER NOT NULL,
+    reason TEXT NOT NULL,
+    detail TEXT NOT NULL,
+    window TEXT NOT NULL,
+    minute TEXT NOT NULL,
+    called_utc TEXT NOT NULL
+);
+"""
+
 
 def _now_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime(
@@ -227,9 +268,18 @@ class DevKeyFace:
                                       isolation_level=None)
         self._lconn.execute("PRAGMA journal_mode=WAL")
         self._lconn.executescript(_LC_SCHEMA)
+        self._rj_path = os.path.join(
+            os.path.dirname(os.path.abspath(self.db_path)),
+            "api_rejects.db")
+        self._rconn = sqlite3.connect(self._rj_path,
+                                      check_same_thread=False,
+                                      isolation_level=None)
+        self._rconn.execute("PRAGMA journal_mode=WAL")
+        self._rconn.executescript(_RJ_SCHEMA)
 
     def close(self):
         with self._lock:
+            self._rconn.close()
             self._lconn.close()
             self._conn.close()
 
@@ -318,6 +368,46 @@ class DevKeyFace:
                 " WHERE substr(called_utc, 1, 16) = ?"
                 " AND key_id IN (" + marks + ")",
                 [minute] + list(ids)).fetchone()[0]
+
+    # -- ring 6: reject tally (diagnostic event store) -------------------
+
+    def _record_reject(self, key_id, reason, detail=""):
+        """Best-effort append of one reject event to the diagnostic
+        store. The primary reject contract is sacred: the caller
+        still raises its own code even when this diagnostic write
+        fails, so an infra-level sqlite failure is swallowed here
+        (diagnostic face, not an accounting face). The window and
+        minute stamps are taken fresh at record time so the row
+        always carries the reject moment's own window keys."""
+        try:
+            with self._lock:
+                self._rconn.execute(
+                    "INSERT INTO reject_events (key_id, reason,"
+                    " detail, window, minute, called_utc)"
+                    " VALUES (?,?,?,?,?,?)",
+                    (key_id, reason, detail, _window_utc(),
+                     _minute_utc(), _now_utc()))
+        except sqlite3.Error:
+            pass
+
+    def _reject(self, key_id, code, detail=""):
+        """Record one key-attributed reject event in the tally
+        store, then raise the reject. One call site per gate keeps
+        the call chain readable; this helper always raises."""
+        self._record_reject(key_id, code, detail)
+        raise ApiDevError(code, detail)
+
+    def _reject_tally(self, key_id, window):
+        """Read-time COUNT aggregation of reject events by reason
+        for one key in one window (zero maintained counters, zero
+        UPDATE: the GROUP BY runs over immutable rows)."""
+        with self._lock:
+            rows = self._rconn.execute(
+                "SELECT reason, COUNT(*) FROM reject_events"
+                " WHERE key_id = ? AND window = ?"
+                " GROUP BY reason ORDER BY reason",
+                (key_id, window)).fetchall()
+        return {r[0]: int(r[1]) for r in rows}
 
     # -- ring 1: key issuance --------------------------------------------------
 
@@ -432,25 +522,33 @@ class DevKeyFace:
         minute_cap = int(row[7])
         enabled = row[5].split(",")
         if self._terminal_event(key_id) is not None:
-            raise ApiDevError(E_AD_REVOKED, api_key)
+            self._reject(key_id, E_AD_REVOKED, api_key)
         if kind not in enabled:
-            raise ApiDevError(E_AD_KIND, kind)
+            self._reject(key_id, E_AD_KIND, kind)
         minute = _minute_utc()
         if (minute_cap > 0
                 and self._effective_minute_count(key_id, minute)
                 >= minute_cap):
-            raise ApiDevError(E_AD_RATE, minute)
+            self._reject(key_id, E_AD_RATE, minute)
         window = _window_utc()
         if self._effective_window_count(key_id, window) >= window_cap:
-            raise ApiDevError(E_AD_QUOTA, window)
+            self._reject(key_id, E_AD_QUOTA, window)
         with self._lock:
             dup = self._conn.execute(
                 "SELECT 1 FROM api_calls WHERE call_ref = ?",
                 (call_ref,)).fetchone()
         if dup is not None:
-            raise ApiDevError(E_AD_DUP, call_ref)
-        # billing ring first: its rejects leave zero local rows
-        self.metered.meter_call(metered_client, kind, call_ref, engine_ref)
+            self._reject(key_id, E_AD_DUP, call_ref)
+        # billing ring first: its rejects leave zero local rows; its
+        # business rejects (no credits, kind gate, replay) are
+        # recorded in the reject tally with their own metered codes
+        try:
+            self.metered.meter_call(metered_client, kind, call_ref,
+                                    engine_ref)
+        except MeteredError as exc:
+            self._record_reject(key_id, exc.code, str(exc))
+            raise
+        dup_race = False
         with self._lock:
             self._conn.execute("BEGIN IMMEDIATE")
             try:
@@ -463,10 +561,12 @@ class DevKeyFace:
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
                 self._conn.execute("ROLLBACK")
-                raise ApiDevError(E_AD_DUP, call_ref)
+                dup_race = True
             except BaseException:
                 self._conn.execute("ROLLBACK")
                 raise
+        if dup_race:
+            self._reject(key_id, E_AD_DUP, call_ref)
         return {"call_ref": call_ref, "kind": kind,
                 "engine_ref": engine_ref, "window": window,
                 "quota_used": self._effective_window_count(key_id,
@@ -505,6 +605,7 @@ class DevKeyFace:
                 "quota_remaining": int(row[4]) - used,
                 "minute_window": minute,
                 "minute_used": minute_used,
+                "reject_tally": self._reject_tally(row[0], window),
                 "disclaimer": self.disclaimer}
 
     def dev_board(self, dev_account):
@@ -524,8 +625,12 @@ class DevKeyFace:
                 " FROM api_dev_keys"
                 " WHERE dev_account = ? ORDER BY key_id",
                 (dev_account,)).fetchall()
+        tally_total = {}
         for row in rows:
             terminal = self._terminal_event(row[0])
+            k_tally = self._reject_tally(row[0], window)
+            for reason, count in k_tally.items():
+                tally_total[reason] = tally_total.get(reason, 0) + count
             keys.append({"key_name": row[1], "api_key": row[3],
                          "metered_client": row[2],
                          "window_cap": int(row[4]),
@@ -540,9 +645,11 @@ class DevKeyFace:
                          "minute_window": minute,
                          "minute_used": self._effective_minute_count(
                              row[0], minute),
+                         "reject_tally": k_tally,
                          "billing": self.metered.reconcile_client(row[2])})
         return {"dev_account": dev_account, "keys": keys,
-                "window": window, "disclaimer": self.disclaimer}
+                "window": window, "reject_tally_total": tally_total,
+                "disclaimer": self.disclaimer}
 
     def usage_log(self, api_key):
         """One key's immutable call log (call rows with their
@@ -560,6 +667,23 @@ class DevKeyFace:
                 "calls": [{"call_ref": r[0], "kind": r[1],
                            "engine_ref": r[2], "window": r[3],
                            "called_utc": r[4]} for r in rows],
+                "disclaimer": self.disclaimer}
+
+    def reject_tally(self, api_key):
+        """One key's reject-tally diagnostic profile for the current
+        UTC month window: counts per rejection reason, aggregated
+        at read time over the immutable reject-event rows (the
+        developer panel's "why was my call rejected" face). Read-
+        only, zero token movement; a revoked or rotated-out key
+        stays readable with its tally intact."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        window = _window_utc()
+        by_reason = self._reject_tally(row[0], window)
+        return {"api_key": api_key, "key_name": row[2],
+                "window": window, "by_reason": by_reason,
+                "total": sum(by_reason.values()),
                 "disclaimer": self.disclaimer}
 
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------

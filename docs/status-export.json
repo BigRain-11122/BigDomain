@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T10:00:53+08:00",
+  "export_ts": "2026-10-10T10:34:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1727 suite_matrix live-mtime normalization window delivered as runnable probe (P2 head cashed, R1726 carry-note; score 2 = runnable artifact; AC-LN1..LN8 pre-registered in tech.md claim row before code): src/os/qa_mtime_probe.py (pure ASCII stdlib zero-network; discovery face imported live from suite_matrix, single source zero copy, QA_DIR monkeypatch R1709 same law) - --selftest five-state fixtures 16/16 green (full-normalization winner==name-asc min among eligible + in-group skip never falling to old group [AC-TIE2 re-verified] + two-eligible tie TIE-EXERCISED + spread NO-LIVE-TIE + zero-eligible refusal exit 3 family; hygiene pure-ascii + zero net imports); live qa/ reading = 940 files 899 distinct mtimes, winner reconcile-all-R1725.log, 3/3 consecutive calls identical, tie_peers=0 NO-LIVE-TIE; real git worktree checkout rebuild (add --detach HEAD, zero work-tree touch, removed exit 0) = 939 files 285-305 distinct mtimes, largest tie group 7, winner venue-runner-R605.log, 3/3 identical, NO-LIVE-TIE - empirical finding: real git checkout does NOT flatten qa/ mtimes on NTFS; per pre-registered AC-LN4 rule = spread state, window stays open with honest reading (lawful negative), probe = mechanically re-runnable closure face for any future genuinely flattened state; evidence qa/suite-matrix-livemtime-R1727.log (three sections + reading); nine-face scan round-start all PASS zero FLAG; next P2 head = apidev reject-tally read face; closeout 1726 -> 1727",
-    "latest_artifact": "最近实物：QA 证据目录 mtime 归一态实证探针件（2026-10-10·R1727 交付·轮计分 2=可跑实物）：src/os/qa_mtime_probe.py（纯 ASCII stdlib 零网络·发现面 import suite_matrix 单一事实源引用不复制·QA_DIR monkeypatch R1709 同律·--selftest 五态夹具 16/16 全绿〔全归一/并列组/双合格并列/散布/零合格 refusal〕+纯 ASCII/零网络 import 卫生自检）——live qa/ 读数=940 件 899 distinct mtime·winner=reconcile-all-R1725.log·三连调逐位同一·NO-LIVE-TIE；真 git worktree checkout 重建实测〔--detach HEAD 零触碰实盘·毕即 remove exit 0〕=939 件 285-305 distinct mtime·最大并列组 7·winner=venue-runner-R605.log·NO-LIVE-TIE——实证结论=真 checkout 在 NTFS 不拉平 qa/ 全件 mtime·「全归一」前提未在真重建态复现·窗按 AC-LN4 预注册规则留开〔判负留痕合法〕·探针=机械可复跑闭口面；证据 qa/suite-matrix-livemtime-R1727.log（selftest+live+checkout 三节+读数节）",
-    "next_milestone": "下轮=P2 队头=apidev 拒因分类计数读面（tech.md 次开项·E_AD_* 各拒因读时 COUNT 聚合=dev_board/key_view「为何被拒」自诊剖面·零新表零 UPDATE 读时聚合优先）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1728 apidev reject-tally read face delivered (P2 head cashed, R1727 carry-note; score 2 = runnable artifact; AC-RJ1..RJ7 pre-registered in tech.md claim row before code): apidev.py ring 6 = key-attributed call-chain reject events in a separate sqlite store api_rejects.db (single writer, zero ledger-schema touch, fingerprint sentinel CLEAN across 5 domains; append-only reject_events, zero UPDATE); recording is best-effort (a diagnostic write failure is swallowed so the primary reject contract stays sacred); read faces = reject_tally public face + key_view reject_tally embed + dev_board per-key tally + board-level reject_tally_total, aggregated at read time with GROUP BY COUNT per reason over the current UTC month window (zero maintained counters); rotation attributes rejects to the exact key (successor starts empty, old key keeps its readable tally); month-rollover semantics proven; suite test_apidev_reject.py 7/7 exit 0, determinism double-run byte-identical, RUNNER PASS 57/57 (suites 56->57 criteria 582->589) controls 6/6 183.2s zero regression, matrix 57/589 green --check byte-identical; evidence qa/apidev-reject-R1728.log (four sections); nine-face scan round-start all PASS zero FLAG; next P2 head = apidev usage_log read-cap face; closeout 1727 -> 1728",
+    "latest_artifact": "最近实物：apidev 拒因分类计数读面（2026-10-10·R1728 交付·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py ring 6（拒因事件源=独立件 api_rejects.db·表 reject_events append-only 零 UPDATE·零 ledger schema 触碰〔指纹哨兵 CLEAN 5 域〕+call 链六门族拒入册〔计费环 metered 码同入〕+best-effort 诊断记录〔写失败吞=原始拒码仍抛〕）+reject_tally 公面+key_view/dev_board 自诊剖面嵌入〔当月窗 GROUP BY COUNT 读时聚合·零维护计数器〕+套件 test_apidev_reject.py 7/7 全绿（双跑逐位同一·RUNNER PASS 57/57 套件 56→57·矩阵 57/589 byte-identical）——开发者面板「为何被拒」可见面（面板诊断=调用拒·无键归属拒不入册诚实注）；证据 qa/apidev-reject-R1728.log（套件×2+指纹哨兵+回归+矩阵四节）",
+    "next_milestone": "下轮=P2 队头=apidev usage_log 读帽面（tech.md 次开项·大日志键全量返回行数无帽=读面放大面·读帽参数化+溢出截断标记行〔shipped config 零改动·缺省 0=全量现行行为保真〕）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1727",
+      "1728",
       "OSLoop 执行 tick"
     ],
     [
@@ -3005,20 +3005,24 @@
     [
       "2",
       "suite_matrix live mtime 归一态实证探针件（R1727·P2 队头·R1726 承传点名兑现·AC-LN1..LN8 预注册=tech.md 认领行先于代码：src/os/qa_mtime_probe.py 纯 ASCII stdlib 零网络·发现面 import suite_matrix 单一事实源引用不复制〔default_evidence/_evidence_eligible·QA_DIR monkeypatch R1709 同律〕·--selftest 五态夹具 16/16 全绿〔全归一态 winner==name 升序最小合格件+并列组组内跳过不坠旧组〔AC-TIE2 语义复证〕+双合格并列 TIE-EXERCISED+散布 NO-LIVE-TIE+零合格 refusal exit 3 族〕+纯 ASCII/零网络 import 卫生自检过；live qa/ 读数=940 件 899 distinct mtime·winner=reconcile-all-R1725.log·三连调逐位同一·tie_peers=0·NO-LIVE-TIE；真 checkout 重建实测〔git worktree add --detach HEAD 真追踪关系重建零触碰实盘·毕即 remove exit 0〕=939 件 285-305 distinct mtime·最大并列组 7·winner=venue-runner-R605.log·三连调同一·NO-LIVE-TIE——实证结论=真 git checkout 在 NTFS 不拉平 qa/ 全件 mtime·窗名「全归一」前提未在真重建态复现·按 AC-LN4 判定规则散布态=如实注留窗〔判负留痕合法〕·探针=机械可复跑闭口面〔未来真拉平态任轮 --dir 即判·全归一即闭口〕；不入 SUITES 注册表=测量面非产品套件〔check_export_consistency 先例〕·suite_matrix.py/shipped config 零字节改动；证据 qa/suite-matrix-livemtime-R1727.log 三节+读数节·tech open 10 持平〔窗留开〕）"
+    ],
+    [
+      "2",
+      "apidev 拒因分类计数读面（R1728·P2 队头·R1727 承传点名兑现·AC-RJ1..RJ7 预注册=tech.md 认领行先于代码：apidev.py ring 6 拒因事件源=独立件 api_rejects.db〔单写者·零 ledger schema 触碰·指纹哨兵 CLEAN 5 域·表 reject_events append-only〕+best-effort 诊断记录〔sqlite3.Error 吞写失败=原始拒码仍抛·conn 替身法实测〕+call 链门族接线〔REVOKED/KIND/RATE/QUOTA/DUP 预检径+INSERT 竞态径+MeteredError 计费环族 metered 码入 reason〕+reject_tally 公面〔当月窗 GROUP BY COUNT 零维护计数器〕+key_view reject_tally 嵌入+dev_board 每键 tally+板级 reject_tally_total；无键归属拒〔BAD_ARGS/UNKNOWN_KEY〕与 issue_key/buy_credits 拒不入册=面板不可达诚实注·轮换归属精确 key_id〔后继零起步旧键保留〕·月滚动实测〔23 天→2026-11 空读全时行在〕；套件 test_apidev_reject.py 7/7 exit 0 双跑逐位同一·RUNNER PASS 57/57〔套件 56→57 判据 582→589〕controls 6/6 183.2s 零回归·矩阵 57/589 green --check byte-identical·证据 qa/apidev-reject-R1728.log 四节）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1727 flush caliber: R1727 closeout pair appended (both dated 2026-10-10, in window; substantive R1727 line +1, tokens excluded) -> log_lines_in_window 20 -> 22, substantive 7 -> 8, nop 1 / idle 0 flat; tick row 1726 -> 1727; queues 6/10/10 flat (live-mtime window stays open with R1727 empirical note per pre-registered AC-LN4 rule; probe = mechanical re-runnable closure face)"
+    "method": "R1728 flush caliber: R1728 closeout pair appended (both dated 2026-10-10, in window; substantive R1728 line +1, tokens excluded) -> log_lines_in_window 22 -> 24, substantive 8 -> 9, nop 1 / idle 0 flat; tick row 1727 -> 1728; queues 6/10/10 flat (tech row closed, reseed +1 window-parameterized tally read)"
   }
 }

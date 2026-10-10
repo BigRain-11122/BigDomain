@@ -1,0 +1,36 @@
+=== apidev reject-tally R1728 evidence: suite run 1 === 
+PASS AC-RJ1: separate store api_rejects.db next to ledger db; ledger tables: reject_events absent=True, api pair present=True/True; rejects store has reject_events=True; re-issue E_AD_DUP_KEY left rows 0==0; buy on revoked E_AD_REVOKED left 0==0; call on revoked E_AD_REVOKED recorded +1; swallowed diagnostic fault still raised E_AD_QUOTA at 1 rows; healthy re-run recorded +1
+PASS AC-RJ2: quota reject at cap: api_calls 3==3 (zero-row law), q1 rows=[('E_AD_QUOTA', '2026-10'), ('E_AD_QUOTA', '2026-10')] (detail=2026-10 window=2026-10 minute=2026-10-10T05:00 utc=2026-10-10T05:00:00Z, double reject = 2 rows), dup gate row (E_AD_DUP, detail carries call_ref RJ-D-1), billing ring reject recorded as E_MT_NO_CREDITS with api_calls 4==4
+PASS AC-RJ3: tally window=2026-10 by_reason={'E_AD_QUOTA': 2} total=2 (manual SQL GROUP BY cross-check equal), fresh key {}/0, unknown key -> E_AD_UNKNOWN_KEY, month roll -> window 2026-11 by_reason={} (all-time rows still 2)
+PASS AC-RJ4: key_view reject_tally={'E_AD_QUOTA': 2} additive (prior key set preserved=True), dev_board rows all carry reject_tally (q1={'E_AD_QUOTA': 2}), board merged total={'E_AD_REVOKED': 1, 'E_AD_QUOTA': 3, 'E_AD_DUP': 1, 'E_MT_NO_CREDITS': 1}, dead key readable status=revoked tally={'E_AD_REVOKED': 1}
+PASS AC-RJ5: pre-rotation quota reject stays on the old key (status=rotated_out tally={'E_AD_QUOTA': 1}), successor starts empty {} (ancestor not inherited), successor own kind reject E_AD_KIND accumulates on the successor (tally={'E_AD_KIND': 1}), old key unchanged ({'E_AD_QUOTA': 1})
+PASS AC-RJ6: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, reject_tally face exported=True, close() shuts all three connections=True
+PASS AC-RJ7: reconcile_all SUITES row registered=True (ledger-apidev-reject / test_apidev_reject.py / 7 criteria), suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-reject: 7/7 criteria pass
+ 
+=== suite run 2 (determinism double-run) === 
+PASS AC-RJ1: separate store api_rejects.db next to ledger db; ledger tables: reject_events absent=True, api pair present=True/True; rejects store has reject_events=True; re-issue E_AD_DUP_KEY left rows 0==0; buy on revoked E_AD_REVOKED left 0==0; call on revoked E_AD_REVOKED recorded +1; swallowed diagnostic fault still raised E_AD_QUOTA at 1 rows; healthy re-run recorded +1
+PASS AC-RJ2: quota reject at cap: api_calls 3==3 (zero-row law), q1 rows=[('E_AD_QUOTA', '2026-10'), ('E_AD_QUOTA', '2026-10')] (detail=2026-10 window=2026-10 minute=2026-10-10T05:00 utc=2026-10-10T05:00:00Z, double reject = 2 rows), dup gate row (E_AD_DUP, detail carries call_ref RJ-D-1), billing ring reject recorded as E_MT_NO_CREDITS with api_calls 4==4
+PASS AC-RJ3: tally window=2026-10 by_reason={'E_AD_QUOTA': 2} total=2 (manual SQL GROUP BY cross-check equal), fresh key {}/0, unknown key -> E_AD_UNKNOWN_KEY, month roll -> window 2026-11 by_reason={} (all-time rows still 2)
+PASS AC-RJ4: key_view reject_tally={'E_AD_QUOTA': 2} additive (prior key set preserved=True), dev_board rows all carry reject_tally (q1={'E_AD_QUOTA': 2}), board merged total={'E_AD_REVOKED': 1, 'E_AD_QUOTA': 3, 'E_AD_DUP': 1, 'E_MT_NO_CREDITS': 1}, dead key readable status=revoked tally={'E_AD_REVOKED': 1}
+PASS AC-RJ5: pre-rotation quota reject stays on the old key (status=rotated_out tally={'E_AD_QUOTA': 1}), successor starts empty {} (ancestor not inherited), successor own kind reject E_AD_KIND accumulates on the successor (tally={'E_AD_KIND': 1}), old key unchanged ({'E_AD_QUOTA': 1})
+PASS AC-RJ6: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, reject_tally face exported=True, close() shuts all three connections=True
+PASS AC-RJ7: reconcile_all SUITES row registered=True (ledger-apidev-reject / test_apidev_reject.py / 7 criteria), suite self-carrier: 6 prior criteria all green=True
+SUITE apidev-reject: 7/7 criteria pass
+determinism byte-identical: True 
+ 
+=== sentinel: fingerprint_regen --chain migration_chains.json --check === 
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+ 
+=== regression: full RUNNER === 
+RUNNER PASS (57/57 suites green, reconcile controls 6/6, 183.2s)
+full log: qa/reconcile-all-R1728.log (RUNNER PASS 57/57 suites, reconcile controls 6/6, 183.2s) 
+=== matrix regeneration + --check === 
+PASS generated docs/sandbox-suite-matrix.md (6964 bytes) - registry suites=57 criteria=589 evidence=qa/reconcile-all-R1728.log green=57/57
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (6964 bytes, 57 suites, 589 criteria)
