@@ -1,0 +1,54 @@
+﻿== BigDomain R1730 apidev reject_tally window-parameterized read face ==
+== Canon: tech-queue row (seed = reject_events window column, R1728) ==
+== Criteria AC-RJW1..RJW7 pre-registered in tech.md claim line BEFORE the suite ran ==
+== Round context: prior invocation crashed mid-round after apidev.py edit + tech.md claim; this round completed the face (suite + wiring + regression + matrix + closure) ==
+
+--SECTION 1: suite run 1 (test_apidev_rejectwin.py)--
+PASS AC-RJW1: default read window=2026-10 by_reason={'E_AD_QUOTA': 2} total=2 (manual SQL equal), envelope exactly ['api_key', 'by_reason', 'disclaimer', 'key_name', 'total', 'window'], key gate before window gate: unknown key + bad window -> E_AD_UNKNOWN_KEY
+PASS AC-RJW2: 11 bad shapes (['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS']) all -> E_AD_BAD_ARGS on an in-register key; empty string is NOT the default sentinel (only None is); reject rows 2==2 zero side effects
+PASS AC-RJW3: fixture-injected 2026-09 rows read back by_reason={'E_AD_KIND': 1, 'E_AD_RATE': 2} total=3; future 2026-11 honest empty read {}/0; window separation: default stays {'E_AD_QUOTA': 2} (no historical penetration), historical read has no current-month keys (E_AD_QUOTA absent)
+PASS AC-RJW4: key_view reject_tally={'E_AD_QUOTA': 2}, dev_board row={'E_AD_QUOTA': 2}, board merged total={'E_AD_QUOTA': 2} (manual all-key SQL equal=True), zero historical penetration; source signatures window-free: key_view=True dev_board=True
+PASS AC-RJW5: revoked dead key: current={'E_AD_REVOKED': 1} historical={'E_AD_RATE': 1} (read open); rotated_out dead key: current={'E_AD_QUOTA': 1} historical={'E_AD_KIND': 1} (read open); successor fresh historical read={}/0
+PASS AC-RJW6: explicit 2026-09 read == manual SQL equal; clock +23d month roll: default follows to 2026-11 by_reason={'E_AD_QUOTA': 1} (manual SQL equal), old 2026-10 explicit read intact {'E_AD_QUOTA': 2}, old 2026-09 explicit read intact {'E_AD_KIND': 1, 'E_AD_RATE': 2}, all-time rows 6 (2+3+1) never lost
+PASS AC-RJW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, close() shuts all three=True; reconcile_all SUITES row registered=True (ledger-apidev-rejectwin / 7 criteria); 6 prior criteria all green=True
+SUITE apidev-rejectwin: 7/7 criteria pass
+
+--SECTION 2: suite run 2 (determinism, byte-identical hash compare)--
+PASS AC-RJW1: default read window=2026-10 by_reason={'E_AD_QUOTA': 2} total=2 (manual SQL equal), envelope exactly ['api_key', 'by_reason', 'disclaimer', 'key_name', 'total', 'window'], key gate before window gate: unknown key + bad window -> E_AD_UNKNOWN_KEY
+PASS AC-RJW2: 11 bad shapes (['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS']) all -> E_AD_BAD_ARGS on an in-register key; empty string is NOT the default sentinel (only None is); reject rows 2==2 zero side effects
+PASS AC-RJW3: fixture-injected 2026-09 rows read back by_reason={'E_AD_KIND': 1, 'E_AD_RATE': 2} total=3; future 2026-11 honest empty read {}/0; window separation: default stays {'E_AD_QUOTA': 2} (no historical penetration), historical read has no current-month keys (E_AD_QUOTA absent)
+PASS AC-RJW4: key_view reject_tally={'E_AD_QUOTA': 2}, dev_board row={'E_AD_QUOTA': 2}, board merged total={'E_AD_QUOTA': 2} (manual all-key SQL equal=True), zero historical penetration; source signatures window-free: key_view=True dev_board=True
+PASS AC-RJW5: revoked dead key: current={'E_AD_REVOKED': 1} historical={'E_AD_RATE': 1} (read open); rotated_out dead key: current={'E_AD_QUOTA': 1} historical={'E_AD_KIND': 1} (read open); successor fresh historical read={}/0
+PASS AC-RJW6: explicit 2026-09 read == manual SQL equal; clock +23d month roll: default follows to 2026-11 by_reason={'E_AD_QUOTA': 1} (manual SQL equal), old 2026-10 explicit read intact {'E_AD_QUOTA': 2}, old 2026-09 explicit read intact {'E_AD_KIND': 1, 'E_AD_RATE': 2}, all-time rows 6 (2+3+1) never lost
+PASS AC-RJW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, close() shuts all three=True; reconcile_all SUITES row registered=True (ledger-apidev-rejectwin / 7 criteria); 6 prior criteria all green=True
+SUITE apidev-rejectwin: 7/7 criteria pass
+
+IDENTICAL=True (Get-FileHash run1 == run2)
+
+--SECTION 3: hygiene git status (changed files face)--
+ M src/sandbox/ledger/apidev.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+ M docs/sandbox-suite-matrix.md (regenerated)
+?? src/sandbox/ledger/test_apidev_rejectwin.py (new suite)
+?? qa/reconcile-all-R1730.log (regression evidence)
+ledger.py / metered.py / config.json: ZERO byte changes (reference-not-copy law; config byte-stability asserted in-suite AC-RJW7)
+stray file cleanup: root --help artifact (2615B, created by reconcile_all.py ignoring a stray CLI arg) removed this round; tree clean of it
+
+--SECTION 4: full RUNNER regression (reconcile_all.py)--
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-d_h1_ga8\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-d_h1_ga8\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-d_h1_ga8\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (59/59 suites green, reconcile controls 6/6, 128.2s)
+
+RUNNER PASS (59/59 suites green, reconcile controls 6/6, 128.2s); expected criteria total=603 (58 suites/596 -> 59/603, +1 suite/+7 criteria)
+
+--SECTION 5: suite matrix regen + byte check--
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7132 bytes, 59 suites, 603 criteria)
+matrix row 27: ledger-apidev-rejectwin | ledger/test_apidev_rejectwin.py | 7 | green | 0.3
+matrix status row: | 59 | 603 | 59/59 | R1730 |
+evidence pointer embedded by matrix: reconcile-all-R1730.log

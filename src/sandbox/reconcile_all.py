@@ -198,6 +198,16 @@ SUITES = [
     # in state/queue/tech.md).
     ("ledger-apidev-usagelog",
      os.path.join("ledger", "test_apidev_usagelog.py"), 7),
+    # R1730 apidev reject-tally window-parameterized read: the
+    # public reject_tally face takes an optional explicit
+    # "YYYY-MM" window (None = current UTC month, byte-stable
+    # with R1728); strict format gate fail-closed after the key
+    # gate; historical/future windows are honest reads over the
+    # immutable rows; embedded faces (key_view, dev_board) keep
+    # the current-month default; dead keys stay readable
+    # (AC-RJW1..RJW7 pre-registered in state/queue/tech.md).
+    ("ledger-apidev-rejectwin",
+     os.path.join("ledger", "test_apidev_rejectwin.py"), 7),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

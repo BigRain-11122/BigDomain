@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T10:59:43+08:00",
+  "export_ts": "2026-10-10T12:01:59+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1729 apidev usage_log read-cap face delivered (P2 tech head cashed, R1728 carry-note; score 2 = runnable artifact; AC-UL1..UL7 pre-registered in tech.md claim row before code): apidev.py usage_log(api_key, limit=0) tail parameter -- default 0 keeps the full-log behavior byte-stable (envelope key set exactly api_key/calls/disclaimer, row order and row set identical to the incumbent read with a manual SQL cross-check); key gate before argument gate (unknown key -> E_AD_UNKNOWN_KEY even with a bad limit, the call-chain key-gate-first law); bad limits (-1/bool/'2'/2.5) reject E_AD_BAD_ARGS with zero rows read (api_calls count unchanged); limit>0 bounds the response to the most recent limit rows and adds the overflow block (limit/total/returned/truncated) -- the truncated window is the exact tail of the ascending (called_utc, call_ref) order (mirror SQL DESC/DESC LIMIT then reverse, call_ref primary key makes a total order so the mirror is exact); boundary states (limit==total no overflow, empty key total=0, limit=1 single row) proven; capped reads stay read-only (zero api_calls writes); dead keys (revoked, rotated-out) keep the capped read face open with identical semantics; suite test_apidev_usagelog.py 7/7 exit 0, determinism double-run byte-identical, RUNNER PASS 58/58 (suites 57->58 criteria 589->596) controls 6/6 131.8s zero regression, matrix 58/596 green --check byte-identical; evidence qa/apidev-usagelog-R1729.log (four sections); nine-face scan round-start all PASS zero FLAG; tech queue 10->9 then reseed 1->10 (window-filtered usage_log read seeded); next P2 head = apidev reject_tally window-parameterized read; closeout 1728 -> 1729",
-    "latest_artifact": "最近实物：apidev usage_log 读帽面（2026-10-10·R1729 交付·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py usage_log(api_key, limit=0) 尾参读帽（缺省 0=全量现行行为保真〔envelope 三键 set 等断言+行序行集与现行逐位同一·manual SQL 交叉验证〕+键门先于参数门〔未知键+坏参仍键门拒〕+坏参 {-1,True,\"2\",2.5} 四态 E_AD_BAD_ARGS fail-closed 零读副作用+limit>0=最近 limit 行+溢出块四键 {limit,total,returned,truncated}〔截断窗=升序全量日志尾窗逐位保真·镜像 SQL DESC/DESC LIMIT 反转·call_ref PK 全序〕+边界态〔limit==total 无溢出+零行键+limit=1〕+只读律+死键帽读仍开〔revoked/rotated_out〕）+套件 test_apidev_usagelog.py 7/7 全绿（双跑逐位同一·RUNNER PASS 58/58 套件 57→58 判据 589→596·矩阵 58/596 byte-identical）——开发者面板大日志键读面放大收敛面；证据 qa/apidev-usagelog-R1729.log（套件×2+卫生+回归+矩阵四节）",
-    "next_milestone": "下轮=P2 队头=apidev reject_tally 窗参数化读面（R1728 种子行·reject_events 行已带 window 列=历史月窗不可读扩展面：reject_tally(api_key, window=None) 显式月窗读〔缺省 None=当月现行保真〕+未知窗格式拒读+dev_board/key_view 嵌入面缺省当月不动·零新表零 UPDATE 读时聚合沿用）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1730 apidev reject_tally window-parameterized read face delivered (P2 tech head cashed, R1729 carry-note; score 2 = runnable artifact; round context = prior invocation crashed mid-round after the tech.md claim [AC-RJW1..RJW7 pre-registered] and the apidev.py window-param edit; this round detected the in-flight tree face (no index.lock = same-task interruption, not a rival writer), completed it and closed out): reject_tally(api_key, window=None) -- default None keeps the R1728 current-UTC-month behavior byte-stable (six-key envelope set assertion + frozen-clock window value + manual SQL cross-check); key gate before window gate (unknown key + bad window -> E_AD_UNKNOWN_KEY first); strict YYYY-MM format gate fail-closed (11 bad shapes all E_AD_BAD_ARGS, reject rows unchanged); historical/future windows are honest reads over the immutable rows (fixture-injected 2026-09 rows read back exactly, 2026-11 empty read {}/0, zero cross-window penetration both directions); embedded faces (key_view, dev_board, board total) keep the current-month default with window-free source signatures; dead keys (revoked, rotated_out) stay readable on explicit windows; frozen clock +23d proves the month roll (new rejects land in the new month, old months stay readable forever, all-time 6 = 2+3+1); suite test_apidev_rejectwin.py 7/7 exit 0, determinism double-run byte-identical, RUNNER PASS 59/59 (suites 58->59 criteria 596->603) controls 6/6 128.2s zero regression, matrix 59/603 green --check byte-identical; evidence qa/apidev-rejectwin-R1730.log (five sections); nine-face scan round-start all PASS (GORD 4 new table rows all other-company domain, baseline 200->204 acked); tech queue 10->9 then reseed 1->10 (window-anchor hardening seed: $ regex tail-anchor tolerates trailing newline '2026-10\\n' -> honest empty read instead of reject = fail-closed gap, verified live); next P2 head = apidev usage_log window-filtered read; round water-level 81053B over the 78,500B line -> fold R471 = next round-head gauge; closeout 1729 -> 1730",
+    "latest_artifact": "最近实物：apidev reject_tally 窗参数化读面（2026-10-10·R1730 交付·轮计分 2=可跑实物）：src/sandbox/ledger/apidev.py reject_tally(api_key, window=None) 尾参窗读（缺省 None=当月现行行为零漂移〔六键 envelope set 等断言+manual SQL 交叉验证〕+键门先于窗参门+坏窗参 11 形态全拒 E_AD_BAD_ARGS 零副作用+历史/未来窗诚实读〔fixture 注入 2026-09 读==注入集·2026-11 空读·两窗互不渗透〕+嵌入面 key_view/dev_board/板级 total 缺省当月不动〔源级签名零 window 参〕+死键 revoked/rotated_out 显式历史窗读仍开+时钟 +23d 月滚动保真〔旧窗旧行永在·all-time 6=2+3+1〕）+套件 test_apidev_rejectwin.py 7/7 全绿（双跑逐位同一·RUNNER PASS 59/59 套件 58→59 判据 596→603·矩阵 59/603 byte-identical）——开发者面板拒因剖面历史月窗可读面；证据 qa/apidev-rejectwin-R1730.log（套件×2+卫生+回归+矩阵五节）",
+    "next_milestone": "下轮=P2 队头=apidev usage_log 窗过滤读面（R1729 种子行·usage_log calls 行已带 window 列=跨月大键不可分月读扩展面：usage_log(api_key, window=None) 显式月窗过滤读〔缺省 None=全窗现行行为保真〕+未知窗格式拒读+窗过滤与读帽正交组合〔溢出块 total=窗内行数〕·零新表零 UPDATE 读时过滤沿用·R1730 补种子=窗参数格式锚硬化面〔$ 尾锚容尾随换行→\\Z 严锚〕在队）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R471（上轮收账后水位 81053B 越线）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1729",
+      "1730",
       "OSLoop 执行 tick"
     ],
     [
@@ -3013,20 +3013,24 @@
     [
       "2",
       "apidev usage_log 读帽面（R1729·P2 队头·R1728 承传点名兑现·AC-UL1..UL7 预注册=tech.md 认领行先于代码：usage_log(api_key, limit=0) 尾参读帽——缺省 0=envelope 键集恰三键现行行为零漂移〔行序/行集与现行逐位同一·manual SQL 交叉验证〕+键门先于参数门〔未知键+坏参仍键门拒〕+坏参 {-1,True,\"2\",2.5} 四连拒 E_AD_BAD_ARGS〔api_calls 10==10 零读副作用〕+帽下全量〔limit=50 over 10：truncated=False+溢出块四键 {limit,total,returned,truncated} additive〕+截断尾窗逐位保真〔limit=3：calls==全量读 calls[-3:]·镜像 SQL=DESC/DESC LIMIT 反转·call_ref PK 全序保证镜像恰尾窗〕+边界态〔limit==total 无溢出+零行键 total=0+limit=1 尾 1〕+只读律〔帽读零 api_calls 行写〕+死键帽读仍开〔revoked total=5 returned=2 尾窗同一+rotated_out total=4 同语义〕；套件 test_apidev_usagelog.py 7/7 exit 0 双跑逐位同一·RUNNER PASS 58/58〔套件 57→58 判据 589→596〕controls 6/6 131.8s 零回归·矩阵 58/596 green --check byte-identical·证据 qa/apidev-usagelog-R1729.log 四节〔套件×2+卫生 git status 恰改 apidev.py/套件/reconcile_all/tech.md 四件·ledger.py/metered.py 零改动=引用不复制律〕）"
+    ],
+    [
+      "2",
+      "apidev reject_tally 窗参数化读面（R1730·P2 队头·前次调用中断收口轮〔前轮已认领 tech.md 行+apidev.py 窗参落盘后中断未收账·本轮检出在飞面正法收口〕·AC-RJW1..RJW7 预注册=tech.md 认领行先于代码：reject_tally(api_key, window=None) 尾参窗读——缺省 None=当月现行行为零漂移〔六键 envelope set 等断言+manual SQL 交叉验证〕+键门先于窗参门〔未知键+坏窗参→E_AD_UNKNOWN_KEY 先执法〕+坏窗参 11 形态全拒 E_AD_BAD_ARGS〔拒行计数前后同一零副作用〕+历史/未来窗诚实读〔fixture 直接 INSERT 注明·2026-09 读==注入集 {E_AD_RATE:2,E_AD_KIND:1}·2026-11 空读 {}/0·两窗互不渗透〕+嵌入面 key_view/dev_board/板级 total 缺省当月不动〔源级签名零 window 参〕+死键 revoked/rotated_out 显式历史窗读仍开+时钟 +23d 月滚动保真〔新拒落新窗·旧窗显式读旧行在·all-time 6=2+3+1〕；套件 test_apidev_rejectwin.py 7/7 exit 0 双跑逐位同一·RUNNER PASS 59/59〔套件 58→59 判据 596→603〕controls 6/6 128.2s 零回归·矩阵 59/603 green --check byte-identical〔7132B·行27 green〕·证据 qa/apidev-rejectwin-R1730.log 五节）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 28,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1729 flush caliber: R1729 closeout pair appended (both dated 2026-10-10, in window; substantive R1729 line +1, tokens excluded) -> log_lines_in_window 24 -> 26, substantive 9 -> 10, nop 1 / idle 0 flat; tick row 1728 -> 1729; queues 6/10/10 flat (tech row closed +1 reseed window-filtered usage_log read)"
+    "method": "R1730 flush caliber: R1730 closeout pair appended (both dated 2026-10-10, in window; substantive R1730 line +1, tokens excluded) -> log_lines_in_window 26 -> 28, substantive 10 -> 11, nop 1 / idle 0 flat; tick row 1729 -> 1730; queues 6/10/10 flat (tech row closed +1, reseed window-anchor hardening +1); GORD baseline 200 -> 204 (4 new table rows, all other-company domain, acked)"
   }
 }

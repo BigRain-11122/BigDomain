@@ -73,7 +73,12 @@ existed; honesty law):
                           aggregate those rows at read time with
                           GROUP BY COUNT per reason over the
                           current UTC month window -- the panel's
-                          "why was my call rejected" profile.
+                          "why was my call rejected" profile. The
+                          public reject_tally face also takes an
+                          optional explicit "YYYY-MM" window so any
+                          historical month stays readable (the
+                          embedded faces keep the current-month
+                          default).
                           Recording is best-effort: a diagnostic
                           write failure is swallowed so the
                           primary reject contract (correct code,
@@ -125,6 +130,7 @@ writer, same pattern as the ledger core). Zero UPDATE, zero RNG.
 import datetime
 import hashlib
 import os
+import re
 import sqlite3
 import threading
 
@@ -143,6 +149,11 @@ E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
 
 NON_ADVISORY = ("non-advisory notice: open API is a compute +"
                 " visualization interface, not investment advice")
+
+# explicit-window read format for the reject-tally public face:
+# exactly YYYY-MM with month 01..12 (None on the face means the
+# current UTC month, the byte-stable default)
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
 
 # read-face status names (human-facing) for terminal lifecycle
 # events; the event names themselves stay compact in the store
@@ -701,17 +712,31 @@ class DevKeyFace:
                 "truncated": total > limit,
                 "disclaimer": self.disclaimer}
 
-    def reject_tally(self, api_key):
-        """One key's reject-tally diagnostic profile for the current
-        UTC month window: counts per rejection reason, aggregated
-        at read time over the immutable reject-event rows (the
-        developer panel's "why was my call rejected" face). Read-
-        only, zero token movement; a revoked or rotated-out key
-        stays readable with its tally intact."""
+    def reject_tally(self, api_key, window=None):
+        """One key's reject-tally diagnostic profile: counts per
+        rejection reason, aggregated at read time over the
+        immutable reject-event rows (the developer panel's "why
+        was my call rejected" face). window=None (the default)
+        keeps the current-UTC-month behavior byte-stable; an
+        explicit "YYYY-MM" string reads any month window at read
+        time (rows are immutable and stamped with their own
+        record-time window, so a historical month stays readable
+        forever); any other shape rejects E_AD_BAD_ARGS
+        fail-closed before the aggregation (the key gate fires
+        first, the call-chain key-gate-first law). The embedded
+        faces (key_view, dev_board) keep the current-month
+        default untouched. Read-only, zero token movement; a
+        revoked or rotated-out key stays readable with its tally
+        intact."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
-        window = _window_utc()
+        if window is None:
+            window = _window_utc()
+        elif not (isinstance(window, str)
+                  and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
         by_reason = self._reject_tally(row[0], window)
         return {"api_key": api_key, "key_name": row[2],
                 "window": window, "by_reason": by_reason,
