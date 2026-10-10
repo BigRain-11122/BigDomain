@@ -50,8 +50,19 @@ class EventStore:
     """Single-writer store: one connection guarded by one lock; every write
     opens with BEGIN IMMEDIATE (SQLite WAL discipline)."""
 
-    def __init__(self, db_path):
+    def __init__(self, db_path, disclaimer=None):
         self.db_path = db_path
+        # R1773 room-level message read face: the standing non-advisory
+        # disclaimer carried by the read-face envelope. Legacy callers
+        # construct without it (backward compatible); the read face
+        # itself refuses fail-closed until a non-empty one is wired.
+        # An EXPLICITLY provided empty/whitespace/non-str value is a
+        # bad argument and rejected at construction.
+        if disclaimer is not None and (
+            not isinstance(disclaimer, str) or not disclaimer.strip()
+        ):
+            raise ValueError("E_STORE_NO_DISCLAIMER")
+        self.disclaimer = disclaimer
         parent = os.path.dirname(os.path.abspath(db_path))
         os.makedirs(parent, exist_ok=True)
         self._lock = threading.Lock()
@@ -144,6 +155,31 @@ class EventStore:
                 "SELECT fields_json FROM census_cache WHERE cid = ?", (cid,)
             ).fetchone()
         return json.loads(row[0]) if row else None
+
+    def room_message_board(self):
+        """R1773 room-level message read face: pure-read derivation over
+        the public event stream. Per room (zone) chat message count and
+        distinct active-actor count, aggregated read-only over
+        type='chat.broadcast' rows (the server chat path lands broadcasts
+        with zone=room). The events table stays append-only: this face
+        holds no mutation statements and no cache counters - every call
+        re-derives from the events table. Zone-ascending deterministic
+        order, zero RNG. Envelope carries the standing non-advisory
+        disclaimer (the lobby compliance face lives at the protocol
+        layer, sys.risk_warning at connect; this read face keeps the
+        same standing-discipline)."""
+        if not self.disclaimer or not self.disclaimer.strip():
+            raise ValueError("E_STORE_NO_DISCLAIMER")
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+                " WHERE type = 'chat.broadcast' GROUP BY zone ORDER BY zone"
+            ).fetchall()
+        board = [
+            {"room": room, "messages": int(n), "actors": int(k)}
+            for room, n, k in rows
+        ]
+        return {"room_message_board": board, "disclaimer": self.disclaimer}
 
     def close(self):
         with self._lock:

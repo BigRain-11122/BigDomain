@@ -5,8 +5,12 @@ docs/spec/lobby-websocket-spec.md section 1 (AC-S11..S13 = city running
 face: census whitelist reads, avatar intake, read-only HTTP API) plus the
 client reconnect semantics face AC-S8c/S8d/S8e (spec v0.4: keepalive dead
 detection, backoff reconnect with exact room-set restoration, idempotent
-replay via client_msg_id). Each criterion prints PASS/FAIL with evidence;
-the process exits non-zero on any FAIL.
+replay via client_msg_id) plus the room-level message read face
+AC-S14/S15 (R1773: per-room chat counts + distinct active-actor
+aggregation, pure-read derivation on the EventStore, zero UPDATE,
+standing disclaimer envelope, fail-closed without a wired disclaimer).
+Each criterion prints PASS/FAIL with evidence; the process exits non-zero
+on any FAIL.
 
 Usage (run with the repo venv python that has websockets installed):
     python test_client.py            # AC-S1..S7, S8a..S8e, S9..S13 + startup refusal
@@ -17,6 +21,7 @@ import asyncio
 import base64
 import hashlib
 import http.client
+import inspect
 import json
 import os
 import shutil
@@ -1003,6 +1008,151 @@ async def city_cases():
         city_restore_writable(ro_dir)
 
 
+def room_board_cases(srv_db):
+    """AC-S14/S15: room-level message read face (R1773): per-room chat
+    message counts + distinct active-actor aggregation, pure-read
+    derivation on the EventStore (zero UPDATE, standing disclaimer
+    envelope, fail-closed without a wired disclaimer)."""
+    from store import EventStore
+    tmp = tempfile.mkdtemp(prefix="lobby-board-")
+    notice = ("sandbox non-advisory notice: room board rows are "
+              "operational read-only derivations, not advice")
+
+    # ---- AC-S15 half: explicit bad disclaimer rejected at construction ----
+    bad_refusals = []
+    for value, label in (("", "empty"), ("   ", "whitespace"), (123, "non-str")):
+        refused = False
+        try:
+            EventStore(os.path.join(tmp, "bad-%s.db" % label), disclaimer=value)
+        except ValueError as exc:
+            refused = "E_STORE_NO_DISCLAIMER" in str(exc)
+        bad_refusals.append("%s=%s" % (label, refused))
+
+    # ---- AC-S14: semantics, scoping, ordering, cross-validation ----
+    st = EventStore(os.path.join(tmp, "board.db"), disclaimer=notice)
+    empty_env = st.room_message_board()
+    ok_empty = (set(empty_env.keys()) == {"room_message_board", "disclaimer"}
+                and empty_env["disclaimer"] == notice
+                and empty_env["room_message_board"] == [])
+
+    # deterministic world: five chat broadcasts across two rooms by two
+    # actors + two non-chat rows (scope isolation: never counted)
+    world = [
+        ("2026-10-11T00:00:01.000000Z", "chat.broadcast", "res-alpha", "lobby",
+         "alpha lobby line", {"text": "alpha lobby line"}),
+        ("2026-10-11T00:00:02.000000Z", "chat.broadcast", "res-beta", "quant",
+         "beta quant line 1", {"text": "beta quant line 1"}),
+        ("2026-10-11T00:00:03.000000Z", "chat.broadcast", "res-beta", "quant",
+         "beta quant line 2", {"text": "beta quant line 2"}),
+        ("2026-10-11T00:00:04.000000Z", "chat.broadcast", "res-alpha", "quant",
+         "alpha quant line", {"text": "alpha quant line"}),
+        ("2026-10-11T00:00:05.000000Z", "chat.broadcast", "res-beta", "lobby",
+         "beta lobby line", {"text": "beta lobby line"}),
+        ("2026-10-11T00:00:06.000000Z", "idea.submit", "res-alpha", "cocreate",
+         "idea line not chat", {"text": "idea line not chat"}),
+        ("2026-10-11T00:00:07.000000Z", "avatar.intake", "res-gamma", "intake",
+         "intake line not chat", {"text": "intake line not chat"}),
+    ]
+    for evt in world:
+        st.append(*evt)
+    env = st.room_message_board()
+    board = env["room_message_board"]
+    expected = [
+        {"room": "lobby", "messages": 2, "actors": 2},
+        {"room": "quant", "messages": 3, "actors": 2},
+    ]
+    ok_rows = (board == expected
+               and all(set(r.keys()) == {"room", "messages", "actors"} for r in board))
+
+    manual = [
+        {"room": r, "messages": int(n), "actors": int(k)}
+        for r, n, k in db_query(
+            os.path.join(tmp, "board.db"),
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' GROUP BY zone ORDER BY zone")
+    ]
+    ok_manual = manual == board
+    n_all = db_query(os.path.join(tmp, "board.db"),
+                     "SELECT COUNT(*) FROM events")[0][0]
+    n_board_msgs = sum(r["messages"] for r in board)
+    ok_scope = n_all == 7 and n_board_msgs == 5  # non-chat rows never counted
+
+    # insertion-order independence: same world, reversed append order
+    st2 = EventStore(os.path.join(tmp, "board2.db"), disclaimer=notice)
+    for evt in reversed(world):
+        st2.append(*evt)
+    ok_order = (json.dumps(st2.room_message_board(), sort_keys=True)
+                == json.dumps(env, sort_keys=True))
+
+    # live derivation, zero cache: a new broadcast changes the next read
+    st.append("2026-10-11T00:00:08.000000Z", "chat.broadcast", "res-gamma",
+              "lobby", "gamma lobby line", {"text": "gamma lobby line"})
+    env_after = st.room_message_board()
+    lobby_row = [r for r in env_after["room_message_board"] if r["room"] == "lobby"][0]
+    ok_alive = lobby_row == {"room": "lobby", "messages": 3, "actors": 3}
+
+    record("AC-S14", ok_empty and ok_rows and ok_manual and ok_scope
+           and ok_order and ok_alive,
+           "empty-board=%s envelope-keys=%s; rows=%s row-keys-exact=%s; "
+           "manual-sql-cross=%s scope(events=%d board-msgs=%d non-chat-excluded)=%s; "
+           "insertion-order-independent=%s; live-rederive=%s"
+           % (ok_empty, sorted(empty_env.keys()), board,
+              all(set(r.keys()) == {"room", "messages", "actors"} for r in board),
+              ok_manual, n_all, n_board_msgs, ok_scope, ok_order, ok_alive))
+
+    # ---- AC-S15: pure-read law, fail-closed, determinism, live db ----
+    unit_db = os.path.join(tmp, "board.db")
+    before = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+              for t in ("events", "census_cache")]
+    st.room_message_board()
+    st2.room_message_board()
+    after = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+             for t in ("events", "census_cache")]
+    ok_pure = before == after and before[0] == 8
+
+    src = inspect.getsource(EventStore.room_message_board)
+    ok_src = not any(word in src for word in ("INSERT", "UPDATE", "DELETE"))
+    ok_det = (json.dumps(env_after, sort_keys=True)
+              == json.dumps(st.room_message_board(), sort_keys=True))
+
+    # legacy construction (no disclaimer): the face refuses fail-closed
+    st3 = EventStore(os.path.join(tmp, "legacy.db"))
+    face_refused = False
+    try:
+        st3.room_message_board()
+    except ValueError as exc:
+        face_refused = "E_STORE_NO_DISCLAIMER" in str(exc)
+    st3.close()
+
+    # live cross-check: this suite's real server db (server stopped; WAL
+    # read recovery) - rooms lobby+quant hold real broadcasts from the
+    # AC-S1..S10 flow; the face must equal the manual re-derivation.
+    st_srv = EventStore(srv_db, disclaimer=notice)
+    env_srv = st_srv.room_message_board()
+    manual_srv = [
+        {"room": r, "messages": int(n), "actors": int(k)}
+        for r, n, k in db_query(
+            srv_db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' GROUP BY zone ORDER BY zone")
+    ]
+    rooms_srv = sorted(r["room"] for r in env_srv["room_message_board"])
+    ok_srv = (env_srv["room_message_board"] == manual_srv
+              and rooms_srv == ["lobby", "quant"]
+              and all(r["messages"] > 0 for r in env_srv["room_message_board"]))
+    st_srv.close()
+    st.close()
+    st2.close()
+
+    record("AC-S15", ok_pure and ok_src and ok_det and face_refused and ok_srv
+           and all("True" in r for r in bad_refusals),
+           "row-counts-stable=%s (%s); zero-write-method-src=%s; "
+           "deterministic=%s; bad-disclaimer-construction-refused %s; "
+           "legacy-no-disclaimer-face-refused=%s; live-db cross=%s rooms=%s"
+           % (ok_pure, before, ok_src, ok_det, bad_refusals, face_refused,
+              ok_srv, rooms_srv))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -1215,6 +1365,10 @@ async def suite():
             except Exception:
                 pass
         srv.stop()
+
+    # AC-S14/S15: room-level message read face (R1773) - unit store plus
+    # this server's real db (server stopped; WAL read recovery on open).
+    room_board_cases(srv.db)
 
     await city_cases()
 

@@ -81,7 +81,11 @@ def _load_json(path):
 
 SUITES = [
     # (label, suite path relative to the sandbox root, expected criteria)
-    ("lobby", os.path.join("lobby", "test_client.py"), 16),
+    # R1773 lobby room-level message read face: per-room chat counts +
+    # distinct active-actor aggregation, pure-read derivation on the
+    # EventStore (zero UPDATE, standing disclaimer envelope,
+    # fail-closed without a wired disclaimer) - AC-S14/S15.
+    ("lobby", os.path.join("lobby", "test_client.py"), 18),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
