@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T05:50:47+08:00",
+ "export_ts": "2026-10-11T06:02:59+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1774 一件事：会员模块加了到期前预测读面——一条命令读出「未来 N 天内到期的会员期」（纯读、零写入），到期提醒扫描可以直接拿它当数据源；顺手修了一个真缺口：证据文件走查器遇到编码损坏的旧证据件会崩，已修为跳过该件继续找（不造数据、语义不变）。沙箱总量升到 76 套件 764 条判据全绿。",
-  "latest_artifact": "最近实物：src/sandbox/member/member.py（expiring_soon 到期前预测读面）+ test_expiring_soon.py AC-ES1..ES7；证据 qa/member-expiring-R1774.log（2026-10-11）",
-  "next_milestone": "下轮实物：tech 队头『pay 渠道对账覆盖矩阵读面』当窗交付（48h 内·至 10-13）；账本水位本轮收账后大概率越线，下轮首测若越线先做 fold R485 再拉活；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
+  "current": "R1775 一件事：账本滚动整编——把前三轮流水压成一条总账，原文全量进档案一条不少，给后面产出腾空间；全程先验证后写盘，工具闸拦下一次超预算操作（零风险零突变）。",
+  "latest_artifact": "最近实物：qa/reorg-R1775.log（fold R485 水位整编证据：7 行压 1 滚窗行·72 token 零丢失·census 402 节全过）+ preop 备份件 logs/state-preop-R1775.bak（2026-10-11）",
+  "next_milestone": "下轮实物：tech 队头『pay 渠道对账覆盖矩阵读面』当窗交付（48h 内·至 10-13）；账本水位 77,096B 余量 1,404B，下轮产出照常拉活；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
  },
  "depts": [
   {
@@ -187,6 +187,10 @@
  ],
  "results": [
   [
+   "1",
+   "fold R485 水位整编+滚窗并折收账（R1775·台账维护机制件·P-2026-09-25-18 第四百八十五刀·R1772 行承传注记兑现：轮首首测 80,041B 越 1,541B→fold 工具正门 tail-7 窗=fold R484 滚窗行+R1772/R1773/R1774 三收账对 9,189B 压 1 滚窗行 kept=0·72 token 全字面嵌零丢失〔catalog 直拼+fold 工具机械复验 PASS〕·原文全量保全=archive §R1775 节 7 行 verbatim+preop 备份件·verify-then-write post==predicted 75,412B·eol/indent/layout 三面过·census 402 节 pass 零新 mismatch·预留 3000 首跑预检超 715B 被闸拦截零突变→summary 修剪+预留校准 2600〔R1694 先例〕·census 首跑子进程 GBK stdout 编码炸=PYTHONIOENCODING=utf-8 补跑如实注·证据 qa/reorg-R1775.log·收账后水位 77,096B 余量 1,404B〔fold R486=再越线时下轮轮首首测裁定〕·export 实刷 tick 1775·HB lag=0·auto-saves 345.4MB/154 件线内不清·tick 1774→1775）"
+  ],
+  [
    "2",
    "member 到期前预测读面交付（R1774·P2 tech 队头·P1 板顶全门控承 R1773 判读·AC-ES1..ES7 预注册先于代码：MemberStore.expiring_soon(days, now=None) 纯读派生面=active 期 as_of<=end_utc<=as_of+days 双沿包容窗+days_left floor+行序 end_utc,census,period_id 零 RNG+信封 {expiring_soon,days,as_of,count}+_face 合规三件+坏参 6 形态与非 ISO now 全拒 E_BAD_STATE+边界=恰 as_of/horizon 入榜+越窗一刻/过终态/expired 排除+纯读律四表计数恒定+inspect 零 DML+双调逐字节同一+提醒 due 窗对齐=manual SQL due 集==榜内 end>as_of 子集（恰到期边界行超集诚实注）+全局榜异插入序双世界逐位同一·test_expiring_soon.py SUITE 7/7 exit 0 首跑全绿——同轮修如实注：全量回归首跑 75/76 一红=suite-matrix-discovery 两 live 例 UnicodeDecodeError（混合方言证据件解码失败逃逸坏件跳过闸 OSError-only 捕获=R1683 方言坑复发族）→正法=闸扩 (OSError, UnicodeDecodeError) 解码失败件不可作证据走查续行 fail-closed 零改动→套件单跑 16/16 复绿+二跑 RUNNER PASS 76/76 套件 764 判据 controls 7/7 202.4s 零回归（首跑红证据保全 qa/reconcile-all-R1774-firstfail.log）·reconcile_all SUITES 75→76 判据 757→764·矩阵再生 76/764 green --check byte-identical 双跑 8408B·指纹哨兵 CLEAN domains=5（member 4 表零 schema 触碰）·member.py +43/-0 additive+config.json 逐字节零改动·证据 qa/member-expiring-R1774.log 五节·queue_tech_open 9→8 补种 2→10·R1774）"
   ],
@@ -323,7 +327,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1774",
+   "1775",
    "OSLoop 执行 tick"
   ],
   [
@@ -3198,15 +3202,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 22,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 10,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 10,
   "queue_explore_open": 10,
-  "method": "R1774 member expiring_soon pre-expiry board delivered (pure-read derived face, inclusive both edges, days_left floor, reminder due-window alignment as honest superset; suite 7/7; same-round fix: suite_matrix discovery skip-guard widened to UnicodeDecodeError after a mixed-dialect evidence file bricked the walk; RUNNER PASS 76/76 suites 764 criteria; matrix 76/764 --check byte-identical; sentinel CLEAN domains=5; evidence qa/member-expiring-R1774.log; queue_tech 9->8 reseeded 2->10)"
+  "method": "R1775 fold R485 watermark compaction (R1772 carry-note honored; tool-door tail-7 window 9189B folded to one roll line kept=0; 72 tokens embedded zero-loss; archive verbatim + preop backup; verify-then-write post==predicted 75412B; reserve calibrated 3000->2600 per R1694 after first dry-run over-gated by 715B with zero mutation; eol/indent/layout clean; census 402 sections pass zero new mismatch; evidence qa/reorg-R1775.log; final watermark 77096B margin 1404B; fold R486 = next over-gate first-gauge ruling)"
  }
 }
