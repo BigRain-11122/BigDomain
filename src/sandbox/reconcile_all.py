@@ -498,6 +498,19 @@ SUITES = [
     # (AC-ET1..ET7 pre-registered in state/queue/explore.md).
     ("ledger-eventtickets",
      os.path.join("ledger", "test_eventtickets.py"), 7),
+    # R1768 developer free-trial tier face: the zero-fee trial
+    # window (lifetime cap, the apidev quota-ring variant -
+    # immutable call rows, COUNT face, zero mutation) + the
+    # upgrade-conversion gate (cap exhaustion refuses with the
+    # upgrade hint; a converted developer loses the free tier
+    # fail-closed; one terminal conversion row per (dev, plan),
+    # the member tier-grant structure reference) over the
+    # DevKeyFace registry gate (referenced, never copied); the
+    # face holds no ledger reference at all - the free tier is
+    # structurally free
+    # (AC-FT1..FT7 pre-registered in state/queue/explore.md).
+    ("ledger-freetrial",
+     os.path.join("ledger", "test_freetrial.py"), 7),
 ]
 
 FAILS = 0

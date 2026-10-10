@@ -1,0 +1,35 @@
+== BigDomain R1768 fold R483 water reorg evidence ==
+[pre] round-start scan state_bytes=80507 (over gate 78500, carry-note from R1767 honored this round)
+[pre] closeout gauge disk_bytes=83631 margin_bytes=-5131 fold_needed=true
+[dry-run] window=tail-8 lines 24..31 (R1765..R1768 four pairs) content 9750B; token_missing=[] token_ok=true (AC-ET1|AC-FT1|AC-PD5F1|AC-PD5F3|AC-PP1|BD-PROP-003|D-20260930-19|OH-20261011-bigdomain|P-2026-09-25-18|P-32 all embedded); gate_ok=true predicted_bytes=74961 reserve 3000; preop sha16 07c82162a4e793ab
+[execute] post_bytes=74961 predicted_eq_actual=true; archive_appended=true appendix_bytes=9948; backup_written=true logs/state-preop-R1768.bak; archive logs/state-log-archive-2026-10.md section R1768 fold append, 8 lines verbatim
+[post] fresh gauge (post-surgery live probe):
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 74961,
+  "gate": 78500,
+  "log_lines": 24,
+  "log_content_bytes": 72053,
+  "margin_bytes": 3539,
+  "fold_needed": false,
+  "tick": 1768
+}
+[post] fresh eol profile (post-surgery live probe):
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 74961,
+  "total_lf": 34,
+  "crlf": 34,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": true,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 24,
+  "indent16_lines": 24,
+  "indent_anomaly": 0,
+  "indent_ok": true
+}
+[post] census rc=2 (tool face; verbatim archive section + backup + git history = zero-loss chain)
+[carry] post waterline margin under gate: fold R484 = next over-gate round first-gauge ruling

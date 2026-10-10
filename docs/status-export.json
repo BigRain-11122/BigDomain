@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T03:23:53+08:00",
+ "export_ts": "2026-10-11T04:45:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1767 一件事：虚拟活动门票面上线——场次注册→窗内购票（限购/容量帽全前置）→入场检票（无票不放进），全套沙箱可跑（test_eventtickets 7/7 全绿）。沙箱总量升到 74 套件 727 条判据全绿（本轮零回归）。",
-  "latest_artifact": "最近实物：src/sandbox/ledger/eventtickets.py+test_eventtickets.py（R1767 活动门票面·qa/eventtickets-R1767.log+qa/reconcile-all-R1767.log）",
-  "next_milestone": "下轮起：P3 探索队列续挖（开发者免费试用配额/荣誉榜并列名次/热度榜差分面等 4 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
+  "current": "R1768 一件事：开发者免费试用配额面上线——在册开发者领免费试用（终身帽、用满即提示升级）、一键转正档（转正后免费调用永闭），全套沙箱可跑（test_freetrial 7/7 全绿）。沙箱总量升到 75 套件 734 条判据全绿（本轮零回归）。",
+  "latest_artifact": "最近实物：src/sandbox/ledger/freetrial.py+test_freetrial.py（R1768 免费试用配额面·qa/freetrial-R1768.log+qa/reconcile-all-R1768.log）",
+  "next_milestone": "下轮起：P3 探索队列续挖（荣誉榜并列名次读面/热度榜差分面等 3 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
  },
  "depts": [
   {
@@ -315,7 +315,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1767",
+   "1768",
    "OSLoop 执行 tick"
   ],
   [
@@ -3165,20 +3165,24 @@
   [
    "2",
    "虚拟活动门票面沙箱件（R1767·P3 explore 队头·AC-ET1..ET7 预注册先于代码：EventTicketFace 三域=场次注册〔UNIQUE+ai_label 持久+capacity None 合法〕+窗内购票〔双沿包容+门外一刻拒零扣费+每笔恰一 spend 绑 tx〕+检票门〔liveroom 无人值守禁入律=无票拒 E_ET_NO_TICKET 零行零 token 动+append-only 检入+重检票拒〕·AIGC/disclaimer 六信封常驻·SUITE 7/7 首跑即净+RUNNER PASS 74/74 套件 727 判据零回归·矩阵 74/727 --check byte-identical·证据 qa/eventtickets-R1767.log 三节·票价/限购/容量 [needs-CEO] 呈批不执行·R1767）"
+  ],
+  [
+   "2",
+   "开发者免费试用配额面沙箱件（R1768·P3 explore 队头·AC-FT1..FT7 预注册先于代码〔explore.md 认领行先于 freetrial.py 落码〕：FreeTrialFace=计划注册/授予+免费调用/升级转化三域〔独立 free_trial.db 单写者·零 ledger schema 触碰〕——计划注册 UNIQUE+ai_label CHECK；注册门=dev_board 公有读面引用（非开发者 E_FT_NOT_DEV 前置零行）；零费试用窗=终身帽 quota ring 变体〔不可变调用行 COUNT 面·cap+1 拒 E_FT_QUOTA 带 upgrade 提示=转化门燃点·trial_calls 表零 window 列=终身窗结构性〕；升级转化门=一 (dev,plan) 恰一转化行〔member 一户一档授予律判读〕+转化后免费调用永闭 E_FT_CONVERTED〔fail-closed〕+计划独立实证；构造零 ledger 参=零 token 动结构性自证〔ledger_tx 全程恒定 0〕+AIGC/disclaimer 全信封常驻+读面五面零写语句〔inspect 机检〕；test_freetrial.py SUITE 7/7 exit 0 首跑即净〔13+10+6+3+13 坏参全拒零副作用〕·reconcile_all SUITES 74→75 判据 727→734〔ledger-freetrial〕·RUNNER PASS 75/75 controls 7/7 161.0s 零回归=qa/reconcile-all-R1768.log·矩阵再生 75/734 green --check byte-identical〔8333B〕·指纹哨兵 CLEAN domains=5·证据 qa/freetrial-R1768.log 三节；生产价目/转化档全 [needs-CEO] P1 呈批不执行·queue_explore_open 5→4·R1768）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 21,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 10,
+  "substantive_non_idle_mention_lines": 7,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 5,
-  "queue_explore_open": 5,
-  "method": "R1767 virtual event ticket face delivery (suite 7/7 first-run clean, RUNNER PASS 74/74 suites 727 criteria zero-regression, matrix regen --check byte-identical, qa/eventtickets-R1767.log)"
+  "queue_explore_open": 4,
+  "method": "R1768 developer free-trial tier face delivery (suite 7/7 first-run clean, RUNNER PASS 75/75 suites 734 criteria zero-regression, matrix regen --check byte-identical, qa/freetrial-R1768.log)"
  }
 }
