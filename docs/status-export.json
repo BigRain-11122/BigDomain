@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-10T19:00:55+08:00",
+  "export_ts": "2026-10-10T19:16:05+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1743 中断收口代落+export flush 债闭口+定价生效确认回执轮（R1744）：R1743 fold R474 产物验真入册（qa/reorg-R1743.log·收口代落=R1740/R1742 同型 erratum 链第三案）+export_ts 实刷+checker PASS（qa/export-consistency-R1744.log）+DEC C-20261010-03 ④BigDomain 定价生效确认（案 A·订阅梯 19.9/29.9/49.9·委员会 T1 代决·否决窗 10-17 12:00·收款仍卡商户号=billing gate 不变）回执+生效接线批入板；GORD 11 行批全判毕（O-1730 硅基窗=bm-a 交互窗已执行/O-1755 吸嘟嘟/X2332/O-1800/O-1805/O-1810 软著最低线/O-1815/O-1825/O-1830/X2333-34/BigLife 解冻 全他司域知悉·定价确认=唯一本司执行面）",
-    "latest_artifact": "最近实物：R1740 notify longterm 授权撤销面沙箱件（SUITE 7/7·RUNNER 63/63 判据 639·qa/pay-notify-revoke-R1740.log·收口由 R1741 代落）+R1743 fold R474 水位整编（11 行压 1 kept=0·verify-then-write byte-exact 75412B·qa/reorg-R1743.log）+R1744 export flush 三连 erratum 闭口（qa/export-consistency-R1744.log PASS）",
-    "next_milestone": "下轮=P2 队头 pay 对账 revokes 覆盖例（R1740 承传点名）+C-20261010-03 定价生效接线批（[needs-CEO] 定价批面→委员会已决生效注记：BLUEPRINT §四+price-canon-amendment-spec v0.2+member config 注记·收款仍卡商户号）；窗口 ≤48h（2026-10-12 前）·轮首 fold R475 首测裁定"
+    "current": "R1745 C-20261010-03 定价生效接线批交付轮（backlog 顶行认领·R1744 排队兑现）：案 A 生效〔订阅梯 19.9/29.9/49.9〕+N1-N7 增补随批生效〔含 N2 ¥9.9/月〕+部署预备解锁〔C-20261010-03④ 委员会 T1 代决·O-20261010-1800 授权面·否决窗至 2026-10-17 12:00 CEO 一句话可翻〕；四接线面=BLUEPRINT §四 订阅梯行+§十 生效注记与清单项+price-canon-amendment-spec v0.3〔席7 附款映射表 BILLING GATE 联办列=三闸串联执法·任一未过=零开单〕+member config 四档注记〔99 共创者卡未入生效射程如实注〕；收款门 CLOSED 律不变〔商户号=CEO 物理件〕；三套件直跑零回归〔entry_tier 7/7+member 25 断言+reminder 12 断言·AC-E6/E7 测试锚保全〕；fold R475 轮首首测 79527B 越线=产出轮间携带〔R1737..R1742 先例〕",
+    "latest_artifact": "最近实物：R1745 定价生效接线三件（BLUEPRINT.md 订阅梯/生效注记+docs/spec/price-canon-amendment-spec.md v0.3+src/sandbox/member/config.json 四档注记·三套件直跑全绿=qa/ 接线零回归证据在盘）+R1740 notify longterm 授权撤销面沙箱件（qa/pay-notify-revoke-R1740.log）+R1743 fold R474 水位整编（qa/reorg-R1743.log）",
+    "next_milestone": "下轮首=fold R475 水位整编〔轮首首测 79527B 已越线裁定·P-2026-09-25-18 第四百七十五刀〕+P2 队头 pay 对账 revokes 覆盖例（R1740 承传点名）；窗口 ≤48h（2026-10-12 前）；收款门在商户号物理件到位前不开单（C-20260927-02 护栏·席7 五列表逐行过表联办）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1744",
+      "1745",
       "OSLoop 执行 tick"
     ],
     [
@@ -3069,20 +3069,24 @@
     [
       "1",
       "R1743 中断收口代落+export flush 债闭口+DEC/GORD 批判读收账轮（①R1743 fold 产物验真入册+tick 1742→1744+HB backfill ②export flush 三连 erratum 闭口=export_ts 实刷+ceo_face 重派+results tick 行 1739→1744+增行 4+self_drive 单一口径重算+checker PASS=qa/export-consistency-R1744.log ③DEC C-20261010-03 ④定价生效确认（案 A·订阅梯 19.9/29.9/49.9·否决窗 10-17 12:00·收款仍卡商户号）回执+生效接线批排 backlog 顶行 ④GORD 11 行批基线 231→242 全判毕（首扫 8=O-1730 硅基窗〔bm-a 交互窗已执行〕/O-1755 吸嘟嘟/X2332/O-1800/O-1805/O-1810/O-1815/O-1825+轮内二扫 3=BigLife 解冻/O-1830/X2333-34 全他司域知悉·定价确认=唯一本司执行面）·R1744）"
+    ],
+    [
+      "1",
+      "R1745 C-20261010-03 定价生效接线批交付件（案 A 生效〔订阅梯 19.9/29.9/49.9〕+N1-N7 随批生效〔含 N2 ¥9.9/月〕+部署预备解锁·否决窗至 2026-10-17 12:00 CEO 一句话可翻·收款门 CLOSED 律不变〔商户号=CEO 物理件〕；四接线面=BLUEPRINT §四 订阅梯两行+§十 生效注记+定价确认清单项翻✅+price-canon-amendment-spec v0.3〔生效门+§二 N2+§四 应用表+呈批清单闭口+席7 BILLING GATE 联办列=三闸串联执法〕+member config 四档注记+params_status 四档终值翻新；零回归=JSON parse OK+AC-E6/E7 测试锚保全+三套件直跑全绿〔entry_tier 7/7+member 25 断言 16 判据+reminder 12 断言 10 判据〕+reconcile runner 零 copy 断言 rg 无命中+当日 reconcile-daily 证据在盘不重跑；fold R475 轮首首测 79527B 越线=产出轮间携带·下轮轮首首测裁定·R1745）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10,
-    "method": "R1744 closeout-landing round (score 1 = real file change): R1743 fold R474 product verified and landed (session died post-fold pre-accounting 18:35; rolling fold 11->1 kept=0, verify-then-write byte-exact 75412B); export-flush erratum chain R1741/R1742/R1743 closed (flush claims never landed on disk, now flushed once at R1744); self_drive recomputed with the checker's canonical single-caliber recompute; in-window lines +4 (R1743 pair + R1744 pair dated 2026-10-10); tick row 1739 -> 1744"
+    "method": "R1745 pricing-wiring round (score 1 = real file change): C-20261010-03 clause-4 canon wiring landed across BLUEPRINT + price-canon-amendment-spec v0.3 (seat-7 BILLING GATE co-gate column, three-gate serial enforcement) + member config four-tier annotations; scope per bill = case A ladder 19.9/29.9/49.9 effective + N1-N7 additions effective with batch + deployment-prep unlocked, billing gate stays CLOSED on merchant-account physical; three suites direct-run zero regression with AC-E6/E7 anchors preserved; in-window lines +2 (R1745 pair dated 2026-10-10); tick row 1744 -> 1745; fold R475 carried (round-start gauge 79527B over line, next round-start gauge)"
   }
 }
