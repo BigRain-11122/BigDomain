@@ -1,0 +1,30 @@
+# qa/reorg-R1726.log - fold R470 verification evidence (R1726, 2026-10-10)
+# Window: tail-5 = R1714..R1723 roll line (10035B) + R1724/R1725 pairs 4 lines (4164B) = 14199B -> 1 rolling line kept=0
+# Command: python src/os/logs_toolkit.py fold --round R1726 --fold-no 470 --window-tail 5 --summary-file .codely-cli/tmp/fold-r470-summary.txt --execute
+
+[AC-R4701] pre-gauge: disk 79156B > gate 78500B (over by 656B) -> fold R470 triggered per R1725 carry-note
+  gauge output: {"disk_bytes": 79156, "gate": 78500, "margin_bytes": -656, "fold_needed": true, "tick": 1725}
+
+[AC-R4702] post-gauge: fold_needed=false margin 9435B
+  gauge output: {"disk_bytes": 69065, "gate": 78500, "log_lines": 21, "margin_bytes": 9435, "fold_needed": false, "tick": 1725}
+
+[AC-R4703] eol dual-green: layout_ok=true AND indent_ok=true, bare_lf=0 (crlf 30/30, lone_cr 0), log_item_lines=21, indent_anomaly=0
+  eol output: {"bare_lf": 0, "layout_ok": true, "log_item_lines": 21, "indent_anomaly": 0, "indent_ok": true}
+
+[AC-R4704] dual parsers pass (py + PS):
+  PY parser: tick=1725 log=21 last_head=2026-10-10（R1724..R172
+  PS parser: tick=1725 log=21 last_head=2026-10-10（R1724..R172
+
+[AC-R4705] archive verbatim 5/5 + post-hoc catalog: 197 tokens, missing_in_roll=[], pass=true
+  archive section (header '# --- R1726 fold append ... fold R470 window, pre-op sha16 7c1982c4c2205cd7') holds exactly 5 non-empty window lines verbatim
+  catalog --window-file fold-r470-window.txt --roll-file fold-r470-summary.txt:
+  {"window_lines": 5, "tokens_total": 197, "missing_in_roll": [], "pass": true}
+
+[AC-R4706] fold execute verify-then-write: post==predicted
+  fold output: {"pre_bytes": 79156, "new_log_len": 21, "token_missing": [], "token_ok": true, "gate_ok": true,
+    "predicted_bytes": 69065, "post_bytes": 69065, "predicted_eq_actual": true,
+    "appendix_bytes": 14402, "archive_appended": true, "backup_written": true,
+    "backup_path": logs/state-preop-R1726.bak, "preop_sha16": 7c1982c4c2205cd7}
+
+Summary: fold R470 closed. 5 lines 14199B -> 1 rolling line, 197 tokens zero-loss, log 25->21,
+state 79156B -> 69065B (margin 9435B), original text fully preserved in archive §R470 + preop backup + git history.
