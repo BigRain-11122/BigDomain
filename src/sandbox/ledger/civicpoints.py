@@ -64,6 +64,12 @@ platform-award zero-token precedent). The linkage is deliberately
 NOT implemented in this round: the judgment itself is the
 deliverable and the grant face is a named successor slice.
 
+Competition ranks (R1769): honor_board_competition is the 1224
+presentation face over the same annual aggregation - ties share
+the minimum rank, the next distinct value skips. Grant slicing
+stays ROW-COUNT-BASED (honorcert top-N = N accounts, bounded
+budget under mass ties); the tie ranks are presentation-only.
+
 AIGC labeling: registry rows carry a persistent ai_label (0/1,
 DB CHECK) shown on every listing surface; a resident standing
 disclaimer is required at construction and rides every envelope
@@ -511,3 +517,35 @@ class CivicPointsFace:
                           "points": entry["points"],
                           "events": entry["events"]})
         return {"honor_board": board, "disclaimer": self.disclaimer}
+
+    def honor_board_competition(self, year):
+        """Competition-ranked annual honor board (R1769): the 1224
+        standard competition ranking over the SAME single-source
+        aggregation as honor_board - tied accounts share the
+        minimum rank and the next distinct value skips ahead by
+        the number of tied rows (two accounts tied at rank 1 ->
+        both rank 1, next account rank 3). The rows, their order
+        (points DESC, account_id ASC) and the per-row aggregation
+        are derived from honor_board itself (single-source
+        derivation, no second aggregation engine); only the rank
+        field semantics differ. Pure read: zero writes, zero
+        storage, zero token movement, zero RNG. Grant-slice
+        judgment (registered before this code in the R1769
+        explore-queue row): the top-N certificate slice stays
+        ROW-COUNT-BASED (honorcert slices board rows [:top_n]) -
+        the competition rank is presentation-only and this face
+        deliberately adds no grant verb."""
+        dense = self.honor_board(year)["honor_board"]
+        board = []
+        prev_points = None
+        prev_rank = 0
+        for row in dense:
+            if row["points"] != prev_points:
+                prev_points = row["points"]
+                prev_rank = row["rank"]
+            board.append({"rank": prev_rank,
+                          "account_id": row["account_id"],
+                          "points": row["points"],
+                          "events": row["events"]})
+        return {"honor_board_competition": board,
+                "disclaimer": self.disclaimer}

@@ -426,9 +426,11 @@ SUITES = [
     # deterministic (-points, account_id) ordering, cross-year
     # isolation and the platform-side honor-certificate linkage
     # candidate judgment (AC-HN1..HN6 pre-registered in the R1754
-    # explore-queue row).
+    # explore-queue row), plus the 1224 competition-rank
+    # presentation face with the row-count-based grant-slice
+    # judgment (AC-HR1..HR7 pre-registered in the R1769 row).
     ("ledger-civicpoints",
-     os.path.join("ledger", "test_civicpoints.py"), 13),
+     os.path.join("ledger", "test_civicpoints.py"), 20),
     # R1755 annual civic honor certificate grant face: pure
     # orchestration over two public faces (civic honor_board read +
     # collectibles issue_certificate/collection) - zero own storage,

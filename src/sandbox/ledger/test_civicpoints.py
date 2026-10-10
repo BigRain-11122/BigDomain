@@ -4,7 +4,8 @@ points inside the counts-vs-tokens isolation law, public-welfare
 compliance judged first, points-redeem-entitlements on the
 props-domain adjacency verdict). Asserts the pre-registered
 criteria AC-CV1..CV7 from the R1752 explore-queue row plus the
-annual honor board extension AC-HN1..HN6 from the R1754 row
+annual honor board extension AC-HN1..HN6 from the R1754 row and
+the competition-rank extension AC-HR1..HR7 from the R1769 row
 (criteria were registered before this code existed; honesty
 law). Each criterion prints PASS/FAIL with evidence; the process
 exits non-zero on any FAIL.
@@ -586,6 +587,177 @@ def main():
           " (%d non-ascii), zero circulation verbs (%s), zero"
           " RNG; shipped config.json byte-stable across the suite"
           % (non_ascii_hn, banned_hn))
+
+    # -- AC-HR1 competition face: year gate + envelope + empty year ----------
+    bad_years_hr = []
+    raised_hr1 = True
+    for label, arg in (
+            ("int year", 2026),
+            ("bool year", True),
+            ("short year", "26"),
+            ("long year", "20261"),
+            ("alpha year", "abcd"),
+            ("signed year", "-026"),
+            ("space year", " 2026"),
+            ("empty year", ""),
+            ("unicode digits year", "\u0662\u0660\u0662\u0666")):
+        ok_one_hr, got_hr = expect_cv_error(
+            lambda a=arg: cv.honor_board_competition(a), CV.E_CV_BAD_ARGS)
+        if ok_one_hr:
+            bad_years_hr.append("%s=%s" % (label, got_hr))
+        else:
+            bad_years_hr.append("%s NOT-RAISED(%s)" % (label, got_hr))
+            raised_hr1 = False
+    cb_none = cv.honor_board_competition("2030")
+    ok_hr1 = (raised_hr1
+              and cb_none == {"honor_board_competition": [],
+                              "disclaimer": DISCLAIMER}
+              and set(cb_none.keys()) == {"honor_board_competition",
+                                          "disclaimer"})
+    record("AC-HR1", ok_hr1, "honor_board_competition year gate:"
+          " all %d bad year args rejected (%s); zero-earn year"
+          " 2030 is the honest empty board; envelope keys are"
+          " exactly {honor_board_competition, disclaimer}"
+          % (len(bad_years_hr), "; ".join(bad_years_hr)))
+
+    # -- AC-HR2 1224 tie semantics: shared min rank + skip -------------------
+    cv.earn_civic("usr:carol", "city-poll", "2026-10-11", "cc-1")
+    cv.earn_civic("usr:carol", "park-clean", "2026-10-11", "cc-pc1")
+    cv.earn_civic("usr:dave", "park-clean", "2026-10-11", "dd-pc1")
+    cb26 = cv.honor_board_competition("2026")
+    hb26_hr = cv.honor_board("2026")
+    comp_seq = [(r["rank"], r["account_id"], r["points"], r["events"])
+                for r in cb26["honor_board_competition"]]
+    dense_seq = [(r["rank"], r["account_id"])
+                 for r in hb26_hr["honor_board"]]
+    row_keys_hr = all(set(r.keys()) == {"rank", "account_id",
+                                        "points", "events"}
+                      for r in cb26["honor_board_competition"])
+    le_dense = all(c[0] <= d[0] for c, d in zip(comp_seq, dense_seq))
+    ok_hr2 = (comp_seq == [(1, "usr:alice", 18, 4),
+                           (2, "usr:bob", 12, 3),
+                           (3, "usr:aaron", 7, 2),
+                           (3, "usr:carol", 7, 2),
+                           (5, "usr:dave", 2, 1)]
+              and row_keys_hr and le_dense
+              and dense_seq == [(1, "usr:alice"), (2, "usr:bob"),
+                                (3, "usr:aaron"), (4, "usr:carol"),
+                                (5, "usr:dave")])
+    record("AC-HR2", ok_hr2, "tie world %s: aaron/carol share"
+          " rank 3 and the next distinct value skips to 5 (1224"
+          " competition ranking); sequential board %s with"
+          " comp_rank <= sequential rank per row (tie members"
+          " hold a rank at or below their row index); row keys"
+          " exactly {rank, account_id, points, events}"
+          % (comp_seq, dense_seq))
+
+    # -- AC-HR3 single-source cross-validation -------------------------------
+    manual_hr = {}
+    for acc, pts in cvconn.execute(
+            "SELECT account_id, SUM(points) FROM civic_earns"
+            " WHERE at_day LIKE '2026-%' GROUP BY"
+            " account_id").fetchall():
+        manual_hr[acc] = int(pts)
+    comp_cross = all(
+        r["rank"] == 1 + sum(1 for v in manual_hr.values()
+                             if v > manual_hr[r["account_id"]])
+        for r in cb26["honor_board_competition"])
+    seq_equal = ([(r["account_id"], r["points"], r["events"])
+                 for r in cb26["honor_board_competition"]]
+                == [(r["account_id"], r["points"], r["events"])
+                    for r in hb26_hr["honor_board"]])
+    ok_hr3 = (comp_cross and seq_equal
+              and len(manual_hr) == len(cb26["honor_board_competition"]))
+    record("AC-HR3", ok_hr3, "per-row competition rank equals"
+          " 1 + manual-SQL count of strictly-greater totals on"
+          " all %d rows; the (account, points, events) row"
+          " sequence is byte-equal to honor_board (single-source"
+          " derivation, no second aggregation engine)"
+          % len(manual_hr))
+
+    # -- AC-HR4 live derivation: tie broken by a new earn --------------------
+    carol_min_id = cvconn.execute(
+        "SELECT MIN(earn_id) FROM civic_earns WHERE"
+        " account_id = 'usr:carol'").fetchone()[0]
+    aaron_max_id = cvconn.execute(
+        "SELECT MAX(earn_id) FROM civic_earns WHERE"
+        " account_id = 'usr:aaron'").fetchone()[0]
+    cv.earn_civic("usr:carol", "park-clean", "2026-10-12", "cc-pc2")
+    cb_live = cv.honor_board_competition("2026")
+    live_seq = [(r["rank"], r["account_id"], r["points"])
+                for r in cb_live["honor_board_competition"]]
+    ok_hr4 = (live_seq == [(1, "usr:alice", 18),
+                           (2, "usr:bob", 12),
+                           (3, "usr:carol", 9),
+                           (4, "usr:aaron", 7),
+                           (5, "usr:dave", 2)]
+              and int(carol_min_id) > int(aaron_max_id))
+    record("AC-HR4", ok_hr4, "live derivation with zero cached"
+          " counters: one new carol earn (7->9) breaks the tie -"
+          " carol holds rank 3 alone and aaron drops to rank 4,"
+          " board now %s; every carol earn row (min id %d) is"
+          " newer than all of aaron's (max id %d), so the tie"
+          " order never rode the insertion order"
+          % (live_seq, int(carol_min_id), int(aaron_max_id)))
+
+    # -- AC-HR5 pure-read law --------------------------------------------------
+    counts_hr0 = (_count(cvconn, "civic_behaviors"),
+                  _count(cvconn, "civic_earns"),
+                  _count(cvconn, "civic_rewards"),
+                  _count(cvconn, "civic_redeems"),
+                  _count(cvconn, "civic_grants"))
+    n_tx_hr0 = _count(conn, "ledger_tx")
+    cv.honor_board_competition("2026")
+    cv.honor_board_competition("2025")
+    cv.honor_board_competition("2030")
+    n_tx_hr1 = _count(conn, "ledger_tx")
+    counts_hr1 = (_count(cvconn, "civic_behaviors"),
+                  _count(cvconn, "civic_earns"),
+                  _count(cvconn, "civic_rewards"),
+                  _count(cvconn, "civic_redeems"),
+                  _count(cvconn, "civic_grants"))
+    src_hr = inspect.getsource(
+        CV.CivicPointsFace.honor_board_competition)
+    write_hits_hr = [w for w in ("INSERT", "UPDATE", "DELETE")
+                     if w in src_hr]
+    ok_hr5 = (counts_hr0 == counts_hr1 and n_tx_hr0 == n_tx_hr1
+              and not write_hits_hr)
+    record("AC-HR5", ok_hr5, "competition reads leave all five"
+          " civic tables unchanged (%s == %s) and ledger_tx"
+          " constant (%d==%d); method source carries zero"
+          " INSERT/UPDATE/DELETE statements (%s)"
+          % (counts_hr0, counts_hr1, n_tx_hr0, n_tx_hr1,
+             write_hits_hr))
+
+    # -- AC-HR6 determinism ----------------------------------------------------
+    dump_hr_a = json.dumps(cb_live, sort_keys=True)
+    dump_hr_b = json.dumps(cv.honor_board_competition("2026"),
+                           sort_keys=True)
+    ok_hr6 = dump_hr_a == dump_hr_b
+    record("AC-HR6", ok_hr6, "double json.dumps of the competition"
+          " board is byte-identical; the tie world resolved by"
+          " account_id ASC (AC-HR2 aaron before carol despite"
+          " later insertion) - fully deterministic sort keys,"
+          " zero RNG, zero time keys, zero insertion-order keys")
+
+    # -- AC-HR7 hard laws + grant-slice judgment carriage --------------------
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_hr = h.read()
+    non_ascii_hr = sum(1 for ch in src_hr if ord(ch) > 127)
+    banned_hr = [w for w in BANNED_VERBS if w in src_hr]
+    grant_absent_hr = (not hasattr(cv, "grant_year_honors")
+                       and not hasattr(cv, "honor_roll_grant"))
+    judgment_in_src = "ROW-COUNT-BASED" in inspect.getsource(CV)
+    ok_hr7 = (non_ascii_hr == 0 and not banned_hr
+              and "random" not in src_hr and cfg_hr == cfg_bytes
+              and grant_absent_hr and judgment_in_src)
+    record("AC-HR7", ok_hr7, "method source pure ASCII (%d"
+          " non-ascii), zero circulation verbs (%s), zero RNG;"
+          " shipped config.json byte-stable; zero grant verbs on"
+          " this face (%s) - the top-N certificate slice stays"
+          " ROW-COUNT-BASED in honorcert (grant judgment carried"
+          " in the module canon)" % (non_ascii_hr, banned_hr,
+                                     grant_absent_hr))
 
     conn.close()
     cvconn.close()
