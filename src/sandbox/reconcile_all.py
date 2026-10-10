@@ -462,6 +462,18 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-apimarket",
      os.path.join("ledger", "test_apimarket.py"), 7),
+    # R1764 explore-queue row: city public dataset subscription
+    # face - window law (monthly YYYY-MM / quarterly YYYY-QN, \Z
+    # hard anchor per the R1748 lesson) + one-spend-per-
+    # (account,dataset,window) subscription idempotency (the
+    # observation R623 monthly-window judgement reused) +
+    # permission-gate delivery with re-download voucher rows and
+    # structural de-identification (the reports R627 law: the
+    # delivered bundle carries exactly the descriptor key set,
+    # zero foreign SELECT); platform-side registration posture
+    # (AC-DSB1..DSB7 pre-registered in state/queue/explore.md).
+    ("ledger-datasub",
+     os.path.join("ledger", "test_datasub.py"), 7),
 ]
 
 FAILS = 0

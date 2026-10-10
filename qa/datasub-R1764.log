@@ -1,0 +1,18 @@
+PASS AC-DSB1: register rows 1->2 idem=True conflict=True ai=0/1 badargs=9/9 unknown=True/True
+PASS AC-DSB2: edges 01/12/Q1 ok; monthly-bad 12/12 quarterly-bad 6/6 cross-period True/True; rows 3==2+1
+PASS AC-DSB3: carol -99 spend 1; dup-window=True dup-ref=True zero charge (b 201==201==201); other window -99 tx distinct; unknown=True ledger-reject=True rows 5==5
+PASS AC-DSB4: not-subscribed=True rows 0->1(redeliver 2, dup-unchanged 2) dup-ref=True bad-window=True ledger_tx 9==9 (zero token movement)
+PASS AC-DSB5: bundle key-set exact=True foreign-SELECT lines=0 notice-first/last=True
+PASS AC-DSB6: empty-disclaimer=True envelopes=True ai view 0/1=True ai_label=2 db-check=True
+PASS AC-DSB7: clean balanced=True subs=4 billed=396; orphan-injection flip=True named; post-rollback balanced=True; ascii=True upd/del-execute-lines=0 net=True rng=True config-stable=True independent-db=True
+
+SUITE PASS 7/7
+PASS generated docs/sandbox-suite-matrix.md (8115 bytes) - registry suites=72 criteria=713 evidence=qa/reconcile-all-R1764.log green=72/72
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8115 bytes, 72 suites, 713 criteria)
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

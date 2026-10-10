@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T02:17:00+08:00",
+ "export_ts": "2026-10-11T02:34:32+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1763 一件事：给开发者生态又交付一块能跑的实物——API 市场上架面：只有注册开发者能上架服务、上架文字先过内容安全闸才入库、买家购买自动按 70/30 整数分账（一分钱都不舍入）、只有真买过的人能打分。全部 71 个沙箱套件 706 条判据回归全绿。",
-  "latest_artifact": "最近实物：src/sandbox/ledger/apimarket.py+test_apimarket.py（SUITE 7/7）+qa/apimarket-R1763.log+qa/reconcile-all-R1763.log（RUNNER PASS 71/71）+软著材料 docs/copyright/name-pending/ 仍等 CEO 定名",
-  "next_milestone": "下轮起：P3 探索队列续挖（城市数据订阅面等 8 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
+  "current": "R1764 一件事：给城市数据商业化又交付一块能跑的实物——城市公开数据集订阅面：数据集分月刊/季刊两档注册，居民按窗口订阅（每个账号每个窗口只收一次钱、重复订阅在扣费前就拒绝、余额不够一分钱不扣），订阅后按窗口交付脱敏数据包（没订阅的拿不到、可反复下载、包里只有统计描述符没有原始行数据）。全部 72 个沙箱套件 713 条判据回归全绿。",
+  "latest_artifact": "最近实物：src/sandbox/ledger/datasub.py+test_datasub.py（SUITE 7/7）+qa/datasub-R1764.log+qa/reconcile-all-R1764.log（RUNNER PASS 72/72）+软著材料 docs/copyright/name-pending/ 仍等 CEO 定名",
+  "next_milestone": "下轮起：P3 探索队列续挖（居民提案联署/活动门票/开发者免费试用等 7 项在册）；软著正式申请仍等两前置（平台名 CEO 定+服务器到位）；每日对账常设照跑——窗 ≤48h=2026-10-13"
  },
  "depts": [
   {
@@ -303,7 +303,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1763",
+   "1764",
    "OSLoop 执行 tick"
   ],
   [
@@ -3154,15 +3154,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 25,
+  "log_lines_in_window": 27,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
   "queue_tech_open": 5,
-  "queue_explore_open": 8,
+  "queue_explore_open": 7,
   "method": "R1763 apimarket face delivery (SUITE 7/7 + RUNNER PASS 71/71 suites 706 criteria zero-regression + matrix 71/706 --check byte-identical, qa/apimarket-R1763.log)"
  }
 }
