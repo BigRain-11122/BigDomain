@@ -1,0 +1,63 @@
+=== S1 pre-surgery gauge (round R1762, first tool-native fold live execute per AC-LT10; R1761 carry-note triggered) ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 79368,
+  "gate": 78500,
+  "log_lines": 27,
+  "log_content_bytes": 76397,
+  "margin_bytes": -868,
+  "fold_needed": true,
+  "tick": 1761
+}
+
+=== S2 dry-run #1 (summary v1 too heavy: predicted 75568 + reserve 3000 = 78568 > 78500 -> gate-exceed abort face exercised) ===
+key fields: window_lines=4, window_content_bytes=5965, token_missing=[] token_ok=true,
+gate_ok=false, predicted_bytes=75568, reserve_bytes=3000, would_fail=["gate-exceed"]
+action: summary trimmed ~250B (evidence-anchored cuts only; token set unchanged 11/11)
+
+=== S3 dry-run #2 (trimmed summary, all green) ===
+{
+  "mode": "dry-run", "round": "R1762", "fold_no": "481", "window_mode": "tail",
+  "window_start": 24, "window_end": 27, "window_lines": 4, "window_content_bytes": 5965,
+  "preop_sha16": "9446deeabfc5b6e7",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1762.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1762 fold append (2026-10-11, 4 lines verbatim: tail-4 window: R1760 fold-R480 closeout pair + R1761 sentinel-adoption closeout pair, fold R481 window, pre-op sha16 9446deeabfc5b6e7)",
+  "pre_bytes": 79368, "new_log_len": 24, "token_missing": [], "token_ok": true,
+  "gate_ok": true, "predicted_bytes": 75380, "reserve_bytes": 3000, "gate": 78500, "would_fail": []
+}
+window tokens (11, mechanically extracted, all embedded in summary, zero loss):
+AC-PD5F1|AC-PD5F3|AC-SR1|D-20260930-19|D-20261011-03|O-LIVE-TIE|P-32|P-47|P-56|P-74|T-CLEAN
+(O-LIVE-TIE/T-CLEAN = NO-LIVE-TIE/DRIFT-CLEAN excerpt pseudo-tokens mechanically embedded
+ to prevent re-report; O-RAISE R1748 precedent)
+
+=== S4 execute (verify-then-write four-step hard order per AC-LT10) ===
+{
+  "mode": "execute", "post_bytes": 75380, "predicted_eq_actual": true,
+  "appendix_bytes": 6159, "archive_appended": true, "backup_written": true,
+  "token_ok": true, "gate_ok": true, "would_fail": []
+}
+pre-op backup: logs/state-preop-R1762.bak (sha16 9446deeabfc5b6e7, byte-identical read-back)
+archive append: 4 lines verbatim under header (single write, size delta == appendix)
+
+=== S5 post-surgery gauge ===
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 75380, "gate": 78500, "log_lines": 24, "log_content_bytes": 72472,
+  "margin_bytes": 3120, "fold_needed": false, "tick": 1761
+}
+
+=== S6 census post-check (section integrity) ===
+sections_total: 398 (10-month file 206 + 09-month file 192)
+section_line_mismatches: 1 -> known adjudicated R1317 (R1314 line-split era artifact,
+  content byte-preserved; in-file census_known_findings.json, NOT a new failure)
+dangling: known adjudicated items only (R1192/R601 family), zero new
+new section R1762: NOT flagged -> declared 4 == actual 4, clean
+census exit 0 (faces 1+2 green under known-findings regime)
+note: census direct console run hits GBK encode error (PS5.1 dialect); rerun via
+python subprocess with PYTHONIOENCODING=utf-8, captured to .codely-cli/tmp/census481.txt
+(UTF-16LE `>` redirect trap avoided per R1684 platform-pit precedent)
+
+verdict: fold R481 closed tool-native (first live --execute of the fold subcommand;
+R1687 delivered, R1690 declared "next water-over-gate round live execute main gate",
+R1762 fulfills). Water 79368B -> 75380B (margin +3120B under gate). Log 27 -> 24 lines.
