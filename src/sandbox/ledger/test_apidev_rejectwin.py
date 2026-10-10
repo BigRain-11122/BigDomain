@@ -226,9 +226,13 @@ def main():
                   code_gate))
 
         # -- AC-RJW2 bad window shapes fail closed --------------------
+        # R1748 anchor hardening: the trailing-newline form is the
+        # gap form (pre-fix '$' accepted it); space/CR tails are
+        # regression guards (already rejected by '$').
         bad_shapes = ["2026-13", "2026-00", "2026-1", "2026/10",
                       "2026", "202610", "abcd", "",
-                      2026, True, 2.5]
+                      2026, True, 2.5,
+                      "2026-10\n", "2026-10 ", "2026-10\r"]
         n_before = _reject_count(rj_conn)
         codes = []
         for shape in bad_shapes:
@@ -242,7 +246,7 @@ def main():
         all_bad = all(c == D.E_AD_BAD_ARGS for c in codes)
         rjw2 = (all_bad and n_after == n_before)
         record("AC-RJW2", rjw2,
-               "11 bad shapes (%s) all -> E_AD_BAD_ARGS on an"
+               "14 bad shapes (%s) all -> E_AD_BAD_ARGS on an"
                " in-register key; empty string is NOT the default"
                " sentinel (only None is); reject rows %d==%d"
                " zero side effects"

@@ -152,8 +152,11 @@ NON_ADVISORY = ("non-advisory notice: open API is a compute +"
 
 # explicit-window read format for the reject-tally public face:
 # exactly YYYY-MM with month 01..12 (None on the face means the
-# current UTC month, the byte-stable default)
-_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+# current UTC month, the byte-stable default). The \Z strict end
+# anchor rejects a trailing newline: Python's '$' would accept
+# "2026-10\n", which passes the gate and silently reads an empty
+# account instead of failing closed (R1748 anchor hardening).
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 # read-face status names (human-facing) for terminal lifecycle
 # events; the event names themselves stay compact in the store

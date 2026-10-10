@@ -20,7 +20,7 @@ explicit-window envelope adds an additive "window" key
 key-drift-free); the key gate fires before the window gate
 (call-chain key-gate-first law) and the limit gate before the
 window gate (deterministic parameter gate order, probed with a
-double-bad call); 11 bad window shapes reject E_AD_BAD_ARGS
+double-bad call); 14 bad window shapes reject E_AD_BAD_ARGS
 fail-closed with zero rows read (empty string is a bad shape,
 only None is the default sentinel); window-filtered reads
 stay read-only (zero api_calls rows written) and dead keys
@@ -241,21 +241,25 @@ def main():
                   det_dbl))
 
         # -- AC-UW2 bad window shapes fail-closed ----------------------
+        # R1748 anchor hardening: the trailing-newline form is the
+        # gap form (pre-fix '$' accepted it); space/CR tails are
+        # regression guards (already rejected by '$').
         calls_before = _call_count(conn)
         codes = []
         oks = []
         for bad in ("2026-13", "2026-00", "2026-1", "2026/10",
-                    "2026", "202610", "abcd", "", 2026, True, 2.5):
+                    "2026", "202610", "abcd", "", 2026, True, 2.5,
+                    "2026-10\n", "2026-10 ", "2026-10\r"):
             ok_bad, code_bad, _d2 = expect_ad_error(
                 lambda b=bad: dk.usage_log(k10["api_key"], 0, b),
                 D.E_AD_BAD_ARGS)
             oks.append(ok_bad)
             codes.append(code_bad)
         calls_after = _call_count(conn)
-        uw2 = (all(oks) and codes == [D.E_AD_BAD_ARGS] * 11
+        uw2 = (all(oks) and codes == [D.E_AD_BAD_ARGS] * 14
                and calls_after == calls_before)
         record("AC-UW2", uw2,
-               "11 bad shapes -> %s (api_calls %d==%d, zero rows"
+               "14 bad shapes -> %s (api_calls %d==%d, zero rows"
                " read); empty string is NOT the default sentinel"
                " (only None is)" % (codes, calls_after,
                                     calls_before))

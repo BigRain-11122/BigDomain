@@ -1,0 +1,110 @@
+--- probe: pre-fix gap anchor (R1748 AC-WA2) --- 
+REGEX _WINDOW_RE pattern: ^\d{4}-(0[1-9]|1[0-2])$
+REGEX match '2026-10\n' -> True
+REGEX match '2026-10 ' -> False
+REGEX match '2026-10\r' -> False
+REGEX match '2026-10' -> True
+PROBE reject_tally      trailing-newline NO-RAISE window='2026-10\n' total=0
+PROBE reject_tally      trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE reject_tally      trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_log         trailing-newline NO-RAISE window='2026-10\n' total=None
+PROBE usage_log         trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_log         trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_kind_tally  trailing-newline NO-RAISE window='2026-10\n' total=0
+PROBE usage_kind_tally  trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_kind_tally  trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE DONE
+--- probe: post-fix anchor (R1748 AC-WA2/WA3) --- 
+REGEX _WINDOW_RE pattern: ^\d{4}-(0[1-9]|1[0-2])\Z
+REGEX match '2026-10\n' -> False
+REGEX match '2026-10 ' -> False
+REGEX match '2026-10\r' -> False
+REGEX match '2026-10' -> True
+PROBE reject_tally      trailing-newline RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE reject_tally      trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE reject_tally      trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_log         trailing-newline RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_log         trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_log         trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_kind_tally  trailing-newline RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_kind_tally  trailing-space   RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE usage_kind_tally  trailing-CR      RAISE E_AD_BAD_ARGS (window must be None or YYYY-MM)
+PROBE DONE
+--- anchor diff: apidev.py single-line (R1748 AC-WA1) --- 
+diff --git a/src/sandbox/ledger/apidev.py b/src/sandbox/ledger/apidev.py
+index 1e7b95c..10887e2 100644
+--- a/src/sandbox/ledger/apidev.py
++++ b/src/sandbox/ledger/apidev.py
+@@ -152,8 +152,11 @@ NON_ADVISORY = ("non-advisory notice: open API is a compute +"
+ 
+ # explicit-window read format for the reject-tally public face:
+ # exactly YYYY-MM with month 01..12 (None on the face means the
+-# current UTC month, the byte-stable default)
+-_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
++# current UTC month, the byte-stable default). The \Z strict end
++# anchor rejects a trailing newline: Python's '$' would accept
++# "2026-10\n", which passes the gate and silently reads an empty
++# account instead of failing closed (R1748 anchor hardening).
++_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
+ 
+ # read-face status names (human-facing) for terminal lifecycle
+ # events; the event names themselves stay compact in the store
+
+ 
+--- suites: three window-family suites post-fix (R1748 AC-WA4) --- 
+PASS AC-RJW1: default read window=2026-10 by_reason={'E_AD_QUOTA': 2} total=2 (manual SQL equal), envelope exactly ['api_key', 'by_reason', 'disclaimer', 'key_name', 'total', 'window'], key gate before window gate: unknown key + bad window -> E_AD_UNKNOWN_KEY
+PASS AC-RJW2: 14 bad shapes (['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS']) all -> E_AD_BAD_ARGS on an in-register key; empty string is NOT the default sentinel (only None is); reject rows 2==2 zero side effects
+PASS AC-RJW3: fixture-injected 2026-09 rows read back by_reason={'E_AD_KIND': 1, 'E_AD_RATE': 2} total=3; future 2026-11 honest empty read {}/0; window separation: default stays {'E_AD_QUOTA': 2} (no historical penetration), historical read has no current-month keys (E_AD_QUOTA absent)
+PASS AC-RJW4: key_view reject_tally={'E_AD_QUOTA': 2}, dev_board row={'E_AD_QUOTA': 2}, board merged total={'E_AD_QUOTA': 2} (manual all-key SQL equal=True), zero historical penetration; source signatures window-free: key_view=True dev_board=True
+PASS AC-RJW5: revoked dead key: current={'E_AD_REVOKED': 1} historical={'E_AD_RATE': 1} (read open); rotated_out dead key: current={'E_AD_QUOTA': 1} historical={'E_AD_KIND': 1} (read open); successor fresh historical read={}/0
+PASS AC-RJW6: explicit 2026-09 read == manual SQL equal; clock +23d month roll: default follows to 2026-11 by_reason={'E_AD_QUOTA': 1} (manual SQL equal), old 2026-10 explicit read intact {'E_AD_QUOTA': 2}, old 2026-09 explicit read intact {'E_AD_KIND': 1, 'E_AD_RATE': 2}, all-time rows 6 (2+3+1) never lost
+PASS AC-RJW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, close() shuts all three=True; reconcile_all SUITES row registered=True (ledger-apidev-rejectwin / 7 criteria); 6 prior criteria all green=True
+SUITE apidev-rejectwin: 7/7 criteria pass
+PASS AC-UW1: default envelope keys=['api_key', 'calls', 'disclaimer'] (3-key set), 10 rows in ascending order=True (manual SQL cross-check True), row fields=['call_ref', 'called_utc', 'engine_ref', 'kind', 'window']; unknown key + bad window -> E_AD_UNKNOWN_KEY (key gate first); double-bad limit+window -> E_AD_BAD_ARGS detail='limit must be an integer >= 0' (limit gate before window gate)
+PASS AC-UW2: 14 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 10==10, zero rows read); empty string is NOT the default sentinel (only None is)
+PASS AC-UW3: fixture-injected 2026-09 rows read back=True (manual SQL equal=True, all window=2026-09); future 2026-11 honest empty read calls=[]; separation: default full read keeps 10 rows (historical included=True), historical read has zero current-month rows
+PASS AC-UW4: window=2026-10 over 6 in-window rows (all-months=10): limit=3 -> total=6 (in-window, NOT 10) returned=3 truncated=True, rows=['UW-A-04', 'UW-A-05', 'UW-A-06'] == mirror SQL ['UW-A-04', 'UW-A-05', 'UW-A-06'] == ascending tail ['UW-A-04', 'UW-A-05', 'UW-A-06']; limit=50 -> returned=6 truncated=False; limit=6==total -> truncated=False; explicit-window envelope keys=['api_key', 'calls', 'disclaimer', 'limit', 'returned', 'total', 'truncated', 'window'] (additive window key)
+PASS AC-UW5: zero-row window + limit=3: calls=[] total=0 returned=0 truncated=False window=2026-10; zero-row window + limit=0: calls=[] keys=['api_key', 'calls', 'disclaimer', 'window']; limit=1: returned=1 truncated=True tail=['UW-A-06']
+PASS AC-UW6: window-filtered reads leave api_calls 10==10; revoked key window read open (3 rows, capped total=3 returned=2 truncated=True), rotated-out key window read open (2 rows, capped total=2 returned=1)
+PASS AC-UW8: month roll (frozen clock +23d): October cap exhausted first (E_AD_QUOTA on 4th call), November calls succeed = quota ring rolled with _window_utc; default all-months read carries both months rows=5 (['UW-M-01', 'UW-M-02', 'UW-M-03', 'UW-N-01', 'UW-N-02'], manual SQL equal=True, record-time 2026-11 stamps=2, envelope keys=['api_key', 'calls', 'disclaimer']); old 2026-10 explicit read intact rows=['UW-M-01', 'UW-M-02', 'UW-M-03'] (quota-rejected call left zero rows, manual equal=True); new 2026-11 explicit read rows=['UW-N-01', 'UW-N-02'] (manual equal=True, zero October penetration); k10 2026-10 rows=6 unchanged, k10 2026-09 fixture rows=4 unchanged, k10 all-months=10; orthogonal cap read after roll: limit=1 window=2026-11 -> total=2 (in-window, NOT 5) returned=1 truncated=True tail=['UW-N-02'] == mirror SQL ['UW-N-02']; all-time rows=5 (3+2, immutable rows never lost)
+PASS AC-UW7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, window face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 7 prior criteria all green=True
+SUITE apidev-usagewin: 8/8 criteria pass
+PASS AC-UK1: default envelope keys=['api_key', 'by_kind', 'disclaimer', 'key_name', 'total', 'window'] (reject_tally mirror 6-key set), window=2026-10, by_kind={'backtest': 4, 'visualize': 2} (manual SQL equal=True), total=6; unknown key + bad window -> E_AD_UNKNOWN_KEY (key gate first)
+PASS AC-UK2: 14 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 9==9, zero rows read); empty string is NOT the default sentinel (only None is)
+PASS AC-UK3: fixture-injected 2026-09 rows read back={'backtest': 2, 'visualize': 1} (manual SQL equal=True total=3); future 2026-11 honest empty by_kind={} total=0; separation: default current-month by_kind={'backtest': 4, 'visualize': 2} (zero historical permeation), historical read excludes current rows
+PASS AC-UK4: single-kind key counts only its own kind: by_kind={'visualize': 2} (manual SQL equal=True, zero phantom backtest); zero-row key honest empty={} total=0; total==sum(by_kind) law on all four reads=True
+PASS AC-UK5: key_view usage_kind_tally={'backtest': 4, 'visualize': 2} additive (prior key set preserved=True), dev_board rows all carry usage_kind_tally (uk-full={'backtest': 4, 'visualize': 2}), board merged total={'backtest': 4, 'visualize': 4} (manual all-key SQL equal=True), zero historical penetration; source signatures window-free: key_view=True dev_board=True
+PASS AC-UK6: kind-tally reads leave api_calls 11==11; revoked key face open by_kind={'backtest': 2, 'visualize': 1} (explicit hist window 2026-09 open empty={}); rotated-out key face open by_kind={'backtest': 2}, successor tally={} (own rows only, zero ancestor inheritance)
+PASS AC-UK8: month roll (frozen clock +23d): October cap exhausted first (E_AD_QUOTA on 4th call), November calls succeed = quota ring rolled with _window_utc; default read follows to 2026-11 by_kind={'backtest': 1, 'visualize': 1} (manual SQL equal=True, record-time window stamp rows=2, envelope keys=['api_key', 'by_kind', 'disclaimer', 'key_name', 'total', 'window']); old 2026-10 explicit read intact {'backtest': 3} (quota-rejected call left zero rows), k10 2026-10 intact {'backtest': 4, 'visualize': 2}, k10 2026-09 fixture intact {'backtest': 2, 'visualize': 1}; all-time rows=5 (3+2, immutable rows never lost)
+PASS AC-UK7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, kind face exported=True, reconcile_all SUITES row registered=True, close() shuts all three connections=True; suite self-carrier: 7 prior criteria all green=True
+SUITE apidev-usagekind: 8/8 criteria pass
+ 
+--- regression: RUNNER full (R1748 AC-WA4, full log = qa/reconcile-all-R1748.log) --- 
+RUNNER PASS (65/65 suites green, reconcile controls 7/7, 173.0s) exit=0 
+PASS generated docs/sandbox-suite-matrix.md (7622 bytes) - registry suites=65 criteria=652 evidence=qa/reconcile-all-R1748.log green=65/65
+PASS hygiene: pure-ascii source, zero network imports
+ 
+--- matrix --check byte-identical (x2) --- 
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7622 bytes, 65 suites, 652 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (7622 bytes, 65 suites, 652 criteria)
+ 
+--- fingerprint sentinel --check (schema untouched) --- 
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+ 
+--- hygiene: git status + config byte-stability (R1748 AC-WA5) --- 
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/ledger/apidev.py
+ M src/sandbox/ledger/test_apidev_rejectwin.py
+ M src/sandbox/ledger/test_apidev_usagekind.py
+ M src/sandbox/ledger/test_apidev_usagewin.py
+ M state/queue/tech.md
+?? qa/apidev-window-anchor-R1748.log
+?? qa/reconcile-all-R1748.log
+
+shipped config.json bytes: 
+2320
