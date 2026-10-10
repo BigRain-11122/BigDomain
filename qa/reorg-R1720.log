@@ -1,0 +1,11 @@
+--- fold R467 evidence (R1720, tail-8 window R1716..R1719 pairs) ---
+pre_bytes=79791 gate=78500 predicted=75161 post=75161 new_log_len=22 reserve=3000 gate_ok=true token_ok=true
+window=R1716 main+tokens / R1717 main+tokens / R1718 main+tokens / R1719 main+tokens (8 lines 10128B -> 1 roll line kept=0)
+
+AC-R4671 preop backup PASS logs/state-preop-R1720.bak (preop sha16 a17f969a7480b183, backup_written=true)
+AC-R4672 verify-then-write PASS post==predicted 75161B (execute output predicted_eq_actual=true, margin_bytes=3339)
+AC-R4673 gauge+eol PASS fold_needed=false disk=75161B margin=3339B; layout_ok=true indent_ok=true bare_lf=0 (22 item lines all 16-space)
+AC-R4674 dual parser PASS py log_len=22; PS ConvertFrom-Json log.Count=22 (with -Encoding UTF8; first-run false alarm root-caused: PS5.1 Get-Content without -Encoding reads no-BOM UTF-8 as ANSI/GBK = mojibake pseudo-defect, known PS5.1 encoding law; honest note)
+AC-R4675 archive verbatim PASS 8/8 window lines in R1720 append section (archive_appended=true)
+AC-R4676 catalog zero-loss PASS tokens=26 missing=0 (26 window tokens all literally embedded in roll line)
+ALL AC-R4671..R4676 PASS

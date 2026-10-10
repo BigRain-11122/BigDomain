@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T07:56:41+08:00",
+  "export_ts": "2026-10-10T08:14:12+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1719 W15 authorization report face closed-loop (P2 tech queue head, R1718 successor; AC-AZ1..AZ7 pre-registered in tech.md claim row before code): src/sandbox/pay/authorize.py AuthorizeFace wraps the caller-built PayNotifyFace (pay-domain bearer; lobby forwarding rejected - ephemeral lobby actors key dead budget + forgeable identity). Gate order = identity E_AZ_BAD_ARGS -> template registered/approved fail-closed (unapproved = zero grant rows, honest pending) -> grant_type -> request_id idempotent replay (already_granted) -> longterm already-granted no-op (already_longterm = W15 always-keep popup suppression) -> grant via notify.grant_authorization; notify.py adds additive public read budget_face. Suite first run exposed a true defect and root-fixed it: same-second grant_id hash PK collision (W15 re-accept) -> deterministic salt-suffix retry (zero RNG, append-only). End-to-end closure (wired R1718 world): authorized avatar pays -> envelope notify sent (budget truly consumed = the W15 gap closed); unauthorized -> skipped_no_budget (banner queue); once-type second order exhausts the unit; longterm double orders both sent. SUITE 7/7 + RUNNER PASS 53/53 suites 561 criteria controls 6/6 93.9s zero-regression (pay-notify + pay-notify-wiring re-green) + matrix 53/561 --check byte-identical",
-    "latest_artifact": "最近实物：W15 授权动作面（2026-10-10·R1719 交付·可跑实物计 2）：src/sandbox/pay/authorize.py 授权报告 face+notify.py budget_face 公开读+同秒 grant_id 去撞根修（套件首跑揪出的真缺陷）——W15 授权→预算账→R1718 接线支付通知消费，授权流断点闭合端到端实证；套件 test_authorize.py 7/7 全绿·证据 qa/authorize-R1719.log（套件+回归+矩阵三节）",
-    "next_milestone": "下轮=tech 队头序推进（watermark 缩放族未知缩放因子恢复扩展面〔R1707 后继·非整数因子 {0.7/0.85/1.1/1.5}× 模板对位实测〕+suite_matrix live mtime 归一态实证窗〔R1709 后继〕+apidev 拒因分类计数读面）；窗口 ≤48h（2026-10-12 前）"
+    "current": "R1720 fold R467 watermark reorg (mechanism round, score 1 = ledger maintenance): round-start 79791B over the 78500B line by 1291B -> tail-8 window [R1716..R1719 four round pairs] 8 lines 10128B compressed to 1 rolling summary line kept=0; verify-then-write post==predicted 75161B margin 3339B; catalog 26 tokens all literally embedded zero-loss; archive section R467 verbatim 8/8 + preop backup logs/state-preop-R1720.bak (sha16 a17f969a7480b183); AC-R4671..R4676 = qa/reorg-R1720.log; dual parser py+PS green (first-run PS false alarm root-caused: Get-Content without -Encoding UTF8 reads no-BOM UTF-8 as ANSI = mojibake pseudo-defect, known PS5.1 encoding law, honest note)",
+    "latest_artifact": "最近实物：fold R467 水位整编件（2026-10-10·R1720 交付·台账维护机制件计 1）：state.json 79,791B→75,161B（log 29→22 项）+archive §R467 节 8 行 verbatim 全量保全+preop 备份件+catalog 26 token 零丢失+六项 AC 证据 qa/reorg-R1720.log——水位闸机制第 467 刀，滚窗并折链（R1716..R1719 四轮对）保持台账可读性与磁盘水位双达标",
+    "next_milestone": "下轮=P2 队头 close_refund 权益回收联动面（R1718 后继：refund 闭单后 entitlement 行回收语义——member 域 entry_tier/grants_for 消费面+判据预注册窗〔回收=撤销激活还是标记 refunded 态〕先行）；窗口 ≤48h（2026-10-12 前）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1719",
+      "1720",
       "OSLoop 执行 tick"
     ],
     [
@@ -2982,15 +2982,15 @@
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 21,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1719 flush caliber (checker single-source law): R1719 pair appended (substantive + tokens), log_lines_in_window 24 -> 26, substantive 9 -> 10; tick row 1718 -> 1719; queue_tech_open 10 -> 9 (pay-authorize done [x]) then +1 successor seed (notify longterm revoke face) -> 10"
+    "method": "R1720 flush caliber (checker single-source law): fold R467 replaced R1716..R1719 four pairs with one rolling line (not R-anchored) + R1720 pair appended -> log_lines_in_window 26-8+1+2=21, substantive 10-4+1=7; tick row 1719->1720; queue_tech_open 10 flat (fold = standing-line slice, no tech row claimed; close_refund stays head for next round)"
   }
 }
