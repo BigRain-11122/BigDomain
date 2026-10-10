@@ -231,9 +231,10 @@ SUITES = [
     # attribution (rotation does not inherit ancestor kinds);
     # embedded faces (key_view, dev_board) gain the current-month
     # profile additively and stay window-free (AC-RJW4 law)
-    # (AC-UK1..UK7 pre-registered in state/queue/tech.md).
+    # (AC-UK1..UK7 pre-registered in state/queue/tech.md;
+    # AC-UK8 month-rollover truth-preservation R1738).
     ("ledger-apidev-usagekind",
-     os.path.join("ledger", "test_apidev_usagekind.py"), 7),
+     os.path.join("ledger", "test_apidev_usagekind.py"), 8),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

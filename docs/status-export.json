@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-10T14:30:09+08:00",
+  "export_ts": "2026-10-10T14:50:12+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1737 哨兵段时长入证面交付轮（P2 队头·R1735/R1736 承传点名兑现·轮计分 2=可跑实物）：reconcile_daily.py run_sentinel 尾行入 elapsed〔sentinel exit=N elapsed=X.Xs·AC-SN1〕+runner_profile.py daily 剖面哨兵段消费面〔SENTINEL_TAIL_RE parse 三态：新形 elapsed/legacy None/主面 None 惰性零漂移·render sentinel-segment 行仅非 None=主面逐字节不变·漂移执法 AC-RP4 家族式预注册沿用 drift iff cur>base+max(2.0s,0.5×base)·比对三态 FLAG 入 flagged/NEW-SEGMENT info/ABSENT info·baseline_dict 增键仅非 None=存量主/日双基线 --check byte-identical 零再冻结·双尾行 Refusal exit 3 fail-closed〕——AC-SN1..SN7 判据预注册先于代码〔tech.md 行在册〕·套件判据 6→8+8→12 全绿·RUNNER PASS 62/62 判据 630 controls 6/6 129.7s〔首跑 pd6 shipped-clean=False=改完未提交时序面如实注·代码面外科提交 1cf34f5 后复跑全绿〕·矩阵 62/630 green --check byte-identical·证据 qa/sentinel-elapsed-R1737.log 五节·tech open 10→9 后补种 1→10〔daily 基线哨兵段收养窗〕；export 实刷 tick 1737+sd (22,0,1,10)",
-    "latest_artifact": "最近实物：哨兵段时长入证面（2026-10-10 14:30·R1737·轮计分 2=可跑实物）：src/sandbox/reconcile_daily.py+runner_profile.py 两源交付+两套件扩面（fs7/fs8+sn1..sn4 新 6 判据·判据 6→8+8→12）+qa/sentinel-elapsed-R1737.log 五节证据+qa/reconcile-all-R1737.log RUNNER PASS 62/62 判据 630+docs/sandbox-suite-matrix.md 62 套件/630 判据矩阵再生；上一件可跑产品实物=R1735 apidev usage_kind_tally 窗计数读面（qa/apidev-usagekind-R1735.log）",
-    "next_milestone": "下轮=P2 队头=哨兵段时长入证面（R1715 后继·tech.md 次开项：run_sentinel 记录哨兵子进程 elapsed 入尾行〔sentinel exit=N elapsed=X.Xs〕+daily 剖面对哨兵段时长的消费面·阈值预注册先行）；窗口 ≤48h（2026-10-12 前）·轮首先测 fold R474（本轮收账后水位 70744B·margin 7756B 线下）·tech 后继族=by-kind 月滚动保真例/member refunded 态真读面 schema 变更窗/suite_matrix live mtime 归一态/观察窗转正判据预注册/notify longterm 撤销/watermark 0.7x refine/apidev 窗参数格式锚硬化"
+    "current": "R1738 apidev by-kind 月滚动保真例交付轮（P2 队头·R1737 承传点名兑现·轮计分 2=可跑实物）：AC-UK8 月滚动保真=新月窗执法先证〔kroll cap=3 十月满帽 E_AD_QUOTA+跨月 2 调成功=quota 环随 _window_utc 滚动清零〕+缺省读随钟入 2026-11〔by_kind==manual SQL·record-time 窗戳 2〕+旧月/历史月显式读原值保全+不可变行 5==3+2 永不丢失·AC-UK7 计数面跟随〔prior len 6→7+注册 regex 8〕·SUITE 8/8·判据 630→631·RUNNER PASS 62/62 controls 6/6 116.4s 零回归·哨兵 CLEAN domains=5·矩阵 62/631 --check byte-identical·tech open 10→9 后补种 1→10〔usage_log 窗过滤月滚例〕；export 实刷 tick 1738+sd (24,0,1,11)",
+    "latest_artifact": "最近实物：apidev by-kind 月滚动保真例（2026-10-10 14:48·R1738·轮计分 2=可跑实物）：src/sandbox/ledger/test_apidev_usagekind.py 新增 AC-UK8 月滚例（SUITE 8/8）+reconcile_all 判据 7→8〔总 631〕+qa/apidev-usagekind-roll-R1738.log 四节证据+qa/reconcile-all-R1738.log RUNNER PASS 62/62+docs/sandbox-suite-matrix.md 62 套件/631 判据矩阵再生；上一件可跑实物=R1737 哨兵段时长入证面（qa/sentinel-elapsed-R1737.log）",
+    "next_milestone": "下轮=P2 队头=apidev usage_log 窗过滤月滚动保真例（R1732 后继·tech.md 次开项：读面族窗参三成员月滚例对称补全——R1730 rejectwin 与 R1738 usagekind 两族在册·usage_log 独缺）；窗口 ≤48h（2026-10-12 前）·轮首 fold R474 首测裁定（本轮收账后水位 ~75.8KB 线下）·tech 后继族=notify longterm 撤销面/watermark 0.7x 恢复精化/apidev 窗参数格式锚硬化/daily 基线哨兵段收养窗（gated on 明日首个真实 elapsed daily 证据）"
   },
   "depts": [
     {
@@ -251,7 +251,7 @@
       "fold 中段窗支持件（P2 队头·AC-LT20..LT24 预注册先于代码：logs_toolkit.py fold --window-slice START:END 中段窗选择器+互斥/坏格式/界外误用面 exit 2+三段式手术〔prefix/suffix 逐字节保真+summary 逗号律〕+mid-window 档案头 census 兼容+plan 窗字段；套件 81→104 断言全绿；live 真窗 10:11 dry-run 探针 11 token 全嵌零突变=qa/logs-fold-slice-R1690.log·R1690）"
     ],
     [
-      "1737",
+      "1738",
       "OSLoop 执行 tick"
     ],
     [
@@ -3045,20 +3045,24 @@
     [
       "2",
       "哨兵段时长入证面（R1737·P2 队头·R1735/R1736 承传点名兑现·AC-SN1..SN7 预注册=tech.md 认领行先于代码：reconcile_daily.py run_sentinel 尾行入 elapsed〔time.monotonic 包测·sentinel exit=N elapsed=X.Xs·分节行/输出行/RECONCILE-DAILY 终行字段零改动〕+runner_profile.py daily 剖面哨兵段消费面〔SENTINEL_TAIL_RE parse 三态=新形 elapsed/legacy None/主面 None 惰性·render sentinel-segment 行仅非 None=主面逐字节不变·漂移执法 AC-RP4 家族式预注册沿用 drift iff cur>base+max(2.0s,0.5×base)·比对三态 FLAG 入 flagged/NEW-SEGMENT info/ABSENT info·baseline_dict 增键仅非 None=存量主/日双基线 --check byte-identical 零再冻结·双尾行 Refusal exit 3 fail-closed〕·套件判据 6→8〔fs7/fs8〕+8→12〔sn1..sn4〕全绿·RUNNER PASS 62/62 判据 630 controls 6/6 129.7s=qa/reconcile-all-R1737.log〔首跑 pd6 shipped-clean=False=改完未提交时序面如实注·代码面外科提交 1cf34f5 后复跑全绿〕·矩阵 62/630 green --check byte-identical·证据 qa/sentinel-elapsed-R1737.log 五节·tech open 10→9 后补种 1→10〔daily 基线哨兵段收养窗〕）"
+    ],
+    [
+      "2",
+      "apidev by-kind 月滚动保真例交付件（R1738·P2 队头·R1737 承传点名兑现·AC-UK8 预注册=tech.md 认领行先于代码：新月窗执法先证〔kroll cap=3 十月窗 3 调满帽第 4 调 E_AD_QUOTA·冻结钟 +23d 跨月后 backtest+visualize 2 调成功=quota 环随 _window_utc 滚动清零执法〕+缺省读（None）随钟入 2026-11 窗〔envelope 六键集沿 UK1 律·by_kind={backtest:1,visualize:1}==manual SQL 交叉验证·total==2·record-time 窗戳 SELECT 计 2〕+旧月 2026-10 显式读原值保全〔kroll={backtest:3} 帽拒调零行律·k10={backtest:4,visualize:2} total=6 零 11 月渗透〕+历史月 2026-09 fixture 原值保全〔k10={backtest:2,visualize:1}·不可变行永在〕+不可变行永不丢失〔kroll 全窗 api_calls 5==3+2 恒定〕·AC-UK7 计数面跟随〔prior len 6→7+注册面 regex criteria 7→8+docstring 族号〕·套件 test_apidev_usagekind.py SUITE 8/8 exit 0·reconcile_all SUITES ledger-apidev-usagekind 判据 7→8〔总 630→631〕·RUNNER PASS 62/62 controls 6/6 116.4s 零回归=qa/reconcile-all-R1738.log·指纹哨兵 verdict CLEAN domains=5·矩阵再生 62/631 green --check byte-identical〔7418B〕·证据 qa/apidev-usagekind-roll-R1738.log 四节·tech open 10→9 后补种 1→10〔usage_log 窗过滤月滚例=R1732 后继对称缺位〕）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-04..2026-10-10",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10,
-    "method": "R1737 product round (score 2): sentinel-elapsed evidence face delivered (reconcile_daily elapsed tail line + runner_profile daily sentinel-segment consumption, suites 6->8+8->12, RUNNER PASS 62/62 criteria 630, matrix regen byte-identical); in-window lines +2 (R1737 pair dated 2026-10-10) = 22; substantive +1 = 10; tech open 10->9 done -> reseed 1 (daily baseline sentinel adoption window) -> 10; tick row 1736 -> 1737"
+    "method": "R1738 product round (score 2): apidev by-kind month-rollover truth-preservation case delivered (AC-UK8 pre-registered first: quota-ring roll proof + default read follows clock to 2026-11 + old/historical explicit reads intact + immutable rows 5=3+2, suite 7->8, RUNNER PASS 62/62 criteria 631, sentinel CLEAN, matrix regen byte-identical); in-window lines +2 (R1738 pair dated 2026-10-10) = 24; substantive +1 = 11; tech open 10->9 done -> reseed 1 (usage_log window month-rollover symmetric gap) -> 10; tick row 1737 -> 1738"
   }
 }

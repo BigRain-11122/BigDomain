@@ -1,7 +1,7 @@
 """Acceptance suite for the apidev usage by-kind window-count
 read face (BigDomain R1735; canon = tech-queue "apidev usage
 by-kind window-count read" row, seed = usage_log window-filtered
-read R1732). Asserts the pre-registered criteria AC-UK1..AC-UK7
+read R1732). Asserts the pre-registered criteria AC-UK1..AC-UK8
 (the criteria were registered on the tech-queue claim row before
 this code ran; honesty law). Each criterion prints PASS/FAIL
 with evidence; the process exits non-zero on any FAIL.
@@ -400,6 +400,83 @@ def main():
                   HIST_WIN, rev_hist["by_kind"],
                   rot_old_t["by_kind"], rot_new_t["by_kind"]))
 
+        # -- AC-UK8 month-rollover truth-preservation (R1738) ---------
+        # quota-ring roll first (the same _window_utc source the
+        # kind tally reads through): a key capped out in October
+        # must accept calls again after the frozen clock crosses
+        # the month boundary.
+        kroll = dk.issue_key("usr:ada", "uk-roll", 3,
+                             ["backtest", "visualize"], False)
+        dk.buy_credits(kroll["api_key"], 10, 1, "PACK-UK-M")
+        _make_calls(dk, clock, kroll["api_key"], "UK-M", 3,
+                    "backtest")
+        ok_oct_q, code_oct_q, _d3 = expect_ad_error(
+            lambda: dk.call(kroll["api_key"], "backtest",
+                            "UK-M-04", "e"),
+            D.E_AD_QUOTA)
+        kroll_id = conn.execute(
+            "SELECT key_id FROM api_dev_keys"
+            " WHERE dev_account = ? AND key_name = ?",
+            ("usr:ada", "uk-roll")).fetchone()[0]
+        clock.advance(23 * 86400)
+        dk.call(kroll["api_key"], "backtest", "UK-N-01", "e")
+        dk.call(kroll["api_key"], "visualize", "UK-N-02", "e")
+        nov_win = "2026-11"
+        t_roll_def = dk.usage_kind_tally(kroll["api_key"])
+        manual_nov = _manual_kinds(conn, kroll_id, nov_win)
+        stamp_nov = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id = ? AND window = ?"
+            " AND call_ref LIKE 'UK-N-%'",
+            (kroll_id, nov_win)).fetchone()[0]
+        t_roll_oct = dk.usage_kind_tally(kroll["api_key"],
+                                         window="2026-10")
+        t_k10_oct = dk.usage_kind_tally(k10["api_key"],
+                                        window="2026-10")
+        t_k10_sep = dk.usage_kind_tally(k10["api_key"],
+                                        window=HIST_WIN)
+        all_time = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id = ?", (kroll_id,)).fetchone()[0]
+        uk8 = (ok_oct_q and code_oct_q == D.E_AD_QUOTA
+               and set(t_roll_def.keys())
+               == {"api_key", "key_name", "window", "by_kind",
+                   "total", "disclaimer"}
+               and t_roll_def["window"] == nov_win
+               and t_roll_def["by_kind"] == {"backtest": 1,
+                                            "visualize": 1}
+               and t_roll_def["by_kind"] == manual_nov
+               and t_roll_def["total"] == 2
+               and stamp_nov == 2
+               and t_roll_oct["by_kind"] == {"backtest": 3}
+               and t_roll_oct["total"] == 3
+               and t_k10_oct["by_kind"] == {"backtest": 4,
+                                            "visualize": 2}
+               and t_k10_oct["total"] == 6
+               and t_k10_sep["by_kind"] == {"backtest": 2,
+                                            "visualize": 1}
+               and t_k10_sep["total"] == 3
+               and all_time == 5)
+        record("AC-UK8", uk8,
+               "month roll (frozen clock +23d): October cap"
+               " exhausted first (%s on 4th call), November calls"
+               " succeed = quota ring rolled with _window_utc;"
+               " default read follows to %s by_kind=%s (manual"
+               " SQL equal=%s, record-time window stamp rows=%d,"
+               " envelope keys=%s); old %s explicit read intact"
+               " %s (quota-rejected call left zero rows), k10"
+               " %s intact %s, k10 %s fixture intact %s;"
+               " all-time rows=%d (3+2, immutable rows never"
+               " lost)" % (code_oct_q, t_roll_def["window"],
+                           t_roll_def["by_kind"],
+                           t_roll_def["by_kind"] == manual_nov,
+                           stamp_nov,
+                           sorted(t_roll_def.keys()),
+                           "2026-10", t_roll_oct["by_kind"],
+                           "2026-10", t_k10_oct["by_kind"],
+                           HIST_WIN, t_k10_sep["by_kind"],
+                           all_time))
+
         # -- AC-UK7 hygiene + delivery carriers ------------------------
         source = open(os.path.join(BASE, "apidev.py"), "r",
                       encoding="ascii").read()
@@ -425,7 +502,7 @@ def main():
         registered = re.search(
             r'\("ledger-apidev-usagekind",\s*'
             r'os\.path\.join\("ledger",\s*'
-            r'"test_apidev_usagekind\.py"\),\s*7\)',
+            r'"test_apidev_usagekind\.py"\),\s*8\)',
             runner_src) is not None
         dk.close()
         closed = []
@@ -439,7 +516,7 @@ def main():
                and is_ascii and not has_update and not has_rng
                and len(imports_net) == 0 and kind_face
                and registered
-               and len(RESULTS) == 6
+               and len(RESULTS) == 7
                and all(ok for _, ok in RESULTS)
                and closed == [True, True, True])
         record("AC-UK7", uk7,
