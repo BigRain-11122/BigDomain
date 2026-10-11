@@ -1,0 +1,38 @@
+== qa/apidev-devboard-roll-R1845.log (BigDomain R1845 evidence, tee dialect utf-8+LF) ==
+
+[1] suite first run (exit 0)
+PASS AC-DBR1: pre-roll anchor: 4th call -> E_AD_QUOTA (api_calls pair=3, reject_events 2026-10=1); board window=2026-10 envelope exact=True row envelope exact=True/True; rows=2 status rotated_out/active rotated_from None/1; quota_used 2/3 (ancestry inheritance visible), minute_used 2/3 (one frozen minute); reject_tally {}/{'E_AD_QUOTA': 1}, kind_tally {'backtest': 2}/{'backtest': 1}; totals {'E_AD_QUOTA': 1} + {'backtest': 3}; explicit old-window read own={1: 2, 2: 1} chain_total=3 effective=3
+PASS AC-DBR2: frozen clock +23d: panel window rolls 2026-10 -> 2026-11 (no-window-param face always reads current _window_utc); minute_window follows the clock ==2026-11-07T10:00 on both rows
+PASS AC-DBR3: honest re-domain BEFORE any new call: per-key quota_used 0/0, minute_used 0/0, reject_tally {}/{}, kind_tally {}/{} all zero in 2026-11; October quota reject row stays in the store (reject_events window 2026-10 COUNT=1, 2026-11 COUNT=0) yet never penetrates the new month panel tally (record-time attribution)
+PASS AC-DBR4: panel total keys reset with the re-domain: reject_tally_total={}, usage_kind_tally_total={} (window-scoped aggregation like the per-key faces, not lifetime counters)
+PASS AC-DBR5: old-month preservation: explicit chain_usage window=2026-10 byte-equal across the roll=True (own={1: 2, 2: 1} chain_total=3); window-scoped tally faces keep their values (_reject_tally roll-b 2026-10={'E_AD_QUOTA': 1}, _usage_kind_tally roll-p 2026-10={'backtest': 2}); immutable rows all preserved (api_calls pair=3 == pre-roll 3)
+PASS AC-DBR6: new-month re-compute: November call succeeds (quota ring rolled, no E_AD_QUOTA), record-time stamp window=2026-11 COUNT=1; panel recomputes roll-b quota_used=1 minute_used=1 kind_tally={'backtest': 1}, roll-p stays all-zero (0/0 {}); totals follow: kinds={'backtest': 1} rejects={}; all-time rows=4; October explicit read still byte-equal=True (two windows non-penetrating)
+PASS AC-DBR7: hygiene: apidev.py byte-stable across the run=True (dev_board face present=True), config.json byte-stable=True, suite source pure-ASCII=True, net-imports=0 (double-run byte-identity and the RUNNER / matrix / sentinel faces live in the round evidence log)
+SUITE apidev-devboard-roll: 7/7 criteria pass
+
+[2] double-run byte identity
+run1 sha256: 0F40D7F97E05F659514C2CC555BCC7A60FC385E3493AD9FB360822ED75CCBAAB
+run2 sha256: 0F40D7F97E05F659514C2CC555BCC7A60FC385E3493AD9FB360822ED75CCBAAB (byte-identical=True, 2244 bytes, zero RNG / zero timestamps in output)
+
+[3] reconcile_all full RUNNER regression (evidence qa/reconcile-all-R1845.log)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | SUITE apidev-devboard-roll: 7/7 criteria pass
+PASS suite ledger-apidev-devboard-roll exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suites 110/110 green, expected criteria total=1009
+RUNNER PASS (110/110 suites green, reconcile controls 7/7, 178.8s)
+
+[4] suite matrix regen + check (regen with explicit evidence, then --check)
+PASS generated docs/sandbox-suite-matrix.md (11230 bytes) - registry suites=110 criteria=1009 evidence=qa/reconcile-all-R1845.log green=110/110
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11230 bytes, 110 suites, 1009 criteria)
+
+[5] fingerprint sentinel (five domains, zero schema touch this round)
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

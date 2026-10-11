@@ -834,6 +834,20 @@ SUITES = [
     ("ledger-apidev-chainusage", os.path.join("ledger",
                                              "test_apidev_chainusage.py"),
      8),
+    # R1845 apidev dev_board month-rollover re-domain fidelity:
+    # the account-level no-window-param panel re-domains honestly
+    # when the frozen clock crosses the month boundary (window
+    # key rolls, per-key faces + both total keys honest all-zero
+    # before any new call, October quota reject row
+    # record-time-stamped in reject_events never penetrates the
+    # new-month panel tally, old month preserved as explicit
+    # window reads, November call re-computes the panel, immutable
+    # rows never lost) -- the panel symmetric case closing the
+    # month-roll family (AC-DBR1..DBR7 pre-registered in
+    # state/queue/tech.md; zero product bytes, pin-only suite)
+    ("ledger-apidev-devboard-roll", os.path.join("ledger",
+                                                "test_apidev_devboard_roll.py"),
+     7),
 ]
 
 FAILS = 0
