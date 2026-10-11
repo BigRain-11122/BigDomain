@@ -370,6 +370,29 @@ the row count stays 14 throughout; the [18] behavior face stays
 in-register, not repeated. Measurement face, R1727 precedent,
 not registered into SUITES. Zero product files touched.
 
+R1823 extension (sqlite_sequence AUTOINCREMENT high-water
+bookkeeping readback): the [19] honest table set already listed
+sqlite_sequence, the AUTOINCREMENT bookkeeping table - this
+section reads its body. The ever-max assigned id (seq) is a
+structural constant of the probe world: ids 1..25 were all
+assigned in operation order (nine real windows, the drift row 10,
+three fixture rows 11..13, the ghost row 14, then the
+inject-then-delete rounds consumed 15..25), so at the [19] end
+state seq is 25 while the live MAX(window_id) is 14 - the
+no-reuse guarantee read directly: deleted ids never return. The
+engine semantics were pinned empirically before this section
+landed (R1704 law; hw_precheck, SQLite 3.50.4: high-water never
+retreats across deletes; a fresh insert consumes seq+1). The
+section then demonstrates the consume-and-restore round: a fresh
+closed-set INSERT (delta '{}', total_delta 0 - the value faces
+stay untouched while the count face moves) consumes seq+1 == 26
+and advances the bookkeeping row to 26; deleting that row returns
+the 14-row world with the product faces back at their registered
+dicts while seq stays at 26 - the high-water never retreats, the
+no-reuse semantics read end to end. Measurement face, R1727
+precedent, not registered into SUITES. Zero product files
+touched.
+
 
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
@@ -2588,6 +2611,136 @@ def main():
         fail = fail or not (sk1_ok and sk2_ok and sk3_ok
                             and sk4_ok and sk5_ok)
 
+        # ---- [20] sqlite_sequence AUTOINCREMENT high-water
+        # bookkeeping readback (R1823; AC-HW1..HW5) --------------
+        # The [19] honest table set already lists sqlite_sequence
+        # (the AUTOINCREMENT bookkeeping table); this section reads
+        # its body. The ever-max assigned id (seq) is a structural
+        # constant of this probe world: ids 1..25 were all assigned
+        # in operation order (nine real windows, drift row 10,
+        # three fixture rows 11..13, ghost row 14, then the
+        # inject-then-delete rounds consumed 15..25), so at the
+        # [19] end state seq is 25 while the live MAX(window_id)
+        # is 14 - the no-reuse guarantee read directly (deleted
+        # ids never return). Engine semantics pinned empirically
+        # before this section landed (R1704 law; hw_precheck,
+        # SQLite 3.50.4: high-water never retreats across deletes,
+        # a fresh insert consumes seq+1). The consume-and-restore
+        # round: a fresh closed-set INSERT (delta '{}',
+        # total_delta 0 - value faces untouched, count face moves)
+        # consumes seq+1 == 26 and advances the bookkeeping row;
+        # deleting it returns the 14-row world, product faces back
+        # at their registered dicts, while seq stays at 26 - the
+        # high-water never retreats.
+
+        def hw_ro_rows(sql, args=()):
+            hw_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = list(hw_ro.execute(sql, args))
+            hw_ro.close()
+            return got
+
+        hw_pre_n = hw_ro_rows(
+            "SELECT COUNT(*) FROM water_windows")[0][0]
+        hw_seq_rows = hw_ro_rows(
+            "SELECT name, seq FROM sqlite_sequence")
+        hw_max_id = hw_ro_rows(
+            "SELECT MAX(window_id) FROM water_windows")[0][0]
+        HW_SEQ_CONST = 25
+        # AC-HW1: exactly one bookkeeping row, right name, int seq.
+        hw1_ok = (len(hw_seq_rows) == 1
+                  and hw_seq_rows[0][0] == "water_windows"
+                  and isinstance(hw_seq_rows[0][1], int))
+        hw_seq = hw_seq_rows[0][1] if hw_seq_rows else None
+        # AC-HW2: high-water vs live max - ever-max 25 > live 14.
+        hw2_ok = (hw_seq == HW_SEQ_CONST and hw_max_id == 14
+                  and hw_seq > hw_max_id)
+
+        # product faces before the consume-restore round
+        hw_tally_pre = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        hw_tally_cur_pre = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        hw_total_pre = pipe.journal.cell_totals()["total"]
+
+        # AC-HW3: fresh closed-set INSERT consumes seq+1 == 26 and
+        # advances the bookkeeping row to 26 (ts month-derived from
+        # cur_w, R1813 law; -22T avoids the deleted -11T/-21T
+        # slots - same-clock legality per R1821 note).
+        hw_conn = sqlite3.connect(journal_db)
+        hw_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-22T00:00:00.000000Z",))
+        hw_new_id = hw_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        hw_seq_mid = hw_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        hw_conn.commit()
+        hw3_ok = (hw_new_id == HW_SEQ_CONST + 1
+                  and hw_seq_mid == HW_SEQ_CONST + 1)
+
+        # AC-HW4: delete by window_id - the 14-row world returns,
+        # product faces return to the registered dicts, while seq
+        # stays at 26 (high-water never retreats).
+        hw_conn.execute(
+            "DELETE FROM water_windows WHERE window_id = ?",
+            (hw_new_id,))
+        hw_conn.commit()
+        hw_post_n = hw_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        hw_seq_post = hw_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        hw_conn.close()
+        hw_tally_post = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        hw_tally_cur_post = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        hw_total_post = pipe.journal.cell_totals()["total"]
+        hw4_ok = (hw_post_n == 14
+                  and hw_seq_post == HW_SEQ_CONST + 1
+                  and hw_tally_post == hw_tally_pre
+                  and hw_tally_cur_post == hw_tally_cur_pre
+                  and hw_total_post == hw_total_pre)
+
+        # AC-HW5: pure-read law on the readback face - the row
+        # count never moved across the ro reads; the [1]..[19]
+        # zero-regression rides the whole-probe verdict.
+        hw_post_n_ro = hw_ro_rows(
+            "SELECT COUNT(*) FROM water_windows")[0][0]
+        hw5_ok = (hw_pre_n == 14 and hw_post_n_ro == 14)
+
+        sections.append("[20] sqlite_sequence high-water readback:")
+        sections.append("    bookkeeping-row: rows=%d name=%s"
+                        " seq=%s %s"
+                        % (len(hw_seq_rows),
+                           hw_seq_rows[0][0] if hw_seq_rows
+                           else None, hw_seq,
+                           "OK" if hw1_ok else "DRIFT"))
+        sections.append("    high-water-vs-live: seq=%s max-id=%s"
+                        " no-reuse=%s %s"
+                        % (hw_seq, hw_max_id,
+                           hw_seq > hw_max_id,
+                           "OK" if hw2_ok else "DRIFT"))
+        sections.append("    consume: new-id=%d seq-mid=%d %s"
+                        % (hw_new_id, hw_seq_mid,
+                           "OK" if hw3_ok else "DRIFT"))
+        sections.append("    restore-no-retreat: rows=%d seq=%d"
+                        " total=%s tallies-eq=%s %s"
+                        % (hw_post_n, hw_seq_post, hw_total_post,
+                           hw_tally_post == hw_tally_pre
+                           and hw_tally_cur_post == hw_tally_cur_pre,
+                           "OK" if hw4_ok else "DRIFT"))
+        sections.append("    pure-read: rows=%d->%d %s"
+                        % (hw_pre_n, hw_post_n_ro,
+                           "OK" if hw5_ok else "DRIFT"))
+        fail = fail or not (hw1_ok and hw2_ok and hw3_ok
+                            and hw4_ok and hw5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2603,7 +2756,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[20] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[21] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)

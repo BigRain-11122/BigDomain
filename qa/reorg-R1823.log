@@ -1,0 +1,198 @@
+qa/reorg-R1823.log - fold R495 evidence (executed in round R1823)
+window = state.json log lines 7..42 (slice mode) = R1805..R1822
+water journal delivery window; 36 lines; knife = P-2026-09-25-18 #495
+
+== [1] pre-op gauge (round-start first measurement) ==
+{
+
+  "mode": "dry-run",
+
+  "round": "R1823",
+
+  "fold_no": "495",
+
+  "window_mode": "slice",
+
+  "window_start": 7,
+
+  "window_end": 42,
+
+  "window_lines": 36,
+
+  "window_content_bytes": 58524,
+
+  "summary_head": "2026-10-11��R1805..R1822 ��������ժҪ��fold R495 �� R1822 �д�ע�Ƕ��֡������ײ�",
+
+  "preop_sha16": "cbbfff28647fc7c9",
+
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1823.bak",
+
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+
+  "archive_header": "# --- R1823 fold append (2026-10-11, 36 lines verbatim: R1805..R1822 water journal delivery window mid-window roll, fold R495 mid-window, pre-op sha16 cbbfff28647fc7c9)",
+
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+
+  "pre_bytes": 80667,
+
+  "new_log_len": 7,
+
+  "token_missing": [],
+
+  "token_ok": true,
+
+  "gate_ok": true,
+
+  "predicted_bytes": 25867,
+
+  "reserve_bytes": 3000,
+
+  "gate": 78500,
+
+  "would_fail": []
+
+}
+
+== [2] dry-run verification ==
+{
+
+  "mode": "dry-run",
+
+  "round": "R1823",
+
+  "fold_no": "495",
+
+  "window_mode": "slice",
+
+  "window_start": 7,
+
+  "window_end": 42,
+
+  "window_lines": 36,
+
+  "window_content_bytes": 58524,
+
+  "summary_head": "2026-10-11��R1805..R1822 ��������ժҪ��fold R495 �� R1822 �д�ע�Ƕ��֡������ײ�",
+
+  "preop_sha16": "cbbfff28647fc7c9",
+
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1823.bak",
+
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+
+  "archive_header": "# --- R1823 fold append (2026-10-11, 36 lines verbatim: R1805..R1822 water journal delivery window mid-window roll, fold R495 mid-window, pre-op sha16 cbbfff28647fc7c9)",
+
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+
+  "pre_bytes": 80667,
+
+  "new_log_len": 7,
+
+  "token_missing": [],
+
+  "token_ok": true,
+
+  "gate_ok": true,
+
+  "predicted_bytes": 25867,
+
+  "reserve_bytes": 3000,
+
+  "gate": 78500,
+
+  "would_fail": []
+
+}
+
+== [3] execute (verify-then-write; preop backup + archive append) ==
+{
+
+  "mode": "execute",
+
+  "round": "R1823",
+
+  "fold_no": "495",
+
+  "window_mode": "slice",
+
+  "window_start": 7,
+
+  "window_end": 42,
+
+  "window_lines": 36,
+
+  "window_content_bytes": 58524,
+
+  "summary_head": "2026-10-11��R1805..R1822 ��������ժҪ��fold R495 �� R1822 �д�ע�Ƕ��֡������ײ�",
+
+  "preop_sha16": "cbbfff28647fc7c9",
+
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1823.bak",
+
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+
+  "archive_header": "# --- R1823 fold append (2026-10-11, 36 lines verbatim: R1805..R1822 water journal delivery window mid-window roll, fold R495 mid-window, pre-op sha16 cbbfff28647fc7c9)",
+
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+
+  "pre_bytes": 80667,
+
+  "new_log_len": 7,
+
+  "token_missing": [],
+
+  "token_ok": true,
+
+  "gate_ok": true,
+
+  "predicted_bytes": 25867,
+
+  "reserve_bytes": 3000,
+
+  "gate": 78500,
+
+  "would_fail": [],
+
+  "post_bytes": 25867,
+
+  "predicted_eq_actual": true,
+
+  "appendix_bytes": 58729,
+
+  "archive_appended": true,
+
+  "backup_written": true
+
+}
+
+== [4] post-op gauge ==
+{
+ "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+ "disk_bytes": 25867,
+ "gate": 78500,
+ "log_lines": 7,
+ "log_content_bytes": 23245,
+ "margin_bytes": 52633,
+ "fold_needed": false,
+ "tick": 1822
+}
+
+== [5] archive section probe (R1823 split-point) ==
+physical lines incl header (split count) = 39
+split physical line 7 tail: ...ows==[] 三面零计数逐位·AC-BK4 坏窗 '2026-10
+split physical line 8 head: '〔R1748 尾随换行家族〕kind_tally 拒 E_WJ_B...
+note: R1808 window line embeds literal U+000A inside the
+AC-BK4 malformed-window probe form '2026-10\n' (R1748
+trailing-newline bad-window family) quoted verbatim in the
+log line - one logical line, two physical lines at archive
+write; content byte-preserved, zero data loss (R1317 class).
+adjudicated in census_known_findings.json (R1823 entry).
+
+== [6] preop backup + hygiene ==
+preop backup: logs/state-preop-R1823.bak
+  bytes=80667 sha16=cbbfff28647fc7c9
+archive: logs/state-log-archive-2026-10.md section R1823
+  36 window lines verbatim (37 physical, adjudicated)
+generator: .codely-cli/tmp/gen495.py (catalog mechanical,
+  zero hand-copy); summary file fold495-summary.txt (6256B,
+  90 tokens embedded, zero missing)

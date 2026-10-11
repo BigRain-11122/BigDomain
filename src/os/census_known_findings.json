@@ -5,6 +5,11 @@
       "round": "R1317",
       "reason": "R1314 window line was split into two physical lines at archive write (573+1196 chars, one logical line) - pre-fix line-layer splice-defect era artifact (R1257/R1303/R1312 family; the fragment itself cites the same-type repair). Content byte-preserved, zero data loss. Evidence: qa/logs-census-R1688.log section 2c probe.",
       "adjudicated": "2026-10-09 R1688"
+    },
+    {
+      "round": "R1823",
+      "reason": "R1808 window line (fold R495 window, slice 7:42) embeds one literal U+000A inside the AC-BK4 malformed-window probe form '2026-10\\n' quoted verbatim in the log line (R1748 trailing-newline bad-window family); the archive write therefore splits that one logical line into two physical lines (declared 36, actual 37). Content byte-preserved, zero data loss - the newline is quoted probe payload, not a record boundary. Same class as R1317 (archive-write physical split of one logical line). Evidence: qa/reorg-R1823.log section 5 archive split-point probe.",
+      "adjudicated": "2026-10-11 R1823"
     }
   ],
   "dangling_pointers": [
