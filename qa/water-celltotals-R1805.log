@@ -1,0 +1,53 @@
+--- section 1: suite double-run (determinism) ---
+suite run1 exit=0
+PASS AC-CT1: keys=True ascending=True cells=True total0==sql-sum=True double-call=True compliance=True zero-world=True
+PASS AC-CT2: rejected=14/14 code=E_WJ_BAD_WINDOW rows-stable=True
+PASS AC-CT3: history-window=True default-includes-history=True current-window-no-penetration=True future-empty=True
+PASS AC-CT4: cells==manual=True total==sql-sum=True window==manual=True composition(default)=True composition(2026-08)=True monthly_flow-net-delta-x3=True
+PASS AC-CT5: read-method-clean=True rows-stable=True double-call-identical=True
+PASS AC-CT6: liveness-plus-one=True reopen-identical=True resume-record-follows=True
+PASS AC-CT7: pure-ascii=True import-lines-clean=True append-only-source=True schema-constant=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+suite run2 exit=0
+PASS AC-CT1: keys=True ascending=True cells=True total0==sql-sum=True double-call=True compliance=True zero-world=True
+PASS AC-CT2: rejected=14/14 code=E_WJ_BAD_WINDOW rows-stable=True
+PASS AC-CT3: history-window=True default-includes-history=True current-window-no-penetration=True future-empty=True
+PASS AC-CT4: cells==manual=True total==sql-sum=True window==manual=True composition(default)=True composition(2026-08)=True monthly_flow-net-delta-x3=True
+PASS AC-CT5: read-method-clean=True rows-stable=True double-call-identical=True
+PASS AC-CT6: liveness-plus-one=True reopen-identical=True resume-record-follows=True
+PASS AC-CT7: pure-ascii=True import-lines-clean=True append-only-source=True schema-constant=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+double-run stdout sha-identical=True
+--- section 2: full regression (tee: qa/reconcile-all-R1805.log) ---
+runner exit=0 (full output in tee log; last lines below)
+  |   |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+  | PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+  | RUNNER PASS (98/98 suites green, reconcile controls 7/7, 174.8s)
+--- section 3: matrix regen + --check x2 ---
+regen exit=0
+PASS generated docs/sandbox-suite-matrix.md (10114 bytes) - registry suites=98 criteria=919 evidence=qa/reconcile-all-R1805.log green=98/98
+PASS hygiene: pure-ascii source, zero network imports
+check1 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10114 bytes, 98 suites, 919 criteria)
+check2 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10114 bytes, 98 suites, 919 criteria)
+check x2 stdout identical=True
+--- section 4: fingerprint sentinel ---
+sentinel exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- section 5: git hygiene (frozen files untouched) ---
+targeted diff --stat over frozen four: (empty - zero bytes changed)
+git status --porcelain:
+   M docs/sandbox-suite-matrix.md
+   M src/sandbox/reconcile_all.py
+   M src/sandbox/ugc/water_journal.py
+   M state/queue/tech.md
+  ?? qa/reconcile-all-R1805.log
+  ?? qa/water-celltotals-R1805.log
+  ?? src/sandbox/ugc/test_water_cell_totals.py
+VERDICT: suite=PASS run1=0 run2=0 deterministic=True regression=PASS matrix-check=PASS sentinel=PASS frozen=clean

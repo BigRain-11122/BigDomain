@@ -684,6 +684,16 @@ SUITES = [
     # (AC-JL1..JL7 pre-registered in state/queue/tech.md)
     ("ugc-water-journalcap", os.path.join("ugc",
                                          "test_water_journal_limit.py"), 7),
+    # R1805 water journal cell_totals: cumulative per-cell net-flow
+    # aggregation over the archived delta rows (window=None
+    # whole-board default; explicit YYYY-MM month filter; sparse
+    # union of cell keys, ascending; envelope total == SUM of the
+    # total_delta column == monthly_flow net_delta; the verdicted
+    # cells keep their own keys and stay out of the envelope total -
+    # the R1785 composition law, AC-VW1 verdict windows land -1)
+    # (AC-CT1..CT7 pre-registered in state/queue/tech.md)
+    ("ugc-water-celltotals", os.path.join("ugc",
+                                          "test_water_cell_totals.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)

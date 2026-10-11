@@ -251,5 +251,60 @@ class WaterJournalFace:
             env["window"] = w
         return env
 
+    def cell_totals(self, window=None):
+        """Pure cumulative per-cell net-flow aggregation over the
+        archived completed-window rows (AC-CT1..AC-CT7). window=None
+        keeps the whole-board behavior; an explicit YYYY-MM filters
+        on the record-time ts_utc month (the same single-column key
+        the journal_board / kind_tally / monthly_flow faces read) and
+        malformed windows fail closed E_WJ_BAD_WINDOW before any
+        read. Cell keys are a free TEXT domain (the union of the
+        keys inside the archived delta rows: noise.total,
+        noise.by_reason.*, review.suspended, review.verdicted.*),
+        so a dense grid is not constructible - a zero-window world
+        reads as an honest empty mapping and observed keys render
+        ascending, deterministic, zero RNG. Each cell carries its
+        signed sum across the filtered rows. The envelope total sums
+        the total_delta column over the same filtered set (the
+        ledger's scalar net flow): the composition law stays the
+        store delta composition - total equals the noise.total cell
+        plus the review.suspended cell, while the verdicted cells
+        keep their own keys and stay out of the envelope total
+        (R1785 law; a verdict window lands total_delta=-1, AC-VW1) -
+        and the value matches monthly_flow net_delta over the same
+        filtered set. The compliance three-piece stays resident:
+        ai_generated=0 (server authority), the standing
+        non-advisory disclaimer and the persistent flag."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError(
+                    "water journal: window must be YYYY-MM (%s)"
+                    % E_WJ_BAD_WINDOW)
+        if w is None:
+            cur = self._conn.execute(
+                "SELECT delta, total_delta FROM water_windows")
+        else:
+            cur = self._conn.execute(
+                "SELECT delta, total_delta FROM water_windows"
+                " WHERE substr(ts_utc, 1, 7) = ?", (w,))
+        cells = {}
+        total = 0
+        for delta, total_delta in cur:
+            payload = json.loads(delta)
+            for key, value in payload.items():
+                cells[key] = cells.get(key, 0) + int(value)
+            total += int(total_delta)
+        ordered = {}
+        for key in sorted(cells):
+            ordered[key] = cells[key]
+        env = {"cell_totals": ordered, "total": total,
+               "ai_generated": 0, "disclaimer": self.disclaimer,
+               "persistent": True}
+        if w is not None:
+            env["window"] = w
+        return env
+
     def close(self):
         self._conn.close()
