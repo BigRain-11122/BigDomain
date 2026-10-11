@@ -89,6 +89,7 @@ E_UNKNOWN_TEMPLATE = "E_UNKNOWN_TEMPLATE"
 E_BAD_GRANT_TYPE = "E_BAD_GRANT_TYPE"
 E_BANNED_TEMPLATE_COPY = "E_BANNED_TEMPLATE_COPY"
 E_REM_NO_DISCLAIMER = "E_REM_NO_DISCLAIMER"
+E_REM_BAD_LIMIT = "E_REM_BAD_LIMIT"
 
 # log statuses (rows; the two skipped faces double as banner queue)
 ST_SENT = "sent"
@@ -331,20 +332,36 @@ class ReminderFace(object):
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
             " ORDER BY ts_utc").fetchall()
 
-    def banner_board(self):
+    def banner_board(self, limit=0):
         """Degraded in-app banner board (pure derived read face over the
-        persistent fallback journal, tech.md AC-BQ1..AC-BQ7 registered
+        persistent fallback journal, tech.md AC-BQ1..AC-BQ12 registered
         before this code): one row per avatar holding at least one
         degraded row, plus dense status/reason zero grids. Row order =
         the unique census key ascending (aggregation-family
         deterministic ordering law). Envelope carries the member
         family's server-authoritative marker trio; the resident
         compliance copy comes from the raw config capture and a world
-        without it refuses the face rather than faking an envelope."""
+        without it refuses the face rather than faking an envelope.
+        Read-cap (R1851): limit tail param - sentinel is ONLY the int 0
+        (bool excluded, None refused - fail-closed, no ambiguity);
+        limit>0 returns the tail window of the board (relative order
+        preserved) plus four additive keys: limit, banner_board_total
+        (full avatar-row count, never the truncated count - the
+        truncated read must carry the full set count),
+        returned, truncated. The pre-existing total key keeps its
+        pinned unit (count of skipped_* log rows) - a different
+        aggregate than the avatar-row count; the world-level
+        by_status/by_reason grids stay world-level in capped reads
+        (truncation slices only the board list, aggregates never
+        lie about the world)."""
         if (not isinstance(self.disclaimer, str)
                 or not self.disclaimer.strip()):
             raise ValueError("%s: resident compliance copy missing"
                              % E_REM_NO_DISCLAIMER)
+        if (isinstance(limit, bool) or not isinstance(limit, int)
+                or limit < 0):
+            raise ValueError("%s: limit must be a non-negative int"
+                             % E_REM_BAD_LIMIT)
         rows = self._exec(
             "SELECT census_avatar_id, status, reason, COUNT(*)"
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
@@ -367,10 +384,22 @@ class ReminderFace(object):
             board.append({"census_avatar_id": avatar,
                           "skipped": sum(cell.values()),
                           "by_reason": dict(cell)})
+        if limit == 0:
+            return {"banner_board": board, "total": total,
+                    "by_status": by_status, "by_reason": by_reason,
+                    "ai_generated": 0, "disclaimer": self.disclaimer,
+                    "persistent": True}
+        board_total = len(board)
+        returned = min(limit, board_total)
+        board = board[board_total - returned:] if returned else []
         return {"banner_board": board, "total": total,
                 "by_status": by_status, "by_reason": by_reason,
                 "ai_generated": 0, "disclaimer": self.disclaimer,
-                "persistent": True}
+                "persistent": True,
+                "limit": limit,
+                "banner_board_total": board_total,
+                "returned": len(board),
+                "truncated": len(board) < board_total}
 
     def dual_timepoint_coverage(self, avatar):
         """W10 dual-timepoint coverage face (which reasons have rows)."""

@@ -378,9 +378,11 @@ SUITES = [
     # one board row per avatar holding skipped_* rows, dense status/
     # reason zero grids, deterministic census-key ascending order,
     # member-family compliance envelope, live derivation
-    # (AC-BQ1..BQ7 pre-registered in state/queue/tech.md).
+    # (AC-BQ1..BQ12 pre-registered in state/queue/tech.md; the R1851
+    # read-cap extension adds AC-BQ8..BQ12 - limit tail param with the
+    # four-key additive overflow block).
     ("member-banner-board",
-     os.path.join("member", "test_banner_board.py"), 7),
+     os.path.join("member", "test_banner_board.py"), 12),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

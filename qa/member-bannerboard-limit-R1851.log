@@ -1,0 +1,50 @@
+=== [1] suite run 1 (exit=0) ===
+PASS AC-BQ1: env-keys=True dense=True empty-board=True refusals=5/5 ['no-compliance', 'empty', 'blank', 'non-str', 'null']
+PASS AC-BQ2: by_status={'skipped_no_budget': 2, 'skipped_daily_cap': 2} by_reason={'first_service': 2, 'renewal_due': 2} total=4 manual=True rows-cross=True order=['AV-B', 'AV-C', 'AV-E', 'AV-F']
+PASS AC-BQ3: status-keys=2 total=4 < log=6 board==skipped-avatars=True sent-avatars-absent=True
+PASS AC-BQ4: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-BQ5: before=1 after=2 cell=2 new-row=True order-follows=True
+PASS AC-BQ6: ascii=True subjects=2 network-imports=0 cfg-sha-stable=True additive=True schema-tables=2
+PASS AC-BQ7: suites-registry-row=True criteria=12
+PASS AC-BQ8: default-fidelity=True seven-keys=True new-keys=['banner_board_total', 'limit', 'returned', 'truncated'] capped-envelope=[1, 2, 1, True]
+PASS AC-BQ9: rejects=5/5 ['-1', 'True', "'2'", '2.5', 'None'] counts-stable=True gate-order=True
+PASS AC-BQ10: seq-cap=['AV-E', 'AV-F'] mirror-match=True board_total=6 total=7 units-differ=True world-aggregates-stable=True
+PASS AC-BQ11: six=True over=True one=True empty=True keys=11
+PASS AC-BQ12: counts-stable=True double-call-identical=True delivery=True
+SUITE PASS: 12/12
+=== [2] suite run 2 (exit=0) ===
+PASS AC-BQ1: env-keys=True dense=True empty-board=True refusals=5/5 ['no-compliance', 'empty', 'blank', 'non-str', 'null']
+PASS AC-BQ2: by_status={'skipped_no_budget': 2, 'skipped_daily_cap': 2} by_reason={'first_service': 2, 'renewal_due': 2} total=4 manual=True rows-cross=True order=['AV-B', 'AV-C', 'AV-E', 'AV-F']
+PASS AC-BQ3: status-keys=2 total=4 < log=6 board==skipped-avatars=True sent-avatars-absent=True
+PASS AC-BQ4: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-BQ5: before=1 after=2 cell=2 new-row=True order-follows=True
+PASS AC-BQ6: ascii=True subjects=2 network-imports=0 cfg-sha-stable=True additive=True schema-tables=2
+PASS AC-BQ7: suites-registry-row=True criteria=12
+PASS AC-BQ8: default-fidelity=True seven-keys=True new-keys=['banner_board_total', 'limit', 'returned', 'truncated'] capped-envelope=[1, 2, 1, True]
+PASS AC-BQ9: rejects=5/5 ['-1', 'True', "'2'", '2.5', 'None'] counts-stable=True gate-order=True
+PASS AC-BQ10: seq-cap=['AV-E', 'AV-F'] mirror-match=True board_total=6 total=7 units-differ=True world-aggregates-stable=True
+PASS AC-BQ11: six=True over=True one=True empty=True keys=11
+PASS AC-BQ12: counts-stable=True double-call-identical=True delivery=True
+SUITE PASS: 12/12
+read-cap section determinism (AC-BQ8..BQ12 tail): byte-identical=True
+=== [3] fingerprint sentinel (exit=0) ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+=== [4] RUNNER full regression (exit=0; Tee evidence=qa/reconcile-all-R1851.log) ===
+RUNNER PASS (112/112 suites green, reconcile controls 7/7, 184.4s)
+=== [5] matrix regen (exit=0) + --check x2 (exit=0/0, byte-identical=True) ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11406 bytes, 112 suites, 1034 criteria)
+=== [6] writer-census --check (exit=0) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1177 tee=676 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+VERDICT PASS (suite 12/12 x2 + read-cap determinism + sentinel CLEAN + RUNNER green + matrix --check identical x2 + census DRIFT-CLEAN)

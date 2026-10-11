@@ -1,14 +1,19 @@
 """Acceptance suite for the reminder banner board (tech.md claim line
-R1782).
+R1782; read-cap extension claim R1851).
 
-Asserts the pre-registered criteria AC-BQ1..AC-BQ7 (registered in
+Asserts the pre-registered criteria AC-BQ1..AC-BQ12 (registered in
 state/queue/tech.md BEFORE this code; honesty law).
 
 Subject: ReminderFace.banner_board() - pure-read derived aggregation
 over the persistent degraded in-app fallback journal: one board row per
 avatar holding at least one skipped_* row, dense status/reason zero
 grids, deterministic census-key ascending order, member-family
-compliance envelope, zero writes, live derivation (no cache).
+compliance envelope, zero writes, live derivation (no cache). The
+R1851 read-cap extension adds the limit tail param (sentinel 0, bool
+excluded, None refused) with a four-key additive overflow block
+{limit, banner_board_total, returned, truncated} - the full-count key
+is banner_board_total because the pre-existing total key is pinned to
+the skipped-row count unit (AC-BQ1), a different aggregate.
 
 Usage: python test_banner_board.py
 """
@@ -29,7 +34,7 @@ sys.path.insert(0, BASE)
 import reminder as RM                   # noqa: E402 (face under test)
 
 RESULTS = []
-EXPECTED = 7
+EXPECTED = 12
 TS = "2030-06-01T00:00:00Z"             # frozen clock for row stamps
 CFG_PATH = os.path.join(BASE, "config.json")
 
@@ -290,11 +295,192 @@ def main():
     reg_path = os.path.join(os.path.dirname(BASE), "reconcile_all.py")
     reg_src = open(reg_path, encoding="utf-8").read()
     registered = ('"member-banner-board"' in reg_src
-                  and 'os.path.join("member", "test_banner_board.py"), 7'
+                  and 'os.path.join("member", "test_banner_board.py"), 12'
                   in reg_src)
     ok7 = registered
     record("AC-BQ7", ok7,
-           "suites-registry-row=%s criteria=7" % registered)
+           "suites-registry-row=%s criteria=12" % registered)
+
+    # ---- AC-BQ8: read-cap contract + default fidelity ---------------
+    face8, db8 = fresh_face(tmp, "bq8.db", load_cfg())
+    face8.attempt("AV-B", "renewal_notice", "renewal_due",
+                  now=TS, period_key="PK-B")
+    face8.attempt("AV-G", "renewal_notice", "renewal_due",
+                  now=TS, period_key="PK-G")
+    plain = face8.banner_board()
+    zeroed = face8.banner_board(limit=0)
+    fid = (json.dumps(plain, sort_keys=True)
+           == json.dumps(zeroed, sort_keys=True))
+    seven = set(plain) == {"banner_board", "total", "by_status",
+                           "by_reason", "ai_generated", "disclaimer",
+                           "persistent"}
+    capped = face8.banner_board(limit=1)
+    new_keys = set(capped) - set(plain)
+    ok8 = (fid and seven
+           and new_keys == {"limit", "banner_board_total",
+                            "returned", "truncated"}
+           and capped["limit"] == 1
+           and capped["banner_board_total"] == 2
+           and capped["returned"] == 1
+           and capped["truncated"] is True)
+    record("AC-BQ8", ok8,
+           "default-fidelity=%s seven-keys=%s new-keys=%s "
+           "capped-envelope=%s"
+           % (fid, seven, sorted(new_keys),
+              [capped[k] for k in ("limit", "banner_board_total",
+                                   "returned", "truncated")]))
+    face8.close()
+
+    # ---- AC-BQ9: bad limit params fail-closed ------------------------
+    face9, db9 = fresh_face(tmp, "bq9.db", load_cfg())
+    face9.attempt("AV-B", "renewal_notice", "renewal_due",
+                  now=TS, period_key="PK-B")
+    before9 = q(db9, "SELECT COUNT(*) FROM member_reminder_log")[0][0]
+    rejects = []
+    for bad in (-1, True, "2", 2.5, None):
+        try:
+            face9.banner_board(limit=bad)
+            rejects.append((bad, "no-refusal"))
+        except ValueError as exc:
+            rejects.append((bad, RM.E_REM_BAD_LIMIT in str(exc)))
+    after9 = q(db9, "SELECT COUNT(*) FROM member_reminder_log")[0][0]
+    # dual-bad: missing resident compliance copy + bad limit -> the
+    # compliance gate fires first (outermost face gate, order pinned)
+    badc = json.loads(json.dumps(load_cfg()))
+    badc.pop("compliance", None)
+    face9b, _ = fresh_face(tmp, "bq9-probe.db", badc)
+    try:
+        face9b.banner_board(limit=-1)
+        gate = "no-refusal"
+    except ValueError as exc:
+        gate = RM.E_REM_NO_DISCLAIMER in str(exc)
+    ok9 = (all(r[1] is True for r in rejects)
+           and before9 == after9 and gate is True)
+    record("AC-BQ9", ok9,
+           "rejects=%d/%d %s counts-stable=%s gate-order=%s"
+           % (sum(1 for r in rejects if r[1] is True), len(rejects),
+              [repr(r[0]) for r in rejects if r[1] is True],
+              before9 == after9, gate))
+    face9.close()
+    face9b.close()
+
+    # ---- AC-BQ10: tail-window truncation + mirror SQL ---------------
+    # cap=2: two budgeted senders exhaust the daily cap first, then six
+    # unbudgeted avatars all degrade as cap-skips; AV-B gets two rows
+    # (distinct period keys) so total (7 skipped rows) and the avatar
+    # -row count (6) provably differ - the two-unit distinction this
+    # round's adjudication 1 exists for.
+    face10, db10 = fresh_face(tmp, "bq10.db", load_cfg(cap=2))
+    face10.grant_authorization("SE-1", "renewal_notice", "longterm")
+    face10.grant_authorization("SE-2", "renewal_notice", "longterm")
+    face10.attempt("SE-1", "renewal_notice", "renewal_due",
+                   now=TS, period_key="SE-1")
+    face10.attempt("SE-2", "renewal_notice", "renewal_due",
+                   now=TS, period_key="SE-2")
+    for av, keys in (("AV-A", ("PK-A",)),
+                     ("AV-B", ("PK-B1", "PK-B2")),
+                     ("AV-C", ("PK-C",)),
+                     ("AV-D", ("PK-D",)),
+                     ("AV-E", ("PK-E",)),
+                     ("AV-F", ("PK-F",))):
+        for pk in keys:
+            face10.attempt(av, "renewal_notice", "renewal_due",
+                           now=TS, period_key=pk)
+    full = face10.banner_board()
+    cap2 = face10.banner_board(limit=2)
+    seq_full = [r["census_avatar_id"] for r in full["banner_board"]]
+    seq_cap = [r["census_avatar_id"] for r in cap2["banner_board"]]
+    mirror = [r[0] for r in q(
+        db10, "SELECT census_avatar_id FROM member_reminder_log"
+        " WHERE status LIKE 'skipped_%' GROUP BY census_avatar_id"
+        " ORDER BY census_avatar_id DESC LIMIT 2")]
+    mirror.reverse()
+    row_keys = all(set(r) == {"census_avatar_id", "skipped",
+                              "by_reason"}
+                   for r in cap2["banner_board"])
+    ok10 = (seq_full == ["AV-A", "AV-B", "AV-C", "AV-D", "AV-E",
+                         "AV-F"]
+            and full["total"] == 7
+            and cap2["returned"] == 2 and cap2["truncated"] is True
+            and cap2["banner_board_total"] == 6
+            and cap2["total"] == 7
+            and cap2["banner_board_total"] != cap2["total"]
+            and seq_cap == seq_full[-2:] == ["AV-E", "AV-F"]
+            and seq_cap == mirror
+            and row_keys
+            and cap2["by_status"] == full["by_status"]
+            and cap2["by_reason"] == full["by_reason"])
+    record("AC-BQ10", ok10,
+           "seq-cap=%s mirror-match=%s board_total=%d total=%d "
+           "units-differ=%s world-aggregates-stable=%s"
+           % (seq_cap, seq_cap == mirror, cap2["banner_board_total"],
+              cap2["total"],
+              cap2["banner_board_total"] != cap2["total"],
+              cap2["by_status"] == full["by_status"]))
+    # face10 stays open: AC-BQ11 boundary states reuse this world
+
+    # ---- AC-BQ11: boundary states (world carried from AC-BQ10) ------
+    six = face10.banner_board(limit=6)
+    over = face10.banner_board(limit=50)
+    one = face10.banner_board(limit=1)
+    face10.close()
+    face11, db11 = fresh_face(tmp, "bq11.db", load_cfg())
+    empty = face11.banner_board(limit=3)
+    ok11 = (six["returned"] == 6 and six["truncated"] is False
+            and six["banner_board_total"] == 6
+            and [r["census_avatar_id"] for r in six["banner_board"]]
+            == seq_full
+            and over["returned"] == 6 and over["truncated"] is False
+            and one["returned"] == 1 and one["truncated"] is True
+            and [r["census_avatar_id"] for r in one["banner_board"]]
+            == ["AV-F"]
+            and empty["banner_board"] == [] and empty["returned"] == 0
+            and empty["banner_board_total"] == 0
+            and empty["truncated"] is False
+            and empty["total"] == 0
+            and set(empty) == {"banner_board", "total", "by_status",
+                               "by_reason", "ai_generated",
+                               "disclaimer", "persistent", "limit",
+                               "banner_board_total", "returned",
+                               "truncated"})
+    record("AC-BQ11", ok11,
+           "six=%s over=%s one=%s empty=%s keys=%d"
+           % (six["returned"] == 6 and six["truncated"] is False,
+              over["returned"] == 6 and over["truncated"] is False,
+              one["returned"] == 1,
+              empty["banner_board"] == [] and empty["returned"] == 0,
+              len(set(empty))))
+    face11.close()
+
+    # ---- AC-BQ12: pure-read law, determinism, delivery ---------------
+    face12, db12 = fresh_face(tmp, "bq12.db", load_cfg(cap=1))
+    face12.grant_authorization("SE-9", "renewal_notice", "longterm")
+    face12.attempt("SE-9", "renewal_notice", "renewal_due",
+                   now=TS, period_key="SE-9")
+    for av in ("AV-B", "AV-G", "AV-H"):
+        face12.attempt(av, "renewal_notice", "renewal_due",
+                       now=TS, period_key="PK-" + av)
+    before12 = (q(db12, "SELECT COUNT(*) FROM"
+                  " member_reminder_log")[0][0],
+                q(db12, "SELECT COUNT(*) FROM"
+                  " member_subscribe_grants")[0][0])
+    r1 = face12.banner_board(limit=2)
+    r2 = face12.banner_board(limit=2)
+    after12 = (q(db12, "SELECT COUNT(*) FROM"
+                 " member_reminder_log")[0][0],
+               q(db12, "SELECT COUNT(*) FROM"
+                 " member_subscribe_grants")[0][0])
+    same12 = (json.dumps(r1, sort_keys=True)
+              == json.dumps(r2, sort_keys=True))
+    delivered = ('os.path.join("member", "test_banner_board.py"), 12'
+                 in reg_src
+                 and hasattr(RM, "E_REM_BAD_LIMIT")
+                 and RM.E_REM_BAD_LIMIT == "E_REM_BAD_LIMIT")
+    ok12 = (before12 == after12 and same12 and delivered)
+    record("AC-BQ12", ok12,
+           "counts-stable=%s double-call-identical=%s delivery=%s"
+           % (before12 == after12, same12, delivered))
+    face12.close()
 
     shutil.rmtree(tmp, ignore_errors=True)
     if len(RESULTS) != EXPECTED:
