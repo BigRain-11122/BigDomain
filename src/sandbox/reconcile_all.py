@@ -648,6 +648,18 @@ SUITES = [
     # (AC-CBK1..CBK8 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-callkind",
      os.path.join("ledger", "test_freetrial_callkind.py"), 8),
+    # R1830 free-trial calls-by-plan pure read face: global
+    # plan-profile aggregation over immutable trial_calls rows
+    # (structured INTEGER domain, no CHECK, no FK); window=None
+    # full-window default; explicit YYYY-MM filters rows by
+    # record-time stamp first, then aggregates plans over the
+    # surviving rows; malformed windows fail closed
+    # E_FT_BAD_ARGS; orphan plan_id rows (no trial_plans row,
+    # only direct injection can produce one) surface and
+    # count toward total (the face never hides data)
+    # (AC-CBP1..CBP8 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-callplan",
+     os.path.join("ledger", "test_freetrial_callplan.py"), 8),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
