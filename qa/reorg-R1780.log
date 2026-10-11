@@ -1,0 +1,116 @@
+﻿--- fold R487 dry-run 2026-10-11 07:59:10 ---
+{
+  "mode": "dry-run",
+  "round": "R1780",
+  "fold_no": "487",
+  "window_mode": "tail",
+  "window_start": 23,
+  "window_end": 28,
+  "window_lines": 6,
+  "window_content_bytes": 8516,
+  "summary_head": "2026-10-11��R1778..R1779 ��������ժҪ��fold R487 �� R1779 �гд�ע�Ƕ��֡�������",
+  "preop_sha16": "27ab5645e20fd63f",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1780.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1780 fold append (2026-10-11, 6 lines verbatim: tail-6 window: fold R486 roll-line + R1778/R1779 closeout pairs + GORD line, 8514B, fold R487 window, pre-op sha16 27ab5645e20fd63f)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 79342,
+  "new_log_len": 23,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 73272,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+--- fold R487 execute ---
+{
+  "mode": "execute",
+  "round": "R1780",
+  "fold_no": "487",
+  "window_mode": "tail",
+  "window_start": 23,
+  "window_end": 28,
+  "window_lines": 6,
+  "window_content_bytes": 8516,
+  "summary_head": "2026-10-11��R1778..R1779 ��������ժҪ��fold R487 �� R1779 �гд�ע�Ƕ��֡�������",
+  "preop_sha16": "27ab5645e20fd63f",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1780.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1780 fold append (2026-10-11, 6 lines verbatim: tail-6 window: fold R486 roll-line + R1778/R1779 closeout pairs + GORD line, 8514B, fold R487 window, pre-op sha16 27ab5645e20fd63f)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 79342,
+  "new_log_len": 23,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 73272,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [],
+  "post_bytes": 73272,
+  "predicted_eq_actual": true,
+  "appendix_bytes": 8710,
+  "archive_appended": true,
+  "backup_written": true
+}
+--- post fold gauge + eol + verify 2026-10-11 07:59:41 ---
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 73272,
+  "gate": 78500,
+  "log_lines": 23,
+  "log_content_bytes": 70385,
+  "margin_bytes": 5228,
+  "fold_needed": false,
+  "tick": 1779
+}
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 73272,
+  "total_lf": 33,
+  "crlf": 33,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": true,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 23,
+  "indent16_lines": 23,
+  "indent_anomaly": 0,
+  "indent_ok": true
+}
+log_len: 23
+last_line_head: 2026-10-11��R1778..R1779 ��������ժҪ��fold R487 �� R1779 �гд�ע�Ƕ��֡������ײ� 79342B disk Խ 78,500B �� 842B
+last_line_bytes: 2551
+tick: 1779
+disk_bytes: 73272
+archive_window_tokens: 76
+roll_line_tokens: 77
+missing_in_roll: []
+--- export consistency checker (closeout) 2026-10-11 08:05:47 ---
+PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=22
+PASS self_drive.no_pullable_mention_lines stored=1
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=10
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=10
+PASS self_drive.substantive_non_idle_mention_lines stored=8
+PASS self_drive.window stored='2026-10-05..2026-10-11'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1780'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-11T08:05:19+08:00' (age 0.0h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1780 window=2026-10-05..2026-10-11 W=22 idle=0 nop=1 sub=8 proposals=3/1 queues=6/10/10
+VERDICT PASS

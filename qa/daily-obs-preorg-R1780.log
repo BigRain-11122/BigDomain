@@ -1,0 +1,47 @@
+# qa/daily-obs-preorg-R1780.log - daily profile observation-window flip-criteria pre-registration evidence
+# Round R1780 (2026-10-11) - tech.md claim: daily 剖面步观察窗转正判据预注册窗 (AC-OW1..OW5)
+# Pure pre-registration + doc amendment + reading consumption. Zero code change (AC-OW1).
+
+## §1 在册读数回填 (recorded readings base, AC-OW5-①)
+
+- R1733 pd5 live 首读数 (qa/reconcile-daily-profile-R1733.log):
+  - "pd5 live exit=0 (newest daily: reconcile-daily-20261010-2.log)"
+  - "PASS pd5-live-step real --daily --check exit=0 (expected 0)"
+- R1760 当日 daily 证据 pd5 段 (qa/reconcile-daily-20261011-4.log):
+  - "RUNNER PASS (70/70 suites green, reconcile controls 7/7, 153.4s)"
+  - "profile exit=0 (observation-window: recorded, not gating)"
+- R1761 收养比对读数 (qa/sentinel-adopt-R1761.log):
+  - "sentinel-segment: 0.3s (daily sentinel subprocess elapsed)" (首个真实哨兵段读数)
+  - "verdict: DRIFT-CLEAN (50 compared, 0 flagged)" (预收养比对)
+  - "verdict: DRIFT-CLEAN (70 compared, 0 flagged)" (收养后双在比对转正复跑)
+
+## §2 裁定计数器现值实测 (counter measurement, AC-OW5-② / counting rule AC-OW3)
+
+- live-step 标记行 (唯一计数口径 "profile exit=2 (observation-window: recorded, not gating)"):
+  - reconcile-daily-20261011-2.log : profile exit=0
+  - reconcile-daily-20261011-3.log : profile exit=0
+  - reconcile-daily-20261011-4.log : profile exit=0
+  - live-step 标记行总数=3, 其中 exit=2 (漂移 FLAG) 计数=0
+- 甄别注记 (AC-OW3 防误计实锚): 全 daily 证据 log 机械 grep "profile exit=2" 共 4 命中, 全部为
+  套件级判行 "FAIL suite reconcile-daily-profile exit=2 pass-lines=6 fail-lines=1 criteria=7 0.4s"
+  (reconcile-daily-20261011-2/-3/-rerun/-20261011 四件) = 10-11 晨跑双 FAIL 的 pd5 测试件潜伏缺陷
+  (全文本禁词扫描越界) 当日 G1 分级修复 (AC-PD5F1/F2, R1760) 后第三跑已复绿——测试件结局非漂移读数,
+  恒不入裁定计数 (AC-OW3 钉死).
+- 现值结论: 观察期漂移 FLAG 计数=0 → AC-OW2 裁定规则支① 现行领先 (维持观察窗方向, 待 10-16 裁定窗机械确认).
+
+## §3 本轮 live 复跑实测 (AC-OW5-③)
+
+Command: python src/sandbox/runner_profile.py --daily --check
+- baseline source: qa/reconcile-daily-20261011-4.log
+- check: byte-identical PASS
+- exit code: 0 (measured)
+- 读数判读: 当日证据对日基线字节一致=零漂移, 与 §2 计数器现值互证.
+
+## §4 卫生自检 (AC-OW5-④ / AC-OW1)
+
+- 本窗零代码改动: src/sandbox/reconcile_daily.py 与 src/sandbox/runner_profile.py 零字节
+  (git status 证据面=本轮改动仅 tech.md / runbook / qa 证据 / 收账款).
+- PROFILE_OBSERVATION_WINDOW=True 常量不动 (docstring 原文在册: "promotion to a gating face is
+  decided at the drift-threshold revisit").
+- 判据预注册时点 2026-10-11 R1780 < 裁定时点 2026-10-16 = 预注册语义自证 (先于裁定, 非事后).
+- runbook 行数 56 ≤120 (AC-RB1 线不破, UTF-8 口径实测).

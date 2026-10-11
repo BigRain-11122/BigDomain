@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-11T07:47:54+08:00",
+ "export_ts": "2026-10-11T08:05:19+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1779 一件事：把会员到期提醒的扫描接到统一读面（expiring_soon）——以前提醒器自己算一遍到期窗（SQL+算术两处算），现在直接吃 member 域的到期预测榜：同窗三源逐位相等、恰到期边界行榜上零误发、幂等重扫零重发；80 件自检 792 判据全量回归零回归，判据先注册后写码，全程证据在 qa/。",
-  "latest_artifact": "最近实物：qa/reminder-scanwire-R1779.log（接线证据七节：套件 7/7 双跑绿+test_reminder 12 断言复绿+80 套件 792 判据全量回归 RUNNER PASS+矩阵 byte-identical+指纹哨兵 CLEAN）+ src/sandbox/member/test_reminder_scan_wire.py（2026-10-11）",
-  "next_milestone": "下轮实物：tech 队头下一项『qa 证据件可解码性探针窗』当窗交付（48h 内·至 10-13）；账本水位近线（收账后 ~79KB），越 78,500B 时下轮首件事=fold R487 再整理；正式申请仍等两前置：平台名 CEO 定谳+服务器等物理件到位。"
+  "current": "R1780 一件事：账本水位越线先折刀（fold R487：近两轮收账并成一条摘要行，原文逐字入档零丢失，压后 73,272B 回线内）；再把「daily 剖面步什么时候从记账转成门控」的裁定标准提前写死在板行上（AC-OW2 三支机械可判：观察期零漂移→继续观察；确认漂移→升 G5 门控；阈值沿用 AC-RP4 不另立），计数规则也钉死（只数真实步读数，测试件判行不算）——10-16 治理窗到点照单执行，零临场裁量；全程零代码改动，读数底座三源入证。",
+  "latest_artifact": "最近实物：qa/reorg-R1780.log（fold R487 证据链：dry-run+execute post==predicted 逐字节+76 token 零丢失+archive verbatim+preop 备份）+ qa/daily-obs-preorg-R1780.log（观察窗预注册四节：在册读数回填+裁定计数器现值 0+live 复跑 exit=0+卫生自检）+ state/queue/tech.md R1780 认领行（AC-OW1..OW5 预注册正典位）（2026-10-11）",
+  "next_milestone": "下轮实物：tech 队头下一项『qa 证据件可解码性探针窗』当窗交付（48h 内·至 10-13）——qa/ 全 *.log 逐件解码探测+不可解码件点名+方言判定+与发现面坏件跳过闸互证（R1727 probe 先例）；收账后水位 ~75.2KB 近线，再越 78,500B 时 fold R488=下轮首件事；正式申请双前置不变（平台名 CEO 定谳+服务器等物理件到位）。"
  },
  "depts": [
   {
@@ -188,6 +188,10 @@
  "results": [
   [
    "2",
+   "fold R487 水位整编+daily 观察窗转正判据预注册窗交付（R1780·fold 承 R1779 承传注记兑现：轮首首测 79,342B 越 78,500B 线 842B＝P-2026-09-25-18 第四百八十七刀·tail-6 窗〔fold R486 滚窗行+R1778 收账对+R1778 GORD 行+R1779 收账对〕压 1 滚窗行 kept=0·76 token 全字面嵌零丢失〔token_missing=[]〕·verify-then-write post==predicted 73,272B·eol/indent 三面过·archive §R1780 节 verbatim+preop 备份 sha16 27ab5645e20fd63f·证据 qa/reorg-R1780.log）＋AC-OW1..OW5 预注册先于 10-16 裁定窗落定（tech 队头可领项：转正裁定判据三支机械可判〔零 FLAG→续观察 7 天滚动复评/确认 FLAG→PROFILE_OBSERVATION_WINDOW=False+G5 门控升格/阈值=AC-RP4 零改动〕+计数规则钉死〔唯一口径=live-step 标记行·套件级判行恒不入计数·晨跑双 FAIL 四命中甄别实锚〕+runbook §三 G5 行观察窗注记+§一 3b 指针改指〔56 行 ≤120〕+读数底座入证 qa/daily-obs-preorg-R1780.log 四节〔live-step 3 条全 exit=0 FLAG 计数=0+live 复跑 exit=0 byte-identical〕·零代码改动·queue_tech 6→5 补种 5→10·R1780）"
+  ],
+  [
+   "2",
    "reminder 到期扫描 expiring_soon 读面接线交付（R1779·P2 tech 队头·AC-RW1..RW7 预注册先于代码：reminder.py 构造尾参 member_db→expiring_face〔注入 callable·约定=store.expiring_soon 绑定方法〕+scan 改由 expiring_soon(R,ts) 榜驱动〔due=榜内 end_utc>as_of 仍运行子集·恰到期边界行榜在 due 无〕·二次派生清除〔scan 源零 SQL 零窗算术·模块零 member.db 直连=跨文件只读纪律强化〕·三源等价〔scan fired period_key 集==board 子集==manual SQL 旧 due 公式集逐位等〕+幂等重扫 already_logged 零新行+无授权行 skipped_no_budget 入 banner 队列·套件 test_reminder_scan_wire.py SUITE 7/7 双跑绿〔首跑两红=取证口径 bug 两修如实注〕+test_reminder.py 12 断言复绿〔构造调用单点更新〕+RUNNER PASS 80/80 套件 792 判据 controls 7/7 180.7s 零回归=qa/reconcile-all-R1779.log·矩阵再生 80/792 green --check byte-identical 8712B·指纹哨兵 CLEAN domains=5=qa/fingerprint-R1779.log·member.py/config.json 零字节〔git status 证据〕·证据 qa/reminder-scanwire-R1779.log 七节·queue_tech_open 7→6·R1779）"
   ],
   [
@@ -343,7 +347,7 @@
    "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
   ],
   [
-   "1779",
+   "1780",
    "OSLoop 执行 tick"
   ],
   [
@@ -3218,15 +3222,15 @@
  "self_drive": {
   "window": "2026-10-05..2026-10-11",
   "window_days": 7,
-  "log_lines_in_window": 25,
+  "log_lines_in_window": 22,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 1,
-  "substantive_non_idle_mention_lines": 10,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 6,
+  "queue_tech_open": 10,
   "queue_explore_open": 10,
-  "method": "R1779 reminder due-scan read-face wiring (tech queue head claimed, criteria pre-registered before code): the renewal-due scan now consumes the member pre-expiry board through an injected callable (single window-derivation source, due = still-running subset, boundary row honest superset) - second derivation cleared, zero direct member.db access; suite 7/7 double-run green, 80 suites 792 criteria full regression RUNNER PASS, matrix byte-identical, fingerprint sentinel CLEAN."
+  "method": "R1780 fold R487 water-level compaction + daily profile observation-window flip-criteria pre-registration (AC-OW1..OW5 in tech.md before the 2026-10-16 governance revisit: three mechanical flip branches, counting rule pinned to live-step marker lines only, runbook G5 row observation note, reading base four sections; zero code change, live --daily --check re-run exit=0 byte-identical; queue_tech 6->5 restocked +5 ->10)."
  }
 }
