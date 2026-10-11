@@ -83,8 +83,9 @@ class UGCPipeline:
         # stay untouched. _last_water carries the most recent
         # completed window's delta envelope - the ingest_lobby window
         # (AC-IW1), the submit_batch batch window (AC-BW1), the
-        # drain_recover recovery window (AC-DR1) and the submit window
-        # (AC-SU1) share this single slot, last writer wins (None
+        # drain_recover recovery window (AC-DR1), the submit window
+        # (AC-SU1) and the review_verdict verdict window (AC-VW1)
+        # share this single slot, last writer wins (None
         # before any window).
         self.store = UGC.UGCStore(db_path, disclaimer=self.disclaimer)
         self._last_water = None
@@ -489,12 +490,13 @@ class UGCPipeline:
         return receipts
 
     def last_water_delta(self):
-        """R1794/R1796/R1797/R1798 window water monitor read face
-        (AC-IW1/AC-BW1/AC-DR1/AC-SU1): the most recent completed
-        window's pool-water delta envelope - an ingest_lobby window
-        (R1794), a submit_batch batch window (R1796), a drain_recover
-        recovery window (R1797) or a submit single-text window
-        (R1798); one shared single slot, last writer wins (AC-SU4).
+        """R1794/R1796/R1797/R1798/R1799 window water monitor read
+        face (AC-IW1/AC-BW1/AC-DR1/AC-SU1/AC-VW1): the most recent
+        completed window's pool-water delta envelope - an ingest_lobby
+        window (R1794), a submit_batch batch window (R1796), a
+        drain_recover recovery window (R1797), a submit single-text
+        window (R1798) or a review_verdict verdict window (R1799);
+        one shared single slot, last writer wins (AC-SU4/AC-VW4).
         Passed through from the store face unwrapped; None before any
         window ran (honest empty, no fabricated zeros)."""
         return self._last_water
@@ -598,13 +600,47 @@ class UGCPipeline:
 
     def review_verdict(self, evt_id, verdict, reviewer="sandbox-reviewer"):
         """pass -> the case re-enters the flow from routing; risky ->
-        E_CONTENT_REJECTED (trace kept in the queue)."""
-        self.desk.decide(evt_id, verdict, reviewer)
+        E_CONTENT_REJECTED (trace kept in the queue).
+
+        Verdict water wiring (R1799, AC-VW1): two live snapshots
+        around the verdict window - the start snapshot is a pure read
+        at method entry (before the desk decision; pre-mutation
+        refusals - bad verdict, unknown review row, already decided -
+        leave no completed window, the slot keeps its previous value).
+        The risky verdict records the queue trace BEFORE its raise,
+        so the decision completed and the raise is the outcome
+        receipt: the window completes with the real water change
+        (zero silent water change, AC-VW5 post-mutation guard family).
+        The pass receipt shape is unchanged; the delta is visible via
+        last_water_delta() - one slot shared by the ingest window
+        (R1794), the batch window (R1796), the recovery window
+        (R1797), the submit window (R1798) and this verdict window:
+        the last completed window wins (AC-VW4)."""
+        prev_water = self.store.pool_water_levels()  # verdict-start live snapshot (AC-VW1)
+        try:
+            self.desk.decide(evt_id, verdict, reviewer)
+        except UGC.PipelineError as exc:
+            if exc.code == UGC.E_CONTENT_REJECTED:
+                # risky verdict: the trace landed before this raise -
+                # completed window with the real water change (AC-VW3)
+                self._last_water = self.store.pool_water_delta(prev_water)
+            raise  # pre-mutation refusals keep the slot (AC-SU family)
         row = self.store.event_row(evt_id)
         if row is None:
+            # post-verdict guard (structurally unreachable: review_open
+            # implies the event row; no sandbox delete path): the
+            # verdict landed, so complete the window before raising -
+            # zero silent water change (AC-VW5)
+            self._last_water = self.store.pool_water_delta(prev_water)
             raise UGC.PipelineError(UGC.E_NOT_FOUND, evt_id)
-        return self._accept_clean(evt_id, UGC.utc_now_iso(), row["zone"],
-                                  row["actor"], row["summary"], event_exists=True)
+        out = self._accept_clean(evt_id, UGC.utc_now_iso(), row["zone"],
+                                 row["actor"], row["summary"], event_exists=True)
+        # verdict-end live delta (AC-VW1): current side re-derives live
+        # inside the store face; the single _last_water slot is shared
+        # by the five windows - the most recent completed window wins
+        # (AC-VW4 co-residency law)
+        self._last_water = self.store.pool_water_delta(prev_water)
+        return out
 
     # ---- draft + final review (AC-U7/AC-U9) --------------------------------
 

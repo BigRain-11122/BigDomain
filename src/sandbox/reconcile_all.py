@@ -635,6 +635,14 @@ SUITES = [
     # last completed window wins, refused paths keep the slot
     # (AC-SU1..SU7 pre-registered in state/queue/tech.md)
     ("ugc-submit-water", os.path.join("ugc", "test_submit_waterwire.py"), 7),
+    # R1799 UGC review_verdict verdict water-delta wiring: dual live
+    # snapshots around the verdict window; five-window co-residency
+    # (ingest R1794 + batch R1796 + recovery R1797 + submit R1798 +
+    # verdict R1799), last completed window wins; the risky verdict
+    # records its trace before the raise, so it completes the window
+    # (pre-mutation refusals keep the slot)
+    # (AC-VW1..VW7 pre-registered in state/queue/tech.md)
+    ("ugc-verdict-water", os.path.join("ugc", "test_verdict_waterwire.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)
