@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-12T06:10:09+08:00",
+  "export_ts": "2026-10-12T06:31:04+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1848 一句话：writer-census 漂移探测器接进每日对账链（census 哨兵步）——新管线首跑全绿（RUNNER 111/111+sentinel ok+profile ok+census ok）·qa 证据方言病面从此每日机检 fail-closed。",
-    "latest_artifact": "最近实物：src/sandbox/test_reconcile_daily_census.py+reconcile_daily.py census 哨兵步+qa/reconcile-daily-20261012-3.log（新管线首跑·RECONCILE-DAILY PASS census=ok）+qa/census-daily-R1848.log（2026-10-12 06:10）",
-    "next_milestone": "下个实物：P2 tech FIFO 队头续交付+runbook census 节补文（R1848 后继）+2026-10-14 21:40 雷达第七窗候选清单到达续候〔窗 ≤48h·2026-10-14 前后〕"
+    "current": "R1849 一句话：免费试用「谁快到帽」看板加了读帽参数（limit=要看的条数，总数字不撒谎）+坏参数专用错误码·112 个验证套件 1024 判据全绿。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/test_freetrial_caplimit.py+freetrial.py 读帽参数+qa/freetrial-caplimit-R1849.log（2026-10-12）",
+    "next_milestone": "下个实物：P2 tech FIFO 队头续交付（member banner_board 读帽+runbook census 节补文+cap_usage_board 月滚保真例）+雷达第七窗候选清单 2026-10-14 21:40 到达续候〔窗 ≤48h·2026-10-14 前后〕"
   },
   "depts": [
     {
@@ -575,7 +575,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1848",
+      "1849",
       "OSLoop 执行 tick"
     ],
     [
@@ -3477,20 +3477,24 @@
     [
       "2",
       "ugc review_verdict 审决水位差分回执接线件（R1799·AC-VW1..VW7 预注册先于代码：review_verdict 窗前后双活快照+delta 经 last_water_delta 五窗共居单值槽〔ingest R1794+batch R1796+drain R1797+submit R1798+verdict R1799·last-writer-wins·risky 完成窗裁定=verdict 先落账再 raise 窗照样覆写·预变异三拒槽保持·后变异守卫完成窗后再 raise=零静默水位变全径〕+pass 胞恰 {review.suspended:-1,review.verdicted.pass:+1}+noise 复入边零 noise 胞+五窗共居 fwd/rev 十步；套件 test_verdict_waterwire.py 7/7 首跑绿·双跑逐位同一+RUNNER 92/92 套件 877 判据零回归+矩阵 --check byte-identical+指纹哨兵 CLEAN；证据 qa/ugc-verdictwater-R1799.log）"
+    ],
+    [
+      "2",
+      "R1849 freetrial cap_usage_board 读帽参数窗交付（P2 tech 队头 FIFO 最老可认领行〔R1842 补种〕·轮计分 2=可跑实物：AC-CUL1..CUL7 预注册先于代码〔tech.md 认领注记·四设计裁定：新造 E_FT_BAD_LIMIT 独立码 R1804/R1840 先例同型·limit 门先于窗门·溢出块三键 additive 复用 total=grant 行集全量计数·缺省哨兵唯 0〕——freetrial.py additive（签名 window=None,limit=0+独立码+尾窗帽切片+溢出块）+新套件 test_freetrial_caplimit.py SUITE PASS 7/7 exit 0〔首跑 一红=套件侧取证口径 bug：位置参数 0 绑 window 槽·修后净跑〕+双跑 sha256 逐字节同一+镜像 SQL 第三径交叉〔双键 DESC LIMIT 反转==产品行逐位·窗帽组合同律〕+窗×帽正交三窗全测〔(cur,2) total=5·(m1,1) 单行·(fut,4) 空板〕+零 grant 世界 空帽读键照带+纯读律全过〔inspect 零写语句+四表计数前后 同一〕·reconcile_all SUITES 111→112 判据 1017→1024〔ledger-freetrial-caplimit 行〕+RUNNER PASS 112/112 controls 7/7 193.9s 零回归=qa/reconcile-all-R1849.log·矩阵再生 112/1024 green --check byte-identical ×2〔11404B〕+指纹哨兵 CLEAN domains=5+writer-census DRIFT-CLEAN flags=0·实锚教训=wrapper 双写者污染证据件致 census cd7 连坐一红（wrapper wb 预开证据路径+runner Tee 并发写同路径=字节交错·污染件在场触发 census new-dialect FLAG）→修正法=wrapper 零触碰证据路径·Tee 独写·清污染件 复跑即绿=R1791 包装器纪律增补·证据 qa/freetrial-caplimit-R1849.log 五节）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 19,
+    "log_lines_in_window": 21,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1848 qa writer-census daily-chain wiring delivered (score 2 = runnable artifact): census sentinel step after the profile step (baseline-present subprocess --check, missing-baseline honest INFO never gating, daily exit aggregates runner->sentinel->census), new suite 8/8 double-run byte-identical, SUITES 110->111 criteria 1009->1017, daily first-run RUNNER PASS 111/111 + RECONCILE-DAILY PASS sentinel=ok profile=ok census=ok (end-to-end anchor), fingerprint CLEAN, census live DRIFT-CLEAN, matrix 111/1017 --check x2"
+    "method": "R1849 freetrial cap_usage_board read-cap delivered (score 2 = runnable artifact): additive limit tail param (sole sentinel 0 keeps full board, positive int caps the (dev,plan) ascending tail window, overflow block reuses total as the full grant-row-set count and adds {limit,returned,truncated}, dedicated E_FT_BAD_LIMIT code before the window gate), new suite 7/7 double-run byte-identical, mirror-SQL third path, window-x-cap orthogonal three windows, SUITES 111->112 criteria 1017->1024, RUNNER PASS 112/112 controls 7/7, matrix 112/1024 --check x2, fingerprint CLEAN, census DRIFT-CLEAN; live lesson = wrapper double-writer corrupted the evidence path and tripped the census mid-run, root cause fixed (Tee sole writer, R1791 wrapper discipline addendum)"
   }
 }

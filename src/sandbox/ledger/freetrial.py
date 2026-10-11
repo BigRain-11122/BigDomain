@@ -95,6 +95,7 @@ E_FT_QUOTA = "E_FT_QUOTA"                     # AC-FT3
 E_FT_CONVERTED = "E_FT_CONVERTED"             # AC-FT3/AC-FT4
 E_FT_DUP_CONVERT = "E_FT_DUP_CONVERT"         # AC-FT4
 E_FT_NO_DISCLAIMER = "E_FT_NO_DISCLAIMER"     # AC-FT5
+E_FT_BAD_LIMIT = "E_FT_BAD_LIMIT"             # R1849 AC-CUL2
 
 _WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
@@ -969,7 +970,7 @@ class FreeTrialFace:
         env["disclaimer"] = self.disclaimer
         return env
 
-    def cap_usage_board(self, window=None):
+    def cap_usage_board(self, window=None, limit=0):
         """Per-grant cap-distance profile board (R1842
         tech-queue claim row; the seed = the calls_by_account
         R1837 face plus the cap_usage seed text): one row per
@@ -1022,7 +1023,31 @@ class FreeTrialFace:
         with zero dice and zero insertion-order surprises.
         The persistent ai_label rides every row (the AIGC
         labeling law: every view surface shows it). Pure
-        read."""
+        read.
+
+        Read cap (the R1849 claim row; the R1729/R1804/R1840
+        read-hat family law): limit=0 - the sole default
+        sentinel - keeps the full current behavior
+        byte-identical; a positive int caps the board to the
+        tail window, the same rows the mirror clause (ORDER
+        BY dev_account DESC, plan_id DESC LIMIT N, reversed
+        back to ascending) yields - with the in-board
+        relative order unchanged. The overflow block reuses
+        the existing "total" key as the full grant-row-set
+        count (window-filtered when a window rides along),
+        never the post-truncation count, and adds exactly
+        three keys {limit, returned, truncated} - a capped
+        read never lies about what it left out. Window
+        filtering runs before the cap (orthogonal
+        combination). A malformed limit fails closed
+        E_FT_BAD_LIMIT before the window gate (the
+        double-bad gate-order law; the sole sentinel is 0 -
+        a non-zero positive int caps, anything else
+        refuses)."""
+        if not _is_int(limit) or limit < 0:
+            raise TrialError(E_FT_BAD_LIMIT,
+                              "limit must be int >= 0: %r"
+                              % (limit,))
         w = None
         if window is not None:
             w = str(window)
@@ -1071,8 +1096,14 @@ class FreeTrialFace:
                     "ai_label": int(r[6]),
                 })
             total = len(board)
+            if limit > 0 and total > limit:
+                board = board[-limit:]
         env = {"cap_usage_board": board, "total": total}
         if w is not None:
             env["window"] = w
+        if limit > 0:
+            env["limit"] = limit
+            env["returned"] = len(board)
+            env["truncated"] = len(board) < total
         env["disclaimer"] = self.disclaimer
         return env

@@ -716,6 +716,15 @@ SUITES = [
     # count-domain-not-sliced verdict)
     ("ledger-freetrial-capusage",
      os.path.join("ledger", "test_freetrial_capusage.py"), 8),
+    # R1849 cap_usage_board read cap: limit=0 sole sentinel keeps
+    # the full board; positive int caps to the (dev,plan) ascending
+    # tail window; overflow block reuses total as the full
+    # grant-row-set count and adds {limit, returned, truncated};
+    # malformed limit fails closed E_FT_BAD_LIMIT before the
+    # window gate; window filter runs before the cap
+    # (AC-CUL1..CUL7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-caplimit",
+     os.path.join("ledger", "test_freetrial_caplimit.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
