@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-12T02:15:00+08:00",
+  "export_ts": "2026-10-12T02:37:46+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1836 一句话：给测试总控加了「自报身份」机制——以前用命令行窗口直接抓测试输出存档，中文会乱码且查不出写入者；现在不带存档路径启动时第一行自动声明「外壳捕获模式」，这类文件从此可被机器一眼识别。现场跑通整条日检链（106 项测试全绿），两次独立运行的中文行逐字节比对证明全链中文不再乱码；顺手给全部 1148 份历史证据文件做了写入者体检（651 份正常、15 份乱码原始件、296 份重编码件、97 份旧式 UTF-16、89 份其他），并修好一处账本排版老毛病。",
-    "latest_artifact": "最近实物：src/sandbox/reconcile_all.py（无参启动自标注段·git diff 12 行单点）+src/os/qa_writer_census.py（证据文件写入者体检工具·1148 件五态分类）+qa/reconcile-daily-20261012-2.log（全链日检 106/106 全绿+中文锚行两独立运行逐字节同一）+qa/selflabel-chain-R1836.log（证据 10/10 全过）·2026-10-12 R1836",
-    "next_milestone": "下个实物：技术队列按序交付（下一项=免费试用按开发者账号计数读面·写入者普查基线/漂移探测器等 10 项在册·判据先立再写代码）+每日首轮对账照常+2026-10-14 21:40 雷达候选清单到窗即过目认领·窗口 <=48h→2026-10-14 前。"
+    "current": "R1837 一句话：给免费试用模块补上「哪个开发者用了多少次」的统计读面。月、类型、套餐、引擎四个剖面此前都有了，唯独按开发者账号一直看不了；本面补齐后五个剖面完整，同样支持按月筛选，坏参数一律拒绝，只读不改数据。新测试 8 项全过，全套回归 107 项测试全绿，两次运行逐字节一致。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/freetrial.py（calls_by_account 开发者账号计数读面·additive 新方法）+src/sandbox/ledger/test_freetrial_callaccount.py（验收套件 8/8）+qa/freetrial-callaccount-R1837.log（五节证据）+qa/reconcile-all-R1837.log（107/107 全绿 188.0s）+docs/sandbox-suite-matrix.md（107 套件 986 判据再生）·2026-10-12 R1837",
+    "next_milestone": "下个实物：技术队列按序交付（下一项=免费试用「谁快到帽」用量剖面读面·写入者普查基线/漂移探测器等 10 项在册·判据先立再写代码）+每日首轮对账照常+2026-10-14 21:40 雷达候选清单到窗即过目认领·窗口 <=48h→2026-10-14 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "freetrial 调用 by-account 计数读面交付（R1837·P2 tech 队头 FIFO 最老可认领项〔R1831 补种 LN129〕·轮计分 2=可跑实物）：AC-CBA1..CBA8 预注册先于代码〔tech.md R1837 认领行本行即册·AC-CBA 前缀全仓扫描无主〕——calls_by_account(window=None) 纯读聚合面 additive 落成：缺省 None=全窗 account→计数 dict〔envelope 恰三键·account 键观测 TEXT 域升序零 RNG·total==Σ==COUNT(*) 双不变量〕+零调用世界 {} total=0 诚实空+显式 YYYY-MM 行过滤窗=该月 account 剖面或 {} 诚实空+window 键 additive+坏窗 14 形态全拒 E_FT_BAD_ARGS 零副作用〔四表计数前后同一〕+域外观测 account 不隐藏〔ghost-account-probe 非 usr: 前缀域外戳直注行缺省读升序首位显形计入 total·usr 形戳和 8==total 9−ghost 1·月窗读该月内显形该月外不可见·face 永不藏数据 R1776 AC-CHM3 同律〕+manual SQL GROUP BY dev_account 逐位等+键序==SQL ORDER BY 升序同构+纯读律〔inspect 零写语句+四表计数前后同一+双调 json.dumps 双形态逐字节同一〕+活态零缓存〔新调用 usr:alice 格 2→3·total 9→10·ghost/bob/hist-a/hist-b 格不动〕——SUITE PASS 8/8 exit 0 首跑全绿零修正+双跑 sha256 F840B7D89C55D2A7392DE9D5FB1FE9664F871F09DA30997840214ADF69ADB6BE 逐字节同一〔零 RNG 零时间戳〕·reconcile_all SUITES 106→107 判据 978→986 接线〔ledger-freetrial-callaccount 行〕+RUNNER PASS 107/107 controls 7/7 188.0s 零回归=qa/reconcile-all-R1837.log·矩阵再生 107/986 green --check byte-identical〔10944B·evidence 显式指定 qa/reconcile-all-R1837.log〕·证据 qa/freetrial-callaccount-R1837.log 五节·queue_tech_open 10→9 补种 1→10〔freetrial grant 用量帽距剖面读面窗〕·R1837"
+    ],
     [
       "2",
       "reconcile_all 无 argv 壳捕获自标注+daily 链端到端方言互证交付（R1836·P2 tech 队头 FIFO 最老可认领项〔R1827 补种 LN127·板序注=R1835 尾注指针指 by-account 行系漏扫本行·按板序纠正如实注〕·轮计分 2=可跑实物）：AC-SL1..SL4 判据预注册先于代码〔tech.md R1836 认领行本行即册·AC-SL 前缀全仓扫描无主〕——reconcile_all.py 增 SHELL_CAPTURE_LABEL 模块常量+main() 无 argv〔len<2〕首行 flush 自标注段〔git diff 12 insertions 单点·有 argv Tee 模式零标签行=现行证据首行序零漂移〕+流式首行证〔binary 管道首行内容逐字节==标签+kill rc=1·平台 text-mode 尾 EOL 为 CRLF 如实注=无 argv 壳捕获流 post-R1827 为 utf-8+CRLF=考古 pwsh-capture 签名族·标签宣告之〕；daily 链互证=全链实跑 qa/reconcile-daily-20261012-2.log〔同日 -2=R1714 先例·当日义务已由晨跑件兑现·互证载体非重跑〕RUNNER PASS 106/106 controls 7/7 181.8s+RECONCILE-DAILY verdict=PASS sentinel=ok profile=ok·五检全过〔strict utf-8 210550B 零错+CR 计数 0+三锚行 AC-L9〔AI 判定〕/AC-LR3〔赌博保本〕/AC-VR1〔非投顾 receipt〕与晨跑件逐字节同一=两独立全链捕获互证+首行非标签+verdict 行在册〕；普查件 src/os/qa_writer_census.py〔纯 ASCII·BOM 面 import qa_decode_probe._bom_of 单源+标签面 import SHELL_CAPTURE_LABEL 单源·--selftest 13/13+live qa/ 1148 件 tee=651/cmd-raw=15/pwsh-capture=296/ps-utf16=97/other=89 诚实桶+labeled_selfannounced=0 标签新落零存量件如实注·测量面不入 SUITES〕+矩阵 --check byte-identical〔10848B 106/978 零漂移·缺省发现面被新 daily -2 件 mtime 劫走=face-mismatch hint 非漂移·显式 --evidence 钉 R1833 原证据件判真漂移如实注〕+reconcile_daily.py 零字节+state.json 同文件卫生顺手修=R1831 遗留孤立逗号行并回行尾〔16 空格正典·eol 工具绿〕——证据 qa/selflabel-chain-R1836.log〔四节·10/10 ALL-PASS〕·queue_tech_open 消耗 1 补种 1=10 续常备线〔写入者普查基线+漂移探测器窗〕·R1836）"
@@ -528,7 +532,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1836",
+      "1837",
       "OSLoop 执行 tick"
     ],
     [
@@ -3435,15 +3439,15 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 32,
+    "log_lines_in_window": 34,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1836 reconcile_all no-argv shell-capture self-label + daily chain dialect mutual-proof delivered (score 2 = runnable artifact; P2 tech FIFO head per current board order - the R1835 tail-pointer named by-account but missed this 2026-10-11-planted row, corrected honestly): reconcile_all.py gains SHELL_CAPTURE_LABEL module constant + a no-argv first-line flush label block (git diff 12 insertions, argv/Tee mode untouched); streaming kill test proves the label is the byte-identical first output (platform text-mode trailing CRLF honestly noted = post-R1827 shell-capture stream is utf-8+CRLF, the archaeology pwsh-capture signature family, now self-announced); daily chain full run qa/reconcile-daily-20261012-2.log (same-day -2 suffix, R1714 precedent; daily obligation already honored by the morning file, this run is the proof vehicle) RUNNER PASS 106/106 + verdict=PASS sentinel=ok, five mechanical checks green: strict utf-8 210550B zero errors, CR count 0, three non-ASCII anchor lines byte-identical vs the morning capture (two independent full-chain runs), first line not the label, verdict in record; writer census probe src/os/qa_writer_census.py (measurement face, not in SUITES; BOM face imports qa_decode_probe._bom_of, label face imports the constant - single sources) selftest 13/13 + live qa/ 1148 files: tee=651 cmd-raw=15 pwsh-capture=296 ps-utf16=97 other=89 honest bucket, labeled_selfannounced=0; matrix --check byte-identical 106/978 vs the doc's own R1833 evidence (default discovery face hijacked by the fresh daily -2 file = face-mismatch hint not drift, pinned per hint); reconcile_daily.py zero bytes; state.json same-file hygiene: R1831-era stray bare-comma line folded back (16-space canon, eol tool green); five-silence nine faces all PASS/INFO zero new items; queue_tech_open 10 kept (consumed 1, planted writer-census baseline+drift detector window); heartbeat R1836 current"
+    "method": "R1837 freetrial calls_by_account developer-account profile pure-read face delivered (score 2 = runnable artifact; P2 tech FIFO head LN129 R1831 seed; AC-CBA1..CBA8 pre-registered before code; SUITE 8/8 + RUNNER 107/107 zero regression; queue tech open 10 maintained)"
   }
 }

@@ -1,0 +1,39 @@
+== qa/freetrial-callaccount-R1837.log ==
+R1837 freetrial calls_by_account account-profile pure-read face acceptance evidence (AC-CBA1..CBA8 pre-registered in state/queue/tech.md R1837 claim line before code; P2 tech FIFO head L129 R1831 seed).
+
+[1] suite run1 verbatim
+PASS AC-CBA1: zero-call world honest empty (True); envelope keys exact; account keys ascending ['ghost-account-probe', 'usr:alice', 'usr:bob', 'usr:hist-a', 'usr:hist-b']; cells {'ghost-account-probe': 1, 'usr:alice': 2, 'usr:bob': 1, 'usr:hist-a': 2, 'usr:hist-b': 3}; total 9 == sum == COUNT; window key additive on explicit read; config bytes stable
+PASS AC-CBA2: 14 bad forms rejected E_FT_BAD_ARGS; four-table counts unchanged (2, 2, 9, 0); None default accepted []
+PASS AC-CBA3: month 2026-08 account profile {'usr:hist-a': 2}; month 2026-09 account profile {'ghost-account-probe': 1, 'usr:hist-b': 3}; future 2026-11 honest empty; default read carries all observed accounts; zero cross-month leakage
+PASS AC-CBA4: per-account counts == manual SQL GROUP BY; total 9 == COUNT(*) == sum(cells); key order == SQL ORDER BY ascending ['ghost-account-probe', 'usr:alice', 'usr:bob', 'usr:hist-a', 'usr:hist-b']; windowed total == manual SQL 4; windowed account map == windowed SQL
+PASS AC-CBA5: out-of-domain account 'ghost-account-probe' surfaced in full read (cell 1, ascending slot 1 of ['ghost-account-probe', 'usr:alice', 'usr:bob', 'usr:hist-a', 'usr:hist-b']) and counted toward total 9 (usr-shaped stamps sum 8); surfaced in its month window; absent from months without it - the face never hides observed data
+PASS AC-CBA6: method source free of data-changing statements; four-table counts unchanged (2, 2, 9, 0); double-call dumps byte-identical (sorted and insertion order); windowed double-call identical
+PASS AC-CBA7: new live call: usr:alice cell 2 -> 3; total 9 -> 10; ghost/usr:bob/usr:hist-a/usr:hist-b cells unchanged; windowed read follows (cur window usr:alice -> 3); history month account profile unchanged
+PASS AC-CBA8: freetrial.py pure ASCII; import lines network-free (5 imports); SUITES registration row present; criteria drift self-check 7+1==8
+SUITE PASS 8/8 exit=0
+
+[2] double-run determinism
+run2 exit=0; stdout sha256 = F840B7D89C55D2A7392DE9D5FB1FE9664F871F09DA30997840214ADF69ADB6BE
+run1 sha256 == run2 sha256 (byte-identical, zero RNG, zero timestamps): True
+
+[3] full RUNNER regression excerpt (qa/reconcile-all-R1837.log)
+  | PASS suite ledger-freetrial-callaccount exit=0 pass-lines=8 fail-lines=0 criteria=8 0.3s
+...
+    | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wgio7sj7\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wgio7sj7\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wgio7sj7\member-ledger.db)
+  PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+    | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+    |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+  PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+  RUNNER PASS (107/107 suites green, reconcile controls 7/7, 188.0s)
+(SUITES 106->107 criteria 978->986 via ledger-freetrial-callaccount registration row; zero regression across the other 106 suites)
+
+[4] suite matrix regen + --check
+PASS generated docs/sandbox-suite-matrix.md (10944 bytes) - registry suites=107 criteria=986 evidence=qa/reconcile-all-R1837.log green=107/107
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10944 bytes, 107 suites, 986 criteria)
+
+[5] hygiene and registration
+freetrial.py: calls_by_account appended additively (calls_by_month/kind/plan/engine family untouched); source pure ASCII (suite AC-CBA8 asserts all bytes < 128); import lines network-free (5 imports); shipped ledger/config.json byte-stable (suite AC-CBA1 asserts config bytes unchanged).
+reconcile_all.py: SUITES registration row ledger-freetrial-callaccount / test_freetrial_callaccount.py criteria=8 added after the callengine row (suite AC-CBA8 asserts both strings present).
+daily standing line honored earlier today: qa/reconcile-daily-20261012.log (RECONCILE-DAILY 20261012 verdict=PASS runner_exit=0 sentinel=ok) - produced 00:11 by R1831, not re-run.
+criteria pre-registration ordering: tech.md R1837 claim line (AC-CBA1..CBA8) written before freetrial.py calls_by_account code (pre-registration discipline; claim text in git history of this commit).
