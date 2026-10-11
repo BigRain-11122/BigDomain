@@ -1,0 +1,29 @@
+R1824 apidev lifecycle audit trace evidence (AC-TR1..TR7)
+== [1] suite standalone double-run (determinism) ==
+PASS AC-TR1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True
+PASS AC-TR2: event rows verbatim keys=True, total==len=True, (event_utc,event_id) ascending=True, same-second tiebreak pin [rotate_out,rotate_in] insertion order kept (name-sort would flip)=True
+PASS AC-TR3: shapes: fresh=[] active, revoked=[revoke], A=[rotate_out->B] rotated_out, B=[rotate_in<-A, rotate_out->C], C pre=[rotate_in<-B] / post=[rotate_in <-B, revoke] revoked (double-terminal) -- briefs []/[('revoke', None)]/[('rotate_out', 4)]/[('rotate_in', 3), ('rotate_out', 5)]/[('rotate_in', 4)]/[('rotate_in', 4), ('revoke', None)]
+PASS AC-TR5: dead keys fully readable (revoked rk + rotated-out A/B + revoked-rotated-in C all trace without raising), A->B->C walkable purely through traces: pairs close both directions (A<->B=(3, 4), B<->C=(4, 5))
+PASS AC-TR4: trace vs key_view zero drift over the five key states (fresh/revoked/rotated-out/middle/successor-revoked, post-revoke world)=True
+PASS AC-TR6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero trace embedding=True
+PASS AC-TR7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, lifecycle_trace present=True
+SUITE apidev-lifecycle-trace: 7/7 criteria pass
+run1 exit=0 sha256=3c11c8f1e43055e2
+run2 exit=0 sha256=3c11c8f1e43055e2
+byte-identical=True
+
+== [2] RUNNER full-regression excerpt (qa/reconcile-all-R1824.log) ==
+PASS suite ledger-apidev-lifecycletrace exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (99/99 suites green, reconcile controls 7/7, 195.5s)
+
+== [3] suite matrix regen + --check ==
+PASS generated docs/sandbox-suite-matrix.md (10211 bytes) - registry suites=99 criteria=926 evidence=qa/reconcile-all-R1824.log green=99/99
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10211 bytes, 99 suites, 926 criteria)
+regen exit=0 check exit=0
+
+== [4] hygiene: git status on the four touched paths (shipped config.json must be absent = byte-stable) ==
+M src/sandbox/ledger/apidev.py
+ M src/sandbox/reconcile_all.py
+?? src/sandbox/ledger/test_apidev_lifecycle_trace.py
+exit=0

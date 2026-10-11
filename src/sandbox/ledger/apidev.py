@@ -41,7 +41,17 @@ existed; honesty law):
                           movement, zero register re-touch) and
                           the window usage of its full ancestor
                           chain (rotation never resets the monthly
-                          quota). Zero UPDATE, zero RNG.
+                          quota). Zero UPDATE, zero RNG. The
+                          store's audit read face is
+                          lifecycle_trace: one key's own event
+                          timeline (revoke/rotate_out/rotate_in
+                          with pair links) aggregated at read
+                          time over the append-only rows, status
+                          and pair links derived from the same
+                          rows key_view reads (zero drift), the
+                          rotation chain walkable in both
+                          directions; embedded faces stay
+                          untouched (AC-RJW4 law).
   ring 5 rate            : per-key per-UTC-minute call cap
                           (minute_cap, 0 = off, backward
                           compatible: the legacy five-argument
@@ -826,6 +836,59 @@ class DevKeyFace:
         return {"api_key": api_key, "key_name": row[2],
                 "window": window, "by_kind": by_kind,
                 "total": sum(by_kind.values()),
+                "disclaimer": self.disclaimer}
+
+    # -- lifecycle audit trace (read face) -----------------------------------
+
+    def lifecycle_trace(self, api_key):
+        """One key's lifecycle audit trace: the key's own
+        immutable lifecycle events (revoke / rotate_out /
+        rotate_in, with their timestamps and pair links) in event
+        time order, aggregated at read time over the append-only
+        key_events rows (zero maintained counters, zero UPDATE).
+        This is the audit-profile read the lifecycle store never
+        exposed: the developer panel's "what happened to this
+        key" face. Status and both pair links (rotated_from_key_id
+        / rotated_to_key_id) are derived from the same fetched
+        rows, so this face and key_view cannot drift; the pair
+        ids close the rotation chain in both directions, so an
+        A->B->C lineage stays walkable purely through traces.
+        Read-only, zero token movement; a revoked or rotated-out
+        key stays fully readable (a terminal state never closes
+        the audit face). The key gate fires first (the
+        call-chain key-gate-first law). Ordering is
+        (event_utc, event_id) so same-second events keep their
+        insertion order deterministically. The embedded faces
+        (key_view, dev_board) stay untouched (the AC-RJW4
+        embedded-face law)."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        key_id = row[0]
+        with self._lock:
+            events = self._lconn.execute(
+                "SELECT event_id, event, pair_key_id, event_utc"
+                " FROM key_events WHERE key_id = ?"
+                " ORDER BY event_utc, event_id",
+                (key_id,)).fetchall()
+        rotated_from = None
+        rotated_to = None
+        for ev in events:
+            if ev[1] == "rotate_in":
+                rotated_from = ev[2]
+            elif ev[1] == "rotate_out":
+                rotated_to = ev[2]
+        terminal = self._terminal_event(key_id)
+        return {"api_key": api_key, "dev_account": row[1],
+                "key_name": row[2], "key_id": key_id,
+                "status": _STATUS_BY_EVENT[terminal[0]]
+                          if terminal is not None else "active",
+                "rotated_from_key_id": rotated_from,
+                "rotated_to_key_id": rotated_to,
+                "events": [{"event_id": e[0], "event": e[1],
+                            "pair_key_id": e[2], "event_utc": e[3]}
+                           for e in events],
+                "total": len(events),
                 "disclaimer": self.disclaimer}
 
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
