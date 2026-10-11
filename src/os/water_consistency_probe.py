@@ -130,6 +130,25 @@ ring fires through a good limit), and the reads stay pure
 product files touched (measurement face, R1727 precedent).
 
 
+R1813 extension (drift-row wall-clock-month abstraction): the [4]
+drift row used a hardcoded ts, which was the probe world's only
+live-month coupling (R1806 onwards) - run in any month other than
+2026-10 the row fell into a foreign month and broke the [10]
+n_cur==11 structural constant (a month coupling that R1812 had
+just introduced). The ts now derives from the pre-injection board
+tail row month (the R1809 ghost-row method), so the drift row
+always rides the real flow month and the count readings become
+month-independent structural constants. The abstracted ts ties
+the ghost ts (same month, same -11T00:00:00.000000Z clock), so the
+board order falls to the window_id tiebreak: drift (injected in
+[4]) before ghost (injected in [7]) - the prior order carried
+forward, asserted in [10]. Known family boundary, not extended
+here: a run inside calendar 2026-12 turns the "future window"
+into the current month (the R1807/R1808/R1811 fut-2026-12 honest
+empty reads then exercise the current-month path instead). Zero
+product files touched (measurement face, R1727 precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -330,11 +349,19 @@ def main():
         fail = fail or not (all_match and composition_ok and hand_ok)
 
         # ---- AC-JC4: drift injection negative path -------------------
+        # R1813: drift ts derives from the pre-injection board tail row
+        # month (the ghost-row R1809 method) so the injected row always
+        # rides the real flow month; the old wall-clock-month-coupled
+        # literal is gone and the [10] n_cur==11 count becomes a
+        # month-independent structural constant.
+        drift_w = pipe.journal.journal_board()["journal_board"][-1][
+            "ts_utc"][:7]
         conn = sqlite3.connect(journal_db)
         conn.execute(
             "INSERT INTO water_windows (kind, delta, total_delta, ts_utc) "
-            "VALUES ('submit', ?, 5, '2026-10-11T00:00:00.000000Z')",
-            (json.dumps({"noise.total": 5}, sort_keys=True),))
+            "VALUES ('submit', ?, 5, ?)",
+            (json.dumps({"noise.total": 5}, sort_keys=True),
+             drift_w + "-11T00:00:00.000000Z"))
         conn.commit()
         conn.close()
         drift_env = pipe.journal.cell_totals()
@@ -895,11 +922,32 @@ def main():
         store_rl = json.dumps(pipe.store.pool_water_levels(),
                               sort_keys=True)
         rl5_ok = store_rl == store_pre
+        # R1813 AC-DM3: month-abstracted drift ts ties the ghost ts
+        # (same month, same -11T00:00:00.000000Z clock) so the board
+        # order falls to the window_id tiebreak: drift row (injected
+        # in [4]) precedes the ghost row (injected in [7]) - the
+        # pre-R1813 order carried forward.
+        drift_pos = next(i for i, r in enumerate(full_rows_rl)
+                        if r["kind"] == "submit"
+                        and r["total_delta"] == 5)
+        ghost_pos = next(i for i, r in enumerate(full_rows_rl)
+                         if r["kind"] == "legacy-ghost")
+        ts_tie = (full_rows_rl[drift_pos]["ts_utc"]
+                  == full_rows_rl[ghost_pos]["ts_utc"]
+                  == drift_w + "-11T00:00:00.000000Z")
+        tie_ok = (ts_tie and drift_pos < ghost_pos
+                  and drift_w == cur_w)
         sections.append("[10] board read-cap x month-window combo:")
         sections.append("    tail-truncation: cur-rows=%d cap-rows=%d "
                        "positional=%s %s"
                         % (n_cur, len(cap_rows), pos_ok,
                            "OK" if rl1_ok else "DRIFT"))
+        sections.append("    drift-month tie-order (R1813): "
+                       "drift_w=%s==cur_w=%s ts-tie=%s "
+                       "drift-pos=%d ghost-pos=%d %s"
+                        % (drift_w, cur_w, ts_tie,
+                           drift_pos, ghost_pos,
+                           "OK" if tie_ok else "DRIFT"))
         sections.append("    envelope additive: diff-keys=%s "
                        "common-eq=%s limit=%s returned=%s "
                        "truncated=%s %s"
@@ -927,7 +975,7 @@ def main():
                        "identical=%s %s"
                         % (rl5_ok, "OK" if rl5_ok else "DRIFT"))
         fail = fail or not (rl1_ok and rl2_ok and rl3_ok and rl4_ok
-                            and rl5_ok)
+                            and rl5_ok and tie_ok)
 
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
