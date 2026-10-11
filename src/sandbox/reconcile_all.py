@@ -580,6 +580,11 @@ SUITES = [
     # the standing non-advisory disclaimer)
     # (AC-NP1..NP7 pre-registered in state/queue/tech.md)
     ("ugc-pool-water", os.path.join("ugc", "test_pool_water.py"), 7),
+    # R1785 UGC pool water two-snapshot delta probe: caller-held
+    # snapshot vs single live levels call (change-only cells,
+    # prev-only keys show as negatives)
+    # (AC-DW1..DW7 pre-registered in state/queue/tech.md)
+    ("ugc-pool-delta", os.path.join("ugc", "test_pool_delta.py"), 7),
 ]
 
 FAILS = 0

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T09:25:46+08:00",
+  "export_ts": "2026-10-11T09:48:11+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1784 一句话：pay 渠道状态矩阵升级月窗读面——19.9 支付域对账消费面再进一格：按月过滤每渠道×每状态计数（创建月 record-time 戳），坏窗参一律拒（fail-closed），全量回归 83 套件 813 判据全绿。",
-    "latest_artifact": "本轮实物：src/sandbox/pay/test_channel_window.py（7 判据月窗读面套件）+ orders.py 月窗参（window=YYYY-MM）·新增套件连公幸全量回归 83/83 全绿+ qa/pay-channel-window-R1784.log（套件+回归+矩阵+哨兵六节证据）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头下一项「ugc 池水位双调差分探针窗」（两调差分=窗口内分流净变读数·纯读零快照）——窗 ≤48h（不晚于 10-13），判据预注册先于代码照走。"
+    "current": "R1785 一句话：fold R489 水位整编（79762B→72485B·99 token 零丢失）+ugc 池水位双调差分读面交付——调用方持快照传入参+单一活读派生，21 坏快照形态全拒（fail-closed），全量回归 84 套件 820 判据全绿。",
+    "latest_artifact": "本轮实物：src/sandbox/ugc/test_pool_delta.py（7 判据双调差分套件）+ store.py pool_water_delta（+89/-0 纯读面：change-only 净变胞+prev 独有键负值并集语义）+ 全量回归 84/84 全绿+ qa/ugc-pooldelta-R1785.log（套件+回归+矩阵+哨兵+卫生五节证据）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头下一项「expiring_soon 档位分布读面探索」（到期榜按 tier/period_no 分布聚合纯读派生·确定性排序零 RNG）——窗 ≤48h（不晚于 10-13），判据预注册先于代码照走。"
   },
   "depts": [
     {
@@ -355,7 +355,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1784",
+      "1785",
       "OSLoop 执行 tick"
     ],
     [
@@ -3233,20 +3233,24 @@
     [
       "2",
       "pay 渠道矩阵月窗读面交付（R1784·P2 tech 队头可领项·轮计分 2=可跑实物：AC-CW1..CW7 预注册先于代码〔tech.md R1784 认领行〕——orders.py channel_status_matrix 增 window 尾参［缺省 None=全窗现行行为零漂移+envelope 五键 set 等断言+缺省双调 json 逐位同一+显式窗读 additive window 键｝+14 坏窗形态全拒 E_BAD_STATE（Z 尾锚严锚家族律 ledger apidev L159 同锚）零读副作用+历史月窗读［cur/hist/future 全运行时派生零硬编码·manual SQL 交叉逐位等·两窗互不渗透·未来窗 10 格全 0 诚实空｝+域外对窗内诚实面［tamper (legacy,reversed) dense 后追加计入 total·他窗零计入=窗隔离｝+纯读律［dml-hits=0·三表计数前后同一·双调同一｝+活态零缓存［当月窗随 created-pending-granted 跟随·hist 窗四读 frozen｝·SUITES 82→83 判据 806→813+RUNNER PASS 83/83 controls 7/7 151.7s 零回归+矩阵再生 83/813 green --check byte-identical+指纹哨兵 CLEAN domains=5·证据 qa/pay-channel-window-R1784.log"
+    ],
+    [
+      "2",
+      "fold R489 水位整编+ugc 池水位双调差分探针交付（R1785·fold 随轮+P2 tech 队头可领项·轮计分 2=可跑实物：AC-DW1..DW7 预注册先于代码〔tech.md R1785 认领行先落〕——store.py pool_water_delta +89/-0 additive〔git numstat 证据〕：调用方持快照传入参+现值侧=单次活 pool_water_levels() 派生〔单一派生源·hot_board_delta R1770 同律〕+四族闭集胞 signed 净变 change-only〔恒稳胞省略·全恒稳=诚实空 delta〕+prev 独有键负值显〔并集语义〕+21 坏快照形态全拒 E_BAD_STATE fail-closed 零读副作用+双径交叉验证〔手算对照逐位等〕+窗口净变真流例〔suspended +1−1 净零省略+verdicted.pass +1〕+纯读律〔dml-hits=0·五表稳定·双调逐字节同一〕——test_pool_delta.py SUITE 7/7 双跑绿〔首跑全绿〕+SUITES 83→84 判据 813→820+RUNNER PASS 84/84 controls 7/7 154.7s 零回归=qa/reconcile-all-R1785.log+矩阵再生 84/820 green --check byte-identical〔9004B〕+指纹哨兵 CLEAN domains=5·证据 qa/ugc-pooldelta-R1785.log·queue_tech_open 6→5；fold R489：tail-5 窗 5 行 12233B 压 1 滚窗行 kept=0·99 token 零丢失·post==predicted 72485B·archive §R1785 verbatim+preop logs/state-preop-R1785.bak〔sha16 f726d14c5eb7d437〕"
     ]
   ],
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 6,
+    "queue_tech_open": 5,
     "queue_explore_open": 10,
-    "method": "R1784 pay channel-status matrix monthly window (P2 tech queue head, AC-CW1..CW7 pre-registered in tech.md before code): orders.py channel_status_matrix(window=None) - default None keeps the full-window dense matrix with zero drift (five-key envelope set-equality + default==None byte-identical + additive window key on explicit reads); 14 bad window forms all refused E_BAD_STATE (strict Z-tail anchor, ledger apidev L159 same family law) with zero read side-effects; historical/future months derived at runtime (manual-SQL cross-validation, two-window non-penetration, future window honest all-zero); out-of-domain pairs appended-and-counted inside the window; pure-read law (dml-hits=0, counts stable, double-call identical); live zero-cache (current-month window follows created-pending-granted, hist window frozen); SUITES 82->83 criteria 806->813, RUNNER PASS 83/83 controls 7/7 151.7s, matrix regen 83/813 byte-identical, fingerprint sentinel CLEAN domains=5; evidence qa/pay-channel-window-R1784.log"
+    "method": "R1785 fold R489 water-level compaction + ugc pool water two-snapshot delta probe (P2 tech queue head, AC-DW1..DW7 pre-registered in tech.md before code): store.py pool_water_delta +89/-0 additive - caller-held snapshot vs a single live pool_water_levels() call (single derivation source, R1770 board-movement precedent); change-only signed net-change cells over the closed set with steady cells omitted and prev-only keys shown as negatives (union semantics); 21 malformed snapshot forms refused E_BAD_STATE fail-closed with zero read side-effects; dual-path cross-validation bitwise equal; window net-change real-flow example (verdict migration suspended -1 pass +1, total invariant); pure-read law (no write verbs, five tables stable, double-call byte-identical); SUITES 83->84 criteria 813->820, RUNNER PASS 84/84 controls 7/7 154.7s, matrix regen 84/820 byte-identical, fingerprint sentinel CLEAN domains=5; fold R489: 5 lines 12233B to one roll line kept=0, 99 tokens zero-loss, post==predicted 72485B; evidence qa/ugc-pooldelta-R1785.log + qa/reconcile-all-R1785.log"
   }
 }

@@ -420,3 +420,92 @@ class UGCStore:
             "disclaimer": self.disclaimer,
             "persistent": True,
         }
+
+    _PW_VERDICT_CELLS = ("pass", "risky")
+
+    def _pw_count(self, value):
+        """Validate one snapshot count cell: a real int >= 0 (bool is an
+        int subclass, excluded explicitly - R1712 bad-arg precedent)."""
+        if (isinstance(value, bool) or not isinstance(value, int)
+                or value < 0):
+            raise ValueError(E_BAD_STATE)
+        return value
+
+    def _pw_prev_cells(self, snapshot):
+        """Validate and flatten a caller-held previous water envelope
+        into comparable cells (R1785 delta face). Fail-closed: the
+        closed cell set of the levels face must be present and
+        well-formed; reason and verdict keys must be non-empty
+        strings; every count must be a real non-negative int."""
+        if not isinstance(snapshot, dict):
+            raise ValueError(E_BAD_STATE)
+        levels = snapshot.get("pool_water_levels")
+        if not isinstance(levels, dict):
+            raise ValueError(E_BAD_STATE)
+        noise = levels.get("noise")
+        review = levels.get("review")
+        if not isinstance(noise, dict) or not isinstance(review, dict):
+            raise ValueError(E_BAD_STATE)
+        by_reason = noise.get("by_reason")
+        verdicted = review.get("verdicted")
+        if not isinstance(by_reason, dict) or not isinstance(verdicted, dict):
+            raise ValueError(E_BAD_STATE)
+        for key in list(by_reason) + list(verdicted):
+            if not isinstance(key, str) or not key:
+                raise ValueError(E_BAD_STATE)
+        for cell in self._PW_VERDICT_CELLS:
+            if cell not in verdicted:
+                raise ValueError(E_BAD_STATE)
+        return {
+            "noise_total": self._pw_count(noise.get("total")),
+            "by_reason": {key: self._pw_count(val)
+                          for key, val in by_reason.items()},
+            "suspended": self._pw_count(review.get("suspended")),
+            "verdicted": {key: self._pw_count(val)
+                          for key, val in verdicted.items()},
+            "total": self._pw_count(snapshot.get("total")),
+        }
+
+    def pool_water_delta(self, snapshot):
+        """R1785 two-snapshot net-change read face for the diverting
+        pools: the difference between a caller-held previous
+        pool_water_levels() envelope and the live levels. The current
+        side derives from a single live levels call (single
+        derivation source, zero second aggregation engine - the
+        R1770 board-movement precedent). Only changed cells appear in
+        the delta map (change-only semantics); a fully-steady world
+        returns an honest empty map. Reason and verdict keys union
+        the two sides: a prev-only key zeroed inside the window
+        shows as a negative cell (a caller-held cross-world snapshot
+        is a legitimate face input). Zero stored snapshots, zero
+        cache, zero RNG; the envelope carries the standing
+        non-advisory disclaimer (resident face)."""
+        if self.disclaimer is None:
+            raise ValueError(E_STORE_NO_DISCLAIMER)
+        prev = self._pw_prev_cells(snapshot)
+        cur_env = self.pool_water_levels()
+        cur = cur_env["pool_water_levels"]
+        cur_reasons = cur["noise"]["by_reason"]
+        cur_verdicts = cur["review"]["verdicted"]
+        raw = {}
+
+        def _cell(key, now, then):
+            diff = int(now) - int(then)
+            if diff != 0:
+                raw[key] = diff
+
+        _cell("noise.total", cur["noise"]["total"], prev["noise_total"])
+        for key in sorted(set(prev["by_reason"]) | set(cur_reasons)):
+            _cell("noise.by_reason." + key, cur_reasons.get(key, 0),
+                  prev["by_reason"].get(key, 0))
+        _cell("review.suspended", cur["review"]["suspended"],
+              prev["suspended"])
+        for key in sorted(set(prev["verdicted"]) | set(cur_verdicts)):
+            _cell("review.verdicted." + key, cur_verdicts.get(key, 0),
+                  prev["verdicted"].get(key, 0))
+        return {
+            "pool_water_delta": {key: raw[key] for key in sorted(raw)},
+            "total_delta": int(cur_env["total"]) - int(prev["total"]),
+            "disclaimer": self.disclaimer,
+            "persistent": True,
+        }
