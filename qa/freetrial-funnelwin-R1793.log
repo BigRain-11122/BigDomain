@@ -1,0 +1,42 @@
+== freetrial funnel window parameterization R1793 evidence ==
+
+-- 1) suite rerun (AC-CFW1..CFW7) exit=0 --
+PASS AC-CFW1: default envelope keys exact=True; double-call byte-identical=True; rows manual-SQL equal=True; explicit window adds key window=True additive; cur-month window == full board for the all-current-month world=True
+PASS AC-CFW2: 14/14 malformed forms rejected E_FT_BAD_ARGS (11 base + 3 trailing R1748 forms); default sentinel is None only (empty string rejected); four-table counts flat (2, 1, 1, 0) -> (2, 1, 1, 0)
+PASS AC-CFW3: windowed cells == manual SQL per record-time column [xmonth-cross g=0 c=1; inmonth-full g=1 c=1; alpha-starter g=0 c=0; zulu-zero g=0 c=0]; history window carries zero current-month rows=True; current-month window carries zero history rows=True; older month read exact=True; future window honest zeros dense=True; default full-window still shows every plan=True
+PASS AC-CFW4: cross-month case (grant 2026-08 + conversion 2026-09): window 2026-09 granted_w=0 converted_w=1 active=0 (net-flow -1 never surfaced under the field name)=True; older-month snapshot active=1=True; every windowed active == manual cumulative SQL=True; active >= 0 across all windows=True
+PASS AC-CFW5: zero-grant guard in window (granted_w=0, converted_w=1 -> rate 0.0)=True; in-month full funnel rate 1.0=True; every windowed rate == windowed ratio arithmetic=True
+PASS AC-CFW6: four-table counts flat True; method source carries zero data-changing statements (inspect)=True; windowed double-call byte-identical=True; fresh grant moves cur-month window 0->1 while history window stays 0=True
+PASS AC-CFW7: module pure ASCII (0 non-ascii); true import lines carry zero network libs (0); zero mutation surface for own tables; zero dice; config.json byte-stable; reconcile_all SUITES row 'ledger-freetrial-funnelwin' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+
+-- 2) hygiene: git status --short + diff stat --
+ M src/sandbox/ledger/freetrial.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/freetrial-funnelwin-R1793.log
+?? qa/reconcile-all-R1793.log
+?? src/sandbox/ledger/test_freetrial_funnelwin.py
+ src/sandbox/ledger/freetrial.py | 86 +++++++++++++++++++++++++++++++++++------
+ src/sandbox/reconcile_all.py    | 10 +++++
+ 2 files changed, 84 insertions(+), 12 deletions(-)
+config.json in status (must be absent from sandbox): False
+-- 3) RUNNER regression verdict --
+PASS suite ledger-freetrial-funnel exit=0 pass-lines=7 fail-lines=0 criteria=7 0.8s
+PASS suite ledger-freetrial-funnelwin exit=0 pass-lines=7 fail-lines=0 criteria=7 0.4s
+RUNNER PASS (87/87 suites green, reconcile controls 7/7, 241.0s)
+-- 4) suite_matrix regen + --check --
+regen exit=0
+check #1 exit=0 tail=PASS check: docs/sandbox-suite-matrix.md byte-identical (9259 bytes, 87 suites, 845 criteria)
+check #2 exit=0 tail=PASS check: docs/sandbox-suite-matrix.md byte-identical (9259 bytes, 87 suites, 845 criteria)
+--check double-run byte-identical: True
+-- 5) schema fingerprint sentinel --
+sentinel exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+== end evidence ==

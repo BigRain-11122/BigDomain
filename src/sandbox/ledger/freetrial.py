@@ -78,6 +78,7 @@ explore-queue row and were written before this code existed
 
 import datetime
 import os
+import re
 import sqlite3
 import threading
 
@@ -94,6 +95,8 @@ E_FT_QUOTA = "E_FT_QUOTA"                     # AC-FT3
 E_FT_CONVERTED = "E_FT_CONVERTED"             # AC-FT3/AC-FT4
 E_FT_DUP_CONVERT = "E_FT_DUP_CONVERT"         # AC-FT4
 E_FT_NO_DISCLAIMER = "E_FT_NO_DISCLAIMER"     # AC-FT5
+
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS trial_plans (
@@ -549,7 +552,7 @@ class FreeTrialFace:
                                  "converted_utc": r[3]}
                                 for r in rows]}
 
-    def conversion_funnel_board(self):
+    def conversion_funnel_board(self, window=None):
         """Plan-level conversion-funnel board (R1788 explore
         queue row; the seed = this face's R1768 registry): one
         row per registered plan carrying the grant count, the
@@ -566,19 +569,76 @@ class FreeTrialFace:
         is deterministic with zero dice and zero insertion-order
         keys. The declared AIGC label persists on every row and
         the envelope carries the resident disclaimer. Pure
-        read."""
+        read.
+
+        Window parameterization (R1793 tech-queue row, the
+        R1730/R1732/R1735/R1784 family law): window=None is
+        the full-window default with zero drift against the
+        prior single-arg behavior; an explicit "YYYY-MM" month
+        window filters granted by granted_utc and converted by
+        converted_utc (record-time columns, each row family on
+        its own provenance stamp - the seed verdict). In a
+        windowed read active_trials switches to the
+        end-of-window snapshot: grants whose grant month is at
+        or before the window minus conversions whose conversion
+        month is at or before the window - the conversion gate
+        forces month(grant) <= month(conversion), so the
+        subtraction keeps the structurally-non-negative
+        registered verdict across windows; the in-window net
+        flow (granted_w - converted_w, which may go negative
+        when an earlier grant converts inside this window) is
+        deliberately NOT surfaced under this field name. The
+        conversion rate stays the window-filtered ratio under
+        the same zero-grant guard. The explicit-window envelope
+        adds one "window" key (additive); the default envelope
+        is byte-identical to the prior shape. A malformed
+        window fails closed E_FT_BAD_ARGS before any read
+        (zero side effects)."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise TrialError(E_FT_BAD_ARGS,
+                                 "window must be YYYY-MM: %r"
+                                 % (window,))
         with self._lock:
             plans = self._conn.execute(
                 "SELECT plan_id, plan_key, title, ai_label FROM"
                 " trial_plans ORDER BY plan_key").fetchall()
             rows = []
             for plan_id, p_key, title, label in plans:
-                granted = self._conn.execute(
-                    "SELECT COUNT(*) FROM trial_grants"
-                    " WHERE plan_id = ?", (plan_id,)).fetchone()[0]
-                converted = self._conn.execute(
-                    "SELECT COUNT(*) FROM trial_conversions"
-                    " WHERE plan_id = ?", (plan_id,)).fetchone()[0]
+                if w is None:
+                    granted = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_grants"
+                        " WHERE plan_id = ?",
+                        (plan_id,)).fetchone()[0]
+                    converted = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_conversions"
+                        " WHERE plan_id = ?",
+                        (plan_id,)).fetchone()[0]
+                    active = int(granted) - int(converted)
+                else:
+                    granted = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_grants"
+                        " WHERE plan_id = ?"
+                        " AND substr(granted_utc, 1, 7) = ?",
+                        (plan_id, w)).fetchone()[0]
+                    converted = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_conversions"
+                        " WHERE plan_id = ?"
+                        " AND substr(converted_utc, 1, 7) = ?",
+                        (plan_id, w)).fetchone()[0]
+                    g_cum = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_grants"
+                        " WHERE plan_id = ?"
+                        " AND substr(granted_utc, 1, 7) <= ?",
+                        (plan_id, w)).fetchone()[0]
+                    c_cum = self._conn.execute(
+                        "SELECT COUNT(*) FROM trial_conversions"
+                        " WHERE plan_id = ?"
+                        " AND substr(converted_utc, 1, 7) <= ?",
+                        (plan_id, w)).fetchone()[0]
+                    active = int(g_cum) - int(c_cum)
                 rate = (round(converted / granted, 4)
                         if granted > 0 else 0.0)
                 rows.append({"plan_id": int(plan_id),
@@ -586,8 +646,10 @@ class FreeTrialFace:
                              "ai_label": int(label),
                              "granted": int(granted),
                              "converted": int(converted),
-                             "active_trials": int(granted)
-                             - int(converted),
+                             "active_trials": int(active),
                              "conversion_rate": rate})
-        return {"conversion_funnel_board": rows,
-                "disclaimer": self.disclaimer}
+        env = {"conversion_funnel_board": rows}
+        if w is not None:
+            env["window"] = w
+        env["disclaimer"] = self.disclaimer
+        return env

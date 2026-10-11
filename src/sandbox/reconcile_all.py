@@ -593,6 +593,16 @@ SUITES = [
     # (AC-CF1..CF7 pre-registered in state/queue/explore.md)
     ("ledger-freetrial-funnel",
      os.path.join("ledger", "test_freetrial_funnel.py"), 7),
+    # R1793 free-trial funnel window parameterization: default
+    # None full-window zero drift + explicit YYYY-MM month
+    # window filtering granted by granted_utc and converted by
+    # converted_utc (record-time columns); windowed
+    # active_trials = end-of-window snapshot (grants month<=W
+    # minus conversions month<=W, structurally non-negative);
+    # malformed windows fail closed E_FT_BAD_ARGS
+    # (AC-CFW1..CFW7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-funnelwin",
+     os.path.join("ledger", "test_freetrial_funnelwin.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

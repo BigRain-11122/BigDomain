@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-11T11:56:39+08:00",
+  "export_ts": "2026-10-11T12:18:53+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1792 一句话：lobby idea pool 事件派生读面交付（AC-S18/S19 全过 SUITE 22/22——EventStore.idea_pool_board 纯读派生〔idea.submit per zone 聚合〕+idea.board 协议接线〔rooms 过滤 AC-S17 同律〕+fresh 进程重启存活证〔新进程同 db·内存 stub 必空·榜恒真〕·RUNNER PASS 86/86 controls 7/7 144.1s·矩阵 86/838 green --check 双过·指纹哨兵 CLEAN·证据 qa/lobby-ideaboard-R1792.log 五节）。",
-    "latest_artifact": "本轮实物：lobby idea pool 事件派生读面（store.py idea_pool_board 纯读面+server.py handle_idea_board+dispatch 行+test_client.py AC-S18/S19 例〔判据 20→22〕+spec v0.7 增补〔§一表 S18/S19 行+§二 type 枚举+idea 池读面节〕+reconcile_all lobby 20→22）+qa 证据两件（reconcile-all-R1792/lobby-ideaboard-R1792）。（2026-10-11）",
+    "current": "R1793 一句话：freetrial 漏斗板月窗参数化交付（AC-CFW1..CFW7 全过 SUITE 7/7 首跑绿——conversion_funnel_board 窗参化〔缺省 None 全窗零漂移+YYYY-MM 月窗 record-time 双列过滤〕+active_trials 月末快照口径〔结构非负保真·净流不落字段〕+坏窗参 14 形态 fail-closed·RUNNER PASS 87/87 controls 7/7 241.0s·矩阵 87/845 双过·指纹哨兵 CLEAN·证据 qa/freetrial-funnelwin-R1793.log 五节）。",
+    "latest_artifact": "本轮实物：freetrial 漏斗板月窗参数化（src/sandbox/ledger/freetrial.py conversion_funnel_board window 尾参 +84/-12 additive+test_freetrial_funnelwin.py 新套件 7 判据+reconcile_all SUITES 87 行接线〔86→87·838→845〕）+qa 证据两件（reconcile-all-R1793/freetrial-funnelwin-R1793）+矩阵文档再生（docs/sandbox-suite-matrix.md 87 套件 845 判据 green）。（2026-10-11）",
     "next_milestone": "下个实物：tech 队头滚动（reconcile_all 子进程输出编码统一面〔RUNNER 证据件混方言实测种子〕或 freetrial 漏斗月窗参数化·判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）+fold R492 轮首首测裁定（收账后水位 83983B 越线）——窗 ≤48h（2026-10-13 前）。"
   },
   "depts": [
@@ -378,8 +378,9 @@
       "2",
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
+    "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1792",
+      "1793",
       "OSLoop 执行 tick"
     ],
     [
@@ -3270,10 +3271,10 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 28,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
