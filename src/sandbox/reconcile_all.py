@@ -85,7 +85,8 @@ SUITES = [
     # distinct active-actor aggregation, pure-read derivation on the
     # EventStore (zero UPDATE, standing disclaimer envelope,
     # fail-closed without a wired disclaimer) - AC-S14/S15.
-    ("lobby", os.path.join("lobby", "test_client.py"), 18),
+    # R1790 room.board protocol wiring face - AC-S16 (18 -> 19).
+    ("lobby", os.path.join("lobby", "test_client.py"), 19),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",

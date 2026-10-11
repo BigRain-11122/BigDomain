@@ -8,7 +8,12 @@ detection, backoff reconnect with exact room-set restoration, idempotent
 replay via client_msg_id) plus the room-level message read face
 AC-S14/S15 (R1773: per-room chat counts + distinct active-actor
 aggregation, pure-read derivation on the EventStore, zero UPDATE,
-standing disclaimer envelope, fail-closed without a wired disclaimer).
+standing disclaimer envelope, fail-closed without a wired disclaimer)
+plus the protocol wiring face AC-S16 (R1790: room.board request/
+response frame over the store read face - spectator-queryable public
+read, server-authoritative fields, live cross-check against the
+server db, zero-cache fresh reflection, legacy no-disclaimer store
+rejected gracefully through sec.reject).
 Each criterion prints PASS/FAIL with evidence; the process exits non-zero
 on any FAIL.
 
@@ -1347,6 +1352,67 @@ async def suite():
         record("AC-S10", ok10, "chat->%s(room=%s); idea->pool-stub idea_id=%s; store-types=%s"
                % (chat_out.get("type"), chat_out.get("room"),
                   bool(idea_out.get("payload", {}).get("idea_id")), types))
+
+        # AC-S16: room.board protocol wiring (R1790) - spectator public
+        # read face over the R1773 store read face; cross-checked against
+        # this server's db (WAL concurrent read) and proven live-fresh.
+        fb, _, _ = await open_client(8091)
+        clients.append(fb)
+        await fb.send(frame("room.board"))
+        board_frame = await recv_until(fb, lambda x: x.get("type") == "room.board")
+        board = board_frame.get("payload", {}).get("board", [])
+        bdis = board_frame.get("payload", {}).get("disclaimer", "")
+        manual = db_query(
+            srv.db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' GROUP BY zone ORDER BY zone")
+        manual_board = [{"room": r, "messages": int(n), "actors": int(k)}
+                        for r, n, k in manual]
+        ok_board = (board == manual_board
+                    and board_frame.get("ai_generated") is False
+                    and board_frame.get("actor") == "system"
+                    and bdis == cfg["risk_warning"]["text"]
+                    and all(row["room"] in cfg["rooms"] for row in board)
+                    and any(row["messages"] > 0 for row in board))
+        # fresh reflection: a new broadcast moves the next board query
+        # (e is the resident with remaining rate budget; d is muted)
+        await e.send(frame("chat.send", room="lobby",
+                           payload={"text": "board refresh probe"}))
+        await recv_until(e, lambda x: x.get("type") == "chat.broadcast")
+        await fb.send(frame("room.board"))
+        board2 = (await recv_until(fb, lambda x: x.get("type") == "room.board")) \
+            .get("payload", {}).get("board", [])
+        lob1 = [row for row in board if row["room"] == "lobby"][0]
+        lob2 = [row for row in board2 if row["room"] == "lobby"][0]
+        ok_fresh = lob2["messages"] == lob1["messages"] + 1
+        # legacy no-disclaimer store: graceful sec.reject, no crash
+        import server as lobby_server
+        from sec_gate import SecGate as _SecGate
+        legacy_dir = tempfile.mkdtemp(prefix="lobby-legacy-")
+        legacy_store = EventStore(os.path.join(legacy_dir, "legacy.db"))
+        legacy_gate = _SecGate.from_config(cfg)
+        legacy_lobby = lobby_server.Lobby(cfg, legacy_gate, legacy_store)
+
+        class _FakeWS:
+            def __init__(self):
+                self.frames = []
+
+            async def send(self, data):
+                self.frames.append(json.loads(data))
+
+        legacy_client = lobby_server.Client(_FakeWS(), legacy_lobby.rooms)
+        await legacy_lobby.handle_room_board(legacy_client, None)
+        rej_frame = legacy_client.ws.frames[-1]
+        ok_legacy = (rej_frame.get("type") == "sec.reject"
+                     and rej_frame.get("payload", {}).get("code") == "E_STORE_NO_DISCLAIMER")
+        legacy_store.close()
+        record("AC-S16", ok_board and ok_fresh and ok_legacy,
+               "board==manual-sql=%s rooms=%s ai_generated=%s actor=%s "
+               "disclaimer-match=%s fresh-reflection=%s legacy-reject=%s"
+               % (board == manual_board, [r["room"] for r in board],
+                  board_frame.get("ai_generated") is False,
+                  board_frame.get("actor"),
+                  bdis == cfg["risk_warning"]["text"], ok_fresh, ok_legacy))
 
         # AC-S8a: heartbeat config 30/60 on the main server + no-pong enforcement
         ok_cfg_hb = (cfg["heartbeat"]["ping_interval"] == 30

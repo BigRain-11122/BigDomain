@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T11:00:46+08:00",
+  "export_ts": "2026-10-11T11:18:03+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1789 一句话：fold R491 水位整编收账（tech L13 常设线 live execute·轮首 79073B 越线 573B→tail-5 窗 5 行 11544B 压 1 滚窗行·110 token 零丢失·post==predicted 72523B·census pass·收账后水位 75148B 余量 3352B·证据 qa/reorg-R1789.log）。",
-    "latest_artifact": "本轮实物：state.json 水位整编 fold R491（滚窗行 110 token 全嵌）+archive §R1789 节 5 行 verbatim 保全+preop 备份 sha16 05f1e191bedcb872+qa/reorg-R1789.log 证据件+tech.md L13 切片交付注。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头交付（新种子首项 lobby room.board 协议接线或 freetrial 漏斗月窗参数化·判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）——窗 ≤48h（2026-10-13 前）。"
+    "current": "R1790 一句话：lobby room.board 协议接线交付（AC-S16 全过 SUITE 19/19——server.py 接线=room.board 零参公共读面围观可查·board 经 store 读面公有 API 引用·disclaimer=config risk_warning.text 既有键·legacy 无 disclaimer graceful 拒·RUNNER PASS 86/86 controls 7/7 145.7s·矩阵 86/835 green --check 双过·指纹哨兵 CLEAN·证据 qa/lobby-roomboard-wire-R1790.log 五节）。",
+    "latest_artifact": "本轮实物：lobby room.board 协议接线（server.py 响应帧+spec v0.5 增补节〔§一表 AC-S14..S16 三行+§二 枚举/错误码/房间读面节〕+test_client.py AC-S16 例〔判据 18→19〕+reconcile_all lobby 18→19）+qa 五证据件（reconcile-all-R1790/lobby-roomboard-wire-R1790/matrix-regen-R1790/fingerprint-R1790）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头交付（freetrial 漏斗月窗参数化读面或 lobby room.board 订阅过滤参数窗·判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）——窗 ≤48h（2026-10-13 前）。"
   },
   "depts": [
     {
@@ -37,7 +37,7 @@
     [
       "大厅 WebSocket（规格+沙箱）",
       "on",
-      "AC-S1..S13+AC-S8c/S8d/S8e 自验 16/16 全绿（R1675 重连语义面 13→16）"
+      "AC-S1..S13+AC-S8c/S8d/S8e+AC-S14/S15+AC-S16 自验 19/19 全绿（R1773 房间读面 16→18·R1790 room.board 协议接线 18→19）"
     ],
     [
       "代币双式账本（规格+沙箱）",
@@ -186,6 +186,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "lobby room_message_board 协议接线交付（R1790·P2 tech 队头可领项·AC-S16 预注册先于代码〔tech.md R1790 认领行〕：server.py 接线=main() store 构造期 disclaimer=config risk_warning.text 既有键复用〔shipped config.json+store.py 零字节=diff stat 空实锚〕+handle_room_board 请求帧零参公共读面〔围观可查 AC-S11 同律〕→响应帧 payload={board,disclaimer}〔board 经 store.room_message_board 公有 API 引用零第二聚合引擎·ai_generated=false/actor=system 服务端权威〕+legacy 无 disclaimer store graceful 拒 sec.reject E_STORE_NO_DISCLAIMER〔in-process Lobby 直构+假 ws 断言不崩连接〕·live 交叉 board==manual SQL srv.db 并发只读逐位〔lobby+quant 双房〕+活态零缓存〔新广播后复查询 lobby 计数 +1〕·首跑取证口径 bug 一修如实注〔db_query 已返 list〕·SUITE PASS 19/19〔18→19〕+RUNNER PASS 86/86 controls 7/7 145.7s 零回归=qa/reconcile-all-R1790.log·矩阵再生 86/835 green --check byte-identical 双跑〔9168B〕·指纹哨兵 CLEAN domains=5·spec v0.5 增补节〔S14/S15=R1773 tech.md 预注册 spec 入册闭口〕·证据 qa/lobby-roomboard-wire-R1790.log 五节·queue_tech_open 10→9 补种 1→10·R1790）"
+    ],
     [
       "1",
       "fold R491 水位整编收账轮（R1789·P2 队头=tech L13 常设线 fold 手术段 live execute〔R1787 注「fold R491=再越线时轮首首测裁定」兑现〕：轮首首测 79073B 越 78500B 线 573B＝P-2026-09-25-18 第四百九十一刀·tail-5 窗〔fold R490 滚窗行 5742B+R1787 fold 收账对+R1788 收账对〕5 行 11544B 压 1 滚窗行 kept=0·110 token 全字面嵌零丢失〔catalog 机械提取零手抄·gen491 程序化拼接〕·verify-then-write post==predicted 72523B·eol/indent 三面过·archive §R1789 节 5 行 verbatim+preop 备份 sha16 05f1e191bedcb872·census pass=true 110 token missing=0·证据 qa/reorg-R1789.log·收账后水位 75148B 余量 3352B·fold R492=再越线时轮首首测裁定）·R1789）"
@@ -367,7 +371,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1789",
+      "1790",
       "OSLoop 执行 tick"
     ],
     [
@@ -3258,15 +3262,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1789 fold R491 water compaction (tail-5 5 lines 11544B -> 1 roll line kept=0, 110 tokens zero-loss via gen491 mechanical splice, verify-then-write post==predicted 72523B, census pass, evidence qa/reorg-R1789.log) - ledger standing-line maintenance per P-2026-09-25-18 knife 491"
+    "method": "R1790 lobby room.board protocol wiring delivery (AC-S16 all-pass SUITE 19/19, RUNNER 86/86 controls 7/7, matrix 86/835 green --check x2, fingerprint CLEAN, evidence qa/lobby-roomboard-wire-R1790.log)"
   }
 }

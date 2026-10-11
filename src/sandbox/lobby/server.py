@@ -386,6 +386,34 @@ class Lobby:
             return
         await send_frame(client.ws, self.city.census_snapshot_frame(msg))
 
+    async def handle_room_board(self, client, msg):
+        # AC-S16 (R1790): room-level message board protocol wiring - a
+        # zero-parameter public read face over the R1773 store read face
+        # (public API reference, zero second aggregation engine).
+        # Spectators may query (AC-S11 census public-read law); server
+        # fields stay authoritative. A legacy store constructed without a
+        # wired disclaimer refuses fail-closed through sec.reject, never
+        # crashing the connection.
+        try:
+            env = self.store.room_message_board()
+        except ValueError:
+            await self.send_reject(
+                client, "E_STORE_NO_DISCLAIMER",
+                "room board unavailable: no wired disclaimer")
+            return
+        await send_frame(client.ws, {
+            "v": 1,
+            "type": "room.board",
+            "ts_utc": utc_now_iso(),
+            "room": self.rooms[0],
+            "actor": "system",
+            "payload": {
+                "board": env["room_message_board"],
+                "disclaimer": env["disclaimer"],
+            },
+            "ai_generated": False,
+        })
+
     async def handle_avatar_register(self, client, msg):
         # AC-S12: intake face - gates 1+2, queue = one public event row,
         # receipt carries evt_id; household registration is BigLife T-04
@@ -428,6 +456,8 @@ class Lobby:
             await self.handle_grant(client, msg)
         elif mtype == "census.query":
             await self.handle_census_query(client, msg)
+        elif mtype == "room.board":
+            await self.handle_room_board(client, msg)
         elif mtype == "avatar.register":
             await self.handle_avatar_register(client, msg)
         else:
@@ -518,7 +548,11 @@ def main():
         cfg["heartbeat"]["ping_timeout"]
     )
     global LOBBY
-    store = EventStore(args.db)
+    # R1790 AC-S16: the standing non-advisory risk text (existing config
+    # key, shipped config zero-change) is the read-face disclaimer source;
+    # the store read face refuses fail-closed without a wired disclaimer.
+    store = EventStore(
+        args.db, disclaimer=str(cfg["risk_warning"]["text"]))
     city = None
     city_cfg = cfg.get("city")
     if isinstance(city_cfg, dict) and city_cfg.get("enabled", True):
