@@ -636,6 +636,18 @@ SUITES = [
     # (AC-CBM1..CBM7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-callmonth",
      os.path.join("ledger", "test_freetrial_callmonth.py"), 7),
+    # R1829 free-trial calls-by-kind pure read face: global
+    # kind-profile aggregation over immutable trial_calls rows
+    # (free TEXT domain, no CHECK constraint); window=None
+    # full-window default; explicit YYYY-MM filters rows by
+    # record-time stamp first, then aggregates kinds over the
+    # surviving rows; malformed windows fail closed
+    # E_FT_BAD_ARGS; observed kinds outside the registered
+    # tally domain surface and count toward total (the face
+    # never hides data)
+    # (AC-CBK1..CBK8 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-callkind",
+     os.path.join("ledger", "test_freetrial_callkind.py"), 8),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

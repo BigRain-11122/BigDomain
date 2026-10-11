@@ -712,3 +712,65 @@ class FreeTrialFace:
             env["window"] = w
         env["disclaimer"] = self.disclaimer
         return env
+
+    def calls_by_kind(self, window=None):
+        """Free-trial call volume by usage kind (R1828
+        tech-queue follow-up row; the seed = the calls_by_month
+        face): a pure-read aggregation over immutable call rows
+        with one dict cell per observed kind key holding the
+        call count - the global "which kind, how many" profile
+        the per-month profile (calls_by_month) never surfaces.
+        kind is a free TEXT domain with no CHECK constraint
+        (trial_calls.kind), so aggregation walks whatever values
+        are observed: keys ascend in query order (a unique
+        group key, so the dict is deterministic with zero dice
+        and zero insertion-order surprises), and an observed
+        kind outside the registered usage tally domain is NOT
+        hidden - it surfaces in ascending order and counts
+        toward total (the face never hides data, the R1776
+        AC-CHM3 law; the same free-domain ruling the apidev
+        usage_kind_tally face already carries). A zero-call
+        world is the honest empty mapping with total 0 - no
+        phantom kinds.
+
+        Window parameterization (the R1730/R1732/R1735/R1784/
+        R1793 family law): window=None keeps the full-window
+        aggregate; an explicit "YYYY-MM" month window filters
+        rows by their called_utc record-time stamp first, then
+        aggregates kinds over the surviving rows (a row-filter
+        window, orthogonal to the calls_by_month cell window).
+        A malformed window fails closed E_FT_BAD_ARGS before
+        any read. Every count is derived at read time over
+        immutable rows: zero cached counters, zero stored
+        state. The explicit-window envelope adds one "window"
+        key (additive); the default envelope is byte-identical
+        in shape. Pure read."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise TrialError(E_FT_BAD_ARGS,
+                                 "window must be YYYY-MM: %r"
+                                 % (window,))
+        with self._lock:
+            if w is None:
+                rows = self._conn.execute(
+                    "SELECT kind, COUNT(*)"
+                    " FROM trial_calls"
+                    " GROUP BY kind"
+                    " ORDER BY kind").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT kind, COUNT(*)"
+                    " FROM trial_calls"
+                    " WHERE substr(called_utc, 1, 7) = ?"
+                    " GROUP BY kind"
+                    " ORDER BY kind",
+                    (w,)).fetchall()
+            by_kind = {str(r[0]): int(r[1]) for r in rows}
+            total = sum(by_kind.values())
+        env = {"calls_by_kind": by_kind, "total": total}
+        if w is not None:
+            env["window"] = w
+        env["disclaimer"] = self.disclaimer
+        return env

@@ -1,0 +1,43 @@
+# freetrial calls_by_kind pure read face - R1829 evidence
+# claim row: state/queue/tech.md LN92 (R1828-seeded successor)
+# criteria AC-CBK1..AC-CBK8 pre-registered on the claim line
+# BEFORE freetrial.py code existed (honesty law)
+# interpreter: system python (family canon R684)
+
+[1] suite run1 verbatim (test_freetrial_callkind.py)
+
+PASS AC-CBK1: zero-call world honest empty (True); envelope keys exact; kind keys ascending ['backtest', 'ghost-probe', 'visualize']; cells {'backtest': 5, 'ghost-probe': 1, 'visualize': 3}; total 9 == sum == COUNT; window key additive on explicit read; config bytes stable
+PASS AC-CBK2: 14 bad forms rejected E_FT_BAD_ARGS; four-table counts unchanged (2, 2, 9, 0); None default accepted []
+PASS AC-CBK3: month 2026-08 kind profile {'backtest': 1, 'visualize': 1}; month 2026-09 kind profile {'backtest': 2, 'ghost-probe': 1, 'visualize': 1}; future 2026-11 honest empty; default read carries all observed kinds; zero cross-month leakage
+PASS AC-CBK4: per-kind counts == manual SQL GROUP BY; total 9 == COUNT(*) == sum(cells); key order == SQL ORDER BY ascending ['backtest', 'ghost-probe', 'visualize']; windowed total == manual SQL 4; windowed kind map == windowed SQL
+PASS AC-CBK5: out-of-domain kind 'ghost-probe' surfaced in full read (cell 1, ascending slot 2 of ['backtest', 'ghost-probe', 'visualize']) and counted toward total 9 (tally-domain kinds sum 8); surfaced in its month window; absent from months without it - the face never hides observed data
+PASS AC-CBK6: method source free of data-changing statements; four-table counts unchanged (2, 2, 9, 0); double-call dumps byte-identical (sorted and insertion order); windowed double-call identical
+PASS AC-CBK7: new live call: backtest cell 5 -> 6; total 9 -> 10; ghost and visualize cells unchanged; windowed read follows (cur window backtest -> 3); history month kind profile unchanged
+PASS AC-CBK8: freetrial.py pure ASCII; import lines network-free (5 imports); SUITES registration row present; criteria drift self-check 7+1==8
+SUITE PASS 8/8 exit=0
+
+[2] double-run determinism (zero RNG, zero wall-clock in stdout)
+
+run1 sha256: C58B0688C2217C9EFFC20BD1E6B86514123AAFA3A825ADC5788BED4ADAA66D6C
+run2 sha256: C58B0688C2217C9EFFC20BD1E6B86514123AAFA3A825ADC5788BED4ADAA66D6C
+byte-identical: True; exits 0/0
+
+[3] full RUNNER regression (qa/reconcile-all-R1829.log)
+
+PASS suites 103/103 green, expected criteria total=955
+RUNNER PASS (103/103 suites green, reconcile controls 7/7, 180.2s) exit=0
+chain: 101 (R1824) -> 102 (R1828 callmonth +7 criteria) -> 103 (R1829 callkind +8 criteria)
+tamper-control lines expect FAIL semantics and PASS their controls (7/7)
+
+[4] matrix regen + --check
+
+PASS generated docs/sandbox-suite-matrix.md (10576 bytes) - registry suites=103 criteria=955 evidence=qa/reconcile-all-R1829.log green=103/103
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10576 bytes, 103 suites, 955 criteria)
+
+[5] registration + ownership face
+
+SUITES row added: ("ledger-freetrial-callkind", os.path.join("ledger", "test_freetrial_callkind.py"), 8) in src/sandbox/reconcile_all.py
+AC-CBK prefix ownership scan (2026-10-11, before code): AC-CK[0-9] claimed by water-checkkind R1821 (6 files); AC-CBK[0-9] zero hits repo-wide = CBM mirror prefix usable
+product change face: freetrial.py additive method calls_by_kind only (existing methods byte-untouched); shipped config.json zero change (in-suite byte compare)
+source purity: freetrial.py pure ASCII (byte scan), suite pure ASCII (byte scan), zero network imports (5 stdlib imports)
+history fixture rows: test-side direct trial_calls inserts (R1730 family precedent), distinct call_ref uniqueness respected; one injected row carries the out-of-domain ghost kind on purpose (AC-CBK5)

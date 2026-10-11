@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T23:16:24+08:00",
+  "export_ts": "2026-10-11T23:35:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1828 一句话：给开发者免费试用面补上了「每个月调用了多少次」的统计读面——按月份聚合计数的纯读面、可指定单月过滤、坏参数一律拒绝，判据先立再写代码，7 项验收全绿，全套 102 项回归测试零回归；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
-    "latest_artifact": "最近实物：src/sandbox/ledger/freetrial.py（calls_by_month 月剖面纯读聚合面）+src/sandbox/ledger/test_freetrial_callmonth.py（验收套件 7/7）+qa/freetrial-callmonth-R1828.log（验收+回归+矩阵+哨兵五节证据）·2026-10-11T23:16:24+08:00。",
-    "next_milestone": "下个实物：tech 队列按序交付（freetrial 调用 by-kind 计数读面窗/water sqlite_sequence 簿记行篡改探针窗/apidev lineage 链内用量聚合读面窗·判据先立再写代码）+daily 对账常设每日首轮+10-16 治理窗回访面+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1829 一句话：给开发者免费试用面再补上「哪类功能调用了多少次」的统计读面——按 kind 聚合计数的纯读面、可指定单月过滤、坏参数一律拒绝、域外新增的 kind 也如实显示不隐藏，判据先立再写代码，8 项验收全绿，全套 103 项回归测试零回归；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/freetrial.py（calls_by_kind kind 剖面纯读聚合面）+src/sandbox/ledger/test_freetrial_callkind.py（验收套件 8/8）+qa/freetrial-callkind-R1829.log（验收+回归+矩阵五节证据）·2026-10-11T23:35:30+08:00。",
+    "next_milestone": "下个实物：tech 队列按序交付（freetrial 调用 by-plan 计数读面窗/water sqlite_sequence 簿记行篡改探针窗/apidev lineage 链内用量聚合读面窗·判据先立再写代码）+daily 对账常设每日首轮+10-16 治理窗回访面+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "freetrial 调用 by-kind 计数读面交付（R1829·P2 tech 队头 FIFO〔R1828 补种·LN5 docker 门控/LN13 常设/LN47 R1727 驻留/LN89 gated 10-16 全跳过〕·轮计分 2=可跑实物：AC-CBK1..CBK8 预注册先于代码〔tech.md R1829 认领行本行即册先于 freetrial.py 落码·AC-CBK 前缀全仓扫描无主〕——freetrial.py calls_by_kind(window=None) 纯读聚合面 additive 落成：缺省 None=全窗 kind→计数 dict〔envelope 恰三键 calls_by_kind/total/disclaimer·kind 键升序零 RNG·total==Σ==COUNT(*) 双不变量〕+零调用世界 {}+total=0 诚实空+显式 YYYY-MM 行过滤窗=该月行 kind 剖面或 {} 诚实空+window 键 additive 缺省面零键漂移+坏窗 14 形态全拒 E_FT_BAD_ARGS 零副作用〔四表计数前后同一〕+域外观测 kind 不隐藏〔ghost-probe 直注行缺省读与窗读双面显形计入 total·face 永不藏数据 R1776 AC-CHM3 同律〕+manual SQL GROUP BY kind 逐位等+kind 键序==SQL ORDER BY 升序同构+纯读律〔方法源 inspect 零写语句+双调 json.dumps 双形态逐字节同一〕+活态零缓存〔新调用 backtest 格 5→6·total 9→10·他 kind 格不动〕——SUITE PASS 8/8 exit 0 首跑全绿零修正+双跑 sha16 C58B0688C2217C9E 逐字节同一〔零 RNG 零时间戳〕·reconcile_all SUITES 102→103 判据 947→955 接线〔ledger-freetrial-callkind 行〕+RUNNER PASS 103/103 controls 7/7 180.2s 零回归=qa/reconcile-all-R1829.log·矩阵再生 103/955 green --check byte-identical〔10576B·evidence 显式指定〕·证据 qa/freetrial-callkind-R1829.log 五节·queue_tech_open 10→9 补种 1→10〔freetrial 调用 by-plan 计数读面窗〕·DEC 零新 token〔281 行 row_owner=117 持平〕+GORD 273 行零新令〔尾三行=R1828 已判读他司令〕·R1829）"
+    ],
     [
       "2",
       "freetrial 调用月窗计数读面交付（R1828·P2 tech 队头 FIFO 最老可认领项〔R1793 补种〕·轮计分 2=可跑实物：AC-CBM1..CBM7 预注册先于代码〔tech.md R1828 认领行本行即册·AC-CBM 前缀全仓扫描无主〕——freetrial.py calls_by_month(window=None) 纯读聚合面 additive 落成：缺省 None=全窗月→计数 dict〔envelope 恰三键 calls_by_month/total/disclaimer·月键升序零 RNG·total==Σ==COUNT(*) 双不变量〕+零调用世界 {}+total=0 诚实空+显式 YYYY-MM 窗读=恰该月格或 {} 诚实空+window 键 additive 缺省面零键漂移+坏窗 14 形态全拒 E_FT_BAD_ARGS 零副作用〔四表计数前后同一〕+历史月 fixture 直注入注明+manual SQL GROUP BY 逐位等+月键序==SQL ORDER BY 升序同构+纯读律〔方法源 inspect 零写语句+四表计数前后同一+双调 json.dumps 双形态逐字节同一〕+活态零缓存〔新调用当前月格 3→4·total 8→9·历史月格不动〕+卫生〔源纯 ASCII·真 import 5 行零网络·config.json 逐字节稳定〕——SUITE PASS 7/7 exit 0 首跑全绿+双跑 sha16 877704F135795248 逐字节同一·reconcile_all SUITES 101→102 判据 940→947 接线〔ledger-freetrial-callmonth 行〕+RUNNER PASS 102/102 controls 7/7 174.4s 零回归=qa/reconcile-all-R1828.log·矩阵再生 102/947 green --check byte-identical〔10486B·缺省发现面=本轮 RUNNER 件〕·指纹哨兵 CLEAN domains=5〔freetrial 四表基线保真〕·证据 qa/freetrial-callmonth-R1828.log 五节·queue_tech_open 10→9 补种 1→10〔freetrial 调用 by-kind 计数读面窗〕·GORD 表压缩 402→273〔尾 3 行=BigLife 点名复工令+CEO 道具令+导演席/道具席失职纠偏令——全他司执行面知悉不动作·基线随轮校〕·R1828）"
@@ -500,7 +504,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1828",
+      "1829",
       "OSLoop 执行 tick"
     ],
     [
@@ -3407,15 +3411,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 16,
+    "log_lines_in_window": 18,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1828 freetrial calls_by_month month-profile pure-read face delivered (score 2, P2 tech FIFO head R1793 seed; AC-CBM1..CBM7 pre-registered before code; global month-profile aggregation over immutable trial_calls rows, window=None default + explicit YYYY-MM filtering; suite 7/7 first-run green + double-run sha16 877704F135795248; RUNNER 102/102 suites 947 criteria controls 7/7 174.4s zero-reg; evidence qa/freetrial-callmonth-R1828.log + qa/reconcile-all-R1828.log); window counting recomputed mechanically from state.json log 2026-10-05..2026-10-11 (W=16, sub=6, idle=0, nop=0)"
+    "method": "R1829 freetrial calls_by_kind kind-profile pure-read face delivered (score 2, P2 tech FIFO head R1828 seed; AC-CBK1..CBK8 pre-registered before code; global kind-profile aggregation over immutable trial_calls rows, free TEXT domain with observed out-of-domain kinds surfaced and counted, window=None default + explicit YYYY-MM row-filter windows; suite 8/8 first-run green + double-run sha16 C58B0688C2217C9E; RUNNER 103/103 suites 955 criteria controls 7/7 180.2s zero-reg; evidence qa/freetrial-callkind-R1829.log + qa/reconcile-all-R1829.log); window counting recomputed mechanically from state.json log 2026-10-05..2026-10-11 (W=18, sub=7, idle=0, nop=0)"
   }
 }
