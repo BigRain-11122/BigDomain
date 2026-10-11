@@ -196,6 +196,29 @@ pair against the SQL COUNT/SUM. Zero product files touched
 (measurement face, R1727 precedent).
 
 
+R1816 extension (cell-aggregate mirror-SQL third path): the [12]
+section proved the scalar aggregation faces (kind_tally,
+monthly_flow) against window-predicate GROUP BY counts/sums; this
+section adds the independent third path for the per-cell
+aggregation face cell_totals. The delta JSON expansion happens
+engine-side via the json_each table value function (the product
+face expands rows with Python json.loads - the two paths share no
+expansion code), on the whole board, the historical fixture month,
+the current flow month and the honest empty future month. The
+envelope total cross-checks against SUM(total_delta) (an empty
+filtered set makes SQL SUM return NULL, so the cross reads
+COALESCE(SUM(total_delta), 0) - the honest zero, not a fabricated
+value), the composition law re-proves on the SQL-side cells alone
+(the verdicted cells ride inside the aggregate on every non-empty
+window yet the arithmetic never adds them), and row-level filtered
+aggregation shows each tamper row's cells with their month
+attribution (ghost {noise.total:1} and drift {noise.total:5}, both
+inside the current flow month, none inside the historical fixture
+window) - the third path never hides the tamper rows at cell
+level. Zero product files touched (measurement face, R1727
+precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -1324,6 +1347,151 @@ def main():
         fail = fail or not (ag1_ok and ag2_ok and ag3_ok and ag4_ok
                             and ag5_ok)
 
+        # ---- [13] cell-aggregate mirror-SQL third path (R1816) --
+        # The [12] section proved the scalar aggregation faces
+        # (kind_tally, monthly_flow) against window-predicate GROUP
+        # BY counts/sums. This section adds the independent third
+        # path for the per-cell aggregation face cell_totals: the
+        # delta JSON expansion happens engine-side via the json_each
+        # table value function (the product face expands rows with
+        # Python json.loads - the two paths share no expansion
+        # code), the window predicate rides the same substr clause,
+        # the envelope total cross-checks against SUM(total_delta),
+        # and the composition law re-proves on the SQL-side cells
+        # alone. Registration-time honest note: an empty filtered
+        # set makes SQL SUM return NULL, so the envelope cross reads
+        # COALESCE(SUM(total_delta), 0) - the honest zero.
+        cell_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        cell_cnt_before = cell_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+
+        def sql_cell_aggregate(window=None):
+            where = ""
+            args = []
+            if window is not None:
+                where = " WHERE substr(ts_utc, 1, 7) = ?"
+                args.append(window)
+            cell_rows = cell_ro.execute(
+                "SELECT je.key, SUM(CAST(je.value AS INTEGER))"
+                " FROM water_windows, json_each(water_windows.delta) je"
+                + where + " GROUP BY je.key ORDER BY je.key",
+                args).fetchall()
+            cells = {}
+            for key, value in cell_rows:
+                cells[str(key)] = int(value)
+            sum_row = cell_ro.execute(
+                "SELECT COALESCE(SUM(total_delta), 0)"
+                " FROM water_windows" + where, args).fetchone()
+            return cells, int(sum_row[0])
+
+        def sql_row_cells(row_where, args):
+            cell_rows = cell_ro.execute(
+                "SELECT je.key, SUM(CAST(je.value AS INTEGER))"
+                " FROM water_windows, json_each(water_windows.delta) je"
+                " WHERE " + row_where +
+                " GROUP BY je.key ORDER BY je.key", args).fetchall()
+            return {str(k): int(v) for k, v in cell_rows}
+
+        ca_windows = [("whole-board", None),
+                      ("hist-2026-08", "2026-08"),
+                      ("cur-" + cur_w, cur_w),
+                      ("fut-2026-12", "2026-12")]
+        ca1_ok = True
+        ca2_ok = True
+        ca2_verdicted = False
+        ca1_detail = []
+        ca2_detail = []
+        for label, w in ca_windows:
+            env = (pipe.journal.cell_totals(w) if w is not None
+                   else pipe.journal.cell_totals())
+            sql_cells, sql_total = sql_cell_aggregate(w)
+            keys_ok = (list(env["cell_totals"]) == list(sql_cells)
+                       == sorted(sql_cells))
+            dict_ok = dict(env["cell_totals"]) == sql_cells
+            total_ok = int(env["total"]) == sql_total
+            comp_sum = (sql_cells.get("noise.total", 0)
+                        + sql_cells.get("review.suspended", 0))
+            comp_ok = sql_total == comp_sum
+            verdicted_here = any(
+                k.startswith("review.verdicted.") for k in sql_cells)
+            ca2_verdicted = ca2_verdicted or (
+                verdicted_here and comp_ok and sql_total != 0)
+            ca1_ok = ca1_ok and keys_ok and dict_ok and total_ok
+            ca2_ok = ca2_ok and comp_ok
+            ca1_detail.append(
+                "%s cells==sql=%s keys-asc=%s total %d==%d %s"
+                % (label, dict_ok, keys_ok, int(env["total"]),
+                   sql_total, "OK" if (keys_ok and dict_ok
+                                       and total_ok) else "DRIFT"))
+            ca2_detail.append(
+                "%s total=%d noise.total=%d susp=%d comp=%d %s"
+                % (label, sql_total,
+                   sql_cells.get("noise.total", 0),
+                   sql_cells.get("review.suspended", 0), comp_sum,
+                   "OK" if comp_ok else "DRIFT"))
+        ca2_ok = ca2_ok and ca2_verdicted
+
+        ghost_cells = sql_row_cells("kind = 'legacy-ghost'", [])
+        drift_cells = sql_row_cells(
+            "kind = 'submit' AND total_delta = 5", [])
+        tamper_cur = cell_ro.execute(
+            "SELECT COUNT(*) FROM water_windows WHERE (kind ="
+            " 'legacy-ghost' OR (kind = 'submit' AND total_delta"
+            " = 5)) AND substr(ts_utc, 1, 7) = ?",
+            (cur_w,)).fetchone()[0]
+        tamper_hist = cell_ro.execute(
+            "SELECT COUNT(*) FROM water_windows WHERE (kind ="
+            " 'legacy-ghost' OR (kind = 'submit' AND total_delta"
+            " = 5)) AND substr(ts_utc, 1, 7) = '2026-08'",
+            ()).fetchone()[0]
+        hist_cells_sql, hist_total_sql = sql_cell_aggregate("2026-08")
+        ca3_ok = (ghost_cells == {"noise.total": 1}
+                  and drift_cells == {"noise.total": 5}
+                  and tamper_cur == 2 and tamper_hist == 0
+                  and hist_cells_sql.get("noise.total") == 1
+                  and hist_total_sql == -1)
+
+        fut_env = pipe.journal.cell_totals("2026-12")
+        fut_cells_sql, fut_total_sql = sql_cell_aggregate("2026-12")
+        ca4_ok = (fut_env["cell_totals"] == {} and fut_cells_sql == {}
+                  and int(fut_env["total"]) == 0
+                  and fut_total_sql == 0)
+
+        cell_cnt_after = cell_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        cell_ro.close()
+        ca5_ok = (cell_cnt_before == cell_cnt_after
+                  == rows_rl == 14)
+
+        sections.append("[13] cell-aggregate mirror-SQL third path:")
+        for line in ca1_detail:
+            sections.append("    cells " + line)
+        for line in ca2_detail:
+            sections.append("    composition " + line)
+        sections.append("    verdicted-carried-excluded=%s (cells"
+                        " carry review.verdicted.* keys on non-empty"
+                        " windows; the arithmetic never adds them)"
+                        % ca2_verdicted)
+        sections.append("    tamper cells: ghost=%s drift=%s"
+                        " cur-count=%d hist-count=%d"
+                        " hist-noise.total=%d %s"
+                        % (json.dumps(ghost_cells, sort_keys=True),
+                           json.dumps(drift_cells, sort_keys=True),
+                           tamper_cur, tamper_hist,
+                           hist_cells_sql.get("noise.total", 0),
+                           "OK" if ca3_ok else "DRIFT"))
+        sections.append("    honest empty: fut-2026-12 cells=={}=%s"
+                        " total 0==%d (empty SUM -> COALESCE 0) %s"
+                        % (fut_cells_sql == {}, fut_total_sql,
+                           "OK" if ca4_ok else "DRIFT"))
+        sections.append("    pure-read: rows %d==%d==14 %s"
+                        % (cell_cnt_before, cell_cnt_after,
+                           "OK" if ca5_ok else "DRIFT"))
+        fail = fail or not (ca1_ok and ca2_ok and ca3_ok and ca4_ok
+                            and ca5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -1339,7 +1507,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[13] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[14] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
