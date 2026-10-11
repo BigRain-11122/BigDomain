@@ -1,0 +1,43 @@
+# qa/reorg-R1789.log - fold R491 water compaction evidence (machine-derived)
+# Round: R1789 | Knife: 491 (P-2026-09-25-18) | Window: tail-5 | Date: 2026-10-11
+# Generator: .codely-cli/tmp/gen491.py (catalog mechanical extraction, zero hand-copied tokens)
+
+## 1. pre-op gauge (logs_toolkit.py gauge)
+{"disk_bytes": 79073, "gate": 78500, "log_lines": 25, "log_content_bytes": 76146, "margin_bytes": -573, "fold_needed": true, "tick": 1788}
+
+## 2. gen491 roll-line generation stats
+window_lines=5 total_content_bytes=11544 unique_tokens=110
+roll_content_bytes=5078
+token_missing=0
+per-line content bytes: fold R490 roll-line [5742B] + R1787 fold closeout [2718B] + R1787 tokens [228B] + R1788 closeout [2646B] + R1788 tokens [210B]
+
+## 3. fold dry-run plan (verify-then-write step 1, zero mutation)
+{"mode":"dry-run","round":"R1789","fold_no":"491","window_mode":"tail","window_start":21,"window_end":25,"window_lines":5,"window_content_bytes":11544,"preop_sha16":"05f1e191bedcb872","pre_bytes":79073,"new_log_len":21,"token_missing":[],"token_ok":true,"gate_ok":true,"predicted_bytes":72523,"reserve_bytes":3000,"gate":78500,"would_fail":[]}
+
+## 4. fold execute (verify-then-write steps 2-4: backup -> archive append -> atomic state write)
+{"mode":"execute","post_bytes":72523,"predicted_eq_actual":true,"appendix_bytes":11687,"archive_appended":true,"backup_written":true}
+post==predicted: 72523 == 72523 PASS
+
+## 5. post-fold gauge
+{"disk_bytes": 72523, "gate": 78500, "log_lines": 21, "log_content_bytes": 69680, "margin_bytes": 5977, "fold_needed": false, "tick": 1788}
+
+## 6. eol check (post-fold)
+{"layout_ok": true, "bare_lf": 0, "indent_anomaly": 0, "indent_ok": true}
+
+## 7. census reverse check (catalog --window-file window_R1789.txt --roll-file roll_R1789.txt)
+{"window_lines": 5, "tokens_total": 110, "missing_in_roll": [], "pass": true}
+
+## 8. archive + preop double evidence
+archive header (logs/state-log-archive-2026-10.md):
+# --- R1789 fold append (2026-10-11, 5 lines verbatim: fold R491 tail-5 roll compaction, fold R491 window, pre-op sha16 05f1e191bedcb872)
+preop backup: logs/state-preop-R1789.bak (sha16 05f1e191bedcb872 == archive header sha16 == match)
+
+## 9. closeout surgery (byte surgery, no json.dump full rewrite; .codely-cli/tmp/closeout_R1789.py)
+predicted=75148 post=75148 equal=True
+tick=1789 log_len=23
+post-closeout gauge: {"disk_bytes": 75148, "gate": 78500, "log_lines": 23, "margin_bytes": 3352, "fold_needed": false, "tick": 1789}
+post-closeout eol: {"indent16_lines": 23, "indent_anomaly": 0, "indent_ok": true}
+
+## 10. verdict
+fold R491 complete: 5 lines 11544B -> 1 roll line kept=0, 110 tokens zero-loss, post==predicted all faces green.
+waterline carry-note: fold R492 = next round-start first-gauge ruling if over 78500B again.
