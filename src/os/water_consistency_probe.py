@@ -149,6 +149,28 @@ empty reads then exercise the current-month path instead). Zero
 product files touched (measurement face, R1727 precedent).
 
 
+R1814 extension (mirror-SQL third path for capped reads): the
+[10] tail-truncation face compared two paths over the product
+connection (the cap read vs the full-read tail subsequence). This
+section adds the independent third path: a raw read-only SQL
+connection (file URI mode=ro) running the product's mirror
+clause verbatim - window predicate first, then ORDER BY ts_utc
+DESC, window_id DESC LIMIT N, reversed back to board order. The
+global cap, the month-window combination and the loose cap each
+equal their product reads position by position (five fields);
+the SQL in-window COUNT equals the envelope total law (n_cur);
+the ghost and drift tamper rows stay visible on the raw path (a
+third path that never hides them); the honest-empty future month
+reads zero rows and the historical fixture stays visible (count
+3, capped read positional). The read-only connection rejects a
+write attempt at the connection level (behavioral proof, zero
+mutation: the row count stays 14). The global-cap == window-cap
+equality rides on the world shape (the historical fixture month
+always precedes the flow month; the fut-2026-12 family boundary
+note applies unchanged). Zero product files touched (measurement
+face, R1727 precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -977,6 +999,142 @@ def main():
         fail = fail or not (rl1_ok and rl2_ok and rl3_ok and rl4_ok
                             and rl5_ok and tie_ok)
 
+        # ---- [11] mirror-SQL third path for capped reads (R1814) --
+        # The [10] tail-truncation face compared two paths over the
+        # product connection (cap read vs full-read tail). This
+        # section adds the independent third path: a raw read-only
+        # SQL connection (file URI mode=ro) running the product's
+        # mirror clause verbatim - window predicate first, then
+        # ORDER BY ts_utc DESC, window_id DESC LIMIT N, reversed
+        # back to board order. Every capped combination (global /
+        # month-window / loose) equals its product read position by
+        # position, the tamper rows stay visible on the raw path,
+        # the honest-empty and historical windows keep their laws,
+        # and the read-only connection rejects a write attempt at
+        # the connection level (zero mutation, count constant).
+        ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+
+        def mirror_sql(window=None, limit=0):
+            where = ""
+            args = []
+            if window is not None:
+                where = " WHERE substr(ts_utc, 1, 7) = ?"
+                args.append(window)
+            sql = ("SELECT window_id, kind, delta, total_delta, ts_utc"
+                   " FROM water_windows" + where)
+            if limit > 0:
+                order = " ORDER BY ts_utc DESC, window_id DESC LIMIT ?"
+                fetched = [list(r) for r in
+                           ro.execute(sql + order, args + [limit])]
+                fetched.reverse()
+            else:
+                order = " ORDER BY ts_utc, window_id"
+                fetched = [list(r) for r in
+                           ro.execute(sql + order, args)]
+            return [{"window_id": r[0], "kind": r[1],
+                     "delta": json.loads(r[2]), "total_delta": r[3],
+                     "ts_utc": r[4]} for r in fetched]
+
+        def rows_equal5(a_rows, b_rows):
+            return (len(a_rows) == len(b_rows)
+                    and all(x["window_id"] == y["window_id"]
+                            and x["kind"] == y["kind"]
+                            and x["delta"] == y["delta"]
+                            and x["total_delta"] == y["total_delta"]
+                            and x["ts_utc"] == y["ts_utc"]
+                            for x, y in zip(a_rows, b_rows)))
+
+        glob_cap = pipe.journal.journal_board(limit=3)
+        glob_rows = glob_cap["journal_board"]
+        sq1_sql = mirror_sql(limit=3)
+        glob_cnt = ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sq1_ok = (rows_equal5(glob_rows, sq1_sql)
+                  and rows_equal5(glob_rows, cap_rows)
+                  and glob_cap["returned"] == len(sq1_sql) == 3
+                  and glob_cap["truncated"] is True
+                  and glob_cap["total"] == glob_cnt == 14)
+
+        sq2_sql = mirror_sql(cur_w, 3)
+        cur_cnt_sql = ro.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE substr(ts_utc, 1, 7) = ?", (cur_w,)).fetchone()[0]
+        sq2_ok = (rows_equal5(sq2_sql, cap_rows)
+                  and cur_cnt_sql == n_cur == 11)
+
+        sq3_sql = mirror_sql(cur_w, 99)
+        ghost_sql_n = sum(1 for r in sq3_sql
+                          if r["kind"] == "legacy-ghost")
+        drift_sql_n = sum(1 for r in sq3_sql
+                          if r["kind"] == "submit"
+                          and r["total_delta"] == 5)
+        sq3_ok = (rows_equal5(sq3_sql, loose_rows)
+                  and len(sq3_sql) == n_cur
+                  and ghost_sql_n == 1 and drift_sql_n == 1)
+
+        sq4_fut = mirror_sql("2026-12", 5)
+        hist_cnt_sql = ro.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE substr(ts_utc, 1, 7) = ?",
+            ("2026-08",)).fetchone()[0]
+        hist_cap = pipe.journal.journal_board("2026-08", 3)
+        hist_sql = mirror_sql("2026-08", 3)
+        sq4_ok = (sq4_fut == [] and hist_cnt_sql == 3
+                  and hist_cap["returned"] == 3
+                  and rows_equal5(hist_sql, hist_cap["journal_board"]))
+
+        ro_write_reject = "(none)"
+        try:
+            ro.execute("INSERT INTO water_windows (kind, delta,"
+                       " total_delta, ts_utc) VALUES ('probe-read',"
+                       " '{}', 0, '1970-01-01T00:00:00.000000Z')")
+            ro.commit()
+        except sqlite3.OperationalError:
+            ro_write_reject = "OperationalError"
+        ro_cnt = ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        ro.close()
+        sq5_ok = (ro_write_reject == "OperationalError"
+                  and ro_cnt == rows_rl == 14)
+
+        sections.append("[11] mirror-SQL third path (capped reads):")
+        sections.append("    global cap: sql-rows=%d pos-vs-product=%s"
+                        " pos-vs-window-cap=%s returned=%d"
+                        " truncated=%s total=%d==%d %s"
+                        % (len(sq1_sql),
+                           rows_equal5(glob_rows, sq1_sql),
+                           rows_equal5(glob_rows, cap_rows),
+                           glob_cap["returned"],
+                           glob_cap["truncated"],
+                           glob_cap["total"], glob_cnt,
+                           "OK" if sq1_ok else "DRIFT"))
+        sections.append("    month-window combo: sql-rows=%d"
+                        " pos-vs-cap=%s win-count=%d==n_cur=%d %s"
+                        % (len(sq2_sql),
+                           rows_equal5(sq2_sql, cap_rows),
+                           cur_cnt_sql, n_cur,
+                           "OK" if sq2_ok else "DRIFT"))
+        sections.append("    loose 99: sql-rows=%d pos-vs-product=%s"
+                        " ghost=%d drift=%d %s"
+                        % (len(sq3_sql),
+                           rows_equal5(sq3_sql, loose_rows),
+                           ghost_sql_n, drift_sql_n,
+                           "OK" if sq3_ok else "DRIFT"))
+        sections.append("    honest empty/hist: fut-rows=%d"
+                        " hist-count=%d hist-cap-pos=%s %s"
+                        % (len(sq4_fut), hist_cnt_sql,
+                           rows_equal5(hist_sql,
+                                       hist_cap["journal_board"]),
+                           "OK" if sq4_ok else "DRIFT"))
+        sections.append("    read-only: write-reject=%s rows"
+                        " %d==%d==14 %s"
+                        % (ro_write_reject, ro_cnt, rows_rl,
+                           "OK" if sq5_ok else "DRIFT"))
+        fail = fail or not (sq1_ok and sq2_ok and sq3_ok and sq4_ok
+                            and sq5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -992,7 +1150,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[11] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[12] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
