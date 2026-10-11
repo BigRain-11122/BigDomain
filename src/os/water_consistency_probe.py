@@ -106,6 +106,30 @@ ghost-present world. Zero product files touched (measurement
 face, R1727 precedent).
 
 
+R1812 extension (board read-cap x month-window orthogonal
+combination): the R1804 product face journal_board(window,
+limit) has had both parameters proven separately (the window
+filter cross in [5], the read-cap law in the R1804 suite) but
+the orthogonal combination is unmeasured in the probe world.
+On the ghost-present world: the current-month window x limit=3
+tail truncation equals the tail-3 subsequence of that window's
+full row list position by position (mirror-SQL law), the
+envelope adds exactly the three keys {limit, returned,
+truncated} (additive over the no-limit envelope), total reports
+the full in-window count (never the truncated one - a
+truncated board never lies about its size, and the ghost+drift
+rows stay inside that count), the cap semantics cover all
+three states (truncating 3 < window count / loose 99 >= window
+count with the loose row set carrying the ghost row - a loose
+read never hides the tamper row / honest empty future month),
+the bad-limit reject ring stays unweakened in the tampered
+world (four malformed shapes plus the both-bad gate order:
+E_WJ_BAD_LIMIT fires before the window gate; the bad-window
+ring fires through a good limit), and the reads stay pure
+(store snapshot byte-identical, row count constant). Zero
+product files touched (measurement face, R1727 precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -790,6 +814,121 @@ def main():
                            "OK" if tl3_ok else "DRIFT"))
         fail = fail or not (months_ok and tl2_ok and tl3_ok)
 
+        # ---- [10] board read-cap x month-window combo (R1812) ----
+        # The R1804 product face journal_board(window, limit) has
+        # had both parameters proven separately; this section proves
+        # the orthogonal combination on the ghost-present world:
+        # window filter first, mirror-SQL tail truncation second,
+        # the envelope never lies about the window size, and the
+        # reject ring stays unweakened across both gates.
+        full_rl = pipe.journal.journal_board(cur_w)
+        full_rows_rl = full_rl["journal_board"]
+        n_cur = len(full_rows_rl)
+        cap = pipe.journal.journal_board(cur_w, 3)
+        cap_rows = cap["journal_board"]
+        tail3 = full_rows_rl[-3:]
+        pos_ok = all(a["window_id"] == b["window_id"]
+                     and a["kind"] == b["kind"]
+                     and a["delta"] == b["delta"]
+                     and a["total_delta"] == b["total_delta"]
+                     and a["ts_utc"] == b["ts_utc"]
+                     for a, b in zip(cap_rows, tail3))
+        rl1_ok = (n_cur == 11 and len(cap_rows) == 3
+                  and cap["returned"] == 3 and pos_ok)
+
+        keys_full = set(full_rl)
+        keys_cap = set(cap)
+        common_ok = all(full_rl[k] == cap[k]
+                        for k in keys_full if k != "journal_board")
+        rl2_ok = (keys_full <= keys_cap
+                  and keys_cap - keys_full == {"limit", "returned",
+                                               "truncated"}
+                  and common_ok and cap["limit"] == 3
+                  and cap["returned"] == 3 and cap["truncated"] is True)
+
+        loose = pipe.journal.journal_board(cur_w, 99)
+        loose_rows = loose["journal_board"]
+        ghost_in_loose = any(r["kind"] == "legacy-ghost"
+                             for r in loose_rows)
+        futc = pipe.journal.journal_board("2026-12", 5)
+        rl3_ok = (cap["total"] == full_rl["total"] == n_cur
+                  and len(loose_rows) == n_cur
+                  and loose["returned"] == n_cur
+                  and loose["truncated"] is False
+                  and loose["total"] == n_cur
+                  and all(a["window_id"] == b["window_id"]
+                          for a, b in zip(loose_rows, full_rows_rl))
+                  and ghost_in_loose
+                  and futc["journal_board"] == []
+                  and futc["returned"] == 0
+                  and futc["truncated"] is False
+                  and futc["total"] == 0
+                  and set(futc) - keys_full
+                  == {"limit", "returned", "truncated"})
+
+        rej_codes = []
+        for bad in (-1, True, "3", 2.5):
+            try:
+                pipe.journal.journal_board(cur_w, bad)
+                rej_codes.append("(none)")
+            except ValueError as exc:
+                rej_codes.append(str(exc).split("(")[-1].rstrip(")"))
+        both_code = "(none)"
+        try:
+            pipe.journal.journal_board("bad-window", -1)
+        except ValueError as exc:
+            both_code = str(exc).split("(")[-1].rstrip(")")
+        badwin_code = "(none)"
+        try:
+            pipe.journal.journal_board("2026-10\n", 3)
+        except ValueError as exc:
+            badwin_code = str(exc).split("(")[-1].rstrip(")")
+        conn = sqlite3.connect(journal_db)
+        rows_rl = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        rl4_ok = (rej_codes == ["E_WJ_BAD_LIMIT"] * 4
+                  and both_code == "E_WJ_BAD_LIMIT"
+                  and badwin_code == "E_WJ_BAD_WINDOW"
+                  and rows_rl == 14)
+
+        store_rl = json.dumps(pipe.store.pool_water_levels(),
+                              sort_keys=True)
+        rl5_ok = store_rl == store_pre
+        sections.append("[10] board read-cap x month-window combo:")
+        sections.append("    tail-truncation: cur-rows=%d cap-rows=%d "
+                       "positional=%s %s"
+                        % (n_cur, len(cap_rows), pos_ok,
+                           "OK" if rl1_ok else "DRIFT"))
+        sections.append("    envelope additive: diff-keys=%s "
+                       "common-eq=%s limit=%s returned=%s "
+                       "truncated=%s %s"
+                        % (",".join(sorted(keys_cap - keys_full))
+                           or "(none)", common_ok, cap["limit"],
+                           cap["returned"], cap["truncated"],
+                           "OK" if rl2_ok else "DRIFT"))
+        sections.append("    total full-count: cap-total=%d "
+                       "full-total=%d loose99 returned=%d "
+                       "truncated=%s ghost-in-loose=%s "
+                       "fut-2026-12 cap5 rows=%d returned=%d "
+                       "truncated=%s total=%d %s"
+                        % (cap["total"], full_rl["total"],
+                           loose["returned"], loose["truncated"],
+                           ghost_in_loose,
+                           len(futc["journal_board"]), futc["returned"],
+                           futc["truncated"], futc["total"],
+                           "OK" if rl3_ok else "DRIFT"))
+        sections.append("    bad-limit ring: codes=%s both-bad=%s "
+                       "bad-window=%s rows %d==14 %s"
+                        % ("/".join(rej_codes), both_code, badwin_code,
+                           rows_rl,
+                           "OK" if rl4_ok else "DRIFT"))
+        sections.append("    store zero-background+pure-read: "
+                       "identical=%s %s"
+                        % (rl5_ok, "OK" if rl5_ok else "DRIFT"))
+        fail = fail or not (rl1_ok and rl2_ok and rl3_ok and rl4_ok
+                            and rl5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -805,7 +944,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[10] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[11] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)

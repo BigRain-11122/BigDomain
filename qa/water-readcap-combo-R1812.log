@@ -1,0 +1,129 @@
+=== R1812 water journal board read-cap x month-window orthogonal combination probe ===
+seed: tech.md L107 (R1811 reseed) | AC-RL1..RL6 pre-registered in tech.md R1812 claim row before code
+carrier: src/os/water_consistency_probe.py [10] section (hygiene moved to [11]) + R1812 docstring paragraph
+cmd: python src/os/water_consistency_probe.py (double run, temp fresh world each run)
+
+--- RUN 1 (exit 0) full stdout ---
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] by-kind month-window count cross:
+    hist 2026-08: rows=3 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 1, "verdict": 2} OK
+    months=2026-08,2026-10 telescoping(sum==all)={"batch": 1, "drain": 1, "ingest": 1, "submit": 6, "verdict": 4} OK
+    cur 2026-10: rows=10 tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2} OK
+    fut 2026-12: rows=0 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 0, "verdict": 0} OK
+    bad-window kind_tally: E_WJ_BAD_WINDOW rows 13==13 OK
+[7] ghost-kind cross:
+    injected=1 absent-pre=True tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2, "legacy-ghost": 1} OK
+    hidden-face detection: diff-keys=legacy-ghost other-cells-equal=True OK
+    bad-window with ghost: E_WJ_BAD_WINDOW rows 14==14 OK
+    month attribution: hist-2026-08-clean=True fut-2026-12-zero=True flow 2026-10 windows=10->11 total_delta=11->12 net_delta=11->12 OK
+    store zero-background: identical=True ([3]/[4] closed pre-tamper)
+[8] ghost value-plane cross:
+    month-cross-reproof 2026-10: rows=11 total=12 OK
+    ghost-cell visibility: noise.total 9->10 diff={"noise.total": 1} OK
+    composition-with-ghost: total=12 noise.total+susp=12 pre+1=12 OK
+    flow value attribution: total_delta=12 net_delta=12 (pre 11/11) OK
+    store zero-background+pure-read: identical=True rows 14==14 OK
+[9] monthly net-flow value telescoping:
+    months=2026-08,2026-10 (board==flow sets True)
+    per-month flow: 2026-08:-1/3w 2026-10:+12/11w
+    telescoping: sum=+11 cells=11 flow-net=11 hand-col=11 windows 14==14 OK
+    ghost ride: ghost-col=+1 non-ghost=+10 cur 2026-10=+12==pre +11 +1 OK
+    zero penetration: hist-2026-08=-1 cells=-1 fut-2026-12 zero=True absent=True OK
+[10] board read-cap x month-window combo:
+    tail-truncation: cur-rows=11 cap-rows=3 positional=True OK
+    envelope additive: diff-keys=limit,returned,truncated common-eq=True limit=3 returned=3 truncated=True OK
+    total full-count: cap-total=11 full-total=11 loose99 returned=11 truncated=False ghost-in-loose=True fut-2026-12 cap5 rows=0 returned=0 truncated=False total=0 OK
+    bad-limit ring: codes=E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT both-bad=E_WJ_BAD_LIMIT bad-window=E_WJ_BAD_WINDOW rows 14==14 OK
+    store zero-background+pure-read: identical=True OK
+[11] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING
+
+--- RUN 2 (exit 0) full stdout ---
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] by-kind month-window count cross:
+    hist 2026-08: rows=3 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 1, "verdict": 2} OK
+    months=2026-08,2026-10 telescoping(sum==all)={"batch": 1, "drain": 1, "ingest": 1, "submit": 6, "verdict": 4} OK
+    cur 2026-10: rows=10 tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2} OK
+    fut 2026-12: rows=0 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 0, "verdict": 0} OK
+    bad-window kind_tally: E_WJ_BAD_WINDOW rows 13==13 OK
+[7] ghost-kind cross:
+    injected=1 absent-pre=True tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2, "legacy-ghost": 1} OK
+    hidden-face detection: diff-keys=legacy-ghost other-cells-equal=True OK
+    bad-window with ghost: E_WJ_BAD_WINDOW rows 14==14 OK
+    month attribution: hist-2026-08-clean=True fut-2026-12-zero=True flow 2026-10 windows=10->11 total_delta=11->12 net_delta=11->12 OK
+    store zero-background: identical=True ([3]/[4] closed pre-tamper)
+[8] ghost value-plane cross:
+    month-cross-reproof 2026-10: rows=11 total=12 OK
+    ghost-cell visibility: noise.total 9->10 diff={"noise.total": 1} OK
+    composition-with-ghost: total=12 noise.total+susp=12 pre+1=12 OK
+    flow value attribution: total_delta=12 net_delta=12 (pre 11/11) OK
+    store zero-background+pure-read: identical=True rows 14==14 OK
+[9] monthly net-flow value telescoping:
+    months=2026-08,2026-10 (board==flow sets True)
+    per-month flow: 2026-08:-1/3w 2026-10:+12/11w
+    telescoping: sum=+11 cells=11 flow-net=11 hand-col=11 windows 14==14 OK
+    ghost ride: ghost-col=+1 non-ghost=+10 cur 2026-10=+12==pre +11 +1 OK
+    zero penetration: hist-2026-08=-1 cells=-1 fut-2026-12 zero=True absent=True OK
+[10] board read-cap x month-window combo:
+    tail-truncation: cur-rows=11 cap-rows=3 positional=True OK
+    envelope additive: diff-keys=limit,returned,truncated common-eq=True limit=3 returned=3 truncated=True OK
+    total full-count: cap-total=11 full-total=11 loose99 returned=11 truncated=False ghost-in-loose=True fut-2026-12 cap5 rows=0 returned=0 truncated=False total=0 OK
+    bad-limit ring: codes=E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT both-bad=E_WJ_BAD_LIMIT bad-window=E_WJ_BAD_WINDOW rows 14==14 OK
+    store zero-background+pure-read: identical=True OK
+[11] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING
+
+--- RUN 3/RUN 4 exit-code probe ---
+exit3=0 exit4=0 (verdict-consistent world returns 0)
+
+--- determinism (AC-RL6) ---
+run1 sha256: AC708A5E80CA41FBDEFEA2E7CEAA8C1EAF2F3E23A10D39293A4F94701B023A72
+run2 sha256: AC708A5E80CA41FBDEFEA2E7CEAA8C1EAF2F3E23A10D39293A4F94701B023A72
+verdict: double-run stdout byte-identical (zero timestamps, zero paths, wall-clock-month-stable per family law)
+
+--- preregistration cross-check (AC-RL1..RL6 vs live readings) ---
+AC-RL1 OK: cur-rows=11 cap-rows=3 returned=3 positional=True (five-field tail-3 subsequence of full window read, mirror-SQL law)
+AC-RL2 OK: diff-keys exactly {limit,returned,truncated} additive, common keys equal, limit=3 returned=3 truncated=True; limit=0 world keeps three keys absent (AC-JL1 carryover)
+AC-RL3 OK: cap-total=11==full-total==n_cur (nine real windows + drift row + ghost row; same-month fixture boundary carried per R1807 note), loose99 returned=11 truncated=False ghost-in-loose=True, fut-2026-12 cap5 rows=0 returned=0 truncated=False total=0 with the three cap keys still additive
+AC-RL4 OK: four malformed limit shapes all E_WJ_BAD_LIMIT, both-bad gate order E_WJ_BAD_LIMIT fires first, bad-window through good limit E_WJ_BAD_WINDOW, rows 14==14 zero side effects
+AC-RL5 OK: store pool_water_levels snapshot byte-identical across all section reads (identical=True), water_windows rows 14==14
+AC-RL6 OK: double-run byte-identical sha256 AC708A5E80CA41FB..., probe-ascii=True, import-lines-clean=True, frozen four product files sha16 unchanged (zero product bytes), sections [1]..[9] zero regression, measurement face not in SUITES per R1727 precedent
+
+--- honest correction note (preregistration amendment, R1704 precedent) ---
+design judgment 2 corrected before code: first draft claimed ghost row = board last (in limit=3 tail). Board order is ORDER BY ts_utc,window_id (ts first); ghost ts=cur_w+'-11T00:00:00.000000Z' sorts before same-day real windows when run day > 11 (wall-clock-day dependent, not a structural constant). Corrected visibility reading: truncated read never lies about size (total keeps counting ghost+drift) + loose cap 99 carries the ghost row (position-independent). Live readings confirm: ghost NOT required in tail-3, IS in loose99 (ghost-in-loose=True).
