@@ -1,0 +1,52 @@
+=== R1791 lobby room.board payload.rooms subscription filter (AC-S17) ===
+
+--- section 1: lobby suite excerpt from full RUNNER evidence ---
+  | PASS AC-S16: board==manual-sql=True rooms=['lobby', 'quant'] ai_generated=True actor=system disclaimer-match=True fresh-reflection=True legacy-reject=True
+  | PASS AC-S17: single==py-slice==manual-sql=True multi+unknown=True empty=True bad-forms-reject=[True, True, True, True, True, True] default-none-full=True
+  | PASS AC-S14: empty-board=True envelope-keys=['disclaimer', 'room_message_board']; rows=[{'room': 'lobby', 'messages': 2, 'actors': 2}, {'room': 'quant', 'messages': 3, 'actors': 2}] row-keys-exact=True; manual-sql-cross=True scope(events=7 board-msgs=5 non-chat-excluded)=True; insertion-order-independent=True; live-rederive=True
+  | PASS AC-S15: row-counts-stable=True ([8, 0]); zero-write-method-src=True; deterministic=True; bad-disclaimer-construction-refused ['empty=True', 'whitespace=True', 'non-str=True']; legacy-no-disclaimer-face-refused=True; live-db cross=True rooms=['lobby', 'quant']
+RUNNER PASS (86/86 suites green, reconcile controls 7/7, 170.6s)
+
+--- section 2: suite direct run exit (first-gate) ---
+lobby suite first direct run: PASS AC-S17 all-true, exit=0 (single==py-slice==manual-sql / multi+unknown / empty [] / 6 bad-forms E_BAD_FRAME / default-none-full-board)
+
+--- section 3: matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (9168 bytes) - registry suites=86 criteria=836 evidence=qa/reconcile-all-R1791.log green=86/86
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9168 bytes, 86 suites, 836 criteria)
+check2: PASS check: docs/sandbox-suite-matrix.md byte-identical (9168 bytes, 86 suites, 836 criteria)
+
+--- section 4: schema fingerprint sentinel ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- section 5: hygiene (shipped faces zero-byte) ---
+git status --porcelain (round delta):
+M docs/sandbox-suite-matrix.md
+ M docs/spec/lobby-websocket-spec.md
+ M src/sandbox/lobby/server.py
+ M src/sandbox/lobby/test_client.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1791.log
+
+git diff --stat vs HEAD (uncommitted round work):
+warning: in the working copy of 'docs/sandbox-suite-matrix.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/spec/lobby-websocket-spec.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/sandbox/lobby/server.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/sandbox/lobby/test_client.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/sandbox/reconcile_all.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'state/queue/tech.md', LF will be replaced by CRLF the next time Git touches it
+ docs/sandbox-suite-matrix.md      | 132 +++++++++++++++++++-------------------
+ docs/spec/lobby-websocket-spec.md |   6 +-
+ src/sandbox/lobby/server.py       |  40 ++++++++++--
+ src/sandbox/lobby/test_client.py  |  65 +++++++++++++++++++
+ src/sandbox/reconcile_all.py      |   7 +-
+ state/queue/tech.md               |   2 +-
+ 6 files changed, 175 insertions(+), 77 deletions(-)
+
+shipped face zero-byte evidence: config.json and store.py absent from the diff stat above = zero bytes touched; server.py diff = handle_room_board filter block only.

@@ -1414,6 +1414,71 @@ async def suite():
                   board_frame.get("actor"),
                   bdis == cfg["risk_warning"]["text"], ok_fresh, ok_legacy))
 
+        # AC-S17: room.board optional subscription filter (R1791) -
+        # payload.rooms absent/None keeps the full board; a list filters
+        # rows Python-side AFTER the store read face (order-preserving
+        # subsequence, zero second SQL engine); an explicit empty list
+        # is an honest empty interest set; bad forms fail closed through
+        # sec.reject E_BAD_FRAME and the connection survives.
+        async def recv_or_none(ws_, pred_, timeout_=3.0):
+            try:
+                return await recv_until(ws_, pred_, timeout_)
+            except (TimeoutError, ConnectionClosed):
+                return None
+
+        await fb.send(frame("room.board"))
+        full17 = (await recv_until(fb, lambda x: x.get("type") == "room.board")) \
+            .get("payload", {}).get("board", [])
+        await fb.send(frame("room.board", payload={"rooms": ["lobby"]}))
+        p17 = (await recv_until(fb, lambda x: x.get("type") == "room.board")) \
+            .get("payload", {})
+        b17 = p17.get("board", [])
+        manual17 = db_query(
+            srv.db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' GROUP BY zone ORDER BY zone")
+        manual17_board = [{"room": r, "messages": int(n), "actors": int(k)}
+                          for r, n, k in manual17]
+        ok_filter = (
+            b17 == [row for row in full17 if row["room"] == "lobby"]
+            and b17 == [row for row in manual17_board if row["room"] == "lobby"]
+            and [row["room"] for row in b17] == ["lobby"]
+            and sorted(p17.keys()) == ["board", "disclaimer"]
+            and p17.get("disclaimer") == cfg["risk_warning"]["text"])
+        await fb.send(frame("room.board",
+                            payload={"rooms": ["quant", "lobby", "nether"]}))
+        b17b = (await recv_until(fb, lambda x: x.get("type") == "room.board")) \
+            .get("payload", {}).get("board", [])
+        ok_multi = (
+            b17b == [row for row in full17
+                     if row["room"] in ("quant", "lobby")]
+            and "nether" not in [row["room"] for row in b17b]
+            and len(b17b) >= 2)
+        await fb.send(frame("room.board", payload={"rooms": []}))
+        b17c = (await recv_until(fb, lambda x: x.get("type") == "room.board")) \
+            .get("payload", {}).get("board", [])
+        ok_empty = b17c == []
+        bad17 = []
+        for bad in ("lobby", ["lobby", 3], [""], ["   "], {"lobby": 1}, True):
+            await fb.send(frame("room.board", payload={"rooms": bad}))
+            rej17 = await recv_or_none(
+                fb, lambda f: f.get("type") == "sec.reject"
+                and f.get("payload", {}).get("code") == "E_BAD_FRAME")
+            bad17.append(rej17 is not None)
+        ok_bad = all(bad17)
+        # default sentinel None + connection survival: the same socket
+        # still answers a good query after the reject burst.
+        await fb.send(frame("room.board", payload={"rooms": None}))
+        b17d = await recv_or_none(
+            fb, lambda x: x.get("type") == "room.board")
+        ok_default = (b17d is not None
+                     and b17d.get("payload", {}).get("board", []) == full17)
+        record("AC-S17",
+               ok_filter and ok_multi and ok_empty and ok_bad and ok_default,
+               "single==py-slice==manual-sql=%s multi+unknown=%s empty=%s "
+               "bad-forms-reject=%s default-none-full=%s"
+               % (ok_filter, ok_multi, ok_empty, bad17, ok_default))
+
         # AC-S8a: heartbeat config 30/60 on the main server + no-pong enforcement
         ok_cfg_hb = (cfg["heartbeat"]["ping_interval"] == 30
                      and cfg["heartbeat"]["ping_timeout"] == 60)

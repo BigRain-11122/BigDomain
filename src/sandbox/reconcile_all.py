@@ -86,7 +86,12 @@ SUITES = [
     # EventStore (zero UPDATE, standing disclaimer envelope,
     # fail-closed without a wired disclaimer) - AC-S14/S15.
     # R1790 room.board protocol wiring face - AC-S16 (18 -> 19).
-    ("lobby", os.path.join("lobby", "test_client.py"), 19),
+    # R1791 room.board optional payload.rooms subscription filter -
+    # default absent/None keeps the full board, Python-side
+    # order-preserving row filter after the store read face (zero
+    # second SQL engine), bad forms fail closed E_BAD_FRAME,
+    # explicit [] is an honest empty interest set - AC-S17 (19 -> 20).
+    ("lobby", os.path.join("lobby", "test_client.py"), 20),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",

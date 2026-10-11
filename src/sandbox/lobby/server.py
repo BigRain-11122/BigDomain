@@ -387,13 +387,36 @@ class Lobby:
         await send_frame(client.ws, self.city.census_snapshot_frame(msg))
 
     async def handle_room_board(self, client, msg):
-        # AC-S16 (R1790): room-level message board protocol wiring - a
-        # zero-parameter public read face over the R1773 store read face
-        # (public API reference, zero second aggregation engine).
-        # Spectators may query (AC-S11 census public-read law); server
-        # fields stay authoritative. A legacy store constructed without a
-        # wired disclaimer refuses fail-closed through sec.reject, never
+        # AC-S16 (R1790): room.board protocol wiring - a zero-parameter
+        # public read face over the R1773 store read face (public API
+        # reference, zero second aggregation engine). Spectators may
+        # query (AC-S11 census public-read law); server fields stay
+        # authoritative. A legacy store constructed without a wired
+        # disclaimer refuses fail-closed through sec.reject, never
         # crashing the connection.
+        # AC-S17 (R1791): optional payload.rooms subscription filter.
+        # Absent key or None keeps the full board (default sentinel);
+        # the filter is a Python-side row filter applied AFTER the store
+        # face call (read-face single source, zero second SQL engine)
+        # and preserves the zone-ascending order (subsequence, no
+        # resorting). An explicit empty list is an honest empty
+        # interest set (board == []); unknown room names simply never
+        # match. Bad forms fail closed through sec.reject E_BAD_FRAME
+        # BEFORE the store call (deterministic precedence over the
+        # legacy no-disclaimer refusal).
+        payload = msg.get("payload") if isinstance(msg, dict) else None
+        rooms_param = payload.get("rooms") if isinstance(payload, dict) else None
+        if rooms_param is not None:
+            if (not isinstance(rooms_param, list)
+                    or any(not isinstance(r, str) or not r.strip()
+                           for r in rooms_param)):
+                await self.send_reject(
+                    client, "E_BAD_FRAME",
+                    "payload.rooms must be a list of non-empty room names")
+                return
+            wanted = set(rooms_param)
+        else:
+            wanted = None
         try:
             env = self.store.room_message_board()
         except ValueError:
@@ -401,6 +424,9 @@ class Lobby:
                 client, "E_STORE_NO_DISCLAIMER",
                 "room board unavailable: no wired disclaimer")
             return
+        board = env["room_message_board"]
+        if wanted is not None:
+            board = [row for row in board if row.get("room") in wanted]
         await send_frame(client.ws, {
             "v": 1,
             "type": "room.board",
@@ -408,7 +434,7 @@ class Lobby:
             "room": self.rooms[0],
             "actor": "system",
             "payload": {
-                "board": env["room_message_board"],
+                "board": board,
                 "disclaimer": env["disclaimer"],
             },
             "ai_generated": False,

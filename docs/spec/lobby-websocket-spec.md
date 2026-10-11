@@ -36,6 +36,7 @@
 | AC-S14 | 房间级消息读面（存储层·R1773）：`EventStore.room_message_board()` 纯读派生=每房 `chat.broadcast` 计数+活跃户（DISTINCT actor）聚合·零 UPDATE 零缓存（读时派生）·信封常驻非投顾 disclaimer·无 disclaimer fail-closed 拒 | 单元读面断言+manual SQL 交叉+行数恒定纯读律〔预注册载体=state/queue/tech.md R1773 板行·本表入册=R1790 闭口〕 |
 | AC-S15 | 读面卫生律（R1773）：显式空/空白/非 str disclaimer 构造拒·legacy 无 disclaimer 构造面调拒 `E_STORE_NO_DISCLAIMER`·方法源零写语句（inspect 机检）·确定性双调同一 | 构造拒绝族断言+inspect 扫描+双调 json 等断言 |
 | AC-S16 | room.board 协议接线（R1790）：请求帧 `{"type":"room.board"}` 零参公共读面（围观态可查=AC-S11 同律）→响应帧 `room.board`（payload={board,disclaimer}·board 经存储层读面公有 API 引用零第二引擎·ai_generated/actor 服务端权威）·board==manual SQL 并发只读交叉·新广播后复查询计数 +1（零缓存活态）·legacy 无 disclaimer store 经 `sec.reject` graceful 拒不崩连接 | live 套件断言〔test_client.py AC-S16 例〕 |
+| AC-S17 | room.board 订阅过滤参数（R1791）：可选 `payload.rooms`——缺省（无键/None）=全榜现行行为零漂移·过滤=board 后 Python 侧行过滤（读面单源零第二 SQL 引擎·zone 升序保序子序列·请求序不重写结果序）·空列表 []=诚实空兴趣集 board==[]·未知房名=零幻影行零报错（兴趣集语义）·坏参（非 list/成员非 str/空串/纯空白）fail-closed `sec.reject E_BAD_FRAME`（门序先于 store 调用）·拒后同连接恢复（不崩连接）·响应帧零键漂移（ai_generated/actor 承传） | live 套件断言〔test_client.py AC-S17 例〕 |
 
 ### 生产判据（P 系·预注册不预执行·blocked on CEO 物理件）
 
@@ -55,9 +56,10 @@
 - type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / chat.duplicate / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`+城市面（P-52①）：`census.query / census.snapshot / avatar.register / avatar.intake_receipt`+房间读面（R1790）：`room.board`。
 - 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE / E_FORBIDDEN_FIELD / E_DUPLICATE_MSG / E_STORE_NO_DISCLAIMER`。
 
-### 房间级消息读面（R1790 接线·AC-S14..S16 承载）
+### 房间级消息读面（R1790 接线·AC-S14..S17 承载）
 - `room.board` 请求帧零参零入城门（公共读面·围观可查）；响应帧 `payload.board`=存储层 `EventStore.room_message_board()` 公有 API 引用派生（每房 {room,messages,actors}·zone 升序·零缓存读时聚合·零第二引擎）+`payload.disclaimer`=常驻非投顾文案（服务端 store 构造期接线自 config `risk_warning.text` 既有键——shipped config 零改动）。
 - `ai_generated:false`+`actor:"system"` 服务端权威；legacy 无 disclaimer store 上该帧经 `sec.reject E_STORE_NO_DISCLAIMER` graceful 拒（连接存活）。
+- 可选 `payload.rooms` 订阅过滤（R1791·AC-S17）：缺省（无键/None）=全榜；显式 list=board 后 Python 侧行过滤（读面单源律·zone 升序保序子序列）；空列表=诚实空榜；未知房名零幻影行；坏参（非 list/成员非 str/空串/纯空白）`sec.reject E_BAD_FRAME` fail-closed 先于 store 调用·拒后连接存活。
 
 ### 房间模型
 - `lobby`（大厅主频道·默认）/`quant`（QUANT 城围观·回测演出事件流）/`cocreate`（共创房）；订阅制，跨房间消息不串流。
@@ -128,4 +130,4 @@ connect → sys.hello + sys.risk_warning → room.subscribe
 ICP 备案 → wss/域名 → msgSecCheck 真实接线 → 支付回执凭证（P-47-4）→ 日志留存/等保测评呈报 → 云上压测（AC-P5）→ **呈批开门（CEO 一句话）**。
 
 ---
-版本：v0.5（2026-10-11·OSLoop R1790·room.board 协议接线+房间读面判据入册：§一表 AC-S14..S16 三行〔S14/S15=R1773 存储层读面·S16=协议接线帧·tech.md 板行预注册先于实现〕+§二 type 枚举/错误码表增补+§四① 行同步）；v0.4=2026-10-09·OSLoop R1675·客户端重连语义节入册：`chat.duplicate` 帧+`client_msg_id` 幂等闸〔闸位=闸1/2 后、闸3 前〕+AC-S8c/S8d/S8e 三例〔预注册先于实现·state/queue/tech.md R1675 板行〕；v0.3=2026-10-08·OSLoop R1553·同步层选型节回写=ygo PoC 裁决落规格〔评估行②〕+Go/Python 同评=超承载→降级「仅协议参照」〔评估行③〕；v0.2=2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
+版本：v0.6（2026-10-11·OSLoop R1791·room.board 订阅过滤参数入册：§一表 AC-S17 行+§二房间读面节增补〔可选 payload.rooms·缺省全榜/保序 Python 侧过滤/空榜诚实/坏参 fail-closed·tech.md 板行预注册先于实现〕）；v0.5=2026-10-11·OSLoop R1790·room.board 协议接线+房间读面判据入册：§一表 AC-S14..S16 三行〔S14/S15=R1773 存储层读面·S16=协议接线帧·tech.md 板行预注册先于实现〕+§二 type 枚举/错误码表增补+§四① 行同步；v0.4=2026-10-09·OSLoop R1675·客户端重连语义节入册：`chat.duplicate` 帧+`client_msg_id` 幂等闸〔闸位=闸1/2 后、闸3 前〕+AC-S8c/S8d/S8e 三例〔预注册先于实现·state/queue/tech.md R1675 板行〕；v0.3=2026-10-08·OSLoop R1553·同步层选型节回写=ygo PoC 裁决落规格〔评估行②〕+Go/Python 同评=超承载→降级「仅协议参照」〔评估行③〕；v0.2=2026-09-24·OSLoop R3·服务器律 v2 对齐+P-52① 城市运行面吸收版；v0.1=2026-09-24 R1 判据预注册版；修订记录：本件判据变更须先改本表再动实现（预注册纪律·否决窗随集团 T2 例）。
