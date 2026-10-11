@@ -81,7 +81,9 @@ class UGCPipeline:
         # startup checks above) so the pool-water read faces unlock on
         # the pipeline's own store; legacy direct UGCStore() callers
         # stay untouched. _last_water carries the most recent
-        # ingest_lobby window's delta envelope (None before any window).
+        # completed window's delta envelope - the ingest_lobby window
+        # (AC-IW1) and the submit_batch batch window (AC-BW1) share
+        # this single slot, last writer wins (None before any window).
         self.store = UGC.UGCStore(db_path, disclaimer=self.disclaimer)
         self._last_water = None
         self.desk = ReviewDesk(self.store)
@@ -224,7 +226,19 @@ class UGCPipeline:
         then ONE real batch gate call per max_batch chunk. The budget
         face degrades the ungated suffix into the persistent queue
         (fail-closed: never passed, never lost). One bad text never
-        aborts the batch - every text gets its own receipt."""
+        aborts the batch - every text gets its own receipt.
+
+        Batch water wiring (AC-BW1): two live snapshots around the
+        batch window - the start snapshot is a pure read at method
+        entry (refused calls discard it harmlessly: no completed
+        window, the slot keeps its previous value), the end delta
+        derives through the store face pool_water_delta(prev) whose
+        current side is one live levels call (single derivation
+        source, R1785 caller-held-snapshot law preserved on the store
+        face). The receipts list shape is unchanged; the delta is
+        visible via last_water_delta() - one slot shared with the
+        ingest window, last completed window wins (AC-BW4)."""
+        prev_water = self.store.pool_water_levels()  # batch-start live snapshot (AC-BW1)
         self._validate_source(source)
         if source in self.entrance_required and not self.store.entrance_valid(actor):
             raise UGC.PipelineError(UGC.E_ENTRANCE_REQUIRED, str(actor))
@@ -279,6 +293,11 @@ class UGCPipeline:
                 i = piece[len(verdicts) + k]
                 receipts[i] = {"received": False, "queued": True,
                                "qid": qid, "text_index": i}
+        # batch-end live delta (AC-BW1): current side re-derives live
+        # inside the store face; the single _last_water slot is shared
+        # with the ingest window - the most recent completed window
+        # wins, an empty batch included (AC-BW4 co-residency law)
+        self._last_water = self.store.pool_water_delta(prev_water)
         return receipts
 
     def degraded_banner(self):
@@ -429,9 +448,11 @@ class UGCPipeline:
         return receipts
 
     def last_water_delta(self):
-        """R1794 window water monitor read face (AC-IW1): the most
-        recent ingest_lobby window's pool-water delta envelope,
-        passed through from the store face unwrapped; None before any
+        """R1794/R1796 window water monitor read face (AC-IW1/AC-BW1):
+        the most recent completed window's pool-water delta envelope -
+        an ingest_lobby window (R1794) or a submit_batch batch window
+        (R1796); one shared single slot, last writer wins (AC-BW4).
+        Passed through from the store face unwrapped; None before any
         window ran (honest empty, no fabricated zeros)."""
         return self._last_water
 

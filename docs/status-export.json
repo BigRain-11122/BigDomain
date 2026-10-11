@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T13:04:42+08:00",
+  "export_ts": "2026-10-11T13:25:39+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1795 一句话：scan [DEC] 面行属主判读修复交付（AC-DO1..DO4+AC-SC15/SC16 预注册先于代码——表行行首 token=属主·行内引用 token=INFO 免假阳·归属显示改属主行映射·harness 31 checks ALL PASS exit 0 零回归〔SC1..SC14 全保〕+live 复跑 [DEC] PASS row_owner_tokens=115+源件/装件 sha 同一=qa/scan-dec-owner-R1795.log 三节）。",
-    "latest_artifact": "本轮实物：scan_five_still.ps1 [DEC] 面行属主判读（R1794 轮首假阳机制根治·verdict 唯一属主集驱动+dec_ref_missing_base INFO 行+dec_new_tok 属主行归属修复）+harness test_scan_faces.ps1 AC-SC15/SC16 两例（R1794 形态夹具复现+真新属主行检出例）+源件/装件双同步+证据 qa/scan-dec-owner-R1795.log（三节）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头滚动（apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数/ugc submit_batch 水位差分回执——判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）+fold R493=再越线时轮首首测裁定（收账后水位 ~51.3KB 余量 ~27.2KB）——窗 ≤48h（2026-10-13 前）。"
+    "current": "R1796 一句话：ugc submit_batch 批面水位差分回执接线交付（AC-BW1..BW6 预注册先于代码——批面窗前后双活快照+last_water_delta 共居单值槽 last-writer-wins·套件 6/6 双跑绿·RUNNER 89/89 套件 857 判据零回归=qa/reconcile-all-R1796.log·矩阵 --check byte-identical·指纹哨兵 CLEAN·证据 qa/ugc-batchwater-R1796.log）。",
+    "latest_artifact": "本轮实物：pipeline.py submit_batch 批面水位接线（首句纯读 prev 快照+批尾 pool_water_delta(prev) 单一派生源+读面/注释「most recent completed window·last writer wins」更新）+套件 src/sandbox/ugc/test_batch_waterwire.py（6 判据·共居单值律四腿实测）+reconcile_all ugc-batch-water 注册行 证据 qa/ugc-batchwater-R1796.log（五节）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头滚动（apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数/ugc drain_recover 水位差分回执——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~54.6KB 余量 ~23.9KB）——窗 ≤48h、2026-10-13 前。"
   },
   "depts": [
     {
@@ -388,7 +388,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1795",
+      "1796",
       "OSLoop 执行 tick"
     ],
     [
@@ -3274,20 +3274,24 @@
     [
       "2",
       "member 到期板档位分布折叠面交付（R1786·P2 tech 队头可领项·轮计分 2=可跑实物：AC-ESD1..ESD7 预注册先于代码〔tech.md R1786 认领行先落〕——member.py expiring_distribution 聚合纯读面 +27/-0 additive〔单一派生源=内部单次 expiring_soon 调用+方法源零 SQL 语句·R1779 二次派生清除律聚合面〕：稀疏折叠确定性排序〔tier 字典序/period_no 数值序渲染 str 键·{2,10} 例钉死数值序〕+count==Σ双轴不变量+坏参 9 形态 E_BAD_STATE 透传零副作用+三径交叉验证〔板 Counter==manual SQL 双轴逐位等〕+scope 隔离承传+活态派生零缓存+四表稳定+双调双形态同一·首跑两红=工具面修复链如实注〔①缩进归一化 return 卷入 for 体→字节外科 dedent+AST 验证②同单再购 bucket 幂等重放→period_no 2=AC-M2 机边〕——test_expiring_dist.py SUITE PASS 7/7 exit 0+RUNNER PASS 85/85 套件 827 判据 controls 7/7 144.2s 零回归=qa/reconcile-all-R1786.log+矩阵再生 85/827 green --check byte-identical 双跑〔9083B〕+指纹哨兵 CLEAN domains=5·证据 qa/member-expiring-dist-R1786.log 五节·shipped config.json 零改动〔git status〕·queue_tech_open 5→4）"
+    ],
+    [
+      "2",
+      "ugc submit_batch 批面水位差分回执接线件（R1796·AC-BW1..BW6 预注册先于代码：批面窗前后双活快照+delta 经 last_water_delta 共居单值槽〔last-writer-wins·空窗亦覆写〕+receipts 列表形状零漂移；套件 test_batch_waterwire.py 6/6 双跑绿+RUNNER 89/89 套件 857 判据零回归+矩阵 --check byte-identical+指纹哨兵 CLEAN；证据 qa/ugc-batchwater-R1796.log）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 25,
+    "log_lines_in_window": 27,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1795 scan DEC row-owner law delivered (AC-DO1..DO4 + harness AC-SC15/SC16 all-pass 31 checks: row-head token = owner, in-row references INFO-only, dec_new_tok owner-row attribution; live [DEC] PASS row_owner_tokens=115; source+installed sha same; evidence qa/scan-dec-owner-R1795.log; state tick 1795; tech queue reseed 1)"
+    "method": "R1796 ugc submit_batch batch water-delta wiring delivered (AC-BW1..BW6 pre-registered before code: dual live snapshots around the batch window + last_water_delta single-slot co-residency last-writer-wins; suite 6/6 double-run green; RUNNER 89/89 suites 857 criteria zero-regression; matrix --check byte-identical; sentinel CLEAN; evidence qa/ugc-batchwater-R1796.log; state tick 1796; tech queue reseed 1)"
   }
 }

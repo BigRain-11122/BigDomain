@@ -1,0 +1,60 @@
+--- section 1: suite double-run (determinism) ---
+
+run1 exit=0
+PASS AC-BW1: pre-batch None=True envelope-keys=['disclaimer', 'persistent', 'pool_water_delta', 'total_delta'] empty-batch=True receipts=5/5 shape=True kinds=True
+PASS AC-BW2: face-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} manual-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} face-total=2 manual-total=2 double-call-identical=True
+PASS AC-BW3: cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} total=2 clean-batch-delta={} total=0
+PASS AC-BW5: l1-batch gate-calls=0 l1-receipts=2 degraded-queued=2 five-tables-steady=True degraded-delta={} queue-rows(gate_error)=2
+PASS AC-BW4: ingest-then-batch=True batch-then-ingest=True slot-sequence=ingest:susp batch:zero batch:susp ingest:zero
+PASS AC-BW6: pure-ascii=True import-lines-clean=True registry-wired=True
+SUITE PASS 6/6
+
+run2 exit=0
+PASS AC-BW1: pre-batch None=True envelope-keys=['disclaimer', 'persistent', 'pool_water_delta', 'total_delta'] empty-batch=True receipts=5/5 shape=True kinds=True
+PASS AC-BW2: face-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} manual-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} face-total=2 manual-total=2 double-call-identical=True
+PASS AC-BW3: cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} total=2 clean-batch-delta={} total=0
+PASS AC-BW5: l1-batch gate-calls=0 l1-receipts=2 degraded-queued=2 five-tables-steady=True degraded-delta={} queue-rows(gate_error)=2
+PASS AC-BW4: ingest-then-batch=True batch-then-ingest=True slot-sequence=ingest:susp batch:zero batch:susp ingest:zero
+PASS AC-BW6: pure-ascii=True import-lines-clean=True registry-wired=True
+SUITE PASS 6/6
+
+--- section 2: git status hygiene (touched-face check) ---
+
+exit=0
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/pipeline.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1796.log
+?? src/sandbox/ugc/test_batch_waterwire.py
+
+git diff --stat store.py/sec_batch.py/config.json exit=0
+(zero-byte: no diff hunks)
+
+git diff --stat pipeline.py/reconcile_all.py exit=0
+ src/sandbox/reconcile_all.py |  5 +++++
+ src/sandbox/ugc/pipeline.py  | 31 ++++++++++++++++++++++++++-----
+ 2 files changed, 31 insertions(+), 5 deletions(-)
+
+[stderr]
+warning: in the working copy of 'src/sandbox/reconcile_all.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/sandbox/ugc/pipeline.py', LF will be replaced by CRLF the next time Git touches it
+
+--- section 3: matrix --check cross ---
+
+exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9411 bytes, 89 suites, 857 criteria)
+
+--- section 4: fingerprint sentinel ---
+
+exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- section 5: full regression cross-reference ---
+
+RUNNER evidence: qa/reconcile-all-R1796.log (RUNNER PASS 89/89 suites, controls 7/7, 169.4s, exit=0)

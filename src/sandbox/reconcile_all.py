@@ -618,6 +618,11 @@ SUITES = [
     # around ingest_lobby + last_water_delta read face
     # (AC-IW1..IW6 pre-registered in state/queue/tech.md)
     ("ugc-ingest-waterwire", os.path.join("ugc", "test_ingest_waterwire.py"), 6),
+    # R1796 UGC submit_batch batch water-delta wiring: dual live
+    # snapshots around the batch window + single-slot co-residency
+    # with the ingest window (last completed window wins)
+    # (AC-BW1..BW6 pre-registered in state/queue/tech.md)
+    ("ugc-batch-water", os.path.join("ugc", "test_batch_waterwire.py"), 6),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)
