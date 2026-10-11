@@ -1,0 +1,44 @@
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING
+
+--- second run: exit=0 sha256=AE2D7C9F7AC5E3E9 byte-identical=True ---
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING

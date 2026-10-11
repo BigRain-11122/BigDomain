@@ -20,6 +20,19 @@ injection (direct fake journal row, the R1776/R1801 tamper posture)
 must be detected and named - detection is the probe's positive path,
 never a silent green.
 
+R1807 extension (month-window three-face cross): the same
+shared-birth world additionally cross-checks the three
+window-filtered journal read faces against each other -
+cell_totals(W) cells vs the per-cell sum of journal_board(W) row
+deltas, monthly_flow(W) windows vs the board row count, and
+monthly_flow(W) total_delta vs the summed total_delta column vs
+cell_totals(W).total - on a historical fixture month (direct
+INSERT, the R1730 family precedent: fixture rows have no store
+backing and stay out of the [3]/[4] journal-vs-store crosses,
+which run first), the current flow month, an honest empty future
+month, and a malformed window that all three faces must reject
+with the shared E_WJ_BAD_WINDOW code before any read.
+
 Encoding discipline: this source stays pure ASCII (the emoji probe
 text rides \U escapes); the output stays deterministic (no
 timestamps, no temp paths) so double runs compare byte-identical.
@@ -246,6 +259,93 @@ def main():
                           "OK" if drift_comp_ok else "DRIFT"))
         fail = fail or not (not drift_match and drift_named)
 
+        # ---- [5] month-window three-face cross (R1807) ---------------
+        conn = sqlite3.connect(journal_db)
+        for kind, delta, total, ts in (
+                ("submit", {"noise.total": 1,
+                            "noise.by_reason.too_short": 1}, 1,
+                 "2026-08-05T00:00:00.000000Z"),
+                ("verdict", {"review.suspended": -1,
+                             "review.verdicted.pass": 1}, -1,
+                 "2026-08-20T00:00:00.000000Z"),
+                ("verdict", {"review.suspended": -1,
+                             "review.verdicted.risky": 1}, -1,
+                 "2026-08-28T00:00:00.000000Z")):
+            conn.execute(
+                "INSERT INTO water_windows (kind, delta, total_delta,"
+                " ts_utc) VALUES (?, ?, ?, ?)",
+                (kind, json.dumps(delta, sort_keys=True), total, ts))
+        conn.commit()
+        c1 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+
+        def month_cross(w):
+            cells_env = pipe.journal.cell_totals(w)
+            board_env = pipe.journal.journal_board(w)
+            flow_env = pipe.journal.monthly_flow(w)
+            hand = hand_sum_cells(board_env["journal_board"])
+            n_rows = len(board_env["journal_board"])
+            cells_ok = (cells_env["cell_totals"] == hand
+                        and board_env["total"] == n_rows)
+            flow_rows = flow_env["monthly_flow"]
+            if n_rows:
+                row_sum = sum(r["total_delta"]
+                              for r in board_env["journal_board"])
+                flow_ok = (len(flow_rows) == 1
+                           and flow_rows[0]["month"] == w
+                           and flow_rows[0]["windows"] == n_rows
+                           and flow_env["total"] == n_rows
+                           and flow_env["net_delta"]
+                           == flow_rows[0]["total_delta"])
+                sums_ok = (flow_rows[0]["total_delta"] == row_sum
+                           == cells_env["total"])
+            else:
+                flow_ok = (flow_rows == [] and flow_env["total"] == 0
+                           and flow_env["net_delta"] == 0)
+                sums_ok = cells_env["total"] == 0
+            return (cells_ok and flow_ok and sums_ok,
+                    cells_env["cell_totals"], n_rows, cells_env["total"])
+
+        hist_ok, hist_cells, hist_n, hist_total = month_cross("2026-08")
+        tail = pipe.journal.journal_board()["journal_board"][-1]
+        cur_w = tail["ts_utc"][:7]
+        cur_ok, cur_cells, cur_n, cur_total = month_cross(cur_w)
+        fut_ok, fut_cells, fut_n, fut_total = month_cross("2026-12")
+        bad = "2026-10\n"
+        rejects = []
+        for face in (pipe.journal.cell_totals,
+                     pipe.journal.journal_board,
+                     pipe.journal.monthly_flow):
+            try:
+                face(window=bad)
+                rejects.append("NO-RAISE")
+            except ValueError as exc:
+                rejects.append("E_WJ_BAD_WINDOW"
+                               if "E_WJ_BAD_WINDOW" in str(exc)
+                               else "OTHER")
+        conn = sqlite3.connect(journal_db)
+        c2 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        rejects_ok = (rejects == ["E_WJ_BAD_WINDOW"] * 3 and c1 == c2)
+        sections.append("[5] month-window three-face cross:")
+        sections.append("    hist 2026-08: rows=%d total=%d cells=%s %s"
+                        % (hist_n, hist_total,
+                           json.dumps(hist_cells, sort_keys=True),
+                           "OK" if hist_ok else "DRIFT"))
+        sections.append("    cur %s: rows=%d total=%d cells=%s %s"
+                        % (cur_w, cur_n, cur_total,
+                           json.dumps(cur_cells, sort_keys=True),
+                           "OK" if cur_ok else "DRIFT"))
+        sections.append("    fut 2026-12: rows=%d total=%d %s"
+                        % (fut_n, fut_total,
+                           "OK" if fut_ok else "DRIFT"))
+        sections.append("    bad-window passthrough: %s rows %d==%d %s"
+                        % (",".join(rejects), c1, c2,
+                           "OK" if rejects_ok else "DRIFT"))
+        fail = fail or not (hist_ok and cur_ok and fut_ok and rejects_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -261,7 +361,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[5] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[6] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
