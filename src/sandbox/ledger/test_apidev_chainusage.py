@@ -3,7 +3,8 @@
 one-shot aggregate read face" row, the R1825 audit_lineage
 successor, claimed from the tech-lane FIFO oldest open row). The
 pre-registered criteria AC-LU1..AC-LU7 live in the R1833 tech
-claim note (criteria were registered before this code ran; the
+claim note and AC-LU8 lives in the R1839 claim note (criteria
+were registered before this code ran; the
 AC-CU prefix was taken by the R1751 curation family so the claim
 switched to AC-LU per the R1811 prefix-switch precedent).
 
@@ -22,6 +23,20 @@ untouched.
 The metered face is the real product injected by reference (no
 copy). This test source stays pure ASCII per the encoding
 discipline.
+
+Month rollover (AC-LU8, the R1839 symmetric case closing the
+window-parameter month-roll family gap set by the R1730
+rejectwin / R1738 usagekind / R1739 usagewin precedents -- the
+seed row's "R1839 usagewin" reference was a round-number typo
+for the R1739 usagewin roll, corrected on claim per the honesty
+law): a capped-out October roll chain accepts calls again after
+the frozen clock crosses the month boundary (the quota ring
+rolls with _window_utc), the default read follows the new month
+window (an honest all-zero before any new call), the old month
+keeps its values as an explicit window read (two windows never
+penetrate each other), the lineage / gate / panel alignment
+re-computes in the new window, and no immutable row is ever
+lost.
 
 Usage: python test_apidev_chainusage.py
 """
@@ -452,6 +467,122 @@ def main():
                % (_own_map(t_c), calls_end, keys_end, ev_end,
                   writes is None))
 
+        # -- AC-LU8 month-rollover truth preservation (R1839) ---------
+        # dedicated roll chain on a fresh account (scope isolation
+        # from the AC-LU1..LU6 world): roll-a cap 3 spends 2 calls,
+        # rotates to roll-b which spends 1 -> effective 3 == cap, so
+        # the 4th October call rejects E_AD_QUOTA (the capped-out
+        # anchor, zero api_calls rows). After the frozen clock
+        # crosses the month boundary the quota ring rolls with
+        # _window_utc: the default read follows the new month window
+        # (honest all-zero before any new call), new calls succeed
+        # again and land record-time stamped in the new window, the
+        # old month stays readable with its values preserved, the
+        # lineage / gate / panel alignment re-computes in the new
+        # window, and no immutable row is ever lost.
+        led.ensure_account("usr:mia", census_avatar_id="mia")
+        led.adjust([("pool:reserve", "debit", 100),
+                    ("usr:mia", "credit", 100)],
+                   "manual:fund-mia-roll", "suite funding mia roll")
+        kr_a = dk.issue_key("usr:mia", "roll-a", 3,
+                            ["backtest", "visualize"], True)
+        dk.buy_credits(kr_a["api_key"], 10, 1, "PACK-LU-RA")
+        _make_calls(dk, clock, kr_a["api_key"], "LU-RA", 2,
+                    "backtest")
+        kr_b = dk.rotate_key(kr_a["api_key"], "roll-b")
+        _make_calls(dk, clock, kr_b["api_key"], "LU-RB", 1,
+                    "backtest")
+        ok_oct_q, code_oct_q, _d5 = expect_ad_error(
+            lambda: dk.call(kr_b["api_key"], "backtest",
+                            "LU-RB-02", "engine:LU-RB-02"),
+            D.E_AD_QUOTA)
+        id_ra = _key_id(conn, kr_a["api_key"])
+        id_rb = _key_id(conn, kr_b["api_key"])
+        marks_pair = ",".join("?" for _ in (id_ra, id_rb))
+        pre_all = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id IN (" + marks_pair + ")",
+            (id_ra, id_rb)).fetchone()[0]
+        t_pre = dk.chain_usage(kr_b["api_key"])
+        view_pre = dk.key_view(kr_b["api_key"])
+        clock.advance(23 * 86400)
+        t_empty = dk.chain_usage(kr_b["api_key"])
+        _make_calls(dk, clock, kr_b["api_key"], "LU-RN", 2,
+                    "backtest")
+        t_new = dk.chain_usage(kr_b["api_key"])
+        eff_gate = dk._effective_window_count(id_rb, "2026-11")
+        view_new = dk.key_view(kr_b["api_key"])
+        t_old = dk.chain_usage(kr_b["api_key"], window="2026-10")
+        stamp_nov = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id IN (" + marks_pair + ")"
+            " AND window = '2026-11'"
+            " AND call_ref LIKE 'LU-RN-%'",
+            (id_ra, id_rb)).fetchone()[0]
+        post_all = conn.execute(
+            "SELECT COUNT(*) FROM api_calls"
+            " WHERE key_id IN (" + marks_pair + ")",
+            (id_ra, id_rb)).fetchone()[0]
+        lu8 = (ok_oct_q and code_oct_q == D.E_AD_QUOTA
+               and t_pre["window"] == "2026-10"
+               and _own_map(t_pre) == {id_ra: 2, id_rb: 1}
+               and t_pre["chain_total"] == 3
+               and t_pre["effective_upto_queried"] == 3
+               and view_pre["quota_used"] == 3
+               and view_pre["quota_remaining"] == 0
+               and view_pre["window"] == "2026-10"
+               and pre_all == 3
+               and t_empty["window"] == "2026-11"
+               and _own_map(t_empty) == {id_ra: 0, id_rb: 0}
+               and t_empty["chain_total"] == 0
+               and t_empty["effective_upto_queried"] == 0
+               and t_empty["chain_size"] == 2
+               and t_empty["queried_index"] == 1
+               and sorted(t_empty.keys()) == CHAIN_USAGE_KEYS
+               and t_new["window"] == "2026-11"
+               and _own_map(t_new) == {id_ra: 0, id_rb: 2}
+               and t_new["chain_total"] == 2
+               and t_new["effective_upto_queried"] == 2
+               and eff_gate == 2
+               and view_new["quota_used"] == 2
+               and view_new["window"] == "2026-11"
+               and t_old["window"] == "2026-10"
+               and t_old["by_member"] == t_pre["by_member"]
+               and t_old["chain_total"] == t_pre["chain_total"] == 3
+               and t_old["effective_upto_queried"] ==
+                   t_pre["effective_upto_queried"] == 3
+               and stamp_nov == 2
+               and post_all == 5 and post_all == pre_all + 2
+               and t_old["chain_total"] + t_new["chain_total"]
+                   == post_all)
+        record("AC-LU8", lu8,
+               "month roll (frozen clock +23d): October cap anchor"
+               " roll-a 2 + roll-b 1 = effective 3 == cap 3, 4th"
+               " call -> %s (key_view quota_used=%d remaining=%d,"
+               " window=%s) leaving %d api_calls rows; pre-roll"
+               " default own=%s; after roll honest-empty default"
+               " window=%s own all-zero (envelope exact=%s); 2 new"
+               " calls succeed = quota ring rolled, record-time"
+               " stamps in 2026-11=%d; new-window default own=%s;"
+               " three-way alignment effective_upto_queried==gate"
+               "==panel quota_used==%d (key_view window=%s); old"
+               " month 2026-10 explicit read preserved by_member=="
+               "pre-roll=%s chain_total=%d effective=%d (two"
+               " windows non-penetrating); immutable rows never"
+               " lost: all-time=%d == pre-roll %d + new %d =="
+               " oct %d + nov %d"
+               % (code_oct_q, view_pre["quota_used"],
+                  view_pre["quota_remaining"], view_pre["window"],
+                  pre_all, _own_map(t_pre), t_empty["window"],
+                  sorted(t_empty.keys()) == CHAIN_USAGE_KEYS,
+                  stamp_nov, _own_map(t_new), eff_gate,
+                  view_new["window"],
+                  t_old["by_member"] == t_pre["by_member"],
+                  t_old["chain_total"],
+                  t_old["effective_upto_queried"],
+                  post_all, pre_all, post_all - pre_all,
+                  t_old["chain_total"], t_new["chain_total"]))
+
         # -- AC-LU7 embedded faces + hygiene -----------------------------
         view_fk = dk.key_view(fk["api_key"])
         board_lin = dk.dev_board("usr:lin")
@@ -503,7 +634,7 @@ def main():
     dk.close()
     metered.close()
     led.close()
-    return 0 if passed == total == 7 else 1
+    return 0 if passed == total == 8 else 1
 
 
 if __name__ == "__main__":

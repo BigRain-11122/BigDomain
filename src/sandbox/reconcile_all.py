@@ -807,11 +807,12 @@ SUITES = [
     # own rows (audit view vs enforcement face), 14 bad-window
     # forms fail-closed, historical/future month semantics on the
     # record-time window column, dead keys fully readable,
-    # embedded faces untouched (AC-LU1..LU7 pre-registered in
+    # embedded faces untouched, month-rollover truth preservation
+    # (AC-LU1..LU7 R1833 + AC-LU8 R1839 pre-registered in
     # state/queue/tech.md)
     ("ledger-apidev-chainusage", os.path.join("ledger",
                                              "test_apidev_chainusage.py"),
-     7),
+     8),
 ]
 
 FAILS = 0
