@@ -1,0 +1,77 @@
+--- section 1: selftest (AC-WCB1..WCB6 fixtures) ---
+exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+selftest: 26/26 checks pass
+  [ok] refusal not triggered (8 fixtures)
+  [ok] tee dialect named
+  [ok] cmd-raw dialect named (utf8=no)
+  [ok] pwsh-capture dialect named
+  [ok] ps-utf16 named
+  [ok] labeled capture self-announces (label=yes)
+  [ok] utf-8-sig and mixed-EOL land in other bucket
+  [ok] empty degenerate honest row (bytes=0, tee-by-rule)
+  [ok] counts sum == file count
+  [ok] empty dir refusal exit 3
+  [ok] reprobe deterministic (identical census)
+  [ok] zero writes into probed dirs
+  [ok] hygiene ascii+net-imports clean
+  [ok] AC-WCB1 freeze exit 0 + keys exactly four non-tee
+  [ok] AC-WCB1 idempotent re-freeze byte-identical
+  [ok] AC-WCB1 baseline lists sorted per class
+  [ok] AC-WCB1 post-check green inside freeze
+  [ok] AC-WCB2 clean world DRIFT-CLEAN exit 0
+  [ok] AC-WCB2 new tee file = normal product, zero flag
+  [ok] AC-WCB3 four new dialects FLAG exit 2, each named
+  [ok] AC-WCB4 class-migrated flag named (base=cmd-raw cur=tee)
+  [ok] AC-WCB5 disappeared file = info face, exit 0
+  [ok] AC-WCB5 missing baseline honest refusal exit 2
+  [ok] AC-WCB6 double-check deterministic
+  [ok] AC-WCB6 mutex --check + --update-baseline refused
+  [ok] AC-WCB6 check face zero writes (baseline only file)
+self-ascii: PASS (27192 bytes)
+self-net-imports: NONE (PASS)
+
+--- section 2: live --update-baseline (re-freeze) ---
+exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: update-baseline (re-freeze gate)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+baseline written: writer-census-baseline.json
+  cmd-raw: 15 names
+  pwsh-capture: 296 names
+  ps-utf16: 97 names
+  other: 93 names
+  tee: 657 files (healthy dialect, NOT baselined)
+--- post-check (self-run after freeze) ---
+census: files=1158 tee=657 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+post-check exit=0
+
+--- section 3: live --check run1 ---
+exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1158 tee=657 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- section 4: live --check run2 (determinism) ---
+exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1158 tee=657 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- determinism verdict ---
+double-check byte-identical: yes
+verdict: PASS

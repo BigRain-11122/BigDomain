@@ -39,11 +39,58 @@ This probe is a measurement face (R1727 precedent): it is NOT
 registered in the reconcile_all SUITES table, reads directories only,
 and never writes inside any qa/ dir.
 
-Evidence: qa/selflabel-chain-R1836.log (selftest + live sections).
+R1841 baseline + drift-detector extension (writer-census baseline
+window; criteria AC-WCB1..WCB6 pre-registered in state/queue/tech.md
+BEFORE this code). The R1836 census answered "what writer families
+exist TODAY" one-shot; this extension answers "did any NEW non-tee
+dialect file appear SINCE the baseline" on every future call:
+
+    python qa_writer_census.py --update-baseline   # freeze baseline
+    python qa_writer_census.py --check             # drift detector
+
+Baseline law (AC-WCB1): writer-census-baseline.json (default under
+the target dir, --baseline overridable) carries ONLY the four non-tee
+class name lists {cmd-raw, pwsh-capture, ps-utf16, other} sorted;
+tee files are deliberately NOT baselined because the runner Tee is
+the healthy dialect - a NEW tee file is a normal evidence product
+and must never flag (the zero-tee-key baseline IS that mechanism).
+The baseline is a pure parse product: zero timestamps, zero paths,
+indent=2 + sort_keys + trailing NL round-trip format, atomic
+tempfile+os.replace write, idempotent re-freeze byte-identical
+(R1684 runner-profile-baseline isomorphism). --update-baseline is
+the re-freeze gate (R1713 AC-BF4 law): mutually exclusive with
+--check, and after writing it self-runs the check (post-check must
+be green - structurally guaranteed because the baseline derives
+from the very census it is checked against).
+
+Check law (AC-WCB2..WCB5): three verdict faces -
+  * new-dialect   FLAG  current class in the four baselined classes
+                         AND name not in that class list -> the
+                         shell-capture discipline detector body
+                         (every future pwsh/cmd-captured evidence
+                         file is caught by name, exit 2, no silence)
+  * class-migrated FLAG baselined file whose current class differs
+                         from its base class (incl. rewritten to
+                         tee) -> rewrite face, exit 2
+  * disappeared   info  baselined file no longer on disk -> legal
+                         cleanup, NOT a violation (R1684 REMOVED-SUITE
+                         info precedent), exit 0 face
+Missing baseline file during --check -> exit 2 with an honest
+"probe not deployed" hint (zero fabricated empty baseline). Double
+run of --check prints byte-identical stdout (zero timestamps).
+
+Write-discipline note (honest update of the R1836 read-only claim):
+the census and check faces still write NOTHING inside any qa/ dir;
+--update-baseline writes exactly ONE file - the baseline itself -
+and only as an explicit operator re-freeze action.
+
+Evidence: qa/selflabel-chain-R1836.log (R1836); qa/
+writer-census-drift-R1841.log (this window).
 """
 
 import argparse
 import io
+import json
 import os
 import sys
 import tempfile
@@ -63,6 +110,8 @@ NET_IMPORTS = ("urllib", "requests", "socket", "http", "ftplib",
 QA_DIR = os.path.join(ROOT, "qa")
 LABEL = RA.SHELL_CAPTURE_LABEL
 CLASSES = ("tee", "cmd-raw", "pwsh-capture", "ps-utf16", "other")
+BASELINE_CLASSES = ("cmd-raw", "pwsh-capture", "ps-utf16", "other")
+BASELINE_NAME = "writer-census-baseline.json"
 
 
 def classify_file(path):
@@ -144,6 +193,126 @@ def probe_dir(target):
                  "other=%d honest bucket)" % (len(names), counts["other"]))
     return lines, 0, {"file_count": len(names), "counts": counts,
                       "labeled": labeled}
+
+
+def census_names(target):
+    """Per-class sorted name lists (read-only, AC-WCB1 derivation
+    face). Returns dict class -> sorted names, or None for the empty
+    refusal family (probe_dir law)."""
+    names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+    if not names:
+        return None
+    lists = dict((c, []) for c in CLASSES)
+    for name in names:
+        row = classify_file(os.path.join(target, name))
+        lists[row["class"]].append(name)
+    return dict((c, sorted(lists[c])) for c in CLASSES)
+
+
+def default_baseline_path(target):
+    return os.path.join(target, BASELINE_NAME)
+
+
+def write_baseline(target, path):
+    """AC-WCB1 re-freeze face. Derives the baseline from a live census
+    (pure parse product: zero timestamps, zero paths), writes it
+    atomically (tempfile + os.replace), then self-runs the check
+    (post-check must be green - structurally guaranteed). Returns
+    (lines, exit_code, baseline_dict); lines carry the freeze report
+    plus the post-check output as evidence."""
+    lines = []
+    lists = census_names(target)
+    if lists is None:
+        lines.append("no *.log candidates under target dir (refusal)")
+        return lines, 3, None
+    base = dict((c, lists[c]) for c in BASELINE_CLASSES)
+    text = json.dumps(base, indent=2, sort_keys=True) + "\n"
+    d = os.path.dirname(os.path.abspath(path))
+    fd, tmp = tempfile.mkstemp(prefix=".wc-baseline-", dir=d)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+    lines.append("baseline written: %s" % os.path.basename(path))
+    for c in BASELINE_CLASSES:
+        lines.append("  %s: %d names" % (c, len(base[c])))
+    lines.append("  tee: %d files (healthy dialect, NOT baselined)"
+                 % len(lists["tee"]))
+    post, post_code = check_against_baseline(target, path)
+    lines.append("--- post-check (self-run after freeze) ---")
+    lines.extend(post)
+    lines.append("post-check exit=%d" % post_code)
+    if post_code != 0:
+        return lines, 2, base      # structurally unreachable, honest face
+    return lines, 0, base
+
+
+def check_against_baseline(target, path):
+    """AC-WCB2..WCB5 drift-detector face. Read-only against the target
+    dir AND the baseline file. Three verdict faces: new-dialect FLAG,
+    class-migrated FLAG, disappeared info. Deterministic output."""
+    lines = []
+    if not os.path.exists(path):
+        lines.append("baseline file missing: %s" % os.path.basename(path))
+        lines.append("hint: run --update-baseline first "
+                     "(probe not deployed - honest refusal, "
+                     "zero fabricated empty baseline)")
+        return lines, 2
+    try:
+        with io.open(path, "r", encoding="utf-8") as fh:
+            base = json.load(fh)
+    except (OSError, ValueError) as exc:
+        lines.append("baseline unreadable: %s (%s)"
+                     % (os.path.basename(path), exc.__class__.__name__))
+        return lines, 2
+    for c in BASELINE_CLASSES:
+        if c not in base:
+            lines.append("baseline malformed: missing class key %s" % c)
+            return lines, 2
+    lists = census_names(target)
+    if lists is None:
+        lines.append("no *.log candidates under target dir (refusal)")
+        return lines, 3
+    base_of = {}
+    for c in BASELINE_CLASSES:
+        for n in base[c]:
+            base_of[n] = c
+    flags = 0
+    for c in CLASSES:
+        for n in lists[c]:
+            if c == "tee":
+                continue          # healthy dialect face, never flags
+            if n not in base_of:
+                lines.append("[flag] new-dialect: %s (class=%s)" % (n, c))
+                flags += 1
+    for c in CLASSES:
+        for n in lists[c]:
+            b = base_of.get(n)
+            if b is not None and b != c:
+                lines.append("[flag] class-migrated: %s (base=%s cur=%s)"
+                             % (n, b, c))
+                flags += 1
+    seen = set()
+    for c in CLASSES:
+        seen.update(lists[c])
+    gone = sorted(n for n in base_of if n not in seen)
+    for n in gone:
+        lines.append("[info] disappeared: %s (base=%s)"
+                     % (n, base_of[n]))
+    lines.append("census: files=%d tee=%d baselined=%d"
+                 % (sum(len(lists[c]) for c in CLASSES),
+                    len(lists["tee"]), len(base_of)))
+    lines.append("disappeared=%d" % len(gone))
+    lines.append("flags=%d" % flags)
+    lines.append("verdict: %s" % ("DRIFT-CLEAN" if flags == 0
+                                 else "DRIFT-FLAG"))
+    return lines, (0 if flags == 0 else 2)
 
 
 def _hygiene_lines():
@@ -239,6 +408,104 @@ def _selftest():
         # 12 hygiene faces
         hy, hy_code = _hygiene_lines()
         check("hygiene ascii+net-imports clean", hy_code == 0)
+        # --- AC-WCB1..WCB6 baseline + drift-detector family (R1841) ---
+        bx = os.path.join(tmp, "baseline-world")
+        os.mkdir(bx)
+        with open(os.path.join(bx, "b-cmdraw.log"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        with open(os.path.join(bx, "b-pwsh.log"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("utf-8") + b"\r\n")
+        with open(os.path.join(bx, "b-utf16.log"), "wb") as fh:
+            fh.write(b"\xff\xfe" + "hi\n".encode("utf-16-le"))
+        with open(os.path.join(bx, "b-tee.log"), "wb") as fh:
+            fh.write("PASS suite row\n".encode("utf-8"))
+        bpath = os.path.join(bx, BASELINE_NAME)
+        # AC-WCB1: freeze lands 4-class baseline, no tee key, idempotent,
+        # post-check green
+        wlines, wcode, wbase = write_baseline(bx, bpath)
+        check("AC-WCB1 freeze exit 0 + keys exactly four non-tee",
+              wcode == 0 and set(wbase.keys()) == set(BASELINE_CLASSES))
+        with io.open(bpath, "r", encoding="utf-8") as fh:
+            t1 = fh.read()
+        _wl2, _wc2, _wb2 = write_baseline(bx, bpath)
+        with io.open(bpath, "r", encoding="utf-8") as fh:
+            t2 = fh.read()
+        check("AC-WCB1 idempotent re-freeze byte-identical", t1 == t2)
+        check("AC-WCB1 baseline lists sorted per class",
+              all(wbase[c] == sorted(wbase[c]) for c in BASELINE_CLASSES)
+              and wbase["cmd-raw"] == ["b-cmdraw.log"])
+        check("AC-WCB1 post-check green inside freeze",
+              wcode == 0 and any("post-check exit=0" in l
+                                 for l in wlines))
+        # AC-WCB2: clean check + new tee file never flags
+        clines, ccode = check_against_baseline(bx, bpath)
+        check("AC-WCB2 clean world DRIFT-CLEAN exit 0",
+              ccode == 0 and "DRIFT-CLEAN" in "\n".join(clines))
+        with open(os.path.join(bx, "new-tee-product.log"), "wb") as fh:
+            fh.write("PASS suite fresh\n".encode("utf-8"))
+        clines2, ccode2 = check_against_baseline(bx, bpath)
+        check("AC-WCB2 new tee file = normal product, zero flag",
+              ccode2 == 0 and "[flag]" not in "\n".join(clines2))
+        # AC-WCB3: four new dialect files each flag by name
+        for name, payload in (
+                ("new-cmdraw.log", u"AI \u5224\u5b9a".encode("gbk")
+                 + b"\r\n"),
+                ("new-pwsh.log", u"AI \u5224\u5b9a".encode("utf-8")
+                 + b"\r\n"),
+                ("new-utf16.log", b"\xff\xfe" + "hi\n".encode("utf-16-le")),
+                ("new-other.log", b"\xef\xbb\xbf" + "x\n".encode("utf-8"))):
+            with open(os.path.join(bx, name), "wb") as fh:
+                fh.write(payload)
+        dlines, dcode = check_against_baseline(bx, bpath)
+        dblob = "\n".join(dlines)
+        check("AC-WCB3 four new dialects FLAG exit 2, each named",
+              dcode == 2 and dblob.count("[flag] new-dialect:") == 4
+              and "new-cmdraw.log" in dblob
+              and "new-pwsh.log" in dblob
+              and "new-utf16.log" in dblob
+              and "new-other.log" in dblob
+              and "DRIFT-FLAG" in dblob)
+        # AC-WCB4: rewrite baselined cmd-raw file as tee -> migration flag
+        with open(os.path.join(bx, "b-cmdraw.log"), "wb") as fh:
+            fh.write("rewritten by tee now\n".encode("utf-8"))
+        mlines, mcode = check_against_baseline(bx, bpath)
+        check("AC-WCB4 class-migrated flag named (base=cmd-raw cur=tee)",
+              mcode == 2 and ("[flag] class-migrated: b-cmdraw.log "
+                              "(base=cmd-raw cur=tee)")
+              in "\n".join(mlines))
+        # restore cmd-raw content, clear the four injected dialect
+        # files, then delete a baselined file for the disappeared face
+        with open(os.path.join(bx, "b-cmdraw.log"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        for _n in ("new-cmdraw.log", "new-pwsh.log", "new-utf16.log",
+                   "new-other.log"):
+            os.unlink(os.path.join(bx, _n))
+        os.unlink(os.path.join(bx, "b-pwsh.log"))
+        glines, gcode = check_against_baseline(bx, bpath)
+        gblob = "\n".join(glines)
+        check("AC-WCB5 disappeared file = info face, exit 0",
+              gcode == 0 and "[info] disappeared: b-pwsh.log "
+              "(base=pwsh-capture)" in gblob
+              and "DRIFT-CLEAN" in gblob)
+        # AC-WCB5: missing baseline -> honest refusal exit 2
+        rlines, rcode = check_against_baseline(
+            bx, os.path.join(bx, "no-such-baseline.json"))
+        check("AC-WCB5 missing baseline honest refusal exit 2",
+              rcode == 2 and "probe not deployed" in "\n".join(rlines))
+        # AC-WCB2/WCB6 determinism: identical double check
+        g2lines, g2code = check_against_baseline(bx, bpath)
+        check("AC-WCB6 double-check deterministic",
+              (g2lines, g2code) == (glines, gcode))
+        # AC-WCB6 mutex gate via main()
+        try:
+            mcode2 = main(["--dir", bx, "--check", "--update-baseline"])
+        except SystemExit as exc:
+            mcode2 = exc.code          # argparse error exits 2
+        check("AC-WCB6 mutex --check + --update-baseline refused",
+              mcode2 == 2)
+        # write-discipline: check face wrote nothing inside world dir
+        check("AC-WCB6 check face zero writes (baseline only file)",
+              BASELINE_NAME in os.listdir(bx))
     finally:
         for sub in os.listdir(tmp):
             d = os.path.join(tmp, sub)
@@ -258,13 +525,32 @@ def _selftest():
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="qa evidence writer-mode census (R1836 AC-SL3)")
+        description="qa evidence writer-mode census (R1836 AC-SL3; "
+                    "R1841 baseline+drift AC-WCB1..WCB6)")
     parser.add_argument("--dir", default=QA_DIR,
                         help="target evidence dir (default live qa/)")
     parser.add_argument("--selftest", action="store_true",
                         help="run sandbox fixtures")
+    parser.add_argument("--check", action="store_true",
+                        help="drift detector: recompute census vs "
+                             "baseline, flag new non-tee dialect files")
+    parser.add_argument("--update-baseline", action="store_true",
+                        help="re-freeze gate: derive baseline from "
+                             "live census (R1713 AC-BF4 law: only "
+                             "after drift disposition)")
+    parser.add_argument("--baseline", default=None,
+                        help="baseline path (default: "
+                             "writer-census-baseline.json under "
+                             "target dir)")
+    if argv is None:
+        argv = sys.argv[1:]
     args = parser.parse_args(argv)
-    print("probe: qa writer-mode census (BigDomain R1836 AC-SL3)")
+    if args.check and args.update_baseline:
+        parser.error("--check and --update-baseline are mutually "
+                     "exclusive (re-freeze only after drift "
+                     "disposition, R1713 AC-BF4 law)")
+    print("probe: qa writer-mode census (BigDomain R1836 AC-SL3; "
+          "R1841 baseline+drift AC-WCB1..WCB6)")
     if args.selftest:
         code, _checks = _selftest()
         hy, hy_code = _hygiene_lines()
@@ -272,6 +558,24 @@ def main(argv=None):
             print(line)
         return code or hy_code
     target = os.path.abspath(args.dir)
+    bpath = os.path.abspath(args.baseline
+                            or default_baseline_path(target))
+    if args.check:
+        print("mode: check (drift detector)")
+        print("dir: %s" % target)
+        print("baseline: %s" % bpath)
+        lines, code = check_against_baseline(target, bpath)
+        for line in lines:
+            print(line)
+        return code
+    if args.update_baseline:
+        print("mode: update-baseline (re-freeze gate)")
+        print("dir: %s" % target)
+        print("baseline: %s" % bpath)
+        lines, code, _base = write_baseline(target, bpath)
+        for line in lines:
+            print(line)
+        return code
     print("dir: %s" % target)
     lines, code, _summary = probe_dir(target)
     for line in lines:
