@@ -245,6 +245,28 @@ value). Measurement face, R1727 precedent, not registered into
 SUITES. Zero product files touched.
 
 
+R1818 extension (per-row delta literal conservation): the [14]
+section enforced the structural premise; this section pins the
+per-row literal plane on the clean 14-row world. Three paths per
+row - the product board delta dict (the json.loads route, the
+reference), the SQL json_extract per-key route (per-key value
+equality plus the json_type 'integer' premise plus the
+json_quote leaf-literal face: the engine's quoted text of the
+extracted value equals the product json.dumps of that value;
+key-set closure rides the [14] three-way leaf-count cross, not
+repeated), and the SQL json(delta) re-parse route (the engine
+canonical text json.loads-ed back must equal the row dict). Two
+literal laws: the engine canonical text equals the product
+compact serialization (json.dumps sort_keys=True with tight
+separators) byte for byte, and the stored write-format text is a
+fixed point of the writer's own serialization law (the
+default-separator json.dumps sort_keys=True of the record()
+face) - the write-read literal round trip. The injected
+negative-path faces stay in [14] (in-book, not repeated).
+Measurement face, R1727 precedent, not registered into SUITES.
+Zero product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -1687,6 +1709,100 @@ def main():
                            "OK" if ji4_ok else "DRIFT"))
         fail = fail or not (ji1_ok and ji2_ok and ji3_ok and ji4_ok)
 
+        # ---- [15] per-row delta literal three-way + round-trip
+        # conservation (R1818) ---------------------------------------
+        # The [14] section enforced the structural premise; this
+        # section pins the per-row literal plane on the clean 14-row
+        # world. Three paths per row: the product board delta dict
+        # (json.loads route, the reference), the SQL json_extract
+        # per-key route (value equality + json_type 'integer' +
+        # json_quote leaf-literal face - key-set closure rides the
+        # [14] three-way leaf-count cross, not repeated), and the
+        # SQL json(delta) re-parse route. Two literal laws: the
+        # engine canonical text equals the product compact
+        # serialization byte for byte, and the stored write-format
+        # text is a fixed point of the writer's own serialization
+        # law (record() rides json.dumps sort_keys=True with the
+        # default separators). Negative injection faces stay in
+        # [14] (in-book, not repeated).
+        lc_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        lc_cnt_before = lc_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        lc_rows = lc_ro.execute(
+            "SELECT window_id, delta, json(delta)"
+            " FROM water_windows ORDER BY window_id").fetchall()
+        board_map = {r["window_id"]: r["delta"]
+                     for r in pipe.journal.journal_board()
+                     ["journal_board"]}
+        lc_three_ok = True
+        lc_engine_ok = True
+        lc_write_ok = True
+        lc_key_face_total = 0
+        lc_empty_rows = 0
+        for wid, raw, canon in lc_rows:
+            row_delta = board_map.get(wid)
+            if not isinstance(row_delta, dict):
+                lc_three_ok = False
+                continue
+            if not row_delta:
+                lc_empty_rows += 1
+            for key in sorted(row_delta):
+                path = '$."' + key + '"'
+                if '"' in key or "\\" in key:
+                    lc_three_ok = False
+                    continue
+                val, jtype, quoted = lc_ro.execute(
+                    "SELECT json_extract(delta, ?),"
+                    " json_type(delta, ?),"
+                    " json_quote(json_extract(delta, ?))"
+                    " FROM water_windows WHERE window_id = ?",
+                    (path, path, path, wid)).fetchone()
+                if (val is None
+                        or val != row_delta[key]
+                        or jtype != "integer"
+                        or quoted != json.dumps(row_delta[key])):
+                    lc_three_ok = False
+                lc_key_face_total += 1
+            if json.loads(canon) != row_delta:
+                lc_three_ok = False
+            if canon != json.dumps(row_delta, sort_keys=True,
+                                   separators=(",", ":")):
+                lc_engine_ok = False
+            if raw != json.dumps(json.loads(raw), sort_keys=True):
+                lc_write_ok = False
+        lc_cnt_after = lc_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        lc_ro.close()
+        lc1_ok = (len(lc_rows) == 14 and lc_three_ok)
+        lc2_ok = lc_engine_ok
+        lc3_ok = lc_write_ok
+        lc4_ok = (lc_cnt_before == lc_cnt_after == 14
+                  and set(board_map)
+                  == set(wid for wid, _, _ in lc_rows))
+
+        sections.append("[15] delta literal three-way + round-trip:")
+        sections.append("    rows=%d keys-checked=%d"
+                        " empty-delta-rows=%d"
+                        % (len(lc_rows), lc_key_face_total,
+                           lc_empty_rows))
+        sections.append("    three-path per-row (extract/type/"
+                        "quote + json() re-parse): %s"
+                        % ("OK" if lc1_ok else "DRIFT"))
+        sections.append("    engine-canonical == product-compact"
+                        " (sort_keys, tight separators): %s"
+                        % ("OK" if lc2_ok else "DRIFT"))
+        sections.append("    write-format fixed point"
+                        " (default-separator sort_keys): %s"
+                        % ("OK" if lc3_ok else "DRIFT"))
+        sections.append("    pure-read: rows %d==%d==14"
+                        " board-map==sql-wids %s"
+                        % (lc_cnt_before, lc_cnt_after,
+                           "OK" if lc4_ok else "DRIFT"))
+        fail = fail or not (lc1_ok and lc2_ok and lc3_ok
+                            and lc4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -1702,7 +1818,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[15] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[16] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
