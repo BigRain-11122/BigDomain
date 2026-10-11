@@ -219,6 +219,32 @@ level. Zero product files touched (measurement face, R1727
 precedent).
 
 
+R1817 extension (delta JSON engine-side integrity): the [13]
+section rode json_each with CAST(je.value AS INTEGER) - safe only
+while every delta is well-formed JSON whose leaf values are all
+integers. This section enforces that structural premise
+engine-side on the 14-row baseline world (json_valid across all
+rows + json_tree non-root leaf types all 'integer' + a three-way
+leaf-count cross: json_tree non-root nodes == json_each rows ==
+the product-side sum of len(delta dict) over the whole board),
+then proves the detection faces with two injected negative paths
+(the tamper posture of R1809/R1801, PRAGMA ignore_check_constraints
+direct INSERT, month-abstract ts on the -21T hour so the row
+never collides with the drift/ghost -11T tie window):
+a malformed-JSON row caught both ways (SQL json_valid=0
+engine-side point-name vs the product cell_totals() json.loads
+fail-closed crash - two detection faces on the same injected
+row), then a non-integer-leaf row (valid JSON, a text leaf - the
+CAST premise broken on both sides: json_tree non-root non-integer
+leaf count engine-side vs the product sum-stage TypeError). Each
+injected row is deleted by its window_id right after its two
+faces are recorded, the board returns to 14 rows and the
+integrity face re-reads green (valid0=0, non-integer leaves=0,
+product cell_totals() total back to the whole-board registered
+value). Measurement face, R1727 precedent, not registered into
+SUITES. Zero product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -1492,6 +1518,175 @@ def main():
         fail = fail or not (ca1_ok and ca2_ok and ca3_ok and ca4_ok
                             and ca5_ok)
 
+        # ---- [14] delta JSON engine-side integrity (R1817) ------
+        # The [13] section rode json_each with CAST(je.value AS
+        # INTEGER) - safe only while every delta is well-formed
+        # JSON whose leaf values are all integers. This section
+        # enforces that structural premise engine-side and proves
+        # the detection faces with two injected negative paths
+        # (tamper posture of R1809/R1801, month-abstract ts on the
+        # -21T hour so the rows never collide with the drift/ghost
+        # -11T tie window). Each injected row is deleted by its
+        # window_id right after its faces are recorded, the board
+        # returns to 14 rows and the integrity face re-reads green.
+        ji_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        ji_base_rows = ji_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        ji_base_valid0 = ji_ro.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE json_valid(delta) <> 1").fetchone()[0]
+        ji_base_bad_leaves = ji_ro.execute(
+            "SELECT COUNT(*) FROM water_windows,"
+            " json_tree(water_windows.delta) jt"
+            " WHERE jt.parent IS NOT NULL"
+            " AND jt.type <> 'integer'").fetchone()[0]
+        ji_tree_leaves = ji_ro.execute(
+            "SELECT COUNT(*) FROM water_windows,"
+            " json_tree(water_windows.delta) jt"
+            " WHERE jt.parent IS NOT NULL").fetchone()[0]
+        ji_each_total = ji_ro.execute(
+            "SELECT COUNT(*) FROM water_windows,"
+            " json_each(water_windows.delta) je").fetchone()[0]
+        ji_ro.close()
+        board_all = pipe.journal.journal_board()
+        ji_product_leaves = sum(len(r["delta"])
+                                for r in board_all["journal_board"])
+        ji1_ok = (ji_base_rows == 14
+                  and ji_base_valid0 == 0
+                  and ji_base_bad_leaves == 0
+                  and ji_tree_leaves == ji_each_total
+                  == ji_product_leaves)
+
+        # negative path 1: malformed JSON row, caught both ways
+        ji_inject_ts = cur_w + "-21T00:00:00.000000Z"
+        ji_conn = sqlite3.connect(journal_db)
+        ji_conn.execute("PRAGMA ignore_check_constraints = ON")
+        ji_conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta,"
+            " ts_utc) VALUES (?, ?, ?, ?)",
+            ("submit", "not-json{", 0, ji_inject_ts))
+        ji_conn.commit()
+        ji_conn.execute("PRAGMA ignore_check_constraints = OFF")
+        ji_conn.close()
+        ji_ro2 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        ji_bad_valid0 = ji_ro2.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE json_valid(delta) <> 1").fetchone()[0]
+        ji_bad_wid, ji_bad_delta = ji_ro2.execute(
+            "SELECT window_id, delta FROM water_windows"
+            " WHERE json_valid(delta) <> 1").fetchone()
+        ji_ro2.close()
+        try:
+            pipe.journal.cell_totals()
+            ji_bad_crash = None
+        except ValueError as exc:
+            ji_bad_crash = type(exc).__name__
+        ji2_ok = (ji_bad_valid0 == 1
+                  and ji_bad_delta == "not-json{"
+                  and ji_bad_crash is not None)
+
+        ji_conn2 = sqlite3.connect(journal_db)
+        ji_conn2.execute(
+            "DELETE FROM water_windows WHERE window_id = ?",
+            (ji_bad_wid,))
+        ji_conn2.commit()
+        ji_conn2.close()
+
+        # negative path 2: valid JSON, non-integer leaf - the
+        # CAST premise broken on both sides
+        ji_conn3 = sqlite3.connect(journal_db)
+        ji_conn3.execute("PRAGMA ignore_check_constraints = ON")
+        ji_conn3.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta,"
+            " ts_utc) VALUES (?, ?, ?, ?)",
+            ("submit", '{"noise.total":"five"}', 0, ji_inject_ts))
+        ji_conn3.commit()
+        ji_conn3.execute("PRAGMA ignore_check_constraints = OFF")
+        ji_conn3.close()
+        ji_ro3 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        ji_leaf_bad = ji_ro3.execute(
+            "SELECT COUNT(*) FROM water_windows,"
+            " json_tree(water_windows.delta) jt"
+            " WHERE jt.parent IS NOT NULL"
+            " AND jt.type <> 'integer'").fetchone()[0]
+        ji_leaf_wid, ji_leaf_type = ji_ro3.execute(
+            "SELECT window_id, jt.type FROM water_windows,"
+            " json_tree(water_windows.delta) jt"
+            " WHERE jt.parent IS NOT NULL"
+            " AND jt.type <> 'integer'").fetchone()
+        ji_ro3.close()
+        try:
+            pipe.journal.cell_totals()
+            ji_leaf_crash = None
+        except (TypeError, ValueError) as exc:
+            ji_leaf_crash = type(exc).__name__
+        ji3_ok = (ji_leaf_bad == 1
+                  and ji_leaf_type == "text"
+                  and ji_leaf_crash is not None)
+
+        ji_conn4 = sqlite3.connect(journal_db)
+        ji_conn4.execute(
+            "DELETE FROM water_windows WHERE window_id = ?",
+            (ji_leaf_wid,))
+        ji_conn4.commit()
+        ji_conn4.close()
+
+        # restore face: board back to 14 rows, integrity re-reads
+        # green, product total back to the whole-board registered
+        # value
+        ji_ro4 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        ji_rest_rows = ji_ro4.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        ji_rest_valid0 = ji_ro4.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE json_valid(delta) <> 1").fetchone()[0]
+        ji_rest_bad_leaves = ji_ro4.execute(
+            "SELECT COUNT(*) FROM water_windows,"
+            " json_tree(water_windows.delta) jt"
+            " WHERE jt.parent IS NOT NULL"
+            " AND jt.type <> 'integer'").fetchone()[0]
+        ji_ro4.close()
+        ji_rest_env = pipe.journal.cell_totals()
+        ji4_ok = (ji_rest_rows == 14
+                  and ji_rest_valid0 == 0
+                  and ji_rest_bad_leaves == 0
+                  and int(ji_rest_env["total"]) == 11)
+
+        sections.append("[14] delta JSON engine-side integrity:")
+        sections.append("    baseline: rows=%d valid0=%d"
+                        " non-integer-leaves=%d leaf-count"
+                        " tree=%d each=%d product=%d %s"
+                        % (ji_base_rows, ji_base_valid0,
+                           ji_base_bad_leaves, ji_tree_leaves,
+                           ji_each_total, ji_product_leaves,
+                           "OK" if ji1_ok else "DRIFT"))
+        sections.append("    bad-json row: sql-valid0=%d"
+                        " window_id=%d delta=%r product-crash=%s %s"
+                        % (ji_bad_valid0, ji_bad_wid,
+                           ji_bad_delta, ji_bad_crash,
+                           "OK" if ji2_ok else "DRIFT"))
+        sections.append("    non-integer leaf row: bad-leaves=%d"
+                        " window_id=%d type=%s product-crash=%s %s"
+                        % (ji_leaf_bad, ji_leaf_wid, ji_leaf_type,
+                           ji_leaf_crash,
+                           "OK" if ji3_ok else "DRIFT"))
+        sections.append("    restore: rows=%d valid0=%d"
+                        " non-integer-leaves=%d product-total=%d"
+                        " %s"
+                        % (ji_rest_rows, ji_rest_valid0,
+                           ji_rest_bad_leaves,
+                           int(ji_rest_env["total"]),
+                           "OK" if ji4_ok else "DRIFT"))
+        fail = fail or not (ji1_ok and ji2_ok and ji3_ok and ji4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -1507,7 +1702,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[14] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[15] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)

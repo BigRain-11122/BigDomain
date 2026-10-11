@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T19:25:27+08:00",
+  "export_ts": "2026-10-11T19:40:11+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1816 一句话：water journal cell_totals 胞聚合镜像 SQL 第三径交付（AC-CA1..CA6 预注册先于代码·AC-CM 前缀撞车 compliance-map 族→换 AC-CA 全仓无主）——探针增 [13] 节：json_each 表值函数引擎侧 JSON 展开（与产品 Python json.loads 零共享代码·SQLite 3.50.4 JSON1 能力探测先于代码）四窗逐胞==产品 cell_totals(W)〔whole 11/hist −1/cur 12/fut 0·键升序同构〕+组合口径律 SQL 侧复证〔total==noise.total+susp·verdicted 恒不入〕+篡改行胞级归属〔ghost {noise.total:1}/drift {noise.total:5}·月归属 cur=2/hist=0〕+诚实空窗〔COALESCE 0〕·双跑 sha256 1C0867F0…逐字节同一 exit 0/0·PROBE CONSISTENT+DETECTING·tick 1815→1816。",
-    "latest_artifact": "最近实物：src/os/water_consistency_probe.py 胞聚合镜像 SQL 第三径扩面（[13] 节 json_each 引擎侧展开+docstring R1816 段·零产品文件字节·测量面不入 SUITES）+证据 qa/water-cellmirror-R1816.log（双跑 byte-identical sha256 1C0867F0A8823F80…三节）·2026-10-11 20:1x。",
-    "next_milestone": "下个实物：tech 队头按序交付（water journal delta JSON 引擎侧完整性探针窗［R1816 补种］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1817 一句话：water journal delta JSON 引擎侧完整性探针交付（AC-JI1..JI5 预注册先于代码·AC-JI 前缀全仓无主）——探针增 [14] 节（hygiene 顺移 [15]）：14 行基线 json_valid0==0+json_tree 非根叶全 integer+叶计数三方对照 tree=24==each=24==产品 24；坏 JSON 行双径互证〔SQL json_valid0=1 点名 window_id=15 vs 产品 cell_totals() JSONDecodeError fail-closed 崩响捕获〕；非整值行双面〔SQL 叶 type=text 点名 window_id=16 vs 产品求和段 ValueError（int() 前置执法命中）〕；DELETE 恢复复绿（行数回 14+产品 total==11 在册值复现）·双跑 sha256 6AA701CD38E12C78 逐字节同一 exit 0/0·PROBE CONSISTENT+DETECTING·tick 1816→1817。轮首 DEC 新行 D-20261011-07（全集团任务排布案）判毕=执行司 bm-c/bm-b/委员会·本司未入派工面知悉；GORD 新 1 行（19:3x 三车道排产政策令）=本司纯本地 CPU 沙箱零云端零 GPU=零新约束知悉。",
+    "latest_artifact": "最近实物：src/os/water_consistency_probe.py delta JSON 引擎侧完整性扩面（[14] 节 json_valid/json_tree 前提执法+两注入负路径双径检出+DELETE 恢复复绿+docstring R1817 段·零产品文件字节·测量面不入 SUITES）+证据 qa/water-integrity-R1817.log（双跑 byte-identical sha256 6AA701CD38E12C78·三节 14514B）·2026-10-11 20:5x。",
+    "next_milestone": "下个实物：tech 队头按序交付（water journal 行级 delta 字面三方对照+json_quote 往返守恒探针窗［R1817 补种］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -183,6 +183,10 @@
       "产品面前台静态预览（preview/index.html）",
       "on",
       "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）·frontdoor v0.15=R980（Creator Incentive Face 创作者激励梯度面卡·AC-FD15a..f·真探针 12 腿〔梯度+预算窗+项圈+join+幂等〕+合规四件套+单向 share 结构法注·活体重启上线 17 卡）·frontdoor v0.16=R984（Strategy Observation Face 策略共创围观付费面卡·AC-FD16a..f·真探针 15 腿+合规四件套·活体重启上线 18 卡）·frontdoor v0.17=R986（Studio Onboarding Face 工作室入驻年费面卡·AC-FD17a..f·真探针 21 腿+合规四件套+注册行不可变结构法注·活体重启上线 19 卡）·frontdoor v0.18=R987（Ad Slot Face 虚拟展厅/广告位面卡·AC-FD18a..f·真探针 23 腿+合规四件套+venue 引用律结构法注·活体重启上线 20 卡）·frontdoor v0.19=R989（Venue Face 线上活动场地/店面租约面卡·AC-FD19a..f·真探针 26 腿+合规四件套+占用引擎单源引用律结构法注·活体重启上线 21 卡）·frontdoor v0.20=R990（Reports Face 城市数据报告面卡·AC-FD20a..f·真探针 25 腿+结构脱敏九键 descriptor+ent: 企业直购代币层拒诚实结构边界+合规四件套·活体重启上线 22 卡）·frontdoor v0.21=R992（Identity Face 元宇宙身份付费面卡·AC-FD21a..f·真探针 26 腿+props/venue 引擎引用律结构法注+合规四件套·活体重启上线 23 卡）·frontdoor v0.22=R993（Expedite Face 交易大厅加急特权面卡·AC-FD22a..f·真探针 25 腿+合规四件套·活体重启上线 24 卡）·frontdoor v0.23=R995（Enterprise Metered API Face 企业计量 API 面卡·AC-FD23a..f·真探针 30 腿+合规四件套·活体重启上线 25 卡） · frontdoor v0.24 city digital collectibles card (R997: AC-FD24a..f, collectibles.py R619 face reused not copied, 21-leg real probe with nine fail-closed refusals, SUITE PASS 8/8 + RUNNER PASS 27/27 zero regression, live restart 26 cards on 8093)·frontdoor v0.28=R1003（Sibling-Ops Review Gate 兄弟司运营层规格合规门卡·AC-FD28a..f·真门探针 9 腿+活体兄弟仓 spec 每渲染重算+合规四件套·活体重启上线 30 卡）"
+    ],
+    [
+      "2",
+      "water journal delta JSON 引擎侧完整性探针件（R1817·AC-JI1..JI5 预注册先于代码：14 行基线 json_valid0==0+json_tree 非根叶全 integer+叶计数三方对照 tree=24==each=24==产品 Σ len=24 逐位等；坏 JSON 行注入双径检出互证〔SQL json_valid0=1+window_id=15 点名+delta 字面对照== vs 产品 cell_totals() JSONDecodeError 崩响捕获=fail-closed 检出行为证〕；非整值行注入双面检出〔json_valid=1 但 json_tree 非根叶 type=text window_id=16 点名 vs 产品求和段 ValueError（int() 前置执法命中·TypeError/ValueError 族内）=CAST 前提破坏双面〕；两注入行各按 window_id 精确 DELETE 恢复复绿〔行数回 14+valid0==0+叶==0+产品 total==11 在册值复现〕；探针增 [14] 节〔hygiene 顺移 [15]〕+docstring R1817 段·测量面不入 SUITES〔R1727 先例〕·双跑 stdout 逐字节同一 sha256 6AA701CD38E12C78 exit 0/0+[1]..[13] 零回归 PROBE VERDICT CONSISTENT+DETECTING+frozen 四件零产品字节；证据 qa/water-integrity-R1817.log）"
     ]
   ],
   "results": [
@@ -440,7 +444,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1816",
+      "1817",
       "OSLoop 执行 tick"
     ],
     [
@@ -3347,15 +3351,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 27,
+    "log_lines_in_window": 29,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1816 water journal cell_totals cell-aggregate mirror-SQL third path delivered (score 2, P2 tech queue head [R1815 seed]; probe [13] section: json_each engine-side JSON expansion, four-window per-cell cross vs product cell_totals, composition law SQL-side re-proof, tamper-row cell attribution, honest empty window; double-run byte-identical sha256 1C0867F0A8823F80 exit 0/0; evidence qa/water-cellmirror-R1816.log; queue_tech_open 10->9 reseed 1->10)"
+    "method": "R1817 water journal delta JSON engine-side integrity probe delivered (score 2, P2 tech queue head [R1816 seed]; probe [14] section: json_valid all-rows + json_tree integer-leaf premise + two injected negative paths each caught both ways (SQL engine-side point-name vs product fail-closed crash) + DELETE restore green; double-run byte-identical sha256 6AA701CD38E12C78 exit 0/0; evidence qa/water-integrity-R1817.log; queue_tech_open 10->9 reseed 1->10)"
   }
 }
