@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-12T05:31:32+08:00",
+  "export_ts": "2026-10-12T05:42:53+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1846 一句话：P2 技术队头 FIFO 交付帧——water journal 簿记行 VACUUM 扫描序稳定例窗闭口：dm3 引擎预验三面钉定（重复行经 VACUUM 存续+首行读序跨重建稳定+分配器零漂移）+探针 [24] 节 AC-VSQ1..VSQ5 五读数全过+双跑逐字节同一+writer-census DRIFT-CLEAN——零产品字节测量面。",
-    "latest_artifact": "最近实物：src/os/dm3_precheck.py+src/os/water_consistency_probe.py [24] 节+qa/water-vacuumseq-R1846.log（2026-10-12 05:31 +08:00）",
-    "next_milestone": "下个实物：qa writer-census 探针 daily 链接线窗（P2 FIFO 队头·判据预注册先行后落码）+每日对账日常化常设行+2026-10-14 21:40 雷达候选清单到达续候〔窗 ≤48h·2026-10-14 前后〕"
+    "current": "R1847 一句话：雷达窗6强契合件认领+pycrdt 接线前置 A+D 切片当轮闭环——wire-compat 双向闭合 PASS（yjs@13.6.33 fixtures 正向三面全过+node 反向腿逐键等=ygo 未验之过线·指针兑现链实证闭合）+cp314 Windows 轮子净装验证——P-47① 共创收敛层 Python 正身候选实测可信（B/C/E=接线窗 gated）。",
+    "latest_artifact": "最近实物：src/sandbox/pycrdt-poc/{wire_poc.py,apply_in_yjs.mjs}+qa/pycrdt-wire-R1847.log（AC-YC1..YC6 全过·VERDICT wire-compat PASS 双向闭合·2026-10-12 05:42 +08:00）",
+    "next_milestone": "下个实物：P2 tech FIFO 队头续交付+每日对账日常化常设行+pycrdt 接线前置 B/C/E（gated=bootstrap 或 P-47① 共创面功能窗）+2026-10-14 21:40 雷达第七窗候选清单到达续候〔窗 ≤48h·2026-10-14 前后〕"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "2026-10-12 R1847 雷达窗6强契合件认领+pycrdt 接线前置 A+D 切片当轮闭环（P1 承接行 gate 燃=OH-20261011 窗6候选清单已过目→radar v1.1 §6.4 固定格式认领行=OH-20261011-bigdomain.md §三〔群档 ledger 路径〕+README（六）认领注记+backlog 顶行任务单·判据预注册先于执行·AC-YC 前缀全仓零占用实锚）：A wire-compat 双向闭合 PASS=正向 ygo-poc fixtures 三面全过（fx1 单客户端 Map/Array/Text/嵌套 profile 快照逐键==fx1-expected.json+fxA/fxB 双客户端并发对合并态==fx-merge-expected.json+sv-a 差分探针 sv_len=5 diff_len=96）+反向 pycrdt 镜像 doc get_update 189B V1 更新→node yjs@13.6.33 applyUpdate 快照逐键等（ygo 未验之 wire-compat 门在 Python 正身上过线=指针兑现链实证闭合）；D 轮子面 live=pycrdt-0.14.8+pycrdt-websocket-0.16.5 cp314 Windows 轮子净装零源码构建（vendor 沙箱面 gitignore 收录零系统污染）；B（lobby 语义保真）/C（MIT attribution）/E（websockets 现役保持）=接线窗（bootstrap/P-47① 共创面功能窗）执行·沙箱评估合法（ygo-poc 同型）·AC-YC1..YC6 全过=qa/pycrdt-wire-R1847.log·沙箱件 src/sandbox/pycrdt-poc/（纯 ASCII·ygo-poc 对手件只读复用零改动）"
+    ],
     [
       "2",
       "2026-10-12 R1846 water journal 簿记行 VACUUM 扫描序稳定例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1844 补种〕·轮计分 2=可跑实物）：dm3_precheck.py 引擎语义预验先行落地实跑 PASS〔SQLite 3.50.4·G0..G4 全绿·三面钉定=重复行经 VACUUM 存续〔COUNT 2 pre==post·fetchall [28,99] 双侧〕+首行读序跨重建稳定〔fetchone 28 pre==28 post·order-stable=True〕+分配器零漂移〔consults first row 28+1==29·post-alloc [29,99]=UPDATE 只触首行·哨兵 99 从不被咨询〕+VACUUM 在 idle 第二连接在场下可行=探针世界连接拓扑前提〕——AC-VSQ1..VSQ5 判据预注册先于代码〔tech.md R1846 认领注记·AC-VSQ 前缀全仓 rg 零命中·ts 槽位 -27T 避让〕探针 [24] 节落地（hygiene 顺移 [25]）五读数全 OK〔dup-inject seq-rows 1->2 first-read=28 all-rows=[28,99] 读序陷阱双面复现/vacuum rows-pre=2 rows-post=2 first 28->28 order-stable=True all-post=[28,99]=存续+扫描序稳定双律/alloc-post-vacuum new-id=29 rows=15 seq-rows=[29,99] board-cur 11->12 产品面见 +1 行/cleanup-restore rows=14 wiped=0 honest-seq-rows=1 seq=29 consumed high-water〔对 [23] 终态 28 合法推进非回退〕/re-green tallies+total+board 全等+pure-read 14->14〕+PROBE VERDICT CONSISTENT+DETECTING+双跑 stdout 逐字节同一〔exits 0/0〕+[25] hygiene 四件 sha16 前后同一=零产品字节·测量面不入 SUITES〔R1727 先例〕·证据 qa/water-vacuumseq-R1846.log 四节〔dm3 verbatim+探针 run1 verbatim+双跑判定 byte-identical=true+writer-census --check DRIFT-CLEAN exit 0=新证据件 tee 方言零 FLAG·R1841 归一执法〕——轮首五静九面全 PASS 零新项〔LEDGER atbd=0+DEC 288 row_owner 119 持平+GORD 277 持平〔BigStream MV 族水位在册知悉〕+ORD/BENCH/QA 当日+HB lag=0+树净零锁〕·P1 常设行全门控或当日已毕〔雷达窗 10-14 21:40 续候/对账当日证据在盘/BigLife R777 外件未达/bootstrap=CEO 物理件〕→P2 FIFO 消耗 1+补种 1=10〔ugc sec_batch banner_queue 读帽参数窗〕"
@@ -568,7 +572,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1846",
+      "1847",
       "OSLoop 执行 tick"
     ],
     [
@@ -3475,10 +3479,10 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 15,
+    "log_lines_in_window": 17,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,

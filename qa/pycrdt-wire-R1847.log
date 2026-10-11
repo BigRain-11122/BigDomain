@@ -1,0 +1,26 @@
+--- AC-YC1 pip install (prereq D live) ---
+cmd: python -m pip install --target <pycrdt-poc>/vendor pycrdt pycrdt-websocket
+pip| Using cached pycrdt_store-0.1.5-py3-none-any.whl (11 kB)
+pip| Using cached sqlite_anyio-0.2.10-py3-none-any.whl (4.0 kB)
+pip| Using cached idna-3.20-py3-none-any.whl (69 kB)
+pip| Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+pip| Installing collected packages: typing_extensions, idna, anyio, sqlite-anyio, pycrdt, pycrdt-store, pycrdt-websocket
+pip| Successfully installed anyio-4.15.1 idna-3.20 pycrdt-0.14.8 pycrdt-store-0.1.5 pycrdt-websocket-0.16.5 sqlite-anyio-0.2.10 typing_extensions-4.16.0
+pip| [notice] A new release of pip is available: 26.0.1 -> 26.2.1
+pip| [notice] To update, run: python.exe -m pip install --upgrade pip
+PASS AC-YC1 install returncode=0 source_build=no
+pycrdt version=0.14.8
+--- AC-YC2 control anchor (pycrdt self roundtrip) ---
+PASS AC-YC2 anchor roundtrip text='hello bigdomain wire' bind=doc.get(name,type=T)
+--- AC-YC3 forward yjs@13 fixtures -> pycrdt ---
+PASS AC-YC3 fx1 single-client format=v1 bind=doc.get(name,type=T)
+fx1 snap={"array": ["sys:room-open", "welcome"], "map": {"count": 8.0, "profile": {"level": 7.0, "title": "resident"}, "theme": "dark", "x": 123.456}, "text": "ello world!"}
+other-format probe (fx1-v2.bin): readable=False
+PASS AC-YC3 concurrent merge fxA+fxB snap={"array": ["sys:room-open", "welcome"], "map": {"count": 8.0, "editA": "from-A", "editB": "from-B", "profile": {"level": 7.0, "title": "resident"}, "theme": "dark", "x": 123.456}, "text": "A:B:ello world!"}
+sv probe: sv_len=5 diff_len=96
+PASS AC-YC3 sv diff probe
+--- AC-YC4 reverse pycrdt -> yjs@13 live ---
+py side snap={"array": ["a1", "b2"], "map": {"count": 3.0, "profile": {"level": 2.0, "title": "core"}, "theme": "light", "x": 2.5}, "text": "pycrdt wire ok"} update_len=189
+PASS AC-YC4 reverse wire-compat format=v1 py={"array": ["a1", "b2"], "map": {"count": 3.0, "profile": {"level": 2.0, "title": "core"}, "theme": "light", "x": 2.5}, "text": "pycrdt wire ok"} js={"array": ["a1", "b2"], "map": {"count": 3, "profile": {"level": 2, "title": "core"}, "theme": "light", "x": 2.5}, "text": "pycrdt wire ok"}
+--- verdict ---
+VERDICT wire-compat PASS both directions closed (yjs@13.6.33 <-> pycrdt, prereq A core met; prereq D wheel verified)

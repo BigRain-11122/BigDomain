@@ -1,0 +1,6 @@
+{
+  "lines": [
+    "2026-10-12 R1847 雷达窗6强契合件认领+pycrdt 接线前置 A+D 切片当轮闭环轮（P1 承接行 gate 燃=OH-20261011 窗6候选清单已过目〔R1757 交付〕→radar v1.1 §6.4 固定格式认领行=OH-20261011-bigdomain.md §三〔群档 ledger 路径〕+README（六）认领注记+backlog 顶行任务单·轮计分 2=可跑实物）：y-crdt/pycrdt+y-crdt/pycrdt-websocket 双件套接线五前置中 A+D 双切片 live 实测——**A wire-compat 双向闭合 PASS**〔正向=ygo-poc fixtures 三面全过：fx1 单客户端 Map/Array/Text/嵌套 profile 快照逐键==fx1-expected.json+fxA/fxB 双客户端并发对合并态逐键==fx-merge-expected.json+sv-a 状态向量差分探针 sv_len=5 diff_len=96；反向=pycrdt 构造确定性镜像 doc get_update 189B V1 更新→node yjs@13.6.33 applyUpdate 快照逐键等（py 3.0/js 3 int 语义等如实注）·ygo 未验之 wire-compat 门在 Python 正身上实测过线=ygo §五 指针兑现链实证闭合〕+**D PyPI Windows 轮子面 live PASS**〔pycrdt-0.14.8+pycrdt-websocket-0.16.5 cp314 轮子净装零源码构建零 Rust 工具链·vendor 沙箱面 gitignore 收录零系统环境污染〕；B（lobby 语义保真）/C（MIT attribution 双件携带）/E（websockets 现役保持注记）=接线窗（bootstrap/P-47① 共创面功能窗）执行·沙箱评估合法（ygo-poc 同型）；AC-YC1..YC6 全过（判据预注册先于执行=backlog R1847 行先于代码·AC-YC 前缀全仓零占用实锚）=qa/pycrdt-wire-R1847.log；沙箱件 src/sandbox/pycrdt-poc/{wire_poc.py,apply_in_yjs.mjs}（纯 ASCII·ygo-poc 对手件只读复用零改动·pycrdt 0.14 Map 无 to_json→防御式 deep 递归转换器如实注）·轮首五静九面全 PASS 零新项（GORD 尾三行 BigStream MV 族水位在册知悉）",
+    "2026-10-12 R1847 tokens: local=unmeasured api=unmeasured api_reason=会话无计量出口如实记·零新增外部 API 触点（pip 轮子下载安装面=入池件 prereq D live 检查非云端 API 触点·node+套件=纯本地进程件·三问门未涉）"
+  ]
+}
