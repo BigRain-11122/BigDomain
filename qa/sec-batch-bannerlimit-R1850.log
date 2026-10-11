@@ -1,0 +1,60 @@
+=== [1] suite run 1 (exit=0) ===
+PASS AC-SB1: defaults budget_ms=200 max_batch=200; own-db single file; ascii=True net_imports=0 ugc store never imported (zero ugc.db schema touch) sec_gate=referenced
+PASS AC-SB2: verdicts 5/5 identical to per-text gate; degraded=0
+PASS AC-SB4: first text gated, 4 land queued reason=budget_breach; replay dedupe rows 4==4; no degraded text holds a verdict (fail-closed)
+PASS AC-SB5: outage at text 3 -> texts 3..5 queued reason=gate_error; verdicts=2; zero silent pass
+PASS AC-SB6: restart: 7 queued rows survive; drain 5 pass + 2 rejected (fail-closed forever); second drain=0; terminal re-degrade PK-deduped rows 7==7 landed=['drained_pass']
+PROF n=1 runs=5 p50_ms=0.004 p95_ms=0.021 max_ms=0.025
+PROF n=10 runs=5 p50_ms=0.005 p95_ms=0.006 max_ms=0.007
+PROF n=50 runs=5 p50_ms=0.013 p95_ms=0.014 max_ms=0.014
+PROF n=100 runs=5 p50_ms=0.023 p95_ms=0.024 max_ms=0.024
+PROF n=200 runs=5 p50_ms=0.040 p95_ms=0.043 max_ms=0.043
+PASS AC-SB3: profile 5 sizes x5 runs real monotonic clock; shape+monotone ok; n=200 max_ms=0.043>0 (wordlist-mock floor; production msgSecCheck p95 = bootstrap wiring window [needs-CEO])
+PASS AC-SB7: submitted=215 verdicted=208 queued_rows=7 exactly-one-outcome xor ok; suite ascii=True; config.json untouched (module defaults only); other suites untouched (git closeout)
+PASS AC-SB8: default face raw list byte-identical (double call); capped envelope exact 5 keys {rows,limit,total,returned,truncated}; default zero shape drift
+PASS AC-SB9: five bad forms {-1,True,'2',2.5,None} all ValueError (module family code, R1850 verdict 2); queue_counts unchanged across 5 rejections (reject before any read)
+PASS AC-SB10: 6-row tie world (3+3 shared-ts groups); limit=2 tail==full[-2:]; mirror SQL (ro conn, DESC rowid tiebreak, reversed)== product; limit=4 straddles tie group ==full[-4:]
+PASS AC-SB11: limit==total full (truncated=False); limit>total full; limit=1 single tail row; zero world honest empty cap read carries all keys
+PASS AC-SB12: method source zero write verbs (inspect); capped double call json-identical; queue_counts stable across all cap reads; reconcile_all ugc-sec-batch criteria 7->12 wired
+SUITE PASS: 12/12
+=== [2] suite run 2 (exit=0) ===
+PASS AC-SB1: defaults budget_ms=200 max_batch=200; own-db single file; ascii=True net_imports=0 ugc store never imported (zero ugc.db schema touch) sec_gate=referenced
+PASS AC-SB2: verdicts 5/5 identical to per-text gate; degraded=0
+PASS AC-SB4: first text gated, 4 land queued reason=budget_breach; replay dedupe rows 4==4; no degraded text holds a verdict (fail-closed)
+PASS AC-SB5: outage at text 3 -> texts 3..5 queued reason=gate_error; verdicts=2; zero silent pass
+PASS AC-SB6: restart: 7 queued rows survive; drain 5 pass + 2 rejected (fail-closed forever); second drain=0; terminal re-degrade PK-deduped rows 7==7 landed=['drained_pass']
+PROF n=1 runs=5 p50_ms=0.004 p95_ms=0.023 max_ms=0.028
+PROF n=10 runs=5 p50_ms=0.005 p95_ms=0.006 max_ms=0.007
+PROF n=50 runs=5 p50_ms=0.012 p95_ms=0.015 max_ms=0.015
+PROF n=100 runs=5 p50_ms=0.023 p95_ms=0.026 max_ms=0.026
+PROF n=200 runs=5 p50_ms=0.041 p95_ms=0.045 max_ms=0.046
+PASS AC-SB3: profile 5 sizes x5 runs real monotonic clock; shape+monotone ok; n=200 max_ms=0.046>0 (wordlist-mock floor; production msgSecCheck p95 = bootstrap wiring window [needs-CEO])
+PASS AC-SB7: submitted=215 verdicted=208 queued_rows=7 exactly-one-outcome xor ok; suite ascii=True; config.json untouched (module defaults only); other suites untouched (git closeout)
+PASS AC-SB8: default face raw list byte-identical (double call); capped envelope exact 5 keys {rows,limit,total,returned,truncated}; default zero shape drift
+PASS AC-SB9: five bad forms {-1,True,'2',2.5,None} all ValueError (module family code, R1850 verdict 2); queue_counts unchanged across 5 rejections (reject before any read)
+PASS AC-SB10: 6-row tie world (3+3 shared-ts groups); limit=2 tail==full[-2:]; mirror SQL (ro conn, DESC rowid tiebreak, reversed)== product; limit=4 straddles tie group ==full[-4:]
+PASS AC-SB11: limit==total full (truncated=False); limit>total full; limit=1 single tail row; zero world honest empty cap read carries all keys
+PASS AC-SB12: method source zero write verbs (inspect); capped double call json-identical; queue_counts stable across all cap reads; reconcile_all ugc-sec-batch criteria 7->12 wired
+SUITE PASS: 12/12
+read-cap section determinism: tail byte-identical=True (AC-SB3 real-clock PROF section excluded per honesty note)
+=== [3] fingerprint sentinel (exit=0) ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+=== [4] RUNNER full regression (exit=0; Tee evidence=qa/reconcile-all-R1850.log) ===
+RUNNER PASS (112/112 suites green, reconcile controls 7/7, 186.0s)
+=== [5] matrix regen (exit=0) + --check x2 (exit=0/0, byte-identical=True) ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11405 bytes, 112 suites, 1029 criteria)
+=== [6] writer-census --check (exit=0) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1175 tee=674 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+VERDICT PASS (suite 12/12 x2 + determinism + sentinel CLEAN + RUNNER green + matrix --check identical x2 + census DRIFT-CLEAN)

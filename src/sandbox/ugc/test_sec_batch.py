@@ -1,15 +1,19 @@
-"""AC-SB1..AC-SB7 suite: UGC sec-gate batch + degradation face.
+"""AC-SB1..AC-SB12 suite: UGC sec-gate batch + degradation face.
 
-Criteria pre-registered in state/queue/tech.md (R1681 claim row)
-BEFORE this code - honesty law. Suite convention: one PASS line per
-criterion, SUITE tail line, exit 0 only when all green.
+Criteria pre-registered in state/queue/tech.md (R1681 claim row;
+R1850 read-cap extension AC-SB8..AC-SB12) BEFORE this code - honesty
+law. Suite convention: one PASS line per criterion, SUITE tail line,
+exit 0 only when all green.
 
 Face under test: sec_batch.SecBatchFace (batch gate wrapper + own-file
 persistent degraded banner queue, R1254 rows-are-queue semantics).
 """
 
+import inspect
+import json
 import os
 import re
+import sqlite3
 import sys
 import tempfile
 
@@ -223,7 +227,120 @@ def main():
           % (len(submitted), len(verdicted), len(queued_contents),
              self_ascii))
 
-    n = 7
+    # ---- AC-SB8..AC-SB12: banner_queue read-cap (R1850) --------------------
+    capdb = os.path.join(tmp, "sec_degraded_cap.db")
+    fcap = SecBatchFace(gate, capdb, config={}, clock=frozen)
+    raw_zero = fcap.banner_queue()
+    raw_zero_b = fcap.banner_queue()
+    cap_zero = fcap.banner_queue(limit=3)
+    check(bad, "AC-SB8",
+          (isinstance(raw_zero, list) and raw_zero == []
+           and json.dumps(raw_zero) == json.dumps(raw_zero_b)
+           and isinstance(cap_zero, dict)
+           and sorted(cap_zero.keys()) ==
+           ["limit", "returned", "rows", "total", "truncated"]
+           and isinstance(cap_zero["rows"], list)),
+          "default face raw list byte-identical (double call); capped "
+          "envelope exact 5 keys {rows,limit,total,returned,truncated}; "
+          "default zero shape drift")
+
+    raised9 = []
+    before9 = fcap.queue_counts()
+    for bad_limit in (-1, True, "2", 2.5, None):
+        try:
+            fcap.banner_queue(limit=bad_limit)
+            raised9.append(None)
+        except ValueError:
+            raised9.append("ValueError")
+    check(bad, "AC-SB9",
+          raised9 == ["ValueError"] * 5
+          and fcap.queue_counts() == before9,
+          "five bad forms {-1,True,'2',2.5,None} all ValueError "
+          "(module family code, R1850 verdict 2); queue_counts "
+          "unchanged across 5 rejections (reject before any read)")
+
+    fcap.close()
+    # 6-row queued world: two StepClock budget-breach batches, shared
+    # ts per batch (realistic chunk-degradation tie groups)
+    fcapb = SecBatchFace(gate, capdb,
+                         config={"sec_batch": {"budget_ms": 100}},
+                         clock=StepClock())
+    ts_a = "2026-10-12T01:00:00.000000Z"
+    ts_b = "2026-10-12T02:00:00.000000Z"
+    outa = fcapb.check_batch(["capA one", "capA two", "capA three",
+                              "capA four"], source="capA", ts=ts_a)
+    outb = fcapb.check_batch(["capB one", "capB two", "capB three",
+                              "capB four"], source="capB", ts=ts_b)
+    fcapb.close()
+    fcapr = SecBatchFace(gate, capdb, config={}, clock=frozen)
+    full = fcapr.banner_queue()
+    counts_pre = fcapr.queue_counts()
+
+    cap2 = fcapr.banner_queue(limit=2)
+    ro = sqlite3.connect(
+        "file:" + capdb.replace("\\", "/") + "?mode=ro", uri=True)
+    mir2 = ro.execute(
+        "SELECT qid, source, actor, content, reason, status, ts_utc"
+        " FROM sec_degraded_queue WHERE status='queued'"
+        " ORDER BY ts_utc DESC, rowid DESC LIMIT 2").fetchall()
+    ro.close()
+    mir2.reverse()
+    cap4 = fcapr.banner_queue(limit=4)
+    tie_ok = (len(outa["degraded"]) == 3 and len(outb["degraded"]) == 3
+              and len(full) == 6
+              and [r[6] for r in full[:3]] == [ts_a] * 3
+              and [r[6] for r in full[3:]] == [ts_b] * 3)
+    check(bad, "AC-SB10",
+          (tie_ok
+           and cap2["returned"] == 2 and cap2["truncated"] is True
+           and cap2["total"] == 6
+           and cap2["rows"] == full[-2:]
+           and mir2 == cap2["rows"]
+           and cap4["returned"] == 4 and cap4["truncated"] is True
+           and cap4["rows"] == full[-4:]),
+          "6-row tie world (3+3 shared-ts groups); limit=2 tail==full"
+          "[-2:]; mirror SQL (ro conn, DESC rowid tiebreak, reversed)"
+          "== product; limit=4 straddles tie group ==full[-4:]")
+
+    cap6 = fcapr.banner_queue(limit=6)
+    cap50 = fcapr.banner_queue(limit=50)
+    cap1 = fcapr.banner_queue(limit=1)
+    check(bad, "AC-SB11",
+          (cap6["truncated"] is False and cap6["rows"] == full
+           and cap50["truncated"] is False and cap50["rows"] == full
+           and cap50["total"] == 6
+           and cap1["returned"] == 1 and cap1["rows"] == full[-1:]
+           and cap_zero["rows"] == [] and cap_zero["total"] == 0
+           and cap_zero["returned"] == 0
+           and cap_zero["truncated"] is False
+           and cap_zero["limit"] == 3),
+          "limit==total full (truncated=False); limit>total full; "
+          "limit=1 single tail row; zero world honest empty cap read "
+          "carries all keys")
+
+    cap2_b = fcapr.banner_queue(limit=2)
+    counts_post = fcapr.queue_counts()
+    method_src = inspect.getsource(SecBatchFace.banner_queue).upper()
+    write_verbs = re.findall(r"\bINSERT\b|\bUPDATE\b|\bDELETE\b",
+                             method_src)
+    runner_path = os.path.normpath(
+        os.path.join(BASE, "..", "reconcile_all.py"))
+    runner_txt = open(runner_path, encoding="utf-8").read()
+    reg_ok = ('"ugc-sec-batch"' in runner_txt
+              and 'os.path.join("ugc", "test_sec_batch.py"), 12)'
+              in runner_txt)
+    fcapr.close()
+    check(bad, "AC-SB12",
+          (not write_verbs
+           and json.dumps(cap2, default=list)
+           == json.dumps(cap2_b, default=list)
+           and counts_post == counts_pre
+           and reg_ok),
+          "method source zero write verbs (inspect); capped double "
+          "call json-identical; queue_counts stable across all cap "
+          "reads; reconcile_all ugc-sec-batch criteria 7->12 wired")
+
+    n = 12
     print("SUITE %s: %d/%d" % ("PASS" if not bad else "FAIL",
                                n - len(bad), n), flush=True)
     return 1 if bad else 0

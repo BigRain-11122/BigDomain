@@ -245,13 +245,44 @@ class SecBatchFace(object):
 
     # ---------------- read faces ----------------
 
-    def banner_queue(self):
+    def banner_queue(self, limit=0):
         """Degraded in-app banner queue = all queued rows (rows ARE the
-        queue; R1254 semantics)."""
-        return self._exec(
+        queue; R1254 semantics).
+
+        limit=0 (default): the full current face - a raw list of row
+        tuples, byte-identical to the pre-R1850 behavior (existing
+        callers untouched).
+
+        limit>0 (R1850 read-cap, AC-SB8..AC-SB12): tail-window cap.
+        Returns a dict envelope {rows, limit, total, returned,
+        truncated} where rows are the LAST `limit` queued rows in the
+        same order the full face yields them (ts_utc ascending, rowid
+        ascending within ties), and total is the FULL queued-row count
+        - a truncated read never lies about how much was cut off.
+        The capped query pins an explicit rowid tiebreak so the tail
+        window is deterministic (the full face's bare ORDER BY ts_utc
+        relies on engine scan order for ties; the capped path cannot,
+        so it pins one)."""
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ValueError(
+                "limit must be a non-negative int (0 = full read)")
+        if limit == 0:
+            return self._exec(
+                "SELECT qid, source, actor, content, reason, status,"
+                " ts_utc FROM sec_degraded_queue WHERE status=?"
+                " ORDER BY ts_utc", (ST_QUEUED,)).fetchall()
+        total = int(self._one(
+            "SELECT COUNT(*) FROM sec_degraded_queue WHERE status=?",
+            (ST_QUEUED,)))
+        rows = self._exec(
             "SELECT qid, source, actor, content, reason, status, ts_utc"
-            " FROM sec_degraded_queue WHERE status=? ORDER BY ts_utc",
-            (ST_QUEUED,)).fetchall()
+            " FROM sec_degraded_queue WHERE status=?"
+            " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
+            (ST_QUEUED, limit)).fetchall()
+        rows.reverse()
+        return {"rows": rows, "limit": int(limit), "total": total,
+                "returned": len(rows), "truncated": len(rows) < total}
 
     def rows_by_status(self, status):
         """Read face for the recovery loop (R1681 wiring, AC-PW5):
