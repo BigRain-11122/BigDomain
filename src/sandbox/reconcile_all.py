@@ -470,6 +470,13 @@ SUITES = [
     # window records the profile exit without gating the day (AC-PD1..PD7
     # pre-registered in state/queue/tech.md).
     ("reconcile-daily-profile", "test_reconcile_daily_profile.py", 7),
+    # R1848 reconcile-daily census step: qa_writer_census --check
+    # appended to the dated evidence log after the profile step;
+    # baseline-present drift FLAG gates the day (exit 2/3 FAIL),
+    # missing baseline is an honest INFO face (recorded, never
+    # gating); daily exit aggregates runner -> sentinel -> census
+    # (AC-WCD1..WCD7 pre-registered in state/queue/tech.md).
+    ("reconcile-daily-census", "test_reconcile_daily_census.py", 8),
     # R1750 collectibles public-showcase face: append-only place/retract
     # event ledger (zero UPDATE, derived display state, one item one
     # window), dock-verified ownership over the collectibles rows,

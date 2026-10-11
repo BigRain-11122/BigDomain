@@ -1,0 +1,38 @@
+R1848 qa writer-census daily-chain wiring window (AC-WCD1..WCD7, pre-registered in state/queue/tech.md before code)
+=== [1] new suite standalone run 1 (utf-8 capture) ===
+PASS cd1-missing-baseline-info zero-subproc+INFO+not-gating exit=0
+PASS cd2-argv-wiring src/os-path+--check/--dir+cwd=BASE +section+elapsed-tail exit=0
+PASS cd3-aggregate-census-drift (0,0,2)->exit=2 FAIL
+PASS cd4-aggregate-runner-fail (3,0,2)->exit=3 census kept
+PASS cd5-sentinel-precedence (0,2,0)->exit=2 census still logged
+PASS cd6-refusal-fail (0,0,3)->exit=3 refusal FAIL
+PASS cd7-live-real-tree exit=0 label=ok DRIFT-CLEAN (closed daily evidence untouched)
+PASS cd8-hygiene ascii=True net-imports=0 shipped-clean=True
+SUITE PASS 8/8
+=== [2] determinism double-run ===
+run1 exit=0 run2 exit=0 byte-identical=true sha256=9b07aa58372eb9cf98f30856e8840461665b525c94e1cec63e5921a56606ba4b
+=== [3] daily first-run of the new pipeline (qa/reconcile-daily-20261012-3.log, same-day -3 suffix = R1714 first-run precedent, closed originals untouched) ===
+RUNNER PASS (111/111 suites green, reconcile controls 7/7, 217.3s)
+RECONCILE-DAILY 20261012 verdict=PASS exit=0 log=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-daily-20261012-3.log runner_exit=0 sentinel=ok profile=ok census=ok
+sister suites inside the same RUNNER: reconcile-daily-sentinel SUITE PASS 8/8 exit=0; reconcile-daily-profile SUITE PASS 7/7 exit=0
+=== [4] census section verbatim from the daily log ===
+--- census: qa-writer-census --check ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1171 tee=670 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census exit=0 elapsed=0.6s
+=== [5] fingerprint sentinel standalone ===
+verdict CLEAN domains=5 (exit 0, chain src/sandbox/migration_chains.json)
+=== [6] writer-census live re-check (post-daily) ===
+verdict: DRIFT-CLEAN flags=0 disappeared=0 files=1171 tee=670 baselined=501 (exit 0)
+=== [7] matrix regen + check ===
+PASS generated docs/sandbox-suite-matrix.md (11367 bytes) - registry suites=111 criteria=1017 evidence=qa/reconcile-daily-20261012-3.log green=111/111
+PASS check: byte-identical x2 (11367 bytes, 111 suites, 1017 criteria)
+=== [8] hygiene ===
+reconcile_daily.py + test_reconcile_daily_census.py pure ASCII; net-imports 0; qa_writer_census.py zero bytes touched; shipped config.json zero bytes; SUITES row reconcile-daily-census criteria=8 registered (RUNNER 111/111 = 110->111, criteria 1009->1017)
+note: first evidence build landed CRLF-contaminated child capture (9 CRLF / 28 LF mixed EOL -> writer-census class 'other'); the R1841 census detector caught it live (DRIFT-FLAG, cd7 turned red on the standalone double-run); rebuilt with CRLF->LF normalization per the R1841/R1845 precedent - the in-round catch is the J-M18 completed-is-QC law firing on real evidence
