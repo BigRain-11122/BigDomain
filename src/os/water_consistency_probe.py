@@ -301,6 +301,35 @@ registered 11. Measurement face, R1727 precedent, not
 registered into SUITES. Zero product files touched.
 
 
+R1820 extension (ts lexicographic == chronological total
+order): the [16] section pinned the fixed 27-char shape; this
+section pins the sort-key semantics - over a well-formed world
+the text order (ORDER BY ts_utc, window_id) equals the
+chronological order (ORDER BY julianday(ts_utc), window_id)
+row by row, and the product board read (ORDER BY ts_utc DESC,
+window_id DESC, reversed to ascending) carries the same
+sequence - the fixed-length ISO form makes the lexicographic
+order a chronological order. Tie window: the drift/ghost pair
+shares one ts; the product order falls to the window_id
+tiebreak and the full-board read shows drift (kind submit,
+injected in [4]) before ghost (legacy-ghost, injected in [7])
+at adjacent positions - the [10] in-register order re-proven
+on the whole-board read. Negative path: one bad-calendar row
+(27 chars, GLOB passes, julianday NULL - the [16] B shape,
+month-abstract ts) is an incomparable key - the chronological
+order is no longer total (SQLite floats the NULL row first in
+ASC), while the text order stays total: a valid hour starts
+with 0/1/2, the -99T hour starts with 9, so the bad row
+always sorts last in ascending text order (a constructive
+position, wall-clock independent), and the product read
+places it last - the pure text order does not depend on
+parseability (honest note; the enforcement face lives on
+this probe). DELETE restore: the row removed by window_id,
+every face back to the 14-row registered values. Measurement
+face, R1727 precedent, not registered into SUITES. Zero
+product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -2043,6 +2072,175 @@ def main():
         fail = fail or not (tz1_ok and tz2_ok and tz3_ok
                             and tz4_ok)
 
+        # ---- [17] ts lexicographic == chronological total
+        # order (R1820) ---------------------------------------
+        # The [16] section pinned the fixed 27-char shape; this
+        # section pins the sort-key semantics the board reads
+        # lean on: over a well-formed world the text order
+        # equals the chronological order row by row (the
+        # fixed-length ISO form makes ORDER BY ts_utc a total
+        # chronological order), the product board read (ORDER BY
+        # ts_utc DESC, window_id DESC, reversed to ascending)
+        # carries the same sequence, and a ts tie falls to the
+        # window_id tiebreak - drift (kind submit, injected in
+        # [4]) before ghost (legacy-ghost, injected in [7]),
+        # the [10] in-register order. Negative path: one
+        # bad-calendar row (27 chars, GLOB passes, julianday
+        # NULL - the [16] B shape, month-abstract ts) is an
+        # incomparable key: the chronological order is no
+        # longer total (SQLite floats the NULL row first in
+        # ASC), while the text order stays total - a valid
+        # hour starts with 0/1/2, the -99T hour starts with 9,
+        # so the bad row always sorts last in ascending text
+        # order (a constructive position, wall-clock
+        # independent), and the product read places it last -
+        # the pure text order does not depend on parseability
+        # (honest note; the enforcement face lives on this
+        # probe). DELETE restore by window_id, every face back
+        # to the 14-row registered values.
+
+        def lo_lex_seq(ro):
+            return [r[0] for r in ro.execute(
+                "SELECT ts_utc FROM water_windows"
+                " ORDER BY ts_utc, window_id")]
+
+        def lo_jd_seq(ro):
+            return [r[0] for r in ro.execute(
+                "SELECT ts_utc FROM water_windows"
+                " WHERE julianday(ts_utc) IS NOT NULL"
+                " ORDER BY julianday(ts_utc), window_id")]
+
+        def lo_jd_seq_all(ro):
+            return [r[0] for r in ro.execute(
+                "SELECT ts_utc FROM water_windows"
+                " ORDER BY julianday(ts_utc), window_id")]
+
+        lo_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        lo_lex = lo_lex_seq(lo_ro)
+        lo_jd = lo_jd_seq(lo_ro)
+        lo_prod = [r["ts_utc"] for r in
+                   pipe.journal.journal_board()["journal_board"]]
+        lo1_ok = (len(lo_lex) == 14 and len(lo_jd) == 14
+                  and lo_lex == lo_jd and lo_prod == lo_lex)
+
+        # tie window: the drift/ghost pair shares one ts; the
+        # product order falls to the window_id tiebreak
+        lo_tie_ts = drift_w + "-11T00:00:00.000000Z"
+        lo_board_full = pipe.journal.journal_board()[
+            "journal_board"]
+        lo_tie_ids_prod = [r["window_id"] for r in lo_board_full
+                           if r["ts_utc"] == lo_tie_ts]
+        lo_tie_kinds = [r["kind"] for r in lo_board_full
+                        if r["ts_utc"] == lo_tie_ts]
+        lo_tie_ids_sql = [r[0] for r in lo_ro.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE ts_utc = ? ORDER BY window_id",
+            (lo_tie_ts,))]
+        lo_drift_pos = lo_prod.index(lo_tie_ts)
+        lo2_ok = (len(lo_tie_ids_prod) == 2
+                  and lo_tie_ids_prod == lo_tie_ids_sql
+                  == sorted(lo_tie_ids_prod)
+                  and lo_tie_kinds == ["submit", "legacy-ghost"]
+                  and lo_prod[lo_drift_pos + 1] == lo_tie_ts
+                  and drift_w == cur_w)
+
+        # negative path: inject the [16] B-shape bad-calendar
+        # row (27 chars, GLOB passes, julianday NULL)
+        lo_bad_ts = cur_w + "-99T99:99:99.999999Z"
+        lo_pre_total = pipe.journal.journal_board(
+            window=cur_w)["total"]
+        lo_conn = sqlite3.connect(journal_db)
+        lo_conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta,"
+            " ts_utc) VALUES (?, ?, ?, ?)",
+            ("submit", '{"noise.total":1}', 1, lo_bad_ts))
+        lo_conn.commit()
+        lo_bad_wid = lo_conn.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE ts_utc = ?", (lo_bad_ts,)).fetchone()[0]
+        lo_conn.close()
+        lo_ro2 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        lo_lex2 = lo_lex_seq(lo_ro2)
+        lo_jd2 = lo_jd_seq(lo_ro2)
+        lo_jd_all2 = lo_jd_seq_all(lo_ro2)
+        lo_prod2 = [r["ts_utc"] for r in
+                    pipe.journal.journal_board()["journal_board"]]
+        lo_valid_n = lo_ro2.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE julianday(ts_utc) IS NOT NULL").fetchone()[0]
+        lo_null_n = lo_ro2.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE julianday(ts_utc) IS NULL").fetchone()[0]
+        lo_post_total = pipe.journal.journal_board(
+            window=cur_w)["total"]
+        lo3_ok = (len(lo_lex2) == 15
+                  and lo_lex2 == lo_lex + [lo_bad_ts]
+                  and lo_prod2 == lo_lex2
+                  and lo_prod2[-1] == lo_bad_ts
+                  and len(lo_jd2) == 14 and lo_jd2 == lo_jd
+                  and len(lo_jd_all2) == 15
+                  and lo_jd_all2[0] == lo_bad_ts
+                  and lo_valid_n == 14 and lo_null_n == 1
+                  and lo_pre_total == 11 and lo_post_total == 12)
+        lo_ro2.close()
+
+        # restore: the bad row removed by window_id, every
+        # face back to the 14-row registered values
+        lo_conn2 = sqlite3.connect(journal_db)
+        lo_conn2.execute(
+            "DELETE FROM water_windows WHERE window_id = ?",
+            (lo_bad_wid,))
+        lo_conn2.commit()
+        lo_conn2.close()
+        lo_ro3 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        lo_lex3 = lo_lex_seq(lo_ro3)
+        lo_jd3 = lo_jd_seq(lo_ro3)
+        lo_prod3 = [r["ts_utc"] for r in
+                    pipe.journal.journal_board()["journal_board"]]
+        lo_ro3.close()
+        lo_ro.close()
+        lo_rest_total = int(
+            pipe.journal.cell_totals()["total"])
+        lo4_ok = (len(lo_lex3) == 14 and lo_lex3 == lo_lex
+                  and lo_jd3 == lo_jd and lo_prod3 == lo_lex3
+                  and lo_rest_total == 11)
+
+        sections.append("[17] ts lexicographic =="
+                        " chronological total order:")
+        sections.append("    clean-world: rows=%d lex==jd=%s"
+                        " prod==lex=%s %s"
+                        % (len(lo_lex), lo_lex == lo_jd,
+                           lo_prod == lo_lex,
+                           "OK" if lo1_ok else "DRIFT"))
+        sections.append("    tie window: drift-pos=%d ids=%s"
+                        " kinds=%s adjacent=%s %s"
+                        % (lo_drift_pos, lo_tie_ids_prod,
+                           lo_tie_kinds,
+                           lo_prod[lo_drift_pos + 1] == lo_tie_ts,
+                           "OK" if lo2_ok else "DRIFT"))
+        sections.append("    tampered: rows=%d bad-wid=%d"
+                        " bad-last=%s jd-valid=%d jd-null=%d"
+                        " jd-first-is-bad=%s board(cur) %d->%d %s"
+                        % (len(lo_lex2), lo_bad_wid,
+                           lo_prod2[-1] == lo_bad_ts,
+                           lo_valid_n, lo_null_n,
+                           lo_jd_all2[0] == lo_bad_ts,
+                           lo_pre_total, lo_post_total,
+                           "OK" if lo3_ok else "DRIFT"))
+        sections.append("    restore: rows=%d lex==jd=%s"
+                        " prod==lex=%s total=%d %s"
+                        % (len(lo_lex3), lo_lex3 == lo_jd3,
+                           lo_prod3 == lo_lex3, lo_rest_total,
+                           "OK" if lo4_ok else "DRIFT"))
+        fail = fail or not (lo1_ok and lo2_ok and lo3_ok
+                            and lo4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2058,7 +2256,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[17] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[18] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
