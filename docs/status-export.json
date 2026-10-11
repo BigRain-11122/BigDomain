@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T20:33:59+08:00",
+  "export_ts": "2026-10-11T20:53:12+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1821 一句话：water journal kind CHECK 约束引擎侧执法面探针交付（AC-CK1..CK5 预注册先于代码·AC-CK 前缀全仓扫描无主·SQLite 3.50.4 消息形态本机预验）——探针增 [18] 节（hygiene 顺移 [19]）：默认姿态域外 kind INSERT=IntegrityError 崩响捕获（消息 'CHECK constraint failed'+'kind IN' 双字面·行数恒 14 零落行）+PRAGMA 开关双态可逆（ON 落行 on-wid=20·OFF 复位后第二域外 kind 恢复拒·CK2 落行 tally 追加键可见 tally-vis=1=R1801 不隐藏律）+正面闭集五 KINDS 全过（kind_tally(cur_w) 五格各 +1·total 17）+六注入行 DELETE 复绿（行数回 14+total 回 11+全榜/cur_w tally 回注入前 dict=R1820 世界态零漂移）·双跑 stdout 逐字节同一 sha256 1a23c8494d12f885…exit 0/0·PROBE CONSISTENT+DETECTING·[1]..[17] 零回归·frozen 四件零产品字节·测量面不入 SUITES（R1727）·预注册修正一处如实注（AC-CK3 total 16→17=预注册算术漏计 CK2 落行·产品行为全程正确·探针侧预期修正）·tick 1820→1821。轮首 [STATE] eol_bare_lf=47 修复（logs_toolkit eol --fix --execute·原子写）；其余八面全 PASS/INFO 零新项；HB lag=0。",
-    "latest_artifact": "最近实物：src/os/water_consistency_probe.py kind CHECK 引擎侧执法面扩面（[18] 节：默认拒+开关双态可逆+正面闭集+DELETE 复绿·零产品文件字节·测量面不入 SUITES）+证据 qa/water-checkkind-R1821.log（双跑 byte-identical sha256 1a23c849…·四节）·2026-10-11 2x:xx。",
-    "next_milestone": "下个实物：tech 队头按序交付（water journal kind CHECK 约束 schema 正身引读探针窗［R1821 补种·[18] 行为证已立而 sqlite_master 正身文本面未引读］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1822 一句话：water journal kind CHECK 约束 schema 正身引读探针交付（AC-SK1..SK5 预注册先于代码·AC-SK 前缀全仓扫描无主·引擎规范化实证预验先行）——探针增 [19] 节（hygiene 顺移 [20]）：sqlite_master 正身引读恰一行 name=water_windows·表集诚实读数 ['sqlite_sequence','water_windows']（AUTOINCREMENT 簿记表诚实注）+CHECK 整句字面 verbatim=True+五值引号字面各恰 1 命中+产品源互证 norm-eq=True（引擎落库语句剥 'IF NOT EXISTS '+外空白+尾分号后与 WJ.SCHEMA 逐字节同一=单一事实源）+table_info 五列元数据逐位同一（kind TEXT notnull=1 pk=0）+纯读律 rows=14→14 零突变·双跑 stdout 逐字节同一 sha256 e728dc6e… exit 0/0·PROBE CONSISTENT+DETECTING·[1]..[18] 零回归·frozen 四件零产品字节·测量面不入 SUITES（R1727）·tick 1821→1822。轮首五静九面全 PASS/INFO 零新项（state 77789B<78500B 线内）；HB lag=0。",
+    "latest_artifact": "最近实物：src/os/water_consistency_probe.py kind CHECK 约束 schema 正身引读扩面（[19] 节：sqlite_master 引读+CHECK 子句字面+五值逐值+产品源互证+table_info 元数据·零产品文件字节·测量面不入 SUITES）+证据 qa/water-schemaread-R1822.log（双跑 byte-identical sha256 e728dc6e…·四节）·2026-10-11 20x:xx。",
+    "next_milestone": "下个实物：tech 队头按序交付（water journal sqlite_sequence AUTOINCREMENT 高水位簿记读面探针窗［R1822 补种·[19] schema 引读面已立而簿记表正身未读］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "water journal kind CHECK 约束 schema 正身引读探针件（R1822·AC-SK1..SK5 预注册先于代码〔tech.md R1822 认领行本行即册先于 water_consistency_probe.py 落码·AC-SK 前缀全仓扫描无主·引擎规范化实证预验先行=剥 'IF NOT EXISTS '+外空白+尾分号后与 WJ.SCHEMA 逐字节同一【sk_precheck 件·R1704 前提实证先例】】：AC-SK1 sqlite_master 正身定位〔mode=ro 恰一行 name=water_windows·表集诚实读数 ['sqlite_sequence','water_windows']（AUTOINCREMENT 簿记表诚实注非过滤）】·AC-SK2 CHECK 子句字面〔整句 verbatim=True+五值引号字面各恰 1 命中】·AC-SK3 产品源互证〔norm-eq=True=引擎落库语句与 WJ.SCHEMA 常量规范化后逐字节同一·单一事实源】·AC-SK4 table_info 五列元数据逐位同一〔kind TEXT notnull=1 pk=0 语义注·seed 原文承载】·AC-SK5 纯读律〔rows=14→14 零突变·[1]..[18] 零回归〕——双跑 stdout 逐字节同一 sha256 e728dc6ecba1533c… exit 0/0·8602B·零时间戳零路径承 R1806..R1821+PROBE VERDICT CONSISTENT+DETECTING+[20] 卫生 probe-ascii=True import-lines-clean=True frozen 四件 sha16 前后同一=零产品字节·测量面不入 SUITES 注册表〔R1727 先例承传】·证据 qa/water-schemaread-R1822.log 四节·queue_tech_open 10→9 补种 1→10【water journal sqlite_sequence AUTOINCREMENT 高水位簿记读面探针窗】·R1822）"
+    ],
     [
       "2",
       "water journal kind CHECK 约束引擎侧执法面探针件（R1821·AC-CK1..CK5 预注册先于代码〔tech.md R1821 认领行本行即册先于 water_consistency_probe.py 落码·AC-CK 前缀全仓扫描无主·SQLite 3.50.4 消息形态本机预验实测〕：AC-CK1 默认执法面〔默认姿态新连接域外 kind 'check-probe-kind' plain INSERT→sqlite3.IntegrityError 崩响捕获+消息含 'CHECK constraint failed' 与 'kind IN' 双字面·行数恒 14 零落行·域外 kind SELECT 计数==0 零静默〕·AC-CK2 开关双态可逆〔PRAGMA ignore_check_constraints=ON→同形 INSERT 落行 on-wid=20 COUNT 14→15·同连接 =OFF 复位→第二域外 kind 'check-probe-kind-2' 再注 IntegrityError 恢复拒同码同消息族·行数恒 15 零落行+开关落行 tally 可见性 tally-vis=1=追加键 check-probe-kind:1 在证（R1801 不隐藏律同源·强化 CK2）〕·AC-CK3 正面闭集〔默认姿态新连接五 KINDS 逐 kind plain INSERT 全通过零 IntegrityError〔wids=[21,22,23,24,25]〕+kind_tally(cur_w) 五 kind 格各 +1==在册值+1 逐位〔batch 1→2/drain 1→2/ingest 1→2/submit 5→6/verdict 2→3·legacy-ghost 追加键恒 1 不渗透〕+total 17〕·AC-CK4 恢复复绿〔六注入行〔CK2 一+CK3 五〕各按 window_id 精确 DELETE→行数回 14==board total==14+cell_totals() total 回 11 在册值〔值面零扰复证〕+kind_tally() 全榜/cur_w 双双回注入前 dict 逐位=R1820 世界态 零漂移〕·AC-CK5 确定性+卫生〔双跑 stdout 逐字节同一 sha256 1a23c8494d12f885… exit 0/0+[1]..[17] 零回归 PROBE VERDICT CONSISTENT+DETECTING+probe-ascii=True+import-lines-clean=True+frozen 四件 sha16 前后同一=零产品字节〔git status 恰三件=state EOL 修+探针+tech.md〕+测量面不入 SUITES〔rg reconcile_all 零命中=R1727 先例承传〕〕——预注册修正如实注：AC-CK3 首跑 total=17 非预期 16=预注册算术漏计 CK2 落行（同窗同月·计数面照样可见=R1801 不隐藏律）→探针侧预期修正（产品行为全程正确·R1704 前提更正先例族）：CK3 基线改取 CK2 毕态（12 行含追加键）+5=17+CK2 落行可见性入证强化；轮首 [STATE] FLAG eol_bare_lf=47 修复（logs_toolkit eol --fix --execute·73240→73287B·post_bare_lf=0·content_eq/json_eq 双验·tempfile+os.replace 原子写）；证据 qa/water-checkkind-R1821.log〔[1] 双跑确定性+[2] [18] 节读数+AC 判读+[3] 卫生+[4] run1 stdout verbatim 四节〕·queue_tech_open 10→9 补种 1→10〔water journal kind CHECK 约束 schema 正身引读探针窗〕·R1821）"
@@ -472,7 +476,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1821",
+      "1822",
       "OSLoop 执行 tick"
     ],
     [
@@ -3379,15 +3383,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 37,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1821 water journal kind CHECK engine-side enforcement probe delivered (score 2, P2 tech queue head R1820 seed; hygiene moved to [19]; default-posture IntegrityError + reversible PRAGMA dual-state + positive closed set + DELETE restore; double-run byte-identical sha256 1a23c8494d12f885 exit 0/0; evidence qa/water-checkkind-R1821.log)"
+    "method": "R1822 water journal kind CHECK schema-text readback probe delivered (score 2, P2 tech queue head R1821 seed; hygiene moved to [20]; sqlite_master single-row locate + verbatim CHECK clause + five-value literals + product-source identity + table_info metadata; double-run byte-identical sha256 e728dc6ecba1533c exit 0/0; evidence qa/water-schemaread-R1822.log)"
   }
 }

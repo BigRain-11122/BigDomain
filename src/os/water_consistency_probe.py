@@ -349,6 +349,27 @@ pre-injection dicts - the R1820 world state intact. Measurement
 face, R1727 precedent, not registered into SUITES. Zero
 product files touched.
 
+R1822 extension (kind CHECK constraint schema-text readback):
+the [18] section proved the constraint on behavior (IntegrityError
+/ pragma dual state / positive closed set); this section reads the
+constraint body text face, engine-side and product-side. The engine
+archives the executed CREATE TABLE statement in sqlite_master - the
+probe reads it back through a mode=ro connection and asserts: the
+water_windows row is exactly one (the honest table-set reading also
+lists sqlite_sequence, the AUTOINCREMENT bookkeeping table, not a
+product table); the stored sql carries the CHECK clause verbatim
+with each of the five kind values present; the stored sql is
+byte-identical to the product WJ.SCHEMA constant after the
+verified engine normalization (strip the "IF NOT EXISTS " marker,
+outer whitespace and the trailing semicolon - single source of
+truth: the module constant the constructor executes is the very
+text the engine archived); and PRAGMA table_info pins the
+five-column metadata (kind is TEXT NOT NULL, non-pk; window_id is
+the INTEGER pk). Pure readback - zero injections, zero deletes,
+the row count stays 14 throughout; the [18] behavior face stays
+in-register, not repeated. Measurement face, R1727 precedent,
+not registered into SUITES. Zero product files touched.
+
 
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
@@ -2454,6 +2475,119 @@ def main():
         fail = fail or not (ck1_ok and ck2_ok and ck3_ok
                             and ck4_ok)
 
+        # ---- [19] kind CHECK constraint schema-text readback
+        # (R1822) ------------------------------------------------
+        # The [18] section proved the constraint behaviorally
+        # (IntegrityError / pragma dual state / positive closed
+        # set); this section reads the constraint body text face.
+        # The engine archives the executed CREATE TABLE statement
+        # in sqlite_master; the readback rides a mode=ro
+        # connection (the [18] ck_ro_scalar law). The engine
+        # normalization is verified empirically (R1822 pre-check):
+        # the stored sql is the product WJ.SCHEMA constant with
+        # the "IF NOT EXISTS " marker, outer whitespace and the
+        # trailing semicolon stripped - byte-identical otherwise,
+        # so the module constant the constructor executes is the
+        # very text the engine archived (single source of truth).
+        # The honest table-set reading lists sqlite_sequence too
+        # (the AUTOINCREMENT bookkeeping table, not a product
+        # table - read, not filtered). PRAGMA table_info pins the
+        # five-column metadata (kind TEXT NOT NULL non-pk,
+        # window_id INTEGER pk). Pure readback: zero injections,
+        # zero deletes, the row count stays 14 throughout.
+
+        def sk_ro_rows(sql, args=()):
+            sk_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = list(sk_ro.execute(sql, args))
+            sk_ro.close()
+            return got
+
+        sk_pre_n = sk_ro_rows(
+            "SELECT COUNT(*) FROM water_windows")[0][0]
+        sk_name_rows = sk_ro_rows(
+            "SELECT name, sql FROM sqlite_master"
+            " WHERE type='table' AND name='water_windows'")
+        sk_table_set = [r[0] for r in sk_ro_rows(
+            "SELECT name FROM sqlite_master"
+            " WHERE type='table' ORDER BY name")]
+        # AC-SK1: exactly one water_windows row, name located,
+        # sql non-empty; honest table set includes the
+        # AUTOINCREMENT bookkeeping table.
+        sk1_ok = (len(sk_name_rows) == 1
+                  and sk_name_rows[0][0] == "water_windows"
+                  and isinstance(sk_name_rows[0][1], str)
+                  and sk_name_rows[0][1].strip() != ""
+                  and sk_table_set == ["sqlite_sequence",
+                                       "water_windows"])
+
+        # AC-SK2: CHECK clause verbatim + each of the five kind
+        # values present in the constraint body text.
+        sk_sql = sk_name_rows[0][1]
+        sk_clause = ("CHECK (kind IN "
+                     "('ingest','batch','drain','submit',"
+                     "'verdict'))")
+        sk_values = ("'ingest'", "'batch'", "'drain'",
+                     "'submit'", "'verdict'")
+        sk_hits = {v: sk_sql.count(v) for v in sk_values}
+        sk2_ok = ("CHECK" in sk_sql and "kind IN" in sk_sql
+                  and sk_clause in sk_sql
+                  and all(n >= 1 for n in sk_hits.values()))
+
+        # AC-SK3: product-source identity - the engine-stored
+        # statement equals the module constant after the
+        # verified normalization (strip marker + outer ws +
+        # trailing semicolon).
+        sk_norm = (WJ.SCHEMA.replace("IF NOT EXISTS ", "")
+                   .strip().rstrip(";"))
+        sk3_ok = (sk_sql == sk_norm
+                  and sk_clause in WJ.SCHEMA)
+
+        # AC-SK4: five-column metadata pinned row by row.
+        sk_info = sk_ro_rows(
+            "PRAGMA table_info(water_windows)")
+        sk_want_info = [
+            (0, "window_id", "INTEGER", 0, None, 1),
+            (1, "kind", "TEXT", 1, None, 0),
+            (2, "delta", "TEXT", 1, None, 0),
+            (3, "total_delta", "INTEGER", 1, None, 0),
+            (4, "ts_utc", "TEXT", 1, None, 0)]
+        sk_kind_row = [r for r in sk_info if r[1] == "kind"]
+        sk4_ok = (len(sk_info) == 5
+                  and sk_info == sk_want_info
+                  and len(sk_kind_row) == 1
+                  and sk_kind_row[0][2] == "TEXT"
+                  and sk_kind_row[0][3] == 1
+                  and sk_kind_row[0][5] == 0)
+
+        # AC-SK5: pure-read law - the row count never moved.
+        sk_post_n = sk_ro_rows(
+            "SELECT COUNT(*) FROM water_windows")[0][0]
+        sk5_ok = (sk_pre_n == 14 and sk_post_n == 14)
+
+        sections.append("[19] schema text readback:")
+        sections.append("    table-locate: rows=%d name=%s"
+                        " table-set=%s %s"
+                        % (len(sk_name_rows),
+                           sk_name_rows[0][0] if sk_name_rows
+                           else None, sk_table_set,
+                           "OK" if sk1_ok else "DRIFT"))
+        sections.append("    check-clause: verbatim=%s hits=%s %s"
+                        % (sk_clause in sk_sql, sk_hits,
+                           "OK" if sk2_ok else "DRIFT"))
+        sections.append("    product-source: norm-eq=%s %s"
+                        % (sk_sql == sk_norm,
+                           "OK" if sk3_ok else "DRIFT"))
+        sections.append("    table-info: rows=%d kind-row=%s %s"
+                        % (len(sk_info), sk_kind_row,
+                           "OK" if sk4_ok else "DRIFT"))
+        sections.append("    pure-read: rows=%d->%d %s"
+                        % (sk_pre_n, sk_post_n,
+                           "OK" if sk5_ok else "DRIFT"))
+        fail = fail or not (sk1_ok and sk2_ok and sk3_ok
+                            and sk4_ok and sk5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2469,7 +2603,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[19] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[20] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)

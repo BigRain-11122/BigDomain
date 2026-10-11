@@ -1,0 +1,59 @@
+=== water journal kind CHECK constraint schema-text readback (R1822) ===
+seed: tech.md R1822 claim line (AC-SK1..SK5 pre-registered before code)
+probe: src/os/water_consistency_probe.py [19] schema text readback
+       section (hygiene shifted [19]->[20]; measurement face,
+       R1727 precedent, not registered into SUITES)
+
+=== [1] double-run determinism ===
+run1 exit=0 sha256=e728dc6ecba1533cd9b26cf5177336e5f52cd3b5b77118367aa64d8bc4d41d6f bytes=8602
+run2 exit=0 sha256=e728dc6ecba1533cd9b26cf5177336e5f52cd3b5b77118367aa64d8bc4d41d6f bytes=8602
+byte-identical: True
+zero timestamps / zero paths in stdout (R1806..R1821 family law)
+stderr: empty on both runs
+
+=== [2] [19] section readings (run1 verbatim) ===
+[19] schema text readback:
+    table-locate: rows=1 name=water_windows table-set=['sqlite_sequence', 'water_windows'] OK
+    check-clause: verbatim=True hits={"'ingest'": 1, "'batch'": 1, "'drain'": 1, "'submit'": 1, "'verdict'": 1} OK
+    product-source: norm-eq=True OK
+    table-info: rows=5 kind-row=[(1, 'kind', 'TEXT', 1, None, 0)] OK
+    pure-read: rows=14->14 OK
+
+AC-SK1 OK: exactly one sqlite_master row for water_windows, name
+      located, sql non-empty; honest table set includes
+      sqlite_sequence (AUTOINCREMENT bookkeeping table, not a
+      product table - read, not filtered).
+AC-SK2 OK: the whole CHECK clause literal is present verbatim and
+      each of the five quoted kind values hits exactly once.
+AC-SK3 OK: stored sql == WJ.SCHEMA.replace('IF NOT EXISTS ','')
+      .strip().rstrip(';') byte-identical; WJ.SCHEMA carries the
+      same clause literal (single source of truth: the module
+      constant the constructor executes is the very text the
+      engine archived).
+AC-SK4 OK: PRAGMA table_info five rows match the registered shape
+      (window_id INTEGER pk=1 / kind TEXT notnull=1 pk=0 /
+      delta TEXT notnull=1 / total_delta INTEGER notnull=1 /
+      ts_utc TEXT notnull=1); kind column type='TEXT' semantic
+      note carried (seed text).
+AC-SK5 OK: pure readback - row count 14 -> 14, zero mutations;
+      [1]..[18] zero regression (PROBE VERDICT carries).
+
+=== [3] premise: empirical pre-check (R1822, .codely-cli/tmp/sk_precheck.py) ===
+name: 'water_windows'
+sql: "CREATE TABLE water_windows (\n    window_id INTEGER PRIMARY KEY AUTOINCREMENT,\n    kind TEXT NOT NULL\n        CHECK (kind IN ('ingest','batch','drain','submit','verdict')),\n    delta TEXT NOT NULL,\n    total_delta INTEGER NOT NULL,\n    ts_utc TEXT NOT NULL\n)"
+sql == norm.strip().rstrip(';'): True
+table set: [('sqlite_sequence',), ('water_windows',)]
+table_info:
+    (0, 'window_id', 'INTEGER', 0, None, 1)
+    (1, 'kind', 'TEXT', 1, None, 0)
+    (2, 'delta', 'TEXT', 1, None, 0)
+    (3, 'total_delta', 'INTEGER', 1, None, 0)
+    (4, 'ts_utc', 'TEXT', 1, None, 0)
+(normalization premise verified before the pre-registered
+assertions landed - R1704 empirical-premise precedent)
+
+=== [4] hygiene + verdict (run1 verbatim) ===
+[20] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING
+git status (round face): water_consistency_probe.py + state/queue/tech.md
+       only - zero product files touched (frozen sha16 evidence above)
