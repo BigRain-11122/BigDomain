@@ -1,0 +1,55 @@
+# R1783 fold R488 reorg evidence log (recorded transcript of the round's
+# actual tool outputs; raw byte paths for the suite/RUNNER/matrix evidence
+# are in qa/watermark-dualbit-R1783.log and qa/reconcile-all-R1783.log).
+
+--- 1. round-start gauge (first-gauge ruling: R1782 carry-note cashed) ---
+gauge: state.json disk_bytes=81181 gate=78500 over_by=2681 fold_triggered=YES
+(P-2026-09-25-18 knife 488; tree clean, no index.lock, git log HEAD ce3f302)
+
+--- 2. window selection probes (verify-then-write gate, zero mutation) ---
+tail-6 window = R1780 pair + R1781 pair + R1782 pair (7783B content):
+  dry-run: token_ok=true (19 tokens) predicted_bytes=76779
+  reserve_bytes=3000 gate=78500 -> gate-exceed FAIL by 38B (refused, no write)
+tail-8 window = + fold R477 roll line (762B) + fold R487 roll line (2551B):
+  dry-run: token_ok=true (90 tokens) predicted_bytes=75538
+  -> gate-exceed FAIL by 38B (refused, no write)
+tail-9 window = + fold R476 roll line (2470B) = 9 lines 13566B:
+  dry-run: token_ok=true (97 tokens) predicted_bytes=74204
+  gate_ok=true (74204+3000=77204 <= 78500) would_fail=[] -> approved for execute
+
+--- 3. catalog (mechanical, zero hand-copy) ---
+window tokens=97 all embedded in roll line (missing_in_roll=[] pass=true)
+pseudo-tokens mechanically embedded per R1253 D-20260930-00 precedent:
+O-ELIGIBLE / O-LIVE-TIE / O-RAISE / R-ABSENT / R-RAN / T-CLEAN / D-20260930-00
+
+--- 4. execute (fold surgery, verify-then-write) ---
+mode=execute round=R1783 fold_no=488 window_start=21 window_end=29
+window_lines=9 window_content_bytes=13566
+pre_bytes=81181 predicted_bytes=74204 post_bytes=74204
+predicted_eq_actual=true token_missing=[] gate_ok=true
+backup_written=true (logs/state-preop-R1783.bak, preop sha16 e3dc7c4393884210)
+archive_appended=true (appendix_bytes=13779, header records 9 lines verbatim)
+new_log_len=21
+
+--- 5. post-fold verification ---
+gauge: disk_bytes=74204 margin_bytes=4296 fold_needed=false
+eol: total_lf=31 crlf=31 bare_lf=0 lone_cr=0 ends_with_eol=true
+     layout_ok=true log_item_lines=21 indent16_lines=21 indent_anomaly=0
+json parse: OK tick=1782 (pre-closeout) log=21 lines
+
+--- 6. five-still scan (post-fold, pre-product) ---
+[STATE] PASS eol_ok=1 | [LEDGER] PASS 143 conflict=0 atbd_rows=0
+[DEC] PASS 272 rows content-addressed flat | [GORD] INFO 254 tbl_rows
+gord_new_rows=0 (last three table rows all other-company faces)
+[ORD] PASS flat | [BENCH] PASS 0 days | [QA] PASS same-day evidence in place
+[HB] PASS lag=0 | [TASKS] INFO backlog_open=4 blocked_on_ceo=1 claimable=3
+[EXPORT] PASS age 0.2h | [TREE] FLAG dirty=1 src/os/state.json
+  (own in-flight fold write, expected transient; clean at commit time)
+
+--- 7. closeout ---
+state.json byte-surgery append (R1783 pair + tick 1782->1783): 77503B
+eol/indent clean (bare_lf=0, indent_anomaly=0), json parse OK log=23
+export flush: tick row 1783, self_drive W=20 sub=8 queues 6/7/10,
+checker 21/21 PASS (export_ts 2026-10-11T09:04:41+08:00)
+next-round first-gauge note: post-closeout 77503B < 78500B line,
+margin 997B; fold R489 = next-round first-gauge ruling if over.

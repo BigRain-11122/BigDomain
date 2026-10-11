@@ -1,0 +1,71 @@
+qa evidence R1783 - watermark dual-bit crosstalk probe (AC-BD1..BD7, pre-registered in state/queue/tech.md R1783 claim row before first run)
+generated 2026-10-11T08:57:08
+--- suite: test_dual_bit.py run-1 ---
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-BD1: binding bits=SHA-256(provider:content_no:label_text) sha16=5b150f2956debcf9 nbits=256 clean-extract ber=0.0000 (exact required)
+PASS AC-BD2: C(8,2)=28 simultaneous two-bit flips vs base: min=0.4297 max=0.5547 in-band=28/28 (band [0.35, 0.65], zero silent skip)
+PASS AC-BD3: crosstalk vs component singles: n=28 worst-delta=0.0938 (slack<=0.15; single-bit ber min=0.4531 max=0.4961; no convergence/cancellation/amplification beyond hash noise)
+PASS AC-BD4: two-bit seals (first/mid/last): pair(0, 1) vs-base ber=0.5430 (floor>=0.40) self ber=0.0000; pair(2, 4) vs-base ber=0.5078 (floor>=0.40) self ber=0.0000; pair(6, 7) vs-base ber=0.5078 (floor>=0.40) self ber=0.0000 (6/6 readings produced)
+PASS AC-BD5: double-run bitwise identity: base-bits=True all-28-dual-bits=True rep-seal-roundtrip-exact=True
+PASS AC-BD6: ascii=True true-import-lines=9 network-imports=0 config-sha16-unchanged=True (read-only open, temp-dir-only writes)
+PASS AC-BD7: suites-registry-line=True prior-criteria=6 expected=7
+SUITE PASS: 7/7
+
+[stderr]
+[ WARN:0@0.310] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+[suite: test_dual_bit.py run-1 exit=0]
+--- suite: test_dual_bit.py run-2 (determinism) ---
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-BD1: binding bits=SHA-256(provider:content_no:label_text) sha16=5b150f2956debcf9 nbits=256 clean-extract ber=0.0000 (exact required)
+PASS AC-BD2: C(8,2)=28 simultaneous two-bit flips vs base: min=0.4297 max=0.5547 in-band=28/28 (band [0.35, 0.65], zero silent skip)
+PASS AC-BD3: crosstalk vs component singles: n=28 worst-delta=0.0938 (slack<=0.15; single-bit ber min=0.4531 max=0.4961; no convergence/cancellation/amplification beyond hash noise)
+PASS AC-BD4: two-bit seals (first/mid/last): pair(0, 1) vs-base ber=0.5430 (floor>=0.40) self ber=0.0000; pair(2, 4) vs-base ber=0.5078 (floor>=0.40) self ber=0.0000; pair(6, 7) vs-base ber=0.5078 (floor>=0.40) self ber=0.0000 (6/6 readings produced)
+PASS AC-BD5: double-run bitwise identity: base-bits=True all-28-dual-bits=True rep-seal-roundtrip-exact=True
+PASS AC-BD6: ascii=True true-import-lines=9 network-imports=0 config-sha16-unchanged=True (read-only open, temp-dir-only writes)
+PASS AC-BD7: suites-registry-line=True prior-criteria=6 expected=7
+SUITE PASS: 7/7
+
+[stderr]
+[ WARN:0@0.320] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+[suite: test_dual_bit.py run-2 (determinism) exit=0]
+--- runner verdict (raw bytes: qa\reconcile-all-R1783.log) ---
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (82/82 suites green, reconcile controls 7/7, 146.9s)
+
+[RUNNER full regression exit=0]
+--- matrix regen (default discovery face) ---
+PASS generated docs/sandbox-suite-matrix.md (8862 bytes) - registry suites=82 criteria=806 evidence=qa/reconcile-all-R1783.log green=82/82
+PASS hygiene: pure-ascii source, zero network imports
+
+[matrix regen (default discovery face) exit=0]
+--- matrix --check run-1 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8862 bytes, 82 suites, 806 criteria)
+
+[matrix --check run-1 exit=0]
+--- matrix --check run-2 (byte-identical probe) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8862 bytes, 82 suites, 806 criteria)
+
+[matrix --check run-2 (byte-identical probe) exit=0]
+--- fingerprint sentinel --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[fingerprint sentinel --check exit=0]

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T08:37:23+08:00",
+  "export_ts": "2026-10-11T09:04:41+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1782 一件事：给「会员到期提醒发不出去」的兜底横幅队列做了一个看板——哪些居民的提醒因没授权/超日限被拦下、各是什么原因，一键可查（纯读、不动任何账），并进了每日全量回归：81 套件 799 判据全绿。",
-    "latest_artifact": "最近实物：src/sandbox/member/reminder.py banner_board 读面（每居民一行+按原因/按拦截类型计数+确定性排序+合规信封）+ src/sandbox/member/test_banner_board.py（7 判据）+ qa/member-banner-R1782.log（套件+邻套件零回归+RUNNER 81/81+矩阵 byte-identical+指纹哨兵 CLEAN 六节）（2026-10-11）",
-    "next_milestone": "下轮实物：tech 队头下一项『watermark 双比特扰动串扰带探针窗』当窗交付（48h 内·至 10-13）——成对双比特组合扰动的误码率带读数，先预注册判据再落码。"
+    "current": "R1783 一件事：给 AIGC 隐式水印的绑定指纹加了双比特扰动探针——同时改两位输入，全部 28 种组合的指纹仍然彻底雪崩（谁也冒充不了谁），并进了每日全量回归：82 套件 806 判据全绿。",
+    "latest_artifact": "最近实物：src/sandbox/watermark/test_dual_bit.py（7 判据探针套件·双跑绿）+ qa/watermark-dualbit-R1783.log（套件+RUNNER 82/82+矩阵 byte-identical+指纹哨兵 CLEAN 七节）（2026-10-11）",
+    "next_milestone": "下轮实物：tech 队头下一项『pay 渠道矩阵月窗读面探索』当窗交付（48h 内·至 10-13）——渠道×状态覆盖矩阵加历史月窗过滤读面，先预注册判据再落码。"
   },
   "depts": [
     {
@@ -355,7 +355,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1782",
+      "1783",
       "OSLoop 执行 tick"
     ],
     [
@@ -3225,20 +3225,24 @@
     [
       "1",
       "R1772 fold R484 水位整编收账轮（轮计分 1=台账维护机制件·五静全过→轮首首测 80,640B 越线 2,140B＝P-2026-09-25-18 第四百八十四刀：tail-8 窗=fold R482/R483 双前滚窗行+R1769..R1771 三收账对 9,772B 压 1 滚窗行 kept=0·68 token 全字面嵌零丢失〔catalog 直拼+fold 工具机械复验 PASS〕·archive §R1772 节 8 行 verbatim+preop 备份 sha16 b24993f9e2bec6c8·verify-then-write post==predicted 73,894B 逐字节·收账后 75,518B 余量 2,982B·eol/indent/layout 三面过·证据 qa/reorg-R1772.log·export tick 1772）"
+    ],
+    [
+      "2",
+      "watermark 双比特扰动串扰带探针交付（R1783·P2 tech 队头可领项·轮计分 2=可跑实物：AC-BD1..BD7 预注册先于代码［tech.md R1783 认领行先落］——src/sandbox/watermark/test_dual_bit.py SUITE 7/7 双跑绿：控制锚 clean 往返 ber=0.0 exact［sha16=5b150f2956debcf9 与 R1778 同 preimage 交叉验证］+C(8,2)=28 双比特同翻全落雪崩带［min=0.4297 max=0.5547］+串扰带 worst-delta=0.0938 ≤0.15［单比特基读数与 R1778 在册值逐位复现］+三代表双比特密封件 vs-base ber=0.5430/0.5078/0.5078 全 >=0.40 伪造地板［R593 FORGERY_BER_MIN 双比特粒度成立］∧self ber=0.0000 全往返+确定性双跑逐位同一+卫生面全过·reconcile_all SUITES 81→82 判据 799→806［watermark-dualbit 行］+RUNNER PASS 82/82 controls 7/7 146.9s 零回归=qa/reconcile-all-R1783.log+矩阵再生 82/806 green --check byte-identical［8862B］+指纹哨兵 CLEAN domains=5·证据 qa/watermark-dualbit-R1783.log 七节·queue_tech_open 8→7）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 8,
+    "queue_tech_open": 7,
     "queue_explore_open": 10,
-    "method": "R1782 reminder banner-board persistent read face (P2 tech head claimable; AC-BQ1..BQ7 pre-registered in tech.md before code: pure-read derived aggregation over the persistent degraded fallback journal - one row per avatar holding skipped_* rows, dense status/reason zero grids, total invariant, census-key ascending order, member-family compliance envelope, five-state refusal family E_REM_NO_DISCLAIMER; suite SUITE 7/7 + neighbor zero-regression; reconcile_all SUITES 80->81 criteria 792->799; RUNNER PASS 81/81 controls 7/7 148.1s zero-regression; matrix regen 81/799 --check byte-identical; fingerprint sentinel CLEAN domains=5; evidence qa/member-banner-R1782.log; queue_tech 9->8)."
+    "method": "R1783 fold R488 water-level compaction + watermark two-bit crosstalk-band probe (tail-6/tail-8 gate probes over by 38B -> tail-9 window-extension precedent: fold R476/R477/R487 roll-lines + R1780/R1781/R1782 closeout pairs, 9 lines 13566B to one roll line kept=0, 97 tokens zero-loss, verify-then-write post==predicted 74204B, evidence qa/reorg-R1783.log; product face: AC-BD1..BD7 pre-registered in tech.md BEFORE code; test_dual_bit.py SUITE 7/7 double-run green - clean roundtrip exact same preimage sha16 as R1778; C(8,2)=28 simultaneous two-bit flips all in avalanche band 0.4297..0.5547; crosstalk worst-delta 0.0938 within 0.15 slack; forgery floor >= 0.40 holds at two-bit granularity while self roundtrip exact; reconcile_all SUITES 81->82 criteria 799->806; RUNNER PASS 82/82 controls 7/7 146.9s; matrix 82/806 green byte-identical; sentinel CLEAN domains=5; evidence qa/watermark-dualbit-R1783.log; queue_tech 8->7)"
   }
 }

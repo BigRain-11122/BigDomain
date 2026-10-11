@@ -386,6 +386,13 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("watermark-bindbit",
      os.path.join("watermark", "test_bind_bit.py"), 7),
+    # R1783 two-bit crosstalk probe (successor of the R1778 single-bit
+    # basis): C(8,2) simultaneous two-bit preimage flips stay inside the
+    # avalanche band and within crosstalk slack of their component
+    # single-bit readings (AC-BD1..BD7 pre-registered in
+    # state/queue/tech.md).
+    ("watermark-dualbit",
+     os.path.join("watermark", "test_dual_bit.py"), 7),
     ("opsreview", os.path.join("opsreview", "test_opsreview.py"), 7),
     ("liveroom", os.path.join("liveroom", "test_liveroom.py"), 10),
     # R1063 fan-out expansion: five suites shipped after R595 but never
