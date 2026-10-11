@@ -1,0 +1,8 @@
+PASS AC-KT1: envelope-keys=True dense-ascending=True zero-total=True compliance=True double-call=True all-window=True explicit-window-key=True
+PASS AC-KT2: rejected=14/14 codes=E_WJ_BAD_WINDOW rows-stable=True
+PASS AC-KT3: aug=True sep=True default-includes-history=True no-current-permeation=True future-empty=True
+PASS AC-KT4: manual-cross=True ghost-visible=True ghost-aug-window=True window-isolation=True
+PASS AC-KT5: read-method-clean=True rows-stable=True double-call-identical=True
+PASS AC-KT6: liveness-plus-one=True restart-identical=True resume-plus-one=True
+PASS AC-KT7: pure-ascii=True import-lines-clean=True append-only-source=True schema-constant=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7

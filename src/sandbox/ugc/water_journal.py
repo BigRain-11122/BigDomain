@@ -20,6 +20,7 @@ config.json (data file).
 """
 
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 
@@ -39,6 +40,11 @@ CREATE TABLE IF NOT EXISTS water_windows (
 E_WJ_NO_DISCLAIMER = "E_WJ_NO_DISCLAIMER"
 E_WJ_BAD_KIND = "E_WJ_BAD_KIND"
 E_WJ_BAD_ENVELOPE = "E_WJ_BAD_ENVELOPE"
+E_WJ_BAD_WINDOW = "E_WJ_BAD_WINDOW"
+
+# R1748 family law: strict \Z anchor (a bare $ would admit a
+# trailing newline and silently read an empty account).
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 
 def _utc_now_iso():
@@ -99,6 +105,49 @@ class WaterJournalFace:
         return {"journal_board": rows, "total": len(rows),
                 "ai_generated": 0, "disclaimer": self.disclaimer,
                 "persistent": True}
+
+    def kind_tally(self, window=None):
+        """Pure dense per-kind aggregation over the append-only ledger
+        (AC-KT1..AC-KT6). window=None keeps the all-history behavior;
+        an explicit YYYY-MM filters on the record-time ts_utc month
+        (single column, same key the journal_board rows carry).
+        Malformed windows fail closed E_WJ_BAD_WINDOW before any
+        read. The five window kinds are a closed set, so zero-count
+        cells stay explicit (dense grid); observed kinds outside the
+        domain (production-unreachable through the CHECK guard; a
+        raw-row simulation may still land them) are appended after
+        the dense cells in ascending order and counted in total -
+        the face never hides data. Keys render ascending,
+        deterministic, zero RNG; total == sum of all cells."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError(
+                    "water journal: window must be YYYY-MM (%s)"
+                    % E_WJ_BAD_WINDOW)
+        if w is None:
+            grouped = self._conn.execute(
+                "SELECT kind, COUNT(*) FROM water_windows GROUP BY kind")
+        else:
+            grouped = self._conn.execute(
+                "SELECT kind, COUNT(*) FROM water_windows"
+                " WHERE substr(ts_utc, 1, 7) = ? GROUP BY kind", (w,))
+        observed = {}
+        for kind, n in grouped:
+            observed[kind] = int(n)
+        by_kind = {}
+        for kind in sorted(KINDS):
+            by_kind[kind] = observed.pop(kind, 0)
+        for kind in sorted(observed):
+            by_kind[kind] = observed[kind]
+        env = {"kind_tally": by_kind,
+               "total": sum(by_kind.values()),
+               "ai_generated": 0, "disclaimer": self.disclaimer,
+               "persistent": True}
+        if w is not None:
+            env["window"] = w
+        return env
 
     def close(self):
         self._conn.close()

@@ -650,6 +650,14 @@ SUITES = [
     # restarts where the single _last_water slot cannot
     # (AC-WJ1..WJ7 pre-registered in state/queue/tech.md)
     ("ugc-water-journal", os.path.join("ugc", "test_water_journal.py"), 7),
+    # R1801 water journal kind_tally: dense per-kind completed-window
+    # count aggregation (window=None full-history default; explicit
+    # YYYY-MM filters on the record-time ts_utc month; R1748 \Z-anchored
+    # family law, 14 bad shapes fail closed; out-of-domain observed
+    # kinds stay visible - the face never hides data)
+    # (AC-KT1..KT7 pre-registered in state/queue/tech.md)
+    ("ugc-water-kindtally", os.path.join("ugc",
+                                         "test_water_kind_tally.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)
