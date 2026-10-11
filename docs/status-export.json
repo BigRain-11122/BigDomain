@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T22:29:00+08:00",
+  "export_ts": "2026-10-11T22:49:04+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1826 一句话：eventtickets 审计榜月窗参数化读面交付（event_audit_board(window=None) 窗参化：默认 None=现行信封逐字节保真+显式 YYYY-MM 严锚坏窗 fail-closed E_ET_BAD_ARGS 先于读+sold/revenue/admitted 按 record-time 列（purchased_utc/checked_utc）过滤+no_show=端窗快照〔AC-CFW4 同律·in-window 净流可负禁在注册名下出面〕+admission_rate=窗过滤比值零 sold 卫 0.0·AC-EAW1..EAW7 预注册先于代码·套件 7/7 首跑全绿+双跑逐字节同一+RUNNER 101/101 套件 940 判据零回归）——P2 tech 队头 FIFO 最老可认领项清账；轮首五静非全静：DEC 零新 token〔279 行 vs 基线 281=排版漂移·D-20261011-01..06 全在基线差集实证〕+GORD 表压缩整理〔21:1x/21:4x 行已移出·最新行 13:4x ≤已扫水位 21:4x·270 行=+1 结构漂移·基线 269→270〕+LEDGER 零新增未回；tech 队 10→消耗 1→补种 1=10。",
-    "latest_artifact": "最近实物：src/sandbox/ledger/eventtickets.py event_audit_board 月窗参数化读面+套件 src/sandbox/ledger/test_eventtickets_boardwin.py（SUITE 7/7）+RUNNER 全量回归件（101/101 suites·940 判据·controls 7/7·171.9s）+证据 qa/eventtickets-boardwin-R1826.log·2026-10-11 22:2x。",
-    "next_milestone": "下个实物：tech 队头按序交付（reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面/water sqlite_sequence 簿记行篡改 id 复用负路径探针窗/apidev lineage 链内用量聚合读面窗·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1827 一句话：修好了跑测试工具的中文乱码根子——以前测试证据文件里的中文有时变成乱码、有时变成错误字（两种形态都用字节查清了原因），现在把测试工具的输出统一钉成标准 utf-8 编码，101 项测试照旧全绿零回归，新证据文件干净可读；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
+    "latest_artifact": "最近实物：src/sandbox/reconcile_all.py（子进程输出编码统一三处修复：子进程发射钉+父进程解码钉+父自身流钉）+qa/reconcile-all-R1827.log（全量回归 101 项全绿+中文判定正确）+qa/reconcile-runner-encode-R1827.log（验证全记录）·2026-10-11 22:49。",
+    "next_milestone": "下个实物：tech 队列按序交付（freetrial 免费调用月窗计数读面/water sqlite_sequence 簿记行篡改探针窗/apidev lineage 链内用量聚合读面窗·判据先立再写代码）+daily 对账常设每日首轮+10-16 治理窗回访面+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "reconcile_all \u5b50\u8fdb\u7a0b\u8f93\u51fa\u7f16\u7801\u7edf\u4e00\u9762\u4ea4\u4ed8\uff08R1827\u00b7P2 tech \u961f\u5934 FIFO\u3010R1792 \u8865\u79cd\u3011\u00b7\u8f6e\u8ba1\u5206 2=\u53ef\u8dd1\u5b9e\u7269\uff1aAC-PE1..PE7 \u9884\u6ce8\u518c\u5148\u4e8e\u4ee3\u7801\u3010tech.md R1827 \u8ba4\u9886\u884c\u672c\u884c\u5373\u518c\u3011+\u5b57\u8282\u8003\u53e4\u52d8\u6b63\u4e09\u6001\u5199\u5165\u8005\u5728\u518c\u3010R1791/92 \u65e0 argv \u58f3\u539f\u59cb\u91cd\u5b9a\u5411 cp936+CRLF \u88f8 GBK\u00b7R1824/25 \u58f3\u518d\u7f16\u7801\u6355\u83b7 CRLF+utf-8 \u53ef\u89e3\u4f46 AC-L9 \u884c mojibake \u941c\u3054\u757e=\u5b50 utf-8 \u5b57\u8282\u88ab run_cmd \u6309\u673a\u5730 cp936 \u8bef\u89e3\u7801\u00b7R1803-05 Tee \u6b63\u8eab LF+utf-8 \u5224\u5b9a\u6b63\u3011\u2014\u2014\u4e09\u9489\u4fee\u6cd5\uff1arun_cmd \u6bcf\u5b50 spawn env \u6ce8 PYTHONIOENCODING=utf-8\uff08\u8986\u76d6 ambient\uff09+\u7236\u7ba1\u9053\u663e\u5f0f encoding=utf-8\uff08\u673a\u5730\u6c38\u4e0d\u53c2\u4e0e\uff09+main\uff08\uff09 sys.stdout.reconfigure utf-8/replace\uff08\u65e0 argv \u58f3\u6355\u83b7\u5f84\u7236\u6d41\u4ea6\u5355\u65b9\u8a00\uff09\u00b7\u5b50\u5957\u4ef6\u6e90\u96f6\u6539\u52a8\u3010\u79cd\u5b50\u660e\u5f8b\u3011\u2014\u2014\u4e09\u6001\u53d1\u5c04\u63a2\u9488\u9010\u6001\u540c\u771f\uff08unset/utf-8/cp936\uff09+\u53cc\u5411 pre-fix \u8865\u4f53\u6f14\u793a\uff08cp936 \u5b57\u8282 utf-8 \u4e25\u62d2=R1791/92 \u75c5\u673a\u00b7utf-8 \u5b57\u8282 gbk \u89e3=R1824/25 \u75c5\u673a\u65cf\uff09+\u5168\u91cf RUNNER PASS 101/101 suites 940 \u5224\u636e controls 7/7 178.6s \u96f6\u56de\u5f52=qa/reconcile-all-R1827.log\uff08Tee \u6b63\u8eab LF utf-8\u00b7AC-L9 \u884c E588A4E5AE9A \u5224\u5b9a\u6b63\u00b7\u96f6 mojibake \u96f6\u88f8 GBK\uff09+\u955c\u50cf\u6d41 utf-8 \u4e25\u683c\u89e3\u7801 202523B \u96f6\u9519\uff08\u7236\u6d41\u9489\uff09+legacy \u56db\u4ef6 sha256 \u9010\u5b57\u8282\u540c\u4e00\uff08append-only \u4fdd\u5168\uff09+qa_decode_probe census exit 0+\u6e90\u7eaf ASCII 58440B \u96f6\u7f51\u7edc\u2014\u2014\u9996\u8dd1 harness complement-B \u671f\u671b\u8f6c\u5199\u9519 1 FAIL=qa \u8f6c\u5f55\u4ef6 [7] addendum \u5982\u5b9e\u7559\u75d5+\u673a\u5236\u771f\u65ad\u8a00\u590d\u9a8c PASS\uff08\u4ea7\u54c1\u5224\u636e\u96f6\u6d89\u00b7\u7ec8\u6001\u4ea7\u54c1 fails=0\uff09\u00b7queue_tech_open 10\u21929 \u8865\u79cd 1\u219210\u3010\u65e0 argv \u81ea\u6807\u6ce8+daily \u94fe\u4e92\u8bc1\u7a97\u3011\u00b7R1827\uff09"
+    ],
     [
       "2",
       "eventtickets 审计榜月窗参数化读面交付（R1826·P2 tech 队头 FIFO 最老可认领项〔R1788 补种〕·轮计分 2=可跑实物：AC-EAW1..EAW7 预注册先于代码〔tech.md R1826 认领行本行即册〕——eventtickets.py event_audit_board(self, window=None) 窗参化：默认 None=现行 SQL+信封逐字节保真〔无 window 键〕·显式 YYYY-MM 过 _WINDOW_RE 严锚〔月值 01-12 全匹配双端锚·freetrial 同文本〕坏窗 14 形态 fail-closed E_ET_BAD_ARGS 先于任何读·窗读 sold/revenue 按 substr(purchased_utc,1,7)/admitted 按 substr(checked_utc,1,7)〔record-time 各行自证戳〕·no_show=端窗快照〔cumulative ≤w·AC-CFW4 同律·in-window 净流 sold_w−admitted_w 可负禁在注册名下出面·快照非负基底=配对行流律〕·admission_rate=窗过滤比值〔零 sold 卫 0.0·AC-CFW5 同律〕·信封显式窗加 window 键 additive——套件 test_eventtickets_boardwin.py SUITE PASS 7/7 首跑全绿+双跑 stdout sha256 1facc52bfc9c8436 逐字节同一·reconcile_all SUITES 100→101 判据 933→940 接线〔ledger-eventtickets-boardwin〕·RUNNER PASS 101/101 套件 940 判据 controls 7/7 171.9s 零回归·shipped config.json 逐字节零改动·eventtickets.py 纯 ASCII+零 UPDATE+零 RNG+真 import 行零网络库·证据 qa/eventtickets-boardwin-R1826.log〔套件 run1 verbatim+双跑 sha+RUNNER 摘要+注册面四节〕·queue_tech_open 10→消耗 1→补种 1=10·DEC 零新 token〔279 行=排版漂移·差集实证〕+GORD 表压缩整理〔21:1x/21:4x 行移出·最新行 13:4x ≤已扫水位·基线 269→270〕·R1826）"
@@ -492,7 +496,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1825",
+      "1827",
       "OSLoop 执行 tick"
     ],
     [
@@ -3399,15 +3403,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 3,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1825 apidev lineage one-shot read face delivered (score 2, P2 tech FIFO head R1824 seed: audit_lineage walks rotate_in upward plus rotate_out downward in one ordered chain, member blocks field-locked to lifecycle_trace seven fields, zero foreign raw api_keys, dead keys fully readable; AC-LG1..LG7 pre-registered before code; suite 7/7 first run green; RUNNER 100/100 suites 933 criteria controls 7/7 178.3s; matrix 100/933 --check byte-identical 10298B; evidence qa/apidev-lineage-R1825.log + qa/reconcile-all-R1825.log); DEC new token D-20261011-08 acknowledged with self-compliance note (oversight deployment legs = machine channel), GORD 2 rows acknowledged (gord_rows 267->269), radar window-6 slice already consumed by R1757"
+    "method": "R1827 reconcile_all child-pipe utf-8 unification delivered (score 2, P2 tech FIFO head R1792 seed; AC-PE1..PE7 pre-registered before code; three pins: per-child env PYTHONIOENCODING=utf-8 + explicit utf-8 pipe decode + main() stdout reconfigure; 3-ambient-state probe identical; RUNNER 101/101 suites 940 criteria controls 7/7 178.6s zero-reg; evidence qa/reconcile-runner-encode-R1827.log + qa/reconcile-all-R1827.log); window counting recomputed mechanically from state.json log 2026-10-05..2026-10-11 (W=14, sub=5, idle=0, nop=0)"
   }
 }

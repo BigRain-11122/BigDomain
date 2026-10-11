@@ -776,11 +776,19 @@ def note(ok, line):
 
 
 def run_cmd(cmd, cwd):
-    # child pythons emit pipe output in the machine locale (cp936 on
-    # this zh-CN Windows) - decode with the same locale, not utf-8
+    # single-dialect child pipes: every child is forced to EMIT utf-8
+    # (PYTHONIOENCODING injected over a copy of the ambient env, so
+    # whatever the calling shell set is overridden) and the runner
+    # DECODES the pipe as utf-8 explicitly - the machine locale never
+    # participates. Locale-dependent decode is how mixed-dialect
+    # evidence bytes were born (R1791/R1792 raw cp936 in the files,
+    # R1824/R1825 child-utf-8-bytes-decoded-as-cp936 mojibake).
+    env = dict(os.environ)
+    env["PYTHONIOENCODING"] = "utf-8"
     proc = subprocess.run(cmd, stdout=subprocess.PIPE,
                            stderr=subprocess.STDOUT, text=True,
-                           errors="replace", cwd=cwd, timeout=300)
+                           encoding="utf-8", errors="replace", cwd=cwd,
+                           timeout=300, env=env)
     return proc.returncode, proc.stdout or ""
 
 
@@ -1045,6 +1053,14 @@ def phase_member_reconcile(tmp):
 
 
 def main(argv):
+    # pin the runner's own console/redirect stream to utf-8 as well,
+    # so a no-argv shell-captured run (the R1791/R1792/R1824/R1825
+    # evidence writer mode) lands single-dialect too; the Tee mirror
+    # holds this reconfigured stream. Cosmetic-only on a real console.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
     tee = None
     if len(argv) > 1:
         tee = Tee(argv[1])

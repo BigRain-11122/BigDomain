@@ -1,0 +1,36 @@
+[1] three-ambient-state probe through the FIXED run_cmd
+    child: python -c print('AI 判定')  (expected utf-8 e5 88 a4 e5 ae 9a)
+PASS AC-PE1+PE2 state PYTHONIOENCODING=unset: raw child bytes=b'AI \xc5\xd0\xb6\xa8\r\n' (ambient-coupled) -> run_cmd captured='AI 判定\n' (pinned identical)
+PASS AC-PE1+PE2 state PYTHONIOENCODING=utf-8: raw child bytes=b'AI \xe5\x88\xa4\xe5\xae\x9a\r\n' (ambient-coupled) -> run_cmd captured='AI 判定\n' (pinned identical)
+PASS AC-PE1+PE2 state PYTHONIOENCODING=cp936: raw child bytes=b'AI \xc5\xd0\xb6\xa8\r\n' (ambient-coupled) -> run_cmd captured='AI 判定\n' (pinned identical)
+PASS pre-fix complement A: raw cp936 bytes fail utf-8 strict = the R1791/R1792 raw-dialect defect mechanism
+FAIL pre-fix complement B: child utf-8 bytes decoded as gbk -> 'AI 鍒ゅ畾\r\n' = the R1824/R1825 mojibake mechanism reproduced
+[2] source law
+PASS AC-PE7 runner source pure ASCII (58440 bytes)
+PASS AC-PE7 zero network imports (import lines: 20)
+[3] full RUNNER Tee run (ambient PYTHONIOENCODING unset; mirror=parent reconfigured stdout through a strict-utf-8 probe pipe)
+PASS AC-PE3 mirror stream (reconfigured parent stdout) strict utf-8 decodable (202523 bytes)
+PASS AC-PE4 mirror carries RUNNER PASS 101/101 suites + controls 7/7
+PASS AC-PE4 mirror AC-L9 line carries correct 判定 (re-encoded verdicts unchanged)
+PASS runner exit=0 (178.6s)
+[4] new evidence file checks
+PASS AC-PE5 evidence file qa/reconcile-all-R1827.log strict utf-8 OK (201015 bytes)
+PASS evidence file LF-only (Tee utf-8 writer signature preserved)
+PASS AC-PE5 AC-L9 line carries correct utf-8 bytes e5 88 a4 e5 ae 9a
+PASS zero mojibake bytes / zero raw-GBK bytes in evidence
+PASS AC-PE4 evidence file carries RUNNER PASS 101/101 + controls 7/7
+[5] legacy preservation (append-only history)
+PASS AC-PE6 reconcile-all-R1791.log byte-identical sha256=dc0be7a885fad8fb
+PASS AC-PE6 reconcile-all-R1792.log byte-identical sha256=69be642d9c807ff8
+PASS AC-PE6 reconcile-all-R1824.log byte-identical sha256=e22a0ce2f29c7f6d
+PASS AC-PE6 reconcile-all-R1825.log byte-identical sha256=dfd82325aa95b4b4
+[6] qa_decode_probe live census
+    probe exit=0
+PASS AC-PE5 qa_decode_probe census exit 0
+SUMMARY fails=1 (verdict FAIL)
+
+[7] addendum post-first-run (same round, honest re-fix; see NOTE)
+PASS  complement B (mechanism-true, expectation fixed): gbk decode of child utf-8 bytes -> 'AI 鍒ゅ畾\r\n' (pairs e5,88->U+9352 / ae,9a->U+757E, != source text) = R1824/R1825 mojibake family reproduced
+PASS  AC-PE4 full-count pin: evidence carries suites 101/101 + criteria total=940 + controls 7/7 (= R1826 baseline counts)
+NOTE first-run complement-B FAIL root cause: harness expectation hand-transcribed from the R1824/R1825 file artifact (which carries an extra console round-trip layer, utf-8 of the mojibake string) instead of derived from the direct gbk decode; product criteria AC-PE1..PE7 all PASS on first run and are untouched by this fix
+ADDENDUM VERDICT PASS (first-run summary fails=1 -> final product criteria fails=0)
