@@ -1,0 +1,60 @@
+--- 1. suite double-run (determinism) ---
+$ python src\sandbox\ugc\test_water_journal_limit.py
+PASS AC-JL1: default-keys=True default==manual+double-call=True limit3-keys/total10/returned3/truncated=True compliance=True
+PASS AC-JL2: rejected=4/4 codes=E_WJ_BAD_LIMIT both-bad=limit-first=True window-only-still-E_WJ_BAD_WINDOW=True rows-stable=True
+PASS AC-JL3: rows==default-tail3=True mirror-sql=True field-keys=True
+PASS AC-JL4: limit==total-full=True over-total-full=True limit1-tail=True zero-world-honest=True
+PASS AC-JL5: full12=True window-cap-ok=True keys-coexist=True over-window-full=True history-window=True
+PASS AC-JL6: read-method-clean=True rows-stable=True double-call-identical=True liveness-plus-one=True
+PASS AC-JL7: pure-ascii=True import-lines-clean=True append-only-source=True schema-constant=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+
+exit1=0 exit2=0 stdout-identical=True
+
+--- 2. RUNNER full regression ---
+RUNNER PASS (97/97 suites green, reconcile controls 7/7, 177.2s)
+suite PASS lines=97 criteria-sum=912
+
+--- 3. matrix regen (default evidence) ---
+PASS generated docs/sandbox-suite-matrix.md (10034 bytes) - registry suites=97 criteria=912 evidence=qa/reconcile-all-R1804.log green=97/97
+PASS hygiene: pure-ascii source, zero network imports
+
+exit=0
+
+--- 3b. matrix --check run 1 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10034 bytes, 97 suites, 912 criteria)
+
+exit=0
+
+--- 3b. matrix --check run 2 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10034 bytes, 97 suites, 912 criteria)
+
+exit=0
+
+check-x2-identical=True both-exit0=True
+
+--- 4. fingerprint sentinel --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+exit=0
+
+--- 5. hygiene ---
+git status --short:
+ M docs/sandbox-suite-matrix.md
+ M src/os/state.json
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/water_journal.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1804.log
+?? src/sandbox/ugc/test_water_journal_limit.py
+
+targeted diff --stat (config/store/sec_batch/pipeline):
+(empty)
+frozen-files-clean=True
+
+VERDICT PASS (suite=0 det=True runner=0 matrix=0 check-ok=True sentinel=0 frozen-clean=True)

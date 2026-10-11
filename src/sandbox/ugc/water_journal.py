@@ -41,6 +41,7 @@ E_WJ_NO_DISCLAIMER = "E_WJ_NO_DISCLAIMER"
 E_WJ_BAD_KIND = "E_WJ_BAD_KIND"
 E_WJ_BAD_ENVELOPE = "E_WJ_BAD_ENVELOPE"
 E_WJ_BAD_WINDOW = "E_WJ_BAD_WINDOW"
+E_WJ_BAD_LIMIT = "E_WJ_BAD_LIMIT"
 
 # R1748 family law: strict \Z anchor (a bare $ would admit a
 # trailing newline and silently read an empty account).
@@ -88,19 +89,31 @@ class WaterJournalFace:
         self._conn.commit()
         return {"window_id": cur.lastrowid, "kind": kind, "ts_utc": ts}
 
-    def journal_board(self, window=None):
-        """Pure read face (AC-WJ3, AC-JB1..AC-JB7): every archived
-        completed-window row, time ascending with the window_id
-        tie-break (append order kept within one second - deterministic,
-        zero RNG). window=None keeps the whole-board behavior; an
-        explicit YYYY-M filters on the record-time ts_utc month (the
-        same single-column key the kind_tally / monthly_flow faces
-        read) and malformed windows fail closed E_WJ_BAD_WINDOW
-        before any read. The in-window row order is the full-board
+    def journal_board(self, window=None, limit=0):
+        """Pure read face (AC-WJ3, AC-JB1..AC-JB7, AC-JL1..AC-JL7):
+        every archived completed-window row, time ascending with the
+        window_id tie-break (append order kept within one second -
+        deterministic, zero RNG). window=None keeps the whole-board
+        behavior; an explicit YYYY-M filters on the record-time ts_utc
+        month (the same single-column key the kind_tally /
+        monthly_flow faces read) and malformed windows fail closed
+        E_WJ_BAD_WINDOW. The in-window row order is the full-board
         order restricted to that window: one ORDER BY clause, zero
-        re-sorting. The compliance three-piece stays resident:
-        ai_generated=0 (server authority), the standing non-advisory
-        disclaimer and the persistent flag."""
+        re-sorting. limit=0 keeps the full-list behavior; limit>0
+        returns the ascending tail window of N rows (mirror-SQL law:
+        ORDER BY ts_utc DESC, window_id DESC LIMIT N, then reversed
+        back to board order) and adds exactly the three keys
+        {limit, returned, truncated} - the envelope total reports
+        the full filtered count so a truncated board never lies
+        about its size. The limit gate runs before the window gate
+        (both-bad determinism: E_WJ_BAD_LIMIT fires first). The
+        compliance three-piece stays resident: ai_generated=0
+        (server authority), the standing non-advisory disclaimer
+        and the persistent flag."""
+        if isinstance(limit, bool) or not isinstance(limit, int) or limit < 0:
+            raise ValueError(
+                "water journal: limit must be a non-negative int (%s)"
+                % E_WJ_BAD_LIMIT)
         w = None
         if window is not None:
             w = str(window)
@@ -108,24 +121,40 @@ class WaterJournalFace:
                 raise ValueError(
                     "water journal: window must be YYYY-MM (%s)"
                     % E_WJ_BAD_WINDOW)
-        if w is None:
+        where = ""
+        args = []
+        if w is not None:
+            where = " WHERE substr(ts_utc, 1, 7) = ?"
+            args.append(w)
+        total = self._conn.execute(
+            "SELECT COUNT(*) FROM water_windows" + where, args).fetchone()[0]
+        if limit > 0:
             cur = self._conn.execute(
-                "SELECT window_id, kind, delta, total_delta, ts_utc "
-                "FROM water_windows ORDER BY ts_utc, window_id")
+                "SELECT window_id, kind, delta, total_delta, ts_utc"
+                " FROM water_windows" + where
+                + " ORDER BY ts_utc DESC, window_id DESC LIMIT ?",
+                args + [limit])
+            fetched = list(cur)
+            fetched.reverse()
         else:
             cur = self._conn.execute(
-                "SELECT window_id, kind, delta, total_delta, ts_utc "
-                "FROM water_windows WHERE substr(ts_utc, 1, 7) = ? "
-                "ORDER BY ts_utc, window_id", (w,))
+                "SELECT window_id, kind, delta, total_delta, ts_utc"
+                " FROM water_windows" + where
+                + " ORDER BY ts_utc, window_id", args)
+            fetched = list(cur)
         rows = []
-        for window_id, kind, delta, total_delta, ts_utc in cur:
+        for window_id, kind, delta, total_delta, ts_utc in fetched:
             rows.append({
                 "window_id": window_id, "kind": kind,
                 "delta": json.loads(delta),
                 "total_delta": total_delta, "ts_utc": ts_utc})
-        env = {"journal_board": rows, "total": len(rows),
+        env = {"journal_board": rows, "total": total,
                "ai_generated": 0, "disclaimer": self.disclaimer,
                "persistent": True}
+        if limit > 0:
+            env["limit"] = limit
+            env["returned"] = len(rows)
+            env["truncated"] = len(rows) < total
         if w is not None:
             env["window"] = w
         return env

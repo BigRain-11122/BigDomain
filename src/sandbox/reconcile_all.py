@@ -674,6 +674,16 @@ SUITES = [
     # (AC-JB1..JB7 pre-registered in state/queue/tech.md)
     ("ugc-water-journalwin", os.path.join("ugc",
                                           "test_water_journal_window.py"), 7),
+    # R1804 water journal journal_board read-cap: limit=0 keeps the
+    # full-list behavior; limit>0 returns the ascending tail window of
+    # N rows (mirror-SQL law: DESC/DESC LIMIT N reversed back to board
+    # order, R1729 AC-UL4 family) and adds exactly {limit, returned,
+    # truncated} - total reports the full filtered count so a
+    # truncated board never lies; window filter composes ahead of the
+    # cap; both-bad args hit the limit gate first (E_WJ_BAD_LIMIT)
+    # (AC-JL1..JL7 pre-registered in state/queue/tech.md)
+    ("ugc-water-journalcap", os.path.join("ugc",
+                                         "test_water_journal_limit.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)
