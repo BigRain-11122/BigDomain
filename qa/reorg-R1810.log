@@ -1,0 +1,47 @@
+# qa/reorg-R1810.log - fold R494 water-level reorg evidence (round R1810)
+# Inheritance: R1809 closing note -> round-start first-measure ruling.
+# 2026-10-11 round-start measure: state.json 80969B disk > 78500B gate
+# (+2469B) -> fold R494 due (P-2026-09-25-18 knife #494).
+
+[1] window selection (measure494.py, per-line byte report)
+- log_lines=45, state disk_bytes=80969
+- L1-L5 roll-up summaries 12670B (kept, historical folds)
+- L6-L35 rounds R1790..R1804 = 30 lines 49056B  -> fold window slice 6:35
+- L36-L45 rounds R1805..R1809 = 10 lines 15838B (kept, recent rounds)
+- window token extraction (gen494.py, R1580 PAT, zero hand-copy): 53 tokens
+
+[2] gen494 summary line
+- summary bytes=4319 tokens=53 window_bytes=49056 lines=30
+- per-line listing derived programmatically (label+kind+bytes from window)
+- summary file: .codely-cli/tmp/fold494-summary.txt (exactly one non-empty line)
+
+[3] fold dry-run plan (zero mutation)
+- mode=dry-run window_mode=slice window_start=6 window_end=35
+- window_lines=30 window_content_bytes=49056
+- token_missing=[] token_ok=true gate_ok=true
+- pre_bytes=80969 predicted_bytes=35616 new_log_len=16
+- reserve_bytes=3000 gate=78500 would_fail=[]
+- preop_sha16=f1a4b91de168abdf
+
+[4] fold execute (verify-then-write, AC-LT10 four-step order)
+- post_bytes=35616 predicted_eq_actual=true
+- appendix_bytes=49310 archive_appended=true
+  archive header: "# --- R1810 fold append (2026-10-11, 30 lines verbatim:
+  R1790..R1804 lobby/ugc/water-journal delivery rounds, 30 lines to 1
+  roll-up, catalog 53 tokens, gen494 mechanical, fold R494 mid-window,
+  pre-op sha16 f1a4b91de168abdf)"
+- backup_written=true -> logs/state-preop-R1810.bak
+- 80969B -> 35616B (30 lines to 1 roll-up line, kept=0)
+
+[5] post-fold census reverse reconciliation
+- census pass=true (mismatch/dangling faces clean after mid-window
+  surgery; declared==actual for the new R1810 fold section)
+
+[6] post-fold gauge
+- disk_bytes=35616 log_lines=16 log_content_bytes=32827
+- margin_bytes=42884 fold_needed=false
+
+VERDICT: fold R494 PASS - state 80969B -> 35616B, 53 tokens embedded
+zero-loss, archive verbatim + preop backup in place, census pass.
+Next fold (R495) = next round-start first-measure ruling if level
+exceeds 78500B again.

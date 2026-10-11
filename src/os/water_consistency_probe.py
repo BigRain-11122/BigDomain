@@ -70,6 +70,24 @@ Encoding discipline: this source stays pure ASCII (the emoji probe
 text rides \U escapes); the output stays deterministic (no
 timestamps, no temp paths) so double runs compare byte-identical.
 
+R1810 extension (ghost-kind value-plane cross): the R1809 count
+plane proved the ghost observation row stays visible in every
+counting face; the value plane now proves its delta cells aggregate
+into every value face. On the ghost-present world the month_cross
+re-proof holds (cell_totals(cur_w) cells equal the per-cell hand
+sum of board(cur_w) row deltas, ghost row included), the pre-vs-post
+cell diff is exactly the ghost delta cells (a value face that hid
+the ghost delta would break the diff - constructive detection
+power, fail-closed), the composition law holds with the ghost +1
+inside (total == noise.total + suspended, verdicted cells excluded,
+R1785 law), and the flow value attribution chain binds all three
+value totals equal with the ghost in (flow total_delta == net_delta
+== cells total, each exactly pre + 1). The store stays
+byte-identical across the value reads (ghost rows have no store
+backing; the [3]/[4] crosses closed pre-tamper - the R1807/R1809
+fixture law) and the read faces stay pure (row count constant).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -483,6 +501,8 @@ def main():
         store_pre = json.dumps(pipe.store.pool_water_levels(),
                                sort_keys=True)
         pre_tally = dict(pipe.journal.kind_tally(cur_w)["kind_tally"])
+        pre_cells_env = pipe.journal.cell_totals(cur_w)
+        pre_cells = dict(pre_cells_env["cell_totals"])
         pre_flow_env = pipe.journal.monthly_flow(cur_w)
         pre_flow = pre_flow_env["monthly_flow"]
         ghost_absent = "legacy-ghost" not in pre_tally
@@ -580,6 +600,84 @@ def main():
                         % gk4_ok)
         fail = fail or not (gk1_ok and gk2_ok and gk3_ok and gk4_ok)
 
+        # ---- [8] ghost value-plane cross (R1810) ----------------------
+        # The count plane (R1809) proved the ghost row stays visible
+        # in every counting face; the value plane now proves its delta
+        # cells aggregate into every value face: the month_cross
+        # re-proof on the ghost-present world, the composition law
+        # with the ghost +1 inside, and the flow value attribution
+        # chain - all three value totals equal with the ghost in. A
+        # value face that hid the ghost delta would break the
+        # pre/post cell diff (exactly the ghost delta cells) - the
+        # constructive detection proof, fail-closed by construction.
+        conn = sqlite3.connect(journal_db)
+        rows_v1 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        post_cells_env = pipe.journal.cell_totals(cur_w)
+        post_cells = dict(post_cells_env["cell_totals"])
+        gv_month_ok, gv_cells, gv_n, gv_total = month_cross(cur_w)
+        cells_ghost_vis = (int(post_cells.get("noise.total", 0))
+                          == int(pre_cells.get("noise.total", 0)) + 1)
+        diff_cells = {}
+        for key in sorted(set(post_cells) | set(pre_cells)):
+            delta = int(post_cells.get(key, 0)) - int(pre_cells.get(key, 0))
+            if delta:
+                diff_cells[key] = delta
+        diff_only_ghost_delta = diff_cells == {"noise.total": 1}
+        gv1_ok = (gv_month_ok and cells_ghost_vis and diff_only_ghost_delta)
+
+        comp_total = int(post_cells_env["total"])
+        comp_rhs = (int(post_cells.get("noise.total", 0))
+                    + int(post_cells.get("review.suspended", 0)))
+        gv2_ok = (comp_total == comp_rhs
+                  and comp_total == int(pre_cells_env["total"]) + 1)
+
+        flow_env_v = pipe.journal.monthly_flow(cur_w)
+        flow_rows_v = flow_env_v["monthly_flow"]
+        pre_flow_total = int(pre_flow_env["monthly_flow"][0]["total_delta"])
+        pre_flow_net = int(pre_flow_env["net_delta"])
+        gv3_ok = (len(flow_rows_v) == 1
+                  and flow_rows_v[0]["total_delta"] == comp_total
+                  == flow_env_v["net_delta"]
+                  and flow_rows_v[0]["total_delta"] == pre_flow_total + 1
+                  and flow_env_v["net_delta"] == pre_flow_net + 1)
+
+        store_post_v = json.dumps(pipe.store.pool_water_levels(),
+                                  sort_keys=True)
+        conn = sqlite3.connect(journal_db)
+        rows_v2 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        gv4_ok = (store_post_v == store_pre and rows_v1 == rows_v2)
+        sections.append("[8] ghost value-plane cross:")
+        sections.append("    month-cross-reproof %s: rows=%d total=%d %s"
+                        % (cur_w, gv_n, gv_total,
+                           "OK" if gv_month_ok else "DRIFT"))
+        sections.append("    ghost-cell visibility: noise.total %d->%d "
+                       "diff=%s %s"
+                        % (int(pre_cells.get("noise.total", 0)),
+                           int(post_cells.get("noise.total", 0)),
+                           json.dumps(diff_cells, sort_keys=True),
+                           "OK" if (cells_ghost_vis
+                                    and diff_only_ghost_delta) else "DRIFT"))
+        sections.append("    composition-with-ghost: total=%d "
+                       "noise.total+susp=%d pre+1=%d %s"
+                        % (comp_total, comp_rhs,
+                           int(pre_cells_env["total"]) + 1,
+                           "OK" if gv2_ok else "DRIFT"))
+        sections.append("    flow value attribution: total_delta=%d "
+                       "net_delta=%d (pre %d/%d) %s"
+                        % (flow_rows_v[0]["total_delta"],
+                           flow_env_v["net_delta"], pre_flow_total,
+                           pre_flow_net,
+                           "OK" if gv3_ok else "DRIFT"))
+        sections.append("    store zero-background+pure-read: "
+                       "identical=%s rows %d==%d %s"
+                        % (store_post_v == store_pre, rows_v1, rows_v2,
+                           "OK" if gv4_ok else "DRIFT"))
+        fail = fail or not (gv1_ok and gv2_ok and gv3_ok and gv4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -595,7 +693,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[8] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[9] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
