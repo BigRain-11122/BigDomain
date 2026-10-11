@@ -614,6 +614,10 @@ SUITES = [
     # prev-only keys show as negatives)
     # (AC-DW1..DW7 pre-registered in state/queue/tech.md)
     ("ugc-pool-delta", os.path.join("ugc", "test_pool_delta.py"), 7),
+    # R1794 UGC ingest window water-delta wiring: dual live snapshots
+    # around ingest_lobby + last_water_delta read face
+    # (AC-IW1..IW6 pre-registered in state/queue/tech.md)
+    ("ugc-ingest-waterwire", os.path.join("ugc", "test_ingest_waterwire.py"), 6),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)

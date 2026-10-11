@@ -76,7 +76,14 @@ class UGCPipeline:
         self._startup_checks(config)
         self.config = config
         self.db_path = db_path
-        self.store = UGC.UGCStore(db_path)
+        # R1794 window water wiring (AC-IW1): the store gets the
+        # standing non-advisory disclaimer (validated non-empty by the
+        # startup checks above) so the pool-water read faces unlock on
+        # the pipeline's own store; legacy direct UGCStore() callers
+        # stay untouched. _last_water carries the most recent
+        # ingest_lobby window's delta envelope (None before any window).
+        self.store = UGC.UGCStore(db_path, disclaimer=self.disclaimer)
+        self._last_water = None
         self.desk = ReviewDesk(self.store)
         self._rate = defaultdict(deque)
         # batch face wraps the SAME gate instance (referenced, not
@@ -324,9 +331,19 @@ class UGCPipeline:
         instead of one call per row. The face takes a single
         source/actor pair per call, so rows are grouped by that pair -
         mixing groups would mislabel degraded queue rows with the
-        wrong metadata. Post-gate flow still replays in window order
+        wrong metadata.         Post-gate flow still replays in window order
         (AC-IL3): gray/noise/flood/duplicate state stays identical to
-        the old per-row semantics."""
+        the old per-row semantics.
+
+        Window water wiring (AC-IW1): two live snapshots around the
+        window - the start snapshot is taken before the window read
+        (pure read), the end delta derives through the store face
+        pool_water_delta(prev) whose current side is one live levels
+        call (single derivation source, R1785 caller-held-snapshot
+        law preserved on the store face). The receipts return shape
+        is unchanged; the delta is visible via last_water_delta().
+        """
+        prev_water = self.store.pool_water_levels()  # window-start live snapshot (AC-IW1)
         rows = self.store.lobby_intake_rows()
         if self.max_ingest_window > 0:
             # watermark cap (AC-WC2): rows beyond the cap are simply
@@ -406,7 +423,17 @@ class UGCPipeline:
                               else exc.code)
             self.store.mark_ingest(origin, status, UGC.utc_now_iso())
             receipts.append(out)
+        # window-end live delta (AC-IW1): current side re-derives live
+        # inside the store face; the envelope passes through unwrapped
+        self._last_water = self.store.pool_water_delta(prev_water)
         return receipts
+
+    def last_water_delta(self):
+        """R1794 window water monitor read face (AC-IW1): the most
+        recent ingest_lobby window's pool-water delta envelope,
+        passed through from the store face unwrapped; None before any
+        window ran (honest empty, no fabricated zeros)."""
+        return self._last_water
 
     # ---- core pipeline -----------------------------------------------------
 

@@ -329,17 +329,24 @@ def main():
         "read", "read_one", "write", "write_tx", "close"))
     with open(os.path.join(BASE, "pipeline.py"), encoding="utf-8") as fh:
         pipe_text = fh.read()
-    pipe_untouched = "pool_water_delta" not in pipe_text
+    # R1794 successor window (authorized by the R1788 seed line): the
+    # pipeline now consumes the store delta face via delegation (the
+    # window-end live delta in ingest_lobby, AC-IW1). Zero-touch is
+    # superseded by the delegation law: no own delta engine on the
+    # pipeline class (face-free) and consumption only through
+    # self.store (R1732 contract-follow precedent).
+    pipe_face_free = not hasattr(P.UGCPipeline, "pool_water_delta")
+    pipe_delegates = "self.store.pool_water_delta(" in pipe_text
     cfg_sha_after = hashlib.sha256(
         open(os.path.join(BASE, "config.json"), "rb").read()
     ).hexdigest()[:16]
-    ok6 = (ascii_ok and not net_hits and additive and pipe_untouched
-           and cfg_sha == cfg_sha_after)
+    ok6 = (ascii_ok and not net_hits and additive and pipe_face_free
+           and pipe_delegates and cfg_sha == cfg_sha_after)
     record("AC-DW6", ok6,
            "ascii=%s subjects=%d network-imports=%d additive=%s "
-           "pipeline-zero-touch=%s config-sha=%s"
+           "pipeline-store-delegation=%s (face-free=%s) config-sha=%s"
            % (ascii_ok, len(subjects), len(net_hits), additive,
-              pipe_untouched, cfg_sha == cfg_sha_after))
+              pipe_delegates, pipe_face_free, cfg_sha == cfg_sha_after))
 
     # ---- AC-DW7: delivery wiring -----------------------------------------
     all_path = os.path.join(os.path.dirname(BASE), "reconcile_all.py")

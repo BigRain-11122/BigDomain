@@ -280,14 +280,21 @@ def main():
     pipe_face_free = not hasattr(P.UGCPipeline, "pool_water_levels")
     with open(os.path.join(BASE, "pipeline.py"), encoding="utf-8") as fh:
         pipe_text = fh.read()
-    pipe_untouched = "pool_water_levels" not in pipe_text
+    # R1794 successor window (authorized by the R1788 seed line): the
+    # pipeline now consumes the store water faces via delegation (dual
+    # live snapshots around ingest_lobby, AC-IW1). The zero-touch
+    # guard is superseded by the delegation law: the pipeline must hold
+    # NO second aggregation engine - no own face definition (face_free)
+    # and consumption only through self.store (R1732 contract-follow
+    # precedent).
+    pipe_delegates = "self.store.pool_water_levels()" in pipe_text
     ok6 = (ascii_ok and not net_hits and additive and pipe_face_free
-           and pipe_untouched)
+           and pipe_delegates)
     record("AC-NP6", ok6,
            "ascii=%s subjects=%d network-imports=%d additive=%s"
-           " pipeline-zero-touch=%s"
+           " pipeline-store-delegation=%s (face-free=%s)"
            % (ascii_ok, len(subjects), len(net_hits), additive,
-              pipe_untouched and pipe_face_free))
+              pipe_delegates, pipe_face_free))
 
     # ---- AC-NP7: delivery wiring -----------------------------------------
     all_path = os.path.join(os.path.dirname(BASE), "reconcile_all.py")
