@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T18:52:39+08:00",
+  "export_ts": "2026-10-11T19:11:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1814 一句话：water journal 探针尾窗截断镜像 SQL 第三径交付（AC-SQ1..SQ5 预注册先于代码）——探针增 [11] 镜像 SQL 第三径节（mode=ro 只读连接+子句逐字复刻产品正身）：全榜帽/月窗组合/宽松帽三组合 SQL 径==产品读五字段逐位（pos-vs-product/pos-vs-cap 全 True）；SQL 窗内 COUNT==n_cur==11；ghost+漂移行 SQL 径可见（第三径不藏篡改行）；fut-2026-12 诚实空+hist fixture 第三径可见（COUNT==3）；写尝试连接级拒 OperationalError（行为证零突变·行数 14 恒定）；双跑 stdout 逐字节同一 sha256 D87D481A…·PROBE CONSISTENT+DETECTING exit 0/0·tick 1813→1814。",
-    "latest_artifact": "最近实物：src/os/water_consistency_probe.py 镜像 SQL 第三径扩面（[11] 节 mode=ro 只读 SQL 帽读三径对照+docstring R1814 段·零产品文件字节·测量面不入 SUITES）+证据 qa/water-mirrorsql-R1814.log（双跑 byte-identical sha256 D87D481A201BFA14·四节）·2026-10-11 19:4x。",
-    "next_milestone": "下个实物：tech 队头按序交付（water journal kind_tally×monthly_flow 聚合面镜像 SQL 第三径窗［R1814 补种］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1815 一句话：water journal 聚合面（kind_tally×monthly_flow）镜像 SQL 第三径交付（AC-AG1..AG5 预注册先于代码）——探针增 [12] 聚合镜像径节（mode=ro 自开只读连接·窗谓词子句与 [11] 同字面）：双观察窗 kind_tally dense==SQL GROUP BY kind COUNT dense 展开逐位（hist 3==3/cur 11==11·ghost 追加键在证）；monthly_flow 双窗行三键==SQL GROUP BY substr COUNT/SUM+env total/net 双键；全榜月集 rows==sql=True（total=14·net=11）；hist/fut 零渗透（3/0）；纯读 14==14==14；双跑 sha256 A7C70F3B…逐字节同一·PROBE CONSISTENT+DETECTING exit 0/0·两处预注册修正如实注（稀疏 SQL vs dense 产品面=探针解释层 dense 展开/net_delta 实为 env 键非行键）·tick 1814→1815。",
+    "latest_artifact": "最近实物：src/os/water_consistency_probe.py 聚合镜像 SQL 第三径扩面（[12] 节 kind_tally/monthly_flow 聚合 SQL 三径对照+docstring R1815 段·零产品文件字节·测量面不入 SUITES）+证据 qa/water-aggmirror-R1815.log（双跑 byte-identical sha256 A7C70F3B7F5D3C2E·三节）·2026-10-11 19:1x。",
+    "next_milestone": "下个实物：tech 队头按序交付（water journal cell_totals 胞聚合镜像 SQL 第三径窗［R1815 补种］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -432,7 +432,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1814",
+      "1815",
       "OSLoop 执行 tick"
     ],
     [
@@ -3339,10 +3339,10 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,

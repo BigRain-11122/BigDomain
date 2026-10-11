@@ -171,6 +171,31 @@ note applies unchanged). Zero product files touched (measurement
 face, R1727 precedent).
 
 
+R1815 extension (aggregate mirror-SQL third path): the [6]/[9]
+sections proved the product aggregation faces (kind_tally,
+monthly_flow) against hand-grouped / hand-summed derivations;
+this section adds the independent third path for the two
+aggregation faces - a fresh read-only SQL connection (file URI
+mode=ro, the [11] law) running the window-predicate GROUP BY
+aggregates: kind_tally(W) dense dict vs "GROUP BY kind COUNT(*)"
+and monthly_flow(W) row vs "GROUP BY substr(ts_utc,1,7)
+COUNT(*)/SUM(total_delta)", on every observed month. The
+whole-board month set rides the same law without the WHERE
+clause (per-month rows month-ascending, all keys positional);
+the historical fixture month keeps its count-3 reading and the
+honest-empty future month reads zero rows (no leak, no
+penetration). The connection opens fresh (the [11] connection
+closed after its behavioral write-reject proof), stays
+read-only, and the row count stays 14 across the section (pure
+read, zero mutation). Registration-time criteria fix, honest
+note: the pre-registered AG2 wording named net_delta as a row
+key - the product row keys exactly {month, windows,
+total_delta}; net_delta is an envelope key, so the cross checks
+the three row keys positionally plus the envelope total/net
+pair against the SQL COUNT/SUM. Zero product files touched
+(measurement face, R1727 precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -1135,6 +1160,170 @@ def main():
         fail = fail or not (sq1_ok and sq2_ok and sq3_ok and sq4_ok
                             and sq5_ok)
 
+        # ---- [12] aggregate mirror-SQL third path (R1815) -----------
+        # The [6]/[9] sections proved the product aggregation faces
+        # against hand-grouped / hand-summed derivations (path two).
+        # This section adds the independent third path: a fresh
+        # read-only SQL connection (the [11] connection closed after
+        # its write-reject proof) running the window-predicate GROUP
+        # BY aggregates - kind_tally(W) dense dict vs GROUP BY kind
+        # COUNT(*), monthly_flow(W) row vs GROUP BY substr
+        # COUNT(*)/SUM(total_delta), on every observed month, plus
+        # the whole-board month set without the WHERE clause.
+        # Registration-time criteria fix (honest note): AG2's
+        # pre-registered wording named net_delta as a row key - the
+        # product row keys exactly {month, windows, total_delta};
+        # net_delta is an envelope key, so the cross checks the
+        # three row keys positionally plus the envelope pair.
+        agg_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        agg_cnt_before = agg_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+
+        def sql_kind_counts(window):
+            # Native SQL GROUP BY returns a sparse row set (observed
+            # kinds only); the product face is dense (closed-set kinds
+            # stay explicit at zero, foreign keys appended sorted -
+            # the AC-KT1 dense grid law). The dense expansion below
+            # is the probe-side interpretation layer mirroring the
+            # [6] hand_group_kinds construction, so the cross
+            # compares dense-vs-dense (first run honest fix: the
+            # sparse-vs-dense dict compare drifted on the historical
+            # fixture month, a probe wording flaw, not a product
+            # defect - the historical window only observes
+            # submit/verdict so the sparse SQL dict lacks the three
+            # zero-count kinds).
+            rows = agg_ro.execute(
+                "SELECT kind, COUNT(*) FROM water_windows"
+                " WHERE substr(ts_utc, 1, 7) = ? GROUP BY kind",
+                (window,)).fetchall()
+            observed = {k: int(n) for k, n in rows}
+            dense = {}
+            rest = dict(observed)
+            for kind in sorted(WJ.KINDS):
+                dense[kind] = int(rest.pop(kind, 0))
+            for kind in sorted(rest):
+                dense[kind] = rest[kind]
+            return dense
+
+        def sql_flow_rows(window=None):
+            if window is None:
+                grouped = agg_ro.execute(
+                    "SELECT substr(ts_utc, 1, 7), COUNT(*),"
+                    " SUM(total_delta) FROM water_windows"
+                    " GROUP BY substr(ts_utc, 1, 7)"
+                    " ORDER BY substr(ts_utc, 1, 7)").fetchall()
+            else:
+                grouped = agg_ro.execute(
+                    "SELECT substr(ts_utc, 1, 7), COUNT(*),"
+                    " SUM(total_delta) FROM water_windows"
+                    " WHERE substr(ts_utc, 1, 7) = ?"
+                    " GROUP BY substr(ts_utc, 1, 7)"
+                    " ORDER BY substr(ts_utc, 1, 7)",
+                    (window,)).fetchall()
+            return [{"month": m, "windows": int(n),
+                     "total_delta": int(s)} for m, n, s in grouped]
+
+        ag1_ok = True
+        ag1_detail = []
+        for w in months:
+            tally_env = pipe.journal.kind_tally(w)
+            tally = dict(tally_env["kind_tally"])
+            sql_kinds = sql_kind_counts(w)
+            win_cnt = agg_ro.execute(
+                "SELECT COUNT(*) FROM water_windows"
+                " WHERE substr(ts_utc, 1, 7) = ?", (w,)).fetchone()[0]
+            ghost_n = int(tally.get("legacy-ghost", 0))
+            w_ok = (tally == sql_kinds
+                    and int(tally_env["total"]) == win_cnt
+                    and sum(sql_kinds.values()) == win_cnt
+                    and ghost_n == (1 if w == cur_w else 0))
+            ag1_ok = ag1_ok and w_ok
+            ag1_detail.append(
+                "%s tally==sql=%s total==cnt %d==%d ghost=%d %s"
+                % (w, tally == sql_kinds,
+                   int(tally_env["total"]), win_cnt, ghost_n,
+                   "OK" if w_ok else "DRIFT"))
+
+        ag2_ok = True
+        ag2_detail = []
+        for w in months:
+            flow_env = pipe.journal.monthly_flow(w)
+            flow_rows = flow_env["monthly_flow"]
+            sql_rows = sql_flow_rows(w)
+            r = flow_rows[0] if flow_rows else None
+            q = sql_rows[0] if sql_rows else None
+            f_ok = (r is not None and q is not None
+                    and r["month"] == q["month"]
+                    and int(r["windows"]) == q["windows"]
+                    and int(r["total_delta"]) == q["total_delta"]
+                    and int(flow_env["total"]) == q["windows"]
+                    and int(flow_env["net_delta"]) == q["total_delta"])
+            ag2_ok = ag2_ok and f_ok
+            ag2_detail.append(
+                "%s month=%s windows %d==%d total_delta %d==%d"
+                " env total/net %d/%d %s"
+                % (w,
+                   r["month"] if r else "-",
+                   int(r["windows"]) if r else -1,
+                   q["windows"] if q else -1,
+                   int(r["total_delta"]) if r else -999,
+                   q["total_delta"] if q else -999,
+                   int(flow_env["total"]), int(flow_env["net_delta"]),
+                   "OK" if f_ok else "DRIFT"))
+
+        board_flow_env = pipe.journal.monthly_flow()
+        board_rows = board_flow_env["monthly_flow"]
+        sql_board_rows = sql_flow_rows(None)
+        ag3_ok = (board_rows == sql_board_rows
+                  and [r["month"] for r in board_rows] == months
+                  and int(board_flow_env["total"])
+                  == sum(r["windows"] for r in sql_board_rows)
+                  and int(board_flow_env["net_delta"])
+                  == sum(r["total_delta"] for r in sql_board_rows))
+
+        hist_cnt = agg_ro.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE substr(ts_utc, 1, 7) = ?",
+            ("2026-08",)).fetchone()[0]
+        fut_cnt = agg_ro.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE substr(ts_utc, 1, 7) = ?",
+            ("2026-12",)).fetchone()[0]
+        fut_env = pipe.journal.monthly_flow("2026-12")
+        ag4_ok = (hist_cnt == 3 and fut_cnt == 0
+                  and fut_env["monthly_flow"] == []
+                  and sql_flow_rows("2026-12") == [])
+
+        agg_cnt_after = agg_ro.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        agg_ro.close()
+        ag5_ok = (agg_cnt_before == agg_cnt_after == rows_rl == 14)
+
+        sections.append("[12] aggregate mirror-SQL third path:")
+        for line in ag1_detail:
+            sections.append("    kind_tally " + line)
+        for line in ag2_detail:
+            sections.append("    monthly_flow " + line)
+        sections.append("    whole-board: months=%s rows==sql=%s"
+                        " env total=%d net=%d %s"
+                        % (",".join(months),
+                           board_rows == sql_board_rows,
+                           int(board_flow_env["total"]),
+                           int(board_flow_env["net_delta"]),
+                           "OK" if ag3_ok else "DRIFT"))
+        sections.append("    zero penetration: hist-cnt=%d fut-cnt=%d"
+                        " fut-env-empty=%s %s"
+                        % (hist_cnt, fut_cnt,
+                           fut_env["monthly_flow"] == [],
+                           "OK" if ag4_ok else "DRIFT"))
+        sections.append("    pure-read: rows %d==%d==14 %s"
+                        % (agg_cnt_before, agg_cnt_after,
+                           "OK" if ag5_ok else "DRIFT"))
+        fail = fail or not (ag1_ok and ag2_ok and ag3_ok and ag4_ok
+                            and ag5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -1150,7 +1339,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[12] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[13] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
