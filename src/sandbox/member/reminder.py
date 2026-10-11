@@ -88,6 +88,7 @@ E_TEMPLATE_NOT_APPROVED = "E_TEMPLATE_NOT_APPROVED"
 E_UNKNOWN_TEMPLATE = "E_UNKNOWN_TEMPLATE"
 E_BAD_GRANT_TYPE = "E_BAD_GRANT_TYPE"
 E_BANNED_TEMPLATE_COPY = "E_BANNED_TEMPLATE_COPY"
+E_REM_NO_DISCLAIMER = "E_REM_NO_DISCLAIMER"
 
 # log statuses (rows; the two skipped faces double as banner queue)
 ST_SENT = "sent"
@@ -160,6 +161,13 @@ class ReminderFace(object):
             self.reason_templates.setdefault(reason, approved[0])
         self.expiring_face = expiring_face
         self.db_path = db_path
+        # raw capture for the read-face compliance envelope (the copy
+        # lives in the compliance section; validated at face-call time
+        # - the constructor itself adds no new refusal path, existing
+        # suites stay zero-regression)
+        comp = (config or {}).get("compliance")
+        self.disclaimer = comp.get("disclaimer") if isinstance(
+            comp, dict) else None
         fresh = not os.path.exists(db_path)
         self.conn = sqlite3.connect(db_path)
         self.conn.isolation_level = None
@@ -322,6 +330,47 @@ class ReminderFace(object):
             "SELECT send_id, census_avatar_id, reason, status, ts_utc"
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
             " ORDER BY ts_utc").fetchall()
+
+    def banner_board(self):
+        """Degraded in-app banner board (pure derived read face over the
+        persistent fallback journal, tech.md AC-BQ1..AC-BQ7 registered
+        before this code): one row per avatar holding at least one
+        degraded row, plus dense status/reason zero grids. Row order =
+        the unique census key ascending (aggregation-family
+        deterministic ordering law). Envelope carries the member
+        family's server-authoritative marker trio; the resident
+        compliance copy comes from the raw config capture and a world
+        without it refuses the face rather than faking an envelope."""
+        if (not isinstance(self.disclaimer, str)
+                or not self.disclaimer.strip()):
+            raise ValueError("%s: resident compliance copy missing"
+                             % E_REM_NO_DISCLAIMER)
+        rows = self._exec(
+            "SELECT census_avatar_id, status, reason, COUNT(*)"
+            " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
+            " GROUP BY census_avatar_id, status, reason").fetchall()
+        by_status = {ST_SKIP_BUDGET: 0, ST_SKIP_CAP: 0}
+        by_reason = {r: 0 for r in ("first_service", "renewal_due")}
+        per_avatar = {}
+        total = 0
+        for avatar, status, reason, n in rows:
+            n = int(n)
+            by_status[status] = by_status.get(status, 0) + n
+            by_reason[reason] = by_reason.get(reason, 0) + n
+            cell = per_avatar.setdefault(
+                avatar, {r: 0 for r in ("first_service", "renewal_due")})
+            cell[reason] = cell.get(reason, 0) + n
+            total += n
+        board = []
+        for avatar in sorted(per_avatar):
+            cell = per_avatar[avatar]
+            board.append({"census_avatar_id": avatar,
+                          "skipped": sum(cell.values()),
+                          "by_reason": dict(cell)})
+        return {"banner_board": board, "total": total,
+                "by_status": by_status, "by_reason": by_reason,
+                "ai_generated": 0, "disclaimer": self.disclaimer,
+                "persistent": True}
 
     def dual_timepoint_coverage(self, avatar):
         """W10 dual-timepoint coverage face (which reasons have rows)."""

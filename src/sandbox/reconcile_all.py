@@ -343,6 +343,14 @@ SUITES = [
     # gone (AC-RW1..RW7 pre-registered in state/queue/tech.md).
     ("member-reminder-scanwire",
      os.path.join("member", "test_reminder_scan_wire.py"), 7),
+    # R1782 reminder banner board (R1779 successor): pure-read derived
+    # aggregation over the persistent degraded in-app fallback queue -
+    # one board row per avatar holding skipped_* rows, dense status/
+    # reason zero grids, deterministic census-key ascending order,
+    # member-family compliance envelope, live derivation
+    # (AC-BQ1..BQ7 pre-registered in state/queue/tech.md).
+    ("member-banner-board",
+     os.path.join("member", "test_banner_board.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

@@ -1,0 +1,51 @@
+=== R1782 member-banner-board (final clean run) ===  
+honest note: two bring-up fixes were TEST-HARNESS only (disclaimer key lives in compliance section; tuple unpack in AC-BQ2 cross helper) - product face unchanged  
+PASS AC-BQ1: env-keys=True dense=True empty-board=True refusals=5/5 ['no-compliance', 'empty', 'blank', 'non-str', 'null']
+PASS AC-BQ2: by_status={'skipped_no_budget': 2, 'skipped_daily_cap': 2} by_reason={'first_service': 2, 'renewal_due': 2} total=4 manual=True rows-cross=True order=['AV-B', 'AV-C', 'AV-E', 'AV-F']
+PASS AC-BQ3: status-keys=2 total=4 < log=6 board==skipped-avatars=True sent-avatars-absent=True
+PASS AC-BQ4: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-BQ5: before=1 after=2 cell=2 new-row=True order-follows=True
+PASS AC-BQ6: ascii=True subjects=2 network-imports=0 cfg-sha-stable=True additive=True schema-tables=2
+PASS AC-BQ7: suites-registry-row=True criteria=7
+SUITE PASS: 7/7
+=== neighbor zero-regression (reminder.py constructor capture touched) ===  
+PASS AC-M17.1: not-due scan=0; due-window scan=7 all renewal_due
+PASS AC-M17.6: 7 due attempts -> 7 rows (sent=3 skipped=4); AV-R1 rows=1
+PASS AC-M17.4: day1: once-grant AV-R1 sent, longterm AV-R2 sent, no-grant AV-R3 skipped_no_budget
+PASS AC-M17.7: rescan=7 already_logged; rows unchanged=7
+PASS AC-M17.4: day2: sent=2 (longterm only), skipped_no_budget=5; once-grant AV-R1 exhausted -> skipped row=skipped_no_budget
+PASS AC-M17.6: banner_queue=9 == skipped rows=9 (zero silent loss)
+PASS AC-M17.2: unapproved refused: E_TEMPLATE_NOT_APPROVED: pending_review_example; unknown refused: E_UNKNOWN_TEMPLATE: no_such_template; log rows unchanged=14
+PASS AC-M17.3: banned copy refused: E_BANNED_TEMPLATE_COPY: template 'renewal_notice' copy contains banned word '±£±¾'
+PASS AC-M17.5: cap=2: sent=2, skipped_daily_cap=5; rescan already_logged
+PASS AC-M17.9: MVP on_accept=not_required_mvp (rows=0, no fake activity); auto-renewal sim on_accept=sent; coverage=['first_service', 'renewal_due']
+PASS AC-M17.8: fiat/token-named columns=none; raw fiat inject refused=table member_reminder_log has no column named price_cent
+PASS AC-M17.10: reconcile six checks clean=True
+suite: 12 assertions over 10 criteria; failed=none
+PASS AC-RW1: face-less scan refused=True zero-rows=0; scan source free of SQL/window tokens; old member dock gone
+PASS AC-RW2: three sources equal=True; scan=3 board=3 manual=3
+PASS AC-RW3: boundary row on board=True zero-attempt=0; not-due=0; due-window fired=3
+PASS AC-RW4: rescan=3 all already_logged rows 3==3 dup-groups=0; no-grant row=skipped_no_budget banner=True
+PASS AC-RW5: injected-face calls=[(3, '2026-11-09T00:33:51Z')] results=3; module free of direct member dock tokens=True
+PASS AC-RW6: suites-registry-line=True prior-criteria=5 expected=7
+PASS AC-RW7: ascii=True network-imports=0 update-tokens=0
+SUITE PASS: 7/7
+=== RUNNER full regression (81/81) ===  
+=== RUNNER full regression ===  
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+RUNNER PASS (81/81 suites green, reconcile controls 7/7, 148.1s)
+=== matrix regen + --check roundtrips ===  
+PASS generated docs/sandbox-suite-matrix.md (8788 bytes) - registry suites=81 criteria=799 evidence=qa/reconcile-all-R1782.log green=81/81
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8788 bytes, 81 suites, 799 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8788 bytes, 81 suites, 799 criteria)
+=== fingerprint sentinel ===  
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
