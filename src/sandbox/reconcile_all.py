@@ -666,6 +666,14 @@ SUITES = [
     # (AC-MF1..MF7 pre-registered in state/queue/tech.md)
     ("ugc-water-monthlyflow", os.path.join("ugc",
                                           "test_water_monthly_flow.py"), 7),
+    # R1803 water journal journal_board month-window filter: the full
+    # time-ordered row list gains an optional YYYY-M read (ts_utc
+    # record-time filter, one ORDER BY clause - the in-window order is
+    # the full-board order restricted to the window, zero re-sorting;
+    # explicit window adds the window key, default face unchanged)
+    # (AC-JB1..JB7 pre-registered in state/queue/tech.md)
+    ("ugc-water-journalwin", os.path.join("ugc",
+                                          "test_water_journal_window.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)

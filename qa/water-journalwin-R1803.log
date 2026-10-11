@@ -1,0 +1,43 @@
+
+===== SUITE DOUBLE-RUN (test_water_journal_window.py) =====
+PASS AC-JB1: envelope-keys=True honest-zero=True compliance=True default-board==manual=True double-call=True explicit-window-key-additive=True
+PASS AC-JB2: rejected=14/14 codes=E_WJ_BAD_WINDOW rows-stable=True
+PASS AC-JB3: aug=True sep=True default-includes-history=True no-current-permeation=True future-empty=True
+PASS AC-JB4: window==manual-sql=True full-board-subsequence=True history-subsequence=True
+PASS AC-JB5: read-method-clean=True rows-stable=True double-call-identical=True
+PASS AC-JB6: liveness-plus-one=True restart-identical=True resume-plus-one=True
+PASS AC-JB7: pure-ascii=True import-lines-clean=True append-only-source=True schema-constant=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+run1 exit=0 sha256=1C9BFAC8BE57CBD2
+run2 exit=0 sha256=1C9BFAC8BE57CBD2
+double-run-identical=True
+honest note: first run FAIL AC-JB6 = suite probe bug (month-window read compared to whole-board total; the month subset excludes history rows), fixed before this double-run; product face unchanged.
+
+===== HYGIENE (git status + frozen shipped bytes) =====
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/water_journal.py
+ M state/queue/tech.md
+?? src/sandbox/ugc/test_water_journal_window.py
+git exit=0
+
+===== RUNNER FULL REGRESSION =====
+runner tees its own evidence file: qa/reconcile-all-R1803.log
+runner exit=0 tail-line: RUNNER PASS (96/96 suites green, reconcile controls 7/7, 167.8s)
+
+===== MATRIX REGEN + --CHECK x2 =====
+PASS generated docs/sandbox-suite-matrix.md (9952 bytes) - registry suites=96 criteria=905 evidence=qa/reconcile-all-R1803.log green=96/96
+PASS hygiene: pure-ascii source, zero network imports
+regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9952 bytes, 96 suites, 905 criteria)
+check1 exit=0
+check2 exit=0
+matrix-check-byte-identical=True
+
+===== FINGERPRINT SENTINEL =====
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0

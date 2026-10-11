@@ -88,23 +88,47 @@ class WaterJournalFace:
         self._conn.commit()
         return {"window_id": cur.lastrowid, "kind": kind, "ts_utc": ts}
 
-    def journal_board(self):
-        """Pure read face (AC-WJ3): every archived completed-window row,
-        time ascending with the window_id tie-break (append order kept
-        within one second - deterministic, zero RNG). The compliance
-        three-piece stays resident: ai_generated=0 (server authority),
-        the standing non-advisory disclaimer and the persistent flag."""
-        rows = []
-        for window_id, kind, delta, total_delta, ts_utc in self._conn.execute(
+    def journal_board(self, window=None):
+        """Pure read face (AC-WJ3, AC-JB1..AC-JB7): every archived
+        completed-window row, time ascending with the window_id
+        tie-break (append order kept within one second - deterministic,
+        zero RNG). window=None keeps the whole-board behavior; an
+        explicit YYYY-M filters on the record-time ts_utc month (the
+        same single-column key the kind_tally / monthly_flow faces
+        read) and malformed windows fail closed E_WJ_BAD_WINDOW
+        before any read. The in-window row order is the full-board
+        order restricted to that window: one ORDER BY clause, zero
+        re-sorting. The compliance three-piece stays resident:
+        ai_generated=0 (server authority), the standing non-advisory
+        disclaimer and the persistent flag."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError(
+                    "water journal: window must be YYYY-MM (%s)"
+                    % E_WJ_BAD_WINDOW)
+        if w is None:
+            cur = self._conn.execute(
                 "SELECT window_id, kind, delta, total_delta, ts_utc "
-                "FROM water_windows ORDER BY ts_utc, window_id"):
+                "FROM water_windows ORDER BY ts_utc, window_id")
+        else:
+            cur = self._conn.execute(
+                "SELECT window_id, kind, delta, total_delta, ts_utc "
+                "FROM water_windows WHERE substr(ts_utc, 1, 7) = ? "
+                "ORDER BY ts_utc, window_id", (w,))
+        rows = []
+        for window_id, kind, delta, total_delta, ts_utc in cur:
             rows.append({
                 "window_id": window_id, "kind": kind,
                 "delta": json.loads(delta),
                 "total_delta": total_delta, "ts_utc": ts_utc})
-        return {"journal_board": rows, "total": len(rows),
-                "ai_generated": 0, "disclaimer": self.disclaimer,
-                "persistent": True}
+        env = {"journal_board": rows, "total": len(rows),
+               "ai_generated": 0, "disclaimer": self.disclaimer,
+               "persistent": True}
+        if w is not None:
+            env["window"] = w
+        return env
 
     def kind_tally(self, window=None):
         """Pure dense per-kind aggregation over the append-only ledger
