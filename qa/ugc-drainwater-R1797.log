@@ -1,0 +1,65 @@
+R1797 ugc drain_recover water-delta wiring evidence
+--- suite run 1 (rc=0) ---
+PASS AC-DR1: pre-window None=True envelope-keys=['disclaimer', 'persistent', 'pool_water_delta', 'total_delta'] empty-zero=True receipt-keys=9 zero-counts=True
+PASS AC-DR2: face-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} manual-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} face-total=2 manual-total=2 double-call-identical=True
+PASS AC-DR3: queued=4 cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} total=2 receipt=True drained_rejected=1 never-published=True
+PASS AC-DR5: second-drain=True tables-steady=True zero-window=True ledger={"gate_receipts": 0, "review_queue": 1, "ugc_events": 3, "ugc_ingest_log": 0, "ugc_items": 1}
+PASS AC-DR4: slot-sequence=ingest:susp drain:susp batch:zero drain(empty):zero
+PASS AC-DR6: pure-ascii=True import-lines-clean=True registry-wired=True
+SUITE PASS 6/6
+--- suite run 2 (rc=0) ---
+PASS AC-DR1: pre-window None=True envelope-keys=['disclaimer', 'persistent', 'pool_water_delta', 'total_delta'] empty-zero=True receipt-keys=9 zero-counts=True
+PASS AC-DR2: face-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} manual-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} face-total=2 manual-total=2 double-call-identical=True
+PASS AC-DR3: queued=4 cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} total=2 receipt=True drained_rejected=1 never-published=True
+PASS AC-DR5: second-drain=True tables-steady=True zero-window=True ledger={"gate_receipts": 0, "review_queue": 1, "ugc_events": 3, "ugc_ingest_log": 0, "ugc_items": 1}
+PASS AC-DR4: slot-sequence=ingest:susp drain:susp batch:zero drain(empty):zero
+PASS AC-DR6: pure-ascii=True import-lines-clean=True registry-wired=True
+SUITE PASS 6/6
+--- hygiene git status + zero-drift diff ---
+git status --short:
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/pipeline.py
+ M state/queue/tech.md
+?? qa/ugc-drainwater-R1797.log
+?? src/sandbox/ugc/test_drain_waterwire.py
+
+targeted diff stat (store.py/sec_batch.py/config.json, expect empty):
+
+--- runner tail (rc=0, full log=qa/reconcile-all-R1797.log) ---
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cuo_5_7n\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cuo_5_7n\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cuo_5_7n\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (90/90 suites green, reconcile controls 7/7, 164.1s)
+--- matrix regen (rc=0) ---
+PASS generated docs/sandbox-suite-matrix.md (9484 bytes) - registry suites=90 criteria=863 evidence=qa/reconcile-all-R1797.log green=90/90
+PASS hygiene: pure-ascii source, zero network imports
+--- matrix --check double-run ---
+run 1 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9484 bytes, 90 suites, 863 criteria)
+
+run 2 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9484 bytes, 90 suites, 863 criteria)
+--- fingerprint sentinel (rc=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- honest note: first suite run (pre-fix) ---
+AC-DR4 FAIL on the first run (rc=2, 5/6): the queued probe text
+lacked the gray trigger word, so the recovery window pooled the row
+clean instead of suspending it (test fixture probe defect, not a
+product defect). Probe text fixed to include the gray word; both
+post-fix runs PASS 6/6. The pre-fix FAIL output was overwritten by
+the driver rewrite; preserved here verbatim from the transcript:
+FAIL AC-DR4: slot-sequence=ingest:susp drain:? batch:zero drain(empty):zero
+SUITE FAIL 5/6

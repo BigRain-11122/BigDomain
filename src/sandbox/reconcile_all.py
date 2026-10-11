@@ -623,6 +623,12 @@ SUITES = [
     # with the ingest window (last completed window wins)
     # (AC-BW1..BW6 pre-registered in state/queue/tech.md)
     ("ugc-batch-water", os.path.join("ugc", "test_batch_waterwire.py"), 6),
+    # R1797 UGC drain_recover recovery water-delta wiring: dual live
+    # snapshots around the recovery window; three-window co-residency
+    # (ingest R1794 + batch R1796 + recovery R1797), last completed
+    # window wins, an empty recovery window included
+    # (AC-DR1..DR6 pre-registered in state/queue/tech.md)
+    ("ugc-drain-water", os.path.join("ugc", "test_drain_waterwire.py"), 6),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)

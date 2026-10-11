@@ -82,8 +82,9 @@ class UGCPipeline:
         # the pipeline's own store; legacy direct UGCStore() callers
         # stay untouched. _last_water carries the most recent
         # completed window's delta envelope - the ingest_lobby window
-        # (AC-IW1) and the submit_batch batch window (AC-BW1) share
-        # this single slot, last writer wins (None before any window).
+        # (AC-IW1), the submit_batch batch window (AC-BW1) and the
+        # drain_recover recovery window (AC-DR1) share this single
+        # slot, last writer wins (None before any window).
         self.store = UGC.UGCStore(db_path, disclaimer=self.disclaimer)
         self._last_water = None
         self.desk = ReviewDesk(self.store)
@@ -313,7 +314,21 @@ class UGCPipeline:
         (face.drain), then re-enter the post-gate flow for every clean
         row. Rows from other namespaces stay face-owned (source not in
         SOURCES); rows whose event already exists are skipped - the
-        recovery is idempotent across restarts."""
+        recovery is idempotent across restarts.
+
+        Recovery water wiring (R1797, AC-DR1): two live snapshots
+        around the recovery window - the start snapshot is a pure
+        read at method entry (before the face drain; an exception
+        escaping mid-window leaves no completed window, the slot
+        keeps its previous value), the end delta derives through the
+        store face pool_water_delta(prev) whose current side is one
+        live levels call (single derivation source, R1785). The
+        receipt envelope shape is unchanged; the delta is visible via
+        last_water_delta() - one slot shared by the ingest window
+        (R1794), the batch window (R1796) and this recovery window:
+        the last completed window wins, an empty recovery included
+        (AC-DR4)."""
+        prev_water = self.store.pool_water_levels()  # recovery-start live snapshot (AC-DR1)
         stats = self.batch.drain()
         recovered, skipped, failed = [], 0, 0
         for row in self.batch.rows_by_status(ST_DRAINED_PASS):
@@ -330,6 +345,11 @@ class UGCPipeline:
             except UGC.PipelineError:
                 failed += 1  # honest count; the queue row keeps its
                 # terminal drained_pass verdict either way
+        # recovery-end live delta (AC-DR1): current side re-derives
+        # live inside the store face; the single _last_water slot is
+        # shared by all three windows - the most recent completed
+        # window wins, an empty recovery window included (AC-DR4)
+        self._last_water = self.store.pool_water_delta(prev_water)
         return self._disclaimer({
             "drained": stats["drained"], "passed": stats["passed"],
             "rejected": stats["rejected"],
@@ -448,12 +468,13 @@ class UGCPipeline:
         return receipts
 
     def last_water_delta(self):
-        """R1794/R1796 window water monitor read face (AC-IW1/AC-BW1):
-        the most recent completed window's pool-water delta envelope -
-        an ingest_lobby window (R1794) or a submit_batch batch window
-        (R1796); one shared single slot, last writer wins (AC-BW4).
-        Passed through from the store face unwrapped; None before any
-        window ran (honest empty, no fabricated zeros)."""
+        """R1794/R1796/R1797 window water monitor read face
+        (AC-IW1/AC-BW1/AC-DR1): the most recent completed window's
+        pool-water delta envelope - an ingest_lobby window (R1794), a
+        submit_batch batch window (R1796) or a drain_recover recovery
+        window (R1797); one shared single slot, last writer wins
+        (AC-DR4). Passed through from the store face unwrapped; None
+        before any window ran (honest empty, no fabricated zeros)."""
         return self._last_water
 
     # ---- core pipeline -----------------------------------------------------
