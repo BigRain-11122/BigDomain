@@ -329,6 +329,26 @@ every face back to the 14-row registered values. Measurement
 face, R1727 precedent, not registered into SUITES. Zero
 product files touched.
 
+R1821 extension (kind CHECK constraint engine-side enforcement):
+the [7] ghost injection rode PRAGMA ignore_check_constraints -
+indirect evidence the kind column CHECK exists. This section
+proves the constraint body face on the engine: a default-posture
+out-of-domain kind plain INSERT raises sqlite3.IntegrityError
+carrying the CHECK message and lands zero rows; the pragma switch
+is a reversible dual state (ON lands the very same INSERT, OFF
+on the same connection restores the rejection of a second
+out-of-domain kind); and the positive closed set holds - all
+five legal kinds INSERT cleanly, so the constraint is exactly
+the closed set, never over-restrictive. Positive rows carry an
+empty delta and total_delta 0 (the value faces stay untouched
+while the count faces move: kind_tally(cur_w) gains +1 per legal
+kind). DELETE restore by window_id: the row count returns to 14,
+cell_totals total returns to the registered 11, and the
+whole-board and current-window tallies return to their
+pre-injection dicts - the R1820 world state intact. Measurement
+face, R1727 precedent, not registered into SUITES. Zero
+product files touched.
+
 
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
@@ -2241,6 +2261,199 @@ def main():
         fail = fail or not (lo1_ok and lo2_ok and lo3_ok
                             and lo4_ok)
 
+        # ---- [18] kind CHECK constraint engine-side enforcement
+        # (R1821) ----------------------------------------------
+        # The [7] ghost injection rode PRAGMA
+        # ignore_check_constraints - indirect evidence the kind
+        # column CHECK exists. This section proves the constraint
+        # body face on the engine: a default-posture out-of-domain
+        # kind plain INSERT raises sqlite3.IntegrityError carrying
+        # the CHECK message and lands zero rows; the pragma switch
+        # is a reversible dual state (ON lands the very same
+        # INSERT, OFF on the same connection restores the rejection
+        # of a second out-of-domain kind); and the positive closed
+        # set holds - all five legal kinds INSERT cleanly, so the
+        # constraint is exactly the closed set, never
+        # over-restrictive. Positive rows carry an empty delta and
+        # total_delta 0 (the value faces stay untouched while the
+        # count faces move: kind_tally(cur_w) gains +1 per legal
+        # kind). DELETE restore by window_id: the row count returns
+        # to 14, cell_totals total returns to the registered 11,
+        # and the whole-board and current-window tallies return to
+        # their pre-injection dicts - the R1820 world state intact.
+
+        ck_bad_kind = "check-probe-kind"
+
+        def ck_ro_scalar(sql, args=()):
+            ck_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            val = ck_ro.execute(sql, args).fetchone()[0]
+            ck_ro.close()
+            return val
+
+        ck_pre_n = ck_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        ck_tally_pre_all = pipe.journal.kind_tally()[
+            "kind_tally"]
+        ck_tally_pre_cur = pipe.journal.kind_tally(
+            window=cur_w)["kind_tally"]
+
+        # AC-CK1: default posture rejects, zero rows landed
+        ck_exc1 = None
+        ck_msg1 = None
+        ck_conn1 = sqlite3.connect(journal_db)
+        try:
+            ck_conn1.execute(
+                "INSERT INTO water_windows (kind, delta,"
+                " total_delta, ts_utc) VALUES (?, ?, ?, ?)",
+                (ck_bad_kind, "{}", 0,
+                 cur_w + "-21T00:00:00.000000Z"))
+            ck_conn1.commit()
+        except sqlite3.IntegrityError as exc:
+            ck_exc1 = type(exc).__name__
+            ck_msg1 = str(exc)
+        ck_conn1.close()
+        ck_bad_n = ck_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE kind = ?", (ck_bad_kind,))
+        ck_msg_hit1 = (isinstance(ck_msg1, str)
+                       and "CHECK constraint failed" in ck_msg1
+                       and "kind IN" in ck_msg1)
+        ck1_ok = (ck_exc1 == "IntegrityError"
+                  and ck_msg_hit1 and ck_bad_n == 0
+                  and ck_ro_scalar(
+                      "SELECT COUNT(*) FROM water_windows")
+                  == ck_pre_n == 14)
+
+        # AC-CK2: pragma switch dual state and reversibility
+        ck_conn2 = sqlite3.connect(journal_db)
+        ck_conn2.execute("PRAGMA ignore_check_constraints = ON")
+        ck_conn2.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES (?, ?, ?, ?)",
+            (ck_bad_kind, "{}", 0,
+             cur_w + "-21T00:00:00.000000Z"))
+        ck_conn2.commit()
+        ck_on_wid = ck_conn2.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE kind = ?", (ck_bad_kind,)).fetchone()[0]
+        ck_conn2.execute("PRAGMA ignore_check_constraints = OFF")
+        ck_exc2 = None
+        ck_msg2 = None
+        try:
+            ck_conn2.execute(
+                "INSERT INTO water_windows (kind, delta,"
+                " total_delta, ts_utc) VALUES (?, ?, ?, ?)",
+                ("check-probe-kind-2", "{}", 0,
+                 cur_w + "-21T00:00:00.000000Z"))
+            ck_conn2.commit()
+        except sqlite3.IntegrityError as exc:
+            ck_exc2 = type(exc).__name__
+            ck_msg2 = str(exc)
+        ck_conn2.close()
+        ck_on_n = ck_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        ck_bad2_n = ck_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE kind = 'check-probe-kind-2'")
+        ck_tally_mid = pipe.journal.kind_tally(
+            window=cur_w)["kind_tally"]
+        ck_msg_hit2 = (isinstance(ck_msg2, str)
+                       and "CHECK constraint failed" in ck_msg2
+                       and "kind IN" in ck_msg2)
+        ck2_ok = (ck_on_wid is not None
+                  and ck_on_n == ck_pre_n + 1
+                  and ck_exc2 == "IntegrityError"
+                  and ck_msg_hit2 and ck_bad2_n == 0
+                  and ck_tally_mid.get(ck_bad_kind) == 1)
+
+        # AC-CK3: positive closed set - the five legal kinds all
+        # pass; the count faces follow each kind +1 (baseline =
+        # the post-CK2 state, whose switched row stays visible
+        # as an appended tally key - the R1801 never-hide law;
+        # the pre-registered 11->16 arithmetic missed the CK2
+        # row landing in the same month - honest correction,
+        # 12+5=17 with the appended key in evidence)
+        ck_pos_wids = []
+        ck_conn3 = sqlite3.connect(journal_db)
+        for ck_k in ("ingest", "batch", "drain", "submit",
+                     "verdict"):
+            ck_cur = ck_conn3.execute(
+                "INSERT INTO water_windows (kind, delta,"
+                " total_delta, ts_utc) VALUES (?, ?, ?, ?)",
+                (ck_k, "{}", 0,
+                 cur_w + "-21T00:00:00.000000Z"))
+            ck_conn3.commit()
+            ck_pos_wids.append(ck_cur.lastrowid)
+        ck_conn3.close()
+        ck_tally_post_env = pipe.journal.kind_tally(
+            window=cur_w)
+        ck_tally_post = ck_tally_post_env["kind_tally"]
+        ck_want = {}
+        for ck_k in ck_tally_mid:
+            ck_want[ck_k] = ck_tally_mid[ck_k] + (
+                1 if ck_k in ("ingest", "batch", "drain",
+                              "submit", "verdict") else 0)
+        ck3_ok = (ck_tally_post == ck_want
+                  and ck_tally_post_env["total"]
+                  == sum(ck_want.values()) == 17
+                  and len(ck_pos_wids) == 5
+                  and ck_ro_scalar(
+                      "SELECT COUNT(*) FROM water_windows")
+                  == ck_pre_n + 6)
+
+        # AC-CK4: DELETE restore - the R1820 world state intact
+        ck_conn4 = sqlite3.connect(journal_db)
+        for ck_wid in [ck_on_wid] + list(ck_pos_wids):
+            ck_conn4.execute(
+                "DELETE FROM water_windows WHERE window_id = ?",
+                (ck_wid,))
+        ck_conn4.commit()
+        ck_conn4.close()
+        ck_rest_n = ck_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        ck_rest_total = int(
+            pipe.journal.cell_totals()["total"])
+        ck_rest_tally_all = pipe.journal.kind_tally()[
+            "kind_tally"]
+        ck_rest_tally_cur = pipe.journal.kind_tally(
+            window=cur_w)["kind_tally"]
+        ck4_ok = (ck_rest_n == ck_pre_n
+                  and pipe.journal.journal_board()["total"]
+                  == ck_pre_n
+                  and ck_rest_total == 11
+                  and ck_rest_tally_all == ck_tally_pre_all
+                  and ck_rest_tally_cur == ck_tally_pre_cur)
+
+        sections.append("[18] kind CHECK enforcement:")
+        sections.append("    default-reject: exc=%s msg-hit=%s"
+                        " rows=%d bad-rows=%d %s"
+                        % (ck_exc1, ck_msg_hit1, ck_pre_n,
+                           ck_bad_n,
+                           "OK" if ck1_ok else "DRIFT"))
+        sections.append("    pragma-dual-state: on-wid=%d"
+                        " rows=%d off-exc=%s off-rows=%d"
+                        " tally-vis=%s %s"
+                        % (ck_on_wid, ck_on_n, ck_exc2,
+                           ck_bad2_n,
+                           ck_tally_mid.get(ck_bad_kind),
+                           "OK" if ck2_ok else "DRIFT"))
+        sections.append("    positive-closed-set: wids=%s"
+                        " tally-follow=%s total=%d %s"
+                        % (ck_pos_wids,
+                           ck_tally_post == ck_want,
+                           ck_tally_post_env["total"],
+                           "OK" if ck3_ok else "DRIFT"))
+        sections.append("    restore: rows=%d total=%d"
+                        " tally-all-ok=%s tally-cur-ok=%s %s"
+                        % (ck_rest_n, ck_rest_total,
+                           ck_rest_tally_all == ck_tally_pre_all,
+                           ck_rest_tally_cur == ck_tally_pre_cur,
+                           "OK" if ck4_ok else "DRIFT"))
+        fail = fail or not (ck1_ok and ck2_ok and ck3_ok
+                            and ck4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2256,7 +2469,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[18] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[19] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
