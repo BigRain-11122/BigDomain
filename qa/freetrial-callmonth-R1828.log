@@ -1,0 +1,22 @@
+﻿PASS AC-CBM1: zero-call world honest empty (True); envelope keys exact; month keys ascending ['2026-08', '2026-09', '2026-10']; cells {'2026-08': 2, '2026-09': 3, '2026-10': 3}; total 8; window key additive on explicit read; config bytes stable
+PASS AC-CBM2: 14 bad forms rejected E_FT_BAD_ARGS; four-table counts unchanged (2, 2, 8, 0); None default accepted
+PASS AC-CBM3: history month 2026-08 cell == {2}; month 2026-09 cell == {3}; future 2026-11 honest empty; default read carries all three months; zero cross-month leakage
+PASS AC-CBM4: per-cell counts == manual SQL GROUP BY; total 8 == COUNT(*) == sum(cells); key order == SQL ORDER BY ascending; windowed total == manual SQL 3
+PASS AC-CBM5: method source free of data-changing statements; four-table counts unchanged (2, 2, 8, 0); double-call dumps byte-identical (sorted and insertion order); windowed double-call identical
+PASS AC-CBM6: new live call: current-month cell 3 -> 4; total 8 -> 9; windowed read follows; history month cell unchanged
+PASS AC-CBM7: freetrial.py pure ASCII; import lines network-free (5 imports); SUITES registration row present; criteria drift self-check 6+1==7
+SUITE PASS 7/7 exit=0
+
+--- section 2: double-run determinism (R1828) ---
+sha16 run1=877704F135795248 sha16 run2=877704F135795248 identical=True (zero RNG, zero timestamps in readouts)
+
+--- section 3: full RUNNER regression ---
+PASS suite ledger-freetrial-callmonth exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (102/102 suites green, reconcile controls 7/7, 174.4s)
+= qa/reconcile-all-R1828.log (101->102 suites, criteria 940->947, zero regression)
+--- section 4: matrix regen + fingerprint sentinel ---
+PASS generated docs/sandbox-suite-matrix.md (10486 bytes) - registry suites=102 criteria=947 evidence=qa/reconcile-all-R1828.log green=102/102
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10486 bytes, 102 suites, 947 criteria)
+verdict CLEAN domains=5 (zero schema touch: freetrial 4-table baseline preserved)
+--- section 5: hygiene ---
+shipped config.json byte-stable (AC-CBM1 in-suite byte compare); git status face = freetrial.py + reconcile_all.py SUITES row + new suite file only

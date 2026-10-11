@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T22:49:04+08:00",
+  "export_ts": "2026-10-11T23:16:24+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1827 一句话：修好了跑测试工具的中文乱码根子——以前测试证据文件里的中文有时变成乱码、有时变成错误字（两种形态都用字节查清了原因），现在把测试工具的输出统一钉成标准 utf-8 编码，101 项测试照旧全绿零回归，新证据文件干净可读；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
-    "latest_artifact": "最近实物：src/sandbox/reconcile_all.py（子进程输出编码统一三处修复：子进程发射钉+父进程解码钉+父自身流钉）+qa/reconcile-all-R1827.log（全量回归 101 项全绿+中文判定正确）+qa/reconcile-runner-encode-R1827.log（验证全记录）·2026-10-11 22:49。",
-    "next_milestone": "下个实物：tech 队列按序交付（freetrial 免费调用月窗计数读面/water sqlite_sequence 簿记行篡改探针窗/apidev lineage 链内用量聚合读面窗·判据先立再写代码）+daily 对账常设每日首轮+10-16 治理窗回访面+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1828 一句话：给开发者免费试用面补上了「每个月调用了多少次」的统计读面——按月份聚合计数的纯读面、可指定单月过滤、坏参数一律拒绝，判据先立再写代码，7 项验收全绿，全套 102 项回归测试零回归；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/freetrial.py（calls_by_month 月剖面纯读聚合面）+src/sandbox/ledger/test_freetrial_callmonth.py（验收套件 7/7）+qa/freetrial-callmonth-R1828.log（验收+回归+矩阵+哨兵五节证据）·2026-10-11T23:16:24+08:00。",
+    "next_milestone": "下个实物：tech 队列按序交付（freetrial 调用 by-kind 计数读面窗/water sqlite_sequence 簿记行篡改探针窗/apidev lineage 链内用量聚合读面窗·判据先立再写代码）+daily 对账常设每日首轮+10-16 治理窗回访面+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "freetrial 调用月窗计数读面交付（R1828·P2 tech 队头 FIFO 最老可认领项〔R1793 补种〕·轮计分 2=可跑实物：AC-CBM1..CBM7 预注册先于代码〔tech.md R1828 认领行本行即册·AC-CBM 前缀全仓扫描无主〕——freetrial.py calls_by_month(window=None) 纯读聚合面 additive 落成：缺省 None=全窗月→计数 dict〔envelope 恰三键 calls_by_month/total/disclaimer·月键升序零 RNG·total==Σ==COUNT(*) 双不变量〕+零调用世界 {}+total=0 诚实空+显式 YYYY-MM 窗读=恰该月格或 {} 诚实空+window 键 additive 缺省面零键漂移+坏窗 14 形态全拒 E_FT_BAD_ARGS 零副作用〔四表计数前后同一〕+历史月 fixture 直注入注明+manual SQL GROUP BY 逐位等+月键序==SQL ORDER BY 升序同构+纯读律〔方法源 inspect 零写语句+四表计数前后同一+双调 json.dumps 双形态逐字节同一〕+活态零缓存〔新调用当前月格 3→4·total 8→9·历史月格不动〕+卫生〔源纯 ASCII·真 import 5 行零网络·config.json 逐字节稳定〕——SUITE PASS 7/7 exit 0 首跑全绿+双跑 sha16 877704F135795248 逐字节同一·reconcile_all SUITES 101→102 判据 940→947 接线〔ledger-freetrial-callmonth 行〕+RUNNER PASS 102/102 controls 7/7 174.4s 零回归=qa/reconcile-all-R1828.log·矩阵再生 102/947 green --check byte-identical〔10486B·缺省发现面=本轮 RUNNER 件〕·指纹哨兵 CLEAN domains=5〔freetrial 四表基线保真〕·证据 qa/freetrial-callmonth-R1828.log 五节·queue_tech_open 10→9 补种 1→10〔freetrial 调用 by-kind 计数读面窗〕·GORD 表压缩 402→273〔尾 3 行=BigLife 点名复工令+CEO 道具令+导演席/道具席失职纠偏令——全他司执行面知悉不动作·基线随轮校〕·R1828）"
+    ],
     [
       "2",
       "reconcile_all \u5b50\u8fdb\u7a0b\u8f93\u51fa\u7f16\u7801\u7edf\u4e00\u9762\u4ea4\u4ed8\uff08R1827\u00b7P2 tech \u961f\u5934 FIFO\u3010R1792 \u8865\u79cd\u3011\u00b7\u8f6e\u8ba1\u5206 2=\u53ef\u8dd1\u5b9e\u7269\uff1aAC-PE1..PE7 \u9884\u6ce8\u518c\u5148\u4e8e\u4ee3\u7801\u3010tech.md R1827 \u8ba4\u9886\u884c\u672c\u884c\u5373\u518c\u3011+\u5b57\u8282\u8003\u53e4\u52d8\u6b63\u4e09\u6001\u5199\u5165\u8005\u5728\u518c\u3010R1791/92 \u65e0 argv \u58f3\u539f\u59cb\u91cd\u5b9a\u5411 cp936+CRLF \u88f8 GBK\u00b7R1824/25 \u58f3\u518d\u7f16\u7801\u6355\u83b7 CRLF+utf-8 \u53ef\u89e3\u4f46 AC-L9 \u884c mojibake \u941c\u3054\u757e=\u5b50 utf-8 \u5b57\u8282\u88ab run_cmd \u6309\u673a\u5730 cp936 \u8bef\u89e3\u7801\u00b7R1803-05 Tee \u6b63\u8eab LF+utf-8 \u5224\u5b9a\u6b63\u3011\u2014\u2014\u4e09\u9489\u4fee\u6cd5\uff1arun_cmd \u6bcf\u5b50 spawn env \u6ce8 PYTHONIOENCODING=utf-8\uff08\u8986\u76d6 ambient\uff09+\u7236\u7ba1\u9053\u663e\u5f0f encoding=utf-8\uff08\u673a\u5730\u6c38\u4e0d\u53c2\u4e0e\uff09+main\uff08\uff09 sys.stdout.reconfigure utf-8/replace\uff08\u65e0 argv \u58f3\u6355\u83b7\u5f84\u7236\u6d41\u4ea6\u5355\u65b9\u8a00\uff09\u00b7\u5b50\u5957\u4ef6\u6e90\u96f6\u6539\u52a8\u3010\u79cd\u5b50\u660e\u5f8b\u3011\u2014\u2014\u4e09\u6001\u53d1\u5c04\u63a2\u9488\u9010\u6001\u540c\u771f\uff08unset/utf-8/cp936\uff09+\u53cc\u5411 pre-fix \u8865\u4f53\u6f14\u793a\uff08cp936 \u5b57\u8282 utf-8 \u4e25\u62d2=R1791/92 \u75c5\u673a\u00b7utf-8 \u5b57\u8282 gbk \u89e3=R1824/25 \u75c5\u673a\u65cf\uff09+\u5168\u91cf RUNNER PASS 101/101 suites 940 \u5224\u636e controls 7/7 178.6s \u96f6\u56de\u5f52=qa/reconcile-all-R1827.log\uff08Tee \u6b63\u8eab LF utf-8\u00b7AC-L9 \u884c E588A4E5AE9A \u5224\u5b9a\u6b63\u00b7\u96f6 mojibake \u96f6\u88f8 GBK\uff09+\u955c\u50cf\u6d41 utf-8 \u4e25\u683c\u89e3\u7801 202523B \u96f6\u9519\uff08\u7236\u6d41\u9489\uff09+legacy \u56db\u4ef6 sha256 \u9010\u5b57\u8282\u540c\u4e00\uff08append-only \u4fdd\u5168\uff09+qa_decode_probe census exit 0+\u6e90\u7eaf ASCII 58440B \u96f6\u7f51\u7edc\u2014\u2014\u9996\u8dd1 harness complement-B \u671f\u671b\u8f6c\u5199\u9519 1 FAIL=qa \u8f6c\u5f55\u4ef6 [7] addendum \u5982\u5b9e\u7559\u75d5+\u673a\u5236\u771f\u65ad\u8a00\u590d\u9a8c PASS\uff08\u4ea7\u54c1\u5224\u636e\u96f6\u6d89\u00b7\u7ec8\u6001\u4ea7\u54c1 fails=0\uff09\u00b7queue_tech_open 10\u21929 \u8865\u79cd 1\u219210\u3010\u65e0 argv \u81ea\u6807\u6ce8+daily \u94fe\u4e92\u8bc1\u7a97\u3011\u00b7R1827\uff09"
@@ -496,7 +500,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1827",
+      "1828",
       "OSLoop 执行 tick"
     ],
     [
@@ -3403,15 +3407,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 16,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1827 reconcile_all child-pipe utf-8 unification delivered (score 2, P2 tech FIFO head R1792 seed; AC-PE1..PE7 pre-registered before code; three pins: per-child env PYTHONIOENCODING=utf-8 + explicit utf-8 pipe decode + main() stdout reconfigure; 3-ambient-state probe identical; RUNNER 101/101 suites 940 criteria controls 7/7 178.6s zero-reg; evidence qa/reconcile-runner-encode-R1827.log + qa/reconcile-all-R1827.log); window counting recomputed mechanically from state.json log 2026-10-05..2026-10-11 (W=14, sub=5, idle=0, nop=0)"
+    "method": "R1828 freetrial calls_by_month month-profile pure-read face delivered (score 2, P2 tech FIFO head R1793 seed; AC-CBM1..CBM7 pre-registered before code; global month-profile aggregation over immutable trial_calls rows, window=None default + explicit YYYY-MM filtering; suite 7/7 first-run green + double-run sha16 877704F135795248; RUNNER 102/102 suites 947 criteria controls 7/7 174.4s zero-reg; evidence qa/freetrial-callmonth-R1828.log + qa/reconcile-all-R1828.log); window counting recomputed mechanically from state.json log 2026-10-05..2026-10-11 (W=16, sub=6, idle=0, nop=0)"
   }
 }

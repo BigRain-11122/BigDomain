@@ -628,6 +628,14 @@ SUITES = [
     # (AC-CFW1..CFW7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-funnelwin",
      os.path.join("ledger", "test_freetrial_funnelwin.py"), 7),
+    # R1828 free-trial calls-by-month pure read face: global
+    # month-profile aggregation over immutable trial_calls rows
+    # (record-time single column), window=None full-window
+    # default; explicit YYYY-MM keeps that month's cell only;
+    # malformed windows fail closed E_FT_BAD_ARGS
+    # (AC-CBM1..CBM7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-callmonth",
+     os.path.join("ledger", "test_freetrial_callmonth.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

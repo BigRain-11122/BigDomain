@@ -653,3 +653,62 @@ class FreeTrialFace:
             env["window"] = w
         env["disclaimer"] = self.disclaimer
         return env
+
+    def calls_by_month(self, window=None):
+        """Free-trial call volume by calendar month (R1793
+        tech-queue follow-up row; the seed = the trial_calls
+        table itself): a pure-read aggregation over immutable
+        call rows with one dict cell per observed month key
+        holding the call count - the global by-month profile
+        the per-plan lifetime counters (plan_view / trial_view)
+        never surface. Aggregation walks
+        substr(called_utc, 1, 7) - the record-time column is
+        the row's own provenance stamp on this immutable table
+        (single event family, single column - the R1793 grant
+        /conversion pair used two record-time columns because
+        two row families were filtered; this face has one).
+        Month keys ascend in query order (a unique group key,
+        so the dict is deterministic with zero dice and zero
+        insertion-order keys); a zero-call world is the honest
+        empty mapping with total 0 - no phantom months.
+
+        Window parameterization (the R1730/R1732/R1735/R1784
+        family law): window=None keeps the full-window
+        aggregate; an explicit "YYYY-MM" month window keeps
+        only that month's cell (an empty mapping when the
+        month holds zero rows). A malformed window fails
+        closed E_FT_BAD_ARGS before any read. Every count is
+        derived at read time over immutable rows: zero cached
+        counters, zero stored state. The explicit-window
+        envelope adds one "window" key (additive); the
+        default envelope is byte-identical in shape. Pure
+        read."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise TrialError(E_FT_BAD_ARGS,
+                                 "window must be YYYY-MM: %r"
+                                 % (window,))
+        with self._lock:
+            if w is None:
+                rows = self._conn.execute(
+                    "SELECT substr(called_utc, 1, 7), COUNT(*)"
+                    " FROM trial_calls"
+                    " GROUP BY substr(called_utc, 1, 7)"
+                    " ORDER BY substr(called_utc, 1, 7)").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT substr(called_utc, 1, 7), COUNT(*)"
+                    " FROM trial_calls"
+                    " WHERE substr(called_utc, 1, 7) = ?"
+                    " GROUP BY substr(called_utc, 1, 7)"
+                    " ORDER BY substr(called_utc, 1, 7)",
+                    (w,)).fetchall()
+            by_month = {str(r[0]): int(r[1]) for r in rows}
+            total = sum(by_month.values())
+        env = {"calls_by_month": by_month, "total": total}
+        if w is not None:
+            env["window"] = w
+        env["disclaimer"] = self.disclaimer
+        return env
