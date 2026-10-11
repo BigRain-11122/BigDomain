@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-12T03:21:43+08:00",
+  "export_ts": "2026-10-12T03:37:28+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1839 一句话：给 chain_usage 谱系用量读面补上「跨月保真」例。冻结时钟跨过月界后：默认读跟着新月窗走（新月没调用就诚实全零）、旧月显式读原值不动、新调用落进新月窗并把谱系/闸门/面板三面重新对齐、任何旧行不丢——四段全过，套件 8/8 首跑全绿，双跑逐字节同一。",
-    "latest_artifact": "最近实物：src/sandbox/ledger/test_apidev_chainusage.py（AC-LU8 月滚保真例节·判据 8/8）+qa/apidev-chainusage-roll-R1839.log（五节证据）+qa/reconcile-all-R1839.log（RUNNER 107/107·判据 986→987）·2026-10-12 R1839",
-    "next_milestone": "下个实物：技术队列按序交付（下一项=eventtickets 审计榜读帽参数窗·写入者普查基线/用量帽距剖面等 10 项在册·判据先立再写代码）+每日首轮对账照常+2026-10-14 21:40 雷达候选清单窗续候·窗 <=48h（2026-10-14 前）"
+    "current": "R1840 一句话：给 event_audit_board 审计榜补上「读帽」参数——limit=0 全量行为零漂移；limit>0 取 session_key 升序尾窗 N 行（=镜像 SQL DESC LIMIT 反转的同一行集）；溢出块四键 {limit,total,returned,truncated} 如实报「窗内全量计数」，截断永不撒谎；坏参 fail-closed、窗×帽正交、零会话空板诚实，套件 7/7 首跑全绿，双跑逐字节同一。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/test_eventtickets_boardlimit.py（AC-ETL1..ETL7·判据 7/7）+qa/eventtickets-boardlimit-R1840.log（五节证据）+qa/reconcile-all-R1840.log（RUNNER 108/108·判据 987→994）｜2026-10-12 R1840",
+    "next_milestone": "下个实物：技术队列按序交付（下一项 qa/ 写入者模式普查基线+漂移探测器·判据先立再写代码）+每日首轮对账照常+2026-10-14 21:40 雷达候选清单续候·窗 ≤48h（2026-10-14 前发）"
   },
   "depts": [
     {
@@ -198,6 +198,7 @@
     ]
   ],
   "results": [
+    ["2", "eventtickets 审计榜读帽参数窗交付（R1840·P2 tech 队头 FIFO 最老可认领项〔R1834 补种 LN128〕·轮计分 2=可跑实物）：AC-ETL1..ETL7 判据预注册先于代码〔tech.md R1840 认领行本行即册·AC-ETL 前缀全仓扫描无主·设计裁定四条入册：溢出块键集勘正=种子句「三键」按 R1729 usage_log 同型改定四键 {limit,total,returned,truncated}〔event_audit_board 缺省信封无 total 键·R1804 journal_board 缺省有 total 故其三键成立·诚实截断读必须携全量计数=R1704 前提更正先例〕/门序=limit 门先于窗门/截断行序=升序尾窗切片=镜像 SQL DESC LIMIT 反转逐位等价/缺省哨兵唯 0〕——eventtickets.py event_audit_board(window=None, limit=0) 尾参 limit additive 落成〔+33/-2〕：缺省 0=全量现行行为逐字节保真+五坏形态 {-1/True/\"2\"/2.5/None} 全拒 E_ET_BAD_LIMIT fail-closed 零副作用+双坏门序 limit 先执法+尾窗截断 rows==全量读 rows[-2:] 逐位+镜像 SQL 独立 ro 连接交叉逐位等+溢出块四键 additive〔window 键共存〕+窗×帽正交组合三窗全测〔total==窗内全量计数非截断后〕+边界态〔limit==total/50 over 4/limit=1 单尾/零会话世界空板四键照带〕+纯读律〔inspect 零数据变更语句+三表计数前后同一+双调逐字节同一〕——套件 SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 逐字节同一〔sha16 92665fcfed01ea6e〕·reconcile_all SUITES 107→108 判据 987→994+RUNNER PASS 108/108 controls 7/7 183.4s 零回归=qa/reconcile-all-R1840.log·矩阵再生 108/994 --check byte-identical〔11044B〕·指纹哨兵 CLEAN domains=5·shipped config.json 逐字节零改动·证据 qa/eventtickets-boardlimit-R1840.log 五节"],
     ["2", "apidev chain_usage 月滚动保真例收口（R1839·P2 tech 队头 FIFO 最老可认领项〔R1833 补种 LN131〕·轮计分 2=可跑实物）：AC-LU8 月滚保真例（R1739 usagewin 对称例收口=窗参族月滚例四席齐）预注册先于代码——专用 roll 链〔usr:mia 新户·roll-a cap 3 先 2 调→rotate roll-b 1 调=eff 3 恰满帽·第 4 调 E_AD_QUOTA 拒=帽满锚〕+冻结钟 +23d 跨月四段全过：①缺省读随新月窗（2026-11 诚实全零）②旧月显式读原值保全（两窗互不渗透）③新调用落新月窗（quota ring 随 _window_utc 滚动+record-time 窗戳==2）∧谱系-闸面-面板三方对齐（chain_usage effective==_effective_window_count==key_view quota_used==2）④不可变行永不丢失（全窗 5==10 月 3+11 月 2）——套件 8/8 首跑全绿+双跑 sha256 逐字节同一·RUNNER PASS 107/107 判据 986→987 controls 7/7 零回归·矩阵 107/987 --check byte-identical·引用勘误（「R1839 usagewin」→R1739 笔误）注记入册·证据 qa/apidev-chainusage-roll-R1839.log"],
     ["2", "water journal sqlite_sequence 簿记行 DELETE 缺失态负路径探针件（R1838·P2 tech 队头 FIFO 最老可认领项〔R1832 补种 LN130〕·轮计分 2=可跑实物：AC-SQD1..SQD5 预注册先于代码〔tech.md R1838 认领行本行即册·AC-SQD 前缀全仓扫描无主（AC-DM 形撞车 driftmonth R1813 换 SQD）〕+dm_precheck 引擎语义实证预验先行（SQLite 3.50.4 十检全过·首跑实证判负原裁定②「蒸发后直接重插」=sqlite_sequence.name 无 UNIQUE 重复行构造+fetchone 恒读旧行 hazard→tech.md 裁定②+AC-SQD3/SQD5 修正在产品代码落盘前完成=预检先行律执法实录）——探针 [22] 节〔hygiene 顺移 [23]〕：AC-SQD1 缺失态落成（簿记行 DELETE→ro 面 rows==0+water rows==14 不动+值面 total 零扰）+AC-SQD2 退化分配+复用+自重建（fresh INSERT lastrowid==15==max(rowid)+1≠seq+1==27=缺失态同失守构造·board(cur_w) 11→12 计数面显形·值面零扰·簿记行自重建 seq==15）+AC-SQD3 UPDATE 自重建行恢复（seq 15→26·簿记 rows==1·water rows==15）+AC-SQD4 世界复绿（复用行精确删→rows 14·seq 恒 26·tally 全榜/当月+total+board cur 全回注册值）+AC-SQD5 二轮缺失+重插恢复+再武装+纯读+确定性（真缺失直接重插 (name,26) 零消耗 id→再武装 fresh INSERT 分配 27==seq+1≠15=no-reuse 经纯簿记写重武装→删后 rows 14/seq 27 诚实终态·ro 面 pre==post==14）——首跑全绿零修正·双跑 stdout 逐字节同一 sha16 8F1B6AA8DD92D4DB（零时间戳零路径）·PROBE VERDICT CONSISTENT+DETECTING（[1]..[21] 零回归）·[23] 卫生 probe-ascii=True+import-lines-clean=True+frozen 四件 sha16 前后同一=零产品字节·测量面不入 SUITES（R1727 先例）·证据 qa/water-seqmissing-R1838.log 五节·queue_tech_open 消耗 1 补种 1=10（簿记行重复行构造负路径探针窗）·R1838）"],
     [
@@ -534,7 +535,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1839",
+      "1840",
       "OSLoop 执行 tick"
     ],
     [
@@ -3441,15 +3442,15 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 40,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1839 apidev chain_usage month-rollover truth-preservation example delivered (score 2 = runnable artifact; P2 tech FIFO head LN131 R1833 seed; AC-LU8 pre-registered before code; dedicated roll chain usr:mia with cap anchor E_AD_QUOTA; frozen clock +23d: default read follows the new month honest-empty, old month explicit read preserved, new calls land record-time stamped, lineage/gate/panel three-way re-aligned, immutable rows never lost; suite 8/8 first-run green + double-run sha identical; RUNNER PASS 107/107 criteria 986->987 controls 7/7 zero regression; matrix 107/987 check byte-identical; queue tech open 10 maintained)"
+    "method": "R1840 eventtickets audit-board read-cap limit parameter delivered (score 2 = runnable artifact; P2 tech FIFO oldest R1834 seed LN128; AC-ETL1..ETL7 pre-registered before code; seed three-key overflow block honestly corrected to four keys per R1729 usage_log same-type; limit gate before window gate, five bad forms E_ET_BAD_LIMIT fail-closed, tail-window slice == mirror SQL DESC LIMIT reversed, window-x-cap orthogonal across three windows, zero-session honest empty; suite 7/7 first-run green, double-run sha16 92665fcfed01ea6e byte-identical; RUNNER PASS 108/108 criteria 987->994 controls 7/7 183.4s zero regression; matrix 108/994 --check byte-identical; fingerprint sentinel CLEAN domains=5; evidence qa/eventtickets-boardlimit-R1840.log; GORD baseline 270->277 structural drift all-BigStream rows; queue tech open 10 maintained, reseed monthcross cap-orthogonality probe)"
   }
 }

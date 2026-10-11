@@ -1,0 +1,36 @@
+=== R1840 eventtickets boardlimit evidence ===
+suite: test_eventtickets_boardlimit.py (criteria AC-ETL1..AC-ETL7 pre-registered in state/queue/tech.md R1840 claim line before product code)
+
+--- RUN1 stdout verbatim (utf-8) ---
+PASS AC-ETL1: default limit=0 envelope keys exact=True; double-call byte-identical=True; 4 sessions ascending with the 8-key row shape=True; limit>0 adds exactly four keys {limit,total,returned,truncated}=True; window+limit keys coexist=True
+PASS AC-ETL2: 5/5 malformed limits rejected E_ET_BAD_LIMIT (-1 / True / "2" / 2.5 / None; the sole sentinel is 0); three-table counts flat (4, 2, 1) -> (4, 2, 1); double-bad (bad window + bad limit) fires E_ET_BAD_LIMIT first=True; bad window alone still E_ET_BAD_ARGS=True
+PASS AC-ETL3: limit=2: returned=2 truncated=True total=4=True; rows == full-read tail slice byte-equal=True; mirror SQL (DESC LIMIT 2 reversed) == product session_key order ['m-charlie', 'zulu-empty']=True
+PASS AC-ETL4: limit==total (4/4): truncated=False all rows=True; limit>total (50 over 4)=True; limit=1 single tail row=True; zero-session world limit=3: empty board, returned=0 total=0 truncated=False with the four cap keys present=True
+PASS AC-ETL5: window filter before LIMIT, each window [2026-08 rows=4 cap-tail-eq=True; 2026-10 rows=4 cap-tail-eq=True; 2026-11 rows=4 cap-tail-eq=True]: capped rows == windowed-full tail slice; total == in-window full count (registry-driven dense axis, window-invariant); returned/truncated computed against the in-window count=True
+PASS AC-ETL6: three-table counts flat across every limit form (4, 2, 1) -> (4, 2, 1); method source carries zero data-changing statements (inspect)=True; capped windowed double-call byte-identical=True
+PASS AC-ETL7: module pure ASCII (0 non-ascii); zero network imports (0); zero mutation surface for own tables; zero dice; config.json byte-stable (sha16 32b018fad53fb8bc); reconcile_all SUITES row 'ledger-eventtickets-boardlimit' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+
+--- RUN2 determinism ---
+run1 exit=0 sha256=92665fcfed01ea6eaf84830d53eb696a51a1266fcb92ce38e4978c6e2f825d65
+run2 exit=0 sha256=92665fcfed01ea6eaf84830d53eb696a51a1266fcb92ce38e4978c6e2f825d65
+run1-stderr-empty=True run2-stderr-empty=True
+DOUBLE-RUN BYTE-IDENTICAL: True (sha1==sha2=True)
+
+
+--- RUNNER excerpt (qa/reconcile-all-R1840.log) ---
+  | PASS AC-ETL7: module pure ASCII (0 non-ascii); zero network imports (0); zero mutation surface for own tables; zero dice; config.json byte-stable (sha16 32b018fad53fb8bc); reconcile_all SUITES row 'ledger-eventtickets-boardlimit' registered; criteria drift self-check 6/7
+PASS suite ledger-eventtickets-boardlimit exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suites 108/108 green, expected criteria total=994
+RUNNER PASS (108/108 suites green, reconcile controls 7/7, 183.4s)
+
+--- matrix --check (mechanical re-derivation) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11044 bytes, 108 suites, 994 criteria)
+
+--- fingerprint sentinel --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

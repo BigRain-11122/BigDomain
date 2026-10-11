@@ -597,6 +597,20 @@ SUITES = [
     # (AC-EAW1..EAW7 pre-registered in state/queue/tech.md).
     ("ledger-eventtickets-boardwin",
      os.path.join("ledger", "test_eventtickets_boardwin.py"), 7),
+    # R1840 event-ticket audit-board read-cap parameterization:
+    # default limit=0 keeps the full board byte-identical; a
+    # positive limit keeps the last N sessions in session_key
+    # ascending order (the tail window = the mirror clause
+    # DESC LIMIT reversed back), window filtering runs before
+    # the cap (orthogonal), the overflow block reports the
+    # in-window full count under "total" (four keys
+    # {limit,total,returned,truncated}, the R1729 usage_log
+    # same-type shape - the default envelope carries no total
+    # key); a malformed limit fails closed E_ET_BAD_LIMIT
+    # before the window gate (the double-bad gate-order law)
+    # (AC-ETL1..ETL7 pre-registered in state/queue/tech.md).
+    ("ledger-eventtickets-boardlimit",
+     os.path.join("ledger", "test_eventtickets_boardlimit.py"), 7),
     # R1768 developer free-trial tier face: the zero-fee trial
     # window (lifetime cap, the apidev quota-ring variant -
     # immutable call rows, COUNT face, zero mutation) + the

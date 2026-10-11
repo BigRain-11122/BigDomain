@@ -87,6 +87,7 @@ E_ET_DUP_TICKET = "E_ET_DUP_TICKET"           # AC-ET3 (ref replay)
 E_ET_NO_TICKET = "E_ET_NO_TICKET"            # AC-ET5 (admission gate)
 E_ET_DUP_CHECKIN = "E_ET_DUP_CHECKIN"        # AC-ET5
 E_ET_NO_DISCLAIMER = "E_ET_NO_DISCLAIMER"    # AC-ET6
+E_ET_BAD_LIMIT = "E_ET_BAD_LIMIT"            # R1840 AC-ETL2
 
 # Month-window strict anchor (R1826 event_audit_board window
 # parameterization; family text = freetrial.py _WINDOW_RE, the
@@ -479,7 +480,7 @@ class EventTicketFace:
                               "ticket_price": int(r[5]),
                               "ai_label": int(r[6])} for r in rows]}
 
-    def event_audit_board(self, window=None):
+    def event_audit_board(self, window=None, limit=0):
         """Cross-session audit board (BigDomain R1771; canon = the R1771
         explore-queue audit-board line). Per-session derived sales and
         admission accounting over the append-only tables - sold, admitted,
@@ -515,7 +516,29 @@ class EventTicketFace:
         adds one "window" key (additive); the default envelope is
         byte-identical to the prior shape. A malformed window
         fails closed E_ET_BAD_ARGS before any read (zero side
-        effects)."""
+        effects).
+
+        R1840 read-cap parameterization (AC-ETL1..ETL7; the
+        R1729 usage_log / R1804 journal_board read-cap family
+        law): the default limit=0 keeps the full board
+        byte-identical (no extra key); a positive limit keeps
+        the last N sessions in session_key ascending order -
+        the tail window, the same rows the mirror clause
+        (ORDER BY session_key DESC LIMIT N, reversed back to
+        ascending) yields - with the in-board relative order
+        unchanged. Window filtering runs before the cap
+        (orthogonal combination): the overflow block reports
+        the in-window full count under "total", never the
+        post-truncation count, so a capped read never lies
+        about what it left out. A malformed limit fails closed
+        E_ET_BAD_LIMIT before the window gate (the double-bad
+        gate-order law; the sole sentinel is 0 - a non-zero
+        positive int caps, anything else refuses).
+        """
+        if not _is_int(limit) or limit < 0:
+            raise TicketError(E_ET_BAD_LIMIT,
+                              "limit must be int >= 0: %r"
+                              % (limit,))
         w = None
         if window is not None:
             w = str(window)
@@ -575,8 +598,16 @@ class EventTicketFace:
                 "no_show": no_show, "revenue": int(r[5]),
                 "admission_rate": round(admitted / sold, 4) if sold else 0.0,
             })
+        total = len(board)
+        if limit > 0 and total > limit:
+            board = board[-limit:]
         envelope = {"event_audit_board": board,
                    "disclaimer": self.disclaimer}
         if w is not None:
             envelope["window"] = w
+        if limit > 0:
+            envelope["limit"] = limit
+            envelope["total"] = total
+            envelope["returned"] = len(board)
+            envelope["truncated"] = len(board) < total
         return envelope
