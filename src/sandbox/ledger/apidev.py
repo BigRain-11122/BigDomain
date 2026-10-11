@@ -891,6 +891,106 @@ class DevKeyFace:
                 "total": len(events),
                 "disclaimer": self.disclaimer}
 
+    # -- rotation lineage audit read face (R1825) ----------------------------
+
+    def _key_row_by_id(self, key_id):
+        """The key's (key_id, dev_account, key_name) row by id --
+        the lineage chain walks ids, never secrets."""
+        with self._lock:
+            return self._conn.execute(
+                "SELECT key_id, dev_account, key_name"
+                " FROM api_dev_keys WHERE key_id = ?",
+                (key_id,)).fetchone()
+
+    def _successor_key_id(self, key_id):
+        """The successor key_id this key was rotated out to (None
+        when the key never rotated). Read from the same rotate_out
+        rows lifecycle_trace derives its rotated_to link from, so
+        the two faces cannot drift."""
+        with self._lock:
+            row = self._lconn.execute(
+                "SELECT pair_key_id FROM key_events"
+                " WHERE key_id = ? AND event = 'rotate_out'"
+                " ORDER BY event_utc, event_id",
+                (key_id,)).fetchone()
+        return row[0] if row is not None else None
+
+    def _lineage_member(self, key_id):
+        """One chain member block: key_id, dev_account, key_name,
+        status, both pair links and the member's own event rows.
+        The derivation is the exact one lifecycle_trace performs
+        for a single key (same fetch, same ordering, same
+        last-event-wins pair derivation, same terminal-status
+        rule), so the lineage face and the single-key trace face
+        are mechanically locked together."""
+        row = self._key_row_by_id(key_id)
+        with self._lock:
+            events = self._lconn.execute(
+                "SELECT event_id, event, pair_key_id, event_utc"
+                " FROM key_events WHERE key_id = ?"
+                " ORDER BY event_utc, event_id",
+                (key_id,)).fetchall()
+        rotated_from = None
+        rotated_to = None
+        for ev in events:
+            if ev[1] == "rotate_in":
+                rotated_from = ev[2]
+            elif ev[1] == "rotate_out":
+                rotated_to = ev[2]
+        terminal = self._terminal_event(key_id)
+        return {"key_id": key_id,
+                "dev_account": row[1] if row is not None else None,
+                "key_name": row[2] if row is not None else None,
+                "status": _STATUS_BY_EVENT[terminal[0]]
+                          if terminal is not None else "active",
+                "rotated_from_key_id": rotated_from,
+                "rotated_to_key_id": rotated_to,
+                "events": [{"event_id": e[0], "event": e[1],
+                            "pair_key_id": e[2], "event_utc": e[3]}
+                           for e in events],
+                "total": len(events)}
+
+    def audit_lineage(self, api_key):
+        """One key's full rotation lineage in a single read: every
+        predecessor reachable through rotate_in events (walked
+        upward one level at a time) plus every successor reachable
+        through rotate_out pairs (walked downward), returned as
+        one ordered chain -- oldest ancestor first, the queried
+        key in the middle, newest descendant last. Every member
+        block carries the member's own key_id / dev_account /
+        key_name / status / pair links / event rows, so an
+        N-key chain costs one call instead of N lifecycle_trace
+        calls. Member blocks never expose another member's raw
+        api_key: the only raw api_key in the envelope is the
+        queried key's own (least-exposure audit face). Read-only,
+        zero token movement, zero UPDATE; dead keys stay fully
+        readable (a terminal state never closes the audit face)
+        and the embedded faces (key_view, dev_board) stay
+        untouched (the AC-RJW4 embedded-face law). The key gate
+        fires first (the call-chain key-gate-first law).
+        Cycle-safe in both directions: a visited-id set stops any
+        corrupted loop instead of spinning."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        key_id = row[0]
+        ancestors = self._ancestry_key_ids(key_id)[1:]
+        ancestors.reverse()          # oldest predecessor first
+        descendants = []
+        seen = set(ancestors) | {key_id}
+        current = self._successor_key_id(key_id)
+        while current is not None and current not in seen:
+            seen.add(current)
+            descendants.append(current)
+            current = self._successor_key_id(current)
+        chain_ids = ancestors + [key_id] + descendants
+        chain = [self._lineage_member(kid) for kid in chain_ids]
+        return {"api_key": api_key, "dev_account": row[1],
+                "key_name": row[2], "key_id": key_id,
+                "chain": chain, "chain_size": len(chain),
+                "queried_index": chain_ids.index(key_id),
+                "disclaimer": self.disclaimer}
+
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
 
     def revoke_key(self, api_key):

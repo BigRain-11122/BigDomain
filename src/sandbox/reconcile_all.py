@@ -710,6 +710,17 @@ SUITES = [
     # (AC-ESD1..ESD7 pre-registered in state/queue/tech.md)
     ("member-expiring-dist", os.path.join("member",
                                          "test_expiring_dist.py"), 7),
+    # R1825 apidev rotation lineage one-shot read face: the
+    # R1824 lifecycle_trace successor -- rotate_in walked upward
+    # plus rotate_out walked downward in one ordered chain
+    # (oldest ancestor first, queried key in the middle, newest
+    # descendant last), every member block locked field-equal to
+    # lifecycle_trace on that member (zero drift between the two
+    # faces), member blocks exposing zero foreign raw api_keys,
+    # dead keys fully readable, embedded faces untouched
+    # (AC-LG1..LG7 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-lineage", os.path.join("ledger",
+                                           "test_apidev_lineage.py"), 7),
 ]
 
 FAILS = 0

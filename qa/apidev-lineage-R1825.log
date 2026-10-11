@@ -1,0 +1,11 @@
+PASS AC-LG1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True, top-level api_key==queried=True
+PASS AC-LG2: A->B->C from any member: chain_size==3 and order [A,B,C]=True, queried_index 0/1/2=True, member keys exact=True, zero foreign raw api_keys=True, pair closure both directions=True, single dev=True
+PASS AC-LG3: every member block vs lifecycle_trace(member) equal on all 7 lock fields over every queried chain (fresh/revoked/A/B/C)=True
+PASS AC-LG4: lone keys self-chain: fresh chain_size==1 active events=[], plain-revoked chain_size==1 revoked [revoke]=True
+PASS AC-LG5: post-revoke world: member id sequence [A,B,C] equal from every query point=True, dead members fully readable (rotated-out A + double-terminal revoked C with [rotate_in,revoke])=True
+PASS AC-LG6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero lineage embedding=True
+PASS AC-LG7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, audit_lineage present=True
+SUITE apidev-lineage: 7/7 criteria pass
+PASS generated docs/sandbox-suite-matrix.md (10298 bytes) - registry suites=100 criteria=933 evidence=qa/reconcile-all-R1825.log green=100/100
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10298 bytes, 100 suites, 933 criteria)
