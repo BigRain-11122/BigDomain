@@ -1,0 +1,156 @@
+--- tp_precheck (engine semantics pin, R1704 law) ---
+TP-PRE pre-state seq==26 rows==14 max==14 OK
+TP-PRE tamper seq->0 rows-stay-14 OK
+TP-PRE id-reuse new-id==15 seq-mid==15 rows==15 OK
+TP-PRE restore seq==26 OK
+TP-PRE re-green rows==14 seq-stays-26 OK
+TP-PRECHECK PASS
+exit=0
+
+--- double-run determinism ---
+run1 exit=0 sha256-16=FC8FC623697121BA
+run2 exit=0 sha256-16=FC8FC623697121BA
+identical=True
+size=18378 bytes (zero timestamps, zero paths in probe stdout)
+
+--- [21] readings (run1) ---
+[21] seq-bookkeeping tamper id-reuse:
+    tamper-rollback: seq 26->0 rows=14 total=11 OK
+    id-reuse: new-id=15 seq-mid=15 rows=15 board-cur=11->12 OK
+    restore: seq=26 rows=15 OK
+    re-green: rows=14 seq=26 total=11 tallies-eq=True board-cur=11 OK
+    pure-read: rows=14->14 OK
+
+--- AC-TP adjudication (pre-registered in tech.md R1832 claim line before code) ---
+AC-TP1 bookkeeping-row writable tamper: PASS (UPDATE sqlite_sequence SET seq=0; seq 26->0; water_windows rows stay 14; value face total=11 zero drift)
+AC-TP2 id-reuse construction: PASS (fresh closed-set INSERT reuses deleted id 15; sqlite_sequence.seq re-anchors at 15; count faces visible: board-cur 11->12, COUNT 14->15; value face untouched delta={} total_delta=0)
+AC-TP3 bookkeeping restore: PASS (UPDATE seq=26 restored; rows 15 unchanged during restore)
+AC-TP4 world re-green: PASS (DELETE reused row by window_id: rows back 14, cell total back 11, whole-board and cur-window tallies equal pre-tamper dicts, board-cur back 11, seq stays 26 - deletion never touches bookkeeping, [20] AC-HW4 law)
+AC-TP5 pure-read + zero-regression + determinism: PASS (ro face rows 14->14; PROBE VERDICT CONSISTENT+DETECTING carries [1]..[20] zero regression; double-run stdout sha256 byte-identical; hygiene frozen=True zero product bytes)
+Hygiene: probe-ascii=True import-lines-clean=True frozen=True (measurement face, not registered into SUITES - R1727 precedent)
+
+--- run1 stdout verbatim ---
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] by-kind month-window count cross:
+    hist 2026-08: rows=3 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 1, "verdict": 2} OK
+    months=2026-08,2026-10 telescoping(sum==all)={"batch": 1, "drain": 1, "ingest": 1, "submit": 6, "verdict": 4} OK
+    cur 2026-10: rows=10 tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2} OK
+    fut 2026-12: rows=0 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 0, "verdict": 0} OK
+    bad-window kind_tally: E_WJ_BAD_WINDOW rows 13==13 OK
+[7] ghost-kind cross:
+    injected=1 absent-pre=True tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2, "legacy-ghost": 1} OK
+    hidden-face detection: diff-keys=legacy-ghost other-cells-equal=True OK
+    bad-window with ghost: E_WJ_BAD_WINDOW rows 14==14 OK
+    month attribution: hist-2026-08-clean=True fut-2026-12-zero=True flow 2026-10 windows=10->11 total_delta=11->12 net_delta=11->12 OK
+    store zero-background: identical=True ([3]/[4] closed pre-tamper)
+[8] ghost value-plane cross:
+    month-cross-reproof 2026-10: rows=11 total=12 OK
+    ghost-cell visibility: noise.total 9->10 diff={"noise.total": 1} OK
+    composition-with-ghost: total=12 noise.total+susp=12 pre+1=12 OK
+    flow value attribution: total_delta=12 net_delta=12 (pre 11/11) OK
+    store zero-background+pure-read: identical=True rows 14==14 OK
+[9] monthly net-flow value telescoping:
+    months=2026-08,2026-10 (board==flow sets True)
+    per-month flow: 2026-08:-1/3w 2026-10:+12/11w
+    telescoping: sum=+11 cells=11 flow-net=11 hand-col=11 windows 14==14 OK
+    ghost ride: ghost-col=+1 non-ghost=+10 cur 2026-10=+12==pre +11 +1 OK
+    zero penetration: hist-2026-08=-1 cells=-1 fut-2026-12 zero=True absent=True OK
+[10] board read-cap x month-window combo:
+    tail-truncation: cur-rows=11 cap-rows=3 positional=True OK
+    drift-month tie-order (R1813): drift_w=2026-10==cur_w=2026-10 ts-tie=True drift-pos=0 ghost-pos=1 OK
+    envelope additive: diff-keys=limit,returned,truncated common-eq=True limit=3 returned=3 truncated=True OK
+    total full-count: cap-total=11 full-total=11 loose99 returned=11 truncated=False ghost-in-loose=True fut-2026-12 cap5 rows=0 returned=0 truncated=False total=0 OK
+    bad-limit ring: codes=E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT/E_WJ_BAD_LIMIT both-bad=E_WJ_BAD_LIMIT bad-window=E_WJ_BAD_WINDOW rows 14==14 OK
+    store zero-background+pure-read: identical=True OK
+[11] mirror-SQL third path (capped reads):
+    global cap: sql-rows=3 pos-vs-product=True pos-vs-window-cap=True returned=3 truncated=True total=14==14 OK
+    month-window combo: sql-rows=3 pos-vs-cap=True win-count=11==n_cur=11 OK
+    loose 99: sql-rows=11 pos-vs-product=True ghost=1 drift=1 OK
+    honest empty/hist: fut-rows=0 hist-count=3 hist-cap-pos=True OK
+    read-only: write-reject=OperationalError rows 14==14==14 OK
+[12] aggregate mirror-SQL third path:
+    kind_tally 2026-08 tally==sql=True total==cnt 3==3 ghost=0 OK
+    kind_tally 2026-10 tally==sql=True total==cnt 11==11 ghost=1 OK
+    monthly_flow 2026-08 month=2026-08 windows 3==3 total_delta -1==-1 env total/net 3/-1 OK
+    monthly_flow 2026-10 month=2026-10 windows 11==11 total_delta 12==12 env total/net 11/12 OK
+    whole-board: months=2026-08,2026-10 rows==sql=True env total=14 net=11 OK
+    zero penetration: hist-cnt=3 fut-cnt=0 fut-env-empty=True OK
+    pure-read: rows 14==14==14 OK
+[13] cell-aggregate mirror-SQL third path:
+    cells whole-board cells==sql=True keys-asc=True total 11==11 OK
+    cells hist-2026-08 cells==sql=True keys-asc=True total -1==-1 OK
+    cells cur-2026-10 cells==sql=True keys-asc=True total 12==12 OK
+    cells fut-2026-12 cells==sql=True keys-asc=True total 0==0 OK
+    composition whole-board total=11 noise.total=11 susp=0 comp=11 OK
+    composition hist-2026-08 total=-1 noise.total=1 susp=-2 comp=-1 OK
+    composition cur-2026-10 total=12 noise.total=10 susp=2 comp=12 OK
+    composition fut-2026-12 total=0 noise.total=0 susp=0 comp=0 OK
+    verdicted-carried-excluded=True (cells carry review.verdicted.* keys on non-empty windows; the arithmetic never adds them)
+    tamper cells: ghost={"noise.total": 1} drift={"noise.total": 5} cur-count=2 hist-count=0 hist-noise.total=1 OK
+    honest empty: fut-2026-12 cells=={}=True total 0==0 (empty SUM -> COALESCE 0) OK
+    pure-read: rows 14==14==14 OK
+[14] delta JSON engine-side integrity:
+    baseline: rows=14 valid0=0 non-integer-leaves=0 leaf-count tree=24 each=24 product=24 OK
+    bad-json row: sql-valid0=1 window_id=15 delta='not-json{' product-crash=JSONDecodeError OK
+    non-integer leaf row: bad-leaves=1 window_id=16 type=text product-crash=ValueError OK
+    restore: rows=14 valid0=0 non-integer-leaves=0 product-total=11 OK
+[15] delta literal three-way + round-trip:
+    rows=14 keys-checked=24 empty-delta-rows=1
+    three-path per-row (extract/type/quote + json() re-parse): OK
+    engine-canonical == product-compact (sort_keys, tight separators): OK
+    write-format fixed point (default-separator sort_keys): OK
+    pure-read: rows 14==14==14 board-map==sql-wids OK
+[16] ts_utc engine-side format integrity:
+    baseline: rows=14 len-bad=0 len-set=[27] glob-bad=0 jd-null=0 jd-ok=14 OK
+    month-set three-face: sql=['2026-08', '2026-10'] flow=['2026-08', '2026-10'] board=['2026-08', '2026-10'] OK
+    tampered: rows=16 len-bad=1 glob-bad=1 jd-null=2 len-wids=[17] glob-wids=[17] jd-wids=[17, 18] calendar-only=[18] OK
+    prefix-passthrough (product month predicate validates nothing): board(cur) 11->13 flow-windows=13 OK
+    restore: rows=14 len-bad=0 glob-bad=0 jd-null=0 months=['2026-08', '2026-10'] product-total=11 OK
+[17] ts lexicographic == chronological total order:
+    clean-world: rows=14 lex==jd=True prod==lex=True OK
+    tie window: drift-pos=3 ids=[10, 14] kinds=['submit', 'legacy-ghost'] adjacent=True OK
+    tampered: rows=15 bad-wid=19 bad-last=True jd-valid=14 jd-null=1 jd-first-is-bad=True board(cur) 11->12 OK
+    restore: rows=14 lex==jd=True prod==lex=True total=11 OK
+[18] kind CHECK enforcement:
+    default-reject: exc=IntegrityError msg-hit=True rows=14 bad-rows=0 OK
+    pragma-dual-state: on-wid=20 rows=15 off-exc=IntegrityError off-rows=0 tally-vis=1 OK
+    positive-closed-set: wids=[21, 22, 23, 24, 25] tally-follow=True total=17 OK
+    restore: rows=14 total=11 tally-all-ok=True tally-cur-ok=True OK
+[19] schema text readback:
+    table-locate: rows=1 name=water_windows table-set=['sqlite_sequence', 'water_windows'] OK
+    check-clause: verbatim=True hits={"'ingest'": 1, "'batch'": 1, "'drain'": 1, "'submit'": 1, "'verdict'": 1} OK
+    product-source: norm-eq=True OK
+    table-info: rows=5 kind-row=[(1, 'kind', 'TEXT', 1, None, 0)] OK
+    pure-read: rows=14->14 OK
+[20] sqlite_sequence high-water readback:
+    bookkeeping-row: rows=1 name=water_windows seq=25 OK
+    high-water-vs-live: seq=25 max-id=14 no-reuse=True OK
+    consume: new-id=26 seq-mid=26 OK
+    restore-no-retreat: rows=14 seq=26 total=11 tallies-eq=True OK
+    pure-read: rows=14->14 OK
+[21] seq-bookkeeping tamper id-reuse:
+    tamper-rollback: seq 26->0 rows=14 total=11 OK
+    id-reuse: new-id=15 seq-mid=15 rows=15 board-cur=11->12 OK
+    restore: seq=26 rows=15 OK
+    re-green: rows=14 seq=26 total=11 tallies-eq=True board-cur=11 OK
+    pure-read: rows=14->14 OK
+[22] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING

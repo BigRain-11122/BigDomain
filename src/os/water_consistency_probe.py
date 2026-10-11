@@ -393,6 +393,31 @@ no-reuse semantics read end to end. Measurement face, R1727
 precedent, not registered into SUITES. Zero product files
 touched.
 
+R1832 extension (sqlite_sequence bookkeeping tamper id-reuse
+negative path): the [20] section read the high-water bookkeeping
+row as the no-reuse guarantee (seq 26 over live max 14, deleted
+ids never return). This section proves the guarantee's single
+point of dependence: SQLite allows a direct UPDATE on the
+sqlite_sequence bookkeeping row, and the bookkeeping table
+carries no constraint protecting it. Rolling seq back to 0 while
+deleted ids 15..26 sit above the live max breaks the guarantee -
+the next INSERT allocates max(seq, live max)+1 == 15, the id of
+a row that was already used and deleted ([20] census). Engine
+semantics were pinned empirically before this section landed
+(R1704 law; tp_precheck, SQLite 3.50.4: after the rollback a
+fresh INSERT reuses the deleted id and the bookkeeping row
+re-anchors at the wrong lower watermark). The tamper-reuse-
+restore round: rollback seq to 0 (product rows untouched, value
+faces at their registered dicts), prove the reused id 15
+surfaces in the product count faces (journal_board(cur_w)
+total 11->12, COUNT 14->15 - the value face stays untouched:
+delta '{}', total_delta 0), restore the high-water 26, then
+delete the reused row by window_id - the 14-row world returns
+with the product faces back at their registered dicts while seq
+stays at 26 (deletion never touches the bookkeeping row, [20]
+AC-HW4 law). Measurement face, R1727 precedent, not registered
+into SUITES. Zero product files touched.
+
 
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
@@ -2741,6 +2766,155 @@ def main():
         fail = fail or not (hw1_ok and hw2_ok and hw3_ok
                             and hw4_ok and hw5_ok)
 
+        # ---- [21] sqlite_sequence bookkeeping tamper
+        # id-reuse negative path (R1832; AC-TP1..TP5) ---------
+        # The [20] section read the high-water bookkeeping row
+        # as the no-reuse guarantee. This section proves the
+        # guarantee's single point of dependence: SQLite allows
+        # a direct UPDATE on the sqlite_sequence row and the
+        # bookkeeping table carries no constraint protecting it.
+        # Rolling seq back to 0 while deleted ids 15..26 sit
+        # above the live max breaks the guarantee - the next
+        # INSERT allocates max(seq, live max)+1 == 15, the id of
+        # a row that was already used and deleted ([20] census).
+        # Engine semantics pinned empirically before this
+        # section landed (R1704 law; tp_precheck, SQLite 3.50.4).
+        # The tamper-reuse-restore round: rollback, prove the
+        # reused id surfaces in the product count faces (value
+        # faces untouched: delta '{}', total_delta 0), restore
+        # the high-water 26, then delete the reused row - the
+        # 14-row world returns while seq stays at 26 (deletion
+        # never touches the bookkeeping row, [20] AC-HW4 law).
+
+        def tp_ro_scalar(sql, args=()):
+            tp_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = tp_ro.execute(sql, args).fetchone()
+            tp_ro.close()
+            return got[0] if got else None
+
+        tp_pre_n = tp_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        tp_seq_pre = tp_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        # product faces before the tamper round
+        tp_tally_pre = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        tp_tally_cur_pre = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        tp_total_pre = pipe.journal.cell_totals()["total"]
+        tp_board_cur_pre = pipe.journal.journal_board(
+            cur_w)["total"]
+
+        # AC-TP1: bookkeeping row is writable - rollback to 0
+        tp_conn = sqlite3.connect(journal_db)
+        tp_conn.execute(
+            "UPDATE sqlite_sequence SET seq = 0"
+            " WHERE name = 'water_windows'")
+        tp_conn.commit()
+        tp_seq_zero = tp_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        tp_rows_zero = tp_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        tp_total_zero = pipe.journal.cell_totals()["total"]
+        tp1_ok = (tp_seq_pre == 26 and tp_seq_zero == 0
+                  and tp_rows_zero == 14
+                  and tp_total_zero == tp_total_pre)
+
+        # AC-TP2: id reuse - fresh INSERT reuses deleted id 15
+        tp_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-23T00:00:00.000000Z",))
+        tp_reuse_id = tp_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        tp_seq_mid = tp_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        tp_conn.commit()
+        tp_rows_mid = tp_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        tp_board_cur_mid = pipe.journal.journal_board(
+            cur_w)["total"]
+        tp2_ok = (tp_reuse_id == 15 and tp_seq_mid == 15
+                  and tp_rows_mid == 15
+                  and tp_board_cur_mid == tp_board_cur_pre + 1)
+
+        # AC-TP3: restore the bookkeeping high-water 26
+        tp_conn.execute(
+            "UPDATE sqlite_sequence SET seq = 26"
+            " WHERE name = 'water_windows'")
+        tp_conn.commit()
+        tp_seq_restored = tp_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        tp_rows_restored = tp_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        tp3_ok = (tp_seq_restored == 26
+                  and tp_rows_restored == 15)
+
+        # AC-TP4: world re-green - delete the reused row
+        tp_conn.execute(
+            "DELETE FROM water_windows"
+            " WHERE window_id = ?", (tp_reuse_id,))
+        tp_conn.commit()
+        tp_rows_post = tp_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        tp_seq_final = tp_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        tp_conn.close()
+        tp_tally_post = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        tp_tally_cur_post = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        tp_total_post = pipe.journal.cell_totals()["total"]
+        tp_board_cur_post = pipe.journal.journal_board(
+            cur_w)["total"]
+        tp4_ok = (tp_rows_post == 14 and tp_seq_final == 26
+                  and tp_tally_post == tp_tally_pre
+                  and tp_tally_cur_post == tp_tally_cur_pre
+                  and tp_total_post == tp_total_pre
+                  and tp_board_cur_post == tp_board_cur_pre)
+
+        # AC-TP5: pure-read law - the ro face never moved rows
+        tp_post_n_ro = tp_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        tp5_ok = (tp_pre_n == 14 and tp_post_n_ro == 14)
+
+        sections.append("[21] seq-bookkeeping tamper id-reuse:")
+        sections.append("    tamper-rollback: seq %s->%d rows=%d"
+                        " total=%s %s"
+                        % (tp_seq_pre, tp_seq_zero, tp_rows_zero,
+                           tp_total_zero,
+                           "OK" if tp1_ok else "DRIFT"))
+        sections.append("    id-reuse: new-id=%d seq-mid=%d"
+                        " rows=%d board-cur=%d->%d %s"
+                        % (tp_reuse_id, tp_seq_mid, tp_rows_mid,
+                           tp_board_cur_pre, tp_board_cur_mid,
+                           "OK" if tp2_ok else "DRIFT"))
+        sections.append("    restore: seq=%d rows=%d %s"
+                        % (tp_seq_restored, tp_rows_restored,
+                           "OK" if tp3_ok else "DRIFT"))
+        sections.append("    re-green: rows=%d seq=%d"
+                        " total=%s tallies-eq=%s board-cur=%d %s"
+                        % (tp_rows_post, tp_seq_final,
+                           tp_total_post,
+                           tp_tally_post == tp_tally_pre
+                           and tp_tally_cur_post
+                           == tp_tally_cur_pre,
+                           tp_board_cur_post,
+                           "OK" if tp4_ok else "DRIFT"))
+        sections.append("    pure-read: rows=%d->%d %s"
+                        % (tp_pre_n, tp_post_n_ro,
+                           "OK" if tp5_ok else "DRIFT"))
+        fail = fail or not (tp1_ok and tp2_ok and tp3_ok
+                            and tp4_ok and tp5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2756,7 +2930,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[21] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[22] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
