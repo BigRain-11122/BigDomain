@@ -3174,6 +3174,179 @@ def main():
         fail = fail or not (sqd1_ok and sqd2_ok and sqd3_ok
                             and sqd4_ok and sqd5_ok)
 
+        # ---- [23] sqlite_sequence duplicate-bookkeeping-row
+        # construction (R1844; AC-DRW1..DRW5) ------------------
+        # dm_precheck F5 (R1838) pinned the duplicate-row READ
+        # face at engine level; this section proves it on the
+        # product world and adds the ALLOCATOR face dm2_precheck
+        # pinned first (R1844, SQLite 3.50.4, R1704 law): beside
+        # a duplicate the allocator consults the FIRST row
+        # (allocates 27+1 == 28, the 99 sentinel never surfaces)
+        # and its post-alloc UPDATE touches only that first row
+        # (sentinel keeps 99). Cleanup wipes ALL bookkeeping
+        # rows and restores ONE honest row at the consumed
+        # high-water 28 - the consume-no-retreat law means the
+        # seed's "back to 27" was falsified by the dm2 pin (the
+        # section's own allocator test consumes 28); amended in
+        # tech.md before this code landed.
+
+        def drw_ro_scalar(sql, args=()):
+            drw_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = drw_ro.execute(sql, args).fetchone()
+            drw_ro.close()
+            return got[0] if got else None
+
+        drw_pre_n = drw_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        drw_seq_rows_pre = drw_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        drw_seq_pre = drw_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        # product faces before the duplicate round
+        drw_tally_pre = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        drw_tally_cur_pre = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        drw_total_pre = pipe.journal.cell_totals()["total"]
+        drw_board_cur_pre = pipe.journal.journal_board(
+            cur_w)["total"]
+
+        # AC-DRW1: construct the duplicate (99 sentinel) - the
+        # ro face counts two rows, the plain fetchone keeps
+        # reading the old first row (stale-read trap), while
+        # the full read exposes the sentinel.
+        drw_conn = sqlite3.connect(journal_db)
+        drw_conn.execute(
+            "INSERT INTO sqlite_sequence (name, seq)"
+            " VALUES ('water_windows', 99)")
+        drw_conn.commit()
+        drw_dup_n = drw_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        drw_first = drw_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        drw_ro_all = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/")
+            + "?mode=ro", uri=True)
+        drw_all = [r[0] for r in drw_ro_all.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows' ORDER BY seq")]
+        drw_ro_all.close()
+        drw1_ok = (drw_seq_rows_pre == 1
+                   and drw_seq_pre == 27
+                   and drw_dup_n == 2
+                   and drw_first == 27
+                   and drw_all == [27, 99])
+
+        # AC-DRW2: allocator beside the duplicate (dm2-pinned)
+        # - the new INSERT allocates the first row's seq+1 == 28
+        # (the sentinel is never consulted) and the post-alloc
+        # UPDATE touches only the first row; the product board
+        # face sees the +1 row in the current window.
+        drw_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-26T00:00:00.000000Z",))
+        drw_alloc_id = drw_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        drw_rows_mid = drw_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        drw_seq_rows_mid = [r[0] for r in drw_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows' ORDER BY seq")]
+        drw_conn.commit()
+        drw_board_cur_mid = pipe.journal.journal_board(
+            cur_w)["total"]
+        drw2_ok = (drw_alloc_id == 28
+                   and drw_rows_mid == 15
+                   and drw_seq_rows_mid == [28, 99]
+                   and drw_board_cur_mid == drw_board_cur_pre + 1)
+
+        # AC-DRW3: cleanup recovery - delete the allocated row,
+        # wipe ALL bookkeeping rows for the name, restore ONE
+        # honest row at the consumed high-water (28, not the
+        # pre-section 27: consume-no-retreat)
+        drw_conn.execute(
+            "DELETE FROM water_windows"
+            " WHERE window_id = ?", (drw_alloc_id,))
+        drw_conn.commit()
+        drw_rows_post = drw_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        drw_conn.execute(
+            "DELETE FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        drw_wipe_n = drw_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        drw_conn.execute(
+            "INSERT INTO sqlite_sequence (name, seq)"
+            " VALUES ('water_windows', ?)", (drw_alloc_id,))
+        drw_conn.commit()
+        drw_seq_rows_final = drw_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        drw_seq_final = drw_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        drw3_ok = (drw_rows_post == 14
+                   and drw_wipe_n == 0
+                   and drw_seq_rows_final == 1
+                   and drw_seq_final == 28
+                   and drw_seq_final == drw_alloc_id)
+
+        # AC-DRW4: world re-green + pure-read law
+        drw_tally_post = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        drw_tally_cur_post = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        drw_total_post = pipe.journal.cell_totals()["total"]
+        drw_board_cur_post = pipe.journal.journal_board(
+            cur_w)["total"]
+        drw_post_n_ro = drw_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        drw_conn.close()
+        drw4_ok = (drw_tally_post == drw_tally_pre
+                   and drw_tally_cur_post == drw_tally_cur_pre
+                   and drw_total_post == drw_total_pre
+                   and drw_board_cur_post == drw_board_cur_pre
+                   and drw_pre_n == 14
+                   and drw_post_n_ro == 14)
+
+        sections.append("[23] dup-bookkeeping-row construction:")
+        sections.append("    dup-inject: seq-rows %d->%d"
+                        " first-read=%s all-rows=%s %s"
+                        % (drw_seq_rows_pre, drw_dup_n,
+                           drw_first, drw_all,
+                           "OK" if drw1_ok else "DRIFT"))
+        sections.append("    alloc-beside-dup: new-id=%d"
+                        " rows=%d seq-rows=%s board-cur=%d->%d %s"
+                        % (drw_alloc_id, drw_rows_mid,
+                           drw_seq_rows_mid, drw_board_cur_pre,
+                           drw_board_cur_mid,
+                           "OK" if drw2_ok else "DRIFT"))
+        sections.append("    cleanup-restore: rows=%d wiped=%d"
+                        " honest-seq-rows=%d seq=%d %s"
+                        % (drw_rows_post, drw_wipe_n,
+                           drw_seq_rows_final, drw_seq_final,
+                           "OK" if drw3_ok else "DRIFT"))
+        sections.append("    re-green: tallies-eq=%s total-eq=%s"
+                        " board-cur=%d pure-read=%d->%d %s"
+                        % (drw_tally_post == drw_tally_pre
+                           and drw_tally_cur_post
+                           == drw_tally_cur_pre,
+                           drw_total_post == drw_total_pre,
+                           drw_board_cur_post,
+                           drw_pre_n, drw_post_n_ro,
+                           "OK" if drw4_ok else "DRIFT"))
+        fail = fail or not (drw1_ok and drw2_ok
+                            and drw3_ok and drw4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -3189,7 +3362,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[23] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[24] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
