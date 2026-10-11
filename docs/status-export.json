@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T15:04:30+08:00",
+  "export_ts": "2026-10-11T15:28:50+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1801 一句话：water journal kind_tally 窗计数读面交付（AC-KT1..KT7 预注册先于代码——water_journal.py kind_tally(window=None) 纯读聚合〔dense 五值闭集 {ingest,batch,drain,submit,verdict} 零计数格显式在场+键序字典序升序零 RNG+14 坏窗形态 E_WJ_BAD_WINDOW fail-closed〔严锚 R1748 家族律〕+ts_utc record-time 月窗过滤+manual SQL 交叉+域外 kind 观测行不隐藏〕·套件 7/7 首跑绿·RUNNER 94/94 套件 891 判据零回归=qa/reconcile-all-R1801.log·矩阵 --check byte-identical·指纹哨兵 CLEAN domains=5·证据 qa/water-kindtally-R1801.log）。",
-    "latest_artifact": "本轮实物：src/sandbox/ugc/water_journal.py kind_tally 读面（dense per-kind 计数聚合+月窗过滤+域外诚实面）+套件 src/sandbox/ugc/test_water_kind_tally.py（7 判据）+reconcile_all ugc-water-kindtally 注册行（SUITES 93→94·判据 884→891） 证据 qa/water-kindtally-R1801.log+qa/reconcile-all-R1801.log。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头滚动（water journal 月窗净流聚合读面〔R1801 补种队头〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~72.9KB 余量 ~5.6KB）——窗 ≤48h、2026-10-13 前。"
+    "current": "R1802 一句话：water journal 月窗净流聚合读面交付（AC-MF1..MF7 预注册先于代码——water_journal.py monthly_flow(window=None) 纯读聚合〔每月行键集恰 {month,windows,total_delta} 可负净流+月键升序零 RNG+显式 YYYY-MM 单月窗读+14 坏窗形态 fail-closed〕+信封 net_delta=单读全榜净流+双不变量 total==Σwindows ∧ net_delta==Σtotal_delta·套件 7/7 首跑绿·RUNNER 95/95 套件 898 判据零回归=qa/reconcile-all-R1802.log·矩阵 --check byte-identical·指纹哨兵 CLEAN domains=5·证据 qa/water-monthlyflow-R1802.log）。",
+    "latest_artifact": "本轮实物：src/sandbox/ugc/water_journal.py monthly_flow 读面（按月净流聚合+单月窗读+可负净流诚实面）+套件 src/sandbox/ugc/test_water_monthly_flow.py（7 判据）+reconcile_all ugc-water-monthlyflow 注册行（SUITES 94→95·判据 891→898） 证据 qa/water-monthlyflow-R1802.log+qa/reconcile-all-R1802.log。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头滚动（water journal journal_board 月窗过滤参数窗〔R1802 补种队头〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位约 76KB 余量约 2.5KB）——窗 ≤48h、2026-10-13 前。"
   },
   "depts": [
     {
@@ -186,6 +186,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "water journal 月窗净流聚合读面交付（R1802·P2 tech 队头〔R1801 补种〕·AC-MF1..MF7 预注册先于代码〔tech.md R1802 认领行〕：water_journal.py monthly_flow(window=None) additive 纯读聚合〔信封键集恰六键含 net_delta=单读全榜净流+每月行键集恰 {month,windows,total_delta} 可负净流+月键升序零 RNG+双不变量 total==Σwindows ∧ net_delta==Σtotal_delta〕+显式 YYYY-MM 单月窗读〔window 键 additive·14 坏窗形态 E_WJ_BAD_WINDOW fail-closed〔\\Z 严锚 R1748 家族律〕·拒时行数零副作用〕+历史月 fixture 直注入〔2026-08 净 0/2026-09 verdict −1 可负月行在证〕+未来窗诚实空+manual SQL GROUP BY COUNT/SUM 交叉逐位等〔双径〕+纯读律〔inspect 零写+行数前后同一+双调双形态同一〕+活态零缓存+跨重启账续接·套件 SUITE PASS 7/7 首跑绿+双跑确定性+RUNNER PASS 95/95 套件 898 判据 controls 7/7 178.0s 零回归〔94→95·891→898〕=qa/reconcile-all-R1802.log·矩阵再生 95/898 green --check byte-identical 双跑〔缺省发现面=qa/water-monthlyflow-R1802.log wrapper 件合格入选〕+指纹哨兵 CLEAN domains=5·证据 qa/water-monthlyflow-R1802.log 八节·shipped config/store/sec_batch/pipeline 零字节〔sha256 前后同一〕·queue_tech_open 10→9 补种 1→10〔water journal journal_board 月窗过滤参数窗〕·R1802）"
+    ],
     [
       "2",
       "water journal kind_tally 窗计数读面交付（R1801·P2 tech 队头〔R1800 补种〕·AC-KT1..KT7 预注册先于代码〔tech.md R1801 认领行〕：water_journal.py kind_tally(window=None) additive 纯读聚合面〔dense 五值闭集 {ingest,batch,drain,submit,verdict} 零计数格显式在场+键序字典序升序零 RNG+total==Σ 不变量+envelope 恰五键合规三件常驻+显式窗读 additive window 键〕+14 坏窗形态全拒 E_WJ_BAD_WINDOW〔_WINDOW_RE 严锚 R1748 家族律·str() 归一锚判〕+ts_utc record-time 月窗过滤〔历史月 fixture 直 INSERT 注明·两窗互不渗透+未来窗诚实空〕+manual SQL GROUP BY 交叉逐位等〔双径〕+域外 kind 观测行不隐藏〔PRAGMA ignore_check_constraints 直 INSERT 仿真→dense 五胞后升序追加+计入 total=face 永不藏数据·R1776 AC-CHM3 tamper 姿态〕+纯读律〔inspect 零写+行数前后同一+双调 json.dumps 双形态逐字节同一〕+活态零缓存+跨重启账续接·套件 SUITE PASS 7/7 首跑绿〔取证断言一修如实注：AUTOINCREMENT 副产 sqlite_sequence 表集恒定口径〕+RUNNER PASS 94/94 套件 891 判据 controls 7/7 165.3s 零回归=qa/reconcile-all-R1801.log+矩阵再生 94/891 green --check byte-identical 双跑 9787B+指纹哨兵 CLEAN domains=5·证据 qa/water-kindtally-R1801.log〔utf-8 纯方言〕·shipped config/store/sec_batch/pipeline 零字节〔sha256 前后同一〕·queue_tech_open 10→9 补种 1→10〔water journal 月窗净流聚合读面〕·R1801）"
@@ -396,7 +400,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1801",
+      "1802",
       "OSLoop 执行 tick"
     ],
     [
@@ -3303,10 +3307,10 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 37,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,

@@ -658,6 +658,14 @@ SUITES = [
     # (AC-KT1..KT7 pre-registered in state/queue/tech.md)
     ("ugc-water-kindtally", os.path.join("ugc",
                                          "test_water_kind_tally.py"), 7),
+    # R1802 water journal monthly_flow: by-month net-flow aggregation
+    # (window=None whole-board default; explicit YYYY-MM single-month
+    # read; month keys ascending; row keys exactly {month, windows,
+    # total_delta} with signed sums; total==sum windows and
+    # net_delta==sum total_delta invariants)
+    # (AC-MF1..MF7 pre-registered in state/queue/tech.md)
+    ("ugc-water-monthlyflow", os.path.join("ugc",
+                                          "test_water_monthly_flow.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)

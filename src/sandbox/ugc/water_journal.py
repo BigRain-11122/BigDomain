@@ -149,5 +149,54 @@ class WaterJournalFace:
             env["window"] = w
         return env
 
+    def monthly_flow(self, window=None):
+        """Pure by-month net-flow aggregation over the append-only
+        ledger (AC-MF1..AC-MF7). window=None keeps the whole-board
+        behavior (every observed month, ascending); an explicit
+        YYYY-MM filters on the record-time ts_utc month and returns
+        just that month's row. Months are an unbounded domain (any
+        YYYY-MM), so a dense grid is not constructible - a month
+        with no archived window reads as an honest empty row list.
+        Malformed windows fail closed E_WJ_BAD_WINDOW before any
+        read. Each month row keys exactly {month, windows,
+        total_delta}: windows = the month's completed-window count,
+        total_delta = the month's signed sum (a verdict pass window
+        lands -1, AC-VW1). Envelope invariants: total == sum of row
+        windows, net_delta == sum of row total_delta (the whole-
+        board net in one read - the point of this face). Month keys
+        render ascending, deterministic, zero RNG."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError(
+                    "water journal: window must be YYYY-MM (%s)"
+                    % E_WJ_BAD_WINDOW)
+        if w is None:
+            grouped = self._conn.execute(
+                "SELECT substr(ts_utc, 1, 7), COUNT(*), SUM(total_delta)"
+                " FROM water_windows"
+                " GROUP BY substr(ts_utc, 1, 7)"
+                " ORDER BY substr(ts_utc, 1, 7)")
+        else:
+            grouped = self._conn.execute(
+                "SELECT substr(ts_utc, 1, 7), COUNT(*), SUM(total_delta)"
+                " FROM water_windows"
+                " WHERE substr(ts_utc, 1, 7) = ?"
+                " GROUP BY substr(ts_utc, 1, 7)"
+                " ORDER BY substr(ts_utc, 1, 7)", (w,))
+        rows = []
+        for month, n, s in grouped:
+            rows.append({"month": month, "windows": int(n),
+                         "total_delta": int(s)})
+        env = {"monthly_flow": rows,
+               "total": sum(r["windows"] for r in rows),
+               "net_delta": sum(r["total_delta"] for r in rows),
+               "ai_generated": 0, "disclaimer": self.disclaimer,
+               "persistent": True}
+        if w is not None:
+            env["window"] = w
+        return env
+
     def close(self):
         self._conn.close()
