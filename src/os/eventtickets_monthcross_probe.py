@@ -49,6 +49,22 @@ honesty law):
     reconcile_all.py (measurement face stays out of the
     SUITES registry).
 
+  R1843 read-cap x month-window orthogonal combination
+  (AC-MC6..AC-MC9; the L133 tech-queue seed, criteria
+  pre-registered in the R1843 claim row before this code
+  existed): every window shape (None + m1 + m2 + cur + fut)
+  crossed with every cap shape (1, 2, 4, 50) checks the
+  capped read against the tail-N subsequence of that
+  window's full read element-wise, the mirror SQL
+  DESC-LIMIT reversal third path, the four-key overflow
+  block value alignment (total = the in-window full count
+  == the registry COUNT, never the post-truncation count -
+  the dense registry axis is window-invariant), the
+  window-key coexistence law, and the zero-registration
+  sub-world honest-empty capped read (the only zero-row
+  shape a registry-driven board can produce). Measurement
+  face stays out of the SUITES registry (R1727 precedent).
+
 Single-source law ("lock the source"): the observed-month set
 and every cross-check derive from the product faces and the
 engine rows themselves - zero hardcoded month rosters, zero
@@ -84,6 +100,10 @@ DISCLAIMER = ("sandbox stand-in disclaimer: virtual event"
 
 SESSION_KEYS = ("alpha-gala", "zulu-empty", "xmonth-cross",
                 "inmonth-full")
+
+ROW_KEYS = frozenset((
+    "session_key", "title", "ai_label", "sold", "admitted",
+    "no_show", "revenue", "admission_rate"))
 
 
 def record(ac, ok, evidence):
@@ -427,6 +447,149 @@ def main():
            % (counts0, counts1, ok5_pure, ok5_det, non_ascii,
               len(net_imports), ok5_ascii, ok5_frozen,
               ok5_registry))
+
+    # -- [6] read-cap x window orthogonal combination (R1843) ----
+    print("[6] read-cap x window orthogonal combination",
+          flush=True)
+    caps = (1, 2, 4, 50)
+    cap_windows = (None, m1, m2, cur_m, fut)
+    sess_count = ro.execute(
+        "SELECT COUNT(*) FROM ticket_sessions").fetchone()[0]
+    counts6a = _table_counts()
+    ok6_rows = True
+    ok6_env = True
+    ok6_wkey = True
+    ok7_mirror = True
+    combos = 0
+    trunc_seen = 0
+    full_seen = 0
+    for w in cap_windows:
+        full_rows_list = tf.event_audit_board(
+            w)["event_audit_board"]
+        for n in caps:
+            env = tf.event_audit_board(w, n)
+            rows = env["event_audit_board"]
+            combos += 1
+            expect = full_rows_list[-n:]
+            ok6_rows = ok6_rows and (
+                json.dumps(rows, sort_keys=True)
+                == json.dumps(expect, sort_keys=True))
+            ok6_rows = ok6_rows and all(
+                frozenset(r) == ROW_KEYS for r in rows)
+            ok6_env = ok6_env and (
+                env.get("limit") == n
+                and env.get("total") == len(full_rows_list)
+                and env.get("total") == sess_count
+                and env.get("returned") == len(rows)
+                and env.get("truncated")
+                == (len(rows) < len(full_rows_list)))
+            if w is None:
+                ok6_wkey = ok6_wkey and "window" not in env
+            else:
+                ok6_wkey = ok6_wkey and env.get("window") == w
+            mirror = [r[0] for r in ro.execute(
+                "SELECT session_key FROM ticket_sessions"
+                " ORDER BY session_key DESC LIMIT ?",
+                (n,)).fetchall()]
+            mirror.reverse()
+            ok7_mirror = ok7_mirror and (
+                mirror == [r["session_key"] for r in rows])
+            if len(rows) < len(full_rows_list):
+                trunc_seen += 1
+            else:
+                full_seen += 1
+    record("AC-MC6", ok6_rows and ok6_env and ok6_wkey,
+           "combos=%d (5 window shapes x 4 caps): capped read"
+           " == tail-N subsequence of that window's full read"
+           " element-wise (json byte-identical + 8-key row"
+           " field set) = %s; overflow block 4-key alignment"
+           " {limit,total,returned,truncated} with total =="
+           " in-window full count == registry COUNT(*)=%d"
+           " (dense registry axis, window-invariant) = %s;"
+           " window-key coexistence law (present == W / absent"
+           " when None) = %s; truncation exercised in %d"
+           " combos, full read carried in %d"
+           % (combos, ok6_rows, sess_count, ok6_env, ok6_wkey,
+              trunc_seen, full_seen))
+    record("AC-MC7", ok7_mirror,
+           "mirror SQL third path (ORDER BY session_key DESC"
+           " LIMIT N, reversed back to ascending) == product"
+           " row order on every one of the %d combos = %s"
+           % (combos, ok7_mirror))
+
+    # zero-registration sub-world: the only zero-row shape a
+    # registry-driven board can produce (fresh db, zero
+    # sessions, zero fixtures; the R1840 AC-ETL4 precedent).
+    db2_path = os.path.join(tmp, "ledger-empty.db")
+    led2 = L.Ledger(db2_path, cfg)
+    tf2 = T.EventTicketFace(led2, DISCLAIMER)
+    ro2 = _ro_conn(db2_path)
+    ok8_empty = True
+    ok8_env = True
+    ok8_wkey = True
+    ok8_mirror = True
+    for w in (cur_m, None):
+        env = tf2.event_audit_board(w, 2)
+        rows = env["event_audit_board"]
+        ok8_empty = ok8_empty and rows == []
+        ok8_env = ok8_env and (
+            env.get("limit") == 2 and env.get("total") == 0
+            and env.get("returned") == 0
+            and env.get("truncated") is False)
+        if w is None:
+            ok8_wkey = ok8_wkey and "window" not in env
+        else:
+            ok8_wkey = ok8_wkey and env.get("window") == w
+        mirror = [r[0] for r in ro2.execute(
+            "SELECT session_key FROM ticket_sessions"
+            " ORDER BY session_key DESC LIMIT 2").fetchall()]
+        mirror.reverse()
+        ok8_mirror = ok8_mirror and mirror == []
+    zero_counts = tuple(
+        ro2.execute("SELECT COUNT(*) FROM " + t).fetchone()[0]
+        for t in ("ticket_sessions", "ticket_purchases",
+                  "ticket_checkins"))
+    ok8_zero_rows = zero_counts == (0, 0, 0)
+    record("AC-MC8", ok8_empty and ok8_env and ok8_wkey
+           and ok8_mirror and ok8_zero_rows,
+           "zero-registration sub-world: board(cur,2) and"
+           " board(None,2) both honest empty truncated reads"
+           " rows==[] with the 4-key block carried"
+           " {limit=2,total=0,returned=0,truncated=False} ="
+           " %s; window-key law in the zero world = %s; zero"
+           " mirror SQL == [] = %s; three-table counts all"
+           " zero %s = %s"
+           % (ok8_empty and ok8_env, ok8_wkey, ok8_mirror,
+              zero_counts, ok8_zero_rows))
+    counts6b = _table_counts()
+    det6a = json.dumps(tf.event_audit_board(m2, 2),
+                       sort_keys=True)
+    det6b = json.dumps(tf.event_audit_board(m2, 2),
+                       sort_keys=True)
+    ok9_counts = counts6a == counts6b
+    ok9_det = det6a == det6b
+    ok9_frozen = all(
+        _sha16(os.path.join(_LEDGER_DIR, rel)) == frozen[rel]
+        for rel in ("eventtickets.py", "ledger.py",
+                    "config.json"))
+    ok9_frozen = ok9_frozen and (
+        _sha16(runner_path) == frozen["reconcile_all.py"])
+    ok9_registry = ("eventtickets_monthcross_probe"
+                    not in runner_src)
+    record("AC-MC9", ok9_counts and ok9_det and ok9_frozen
+           and ok9_registry,
+           "main-world three-table counts flat %s -> %s across"
+           " the %d capped reads = %s; representative combo"
+           " (m2, 2) double-call byte-identical = %s; four"
+           " product files sha-frozen after the whole"
+           " section = %s; probe filename absent from the"
+           " reconcile_all.py SUITES registry (measurement"
+           " face, R1727 precedent) = %s"
+           % (counts6a, counts6b, combos, ok9_counts, ok9_det,
+              ok9_frozen, ok9_registry))
+    ro2.close()
+    tf2.close()
+    led2.close()
 
     ro.close()
     tf.close()

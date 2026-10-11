@@ -1,0 +1,16 @@
+[1] month-set three-way
+PASS AC-MC1: engine DISTINCT union ['2026-08', '2026-09', '2026-10'] == planted month-abstract set ['2026-08', '2026-09', '2026-10'] = True; future month absent = True; cur-month real-API rows on both faces (buys=3 checks=1) = True; every observed-month windowed read walks zero-reject = True
+[2] flow-face telescoping
+PASS AC-MC2: per-session telescoping sum(months) == full for sold/admitted/revenue [alpha-gala sum(s/a/r)=3/1/15 full=3/1/15; zulu-empty sum(s/a/r)=0/0/0 full=0/0/0; xmonth-cross sum(s/a/r)=1/1/3 full=1/1/3; inmonth-full sum(s/a/r)=1/1/4 full=1/1/4] = True; board totals sum=5/3/22 full=5/3/22 = True; manual SQL third path equal on every month x session cell = True
+[3] no_show snapshot face
+PASS AC-MC3: in-register note: no_show = end-of-window cumulative snapshot (R1826 AC-EAW4), NOT additive, excluded from the telescoping sum; honest non-additivity reading: xmonth-cross sum(months)=1 vs full=0, board sum(months)=3 vs full=2 (differ = True); every windowed no_show == manual cumulative SQL across 2026-08/2026-09 + cur + fut = True; no_show >= 0 = True
+[4] dense axis preservation
+PASS AC-MC4: all five reads (default + 2026-08 + 2026-09 + cur + fut) carry the identical registry-driven session_key axis = True; ascending order in every read = True; future window all-zero cells with the full axis in place = True
+[5] pure-read + determinism + hygiene
+PASS AC-MC5: three-table counts flat (4, 5, 3) -> (4, 5, 3) = True; windowed double-call byte-identical = True; probe source pure ASCII (0 non-ascii) with zero network imports (0) = True; four product files sha-frozen = True; probe filename absent from reconcile_all.py SUITES registry (measurement face, R1727 precedent) = True
+[6] read-cap x window orthogonal combination
+PASS AC-MC6: combos=20 (5 window shapes x 4 caps): capped read == tail-N subsequence of that window's full read element-wise (json byte-identical + 8-key row field set) = True; overflow block 4-key alignment {limit,total,returned,truncated} with total == in-window full count == registry COUNT(*)=4 (dense registry axis, window-invariant) = True; window-key coexistence law (present == W / absent when None) = True; truncation exercised in 10 combos, full read carried in 10
+PASS AC-MC7: mirror SQL third path (ORDER BY session_key DESC LIMIT N, reversed back to ascending) == product row order on every one of the 20 combos = True
+PASS AC-MC8: zero-registration sub-world: board(cur,2) and board(None,2) both honest empty truncated reads rows==[] with the 4-key block carried {limit=2,total=0,returned=0,truncated=False} = True; window-key law in the zero world = True; zero mirror SQL == [] = True; three-table counts all zero (0, 0, 0) = True
+PASS AC-MC9: main-world three-table counts flat (4, 5, 3) -> (4, 5, 3) across the 20 capped reads = True; representative combo (m2, 2) double-call byte-identical = True; four product files sha-frozen after the whole section = True; probe filename absent from the reconcile_all.py SUITES registry (measurement face, R1727 precedent) = True
+PROBE VERDICT CONSISTENT (9/9)
