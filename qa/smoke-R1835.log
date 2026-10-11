@@ -1,0 +1,68 @@
+BigDomain QA smoke evidence - round R1835 - 2026-10-12 +08:00
+day work: (1) QA charter daily crawl W22 delivered - popup-push regulation fulltext direct-captured into
+benchmarks S1/S3/S4 + wall W22 signal; (2) five-still [QA] adjudication erratum: R1832..R1834 false-positive
+ruling overturned, broken daily-crawl chain resumed same day; (3) R1760 W21 S4-record omission honestly
+noted (four faces on disk, zero loss); (4) heartbeat R1833/R1834 backfilled + R1835 current row; GORD baseline
+402->277 structural drift recalibrated.
+
+--- (1) W22 crawl (group QA Smoke Test charter v1.0, orders L254 2026-09-28; docs/global-benchmarks.md +
+docs/research/intelligence-wall.md) ---
+W22 = internet popup-push service regulation, official fulltext (A-grade; hnca.miit.gov.cn MIIT-system-domain
+republication, source = China cyberspace administration website; three departments, issued 2022-09-09,
+effective 2022-09-30, 10 articles captured verbatim).
+tries: search locate 1 try; direct capture 2 tries -> 1 get, 1 negative.
+  try 1: gov.cn policy-library page (content_5709179) -> REJECTED - JS navigation shell, zero body text
+          (honest negative, same family as the Roblox JS-shell verdict, noted in the S4 record)
+  try 2: hnca.miit.gov.cn republication -> GOT (full 10 articles; same MIIT-system-domain channel family as
+          the W11 minors-regulation capture, hunca precedent)
+key hard rules captured verbatim:
+  art. 2:   scope - popup message-window push service via OS/app/website = our entitlement-push / banner-queue
+            / month-card reminder faces hit this form
+  art. 5(6): service agreement must disclose push form / content frequency / opt-out channel; plan frequency
+            scientifically; NO unreasonable differential push between ordinary and member users; no
+            interference with closing popups; push must prominently identify the provider
+  art. 5(7): no algorithm models inducing addiction or excessive consumption; no malicious blocking /
+            over-recommendation; NO profiling of minors to push content harmful to their health
+  art. 5(8): popup ads must be identifiable, prominently marked as ads with a close icon, one-tap close
+  art. 5(1)(9): no illegal/bad-info push (W16 dual-list same source); no malicious redirect links/QR codes;
+            no traffic fraud or hijacking via induced clicks
+  art. 4:   provider responsibility systems (content review / ecology governance / data security and personal
+            info protection / minors protection); art. 6: convenient complaint-and-report entry
+consumption: P-47(5) entitlement/monthly-card face (frequency disclosure + opt-out channel + member-differential
+  push ban) + member banner queue (provider identification + no close interference + one-tap close) + minors
+  push ban (stacks with W17/W11 into a three-layer minors-push gate) + P-47(3) UGC disposal face (art.5(1)
+  dual-list reference)
+benchmarks refreshed: 2026-10-12 (7-day cycle next due 2026-10-19; 15h staleness cap back in compliance)
+wall signal: W22 row appended to docs/research/intelligence-wall.md signal table
+
+--- (2) five-still adjudication erratum (honesty law) ---
+round-start scan: [QA] FLAG today_png=0 today_log=0 bench_today=False
+prior rulings R1832..R1834 recorded this flag as a "harness counting false-positive family" citing the
+reconcile-daily evidence on disk - that ruling conflated two distinct obligations: the reconcile-daily
+standing row (O-2026-0930-027, evidence qa/reconcile-daily-20261012.log produced 00:11 by R1831, honored,
+not rerun) versus the group QA Smoke Test charter daily crawl (orders L254: smoke evidence + benchmark 15h
+cap). Cadence evidence: daily crawls R961/R1054/R1156/R1253/R1333/R1385/R1509/R1619/R1698/R1760 on 10-03
+through 10-11, one per day, each with smoke-* evidence; 10-12 had none until this round. This round = the W22
+crawl round; chain resumed same day; gap = R1831..R1834 rounds, honestly noted, no fabrication.
+other scan faces: LEDGER zero new unacked transfers; DEC zero new tokens (row_owner=119 flat;
+C-20261011-03 inline-ref-missing-base = INFO, historical recording gap, not a new row); GORD tbl_rows 277 vs
+baseline 402 = negative structural drift (group table compression moved old rows out; newest CEO-order row
+10-12 00:2x <= scanned watermark 10-12 00:2x from R1832; zero new orders for this company; baseline
+recalibrated 402->277); ORD flat (2026-09-28 22:1x); BENCH 1 day -> refreshed this round; HB lag=2 backfilled
+this round; TREE clean no lock.
+
+--- (3) queue + closeout notes ---
+P1 board all gated or satisfied (radar window-7 opens 2026-10-14 21:40 - window-6 slice already consumed by
+R1757 per registry section six, no duplicate; BigLife R777 review file not arrived; bootstrap blocked on CEO
+physicals; daily standing row evidence on disk from R1831).
+P2 tech queue 10 open items, not consumed this round (charter crawl occupied the round; next round resumes FIFO
+head = freetrial calls-by-account tally face window). Proposal-track window 10-06..10-13 quota already met
+(BD-PROP-003 adopted).
+closeout: state.json tick 1835 + 2 log lines (byte-surgical CRLF splice, dual-parser pass); export flushed
+(tick row 1835, ceo_face three rows, self_drive recomputed via check_export_consistency.recompute single
+caliber, method updated); checker evidence = qa/export-check-R1835.log.
+tool-side erratum, honestly noted: checker first run FAIL (1/21) - the closeout driver wrote export_ts as a
+naive local timestamp without the tz offset (checker age computation needs tz-aware, prior value carried
++08:00); fixed same round, rerun all-pass, evidence file records the final state.
+self-check four items vs charter: daily crawl = this round (W22); benchmark 15h law = refreshed this round;
+research source chain = A-grade URL + channel note in S3 row and S4 record; signal wall = W22 row in place.

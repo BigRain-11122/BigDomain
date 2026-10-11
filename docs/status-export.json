@@ -1,10 +1,10 @@
-﻿{
-  "export_ts": "2026-10-12T01:24:54+08:00",
+{
+  "export_ts": "2026-10-12T01:48:26+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1834 一句话：给「活动门票销售榜的按月查看」做了一次全面对账——把每个月单独查出来的卖出数、检票数、收入加起来，跟不按月查的总数一笔笔对上，全部相等；还如实注明了「未到场数」是按「到某月为止累计」算的指标、不能简单相加（没混进加总里）。探针跑两遍输出逐字节一致，5 项验收全绿；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
-    "latest_artifact": "最近实物：src/os/eventtickets_monthcross_probe.py（审计榜月窗谱系互证探针·测量面）+qa/eventtickets-monthcross-R1834.log（RUN1+RUN2 逐字迹+双跑一致性）·2026-10-12 R1834",
-    "next_milestone": "下个实物：tech 队列按序交付（reconcile_all 无 argv 壳捕获自标注+daily 链方言互证窗/freetrial 调用 by-account 计数读面窗/sqlite_sequence 簿记行 DELETE 缺失态负路径探针窗·判据先立再写代码）+daily 对账常设行每日首轮+10-16 治理窗回访面（daily 剖面转正裁定执行窗同窗）·窗口 <=48h->2026-10-14 前。"
+    "current": "R1835 一句话：把连错三轮的一次判断纠正了——每天该做的「对外规则资料每日更新」，之前三轮被我误当成当天已经做过的对账给跳过了，今天查明并补上：从政府网站原文库抓回《互联网弹窗信息推送服务管理规定》全文（10 条），登进对外规则库。对我们最有用的三条：①给用户弹消息必须先说清推什么、多久推一次、怎么关掉，不能给会员和普通用户搞不合理的区别对待推送；②不能做诱导上瘾、诱导乱花钱的算法，更不能用算法给未成年人画像推送内容；③弹窗广告必须明显标「广告」、能一键关掉。这些直接成为我们月卡提醒和权益弹窗的设计硬规。顺带把漏写两天的值班心跳表补齐。",
+    "latest_artifact": "最近实物：docs/global-benchmarks.md 弹窗推送法规块（W22·2026-10-12 A 级直采入册·10 条全文）+qa/smoke-R1835.log/.png（真日志渲染证据）·2026-10-12 R1835",
+    "next_milestone": "下个实物：技术队列按序恢复交付（下一项=免费试用调用按账号计数读面·判据先立再写代码）+每日首轮对账照常+对外规则每日更新断链已收口照常跑+2026-10-14 21:40 雷达候选清单到窗即过目认领·窗口 <=48h→2026-10-14 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "1",
+      "QA charter 每日 crawl W22 片交付件（R1835·[QA] FLAG 判读勘正=R1832..R1834「harness 假阳性」判读推翻·charter 面正身=orders L254 每日 crawl〔smoke 证据+benchmark 15h 律〕≠对账日常化常设行·当日链断补位同日回位：《互联网弹窗信息推送服务管理规定》官方全文 A 级直采〔hnca.miit.gov.cn miit 系统域转载·源=中国网信网·三部门 2022-09-09 成文·2022-09-30 施行·10 条·search 1 试+直采 2 试 1 得 1 判负〔gov.cn 政策库 JS 壳〕〕→benchmarks §① 弹窗推送法规块+§③ 源行+§④ W22 记录行〔含 R1760 W21 ④ 漏写勘误补档注〕+benchmarks_refreshed=2026-10-12+信号 W22 入 intelligence-wall+qa/smoke-R1835.log+png〔render 真 log 渲染〕+自验四项全过·轮计分 1=数据件入册）"
+    ],
     [
       "2",
       "eventtickets 审计榜月窗谱系互证探针件（R1834·P2 tech 队头 FIFO〔R1826 补种 LN127〕·AC-MC1..MC5 预注册先于代码：观察月集三径互证〔引擎 DISTINCT 并集==月抽象植入集·fut 不在集·cur 真 API 行双面〕+流面 telescoping〔Σ观察月 sold/admitted/revenue==全窗·逐会话+榜总计 5/3/22==5/3/22+manual SQL 第三径闭合〕+no_show 快照面注记〔端窗累计快照不可加诚实读数·R1826 AC-EAW4 在册·不入互证面〕+dense 轴保真〔五读 session_key 轴同升序+未来窗全零胞全轴〕+纯读〔三表计数 (4,5,3) 恒定〕+双跑原始 stdout sha16 F5AE1C2D83D219E9 逐字节同一——PROBE VERDICT CONSISTENT 5/5·测量面不入 SUITES〔R1727 先例〕·证据 qa/eventtickets-monthcross-R1834.log）"
@@ -520,7 +524,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1834",
+      "1835",
       "OSLoop 执行 tick"
     ],
     [
@@ -3427,15 +3431,15 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 28,
+    "log_lines_in_window": 30,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1834 eventtickets audit-board month-set telescoping cross probe delivered (score 2, P2 tech FIFO oldest claimable item R1826 seed at LN127, gated/standing rows skipped; AC-MC1..MC5 pre-registered in the tech.md claim row before code, AC-MC prefix repo-wide scan zero owner); measurement-face probe src/os/eventtickets_monthcross_probe.py (R1727 qa_mtime_probe / R1806 water_consistency_probe precedent, NOT in the SUITES registry, zero product bytes): AC-MC1 observed-month set three-way (engine DISTINCT union of the two record-time prefixes == planted month-abstract set {m1,m2,cur}, future month absent, cur-month real-API rows on both faces, every observed-month windowed read walks); AC-MC2 flow-face telescoping core (per-session and board-total sums over observed months == full-window reads for sold/admitted/revenue, manual SQL third path equal on every month x session cell, board totals 5/3/22 == full 5/3/22); AC-MC3 no_show snapshot in-register note (end-of-window cumulative snapshot NOT additive - honest non-additivity reading xmonth sum=1 vs full=0, board sum=3 vs full=2 - excluded from the telescoping sum per R1826 AC-EAW4; every windowed no_show == manual cumulative SQL across 4 windows; >= 0); AC-MC4 dense axis preservation (all five reads identical registry-driven session_key axis ascending, future window all-zero cells with the full axis); AC-MC5 pure-read + determinism + hygiene (three-table counts (4,5,3) flat, raw-stdout double-run byte-identical sha16 F5AE1C2D83D219E9 via subprocess driver - first Tee/Out-File capture pair sha mismatch = capture writer dialect artifact not probe drift, honestly noted; probe source pure ASCII zero network imports; four product files sha-frozen; probe filename absent from reconcile_all.py); PROBE VERDICT CONSISTENT (5/5) exit 0/0; evidence qa/eventtickets-monthcross-R1834.log; queue_tech_open 10->9 reseed 1->10 (eventtickets audit-board read-cap parameter window)); window counting recomputed mechanically from state.json log 2026-10-06.. 2026-10-12 (W=28, sub=12, idle=0, nop=0)"
+    "method": "R1835 QA charter daily crawl W22 delivered (score 1 = data-file registration; five-still [QA] flag adjudication erratum: the R1832..R1834 harness-false-positive ruling is overturned - the [QA] face is the group daily-crawl charter (orders L254: smoke evidence + benchmark 15h cap), distinct from the reconcile-daily standing row (O-2026-0930-027, whose daily evidence qa/reconcile-daily-20261012.log from R1831 was honored and not rerun); the broken daily chain (last crawl R1760 on 10-11) resumed same day, gap R1831..R1834 honestly noted; W22 = internet popup-push service regulation official fulltext A-grade direct-captured via hnca.miit.gov.cn (MIIT system domain, source = China cyberspace administration website, three departments, effective 2022-09-30, 10 articles; gov.cn policy-library try = JS-shell negative) into benchmarks S1 popup-push law block + S3 source row + S4 W22 record (with R1760 W21 S4-record omission erratum note) + wall W22 signal - consumption: P-47(5) entitlement/monthly-card push disclosure rules + member banner queue identification/one-tap-close + minors-profiling push ban stacking W17/W11 + P-47(3) UGC dual-list same-source; benchmarks_refreshed 2026-10-12; qa/smoke-R1835.log + png rendered from the real log; GORD baseline 402->277 structural table-compression drift recalibrated, zero new orders; heartbeat R1833/R1834 backfilled + R1835 current, lag to 0; P1 board all gated or satisfied this day (radar window-7 opens 10-14 21:40, window-6 slice already consumed by R1757 no duplicate; BigLife R777 not arrived; bootstrap CEO physicals); P2 tech queue 10 open items not consumed this round (crawl occupied it, FIFO head resumes next round); window counting recomputed mechanically via check_export_consistency.recompute (single-caliber law)"
   }
 }
