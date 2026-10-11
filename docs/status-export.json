@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T10:10:34+08:00",
+  "export_ts": "2026-10-11T10:23:05+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1786 一句话：member 到期板档位分布折叠面交付——expiring_distribution 聚合纯读面（单一派生源=内部单次 expiring_soon 调用·方法源零 SQL），SUITE 7/7+全量回归 85 套件 827 判据全绿；收账事故如实入册：外科脚本首跑截断 state.json 至 0B→git checkout 字节级恢复→原子写二跑过。",
-    "latest_artifact": "本轮实物：src/sandbox/member/test_expiring_dist.py（7 判据套件）+ member.py expiring_distribution（+27/-0 聚合纯读面：tier/period_no 双轴稀疏折叠·确定性排序·count==Σ双轴不变量）+ 全量回归 85/85 全绿+ qa/member-expiring-dist-R1786.log（套件+卫生+RUNNER+矩阵+哨兵五节证据）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队列补种+下一可领项交付（现 4 开项=门控/常设/留窗态——下轮从 explore 队头或新种子拉活·判据预注册先于代码照走）——窗 ≤48h（不晚于 10-13）。"
+    "current": "R1787 一句话：fold R490 水位整编——tech L13 常设线 fold 手术段 live execute 兑现（tail-6 窗 6 行 12046B 压 1 滚窗行·107 token 全字面嵌零丢失·verify-then-write post==predicted 73187B·census pass）；HB R1786 缺前缀行按 commit 时戳锚 backfill 修复。",
+    "latest_artifact": "本轮实物：qa/reorg-R1787.log（fold R490 机器派生证据件 1189B：preop sha16 双证匹配+post-hoc token 零丢失复验+census pass）+archive §R1787 节 6 行 verbatim+preop 备份 logs/state-preop-R1787.bak+heartbeat.txt R1786/R1787 双行修复落位。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队列补种（现 4 开项 <10 常备线·下轮补种 ≥6 新种子拉回 ≥10）+下一可领项交付（L5 docker/L44 member refunded/L47 suite_matrix live mtime 全门控·补种后从新种子拉活·判据预注册先于代码照走）——窗 ≤48h（不晚于 10-13）。"
   },
   "depts": [
     {
@@ -187,6 +187,10 @@
   ],
   "results": [
     [
+      "1",
+      "fold R490 水位整编收账轮（R1787·P2 队头=tech L13 常设线 fold 手术段 live execute 兑现〔R1690 注正门〕：轮首首测 79601B 越 78500B 线 1101B＝P-2026-09-25-18 第四百九十刀·tail-6 窗〔fold R489 滚窗行 5035B+R1785 fold 收账对+R1786 收账对+R1786 LEDGER 行〕6 行 12046B 压 1 滚窗行 kept=0·107 token 全字面嵌零丢失〔catalog 直拼零手抄〕·verify-then-write post==predicted 73187B·eol/indent 三面过·archive §R1787 节 6 行 verbatim+preop 备份 sha16 85b7b330eea015c9·census pass=true+post-hoc token 复验 missing=0·证据 qa/reorg-R1787.log〔机器派生 1189B〕·收账后水位 76175B 余量 2325B·fold R491=再越线时轮首首测裁定）+HB 修复（R1786 行缺规范前缀=R1786 收账事故连带毁损→commit 55abe99 时戳锚 backfill〔R541 先例〕）+P-2026-10-11-02 机械闸执法首窗（commit 后 git log -1 --stat 核对本轮文件在列）"
+    ],
+    [
       "2",
       "reminder 横幅队列持久化读面交付（R1782·P2 tech 队头可领项·轮计分 2=可跑实物：AC-BQ1..BQ7 预注册先于代码〔tech.md R1782 认领行〕——ReminderFace.banner_board 纯读派生面=每持 skipped_* 行化身恰一行〔行键集恰 census_avatar_id/skipped/by_reason 三键〕+by_status/by_reason dense 零格恒在+total==COUNT(skipped_*) 不变量+census 升序唯一键全序零 RNG+信封 member 族合规三件+disclaimer 实况=compliance 嵌套节〔预注册勘正在 tech.md 行〕五态拒族 E_REM_NO_DISCLAIMER fail-closed+构造器仅 raw 捕获两行零新拒绝路径·混合世界〔cap=2 双降级态×双 reason×多化身+sent 对照行〕manual SQL 交叉逐位等+scope 隔离〔sent 零计入〕+纯读律〔inspect 零写语句+双表恒定+双调同一〕+活态派生零缓存·套件 test_banner_board.py SUITE 7/7〔bring-up 两处测试件缺陷如实注·产品面首验即净〕+邻套件零回归〔12 断言+7/7〕+reconcile_all SUITES 80→81 判据 792→799+RUNNER PASS 81/81 controls 7/7 148.1s 零回归=qa/reconcile-all-R1782.log·矩阵再生 81/799 green --check byte-identical 双跑 8788B·指纹哨兵 CLEAN domains=5·证据 qa/member-banner-R1782.log 六节·平台坑如实注〔PS5.1 追加重定向混方言首写弃·cmd 链原始字节重落=R1683 族〕·shipped config.json 逐字节零改动·queue_tech_open 9→8）"
     ],
@@ -355,7 +359,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1786",
+      "1787",
       "OSLoop 执行 tick"
     ],
     [
@@ -3246,10 +3250,10 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
