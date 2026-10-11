@@ -47,6 +47,25 @@ bad-window family check covers all four window-parameterized read
 faces. Count cross only - the value cross stays in [5]; zero
 product files touched (measurement face, R1727 precedent).
 
+R1809 extension (ghost-kind observation-row negative path): the
+five-kind closed set never hides an out-of-set observation row
+(R1801 product-face law: dense five first, foreign keys appended
+sorted). This probe injects one ghost row (kind='legacy-ghost',
+direct INSERT under PRAGMA ignore_check_constraints - the R1801
+tamper posture, ts derived from the current flow month so it is
+wall-clock-month independent) and re-proves the three-face count
+cross on it: kind_tally(W) appended key == board hand-group
+appended key == flow windows count. A hidden-face demonstration
+shows the cross has detection power (pre-injection tally vs
+post-injection hand-group differ by exactly the ghost key - any
+face that hid the row would break the cross and fail the probe,
+fail-closed by construction), the malformed-window reject ring
+stays intact in the tampered world, the ghost row attributes to
+its own month only (historical/future windows stay clean), and
+the store stays byte-identical across the injection (ghost rows
+have no store backing; the [3]/[4] journal-vs-store crosses run
+first and close pre-tamper - the R1807 fixture law).
+
 Encoding discipline: this source stays pure ASCII (the emoji probe
 text rides \U escapes); the output stays deterministic (no
 timestamps, no temp paths) so double runs compare byte-identical.
@@ -456,6 +475,111 @@ def main():
         fail = fail or not (hist_ok and tele_ok and cur_ok and fut_ok
                             and bk_ok)
 
+        # ---- [7] ghost-kind cross (R1809) ----------------------------
+        # Out-of-set observation row (R1801 product-face tamper law):
+        # every counting face must keep it visible. Store snapshot and
+        # pre-injection faces are captured first (zero store backing;
+        # the [3]/[4] crosses already closed on the pre-tamper world).
+        store_pre = json.dumps(pipe.store.pool_water_levels(),
+                               sort_keys=True)
+        pre_tally = dict(pipe.journal.kind_tally(cur_w)["kind_tally"])
+        pre_flow_env = pipe.journal.monthly_flow(cur_w)
+        pre_flow = pre_flow_env["monthly_flow"]
+        ghost_absent = "legacy-ghost" not in pre_tally
+        conn = sqlite3.connect(journal_db)
+        conn.execute("PRAGMA ignore_check_constraints = ON")
+        conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta, ts_utc) "
+            "VALUES ('legacy-ghost', ?, 1, ?)",
+            (json.dumps({"noise.total": 1}, sort_keys=True),
+             cur_w + "-11T00:00:00.000000Z"))
+        conn.commit()
+        conn.execute("PRAGMA ignore_check_constraints = OFF")
+        ghost_rows = conn.execute(
+            "SELECT COUNT(*) FROM water_windows"
+            " WHERE kind = 'legacy-ghost'").fetchone()[0]
+        conn.close()
+        gk_ok, gk_tally, gk_rows = kind_count_cross(cur_w)
+        key_order_ok = list(gk_tally) == sorted(WJ.KINDS) + ["legacy-ghost"]
+        gk1_ok = (ghost_absent and ghost_rows == 1 and gk_ok
+                  and key_order_ok and gk_tally.get("legacy-ghost") == 1)
+
+        # hidden-face detection power: pre vs post differ by exactly
+        # the ghost key - a face that hid the row breaks the cross.
+        diff_keys = set(gk_tally) ^ set(pre_tally)
+        diff_only_ghost = (diff_keys == {"legacy-ghost"}
+                           and all(int(gk_tally[k]) == int(v)
+                                   for k, v in pre_tally.items()))
+        conn = sqlite3.connect(journal_db)
+        rows_g1 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        try:
+            pipe.journal.kind_tally(window=bad)
+            gk_reject = "NO-RAISE"
+        except ValueError as exc:
+            gk_reject = ("E_WJ_BAD_WINDOW"
+                         if "E_WJ_BAD_WINDOW" in str(exc) else "OTHER")
+        conn = sqlite3.connect(journal_db)
+        rows_g2 = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        gk2_ok = (diff_only_ghost and gk_reject == "E_WJ_BAD_WINDOW"
+                  and rows_g1 == rows_g2)
+
+        # month attribution: ghost lands in its own month only.
+        hist_tally2 = dict(pipe.journal.kind_tally("2026-08")
+                           ["kind_tally"])
+        hist_clean = (hist_tally2 == {"batch": 0, "drain": 0, "ingest": 0,
+                                      "submit": 1, "verdict": 2})
+        fut_ok2, fut_tally2, fut_rows2 = kind_count_cross("2026-12")
+        fut_clean = (fut_ok2 and sum(fut_tally2.values()) == 0
+                     and "legacy-ghost" not in fut_tally2)
+        post_flow_env = pipe.journal.monthly_flow(cur_w)
+        post_flow = post_flow_env["monthly_flow"]
+        attr_ok = (len(pre_flow) == 1 and len(post_flow) == 1
+                   and post_flow[0]["month"] == pre_flow[0]["month"] == cur_w
+                   and post_flow[0]["windows"]
+                   == pre_flow[0]["windows"] + 1
+                   and post_flow[0]["total_delta"]
+                   == pre_flow[0]["total_delta"] + 1
+                   and post_flow_env["net_delta"]
+                   == pre_flow_env["net_delta"] + 1)
+        gk3_ok = hist_clean and fut_clean and attr_ok
+
+        # zero store background: injection touched the journal only.
+        store_post = json.dumps(pipe.store.pool_water_levels(),
+                                sort_keys=True)
+        gk4_ok = store_pre == store_post
+        sections.append("[7] ghost-kind cross:")
+        sections.append("    injected=%d absent-pre=%s tally=%s %s"
+                        % (ghost_rows, ghost_absent,
+                           json.dumps(gk_tally, sort_keys=False),
+                           "OK" if gk1_ok else "DRIFT"))
+        sections.append("    hidden-face detection: diff-keys=%s "
+                       "other-cells-equal=%s %s"
+                        % (",".join(sorted(diff_keys)) or "(none)",
+                           diff_only_ghost,
+                           "OK" if diff_only_ghost else "DRIFT"))
+        sections.append("    bad-window with ghost: %s rows %d==%d %s"
+                        % (gk_reject, rows_g1, rows_g2,
+                           "OK" if (gk_reject == "E_WJ_BAD_WINDOW"
+                                    and rows_g1 == rows_g2) else "DRIFT"))
+        sections.append("    month attribution: hist-2026-08-clean=%s "
+                       "fut-2026-12-zero=%s flow %s windows=%d->%d "
+                       "total_delta=%d->%d net_delta=%d->%d %s"
+                        % (hist_clean, fut_clean, cur_w,
+                           pre_flow[0]["windows"], post_flow[0]["windows"],
+                           pre_flow[0]["total_delta"],
+                           post_flow[0]["total_delta"],
+                           pre_flow_env["net_delta"],
+                           post_flow_env["net_delta"],
+                           "OK" if gk3_ok else "DRIFT"))
+        sections.append("    store zero-background: identical=%s "
+                       "([3]/[4] closed pre-tamper)"
+                        % gk4_ok)
+        fail = fail or not (gk1_ok and gk2_ok and gk3_ok and gk4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -471,7 +595,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[7] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[8] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)

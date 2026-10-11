@@ -1,0 +1,41 @@
+=== water-ghostkind R1809 double-run evidence ===
+probe: src/os/water_consistency_probe.py ([7] ghost-kind cross, hygiene moved to [8])
+run1 exit=0 sha16=fe8cc53811d98d7e
+run2 exit=0 sha16=fe8cc53811d98d7e
+byte-identical=True
+stderr1=(empty)
+stderr2=(empty)
+--- run1 full stdout ---
+[1] shared-birth zero-start: levels=True board=True tally=True
+[2] world account: kind_tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 4, "verdict": 2} five-kinds>=1=True degraded-queued=True drain={"drained": 1, "passed": 1, "recovered": ["1d783898778c6d03"], "rejected": 0}
+[3] journal-vs-store cross:
+    cell noise.by_reason.emoji_only   journal=3   store=3   OK
+    cell noise.by_reason.too_short    journal=1   store=1   OK
+    cell noise.total                  journal=4   store=4   OK
+    cell review.suspended             journal=2   store=2   OK
+    cell review.verdicted.pass        journal=1   store=1   OK
+    cell review.verdicted.risky       journal=1   store=1   OK
+    composition journal_total=6 noise+susp=6 store_total=6 OK
+    third-path hand-sum=OK
+[4] drift injection: rows=1 named=1 noise.total-named=True verdict=DRIFT-DETECTED
+    cell noise.total                  journal=9   store=4   DRIFT
+    drift composition journal_total=11 noise+susp=11 store_total=6 DRIFT
+[5] month-window three-face cross:
+    hist 2026-08: rows=3 total=-1 cells={"noise.by_reason.too_short": 1, "noise.total": 1, "review.suspended": -2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    cur 2026-10: rows=10 total=11 cells={"noise.by_reason.emoji_only": 3, "noise.by_reason.too_short": 1, "noise.total": 9, "review.suspended": 2, "review.verdicted.pass": 1, "review.verdicted.risky": 1} OK
+    fut 2026-12: rows=0 total=0 OK
+    bad-window passthrough: E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW,E_WJ_BAD_WINDOW rows 13==13 OK
+[6] by-kind month-window count cross:
+    hist 2026-08: rows=3 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 1, "verdict": 2} OK
+    months=2026-08,2026-10 telescoping(sum==all)={"batch": 1, "drain": 1, "ingest": 1, "submit": 6, "verdict": 4} OK
+    cur 2026-10: rows=10 tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2} OK
+    fut 2026-12: rows=0 tally={"batch": 0, "drain": 0, "ingest": 0, "submit": 0, "verdict": 0} OK
+    bad-window kind_tally: E_WJ_BAD_WINDOW rows 13==13 OK
+[7] ghost-kind cross:
+    injected=1 absent-pre=True tally={"batch": 1, "drain": 1, "ingest": 1, "submit": 5, "verdict": 2, "legacy-ghost": 1} OK
+    hidden-face detection: diff-keys=legacy-ghost other-cells-equal=True OK
+    bad-window with ghost: E_WJ_BAD_WINDOW rows 14==14 OK
+    month attribution: hist-2026-08-clean=True fut-2026-12-zero=True flow 2026-10 windows=10->11 total_delta=11->12 net_delta=11->12 OK
+    store zero-background: identical=True ([3]/[4] closed pre-tamper)
+[8] hygiene: probe-ascii=True import-lines-clean=True frozen=True (config.json:74087fe8a3632d8d pipeline.py:332c4163ab5ba4cf store.py:0adbacf7ccd0d043 water_journal.py:077c7b8be8095ab7)
+PROBE VERDICT: CONSISTENT+DETECTING
