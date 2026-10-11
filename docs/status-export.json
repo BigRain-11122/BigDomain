@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-12T00:47:44+08:00",
+  "export_ts": "2026-10-12T01:08:39+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1832 一句话：给「已删编号永不复用」这条数据库保证找到了它的命门并实测验讫——直接改写计数器把高水位拨回零，下一行数据就复用了已删的编号（保证失守实锚）；照原样恢复高水位、精确删掉复用行后世界完好如初。判据先立再写代码，5 项验收全绿，探针双跑逐字节一致，全套既有检查零回归；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
-    "latest_artifact": "最近实物：src/os/water_consistency_probe.py（[21] 簿记篡改 id 复用负路径探针节·篡改→复用→恢复→复绿四段+hygiene 顺移 [22]）+qa/water-seqtamper-R1832.log（预验+双跑+读数+判据判定+全量输出五节证据）·2026-10-12 R1832",
-    "next_milestone": "下个实物：tech 队列按序交付（apidev lineage 链内用量聚合读面窗/eventtickets 审计榜月窗谱系互证窗/sqlite_sequence 簿记行 DELETE 缺失态负路径探针窗·判据先立再写代码）+daily 对账常设行每日首轮+10-16 治理窗回访面（daily 剖面转正裁定执行窗同窗）·窗口 ≤48h→2026-10-14 前。"
+    "current": "R1833 一句话：把「一个开发者换了几把钥匙后各自用了多少次 API」做成了一个数字面板——一次查询拿到整条钥匙链每个成员的当月用量，并验证它跟现行的防逃逸计数、跟开发者面板上的数字完全对得上（换钥匙想刷额度这条老防线依旧硬）。判据先立再写代码，7 项验收全绿，双跑逐字节一致，全套既有检查零回归；技术队列按顺序清了最老一项，再补一项保持 10 项常备。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/apidev.py（chain_usage 链内用量聚合读面·审计视角一次性读）+src/sandbox/ledger/test_apidev_chainusage.py（SUITE 7/7 双跑逐字节一致）+qa/apidev-chainusage-R1833.log（五节证据）·2026-10-12 R1833",
+    "next_milestone": "下个实物：tech 队列按序交付（apidev chain_usage 月滚动保真例窗/eventtickets 审计榜月窗谱系互证窗/sqlite_sequence 簿记行 DELETE 缺失态负路径探针窗·判据先立再写代码）+daily 对账常设行每日首轮+10-16 治理窗回访面（daily 剖面转正裁定执行窗同窗）·窗口 ≤48h→2026-10-14 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "apidev 链内用量聚合读面交付（R1833·P2 tech 队头 FIFO〔R1825 补种·LN5 docker 门控/L13 常设/L44 门控/L47 R1727 认领驻留/L89 gated 10-16 全跳过〕·轮计分 2=可跑实物）：chain_usage(api_key, window=None) 纯读聚合面 additive 落成〔键闸最先+缺省 None=当月+14 坏窗形态 fail-closed·AC-LU1..LU7 预注册先于代码=tech.md R1833 认领行本行即册〕——信封十一键+by_member 行三键〔链序=audit_lineage 同序跨面零漂移·三查询点实测〕+语义对齐双不变量证〔effective_upto_queried==manual prefix SQL==产品 _effective_window_count==key_view quota_used 当月窗（B=5/C=9/A=3）∧chain_total==effective+descendants own〕+窗口径〔历史月 fixture 直注入=A own 2·未来窗诚实空·缺省复读 byte-stable 零渗透〕+死键可读〔全终态 3 键链照读〕+纯读律〔三表计数恒定+方法源写语句扫描净+双调 json 双形态逐字节同一〕——SUITE PASS 7/7 首跑全绿+双跑 sha16 69C0158CB7505E3B 逐字节同一·reconcile_all SUITES 105→106 判据 971→978〔ledger-apidev-chainusage 行〕+RUNNER PASS 106/106 controls 7/7 173.2s 零回归=qa/reconcile-all-R1833.log·矩阵再生 106/978 green --check byte-identical〔10848B〕·指纹哨兵 CLEAN domains=5·shipped config.json 逐字节零改动·证据 qa/apidev-chainusage-R1833.log 五节·R1833"
+    ],
     [
       "2",
       "freetrial 调用 by-engine 计数读面交付（R1831·P2 tech 队头 FIFO〔R1830 补种 LN94·LN5 docker 门控/L13 常设/L44 门控/L47 R1727 认领驻留/L89 gated 10-16 全跳过〕·轮计分 2=可跑实物：当日对账常设行兑现先段〔reconcile_daily 首轮实跑 RUNNER PASS 104/104 套件 963 判据 controls 7/7 182.8s+sentinel=ok=RECONCILE-DAILY 20261012 verdict=PASS G0 绿=qa/reconcile-daily-20261012.log〕+AC-CBE1..CBE8 预注册先于代码〔tech.md R1831 认领行本行即册先于 freetrial.py 落码·AC-CBE 前缀全仓扫描无主·设计裁定三条入册：engine 键观测 TEXT 域查询序升序/ghost engine 直注照 AC-CBK5 判读先行/envelope 恰三键 window additive〕——calls_by_engine(window=None) 纯读聚合面 additive 落成：缺省 None=全窗 engine→计数 dict〔envelope 恰三键·engine 键升序零 RNG·total==Σ==COUNT(*) 双不变量〕+零调用世界 {} total=0 诚实空+显式 YYYY-MM 行过滤窗=该月 engine 剖面或 {} 诚实空+window 键 additive 缺省面零键漂移+坏窗 14 形态全拒 E_FT_BAD_ARGS 零副作用〔四表计数前后同一〕+域外观测 engine 不隐藏〔ghost-engine-probe 直注行缺省读升序显形计入 total·live-gate engine 格和 8==total 9−ghost 1·月窗读该月内显形该月外不可见·face 永不藏数据 R1776 AC-CHM3 同律〕+manual SQL GROUP BY engine_ref 逐位等+键序==SQL ORDER BY 升序同构+纯读律〔inspect 零写语句+四表计数前后同一+双调 json.dumps 双形态逐字节同一〕+活态零缓存〔新调用 eng-x 格 4→5·total 9→10·他 engine 格与 ghost 格不动〕——SUITE PASS 8/8 exit 0 首跑全绿零修正+双跑 sha256 419CED66566B95E2 逐字节同一〔零 RNG 零时间戳〕·reconcile_all SUITES 104→105 判据 963→971 接线〔ledger-freetrial-callengine 行〕+RUNNER PASS 105/105 controls 7/7 187.6s 零回归=qa/reconcile-all-R1831.log·矩阵再生 105/971 green --check byte-identical〔10760B〕·证据 qa/freetrial-callengine-R1831.log 五节·queue_tech_open 10→9 补种 1→10〔freetrial 调用 by-account 计数读面窗〕·五静=GORD tbl_rows 264 vs 基线 275 负漂=表压缩移出旧行〔最新 CEO 令行 10-11 13:4x≤已扫水位 23:5x·@BigDomain 7 提及全旧令〕+DEC token 差集=0〔行数 288 排版漂移基线随轮校 288〕+LEDGER 零新增未回+树净零锁·R1831）"
@@ -512,7 +516,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1832",
+      "1833",
       "OSLoop 执行 tick"
     ],
     [
@@ -3419,15 +3423,15 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1832 sqlite_sequence bookkeeping-tamper id-reuse negative-path probe section delivered (score 2, P2 tech FIFO oldest claimable item R1823 seed LN125, gated/standing rows skipped; AC-TP1..TP5 pre-registered in the tech.md claim row before code, AC-TP prefix checked repo-wide zero owner; tp_precheck engine pin first: after UPDATE sqlite_sequence SET seq=0 a fresh INSERT reuses the deleted id 15 and the bookkeeping row re-anchors at 15, restore 26, delete reused row leaves seq at 26; probe [21] section + hygiene moved to [22]: tamper-rollback seq 26->0 rows stay 14 value faces untouched, id-reuse window_id==15 surfaced in count faces board-cur 11->12 COUNT 14->15, restore seq==26, world re-green rows back 14 total back 11 tallies equal pre-tamper dicts seq stays 26 (deletion never touches the bookkeeping row); first-run all green zero fixes + double-run sha16 FC8FC623697121BA byte-identical; PROBE VERDICT CONSISTENT+DETECTING ([1]..[20] zero-reg), hygiene probe-ascii import-clean frozen-four identical = zero product bytes, measurement face not in SUITES (R1727 precedent); evidence qa/water-seqtamper-R1832.log; round-start five-still: DEC 2 new tokens D-20261012-01/02 knowledge-only (receipt batch + false-alarm correction + veto-window retirement, our fetch-first receipt step already compliant), GORD baseline 264->277 (13 rows all BigStream MV-line orders, wardrobe-seat + lyric-imagery new knowledge-only), QA FLAG adjudicated = daily evidence qa/reconcile-daily-20261012.log on disk (mtime 00:11) obligation met not rerun; queue_tech_open 10->9 reseed 1->10 (bookkeeping-row DELETE absence negative-path probe)); window counting recomputed mechanically from state.json log 2026-10-06..2026-10-12 (W=24, sub=10, idle=0, nop=0)"
+    "method": "R1833 apidev lineage chain-usage one-shot read face delivered (score 2, P2 tech FIFO oldest claimable item R1825 seed, gated/standing rows skipped; AC-LU1..LU7 pre-registered in the tech.md claim row before code, AC-CU prefix taken by curation R1751 -> switched to AC-LU, repo-wide scan zero owner); chain_usage(api_key, window=None) pure-read aggregate: key gate first + default None = current _window_utc + 14 bad-window forms fail-closed (unknown key + bad window -> key gate first), envelope 11 keys, per-member rows {key_id, key_name, own_calls} with the chain order pinned equal to audit_lineage (cross-face zero drift from all three query points); semantic alignment two invariants proven: effective_upto_queried == manual prefix SQL == product _effective_window_count == key_view quota_used (B=5/C=9/A=3) and chain_total == effective + descendants own (9==5+4 / 9==9+0); window semantics: historical-month fixture-injected rows surfaced (A own 2, effective through C carries ancestor hist rows), future window honest all-zero, default re-read byte-stable zero penetration; dead keys fully readable (revoked singleton + all-terminal 3-key chain); pure-read law: three-table counts stable, method-source write-statement scan clean, double-call json byte-identical both shapes; suite test_apidev_chainusage.py SUITE PASS 7/7 first-run all green + double-run sha16 69C0158CB7505E3B byte-identical; reconcile_all SUITES 105->106 criteria 971->978 (ledger-apidev-chainusage row) + RUNNER PASS 106/106 controls 7/7 173.2s zero-reg = qa/reconcile-all-R1833.log; matrix 106/978 green --check byte-identical (10848B); fingerprint sentinel CLEAN domains=5; shipped config.json byte-stable; evidence qa/apidev-chainusage-R1833.log; queue_tech_open 10->9 reseed 1->10 (chain_usage month-roll preservation case)); window counting recomputed mechanically from state.json log 2026-10-06..2026-10-12 (W=26, sub=11, idle=0, nop=0)"
   }
 }

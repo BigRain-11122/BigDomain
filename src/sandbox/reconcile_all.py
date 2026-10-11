@@ -781,6 +781,22 @@ SUITES = [
     # (AC-LG1..LG7 pre-registered in state/queue/tech.md)
     ("ledger-apidev-lineage", os.path.join("ledger",
                                            "test_apidev_lineage.py"), 7),
+    # R1833 apidev lineage chain-usage one-shot read face: the
+    # R1825 audit_lineage successor -- per-chain-member call
+    # counts for one window in a single read (chain walked the
+    # audit_lineage way, cross-face zero drift pinned by the
+    # suite), the prefix sum over ancestors+queried pinned equal
+    # to the quota ring's ancestry-only anti-evasion effective
+    # count and to key_view quota_used for the current window,
+    # chain_total split into that prefix plus the descendants'
+    # own rows (audit view vs enforcement face), 14 bad-window
+    # forms fail-closed, historical/future month semantics on the
+    # record-time window column, dead keys fully readable,
+    # embedded faces untouched (AC-LU1..LU7 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-chainusage", os.path.join("ledger",
+                                             "test_apidev_chainusage.py"),
+     7),
 ]
 
 FAILS = 0

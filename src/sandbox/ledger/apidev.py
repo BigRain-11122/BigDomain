@@ -991,6 +991,92 @@ class DevKeyFace:
                 "queried_index": chain_ids.index(key_id),
                 "disclaimer": self.disclaimer}
 
+    # -- lineage chain usage read face (R1833) -------------------------------
+
+    def chain_usage(self, api_key, window=None):
+        """One key's whole rotation lineage usage in a single
+        read: per-member call counts for one window, aggregated at
+        read time over the immutable call rows. The chain is
+        walked the exact way audit_lineage walks it (rotate_in
+        upward one level at a time, rotate_out downward, a
+        visited-id set stopping any corrupted loop), oldest
+        ancestor first, queried key in the middle, newest
+        descendant last -- so the two faces cannot drift (the
+        suite pins the member order against audit_lineage). Each
+        member block carries only that member's own rows: the
+        audit view attributes usage to the exact key that spent
+        it. Two alignment invariants make the enforcement/audit
+        split explicit: the prefix sum over ancestors plus the
+        queried key equals the quota ring's anti-evasion effective
+        count for the queried key (the enforcement face is
+        ancestry-only; a rotation never resets the window), and
+        chain_total splits into that prefix plus the descendants'
+        own rows (the audit view adds exactly the descendants the
+        enforcement face never counts). window=None (the default)
+        keeps the current-UTC-month behavior, the same _window_utc
+        source as the quota ring; an explicit "YYYY-MM" string
+        reads any month window at read time (rows are immutable
+        and stamped with their own record-time window, so a
+        historical month stays readable forever and a future
+        month is an honest all-zero read); any other shape
+        rejects E_AD_BAD_ARGS fail-closed before the aggregation.
+        The key gate fires first (the call-chain key-gate-first
+        law). Read-only, zero token movement, zero maintained
+        counters; a revoked or rotated-out key stays fully
+        readable (a terminal state never closes the audit face)
+        and the embedded faces (key_view, dev_board) stay
+        untouched (the AC-RJW4 embedded-face law)."""
+        row = self._key_row_by_apikey(str(api_key or "").strip())
+        if row is None:
+            raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if window is None:
+            window = _window_utc()
+        elif not (isinstance(window, str)
+                  and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
+        key_id = row[0]
+        ancestors = self._ancestry_key_ids(key_id)[1:]
+        ancestors.reverse()          # oldest predecessor first
+        descendants = []
+        seen = set(ancestors) | {key_id}
+        current = self._successor_key_id(key_id)
+        while current is not None and current not in seen:
+            seen.add(current)
+            descendants.append(current)
+            current = self._successor_key_id(current)
+        chain_ids = ancestors + [key_id] + descendants
+        marks = ",".join("?" for _ in chain_ids)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT key_id, COUNT(*) FROM api_calls"
+                " WHERE window = ? AND key_id IN (" + marks + ")"
+                " GROUP BY key_id",
+                [window] + list(chain_ids)).fetchall()
+        counts = {r[0]: int(r[1]) for r in rows}
+        members = []
+        chain_total = 0
+        prefix_total = 0
+        for member_id in chain_ids:
+            own = counts.get(member_id, 0)
+            name_row = self._key_row_by_id(member_id)
+            members.append({"key_id": member_id,
+                            "key_name": name_row[2]
+                                        if name_row is not None
+                                        else None,
+                            "own_calls": own})
+            chain_total += own
+            if member_id not in descendants:
+                prefix_total += own
+        return {"api_key": api_key, "dev_account": row[1],
+                "key_name": row[2], "key_id": key_id,
+                "window": window, "by_member": members,
+                "chain_total": chain_total,
+                "effective_upto_queried": prefix_total,
+                "chain_size": len(chain_ids),
+                "queried_index": chain_ids.index(key_id),
+                "disclaimer": self.disclaimer}
+
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
 
     def revoke_key(self, api_key):

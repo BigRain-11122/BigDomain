@@ -1,0 +1,73 @@
+qa/apidev-chainusage-R1833.log -- R1833 apidev chain_usage delivery round evidence
+verdict=PASS (suite 7/7 double-run + runner green + matrix --check stable + sentinel clean)
+--- [1] suite run1 (verbatim) ---
+PASS AC-LU1: key gate first: unknown/empty/unknown+bad-window -> E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY; envelope 11 keys exact=True, window=2026-10, member rows 3-key exact=True, chain order [A,B,C]==audit_lineage order=True, own map={1: 3, 2: 2, 3: 4}, chain_total=9, effective_upto_queried=5, queried_index=1
+PASS AC-LU2: 14 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 18==18, api_dev_keys 6==6, key_events 6==6, zero read side effects); only None is the default sentinel
+PASS AC-LU3: by_member id order == audit_lineage chain order from every query point=True; point invariance (own map / chain_total=9 / chain_size=3 equal, queried_index 0/1/2 by point)=True
+PASS AC-LU4: per-member own == manual SQL={1: 3, 2: 2, 3: 4}; chain_total==manual IN-list==9; effective(B)==manual prefix==product _effective_window_count==key_view quota_used==5; effective(C)==9; split law chain_total==effective+descendants (9==5+4, 9==9+0)=True
+PASS AC-LU5: hist window: A own==2 (fixture-injected rows, direct INSERT noted), B/C zero, chain_total==2, effective through C==2 (ancestor hist rows carry); future window: all-zero honest empty; default read re-read byte-stable (zero hist penetration)=True
+PASS AC-LU6: revoked singleton readable (own==2), zero-call fresh key honest zero, all-terminal 3-key chain readable (A rotated_out/B rotated_out/C revoked, own map=={1: 3, 2: 2, 3: 4}); double-call json byte-identical (sorted + insertion order); table counts stable (18/6/6); chain_usage source write-statement scan=True
+PASS AC-LU7: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero chain_usage embedding=True; config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, chain_usage present=True
+SUITE apidev-chainusage: 7/7 criteria pass
+
+--- [2] double-run determinism ---
+run1 exit=0 sha16=69C0158CB7505E3B
+run2 exit=0 sha16=69C0158CB7505E3B
+byte-identical=True
+
+--- [3] full runner regression ---
+runner exit=0 (evidence self-written: qa\reconcile-all-R1833.log)
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-mfjl8ybc\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-mfjl8ybc\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-mfjl8ybc\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (106/106 suites green, reconcile controls 7/7, 173.2s)
+
+--- [4] suite matrix ---
+regen exit=0
+--check run1 exit=0
+--check run2 exit=0
+--check byte-identical=True
+PASS generated docs/sandbox-suite-matrix.md (10848 bytes) - registry suites=106 criteria=978 evidence=qa/reconcile-all-R1833.log green=106/106
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [5] fingerprint sentinel ---
+exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] export consistency checker (post-refresh) ---
+PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=26
+PASS self_drive.no_pullable_mention_lines stored=0
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=9
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=10
+PASS self_drive.substantive_non_idle_mention_lines stored=11
+PASS self_drive.window stored='2026-10-06..2026-10-12'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1833'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-12T01:08:39+08:00' (age 0.0h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1833 window=2026-10-06..2026-10-12 W=26 idle=0 nop=0 sub=11 proposals=3/1 queues=6/10/9
+VERDICT PASS
