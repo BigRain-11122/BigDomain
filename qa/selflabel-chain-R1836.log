@@ -1,0 +1,575 @@
+probe: reconcile_all no-argv self-label + daily chain dialect mutual-proof evidence (BigDomain R1836 AC-SL)
+seed: R1827 three-state writer archaeology + qa_decode_probe canon (claim row tech.md, criteria pre-registered before code)
+
+=== [1] AC-SL1 no-argv first-line self-label (streaming kill test, driver output) ===
+first-line bytes : b'no evidence path: shell-capture mode, evidence dialect follows the caller\r\n'
+expected  bytes : b'no evidence path: shell-capture mode, evidence dialect follows the caller\n'
+observed EOL    : b'\r\n' (platform text-mode, honest note)
+label-first     : PASS
+killed rc       : 1 (PASS non-zero)
+AC-SL1: PASS
+exit=0 (0 expected)
+
+=== [2] AC-SL2 daily chain end-to-end single-dialect mutual proof (qa/reconcile-daily-20261012-2.log) ===
+morning capture : reconcile-daily-20261012.log (206494 bytes, CR count 0)
+anchor   | PASS AC-L9:        new-file hits=1 morning hits=1 identical=yes hex-prefix=20207c20504153532041432d4c393a2061692d616374696f6e20736f757263655f61693d31206169
+anchor   | PASS AC-LR3:       new-file hits=1 morning hits=1 identical=yes hex-prefix=20207c20504153532041432d4c52333a2062616e6e656420776f72642028e8b58ce58d9a29207265
+anchor   | PASS AC-VR1:       new-file hits=1 morning hits=1 identical=yes hex-prefix=20207c20504153532041432d5652313a20736368656d613d54727565206e6f2d5550444154453d54
+first line of -2 log:   | PASS AC-S1: first frame type=sys.hello payload keys=['ri
+runner : RUNNER PASS (106/106 suites green, reconcile controls 7/7, 181.8s)
+sentinel tail : sentinel exit=0 elapsed=0.4s
+profile tail  : profile exit=0 (observation-window: recorded, not gating)
+verdict: RECONCILE-DAILY 20261012 verdict=PASS exit=0 log=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-daily-20261012-2.log runner_exit=0 sentinel=ok profile=ok
+=== header ===
+[ok] AC-SL2-1 strict utf-8 decode of the -2 daily log (210550 bytes) zero errors
+[ok] AC-SL2-2 CR count == 0 (pure LF, measured 0)
+[ok] AC-SL2-3 three non-ASCII anchor lines byte-identical vs morning capture (two independent full-chain runs)
+[ok] AC-SL2-4 first line of the argv-mode daily log is NOT the shell-capture label
+[ok] AC-SL2-5 RUNNER PASS + RECONCILE-DAILY verdict=PASS + sentinel=ok in record
+[ok] AC-SL3 live qa/ census complete (exit=0)
+[ok] suite matrix --check byte-identical vs doc's own evidence (exit=0, default-face hijack by the fresh daily -2 file honestly noted)
+[ok] reconcile_all.py diff face = label block only ([' 1 file changed, 12 insertions(+)'])
+[ok] AC-SL1 driver rerun green inside evidence capture
+
+=== [3] AC-SL3 writer census (selftest 13/13 + live) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3)
+selftest: 13/13 checks pass
+  [ok] refusal not triggered (8 fixtures)
+  [ok] tee dialect named
+  [ok] cmd-raw dialect named (utf8=no)
+  [ok] pwsh-capture dialect named
+  [ok] ps-utf16 named
+  [ok] labeled capture self-announces (label=yes)
+  [ok] utf-8-sig and mixed-EOL land in other bucket
+  [ok] empty degenerate honest row (bytes=0, tee-by-rule)
+  [ok] counts sum == file count
+  [ok] empty dir refusal exit 3
+  [ok] reprobe deterministic (identical census)
+  [ok] zero writes into probed dirs
+  [ok] hygiene ascii+net-imports clean
+self-ascii: PASS (12517 bytes)
+self-net-imports: NONE (PASS)
+selftest exit=0 (0 expected)
+
+--- live qa/ census: counts + non-tee rows + first 3 tee rows (full per-file list reproducible via: python src/os/qa_writer_census.py) ---
+counts: tee=651 cmd-raw=15 pwsh-capture=296 ps-utf16=97 other=89
+labeled_selfannounced=0
+total=1148
+verdict: CENSUS-COMPLETE (all 1148 files classified, other=89 honest bucket)
+[ps-utf16] ads-R622.log bytes=4070 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] apidev-R1700-runner.log bytes=191264 bom=utf-16le crlf=0 bare_lf=773 utf8=no label=no
+[ps-utf16] apidev-R1700.log bytes=3374 bom=utf-16le crlf=0 bare_lf=11 utf8=no label=no
+[pwsh-capture] apidev-chainusage-R1833.log bytes=5564 bom=utf-8 crlf=38 bare_lf=35 utf8=yes label=no
+[ps-utf16] apidev-lifecycle-R1711.log bytes=4554 bom=utf-16le crlf=0 bare_lf=17 utf8=no label=no
+[pwsh-capture] apidev-lifecycle-trace-R1824.log bytes=2419 bom=utf-8 crlf=29 bare_lf=0 utf8=yes label=no
+[pwsh-capture] apidev-lineage-R1825.log bytes=1472 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[ps-utf16] apidev-rate-R1712.log bytes=5120 bom=utf-16le crlf=0 bare_lf=18 utf8=no label=no
+[pwsh-capture] apidev-reject-R1728.log bytes=5108 bom=utf-8 crlf=36 bare_lf=0 utf8=yes label=no
+[other] apidev-rejectwin-R1730.log bytes=6453 bom=utf-8-sig crlf=54 bare_lf=0 utf8=yes label=no
+[other] apidev-usagekind-R1735.log bytes=3467 bom=utf-8 crlf=15 bare_lf=21 utf8=yes label=no
+[pwsh-capture] apidev-usagekind-roll-R1738.log bytes=136406 bom=utf-8 crlf=1093 bare_lf=0 utf8=yes label=no
+[pwsh-capture] apidev-usagelog-R1729.log bytes=4230 bom=utf-8 crlf=19 bare_lf=16 utf8=yes label=no
+[other] apidev-usagewin-R1732.log bytes=5799 bom=utf-8-sig crlf=41 bare_lf=0 utf8=yes label=no
+[pwsh-capture] apidev-usagewin-roll-R1739.log bytes=138280 bom=utf-8 crlf=1101 bare_lf=0 utf8=yes label=no
+[pwsh-capture] apidev-window-anchor-R1748.log bytes=12727 bom=utf-8 crlf=110 bare_lf=0 utf8=yes label=no
+[pwsh-capture] apimarket-R1763.log bytes=1395 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[ps-utf16] authorize-R1719.log bytes=232734 bom=utf-16le crlf=0 bare_lf=975 utf8=no label=no
+[ps-utf16] bench-pyahoco-R1155.log bytes=2714 bom=utf-16le crlf=0 bare_lf=12 utf8=no label=no
+[other] board-R1030.log bytes=7174 bom=utf-8 crlf=22 bare_lf=75 utf8=yes label=no
+[pwsh-capture] board-R1032.log bytes=962 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1036.log bytes=1269 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1039.log bytes=945 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1040.log bytes=945 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1041.log bytes=741 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1044.log bytes=1235 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1048.log bytes=1389 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1050.log bytes=774 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1051.log bytes=807 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1055.log bytes=1512 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1058.log bytes=938 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1059.log bytes=916 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1061.log bytes=1283 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1064.log bytes=1286 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1072.log bytes=1899 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1078.log bytes=4532 bom=utf-8 crlf=96 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1083.log bytes=4505 bom=utf-8 crlf=78 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1093.log bytes=4515 bom=utf-8 crlf=78 bare_lf=0 utf8=yes label=no
+[other] board-R1097.log bytes=2599 bom=utf-8 crlf=1 bare_lf=23 utf8=yes label=no
+[pwsh-capture] board-R1142.log bytes=2335 bom=utf-8 crlf=13 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1145.log bytes=2424 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[other] board-R1154.log bytes=1185 bom=utf-8 crlf=1 bare_lf=6 utf8=yes label=no
+[pwsh-capture] board-R1179.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1180.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1181.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1182.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1183.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1184.log bytes=1309 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1190.log bytes=675 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1191.log bytes=675 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1192.log bytes=1338 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1196.log bytes=813 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1198.log bytes=747 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1201.log bytes=747 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1203.log bytes=747 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1205.log bytes=747 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1206.log bytes=783 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1209.log bytes=1562 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1210.log bytes=2170 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1211.log bytes=1677 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1212.log bytes=2528 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1213.log bytes=2586 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1214.log bytes=2616 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1215.log bytes=3023 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1216.log bytes=1762 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1218.log bytes=264 bom=utf-8 crlf=5 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1220.log bytes=2958 bom=utf-8 crlf=21 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1221.log bytes=957 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1222.log bytes=999 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[other] board-R1224.log bytes=482 bom=utf-8-sig crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R1230.log bytes=678 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[other] board-R577.log bytes=1237 bom=utf-8 crlf=2 bare_lf=9 utf8=yes label=no
+[other] board-R581.log bytes=3803 bom=utf-8 crlf=15 bare_lf=19 utf8=yes label=no
+[pwsh-capture] board-R593.log bytes=459 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[other] board-R599.log bytes=1788 bom=utf-8 crlf=10 bare_lf=10 utf8=yes label=no
+[ps-utf16] board-R602.log bytes=1290 bom=utf-16le crlf=0 bare_lf=11 utf8=no label=no
+[pwsh-capture] board-R608.log bytes=859 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[other] board-R609.log bytes=919 bom=utf-8 crlf=4 bare_lf=7 utf8=yes label=no
+[other] board-R615.log bytes=2758 bom=utf-8 crlf=9 bare_lf=12 utf8=yes label=no
+[pwsh-capture] board-R625.log bytes=836 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R629.log bytes=2636 bom=utf-8 crlf=36 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R637.log bytes=3258 bom=utf-8 crlf=45 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R651.log bytes=2975 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R653.log bytes=2993 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R798.log bytes=1165 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R804.log bytes=1174 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R807.log bytes=1174 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R810.log bytes=1174 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R824.log bytes=1176 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R827.log bytes=1271 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R830.log bytes=867 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R833.log bytes=1020 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R839.log bytes=1325 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R840.log bytes=2310 bom=utf-8 crlf=13 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R842.log bytes=1347 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R843.log bytes=1271 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R848.log bytes=292 bom=utf-8 crlf=1 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R852.log bytes=933 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R855.log bytes=849 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R858.log bytes=849 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R862.log bytes=850 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R865.log bytes=849 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R907.log bytes=3172 bom=utf-8 crlf=40 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R910.log bytes=2159 bom=utf-8 crlf=34 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R913.log bytes=1125 bom=utf-8 crlf=10 bare_lf=0 utf8=yes label=no
+[pwsh-capture] board-R921.log bytes=916 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[other] board-R932.log bytes=693 bom=utf-8-sig crlf=6 bare_lf=0 utf8=yes label=no
+[ps-utf16] board-R935.log bytes=1705 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] citymodel-R850.log bytes=606 bom=utf-16le crlf=0 bare_lf=11 utf8=no label=no
+[cmd-raw] civic-comprank-R1769.log bytes=176627 bom=utf-8 crlf=1314 bare_lf=0 utf8=no label=no
+[ps-utf16] civic-honorboard-R1754.log bytes=10832 bom=utf-16le crlf=0 bare_lf=28 utf8=no label=no
+[ps-utf16] civicpoints-R1752.log bytes=6038 bom=utf-16le crlf=0 bare_lf=16 utf8=no label=no
+[other] cleanup-R1089.log bytes=1474 bom=utf-8-sig crlf=21 bare_lf=0 utf8=yes label=no
+[pwsh-capture] cleanup-R1182.log bytes=1105 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] cleanup-R1215.log bytes=619 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] cleanup-R1354.log bytes=621 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] cleanup-R1757.log bytes=391 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[pwsh-capture] closeout-R843.log bytes=1209 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] closeout-R875.log bytes=493 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[ps-utf16] collectibles-R619.log bytes=2662 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[other] compliance-map-R675.log bytes=19676 bom=utf-8-sig crlf=82 bare_lf=0 utf8=yes label=no
+[other] copyright-prep-R1760.log bytes=4630 bom=utf-8-sig crlf=36 bare_lf=11 utf8=yes label=no
+[other] curation-R1751.log bytes=3072 bom=utf-8-sig crlf=27 bare_lf=0 utf8=yes label=no
+[pwsh-capture] curation-hotboard-R1753.log bytes=154199 bom=utf-8 crlf=1187 bare_lf=0 utf8=yes label=no
+[other] curation-hotdelta-R1770.log bytes=20811 bom=utf-8 crlf=44 bare_lf=98 utf8=yes label=no
+[pwsh-capture] devshare-R1759.log bytes=2917 bom=utf-8 crlf=34 bare_lf=0 utf8=yes label=no
+[ps-utf16] dual-track-R593.log bytes=3236 bom=utf-16le crlf=0 bare_lf=22 utf8=no label=no
+[ps-utf16] effects-R629.log bytes=3350 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] effects-runner-R629.log bytes=94708 bom=utf-16le crlf=0 bare_lf=379 utf8=no label=no
+[ps-utf16] entry-tier-R681.log bytes=88146 bom=utf-16le crlf=0 bare_lf=353 utf8=no label=no
+[other] eventtickets-R1767.log bytes=11204 bom=utf-8 crlf=8 bare_lf=84 utf8=yes label=no
+[other] eventtickets-audit-R1771.log bytes=5535 bom=utf-8 crlf=3 bare_lf=31 utf8=yes label=no
+[pwsh-capture] eventtickets-boardwin-R1826.log bytes=3211 bom=utf-8 crlf=24 bare_lf=0 utf8=yes label=no
+[pwsh-capture] eventtickets-monthcross-R1834.log bytes=3823 bom=utf-8 crlf=22 bare_lf=11 utf8=yes label=no
+[ps-utf16] expedite-R620.log bytes=2950 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] export-R937.log bytes=230 bom=utf-16le crlf=0 bare_lf=1 utf8=no label=no
+[ps-utf16] export-checker-R1815.log bytes=2320 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] export-checker-R1816.log bytes=1159 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[ps-utf16] export-checker-R1818.log bytes=2320 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] export-checker-R1820.log bytes=1365 bom=utf-8 crlf=23 bare_lf=4 utf8=yes label=no
+[pwsh-capture] export-consistency-R1685.log bytes=2578 bom=utf-8 crlf=44 bare_lf=7 utf8=yes label=no
+[pwsh-capture] export-consistency-R1701.log bytes=1161 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[ps-utf16] export-consistency-R1702.log bytes=2322 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] export-consistency-R1705.log bytes=1624 bom=utf-8 crlf=32 bare_lf=8 utf8=yes label=no
+[pwsh-capture] export-consistency-R1728.log bytes=1159 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[ps-utf16] export-consistency-R1756.log bytes=2316 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] export-fix-R1218.log bytes=1852 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[other] festival-R1693.log bytes=88598 bom=utf-8 crlf=11 bare_lf=746 utf8=yes label=no
+[ps-utf16] fingerprint-R1773.log bytes=828 bom=utf-16le crlf=0 bare_lf=6 utf8=no label=no
+[ps-utf16] fingerprint-R1779.log bytes=828 bom=utf-16le crlf=0 bare_lf=6 utf8=no label=no
+[pwsh-capture] fingerprint-R1790.log bytes=413 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[ps-utf16] fingerprint-R1799.log bytes=828 bom=utf-16le crlf=0 bare_lf=6 utf8=no label=no
+[pwsh-capture] fingerprint-R1800.log bytes=413 bom=utf-8 crlf=6 bare_lf=0 utf8=yes label=no
+[ps-utf16] freetrial-R1768.log bytes=9528 bom=utf-16le crlf=0 bare_lf=21 utf8=no label=no
+[other] freetrial-callmonth-R1828.log bytes=2178 bom=utf-8-sig crlf=10 bare_lf=12 utf8=yes label=no
+[pwsh-capture] freetrial-funnel-R1788.log bytes=2987 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[other] freetrial-funnelwin-R1793.log bytes=3470 bom=utf-8 crlf=14 bare_lf=28 utf8=yes label=no
+[other] frontdoor-v04-R908.log bytes=606 bom=utf-8-sig crlf=17 bare_lf=0 utf8=yes label=no
+[ps-utf16] frontdoor-v10-R965.log bytes=2482 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v12-R975.log bytes=2498 bom=utf-16le crlf=0 bare_lf=27 utf8=no label=no
+[ps-utf16] frontdoor-v13-R977.log bytes=3710 bom=utf-16le crlf=0 bare_lf=37 utf8=no label=no
+[ps-utf16] frontdoor-v15-R980.log bytes=3996 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v16-R984.log bytes=4116 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v17-R986.log bytes=4208 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v18-R987.log bytes=4236 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v19-R989.log bytes=4390 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v20-R990.log bytes=4460 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] frontdoor-v21-R992.log bytes=1937 bom=utf-8 crlf=16 bare_lf=0 utf8=yes label=no
+[pwsh-capture] frontdoor-v22-R993.log bytes=2357 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[ps-utf16] frontdoor-v23-R995.log bytes=4598 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v24-R997.log bytes=4712 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v25-R999.log bytes=4954 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[ps-utf16] frontdoor-v26-R1000.log bytes=4692 bom=utf-16le crlf=0 bare_lf=23 utf8=no label=no
+[pwsh-capture] frontdoor-v27-R1001.log bytes=2203 bom=utf-8 crlf=16 bare_lf=0 utf8=yes label=no
+[other] frontdoor-v29-R1018.log bytes=2247 bom=utf-8 crlf=3 bare_lf=30 utf8=yes label=no
+[pwsh-capture] frontdoor-v30-R1224.log bytes=130813 bom=utf-8 crlf=42 bare_lf=0 utf8=yes label=no
+[ps-utf16] growth-archive-R1017.log bytes=5300 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[other] holiday-readiness-R693.log bytes=1945 bom=utf-8-sig crlf=43 bare_lf=0 utf8=yes label=no
+[other] honorcert-R1755.log bytes=5248 bom=utf-8-sig crlf=4 bare_lf=25 utf8=yes label=no
+[ps-utf16] identity-R624.log bytes=4264 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] incentive-R600.log bytes=1790 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[pwsh-capture] journey-demo-R607.log bytes=6934 bom=utf-8 crlf=51 bare_lf=0 utf8=yes label=no
+[other] ledger-clawback-R1723.log bytes=2297 bom=utf-8-sig crlf=39 bare_lf=0 utf8=yes label=no
+[other] liveroom-R608.log bytes=1642 bom=utf-8-sig crlf=11 bare_lf=0 utf8=yes label=no
+[other] load-S8b-R550.log bytes=3902 bom=utf-8-sig crlf=8 bare_lf=36 utf8=yes label=no
+[pwsh-capture] load-S8b-R685.log bytes=551 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] lobby-ideaboard-R1792.log bytes=4922 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] lobby-reconnect-R1675.log bytes=2495 bom=utf-8 crlf=17 bare_lf=0 utf8=yes label=no
+[ps-utf16] lobby-roomboard-R1773.log bytes=7077 bom=utf-16le crlf=0 bare_lf=25 utf8=no label=no
+[other] lobby-roomfilter-R1791.log bytes=3881 bom=utf-8 crlf=6 bare_lf=46 utf8=yes label=no
+[pwsh-capture] logs-census-R1688.log bytes=100630 bom=utf-8 crlf=3317 bare_lf=0 utf8=yes label=no
+[pwsh-capture] logs-eol-R1705.log bytes=3745 bom=utf-8 crlf=94 bare_lf=0 utf8=yes label=no
+[pwsh-capture] logs-fold-hint-R1716.log bytes=7872 bom=utf-8 crlf=156 bare_lf=0 utf8=yes label=no
+[pwsh-capture] logs-fold-slice-R1690.log bytes=7257 bom=utf-8 crlf=163 bare_lf=0 utf8=yes label=no
+[pwsh-capture] logs-toolkit-R1686.log bytes=7459 bom=utf-8 crlf=283 bare_lf=27 utf8=yes label=no
+[pwsh-capture] logs-toolkit-R1687.log bytes=6122 bom=utf-8 crlf=131 bare_lf=24 utf8=yes label=no
+[ps-utf16] matrix-check1-R1773.log bytes=192 bom=utf-16le crlf=0 bare_lf=1 utf8=no label=no
+[pwsh-capture] matrix-check1-R1800.log bytes=95 bom=utf-8 crlf=1 bare_lf=0 utf8=yes label=no
+[ps-utf16] matrix-check2-R1773.log bytes=192 bom=utf-16le crlf=0 bare_lf=1 utf8=no label=no
+[pwsh-capture] matrix-check2-R1800.log bytes=95 bom=utf-8 crlf=1 bare_lf=0 utf8=yes label=no
+[ps-utf16] matrix-regen-R1773.log bytes=392 bom=utf-16le crlf=0 bare_lf=2 utf8=no label=no
+[pwsh-capture] matrix-regen-R1790.log bytes=385 bom=utf-8 crlf=4 bare_lf=0 utf8=yes label=no
+[ps-utf16] matrix-regen-R1799.log bytes=392 bom=utf-16le crlf=0 bare_lf=2 utf8=no label=no
+[pwsh-capture] matrix-regen-R1800.log bytes=195 bom=utf-8 crlf=2 bare_lf=0 utf8=yes label=no
+[cmd-raw] member-banner-R1782.log bytes=4200 bom=utf-8 crlf=51 bare_lf=0 utf8=no label=no
+[pwsh-capture] member-expiring-R1774.log bytes=2625 bom=utf-8 crlf=40 bare_lf=0 utf8=yes label=no
+[other] member-expiring-dist-R1786.log bytes=4383 bom=utf-8 crlf=16 bare_lf=28 utf8=yes label=no
+[other] member-reminder-R1254.log bytes=5456 bom=utf-8-sig crlf=55 bare_lf=0 utf8=yes label=no
+[ps-utf16] metered-R626.log bytes=4488 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[other] minors-R937.log bytes=1487 bom=utf-8-sig crlf=21 bare_lf=0 utf8=yes label=no
+[ps-utf16] obs-R623.log bytes=3830 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] obs-runner-R623.log bytes=73056 bom=utf-16le crlf=0 bare_lf=334 utf8=no label=no
+[ps-utf16] pay-channel-matrix-R1776.log bytes=3784 bom=utf-16le crlf=0 bare_lf=31 utf8=no label=no
+[other] pay-notify-R1706.log bytes=1597 bom=utf-8 crlf=7 bare_lf=11 utf8=yes label=no
+[ps-utf16] pay-notify-wiring-R1718.log bytes=232700 bom=utf-16le crlf=0 bare_lf=976 utf8=no label=no
+[other] pay-revoke-recon-R1746.log bytes=2195 bom=utf-8-sig crlf=30 bare_lf=0 utf8=yes label=no
+[ps-utf16] pay-v3-R555.log bytes=6744 bom=utf-16le crlf=0 bare_lf=32 utf8=no label=no
+[other] prefilter-R838.log bytes=4293 bom=utf-8-sig crlf=20 bare_lf=18 utf8=yes label=no
+[ps-utf16] preview-v02-R698.log bytes=892 bom=utf-16le crlf=0 bare_lf=11 utf8=no label=no
+[ps-utf16] preview-v03-R869.log bytes=956 bom=utf-16le crlf=0 bare_lf=10 utf8=no label=no
+[pwsh-capture] preview-v05-R875.log bytes=1273 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[other] preview-v06-R937.log bytes=1434 bom=utf-8-sig crlf=17 bare_lf=0 utf8=yes label=no
+[other] proposal-R1766.log bytes=2858 bom=utf-8 crlf=1 bare_lf=23 utf8=yes label=no
+[ps-utf16] props-R599.log bytes=1644 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[ps-utf16] props-runner-R599.log bytes=42826 bom=utf-16le crlf=0 bare_lf=211 utf8=no label=no
+[pwsh-capture] qa-decode-probe-R1781.log bytes=63022 bom=utf-8 crlf=1051 bare_lf=5 utf8=yes label=no
+[ps-utf16] reconcile-all-R1000.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[cmd-raw] reconcile-all-R1001.log bytes=47931 bom=utf-8 crlf=388 bare_lf=0 utf8=no label=no
+[ps-utf16] reconcile-all-R1003.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[pwsh-capture] reconcile-all-R1701.log bytes=96803 bom=utf-8 crlf=780 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1702.log bytes=195414 bom=utf-16le crlf=0 bare_lf=787 utf8=no label=no
+[pwsh-capture] reconcile-all-R1703.log bytes=96041 bom=utf-8 crlf=776 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1706.log bytes=100662 bom=utf-8 crlf=807 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1707.log bytes=205000 bom=utf-16le crlf=0 bare_lf=827 utf8=no label=no
+[ps-utf16] reconcile-all-R1723.log bytes=234950 bom=utf-16le crlf=0 bare_lf=981 utf8=no label=no
+[cmd-raw] reconcile-all-R1728.log bytes=122648 bom=utf-8 crlf=1018 bare_lf=0 utf8=no label=no
+[ps-utf16] reconcile-all-R1730.log bytes=253062 bom=utf-16le crlf=0 bare_lf=1036 utf8=no label=no
+[ps-utf16] reconcile-all-R1732.log bytes=257768 bom=utf-16le crlf=0 bare_lf=1045 utf8=no label=no
+[ps-utf16] reconcile-all-R1739.log bytes=267152 bom=utf-16le crlf=0 bare_lf=1072 utf8=no label=no
+[pwsh-capture] reconcile-all-R1740.log bytes=135359 bom=utf-8 crlf=1081 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1748.log bytes=139940 bom=utf-8 crlf=1132 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1749.log bytes=279252 bom=utf-16le crlf=0 bare_lf=1133 utf8=no label=no
+[ps-utf16] reconcile-all-R1750.log bytes=285016 bom=utf-16le crlf=0 bare_lf=1142 utf8=no label=no
+[ps-utf16] reconcile-all-R1754.log bytes=302630 bom=utf-16le crlf=0 bare_lf=1171 utf8=no label=no
+[pwsh-capture] reconcile-all-R1770.log bytes=170517 bom=utf-8 crlf=1250 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1771.log bytes=171752 bom=utf-8 crlf=1257 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1773.log bytes=343930 bom=utf-16le crlf=0 bare_lf=1259 utf8=no label=no
+[cmd-raw] reconcile-all-R1774-firstfail.log bytes=205669 bom=utf-8 crlf=1268 bare_lf=0 utf8=no label=no
+[cmd-raw] reconcile-all-R1774.log bytes=172839 bom=utf-8 crlf=1268 bare_lf=0 utf8=no label=no
+[ps-utf16] reconcile-all-R1776.log bytes=347032 bom=utf-16le crlf=0 bare_lf=1277 utf8=no label=no
+[pwsh-capture] reconcile-all-R1778.log bytes=176142 bom=utf-8 crlf=1302 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1779.log bytes=352950 bom=utf-16le crlf=0 bare_lf=1311 utf8=no label=no
+[cmd-raw] reconcile-all-R1782.log bytes=177377 bom=utf-8 crlf=1320 bare_lf=0 utf8=no label=no
+[pwsh-capture] reconcile-all-R1783.log bytes=179308 bom=utf-8 crlf=1336 bare_lf=2 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1788.log bytes=183758 bom=utf-8 crlf=1372 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1790.log bytes=183990 bom=utf-8 crlf=1373 bare_lf=0 utf8=yes label=no
+[cmd-raw] reconcile-all-R1791.log bytes=183400 bom=utf-8 crlf=1374 bare_lf=0 utf8=no label=no
+[cmd-raw] reconcile-all-R1792.log bytes=184128 bom=utf-8 crlf=1376 bare_lf=0 utf8=no label=no
+[pwsh-capture] reconcile-all-R1793.log bytes=186791 bom=utf-8 crlf=1385 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1799.log bytes=383202 bom=utf-16le crlf=0 bare_lf=1427 utf8=no label=no
+[cmd-raw] reconcile-all-R1800.log bytes=193000 bom=utf-8 crlf=1436 bare_lf=0 utf8=no label=no
+[pwsh-capture] reconcile-all-R1824.log bytes=199565 bom=utf-8 crlf=1490 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-all-R1825.log bytes=200863 bom=utf-8 crlf=1499 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R1829.log bytes=410220 bom=utf-16le crlf=0 bare_lf=1527 utf8=no label=no
+[pwsh-capture] reconcile-all-R1830.log bytes=207342 bom=utf-8 crlf=1537 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R945.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R946.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R965.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R975.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R980.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R986.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R989.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R990.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[pwsh-capture] reconcile-all-R993.log bytes=47975 bom=utf-8 crlf=388 bare_lf=0 utf8=yes label=no
+[ps-utf16] reconcile-all-R995.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[ps-utf16] reconcile-all-R999.log bytes=95858 bom=utf-16le crlf=0 bare_lf=388 utf8=no label=no
+[cmd-raw] reconcile-daily-20261011-rerun.log bytes=154165 bom=utf-8 crlf=1190 bare_lf=0 utf8=no label=no
+[cmd-raw] reconcile-daily-20261011.log bytes=154165 bom=utf-8 crlf=1190 bare_lf=0 utf8=no label=no
+[other] reconcile-daily-profile-R1733.log bytes=2022 bom=utf-8-sig crlf=36 bare_lf=0 utf8=yes label=no
+[other] reconcile-daily-sentinel-R1714.log bytes=1759 bom=utf-8-sig crlf=27 bare_lf=3 utf8=yes label=no
+[pwsh-capture] reconcile-live-R875.log bytes=47946 bom=utf-8 crlf=388 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reconcile-live-R875b.log bytes=47976 bom=utf-8 crlf=388 bare_lf=0 utf8=yes label=no
+[pwsh-capture] release-gate-R606.log bytes=1686 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] release-gate-R639.log bytes=3053 bom=utf-8 crlf=20 bare_lf=7 utf8=yes label=no
+[pwsh-capture] release-gate-R736.log bytes=1686 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1041.log bytes=4713 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1044.log bytes=4429 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1048.log bytes=4592 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1058.log bytes=1078 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1078.log bytes=5351 bom=utf-8 crlf=56 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1083.log bytes=5197 bom=utf-8 crlf=48 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1093.log bytes=5940 bom=utf-8 crlf=49 bare_lf=0 utf8=yes label=no
+[other] reorg-R1097.log bytes=4547 bom=utf-8 crlf=3 bare_lf=36 utf8=yes label=no
+[pwsh-capture] reorg-R1142.log bytes=6272 bom=utf-8 crlf=34 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1145.log bytes=7291 bom=utf-8 crlf=37 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1179.log bytes=5590 bom=utf-8 crlf=35 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1180.log bytes=5509 bom=utf-8 crlf=35 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1181.log bytes=5450 bom=utf-8 crlf=35 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1182.log bytes=5565 bom=utf-8 crlf=36 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1183.log bytes=5540 bom=utf-8 crlf=36 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1184.log bytes=6640 bom=utf-8 crlf=40 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1190.log bytes=2977 bom=utf-8 crlf=25 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1191.log bytes=2625 bom=utf-8 crlf=25 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1192.log bytes=4742 bom=utf-8 crlf=30 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1196.log bytes=3458 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1198.log bytes=3511 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1201.log bytes=3945 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1203.log bytes=3819 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1205.log bytes=5046 bom=utf-8 crlf=37 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1206.log bytes=1826 bom=utf-8 crlf=17 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1209.log bytes=2713 bom=utf-8 crlf=28 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1210.log bytes=2674 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1211.log bytes=2682 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1212.log bytes=2496 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1213.log bytes=2496 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1214.log bytes=2766 bom=utf-8 crlf=21 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1215.log bytes=3141 bom=utf-8 crlf=21 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1216.log bytes=2596 bom=utf-8 crlf=24 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1218.log bytes=777 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1220.log bytes=2755 bom=utf-8 crlf=21 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1221.log bytes=6037 bom=utf-8 crlf=40 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1222.log bytes=3595 bom=utf-8 crlf=37 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1224.log bytes=3293 bom=utf-8 crlf=37 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1225.log bytes=2591 bom=utf-8 crlf=16 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1227.log bytes=6635 bom=utf-8 crlf=95 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1230.log bytes=3843 bom=utf-8 crlf=44 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1232.log bytes=3501 bom=utf-8 crlf=39 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1266.log bytes=1471 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1286.log bytes=4581 bom=utf-8 crlf=52 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1327.log bytes=2637 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1329.log bytes=2916 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[other] reorg-R1340.log bytes=6200 bom=utf-8 crlf=1 bare_lf=17 utf8=yes label=no
+[other] reorg-R1349.log bytes=6535 bom=utf-8 crlf=1 bare_lf=17 utf8=yes label=no
+[other] reorg-R1364.log bytes=7409 bom=utf-8 crlf=1 bare_lf=17 utf8=yes label=no
+[pwsh-capture] reorg-R1372.log bytes=7400 bom=utf-8 crlf=11 bare_lf=8 utf8=yes label=no
+[pwsh-capture] reorg-R1374.log bytes=7710 bom=utf-8 crlf=11 bare_lf=8 utf8=yes label=no
+[pwsh-capture] reorg-R1380.log bytes=8517 bom=utf-8 crlf=10 bare_lf=8 utf8=yes label=no
+[other] reorg-R1382.log bytes=8729 bom=utf-8 crlf=1 bare_lf=17 utf8=yes label=no
+[pwsh-capture] reorg-R1389.log bytes=2165 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1391.log bytes=2109 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1397.log bytes=3301 bom=utf-8 crlf=25 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1443.log bytes=8649 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1446.log bytes=4449 bom=utf-8 crlf=22 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1449.log bytes=4171 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1452.log bytes=4501 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1487.log bytes=5669 bom=utf-8 crlf=16 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1493.log bytes=5560 bom=utf-8 crlf=28 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1504.log bytes=4672 bom=utf-8 crlf=28 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1527.log bytes=6777 bom=utf-8 crlf=13 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1551.log bytes=1197 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1569.log bytes=2921 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1576.log bytes=5865 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1650.log bytes=2797 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[other] reorg-R1677.log bytes=1528 bom=utf-8 crlf=2 bare_lf=8 utf8=yes label=no
+[ps-utf16] reorg-R1692.log bytes=8306 bom=utf-16le crlf=0 bare_lf=98 utf8=no label=no
+[ps-utf16] reorg-R1694.log bytes=8994 bom=utf-16le crlf=0 bare_lf=132 utf8=no label=no
+[pwsh-capture] reorg-R1716.log bytes=930 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1722.log bytes=5715 bom=utf-8 crlf=196 bare_lf=13 utf8=yes label=no
+[pwsh-capture] reorg-R1724.log bytes=1734 bom=utf-8 crlf=25 bare_lf=18 utf8=yes label=no
+[other] reorg-R1731.log bytes=72925 bom=utf-8-sig crlf=3330 bare_lf=1 utf8=yes label=no
+[pwsh-capture] reorg-R1734.log bytes=69394 bom=utf-8 crlf=3206 bare_lf=22 utf8=yes label=no
+[other] reorg-R1736.log bytes=66072 bom=utf-8-sig crlf=3023 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1746.log bytes=1596 bom=utf-8 crlf=12 bare_lf=0 utf8=yes label=no
+[other] reorg-R1751.log bytes=3420 bom=utf-8-sig crlf=88 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R1758.log bytes=4917 bom=utf-8 crlf=125 bare_lf=28 utf8=yes label=no
+[pwsh-capture] reorg-R1765.log bytes=70340 bom=utf-8 crlf=3170 bare_lf=59 utf8=yes label=no
+[other] reorg-R1780.log bytes=4703 bom=utf-8-sig crlf=116 bare_lf=0 utf8=yes label=no
+[other] reorg-R1787.log bytes=1189 bom=utf-8 crlf=9 bare_lf=22 utf8=yes label=no
+[pwsh-capture] reorg-R553.log bytes=2857 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R560.log bytes=2215 bom=utf-8 crlf=15 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R577.log bytes=2221 bom=utf-8 crlf=9 bare_lf=8 utf8=yes label=no
+[pwsh-capture] reorg-R587.log bytes=2694 bom=utf-8 crlf=9 bare_lf=8 utf8=yes label=no
+[pwsh-capture] reorg-R592.log bytes=3249 bom=utf-8 crlf=10 bare_lf=8 utf8=yes label=no
+[pwsh-capture] reorg-R596.log bytes=2433 bom=utf-8 crlf=28 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R608.log bytes=916 bom=utf-8 crlf=9 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R613.log bytes=1278 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R625.log bytes=1373 bom=utf-8 crlf=13 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R631.log bytes=1279 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R644.log bytes=1504 bom=utf-8 crlf=13 bare_lf=0 utf8=yes label=no
+[other] reorg-R656.log bytes=2124 bom=utf-8 crlf=3 bare_lf=15 utf8=yes label=no
+[other] reorg-R660.log bytes=2921 bom=utf-8 crlf=2 bare_lf=25 utf8=yes label=no
+[other] reorg-R671.log bytes=2635 bom=utf-8 crlf=2 bare_lf=10 utf8=yes label=no
+[other] reorg-R677.log bytes=3210 bom=utf-8 crlf=1 bare_lf=12 utf8=yes label=no
+[pwsh-capture] reorg-R682.log bytes=1888 bom=utf-8 crlf=7 bare_lf=0 utf8=yes label=no
+[other] reorg-R693.log bytes=3429 bom=utf-8 crlf=13 bare_lf=33 utf8=yes label=no
+[pwsh-capture] reorg-R699.log bytes=2443 bom=utf-8 crlf=41 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R702.log bytes=2044 bom=utf-8 crlf=39 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R707.log bytes=4301 bom=utf-8 crlf=50 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R710.log bytes=3989 bom=utf-8 crlf=49 bare_lf=0 utf8=yes label=no
+[other] reorg-R712.log bytes=3857 bom=utf-8 crlf=6 bare_lf=7 utf8=yes label=no
+[other] reorg-R715.log bytes=3916 bom=utf-8 crlf=6 bare_lf=7 utf8=yes label=no
+[other] reorg-R718.log bytes=3100 bom=utf-8 crlf=1 bare_lf=12 utf8=yes label=no
+[other] reorg-R721.log bytes=4560 bom=utf-8 crlf=7 bare_lf=7 utf8=yes label=no
+[other] reorg-R738.log bytes=3759 bom=utf-8 crlf=6 bare_lf=7 utf8=yes label=no
+[other] reorg-R744.log bytes=5170 bom=utf-8 crlf=1 bare_lf=12 utf8=yes label=no
+[other] reorg-R747.log bytes=5726 bom=utf-8 crlf=1 bare_lf=12 utf8=yes label=no
+[other] reorg-R764.log bytes=7053 bom=utf-8 crlf=1 bare_lf=12 utf8=yes label=no
+[pwsh-capture] reorg-R782.log bytes=3482 bom=utf-8 crlf=30 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R784.log bytes=4316 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R787.log bytes=4021 bom=utf-8 crlf=18 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R789.log bytes=2995 bom=utf-8 crlf=43 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R792.log bytes=4094 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R795.log bytes=2412 bom=utf-8 crlf=45 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R798.log bytes=3320 bom=utf-8 crlf=32 bare_lf=0 utf8=yes label=no
+[other] reorg-R801.log bytes=3477 bom=utf-8 crlf=1 bare_lf=55 utf8=yes label=no
+[pwsh-capture] reorg-R804.log bytes=3148 bom=utf-8 crlf=32 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R807.log bytes=3183 bom=utf-8 crlf=32 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R810.log bytes=3184 bom=utf-8 crlf=32 bare_lf=0 utf8=yes label=no
+[other] reorg-R813.log bytes=3573 bom=utf-8 crlf=1 bare_lf=58 utf8=yes label=no
+[other] reorg-R815.log bytes=3502 bom=utf-8 crlf=1 bare_lf=57 utf8=yes label=no
+[other] reorg-R818.log bytes=3639 bom=utf-8 crlf=1 bare_lf=59 utf8=yes label=no
+[other] reorg-R821.log bytes=3686 bom=utf-8 crlf=1 bare_lf=60 utf8=yes label=no
+[pwsh-capture] reorg-R824.log bytes=3202 bom=utf-8 crlf=32 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R827.log bytes=4853 bom=utf-8 crlf=44 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R830.log bytes=3660 bom=utf-8 crlf=28 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R833.log bytes=1923 bom=utf-8 crlf=16 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R839.log bytes=3063 bom=utf-8 crlf=19 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R842.log bytes=2747 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R848.log bytes=2381 bom=utf-8 crlf=11 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R852.log bytes=2744 bom=utf-8 crlf=25 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R855.log bytes=2574 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R858.log bytes=2706 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R862.log bytes=2829 bom=utf-8 crlf=23 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R865.log bytes=2900 bom=utf-8 crlf=24 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R913.log bytes=3068 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
+[other] reorg-R932.log bytes=9252 bom=utf-8-sig crlf=97 bare_lf=0 utf8=yes label=no
+[other] reorg-R940.log bytes=2512 bom=utf-8-sig crlf=0 bare_lf=17 utf8=yes label=no
+[pwsh-capture] reorg-R976.log bytes=3931 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R979.log bytes=3921 bom=utf-8 crlf=33 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-R985.log bytes=4067 bom=utf-8 crlf=34 bare_lf=0 utf8=yes label=no
+[pwsh-capture] reorg-archive10-rebuild.log bytes=16264 bom=utf-8 crlf=234 bare_lf=0 utf8=yes label=no
+[ps-utf16] reports-R627.log bytes=4926 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
+[pwsh-capture] research-R843.log bytes=649 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[ps-utf16] runner-profile-daily-R1715.log bytes=33764 bom=utf-16le crlf=0 bare_lf=348 utf8=no label=no
+[pwsh-capture] scan-dec-owner-R1795.log bytes=5308 bom=utf-8 crlf=59 bare_lf=0 utf8=yes label=no
+[ps-utf16] scan-faces-R554.log bytes=1978 bom=utf-16le crlf=0 bare_lf=18 utf8=no label=no
+[other] scan-gord-R763.log bytes=4934 bom=utf-8-sig crlf=56 bare_lf=0 utf8=yes label=no
+[other] scan-origin-R737.log bytes=6309 bom=utf-8-sig crlf=24 bare_lf=0 utf8=yes label=no
+[ps-utf16] sec-batch-R1681.log bytes=157612 bom=utf-16le crlf=0 bare_lf=732 utf8=no label=no
+[pwsh-capture] self-drive-R556.log bytes=4977 bom=utf-8 crlf=49 bare_lf=1 utf8=yes label=no
+[pwsh-capture] sentinel-elapsed-R1737.log bytes=5155 bom=utf-8 crlf=86 bare_lf=5 utf8=yes label=no
+[other] settlement-R601.log bytes=874 bom=utf-8-sig crlf=8 bare_lf=0 utf8=yes label=no
+[other] showcase-R1750.log bytes=3749 bom=utf-8-sig crlf=34 bare_lf=0 utf8=yes label=no
+[ps-utf16] showroom-R1695.log bytes=189364 bom=utf-16le crlf=0 bare_lf=768 utf8=no label=no
+[other] smoke-R1333.log bytes=2689 bom=utf-8 crlf=5 bare_lf=8 utf8=yes label=no
+[other] smoke-R1385.log bytes=4834 bom=utf-8 crlf=1 bare_lf=13 utf8=yes label=no
+[other] studio-R625.log bytes=1779 bom=utf-8-sig crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] suite-matrix-R1683.log bytes=381 bom=utf-8 crlf=4 bare_lf=0 utf8=yes label=no
+[pwsh-capture] suite-matrix-evidence-R1708.log bytes=2372 bom=utf-8 crlf=21 bare_lf=18 utf8=yes label=no
+[pwsh-capture] suite-matrix-livemtime-R1727.log bytes=2441 bom=utf-8 crlf=51 bare_lf=0 utf8=yes label=no
+[ps-utf16] suite-matrix-staleface-R1749.log bytes=7280 bom=utf-16le crlf=0 bare_lf=61 utf8=no label=no
+[ps-utf16] tourstate-R602.log bytes=4482 bom=utf-16le crlf=0 bare_lf=38 utf8=no label=no
+[other] ugc-batchwater-R1796.log bytes=3407 bom=utf-8 crlf=17 bare_lf=43 utf8=yes label=no
+[other] ugc-drainwater-R1797.log bytes=4818 bom=utf-8 crlf=24 bare_lf=41 utf8=yes label=no
+[ps-utf16] ugc-ingest-R1702.log bytes=9462 bom=utf-16le crlf=0 bare_lf=31 utf8=no label=no
+[pwsh-capture] ugc-pipeline-R1701.log bytes=3840 bom=utf-8 crlf=26 bare_lf=0 utf8=yes label=no
+[pwsh-capture] ugc-poolwater-R1777.log bytes=2308 bom=utf-8 crlf=32 bare_lf=13 utf8=yes label=no
+[other] ugc-submitwater-R1798.log bytes=5108 bom=utf-8 crlf=14 bare_lf=59 utf8=yes label=no
+[cmd-raw] ugc-window-cap-R1703.log bytes=105740 bom=utf-8 crlf=834 bare_lf=10 utf8=no label=no
+[pwsh-capture] venue-R605.log bytes=1051 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-aggmirror-R1815.log bytes=6583 bom=utf-8 crlf=65 bare_lf=26 utf8=yes label=no
+[pwsh-capture] water-bykindcross-R1808.log bytes=4808 bom=utf-8 crlf=54 bare_lf=5 utf8=yes label=no
+[other] water-celltotals-R1805.log bytes=3488 bom=utf-8 crlf=20 bare_lf=33 utf8=yes label=no
+[pwsh-capture] water-checkkind-R1821.log bytes=11211 bom=utf-8 crlf=105 bare_lf=69 utf8=yes label=no
+[pwsh-capture] water-consistency-probe-R1806.log bytes=1520 bom=utf-8 crlf=16 bare_lf=9 utf8=yes label=no
+[pwsh-capture] water-deltaliteral-R1818.log bytes=7907 bom=utf-8 crlf=90 bare_lf=20 utf8=yes label=no
+[pwsh-capture] water-driftmonth-R1813.log bytes=6294 bom=utf-8 crlf=86 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-ghostkind-R1809.log bytes=3074 bom=utf-8 crlf=33 bare_lf=8 utf8=yes label=no
+[pwsh-capture] water-ghostval-R1810.log bytes=3640 bom=utf-8 crlf=39 bare_lf=8 utf8=yes label=no
+[pwsh-capture] water-integrity-R1817.log bytes=14514 bom=utf-8 crlf=184 bare_lf=0 utf8=yes label=no
+[other] water-journalcap-R1804.log bytes=2529 bom=utf-8 crlf=18 bare_lf=42 utf8=yes label=no
+[other] water-journalwin-R1803.log bytes=2343 bom=utf-8 crlf=17 bare_lf=26 utf8=yes label=no
+[pwsh-capture] water-kindtally-R1801.log bytes=729 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-mirrorsql-R1814.log bytes=6575 bom=utf-8 crlf=85 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-monthcross-R1807.log bytes=3640 bom=utf-8 crlf=42 bare_lf=2 utf8=yes label=no
+[pwsh-capture] water-monthflow-telescoping-R1811.log bytes=7416 bom=utf-8 crlf=90 bare_lf=9 utf8=yes label=no
+[pwsh-capture] water-monthlyflow-R1802.log bytes=199146 bom=utf-8 crlf=1504 bare_lf=18 utf8=yes label=no
+[pwsh-capture] water-readcap-combo-R1812.log bytes=11011 bom=utf-8 crlf=129 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-seqtamper-R1832.log bytes=11171 bom=utf-8 crlf=156 bare_lf=0 utf8=yes label=no
+[pwsh-capture] water-totalorder-R1820.log bytes=8822 bom=utf-8 crlf=107 bare_lf=9 utf8=yes label=no
+[pwsh-capture] water-tsintegrity-R1819.log bytes=8533 bom=utf-8 crlf=96 bare_lf=19 utf8=yes label=no
+[other] watermark-bindbit-R1778.log bytes=4848 bom=utf-8-sig crlf=61 bare_lf=0 utf8=yes label=no
+[pwsh-capture] watermark-dct-sweep-R1680.log bytes=4997 bom=utf-8 crlf=104 bare_lf=0 utf8=yes label=no
+[pwsh-capture] watermark-dualbit-R1783.log bytes=4747 bom=utf-8 crlf=40 bare_lf=31 utf8=yes label=no
+[pwsh-capture] watermark-robust-R552.log bytes=1034 bom=utf-8 crlf=15 bare_lf=0 utf8=yes label=no
+[pwsh-capture] watermark-scale-refine-R1747.log bytes=2839 bom=utf-8 crlf=24 bare_lf=10 utf8=yes label=no
+[other] wiring-R939.log bytes=3287 bom=utf-8-sig crlf=40 bare_lf=0 utf8=yes label=no
+[other] wiring-R940.log bytes=13625 bom=utf-8-sig crlf=137 bare_lf=7 utf8=yes label=no
+[pwsh-capture] wiring-R941.log bytes=14203 bom=utf-8 crlf=130 bare_lf=23 utf8=yes label=no
+[cmd-raw] wiring-R942.log bytes=14830 bom=utf-8 crlf=147 bare_lf=0 utf8=no label=no
+[cmd-raw] wiring-R943.log bytes=16092 bom=utf-8 crlf=155 bare_lf=0 utf8=no label=no
+[ps-utf16] wiring-R945.log bytes=12952 bom=utf-16le crlf=0 bare_lf=58 utf8=no label=no
+[ps-utf16] wiring-R946.log bytes=16768 bom=utf-16le crlf=0 bare_lf=79 utf8=no label=no
+[pwsh-capture] wj-run1-R1800.log bytes=1169 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[pwsh-capture] wj-run2-R1800.log bytes=1169 bom=utf-8 crlf=8 bare_lf=0 utf8=yes label=no
+[other] xl16-cleanup-R711.log bytes=500 bom=utf-8-sig crlf=8 bare_lf=0 utf8=yes label=no
+[ps-utf16] ygo-poc-20261008.log bytes=2248 bom=utf-16le crlf=0 bare_lf=15 utf8=no label=no
+[tee] ads-runner-R622.log bytes=34193 bom=utf-8 crlf=0 bare_lf=325 utf8=yes label=no
+[tee] benchgate-R691.log bytes=1038 bom=utf-8 crlf=0 bare_lf=13 utf8=yes label=no
+[tee] board-R1019.log bytes=553 bom=utf-8 crlf=0 bare_lf=4 utf8=yes label=no
+... (651 tee rows total, list truncated in evidence, probe rerun for full census)
+
+=== [4] hygiene ===
+git diff --stat src/sandbox/reconcile_all.py:
+  src/sandbox/reconcile_all.py | 12 ++++++++++++
+   1 file changed, 12 insertions(+)
+git status --short (round working set):
+   M src/sandbox/reconcile_all.py
+   M state/queue/tech.md
+  ?? qa/reconcile-daily-20261012-2.log
+  ?? qa/selflabel-chain-R1836.log
+  ?? src/os/qa_writer_census.py
+matrix --check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (10848 bytes, 106 suites, 978 criteria)
+self-ascii: PASS (12517 bytes)
+self-net-imports: NONE (PASS)
+
+VERDICT: ALL-PASS (10/10 checks)

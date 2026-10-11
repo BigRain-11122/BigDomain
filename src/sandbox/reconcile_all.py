@@ -1113,6 +1113,10 @@ def phase_member_reconcile(tmp):
          "reconcile member-tamper exit=%d (expect 2, FAIL detected)" % code2)
 
 
+SHELL_CAPTURE_LABEL = ("no evidence path: shell-capture mode, "
+                       "evidence dialect follows the caller")
+
+
 def main(argv):
     # pin the runner's own console/redirect stream to utf-8 as well,
     # so a no-argv shell-captured run (the R1791/R1792/R1824/R1825
@@ -1122,6 +1126,14 @@ def main(argv):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except (AttributeError, ValueError):
         pass
+    if len(argv) < 2:
+        # R1836 AC-SL1 (pre-registered in state/queue/tech.md before
+        # this code): with no evidence path the output goes to whoever
+        # captures us - say so as the very first line so a captured
+        # evidence file is mechanically identifiable as shell-capture
+        # mode (writer-census / R1827 archaeology faces). Printed
+        # before phase_suites, so the label is structurally first.
+        print(SHELL_CAPTURE_LABEL, flush=True)
     tee = None
     if len(argv) > 1:
         tee = Tee(argv[1])
