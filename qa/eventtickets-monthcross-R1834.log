@@ -1,0 +1,33 @@
+=== eventtickets monthcross probe R1834 evidence ===
+--- RUN1 stdout verbatim ---
+[1] month-set three-way
+PASS AC-MC1: engine DISTINCT union ['2026-08', '2026-09', '2026-10'] == planted month-abstract set ['2026-08', '2026-09', '2026-10'] = True; future month absent = True; cur-month real-API rows on both faces (buys=3 checks=1) = True; every observed-month windowed read walks zero-reject = True
+[2] flow-face telescoping
+PASS AC-MC2: per-session telescoping sum(months) == full for sold/admitted/revenue [alpha-gala sum(s/a/r)=3/1/15 full=3/1/15; zulu-empty sum(s/a/r)=0/0/0 full=0/0/0; xmonth-cross sum(s/a/r)=1/1/3 full=1/1/3; inmonth-full sum(s/a/r)=1/1/4 full=1/1/4] = True; board totals sum=5/3/22 full=5/3/22 = True; manual SQL third path equal on every month x session cell = True
+[3] no_show snapshot face
+PASS AC-MC3: in-register note: no_show = end-of-window cumulative snapshot (R1826 AC-EAW4), NOT additive, excluded from the telescoping sum; honest non-additivity reading: xmonth-cross sum(months)=1 vs full=0, board sum(months)=3 vs full=2 (differ = True); every windowed no_show == manual cumulative SQL across 2026-08/2026-09 + cur + fut = True; no_show >= 0 = True
+[4] dense axis preservation
+PASS AC-MC4: all five reads (default + 2026-08 + 2026-09 + cur + fut) carry the identical registry-driven session_key axis = True; ascending order in every read = True; future window all-zero cells with the full axis in place = True
+[5] pure-read + determinism + hygiene
+PASS AC-MC5: three-table counts flat (4, 5, 3) -> (4, 5, 3) = True; windowed double-call byte-identical = True; probe source pure ASCII (0 non-ascii) with zero network imports (0) = True; four product files sha-frozen = True; probe filename absent from reconcile_all.py SUITES registry (measurement face, R1727 precedent) = True
+PROBE VERDICT CONSISTENT (5/5)
+
+--- RUN2 stdout verbatim ---
+[1] month-set three-way
+PASS AC-MC1: engine DISTINCT union ['2026-08', '2026-09', '2026-10'] == planted month-abstract set ['2026-08', '2026-09', '2026-10'] = True; future month absent = True; cur-month real-API rows on both faces (buys=3 checks=1) = True; every observed-month windowed read walks zero-reject = True
+[2] flow-face telescoping
+PASS AC-MC2: per-session telescoping sum(months) == full for sold/admitted/revenue [alpha-gala sum(s/a/r)=3/1/15 full=3/1/15; zulu-empty sum(s/a/r)=0/0/0 full=0/0/0; xmonth-cross sum(s/a/r)=1/1/3 full=1/1/3; inmonth-full sum(s/a/r)=1/1/4 full=1/1/4] = True; board totals sum=5/3/22 full=5/3/22 = True; manual SQL third path equal on every month x session cell = True
+[3] no_show snapshot face
+PASS AC-MC3: in-register note: no_show = end-of-window cumulative snapshot (R1826 AC-EAW4), NOT additive, excluded from the telescoping sum; honest non-additivity reading: xmonth-cross sum(months)=1 vs full=0, board sum(months)=3 vs full=2 (differ = True); every windowed no_show == manual cumulative SQL across 2026-08/2026-09 + cur + fut = True; no_show >= 0 = True
+[4] dense axis preservation
+PASS AC-MC4: all five reads (default + 2026-08 + 2026-09 + cur + fut) carry the identical registry-driven session_key axis = True; ascending order in every read = True; future window all-zero cells with the full axis in place = True
+[5] pure-read + determinism + hygiene
+PASS AC-MC5: three-table counts flat (4, 5, 3) -> (4, 5, 3) = True; windowed double-call byte-identical = True; probe source pure ASCII (0 non-ascii) with zero network imports (0) = True; four product files sha-frozen = True; probe filename absent from reconcile_all.py SUITES registry (measurement face, R1727 precedent) = True
+PROBE VERDICT CONSISTENT (5/5)
+
+--- determinism (raw stdout bytes, same writer both runs) ---
+run1 exit=0
+run2 exit=0
+run1 sha16=F5AE1C2D83D219E9
+run2 sha16=F5AE1C2D83D219E9
+byte-identical=True
