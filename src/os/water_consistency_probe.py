@@ -33,6 +33,20 @@ which run first), the current flow month, an honest empty future
 month, and a malformed window that all three faces must reject
 with the shared E_WJ_BAD_WINDOW code before any read.
 
+R1808 extension (by-kind month-window count cross): the count-only
+sibling of the R1807 value cross - kind_tally(W) five-kind dense
+counts vs the hand-grouped kind counts of journal_board(W) rows vs
+monthly_flow(W).windows, on the same historical fixture month
+(submit x1 + verdict x2), the current flow month, and an honest
+empty future month. The telescoping law runs in its general form:
+every observed month passes the three-face count cross and the
+per-kind sum across months equals the whole-board tally (this
+reduces to all-minus-historical==current in the probe's two-month
+world). kind_tally joins the malformed-window reject ring so the
+bad-window family check covers all four window-parameterized read
+faces. Count cross only - the value cross stays in [5]; zero
+product files touched (measurement face, R1727 precedent).
+
 Encoding discipline: this source stays pure ASCII (the emoji probe
 text rides \U escapes); the output stays deterministic (no
 timestamps, no temp paths) so double runs compare byte-identical.
@@ -346,6 +360,102 @@ def main():
                            "OK" if rejects_ok else "DRIFT"))
         fail = fail or not (hist_ok and cur_ok and fut_ok and rejects_ok)
 
+        # ---- [6] by-kind month-window count cross (R1808) -----------
+        def hand_group_kinds(rows):
+            grouped = {}
+            for row in rows:
+                grouped[row["kind"]] = grouped.get(row["kind"], 0) + 1
+            dense = {}
+            rest = dict(grouped)
+            for kind in sorted(WJ.KINDS):
+                dense[kind] = int(rest.pop(kind, 0))
+            for kind in sorted(rest):
+                dense[kind] = rest[kind]
+            return dense
+
+        def kind_count_cross(w, dense_expect=None):
+            tally_env = pipe.journal.kind_tally(w)
+            board_env = pipe.journal.journal_board(w)
+            flow_env = pipe.journal.monthly_flow(w)
+            dense = hand_group_kinds(board_env["journal_board"])
+            tally = dict(tally_env["kind_tally"])
+            keys_ok = set(tally) == set(dense)
+            counts_ok = tally == dense
+            n_rows = len(board_env["journal_board"])
+            flow_rows = flow_env["monthly_flow"]
+            if n_rows:
+                flow_ok = (len(flow_rows) == 1
+                           and flow_rows[0]["month"] == w
+                           and flow_rows[0]["windows"] == n_rows
+                           and flow_env["total"] == n_rows)
+                sum_ok = (flow_rows[0]["windows"] == sum(tally.values())
+                          == tally_env["total"])
+            else:
+                flow_ok = (flow_rows == [] and flow_env["total"] == 0
+                           and flow_env["net_delta"] == 0)
+                sum_ok = sum(tally.values()) == 0 == tally_env["total"]
+            expect_ok = True
+            if dense_expect is not None:
+                expect_ok = tally == dense_expect
+            return (keys_ok and counts_ok and flow_ok and sum_ok
+                    and expect_ok), tally, n_rows
+
+        hist_ok, hist_tally, hist_rows = kind_count_cross(
+            "2026-08",
+            dense_expect={"batch": 0, "drain": 0, "ingest": 0,
+                          "submit": 1, "verdict": 2})
+        months = [r["month"] for r in
+                  pipe.journal.monthly_flow()["monthly_flow"]]
+        tele_ok = True
+        per_kind_sum = {}
+        for month in months:
+            m_ok, m_tally, _ = kind_count_cross(month)
+            tele_ok = tele_ok and m_ok
+            for kind, n in m_tally.items():
+                per_kind_sum[kind] = per_kind_sum.get(kind, 0) + int(n)
+        all_tally = dict(pipe.journal.kind_tally()["kind_tally"])
+        tele_ok = tele_ok and per_kind_sum == all_tally
+        cur_ok, cur_tally, cur_rows = kind_count_cross(cur_w)
+        fut_ok, fut_tally, fut_rows = kind_count_cross("2026-12")
+        conn = sqlite3.connect(journal_db)
+        rows_bk_before = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        try:
+            pipe.journal.kind_tally(window=bad)
+            bk_reject = "NO-RAISE"
+        except ValueError as exc:
+            bk_reject = ("E_WJ_BAD_WINDOW"
+                         if "E_WJ_BAD_WINDOW" in str(exc) else "OTHER")
+        conn = sqlite3.connect(journal_db)
+        rows_bk_after = conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        conn.close()
+        bk_ok = (bk_reject == "E_WJ_BAD_WINDOW"
+                 and rows_bk_before == rows_bk_after)
+        sections.append("[6] by-kind month-window count cross:")
+        sections.append("    hist 2026-08: rows=%d tally=%s %s"
+                        % (hist_rows,
+                           json.dumps(hist_tally, sort_keys=True),
+                           "OK" if hist_ok else "DRIFT"))
+        sections.append("    months=%s telescoping(sum==all)=%s %s"
+                        % (",".join(months),
+                           json.dumps(all_tally, sort_keys=True),
+                           "OK" if tele_ok else "DRIFT"))
+        sections.append("    cur %s: rows=%d tally=%s %s"
+                        % (cur_w, cur_rows,
+                           json.dumps(cur_tally, sort_keys=True),
+                           "OK" if cur_ok else "DRIFT"))
+        sections.append("    fut 2026-12: rows=%d tally=%s %s"
+                        % (fut_rows,
+                           json.dumps(fut_tally, sort_keys=True),
+                           "OK" if fut_ok else "DRIFT"))
+        sections.append("    bad-window kind_tally: %s rows %d==%d %s"
+                        % (bk_reject, rows_bk_before, rows_bk_after,
+                           "OK" if bk_ok else "DRIFT"))
+        fail = fail or not (hist_ok and tele_ok and cur_ok and fut_ok
+                            and bk_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -361,7 +471,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[6] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[7] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
