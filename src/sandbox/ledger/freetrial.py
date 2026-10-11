@@ -968,3 +968,111 @@ class FreeTrialFace:
             env["window"] = w
         env["disclaimer"] = self.disclaimer
         return env
+
+    def cap_usage_board(self, window=None):
+        """Per-grant cap-distance profile board (R1842
+        tech-queue claim row; the seed = the calls_by_account
+        R1837 face plus the cap_usage seed text): one row per
+        trial grant joined to its plan registry values, carrying
+        the lifetime call count and the remaining cap distance -
+        the "who is close to the cap" conversion-gate proximity
+        profile the month, kind, plan, engine and account
+        single-axis call profiles never surface. calls_used is
+        the lifetime count of immutable call rows stamped with
+        the same (dev_account, plan_id) pair, and remaining is
+        the plain arithmetic trial_cap minus calls_used: in a
+        live-only world every remaining value is at least 1 by
+        structure (the live call gate refuses once the count
+        reaches the cap), so a negative remaining - only
+        directly injected extra call rows can produce one - is
+        NOT hidden: the row surfaces in ascending order and
+        counts toward total (the face never hides data, the
+        R1776 AC-CHM3 law; the R1838 dm_precheck injection
+        convention). A zero-grant world is the honest empty
+        board with total 0 - no phantom grants. Converted
+        developers keep their grant rows here: the conversion
+        records are a separate register (conversions_board) and
+        never merge into this board; a grant row does not
+        vanish at conversion, so its cap distance stays
+        readable. The row is a grant-times-plan-registry join:
+        an orphan grant row (no registry plan - only direct
+        injection can produce one, the live grant gate checks
+        the registry first) falls outside the join domain and
+        does not surface here; the raw grant census stays
+        visible on the plan and trials listing faces.
+
+        Window parameterization (the R1730/R1732/R1735/R1784/
+        R1793 family law, with the count-domain verdict
+        registered in the R1842 claim row): window=None keeps
+        every grant row on the board; an explicit "YYYY-MM"
+        month window filters GRANT rows by their granted_utc
+        record-time stamp - the surviving grant rows still
+        carry LIFETIME calls_used and remaining values (the
+        count domain is never sliced by the window: "who is
+        close to the cap" is a property of the grant's whole
+        life, not of the month's net flow - the seed's
+        count-domain-not-sliced honesty note). A malformed
+        window fails closed E_FT_BAD_ARGS before any read.
+        Every count is derived at read time over immutable
+        rows: zero cached counters, zero stored state. The
+        explicit-window envelope adds one "window" key
+        (additive); the default envelope is byte-identical in
+        shape. Rows order by (dev_account, plan_id) ascending -
+        a unique grant key pair, so the board is deterministic
+        with zero dice and zero insertion-order surprises.
+        The persistent ai_label rides every row (the AIGC
+        labeling law: every view surface shows it). Pure
+        read."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise TrialError(E_FT_BAD_ARGS,
+                                 "window must be YYYY-MM: %r"
+                                 % (window,))
+        with self._lock:
+            if w is None:
+                rows = self._conn.execute(
+                    "SELECT g.dev_account, g.plan_id,"
+                    " p.plan_key, p.title, p.trial_cap,"
+                    " g.granted_utc, p.ai_label,"
+                    " (SELECT COUNT(*) FROM trial_calls c"
+                    " WHERE c.dev_account = g.dev_account"
+                    " AND c.plan_id = g.plan_id)"
+                    " FROM trial_grants g"
+                    " JOIN trial_plans p ON p.plan_id = g.plan_id"
+                    " ORDER BY g.dev_account, g.plan_id").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT g.dev_account, g.plan_id,"
+                    " p.plan_key, p.title, p.trial_cap,"
+                    " g.granted_utc, p.ai_label,"
+                    " (SELECT COUNT(*) FROM trial_calls c"
+                    " WHERE c.dev_account = g.dev_account"
+                    " AND c.plan_id = g.plan_id)"
+                    " FROM trial_grants g"
+                    " JOIN trial_plans p ON p.plan_id = g.plan_id"
+                    " WHERE substr(g.granted_utc, 1, 7) = ?"
+                    " ORDER BY g.dev_account, g.plan_id",
+                    (w,)).fetchall()
+            board = []
+            for r in rows:
+                used = int(r[7])
+                cap = int(r[4])
+                board.append({
+                    "dev_account": str(r[0]),
+                    "plan_id": int(r[1]),
+                    "plan_key": str(r[2]),
+                    "title": str(r[3]),
+                    "trial_cap": cap,
+                    "calls_used": used,
+                    "remaining": cap - used,
+                    "granted_utc": str(r[5]),
+                    "ai_label": int(r[6]),
+                })
+            total = len(board)
+        env = {"cap_usage_board": board, "total": total}
+        if w is not None:
+            env["window"] = w
+        env["disclaimer"] = self.disclaimer
+        return env

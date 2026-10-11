@@ -1,0 +1,58 @@
+qa/freetrial-capusage-R1842.log - cap_usage_board evidence
+(executed in round R1842; P2 tech-queue FIFO oldest
+claimable item, FL135 seeded by R1837)
+
+== [1] pre-registration pointer + SUITE RUN1 verbatim ==
+criteria AC-CCU1..AC-CCU8 registered in the tech.md
+FL135 claim line BEFORE freetrial.py carried any
+cap_usage_board code (honesty law); AC-CCU amendment
+noted in-place: AC-CCU5 structural bound corrected to
+the seed canon (structurally non-negative, remaining
+>= 0; the >= 1 reading was a snapshot world fact -
+R1704 premise-correction precedent).
+suite: python src/sandbox/ledger/test_freetrial_capusage.py
+
+PASS AC-CCU1: zero-grant world honest empty (True); envelope keys exact; 6 grant rows in (dev,plan) ascending order [('usr:alice', 1), ('usr:alice', 3), ('usr:bob', 2), ('usr:carol', 2), ('usr:dave', 3), ('usr:hist-g', 1)]; row keys exact 9; remaining==cap-used and calls_used==expected per row; ai_label rides rows; converted dave row still on board while the conversion register never merges (total 6 == grant count); window key additive; config bytes stable
+PASS AC-CCU2: 14 bad forms rejected E_FT_BAD_ARGS; four-table counts unchanged (3, 6, 6, 1); None default accepted []
+PASS AC-CCU3: m1 window keeps only the m1-stamped grant row and its calls_used==2 stays the LIFETIME count (two current-month calls - count domain never sliced); m2/future windows honest empty 0/0; default read carries all 6 grants; zero cross-month grant leakage
+PASS AC-CCU4: per-row calls_used == manual SQL COUNT per (dev,plan); remaining == cap-used arithmetic; row order == SQL ORDER BY dev_account,plan_id [('usr:alice', 1), ('usr:alice', 3), ('usr:bob', 2), ('usr:carol', 2), ('usr:dave', 3), ('usr:hist-g', 1)]; total 6 == COUNT(trial_grants); windowed pairs == windowed SQL
+PASS AC-CCU5: pre-call snapshot: all remaining >= 1 in this world (world fact; structural law is >= 0 - the seed's non-negative canon); headroom call succeeded and landed alice remaining == 0 at the full cap (legal conversion-gate trigger state); directly-injected past-cap world: bob row surfaces calls_used=6 remaining=-1 in ascending slot 3 of 6, counted on the board (total 6 == grant count); live call attempt on the past-cap grant now refuses E_FT_QUOTA (True) - negative remaining is injection-only, never hidden
+PASS AC-CCU6: method source free of data-changing statements; four-table counts unchanged (3, 6, 12, 1); double-call dumps byte-identical (sorted and insertion order); windowed double-call identical
+PASS AC-CCU7: new live call under cap: carol row calls_used 1->2 remaining 4->3; alice/pa row still carries the CCU5 headroom call (used 3, remaining 0); bob past-cap row and hist-g row unchanged; total 6; windowed read follows; m1 windowed row unchanged (no cross-window contamination)
+PASS AC-CCU8: freetrial.py pure ASCII; import lines network-free (5 imports); shipped config.json sha256 stable; SUITES registration row present; criteria drift self-check 7+1==8
+SUITE PASS 8/8 exit=0
+
+== [2] double-run determinism ==
+run1 exit=0 sha256=d36c8267451ef76070eb19db235b84aa7f0076c6ad778e9d84259dfefe6b6e95 bytes=2370
+run2 exit=0 sha256=d36c8267451ef76070eb19db235b84aa7f0076c6ad778e9d84259dfefe6b6e95 bytes=2370
+byte-identical: True (zero dice, zero timestamps in output)
+
+== [3] RUNNER full-regression extract ==
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+PASS suite ledger-freetrial-capusage exit=0 pass-lines=8 fail-lines=0 criteria=8 0.3s
+PASS suites 109/109 green, expected criteria total=1002
+RUNNER PASS (109/109 suites green, reconcile controls 7/7, 177.5s)
+baseline chain: 108 suites/994 criteria (R1840) ->
+109/1002 this batch (+1 suite ledger-freetrial-capusage,
++8 criteria AC-CCU1..CCU8) - zero regression
+
+== [4] matrix regen + --check + fingerprint sentinel ==
+python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1842.log
+  PASS generated docs/sandbox-suite-matrix.md (11136 bytes) - registry suites=109 criteria=1002 green=109/109
+  PASS check: byte-identical (11136 bytes)
+python src/sandbox/fingerprint_regen.py --chain src/sandbox/migration_chains.json --check
+  five domain baseline-matches lines + verdict CLEAN
+  domains=5 (zero schema touch: freetrial rides its own
+  SQLite file, read-only join over existing tables)
+
+== [5] hygiene + delivery notes ==
+freetrial.py: additive method only (git diff evidence in
+commit); pure ASCII; 5 stdlib imports, zero network
+libs; shipped config.json sha256 stable (suite-checked)
+suite source: pure ASCII, direct-injection fixtures
+noted in header (R1730 family precedent)
+queue accounting: FL135 consumed; one replacement seed
+appended (queue holds 10 open items, family rhythm)

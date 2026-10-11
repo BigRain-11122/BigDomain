@@ -1,0 +1,86 @@
+qa/reorg-R1842.log - fold R496 evidence (executed in round R1842)
+window = state.json log lines 8..45 (slice mode) = R1823..R1841,
+  38 lines, P2 tech FIFO delivery window;
+knife = P-2026-09-25-18 #496; obligation = R1841 carry-over note
+
+== [1] pre-op gauge (recomputed live from logs/state-preop-R1842.bak) ==
+{
+ "disk_bytes": 82954,
+ "gate": 78500,
+ "margin_bytes": -4454,
+ "fold_needed": true,
+ "log_lines": 45,
+ "log_content_bytes": 77029,
+ "tick": 1841,
+ "preop_sha16": "da98cdcea88e5533"
+}
+recorded round-start gauge (console): disk=82954 margin=-4454 tick=1841
+
+== [2] dry-run verification (recorded console output, zero mutation) ==
+{
+ "window_mode": "slice",
+ "window_start": 8,
+ "window_end": 45,
+ "window_lines": 38,
+ "window_content_bytes": 53784,
+ "token_missing": [],
+ "token_ok": true,
+ "gate_ok": true,
+ "predicted_bytes": 40809,
+ "reserve_bytes": 3000,
+ "gate": 78500,
+ "would_fail": [],
+ "preop_sha16": "da98cdcea88e5533"
+}
+
+== [3] execute (verify-then-write; preop backup + archive append) ==
+recorded execute verdict: post_bytes=40809 predicted_eq_actual=True
+  archive_appended=True backup_written=True appendix_bytes=54063
+live re-verification:
+{
+ "post_disk_bytes": 40809,
+ "predicted_eq_actual_live": true,
+ "new_log_len": 8,
+ "new_log_len_expected": 8,
+ "summary_embedded_head": "2026-10-11/12（R1823..R1841 滚窗并折摘要·fold R496 承 R1841 承传注记兑现·轮",
+ "summary_file_bytes": 14823
+}
+
+== [4] post-op gauge ==
+{
+ "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+ "disk_bytes": 40809,
+ "gate": 78500,
+ "log_lines": 8,
+ "log_content_bytes": 38068,
+ "margin_bytes": 37691,
+ "fold_needed": false,
+ "tick": 1841
+}
+
+== [5] archive section probe (R1842) + catalog re-check ==
+archive section R1842: declared 38 lines verbatim
+  physical lines in section body = 39 (non-empty 38)
+  split-point check: no window line embeds U+000A (gen496
+  NL-CHECK clean before surgery; census R1842 section mismatch NONE)
+mechanical catalog re-check (archive window vs summary file):
+{
+ "window_lines": 38,
+ "tokens_total": 88,
+ "missing_in_roll": [],
+ "pass": true
+}
+census (reverse reconciliation): sections_total=413
+  unknown_mismatch_count=0 unknown_dangling_count=0 pass=True
+  R1823 known finding still visible, adjudicated (census_known_findings)
+
+== [6] preop backup + hygiene ==
+preop backup: logs/state-preop-R1842.bak
+  bytes=82954 sha16=da98cdcea88e5533
+archive: logs/state-log-archive-2026-10.md section R1842
+  38 window lines verbatim, zero data loss
+generator: .codely-cli/tmp/gen496.py (catalog mechanical,
+  zero hand-copy; listing programmatic); summary file
+  fold496-summary.txt (14823B, 88 tokens embedded, zero missing)
+record retention: state-preop-R1842.bak joins preop-bak class
+  (keep-newest 12 per PRUNE_KEEP; prune dry-run face only)

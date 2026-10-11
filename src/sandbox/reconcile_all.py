@@ -702,6 +702,13 @@ SUITES = [
     # (AC-CBA1..CBA8 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-callaccount",
      os.path.join("ledger", "test_freetrial_callaccount.py"), 8),
+    # R1842 per-grant cap-distance profile board: pure-read
+    # grant x plan-cap x call-count three-face derivation over
+    # trial_grants/trial_plans/trial_calls (window filters the
+    # grant row set only; counts stay lifetime - the
+    # count-domain-not-sliced verdict)
+    ("ledger-freetrial-capusage",
+     os.path.join("ledger", "test_freetrial_capusage.py"), 8),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
