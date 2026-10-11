@@ -1,0 +1,35 @@
+BigDomain qa evidence - pay channel-status matrix monthly window read face
+Round: R1784 | Date: 2026-10-11 | Claim line: state/queue/tech.md R1784
+Criteria: AC-CW1..AC-CW7 (pre-registered in tech.md BEFORE code; honesty law)
+
+--- section 1: suite run 1 (test_channel_window.py) ---
+PASS AC-CW1: def-keys=True def==None=True explicit-keys=True dense=10 order-ok=True zero-state=True
+PASS AC-CW2: rejected=14/14 count-stable=True (1==1)
+PASS AC-CW3: cur=2026-10 hist=2026-09 future=2027-10 hist-cross=True hist-total=3 cur-total=2 full=5(5) future-empty=True
+PASS AC-CW4: hist-rows=11 extra=[{'channel': 'legacy', 'status': 'reversed', 'count': 1}] hist-total=1 cur-rows=10 cur-total=1
+PASS AC-CW5: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-CW6: cur created 1->0->pending 1->0->granted 1 totals=(1, 1, 1) hist-frozen=True
+PASS AC-CW7: ascii=True network-imports=0 config-sha-stable=True signature=(self, window=None) additive=True wired=True prior=6
+SUITE PASS: 7/7
+
+--- section 2: suite run 2 tail (determinism) ---
+SUITE PASS: 7/7 (second consecutive run, exit=0)
+--- section 3: additive diff evidence (git) ---
+ src/sandbox/pay/orders.py    | 40 ++++++++++++++++++++++++++++++++++------  (import re + _WINDOW_RE family constant + window param/filter, existing faces untouched)
+ src/sandbox/reconcile_all.py |  8 ++++++++  (SUITES registry row pay-channel-window criteria=7 + comment)
+ ?? src/sandbox/pay/test_channel_window.py  (new suite, 7 criteria)
+ shipped config.json: absent from git status = zero bytes changed (sha256 stable, asserted in-suite AC-CW7)
+--- section 4: full regression (reconcile_all.py, evidence qa/reconcile-all-R1784.log) ---
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (83/83 suites green, reconcile controls 7/7, 151.7s)
+--- section 5: suite matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (8937 bytes) - registry suites=83 criteria=813 evidence=qa/reconcile-all-R1784.log green=83/83
+PASS check: docs/sandbox-suite-matrix.md byte-identical (8937 bytes, 83 suites, 813 criteria)  [x2, default discovery face resolved qa/reconcile-all-R1784.log]
+--- section 6: fingerprint sentinel (zero schema touch) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

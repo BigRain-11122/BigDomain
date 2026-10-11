@@ -304,6 +304,14 @@ SUITES = [
     # deterministic order, out-of-domain observed pairs appended not
     # hidden (AC-CHM1..CHM7 pre-registered in state/queue/tech.md).
     ("pay-channel-matrix", os.path.join("pay", "test_channel_matrix.py"), 7),
+    # R1784 pay channel-status matrix monthly window (R1776 successor;
+    # window-parameterized read-face family, R1730/R1732 same law):
+    # default None keeps the full-window dense matrix with zero drift,
+    # an explicit strict-anchor 'YYYY-MM' restricts counts to the
+    # creation month (ts_utc record-time stamp), out-of-domain pairs
+    # stay appended-and-counted inside the window, zero caching
+    # (AC-CW1..CW7 pre-registered in state/queue/tech.md).
+    ("pay-channel-window", os.path.join("pay", "test_channel_window.py"), 7),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,

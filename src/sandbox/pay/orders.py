@@ -49,6 +49,7 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import sys
 import threading
@@ -88,6 +89,11 @@ E_BAD_CONFIG = "E_BAD_CONFIG"
 
 _CHANNELS = ("virtual", "standard")
 _STATUSES = ("created", "pending", "paid", "granted", "closed")
+
+# R1784 window-parameterization family law (ledger apidev L159 same
+# anchor, same law): strict \Z tail anchor rejects trailing-newline /
+# trailing-space forms that Python's $ would tolerate (R1748 hardening).
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 # legal status edges (spec section 2): main chain + timeout close
 # (created/pending -> closed) + refund close (granted -> closed);
 # closed is absorbing, granted only closes on refund.
@@ -860,7 +866,7 @@ class PayOrders:
                            "granted_utc": r[3],
                            "refunded": r[4] != "granted"} for r in rows]}
 
-    def channel_status_matrix(self):
+    def channel_status_matrix(self, window=None):
         """R1776 read face: per-channel x per-status dense coverage
         matrix (pure derived view for reconciliation consumers; the
         reconcile control plane stays the independent enforcement
@@ -873,11 +879,30 @@ class PayOrders:
         unreachable through this product because the schema constrains
         both columns) is appended after the dense cells and counted in
         the total instead of being hidden. Pure read: zero rows
-        written, zero caching (a fresh call re-derives)."""
+        written, zero caching (a fresh call re-derives).
+
+        R1784 window parameter (family = the R1730/R1732
+        window-parameterized read faces, same strict-anchor law):
+        default None = full-window matrix, current behavior with zero
+        drift; an explicit 'YYYY-MM' restricts every count to orders
+        whose creation month matches. The filter keys on the ts_utc
+        record-time stamp, which is set once at creation and never
+        rewritten by later status transitions, so a window is the
+        creation month (honest note). Read-time filter, zero caching."""
+        if window is not None:
+            if (not isinstance(window, str)
+                    or not _WINDOW_RE.match(window)):
+                raise PayError(E_BAD_STATE,
+                               "window must be YYYY-MM or None")
+            where = " WHERE substr(ts_utc,1,7) = ?"
+            params = (window,)
+        else:
+            where = ""
+            params = ()
         with self._lock:
             rows = self._conn.execute(
-                "SELECT channel, status, COUNT(*) FROM pay_orders"
-                " GROUP BY channel, status").fetchall()
+                "SELECT channel, status, COUNT(*) FROM pay_orders" + where +
+                " GROUP BY channel, status", params).fetchall()
         observed = {}
         for channel, status, count in rows:
             observed[(str(channel), str(status))] = int(count)
@@ -889,8 +914,11 @@ class PayOrders:
         for pair in sorted(observed):
             cells.append({"channel": pair[0], "status": pair[1],
                           "count": observed[pair]})
-        return self._face({"channel_status_matrix": cells,
-                           "total": sum(c["count"] for c in cells)})
+        out = {"channel_status_matrix": cells,
+               "total": sum(c["count"] for c in cells)}
+        if window is not None:
+            out["window"] = window
+        return self._face(out)
 
 
 def main():
