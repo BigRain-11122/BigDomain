@@ -88,6 +88,24 @@ backing; the [3]/[4] crosses closed pre-tamper - the R1807/R1809
 fixture law) and the read faces stay pure (row count constant).
 
 
+R1811 extension (monthly net-flow value telescoping): the
+value-plane sibling of the [6] count telescoping - for every
+observed month the window-filtered monthly_flow(W).total_delta
+sums (with the window counts) to the whole-board cell_totals
+total, the whole-board monthly_flow net_delta, and the
+hand-summed total_delta column of all board rows (three
+derivations of one world). The observed-month set derives from
+board row timestamps and cross-checks against the month column
+of the whole-board flow rows. The ghost row's +1 rides inside
+the telescoping sum (out-of-set kind direct query - a
+month-agnostic attribution path; the [8] pre-ghost baseline
+re-proves the current-month value), the historical fixture
+month keeps its registered -1 net, and the honest empty future
+month stays at zero: zero penetration re-proof on the
+ghost-present world. Zero product files touched (measurement
+face, R1727 precedent).
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -678,6 +696,100 @@ def main():
                            "OK" if gv4_ok else "DRIFT"))
         fail = fail or not (gv1_ok and gv2_ok and gv3_ok and gv4_ok)
 
+        # ---- [9] monthly net-flow value telescoping (R1811) --------
+        # The count plane ([6]) proved per-month by-kind sums equal
+        # the whole-board tally; the value plane proves the per-month
+        # net-flow telescoping: each observed month's window-filtered
+        # monthly_flow(W).total_delta, summed across months, equals
+        # the whole-board cell_totals total, the whole-board
+        # monthly_flow net_delta, and the hand-summed total_delta
+        # column of all board rows (three derivations of one world).
+        # The ghost row's +1 rides inside the sum (month-agnostic
+        # attribution via the out-of-set kind direct query), the
+        # historical fixture month keeps its registered -1 net, and
+        # the honest empty future month stays at zero.
+        board_full = pipe.journal.journal_board()["journal_board"]
+        months_board = sorted({r["ts_utc"][:7] for r in board_full})
+        flow_full_env = pipe.journal.monthly_flow()
+        flow_full_rows = flow_full_env["monthly_flow"]
+        months_flow = [r["month"] for r in flow_full_rows]
+        months_ok = months_board == months_flow
+        per_month = []
+        sum_flow = 0
+        sum_windows = 0
+        months_read_ok = True
+        for month in months_board:
+            m_env = pipe.journal.monthly_flow(month)
+            m_rows = m_env["monthly_flow"]
+            ok_m = (len(m_rows) == 1 and m_rows[0]["month"] == month
+                    and int(m_env["total"]) == int(m_rows[0]["windows"])
+                    and int(m_env["net_delta"])
+                    == int(m_rows[0]["total_delta"]))
+            months_read_ok = months_read_ok and ok_m
+            per_month.append("%s:%+d/%dw"
+                            % (month, int(m_rows[0]["total_delta"]),
+                               int(m_rows[0]["windows"])))
+            sum_flow += int(m_rows[0]["total_delta"])
+            sum_windows += int(m_rows[0]["windows"])
+        cells_full_env = pipe.journal.cell_totals()
+        cells_full_total = int(cells_full_env["total"])
+        flow_net = int(flow_full_env["net_delta"])
+        hand_col = sum(int(r["total_delta"]) for r in board_full)
+        tl2_ok = (months_read_ok
+                  and sum_flow == cells_full_total == flow_net == hand_col
+                  and sum_windows == len(board_full)
+                  and sum(int(r["windows"]) for r in flow_full_rows)
+                  == len(board_full))
+        ghost_col = sum(int(r["total_delta"]) for r in board_full
+                        if r["kind"] == "legacy-ghost")
+        non_ghost_col = sum(int(r["total_delta"]) for r in board_full
+                            if r["kind"] != "legacy-ghost")
+        cur_flow_env_t = pipe.journal.monthly_flow(cur_w)
+        cur_flow_rows_t = cur_flow_env_t["monthly_flow"]
+        cur_ride = (len(cur_flow_rows_t) == 1
+                    and int(cur_flow_rows_t[0]["total_delta"])
+                    == int(pre_cells_env["total"]) + 1)
+        ghost_ride = (ghost_col == 1
+                      and sum_flow == non_ghost_col + ghost_col
+                      and cur_ride)
+        hflow_env = pipe.journal.monthly_flow("2026-08")
+        hflow_rows = hflow_env["monthly_flow"]
+        hflow_ok = (len(hflow_rows) == 1
+                    and int(hflow_rows[0]["windows"]) == 3
+                    and int(hflow_rows[0]["total_delta"]) == -1)
+        hcells_total = int(pipe.journal.cell_totals("2026-08")["total"])
+        fflow_env = pipe.journal.monthly_flow("2026-12")
+        fcells_env = pipe.journal.cell_totals("2026-12")
+        fut_zero = (fflow_env["monthly_flow"] == []
+                    and int(fflow_env["total"]) == 0
+                    and int(fflow_env["net_delta"]) == 0
+                    and fcells_env["cell_totals"] == {}
+                    and int(fcells_env["total"]) == 0)
+        fut_absent = "2026-12" not in months_board
+        tl3_ok = (ghost_ride and hflow_ok and hcells_total == -1
+                  and fut_zero and fut_absent)
+        sections.append("[9] monthly net-flow value telescoping:")
+        sections.append("    months=%s (board==flow sets %s)"
+                        % (",".join(months_board), months_ok))
+        sections.append("    per-month flow: %s" % " ".join(per_month))
+        sections.append("    telescoping: sum=%+d cells=%d flow-net=%d "
+                        "hand-col=%d windows %d==%d %s"
+                        % (sum_flow, cells_full_total, flow_net, hand_col,
+                           sum_windows, len(board_full),
+                           "OK" if (months_ok and tl2_ok) else "DRIFT"))
+        sections.append("    ghost ride: ghost-col=%+d non-ghost=%+d "
+                        "cur %s=%+d==pre %+d +1 %s"
+                        % (ghost_col, non_ghost_col, cur_w,
+                           int(cur_flow_rows_t[0]["total_delta"]),
+                           int(pre_cells_env["total"]),
+                           "OK" if ghost_ride else "DRIFT"))
+        sections.append("    zero penetration: hist-2026-08=%+d cells=%+d "
+                        "fut-2026-12 zero=%s absent=%s %s"
+                        % (int(hflow_rows[0]["total_delta"]), hcells_total,
+                           fut_zero, fut_absent,
+                           "OK" if tl3_ok else "DRIFT"))
+        fail = fail or not (months_ok and tl2_ok and tl3_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -693,7 +805,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[9] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[10] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
