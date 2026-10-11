@@ -1,0 +1,39 @@
+--- dm_precheck (engine semantics pin, R1704 law) ---
+DM-PRECHECK (sqlite 3.50.4)
+  F0 base-state 26/14/14             PASS
+  F1 bookkeeping-evaporated          PASS
+  F2 degraded-allocation-reuse-15    PASS
+  F3 self-rebuild-with-new-value     PASS
+  F4 update-restore-on-rebuilt       PASS
+  F7a re-green-delete-keeps-26       PASS
+  F6 reinsert-while-missing-rearm-27 PASS
+  F7b final-delete-keeps-27          PASS
+  F5 dup-row-hazard-stale-read       PASS
+  F5 hazard-cleanup                  PASS
+DM-PRECHECK VERDICT: PASS
+exit=0
+
+--- double-run determinism ---
+run1 exit=0 sha256-16=8F1B6AA8DD92D4DB
+run2 exit=0 sha256-16=8F1B6AA8DD92D4DB
+identical=True
+size=9615 bytes (zero timestamps, zero paths in probe stdout)
+
+--- [22] readings (run1) ---
+[22] seq-row-delete missing state:
+    evaporated: seq-rows 1->0 rows=14 total=11 OK
+    degraded-reuse: new-id=15 rows=15 rebuilt-seq=15 board-cur=11->12 OK
+    update-restore: seq=26 seq-rows=1 water-rows=15 OK
+    re-green: rows=14 seq=26 total=11 tallies-eq=True board-cur=11 OK
+    reinsert-rearm: mid-missing=0 ri-rows=1 ri-seq=26 ri-live=14 rearm-id=27 final-rows=14 final-seq=27 OK
+    pure-read: rows=14->14 OK
+
+--- AC-SQD adjudication (pre-registered in tech.md R1838 claim line before code; ruling amended after dm_precheck first-run falsified the naive re-INSERT restore - dup-row hazard, name has no UNIQUE) ---
+AC-SQD1 missing-state lands: PASS (bookkeeping row DELETEd; ro seq face rows==0; water rows stay 14; value face total zero drift)
+AC-SQD2 degraded allocation + id 15 reuse + self-rebuild: PASS (fresh INSERT -> new-id==15==max(rowid)+1 (NOT seq+1==27); rows 15; board(cur) 11->12; rebuilt seq==15)
+AC-SQD3 restore by UPDATE on the self-rebuilt row: PASS (seq 15->26; bookkeeping rows==1; water rows==15)
+AC-SQD4 world re-green: PASS (reused row deleted; rows back to 14; seq stays 26; tallies/total/board back at registered dicts)
+AC-SQD5 second-missing re-INSERT restore + re-arm + pure-read + determinism: PASS (re-evaporate -> direct re-INSERT (name,26) while truly missing -> rows==1 seq==26 live==14 zero consume; re-arm INSERT allocates 27==seq+1 (NOT 15); delete -> rows 14 final seq 27; ro face pre==post==14; double-run byte-identical)
+
+run1 probe verdict present: True
+DM-SECTION VERDICT: PASS

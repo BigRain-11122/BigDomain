@@ -419,6 +419,39 @@ AC-HW4 law). Measurement face, R1727 precedent, not registered
 into SUITES. Zero product files touched.
 
 
+R1838 extension (sqlite_sequence bookkeeping-row DELETE missing
+state): the [21] section proved the no-reuse guarantee fails when
+the bookkeeping row is tampered (UPDATE rollback); this section
+proves the second failure face - SQLite also allows a direct
+DELETE of the bookkeeping row. With the row gone the AUTOINCREMENT
+allocator degrades to the plain rowid rule: the next INSERT
+allocates max(rowid)+1 == 15, reusing the id of a row that was
+already used and deleted (the same lost-guard construction as
+[21], reached without touching a single product row value), and
+that INSERT self-rebuilds the bookkeeping row carrying the wrong
+lower watermark (seq == 15). Engine semantics were pinned
+empirically before this section landed (R1704 law; dm_precheck,
+SQLite 3.50.4 - which also falsified the first restore ruling:
+sqlite_sequence.name carries no UNIQUE, so a naive re-INSERT
+beside the self-rebuilt row creates a duplicate row while the
+plain read keeps returning the old one; the post-consume restore
+is therefore an UPDATE on the rebuilt row, and the direct
+re-INSERT is legal only while the row is truly missing). The
+missing-reuse-restore round: evaporate the bookkeeping row
+(product rows untouched), prove the degraded allocation reuses
+id 15 and surfaces in the count faces (journal_board(cur_w)
+11->12, value faces untouched: delta '{}', total_delta 0),
+restore the high-water 26 by UPDATE on the self-rebuilt row,
+delete the reused row - the 14-row world returns at seq 26.
+Second missing round: re-evaporate and restore by direct
+re-INSERT while truly missing (zero ids consumed), then prove
+the re-arm - a fresh INSERT allocates 27 == seq+1, not 15 - and
+delete it, leaving the honest final state (14 rows, seq 27: the
+consume advanced the high-water and the delete never retreats
+it). Measurement face, R1727 precedent, not registered into
+SUITES. Zero product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -2915,6 +2948,232 @@ def main():
         fail = fail or not (tp1_ok and tp2_ok and tp3_ok
                             and tp4_ok and tp5_ok)
 
+        # ---- [22] sqlite_sequence bookkeeping-row DELETE
+        # missing state (R1838; AC-SQD1..SQD5) ------------------
+        # The [21] section proved the no-reuse guarantee's
+        # single point of dependence against an UPDATE tamper;
+        # this section proves the second failure face - the
+        # bookkeeping row can also be DELETEd outright. With
+        # the row missing the AUTOINCREMENT allocator degrades
+        # to the plain rowid rule max(rowid)+1, so the next
+        # INSERT reuses the deleted id 15 (the same lost-guard
+        # construction as [21] without touching a product value)
+        # and self-rebuilds the bookkeeping row at the wrong
+        # lower watermark. Engine semantics pinned empirically
+        # before this section landed (R1704 law; dm_precheck,
+        # SQLite 3.50.4 - which also falsified the naive
+        # re-INSERT restore beside a rebuilt row: name carries
+        # no UNIQUE, duplicate row, stale first read; the
+        # post-consume restore is an UPDATE, the direct
+        # re-INSERT is legal only while truly missing).
+
+        def sqd_ro_scalar(sql, args=()):
+            sqd_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = sqd_ro.execute(sql, args).fetchone()
+            sqd_ro.close()
+            return got[0] if got else None
+
+        sqd_pre_n = sqd_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        sqd_seq_rows_pre = sqd_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        sqd_seq_pre = sqd_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        sqd_live_max_pre = sqd_ro_scalar(
+            "SELECT MAX(window_id) FROM water_windows")
+        # product faces before the missing round
+        sqd_tally_pre = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        sqd_tally_cur_pre = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        sqd_total_pre = pipe.journal.cell_totals()["total"]
+        sqd_board_cur_pre = pipe.journal.journal_board(
+            cur_w)["total"]
+
+        # AC-SQD1: evaporate the bookkeeping row - missing state
+        sqd_conn = sqlite3.connect(journal_db)
+        sqd_conn.execute(
+            "DELETE FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        sqd_conn.commit()
+        sqd_missing_n = sqd_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_rows_missing = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd_total_missing = pipe.journal.cell_totals()["total"]
+        sqd1_ok = (sqd_seq_pre == 26
+                   and sqd_seq_rows_pre == 1
+                   and sqd_missing_n == 0
+                   and sqd_rows_missing == 14
+                   and sqd_live_max_pre == 14
+                   and sqd_total_missing == sqd_total_pre)
+
+        # AC-SQD2: degraded allocation reuses deleted id 15 and
+        # self-rebuilds the bookkeeping row at the wrong
+        # watermark (NOT seq+1 == 27)
+        sqd_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-24T00:00:00.000000Z",))
+        sqd_reuse_id = sqd_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        sqd_rows_mid = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd_rebuilt = sqd_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()
+        sqd_conn.commit()
+        sqd_board_cur_mid = pipe.journal.journal_board(
+            cur_w)["total"]
+        sqd2_ok = (sqd_reuse_id == 15 and sqd_rows_mid == 15
+                   and sqd_rebuilt is not None
+                   and sqd_rebuilt[0] == 15
+                   and sqd_board_cur_mid == sqd_board_cur_pre + 1)
+
+        # AC-SQD3: restore by UPDATE on the self-rebuilt row
+        sqd_conn.execute(
+            "UPDATE sqlite_sequence SET seq = 26"
+            " WHERE name = 'water_windows'")
+        sqd_conn.commit()
+        sqd_seq_up = sqd_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_seq_up_rows = sqd_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_rows_up = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd3_ok = (sqd_seq_up == 26 and sqd_seq_up_rows == 1
+                   and sqd_rows_up == 15)
+
+        # AC-SQD4: world re-green - delete the reused row
+        sqd_conn.execute(
+            "DELETE FROM water_windows"
+            " WHERE window_id = ?", (sqd_reuse_id,))
+        sqd_conn.commit()
+        sqd_rows_post = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd_seq_post = sqd_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_tally_post = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        sqd_tally_cur_post = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        sqd_total_post = pipe.journal.cell_totals()["total"]
+        sqd_board_cur_post = pipe.journal.journal_board(
+            cur_w)["total"]
+        sqd4_ok = (sqd_rows_post == 14 and sqd_seq_post == 26
+                   and sqd_tally_post == sqd_tally_pre
+                   and sqd_tally_cur_post == sqd_tally_cur_pre
+                   and sqd_total_post == sqd_total_pre
+                   and sqd_board_cur_post == sqd_board_cur_pre)
+
+        # AC-SQD5: second missing round - direct re-INSERT
+        # restore while truly missing (zero ids consumed),
+        # then the re-arm proof (fresh INSERT allocates
+        # seq+1 == 27, NOT the reused 15), then delete; the
+        # honest final state is 14 rows at seq 27 (the consume
+        # advanced the high-water, the delete never retreats).
+        sqd_conn.execute(
+            "DELETE FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        sqd_conn.commit()
+        sqd_missing2 = sqd_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_conn.execute(
+            "INSERT INTO sqlite_sequence (name, seq)"
+            " VALUES ('water_windows', 26)")
+        sqd_conn.commit()
+        sqd_ri_rows = sqd_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_ri_seq = sqd_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_ri_live = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-25T00:00:00.000000Z",))
+        sqd_rearm_id = sqd_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        sqd_conn.commit()
+        sqd_rearm_ok = (sqd_missing2 == 0 and sqd_ri_rows == 1
+                        and sqd_ri_seq == 26
+                        and sqd_ri_live == 14
+                        and sqd_rearm_id == 27)
+        sqd_conn.execute(
+            "DELETE FROM water_windows"
+            " WHERE window_id = ?", (sqd_rearm_id,))
+        sqd_conn.commit()
+        sqd_rows_final = sqd_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        sqd_seq_final = sqd_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        sqd_conn.close()
+        sqd_post_n_ro = sqd_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        sqd5_ok = (sqd_rearm_ok
+                   and sqd_rows_final == 14
+                   and sqd_seq_final == 27
+                   and sqd_post_n_ro == 14
+                   and sqd_pre_n == 14)
+
+        sections.append("[22] seq-row-delete missing state:")
+        sections.append("    evaporated: seq-rows %d->%d"
+                        " rows=%d total=%s %s"
+                        % (sqd_seq_rows_pre, sqd_missing_n,
+                           sqd_rows_missing, sqd_total_missing,
+                           "OK" if sqd1_ok else "DRIFT"))
+        sections.append("    degraded-reuse: new-id=%d rows=%d"
+                        " rebuilt-seq=%s board-cur=%d->%d %s"
+                        % (sqd_reuse_id, sqd_rows_mid,
+                           sqd_rebuilt[0] if sqd_rebuilt
+                           else None,
+                           sqd_board_cur_pre, sqd_board_cur_mid,
+                           "OK" if sqd2_ok else "DRIFT"))
+        sections.append("    update-restore: seq=%d seq-rows=%d"
+                        " water-rows=%d %s"
+                        % (sqd_seq_up, sqd_seq_up_rows,
+                           sqd_rows_up,
+                           "OK" if sqd3_ok else "DRIFT"))
+        sections.append("    re-green: rows=%d seq=%d"
+                        " total=%s tallies-eq=%s board-cur=%d %s"
+                        % (sqd_rows_post, sqd_seq_post,
+                           sqd_total_post,
+                           sqd_tally_post == sqd_tally_pre
+                           and sqd_tally_cur_post
+                           == sqd_tally_cur_pre,
+                           sqd_board_cur_post,
+                           "OK" if sqd4_ok else "DRIFT"))
+        sections.append("    reinsert-rearm: mid-missing=%d"
+                        " ri-rows=%d ri-seq=%d ri-live=%d"
+                        " rearm-id=%d final-rows=%d"
+                        " final-seq=%d %s"
+                        % (sqd_missing2, sqd_ri_rows,
+                           sqd_ri_seq, sqd_ri_live,
+                           sqd_rearm_id, sqd_rows_final,
+                           sqd_seq_final,
+                           "OK" if sqd5_ok else "DRIFT"))
+        sections.append("    pure-read: rows=%d->%d %s"
+                        % (sqd_pre_n, sqd_post_n_ro,
+                           "OK" if (sqd_pre_n == 14
+                                    and sqd_post_n_ro == 14)
+                           else "DRIFT"))
+        fail = fail or not (sqd1_ok and sqd2_ok and sqd3_ok
+                            and sqd4_ok and sqd5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -2930,7 +3189,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[22] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[23] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
