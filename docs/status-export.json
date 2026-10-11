@@ -1,10 +1,10 @@
-{
-  "export_ts": "2026-10-11T14:27:13+08:00",
+﻿{
+  "export_ts": "2026-10-11T14:48:10+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1799 一句话：ugc review_verdict 审决水位差分回执接线交付（AC-VW1..VW7 预注册先于代码——审决窗前后双活快照+last_water_delta 五窗共居单值槽〔ingest/batch/drain/submit/verdict 五窗·last-writer-wins；risky 审决=verdict 先落账再 raise=完成窗照样覆写〔零静默水位变〕；预变异三拒槽保持〕·套件 7/7 首跑绿·RUNNER 92/92 套件 877 判据零回归=qa/reconcile-all-R1799.log·矩阵 --check byte-identical·指纹哨兵 CLEAN·证据 qa/ugc-verdictwater-R1799.log）。",
-    "latest_artifact": "本轮实物：pipeline.py review_verdict() 水位接线（方法入口纯读 prev 快照先于 desk.decide+risky 完成窗+后变异守卫完成窗后再 raise+五窗 docstring/构造注释/last_water_delta 读面注记同步）+套件 src/sandbox/ugc/test_verdict_waterwire.py（7 判据·五窗共居 fwd/rev 十步+三拒槽保持+直删注入后变异守卫例+noise 复入边+五表账本）+reconcile_all ugc-verdict-water 注册行 证据 qa/ugc-verdictwater-R1799.log（五节）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头滚动（ugc 窗口水位差分观测日志面〔R1799 补种队头=五窗历史差分持久化观测缺口〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~65.1KB 余量 ~13.4KB）——窗 ≤48h、2026-10-13 前。"
+    "current": "R1800 一句话：ugc 完成窗水位差分观测日志面交付（AC-WJ1..WJ7 预注册先于代码——water_journal.py 独立 append-only 账本〔dirname(ugc.db)/water_journal.db·每完成窗一行 kind+delta+ts〕+pipeline.py _complete_water 七窗位统一收口〔best-effort sqlite3.Error 吞/ValueError 穿透〕+journal_board 纯读面·五窗历史差分跨重启持久化〔单值槽重启即失的根治〕·套件 7/7 首跑绿+双跑逐字节同一·RUNNER 93/93 套件 884 判据零回归=qa/reconcile-all-R1800.log·矩阵 --check byte-identical·指纹哨兵 CLEAN·证据 qa/ugc-waterjournal-R1800.log）。",
+    "latest_artifact": "本轮实物：src/sandbox/ugc/water_journal.py（WaterJournalFace·append-only water_windows 表·journal_board 读面）+pipeline.py 完成窗助手接线（七窗位 _complete_water+close 三连关）+套件 src/sandbox/ugc/test_water_journal.py（7 判据·五窗各一行+空窗诚实零变+拒路径零入账+跨重启持久化 16/16+吞例证）+reconcile_all ugc-water-journal 注册行 证据 qa/ugc-waterjournal-R1800.log（五节）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头滚动（water journal by-kind 窗计数读面〔R1800 补种队头〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~68KB 余量 ~10KB）——窗 ≤48h、2026-10-13 前。"
   },
   "depts": [
     {
@@ -186,6 +186,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "ugc 完成窗水位差分观测日志面交付（R1800·P2 tech 队头可领项〔R1799 补种〕·AC-WJ1..WJ7 预注册先于代码〔tech.md R1800 认领行〕：water_journal.py WaterJournalFace〔独立 sqlite 件 water_journal.db·表 water_windows append-only 零 UPDATE·kind 五值闭集·disclaimer 四态拒构造〕+pipeline.py _complete_water 七窗位统一收口〔best-effort sqlite3.Error 吞/ValueError 穿透 fail-closed·close 三连关〕+journal_board 纯读面〔合规三件常驻·ai_generated=0·ORDER BY ts_utc,window_id〕·AC-WJ6 跨重启持久化=新实例全行仍在 window_id 单调续接而 _last_water=None 对照·套件 test_water_journal.py SUITE PASS 7/7 首跑绿+双跑逐字节同一·RUNNER PASS 93/93 套件 884 判据 controls 7/7 184.0s 零回归=qa/reconcile-all-R1800.log·矩阵 93/884 green --check byte-identical 双跑 9709B·指纹哨兵 CLEAN domains=5·shipped config/store/sec_batch 零字节·证据 qa/ugc-waterjournal-R1800.log 五节·queue_tech_open 10→9 补种 1→10〔water journal by-kind 窗计数读面〕·R1800）"
+    ],
     [
       "1",
       "scan_five_still DEC 面行属主 token 判读修复件（R1795·P2 tech 队头〔R1794 补种〕·轮计分 1=台账维护机制件〔scan 判读面·R763/R1705 同型〕：AC-DO1..DO4+AC-SC15/SC16 预注册先于代码〔tech.md R1795 认领行〕——scan_five_still.ps1 [DEC] 面新 token 集合改行属主判读〔表行行首 token=属主·行内余 token+非表行 token=引用集·known_tokens=140 全集计数保留+row_owner_tokens=115 新读数入 PASS/FLAG 行·verdict 唯一由属主集驱动·引用缺基线=dec_ref_missing_base INFO 行非 FLAG〔PASS/FLAG 两态随显〕·dec_new_tok 详情行改属主行映射归属修复〕+fallback 注释块同步改写+harness test_scan_faces.ps1 增 AC-SC15/SC16 两例〔R1794 形态夹具复现=已判行内引旧 token 缺基线→PASS row_owner_tokens=1+INFO 点名+零 dec_new_tok 行·真新属主行→FLAG new_tokens=1+详情=属主自身行文+子进程 exit 0〕全量复跑 31 checks ALL PASS exit 0 零回归〔SC1..SC14 全保〕+源件 tools/skills+装件 .codely-cli/skills sha256 同一+live 复跑 [DEC] PASS row_owner_tokens=115〔基线持平·零 ref_missing〕=qa/scan-dec-owner-R1795.log 三节〔harness+live+sha〕·GORD +4 行全他司面知悉·基线 last_gord_tbl_rows 257→261·queue_tech_open 10→9 补种 1→10〔ugc submit_batch 水位差分回执接线〕·R1795"
@@ -388,7 +392,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1799",
+      "1800",
       "OSLoop 执行 tick"
     ],
     [
@@ -3295,15 +3299,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 33,
+    "log_lines_in_window": 35,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1799 ugc review_verdict verdict water-delta wiring delivered (AC-VW1..VW7 pre-registered before code: dual live snapshots around the verdict window + last_water_delta five-window co-residency single slot last-writer-wins; the risky verdict records its trace before the raise, so it completes the window - outcome receipt channel, zero silent water change; pre-mutation refusals keep the slot; post-mutation guard completes the window before raising; suite 7/7 first-run green; RUNNER 92/92 suites 877 criteria zero-regression; matrix --check byte-identical; sentinel CLEAN; evidence qa/ugc-verdictwater-R1799.log; state tick 1799; tech queue reseed 1)"
+    "method": "R1800 ugc completed-window water journal delivered (AC-WJ1..WJ7 pre-registered before code: water_journal.py WaterJournalFace = append-only observability ledger next to ugc.db [water_windows table, kind CHECK five-value set, journal_board pure read face, compliance three-piece resident, ai_generated=0]; pipeline.py _complete_water helper unifies all seven window-completion sites [delta via the single store face, slot last-writer-wins carried, journal best-effort: sqlite3.Error swallowed / ValueError fail-closed; close triple store+batch+journal]; suite 7/7 first-run green double-run byte-identical; five windows each exactly one row, empty windows one honest-zero row, refused paths zero rows, risky verdict one row with the real water change; restart persistence 16/16 rows survive while _last_water resets to None [the single-slot history-loss gap this ledger closes]; RUNNER 93/93 suites 884 criteria controls 7/7 184.0s zero-regression = qa/reconcile-all-R1800.log; matrix 93/884 --check x2 byte-identical 9709B; fingerprint CLEAN domains=5; evidence qa/ugc-waterjournal-R1800.log; state tick 1800; tech queue reseed 1 [water journal by-kind window tally])"
   }
 }

@@ -34,6 +34,7 @@ import hashlib
 import json
 import os
 import re
+import sqlite3
 import sys
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
@@ -54,6 +55,7 @@ import store as UGC
 from review import ReviewDesk
 from wordlist import PreFilter  # L1 local pre-filter (OH-20261002 wiring)
 from sec_batch import SecBatchFace, ST_DRAINED_PASS  # batch + degraded queue (R1681)
+from water_journal import WaterJournalFace  # completed-window ledger (R1800)
 
 REPO_ROOT = os.path.realpath(os.path.join(BASE, "..", "..", ".."))
 SOURCES = ("direct", "lobby_idea", "avatar_intake", "live_danmaku")
@@ -102,6 +104,19 @@ class UGCPipeline:
         except ValueError as exc:
             self.store.close()
             raise GateOfflineError("sec_batch config invalid: %s" % exc)
+        # R1800 completed-window water journal (AC-WJ1): append-only
+        # observability ledger riding next to ugc.db (single writer,
+        # zero ugc.db schema touch); built last, so refused
+        # constructions never open the journal file either.
+        journal_db = os.path.join(
+            os.path.dirname(os.path.abspath(db_path)), "water_journal.db")
+        try:
+            self.journal = WaterJournalFace(
+                journal_db, disclaimer=self.disclaimer)
+        except ValueError as exc:
+            self.batch.close()
+            self.store.close()
+            raise GateOfflineError("water journal invalid: %s" % exc)
 
     # ---- startup self-checks (serve refusal family) -----------------------
 
@@ -173,8 +188,26 @@ class UGCPipeline:
         return real
 
     def close(self):
+        self.journal.close()
         self.batch.close()
         self.store.close()
+
+    def _complete_water(self, kind, prev_water):
+        """R1800 window completion (AC-WJ2): derive the delta through
+        the single store face, land the shared last-writer-wins slot,
+        then archive the completed window in the water journal (one
+        row per completed window). The journal is best-effort
+        observability: a sqlite3.Error on the ledger write never
+        breaks the completed product window (the window already
+        committed - R1728 diagnostic-face precedent); wiring bugs
+        (the ValueError family) stay fail-closed."""
+        env = self.store.pool_water_delta(prev_water)
+        self._last_water = env
+        try:
+            self.journal.record(kind, env)
+        except sqlite3.Error:
+            pass
+        return env
 
     @classmethod
     def startup_check(cls, config, db_path):
@@ -241,7 +274,7 @@ class UGCPipeline:
         # inside the store face; the single _last_water slot is shared
         # by all four windows - the most recent completed window wins
         # (AC-SU4 co-residency law)
-        self._last_water = self.store.pool_water_delta(prev_water)
+        self._complete_water("submit", prev_water)
         return out
 
     def submit_batch(self, source, actor, texts):
@@ -320,7 +353,7 @@ class UGCPipeline:
         # inside the store face; the single _last_water slot is shared
         # with the ingest window - the most recent completed window
         # wins, an empty batch included (AC-BW4 co-residency law)
-        self._last_water = self.store.pool_water_delta(prev_water)
+        self._complete_water("batch", prev_water)
         return receipts
 
     def degraded_banner(self):
@@ -371,7 +404,7 @@ class UGCPipeline:
         # live inside the store face; the single _last_water slot is
         # shared by all three windows - the most recent completed
         # window wins, an empty recovery window included (AC-DR4)
-        self._last_water = self.store.pool_water_delta(prev_water)
+        self._complete_water("drain", prev_water)
         return self._disclaimer({
             "drained": stats["drained"], "passed": stats["passed"],
             "rejected": stats["rejected"],
@@ -486,7 +519,7 @@ class UGCPipeline:
             receipts.append(out)
         # window-end live delta (AC-IW1): current side re-derives live
         # inside the store face; the envelope passes through unwrapped
-        self._last_water = self.store.pool_water_delta(prev_water)
+        self._complete_water("ingest", prev_water)
         return receipts
 
     def last_water_delta(self):
@@ -623,7 +656,7 @@ class UGCPipeline:
             if exc.code == UGC.E_CONTENT_REJECTED:
                 # risky verdict: the trace landed before this raise -
                 # completed window with the real water change (AC-VW3)
-                self._last_water = self.store.pool_water_delta(prev_water)
+                self._complete_water("verdict", prev_water)
             raise  # pre-mutation refusals keep the slot (AC-SU family)
         row = self.store.event_row(evt_id)
         if row is None:
@@ -631,7 +664,7 @@ class UGCPipeline:
             # implies the event row; no sandbox delete path): the
             # verdict landed, so complete the window before raising -
             # zero silent water change (AC-VW5)
-            self._last_water = self.store.pool_water_delta(prev_water)
+            self._complete_water("verdict", prev_water)
             raise UGC.PipelineError(UGC.E_NOT_FOUND, evt_id)
         out = self._accept_clean(evt_id, UGC.utc_now_iso(), row["zone"],
                                  row["actor"], row["summary"], event_exists=True)
@@ -639,7 +672,7 @@ class UGCPipeline:
         # inside the store face; the single _last_water slot is shared
         # by the five windows - the most recent completed window wins
         # (AC-VW4 co-residency law)
-        self._last_water = self.store.pool_water_delta(prev_water)
+        self._complete_water("verdict", prev_water)
         return out
 
     # ---- draft + final review (AC-U7/AC-U9) --------------------------------

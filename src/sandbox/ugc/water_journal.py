@@ -1,0 +1,104 @@
+"""Completed-window water journal (R1800, seed: R1799 five-window wiring).
+
+The five water-delta windows (ingest_lobby R1794, submit_batch R1796,
+drain_recover R1797, submit R1798, review_verdict R1799) share one
+single _last_water slot: only the most recent completed window stays
+visible and history is lost on restart. This module is the append-only
+observability ledger - one row per completed window (kind + delta
+envelope + ts), stored in an independent sqlite file next to ugc.db
+(single writer: the pipeline builds one journal per instance; R1681
+sec_degraded / R1254 reminder precedent; zero ugc.db schema touch).
+journal_board() is the pure read face: time ascending, compliance
+three-piece resident, ai_generated=0 (server authority).
+
+Append-only law: rows land via INSERT only; the ledger never rewrites
+history. total_delta carries any sign (a verdict pass window lands
+total_delta=-1, AC-VW1), so the table has no sign constraint on it.
+
+Encoding discipline: this source stays ASCII; Chinese copy lives in
+config.json (data file).
+"""
+
+import json
+import sqlite3
+from datetime import datetime, timezone
+
+KINDS = ("ingest", "batch", "drain", "submit", "verdict")
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS water_windows (
+    window_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kind TEXT NOT NULL
+        CHECK (kind IN ('ingest','batch','drain','submit','verdict')),
+    delta TEXT NOT NULL,
+    total_delta INTEGER NOT NULL,
+    ts_utc TEXT NOT NULL
+);
+"""
+
+E_WJ_NO_DISCLAIMER = "E_WJ_NO_DISCLAIMER"
+E_WJ_BAD_KIND = "E_WJ_BAD_KIND"
+E_WJ_BAD_ENVELOPE = "E_WJ_BAD_ENVELOPE"
+
+
+def _utc_now_iso():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z"
+
+
+class WaterJournalFace:
+    """Single-writer face over the independent journal sqlite file."""
+
+    def __init__(self, db_path, disclaimer=None):
+        if not isinstance(disclaimer, str) or not disclaimer.strip():
+            raise ValueError(
+                "water journal: disclaimer missing (%s)" % E_WJ_NO_DISCLAIMER)
+        self.db_path = db_path
+        self.disclaimer = disclaimer
+        self._conn = sqlite3.connect(db_path)
+        self._conn.execute(SCHEMA)
+        self._conn.commit()
+
+    def record(self, kind, envelope):
+        """Archive one completed window (AC-WJ2): kind must be one of
+        the five window kinds; envelope is the store pool_water_delta
+        envelope the window already derived (single derivation source
+        stays the store face - this ledger only archives it). Returns
+        the landing receipt {window_id, kind, ts_utc}."""
+        if kind not in KINDS:
+            raise ValueError(
+                "water journal: unknown window kind (%s)" % E_WJ_BAD_KIND)
+        if (not isinstance(envelope, dict)
+                or not isinstance(envelope.get("pool_water_delta"), dict)
+                or isinstance(envelope.get("total_delta"), bool)
+                or not isinstance(envelope.get("total_delta"), int)):
+            raise ValueError(
+                "water journal: bad delta envelope (%s)" % E_WJ_BAD_ENVELOPE)
+        ts = _utc_now_iso()
+        cur = self._conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta, ts_utc) "
+            "VALUES (?, ?, ?, ?)",
+            (kind, json.dumps(envelope["pool_water_delta"], sort_keys=True),
+             int(envelope["total_delta"]), ts))
+        self._conn.commit()
+        return {"window_id": cur.lastrowid, "kind": kind, "ts_utc": ts}
+
+    def journal_board(self):
+        """Pure read face (AC-WJ3): every archived completed-window row,
+        time ascending with the window_id tie-break (append order kept
+        within one second - deterministic, zero RNG). The compliance
+        three-piece stays resident: ai_generated=0 (server authority),
+        the standing non-advisory disclaimer and the persistent flag."""
+        rows = []
+        for window_id, kind, delta, total_delta, ts_utc in self._conn.execute(
+                "SELECT window_id, kind, delta, total_delta, ts_utc "
+                "FROM water_windows ORDER BY ts_utc, window_id"):
+            rows.append({
+                "window_id": window_id, "kind": kind,
+                "delta": json.loads(delta),
+                "total_delta": total_delta, "ts_utc": ts_utc})
+        return {"journal_board": rows, "total": len(rows),
+                "ai_generated": 0, "disclaimer": self.disclaimer,
+                "persistent": True}
+
+    def close(self):
+        self._conn.close()

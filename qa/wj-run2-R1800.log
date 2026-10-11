@@ -1,0 +1,8 @@
+PASS AC-WJ1: disclaimer-rejects=ValueError,ValueError,ValueError,ValueError schema=True bad-args=ValueError,ValueError,ValueError,ValueError append-only-source=True pipeline-wired=True ugc-schema-untouched=True kinds=True
+PASS AC-WJ2: zero=True five-kinds=True empty=True degraded=True submit-refusals-zero=True codes=E_BAD_SOURCE,E_ENTRANCE_REQUIRED,E_RATE_LIMIT,E_BAD_FRAME,E_CONTENT_REJECTED,E_BAD_VERDICT,E_NOT_FOUND,E_REVIEW_DONE verdict-refusals-zero=True risky-row={"review.suspended": -1, "review.verdicted.risky": 1}
+PASS AC-WJ3: envelope-keys=True compliance=True row-keys=True id-ascending=True ts-ascending=True total=True delta-roundtrip=True
+PASS AC-WJ4: rows=15 dual-path-identical=True kinds=submit,ingest,batch,drain,verdict,batch,submit,submit,submit,submit,submit,submit,submit,verdict,submit
+PASS AC-WJ5: read-method-clean=True counts-stable=True double-call-identical=True liveness-plus-one=True
+PASS AC-WJ6: slot-after-restart=None:True rows-persisted=16/16 window-id-monotonic=17
+PASS AC-WJ7: sqlite-swallow=True/True valueerror-propagates=True pure-ascii=True import-lines-clean=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7

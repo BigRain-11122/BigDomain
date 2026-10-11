@@ -1,0 +1,67 @@
+qa/ugc-waterjournal-R1800.log - R1800 completed-window water journal
+seed: R1799 five-window wiring in-book; claim row: state/queue/tech.md R1800
+criteria AC-WJ1..WJ7 pre-registered in the claim line BEFORE any code
+delivery: src/sandbox/ugc/water_journal.py (WaterJournalFace, append-only
+  water_windows table, independent sqlite next to ugc.db) + pipeline.py
+  _complete_water wiring (7 window-completion sites, best-effort journal,
+  sqlite3.Error swallowed / ValueError fail-closed) + suite + registry row
+
+
+--- section 1: suite double-run (determinism) ---
+
+PASS AC-WJ1: disclaimer-rejects=ValueError,ValueError,ValueError,ValueError schema=True bad-args=ValueError,ValueError,ValueError,ValueError append-only-source=True pipeline-wired=True ugc-schema-untouched=True kinds=True
+PASS AC-WJ2: zero=True five-kinds=True empty=True degraded=True submit-refusals-zero=True codes=E_BAD_SOURCE,E_ENTRANCE_REQUIRED,E_RATE_LIMIT,E_BAD_FRAME,E_CONTENT_REJECTED,E_BAD_VERDICT,E_NOT_FOUND,E_REVIEW_DONE verdict-refusals-zero=True risky-row={"review.suspended": -1, "review.verdicted.risky": 1}
+PASS AC-WJ3: envelope-keys=True compliance=True row-keys=True id-ascending=True ts-ascending=True total=True delta-roundtrip=True
+PASS AC-WJ4: rows=15 dual-path-identical=True kinds=submit,ingest,batch,drain,verdict,batch,submit,submit,submit,submit,submit,submit,submit,verdict,submit
+PASS AC-WJ5: read-method-clean=True counts-stable=True double-call-identical=True liveness-plus-one=True
+PASS AC-WJ6: slot-after-restart=None:True rows-persisted=16/16 window-id-monotonic=17
+PASS AC-WJ7: sqlite-swallow=True/True valueerror-propagates=True pure-ascii=True import-lines-clean=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+
+[wj-run2-R1800.log] byte-identical to run1 (sha256 equal, driver SUMMARY line)
+
+--- section 2: hygiene (frozen bytes + targeted diff) ---
+
+git status --short:
+M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/pipeline.py
+ M state/queue/tech.md
+?? qa/fingerprint-R1800.log
+?? qa/matrix-check1-R1800.log
+?? qa/matrix-check2-R1800.log
+?? qa/matrix-regen-R1800.log
+?? qa/reconcile-all-R1800.log
+?? qa/wj-run1-R1800.log
+?? qa/wj-run2-R1800.log
+?? src/sandbox/ugc/test_water_journal.py
+?? src/sandbox/ugc/water_journal.py
+
+targeted diff (config.json/store.py/sec_batch.py): (empty - zero bytes touched)
+
+--- section 3: RUNNER full regression (cross) ---
+
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-113re_mb\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-113re_mb\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-113re_mb\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (93/93 suites green, reconcile controls 7/7, 184.0s)
+
+--- section 4: matrix regen + --check roundtrip ---
+
+PASS generated docs/sandbox-suite-matrix.md (9709 bytes) - registry suites=93 criteria=884 evidence=qa/reconcile-all-R1800.log green=93/93
+PASS hygiene: pure-ascii source, zero network imports
+
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9709 bytes, 93 suites, 884 criteria)
+
+[matrix-check2-R1800.log] byte-identical to check1 (rc 0/0/0 regen/check1/check2, driver SUMMARY line)
+
+--- section 5: fingerprint sentinel ---
+
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

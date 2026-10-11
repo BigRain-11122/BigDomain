@@ -643,6 +643,13 @@ SUITES = [
     # (pre-mutation refusals keep the slot)
     # (AC-VW1..VW7 pre-registered in state/queue/tech.md)
     ("ugc-verdict-water", os.path.join("ugc", "test_verdict_waterwire.py"), 7),
+    # R1800 UGC completed-window water journal: append-only observability
+    # ledger next to ugc.db (one row per completed window: kind + delta
+    # envelope + ts; single writer, zero ugc.db schema touch) with the
+    # journal_board pure read face - window history persists across
+    # restarts where the single _last_water slot cannot
+    # (AC-WJ1..WJ7 pre-registered in state/queue/tech.md)
+    ("ugc-water-journal", os.path.join("ugc", "test_water_journal.py"), 7),
     # R1786 member expiring-board tier/line fold: aggregation-only
     # face over the expiring_soon board (single window-derivation
     # source, R1779 law; sparse ascending keys)
