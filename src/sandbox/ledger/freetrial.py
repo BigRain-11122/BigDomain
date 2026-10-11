@@ -548,3 +548,46 @@ class FreeTrialFace:
                                  "tier_key": r[2],
                                  "converted_utc": r[3]}
                                 for r in rows]}
+
+    def conversion_funnel_board(self):
+        """Plan-level conversion-funnel board (R1788 explore
+        queue row; the seed = this face's R1768 registry): one
+        row per registered plan carrying the grant count, the
+        terminal-conversion count, the derived active-trial
+        count and the conversion rate. Every aggregate is a
+        row count over immutable rows at read time (the
+        conversion gate is itself a conversion-row count - the
+        registered verdict); zero cached counters, zero stored
+        state. active = granted minus converted, structurally
+        non-negative (the conversion gate requires a grant row
+        first); rate = round(converted / granted, 4) with the
+        zero-grant guard defaulting to 0.0. Rows walk in
+        plan_key ascending order - a unique key, so the board
+        is deterministic with zero dice and zero insertion-order
+        keys. The declared AIGC label persists on every row and
+        the envelope carries the resident disclaimer. Pure
+        read."""
+        with self._lock:
+            plans = self._conn.execute(
+                "SELECT plan_id, plan_key, title, ai_label FROM"
+                " trial_plans ORDER BY plan_key").fetchall()
+            rows = []
+            for plan_id, p_key, title, label in plans:
+                granted = self._conn.execute(
+                    "SELECT COUNT(*) FROM trial_grants"
+                    " WHERE plan_id = ?", (plan_id,)).fetchone()[0]
+                converted = self._conn.execute(
+                    "SELECT COUNT(*) FROM trial_conversions"
+                    " WHERE plan_id = ?", (plan_id,)).fetchone()[0]
+                rate = (round(converted / granted, 4)
+                        if granted > 0 else 0.0)
+                rows.append({"plan_id": int(plan_id),
+                             "plan_key": p_key, "title": title,
+                             "ai_label": int(label),
+                             "granted": int(granted),
+                             "converted": int(converted),
+                             "active_trials": int(granted)
+                             - int(converted),
+                             "conversion_rate": rate})
+        return {"conversion_funnel_board": rows,
+                "disclaimer": self.disclaimer}

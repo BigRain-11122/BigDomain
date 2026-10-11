@@ -1,0 +1,33 @@
+--- suite: test_freetrial_funnel.py ---
+PASS AC-CF1: empty world [] honest (True); envelope keys exact; row keys exact x3; dense 3-row board; plan_key ascending despite reverse registration (gamma, beta, alpha) = ['alpha-starter', 'beta-pro', 'gamma-ungranted']
+PASS AC-CF2: every cell == manual SQL GROUP BY + rate arithmetic: alpha-starter g=2/2 c=1/1 rate=0.5/0.5; beta-pro g=1/1 c=1/1 rate=1.0/1.0; gamma-ungranted g=0/0 c=0/0 rate=0.0/0.0
+PASS AC-CF3: active==granted-converted >=0 all rows; full-conversion plan (beta) active=0; zero-grant plan (gamma) 0/0 rate=0.0 funnel-top empty honest; partial plan (alpha) active=1
+PASS AC-CF4: double-call json.dumps byte-identical=True; grant liveness 0->1 (rate 0.0 zero-conversion guard)=True; conversion liveness converted 0->1 rate=1.0 active=0=True
+PASS AC-CF5: four-table counts flat (3, 4, 3, 3); method source carries zero data-changing statements (inspect); ledger_tx flat at 0 (zero token movement structural)
+PASS AC-CF6: every row ai_label == registry declaration (0/1 both states exercised); resident disclaimer rides the envelope
+PASS AC-CF7: module pure ASCII (0 non-ascii); true import lines carry zero network libs (0); zero mutation surface for own tables; zero dice; config.json byte-stable; reconcile_all SUITES row 'ledger-freetrial-funnel' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+suite exit=0
+--- sentinel: fingerprint-regen --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0
+--- runner: reconcile_all.py (full log = qa/reconcile-all-R1788.log) ---
+  | PASS AC-CF7: module pure ASCII (0 non-ascii); true import lines carry zero network libs (0); zero mutation surface for own tables; zero dice; config.json byte-stable; reconcile_all SUITES row 'ledger-freetrial-funnel' registered; criteria drift self-check 6/7
+PASS suite ledger-freetrial-funnel exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (86/86 suites green, reconcile controls 7/7, 158.4s)
+runner exit=0
+--- matrix regen (default discovery) ---
+PASS generated docs/sandbox-suite-matrix.md (9168 bytes) - registry suites=86 criteria=834 evidence=qa/reconcile-all-R1788.log green=86/86
+PASS hygiene: pure-ascii source, zero network imports
+regen exit=0
+--- matrix --check x2 (byte-identical drift probe) ---
+check#1: PASS check: docs/sandbox-suite-matrix.md byte-identical (9168 bytes, 86 suites, 834 criteria)
+check#1 exit=0
+check#2: PASS check: docs/sandbox-suite-matrix.md byte-identical (9168 bytes, 86 suites, 834 criteria)
+check#2 exit=0
+ROUND-VERDICT: PASS (sentinel=True runner=True regen=True check=True)

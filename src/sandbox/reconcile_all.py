@@ -574,6 +574,14 @@ SUITES = [
     # (AC-FT1..FT7 pre-registered in state/queue/explore.md).
     ("ledger-freetrial",
      os.path.join("ledger", "test_freetrial.py"), 7),
+    # R1788 free-trial conversion-funnel board: plan-level
+    # grant/conversion counts + derived active-trials and
+    # conversion-rate, pure read-time aggregation over
+    # immutable rows (zero cached counters; the conversion gate
+    # is itself a conversion-row count)
+    # (AC-CF1..CF7 pre-registered in state/queue/explore.md)
+    ("ledger-freetrial-funnel",
+     os.path.join("ledger", "test_freetrial_funnel.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

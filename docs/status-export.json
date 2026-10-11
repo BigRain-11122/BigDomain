@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T10:23:05+08:00",
+  "export_ts": "2026-10-11T10:45:45+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1787 一句话：fold R490 水位整编——tech L13 常设线 fold 手术段 live execute 兑现（tail-6 窗 6 行 12046B 压 1 滚窗行·107 token 全字面嵌零丢失·verify-then-write post==predicted 73187B·census pass）；HB R1786 缺前缀行按 commit 时戳锚 backfill 修复。",
-    "latest_artifact": "本轮实物：qa/reorg-R1787.log（fold R490 机器派生证据件 1189B：preop sha16 双证匹配+post-hoc token 零丢失复验+census pass）+archive §R1787 节 6 行 verbatim+preop 备份 logs/state-preop-R1787.bak+heartbeat.txt R1786/R1787 双行修复落位。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队列补种（现 4 开项 <10 常备线·下轮补种 ≥6 新种子拉回 ≥10）+下一可领项交付（L5 docker/L44 member refunded/L47 suite_matrix live mtime 全门控·补种后从新种子拉活·判据预注册先于代码照走）——窗 ≤48h（不晚于 10-13）。"
+    "current": "R1788 一句话：P3 队头交付=freetrial 转化漏斗读面（conversion_funnel_board 纯读面·判据 AC-CF1..CF7 全过·SUITE 7/7 首跑绿·RUNNER 86/86 零回归·矩阵 86/834 --check byte-identical）+tech 队补种执法（4→10 常备线达标·R1787 承传注记兑现）。",
+    "latest_artifact": "本轮实物：src/sandbox/ledger/freetrial.py conversion_funnel_board 读面+test_freetrial_funnel.py 套件+reconcile_all SUITES 85→86 判据 827→834+docs/sandbox-suite-matrix.md 再生+qa/freetrial-funnel-R1788.log+qa/reconcile-all-R1788.log 双证据在盘。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队新种子首项交付（lobby room.board 协议接线/freetrial 漏斗月窗参数化等 6 新种子在列·判据预注册先于代码照走）+fold R491 水位整编（收账后水位 79073B 已越线·下轮轮首首测裁定）——窗 ≤48h（不晚于 10-13）。"
   },
   "depts": [
     {
@@ -187,6 +187,10 @@
   ],
   "results": [
     [
+      "2",
+      "freetrial 转化漏斗读面交付（R1788·P3 explore 队头·AC-CF1..CF7 预注册先于代码：freetrial.py conversion_funnel_board 纯读面=计划级 granted/converted 不可变行计数聚合+active_trials==granted−converted 结构性 ≥0+conversion_rate=round(converted/granted,4) 零授予 0.0 除零护·dense 全注册计划每计划恰一行·plan_key 字典序升序零插入序键（注册逆序世界实测）·granted/converted==manual SQL GROUP BY 交叉逐位等·双调 json.dumps 逐位同一·活态派生零缓存（新 grant/conversion 复读即变）·纯读律［四表行数恒定+方法源 inspect 零数据改动语句+ledger_tx 恒定零 token］·AIGC ai_label==注册声明 0/1 双态+disclaimer 常驻）+test_freetrial_funnel.py SUITE PASS 7/7 exit 0 首跑即净+reconcile_all SUITES 85→86 判据 827→834 接线+RUNNER PASS 86/86 controls 7/7 158.4s 零回归=qa/reconcile-all-R1788.log+矩阵再生 86/834 green --check byte-identical 双跑［9168B］+指纹哨兵 verdict CLEAN domains=5（零 schema 触碰）=qa/freetrial-funnel-R1788.log 四节；+tech 队补种执法（R1787 承传注记兑现·self-drive §1 常备线：6 新种子行入列［lobby room.board 协议接线（R1773 显式留窗）/freetrial 漏斗月窗参数化（R1788 后继·窗参数化族）/ugc ingest 水位差分回执接线（R1785 显式留窗）/apidev lifecycle 事件链审计读面（R1711 读面缺口）/eventtickets 审计榜月窗参数化（R1771 后继）/daily 观察窗转正裁定执行窗（R1780 AC-OW2 承载·gated on 10-16）］→queue_tech_open 4→10 达标·queue_explore_open 10→9）·R1788）"
+    ],
+    [
       "1",
       "fold R490 水位整编收账轮（R1787·P2 队头=tech L13 常设线 fold 手术段 live execute 兑现〔R1690 注正门〕：轮首首测 79601B 越 78500B 线 1101B＝P-2026-09-25-18 第四百九十刀·tail-6 窗〔fold R489 滚窗行 5035B+R1785 fold 收账对+R1786 收账对+R1786 LEDGER 行〕6 行 12046B 压 1 滚窗行 kept=0·107 token 全字面嵌零丢失〔catalog 直拼零手抄〕·verify-then-write post==predicted 73187B·eol/indent 三面过·archive §R1787 节 6 行 verbatim+preop 备份 sha16 85b7b330eea015c9·census pass=true+post-hoc token 复验 missing=0·证据 qa/reorg-R1787.log〔机器派生 1189B〕·收账后水位 76175B 余量 2325B·fold R491=再越线时轮首首测裁定）+HB 修复（R1786 行缺规范前缀=R1786 收账事故连带毁损→commit 55abe99 时戳锚 backfill〔R541 先例〕）+P-2026-10-11-02 机械闸执法首窗（commit 后 git log -1 --stat 核对本轮文件在列）"
     ],
@@ -359,7 +363,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1787",
+      "1788",
       "OSLoop 执行 tick"
     ],
     [
@@ -3250,15 +3254,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 4,
-    "queue_explore_open": 10,
-    "method": "R1786 member expiring-board tier/line fold (P2 tech queue head, AC-ESD1..ESD7 pre-registered in tech.md before code): MemberStore.expiring_distribution days/now aggregation-only pure-read face +27/-0 additive - single window-derivation source (internal single self.expiring_soon call, method source holds zero SQL, R1779 law); sparse fold with ascending deterministic keys (tier lexicographic, period line numeric rendered as string keys; {2,10} fixture pins numeric order); count==sum-by-tier==sum-by-line invariants; 9 bad-arg forms E_BAD_STATE via the single gate, zero side effects; three-way cross-validation (board Counter == manual SQL GROUP BY both axes); scope isolation inherited (expired/beyond-horizon/pre-window excluded with zero own predicates); live re-read +1 zero-cache; four tables stable; double-call byte-identical both dump forms; SUITES 84->85 criteria 820->827, RUNNER PASS 85/85 controls 7/7 144.2s, matrix regen 85/827 byte-identical, fingerprint sentinel CLEAN domains=5; first-run two reds = tool-face fixes honestly noted (replace-tool indent normalization dragged the expiring_soon return into the for body -> byte-surgery dedent + AST check; same-order rebuy is bucket-idempotent -> period_no 2 walks the AC-M2 machine edge: first order direct-closed then second order opens); closeout incident honestly logged: first surgery run truncated state.json to 0B (w-mode UnicodeEncodeError on a surrogate-pair emoji) -> git checkout byte-exact restore (75392B verified) -> second run atomic write (tempfile+os.replace) green; P-2026-10-11-02 unattended-loop enforcement adopted (commit-then-verify git log -1 --stat step in effect from this round); evidence qa/member-expiring-dist-R1786.log + qa/reconcile-all-R1786.log"
+    "queue_tech_open": 10,
+    "queue_explore_open": 9,
+    "method": "R1788 freetrial conversion-funnel board (P3 explore queue head, AC-CF1..CF7 pre-registered before code: plan-level grant/conversion row-count aggregation + derived active-trials + rate, dense over the registry, plan_key ascending zero insertion-order keys, manual SQL cross, pure-read zero mutation, RUNNER 86/86 zero-regression) + tech-queue replenishment enforcement (4->10 standing line, self-drive s1)"
   }
 }
