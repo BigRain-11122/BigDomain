@@ -1,0 +1,44 @@
+qa/member-expiring-dist-R1786.log
+claim: state/queue/tech.md R1786 (AC-ESD1..ESD7 pre-registered BEFORE code)
+subject: MemberStore.expiring_distribution(days, now=None) - aggregation-only fold over expiring_soon (single window-derivation source, R1779 law)
+
+--- section 1: suite single-run (deterministic re-run) exit=0 ---
+PASS AC-ESD1: env=True fold=True values=True sums=True tier-order=True line-order=True trio=非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠） single-source=True
+PASS AC-ESD2: days-refused=6/6 ts-refused=3/3 counts-stable=True
+PASS AC-ESD3: tier three-way=True line three-way=True (tier={'cocreator': 1, 'experience': 3, 'mayor': 1} line={'1': 4, '2': 1})
+PASS AC-ESD4: expired/beyond-horizon/pre-window all excluded: {'by_tier': {'cocreator': 1, 'experience': 3, 'mayor': 1}, 'by_period_no': {'1': 4, '2': 1}}
+PASS AC-ESD5: empty-ok=True numeric-key-order=True keys=['2', '10']
+PASS AC-ESD6: counts-stable=True double-call-identical=True liveness=True (mayor 1->2, line1 4->5, count 5->6)
+PASS AC-ESD7: ascii=True subjects=2 network-imports=0 suites-registered=True additive-face=True
+SUITE PASS: 7/7
+
+--- section 2: hygiene git status (shipped config.json absent = byte-identical; intended six files only) exit=0 ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/member/member.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1786.log
+?? src/sandbox/member/test_expiring_dist.py
+
+--- section 3: RUNNER full regression (member-expiring-dist rows + verdict; full log = qa/reconcile-all-R1786.log) ---
+  | PASS AC-ESD1: env=True fold=True values=True sums=True tier-order=True line-order=True trio=闈炴姇椤惧父椹绘彁绀猴細浼氬憳鏉冪泭涓� AI 鐢熸垚宸ュ叿涓庡巻鍙插洖娴嬬爺绌跺睍绀虹浉鍏崇殑鏈嶅姟閰嶉�濅笌骞冲彴鐗规潈锛岄潪鎶曡祫寤鸿��锛屼笉鏋勬垚浠讳綍涓�鑲′拱鍗栧缓璁�銆佺偣浣嶉�勬祴鎴栨敹鐩婃壙璇猴紱銆屽姞鎬ラ�氶亾銆嶄负鏈嶅姟鎺掗槦浼樺厛浣嶏紝闈炴姇璧勫缓璁�浼樺厛浜у嚭锛屼骇鍑虹墿鍚岃繃闈炴姇椤惧畾鎬э紱鍘嗗彶鍥炴祴鏁版嵁浠呬綔鐮旂┒灞曠ず锛屼笉浠ｈ〃鏈�鏉ヨ〃鐜帮紱璇风嫭绔嬪垽鏂�锛岄�庨櫓鑷�鎷呫�傦紙甯搁┗灞曠ず路涓嶅彲鎶樺彔锛� single-source=True
+  | PASS AC-ESD2: days-refused=6/6 ts-refused=3/3 counts-stable=True
+  | PASS AC-ESD3: tier three-way=True line three-way=True (tier={'cocreator': 1, 'experience': 3, 'mayor': 1} line={'1': 4, '2': 1})
+  | PASS AC-ESD4: expired/beyond-horizon/pre-window all excluded: {'by_tier': {'cocreator': 1, 'experience': 3, 'mayor': 1}, 'by_period_no': {'1': 4, '2': 1}}
+  | PASS AC-ESD5: empty-ok=True numeric-key-order=True keys=['2', '10']
+  | PASS AC-ESD6: counts-stable=True double-call-identical=True liveness=True (mayor 1->2, line1 4->5, count 5->6)
+  | PASS AC-ESD7: ascii=True subjects=2 network-imports=0 suites-registered=True additive-face=True
+PASS suite member-expiring-dist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.5s
+PASS suites 85/85 green, expected criteria total=827
+RUNNER PASS (85/85 suites green, reconcile controls 7/7, 144.2s)
+--- section 4: matrix regen + double --check (regen already run pre-evidence; byte-identical twice) exits=0/0 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9083 bytes, 85 suites, 827 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9083 bytes, 85 suites, 827 criteria)
+
+--- section 5: fingerprint sentinel (zero schema touch) exit=0 ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

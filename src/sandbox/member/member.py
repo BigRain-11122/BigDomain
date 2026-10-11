@@ -621,7 +621,33 @@ class MemberStore:
                           "tier": tier, "period_no": int(no),
                           "end_utc": end_utc, "days_left": int(left)})
         return self._face({"expiring_soon": board, "days": int(days),
-                           "as_of": as_of, "count": len(board)})
+                          "as_of": as_of, "count": len(board)})
+
+    def expiring_distribution(self, days, now=None):
+        """Tier / period-line fold of the pre-expiry board (tech.md
+        AC-ESD1..ESD7, criteria registered before this code; honesty
+        law). Aggregation-only face: the window derivation lives
+        solely in expiring_soon (single derivation source, R1779
+        wiring law) - this method holds no SQL at all, it calls the
+        board face once and folds the rows. tier is free text and the
+        line number is unbounded, so a dense grid is not
+        constructible; the fold is sparse with ascending keys
+        (lexicographic for tier, numeric for the line number, then
+        rendered as a string key)."""
+        env = self.expiring_soon(days, now)
+        board = env["expiring_soon"]
+        tier_raw = {}
+        line_raw = {}
+        for row in board:
+            tier_raw[row["tier"]] = tier_raw.get(row["tier"], 0) + 1
+            key = str(row["period_no"])
+            line_raw[key] = line_raw.get(key, 0) + 1
+        fold = {"by_tier": {k: tier_raw[k] for k in sorted(tier_raw)},
+                "by_period_no": {k: line_raw[k]
+                                 for k in sorted(line_raw, key=int)}}
+        return self._face({"expiring_distribution": fold,
+                           "days": env["days"], "as_of": env["as_of"],
+                           "count": env["count"]})
 
     def consume_credits(self, census_avatar_id, count, ref=None, ref_type=None):
         """Draw service credits across active periods, soonest-expiring

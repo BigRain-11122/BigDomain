@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T09:48:11+08:00",
+  "export_ts": "2026-10-11T10:10:34+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1785 一句话：fold R489 水位整编（79762B→72485B·99 token 零丢失）+ugc 池水位双调差分读面交付——调用方持快照传入参+单一活读派生，21 坏快照形态全拒（fail-closed），全量回归 84 套件 820 判据全绿。",
-    "latest_artifact": "本轮实物：src/sandbox/ugc/test_pool_delta.py（7 判据双调差分套件）+ store.py pool_water_delta（+89/-0 纯读面：change-only 净变胞+prev 独有键负值并集语义）+ 全量回归 84/84 全绿+ qa/ugc-pooldelta-R1785.log（套件+回归+矩阵+哨兵+卫生五节证据）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头下一项「expiring_soon 档位分布读面探索」（到期榜按 tier/period_no 分布聚合纯读派生·确定性排序零 RNG）——窗 ≤48h（不晚于 10-13），判据预注册先于代码照走。"
+    "current": "R1786 一句话：member 到期板档位分布折叠面交付——expiring_distribution 聚合纯读面（单一派生源=内部单次 expiring_soon 调用·方法源零 SQL），SUITE 7/7+全量回归 85 套件 827 判据全绿；收账事故如实入册：外科脚本首跑截断 state.json 至 0B→git checkout 字节级恢复→原子写二跑过。",
+    "latest_artifact": "本轮实物：src/sandbox/member/test_expiring_dist.py（7 判据套件）+ member.py expiring_distribution（+27/-0 聚合纯读面：tier/period_no 双轴稀疏折叠·确定性排序·count==Σ双轴不变量）+ 全量回归 85/85 全绿+ qa/member-expiring-dist-R1786.log（套件+卫生+RUNNER+矩阵+哨兵五节证据）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队列补种+下一可领项交付（现 4 开项=门控/常设/留窗态——下轮从 explore 队头或新种子拉活·判据预注册先于代码照走）——窗 ≤48h（不晚于 10-13）。"
   },
   "depts": [
     {
@@ -355,7 +355,7 @@
       "展示橱窗策展主题面沙箱件（explore 队头认领·AC-CU1..CU7 预注册先于代码：src/sandbox/ledger/curation.py CurationFace=编组注册〔UNIQUE+成员 position 1..N append-only 不可变·零 UPDATE 零 mutation API〕+主题导览全局 stop 跨橱窗连续 1..N〔ShowcaseFace.chronicle_tour 公有 API 引用不复制零第二引擎·活态派生〕+成员存在门 fail-closed〔未知橱窗拒全注册零行·合法路径不污染〕+零 token〔ledger_tx 恒定〕+AIGC/disclaimer 四信封〔直插 ai_label=2 CHECK 拒〕+独立 curation.db 零 schema 触碰〔指纹哨兵 verdict CLEAN domains=5〕·test_curation.py SUITE 7/7 首跑即净双跑逐位同一·reconcile_all SUITES 66→67 判据 660→667·RUNNER PASS 67/67 controls 7/7 181.2s 零回归·矩阵 67/667 --check byte-identical 双跑·qa/curation-R1751.log·R1751）"
     ],
     [
-      "1785",
+      "1786",
       "OSLoop 执行 tick"
     ],
     [
@@ -3237,20 +3237,24 @@
     [
       "2",
       "fold R489 水位整编+ugc 池水位双调差分探针交付（R1785·fold 随轮+P2 tech 队头可领项·轮计分 2=可跑实物：AC-DW1..DW7 预注册先于代码〔tech.md R1785 认领行先落〕——store.py pool_water_delta +89/-0 additive〔git numstat 证据〕：调用方持快照传入参+现值侧=单次活 pool_water_levels() 派生〔单一派生源·hot_board_delta R1770 同律〕+四族闭集胞 signed 净变 change-only〔恒稳胞省略·全恒稳=诚实空 delta〕+prev 独有键负值显〔并集语义〕+21 坏快照形态全拒 E_BAD_STATE fail-closed 零读副作用+双径交叉验证〔手算对照逐位等〕+窗口净变真流例〔suspended +1−1 净零省略+verdicted.pass +1〕+纯读律〔dml-hits=0·五表稳定·双调逐字节同一〕——test_pool_delta.py SUITE 7/7 双跑绿〔首跑全绿〕+SUITES 83→84 判据 813→820+RUNNER PASS 84/84 controls 7/7 154.7s 零回归=qa/reconcile-all-R1785.log+矩阵再生 84/820 green --check byte-identical〔9004B〕+指纹哨兵 CLEAN domains=5·证据 qa/ugc-pooldelta-R1785.log·queue_tech_open 6→5；fold R489：tail-5 窗 5 行 12233B 压 1 滚窗行 kept=0·99 token 零丢失·post==predicted 72485B·archive §R1785 verbatim+preop logs/state-preop-R1785.bak〔sha16 f726d14c5eb7d437〕"
+    ],
+    [
+      "2",
+      "member 到期板档位分布折叠面交付（R1786·P2 tech 队头可领项·轮计分 2=可跑实物：AC-ESD1..ESD7 预注册先于代码〔tech.md R1786 认领行先落〕——member.py expiring_distribution 聚合纯读面 +27/-0 additive〔单一派生源=内部单次 expiring_soon 调用+方法源零 SQL 语句·R1779 二次派生清除律聚合面〕：稀疏折叠确定性排序〔tier 字典序/period_no 数值序渲染 str 键·{2,10} 例钉死数值序〕+count==Σ双轴不变量+坏参 9 形态 E_BAD_STATE 透传零副作用+三径交叉验证〔板 Counter==manual SQL 双轴逐位等〕+scope 隔离承传+活态派生零缓存+四表稳定+双调双形态同一·首跑两红=工具面修复链如实注〔①缩进归一化 return 卷入 for 体→字节外科 dedent+AST 验证②同单再购 bucket 幂等重放→period_no 2=AC-M2 机边〕——test_expiring_dist.py SUITE PASS 7/7 exit 0+RUNNER PASS 85/85 套件 827 判据 controls 7/7 144.2s 零回归=qa/reconcile-all-R1786.log+矩阵再生 85/827 green --check byte-identical 双跑〔9083B〕+指纹哨兵 CLEAN domains=5·证据 qa/member-expiring-dist-R1786.log 五节·shipped config.json 零改动〔git status〕·queue_tech_open 5→4）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 23,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 1,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
-    "queue_tech_open": 5,
+    "queue_tech_open": 4,
     "queue_explore_open": 10,
-    "method": "R1785 fold R489 water-level compaction + ugc pool water two-snapshot delta probe (P2 tech queue head, AC-DW1..DW7 pre-registered in tech.md before code): store.py pool_water_delta +89/-0 additive - caller-held snapshot vs a single live pool_water_levels() call (single derivation source, R1770 board-movement precedent); change-only signed net-change cells over the closed set with steady cells omitted and prev-only keys shown as negatives (union semantics); 21 malformed snapshot forms refused E_BAD_STATE fail-closed with zero read side-effects; dual-path cross-validation bitwise equal; window net-change real-flow example (verdict migration suspended -1 pass +1, total invariant); pure-read law (no write verbs, five tables stable, double-call byte-identical); SUITES 83->84 criteria 813->820, RUNNER PASS 84/84 controls 7/7 154.7s, matrix regen 84/820 byte-identical, fingerprint sentinel CLEAN domains=5; fold R489: 5 lines 12233B to one roll line kept=0, 99 tokens zero-loss, post==predicted 72485B; evidence qa/ugc-pooldelta-R1785.log + qa/reconcile-all-R1785.log"
+    "method": "R1786 member expiring-board tier/line fold (P2 tech queue head, AC-ESD1..ESD7 pre-registered in tech.md before code): MemberStore.expiring_distribution days/now aggregation-only pure-read face +27/-0 additive - single window-derivation source (internal single self.expiring_soon call, method source holds zero SQL, R1779 law); sparse fold with ascending deterministic keys (tier lexicographic, period line numeric rendered as string keys; {2,10} fixture pins numeric order); count==sum-by-tier==sum-by-line invariants; 9 bad-arg forms E_BAD_STATE via the single gate, zero side effects; three-way cross-validation (board Counter == manual SQL GROUP BY both axes); scope isolation inherited (expired/beyond-horizon/pre-window excluded with zero own predicates); live re-read +1 zero-cache; four tables stable; double-call byte-identical both dump forms; SUITES 84->85 criteria 820->827, RUNNER PASS 85/85 controls 7/7 144.2s, matrix regen 85/827 byte-identical, fingerprint sentinel CLEAN domains=5; first-run two reds = tool-face fixes honestly noted (replace-tool indent normalization dragged the expiring_soon return into the for body -> byte-surgery dedent + AST check; same-order rebuy is bucket-idempotent -> period_no 2 walks the AC-M2 machine edge: first order direct-closed then second order opens); closeout incident honestly logged: first surgery run truncated state.json to 0B (w-mode UnicodeEncodeError on a surrogate-pair emoji) -> git checkout byte-exact restore (75392B verified) -> second run atomic write (tempfile+os.replace) green; P-2026-10-11-02 unattended-loop enforcement adopted (commit-then-verify git log -1 --stat step in effect from this round); evidence qa/member-expiring-dist-R1786.log + qa/reconcile-all-R1786.log"
   }
 }

@@ -585,6 +585,12 @@ SUITES = [
     # prev-only keys show as negatives)
     # (AC-DW1..DW7 pre-registered in state/queue/tech.md)
     ("ugc-pool-delta", os.path.join("ugc", "test_pool_delta.py"), 7),
+    # R1786 member expiring-board tier/line fold: aggregation-only
+    # face over the expiring_soon board (single window-derivation
+    # source, R1779 law; sparse ascending keys)
+    # (AC-ESD1..ESD7 pre-registered in state/queue/tech.md)
+    ("member-expiring-dist", os.path.join("member",
+                                         "test_expiring_dist.py"), 7),
 ]
 
 FAILS = 0
