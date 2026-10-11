@@ -452,6 +452,32 @@ it). Measurement face, R1727 precedent, not registered into
 SUITES. Zero product files touched.
 
 
+R1846 extension (sqlite_sequence VACUUM scan-order stability):
+the [23] section closed the duplicate-row family's construction
+/ read-trap / allocator faces; this section adds the VACUUM
+plane - VACUUM rebuilds the database file, and whether the
+duplicate bookkeeping rows SURVIVE the rebuild, whether the
+plain first-row read (the one the allocator consults) stays
+STABLE across the rebuild, and whether the allocator behavior
+DRIFTS are engine facts pinned first (R1846, SQLite 3.50.4,
+dm3_precheck, R1704 law: the duplicate survives at COUNT 2 with
+fetchall [28, 99] on both sides, the first-row read is
+order-stable 28 -> 28, and the allocator consults the first row
+allocating 28+1 == 29 with the post-alloc UPDATE touching only
+that row while the 99 sentinel never surfaces; VACUUM succeeds
+beside the probe world's idle open journal connection). The
+vacuum round: re-inject the 99 sentinel duplicate, take the
+pre-VACUUM readings, VACUUM, re-take the three readings (count
+/ first / all - survival + scan-order stability asserted
+against the dm3 pins, drift fails honestly), retest the
+allocator (fresh INSERT allocates 29, the product count face
+sees the +1 row, value faces untouched), then cleanup: delete
+the allocated row, wipe ALL bookkeeping rows, restore ONE
+honest row at the consumed high-water 29 (consume-no-retreat
+over the [23] end state 28). Measurement face, R1727 precedent,
+not registered into SUITES. Zero product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -3347,6 +3373,218 @@ def main():
         fail = fail or not (drw1_ok and drw2_ok
                             and drw3_ok and drw4_ok)
 
+        # ---- [24] sqlite_sequence VACUUM scan-order
+        # stability (R1846; AC-VSQ1..VSQ5) -------------------
+        # The [23] section closed the duplicate-row family's
+        # construction / read-trap / allocator faces; this
+        # section adds the VACUUM plane: VACUUM rebuilds the
+        # database file, and whether the duplicate bookkeeping
+        # rows SURVIVE the rebuild, whether the plain first-row
+        # read (the one the allocator consults) stays STABLE
+        # across the rebuild, and whether the allocator behavior
+        # drifts are engine facts pinned first (R1846, SQLite
+        # 3.50.4, dm3_precheck, R1704 law): the duplicate
+        # survives (COUNT 2 pre == post), the first-row read is
+        # order-stable (28 pre == 28 post, fetchall [28, 99]
+        # both sides), and the allocator consults the first row
+        # (allocates 28+1 == 29, the 99 sentinel never
+        # surfaces, post-alloc rows [29, 99] - the UPDATE
+        # touches only the first row). Cleanup wipes ALL
+        # bookkeeping rows and restores ONE honest row at the
+        # consumed high-water 29 (consume-no-retreat law over
+        # the [23] end state 28).
+
+        def vsq_ro_scalar(sql, args=()):
+            vsq_ro = sqlite3.connect(
+                "file:" + journal_db.replace(os.sep, "/")
+                + "?mode=ro", uri=True)
+            got = vsq_ro.execute(sql, args).fetchone()
+            vsq_ro.close()
+            return got[0] if got else None
+
+        vsq_pre_n = vsq_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        vsq_seq_rows_pre = vsq_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_seq_pre = vsq_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        # product faces before the VACUUM round
+        vsq_tally_pre = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        vsq_tally_cur_pre = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        vsq_total_pre = pipe.journal.cell_totals()["total"]
+        vsq_board_cur_pre = pipe.journal.journal_board(
+            cur_w)["total"]
+
+        # AC-VSQ1: re-construct the duplicate (99 sentinel) and
+        # take the pre-VACUUM readings - the ro face counts two
+        # rows, the plain fetchone keeps reading the old first
+        # row (stale-read trap, [23] dm2 face), the full read
+        # exposes both rows.
+        vsq_conn = sqlite3.connect(journal_db)
+        vsq_conn.execute(
+            "INSERT INTO sqlite_sequence (name, seq)"
+            " VALUES ('water_windows', 99)")
+        vsq_conn.commit()
+        vsq_dup_n_pre = vsq_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_first_pre = vsq_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_ro_all_pre = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/")
+            + "?mode=ro", uri=True)
+        vsq_all_pre = [r[0] for r in vsq_ro_all_pre.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows' ORDER BY seq")]
+        vsq_ro_all_pre.close()
+        vsq1_ok = (vsq_seq_rows_pre == 1
+                   and vsq_seq_pre == 28
+                   and vsq_dup_n_pre == 2
+                   and vsq_first_pre == 28
+                   and vsq_all_pre == [28, 99])
+
+        # AC-VSQ2: VACUUM the journal file - duplicate-row
+        # survival and first-row scan-order stability are
+        # dm3-pinned engine facts asserted here; a drift fails
+        # the probe honestly (fail-closed, never silent green)
+        vsq_conn.execute("VACUUM")
+        vsq_conn.commit()
+        vsq_dup_n_post = vsq_ro_scalar(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_first_post = vsq_ro_scalar(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_ro_all_post = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/")
+            + "?mode=ro", uri=True)
+        vsq_all_post = [r[0] for r in vsq_ro_all_post.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows' ORDER BY seq")]
+        vsq_ro_all_post.close()
+        vsq2_ok = (vsq_dup_n_post == 2
+                   and vsq_dup_n_post == vsq_dup_n_pre
+                   and vsq_first_post == vsq_first_pre
+                   and vsq_all_post == [28, 99])
+
+        # AC-VSQ3: allocator retest after VACUUM (dm3-pinned)
+        # - the new INSERT allocates the first row's seq+1 == 29
+        # (the sentinel is never consulted) and the post-alloc
+        # UPDATE touches only the first row; the product board
+        # face sees the +1 row in the current window while the
+        # value faces stay untouched (delta '{}', 0).
+        vsq_conn.execute(
+            "INSERT INTO water_windows (kind, delta,"
+            " total_delta, ts_utc) VALUES ('submit', '{}',"
+            " 0, ?)",
+            (cur_w + "-27T00:00:00.000000Z",))
+        vsq_alloc_id = vsq_conn.execute(
+            "SELECT last_insert_rowid()").fetchone()[0]
+        vsq_rows_mid = vsq_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        vsq_seq_rows_mid = [r[0] for r in vsq_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows' ORDER BY seq")]
+        vsq_conn.commit()
+        vsq_board_cur_mid = pipe.journal.journal_board(
+            cur_w)["total"]
+        vsq3_ok = (vsq_alloc_id == 29
+                   and vsq_rows_mid == 15
+                   and vsq_seq_rows_mid == [29, 99]
+                   and vsq_board_cur_mid == vsq_board_cur_pre + 1)
+
+        # AC-VSQ4: cleanup recovery - delete the allocated row,
+        # wipe ALL bookkeeping rows for the name, restore ONE
+        # honest row at the consumed high-water (29, not the
+        # pre-section 28: consume-no-retreat, dm3 G3 pin)
+        vsq_conn.execute(
+            "DELETE FROM water_windows"
+            " WHERE window_id = ?", (vsq_alloc_id,))
+        vsq_conn.commit()
+        vsq_rows_post = vsq_conn.execute(
+            "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+        vsq_conn.execute(
+            "DELETE FROM sqlite_sequence"
+            " WHERE name = 'water_windows'")
+        vsq_wipe_n = vsq_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        vsq_conn.execute(
+            "INSERT INTO sqlite_sequence (name, seq)"
+            " VALUES ('water_windows', ?)", (vsq_alloc_id,))
+        vsq_conn.commit()
+        vsq_seq_rows_final = vsq_conn.execute(
+            "SELECT COUNT(*) FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        vsq_seq_final = vsq_conn.execute(
+            "SELECT seq FROM sqlite_sequence"
+            " WHERE name = 'water_windows'").fetchone()[0]
+        vsq4_ok = (vsq_rows_post == 14
+                   and vsq_wipe_n == 0
+                   and vsq_seq_rows_final == 1
+                   and vsq_seq_final == 29
+                   and vsq_seq_final == vsq_alloc_id)
+
+        # AC-VSQ5: world re-green + pure-read law
+        vsq_tally_post = dict(
+            pipe.journal.kind_tally()["kind_tally"])
+        vsq_tally_cur_post = dict(
+            pipe.journal.kind_tally(cur_w)["kind_tally"])
+        vsq_total_post = pipe.journal.cell_totals()["total"]
+        vsq_board_cur_post = pipe.journal.journal_board(
+            cur_w)["total"]
+        vsq_post_n_ro = vsq_ro_scalar(
+            "SELECT COUNT(*) FROM water_windows")
+        vsq_conn.close()
+        vsq5_ok = (vsq_tally_post == vsq_tally_pre
+                   and vsq_tally_cur_post == vsq_tally_cur_pre
+                   and vsq_total_post == vsq_total_pre
+                   and vsq_board_cur_post == vsq_board_cur_pre
+                   and vsq_pre_n == 14
+                   and vsq_post_n_ro == 14)
+
+        sections.append("[24] seq-vacuum scan-order stability:")
+        sections.append("    dup-inject: seq-rows 1->%d"
+                        " first-read=%s all-rows=%s %s"
+                        % (vsq_dup_n_pre, vsq_first_pre,
+                           vsq_all_pre,
+                           "OK" if vsq1_ok else "DRIFT"))
+        sections.append("    vacuum: rows-pre=%s rows-post=%s"
+                        " first-pre=%s first-post=%s"
+                        " all-post=%s order-stable=%s %s"
+                        % (vsq_dup_n_pre, vsq_dup_n_post,
+                           vsq_first_pre, vsq_first_post,
+                           vsq_all_post,
+                           vsq_first_post == vsq_first_pre,
+                           "OK" if vsq2_ok else "DRIFT"))
+        sections.append("    alloc-post-vacuum: new-id=%d"
+                        " rows=%d seq-rows=%s board-cur=%d->%d %s"
+                        % (vsq_alloc_id, vsq_rows_mid,
+                           vsq_seq_rows_mid, vsq_board_cur_pre,
+                           vsq_board_cur_mid,
+                           "OK" if vsq3_ok else "DRIFT"))
+        sections.append("    cleanup-restore: rows=%d wiped=%d"
+                        " honest-seq-rows=%d seq=%d %s"
+                        % (vsq_rows_post, vsq_wipe_n,
+                           vsq_seq_rows_final, vsq_seq_final,
+                           "OK" if vsq4_ok else "DRIFT"))
+        sections.append("    re-green: tallies-eq=%s total-eq=%s"
+                        " board-cur=%d pure-read=%d->%d %s"
+                        % (vsq_tally_post == vsq_tally_pre
+                           and vsq_tally_cur_post
+                           == vsq_tally_cur_pre,
+                           vsq_total_post == vsq_total_pre,
+                           vsq_board_cur_post,
+                           vsq_pre_n, vsq_post_n_ro,
+                           "OK" if vsq5_ok else "DRIFT"))
+        fail = fail or not (vsq1_ok and vsq2_ok and vsq3_ok
+                            and vsq4_ok and vsq5_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -3362,7 +3600,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[24] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[25] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
