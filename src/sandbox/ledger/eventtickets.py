@@ -70,6 +70,7 @@ explore-queue row and were written before this code existed
 """
 
 import datetime
+import re
 import sqlite3
 import threading
 
@@ -86,6 +87,12 @@ E_ET_DUP_TICKET = "E_ET_DUP_TICKET"           # AC-ET3 (ref replay)
 E_ET_NO_TICKET = "E_ET_NO_TICKET"            # AC-ET5 (admission gate)
 E_ET_DUP_CHECKIN = "E_ET_DUP_CHECKIN"        # AC-ET5
 E_ET_NO_DISCLAIMER = "E_ET_NO_DISCLAIMER"    # AC-ET6
+
+# Month-window strict anchor (R1826 event_audit_board window
+# parameterization; family text = freetrial.py _WINDOW_RE, the
+# R1730/R1793 window-parameterization line: YYYY-MM, fullmatch
+# anchored both ends, month 01..12 only).
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS ticket_sessions (
@@ -472,7 +479,7 @@ class EventTicketFace:
                               "ticket_price": int(r[5]),
                               "ai_label": int(r[6])} for r in rows]}
 
-    def event_audit_board(self):
+    def event_audit_board(self, window=None):
         """Cross-session audit board (BigDomain R1771; canon = the R1771
         explore-queue audit-board line). Per-session derived sales and
         admission accounting over the append-only tables - sold, admitted,
@@ -484,26 +491,92 @@ class EventTicketFace:
         empty board. no_show = sold - admitted is structurally >= 0
         because every check-in row requires a purchase by that account
         and check-ins are UNIQUE per (session, account). Pure read,
-        zero token movement, zero schema touch (AC-EA1..EA7)."""
+        zero token movement, zero schema touch (AC-EA1..EA7).
+
+        R1826 window parameterization (AC-EAW1..EAW7; the
+        R1730/R1793 window-parameterization family law): the default
+        window=None keeps the full-window behavior byte-identical
+        (same SQL, same envelope, no extra key); an explicit
+        "YYYY-MM" month window filters by the record-time columns -
+        sold and revenue by purchased_utc, admitted by checked_utc
+        (each row family on its own provenance stamp - the seed
+        verdict). In a windowed read no_show switches to the
+        end-of-window snapshot: purchases with month <= W minus
+        check-ins with month <= W - the pairing keeps the
+        structurally-non-negative registered verdict across
+        windows because every check-in row pairs with a purchase
+        that precedes it in the product flow (the same per-pair
+        law the full board pairs by); the in-window net flow
+        (sold_w - admitted_w, which may go negative when an
+        earlier-month purchase checks in inside this window) is
+        deliberately NOT surfaced under the no_show field name.
+        The admission rate stays the window-filtered ratio under
+        the same zero-sold guard. The explicit-window envelope
+        adds one "window" key (additive); the default envelope is
+        byte-identical to the prior shape. A malformed window
+        fails closed E_ET_BAD_ARGS before any read (zero side
+        effects)."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise TicketError(E_ET_BAD_ARGS,
+                                 "window must be YYYY-MM: %r"
+                                 % (window,))
         with self._lock:
-            rows = self._conn.execute(
-                "SELECT s.session_key, s.title, s.ai_label,"
-                " (SELECT COUNT(*) FROM ticket_purchases p"
-                "   WHERE p.session_id = s.session_id),"
-                " (SELECT COUNT(*) FROM ticket_checkins c"
-                "   WHERE c.session_id = s.session_id),"
-                " (SELECT COALESCE(SUM(p2.price_paid), 0) FROM"
-                "   ticket_purchases p2"
-                "   WHERE p2.session_id = s.session_id)"
-                " FROM ticket_sessions s ORDER BY s.session_key").fetchall()
+            if w is None:
+                rows = self._conn.execute(
+                    "SELECT s.session_key, s.title, s.ai_label,"
+                    " (SELECT COUNT(*) FROM ticket_purchases p"
+                    "   WHERE p.session_id = s.session_id),"
+                    " (SELECT COUNT(*) FROM ticket_checkins c"
+                    "   WHERE c.session_id = s.session_id),"
+                    " (SELECT COALESCE(SUM(p2.price_paid), 0) FROM"
+                    "   ticket_purchases p2"
+                    "   WHERE p2.session_id = s.session_id)"
+                    " FROM ticket_sessions s"
+                    " ORDER BY s.session_key").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT s.session_key, s.title, s.ai_label,"
+                    " (SELECT COUNT(*) FROM ticket_purchases p"
+                    "   WHERE p.session_id = s.session_id"
+                    "   AND substr(p.purchased_utc, 1, 7) = ?),"
+                    " (SELECT COUNT(*) FROM ticket_checkins c"
+                    "   WHERE c.session_id = s.session_id"
+                    "   AND substr(c.checked_utc, 1, 7) = ?),"
+                    " (SELECT COALESCE(SUM(p2.price_paid), 0) FROM"
+                    "   ticket_purchases p2"
+                    "   WHERE p2.session_id = s.session_id"
+                    "   AND substr(p2.purchased_utc, 1, 7) = ?),"
+                    " (SELECT COUNT(*) FROM ticket_purchases p3"
+                    "   WHERE p3.session_id = s.session_id"
+                    "   AND substr(p3.purchased_utc, 1, 7) <= ?),"
+                    " (SELECT COUNT(*) FROM ticket_checkins c3"
+                    "   WHERE c3.session_id = s.session_id"
+                    "   AND substr(c3.checked_utc, 1, 7) <= ?)"
+                    " FROM ticket_sessions s"
+                    " ORDER BY s.session_key",
+                    (w, w, w, w, w)).fetchall()
         board = []
         for r in rows:
             sold = int(r[3])
             admitted = int(r[4])
+            if w is None:
+                no_show = sold - admitted
+            else:
+                # end-of-window snapshot (AC-EAW4): cumulative
+                # purchases <= W minus cumulative check-ins <= W;
+                # the in-window net flow is not surfaced here.
+                no_show = int(r[6]) - int(r[7])
             board.append({
                 "session_key": r[0], "title": r[1], "ai_label": int(r[2]),
                 "sold": sold, "admitted": admitted,
-                "no_show": sold - admitted, "revenue": int(r[5]),
+                "no_show": no_show, "revenue": int(r[5]),
                 "admission_rate": round(admitted / sold, 4) if sold else 0.0,
             })
-        return {"event_audit_board": board, "disclaimer": self.disclaimer}
+        envelope = {"event_audit_board": board,
+                   "disclaimer": self.disclaimer}
+        if w is not None:
+            envelope["window"] = w
+        return envelope

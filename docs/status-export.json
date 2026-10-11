@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T22:03:31+08:00",
+  "export_ts": "2026-10-11T22:29:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1825 一句话：apidev 谱系链一次性读面交付（audit_lineage：rotate_in 逐级上溯+rotate_out 逐级下钻合成全链成员序〔最老祖先→查询键→最末后继〕·成员块与 lifecycle_trace 七锁字段机械互锁零漂移·AC-LG1..LG7 预注册先于代码·套件 7/7 首跑全绿+RUNNER 100/100 套件 933 判据零回归+矩阵 100/933 --check byte-identical）——R1824 补种后继按 FIFO 清账；轮首五静非全静：DEC 新 token D-20261011-08（C-20261011-02 空转防治顶层机制案·T2 否决窗至 10-18 21:30）知悉+自我执法面注记（本司 OSLoop schtasks 会话无关 Running 实测 ✓/当日 commit 节律健康/benchmarks 当日刷新）+GORD 新 2 行知悉（专辑 i2v 本地终裁令 bm-a=可爱女人 KN 29 单 768P int8 GPU 面与本司轻 CPU 环共存/空转防治令同 D-20261011-08 面）；雷达窗 6 切片已由 R1757 消费入册（pycrdt 双件套入池记录面（六）在盘）·窗 7=10-14 21:40 开续候；tech 队 10→9。",
-    "latest_artifact": "最近实物：src/sandbox/ledger/apidev.py audit_lineage 谱系链一次性读面+套件 src/sandbox/ledger/test_apidev_lineage.py（SUITE 7/7）+RUNNER 全量回归件 qa/reconcile-all-R1825.log（100/100 suites·933 判据·controls 7/7）+证据 qa/apidev-lineage-R1825.log·2026-10-11 22:1x。",
-    "next_milestone": "下个实物：tech 队头按序交付（eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1826 一句话：eventtickets 审计榜月窗参数化读面交付（event_audit_board(window=None) 窗参化：默认 None=现行信封逐字节保真+显式 YYYY-MM 严锚坏窗 fail-closed E_ET_BAD_ARGS 先于读+sold/revenue/admitted 按 record-time 列（purchased_utc/checked_utc）过滤+no_show=端窗快照〔AC-CFW4 同律·in-window 净流可负禁在注册名下出面〕+admission_rate=窗过滤比值零 sold 卫 0.0·AC-EAW1..EAW7 预注册先于代码·套件 7/7 首跑全绿+双跑逐字节同一+RUNNER 101/101 套件 940 判据零回归）——P2 tech 队头 FIFO 最老可认领项清账；轮首五静非全静：DEC 零新 token〔279 行 vs 基线 281=排版漂移·D-20261011-01..06 全在基线差集实证〕+GORD 表压缩整理〔21:1x/21:4x 行已移出·最新行 13:4x ≤已扫水位 21:4x·270 行=+1 结构漂移·基线 269→270〕+LEDGER 零新增未回；tech 队 10→消耗 1→补种 1=10。",
+    "latest_artifact": "最近实物：src/sandbox/ledger/eventtickets.py event_audit_board 月窗参数化读面+套件 src/sandbox/ledger/test_eventtickets_boardwin.py（SUITE 7/7）+RUNNER 全量回归件（101/101 suites·940 判据·controls 7/7·171.9s）+证据 qa/eventtickets-boardwin-R1826.log·2026-10-11 22:2x。",
+    "next_milestone": "下个实物：tech 队头按序交付（reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面/water sqlite_sequence 簿记行篡改 id 复用负路径探针窗/apidev lineage 链内用量聚合读面窗·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）+10-18 21:30 D-20261011-08 否决窗到期核对面·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "eventtickets 审计榜月窗参数化读面交付（R1826·P2 tech 队头 FIFO 最老可认领项〔R1788 补种〕·轮计分 2=可跑实物：AC-EAW1..EAW7 预注册先于代码〔tech.md R1826 认领行本行即册〕——eventtickets.py event_audit_board(self, window=None) 窗参化：默认 None=现行 SQL+信封逐字节保真〔无 window 键〕·显式 YYYY-MM 过 _WINDOW_RE 严锚〔月值 01-12 全匹配双端锚·freetrial 同文本〕坏窗 14 形态 fail-closed E_ET_BAD_ARGS 先于任何读·窗读 sold/revenue 按 substr(purchased_utc,1,7)/admitted 按 substr(checked_utc,1,7)〔record-time 各行自证戳〕·no_show=端窗快照〔cumulative ≤w·AC-CFW4 同律·in-window 净流 sold_w−admitted_w 可负禁在注册名下出面·快照非负基底=配对行流律〕·admission_rate=窗过滤比值〔零 sold 卫 0.0·AC-CFW5 同律〕·信封显式窗加 window 键 additive——套件 test_eventtickets_boardwin.py SUITE PASS 7/7 首跑全绿+双跑 stdout sha256 1facc52bfc9c8436 逐字节同一·reconcile_all SUITES 100→101 判据 933→940 接线〔ledger-eventtickets-boardwin〕·RUNNER PASS 101/101 套件 940 判据 controls 7/7 171.9s 零回归·shipped config.json 逐字节零改动·eventtickets.py 纯 ASCII+零 UPDATE+零 RNG+真 import 行零网络库·证据 qa/eventtickets-boardwin-R1826.log〔套件 run1 verbatim+双跑 sha+RUNNER 摘要+注册面四节〕·queue_tech_open 10→消耗 1→补种 1=10·DEC 零新 token〔279 行=排版漂移·差集实证〕+GORD 表压缩整理〔21:1x/21:4x 行移出·最新行 13:4x ≤已扫水位·基线 269→270〕·R1826）"
+    ],
     [
       "2",
       "apidev 谱系链一次性读面交付（R1825·P2 tech 队头 FIFO〔R1824 补种〕·轮计分 2=可跑实物：AC-LG1..LG7 预注册先于代码〔tech.md R1825 认领行本行即册〕——apidev.py 增 audit_lineage(api_key) 一次性全链谱系纯读面：信封八键 {api_key,dev_account,key_name,key_id,chain,chain_size,queried_index,disclaimer}·rotate_in 逐级上溯〔_ancestry_key_ids 复用〕+rotate_out 逐级下钻〔_successor_key_id 新私有面〕合成全链成员序〔最老祖先→…→查询键→…→最末后继〕·queried_index 随查询点（A=0/B=1/C=2）·成员块键集恰八键 {key_id,dev_account,key_name,status,rotated_from_key_id,rotated_to_key_id,events,total}（成员零裸 api_key=最小暴露面·信封唯一裸键=查询键）·成员块派生与 lifecycle_trace 同构（AC-LG3 七锁字段全等=谱系面与单键追溯面机械互锁禁漂移）·链内 pair 双向闭合·孤键自链两态（fresh active/plain-revoked）·查询点无关（中段 B 查询链集==端点 A/C 查询）·死键全可读（双终态 C 链读不炸 status=revoked）·嵌入面缺省不动〔key_view 18 键/dev_board 6+15 键 exact pin=AC-RJW4/AC-TR6 同源〕·纯读律〔api_dev_keys+key_events 行数前后同一〕+键闸最先〔未知/空串 E_AD_UNKNOWN_KEY〕+双向环防护 visited-id 集——套件 test_apidev_lineage.py SUITE 7/7 首跑全绿 exit 0·reconcile_all SUITES 99→100 判据 926→933 接线〔ledger-apidev-lineage〕·RUNNER PASS 100/100 套件 933 判据 controls 7/7 178.3s 零回归=qa/reconcile-all-R1825.log·矩阵再生 100/933 green --check byte-identical〔10298B〕·shipped config.json 逐字节零改动·apidev.py 纯 ASCII+零 UPDATE+零 RNG+真 import 行零网络库·证据 qa/apidev-lineage-R1825.log〔套件+RUNNER 行+矩阵三节〕·queue_tech_open 10→9·DEC D-20261011-08 知悉〔新行 inline 引用 4 token 机械并入基线〕+GORD 2 行知悉〔last_gord_tbl_rows 267→269〕+雷达窗 6 已由 R1757 消费〔窗 7=10-14 21:40 开续候〕·R1825）"

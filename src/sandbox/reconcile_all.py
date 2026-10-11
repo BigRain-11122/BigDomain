@@ -582,6 +582,21 @@ SUITES = [
     # (AC-ET1..ET7 pre-registered in state/queue/explore.md).
     ("ledger-eventtickets",
      os.path.join("ledger", "test_eventtickets.py"), 14),
+    # R1826 audit-board month-window parameterization: the
+    # event_audit_board read gains the R1730/R1793 window family
+    # law - default None keeps the full-window envelope
+    # byte-identical; an explicit YYYY-MM window filters
+    # sold/revenue by purchased_utc and admitted by checked_utc
+    # (record-time provenance stamps); no_show in a windowed
+    # read is the end-of-window snapshot (structurally
+    # non-negative under the per-pair purchase-precedes-check-in
+    # flow law; the in-window net flow is never surfaced under
+    # the registered field name); admission_rate stays the
+    # window-filtered ratio under the zero-sold guard; malformed
+    # windows fail closed E_ET_BAD_ARGS before any read
+    # (AC-EAW1..EAW7 pre-registered in state/queue/tech.md).
+    ("ledger-eventtickets-boardwin",
+     os.path.join("ledger", "test_eventtickets_boardwin.py"), 7),
     # R1768 developer free-trial tier face: the zero-fee trial
     # window (lifetime cap, the apidev quota-ring variant -
     # immutable call rows, COUNT face, zero mutation) + the

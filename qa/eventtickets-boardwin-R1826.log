@@ -1,0 +1,24 @@
+== [1] suite run1 stdout verbatim (test_eventtickets_boardwin.py) ==
+PASS AC-EAW1: default envelope keys exact=True; double-call byte-identical=True; rows manual-SQL equal=True; explicit window adds key window=True additive; cur-month window == full board for the all-current-month world=True
+PASS AC-EAW2: 14/14 malformed forms rejected E_ET_BAD_ARGS (11 base + 3 trailing R1748 forms); default sentinel is None only (empty string rejected); three-table counts flat (2, 3, 1) -> (2, 3, 1)
+PASS AC-EAW3: windowed cells == manual SQL per record-time column [xmonth-cross s=0 a=1 rev=0; inmonth-full s=1 a=1 rev=4; alpha-gala s=0 a=0 rev=0; zulu-empty s=0 a=0 rev=0]; history window carries zero current-month rows=True; current-month window carries zero history rows=True; older month read exact=True; future window honest zeros dense=True; default full-window still shows every session=True
+PASS AC-EAW4: cross-month case (purchase 2026-08 + check-in 2026-09): window 2026-09 sold_w=0 admitted_w=1 no_show=0 (net-flow -1 never surfaced under the field name)=True; older-month snapshot no_show=1=True; every windowed no_show == manual cumulative SQL=True; no_show >= 0 across all windows=True
+PASS AC-EAW5: zero-sold guard in window (sold_w=0, admitted_w=1 -> rate 0.0)=True; in-month full funnel rate 1.0=True; every windowed rate == windowed ratio arithmetic=True
+PASS AC-EAW6: cross-month revenue lands in the purchase month (m1 rev=3, m2 rev=0)=True; in-month rev=4=True; every windowed revenue == manual SQL=True; full-board revenue sum == SUM(price_paid) over all purchases (22)=True
+PASS AC-EAW7: three-table counts flat True; method source carries zero data-changing statements (inspect)=True; windowed double-call byte-identical=True; fresh purchase moves cur-month window 0->1 while history window stays 0=True; module pure ASCII (0 non-ascii); zero network imports (0); zero mutation surface for own tables; zero dice; config.json byte-stable; reconcile_all SUITES row 'ledger-eventtickets-boardwin' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+
+== [2] double-run determinism ==
+RUN1-SHA256: 1FACC52BFC9C8436D9464CCB96FFAB81D87B023F4E1AC7918782FC61E13B5344
+RUN2-SHA256: 1FACC52BFC9C8436D9464CCB96FFAB81D87B023F4E1AC7918782FC61E13B5344
+BYTE-IDENTICAL: True  (zero RNG, month stamps derived from wall clock, same-month reruns identical)
+== [3] RUNNER full regression (reconcile_all.py) ==
+RUNNER-EXIT: 0
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+RUNNER PASS (101/101 suites green, reconcile controls 7/7, 171.9s)
+suite count 100(R1825) -> +1 ledger-eventtickets-boardwin (R1826) = 101; criteria total 933 -> 940 (+7 AC-EAW); sub-suite "runner:" lines above are verbatim in-logger sub-run excerpts from the runner log tail
+== [4] SUITES registration ==
+("ledger-eventtickets-boardwin", os.path.join("ledger", "test_eventtickets_boardwin.py"), 7) registered in src/sandbox/reconcile_all.py (AC-EAW7 wiring check PASS in-suite)
