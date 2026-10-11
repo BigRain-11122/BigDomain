@@ -660,6 +660,19 @@ SUITES = [
     # (AC-CBP1..CBP8 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-callplan",
      os.path.join("ledger", "test_freetrial_callplan.py"), 8),
+    # R1831 free-trial calls-by-engine pure read face: global
+    # engine-profile aggregation over immutable trial_calls rows
+    # (engine_ref free TEXT domain, the engine attribution
+    # stamp; a live call always carries a non-empty stamp);
+    # window=None full-window default; explicit YYYY-MM filters
+    # rows by record-time stamp first, then aggregates engine
+    # stamps over the surviving rows; malformed windows fail
+    # closed E_FT_BAD_ARGS; out-of-domain stamps (only direct
+    # injection can produce one) surface and count toward
+    # total (the face never hides data)
+    # (AC-CBE1..CBE8 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-callengine",
+     os.path.join("ledger", "test_freetrial_callengine.py"), 8),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

@@ -1,0 +1,35 @@
+== qa/freetrial-callengine-R1831.log ==
+R1831 freetrial calls_by_engine engine-profile pure-read face acceptance evidence (AC-CBE1..CBE8 pre-registered in state/queue/tech.md R1831 claim line before code; P2 tech FIFO head LN94 R1830 seed).
+
+[1] suite run1 verbatim
+PASS AC-CBE1: zero-call world honest empty (True); envelope keys exact; engine keys ascending ['eng-x', 'eng-y', 'eng-z', 'ghost-engine-probe']; cells {'eng-x': 4, 'eng-y': 2, 'eng-z': 2, 'ghost-engine-probe': 1}; total 9 == sum == COUNT; window key additive on explicit read; config bytes stable
+PASS AC-CBE2: 14 bad forms rejected E_FT_BAD_ARGS; four-table counts unchanged (2, 2, 9, 0); None default accepted []
+PASS AC-CBE3: month 2026-08 engine profile {'eng-x': 1, 'eng-z': 1}; month 2026-09 engine profile {'eng-x': 1, 'eng-y': 1, 'eng-z': 1, 'ghost-engine-probe': 1}; future 2026-11 honest empty; default read carries all observed engines; zero cross-month leakage
+PASS AC-CBE4: per-engine counts == manual SQL GROUP BY; total 9 == COUNT(*) == sum(cells); key order == SQL ORDER BY ascending ['eng-x', 'eng-y', 'eng-z', 'ghost-engine-probe']; windowed total == manual SQL 4; windowed engine map == windowed SQL
+PASS AC-CBE5: out-of-domain engine 'ghost-engine-probe' surfaced in full read (cell 1, ascending slot 4 of ['eng-x', 'eng-y', 'eng-z', 'ghost-engine-probe']) and counted toward total 9 (live-gate engines sum 8); surfaced in its month window; absent from months without it - the face never hides observed data
+PASS AC-CBE6: method source free of data-changing statements; four-table counts unchanged (2, 2, 9, 0); double-call dumps byte-identical (sorted and insertion order); windowed double-call identical
+PASS AC-CBE7: new live call: eng-x cell 4 -> 5; total 9 -> 10; ghost/eng-y/eng-z cells unchanged; windowed read follows (cur window eng-x -> 3); history month engine profile unchanged
+PASS AC-CBE8: freetrial.py pure ASCII; import lines network-free (5 imports); SUITES registration row present; criteria drift self-check 7+1==8
+SUITE PASS 8/8 exit=0
+
+[2] double-run determinism
+run2 exit=0; stdout sha256 = 419CED66566B95E2A24B59F54E51E9AEF2E5DDC9459AE52A700425225070C56C
+run1 sha256 == run2 sha256 (byte-identical, zero RNG, zero timestamps); file compare identical=True
+
+[3] full RUNNER regression excerpt (qa/reconcile-all-R1831.log)
+  | PASS AC-PW2: gate-hit-via-batch-face=True(E_CONTENT_REJECTED) hit-zero-row=True clean-submit=True; prefilter-face-untouched=prefilter-suite-in-RUNNER; AC-U1..U12-zero-regression=SUITE-line-below
+  | PASS AC-PW7: pipeline-ascii=True sec_batch-ascii=True net-import-hits=0 rows_by_status=read-only-addition full-regression=RUNNER-log
+...
+RUNNER PASS (105/105 suites green, reconcile controls 7/7, 187.6s)
+(SUITES 104->105 criteria 963->971 via ledger-freetrial-callengine registration row; zero regression across the other 104 suites; controls 7/7)
+
+[4] suite matrix regen + --check
+PASS generated docs/sandbox-suite-matrix.md (10760 bytes) - registry suites=105 criteria=971 evidence=qa/reconcile-all-R1831.log green=105/105
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (10760 bytes, 105 suites, 971 criteria)
+
+[5] hygiene and registration
+freetrial.py: calls_by_engine appended additively (calls_by_kind/calls_by_plan/funnel family untouched); source pure ASCII (suite AC-CBE8 asserts all bytes < 128); import lines network-free (5 imports); shipped ledger/config.json byte-stable (suite AC-CBE1 asserts config bytes unchanged).
+reconcile_all.py: SUITES registration row ledger-freetrial-callengine / test_freetrial_callengine.py criteria=8 added after the callplan row (suite AC-CBE8 asserts both strings present).
+daily standing line honored first this round: RECONCILE-DAILY 20261012 verdict=PASS exit=0 runner_exit=0 sentinel=ok (RUNNER 104/104 controls 7/7 182.8s) = qa/reconcile-daily-20261012.log.
+criteria pre-registration ordering: tech.md R1831 claim line (AC-CBE1..CBE8) written before freetrial.py calls_by_engine code (pre-registration discipline; claim text in git history of this commit).
