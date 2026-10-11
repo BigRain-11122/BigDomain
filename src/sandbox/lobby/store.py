@@ -181,6 +181,31 @@ class EventStore:
         ]
         return {"room_message_board": board, "disclaimer": self.disclaimer}
 
+    def idea_pool_board(self):
+        """R1792 idea pool board: pure-read event-derived face over the
+        persistent events table. The server-side in-memory proposal
+        pool stub resets on restart; this board re-derives the pool
+        from type='idea.submit' rows on every call (zero cache
+        counters). Per zone (pool) idea count and distinct submitter
+        count, aggregated read-only; zone renders as room (room board
+        family law, R1773). Zone-ascending deterministic order, zero
+        RNG. The events table stays append-only: this face holds no
+        mutation statements. Envelope carries the standing
+        non-advisory disclaimer; a store constructed without one
+        refuses fail-closed (same law as the room board face)."""
+        if not self.disclaimer or not self.disclaimer.strip():
+            raise ValueError("E_STORE_NO_DISCLAIMER")
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+                " WHERE type = 'idea.submit' GROUP BY zone ORDER BY zone"
+            ).fetchall()
+        board = [
+            {"room": zone, "ideas": int(n), "actors": int(k)}
+            for zone, n, k in rows
+        ]
+        return {"idea_pool_board": board, "disclaimer": self.disclaimer}
+
     def close(self):
         with self._lock:
             self._conn.close()

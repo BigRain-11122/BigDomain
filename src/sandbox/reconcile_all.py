@@ -91,7 +91,12 @@ SUITES = [
     # order-preserving row filter after the store read face (zero
     # second SQL engine), bad forms fail closed E_BAD_FRAME,
     # explicit [] is an honest empty interest set - AC-S17 (19 -> 20).
-    ("lobby", os.path.join("lobby", "test_client.py"), 20),
+    # R1792 event-derived idea pool face: idea_pool_board pure-read
+    # derivation over type='idea.submit' rows (restart-surviving
+    # replacement for the read reliance on the in-memory
+    # proposal_pool stub) + idea.board wire face with the same
+    # optional rooms filter law - AC-S18/S19 (20 -> 22).
+    ("lobby", os.path.join("lobby", "test_client.py"), 22),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",

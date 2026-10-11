@@ -440,6 +440,62 @@ class Lobby:
             "ai_generated": False,
         })
 
+    async def handle_idea_board(self, client, msg):
+        # AC-S19 (R1792): idea.board protocol wiring - a zero-parameter
+        # public read face over the event-derived idea pool board. The
+        # in-memory proposal_pool stub resets on restart; this face
+        # re-derives from the persistent events table, so the pool
+        # stays readable across restarts. Spectators may query
+        # (AC-S11 census public-read law); server fields stay
+        # authoritative. A legacy store constructed without a wired
+        # disclaimer refuses fail-closed through sec.reject, never
+        # crashing the connection. Optional payload.rooms subscription
+        # filter per AC-S17 semantics: absent key or None keeps the
+        # full board (default sentinel); the filter is a Python-side
+        # row filter applied AFTER the store face call (read-face
+        # single source, zero second SQL engine) and preserves the
+        # zone-ascending order (subsequence, no resorting). An
+        # explicit empty list is an honest empty interest set
+        # (board == []); unknown room names simply never match. Bad
+        # forms fail closed through sec.reject E_BAD_FRAME BEFORE the
+        # store call (deterministic precedence over the legacy
+        # no-disclaimer refusal).
+        payload = msg.get("payload") if isinstance(msg, dict) else None
+        rooms_param = payload.get("rooms") if isinstance(payload, dict) else None
+        if rooms_param is not None:
+            if (not isinstance(rooms_param, list)
+                    or any(not isinstance(r, str) or not r.strip()
+                           for r in rooms_param)):
+                await self.send_reject(
+                    client, "E_BAD_FRAME",
+                    "payload.rooms must be a list of non-empty room names")
+                return
+            wanted = set(rooms_param)
+        else:
+            wanted = None
+        try:
+            env = self.store.idea_pool_board()
+        except ValueError:
+            await self.send_reject(
+                client, "E_STORE_NO_DISCLAIMER",
+                "idea board unavailable: no wired disclaimer")
+            return
+        board = env["idea_pool_board"]
+        if wanted is not None:
+            board = [row for row in board if row.get("room") in wanted]
+        await send_frame(client.ws, {
+            "v": 1,
+            "type": "idea.board",
+            "ts_utc": utc_now_iso(),
+            "room": self.rooms[0],
+            "actor": "system",
+            "payload": {
+                "board": board,
+                "disclaimer": env["disclaimer"],
+            },
+            "ai_generated": False,
+        })
+
     async def handle_avatar_register(self, client, msg):
         # AC-S12: intake face - gates 1+2, queue = one public event row,
         # receipt carries evt_id; household registration is BigLife T-04
@@ -484,6 +540,8 @@ class Lobby:
             await self.handle_census_query(client, msg)
         elif mtype == "room.board":
             await self.handle_room_board(client, msg)
+        elif mtype == "idea.board":
+            await self.handle_idea_board(client, msg)
         elif mtype == "avatar.register":
             await self.handle_avatar_register(client, msg)
         else:

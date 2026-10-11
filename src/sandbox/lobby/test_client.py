@@ -13,7 +13,11 @@ plus the protocol wiring face AC-S16 (R1790: room.board request/
 response frame over the store read face - spectator-queryable public
 read, server-authoritative fields, live cross-check against the
 server db, zero-cache fresh reflection, legacy no-disclaimer store
-rejected gracefully through sec.reject).
+rejected gracefully through sec.reject) plus the event-derived idea
+pool face AC-S18/S19 (R1792: idea_pool_board pure-read derivation over
+type='idea.submit' rows + idea.board wire face with optional rooms
+filter and restart-survival proof on a fresh server process over the
+same db).
 Each criterion prints PASS/FAIL with evidence; the process exits non-zero
 on any FAIL.
 
@@ -1158,6 +1162,279 @@ def room_board_cases(srv_db):
               ok_srv, rooms_srv))
 
 
+async def idea_board_cases(srv_db):
+    """AC-S18/S19 (R1792): event-derived idea pool read face +
+    idea.board protocol wiring. The store face re-derives the pool
+    from persistent type='idea.submit' rows (the server in-memory
+    proposal_pool stub resets on restart); the wire half starts a
+    FRESH server process on this suite's real db and reads the full
+    board back over the socket - the restart-survival proof (a fresh
+    process's stub is empty by construction; the event-derived board
+    carries every prior idea)."""
+    from store import EventStore
+    import server as lobby_server
+    from sec_gate import SecGate as _SecGate
+    tmp = tempfile.mkdtemp(prefix="lobby-ideaboard-")
+    with open(CONFIG, encoding="utf-8") as handle:
+        cfg = json.load(handle)
+    notice = ("sandbox non-advisory notice: idea pool board rows are "
+              "operational read-only derivations, not advice")
+
+    # ---- AC-S18: semantics, scoping, ordering, cross-validation ----
+    bad_refusals = []
+    for value, label in (("", "empty"), ("   ", "whitespace"), (123, "non-str")):
+        refused = False
+        try:
+            EventStore(os.path.join(tmp, "bad-%s.db" % label), disclaimer=value)
+        except ValueError as exc:
+            refused = "E_STORE_NO_DISCLAIMER" in str(exc)
+        bad_refusals.append("%s=%s" % (label, refused))
+
+    st = EventStore(os.path.join(tmp, "pool.db"), disclaimer=notice)
+    empty_env = st.idea_pool_board()
+    ok_empty = (set(empty_env.keys()) == {"idea_pool_board", "disclaimer"}
+                and empty_env["disclaimer"] == notice
+                and empty_env["idea_pool_board"] == [])
+
+    # deterministic world: four ideas across two pools by three actors
+    # + two non-idea rows (scope isolation: never counted)
+    world = [
+        ("2026-10-11T01:00:01.000000Z", "idea.submit", "res-alpha", "cocreate",
+         "alpha idea one", {"text": "alpha idea one", "pool": "proposal-queue-stub"}),
+        ("2026-10-11T01:00:02.000000Z", "idea.submit", "res-beta", "cocreate",
+         "beta idea", {"text": "beta idea", "pool": "proposal-queue-stub"}),
+        ("2026-10-11T01:00:03.000000Z", "idea.submit", "res-alpha", "cocreate",
+         "alpha idea two", {"text": "alpha idea two", "pool": "proposal-queue-stub"}),
+        ("2026-10-11T01:00:04.000000Z", "idea.submit", "res-gamma", "lab",
+         "gamma lab idea", {"text": "gamma lab idea", "pool": "proposal-queue-stub"}),
+        ("2026-10-11T01:00:05.000000Z", "chat.broadcast", "res-alpha", "lobby",
+         "chat line never counted", {"text": "chat line never counted"}),
+        ("2026-10-11T01:00:06.000000Z", "avatar.intake", "res-delta", "intake",
+         "intake line never counted", {"text": "intake line never counted"}),
+    ]
+    for evt in world:
+        st.append(*evt)
+    env = st.idea_pool_board()
+    board = env["idea_pool_board"]
+    expected = [
+        {"room": "cocreate", "ideas": 3, "actors": 2},
+        {"room": "lab", "ideas": 1, "actors": 1},
+    ]
+    ok_rows = (board == expected
+               and all(set(r.keys()) == {"room", "ideas", "actors"} for r in board))
+
+    manual = [
+        {"room": r, "ideas": int(n), "actors": int(k)}
+        for r, n, k in db_query(
+            os.path.join(tmp, "pool.db"),
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='idea.submit' GROUP BY zone ORDER BY zone")
+    ]
+    ok_manual = manual == board
+    n_all = db_query(os.path.join(tmp, "pool.db"),
+                     "SELECT COUNT(*) FROM events")[0][0]
+    n_board_ideas = sum(r["ideas"] for r in board)
+    ok_scope = n_all == 6 and n_board_ideas == 4  # non-idea rows never counted
+
+    # insertion-order independence: same world, reversed append order
+    st2 = EventStore(os.path.join(tmp, "pool2.db"), disclaimer=notice)
+    for evt in reversed(world):
+        st2.append(*evt)
+    ok_order = (json.dumps(st2.idea_pool_board(), sort_keys=True)
+                == json.dumps(env, sort_keys=True))
+
+    # live derivation, zero cache: a new idea moves the next read
+    st.append("2026-10-11T01:00:08.000000Z", "idea.submit", "res-delta",
+              "lab", "delta lab idea", {"text": "delta lab idea"})
+    env_after = st.idea_pool_board()
+    lab_row = [r for r in env_after["idea_pool_board"] if r["room"] == "lab"][0]
+    ok_alive = lab_row == {"room": "lab", "ideas": 2, "actors": 2}
+
+    # ---- AC-S18: pure-read law, determinism, legacy refusal, live db ----
+    unit_db = os.path.join(tmp, "pool.db")
+    before = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+              for t in ("events", "census_cache")]
+    st.idea_pool_board()
+    st2.idea_pool_board()
+    after = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+             for t in ("events", "census_cache")]
+    ok_pure = before == after and before[0] == 7
+
+    src = inspect.getsource(EventStore.idea_pool_board)
+    ok_src = not any(word in src for word in ("INSERT", "UPDATE", "DELETE"))
+    ok_det = (json.dumps(env_after, sort_keys=True)
+              == json.dumps(st.idea_pool_board(), sort_keys=True))
+
+    st3 = EventStore(os.path.join(tmp, "legacy.db"))
+    face_refused = False
+    try:
+        st3.idea_pool_board()
+    except ValueError as exc:
+        face_refused = "E_STORE_NO_DISCLAIMER" in str(exc)
+    st3.close()
+
+    # live cross-check: this suite's real db - cocreate holds the real
+    # idea submitted through the wire in the AC-S10 flow
+    st_srv = EventStore(srv_db, disclaimer=notice)
+    env_srv = st_srv.idea_pool_board()
+    manual_srv = [
+        {"room": r, "ideas": int(n), "actors": int(k)}
+        for r, n, k in db_query(
+            srv_db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='idea.submit' GROUP BY zone ORDER BY zone")
+    ]
+    pools_srv = sorted(r["room"] for r in env_srv["idea_pool_board"])
+    ok_srv = (env_srv["idea_pool_board"] == manual_srv
+              and pools_srv == ["cocreate"]
+              and all(r["ideas"] > 0 for r in env_srv["idea_pool_board"]))
+    st_srv.close()
+    st.close()
+    st2.close()
+
+    record("AC-S18",
+           ok_empty and ok_rows and ok_manual and ok_scope and ok_order
+           and ok_alive and ok_pure and ok_src and ok_det and face_refused
+           and ok_srv and all("True" in r for r in bad_refusals),
+           "empty-board=%s rows=%s manual-sql-cross=%s "
+           "scope(events=%d board-ideas=%d)=%s insertion-order-independent=%s "
+           "live-rederive=%s; row-counts-stable=%s zero-write-src=%s "
+           "deterministic=%s bad-disclaimer %s legacy-refused=%s "
+           "live-db-cross=%s pools=%s"
+           % (ok_empty, board, ok_manual, n_all, n_board_ideas, ok_scope,
+              ok_order, ok_alive, ok_pure, ok_src, ok_det, bad_refusals,
+              face_refused, ok_srv, pools_srv))
+
+    # ---- AC-S19: wire face + restart survival + rooms filter + legacy ----
+    async def recv_or_none(ws_, pred_, timeout_=3.0):
+        try:
+            return await recv_until(ws_, pred_, timeout_)
+        except (TimeoutError, ConnectionClosed):
+            return None
+
+    port2 = _free_port()
+    srv2 = ServerProc(port2, db=srv_db)
+    srv2.start()
+    wire_clients = []
+    try:
+        # restart-survival: srv2 is a FRESH process on the existing db -
+        # its in-memory proposal_pool stub starts empty by construction;
+        # the event-derived board must still return every prior idea.
+        fb, _, _ = await open_client(port2)
+        wire_clients.append(fb)
+        await fb.send(frame("idea.board"))
+        ib_frame = await recv_until(fb, lambda x: x.get("type") == "idea.board")
+        p19 = ib_frame.get("payload", {})
+        board19 = p19.get("board", [])
+        manual19 = [
+            {"room": r, "ideas": int(n), "actors": int(k)}
+            for r, n, k in db_query(
+                srv_db,
+                "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+                " WHERE type='idea.submit' GROUP BY zone ORDER BY zone")
+        ]
+        ok_restart = (board19 == manual19
+                      and sum(r["ideas"] for r in board19) > 0
+                      and sorted(p19.keys()) == ["board", "disclaimer"]
+                      and p19.get("disclaimer") == cfg["risk_warning"]["text"]
+                      and ib_frame.get("ai_generated") is False
+                      and ib_frame.get("actor") == "system")
+
+        # fresh reflection: a new idea moves the next board query
+        e2, _, _ = await open_client(port2)
+        wire_clients.append(e2)
+        await make_resident(e2)
+        await e2.send(frame("idea.submit",
+                            payload={"text": "idea board refresh probe"}))
+        await recv_until(e2, lambda f: f.get("type") == "sys.notice"
+                         and f.get("ai_generated") is True)
+        await fb.send(frame("idea.board"))
+        board19b = (await recv_until(
+            fb, lambda x: x.get("type") == "idea.board")) \
+            .get("payload", {}).get("board", [])
+        coc1 = [r for r in board19 if r["room"] == "cocreate"][0]["ideas"]
+        coc2 = [r for r in board19b if r["room"] == "cocreate"][0]["ideas"]
+        ok_fresh = coc2 == coc1 + 1
+
+        # rooms filter (AC-S17 law): default full / order-preserving
+        # Python-side filter / honest empty / unknown names / bad forms
+        full19 = board19b
+        await fb.send(frame("idea.board", payload={"rooms": ["cocreate"]}))
+        b19f = (await recv_until(
+            fb, lambda x: x.get("type") == "idea.board")) \
+            .get("payload", {}).get("board", [])
+        ok_filter = (b19f == [row for row in full19 if row["room"] == "cocreate"]
+                     and [row["room"] for row in b19f] == ["cocreate"])
+        await fb.send(frame("idea.board", payload={"rooms": []}))
+        b19e = (await recv_until(
+            fb, lambda x: x.get("type") == "idea.board")) \
+            .get("payload", {}).get("board", [])
+        ok_empty19 = b19e == []
+        await fb.send(frame("idea.board", payload={"rooms": ["nether"]}))
+        b19u = (await recv_until(
+            fb, lambda x: x.get("type") == "idea.board")) \
+            .get("payload", {}).get("board", [])
+        ok_unknown = b19u == []
+        bad19 = []
+        for bad in ("cocreate", ["cocreate", 3], [""], ["   "],
+                    {"cocreate": 1}, True):
+            await fb.send(frame("idea.board", payload={"rooms": bad}))
+            rej19 = await recv_or_none(
+                fb, lambda f: f.get("type") == "sec.reject"
+                and f.get("payload", {}).get("code") == "E_BAD_FRAME")
+            bad19.append(rej19 is not None)
+        ok_bad19 = all(bad19)
+        # default sentinel None + connection survival after the burst
+        await fb.send(frame("idea.board", payload={"rooms": None}))
+        b19d = await recv_or_none(fb, lambda x: x.get("type") == "idea.board")
+        ok_default19 = (b19d is not None
+                       and b19d.get("payload", {}).get("board", []) == full19)
+
+        # legacy no-disclaimer store: graceful sec.reject, no crash
+        legacy_dir = tempfile.mkdtemp(prefix="lobby-idealegacy-")
+        legacy_store = EventStore(os.path.join(legacy_dir, "legacy.db"))
+        legacy_gate = _SecGate.from_config(cfg)
+        legacy_lobby = lobby_server.Lobby(cfg, legacy_gate, legacy_store)
+
+        class _FakeWS:
+            def __init__(self):
+                self.frames = []
+
+            async def send(self, data):
+                self.frames.append(json.loads(data))
+
+        legacy_client = lobby_server.Client(_FakeWS(), legacy_lobby.rooms)
+        await legacy_lobby.handle_idea_board(legacy_client, None)
+        rej_frame = legacy_client.ws.frames[-1]
+        ok_legacy19 = (rej_frame.get("type") == "sec.reject"
+                       and rej_frame.get("payload", {}).get("code")
+                       == "E_STORE_NO_DISCLAIMER")
+        legacy_store.close()
+
+        record("AC-S19",
+               ok_restart and ok_fresh and ok_filter and ok_empty19
+               and ok_unknown and ok_bad19 and ok_default19 and ok_legacy19,
+               "restart-survival(board==manual=%s ideas>0=%s keys=%s "
+               "disclaimer-match=%s ai_generated=%s actor=%s); "
+               "fresh-reflection=%s (%d->%d); filter=%s empty=%s "
+               "unknown=%s bad-rejects=%s default-full=%s legacy-reject=%s"
+               % (board19 == manual19,
+                  sum(r["ideas"] for r in board19) > 0,
+                  sorted(p19.keys()),
+                  p19.get("disclaimer") == cfg["risk_warning"]["text"],
+                  ib_frame.get("ai_generated") is False,
+                  ib_frame.get("actor"),
+                  ok_fresh, coc1, coc2, ok_filter, ok_empty19, ok_unknown,
+                  bad19, ok_default19, ok_legacy19))
+    finally:
+        for ws in wire_clients:
+            try:
+                await ws.close()
+            except Exception:
+                pass
+        srv2.stop()
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -1500,6 +1777,10 @@ async def suite():
     # AC-S14/S15: room-level message read face (R1773) - unit store plus
     # this server's real db (server stopped; WAL read recovery on open).
     room_board_cases(srv.db)
+
+    # AC-S18/S19: event-derived idea pool read face + idea.board wire
+    # face with restart-survival proof (fresh process on the same db).
+    await idea_board_cases(srv.db)
 
     await city_cases()
 
