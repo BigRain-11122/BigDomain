@@ -71,28 +71,62 @@ try {
 } catch { Write-Output '[LEDGER] FLAG read_failed' }
 
 # --- [DEC] group decisions.md (content-addressed D-/C- token set diff vs state baseline; D-20260930-18/19: pure row-count is drift-prone and forbidden) ---
+# Row-owner token law (R1794 false-positive fix, delivered R1795): a decision row's own ID is
+# the FIRST D-/C- token on a table row ('|'-prefixed) line. Tokens cited inside a row body,
+# or on non-table lines, are references - never new rows. A referenced token missing from
+# the baseline is an INFO note (historical recording gap), NOT a FLAG; only a row-owner
+# token missing from the baseline is a new decision row to judge.
 try {
   $gt = Get-GroupFile 'docs/decisions.md'
   $draw = $gt.raw
   $D = @(($draw.TrimEnd("`r", "`n")) -split "\r?\n")
   $tok = @([regex]::Matches($draw, '(?:D|C)-\d{8}-\d{2}') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+  $decTokRe = '(?:D|C)-\d{8}-\d{2}'
+  $ownerRaw = @()
+  $refRaw = @()
+  $ownerRow = @{}
+  for ($i = 0; $i -lt $D.Count; $i++) {
+    $ln = [string]$D[$i]
+    $ms = @([regex]::Matches($ln, $decTokRe))
+    if ($ms.Count -eq 0) { continue }
+    if ($ln -match '^\s*\|') {
+      $own = $ms[0].Value
+      $ownerRaw += $own
+      if (-not $ownerRow.ContainsKey($own)) { $ownerRow[$own] = $ln }
+      if ($ms.Count -gt 1) { $refRaw += @($ms | Select-Object -Skip 1 | ForEach-Object { $_.Value }) }
+    } else {
+      $refRaw += @($ms | ForEach-Object { $_.Value })
+    }
+  }
+  $ownerTok = @($ownerRaw | Sort-Object -Unique)
+  $refTok = @($refRaw | Sort-Object -Unique)
   $baseStr = ''
   if ($st -ne $null) { $baseStr = [string]$st.last_dec_tokens }
   if ($baseStr -eq '') {
-    Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) baseline_missing (init state.json last_dec_tokens from full token set, then only diff)"
+    Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) row_owner_tokens=$($ownerTok.Count) baseline_missing (init state.json last_dec_tokens from full token set, then only diff)"
   } else {
     $baseTok = @($baseStr -split ',' | Where-Object { $_ })
-    $newTok = @($tok | Where-Object { $baseTok -notcontains $_ })
+    $newTok = @($ownerTok | Where-Object { $baseTok -notcontains $_ })
+    $refMissing = @($refTok | Where-Object { $baseTok -notcontains $_ -and $ownerTok -notcontains $_ })
     if ($newTok.Count -gt 0) {
-      Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) new_tokens=$($newTok.Count) (content-addressed; row baseline=$($st.last_decision_rows) secondary)"
+      Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) row_owner_tokens=$($ownerTok.Count) new_tokens=$($newTok.Count) (content-addressed row-owner; row baseline=$($st.last_decision_rows) secondary)"
       foreach ($n in $newTok) {
-        $hit = @($D | Select-String -SimpleMatch $n) | Select-Object -First 1
         $t = ''
-        if ($hit) { $t = [string]$hit.Line; if ($t.Length -gt 300) { $t = $t.Substring(0, 300) + '...' } }
+        if ($ownerRow.ContainsKey($n)) { $t = [string]$ownerRow[$n] }
+        else {
+          $hit = @($D | Select-String -SimpleMatch $n) | Select-Object -First 1
+          if ($hit) { $t = [string]$hit.Line }
+        }
+        if ($t.Length -gt 300) { $t = $t.Substring(0, 300) + '...' }
         Write-Output "  dec_new_tok $n : $t"
       }
     } else {
-      Write-Output "[DEC] PASS rows=$($D.Count) known_tokens=$($tok.Count) (content-addressed; row baseline=$($st.last_decision_rows) secondary)"
+      Write-Output "[DEC] PASS rows=$($D.Count) known_tokens=$($tok.Count) row_owner_tokens=$($ownerTok.Count) (content-addressed row-owner; row baseline=$($st.last_decision_rows) secondary)"
+    }
+    if ($refMissing.Count -gt 0) {
+      foreach ($n in $refMissing) {
+        Write-Output "  dec_ref_missing_base $n (inline reference token absent from baseline; not a new row)"
+      }
     }
   }
 } catch { Write-Output '[DEC] FLAG read_failed' }
@@ -256,8 +290,11 @@ if (Test-Path $lockPath) {
 # FALLBACK (script failed -> run these manually, same metrics):
 #   group reads (D-20261001-03 canon) = git -C <group> fetch origin; git -C <group> show origin/main:<path>
 #     $L = git show origin/main:cph4/evolution-ledger.md (split lines)
-#   -> DEC fallback = extract (?:D|C)-\d{8}-\d{2} token set from full text, diff vs state.json last_dec_tokens
-#      (content-addressed per D-20260930-19(1); pure row-count forbidden per D-20260930-18; report each new token's row)
+#   -> DEC fallback = row-owner tokens only: FIRST (?:D|C)-\d{8}-\d{2} token per '|'-prefixed
+#      table row line (inline referenced tokens are INFO-only, never new rows - R1794
+#      false-positive law, delivered R1795); diff vs state.json last_dec_tokens
+#      (content-addressed per D-20260930-19(1); pure row-count forbidden per D-20260930-18;
+#      report each new owner token's own row)
 #   -> GORD fallback = full-file digest (SHA-256 over whole text, first 16 hex chars) + line/table-row/@BigDomain counts; any change anywhere flips the digest (D-20260927-05(2)).
 #      NOTE: digest is over the origin/main blob text as served by git show (LF-normalized, BOM-stripped) - one-time rebase vs the pre-D-03 worktree-read baseline is expected at the mode switch.
 #      report counts; compare with state.json baselines; git status --short;

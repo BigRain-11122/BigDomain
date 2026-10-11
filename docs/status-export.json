@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T12:43:25+08:00",
+  "export_ts": "2026-10-11T13:04:42+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1794 一句话：fold R492 大窗裁定（87726B→45994B·含旧滚窗行并折·102 token 零丢失）+ugc ingest 水位差分接线交付（AC-IW1..IW6 全过 SUITE 6/6——ingest_lobby 窗前后双活快照+last_water_delta 读面·RUNNER PASS 88/88 controls 7/7·矩阵 88/851 双过·指纹哨兵 CLEAN·卫兵契约面跟随 R1732 先例翻绿·证据 qa/ugc-waterwire-R1794.log 五节）。",
-    "latest_artifact": "本轮实物：ugc ingest 窗口水位差分接线（src/sandbox/ugc/pipeline.py additive 三处+test_ingest_waterwire.py 新套件 6 判据+reconcile_all SUITES 88 行接线〔87→88·845→851〕）+fold R492 滚窗整编（state.json 87726B→45994B）+qa 证据两件（reconcile-all-R1794/ugc-waterwire-R1794）+矩阵文档再生（docs/sandbox-suite-matrix.md 88 套件 851 判据 green 88/88）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头滚动（apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/scan DEC 面行属主判读修复——判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）+fold R493=再越线时轮首首测裁定（收账后水位 48831B 余量 29669B）——窗 ≤48h（2026-10-13 前）。"
+    "current": "R1795 一句话：scan [DEC] 面行属主判读修复交付（AC-DO1..DO4+AC-SC15/SC16 预注册先于代码——表行行首 token=属主·行内引用 token=INFO 免假阳·归属显示改属主行映射·harness 31 checks ALL PASS exit 0 零回归〔SC1..SC14 全保〕+live 复跑 [DEC] PASS row_owner_tokens=115+源件/装件 sha 同一=qa/scan-dec-owner-R1795.log 三节）。",
+    "latest_artifact": "本轮实物：scan_five_still.ps1 [DEC] 面行属主判读（R1794 轮首假阳机制根治·verdict 唯一属主集驱动+dec_ref_missing_base INFO 行+dec_new_tok 属主行归属修复）+harness test_scan_faces.ps1 AC-SC15/SC16 两例（R1794 形态夹具复现+真新属主行检出例）+源件/装件双同步+证据 qa/scan-dec-owner-R1795.log（三节）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头滚动（apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数/ugc submit_batch 水位差分回执——判据预注册先于代码照走）+每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）+fold R493=再越线时轮首首测裁定（收账后水位 ~51.3KB 余量 ~27.2KB）——窗 ≤48h（2026-10-13 前）。"
   },
   "depts": [
     {
@@ -186,6 +186,10 @@
     ]
   ],
   "results": [
+    [
+      "1",
+      "scan_five_still DEC 面行属主 token 判读修复件（R1795·P2 tech 队头〔R1794 补种〕·轮计分 1=台账维护机制件〔scan 判读面·R763/R1705 同型〕：AC-DO1..DO4+AC-SC15/SC16 预注册先于代码〔tech.md R1795 认领行〕——scan_five_still.ps1 [DEC] 面新 token 集合改行属主判读〔表行行首 token=属主·行内余 token+非表行 token=引用集·known_tokens=140 全集计数保留+row_owner_tokens=115 新读数入 PASS/FLAG 行·verdict 唯一由属主集驱动·引用缺基线=dec_ref_missing_base INFO 行非 FLAG〔PASS/FLAG 两态随显〕·dec_new_tok 详情行改属主行映射归属修复〕+fallback 注释块同步改写+harness test_scan_faces.ps1 增 AC-SC15/SC16 两例〔R1794 形态夹具复现=已判行内引旧 token 缺基线→PASS row_owner_tokens=1+INFO 点名+零 dec_new_tok 行·真新属主行→FLAG new_tokens=1+详情=属主自身行文+子进程 exit 0〕全量复跑 31 checks ALL PASS exit 0 零回归〔SC1..SC14 全保〕+源件 tools/skills+装件 .codely-cli/skills sha256 同一+live 复跑 [DEC] PASS row_owner_tokens=115〔基线持平·零 ref_missing〕=qa/scan-dec-owner-R1795.log 三节〔harness+live+sha〕·GORD +4 行全他司面知悉·基线 last_gord_tbl_rows 257→261·queue_tech_open 10→9 补种 1→10〔ugc submit_batch 水位差分回执接线〕·R1795"
+    ],
     [
       "2",
       "ugc ingest 窗口水位差分接线+fold R492 大窗裁定双件轮（R1794·P2 tech 队头〔R1788 补种〕+R1793 延后 fold 承传兑现·AC-IW1..IW6 预注册先于代码〔tech.md R1794 认领行〕：pipeline.py additive 三处〔store 构造单行传 disclaimer 解锁水位面+ingest_lobby 窗前后双活快照〔窗前 pool_water_levels 纯读首句·窗后 pool_water_delta(prev)=R1785 单一派生源〕+last_water_delta() 读面 None 诚实空态〕+套件 test_ingest_waterwire.py SUITE PASS 6/6 首跑绿〔双径差分逐位等+水位-回执对齐 noise.total/emoji_only/suspended 各 +1·L1 拒零水位零门调+L1-only 窗 gate-calls=0+五表稳态纯读〕+reconcile_all SUITES 87→88 判据 845→851+RUNNER PASS 88/88 controls 7/7 202.8s 零回归=qa/reconcile-all-R1794.log〔首跑两红=R1777/R1785 套件 pipeline 零字节卫兵被授权接线合法触碰〔R1788 种子显式留窗=正主后继窗〕→R1732 契约面跟随先例：AC-NP6/AC-DW6 卫兵翻 store 委派律〔face-free+委派字面·防第二聚合引擎本意保全〕→二跑双绿·首跑 FAIL 证据保全〕+矩阵再生 88/851 green --check byte-identical 双跑〔9338B〕+指纹哨兵 CLEAN domains=5·证据 qa/ugc-waterwire-R1794.log 五节；fold R492=轮首首测 87726B 越线 9226B→中段窗 4:11〔含旧滚窗行并折=R302 压窗巨行 31547B〕8 行 43126B 压 1 滚窗行·catalog 102 token 全嵌零丢失·execute post==predicted 45994B〔margin +32506B〕·archive verbatim+preop 备份；DEC scan FLAG 陈旧面如实注〔D-20260930-04=行内引用 token 误报·本体 R1793 已判=同号重现非新行·判毕入基线集〕+GORD 表 263→257 删行如实显·queue_tech_open 10→9 补种 1→10〔scan DEC 面行属主判读修复种子〕·R1794）"
@@ -384,7 +388,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1794",
+      "1795",
       "OSLoop 执行 tick"
     ],
     [
@@ -3275,15 +3279,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 25,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1792 lobby idea pool 事件派生读面交付（AC-S18/S19 all-pass SUITE 22/22: idea_pool_board pure-read derivation over idea.submit rows + idea.board wire face with rooms filter + fresh-process restart-survival proof; RUNNER 86/86 controls 7/7 144.1s zero-regression; matrix 86/838 --check x2; fingerprint CLEAN; spec v0.7; evidence qa/lobby-ideaboard-R1792.log + qa/reconcile-all-R1792.log; state tick 1792; tech queue reseed 1)"
+    "method": "R1795 scan DEC row-owner law delivered (AC-DO1..DO4 + harness AC-SC15/SC16 all-pass 31 checks: row-head token = owner, in-row references INFO-only, dec_new_tok owner-row attribution; live [DEC] PASS row_owner_tokens=115; source+installed sha same; evidence qa/scan-dec-owner-R1795.log; state tick 1795; tech queue reseed 1)"
   }
 }

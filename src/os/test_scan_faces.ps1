@@ -10,6 +10,9 @@
 #          + mechanical new-row count vs state.last_gord_tbl_rows; R709
 #          evidence: a 3-row batch hid two rows behind a single-last-row
 #          display and needed a manual tail re-read).
+#   [DEC]  group decisions.md row-owner token face (R1794 false-positive law,
+#          delivered R1795): a row's own ID is the FIRST D-/C- token on a
+#          '|'-prefixed line; inline references are INFO-only, never new rows.
 # Other faces get minimal fixtures so the real scan script runs end to end;
 # they are deliberately NOT asserted (scope control).
 #
@@ -48,6 +51,14 @@
 #           E_STATE_LAYOUT refusal - R1705 AC-EO5).
 #   AC-SC14 healthy CRLF state -> "[STATE] PASS ... eol_ok=1" (CRLF
 #           conservation gate positive face).
+#   AC-SC15 DEC row-owner law: a judged row citing an old gap token in its
+#           body (reference, not a new row) -> "[DEC] PASS ... row_owner_tokens=1"
+#           + dec_ref_missing_base INFO note; NO dec_new_tok line (R1794
+#           false-FLAG face does not reproduce).
+#   AC-SC16 a genuine new owner row (first token on a '|'-prefixed line
+#           absent from the baseline) -> "[DEC] FLAG ... new_tokens=1" and the
+#           dec_new_tok detail names the owner's OWN row (attribution fix);
+#           scan child exits 0.
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -268,6 +279,34 @@ try {
     Assert ($r.text -match 'gord_new_rows=2(?!\d)') 'AC-SC12' 'new-row count = tbl_rows - baseline (4-2=2)'
     Assert ($r.code -eq 0) 'AC-SC12' 'scan child exits 0 with GORD baseline math active'
 
+    # --- [DEC] row-owner face (R1794 false-positive law, delivered R1795) ---
+    # AC-SC15: a judged row citing an old gap token in its body is a
+    # reference, not a new row -> PASS + INFO note, no false FLAG.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') ('{"tick":9,"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '","last_dec_tokens":"D-20261011-06","log":["a","b"]}') $false
+    Write-Group 'docs\decisions.md' @(
+        '| 2026-10-11 | D-20261011-06 judged decision row (body cites D-20260930-04 gap token) | detail |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[DEC\] PASS rows=\d+ known_tokens=2 row_owner_tokens=1 \(content-addressed row-owner; row baseline=1 secondary\)') 'AC-SC15' 'referenced gap token -> DEC PASS with row_owner_tokens (no false FLAG)'
+    Assert ($r.text -match 'dec_ref_missing_base D-20260930-04 \(inline reference token absent from baseline; not a new row\)') 'AC-SC15' 'ref-missing INFO note names the gap token'
+    Assert ($r.text -notmatch 'dec_new_tok') 'AC-SC15' 'no dec_new_tok line for a referenced-only token'
+
+    # AC-SC16: a genuine new owner row still FLAGs, and the detail line names
+    # the owner's own row (not a row that merely references it).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') ('{"tick":9,"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '","last_dec_tokens":"D-20261011-06","log":["a","b"]}') $false
+    Write-Group 'docs\decisions.md' @(
+        '| 2026-10-11 | D-20261011-06 judged row (body cites D-20260930-04 gap token) | detail |',
+        '| 2026-10-11 | D-20261011-07 brand new owner decision row | detail |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[DEC\] FLAG rows=\d+ known_tokens=3 row_owner_tokens=2 new_tokens=1') 'AC-SC16' 'new owner token -> FLAG with new_tokens=1 (detection semantics preserved)'
+    Assert ($r.text -match 'dec_new_tok D-20261011-07 : .*brand new owner decision row') 'AC-SC16' 'detail line names the owner row itself (attribution fix)'
+    Assert ($r.code -eq 0) 'AC-SC16' 'scan child exits 0 with DEC row-owner face active'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -286,6 +325,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC14, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC16, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

@@ -1,0 +1,59 @@
+--- section 1: harness test_scan_faces.ps1 (AC-SC1..SC16) ---
+PASS AC-SC1 (bottom-appended new row flagged with last/baseline tokens)
+PASS AC-SC1 (ord_last detail line names the bottom row)
+PASS AC-SC2 (matching last-row token -> ORD PASS)
+PASS AC-SC3 (broken state -> STATE FLAG back-off signal)
+PASS AC-SC3 (ORD degrades to INFO when state unavailable)
+PASS AC-SC3 (scan child exits 0 on degraded state (no crash))
+PASS AC-SC13 (bare-LF state -> eol_bare_lf=2 FLAG with repair hint)
+PASS AC-SC13 (scan child exits 0 on eol FLAG (no crash))
+PASS AC-SC14 (healthy CRLF state -> eol_ok=1 on STATE PASS)
+PASS AC-SC4 (index.lock -> TREE FLAG back-off)
+PASS AC-SC5 (clean tree -> TREE PASS)
+PASS AC-SC6 (dirty tree -> TREE FLAG with count)
+PASS AC-SC6 (git detail line lists the dirty entry)
+PASS AC-SC7 (ahead-1 divergence detected)
+PASS AC-SC7 (not-a-local-other-writer note present)
+PASS AC-SC8 (today evidence + today benchmarks -> QA PASS)
+PASS AC-SC9 (missing evidence + stale benchmarks -> QA FLAG)
+PASS AC-SC9 (charter due note present)
+PASS AC-SC11 (last3 block shows the newest batch row)
+PASS AC-SC11 (last3 block shows both older batch rows (R709 blind-spot face))
+PASS AC-SC11 (no baseline field -> baseline_missing (INFO, no crash))
+PASS AC-SC12 (new-row count = tbl_rows - baseline (4-2=2))
+PASS AC-SC12 (scan child exits 0 with GORD baseline math active)
+PASS AC-SC15 (referenced gap token -> DEC PASS with row_owner_tokens (no false FLAG))
+PASS AC-SC15 (ref-missing INFO note names the gap token)
+PASS AC-SC15 (no dec_new_tok line for a referenced-only token)
+PASS AC-SC16 (new owner token -> FLAG with new_tokens=1 (detection semantics preserved))
+PASS AC-SC16 (detail line names the owner row itself (attribution fix))
+PASS AC-SC16 (scan child exits 0 with DEC row-owner face active)
+PASS AC-SC10 (sandbox scan copy byte-identical to real script (sha256 match))
+PASS AC-SC10 (harness pure ASCII (non-ascii bytes=0))
+ALL CRITERIA PASS (AC-SC1..SC16, 31 checks)
+
+--- section 2: live scan_five_still.ps1 rerun (row-owner DEC face on real baseline) ---
+[STATE] PASS tick=1794 last_order=2026-09-28 22:1x last_decision_rows=279 benchmarks_refreshed=2026-10-11 log_lines=26 state_bytes=48831 eol_ok=1
+[LEDGER] PASS lines=143 atbd_rows=0 conflict=0 lastp=P-2026-10-09-01,P-2026-10-08-01,P-2026-10-10-01
+[DEC] PASS rows=279 known_tokens=140 row_owner_tokens=115 (content-addressed row-owner; row baseline=279 secondary)
+[GORD] INFO lines=400 tbl_rows=262 atbd=7 sha16=DD81EE04C5CC3E5D gord_new_rows=5
+  gord_tbl_last3[-3]: | 10-11 12:5x | 「MV全机队开工成品版本，不要制作30秒的了！要给我弄完整版！能直接发布的！」（**mv0001 全机队完整版冲刺令·最高优先**·@BigStream 全机队·正典=CEO-FEEDBACK-fullmv-fix-20261011.md §六） | **三条**：①30 秒线终止（v4.4/v4.5 封存为样片终版）·全部产能转全曲完整版 ②全机队开工（bm-a=...
+  gord_tbl_last3[-2]: | 10-11 13:0x | 「mv的所有剧本 分镜等找导演好好审好才行，导演你给我生成专业的台湾MV音乐MV导演skill，具备什么能力好好写，还有各种先进的github工具什么的，能用能找的都弄来」（**导演席审查硬门+tw-mv-director skill 立档令**·@BigStream） | **两件已落地**：①**导演席审查硬门生效**——一切 MV 剧本/分镜/成片必须过导演席...
+  gord_tbl_last3[-1]: | 10-11 13:2x | 「女主要每个MV都不一样，但要符合受众群的预期！」（**女主每曲独立选角律**·专辑级长期律·正典=mv-album-001-jay/CASTING-LAW.md） | **两法条**：①每曲独立选角——十曲十面孔·禁跨 MV 复用同一张脸（女主不设御用角）；②受众预期锚定——每张脸按该曲受众画像+原版年代脸型族记忆量身·锚亚洲国内大众情感主线。**执行**：女主选...
+  gord_last_line: | 10-11 13:2x | 「女主要每个MV都不一样，但要符合受众群的预期！」（**女主每曲独立选角律**·专辑级长期律·正典=mv-album-001-jay/CASTING-LAW.md） | **两法条**：①每曲独立选角——十曲十面孔·禁跨 MV 复用同一张脸（女主不设御用角）；②受众预期锚定——每张脸按该曲受众画像+原版年代脸型族记忆量身·锚亚洲国内大众情感主线。**执行**：女主选...
+[GROUPSRC] cph4/evolution-ledger.md=origin-main docs/decisions.md=origin-main docs/orders.md=origin-main | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only
+[ORD] PASS last=2026-09-28 22:1x baseline=2026-09-28 22:1x
+[BENCH] PASS days=1 refreshed=2026-10-11
+[QA] PASS today_png=1 today_log=1 bench_today=True
+[HB] PASS hb_tick=1794 state_tick=1794 lag=0
+[TASKS] INFO tasks_unchecked=2 backlog_open=4 blocked_on_ceo=1 claimable=3
+[EXPORT] PASS age_h=0.3 export_ts=2026-10-11T12:43:25+08:00
+[TREE] FLAG dirty=3
+  git:  M src/os/test_scan_faces.ps1
+  git:  M state/queue/tech.md
+  git:  M tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1
+
+--- section 3: source/installed double-sync sha256 ---
+sha_source=4ff607ede084194195ac91fd359306b2a30c660fca7307b3e950ecb11d1a817b
+sha_installed=4ff607ede084194195ac91fd359306b2a30c660fca7307b3e950ecb11d1a817b
+sync_sha_match=true
