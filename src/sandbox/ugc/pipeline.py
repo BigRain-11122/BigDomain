@@ -82,9 +82,10 @@ class UGCPipeline:
         # the pipeline's own store; legacy direct UGCStore() callers
         # stay untouched. _last_water carries the most recent
         # completed window's delta envelope - the ingest_lobby window
-        # (AC-IW1), the submit_batch batch window (AC-BW1) and the
-        # drain_recover recovery window (AC-DR1) share this single
-        # slot, last writer wins (None before any window).
+        # (AC-IW1), the submit_batch batch window (AC-BW1), the
+        # drain_recover recovery window (AC-DR1) and the submit window
+        # (AC-SU1) share this single slot, last writer wins (None
+        # before any window).
         self.store = UGC.UGCStore(db_path, disclaimer=self.disclaimer)
         self._last_water = None
         self.desk = ReviewDesk(self.store)
@@ -212,7 +213,21 @@ class UGCPipeline:
 
     def submit(self, source, actor, content, **client_hints):
         """Direct intake face. client_hints (producer/ai_generated) are
-        deliberately ignored: the server alone stamps provenance (AC-U7)."""
+        deliberately ignored: the server alone stamps provenance (AC-U7).
+
+        Submit water wiring (R1798, AC-SU1): two live snapshots around
+        the single-text window - the start snapshot is a pure read at
+        method entry (before the client-hint scrub and the source
+        validation; refused or raising calls leave no completed
+        window, the slot keeps its previous value), the end delta
+        derives through the store face pool_water_delta(prev) whose
+        current side is one live levels call (single derivation
+        source, R1785). The receipt shape is unchanged; the delta is
+        visible via last_water_delta() - one slot shared by the ingest
+        window (R1794), the batch window (R1796), the recovery window
+        (R1797) and this submit window: the last completed window
+        wins, a degraded (queued) receipt included (AC-SU4)."""
+        prev_water = self.store.pool_water_levels()  # submit-start live snapshot (AC-SU1)
         client_hints.pop("producer", None)
         client_hints.pop("ai_generated", None)
         self._validate_source(source)
@@ -220,7 +235,13 @@ class UGCPipeline:
             raise UGC.PipelineError(UGC.E_ENTRANCE_REQUIRED, str(actor))
         if source == "direct":
             self._check_rate(actor)
-        return self._process(source, actor, content)
+        out = self._process(source, actor, content)
+        # submit-end live delta (AC-SU1): current side re-derives live
+        # inside the store face; the single _last_water slot is shared
+        # by all four windows - the most recent completed window wins
+        # (AC-SU4 co-residency law)
+        self._last_water = self.store.pool_water_delta(prev_water)
+        return out
 
     def submit_batch(self, source, actor, texts):
         """Batch intake face (AC-PW4): per-text prefilter and rate faces,
@@ -468,13 +489,14 @@ class UGCPipeline:
         return receipts
 
     def last_water_delta(self):
-        """R1794/R1796/R1797 window water monitor read face
-        (AC-IW1/AC-BW1/AC-DR1): the most recent completed window's
-        pool-water delta envelope - an ingest_lobby window (R1794), a
-        submit_batch batch window (R1796) or a drain_recover recovery
-        window (R1797); one shared single slot, last writer wins
-        (AC-DR4). Passed through from the store face unwrapped; None
-        before any window ran (honest empty, no fabricated zeros)."""
+        """R1794/R1796/R1797/R1798 window water monitor read face
+        (AC-IW1/AC-BW1/AC-DR1/AC-SU1): the most recent completed
+        window's pool-water delta envelope - an ingest_lobby window
+        (R1794), a submit_batch batch window (R1796), a drain_recover
+        recovery window (R1797) or a submit single-text window
+        (R1798); one shared single slot, last writer wins (AC-SU4).
+        Passed through from the store face unwrapped; None before any
+        window ran (honest empty, no fabricated zeros)."""
         return self._last_water
 
     # ---- core pipeline -----------------------------------------------------

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-11T13:47:32+08:00",
+  "export_ts": "2026-10-11T14:04:50+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1797 一句话：ugc drain_recover 恢复流水位差分回执接线交付（AC-DR1..DR6 预注册先于代码——恢复窗前后双活快照+last_water_delta 三窗共居单值槽〔ingest R1794+batch R1796+恢复 R1797·last-writer-wins·空恢复窗照样覆写〕·套件 6/6 双跑绿·RUNNER 90/90 套件 863 判据零回归=qa/reconcile-all-R1797.log·矩阵 --check byte-identical·指纹哨兵 CLEAN·证据 qa/ugc-drainwater-R1797.log）。",
-    "latest_artifact": "本轮实物：pipeline.py drain_recover 恢复窗水位接线（首句纯读 prev 快照先于 face.drain+窗尾 pool_water_delta(prev) 单一派生源+三窗共居 docstring 更新）+套件 src/sandbox/ugc/test_drain_waterwire.py（6 判据·三窗共居单值律四步实测+幂等二跑+五表计数账）+reconcile_all ugc-drain-water 注册行 证据 qa/ugc-drainwater-R1797.log（六节）。（2026-10-11）",
-    "next_milestone": "下个实物：tech 队头滚动（ugc submit 单文本面水位接线〔R1797 补种队头〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~57.2KB 余量 ~21.3KB）——窗 ≤48h、2026-10-13 前。"
+    "current": "R1798 一句话：ugc submit 单文本面水位差分回执接线交付（AC-SU1..SU7 预注册先于代码——submit 窗前后双活快照+last_water_delta 四窗共居单值槽〔ingest R1794+batch R1796+drain R1797+submit R1798·last-writer-wins·拒/异常路径无完成窗槽保持前值·degraded receipt 亦完成窗照样覆写〕·套件 7/7〔首跑探针口径 bug 修后净跑〕·RUNNER 91/91 套件 870 判据零回归=qa/reconcile-all-R1798.log·矩阵 --check byte-identical·指纹哨兵 CLEAN·证据 qa/ugc-submitwater-R1798.log）。",
+    "latest_artifact": "本轮实物：pipeline.py submit() 水位接线（方法入口纯读 prev 快照先于 client_hints 清洗与 source 校验+成功径窗尾 pool_water_delta(prev) 单一派生源+四窗共居 docstring/构造注释/last_water_delta 读面注记同步）+套件 src/sandbox/ugc/test_submit_waterwire.py（7 判据·四窗共居 fwd/rev 双向 9 步+五拒路径槽保持+degraded 覆写+五表账本）+reconcile_all ugc-submit-water 注册行 证据 qa/ugc-submitwater-R1798.log（五节）。（2026-10-11）",
+    "next_milestone": "下个实物：tech 队头滚动（ugc review_verdict 审决水位接线〔R1798 补种队头·审决 pass/risky 可产 suspended−1+verdicted+1 水位胞变〕/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化/reconcile_all 子进程输出编码统一/freetrial 免费调用月窗计数——判据预注册先于代码照走）；每日对账常设行例行（qa/reconcile-daily-YYYYMMDD.log）；fold R493=再越线时轮首首测裁定（收账后水位 ~61.4KB 余量 ~17.1KB）——窗 ≤48h、2026-10-13 前。"
   },
   "depts": [
     {
@@ -388,7 +388,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1797",
+      "1798",
       "OSLoop 执行 tick"
     ],
     [
@@ -3282,20 +3282,24 @@
     [
       "2",
       "ugc drain_recover 恢复流水位差分回执接线件（R1797·AC-DR1..DR6 预注册先于代码：恢复窗前后双活快照+delta 经 last_water_delta 三窗共居单值槽〔ingest R1794+batch R1796+恢复 R1797·last-writer-wins·空恢复窗照样覆写〕+恢复回执九键零漂移+幂等二跑 skipped_existing+五表计数账；套件 test_drain_waterwire.py 6/6 双跑绿+RUNNER 90/90 套件 863 判据零回归+矩阵 --check byte-identical+指纹哨兵 CLEAN；证据 qa/ugc-drainwater-R1797.log）"
+    ],
+    [
+      "2",
+      "ugc submit 单文本面水位差分回执接线件（R1798·AC-SU1..SU7 预注册先于代码：submit 窗前后双活快照+delta 经 last_water_delta 四窗共居单值槽〔ingest R1794+batch R1796+drain R1797+submit R1798·last-writer-wins·拒/异常路径无完成窗槽保持前值·degraded receipt 亦完成窗照样覆写〕+receipt 形状零漂移+四态对齐〔gray→suspended/emoji→noise 双胞/clean→零/门词→抛穿槽保持〕+五拒路径槽保持+五表账本；套件 test_submit_waterwire.py 7/7〔首跑探针口径 bug 修后净跑〕+RUNNER 91/91 套件 870 判据零回归+矩阵 --check byte-identical+指纹哨兵 CLEAN；证据 qa/ugc-submitwater-R1798.log）"
     ]
   ],
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 29,
+    "log_lines_in_window": 31,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1797 ugc drain_recover recovery water-delta wiring delivered (AC-DR1..DR6 pre-registered before code: dual live snapshots around the recovery window + last_water_delta three-window co-residency single slot last-writer-wins; suite 6/6 double-run green; RUNNER 90/90 suites 863 criteria zero-regression; matrix --check byte-identical; sentinel CLEAN; evidence qa/ugc-drainwater-R1797.log; state tick 1797; tech queue reseed 1)"
+    "method": "R1798 ugc submit single-text water-delta wiring delivered (AC-SU1..SU7 pre-registered before code: dual live snapshots around the submit window + last_water_delta four-window co-residency single slot last-writer-wins, refused paths keep the slot, degraded receipt still overwrites; suite 7/7; RUNNER 91/91 suites 870 criteria zero-regression; matrix --check byte-identical; sentinel CLEAN; evidence qa/ugc-submitwater-R1798.log; state tick 1798; tech queue reseed 1)"
   }
 }

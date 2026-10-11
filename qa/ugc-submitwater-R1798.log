@@ -1,0 +1,73 @@
+qa/ugc-submitwater-R1798.log - R1798 submit single-text water-delta wiring
+seed: R1797 drain_recover water wiring in-book; claim row: state/queue/tech.md R1798
+criteria pre-registered BEFORE code: AC-SU1..SU7 (R1707 prefix-collision check: AC-SW taken R693/R838)
+
+=== section 1: suite rerun (test_submit_waterwire.py) ===
+PASS AC-SU1: pre-window None=True receipt-keys=8 envelope-keys=['disclaimer', 'persistent', 'pool_water_delta', 'total_delta'] clean-zero=True disclaimer=True
+PASS AC-SU2: emoji-window cells={"noise.by_reason.emoji_only": 1, "noise.total": 1} total=1 manual={"noise.by_reason.emoji_only": 1, "noise.total": 1}/1 gray-window cells={"review.suspended": 1} total=1 manual={"review.suspended": 1}/1 double-call-identical=True
+PASS AC-SU3: gray=susp:True emoji={"noise.by_reason.emoji_only": 1, "noise.total": 1} clean=zero:True pool-total-law=True reject-code=E_CONTENT_REJECTED slot-kept=True
+PASS AC-SU4: fwd submit:True ingest:True batch:True drain:True submit:True | rev drain:True batch:True ingest:True submit:True
+PASS AC-SU5: V=True codes=E_BAD_SOURCE,E_ENTRANCE_REQUIRED,E_RATE_LIMIT,E_BAD_FRAME,E_CONTENT_REJECTED slot-kept-after-rejects=True degraded-receipt=True degraded-overwrite-zero=True
+PASS AC-SU6: static-pure-read=True ledger={"gate_receipts": 0, "review_queue": 1, "ugc_events": 3, "ugc_ingest_log": 0, "ugc_items": 1}
+PASS AC-SU7: pure-ascii=True import-lines-clean=True frozen-bytes=True registry-wired=True
+SUITE PASS 7/7
+suite exit=0
+
+=== section 2: hygiene (targeted git status + frozen-trio diff) ===
+M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M src/sandbox/ugc/pipeline.py
+ M state/queue/tech.md
+?? src/sandbox/ugc/test_submit_waterwire.py
+diff --stat frozen trio (store.py/sec_batch.py/config.json):
+(empty = zero-byte, in-suite sha256 also verified AC-SU7)
+
+=== section 3: full RUNNER cross (qa/reconcile-all-R1798.log) ===
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cnny_mx_\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cnny_mx_\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cnny_mx_\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cnny_mx_\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cnny_mx_\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (91/91 suites green, reconcile controls 7/7, 167.6s)
+RUNNER PASS (91/91 suites green, reconcile controls 7/7, 167.6s)
+
+=== section 4: suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (9559 bytes) - registry suites=91 criteria=870 evidence=qa/reconcile-all-R1798.log green=91/91
+PASS hygiene: pure-ascii source, zero network imports
+regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9559 bytes, 91 suites, 870 criteria)
+check1 exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (9559 bytes, 91 suites, 870 criteria)
+check2 exit=0
+
+=== section 5: fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0
