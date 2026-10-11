@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-11T19:50:54+08:00",
+  "export_ts": "2026-10-11T20:03:29+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1818 一句话：water journal 行级 delta 字面三方对照+json() 往返守恒探针交付（AC-LC1..LC5 预注册先于代码·AC-LC 前缀全仓无主）——探针增 [15] 节（hygiene 顺移 [16]）：14 行逐行三径对照全绿（产品 dict×json_extract 逐键+json_quote 叶值字面×json(delta) 重解析·keys-checked=24·空 delta 行 1 行诚实面）+引擎规范化字面守恒〔json(delta)==json.dumps(delta, sort_keys=True, 紧凑分隔符) 14/14 逐字节同一〕+写径定点守恒〔raw 原文==json.dumps(json.loads(raw), sort_keys=True) 14/14=写读往返字面守恒〕·双跑 sha256 75a4b784a0842404…逐字节同一 exit 0/0·PROBE CONSISTENT+DETECTING·tick 1817→1818。轮首 DEC C-20261011-01 引用 token INFO 判毕基线 +1 收口（D-20261011-07 同案·本司未入派工面知悉）；HB lag=1 R1817 行回填补账。",
-    "latest_artifact": "最近实物：src/os/water_consistency_probe.py 行级 delta 字面守恒扩面（[15] 节三径对照+引擎规范化/写格式双字面律·零产品文件字节·测量面不入 SUITES）+证据 qa/water-deltaliteral-R1818.log（双跑 byte-identical sha256 75a4b784a0842404…·四节）·2026-10-11 19:5x。",
-    "next_milestone": "下个实物：tech 队头按序交付（water journal ts_utc 列引擎侧格式完整性探针窗［R1818 补种］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
+    "current": "R1819 一句话：water journal ts_utc 引擎侧格式完整性探针交付（AC-TZ1..TZ5 预注册先于代码·前提更正两枚在册=种子「26 字符」实测 27 字符定长〔strftime %f 六位微秒〕+AC-TI 撞名 AC-TIE 族→换 AC-TZ）——探针增 [16] 节（hygiene 顺移 [17]）：基线三查全绿（LENGTH<>27 违者 0+恒定形 [27]+GLOB 固定数字形违者 0+julianday NULL 0==14）+月窗谓词三面一致（SQL substr 月集==monthly_flow month 集==board 行前缀集==['2026-08','2026-10']）+双注入负路径（短日形 26 字符 GLOB 失配 jd NULL 三面全中+坏历法形 27 字符 GLOB 过 jd NULL 历法面独中=形/历面独立证·jd NULL==2 点名 [17,18]）+产品径纯前缀不过验诚实注（board(cur_w) 11→13+flow windows 11→13=前缀谓词零验证·前提执法面驻探针侧）+DELETE 恢复复绿（回 14 行三查 0/0/0+月集==基线+total 回 11）·双跑 sha256 491214e22bba268e…逐字节同一 exit 0/0·PROBE CONSISTENT+DETECTING·tick 1818→1819。轮首五静九面全 PASS/INFO 零新项；HB lag=0。",
+    "latest_artifact": "最近实物：src/os/water_consistency_probe.py ts_utc 引擎侧格式完整性扩面（[16] 节：27 字符定长/GLOB 数字形/julianday 可解析三查+月窗谓词三面一致+双注入坏 ts 负路径双径检出+DELETE 恢复复绿·零产品文件字节·测量面不入 SUITES）+证据 qa/water-tsintegrity-R1819.log（双跑 byte-identical sha256 491214e2…·三节）·2026-10-11 20:1x。",
+    "next_milestone": "下个实物：tech 队头按序交付（water journal ts_utc 字典序==时间序全序性探针窗［R1819 补种·定长格式面已执法后的排序键前提］/apidev lifecycle 事件链审计读面/eventtickets 审计榜月窗参数化读面/reconcile_all 子进程输出编码统一面/freetrial 免费调用月窗计数读面·判据预注册先于代码·按队列顺序逐轮交付）+daily 对账常设每日首轮+10-16 治理窗回访面（daily 剖面观察窗转正裁定按 AC-OW2 机械三支执行·R1780 预注册在册）·窗口 ≤48h→2026-10-13 前。"
   },
   "depts": [
     {
@@ -191,9 +191,17 @@
     [
       "2",
       "water journal 行级 delta 字面三方对照+json() 往返守恒探针件（R1818·AC-LC1..LC5 预注册先于代码：三径行级对照 14/14〔json_extract 逐键值等+json_type integer+json_quote 叶值字面==json.dumps(值)·json(delta) 重解析回 dict==行 delta·keys-checked=24·空 delta 行 1 行零键恒过〕+引擎规范化字面守恒〔json(delta)==json.dumps(delta, sort_keys=True, 紧凑分隔符) 14/14 逐字节同一〕+写径定点守恒〔raw==json.dumps(json.loads(raw), sort_keys=True) 14/14=写读往返字面守恒〕+纯读〔mode=ro·行数 14==14==14〕·双跑 stdout 逐字节同一 sha256 75a4b784a0842404… exit 0/0+[1]..[14] 零回归 PROBE CONSISTENT+DETECTING+frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-deltaliteral-R1818.log"
+    ],
+    [
+      "2",
+      "water journal ts_utc 引擎侧格式完整性探针件（R1819·AC-TZ1..TZ5 预注册先于代码·前提更正两枚在册=种子 26 字符→实测 27 字符定长+AC-TI 撞名→AC-TZ 全仓无主：基线三查全绿〔LENGTH<>27 违者 0+恒定形 [27]+GLOB 固定数字形违者 0+julianday NULL 0==14〕+月窗谓词三面一致〔SQL substr 月集==monthly_flow month 集==board 行前缀集==['2026-08','2026-10']〕+双注入负路径〔ts 无 CHECK=plain INSERT·月抽象 ts=cur_w 派生承 R1813：短日形 26 字符 GLOB 失配 jd NULL 三面全中+坏历法形 27 字符 GLOB 过 jd NULL 历法面独中 calendar-only=[18] 形/历面独立证·jd NULL==2 点名 [17,18]〕+产品径纯前缀不过验诚实注〔board(cur_w) 11→13+flow windows 11→13=前缀谓词零验证〕+DELETE 恢复复绿〔回 14 行三查 0/0/0+月集==基线+total 回 11〕·双跑 sha256 491214e2…逐字节同一 exit 0/0+PROBE CONSISTENT+DETECTING+[1]..[15] 零回归+[17] 卫生 frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-tsintegrity-R1819.log）"
     ]
   ],
   "results": [
+    [
+      "2",
+      "water journal ts_utc 引擎侧格式完整性探针件（R1819·AC-TZ1..TZ5 预注册先于代码·前提更正两枚在册=种子 26 字符→实测 27 字符定长+AC-TI 撞名→AC-TZ 全仓无主：基线三查全绿〔LENGTH<>27 违者 0+恒定形 [27]+GLOB 固定数字形违者 0+julianday NULL 0==14〕+月窗谓词三面一致〔SQL substr 月集==monthly_flow month 集==board 行前缀集==['2026-08','2026-10']〕+双注入负路径〔ts 无 CHECK=plain INSERT·月抽象 ts=cur_w 派生承 R1813：短日形 26 字符 GLOB 失配 jd NULL 三面全中+坏历法形 27 字符 GLOB 过 jd NULL 历法面独中 calendar-only=[18] 形/历面独立证·jd NULL==2 点名 [17,18]〕+产品径纯前缀不过验诚实注〔board(cur_w) 11→13+flow windows 11→13=前缀谓词零验证〕+DELETE 恢复复绿〔回 14 行三查 0/0/0+月集==基线+total 回 11〕·双跑 sha256 491214e2…逐字节同一 exit 0/0+PROBE CONSISTENT+DETECTING+[1]..[15] 零回归+[17] 卫生 frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-tsintegrity-R1819.log·R1819）"
+    ],
     [
       "2",
       "water journal 行级 delta 字面三方对照+json() 往返守恒探针件（R1818·AC-LC1..LC5 预注册先于代码：三径行级对照 14/14〔json_extract 逐键值等+json_type integer+json_quote 叶值字面==json.dumps(值)·json(delta) 重解析回 dict==行 delta·keys-checked=24·空 delta 行 1 行零键恒过〕+引擎规范化字面守恒〔json(delta)==json.dumps(delta, sort_keys=True, 紧凑分隔符) 14/14 逐字节同一〕+写径定点守恒〔raw==json.dumps(json.loads(raw), sort_keys=True) 14/14=写读往返字面守恒〕+纯读〔mode=ro·行数 14==14==14〕·双跑 stdout 逐字节同一 sha256 75a4b784a0842404… exit 0/0+[1]..[14] 零回归 PROBE CONSISTENT+DETECTING+frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-deltaliteral-R1818.log·R1818）"
@@ -456,7 +464,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1818",
+      "1819",
       "OSLoop 执行 tick"
     ],
     [
@@ -3363,15 +3371,15 @@
   "self_drive": {
     "window": "2026-10-05..2026-10-11",
     "window_days": 7,
-    "log_lines_in_window": 31,
+    "log_lines_in_window": 33,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 9,
-    "method": "R1818 water journal per-row delta literal three-way + json() round-trip probe delivered (score 2, P2 tech queue head [R1817 seed, newest-seed-is-head]; probe [15] section: per-row three-path cross (product dict x json_extract per-key with json_quote leaf literal x json(delta) re-parse), engine-canonical and write-format fixed-point literal laws 14/14, pure-read ro; double-run byte-identical sha256 75a4b784a0842404 exit 0/0; evidence qa/water-deltaliteral-R1818.log; queue_tech_open 10->9 reseed 1->10 ts_utc integrity window; DEC C-20261011-01 reference token judged baseline +1; HB R1817 row backfilled)"
+    "method": "R1819 water journal ts_utc engine-side format integrity probe delivered (score 2, P2 tech queue head [R1818 seed, newest-seed-is-head]; probe [16] section, hygiene shifted to [17]: baseline three faces green (LENGTH<>27 violators 0, fixed digit-shape GLOB violators 0, julianday NULL 0), month-predicate three-face consistency (SQL substr month set == monthly_flow month set == board row prefix set), two injected bad-ts negative paths (short-day 26-char caught by shape+calendar faces, bad-calendar 27-char caught by calendar face only = face independence), honest product passthrough note (pure-prefix month predicate validates nothing: board(cur_w) 11->13, flow windows 11->13), DELETE restore back to 14 rows green; premise corrections: seed 26 chars -> measured 27 fixed length (strftime %f six-digit microseconds, R1704 precedent), AC-TI prefix collided with AC-TIE family -> AC-TZ; double-run byte-identical sha256 491214e22bba268e exit 0/0; evidence qa/water-tsintegrity-R1819.log; queue_tech_open 10->9 reseed 1->10 ts_utc lexicographic==chronological order window)"
   }
 }

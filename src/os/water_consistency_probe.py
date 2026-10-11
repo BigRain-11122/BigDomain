@@ -267,6 +267,40 @@ Measurement face, R1727 precedent, not registered into SUITES.
 Zero product files touched.
 
 
+R1819 extension (ts_utc engine-side format integrity): the
+[14]/[15] sections pinned the delta column; this section pins
+the ts_utc column - the structural premise of the month-window
+predicate substr(ts_utc,1,7) and the ORDER BY ts_utc sort key.
+Premise correction, honest note: the seed text said a 26-char
+fixed form; the product record() rides strftime %f (always
+six-digit microseconds), so the real fixed length is 27 - the
+judgment runs on 27 throughout. Baseline face (clean 14-row
+world): LENGTH(ts_utc)=27 on every row (violator count 0, the
+distinct length set exactly {27}), the fixed digit-shape GLOB
+pattern matches every row, and julianday(ts_utc) parses every
+row (no NULLs). Month-predicate three-face consistency: the
+SQL DISTINCT substr(ts_utc,1,7) month set == the product
+monthly_flow() row month set == the board row ts_utc[:7]
+prefix set - the prefix-is-a-real-month-key law the window
+filter leans on. Two injected negative paths (ts_utc carries
+no CHECK constraint, kind rides inside the closed set - a
+plain INSERT, no PRAGMA posture needed; month-abstract ts
+derived from cur_w, the R1813 law): a short-day shape (26
+chars, GLOB miss, julianday NULL - caught by every face) and
+a bad-calendar shape (27 chars, GLOB passes, julianday NULL -
+the calendar face is its sole detector, so the shape faces and
+the calendar face stay independent). The honest product-side
+note: the pure-prefix month predicate validates nothing - both
+bad-ts rows still flow into the current-month window (board
+total 11->13, flow windows 11->13), so the format premise is
+enforced on this probe face, not in the product. DELETE
+restore: both rows removed by window_id, the board back to 14
+rows, all three faces green again, the month-set cross back to
+the baseline set, the product whole-board total back to the
+registered 11. Measurement face, R1727 precedent, not
+registered into SUITES. Zero product files touched.
+
+
 Usage: python water_consistency_probe.py
 Exit 0 = consistent world + drift detected; 2 = any unexpected
 mismatch (fail-closed).
@@ -1803,6 +1837,212 @@ def main():
         fail = fail or not (lc1_ok and lc2_ok and lc3_ok
                             and lc4_ok)
 
+        # ---- [16] ts_utc engine-side format integrity (R1819) ----
+        # The [14]/[15] sections pinned the delta column; this
+        # section pins the ts_utc column - the structural
+        # premise of the month-window predicate substr(ts_utc,
+        # 1,7) and the ORDER BY ts_utc sort key. Premise
+        # correction, honest note: the seed said 26 chars; the
+        # product record() rides strftime %f (always six-digit
+        # microseconds), so the fixed length is 27 - the
+        # judgment runs on 27 throughout (R1704 precedent).
+        TZ_LEN = 27
+        TZ_GLOB = ('[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+                   'T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]'
+                   '.[0-9][0-9][0-9][0-9][0-9][0-9]Z')
+
+        def tz_format_faces(ro):
+            rows = ro.execute(
+                "SELECT COUNT(*) FROM water_windows").fetchone()[0]
+            len_bad = ro.execute(
+                "SELECT COUNT(*) FROM water_windows"
+                " WHERE LENGTH(ts_utc) <> ?",
+                (TZ_LEN,)).fetchone()[0]
+            len_set = sorted({r[0] for r in ro.execute(
+                "SELECT DISTINCT LENGTH(ts_utc)"
+                " FROM water_windows")})
+            glob_bad = ro.execute(
+                "SELECT COUNT(*) FROM water_windows"
+                " WHERE ts_utc NOT GLOB ?",
+                (TZ_GLOB,)).fetchone()[0]
+            jd_null = ro.execute(
+                "SELECT COUNT(*) FROM water_windows"
+                " WHERE julianday(ts_utc) IS NULL").fetchone()[0]
+            jd_ok = ro.execute(
+                "SELECT COUNT(*) FROM water_windows"
+                " WHERE julianday(ts_utc) IS NOT NULL").fetchone()[0]
+            return (rows, len_bad, len_set, glob_bad,
+                    jd_null, jd_ok)
+
+        def tz_month_faces(ro):
+            sql_months = [r[0] for r in ro.execute(
+                "SELECT DISTINCT substr(ts_utc, 1, 7)"
+                " FROM water_windows ORDER BY 1")]
+            flow_months = [r["month"] for r in
+                           pipe.journal.monthly_flow()
+                           ["monthly_flow"]]
+            board_months = sorted({r["ts_utc"][:7] for r in
+                                   pipe.journal.journal_board()
+                                   ["journal_board"]})
+            return sql_months, flow_months, board_months
+
+        tz_ro = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        (tz_base_rows, tz_base_len_bad, tz_base_len_set,
+         tz_base_glob_bad, tz_base_jd_null,
+         tz_base_jd_ok) = tz_format_faces(tz_ro)
+        tz1_ok = (tz_base_rows == 14
+                  and tz_base_len_bad == 0
+                  and tz_base_len_set == [27]
+                  and tz_base_glob_bad == 0
+                  and tz_base_jd_null == 0
+                  and tz_base_jd_ok == 14)
+        (tz_sql_months, tz_flow_months,
+         tz_board_months) = tz_month_faces(tz_ro)
+        # month-abstract expected set: the fixture month is a
+        # hardcoded 2026-08 row face, the second member derives
+        # from the live flow month (the R1813 abstraction law)
+        tz_exp_months = sorted(set(["2026-08", cur_w]))
+        tz2_ok = (tz_sql_months == tz_flow_months
+                  == tz_board_months == tz_exp_months)
+        tz_ro.close()
+
+        # negative paths: the ts_utc column carries no CHECK
+        # constraint and the kind rides inside the closed set -
+        # a plain INSERT, no PRAGMA posture needed (honest
+        # note); the ts derives from cur_w so both rows ride the
+        # real flow month (the R1813 abstraction law)
+        tz_n_pre = pipe.journal.journal_board(
+            window=cur_w)["total"]
+        tz_conn = sqlite3.connect(journal_db)
+        tz_conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta,"
+            " ts_utc) VALUES (?, ?, ?, ?)",
+            ("submit", '{"noise.total":1}', 1,
+             cur_w + "-1T00:00:00.000000Z"))
+        tz_conn.execute(
+            "INSERT INTO water_windows (kind, delta, total_delta,"
+            " ts_utc) VALUES (?, ?, ?, ?)",
+            ("submit", '{"noise.total":1}', 1,
+             cur_w + "-99T99:99:99.999999Z"))
+        tz_conn.commit()
+        tz_conn.close()
+        tz_ro2 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        (tz_bad_rows, tz_bad_len_bad, tz_bad_len_set,
+         tz_bad_glob_bad, tz_bad_jd_null,
+         tz_bad_jd_ok) = tz_format_faces(tz_ro2)
+        tz_len_wids = [r[0] for r in tz_ro2.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE LENGTH(ts_utc) <> ? ORDER BY window_id",
+            (TZ_LEN,))]
+        tz_glob_wids = [r[0] for r in tz_ro2.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE ts_utc NOT GLOB ? ORDER BY window_id",
+            (TZ_GLOB,))]
+        tz_jd_wids = [r[0] for r in tz_ro2.execute(
+            "SELECT window_id FROM water_windows"
+            " WHERE julianday(ts_utc) IS NULL"
+            " ORDER BY window_id")]
+        tz_ro2.close()
+        # face independence: the bad-calendar row passes both
+        # shape faces (length + GLOB) - the calendar face is its
+        # sole detector
+        tz_shape_wids = set(tz_len_wids) | set(tz_glob_wids)
+        tz_b_only = [w for w in tz_jd_wids
+                     if w not in tz_shape_wids]
+        # product pure-prefix passthrough: the month predicate
+        # validates nothing - both bad-ts rows still flow into
+        # the current-month window (the premise-enforcement
+        # honest note; the enforcement face lives on this probe)
+        tz_n_post = pipe.journal.journal_board(
+            window=cur_w)["total"]
+        tz_flow_windows_post = pipe.journal.monthly_flow(
+            window=cur_w)["monthly_flow"][0]["windows"]
+        tz3_ok = (tz_bad_rows == 16
+                  and tz_bad_len_bad == 1
+                  and tz_bad_glob_bad == 1
+                  and tz_bad_jd_null == 2
+                  and tz_len_wids == tz_glob_wids
+                  and len(tz_b_only) == 1
+                  and tz_n_pre == 11
+                  and tz_n_post == 13
+                  and tz_flow_windows_post == 13)
+
+        # restore: both rows removed by window_id, every face
+        # back to green, the month-set cross back to the
+        # baseline set, the product total back to the
+        # registered whole-board value
+        tz_conn2 = sqlite3.connect(journal_db)
+        for wid in tz_jd_wids:
+            tz_conn2.execute(
+                "DELETE FROM water_windows WHERE window_id = ?",
+                (wid,))
+        tz_conn2.commit()
+        tz_conn2.close()
+        tz_ro3 = sqlite3.connect(
+            "file:" + journal_db.replace(os.sep, "/") + "?mode=ro",
+            uri=True)
+        (tz_rest_rows, tz_rest_len_bad, tz_rest_len_set,
+         tz_rest_glob_bad, tz_rest_jd_null,
+         tz_rest_jd_ok) = tz_format_faces(tz_ro3)
+        tz_rest_months = tz_month_faces(tz_ro3)
+        tz_ro3.close()
+        tz_rest_total = int(
+            pipe.journal.cell_totals()["total"])
+        tz4_ok = (tz_rest_rows == 14
+                  and tz_rest_len_bad == 0
+                  and tz_rest_len_set == [27]
+                  and tz_rest_glob_bad == 0
+                  and tz_rest_jd_null == 0
+                  and tz_rest_jd_ok == 14
+                  and tz_rest_months[0] == tz_rest_months[1]
+                  == tz_rest_months[2] == tz_exp_months
+                  and tz_rest_total == 11)
+
+        sections.append("[16] ts_utc engine-side format"
+                        " integrity:")
+        sections.append("    baseline: rows=%d len-bad=%d"
+                        " len-set=%s glob-bad=%d jd-null=%d"
+                        " jd-ok=%d %s"
+                        % (tz_base_rows, tz_base_len_bad,
+                           tz_base_len_set, tz_base_glob_bad,
+                           tz_base_jd_null, tz_base_jd_ok,
+                           "OK" if tz1_ok else "DRIFT"))
+        sections.append("    month-set three-face: sql=%s"
+                        " flow=%s board=%s %s"
+                        % (tz_sql_months, tz_flow_months,
+                           tz_board_months,
+                           "OK" if tz2_ok else "DRIFT"))
+        sections.append("    tampered: rows=%d len-bad=%d"
+                        " glob-bad=%d jd-null=%d len-wids=%s"
+                        " glob-wids=%s jd-wids=%s"
+                        " calendar-only=%s %s"
+                        % (tz_bad_rows, tz_bad_len_bad,
+                           tz_bad_glob_bad, tz_bad_jd_null,
+                           tz_len_wids, tz_glob_wids,
+                           tz_jd_wids, tz_b_only,
+                           "OK" if tz3_ok else "DRIFT"))
+        sections.append("    prefix-passthrough (product month"
+                        " predicate validates nothing):"
+                        " board(cur) %d->%d flow-windows=%d %s"
+                        % (tz_n_pre, tz_n_post,
+                           tz_flow_windows_post,
+                           "OK" if (tz_n_post == 13
+                                    and tz_flow_windows_post
+                                    == 13) else "DRIFT"))
+        sections.append("    restore: rows=%d len-bad=%d"
+                        " glob-bad=%d jd-null=%d months=%s"
+                        " product-total=%d %s"
+                        % (tz_rest_rows, tz_rest_len_bad,
+                           tz_rest_glob_bad, tz_rest_jd_null,
+                           tz_rest_months[0], tz_rest_total,
+                           "OK" if tz4_ok else "DRIFT"))
+        fail = fail or not (tz1_ok and tz2_ok and tz3_ok
+                            and tz4_ok)
+
         # ---- AC-JC5: hygiene -----------------------------------------
         with open(os.path.abspath(__file__), "rb") as handle:
             self_bytes = handle.read()
@@ -1818,7 +2058,7 @@ def main():
         frozen_after = {rel: sha16(os.path.join(UGCDIR, rel))
                         for rel in FROZEN}
         frozen_ok = frozen_before == frozen_after
-        sections.append("[16] hygiene: probe-ascii=%s import-lines-clean=%s "
+        sections.append("[17] hygiene: probe-ascii=%s import-lines-clean=%s "
                        "frozen=%s (%s)"
                        % (ascii_ok, net_ok, frozen_ok,
                           " ".join("%s:%s" % (rel, sha)
