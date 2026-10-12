@@ -728,6 +728,17 @@ SUITES = [
     # (AC-CUL1..CUL7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-caplimit",
      os.path.join("ledger", "test_freetrial_caplimit.py"), 7),
+    # R1854 cap_usage_board month-roll fidelity example: frozen
+    # clock +23d across the month boundary - new-month grants
+    # land in the new window, the old-month windowed read keeps
+    # its original row set (two windows never leak), the
+    # surviving grant keeps LIFETIME calls_used/remaining
+    # (count domain never sliced), the read cap rides along
+    # (window x cap orthogonal, total = the windowed grant
+    # count); zero product bytes - pin-only suite
+    # (AC-CRU1..CRU7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-caproll",
+     os.path.join("ledger", "test_freetrial_caproll.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

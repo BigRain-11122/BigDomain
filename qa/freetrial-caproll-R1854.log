@@ -1,0 +1,39 @@
+== R1854 freetrial cap_usage_board month-roll fidelity example - evidence log ==
+
+--- section 1: claim + first-run red note ---
+Criteria AC-CRU1..AC-CRU7 pre-registered in the state/queue/tech.md claim row BEFORE any suite code (honesty law; AC-CRU prefix repo-wide git grep zero-owner anchor 2026-10-12).
+First run: 6/7 - AC-CRU3 red = suite-side evidence bug (the November-window no-leak assertion bound pq instead of pa: the November window legitimately carries the roll-q row; the product was never at fault - an isolated probe showed the old-month snapshot byte-identical post-roll, MATCH). Fixed per the R1849 suite-side-first-red convention; criteria text unchanged (the registered intent was 'zero OCTOBER rows in the November window').
+
+--- section 2: suite run verbatim (post-fix) ---
+PASS AC-CRU1: October anchor: frozen-clock grant stamp 2026-10-15T10:00:00Z (record-time 2026-10 prefix); 2 calls -> used=2 remaining=1; explicit 2026-10 window read exactly 1 row with 9-key row shape and 4-key envelope; default all-window read total=1 same row set; pre-roll snapshot anchored
+PASS AC-CRU2: frozen clock +23d crossed the month boundary; 2 November grants stamped in 2026-11 (SQL prefix count 2); explicit 2026-11 window read exactly 2 rows in (dev,plan) ascending order [('usr:roll-a', 2), ('usr:roll-b', 3)], total 2, zero October rows; default all-window board carries 3 rows including the cross-month rows
+PASS AC-CRU3: post-roll (before any cross-month call) explicit 2026-10 window read is byte-identical to the pre-roll snapshot (grant row set and values preserved, zero November leakage); 2026-11 window read carries zero October rows - the two windows never leak into each other in either direction
+PASS AC-CRU4: cross-month call 2026-11-07T10:00:28Z on the surviving October grant passed the live gate (used 2 < cap 3); the 2026-10 windowed read still holds the surviving grant row with LIFETIME calls_used=3 and remaining=0 (the legal full-cap conversion-gate trigger state) - the count domain never slices by the window (R1842 verdict); the October row stays OUT of the 2026-11 window (the window slices the grant row set, not the counts); the November roll-q row still shows used=0; default read carries the same lifetime values
+PASS AC-CRU5: read cap x window orthogonal combination in the rolled world: (2026-11,1) envelope exact 7 keys, total=2 (the new-month grant-row count, not the all-window 3 - an honest truncated read), returned=1 truncated=True, rows == the new-month full read tail slice; (2026-11,5) full return truncated=False; (2026-10,1) single-row old-month cap read total=1 truncated=False - window filtering runs before the cap
+PASS AC-CRU6: after the roll: trial_grants=3 trial_calls=3 (2 October + 1 November call - immutable rows never lost); method source free of data-changing statements; four-table counts (3, 3, 3, 0) unchanged across board reads; double-call dumps byte-identical for default and both explicit windows (sorted and insertion order)
+PASS AC-CRU7: freetrial.py sha256 stable across the whole run (zero product bytes - pin-only suite); shipped config.json sha256 stable; face source pure ASCII with network-free import lines (5 imports); SUITES registration row present; criteria drift self-check 6+1==7
+SUITE PASS 7/7 exit=0
+
+--- section 3: double-run determinism ---
+run1 exit=0 run2 exit=0
+run1 sha256=dfb3ce8bdd8eb17733e413a2ad52b6376f04de815fc2bd327599b6de40bd0ebb
+run2 sha256=dfb3ce8bdd8eb17733e413a2ad52b6376f04de815fc2bd327599b6de40bd0ebb
+byte-identical=True
+
+--- section 4: regression + matrix + sentinel ---
+reconcile_all SUITES 113->114 criteria 1042->1049 (ledger-freetrial-caproll row, criteria 7)
+RUNNER PASS 114/114 suites green, reconcile controls 7/7, 182.5s = qa/reconcile-all-R1854.log
+suite line: PASS suite ledger-freetrial-caproll exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+matrix regen --evidence qa/reconcile-all-R1854.log (11590 bytes, 114 suites, 1049 criteria, green=114/114); --check byte-identical x2
+fingerprint sentinel: verdict CLEAN domains=5 (freetrial.py untouched - pin-only suite, zero product bytes)
+writer-census: see the census check output in the round log (new evidence files tee-dialect, zero flags)
+--- section 5: writer-census live-fire note (J-M18 again) ---
+The census probe caught the FIRST generation of this very file:
+raw byte capture of the child stdout kept Windows CRLF line
+endings (newline=None translation on child pipes), landing a
+mixed-EOL evidence file class=other -> DRIFT-FLAG at check
+time. Root-caused and fixed by switching the generator to
+text-mode capture with explicit encoding (the runner run_cmd
+universal-newlines approach) -> pure LF, class=tee,
+writer-census --check DRIFT-CLEAN flags=0. The completion-QC
+gate did its job before commit.
