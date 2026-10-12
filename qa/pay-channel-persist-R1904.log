@@ -1,0 +1,31 @@
+R1904 pay channel_status_matrix windowed-read cross-restart persistence example window - evidence log
+Suite: src/sandbox/pay/test_channel_persist.py
+Criteria: AC-CW8..AC-CW14 (pre-registered in state/queue/tech.md BEFORE code; honesty law)
+
+--- run 1 (exit=0) ---
+Criteria: AC-CW8..AC-CW14 (pre-registered in tech.md BEFORE code; honesty law)
+PASS AC-CW8: W=2026-10 fut=2027-10 dense=10 cells=(v-granted=1 v-created=1 s-granted=1 s-pending=1 s-closed=1) oct-total=5 def-total=5 cross=True future-empty=True
+PASS AC-CW9: oct-win-restore=True self-reread=True
+PASS AC-CW10: def-restore=True fut-restore=True def-keys=5 fut-keys=6
+PASS AC-CW11: nov-rows=2 def-total=7 nov-total=2 recalc=True restore-probe=True
+PASS AC-CW12: oct-frozen=True oct-count=5 nov-count=2 all=7
+PASS AC-CW13: pairwise=True oct-still-original=True
+PASS AC-CW14: counts-stable=True((7, 3, 3)) dml-hits=0 cfg-sha-stable=True orders-sha-stable=True ascii=True network-imports=0 wired=True prior=6
+SUITE PASS: 7/7
+
+--- run 2 (exit=0) ---
+Criteria: AC-CW8..AC-CW14 (pre-registered in tech.md BEFORE code; honesty law)
+PASS AC-CW8: W=2026-10 fut=2027-10 dense=10 cells=(v-granted=1 v-created=1 s-granted=1 s-pending=1 s-closed=1) oct-total=5 def-total=5 cross=True future-empty=True
+PASS AC-CW9: oct-win-restore=True self-reread=True
+PASS AC-CW10: def-restore=True fut-restore=True def-keys=5 fut-keys=6
+PASS AC-CW11: nov-rows=2 def-total=7 nov-total=2 recalc=True restore-probe=True
+PASS AC-CW12: oct-frozen=True oct-count=5 nov-count=2 all=7
+PASS AC-CW13: pairwise=True oct-still-original=True
+PASS AC-CW14: counts-stable=True((7, 3, 3)) dml-hits=0 cfg-sha-stable=True orders-sha-stable=True ascii=True network-imports=0 wired=True prior=6
+SUITE PASS: 7/7
+
+--- determinism ---
+double-run stdout byte-identical: True
+run1 sha256[:16]=c9875bd41b6beb26 run2 sha256[:16]=c9875bd41b6beb26
+stderr empty: run1=True run2=True
+evidence written single-writer utf-8 LF (tee dialect)

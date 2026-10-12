@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T07:24:17+08:00",
+ "export_ts": "2026-10-13T07:44:49+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech 队头交付（apidev usage_log 帽窗读跨重启持久化例窗：AC-UW9..UW15 全绿 SUITE 7/7+RUNNER 145/145 判据 1346+矩阵 --check byte-identical×2+census DRIFT-CLEAN〔关前四元快照跨三件套重启逐字节复原/重启后十一月 2 真调=缺省帽读重算零缓存+老窗全信封冻结/双实例序贯读逐字节同一〕）",
-  "latest_artifact": "src/sandbox/ledger/test_apidev_usagelogpersist.py + qa/apidev-usagelogpersist-R1903.log（2026-10-13）",
-  "next_milestone": "P2 队头续（pay channel_status_matrix 窗读跨重启例窗=R1898 补种+water journal journal_board 帽窗读跨重启例窗=R1900 补种+sec_batch rows_by_status/queue_counts 窗读跨重启例窗=R1901 补种+apidev key_view 窗读跨重启例窗=R1902 补种+apidev reject_tally 窗读跨重启例窗=R1903 补种）→ ≤48h（2026-10-15 前）"
+  "current": "P2 技术深耕线 FIFO 持续交付：pay channel_status_matrix 窗读跨重启持久化例窗本轮闭环（套件 146 入册·判据 1353 全绿）",
+  "latest_artifact": "src/sandbox/pay/test_channel_persist.py + qa/pay-channel-persist-R1904.log + qa/reconcile-all-R1904.log（RUNNER 146/146）·2026-10-13",
+  "next_milestone": "下轮 P2 队头 FIFO：water journal journal_board 帽窗读跨重启例窗（R1900 补种在册种子）交付·窗 ≤48h（2026-10-15 前）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1904",
+   "pay channel_status_matrix windowed-read cross-restart persistence 7/7 (criteria AC-CW8..AC-CW14; five-cell October world via the true product path, oct windowed/default/future snapshot quartet restored byte-identical across PayOrders close/reopen same db/config with the event store and ledger surviving as caller-owned dependencies, frozen-clock November two-channel create_order rows recompute the default read total 5->7 via the true product path (zero cache) while the October windowed read stays byte-frozen (pay_orders rows record-time immutable), third-instance four-read pairwise identity, pure-read battery three-table counts flat; suite-only round product bytes unchanged) + RUNNER 146/146 criteria 1346->1353 (pay-channel-persist 7, SUITES 145->146) + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
+  ],
   [
    "R1903",
    "apidev usage_log cap-window read cross-restart persistence 7/7 (criteria AC-UW9..AC-UW15; pre-close snapshot quartet restored byte-identical across the full three-piece stack close/reopen, injected 2 November calls on chain-b -- the very key the October capped read pins in its tail slice -- recompute the default capped and bare reads via the true product path (zero cache) while the October windowed reads stay FULL-envelope byte-frozen (record-time immutability + zero clock-following envelope fields = the claim ruling-3 stronger face, no projection needed), third-instance four-read pairwise identity, 11-form pure-read battery four-table counts flat; suite-only round product bytes unchanged) + RUNNER 145/145 criteria 1339->1346 (ledger-apidev-usagelogpersist 7, SUITES 144->145) + matrix byte-identical x2 + census DRIFT-CLEAN"
@@ -791,7 +795,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1903",
+   "1904",
    "OSLoop 执行 tick"
   ],
   [
@@ -3730,10 +3734,10 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 18,
+  "log_lines_in_window": 20,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 6,
+  "substantive_non_idle_mention_lines": 7,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

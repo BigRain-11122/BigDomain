@@ -447,6 +447,14 @@ SUITES = [
     # stay appended-and-counted inside the window, zero caching
     # (AC-CW1..CW7 pre-registered in state/queue/tech.md).
     ("pay-channel-window", os.path.join("pay", "test_channel_window.py"), 7),
+    # R1904 pay channel-status matrix cross-restart persistence example
+    # window (R1889..R1903 persist family, same law): face close -> new
+    # instance same db same config -> window/default reads byte-identical
+    # to pre-close snapshots, new November orders re-derive the default
+    # read (zero caching) while the old window stays frozen, third
+    # instance reads pairwise identical; suite-only round, zero product
+    # changes (AC-CW8..CW14 pre-registered in state/queue/tech.md).
+    ("pay-channel-persist", os.path.join("pay", "test_channel_persist.py"), 7),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,
