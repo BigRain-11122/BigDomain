@@ -1,7 +1,8 @@
 """Acceptance suite for the reminder banner board (tech.md claim line
-R1782; read-cap extension claim R1851).
+R1782; read-cap extension claim R1851; month-window filter claim
+R1856).
 
-Asserts the pre-registered criteria AC-BQ1..AC-BQ12 (registered in
+Asserts the pre-registered criteria AC-BQ1..AC-BQ17 (registered in
 state/queue/tech.md BEFORE this code; honesty law).
 
 Subject: ReminderFace.banner_board() - pure-read derived aggregation
@@ -13,7 +14,15 @@ R1851 read-cap extension adds the limit tail param (sentinel 0, bool
 excluded, None refused) with a four-key additive overflow block
 {limit, banner_board_total, returned, truncated} - the full-count key
 is banner_board_total because the pre-existing total key is pinned to
-the skipped-row count unit (AC-BQ1), a different aggregate.
+the skipped-row count unit (AC-BQ1), a different aggregate. The R1856
+month-window filter adds the window tail param (sentinel ONLY None):
+an explicit YYYY-MM window narrows the WORLD scope (record-time
+ts_utc month) - board rows, both dense grids, total and
+banner_board_total all follow the window (a data-scope filter, unlike
+the cap which only slices the returned list); one additive "window"
+key rides the explicit-window envelope; malformed windows fail closed
+E_REM_BAD_WINDOW (new code - this module owns an E_REM_* vocabulary)
+after the limit gate, before any read.
 
 Usage: python test_banner_board.py
 """
@@ -34,9 +43,29 @@ sys.path.insert(0, BASE)
 import reminder as RM                   # noqa: E402 (face under test)
 
 RESULTS = []
-EXPECTED = 12
+EXPECTED = 17
 TS = "2030-06-01T00:00:00Z"             # frozen clock for row stamps
+CUR_W = TS[:7]                          # "2030-06" record-time month
+HIST_W = "2029-08"                      # fixture month (R1730 family)
+FUT_W = "2030-12"                       # future window (honest empty)
 CFG_PATH = os.path.join(BASE, "config.json")
+
+
+def inject_fixture(db, rows):
+    """Historical-month journal rows land via a direct second
+    connection (fixture provenance, R1730 family precedent: the
+    product path stamps record-time at attempt(); only direct rows
+    reach a past month)."""
+    conn = sqlite3.connect(db)
+    try:
+        for row in rows:
+            conn.execute(
+                "INSERT INTO member_reminder_log (send_id,"
+                " census_avatar_id, template_id, reason, status,"
+                " period_key, ts_utc) VALUES (?,?,?,?,?,?,?)", row)
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def record(ac, ok, evidence):
@@ -295,11 +324,11 @@ def main():
     reg_path = os.path.join(os.path.dirname(BASE), "reconcile_all.py")
     reg_src = open(reg_path, encoding="utf-8").read()
     registered = ('"member-banner-board"' in reg_src
-                  and 'os.path.join("member", "test_banner_board.py"), 12'
+                  and 'os.path.join("member", "test_banner_board.py"), 17'
                   in reg_src)
     ok7 = registered
     record("AC-BQ7", ok7,
-           "suites-registry-row=%s criteria=12" % registered)
+           "suites-registry-row=%s criteria=17" % registered)
 
     # ---- AC-BQ8: read-cap contract + default fidelity ---------------
     face8, db8 = fresh_face(tmp, "bq8.db", load_cfg())
@@ -472,7 +501,7 @@ def main():
                  " member_subscribe_grants")[0][0])
     same12 = (json.dumps(r1, sort_keys=True)
               == json.dumps(r2, sort_keys=True))
-    delivered = ('os.path.join("member", "test_banner_board.py"), 12'
+    delivered = ('os.path.join("member", "test_banner_board.py"), 17'
                  in reg_src
                  and hasattr(RM, "E_REM_BAD_LIMIT")
                  and RM.E_REM_BAD_LIMIT == "E_REM_BAD_LIMIT")
@@ -481,6 +510,254 @@ def main():
            "counts-stable=%s double-call-identical=%s delivery=%s"
            % (before12 == after12, same12, delivered))
     face12.close()
+
+    # ---- AC-BQ13: window contract + default fidelity (R1856) -------
+    face13, db13 = fresh_face(tmp, "bq13.db", load_cfg())
+    face13.attempt("AV-B", "renewal_notice", "renewal_due",
+                   now=TS, period_key="PK-B")
+    plain13 = face13.banner_board()
+    zeroed13 = face13.banner_board(limit=0, window=None)
+    fid13 = (json.dumps(plain13, sort_keys=True)
+             == json.dumps(zeroed13, sort_keys=True))
+    seven13 = {"banner_board", "total", "by_status",
+               "by_reason", "ai_generated", "disclaimer",
+               "persistent"}
+    keys_ok13 = set(plain13) == seven13
+    wv13 = face13.banner_board(window=CUR_W)
+    wv13b = face13.banner_board(limit=0, window=CUR_W)
+    eight13 = set(wv13) == seven13 | {"window"}
+    echo13 = wv13.get("window") == CUR_W
+    same13 = (json.dumps(wv13, sort_keys=True)
+              == json.dumps(wv13b, sort_keys=True))
+    cap13 = face13.banner_board(limit=1, window=CUR_W)
+    twelve13 = set(cap13) == set(wv13) | {"limit",
+                                          "banner_board_total",
+                                          "returned", "truncated"}
+    ok13 = (fid13 and keys_ok13 and eight13 and echo13 and same13
+            and twelve13 and cap13["banner_board_total"] == 1)
+    record("AC-BQ13", ok13,
+           "default-fidelity=%s seven-keys=%s eight-keys=%s "
+           "twelve-keys=%s window-echo=%s"
+           % (fid13, keys_ok13, eight13, twelve13, echo13))
+    face13.close()
+
+    # ---- AC-BQ14: bad window params fail-closed (R1856) -------------
+    face14, db14 = fresh_face(tmp, "bq14.db", load_cfg())
+    face14.attempt("AV-B", "renewal_notice", "renewal_due",
+                   now=TS, period_key="PK-B")
+    before14 = (q(db14, "SELECT COUNT(*) FROM"
+                  " member_reminder_log")[0][0],
+                q(db14, "SELECT COUNT(*) FROM"
+                  " member_subscribe_grants")[0][0])
+    bads14 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+              "202610", "abcd", "", 2026, True, 2.5,
+              "2026-10\n", "2026-10 ", "2026-10\r")
+    rejects14 = []
+    for bad in bads14:
+        try:
+            face14.banner_board(window=bad)
+            rejects14.append((bad, "no-refusal"))
+        except ValueError as exc:
+            rejects14.append((bad, RM.E_REM_BAD_WINDOW in str(exc)))
+    after14 = (q(db14, "SELECT COUNT(*) FROM"
+                 " member_reminder_log")[0][0],
+               q(db14, "SELECT COUNT(*) FROM"
+                 " member_subscribe_grants")[0][0])
+    try:                                    # dual-bad: limit gate first
+        face14.banner_board(limit=-1, window="2026-99")
+        dual14 = "no-refusal"
+    except ValueError as exc:
+        dual14 = (RM.E_REM_BAD_LIMIT in str(exc)
+                  and RM.E_REM_BAD_WINDOW not in str(exc))
+    ok14 = (all(r[1] is True for r in rejects14)
+            and before14 == after14 and dual14 is True)
+    record("AC-BQ14", ok14,
+           "rejects=%d/%d counts-stable=%s dual-bad-limit-first=%s"
+           % (sum(1 for r in rejects14 if r[1] is True),
+              len(rejects14), before14 == after14, dual14))
+    face14.close()
+
+    # ---- AC-BQ15: window filter semantics (full-scope cut) ----------
+    face15, db15 = fresh_face(tmp, "bq15.db", load_cfg())
+    face15.attempt("AV-B", "renewal_notice", "renewal_due",
+                   now=TS, period_key="PK-B")
+    face15.attempt("AV-G", "renewal_notice", "renewal_due",
+                   now=TS, period_key="PK-G")
+    inject_fixture(db15, [
+        ("FIX-H1", "AV-H1", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_BUDGET, "PK-H1", HIST_W + "-15T00:00:00Z"),
+        ("FIX-H2", "AV-H2", "renewal_notice", "first_service",
+         RM.ST_SKIP_BUDGET, "PK-H2", HIST_W + "-20T00:00:00Z"),
+        ("FIX-H3", "AV-H1", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_CAP, "PK-H3", HIST_W + "-25T00:00:00Z"),
+    ])
+    h15 = face15.banner_board(window=HIST_W)
+    man_status15 = dict((r[0], r[1]) for r in q(
+        db15, "SELECT status, COUNT(*) FROM member_reminder_log"
+        " WHERE status LIKE 'skipped_%'"
+        " AND substr(ts_utc,1,7)=? GROUP BY status", (HIST_W,)))
+    man_reason15 = dict((r[0], r[1]) for r in q(
+        db15, "SELECT reason, COUNT(*) FROM member_reminder_log"
+        " WHERE status LIKE 'skipped_%'"
+        " AND substr(ts_utc,1,7)=? GROUP BY reason", (HIST_W,)))
+    man_total15 = q(db15, "SELECT COUNT(*) FROM"
+                    " member_reminder_log WHERE status LIKE 'skipped_%'"
+                    " AND substr(ts_utc,1,7)=?", (HIST_W,))[0][0]
+    man_rows15 = {}
+    for avatar, reason, n in q(
+            db15, "SELECT census_avatar_id, reason, COUNT(*)"
+            " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
+            " AND substr(ts_utc,1,7)=?"
+            " GROUP BY census_avatar_id, reason", (HIST_W,)):
+        cell = man_rows15.setdefault(avatar, {})
+        cell[reason] = n
+    board_ok15 = True
+    for row in h15["banner_board"]:
+        cell = man_rows15.get(row["census_avatar_id"], {})
+        if row["skipped"] != sum(cell.values()):
+            board_ok15 = False
+        for reason, n in cell.items():
+            if row["by_reason"].get(reason) != n:
+                board_ok15 = False
+    seq15 = [r["census_avatar_id"] for r in h15["banner_board"]]
+    cross15 = (h15["by_status"] == man_status15
+              and h15["by_reason"] == man_reason15
+              and h15["total"] == man_total15 == 3
+              and board_ok15 and seq15 == ["AV-H1", "AV-H2"])
+    full15 = face15.banner_board()
+    cur15 = face15.banner_board(window=CUR_W)
+    fut15 = face15.banner_board(window=FUT_W)
+    nonpen15 = (full15["total"] == 5
+                and [r["census_avatar_id"]
+                     for r in full15["banner_board"]]
+                == ["AV-B", "AV-G", "AV-H1", "AV-H2"]
+                and [r["census_avatar_id"]
+                     for r in cur15["banner_board"]] == ["AV-B", "AV-G"]
+                and cur15["total"] == 2)
+    fut_ok15 = (fut15["banner_board"] == [] and fut15["total"] == 0
+                and fut15["by_status"]
+                == {"skipped_no_budget": 0, "skipped_daily_cap": 0}
+                and fut15["by_reason"]
+                == {"first_service": 0, "renewal_due": 0}
+                and set(fut15) == {"banner_board", "total",
+                                   "by_status", "by_reason",
+                                   "ai_generated", "disclaimer",
+                                   "persistent", "window"})
+    ok15 = (cross15 and nonpen15 and fut_ok15)
+    record("AC-BQ15", ok15,
+           "cross=%s manual={status=%s reason=%s total=%d} "
+           "nonpenetration=%s future-empty=%s"
+           % (cross15, man_status15 == h15["by_status"],
+              man_reason15 == h15["by_reason"], man_total15,
+              nonpen15, fut_ok15))
+    face15.close()
+
+    # ---- AC-BQ16: window x cap orthogonal combination ---------------
+    face16, db16 = fresh_face(tmp, "bq16.db", load_cfg())
+    for av, keys in (("AV-A", ("PK-A",)),
+                     ("AV-B", ("PK-B1", "PK-B2")),
+                     ("AV-C", ("PK-C",)),
+                     ("AV-D", ("PK-D",))):
+        for pk in keys:
+            face16.attempt(av, "renewal_notice", "renewal_due",
+                           now=TS, period_key=pk)
+    inject_fixture(db16, [
+        ("FIX-X1", "AV-H1", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_BUDGET, "PK-X1", HIST_W + "-15T00:00:00Z"),
+        ("FIX-X2", "AV-H2", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_BUDGET, "PK-X2", HIST_W + "-16T00:00:00Z"),
+    ])
+    full16 = face16.banner_board()
+    cur_full16 = face16.banner_board(window=CUR_W)
+    wc16 = face16.banner_board(limit=2, window=CUR_W)
+    seq_full16 = [r["census_avatar_id"]
+                  for r in cur_full16["banner_board"]]
+    seq_wc16 = [r["census_avatar_id"] for r in wc16["banner_board"]]
+    mirror16 = [r[0] for r in q(
+        db16, "SELECT census_avatar_id FROM member_reminder_log"
+        " WHERE status LIKE 'skipped_%'"
+        " AND substr(ts_utc,1,7)=?"
+        " GROUP BY census_avatar_id"
+        " ORDER BY census_avatar_id DESC LIMIT 2", (CUR_W,))]
+    mirror16.reverse()
+    ok16 = (full16["total"] == 7
+            and wc16["banner_board_total"] == 4
+            and wc16["total"] == 5
+            and wc16["returned"] == 2 and wc16["truncated"] is True
+            and wc16["banner_board_total"] != wc16["total"]
+            and seq_wc16 == seq_full16[-2:] == ["AV-C", "AV-D"]
+            and seq_wc16 == mirror16
+            and wc16["by_status"] == cur_full16["by_status"]
+            and wc16["by_reason"] == cur_full16["by_reason"]
+            and wc16["total"] == cur_full16["total"]
+            and set(wc16) == {"banner_board", "total", "by_status",
+                              "by_reason", "ai_generated", "disclaimer",
+                              "persistent", "window", "limit",
+                              "banner_board_total", "returned",
+                              "truncated"})
+    record("AC-BQ16", ok16,
+           "window-scope={board_total=%d total=%d} returned=%d "
+           "truncated=%s mirror-match=%s aggregates-window-level=%s"
+           % (wc16["banner_board_total"], wc16["total"],
+              wc16["returned"], wc16["truncated"],
+              seq_wc16 == mirror16,
+              wc16["by_status"] == cur_full16["by_status"]))
+    face16.close()
+
+    # ---- AC-BQ17: pure-read, live derivation, determinism -----------
+    face17, db17 = fresh_face(tmp, "bq17.db", load_cfg())
+    face17.attempt("AV-B", "renewal_notice", "renewal_due",
+                   now=TS, period_key="PK-B")
+    inject_fixture(db17, [
+        ("FIX-Y1", "AV-H1", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_BUDGET, "PK-Y1", HIST_W + "-15T00:00:00Z"),
+    ])
+    before17 = (q(db17, "SELECT COUNT(*) FROM"
+                  " member_reminder_log")[0][0],
+                q(db17, "SELECT COUNT(*) FROM"
+                  " member_subscribe_grants")[0][0])
+    h_a17 = face17.banner_board(window=HIST_W)
+    h_b17 = face17.banner_board(window=HIST_W)
+    c_a17 = face17.banner_board(limit=1, window=CUR_W)
+    c_b17 = face17.banner_board(limit=1, window=CUR_W)
+    try:
+        face17.banner_board(window="2026-99")
+    except ValueError:
+        pass
+    after17 = (q(db17, "SELECT COUNT(*) FROM"
+                 " member_reminder_log")[0][0],
+               q(db17, "SELECT COUNT(*) FROM"
+                 " member_subscribe_grants")[0][0])
+    same_sort17 = (json.dumps(h_a17, sort_keys=True)
+                   == json.dumps(h_b17, sort_keys=True))
+    same_ins17 = json.dumps(h_a17) == json.dumps(h_b17)
+    same_cap17 = (json.dumps(c_a17, sort_keys=True)
+                  == json.dumps(c_b17, sort_keys=True))
+    # live derivation: a fresh historical fixture row lands; the
+    # windowed read follows (+1), the current window read is untouched
+    inject_fixture(db17, [
+        ("FIX-Y2", "AV-H2", "renewal_notice", "renewal_due",
+         RM.ST_SKIP_BUDGET, "PK-Y2", HIST_W + "-18T00:00:00Z"),
+    ])
+    h_after17 = face17.banner_board(window=HIST_W)
+    cur_after17 = face17.banner_board(window=CUR_W)
+    live17 = (h_after17["total"] == h_a17["total"] + 1
+              and len(h_after17["banner_board"])
+              == len(h_a17["banner_board"]) + 1
+              and cur_after17["total"] == 1)
+    delivered17 = ('os.path.join("member", "test_banner_board.py"), 17'
+                   in reg_src
+                   and hasattr(RM, "E_REM_BAD_WINDOW")
+                   and RM.E_REM_BAD_WINDOW == "E_REM_BAD_WINDOW"
+                   and hasattr(RM, "_WINDOW_RE"))
+    ok17 = (before17 == after17 and same_sort17 and same_ins17
+            and same_cap17 and live17 and delivered17)
+    record("AC-BQ17", ok17,
+           "counts-stable=%s determinism={sort=%s insert=%s cap=%s} "
+           "live-follow=%s delivery=%s"
+           % (before17 == after17, same_sort17, same_ins17,
+              same_cap17, live17, delivered17))
+    face17.close()
 
     shutil.rmtree(tmp, ignore_errors=True)
     if len(RESULTS) != EXPECTED:

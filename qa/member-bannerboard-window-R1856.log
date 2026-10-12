@@ -1,0 +1,43 @@
+=== member banner_board month-window filter (R1856) - evidence ===
+--- section 1: suite double-run (test_banner_board.py, R1851+R1856 criteria) ---
+PASS AC-BQ1: env-keys=True dense=True empty-board=True refusals=5/5 ['no-compliance', 'empty', 'blank', 'non-str', 'null']
+PASS AC-BQ2: by_status={'skipped_no_budget': 2, 'skipped_daily_cap': 2} by_reason={'first_service': 2, 'renewal_due': 2} total=4 manual=True rows-cross=True order=['AV-B', 'AV-C', 'AV-E', 'AV-F']
+PASS AC-BQ3: status-keys=2 total=4 < log=6 board==skipped-avatars=True sent-avatars-absent=True
+PASS AC-BQ4: dml-hits=0 counts-stable=True double-call-identical=True
+PASS AC-BQ5: before=1 after=2 cell=2 new-row=True order-follows=True
+PASS AC-BQ6: ascii=True subjects=2 network-imports=0 cfg-sha-stable=True additive=True schema-tables=2
+PASS AC-BQ7: suites-registry-row=True criteria=17
+PASS AC-BQ8: default-fidelity=True seven-keys=True new-keys=['banner_board_total', 'limit', 'returned', 'truncated'] capped-envelope=[1, 2, 1, True]
+PASS AC-BQ9: rejects=5/5 ['-1', 'True', "'2'", '2.5', 'None'] counts-stable=True gate-order=True
+PASS AC-BQ10: seq-cap=['AV-E', 'AV-F'] mirror-match=True board_total=6 total=7 units-differ=True world-aggregates-stable=True
+PASS AC-BQ11: six=True over=True one=True empty=True keys=11
+PASS AC-BQ12: counts-stable=True double-call-identical=True delivery=True
+PASS AC-BQ13: default-fidelity=True seven-keys=True eight-keys=True twelve-keys=True window-echo=True
+PASS AC-BQ14: rejects=14/14 counts-stable=True dual-bad-limit-first=True
+PASS AC-BQ15: cross=True manual={status=True reason=True total=3} nonpenetration=True future-empty=True
+PASS AC-BQ16: window-scope={board_total=4 total=5} returned=2 truncated=True mirror-match=True aggregates-window-level=True
+PASS AC-BQ17: counts-stable=True determinism={sort=True insert=True cap=True} live-follow=True delivery=True
+SUITE PASS: 17/17
+run1-exit=0 run2-exit=0
+run1-sha256=5F857C31BD599E14FF6FE076E5C2CDE8E9493F202E9756BDF7380A9267B41801
+run2-sha256=5F857C31BD599E14FF6FE076E5C2CDE8E9493F202E9756BDF7380A9267B41801
+byte-identical=True
+--- section 2: RUNNER full regression (tee evidence: qa/reconcile-all-R1856.log) ---
+PASS suite member-banner-board exit=0 pass-lines=17 fail-lines=0 criteria=17 0.6s
+RUNNER PASS (114/114 suites green, reconcile controls 7/7, 186.1s)
+--- section 3: matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (11590 bytes) - registry suites=114 criteria=1059 evidence=qa/reconcile-all-R1856.log green=114/114
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11590 bytes, 114 suites, 1059 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11590 bytes, 114 suites, 1059 criteria)
+--- section 4: fingerprint sentinel ---
+verdict CLEAN domains=5
+--- section 5: writer census ---
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+--- section 6: change face + hygiene ---
+git status: M docs/sandbox-suite-matrix.md / M src/sandbox/member/reminder.py / M src/sandbox/member/test_banner_board.py / M src/sandbox/reconcile_all.py / M state/queue/tech.md / ?? qa/reconcile-all-R1856.log
+member config.json sha256=3D4698AF01347F3065026B38CCFA81F31C4FC27FC7E45E73AC4C2F5ACB72EEE4 (untouched; AC-BQ6 in==out)
+diff stat: reminder.py +77/-33 (window param + gate + predicate + envelope key), test_banner_board.py +291/-4 (AC-BQ13..BQ17), reconcile_all.py 12->17 registration
+first-run reds (suite-side evidence-口径 bugs, fixed same round, family precedent): (1) seven13 was assigned the == bool then used as a set operand -> keys_ok13 pattern; (2) AC-BQ16 full-world total arithmetic 6->7 (AV-B holds two rows, dual period keys).
+set-repr drift removed from AC-BQ13 evidence line (PYTHONHASHSEED cross-process nondeterminism -> byte-identical double-run restored).

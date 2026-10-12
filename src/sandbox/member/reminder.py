@@ -72,6 +72,7 @@ Run (readiness self-check):
 import argparse
 import json
 import os
+import re
 import sqlite3
 import sys
 
@@ -90,6 +91,11 @@ E_BAD_GRANT_TYPE = "E_BAD_GRANT_TYPE"
 E_BANNED_TEMPLATE_COPY = "E_BANNED_TEMPLATE_COPY"
 E_REM_NO_DISCLAIMER = "E_REM_NO_DISCLAIMER"
 E_REM_BAD_LIMIT = "E_REM_BAD_LIMIT"
+E_REM_BAD_WINDOW = "E_REM_BAD_WINDOW"
+
+# strict-anchor month-window shape (family law R1748: \Z never $ - a
+# trailing newline must never slip the gate and read an empty ledger)
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 # log statuses (rows; the two skipped faces double as banner queue)
 ST_SENT = "sent"
@@ -332,9 +338,9 @@ class ReminderFace(object):
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
             " ORDER BY ts_utc").fetchall()
 
-    def banner_board(self, limit=0):
+    def banner_board(self, limit=0, window=None):
         """Degraded in-app banner board (pure derived read face over the
-        persistent fallback journal, tech.md AC-BQ1..AC-BQ12 registered
+        persistent fallback journal, tech.md AC-BQ1..AC-BQ17 registered
         before this code): one row per avatar holding at least one
         degraded row, plus dense status/reason zero grids. Row order =
         the unique census key ascending (aggregation-family
@@ -350,10 +356,20 @@ class ReminderFace(object):
         truncated read must carry the full set count),
         returned, truncated. The pre-existing total key keeps its
         pinned unit (count of skipped_* log rows) - a different
-        aggregate than the avatar-row count; the world-level
-        by_status/by_reason grids stay world-level in capped reads
-        (truncation slices only the board list, aggregates never
-        lie about the world)."""
+        aggregate than the avatar-row count; capped reads slice only
+        the board list, aggregates never lie about the world.
+        Month-window filter (R1856): window tail param - sentinel is
+        ONLY None (an empty string is a bad param, never a default
+        fallback); an explicit YYYY-MM window narrows the WORLD scope
+        (record-time ts_utc month): board rows, the status/reason
+        grids, total and banner_board_total all follow the window - a
+        window is a data-scope filter, unlike the cap which only
+        slices the returned list. The explicit-window envelope adds
+        one "window" key (additive); the default envelope stays
+        byte-identical. Malformed windows fail closed
+        E_REM_BAD_WINDOW (this module owns an E_REM_* code
+        vocabulary, E_WJ_BAD_WINDOW precedent) after the limit gate
+        and before any read (zero side effects)."""
         if (not isinstance(self.disclaimer, str)
                 or not self.disclaimer.strip()):
             raise ValueError("%s: resident compliance copy missing"
@@ -362,10 +378,24 @@ class ReminderFace(object):
                 or limit < 0):
             raise ValueError("%s: limit must be a non-negative int"
                              % E_REM_BAD_LIMIT)
-        rows = self._exec(
-            "SELECT census_avatar_id, status, reason, COUNT(*)"
-            " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
-            " GROUP BY census_avatar_id, status, reason").fetchall()
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError("%s: window must be YYYY-MM: %r"
+                                 % (E_REM_BAD_WINDOW, window))
+        if w is None:
+            rows = self._exec(
+                "SELECT census_avatar_id, status, reason, COUNT(*)"
+                " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
+                " GROUP BY census_avatar_id, status, reason").fetchall()
+        else:
+            rows = self._exec(
+                "SELECT census_avatar_id, status, reason, COUNT(*)"
+                " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
+                " AND substr(ts_utc,1,7)=?"
+                " GROUP BY census_avatar_id, status, reason",
+                (w,)).fetchall()
         by_status = {ST_SKIP_BUDGET: 0, ST_SKIP_CAP: 0}
         by_reason = {r: 0 for r in ("first_service", "renewal_due")}
         per_avatar = {}
@@ -384,22 +414,23 @@ class ReminderFace(object):
             board.append({"census_avatar_id": avatar,
                           "skipped": sum(cell.values()),
                           "by_reason": dict(cell)})
+        env = {"banner_board": board, "total": total,
+               "by_status": by_status, "by_reason": by_reason,
+               "ai_generated": 0, "disclaimer": self.disclaimer,
+               "persistent": True}
+        if w is not None:
+            env["window"] = w
         if limit == 0:
-            return {"banner_board": board, "total": total,
-                    "by_status": by_status, "by_reason": by_reason,
-                    "ai_generated": 0, "disclaimer": self.disclaimer,
-                    "persistent": True}
+            return env
         board_total = len(board)
         returned = min(limit, board_total)
-        board = board[board_total - returned:] if returned else []
-        return {"banner_board": board, "total": total,
-                "by_status": by_status, "by_reason": by_reason,
-                "ai_generated": 0, "disclaimer": self.disclaimer,
-                "persistent": True,
-                "limit": limit,
-                "banner_board_total": board_total,
-                "returned": len(board),
-                "truncated": len(board) < board_total}
+        env["banner_board"] = (board[board_total - returned:]
+                               if returned else [])
+        env["limit"] = limit
+        env["banner_board_total"] = board_total
+        env["returned"] = returned
+        env["truncated"] = returned < board_total
+        return env
 
     def dual_timepoint_coverage(self, avatar):
         """W10 dual-timepoint coverage face (which reasons have rows)."""
