@@ -1,0 +1,45 @@
+PASS AC-PN8: default raw list rows=7 double-read-identical=True fields=6
+PASS AC-PN9: bad forms raised=5/5 log-rows 7==7 zero side effects
+PASS AC-PN10: envelope keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=7 returned=7 truncated=False rows==full=True
+PASS AC-PN11: returned=3 truncated=True total=7 tail==full[4:] True mirror-SQL True fields=6
+PASS AC-PN12: limit==total truncated=False empty-world envelope={'rows': [], 'limit': 3, 'total': 0, 'returned': 0, 'truncated': False} limit=1 tail==last=True
+PASS AC-PN13: tie pair same-ts=True full order=(refund,payment_success) capped-tail match=True double-call-identical=True
+PASS AC-PN14: write-stmt hits=none table-counts (7, 0, 0)==(7, 0, 0) (log/grants/revokes)
+PASS AC-PN15: ascii=True net-imports=none suite-ascii=True shipped-cfg read-only=True criteria-so-far=7/8
+---- pay-notify-bannerlimit acceptance: 8/8 passed
+--- section 2: RUNNER tail (qa/reconcile-all-R1871.log) ---
+482:  | ---- pay-notify-bannerlimit acceptance: 8/8 passed
+483:PASS suite pay-notify-bannerlimit exit=0 pass-lines=8 fail-lines=0 criteria=8 0.3s
+1167:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+1179:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+1201:  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+1205:  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+1766:RUNNER PASS (125/125 suites green, reconcile controls 7/7, 176.4s)
+--- section 3: matrix regen + --check ---
+PASS generated docs/sandbox-suite-matrix.md (12562 bytes) - registry suites=125 criteria=1150 evidence=qa/reconcile-all-R1871.log green=125/125
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12562 bytes, 125 suites, 1150 criteria)
+--- section 4: writer-census --check + fingerprint sentinel ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1224 tee=723 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- section 5: git status hygiene ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/pay/notify.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/pay-notify-bannerlimit-R1871.log
+?? qa/reconcile-all-R1871.log
+?? src/sandbox/pay/test_pay_notify_bannerlimit.py
+

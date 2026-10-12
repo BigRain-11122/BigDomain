@@ -304,6 +304,12 @@ SUITES = [
     # daily cap, skipped_* banner queue; AC-PN1..PN7 pre-registered
     # in state/queue/tech.md)
     ("pay-notify", os.path.join("pay", "test_pay_notify.py"), 7),
+    # R1871 banner_queue read-cap (R1706 successor): limit tail param,
+    # raw-list default byte-preserved, five-key capped envelope, rowid
+    # tiebreak, E_PN_BAD_LIMIT fail-closed gate (AC-PN8..PN15
+    # pre-registered in state/queue/tech.md).
+    ("pay-notify-bannerlimit",
+     os.path.join("pay", "test_pay_notify_bannerlimit.py"), 8),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face

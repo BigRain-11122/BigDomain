@@ -76,6 +76,7 @@ E_PN_UNKNOWN_ORDER = "E_PN_UNKNOWN_ORDER"
 E_PN_NO_DISCLAIMER = "E_PN_NO_DISCLAIMER"
 E_PN_NO_PAY_DB = "E_PN_NO_PAY_DB"
 E_PN_BAD_CONFIG = "E_PN_BAD_CONFIG"
+E_PN_BAD_LIMIT = "E_PN_BAD_LIMIT"
 
 # log statuses (rows; the two skipped faces double as banner queue)
 ST_SENT = "sent"
@@ -473,12 +474,48 @@ class PayNotifyFace(object):
                 "revoked": cutoff is not None and (once + longterm) == 0,
                 "revoke_ts": cutoff}
 
-    def banner_queue(self):
-        """Degraded in-app fallback queue = all skipped_* rows."""
-        return self._exec(
+    def banner_queue(self, limit=0):
+        """Degraded in-app fallback queue = all skipped_* rows.
+
+        limit=0 (default): the full current face - a raw list of row
+        tuples, byte-identical to the pre-R1871 behavior (existing
+        callers untouched).
+
+        limit>0 (R1871 read-cap, AC-PN8..AC-PN15 registered before
+        this code): tail-window cap. Returns a dict envelope
+        {rows, limit, total, returned, truncated} where rows are the
+        LAST `limit` skipped rows in the same order the full face
+        yields them (ts_utc ascending, rowid ascending within ties -
+        the capped query pins the explicit rowid tie-break because
+        the full face's bare ordering relies on engine scan order
+        for same-second ties). total is the full skipped-row count -
+        a truncated read never lies about how much was cut off.
+
+        Bad limit forms are refused before any read (fail-closed,
+        E_PN_BAD_LIMIT): the sentinel is ONLY the int 0 - bools,
+        floats, strings, None and negatives are all bad params, no
+        ambiguity. This face is a pure derived read: zero
+        data-changing statements."""
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ValueError(
+                "%s: limit must be a non-negative int (0 = full read)"
+                % E_PN_BAD_LIMIT)
+        if limit == 0:
+            return self._exec(
+                "SELECT send_id, census_avatar_id, order_id, reason,"
+                " status, ts_utc FROM pay_notify_log"
+                " WHERE status LIKE 'skipped_%' ORDER BY ts_utc").fetchall()
+        total = self._exec(
+            "SELECT COUNT(*) FROM pay_notify_log"
+            " WHERE status LIKE 'skipped_%'").fetchone()[0]
+        rows = list(self._exec(
             "SELECT send_id, census_avatar_id, order_id, reason, status,"
             " ts_utc FROM pay_notify_log WHERE status LIKE 'skipped_%'"
-            " ORDER BY ts_utc").fetchall()
+            " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
+            (limit,)))[::-1]
+        return {"rows": rows, "limit": limit, "total": total,
+                "returned": len(rows), "truncated": total > len(rows)}
 
     def event_coverage(self, order_id):
         """Which event kinds have rows for one order (audit read)."""
