@@ -156,6 +156,7 @@ E_AD_RATE = "E_AD_RATE"                # minute-window rate cap, fail-closed
 E_AD_NO_DISCLAIMER = "E_AD_NO_DISCLAIMER"
 E_AD_REVOKED = "E_AD_REVOKED"          # key revoked or rotated out
 E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
+E_AD_BAD_LIMIT = "E_AD_BAD_LIMIT"      # dev_board read cap must be int >= 0
 
 NON_ADVISORY = ("non-advisory notice: open API is a compute +"
                 " visualization interface, not investment advice")
@@ -650,13 +651,31 @@ class DevKeyFace:
                     row[0], window),
                 "disclaimer": self.disclaimer}
 
-    def dev_board(self, dev_account):
+    def dev_board(self, dev_account, limit=0):
         """The developer's key board: every key with its quota
         state plus the billing-ring reconcile reference (through
-        the metered public API). Read-only, zero token movement."""
+        the metered public API). Read-only, zero token movement.
+        The optional limit parameterizes a read cap for a large
+        key pool: limit=0 (the default) keeps the full-board
+        behavior byte-stable; limit>0 bounds the keys list to
+        the most recent limit rows (the highest key_ids, a
+        tail-window slice of the board's ascending key_id order)
+        and adds an overflow block
+        (limit/total/returned/truncated) to the envelope, so a
+        large key pool stays a bounded payload on the developer
+        panel. The overflow block's total and the world
+        aggregates (reject_tally_total / usage_kind_tally_total)
+        stay full-world counts over every key of the account --
+        truncation only cuts the keys list. A bad limit (non-int,
+        bool, or negative) rejects E_AD_BAD_LIMIT fail-closed
+        before any read."""
         dev_account = str(dev_account or "").strip()
         if not dev_account.startswith("usr:"):
             raise ApiDevError(E_AD_BAD_ARGS, "dev accounts are usr:* only")
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ApiDevError(E_AD_BAD_LIMIT,
+                              "limit must be an integer >= 0")
         window = _window_utc()
         minute = _minute_utc()
         keys = []
@@ -694,6 +713,17 @@ class DevKeyFace:
                          "reject_tally": k_tally,
                          "usage_kind_tally": k_kinds,
                          "billing": self.metered.reconcile_client(row[2])})
+        if limit:
+            total = len(keys)
+            keys = keys[-limit:]
+            return {"dev_account": dev_account, "keys": keys,
+                    "window": window,
+                    "reject_tally_total": tally_total,
+                    "usage_kind_tally_total": kinds_total,
+                    "limit": limit, "total": total,
+                    "returned": len(keys),
+                    "truncated": total > limit,
+                    "disclaimer": self.disclaimer}
         return {"dev_account": dev_account, "keys": keys,
                 "window": window, "reject_tally_total": tally_total,
                 "usage_kind_tally_total": kinds_total,

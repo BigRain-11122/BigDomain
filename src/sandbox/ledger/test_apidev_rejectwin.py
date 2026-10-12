@@ -297,7 +297,8 @@ def main():
                          r"def key_view\(self, api_key,\s*window",
                          src) is None)
         db_sig_ok = (re.search(
-                         r"def dev_board\(self, dev_account\)",
+                         r"def dev_board\(self, dev_account,"
+                         r" limit=0\)",
                          src) is not None
                      and re.search(
                          r"def dev_board\(self, dev_account,\s*"

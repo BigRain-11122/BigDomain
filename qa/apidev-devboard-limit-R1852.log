@@ -1,0 +1,50 @@
+=== R1852 apidev dev_board read-cap parameter window: suite standalone run 1 (exit=0) ===
+PASS AC-DBL1: default fidelity: no-arg == explicit limit=0 byte-identical=True; envelope keys == 6-pin=True; rows=6 all 15-pin=True; issue order k1..k6=True; world anchor (6 keys / 3 calls / 1 reject, 2nd k1 call -> E_AD_QUOTA)
+PASS AC-DBL2: five bad forms reject=5/5 codes=['E_AD_BAD_LIMIT']; counts stable across rejects=True (keys/calls/rejects (6, 3, 1) -> (6, 3, 1)); double-bad ('not-usr', -1) -> E_AD_BAD_ARGS (dev_account form gate fires first); sentinel is 0 only, None rejects
+PASS AC-DBL3: tail-window fidelity: limit=2 -> ['k5', 'k6'], limit=4 -> ['k3', 'k4', 'k5', 'k6']; per-row dumps byte-equal to full[-N:]=True/True; every returned row keeps the 15-key field set; ascending key_id order kept
+PASS AC-DBL4: overflow block: capped envelope keys == 6+4=True; limit=2 total=6 (== mirror COUNT=6) returned=2 truncated=True; world aggregates full-world stable capped vs uncapped=True/True (reject={'E_AD_QUOTA': 1} kinds={'backtest': 3}); truncation only cuts the keys list
+PASS AC-DBL5: mirror SQL third path (mode=ro, ORDER BY key_id DESC LIMIT N reversed): limit=2 True, limit=4 True -- api_key/key_name field-level equality with the product tail slice
+PASS AC-DBL6: boundary states: exact-fit limit==6 (truncated=False returned==total==6), over 50 (rows=6 truncated=False), single tail limit=1 -> ['k6'], zero-key world usr:ghost (rows=0 total=0 truncated=False, tallies {}/{}, all four overflow keys carried)
+PASS AC-DBL7: month-roll orthogonality: frozen clock +23d -> capped read window=2026-11 rows=['roll-p', 'roll-b'] total=2 truncated=False (tail rows all returned); new-month re-domain honest (roll-p/roll-b quota_used 0/0, totals {}/{}); capped totals byte-equal uncapped=True; November call re-computes under the cap (roll-b quota_used=1 kinds={'backtest': 1}, totals {'backtest': 1}); October explicit read never moves=True; counts (2, 3, 1) -> (2, 4, 1) (the +1 call is the AC fixture write, zero movement from any read)
+PASS AC-DBL8: pure-read + hygiene: main-world counts stable across every read (6, 3, 1) == (6, 3, 1); dev_board source DML verbs=0; double-call byte-identical (back-to-back fresh reads at the rolled clock, window=2026-11)=True; config.json byte-stable=True; suite pure-ASCII=True; net-imports=0; schema frozen=True; registry row + criteria=8=True
+SUITE apidev-devboard-limit: 8/8 criteria pass
+
+=== suite standalone run 2 -- determinism (exit=0) ===
+PASS AC-DBL1: default fidelity: no-arg == explicit limit=0 byte-identical=True; envelope keys == 6-pin=True; rows=6 all 15-pin=True; issue order k1..k6=True; world anchor (6 keys / 3 calls / 1 reject, 2nd k1 call -> E_AD_QUOTA)
+PASS AC-DBL2: five bad forms reject=5/5 codes=['E_AD_BAD_LIMIT']; counts stable across rejects=True (keys/calls/rejects (6, 3, 1) -> (6, 3, 1)); double-bad ('not-usr', -1) -> E_AD_BAD_ARGS (dev_account form gate fires first); sentinel is 0 only, None rejects
+PASS AC-DBL3: tail-window fidelity: limit=2 -> ['k5', 'k6'], limit=4 -> ['k3', 'k4', 'k5', 'k6']; per-row dumps byte-equal to full[-N:]=True/True; every returned row keeps the 15-key field set; ascending key_id order kept
+PASS AC-DBL4: overflow block: capped envelope keys == 6+4=True; limit=2 total=6 (== mirror COUNT=6) returned=2 truncated=True; world aggregates full-world stable capped vs uncapped=True/True (reject={'E_AD_QUOTA': 1} kinds={'backtest': 3}); truncation only cuts the keys list
+PASS AC-DBL5: mirror SQL third path (mode=ro, ORDER BY key_id DESC LIMIT N reversed): limit=2 True, limit=4 True -- api_key/key_name field-level equality with the product tail slice
+PASS AC-DBL6: boundary states: exact-fit limit==6 (truncated=False returned==total==6), over 50 (rows=6 truncated=False), single tail limit=1 -> ['k6'], zero-key world usr:ghost (rows=0 total=0 truncated=False, tallies {}/{}, all four overflow keys carried)
+PASS AC-DBL7: month-roll orthogonality: frozen clock +23d -> capped read window=2026-11 rows=['roll-p', 'roll-b'] total=2 truncated=False (tail rows all returned); new-month re-domain honest (roll-p/roll-b quota_used 0/0, totals {}/{}); capped totals byte-equal uncapped=True; November call re-computes under the cap (roll-b quota_used=1 kinds={'backtest': 1}, totals {'backtest': 1}); October explicit read never moves=True; counts (2, 3, 1) -> (2, 4, 1) (the +1 call is the AC fixture write, zero movement from any read)
+PASS AC-DBL8: pure-read + hygiene: main-world counts stable across every read (6, 3, 1) == (6, 3, 1); dev_board source DML verbs=0; double-call byte-identical (back-to-back fresh reads at the rolled clock, window=2026-11)=True; config.json byte-stable=True; suite pure-ASCII=True; net-imports=0; schema frozen=True; registry row + criteria=8=True
+SUITE apidev-devboard-limit: 8/8 criteria pass
+sha256 run1=eea458ff08dac99529ec109326031afee9b8cecc536a22cb0057ede605b1aa72 run2=eea458ff08dac99529ec109326031afee9b8cecc536a22cb0057ede605b1aa72 byte-identical=True
+
+=== RUNNER evidence (qa/reconcile-all-R1852-3.log) ===
+PASS suite ledger-apidev-devboard-limit exit=0 pass-lines=8 fail-lines=0 criteria=8 0.3s
+RUNNER PASS (113/113 suites green, reconcile controls 7/7, 194.8s)
+
+=== suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (11510 bytes) - registry suites=113 criteria=1042 evidence=qa/reconcile-all-R1852-3.log green=113/113
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11510 bytes, 113 suites, 1042 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11510 bytes, 113 suites, 1042 criteria)
+
+=== fingerprint sentinel (schema freeze) ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+=== writer-census --check (post-fix) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1183 tee=682 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN

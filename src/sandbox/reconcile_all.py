@@ -867,6 +867,24 @@ SUITES = [
     ("ledger-apidev-devboard-roll", os.path.join("ledger",
                                                 "test_apidev_devboard_roll.py"),
      7),
+    # R1852 apidev dev_board read-cap parameter window: the
+    # account-level key board gains an optional limit tail
+    # parameter (limit=0 default keeps the full-board envelope
+    # byte-stable for every existing consumer; limit>0 bounds the
+    # keys list to the most recent limit rows -- highest key_ids,
+    # tail-window slice of the ascending key_id order -- and
+    # adds an overflow block limit/total/returned/truncated with
+    # total = the full key-row count; the world aggregates stay
+    # full-world, truncation only cuts the keys list; five bad
+    # limit forms reject the dedicated E_AD_BAD_LIMIT code
+    # fail-closed before any read; the capped read stays honest
+    # across the month rollover, orthogonal to the R1845 roll
+    # panel) -- the apidev read-cap family row after the R1729
+    # usage_log precedent (AC-DBL1..DBL8 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-devboard-limit", os.path.join("ledger",
+                                                 "test_apidev_devboard_limit.py"),
+     8),
 ]
 
 FAILS = 0
