@@ -1,0 +1,33 @@
+=== authorize-persist R1885 evidence (5 sections) ===
+--- section 1: suite run #1 (rc=0) ---
+PASS AC-PN37: sends=['sent', 'sent', 'sent'] revoke=revoked lt=[{'once': 0, 'longterm': 1, 'consumed': 1}, -1] once=[{'once': 2, 'longterm': 0, 'consumed': 1}, 1] rvk=[True, '2026-10-05T10:00:02Z'] empty={'avatar': 'AV-EMPTY', 'template_id': 'tpl_ok', 'once': 0, 'longterm': 0, 'consumed': 0, 'remaining_once': 0, 'revoked': False, 'revoke_ts': None} key_sets=True
+PASS AC-PN38: all_eight_byte_identical=True rvk_revoked=True lt_neg=-1
+PASS AC-PN39: rerevoke=nothing_to_revoke rvk_rows=1 rearm_budget={'once': 1, 'longterm': 0, 'consumed': 0} revoked=False cutoff_kept=2026-10-05T10:00:02Z postcutoff_grants=1
+PASS AC-PN40: send2=sent once_state=[2, 2, 0, False] suppressed=already_longterm grant_rows=7->7 empty={'once': 0, 'longterm': 0, 'consumed': 0}
+PASS AC-PN41: i1_batch_clean=True i2_batch_clean=True log=4 grants=7 revokes=1
+PASS AC-PN42: i3_eq_postcycle=True rvk_rearmed=[False, '2026-10-05T10:00:02Z'] once_exhausted=[0, False] lt_neg=-1
+PASS AC-PN43: cfg_stable=True notify_stable=True az_stable=True world_outside=True ascii=True
+SUITE PASS: 7/7 pass-lines
+--- section 2: suite run #2 byte-identity (rc=0) ---
+double_run_byte_identical=True rc1=0 rc2=0
+--- section 3: full regression runner ---
+runner_rc=0
+RUNNER PASS (133/133 suites green, reconcile controls 7/7, 154.0s)
+
+--- section 4: suite matrix regen + --check x2 ---
+regen_rc=0
+PASS generated docs/sandbox-suite-matrix.md (13281 bytes) - registry suites=133 criteria=1223 evidence=qa/reconcile-all-R1884.log green=132/133
+PASS hygiene: pure-ascii source, zero network imports
+check1_rc=0 check2_rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13281 bytes, 133 suites, 1223 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13281 bytes, 133 suites, 1223 criteria)
+--- section 5: writer-census --check ---
+census_rc=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1252 tee=750 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN

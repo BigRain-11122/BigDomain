@@ -351,6 +351,17 @@ SUITES = [
     # (AC-PN30..PN36 pre-registered in tech.md).
     ("pay-notify-bannerpersist",
      os.path.join("pay", "test_pay_notify_bannerpersist.py"), 7),
+    # R1885 authorize budget_face/authorization_state read
+    # cross-restart persistence example (R1884 reseed): close ->
+    # new instance -> same-db reopen reproduces the eight derived
+    # read faces byte-identically (zero in-memory drift), the R1740
+    # revocation cutoff keeps excluding pre-cutoff grants/sends
+    # after the restart (nothing_to_revoke no-op, post-cutoff
+    # re-arm, revoke_ts provenance), exhausted-once stays honestly
+    # not-revoked, double-restart stability, pure-read law
+    # (AC-PN37..PN43 pre-registered in state/queue/tech.md).
+    ("pay-authorize-persist",
+     os.path.join("pay", "test_authorize_persist.py"), 7),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face
