@@ -105,7 +105,16 @@ SUITES = [
     # fail-closed after the disclaimer gate; pure-read law,
     # determinism and the live-db manual-SQL cross kept -
     # AC-S20/S21/S22 (22 -> 25).
-    ("lobby", os.path.join("lobby", "test_client.py"), 25),
+    # R1876 cross-month roll preservation on both lobby board
+    # faces: explicit-ts data-driven roll (no frozen clock), the
+    # new-month grid is born inside the November window, the
+    # October window keeps the pre-roll snapshot byte-identical
+    # with bidirectional non-penetration, the default read stays
+    # the full-window semantics (both months merged, the two
+    # windows partition it exactly) and the immutable events
+    # total is kept with the cross-board non-counted rows
+    # isolated - AC-S23/S24/S25 (25 -> 28).
+    ("lobby", os.path.join("lobby", "test_client.py"), 28),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",

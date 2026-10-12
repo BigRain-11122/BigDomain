@@ -1,0 +1,17 @@
+--- suite_matrix regen (default evidence discovery) ---
+PASS generated docs/sandbox-suite-matrix.md (12747 bytes) - registry suites=127 criteria=1175 evidence=qa/reconcile-all-R1876.log green=127/127
+PASS hygiene: pure-ascii source, zero network imports
+
+--- suite_matrix --check (run 1) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12747 bytes, 127 suites, 1175 criteria)
+
+--- suite_matrix --check (run 2) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12747 bytes, 127 suites, 1175 criteria)
+
+--- fingerprint sentinel: fingerprint_regen --chain migration_chains.json --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

@@ -1667,6 +1667,212 @@ def board_window_cases(srv_db):
               ok_live, now_month, len(manual_srv)))
 
 
+def board_monthroll_cases():
+    """AC-S23/S24/S25 (R1876): cross-month roll preservation on the
+    two lobby board read faces. The roll is data-driven: rows are
+    appended with explicit ts_utc stamps through store.append (no
+    frozen clock needed -- the lobby boards slice windows on each
+    event's own record time, unlike the apidev/freetrial frozen-clock
+    families). October is snapshotted first, November rows then
+    arrive (the roll), and every windowed read keeps its own month's
+    truth."""
+    from store import EventStore
+    tmp = tempfile.mkdtemp(prefix="lobby-monthroll-")
+    notice = ("sandbox non-advisory notice: board rows are "
+              "operational read-only derivations, not advice")
+    db = os.path.join(tmp, "roll.db")
+    st = EventStore(db, disclaimer=notice)
+
+    # October world: 3 chat rows over 2 zones, 2 idea rows over 2
+    # pools, plus 1 cross-board non-counted row (avatar.update feeds
+    # neither board and lands inside zone "lobby" on purpose).
+    oct_world = [
+        ("2026-10-01T01:00:01.000000Z", "chat.broadcast", "res-a", "lobby",
+         "oct chat one", {"text": "oct chat one"}),
+        ("2026-10-01T01:00:02.000000Z", "chat.broadcast", "res-b", "quant",
+         "oct chat two", {"text": "oct chat two"}),
+        ("2026-10-01T01:00:03.000000Z", "chat.broadcast", "res-a", "lobby",
+         "oct chat three", {"text": "oct chat three"}),
+        ("2026-10-02T01:00:04.000000Z", "idea.submit", "res-a", "cocreate",
+         "oct idea one", {"text": "oct idea one", "pool": "proposal-queue-stub"}),
+        ("2026-10-02T01:00:05.000000Z", "idea.submit", "res-c", "lab",
+         "oct idea two", {"text": "oct idea two", "pool": "proposal-queue-stub"}),
+        ("2026-10-03T01:00:06.000000Z", "avatar.update", "res-a", "lobby",
+         "oct avatar row", {"name": "resident a"}),
+    ]
+    for evt in oct_world:
+        st.append(*evt)
+
+    # pre-roll snapshots: explicit October window reads on both
+    # boards; with October the only month on file the default reads
+    # equal the windowed reads (the full-window semantics anchor).
+    oct_room_snap = st.room_message_board(window="2026-10")
+    oct_idea_snap = st.idea_pool_board(window="2026-10")
+    pre_default_room = st.room_message_board()
+    pre_default_idea = st.idea_pool_board()
+
+    # the roll: November rows arrive with new record times. zone
+    # "arena" carries zero October rows -- its grid cell is born
+    # inside November only (the new-month grid proof).
+    nov_world = [
+        ("2026-11-05T01:00:07.000000Z", "chat.broadcast", "res-b", "lobby",
+         "nov chat one", {"text": "nov chat one"}),
+        ("2026-11-05T01:00:08.000000Z", "chat.broadcast", "res-d", "arena",
+         "nov chat two", {"text": "nov chat two"}),
+        ("2026-11-06T01:00:09.000000Z", "chat.broadcast", "res-d", "arena",
+         "nov chat three", {"text": "nov chat three"}),
+        ("2026-11-06T01:00:10.000000Z", "idea.submit", "res-d", "cocreate",
+         "nov idea one", {"text": "nov idea one", "pool": "proposal-queue-stub"}),
+        ("2026-11-07T01:00:11.000000Z", "idea.submit", "res-e", "arena",
+         "nov idea two", {"text": "nov idea two", "pool": "proposal-queue-stub"}),
+        ("2026-11-07T01:00:12.000000Z", "avatar.update", "res-c", "lab",
+         "nov avatar row", {"name": "resident c"}),
+    ]
+    for evt in nov_world:
+        st.append(*evt)
+
+    nov_room = st.room_message_board(window="2026-11")
+    nov_idea = st.idea_pool_board(window="2026-11")
+    post_oct_room = st.room_message_board(window="2026-10")
+    post_oct_idea = st.idea_pool_board(window="2026-10")
+
+    # ---- AC-S23: roll preservation core ----
+    # (1) new-month rows land in the new-month grid: the November
+    # window reads carry the new rows and the arena cell is born
+    # inside November; manual SQL mirror cross (record-time law).
+    ok_nov_grid = (
+        nov_room["room_message_board"] == [
+            {"room": "arena", "messages": 2, "actors": 1},
+            {"room": "lobby", "messages": 1, "actors": 1},
+        ]
+        and nov_idea["idea_pool_board"] == [
+            {"room": "arena", "ideas": 1, "actors": 1},
+            {"room": "cocreate", "ideas": 1, "actors": 1},
+        ])
+    manual_nov_room = [
+        {"room": z, "messages": int(n), "actors": int(k)}
+        for z, n, k in db_query(
+            db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' AND substr(ts_utc,1,7)='2026-11'"
+            " GROUP BY zone ORDER BY zone")
+    ]
+    manual_nov_idea = [
+        {"room": z, "ideas": int(n), "actors": int(k)}
+        for z, n, k in db_query(
+            db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='idea.submit' AND substr(ts_utc,1,7)='2026-11'"
+            " GROUP BY zone ORDER BY zone")
+    ]
+    ok_nov_manual = (manual_nov_room == nov_room["room_message_board"]
+                     and manual_nov_idea == nov_idea["idea_pool_board"])
+
+    # (2) the old-month window reads keep the pre-roll snapshots
+    # byte-identical on both boards, and the two windows never leak
+    # either way (each window sums only its own month's rows).
+    ok_oct_snap = (
+        json.dumps(post_oct_room, sort_keys=True)
+        == json.dumps(oct_room_snap, sort_keys=True)
+        and json.dumps(post_oct_idea, sort_keys=True)
+        == json.dumps(oct_idea_snap, sort_keys=True))
+    ok_no_leak = (
+        sum(r["messages"] for r in post_oct_room["room_message_board"]) == 3
+        and sum(r["messages"] for r in nov_room["room_message_board"]) == 3
+        and sum(r["ideas"] for r in post_oct_idea["idea_pool_board"]) == 2
+        and sum(r["ideas"] for r in nov_idea["idea_pool_board"]) == 2)
+
+    record("AC-S23", ok_nov_grid and ok_nov_manual and ok_oct_snap
+           and ok_no_leak,
+           "nov-grid-born=%s nov-manual-sql=%s oct-snapshot-kept=%s "
+           "no-leak-either-way=%s (oct msgs 3+3 / ideas 2+2)"
+           % (ok_nov_grid, ok_nov_manual, ok_oct_snap, ok_no_leak))
+
+    # ---- AC-S24: default full-window semantics across the roll ----
+    # lobby default = the full-history read (eventtickets full-window
+    # family, NOT the apidev current-month family): the default board
+    # carries BOTH months -- a cross-month zone merges its October +
+    # November counts, and the two explicit windows partition the
+    # default board per zone exactly.
+    full_room = st.room_message_board()
+    full_idea = st.idea_pool_board()
+    ok_default_shape = (
+        full_room["room_message_board"] == [
+            {"room": "arena", "messages": 2, "actors": 1},
+            {"room": "lobby", "messages": 3, "actors": 2},
+            {"room": "quant", "messages": 1, "actors": 1},
+        ]
+        and full_idea["idea_pool_board"] == [
+            {"room": "arena", "ideas": 1, "actors": 1},
+            {"room": "cocreate", "ideas": 2, "actors": 2},
+            {"room": "lab", "ideas": 1, "actors": 1},
+        ])
+    oct_msgs = {r["room"]: r["messages"]
+               for r in post_oct_room["room_message_board"]}
+    nov_msgs = {r["room"]: r["messages"]
+                for r in nov_room["room_message_board"]}
+    oct_ideas = {r["room"]: r["ideas"]
+                 for r in post_oct_idea["idea_pool_board"]}
+    nov_ideas = {r["room"]: r["ideas"]
+                 for r in nov_idea["idea_pool_board"]}
+    ok_partition = (
+        all(r["messages"] == oct_msgs.get(r["room"], 0)
+            + nov_msgs.get(r["room"], 0)
+            for r in full_room["room_message_board"])
+        and all(r["ideas"] == oct_ideas.get(r["room"], 0)
+                + nov_ideas.get(r["room"], 0)
+                for r in full_idea["idea_pool_board"]))
+    ok_pre_default = (
+        json.dumps(pre_default_room, sort_keys=True)
+        == json.dumps(oct_room_snap, sort_keys=True)
+        and json.dumps(pre_default_idea, sort_keys=True)
+        == json.dumps(oct_idea_snap, sort_keys=True))
+
+    record("AC-S24", ok_default_shape and ok_partition and ok_pre_default,
+           "default-both-months=%s windows-partition-default=%s "
+           "pre-roll-default==oct-window=%s"
+           % (ok_default_shape, ok_partition, ok_pre_default))
+
+    # ---- AC-S25: immutable rows never lost + non-counted rows ----
+    # events total == October rows + November rows (per-month SELECT
+    # cross); the two avatar.update rows (cross-board non-counted,
+    # sitting inside board zones on purpose) never surface in any
+    # board read; re-counting after every read proves the pure-read
+    # law; a second October window read stays byte-identical.
+    total = db_query(db, "SELECT COUNT(*) FROM events")[0][0]
+    oct_n = db_query(db, "SELECT COUNT(*) FROM events WHERE"
+                     " substr(ts_utc,1,7)='2026-10'")[0][0]
+    nov_n = db_query(db, "SELECT COUNT(*) FROM events WHERE"
+                     " substr(ts_utc,1,7)='2026-11'")[0][0]
+    noncounted = db_query(
+        db, "SELECT COUNT(*) FROM events WHERE type NOT IN"
+        " ('chat.broadcast','idea.submit')")[0][0]
+    ok_total = (total == oct_n + nov_n and total == 12
+                and oct_n == 6 and nov_n == 6 and noncounted == 2)
+    all_chat = db_query(db, "SELECT COUNT(*) FROM events WHERE"
+                        " type='chat.broadcast'")[0][0]
+    all_ideas = db_query(db, "SELECT COUNT(*) FROM events WHERE"
+                         " type='idea.submit'")[0][0]
+    ok_type_iso = (
+        sum(r["messages"] for r in full_room["room_message_board"])
+        == all_chat
+        and sum(r["ideas"] for r in full_idea["idea_pool_board"])
+        == all_ideas
+        and all_chat == 6 and all_ideas == 4)
+    total_after = db_query(db, "SELECT COUNT(*) FROM events")[0][0]
+    ok_pure = total_after == total
+    ok_det = (json.dumps(st.room_message_board(window="2026-10"),
+                         sort_keys=True)
+              == json.dumps(oct_room_snap, sort_keys=True))
+    st.close()
+
+    record("AC-S25", ok_total and ok_type_iso and ok_pure and ok_det,
+           "events-total=%d (oct %d + nov %d, non-counted %d)=%s "
+           "type-isolation=%s pure-read=%s oct-reread-stable=%s"
+           % (total, oct_n, nov_n, noncounted, ok_total,
+              ok_type_iso, ok_pure, ok_det))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -2017,6 +2223,10 @@ async def suite():
     # AC-S20/S21/S22 (R1869): month-window parameter on the two
     # lobby board read faces (store-level; window only slices rows).
     board_window_cases(srv.db)
+
+    # AC-S23/S24/S25 (R1876): cross-month roll preservation on the
+    # two lobby board read faces (explicit-ts world; store-level).
+    board_monthroll_cases()
 
     await city_cases()
 

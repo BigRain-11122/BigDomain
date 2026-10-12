@@ -1,0 +1,65 @@
+--- lobby suite run 1 (cwd=src/sandbox/lobby) ---
+PASS AC-S1: first frame type=sys.hello payload keys=['risk_doc', 'rooms', 'v']
+PASS AC-S6: frame2 type=sys.risk_warning persistent=True text_len=115
+PASS AC-S2: spectator-rejected=True not-broadcast=True spectator-receives=True
+PASS AC-S3: rtt self=0.1ms other=0.3ms lobby-isolation=True quant-recv-room=quant
+PASS AC-S4: refusal[empty-wordlist-config rc=2 offline=True; missing-config rc=2 offline=True; port-51409-never-bound=True]; gate1=True gate2=True no-broadcast=True clean-passed=True rejected-in-stream=0/0
+PASS AC-S5: spoof overwritten: ai_generated=False actor=res-d355ad00; ai-notice ai_generated=True label-set=True
+PASS AC-S7: last row repo=domain/BigDomain zone=lobby all-fields-set=True; replay-rejected=True; jsonl-export=True evt_id=51912e056f999f9d
+PASS AC-S9: violations-err.rate_limit=True; 3rd-violation-mute-sec.reject=sec.reject muted_until-in-future=True; muted-hold=True (60s unmute path not awaited in suite; window asserted via muted_until)
+PASS AC-S10: chat->chat.broadcast(room=lobby); idea->pool-stub idea_id=True; store-types=['chat.broadcast', 'idea.submit']
+PASS AC-S16: board==manual-sql=True rooms=['lobby', 'quant'] ai_generated=True actor=system disclaimer-match=True fresh-reflection=True legacy-reject=True
+PASS AC-S17: single==py-slice==manual-sql=True multi+unknown=True empty=True bad-forms-reject=[True, True, True, True, True, True] default-none-full=True
+PASS AC-S8a: config-30/60=True banner-ok=True; server disconnected the no-pong client after 3.0s (test instance interval=1s timeout=2s)
+PASS AC-S8c: baseline-acked=True; dead=True via=ConnectionClosedError in 2.5s (keepalive 1s+1s, bound 6s); proxy-frozen=True sessions=1 (no-FIN premise); reconnect-direct=True; post-recovery-roundtrip=True pending=0
+PASS AC-S8e: armed=True frozen=True pending-after-cut=1; observer-once evt=cca6ebff12665e96; dead=True via=ConnectionClosedError in 2.5s; reconnect=True; duplicate-ack evt-match=True id-match=True code=E_DUPLICATE_MSG; store-rows=1; no-rebroadcast=True; pending=0; post-roundtrip=True
+PASS AC-S8d: dead=True via=ConnectionClosedError in 0.0s; refusal-drill budget-out=False drill-refusals=2 (retry loop caught+backed off real refusals); restart: reconnect=True retries=1 (>=1, <=10: not busy-spinning; a corpse-backlog dial may bridge the restart on Windows loopback - honest count); room-set restored exactly: lobby-isolated=True quant-received=True
+PASS AC-S14: empty-board=True envelope-keys=['disclaimer', 'room_message_board']; rows=[{'room': 'lobby', 'messages': 2, 'actors': 2}, {'room': 'quant', 'messages': 3, 'actors': 2}] row-keys-exact=True; manual-sql-cross=True scope(events=7 board-msgs=5 non-chat-excluded)=True; insertion-order-independent=True; live-rederive=True
+PASS AC-S15: row-counts-stable=True ([8, 0]); zero-write-method-src=True; deterministic=True; bad-disclaimer-construction-refused ['empty=True', 'whitespace=True', 'non-str=True']; legacy-no-disclaimer-face-refused=True; live-db cross=True rooms=['lobby', 'quant']
+PASS AC-S18: empty-board=True rows=[{'room': 'cocreate', 'ideas': 3, 'actors': 2}, {'room': 'lab', 'ideas': 1, 'actors': 1}] manual-sql-cross=True scope(events=6 board-ideas=4)=True insertion-order-independent=True live-rederive=True; row-counts-stable=True zero-write-src=True deterministic=True bad-disclaimer ['empty=True', 'whitespace=True', 'non-str=True'] legacy-refused=True live-db-cross=True pools=['cocreate']
+PASS AC-S19: restart-survival(board==manual=True ideas>0=True keys=['board', 'disclaimer'] disclaimer-match=True ai_generated=True actor=system); fresh-reflection=True (2->3); filter=True empty=True unknown=True bad-rejects=[True, True, True, True, True, True] default-full=True legacy-reject=True
+PASS AC-S20: default-shape=True window-rows=True order=True empty=True manual-sql=True reorder-independent=True scope=True
+PASS AC-S21: bads14 x 2 boards all E_LS_BAD_WINDOW=True (28 rejects); zero-side-effects events 7==7; disclaimer-gate-outermost=True
+PASS AC-S22: row-counts-stable=True zero-write-src=True det-room=True det-idea=True default-unchanged=True live-db-cross=True (month=2026-10 rows=2)
+PASS AC-S23: nov-grid-born=True nov-manual-sql=True oct-snapshot-kept=True no-leak-either-way=True (oct msgs 3+3 / ideas 2+2)
+PASS AC-S24: default-both-months=True windows-partition-default=True pre-roll-default==oct-window=True
+PASS AC-S25: events-total=12 (oct 6 + nov 6, non-counted 2)=True type-isolation=True pure-read=True oct-reread-stable=True
+PASS AC-S11: full: keys=12 subset=True name-match=True deep-water-leak=[]; subset=True forbidden=True honorary-zero-render=True unknown=True
+PASS AC-S12: receipt-evt_id=True queued-row=True gate-rejects=True ungated-rows=0
+PASS AC-S13: snapshot-200-as_of=True census-subset=True 404=404/404 405=405/405/405 ro-write-refused=True files-unchanged=True
+SUITE PASS (28/28 criteria pass)
+
+--- lobby suite run 2 ---
+PASS AC-S1: first frame type=sys.hello payload keys=['risk_doc', 'rooms', 'v']
+PASS AC-S6: frame2 type=sys.risk_warning persistent=True text_len=115
+PASS AC-S2: spectator-rejected=True not-broadcast=True spectator-receives=True
+PASS AC-S3: rtt self=0.1ms other=0.3ms lobby-isolation=True quant-recv-room=quant
+PASS AC-S4: refusal[empty-wordlist-config rc=2 offline=True; missing-config rc=2 offline=True; port-51508-never-bound=True]; gate1=True gate2=True no-broadcast=True clean-passed=True rejected-in-stream=0/0
+PASS AC-S5: spoof overwritten: ai_generated=False actor=res-11a4cf80; ai-notice ai_generated=True label-set=True
+PASS AC-S7: last row repo=domain/BigDomain zone=lobby all-fields-set=True; replay-rejected=True; jsonl-export=True evt_id=51912e056f999f9d
+PASS AC-S9: violations-err.rate_limit=True; 3rd-violation-mute-sec.reject=sec.reject muted_until-in-future=True; muted-hold=True (60s unmute path not awaited in suite; window asserted via muted_until)
+PASS AC-S10: chat->chat.broadcast(room=lobby); idea->pool-stub idea_id=True; store-types=['chat.broadcast', 'idea.submit']
+PASS AC-S16: board==manual-sql=True rooms=['lobby', 'quant'] ai_generated=True actor=system disclaimer-match=True fresh-reflection=True legacy-reject=True
+PASS AC-S17: single==py-slice==manual-sql=True multi+unknown=True empty=True bad-forms-reject=[True, True, True, True, True, True] default-none-full=True
+PASS AC-S8a: config-30/60=True banner-ok=True; server disconnected the no-pong client after 3.0s (test instance interval=1s timeout=2s)
+PASS AC-S8c: baseline-acked=True; dead=True via=ConnectionClosedError in 2.5s (keepalive 1s+1s, bound 6s); proxy-frozen=True sessions=1 (no-FIN premise); reconnect-direct=True; post-recovery-roundtrip=True pending=0
+PASS AC-S8e: armed=True frozen=True pending-after-cut=1; observer-once evt=1ad79ddd8fb8edcb; dead=True via=ConnectionClosedError in 2.5s; reconnect=True; duplicate-ack evt-match=True id-match=True code=E_DUPLICATE_MSG; store-rows=1; no-rebroadcast=True; pending=0; post-roundtrip=True
+PASS AC-S8d: dead=True via=ConnectionClosedError in 0.0s; refusal-drill budget-out=False drill-refusals=2 (retry loop caught+backed off real refusals); restart: reconnect=True retries=1 (>=1, <=10: not busy-spinning; a corpse-backlog dial may bridge the restart on Windows loopback - honest count); room-set restored exactly: lobby-isolated=True quant-received=True
+PASS AC-S14: empty-board=True envelope-keys=['disclaimer', 'room_message_board']; rows=[{'room': 'lobby', 'messages': 2, 'actors': 2}, {'room': 'quant', 'messages': 3, 'actors': 2}] row-keys-exact=True; manual-sql-cross=True scope(events=7 board-msgs=5 non-chat-excluded)=True; insertion-order-independent=True; live-rederive=True
+PASS AC-S15: row-counts-stable=True ([8, 0]); zero-write-method-src=True; deterministic=True; bad-disclaimer-construction-refused ['empty=True', 'whitespace=True', 'non-str=True']; legacy-no-disclaimer-face-refused=True; live-db cross=True rooms=['lobby', 'quant']
+PASS AC-S18: empty-board=True rows=[{'room': 'cocreate', 'ideas': 3, 'actors': 2}, {'room': 'lab', 'ideas': 1, 'actors': 1}] manual-sql-cross=True scope(events=6 board-ideas=4)=True insertion-order-independent=True live-rederive=True; row-counts-stable=True zero-write-src=True deterministic=True bad-disclaimer ['empty=True', 'whitespace=True', 'non-str=True'] legacy-refused=True live-db-cross=True pools=['cocreate']
+PASS AC-S19: restart-survival(board==manual=True ideas>0=True keys=['board', 'disclaimer'] disclaimer-match=True ai_generated=True actor=system); fresh-reflection=True (2->3); filter=True empty=True unknown=True bad-rejects=[True, True, True, True, True, True] default-full=True legacy-reject=True
+PASS AC-S20: default-shape=True window-rows=True order=True empty=True manual-sql=True reorder-independent=True scope=True
+PASS AC-S21: bads14 x 2 boards all E_LS_BAD_WINDOW=True (28 rejects); zero-side-effects events 7==7; disclaimer-gate-outermost=True
+PASS AC-S22: row-counts-stable=True zero-write-src=True det-room=True det-idea=True default-unchanged=True live-db-cross=True (month=2026-10 rows=2)
+PASS AC-S23: nov-grid-born=True nov-manual-sql=True oct-snapshot-kept=True no-leak-either-way=True (oct msgs 3+3 / ideas 2+2)
+PASS AC-S24: default-both-months=True windows-partition-default=True pre-roll-default==oct-window=True
+PASS AC-S25: events-total=12 (oct 6 + nov 6, non-counted 2)=True type-isolation=True pure-read=True oct-reread-stable=True
+PASS AC-S11: full: keys=12 subset=True name-match=True deep-water-leak=[]; subset=True forbidden=True honorary-zero-render=True unknown=True
+PASS AC-S12: receipt-evt_id=True queued-row=True gate-rejects=True ungated-rows=0
+PASS AC-S13: snapshot-200-as_of=True census-subset=True 404=404/404 405=405/405/405 ro-write-refused=True files-unchanged=True
+SUITE PASS (28/28 criteria pass)
+
+--- determinism scope: board-window family lines (PASS AC-S20..AC-S25) run1 vs run2: IDENTICAL (755 bytes) ---
+full-stdout compare: DIFFER - pre-existing nondeterministic fields only (AC-S3 rtt ms readings, AC-S4 ephemeral port, AC-S5/S8e uuid-derived actor/evt ids); the delivered family lines are outside the diff (R1869 single-run capture precedent, honesty note)
+run1 rc=0 [SUITE PASS (28/28 criteria pass)]; run2 rc=0 [SUITE PASS (28/28 criteria pass)]; both-green=True
