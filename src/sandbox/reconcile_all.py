@@ -522,6 +522,17 @@ SUITES = [
     # the restart boundary).
     ("member-banner-queue-persist",
      os.path.join("member", "test_banner_queue_persist.py"), 7),
+    # R1894 member banner_board capped+windowed read cross-restart
+    # persistence example (R1889 reseed): face close -> same cfg
+    # same db reopen; oct capped-window envelope (window echo +
+    # cap block) == pre-close snapshot byte-identical; default
+    # capped/bare reads recover; one new november row recomputes
+    # the default face while the old window stays frozen (window
+    # aggregates follow the window); dual live instances read
+    # identical. (AC-BQ18..AC-BQ24 pre-registered in the R1894
+    # tech.md claim row; suite-only round, product untouched.)
+    ("member-banner-board-persist",
+     os.path.join("member", "test_banner_board_persist.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

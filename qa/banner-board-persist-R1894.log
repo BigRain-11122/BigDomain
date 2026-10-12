@@ -1,0 +1,36 @@
+=== [1] suite double-run (test_banner_board_persist.py, driver CRLF->LF normalized) ===
+run1 rc=0 sha256=22e440ee7c99126c9b296732f97f23b9bd91dcc842bd6114671fa7ba26d9e5ed bytes=1058
+run2 rc=0 sha256=22e440ee7c99126c9b296732f97f23b9bd91dcc842bd6114671fa7ba26d9e5ed bytes=1058
+byte-identical=True
+--- run1 stdout verbatim ---
+PASS AC-BQ18: statuses ok skipped=7 rows=11 grants=5 oct_cap 12keys tail=['AV-E', 'AV-F'] total=4 def_cap 11keys bb_total=6 tail=['AV-G', 'AV-J'] total=7 def_bare 7keys rows=['AV-A', 'AV-B', 'AV-E', 'AV-F', 'AV-G', 'AV-J'] nov_cap total=3 oct_bare 8keys rows=4
+PASS AC-BQ19: oct_cap==pre=True repeat_identical=True keys=12 tail=['AV-E', 'AV-F'] oct_bare==pre=True keys=8
+PASS AC-BQ20: def_cap==pre=True 11keys bb_total=6 total=7 cap_board==bare_tail=True def_bare==pre=True tail=['AV-G', 'AV-J']
+PASS AC-BQ21: av_l=skipped_no_budget def_cap bb_total=7 total=8 differs_from_pre=True tail=['AV-J', 'AV-L'] bare_rows=7
+PASS AC-BQ22: oct_cap==pre=True oct_total=4 oct_bare==pre=True nov_total=4 nov_bb_total=4 nov_bare=['AV-A', 'AV-G', 'AV-J', 'AV-L']
+PASS AC-BQ23: face2==face3_all_four=True face2_reread_identical=True oct_cap==pre=True def_total=8 def_bb_total=7 nov_total=4
+PASS AC-BQ24: write_keywords=[] counts_stable=True (log 12==12 grants 5==5) ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7
+
+
+=== [2] fingerprint sentinel (fingerprint_regen --check, rc=0) ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+=== [3] census (qa_writer_census --check, rc=0) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1271 tee=769 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [4] references ===
+RUNNER evidence: qa/reconcile-all-R1894.log (RUNNER PASS 137/137 suites, criteria 1284, controls 7/7, 160.9s)
+matrix: docs/sandbox-suite-matrix.md regenerated against qa/reconcile-all-R1894.log; --check byte-identical x2 (13643 bytes, 137 suites, 1284 criteria)
