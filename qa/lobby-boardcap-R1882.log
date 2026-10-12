@@ -1,0 +1,30 @@
+== qa/lobby-boardcap-R1882.log: lobby room_message_board/idea_pool_board read-cap (R1882) ==
+== claim row: state/queue/tech.md R1882 (AC-S26..S31 preregistered before code) ==
+
+-- section 1: suite segment (AC-S26..S31, lobby suite standalone run) --
+PASS AC-S26: default-2keys-full-6zones=True cap-6keys-total6-returned2-truncated=True tail==full[-2:]=True
+PASS AC-S27: 10/10 bad-limit x 2 boards rejected E_LS_BAD_LIMIT; events flat 16==16; double-bad->limit gate wins=True; bad-window-only=True; disclaimer-outermost=True
+PASS AC-S28: tail slice == mirror SQL (zone DESC LIMIT N reversed) on n=1/3/4 x both boards, zone-ascending kept=True
+PASS AC-S29: window-before-cap: nov total=2 (in-window, not global 6); windowed cap rows == windowed full tail; no re-order; windowed-cap envelope exactly 6 keys (no window echo)=True
+PASS AC-S30: empty board + zero-row month keep the 4-key block honest (total=0 truncated=False); limit==total full return; limit=1 tail-1=True
+PASS AC-S31: row-counts-stable=True zero-write-src=True det-byte-identical=True live-db-cross=True (month=2026-10 returned=2 total=2)
+
+-- section 2: double-run determinism --
+segment byte-identical across two full suite runs: True
+
+-- section 3: full regression (reconcile_all.py -> qa/reconcile-all-R1882.log) --
+PASS suite lobby exit=0 pass-lines=34 fail-lines=0 criteria=34 23.2s
+RUNNER PASS (130/130 suites green, reconcile controls 7/7, 197.5s)
+
+-- section 4: matrix regen + --check --
+<!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
+|  | 合计 |  | 1202 | green 130 / FAIL 0 / no-evidence 0 |  |
+matrix --check byte-identical: exit 0 twice (matrix-check-exit=0, matrix-check2-exit=0)
+
+-- section 5: hygiene --
+git status modified set = docs/sandbox-suite-matrix.md, src/sandbox/lobby/store.py,
+  src/sandbox/lobby/test_client.py, src/sandbox/reconcile_all.py, state/queue/tech.md
+  (+ untracked qa/reconcile-all-R1882.log, this evidence log)
+shipped config.json: zero bytes changed (lobby config absent from modified set)
+store.py fully ASCII: True; new suite segment fully ASCII: True
+fingerprint face untouched: zero schema statements in store.py diff (board methods only)

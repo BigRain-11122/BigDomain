@@ -22,6 +22,7 @@ REPO = "domain/BigDomain"
 # dedicated E_LS_BAD_WINDOW fail-closed before any read.
 _BOARD_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 E_LS_BAD_WINDOW = "E_LS_BAD_WINDOW"
+E_LS_BAD_LIMIT = "E_LS_BAD_LIMIT"
 
 
 def _board_window_or_none(window):
@@ -37,6 +38,21 @@ def _board_window_or_none(window):
     ):
         raise ValueError(E_LS_BAD_WINDOW)
     return window
+
+
+def _board_readcap_gate(limit):
+    """Read-cap gate shared by the two lobby board read faces
+    (R1882, the R1729/R1880 read-hat family). limit=0 is the sole
+    default sentinel (full read); every other shape -- a negative
+    int, a bool (an int subclass that must still refuse), a
+    non-int, None -- raises the dedicated E_LS_BAD_LIMIT
+    ValueError before any read (zero side effects)."""
+    if isinstance(limit, bool) or not isinstance(limit, int) \
+            or limit < 0:
+        raise ValueError(
+            "%s: limit must be a non-negative int (0 = full read)"
+            % E_LS_BAD_LIMIT)
+    return limit
 
 
 def utc_now_iso():
@@ -178,7 +194,7 @@ class EventStore:
             ).fetchone()
         return json.loads(row[0]) if row else None
 
-    def room_message_board(self, window=None):
+    def room_message_board(self, window=None, limit=0):
         """R1773 room-level message read face: pure-read derivation over
         the public event stream. Per room (zone) chat message count and
         distinct active-actor count, aggregated read-only over
@@ -200,9 +216,30 @@ class EventStore:
         historical month stays readable forever and a month with no
         rows is an honest empty board). A bad window shape rejects
         the dedicated E_LS_BAD_WINDOW fail-closed, after the
-        disclaimer gate (the disclaimer gate stays outermost)."""
+        disclaimer gate (the disclaimer gate stays outermost).
+        R1882 read cap (the R1729/R1880 read-hat family law):
+        limit=0 - the sole default sentinel - keeps the full
+        current behavior byte-identical; a positive int caps the
+        board to the tail window, the same rows the mirror clause
+        (ORDER BY zone DESC LIMIT N, reversed back to ascending)
+        yields, with the in-board zone-ascending relative order
+        unchanged (zone is the GROUP BY key, structurally unique
+        per board row, so the mirror ordering needs no rowid
+        tie-break - the row-level faces' tie law does not apply
+        here). The overflow block adds exactly four keys {limit,
+        total, returned, truncated} with total = the board's full
+        zone-row count (window-filtered when a window is given -
+        window filtering runs before the cap and before COUNT;
+        never the post-truncation count; a capped read never lies
+        about what it left out). Per the R1869 envelope-shape law
+        the windowed-cap envelope carries no window echo key - the
+        window semantic rides on the call, the overflow block
+        carries only the cap facts. A malformed limit fails closed
+        E_LS_BAD_LIMIT before the window gate (the double-bad
+        gate-order law); the disclaimer gate stays outermost."""
         if not self.disclaimer or not self.disclaimer.strip():
             raise ValueError("E_STORE_NO_DISCLAIMER")
+        _board_readcap_gate(limit)
         win = _board_window_or_none(window)
         sql = ("SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
                " WHERE type = 'chat.broadcast'")
@@ -217,9 +254,19 @@ class EventStore:
             {"room": room, "messages": int(n), "actors": int(k)}
             for room, n, k in rows
         ]
-        return {"room_message_board": board, "disclaimer": self.disclaimer}
+        env = {"room_message_board": board}
+        if limit > 0:
+            total = len(board)
+            if total > limit:
+                env["room_message_board"] = board[-limit:]
+            env["limit"] = limit
+            env["total"] = total
+            env["returned"] = len(env["room_message_board"])
+            env["truncated"] = env["returned"] < total
+        env["disclaimer"] = self.disclaimer
+        return env
 
-    def idea_pool_board(self, window=None):
+    def idea_pool_board(self, window=None, limit=0):
         """R1792 idea pool board: pure-read event-derived face over the
         persistent events table. The server-side in-memory proposal
         pool stub resets on restart; this board re-derives the pool
@@ -240,9 +287,27 @@ class EventStore:
         month with no rows is an honest empty board. A bad window
         shape rejects the dedicated E_LS_BAD_WINDOW fail-closed,
         after the disclaimer gate (the disclaimer gate stays
-        outermost)."""
+        outermost).
+        R1882 read cap (the R1729/R1880 read-hat family law):
+        limit=0 - the sole default sentinel - keeps the full
+        current behavior byte-identical; a positive int caps the
+        board to the tail window, the same rows the mirror clause
+        (ORDER BY zone DESC LIMIT N, reversed back to ascending)
+        yields, with the in-board zone-ascending relative order
+        unchanged (zone is the GROUP BY key, structurally unique
+        per board row - no rowid tie-break needed). The overflow
+        block adds exactly four keys {limit, total, returned,
+        truncated} with total = the board's full zone-row count
+        (window-filtered when a window is given - window filtering
+        runs before the cap and before COUNT; never the
+        post-truncation count). Per the R1869 envelope-shape law
+        the windowed-cap envelope carries no window echo key. A
+        malformed limit fails closed E_LS_BAD_LIMIT before the
+        window gate (the double-bad gate-order law); the disclaimer
+        gate stays outermost."""
         if not self.disclaimer or not self.disclaimer.strip():
             raise ValueError("E_STORE_NO_DISCLAIMER")
+        _board_readcap_gate(limit)
         win = _board_window_or_none(window)
         sql = ("SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
                " WHERE type = 'idea.submit'")
@@ -257,7 +322,17 @@ class EventStore:
             {"room": zone, "ideas": int(n), "actors": int(k)}
             for zone, n, k in rows
         ]
-        return {"idea_pool_board": board, "disclaimer": self.disclaimer}
+        env = {"idea_pool_board": board}
+        if limit > 0:
+            total = len(board)
+            if total > limit:
+                env["idea_pool_board"] = board[-limit:]
+            env["limit"] = limit
+            env["total"] = total
+            env["returned"] = len(env["idea_pool_board"])
+            env["truncated"] = env["returned"] < total
+        env["disclaimer"] = self.disclaimer
+        return env
 
     def close(self):
         with self._lock:

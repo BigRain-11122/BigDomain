@@ -1873,6 +1873,254 @@ def board_monthroll_cases():
               ok_type_iso, ok_pure, ok_det))
 
 
+def board_readcap_cases(srv_db):
+    """AC-S26..S31 (R1882): read-cap limit parameter on the two
+    lobby board read faces (the R1729/R1880 read-hat family law;
+    the seed = the boards' own R1869 window family). limit=0 is
+    the sole default sentinel (full read, byte-identical
+    envelope); a positive int caps the board to the tail window -
+    the same rows the mirror clause (ORDER BY zone DESC LIMIT N,
+    reversed back to ascending) yields - with a four-key overflow
+    block whose total is the full (window-filtered) board count,
+    never the post-truncation one. Zone is the GROUP BY key, so
+    board rows are structurally tie-free: no rowid tie-break."""
+    from store import EventStore
+    tmp = tempfile.mkdtemp(prefix="lobby-boardcap-")
+    notice = ("sandbox non-advisory notice: board rows are "
+              "operational read-only derivations, not advice")
+    db = os.path.join(tmp, "cap.db")
+    st = EventStore(db, disclaimer=notice)
+
+    # six-zone world per board family, ascending-unique zones:
+    # October carries all six zones on both board types; November
+    # carries only two zones (delta, zeta) -- the window x cap
+    # orthogonality probe (in-window total 2 vs global 6).
+    zones = ["alpha", "beta", "delta", "epsilon", "gamma", "zeta"]
+    for i, z in enumerate(zones):
+        st.append("2026-10-01T01:00:%02d.000000Z" % (i + 1),
+                  "chat.broadcast", "res-%d" % i, z,
+                  "oct chat %d" % i, {"text": "x"})
+        st.append("2026-10-01T02:00:%02d.000000Z" % (i + 1),
+                  "idea.submit", "res-%d" % i, z,
+                  "oct idea %d" % i, {"text": "y"})
+    for z, actor in (("delta", "res-d2"), ("zeta", "res-z2")):
+        st.append("2026-11-05T01:00:%02d.000000Z" % (3 if z == "delta"
+                                                     else 4),
+                  "chat.broadcast", actor, z, "nov chat", {"text": "x"})
+        st.append("2026-11-05T02:00:%02d.000000Z" % (3 if z == "delta"
+                                                     else 4),
+                  "idea.submit", actor, z, "nov idea", {"text": "y"})
+
+    # ---- AC-S26: default sentinel + overflow block law ----
+    full_room = st.room_message_board()
+    full_idea = st.idea_pool_board()
+    ok_default = (
+        set(full_room.keys()) == {"room_message_board", "disclaimer"}
+        and set(full_idea.keys()) == {"idea_pool_board", "disclaimer"}
+        and [r["room"] for r in full_room["room_message_board"]]
+        == sorted(zones)
+        and len(full_room["room_message_board"]) == 6
+        and len(full_idea["idea_pool_board"]) == 6
+        and json.dumps(st.room_message_board(window="2026-11"),
+                       sort_keys=True)
+        == json.dumps(st.room_message_board(window="2026-11", limit=0),
+                      sort_keys=True))
+    cap_room = st.room_message_board(limit=2)
+    cap_idea = st.idea_pool_board(limit=2)
+    ok_cap_keys = (
+        set(cap_room.keys())
+        == {"room_message_board", "disclaimer", "limit", "total",
+            "returned", "truncated"}
+        and set(cap_idea.keys())
+        == {"idea_pool_board", "disclaimer", "limit", "total",
+            "returned", "truncated"}
+        and cap_room["limit"] == 2 and cap_idea["limit"] == 2
+        and cap_room["total"] == 6 and cap_idea["total"] == 6
+        and cap_room["returned"] == 2 and cap_idea["returned"] == 2
+        and cap_room["truncated"] is True
+        and cap_idea["truncated"] is True
+        and cap_room["room_message_board"]
+        == full_room["room_message_board"][-2:]
+        and cap_idea["idea_pool_board"]
+        == full_idea["idea_pool_board"][-2:])
+    record("AC-S26", ok_default and ok_cap_keys,
+           "default-2keys-full-6zones=%s cap-6keys-total6-returned2-"
+           "truncated=%s tail==full[-2:]=%s"
+           % (ok_default, ok_cap_keys,
+              cap_room["room_message_board"]
+              == full_room["room_message_board"][-2:]))
+
+    # ---- AC-S27: five bad limit forms + gate order ----
+    bads = [-1, True, "2", 2.5, None]
+    n_before = db_query(db, "SELECT COUNT(*) FROM events")[0][0]
+    rejects = 0
+    for bad in bads:
+        for face in (st.room_message_board, st.idea_pool_board):
+            refused = False
+            try:
+                face(limit=bad)
+            except ValueError as exc:
+                refused = "E_LS_BAD_LIMIT" in str(exc)
+            rejects += 1 if refused else 0
+    n_after = db_query(db, "SELECT COUNT(*) FROM events")[0][0]
+    gate_code = win_code = ""
+    try:
+        st.room_message_board(limit=-1, window="2026-13")
+    except ValueError as exc:
+        gate_code = str(exc)
+    try:
+        st.idea_pool_board(window="2026-13")
+    except ValueError as exc:
+        win_code = str(exc)
+    st_leg = EventStore(os.path.join(tmp, "legacy.db"))
+    legacy_first = False
+    try:
+        st_leg.room_message_board(limit=-1)
+    except ValueError as exc:
+        legacy_first = "E_STORE_NO_DISCLAIMER" in str(exc)
+    st_leg.close()
+    ok27 = (rejects == 10 and n_before == n_after
+            and "E_LS_BAD_LIMIT" in gate_code
+            and "E_LS_BAD_WINDOW" in win_code and legacy_first)
+    record("AC-S27", ok27,
+           "%d/10 bad-limit x 2 boards rejected E_LS_BAD_LIMIT; "
+           "events flat %d==%d; double-bad->limit gate wins=%s; "
+           "bad-window-only=%s; disclaimer-outermost=%s"
+           % (rejects, n_before, n_after,
+              "E_LS_BAD_LIMIT" in gate_code,
+              "E_LS_BAD_WINDOW" in win_code, legacy_first))
+
+    # ---- AC-S28: tail-window three-path cross (slice/mirror) ----
+    ok28 = True
+    for n in (1, 3, 4):
+        for face, board_key, etype in (
+                (st.room_message_board, "room_message_board",
+                 "chat.broadcast"),
+                (st.idea_pool_board, "idea_pool_board", "idea.submit")):
+            full = face()
+            capped = face(limit=n)
+            mirror = [
+                {"room": z,
+                 ("messages" if etype == "chat.broadcast" else "ideas"):
+                 int(cnt), "actors": int(k)}
+                for z, cnt, k in db_query(
+                    db,
+                    "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM"
+                    " events WHERE type = ? GROUP BY zone"
+                    " ORDER BY zone DESC LIMIT ?", (etype, n))
+            ][::-1]
+            rows = capped[board_key]
+            ok28 = ok28 and rows == full[board_key][-n:] == mirror
+            ok28 = ok28 and [r["room"] for r in rows] \
+                == sorted(r["room"] for r in rows)
+            ok28 = ok28 and capped["total"] == 6 \
+                and capped["returned"] == len(rows) \
+                and capped["truncated"] == (len(rows) < 6)
+    record("AC-S28", ok28,
+           "tail slice == mirror SQL (zone DESC LIMIT N reversed) on "
+           "n=1/3/4 x both boards, zone-ascending kept=%s" % ok28)
+
+    # ---- AC-S29: window x cap orthogonality ----
+    nov_full_room = st.room_message_board(window="2026-11")
+    nov_full_idea = st.idea_pool_board(window="2026-11")
+    nov_cap_room = st.room_message_board(window="2026-11", limit=1)
+    nov_cap_idea = st.idea_pool_board(window="2026-11", limit=1)
+    oct_cap_room = st.room_message_board(window="2026-10", limit=4)
+    ok29 = (
+        nov_cap_room["total"] == 2 and nov_cap_room["returned"] == 1
+        and nov_cap_room["truncated"] is True
+        and nov_cap_room["room_message_board"]
+        == nov_full_room["room_message_board"][-1:]
+        and nov_cap_idea["total"] == 2 and nov_cap_idea["returned"] == 1
+        and nov_cap_idea["idea_pool_board"]
+        == nov_full_idea["idea_pool_board"][-1:]
+        and oct_cap_room["total"] == 6 and oct_cap_room["returned"] == 4
+        and oct_cap_room["room_message_board"]
+        == st.room_message_board(window="2026-10")
+        ["room_message_board"][-4:]
+        and [r["room"] for r in nov_cap_room["room_message_board"]]
+        == sorted(r["room"] for r in nov_cap_room["room_message_board"])
+        and set(nov_cap_room.keys())
+        == {"room_message_board", "disclaimer", "limit", "total",
+            "returned", "truncated"})
+    record("AC-S29", ok29,
+           "window-before-cap: nov total=2 (in-window, not global 6); "
+           "windowed cap rows == windowed full tail; no re-order; "
+           "windowed-cap envelope exactly 6 keys (no window echo)=%s"
+           % ok29)
+
+    # ---- AC-S30: honest empty + boundary states ----
+    st_e = EventStore(os.path.join(tmp, "empty.db"), disclaimer=notice)
+    empty_room = st_e.room_message_board(limit=3)
+    empty_idea = st_e.idea_pool_board(limit=3)
+    zero_month = st.room_message_board(window="2000-01", limit=2)
+    zero_month_idea = st.idea_pool_board(window="2000-01", limit=2)
+    boundary = st.room_message_board(limit=6)
+    one_row = st.room_message_board(limit=1)
+    st_e.close()
+    ok30 = (
+        empty_room["room_message_board"] == []
+        and empty_room["total"] == 0 and empty_room["returned"] == 0
+        and empty_room["truncated"] is False and empty_room["limit"] == 3
+        and empty_idea["idea_pool_board"] == []
+        and empty_idea["total"] == 0 and empty_idea["truncated"] is False
+        and zero_month["room_message_board"] == []
+        and zero_month["total"] == 0 and zero_month["truncated"] is False
+        and zero_month_idea["idea_pool_board"] == []
+        and boundary["total"] == 6 and boundary["returned"] == 6
+        and boundary["truncated"] is False
+        and boundary["room_message_board"]
+        == full_room["room_message_board"]
+        and one_row["returned"] == 1 and one_row["truncated"] is True
+        and one_row["room_message_board"]
+        == full_room["room_message_board"][-1:])
+    record("AC-S30", ok30,
+           "empty board + zero-row month keep the 4-key block honest "
+           "(total=0 truncated=False); limit==total full return; "
+           "limit=1 tail-1=%s" % ok30)
+
+    # ---- AC-S31: pure-read + determinism + live-db cross ----
+    before31 = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+                for t in ("events", "census_cache")]
+    st.room_message_board(limit=2)
+    st.idea_pool_board(limit=2)
+    st.room_message_board(window="2026-10", limit=5)
+    st.idea_pool_board(window="2026-11", limit=1)
+    after31 = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+               for t in ("events", "census_cache")]
+    ok_pure = before31 == after31 and before31[0] == 16
+    src_both = (inspect.getsource(st.room_message_board)
+                + inspect.getsource(st.idea_pool_board))
+    ok_src = not any(word in src_both
+                     for word in ("INSERT", "UPDATE", "DELETE"))
+    det = (json.dumps(st.room_message_board(limit=2), sort_keys=True)
+           == json.dumps(cap_room, sort_keys=True)
+           and json.dumps(st.idea_pool_board(limit=2), sort_keys=True)
+           == json.dumps(cap_idea, sort_keys=True))
+    st.close()
+    now_month = time.strftime("%Y-%m", time.gmtime())
+    st_srv = EventStore(srv_db, disclaimer=notice)
+    srv_cap = st_srv.room_message_board(window=now_month, limit=2)
+    manual_srv = [
+        {"room": z, "messages": int(n), "actors": int(k)}
+        for z, n, k in db_query(
+            srv_db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' AND substr(ts_utc,1,7)=?"
+            " GROUP BY zone ORDER BY zone DESC LIMIT 2", (now_month,))
+    ][::-1]
+    st_srv.close()
+    ok_live = (srv_cap["room_message_board"] == manual_srv
+               and srv_cap["returned"] == len(manual_srv)
+               and srv_cap["total"]
+               >= srv_cap["returned"])
+    record("AC-S31", ok_pure and ok_src and det and ok_live,
+           "row-counts-stable=%s zero-write-src=%s det-byte-identical=%s "
+           "live-db-cross=%s (month=%s returned=%d total=%d)"
+           % (ok_pure, ok_src, det, ok_live, now_month,
+              srv_cap["returned"], srv_cap["total"]))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -2227,6 +2475,11 @@ async def suite():
     # AC-S23/S24/S25 (R1876): cross-month roll preservation on the
     # two lobby board read faces (explicit-ts world; store-level).
     board_monthroll_cases()
+
+    # AC-S26..S31 (R1882): read-cap limit parameter on the two
+    # lobby board read faces (store-level; live-db cross on the
+    # real server db).
+    board_readcap_cases(srv.db)
 
     await city_cases()
 

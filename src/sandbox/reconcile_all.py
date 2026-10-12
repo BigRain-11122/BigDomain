@@ -114,7 +114,15 @@ SUITES = [
     # windows partition it exactly) and the immutable events
     # total is kept with the cross-board non-counted rows
     # isolated - AC-S23/S24/S25 (25 -> 28).
-    ("lobby", os.path.join("lobby", "test_client.py"), 28),
+    # R1882 read-cap limit parameter on both lobby board read
+    # faces: limit=0 sole default sentinel (full read
+    # byte-identical), positive int caps to the zone-ascending
+    # tail window with the four-key overflow block {limit, total,
+    # returned, truncated} (total = windowed full count, never
+    # post-truncation), five bad forms fail-closed E_LS_BAD_LIMIT
+    # before the window gate, honest-empty four keys, pure-read +
+    # live-db cross - AC-S26..S31 (28 -> 34).
+    ("lobby", os.path.join("lobby", "test_client.py"), 34),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
