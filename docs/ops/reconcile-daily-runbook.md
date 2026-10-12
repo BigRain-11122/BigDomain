@@ -16,7 +16,8 @@
 2. **runner 段**：全量套件+三域对账控制面双态六控制：ledger 八查（clean → exit 0；篡改副本 balance+1 → exit 2）+ pay 六查（clean → exit 0；篡改 granted order amount_cent+1 → exit 2）+ member 六查（clean → exit 0；删 credits audit 行 → exit 2）。套件数与判据数随 SUITES 注册表现值增长（写死计数已 stale·以当日 RUNNER 行实测为准）。防篡改防线=tamper 面 must exit 2（AC-RA8/RA9 在册口径）。
 3. **schema 漂移哨兵步（R1714 起随跑·零配置）**：runner 段毕后入口件自动跑 `src/sandbox/fingerprint_regen.py --chain migration_chains.json --check`，stdout/stderr 追加进同一当日证据 log——分节行 `--- sentinel: fingerprint-regen --check ---` 先行、`sentinel exit=N` 尾行（追加模式零覆写·同日 -N 后缀件语义不变）。哨兵=五域构造器活体指纹对 `migration_chains.json` 冻结基线逐域比对，漂移（exit 2）=基线与活体分叉。
 3b. **daily 剖面步（R1733 起随跑·观察窗）**：哨兵步毕后入口件自动跑 `src/sandbox/runner_profile.py --daily --check`（daily 基线 staleness 检测·R1715 daily 变体），输出追加同一当日证据 log——分节行 `--- profile: runner-profile --daily --check ---` 先行、`profile exit=N (observation-window: recorded, not gating)` 尾行。**观察窗期 profile exit 恒记账不参当日判定**（`PROFILE_OBSERVATION_WINDOW=True`）；转正（升 G5 同级门控）=漂移阈值回访窗定夺——裁定判据预注册=tech.md R1780 认领行 AC-OW2（裁定时点 2026-10-16 治理窗·计数规则 AC-OW3）。
-4. **当日退出码聚合**：runner 非零=传播 runner 码（哨兵仍跑仍记账=失败日不漏检漂移面）；runner 零=哨兵承接（漂移即当日 FAIL）；profile 步观察窗期恒不参判定（终行 `profile=ok|flag(exit=N)` 字段=记账面）。终行 `RECONCILE-DAILY <date> verdict=… exit=N log=… runner_exit=N sentinel=ok|drift(exit=N) profile=ok|flag(exit=N)` 打 stdout——判读以终行为准，证据细节在当日 log。
+3c. **writer-census 哨兵步（R1848 起随跑）**：profile 步毕后入口件自动跑 `src/os/qa_writer_census.py --check --dir qa`（基线=qa/writer-census-baseline.json·R1841 落基），stdout/stderr 追加进同一当日证据 log——分节行 `--- census: qa-writer-census --check ---` 先行、`census exit=N elapsed=X.Xs` 尾行（追加模式零覆写·同日 -N 后缀件语义不变）。**baseline 缺位=INFO 面不门控**：零子进程+分节记「census baseline missing: writer-census-baseline.json (probe not deployed …)」+`census not-deployed (recorded, not gating)` 尾行——verdict 记 `census=not-deployed`，当日判定不受影响（AC-WCD2 缺基诚实拒的值守面翻译）。
+4. **当日退出码聚合**：runner 非零=传播 runner 码（哨兵/census 仍跑仍记账=失败日不漏检漂移面）；runner 零=哨兵承接（漂移即当日 FAIL）；哨兵零=census 承接（census exit 2=drift / exit 3=refusal 即当日 FAIL；not-deployed 恒零不门控）；profile 步观察窗期恒不参判定（终行 `profile=ok|flag(exit=N)` 字段=记账面）。终行 `RECONCILE-DAILY <date> verdict=… exit=N log=… runner_exit=N sentinel=ok|drift(exit=N) profile=ok|flag(exit=N) census=ok|drift(exit=2)|refusal(exit=3)|not-deployed|anomaly(exit=N)` 打 stdout——判读以终行为准，证据细节在当日 log。
 5. **生产态（bootstrap 后启用·CEO 物理件到位为前置）**：三域 reconcile CLI 传真实 db 路径（ledger/pay=positional argv·member=argparse flags——passthrough 已验 AC-RA10·零新 CLI 面）+微信支付 T+1 日对账（当日 10 点后账单逐笔核对四情况；查单判据=验签成功+trade_state=SUCCESS；前端返回即查单+未付再发起用原单号律——对单指引全文=`docs/global-benchmarks.md` §① 支付合规行〔**4012075249**·引用不复制〕+`docs/research/intelligence-wall.md` W2）；账本判据面锚=`docs/spec/token-ledger-spec.md` §一 **AC-L1..L11**（双式平衡/余额符号律/evt_id 幂等/对账八查·引用不复制）。
 
 ## §二 判读（一行定态）
@@ -26,6 +27,7 @@
 | `RECONCILE-DAILY <当日> verdict=PASS exit=0 … runner_exit=0 sentinel=ok`（runner 段与哨兵节双绿） | **G0 绿**——当日对账闭环，记账收轮（state log 附一行引用证据文件名） |
 | `RECONCILE-DAILY … runner_exit≠0`（runner 段红·哨兵仍跑仍记账） | 套件回归破或控制面断言失——按 §三 分级 |
 | `RECONCILE-DAILY … verdict=FAIL` 而 runner_exit=0（sentinel=drift） | **G5 漂移面**——按 §三 G5 行处置 |
+| `RECONCILE-DAILY … runner_exit=0 sentinel=ok` 而 `census=drift(exit=2)`（census 旗面·R1848 起） | **census 漂移面**——当日 FAIL（G0 破）·按 §三 G6 行处置；`census=refusal(exit=3)`=qa/ 证据目录异常面同 FAIL；`census=not-deployed`=baseline 缺位 INFO 记账·PASS 面不变 |
 | reconcile clean 面 exit≠0 且非 2 | **G2**（数据面真不一致） |
 | reconcile tamper 面 exit≠2 | **G3 防线失守**（最高级） |
 | 生产期金额不一致 | **G4**（对单四情况处置） |
@@ -40,6 +42,7 @@
 | G3 | tamper 面 exit≠2（防篡改防线失守） | **红线事件**：当日必修（触发器/约束复原+复跑双态全绿）·禁过夜 | HQ-FEEDBACK **P0** 行即写即报+state log 注红线 |
 | G4 | 生产期支付对单不一致（四情况） | 按查单指引处置（原单号查单/关单/人工对账）·金额差永不静默调账 | 涉资损/重复支付→[needs-CEO] 当日呈批 |
 | G5 | 哨兵漂移（sentinel=drift·runner_exit=0·当日 verdict=FAIL）**·观察窗注记**：profile 段漂移（`profile exit=2`·R1733 起）现=记账不门控——转正裁定=2026-10-16 治理窗按 tech.md R1780 AC-OW2 机械执行（转正后并入本行 G5 同级门控） | 读证据 log 哨兵节漂移域+_fp_diff 细节→`git log/diff` 定位构造器/链改动→合法 schema 变更=追加迁移链步〔schema_migrate〕+`fingerprint_regen --update` 再冻结〔steps 非空时 --update 拒=先过迁移链〕→复跑哨兵绿+当日复跑全绿 | 当日不闭环→HQ-FEEDBACK P1 行（基线契约 open 风险） |
+| G6 | census 漂移旗（census=drift(exit=2)·runner_exit=0·当日 verdict=FAIL·R1848 起） | 读证据 log census 节 `[flag]` 行逐旗处置：`new-dialect`=新证据件方言病面（壳捕获/PS 重定向写入=方言病复发面）→按 R1841 归一先例修复重建该证据件——**非重冻结**（`--update-baseline` 只在处置毕合法面变更后·R1841 AC-WCB5 再冻结门）；`class-migrated`=存量件改写面→`git log/diff` 该件归因定改写者；`disappeared`=基线在册件清理=合法动作 info 非旗。修复毕复跑 `qa_writer_census.py --check` 绿+当日复跑全绿 | 当日不闭环→HQ-FEEDBACK P1 行（证据纪律面 open 风险） |
 
 ## §四 当日闭环路径（值守联动）
 
@@ -54,3 +57,4 @@
 - **AC-RB3 过**：§三 四级分级表+处置面+升级面三列齐。
 - **AC-RB4 过**：三载体=state log R1186 行+backlog done 标+commit 消息含 O-2026-0930-027。
 - **R1715 哨兵节补文对照**：§一3/4 哨兵步+聚合语义、§二 G0 双绿口径+runner 红行+G5 漂移行、§三 G5 处置行、§一2 活性计数口径=tech.md R1715 认领行 AC-RK1..RK3 全对照（判据预注册先于成文）；行数 ≤120 实测（AC-RB1 线不破）。
+- **R1853 census 节补文对照**：§一3c/§一4 census 步+聚合链、§二 census 判读行、§三 G6 处置行、§五 本行=tech.md R1853 认领行 AC-RBC1..RBC5 全对照（判据预注册先于成文·成文来源=reconcile_daily.py run_census 产品源实读）；行数 ≤120 实测（AC-RB1 线不破）。

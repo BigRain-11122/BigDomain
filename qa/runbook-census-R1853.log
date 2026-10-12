@@ -1,0 +1,51 @@
+=== section 1: line budget (AC-RB1) ===
+line_count=60 budget_ok=True
+PASS line-budget-120
+
+=== section 2: literal anchors (runbook vs product source) ===
+marker-literal: runbook=True product=True
+PASS marker-literal
+notdeployed-tail-literal: runbook=True product=True
+PASS notdeployed-tail-literal
+
+=== section 3: rendered-form anchors (product templates) ===
+product tail template: census exit=%d elapsed=%.1fs  -> runbook form: census exit=N elapsed=X.Xs
+PASS tail-rendered
+product missing template: census baseline missing: %s (probe not deployed - honest INFO, recorded, not gating)
+runbook form: census baseline missing: writer-census-baseline.json (probe not deployed ...)
+PASS missing-rendered
+PASS argv-face
+
+=== section 4: verdict census field label set ===
+product label present: ok -> True
+product label present: drift(exit=2) -> True
+product label present: refusal(exit=3) -> True
+product label present: not-deployed -> True
+product label present: anomaly(exit=%d) -> True
+runbook field: census=ok|drift(exit=2)|refusal(exit=3)|not-deployed|anomaly(exit=N)
+PASS verdict-label-set
+PASS aggregation-chain
+PASS aggregation-expr
+
+=== section 5: section presence ===
+PASS step-3c-row
+PASS judge-census-row
+PASS g6-row
+PASS r1853-bullet
+PASS baseline-info-face
+PASS newdialect-not-refreeze
+
+=== section 6: census mention distribution ===
+section §一 census-mention-lines=2
+section §二 census-mention-lines=1
+section §三 census-mention-lines=1
+section §四 census-mention-lines=0
+section §五 census-mention-lines=1
+PASS sections-covered
+
+=== section 7: change face (git diff --stat HEAD) ===
+docs/ops/reconcile-daily-runbook.md | 6 +++++-
+ state/queue/tech.md                 | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+VERDICT: ALL-PASS (16/16 checks)
