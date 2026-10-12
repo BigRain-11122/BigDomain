@@ -500,6 +500,15 @@ SUITES = [
     # window-total immutability across the roll).
     ("member-banner-queue-caproll",
      os.path.join("member", "test_banner_queue_caproll.py"), 7),
+    # R1889 member banner_queue cap-window read cross-restart
+    # persistence example (AC-MB30..MB36 pre-registered before
+    # code; close -> same cfg same db reopen: October cap-window
+    # envelope byte-identity, default-cap restoration, one new
+    # November row = window-isolation across restart, dual live
+    # instances sequential read identity, pure-read law across
+    # the restart boundary).
+    ("member-banner-queue-persist",
+     os.path.join("member", "test_banner_queue_persist.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

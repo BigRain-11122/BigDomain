@@ -1,0 +1,55 @@
+--- section 1: suite double-run (utf-8 LF single writer) ---
+RUN1 rc=0
+PASS AC-MB30: statuses oct=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap,skipped_daily_cap nov=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap skipped=7 rows=11 grants=5 oct_bare=['AV-A', 'AV-B', 'AV-E', 'AV-F'] oct_cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window'] tail=['AV-E', 'AV-F'] def_cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=7 def_bare_rows=7
+PASS AC-MB31: oct_cap2==pre=True oct_bare==pre=True repeat_identical=True tiebreak_tail=['AV-E', 'AV-F']
+PASS AC-MB32: def_cap2==pre=True total=7 rows==def_bare_tail=True def_bare==pre=True tail=['AV-A', 'AV-J']
+PASS AC-MB33: av_l=skipped_no_budget def_total=8 nov_total=4 nov_bare=['AV-G', 'AV-A', 'AV-J', 'AV-L'] oct_total=4 oct_envelope==pre=True
+PASS AC-MB34: face2==face3_all_four=True face2_reread_identical=True oct_envelope==pre=True def_total=8
+PASS AC-MB35: write_keywords=[] counts_stable=True (log 12==12 grants 5==5)
+PASS AC-MB36: ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7
+
+RUN2 rc=0
+PASS AC-MB30: statuses oct=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap,skipped_daily_cap nov=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap skipped=7 rows=11 grants=5 oct_bare=['AV-A', 'AV-B', 'AV-E', 'AV-F'] oct_cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window'] tail=['AV-E', 'AV-F'] def_cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=7 def_bare_rows=7
+PASS AC-MB31: oct_cap2==pre=True oct_bare==pre=True repeat_identical=True tiebreak_tail=['AV-E', 'AV-F']
+PASS AC-MB32: def_cap2==pre=True total=7 rows==def_bare_tail=True def_bare==pre=True tail=['AV-A', 'AV-J']
+PASS AC-MB33: av_l=skipped_no_budget def_total=8 nov_total=4 nov_bare=['AV-G', 'AV-A', 'AV-J', 'AV-L'] oct_total=4 oct_envelope==pre=True
+PASS AC-MB34: face2==face3_all_four=True face2_reread_identical=True oct_envelope==pre=True def_total=8
+PASS AC-MB35: write_keywords=[] counts_stable=True (log 12==12 grants 5==5)
+PASS AC-MB36: ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7
+
+DOUBLE-RUN BYTE-IDENTICAL: True (rc 0/0)
+
+--- section 2: RUNNER full regression (qa/reconcile-all-R1889.log) ---
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | PASS AC-DBR7: hygiene: apidev.py byte-stable across the run=True (dev_board face present=True), config.json byte-stable=True, suite source pure-ASCII=True, net-imports=0 (double-run byte-identity and the RUNNER / matrix / sentinel faces live in the round evidence log)
+  | PASS AC-ANW7: hygiene: apidev.py byte-stable across the run=True (dev_board face present=True), config.json byte-stable=True, suite source pure-ASCII=True, net-imports=0 (double-run byte-identity and the RUNNER / matrix / sentinel faces live in the round evidence log)
+PASS suites 135/135 green, expected criteria total=1252
+RUNNER PASS (135/135 suites green, reconcile controls 7/7, 159.1s)
+
+--- section 3: suite matrix regen + --check ---
+regen rc=0
+PASS generated docs/sandbox-suite-matrix.md (13448 bytes) - registry suites=135 criteria=1252 evidence=qa/reconcile-all-R1889.log green=135/135
+PASS hygiene: pure-ascii source, zero network imports
+
+--check run 1 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13448 bytes, 135 suites, 1252 criteria)
+
+--check run 2 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13448 bytes, 135 suites, 1252 criteria)
+
+MATRIX --check BYTE-IDENTICAL: True
+
+--- section 4: census (bare read-only reconciliation face) ---
+rc=0
+summary: {"archive_only": null, "archive_token": null, "dangling": null, "live_token": null, "mismatch": null, "not_embedded": null, "pass": true, "sections": null, "unknown_dangling": null, "unknown_mismatch": null}
+caller-side note: first driver pass invoked `census --check`
+which the argparse surface rejects (usage error, rc=2) -
+a caller-side flag mistake, not a product defect; the census
+face is the bare subcommand (exit 0 = clean, pass=true).
+
+VERDICT: PASS
