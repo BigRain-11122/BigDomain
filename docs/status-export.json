@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T05:57:11+08:00",
+ "export_ts": "2026-10-13T06:23:25+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech 队头交付（lobby chat.send idem_seen 键位绑定例窗：AC-S44..S48 全绿 SUITE 新段 5/5+RUNNER 141/141 判据 1318+矩阵 --check byte-identical×2+census DRIFT-CLEAN〔同 id 异 text=新事件+双键共居/跨连接重放吸收=服务器实例级缓存/异 id 同 text=新事件 id 域独立/strip+id 规范化+截断先于键计算三面吸收〕）",
-  "latest_artifact": "src/sandbox/lobby/test_client.py idem_keybind_cases() + qa/lobby-idemkeybind-R1899.log（2026-10-13）",
-  "next_milestone": "P2 队头续（sec_batch banner_queue 帽窗读跨重启例窗=R1895 补种+apidev dev_board 帽窗读跨重启例窗=R1896 补种+apidev usage_log 帽窗读跨重启例窗=R1897 补种+pay channel_status_matrix 窗读跨重启例窗=R1898 补种+member expiring_soon 读面跨重启例窗=R1899 补种）→ ≤48h（2026-10-15 前）"
+  "current": "P2 tech 队头交付（member expiring_soon 读面跨重启持久化例窗：AC-ES8..ES14 全绿 SUITE 7/7+RUNNER 142/142 判据 1325+矩阵 --check byte-identical×2+census DRIFT-CLEAN〔冻结 as_of 窗读榜跨重启逐字节同一/同 grant 重激活幂等=db 态去重图/新激活期重算零缓存/双界越窗零回声/双实例序贯读同一〕）",
+  "latest_artifact": "src/sandbox/member/test_expiring_soon_persist.py + qa/expiring-soon-persist-R1900.log（2026-10-13）",
+  "next_milestone": "P2 队头续（sec_batch banner_queue 帽窗读跨重启例窗=R1895 补种+apidev dev_board 帽窗读跨重启例窗=R1896 补种+apidev usage_log 帽窗读跨重启例窗=R1897 补种+pay channel_status_matrix 窗读跨重启例窗=R1898 补种+water journal journal_board 帽窗读跨重启例窗=R1900 补种）→ ≤48h（2026-10-15 前）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1900",
+   "member expiring_soon board + distribution fold cross-restart persist 7/7 (criteria AC-ES8..AC-ES14; MemberStore close-reopen on the same db/cfg/pay replays the frozen-as_of snapshot quartet byte-identically, same-grant re-activation stays idempotent = db-backed dedup map, new true-path activation recomputes the board zero cache, dual-boundary out-of-window zero echo with 4 live rows in db, third-instance sequential identity) + RUNNER 142/142 criteria 1318->1325 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
+  ],
   [
    "R1899",
    "lobby chat.send idem key-binding semantics 5/5 (criteria AC-S44..S48; same-id different-text = fresh event with both (id,text) keys coexisting, cross-connection replay absorbed = server-instance-scoped cache, different-id same-text = fresh event with per-id keys coexisting, strip / id-strip / truncation normalization all feed the key before the digest, suite-only round product bytes unchanged) + RUNNER 141/141 criteria 1313->1318 (lobby 46->51) + matrix byte-identical x2 + census DRIFT-CLEAN"
@@ -775,7 +779,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1899",
+   "1900",
    "OSLoop 执行 tick"
   ],
   [
@@ -3714,10 +3718,10 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 10,
+  "log_lines_in_window": 12,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

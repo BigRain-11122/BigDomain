@@ -1255,6 +1255,20 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-eventtickets-boardpersist", os.path.join(
         "ledger", "test_eventtickets_boardpersist.py"), 7),
+    # R1900: member expiring_soon board + distribution fold
+    # read-face derivation purity across an instance restart
+    # (seed = the R1899 tech-queue claim row; AC-ES1..ES7 R1774
+    # window semantics + AC-ESD1..ESD7 R1786 fold semantics in
+    # ce, the cross-instance restart example was zero-registered;
+    # MemberStore close-reopen on the same db/cfg/pay replays the
+    # frozen-as_of snapshot quartet byte-identically, the
+    # same-grant re-activation stays idempotent (source_grant_id
+    # db-backed dedup), a new true-path activation recomputes the
+    # board (zero cache) and out-of-window rows never echo)
+    # (AC-ES8..AC-ES14 pre-registered in
+    # state/queue/tech.md)
+    ("member-expiring-soon-persist", os.path.join(
+        "member", "test_expiring_soon_persist.py"), 7),
 ]
 
 FAILS = 0
