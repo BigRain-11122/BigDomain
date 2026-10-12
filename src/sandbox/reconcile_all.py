@@ -1190,6 +1190,23 @@ SUITES = [
     # window - R1860 AC-SB21 law enforced as the roll example)
     ("ugc-sec-batch-rowsroll", os.path.join(
         "ugc", "test_sec_batch_rowsroll.py"), 7),
+    # R1896 apidev audit_lineage capped-windowed read
+    # restart-persistence example window (the R1891 seed): the
+    # three-piece stack (Ledger -> MeteredFace -> DevKeyFace)
+    # closes fully and reopens on the same db path and config --
+    # the October capped-windowed lineage envelope (window echo +
+    # overflow block) replays byte-identical from the fresh
+    # instance (zero in-memory drift in the derived face), a
+    # November revoke on an isolated lone key recalculates the
+    # default capped read (zero cache) while the October windowed
+    # chain reads stay byte-frozen (key_events rows are
+    # record-time immutable; the injected key lives outside the
+    # October chain's key domain per the claim ruling), and a
+    # third instance replays the post-injection state
+    # byte-identically (two-instance sequential reads)
+    # (AC-LG23..AC-LG29 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-lineagepersist", os.path.join(
+        "ledger", "test_apidev_lineagepersist.py"), 7),
 ]
 
 FAILS = 0

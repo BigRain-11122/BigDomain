@@ -1,0 +1,56 @@
+apidev audit_lineage capped-windowed read restart persistence (R1896) evidence
+criteria AC-LG23..AC-LG29 pre-registered in state/queue/tech.md before code
+
+--- suite run 1 (rc=0) ---
+PASS AC-LG23: October anchor: 4 lifecycle events record-time 2026-10 (SQL count==4), W=2026-10 from event prefix, four snapshots anchored (capped-win 13 keys block l/t/r/tr=2/3/2/True tail [B,C] queried full-chain=2; bare-win 9; default-cap 12; default 8), lone-x pre-close cap read active/empty=True
+PASS AC-LG24: full stack close -> reopen same db/config: October capped-windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-LG25: default full-chain read replayed byte-identical=True (chain [A,B,C] ids/names/queried_index/status facts stable), bare-window=True, default-cap=True
+PASS AC-LG26: frozen clock +23d -> November revoke on the lone key (record-time 2026-11 SQL count==1): default capped read recalculated (status revoked + [revoke@2026-11], byte-differs from the pre-close snapshot=True = zero-cache), November windowed cap read carries the new event=True, October windowed events axis stays empty (member status=revoked is a key-attribute evolution, not window slicing)=True
+PASS AC-LG27: after the November injection: October capped-windowed chain read still byte-identical to the pre-close snapshot=True, bare-window=True, chain November window carries zero events (all four lifecycle rows are October-stamped)=True, key_events total 5 == 4+1 (immutable rows never lost)
+PASS AC-LG28: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True) and the October capped-windowed chain read still equals the original pre-close snapshot=True (windowed read survives restart x new-data unscratched)
+PASS AC-LG29: pure read: 10 read calls on the third face move zero rows (keys 4==4, events 5==5), audit_lineage segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-lineagepersist: 7/7 criteria pass
+clock restore probe: True
+
+--- suite run 2 (rc=0) ---
+PASS AC-LG23: October anchor: 4 lifecycle events record-time 2026-10 (SQL count==4), W=2026-10 from event prefix, four snapshots anchored (capped-win 13 keys block l/t/r/tr=2/3/2/True tail [B,C] queried full-chain=2; bare-win 9; default-cap 12; default 8), lone-x pre-close cap read active/empty=True
+PASS AC-LG24: full stack close -> reopen same db/config: October capped-windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-LG25: default full-chain read replayed byte-identical=True (chain [A,B,C] ids/names/queried_index/status facts stable), bare-window=True, default-cap=True
+PASS AC-LG26: frozen clock +23d -> November revoke on the lone key (record-time 2026-11 SQL count==1): default capped read recalculated (status revoked + [revoke@2026-11], byte-differs from the pre-close snapshot=True = zero-cache), November windowed cap read carries the new event=True, October windowed events axis stays empty (member status=revoked is a key-attribute evolution, not window slicing)=True
+PASS AC-LG27: after the November injection: October capped-windowed chain read still byte-identical to the pre-close snapshot=True, bare-window=True, chain November window carries zero events (all four lifecycle rows are October-stamped)=True, key_events total 5 == 4+1 (immutable rows never lost)
+PASS AC-LG28: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True) and the October capped-windowed chain read still equals the original pre-close snapshot=True (windowed read survives restart x new-data unscratched)
+PASS AC-LG29: pure read: 10 read calls on the third face move zero rows (keys 4==4, events 5==5), audit_lineage segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-lineagepersist: 7/7 criteria pass
+clock restore probe: True
+
+--- double-run byte-identical check ---
+run1 sha16=89FA80871EC1F99D run2 sha16=89FA80871EC1F99D identical=True
+
+--- runner full regression (see qa/reconcile-all-R1896.log, rc=0) ---
+RUNNER PASS (139/139 suites green, reconcile controls 7/7, 173.9s)
+PASS suite ledger-apidev-lineagepersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+
+--- matrix regen + check x2 ---
+regen rc=0 | check rc=0 | check rc=0 | check byte-identical=True
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13833 bytes, 139 suites, 1299 criteria)
+
+
+--- census --check (rc=0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1276 tee=774 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- fingerprint sentinel (rc=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[VERDICT PASS]
