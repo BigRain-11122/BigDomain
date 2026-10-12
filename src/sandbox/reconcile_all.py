@@ -850,6 +850,16 @@ SUITES = [
     # (AC-CVR1..CVR7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-funnelroll",
      os.path.join("ledger", "test_freetrial_funnelroll.py"), 7),
+    # R1880 free-trial conversion_funnel_board read cap: limit=0
+    # sole default sentinel keeps the full behavior byte-identical,
+    # positive int caps to the tail window (mirror SQL plan_key
+    # DESC LIMIT N reversed), overflow block adds exactly four keys
+    # {limit, total, returned, truncated} with total = the registry
+    # row count (dense axis, window-independent), malformed limit
+    # fails closed E_FT_BAD_LIMIT before the window gate
+    # (AC-CVR8..CVR14 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-funnelcap",
+     os.path.join("ledger", "test_freetrial_funnelcap.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

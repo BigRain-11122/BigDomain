@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-12T22:16:00+08:00",
+ "export_ts": "2026-10-12T22:48:22+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "本轮产出：member banner_queue 帽面月滚保真例窗交付（滚前帽窗快照→十一月注入→滚后旧月帽窗读逐字节保真+缺省帽面随钟到新窗反向断言——判据预注册先于代码 AC-MB23..29·套件 7/7 双跑逐字节同一·全量回归 129 套件 1189 判据零回归）",
-  "latest_artifact": "src/sandbox/member/test_banner_queue_caproll.py（帽窗月滚保真套件 7 判据）2026-10-12·证据 qa/banner-queue-caproll-R1879.log",
-  "next_milestone": "下轮 P2 FIFO 队头：freetrial conversion_funnel_board 读帽参数窗（R1874 补种=最老可认领）·下窗 ≤48h"
+  "current": "本轮产出：freetrial conversion_funnel_board 读帽参数窗交付（limit=0 缺省逐字节保真+五坏形态 fail-closed E_FT_BAD_LIMIT+截断尾窗镜像 SQL 第三径+溢出块四键 additive·判据预注册先于代码 AC-CVR8..14·套件 7/7 双跑逐字节同一·全量回归 130 套件 1196 判据零回归）",
+  "latest_artifact": "src/sandbox/ledger/test_freetrial_funnelcap.py（读帽套件 7 判据）2026-10-12·证据 qa/freetrial-funnelcap-R1880.log",
+  "next_milestone": "P2 FIFO 续队：lobby room_message_board/idea_pool_board 读帽参数窗（R1874 补种=次老种子）下轮接续·窗口 ≤48h（2026-10-14 前）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "2",
+   "R1880 freetrial conversion_funnel_board 读帽参数窗交付轮（P2 tech 队头 FIFO=R1874 补种·轮计分 2=可跑实物）：AC-CVR8..CVR14 判据预注册先于代码——freetrial.py conversion_funnel_board(window=None, limit=0) 尾参（缺省 0 逐字节保真+五坏形态 E_FT_BAD_LIMIT fail-closed 先于窗门+截断尾窗==镜像 SQL plan_key DESC LIMIT N 反转第三径+溢出块恰四键 additive·total=注册轴稠密计数窗无关+零计划世界空板四键照带+窗×帽七键并集）+套件 test_freetrial_funnelcap.py SUITE 7/7 首跑全绿双跑逐字节同一〔sha16 4bcd8009944d1fb7〕+RUNNER PASS 130/130 controls 7/7 159.9s 零回归〔SUITES 129→130 判据 1189→1196〕+矩阵再生 130/1196 green --check byte-identical+census DRIFT-CLEAN+指纹哨兵 CLEAN——平台坑实录：首跑 RUNNER FAIL 129/130（census cd7 live 探针 exit=2）根因=Windows text mode 子进程 stdout 落 CRLF→证据件方言=pwsh-capture→census new-dialect FLAG→driver CRLF→LF 归一重落全绿〔R1873/R1879 方言预防族新证〕——tech 消耗 1+补种 1〔freetrial conversion_funnel_board 帽窗读跨重启持久化例窗〕·证据 qa/freetrial-funnelcap-R1880.log 五节"
+  ],
   [
    "2",
    "R1879 member banner_queue 帽面月滚保真例窗交付轮（P2 tech 队头 FIFO〔R1872 补种=最老可认领〕·轮计分 2=可跑实物）：AC-MB23..MB29 判据预注册先于代码〔tech.md R1879 认领行·AC-MB23 前缀全仓 git grep 零占用〕——test_banner_queue_caproll.py 落地：十月锚 4 skipped 同秒 tie 滚前快照四面→十一月 3 skipped 真路径注入〔全队 7 skipped/11 行〕=滚后十月截断帽窗读==滚前同参快照逐字节〔dumps 全 dict 等+rowid 尾窗 [AV-E,AV-F] 跨滚冻结〕+滚后十月全量帽 rows==滚前裸窗快照+缺省帽面随数据到新窗〔尾 [AV-A,AV-J]≠滚前 [AV-E,AV-F]=漂移实证 total=7〕+窗 total 语义跨滚〔oct 4==4/nov 3/缺省 7=窗先于 COUNT+LIMIT〕+正交反向断言〔oct 帽窗行全 2026-10/缺省帽行全 2026-11〕+oct 帽窗恰六键缺省恰五键+空月帽窗诚实空+纯读律+卫生全过〔config/reminder sha256 双证零改动〕SUITE 7/7 首跑全绿+双跑 stdout 逐字节同一·reconcile_all SUITES 128→129 判据 1182→1189+RUNNER PASS 129/129 controls 7/7 162.5s=qa/reconcile-all-R1879.log+矩阵再生 129/1189 green --check byte-identical〔12925B〕+census DRIFT-CLEAN flags=0+证据 qa/banner-queue-caproll-R1879.log——平台坑第四态如实注：证据件 PS `>` UTF-16+cmd /c CRLF 两连方言被 writer-census 自旗〔cd7 FAIL=RUNNER FAIL 自指〕→驱动器捕获归一 tee 重落正法〔R1873 GBK 归一同族·J-M18 完成即 QC 再证〕·tech 消耗 1+补种 1〔member banner_queue 帽窗读跨重启持久化例窗〕·R1879"
@@ -695,7 +699,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1879",
+   "1880",
    "OSLoop 执行 tick"
   ],
   [
@@ -3634,10 +3638,10 @@
  "self_drive": {
   "window": "2026-10-06..2026-10-12",
   "window_days": 7,
-  "log_lines_in_window": 13,
+  "log_lines_in_window": 15,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 4,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

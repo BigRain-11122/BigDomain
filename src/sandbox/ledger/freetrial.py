@@ -553,7 +553,7 @@ class FreeTrialFace:
                                  "converted_utc": r[3]}
                                 for r in rows]}
 
-    def conversion_funnel_board(self, window=None):
+    def conversion_funnel_board(self, window=None, limit=0):
         """Plan-level conversion-funnel board (R1788 explore
         queue row; the seed = this face's R1768 registry): one
         row per registered plan carrying the grant count, the
@@ -594,7 +594,29 @@ class FreeTrialFace:
         adds one "window" key (additive); the default envelope
         is byte-identical to the prior shape. A malformed
         window fails closed E_FT_BAD_ARGS before any read
-        (zero side effects)."""
+        (zero side effects).
+
+        Read cap (the R1880 claim row; the R1729/R1840/R1849
+        read-hat family law): limit=0 - the sole default
+        sentinel - keeps the full current behavior
+        byte-identical; a positive int caps the board to the
+        tail window, the same rows the mirror clause (ORDER
+        BY plan_key DESC LIMIT N, reversed back to ascending)
+        yields, with the in-board relative order unchanged.
+        The overflow block adds exactly four keys {limit,
+        total, returned, truncated} with total = the full
+        registry row count (this axis is registry-dense, so
+        a window never removes rows and total stays
+        window-independent - never the post-truncation
+        count; a capped read never lies about what it left
+        out). A malformed limit fails closed E_FT_BAD_LIMIT
+        before the window gate (the double-bad gate-order
+        law; the sole sentinel is 0 - a non-zero positive
+        int caps, anything else refuses)."""
+        if not _is_int(limit) or limit < 0:
+            raise TrialError(E_FT_BAD_LIMIT,
+                              "limit must be int >= 0: %r"
+                              % (limit,))
         w = None
         if window is not None:
             w = str(window)
@@ -649,9 +671,18 @@ class FreeTrialFace:
                              "converted": int(converted),
                              "active_trials": int(active),
                              "conversion_rate": rate})
-        env = {"conversion_funnel_board": rows}
+        total = len(rows)
+        capped = rows
+        if limit > 0 and total > limit:
+            capped = rows[-limit:]
+        env = {"conversion_funnel_board": capped}
         if w is not None:
             env["window"] = w
+        if limit > 0:
+            env["limit"] = limit
+            env["total"] = total
+            env["returned"] = len(capped)
+            env["truncated"] = len(capped) < total
         env["disclaimer"] = self.disclaimer
         return env
 

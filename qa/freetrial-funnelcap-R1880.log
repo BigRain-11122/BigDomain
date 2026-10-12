@@ -1,0 +1,46 @@
+R1880 freetrial conversion_funnel_board read-cap suite evidence (AC-CVR8..CVR14, pre-registered in state/queue/tech.md before code)
+--- run 1 (exit=0 sha16=4bcd8009944d1fb7) ---
+PASS AC-CVR8: default call == explicit (None, 0) byte-identical=True; default envelope keys exact=True; windowed limit=0 read adds window key only (zero overflow keys)=True; four-plan ascending axis with 8-key rows=True
+PASS AC-CVR9: 5/5 bad forms rejected E_FT_BAD_LIMIT (None is not the sentinel - 0 is); four-table counts flat (4, 1, 1, 0) -> (4, 1, 1, 0); double-bad call yields limit gate code E_FT_BAD_LIMIT; bad-window-only still yields E_FT_BAD_ARGS
+PASS AC-CVR10: limit=50 over 4 plans: envelope = base + exactly four overflow keys=True; limit=50 total=4 returned=4 truncated=False=True; rows == default ascending board byte-identical=True
+PASS AC-CVR11: limit=2: returned=2 total=4 truncated=True=True; rows == default tail-2 slice byte-identical (8-key rows unchanged)=True; mirror SQL (ro connection ORDER BY plan_key DESC LIMIT 2 reversed) == ['tango-tier', 'zulu-zero'] =True
+PASS AC-CVR12: limit==total (4/4): full board truncated=False=True; limit=1 single tail row zulu-zero=True; zero-plan world limit=3: empty board with all four overflow keys carried (honest empty capped read)=True
+PASS AC-CVR13: (window, limit) union envelope = 7 keys=True; capped windowed rows == windowed board tail-2 slice=True; total stays the registry count 4 across windows (dense axis verdict)=True; future-window capped read returns honest zero rows under the cap=True
+PASS AC-CVR14: four-table counts flat True; method source carries zero data-changing statements (inspect)=True; capped windowed double-call byte-identical=True; module pure ASCII (0 non-ascii); true import lines carry zero network libs (0); zero dice; config.json byte-stable; SUITES row 'ledger-freetrial-funnelcap' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+--- run 2 (exit=0 sha16=4bcd8009944d1fb7) ---
+PASS AC-CVR8: default call == explicit (None, 0) byte-identical=True; default envelope keys exact=True; windowed limit=0 read adds window key only (zero overflow keys)=True; four-plan ascending axis with 8-key rows=True
+PASS AC-CVR9: 5/5 bad forms rejected E_FT_BAD_LIMIT (None is not the sentinel - 0 is); four-table counts flat (4, 1, 1, 0) -> (4, 1, 1, 0); double-bad call yields limit gate code E_FT_BAD_LIMIT; bad-window-only still yields E_FT_BAD_ARGS
+PASS AC-CVR10: limit=50 over 4 plans: envelope = base + exactly four overflow keys=True; limit=50 total=4 returned=4 truncated=False=True; rows == default ascending board byte-identical=True
+PASS AC-CVR11: limit=2: returned=2 total=4 truncated=True=True; rows == default tail-2 slice byte-identical (8-key rows unchanged)=True; mirror SQL (ro connection ORDER BY plan_key DESC LIMIT 2 reversed) == ['tango-tier', 'zulu-zero'] =True
+PASS AC-CVR12: limit==total (4/4): full board truncated=False=True; limit=1 single tail row zulu-zero=True; zero-plan world limit=3: empty board with all four overflow keys carried (honest empty capped read)=True
+PASS AC-CVR13: (window, limit) union envelope = 7 keys=True; capped windowed rows == windowed board tail-2 slice=True; total stays the registry count 4 across windows (dense axis verdict)=True; future-window capped read returns honest zero rows under the cap=True
+PASS AC-CVR14: four-table counts flat True; method source carries zero data-changing statements (inspect)=True; capped windowed double-call byte-identical=True; module pure ASCII (0 non-ascii); true import lines carry zero network libs (0); zero dice; config.json byte-stable; SUITES row 'ledger-freetrial-funnelcap' registered; criteria drift self-check 6/7
+SUITE PASS 7/7
+DETERMINISM: stdout byte-identical double-run=True (sha16 run1=4bcd8009944d1fb7 run2=4bcd8009944d1fb7)
+VERDICT: SUITE PASS 7/7 exit=0/0
+--- matrix regen (--evidence qa/reconcile-all-R1880) ---
+PASS generated docs/sandbox-suite-matrix.md (13017 bytes) - registry suites=130 criteria=1196 evidence=qa/reconcile-all-R1880.log green=130/130
+PASS hygiene: pure-ascii source, zero network imports
+section exit=0
+--- matrix --check (run 2 of 2, byte-identical law) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13017 bytes, 130 suites, 1196 criteria)
+section exit=0
+--- writer-census --check ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1244 tee=742 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+section exit=0
+--- fingerprint sentinel --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+section exit=0

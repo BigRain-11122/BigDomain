@@ -1,0 +1,21 @@
+{
+  "tech_verify": {
+    "claim_prefix": "- [x] freetrial conversion_funnel_board 读帽参数窗",
+    "done_marker": "done 2026-10-12 R1880",
+    "criteria_refs": ["AC-CVR8..CVR14", "R1874"],
+    "open_expected": 10,
+    "reseed_prefix": "- [ ] freetrial conversion_funnel_board 帽窗读跨重启持久化例窗"
+  },
+  "log_lines": [
+    "2026-10-12 R1880 freetrial conversion_funnel_board 读帽参数窗交付轮（P2 tech 队头 FIFO=R1874 补种双种子文件位前者·轮计分 2=可跑实物）：五静全绿（LEDGER @BigDomain 零行+DEC 内容寻址零新 token〔辅证行 294 口径持平〕+GORD 314→324 十新行全 @BigStream MV/@bm-c/@bm-b 面=零本司执行面〔基线随收账更新〕+ORD 持平+BENCH 当日+树净零锁+当日 daily 证据在盘=对账已跑不重跑）——AC-CVR8..CVR14 判据预注册先于代码〔tech.md R1880 认领行·AC-CVR 续编前缀全仓 rg 零占用实锚·认领轮三裁定：E_FT_BAD_LIMIT=R1849 码在册复用/limit 门先于窗门/total=注册轴稠密计数窗无关〕→freetrial.py conversion_funnel_board(window=None, limit=0) 尾参落地〔缺省 0 逐字节保真+五坏形态全拒先于窗门+截断尾窗==镜像 SQL plan_key DESC LIMIT 2 反转逐位+溢出块恰四键 additive+零计划世界空板四键照带+窗×帽七键并集〕+套件 test_freetrial_funnelcap.py SUITE 7/7 首跑全绿零修正+双跑 stdout 逐字节同一〔sha16 4bcd8009944d1fb7〕——reconcile_all SUITES 129→130 判据 1189→1196〔ledger-freetrial-funnelcap〕+RUNNER PASS 130/130 controls 7/7 159.9s 零回归=qa/reconcile-all-R1880.log+矩阵再生 130/1196 green --check byte-identical 双跑+census --check DRIFT-CLEAN flags=0+指纹哨兵 CLEAN domains=5——平台坑实录=首跑 RUNNER FAIL 129/130〔reconcile-daily-census cd7 live 探针 exit=2〕根因=driver 捕获子进程 stdout 在 Windows text mode 落 CRLF→证据件方言签名=pwsh-capture→census new-dialect FLAG〔PYTHONIOENCODING 只钉编码不钉换行翻译〕→driver CRLF→LF 归一重落全绿〔R1873/R1879 证据件方言预防族新证〕——tech 消耗 1+补种 1〔freetrial conversion_funnel_board 帽窗读跨重启持久化例窗=R1880 补种〕·证据 qa/freetrial-funnelcap-R1880.log〔套件双跑+矩阵+census+哨兵五节〕",
+    "2026-10-12 R1880 tokens: local=unmeasured api=0 api_reason=纯本地进程件（套件双跑+RUNNER 全量回归+矩阵+census+指纹哨兵全本地跑·零外部 API 触点·三问门未涉及）"
+  ],
+  "hb_body": "freetrial funnel read-cap shipped: SUITE 7/7, RUNNER 130/130 green",
+  "export": {
+    "ceo_current": "本轮产出：freetrial conversion_funnel_board 读帽参数窗交付（limit=0 缺省逐字节保真+五坏形态 fail-closed E_FT_BAD_LIMIT+截断尾窗镜像 SQL 第三径+溢出块四键 additive·判据预注册先于代码 AC-CVR8..14·套件 7/7 双跑逐字节同一·全量回归 130 套件 1196 判据零回归）",
+    "ceo_artifact": "src/sandbox/ledger/test_freetrial_funnelcap.py（读帽套件 7 判据）2026-10-12·证据 qa/freetrial-funnelcap-R1880.log",
+    "ceo_milestone": "P2 FIFO 续队：lobby room_message_board/idea_pool_board 读帽参数窗（R1874 补种=次老种子）下轮接续·窗口 ≤48h（2026-10-14 前）",
+    "self_drive_method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)",
+    "result_row": ["2", "R1880 freetrial conversion_funnel_board 读帽参数窗交付轮（P2 tech 队头 FIFO=R1874 补种·轮计分 2=可跑实物）：AC-CVR8..CVR14 判据预注册先于代码——freetrial.py conversion_funnel_board(window=None, limit=0) 尾参（缺省 0 逐字节保真+五坏形态 E_FT_BAD_LIMIT fail-closed 先于窗门+截断尾窗==镜像 SQL plan_key DESC LIMIT N 反转第三径+溢出块恰四键 additive·total=注册轴稠密计数窗无关+零计划世界空板四键照带+窗×帽七键并集）+套件 test_freetrial_funnelcap.py SUITE 7/7 首跑全绿双跑逐字节同一〔sha16 4bcd8009944d1fb7〕+RUNNER PASS 130/130 controls 7/7 159.9s 零回归〔SUITES 129→130 判据 1189→1196〕+矩阵再生 130/1196 green --check byte-identical+census DRIFT-CLEAN+指纹哨兵 CLEAN——平台坑实录：首跑 RUNNER FAIL 129/130（census cd7 live 探针 exit=2）根因=Windows text mode 子进程 stdout 落 CRLF→证据件方言=pwsh-capture→census new-dialect FLAG→driver CRLF→LF 归一重落全绿〔R1873/R1879 方言预防族新证〕——tech 消耗 1+补种 1〔freetrial conversion_funnel_board 帽窗读跨重启持久化例窗〕·证据 qa/freetrial-funnelcap-R1880.log 五节"]
+  }
+}
