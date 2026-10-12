@@ -1,0 +1,23 @@
+== R1861 member banner_board monthly-roll suite ==
+-- run1 (rc=0) --
+PASS AC-MB1: oct_status=[('sent', 2), ('skipped_daily_cap', 2), ('skipped_no_budget', 2)] rows_default==explicit_oct=True board=['AV-A', 'AV-B', 'AV-E', 'AV-F'] total=4 oct_skip_ids=4
+PASS AC-MB2: nov_rows=5 nov_skipped=3 nov_board=['AV-A', 'AV-G', 'AV-J'] nov_total=3 default_board=6 avatars av-A-merged={'census_avatar_id': 'AV-A', 'skipped': 2, 'by_reason': {'first_service': 0, 'renewal_due': 2}}
+PASS AC-MB3: oct_window_byte_identical_after_roll=True av-A-oct=1 av-A-nov={'census_avatar_id': 'AV-A', 'skipped': 1, 'by_reason': {'first_service': 0, 'renewal_due': 1}} leak-free=True
+PASS AC-MB4: full_count=11 oct_ids_preserved=True telescoping=True (7==4+3)
+PASS AC-MB5: nov-cap env 12 keys + total==3 returned==2 truncated==True oct-cap total==4 returned==1
+PASS AC-MB6: write_keywords=[] count_stable=True (11==11)
+PASS AC-MB7: ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7
+-- run2 (rc=0) --
+PASS AC-MB1: oct_status=[('sent', 2), ('skipped_daily_cap', 2), ('skipped_no_budget', 2)] rows_default==explicit_oct=True board=['AV-A', 'AV-B', 'AV-E', 'AV-F'] total=4 oct_skip_ids=4
+PASS AC-MB2: nov_rows=5 nov_skipped=3 nov_board=['AV-A', 'AV-G', 'AV-J'] nov_total=3 default_board=6 avatars av-A-merged={'census_avatar_id': 'AV-A', 'skipped': 2, 'by_reason': {'first_service': 0, 'renewal_due': 2}}
+PASS AC-MB3: oct_window_byte_identical_after_roll=True av-A-oct=1 av-A-nov={'census_avatar_id': 'AV-A', 'skipped': 1, 'by_reason': {'first_service': 0, 'renewal_due': 1}} leak-free=True
+PASS AC-MB4: full_count=11 oct_ids_preserved=True telescoping=True (7==4+3)
+PASS AC-MB5: nov-cap env 12 keys + total==3 returned==2 truncated==True oct-cap total==4 returned==1
+PASS AC-MB6: write_keywords=[] count_stable=True (11==11)
+PASS AC-MB7: ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7
+-- verdict --
+double-run byte-identical=True
+stdout sha256=1af100b457e98b455239dded24d3713f8b7d934f5f24167351aca692e94399ce bytes=943
+exit codes: run1=0 run2=0

@@ -391,6 +391,13 @@ SUITES = [
     # E_REM_BAD_WINDOW fail-closed gate, window-x-cap orthogonality).
     ("member-banner-board",
      os.path.join("member", "test_banner_board.py"), 17),
+    # R1861 member banner_board month-roll fidelity example: frozen
+    # explicit-ts true product path across the Oct->Nov boundary -
+    # new-month landing, old-month byte preservation, immutable-row
+    # no-loss + telescoping totals, window-x-cap-x-roll orthogonality
+    # (AC-MB1..MB7 pre-registered in state/queue/tech.md).
+    ("member-banner-roll",
+     os.path.join("member", "test_banner_board_roll.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),
