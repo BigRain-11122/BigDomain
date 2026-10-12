@@ -816,6 +816,16 @@ SUITES = [
     # (AC-CFR1..CFR7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-callroll",
      os.path.join("ledger", "test_freetrial_callroll.py"), 7),
+    # R1874 free-trial conversion_funnel_board month-roll
+    # fidelity pin: frozen-clock isolated world, the cross-
+    # month conversion (grant 2026-10 + conversion 2026-11)
+    # reads two states in two windows (end-of-window snapshot
+    # walks with the window), old-month window reads preserved
+    # byte-identical across the roll, windowed rate keeps the
+    # zero-grant guard; zero product bytes - pin-only suite
+    # (AC-CVR1..CVR7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-funnelroll",
+     os.path.join("ledger", "test_freetrial_funnelroll.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
