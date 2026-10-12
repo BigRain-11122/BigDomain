@@ -919,6 +919,20 @@ SUITES = [
     # (AC-CVR8..CVR14 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-funnelcap",
      os.path.join("ledger", "test_freetrial_funnelcap.py"), 7),
+    # R1890 free-trial conversion_funnel_board capped-window
+    # read cross-restart persistence: the full four-piece
+    # dependency stack (Ledger -> MeteredFace -> DevKeyFace ->
+    # FreeTrialFace) closes and reopens on the same db, capped
+    # windowed/default reads return byte-identical to the
+    # pre-close snapshots (zero in-memory drift), new November
+    # rows recompute the default capped read (zero cache)
+    # while the old-month windowed capped read stays
+    # byte-identical (window isolation across restart and
+    # across new data), second reopen reads sequentially
+    # identical; zero product bytes - pin-only suite
+    # (AC-CVR15..CVR21 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-funnelpersist",
+     os.path.join("ledger", "test_freetrial_funnelpersist.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
