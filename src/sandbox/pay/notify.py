@@ -62,6 +62,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import sys
 
@@ -77,6 +78,10 @@ E_PN_NO_DISCLAIMER = "E_PN_NO_DISCLAIMER"
 E_PN_NO_PAY_DB = "E_PN_NO_PAY_DB"
 E_PN_BAD_CONFIG = "E_PN_BAD_CONFIG"
 E_PN_BAD_LIMIT = "E_PN_BAD_LIMIT"
+E_PN_BAD_WINDOW = "E_PN_BAD_WINDOW"
+
+# month-window gate (family law: strict anchor, R1748)
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 # log statuses (rows; the two skipped faces double as banner queue)
 ST_SENT = "sent"
@@ -474,12 +479,17 @@ class PayNotifyFace(object):
                 "revoked": cutoff is not None and (once + longterm) == 0,
                 "revoke_ts": cutoff}
 
-    def banner_queue(self, limit=0):
+    def banner_queue(self, limit=0, window=None):
         """Degraded in-app fallback queue = all skipped_* rows.
 
         limit=0 (default): the full current face - a raw list of row
         tuples, byte-identical to the pre-R1871 behavior (existing
-        callers untouched).
+        callers untouched). With window=W this stays a raw LIST, just
+        filtered to rows whose ts_utc lands in month W (record-time
+        substr(ts_utc,1,7)): the list face has no envelope, so the
+        window only narrows the row set - zero shape drift, and the
+        relative order is untouched (a window cuts rows, it never
+        reorders).
 
         limit>0 (R1871 read-cap, AC-PN8..AC-PN15 registered before
         this code): tail-window cap. Returns a dict envelope
@@ -488,34 +498,67 @@ class PayNotifyFace(object):
         yields them (ts_utc ascending, rowid ascending within ties -
         the capped query pins the explicit rowid tie-break because
         the full face's bare ordering relies on engine scan order
-        for same-second ties). total is the full skipped-row count -
-        a truncated read never lies about how much was cut off.
+        for same-second ties). total is the windowed skipped-row
+        count - a truncated read never lies about how much was cut
+        off.
 
-        Bad limit forms are refused before any read (fail-closed,
-        E_PN_BAD_LIMIT): the sentinel is ONLY the int 0 - bools,
-        floats, strings, None and negatives are all bad params, no
-        ambiguity. This face is a pure derived read: zero
+        window (R1878 month filter, AC-PN16..AC-PN22; seed = the
+        R1855 sec_batch / R1866 member / R1869 lobby board family):
+        optional YYYY-MM tail param. window=None keeps every
+        existing face byte-identical (limit=0 raw list; cap envelope
+        with exactly five keys). An explicit window narrows the row
+        set by record time and, on the cap face only, adds an
+        additive "window" echo key (six keys). Window filtering runs
+        BEFORE COUNT and LIMIT: total reports the full windowed set,
+        never the global one.
+
+        Bad params are rejected before any read (fail-closed):
+        the limit gate first (E_PN_BAD_LIMIT), then the window gate
+        (_WINDOW_RE strict anchor, 14 family bad forms;
+        E_PN_BAD_WINDOW). This face is a pure derived read: zero
         data-changing statements."""
         if isinstance(limit, bool) or not isinstance(limit, int) \
                 or limit < 0:
             raise ValueError(
                 "%s: limit must be a non-negative int (0 = full read)"
                 % E_PN_BAD_LIMIT)
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError("%s: window must be YYYY-MM: %r"
+                                 % (E_PN_BAD_WINDOW, window))
+        win = ""
+        if w is not None:
+            win = " AND substr(ts_utc,1,7)=?"
         if limit == 0:
+            if w is None:
+                return self._exec(
+                    "SELECT send_id, census_avatar_id, order_id, reason,"
+                    " status, ts_utc FROM pay_notify_log"
+                    " WHERE status LIKE 'skipped_%' ORDER BY ts_utc"
+                ).fetchall()
             return self._exec(
                 "SELECT send_id, census_avatar_id, order_id, reason,"
                 " status, ts_utc FROM pay_notify_log"
-                " WHERE status LIKE 'skipped_%' ORDER BY ts_utc").fetchall()
+                " WHERE status LIKE 'skipped_%'" + win +
+                " ORDER BY ts_utc", (w,)).fetchall()
+        count_args = (w,) if w is not None else ()
         total = self._exec(
             "SELECT COUNT(*) FROM pay_notify_log"
-            " WHERE status LIKE 'skipped_%'").fetchone()[0]
+            " WHERE status LIKE 'skipped_%'" + win,
+            count_args).fetchone()[0]
         rows = list(self._exec(
             "SELECT send_id, census_avatar_id, order_id, reason, status,"
             " ts_utc FROM pay_notify_log WHERE status LIKE 'skipped_%'"
-            " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
-            (limit,)))[::-1]
-        return {"rows": rows, "limit": limit, "total": total,
-                "returned": len(rows), "truncated": total > len(rows)}
+            + win + " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
+            count_args + (limit,)))[::-1]
+        envelope = {"rows": rows, "limit": limit, "total": total,
+                    "returned": len(rows),
+                    "truncated": total > len(rows)}
+        if w is not None:
+            envelope["window"] = w
+        return envelope
 
     def event_coverage(self, order_id):
         """Which event kinds have rows for one order (audit read)."""

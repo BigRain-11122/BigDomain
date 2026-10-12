@@ -320,6 +320,13 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("pay-notify-bannerlimit",
      os.path.join("pay", "test_pay_notify_bannerlimit.py"), 8),
+    # R1878 banner_queue month-window filter (R1871 successor):
+    # window=None tail param, record-time substr(1,7) row filter,
+    # window-before-COUNT/LIMIT (windowed total), additive envelope
+    # window echo key, E_PN_BAD_WINDOW fail-closed gate
+    # (AC-PN16..PN22 pre-registered in state/queue/tech.md).
+    ("pay-notify-bannerwin",
+     os.path.join("pay", "test_pay_notify_bannerwin.py"), 7),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face

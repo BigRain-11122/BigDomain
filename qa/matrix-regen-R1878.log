@@ -1,0 +1,4 @@
+PASS generated docs/sandbox-suite-matrix.md (12831 bytes) - registry suites=128 criteria=1182 evidence=qa/reconcile-all-R1878.log green=128/128
+PASS hygiene: pure-ascii source, zero network imports
+--- check pass ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12831 bytes, 128 suites, 1182 criteria)

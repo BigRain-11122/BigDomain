@@ -1,0 +1,46 @@
+--- pay-notify-bannerwin suite run 1 (cwd=src/sandbox/pay) ---
+PASS AC-PN16: default==window-None==limit-0 byte-identical=True explicit-window list-face rows=7 is-list=True default-cap keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=10
+PASS AC-PN17: bad forms raised=14/14 log-rows 10==10 zero side effects gate-order limit-first=True window-after=True
+PASS AC-PN18: oct=7 sep=3 subsequence-preserved=True mirror-SQL=True empty-window honest-empty=True
+PASS AC-PN19: keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window'] window=2026-10 total=7 (windowed; global would be 10) tail==oct[4:] True mirror-SQL True returned=3 truncated=True
+PASS AC-PN20: limit==windowed-total truncated=False returned=7; limit=1 tail==last=True truncated=True; empty-window envelope={'rows': [], 'limit': 3, 'total': 0, 'returned': 0, 'truncated': False, 'window': '2026-08'}
+PASS AC-PN21: oct-only=True sep-only=True disjoint=True union==full=True tie-pair in record month=True future-window list-empty=True future-cap total=0 rows=0
+PASS AC-PN22: write-stmt hits=none table-counts (10, 0, 0)==(10, 0, 0) (log/grants/revokes 3 paths) ascii=True net-imports=none suite-ascii=True shipped-cfg read-only=True criteria-so-far=6/7
+---- pay-notify-bannerwin acceptance: 7/7 passed
+
+--- suite run 2 (determinism) ---
+PASS AC-PN16: default==window-None==limit-0 byte-identical=True explicit-window list-face rows=7 is-list=True default-cap keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=10
+PASS AC-PN17: bad forms raised=14/14 log-rows 10==10 zero side effects gate-order limit-first=True window-after=True
+PASS AC-PN18: oct=7 sep=3 subsequence-preserved=True mirror-SQL=True empty-window honest-empty=True
+PASS AC-PN19: keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window'] window=2026-10 total=7 (windowed; global would be 10) tail==oct[4:] True mirror-SQL True returned=3 truncated=True
+PASS AC-PN20: limit==windowed-total truncated=False returned=7; limit=1 tail==last=True truncated=True; empty-window envelope={'rows': [], 'limit': 3, 'total': 0, 'returned': 0, 'truncated': False, 'window': '2026-08'}
+PASS AC-PN21: oct-only=True sep-only=True disjoint=True union==full=True tie-pair in record month=True future-window list-empty=True future-cap total=0 rows=0
+PASS AC-PN22: write-stmt hits=none table-counts (10, 0, 0)==(10, 0, 0) (log/grants/revokes 3 paths) ascii=True net-imports=none suite-ascii=True shipped-cfg read-only=True criteria-so-far=6/7
+---- pay-notify-bannerwin acceptance: 7/7 passed
+
+--- determinism: run1 vs run2 full stdout ---
+byte-identical=True sha256-run1=990a047dc776360cd5b9fef8d8dbbe1e0618af3c56ea2d47911e016f67b269f1 rc=0/0
+
+--- neighbor regression: pay-notify (AC-PN1..PN7) rc=0 ---
+PASS AC-PN1: shipped default constructs with approved=[], send raises E_TEMPLATE_NOT_APPROVED (E_TEMPLATE_NOT_APPROVED: tpl_pay_success_pending_ceo); empty-disclaimer/banned-copy/bad-cap/missing-paydb all refuse construction
+PASS AC-PN2: once grant: first=sent second=skipped_no_budget (unit consumed), longterm avatar=sent; bad type/unknown template refuse
+PASS AC-PN3: success=sent replay=already_logged refund=sent replay=already_logged rows 1->2; timeout-close/pending/granted-not-closed/closed-not-granted/unknown all raise zero-row
+PASS AC-PN4: cap=1: first=sent second=skipped_daily_cap (sent=1 cap-skips=1)
+PASS AC-PN5: unapproved template raises on 3 calls rows=0 (template gate before idempotency); bogus reason template raises; envelope ai_service=1 disclaimer=present
+PASS AC-PN6: attempts=2 rows=2 banner=1 survives reopen=1; coverage ok1=['payment_success'] refund=['refund']
+PASS AC-PN7: ascii=True net-imports=none update-free=True (imports: import argparse; import hashlib; import json; import os; import re; import sqlite3; import sys; import datetime)
+---- pay-notify acceptance: 7/7 passed
+
+--- neighbor regression: pay-notify-bannerlimit (AC-PN8..PN15) rc=0 ---
+PASS AC-PN8: default raw list rows=7 double-read-identical=True fields=6
+PASS AC-PN9: bad forms raised=5/5 log-rows 7==7 zero side effects
+PASS AC-PN10: envelope keys=['limit', 'returned', 'rows', 'total', 'truncated'] total=7 returned=7 truncated=False rows==full=True
+PASS AC-PN11: returned=3 truncated=True total=7 tail==full[4:] True mirror-SQL True fields=6
+PASS AC-PN12: limit==total truncated=False empty-world envelope={'rows': [], 'limit': 3, 'total': 0, 'returned': 0, 'truncated': False} limit=1 tail==last=True
+PASS AC-PN13: tie pair same-ts=True full order=(refund,payment_success) capped-tail match=True double-call-identical=True
+PASS AC-PN14: write-stmt hits=none table-counts (7, 0, 0)==(7, 0, 0) (log/grants/revokes)
+PASS AC-PN15: ascii=True net-imports=none suite-ascii=True shipped-cfg read-only=True criteria-so-far=7/8
+---- pay-notify-bannerlimit acceptance: 8/8 passed
+
+--- verdict ---
+suite=0/0 determinism=True neighbors=0/0 ALL-GREEN=True

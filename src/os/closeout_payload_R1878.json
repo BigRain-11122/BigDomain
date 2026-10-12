@@ -1,0 +1,26 @@
+{
+ "tech_verify": {
+  "claim_prefix": "- [x] pay notify banner_queue 月窗过滤参数窗（R1871 补种",
+  "done_marker": "〔done 2026-10-12 R1878",
+  "open_expected": 10,
+  "criteria_refs": ["AC-PN16", "AC-PN22"]
+ },
+ "baselines": {
+  "last_gord_tbl_rows": 314
+ },
+ "log_lines": [
+  "2026-10-12 R1878 pay notify banner_queue 月窗过滤参数窗交付轮（P2 tech 队头 FIFO=R1877 勘定项〔R1871 补种=最老可认领〕·轮计分 2=可跑实物）：五静全绿（LEDGER @BigDomain 零行+DEC 294/row_owner 120 内容寻址零新 token+GORD 314 持平零新行〔新行全 @BigStream MV 面=零本司执行面〕+ORD 持平+BENCH 当日+树净零锁+scan eol_ok=1）——AC-PN16..PN22 判据预注册先于代码〔tech.md R1878 认领行·AC-PN 前缀+E_PN_BAD_WINDOW 全仓 rg 零占用实锚〕→notify.py banner_queue(limit=0, window=None) 尾参落地（设计裁定四条：窗位=window 尾参缀 limit 后=既有调用者零触碰〔member 前位 vs 本司 limit 先上链=位序随产品正身〕·坏窗码=新造 E_PN_BAD_WINDOW〔E_PN_* 词表族律·R1871 E_PN_BAD_LIMIT 同判读先例〕·门序=坏 limit 先拒〔member R1872 同律·双坏=E_PN_BAD_LIMIT 胜出〕·window 回声键只进帽信封=显式窗帽读恰六键〔裸列表面零形状漂移·sec_batch R1855 同律〕）+套件 test_pay_notify_bannerwin.py SUITE 7/7 首跑全绿·双跑 stdout 逐字节同一+邻套件 pay-notify/pay-notify-bannerlimit 零回归=qa/pay-notify-bannerwin-R1878.log·SUITES 127→128 判据 1175→1182〔pay-notify-bannerwin〕+RUNNER PASS 128/128 controls 7/7 164.2s=qa/reconcile-all-R1878.log+矩阵再生 128/1182 green --check byte-identical〔12831B〕+census DRIFT-CLEAN flags=0+指纹哨兵 CLEAN domains=5·tech 消耗 1+补种 1〔后继=月滚保真例窗·R1878 补种〕",
+  "2026-10-12 R1878 tokens: local=unmeasured api=0 api_reason=纯本地进程件（套件+RUNNER+矩阵+census+指纹全本地跑·零外部 API 触点·三问门未涉及）"
+ ],
+ "hb_body": "R1878: pay notify banner_queue month-window tail param delivered (AC-PN16..PN22 pre-registered before code; window=None default zero-drift, BADS14 fail-closed E_PN_BAD_WINDOW, window-before-COUNT/LIMIT windowed total, six-key envelope additive window echo; SUITE 7/7 first-run green, double-run byte-identical; RUNNER 128/128 suites 1182 criteria zero-regression; matrix regen --check byte-identical; census DRIFT-CLEAN; fingerprint CLEAN)",
+ "export": {
+  "ceo_current": "本轮产出：pay notify banner_queue 月窗过滤参数窗交付（window=None 尾参+E_PN_BAD_WINDOW 坏窗闸+窗帽正交 total=窗内计数——判据预注册先于代码 AC-PN16..PN22·套件 7/7 双跑逐字节同一·全量回归 128 套件 1182 判据零回归）",
+  "ceo_artifact": "src/sandbox/pay/test_pay_notify_bannerwin.py（月窗套件 7 判据）+notify.py banner_queue window 尾参 2026-10-12·证据 qa/pay-notify-bannerwin-R1878.log",
+  "ceo_milestone": "下轮 P2 FIFO 队头：freetrial conversion_funnel_board 读幅参数窗（R1874 补种=最老可认领）·下窗 ≤48h",
+  "self_drive_method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)",
+  "result_row": [
+   "2",
+   "2026-10-12 R1878 pay notify banner_queue 月窗过滤参数窗交付轮（P2 tech 队头 FIFO〔R1871 补种=R1877 勘定最老可认领〕·轮计分 2=可跑实物）：AC-PN16..PN22 判据预注册先于代码〔tech.md R1878 认领行·四裁定入册=窗位尾参缀 limit 后/坏窗码新造 E_PN_BAD_WINDOW/门序坏 limit 先/window 回声键只进帽信封〕——notify.py banner_queue(limit=0, window=None) 尾参〔缺省三形裸列表逐字节零漂移+BADS14 全拒 E_PN_BAD_WINDOW 零副作用+双坏 limit 码胜出+record-time substr(1,7) 行过滤+窗先于 COUNT/LIMIT total=窗内计数非全局+帽信封恰六键 additive window 回声〔缺省帽面恰五键不变〕+跨月互不渗透双向+未来窗诚实空+同秒并列按 record 月归属+纯读律三表三径不变〕——SUITE 7/7 首跑全绿+双跑 stdout 逐字节同一+邻套件零回归〔pay-notify/pay-notify-bannerlimit〕·SUITES 127→128 判据 1175→1182〔pay-notify-bannerwin〕+RUNNER PASS 128/128 controls 7/7 164.2s=qa/reconcile-all-R1878.log+矩阵再生 128/1182 green --check byte-identical〔12831B〕+census DRIFT-CLEAN flags=0+指纹哨兵 CLEAN domains=5·证据 qa/pay-notify-bannerwin-R1878.log·tech 消耗 1+补种 1〔pay notify 月滚保真例窗=R1878 补种〕"
+  ]
+ }
+}
