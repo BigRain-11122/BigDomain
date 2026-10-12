@@ -970,6 +970,29 @@ SUITES = [
     # (AC-ANW1..ANW7 pre-registered in state/queue/tech.md)
     ("ledger-apidev-devboard-ancestry", os.path.join(
         "ledger", "test_apidev_devboard_ancestry.py"), 7),
+    # R1868 apidev key_view explicit historical window read:
+    # the single-key panel gains the optional window=None tail
+    # parameter -- default keeps the current-UTC-month behavior
+    # byte-stable (no-arg == window=None, the 18-key envelope
+    # unchanged); an explicit "YYYY-MM" month re-domains the
+    # quota panel (quota_used / quota_remaining / reject_tally /
+    # usage_kind_tally window-scoped, the quota counter keeping
+    # the rotation-chain ancestry semantics so a rotate never
+    # resets an explicit month either); the minute ring stays
+    # clock-orthogonal; a historical month stays readable forever
+    # and a future month is an honest all-zero panel; 14 bad
+    # window forms reject the dedicated E_AD_BAD_WINDOW fail-closed
+    # (panel-class code per the dev_board precedent, claim-round
+    # judgment recorded) after the key gate; the R1863 AC-ANW
+    # three-face interlock carries to the single-key face:
+    # key_view(key, window=W) quota_used == dev_board(window=W)
+    # board row == chain_usage(key, window=W) effective_upto_queried
+    # in the anchor month and across the roll; the old-month
+    # window projection is byte-preserved across the month roll
+    # (minute fields clock-orthogonal, the AC-ANW5 premise)
+    # (AC-KVW1..KVW7 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-keyviewwin", os.path.join(
+        "ledger", "test_apidev_keyviewwin.py"), 7),
     # R1864 water journal month-roll fidelity: frozen-clock +23d
     # cross-month pin over the four window-parameter read faces
     # (journal_board/kind_tally/monthly_flow/cell_totals) - new-

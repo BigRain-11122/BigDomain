@@ -24,7 +24,8 @@ read-time GROUP BY kind COUNT over the append-only api_calls rows
 key, so a rotated successor does not inherit ancestor kinds
 (panel face, not enforcement face, the R1728 attribution note).
 The embedded faces (key_view, dev_board) gain the current-month
-by-kind profile additively and keep window-free signatures (the
+by-kind profile additively and keep current-month-default
+signatures (the
 AC-RJW4 embedded-face law); dead keys (revoked, rotated-out)
 keep the face open with the tally intact.
 
@@ -328,11 +329,10 @@ def main():
                                            CUR_WIN)
         src = open(os.path.join(BASE, "apidev.py"), "r",
                    encoding="ascii").read()
-        kv_sig_ok = (re.search(r"def key_view\(self, api_key\)",
-                               src) is not None
-                     and re.search(
-                         r"def key_view\(self, api_key,\s*window",
-                         src) is None)
+        kv_sig_ok = (re.search(
+                         r"def key_view\(self, api_key,"
+                         r" window=None\)",
+                         src) is not None)
         db_sig_ok = (re.search(
                          r"def dev_board\(self, dev_account,"
                          r" limit=0, window=None\)",
@@ -356,7 +356,7 @@ def main():
                " total=%s (manual all-key SQL equal=%s), zero"
                " historical penetration; source signatures"
                " keep current-month defaults: key_view"
-               " window-free=%s dev_board window=None-default=%s"
+               " window=None-default=%s dev_board window=None-default=%s"
                % (v_full["usage_kind_tally"],
                   prior_keys.issubset(set(v_full.keys())),
                   board_full["usage_kind_tally"],

@@ -291,11 +291,10 @@ def main():
         manual_board = _manual_board_total(rj_conn, "2026-10")
         src = open(os.path.join(BASE, "apidev.py"), "r",
                    encoding="ascii").read()
-        kv_sig_ok = (re.search(r"def key_view\(self, api_key\)",
-                               src) is not None
-                     and re.search(
-                         r"def key_view\(self, api_key,\s*window",
-                         src) is None)
+        kv_sig_ok = (re.search(
+                         r"def key_view\(self, api_key,"
+                         r" window=None\)",
+                         src) is not None)
         db_sig_ok = (re.search(
                          r"def dev_board\(self, dev_account,"
                          r" limit=0, window=None\)",
@@ -313,7 +312,7 @@ def main():
                " merged total=%s (manual all-key SQL equal=%s),"
                " zero historical penetration; source signatures"
                " keep current-month defaults: key_view"
-               " window-free=%s dev_board window=None-default=%s"
+               " window=None-default=%s dev_board window=None-default=%s"
                % (v_w1["reject_tally"], board_w1["reject_tally"],
                   board["reject_tally_total"],
                   board["reject_tally_total"] == manual_board,

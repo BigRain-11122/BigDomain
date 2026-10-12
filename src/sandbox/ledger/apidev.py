@@ -622,15 +622,38 @@ class DevKeyFace:
 
     # -- read faces ------------------------------------------------------------
 
-    def key_view(self, api_key):
+    def key_view(self, api_key, window=None):
         """One key's contract view: declaration + lifecycle state +
         quota state + billing-ring binding. Read-only, zero token
         movement; a revoked or rotated-out key stays readable with
-        its status reported."""
+        its status reported. The optional window parameter re-domains
+        the quota panel to one "YYYY-MM" month at read time:
+        window=None (the default) keeps the current-UTC-month
+        behavior byte-stable (the same _window_utc source as the
+        quota ring); an explicit historical month reads that
+        month's counters -- the dev_board window semantics carried
+        to the single-key face (quota_used / quota_remaining /
+        reject_tally / usage_kind_tally all window-scoped, the
+        quota counter keeping its rotation-chain ancestry semantics
+        so a rotate never resets an explicit month either), while
+        the minute-ring fields keep following the clock (the minute
+        ring is orthogonal to the month window); rows are immutable
+        and stamped with their own record-time window, so a
+        historical month stays readable forever and a future month
+        is an honest all-zero panel. A bad window shape (non-None
+        non-"YYYY-MM") rejects the dedicated E_AD_BAD_WINDOW
+        fail-closed (the panel-class code the dev_board window
+        face already owns), after the key gate (the call-chain
+        key-gate-first law)."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
-        window = _window_utc()
+        if window is None:
+            window = _window_utc()
+        elif not (isinstance(window, str)
+                  and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_WINDOW,
+                              "window must be None or YYYY-MM")
         minute = _minute_utc()
         terminal = self._terminal_event(row[0])
         used = self._effective_window_count(row[0], window)
