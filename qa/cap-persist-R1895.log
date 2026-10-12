@@ -1,0 +1,45 @@
+=== [1] suite double-run (driver CRLF->LF normalized, single-writer utf-8) ===
+suite: test_freetrial_cappersist.py
+run1 rc=0 run2 rc=0 byte-identical=True sha16(normalized stdout)=536C2748D90CED75
+--- run1 stdout verbatim ---
+PASS AC-CRU8: stack1 loaded under the frozen clock; SQL 2026-10 record-time stamps (grants=2 calls=3); usr:roll-a used=2 remaining=1 + usr:roll-c used=1 remaining=1; four pre-close snapshots anchored (oct windowed bare 4 keys with window echo / oct windowed capped 7 keys overflow block limit=1 total=2 returned=1 truncated=True with the usr:roll-c tail row / default capped 6 keys same tail row / default bare 3 keys, 2 rows)
+PASS AC-CRU9: four-piece stack closed in reverse dependency order and reopened on the same db path with the same config; the 2026-10 windowed capped read is byte-identical to the pre-close snapshot (7-key envelope with the window echo and the non-trivial overflow block; the (dev,plan) double-key ordering is stable across restart - zero in-memory drift on the derived face); a same-param second read is self-identical; the oct windowed bare read matches its snapshot too
+PASS AC-CRU10: post-restart default capped read is byte-identical to the pre-close snapshot (6-key envelope without the window echo, total=2, usr:roll-c tail row); the default bare read matches its snapshot; in the October-only era the default capped rows equal the oct windowed capped rows (same shape apart from the window key)
+PASS AC-CRU11: clock +23d crossed the month boundary on the reopened face; the November usr:roll-z grant on roll-q (SQL 2026-11 grants=1) recomputed the default capped read (limit=1 tail window drifted [usr:roll-c row] -> [usr:roll-z row] used=0 remaining=5 ai_label=1 - byte-different from the pre-close default snapshot, zero cached state on the face) while the 2026-10 windowed capped read stayed byte-identical to the pre-close snapshot (old window zero leakage across restart AND across new data; grant rows keep their record-time stamps) and the 2026-11 windowed capped read carries the new-month row (total=1 truncated=False)
+PASS AC-CRU12: oct windowed total stays 2 across restart and new data (zero penetration); nov windowed total=1; the empty-month 2026-12 capped windowed read is an honest empty (rows=[] total=0 returned=0 truncated=False, all 7 keys present, zero phantom rows); composition law holds - default bare total=3 == oct 2 + nov 1 (telescoping)
+PASS AC-CRU13: cap_usage_board source free of data-changing statements; four-table counts pinned plans/grants/calls/conversions=(3, 3, 3, 0) unchanged across the six-shape double-read battery; every shape double-read byte-identical (default and bare windows, default and capped windows)
+PASS AC-CRU14: stack2 four reads re-read self-identical, then closed and reopened as stack3 on the same db; all four reads (oct windowed capped / default capped / 2026-11 windowed capped / default bare) are pairwise byte-identical across the two instances - zero cross-instance drift; the oct windowed capped read still equals the ORIGINAL pre-close snapshot (the persistence core: explicit window reads survive restart x new data double hijack without drift)
+PASS AC-CRU15: freetrial.py + shipped config.json sha256 stable across the whole run (zero product bytes - pin-only suite); suite + face sources pure ASCII with network-free import lines (13 imports); SUITES registration row present (ledger-freetrial-cappersist, criteria 8); criteria drift self-check 7+1==8; frozen clock restored with probe
+SUITE PASS 8/8 exit=0
+
+
+=== [2] fingerprint sentinel: fingerprint_regen --check ===
+cmd rc=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+=== [3] writer census: qa_writer_census --check ===
+cmd rc=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1274 tee=772 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [4a] suite matrix regen (default discovery) ===
+cmd rc=0
+PASS generated docs/sandbox-suite-matrix.md (13737 bytes) - registry suites=138 criteria=1292 evidence=qa/reconcile-all-R1895.log green=138/138
+PASS hygiene: pure-ascii source, zero network imports
+
+=== [4b] suite matrix --check x2 (byte-identical) ===
+check-a rc=0 sha16=CF10E3B2486D1C51
+check-b rc=0 sha16=CF10E3B2486D1C51
+byte-identical=True
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13737 bytes, 138 suites, 1292 criteria)

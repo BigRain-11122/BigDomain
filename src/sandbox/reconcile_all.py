@@ -957,6 +957,16 @@ SUITES = [
     # (AC-CVR15..CVR21 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-funnelpersist",
      os.path.join("ledger", "test_freetrial_funnelpersist.py"), 7),
+    # R1895 freetrial cap_usage_board capped-window read
+    # cross-restart persistence: four-piece stack close/reopen,
+    # windowed capped reads byte-identical to pre-close
+    # snapshots, November grant recomputes the default capped
+    # read (zero cache) while the October windowed capped read
+    # stays byte-identical, second reopen reads sequentially
+    # identical; zero product bytes - pin-only suite
+    # (AC-CRU8..CRU15 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-cappersist",
+     os.path.join("ledger", "test_freetrial_cappersist.py"), 8),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
