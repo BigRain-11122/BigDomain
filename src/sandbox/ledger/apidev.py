@@ -156,7 +156,8 @@ E_AD_RATE = "E_AD_RATE"                # minute-window rate cap, fail-closed
 E_AD_NO_DISCLAIMER = "E_AD_NO_DISCLAIMER"
 E_AD_REVOKED = "E_AD_REVOKED"          # key revoked or rotated out
 E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
-E_AD_BAD_LIMIT = "E_AD_BAD_LIMIT"      # dev_board read cap must be int >= 0
+E_AD_BAD_LIMIT = "E_AD_BAD_LIMIT"      # read-cap limit must be int >= 0
+                                        # (dev_board / audit_lineage)
 E_AD_BAD_WINDOW = "E_AD_BAD_WINDOW"    # dev_board month window: None or YYYY-MM
 
 NON_ADVISORY = ("non-advisory notice: open API is a compute +"
@@ -1062,7 +1063,7 @@ class DevKeyFace:
                            for e in shown],
                 "total": len(shown)}
 
-    def audit_lineage(self, api_key, window=None):
+    def audit_lineage(self, api_key, window=None, limit=0):
         """One key's full rotation lineage in a single read: every
         predecessor reachable through rotate_in events (walked
         upward one level at a time) plus every successor reachable
@@ -1093,7 +1094,31 @@ class DevKeyFace:
         is read (the audit-family code, matching lifecycle_trace
         / usage_log / reject_tally / chain_usage; E_AD_BAD_WINDOW
         stays the dev_board / key_view panel-family code). The
-        key gate fires first (the call-chain key-gate-first
+        optional limit parameterizes a read cap for a large
+        lineage chain: limit=0 (the default) keeps the
+        full-chain behavior byte-stable; limit>0 bounds the
+        chain list to the most recent limit members (a
+        tail-window slice of the chain's oldest-first order,
+        the dev_board read-cap law; the chain has no SQL
+        direct storage, so the cap is a post-assembly slice,
+        the R1791 board post-filter family) and adds an
+        overflow block (limit / total / returned / truncated)
+        to the envelope. The cap never redefines the chain's
+        facts: queried_index stays the full-chain index (the
+        slice may legitimately exclude the queried key itself
+        on an old-ancestor query -- truncated=True is the
+        honest partial-view flag), the block's total stays the
+        full-chain member count (an honest truncated read
+        carries the full count), and chain_size follows the
+        slice (the member-total-follows-the-slice law). The
+        window lens and the cap are orthogonal (the R1812
+        combination law): the window lenses member event
+        trails, the cap slices the member list, and neither
+        ever redefines the other's domain. A bad limit
+        (non-int, bool, or negative) rejects E_AD_BAD_LIMIT
+        fail-closed (the read-cap family code, matching
+        dev_board) after the key gate, before the window gate.
+        The key gate fires first (the call-chain key-gate-first
         law). Read-only, zero token movement, zero UPDATE; dead
         keys stay fully readable (a terminal state never closes
         the audit face) and the embedded faces (key_view,
@@ -1103,6 +1128,10 @@ class DevKeyFace:
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ApiDevError(E_AD_BAD_LIMIT,
+                              "limit must be an integer >= 0")
         if window is not None and not (isinstance(window, str)
                                        and _WINDOW_RE.match(window)):
             raise ApiDevError(E_AD_BAD_ARGS,
@@ -1127,6 +1156,15 @@ class DevKeyFace:
                "disclaimer": self.disclaimer}
         if window is not None:
             out["window"] = window
+        if limit:
+            total = len(chain)
+            chain = chain[-limit:]
+            out["chain"] = chain
+            out["chain_size"] = len(chain)
+            out["limit"] = limit
+            out["total"] = total
+            out["returned"] = len(chain)
+            out["truncated"] = total > limit
         return out
 
     # -- lineage chain usage read face (R1833) -------------------------------

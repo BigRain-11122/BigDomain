@@ -1,0 +1,78 @@
+apidev audit_lineage read-cap window (R1888) evidence
+criteria AC-LG16..AC-LG22 pre-registered in state/queue/tech.md before code
+--- suite run 1 ---
+PASS AC-LG1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True, top-level api_key==queried=True
+PASS AC-LG2: A->B->C from any member: chain_size==3 and order [A,B,C]=True, queried_index 0/1/2=True, member keys exact=True, zero foreign raw api_keys=True, pair closure both directions=True, single dev=True
+PASS AC-LG3: every member block vs lifecycle_trace(member) equal on all 7 lock fields over every queried chain (fresh/revoked/A/B/C)=True
+PASS AC-LG4: lone keys self-chain: fresh chain_size==1 active events=[], plain-revoked chain_size==1 revoked [revoke]=True
+PASS AC-LG5: post-revoke world: member id sequence [A,B,C] equal from every query point=True, dead members fully readable (rotated-out A + double-terminal revoked C with [rotate_in,revoke])=True
+PASS AC-LG6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero lineage embedding=True
+PASS AC-LG7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, audit_lineage present=True
+PASS AC-LG8: default call == window=None call byte-identical on all 5 queried keys=True, default envelope keys exact 8 (zero window key)=True
+PASS AC-LG9: 14 bad forms all reject E_AD_BAD_ARGS (audit-family code) rejects=0, key gate first: unknown+bad window -> E_AD_UNKNOWN_KEY, pure read: keys 5==5 events 6==6
+PASS AC-LG10: window=2026-10 lens: member events all in-month=True, member keys exact=True, envelope adds exactly window key=True, member events/total == lifecycle_trace(member, window) cross-face=True
+PASS AC-LG11: windowed vs default reads: chain ids/order/names/sizes/queried_index/member status + pair links all identical on 5 queried keys=True, zero-event window keeps full chain shape=True
+PASS AC-LG12: injected historical revoke (2026-08) reads in that window=True, current window isolated=True, no cross-month leak=True, default full trail keeps both rows=True, future window honest empty=True
+PASS AC-LG13: current window shows rotate pair on both member blocks=True, zero-event window drops both sides while pair links stay=True, single-side tamper displayed honestly + chain walk unchanged=True
+PASS AC-LG14: 25 window reads move zero rows: keys 5==5 events 8==8, double-call byte-identical=True
+PASS AC-LG15: config.json byte-stable=True, signature window=None present=True, embedded faces exact-pin (key_view 18/ board 6 / row 15 keys)=True, source pure-ASCII=True
+PASS AC-LG16: default read keeps exact LINEAGE_KEYS on the five-member chain=True, explicit limit=0 read byte-identical to default=True
+PASS AC-LG17: five bad limits all reject E_AD_BAD_LIMIT codes=['E_AD_BAD_LIMIT'], key gate first (unknown+bad limit -> E_AD_UNKNOWN_KEY), limit gate before window gate (bad limit+bad window -> E_AD_BAD_LIMIT), zero rows moved 10==10 16==16
+PASS AC-LG18: limit=2 tail slice byte-identical to full read tail=True, overflow block {limit=2,total=5,returned=2,truncated=True}=True, envelope+queried_index stay full-chain facts=True, oldest-key query slice [F,G] excludes the queried key with honest truncated=True
+PASS AC-LG19: capped+windowed slice == windowed read tail=True, total==windowed chain_size==5 with window echo + block additive=True, zero-event window keeps total=5 with empty trails=True
+PASS AC-LG20: single-member chain cap reads carry the honest block (limit=1 and oversized limit=5 both truncated=False)=True, revoked dead-key cap read stays open=True
+PASS AC-LG21: 16 capped reads move zero rows: keys 10==10 events 16==16, double-call byte-identical on three cap forms=True
+PASS AC-LG22: config.json byte-stable=True, new signature pin=True, embedded faces exact-pin=True, product imports network-free=True, sources pure-ASCII (suite=True product=True)
+SUITE apidev-lineage: 22/22 criteria pass
+[suite run 1 exit=0]
+--- suite run 2 ---
+PASS AC-LG1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True, top-level api_key==queried=True
+PASS AC-LG2: A->B->C from any member: chain_size==3 and order [A,B,C]=True, queried_index 0/1/2=True, member keys exact=True, zero foreign raw api_keys=True, pair closure both directions=True, single dev=True
+PASS AC-LG3: every member block vs lifecycle_trace(member) equal on all 7 lock fields over every queried chain (fresh/revoked/A/B/C)=True
+PASS AC-LG4: lone keys self-chain: fresh chain_size==1 active events=[], plain-revoked chain_size==1 revoked [revoke]=True
+PASS AC-LG5: post-revoke world: member id sequence [A,B,C] equal from every query point=True, dead members fully readable (rotated-out A + double-terminal revoked C with [rotate_in,revoke])=True
+PASS AC-LG6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero lineage embedding=True
+PASS AC-LG7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, audit_lineage present=True
+PASS AC-LG8: default call == window=None call byte-identical on all 5 queried keys=True, default envelope keys exact 8 (zero window key)=True
+PASS AC-LG9: 14 bad forms all reject E_AD_BAD_ARGS (audit-family code) rejects=0, key gate first: unknown+bad window -> E_AD_UNKNOWN_KEY, pure read: keys 5==5 events 6==6
+PASS AC-LG10: window=2026-10 lens: member events all in-month=True, member keys exact=True, envelope adds exactly window key=True, member events/total == lifecycle_trace(member, window) cross-face=True
+PASS AC-LG11: windowed vs default reads: chain ids/order/names/sizes/queried_index/member status + pair links all identical on 5 queried keys=True, zero-event window keeps full chain shape=True
+PASS AC-LG12: injected historical revoke (2026-08) reads in that window=True, current window isolated=True, no cross-month leak=True, default full trail keeps both rows=True, future window honest empty=True
+PASS AC-LG13: current window shows rotate pair on both member blocks=True, zero-event window drops both sides while pair links stay=True, single-side tamper displayed honestly + chain walk unchanged=True
+PASS AC-LG14: 25 window reads move zero rows: keys 5==5 events 8==8, double-call byte-identical=True
+PASS AC-LG15: config.json byte-stable=True, signature window=None present=True, embedded faces exact-pin (key_view 18/ board 6 / row 15 keys)=True, source pure-ASCII=True
+PASS AC-LG16: default read keeps exact LINEAGE_KEYS on the five-member chain=True, explicit limit=0 read byte-identical to default=True
+PASS AC-LG17: five bad limits all reject E_AD_BAD_LIMIT codes=['E_AD_BAD_LIMIT'], key gate first (unknown+bad limit -> E_AD_UNKNOWN_KEY), limit gate before window gate (bad limit+bad window -> E_AD_BAD_LIMIT), zero rows moved 10==10 16==16
+PASS AC-LG18: limit=2 tail slice byte-identical to full read tail=True, overflow block {limit=2,total=5,returned=2,truncated=True}=True, envelope+queried_index stay full-chain facts=True, oldest-key query slice [F,G] excludes the queried key with honest truncated=True
+PASS AC-LG19: capped+windowed slice == windowed read tail=True, total==windowed chain_size==5 with window echo + block additive=True, zero-event window keeps total=5 with empty trails=True
+PASS AC-LG20: single-member chain cap reads carry the honest block (limit=1 and oversized limit=5 both truncated=False)=True, revoked dead-key cap read stays open=True
+PASS AC-LG21: 16 capped reads move zero rows: keys 10==10 events 16==16, double-call byte-identical on three cap forms=True
+PASS AC-LG22: config.json byte-stable=True, new signature pin=True, embedded faces exact-pin=True, product imports network-free=True, sources pure-ASCII (suite=True product=True)
+SUITE apidev-lineage: 22/22 criteria pass
+[suite run 2 exit=0]
+[suite double-run stdout identical=True]
+--- full regression runner (verdict excerpt; full output = qa/reconcile-all-R1888.log) ---
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+PASS suite ledger-apidev-lineage exit=0 pass-lines=22 fail-lines=0 criteria=22 0.2s
+RUNNER PASS (134/134 suites green, reconcile controls 7/7, 158.2s)
+[runner exit=0]
+--- matrix regen ---
+PASS generated docs/sandbox-suite-matrix.md (13354 bytes) - registry suites=134 criteria=1245 evidence=qa/reconcile-all-R1888.log green=134/134
+[matrix regen exit=0]
+--- matrix check 1 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13354 bytes, 134 suites, 1245 criteria)
+[matrix check 1 exit=0]
+--- matrix check 2 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13354 bytes, 134 suites, 1245 criteria)
+[matrix check 2 exit=0]
+--- census check (verdict excerpt) ---
+  "sections_total": 419,
+  "dangling_total": 0,
+  "unknown_mismatch_count": 0,
+  "unknown_dangling_count": 0,
+  "pass": true
+[census exit=0]
+[VERDICT PASS]

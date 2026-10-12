@@ -4,9 +4,12 @@ one-shot lineage read face" row, the R1824 lifecycle_trace
 successor, claimed from the tech-lane top open row per the FIFO
 law) and its R1887 explicit-month-window lens (canon = the
 "apidev audit_lineage explicit month window" tech-queue row,
-the R1875 lifecycle_trace window successor). Asserts the
+the R1875 lifecycle_trace window successor) and its R1888
+read-cap window (canon = the "apidev audit_lineage read cap"
+tech-queue row, the R1887 successor seed). Asserts the
 pre-registered criteria AC-LG1..AC-LG7 from the R1825 claim
-note plus AC-LG8..AC-LG15 from the R1887 claim note (criteria
+note plus AC-LG8..AC-LG15 from the R1887 claim note plus
+AC-LG16..AC-LG22 from the R1888 claim note (criteria
 were registered before this code ran; honesty law). Each
 criterion prints PASS/FAIL with evidence; the process exits
 non-zero on any FAIL.
@@ -79,6 +82,12 @@ EVENT_KEYS = sorted(["event_id", "event", "pair_key_id", "event_utc"])
 BADS14 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
           "202610", "abcd", "", 2026, True, 2.5, "2026-10\n",
           "2026-10 ", "2026-10\r")
+# five bad limit forms (the R1840 dev_board read-cap family)
+BAD_LIMIT5 = (-1, True, "2", 2.5, None)
+# capped envelope key sets (the R1888 overflow block)
+CAPPED_KEYS = sorted(LINEAGE_KEYS
+                     + ["limit", "total", "returned", "truncated"])
+CAPPED_WIN_KEYS = sorted(CAPPED_KEYS + ["window"])
 # AC-LG3 lock fields: shared by a lineage member block and a
 # lifecycle_trace envelope
 LOCK_FIELDS = ["dev_account", "key_name", "status",
@@ -529,8 +538,8 @@ def main():
     with open(os.path.join(BASE, "config.json"), "rb") as handle:
         cfg_bytes_end15 = handle.read()
     sig_ok = re.search(
-        r"def audit_lineage\(self, api_key, window=None\)",
-        source) is not None
+        r"def audit_lineage\(self, api_key, window=None,"
+        r" limit=0\)", source) is not None
     view_pin = sorted(dk.key_view(fk["api_key"]).keys()) \
         == KEY_VIEW_KEYS
     board_pin = sorted(dk.dev_board("usr:ada").keys()) \
@@ -548,6 +557,207 @@ def main():
               len(KEY_VIEW_KEYS), len(BOARD_KEYS),
               len(BOARD_ROW_KEYS),
               view_pin and board_pin and row_pin, ascii15))
+
+    # -- AC-LG16..AC-LG22 read-cap window (R1888 claim note) -----
+    # extend the world to a five-member chain X->D->E->F->G so a
+    # real truncation case exists. First-run amendment (honest
+    # note): extending the A->B->C fixture chain by two more
+    # rotations is impossible -- AC-LG5 already revoked C into
+    # a terminal key, so rotate_key(C) rejects E_AD_ALREADY. A
+    # new seed key on usr:lin plus four rotations builds the
+    # five-member chain instead (X rotated-out oldest, G active
+    # newest; the A->B->C chain stays untouched for the already
+    # recorded criteria above).
+    kx = dk.issue_key("usr:lin", "chain-x", 5, ["backtest"], True)
+    kd = dk.rotate_key(kx["api_key"], "chain-d")
+    ke = dk.rotate_key(kd["api_key"], "chain-e")
+    kf2 = dk.rotate_key(ke["api_key"], "chain-f")
+    kg = dk.rotate_key(kf2["api_key"], "chain-g")
+    id_x = _key_id(conn, kx["api_key"])
+    id_d = _key_id(conn, kd["api_key"])
+    id_e = _key_id(conn, ke["api_key"])
+    id_f = _key_id(conn, kf2["api_key"])
+    id_g = _key_id(conn, kg["api_key"])
+
+    # AC-LG16: default + explicit zero stay byte-stable
+    lg_def_g = dk.audit_lineage(kg["api_key"])
+    lg16 = (sorted(lg_def_g.keys()) == LINEAGE_KEYS
+            and lg_def_g["chain_size"] == 5
+            and _ids(lg_def_g) == [id_x, id_d, id_e, id_f, id_g]
+            and lg_def_g["queried_index"] == 4)
+    lg_exp0 = dk.audit_lineage(kg["api_key"], None, 0)
+    lg16 = lg16 and json.dumps(lg_exp0, sort_keys=True) \
+        == json.dumps(lg_def_g, sort_keys=True)
+    record("AC-LG16", lg16,
+           "default read keeps exact LINEAGE_KEYS on the"
+           " five-member chain=%s, explicit limit=0 read"
+           " byte-identical to default=%s"
+           % (sorted(lg_def_g.keys()) == LINEAGE_KEYS,
+              json.dumps(lg_exp0, sort_keys=True)
+              == json.dumps(lg_def_g, sort_keys=True)))
+
+    # AC-LG17: five bad limit forms fail-closed E_AD_BAD_LIMIT
+    keys_b17 = _count(conn, "api_dev_keys")
+    ev_b17 = _count(lcconn, "key_events")
+    bad_codes = []
+    for bad in BAD_LIMIT5:
+        try:
+            dk.audit_lineage(kg["api_key"], None, bad)
+            bad_codes.append("no-error")
+        except D.ApiDevError as exc:
+            bad_codes.append(exc.code)
+    ok_unk_lim = expect_unknown(
+        lambda: dk.audit_lineage("sk-nope", None, -1))
+    try:
+        dk.audit_lineage(kg["api_key"], "2026-13", -1)
+        code_both = "no-error"
+    except D.ApiDevError as exc:
+        code_both = exc.code
+    keys_a17 = _count(conn, "api_dev_keys")
+    ev_a17 = _count(lcconn, "key_events")
+    lg17 = (bad_codes == [D.E_AD_BAD_LIMIT] * 5
+            and ok_unk_lim[0] and code_both == D.E_AD_BAD_LIMIT
+            and keys_a17 == keys_b17 and ev_a17 == ev_b17)
+    record("AC-LG17", lg17,
+           "five bad limits all reject %s codes=%s, key gate"
+           " first (unknown+bad limit -> %s), limit gate before"
+           " window gate (bad limit+bad window -> %s), zero"
+           " rows moved %d==%d %d==%d"
+           % (D.E_AD_BAD_LIMIT, sorted(set(bad_codes)),
+              ok_unk_lim[1], code_both, keys_a17, keys_b17,
+              ev_a17, ev_b17))
+
+    # AC-LG18: cap semantics + overflow block + key-facts law
+    lg_cap2 = dk.audit_lineage(kg["api_key"], None, 2)
+    slice_ok = json.dumps(lg_cap2["chain"], sort_keys=True) \
+        == json.dumps(lg_def_g["chain"][-2:], sort_keys=True)
+    block_ok = (lg_cap2["limit"] == 2 and lg_cap2["total"] == 5
+                and lg_cap2["returned"] == 2
+                and lg_cap2["truncated"] is True)
+    shape_ok = (sorted(lg_cap2.keys()) == CAPPED_KEYS
+                and lg_cap2["chain_size"] == 2
+                and lg_cap2["queried_index"] == 4
+                == lg_def_g["queried_index"])
+    lg_cap_old = dk.audit_lineage(kx["api_key"], None, 2)
+    old_ok = (_ids(lg_cap_old) == [id_f, id_g]
+              and lg_cap_old["queried_index"] == 0
+              and lg_cap_old["truncated"] is True
+              and lg_cap_old["total"] == 5
+              and lg_cap_old["returned"] == 2
+              and id_x not in _ids(lg_cap_old))
+    lg18 = slice_ok and block_ok and shape_ok and old_ok
+    record("AC-LG18", lg18,
+           "limit=2 tail slice byte-identical to full read"
+           " tail=%s, overflow block {limit=%s,total=%s,"
+           "returned=%s,truncated=%s}=%s, envelope+queried_index"
+           " stay full-chain facts=%s, oldest-key query slice"
+           " [F,G] excludes the queried key with honest"
+           " truncated=%s"
+           % (slice_ok, lg_cap2["limit"], lg_cap2["total"],
+              lg_cap2["returned"], lg_cap2["truncated"],
+              block_ok, shape_ok, old_ok))
+
+    # AC-LG19: window x cap orthogonality
+    lg_win_only = dk.audit_lineage(kg["api_key"], W)
+    lg_cap_win = dk.audit_lineage(kg["api_key"], W, 2)
+    orth_slice = json.dumps(lg_cap_win["chain"],
+                            sort_keys=True) \
+        == json.dumps(lg_win_only["chain"][-2:], sort_keys=True)
+    orth_ok = (lg_cap_win["total"] == 5
+               and lg_win_only["chain_size"] == 5
+               and lg_cap_win["window"] == W
+               and sorted(lg_cap_win.keys())
+               == CAPPED_WIN_KEYS)
+    lg_cap_july = dk.audit_lineage(kg["api_key"], "2026-07", 2)
+    july_total = (lg_cap_july["total"] == 5
+                  and lg_cap_july["returned"] == 2
+                  and lg_cap_july["truncated"] is True
+                  and all(m["total"] == 0
+                          for m in lg_cap_july["chain"]))
+    lg19 = orth_slice and orth_ok and july_total
+    record("AC-LG19", lg19,
+           "capped+windowed slice == windowed read tail=%s,"
+           " total==windowed chain_size==5 with window echo +"
+           " block additive=%s, zero-event window keeps total=5"
+           " with empty trails=%s"
+           % (orth_slice, orth_ok, july_total))
+
+    # AC-LG20: honest non-truncating block + dead-key cap read
+    lg_fresh1 = dk.audit_lineage(fk["api_key"], None, 1)
+    lg_fresh5 = dk.audit_lineage(fk["api_key"], None, 5)
+    fresh_ok = (lg_fresh1["limit"] == 1
+                and lg_fresh1["total"] == 1
+                and lg_fresh1["returned"] == 1
+                and lg_fresh1["truncated"] is False
+                and lg_fresh5["limit"] == 5
+                and lg_fresh5["total"] == 1
+                and lg_fresh5["returned"] == 1
+                and lg_fresh5["truncated"] is False)
+    lg_dead_cap = dk.audit_lineage(rk["api_key"], None, 1)
+    dead_ok = (lg_dead_cap["total"] == 1
+               and lg_dead_cap["returned"] == 1
+               and lg_dead_cap["truncated"] is False
+               and lg_dead_cap["chain"][0]["status"]
+               == "revoked")
+    lg20 = fresh_ok and dead_ok
+    record("AC-LG20", lg20,
+           "single-member chain cap reads carry the honest"
+           " block (limit=1 and oversized limit=5 both"
+           " truncated=False)=%s, revoked dead-key cap read"
+           " stays open=%s" % (fresh_ok, dead_ok))
+
+    # AC-LG21: pure-read law + determinism under the cap
+    keys_b21 = _count(conn, "api_dev_keys")
+    ev_b21 = _count(lcconn, "key_events")
+    for k in (kg["api_key"], kx["api_key"], fk["api_key"],
+              rk["api_key"]):
+        for w, lmt in ((None, 2), (W, 2), (None, 0), (None, 1)):
+            dk.audit_lineage(k, w, lmt)
+    keys_a21 = _count(conn, "api_dev_keys")
+    ev_a21 = _count(lcconn, "key_events")
+    det21 = all(
+        json.dumps(dk.audit_lineage(kg["api_key"], w, l),
+                   sort_keys=True)
+        == json.dumps(dk.audit_lineage(kg["api_key"], w, l),
+                      sort_keys=True)
+        for w, l in ((None, 2), (W, 2), (None, 0)))
+    lg21 = (keys_a21 == keys_b21 and ev_a21 == ev_b21
+            and det21)
+    record("AC-LG21", lg21,
+           "16 capped reads move zero rows: keys %d==%d events"
+           " %d==%d, double-call byte-identical on three cap"
+           " forms=%s" % (keys_a21, keys_b21, ev_a21, ev_b21,
+                         det21))
+
+    # AC-LG22: hygiene face
+    with open(os.path.join(BASE, "config.json"), "rb") as handle:
+        cfg_bytes_end22 = handle.read()
+    sig_ok22 = re.search(
+        r"def audit_lineage\(self, api_key, window=None,"
+        r" limit=0\)", source) is not None
+    view_pin22 = sorted(dk.key_view(fk["api_key"]).keys()) \
+        == KEY_VIEW_KEYS
+    board_pin22 = sorted(dk.dev_board("usr:ada").keys()) \
+        == BOARD_KEYS
+    imports_ok22 = all(
+        not re.search(r"\b(urllib|requests|socket|http)\b", ln)
+        for ln in source.splitlines()
+        if ln.startswith(("import ", "from ")))
+    with open(os.path.abspath(__file__), "rb") as handle:
+        me_bytes = handle.read()
+    me_ascii = all(b < 128 for b in me_bytes)
+    ascii22 = all(ord(ch) < 128 for ch in source)
+    lg22 = (cfg_bytes_end22 == cfg_bytes and sig_ok22
+            and view_pin22 and board_pin22 and imports_ok22
+            and me_ascii and ascii22)
+    record("AC-LG22", lg22,
+           "config.json byte-stable=%s, new signature pin=%s,"
+           " embedded faces exact-pin=%s, product imports"
+           " network-free=%s, sources pure-ASCII (suite=%s"
+           " product=%s)"
+           % (cfg_bytes_end22 == cfg_bytes, sig_ok22,
+              view_pin22 and board_pin22, imports_ok22,
+              me_ascii, ascii22))
 
     total = len(RESULTS)
     passed = sum(1 for _, ok in RESULTS if ok)

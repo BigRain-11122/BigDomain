@@ -1015,10 +1015,11 @@ SUITES = [
     # lifecycle_trace on that member (zero drift between the two
     # faces), member blocks exposing zero foreign raw api_keys,
     # dead keys fully readable, embedded faces untouched
-    # (AC-LG1..LG7 R1825 + AC-LG8..LG15 R1887 window lens,
-    # pre-registered in state/queue/tech.md)
+    # (AC-LG1..LG7 R1825 + AC-LG8..LG15 R1887 window lens +
+    # AC-LG16..LG22 R1888 read cap, pre-registered in
+    # state/queue/tech.md)
     ("ledger-apidev-lineage", os.path.join("ledger",
-                                           "test_apidev_lineage.py"), 15),
+                                           "test_apidev_lineage.py"), 22),
     # R1833 apidev lineage chain-usage one-shot read face: the
     # R1825 audit_lineage successor -- per-chain-member call
     # counts for one window in a single read (chain walked the
