@@ -1,0 +1,30 @@
+--- [1] suite fresh run (exit=0) ---
+PASS AC-RQR1: oct anchor: SQL record-time 2026-10 queued count==6; default rows_by_status read == explicit 2026-10 window read (6 rows, byte-identical); queue_counts default == windowed == {'queued': 6}; snapshot S_oct locked
+PASS AC-RQR2: roll landing: SQL record-time 2026-11 count==4; windowed 2026-11 read = exactly the 4 new rows (zero overlap with S_oct); default all-window read = 10 rows (cross-month rows included); queue_counts=={'queued': 10}
+PASS AC-RQR3: old-month preservation: post-roll 2026-10 window read == S_oct byte-identical; queue_counts(2026-10)=={'queued':6} unchanged (nov rows never leak in); 2026-11 window read has zero oct qids (two windows never leak either way)
+PASS AC-RQR4: no-loss accounting: full-table COUNT 6 -> 10 (constant growth, zero rows lost); global queued read carries all 10 distinct qids == oct-window set | nov-window set; queue_counts delta == 4 == new rows
+PASS AC-RQR5: drain x month-roll: drain(ts=nov) -> {'drained': 10, 'passed': 8, 'rejected': 2, 'still_queued': 0}; oct-window drained_pass==5 rows each carrying a NOVEMBER ts_drained (landing-month window attribution, AC-SB21 law enforced); oct-window drained_rejected==1 (banned word re-gated fail-closed across the roll); nov-window 3+1; queue_counts windows follow the status transition without switching the row sets: 2026-10=={'drained_pass': 5, 'drained_rejected': 1}, 2026-11=={'drained_pass': 3, 'drained_rejected': 1}, all=={'drained_pass': 8, 'drained_rejected': 2}; queued key vanishes from every window (sparse caliber)
+PASS AC-RQR6: row preservation: post-drain qid->ts_utc map == pre-drain map (drain never touches record-time identity); full-table COUNT still 10; union of terminal global reads == all 10 original qids (zero-loss ledger)
+PASS AC-RQR7: hygiene: suite source pure ASCII; true import lines carry zero network libraries; reconcile_all ugc-sec-batch-rowsroll wired exactly once (criteria 7); world = temp dir only, sec_batch.py untouched (git status evidence face)
+SUITE PASS: 7/7
+
+--- [2] double-run determinism (raw stdout, LF-normalized) ---
+RUN_B_SHA256=2C5FB6855E2697A5A2273E1036AD1E95AB2153117249EF94EEE877AD121CCDA8
+RUN_C_SHA256=2C5FB6855E2697A5A2273E1036AD1E95AB2153117249EF94EEE877AD121CCDA8
+BYTE-IDENTICAL=true
+
+--- [3] full RUNNER regression (qa/reconcile-all-R1865.log) ---
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | PASS AC-RQR7: hygiene: suite source pure ASCII; true import lines carry zero network libraries; reconcile_all ugc-sec-batch-rowsroll wired exactly once (criteria 7); world = temp dir only, sec_batch.py untouched (git status evidence face)
+PASS suite ugc-sec-batch-rowsroll exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suites 121/121 green, expected criteria total=1119
+RUNNER PASS (121/121 suites green, reconcile controls 7/7, 180.4s)
+
+--- [4] closeout faces ---
+fingerprint sentinel: verdict CLEAN domains=5
+writer-census: verdict DRIFT-CLEAN flags=0 (pre-evidence face)
+matrix gen: PASS generated docs/sandbox-suite-matrix.md (12196 bytes) - registry suites=121 criteria=1119 evidence=qa/reconcile-all-R1865.log green=121/121
+matrix check x2: PASS byte-identical (12196 bytes, 121 suites, 1119 criteria)

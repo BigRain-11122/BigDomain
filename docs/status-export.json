@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-12T14:56:28+08:00",
+ "export_ts": "2026-10-12T15:35:11+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "water journal 月滚保真例窗套件 7/7 过闸（冻结钟 +23d 跨月·四面窗读月滚保真）——全量回归 120 套件 1112 判据绿",
-  "latest_artifact": "qa/water-journalroll-R1864.log + src/sandbox/ugc/test_water_journal_roll.py（2026-10-12 R1864）",
-  "next_milestone": "sec_batch rows_by_status/queue_counts 月滚保真例窗（R1860 补种·窗参族月滚对称续）——窗 ≤48h"
+  "current": "本轮新代码：内容审核降级队列两读面的跨月保真例窗全绿（7 项判据过闸+全量回归 121 套件 1119 判据全过）",
+  "latest_artifact": "qa/sec-batch-rowsroll-R1865.log + src/sandbox/ugc/test_sec_batch_rowsroll.py（2026-10-12 R1865）",
+  "next_milestone": "P2 队列滚动交付续（pay notify banner_queue 读帽参数窗等 5 开项）+雷达候选清单 10-14 过目——窗 ≤48h"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "2",
+   "2026-10-12 R1865 sec_batch rows_by_status/queue_counts 月滚保真例窗交付轮（P2 tech 队头 FIFO〔R1860 补种〕·轮计分 2=可跑实物）：AC-RQR1..RQR7 判据预注册先于套件——test_sec_batch_rowsroll.py 落地（独立 face+独立 temp db+StepClock 预算击穿真产品径）：十月锚〔SQL record-time 6+缺省读==窗读逐字节+S_oct〕+新月落窗〔2026-11 恰 4 行零交集+缺省 10 含跨月〕+旧月窗原值保全〔S_oct 逐字节+两窗双向零渗透〕+不可变行零丢失〔COUNT 6→10 恒等〕+drain 跨月转态落地月归属核心〔drain(ts=十一月) 10 行转态——十月窗 drained_pass 5 行全挂十一月 ts_drained=AC-SB21 落地月归属执法正身+禁词 fail-closed 跨月复闸+queue_counts 三窗切状态不切行集+queued 键全窗消失稀疏口径〕+行保全双证〔M_pre==M_post〔drain 即前捕获·取证时点 bug 首跑实证后修·R1712 先例族〕+qid 全集零丢失〕——SUITE 7/7+双跑 LF 归一原生 sha16 2C5FB6855E2697A5 逐字节同一+reconcile_all SUITES 120→121 判据 1112→1119+RUNNER PASS 121/121 controls 7/7 180.4s=qa/reconcile-all-R1865.log+sentinel CLEAN+census DRIFT-CLEAN〔新证据件 CRLF 混行被 census 自旗当场修复=J-M18 探测器 live-fire 再证〕+矩阵 121/1119 green 12196B --check byte-identical·证据 qa/sec-batch-rowsroll-R1865.log·tech 消耗 1+补种 1=10〔pay notify banner_queue 读帽参数窗〕·GORD 基线 291→300 九行知悉〔O-20261012-1400/1420/1510+15:0x git 边界=FluxGroup 全自主合规+O-20261012-1505 机队满载+15:1x 云端 token 节约=本司零云端线合规〕·DEC 294 持平"
+  ],
   [
    "2",
    "2026-10-12 R1864 water journal 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1858 补种〕·轮计分 2=可跑实物·前窗 13:54 中断验真收口=R1730/R1675 先例）：AC-WMR1..WMR7 预注册先于套件——test_water_journal_roll.py 落地（冻结钟 +23d 跨月·四面〔board/tally/flow/cells〕月滚保真）：新月落格〔SQL 2026-11 COUNT==2+四面新窗读恰承新胞+组合律 2+(-1)==1+缺省含跨月行〕+旧月保全〔逐字节==滚前快照〕+月轴 telescoping〔逐面 Σ月==全窗+跨面律 cells==net==3〕+读帽×窗正交+不可变行 COUNT==4 恒定——SUITE PASS 7/7·双跑三审裁定〔driver h0 误标+CRLF 方言差→归一后四方逻辑同一 sha16 06732b1e·MISMATCH 旗=driver bug〕+registry 机报勘正〔criteria 途径 120/1112 权威〕·RUNNER PASS 120/120 controls 7/7 176.5s〔收载 119→120〕+sentinel CLEAN+census DRIFT-CLEAN+矩阵再生 120/1112 --check byte-identical·SUITES 判据 1105→1112"
@@ -639,7 +643,7 @@
   ],
   "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
   [
-   "1864",
+   "1865",
    "OSLoop 执行 tick"
   ],
   [
@@ -3578,10 +3582,10 @@
  "self_drive": {
   "window": "2026-10-06..2026-10-12",
   "window_days": 7,
-  "log_lines_in_window": 11,
+  "log_lines_in_window": 13,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

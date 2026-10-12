@@ -1,0 +1,24 @@
+{
+  "tech": {
+    "claim_prefix": "- [x] sec_batch rows_by_status/queue_counts 月滚保真例窗（R1860 后继补种",
+    "reseed_line": "- [ ] pay notify banner_queue 读帽参数窗（R1865 补种：pay 通知降级横幅队列读面〔R1706 AC-PN6 在册〕现恒全量=大降级队列读面放大面〔R1729 usage_log 读帽/R1804 journal_board/R1840 event_audit_board/R1842 cap_usage/R1843 banner_board/R1849/R1850/R1851/R1852 读帽先例族同型判读〕——扩展=limit 尾参〔缺省 0=全量现行行为保真+五坏形态 {-1/True/\"2\"/2.5/None} fail-closed·坏参码面=认领轮判读先行：notify.py E_PN_* 词表族在册→新造 E_PN_BAD_LIMIT 独立码候选 vs 入既有 ValueError 族=认领轮实读词表定谳〕+溢出块四键 {limit,total,returned,truncated}〔R1729/R1840 同型·total==降级行全量计数非截断后=诚实截断读携全量计数〕+尾窗切片==镜像 SQL ORDER BY ... DESC LIMIT N 反转第三径交叉〔排序键=认领轮实读锚定·banner_queue 现行 ORDER BY ts_utc tiebreak 实读判读〕+零降级世界空板键照带+套件例〔AC-PN 族续编 8 起〕+后继=月窗过滤参数窗+月滚保真例窗〔窗参族对称链·R1855/R1856/R1861 三段式参照〕——种子=pay/notify.py banner_queue L476 在册·入列 2026-10-12〔R1865 补种〕）"
+  },
+  "baselines": {
+    "last_gord_tbl_rows": 300
+  },
+  "log_lines": [
+    "2026-10-12 R1865 sec_batch rows_by_status/queue_counts 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1860 补种〕·轮计分 2=可跑实物·AC-RQR1..RQR7 判据预注册先于套件=tech.md R1865 认领注记）：test_sec_batch_rowsroll.py 落地（独立 face+独立 temp db+StepClock 预算击穿真产品径·禁词文本预算击穿降级=drain 复闸 fail-closed 跨月执法面）——十月锚〔SQL record-time 6+缺省读==窗读逐字节+S_oct 快照〕+新月落窗〔SQL 2026-11==4+窗读恰 4 行零交集+缺省 10 行含跨月〕+旧月窗原值保全〔滚后 2026-10 窗读==S_oct 逐字节+queue_counts(2026-10) 不动+两窗双向零渗透〕+不可变行零丢失〔COUNT 6→10 恒等+qid 全集在册〕+drain 跨月转态落地月归属核心例〔drain(ts=十一月) {drained:10,passed:8,rejected:2,still_queued:0}——十月窗 drained_pass 5 行全挂十一月 ts_drained=窗归属恒落地月〔R1860 AC-SB21 执法正身〕+禁词 fail-closed 跨月复闸拒+queue_counts 三窗随转态切状态不切行集+queued 键全窗消失=稀疏口径〕+行保全双证〔M_pre==M_post 逐行同一·drain 零触碰 record-time·取证时点前提更正=R1712 取值点先例族首跑实证后修·tech.md 预注册同步更正原文保全〕——SUITE PASS 7/7+双跑 LF 归一原生哈希 sha16 2C5FB6855E2697A5 逐字节同一+reconcile_all SUITES 120→121 判据 1112→1119〔ugc-sec-batch-rowsroll 7〕+RUNNER PASS 121/121 controls 7/7 180.4s=qa/reconcile-all-R1865.log+sentinel CLEAN 5 domains+census DRIFT-CLEAN flags=0〔新证据件首版 CRLF 混行 class=other 被 census 当场自旗→LF 归一 tee 方言修复=J-M18 完成即 QC 探测器 live-fire 再证〕+矩阵再生 121/1119 green 12196B --check byte-identical 双跑·证据 qa/sec-batch-rowsroll-R1865.log·tech 消耗 1+补种 1=10〔pay notify banner_queue 读帽参数窗=R1865 补种〕·GORD 表基线 291→300 九行判读全知悉〔O-20261012-1400 MV 产线定谳+O-20261012-1420 冲刺压缩+O-20261012-1510 冲刺确认开工+15:0x git 确认边界勘正=FluxGroup 全仓全自主 commit/push〔本司现行实践合规〕+O-20261012-1505 机队满载包/IdleWatch 面+15:1x 云端 token 节约强化〔C-20261012-02 §五 L4 转正=本司零云端调用线·轮账本照记合规〕——MV 线全 BigStream 派工面零本司动作〕·DEC 294 持平零新 token·LEDGER @BigDomain 零行",
+    "2026-10-12 R1865 tokens: local=unmeasured api=unmeasured api_reason=会话无计量出口如实记·零新增外部 API 触点（套件三跑+RUNNER 全量回归+sentinel/census/矩阵/组装器=纯本地进程件·15:1x 云端 token 节约令知悉=本司零云端调用线轮账本照记·三问门未涉及）"
+  ],
+  "hb_body": "R1865 sec_batch rows/queue 月滚例窗 7/7+RUNNER 121/121 绿（tech 消耗1+补种1=10）",
+  "export": {
+    "ceo_current": "本轮新代码：内容审核降级队列两读面的跨月保真例窗全绿（7 项判据过闸+全量回归 121 套件 1119 判据全过）",
+    "ceo_artifact": "qa/sec-batch-rowsroll-R1865.log + src/sandbox/ugc/test_sec_batch_rowsroll.py（2026-10-12 R1865）",
+    "ceo_milestone": "P2 队列滚动交付续（pay notify banner_queue 读帽参数窗等 5 开项）+雷达候选清单 10-14 过目——窗 ≤48h",
+    "self_drive_method": "machine-derived per check_export_consistency recompute (BD-PROP-001)",
+    "result_row": [
+      "2",
+      "2026-10-12 R1865 sec_batch rows_by_status/queue_counts 月滚保真例窗交付轮（P2 tech 队头 FIFO〔R1860 补种〕·轮计分 2=可跑实物）：AC-RQR1..RQR7 判据预注册先于套件——test_sec_batch_rowsroll.py 落地（独立 face+独立 temp db+StepClock 预算击穿真产品径）：十月锚〔SQL record-time 6+缺省读==窗读逐字节+S_oct〕+新月落窗〔2026-11 恰 4 行零交集+缺省 10 含跨月〕+旧月窗原值保全〔S_oct 逐字节+两窗双向零渗透〕+不可变行零丢失〔COUNT 6→10 恒等〕+drain 跨月转态落地月归属核心〔drain(ts=十一月) 10 行转态——十月窗 drained_pass 5 行全挂十一月 ts_drained=AC-SB21 落地月归属执法正身+禁词 fail-closed 跨月复闸+queue_counts 三窗切状态不切行集+queued 键全窗消失稀疏口径〕+行保全双证〔M_pre==M_post〔drain 即前捕获·取证时点 bug 首跑实证后修·R1712 先例族〕+qid 全集零丢失〕——SUITE 7/7+双跑 LF 归一原生 sha16 2C5FB6855E2697A5 逐字节同一+reconcile_all SUITES 120→121 判据 1112→1119+RUNNER PASS 121/121 controls 7/7 180.4s=qa/reconcile-all-R1865.log+sentinel CLEAN+census DRIFT-CLEAN〔新证据件 CRLF 混行被 census 自旗当场修复=J-M18 探测器 live-fire 再证〕+矩阵 121/1119 green 12196B --check byte-identical·证据 qa/sec-batch-rowsroll-R1865.log·tech 消耗 1+补种 1=10〔pay notify banner_queue 读帽参数窗〕·GORD 基线 291→300 九行知悉〔O-20261012-1400/1420/1510+15:0x git 边界=FluxGroup 全自主合规+O-20261012-1505 机队满载+15:1x 云端 token 节约=本司零云端线合规〕·DEC 294 持平"
+    ]
+  }
+}

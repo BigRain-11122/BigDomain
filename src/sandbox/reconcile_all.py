@@ -964,6 +964,17 @@ SUITES = [
     # (AC-WMR1..WMR7 pre-registered in state/queue/tech.md)
     ("ugc-water-journalroll", os.path.join(
         "ugc", "test_water_journal_roll.py"), 7),
+    # R1865 sec_batch rows_by_status/queue_counts monthly-roll
+    # preservation example (AC-RQR1..AC-RQR7 pre-registered in
+    # state/queue/tech.md): new-month degraded rows land in the
+    # new-month window via the real product path, old-month window
+    # reads preserved byte-identical, immutable rows never lost, and
+    # the cross-month drain keeps window attribution on the LANDING
+    # month (drain writes status + ts_drained only; ts_drained is the
+    # drain month while the row still reads under its landing-month
+    # window - R1860 AC-SB21 law enforced as the roll example)
+    ("ugc-sec-batch-rowsroll", os.path.join(
+        "ugc", "test_sec_batch_rowsroll.py"), 7),
 ]
 
 FAILS = 0
