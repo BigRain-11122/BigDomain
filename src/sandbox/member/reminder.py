@@ -331,12 +331,34 @@ class ReminderFace(object):
 
     # ---------------- read faces ----------------
 
-    def banner_queue(self):
-        """Degraded in-app fallback queue = all skipped_* rows."""
+    def banner_queue(self, window=None):
+        """Degraded in-app fallback queue = all skipped_* rows.
+
+        R1866 window filter (tech.md AC-MB8..AC-MB14, seed = the
+        R1856 banner_board window law + the R1860 rows_by_status
+        raw-row window caliber): window=None keeps the raw row face
+        byte-identical; an explicit YYYY-MM month narrows the row set
+        by record time substr(ts_utc,1,7). The raw LIST shape never
+        changes (no envelope, no window echo key); the relative
+        ts_utc order is untouched - a window cuts the row set, it
+        never reorders. Malformed windows fail closed
+        E_REM_BAD_WINDOW before any read (zero side effects)."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError("%s: window must be YYYY-MM: %r"
+                                 % (E_REM_BAD_WINDOW, window))
+        if w is None:
+            return self._exec(
+                "SELECT send_id, census_avatar_id, reason, status, ts_utc"
+                " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
+                " ORDER BY ts_utc").fetchall()
         return self._exec(
             "SELECT send_id, census_avatar_id, reason, status, ts_utc"
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
-            " ORDER BY ts_utc").fetchall()
+            " AND substr(ts_utc,1,7)=?"
+            " ORDER BY ts_utc", (w,)).fetchall()
 
     def banner_board(self, limit=0, window=None):
         """Degraded in-app banner board (pure derived read face over the

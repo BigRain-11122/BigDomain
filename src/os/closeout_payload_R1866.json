@@ -1,0 +1,23 @@
+{
+  "tech": {
+    "claim_prefix": "- [ ] member banner_queue 月窗过滤参数窗",
+    "done_note": "——〔**done 2026-10-12 R1866**：AC-MB8..MB14 全过=SUITE 7/7×2 双跑逐字节同一〔sha16 58075943D79BFD84〕+RUNNER PASS 122/122 全量回归〔SUITES 121→122 判据 1119→1126〕+census DRIFT-CLEAN flags=0+矩阵再生 122/1126 green 12288B --check byte-identical+证据 qa/reconcile-all-R1866.log·行面窗径=R1860 rows_by_status 原始 LIST 口径律〔无信封无回显键〕·后继=读帽参数窗补种〕",
+    "reseed_line": "- [ ] member banner_queue 读帽参数窗（R1866 后继补种：窗参已立〔R1866 AC-MB8..MB14〕而读帽零承载〔行面恒全量〕——扩展=limit 尾参〔缺省 0=全量现行行为保真·五坏形态 fail-closed E_REM_BAD_LIMIT 在册复用·门序裁定=认领轮判读先行〕+尾窗切片行集保真〔相对序零变化·帽只切行集〕+口径裁定先行〔R1860 原始 LIST 无信封 vs R1851 信封四键 limit/total/returned/truncated=两口径认领轮拍板·rows_by_status 无帽先例 vs journal_board R1804 信封帽先例〕+窗×帽正交〔R1812 组合律〕+套件例〔AC-MB 族续编 15 起·AC-MB15.. 前缀零占用认领轮实锚〕+月滚保真已并入窗参例〔R1866 AC-MB12 先例注记〕——种子=member/reminder.py banner_queue window R1866 在册·入列 2026-10-12〔R1866 补种〕）"
+  },
+  "baselines": {
+    "last_gord_tbl_rows": 306,
+    "last_decision_rows": 301
+  },
+  "log_lines": [
+    "2026-10-12 R1866 member banner_queue 月窗过滤参数窗+D-20261012-03 拍板三件兑现轮（P2 tech 队头 FIFO 最老可认领行〔R1861 补种〕·轮计分 2=可跑实物·R1865 中断收口由本轮先完成〔commit 9c9f489a 推送毕 8923d674..9c9f489a〕）：AC-MB8..MB14 判据预注册先于套件〔tech.md R1866 认领注记·AC-MB 族续编 8 起全仓 rg 零占用实锚〕——test_banner_queue_window.py 落地（R1861 banner_board_roll 同构姊妹件：独立 face+独立 temp db+真产品径 attempt()/on_accept() 显式 ts 落行零 fixture 注入·行面窗径=R1860 rows_by_status 原始 LIST 口径律无信封无回显键）：十月锚缺省三同一〔无参==window=None==镜像 SQL 逐字节·4 行〕+十一月窗过滤〔镜像 SQL 行集逐位等+ts_utc 序非降+窗读相对序==缺省读同子集〕+14 坏窗 fail-closed E_REM_BAD_WINDOW 零副作用〔R1856 bads14 元组复用〕+零行月窗诚实空 []+跨月滚旧月窗快照逐字节保全两窗零互渗〔缺省 7 行含跨月〕+telescoping 分区律〔Σ两月窗 send_id 集==缺省全量集·零交〕+board 互证〔len(banner_queue(W))==banner_board(window=W)['total'] 逐窗 4/4·3/3·7/7〕+纯读律〔源零写关键词·读前后计数恒定 11〕——SUITE PASS 7/7×2 双跑 stdout 逐字节同一〔sha16 58075943D79BFD84〕+reconcile_all SUITES 121→122 判据 1119→1126〔member-banner-queue-window 7〕+RUNNER PASS 122/122 controls 7/7 183.2s=qa/reconcile-all-R1866.log+census DRIFT-CLEAN flags=0〔files=1213 tee=712 baselined=501〕+矩阵再生 122/1126 green 12288B --check byte-identical；**D-20261012-03 拍板三件当窗兑现〔回执窗 10-13 15:2x 内·值守轮 15:07 三实锚点名批收下〕**：①D-20261011-03 当窗回执=材料预备件 R1760 已交付如实进度一行〔命名范围问询 R1736 已呈待 CEO 点示·正式申请双前置=平台名定谳+bootstrap 物理件四项〕②tasks.md 补货刷新=+3 真活行〔done 1+open 2=eventtickets 月轴 telescoping 例窗+apidev key_view 显式历史窗·自可执行 open ≥2 达标·板滞 6 天批评收下〕③HQ-FEEDBACK 10-11/12 两行补齐〔断更批评收下〕——送达三载体=HQ-FEEDBACK 行+本行+commit 消息含双编号；GORD 基线 300→306 六行判读〔五行为 R1865 已回执内容复现位〔O-20261012-1400 产线定谳/O-20261012-1420 冲刺压缩/O-20261012-1510 冲刺确认/git 确认边界/cloud token 节约·表后段活跃编辑位如实注〕+一行新=O-20261011-0012 修订一哨兵加密令〔GM/BigMoney 域 6h→30min·零 @BigDomain 执行面·知悉不动作〕〕·DEC 基线 294→301 新 token 一枚=D-20261012-03〔本司执行面·本轮执行毕·last_dec_tokens 入册〕·LEDGER @BigDomain 零新行·tech 消耗 1+补种 1=10〔member banner_queue 读帽参数窗=R1866 补种〕",
+    "2026-10-12 R1866 tokens: local=unmeasured api=unmeasured api_reason=会话无计量出口如实记·零新增外部 API 触点（套件双跑+RUNNER 全量回归+census/矩阵再生+closeout 工具链=纯本地进程件·云端 token 节约令 C-20261012-02 §五 L4 知悉=本司零云端调用线轮账本照记·三问门未涉及）"
+  ],
+  "hb_body": "R1866: member banner_queue window-param suite 7/7x2 (sha16 58075943D79BFD84; RUNNER 122/122 controls 7/7 183.2s; SUITES 121->122 criteria 1119->1126; census DRIFT-CLEAN; matrix 122/1126 --check; tech -1 +1 planted) + D-20261012-03 three-part closeout delivered (D-20261011-03 receipt + tasks.md restock + HQ-FEEDBACK 10-11/12 rows) + R1865 interrupted closeout completed this window (commit 9c9f489a); GORD 300->306 ack; DEC 294->301 (D-20261012-03 executed) [via BigDomain-OSLoop]",
+  "export": {
+    "ceo_current": "本轮产出：member 降级横幅队列月窗过滤参数窗套件+D-20261012-03 值守轮拍板三件兑现（回执+任务板补货+HQ 续鲜）——全量回归 122 套件 1126 判据全绿",
+    "ceo_artifact": "qa/reconcile-all-R1866.log + src/sandbox/member/test_banner_queue_window.py（2026-10-12 R1866）",
+    "ceo_milestone": "P2 交付线续跑（tech 队头=eventtickets 月轴 telescoping 例窗+apidev key_view 显式历史窗两真活行已入 tasks.md）+提案轨窗 10-06~10-13 配额核档·下窗 ≤48h",
+    "self_drive_method": "machine-derived per check_export_consistency recompute (BD-PROP-001)",
+    "result_row": ["2", "2026-10-12 R1866 member banner_queue 月窗过滤参数窗套件（P2 tech 队头 FIFO〔R1861 补种〕·轮计分 2=可跑实物）：AC-MB8..MB14 判据预注册先于代码（tech.md R1866 认领注记）——test_banner_queue_window.py（R1861 banner_board_roll 同构姊妹件·独立 face+独立 temp db+真产品径显式 ts 零 fixture）：缺省保真三同一+镜像 SQL 过滤逐位等+14 坏窗 fail-closed+零行窗诚实空+跨月快照逐字节保全+telescoping 分区+board 互证（len(queue(W))==board(window=W)['total'] 逐窗）+纯读律——SUITE 7/7×2 sha16 58075943D79BFD84+RUNNER 122/122 183.2s（SUITES 121→122 判据 1119→1126）+census DRIFT-CLEAN+矩阵 --check 同一=qa/reconcile-all-R1866.log；D-20261012-03 拍板三件兑现（①D-20261011-03 当窗回执 ②tasks.md +3 真活行补货 ③HQ-FEEDBACK 10-11/12 续鲜）·GORD 300→306 知悉·tech -1+1=10；R1865 中断收口同窗完成（commit 9c9f489a）"]
+  }
+}

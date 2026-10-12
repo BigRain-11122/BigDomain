@@ -398,6 +398,14 @@ SUITES = [
     # (AC-MB1..MB7 pre-registered in state/queue/tech.md).
     ("member-banner-roll",
      os.path.join("member", "test_banner_board_roll.py"), 7),
+    # R1866 member banner_queue window param (AC-MB8..MB14
+    # pre-registered in state/queue/tech.md): raw row face month
+    # filter - default byte-preservation + mirror-SQL equality,
+    # 14 bad-window fail-closed, honest empty window, cross-month
+    # byte preservation + zero mutual leakage, telescoping partition
+    # + board-total interlock, pure-read + hygiene.
+    ("member-banner-queue-window",
+     os.path.join("member", "test_banner_queue_window.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),
