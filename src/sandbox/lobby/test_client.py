@@ -2121,6 +2121,206 @@ def board_readcap_cases(srv_db):
               srv_cap["returned"], srv_cap["total"]))
 
 
+def board_persist_cases():
+    """AC-S32..S38 (R1891): the two lobby board read faces across
+    an instance restart (the R1882 read-cap family; the
+    R1879/R1880/R1882 persist-family law). Both boards are pure
+    read-only derivations over the immutable events table - no
+    cache counters, no in-memory board state - so a close +
+    same-db reopen must reproduce every read face (default /
+    cap / window x cap) byte-for-byte; old explicit windows stay
+    frozen across restarts while new data lands in new months;
+    a second restart keeps the guarantee. Suite-only round:
+    zero product-code change, the example window pins the
+    existing guarantee into the suite in-book."""
+    from store import EventStore
+    cfg_sha_in = hashlib.sha256(
+        open(CONFIG, "rb").read()).hexdigest()
+    store_sha_in = hashlib.sha256(
+        open(os.path.join(BASE, "store.py"), "rb").read()).hexdigest()
+    tmp = tempfile.mkdtemp(prefix="lobby-boardpersist-")
+    notice = ("sandbox non-advisory notice: board rows are "
+              "operational read-only derivations, not advice")
+    db = os.path.join(tmp, "persist.db")
+    st = EventStore(db, disclaimer=notice)
+
+    # October anchor: six zones on both board types (the R1882
+    # readcap world shape).
+    zones = ["alpha", "beta", "delta", "epsilon", "gamma", "zeta"]
+    for i, z in enumerate(zones):
+        st.append("2026-10-01T01:00:%02d.000000Z" % (i + 1),
+                  "chat.broadcast", "res-%d" % i, z,
+                  "oct chat %d" % i, {"text": "x"})
+        st.append("2026-10-01T02:00:%02d.000000Z" % (i + 1),
+                  "idea.submit", "res-%d" % i, z,
+                  "oct idea %d" % i, {"text": "y"})
+
+    def faces(store):
+        return {
+            "def_room": json.dumps(store.room_message_board(),
+                                   sort_keys=True),
+            "def_idea": json.dumps(store.idea_pool_board(),
+                                  sort_keys=True),
+            "cap_room": json.dumps(store.room_message_board(limit=2),
+                                   sort_keys=True),
+            "cap_idea": json.dumps(store.idea_pool_board(limit=2),
+                                   sort_keys=True),
+            "wcap_room": json.dumps(
+                store.room_message_board(window="2026-10", limit=2),
+                sort_keys=True),
+            "wfull_room": json.dumps(
+                store.room_message_board(window="2026-10"),
+                sort_keys=True),
+        }
+
+    snap = faces(st)
+    d_room = json.loads(snap["def_room"])["room_message_board"]
+    c_room = json.loads(snap["cap_room"])
+    wcap = json.loads(snap["wcap_room"])
+
+    # ---- AC-S32: oct anchor world + pre-close six-face snapshot ----
+    ok32 = (
+        [r["room"] for r in d_room] == sorted(zones)
+        and len(d_room) == 6
+        and c_room["total"] == 6 and c_room["returned"] == 2
+        and c_room["truncated"] is True
+        and c_room["room_message_board"] == d_room[-2:]
+        and set(c_room.keys())
+        == {"room_message_board", "disclaimer", "limit", "total",
+            "returned", "truncated"}
+        and wcap["total"] == 6 and wcap["returned"] == 2
+        and wcap["room_message_board"] == d_room[-2:]
+        and set(wcap.keys())
+        == {"room_message_board", "disclaimer", "limit", "total",
+            "returned", "truncated"}
+        and json.loads(snap["wfull_room"])["room_message_board"]
+        == d_room)
+    record("AC-S32", ok32,
+           "6 zones ascending=%s; cap total=6 returned=2 tail-2=%s; "
+           "windowed-cap 6 keys (no window echo)=%s"
+           % ([r["room"] for r in d_room] == sorted(zones),
+              c_room["room_message_board"] == d_room[-2:],
+              set(wcap.keys())
+              == {"room_message_board", "disclaimer", "limit", "total",
+                  "returned", "truncated"}))
+
+    # ---- AC-S33: cross-restart byte identity ----
+    st.close()
+    st2 = EventStore(db, disclaimer=notice)
+    faces2 = faces(st2)
+    ok33 = faces2 == snap
+    record("AC-S33", ok33,
+           "close -> reopen same db: six read faces byte-identical=%s"
+           % ok33)
+
+    # ---- AC-S34: post-restart new data = default drifts, window frozen ----
+    st2.append("2026-11-05T01:00:01.000000Z", "chat.broadcast",
+               "res-eta", "eta", "nov chat eta", {"text": "x"})
+    st2.append("2026-11-05T01:00:02.000000Z", "chat.broadcast",
+               "res-d2", "delta", "nov chat delta", {"text": "x"})
+    st2.append("2026-11-05T02:00:02.000000Z", "idea.submit",
+               "res-d2", "delta", "nov idea delta", {"text": "y"})
+    now_room = st2.room_message_board()
+    now_idea = st2.idea_pool_board()
+    rooms_now = [r["room"] for r in now_room["room_message_board"]]
+    delta_idea = [r for r in now_idea["idea_pool_board"]
+                  if r["room"] == "delta"][0]
+    oct_frozen = (
+        json.dumps(st2.room_message_board(window="2026-10"),
+                  sort_keys=True) == snap["wfull_room"]
+        and json.dumps(st2.room_message_board(window="2026-10",
+                                              limit=2),
+                       sort_keys=True) == snap["wcap_room"])
+    nov_carries = any(
+        r["room"] == "eta"
+        for r in st2.room_message_board(window="2026-11")
+        ["room_message_board"])
+    ok34 = (rooms_now == sorted(zones + ["eta"])
+            and delta_idea["ideas"] == 2 and oct_frozen and nov_carries)
+    record("AC-S34", ok34,
+           "default recomputed (eta 7th zone=%s, delta ideas=2)=%s; "
+           "oct window reads frozen byte-identical=%s; nov window "
+           "carries new rows=%s"
+           % ("eta" in rooms_now, delta_idea["ideas"] == 2,
+              oct_frozen, nov_carries))
+
+    # ---- AC-S35: window total semantics + honest empty (restarted inst) ----
+    oct_cap = st2.room_message_board(window="2026-10", limit=2)
+    nov_cap = st2.room_message_board(window="2026-11", limit=1)
+    empty = st2.room_message_board(window="2026-12", limit=2)
+    empty_idea = st2.idea_pool_board(window="2026-12", limit=3)
+    ok35 = (oct_cap["total"] == 6
+            and nov_cap["total"] == 2 and nov_cap["returned"] == 1
+            and nov_cap["truncated"] is True
+            and empty["room_message_board"] == []
+            and empty["total"] == 0 and empty["returned"] == 0
+            and empty["truncated"] is False
+            and empty_idea["idea_pool_board"] == []
+            and empty_idea["total"] == 0)
+    record("AC-S35", ok35,
+           "oct cap total stays 6 (zero nov penetration)=%s; nov cap "
+           "total=2 own-window=%s; empty month 2026-12 honest empty "
+           "4-key block=%s"
+           % (oct_cap["total"] == 6, nov_cap["total"] == 2,
+              empty["room_message_board"] == []
+              and empty["truncated"] is False))
+
+    # ---- AC-S36: pure-read law across restarts ----
+    before = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+              for t in ("events", "census_cache")]
+    faces(st2)
+    st2.room_message_board(window="2026-11", limit=1)
+    st2.idea_pool_board(window="2026-12", limit=3)
+    after = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+             for t in ("events", "census_cache")]
+    ok36 = before == after and before[0] == 15
+    record("AC-S36", ok36,
+           "events/census_cache counts flat across the read batch "
+           "(%d==%d)=%s" % (before[0], after[0], ok36))
+
+    # ---- AC-S37: dual-restart stability ----
+    late = faces(st2)
+    st2.close()
+    st3 = EventStore(db, disclaimer=notice)
+    faces3 = faces(st3)
+    st3.close()
+    ok37 = (faces3 == late
+            and late["wfull_room"] == snap["wfull_room"]
+            and late["wcap_room"] == snap["wcap_room"])
+    record("AC-S37", ok37,
+           "third instance == second-instance state=%s; oct window "
+           "reads still == original pre-close snapshots=%s"
+           % (faces3 == late, late["wfull_room"] == snap["wfull_room"]
+              and late["wcap_room"] == snap["wcap_room"]))
+
+    # ---- AC-S38: hygiene ----
+    cfg_sha_out = hashlib.sha256(
+        open(CONFIG, "rb").read()).hexdigest()
+    store_sha_out = hashlib.sha256(
+        open(os.path.join(BASE, "store.py"), "rb").read()).hexdigest()
+    own_src = inspect.getsource(board_persist_cases)
+    ascii_ok = True
+    try:
+        own_src.encode("ascii")
+    except UnicodeEncodeError:
+        ascii_ok = False
+    import_lines = [ln.strip() for ln in own_src.splitlines()
+                    if ln.strip().startswith("import ")]
+    net_hits = [ln for ln in import_lines
+                for lib in ("urllib", "requests", "socket", "http")
+                if lib in ln]
+    world_outside = not os.path.abspath(db).startswith(
+        os.path.abspath(BASE) + os.sep)
+    ok38 = (ascii_ok and not net_hits
+            and cfg_sha_in == cfg_sha_out
+            and store_sha_in == store_sha_out and world_outside)
+    record("AC-S38", ok38,
+           "ascii=%s net_imports=%s cfg_unchanged=%s "
+           "store_unchanged=%s world_outside_repo=%s"
+           % (ascii_ok, net_hits, cfg_sha_in == cfg_sha_out,
+              store_sha_in == store_sha_out, world_outside))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -2480,6 +2680,7 @@ async def suite():
     # lobby board read faces (store-level; live-db cross on the
     # real server db).
     board_readcap_cases(srv.db)
+    board_persist_cases()
 
     await city_cases()
 

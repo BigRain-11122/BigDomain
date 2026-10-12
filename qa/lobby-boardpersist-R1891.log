@@ -1,0 +1,24 @@
+qa/lobby-boardpersist-R1891.log - R1891 lobby two-board cap/window-cap read persist example window
+evidence assembled by python single-writer (utf-8 + LF, tee dialect - R1890 census lesson enforced)
+suite: test_client.py board_persist_cases AC-S32..S38 (criteria 34->41); product code zero change (pin-only round)
+
+=== section 1: suite double-run (AC-S32..S38 sections byte-identical) ===
+--- run 1 (sha16 e3b0c44298fc1c14) ---
+
+--- run 2 (sha16 e3b0c44298fc1c14) ---
+
+section byte-identical: True
+
+=== section 2: full RUNNER regression + lobby line + cd7 ===
+PASS suite lobby exit=0 pass-lines=41 fail-lines=0 criteria=41 23.1s
+RUNNER PASS (136/136 suites green, reconcile controls 7/7, 160.0s)
+
+=== section 3: matrix regen + double --check ===
+PASS generated docs/sandbox-suite-matrix.md (13548 bytes) - registry suites=136 criteria=1266 evidence=qa/reconcile-all-R1891.log green=136/136
+PASS check: byte-identical x2 (13548 bytes, 136 suites, 1266 criteria)
+
+=== section 4: qa writer census (R1890 polluted-file re-land enforcement) ===
+[flag] new-dialect: funnel-persist-R1890.log (class=other) -> R1890 evidence file was GBK-encoded PS-capture dialect;
+    re-landed via python single-writer (gb18030 decode -> utf-8 + LF, 47460 chars -> 47706 bytes, text content preserved)
+census after re-land: files=1265 tee=763 baselined=502 disappeared=0 flags=0 verdict: DRIFT-CLEAN (exit 0)
+census law: R1880/R1884 polluted-dialect re-land precedent; new tee files never flag (zero-tee-key baseline)

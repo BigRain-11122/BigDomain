@@ -122,7 +122,14 @@ SUITES = [
     # post-truncation), five bad forms fail-closed E_LS_BAD_LIMIT
     # before the window gate, honest-empty four keys, pure-read +
     # live-db cross - AC-S26..S31 (28 -> 34).
-    ("lobby", os.path.join("lobby", "test_client.py"), 34),
+    # R1891 board persist example window on both lobby board read
+    # faces: close + same-db reopen reproduces every read face
+    # (default / cap / window x cap) byte-for-byte (derived-face
+    # zero in-memory drift), post-restart new data drifts the
+    # default face while old explicit windows stay frozen, a
+    # second restart keeps the guarantee, pure-read law across
+    # restarts - AC-S32..S38 (34 -> 41).
+    ("lobby", os.path.join("lobby", "test_client.py"), 41),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
