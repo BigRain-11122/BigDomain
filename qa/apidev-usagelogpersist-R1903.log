@@ -1,0 +1,42 @@
+=== [1] suite double-run: test_apidev_usagelogpersist.py AC-UW9..AC-UW15 ===
+run1 rc=0 (full stdout):
+PASS AC-UW9: October anchor: chain-b 4 real call rows window=2026-10 (SQL count==4), whole-db oct rows==7, W=2026-10 from chain-b's first call row; four snapshots anchored (capwin 8 keys overflow l/t/r/tr=2/4/2/True tail=['ULP-B-03', 'ULP-B-04'] == ascending tail slice; windowed-bare 4 keys 4 rows; default 3 keys; default-cap 7 keys tail same), row pin 5 keys=True, default rows == manual SQL ascending cross=True
+PASS AC-UW10: full stack close (reverse order) -> reopen same db/config: October windowed capped envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-UW11: default bare read replayed byte-identical=True (3 keys, 4 rows), oct bare-window=True (4 keys), default-cap=True (7 keys) -- the derived row face carries zero in-memory state across the restart
+PASS AC-UW12: frozen clock +23d -> 2 November calls on chain-b (the very key the October capped read pins) via the real product path (record-time window=2026-11 SQL count==2): default capped read recalculated (total 4->6, tail=['ULP-N-01', 'ULP-N-02'], byte-differs from the pre-close default-cap snapshot=True = zero cache), default bare read grew 4->6 rows, November windowed capped read carries the new rows exactly-full {limit=2,total=2,returned=2, truncated=False}
+PASS AC-UW13: after the November injection on the same pinned key: October windowed reads stay FULL-envelope byte-frozen (capped=True, bare=True; api_calls rows are record-time immutable and the usage_log envelope carries zero clock-following fields, so no projection is needed -- the claim ruling-3 stronger face), telescoping chain-b all-time 6 == oct 4 + nov 2, whole-db 9 == 7 + 2 immutable rows never lost
+PASS AC-UW14: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True), and the October capped-windowed read still equals the ORIGINAL pre-close snapshot=True (windowed read survives restart x new-data unscratched, full envelope)
+PASS AC-UW15: pure read: 11-form read battery on the third face across both keys moves zero rows (api_calls 9==9, api_dev_keys 3==3, key_events 2==2, reject_events 0==0), usage_log segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-usagelogpersist: 7/7 criteria pass
+clock restore probe: True
+run2 rc=0 sha256=48a9176e15305e5ded2e42beb354789e5bf11768eb226af2ab0d4ab2a60b21ab
+run1 sha256=48a9176e15305e5ded2e42beb354789e5bf11768eb226af2ab0d4ab2a60b21ab
+run1==run2 byte-identical: True
+
+=== [2] RUNNER full regression (Tee mode, qa/reconcile-all-R1903.log) ===
+PASS suite ledger-apidev-usagelog exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+PASS suite ledger-apidev-usagelogpersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (145/145 suites green, reconcile controls 7/7, 166.4s)
+
+=== [3] suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (14425 bytes) - registry suites=145 criteria=1346 evidence=qa/reconcile-all-R1903.log green=145/145
+PASS hygiene: pure-ascii source, zero network imports
+check run2 stdout sha256==check run1 sha256: True
+
+=== [4] qa writer census (check mode) ===
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1293 tee=791 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+
+[VERDICT PASS]

@@ -1299,6 +1299,28 @@ SUITES = [
     # state/queue/tech.md)
     ("member-expiring-soon-persist", os.path.join(
         "member", "test_expiring_soon_persist.py"), 7),
+    # R1903 apidev usage_log capped-windowed read
+    # restart-persistence example window (the R1897 seed): the
+    # three-piece stack (Ledger -> MeteredFace -> DevKeyFace)
+    # closes fully in reverse dependency order and reopens on
+    # the same db path and config bytes -- the October windowed
+    # capped envelope (window echo + overflow block over the
+    # immutable five-key call rows) replays byte-identical
+    # from the fresh instance (zero in-memory drift), two
+    # November calls on chain-b -- the very key whose October
+    # capped-windowed read is pinned in its tail slice --
+    # recalculate the default capped and default bare reads
+    # via the real product path (zero cache) while the October
+    # windowed reads stay FULL-envelope byte-frozen (api_calls
+    # rows are record-time immutable and the envelope carries
+    # zero clock-following fields, so the claim ruling-3
+    # full-envelope face needs no projection), and a third
+    # instance replays the post-injection state
+    # byte-identically (two-instance sequential reads)
+    # (AC-UW9..AC-UW15 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-usagelogpersist", os.path.join(
+        "ledger", "test_apidev_usagelogpersist.py"), 7),
 ]
 
 FAILS = 0
