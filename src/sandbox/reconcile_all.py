@@ -898,7 +898,7 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-apidev-devboard-limit", os.path.join("ledger",
                                                  "test_apidev_devboard_limit.py"),
-     8),
+     14),
 ]
 
 FAILS = 0

@@ -1,0 +1,79 @@
+=== apidev-devboard-window-R1857 section 1: criteria pre-registration ===
+claim note landed in state/queue/tech.md BEFORE any product
+code (criteria-registered-before-code law); AC-DBL continuation
+slots 9..14 verified unowned repo-wide (rg zero hits, exit 1);
+four design verdicts registered: (1) dedicated E_AD_BAD_WINDOW
+code in the E_AD_* family (R1804/R1840/R1856 precedent;
+usage_log/reject_tally/usage_kind_tally/chain_usage legacy
+window gates keep E_AD_BAD_ARGS untouched); (2) gate order
+dev_account form -> limit -> window -> SQL (double-bad: limit
+message first, R1855/R1856 precedent); (3) window = panel
+re-domain, not a row filter: key row set window-independent
+(all keys listed with honest zeros), per-key window-scoped
+fields + the two world aggregates re-domain to the explicit
+month (R1845 window-domain aggregates ruling), minute-ring
+fields keep following the clock, overflow-block total = key
+count window-independent; (4) default None byte-stable, the
+envelope window key is the panel's own quota-window record
+(zero new envelope keys)
+=== section 2: suite double-run byte-identity ===
+run1 exit=0 bytes=4280 / run2 exit=0 bytes=4280
+byte-identical=True
+sha256_run1=322a1fa7c9924b4a736524e624e634d268d66f33f62a8873771ee29d1fb36671
+sha256_run2=322a1fa7c9924b4a736524e624e634d268d66f33f62a8873771ee29d1fb36671
+re-run in evidence build pinned to the same sha (zero RNG,
+frozen clock, zero real-time leakage)
+=== section 3: suite output (14/14, verbatim) ===
+PASS AC-DBL1: default fidelity: no-arg == explicit limit=0 byte-identical=True; envelope keys == 6-pin=True; rows=6 all 15-pin=True; issue order k1..k6=True; world anchor (6 keys / 3 calls / 1 reject, 2nd k1 call -> E_AD_QUOTA)
+PASS AC-DBL2: five bad forms reject=5/5 codes=['E_AD_BAD_LIMIT']; counts stable across rejects=True (keys/calls/rejects (6, 3, 1) -> (6, 3, 1)); double-bad ('not-usr', -1) -> E_AD_BAD_ARGS (dev_account form gate fires first); sentinel is 0 only, None rejects
+PASS AC-DBL3: tail-window fidelity: limit=2 -> ['k5', 'k6'], limit=4 -> ['k3', 'k4', 'k5', 'k6']; per-row dumps byte-equal to full[-N:]=True/True; every returned row keeps the 15-key field set; ascending key_id order kept
+PASS AC-DBL4: overflow block: capped envelope keys == 6+4=True; limit=2 total=6 (== mirror COUNT=6) returned=2 truncated=True; world aggregates full-world stable capped vs uncapped=True/True (reject={'E_AD_QUOTA': 1} kinds={'backtest': 3}); truncation only cuts the keys list
+PASS AC-DBL5: mirror SQL third path (mode=ro, ORDER BY key_id DESC LIMIT N reversed): limit=2 True, limit=4 True -- api_key/key_name field-level equality with the product tail slice
+PASS AC-DBL6: boundary states: exact-fit limit==6 (truncated=False returned==total==6), over 50 (rows=6 truncated=False), single tail limit=1 -> ['k6'], zero-key world usr:ghost (rows=0 total=0 truncated=False, tallies {}/{}, all four overflow keys carried)
+PASS AC-DBL7: month-roll orthogonality: frozen clock +23d -> capped read window=2026-11 rows=['roll-p', 'roll-b'] total=2 truncated=False (tail rows all returned); new-month re-domain honest (roll-p/roll-b quota_used 0/0, totals {}/{}); capped totals byte-equal uncapped=True; November call re-computes under the cap (roll-b quota_used=1 kinds={'backtest': 1}, totals {'backtest': 1}); October explicit read never moves=True; counts (2, 3, 1) -> (2, 4, 1) (the +1 call is the AC fixture write, zero movement from any read)
+PASS AC-DBL9: bad-window fail-closed: six forms [2026, True, 2.5, '2', '2026-1', '2026-13'] reject 6/6 codes=['E_AD_BAD_WINDOW']; counts stable across rejects=True ((6, 3, 1) == (6, 3, 1)); gate order: (limit=-1, bad window) -> E_AD_BAD_LIMIT (limit gate first), ('not-usr', bad window) -> E_AD_BAD_ARGS (form gate outermost); None is the valid default, not a bad form
+PASS AC-DBL10: default fidelity at the rolled clock: no-arg == positional window=None == keyword window=None byte-identical=True/True; envelope keys == 6-pin=True; default window follows the clock (2026-11)
+PASS AC-DBL11: month re-domain: October explicit read byte-equal to the October snapshot projection=True (window=2026-10); November read k2 quota_used=1 k1 quota_used=0 totals {}/{'backtest': 1} (October rows zero-penetration); future 2026-12 honest all-zero panel (rows=6); minute fields follow the clock across all window reads=True
+PASS AC-DBL12: cross-face lock mirror: 12/12 (key, window) rows match the standalone window faces (reject_tally by_reason + usage_kind_tally by_kind) and the manual SQL COUNT per key over 6 keys x 2 windows
+PASS AC-DBL13: window x limit orthogonal: tail slice k5/k6 under both windows=['k5', 'k6']/['k5', 'k6']; October capped rows byte-equal the October snapshot tail projection=True; capped totals stay window aggregates (not truncated)= {'E_AD_QUOTA': 1}/{'backtest': 3}; total==key count 6 window-independent=True; November capped k5 quota_used=0 (its October calls invisible); November capped totals {}/{'backtest': 1} (k2 November call aggregated, truncation cuts only the list); double-call byte-identical=True
+PASS AC-DBL14: window-family pure-read: counts stable across every window read (6, 4, 1) == (6, 4, 1) (one intentional November write in between -> (6, 4, 1)); E_AD_BAD_WINDOW constant registered=True; suite pure-ASCII=True; net-imports=0; config.json byte-stable=True
+PASS AC-DBL8: pure-read + hygiene: main-world counts stable across every read (post-write baseline) (6, 4, 1) == (6, 4, 1); dev_board source DML verbs=0; double-call byte-identical (back-to-back fresh reads at the rolled clock, window=2026-11)=True; config.json byte-stable=True; suite pure-ASCII=True; net-imports=0; schema frozen=True; registry row + criteria=14=True
+SUITE apidev-devboard-limit: 14/14 criteria pass
+=== section 4: full RUNNER regression ===
+PASS suite ledger-apidev-rejectwin exit=0 criteria=7
+  (signature pin synced to the new form: AC-RJW4 green)
+PASS suite ledger-apidev-usagekind exit=0 criteria=8
+  (signature pin synced: AC-UK5 green)
+PASS suite ledger-apidev-devboard-roll exit=0 criteria=7
+  (zero regression on the month-roll suite)
+PASS suite ledger-apidev-devboard-limit exit=0 criteria=14
+RUNNER PASS (114/114 suites green, reconcile controls 7/7, 185.3s)
+criteria total 1059 -> 1065 (+6: AC-DBL9..DBL14)
+evidence: qa/reconcile-all-R1857.log (runner Tee sole writer)
+=== section 5: matrix + fingerprint sentinel + census ===
+matrix regen: 114 suites / 1065 criteria, green=114/114,
+evidence=qa/reconcile-all-R1857.log (default discovery)
+matrix --check byte-identical x2 (11591 bytes)
+fingerprint sentinel: verdict CLEAN domains=5 (zero schema
+touch -- dev_board window is a read-face parameter)
+writer census --check: DRIFT-CLEAN flags=0 (new evidence
+files land in the tee dialect)
+=== section 6: product surface + hygiene closeout ===
+apidev.py diff +28/-2 in exactly two regions: the E_AD_*
+constant block (one new line) and the dev_board head
+block (signature + docstring + window gate)
+test_apidev_devboard_limit.py: criteria 8 -> 14 (docstring +
+AC-DBL9..14 inserted between AC-DBL7 and AC-DBL8; AC-DBL8
+baseline re-anchored to the post-write snapshot; registry-row
+pin 8 -> 14; final count 8 -> 14)
+test_apidev_rejectwin.py / test_apidev_usagekind.py: signature
+anchor positive pin updated to 'limit=0, window=None' form;
+negative pin (window not directly after dev_account) still
+holds; evidence wording window-free -> current-month defaults
+(R1852 signature-sync precedent)
+reconcile_all.py: ledger-apidev-devboard-limit criteria 8 -> 14
+shipped config.json byte-stable (absent from git status;
+asserted in-suite)
+tech queue: claimed row flipped [x] with done note; one row
+reseeded at the bottom (apidev dev_board ancestor-chain
+explicit-window anti-evasion example window); open count 10

@@ -1,10 +1,31 @@
 """Acceptance suite for the apidev dev_board read-cap parameter
 window (BigDomain R1852; canon = tech-queue "apidev dev_board
 read-cap parameter window" row, the R1845 reseed, claimed from the
-tech-lane FIFO oldest open row). The pre-registered criteria
-AC-DBL1..AC-DBL8 live in the R1852 tech claim note (criteria
-were registered before this code ran; the AC-DBL prefix was
-verified unowned by a whole-repo scan on claim).
+tech-lane FIFO oldest open row) and its R1857 successor, the
+month-window panel re-domain (the R1852 reseed "apidev dev_board
+month-window parameter window", claimed from the tech-lane FIFO
+oldest open row). The pre-registered criteria AC-DBL1..AC-DBL8
+live in the R1852 tech claim note and AC-DBL9..AC-DBL14 in the
+R1857 tech claim note (criteria were registered before this code
+ran; the AC-DBL continuation slots 9..14 were verified unowned by
+a whole-repo scan on claim).
+
+Covered semantics (R1857 family): dev_board gains an additive
+window=None tail parameter. window=None (the default) keeps the
+current-UTC-month behavior byte-stable; an explicit "YYYY-MM"
+string re-domains the quota panel to that month at read time --
+every key row stays listed (the key set is window-independent,
+honest zeros included), the per-key window-scoped fields
+(quota_used / reject_tally / usage_kind_tally) and the two world
+aggregates re-domain to the explicit month (window-scoped sums,
+the R1845 window-domain ruling), and the minute-ring fields keep
+following the clock (minute ring orthogonal to the month window).
+Six bad window forms reject the dedicated E_AD_BAD_WINDOW
+fail-closed before any read, after the limit gate, with the
+dev_account form gate outermost. The standalone window faces
+(reject_tally / usage_kind_tally) and a manual SQL COUNT are the
+mirror paths; the capped read stays orthogonal (window re-domains
+fields, the cap only cuts the keys list).
 
 Covered semantics: dev_board(dev_account, limit=0) gains an
 additive read cap. limit=0 (the default) keeps the full-board
@@ -487,6 +508,238 @@ def main():
                   _dumps(t_oct_post) == _dumps(t_oct_pre),
                   roll_counts_pre_call, roll_counts_post_call))
 
+        # ---- window world: month-window panel re-domain (R1857) ---
+        # The frozen clock sits at 2026-11 (after the +23d roll).
+        # The main world keeps its three calls and one reject in
+        # 2026-10; one new November call lands on k2 so the two
+        # windows carry disjoint evidence.
+
+        # -- AC-DBL9 bad-window forms fail-closed --------------------
+        win_counts_pre = _scoped_counts(conn, rjconn, marks, key_ids)
+        bad_windows = [2026, True, 2.5, "2", "2026-1", "2026-13"]
+        win_rejects = []
+        for bad in bad_windows:
+            ok_w, code_w, _d4 = expect_ad_error(
+                lambda b=bad: dk.dev_board("usr:limit", 0, b),
+                D.E_AD_BAD_WINDOW)
+            win_rejects.append((ok_w, code_w))
+        ok_lim_first, code_lim_first, _d5 = expect_ad_error(
+            lambda: dk.dev_board("usr:limit", -1, "2026-13"),
+            D.E_AD_BAD_LIMIT)
+        ok_form_w, code_form_w, _d6 = expect_ad_error(
+            lambda: dk.dev_board("not-usr", 0, "2026-13"),
+            D.E_AD_BAD_ARGS)
+        win_counts_post = _scoped_counts(conn, rjconn, marks, key_ids)
+        dbl9 = (all(ok_w for ok_w, _c in win_rejects)
+                and all(code_w == D.E_AD_BAD_WINDOW
+                        for ok_w, code_w in win_rejects)
+                and win_counts_post == win_counts_pre
+                and ok_lim_first
+                and code_lim_first == D.E_AD_BAD_LIMIT
+                and ok_form_w and code_form_w == D.E_AD_BAD_ARGS)
+        record("AC-DBL9", dbl9,
+               "bad-window fail-closed: six forms %s reject"
+               " %d/6 codes=%s; counts stable across rejects=%s"
+               " (%s == %s); gate order: (limit=-1, bad window)"
+               " -> %s (limit gate first), ('not-usr', bad"
+               " window) -> %s (form gate outermost); None is the"
+               " valid default, not a bad form"
+               % (bad_windows,
+                  sum(1 for ok_w, _c in win_rejects if ok_w),
+                  sorted(set(code_w for _ok, code_w in
+                             win_rejects)),
+                  win_counts_post == win_counts_pre,
+                  win_counts_pre, win_counts_post,
+                  code_lim_first, code_form_w))
+
+        # -- AC-DBL10 default window=None fidelity --------------------
+        board_default = dk.dev_board("usr:limit")
+        board_none = dk.dev_board("usr:limit", 0, None)
+        board_kw = dk.dev_board("usr:limit", limit=0, window=None)
+        dbl10 = (_dumps(board_default) == _dumps(board_none)
+                 and _dumps(board_none) == _dumps(board_kw)
+                 and sorted(board_none.keys()) == BOARD_KEYS
+                 and board_none["window"] == NEW_WIN)
+        record("AC-DBL10", dbl10,
+               "default fidelity at the rolled clock: no-arg =="
+               " positional window=None == keyword window=None"
+               " byte-identical=%s/%s; envelope keys == 6-pin=%s;"
+               " default window follows the clock (%s)"
+               % (_dumps(board_default) == _dumps(board_none),
+                  _dumps(board_none) == _dumps(board_kw),
+                  sorted(board_none.keys()) == BOARD_KEYS,
+                  board_none["window"]))
+
+        # -- AC-DBL11 explicit month panel re-domain -------------------
+        # one November call on k2 (cap 3, fresh quota window)
+        dk.call(issued[1]["api_key"], "backtest", "DBL-N-K2",
+                "engine:DBL-N-K2")
+        win_counts_call = _scoped_counts(conn, rjconn, marks,
+                                         key_ids)
+
+        def _win_projection(board):
+            return {"totals": [board["reject_tally_total"],
+                               board["usage_kind_tally_total"]],
+                    "rows": {r["key_name"]:
+                             [r["quota_used"], r["reject_tally"],
+                              r["usage_kind_tally"]]
+                             for r in board["keys"]}}
+
+        oct_snap = _win_projection(board_noarg)
+        oct_read = dk.dev_board("usr:limit", window="2026-10")
+        nov_read = dk.dev_board("usr:limit", window="2026-11")
+        fut_read = dk.dev_board("usr:limit", window="2026-12")
+        oct_rows = _win_projection(oct_read)
+        nov_k2 = _row_by_name(nov_read, "k2")
+        nov_k1 = _row_by_name(nov_read, "k1")
+        fut_rows = fut_read["keys"]
+        dbl11 = (oct_read["window"] == "2026-10"
+                 and _dumps(oct_rows) == _dumps(oct_snap)
+                 and nov_read["window"] == "2026-11"
+                 and nov_k2["quota_used"] == 1
+                 and nov_k1["quota_used"] == 0
+                 and nov_read["reject_tally_total"] == {}
+                 and nov_read["usage_kind_tally_total"] ==
+                     {"backtest": 1}
+                 and fut_read["window"] == "2026-12"
+                 and len(fut_rows) == 6
+                 and all(r["quota_used"] == 0 for r in fut_rows)
+                 and all(r["reject_tally"] == {}
+                         for r in fut_rows)
+                 and fut_read["reject_tally_total"] == {}
+                 and fut_read["usage_kind_tally_total"] == {}
+                 and oct_read["keys"][0]["minute_window"] ==
+                     nov_read["keys"][0]["minute_window"]
+                 and oct_read["keys"][0]["minute_window"] ==
+                     clock.minute_utc())
+        record("AC-DBL11", dbl11,
+               "month re-domain: October explicit read byte-equal"
+               " to the October snapshot projection=%s"
+               " (window=%s); November read k2 quota_used=%d k1"
+               " quota_used=%d totals %s/%s (October rows"
+               " zero-penetration); future 2026-12 honest"
+               " all-zero panel (rows=%d); minute fields follow"
+               " the clock across all window reads=%s"
+               % (_dumps(oct_rows) == _dumps(oct_snap),
+                  oct_read["window"], nov_k2["quota_used"],
+                  nov_k1["quota_used"],
+                  nov_read["reject_tally_total"],
+                  nov_read["usage_kind_tally_total"],
+                  len(fut_rows),
+                  oct_read["keys"][0]["minute_window"] ==
+                  clock.minute_utc()))
+
+        # -- AC-DBL12 cross-face lock mirror ---------------------------
+        face_locks = 0
+        face_rows = 0
+        for W, board_w in (("2026-10", oct_read),
+                           ("2026-11", nov_read)):
+            for row, kid in zip(board_w["keys"], key_ids):
+                rt = dk.reject_tally(row["api_key"], window=W)
+                uk = dk.usage_kind_tally(row["api_key"], window=W)
+                manual = conn.execute(
+                    "SELECT COUNT(*) FROM api_calls"
+                    " WHERE key_id = ? AND window = ?",
+                    (kid, W)).fetchone()[0]
+                face_rows += 1
+                if (row["reject_tally"] == rt["by_reason"]
+                        and row["usage_kind_tally"] == uk["by_kind"]
+                        and row["quota_used"] == manual):
+                    face_locks += 1
+        dbl12 = (face_rows == 12 and face_locks == 12)
+        record("AC-DBL12", dbl12,
+               "cross-face lock mirror: %d/%d (key, window) rows"
+               " match the standalone window faces (reject_tally"
+               " by_reason + usage_kind_tally by_kind) and the"
+               " manual SQL COUNT per key over 6 keys x 2 windows"
+               % (face_locks, face_rows))
+
+        # -- AC-DBL13 window x limit orthogonality ----------------------
+        oct_cap2 = dk.dev_board("usr:limit", 2, "2026-10")
+        nov_cap2 = dk.dev_board("usr:limit", 2, "2026-11")
+        oct_cap2_again = dk.dev_board("usr:limit", 2, "2026-10")
+        oct_tail_proj = {
+            "totals": [board_noarg["reject_tally_total"],
+                      board_noarg["usage_kind_tally_total"]],
+            "rows": {r["key_name"]:
+                     [r["quota_used"], r["reject_tally"],
+                      r["usage_kind_tally"]]
+                     for r in board_noarg["keys"][-2:]}}
+        nov_k5 = _row_by_name(nov_cap2, "k5")
+        dbl13 = ([r["key_name"] for r in oct_cap2["keys"]] ==
+                 ["k5", "k6"]
+                 and [r["key_name"] for r in nov_cap2["keys"]] ==
+                 ["k5", "k6"]
+                 and _dumps(_win_projection(oct_cap2)) ==
+                     _dumps(oct_tail_proj)
+                 and oct_cap2["reject_tally_total"] ==
+                     {"E_AD_QUOTA": 1}
+                 and oct_cap2["usage_kind_tally_total"] ==
+                     {"backtest": 3}
+                 and oct_cap2["total"] == 6
+                 and oct_cap2["returned"] == 2
+                 and oct_cap2["truncated"] is True
+                 and oct_cap2["window"] == "2026-10"
+                 and nov_k5["quota_used"] == 0
+                 and nov_cap2["reject_tally_total"] == {}
+                 and nov_cap2["usage_kind_tally_total"] ==
+                     {"backtest": 1}
+                 and nov_cap2["total"] == 6
+                 and nov_cap2["window"] == "2026-11"
+                 and _dumps(oct_cap2) == _dumps(oct_cap2_again))
+        record("AC-DBL13", dbl13,
+               "window x limit orthogonal: tail slice k5/k6 under"
+               " both windows=%s/%s; October capped rows byte-equal"
+               " the October snapshot tail projection=%s; capped"
+               " totals stay window aggregates (not truncated)="
+               " %s/%s; total==key count 6 window-independent=%s;"
+               " November capped k5 quota_used=%d (its October"
+               " calls invisible); November capped totals %s/%s"
+               " (k2 November call aggregated, truncation cuts"
+               " only the list); double-call byte-identical=%s"
+               % ([r["key_name"] for r in oct_cap2["keys"]],
+                  [r["key_name"] for r in nov_cap2["keys"]],
+                  _dumps(_win_projection(oct_cap2)) ==
+                  _dumps(oct_tail_proj),
+                  oct_cap2["reject_tally_total"],
+                  oct_cap2["usage_kind_tally_total"],
+                  oct_cap2["total"] == 6,
+                  nov_k5["quota_used"],
+                  nov_cap2["reject_tally_total"],
+                  nov_cap2["usage_kind_tally_total"],
+                  _dumps(oct_cap2) == _dumps(oct_cap2_again)))
+
+        # -- AC-DBL14 window-family pure-read + hygiene ----------------
+        win_counts_end = _scoped_counts(conn, rjconn, marks, key_ids)
+        own_path14 = os.path.abspath(__file__)
+        own_source14 = open(own_path14, "r",
+                            encoding="ascii").read()
+        imports_net14 = [
+            line for line in own_source14.splitlines()
+            if re.match(r"\s*(?:import|from)\s", line)
+            and re.search(r"urllib|requests|socket|http", line)]
+        ascii14 = all(ord(ch) < 128 for ch in own_source14)
+        with open(os.path.join(BASE, "config.json"), "rb") as h14:
+            cfg_bytes14 = h14.read()
+        dbl14 = (win_counts_end == win_counts_call
+                 and win_counts_call == (6, 4, 1)
+                 and hasattr(D, "E_AD_BAD_WINDOW")
+                 and D.E_AD_BAD_WINDOW == "E_AD_BAD_WINDOW"
+                 and ascii14 and len(imports_net14) == 0
+                 and cfg_bytes14 == cfg_bytes)
+        record("AC-DBL14", dbl14,
+               "window-family pure-read: counts stable across every"
+               " window read %s == %s (one intentional November"
+               " write in between -> %s); E_AD_BAD_WINDOW constant"
+               " registered=%s; suite pure-ASCII=%s;"
+               " net-imports=%d; config.json byte-stable=%s"
+               % (win_counts_end, win_counts_call,
+                  win_counts_call,
+                  hasattr(D, "E_AD_BAD_WINDOW")
+                  and D.E_AD_BAD_WINDOW == "E_AD_BAD_WINDOW",
+                  ascii14, len(imports_net14),
+                  cfg_bytes14 == cfg_bytes))
+
         # -- AC-DBL8 pure-read law + determinism + hygiene ----------
         end_counts = _scoped_counts(conn, rjconn, marks, key_ids)
         fn_src = None
@@ -518,11 +771,11 @@ def main():
         reg_chunk = reg_src[reg_row_pos:reg_row_pos + 300]
         reg_row = (reg_row_pos >= 0
                    and "test_apidev_devboard_limit.py" in reg_chunk
-                   and "8)," in reg_chunk)
+                   and "14)," in reg_chunk)
         schema_end = set(r[0] for r in conn.execute(
             "SELECT sql FROM sqlite_master"
             " WHERE sql IS NOT NULL").fetchall())
-        dbl8 = (end_counts == pre_counts
+        dbl8 = (end_counts == win_counts_call
                 and len(dml_hits) == 0
                 and _dumps(again_a) == _dumps(again_b)
                 and cfg_bytes_end == cfg_bytes
@@ -531,13 +784,14 @@ def main():
                 and reg_row)
         record("AC-DBL8", dbl8,
                "pure-read + hygiene: main-world counts stable"
-               " across every read %s == %s; dev_board source DML"
+               " across every read (post-write baseline) %s == %s;"
+               " dev_board source DML"
                " verbs=%d; double-call byte-identical (back-to-back"
                " fresh reads at the rolled clock, window=%s)=%s;"
                " config.json byte-stable=%s; suite pure-ASCII=%s;"
                " net-imports=%d; schema frozen=%s; registry row +"
-               " criteria=8=%s"
-               % (pre_counts, end_counts, len(dml_hits),
+               " criteria=14=%s"
+               % (win_counts_call, end_counts, len(dml_hits),
                   again_a["window"],
                   _dumps(again_a) == _dumps(again_b),
                   cfg_bytes_end == cfg_bytes, own_ascii,
@@ -559,7 +813,7 @@ def main():
     dk.close()
     metered.close()
     led.close()
-    return 0 if passed == total == 8 else 1
+    return 0 if passed == total == 14 else 1
 
 
 if __name__ == "__main__":

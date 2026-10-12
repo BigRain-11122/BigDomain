@@ -157,6 +157,7 @@ E_AD_NO_DISCLAIMER = "E_AD_NO_DISCLAIMER"
 E_AD_REVOKED = "E_AD_REVOKED"          # key revoked or rotated out
 E_AD_ALREADY = "E_AD_ALREADY"          # double revoke / rotate a dead key
 E_AD_BAD_LIMIT = "E_AD_BAD_LIMIT"      # dev_board read cap must be int >= 0
+E_AD_BAD_WINDOW = "E_AD_BAD_WINDOW"    # dev_board month window: None or YYYY-MM
 
 NON_ADVISORY = ("non-advisory notice: open API is a compute +"
                 " visualization interface, not investment advice")
@@ -651,7 +652,7 @@ class DevKeyFace:
                     row[0], window),
                 "disclaimer": self.disclaimer}
 
-    def dev_board(self, dev_account, limit=0):
+    def dev_board(self, dev_account, limit=0, window=None):
         """The developer's key board: every key with its quota
         state plus the billing-ring reconcile reference (through
         the metered public API). Read-only, zero token movement.
@@ -668,7 +669,23 @@ class DevKeyFace:
         stay full-world counts over every key of the account --
         truncation only cuts the keys list. A bad limit (non-int,
         bool, or negative) rejects E_AD_BAD_LIMIT fail-closed
-        before any read."""
+        before any read. The optional window parameter re-domains
+        the quota panel to one "YYYY-MM" month at read time:
+        window=None (the default) keeps the current-UTC-month
+        behavior byte-stable (the same _window_utc source as the
+        quota ring); an explicit historical month reads that
+        month's counters -- every key row stays listed with its
+        window-scoped counts (honest zeros included), the two
+        world aggregates re-domain with it as window-scoped sums
+        over every key, and the minute-ring fields keep following
+        the clock (the minute ring is orthogonal to the month
+        window); rows are immutable and stamped with their own
+        record-time window, so a historical month stays readable
+        forever and a future month is an honest all-zero panel.
+        A bad window shape (non-None non-"YYYY-MM") rejects the
+        dedicated E_AD_BAD_WINDOW fail-closed before any read,
+        after the limit gate; the dev_account form gate stays
+        outermost."""
         dev_account = str(dev_account or "").strip()
         if not dev_account.startswith("usr:"):
             raise ApiDevError(E_AD_BAD_ARGS, "dev accounts are usr:* only")
@@ -676,7 +693,12 @@ class DevKeyFace:
                 or limit < 0:
             raise ApiDevError(E_AD_BAD_LIMIT,
                               "limit must be an integer >= 0")
-        window = _window_utc()
+        if window is None:
+            window = _window_utc()
+        elif not (isinstance(window, str)
+                  and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_WINDOW,
+                              "window must be None or YYYY-MM")
         minute = _minute_utc()
         keys = []
         with self._lock:

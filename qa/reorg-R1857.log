@@ -1,0 +1,54 @@
+=== reorg-R1857 fold R497 section 1: round-open five-silence + pre gauge ===
+scan_five_still: [STATE] PASS tick=1856 log_lines=38 state_bytes=81659 eol_ok=1
+[LEDGER] PASS atbd_rows=0 conflict=0 | [DEC] PASS rows=288 row_owner_tokens=119
+[GORD] INFO tbl_rows=278 gord_new_rows=0 (BigStream MV family watermark, known)
+[ORD] PASS | [BENCH] PASS days=0 | [QA] PASS today_png=1 today_log=1 | [HB] PASS lag=0
+[TASKS] INFO backlog_open=4 blocked_on_ceo=1 | [EXPORT] PASS 0.1h | [TREE] PASS clean
+gauge pre: disk_bytes=81659 gate=78500 margin=-3159 fold_needed=true
+R1856 carry-over note honored: fold R497 = R1857 first item (R1793 deferred-fold
+precedent; R1842/R1846 carry-over-fulfillment forms)
+window selection: tail-30 = log lines 9..38 = rounds R1842..R1856 (15 rounds,
+30 lines; gen496 line-8 roll line preserved per precedent)
+=== section 2: gen497 summary generator (mechanical, zero hand-copy) ===
+NL-CHECK clean: no window line embeds U+000A (R1317/R1823 physical-split class)
+summary bytes=21262 tokens=50 window_bytes=40189 lines=30
+generator: .codely-cli/tmp/gen497.py (gen491..gen496 precedent: PAT token
+extraction + programmatic per-line listing + literal pipe-separated catalog)
+summary file: .codely-cli/tmp/fold497-summary.txt (utf-8 no BOM, single line)
+=== section 3: fold dry-run plan (all checks before any write) ===
+mode=dry-run window_mode=tail window_start=9 window_end=38 window_lines=30
+window_content_bytes=40189 | pre_bytes=81659 | new_log_len=9
+token_missing=[] token_ok=true | gate_ok=true
+predicted_bytes=62102 reserve_bytes=3000 gate=78500 | would_fail=[]
+preop_sha16=4ccc2e5bde97c0ad
+archive_header: # --- R1857 fold append (2026-10-12, 30 lines verbatim:
+P2 tech FIFO delivery window R1842..R1856 (fold R496 closeout + monthcross/
+monthroll family + pycrdt wire-compat + census daily link + cap/window read-hat
+family), fold R497 window, pre-op sha16 4ccc2e5bde97c0ad)
+=== section 4: fold execute (verify-then-write) ===
+post_bytes=62102 | predicted_eq_actual=true (62102==62102)
+appendix_bytes=40488 archive_appended=true backup_written=true
+backup_path=logs/state-preop-R1857.bak (pre-op raw byte-for-byte)
+archive_file=logs/state-log-archive-2026-10.md section R1857 (30 lines verbatim)
+state path surgery: src/os/state.json log[8:38] -> single roll line (atomic
+tempfile+os.replace; prefix/suffix lines untouched)
+=== section 5: post-verify (census + eol + gauge + catalog recheck) ===
+census: pass=true (sections reconciled; R1823 known finding adjudicated still
+passing; zero unknown mismatch; zero unknown dangling)
+eol check: bytes=62102 crlf=18 bare_lf=0 lone_cr=0 layout_ok=true
+indent: log_item_lines=9 indent16_lines=9 indent_anomaly=0 indent_ok=true
+gauge post: disk_bytes=62102 margin_bytes=16398 fold_needed=false
+catalog mechanical recheck vs WRITTEN roll line (preop backup window):
+tokens=50 missing=0 (zero-loss against on-disk state, not just summary file)
+roll_is_new_line9 head='2026-10-12（R1842..R1856 ' roll_bytes=21262
+log_len=9 prefix8_unchanged=True
+archive section R1857: found=true verbatim_lines=30
+=== section 6: closeout note ===
+fold R497 = P-2026-09-25-18 497th cut (watermark 81659B -> 62102B, -19557B)
+standing line logs/ toolchain reuse (tech.md): fold subcommand = main gate,
+gen497 generator precedent chain continues (gen491..gen496 -> gen497)
+watermark carry-over: post 62102B + 16398B margin, next fold R498 = when
+round-open first gauge crosses the 78500B line again
+R1857 second item = P2 tech FIFO oldest claimable (R1852 reseed: apidev
+dev_board month-window filter) delivered in same round per R1842 dual-item
+precedent

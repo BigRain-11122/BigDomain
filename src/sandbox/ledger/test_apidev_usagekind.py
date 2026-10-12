@@ -335,7 +335,7 @@ def main():
                          src) is None)
         db_sig_ok = (re.search(
                          r"def dev_board\(self, dev_account,"
-                         r" limit=0\)",
+                         r" limit=0, window=None\)",
                          src) is not None
                      and re.search(
                          r"def dev_board\(self, dev_account,\s*"
@@ -355,7 +355,8 @@ def main():
                " usage_kind_tally (uk-full=%s), board merged"
                " total=%s (manual all-key SQL equal=%s), zero"
                " historical penetration; source signatures"
-               " window-free: key_view=%s dev_board=%s"
+               " keep current-month defaults: key_view"
+               " window-free=%s dev_board window=None-default=%s"
                % (v_full["usage_kind_tally"],
                   prior_keys.issubset(set(v_full.keys())),
                   board_full["usage_kind_tally"],
