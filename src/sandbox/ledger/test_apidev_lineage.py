@@ -2,10 +2,14 @@
 face (BigDomain R1825; canon = tech-queue "apidev lifecycle
 one-shot lineage read face" row, the R1824 lifecycle_trace
 successor, claimed from the tech-lane top open row per the FIFO
-law). Asserts the pre-registered criteria AC-LG1..AC-LG7 from
-the R1825 tech-queue claim note (criteria were registered before
-this code ran; honesty law). Each criterion prints PASS/FAIL
-with evidence; the process exits non-zero on any FAIL.
+law) and its R1887 explicit-month-window lens (canon = the
+"apidev audit_lineage explicit month window" tech-queue row,
+the R1875 lifecycle_trace window successor). Asserts the
+pre-registered criteria AC-LG1..AC-LG7 from the R1825 claim
+note plus AC-LG8..AC-LG15 from the R1887 claim note (criteria
+were registered before this code ran; honesty law). Each
+criterion prints PASS/FAIL with evidence; the process exits
+non-zero on any FAIL.
 
 Covered semantics: audit_lineage(api_key) is the pure-read
 one-shot lineage face over the append-only key_events store --
@@ -65,11 +69,16 @@ BOARD_ROW_KEYS = sorted([
 LINEAGE_KEYS = sorted([
     "api_key", "dev_account", "key_name", "key_id", "chain",
     "chain_size", "queried_index", "disclaimer"])
+WINDOWED_KEYS = sorted(LINEAGE_KEYS + ["window"])
 MEMBER_KEYS = sorted([
     "key_id", "dev_account", "key_name", "status",
     "rotated_from_key_id", "rotated_to_key_id", "events",
     "total"])
 EVENT_KEYS = sorted(["event_id", "event", "pair_key_id", "event_utc"])
+# bad window forms, the R1856 family tuple (11 base + 3 trailing)
+BADS14 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+          "202610", "abcd", "", 2026, True, 2.5, "2026-10\n",
+          "2026-10 ", "2026-10\r")
 # AC-LG3 lock fields: shared by a lineage member block and a
 # lifecycle_trace envelope
 LOCK_FIELDS = ["dev_account", "key_name", "status",
@@ -304,6 +313,241 @@ def main():
            " net-imports=%d, audit_lineage present=%s"
            % (cfg_bytes_end == cfg_bytes, is_ascii, not has_update,
               not has_rng, len(imports_net), has_lineage))
+
+    # -- R1887 window lens: explicit month window on the lineage ---
+    # (AC-LG8..AC-LG15 pre-registered in the tech-queue claim
+    # note before this suite code ran; honesty law)
+
+    # -- AC-LG8 default fidelity -------------------------------------
+    five_apis = [fk["api_key"], rk["api_key"], ka["api_key"],
+                 kb["api_key"], kc["api_key"]]
+    five_defaults = [lg_fk, lg_rk, lg_ka2, lg_kb2, lg_kc2]
+    fidelity = all(
+        json.dumps(dk.audit_lineage(k, window=None),
+                   sort_keys=True)
+        == json.dumps(d, sort_keys=True)
+        for k, d in zip(five_apis, five_defaults))
+    default_keys_ok = all(
+        sorted(d.keys()) == LINEAGE_KEYS
+        for d in five_defaults)
+    lg8 = fidelity and default_keys_ok
+    record("AC-LG8", lg8,
+           "default call == window=None call byte-identical on"
+           " all 5 queried keys=%s, default envelope keys exact"
+           " %d (zero window key)=%s"
+           % (fidelity, len(LINEAGE_KEYS), default_keys_ok))
+
+    # -- AC-LG9 bad window fail-closed --------------------------------
+    keys_b9 = _count(conn, "api_dev_keys")
+    ev_b9 = _count(lcconn, "key_events")
+    bad_rejects = []
+    for bad in BADS14:
+        try:
+            dk.audit_lineage(fk["api_key"], bad)
+            bad_rejects.append(bad)
+        except D.ApiDevError as exc:
+            if exc.code != D.E_AD_BAD_ARGS:
+                bad_rejects.append(bad)
+    ok_unk_win, code_unk_win = expect_unknown(
+        lambda: dk.audit_lineage("sk-nonexistent", "2026-99"))
+    keys_a9 = _count(conn, "api_dev_keys")
+    ev_a9 = _count(lcconn, "key_events")
+    lg9 = (len(bad_rejects) == 0 and ok_unk_win
+           and keys_a9 == keys_b9 and ev_a9 == ev_b9)
+    record("AC-LG9", lg9,
+           "14 bad forms all reject E_AD_BAD_ARGS (audit-family"
+           " code) rejects=%d, key gate first: unknown+bad"
+           " window -> %s, pure read: keys %d==%d events %d==%d"
+           % (len(bad_rejects), code_unk_win, keys_a9, keys_b9,
+              ev_a9, ev_b9))
+
+    # -- AC-LG10 window lens semantics + cross-face lock -------------
+    # month-abstraction law (R1813): W derives from a real
+    # event's record-time prefix, never hardcoded
+    lg_cur = dk.audit_lineage(kc["api_key"])
+    W = lg_cur["chain"][2]["events"][-1]["event_utc"][:7]
+    win_reads = {k: dk.audit_lineage(k, W) for k in five_apis}
+    lens_ok = all(
+        m["total"] == len(m["events"])
+        and sorted(m.keys()) == MEMBER_KEYS
+        and all(e["event_utc"][:7] == W
+                for e in m["events"])
+        for w in win_reads.values()
+        for m in w["chain"])
+    env_ok10 = all(
+        sorted(w.keys()) == WINDOWED_KEYS and w["window"] == W
+        for w in win_reads.values())
+    cross_ok = True
+    for w in win_reads.values():
+        for m in w["chain"]:
+            api = conn.execute(
+                "SELECT api_key FROM api_dev_keys"
+                " WHERE key_id = ?", (m["key_id"],)).fetchone()
+            trace = dk.lifecycle_trace(api[0], W)
+            if (m["events"] != trace["events"]
+                    or m["total"] != trace["total"]):
+                cross_ok = False
+    lg10 = lens_ok and env_ok10 and cross_ok
+    record("AC-LG10", lg10,
+           "window=%s lens: member events all in-month=%s,"
+           " member keys exact=%s, envelope adds exactly window"
+           " key=%s, member events/total == lifecycle_trace"
+           "(member, window) cross-face=%s"
+           % (W, lens_ok, lens_ok, env_ok10, cross_ok))
+
+    # -- AC-LG11 key attributes not sliced ---------------------------
+    facts_ok = True
+    for k in five_apis:
+        d = dk.audit_lineage(k)
+        w = win_reads[k]
+        if (_ids(d) != _ids(w) or _names(d) != _names(w)
+                or d["chain_size"] != w["chain_size"]
+                or d["queried_index"] != w["queried_index"]):
+            facts_ok = False
+        for md, mw in zip(d["chain"], w["chain"]):
+            if (md["status"] != mw["status"]
+                    or md["rotated_from_key_id"]
+                    != mw["rotated_from_key_id"]
+                    or md["rotated_to_key_id"]
+                    != mw["rotated_to_key_id"]):
+                facts_ok = False
+    july = dk.audit_lineage(kb["api_key"], "2026-07")
+    july_facts = (_ids(july) == _ids(dk.audit_lineage(kb["api_key"]))
+                  and july["chain_size"] == 3
+                  and july["queried_index"] == 1)
+    lg11 = facts_ok and july_facts
+    record("AC-LG11", lg11,
+           "windowed vs default reads: chain ids/order/names/"
+           "sizes/queried_index/member status + pair links all"
+           " identical on 5 queried keys=%s, zero-event window"
+           " keeps full chain shape=%s"
+           % (facts_ok, july_facts))
+
+    # -- AC-LG12 historical month window (fixture direct INSERT) -----
+    # (R1730 family precedent: fixture rows injected directly,
+    # noted here -- production rows carry their own record time)
+    id_rk = _key_id(conn, rk["api_key"])
+    hist_ts = "2026-08-15T00:00:00.000000Z"
+    lcconn.execute(
+        "INSERT INTO key_events (key_id, event, pair_key_id,"
+        " event_utc) VALUES (?, 'revoke', NULL, ?)",
+        (id_rk, hist_ts))
+    lcconn.commit()
+    lg_hist = dk.audit_lineage(rk["api_key"], "2026-08")
+    hist_block = lg_hist["chain"][0]
+    hist_ok = (lg_hist["chain_size"] == 1
+               and hist_block["total"] == 1
+               and hist_block["status"] == "revoked"
+               and hist_block["events"][0]["event_utc"] == hist_ts
+               and hist_block["events"][0]["event"] == "revoke")
+    cur_w_rk = dk.audit_lineage(rk["api_key"], W)
+    cur_isolated = (cur_w_rk["chain"][0]["total"] == 1
+                    and cur_w_rk["chain"][0]["events"][0]
+                    ["event_utc"][:7] == W)
+    no_leak = all(
+        e["event_utc"][:7] != "2026-08"
+        for w in win_reads.values()
+        for m in w["chain"] for e in m["events"])
+    lg_def = dk.audit_lineage(rk["api_key"])
+    full_trail = (lg_def["chain"][0]["total"] == 2
+                  and lg_def["chain"][0]["events"][0]
+                  ["event_utc"] == hist_ts
+                  and lg_def["chain"][0]["events"][1]
+                  ["event_utc"][:7] == W)
+    lg_fut = dk.audit_lineage(kb["api_key"], "2026-12")
+    fut_ok = all(m["total"] == 0 and m["events"] == []
+                 for m in lg_fut["chain"])
+    lg12 = hist_ok and cur_isolated and no_leak and full_trail \
+        and fut_ok
+    record("AC-LG12", lg12,
+           "injected historical revoke (2026-08) reads in that"
+           " window=%s, current window isolated=%s, no"
+           " cross-month leak=%s, default full trail keeps both"
+           " rows=%s, future window honest empty=%s"
+           % (hist_ok, cur_isolated, no_leak, full_trail, fut_ok))
+
+    # -- AC-LG13 pair integrity under the window ----------------------
+    w_kb = win_reads[kb["api_key"]]
+    both_sides = (
+        any(e["event"] == "rotate_out"
+            for e in w_kb["chain"][0]["events"])
+        and any(e["event"] == "rotate_in"
+                for e in w_kb["chain"][1]["events"]))
+    july_kb = dk.audit_lineage(kb["api_key"], "2026-07")
+    links_stay = (july_kb["chain"][0]["rotated_to_key_id"] == id_b
+                  and july_kb["chain"][1]["rotated_from_key_id"]
+                  == id_a
+                  and july_kb["chain"][0]["events"] == []
+                  and july_kb["chain"][1]["events"] == [])
+    # single-side tamper demo (production unreachable: pairs
+    # land in one transaction at one timestamp; direct INSERT
+    # builds the honest single-side display case)
+    july_ts = "2026-07-15T00:00:00.000000Z"
+    lcconn.execute(
+        "INSERT INTO key_events (key_id, event, pair_key_id,"
+        " event_utc) VALUES (?, 'rotate_in', NULL, ?)",
+        (id_rk, july_ts))
+    lcconn.commit()
+    lg_side = dk.audit_lineage(rk["api_key"], "2026-07")
+    side_block = lg_side["chain"][0]
+    single_side = (lg_side["chain_size"] == 1
+                   and side_block["total"] == 1
+                   and side_block["events"][0]["event"]
+                   == "rotate_in"
+                   and side_block["status"] == "revoked"
+                   and side_block["key_id"] == id_rk)
+    lg13 = both_sides and links_stay and single_side
+    record("AC-LG13", lg13,
+           "current window shows rotate pair on both member"
+           " blocks=%s, zero-event window drops both sides while"
+           " pair links stay=%s, single-side tamper displayed"
+           " honestly + chain walk unchanged=%s"
+           % (both_sides, links_stay, single_side))
+
+    # -- AC-LG14 pure-read law + determinism --------------------------
+    keys_b14 = _count(conn, "api_dev_keys")
+    ev_b14 = _count(lcconn, "key_events")
+    for k in five_apis:
+        for w in (None, W, "2026-07", "2026-08", "2026-12"):
+            dk.audit_lineage(k, w)
+    keys_a14 = _count(conn, "api_dev_keys")
+    ev_a14 = _count(lcconn, "key_events")
+    det_ok = all(
+        json.dumps(dk.audit_lineage(kb["api_key"], w),
+                   sort_keys=True)
+        == json.dumps(dk.audit_lineage(kb["api_key"], w),
+                      sort_keys=True)
+        for w in (W, "2026-08"))
+    lg14 = (keys_a14 == keys_b14 and ev_a14 == ev_b14
+            and det_ok)
+    record("AC-LG14", lg14,
+           "25 window reads move zero rows: keys %d==%d events"
+           " %d==%d, double-call byte-identical=%s"
+           % (keys_a14, keys_b14, ev_a14, ev_b14, det_ok))
+
+    # -- AC-LG15 hygiene face -----------------------------------------
+    with open(os.path.join(BASE, "config.json"), "rb") as handle:
+        cfg_bytes_end15 = handle.read()
+    sig_ok = re.search(
+        r"def audit_lineage\(self, api_key, window=None\)",
+        source) is not None
+    view_pin = sorted(dk.key_view(fk["api_key"]).keys()) \
+        == KEY_VIEW_KEYS
+    board_pin = sorted(dk.dev_board("usr:ada").keys()) \
+        == BOARD_KEYS
+    row_pin = sorted(dk.dev_board("usr:ada")["keys"][0].keys()) \
+        == BOARD_ROW_KEYS
+    ascii15 = all(ord(ch) < 128 for ch in source)
+    lg15 = (cfg_bytes_end15 == cfg_bytes and sig_ok and view_pin
+            and board_pin and row_pin and ascii15)
+    record("AC-LG15", lg15,
+           "config.json byte-stable=%s, signature window=None"
+           " present=%s, embedded faces exact-pin (key_view %d"
+           "/ board %d / row %d keys)=%s, source pure-ASCII=%s"
+           % (cfg_bytes_end15 == cfg_bytes, sig_ok,
+              len(KEY_VIEW_KEYS), len(BOARD_KEYS),
+              len(BOARD_ROW_KEYS),
+              view_pin and board_pin and row_pin, ascii15))
 
     total = len(RESULTS)
     passed = sum(1 for _, ok in RESULTS if ok)

@@ -1,0 +1,39 @@
+--- run 1 (rc=0) ---
+PASS AC-LG1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True, top-level api_key==queried=True
+PASS AC-LG2: A->B->C from any member: chain_size==3 and order [A,B,C]=True, queried_index 0/1/2=True, member keys exact=True, zero foreign raw api_keys=True, pair closure both directions=True, single dev=True
+PASS AC-LG3: every member block vs lifecycle_trace(member) equal on all 7 lock fields over every queried chain (fresh/revoked/A/B/C)=True
+PASS AC-LG4: lone keys self-chain: fresh chain_size==1 active events=[], plain-revoked chain_size==1 revoked [revoke]=True
+PASS AC-LG5: post-revoke world: member id sequence [A,B,C] equal from every query point=True, dead members fully readable (rotated-out A + double-terminal revoked C with [rotate_in,revoke])=True
+PASS AC-LG6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero lineage embedding=True
+PASS AC-LG7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, audit_lineage present=True
+PASS AC-LG8: default call == window=None call byte-identical on all 5 queried keys=True, default envelope keys exact 8 (zero window key)=True
+PASS AC-LG9: 14 bad forms all reject E_AD_BAD_ARGS (audit-family code) rejects=0, key gate first: unknown+bad window -> E_AD_UNKNOWN_KEY, pure read: keys 5==5 events 6==6
+PASS AC-LG10: window=2026-10 lens: member events all in-month=True, member keys exact=True, envelope adds exactly window key=True, member events/total == lifecycle_trace(member, window) cross-face=True
+PASS AC-LG11: windowed vs default reads: chain ids/order/names/sizes/queried_index/member status + pair links all identical on 5 queried keys=True, zero-event window keeps full chain shape=True
+PASS AC-LG12: injected historical revoke (2026-08) reads in that window=True, current window isolated=True, no cross-month leak=True, default full trail keeps both rows=True, future window honest empty=True
+PASS AC-LG13: current window shows rotate pair on both member blocks=True, zero-event window drops both sides while pair links stay=True, single-side tamper displayed honestly + chain walk unchanged=True
+PASS AC-LG14: 25 window reads move zero rows: keys 5==5 events 8==8, double-call byte-identical=True
+PASS AC-LG15: config.json byte-stable=True, signature window=None present=True, embedded faces exact-pin (key_view 18/ board 6 / row 15 keys)=True, source pure-ASCII=True
+SUITE apidev-lineage: 15/15 criteria pass
+--- run 2 byte-identical (rc=0) ---
+DOUBLE-RUN IDENTICAL
+
+--- full-regression RUNNER (qa/reconcile-all-R1887.log) ---
+PASS suite ledger-apidev-lineage exit=0 pass-lines=15 fail-lines=0 criteria=15 0.2s
+  | PASS AC-LG8..AC-LG15 (8 window-lens criteria, all green first run)
+RUNNER PASS (134/134 suites green, reconcile controls 7/7, 157.1s)
+PASS suites 134/134 green, expected criteria total=1238
+
+--- matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (13354 bytes) - registry suites=134 criteria=1238 evidence=qa/reconcile-all-R1887.log green=134/134
+PASS check: byte-identical (13354 bytes, 134 suites, 1238 criteria) x2
+
+--- census (qa writer-mode drift detector) ---
+census: files=1258 tee=756 baselined=502
+flags=0
+verdict: DRIFT-CLEAN
+
+--- hygiene notes ---
+apidev.py diff = _lineage_member(window) slice + audit_lineage(window=None) validation/envelope (additive;
+ existing methods zero-touch). shipped config.json byte-stable. suite source pure ASCII.
+driver: .codely-cli/tmp/run_lineagewin_R1887.py (utf-8/LF single-writer law R1880)

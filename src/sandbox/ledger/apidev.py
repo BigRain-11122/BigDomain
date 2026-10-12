@@ -1019,14 +1019,20 @@ class DevKeyFace:
                 (key_id,)).fetchone()
         return row[0] if row is not None else None
 
-    def _lineage_member(self, key_id):
+    def _lineage_member(self, key_id, window=None):
         """One chain member block: key_id, dev_account, key_name,
         status, both pair links and the member's own event rows.
         The derivation is the exact one lifecycle_trace performs
         for a single key (same fetch, same ordering, same
         last-event-wins pair derivation, same terminal-status
         rule), so the lineage face and the single-key trace face
-        are mechanically locked together."""
+        are mechanically locked together. The optional window is
+        a lens on the member's event trail only: status and both
+        pair links stay derived from the full event set (a window
+        never redefines the key's facts), and the slice applies
+        after the single ordered fetch (the R1875
+        lifecycle_trace law: one consistent snapshot, zero
+        second SQL engine); total follows the slice."""
         row = self._key_row_by_id(key_id)
         with self._lock:
             events = self._lconn.execute(
@@ -1042,6 +1048,8 @@ class DevKeyFace:
             elif ev[1] == "rotate_out":
                 rotated_to = ev[2]
         terminal = self._terminal_event(key_id)
+        shown = (events if window is None else
+                 [e for e in events if e[3][:7] == window])
         return {"key_id": key_id,
                 "dev_account": row[1] if row is not None else None,
                 "key_name": row[2] if row is not None else None,
@@ -1051,10 +1059,10 @@ class DevKeyFace:
                 "rotated_to_key_id": rotated_to,
                 "events": [{"event_id": e[0], "event": e[1],
                             "pair_key_id": e[2], "event_utc": e[3]}
-                           for e in events],
-                "total": len(events)}
+                           for e in shown],
+                "total": len(shown)}
 
-    def audit_lineage(self, api_key):
+    def audit_lineage(self, api_key, window=None):
         """One key's full rotation lineage in a single read: every
         predecessor reachable through rotate_in events (walked
         upward one level at a time) plus every successor reachable
@@ -1066,17 +1074,39 @@ class DevKeyFace:
         N-key chain costs one call instead of N lifecycle_trace
         calls. Member blocks never expose another member's raw
         api_key: the only raw api_key in the envelope is the
-        queried key's own (least-exposure audit face). Read-only,
-        zero token movement, zero UPDATE; dead keys stay fully
-        readable (a terminal state never closes the audit face)
-        and the embedded faces (key_view, dev_board) stay
-        untouched (the AC-RJW4 embedded-face law). The key gate
-        fires first (the call-chain key-gate-first law).
-        Cycle-safe in both directions: a visited-id set stops any
-        corrupted loop instead of spinning."""
+        queried key's own (least-exposure audit face). The
+        optional window parameter is a lens on the member event
+        trails only: each member block's events filter to one
+        "YYYY-MM" month at read time (rows are immutable and
+        stamped with their own record-time utc, so a historical
+        month stays readable forever) and the member total
+        follows the slice, while the chain member set, chain
+        order, queried_index and every member's status / pair
+        links stay derived from the full event sets (a window
+        never redefines the key's facts -- the AC-LG5 lineage-
+        is-a-key-property law under the window lens, the R1875
+        lifecycle_trace window law). window=None (the default)
+        keeps the full-trail behavior byte-stable. An explicit-
+        window envelope adds a "window" key (additive, the
+        R1868 / R1875 window-family precedent); a bad window
+        shape rejects E_AD_BAD_ARGS fail-closed before any row
+        is read (the audit-family code, matching lifecycle_trace
+        / usage_log / reject_tally / chain_usage; E_AD_BAD_WINDOW
+        stays the dev_board / key_view panel-family code). The
+        key gate fires first (the call-chain key-gate-first
+        law). Read-only, zero token movement, zero UPDATE; dead
+        keys stay fully readable (a terminal state never closes
+        the audit face) and the embedded faces (key_view,
+        dev_board) stay untouched (the AC-RJW4 embedded-face
+        law). Cycle-safe in both directions: a visited-id set
+        stops any corrupted loop instead of spinning."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if window is not None and not (isinstance(window, str)
+                                       and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
         key_id = row[0]
         ancestors = self._ancestry_key_ids(key_id)[1:]
         ancestors.reverse()          # oldest predecessor first
@@ -1088,12 +1118,16 @@ class DevKeyFace:
             descendants.append(current)
             current = self._successor_key_id(current)
         chain_ids = ancestors + [key_id] + descendants
-        chain = [self._lineage_member(kid) for kid in chain_ids]
-        return {"api_key": api_key, "dev_account": row[1],
-                "key_name": row[2], "key_id": key_id,
-                "chain": chain, "chain_size": len(chain),
-                "queried_index": chain_ids.index(key_id),
-                "disclaimer": self.disclaimer}
+        chain = [self._lineage_member(kid, window)
+                 for kid in chain_ids]
+        out = {"api_key": api_key, "dev_account": row[1],
+               "key_name": row[2], "key_id": key_id,
+               "chain": chain, "chain_size": len(chain),
+               "queried_index": chain_ids.index(key_id),
+               "disclaimer": self.disclaimer}
+        if window is not None:
+            out["window"] = window
+        return out
 
     # -- lineage chain usage read face (R1833) -------------------------------
 

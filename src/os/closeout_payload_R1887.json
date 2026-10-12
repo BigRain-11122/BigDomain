@@ -1,0 +1,19 @@
+{
+ "tech_verify": {
+  "claim_prefix": "- [x] apidev audit_lineage 显式月窗参数窗",
+  "done_marker": "done 2026-10-13 R1887",
+  "reseed_marker": "apidev audit_lineage 读帽参数窗",
+  "open_expected": 10
+ },
+ "hb_body": "P2 deliver audit_lineage month-window lens: suite 15/15 AC-LG8..LG15, RUNNER 134/134 criteria 1238, matrix --check identical x2, census DRIFT-CLEAN",
+ "export": {
+  "ceo_current": "P2 tech 队头交付（apidev audit_lineage 显式月窗参数窗例窗：AC-LG8..LG15 全绿 15/15+RUNNER 134/134 全绿+census DRIFT-CLEAN）",
+  "ceo_artifact": "src/sandbox/ledger/apidev.py + qa/apidev-lineagewin-R1887.log（2026-10-13）",
+  "ceo_milestone": "P2 队头续做：member banner_queue 帽窗读跨重启持久化例窗（R1879 种子=最老可认领）·窗 ≤48h（2026-10-15 前）",
+  "self_drive_method": "substantive delivery round (P2 tech-queue head, no-pullable=0)",
+  "result_row": [
+   "R1887",
+   "audit_lineage month-window lens 15/15 + RUNNER 134/134 criteria 1238 + census DRIFT-CLEAN"
+  ]
+ }
+}
