@@ -1,0 +1,45 @@
+=== [1] suite double-run: test_eventtickets_boardpersist.py AC-EAW8..EAW14 ===
+run1 rc=0 (full stdout):
+PASS AC-EAW8: October anchor: 5 real purchases + 2 real check-ins on the product path, W=2026-10 derived from the first purchase row's record-time prefix; four pre-close snapshots pinned (combo 7 keys with window echo + overflow block l/t/r/tr=2/4/2/True tail [charity,delta]; window-bare 3 keys; default 2 keys; default-cap 6 keys); board order [alpha-gala, beta-night, charity, delta]; every cell == manual SQL (full + windowed + snapshot no_show)=True; combo == default tail slice=True
+PASS AC-EAW9: two-piece stack close (face -> ledger, reverse dependency) -> reopen same db/config: October capped-windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-EAW10: default 2-key read replayed byte-identical=True (no window echo on the default face), window-bare 3-key=True, default-cap 6-key=True (derived face zero in-memory drift)
+PASS AC-EAW11: frozen clock +23d -> 1 November purchase + 1 November check-in on the live tail-slice session delta via the real product path (record-time SQL counts nov pur=1 chk=1): default board recalculated (delta sold 0->1, admitted 0->1, byte-differs from the pre-close default snapshot=True = zero cache), default-cap recalculated with delta inside the tail slice=True, November combo carries the new rows (window echo=2026-11, delta sold_w=1 admitted_w=1, charity end-of-window snapshot no_show==0 absorbing the October pair, both cells == manual SQL)=True
+PASS AC-EAW12: after the November injection on the tail-slice session: October capped-windowed read still byte-identical to the pre-close snapshot=True, window-bare=True (purchase/check-in rows are record-time immutable), table counts pinned sessions=4 purchases=6 checkins=3, telescoping purchases oct 5 + nov 1 == all-time 6 (checkins 2 + 1 == 3)
+PASS AC-EAW13: third instance on the same db: all five post-injection reads byte-identical to the second instance (True/True/True/True/True) and the October capped-windowed read still equals the original pre-close snapshot=True (windowed read survives restart x new-data unscratched)
+PASS AC-EAW14: pure read: 8-form read battery on the third face moves zero rows (sessions/purchases/checkins (4, 6, 3) == (4, 6, 3)), event_audit_board segment zero write keywords=0, eventtickets.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True, reconcile_all SUITES row 'ledger-eventtickets-boardpersist' registered, criteria drift self-check 6/7
+SUITE eventtickets-boardpersist: 7/7 criteria pass
+clock restore probe: True
+run2 rc=0 sha256=3d2aac605c4384472d402df7ee6edcb35394d3ed57787da1a58581db598980b7
+run1 sha256=3d2aac605c4384472d402df7ee6edcb35394d3ed57787da1a58581db598980b7
+run1==run2 byte-identical: True
+
+=== [2] RUNNER full regression (Tee mode, qa/reconcile-all-R1898.log) ===
+RUNNER PASS (141/141 suites green, reconcile controls 7/7, 167.8s)
+PASS suite ledger-eventtickets-boardpersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+SUITES 140->141 (ledger-eventtickets-boardpersist), criteria 1306->1313
+
+=== [3] suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (14039 bytes) - registry suites=141 criteria=1313 evidence=qa/reconcile-all-R1898.log green=141/141
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (14039 bytes, 141 suites, 1313 criteria)
+check run2 stdout sha256==check run1 sha256: True
+
+=== [4] qa writer census (check mode) ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1281 tee=779 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[VERDICT PASS]

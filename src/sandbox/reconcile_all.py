@@ -1226,6 +1226,28 @@ SUITES = [
     # (AC-LU15..AC-LU21 pre-registered in state/queue/tech.md)
     ("ledger-apidev-chainusagepersist", os.path.join(
         "ledger", "test_apidev_chainusagepersist.py"), 7),
+    # R1898 eventtickets event_audit_board capped-windowed read
+    # restart-persistence example window (the R1894 seed): the
+    # two-piece stack (Ledger -> EventTicketFace) closes fully
+    # in reverse dependency order and reopens on the same db
+    # path and config bytes -- the October capped-windowed
+    # board envelope (window echo + overflow block) replays
+    # byte-identical from the fresh instance (zero in-memory
+    # drift in the derived face), a November purchase plus a
+    # November check-in on the live tail-slice session delta
+    # via the real product path recalculate the default board
+    # and the default capped read (zero cache) while the
+    # October windowed reads stay byte-frozen (purchase and
+    # check-in rows are record-time immutable; the injection
+    # lands inside the very tail slice the October capped read
+    # pins -- a stronger double-hijack face than the R1896
+    # isolated-key injection per the claim ruling), and a third
+    # instance replays the post-injection state
+    # byte-identically (two-instance sequential reads)
+    # (AC-EAW8..AC-EAW14 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-eventtickets-boardpersist", os.path.join(
+        "ledger", "test_eventtickets_boardpersist.py"), 7),
 ]
 
 FAILS = 0
