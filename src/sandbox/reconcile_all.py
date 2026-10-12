@@ -951,6 +951,19 @@ SUITES = [
     # (AC-ANW1..ANW7 pre-registered in state/queue/tech.md)
     ("ledger-apidev-devboard-ancestry", os.path.join(
         "ledger", "test_apidev_devboard_ancestry.py"), 7),
+    # R1864 water journal month-roll fidelity: frozen-clock +23d
+    # cross-month pin over the four window-parameter read faces
+    # (journal_board/kind_tally/monthly_flow/cell_totals) - new-
+    # month windows land in new-month cells on record-time stamps,
+    # old-month window reads preserved byte-identical across the
+    # roll, default all-window reads carry the cross-month rows,
+    # month-axis telescoping per face (sum of observed month-window
+    # totals == all-window total; cell_totals total ==
+    # monthly_flow net_delta cross-face law), read-cap x window
+    # orthogonality, immutable rows never lost
+    # (AC-WMR1..WMR7 pre-registered in state/queue/tech.md)
+    ("ugc-water-journalroll", os.path.join(
+        "ugc", "test_water_journal_roll.py"), 7),
 ]
 
 FAILS = 0

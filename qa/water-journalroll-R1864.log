@@ -1,0 +1,72 @@
+PASS AC-WMR1: October anchor: frozen-clock record-time stamps (SQL 2026-10 prefix count 2); four window-parameter faces explicit 2026-10 window reads carry exactly the October cells (board rows 1..2, tally ingest:1 submit:1 dense grid, flow single row {windows:2, total_delta:2}, cells {'noise.by_reason.fw': 1, 'noise.total': 1, 'review.suspended': 1} with composition noise.total+review.suspended==2); default reads equal window reads field-for-field pre-roll; envelope key sets exact-pinned with the compliance three-piece resident; pre-roll snapshots anchored for all four faces
+PASS AC-WMR2: frozen clock +23d crossed the month boundary; the November windows stamp ts_utc=2026-11-07T10:00:14.000000Z (SQL 2026-11 prefix count 2) - every window slices rows by their own record-time month; four faces explicit 2026-11 reads carry exactly the November cells (board rows 3..4 append order, tally batch:1 verdict:1, flow single row {windows:2, total_delta:1}, cells {'noise.total': 2, 'review.suspended': -1, 'review.verdicted.pass': 1} with composition 2+(-1)==1); default all-window reads carry the cross-month rows (board/tally totals 4, flow total 4 net_delta 3, cells total 3)
+PASS AC-WMR3: post-roll explicit 2026-10 window reads are byte-identical to the pre-roll snapshots for all four faces (original cell values and totals preserved, zero November leakage); 2026-11 window reads carry zero October rows/kinds/cells - the two windows never leak into each other in either direction
+PASS AC-WMR4: month-axis telescoping: per-face month-window totals 2026-10(2)+2026-11(2) == all-window totals (board 4, tally 4, cells 3, flow windows 4 and net_delta 2+1==3); monthly_flow all-window row set == the union of the two explicit window reads (row-set partition, every row belongs to exactly one month); cross-face law: cell_totals total == monthly_flow net_delta == 3 on the whole board and per window (2/1)
+PASS AC-WMR5: read-cap x month-window orthogonal (R1812 law): journal_board(2026-11, limit=1) returns the ascending tail window of exactly 1 November row (mirror-SQL DESC/DESC LIMIT 1 == row 4, zero October rows leak into the capped November read); envelope total=2 reports the full filtered count so the truncated board never lies about its size (returned=1 truncated=True); limit=5 on 2026-10 returns the full 2 rows un-truncated; limit=0 keeps the full-list behavior with zero cap keys
+PASS AC-WMR6: immutable rows never lost: water_windows=4 (2 October + 2 November) constant across every read face; all four read-method sources free of data-changing statements; double-call dumps byte-identical for default and both explicit windows on all four faces (sorted and insertion order); row count unchanged across reads
+PASS AC-WMR7: water_journal.py sha256 stable across the whole run (zero product bytes - pin-only suite); shipped ugc config.json sha256 stable; face source pure ASCII with network-free import lines (3 imports); SUITES registration row present (ugc-water-journalroll, criteria 7); criteria drift self-check 6+1==7
+SUITE PASS 7/7 exit=0
+--- section 2: double-run byte-identity (continuation round R1864) ---
+run2 rc=0 stdout_sha16=bbd41865df412b3e stderr_bytes=0
+run3 rc=0 stdout_sha16=bbd41865df412b3e stderr_bytes=0
+recorded run1 (dead window 13:54) sha16=06732b1e55efbba6
+DOUBLE-RUN VERDICT: MISMATCH - inspect
+--- section 3: sentinel fingerprint-regen --check ---
+sentinel exit=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- section 4: profile runner-profile --daily --check (observation window, recorded not gating) ---
+profile exit=0
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+--- section 5: census qa-writer-census --check ---
+census exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1210 tee=709 baselined=501
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+--- section 6: suite-matrix regen + --check ---
+pre-regen --check exit=2 (expected drift after new-suite registration)
+
+regen exit=0
+PASS generated docs/sandbox-suite-matrix.md (12112 bytes) - registry suites=120 criteria=1112 evidence=qa/reconcile-all-R1864.log green=120/120
+PASS hygiene: pure-ascii source, zero network imports
+post-regen --check exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12112 bytes, 120 suites, 1112 criteria)
+--- section 7: registry machine-report ---
+SUITES registered=113 total_criteria=1112 (expect 120/1112: 119+1 new, 1105+7)
+
+--- section 8: continuation-round adjudication (2026-10-12 R1864 closeout) ---
+[8a] double-run MISMATCH adjudicated as driver artifact, not suite drift:
+     the continuation closeout driver (r1864_closeout.py) mislabeled h0 - it hashed the
+     evidence-file bytes at read time (section-1 capture, Tee utf-8+LF dialect), never a
+     saved run1 stdout; run2/run3 hashed raw subprocess capture_output bytes, which Windows
+     text mode translates \n -> \r\n (CRLF dialect). Normalization probe (wmr_adjudicate.py):
+     sec1 blank-trimmed + BOM/CRLF-normalized sha16 == fresh run4 normalized sha16
+     == 06732b1e55efbba6 (== the recorded dead-window h0, i.e. sec1 IS the suite stdout
+     in LF dialect). Four-way logical identity: run1(Tee LF) == run2 == run3 (CRLF pair,
+     byte-identical within dialect) == run4 fresh. Pre-registered double-run criterion
+     holds within-dialect (run2==run3 byte-identical); cross-dialect identity proven at
+     the normalized layer. LOGICAL-EQUIVALENCE: PASS
+[8b] registry machine-report adjudicated: os.path.join substring count (113) is a
+     lossy proxy; authoritative counts = tuple rows 120 / criteria sum 1112 (criteria
+     regex path, len==120, sum==1112; RUNNER 120/120 green; matrix regen 120/1112
+     byte-identical --check). The 7 rows without os.path.join literal:
+     schema-migrate, fingerprint-regen, reconcile-daily-sentinel, suite-matrix-discovery,
+     runner-profile-daily, reconcile-daily-profile, reconcile-daily-census (plain-path
+     registrations). REGISTRY TRUTH: 120 suites / 1112 criteria - PASS
+[8c] diag-inaq-R9999.log = partial shell-capture runner diagnostic from the dead-window
+     continuation (no RUNNER verdict line); superseded by full Tee evidence
+     qa/reconcile-all-R1864.log (RUNNER PASS 120/120, 176.5s). Retained for trail.
+ADJUDICATION VERDICT: both MISMATCH flags = closeout-driver counting/labeling bugs;
+suite, product, registry all green. R1864 closes [done].
+
