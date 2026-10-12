@@ -2552,6 +2552,221 @@ async def idem_restart_cases():
               sha_config_post == sha_config_pre, ascii_ok))
 
 
+async def idem_keybind_cases():
+    """AC-S44..S48 (R1899): chat.send idem key binding semantics - the
+    dedup key binds the client-supplied id to the exact normalized
+    text, so a foreign client guessing the id cannot suppress the
+    original (same id + different text = a fresh event with both keys
+    coexisting), the cache is server-instance scoped (a replay from a
+    different connection absorbs), the id and text domains are
+    independent, and the strip/truncate normalization happens before
+    the key digest. Suite-only round: server.py and the shipped
+    config are not modified (R1892 precedent)."""
+    sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+
+    async def chat_send(ws, room, text, cid):
+        await ws.send(frame("chat.send", room=room,
+                            payload={"text": text}, client_msg_id=cid))
+
+    def chat_rows(db):
+        return db_query(db,
+                        "SELECT COUNT(*) FROM events WHERE type='chat.broadcast'")[0][0]
+
+    async def dup_of(ws, evt_id):
+        return await recv_until(ws, lambda f: f.get("type") == "chat.duplicate"
+                                and f.get("payload", {}).get("evt_id") == evt_id)
+
+    # ---- AC-S44: same id + different text = fresh event, keys coexist
+    port_44 = _free_port()
+    srv_44 = ServerProc(port_44, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-keybind-44-"), "events.db"))
+    ws_44 = None
+    try:
+        srv_44.start()
+        ws_44, _, _ = await open_client(port_44)
+        await make_resident(ws_44)
+        await chat_send(ws_44, "lobby", "s44 alpha", "kb-44-a")
+        e1 = await recv_until(ws_44, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s44 alpha")
+        await chat_send(ws_44, "lobby", "s44 beta", "kb-44-a")  # same id, new text
+        e2 = await recv_until(ws_44, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s44 beta")
+        fresh44 = e2 is not None and e2.get("evt_id") != e1.get("evt_id")
+        rows44 = chat_rows(srv_44.db)
+        await chat_send(ws_44, "lobby", "s44 alpha", "kb-44-a")
+        d1 = await dup_of(ws_44, e1.get("evt_id"))
+        await chat_send(ws_44, "lobby", "s44 beta", "kb-44-a")
+        d2 = await dup_of(ws_44, e2.get("evt_id"))
+        coexist = (d1 is not None and d2 is not None
+                  and d1.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                  and d2.get("payload", {}).get("code") == "E_DUPLICATE_MSG")
+        ok44 = (fresh44 and coexist and rows44 == 2
+                and chat_rows(srv_44.db) == rows44)
+        record("AC-S44", ok44,
+               "same-id different-text fresh-evt=%s; both keys coexist "
+               "(alpha->E1, beta->E2)=%s; rows 2 stable=%s"
+               % (fresh44, coexist, chat_rows(srv_44.db) == rows44))
+    finally:
+        if ws_44 is not None:
+            try:
+                await ws_44.close()
+            except Exception:
+                pass
+        srv_44.stop()
+
+    # ---- AC-S45: same (id, text) from another connection absorbs
+    # (the cache is server-instance scoped, not per-connection)
+    port_45 = _free_port()
+    srv_45 = ServerProc(port_45, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-keybind-45-"), "events.db"))
+    ws_a = ws_b = obs_45 = None
+    try:
+        srv_45.start()
+        ws_a, _, _ = await open_client(port_45)
+        await make_resident(ws_a)
+        ws_b, _, _ = await open_client(port_45)
+        await make_resident(ws_b)
+        obs_45, _, _ = await open_client(port_45)  # spectator on lobby
+        await chat_send(ws_a, "lobby", "s45 alpha", "kb-45-a")
+        e3 = await recv_until(ws_a, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s45 alpha")
+        await recv_until(obs_45, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s45 alpha")
+        rows45 = chat_rows(srv_45.db)
+        await chat_send(ws_b, "lobby", "s45 alpha", "kb-45-a")  # other conn
+        d3 = await recv_until(ws_b, lambda f: f.get("type") == "chat.duplicate"
+                              and f.get("payload", {}).get("client_msg_id") == "kb-45-a")
+        silent45 = await expect_silence(obs_45, 0.5)
+        ok45 = (d3 is not None
+                and d3.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                and d3.get("payload", {}).get("evt_id") == e3.get("evt_id")
+                and chat_rows(srv_45.db) == rows45 and silent45)
+        record("AC-S45", ok45,
+               "cross-connection replay absorbed=%s rows-unchanged=%s "
+               "observer-silent=%s (cache is server-instance scoped)"
+               % (d3 is not None
+                  and d3.get("payload", {}).get("evt_id") == e3.get("evt_id"),
+                  chat_rows(srv_45.db) == rows45, silent45))
+    finally:
+        for ws_ in (ws_a, ws_b, obs_45):
+            if ws_ is not None:
+                try:
+                    await ws_.close()
+                except Exception:
+                    pass
+        srv_45.stop()
+
+    # ---- AC-S46: different id + same text = fresh event (id domain
+    # independent; the text alone never dedups)
+    port_46 = _free_port()
+    srv_46 = ServerProc(port_46, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-keybind-46-"), "events.db"))
+    ws_46 = None
+    try:
+        srv_46.start()
+        ws_46, _, _ = await open_client(port_46)
+        await make_resident(ws_46)
+        await chat_send(ws_46, "lobby", "s46 shared", "kb-46-a")
+        e4 = await recv_until(ws_46, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s46 shared")
+        await chat_send(ws_46, "lobby", "s46 shared", "kb-46-b")  # other id
+        e5 = await recv_until(ws_46, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s46 shared"
+                              and f.get("evt_id") != e4.get("evt_id"))
+        fresh46 = e5 is not None
+        rows46 = chat_rows(srv_46.db)
+        await chat_send(ws_46, "lobby", "s46 shared", "kb-46-a")
+        d4 = await dup_of(ws_46, e4.get("evt_id"))
+        await chat_send(ws_46, "lobby", "s46 shared", "kb-46-b")
+        d5 = await dup_of(ws_46, e5.get("evt_id"))
+        coexist46 = (d4 is not None and d5 is not None
+                     and d4.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                     and d5.get("payload", {}).get("code") == "E_DUPLICATE_MSG")
+        ok46 = (fresh46 and coexist46 and rows46 == 2
+                and chat_rows(srv_46.db) == rows46)
+        record("AC-S46", ok46,
+               "different-id same-text fresh-evt=%s; per-id keys coexist "
+               "(a->E4, b->E5)=%s; rows 2 stable=%s"
+               % (fresh46, coexist46, chat_rows(srv_46.db) == rows46))
+    finally:
+        if ws_46 is not None:
+            try:
+                await ws_46.close()
+            except Exception:
+                pass
+        srv_46.stop()
+
+    # ---- AC-S47: normalization happens before the key digest
+    # (strip / id-strip / truncation all feed the same normalized key)
+    port_47 = _free_port()
+    srv_47 = ServerProc(port_47, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-keybind-47-"), "events.db"))
+    ws_47 = None
+    try:
+        srv_47.start()
+        ws_47, _, _ = await open_client(port_47)
+        await make_resident(ws_47)
+        # strip face: padded text stores stripped, bare replay absorbs
+        await chat_send(ws_47, "lobby", "  s47 padded  ", "kb-47-a")
+        bp = await recv_until(ws_47, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s47 padded")
+        strip_stored = bp is not None
+        await chat_send(ws_47, "lobby", "s47 padded", "kb-47-a")
+        dp = await dup_of(ws_47, bp.get("evt_id"))
+        strip_absorb = strip_stored and dp is not None
+        # id-normalization face: padded id then bare id -> same key
+        await chat_send(ws_47, "lobby", "s47 idnorm", "  kb-47-b  ")
+        bi = await recv_until(ws_47, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s47 idnorm")
+        await chat_send(ws_47, "lobby", "s47 idnorm", "kb-47-b")
+        di = await dup_of(ws_47, bi.get("evt_id"))
+        idnorm_absorb = bi is not None and di is not None
+        # truncation face: 2001-char texts identical to char 2000 share
+        # the normalized key (digest is computed after the slice)
+        base47 = "s47 tr" + "a" * 1994  # exactly 2000 chars
+        await chat_send(ws_47, "lobby", base47 + "X", "kb-47-c")
+        bt = await recv_until(ws_47, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == base47)
+        trunc_stored = (bt is not None
+                        and len(bt.get("payload", {}).get("text", "")) == 2000)
+        await chat_send(ws_47, "lobby", base47 + "Y", "kb-47-c")
+        dt = await dup_of(ws_47, bt.get("evt_id"))
+        trunc_absorb = trunc_stored and dt is not None
+        rows47 = chat_rows(srv_47.db)
+        ok47 = (strip_stored and strip_absorb and idnorm_absorb
+                and trunc_stored and trunc_absorb and rows47 == 3)
+        record("AC-S47", ok47,
+               "strip-face stored+absorbed=%s/%s; id-normalized "
+               "absorbed=%s; truncation stored(2000)+absorbed=%s/%s; "
+               "rows 3 stable=%s"
+               % (strip_stored, strip_absorb, idnorm_absorb, trunc_stored,
+                  trunc_absorb, rows47 == 3))
+    finally:
+        if ws_47 is not None:
+            try:
+                await ws_47.close()
+            except Exception:
+                pass
+        srv_47.stop()
+
+    # ---- AC-S48: hygiene (suite-only round) ----
+    sha_server_post = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_post = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+    own_src = inspect.getsource(idem_keybind_cases)
+    ascii_ok = True
+    try:
+        own_src.encode("ascii")
+    except UnicodeEncodeError:
+        ascii_ok = False
+    ok48 = (sha_server_post == sha_server_pre
+            and sha_config_post == sha_config_pre and ascii_ok)
+    record("AC-S48", ok48,
+           "server.py-unchanged=%s config.json-unchanged=%s section-ascii=%s"
+           % (sha_server_post == sha_server_pre,
+              sha_config_post == sha_config_pre, ascii_ok))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -2916,6 +3131,11 @@ async def suite():
     # AC-S39..S43 (R1892): chat.send idem_seen restart semantics window
     # (in-TTL absorption / cross-restart re-entry / TTL expiry / FIFO cap).
     await idem_restart_cases()
+
+    # AC-S44..S48 (R1899): chat.send idem key binding semantics window
+    # (same-id-different-text / cross-connection / id-domain / pre-key
+    # normalization faces).
+    await idem_keybind_cases()
 
     await city_cases()
 

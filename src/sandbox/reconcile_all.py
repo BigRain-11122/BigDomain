@@ -135,7 +135,14 @@ SUITES = [
     # dies with the process - honest boundary), TTL expiry admits a
     # legitimate resend, FIFO cap eviction is honest - AC-S39..S43
     # (41 -> 46).
-    ("lobby", os.path.join("lobby", "test_client.py"), 46),
+    # R1899 idem key binding semantics window on chat.send: the dedup
+    # key binds the client id to the exact text (same id + different
+    # text = fresh event with both keys coexisting), the cache is
+    # server-instance scoped (cross-connection replay absorbs), id
+    # and text domains are independent, and the strip/truncate
+    # normalization happens before the key digest - AC-S44..S48
+    # (46 -> 51).
+    ("lobby", os.path.join("lobby", "test_client.py"), 51),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",

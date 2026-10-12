@@ -1,0 +1,19 @@
+--- section 1: suite double-run, new section (AC-S44..S48) byte-identical rc 0/0, 5 criteria lines each run ---
+PASS AC-S44: same-id different-text fresh-evt=True; both keys coexist (alpha->E1, beta->E2)=True; rows 2 stable=True
+PASS AC-S45: cross-connection replay absorbed=True rows-unchanged=True observer-silent=True (cache is server-instance scoped)
+PASS AC-S46: different-id same-text fresh-evt=True; per-id keys coexist (a->E4, b->E5)=True; rows 2 stable=True
+PASS AC-S47: strip-face stored+absorbed=True/True; id-normalized absorbed=True; truncation stored(2000)+absorbed=True/True; rows 3 stable=True
+PASS AC-S48: server.py-unchanged=True config.json-unchanged=True section-ascii=True
+
+--- section 2: RUNNER full regression (tee evidence qa/reconcile-all-R1899.log) rc=0 ---
+RUNNER PASS (141/141 suites green, reconcile controls 7/7, 173.6s)
+
+--- section 3: matrix regen rc=0 + --check byte-identical=True (rc 0/0) ---
+PASS generated docs/sandbox-suite-matrix.md (14039 bytes) - registry suites=141 criteria=1318 evidence=qa/reconcile-all-R1899.log green=141/141
+PASS hygiene: pure-ascii source, zero network imports
+
+--- section 4: census --check rc=0 ---
+census: files=1285 tee=783 baselined=502
+verdict: DRIFT-CLEAN
+
+VERDICT: PASS (suite-double-run=True runner=0 matrix=True census=0)
