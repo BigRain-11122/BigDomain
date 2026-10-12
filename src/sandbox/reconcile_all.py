@@ -742,6 +742,16 @@ SUITES = [
     # (AC-CRU1..CRU7 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-caproll",
      os.path.join("ledger", "test_freetrial_caproll.py"), 7),
+    # R1858 free-trial calls_by_* five-profile month-roll
+    # fidelity pin: frozen-clock isolated world, every window
+    # slices CALL rows by their own record-time stamp (never
+    # by grant birth month), old-month window reads preserved
+    # byte-identical across the roll, calls_by_month month
+    # axis telescopes (sum of observed month-window totals ==
+    # all-window total); zero product bytes - pin-only suite
+    # (AC-CFR1..CFR7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-callroll",
+     os.path.join("ledger", "test_freetrial_callroll.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries

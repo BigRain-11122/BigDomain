@@ -1,0 +1,30 @@
+== R1858 freetrial calls_by_* profile-family month-roll
+ fidelity example - evidence log ==
+
+--- section 1: claim + first-run note ---
+Criteria AC-CFR1..AC-CFR7 pre-registered in the
+state/queue/tech.md claim row BEFORE any suite code
+(honesty law; AC-CFR prefix repo-wide git grep
+zero-owner anchor 2026-10-12). This round is an
+interrupted-session closeout (the R550/R551/R1675 and
+R1857 precedents): the prior window died after the
+claim annotation, the suite file and the SUITES
+registration were on disk but uncommitted; this round
+verified the in-flight work against the registered
+criteria and ran the full chain. First run: all green 7/7 zero fixes.
+
+--- section 2: suite run verbatim (run 1) ---
+PASS AC-CFR1: October anchor: frozen-clock record-time stamps (SQL 2026-10 prefix count 2); five profile faces explicit 2026-10 window reads carry exactly the October cells (month=2026-10 kind=backtest:2 plan=1 engine=eng-x:2 account=usr:roll-a:2), 4-key explicit envelopes + 3-key default envelopes, total=2 each; pre-roll snapshots anchored for all five faces
+PASS AC-CFR2: frozen clock +23d crossed the month boundary; the cross-month call on the SURVIVING October grant stamps called_utc=2026-11-07T10:00:14Z (SQL 2026-11 prefix count 2) - every window slices CALL rows by their own record-time stamp, never by the grant's birth month; five profile faces explicit 2026-11 window reads carry exactly the new-month cells {'calls_by_kind': {'backtest': 1, 'visualize': 1}, 'calls_by_account': {'usr:roll-a': 1, 'usr:roll-b': 1}} with total=2; default all-window reads carry the cross-month rows with total=4 ({'calls_by_month': {'2026-10': 2, '2026-11': 2}, 'calls_by_engine': {'eng-x': 3, 'eng-y': 1}})
+PASS AC-CFR3: post-roll explicit 2026-10 window reads are byte-identical to the pre-roll snapshots for all five faces (original cell values and totals preserved, zero November leakage); 2026-11 window reads carry zero October cells - the two windows never leak into each other in either direction
+PASS AC-CFR4: month-axis telescoping: month-window totals 2026-10(2) + 2026-11(2) == all-window total 4; each month cell equals its SQL record-time COUNT cross-check (2/2)
+PASS AC-CFR5: immutable rows never lost: trial_calls=4 (2 October + 2 November); all five method sources free of data-changing statements; four-table counts (2, 2, 4, 0) unchanged across reads; double-call dumps byte-identical for default and both explicit windows on all five faces (sorted and insertion order)
+PASS AC-CFR6: freetrial.py sha256 stable across the whole run (zero product bytes - pin-only suite); shipped config.json sha256 stable; face source pure ASCII with network-free import lines (5 imports)
+PASS AC-CFR7: SUITES registration row present (ledger-freetrial-callroll, criteria 7); criteria drift self-check 6+1==7
+SUITE PASS 7/7 exit=0
+
+--- section 3: double-run determinism ---
+run1 exit=0 run2 exit=0
+run1 sha256=74562dbd51c2f25a3cba29c87bafd7ae62e69ac408efa717ed848f1f9c322f09
+run2 sha256=74562dbd51c2f25a3cba29c87bafd7ae62e69ac408efa717ed848f1f9c322f09
+byte-identical=True (zero RNG, zero real-clock leakage - frozen-clock world)
