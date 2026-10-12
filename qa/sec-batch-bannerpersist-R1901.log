@@ -1,0 +1,40 @@
+=== [1] suite double-run: test_sec_batch_bannerpersist.py AC-SB23..AC-SB29 ===
+run1 rc=0 (full stdout):
+PASS AC-SB23: oct sql=6 nov sql=4; oct capwin 6 keys total=6 tail==oct_bare[-2:]; default cap 5 keys total=10 tail==def_bare[-2:]; bare 10 rows / oct window 6 rows
+PASS AC-SB24: post-restart oct capwin envelope == pre-close snapshot byte-identical (6 keys incl window echo + overflow block; rowid tiebreak deterministic across restart); same-param second read self-identical; oct bare window read == snapshot
+PASS AC-SB25: default capped read (5 keys) and default bare read (7-field row list) restored byte-identical across the restart - derived face carries zero in-memory state
+PASS AC-SB26: injected 2nd-November row via true path (nov sql 4->5); default capped read recomputed total 10->11 (differs from pre-close snapshot = zero cache); nov window cap carries the new row (total==5); oct capwin envelope still == pre-close snapshot byte-identical + oct bare window frozen (ts_utc record-time immutable = old window zero permeation)
+PASS AC-SB27: oct capped total stays 6 (new data zero permeation); nov capped total==5; empty-month 2026-09 capped read honest-empty six keys (rows=[] total=0 returned=0 truncated=False + window echo)
+PASS AC-SB28: face3 (second reopen, two live instances) four reads == face2 same-param reads pairwise byte-identical; face2 re-read self-identical - zero cross-instance drift
+PASS AC-SB29: read faces zero write statements (inspect); read battery before/after full-table count 11==11; sec_batch.py + shipped config.json sha256 unchanged (suite-only round); suite source pure ASCII; true import lines zero network libs; runner row wired; world = temp dir outside repo
+SUITE PASS: 7/7 criteria pass
+run2 rc=0 sha256=a5b2df5367d31835256ab6c4607f7c95c61b0f774fa83a95eaa2c9f4174ad6d3
+run1 sha256=a5b2df5367d31835256ab6c4607f7c95c61b0f774fa83a95eaa2c9f4174ad6d3
+run1==run2 byte-identical: True
+
+=== [2] RUNNER full regression (Tee mode, qa/reconcile-all-R1901.log) ===
+PASS suite ugc-sec-batch-bannerpersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.2s
+RUNNER PASS (143/143 suites green, reconcile controls 7/7, 172.1s)
+
+=== [3] suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (14229 bytes) - registry suites=143 criteria=1332 evidence=qa/reconcile-all-R1901.log green=143/143
+PASS hygiene: pure-ascii source, zero network imports
+check run2 stdout sha256==check run1 sha256: True
+
+=== [4] qa writer census (check mode) ===
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1289 tee=787 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+
+[VERDICT PASS]
