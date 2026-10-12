@@ -335,6 +335,13 @@ SUITES = [
     # (AC-PN16..PN22 pre-registered in state/queue/tech.md).
     ("pay-notify-bannerwin",
      os.path.join("pay", "test_pay_notify_bannerwin.py"), 7),
+    # R1883 banner_queue monthly-roll fidelity example (R1878
+    # successor): pre-roll snapshot -> post-roll explicit old-month
+    # read byte-identity, rowid tail-window frozen across the roll,
+    # default-face drift to the new month, windowed total semantics
+    # across the roll (AC-PN23..PN29 pre-registered in tech.md).
+    ("pay-notify-bannerroll",
+     os.path.join("pay", "test_pay_notify_bannerroll.py"), 7),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face

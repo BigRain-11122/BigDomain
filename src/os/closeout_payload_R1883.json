@@ -1,0 +1,27 @@
+{
+  "tech_flip": {
+    "claim_prefix": "- [ ] pay notify banner_queue 月滚保真例窗（tasks 真活行 4 承接",
+    "done_marker": "[done 2026-10-13 R1883]",
+    "criteria_refs": ["AC-PN23", "AC-PN24", "AC-PN25", "AC-PN26", "AC-PN27", "AC-PN28", "AC-PN29"],
+    "done_note": "——〔2026-10-13 R1883 认领〕；来源=tasks.md 真活行 4（R1878 补种）",
+    "done_tail": "——〔2026-10-13 R1883 认领〕；来源=tasks.md 真活行 4（R1878 补种）——[done 2026-10-13 R1883]（执行注记：套件 test_pay_notify_bannerroll.py SUITE 7/7 首跑 6/7=AC-PN27 期望值笔误同轮修〔同秒 tie 尾窗=插入序尾 2 AV-A/AV-F·产品行为正确·判据注册文字只要求尾=nov 行+漂移实证零冲突〕；双跑 stdout 逐字节同一 sha16 246F0A2C77C089A2；RUNNER PASS 131/131 判据 1209=qa/reconcile-daily-20261013-2.log〔当日 daily 对账 verdict=PASS sentinel=ok profile=ok census=ok 三绿〕；矩阵再生 131/1209 green --check byte-identical；方言坑实录=Start-Process 重定向副本触发 census cd7 drift 一发→删副本+python 单写者前台直跑重落正法收口=R1880 同族预防执法再证；种子行查重缺口=R1878 补种原行同件在库·本轮认领未查重插入重复行·closeout 1b 双行合并收口在案）",
+    "reseed_prefix": "- [ ] pay notify banner_queue 帽窗读跨重启持久化例窗"
+  },
+  "reseed_row": "- [ ] pay notify banner_queue 帽窗读跨重启持久化例窗（R1883 补种=R1878 补种同族收尾：窗参/月滚例两件在册〔AC-PN8..PN15/AC-PN16..PN22/AC-PN23..PN29〕而跨重启持久化例缺口·三段式同族参照 R1879/R1882 补种=member/lobby 两侧已闭合=pay 侧族缺口）——判据预注册=认领轮 tech.md 行内先行（close+新实例重开同库读=窗帽读逐字节保真·跨重启尾窗冻结·缺省帽漂移面跨重启续接）；来源=R1883 收账补种",
+  "tasks_flip": {
+    "prefix": "- [ ] tech 队 FIFO 现役池真活行 4（D-20261012-03 拍板②补货维持·R1881 滚动补货）：pay notify banner_queue 月滚保真例窗",
+    "done_replacement_head": "- [x] tech 队 FIFO 现役池真活行 4（D-20261012-03 拍板②补货维持·R1881 滚动补货）：pay notify banner_queue 月滚保真例窗"
+  },
+  "log_lines": [
+    "2026-10-13 R1883 pay notify banner_queue 月滚保真例窗交付轮（P2 tech 队头 FIFO=tasks 真活行 4〔R1878 补种=最老可认领〕·轮计分 2=可跑实物）：五静全绿（LEDGER @BigDomain 零行+DEC 内容寻址零新 token〔row_owner 120 持平·辅证行 301 口径〕+GORD 332 持平零新行+ORD 持平+BENCH days=1+树净零锁）+QA FLAG=当日 daily 对账到期（当日零证据）→转全任务书——AC-PN23..PN29 判据预注册先于代码〔tech.md R1883 认领行·AC-PN2[3-9] 全仓 git grep 零占用实锚〕→套件 src/sandbox/pay/test_pay_notify_bannerroll.py 落地（三段式：十月锚 4 订单真路径 notify_payment_success 显式 ts→4 skipped_no_budget 同秒 tie 世界+滚前四面快照〔裸窗 raw list 插入序/截断帽窗六键尾 2/全量帽窗六键全量==裸窗/缺省帽五键尾 2〕→十一月真路径 3 订单〔AV-A 跨月第二产品 birthright_entry=同 avatar 两月窗共存〕→滚后保真读：十月截断帽窗读==滚前快照逐字节〔dumps 全 dict 等+rowid 尾窗跨滚冻结〕+十月全量帽 rows==滚前裸窗+缺省帽随数据漂移到新窗〔尾=AV-A/AV-F≠滚前 oct 尾=漂移实证 total=7〕+窗 total 语义跨滚〔oct 4/nov 3/缺省 7=窗先于 COUNT+LIMIT〕+正交反向〔oct 帽窗行 ts 全 2026-10/缺省帽尾行 ts 全 2026-11/两读相异〕+空月帽窗诚实空六键+纯读律〔读前后 skip 行集恒定〕+卫生〔shipped config.json sha256 双证零改动+notify.py sha 零改动+世界 tmp 仓外+源纯 ASCII〕）——首跑 6/7=AC-PN27 期望值笔误同轮修〔同秒 tie 尾窗=插入序尾 2·产品行为正确·判据注册文字只要求尾=nov 行+漂移零冲突〕→SUITE 7/7 exit 0+双跑 stdout 逐字节同一〔sha16 246F0A2C77C089A2〕——reconcile_all SUITES 130→131 判据 1202→1209〔pay-notify-bannerroll 7〕+当日 charter daily 对账=RECONCILE-DAILY 20261013 verdict=PASS RUNNER PASS 131/131 controls 7/7 161.1s sentinel=ok profile=ok census=ok=qa/reconcile-daily-20261013-2.log〔当日 QA FLAG 销账〕+矩阵再生 131/1209 green --check byte-identical〔13156B〕——方言坑实录：Start-Process -RedirectStandardOutput 重定向副本落 CRLF 方言签名→census cd7-live-real-tree drift(exit=2) 一发→删未收口副本+python 单写者前台直跑 reconcile_daily 重落正式件三绿收口=R1873/R1879/R1880 证据件方言预防族再证〔Runbook 面：启动器勿用 PS 重定向包装 reconcile_daily〕——种子行查重缺口实录：R1878 补种原行〔tech.md 同件〕在库 open·本轮认领只查 AC 前缀未查种子行→重复行一枚·closeout 1b 步双行合并收口〔两行均翻 [x] 留痕〕——tech 消耗 1+补种 1〔pay notify banner_queue 帽窗读跨重启持久化例窗=R1883 补种·member/lobby 两侧同族已闭=pay 侧族缺口〕·tasks 真活行 4 翻 done〔R1883 完成注记在板〕",
+    "2026-10-13 R1883 tokens: local=unmeasured api=0 api_reason=纯本地进程件（套件+RUNNER 131 套件+daily 对账+矩阵再生全本地跑·零外部 API 触点·三问门未涉及）"
+  ],
+  "hb_body": "R1883 pay notify banner_queue monthly-roll fidelity example delivered: suite 7/7 AC-PN23..29, RUNNER 131/131 criteria 1209, daily reconcile PASS (sentinel/profile/census all ok), matrix regen --check identical",
+  "export": {
+    "ceo_current": "P2 tech 队头交付窗：pay notify banner_queue 月滚保真例窗落地（AC-PN23..29 套件 7/7+RUNNER 131/131 全绿），当日每日对账 PASS 三绿（哨兵/剖面/普查）",
+    "ceo_artifact": "src/sandbox/pay/test_pay_notify_bannerroll.py + qa/reconcile-daily-20261013-2.log（2026-10-13 00:2x）",
+    "ceo_milestone": "pay notify banner_queue 帽窗读跨重启持久化例窗（R1883 补种·三段式同族收尾），窗 ≤48h（2026-10-15 前）",
+    "result_row": ["R1883", "pay-notify-bannerroll 月滚保真例窗 7/7+RUNNER 131/131+daily PASS"],
+    "self_drive_method": "substantive delivery round (P2 tech-queue head, no-pullable=0)"
+  }
+}
