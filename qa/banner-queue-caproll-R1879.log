@@ -1,0 +1,8 @@
+PASS AC-MB23: oct statuses=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap,skipped_daily_cap skipped=4 rows=6 grants=3 bare_order=['AV-A', 'AV-B', 'AV-E', 'AV-F'] cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window'] cap2_tail=['AV-E', 'AV-F'] cap50==bare=True def_cap2_tail=['AV-E', 'AV-F']
+PASS AC-MB24: nov statuses=skipped_no_budget,skipped_no_budget,sent,sent,skipped_daily_cap full_skipped=7 rows=11 oct_bare==pre_bare=True nov_rows=3 nov_order=['AV-G', 'AV-A', 'AV-J'] leak_free=True
+PASS AC-MB25: oct_cap2==pre_snapshot=True double_call_identical=True oct_cap50_rows==pre_bare=True cap50_total=4 tie_tail_frozen=['AV-E', 'AV-F']
+PASS AC-MB26: def_tail==full_tail=True tail=['AV-A', 'AV-J'] total=7 drifted_from_pre=True keys_five=True
+PASS AC-MB27: oct_window_total pre=4 post=4 cap50=4 nov_window_total=3 default_total=7 window_before_count_and_limit=True
+PASS AC-MB28: oct_cap2_months=['2026-10'] def_cap2_months=['2026-11'] rows_diverge=True oct_keys_six=True def_keys_five=True empty_combo=True
+PASS AC-MB29: write_keywords=[] counts_stable=True (log 11==11 grants 5==5) ascii=True net_imports=[] cfg_unchanged=True reminder_unchanged=True world_outside_repo=True
+SUITE PASS 7/7

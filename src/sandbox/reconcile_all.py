@@ -443,6 +443,13 @@ SUITES = [
     # five-key envelope + window echo key, E_REM_BAD_LIMIT reused).
     ("member-banner-queue-limit",
      os.path.join("member", "test_banner_queue_limit.py"), 8),
+    # R1879 member banner_queue capped+windowed monthly-roll
+    # fidelity example (AC-MB23..MB29 pre-registered before code;
+    # pre-roll snapshot -> post-roll explicit old-month cap-window
+    # read byte-identity, default-cap drift to the new window,
+    # window-total immutability across the roll).
+    ("member-banner-queue-caproll",
+     os.path.join("member", "test_banner_queue_caproll.py"), 7),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),
