@@ -1068,11 +1068,11 @@ SUITES = [
     # forms fail-closed, historical/future month semantics on the
     # record-time window column, dead keys fully readable,
     # embedded faces untouched, month-rollover truth preservation
-    # (AC-LU1..LU7 R1833 + AC-LU8 R1839 pre-registered in
-    # state/queue/tech.md)
+    # (AC-LU1..LU7 R1833 + AC-LU8 R1839 + AC-LU9..LU14 R1893
+    # read-cap pre-registered in state/queue/tech.md)
     ("ledger-apidev-chainusage", os.path.join("ledger",
                                              "test_apidev_chainusage.py"),
-     8),
+     14),
     # R1845 apidev dev_board month-rollover re-domain fidelity:
     # the account-level no-window-param panel re-domains honestly
     # when the frozen clock crosses the month boundary (window

@@ -1,0 +1,52 @@
+=== [1] suite double-run: test_apidev_chainusage.py AC-LU1..LU14 ===
+run1 rc=0 (full stdout):
+PASS AC-LU1: key gate first: unknown/empty/unknown+bad-window -> E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY; envelope 11 keys exact=True, window=2026-10, member rows 3-key exact=True, chain order [A,B,C]==audit_lineage order=True, own map={1: 3, 2: 2, 3: 4}, chain_total=9, effective_upto_queried=5, queried_index=1
+PASS AC-LU2: 14 bad shapes -> ['E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS', 'E_AD_BAD_ARGS'] (api_calls 18==18, api_dev_keys 6==6, key_events 6==6, zero read side effects); only None is the default sentinel
+PASS AC-LU3: by_member id order == audit_lineage chain order from every query point=True; point invariance (own map / chain_total=9 / chain_size=3 equal, queried_index 0/1/2 by point)=True
+PASS AC-LU4: per-member own == manual SQL={1: 3, 2: 2, 3: 4}; chain_total==manual IN-list==9; effective(B)==manual prefix==product _effective_window_count==key_view quota_used==5; effective(C)==9; split law chain_total==effective+descendants (9==5+4, 9==9+0)=True
+PASS AC-LU5: hist window: A own==2 (fixture-injected rows, direct INSERT noted), B/C zero, chain_total==2, effective through C==2 (ancestor hist rows carry); future window: all-zero honest empty; default read re-read byte-stable (zero hist penetration)=True
+PASS AC-LU6: revoked singleton readable (own==2), zero-call fresh key honest zero, all-terminal 3-key chain readable (A rotated_out/B rotated_out/C revoked, own map=={1: 3, 2: 2, 3: 4}); double-call json byte-identical (sorted + insertion order); table counts stable (18/6/6); chain_usage source write-statement scan=True
+PASS AC-LU8: month roll (frozen clock +23d): October cap anchor roll-a 2 + roll-b 1 = effective 3 == cap 3, 4th call -> E_AD_QUOTA (key_view quota_used=3 remaining=0, window=2026-10) leaving 3 api_calls rows; pre-roll default own={7: 2, 8: 1}; after roll honest-empty default window=2026-11 own all-zero (envelope exact=True); 2 new calls succeed = quota ring rolled, record-time stamps in 2026-11=2; new-window default own={7: 0, 8: 2}; three-way alignment effective_upto_queried==gate==panel quota_used==2 (key_view window=2026-11); old month 2026-10 explicit read preserved by_member==pre-roll=True chain_total=3 effective=3 (two windows non-penetrating); immutable rows never lost: all-time=5 == pre-roll 3 + new 2 == oct 3 + nov 2
+PASS AC-LU9: default 0 byte-stable: no-arg == (None,0) == (None) dumps-identical=True, envelope 11 keys exact=True
+PASS AC-LU10: five bad shapes (-1/True/'2'/2.5/None) -> ['E_AD_BAD_LIMIT', 'E_AD_BAD_LIMIT', 'E_AD_BAD_LIMIT', 'E_AD_BAD_LIMIT', 'E_AD_BAD_LIMIT']; gate order: unknown+bad-limit -> E_AD_UNKNOWN_KEY (key gate outermost), bad-limit+bad-window -> E_AD_BAD_LIMIT (limit gate before window gate); zero side effects: api_calls 23==23 keys 8==8 events 8==8
+PASS AC-LU11: cap semantics: by_member == full-read tail slice dumps-identical=True, envelope 15 keys exact=True, block {limit=1 total=3 returned=1 truncated=True}, chain_size follows slice=1, queried_index stays full-chain=1 (slice excludes the queried key), chain_total=9 effective_upto_queried=5 full-chain sums; old-ancestor A query: tail slice excludes A itself, queried_index=0 honest partial view
+PASS AC-LU12: window x cap orthogonal: hist-window composite == window-full tail slice dumps-identical=True (own_calls lensed by window, cap only slices the member list), total stays full-chain members=3 in hist and future windows (the member set is never redefined); future window own all-zero tail member own=0, block keys carried=True, window echo=2026-12
+PASS AC-LU13: boundary states: limit==total -> truncated=False full set dumps-identical=True; limit>total -> full truncated=False; dead-key singleton rk capped read stays open (terminal state never closes the audit face) total=1 own=2; zero-call fresh key total=1 returned=1 own=0
+PASS AC-LU14: pure-read law: read batch (default/capped/window-capped/dead-key) leaves api_calls 23==23, api_dev_keys 8==8, key_events 8==8; capped double-read dumps-identical=True; embedded faces untouched (key_view keys exact 18, dev_board keys exact 6 -- AC-RJW4 law)
+PASS AC-LU7: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero chain_usage embedding=True; config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, chain_usage present=True
+SUITE apidev-chainusage: 14/14 criteria pass
+
+run2 rc=0 sha256=cb28584e7e89fbdcf92c4220640a9ba2644106a115469ca2c7f3de5e662cefea
+run1 sha256=cb28584e7e89fbdcf92c4220640a9ba2644106a115469ca2c7f3de5e662cefea
+run1==run2 byte-identical: True
+
+=== [2] RUNNER full regression (Tee mode, qa/reconcile-all-R1893.log) ===
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+PASS suite ledger-apidev-chainusage exit=0 pass-lines=14 fail-lines=0 criteria=14 0.3s
+RUNNER PASS (136/136 suites green, reconcile controls 7/7, 162.9s)
+
+=== [3] suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (13549 bytes) - registry suites=136 criteria=1277 evidence=qa/reconcile-all-R1893.log green=136/136
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13549 bytes, 136 suites, 1277 criteria)
+check run2 sha256==check run1 sha256: True
+
+=== [4] qa writer census + fingerprint sentinel ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1269 tee=767 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+--- fingerprint sentinel ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5

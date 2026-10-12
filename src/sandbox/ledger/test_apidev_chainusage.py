@@ -3,8 +3,9 @@
 one-shot aggregate read face" row, the R1825 audit_lineage
 successor, claimed from the tech-lane FIFO oldest open row). The
 pre-registered criteria AC-LU1..AC-LU7 live in the R1833 tech
-claim note and AC-LU8 lives in the R1839 claim note (criteria
-were registered before this code ran; the
+claim note, AC-LU8 lives in the R1839 claim note, and the
+read-cap criteria AC-LU9..AC-LU14 live in the R1893 claim note
+(criteria were registered before this code ran; the
 AC-CU prefix was taken by the R1751 curation family so the claim
 switched to AC-LU per the R1811 prefix-switch precedent).
 
@@ -583,6 +584,242 @@ def main():
                   post_all, pre_all, post_all - pre_all,
                   t_old["chain_total"], t_new["chain_total"]))
 
+        # -- AC-LU9..LU14 read-cap limit parameter (R1893) --------------
+        # Pre-registered in the R1893 claim note before this code
+        # ran. The cap mirrors the audit_lineage read-cap law
+        # (R1888): default 0 keeps the current full behavior
+        # byte-stable, limit>0 caps by_member to the tail slice,
+        # the overflow block carries the full-chain member count,
+        # chain_size follows the slice, and queried_index /
+        # chain_total / effective_upto_queried stay full-chain
+        # facts (the cap never redefines the alignment
+        # invariants). Gate order: key gate -> limit gate ->
+        # window gate (double-bad: the limit code wins). Note the
+        # frozen clock is now in November after AC-LU8, so the
+        # October values live behind explicit window reads.
+        CAPPED_KEYS = sorted(
+            CHAIN_USAGE_KEYS + ["limit", "total", "returned",
+                                "truncated"])
+        t9_default = dk.chain_usage(kb["api_key"])
+        t9_explicit = dk.chain_usage(kb["api_key"], None, 0)
+        t9_win_none = dk.chain_usage(kb["api_key"], None)
+        lu9 = (json.dumps(t9_default, sort_keys=True) ==
+               json.dumps(t9_explicit, sort_keys=True) ==
+               json.dumps(t9_win_none, sort_keys=True)
+               and sorted(t9_default.keys()) == CHAIN_USAGE_KEYS)
+        record("AC-LU9", lu9,
+               "default 0 byte-stable: no-arg == (None,0) =="
+               " (None) dumps-identical=%s, envelope 11 keys"
+               " exact=%s"
+               % (json.dumps(t9_default, sort_keys=True) ==
+                  json.dumps(t9_explicit, sort_keys=True),
+                  sorted(t9_default.keys()) == CHAIN_USAGE_KEYS))
+
+        pre_calls = _count(conn, "api_calls")
+        pre_keys = _count(conn, "api_dev_keys")
+        pre_events = _count(lcconn, "key_events")
+        rejects = []
+        for bad in (-1, True, "2", 2.5, None):
+            ok_r, code_r, _d = expect_ad_error(
+                lambda b=bad: dk.chain_usage(kb["api_key"], None,
+                                             b),
+                D.E_AD_BAD_LIMIT)
+            rejects.append((ok_r, code_r))
+        ok_unk_lim, code_unk_lim, _d = expect_ad_error(
+            lambda: dk.chain_usage("sk-nonexistent", None, -1),
+            D.E_AD_UNKNOWN_KEY)
+        ok_lim_win, code_lim_win, _d = expect_ad_error(
+            lambda: dk.chain_usage(kb["api_key"], "2026-13", -1),
+            D.E_AD_BAD_LIMIT)
+        post_calls = _count(conn, "api_calls")
+        post_keys = _count(conn, "api_dev_keys")
+        post_events = _count(lcconn, "key_events")
+        lu10 = (all(r[0] and r[1] == D.E_AD_BAD_LIMIT
+                    for r in rejects)
+               and len(rejects) == 5
+               and ok_unk_lim and code_unk_lim == D.E_AD_UNKNOWN_KEY
+               and ok_lim_win and code_lim_win == D.E_AD_BAD_LIMIT
+               and pre_calls == post_calls
+               and pre_keys == post_keys
+               and pre_events == post_events)
+        record("AC-LU10", lu10,
+               "five bad shapes (-1/True/'2'/2.5/None) -> %s; gate"
+               " order: unknown+bad-limit -> %s (key gate"
+               " outermost), bad-limit+bad-window -> %s (limit"
+               " gate before window gate); zero side effects:"
+               " api_calls %d==%d keys %d==%d events %d==%d"
+               % ([r[1] for r in rejects], code_unk_lim,
+                  code_lim_win, pre_calls, post_calls, pre_keys,
+                  post_keys, pre_events, post_events))
+
+        t_oct_full = dk.chain_usage(kb["api_key"], window="2026-10")
+        t_oct_cap = dk.chain_usage(kb["api_key"], window="2026-10",
+                                   limit=1)
+        t_a_cap = dk.chain_usage(ka["api_key"], window="2026-10",
+                                 limit=1)
+        lu11 = (json.dumps(t_oct_cap["by_member"], sort_keys=True)
+                == json.dumps(t_oct_full["by_member"][-1:],
+                              sort_keys=True)
+                and sorted(t_oct_cap.keys()) == CAPPED_KEYS
+                and t_oct_cap["limit"] == 1
+                and t_oct_cap["total"] == 3
+                and t_oct_cap["returned"] == 1
+                and t_oct_cap["truncated"] is True
+                and t_oct_cap["chain_size"] == 1
+                and t_oct_cap["queried_index"] == 1
+                and t_oct_cap["chain_total"] == 9
+                and t_oct_cap["effective_upto_queried"] == 5
+                and json.dumps(t_a_cap["by_member"],
+                               sort_keys=True)
+                == json.dumps(t_oct_full["by_member"][-1:],
+                              sort_keys=True)
+                and t_a_cap["queried_index"] == 0
+                and t_a_cap["limit"] == 1
+                and t_a_cap["total"] == 3
+                and t_a_cap["returned"] == 1
+                and t_a_cap["truncated"] is True
+                and t_a_cap["chain_total"] == 9
+                and t_a_cap["effective_upto_queried"] == 3)
+        record("AC-LU11", lu11,
+               "cap semantics: by_member == full-read tail slice"
+               " dumps-identical=%s, envelope 15 keys exact=%s,"
+               " block {limit=%d total=%d returned=%d"
+               " truncated=%s}, chain_size follows slice=%d,"
+               " queried_index stays full-chain=%d (slice"
+               " excludes the queried key), chain_total=%d"
+               " effective_upto_queried=%d full-chain sums;"
+               " old-ancestor A query: tail slice excludes A"
+               " itself, queried_index=%d honest partial view"
+               % (json.dumps(t_oct_cap["by_member"],
+                             sort_keys=True) ==
+                  json.dumps(t_oct_full["by_member"][-1:],
+                             sort_keys=True),
+                  sorted(t_oct_cap.keys()) == CAPPED_KEYS,
+                  t_oct_cap["limit"], t_oct_cap["total"],
+                  t_oct_cap["returned"], t_oct_cap["truncated"],
+                  t_oct_cap["chain_size"], t_oct_cap["queried_index"],
+                  t_oct_cap["chain_total"],
+                  t_oct_cap["effective_upto_queried"],
+                  t_a_cap["queried_index"]))
+
+        t_hist_full = dk.chain_usage(kb["api_key"],
+                                     window=HIST_WIN)
+        t_hist_cap = dk.chain_usage(kb["api_key"],
+                                    window=HIST_WIN, limit=1)
+        t_fut_cap = dk.chain_usage(kb["api_key"],
+                                   window=FUT_WIN, limit=1)
+        lu12 = (json.dumps(t_hist_cap["by_member"], sort_keys=True)
+                == json.dumps(t_hist_full["by_member"][-1:],
+                              sort_keys=True)
+                and t_hist_cap["total"] == 3
+                and t_hist_cap["window"] == HIST_WIN
+                and t_hist_cap["chain_total"] == 2
+                and t_hist_cap["effective_upto_queried"] == 2
+                and t_hist_cap["by_member"][0]["own_calls"] == 0
+                and t_fut_cap["total"] == 3
+                and t_fut_cap["window"] == FUT_WIN
+                and t_fut_cap["by_member"][0]["own_calls"] == 0
+                and t_fut_cap["chain_total"] == 0
+                and t_fut_cap["effective_upto_queried"] == 0
+                and t_fut_cap["truncated"] is True
+                and sorted(t_fut_cap.keys()) == CAPPED_KEYS)
+        record("AC-LU12", lu12,
+               "window x cap orthogonal: hist-window composite"
+               " == window-full tail slice dumps-identical=%s"
+               " (own_calls lensed by window, cap only slices"
+               " the member list), total stays full-chain"
+               " members=%d in hist and future windows (the"
+               " member set is never redefined); future window"
+               " own all-zero tail member own=%d, block keys"
+               " carried=%s, window echo=%s"
+               % (json.dumps(t_hist_cap["by_member"],
+                             sort_keys=True) ==
+                  json.dumps(t_hist_full["by_member"][-1:],
+                             sort_keys=True),
+                  t_hist_cap["total"],
+                  t_fut_cap["by_member"][0]["own_calls"],
+                  sorted(t_fut_cap.keys()) == CAPPED_KEYS,
+                  t_fut_cap["window"]))
+
+        t_oct_eq = dk.chain_usage(kb["api_key"], window="2026-10",
+                                  limit=3)
+        t_oct_over = dk.chain_usage(kb["api_key"],
+                                    window="2026-10", limit=50)
+        t_rk_cap = dk.chain_usage(rk["api_key"],
+                                 window="2026-10", limit=1)
+        t_fk_cap = dk.chain_usage(fk["api_key"], limit=1)
+        lu13 = (t_oct_eq["truncated"] is False
+                and t_oct_eq["returned"] == 3
+                and t_oct_eq["total"] == 3
+                and json.dumps(t_oct_eq["by_member"],
+                               sort_keys=True)
+                == json.dumps(t_oct_full["by_member"],
+                              sort_keys=True)
+                and t_oct_over["truncated"] is False
+                and t_oct_over["returned"] == 3
+                and t_rk_cap["total"] == 1
+                and t_rk_cap["returned"] == 1
+                and t_rk_cap["truncated"] is False
+                and t_rk_cap["chain_size"] == 1
+                and t_rk_cap["by_member"][0]["own_calls"] == 2
+                and t_fk_cap["total"] == 1
+                and t_fk_cap["returned"] == 1
+                and t_fk_cap["by_member"][0]["own_calls"] == 0)
+        record("AC-LU13", lu13,
+               "boundary states: limit==total -> truncated=False"
+               " full set dumps-identical=%s; limit>total ->"
+               " full truncated=%s; dead-key singleton rk"
+               " capped read stays open (terminal state never"
+               " closes the audit face) total=%d own=%d;"
+               " zero-call fresh key total=%d returned=%d own=%d"
+               % (json.dumps(t_oct_eq["by_member"],
+                             sort_keys=True) ==
+                  json.dumps(t_oct_full["by_member"],
+                             sort_keys=True),
+                  t_oct_over["truncated"], t_rk_cap["total"],
+                  t_rk_cap["by_member"][0]["own_calls"],
+                  t_fk_cap["total"], t_fk_cap["returned"],
+                  t_fk_cap["by_member"][0]["own_calls"]))
+
+        pre14_calls = _count(conn, "api_calls")
+        pre14_keys = _count(conn, "api_dev_keys")
+        pre14_events = _count(lcconn, "key_events")
+        read_batch = [
+            lambda: dk.chain_usage(kb["api_key"]),
+            lambda: dk.chain_usage(kb["api_key"], "2026-10", 1),
+            lambda: dk.chain_usage(ka["api_key"], HIST_WIN, 2),
+            lambda: dk.chain_usage(rk["api_key"], limit=1),
+        ]
+        for fn in read_batch:
+            fn()
+        cap_twice_a = dk.chain_usage(kb["api_key"], "2026-10", 1)
+        cap_twice_b = dk.chain_usage(kb["api_key"], "2026-10", 1)
+        view_pin = dk.key_view(kb["api_key"])
+        board_pin = dk.dev_board("usr:lin")
+        post14_calls = _count(conn, "api_calls")
+        post14_keys = _count(conn, "api_dev_keys")
+        post14_events = _count(lcconn, "key_events")
+        lu14 = (pre14_calls == post14_calls
+                and pre14_keys == post14_keys
+                and pre14_events == post14_events
+                and json.dumps(cap_twice_a, sort_keys=True) ==
+                    json.dumps(cap_twice_b, sort_keys=True)
+                and sorted(view_pin.keys()) == KEY_VIEW_KEYS
+                and sorted(board_pin.keys()) == BOARD_KEYS
+                and len(RESULTS) == 12)
+        record("AC-LU14", lu14,
+               "pure-read law: read batch (default/capped/"
+               "window-capped/dead-key) leaves api_calls"
+               " %d==%d, api_dev_keys %d==%d, key_events"
+               " %d==%d; capped double-read dumps-identical=%s;"
+               " embedded faces untouched (key_view keys exact"
+               " %d, dev_board keys exact %d -- AC-RJW4 law)"
+               % (pre14_calls, post14_calls, pre14_keys,
+                  post14_keys, pre14_events, post14_events,
+                  json.dumps(cap_twice_a, sort_keys=True) ==
+                  json.dumps(cap_twice_b, sort_keys=True),
+                  len(KEY_VIEW_KEYS), len(BOARD_KEYS)))
+
         # -- AC-LU7 embedded faces + hygiene -----------------------------
         view_fk = dk.key_view(fk["api_key"])
         board_lin = dk.dev_board("usr:lin")
@@ -634,7 +871,7 @@ def main():
     dk.close()
     metered.close()
     led.close()
-    return 0 if passed == total == 8 else 1
+    return 0 if passed == total == 14 else 1
 
 
 if __name__ == "__main__":

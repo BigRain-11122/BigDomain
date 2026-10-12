@@ -1169,7 +1169,7 @@ class DevKeyFace:
 
     # -- lineage chain usage read face (R1833) -------------------------------
 
-    def chain_usage(self, api_key, window=None):
+    def chain_usage(self, api_key, window=None, limit=0):
         """One key's whole rotation lineage usage in a single
         read: per-member call counts for one window, aggregated at
         read time over the immutable call rows. The chain is
@@ -1201,10 +1201,44 @@ class DevKeyFace:
         counters; a revoked or rotated-out key stays fully
         readable (a terminal state never closes the audit face)
         and the embedded faces (key_view, dev_board) stay
-        untouched (the AC-RJW4 embedded-face law)."""
+        untouched (the AC-RJW4 embedded-face law).
+
+        The read-cap limit parameter (R1893) mirrors the
+        audit_lineage read-cap law (R1888): a big lineage is a
+        read-amplification face, so limit (default 0 = the
+        current full behavior, byte-stable) caps the returned
+        by_member list to the tail-window slice of the chain's
+        oldest-first order (the chain has no SQL direct
+        storage, so the cap is a post-assembly Python slice --
+        the R1791 board post-filter family). The cap never
+        redefines the chain's facts or the alignment invariants:
+        queried_index stays the full-chain index (the slice may
+        legitimately exclude the queried key itself on an
+        old-ancestor query -- truncated=True is the honest
+        partial-view flag), chain_total and
+        effective_upto_queried stay the full-chain sums (the
+        enforcement-alignment facts; the slice's own-calls sum
+        is an honest partial view of the full chain_total), and
+        chain_size follows the slice (the
+        member-total-follows-the-slice law) while the overflow
+        block's total carries the full-chain member count (an
+        honest truncated read carries the full count). The
+        window lens and the cap are orthogonal (the R1812
+        combination law): the window lenses the per-member call
+        counts, the cap slices the member list, and neither
+        ever redefines the other's domain -- the member set is
+        never redefined by either. A bad limit (non-int, bool,
+        or negative) rejects E_AD_BAD_LIMIT fail-closed (the
+        read-cap family code, matching dev_board and
+        audit_lineage) after the key gate, before the window
+        gate."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ApiDevError(E_AD_BAD_LIMIT,
+                              "limit must be an integer >= 0")
         if window is None:
             window = _window_utc()
         elif not (isinstance(window, str)
@@ -1244,14 +1278,24 @@ class DevKeyFace:
             chain_total += own
             if member_id not in descendants:
                 prefix_total += own
-        return {"api_key": api_key, "dev_account": row[1],
-                "key_name": row[2], "key_id": key_id,
-                "window": window, "by_member": members,
-                "chain_total": chain_total,
-                "effective_upto_queried": prefix_total,
-                "chain_size": len(chain_ids),
-                "queried_index": chain_ids.index(key_id),
-                "disclaimer": self.disclaimer}
+        out = {"api_key": api_key, "dev_account": row[1],
+               "key_name": row[2], "key_id": key_id,
+               "window": window, "by_member": members,
+               "chain_total": chain_total,
+               "effective_upto_queried": prefix_total,
+               "chain_size": len(chain_ids),
+               "queried_index": chain_ids.index(key_id),
+               "disclaimer": self.disclaimer}
+        if limit:
+            total = len(members)
+            members = members[-limit:]
+            out["by_member"] = members
+            out["chain_size"] = len(members)
+            out["limit"] = limit
+            out["total"] = total
+            out["returned"] = len(members)
+            out["truncated"] = total > limit
+        return out
 
     # -- ring 4: key lifecycle (revoke / rotate) ------------------------------
 
