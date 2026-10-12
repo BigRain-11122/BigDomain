@@ -1435,6 +1435,238 @@ async def idea_board_cases(srv_db):
         srv2.stop()
 
 
+def board_window_cases(srv_db):
+    """AC-S20/S21/S22 (R1869): month-window parameter on the two
+    lobby board read faces (room_message_board / idea_pool_board).
+    window=None keeps the full-history read byte-stable (the live
+    regression anchor: the existing AC-S14..S19 cases run unchanged
+    in this same suite); an explicit "YYYY-MM" window slices the row
+    set by each event's own record-time month before the per-zone
+    aggregation -- zone order, scope isolation and the envelope
+    shape untouched."""
+    from store import EventStore
+    tmp = tempfile.mkdtemp(prefix="lobby-boardwin-")
+    notice = ("sandbox non-advisory notice: board rows are "
+              "operational read-only derivations, not advice")
+    st = EventStore(os.path.join(tmp, "win.db"), disclaimer=notice)
+
+    # deterministic two-month world: October chat rows in two zones
+    # + October ideas in two pools, November rows in one of each,
+    # each month carrying only its own board's rows (cross-board
+    # scope isolation is asserted per month below)
+    world = [
+        ("2026-10-01T01:00:01.000000Z", "chat.broadcast", "res-a", "lobby",
+         "oct chat one", {"text": "oct chat one"}),
+        ("2026-10-01T01:00:02.000000Z", "chat.broadcast", "res-b", "quant",
+         "oct chat two", {"text": "oct chat two"}),
+        ("2026-10-01T01:00:03.000000Z", "chat.broadcast", "res-a", "lobby",
+         "oct chat three", {"text": "oct chat three"}),
+        ("2026-10-02T01:00:04.000000Z", "idea.submit", "res-a", "cocreate",
+         "oct idea one", {"text": "oct idea one", "pool": "proposal-queue-stub"}),
+        ("2026-10-02T01:00:05.000000Z", "idea.submit", "res-c", "lab",
+         "oct idea two", {"text": "oct idea two", "pool": "proposal-queue-stub"}),
+        ("2026-11-05T01:00:06.000000Z", "chat.broadcast", "res-b", "quant",
+         "nov chat one", {"text": "nov chat one"}),
+        ("2026-11-05T01:00:07.000000Z", "idea.submit", "res-d", "cocreate",
+         "nov idea one", {"text": "nov idea one", "pool": "proposal-queue-stub"}),
+    ]
+    for evt in world:
+        st.append(*evt)
+
+    # ---- AC-S20: semantics, order, honest empty, cross-validation ----
+    full_room = st.room_message_board()
+    full_idea = st.idea_pool_board()
+    ok_default_shape = (
+        full_room["room_message_board"] == [
+            {"room": "lobby", "messages": 2, "actors": 1},
+            {"room": "quant", "messages": 2, "actors": 1},
+        ]
+        and full_idea["idea_pool_board"] == [
+            {"room": "cocreate", "ideas": 2, "actors": 2},
+            {"room": "lab", "ideas": 1, "actors": 1},
+        ])
+
+    oct_room = st.room_message_board(window="2026-10")
+    oct_idea = st.idea_pool_board(window="2026-10")
+    nov_room = st.room_message_board(window="2026-11")
+    nov_idea = st.idea_pool_board(window="2026-11")
+    ok_window_rows = (
+        oct_room["room_message_board"] == [
+            {"room": "lobby", "messages": 2, "actors": 1},
+            {"room": "quant", "messages": 1, "actors": 1},
+        ]
+        and oct_idea["idea_pool_board"] == [
+            {"room": "cocreate", "ideas": 1, "actors": 1},
+            {"room": "lab", "ideas": 1, "actors": 1},
+        ]
+        and nov_room["room_message_board"] == [
+            {"room": "quant", "messages": 1, "actors": 1},
+        ]
+        and nov_idea["idea_pool_board"] == [
+            {"room": "cocreate", "ideas": 1, "actors": 1},
+        ])
+
+    # order preservation: zone-ascending inside every window read
+    ok_order = all(
+        [r["room"] for r in b] == sorted(r["room"] for r in b)
+        for b in (oct_room["room_message_board"],
+                  oct_idea["idea_pool_board"],
+                  nov_room["room_message_board"],
+                  nov_idea["idea_pool_board"]))
+
+    # honest empty: a month with no rows is an empty board, same keys
+    empty_room = st.room_message_board(window="2025-01")
+    empty_idea = st.idea_pool_board(window="2025-01")
+    ok_empty = (empty_room["room_message_board"] == []
+                and empty_idea["idea_pool_board"] == []
+                and set(empty_room.keys())
+                == {"room_message_board", "disclaimer"}
+                and set(empty_idea.keys())
+                == {"idea_pool_board", "disclaimer"}
+                and empty_room["disclaimer"] == notice)
+
+    # manual SQL mirror cross (record-time substr law) + the two
+    # windowed months partition the full default board
+    manual_oct_room = [
+        {"room": z, "messages": int(n), "actors": int(k)}
+        for z, n, k in db_query(
+            os.path.join(tmp, "win.db"),
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' AND substr(ts_utc,1,7)='2026-10'"
+            " GROUP BY zone ORDER BY zone")
+    ]
+    ok_manual = (manual_oct_room == oct_room["room_message_board"]
+                 and sum(r["messages"]
+                         for r in full_room["room_message_board"])
+                 == sum(r["messages"]
+                        for r in oct_room["room_message_board"])
+                 + sum(r["messages"]
+                       for r in nov_room["room_message_board"]))
+
+    # record-time law: insertion-order independence for windowed reads
+    st2 = EventStore(os.path.join(tmp, "win2.db"), disclaimer=notice)
+    for evt in reversed(world):
+        st2.append(*evt)
+    ok_reorder = (
+        json.dumps(st2.room_message_board(window="2026-10"), sort_keys=True)
+        == json.dumps(oct_room, sort_keys=True)
+        and json.dumps(st2.idea_pool_board(window="2026-11"), sort_keys=True)
+        == json.dumps(nov_idea, sort_keys=True))
+    st2.close()
+
+    # cross-board in-window scope isolation: October's chat rows (3)
+    # never feed the idea board (2 ideas only), and vice versa
+    ok_scope = (oct_room["room_message_board"][0]["messages"] == 2
+                and oct_idea["idea_pool_board"][0]["ideas"] == 1
+                and sum(r["ideas"] for r in oct_idea["idea_pool_board"]) == 2
+                and sum(r["messages"]
+                        for r in oct_room["room_message_board"]) == 3)
+
+    record("AC-S20", ok_default_shape and ok_window_rows and ok_order
+           and ok_empty and ok_manual and ok_reorder and ok_scope,
+           "default-shape=%s window-rows=%s order=%s empty=%s "
+           "manual-sql=%s reorder-independent=%s scope=%s"
+           % (ok_default_shape, ok_window_rows, ok_order, ok_empty,
+              ok_manual, ok_reorder, ok_scope))
+
+    # ---- AC-S21: 14 bad-window forms fail-closed on both boards ----
+    bads14 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+              "202610", "abcd", "", 2026, True, 2.5,
+              "2026-10\n", "2026-10 ", "2026-10\r")
+    n_before = db_query(os.path.join(tmp, "win.db"),
+                        "SELECT COUNT(*) FROM events")[0][0]
+    rejects = []
+    for bad in bads14:
+        for face, label in ((st.room_message_board, "room"),
+                            (st.idea_pool_board, "idea")):
+            refused = False
+            try:
+                face(window=bad)
+            except ValueError as exc:
+                refused = "E_LS_BAD_WINDOW" in str(exc)
+            rejects.append((label, repr(bad), refused))
+    ok_bads = all(r[2] for r in rejects) and len(rejects) == 28
+    n_after = db_query(os.path.join(tmp, "win.db"),
+                       "SELECT COUNT(*) FROM events")[0][0]
+    ok_no_side = n_before == n_after
+
+    # gate order: the disclaimer gate stays outermost -- a legacy
+    # store without a disclaimer refuses E_STORE_NO_DISCLAIMER first
+    # even for a bad window
+    st3 = EventStore(os.path.join(tmp, "legacy.db"))
+    legacy_first = False
+    try:
+        st3.room_message_board(window="2026-13")
+    except ValueError as exc:
+        legacy_first = "E_STORE_NO_DISCLAIMER" in str(exc)
+    st3.close()
+
+    record("AC-S21", ok_bads and ok_no_side and legacy_first,
+           "bads14 x 2 boards all E_LS_BAD_WINDOW=%s (%d rejects); "
+           "zero-side-effects events %d==%d; "
+           "disclaimer-gate-outermost=%s"
+           % (ok_bads, len(rejects), n_before, n_after, legacy_first))
+
+    # ---- AC-S22: pure-read law, determinism, live-db cross ----
+    unit_db = os.path.join(tmp, "win.db")
+    before = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+              for t in ("events", "census_cache")]
+    st.room_message_board(window="2026-10")
+    st.idea_pool_board(window="2026-11")
+    st.room_message_board(window="2025-01")
+    st.idea_pool_board(window="2025-01")
+    after = [db_query(unit_db, "SELECT COUNT(*) FROM " + t)[0][0]
+             for t in ("events", "census_cache")]
+    ok_pure = before == after and before[0] == 7
+    src_both = (inspect.getsource(st.room_message_board)
+                + inspect.getsource(st.idea_pool_board))
+    ok_src = not any(word in src_both
+                     for word in ("INSERT", "UPDATE", "DELETE"))
+
+    # determinism: same windowed read twice byte-identical; the
+    # windowed reads above never mutated the default read
+    det_room = (json.dumps(st.room_message_board(window="2026-10"),
+                           sort_keys=True)
+                == json.dumps(st.room_message_board(window="2026-10"),
+                              sort_keys=True))
+    det_idea = (json.dumps(st.idea_pool_board(window="2026-11"),
+                           sort_keys=True)
+                == json.dumps(st.idea_pool_board(window="2026-11"),
+                              sort_keys=True))
+    ok_default_unchanged = (
+        json.dumps(st.room_message_board(), sort_keys=True)
+        == json.dumps(full_room, sort_keys=True)
+        and json.dumps(st.idea_pool_board(), sort_keys=True)
+        == json.dumps(full_idea, sort_keys=True))
+    st.close()
+
+    # live cross: this suite's real db -- the current UTC month board
+    # equals the manual SQL mirror; a far month is an honest empty
+    now_month = time.strftime("%Y-%m", time.gmtime())
+    st_srv = EventStore(srv_db, disclaimer=notice)
+    srv_room = st_srv.room_message_board(window=now_month)
+    manual_srv = [
+        {"room": z, "messages": int(n), "actors": int(k)}
+        for z, n, k in db_query(
+            srv_db,
+            "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+            " WHERE type='chat.broadcast' AND substr(ts_utc,1,7)=?"
+            " GROUP BY zone ORDER BY zone", (now_month,))
+    ]
+    srv_far = st_srv.room_message_board(window="2000-01")
+    ok_live = (srv_room["room_message_board"] == manual_srv
+               and srv_far["room_message_board"] == [])
+    st_srv.close()
+
+    record("AC-S22", ok_pure and ok_src and det_room and det_idea
+           and ok_default_unchanged and ok_live,
+           "row-counts-stable=%s zero-write-src=%s det-room=%s "
+           "det-idea=%s default-unchanged=%s live-db-cross=%s "
+           "(month=%s rows=%d)"
+           % (ok_pure, ok_src, det_room, det_idea, ok_default_unchanged,
+              ok_live, now_month, len(manual_srv)))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -1781,6 +2013,10 @@ async def suite():
     # AC-S18/S19: event-derived idea pool read face + idea.board wire
     # face with restart-survival proof (fresh process on the same db).
     await idea_board_cases(srv.db)
+
+    # AC-S20/S21/S22 (R1869): month-window parameter on the two
+    # lobby board read faces (store-level; window only slices rows).
+    board_window_cases(srv.db)
 
     await city_cases()
 

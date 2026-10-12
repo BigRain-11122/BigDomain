@@ -10,11 +10,33 @@ per P-47-2 schema decision).
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import threading
 from datetime import datetime, timezone
 
 REPO = "domain/BigDomain"
+
+# R1869 lobby board month-window gate: an explicit window is one
+# "YYYY-MM" calendar month (01-12); any other shape rejects the
+# dedicated E_LS_BAD_WINDOW fail-closed before any read.
+_BOARD_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
+E_LS_BAD_WINDOW = "E_LS_BAD_WINDOW"
+
+
+def _board_window_or_none(window):
+    """Month-window gate shared by the two lobby board read faces
+    (R1869). window=None keeps the full-history read byte-stable;
+    an explicit window must be a "YYYY-MM" string. Any other shape
+    raises the dedicated E_LS_BAD_WINDOW ValueError (this store's
+    fail-closed family: ValueError carrying an E_ code string, the
+    E_STORE_NO_DISCLAIMER law) -- a bad window never falls through
+    to a silent full read."""
+    if window is not None and not (
+        isinstance(window, str) and _BOARD_WINDOW_RE.match(window)
+    ):
+        raise ValueError(E_LS_BAD_WINDOW)
+    return window
 
 
 def utc_now_iso():
@@ -156,7 +178,7 @@ class EventStore:
             ).fetchone()
         return json.loads(row[0]) if row else None
 
-    def room_message_board(self):
+    def room_message_board(self, window=None):
         """R1773 room-level message read face: pure-read derivation over
         the public event stream. Per room (zone) chat message count and
         distinct active-actor count, aggregated read-only over
@@ -167,21 +189,37 @@ class EventStore:
         order, zero RNG. Envelope carries the standing non-advisory
         disclaimer (the lobby compliance face lives at the protocol
         layer, sys.risk_warning at connect; this read face keeps the
-        same standing-discipline)."""
+        same standing-discipline).
+        R1869 month window: window=None (the default) keeps the
+        full-history behavior byte-stable; an explicit "YYYY-MM"
+        window slices the row set to the events' own record-time
+        month (substr(ts_utc, 1, 7) == window) before the per-zone
+        aggregation -- zone order, scope isolation and the envelope
+        shape are untouched (the window only cuts rows; rows are
+        immutable and stamped with their own record time, so a
+        historical month stays readable forever and a month with no
+        rows is an honest empty board). A bad window shape rejects
+        the dedicated E_LS_BAD_WINDOW fail-closed, after the
+        disclaimer gate (the disclaimer gate stays outermost)."""
         if not self.disclaimer or not self.disclaimer.strip():
             raise ValueError("E_STORE_NO_DISCLAIMER")
+        win = _board_window_or_none(window)
+        sql = ("SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+               " WHERE type = 'chat.broadcast'")
+        args = ()
+        if win is not None:
+            sql += " AND substr(ts_utc, 1, 7) = ?"
+            args = (win,)
+        sql += " GROUP BY zone ORDER BY zone"
         with self._lock:
-            rows = self._conn.execute(
-                "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
-                " WHERE type = 'chat.broadcast' GROUP BY zone ORDER BY zone"
-            ).fetchall()
+            rows = self._conn.execute(sql, args).fetchall()
         board = [
             {"room": room, "messages": int(n), "actors": int(k)}
             for room, n, k in rows
         ]
         return {"room_message_board": board, "disclaimer": self.disclaimer}
 
-    def idea_pool_board(self):
+    def idea_pool_board(self, window=None):
         """R1792 idea pool board: pure-read event-derived face over the
         persistent events table. The server-side in-memory proposal
         pool stub resets on restart; this board re-derives the pool
@@ -192,14 +230,29 @@ class EventStore:
         RNG. The events table stays append-only: this face holds no
         mutation statements. Envelope carries the standing
         non-advisory disclaimer; a store constructed without one
-        refuses fail-closed (same law as the room board face)."""
+        refuses fail-closed (same law as the room board face).
+        R1869 month window: window=None (the default) keeps the
+        full-history behavior byte-stable; an explicit "YYYY-MM"
+        window slices the row set to the events' own record-time
+        month (substr(ts_utc, 1, 7) == window) before the per-zone
+        aggregation -- zone order, scope isolation (chat.broadcast
+        rows never counted) and the envelope shape are untouched; a
+        month with no rows is an honest empty board. A bad window
+        shape rejects the dedicated E_LS_BAD_WINDOW fail-closed,
+        after the disclaimer gate (the disclaimer gate stays
+        outermost)."""
         if not self.disclaimer or not self.disclaimer.strip():
             raise ValueError("E_STORE_NO_DISCLAIMER")
+        win = _board_window_or_none(window)
+        sql = ("SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+               " WHERE type = 'idea.submit'")
+        args = ()
+        if win is not None:
+            sql += " AND substr(ts_utc, 1, 7) = ?"
+            args = (win,)
+        sql += " GROUP BY zone ORDER BY zone"
         with self._lock:
-            rows = self._conn.execute(
-                "SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
-                " WHERE type = 'idea.submit' GROUP BY zone ORDER BY zone"
-            ).fetchall()
+            rows = self._conn.execute(sql, args).fetchall()
         board = [
             {"room": zone, "ideas": int(n), "actors": int(k)}
             for zone, n, k in rows

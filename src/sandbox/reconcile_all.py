@@ -96,7 +96,16 @@ SUITES = [
     # replacement for the read reliance on the in-memory
     # proposal_pool stub) + idea.board wire face with the same
     # optional rooms filter law - AC-S18/S19 (20 -> 22).
-    ("lobby", os.path.join("lobby", "test_client.py"), 22),
+    # R1869 month-window parameter on both lobby board read faces:
+    # window=None keeps the full-history read byte-stable; an
+    # explicit "YYYY-MM" window slices the row set by each event's
+    # own record-time month (substr(ts_utc,1,7)) before the
+    # per-zone aggregation, zone order and envelope untouched; 14
+    # bad-window forms reject the dedicated E_LS_BAD_WINDOW
+    # fail-closed after the disclaimer gate; pure-read law,
+    # determinism and the live-db manual-SQL cross kept -
+    # AC-S20/S21/S22 (22 -> 25).
+    ("lobby", os.path.join("lobby", "test_client.py"), 25),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
