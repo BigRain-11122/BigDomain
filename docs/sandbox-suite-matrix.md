@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-12 13:10 +08:00
+- 生成时间: generated: 2026-10-12 13:36 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1858-2.log
 - 状态证据: reconcile-all-R1858-2.log (RUNNER PASS 115/115 suites green, reconcile controls 7/7, 588.9s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 118 | 1098 | 115/115 | R1858 |
+| 119 | 1105 | 115/115 | R1858 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -155,7 +155,8 @@
 | 116 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
 | 117 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
 | 118 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
-|  | 合计 |  | 1098 | green 115 / FAIL 0 / no-evidence 3 |  |
+| 119 | ledger-apidev-devboard-ancestry | ledger/test_apidev_devboard_ancestry.py | 7 | no-evidence | - |
+|  | 合计 |  | 1105 | green 115 / FAIL 0 / no-evidence 4 |  |
 
 ## 证据出处
 

@@ -1,0 +1,59 @@
+# export-consistency evidence (R1863)
+# pre-flush check -> closeout surgery -> post-flush check (AC-EC4 two-run caliber)
+
+--- pre-flush consistency check (exit=2) ---
+PASS self_drive.idle_fast_mention_lines stored=0
+FAIL self_drive.log_lines_in_window stored=18 recomputed=7
+PASS self_drive.no_pullable_mention_lines stored=0
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=9
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=10
+FAIL self_drive.substantive_non_idle_mention_lines stored=6 recomputed=0
+PASS self_drive.window stored='2026-10-06..2026-10-12'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1862'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-12T13:16:56+08:00' (age 0.3h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=19 fail=2 state_tick=1862 window=2026-10-06..2026-10-12 W=7 idle=0 nop=0 sub=0 proposals=3/1 queues=6/10/9
+VERDICT FAIL exit 2
+
+--- closeout surgery (exit=0) ---
+tech.md ok: claim flipped + done note, reseed appended; open=10 eol='\n'
+state.json ok: tick=1863 log_items=12 bytes=70523 gord=291
+heartbeat.txt ok: +1 row (R1863) eol='\r\n'
+export ok: +1 result row results=842->843 tick_row=1863 self_drive W=9 sub=1 queues=6/10/9
+closeout surgery complete: 4 faces ok
+
+--- post-flush consistency check (exit=0) ---
+PASS self_drive.idle_fast_mention_lines stored=0
+PASS self_drive.log_lines_in_window stored=9
+PASS self_drive.no_pullable_mention_lines stored=0
+PASS self_drive.proposals_open stored=1
+PASS self_drive.proposals_total stored=3
+PASS self_drive.queue_explore_open stored=9
+PASS self_drive.queue_main_open stored=6
+PASS self_drive.queue_tech_open stored=10
+PASS self_drive.substantive_non_idle_mention_lines stored=1
+PASS self_drive.window stored='2026-10-06..2026-10-12'
+PASS self_drive.window_days stored=7
+PASS results.tick_row stored='1863'
+PASS ceo_face.current non-empty stored='present'
+PASS ceo_face.latest_artifact non-empty stored='present'
+PASS ceo_face.next_milestone non-empty stored='present'
+PASS container do non-empty stored='present'
+PASS container depts non-empty stored='present'
+PASS container outs non-empty stored='present'
+PASS container results non-empty stored='present'
+INFO export_ts parseable '2026-10-12T13:37:55+08:00' (age 0.0h)
+PASS checker source pure ASCII stored='0'
+SUMMARY pass=21 fail=0 state_tick=1863 window=2026-10-06..2026-10-12 W=9 idle=0 nop=0 sub=1 proposals=3/1 queues=6/10/9
+VERDICT PASS

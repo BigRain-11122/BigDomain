@@ -934,6 +934,23 @@ SUITES = [
     ("ledger-apidev-devboard-limit", os.path.join("ledger",
                                                  "test_apidev_devboard_limit.py"),
      14),
+    # R1863 apidev dev_board ancestry-in-explicit-window
+    # anti-evasion example: the per-key quota_used carries the
+    # quota ring's ancestry semantics inside EXPLICIT history
+    # window reads too (the R1857 AC-DBL12 mirror used fresh
+    # zero-ancestry keys, leaving this face uncovered) -- the
+    # rotate successor's explicit-window quota_used includes the
+    # ancestor's window rows (board == chain_usage
+    # effective_upto_queried == key_view current-window three
+    # faces align), the own-only SQL mirror discriminates 1 != 3,
+    # ancestors never inherit descendants, the old-month explicit
+    # window projection is byte-preserved across the month roll
+    # (minute fields + lifetime billing stripped per the
+    # clock-orthogonal / lifetime-face rulings, two first-run
+    # reds on record; zero product bytes, pin-only suite)
+    # (AC-ANW1..ANW7 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-devboard-ancestry", os.path.join(
+        "ledger", "test_apidev_devboard_ancestry.py"), 7),
 ]
 
 FAILS = 0
