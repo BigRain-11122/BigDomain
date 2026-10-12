@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-12 11:10 +08:00
+- 生成时间: generated: 2026-10-12 12:08 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1858-2.log
 - 状态证据: reconcile-all-R1858-2.log (RUNNER PASS 115/115 suites green, reconcile controls 7/7, 588.9s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 115 | 1072 | 115/115 | R1858 |
+| 116 | 1079 | 115/115 | R1858 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -70,89 +70,90 @@
 | 31 | tourstate | tourstate/test_tourstate.py | 7 | green | 0.2 |
 | 32 | ugc | ugc/test_ugc.py | 37 | green | 20.8 |
 | 33 | ugc-sec-batch | ugc/test_sec_batch.py | 17 | green | 1.8 |
-| 34 | pay | pay/test_pay.py | 16 | green | 11.5 |
-| 35 | pay-v3 | pay/test_pay_v3.py | 14 | green | 3.5 |
-| 36 | pay-v3-real | pay/test_pay_v3_real.py | 9 | green | 2.2 |
-| 37 | pay-v3-window | pay/test_pay_v3_window.py | 6 | green | 3.1 |
-| 38 | pay-notify | pay/test_pay_notify.py | 7 | green | 4.5 |
-| 39 | pay-notify-wiring | pay/test_pay_notify_wiring.py | 7 | green | 9.7 |
-| 40 | pay-authorize | pay/test_authorize.py | 7 | green | 3.9 |
-| 41 | pay-notify-revoke | pay/test_notify_revoke.py | 7 | green | 9.2 |
-| 42 | pay-revoke-reconcile | pay/test_pay_revoke_recon.py | 7 | green | 3.6 |
-| 43 | pay-channel-matrix | pay/test_channel_matrix.py | 7 | green | 5.3 |
-| 44 | pay-channel-window | pay/test_channel_window.py | 7 | green | 6.0 |
-| 45 | ledger-clawback | pay/test_clawback_wiring.py | 8 | green | 14.2 |
-| 46 | member | member/test_member.py | 16 | green | 7.4 |
-| 47 | member-entry | member/test_entry_tier.py | 7 | green | 0.2 |
-| 48 | member-refund-recovery | member/test_refund_recovery.py | 7 | green | 9.4 |
-| 49 | member-expiring | member/test_expiring_soon.py | 7 | green | 6.5 |
-| 50 | member-reminder-scanwire | member/test_reminder_scan_wire.py | 7 | green | 2.5 |
-| 51 | member-banner-board | member/test_banner_board.py | 17 | green | 10.9 |
-| 52 | watermark | watermark/test_watermark.py | 5 | green | 4.8 |
-| 53 | watermark-robust | watermark/test_watermark_robust.py | 6 | green | 3.4 |
-| 54 | watermark-sweep | watermark/test_watermark_sweep.py | 6 | green | 40.7 |
-| 55 | watermark-scale-recover | watermark/test_scale_recover.py | 7 | green | 13.3 |
-| 56 | watermark-scale-unknown | watermark/test_scale_unknown.py | 6 | green | 18.1 |
-| 57 | watermark-scale-refine | watermark/test_scale_refine.py | 6 | green | 23.5 |
-| 58 | dual-track | watermark/test_dual_track.py | 7 | green | 6.5 |
-| 59 | watermark-bindbit | watermark/test_bind_bit.py | 7 | green | 4.6 |
-| 60 | watermark-dualbit | watermark/test_dual_bit.py | 7 | green | 3.4 |
-| 61 | opsreview | opsreview/test_opsreview.py | 7 | green | 1.7 |
-| 62 | liveroom | liveroom/test_liveroom.py | 10 | green | 1.6 |
-| 63 | benchgate | benchgate/test_bench_gate.py | 11 | green | 0.7 |
-| 64 | citymodel | citymodel/test_scenario.py | 10 | green | 0.4 |
-| 65 | compliance | compliance/test_sku_compliance_map.py | 15 | green | 0.5 |
-| 66 | minors | minors/test_minors.py | 19 | green | 0.2 |
-| 67 | minors-wiring | minors/test_wiring.py | 70 | green | 82.4 |
-| 68 | schema-migrate | test_schema_migrate.py | 21 | green | 11.6 |
-| 69 | fingerprint-regen | test_fingerprint_regen.py | 16 | green | 23.6 |
-| 70 | reconcile-daily-sentinel | test_reconcile_daily_sentinel.py | 8 | green | 3.5 |
-| 71 | suite-matrix-discovery | test_suite_matrix.py | 16 | green | 1.9 |
-| 72 | runner-profile-daily | test_runner_profile_daily.py | 12 | green | 0.4 |
-| 73 | reconcile-daily-profile | test_reconcile_daily_profile.py | 7 | green | 0.6 |
-| 74 | reconcile-daily-census | test_reconcile_daily_census.py | 8 | green | 15.5 |
-| 75 | ledger-showcase | ledger/test_showcase.py | 7 | green | 1.9 |
-| 76 | ledger-curation | ledger/test_curation.py | 19 | green | 1.8 |
-| 77 | ledger-civicpoints | ledger/test_civicpoints.py | 20 | green | 1.7 |
-| 78 | ledger-honorcert | ledger/test_honorcert.py | 7 | green | 2.6 |
-| 79 | ledger-devshare | ledger/test_devshare.py | 7 | green | 2.6 |
-| 80 | ledger-apimarket | ledger/test_apimarket.py | 7 | green | 2.1 |
-| 81 | ledger-datasub | ledger/test_datasub.py | 7 | green | 1.3 |
-| 82 | ledger-proposal | ledger/test_proposal.py | 7 | green | 1.7 |
-| 83 | ledger-eventtickets | ledger/test_eventtickets.py | 14 | green | 2.1 |
-| 84 | ledger-eventtickets-boardwin | ledger/test_eventtickets_boardwin.py | 7 | green | 1.6 |
-| 85 | ledger-eventtickets-boardlimit | ledger/test_eventtickets_boardlimit.py | 7 | green | 2.7 |
-| 86 | ledger-freetrial | ledger/test_freetrial.py | 7 | green | 2.0 |
-| 87 | ledger-freetrial-funnel | ledger/test_freetrial_funnel.py | 7 | green | 1.9 |
-| 88 | ledger-freetrial-funnelwin | ledger/test_freetrial_funnelwin.py | 7 | green | 1.5 |
-| 89 | ledger-freetrial-callmonth | ledger/test_freetrial_callmonth.py | 7 | green | 1.8 |
-| 90 | ledger-freetrial-callkind | ledger/test_freetrial_callkind.py | 8 | green | 1.6 |
-| 91 | ledger-freetrial-callplan | ledger/test_freetrial_callplan.py | 8 | green | 2.0 |
-| 92 | ledger-freetrial-callengine | ledger/test_freetrial_callengine.py | 8 | green | 1.6 |
-| 93 | ledger-freetrial-callaccount | ledger/test_freetrial_callaccount.py | 8 | green | 1.5 |
-| 94 | ledger-freetrial-capusage | ledger/test_freetrial_capusage.py | 8 | green | 1.8 |
-| 95 | ledger-freetrial-caplimit | ledger/test_freetrial_caplimit.py | 7 | green | 1.8 |
-| 96 | ledger-freetrial-caproll | ledger/test_freetrial_caproll.py | 7 | green | 2.1 |
-| 97 | ledger-freetrial-callroll | ledger/test_freetrial_callroll.py | 7 | green | 3.7 |
-| 98 | ugc-pool-water | ugc/test_pool_water.py | 7 | green | 4.9 |
-| 99 | ugc-pool-delta | ugc/test_pool_delta.py | 7 | green | 3.6 |
-| 100 | ugc-ingest-waterwire | ugc/test_ingest_waterwire.py | 6 | green | 1.7 |
-| 101 | ugc-batch-water | ugc/test_batch_waterwire.py | 6 | green | 2.1 |
-| 102 | ugc-drain-water | ugc/test_drain_waterwire.py | 6 | green | 2.8 |
-| 103 | ugc-submit-water | ugc/test_submit_waterwire.py | 7 | green | 3.4 |
-| 104 | ugc-verdict-water | ugc/test_verdict_waterwire.py | 7 | green | 4.6 |
-| 105 | ugc-water-journal | ugc/test_water_journal.py | 7 | green | 3.3 |
-| 106 | ugc-water-kindtally | ugc/test_water_kind_tally.py | 7 | green | 1.0 |
-| 107 | ugc-water-monthlyflow | ugc/test_water_monthly_flow.py | 7 | green | 1.0 |
-| 108 | ugc-water-journalwin | ugc/test_water_journal_window.py | 7 | green | 2.1 |
-| 109 | ugc-water-journalcap | ugc/test_water_journal_limit.py | 7 | green | 2.0 |
-| 110 | ugc-water-celltotals | ugc/test_water_cell_totals.py | 7 | green | 1.7 |
-| 111 | member-expiring-dist | member/test_expiring_dist.py | 7 | green | 4.7 |
-| 112 | ledger-apidev-lineage | ledger/test_apidev_lineage.py | 7 | green | 1.7 |
-| 113 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
-| 114 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
-| 115 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
-|  | 合计 |  | 1072 | green 115 / FAIL 0 / no-evidence 0 |  |
+| 34 | ugc-sec-batch-roll | ugc/test_sec_batch_roll.py | 7 | no-evidence | - |
+| 35 | pay | pay/test_pay.py | 16 | green | 11.5 |
+| 36 | pay-v3 | pay/test_pay_v3.py | 14 | green | 3.5 |
+| 37 | pay-v3-real | pay/test_pay_v3_real.py | 9 | green | 2.2 |
+| 38 | pay-v3-window | pay/test_pay_v3_window.py | 6 | green | 3.1 |
+| 39 | pay-notify | pay/test_pay_notify.py | 7 | green | 4.5 |
+| 40 | pay-notify-wiring | pay/test_pay_notify_wiring.py | 7 | green | 9.7 |
+| 41 | pay-authorize | pay/test_authorize.py | 7 | green | 3.9 |
+| 42 | pay-notify-revoke | pay/test_notify_revoke.py | 7 | green | 9.2 |
+| 43 | pay-revoke-reconcile | pay/test_pay_revoke_recon.py | 7 | green | 3.6 |
+| 44 | pay-channel-matrix | pay/test_channel_matrix.py | 7 | green | 5.3 |
+| 45 | pay-channel-window | pay/test_channel_window.py | 7 | green | 6.0 |
+| 46 | ledger-clawback | pay/test_clawback_wiring.py | 8 | green | 14.2 |
+| 47 | member | member/test_member.py | 16 | green | 7.4 |
+| 48 | member-entry | member/test_entry_tier.py | 7 | green | 0.2 |
+| 49 | member-refund-recovery | member/test_refund_recovery.py | 7 | green | 9.4 |
+| 50 | member-expiring | member/test_expiring_soon.py | 7 | green | 6.5 |
+| 51 | member-reminder-scanwire | member/test_reminder_scan_wire.py | 7 | green | 2.5 |
+| 52 | member-banner-board | member/test_banner_board.py | 17 | green | 10.9 |
+| 53 | watermark | watermark/test_watermark.py | 5 | green | 4.8 |
+| 54 | watermark-robust | watermark/test_watermark_robust.py | 6 | green | 3.4 |
+| 55 | watermark-sweep | watermark/test_watermark_sweep.py | 6 | green | 40.7 |
+| 56 | watermark-scale-recover | watermark/test_scale_recover.py | 7 | green | 13.3 |
+| 57 | watermark-scale-unknown | watermark/test_scale_unknown.py | 6 | green | 18.1 |
+| 58 | watermark-scale-refine | watermark/test_scale_refine.py | 6 | green | 23.5 |
+| 59 | dual-track | watermark/test_dual_track.py | 7 | green | 6.5 |
+| 60 | watermark-bindbit | watermark/test_bind_bit.py | 7 | green | 4.6 |
+| 61 | watermark-dualbit | watermark/test_dual_bit.py | 7 | green | 3.4 |
+| 62 | opsreview | opsreview/test_opsreview.py | 7 | green | 1.7 |
+| 63 | liveroom | liveroom/test_liveroom.py | 10 | green | 1.6 |
+| 64 | benchgate | benchgate/test_bench_gate.py | 11 | green | 0.7 |
+| 65 | citymodel | citymodel/test_scenario.py | 10 | green | 0.4 |
+| 66 | compliance | compliance/test_sku_compliance_map.py | 15 | green | 0.5 |
+| 67 | minors | minors/test_minors.py | 19 | green | 0.2 |
+| 68 | minors-wiring | minors/test_wiring.py | 70 | green | 82.4 |
+| 69 | schema-migrate | test_schema_migrate.py | 21 | green | 11.6 |
+| 70 | fingerprint-regen | test_fingerprint_regen.py | 16 | green | 23.6 |
+| 71 | reconcile-daily-sentinel | test_reconcile_daily_sentinel.py | 8 | green | 3.5 |
+| 72 | suite-matrix-discovery | test_suite_matrix.py | 16 | green | 1.9 |
+| 73 | runner-profile-daily | test_runner_profile_daily.py | 12 | green | 0.4 |
+| 74 | reconcile-daily-profile | test_reconcile_daily_profile.py | 7 | green | 0.6 |
+| 75 | reconcile-daily-census | test_reconcile_daily_census.py | 8 | green | 15.5 |
+| 76 | ledger-showcase | ledger/test_showcase.py | 7 | green | 1.9 |
+| 77 | ledger-curation | ledger/test_curation.py | 19 | green | 1.8 |
+| 78 | ledger-civicpoints | ledger/test_civicpoints.py | 20 | green | 1.7 |
+| 79 | ledger-honorcert | ledger/test_honorcert.py | 7 | green | 2.6 |
+| 80 | ledger-devshare | ledger/test_devshare.py | 7 | green | 2.6 |
+| 81 | ledger-apimarket | ledger/test_apimarket.py | 7 | green | 2.1 |
+| 82 | ledger-datasub | ledger/test_datasub.py | 7 | green | 1.3 |
+| 83 | ledger-proposal | ledger/test_proposal.py | 7 | green | 1.7 |
+| 84 | ledger-eventtickets | ledger/test_eventtickets.py | 14 | green | 2.1 |
+| 85 | ledger-eventtickets-boardwin | ledger/test_eventtickets_boardwin.py | 7 | green | 1.6 |
+| 86 | ledger-eventtickets-boardlimit | ledger/test_eventtickets_boardlimit.py | 7 | green | 2.7 |
+| 87 | ledger-freetrial | ledger/test_freetrial.py | 7 | green | 2.0 |
+| 88 | ledger-freetrial-funnel | ledger/test_freetrial_funnel.py | 7 | green | 1.9 |
+| 89 | ledger-freetrial-funnelwin | ledger/test_freetrial_funnelwin.py | 7 | green | 1.5 |
+| 90 | ledger-freetrial-callmonth | ledger/test_freetrial_callmonth.py | 7 | green | 1.8 |
+| 91 | ledger-freetrial-callkind | ledger/test_freetrial_callkind.py | 8 | green | 1.6 |
+| 92 | ledger-freetrial-callplan | ledger/test_freetrial_callplan.py | 8 | green | 2.0 |
+| 93 | ledger-freetrial-callengine | ledger/test_freetrial_callengine.py | 8 | green | 1.6 |
+| 94 | ledger-freetrial-callaccount | ledger/test_freetrial_callaccount.py | 8 | green | 1.5 |
+| 95 | ledger-freetrial-capusage | ledger/test_freetrial_capusage.py | 8 | green | 1.8 |
+| 96 | ledger-freetrial-caplimit | ledger/test_freetrial_caplimit.py | 7 | green | 1.8 |
+| 97 | ledger-freetrial-caproll | ledger/test_freetrial_caproll.py | 7 | green | 2.1 |
+| 98 | ledger-freetrial-callroll | ledger/test_freetrial_callroll.py | 7 | green | 3.7 |
+| 99 | ugc-pool-water | ugc/test_pool_water.py | 7 | green | 4.9 |
+| 100 | ugc-pool-delta | ugc/test_pool_delta.py | 7 | green | 3.6 |
+| 101 | ugc-ingest-waterwire | ugc/test_ingest_waterwire.py | 6 | green | 1.7 |
+| 102 | ugc-batch-water | ugc/test_batch_waterwire.py | 6 | green | 2.1 |
+| 103 | ugc-drain-water | ugc/test_drain_waterwire.py | 6 | green | 2.8 |
+| 104 | ugc-submit-water | ugc/test_submit_waterwire.py | 7 | green | 3.4 |
+| 105 | ugc-verdict-water | ugc/test_verdict_waterwire.py | 7 | green | 4.6 |
+| 106 | ugc-water-journal | ugc/test_water_journal.py | 7 | green | 3.3 |
+| 107 | ugc-water-kindtally | ugc/test_water_kind_tally.py | 7 | green | 1.0 |
+| 108 | ugc-water-monthlyflow | ugc/test_water_monthly_flow.py | 7 | green | 1.0 |
+| 109 | ugc-water-journalwin | ugc/test_water_journal_window.py | 7 | green | 2.1 |
+| 110 | ugc-water-journalcap | ugc/test_water_journal_limit.py | 7 | green | 2.0 |
+| 111 | ugc-water-celltotals | ugc/test_water_cell_totals.py | 7 | green | 1.7 |
+| 112 | member-expiring-dist | member/test_expiring_dist.py | 7 | green | 4.7 |
+| 113 | ledger-apidev-lineage | ledger/test_apidev_lineage.py | 7 | green | 1.7 |
+| 114 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
+| 115 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
+| 116 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
+|  | 合计 |  | 1079 | green 115 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

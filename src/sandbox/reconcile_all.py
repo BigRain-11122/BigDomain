@@ -276,6 +276,9 @@ SUITES = [
     # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12;
     # R1855 banner_queue window filter (AC-SB13..SB17) 12 -> 17
     ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 17),
+    # R1859 sec_batch banner_queue monthly-roll preservation example
+    # (AC-SBR1..AC-SBR7 pre-registered in state/queue/tech.md)
+    ("ugc-sec-batch-roll", os.path.join("ugc", "test_sec_batch_roll.py"), 7),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
     ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),

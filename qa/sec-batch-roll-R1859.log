@@ -1,0 +1,25 @@
+== R1859 sec_batch banner_queue monthly-roll suite (adoption closeout) ==
+-- run1 (rc=0) --
+PASS AC-SBR1: oct anchor: SQL record-time count==6; default full read == explicit 2026-10 window read (6 rows, byte-identical); snapshot S_oct locked; queue_counts=={'queued': 6}
+PASS AC-SBR2: roll landing: SQL record-time 2026-11 count==4; explicit 2026-11 window read = exactly the 4 new rows (zero overlap with S_oct); default full read = 10 rows (cross-month rows included)
+PASS AC-SBR3: old-month preservation: post-roll 2026-10 window read == S_oct byte-identical; 2026-11 window read has zero oct qids (two windows never leak into each other)
+PASS AC-SBR4: no-loss accounting: queue_counts {'queued': 6} -> {'queued': 10} (per-status delta == 4 == new rows; old rows keep their status); all 6 oct qids still queued; full-table COUNT 6 -> 10 constant growth, zero rows lost
+PASS AC-SBR5: window x cap x roll orthogonal: (2026-11, limit=1) envelope = exactly 6 keys (5 base + window additive); total==4 = windowed count (never the global 10); rows == windowed full read [-1:] row-identical; (2026-11, limit=4) full truncated=False; (2026-10, limit=1) old-month capped read unchanged (total==6) - window filter precedes COUNT and LIMIT
+PASS AC-SBR6: pure-read law: banner_queue / queue_counts / rows_by_status method sources carry zero write statements (inspect)
+PASS AC-SBR7: hygiene: suite source pure ASCII; true import lines carry zero network libraries; reconcile_all ugc-sec-batch-roll wired (criteria 7); world = temp dir only, sec_batch.py untouched (git status evidence face)
+SUITE PASS: 7/7
+
+-- run2 (rc=0) --
+PASS AC-SBR1: oct anchor: SQL record-time count==6; default full read == explicit 2026-10 window read (6 rows, byte-identical); snapshot S_oct locked; queue_counts=={'queued': 6}
+PASS AC-SBR2: roll landing: SQL record-time 2026-11 count==4; explicit 2026-11 window read = exactly the 4 new rows (zero overlap with S_oct); default full read = 10 rows (cross-month rows included)
+PASS AC-SBR3: old-month preservation: post-roll 2026-10 window read == S_oct byte-identical; 2026-11 window read has zero oct qids (two windows never leak into each other)
+PASS AC-SBR4: no-loss accounting: queue_counts {'queued': 6} -> {'queued': 10} (per-status delta == 4 == new rows; old rows keep their status); all 6 oct qids still queued; full-table COUNT 6 -> 10 constant growth, zero rows lost
+PASS AC-SBR5: window x cap x roll orthogonal: (2026-11, limit=1) envelope = exactly 6 keys (5 base + window additive); total==4 = windowed count (never the global 10); rows == windowed full read [-1:] row-identical; (2026-11, limit=4) full truncated=False; (2026-10, limit=1) old-month capped read unchanged (total==6) - window filter precedes COUNT and LIMIT
+PASS AC-SBR6: pure-read law: banner_queue / queue_counts / rows_by_status method sources carry zero write statements (inspect)
+PASS AC-SBR7: hygiene: suite source pure ASCII; true import lines carry zero network libraries; reconcile_all ugc-sec-batch-roll wired (criteria 7); world = temp dir only, sec_batch.py untouched (git status evidence face)
+SUITE PASS: 7/7
+
+-- verdict --
+double-run byte-identical=True
+stdout sha256=10810d458c6d59512a3150709d2489e04d76b9b4cf4738bd1729a99c4681f925 bytes=1513
+exit codes: run1=0 run2=0
