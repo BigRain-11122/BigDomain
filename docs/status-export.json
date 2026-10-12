@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-12T16:03:26+08:00",
+ "export_ts": "2026-10-12T16:56:53+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "本轮产出：member 降级横幅队列月窗过滤参数窗套件+D-20261012-03 值守轮拍板三件兑现（回执+任务板补货+HQ 续鲜）——全量回归 122 套件 1126 判据全绿",
-  "latest_artifact": "qa/reconcile-all-R1866.log + src/sandbox/member/test_banner_queue_window.py（2026-10-12 R1866）",
-  "next_milestone": "P2 交付线续跑（tech 队头=eventtickets 月轴 telescoping 例窗+apidev key_view 显式历史窗两真活行已入 tasks.md）+提案轨窗 10-06~10-13 配额核档·下窗 ≤48h"
+  "current": "本轮交付=eventtickets 月轴 telescoping 例窗（前窗中断验真收口·零重跑采信）：ledger eventtickets 板月窗读面族补全推进——套件判据六连过·RUNNER 123 套件 1132 判据全绿",
+  "latest_artifact": "qa/eventtickets-telescope-R1867.log + src/sandbox/ledger/test_eventtickets_telescope.py（2026-10-12 R1867）",
+  "next_milestone": "P2 队头轮转：freetrial conversion_funnel_board 月滚保真例窗（R1867 补种行·窗 ≤48h）+fold R499 水位整编承传下轮+提案轨窗 10-06..10-13 周配额 BD-PROP-005 待产"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "2",
+   "2026-10-12 R1867 eventtickets 月轴 telescoping 例窗交付（前窗 16:36 中断验真收口=R1730/R1675 先例·死窗产物零改动采信）：AC-ETT1..ETT6 全过 SUITE 6/6——三键律 telescoping 六等式+no_show 快照不 telescoping+SQL 第三径交叉；SUITES 122→123 判据 1126→1132·RUNNER 123/123 全绿 195.5s·census DRIFT-CLEAN·矩阵再生 --check 同一；fold R499 承传下轮"
+  ],
   [
    "2",
    "2026-10-12 R1866 member banner_queue 月窗过滤参数窗套件（P2 tech 队头 FIFO〔R1861 补种〕·轮计分 2=可跑实物）：AC-MB8..MB14 判据预注册先于代码（tech.md R1866 认领注记）——test_banner_queue_window.py（R1861 banner_board_roll 同构姊妹件·独立 face+独立 temp db+真产品径显式 ts 零 fixture）：缺省保真三同一+镜像 SQL 过滤逐位等+14 坏窗 fail-closed+零行窗诚实空+跨月快照逐字节保全+telescoping 分区+board 互证（len(queue(W))==board(window=W)['total'] 逐窗）+纯读律——SUITE 7/7×2 sha16 58075943D79BFD84+RUNNER 122/122 183.2s（SUITES 121→122 判据 1119→1126）+census DRIFT-CLEAN+矩阵 --check 同一=qa/reconcile-all-R1866.log；D-20261012-03 拍板三件兑现（①D-20261011-03 当窗回执 ②tasks.md +3 真活行补货 ③HQ-FEEDBACK 10-11/12 续鲜）·GORD 300→306 知悉·tech -1+1=10；R1865 中断收口同窗完成（commit 9c9f489a）"
@@ -647,7 +651,7 @@
   ],
   "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
   [
-   "1866",
+   "1867",
    "OSLoop 执行 tick"
   ],
   [
@@ -3586,10 +3590,10 @@
  "self_drive": {
   "window": "2026-10-06..2026-10-12",
   "window_days": 7,
-  "log_lines_in_window": 15,
+  "log_lines_in_window": 17,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 4,
+  "substantive_non_idle_mention_lines": 5,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

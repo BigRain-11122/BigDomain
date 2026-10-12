@@ -657,6 +657,17 @@ SUITES = [
     # (AC-ETR1..ETR7 pre-registered in state/queue/tech.md).
     ("ledger-eventtickets-roll",
      os.path.join("ledger", "test_eventtickets_roll.py"), 7),
+    # R1867 month-axis telescoping example: sold/admitted/
+    # revenue are additive flow faces (october + november ==
+    # full-window, the row-set partition law via the SQL
+    # mirror); no_show is the end-of-window snapshot and never
+    # telescopes (the R1862 world anchor - cross-month pairing);
+    # admission_rate is a window-local ratio (0.5 + 1.0 !=
+    # 0.75); zero-activity month windows keep the registry-
+    # driven dense rows with honest zeros
+    # (AC-ETT1..ETT6 pre-registered in state/queue/tech.md).
+    ("ledger-eventtickets-telescope",
+     os.path.join("ledger", "test_eventtickets_telescope.py"), 6),
     # R1768 developer free-trial tier face: the zero-fee trial
     # window (lifetime cap, the apidev quota-ring variant -
     # immutable call rows, COUNT face, zero mutation) + the

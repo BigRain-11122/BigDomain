@@ -1,0 +1,28 @@
+=== R1867 eventtickets month-axis telescoping suite evidence (AC-ETT1..ETT6 pre-registered in tech.md claim line by the 16:27 dead window, before execution; closeout per R1730/R1675/R1864 interrupted-window precedent - dead-window artifacts adopted with zero code change, RUNNER evidence reused, not re-burned) ===
+--- run 1 verbatim (dead window 16:30, normalized EOL) ---
+PASS AC-ETT1: additive flow faces telescope: sold/admitted/revenue october+november == full-window value for both sessions (et-tel-a sold 2+2==4; et-tel-a admitted 1+2==3; et-tel-a revenue 60+60==120; et-tel-b sold 1+0==1; et-tel-b admitted 0+0==0; et-tel-b revenue 25+0==25); every immutable row lands in exactly one month cell because each row family filters on its own record-time stamp (substr month equality), the row-set partition law pinned by the SQL mirror in AC-ETT5
+PASS AC-ETT2: no_show does NOT telescope (snapshot semantics, honest note): session a windowed sum 2 != full 1 (the R1862 world anchor - bob checks in november against an october purchase, so the november snapshot re-counts the pair); every windowed no_show == the cumulative mirror SQL (purchases<=W minus check-ins<=W: oct 2-1==1, nov 4-3==1) while the full-window no_show is the plain sold-admitted difference (4-3==1) - snapshot vs incremental semantics, the in-window net flow never masquerades under the no_show field (AC-EAW4)
+PASS AC-ETT3: admission_rate is a window-local ratio, never an additive face: a oct 0.5 + nov 1.0 != full 0.75 - windowed rates telescope nowhere; each windowed rate == round(windowed admitted / windowed sold, 4) recomputed from its own window cells (0.5 / 1.0 / 0.75 all pinned); zero-sold guard stays honest (b november sold==0 -> rate==0.0, no division)
+PASS AC-ETT4: zero-activity month window 2026-09: the registry-driven dense board keeps both session rows with honest zeros (sold==0 revenue==0 rate==0.0, no_show snapshot of an empty past == 0) - rows stay carried, no phantom, no omission; in-world zero-activity cell also pinned: b november row sold==0 revenue==0 rate==0.0 present (rate==0.0 zero-sold guard)
+PASS AC-ETT5: SQL third path (independent ro connection semantics on the same db): per session per month per key, the windowed board values == direct COUNT/SUM mirror (et-tel-a purchases 2+2==4 checkins 1+2==3 revenue 60+60==120; et-tel-b purchases 1+0==1 checkins 0+0==0 revenue 25+0==25); the row-set partition law holds per family: observed-month counts sum == the all-window count (every immutable row lands in exactly one month cell - the structural basis of the AC-ETT1 telescoping); whole-world counters 5 purchases + 3 check-ins constant
+PASS AC-ETT6: event_audit_board read-face source inspect: zero write statements (none); eventtickets.py + config.json zero bytes changed (sha256 pre==post); suite source pure ASCII (True); true import statement lines carry zero network libs (none); frozen clock restored in finally (identity probe + restored value != frozen stamps); temp world outside the repo and cleaned (True, True)
+SUITE PASS (6/6)
+--- run 2 determinism (dead window 16:30) ---
+run2 raw bytes == run1 raw bytes: True
+run2 sha256(normalized)=49383da3caf7cbe6754b5fb9a808d7dfa526911a087e4491c86683abc1c4ac36
+--- run 3 live continuation verification (this window) ---
+run3 rc=0 stdout normalized == run1: True
+--- registration ---
+reconcile_all SUITES row: ledger-eventtickets-telescope criteria=6 (registered by the dead window before the 16:35 RUNNER pass)
+--- census qa-writer-census --check (pre-evidence face) ---
+census exit=0
+verdict: DRIFT-CLEAN
+--- matrix regen + check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (12387 bytes) - registry suites=123 criteria=1132 evidence=qa/reconcile-all-R1867.log green=123/123
+matrix check#1: rc=0 PASS (byte-identical, 12387 bytes, 123 suites, 1132 criteria)
+matrix check#2: rc=0 PASS (byte-identical)
+--- RUNNER tail (full regression evidence from the dead window 16:35, reused not re-burned) ---
+PASS suite ledger-eventtickets-telescope exit=0 pass-lines=6 fail-lines=0 criteria=6 0.2s
+PASS suites 123/123 green, expected criteria total=1132
+RUNNER PASS (123/123 suites green, reconcile controls 7/7, 195.5s)
+
