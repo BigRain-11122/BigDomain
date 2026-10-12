@@ -362,6 +362,21 @@ SUITES = [
     # (AC-PN37..PN43 pre-registered in state/queue/tech.md).
     ("pay-authorize-persist",
      os.path.join("pay", "test_authorize_persist.py"), 7),
+    # R1886 authorize idempotency-cache restart semantics example
+    # (R1885 reseed): the authorize.py header boundary note
+    # ("restart survival is out of sandbox scope - a post-restart
+    # replay re-grants one fresh once unit at most, longterm stays
+    # gate-idempotent") pinned live: in-TTL replay absorption with
+    # the original grant_id preserved, cache keyed on request_id
+    # only, honest FIFO cap eviction, TTL-expired replay re-grants
+    # one fresh unit (re-accept is legitimate W15 semantics),
+    # cross-restart once replay grants exactly one unit,
+    # cross-restart longterm replay stays gate-idempotent
+    # (already_longterm, zero new rows), second-restart boundary
+    # stability + per-avatar grant-row closure
+    # (AC-PN44..PN50 pre-registered in state/queue/tech.md).
+    ("pay-authorize-idem",
+     os.path.join("pay", "test_authorize_idem.py"), 7),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face

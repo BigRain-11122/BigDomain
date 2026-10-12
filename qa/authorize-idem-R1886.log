@@ -1,0 +1,36 @@
+=== authorize-idem R1886 evidence (5 sections) ===
+--- section 1: suite run #1 (rc=0) ---
+PASS AC-PN44: r1=granted replay=already_granted gid_preserved=True keys_ok=True budget={'once': 1, 'longterm': 0, 'consumed': 0} live_budget={'once': 1, 'longterm': 0, 'consumed': 0} rows=1->1
+PASS AC-PN45: keying: r2=granted none=granted,granted budget={'once': 4, 'longterm': 0, 'consumed': 0} rows=4 | cap: c1=granted c2=granted c3=granted evicted_replay=granted(new_gid=True) survivor=already_granted(same_gid=True) budget={'once': 4, 'longterm': 0, 'consumed': 0} rows=4
+PASS AC-PN46: lt_anchor=granted,already_granted(rows=1) | ttl: first=granted pre_expiry=already_granted post_expiry=granted(new_gid=True) budget={'once': 2, 'longterm': 0, 'consumed': 0} rows=2
+PASS AC-PN47: replay=granted new_gid=True rows=11->12 av_once=4->5 budget={'once': 5, 'longterm': 0, 'consumed': 0}
+PASS AC-PN48: replay=already_longterm gid_none=True keys_ok=True budget={'once': 0, 'longterm': 1, 'consumed': 0} rows=1 total=12->12
+PASS AC-PN49: replay2=granted rows=12->13 absorb_back=already_granted(same_gid=True) lt_still=already_longterm closure: once=6/6 lt=1/1 cap=4/4 exp=2/2 total=13/13 remaining=6 revoked=False log_rows=0
+PASS AC-PN50: cfg_stable=True notify_stable=True az_stable=True world_outside=True ascii=True
+SUITE PASS: 7/7 pass-lines
+
+--- section 2: suite run #2 byte-identity (rc=0) ---
+double_run_byte_identical=True rc1=0 rc2=0
+
+--- section 3: full regression runner ---
+runner_rc=0
+RUNNER PASS (134/134 suites green, reconcile controls 7/7, 162.2s)
+
+--- section 4: suite matrix regen + --check x2 ---
+regen_rc=0
+PASS generated docs/sandbox-suite-matrix.md (13353 bytes) - registry suites=134 criteria=1230 evidence=qa/reconcile-all-R1886.log green=134/134
+PASS hygiene: pure-ascii source, zero network imports
+check1_rc=0 check2_rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13353 bytes, 134 suites, 1230 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (13353 bytes, 134 suites, 1230 criteria)
+
+--- section 5: writer-census --check ---
+census_rc=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1256 tee=754 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
