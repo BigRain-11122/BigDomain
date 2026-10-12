@@ -636,6 +636,19 @@ SUITES = [
     # (AC-ETL1..ETL7 pre-registered in state/queue/tech.md).
     ("ledger-eventtickets-boardlimit",
      os.path.join("ledger", "test_eventtickets_boardlimit.py"), 7),
+    # R1862 event-ticket audit-board cross-month month-roll
+    # fidelity example: frozen explicit-stamp true product path
+    # across the Oct->Nov boundary - new-month record-time
+    # landing (each row family on its own provenance stamp),
+    # old-month byte preservation, immutable-row no-loss with
+    # ID-set superset, default all-window read including the
+    # cross-month rows (the all-window default - honest note:
+    # unlike the current-month-default family), windowed
+    # no_show end-of-window snapshot vs the non-surfaced
+    # in-window net flow, window-x-cap-x-roll orthogonality
+    # (AC-ETR1..ETR7 pre-registered in state/queue/tech.md).
+    ("ledger-eventtickets-roll",
+     os.path.join("ledger", "test_eventtickets_roll.py"), 7),
     # R1768 developer free-trial tier face: the zero-fee trial
     # window (lifetime cap, the apidev quota-ring variant -
     # immutable call rows, COUNT face, zero mutation) + the

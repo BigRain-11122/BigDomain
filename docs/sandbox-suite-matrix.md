@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-12 12:51 +08:00
+- 生成时间: generated: 2026-10-12 13:10 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1858-2.log
 - 状态证据: reconcile-all-R1858-2.log (RUNNER PASS 115/115 suites green, reconcile controls 7/7, 588.9s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 117 | 1091 | 115/115 | R1858 |
+| 118 | 1098 | 115/115 | R1858 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -124,37 +124,38 @@
 | 85 | ledger-eventtickets | ledger/test_eventtickets.py | 14 | green | 2.1 |
 | 86 | ledger-eventtickets-boardwin | ledger/test_eventtickets_boardwin.py | 7 | green | 1.6 |
 | 87 | ledger-eventtickets-boardlimit | ledger/test_eventtickets_boardlimit.py | 7 | green | 2.7 |
-| 88 | ledger-freetrial | ledger/test_freetrial.py | 7 | green | 2.0 |
-| 89 | ledger-freetrial-funnel | ledger/test_freetrial_funnel.py | 7 | green | 1.9 |
-| 90 | ledger-freetrial-funnelwin | ledger/test_freetrial_funnelwin.py | 7 | green | 1.5 |
-| 91 | ledger-freetrial-callmonth | ledger/test_freetrial_callmonth.py | 7 | green | 1.8 |
-| 92 | ledger-freetrial-callkind | ledger/test_freetrial_callkind.py | 8 | green | 1.6 |
-| 93 | ledger-freetrial-callplan | ledger/test_freetrial_callplan.py | 8 | green | 2.0 |
-| 94 | ledger-freetrial-callengine | ledger/test_freetrial_callengine.py | 8 | green | 1.6 |
-| 95 | ledger-freetrial-callaccount | ledger/test_freetrial_callaccount.py | 8 | green | 1.5 |
-| 96 | ledger-freetrial-capusage | ledger/test_freetrial_capusage.py | 8 | green | 1.8 |
-| 97 | ledger-freetrial-caplimit | ledger/test_freetrial_caplimit.py | 7 | green | 1.8 |
-| 98 | ledger-freetrial-caproll | ledger/test_freetrial_caproll.py | 7 | green | 2.1 |
-| 99 | ledger-freetrial-callroll | ledger/test_freetrial_callroll.py | 7 | green | 3.7 |
-| 100 | ugc-pool-water | ugc/test_pool_water.py | 7 | green | 4.9 |
-| 101 | ugc-pool-delta | ugc/test_pool_delta.py | 7 | green | 3.6 |
-| 102 | ugc-ingest-waterwire | ugc/test_ingest_waterwire.py | 6 | green | 1.7 |
-| 103 | ugc-batch-water | ugc/test_batch_waterwire.py | 6 | green | 2.1 |
-| 104 | ugc-drain-water | ugc/test_drain_waterwire.py | 6 | green | 2.8 |
-| 105 | ugc-submit-water | ugc/test_submit_waterwire.py | 7 | green | 3.4 |
-| 106 | ugc-verdict-water | ugc/test_verdict_waterwire.py | 7 | green | 4.6 |
-| 107 | ugc-water-journal | ugc/test_water_journal.py | 7 | green | 3.3 |
-| 108 | ugc-water-kindtally | ugc/test_water_kind_tally.py | 7 | green | 1.0 |
-| 109 | ugc-water-monthlyflow | ugc/test_water_monthly_flow.py | 7 | green | 1.0 |
-| 110 | ugc-water-journalwin | ugc/test_water_journal_window.py | 7 | green | 2.1 |
-| 111 | ugc-water-journalcap | ugc/test_water_journal_limit.py | 7 | green | 2.0 |
-| 112 | ugc-water-celltotals | ugc/test_water_cell_totals.py | 7 | green | 1.7 |
-| 113 | member-expiring-dist | member/test_expiring_dist.py | 7 | green | 4.7 |
-| 114 | ledger-apidev-lineage | ledger/test_apidev_lineage.py | 7 | green | 1.7 |
-| 115 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
-| 116 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
-| 117 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
-|  | 合计 |  | 1091 | green 115 / FAIL 0 / no-evidence 2 |  |
+| 88 | ledger-eventtickets-roll | ledger/test_eventtickets_roll.py | 7 | no-evidence | - |
+| 89 | ledger-freetrial | ledger/test_freetrial.py | 7 | green | 2.0 |
+| 90 | ledger-freetrial-funnel | ledger/test_freetrial_funnel.py | 7 | green | 1.9 |
+| 91 | ledger-freetrial-funnelwin | ledger/test_freetrial_funnelwin.py | 7 | green | 1.5 |
+| 92 | ledger-freetrial-callmonth | ledger/test_freetrial_callmonth.py | 7 | green | 1.8 |
+| 93 | ledger-freetrial-callkind | ledger/test_freetrial_callkind.py | 8 | green | 1.6 |
+| 94 | ledger-freetrial-callplan | ledger/test_freetrial_callplan.py | 8 | green | 2.0 |
+| 95 | ledger-freetrial-callengine | ledger/test_freetrial_callengine.py | 8 | green | 1.6 |
+| 96 | ledger-freetrial-callaccount | ledger/test_freetrial_callaccount.py | 8 | green | 1.5 |
+| 97 | ledger-freetrial-capusage | ledger/test_freetrial_capusage.py | 8 | green | 1.8 |
+| 98 | ledger-freetrial-caplimit | ledger/test_freetrial_caplimit.py | 7 | green | 1.8 |
+| 99 | ledger-freetrial-caproll | ledger/test_freetrial_caproll.py | 7 | green | 2.1 |
+| 100 | ledger-freetrial-callroll | ledger/test_freetrial_callroll.py | 7 | green | 3.7 |
+| 101 | ugc-pool-water | ugc/test_pool_water.py | 7 | green | 4.9 |
+| 102 | ugc-pool-delta | ugc/test_pool_delta.py | 7 | green | 3.6 |
+| 103 | ugc-ingest-waterwire | ugc/test_ingest_waterwire.py | 6 | green | 1.7 |
+| 104 | ugc-batch-water | ugc/test_batch_waterwire.py | 6 | green | 2.1 |
+| 105 | ugc-drain-water | ugc/test_drain_waterwire.py | 6 | green | 2.8 |
+| 106 | ugc-submit-water | ugc/test_submit_waterwire.py | 7 | green | 3.4 |
+| 107 | ugc-verdict-water | ugc/test_verdict_waterwire.py | 7 | green | 4.6 |
+| 108 | ugc-water-journal | ugc/test_water_journal.py | 7 | green | 3.3 |
+| 109 | ugc-water-kindtally | ugc/test_water_kind_tally.py | 7 | green | 1.0 |
+| 110 | ugc-water-monthlyflow | ugc/test_water_monthly_flow.py | 7 | green | 1.0 |
+| 111 | ugc-water-journalwin | ugc/test_water_journal_window.py | 7 | green | 2.1 |
+| 112 | ugc-water-journalcap | ugc/test_water_journal_limit.py | 7 | green | 2.0 |
+| 113 | ugc-water-celltotals | ugc/test_water_cell_totals.py | 7 | green | 1.7 |
+| 114 | member-expiring-dist | member/test_expiring_dist.py | 7 | green | 4.7 |
+| 115 | ledger-apidev-lineage | ledger/test_apidev_lineage.py | 7 | green | 1.7 |
+| 116 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
+| 117 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
+| 118 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
+|  | 合计 |  | 1098 | green 115 / FAIL 0 / no-evidence 3 |  |
 
 ## 证据出处
 

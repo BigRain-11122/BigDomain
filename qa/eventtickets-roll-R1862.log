@@ -1,0 +1,41 @@
+# eventtickets-roll evidence (R1862)
+# driver: double-run byte-identity + adjacent smokes + registry counts + matrix regen
+# writer: python driver, LF-normalized (tee dialect)
+
+--- RUN 1 (exit=0) ---
+PASS AC-ETR1: frozen clock patched (T._now_utc=2026-10-15T10:00:00Z -> 2026-11-07T10:00:00Z after +23d); oct phase 2 sessions + 3 purchases + 1 check-in via true gates (zero fixture injection); nov phase 2 purchases + 2 check-ins via true gates; all stamps ride the frozen clock (purchased_utc/checked_utc pre=2026-10-15T10:00:00Z new=2026-11-07T10:00:00Z); post-roll counts purchases 3->5 checkins 1->3
+PASS AC-ETR2: explicit 2026-11 board: a sold==2 admitted==2 revenue==60 (both new purchases + both new check-ins land in the new-month cell); b sold==0 admitted==0 revenue==0 rate==0.0 (zero-activity honest zeros); SQL third path: nov purchases==2 nov checkins==2 a-nov-sold==2 (record-time attribution, each row family on its own stamp); windowed no_show = end-of-window snapshot (a: 4-3==1, b: 1-0==1); in-window net flow 0 deliberately NOT surfaced under the no_show field (AC-EAW4)
+PASS AC-ETR3: post-roll explicit 2026-10 board == pre-roll october snapshot byte-identical (full envelope json.dumps compare); a sold==2 admitted==1 rate==0.5, b sold==1; november rows never leak into the october window (zero-valued nov b-row + byte compare = two-window mutual non-penetration); october no_show snapshot stays frozen under the november check-ins (checked_utc 2026-11 > 2026-10, string-ordered, never back-flows)
+PASS AC-ETR4: default window=None board after the roll: a sold==4 admitted==3 revenue==120, b sold==1 revenue==25 - the cross-month rows all appear in the default read; default envelope carries no window key (AC-EAW1 byte-stability law); honest note: the eventtickets default is the ALL-window semantics, unlike the current-month-default family (apidev dev_board / freetrial calls_by_* whose default reads the clock's current month)
+PASS AC-ETR5: three-table all-window counts across the roll: sessions 2==2 constant, purchases 3->5 (delta exactly the 2 new rows), checkins 1->3 (delta exactly the 2 new rows); every pre-roll purchase_id/checkin_id still present (session_board/attendees product faces, ID-set superset, 2 new purchase ids + 2 new checkin ids); session_view COUNT faces see all rows (a ticket_count 2->4, attendee_count 1->3; b ticket_count 1) - zero rows lost, zero cached counters
+PASS AC-ETR6: board(2026-11,1): total==2 (in-window full count - the windowed board lists every session row, never the post-truncation 1), returned==1, truncated==True, returned row == full windowed board tail-1 (et-roll-b) byte-equal; board(2026-11,5): returned==2, truncated==False, rows == full windowed board; board(2026-10,1) old-month combo: total==2, returned row == october windowed board tail (b sold==1) - window filtering runs before the cap across the roll (R1840 orthogonality law); malformed window 2026-13 refuses E_ET_BAD_ARGS fail-closed with zero side effects (post-bad windowed read byte-identical)
+PASS AC-ETR7: event_audit_board read-face source inspect: zero write statements (none); eventtickets.py + config.json zero bytes changed (sha256 pre==post); suite source pure ASCII (True); true import statement lines carry zero network libs (none); frozen clock restored in finally (identity probe + restored value != frozen stamps); temp world outside the repo and cleaned (True, True)
+SUITE PASS (7/7)
+
+--- RUN 2 (exit=0) ---
+PASS AC-ETR1: frozen clock patched (T._now_utc=2026-10-15T10:00:00Z -> 2026-11-07T10:00:00Z after +23d); oct phase 2 sessions + 3 purchases + 1 check-in via true gates (zero fixture injection); nov phase 2 purchases + 2 check-ins via true gates; all stamps ride the frozen clock (purchased_utc/checked_utc pre=2026-10-15T10:00:00Z new=2026-11-07T10:00:00Z); post-roll counts purchases 3->5 checkins 1->3
+PASS AC-ETR2: explicit 2026-11 board: a sold==2 admitted==2 revenue==60 (both new purchases + both new check-ins land in the new-month cell); b sold==0 admitted==0 revenue==0 rate==0.0 (zero-activity honest zeros); SQL third path: nov purchases==2 nov checkins==2 a-nov-sold==2 (record-time attribution, each row family on its own stamp); windowed no_show = end-of-window snapshot (a: 4-3==1, b: 1-0==1); in-window net flow 0 deliberately NOT surfaced under the no_show field (AC-EAW4)
+PASS AC-ETR3: post-roll explicit 2026-10 board == pre-roll october snapshot byte-identical (full envelope json.dumps compare); a sold==2 admitted==1 rate==0.5, b sold==1; november rows never leak into the october window (zero-valued nov b-row + byte compare = two-window mutual non-penetration); october no_show snapshot stays frozen under the november check-ins (checked_utc 2026-11 > 2026-10, string-ordered, never back-flows)
+PASS AC-ETR4: default window=None board after the roll: a sold==4 admitted==3 revenue==120, b sold==1 revenue==25 - the cross-month rows all appear in the default read; default envelope carries no window key (AC-EAW1 byte-stability law); honest note: the eventtickets default is the ALL-window semantics, unlike the current-month-default family (apidev dev_board / freetrial calls_by_* whose default reads the clock's current month)
+PASS AC-ETR5: three-table all-window counts across the roll: sessions 2==2 constant, purchases 3->5 (delta exactly the 2 new rows), checkins 1->3 (delta exactly the 2 new rows); every pre-roll purchase_id/checkin_id still present (session_board/attendees product faces, ID-set superset, 2 new purchase ids + 2 new checkin ids); session_view COUNT faces see all rows (a ticket_count 2->4, attendee_count 1->3; b ticket_count 1) - zero rows lost, zero cached counters
+PASS AC-ETR6: board(2026-11,1): total==2 (in-window full count - the windowed board lists every session row, never the post-truncation 1), returned==1, truncated==True, returned row == full windowed board tail-1 (et-roll-b) byte-equal; board(2026-11,5): returned==2, truncated==False, rows == full windowed board; board(2026-10,1) old-month combo: total==2, returned row == october windowed board tail (b sold==1) - window filtering runs before the cap across the roll (R1840 orthogonality law); malformed window 2026-13 refuses E_ET_BAD_ARGS fail-closed with zero side effects (post-bad windowed read byte-identical)
+PASS AC-ETR7: event_audit_board read-face source inspect: zero write statements (none); eventtickets.py + config.json zero bytes changed (sha256 pre==post); suite source pure ASCII (True); true import statement lines carry zero network libs (none); frozen clock restored in finally (identity probe + restored value != frozen stamps); temp world outside the repo and cleaned (True, True)
+SUITE PASS (7/7)
+DOUBLE-RUN VERDICT: byte-identical=true sha256=afb554cfa472e17857b2fc4afd79ef6661f300b44974f5930aa9adff8a6b51bc exits=0/0
+
+--- adjacent smoke: ledger-eventtickets (exit=0) ---
+SUITE PASS 14/14
+--- adjacent smoke: ledger-eventtickets-boardwin (exit=0) ---
+SUITE PASS 7/7
+--- adjacent smoke: ledger-eventtickets-boardlimit (exit=0) ---
+SUITE PASS 7/7
+
+--- registry ---
+SUITES=118 criteria_total=1098 new=ledger-eventtickets-roll criteria=7
+
+--- matrix regen (exit=0) ---
+PASS generated docs/sandbox-suite-matrix.md (11955 bytes) - registry suites=118 criteria=1098 evidence=qa/reconcile-all-R1858-2.log green=115/118
+PASS hygiene: pure-ascii source, zero network imports
+--- matrix --check (exit=0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (11955 bytes, 118 suites, 1098 criteria)
+
