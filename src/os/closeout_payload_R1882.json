@@ -1,0 +1,21 @@
+{
+  "tech_verify": {
+    "claim_prefix": "- [x] lobby room_message_board/idea_pool_board 读帽参数窗",
+    "done_marker": "done 2026-10-12 R1882",
+    "criteria_refs": ["AC-S26..S31", "R1874"],
+    "open_expected": 10,
+    "reseed_prefix": "- [ ] lobby 两板帽窗读跨重启持久化例窗"
+  },
+  "log_lines": [
+    "2026-10-12 R1882 lobby 两板读帽参数窗交付轮（R1881 收账勘定 P2 FIFO 队头〔R1874 次老种子〕·轮计分 2=可跑实物·孤儿救援注记：交付会话崩溃于 closeout 前〔产品+板面文件 23:35..23:48 全落而 state/commit 未跑〕·后继启动器会话 23:54 起取证〔codely/py/pwsh 三探针零他窗存活+启动器锁已换班 82780+无 index.lock=非活跃写盘者〕后验证产物全绿〔qa 双证据件在盘〕救援上链 d581123f 已推）：五静全绿（LEDGER @BigDomain 零行+DEC 294/row_owner 120 内容寻址零新 token+GORD 332 持平零新行〔尾三行全 @BigStream 云端波面=零本司执行面〕+ORD 持平+BENCH 当日+QA/HB/EXPORT PASS）——AC-S26..S31 判据预注册先于代码〔tech.md R1882 认领行·五裁定：①limit 尾参缀 window 后既有调用者零触碰 ②E_LS_BAD_LIMIT 新造 ValueError 载码〔R1869 E_LS_BAD_WINDOW 同族〕③门序=disclaimer 最外→limit→window〔双坏 limit 码胜出〕④溢出块恰四键·显式窗帽读恰六键零 window 回声 ⑤镜像 SQL zone DESC LIMIT N 反转确定性零 rowid tiebreak〕→store.py 两板 limit=0 尾参+_board_readcap_gate 共享门+套件 test_client.py board_readcap_cases 六判据——lobby 套件 28→34 全绿 23.2s〔AC-S14..S25 活体回归锚零回归〕+新段双跑逐字节同一+RUNNER PASS 130/130 controls 7/7 197.5s=qa/reconcile-all-R1882.log〔判据 1196→1202〕+矩阵再生 130/1202 green --check byte-identical 双跑+卫生〔shipped config 零字节·store.py 全 ASCII·指纹面零触碰〕=qa/lobby-boardcap-R1882.log 五节·tech 消耗 1+补种 1〔lobby 两板帽窗读跨重启持久化例窗=R1882 补种〕·tasks 真活行 3 翻 done〔R1882 完成注记在板〕",
+    "2026-10-12 R1882 tokens: local=unmeasured api=0 api_reason=纯本地进程件（孤儿救援取证+定向 commit+closeout byte surgery+export recompute 全本地跑·零外部 API 触点·三问门未涉及）"
+  ],
+  "hb_body": "R1882 lobby boards read-cap window delivered + orphan-rescued (crash pre-closeout, zero live writer forensics, product verified green before rescue commit d581123f): two-board limit=0 tail param + shared gate, E_LS_BAD_LIMIT fail-closed, 4-key overflow, window-before-cap, tail==mirror SQL; suite 28->34, RUNNER 130/130 criteria 1196->1202, matrix --check identical; tech -1 +1 reseed",
+  "export": {
+    "ceo_current": "本轮产出：R1882 lobby 两板读帽参数窗交付+孤儿救援上链（交付会话崩溃于 closeout 前·后继会话取证零活跃写盘者+验证产物全绿后定向救援 commit d581123f 已推）——room_message_board/idea_pool_board limit 尾参+四键溢出块+镜像 SQL 三径交叉+RUNNER 130/130 判据 1202 全绿",
+    "ceo_artifact": "src/sandbox/lobby/test_client.py board_readcap_cases 段（读帽六判据·lobby 套件 28→34·R1882 产/孤儿救援上链 d581123f）2026-10-12·证据 qa/lobby-boardcap-R1882.log",
+    "ceo_milestone": "P2 FIFO 队头接续：pay notify banner_queue 月滚保真例窗（R1878 种子·tasks.md 真活行 4）下轮交付·窗口 ≤48h（2026-10-14 前）；lobby 两板帽窗读跨重启持久化例窗（R1882 补种）在池",
+    "self_drive_method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)",
+    "result_row": ["2", "R1882 lobby 两板读帽参数窗交付轮（轮计分 2=可跑实物·孤儿救援上链 d581123f：交付会话崩溃于 closeout 前〔产品+板面五文件全落而 state/commit 未跑〕·后继会话取证零活跃写盘者+验证产物全绿后救援）：store.py room_message_board/idea_pool_board limit=0 尾参+四键溢出块+E_LS_BAD_LIMIT fail-closed 五坏形态+镜像 SQL 三径交叉+窗×帽正交·lobby 套件 28→34 全绿 23.2s+双跑逐字节同一+RUNNER PASS 130/130 判据 1196→1202+矩阵再生 --check byte-identical·五静全绿（DEC/GORD 零新）·tech 消耗 1+补种 1·tasks 真活行 3 翻 done"]
+  }
+}
