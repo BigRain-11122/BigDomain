@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-12T19:23:56+08:00",
+ "export_ts": "2026-10-12T19:51:04+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "本轮交付=R1871 pay notify banner_queue 读帽参数窗（limit 尾参+E_PN_BAD_LIMIT 独立码+五键溢出信封）——SUITE 8/8 首跑全绿+RUNNER 125 套件 1150 判据全绿+census DRIFT-CLEAN+矩阵 --check 同一",
-  "latest_artifact": "qa/pay-notify-bannerlimit-R1871.log + src/sandbox/pay/notify.py（banner_queue limit 读帽）（2026-10-12 R1871）",
-  "next_milestone": "P2 队头轮转：member banner_queue 读帽参数窗（R1866 补种行·窗 ≤48h）+freetrial funnel 月滚/apidev lifecycle_trace 窗参/lobby 两板月滚四行在队"
+  "current": "R1872 member banner_queue 读帽参数窗交付（limit 尾参+E_REM_BAD_LIMIT 在册复用+五键信封+窗回显键）——SUITE 8/8 首跑全绿+RUNNER 126 套件 1158 判据全绿+census DRIFT-CLEAN+矩阵 --check 同一",
+  "latest_artifact": "qa/member-bannerqueuelimit-R1872.log + src/sandbox/member/reminder.py（banner_queue limit 读帽窗〔2026-10-12 R1872）",
+  "next_milestone": "P2 队头接续：freetrial conversion_funnel_board 月滚保真例窗（R1867 补种） ≤48h（窗口序：apidev lifecycle_trace 显式月窗/lobby 两板月滚/pay notify 月窗参数窗续列·member 帽面月滚例窗新入列）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "2",
+   "2026-10-12 R1872 member banner_queue 读帽参数窗交付轮（P2 tech 队头 FIFO〔R1866 补种〕·轮计分 2=可跑实物）：五静全绿〔LEDGER @BigDomain 零行+DEC 294/row_owner 120 内容寻址零新 token+GORD 307 持平+ORD 持平+BENCH 当日+QA 当日 png/log 齐+树净零锁〕·P1 面零可认领〔雷达 gated 10-14/对账当日已毕 qa/reconcile-daily-20261012 族在盘/BigLife R777 gated/bootstrap=CEO 物理件〕——AC-MB15..MB22 八断言判据预注册先于代码〔tech.md R1872 认领注记〕设计裁定三条：①信封 additive（R1850/R1855 sec_batch 直系+R1871 pay 镜像）=limit=0 缺省裸列表逐字节保真+limit>0 恰五键 {rows,limit,total,returned,truncated}+显式窗第六键 window 回显〔member 窗参已在册故随行·与 R1871 pay 五键独行差异=pay 窗参未立·如实注〕②坏参码 E_REM_BAD_LIMIT 在册复用（banner_board R1851 同码·pay 新造码差异=其家族无在册·如实注）·门序 limit 先于窗③rowid tiebreak capped 尾+窗帽正交（窗先于 COUNT 先于 LIMIT）——载体 reminder.py banner_queue(window,limit) 尾参扩〔positional window 兼容实锚〕+套件 test_banner_queue_limit.py——SUITE PASS 8/8 首跑全绿〔缺省保真/五坏 fail-closed/帽下全量/截断尾窗三径逐位等/边界态/同秒并列 rowid 锚〔nov 尾 AV-A,AV-J/oct 尾 AV-E,AV-F〕/窗帽正交〔oct limit=2 total==4 窗域非全局 7〕/纯读律+卫生〕+双跑 sha16 671DFA6B36E6BA44 逐字节同一+RUNNER PASS 126/126 controls 7/7 181.2s 零回归=qa/reconcile-all-R1872.log〔SUITES 125→126 判据 1150→1158〕+矩阵再生 126/1158 green --check byte-identical〔12652B〕+census DRIFT-CLEAN flags=0〔文件 1225·tee 724〕+指纹哨兵 CLEAN domains=5·证据 qa/member-bannerqueuelimit-R1872.log 六节·tech 消耗 1+补种 1=10〔member banner_queue 帽面月滚保真例窗=R1872 补种〕·state 水位 78726B 超 78500B 线 226B=fold R500 承传延后〔R1863/R1867 先例·下轮首测裁定〕"
+  ],
   [
    "2",
    "2026-10-12 R1871 pay notify banner_queue 读帽参数窗交付（P2 tech 队头 FIFO·R1865 补种）：AC-PN8..PN15 判据预注册先于代码——notify.py banner_queue(limit=0)〔缺省裸列表逐字节保真+五坏形态全拒 E_PN_BAD_LIMIT+limit>0 信封恰五键 {rows,limit,total,returned,truncated}+截断尾窗==镜像 SQL DESC/rowid DESC LIMIT N 反转+同秒并列序 rowid 锚定+纯读律〕——SUITE 8/8 首跑全绿·SUITES 124→125 判据 1142→1150·RUNNER PASS 125/125 controls 7/7 176.4s 零回归=qa/reconcile-all-R1871.log·矩阵再生 125/1150 --check byte-identical+census DRIFT-CLEAN flags=0+指纹哨兵 CLEAN domains=5·证据 qa/pay-notify-bannerlimit-R1871.log 五节·tech 消耗 1+补种 1=10〔banner_queue 月窗过滤参数窗〕"
@@ -663,7 +667,7 @@
   ],
   "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
   [
-   "1871",
+   "1872",
    "OSLoop 执行 tick"
   ],
   [
@@ -3602,10 +3606,10 @@
  "self_drive": {
   "window": "2026-10-06..2026-10-12",
   "window_days": 7,
-  "log_lines_in_window": 15,
+  "log_lines_in_window": 17,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 4,
+  "substantive_non_idle_mention_lines": 5,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

@@ -421,6 +421,11 @@ SUITES = [
     # + board-total interlock, pure-read + hygiene.
     ("member-banner-queue-window",
      os.path.join("member", "test_banner_queue_window.py"), 7),
+    # R1872 member banner_queue read-cap (AC-MB15..MB22
+    # pre-registered before code; tail limit param, additive
+    # five-key envelope + window echo key, E_REM_BAD_LIMIT reused).
+    ("member-banner-queue-limit",
+     os.path.join("member", "test_banner_queue_limit.py"), 8),
     ("watermark", os.path.join("watermark", "test_watermark.py"), 5),
     ("watermark-robust",
      os.path.join("watermark", "test_watermark_robust.py"), 6),

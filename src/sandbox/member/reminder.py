@@ -331,34 +331,73 @@ class ReminderFace(object):
 
     # ---------------- read faces ----------------
 
-    def banner_queue(self, window=None):
+    def banner_queue(self, window=None, limit=0):
         """Degraded in-app fallback queue = all skipped_* rows.
 
-        R1866 window filter (tech.md AC-MB8..AC-MB14, seed = the
-        R1856 banner_board window law + the R1860 rows_by_status
-        raw-row window caliber): window=None keeps the raw row face
+        Window filter (R1866, AC-MB8..AC-MB14, seed = the R1856
+        banner_board window law + the R1860 rows_by_status raw-row
+        window caliber): window=None keeps the raw row face
         byte-identical; an explicit YYYY-MM month narrows the row set
         by record time substr(ts_utc,1,7). The raw LIST shape never
         changes (no envelope, no window echo key); the relative
         ts_utc order is untouched - a window cuts the row set, it
         never reorders. Malformed windows fail closed
-        E_REM_BAD_WINDOW before any read (zero side effects)."""
+        E_REM_BAD_WINDOW before any read (zero side effects).
+
+        Read-cap (R1872, AC-MB15..AC-MB22; seed = the R1850/R1855
+        sec_batch banner_queue direct-line precedent + the R1871
+        pay banner_queue mirror): limit tail param - the sentinel is
+        ONLY the int 0 (bool excluded; None/float/str refused,
+        fail-closed; E_REM_BAD_LIMIT reused from the banner_board
+        lexicon; gate order = bad limit first, then a bad window).
+        limit=0 keeps the raw LIST face byte-identical (window or
+        not). limit>0 returns a dict envelope {rows, limit, total,
+        returned, truncated} where rows are the LAST `limit` rows in
+        the same order the full face yields them, and total is the
+        windowed degraded-row count - a truncated read never lies
+        about how much was cut off. An explicit window adds an
+        additive "window" echo key (the default cap face keeps
+        exactly five keys). The capped query pins an explicit rowid
+        tiebreak so the tail window is deterministic (the full
+        face's bare ORDER BY ts_utc relies on engine scan order for
+        ties; the capped path cannot, so it pins one). Window
+        filtering runs BEFORE COUNT and LIMIT: total reports the
+        full windowed set, never the global one."""
+        if isinstance(limit, bool) or not isinstance(limit, int) \
+                or limit < 0:
+            raise ValueError("%s: limit must be a non-negative int"
+                             % E_REM_BAD_LIMIT)
         w = None
         if window is not None:
             w = str(window)
             if not _WINDOW_RE.match(w):
                 raise ValueError("%s: window must be YYYY-MM: %r"
                                  % (E_REM_BAD_WINDOW, window))
-        if w is None:
+        where = ""
+        args = []
+        if w is not None:
+            where = " AND substr(ts_utc,1,7)=?"
+            args.append(w)
+        if limit == 0:
             return self._exec(
-                "SELECT send_id, census_avatar_id, reason, status, ts_utc"
-                " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
-                " ORDER BY ts_utc").fetchall()
-        return self._exec(
+                "SELECT send_id, census_avatar_id, reason, status,"
+                " ts_utc FROM member_reminder_log"
+                " WHERE status LIKE 'skipped_%'" + where
+                + " ORDER BY ts_utc", args).fetchall()
+        total = int(self._one(
+            "SELECT COUNT(*) FROM member_reminder_log"
+            " WHERE status LIKE 'skipped_%'" + where, args))
+        rows = self._exec(
             "SELECT send_id, census_avatar_id, reason, status, ts_utc"
             " FROM member_reminder_log WHERE status LIKE 'skipped_%'"
-            " AND substr(ts_utc,1,7)=?"
-            " ORDER BY ts_utc", (w,)).fetchall()
+            + where + " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
+            args + [int(limit)]).fetchall()
+        rows.reverse()
+        out = {"rows": rows, "limit": int(limit), "total": total,
+               "returned": len(rows), "truncated": len(rows) < total}
+        if w is not None:
+            out["window"] = w
+        return out
 
     def banner_board(self, limit=0, window=None):
         """Degraded in-app banner board (pure derived read face over the
