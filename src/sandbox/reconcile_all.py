@@ -1207,6 +1207,25 @@ SUITES = [
     # (AC-LG23..AC-LG29 pre-registered in state/queue/tech.md)
     ("ledger-apidev-lineagepersist", os.path.join(
         "ledger", "test_apidev_lineagepersist.py"), 7),
+    # R1897 apidev chain_usage capped-windowed read
+    # restart-persistence example window (the R1893 seed): the
+    # three-piece stack (Ledger -> MeteredFace -> DevKeyFace)
+    # closes fully and reopens on the same db path and config --
+    # the October capped-windowed usage envelope (window echo +
+    # overflow block) replays byte-identical from the fresh
+    # instance (zero in-memory drift in the derived face), two
+    # November calls on the live chain-tail key C via the real
+    # product path recalculate the default capped read (zero
+    # cache) while the October windowed reads stay byte-frozen
+    # (api_calls rows are record-time immutable; the injection
+    # lands on the very key whose October capped read is pinned
+    # -- a stronger hijack face than the R1896 isolated-key
+    # injection per the claim ruling), and a third instance
+    # replays the post-injection state byte-identically
+    # (two-instance sequential reads)
+    # (AC-LU15..AC-LU21 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-chainusagepersist", os.path.join(
+        "ledger", "test_apidev_chainusagepersist.py"), 7),
 ]
 
 FAILS = 0

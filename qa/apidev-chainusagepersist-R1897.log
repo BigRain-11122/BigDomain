@@ -1,0 +1,55 @@
+apidev chain_usage capped-windowed read restart persistence (R1897) evidence
+criteria AC-LU15..AC-LU21 pre-registered in state/queue/tech.md before code (R1897 claim note)
+
+--- suite run 1 (rc=0) ---
+PASS AC-LU15: October anchor: 7 real call rows window=2026-10 over the 3-key chain (SQL count==7), W=2026-10 from the first call row's window column, four snapshots anchored (capped-win 15 keys block l/t/r/tr=2/3/2/True tail [B,C] own={2: 2, 3: 2} chain_total=7 effective=7==key_view quota_used=7; win-bare/default 11 keys byte-equal=True; default-cap 15 keys)
+PASS AC-LU16: full stack close -> reopen same db/config: October capped-windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-LU17: default read replayed byte-identical=True (window echo=2026-10, chain [A,B,C] ids/names facts stable across restart), bare-window=True, default-cap=True (derived face zero in-memory drift)
+PASS AC-LU18: frozen clock +23d -> 2 November calls on the live chain-tail key C via the real product path (record-time window=2026-11 SQL count==2): default capped read recalculated (window echo 2026-11, own={2: 0, 3: 2}, byte-differs from the pre-close default-cap snapshot=True = zero cache), November windowed capped read carries the new rows=True, three-way alignment effective==key_view quota_used==2 in the new window
+PASS AC-LU19: after the November injection on the same key: October capped-windowed read still byte-identical to the pre-close snapshot=True, bare-window=True (record-time window column immutable), api_calls total 9 == 7+2 immutable rows never lost, telescoping oct 7 + nov 2 == all-time 9
+PASS AC-LU20: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True) and the October capped-windowed read still equals the original pre-close snapshot=True (windowed read survives restart x new-data unscratched)
+PASS AC-LU21: pure read: 12 read calls on the third face move zero rows (api_calls 9==9, api_dev_keys 3==3, key_events 4==4), chain_usage segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-chainusagepersist: 7/7 criteria pass
+clock restore probe: True
+
+--- suite run 2 (rc=0) ---
+PASS AC-LU15: October anchor: 7 real call rows window=2026-10 over the 3-key chain (SQL count==7), W=2026-10 from the first call row's window column, four snapshots anchored (capped-win 15 keys block l/t/r/tr=2/3/2/True tail [B,C] own={2: 2, 3: 2} chain_total=7 effective=7==key_view quota_used=7; win-bare/default 11 keys byte-equal=True; default-cap 15 keys)
+PASS AC-LU16: full stack close -> reopen same db/config: October capped-windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-LU17: default read replayed byte-identical=True (window echo=2026-10, chain [A,B,C] ids/names facts stable across restart), bare-window=True, default-cap=True (derived face zero in-memory drift)
+PASS AC-LU18: frozen clock +23d -> 2 November calls on the live chain-tail key C via the real product path (record-time window=2026-11 SQL count==2): default capped read recalculated (window echo 2026-11, own={2: 0, 3: 2}, byte-differs from the pre-close default-cap snapshot=True = zero cache), November windowed capped read carries the new rows=True, three-way alignment effective==key_view quota_used==2 in the new window
+PASS AC-LU19: after the November injection on the same key: October capped-windowed read still byte-identical to the pre-close snapshot=True, bare-window=True (record-time window column immutable), api_calls total 9 == 7+2 immutable rows never lost, telescoping oct 7 + nov 2 == all-time 9
+PASS AC-LU20: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True) and the October capped-windowed read still equals the original pre-close snapshot=True (windowed read survives restart x new-data unscratched)
+PASS AC-LU21: pure read: 12 read calls on the third face move zero rows (api_calls 9==9, api_dev_keys 3==3, key_events 4==4), chain_usage segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-chainusagepersist: 7/7 criteria pass
+clock restore probe: True
+
+--- double-run byte-identical check ---
+run1 sha16=B43D27BCF4393292 run2 sha16=B43D27BCF4393292 identical=True
+
+--- runner full regression (see qa/reconcile-all-R1897.log, rc=0) ---
+RUNNER PASS (140/140 suites green, reconcile controls 7/7, 190.1s)
+SUITES 139->140 (ledger-apidev-chainusagepersist), criteria 1299->1306
+
+--- matrix regen + double --check (rc=0/0) ---
+PASS generated docs/sandbox-suite-matrix.md (13935 bytes) - registry suites=140 criteria=1306 evidence=qa/reconcile-all-R1897.log green=140/140
+matrix --check byte-identical x2
+
+--- writer census (rc=0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1279 tee=777 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- fingerprint sentinel (rc=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[VERDICT PASS]
