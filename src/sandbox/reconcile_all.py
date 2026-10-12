@@ -266,9 +266,10 @@ SUITES = [
     # derived from the same rows key_view reads (zero drift),
     # rotation chain walkable in both directions, dead keys
     # fully readable, embedded faces untouched (AC-RJW4 law)
-    # (AC-TR1..TR7 pre-registered in state/queue/tech.md).
+    # (AC-TR1..TR7 R1824 + AC-TR8..TR14 R1875 explicit month-
+    # window parameterization, pre-registered in tech.md).
     ("ledger-apidev-lifecycletrace",
-     os.path.join("ledger", "test_apidev_lifecycle_trace.py"), 7),
+     os.path.join("ledger", "test_apidev_lifecycle_trace.py"), 14),
     ("tourstate", os.path.join("tourstate", "test_tourstate.py"), 7),
     # R1702 ingest_lobby batched gate window: L1-first per row, one
     # check_batch call per (source, actor) group chunk, window-order

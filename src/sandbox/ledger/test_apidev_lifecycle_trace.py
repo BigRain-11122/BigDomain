@@ -3,8 +3,10 @@ face (BigDomain R1824; canon = tech-queue "apidev lifecycle event
 chain audit read face" row, the R1711 lifecycle-store successor,
 claimed from the tech-lane top open row per the FIFO law).
 Asserts the pre-registered criteria AC-TR1..AC-TR7 from the
-R1824 tech-queue claim note (criteria were registered before
-this code ran; honesty law). Each criterion prints PASS/FAIL
+R1824 tech-queue claim note, plus the explicit month-window
+parameterization criteria AC-TR8..AC-TR14 from the R1875 claim
+note (criteria were registered before this code ran; honesty
+law). Each criterion prints PASS/FAIL
 with evidence; the process exits non-zero on any FAIL.
 
 Covered semantics: lifecycle_trace(api_key) is the pure-read
@@ -27,6 +29,7 @@ Usage: python test_apidev_lifecycle_trace.py
 import json
 import os
 import re
+import shutil
 import sqlite3
 import sys
 import tempfile
@@ -304,6 +307,259 @@ def main():
            % (cfg_bytes_end == cfg_bytes, is_ascii, not has_update,
               not has_rng, len(imports_net), has_trace))
 
+    # -- AC-TR8..TR14 explicit month-window parameterization
+    #    (R1875; window=None default keeps the full-trail
+    #    behavior byte-stable, the usage_log family form) ------
+    m_now = tr_rk["events"][0]["event_utc"][:7]
+
+    # AC-TR8 default-vs-explicit byte identity + 10-key pin
+    def_call = dk.lifecycle_trace(fk["api_key"])
+    exp_call = dk.lifecycle_trace(fk["api_key"], window=None)
+    byte_same = (json.dumps(def_call, sort_keys=True)
+                 == json.dumps(exp_call, sort_keys=True))
+    ok_gate, code_gate = expect_unknown(
+        lambda: dk.lifecycle_trace("sk-nonexistent", "2026-13"))
+    tr8 = (byte_same and sorted(def_call.keys()) == TRACE_KEYS
+           and ok_gate and code_gate == D.E_AD_UNKNOWN_KEY)
+    record("AC-TR8", tr8,
+           "default==window=None byte-identical=%s, default"
+           " envelope 10-key pin (zero window key)=%s, key gate"
+           " before window gate (unknown key + bad window -> %s)"
+           % (byte_same,
+              sorted(def_call.keys()) == TRACE_KEYS, code_gate))
+
+    # AC-TR9 bads14 fail-closed (audit-family code, claim-round
+    # adjudication: lifecycle_trace self-documents as the audit
+    # face; every audit sibling rejects E_AD_BAD_ARGS)
+    bads14 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+              "202610", "abcd", "", 2026, True, 2.5,
+              "2026-10\n", "2026-10 ", "2026-10\r")
+    keys_b9 = _count(conn, "api_dev_keys")
+    ev_b9 = _count(lcconn, "key_events")
+    bad_ok = True
+    for bad in bads14:
+        try:
+            dk.lifecycle_trace(fk["api_key"], bad)
+            bad_ok = False
+        except D.ApiDevError as exc:
+            if exc.code != D.E_AD_BAD_ARGS:
+                bad_ok = False
+    tr9 = (bad_ok and _count(conn, "api_dev_keys") == keys_b9
+           and _count(lcconn, "key_events") == ev_b9)
+    record("AC-TR9", tr9,
+           "bads14 all reject E_AD_BAD_ARGS=%s, empty string is a"
+           " bad shape (None is the only default sentinel), zero"
+           " read side-effects (api_dev_keys %d==%d, key_events"
+           " %d==%d)"
+           % (bad_ok, _count(conn, "api_dev_keys"), keys_b9,
+              _count(lcconn, "key_events"), ev_b9))
+
+    # AC-TR10 window slice semantics: two probe keys -- wr gets
+    # a real revoke in the current month (real record-time
+    # stamp), wk gets a historical fixture pair only (direct
+    # INSERT, test-only rows; zero real writes on a key made
+    # terminal by its fixture row, so each probe has exactly one
+    # terminal event and the derived status is deterministic)
+    wr = dk.issue_key("usr:ada", "win-real", 5, ["backtest"],
+                     False)
+    dk.revoke_key(wr["api_key"])
+    wr_def = dk.lifecycle_trace(wr["api_key"])
+    wr_now = dk.lifecycle_trace(wr["api_key"], m_now)
+    wk = dk.issue_key("usr:ada", "win-probe", 5, ["backtest"],
+                      False)
+    wk_id = _key_id(conn, wk["api_key"])
+    lcconn.execute(
+        "INSERT INTO key_events (key_id, event, pair_key_id,"
+        " event_utc) VALUES (?, 'rotate_out', ?, ?)",
+        (wk_id, id_b, "2025-08-15T00:00:01Z"))
+    lcconn.execute(
+        "INSERT INTO key_events (key_id, event, pair_key_id,"
+        " event_utc) VALUES (?, 'rotate_in', ?, ?)",
+        (wk_id, id_a, "2025-08-15T00:00:02Z"))
+    lcconn.commit()
+    wdef = dk.lifecycle_trace(wk["api_key"])
+    whist = dk.lifecycle_trace(wk["api_key"], "2025-08")
+    wnow = dk.lifecycle_trace(wk["api_key"], m_now)
+    wnone = dk.lifecycle_trace(wk["api_key"], "2030-01")
+    tr10 = (
+        sorted(whist.keys()) == sorted(TRACE_KEYS + ["window"])
+        and whist["window"] == "2025-08"
+        and _brief(whist) == [("rotate_out", id_b),
+                              ("rotate_in", id_a)]
+        and whist["total"] == 2
+        and _brief(wnone) == [] and wnone["total"] == 0
+        and sorted(wnone.keys())
+        == sorted(TRACE_KEYS + ["window"])
+        and _brief(wnow) == [] and wnow["total"] == 0
+        and _brief(wr_now) == [("revoke", None)]
+        and _brief(wr_def) == [("revoke", None)]
+        and _brief(wdef) == [("rotate_out", id_b),
+                             ("rotate_in", id_a)]
+        and all(e["event_utc"][:7] == "2025-08"
+                for e in whist["events"]))
+    record("AC-TR10", tr10,
+           "explicit window slices trail: real revoke month=%s"
+           " shows [revoke] only, 2025-08 fixture pair %s,"
+           " current-month window on wk honest empty=%s, future"
+           " 2030-01 honest empty=%s, default full=%s, explicit"
+           " envelope adds window key=%s"
+           % (m_now, _brief(whist),
+              _brief(wnow) == [], _brief(wnone) == [],
+              _brief(wdef),
+              sorted(whist.keys())
+              == sorted(TRACE_KEYS + ["window"])))
+
+    # AC-TR11 key facts stay full-derived under the window lens
+    # (a window never redefines the key's state; the AC-TR4
+    # zero-drift law holds under window reads)
+    drift_w = True
+    for k in (fk, rk, ka, kb, kc):
+        view = dk.key_view(k["api_key"])
+        tw = dk.lifecycle_trace(k["api_key"], m_now)
+        if (tw["status"] != view["status"]
+                or tw["rotated_from_key_id"]
+                != view["rotated_from_key_id"]):
+            drift_w = False
+    wr_none = dk.lifecycle_trace(wr["api_key"], "2030-01")
+    tr11 = (
+        whist["status"] == wdef["status"] == "rotated_out"
+        and whist["rotated_from_key_id"] == id_a
+        and whist["rotated_to_key_id"] == id_b
+        and whist["rotated_from_key_id"]
+        == wdef["rotated_from_key_id"]
+        and whist["rotated_to_key_id"] == wdef["rotated_to_key_id"]
+        and wr_none["status"] == "revoked"
+        and wr_none["rotated_from_key_id"] is None
+        and _brief(wr_none) == [] and wr_none["total"] == 0
+        and wr_now["status"] == wr_def["status"] == "revoked"
+        and wnow["status"] == "rotated_out"
+        and wnow["rotated_from_key_id"] == id_a
+        and wnow["rotated_to_key_id"] == id_b
+        and drift_w)
+    record("AC-TR11", tr11,
+           "key facts full-derived under window lens: 2025-08"
+           " window status=%s pairs=(%s,%s)==default, zero-event"
+           " windows keep key facts (wr 2030-01 status=%s empty"
+           " trail, wk current-month status=%s pairs still"
+           " populated=%s), window reads vs key_view zero"
+           " drift=%s"
+           % (whist["status"], whist["rotated_from_key_id"],
+              whist["rotated_to_key_id"], wr_none["status"],
+              wnow["status"],
+              wnow["rotated_from_key_id"] is not None
+              and wnow["rotated_to_key_id"] is not None,
+              drift_w))
+
+    # AC-TR12 order preservation + pair cross-month integrity:
+    # the window read is the default order's window-restriction
+    # subsequence (window only slices the row set); a same-month
+    # pair shows on both sides; a single-side tamper row reads
+    # honestly (the face never fabricates the missing twin)
+    wsub = [e["event_id"] for e in wdef["events"]
+            if e["event_utc"][:7] == "2025-08"]
+    ts = dk.issue_key("usr:ada", "lone-probe", 5, ["backtest"],
+                      False)
+    ts_id = _key_id(conn, ts["api_key"])
+    lcconn.execute(
+        "INSERT INTO key_events (key_id, event, pair_key_id,"
+        " event_utc) VALUES (?, 'rotate_out', ?, ?)",
+        (ts_id, id_c, "2025-09-20T00:00:00Z"))
+    lcconn.commit()
+    wlone = dk.lifecycle_trace(ts["api_key"], "2025-09")
+    tr12 = (
+        [e["event_id"] for e in whist["events"]] == wsub
+        and [e["event_utc"] for e in whist["events"]]
+        == [e["event_utc"] for e in wdef["events"]
+            if e["event_utc"][:7] == "2025-08"]
+        and _brief(wlone) == [("rotate_out", id_c)]
+        and wlone["total"] == 1
+        and wlone["rotated_to_key_id"] == id_c
+        and wlone["status"] == "rotated_out")
+    record("AC-TR12", tr12,
+           "window order == default-order window-restriction"
+           " subsequence=%s, same-month pair both sides in window"
+           "=%s, single-side tamper reads only the present side"
+           " (no fabrication, status=%s)=%s"
+           % ([e["event_id"] for e in whist["events"]] == wsub,
+              _brief(whist) == [("rotate_out", id_b),
+                                ("rotate_in", id_a)],
+              wlone["status"], _brief(wlone)))
+
+    # AC-TR13 manual SQL cross + pure-read law
+    wk_sql = lcconn.execute(
+        "SELECT event_id, event, pair_key_id, event_utc"
+        " FROM key_events WHERE key_id = ?"
+        " AND substr(event_utc, 1, 7) = ?"
+        " ORDER BY event_utc, event_id",
+        (wk_id, "2025-08")).fetchall()
+    manual = [{"event_id": r[0], "event": r[1],
+               "pair_key_id": r[2], "event_utc": r[3]}
+              for r in wk_sql]
+    msrc = re.search(r"def lifecycle_trace\(.*?(?=\n    def |\Z)",
+                     source, re.S).group(0)
+    mcode = re.sub(r'"""[\s\S]*?"""', '""', msrc)
+    has_writes = re.search(
+        r"\b(?:INSERT|UPDATE|DELETE)\b", mcode) is not None
+    keys_b13 = _count(conn, "api_dev_keys")
+    ev_b13 = _count(lcconn, "key_events")
+    wdef2 = dk.lifecycle_trace(wk["api_key"])
+    whist2 = dk.lifecycle_trace(wk["api_key"], "2025-08")
+    dbl = (json.dumps(wdef2, sort_keys=True)
+           == json.dumps(dk.lifecycle_trace(wk["api_key"]),
+                         sort_keys=True)
+           and json.dumps(whist2, sort_keys=True)
+           == json.dumps(dk.lifecycle_trace(
+               wk["api_key"], "2025-08"), sort_keys=True))
+    tr13 = (whist2["events"] == manual and not has_writes and dbl
+            and _count(conn, "api_dev_keys") == keys_b13
+            and _count(lcconn, "key_events") == ev_b13)
+    record("AC-TR13", tr13,
+           "explicit window events == manual SQL cross=%s,"
+           " lifecycle_trace source zero write statements=%s,"
+           " pure read (api_dev_keys %d==%d, key_events %d==%d),"
+           " double-call byte identity (default + window)=%s"
+           % (whist2["events"] == manual, not has_writes,
+              _count(conn, "api_dev_keys"), keys_b13,
+              _count(lcconn, "key_events"), ev_b13, dbl))
+
+    # AC-TR14 liveness (zero cache), dead-key window reads,
+    # criteria-count self-check, temp-world hygiene
+    lv = dk.issue_key("usr:ada", "live-probe", 5, ["backtest"],
+                      False)
+    lv_before = dk.lifecycle_trace(lv["api_key"], m_now)
+    dk.revoke_key(lv["api_key"])
+    lv_after = dk.lifecycle_trace(lv["api_key"], m_now)
+    dead_ok = True
+    for k in (rk, ka, ts):
+        try:
+            dk.lifecycle_trace(k["api_key"], "2025-08")
+            dk.lifecycle_trace(k["api_key"], m_now)
+        except D.ApiDevError:
+            dead_ok = False
+    with open(os.path.abspath(__file__), "r",
+              encoding="ascii") as handle:
+        self_ascii = all(ord(ch) < 128 for ch in handle.read())
+    tr14 = (lv_before["total"] == 0
+            and _brief(lv_after) == [("revoke", None)]
+            and lv_after["status"] == "revoked"
+            and dead_ok
+            and len(RESULTS) + 1 == 14
+            and self_ascii
+            and cfg_bytes_end == cfg_bytes)
+    record("AC-TR14", tr14,
+           "liveness: fresh revoke shows in the current-month"
+           " window read immediately (0 -> %s)=%s, dead keys"
+           " (revoked + rotated-out + tamper-terminal) window"
+           " reads open=%s, criteria-count self-check"
+           " (results=%d, registered=14)=%s, suite source"
+           " pure-ASCII=%s, config.json byte-stable=%s"
+           % (_brief(lv_after),
+              lv_before["total"] == 0
+              and _brief(lv_after) == [("revoke", None)],
+              dead_ok, len(RESULTS) + 1,
+              len(RESULTS) + 1 == 14, self_ascii,
+              cfg_bytes_end == cfg_bytes))
+
     total = len(RESULTS)
     passed = sum(1 for _, ok in RESULTS if ok)
     print("SUITE apidev-lifecycle-trace: %d/%d criteria pass"
@@ -313,6 +569,7 @@ def main():
     dk.close()
     metered.close()
     led.close()
+    shutil.rmtree(tmp, ignore_errors=True)
     return 0 if passed == total else 1
 
 

@@ -1,0 +1,63 @@
+=== R1875 apidev lifecycle_trace explicit month window (AC-TR8..TR14 pre-registered in state/queue/tech.md) ===
+--- suite run 1 (exit=0 sha16=8ea64e0b21083620) ---
+PASS AC-TR1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True
+PASS AC-TR2: event rows verbatim keys=True, total==len=True, (event_utc,event_id) ascending=True, same-second tiebreak pin [rotate_out,rotate_in] insertion order kept (name-sort would flip)=True
+PASS AC-TR3: shapes: fresh=[] active, revoked=[revoke], A=[rotate_out->B] rotated_out, B=[rotate_in<-A, rotate_out->C], C pre=[rotate_in<-B] / post=[rotate_in <-B, revoke] revoked (double-terminal) -- briefs []/[('revoke', None)]/[('rotate_out', 4)]/[('rotate_in', 3), ('rotate_out', 5)]/[('rotate_in', 4)]/[('rotate_in', 4), ('revoke', None)]
+PASS AC-TR5: dead keys fully readable (revoked rk + rotated-out A/B + revoked-rotated-in C all trace without raising), A->B->C walkable purely through traces: pairs close both directions (A<->B=(3, 4), B<->C=(4, 5))
+PASS AC-TR4: trace vs key_view zero drift over the five key states (fresh/revoked/rotated-out/middle/successor-revoked, post-revoke world)=True
+PASS AC-TR6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero trace embedding=True
+PASS AC-TR7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, lifecycle_trace present=True
+PASS AC-TR8: default==window=None byte-identical=True, default envelope 10-key pin (zero window key)=True, key gate before window gate (unknown key + bad window -> E_AD_UNKNOWN_KEY)
+PASS AC-TR9: bads14 all reject E_AD_BAD_ARGS=True, empty string is a bad shape (None is the only default sentinel), zero read side-effects (api_dev_keys 6==6, key_events 8==8)
+PASS AC-TR10: explicit window slices trail: real revoke month=2026-10 shows [revoke] only, 2025-08 fixture pair [('rotate_out', 4), ('rotate_in', 3)], current-month window on wk honest empty=True, future 2030-01 honest empty=True, default full=[('rotate_out', 4), ('rotate_in', 3)], explicit envelope adds window key=True
+PASS AC-TR11: key facts full-derived under window lens: 2025-08 window status=rotated_out pairs=(3,4)==default, zero-event windows keep key facts (wr 2030-01 status=revoked empty trail, wk current-month status=rotated_out pairs still populated=True), window reads vs key_view zero drift=True
+PASS AC-TR12: window order == default-order window-restriction subsequence=True, same-month pair both sides in window=True, single-side tamper reads only the present side (no fabrication, status=rotated_out)=[('rotate_out', 5)]
+PASS AC-TR13: explicit window events == manual SQL cross=True, lifecycle_trace source zero write statements=True, pure read (api_dev_keys 9==9, key_events 12==12), double-call byte identity (default + window)=True
+PASS AC-TR14: liveness: fresh revoke shows in the current-month window read immediately (0 -> [('revoke', None)])=True, dead keys (revoked + rotated-out + tamper-terminal) window reads open=True, criteria-count self-check (results=14, registered=14)=True, suite source pure-ASCII=True, config.json byte-stable=True
+SUITE apidev-lifecycle-trace: 14/14 criteria pass
+--- suite run 2 (exit=0 sha16=8ea64e0b21083620) ---
+PASS AC-TR1: key gate first: unknown/empty reject E_AD_UNKNOWN_KEY/E_AD_UNKNOWN_KEY, pure read: api_dev_keys 5==5, key_events 5==5, envelope keys exact=True
+PASS AC-TR2: event rows verbatim keys=True, total==len=True, (event_utc,event_id) ascending=True, same-second tiebreak pin [rotate_out,rotate_in] insertion order kept (name-sort would flip)=True
+PASS AC-TR3: shapes: fresh=[] active, revoked=[revoke], A=[rotate_out->B] rotated_out, B=[rotate_in<-A, rotate_out->C], C pre=[rotate_in<-B] / post=[rotate_in <-B, revoke] revoked (double-terminal) -- briefs []/[('revoke', None)]/[('rotate_out', 4)]/[('rotate_in', 3), ('rotate_out', 5)]/[('rotate_in', 4)]/[('rotate_in', 4), ('revoke', None)]
+PASS AC-TR5: dead keys fully readable (revoked rk + rotated-out A/B + revoked-rotated-in C all trace without raising), A->B->C walkable purely through traces: pairs close both directions (A<->B=(3, 4), B<->C=(4, 5))
+PASS AC-TR4: trace vs key_view zero drift over the five key states (fresh/revoked/rotated-out/middle/successor-revoked, post-revoke world)=True
+PASS AC-TR6: key_view keys exact (18), dev_board keys exact (6), board row keys exact (15) -- zero trace embedding=True
+PASS AC-TR7: hygiene: config.json byte-stable=True, source pure-ASCII=True, zero UPDATE=True, zero RNG=True, net-imports=0, lifecycle_trace present=True
+PASS AC-TR8: default==window=None byte-identical=True, default envelope 10-key pin (zero window key)=True, key gate before window gate (unknown key + bad window -> E_AD_UNKNOWN_KEY)
+PASS AC-TR9: bads14 all reject E_AD_BAD_ARGS=True, empty string is a bad shape (None is the only default sentinel), zero read side-effects (api_dev_keys 6==6, key_events 8==8)
+PASS AC-TR10: explicit window slices trail: real revoke month=2026-10 shows [revoke] only, 2025-08 fixture pair [('rotate_out', 4), ('rotate_in', 3)], current-month window on wk honest empty=True, future 2030-01 honest empty=True, default full=[('rotate_out', 4), ('rotate_in', 3)], explicit envelope adds window key=True
+PASS AC-TR11: key facts full-derived under window lens: 2025-08 window status=rotated_out pairs=(3,4)==default, zero-event windows keep key facts (wr 2030-01 status=revoked empty trail, wk current-month status=rotated_out pairs still populated=True), window reads vs key_view zero drift=True
+PASS AC-TR12: window order == default-order window-restriction subsequence=True, same-month pair both sides in window=True, single-side tamper reads only the present side (no fabrication, status=rotated_out)=[('rotate_out', 5)]
+PASS AC-TR13: explicit window events == manual SQL cross=True, lifecycle_trace source zero write statements=True, pure read (api_dev_keys 9==9, key_events 12==12), double-call byte identity (default + window)=True
+PASS AC-TR14: liveness: fresh revoke shows in the current-month window read immediately (0 -> [('revoke', None)])=True, dead keys (revoked + rotated-out + tamper-terminal) window reads open=True, criteria-count self-check (results=14, registered=14)=True, suite source pure-ASCII=True, config.json byte-stable=True
+SUITE apidev-lifecycle-trace: 14/14 criteria pass
+double-run byte identity: IDENTICAL
+--- sentinel: fingerprint-regen --check (exit=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+--- RUNNER full regression (exit=1, full log=qa/reconcile-all-R1875.log) tail ---
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-47upnec2\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-47upnec2\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-47upnec2\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER FAIL (2 failed assertions)
+--- matrix regen (explicit evidence, exit=0) ---
+PASS hygiene: pure-ascii source, zero network imports
+--- matrix --check double run (exit=2/2, sha16=279a25fdf510a4a1/279a25fdf510a4a1) ---
+  hint: evidence face-mismatch - the doc was generated against a different evidence file than this check resolved; rerun: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1874.log  then re-run --check to judge true drift
+--- census drift disposition (R1875) ---
+first RUNNER (shell-capture) surfaced 3 flags: 2 x pwsh-capture (this round's python-capture CRLF artifact, normalized to the healthy LF dialect) + matrix-regen-R1874.log ps-utf16 (R1874's closed-round capture, created after that round's RUNNER = latent debt surfaced here); disposition -> --update-baseline re-freeze
+census --check post-runner (exit=0):
+census: files=1233 tee=731 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+--- matrix regen (tee-written RUNNER evidence, exit=0) ---
+PASS hygiene: pure-ascii source, zero network imports
+--- matrix --check double run (exit=0/0, sha16=0a876354ab851184/0a876354ab851184) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (12747 bytes, 127 suites, 1172 criteria)

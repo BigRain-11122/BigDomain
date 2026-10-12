@@ -1,0 +1,24 @@
+{
+  "tech_verify": {
+    "claim_prefix": "- [x] apidev lifecycle_trace 显式月窗过滤参数窗",
+    "done_marker": "done 2026-10-12 R1875",
+    "reseed_marker": "- [ ] apidev audit_lineage 显式月窗参数窗",
+    "open_expected": 11
+  },
+  "baselines": {
+    "last_gord_tbl_rows": 313,
+    "last_decision_rows": 294
+  },
+  "log_lines": [
+    "2026-10-12 R1875 apidev lifecycle_trace 显式月窗过滤参数窗当轮闭环（P2 tech 队头 FIFO 最老可认领行〔R1868 补种〕·轮计分 2=可跑实物·AC-TR8..TR14 判据预注册先于代码〔tech.md R1875 认领注记·前缀续编 8 起全仓 rg 零占用实锚〕）——三裁定落定：①码族=E_AD_BAD_ARGS 审计族（实读锚定：reject_tally R1730/usage_log R1732/usage_kind_tally R1735/chain_usage R1833 四审计姊妹面全用该码·E_AD_BAD_WINDOW L160 注释自证 dev_board 面板专用码·种子括注 E_AD_BAD_WINDOW 面板先例被实读推翻=「实读锚定」指令兑现）②过滤载体=单次全序取行+Python 侧切片（R1791 AC-S17 零第二 SQL 引擎先例·键级事实 status/pair 全量行派生=窗透镜不重定义键状态〔AC-TR4 与 key_view 零漂移律窗读径承传·AC-LG5 谱系=键属性同源〕）③信封=显式窗 additive 恰 window 键（usage_log R1732 AC-UW4 先例·缺省面 TRACE_KEYS 10 键 pin 零漂移）——test_apidev_lifecycle_trace.py 扩例 7→14：SUITE PASS 14/14 exit 0 双跑 stdout 逐字节同一（首跑 TR10 夹具病一修如实注=fixture rotate_out 直注使 wk 终态→真 revoke E_AD_ALREADY 拒·夹具重构=真 revoke 落专键 wr+历史 pair 键 wk 零真写·消双终态扫描序依赖）——**全量回归首跑 RUNNER FAIL 126/127 诚实记录**=reconcile-daily-census cd7 检出 3 新方言旗〔qa_writer_census --check：我两件 Python 子进程捕获件=pwsh-capture 壳捕获方言（Windows stdout 换行翻译 CRLF 实锚）→字节外科归一 LF=健康 tee 方言归队+R1874 遗留 matrix-regen-R1874.log ps-utf16（其件产 RUNNER 后=census 盲区潜伏债本轮浮出）→disposition+--update-baseline 再冻结 501→502 件〕→**Tee 正身重跑 RUNNER PASS 127/127 判据 1165→1172 controls 7/7 165.6s**=qa/reconcile-all-R1875.log+矩阵再生 127/1172 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+census --check DRIFT-CLEAN 复验——reconcile_all SUITES ledger-apidev-lifecycletrace 判据 7→14；GORD 基线 311→313 两新令知悉〔O-20261012-2020 KF demo 复看男主脸+道具考据双修令 @BigStream mv0001+O-20261012-2025 CEO 下班全算力移交+科学排班令=机队面·零本司执行面·回执无动作〕·DEC rows 294 零新 token（内容寻址·次级基线 301→294 刷新对齐）·LEDGER @BigDomain 零新行·tech 消耗 1+补种 1=11〔apidev audit_lineage 显式月窗参数窗=R1875 补种〕；工具教训=Python 子进程捕获在 Windows 继承 stdout 换行翻译（CRLF）→证据收集器写盘前必归一 LF（否则落 pwsh-capture 壳捕获方言进 census 基线）",
+    "2026-10-12 R1875 tokens: local=unmeasured api=0 api_reason=纯本地进程件（套件双跑+RUNNER 全量回归+矩阵再生+census 处置全本地跑·零外部 API 触点·三问门未涉及）"
+  ],
+  "hb_body": "R1875: apidev lifecycle_trace window-param suite 14/14 (AC-TR8..TR14; audit-family code E_AD_BAD_ARGS by actual-read adjudication; key facts full-derived under window lens) + census drift disposition (3 flags: 2x CRLF shell-capture normalized to LF + R1874 leftover ps-utf16 baselined 501->502) + Tee re-run RUNNER 127/127 criteria 1165->1172 165.6s + matrix 127/1172 --check identical + census DRIFT-CLEAN; GORD 311->313 ack; tech -1 +1 planted [via BigDomain-OSLoop]",
+  "export": {
+    "ceo_current": "本轮产出：apidev 生命周期审计轨迹显式月窗参数窗（审计面板「这个月发生了什么」读面）+census 三新方言旗处置——全量回归 127 套件 1172 判据全绿",
+    "ceo_artifact": "qa/reconcile-all-R1875.log + src/sandbox/ledger/test_apidev_lifecycle_trace.py（2026-10-12 R1875·判据 7→14）",
+    "ceo_milestone": "P2 交付线续跑（tech 队头=apidev audit_lineage 显式月窗参数窗〔R1875 补种〕已入列）+daily 剖面步观察窗转正裁定窗 gated 2026-10-16 治理窗·下窗 ≤48h",
+    "self_drive_method": "machine-derived per check_export_consistency recompute (BD-PROP-001)",
+    "result_row": ["2", "2026-10-12 R1875 apidev lifecycle_trace 显式月窗过滤参数窗套件（P2 tech 队头 FIFO〔R1868 补种〕·轮计分 2=可跑实物）：AC-TR8..TR14 判据预注册先于代码（tech.md R1875 认领注记）——三裁定=审计族码 E_AD_BAD_ARGS（实读锚定）+单取全序 Python 切片（键级事实窗不重定义）+显式窗 additive window 键：bads14 全拒零副作用+键门先律+历史窗==注入集+两窗互不渗透+未来窗诚实空+零事件窗键事实照常全派生+行序==全序窗限子序列+pair 双侧同现+单侧 tamper 如实显+manual SQL 交叉+纯读律+活态零缓存+死键窗读全开——SUITE 14/14 双跑绿；全量回归首跑 FAIL 126/127 诚实记录=census 检出 3 新方言旗（两件 CRLF 壳捕获归一 LF+R1874 遗留 ps-utf16 入基线）→Tee 正身重跑 RUNNER 127/127 判据 1165→1172 165.6s+矩阵 127/1172 --check 同一+DRIFT-CLEAN=qa/reconcile-all-R1875.log；GORD 311→313 知悉·tech -1+1=11"]
+  }
+}

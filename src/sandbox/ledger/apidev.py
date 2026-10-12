@@ -915,7 +915,7 @@ class DevKeyFace:
 
     # -- lifecycle audit trace (read face) -----------------------------------
 
-    def lifecycle_trace(self, api_key):
+    def lifecycle_trace(self, api_key, window=None):
         """One key's lifecycle audit trace: the key's own
         immutable lifecycle events (revoke / rotate_out /
         rotate_in, with their timestamps and pair links) in event
@@ -933,12 +933,36 @@ class DevKeyFace:
         the audit face). The key gate fires first (the
         call-chain key-gate-first law). Ordering is
         (event_utc, event_id) so same-second events keep their
-        insertion order deterministically. The embedded faces
-        (key_view, dev_board) stay untouched (the AC-RJW4
-        embedded-face law)."""
+        insertion order deterministically. The optional window
+        parameter filters the event trail to one "YYYY-MM" month
+        at read time (rows are immutable and stamped with their
+        own record-time utc, so a historical month stays
+        readable forever); window=None (the default) keeps the
+        full-trail behavior byte-stable. The window is a lens on
+        the trail only: status and both pair links stay derived
+        from the key's full event set (the zero-drift-vs-key_view
+        law holds under the window lens -- a window never
+        redefines the key's state), and the slice applies after
+        the single ordered fetch (zero second SQL engine, one
+        consistent snapshot; key_events rows per key are
+        structurally tiny). An explicit-window envelope adds a
+        "window" key (additive, the usage_log precedent); a bad
+        window shape rejects E_AD_BAD_ARGS fail-closed before
+        any row is read (the audit-family code, matching
+        usage_log / reject_tally / usage_kind_tally /
+        chain_usage; E_AD_BAD_WINDOW stays the dev_board /
+        key_view panel-family code). rotate_out / rotate_in
+        pairs land in one transaction at one timestamp, so a
+        window read shows a pair on both sides or neither. The
+        embedded faces (key_view, dev_board) stay untouched (the
+        AC-RJW4 embedded-face law)."""
         row = self._key_row_by_apikey(str(api_key or "").strip())
         if row is None:
             raise ApiDevError(E_AD_UNKNOWN_KEY, str(api_key))
+        if window is not None and not (isinstance(window, str)
+                                       and _WINDOW_RE.match(window)):
+            raise ApiDevError(E_AD_BAD_ARGS,
+                              "window must be None or YYYY-MM")
         key_id = row[0]
         with self._lock:
             events = self._lconn.execute(
@@ -954,17 +978,22 @@ class DevKeyFace:
             elif ev[1] == "rotate_out":
                 rotated_to = ev[2]
         terminal = self._terminal_event(key_id)
-        return {"api_key": api_key, "dev_account": row[1],
-                "key_name": row[2], "key_id": key_id,
-                "status": _STATUS_BY_EVENT[terminal[0]]
-                          if terminal is not None else "active",
-                "rotated_from_key_id": rotated_from,
-                "rotated_to_key_id": rotated_to,
-                "events": [{"event_id": e[0], "event": e[1],
-                            "pair_key_id": e[2], "event_utc": e[3]}
-                           for e in events],
-                "total": len(events),
-                "disclaimer": self.disclaimer}
+        shown = (events if window is None else
+                 [e for e in events if e[3][:7] == window])
+        out = {"api_key": api_key, "dev_account": row[1],
+               "key_name": row[2], "key_id": key_id,
+               "status": _STATUS_BY_EVENT[terminal[0]]
+                         if terminal is not None else "active",
+               "rotated_from_key_id": rotated_from,
+               "rotated_to_key_id": rotated_to,
+               "events": [{"event_id": e[0], "event": e[1],
+                           "pair_key_id": e[2], "event_utc": e[3]}
+                          for e in shown],
+               "total": len(shown),
+               "disclaimer": self.disclaimer}
+        if window is not None:
+            out["window"] = window
+        return out
 
     # -- rotation lineage audit read face (R1825) ----------------------------
 
