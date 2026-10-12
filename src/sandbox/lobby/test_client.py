@@ -2321,6 +2321,237 @@ def board_persist_cases():
               store_sha_in == store_sha_out, world_outside))
 
 
+def idem_cfg_copy(ttl=None, cap=None):
+    """Derived test config for the idem_seen semantics window (AC-S41/
+    AC-S42): a copy of the shipped lobby config with only the
+    idempotency block overridden - the shipped config.json file is
+    never modified."""
+    cfg = json.loads(open(CONFIG, encoding="utf-8").read())
+    idem = cfg.setdefault("idempotency", {})
+    if ttl is not None:
+        idem["ttl_seconds"] = ttl
+    if cap is not None:
+        idem["max_keys"] = cap
+    path = os.path.join(tempfile.mkdtemp(prefix="lobby-idem-cfg-"), "config.json")
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(cfg, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    return path
+
+
+async def idem_restart_cases():
+    """AC-S39..S43 (R1892): chat.send idem_seen restart semantics - the
+    in-memory TTL+FIFO replay cache lives and dies with the server
+    process (the honest boundary already documented on the pay
+    authorize face). This window pins each semantic: in-TTL replay
+    absorption re-acks the original evt_id, a cross-restart replay
+    re-enters the event flow, TTL expiry admits a legitimate resend,
+    FIFO cap eviction is honest. Suite-only round: server.py and the
+    shipped config are not modified."""
+    sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+
+    async def chat_send(ws, room, text, cid):
+        await ws.send(frame("chat.send", room=room,
+                            payload={"text": text}, client_msg_id=cid))
+
+    def chat_rows(db):
+        return db_query(db,
+                        "SELECT COUNT(*) FROM events WHERE type='chat.broadcast'")[0][0]
+
+    # ---- AC-S39 + AC-S40: shipped-config world, then same-db restart ----
+    port_a = _free_port()
+    srv_a = ServerProc(port_a, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-a-"), "events.db"))
+    sender = observer = sender2 = None
+    srv_b = None
+    try:
+        srv_a.start()
+        sender, _, _ = await open_client(port_a)
+        await make_resident(sender)
+        observer, _, _ = await open_client(port_a)  # spectator: default lobby room
+        await chat_send(sender, "lobby", "s39 alpha", "idem-39-a")
+        b1 = await recv_until(sender, lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s39 alpha")
+        obs_b1 = await recv_until(observer,
+                                  lambda f: f.get("type") == "chat.broadcast"
+                                  and f.get("payload", {}).get("text") == "s39 alpha")
+        rows_pre = chat_rows(srv_a.db)
+        await chat_send(sender, "lobby", "s39 alpha", "idem-39-a")  # in-TTL replay
+        dup = await recv_until(sender,
+                               lambda f: f.get("type") == "chat.duplicate"
+                               and f.get("payload", {}).get("client_msg_id") == "idem-39-a")
+        silent_obs = await expect_silence(observer, 0.5)
+        ok39 = (obs_b1 is not None
+                and dup.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                and "already processed" in dup.get("payload", {}).get("reason", "")
+                and dup.get("payload", {}).get("evt_id") == b1.get("evt_id")
+                and chat_rows(srv_a.db) == rows_pre and silent_obs)
+        record("AC-S39", ok39,
+               "replay absorbed: dup-frame-evt_id==orig=%s code-ok=%s "
+               "reason-processed=%s rows-unchanged=%s observer-silent=%s"
+               % (dup.get("payload", {}).get("evt_id") == b1.get("evt_id"),
+                  dup.get("payload", {}).get("code") == "E_DUPLICATE_MSG",
+                  "already processed" in dup.get("payload", {}).get("reason", ""),
+                  chat_rows(srv_a.db) == rows_pre, silent_obs))
+        # cross-restart replay: the in-memory cache dies with the process
+        try:
+            await sender.close()
+        except Exception:
+            pass
+        try:
+            await observer.close()
+        except Exception:
+            pass
+        sender = observer = None
+        srv_a.stop()
+        srv_b = ServerProc(port_a, db=srv_a.db)  # same shipped config, same db
+        srv_b.start()
+        sender2, _, _ = await open_client(port_a)
+        await make_resident(sender2)
+        await chat_send(sender2, "lobby", "s39 alpha", "idem-39-a")
+        b2 = await recv_until(sender2,
+                              lambda f: f.get("type") == "chat.broadcast"
+                              and f.get("payload", {}).get("text") == "s39 alpha")
+        ok40 = (b2 is not None and b2.get("evt_id") != b1.get("evt_id")
+                and chat_rows(srv_b.db) == rows_pre + 1)
+        record("AC-S40", ok40,
+               "post-restart replay re-entered the event flow: new-evt=%s "
+               "rows %d -> %d (in-memory cache dies with the process - "
+               "honest boundary)"
+               % (b2.get("evt_id") != b1.get("evt_id"), rows_pre,
+                  chat_rows(srv_b.db)))
+    finally:
+        for ws_ in (sender, observer, sender2):
+            if ws_ is not None:
+                try:
+                    await ws_.close()
+                except Exception:
+                    pass
+        srv_a.stop()
+        if srv_b is not None:
+            srv_b.stop()
+
+    # ---- AC-S41: TTL expiry admits a legitimate resend ----
+    cfg_ttl = idem_cfg_copy(ttl=1.5)
+    port_t = _free_port()
+    srv_t = ServerProc(port_t, config=cfg_ttl, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-t-"), "events.db"))
+    ws_t = None
+    try:
+        srv_t.start()
+        ws_t, _, _ = await open_client(port_t)
+        await make_resident(ws_t)
+        await chat_send(ws_t, "lobby", "s41 alpha", "idem-41-a")
+        bt1 = await recv_until(ws_t, lambda f: f.get("type") == "chat.broadcast"
+                               and f.get("payload", {}).get("text") == "s41 alpha")
+        await chat_send(ws_t, "lobby", "s41 alpha", "idem-41-a")  # in-TTL replay
+        dup_t = await recv_until(ws_t,
+                                 lambda f: f.get("type") == "chat.duplicate"
+                                 and f.get("payload", {}).get("client_msg_id") == "idem-41-a")
+        absorbed = (dup_t.get("payload", {}).get("evt_id") == bt1.get("evt_id"))
+        rows_t1 = chat_rows(srv_t.db)
+        await asyncio.sleep(2.0)  # > ttl 1.5s: the cache entry expires
+        await chat_send(ws_t, "lobby", "s41 alpha", "idem-41-a")  # resend
+        bt2 = await recv_until(ws_t,
+                               lambda f: f.get("type") == "chat.broadcast"
+                               and f.get("payload", {}).get("text") == "s41 alpha"
+                               and f.get("evt_id") != bt1.get("evt_id"))
+        ok41 = (absorbed and bt2 is not None
+                and chat_rows(srv_t.db) == rows_t1 + 1)
+        record("AC-S41", ok41,
+               "in-TTL replay absorbed=%s; after ttl expiry the resend "
+               "re-enters as a fresh event=%s rows %d -> %d"
+               % (absorbed, bt2 is not None, rows_t1, chat_rows(srv_t.db)))
+    finally:
+        if ws_t is not None:
+            try:
+                await ws_t.close()
+            except Exception:
+                pass
+        srv_t.stop()
+
+    # ---- AC-S42: FIFO cap eviction honesty ----
+    cfg_cap = idem_cfg_copy(cap=2)  # ttl stays at the shipped 300
+    port_c = _free_port()
+    srv_c = ServerProc(port_c, config=cfg_cap, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-c-"), "events.db"))
+    ws_c = None
+    try:
+        srv_c.start()
+        ws_c, _, _ = await open_client(port_c)
+        await make_resident(ws_c)
+        texts = ("s42 one", "s42 two", "s42 three")
+        cids = ("idem-42-a", "idem-42-b", "idem-42-c")
+        orig = []
+        for text, cid in zip(texts, cids):
+            await chat_send(ws_c, "lobby", text, cid)
+            b = await recv_until(ws_c,
+                                 lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == text)
+            orig.append(b.get("evt_id"))
+        rows_c3 = chat_rows(srv_c.db)  # 3 rows; cap=2 FIFO evicted cids[0]
+        await chat_send(ws_c, "lobby", texts[0], cids[0])  # evicted-key replay
+        br1 = await recv_until(ws_c,
+                               lambda f: f.get("type") == "chat.broadcast"
+                               and f.get("payload", {}).get("text") == texts[0]
+                               and f.get("evt_id") != orig[0])
+        reentered = br1 is not None and br1.get("evt_id") != orig[0]
+        # The re-entered key is re-remembered at the FIFO tail, which
+        # evicts the next-oldest survivor (cids[1]) - insertion-order
+        # honesty: replay the freshest key (absorbed, re-entry evt_id),
+        # the survivor cids[2] (absorbed), then cids[1] (evicted by the
+        # re-remember -> re-enters the event flow).
+        await chat_send(ws_c, "lobby", texts[0], cids[0])  # freshest replay
+        dup1b = await recv_until(ws_c,
+                                 lambda f: f.get("type") == "chat.duplicate"
+                                 and f.get("payload", {}).get("client_msg_id") == cids[0])
+        await chat_send(ws_c, "lobby", texts[2], cids[2])  # survivor replay
+        dup3 = await recv_until(ws_c,
+                                lambda f: f.get("type") == "chat.duplicate"
+                                and f.get("payload", {}).get("client_msg_id") == cids[2])
+        await chat_send(ws_c, "lobby", texts[1], cids[1])  # evicted survivor
+        br2 = await recv_until(ws_c,
+                               lambda f: f.get("type") == "chat.broadcast"
+                               and f.get("payload", {}).get("text") == texts[1]
+                               and f.get("evt_id") != orig[1])
+        reentered2 = br2 is not None and br2.get("evt_id") != orig[1]
+        absorbed_fresh = (dup1b.get("payload", {}).get("evt_id") == br1.get("evt_id"))
+        absorbed_surv = (dup3.get("payload", {}).get("evt_id") == orig[2])
+        ok42 = (reentered and absorbed_fresh and absorbed_surv and reentered2
+                and chat_rows(srv_c.db) == rows_c3 + 2)
+        record("AC-S42", ok42,
+               "cap=2: evicted-key replay re-entered=%s; re-remembered key "
+               "absorbed=%s survivor c3 absorbed=%s; next-oldest survivor "
+               "c2 evicted by the re-remember -> re-entered=%s; rows 3 + 1 "
+               "+ 0 + 0 + 1 = %d"
+               % (reentered, absorbed_fresh, absorbed_surv, reentered2,
+                  chat_rows(srv_c.db)))
+    finally:
+        if ws_c is not None:
+            try:
+                await ws_c.close()
+            except Exception:
+                pass
+        srv_c.stop()
+
+    # ---- AC-S43: hygiene (suite-only round) ----
+    sha_server_post = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_post = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+    own_src = inspect.getsource(idem_restart_cases)
+    ascii_ok = True
+    try:
+        own_src.encode("ascii")
+    except UnicodeEncodeError:
+        ascii_ok = False
+    ok43 = (sha_server_post == sha_server_pre
+            and sha_config_post == sha_config_pre and ascii_ok)
+    record("AC-S43", ok43,
+           "server.py-unchanged=%s config.json-unchanged=%s section-ascii=%s"
+           % (sha_server_post == sha_server_pre,
+              sha_config_post == sha_config_pre, ascii_ok))
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -2681,6 +2912,10 @@ async def suite():
     # real server db).
     board_readcap_cases(srv.db)
     board_persist_cases()
+
+    # AC-S39..S43 (R1892): chat.send idem_seen restart semantics window
+    # (in-TTL absorption / cross-restart re-entry / TTL expiry / FIFO cap).
+    await idem_restart_cases()
 
     await city_cases()
 

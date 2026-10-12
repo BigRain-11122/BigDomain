@@ -1,0 +1,31 @@
+=== R1892 lobby chat.send idem_seen restart-semantics window (suite-only) ===
+--- section 1: suite double-run, new section (AC-S39..S43) byte-identical rc 0/0 ---
+run1:
+PASS AC-S39: replay absorbed: dup-frame-evt_id==orig=True code-ok=True reason-processed=True rows-unchanged=True observer-silent=True
+PASS AC-S40: post-restart replay re-entered the event flow: new-evt=True rows 1 -> 2 (in-memory cache dies with the process - honest boundary)
+PASS AC-S41: in-TTL replay absorbed=True; after ttl expiry the resend re-enters as a fresh event=True rows 1 -> 2
+PASS AC-S42: cap=2: evicted-key replay re-entered=True; re-remembered key absorbed=True survivor c3 absorbed=True; next-oldest survivor c2 evicted by the re-remember -> re-entered=True; rows 3 + 1 + 0 + 0 + 1 = 5
+PASS AC-S43: server.py-unchanged=True config.json-unchanged=True section-ascii=True
+SUITE PASS (46/46 criteria pass)
+run2:
+PASS AC-S39: replay absorbed: dup-frame-evt_id==orig=True code-ok=True reason-processed=True rows-unchanged=True observer-silent=True
+PASS AC-S40: post-restart replay re-entered the event flow: new-evt=True rows 1 -> 2 (in-memory cache dies with the process - honest boundary)
+PASS AC-S41: in-TTL replay absorbed=True; after ttl expiry the resend re-enters as a fresh event=True rows 1 -> 2
+PASS AC-S42: cap=2: evicted-key replay re-entered=True; re-remembered key absorbed=True survivor c3 absorbed=True; next-oldest survivor c2 evicted by the re-remember -> re-entered=True; rows 3 + 1 + 0 + 0 + 1 = 5
+PASS AC-S43: server.py-unchanged=True config.json-unchanged=True section-ascii=True
+SUITE PASS (46/46 criteria pass)
+--- section 2: full regression runner (evidence qa/reconcile-all-R1892.log) ---
+PASS suite lobby exit=0 pass-lines=46 fail-lines=0 criteria=46 28.1s
+PASS suites 136/136 green, expected criteria total=1271
+RUNNER PASS (136/136 suites green, reconcile controls 7/7, 173.1s)
+--- section 3: matrix regen + --check x2 ---
+PASS generated docs/sandbox-suite-matrix.md (13548 bytes) - registry suites=136 criteria=1271 evidence=qa/reconcile-all-R1892.log green=136/136
+MATRIX --check byte-identical x2 rc=0/0 (13548 bytes, 136 suites, 1271 criteria)
+--- section 4: qa writer census ---
+census: files=1267 tee=765 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+NOTE AC-S42 same-round criteria fix (R1883 precedent): pre-registered m2-survivor half was falsified live -
+the re-entered key re-remembers at the FIFO tail and evicts the next-oldest survivor m2
+(insertion-order honesty); product behavior correct, judgment amended, original preserved in tech.md.

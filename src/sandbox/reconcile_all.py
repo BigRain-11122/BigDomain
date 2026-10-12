@@ -129,7 +129,13 @@ SUITES = [
     # default face while old explicit windows stay frozen, a
     # second restart keeps the guarantee, pure-read law across
     # restarts - AC-S32..S38 (34 -> 41).
-    ("lobby", os.path.join("lobby", "test_client.py"), 41),
+    # R1892 idem_seen restart semantics window on chat.send: in-TTL
+    # replay absorption re-acks the original evt_id, cross-restart
+    # replay re-enters the event flow (the in-memory TTL+FIFO cache
+    # dies with the process - honest boundary), TTL expiry admits a
+    # legitimate resend, FIFO cap eviction is honest - AC-S39..S43
+    # (41 -> 46).
+    ("lobby", os.path.join("lobby", "test_client.py"), 46),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
