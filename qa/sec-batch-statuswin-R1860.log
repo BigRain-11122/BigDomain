@@ -1,0 +1,67 @@
+=== run1 stdout verbatim ===
+PASS AC-SB1: defaults budget_ms=200 max_batch=200; own-db single file; ascii=True net_imports=0 ugc store never imported (zero ugc.db schema touch) sec_gate=referenced
+PASS AC-SB2: verdicts 5/5 identical to per-text gate; degraded=0
+PASS AC-SB4: first text gated, 4 land queued reason=budget_breach; replay dedupe rows 4==4; no degraded text holds a verdict (fail-closed)
+PASS AC-SB5: outage at text 3 -> texts 3..5 queued reason=gate_error; verdicts=2; zero silent pass
+PASS AC-SB6: restart: 7 queued rows survive; drain 5 pass + 2 rejected (fail-closed forever); second drain=0; terminal re-degrade PK-deduped rows 7==7 landed=['drained_pass']
+PROF n=1 runs=5 p50_ms=0.003 p95_ms=0.018 max_ms=0.021
+PROF n=10 runs=5 p50_ms=0.005 p95_ms=0.006 max_ms=0.007
+PROF n=50 runs=5 p50_ms=0.012 p95_ms=0.014 max_ms=0.014
+PROF n=100 runs=5 p50_ms=0.022 p95_ms=0.025 max_ms=0.025
+PROF n=200 runs=5 p50_ms=0.040 p95_ms=0.043 max_ms=0.043
+PASS AC-SB3: profile 5 sizes x5 runs real monotonic clock; shape+monotone ok; n=200 max_ms=0.043>0 (wordlist-mock floor; production msgSecCheck p95 = bootstrap wiring window [needs-CEO])
+PASS AC-SB7: submitted=215 verdicted=208 queued_rows=7 exactly-one-outcome xor ok; suite ascii=True; config.json untouched (module defaults only); other suites untouched (git closeout)
+PASS AC-SB8: default face raw list byte-identical (double call); capped envelope exact 5 keys {rows,limit,total,returned,truncated}; default zero shape drift
+PASS AC-SB9: five bad forms {-1,True,'2',2.5,None} all ValueError (module family code, R1850 verdict 2); queue_counts unchanged across 5 rejections (reject before any read)
+PASS AC-SB10: 6-row tie world (3+3 shared-ts groups); limit=2 tail==full[-2:]; mirror SQL (ro conn, DESC rowid tiebreak, reversed)== product; limit=4 straddles tie group ==full[-4:]
+PASS AC-SB11: limit==total full (truncated=False); limit>total full; limit=1 single tail row; zero world honest empty cap read carries all keys
+PASS AC-SB12: method source zero write verbs (inspect); capped double call json-identical; queue_counts stable across all cap reads; reconcile_all ugc-sec-batch wired (registry face follows the runner count 7->12->17->22, R1732 precedent)
+PASS AC-SB13: default face raw list byte-identical (double call); limit=0 + explicit window keeps the raw LIST shape (zero shape drift); capped+window envelope exact 6 keys with window echo; empty world honest zero reads
+PASS AC-SB14: 14 bad window forms all ValueError (module family code, R1850 verdict 2 carried over; \Z strict anchor R1748 family law); queue_counts unchanged across 14 rejections; double-bad -> limit message first (gate order pinned)
+PASS AC-SB15: record-time window: 2 fixture August rows + 3 real October rows; explicit window read == filtered row set (7 fields, mirror SQL third path cross); default full read carries both months; two-window zero cross-penetration both ways; future window honest empty on both shapes (keys carried)
+PASS AC-SB16: window filter precedes COUNT/LIMIT: overflow block total=windowed count (3, not the global 5); tail window ==windowed full read tail; mirror SQL (window predicate + DESC rowid tiebreak, reversed) == product; limit==windowed count full; limit>count full
+PASS AC-SB17: method source zero write verbs (inspect); windowed reads double-call json-identical (list + envelope shapes); queue_counts stable across all window reads; reconcile_all ugc-sec-batch criteria 17->22 wired
+PASS AC-SB18: default + explicit-None byte-identical on both faces (populated world); windowed rows_by_status keeps the raw 8-field tuple LIST shape; three statuses walk; queue_counts windowed = same sparse dict shape (October window shows only the observed queued key; zero window-key pollution)
+PASS AC-SB19: 14 bad window forms x both faces all ValueError (module family code, R1850 verdict 2); ro COUNT 5==5 across 28 rejections (reject before any read); full queued read unchanged; double-bad -> status message first (status gate before window gate)
+PASS AC-SB20: rows_by_status(window) == mirror SQL (ro conn, status + window predicates, same order); queue_counts(window) == mirror GROUP BY (both statuses observed in August); windowed read == same-order subset of the default full read; two-window zero cross-penetration both ways; future window honest empty on both shapes ({} zero keys)
+PASS AC-SB21: sparse carry-over: October window after the drain = {'drained_pass': 3} only (the queued key is gone - a window shows observed statuses only); terminal attribution = landing month: rows re-gated in November keep the October window (November window honestly empty {}), and they carry the November drain stamp INSIDE the October window (record-time identity); full read covers every observed key
+PASS AC-SB22: both method sources zero write verbs (inspect); windowed reads double-call json-identical (list + dict shapes); row count 5==5 stable across every window read; reconcile_all ugc-sec-batch criteria 17->22 wired (registry face follows the runner count, R1732 precedent)
+SUITE PASS: 22/22
+
+=== run2 stdout verbatim ===
+PASS AC-SB1: defaults budget_ms=200 max_batch=200; own-db single file; ascii=True net_imports=0 ugc store never imported (zero ugc.db schema touch) sec_gate=referenced
+PASS AC-SB2: verdicts 5/5 identical to per-text gate; degraded=0
+PASS AC-SB4: first text gated, 4 land queued reason=budget_breach; replay dedupe rows 4==4; no degraded text holds a verdict (fail-closed)
+PASS AC-SB5: outage at text 3 -> texts 3..5 queued reason=gate_error; verdicts=2; zero silent pass
+PASS AC-SB6: restart: 7 queued rows survive; drain 5 pass + 2 rejected (fail-closed forever); second drain=0; terminal re-degrade PK-deduped rows 7==7 landed=['drained_pass']
+PROF n=1 runs=5 p50_ms=0.003 p95_ms=0.015 max_ms=0.018
+PROF n=10 runs=5 p50_ms=0.004 p95_ms=0.005 max_ms=0.006
+PROF n=50 runs=5 p50_ms=0.012 p95_ms=0.014 max_ms=0.014
+PROF n=100 runs=5 p50_ms=0.022 p95_ms=0.023 max_ms=0.023
+PROF n=200 runs=5 p50_ms=0.040 p95_ms=0.042 max_ms=0.042
+PASS AC-SB3: profile 5 sizes x5 runs real monotonic clock; shape+monotone ok; n=200 max_ms=0.042>0 (wordlist-mock floor; production msgSecCheck p95 = bootstrap wiring window [needs-CEO])
+PASS AC-SB7: submitted=215 verdicted=208 queued_rows=7 exactly-one-outcome xor ok; suite ascii=True; config.json untouched (module defaults only); other suites untouched (git closeout)
+PASS AC-SB8: default face raw list byte-identical (double call); capped envelope exact 5 keys {rows,limit,total,returned,truncated}; default zero shape drift
+PASS AC-SB9: five bad forms {-1,True,'2',2.5,None} all ValueError (module family code, R1850 verdict 2); queue_counts unchanged across 5 rejections (reject before any read)
+PASS AC-SB10: 6-row tie world (3+3 shared-ts groups); limit=2 tail==full[-2:]; mirror SQL (ro conn, DESC rowid tiebreak, reversed)== product; limit=4 straddles tie group ==full[-4:]
+PASS AC-SB11: limit==total full (truncated=False); limit>total full; limit=1 single tail row; zero world honest empty cap read carries all keys
+PASS AC-SB12: method source zero write verbs (inspect); capped double call json-identical; queue_counts stable across all cap reads; reconcile_all ugc-sec-batch wired (registry face follows the runner count 7->12->17->22, R1732 precedent)
+PASS AC-SB13: default face raw list byte-identical (double call); limit=0 + explicit window keeps the raw LIST shape (zero shape drift); capped+window envelope exact 6 keys with window echo; empty world honest zero reads
+PASS AC-SB14: 14 bad window forms all ValueError (module family code, R1850 verdict 2 carried over; \Z strict anchor R1748 family law); queue_counts unchanged across 14 rejections; double-bad -> limit message first (gate order pinned)
+PASS AC-SB15: record-time window: 2 fixture August rows + 3 real October rows; explicit window read == filtered row set (7 fields, mirror SQL third path cross); default full read carries both months; two-window zero cross-penetration both ways; future window honest empty on both shapes (keys carried)
+PASS AC-SB16: window filter precedes COUNT/LIMIT: overflow block total=windowed count (3, not the global 5); tail window ==windowed full read tail; mirror SQL (window predicate + DESC rowid tiebreak, reversed) == product; limit==windowed count full; limit>count full
+PASS AC-SB17: method source zero write verbs (inspect); windowed reads double-call json-identical (list + envelope shapes); queue_counts stable across all window reads; reconcile_all ugc-sec-batch criteria 17->22 wired
+PASS AC-SB18: default + explicit-None byte-identical on both faces (populated world); windowed rows_by_status keeps the raw 8-field tuple LIST shape; three statuses walk; queue_counts windowed = same sparse dict shape (October window shows only the observed queued key; zero window-key pollution)
+PASS AC-SB19: 14 bad window forms x both faces all ValueError (module family code, R1850 verdict 2); ro COUNT 5==5 across 28 rejections (reject before any read); full queued read unchanged; double-bad -> status message first (status gate before window gate)
+PASS AC-SB20: rows_by_status(window) == mirror SQL (ro conn, status + window predicates, same order); queue_counts(window) == mirror GROUP BY (both statuses observed in August); windowed read == same-order subset of the default full read; two-window zero cross-penetration both ways; future window honest empty on both shapes ({} zero keys)
+PASS AC-SB21: sparse carry-over: October window after the drain = {'drained_pass': 3} only (the queued key is gone - a window shows observed statuses only); terminal attribution = landing month: rows re-gated in November keep the October window (November window honestly empty {}), and they carry the November drain stamp INSIDE the October window (record-time identity); full read covers every observed key
+PASS AC-SB22: both method sources zero write verbs (inspect); windowed reads double-call json-identical (list + dict shapes); row count 5==5 stable across every window read; reconcile_all ugc-sec-batch criteria 17->22 wired (registry face follows the runner count, R1732 precedent)
+SUITE PASS: 22/22
+
+=== double-run determinism (R1855 convention) ===
+run1 bytes=10144 run2 bytes=10144
+run1 sha256=99b51d8ca647280067604148ae3f67ddbe414fbb8a3e61200a30940a42cd6fab run2 sha256=39bf32ef98885c3d0aca5ee73ad1407a8b1c75441b6159bd4b62a4d4992d63c9
+full-identical=False (PROF lines and the AC-SB3 PASS line carry real wall-clock values - declared measurement faces since R1681)
+filtered-lines (PROF + AC-SB3 excluded) 22/22 identical=True
+criteria-lines (PASS/FAIL/SUITE, PROF/AC-SB3 excluded) 22/22 byte-identical=True
+R1860-section (AC-SB18..SB22 + SUITE) 6 lines byte-identical=True

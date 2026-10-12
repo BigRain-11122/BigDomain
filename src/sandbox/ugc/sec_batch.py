@@ -64,6 +64,22 @@ ST_DRAINED_REJ = "drained_rejected"
 # rejecting). Same text as freetrial.py / water_journal.py / apidev.py.
 _WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
+
+def _window_or_raise(window):
+    """Coerce an optional YYYY-MM month filter (None = full read).
+
+    R1860 shared coercion for the rows_by_status / queue_counts window
+    params (AC-SB18..AC-SB22). Strict \\Z anchor family law (R1748);
+    ValueError family code - this module has no E_* code vocabulary
+    (R1850 verdict 2). None is the ONLY default sentinel: an empty
+    string is a bad form, never a fallback."""
+    if window is None:
+        return None
+    w = str(window)
+    if not _WINDOW_RE.match(w):
+        raise ValueError("window must be a YYYY-MM month string")
+    return w
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sec_degraded_queue (
   qid        TEXT PRIMARY KEY,
@@ -315,22 +331,52 @@ class SecBatchFace(object):
             out["window"] = w
         return out
 
-    def rows_by_status(self, status):
+    def rows_by_status(self, status, window=None):
         """Read face for the recovery loop (R1681 wiring, AC-PW5):
         queue rows at one status. Terminal rows are history - callers
         treat them read-only; the single writer stays inside this
-        class."""
+        class.
+
+        R1860 window filter (AC-SB18..AC-SB22): window=None keeps the
+        current face byte-identical; an explicit YYYY-MM month narrows
+        the row set by landing month (record-time substr(ts_utc,1,7))
+        - the raw LIST shape never changes (no envelope, no window
+        echo key). The status gate runs before the window gate (param
+        gate-first family law). A row re-gated in a later month keeps
+        its landing-month window: the landing timestamp is the row's
+        record-time identity."""
         if status not in (ST_QUEUED, ST_DRAINED_PASS, ST_DRAINED_REJ):
             raise ValueError("unknown queue status: %s" % status)
+        w = _window_or_raise(window)
+        where = ""
+        args = [status]
+        if w is not None:
+            where = " AND substr(ts_utc, 1, 7) = ?"
+            args.append(w)
         return self._exec(
             "SELECT qid, source, actor, content, reason, status, ts_utc,"
-            " ts_drained FROM sec_degraded_queue WHERE status = ?"
-            " ORDER BY ts_utc", (status,)).fetchall()
+            " ts_drained FROM sec_degraded_queue WHERE status = ?" + where
+            + " ORDER BY ts_utc", args).fetchall()
 
-    def queue_counts(self):
+    def queue_counts(self, window=None):
+        """Per-status row counts. Sparse caliber: only observed
+        statuses appear (R1859 AC-SBR1 single-key anchor). The windowed
+        read carries the SAME sparse caliber - a status with zero rows
+        in the window simply shows no key (window narrows the data
+        domain, it never reshapes the dict; R1856 verdict 3 law).
+
+        R1860 window filter (AC-SB18..AC-SB22): window=None keeps the
+        current face byte-identical; an explicit YYYY-MM month counts
+        rows by landing month (record-time substr(ts_utc,1,7))."""
+        w = _window_or_raise(window)
+        where = ""
+        args = []
+        if w is not None:
+            where = " WHERE substr(ts_utc, 1, 7) = ?"
+            args.append(w)
         rows = self._exec(
-            "SELECT status, COUNT(*) FROM sec_degraded_queue"
-            " GROUP BY status").fetchall()
+            "SELECT status, COUNT(*) FROM sec_degraded_queue" + where
+            + " GROUP BY status", args).fetchall()
         return {str(s): int(c) for s, c in rows}
 
     # ---------------- p95 profile face (AC-SB3) ----------------

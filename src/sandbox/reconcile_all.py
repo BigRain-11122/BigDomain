@@ -274,8 +274,10 @@ SUITES = [
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent);
     # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12;
-    # R1855 banner_queue window filter (AC-SB13..SB17) 12 -> 17
-    ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 17),
+    # R1855 banner_queue window filter (AC-SB13..SB17) 12 -> 17;
+    # R1860 rows_by_status/queue_counts window filter
+    # (AC-SB18..SB22 pre-registered in state/queue/tech.md) 17 -> 22
+    ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 22),
     # R1859 sec_batch banner_queue monthly-roll preservation example
     # (AC-SBR1..AC-SBR7 pre-registered in state/queue/tech.md)
     ("ugc-sec-batch-roll", os.path.join("ugc", "test_sec_batch_roll.py"), 7),

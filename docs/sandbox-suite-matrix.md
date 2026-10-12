@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-12 12:08 +08:00
+- 生成时间: generated: 2026-10-12 12:33 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1858-2.log
 - 状态证据: reconcile-all-R1858-2.log (RUNNER PASS 115/115 suites green, reconcile controls 7/7, 588.9s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 116 | 1079 | 115/115 | R1858 |
+| 116 | 1084 | 115/115 | R1858 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -69,7 +69,7 @@
 | 30 | ledger-apidev-lifecycletrace | ledger/test_apidev_lifecycle_trace.py | 7 | green | 1.1 |
 | 31 | tourstate | tourstate/test_tourstate.py | 7 | green | 0.2 |
 | 32 | ugc | ugc/test_ugc.py | 37 | green | 20.8 |
-| 33 | ugc-sec-batch | ugc/test_sec_batch.py | 17 | green | 1.8 |
+| 33 | ugc-sec-batch | ugc/test_sec_batch.py | 22 | green | 1.8 |
 | 34 | ugc-sec-batch-roll | ugc/test_sec_batch_roll.py | 7 | no-evidence | - |
 | 35 | pay | pay/test_pay.py | 16 | green | 11.5 |
 | 36 | pay-v3 | pay/test_pay_v3.py | 14 | green | 3.5 |
@@ -153,7 +153,7 @@
 | 114 | ledger-apidev-chainusage | ledger/test_apidev_chainusage.py | 8 | green | 2.7 |
 | 115 | ledger-apidev-devboard-roll | ledger/test_apidev_devboard_roll.py | 7 | green | 1.5 |
 | 116 | ledger-apidev-devboard-limit | ledger/test_apidev_devboard_limit.py | 14 | green | 2.2 |
-|  | 合计 |  | 1079 | green 115 / FAIL 0 / no-evidence 1 |  |
+|  | 合计 |  | 1084 | green 115 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

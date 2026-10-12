@@ -1,8 +1,9 @@
-"""AC-SB1..AC-SB17 suite: UGC sec-gate batch + degradation face.
+"""AC-SB1..AC-SB22 suite: UGC sec-gate batch + degradation face.
 
 Criteria pre-registered in state/queue/tech.md (R1681 claim row;
 R1850 read-cap extension AC-SB8..AC-SB12; R1855 window-filter
-extension AC-SB13..AC-SB17) BEFORE this code - honesty law. Suite
+extension AC-SB13..AC-SB17; R1860 rows_by_status/queue_counts window
+extension AC-SB18..AC-SB22) BEFORE this code - honesty law. Suite
 convention: one PASS line per criterion, SUITE tail line, exit 0 only
 when all green.
 
@@ -328,7 +329,7 @@ def main():
         os.path.join(BASE, "..", "reconcile_all.py"))
     runner_txt = open(runner_path, encoding="utf-8").read()
     reg_ok = ('"ugc-sec-batch"' in runner_txt
-              and 'os.path.join("ugc", "test_sec_batch.py"), 17)'
+              and 'os.path.join("ugc", "test_sec_batch.py"), 22)'
               in runner_txt)
     fcapr.close()
     check(bad, "AC-SB12",
@@ -340,7 +341,7 @@ def main():
           "method source zero write verbs (inspect); capped double "
           "call json-identical; queue_counts stable across all cap "
           "reads; reconcile_all ugc-sec-batch wired (registry face "
-          "follows the runner count 7->12->17, R1732 precedent)")
+          "follows the runner count 7->12->17->22, R1732 precedent)")
 
     # ---- AC-SB13..AC-SB17: banner_queue window filter (R1855) ------------
     windb = os.path.join(tmp, "sec_degraded_win.db")
@@ -489,9 +490,201 @@ def main():
           "method source zero write verbs (inspect); windowed reads "
           "double-call json-identical (list + envelope shapes); "
           "queue_counts stable across all window reads; reconcile_all "
-          "ugc-sec-batch criteria 12->17 wired")
+          "ugc-sec-batch criteria 17->22 wired")
 
-    n = 17
+    # ---- AC-SB18..AC-SB22: rows_by_status / queue_counts window
+    # filter (R1860) -------------------------------------------------
+    # two-month world: October rows via the real product path (an
+    # explicit-ts budget-breach batch), August rows via fixture direct
+    # rows (R1730 family precedent - declared; one queued + one
+    # already re-gated terminal with a September drain stamp)
+    rbsdb = os.path.join(tmp, "sec_degraded_rbs.db")
+    frbsb = SecBatchFace(gate, rbsdb,
+                         config={"sec_batch": {"budget_ms": 100}},
+                         clock=StepClock())
+    ts_rbs_oct = "2026-10-12T03:00:00.000000Z"
+    outrbs = frbsb.check_batch(["rbs one", "rbs two", "rbs three",
+                                "rbs four"], source="rbs", ts=ts_rbs_oct)
+    frbsb.close()
+    connr = sqlite3.connect(rbsdb)
+    connr.execute(
+        "INSERT INTO sec_degraded_queue"
+        " (qid, source, actor, content, reason, status, ts_utc,"
+        " ts_drained) VALUES (?,?,?,?,?,?,?,?)",
+        ("fixture-aug-q", "fixture", "", "hist aug queued",
+         "budget_breach", "queued", "2026-08-05T01:00:00.000000Z",
+         None))
+    connr.execute(
+        "INSERT INTO sec_degraded_queue"
+        " (qid, source, actor, content, reason, status, ts_utc,"
+        " ts_drained) VALUES (?,?,?,?,?,?,?,?)",
+        ("fixture-aug-d", "fixture", "", "hist aug re-gated",
+         "gate_error", "drained_pass", "2026-08-05T02:00:00.000000Z",
+         "2026-09-01T01:00:00.000000Z"))
+    connr.commit()
+    connr.close()
+    frbs = SecBatchFace(gate, rbsdb, config={}, clock=frozen)
+
+    q_def = frbs.rows_by_status("queued")
+    q_none = frbs.rows_by_status("queued", window=None)
+    q_oct = frbs.rows_by_status("queued", window="2026-10")
+    q_aug = frbs.rows_by_status("queued", window="2026-08")
+    dp_aug = frbs.rows_by_status("drained_pass", window="2026-08")
+    dr_oct = frbs.rows_by_status("drained_rejected", window="2026-10")
+    cq_def = frbs.queue_counts()
+    cq_none = frbs.queue_counts(window=None)
+    cq_oct = frbs.queue_counts(window="2026-10")
+    check(bad, "AC-SB18",
+          (len(outrbs["degraded"]) == 3
+           and json.dumps(q_def, default=list)
+           == json.dumps(q_none, default=list)
+           and all(isinstance(r, tuple) and len(r) == 8 for r in q_def)
+           and isinstance(q_oct, list) and len(q_oct) == 3
+           and all(isinstance(r, tuple) and len(r) == 8 for r in q_oct)
+           and len(q_aug) == 1 and len(dp_aug) == 1 and dr_oct == []
+           and json.dumps(cq_def) == json.dumps(cq_none)
+           and cq_def == {"queued": 4, "drained_pass": 1}
+           and cq_oct == {"queued": 3}
+           and sorted(cq_oct.keys()) == ["queued"]),
+          "default + explicit-None byte-identical on both faces "
+          "(populated world); windowed rows_by_status keeps the raw "
+          "8-field tuple LIST shape; three statuses walk; queue_counts "
+          "windowed = same sparse dict shape (October window shows "
+          "only the observed queued key; zero window-key pollution)")
+
+    bad_forms19 = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+                   "202610", "abcd", "", 2026, True, 2.5,
+                   "2026-10\n", "2026-10 ", "2026-10\r")
+    raised19a, raised19b = [], []
+    ro19 = sqlite3.connect(
+        "file:" + rbsdb.replace("\\", "/") + "?mode=ro", uri=True)
+    pre19 = ro19.execute(
+        "SELECT COUNT(*) FROM sec_degraded_queue").fetchone()[0]
+    ro19.close()
+    for form in bad_forms19:
+        try:
+            frbs.rows_by_status("queued", window=form)
+            raised19a.append(None)
+        except ValueError:
+            raised19a.append("ValueError")
+        try:
+            frbs.queue_counts(window=form)
+            raised19b.append(None)
+        except ValueError:
+            raised19b.append("ValueError")
+    try:
+        frbs.rows_by_status("nope", window="2026-99")
+        order19 = None
+    except ValueError as exc:
+        order19 = ("status" if "unknown queue status" in str(exc)
+                   else "window")
+    ro19 = sqlite3.connect(
+        "file:" + rbsdb.replace("\\", "/") + "?mode=ro", uri=True)
+    post19 = ro19.execute(
+        "SELECT COUNT(*) FROM sec_degraded_queue").fetchone()[0]
+    ro19.close()
+    check(bad, "AC-SB19",
+          (raised19a == ["ValueError"] * 14
+           and raised19b == ["ValueError"] * 14
+           and pre19 == post19 == 5
+           and json.dumps(frbs.rows_by_status("queued"), default=list)
+           == json.dumps(q_def, default=list)
+           and order19 == "status"),
+          "14 bad window forms x both faces all ValueError (module "
+          "family code, R1850 verdict 2); ro COUNT 5==5 across 28 "
+          "rejections (reject before any read); full queued read "
+          "unchanged; double-bad -> status message first (status gate "
+          "before window gate)")
+
+    ror20 = sqlite3.connect(
+        "file:" + rbsdb.replace("\\", "/") + "?mode=ro", uri=True)
+    mir_q_oct = ror20.execute(
+        "SELECT qid, source, actor, content, reason, status, ts_utc,"
+        " ts_drained FROM sec_degraded_queue WHERE status='queued'"
+        " AND substr(ts_utc, 1, 7) = '2026-10' ORDER BY ts_utc"
+    ).fetchall()
+    mir_cq_aug = dict(ror20.execute(
+        "SELECT status, COUNT(*) FROM sec_degraded_queue"
+        " WHERE substr(ts_utc, 1, 7) = '2026-08' GROUP BY status"
+    ).fetchall())
+    ror20.close()
+    cq_aug = frbs.queue_counts(window="2026-08")
+    fut_q = frbs.rows_by_status("queued", window="2026-12")
+    fut_cq = frbs.queue_counts(window="2026-12")
+    check(bad, "AC-SB20",
+          (q_oct == mir_q_oct and cq_aug == mir_cq_aug
+           and cq_aug == {"queued": 1, "drained_pass": 1}
+           and q_oct == [r for r in q_def if r[6][:7] == "2026-10"]
+           and q_aug == [r for r in q_def if r[6][:7] == "2026-08"]
+           and len(q_def) == 4
+           and len(frbs.rows_by_status("drained_pass")) == 1
+           and fut_q == [] and fut_cq == {}),
+          "rows_by_status(window) == mirror SQL (ro conn, status + "
+          "window predicates, same order); queue_counts(window) == "
+          "mirror GROUP BY (both statuses observed in August); "
+          "windowed read == same-order subset of the default full "
+          "read; two-window zero cross-penetration both ways; future "
+          "window honest empty on both shapes ({} zero keys)")
+
+    ts_rbs_nov = "2026-11-01T01:00:00.000000Z"
+    drained_rbs = frbs.drain(ts=ts_rbs_nov)
+    cq_oct_post = frbs.queue_counts(window="2026-10")
+    cq_aug_post = frbs.queue_counts(window="2026-08")
+    cq_nov = frbs.queue_counts(window="2026-11")
+    dp_oct_post = frbs.rows_by_status("drained_pass", window="2026-10")
+    cq_full_post = frbs.queue_counts()
+    keys_union = set(cq_oct_post) | set(cq_aug_post) | set(cq_nov)
+    check(bad, "AC-SB21",
+          (drained_rbs["drained"] == 4 and drained_rbs["passed"] == 4
+           and drained_rbs["still_queued"] == 0
+           and cq_oct_post == {"drained_pass": 3}
+           and "queued" not in cq_oct_post
+           and cq_nov == {}
+           and len(dp_oct_post) == 3
+           and all(r[7] == ts_rbs_nov for r in dp_oct_post)
+           and all(r[6][:7] == "2026-10" for r in dp_oct_post)
+           and cq_full_post == {"drained_pass": 5}
+           and keys_union == {"drained_pass"}
+           and keys_union <= set(cq_full_post)),
+          "sparse carry-over: October window after the drain = "
+          "{'drained_pass': 3} only (the queued key is gone - a "
+          "window shows observed statuses only); terminal "
+          "attribution = landing month: rows re-gated in November "
+          "keep the October window (November window honestly empty "
+          "{}), and they carry the November drain stamp INSIDE the "
+          "October window (record-time identity); full read covers "
+          "every observed key")
+
+    src_rbs22 = inspect.getsource(SecBatchFace.rows_by_status).upper()
+    src_cq22 = inspect.getsource(SecBatchFace.queue_counts).upper()
+    verbs22 = re.findall(r"\bINSERT\b|\bUPDATE\b|\bDELETE\b",
+                         src_rbs22 + src_cq22)
+    dp_b = frbs.rows_by_status("drained_pass", window="2026-10")
+    dp_b2 = frbs.rows_by_status("drained_pass", window="2026-10")
+    cq_b = frbs.queue_counts(window="2026-10")
+    cq_b2 = frbs.queue_counts(window="2026-10")
+    ro22 = sqlite3.connect(
+        "file:" + rbsdb.replace("\\", "/") + "?mode=ro", uri=True)
+    rows22 = ro22.execute(
+        "SELECT COUNT(*) FROM sec_degraded_queue").fetchone()[0]
+    ro22.close()
+    frbs.close()
+    reg22_ok = ('os.path.join("ugc", "test_sec_batch.py"), 22)'
+                in runner_txt)
+    check(bad, "AC-SB22",
+          (not verbs22
+           and json.dumps(dp_b, default=list)
+           == json.dumps(dp_b2, default=list)
+           and json.dumps(cq_b) == json.dumps(cq_b2)
+           and rows22 == 5 and pre19 == rows22
+           and reg22_ok),
+          "both method sources zero write verbs (inspect); windowed "
+          "reads double-call json-identical (list + dict shapes); "
+          "row count 5==5 stable across every window read; "
+          "reconcile_all ugc-sec-batch criteria 17->22 wired "
+          "(registry face follows the runner count, R1732 precedent)")
+
+    n = 22
     print("SUITE %s: %d/%d" % ("PASS" if not bad else "FAIL",
                                n - len(bad), n), flush=True)
     return 1 if bad else 0
