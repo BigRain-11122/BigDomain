@@ -273,8 +273,9 @@ SUITES = [
     ("ugc", os.path.join("ugc", "test_ugc.py"), 37),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent);
-    # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12
-    ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 12),
+    # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12;
+    # R1855 banner_queue window filter (AC-SB13..SB17) 12 -> 17
+    ("ugc-sec-batch", os.path.join("ugc", "test_sec_batch.py"), 17),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
     ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),

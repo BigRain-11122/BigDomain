@@ -1,9 +1,10 @@
-"""AC-SB1..AC-SB12 suite: UGC sec-gate batch + degradation face.
+"""AC-SB1..AC-SB17 suite: UGC sec-gate batch + degradation face.
 
 Criteria pre-registered in state/queue/tech.md (R1681 claim row;
-R1850 read-cap extension AC-SB8..AC-SB12) BEFORE this code - honesty
-law. Suite convention: one PASS line per criterion, SUITE tail line,
-exit 0 only when all green.
+R1850 read-cap extension AC-SB8..AC-SB12; R1855 window-filter
+extension AC-SB13..AC-SB17) BEFORE this code - honesty law. Suite
+convention: one PASS line per criterion, SUITE tail line, exit 0 only
+when all green.
 
 Face under test: sec_batch.SecBatchFace (batch gate wrapper + own-file
 persistent degraded banner queue, R1254 rows-are-queue semantics).
@@ -327,7 +328,7 @@ def main():
         os.path.join(BASE, "..", "reconcile_all.py"))
     runner_txt = open(runner_path, encoding="utf-8").read()
     reg_ok = ('"ugc-sec-batch"' in runner_txt
-              and 'os.path.join("ugc", "test_sec_batch.py"), 12)'
+              and 'os.path.join("ugc", "test_sec_batch.py"), 17)'
               in runner_txt)
     fcapr.close()
     check(bad, "AC-SB12",
@@ -338,9 +339,159 @@ def main():
            and reg_ok),
           "method source zero write verbs (inspect); capped double "
           "call json-identical; queue_counts stable across all cap "
-          "reads; reconcile_all ugc-sec-batch criteria 7->12 wired")
+          "reads; reconcile_all ugc-sec-batch wired (registry face "
+          "follows the runner count 7->12->17, R1732 precedent)")
 
-    n = 12
+    # ---- AC-SB13..AC-SB17: banner_queue window filter (R1855) ------------
+    windb = os.path.join(tmp, "sec_degraded_win.db")
+    fwin = SecBatchFace(gate, windb, config={}, clock=frozen)
+    w_raw0 = fwin.banner_queue()
+    w_raw0_b = fwin.banner_queue()
+    w_list_empty = fwin.banner_queue(window="2026-10")
+    w_env_empty = fwin.banner_queue(limit=3, window="2026-10")
+    check(bad, "AC-SB13",
+          (isinstance(w_raw0, list) and w_raw0 == []
+           and json.dumps(w_raw0, default=list)
+           == json.dumps(w_raw0_b, default=list)
+           and isinstance(w_list_empty, list) and w_list_empty == []
+           and isinstance(w_env_empty, dict)
+           and sorted(w_env_empty.keys()) ==
+           ["limit", "returned", "rows", "total", "truncated", "window"]
+           and w_env_empty["window"] == "2026-10"
+           and w_env_empty["rows"] == [] and w_env_empty["total"] == 0
+           and w_env_empty["truncated"] is False),
+          "default face raw list byte-identical (double call); "
+          "limit=0 + explicit window keeps the raw LIST shape (zero "
+          "shape drift); capped+window envelope exact 6 keys with "
+          "window echo; empty world honest zero reads")
+
+    bad_forms = ("2026-13", "2026-00", "2026-1", "2026/10", "2026",
+                 "202610", "abcd", "", 2026, True, 2.5,
+                 "2026-10\n", "2026-10 ", "2026-10\r")
+    raised14 = []
+    counts_pre14 = fwin.queue_counts()
+    for form in bad_forms:
+        try:
+            fwin.banner_queue(window=form)
+            raised14.append(None)
+        except ValueError:
+            raised14.append("ValueError")
+    try:
+        fwin.banner_queue(limit=-1, window="2026-99")
+        gate_order = None
+    except ValueError as exc:
+        gate_order = "limit" if "limit" in str(exc) else "window"
+    check(bad, "AC-SB14",
+          (raised14 == ["ValueError"] * 14
+           and fwin.queue_counts() == counts_pre14
+           and gate_order == "limit"),
+          "14 bad window forms all ValueError (module family code, "
+          "R1850 verdict 2 carried over; \\Z strict anchor R1748 "
+          "family law); queue_counts unchanged across 14 rejections; "
+          "double-bad -> limit message first (gate order pinned)")
+
+    fwin.close()
+    # two-month world: October rows via the real product path (a
+    # shared-ts budget-breach batch with an explicit ts), August rows
+    # via fixture direct INSERT (R1730 family precedent - declared)
+    fwinb = SecBatchFace(gate, windb,
+                         config={"sec_batch": {"budget_ms": 100}},
+                         clock=StepClock())
+    ts_oct = "2026-10-12T03:00:00.000000Z"
+    outw = fwinb.check_batch(["winA one", "winA two", "winA three",
+                              "winA four"], source="winA", ts=ts_oct)
+    fwinb.close()
+    connf = sqlite3.connect(windb)
+    for i, content in enumerate(("hist aug one", "hist aug two")):
+        connf.execute(
+            "INSERT INTO sec_degraded_queue"
+            " (qid, source, actor, content, reason, status, ts_utc)"
+            " VALUES (?,?,?,?,?,?,?)",
+            ("fixture-aug-%02d" % i, "fixture", "", content,
+             "budget_breach", "queued",
+             "2026-08-05T0%d:00:00.000000Z" % (i + 1)))
+    connf.commit()
+    connf.close()
+    fwinr = SecBatchFace(gate, windb, config={}, clock=frozen)
+
+    full_win = fwinr.banner_queue()
+    aug_rows = fwinr.banner_queue(window="2026-08")
+    oct_rows = fwinr.banner_queue(window="2026-10")
+    nov_rows = fwinr.banner_queue(window="2026-11")
+    nov_cap = fwinr.banner_queue(limit=2, window="2026-11")
+    ro15 = sqlite3.connect(
+        "file:" + windb.replace("\\", "/") + "?mode=ro", uri=True)
+    mir_oct = ro15.execute(
+        "SELECT qid, source, actor, content, reason, status, ts_utc"
+        " FROM sec_degraded_queue WHERE status='queued'"
+        " AND substr(ts_utc, 1, 7) = '2026-10'"
+        " ORDER BY ts_utc").fetchall()
+    ro15.close()
+    check(bad, "AC-SB15",
+          (len(outw["degraded"]) == 3 and len(full_win) == 5
+           and len(aug_rows) == 2
+           and [r[6][:7] for r in aug_rows] == ["2026-08"] * 2
+           and len(oct_rows) == 3
+           and [r[6][:7] for r in oct_rows] == ["2026-10"] * 3
+           and oct_rows == mir_oct
+           and all(len(r) == 7 for r in aug_rows + oct_rows)
+           and nov_rows == []
+           and nov_cap["rows"] == [] and nov_cap["total"] == 0
+           and nov_cap["truncated"] is False
+           and nov_cap["window"] == "2026-11"),
+          "record-time window: 2 fixture August rows + 3 real October "
+          "rows; explicit window read == filtered row set (7 fields, "
+          "mirror SQL third path cross); default full read carries "
+          "both months; two-window zero cross-penetration both ways; "
+          "future window honest empty on both shapes (keys carried)")
+
+    oc2 = fwinr.banner_queue(limit=2, window="2026-10")
+    oc3 = fwinr.banner_queue(limit=3, window="2026-10")
+    oc50 = fwinr.banner_queue(limit=50, window="2026-10")
+    ro16 = sqlite3.connect(
+        "file:" + windb.replace("\\", "/") + "?mode=ro", uri=True)
+    mir_oc2 = ro16.execute(
+        "SELECT qid, source, actor, content, reason, status, ts_utc"
+        " FROM sec_degraded_queue WHERE status='queued'"
+        " AND substr(ts_utc, 1, 7) = '2026-10'"
+        " ORDER BY ts_utc DESC, rowid DESC LIMIT 2").fetchall()
+    ro16.close()
+    mir_oc2.reverse()
+    check(bad, "AC-SB16",
+          (oc2["total"] == 3 and oc2["returned"] == 2
+           and oc2["truncated"] is True
+           and oc2["rows"] == oct_rows[-2:]
+           and mir_oc2 == oc2["rows"]
+           and oc3["truncated"] is False and oc3["rows"] == oct_rows
+           and oc50["truncated"] is False and oc50["rows"] == oct_rows
+           and oc50["total"] == 3),
+          "window filter precedes COUNT/LIMIT: overflow block "
+          "total=windowed count (3, not the global 5); tail window =="
+          "windowed full read tail; mirror SQL (window predicate + "
+          "DESC rowid tiebreak, reversed) == product; limit==windowed "
+          "count full; limit>count full")
+
+    method_src17 = inspect.getsource(SecBatchFace.banner_queue).upper()
+    write_verbs17 = re.findall(r"\bINSERT\b|\bUPDATE\b|\bDELETE\b",
+                               method_src17)
+    oc2_b17 = fwinr.banner_queue(limit=2, window="2026-10")
+    oct_rows_b17 = fwinr.banner_queue(window="2026-10")
+    counts_post17 = fwinr.queue_counts()
+    fwinr.close()
+    check(bad, "AC-SB17",
+          (not write_verbs17
+           and json.dumps(oc2, default=list)
+           == json.dumps(oc2_b17, default=list)
+           and json.dumps(oct_rows, default=list)
+           == json.dumps(oct_rows_b17, default=list)
+           and counts_post17 == {"queued": 5}
+           and reg_ok),
+          "method source zero write verbs (inspect); windowed reads "
+          "double-call json-identical (list + envelope shapes); "
+          "queue_counts stable across all window reads; reconcile_all "
+          "ugc-sec-batch criteria 12->17 wired")
+
+    n = 17
     print("SUITE %s: %d/%d" % ("PASS" if not bad else "FAIL",
                                n - len(bad), n), flush=True)
     return 1 if bad else 0

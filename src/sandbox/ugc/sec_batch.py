@@ -34,6 +34,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import sys
 import time
@@ -57,6 +58,11 @@ R_GATE_ERR = "gate_error"
 ST_QUEUED = "queued"
 ST_DRAINED_PASS = "drained_pass"
 ST_DRAINED_REJ = "drained_rejected"
+
+# R1748 family law: strict \Z anchor (a bare $ would let a trailing
+# newline through and silently read an empty window instead of
+# rejecting). Same text as freetrial.py / water_journal.py / apidev.py.
+_WINDOW_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])\Z")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sec_degraded_queue (
@@ -245,44 +251,69 @@ class SecBatchFace(object):
 
     # ---------------- read faces ----------------
 
-    def banner_queue(self, limit=0):
+    def banner_queue(self, limit=0, window=None):
         """Degraded in-app banner queue = all queued rows (rows ARE the
         queue; R1254 semantics).
 
         limit=0 (default): the full current face - a raw list of row
         tuples, byte-identical to the pre-R1850 behavior (existing
-        callers untouched).
+        callers untouched). With window=W this stays a raw LIST, just
+        filtered to rows whose ts_utc lands in month W (record-time
+        substr(ts_utc,1,7)): the list face has no envelope, so the
+        window only narrows the row set - zero shape drift.
 
         limit>0 (R1850 read-cap, AC-SB8..AC-SB12): tail-window cap.
         Returns a dict envelope {rows, limit, total, returned,
         truncated} where rows are the LAST `limit` queued rows in the
         same order the full face yields them (ts_utc ascending, rowid
-        ascending within ties), and total is the FULL queued-row count
-        - a truncated read never lies about how much was cut off.
+        ascending within ties), and total is the windowed queued-row
+        count - a truncated read never lies about how much was cut
+        off. An explicit window adds a "window" key to the envelope
+        (R1855, additive: the default cap face keeps exactly five
+        keys).
         The capped query pins an explicit rowid tiebreak so the tail
         window is deterministic (the full face's bare ORDER BY ts_utc
         relies on engine scan order for ties; the capped path cannot,
-        so it pins one)."""
+        so it pins one). Window filtering runs BEFORE COUNT and LIMIT:
+        total reports the full windowed set, never the global one.
+
+        Bad params are rejected before any read (fail-closed): bad
+        limit first, then a bad window (14 forms, ValueError family -
+        this module has no E_* code vocabulary; R1850 verdict 2)."""
         if isinstance(limit, bool) or not isinstance(limit, int) \
                 or limit < 0:
             raise ValueError(
                 "limit must be a non-negative int (0 = full read)")
+        w = None
+        if window is not None:
+            w = str(window)
+            if not _WINDOW_RE.match(w):
+                raise ValueError(
+                    "window must be a YYYY-MM month string")
+        where = ""
+        args = [ST_QUEUED]
+        if w is not None:
+            where = " AND substr(ts_utc, 1, 7) = ?"
+            args.append(w)
         if limit == 0:
             return self._exec(
                 "SELECT qid, source, actor, content, reason, status,"
-                " ts_utc FROM sec_degraded_queue WHERE status=?"
-                " ORDER BY ts_utc", (ST_QUEUED,)).fetchall()
+                " ts_utc FROM sec_degraded_queue WHERE status=?" + where
+                + " ORDER BY ts_utc", args).fetchall()
         total = int(self._one(
-            "SELECT COUNT(*) FROM sec_degraded_queue WHERE status=?",
-            (ST_QUEUED,)))
+            "SELECT COUNT(*) FROM sec_degraded_queue WHERE status=?"
+            + where, args))
         rows = self._exec(
             "SELECT qid, source, actor, content, reason, status, ts_utc"
-            " FROM sec_degraded_queue WHERE status=?"
-            " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
-            (ST_QUEUED, limit)).fetchall()
+            " FROM sec_degraded_queue WHERE status=?" + where
+            + " ORDER BY ts_utc DESC, rowid DESC LIMIT ?",
+            args + [int(limit)]).fetchall()
         rows.reverse()
-        return {"rows": rows, "limit": int(limit), "total": total,
-                "returned": len(rows), "truncated": len(rows) < total}
+        out = {"rows": rows, "limit": int(limit), "total": total,
+               "returned": len(rows), "truncated": len(rows) < total}
+        if w is not None:
+            out["window"] = w
+        return out
 
     def rows_by_status(self, status):
         """Read face for the recovery loop (R1681 wiring, AC-PW5):

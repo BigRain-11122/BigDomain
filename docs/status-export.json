@@ -1,10 +1,10 @@
 ﻿{
-  "export_ts": "2026-10-12T08:39:41+08:00",
+  "export_ts": "2026-10-12T08:57:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1854 一句话实况（freetrial 月滚例）：成了。cap_usage_board 月滚保真例落册——冻结钟跨月后新月 grant 落新月窗、旧月窗读原值保全、幸存 grant 终身计数不切窗、帽读跨月照常；独立套件 7/7+全量回归 114/114 全绿（月滚例族第六席）。",
-    "latest_artifact": "可跑实物：src/sandbox/ledger/test_freetrial_caproll.py（AC-CRU1..CRU7·冻结钟 +23d 跨月保真）+qa/freetrial-caproll-R1854.log+qa/reconcile-all-R1854.log（RUNNER PASS 114/114·2026-10-12）",
-    "next_milestone": "下个实物：P2 tech FIFO 队头月窗过滤/跨月例族（sec_batch banner_queue 月窗过滤+member banner_board 月窗过滤+apidev dev_board 月窗过滤+eventtickets 跨月保真例）+下窗雷达候选清单 2026-10-14 21:40 到达续候（窗 ≤48h·2026-10-14 内交付一件）"
+    "current": "R1855 一句话实况（sec_batch 月窗过滤）：成了。banner_queue 月窗过滤参数落册——显式 YYYY-MM 窗只切行集不切形状、14 坏窗形态 fail-closed、窗×帽正交（溢出 total=窗内计数）、缺省面逐字节保真；套件 17/17 首跑全绿+全量回归 114/114（判据 1049→1054）。",
+    "latest_artifact": "可跑实物：src/sandbox/ugc/sec_batch.py banner_queue(limit=0, window=None)（AC-SB13..SB17·判据预注册先于代码）+qa/sec-batch-bannerwindow-R1855.log+qa/reconcile-all-R1855.log（RUNNER PASS 114/114·2026-10-12）",
+    "next_milestone": "下个实物：P2 tech FIFO 月窗过滤/跨月例族续件（sec_batch banner_queue 月滚保真例+member banner_board 月窗过滤+apidev dev_board 月窗过滤+eventtickets 跨月保真例）+下窗雷达候选清单 2026-10-14 21:40 到达续候（窗 ≤48h·2026-10-14 内交付一件）"
   },
   "depts": [
     {
@@ -198,6 +198,10 @@
     ]
   ],
   "results": [
+    [
+      "2",
+      "2026-10-12 R1855 ugc sec_batch banner_queue 月窗过滤参数窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1850 补种〕·轮计分 2=可跑实物）：AC-SB13..SB17 判据预注册先于代码〔tech.md R1855 认领注记·前缀全仓 git grep 零占用·设计裁定四条入册：坏窗码面=入 ValueError 族〔R1850 裁定②承传〕/门序 limit 先于窗/窗×帽正交 total=窗内全量计数/limit=0+显式窗=行列表过滤形零形状漂移〕——sec_batch.py banner_queue(limit=0, window=None) additive〔import re+R1748 严锚家族律+record-time substr(1,7) 过滤·缺省面逐字节保真·既有消费者零触碰〕+套件 12→17〔AC-SB12 注册断言随注册面跟随=R1732 先例〕SUITE PASS 17/17 首跑全绿+双跑节级滤真钟节逐位同一+RUNNER PASS 114/114 判据 1049→1054 controls 7/7 180.1s 零回归=qa/reconcile-all-R1855.log+矩阵再生 114/1054 --check byte-identical ×2+指纹哨兵 CLEAN domains=5+writer-census 当场抓新证据件混 CRLF 判 other 类〔Windows 管道 text 态 LF 翻译=J-M18 完成即 QC 实弹正验〕→R1841 归一重建纯 LF 复跑 DRIFT-CLEAN=qa/sec-batch-bannerwindow-R1855.log 六节·shipped config.json 逐字节零改动·HB R1854 欠账同轮 backfill 清偿〔5bb9de0e 锚〕·tech 消耗 1+补种 1=10〔sec_batch banner_queue 月滚保真例窗〕"
+    ],
     [
       "2",
       "2026-10-12 R1854 freetrial cap_usage_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1849 补种〕·轮计分 2=可跑实物）：AC-CRU1..CRU7 判据预注册先于代码〔载体=R1845 devboard_roll 独立套件先例〕——test_freetrial_caproll.py 落地（冻结钟 +23d 跨月）：新月 grant 落新月窗〔2026-11 窗恰 2 行+缺省全窗板 3 行含跨月行〕+旧月窗读逐字节原值保全〔两窗互不渗透双向〕+跨月调用幸存十月 grant 终身计数〔calls_used==3 remaining==0·计数域不切 R1842 裁定③执法〕+帽读跨月照常〔(新月,limit) 正交·total=窗内 grant 计数〕——SUITE PASS 7/7〔首跑一红=套件侧取证口径 bug 同轮修·独立探针证产品面零病〕+双跑 sha256 逐字节同一+reconcile_all SUITES 113→114 判据 1042→1049+RUNNER PASS 114/114 controls 7/7 182.5s 零回归+矩阵 --check byte-identical ×2+指纹哨兵 CLEAN domains=5+writer-census DRIFT-CLEAN〔证据件首代混 EOL 被普查当场 FLAG 检出后修=J-M18 完成即 QC 实弹〕·证据 qa/freetrial-caproll-R1854.log 五节"
@@ -595,7 +599,7 @@
     ],
     "freetrial 漏斗板月窗参数化交付（R1793·P2 tech 队头可领项·AC-CFW1..CFW7 预注册先于代码〔tech.md R1793 认领行〕：conversion_funnel_board(window=None) 尾参缺省全窗零漂移+YYYY-MM 显式月窗读〔granted/converted 按 granted_utc/converted_utc record-time 双列窗过滤·坏窗参 14 形态 E_FT_BAD_ARGS fail-closed〕+active_trials 窗径=月末快照〔grants month<=W−conversions month<=W 结构非负·窗内净流不落字段〕+conversion_rate 窗径 zero-grant guard 0.0·新套件 test_freetrial_funnelwin.py 7 判据〔历史月 fixture 直 INSERT·跨界例 grant 2026-08+conversion 2026-09→2026-09 窗 granted_w=0/converted_w=1/active=0〕SUITE PASS 7/7 首跑绿+RUNNER PASS 87/87 套件 845 判据 controls 7/7 241.0s 零回归=qa/reconcile-all-R1793.log〔86→87·838→845〕+矩阵再生 87/845 green --check byte-identical 双跑+指纹哨兵 CLEAN domains=5+证据 qa/freetrial-funnelwin-R1793.log 五节·freetrial.py +84/-12 additive·shipped config.json 零字节·fold R492 工具闸拒延后〔gate-exceed tail-8·post 77097B+reserve 3000>78500〕·queue_tech_open 10→9 补种 1→10〔freetrial 免费调用月窗计数读面〕·R1793）",
     [
-      "1854",
+      "1855",
       "OSLoop 执行 tick"
     ],
     [
@@ -3506,10 +3510,10 @@
   "self_drive": {
     "window": "2026-10-06..2026-10-12",
     "window_days": 7,
-    "log_lines_in_window": 31,
+    "log_lines_in_window": 33,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 3,
     "proposals_open": 1,
     "queue_main_open": 6,
