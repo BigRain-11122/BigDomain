@@ -1,0 +1,39 @@
+=== [1] suite double-run: test_apidev_devboardpersist.py AC-DBL15..AC-DBL21 ===
+run1 rc=0 (full stdout):
+PASS AC-DBL15: October anchor: 9 real call rows window=2026-10 over the 4-key world (SQL count==9), 1 E_AD_KIND reject row, W=2026-10 from the first call row's window column; four snapshots anchored (capped-win 10 keys overflow l/t/r/tr=2/4/2/True tail=['chain-c', 'lone-d']; bare/default 6 keys; default==oct-bare byte-equal=True), quota map {'chain-a': 3, 'chain-b': 5, 'chain-c': 7, 'lone-d': 2} (chain ancestry carried), statuses {'chain-a': 'rotated_out', 'chain-b': 'rotated_out', 'chain-c': 'active', 'lone-d': 'active'}, world aggregates full-world under truncation kinds={'backtest': 7, 'visualize': 2} tally={'E_AD_KIND': 1}, row pin 15 keys=True
+PASS AC-DBL16: full stack close (reverse order) -> reopen same db/config: October windowed capped envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-DBL17: default read replayed byte-identical=True (window echo stays 2026-10), oct bare-window=True, default-cap=True (derived face carries zero in-memory state across the restart)
+PASS AC-DBL18: frozen clock +23d -> 2 November calls on chain-c (the very key the October capped read pins in its tail slice) via the real product path (record-time window=2026-11 SQL count==2): default capped read recalculated (window echo 2026-11, quota map {'chain-c': 2, 'lone-d': 0}, byte-differs from the pre-close default-cap snapshot=True = zero cache), November windowed capped read carries the new rows kinds={'backtest': 2} tally={} honest-empty
+PASS AC-DBL19: after the November injection on the same pinned key: October windowed reads stay window-frozen under the window-scoped projection (capped=True, bare=True; record-time window column immutable), api_calls total 11 == oct 9 + nov 2 immutable rows never lost
+PASS AC-DBL20: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True), and the October capped-windowed projection still equals the original pre-close projection=True (windowed read survives restart x new-data unscratched)
+PASS AC-DBL21: pure read: 8-form read battery on the third face moves zero rows (api_calls 11==11, api_dev_keys 4==4, key_events 4==4, reject_events 1==1), dev_board segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-devboardpersist: 7/7 criteria pass
+clock restore probe: True
+run2 rc=0 sha256=838fb59afddc7555cdf5a57311a40eb59c6894ba20f3ae9707bd28ea009a6a5c
+run1 sha256=838fb59afddc7555cdf5a57311a40eb59c6894ba20f3ae9707bd28ea009a6a5c
+byte-identical=True
+
+=== [2] RUNNER full regression (Tee mode, qa/reconcile-all-R1902.log) ===
+PASS suite ledger-apidev-devboardpersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (144/144 suites green, reconcile controls 7/7, 168.1s)
+
+=== [3] suite_matrix regen + --check x2 ===
+PASS generated docs/sandbox-suite-matrix.md (14327 bytes) - registry suites=144 criteria=1339 evidence=qa/reconcile-all-R1902.log green=144/144
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (14327 bytes, 144 suites, 1339 criteria)
+check run2 stdout sha256==check run1 sha256: True
+
+=== [4] qa writer census (check mode) ===
+census: files=1291 tee=789 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+
+[VERDICT PASS]

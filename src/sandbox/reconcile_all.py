@@ -1238,6 +1238,31 @@ SUITES = [
     # (AC-LU15..AC-LU21 pre-registered in state/queue/tech.md)
     ("ledger-apidev-chainusagepersist", os.path.join(
         "ledger", "test_apidev_chainusagepersist.py"), 7),
+    # R1902 apidev dev_board capped-windowed read
+    # restart-persistence example window (the R1896 seed): the
+    # three-piece stack (Ledger -> MeteredFace -> DevKeyFace)
+    # closes fully in reverse dependency order and reopens on
+    # the same db path and config bytes -- the October
+    # windowed capped envelope (window re-domained panel x cap
+    # tail-slice, window echo + overflow block, world
+    # aggregates staying full-world under truncation) replays
+    # byte-identical from the fresh instance (zero in-memory
+    # drift in the derived face), two November calls on
+    # chain-c -- the very key the October capped read pins in
+    # its tail slice -- recalculate the default capped read via
+    # the real product path (zero cache) while the October
+    # windowed reads stay window-frozen under the window-scoped
+    # projection (api_calls rows are record-time immutable; the
+    # clock-following minute fields and the lifetime billing
+    # block are stripped per the R1863 AC-DBL13 rulings for the
+    # cross-clock face; the pure-restart face compares the FULL
+    # envelope), and a third instance replays the
+    # post-injection state byte-identically (two-instance
+    # sequential reads)
+    # (AC-DBL15..AC-DBL21 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-devboardpersist", os.path.join(
+        "ledger", "test_apidev_devboardpersist.py"), 7),
     # R1898 eventtickets event_audit_board capped-windowed read
     # restart-persistence example window (the R1894 seed): the
     # two-piece stack (Ledger -> EventTicketFace) closes fully
