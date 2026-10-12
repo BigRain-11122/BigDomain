@@ -1,0 +1,95 @@
+# fold R501 evidence (R1877, R1876 carry-forward deferral honored; pre- repair = none needed, eol_ok=1 five- silence green; children spawned with PYTHONIOENCODING=utf-8)
+# window = log lines 10..18 tail-9 (fold R500 summary line + R1873..R1876), summary gen501
+
+--- pre gauge (exit=0) ---
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 78631,
+  "gate": 78500,
+  "log_lines": 18,
+  "log_content_bytes": 75567,
+  "margin_bytes": -131,
+  "fold_needed": true,
+  "tick": 1876
+}
+
+--- fold dry-run (exit=0) ---
+{
+  "mode": "dry-run",
+  "round": "R1877",
+  "fold_no": "501",
+  "window_mode": "tail",
+  "window_start": 10,
+  "window_end": 18,
+  "window_lines": 9,
+  "window_content_bytes": 16237,
+  "summary_head": "2026-10-12（R1873..R1876 滚窗并折摘要·fold R501 承 R1877 承传注记兑现〔R187",
+  "preop_sha16": "00042b279152ff3b",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1877.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1877 fold append (2026-10-12, 9 lines verbatim: fold R500 summary line + R1873..R1876 four-round delivery window (R1876 carry-forward), fold R501 window, pre-op sha16 00042b279152ff3b)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78631,
+  "new_log_len": 10,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 70937,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": []
+}
+
+--- fold execute (exit=0) ---
+{
+  "mode": "execute",
+  "round": "R1877",
+  "fold_no": "501",
+  "window_mode": "tail",
+  "window_start": 10,
+  "window_end": 18,
+  "window_lines": 9,
+  "window_content_bytes": 16237,
+  "summary_head": "2026-10-12（R1873..R1876 滚窗并折摘要·fold R501 承 R1877 承传注记兑现〔R187",
+  "preop_sha16": "00042b279152ff3b",
+  "backup_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-preop-R1877.bak",
+  "archive_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-10.md",
+  "archive_header": "# --- R1877 fold append (2026-10-12, 9 lines verbatim: fold R500 summary line + R1873..R1876 four-round delivery window (R1876 carry-forward), fold R501 window, pre-op sha16 00042b279152ff3b)",
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "pre_bytes": 78631,
+  "new_log_len": 10,
+  "token_missing": [],
+  "token_ok": true,
+  "gate_ok": true,
+  "predicted_bytes": 70937,
+  "reserve_bytes": 3000,
+  "gate": 78500,
+  "would_fail": [],
+  "post_bytes": 70937,
+  "predicted_eq_actual": true,
+  "appendix_bytes": 16438,
+  "archive_appended": true,
+  "backup_written": true
+}
+
+--- post gauge (exit=0) ---
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 70937,
+  "gate": 78500,
+  "log_lines": 10,
+  "log_content_bytes": 68061,
+  "margin_bytes": 7563,
+  "fold_needed": false,
+  "tick": 1876
+}
+
+--- post census --check (exit=0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1236 tee=734 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
