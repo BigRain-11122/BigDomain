@@ -1,0 +1,17 @@
+R1884 pay notify banner_queue capped-window read cross-restart persistence example (AC-PN30..PN36 pre-registered in tech.md claim line before code)
+suite: src/sandbox/pay/test_pay_notify_bannerpersist.py
+driver: python single writer, utf-8, LF (dialect law R1873/R1879/R1880/R1883 family)
+double-run: run1 exit=0 run2 exit=0 stdout_byte_identical=True
+
+--- run 1 stdout ---
+PASS AC-PN30: oct statuses=['skipped_no_budget', 'skipped_no_budget', 'skipped_no_budget', 'skipped_no_budget'] skip_rows=4 faces: bare=4 cap2_tail=['AV-C', 'AV-D'] cap50_eq_bare=True def_cap2_keys=['limit', 'returned', 'rows', 'total', 'truncated'] def_bare=4
+PASS AC-PN31: all_five_byte_identical=True oct_cap2_tail_frozen=True key_sets_stable=True
+PASS AC-PN32: oct_frozen(bare=True cap2=True cap50=True) def_drift(total=7 tail=['AV-A', 'AV-F'] bare=7) ava_both_windows=2
+PASS AC-PN33: oct_total=4 nov_total=3 nov_returned=3 empty_total=0 empty_keys=['limit', 'returned', 'rows', 'total', 'truncated', 'window']
+PASS AC-PN34: i1_batch_clean=True i2_batch_clean=True bare_reread_eq=True log_rows=7 grant_rows=0
+PASS AC-PN35: i3_eq_i2_postroll=True oct_still_eq_original_snapshot=True def_tail=['AV-A', 'AV-F']
+PASS AC-PN36: cfg_stable=True face_stable=True world_outside=True ascii=True
+SUITE PASS: 7/7 pass-lines
+
+--- run 2 stdout (byte-identity witness) ---
+run2_stdout==run1_stdout: True

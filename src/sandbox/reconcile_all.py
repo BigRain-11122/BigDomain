@@ -342,6 +342,15 @@ SUITES = [
     # across the roll (AC-PN23..PN29 pre-registered in tech.md).
     ("pay-notify-bannerroll",
      os.path.join("pay", "test_pay_notify_bannerroll.py"), 7),
+    # R1884 banner_queue capped-window read cross-restart
+    # persistence example (R1883 reseed): close -> new instance ->
+    # same-db reopen reproduces all five derived read faces
+    # byte-identically (zero in-memory drift), default faces drift
+    # to post-restart data while explicit-window October reads stay
+    # frozen, double-restart stability, pure-read law
+    # (AC-PN30..PN36 pre-registered in tech.md).
+    ("pay-notify-bannerpersist",
+     os.path.join("pay", "test_pay_notify_bannerpersist.py"), 7),
     # R1718 orders.py notify wiring (R1706 successor): post-commit
     # payment-success + refund-close notice attempts, never-break
     # degradation with envelope evidence, close_refund face

@@ -1,0 +1,23 @@
+{
+  "tech_flip": {
+    "claim_prefix": "- [ ] pay notify banner_queue 帽窗读跨重启持久化例窗（R1883 补种",
+    "done_marker": "[done 2026-10-13 R1884]",
+    "criteria_refs": ["AC-PN30", "AC-PN31", "AC-PN32", "AC-PN33", "AC-PN34", "AC-PN35", "AC-PN36"],
+    "done_note": "——〔2026-10-13 R1884 认领〕",
+    "done_tail": "——〔2026-10-13 R1884 认领〕——[done 2026-10-13 R1884]（执行注记：套件 test_pay_notify_bannerpersist.py SUITE 7/7 首跑全绿+双跑 stdout 逐字节同一〔rc 0/0〕——三实例世界：①十月锚 4 真路径 skipped 行+五面快照〔裸窗/截断帽窗六键/全量帽窗/缺省帽五键/缺省裸读〕②close 新实例②同库重开五面逐字节同一〔键集六/五面+截断尾窗 rowid 跨重启冻结=派生面零内存态漂移〕③重启后十一月 3 真路径行〔AV-A 跨月第二产品两月窗共存〕→缺省帽 total 4→7 尾漂移 nov 行+缺省裸读 4→7 而 oct 三窗读与重启前快照字节同一〔窗冻结跨重启×新数据双证〕+oct 帽窗 total 恒 4 新数据零渗透+nov 帽窗 3 六键诚实+空月 2026-12 诚实空+两实例读批前后 log 行集计数恒定纯读律+实例③三开五面重读与②态字节同一且 oct 仍等原始快照〔双重启稳定〕+卫生 config/notify sha 双证零改动·世界仓外——RUNNER PASS 132/132 判据 1216〔SUITES 131→132〕=qa/reconcile-all-R1884.log+矩阵再生 132/1216 green --check byte-identical〔13195B〕+census DRIFT-CLEAN——方言坑实录：首跑 RUNNER FAIL 131/132〔cd7 自旗〕根因=子进程 stdout 管道 TextIOWrapper newline=None 把 \\n 译 CRLF→两新证据件落 pwsh-capture/other 方言签名→驱动器 CRLF→LF 归一〔R1880 族〕+污染件删除重落+复跑全绿=R1873/R1879/R1880/R1883 证据件方言预防族新证〔驱动器面：捕获子进程 stdout 必归一后落盘〕）",
+    "reseed_prefix": "- [ ] pay authorize budget_face/authorization_state 读面跨重启持久化例窗"
+  },
+  "reseed_row": "- [ ] pay authorize budget_face/authorization_state 读面跨重启持久化例窗（R1884 补种=R1883 收账补种同族续：撤销截止窗〔R1740 revokes〕下 live budget 读/authorization_state 读面派生纯度跨实例重启例零在册——face close 后新实例同 db 重开·撤销前后读面复原+revoke 截止窗内预算计数跨重启续接+revoked/remaining_once 读数跨重启稳定）；判据预注册=认领轮 tech.md 行内先行；来源=R1884 收账补种",
+  "log_lines": [
+    "2026-10-13 R1884 pay notify banner_queue 帽窗读跨重启持久化例窗交付轮+charter 每日 crawl W23 断链续链轮（P2 tech 队头 FIFO〔R1883 补种=最上开项〕·轮计分 2=可跑实物+charter 证据件）：五静面=LEDGER @BigDomain 零行+GORD 332 持平零新行+ORD 持平+BENCH days=1+树净零锁——DEC 批判读两 token=D-20261013-01 回执核销批〔本司 R1866/R1881 三件当窗兑现获核销·知悉回执零动作〕+D-20261013-02 C-20261012-01 Phase 0 盘点三件交卷〔owner=委员会秘书处·非本司执行面·知悉〕·基线 301→308 两 token 入册随收账更新——AC-PN30..PN36 判据预注册先于代码〔tech.md R1884 认领行·AC-PN3[0-6] 全仓 git grep 零占用实锚〕→套件 src/sandbox/pay/test_pay_notify_bannerpersist.py 三实例世界：①十月锚 4 真路径 skipped 同秒 tie 行+五面快照 ②close 新实例同库重开五面逐字节同一〔键集六/五+截断尾窗 rowid 冻结=零内存态漂移〕③重启后十一月 3 真路径行〔AV-A 跨月共存〕→缺省帽 4→7 尾漂移+缺省裸读 4→7 而 oct 三窗读与重启前快照字节同一〔窗冻结跨重启×新数据双证〕+oct total 恒 4 零渗透+nov 帽窗 3 六键+空月诚实空+两实例纯读律+实例③三开与②态字节同一且 oct 仍等原始快照〔双重启稳定〕+卫生双 sha 零改动——SUITE 7/7 首跑全绿+双跑逐字节同一——reconcile_all SUITES 131→132 判据 1209→1216+RUNNER PASS 132/132 controls 7/7 159.2s=qa/reconcile-all-R1884.log+矩阵再生 132/1216 green --check byte-identical〔13195B〕+census DRIFT-CLEAN flags=0——方言坑实录：首跑 RUNNER FAIL〔cd7 自旗〕根因=子进程 stdout 管道 TextIOWrapper newline=None 译 CRLF→两新证据件 pwsh-capture/other 方言→驱动器 CRLF→LF 归一修复〔R1880 族〕删污染件重落复跑全绿〔驱动器面新律：捕获子进程 stdout 必归一后落盘〕——charter 每日 crawl W23=《网络数据安全管理条例》官方全文〔国务院令第790号·2024-08-30 通过·2024-09-24 公布·2025-01-01 施行·9 章 64 条·A 级 mee.gov.cn 生态环境部转载中国政府网全文·gov.cn 政策库 JS 壳判负 1 试留痕·search 定位双证〕→benchmarks §① 数据安全法规块〔第九条处理者一般义务+第十二条委托处理记录 ≥3 年+第十九条 AI 训练数据+第二十一条处理规则+未成年专门规则+第二十二条同意六规+第二十四条注销删除+第二十七条合规审计+第二十八条 1000 万人门槛+平台义务族+罚则〕+§③ 源行+§④ 记录行三处入册+intelligence-wall W23 主表行+结论行双行——勘误两件如实记：①R1883 五静 [QA] 误判=把 smoke-crawl 证据 FLAG 当 daily 对账到期〔daily 确已跑双证据在盘·smoke 缺位〕→10-13 smoke 链断一窗·本轮照 R1835 判例同日续链〔qa/smoke-R1884.log+png 91 行 render 真 log 渲染〕不重写史 ②wall 主表 W22 行缺位〔R1835 只落结论行〕如实注·W23 双行齐补不回改——benchmarks_refreshed=2026-10-13〔7 天周期下次 10-20〕——tech 消耗 1+补种 1〔pay authorize budget_face/authorization_state 读面跨重启持久化例窗=R1884 补种〕",
+    "2026-10-13 R1884 tokens: local=unmeasured api=0 api_reason=纯本地进程件（套件双跑+RUNNER 132 套件+矩阵再生+census+charter crawl 官方页 web 直采通道+closeout byte surgery 全本地跑·零外部付费 API 触点·三问门未涉及）"
+  ],
+  "hb_body": "R1884 pay notify bannerpersist cross-restart persistence example delivered: suite 7/7 AC-PN30..36, RUNNER 132/132 criteria 1216, matrix --check identical; charter W23 crawl (Network Data Security Regulation, State Council Order No.790) captured, smoke chain resumed after R1883 [QA] misread erratum",
+  "export": {
+    "ceo_current": "P2 tech 队头交付窗：pay notify banner_queue 帽窗读跨重启持久化例窗落地（AC-PN30..36 套件 7/7+RUNNER 132/132 全绿）+charter 每日 crawl W23《网络数据安全管理条例》官方全文入册（smoke 链断一窗后同日续链）",
+    "ceo_artifact": "src/sandbox/pay/test_pay_notify_bannerpersist.py + qa/smoke-R1884.png（2026-10-13 01:xx）",
+    "ceo_milestone": "pay authorize 读面跨重启持久化例窗（R1884 补种）+帽窗持久化族 member/freetrial/lobby 三侧续接，窗 ≤48h（2026-10-15 前）",
+    "result_row": ["R1884", "pay-notify-bannerpersist 跨重启持久化 7/7+RUNNER 132/132+W23 crawl 入册"],
+    "self_drive_method": "substantive delivery round (P2 tech-queue head, no-pullable=0)"
+  }
+}

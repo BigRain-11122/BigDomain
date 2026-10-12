@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T00:21:19+08:00",
+ "export_ts": "2026-10-13T00:41:53+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech 队头交付窗：pay notify banner_queue 月滚保真例窗落地（AC-PN23..29 套件 7/7+RUNNER 131/131 全绿），当日每日对账 PASS 三绿（哨兵/剖面/普查）",
-  "latest_artifact": "src/sandbox/pay/test_pay_notify_bannerroll.py + qa/reconcile-daily-20261013-2.log（2026-10-13 00:2x）",
-  "next_milestone": "pay notify banner_queue 帽窗读跨重启持久化例窗（R1883 补种·三段式同族收尾），窗 ≤48h（2026-10-15 前）"
+  "current": "P2 tech 队头交付窗：pay notify banner_queue 帽窗读跨重启持久化例窗落地（AC-PN30..36 套件 7/7+RUNNER 132/132 全绿）+charter 每日 crawl W23《网络数据安全管理条例》官方全文入册（smoke 链断一窗后同日续链）",
+  "latest_artifact": "src/sandbox/pay/test_pay_notify_bannerpersist.py + qa/smoke-R1884.png（2026-10-13 01:xx）",
+  "next_milestone": "pay authorize 读面跨重启持久化例窗（R1884 补种）+帽窗持久化族 member/freetrial/lobby 三侧续接，窗 ≤48h（2026-10-15 前）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1884",
+   "pay-notify-bannerpersist 跨重启持久化 7/7+RUNNER 132/132+W23 crawl 入册"
+  ],
   [
    "R1883",
    "pay-notify-bannerroll 月滚保真例窗 7/7+RUNNER 131/131+daily PASS"
@@ -711,7 +715,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1883",
+   "1884",
    "OSLoop 执行 tick"
   ],
   [
@@ -3650,10 +3654,10 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 21,
+  "log_lines_in_window": 23,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 7,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

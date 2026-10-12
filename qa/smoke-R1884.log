@@ -1,0 +1,91 @@
+BigDomain QA smoke evidence - round R1884 - 2026-10-13 +08:00
+day work: (1) QA charter daily crawl W23 delivered - Network Data Security
+Regulation of the PRC (State Council Order No. 790, effective 2025-01-01,
+9 chapters 64 articles) official fulltext direct-captured into
+benchmarks S1/S3/S4 + intelligence-wall W23 rows; (2) product line
+(tech-queue head): pay notify banner_queue cross-restart persistence
+example AC-PN30..PN36 suite 7/7 double-run identical, RUNNER 132/132
+criteria 1216, matrix regen --check identical; (3) five-sill [QA]
+adjudication erratum honestly noted: R1883 misread the smoke-crawl FLAG as
+the daily-reconcile due (reconcile-daily evidence was genuinely on disk,
+smoke evidence was not) - smoke chain broken one round, resumed same day
+per the R1835 precedent; (4) wall main-table W22 row omission (R1835
+placed the conclusion-table row only) noted honestly; W23 adds both rows.
+
+--- (1) W23 crawl (group QA Smoke Test charter v1.0, orders L254
+2026-09-28; docs/global-benchmarks.md + docs/research/intelligence-wall.md)
+---
+W23 = Network Data Security Regulation of the PRC, official fulltext
+(A-grade; mee.gov.cn Ministry of Ecology and Environment republication,
+page note source = Chinese Government Web; State Council Order No. 790,
+passed 2024-08-30 by the 40th State Council executive meeting, published
+2024-09-24, effective 2025-01-01; 9 chapters, 64 articles).
+tries: search locate 1 try; direct capture 2 tries -> 1 get, 1 negative.
+  try 1: gov.cn policy-library page (zhengceku content_6977767) ->
+         REJECTED - JS navigation shell, zero body text (honest negative,
+         same family as the W22 gov.cn JS-shell verdict)
+  try 2: mee.gov.cn fulltext page (t20241003_1087417) -> GET, article-level
+         verbatim capture
+key clauses consumed into S1/S3: art. 9 handler general obligations
+(security-management system on the classified-protection base; encryption,
+backup, access control, security authentication; primary responsibility
+for processed data), art. 12 entrusted-processing records kept at least
+3 years, art. 19 gen-AI training-data safety management, art. 21
+personal-info processing rules (centrally displayed, easy to access,
+prominent; four content items; list form; dedicated rules for minors
+under 14), art. 22 six consent rules (no over-collection; no
+misleading/fraudulent/coerced consent; separate consent for sensitive PI;
+guardian consent for minors under 14; no processing beyond consent; no
+frequent re-asking after refusal; fresh consent on change), art. 24
+account-cancellation delete/anonymize, art. 27 periodic compliance audit,
+art. 28 10M-PI threshold, arts. 40/42/46 platform duties (third-party
+obligations; easy-to-understand recommendation off-switch; deletion of
+personal-characteristic user tags; mega-platform prohibitions incl.
+unjustified differential treatment), art. 55 penalties (up to CNY 1M tier
++ responsible-personnel CNY 10k-100k), art. 62 definitions (mega-platform
+= 50M registered or 10M MAU - this co is far below both, honest note).
+
+--- (2) product line (P2 tech-queue head; criteria pre-registered in
+state/queue/tech.md claim line BEFORE code) ---
+suite: src/sandbox/pay/test_pay_notify_bannerpersist.py SUITE 7/7
+(AC-PN30..AC-PN36): October anchor 4 true-path skipped rows -> five
+derived read faces snapshotted on instance #1; close -> new instance #2
+same-db reopen reproduces all five faces byte-identically (zero
+in-memory drift, capped-window rowid tail frozen); post-restart November
+roll (3 true-path rows incl. one avatar living in both month windows)
+-> default faces drift to 7 while explicit-window October reads stay
+frozen to the pre-restart snapshot (window freeze across restart AND new
+data); window totals semantics + honest-empty month; pure-read law on
+both instances; instance #3 double-restart stability; hygiene faces.
+double-run stdout byte-identical (exit 0/0).
+RUNNER PASS 132/132 suites green, criteria 1216, controls 7/7, 159.2s
+= qa/reconcile-all-R1884.log; matrix regen 132/1216 green --check
+byte-identical (13195 bytes); writer census DRIFT-CLEAN flags=0.
+platform trap honestly noted: first regression run FLAGged 2 new evidence
+files (pwsh-capture / other class) - child stdout through a pipe carries
+CRLF on Windows (TextIOWrapper newline=None translates to os.linesep);
+driver CRLF->LF normalization fix (R1880 family), tainted file deleted,
+evidence re-written, rerun all green.
+
+--- (3) five-sill [QA] adjudication erratum (R1883; honest note, no
+history rewrite) ---
+R1883's five-sill read treated the [QA] FLAG as "daily reconcile due"
+and cleared it by running reconcile_daily; the [QA] face actually checks
+qa/smoke-*.png + qa/smoke-*.log (charter daily-crawl evidence) plus
+benchmarks refreshed today. The reconcile-daily run was genuine (both
+same-day evidence files on disk), but the smoke crawl was NOT run that
+round -> smoke chain broken for one round (last smoke = R1835, 10-12
+01:48). Resumed this round same-day, mirroring the R1835 recovery after
+the R1832..R1834 false-positive ruling. Erratum appended in benchmarks
+section 4 record line.
+
+--- (4) wall row hygiene ---
+intelligence-wall main signal table has no W22 row (R1835 placed the
+conclusion-table row only) - omission noted honestly here; W23 adds
+BOTH the main-table row and the conclusion-table row per the proper
+pattern. W22 main-table row left as-is (no history rewrite).
+
+self-check four items vs charter: daily crawl = this round (W23);
+benchmark 15h law = refreshed this round (benchmarks_refreshed=
+2026-10-13); research source chain = A-grade URL + negative-try note in
+the S3 row and the S4 record; signal wall = W23 rows in place.
