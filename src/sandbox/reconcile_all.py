@@ -162,6 +162,14 @@ SUITES = [
     ("lobby", os.path.join("lobby", "test_client.py"), 57),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
+    # props persist window: cross-restart byte-identical replay of
+    # the inventory/balance read battery, restart-surviving gate
+    # probes, post-restart continuation (new spend-bound grant,
+    # credit consume + stack re-purchase), frozen provenance faces
+    # + dup gate, pure-read law, third instance stability (AC-PSP1..
+    # PSP7 pre-registered in state/queue/tech.md).
+    ("ledger-props-persist", os.path.join(
+        "ledger", "test_props_persist.py"), 7),
     ("ledger-incentive",
      os.path.join("ledger", "test_incentive.py"), 7),
     ("ledger-settlement",
