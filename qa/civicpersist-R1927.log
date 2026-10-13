@@ -1,0 +1,28 @@
+=== R1927 civic honor-board persist suite: double run ===
+run1 exit=0 run2 exit=0 stdout byte-identical=True sha16=f55b475347ce0afd
+--- run1 stdout ---
+PASS AC-CVP1: pre-close pinning: 2025 dense 3 rows (alpha r1 8pts 2ev, bravo r2 / charlie r3 tie at 5pts, account_id ASC tie-break), comp 2025 = 1224 tie (bravo + charlie share rank 2), 2026 dense/comp 2 rows (delta r1, echo r2), empty year 2030 honest [] on both faces, envelope/row key sets exact, boards == independent manual SQL GROUP BY cross
+PASS AC-CVP2: CivicPointsFace close -> new instance over the same civic.db path: reopened honor_board + honor_board_competition for 2025 / 2026 / 2030 all byte-identical to the pre-close snapshots (sort_keys dumps; zero in-memory drift in the derived read faces)
+PASS AC-CVP3: post-restart earn (echo guide @2026-04-04): the 2026 board recomputed zero-cache with the order flip echo 8pts r1 over delta 5pts r2 (echo events 1 -> 2 counted), comp follows the dense single-source, and the 2025 dense + comp boards remain byte-identical to the pre-close snapshots (old-year frozen)
+PASS AC-CVP4: second post-restart earn (alpha cleanup @2026-05-05): alpha now coexists on both year boards with independent year-scoped sums (2025 row still 8pts 2ev, 2026 row new 3pts r3 == manual SQL), 2025 dense + comp still byte-identical to the original snapshots, delta never leaks into the 2025 board
+PASS AC-CVP5: second civic-face restart (third instance, same civic.db): all six form reads byte-identical to the post-earn state and the repeated read batch identical to itself (repeat-read purity, zero in-memory drift across two restarts)
+PASS AC-CVP6: pure-read law: every read batch left civic_earns / civic_redeems / civic_grants row counts constant ({"civic_earns": 8, "civic_grants": 0, "civic_redeems": 0}); post-earn 2026 board == fresh manual SQL cross; civicpoints.py sha256 unchanged
+PASS AC-CVP7: hygiene: source pure ASCII (14506 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (7/7 criteria green)
+
+=== R1927 closeout: RUNNER + matrix + census + sentinel ===
+--- RUNNER (qa/reconcile-all-R1927.log) ---
+PASS suites 166/166 green, expected criteria total=1501
+RUNNER PASS (166/166 suites green, reconcile controls 7/7, 178.8s)
+--- matrix regen ---
+PASS generated docs/sandbox-suite-matrix.md (16347 bytes) - registry suites=166 criteria=1501 evidence=qa/reconcile-all-R1927.log green=166/166
+PASS hygiene: pure-ascii source, zero network imports
+--- matrix --check ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16347 bytes, 166 suites, 1501 criteria)
+--- writer census ---
+census: files=1340 tee=838 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+--- fingerprint sentinel ---
+verdict CLEAN domains=5

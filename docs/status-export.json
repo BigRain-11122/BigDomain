@@ -1,8 +1,8 @@
 {
- "export_ts": "2026-10-13T21:10:00+08:00",
+ "export_ts": "2026-10-13T20:29:20+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-    "current": "R1926 ledger curation 注册面/巡览读面族跨重启持久化例窗交付：AC-CRP1..CRP7 判据预注册先于代码+test_curation_regpersist.py SUITE 7/7 双跑 sha16 50e07f254d930710+RUNNER PASS 165/165+census DRIFT-CLEAN+方言坑实录（捕获驱动器未归一→pwsh-capture 假红→R1884 归一律执法）+tech consume 1 reseed 5（queue_tech_open 6→10·查重前置）·本轮 commit 上链",  "latest_artifact": "ledger-curation-regpersist 套件 7/7【src/sandbox/ledger/test_curation_regpersist.py+证据 qa/curation-regpersist-R1926.log 双跑 sha16 50e07f254d930710+RUNNER PASS 165/165 174.6s=qa/reconcile-all-R1926.log·2026-10-13】",  "next_milestone": "下轮 R1927：pay 渠道状态矩阵读面族跨重启持久化例窗【R1926 补种→现 FIFO 队头】（2026-10-14 内推进）"},
+    "current": "R1927 孤儿 payload 接管收口上链：member civic 荣誉榜读面族跨重启持久化例窗（AC-CVP1..CVP7 全过 SUITE 7/7·活体复跑双跑 sha16 f55b475347ce0afd 与孤儿宣称逐字节一致·R1884 捕获归一律第四证+RUNNER PASS 166/166 判据 1501+矩阵 166/1501 byte-identical+census DRIFT-CLEAN+哨兵 CLEAN）·本轮 commit+push 欠账可见化+348KB 误重定向残件清理+export 滞后两轮补刷（R1928/R1927 双行+tick 1928+self_drive 重算）",  "latest_artifact": "src/sandbox/ledger/test_civic_persist.py + qa/civicpersist-R1927.log + qa/reconcile-all-R1927.log + qa/civictakeover-R1928.log（2026-10-13·166 套件 1501 判据 green·接管活体复验 PASS）",  "next_milestone": "下轮 R1929：lobby 房间/想法榜读面族 EventStore 跨重启持久化例窗【R1926 补种=现 FIFO 队头】（2026-10-14 内推进）"},
  "depts": [
   {
    "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -199,6 +199,14 @@
   ]
  ],
  "results": [
+ [
+   "R1928",
+   "R1928 R1927 commit-debt takeover closeout (score 1 honest: no new product artifact this round - the collected debt made R1927's civic persist suite + evidence chain visible on origin; orphan-adoption chain R550/R551/R1675/R1919/R1920/R1922/R1924/R1925 one more link; live re-verification: civic suite double-run exit 0/0 byte-identical with sha16 f55b475347ce0afd EXACT match with the orphan claim after the R1884 capture-normalization law (Windows child text-pipe CRLF, fourth live-fire of the family - first takeover-harness pass hashed raw CRLF and mismatched, honest note); at-rest seven-face anchors: tech dual-row edit (pay channel-matrix duplicate-closed + civic done, open rows 8 = queue_tech_open 10->8), evidence 5-anchor set, RUNNER PASS 166/166 controls 7/7 178.8s terminal line, matrix 16347B on disk, state R1927 round+tokens lines complete CRLF-clean, heartbeat lag=0; hygiene: stray 348547B misfired-redirect artifact src/sandbox/--help removed (superseded first-capture of the same RUNNER output, 490B dialect-shell delta vs the canonical evidence file, not a payload piece); export lag-2-rounds backfill: R1928+R1927 result rows prepended, tick row 1926->1928, self_drive recompute via checker caliber (log_lines 15->19, sub 3->5, queue_tech_open 10->8), export_ts clock-anomaly honest note (R1926 closeout wrote future-stamp 21:10:00 vs live clock 20:2x - clock-ahead artifact, refreshed with live clock); five-still green: LEDGER 0 unacked, DEC 308 token-flat, GORD 367 flat, ORD flat, BENCH current-day, QA daily family in-plate, state 68986B < 78500 no fold; takeover evidence = qa/civictakeover-R1928.log TAKEOVER VERDICT=PASS; next FIFO head lobby two-boards persist (R1926 reseed) deferred to next round full budget per the R1922 no-third-orphan precedent)"
+  ],
+ [
+   "R1927",
+   "R1927 member civic honor-board read-faces cross-restart persistence suite 7/7 (criteria AC-CVP1..AC-CVP7 pre-registered before code; 2025 anchor world dual-behavior five-accounts two-years, six reads pinned pre-close - dense board account_id-ASC tie-break + 1224 competition min-rank-shared + honest empty year + envelope key-sets + manual SQL GROUP BY cross; CivicPointsFace close -> new instance same civic.db replays six reads byte-identical; post-restart new earn flips the 2026 board zero-cache echo 8pts over delta 5pts with 2025 double-board byte-frozen; cross-year same-account coexistence alpha 2025 8pts + 2026 3pts independent year-sums with zero 2025-permeation from delta; second restart third-instance sequential identity + repeat-read purity; pure-read law earns/redeems/grants counts flat + civicpoints.py sha256 double-proof; hygiene pure ASCII zero network imports; suite double-run sha16 f55b475347ce0afd byte-identical; RUNNER PASS 166/166 controls 7/7 178.8s criteria 1494->1501 new seat ledger-civicpersist, matrix 166/1501 --check byte-identical 16347B, census DRIFT-CLEAN tee=838, sentinel CLEAN domains=5; same round: pay channel-matrix queue head duplicate-closed against R1904 pay-channel-persist AC-CW8..14 + R1921 migrate-persist per the R1925 zero-delivery precedent - root cause R1926 reseed dedup pattern channelpersist missed the hyphenated registry label, dedup law: scan by registry-label full form; dialect incident third live-fire of the R1884 family (capture pipe CRLF->LF normalization law; runner self-evidence tee-land timing face new proof); round crashed pre-commit after its own state surgery + heartbeat row, payload verified live + adopted + committed + pushed by the R1928 takeover)"
+  ],
  [
    "R1926",
    "R1926 ledger curation registry/tour read-faces cross-restart persistence suite 7/7 (P2 tech FIFO head, R1923-reseeded claim adopted; criteria AC-CRP1..AC-CRP7 pre-registered in state/queue/tech.md before code: active_curations board + curation_view facts/members + curation_tour global stop-numbering pinned pre-close, CurationFace close -> new instance over the SAME ShowcaseFace and same curation db replays all five forms byte-identical, post-restart placement recompute (sh-two on_display 2->3, tour stop 4 continues the global numbering) and post-restart new registration recompute (cu-gamma rowid tail + positions 1..2) both zero-cache, third-instance seven-form sequential reads byte-identical, pure-read law with product-file sha256 five-file double-proof, hygiene; suite double-run sha16 50e07f254d930710 byte-identical; one suite-side evidence-caliber bug honestly fixed same-round = AC-CRP2 compared a raw dict against a dumps string, product behavior correct per R1883 precedent; dialect incident live-fired twice honestly recorded: capture driver first version did not normalize subprocess stdout (Windows text-mode pipes CRLF) -> both evidence files classified pwsh-capture new-dialect -> RUNNER cd7 false-red 164/165 x2 -> R1884 capture-normalization law enforced: both drivers CRLF->LF normalized, both evidence files re-landed tee-dialect, census DRIFT-CLEAN restored, final RUNNER PASS 165/165 controls 7/7 174.6s = qa/reconcile-all-R1926.log, matrix 165/1494 --check byte-identical 16268B; five-still green: DEC 308 token-flat, GORD 365->366 one new row 18:5x CEO refinement order O-20261013-1830 supplement-2 BigStream MV family acknowledged no-action; tech consume 1 reseed 5 queue_tech_open 6->10 (dedup-checked against RUNNER SUITES labels: pay channel matrix / member civic honor boards / lobby two boards / ugc pool water / eventtickets session boards - zero persist coverage each), next FIFO head = pay channel_status_matrix read-faces persist seed (R1926 reseed))"
@@ -816,7 +824,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1926",
+   "1928",
    "OSLoop 执行 tick"
   ],
   [
@@ -3819,14 +3827,14 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 15,
+  "log_lines_in_window": 19,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 5,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 10,
+  "queue_tech_open": 8,
   "queue_explore_open": 10,
   "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
  }

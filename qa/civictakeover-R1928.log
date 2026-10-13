@@ -1,0 +1,14 @@
+=== R1928 takeover live re-verification: civic suite double run ===
+run1 exit=0 run2 exit=0 stdout byte-identical=True (raw=True) sha16=f55b475347ce0afd
+sha16 matches orphan log claim (f55b475347ce0afd): True
+suite terminal marker present: True
+--- evidence-at-rest anchors ---
+civicpersist-R1927.log: 5 anchors ok (2779 bytes)
+reconcile-all-R1927.log: RUNNER terminal line ok (348057 bytes)
+matrix on disk: 16347 bytes (byte-identical claim in evidence)
+tech.md: pay duplicate-closed + civic done markers x1 each; open rows = 8 (queue_tech_open 10->8 confirmed)
+state.json: tick 1927, gord 367, R1927 round+tokens lines at tail, CRLF layout, zero bare LF
+heartbeat: R1927 row present (lag=0)
+--- hygiene ---
+stray artifact src/sandbox/--help removed (348547 bytes; misfired-redirect old lobby AC-S1..S6 evidence, not an R1927 payload piece)
+TAKEOVER VERDICT=PASS

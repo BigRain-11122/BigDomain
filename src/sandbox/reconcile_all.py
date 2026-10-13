@@ -767,6 +767,21 @@ SUITES = [
     # R1755 explore-queue row).
     ("ledger-honorcert",
      os.path.join("ledger", "test_honorcert.py"), 7),
+    # R1927 civic honor-board cross-restart persistence example
+    # window (R1926-reseeded tech-queue row; the R1925 law): the
+    # honor_board / honor_board_competition read faces derive
+    # purely from the append-only civic_earns rows, so a face
+    # close -> new instance over the same civic.db must reproduce
+    # the six pre-close forms byte-identically (2025 dense + comp
+    # with a 1224 tie, 2026 dense + comp, empty-year honest []),
+    # recompute zero-cache after post-restart earns (order flip +
+    # same-account cross-year coexistence with the old-year board
+    # frozen), and hold through a second restart third instance;
+    # pure-read law + manual-SQL cross + civicpoints.py sha256
+    # double-proof (AC-CVP1..CVP7 pre-registered in the R1927
+    # tech.md claim row; suite-only round, zero product changes).
+    ("ledger-civicpersist",
+     os.path.join("ledger", "test_civic_persist.py"), 7),
     # R1759 developer revenue-share gradient face: settlement chain
     # composed onto the IncentiveFace proper (band walk / collar /
     # budget pro-rata / window idempotence - structure reuse, zero
