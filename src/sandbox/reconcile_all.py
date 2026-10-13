@@ -1351,6 +1351,29 @@ SUITES = [
     # state/queue/tech.md)
     ("ugc-water-journalboardpersist", os.path.join(
         "ugc", "test_water_journal_boardpersist.py"), 7),
+    # R1907 apidev key_view windowed panel read restart-persistence
+    # example window (the R1902 seed): the three-piece stack
+    # (Ledger -> MeteredFace -> DevKeyFace) closes fully in
+    # reverse dependency order and reopens on the same db path
+    # and config bytes -- the October explicit-window 18-key
+    # panel (window echo + ancestry quota counter + exact-key
+    # reject/usage tallies + lifecycle status) replays
+    # byte-identical from the fresh instance while the clock
+    # stands still (zero in-memory drift, full-envelope
+    # comparable because the two minute-ring fields are frozen
+    # too), two November calls on roll-b -- the very key whose
+    # October panel is pinned -- recalculate the default read via
+    # the real product path (zero cache) while the October
+    # windowed read stays byte-frozen under the banded projection
+    # (the two clock-following minute fields stripped; api_calls
+    # rows are record-time immutable so the old window never
+    # permeates), and a third instance replays the
+    # post-injection state byte-identically (two-instance
+    # sequential reads)
+    # (AC-KVW8..AC-KVW14 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-keyviewpersist", os.path.join(
+        "ledger", "test_apidev_keyviewpersist.py"), 7),
 ]
 
 FAILS = 0

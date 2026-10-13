@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T08:28:15+08:00",
+ "export_ts": "2026-10-13T08:48:42+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 技术深耕线 FIFO 持续交付：sec_batch rows_by_status/queue_counts 窗读跨重启持久化例窗本轮闭环（套件 148 入册·判据 1367 全绿）",
-  "latest_artifact": "src/sandbox/ugc/test_sec_batch_rowpersist.py + qa/sec-batch-rowpersist-R1906.log + qa/reconcile-all-R1906.log（RUNNER 148/148）·2026-10-13",
-  "next_milestone": "下轮 P2 队头 FIFO：apidev key_view 窗读跨重启例窗（R1902 补种在册种子）交付·窗 ≤48h（2026-10-15 前）"
+  "current": "P2 技术深耕线 FIFO 持续交付：apidev key_view 窗读跨重启持久化例窗本轮闭环（套件 149 入册·判据 1374 全绿）",
+  "latest_artifact": "src/sandbox/ledger/test_apidev_keyviewpersist.py + qa/apidev-keyviewpersist-R1907.log + qa/reconcile-all-R1907.log（RUNNER 149/149）·2026-10-13",
+  "next_milestone": "下轮 P2 队头 FIFO：apidev reject_tally 窗读跨重启例窗（R1903 补种在册种子）交付·窗 ≤48h（2026-10-15 前）"
  },
  "depts": [
   {
@@ -795,7 +795,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1906",
+   "1907",
    "OSLoop 执行 tick"
   ],
   [
@@ -3737,15 +3737,19 @@
   [
    "2",
    "R1906 sec_batch rows_by_status/queue_counts 窗读跨重启持久化套件（P2 tech 队头 FIFO〔R1901 补种〕·轮计分 2=可跑实物）：AC-SB30..SB36 判据预注册先于代码〔tech.md R1906 认领行〕——三裁定（重启载体=face close 后新实例同 db 同词表重开/世界=真产品径十月 6 行 3 plain+3 dirty drain 十一月戳翻态=record-time 身份律活体/快照六元组 dumps sort_keys 逐字节等）：六元快照〔dp_oct/dr_oct/q_nov/q_default 行面+qc_oct 恰两键稀疏+qc_default 三键+manual SQL 八字段镜像〕+跨重启六面复原逐字节+注入新行→qc_default 重算 4→5 零缓存+oct 三面冻结老窗零渗透+稀疏口径执法〔全局 queued 在册窗内无键〕+空月诚实空+face3 三开序贯读同一+纯读律 16 读电池计数恒定——SUITE 7/7 双跑逐字节同一〔sha16 5796284dfe748c9a〕+RUNNER 148/148 判据 1360→1367〔SUITES 147→148〕=qa/reconcile-all-R1906.log+矩阵 148/1367 --check byte-identical×2+census DRIFT-CLEAN+指纹哨兵 CLEAN domains=5=qa/sec-batch-rowpersist-R1906.log；tech consumed 1 + reseeded 1（apidev usage_kind_tally windowed read cross-restart persist seed）"
+  ],
+  [
+   "2",
+   "R1907 apidev key_view 窗读跨重启持久化套件（P2 tech 队头 FIFO〔R1902 补种〕·轮计分 2=可跑实物）：AC-KVW8..KVW14 判据预注册先于代码〔tech.md R1907 认领行〕——三裁定（载体=三件套逆序关重开/注入面=重开实例真径 2 新调于面板所钉本键/比较面=分带投影律——18 键面板双分钟字段钟随行·跨钟 strip·纯重启全信封）：AC-KVW8 关前四元快照（rotate 链+E_AD_QUOTA 拒行·18 键钉死+quota 3==ancestry SQL+reject/kind tally exact-key 交叉）+AC-KVW9 跨重启 oct 显式读逐字节复原+AC-KVW10 缺省+死键+nov+fut 复原+AC-KVW11 +23d 2 真调→缺省读随钟重算〔零缓存〕+AC-KVW12 老窗零渗透=oct 分带投影==关前〔全信封差恰分钟双字段〕+AC-KVW13 第三实例序贯读同一〔双劫不漂〕+AC-KVW14 纯读律+卫生——SUITE 7/7 双跑逐字节同一〔sha16 cec3fddf0128980c〕+RUNNER 149/149 判据 1367→1374〔SUITES 148→149〕=qa/reconcile-all-R1907.log+矩阵 149/1374 --check byte-identical×2+census DRIFT-CLEAN+哨兵 CLEAN domains=5=qa/apidev-keyviewpersist-R1907.log；tech consumed 1 + reseeded 1（member balance_face persist seed）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 10,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
