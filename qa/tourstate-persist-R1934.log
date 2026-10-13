@@ -1,0 +1,63 @@
+--- section 1: takeover context ---
+orphan payload takeover (R1922/R1924/R1925 lineage): the
+crashed R1934 attempt left suite + registry row + claim
+line + two failed RUNNER runs on disk (failrun1 22:35,
+final 22:52; both RUNNER FAIL 2 failed assertions,
+deterministic identical surface = census cd7 new-dialect
+flag on r1934-run-stdout.log, a pwsh-capture CRLF
+artifact (361400B, crlf=2264) sitting in qa/).
+fix per R1924 precedent: ps-capture artifacts deleted
+(r1934-run-stdout.log + r1934-run-stderr.log 0B),
+census re-check DRIFT-CLEAN flags=0, full RUNNER re-run
+via raw-byte tee capture (LF/utf-8/no-BOM). failure
+evidence preserved in qa/reconcile-all-R1934-failrun1.log.
+R1933 liveroom evidence residue: 16 CRLF lines normalized
+to LF by the crashed round at 22:38 (content byte-identical
+modulo line endings, R1884 dialect-law family) - kept and
+committed with this round (honest note).
+
+--- section 2: tourstate suite double-run ---
+suite rc=0/0 sha16_run1=88c8e6a64e29d2e3 sha16_run2=88c8e6a64e29d2e3 stdout_byte_identical=True
+run1 stdout (deterministic, no ts/pid/paths):
+  PASS AC-TSP1: fresh subprocess #1 cold re-derivation byte-identical both legs (ids equal)
+  PASS AC-TSP2: three sequential fresh subprocesses mutually byte-identical == parent baseline (double-restart stability)
+  PASS AC-TSP3: verify True x2 across the process boundary (stdin JSON roundtrip zero semantic loss)
+  PASS AC-TSP4: three tampered variants all rejected E_TS_TAMPER by fresh subprocesses (tamper law survives the process boundary)
+  PASS AC-TSP5: bad-input probes in a fresh subprocess raise E_TS_BAD_INPUT x3 (codes=E_TS_BAD_INPUT,E_TS_BAD_INPUT,E_TS_BAD_INPUT)
+  PASS AC-TSP6: post-activity re-derivation == pre-window capture (zero module-state drift) + original packets verify True + idempotent build->verify cycles
+  PASS AC-TSP7: suite source pure ASCII + zero network imports (net=0) + tourstate.py sha unchanged across the window + zero temp-file imports (pipe-only worker protocol)
+  SUITE PASS 7/7 (AC-TSP1..AC-TSP7) exit=0
+
+--- section 3: RUNNER tail (green re-run) ---
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-03xq8as4\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-03xq8as4\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-03xq8as4\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (172/172 suites green, reconcile controls 7/7, 202.9s)
+
+--- section 4: suite matrix regen + --check x2 ---
+matrix bytes=16885 lines_with_green_172_172=2
+(regen PASS 16885B registry=172 criteria=1543 evidence=qa/reconcile-all-R1934.log green=172/172;
+ --check run1 PASS byte-identical; --check run2 PASS byte-identical)
+
+--- section 5: census + git hygiene ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1355 tee=853 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+git status --short:
+   M docs/sandbox-suite-matrix.md
+   M qa/liveroom-persist-R1933.log
+   M src/sandbox/reconcile_all.py
+   M state/queue/tech.md
+  ?? qa/reconcile-all-R1934-failrun1.log
+  ?? qa/reconcile-all-R1934.log
+  ?? qa/tourstate-persist-R1934.log
+  ?? src/sandbox/tourstate/test_tourstate_persist.py
+
+verdict: EVIDENCE-ASSEMBLED suite_double_run=True

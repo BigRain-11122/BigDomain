@@ -1696,6 +1696,16 @@ SUITES = [
     # suite-only round, zero product change).
     ("liveroom-persist", os.path.join(
         "liveroom", "test_liveroom_persist.py"), 7),
+    # R1934 tourstate cross-process re-derivation window (persist-
+    # family seat, R1886 lineage; suite-only round - zero product
+    # change). tourstate is a pure stateless prep face (zero sqlite,
+    # zero file substrate), so the restart carrier is a fresh
+    # interpreter subprocess: both legs re-derive byte-identical
+    # across sequential cold processes, tamper and bad-input law
+    # survive the process boundary, module state zero-drift
+    # (AC-TSP1..TSP7 pre-registered in state/queue/tech.md).
+    ("tourstate-persist", os.path.join(
+        "tourstate", "test_tourstate_persist.py"), 7),
 ]
 
 FAILS = 0

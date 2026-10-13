@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T22:17:06+08:00",
+ "export_ts": "2026-10-13T23:37:30+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1933：直播间模块的读账面（漏斗/合规记录/转化流水账）做了一次「重启不丢样」验证——新测试 7 条全过、总回归 171 套件全绿、证据已落盘 qa/liveroom-persist-R1933.log",
-  "latest_artifact": "src/sandbox/liveroom/test_liveroom_persist.py + qa/liveroom-persist-R1933.log + qa/reconcile-all-R1933.log（2026-10-13·171 套件 1536 判据 green·新席 liveroom-persist）",
-  "next_milestone": "下轮 R1934：tech 队列 FIFO=tourstate 状态面 persist 认领（R1931 补种·2026-10-14 内推进）"
+  "current": "R1934：参观动线的三态选型状态包（tourstate）做了一次「换进程不丢样」验证——新测试 7 条全过、总回归 172 套件全绿；本轮顺带把上轮崩溃会话遗留的已验证产物（新套件+全量回归证据）收口上链，证据在 qa/tourstate-persist-R1934.log",
+  "latest_artifact": "src/sandbox/tourstate/test_tourstate_persist.py + qa/tourstate-persist-R1934.log + qa/reconcile-all-R1934.log（2026-10-13·172 套件 1543 判据 green·新席 tourstate-persist·崩溃轮孤儿载荷接管收口）",
+  "next_milestone": "下轮 R1935：tech 队列 FIFO=ledger datasub 订阅面 persist 认领（R1931 补种·2026-10-14 内推进）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1934",
+   "R1934 tourstate cross-process cold re-derivation persistence suite 7/7 + orphan-payload takeover closeout (P2 tech FIFO head = the R1933 closeout pointer; orphan-adoption chain R1922/R1924/R1925 one more link: the crashed R1934 attempt left suite + registry row + claim line + two failed RUNNER runs on disk, all five payload faces verified live then committed by this takeover; the two deterministic RUNNER FAILs rooted in a pwsh-capture CRLF artifact (361400B) sitting in qa/ poisoning the live-tree census probe - artifacts deleted, census re-check DRIFT-CLEAN flags=0, full RUNNER re-run tee-native per the R1924 precedent; capture-method correction honestly noted: the first re-run with pipe capture re-offended the CRLF dialect and was caught by census on the spot, the second re-run went through the RUNNER argv[1] tee writer = canonical-capture-path judgment entered; suite test_tourstate_persist.py: tourstate is a pure stateless prep face (zero sqlite, zero file substrate) so the restart carrier is a fresh interpreter subprocess with a self-reentrant --worker flag (stdin single-line JSON in, stdout single-line JSON out, zero temp files): control anchor fresh-subprocess cold re-derivation both legs byte-identical + ids equal; three sequential fresh subprocesses mutually byte-identical == parent baseline (double-restart stability); verify True x2 across the process boundary (stdin JSON roundtrip zero semantic loss); three tampered variants all rejected E_TS_TAMPER by fresh subprocesses (tamper law survives the process boundary); bad-input probes E_TS_BAD_INPUT x3 cross-process deterministic; zero module-state drift (post-activity re-derivation == pre-window capture, original packets verify True, idempotent build-verify cycles); hygiene pure ASCII + zero network imports + tourstate.py sha256 unchanged suite-only round; SUITE 7/7 double-run byte-identical sha16 88c8e6a64e29d2e3; RUNNER PASS 172/172 criteria 1536 to 1543 controls 7/7 202.9s = qa/reconcile-all-R1934.log with the failrun1 evidence preserved (qa/reconcile-all-R1934-failrun1.log); matrix regen 172/1543 green --check byte-identical x2 16885B; census DRIFT-CLEAN; R1933 liveroom evidence 16-line CRLF to LF normalization committed same round (content byte-identical, R1884 dialect-law family); takeover fixup: the tourstate tech.md claim checkbox flipped to checked (crashed round left the done annotation but the box unflipped; after the flip the live queue count matches the in-row claim 9 to 10); five-silence: DEC one new token C-20261013-01 group workspace git-hygiene closeout adjudicated knowledge-only (own-repo hygiene compliant: state 70373B under the 78500B line, zero big files, zero media in git; baseline 308 to 309), GORD four new rows all BigStream MV family acknowledged no-action including the O-20261013-2245 cloud-unlock order (this division keeps zero cloud touchpoints, api=0; baseline 371 to 375); tech consume 1 reseed 2 queue_tech_open 9 to 10, next FIFO head ledger datasub persist (R1931 reseed)"
+  ],
   [
    "R1933",
    "R1933 liveroom risk-control read-face family cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1931-reseeded claim pointed by the R1932 closeout; dedup pre-scan per the claim row: registry label full-form zero liveroom-persist variant + base-suite source scan test_liveroom.py zero close-reopen examples + AC-LRP prefix zero-occupancy; criteria AC-LRP1..AC-LRP7 pre-registered in state/queue/tech.md before code with three rulings: two-piece stack restart carrier (LiveRoomFace->Ledger close/reopen, the face owns its connection - R1898 precedent), three-session spectrum world (A closed full-history / B open mid-funnel / C zero-cohort honest empty), full-envelope byte comparison face (funnel/transcript/conversion_ledger carry zero timestamp echo - stronger than a projection band, no clock freezing needed); suite test_liveroom_persist.py: control anchor nine pre-close read snapshots + A funnel semantics + manual SQL three-table cross + transcript compliance spine (AI danmaku line carries [ai_label]) + conversion_ledger four-key rows each binding a real spend debit (bound debit sum 2980==total) + balances amy 510/cyd 1010 exact; stack close -> instance-2 same db/cfg reopen replays all nine reads byte-identical (9/9) with a same-param second read self-identical = zero in-memory drift; risk-control law survives the restart (closed-session writers E_LIVE_CLOSED x2, dup window E_LIVE_CONV_DUP zero-charge 510==510, anonymous danmaku E_LIVE_NOT_RESIDENT, unknown session read E_LIVE_UNKNOWN, probe batch left all four table counts and the spend count untouched); post-restart real-path injection on the open session recomputes the B faces zero-cache (entered 3/registered 2/converted 2/total 1490, transcript 6 lines, ledger 2 rows, spend count +1, cyd 20==1010-990) while the closed A and empty C faces stay byte-frozen to the pre-close snapshots; third instance replays the instance-2 final state byte-identically with A/C still equal to the original pre-close snapshots (restart x new-data double burden, zero drift); pure-read law (read battery leaves the four liveroom tables + spend count constant) + hygiene (liveroom.py/ledger.py sha256 double-proof unchanged - suite-only round, shipped config bytes unchanged, pure ASCII, zero network imports, registry row wired, tmp outside repo); SUITE 7/7 double-run byte-identical sha16 B2716DCD3992F0C9 rc 0/0; RUNNER PASS 171/171 suites criteria 1529->1536 controls 7/7 182.5s = qa/reconcile-all-R1933.log; matrix regen 171/1536 green --check byte-identical x2 (16801B); census DRIFT-CLEAN flags=0; fingerprint sentinel CLEAN domains=5; evidence qa/liveroom-persist-R1933.log five sections; tech consume 1 reseed 1 queue_tech_open 9->9 (minors guard read-face family persist seed, dedup pre-scan clean: registry minors/minors-wiring zero persist variant + test_minors.py zero close-reopen examples + AC-MGP zero-occupancy), next FIFO head by board order = tourstate state-face persist)"
@@ -847,7 +851,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1933",
+   "1934",
    "OSLoop 执行 tick"
   ],
   [
@@ -3850,14 +3854,14 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 16,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 9,
+  "queue_tech_open": 10,
   "queue_explore_open": 10,
   "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
  }
