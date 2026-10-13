@@ -1,0 +1,44 @@
+=== [1] suite double-run: test_sec_batch_rowpersist.py AC-SB30..AC-SB36 ===
+run1 rc=0 (full stdout):
+PASS AC-SB30: true-path world: oct landed 6 (sql dp=3 dr=3) drained at a November stamp (cross-month stamps dp=3 dr=3 = record-time identity: landing month owns the window); nov queued sql=4; sextet pinned (dp_oct 3 rows / dr_oct 3 rows / q_nov 4 rows / q_default 4 rows, all 8-field tuples; qc_oct exactly 2 keys sparse, no queued key; qc_default 3 keys); dp_oct == manual SQL mirror (same WHERE/ORDER); same-param second reads self-identical
+PASS AC-SB31: post-restart oct window row faces (drained_pass + drained_rejected, 8-field tuples incl the November ts_drained stamp) restored byte-identical to the pre-close snapshots; same-param second reads self-identical - derived row faces carry zero in-memory state
+PASS AC-SB32: default queued row face + nov window row face + default count face + oct window count face all restored byte-identical across the restart (four faces complete the zero-in-memory-state proof)
+PASS AC-SB33: injected 2nd-November queued row via the true path (fresh (source,actor,content) triple = fresh qid; nov queued sql 4->5); default count face recomputed queued 4->5 and byte-differs from the pre-close snapshot (zero cache); nov window row face carries the new row as its tail (content + record-time stamp pinned); nov window count face == {'queued': 5}; oct faces (dp/dr rows + counts) still byte-identical to the pre-close snapshots (ts_utc record-time immutable = old-window zero permeation)
+PASS AC-SB34: oct window count face stays exactly 2 keys while queued rows exist globally (window narrows the data domain, it never reshapes the dict); empty-month 2026-09 reads are honestly empty ({} count face, [] row faces); unknown status rejects with ValueError (param gate fail-closed still enforced after the restart)
+PASS AC-SB35: face3 (second reopen, two live instances) four reads == face2 same-param reads pairwise byte-identical; face2 re-read self-identical; face3 dp_oct still == the original pre-close snapshot (restart x new-data double hijack, zero drift)
+PASS AC-SB36: read battery (16 reads, 9 non-empty) before/after full-table count 11==11; rows_by_status + queue_counts method sources free of write statements (inspect); sec_batch.py + shipped config.json sha256 unchanged (suite-only round); suite source pure ASCII; true import lines zero network libs; runner row wired; world = temp dir outside repo
+SUITE PASS: 7/7 criteria pass
+run2 rc=0
+run1 sha16=5796284dfe748c9a run2 sha16=5796284dfe748c9a byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1906.log)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (148/148 suites green, reconcile controls 7/7, 178.2s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (14690 bytes, 148 suites, 1367 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1301 tee=799 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[VERDICT PASS]

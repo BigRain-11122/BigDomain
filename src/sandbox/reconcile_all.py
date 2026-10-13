@@ -333,6 +333,11 @@ SUITES = [
     # state/queue/tech.md)
     ("ugc-sec-batch-bannerpersist",
      os.path.join("ugc", "test_sec_batch_bannerpersist.py"), 7),
+    # R1906 sec_batch rows_by_status/queue_counts windowed read
+    # cross-restart persistence example (AC-SB30..AC-SB36
+    # pre-registered in state/queue/tech.md)
+    ("ugc-sec-batch-rowpersist",
+     os.path.join("ugc", "test_sec_batch_rowpersist.py"), 7),
     ("pay", os.path.join("pay", "test_pay.py"), 16),
     ("pay-v3", os.path.join("pay", "test_pay_v3.py"), 14),
     ("pay-v3-real", os.path.join("pay", "test_pay_v3_real.py"), 9),
