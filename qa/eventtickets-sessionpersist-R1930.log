@@ -1,0 +1,36 @@
+=== R1930 eventtickets sessionpersist evidence ===
+--- section 1: suite double-run (byte-identity) ---
+PASS AC-SBP1: October anchor: 3 sessions + 4 real purchases + 1 real check-in on the product path (counts sessions/purchases/checkins = (3, 4, 1)); ten pre-close board reads pinned - session_board x3 (gala 3 rows, meet 1, late honest-empty), attendees x2 (gala 1 row, meet honest-empty), active_sessions x5 probe windows (0 edge-incl, 15 gala, 31 empty band, 45 meet, 200 honest empty); every board == manual SQL cross-derivation with exact key sets and resident disclaimer
+PASS AC-SBP2: two-piece stack close (face -> ledger, reverse dependency) -> reopen same db/config: all ten board reads byte-identical to the pre-close snapshots (session_board gala/meet/late=True/True/True, attendees gala/meet=True/True, active_sessions 5 windows=True), second same-param read self-identical=True - derived faces carry zero in-memory drift
+PASS AC-SBP3: frozen clock +23d -> 1 November purchase (dave on gala, 4th row, tail purchase_id order) + 1 November check-in (bob on gala, 2nd row) + 1 new session registration (newmo 210..230) via the real product path: session_board(gala) recalculated byte-differs from the pre-close snapshot=True (zero cache), attendees(gala) recalculated=True, active_sessions(215) empty-before=True -> [newmo] recomputed with ai_label=1; new rows carry the full anchor key sets; every touched board == manual SQL
+PASS AC-SBP4: after the November injection: untouched boards byte-frozen (session_board meet/late=True/True, attendees meet=True, active_sessions 5 non-covering windows edge/gala/band/meet/empty all == pre-close=True), table telescoping counts sessions 3+1==4, purchases 4+1==5, checkins 1+1==2
+PASS AC-SBP5: third instance on the same db: post-injection reads (touched gala boards + newmo window + untouched meet/empty boards) byte-identical to the second instance=True, and the untouched boards still equal the original pre-close snapshots=True (board reads survive restart x new-data unscratched)
+PASS AC-SBP6: pure read: 10-form read battery (4 sessions x session_board+attendees + 6 active_sessions windows) on the third face moves zero rows (sessions/purchases/checkins (4, 5, 2) == (4, 5, 2) == 4/5/2), fail-closed negative probes across restart: session_board(unknown)=E_ET_UNKNOWN_SESSION, attendees(unknown)=E_ET_UNKNOWN_SESSION, active_sessions(-1)=E_ET_BAD_ARGS
+PASS AC-SBP7: three read-face segments zero write keywords=0, eventtickets.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True, reconcile_all SUITES row 'ledger-eventtickets-sessionpersist' registered, criteria drift self-check 7/7
+SUITE eventtickets-sessionpersist: 7/7 criteria pass
+clock restore probe: True
+second-run rc=0 byte-identical=True
+sha16 run1=edef2a9231378a9e run2=edef2a9231378a9e
+--- section 2: reconcile_all full RUNNER ---
+runner rc=0
+runner tail:
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (168/168 suites green, reconcile controls 7/7, 188.8s)
+--- section 3: suite_matrix regen + --check ---
+PASS generated docs/sandbox-suite-matrix.md (16537 bytes) - registry suites=168 criteria=1515 evidence=qa/reconcile-all-R1930.log green=168/168
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16537 bytes, 168 suites, 1515 criteria)
+matrix regen rc=0 check rc=0
+--- section 4: qa_writer_census --check ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1346 tee=844 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+VERDICT: PASS

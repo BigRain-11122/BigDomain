@@ -1380,6 +1380,22 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-eventtickets-boardpersist", os.path.join(
         "ledger", "test_eventtickets_boardpersist.py"), 7),
+    # R1930: eventtickets session_board/attendees/active_sessions
+    # three read-face family derivation purity across an instance
+    # restart (seed = the R1771/R1926 tech-queue claim row; the
+    # R1898 boardpersist seat covers event_audit_board only -
+    # the three session/check-in boards were zero-registered for
+    # the restart face). Two-piece stack close -> reopen same
+    # db/config replays the ten pre-close board reads
+    # byte-identical; a November purchase + check-in on the live
+    # gala session plus a fresh newmo registration recompute the
+    # touched boards (zero cache) while untouched boards and
+    # non-covering schedule windows stay byte-frozen; a third
+    # instance replays the post-injection state byte-identically
+    # (AC-SBP1..AC-SBP7 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-eventtickets-sessionpersist", os.path.join(
+        "ledger", "test_eventtickets_sessionpersist.py"), 7),
     # R1900: member expiring_soon board + distribution fold
     # read-face derivation purity across an instance restart
     # (seed = the R1899 tech-queue claim row; AC-ES1..ES7 R1774
