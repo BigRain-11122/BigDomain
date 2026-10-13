@@ -1,0 +1,52 @@
+=== [1] suite double-run: test_expiring_dist_persist.py AC-ESD8..AC-ESD14 (full stdout carries zero volatile lines: no tmp paths, no ports, no ms timings; the default-read as_of echo never prints) ===
+run1 rc=0 lines (8):
+PASS AC-ESD8: fresh=True active=13 shapes_ok=True keys7=True numeric_order=True inv=True single_source=True sql_cross=True excluded_from_d45=10 default_band==frozen=True (as_of end-of-day anchor; d60 shape corrected to the claim's own world arithmetic: EP-C no2 also lands at +60d)
+PASS AC-ESD9: quartet==pre=True key_orders==pre=True reread_self_identical=True single_source=True (fresh instance re-derives identical bytes: zero in-memory state drift)
+PASS AC-ESD10: band(face2_default)==band(face1_default)=True cells==frozen_d45=True as_off_clock=True (default as_of rides the real clock minute-drift: band projection strips the echo, per R1902 law)
+PASS AC-ESD11: ep_d_fresh=True d45_3to4=True d60_5to6=True d400_13to14=True board_changed=True old_cells_prefix_stable=True sql_cross=True key_order_stable=True (recomputed from db, zero cache)
+PASS AC-ESD12: d29_still_byte_empty=True active=14 d45_count=4 excluded=10 covering_three_way=True (out-of-window rows never backfill; d400 fold==board==active = single derivation source)
+PASS AC-ESD13: frozen_quartet_face2==face3=True key_orders=True face2_reread_self=True default_band_pair=True count=4
+PASS AC-ESD14: sql_in_fold=[] write_kw=[] counts_stable=True (periods 14, events 14, vouchers 2, audit 34, pay_orders 14, pay_grants 14), member_sha=True, cfg_sha=True, ascii=True, net_imports=0, world_outside=True, runner_row=True, drift=6/7, clock_live=True (suite-only round: zero product change; fold holds no SQL per R1779 law)
+SUITE member-expiring-dist-persist: 7/7 criteria pass
+run2 rc=0 lines (8):
+PASS AC-ESD8: fresh=True active=13 shapes_ok=True keys7=True numeric_order=True inv=True single_source=True sql_cross=True excluded_from_d45=10 default_band==frozen=True (as_of end-of-day anchor; d60 shape corrected to the claim's own world arithmetic: EP-C no2 also lands at +60d)
+PASS AC-ESD9: quartet==pre=True key_orders==pre=True reread_self_identical=True single_source=True (fresh instance re-derives identical bytes: zero in-memory state drift)
+PASS AC-ESD10: band(face2_default)==band(face1_default)=True cells==frozen_d45=True as_off_clock=True (default as_of rides the real clock minute-drift: band projection strips the echo, per R1902 law)
+PASS AC-ESD11: ep_d_fresh=True d45_3to4=True d60_5to6=True d400_13to14=True board_changed=True old_cells_prefix_stable=True sql_cross=True key_order_stable=True (recomputed from db, zero cache)
+PASS AC-ESD12: d29_still_byte_empty=True active=14 d45_count=4 excluded=10 covering_three_way=True (out-of-window rows never backfill; d400 fold==board==active = single derivation source)
+PASS AC-ESD13: frozen_quartet_face2==face3=True key_orders=True face2_reread_self=True default_band_pair=True count=4
+PASS AC-ESD14: sql_in_fold=[] write_kw=[] counts_stable=True (periods 14, events 14, vouchers 2, audit 34, pay_orders 14, pay_grants 14), member_sha=True, cfg_sha=True, ascii=True, net_imports=0, world_outside=True, runner_row=True, drift=6/7, clock_live=True (suite-only round: zero product change; fold holds no SQL per R1779 law)
+SUITE member-expiring-dist-persist: 7/7 criteria pass
+criteria-identical=True full-stdout-identical=True (lines 8/8)
+run1 full-stdout sha16=dd2e3ecb9df14914 run2 full-stdout sha16=dd2e3ecb9df14914
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1919.log)
+RUNNER PASS (160/160 suites green, reconcile controls 7/7, 189.9s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15824 bytes, 160 suites, 1462 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1325 tee=823 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS

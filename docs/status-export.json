@@ -1,8 +1,8 @@
 {
- "export_ts": "2026-10-13T14:07:05+08:00",
+ "export_ts": "2026-10-13T14:55:32+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-    "current": "P2 队头 FIFO 交付：member birth_cert_face 出生证明读面跨重启持久化例窗（判据预注册 AC-BCP1..BCP7→套件 7/7 全绿：五化身+blank 探针六面跨重启字节同一+零缓存重算+退款重算 R1721 语义+激活域戳+双实例序贯同一·RUNNER 159 套件判据 1455 全绿零回归·矩阵 --check byte-identical）",  "latest_artifact": "src/sandbox/member/test_birthcert_persist.py + qa/birthcert-persist-R1918.log + qa/reconcile-all-R1918.log（2026-10-13·159 套件 1455 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：member expiring_distribution 档位分布读面跨重启持久化例窗（R1916 补种在队·AC-ESD 族续编）→ugc export 三导出面确定性例窗（R1917 补种）→pay channel_status_matrix 窗参 persist 例窗（R1918 补种）·窗 ≤48h（2026-10-15 前）"},
+    "current": "P2 技术队头 FIFO 交付：member expiring_distribution 档位分布读面（会员到期档位/期线折叠面）跨 MemberStore 重启持久化套件 7/7 全绿——RUNNER 160 套件·判据 1462 全绿零回归；三实例真径世界：四窗折面（d45/d60/d29/d400）跨重启逐字节复原、键序数值序证据直读、重启后新激活折面重算零缓存、越窗行不回灌、双实例序贯同一；前轮 14:23 崩溃孤儿认领（判据已预注册）本轮接手完成；诚实注=认领 d60 形状在其自身 EP-C 十连栈世界算术不可达（no2 亦落 +60d）·按世界一致正身修正并双面注",  "latest_artifact": "src/sandbox/member/test_expiring_dist_persist.py + qa/expiringdist-persist-R1919.log + qa/reconcile-all-R1919.log（2026-10-13·160 套件 1462 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：ugc export 三导出面跨重启确定性+幂等例窗（R1917 补种在册）与 pay channel_status_matrix 窗参读面 persist 例窗（R1918 补种在册），滚动族新补种=ledger curation hot_board 热榜 persist 例窗（R1919 补种），窗 ≤48h（2026-10-15 前）"},
  "depts": [
   {
    "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -796,7 +796,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1918",
+   "1919",
    "OSLoop 执行 tick"
   ],
   [
@@ -3782,15 +3782,19 @@
   [
    "2",
    "R1918 member birth_cert_face read-face cross-restart persistence 7/7 (criteria AC-BCP1..AC-BCP7 pre-registered in state/queue/tech.md; six faces five avatar shapes + blank probe replay byte-identical from a fresh MemberStore on the same db/cfg/pay dock, zero-cache recompute on new true-path grants, refund recompute keeps history + marker per R1721, activation marker stamps across the restart boundary, dual-instance sequential identity; suite-only round, product zero changes; two honest calibration notes: create_order is content-addressed per (avatar, product, closed-bucket) so the third BC-B grant rides tier_cocreator, and the AC-BCP6 BC-A anchor calibrates on its post-refund state)"
+  ],
+  [
+   "2",
+   "R1919 member expiring_distribution fold read-face cross-restart persistence 7/7 (criteria AC-ESD8..AC-ESD14 pre-registered in state/queue/tech.md by the orphaned predecessor claim, adopted and closed by this round; suite-only round product bytes unchanged; four-window fold quartet byte-replay across MemberStore close/reopen, numeric key-order evidence read from the live dict, default-read band restoration per the R1902 projection law, EP-D zero-cache recompute with old-cell prefix stability, out-of-window zero backfill, covering-window three-way equality, dual-instance sequential identity, fold source zero-SQL per the R1779 single-derivation law; honest criteria-fix: the registered d60 shape {\"1\":3,\"2\":1} was arithmetically unreachable in the claim's own EP-C x10 world - corrected to {\"1\":3,\"2\":2} count 5 with the as_of end-of-day anchor ruling; stacking true path = the R1912 refund-edge shape) + RUNNER 160/160 criteria 1455->1462 (SUITES 159->160) + matrix 15824B byte-identical x2 + census DRIFT-CLEAN + sentinel PASS + evidence qa/expiringdist-persist-R1919.log VERDICT PASS + tech consume 1 + reseed 1 (ledger curation hot_board persist seed)"
   ]
  ],
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 12,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

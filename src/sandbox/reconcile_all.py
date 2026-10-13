@@ -1538,6 +1538,14 @@ SUITES = [
     # state/queue/tech.md)
     ("member-birthcert-persist", os.path.join(
         "member", "test_birthcert_persist.py"), 7),
+    # R1919: member expiring_distribution fold read-face
+    # derivation purity across an instance restart - default-
+    # read restoration, second-order window membership, numeric
+    # key-order evidence (AC-ESD8..AC-ESD14 pre-registered in
+    # state/queue/tech.md; suite-only round, zero product
+    # change)
+    ("member-expiring-dist-persist", os.path.join(
+        "member", "test_expiring_dist_persist.py"), 7),
 ]
 
 FAILS = 0
