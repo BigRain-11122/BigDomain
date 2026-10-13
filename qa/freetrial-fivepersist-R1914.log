@@ -1,0 +1,46 @@
+=== [1] suite double-run: test_freetrial_fivepersist.py AC-CFP1..CFP7 ===
+run1 rc=0 (full stdout):
+PASS AC-CFP1: stack1 loaded under the frozen clock; SQL 2026-10 record-time stamps (grants=2 calls=3); W derived from the first call row (2026-10); ten pre-close snapshots anchored - five default envelopes pinned to exactly 3 keys with cell values month={'2026-10': 3} kind={'backtest': 2, 'visualize': 1} plan={1: 2, 2: 1} engine={'eng-x': 2, 'eng-y': 1} account={'usr:five-a': 2, 'usr:five-b': 1} (total==3 == sum per face) and five 2026-10 windowed envelopes pinned to exactly 4 keys with the window echo; manual SQL GROUP BY cross-checks equal on all ten reads; same-param double reads self-identical
+PASS AC-CFP2: four-piece stack closed in reverse dependency order and reopened on the same db path with the same config; all five 2026-10 windowed reads are byte-identical to the pre-close snapshots (4-key envelopes with the window echo; group keys walk in query order so the dicts are stable across restart - zero in-memory drift on the derived faces); same-param second reads self-identical
+PASS AC-CFP3: post-restart default reads are byte-identical to the pre-close default snapshots on all five faces (3-key envelopes, zero window key); in the October-only era the default cell values equal the oct windowed cell values (the month face keeps month cells, the other four keep row-filter windows - same values while only one month holds rows)
+PASS AC-CFP4: clock +23d crossed the month boundary; the November usr:five-c grant on five-pc with one backtest and one visualize call (SQL 2026-11 calls=2, written through the reopened stack) recomputed all five default reads (month={'2026-10': 3, '2026-11': 2} kind={'backtest': 3, 'visualize': 2} plan={1: 2, 2: 1, 3: 2} engine={'eng-x': 2, 'eng-y': 1, 'eng-z': 2} account={'usr:five-a': 2, 'usr:five-b': 1, 'usr:five-c': 2}, total==5, byte-different from the pre-close default snapshots - zero cached state on the faces) while all five 2026-10 windowed reads stayed byte-identical to the pre-close snapshots (trial_calls rows keep their record-time stamps - old window zero leakage across restart AND across new data); the 2026-11 windowed reads carry the new-month cells (total==2 on every face)
+PASS AC-CFP5: oct windowed totals stay 3 across restart and new data on all five faces (zero penetration); 2026-11 windowed totals==2; the empty-month 2026-12 reads are honest empties on all five faces ({} total=0, 4 keys present, zero phantom cells); the composition law holds per face - default total == oct total + 2026-11 total (3+2==5, the row-partition telescoping); nov cells equal the manual SQL window- predicate GROUP BY cross-checks
+PASS AC-CFP6: stack2 fifteen reads (five faces x default / 2026-10 window / 2026-11 window) re-read self-identical, then closed and reopened as stack3 on the same db; all fifteen reads are pairwise byte-identical across the two instances - zero cross-instance drift; the five oct windowed reads still equal the ORIGINAL pre-close snapshots (the persistence core: explicit window reads survive restart x new data double hijack without drift)
+PASS AC-CFP7: five face sources free of data-changing statements; four-table counts pinned plans/grants/calls/conversions=(3, 3, 5, 0) unchanged across the twenty-shape double-read battery (five faces x four windows); every shape double-read byte-identical; freetrial.py + shipped config.json sha256 stable across the whole run (zero product bytes - pin-only suite); suite + face sources pure ASCII with network-free import lines (13 imports); SUITES registration row present (ledger-freetrial-fivepersist, criteria 7); criteria drift self-check 6+1==7; frozen clock restored with probe
+SUITE PASS 7/7 exit=0
+run2 rc=0
+run1 sha16=A5DD41950B82173D run2 sha16=A5DD41950B82173D byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1914.log)
+RUNNER PASS (156/156 suites green, reconcile controls 7/7, 241.8s)
+note: predecessor session (2026-10-13 10:51-11:03) was interrupted right
+after the runner; sections [1][3][4][5] plus the accounting were completed
+by the successor session same day (R550/R551/R1675 interruption precedent).
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15466 bytes, 156 suites, 1428 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1317 tee=815 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS

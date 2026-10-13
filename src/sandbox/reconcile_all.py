@@ -992,6 +992,16 @@ SUITES = [
     # (AC-CRU8..CRU15 pre-registered in state/queue/tech.md)
     ("ledger-freetrial-cappersist",
      os.path.join("ledger", "test_freetrial_cappersist.py"), 8),
+    # R1914 freetrial five count faces (calls_by_month/by_kind/
+    # by_plan/by_engine/by_account) windowed-read cross-restart
+    # persistence: four-piece stack close/reopen, windowed reads
+    # byte-identical to pre-close snapshots, November calls on
+    # the reopened face recompute defaults while October windows
+    # freeze, third instance reads sequentially identical;
+    # zero product bytes - pin-only suite
+    # (AC-CFP1..CFP7 pre-registered in state/queue/tech.md)
+    ("ledger-freetrial-fivepersist",
+     os.path.join("ledger", "test_freetrial_fivepersist.py"), 7),
     # R1777 UGC noise/review pool water-level read face: pure-read
     # derivation over payload noise flags + review-desk verdicts
     # (zero stored counters, live per call; store envelope carries
