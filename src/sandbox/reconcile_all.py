@@ -171,6 +171,14 @@ SUITES = [
      os.path.join("ledger", "test_collectibles.py"), 7),
     ("ledger-expedite",
      os.path.join("ledger", "test_expedite.py"), 7),
+    # expedite persist window: cross-restart byte-identical
+    # replay of the queue/credit read battery, restart-surviving
+    # gate probes, post-restart continuation recompute, frozen
+    # faces + idempotent replay, pure-read law, third instance
+    # stability (AC-EPP1..EPP7 pre-registered in state/queue/
+    # tech.md).
+    ("ledger-expedite-persist", os.path.join(
+        "ledger", "test_expedite_persist.py"), 7),
     ("ledger-ads",
      os.path.join("ledger", "test_ads.py"), 7),
     ("ledger-observation",

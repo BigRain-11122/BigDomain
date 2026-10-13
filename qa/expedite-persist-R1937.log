@@ -1,0 +1,79 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-EPP1: anchor world pinned (alice five credits demo x2 consumed->jobs 2/4, submit/backtest/resident unconsumed; bob one unconsumed; carol empty spine); queue two-tier order [build-3 exp, build-4 exp, build-9 norm, tower-mk2 norm] positions 1-4; five gate probes rejected (no-credit=E_EXP_NO_CREDIT; kind-mismatch=E_EXP_KIND_MISMATCH; bad-kind=E_EXP_BAD_KIND; bad-account=E_EXP_BAD_ACCOUNT; empty-subject=E_EXP_BAD_SUBJECT); counts credits=6 jobs=4 spend-tx=6 frozen across probes; balances 1903/570/400/17127; digest=452e9dbb706f35f9
+PASS AC-EPP2: two-piece close->reopen (ef.close -> led.close -> Ledger same db/cfg + ExpediteFace fresh): read battery byte-identical to pre-close snapshot (queue + credits_view x3 + four balances), diffs=none; persisted timestamps and spend_tx values replay with zero in-memory drift; digest=452e9dbb706f35f9
+PASS AC-EPP3: restart-surviving gates: five probes all rejected with identical codes on instance 2 (no-credit=E_EXP_NO_CREDIT; kind-mismatch=E_EXP_KIND_MISMATCH; bad-kind=E_EXP_BAD_KIND; bad-account=E_EXP_BAD_ACCOUNT; empty-subject=E_EXP_BAD_SUBJECT); counts and balances frozen across the probe batch (credits/jobs/spend-tx 6/4/6 unchanged, zero charge, zero rows)
+PASS AC-EPP4: post-restart continuation: carol fresh purchase order:epp-c1 binds a real spend tx (SQL cross type=spend, debit leg=debit, tx_id not echoed); carol jumps demo:build-10 consuming that credit, expedited-tier FIFO lands position 3 behind the two earlier expedited jobs; derived faces recompute zero-cache (jobs 4->5, spend-tx 6->7, carol 400->375, bob 570 frozen); digest=16ccc72771ecb450
+PASS AC-EPP5: frozen faces: bob credits_view byte-identical to pre-close; the four pre-existing jobs keep every persisted field (subject/account/expedited/base_seq/used_credit) with only the derived position honestly shifted (normal jobs 3->4, 4->5); old ref order:epp-a1 replays idempotent across restart (same credit #1, same spend tx, zero new row, zero second charge, alice still 1903); consumed credits cannot be resurrected - third demo jump still rejected
+PASS AC-EPP6: pure-read law: full battery read twice back-to-back - queue + credits_view x3 + four balances byte-identical between the two reads and table counts constant (read faces have zero side effects)
+PASS AC-EPP7: third instance: close -> reopen same db once more - battery byte-identical to instance-2 terminal state (diffs=none, replay faces and new-write faces both stable across a second restart); shipped files untouched (config/expedite/ledger sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+sha16 run1=cf750aceff525efa run2=cf750aceff525efa byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5i2r4ivp\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (175/175 suites green, reconcile controls 7/7, 268.1s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17149 bytes) - registry suites=175 criteria=1564 evidence=qa/reconcile-all-R1937.log green=175/175
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17149 bytes, 175 suites, 1564 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1361 tee=859 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/os/state.json
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1937.log
+?? src/os/evidence_R1937.py
+?? src/sandbox/ledger/test_expedite_persist.py
+
+VERDICT PASS

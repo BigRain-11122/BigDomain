@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T01:48:57+08:00",
+ "export_ts": "2026-10-14T02:44:30+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1936：观测面（observation）做了「关服务重开、策略/授予/五门禁照常工作」验证——接管窗：上一崩溃轮已把套件与全套证据跑齐（双跑逐字节同一），本轮复验后收口；总回归 174 套件全绿；每日 crawl 同窗交付 W24《互联网广告管理办法》直采入册，证据在 qa/observation-persist-R1936.log 与 qa/reconcile-daily-20261014.log",
-  "latest_artifact": "src/sandbox/ledger/test_observation_persist.py + qa/observation-persist-R1936.log + qa/reconcile-daily-20261014.log，2026-10-14·174 套件 1557 判据 green·新增 ledger-observation-persist·观测面跨重启持久化例窗；benchmarks W24 广告法规块+smoke-R1936 证据对",
-  "next_milestone": "下轮 R1937：tech 队列 FIFO=ledger expedite persist 认领（R1935 补种）+轮首首测 fold R508 裁定（收账后水位预测越 78500B 线）"
+  "current": "R1937：加急队列面（expedite）做了「关库重开、队列/积分读面照常执法」验证——接管窗：上一崩溃轮已把套件+全套证据+fold R508 跑齐（双跑逐字节同一），本轮复验后收口；总回归 175 套件全绿；收账顺带补齐上一轮 export 刷新丢的 tick 行",
+  "latest_artifact": "src/sandbox/ledger/test_expedite_persist.py + qa/expedite-persist-R1937.log + qa/reconcile-all-R1937.log，2026-10-14·175 套件 1564 判据 green·新增 ledger-expedite-persist·加急队列跨重启持久化例窗",
+  "next_milestone": "下轮 R1938：tech 队列 FIFO=ledger venue 场地面 persist 认领（R1936 补种）"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1937",
+   "R1937 ledger expedite queue-face cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1936 closeout pointer, the R1935-reseeded claim; criteria AC-EPP1..AC-EPP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934/R1936 lineage - the crashed R1937 attempt left suite + registry row + claim + matrix regen + five-section double evidence + the completed fold R508 on disk with zero failed-run artifacts; this window re-verified live (suite re-run SUITE PASS 7/7 + matrix --check byte-identical 17149B 175/1564) then closed out. Three-instance world: anchor (alice five-credit consumption spectrum + bob single + carol empty spine, five gate probes rejected, battery digest 452e9dbb706f35f9, counts credits 6/jobs 4/spend-tx 6, balances 1903/570/400/17127) -> two-piece ef.close->led.close->reopen same db/config replays queue_snapshot + credits_view x3 + four balances byte-identical (persisted timestamps and spend_tx zero in-memory drift) -> five restart-surviving gates same codes zero-charge -> carol real-path purchase epp-c1 bound to a real spend tx (SQL cross type=spend debit leg) landing expedited FIFO position 3 with zero-cache recompute jobs 4->5 carol 400->375 digest 16ccc72771ecb450 -> frozen faces + idempotent old-ref replay across restart + consumed-credit resurrection refused -> pure-read law -> third instance stable; RUNNER PASS 175/175 criteria 1557->1564 controls 7/7 268.1s = qa/reconcile-all-R1937.log (SUITES 174->175, ledger-expedite-persist seat) + matrix regen 175/1564 green --check byte-identical + census DRIFT-CLEAN; evidence five sections qa/expedite-persist-R1937.log, LF-normalized single-writer driver src/os/evidence_R1937.py; fold R508 round-start honored (crashed round's own surgery verified on disk: R1932..R1936 ten lines 16589B -> 1 rolling line, 20 tokens zero-loss, archive verbatim + preop 81429B); tech consume 1 reseed 1 (queue_tech_open 10->10: expedite done -1 + ledger props persist seed +1 with dedup pre-checks, next FIFO head = ledger venue persist); export refresh collected the R1936 tick-row debt (results tick row 'OSLoop 执行 tick' restored with r[0]==1937) + self_drive synced to the checker recompute (W=13 sub=1) + checker VERDICT PASS; suite-only round, zero product bytes"
+  ],
+  [
    "R1936",
    "R1936 ledger observation cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1935 closeout pointer; criteria AC-OBP1..OBP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934 lineage - the crashed R1936 attempt left suite+registry+matrix+five-section evidence+the 2026-10-14 daily reconcile on disk with zero failed-run artifacts; this window re-verified live (suite re-run PASS + matrix --check byte-identical) and closed out. Three-instance world: anchor (four accounts, two strategies, alice single-permanent + bob pass window bound to real spend txs, four gate probes rejected, digest c184654e4fe640cb) -> two-piece reverse-order close/reopen with 13 read faces + 5 balances byte-identical (registered_utc persisted value, no clock echo) -> five restart-surviving gates -> post-restart real-path continuation with SQL cross-checks and zero-cache recompute -> frozen faces + window isolation -> pure-read law -> third-instance stability; RUNNER PASS 174/174 criteria 1550->1557 controls 7/7 251.4s = qa/reconcile-daily-20261014.log (dual carrier = the daily reconcile, sentinel ok + profile ok + census DRIFT-CLEAN); matrix regen 174/1557 green --check identical; tech consume 1 reseed 1 (venue persist candidate added, queue_tech_open 10->10, next FIFO head = ledger expedite persist). QA charter daily crawl W24 = Internet Advertising Administrative Measures (SAMR Order No. 72) official fulltext direct-captured into benchmarks + intelligence-wall W24 rows; benchmarks_refreshed=2026-10-14; smoke-R1936 log+png pair delivered; GORD one new row (@bm-c V3 refire receipt, BigStream family, acknowledged no-action, baseline 375->376)."
   ],
@@ -361,15 +365,19 @@
   [
    "2",
    "R1881 R1880 孤儿交付救援+拍板②维持补货轮（轮计分 2=R1880 产品件经救援 commit 8ce84451 上链已推=本窗可见实物：freetrial conversion_funnel_board 读帽套件 SUITE 7/7 双跑逐字节同一+RUNNER 130/130·崩溃现场取证=closeout 三面写盘全毕 22:48 而 commit 崩失·进程零存活+无锁+mtime 陈旧=非活跃写盘者·救援合法）+D-20261012-03 拍板②维持面：tasks.md 真活行滚动补货 +2（lobby 读帽参数窗=R1874 队头种子+pay notify 月滚保真例窗=R1878 种子·R1866 批已被 R1866..R1868 当日消耗）+HQ-FEEDBACK R1881 维持回执行+DEC 批二表 token-flat 判读（D-20261012-03 已 R1866 判毕在基线）+GORD 324→332 八新行全他司面知悉·P2 FIFO 队头指针=lobby 读帽参数窗下轮接续"
+  ],
+  [
+   "1937",
+   "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 20,
+  "log_lines_in_window": 13,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 5,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
