@@ -1706,6 +1706,20 @@ SUITES = [
     # (AC-TSP1..TSP7 pre-registered in state/queue/tech.md).
     ("tourstate-persist", os.path.join(
         "tourstate", "test_tourstate_persist.py"), 7),
+    # R1935 datasub cross-restart persistence window (persist-family
+    # seat, R1886 lineage; suite-only round - zero product change):
+    # two-piece close -> same-db reopen replays the nine read faces
+    # (bundle/view x2/subscription_view x4/reconcile x2) plus four
+    # balances byte-for-byte, the pre-spend gate family survives the
+    # restart (dup window, dup ref, dup delivery ref, not-subscribed,
+    # bad window, register conflict + idempotence) with zero row/
+    # balance drift, post-restart real-path continuation recomputes
+    # the derived counts while the descriptor bundle and untouched
+    # account faces stay byte-frozen, zero cross-dataset permeation,
+    # third instance stability (AC-DSP1..DSP7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-datasub-persist", os.path.join(
+        "ledger", "test_datasub_persist.py"), 7),
 ]
 
 FAILS = 0

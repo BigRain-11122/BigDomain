@@ -1,0 +1,79 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-DSP1: anchor world: 2 datasets, 4 subs (ada two-window x99, carol x99, bob x999), 3 deliveries (carol redownload x2, ada x1); views mobility 3/3 ai=0, quarterly 1/0 ai=1; reconcile balanced 297/999; balances ada=1802 bob=2001 carol=901 pool=15296; pre-close gates dup-window=E_DSB_DUP dup-ref=E_DSB_DUP not-subscribed=E_DSB_NOT_SUBSCRIBED; five-table counts {'dataset_registry': 2, 'dataset_subscriptions': 4, 'dataset_deliveries': 3, 'spend_tx': 4}; snapshot digest(sha16,ts/tx-masked) 47106cc3bb36c0a9
+PASS AC-DSP2: instance2 same db/config replays all 13 snapshot values (nine read faces + four balances) byte-identical (diff keys=none, digest 47106cc3bb36c0a9)
+PASS AC-DSP3: post-restart gates: dup-window=E_DSB_DUP dup-ref=E_DSB_DUP dup-delivery=E_DSB_DUP not-subscribed=E_DSB_NOT_SUBSCRIBED bad-window=E_DSB_BAD_WINDOW register-conflict=E_DSB_DUP register-idem=True; counts constant {'dataset_subscriptions': 4, 'dataset_deliveries': 3, 'spend_tx': 4}; four balances zero-moved ((1802, 2001, 901, 0)==(1802, 2001, 901, 0))
+PASS AC-DSP4: post-restart continuation: bob Q2 -999 -> 1002, ada Q1 -999 -> 803, carol redelivery row (zero token); both new subs bound to real spend tx (type=spend, debit entry)=True; derived recompute zero-cache: quarterly subs 1->3 deliveries 0, mobility deliveries 3->4, carol window deliveries 2->3, reconcile quarterly balanced billed 2997; pool=17294
+PASS AC-DSP5: frozen faces: descriptor bundle byte==anchor; untouched dave subscription_view byte==anchor (zero subs); reconcile mobility counts == anchor+1 delivery only (subs 3, billed 297 - quarterly spends do not permeate); reconcile quarterly carries zero mobility rows (deliveries 0, subs 3) - cross-dataset isolation both ways
+PASS AC-DSP6: read battery leaves all five table counts constant {'ledger_tx': 10, 'ledger_entries': 20, 'dataset_subscriptions': 6, 'dataset_deliveries': 4}; third instance replays the post-continuation state byte-identical (diff keys=none, digest 048c19a798da9f9f)
+PASS AC-DSP7: shipped config sha16 stable 32b018fad53fb8bc; datasub.py/ledger.py sha16 stable (True/True); SUITES registration row=True; own source pure-ascii=0 network-imports=0; world tmp outside repo=True
+
+SUITE PASS 7/7
+
+sha16 run1=c620990d4f1170e8 run2=c620990d4f1170e8 byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-cxcwbk0a\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (173/173 suites green, reconcile controls 7/7, 243.7s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (16970 bytes) - registry suites=173 criteria=1550 evidence=qa/reconcile-all-R1935.log green=173/173
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16970 bytes, 173 suites, 1550 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1356 tee=854 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1935.log
+?? src/os/evidence_R1935.py
+?? src/sandbox/ledger/test_datasub_persist.py
+
+VERDICT PASS

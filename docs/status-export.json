@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T23:37:30+08:00",
+ "export_ts": "2026-10-14T00:15:44+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1934：参观动线的三态选型状态包（tourstate）做了一次「换进程不丢样」验证——新测试 7 条全过、总回归 172 套件全绿；本轮顺带把上轮崩溃会话遗留的已验证产物（新套件+全量回归证据）收口上链，证据在 qa/tourstate-persist-R1934.log",
-  "latest_artifact": "src/sandbox/tourstate/test_tourstate_persist.py + qa/tourstate-persist-R1934.log + qa/reconcile-all-R1934.log（2026-10-13·172 套件 1543 判据 green·新席 tourstate-persist·崩溃轮孤儿载荷接管收口）",
-  "next_milestone": "下轮 R1935：tech 队列 FIFO=ledger datasub 订阅面 persist 认领（R1931 补种·2026-10-14 内推进）"
+  "current": "R1935：城市公开数据集订阅面（datasub）做了一次「关服务重开、订阅与投递记录一字不丢」验证——新套件 7 条全过、总回归 173 套件全绿；重启后重复订阅/重复投递/未订阅投递等门禁照常全拒且零扣费，证据在 qa/datasub-persist-R1935.log",
+  "latest_artifact": "src/sandbox/ledger/test_datasub_persist.py + qa/datasub-persist-R1935.log + qa/reconcile-all-R1935.log（2026-10-14·173 套件 1550 判据 green·新席 ledger-datasub-persist·订阅面跨重启持久化例窗）",
+  "next_milestone": "下轮 R1936：tech 队列 FIFO=ledger observation 观测面 persist 认领（R1931 补种·2026-10-14 内推进）+10-14 日戳 daily 对账首轮执行"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1935",
+   "R1935 datasub cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1934 closeout pointer, the R1931-reseeded claim; criteria AC-DSP1..AC-DSP7 pre-registered in tech.md before code with two rulings: the read battery = nine read faces + four balances with full-envelope byte comparison while evidence digests mask the persisted-but-clock-written subscribed_utc and spend_tx fields (R1902 banded-projection law), and the restart carrier = the two-piece full-stack reverse-order close/reopen with a three-instance world): suite test_datasub_persist.py first run all green + double-run stdout byte-identical sha16 c620990d4f1170e8 - anchor world (two datasets monthly 99 ai=0 + quarterly 999 ai=1, four subscriptions across three accounts incl. ada two-window, three delivery rows incl. carol same-window redownload x2, pre-close gate probes all rejected, nine reads + four balances snapshot digest 47106cc3bb36c0a9, manual SQL five-table count cross registry 2 / subs 4 / deliveries 3 / spend-tx 4); close both pieces -> instance-2 same db/config replays all nine reads + four balances byte-identical (zero in-memory drift); seven gate probes all rejected with zero drift (dup window / dup purchase_ref / dup delivery_ref / not-subscribed / cross-period bad window / register conflict + idempotent re-register, counts and balances constant); post-restart real-path continuation (bob Q2 + ada Q1 each -999, carol redelivery zero-token, both new subs bound to real spend tx cross-proven type=spend + debit entry, derived faces recompute zero-cache quarterly subscriber 1->3 / mobility delivery 3->4 / carol 2->3 / reconcile quarterly billed 2997 balanced, balances ada 803 / bob 1002 / pool 17294); frozen faces + two-way zero cross-dataset permeation (descriptor bundle byte==anchor, untouched dave subscription_view frozen, reconcile mobility == anchor+1 delivery only, reconcile quarterly zero mobility permeation); pure-read law + third instance replays the post-continuation state byte-identical (digest 048c19a798da9f9f, five-table counts constant); hygiene config/datasub/ledger sha stable + SUITES row in-book + pure ASCII + zero network imports; RUNNER PASS 173/173 criteria 1543->1550 controls 7/7 243.7s = qa/reconcile-all-R1935.log (SUITES 172->173) + matrix regen 173/1550 green --check byte-identical 16970B + census DRIFT-CLEAN flags=0; evidence five sections qa/datasub-persist-R1935.log, LF-normalized single-writer driver src/os/evidence_R1935.py (R1932 template family); closeout pre-step: R1934 two-line indent disease 8->16 spaces fixed via the canonical eol --fix-indent --execute (73474->73490B, content_eq/json_eq double-proof, R1710 disease-family recurrence honestly noted); tech consume 1 reseed 1 (queue_tech_open 10->10: datasub done -1 + expedite persist seed +1, next FIFO head = ledger observation persist); suite-only round, zero product bytes"
+  ],
   [
    "R1934",
    "R1934 tourstate cross-process cold re-derivation persistence suite 7/7 + orphan-payload takeover closeout (P2 tech FIFO head = the R1933 closeout pointer; orphan-adoption chain R1922/R1924/R1925 one more link: the crashed R1934 attempt left suite + registry row + claim line + two failed RUNNER runs on disk, all five payload faces verified live then committed by this takeover; the two deterministic RUNNER FAILs rooted in a pwsh-capture CRLF artifact (361400B) sitting in qa/ poisoning the live-tree census probe - artifacts deleted, census re-check DRIFT-CLEAN flags=0, full RUNNER re-run tee-native per the R1924 precedent; capture-method correction honestly noted: the first re-run with pipe capture re-offended the CRLF dialect and was caught by census on the spot, the second re-run went through the RUNNER argv[1] tee writer = canonical-capture-path judgment entered; suite test_tourstate_persist.py: tourstate is a pure stateless prep face (zero sqlite, zero file substrate) so the restart carrier is a fresh interpreter subprocess with a self-reentrant --worker flag (stdin single-line JSON in, stdout single-line JSON out, zero temp files): control anchor fresh-subprocess cold re-derivation both legs byte-identical + ids equal; three sequential fresh subprocesses mutually byte-identical == parent baseline (double-restart stability); verify True x2 across the process boundary (stdin JSON roundtrip zero semantic loss); three tampered variants all rejected E_TS_TAMPER by fresh subprocesses (tamper law survives the process boundary); bad-input probes E_TS_BAD_INPUT x3 cross-process deterministic; zero module-state drift (post-activity re-derivation == pre-window capture, original packets verify True, idempotent build-verify cycles); hygiene pure ASCII + zero network imports + tourstate.py sha256 unchanged suite-only round; SUITE 7/7 double-run byte-identical sha16 88c8e6a64e29d2e3; RUNNER PASS 172/172 criteria 1536 to 1543 controls 7/7 202.9s = qa/reconcile-all-R1934.log with the failrun1 evidence preserved (qa/reconcile-all-R1934-failrun1.log); matrix regen 172/1543 green --check byte-identical x2 16885B; census DRIFT-CLEAN; R1933 liveroom evidence 16-line CRLF to LF normalization committed same round (content byte-identical, R1884 dialect-law family); takeover fixup: the tourstate tech.md claim checkbox flipped to checked (crashed round left the done annotation but the box unflipped; after the flip the live queue count matches the in-row claim 9 to 10); five-silence: DEC one new token C-20261013-01 group workspace git-hygiene closeout adjudicated knowledge-only (own-repo hygiene compliant: state 70373B under the 78500B line, zero big files, zero media in git; baseline 308 to 309), GORD four new rows all BigStream MV family acknowledged no-action including the O-20261013-2245 cloud-unlock order (this division keeps zero cloud touchpoints, api=0; baseline 371 to 375); tech consume 1 reseed 2 queue_tech_open 9 to 10, next FIFO head ledger datasub persist (R1931 reseed)"
@@ -851,7 +855,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1934",
+   "1935",
    "OSLoop 执行 tick"
   ],
   [
@@ -3852,12 +3856,12 @@
   ]
  ],
  "self_drive": {
-  "window": "2026-10-07..2026-10-13",
+  "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 16,
+  "log_lines_in_window": 18,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 4,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
