@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T04:35:08+08:00",
+ "export_ts": "2026-10-14T04:59:56+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1940：广告位（ads）面做了「关服务重开、排期看板/独占窗读数全复原、五道闸照常拦截、重启后再下单照样入账」的跨重启验证；总回归 178 套件全绿；本轮=前窗崩溃交付的接管收口（live 复验逐字节同一后上链）",
-  "latest_artifact": "src/sandbox/ledger/test_ads_persist.py + qa/ads-persist-R1940.log + qa/reconcile-all-R1940.log，2026-10-14·178 套件 1585 判据 green·新增 ledger-ads-persist·广告位读面族跨重启持久化例窗",
-  "next_milestone": "下轮 R1941：tech 队列 FIFO=ledger companion 伴生读面族 persist 认领（R1934 补种·最老开项）+雷达窗 6 清单 OH-20261014-cph4.md 今晚 21:40 到窗即过目"
+  "current": "R1941：伴生 AI 伴侣面（companion）做了「关服务重开、通行证/对话/记忆档案全复原、五道闸照常拦截、重启后补购通行证照样入账」的跨重启验证；总回归 179 套件全绿",
+  "latest_artifact": "src/sandbox/ledger/test_companion_persist.py + qa/companion-persist-R1941.log + qa/reconcile-all-R1941.log，2026-10-14·179 套件 1592 判据 green·新增 ledger-companion-persist·伴生读面族跨重启持久化例窗",
+  "next_milestone": "下轮 R1942：tech 队列 FIFO=ledger props 道具/装扮经济面读面族 persist 认领（R1937 补种·最老开项）"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1941",
+   "R1941 ledger companion cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940 closeout pointer; criteria AC-CMP1..CMP7 pre-registered in tech.md before code, with the same-round pool-expectation erratum 19000->19330 and 19090->19420 = the ledger spend counter-leg flows back to the pool, product-behavior orthodoxy cross-attested by the ads seat 17150 = 20000-3000+150; R1883 AC-PN27 same-round pen-slip precedent; first run 5/7 -> fixed -> green). Double-run stdout byte-identical sha16 dff152fd13809909. Three-instance world on the real product path (Ledger + SecGate lobby-product reference injection + CompanionFace): anchor (jan passes alice/bob fee 120 + feb pass carol fee 90 each bound to one real spend tx; dialogue spectrum alice two archived rounds with same-kind memories twice = append-not-unique + bob one round + carol feb one round = 8 structural ai_label rows; can_ five probes a/b-jan True, c-jan False, c-feb True, a-feb False; transcript windows 4/2/0/2; memory views 2/0/0; subs views 1/1/1; balances 180/380/110/19330; five gate probes all-reject incl. gate-fault = injected fault-gate face rebuilt on the same db fails closed; zero drift across the probe batch) -> close/reopen byte-identical (created_utc = stored values, zero in-memory drift) -> restart-surviving gates -> real-path continuation (carol buys the missing jan pass bound to a real spend tx with SQL cross type=spend + debit leg, denied->allowed flip proven, two new rounds + two memory appends, counts subs 3->4 msgs 8->12 memories 2->4 spend-tx 3->4, balances 180/380/20/19420) -> frozen faces (SQL full-row snapshots of all pre-existing rows byte-frozen incl. granted_utc/created_utc/content_json) + dup/denied/content gates across restart -> pure-read law -> third-instance stability. RUNNER PASS 179/179 criteria 1585->1592 controls 7/7 304.7s = qa/reconcile-all-R1941.log (ledger-companion-persist seat 0.8s, census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 179/1592 green --check byte-identical (17468 bytes); state.json EOL bare-LF repair at round start (25 lines -> 0, 74422B predicted==actual); evidence six-section qa/companion-persist-R1941.log via src/os/evidence_R1941.py; tech consume 1 reseed 1 (apimarket persist seeded with same-day dedup scans: registry zero apimarket-persist seat + AC-AMP git-grep rc=1 + base-suite close hits all cleanup/probe closes non-restart = single-Ledger true-activity candidate; next FIFO head = ledger props persist)."
+  ],
+  [
    "R1940",
    "R1940 ledger ads ad-slot cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1939 closeout pointer; criteria AC-ASP1..ASP7 pre-registered in tech.md before code) + crashed-round orphan-payload takeover closeout (eighth case of the R1937 lineage): the crashed R1940 attempt left all eight payload faces on disk (suite + registration + claim line + regen matrix + six-section evidence + RUNNER carrier + fold R509 already done at round start) with zero failed-run artifacts and only the closeout missing; this round live re-verified (suite double-run sha16 fe8a6f5962e1be68 both runs anchor-matching the evidence record, matrix 178/1585 --check byte-identical 17379B, census DRIFT-CLEAN, fingerprint CLEAN domains=5) and closed out. Three-instance world: anchor (three registered ad units screen/naming/splash + carousel three-advertiser concurrency + naming/splash exclusives, lineup four-window read faces pinned, five gate probes rejected zero-charge, digest f8262014291ca748) -> three-piece reverse-order close/reopen battery byte-identical -> five restart-surviving gates -> post-restart real-path continuation (carol books the freed carousel window + a freed naming window, both bound real spend txs via SQL cross, zero-cache recompute, digest f731c355e29e84c5) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; RUNNER PASS 178/178 criteria 1578->1585 controls 7/7 268.3s = qa/reconcile-all-R1940.log; fold R509 honored (carried by the crashed attempt; archive-preop 79330B verified on disk); tech consume 1 reseed 1 (devshare persist seeded via same-day dedup pre-checks, next FIFO head = ledger companion persist); suite-only round zero product bytes"
   ],
@@ -357,23 +361,15 @@
   [
    "R1886",
    "pay-authorize-idem 幂等缓存重启语义 7/7+RUNNER 134/134+fold R502 state 92KB→43KB"
-  ],
-  [
-   "R1885",
-   "pay-authorize-persist 读面跨重启持久化例 7/7+RUNNER 133/133+census 全绿"
-  ],
-  [
-   "1940",
-   "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 13,
+  "log_lines_in_window": 15,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

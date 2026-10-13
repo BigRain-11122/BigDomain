@@ -225,6 +225,16 @@ SUITES = [
     # (AC-CP1..CP7 pre-registered in state/queue/explore.md).
     ("ledger-companion",
      os.path.join("ledger", "test_companion.py"), 7),
+    # companion persist window: cross-restart byte-identical replay
+    # of the can_/transcript/memory/subs read battery, restart-
+    # surviving gate probes (dup-pass/denied/content/gate-fault/
+    # bad-month), post-restart continuation (missing month pass +
+    # new dialogue rounds + memory appends), frozen faces +
+    # dup/denied/content gates, pure-read law, third instance
+    # stability (AC-CMP1..CMP7 pre-registered in state/queue/
+    # tech.md).
+    ("ledger-companion-persist",
+     os.path.join("ledger", "test_companion_persist.py"), 7),
     # R1691 UGC template marketplace face: listing idempotency +
     # msgSecCheck pre-gate (injected SecGate, reference not copy) +
     # integer-law revenue split (exactly one creator share tx per
