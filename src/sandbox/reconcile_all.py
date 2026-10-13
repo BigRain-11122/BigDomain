@@ -502,6 +502,14 @@ SUITES = [
     ("ledger-clawback", os.path.join("pay", "test_clawback_wiring.py"), 8),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
+    # R1932 member entry-tier activation-receipt read-face family
+    # cross-restart persistence (patron C-20260927-01 true path via a
+    # suite-owned dock row, idempotent replay byte law with the honest
+    # vouchers_opened absence, refund dead-source gate across
+    # instances, double-restart identity; AC-ETP1..ETP7 pre-registered
+    # in state/queue/tech.md).
+    ("member-entrytier-persist",
+     os.path.join("member", "test_entry_tier_persist.py"), 7),
     # R1721 close_refund entitlement-recovery linkage (R1718 successor):
     # pay read-face refunded annotation (status-derived, zero schema
     # touch), member activation gate, revoke_refunded face (existing
