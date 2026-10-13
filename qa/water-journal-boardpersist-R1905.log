@@ -1,0 +1,43 @@
+=== [1] suite double-run: test_water_journal_boardpersist.py AC-JL8..AC-JL14 ===
+run1 rc=0 (full stdout):
+PASS AC-JL8: October anchor: 6 windows via the frozen-clock record() path (SQL 2026-10 prefix count 6, ts strictly ascending); quadruple key sets exact-pinned (capped-combined 9 keys / default 5 / bare-window 6 / default-cap 8); capped-combined tail rows == mirror-SQL rows (full row dicts, ids [5, 6]), overflow block {limit=2,total=6,returned=2,truncated=True}; compliance three-piece resident on all four reads; bare-window read == default read minus the window key; same-param double reads byte-identical
+PASS AC-JL9: face.close() -> fresh instance on the same db path with the same disclaimer: the October capped-combined read replays byte-identical to the pre-close snapshot (9 keys, tail ids [5, 6], total=6, truncated=True); the same-param second read is self-identical - the derived face carries zero in-memory drift across the restart
+PASS AC-JL10: default whole-board read, October bare-window read and default capped read all replay byte-identical from the fresh instance; key sets follow the read shape with zero drift (5/6/8 keys)
+PASS AC-JL11: frozen clock +23d then two real windows (drain noise+1, verdict risky -1 - fresh (kind,delta) combinations, SQL 2026-11 count 2): the default read recomputes total 6->8 and byte-differs from the pre-close default snapshot (zero cache); the default capped read tail drifts to the November rows {limit=2,total=8,returned=2,truncated=True}; the November capped-combined read is exactly full {total=2,returned=2,truncated=False} == mirror-SQL full rows, zero October leakage
+PASS AC-JL12: old-window zero penetration: the October capped-combined and bare-window reads stay byte-identical to the pre-close snapshots after the restart x new-data double exposure (tail ids [5, 6] frozen, total 6); telescope oct 6 + nov 2 == default 8 == table count - immutable record-time rows never lost
+PASS AC-JL13: third instance triple-open on the same db: four reads (oct capped-combined / default / nov capped-combined / default-cap) replay the instance-2 captured state pairwise byte-identical, the same-param re-read is self-identical, and the October capped-combined read still equals the pre-close original snapshot (restart x new-data double hijack, zero drift; totals 6/2/8)
+PASS AC-JL14: pure-read law: six read shapes double-read byte-identical with water_windows=8 constant before/after; journal_board method source free of data-changing statements; water_journal.py sha256 stable and shipped config.json sha256 stable (zero product bytes); face + suite sources pure ASCII with network-free import lines (3 face imports); frozen-clock restore probe (function identity + real stamp differs from the frozen stamp) = True; SUITES registration row present; criteria drift self-check 6+1==7
+SUITE PASS 7/7 exit=0
+run2 rc=0
+run1 sha16=14d989b8d58cca65 run2 sha16=14d989b8d58cca65 byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1905.log)
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (147/147 suites green, reconcile controls 7/7, 165.0s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0 (doc rewritten from qa\reconcile-all-R1905.log)
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (14602 bytes, 147 suites, 1360 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1299 tee=797 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+[VERDICT PASS]

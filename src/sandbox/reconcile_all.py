@@ -1329,6 +1329,23 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-apidev-usagelogpersist", os.path.join(
         "ledger", "test_apidev_usagelogpersist.py"), 7),
+    # R1905 water journal journal_board cap-window combined read
+    # restart-persistence example window (the R1900 seed): the
+    # single-writer face closes and a fresh instance reopens on
+    # the same db path and disclaimer -- the October capped-
+    # combined read (window echo + overflow block + ascending
+    # tail slice == mirror-SQL rows) replays byte-identical
+    # from the fresh instance (zero in-memory drift in the
+    # derived face), frozen-clock November windows land via the
+    # real record() path and recompute the default and
+    # default-cap reads zero-cache while the October window
+    # reads stay byte-frozen (record-time rows immutable), and
+    # a third instance replays the post-injection state
+    # byte-identically (two-instance sequential reads)
+    # (AC-JL8..AC-JL14 pre-registered in
+    # state/queue/tech.md)
+    ("ugc-water-journalboardpersist", os.path.join(
+        "ugc", "test_water_journal_boardpersist.py"), 7),
 ]
 
 FAILS = 0
