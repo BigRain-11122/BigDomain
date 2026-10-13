@@ -180,6 +180,13 @@ SUITES = [
      os.path.join("ledger", "test_incentive.py"), 7),
     ("ledger-settlement",
      os.path.join("ledger", "test_settlement.py"), 7),
+    # settlement persist window: optional sqlite mirror + read
+    # family (manifest_view/claims_view/last_window_id), cross-
+    # restart byte-identical replay, chain-anchor survival,
+    # five fail-closed probes, default-path zero drift
+    # (AC-SEP1..SEP7 pre-registered in state/queue/tech.md).
+    ("ledger-settlement-persist", os.path.join(
+        "ledger", "test_settlement_persist.py"), 7),
     ("ledger-venue", os.path.join("ledger", "test_venue.py"), 7),
     # venue persist window: cross-restart byte-identical replay of
     # the is_rented/tenant_of/occupancy_ledger read battery,

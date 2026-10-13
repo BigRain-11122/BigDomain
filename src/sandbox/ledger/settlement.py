@@ -32,10 +32,12 @@ Pre-registered criteria: AC-ST1..AC-ST7 = src/os/backlog.md R601 row.
 
 import hashlib
 import json
+import sqlite3
 
 E_ST_PERIOD_DUP = "E_ST_PERIOD_DUP"
 E_ST_TAMPER = "E_ST_TAMPER"
 E_ST_BAD_INPUT = "E_ST_BAD_INPUT"
+E_ST_CLOSED = "E_ST_CLOSED"
 SCHEMA = "bigdomain.settlement/1"
 
 
@@ -118,21 +120,66 @@ def _build(period, sales_rows, usage_rows, parties, weights, prev_id):
 
 
 class SettlementFace(object):
-    """Per-window manifest builder + verifier + claim gate."""
+    """Per-window manifest builder + verifier + claim gate.
 
-    def __init__(self):
+    Default construction keeps the face purely in-memory (the
+    original R601 path, byte-identical). Passing db_path opts the
+    face into an optional sqlite persistence mirror (R1944
+    cross-restart persist window; minors R1939 precedent): every
+    window/claim write-through lands in the db, and a new instance
+    on the same db path rebuilds windows, claims and the hash-chain
+    anchor from stored rows alone (zero in-memory carry-over).
+    After close() on the db path, further writes are rejected
+    E_ST_CLOSED - no silent memory/db divergence. Read faces
+    (manifest_view/claims_view/last_window_id) work on both paths
+    and hand out copies only.
+    """
+
+    def __init__(self, db_path=None):
         self._windows = {}
         self._claims = {}
         self._last_id = None
+        self._conn = None
+        self._closed = False
+        if db_path is not None:
+            self._conn = sqlite3.connect(db_path,
+                                         check_same_thread=False)
+            self._conn.execute(
+                "CREATE TABLE IF NOT EXISTS st_windows ("
+                "period TEXT PRIMARY KEY, manifest TEXT NOT NULL)")
+            self._conn.execute(
+                "CREATE TABLE IF NOT EXISTS st_claims ("
+                "period TEXT NOT NULL, party TEXT NOT NULL, "
+                "amount_cent INTEGER NOT NULL, "
+                "manifest_id TEXT NOT NULL, "
+                "PRIMARY KEY (period, party))")
+            self._conn.commit()
+            for period, text in self._conn.execute(
+                    "SELECT period, manifest FROM st_windows "
+                    "ORDER BY rowid").fetchall():
+                manifest = json.loads(text)
+                self._windows[period] = manifest
+                self._last_id = manifest["id"]
+            for period, party, amount in self._conn.execute(
+                    "SELECT period, party, amount_cent FROM "
+                    "st_claims ORDER BY rowid").fetchall():
+                self._claims[(period, party)] = amount
 
     def build_manifest(self, period, sales_rows, usage_rows, parties,
                        weights):
+        if self._closed:
+            raise SettlementError(E_ST_CLOSED, "face closed")
         if period in self._windows:
             raise SettlementError(E_ST_PERIOD_DUP, period)
         manifest = _build(period, sales_rows, usage_rows, parties,
                           weights, self._last_id)
         self._windows[period] = manifest
         self._last_id = manifest["id"]
+        if self._conn is not None:
+            self._conn.execute(
+                "INSERT INTO st_windows (period, manifest) "
+                "VALUES (?, ?)", (period, canonical(manifest)))
+            self._conn.commit()
         return json.loads(json.dumps(manifest))  # handed-out copy
 
     def verify_manifest(self, manifest, sales_rows, usage_rows):
@@ -153,6 +200,8 @@ class SettlementFace(object):
         return True
 
     def claim(self, period, party, amount_cent):
+        if self._closed:
+            raise SettlementError(E_ST_CLOSED, "face closed")
         manifest = self._windows.get(period)
         if manifest is None:
             raise SettlementError(E_ST_BAD_INPUT, "unknown period")
@@ -168,8 +217,47 @@ class SettlementFace(object):
                 or amount_cent > apportioned[party]:
             raise SettlementError(E_ST_BAD_INPUT, "claim out of bounds")
         self._claims[key] = amount_cent
+        if self._conn is not None:
+            self._conn.execute(
+                "INSERT INTO st_claims (period, party, amount_cent, "
+                "manifest_id) VALUES (?, ?, ?, ?)",
+                (period, party, amount_cent, manifest["id"]))
+            self._conn.commit()
         return {"period": period, "party": party,
                 "amount_cent": amount_cent, "manifest_id": manifest["id"]}
 
     def window_count(self):
         return len(self._windows)
+
+    def manifest_view(self, period):
+        """Read face: handed-out copy of a stored manifest (or None)."""
+        manifest = self._windows.get(period)
+        if manifest is None:
+            return None
+        return json.loads(json.dumps(manifest))  # handed-out copy
+
+    def claims_view(self, period=None):
+        """Read face: deterministic claim rows across windows."""
+        rows = []
+        for key in sorted(self._claims):
+            p, party = key
+            if period is not None and p != period:
+                continue
+            rows.append({"period": p, "party": party,
+                         "amount_cent": self._claims[key],
+                         "manifest_id": self._windows[p]["id"]})
+        return rows
+
+    def last_window_id(self):
+        """Read face: current hash-chain anchor id."""
+        return self._last_id
+
+    def close(self):
+        """Terminal on the db path; harmless no-op on the default
+        in-memory path (default-path behavior stays byte-identical
+        to the R601 face)."""
+        if self._conn is not None:
+            self._conn.commit()
+            self._conn.close()
+            self._conn = None
+            self._closed = True
