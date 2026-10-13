@@ -1683,6 +1683,19 @@ SUITES = [
     # suite-only round, zero product change)
     ("ledger-collectibles-persist", os.path.join(
         "ledger", "test_collectibles_persist.py"), 7),
+    # R1933 liveroom risk-control read-face family cross-restart
+    # persistence window (persist-family seat, R1886 lineage):
+    # two-piece stack close -> same-db reopen replays the nine read
+    # faces (funnel/transcript/conversion_ledger x closed/open/empty
+    # sessions) byte-for-byte, the risk-control law survives the
+    # restart (closed-session writers, dup window, anonymous and
+    # unknown refusals, zero side effects), post-restart real-path
+    # injection recomputes the open-session faces while the closed
+    # and empty sessions stay byte-frozen, third instance keeps the
+    # guarantee (AC-LRP1..LRP7 pre-registered in state/queue/tech.md;
+    # suite-only round, zero product change).
+    ("liveroom-persist", os.path.join(
+        "liveroom", "test_liveroom_persist.py"), 7),
 ]
 
 FAILS = 0
