@@ -1,0 +1,55 @@
+=== R1931 collectibles persist evidence ===
+--- section 0: qa_mtime_probe live re-run (FIFO head row) ---
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+files: 1396 (candidates 1342)
+distinct_mtime: 1353
+largest_tie_group: 2
+winner: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-all-R1930.log
+winner_calls_identical: True (3/3)
+tie_peers: 0
+verdict: NO-LIVE-TIE
+note: no live tie at winner mtime: tie-break not exercised this state (honest reading)
+PROBE PASS verdict=NO-LIVE-TIE
+probe rc=0
+--- section 1: suite double-run (byte-identity) ---
+PASS AC-CLP1: anchor world 7 rows/3 editions; numbering 2026=#1/#2, 2027=#1/#2 (full), 2028=#1 cap locked 5; balances alice=275 bob=120 carol=0; pre-close gates sold_out=E_CL_SOLD_OUT dup_cert=E_CL_DUP dup_card=E_CL_DUP; snapshot sha16 2fb179239923836d
+PASS AC-CLP2: instance2 same db/config replays all 11 snapshot values byte-identical (diff keys=none, snapshot sha16 2fb179239923836d)
+PASS AC-CLP3: post-restart continuation: carol claim continues numbering #3 (issued 2->3 durable), dave 4th claim sold out E_CL_SOLD_OUT (3/3 cap survives), bob replay 20 charges 120->100 bound to real spend tx (spend/debit), bob new cert appends; touched faces re-read changed zero-cache
+PASS AC-CLP4: post-restart dup gates all reject: cert=E_CL_DUP card=E_CL_DUP replay(same event, fresh ref)=E_CL_DUP card2027=E_CL_DUP; 4-table counts constant {'collectibles': 10, 'cl_editions': 3, 'ledger_tx': 5, 'ledger_entries': 10}; balance zero-moved (275==275)
+PASS AC-CLP5: post-restart claim with divergent cap=99 succeeds under the locked row: card_no=2 echo cap=5 (divergent arg ignored); edition status cap=5 issued=2
+PASS AC-CLP6: read battery leaves all 4 table counts constant {'collectibles': 11, 'cl_editions': 3, 'ledger_tx': 5, 'ledger_entries': 10}; third instance replays the post-continuation state byte-identical (diff keys=none, sha16 bffff09b67fc0a66)
+PASS AC-CLP7: shipped config sha16 stable 32b018fad53fb8bc; collectibles.py/ledger.py sha16 stable (2ab0f53100cfc70d/2ab0f53100cfc70d vs 4fcbe414fe9d7e5c/4fcbe414fe9d7e5c); SUITES registration row present=True; own source pure-ascii=0 network-imports=0; world tmp outside repo=True
+SUITE PASS 7/7
+second-run rc=0 byte-identical=True
+sha16 run1=84a0604c0752ecf7 run2=84a0604c0752ecf7
+--- section 2: reconcile_all full RUNNER ---
+runner rc=0
+runner tail:
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (169/169 suites green, reconcile controls 7/7, 214.2s)
+--- section 3: suite_matrix regen + --check ---
+PASS generated docs/sandbox-suite-matrix.md (16632 bytes) - registry suites=169 criteria=1522 evidence=qa/reconcile-all-R1931.log green=169/169
+PASS hygiene: pure-ascii source, zero network imports
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16632 bytes, 169 suites, 1522 criteria)
+matrix regen rc=0 check rc=0
+--- section 4: qa_writer_census --check ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1348 tee=846 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+--- section 5: git status hygiene snapshot ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/collectibles-persist-R1931.log
+?? qa/reconcile-all-R1931.log
+?? src/sandbox/ledger/test_collectibles_persist.py
+git status rc=0
+VERDICT: PASS

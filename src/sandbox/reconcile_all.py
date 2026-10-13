@@ -1664,6 +1664,17 @@ SUITES = [
     # state/queue/tech.md; suite-only round, zero product change)
     ("ledger-showcaseview-persist", os.path.join(
         "ledger", "test_showcase_persist.py"), 7),
+    # R1931 collectibles cross-restart persistence window: the
+    # collectibles seat of the R1742 family (curation regpersist
+    # R1926 + civic persist R1927 in-book, this seat was absent);
+    # close -> reopen byte-identical read replay, post-restart
+    # continuation (numbering counter, sold-out cap, spend tx
+    # binding), UNIQUE gate survival, cap-lock authority over a
+    # divergent cap argument, third instance stability
+    # (AC-CLP1..AC-CLP7 pre-registered in state/queue/tech.md;
+    # suite-only round, zero product change)
+    ("ledger-collectibles-persist", os.path.join(
+        "ledger", "test_collectibles_persist.py"), 7),
 ]
 
 FAILS = 0

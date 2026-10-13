@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T21:05:01+08:00",
+ "export_ts": "2026-10-13T21:27:31+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1930 eventtickets 会话/检入榜读面族跨重启持久化例窗交付：查重双扫（R1929 升格律）=真活·AC-SBP1..SBP7 预注册先于代码·SUITE 7/7 双跑逐字节同一 sha16 edef2a9231378a9e（十月锚十读面快照+跨重启逐字节重放+重启后真路径三注入三榜重算零缓存+未触榜冻结+双实例序贯同一+纯读律+负探针）·RUNNER PASS 168/168 判据 1508→1515 controls 7/7 188.8s+矩阵 168/1515 --check 同一",
-  "latest_artifact": "src/sandbox/ledger/test_eventtickets_sessionpersist.py + qa/eventtickets-sessionpersist-R1930.log + qa/reconcile-all-R1930.log（2026-10-13·168 套件 1515 判据 green·新席 ledger-eventtickets-sessionpersist）",
-  "next_milestone": "下轮 R1931：tech 队列 FIFO 队头按板序认领（suite_matrix mtime live 一态实证窗〔R1727 认领驻留〕·gated 项跳过）+对账日常化常设轮照跑（2026-10-14 内推进）"
+  "current": "R1931 collectibles 藏品三域读面族跨重启持久化例窗交付：队头 mtime 行 probe 复跑 NO-LIVE-TIE 散布态留窗+同窗查重判负一席（chat idem R1892 在册）→次位真活 AC-CLP1..CLP7 预注册先于代码·SUITE 7/7 双跑逐字节同一（关前快照+跨重启 11 值逐字节重放+重启后连号/帽满/真 spend tx 续建+UNIQUE 门存活+cap 锁权威异参覆盖+三开实例稳定）·RUNNER PASS 169/169 判据 1515→1522+矩阵 --check+census DRIFT-CLEAN",
+  "latest_artifact": "src/sandbox/ledger/test_collectibles_persist.py + qa/collectibles-persist-R1931.log + qa/reconcile-all-R1931.log（2026-10-13·169 套件 1522 判据 green·新席 ledger-collectibles-persist）",
+  "next_milestone": "下轮 R1932：轮首 fold R507 水位裁定（收账后越线）+tech 队列 FIFO=member entry_tier persist 认领（2026-10-14 内推进）"
  },
  "depts": [
   {
@@ -202,6 +202,10 @@
   ]
  ],
  "results": [
+  [
+   "R1931",
+   "R1931 ledger collectibles cross-restart persistence window delivered (P2 tech FIFO head per the R1930 closeout pointer: the suite_matrix mtime one-state window re-probed live at round start - 1395 files, 1352 distinct mtimes, largest tie group 2, tie_peers=0, winner reconcile-all-R1930.log x3 identical, NO-LIVE-TIE scattered state - so per the pre-registered AC-LN4 rule the row honestly stays open awaiting a real normalization event, re-probe note appended to the row; one same-window candidate rejected by dedup scan (lobby chat idem_seen restart semantics = R1892 already in-book, caught by the registry-label scan); next claim = the collectibles seat of the R1742 family (curation regpersist R1926 + civic persist R1927 in-book, this seat absent) with dedup double-scan clean (registry label full-form zero ledger-collectibles-persist variant + base-suite source scan test_collectibles.py zero close-reopen examples) and the AC-CLP prefix git-grep zero-occupancy; criteria AC-CLP1..AC-CLP7 pre-registered in state/queue/tech.md before code; suite test_collectibles_persist.py three-instance world on the real product path: anchor world (7 collectible rows over 3 editions, numbering 2026 #1/#2, 2027 #1/#2 full, 2028 #1 cap locked 5, alice replay spend 300->275) with pre-close gate probes all rejected (sold_out/dup_cert/dup_card) and eleven snapshot values pinned (collections x3 + edition_status x4 incl unknown honest empty + balances x4); close both pieces -> instance 2 same db/config replays all eleven values byte-identical (read faces carry zero timestamp echo = deterministic identity, zero in-memory drift); post-restart real-path continuation (carol claim continues numbering #3 with the issued counter durable, dave 4th claim E_CL_SOLD_OUT at 3/3 cap surviving restart, bob new replay charging 120->100 bound to a real spend tx cross-proven by ledger_tx type=spend + ledger_entries debit SQL, bob new cert appends, touched faces re-read changed zero-cache); UNIQUE gate survival (four dup probes all rejected with 4-table counts and balances constant); cap-lock authority (post-restart claim with divergent cap=99 succeeds as card_no=2 with echo cap=5 - the locked edition row is authoritative); third instance replays the post-continuation state byte-identical (double-restart stability) + pure-read law (read battery leaves all 4 table counts constant); hygiene (shipped config + collectibles.py + ledger.py sha256 double-proof unchanged, suite-only round, pure ASCII, zero network imports, SUITES row ledger-collectibles-persist criteria 7 registered); SUITE 7/7 double-run byte-identical sha16 84a0604c0752ecf7; RUNNER PASS 169/169 suites criteria 1515->1522 controls 7/7 214.2s = qa/reconcile-all-R1931.log; matrix regen 169/1522 green --check byte-identical 16632B; census DRIFT-CLEAN tee=846 files=1348; evidence qa/collectibles-persist-R1931.log five sections (probe re-run + suite double-run + runner summary + matrix + census + git status hygiene = exactly the six intended files) tee-dialect single-writer per the R1884 law; tech consume 1 reseed 5 queue_tech_open 5->10 (five seeds with triple dedup pre-scan: member entry_tier / liveroom / tourstate / ledger datasub / ledger observation persist candidates, registry label + base-suite restart-coverage + AC-prefix occupancy all clean), next FIFO head by board order = member entry_tier persist; fold carry-note: post-closeout state crosses the 78500B line -> next round opens with the fold R507 adjudication)"
+  ],
   [
    "R1930",
    "R1930 eventtickets session/check-in board read-face family cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1926-reseeded claim pointed by the R1929 closeout; dedup double-scan per the R1929 upgraded law: registry-label full-form scan (six eventtickets seats 14+7+7+7+6+7 - the R1898 boardpersist seat pins event_audit_board only, the three boards zero) + suite-source scan (test_eventtickets.py / test_eventtickets_roll.py carry the three face words but zero close-reopen restart examples) = genuine; AC-SBP prefix git-grep zero-occupancy; criteria AC-SBP1..AC-SBP7 pre-registered in state/queue/tech.md before code with a same-round pre-registration amendment honestly noted (newmo window 200..220 would break the as_200 frozen face -> 210..230 with the recompute probe at 215, amended before any code ran); suite test_eventtickets_sessionpersist.py three-instance world on the real product path under a frozen clock: October anchor (3 sessions gala/meet/late + 4 purchases + 1 check-in) with ten pre-close board reads pinned (session_board x3, attendees x2, active_sessions x5 probe windows incl edge-inclusive start, empty band and honest empty) each == manual SQL with exact key sets and resident disclaimer; two-piece stack close -> reopen same db/config replays all ten reads byte-identical with a second same-param read self-identical; post-restart real-path triple injection (dave 4th purchase + bob 2nd check-in on gala + fresh newmo 210..230 registration) recomputes the touched boards zero-cache with new rows in tail id order and full anchor key sets while untouched boards and the five non-covering windows stay byte-frozen, table telescoping counts 3+1/4+1/1+1 pinned; third instance replays the post-injection state byte-identically with untouched boards still equal to the original pre-close snapshots; pure-read law (10-form battery zero row movement) + fail-closed negative probes (unknown session E_ET_UNKNOWN_SESSION x2, active_sessions(-1) E_ET_BAD_ARGS); hygiene (eventtickets.py sha256 double-proof unchanged, three read-face segments zero write keywords, config byte-stable, pure ASCII, zero network imports, SUITES row ledger-eventtickets-sessionpersist registered, 7/7 self-check); SUITE 7/7 double-run byte-identical sha16 edef2a9231378a9e; RUNNER PASS 168/168 suites criteria 1508->1515 controls 7/7 188.8s = qa/reconcile-all-R1930.log; matrix regen 168/1515 green --check byte-identical; census DRIFT-CLEAN tee=844 files=1346; evidence qa/eventtickets-sessionpersist-R1930.log four sections tee-dialect single-writer per the R1884 law; tech consume 1 reseed 0 queue_tech_open 6->5, next FIFO head by board order = suite_matrix live mtime one-state empirical window (R1727 claim standing))"
@@ -835,7 +839,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1930",
+   "1931",
    "OSLoop 执行 tick"
   ],
   [
@@ -3838,14 +3842,14 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 23,
+  "log_lines_in_window": 25,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 7,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
-  "queue_tech_open": 5,
+  "queue_tech_open": 10,
   "queue_explore_open": 10,
   "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
  }
