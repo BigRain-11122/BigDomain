@@ -1351,6 +1351,23 @@ SUITES = [
     # state/queue/tech.md)
     ("ugc-water-journalboardpersist", os.path.join(
         "ugc", "test_water_journal_boardpersist.py"), 7),
+    # R1910 water journal three-sister read faces (kind_tally /
+    # monthly_flow / cell_totals) windowed-read restart-persistence
+    # example window (the R1905 seed): the three aggregation
+    # faces close and a fresh instance reopens on the same db --
+    # each sister's three read shapes (default / October explicit
+    # window / empty-month honest-empty) replay byte-identical to
+    # the pre-close snapshots (zero in-memory drift), frozen-clock
+    # November windows land via the real record() path on the
+    # fresh instance and recompute the default reads zero-cache
+    # (cross-face laws re-verified on the new set) while the
+    # October window reads stay byte-frozen (record-time rows
+    # immutable), and a third instance replays the post-injection
+    # state byte-identically (two-instance sequential reads)
+    # (AC-KT8..KT10 / AC-MF8..MF10 / AC-CT8..CT10 /
+    # AC-MW6..MW8 pre-registered in state/queue/tech.md)
+    ("ugc-water-sisterpersist", os.path.join(
+        "ugc", "test_water_journal_sisterpersist.py"), 12),
     # R1907 apidev key_view windowed panel read restart-persistence
     # example window (the R1902 seed): the three-piece stack
     # (Ledger -> MeteredFace -> DevKeyFace) closes fully in

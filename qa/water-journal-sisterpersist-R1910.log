@@ -1,0 +1,48 @@
+=== [1] suite double-run: test_water_journal_sisterpersist.py AC-KT8..KT10/AC-MF8..MF10/AC-CT8..CT10/AC-MW6..MW8 ===
+run1 rc=0 (full stdout):
+PASS AC-KT8: October anchor (6 windows, frozen-clock real record() path): kind_tally dense five-kind grid pinned {'batch': 1, 'drain': 1, 'ingest': 1, 'submit': 2, 'verdict': 1} total=6; default keys 5 exact, window read keys 6 exact with window echo '2026-10'; total==sum-of-cells; compliance three-piece resident; same-param double reads byte-identical
+PASS AC-MF8: monthly_flow pre-close: default rows exactly [{'month': '2026-10', 'windows': 6, 'total_delta': 4}] with total==6==sum-windows and net_delta==4==sum-total_delta; row keys exact {month,windows,total_delta}; October window read == the same single row; empty month 2026-12 reads honest empty (rows=[], total=0, net_delta=0); default keys 6 exact; same-param double read byte-identical
+PASS AC-CT8: cell_totals pre-close: cells pinned {'noise.by_reason.fw': 1, 'noise.total': 3, 'review.suspended': 1, 'review.verdicted.pass': 1} (keys ascending), total=4; composition law total==noise.total(3)+review.suspended(1); verdicted cells keep their own keys out of the envelope total (R1785); cross-face CT total==MF net_delta (4==4); empty month 2026-12 honest empty cells {} total=0; default keys 5 exact; same-param double read byte-identical
+PASS AC-MW6: window gate trio: malformed window '2026-13' rejected by all three sisters with the same code E_WJ_BAD_WINDOW and zero rows touched (count 6==6); window echo key byte-exact on every windowed read of all three faces; empty-month honest shapes cross-verified (KT dense all-zero grid total=0 / MF empty row list / CT empty cells)
+PASS AC-KT9: kind_tally cross-restart: face.close() -> fresh instance on the same db path replays the default / October / empty reads byte-identical to the pre-close snapshots (zero in-memory drift in the derived face)
+PASS AC-MF9: monthly_flow cross-restart: all three read shapes replay byte-identical from the fresh instance (rows, total and net_delta intact)
+PASS AC-CT9: cell_totals cross-restart: all three read shapes replay byte-identical from the fresh instance (cells, composition total intact)
+PASS AC-KT10: kind_tally recompute + freeze: frozen clock +23d then two real November windows (drain noise+1, verdict risky -1 - fresh combinations) via the record() path on the fresh instance: default read recomputes total 6->8 and byte-differs from the pre-close default snapshot (zero cache); November window read active {'batch': 0, 'drain': 1, 'ingest': 0, 'submit': 0, 'verdict': 1} total=2; the October window read stays byte-frozen to the pre-close snapshot (record-time rows immutable, zero permeation)
+PASS AC-MF10: monthly_flow recompute + freeze: default rows now two months (October row values frozen {'month': '2026-10', 'windows': 6, 'total_delta': 4} + November row {'month': '2026-11', 'windows': 2, 'total_delta': 0}), total 6->8, net_delta 4 stable; the October window read stays byte-frozen; the November window read == the November single row; telescope oct 6 + nov 2 == default total 8
+PASS AC-CT10: cell_totals recompute + freeze: default cells recompute to {'noise.by_reason.emoji_only': 1, 'noise.by_reason.fw': 1, 'noise.total': 4, 'review.suspended': 0, 'review.verdicted.pass': 1, 'review.verdicted.risky': 1} (fresh cells noise.by_reason.emoji_only / review.verdicted.risky merged in) and byte-differ from the pre-close default (zero cache); the October window read stays byte-frozen; cross-face on the new set: KT total==MF total windows==8 and CT total==MF net_delta==4; composition law holds on the November set (total 0 == noise.total 1 + review.suspended -1) and on the default set (4 == 4 + 0)
+PASS AC-MW7: third instance triple-open on the same db: the three sisters' default / October / November reads replay the instance-2 captured state pairwise byte-identical (nine reads, zero drift), and the October windowed reads still equal the ORIGINAL pre-close snapshots (restart x new-data double hijack never scratches the old window; totals 8/8/4)
+PASS AC-MW8: pure-read law: the 12-shape read battery (three sisters x default/oct/nov/empty) double-read byte-identical with water_windows=8 constant before/after; kind_tally / monthly_flow / cell_totals method sources free of data-changing statements; water_journal.py sha256 stable and shipped config.json sha256 stable (zero product bytes); face + suite sources pure ASCII with network-free import lines (3 face imports); frozen-clock restore probe = True; SUITES registration row present; criteria drift self-check 11+1==12
+SUITE PASS 12/12 exit=0
+run2 rc=0
+run1 sha16=c802f8e73bb8c606 run2 sha16=c802f8e73bb8c606 byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1910.log)
+RUNNER PASS (152/152 suites green, reconcile controls 7/7, 166.5s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15093 bytes, 152 suites, 1400 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1309 tee=807 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS
