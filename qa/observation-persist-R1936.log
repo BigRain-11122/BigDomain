@@ -1,0 +1,43 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-OBP1: anchor world: 2 strategies registered (results-only, no source column ['strategy_id', 'creator_account', 'summary_json', 'registered_utc']); alice single + bob pass 2099-01 bound to real spend txs (type=spend, debit legs); pre-close gates dup=E_OBS_DUP pass-dup=E_OBS_PASS_DUP unknown=E_OBS_UNKNOWN denied=E_OBS_DENIED zero charge zero rows; counts strat=2 grants=2 spend=2 tx=7 entries=14; balances 1901/2801/1000/500/13798
+PASS AC-OBP2: of.close -> led.close -> instance-2 same db/cfg reopen: all 18 faces byte-identical (diffs=none) incl. registered_utc persisted value (no clock echo); digest c184654e4fe640cb
+PASS AC-OBP3: restart-surviving gates: five probes rejected (E_OBS_DUP/E_OBS_PASS_DUP/E_OBS_UNKNOWN/E_OBS_DENIED/E_OBS_DENIED) - dup-before-spend and window-door laws survive the restart; probe batch left counts {'obs_strategies': 2, 'obs_grants': 2, 'spend_tx': 2} and balances (1901, 2801, 1000, 500, 13798) untouched
+PASS AC-OBP4: post-restart continuation: bob pass 2099-02 + dave single beta bound to two new real spend txs (spend/debit); zero-cache recompute bob grants 1->2 months ['2099-01', '2099-02'] dave 0->1 single; observe bob@2099-02 kind=pass (new window opens); dave far-month gate kind=single (permanent grant); counts grants=4 spend=4 tx=9 entries=18; balances 1901/2602/1000/451/14046
+PASS AC-OBP5: frozen faces: alice entitlements+observe and carol empty spine byte-identical to the anchor, registry views immutable; window isolation across restart - bob's 2099-01 pass does not cover 2099-03 ({'allowed': False, 'kind': None, 'tx': None}); alice single permanent at far month 2099-12 (kind=single); zero permeation into carol
+PASS AC-OBP6: pure-read law: full battery x2 plus repeated single reads left counts {'obs_strategies': 2, 'obs_grants': 4, 'spend_tx': 4, 'ledger_tx': 9, 'ledger_entries': 18} and balances (1901, 2602, 1000, 451, 14046) constant (reads carry zero side effects)
+PASS AC-OBP7: second restart: instance-3 reopen replays all 18 faces byte-identical to the instance-2 final state (diffs=none); config/observation/ledger sha16 unchanged (32b018fad53fb8bc/f402f86fcd112163/4fcbe414fe9d7e5c); suite source pure ASCII (0 non-ascii); world tmp outside repo (True)
+SUITE PASS 7/7
+
+sha16 run1=0ae114d64e2d4703 run2=0ae114d64e2d4703 byte-identical=True
+--- [2] daily carrier extract (reconcile-daily-20261014.log) ---
+PASS suite ledger-observation-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+RUNNER PASS (174/174 suites green, reconcile controls 7/7, 251.4s)
+sentinel exit=0 elapsed=0.9s
+profile exit=0 (observation-window: recorded, not gating)
+census exit=0 elapsed=0.5s
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17105 bytes) - registry suites=174 criteria=1557 evidence=qa/reconcile-daily-20261014.log green=174/174
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17105 bytes, 174 suites, 1557 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1358 tee=856 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-daily-20261014.log
+?? src/os/evidence_R1936.py
+?? src/sandbox/ledger/test_observation_persist.py
+
+VERDICT PASS

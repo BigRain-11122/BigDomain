@@ -175,6 +175,13 @@ SUITES = [
      os.path.join("ledger", "test_ads.py"), 7),
     ("ledger-observation",
      os.path.join("ledger", "test_observation.py"), 7),
+    # observation persist window: cross-restart byte-identical
+    # replay of the read-face battery, restart-surviving gate
+    # probes, post-restart continuation recompute, frozen faces
+    # + window isolation, pure-read law, third instance stability
+    # (AC-OBP1..OBP7 pre-registered in state/queue/tech.md).
+    ("ledger-observation-persist", os.path.join(
+        "ledger", "test_observation_persist.py"), 7),
     ("ledger-identity",
      os.path.join("ledger", "test_identity.py"), 7),
     ("ledger-studio",
