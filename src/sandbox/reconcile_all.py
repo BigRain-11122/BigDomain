@@ -1472,6 +1472,18 @@ SUITES = [
     # state/queue/tech.md)
     ("member-balanceface-persist", os.path.join(
         "member", "test_balance_face_persist.py"), 7),
+    # R1916 privileges_for/has_privilege privilege read faces
+    # cross-restart persistence suite (the R1912 seed): a fresh
+    # MemberStore on the same db/cfg/pay dock re-derives the same
+    # privilege envelopes byte-identically, the rejection family
+    # fires identically, a new true-path activation recomputes
+    # zero-cache while siblings stay byte-frozen, and a new
+    # consumption moves zero privilege bytes (the
+    # balance-invariance pin)
+    # (AC-PRP1..AC-PRP7 pre-registered in
+    # state/queue/tech.md)
+    ("member-privileges-persist", os.path.join(
+        "member", "test_privileges_persist.py"), 7),
     # R1913 drain_recover recovery-window water read faces
     # cross-restart persistence suite (the R1908 seed): the full
     # pipeline stack (store + batch + journal) closes and a fresh
