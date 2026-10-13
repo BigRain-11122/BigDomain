@@ -1,0 +1,50 @@
+=== [1] suite double-run: test_client.py AC-S49..AC-S54 (new-section byte-identity per the R1899 precedent; full-suite stdout carries volatile tmp/port/ms-timing lines in the load/reconnect sections) ===
+run1 rc=0 suite line: SUITE PASS (57/57 criteria pass)
+run1 new-section criteria lines (6):
+PASS AC-S49: board==manual==expected=True envelope-facts=True filter-subseq=True empty=True default-none==full=True w=2026-10 mirror-window==full=True chat-rows=3=True
+PASS AC-S50: restart reproduces protocol reads byte-identical: full=True filter=True empty=True double-read-self=True
+PASS AC-S51: post-restart live data recomputed: full!=pre=True ==manual==expected=True lobby-filter=True quant-frozen==pre=True chat-rows 3 -> 4
+PASS AC-S52: nov-window==[arena 1/1]=True store-full==expected=True; restarted server protocol read == store read byte-identical=True manual-cross=True
+PASS AC-S53: oct-window frozen across restart-x-nov-row=True nov-window==[arena 1/1]=True; second restart sequential reads byte-identical: full=True quant=True
+PASS AC-S54: read-battery row-counts stable=True ([6, 3]); server.py=True store.py=True config.json=True unchanged; section-ascii=True
+run2 rc=0 suite line: SUITE PASS (57/57 criteria pass)
+run2 new-section criteria lines (6):
+PASS AC-S49: board==manual==expected=True envelope-facts=True filter-subseq=True empty=True default-none==full=True w=2026-10 mirror-window==full=True chat-rows=3=True
+PASS AC-S50: restart reproduces protocol reads byte-identical: full=True filter=True empty=True double-read-self=True
+PASS AC-S51: post-restart live data recomputed: full!=pre=True ==manual==expected=True lobby-filter=True quant-frozen==pre=True chat-rows 3 -> 4
+PASS AC-S52: nov-window==[arena 1/1]=True store-full==expected=True; restarted server protocol read == store read byte-identical=True manual-cross=True
+PASS AC-S53: oct-window frozen across restart-x-nov-row=True nov-window==[arena 1/1]=True; second restart sequential reads byte-identical: full=True quant=True
+PASS AC-S54: read-battery row-counts stable=True ([6, 3]); server.py=True store.py=True config.json=True unchanged; section-ascii=True
+new-section byte-identical=True (lines 6/6, expected 6)
+run1 full-stdout sha16=9259813b59bcea10 run2 full-stdout sha16=5e7d4bc061459fc0
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1915.log)
+RUNNER PASS (156/156 suites green, reconcile controls 7/7, 207.5s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15466 bytes, 156 suites, 1434 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1320 tee=818 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS

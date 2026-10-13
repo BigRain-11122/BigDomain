@@ -2767,6 +2767,345 @@ async def idem_keybind_cases():
               sha_config_post == sha_config_pre, ascii_ok))
 
 
+async def room_board_persist_cases():
+    """AC-S49..S54 (R1915): the room.board PROTOCOL face across full
+    server-process restarts. Adjudication (premise correction, the
+    R1704 precedent): the store-level read-face persist is already
+    in-book (R1891 board_persist_cases, AC-S32..S38, EventStore
+    direct, zero server-process dependency); the genuine
+    zero-in-book surface is the protocol face (handle_room_board
+    with its payload.rooms subscription filter) across a ServerProc
+    stop -> same-config same-db same-port restart (the R1892
+    restart carrier). The protocol face is a pure derivation over
+    the persisted events table (the server holds no in-memory board
+    state), so a restarted process must reproduce every read
+    byte-for-byte at the payload level (the frame ts_utc/room
+    fields are server-clock envelope noise, stripped per the R1902
+    banded-projection law); new data through the live protocol
+    recomputes (zero cache); an explicit-ts November row (the R1876
+    lobby explicit-ts product path, appended in a stopped-server
+    window) proves the old month window frozen across restart x
+    new data while a new zone is born in the November window; a
+    second restart keeps the guarantee (sequential-instance
+    identity). Product reality adjudication: chat.send only speaks
+    into config rooms (server gate), so the live-protocol new data
+    lands in the existing lobby room and the new zone is born by
+    the November append. Suite-only round: server.py, store.py and
+    the shipped config are not modified."""
+    sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_store_pre = hashlib.sha256(
+        open(os.path.join(BASE, "store.py"), "rb").read()).hexdigest()
+    sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+    with open(CONFIG, encoding="utf-8") as handle:
+        cfg = json.load(handle)
+    notice = cfg["risk_warning"]["text"]
+
+    def dump_payload(fr):
+        p = fr.get("payload", {})
+        return json.dumps({"board": p.get("board", []),
+                           "disclaimer": p.get("disclaimer", "")},
+                          sort_keys=True)
+
+    async def board_read(ws, rooms="__unset__"):
+        if rooms == "__unset__":
+            await ws.send(frame("room.board"))
+        else:
+            await ws.send(frame("room.board", payload={"rooms": rooms}))
+        return await recv_until(ws, lambda f: f.get("type") == "room.board")
+
+    def manual_board(db, window=None):
+        sql = ("SELECT zone, COUNT(*), COUNT(DISTINCT actor) FROM events"
+               " WHERE type = 'chat.broadcast'")
+        args = ()
+        if window is not None:
+            sql += " AND substr(ts_utc, 1, 7) = ?"
+            args = (window,)
+        sql += " GROUP BY zone ORDER BY zone"
+        return [
+            {"room": r, "messages": int(n), "actors": int(k)}
+            for r, n, k in db_query(db, sql, args)
+        ]
+
+    def chat_rows(db):
+        return db_query(
+            db, "SELECT COUNT(*) FROM events"
+            " WHERE type = 'chat.broadcast'")[0][0]
+
+    tmp = tempfile.mkdtemp(prefix="lobby-rbpersist-")
+    db = os.path.join(tmp, "events.db")
+    port = _free_port()
+    srv_a = ServerProc(port, db=db)
+    sender = reader = sender2 = reader2 = reader_c = reader_d = None
+    srv_b = srv_c = srv_d = None
+    try:
+        srv_a.start()
+        # world load: live-protocol product path - one resident, three
+        # broadcasts across two config rooms (lobby x2 + quant x1).
+        sender, _, _ = await open_client(port)
+        await make_resident(sender)
+        await sender.send(frame("chat.send", room="lobby",
+                                payload={"text": "s49 lobby one"}))
+        await recv_until(sender, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s49 lobby one")
+        await sender.send(frame("chat.send", room="lobby",
+                                payload={"text": "s49 lobby two"}))
+        await recv_until(sender, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s49 lobby two")
+        await sender.send(frame("room.subscribe", payload={"room": "quant"}))
+        await recv_until(sender, lambda f: f.get("type") == "sys.notice")
+        await sender.send(frame("chat.send", room="quant",
+                                payload={"text": "s49 quant one"}))
+        await recv_until(sender, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s49 quant one")
+
+        # ---- AC-S49: server-A anchor + pre-restart five-face snapshot ----
+        reader, _, _ = await open_client(port)  # spectator may query
+        full_a = await board_read(reader)
+        quant_a = await board_read(reader, ["quant"])
+        empty_a = await board_read(reader, [])
+        none_a = await board_read(reader, None)
+        snap_full = dump_payload(full_a)
+        snap_quant = dump_payload(quant_a)
+        snap_empty = dump_payload(empty_a)
+        board_a = full_a.get("payload", {}).get("board", [])
+        expected_a = [
+            {"room": "lobby", "messages": 2, "actors": 1},
+            {"room": "quant", "messages": 1, "actors": 1}]
+        w = db_query(
+            db, "SELECT substr(MIN(ts_utc), 1, 7) FROM events"
+            " WHERE type = 'chat.broadcast'")[0][0]
+        ok49 = (
+            board_a == manual_board(db) and board_a == expected_a
+            and all(set(r.keys()) == {"room", "messages", "actors"}
+                    for r in board_a)
+            and sorted(full_a.get("payload", {}).keys())
+            == ["board", "disclaimer"]
+            and full_a.get("payload", {}).get("disclaimer") == notice
+            and full_a.get("ai_generated") is False
+            and full_a.get("actor") == "system"
+            and quant_a.get("payload", {}).get("board", [])
+            == [r for r in board_a if r["room"] == "quant"]
+            and empty_a.get("payload", {}).get("board", []) == []
+            and dump_payload(none_a) == snap_full
+            and manual_board(db, w) == board_a
+            and chat_rows(db) == 3)
+        record("AC-S49", ok49,
+               "board==manual==expected=%s envelope-facts=%s "
+               "filter-subseq=%s empty=%s default-none==full=%s "
+               "w=%s mirror-window==full=%s chat-rows=3=%s"
+               % (board_a == manual_board(db) and board_a == expected_a,
+                  (sorted(full_a.get("payload", {}).keys())
+                   == ["board", "disclaimer"]
+                   and full_a.get("payload", {}).get("disclaimer") == notice
+                   and full_a.get("ai_generated") is False
+                   and full_a.get("actor") == "system"),
+                  quant_a.get("payload", {}).get("board", [])
+                  == [r for r in board_a if r["room"] == "quant"],
+                  empty_a.get("payload", {}).get("board", []) == [],
+                  dump_payload(none_a) == snap_full,
+                  w, manual_board(db, w) == board_a, chat_rows(db) == 3))
+
+        # ---- AC-S50: full-process restart, protocol face byte identity ----
+        try:
+            await sender.close()
+        except Exception:
+            pass
+        try:
+            await reader.close()
+        except Exception:
+            pass
+        sender = reader = None
+        srv_a.stop()
+        srv_b = ServerProc(port, db=db)  # same shipped config, same db
+        srv_b.start()
+        reader2, _, _ = await open_client(port)
+        full_b = await board_read(reader2)
+        quant_b = await board_read(reader2, ["quant"])
+        empty_b = await board_read(reader2, [])
+        full_b2 = await board_read(reader2)
+        ok50 = (dump_payload(full_b) == snap_full
+                and dump_payload(quant_b) == snap_quant
+                and dump_payload(empty_b) == snap_empty
+                and dump_payload(full_b2) == dump_payload(full_b))
+        record("AC-S50", ok50,
+               "restart reproduces protocol reads byte-identical: "
+               "full=%s filter=%s empty=%s double-read-self=%s"
+               % (dump_payload(full_b) == snap_full,
+                  dump_payload(quant_b) == snap_quant,
+                  dump_payload(empty_b) == snap_empty,
+                  dump_payload(full_b2) == dump_payload(full_b)))
+
+        # ---- AC-S51: post-restart new data through the live protocol ----
+        rows_pre51 = chat_rows(db)
+        sender2, _, _ = await open_client(port)
+        await make_resident(sender2)
+        await sender2.send(frame("chat.send", room="lobby",
+                                 payload={"text": "s51 lobby fresh"}))
+        await recv_until(sender2, lambda f: f.get("type") == "chat.broadcast"
+                         and f.get("payload", {}).get("text") == "s51 lobby fresh")
+        full_b3 = await board_read(reader2)
+        lobby_b = await board_read(reader2, ["lobby"])
+        quant_b3 = await board_read(reader2, ["quant"])
+        board_b3 = full_b3.get("payload", {}).get("board", [])
+        expected_b3 = [
+            {"room": "lobby", "messages": 3, "actors": 2},
+            {"room": "quant", "messages": 1, "actors": 1}]
+        rows_post51 = chat_rows(db)
+        ok51 = (dump_payload(full_b3) != snap_full
+                and board_b3 == manual_board(db)
+                and board_b3 == expected_b3
+                and lobby_b.get("payload", {}).get("board", [])
+                == [{"room": "lobby", "messages": 3, "actors": 2}]
+                and dump_payload(quant_b3) == snap_quant
+                and rows_post51 == rows_pre51 + 1)
+        record("AC-S51", ok51,
+               "post-restart live data recomputed: full!=pre=%s "
+               "==manual==expected=%s lobby-filter=%s "
+               "quant-frozen==pre=%s chat-rows %d -> %d"
+               % (dump_payload(full_b3) != snap_full,
+                  board_b3 == manual_board(db)
+                  and board_b3 == expected_b3,
+                  lobby_b.get("payload", {}).get("board", [])
+                  == [{"room": "lobby", "messages": 3, "actors": 2}],
+                  dump_payload(quant_b3) == snap_quant,
+                  rows_pre51, rows_post51))
+
+        # pure-read battery on the live server: board reads never write
+        cnt_before = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+                      for t in ("events", "census_cache")]
+        for _ in range(3):
+            await board_read(reader2)
+        await board_read(reader2, ["lobby"])
+        await board_read(reader2, [])
+        cnt_after = [db_query(db, "SELECT COUNT(*) FROM " + t)[0][0]
+                     for t in ("events", "census_cache")]
+
+        try:
+            await sender2.close()
+        except Exception:
+            pass
+        try:
+            await reader2.close()
+        except Exception:
+            pass
+        sender2 = reader2 = None
+        srv_b.stop()
+
+        # ---- AC-S52: stopped-window explicit-ts November row + cross-face ----
+        from store import EventStore
+        st = EventStore(db, disclaimer=notice)
+        s_oct = json.dumps(st.room_message_board(window=w), sort_keys=True)
+        st.append("2026-11-05T01:00:01.000000Z", "chat.broadcast",
+                  "res-nov-direct", "arena", "nov arena row",
+                  {"text": "nov arena row"})
+        nov_env = st.room_message_board(window="2026-11")
+        store_full_rows = st.room_message_board()["room_message_board"]
+        nov_expected_rows = [{"room": "arena", "messages": 1, "actors": 1}]
+        full_expected_rows = [
+            {"room": "arena", "messages": 1, "actors": 1},
+            {"room": "lobby", "messages": 3, "actors": 2},
+            {"room": "quant", "messages": 1, "actors": 1}]
+        ok_nov_local = (nov_env["room_message_board"] == nov_expected_rows
+                        and store_full_rows == full_expected_rows)
+        st.close()
+
+        srv_c = ServerProc(port, db=db)
+        srv_c.start()
+        reader_c, _, _ = await open_client(port)
+        full_c = await board_read(reader_c)
+        ok52 = (ok_nov_local
+                and dump_payload(full_c) == json.dumps(
+                    {"board": store_full_rows, "disclaimer": notice},
+                    sort_keys=True)
+                and full_c.get("payload", {}).get("board", [])
+                == manual_board(db))
+        record("AC-S52", ok52,
+               "nov-window==[arena 1/1]=%s store-full==expected=%s; "
+               "restarted server protocol read == store read "
+               "byte-identical=%s manual-cross=%s"
+               % (nov_env["room_message_board"] == nov_expected_rows,
+                  store_full_rows == full_expected_rows,
+                  dump_payload(full_c) == json.dumps(
+                      {"board": store_full_rows, "disclaimer": notice},
+                      sort_keys=True),
+                  full_c.get("payload", {}).get("board", [])
+                  == manual_board(db)))
+
+        # ---- AC-S53: old-window freeze + second restart sequential reads ----
+        quant_c = await board_read(reader_c, ["quant"])
+        cap_full_c = dump_payload(full_c)
+        cap_quant_c = dump_payload(quant_c)
+        try:
+            await reader_c.close()
+        except Exception:
+            pass
+        reader_c = None
+        srv_c.stop()
+
+        st2 = EventStore(db, disclaimer=notice)
+        oct_after = json.dumps(st2.room_message_board(window=w),
+                               sort_keys=True)
+        nov_after = json.dumps(st2.room_message_board(window="2026-11"),
+                               sort_keys=True)
+        st2.close()
+
+        srv_d = ServerProc(port, db=db)  # second restart, no data change
+        srv_d.start()
+        reader_d, _, _ = await open_client(port)
+        full_d = await board_read(reader_d)
+        quant_d = await board_read(reader_d, ["quant"])
+        ok53 = (oct_after == s_oct
+                and json.loads(nov_after)["room_message_board"]
+                == nov_expected_rows
+                and dump_payload(full_d) == cap_full_c
+                and dump_payload(quant_d) == cap_quant_c)
+        record("AC-S53", ok53,
+               "oct-window frozen across restart-x-nov-row=%s "
+               "nov-window==[arena 1/1]=%s; second restart sequential "
+               "reads byte-identical: full=%s quant=%s"
+               % (oct_after == s_oct,
+                  json.loads(nov_after)["room_message_board"]
+                  == nov_expected_rows,
+                  dump_payload(full_d) == cap_full_c,
+                  dump_payload(quant_d) == cap_quant_c))
+
+        # ---- AC-S54: pure-read law + hygiene (suite-only round) ----
+        sha_server_post = hashlib.sha256(
+            open(SERVER, "rb").read()).hexdigest()
+        sha_store_post = hashlib.sha256(
+            open(os.path.join(BASE, "store.py"), "rb").read()).hexdigest()
+        sha_config_post = hashlib.sha256(
+            open(CONFIG, "rb").read()).hexdigest()
+        own_src = inspect.getsource(room_board_persist_cases)
+        ascii_ok = True
+        try:
+            own_src.encode("ascii")
+        except UnicodeEncodeError:
+            ascii_ok = False
+        ok54 = (cnt_before == cnt_after
+                and sha_server_post == sha_server_pre
+                and sha_store_post == sha_store_pre
+                and sha_config_post == sha_config_pre
+                and ascii_ok)
+        record("AC-S54", ok54,
+               "read-battery row-counts stable=%s (%s); server.py=%s "
+               "store.py=%s config.json=%s unchanged; section-ascii=%s"
+               % (cnt_before == cnt_after, cnt_before,
+                  sha_server_post == sha_server_pre,
+                  sha_store_post == sha_store_pre,
+                  sha_config_post == sha_config_pre, ascii_ok))
+    finally:
+        for ws_ in (sender, reader, sender2, reader2, reader_c, reader_d):
+            if ws_ is not None:
+                try:
+                    await ws_.close()
+                except Exception:
+                    pass
+        for srv_ in (srv_a, srv_b, srv_c, srv_d):
+            if srv_ is not None:
+                srv_.stop()
+
+
 async def suite():
     with open(CONFIG, encoding="utf-8") as handle:
         cfg = json.load(handle)
@@ -3136,6 +3475,12 @@ async def suite():
     # (same-id-different-text / cross-connection / id-domain / pre-key
     # normalization faces).
     await idem_keybind_cases()
+
+    # AC-S49..S54 (R1915): room.board protocol face across full
+    # server-process restarts (the store-level persist is already
+    # in-book R1891; the protocol face + subscription filter across
+    # a ServerProc restart is the genuine zero-in-book surface).
+    await room_board_persist_cases()
 
     await city_cases()
 

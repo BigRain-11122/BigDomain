@@ -142,7 +142,24 @@ SUITES = [
     # and text domains are independent, and the strip/truncate
     # normalization happens before the key digest - AC-S44..S48
     # (46 -> 51).
-    ("lobby", os.path.join("lobby", "test_client.py"), 51),
+    # R1915 room.board protocol-face persist across full server
+    # process restarts (adjudication: the store-level read-face
+    # persist is already in-book via R1891 AC-S32..S38; the genuine
+    # zero-in-book surface is the PROTOCOL face with its
+    # payload.rooms subscription filter across a ServerProc stop ->
+    # same-config same-db same-port restart): pre-restart five-face
+    # protocol snapshot (full / filter / empty / None-default, manual
+    # SQL cross, month window SQL-derived), restarted process
+    # reproduces every protocol read byte-for-byte at the payload
+    # level (frame ts_utc/room stripped as envelope noise), new data
+    # through the live protocol recomputes (zero cache, existing
+    # config-room gate honored), a stopped-window explicit-ts
+    # November row (R1876 product path) is born in the new month
+    # window while the old month window stays frozen across restart
+    # x new data, and a second restart keeps sequential-instance
+    # byte identity; pure-read battery + sha256 double-proof hygiene
+    # - AC-S49..S54 (51 -> 57).
+    ("lobby", os.path.join("lobby", "test_client.py"), 57),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     ("ledger-incentive",
