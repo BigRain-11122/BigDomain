@@ -1,0 +1,121 @@
+== section 1: suite double-run (byte-identity) ==
+PASS AC-BFP1: fresh=True env_keys=True row_keys=True cross_abc=TrueTrueTrue stack=True balances=[2, 6, 10, 3] counts(a/b/c)=1/2/1 empty_faces=TrueTrue carryover=True
+PASS AC-BFP2: five_faces==pre=True self_identical=True (full envelope: zero clock-following fields, zero window params)
+PASS AC-BFP3: idempotent=True same_period=True panel_unchanged=True periods=4 counts_stable=True (dedup map = db state across the restart boundary, source_grant_id)
+PASS AC-BFP4: ep_d_fresh=True ep_d_balance=3 panel_changed=True ep_a_balance=1 ep_a_changed=True ep_a_cross=True siblings_frozen=True (recomputed from db, zero cache; new data never permeates untouched avatars)
+PASS AC-BFP5: face2==face3=True face2_reread=True ep_c_still==pre=True ep_b_still==pre=True (restart x new-data double hijack, stable avatars never drift)
+PASS AC-BFP6: empty_refusal=True(E_PERIOD_EXPIRED) overdraw_refusal=True(E_NO_CREDITS) counts_stable=True (periods 5, events 8, vouchers 2, audit 19), ep_c_untouched=True
+PASS AC-BFP7: write_keywords=[] ascii=True net_imports=0 member_sha=True cfg_sha=True world_outside=True runner_row=True drift=6/7 counts_stable=True
+SUITE member-balanceface-persist: 7/7 criteria pass
+
+r1_sha16=030dfb34ad47addf
+r2_sha16=030dfb34ad47addf
+byte_identical=True
+== section 2: RUNNER full regression (suite lines + verdict) ==
+PASS suite member-balanceface-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suites 154/154 green, expected criteria total=1414
+PASS suites 154/154 green, expected criteria total=1414
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived PASS
+  | 4 zero-sum-and-mint-identity PASS
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE PASS (8/8 checks)
+PASS reconcile ledger-demo exit=0 (expect 0, clean eight checks)
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived FAIL n=1 
+  | 4 zero-sum-and-mint-identity FAIL n=1 sum=1 issued=801 equity=-800
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE FAIL (2/8 checks failed)
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-5vii5xj_\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (154/154 suites green, reconcile controls 7/7, 169.8s)
+RUNNER PASS (154/154 suites green, reconcile controls 7/7, 169.8s)
+
+== section 3: suite matrix regen + --check x2 ==
+regen rc=0
+PASS generated docs/sandbox-suite-matrix.md (15286 bytes) - registry suites=154 criteria=1414 evidence=qa/reconcile-all-R1912.log green=154/154
+PASS hygiene: pure-ascii source, zero network imports
+
+check1 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (15286 bytes, 154 suites, 1414 criteria)
+
+check2 rc=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (15286 bytes, 154 suites, 1414 criteria)
+
+== section 4: writer census (post-evidence write probe runs in section 6) ==
+census rc=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1313 tee=811 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+== section 5: fingerprint sentinel ==
+sentinel rc=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+== section 6: post-write census probe (evidence file itself must classify clean) ==
+post-write census rc=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1314 tee=812 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+VERDICT PASS

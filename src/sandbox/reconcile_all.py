@@ -1427,6 +1427,24 @@ SUITES = [
     # pre-registered in state/queue/tech.md)
     ("ledger-apidev-usagekindpersist", os.path.join(
         "ledger", "test_apidev_usagekindpersist.py"), 7),
+    # R1912 member balance_face entitlement-balance panel read-face
+    # restart-persistence suite (the R1907 seed): MemberStore
+    # close-reopen on the same db/cfg/pay replays the five-avatar
+    # panel snapshots byte-identically (full envelope: zero
+    # clock-following fields, zero window params, no projection
+    # band), the same-grant re-activation stays idempotent
+    # (source_grant_id db-backed dedup), one new true-path
+    # activation (EP-D) plus one new consumption (EP-A) recompute
+    # their panels zero-cache while sibling avatars stay
+    # byte-frozen, and a third instance replays the post-new-data
+    # state byte-identically (two-instance sequential reads);
+    # honest product-path note: the EP-B renewal stacking world
+    # rides the granted->closed refund edge because
+    # compute_order_id buckets on the closed order count
+    # (AC-BFP1..AC-BFP7 pre-registered in
+    # state/queue/tech.md)
+    ("member-balanceface-persist", os.path.join(
+        "member", "test_balance_face_persist.py"), 7),
 ]
 
 FAILS = 0
