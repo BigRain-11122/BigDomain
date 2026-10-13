@@ -1558,6 +1558,25 @@ SUITES = [
     # (AC-DR7..AC-DR13 pre-registered in state/queue/tech.md)
     ("ugc-drain-waterpersist", os.path.join(
         "ugc", "test_drain_waterpersist.py"), 7),
+    # R1929 pool-water read-face family cross-restart persistence
+    # suite (the R1926 reseed claimed after the former queue head
+    # was duplicate-closed): the seed's named carrier is the
+    # STORE-level restart - UGCStore close -> new UGCStore over
+    # the same ugc.db (R1913 AC-DR9 pinned only the levels
+    # envelope across a full pipeline-stack restart in the drain
+    # world). Both faces pin: the reopened levels read and the
+    # delta(caller-held pre-close snapshot) re-derive
+    # byte-identically (steady {} / total_delta 0), NEW noise +
+    # gray + verdict flows through the real same-db pipeline
+    # recompute both faces zero-cache with the change-only delta
+    # semantics enforced across the restart (net-zero suspended
+    # cell omitted), and a second restart's third instance
+    # replays the post-flow state byte-identically on sequential
+    # double reads; pure-read law + manual-SQL cross +
+    # store.py sha256 double-proof (suite-only round)
+    # (AC-PWP1..AC-PWP7 pre-registered in state/queue/tech.md)
+    ("ugc-pool-waterpersist", os.path.join(
+        "ugc", "test_pool_waterpersist.py"), 7),
     # R1917 review-desk read faces (pool_query + chronicle_query)
     # cross-restart persistence suite (the R1913 seed): a fresh
     # UGCPipeline on the same config bytes and db path re-derives

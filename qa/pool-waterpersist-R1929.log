@@ -1,0 +1,42 @@
+qa/pool-waterpersist-R1929.log
+--- suite run 1 ---
+PASS AC-PWP1: pre-close pinning: levels noise 3 (emoji/flood/short 1 each), suspended 1, verdicted pass1 risky1, total 4 == manual SQL cross; steady self-delta {} and total_delta 0; envelope keys exact
+PASS AC-PWP2: UGCStore close -> new instance over the same ugc.db: reopened levels byte-identical to the pre-close snapshot and delta(caller-held pre-close snapshot) re-derived as the same steady {} / total_delta 0 (zero in-memory drift in both derived read faces)
+PASS AC-PWP3: post-restart real-path flows (new emoji noise row + new gray row through the same-db pipeline): levels recomputed zero-cache (noise 3->4, emoji_only 1->2, suspended 1->2, total 4->6), delta vs the same caller-held pre-close snapshot = {emoji_only +1, noise.total +1, review.suspended +1} total_delta 2 == independent hand delta + manual SQL cross
+PASS AC-PWP4: verdict flow on the new gray row (review_verdict pass): suspended 2->1, verdicted pass 1->2 recomputed on the restarted instance; delta vs the same snapshot = {emoji_only +1, noise.total +1, verdicted.pass +1} total_delta 1 with the net-zero suspended cell omitted (change-only semantics enforced across restart) == hand delta + manual cross
+PASS AC-PWP5: second store restart (third instance, same ugc.db): both faces re-read twice byte-identical to the post-verdict state (restart x new-data double hijack, zero drift); read batch left all five table row counts constant
+PASS AC-PWP6: pure-read law: restart read batches left the five tables constant; final world == fresh manual SQL cross (noise 4 / suspended 1 / verdicted pass2 risky1); steady self-delta on the third instance honest {}; store.py sha256 unchanged (suite-only round)
+PASS AC-PWP7: hygiene: source pure ASCII (16760 bytes), zero network imports on true import lines, world db in system tmp outside the repo, config.json sha unchanged; delivery wired into reconcile_all SUITES (ugc-pool-waterpersist, criteria 7)
+SUITE PASS (7/7 criteria green)
+exit=0
+--- suite run 2 ---
+PASS AC-PWP1: pre-close pinning: levels noise 3 (emoji/flood/short 1 each), suspended 1, verdicted pass1 risky1, total 4 == manual SQL cross; steady self-delta {} and total_delta 0; envelope keys exact
+PASS AC-PWP2: UGCStore close -> new instance over the same ugc.db: reopened levels byte-identical to the pre-close snapshot and delta(caller-held pre-close snapshot) re-derived as the same steady {} / total_delta 0 (zero in-memory drift in both derived read faces)
+PASS AC-PWP3: post-restart real-path flows (new emoji noise row + new gray row through the same-db pipeline): levels recomputed zero-cache (noise 3->4, emoji_only 1->2, suspended 1->2, total 4->6), delta vs the same caller-held pre-close snapshot = {emoji_only +1, noise.total +1, review.suspended +1} total_delta 2 == independent hand delta + manual SQL cross
+PASS AC-PWP4: verdict flow on the new gray row (review_verdict pass): suspended 2->1, verdicted pass 1->2 recomputed on the restarted instance; delta vs the same snapshot = {emoji_only +1, noise.total +1, verdicted.pass +1} total_delta 1 with the net-zero suspended cell omitted (change-only semantics enforced across restart) == hand delta + manual cross
+PASS AC-PWP5: second store restart (third instance, same ugc.db): both faces re-read twice byte-identical to the post-verdict state (restart x new-data double hijack, zero drift); read batch left all five table row counts constant
+PASS AC-PWP6: pure-read law: restart read batches left the five tables constant; final world == fresh manual SQL cross (noise 4 / suspended 1 / verdicted pass2 risky1); steady self-delta on the third instance honest {}; store.py sha256 unchanged (suite-only round)
+PASS AC-PWP7: hygiene: source pure ASCII (16760 bytes), zero network imports on true import lines, world db in system tmp outside the repo, config.json sha unchanged; delivery wired into reconcile_all SUITES (ugc-pool-waterpersist, criteria 7)
+SUITE PASS (7/7 criteria green)
+exit=0
+--- double-run byte identity ---
+stdout_byte_identical=True rc=0/0
+--- full runner regression (qa/reconcile-all-R1929.log) ---
+PASS suite ugc-pool-waterpersist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.3s
+PASS suites 167/167 green, expected criteria total=1508
+PASS reconcile ledger-demo exit=0 (expect 0, clean eight checks)
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+runner_exit=0
+--- matrix regen ---
+PASS generated docs/sandbox-suite-matrix.md (16429 bytes) - registry suites=167 criteria=1508 evidence=qa/reconcile-all-R1929.log green=167/167
+PASS hygiene: pure-ascii source, zero network imports
+matrix_regen_exit=0
+--- matrix --check x2 (byte-identical doc) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16429 bytes, 167 suites, 1508 criteria)
+PASS check: docs/sandbox-suite-matrix.md byte-identical (16429 bytes, 167 suites, 1508 criteria)
+check_exit=0/0
