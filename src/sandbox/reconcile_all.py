@@ -1520,6 +1520,24 @@ SUITES = [
     # (AC-RDP1..AC-RDP7 pre-registered in state/queue/tech.md)
     ("ugc-reviewdesk-persist", os.path.join(
         "ugc", "test_reviewdesk_persist.py"), 7),
+    # R1918 member birth_cert_face read-face derivation
+    # purity across an instance restart (the R1915 seed):
+    # the permanent entrance qualification face (the
+    # pay.grants_for live-grant judgement + the
+    # member_audit birth marker) replays byte-identically
+    # from a fresh MemberStore on the same db/cfg/pay dock
+    # (six faces: five avatar shapes + the blank probe),
+    # a new true-path grant recomputes zero-cache while
+    # MIN(granted_utc) keeps the historical anchor, a
+    # refund flips the live judgement but preserves
+    # history and the activation marker (R1721 semantics
+    # across the restart boundary), and the first-paid-
+    # activation marker stamps across the restart boundary
+    # with idempotent re-activation stability
+    # (AC-BCP1..AC-BCP7 pre-registered in
+    # state/queue/tech.md)
+    ("member-birthcert-persist", os.path.join(
+        "member", "test_birthcert_persist.py"), 7),
 ]
 
 FAILS = 0

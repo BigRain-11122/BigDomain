@@ -1,8 +1,8 @@
 {
- "export_ts": "2026-10-13T13:43:53+08:00",
+ "export_ts": "2026-10-13T14:07:05+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-    "current": "P2 技术队头 FIFO 交付：ugc review-desk pool_query/chronicle_query 评审桌面读面（提案池+城市编年史）跨 UGCPipeline 全栈重启持久化套件 7/7 全绿——RUNNER 158 套件·判据 1448 全绿；三实例世界：四读形跨重启逐字节复原、重启后新投稿读面重算零缓存、旧行按 evt_id 逐字节冻结、line 过滤对新数据零渗透、第三实例序贯同一；同轮 fold R505 水位整编（82811B→56006B·18 行压 1 滚窗行）+GORD 基线 355→349 勘正（重叠窗双计 6 行·零真实删行）",  "latest_artifact": "src/sandbox/ugc/test_reviewdesk_persist.py + qa/reviewdesk-persist-R1917.log + docs/sandbox-suite-matrix.md（2026-10-13·158 套件 1448 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：member birth_cert_face 出生证明读面持久化例窗（R1915 补种在册·滚动族：member expiring_distribution/ugc export 确定性例窗），窗 ≤48h（2026-10-15 前）"},
+    "current": "P2 队头 FIFO 交付：member birth_cert_face 出生证明读面跨重启持久化例窗（判据预注册 AC-BCP1..BCP7→套件 7/7 全绿：五化身+blank 探针六面跨重启字节同一+零缓存重算+退款重算 R1721 语义+激活域戳+双实例序贯同一·RUNNER 159 套件判据 1455 全绿零回归·矩阵 --check byte-identical）",  "latest_artifact": "src/sandbox/member/test_birthcert_persist.py + qa/birthcert-persist-R1918.log + qa/reconcile-all-R1918.log（2026-10-13·159 套件 1455 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：member expiring_distribution 档位分布读面跨重启持久化例窗（R1916 补种在队·AC-ESD 族续编）→ugc export 三导出面确定性例窗（R1917 补种）→pay channel_status_matrix 窗参 persist 例窗（R1918 补种）·窗 ≤48h（2026-10-15 前）"},
  "depts": [
   {
    "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -796,7 +796,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1917",
+   "1918",
    "OSLoop 执行 tick"
   ],
   [
@@ -3778,15 +3778,19 @@
   [
    "2",
    "R1916 member privileges_for/has_privilege 特权读面跨重启持久化套件（P2 tech 队头 FIFO〔R1912 补种〕·轮计分 2=可跑实物·中断收口轮=前驱会话判据预注册+套件+接线+五节证据毕即中断·后继会话现场验真+收账闭口〔R550/R551/R1675/R1914/R1915 先例〕）：AC-PRP1..PRP7 判据预注册先于代码——六化身三实例世界（关前六面快照键集钉死+manual SQL 交叉+EP-B mayor 双期堆叠 dedup〔tiers 恰 [mayor]·privileges 恰 mayor 集一次〕+EP-RVK revoke_refunded 撤销恢复空面+client_hints 零权威双面探针/跨重启双信封逐字节复原+同参二读自同一/拒因族四态 E_NO_ACTIVE_PERIOD×2·E_TIER_REQUIRED·E_BAD_STATE 双实例同码同拒四表恒定/EP-D 新激活重算零缓存+姊妹逐字节冻结+EP-A 新 consume 后特权面逐字节==consume 前=balance-不变性钉死〔对照 R1912 balance_face 重算面〕/face3 同库双活序贯同一+稳定化身仍==原始关前快照〔重启×新数据双劫不漂〕/纯读律+卫生全过〔两方法源零写关键词+member.py sha256 双证+纯 ASCII+零网络 import+世界仓外+runner row wired〕）——SUITE 7/7 首跑两修后全绿〔修面=取证口径：revoke_refunded int 计数 resp==1 取证〔R1721 spec 勘正〕+empty_faces 结构空态判据改定·判据零修正·产品零涉及〕+双跑 stdout 逐字节同一 sha16 ed53c1c482c5c778+RUNNER PASS 157/157 套件判据 1434→1441 controls 7/7 197.6s+矩阵再生 157/1441 green --check byte-identical×2〔15600B〕+census DRIFT-CLEAN〔files=1321〕+哨兵 CLEAN domains=5=qa/member-privilegespersist-R1916.log 五节 VERDICT PASS；同窗双重复行查重收口：R1911 audit_lineage persist 重复行〔R1896 已交付〕+R1914 pay notify bannerpersist 重复行〔R1884 已交付〕两枚合并关闭零交付〔R1883/R1878 先例·三源验真〕；GORD 九新行（O-20261013-1205/1225/1230/1255/1300 等 BigStream MV/fleet 族）知悉不动作·基线 346→355；tech 消耗 1+补种 1〔member expiring_distribution 档位分布读面种子〕"
+  ],
+  [
+   "2",
+   "R1918 member birth_cert_face read-face cross-restart persistence 7/7 (criteria AC-BCP1..AC-BCP7 pre-registered in state/queue/tech.md; six faces five avatar shapes + blank probe replay byte-identical from a fresh MemberStore on the same db/cfg/pay dock, zero-cache recompute on new true-path grants, refund recompute keeps history + marker per R1721, activation marker stamps across the restart boundary, dual-instance sequential identity; suite-only round, product zero changes; two honest calibration notes: create_order is content-addressed per (avatar, product, closed-bucket) so the third BC-B grant rides tier_cocreator, and the AC-BCP6 BC-A anchor calibrates on its post-refund state)"
   ]
  ],
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 10,
+  "log_lines_in_window": 12,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,

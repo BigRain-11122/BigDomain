@@ -1,0 +1,52 @@
+=== [1] suite double-run: test_birthcert_persist.py AC-BCP1..AC-BCP7 (full stdout carries zero volatile lines: no tmp paths, no ports, no ms timings) ===
+run1 rc=0 lines (8):
+PASS AC-BCP1: fresh_paths=True envelope9=True live={'BC-A': 1, 'BC-B': 2, 'BC-C': 1, 'BC-D': 0, 'BC-E': 0, '': 0} cross_3way=True marker_split(BC-C True/False)=True refund_honest(BC-D False)=True blank_probe=True
+PASS AC-BCP2: six_faces==pre=True reread==pre=True (same cfg/db/pay dock, zero in-memory drift; face carries no clock field)
+PASS AC-BCP3: bc_f False->True=True bc_b first_stable=True live_b=3=True (recomputed from db, zero cache; MIN law keeps the historical anchor)
+PASS AC-BCP4: refund_live_flip=True first_preserved=True marker_preserved=True (refund undoes the purchase, not history: R1721 semantics across the restart boundary)
+PASS AC-BCP5: marker_flip(BC-C False->True)=True idem_reactivate(BC-B)=True periods_stable=True (the birth stamp is first-paid-activation domain state, restart carried)
+PASS AC-BCP6: face2==face3=True face2_reread=True bc_a_refund_state_anchor=True (two live instances replay the same six-face bytes; BC-A anchors on its post-refund state)
+PASS AC-BCP7: write_keywords=[] counts_stable=True (periods 4, orders 7, grants 7), double_read_identical=True, member_sha=True, cfg_sha=True, ascii=True, net_imports=0, world_outside=True, runner_row=True, drift=6/7
+SUITE member-birthcert-persist: 7/7 criteria pass
+run2 rc=0 lines (8):
+PASS AC-BCP1: fresh_paths=True envelope9=True live={'BC-A': 1, 'BC-B': 2, 'BC-C': 1, 'BC-D': 0, 'BC-E': 0, '': 0} cross_3way=True marker_split(BC-C True/False)=True refund_honest(BC-D False)=True blank_probe=True
+PASS AC-BCP2: six_faces==pre=True reread==pre=True (same cfg/db/pay dock, zero in-memory drift; face carries no clock field)
+PASS AC-BCP3: bc_f False->True=True bc_b first_stable=True live_b=3=True (recomputed from db, zero cache; MIN law keeps the historical anchor)
+PASS AC-BCP4: refund_live_flip=True first_preserved=True marker_preserved=True (refund undoes the purchase, not history: R1721 semantics across the restart boundary)
+PASS AC-BCP5: marker_flip(BC-C False->True)=True idem_reactivate(BC-B)=True periods_stable=True (the birth stamp is first-paid-activation domain state, restart carried)
+PASS AC-BCP6: face2==face3=True face2_reread=True bc_a_refund_state_anchor=True (two live instances replay the same six-face bytes; BC-A anchors on its post-refund state)
+PASS AC-BCP7: write_keywords=[] counts_stable=True (periods 4, orders 7, grants 7), double_read_identical=True, member_sha=True, cfg_sha=True, ascii=True, net_imports=0, world_outside=True, runner_row=True, drift=6/7
+SUITE member-birthcert-persist: 7/7 criteria pass
+criteria-identical=True full-stdout-identical=True (lines 8/8)
+run1 full-stdout sha16=e8d5643aff4a4471 run2 full-stdout sha16=e8d5643aff4a4471
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1918.log)
+RUNNER PASS (159/159 suites green, reconcile controls 7/7, 200.3s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15728 bytes, 159 suites, 1455 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1323 tee=821 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS
