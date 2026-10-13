@@ -1503,6 +1503,23 @@ SUITES = [
     # (AC-DR7..AC-DR13 pre-registered in state/queue/tech.md)
     ("ugc-drain-waterpersist", os.path.join(
         "ugc", "test_drain_waterpersist.py"), 7),
+    # R1917 review-desk read faces (pool_query + chronicle_query)
+    # cross-restart persistence suite (the R1913 seed): a fresh
+    # UGCPipeline on the same config bytes and db path re-derives
+    # the pool envelope (pooled + drafted bodies with the rule-
+    # template draft json), the line-filtered pool reads and the
+    # city-chronicle envelope byte-identically to the pre-close
+    # snapshots; NEW submissions on the restarted instance (one
+    # standing draft + one small-idea adopt through the real
+    # submit->draft->final_review->final_decide path) recompute the
+    # whole pool and chronicle zero-cache while untouched lines and
+    # pre-existing rows stay byte-frozen; the honest empty line
+    # filter and the states= parameter face are pinned; a third
+    # instance replays the post-injection state byte-identically
+    # (double-restart x new-data no drift)
+    # (AC-RDP1..AC-RDP7 pre-registered in state/queue/tech.md)
+    ("ugc-reviewdesk-persist", os.path.join(
+        "ugc", "test_reviewdesk_persist.py"), 7),
 ]
 
 FAILS = 0

@@ -1,11 +1,8 @@
 {
- "export_ts": "2026-10-13T13:21:42+08:00",
+ "export_ts": "2026-10-13T13:43:53+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 技术队头 FIFO 交付：member privileges_for/has_privilege 特权读面（特权面板+granted 形+拒因族）跨 MemberStore 重启持久化套件 7/7 全绿——RUNNER 157 套件·判据 1441 全绿；六化身三实例世界：跨重启双信封逐字节复原、撤销恢复空面、重启后新激活重算零缓存、consume 后特权面逐字节不变（balance-不变性钉死）、第三实例序贯同一；同窗双重复行查重收口（R1911/R1914 两枚重复种子合并关闭·重复交付=空转第三形态判负禁行）",
-  "latest_artifact": "src/sandbox/member/test_privileges_persist.py + qa/member-privilegespersist-R1916.log + docs/sandbox-suite-matrix.md（2026-10-13·157 套件 1441 判据 green）",
-  "next_milestone": "下个 P2 队头 FIFO：ugc review-desk pool_query/chronicle_query 评审桌面读面跨重启持久化例窗（R1913 补种在册·滚动族：member birth_cert_face/expiring_distribution 读面），窗 ≤48h（2026-10-15 前）"
- },
+    "current": "P2 技术队头 FIFO 交付：ugc review-desk pool_query/chronicle_query 评审桌面读面（提案池+城市编年史）跨 UGCPipeline 全栈重启持久化套件 7/7 全绿——RUNNER 158 套件·判据 1448 全绿；三实例世界：四读形跨重启逐字节复原、重启后新投稿读面重算零缓存、旧行按 evt_id 逐字节冻结、line 过滤对新数据零渗透、第三实例序贯同一；同轮 fold R505 水位整编（82811B→56006B·18 行压 1 滚窗行）+GORD 基线 355→349 勘正（重叠窗双计 6 行·零真实删行）",  "latest_artifact": "src/sandbox/ugc/test_reviewdesk_persist.py + qa/reviewdesk-persist-R1917.log + docs/sandbox-suite-matrix.md（2026-10-13·158 套件 1448 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：member birth_cert_face 出生证明读面持久化例窗（R1915 补种在册·滚动族：member expiring_distribution/ugc export 确定性例窗），窗 ≤48h（2026-10-15 前）"},
  "depts": [
   {
    "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -202,6 +199,10 @@
   ]
  ],
  "results": [
+ [
+   "R1917",
+   "ugc review-desk pool_query/chronicle_query read faces cross-restart persistence 7/7 (criteria AC-RDP1..AC-RDP7 pre-registered in state/queue/tech.md; full-stack three-piece close/reopen same db/config, four read shapes byte-identical across restart, November new-submission recompute zero-cache while untouched lines and pre-existing rows stay byte-frozen, honest empty line filter + states parameter face pinned, third instance sequential identity, seven-table pure-read law; suite-only round product bytes unchanged) + RUNNER 158/158 criteria 1441->1448 (ugc-reviewdesk-persist 7, SUITES 157->158) + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN + fold R505 honored at round start (82811B->56006B, 18 lines -> 1 rolling line, 83 tokens embedded zero-loss) + GORD baseline correction 355->349 (overlap double-count diagnosed, git +13/-0 zero real deletions)"
+ ],
   [
    "R1904",
    "pay channel_status_matrix windowed-read cross-restart persistence 7/7 (criteria AC-CW8..AC-CW14; five-cell October world via the true product path, oct windowed/default/future snapshot quartet restored byte-identical across PayOrders close/reopen same db/config with the event store and ledger surviving as caller-owned dependencies, frozen-clock November two-channel create_order rows recompute the default read total 5->7 via the true product path (zero cache) while the October windowed read stays byte-frozen (pay_orders rows record-time immutable), third-instance four-read pairwise identity, pure-read battery three-table counts flat; suite-only round product bytes unchanged) + RUNNER 146/146 criteria 1346->1353 (pay-channel-persist 7, SUITES 145->146) + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
@@ -795,7 +796,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1916",
+   "1917",
    "OSLoop 执行 tick"
   ],
   [
@@ -3782,10 +3783,10 @@
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 25,
+  "log_lines_in_window": 10,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 9,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
