@@ -1794,6 +1794,15 @@ SUITES = [
         "ledger", "test_datasub_persist.py"), 7),
     ("ledger-devshare-persist", os.path.join(
         "ledger", "test_devshare_persist.py"), 7),
+    # R1946 apimarket persist seat of the R1886 family: four-piece
+    # full-chain restart (am/dk/metered/led), byte-identical read
+    # replay across board/view/ratings/sales + balances, ten
+    # restart-surviving gate probes, post-restart continuation with
+    # a fresh bound spend/share pair, frozen immutable rows + dup
+    # gates, pure-read law, third instance stability (AC-AMP1..AMP7
+    # pre-registered in state/queue/tech.md).
+    ("ledger-apimarket-persist", os.path.join(
+        "ledger", "test_apimarket_persist.py"), 7),
 ]
 
 FAILS = 0

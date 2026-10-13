@@ -1,0 +1,89 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-AMP1: anchor world pinned (registered devs ada+dan; listings risk-scan@10 ai0 / macro-feed@3 ai1 / dan variant@7 ai0; purchases bob+carol L1 10->7/3 and bob L3 7->5/2 = integer split law across price points; ratings bob 5* + carol 4* on L1 (count 2 avg 4.5) + bob 3* on L3; listings=3 purchases=3 ratings=3 spend-tx=3 share-tx=3 (one share tx per purchase); balances 614/605/483/390/200, pool:share 1981, pool:reserve 2727); ten gate probes rejected (not-dev=E_AM_NOT_DEV; dup-listing=E_AM_DUP_LISTING; content=E_AM_CONTENT_REJECTED; purchase-dup=E_AM_PURCHASE_DUP; self-buy=E_AM_SELF_BUY; unknown=E_AM_UNKNOWN_LISTING; not-buyer=E_AM_NOT_BUYER; rate-dup=E_AM_RATE_DUP; bad-stars=E_AM_BAD_STARS; gate-fault=E_AM_GATE_ERROR); counts and battery frozen across the probe batch; digest=a85a75b1223e4515
+PASS AC-AMP2: four-piece close->reopen (am.close -> dk.close -> metered.close -> led.close -> Ledger same db/cfg + MeteredFace + DevKeyFace + SecGate + APIMarketFace fresh): read battery byte-identical to the pre-close snapshot (market board + three listing views + rating ledger + both developer sales views with persisted spend/share tx pairs + seven balances), diffs=none; the market read faces rebuild over the same apimarket.db rows with zero in-memory drift; digest=a85a75b1223e4515
+PASS AC-AMP3: restart-surviving gates: ten probes all rejected with identical codes on instance 2 (not-dev=E_AM_NOT_DEV; dup-listing=E_AM_DUP_LISTING; content=E_AM_CONTENT_REJECTED; purchase-dup=E_AM_PURCHASE_DUP; self-buy=E_AM_SELF_BUY; unknown=E_AM_UNKNOWN_LISTING; not-buyer=E_AM_NOT_BUYER; rate-dup=E_AM_RATE_DUP; bad-stars=E_AM_BAD_STARS; gate-fault=E_AM_GATE_ERROR); the registry gate rides the persisted dev-key board, the dup gates ride the UNIQUE constraints, the purchaser-only rating gate rides the persisted purchase rows - every gate survives the restart; counts and battery frozen across the probe batch (listings=3 purchases=3 ratings=3 unchanged, zero movement)
+PASS AC-AMP4: post-restart continuation: dan lists quant-vision@21 on instance 2 (registry + content gates + listing row all keep working); eve buys it -> 21 -> dev 15 / platform 6 (integer split law on a fresh price point), bound to a fresh spend tx and a fresh share tx (SQL cross: usr:eve spend debit leg and usr:dan share credit legs both present, dan has two share credit legs = the pre-restart one plus the new one); eve rates it 5* (purchaser-only gate keeps working); board grows 3->4 listings, dan sales 1->2 rows, listings/purchases/ratings 3->4, spend-tx 3->4, share-tx 3->4; balances eve 179 / dan 620, pool:share 1966, pool:reserve 2748; digest=b71446a470428e68
+PASS AC-AMP5: frozen faces: every pre-existing listing row (all eight columns incl. payload and declared AIGC label), purchase row (all nine columns incl. the bound spend_tx/dev_share_tx provenance pair) and rating row keeps every field byte-identical to the pre-close snapshot - the new listing/ purchase/ rating only append (zero UPDATE surface); dup gates across the restart: listing replay rejected E_AM_DUP_LISTING, purchase replay rejected E_AM_PURCHASE_DUP, rating replay rejected E_AM_RATE_DUP (zero movement); counts and battery frozen across all three probes
+PASS AC-AMP6: pure-read law: full battery read twice back-to-back - market board + three listing views + rating ledger + both sales views + seven balances byte-identical between the two reads and table counts constant (read faces have zero side effects)
+PASS AC-AMP7: third instance: four-piece close -> reopen same db once more - battery byte-identical to the instance-2 terminal state (diffs=none, board/views/ ratings/sales/balances stable across a second restart); shipped files untouched (config + apimarket/apidev/metered/ledger sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+sha16 run1=826797aa94415334 run2=826797aa94415334 byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-7z5fhfdn\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (184/184 suites green, reconcile controls 7/7, 306.4s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17898 bytes) - registry suites=184 criteria=1627 evidence=qa/reconcile-all-R1946.log green=184/184
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17898 bytes, 184 suites, 1627 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1379 tee=877 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/os/state.json
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1946.log
+?? src/os/closeout_R1946.py
+?? src/os/closeout_payload_R1946.json
+?? src/os/evidence_R1946.py
+?? src/sandbox/ledger/test_apimarket_persist.py
+
+VERDICT PASS
