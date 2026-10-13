@@ -674,6 +674,15 @@ SUITES = [
      os.path.join("compliance", "test_sku_compliance_map.py"), 15),
     ("minors", os.path.join("minors", "test_minors.py"), 19),
     ("minors-wiring", os.path.join("minors", "test_wiring.py"), 70),
+    # minors persist window: cross-restart byte-identical replay of
+    # the day_readout/residents_readout battery, restart-surviving
+    # gate probes, post-restart continuation recompute + new-minor
+    # registration on the reopened instance, frozen history face +
+    # cross-restart idempotent replay + per-(resident,date) ref
+    # domain law, pure-read law, third instance stability
+    # (AC-MGP1..MGP7 pre-registered in state/queue/tech.md).
+    ("minors-persist", os.path.join(
+        "minors", "test_minors_persist.py"), 7),
     # R1676 schema-migrate: sandbox-wide schema versioning migrator
     # (PRAGMA user_version chain, ALTER-free rebuild, dual-phase verify;
     # AC-LM1..LM11 pre-registered in state/queue/tech.md).

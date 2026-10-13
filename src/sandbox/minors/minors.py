@@ -28,6 +28,8 @@ Fail-closed discipline (mirrors citymodel/scenario.py R850 law):
 
 from __future__ import annotations
 
+import sqlite3
+
 MINOR_LAW_CITE = (
     "Regulations on the Cyber Protection of Minors "
     "(State Council Decree No.766, 2024-01-01 effective): "
@@ -71,7 +73,7 @@ def _cents(value, name):
 class MinorGuardFace(object):
     """Guardian guard face: minors-only scope, adults pass through."""
 
-    def __init__(self):
+    def __init__(self, db_path=None):
         # resident_id -> {"minor": bool, "guardian": str|None}
         self._residents = {}
         # resident_id -> {"windows": [(s,e)], "single_cent": int,
@@ -79,6 +81,77 @@ class MinorGuardFace(object):
         self._limits = {}
         # (resident_id, date) -> {"spent_cent": int, "events": [str]}
         self._day_ledger = {}
+        # Optional sqlite persistence carrier (R1939 persist-family
+        # seat): default None keeps the pure in-memory behavior
+        # byte-identical (wiring sites construct with no args). With
+        # db_path the state lives in an independent single-writer
+        # sqlite file (reminder/sec_batch/notify precedent); the
+        # store is hydrated at open and every mutation commits the
+        # db row BEFORE the in-memory update (db = recovery source
+        # of truth, so a crash window never loses a spend row - the
+        # fail-closed direction for the minors daily cap).
+        self._db = None
+        if db_path is not None:
+            if not isinstance(db_path, str) or not db_path:
+                raise GuardError(
+                    "E_MG_PARAM", "db_path must be non-empty str")
+            self._db = sqlite3.connect(db_path)
+            self._db.execute(
+                "CREATE TABLE IF NOT EXISTS mg_residents ("
+                " resident_id TEXT PRIMARY KEY,"
+                " is_minor INTEGER NOT NULL,"
+                " guardian_id TEXT)")
+            self._db.execute(
+                "CREATE TABLE IF NOT EXISTS mg_limits ("
+                " resident_id TEXT PRIMARY KEY,"
+                " windows TEXT NOT NULL,"
+                " single_cent INTEGER,"
+                " daily_cent INTEGER)")
+            self._db.execute(
+                "CREATE TABLE IF NOT EXISTS mg_day_spend ("
+                " seq INTEGER PRIMARY KEY AUTOINCREMENT,"
+                " resident_id TEXT NOT NULL,"
+                " date TEXT NOT NULL,"
+                " ref TEXT NOT NULL,"
+                " amount_cent INTEGER NOT NULL,"
+                " UNIQUE (resident_id, date, ref))")
+            self._db.commit()
+            self._hydrate()
+
+    def _hydrate(self):
+        """Rebuild the in-memory working state from the store.
+
+        Day-spend rows replay in seq (insertion) order, so the
+        per-(resident, date) event lists and spent_cent sums match
+        the live face exactly; limits windows round-trip through the
+        canonical %04d-%04d "; " serialization."""
+        for rid, is_minor, guardian in self._db.execute(
+                "SELECT resident_id, is_minor, guardian_id"
+                " FROM mg_residents"):
+            self._residents[rid] = {
+                "minor": bool(is_minor), "guardian": guardian}
+        for rid, wins, single, daily in self._db.execute(
+                "SELECT resident_id, windows, single_cent, daily_cent"
+                " FROM mg_limits"):
+            tuples = tuple(
+                (int(p.split("-")[0]), int(p.split("-")[1]))
+                for p in wins.split(";") if p)
+            self._limits[rid] = {
+                "windows": tuples, "single_cent": single,
+                "daily_cent": daily}
+        for rid, date, ref, amount in self._db.execute(
+                "SELECT resident_id, date, ref, amount_cent"
+                " FROM mg_day_spend ORDER BY seq"):
+            day = self._day_ledger.setdefault(
+                (rid, date), {"spent_cent": 0, "events": []})
+            day["spent_cent"] += amount
+            day["events"].append(ref)
+
+    def close(self):
+        """Close the persistence carrier (no-op in memory mode)."""
+        if self._db is not None:
+            self._db.close()
+            self._db = None
 
     # -- registration ------------------------------------------------
 
@@ -94,12 +167,16 @@ class MinorGuardFace(object):
                 raise GuardError(
                     "E_MG_GUARDIAN",
                     "minor resident requires a guardian binding (sec.43)")
-            self._residents[resident_id] = {
-                "minor": True, "guardian": guardian_id}
+            rec = {"minor": True, "guardian": guardian_id}
         else:
-            self._residents[resident_id] = {
-                "minor": False, "guardian": None}
-        return dict(self._residents[resident_id])
+            rec = {"minor": False, "guardian": None}
+        if self._db is not None:
+            self._db.execute(
+                "INSERT INTO mg_residents VALUES (?, ?, ?)",
+                (resident_id, 1 if rec["minor"] else 0, rec["guardian"]))
+            self._db.commit()
+        self._residents[resident_id] = rec
+        return dict(rec)
 
     # -- guardian limit configuration --------------------------------
 
@@ -137,6 +214,13 @@ class MinorGuardFace(object):
             raise GuardError(
                 "E_MG_PARAM",
                 "spend limits must set single and daily together")
+        if self._db is not None:
+            self._db.execute(
+                "INSERT OR REPLACE INTO mg_limits VALUES (?, ?, ?, ?)",
+                (resident_id,
+                 ";".join("%04d-%04d" % (s, e) for s, e in wins),
+                 lim["single_cent"], lim["daily_cent"]))
+            self._db.commit()
         self._limits[resident_id] = lim
         return {"resident_id": resident_id,
                 "windows": ["%04d-%04d" % (s, e) for s, e in wins],
@@ -228,6 +312,25 @@ class MinorGuardFace(object):
         if ref in day["events"]:
             return {"resident_id": resident_id, "date": date, "ref": ref,
                     "spent_cent": day["spent_cent"], "idempotent": True}
+        if self._db is not None:
+            # db-first: the committed spend row survives a crash
+            # window before the in-memory commit (fail-closed
+            # direction for the minors daily cap). The UNIQUE
+            # (resident, date, ref) key absorbs cross-restart
+            # replays; a zero rowcount here means the store already
+            # holds the ref while the hydrated memory did not - an
+            # invariant violation that must not silently pass.
+            cur = self._db.execute(
+                "INSERT OR IGNORE INTO mg_day_spend"
+                " (resident_id, date, ref, amount_cent)"
+                " VALUES (?, ?, ?, ?)",
+                (resident_id, date, ref, amt))
+            self._db.commit()
+            if cur.rowcount == 0:
+                raise GuardError(
+                    "E_MG_DB",
+                    "ref already committed in store (memory/store "
+                    "divergence; refusing)")
         day["spent_cent"] += amt
         day["events"].append(ref)
         return {"resident_id": resident_id, "date": date, "ref": ref,

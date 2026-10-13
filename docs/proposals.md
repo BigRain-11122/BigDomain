@@ -26,3 +26,10 @@
 - 建议：启动「信号消费窗」试点——当轮修订 membership-spec（§〇 到期前提醒 bullet+§一 AC-M17 判据预注册+§二.1 提醒域两表+§七 实现件两件·预注册纪律=先改判据表再动实现），落 src/sandbox/member/reminder.py+test_reminder.py（纯本地模拟：模板审核闸+一次性/长期两型授权预算账+日限执法缩比+到期前时点触发+双时点【待证】模拟旗+零静默丢失降级横幅队列+幂等复扫），证据入 qa/；自动续费执行面维持【待证】不预建（AC-MP1 同注）。
 - 判据（≤3 问）：①spec 判据面含 W10 双时点（自动续费态【待证】注）+W15 通道约束（模板审核制/两型授权/日限两档）且 AC-M17 先于实现注册（预注册纪律·版本脚注 v0.2 在案）？②沙箱可跑：12 断言/10 判据面全绿+既有件零回归（test_member 25/16+entry_tier 7/7+reconcile 六查干净+CLI READY·qa/member-reminder-R1254.log 在盘）？③零新外部 API 触点（纯本地模拟·真实接线=bootstrap 窗三问门）+不预建律维持（MVP=手动续费单时点如实标注·on_accept 无义务面零落账不虚设）？
 - 试点判定（2026-10-06·R1254·当轮闭环）：判据 ①②③ 全过——①spec v0.2 修订在盘（AC-M17 表行先于 reminder.py 落码）；②test_reminder 12 断言 10 判据面 failed=none+回归三件全绿（qa/member-reminder-R1254.log）；③零新触点（模块纯标准库+零 key）+MVP on_accept=not_required_mvp 零落账断言在案 → 提案面闭环转采用（adopted·实施件已在盘=本提案不留 open 尾巴）；窗 10-06..10-13 配额已清（本条=窗内第 1 条）。
+
+### BD-PROP-004 qa 证据面月度归档常设步（2026-10-14·窗 10-14~10-21·状态 open·试点=下月度窗口轮）
+
+- 现象：qa/ 证据面随轮线性膨胀（census 实测 1365 件·其中 RUNNER 全量载体 reconcile-all-R*.log 每轮一件 ~150-300KB/1370+ 行·与逐套件证据日志大量内容重复）·git 仓体随之增长（集团 GIT-BLOAT-GATE 软限 1MB/commit 在册）——qa writer census 基线机制在册但零回收节律。
+- 建议：每月首个周日周轮（月度节律窗）把上月 reconcile-all-R*.log 载体 git mv 入 qa/archive/ 并 gzip（git 史零删改）·qa/ 活跃面仅留当月载体（矩阵发现面=qa/ 内 mtime-newest 合格件·归档不触发现面）+qa/archive-index.md 一轮一行 verdict 索引不缺。
+- 判据（≤3 问）：①归档轮定向 commit 增量 ≤1MB 软限且 git log 全史保留（git mv 无删除面）？②归档后抽 3 件 gzip 解压读回 RUNNER PASS 行完整逐字节？③下轮套件轮矩阵再生+--check 与 census 双绿零漂移（DRIFT-CLEAN）？
+- 收口三态：全过=转月度常设步；①③ 任一不过=当窗回滚 git mv（软限/发现面保护优先）如实留痕；②不过=判负留痕（负面结论也是产出）。〔2026-10-14 R1939 交：新窗首轮当轮补交·窗配额已清〕

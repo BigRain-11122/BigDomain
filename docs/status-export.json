@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T02:55:06+08:00",
+ "export_ts": "2026-10-14T03:42:40+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1938：场地/店面租约面（venue）做了「关服务重开、读数一字不差、五道闸照常拦截」验证——租期/容量/提前退租/审计轨迹跨重启全保真；总回归 176 套件全绿；证据在 qa/venue-persist-R1938.log 与 qa/reconcile-all-R1938.log",
-  "latest_artifact": "src/sandbox/ledger/test_venue_persist.py + qa/venue-persist-R1938.log + qa/reconcile-all-R1938.log，2026-10-14·176 套件 1571 判据 green·新增 ledger-venue-persist·场地读面族跨重启持久化例窗",
-  "next_milestone": "下轮 R1939：tech 队列 FIFO=minors 守护读面族 persist 认领（R1933 补种·最老开项）+雷达窗 6 清单 OH-20261014-cph4.md 今晚 21:40 到窗即过目"
+  "current": "R1939：未成年人守护面（minors）做了「关服务重开、监护限配/日消费帽/账面全复原、八道拒付闸照常拦截」的跨重启验证，并把守护账本落成可选 sqlite 持久层（崩溃窗日帽不丢=fail-closed 方向）；总回归 177 套件全绿；本轮=前窗崩溃交付的接管收口（live 复验内容逐行同一后上链）",
+  "latest_artifact": "src/sandbox/minors/test_minors_persist.py + src/sandbox/minors/minors.py（sqlite 持久层）+ qa/minors-persist-R1939.log + qa/reconcile-all-R1939.log，2026-10-14·177 套件 1578 判据 green·新增 minors-guard-persist·守护读面族跨重启持久化例窗",
+  "next_milestone": "下轮 R1940：tech 队列 FIFO=ledger ads 广告位读面族 persist 认领（R1934 补种·最老开项）+雷达窗 6 清单 OH-20261014-cph4.md 今晚 21:40 到窗即过目"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1939",
+   "R1939 minors guardian cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1938 closeout pointer; criteria AC-MGP1..MGP7 pre-registered in tech.md before code, with the AC-MGP5 same-window erratum = AC-W7 re-gate-first law, R1883 precedent) + crashed-round orphan-payload takeover closeout (seventh case of the R1937 lineage): the crashed R1939 attempt left all eight payload faces on disk with zero failed-run artifacts; this round live re-verified (suite stdout line-for-line identical to the evidence record with all three battery/report/instance digests matching, double-run byte-identical, matrix 177/1578 --check identical; raw-byte sha difference = probe caliber CRLF-vs-LF, not a content difference) and closed out. Product face = minors.py optional sqlite persistence layer (+115 lines: db_path=None default pure-memory path byte-identical drift-free for the 19+70 wiring criteria; db-first mirror so a crash window cannot lose a day-cap spend row = fail-closed persistence for the sec.31 minor-protection compliance face; three tables mg_residents/mg_limits/mg_day_spend, append-only day ledger with UNIQUE(resident,date,ref)). Three-instance world: anchor (four-resident spectrum + 8 refused probes + battery sha16 90ac70fd49071b9e) -> close/reopen byte-identical -> 8 restart-surviving gates -> real-path continuation (kid1 700 recompute + kid3 fresh-resident persistence + adult refused) -> frozen history + re-gate-passing idempotent replay absorbed + conservative re-gate refusal + ref-domain bucket law -> pure-read law -> third-instance stability; RUNNER PASS 177/177 criteria 1571->1578 controls 7/7 290.2s = qa/reconcile-all-R1939.log (census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 177/1578 green --check byte-identical (17303 bytes); proposal-track BD-PROP-004 delivered (window 10-14~10-21, qa evidence monthly archive step); tech consume 1 reseed 1 (settlement persist seeded, next FIFO head = ledger ads persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1939) + checker VERDICT PASS after the fix"
+  ],
+  [
    "R1938",
    "R1938 ledger venue cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1937 closeout pointer; criteria AC-VNP1..VNP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (plaza capacity-2 concurrent rentals + storefront lease/terminate/re-lease spectrum, five gate probes rejected zero-charge, digest c8315611ef644e8f) -> two-piece reverse-order close/reopen with the is_rented/tenant_of/occupancy_ledger battery byte-identical (tick-parameterized pure-value read faces, zero clock echo, no frozen clock needed) -> five restart-surviving gates -> post-restart real-path continuation (freed plaza slot + termination-freed storefront window both re-rented, bound to real spend txs via SQL cross, zero-cache recompute) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; first-run one-anchor fail (world build missed register_venue, not a product defect) fixed same window, honestly noted; RUNNER PASS 176/176 criteria 1564->1571 controls 7/7 211.8s = qa/reconcile-all-R1938.log (census DRIFT-CLEAN); matrix regen 176/1571 green --check byte-identical (17228 bytes); tech consume 1 reseed 1 (identity persist candidate added, queue_tech_open 10->10, next FIFO head = minors persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1938) + checker VERDICT PASS after the fix"
   ],
@@ -359,23 +363,19 @@
    "pay-notify-bannerpersist 跨重启持久化 7/7+RUNNER 132/132+W23 crawl 入册"
   ],
   [
-   "R1883",
-   "pay-notify-bannerroll 月滚保真例窗 7/7+RUNNER 131/131+daily PASS"
-  ],
-  [
-   "1938",
+   "1939",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 15,
+  "log_lines_in_window": 17,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
-  "proposals_total": 3,
-  "proposals_open": 1,
+  "substantive_non_idle_mention_lines": 3,
+  "proposals_total": 4,
+  "proposals_open": 2,
   "queue_main_open": 6,
   "queue_tech_open": 10,
   "queue_explore_open": 10,

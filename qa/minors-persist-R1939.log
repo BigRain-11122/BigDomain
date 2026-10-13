@@ -1,0 +1,88 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-MGP1: anchor world battery sha16=90ac70fd49071b9e; 8 probes refused same-code; counts {'mg_residents': 4, 'mg_limits': 2, 'mg_day_spend': 3}; adult pass-through
+PASS AC-MGP2: battery replay == pre-close snapshot byte-identical (sha16=90ac70fd49071b9e); second read self-identical
+PASS AC-MGP3: 8 restart probes refused same codes; 3-table counts constant {'mg_residents': 4, 'mg_limits': 2, 'mg_day_spend': 3}; pass-through alive
+PASS AC-MGP4: continuation recomputed 1200/[tx-sub-2, tx-sub-3] != cached pre-close; kid3 registered+limited+first spend on reopened instance; adult ledger refused
+PASS AC-MGP5: history bucket frozen == pre-close; tx-b replay idempotent in re-gate-passing state (rows absorbed); tx-sub-2 replay refused by re-gate-first law (AC-W7 conservative direction, zero mutation); same ref on another date = new row (ref-domain bucket law)
+PASS AC-MGP6: battery double-read byte-identical; 3-table counts constant across the read batch; report double-run byte-identical (sha16=3f7fab498fdecc3b)
+PASS AC-MGP7: third instance == instance-2 terminal state byte-identical (sha16=749b6d6eced3f35a); default db_path=None memory mode drift-free; sources pure ASCII; zero-network imports; world db outside repo
+
+SUITE PASS - 7/7 green
+
+sha16 run1=dbc04a064efb027a run2=dbc04a064efb027a byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e4fezyky\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (177/177 suites green, reconcile controls 7/7, 290.2s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17303 bytes) - registry suites=177 criteria=1578 evidence=qa/reconcile-all-R1939.log green=177/177
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17303 bytes, 177 suites, 1578 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1365 tee=863 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/minors/minors.py
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1939.log
+?? src/os/evidence_R1939.py
+?? src/sandbox/minors/test_minors_persist.py
+
+VERDICT PASS
