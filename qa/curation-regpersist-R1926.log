@@ -1,0 +1,20 @@
+--- run 1 exit=0 ---
+PASS AC-CRP1: pre-close pinning: registry board 2 rows (alpha mc=2, beta mc=1) == manual SQL; view members positions 1..2 with live on_display 1/2 == latest-action law; tour alpha 3 stops globally numbered 1..3 across sh-one+sh-two, tour beta 1 stop; envelopes/rows key sets exact-pinned; stops == manual displayed-id concatenation
+PASS AC-CRP2: CurationFace close -> new instance over the SAME ShowcaseFace object and the same curation db path: reopened active_curations + curation_view x2 + curation_tour x2 all byte-identical to the pre-close snapshots (sort_keys dumps; zero in-memory drift in the derived read faces)
+PASS AC-CRP3: post-restart placement of cl_e into member showcase sh-two: cu-alpha view recomputed zero-cache (sh-two on_display 2 -> 3), tour gained stop 4 (global numbering continues across the sh-two segment end), envelopes differ from the pre-restart snapshots
+PASS AC-CRP4: post-restart new registration cu-gamma (members sh-three + sh-one, registered order): registry board gained the row at the rowid tail with member_count 2 == manual SQL; view positions 1..2 in registered order; tour 2 stops globally numbered across the two member showcases - all recomputed zero-cache
+PASS AC-CRP5: second curation-face restart (third instance, same ShowcaseFace + same db): all seven form reads byte-identical to the post-mutation state and the repeated board read identical to itself (repeat-read purity, zero in-memory drift)
+PASS AC-CRP6: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events row counts constant ({"curation_members": 5, "curations": 3, "exhibit_events": 5, "showcases": 3}); product files sha256 unchanged (curation.py, showcase.py, ledger.py, both shipped config.json)
+PASS AC-CRP7: hygiene: source pure ASCII (18093 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (7/7 criteria green)
+--- run 2 exit=0 ---
+PASS AC-CRP1: pre-close pinning: registry board 2 rows (alpha mc=2, beta mc=1) == manual SQL; view members positions 1..2 with live on_display 1/2 == latest-action law; tour alpha 3 stops globally numbered 1..3 across sh-one+sh-two, tour beta 1 stop; envelopes/rows key sets exact-pinned; stops == manual displayed-id concatenation
+PASS AC-CRP2: CurationFace close -> new instance over the SAME ShowcaseFace object and the same curation db path: reopened active_curations + curation_view x2 + curation_tour x2 all byte-identical to the pre-close snapshots (sort_keys dumps; zero in-memory drift in the derived read faces)
+PASS AC-CRP3: post-restart placement of cl_e into member showcase sh-two: cu-alpha view recomputed zero-cache (sh-two on_display 2 -> 3), tour gained stop 4 (global numbering continues across the sh-two segment end), envelopes differ from the pre-restart snapshots
+PASS AC-CRP4: post-restart new registration cu-gamma (members sh-three + sh-one, registered order): registry board gained the row at the rowid tail with member_count 2 == manual SQL; view positions 1..2 in registered order; tour 2 stops globally numbered across the two member showcases - all recomputed zero-cache
+PASS AC-CRP5: second curation-face restart (third instance, same ShowcaseFace + same db): all seven form reads byte-identical to the post-mutation state and the repeated board read identical to itself (repeat-read purity, zero in-memory drift)
+PASS AC-CRP6: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events row counts constant ({"curation_members": 5, "curations": 3, "exhibit_events": 5, "showcases": 3}); product files sha256 unchanged (curation.py, showcase.py, ledger.py, both shipped config.json)
+PASS AC-CRP7: hygiene: source pure ASCII (18093 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (7/7 criteria green)
+
+DOUBLE-RUN stdout byte-identical: PASS

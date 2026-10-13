@@ -722,6 +722,21 @@ SUITES = [
     # (AC-HBP1..HBP6 pre-registered in state/queue/tech.md).
     ("ledger-curation-hotpersist",
      os.path.join("ledger", "test_curation_hotpersist.py"), 6),
+    # R1926 curation registry / tour read-face family
+    # cross-restart persistence example window (R1923-reseeded
+    # tech-queue row claimed by R1926): active_curations
+    # registry board + curation_view facts/members read +
+    # curation_tour global stop-numbered tour - CurationFace
+    # close -> new instance over the SAME ShowcaseFace and the
+    # same curation db: pre-close three-form snapshots ==
+    # reopened reads byte-identical, zero-cache recompute after
+    # a post-restart placement and a post-restart new
+    # registration, third-instance sequential reads
+    # byte-identical, pure-read law, manual-SQL cross,
+    # product-file sha256 double-proof (suite-only round)
+    # (AC-CRP1..CRP7 pre-registered in state/queue/tech.md).
+    ("ledger-curation-regpersist",
+     os.path.join("ledger", "test_curation_regpersist.py"), 7),
     # R1752 citizen civic-behavior points face: earned-only points
     # inside the counts-vs-tokens isolation law (constructor takes
     # NO ledger reference - token domain structurally out of reach),
