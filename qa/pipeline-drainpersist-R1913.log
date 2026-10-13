@@ -1,0 +1,43 @@
+=== [1] suite double-run: test_drain_waterpersist.py AC-DR7..AC-DR13 ===
+run1 rc=0 (full stdout):
+PASS AC-DR7: envelope-keys=True rows-kind-drain=True sql-oct=2 total=2 rec1=True rec2=True slot1-cells={"noise.by_reason.emoji_only": 1, "noise.total": 1, "review.suspended": 1} slot2-zero=True
+PASS AC-DR8: oct-replay=True double-read-identical=True
+PASS AC-DR9: default-replay=True levels-replay=True fresh-slot-none=True
+PASS AC-DR10: sql-nov=1 default-recomputed=True oct-frozen=True slot-nov-cells={"review.suspended": 1} nov-slice=True rec3=True
+PASS AC-DR11: nov-rows-drain=True nov-total==sql=True telescope 2+1==3 future-empty=True
+PASS AC-DR12: oct==original=True default==inst2-final=True seq-oct=True seq-default=True
+PASS AC-DR13: pure-read=True journal-append-only=True segment-strip=True ascii=True net-clean=True registry-wired=True clock-restored=True product-sha-stable=True
+SUITE PASS 7/7
+run2 rc=0
+run1 sha16=37b7a894addf25c9 run2 sha16=37b7a894addf25c9 byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1913.log)
+RUNNER PASS (155/155 suites green, reconcile controls 7/7, 180.7s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15370 bytes, 155 suites, 1421 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1315 tee=813 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS

@@ -1445,6 +1445,25 @@ SUITES = [
     # state/queue/tech.md)
     ("member-balanceface-persist", os.path.join(
         "member", "test_balance_face_persist.py"), 7),
+    # R1913 drain_recover recovery-window water read faces
+    # cross-restart persistence suite (the R1908 seed): the full
+    # pipeline stack (store + batch + journal) closes and a fresh
+    # UGCPipeline reopens on the same config bytes and db path --
+    # the October explicit-window board read and the default
+    # whole-board read replay byte-identically to the pre-close
+    # snapshots, the store levels envelope replays byte-identically
+    # while the fresh instance's single-slot last_water_delta()
+    # reads an honest None (the journal is the history carrier),
+    # NEW degraded rows queued on the restarted instance land one
+    # November drain window through the REAL drain_recover()
+    # product path which recomputes the default read zero-cache
+    # while the October window read stays byte-frozen (record-
+    # time rows immutable, zero penetration), and a third
+    # instance replays the post-injection state byte-identically
+    # (double-restart x new-data no drift)
+    # (AC-DR7..AC-DR13 pre-registered in state/queue/tech.md)
+    ("ugc-drain-waterpersist", os.path.join(
+        "ugc", "test_drain_waterpersist.py"), 7),
 ]
 
 FAILS = 0
