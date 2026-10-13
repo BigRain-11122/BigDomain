@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T07:09:41+08:00",
+ "export_ts": "2026-10-14T07:37:13+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech FIFO: ledger apimarket cross-restart persist suite delivered 7/7 (AC-AMP1..AMP7, four-piece restart world, 10 restart-surviving gates); RUNNER full regression 184/184 green",
-  "latest_artifact": "src/sandbox/ledger/test_apimarket_persist.py + qa/apimarket-persist-R1946.log (2026-10-14)",
-  "next_milestone": "next: ledger effects persist seat (R1942-seeded FIFO head) + fold R511 state waterline at round start; window <=48h (by 2026-10-16)"
+  "current": "P2 tech FIFO: ledger effects cross-restart persist suite delivered 7/7 (AC-EFP1..EFP7, two-piece restart, 9 restart-surviving gates, pre-restart credits keep serving post-restart); RUNNER full regression 185/185 green; fold R511 state waterline honored (79124->72352B)",
+  "latest_artifact": "src/sandbox/ledger/test_effects_persist.py + qa/effects-persist-R1947.log (2026-10-14)",
+  "next_milestone": "next: ledger honorcert persist seat (R1943-seeded FIFO head); window <=48h (by 2026-10-16)"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1947",
+   "ledger effects cross-restart persist suite 7/7 (AC-EFP1..EFP7; two-piece restart, 9 gate probes, three-lane frozen faces, pre-restart credits keep serving, RUNNER 185/185, fold R511)"
+  ],
+  [
    "R1946",
    "ledger apimarket cross-restart persist suite 7/7 (AC-AMP1..AMP7; four-piece restart, 10 gate probes, frozen rows, RUNNER 184/184)"
   ],
@@ -355,21 +359,17 @@
    "apidev chain_usage read-cap limit 6/6 (criteria 8->14) + RUNNER 136/136 criteria 1277 + matrix byte-identical + census DRIFT-CLEAN + sentinel CLEAN (LU14 count-pin same-round fix 13->12: pre-LU7 RESULTS tally)"
   ],
   [
-   "R1892",
-   "lobby chat.send idem_seen restart-semantics 5/5 (criteria 41->46) + RUNNER 136/136 criteria 1271 + matrix byte-identical + census DRIFT-CLEAN (AC-S42 same-round judge fix: FIFO re-remember evicts the next-oldest survivor)"
-  ],
-  [
-   "1946",
+   "1947",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 17,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

@@ -1,0 +1,88 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-EFP1: anchor world pinned (ada buys all four kinds 50/10/10/10 = credits #1..#4 each bound to a real spend tx; bob buys flood@10 = credit #5 for the cross-kind probe; purchase-ref replay of order:efp-a1 absorbed idempotently onto credit #1 with zero second charge; ada fires dynamic + limit-up effects #1/#2 consuming credits #1/#2; carol stays a zero-row pure face; credits=5 effects=2 spend-tx=5; balances 220/90/200, pool:reserve 490 = consumption flows back in); nine gate probes rejected (bad-acc-buy=E_EFF_BAD_ACCOUNT; bad-kind-buy=E_EFF_BAD_KIND; bad-kind-use=E_EFF_BAD_KIND; zero-price=E_EFF_BAD_AMOUNT; empty-buy-ref=E_EFF_BAD_REF; empty-msg-ref=E_EFF_BAD_MESSAGE; empty-use-ref=E_EFF_BAD_REF; bob-no-credit=E_EFF_NO_CREDIT; bob-cross-kind=E_EFF_NO_CREDIT); counts and battery frozen across the probe batch; digest=d8f38710b9951a62
+PASS AC-EFP2: two-piece close (fx.close + led.close) -> Ledger same db/cfg + EffectsFace fresh: read battery byte-identical to the pre-close snapshot (credits and effects views for all three accounts with persisted spend-tx provenance and consumption state + four balances), diffs=none; the effects read faces rebuild over the same effect_credits/effect_events rows with zero in-memory drift; digest=d8f38710b9951a62
+PASS AC-EFP3: restart-surviving gates: nine probes all rejected with identical codes on instance 2 (bad-acc-buy=E_EFF_BAD_ACCOUNT; bad-kind-buy=E_EFF_BAD_KIND; bad-kind-use=E_EFF_BAD_KIND; zero-price=E_EFF_BAD_AMOUNT; empty-buy-ref=E_EFF_BAD_REF; empty-msg-ref=E_EFF_BAD_MESSAGE; empty-use-ref=E_EFF_BAD_REF; bob-no-credit=E_EFF_NO_CREDIT; bob-cross-kind=E_EFF_NO_CREDIT); the kind registry gate rides the CHECK constraint, the no-credit gates ride the persisted unconsumed-credit rows, the arg gates ride the module law - every gate survives the restart; counts and battery frozen across the probe batch (credits=5 effects=2 unchanged, zero movement)
+PASS AC-EFP4: post-restart continuation: ada's pre-restart message_pin credit #4 keeps serving the new use (effect #3) and her pre-restart flood credit #3 keeps serving the new use (effect #4) - the persisted credit pool survives the restart as live ammunition; carol runs a fresh purchase->use chain: dynamic_emoji@5 buys credit #6 bound to a fresh spend tx (SQL cross: type=spend with the usr:carol debit leg) and fires effect #5; credits 5->6, effects 2->5, spend-tx 5->6; balances ada 220 / bob 90 / carol 200->195, pool:reserve 490->495; bob's flood credit still unconsumed, carol's credit consumed; digest=31291bdd676b171e
+PASS AC-EFP5: frozen faces, three lanes: the continuation-untouched credit rows (#1/#2 consumed pre-close with their consumed_utc marking and used_effect bindings, #5 bob's idle round) keep every one of the nine columns byte-identical to the pre-close snapshot; credits #3/#4 - consumed BY DESIGN by the continuation (consumption marking is the module's single UPDATE surface) - keep their identity columns frozen (account/kind/ref/price/bound spend tx/ purchased_utc) while the transition lands as asserted (credit #3 consumed by effect #4, credit #4 consumed by effect #3, both consumed_utc set); every pre-existing effect row (all seven columns) stays byte-identical (immutable rows, zero UPDATE); replay gates across the restart: purchase-ref replay returns the original credit #1 idempotently with the original spend tx and zero second charge, use-ref replay returns the original effect #1 idempotently with zero second consumption, cross-account replay of use:efp-u1 by bob rejected E_EFF_DUP_USE, exhausted-kind reuse rejected E_EFF_NO_CREDIT; counts and battery frozen across all four replay probes
+PASS AC-EFP6: pure-read law: full battery read twice back-to-back - credits/effects views for all three accounts plus four balances byte-identical between the two reads and table counts constant (read faces have zero side effects)
+PASS AC-EFP7: third instance: two-piece close -> reopen same db once more - battery byte-identical to the instance-2 terminal state (diffs=none, views and balances stable across a second restart); shipped files untouched (config + effects/ledger sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+sha16 run1=58e11bba9577f3d9 run2=58e11bba9577f3d9 byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-yf8nc07w\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (185/185 suites green, reconcile controls 7/7, 248.5s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17982 bytes) - registry suites=185 criteria=1634 evidence=qa/reconcile-all-R1947.log green=185/185
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17982 bytes, 185 suites, 1634 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1381 tee=879 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1947.log
+?? src/os/claim_R1947.py
+?? src/os/erratum_R1947.py
+?? src/os/evidence_R1947.py
+?? src/sandbox/ledger/test_effects_persist.py
+
+VERDICT PASS

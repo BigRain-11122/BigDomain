@@ -1803,6 +1803,20 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("ledger-apimarket-persist", os.path.join(
         "ledger", "test_apimarket_persist.py"), 7),
+    # R1947 effects persist seat of the R1886 family: two-piece
+    # restart (the face rides the same ledger.db with its own
+    # connection), byte-identical read replay across credits and
+    # effects views for three accounts + four balances, nine
+    # restart-surviving gate probes, post-restart continuation
+    # where pre-restart credits keep serving new uses and a fresh
+    # purchase->use chain lands on a new account, three-lane
+    # frozen faces (R1947 first-run erratum: continuation-consumed
+    # credits freeze identity columns with asserted transition) +
+    # idempotent replay gates, pure-read law, third instance
+    # stability (AC-EFP1..EFP7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-effects-persist", os.path.join(
+        "ledger", "test_effects_persist.py"), 7),
 ]
 
 FAILS = 0
