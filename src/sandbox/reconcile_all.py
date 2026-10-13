@@ -167,6 +167,15 @@ SUITES = [
     ("ledger-settlement",
      os.path.join("ledger", "test_settlement.py"), 7),
     ("ledger-venue", os.path.join("ledger", "test_venue.py"), 7),
+    # venue persist window: cross-restart byte-identical replay of
+    # the is_rented/tenant_of/occupancy_ledger read battery,
+    # restart-surviving gate probes, post-restart continuation on a
+    # freed slot and a termination-freed storefront window, frozen
+    # faces + dup/full gates, pure-read law, third instance
+    # stability (AC-VNP1..VNP7 pre-registered in state/queue/
+    # tech.md).
+    ("ledger-venue-persist", os.path.join(
+        "ledger", "test_venue_persist.py"), 7),
     ("ledger-collectibles",
      os.path.join("ledger", "test_collectibles.py"), 7),
     ("ledger-expedite",
