@@ -1374,6 +1374,18 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-apidev-keyviewpersist", os.path.join(
         "ledger", "test_apidev_keyviewpersist.py"), 7),
+    # R1908 apidev reject_tally windowed read cross-restart
+    # persistence: three-piece close/reopen replays the October
+    # windowed diagnostic aggregate (window echo + by_reason
+    # GROUP BY + total over immutable key-attributed reject
+    # rows) byte-for-byte; one November disabled-kind reject on
+    # the pinned key (ancestry-inclusive cap-3 dual-reject world)
+    # recalculates the clock-following default read (zero cache)
+    # while the October windowed read stays byte-frozen; third-
+    # instance identity; pure-read law + hygiene
+    # (AC-RJW8..AC-RJW14 pre-registered in state/queue/tech.md)
+    ("ledger-apidev-rejecttallpersist", os.path.join(
+        "ledger", "test_apidev_rejecttallpersist.py"), 7),
 ]
 
 FAILS = 0

@@ -1,0 +1,41 @@
+=== [1] suite double-run: test_apidev_rejecttallpersist.py AC-RJW8..AC-RJW14 ===
+run1 rc=0 (full stdout):
+PASS AC-RJW8: October anchor world: cap-3 rotate chain (chain-a 2 calls -> chain-b) with the ancestry-inclusive quota gate gives chain-b a dual-reject family {E_AD_KIND: 1, E_AD_QUOTA: 1} total 2 (SQL count==2 whole-db==2, manual GROUP BY cross ==True, kind reject fired=True quota reject fired=True both zero call rows: chain-b call rows==1 whole-db==4), W=2026-10 SQL-derived from chain-b's first reject row; envelope 6-key pin, default ==explicit October byte-identical=True, nov/fut honest empty ({}), lone-e live-key honest empty face=True
+PASS AC-RJW9: full stack close (reverse order) -> reopen same db/config: October windowed reject_tally envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-RJW10: default current-month read (clock still October, default month == explicit October) replayed byte-identical=True, nov honest-empty=True, fut honest-empty=True -- the derived aggregate face carries zero in-memory state across the restart
+PASS AC-RJW11: frozen clock +23d -> one November disabled-kind reject on chain-b (the very key whose October windowed read is pinned) via the real product call chain (record-time window=2026-11 SQL count==1, api_calls rows unchanged 4 == October's 4: rejects fire before the billing ring and the local append): default read followed the clock into November and recalculated (window=2026-11 by_reason={'E_AD_KIND': 1} total=1, byte-differs from the pre-close default snapshot=True = zero cache), November explicit window read == default=True
+PASS AC-RJW12: after the November injection on the same pinned key: October windowed read stays FULL-envelope byte-frozen=True (reject_events rows are record-time immutable and the reject_tally envelope carries zero clock-following fields, so no projection is needed), telescoping chain-b all-time 3 == oct 2 + nov 1, whole-db 3 == 2 + 1 immutable rows never lost
+PASS AC-RJW13: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True), and the October windowed read still equals the ORIGINAL pre-close snapshot=True (windowed read survives restart x new-data unscratched, full envelope)
+PASS AC-RJW14: pure read: 9-form read battery across both keys plus the unknown-key gate probe (fired=True) moves zero rows (api_calls 4==4, api_dev_keys 3==3, key_events 2==2, reject_events 3==3), reject_tally segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True, runner row wired=True
+SUITE apidev-rejecttallpersist: 7/7 criteria pass
+clock restore probe: True
+run2 rc=0
+run1 sha16=9c97d6d311376497 run2 sha16=9c97d6d311376497 byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1908.log)
+RUNNER PASS (150/150 suites green, reconcile controls 7/7, 166.2s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (14888 bytes, 150 suites, 1381 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1306 tee=804 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+
+VERDICT PASS

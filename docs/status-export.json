@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13T08:48:42+08:00",
+ "export_ts": "2026-10-13T09:08:58+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 技术深耕线 FIFO 持续交付：apidev key_view 窗读跨重启持久化例窗本轮闭环（套件 149 入册·判据 1374 全绿）",
-  "latest_artifact": "src/sandbox/ledger/test_apidev_keyviewpersist.py + qa/apidev-keyviewpersist-R1907.log + qa/reconcile-all-R1907.log（RUNNER 149/149）·2026-10-13",
-  "next_milestone": "下轮 P2 队头 FIFO：apidev reject_tally 窗读跨重启例窗（R1903 补种在册种子）交付·窗 ≤48h（2026-10-15 前）"
+  "current": "P2 技术队头 FIFO 交付：apidev reject_tally 窗读跨重启持久化套件 7/7 直收——RUNNER 150 套件·判据 1381 全绿；轮首 fold R504 水位手术兑现（state 80930→51435B）",
+  "latest_artifact": "src/sandbox/ledger/test_apidev_rejecttallpersist.py + qa/apidev-rejecttallpersist-R1908.log + qa/reconcile-all-R1908.log（2026-10-13）",
+  "next_milestone": "下个 P2 队头 FIFO：apidev lifecycle_trace 窗读跨重启持久化例窗（R1904 补种在册·后继族四种滚动交付：lifecycle_trace/水三姊妹/usage_kind_tally/balance_face），窗 ≤48h（2026-10-15 前）"
  },
  "depts": [
   {
@@ -795,7 +795,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1907",
+   "1908",
    "OSLoop 执行 tick"
   ],
   [
@@ -3741,15 +3741,19 @@
   [
    "2",
    "R1907 apidev key_view 窗读跨重启持久化套件（P2 tech 队头 FIFO〔R1902 补种〕·轮计分 2=可跑实物）：AC-KVW8..KVW14 判据预注册先于代码〔tech.md R1907 认领行〕——三裁定（载体=三件套逆序关重开/注入面=重开实例真径 2 新调于面板所钉本键/比较面=分带投影律——18 键面板双分钟字段钟随行·跨钟 strip·纯重启全信封）：AC-KVW8 关前四元快照（rotate 链+E_AD_QUOTA 拒行·18 键钉死+quota 3==ancestry SQL+reject/kind tally exact-key 交叉）+AC-KVW9 跨重启 oct 显式读逐字节复原+AC-KVW10 缺省+死键+nov+fut 复原+AC-KVW11 +23d 2 真调→缺省读随钟重算〔零缓存〕+AC-KVW12 老窗零渗透=oct 分带投影==关前〔全信封差恰分钟双字段〕+AC-KVW13 第三实例序贯读同一〔双劫不漂〕+AC-KVW14 纯读律+卫生——SUITE 7/7 双跑逐字节同一〔sha16 cec3fddf0128980c〕+RUNNER 149/149 判据 1367→1374〔SUITES 148→149〕=qa/reconcile-all-R1907.log+矩阵 149/1374 --check byte-identical×2+census DRIFT-CLEAN+哨兵 CLEAN domains=5=qa/apidev-keyviewpersist-R1907.log；tech consumed 1 + reseeded 1（member balance_face persist seed）"
+  ],
+  [
+   "2",
+   "R1908 apidev reject_tally 窗读跨重启持久化例窗交付轮+fold R504 轮首兑现（P2 tech 队头 FIFO·计分 2=可跑实物）——判据预注册先于代码（AC-RJW8..RJW14）+三裁定入册（三件套全栈关重开/血缘反逃避 cap-3 双拒行族/全信封比较面）+套件 suite-only 产品零改动 7/7（十月锚四元快照+跨重启逐字节复原+十一月本键注入缺省重算零缓存+老窗零渗透+第三实例同一+纯读律卫生）+双跑 stdout 逐字节同一 sha16 9c97d6d311376497+RUNNER 150/150 判据 1374→1381+矩阵 150/1381 byte-identical×2+census DRIFT-CLEAN+哨兵 CLEAN domains=5=qa/apidev-rejecttallpersist-R1908.log 五节 VERDICT PASS；fold R504=R1898..R1907 tail-20 滚窗并折 80930→51435B predicted_eq_actual·archive §R1908 verbatim+preop 备份；tech 消耗 1+补种 1（ugc pipeline drain_recover 种子）"
   ]
  ],
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 9,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 10,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
