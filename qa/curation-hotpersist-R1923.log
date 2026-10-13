@@ -1,0 +1,77 @@
+=== curation hot_board cross-restart persistence suite - double run (R1923) ===
+---- RUN 1 rc=0 sha16=ba370ed2c04c2eaf bytes=1630 ----
+PASS AC-HBP1: pre-restart board pinned rank1 cu-alpha total=3 members=2, rank2 cu-beta / rank3 cu-gamma both total=2 with curation_id ASC tie-break; envelope keys ['disclaimer', 'hot_board'], row keys ['ai_label', 'curation_id', 'displayed_total', 'member_count', 'rank', 'title']; manual SQL second-derivation totals {"cu-alpha": 3, "cu-beta": 2, "cu-gamma": 2}
+PASS AC-HBP2: full-stack close (cu -> sh -> led) then rebuild on the same three db paths: reopened hot_board == pre-close envelope byte-identical (493 bytes, dumps sort_keys); zero in-memory drift in the derived read
+PASS AC-HBP3: post-restart retract cl_b out of sh-one + re-place into sh-four (live counts 2->1 and 2->3): board recomputed zero-cache, all three ranks flipped (gamma 3->1, alpha 1->2, beta 2->3) with the new alpha/beta tie at total=2 broken by curation_id ASC; envelope differs from the pre-restart snapshot; manual SQL totals {"cu-alpha": 2, "cu-beta": 2, "cu-gamma": 3}
+PASS AC-HBP4: second curation-face restart (third instance on the same db): sequential hot_board reads byte-identical to the post-mutation state and to each other (repeat-read purity, zero in-memory drift)
+PASS AC-HBP5: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events row counts constant ({"curation_members": 4, "curations": 3, "exhibit_events": 9, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json)
+PASS AC-HBP6: hygiene: source pure ASCII (13178 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+---- RUN 2 rc=0 sha16=ba370ed2c04c2eaf bytes=1630 ----
+PASS AC-HBP1: pre-restart board pinned rank1 cu-alpha total=3 members=2, rank2 cu-beta / rank3 cu-gamma both total=2 with curation_id ASC tie-break; envelope keys ['disclaimer', 'hot_board'], row keys ['ai_label', 'curation_id', 'displayed_total', 'member_count', 'rank', 'title']; manual SQL second-derivation totals {"cu-alpha": 3, "cu-beta": 2, "cu-gamma": 2}
+PASS AC-HBP2: full-stack close (cu -> sh -> led) then rebuild on the same three db paths: reopened hot_board == pre-close envelope byte-identical (493 bytes, dumps sort_keys); zero in-memory drift in the derived read
+PASS AC-HBP3: post-restart retract cl_b out of sh-one + re-place into sh-four (live counts 2->1 and 2->3): board recomputed zero-cache, all three ranks flipped (gamma 3->1, alpha 1->2, beta 2->3) with the new alpha/beta tie at total=2 broken by curation_id ASC; envelope differs from the pre-restart snapshot; manual SQL totals {"cu-alpha": 2, "cu-beta": 2, "cu-gamma": 3}
+PASS AC-HBP4: second curation-face restart (third instance on the same db): sequential hot_board reads byte-identical to the post-mutation state and to each other (repeat-read purity, zero in-memory drift)
+PASS AC-HBP5: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events row counts constant ({"curation_members": 4, "curations": 3, "exhibit_events": 9, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json)
+PASS AC-HBP6: hygiene: source pure ASCII (13178 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+DOUBLE-RUN verdict: rc=0/0 stdout byte-identical=True
+SUITE-DOUBLE-RUN PASS
+... runner in flight 15s (0 lines captured)
+... runner in flight 30s (0 lines captured)
+... runner in flight 45s (468 lines captured)
+... runner in flight 60s (656 lines captured)
+... runner in flight 75s (832 lines captured)
+... runner in flight 90s (937 lines captured)
+... runner in flight 105s (957 lines captured)
+... runner in flight 120s (985 lines captured)
+... runner in flight 135s (1113 lines captured)
+... runner in flight 150s (1168 lines captured)
+... runner in flight 165s (1537 lines captured)
+... runner in flight 180s (2019 lines captured)
+... runner in flight 195s (2182 lines captured)
+---- full RUNNER (163 suites incl. ledger-curation-hotpersist) rc=0 ----
+PASS suite ledger-curation exit=0 pass-lines=19 fail-lines=0 criteria=19 0.3s
+PASS suite ledger-curation-hotpersist exit=0 pass-lines=6 fail-lines=0 criteria=6 0.2s
+RUNNER PASS (163/163 suites green, reconcile controls 7/7, 185.8s)
+runner evidence file sha16=f9a074ecde2a8695 bytes=343191
+RUNNER-VERDICT PASS 163/163
+---- suite matrix regen + double --check ----
+regen rc=0
+PASS generated docs/sandbox-suite-matrix.md (16086 bytes) - registry suites=163 criteria=1480 evidence=qa/reconcile-all-R1923.log green=163/163
+--check run 1 rc=0 stdout sha16=cca0b6b35682d830
+--check run 2 rc=0 stdout sha16=cca0b6b35682d830
+---- logs census --check ----
+census rc=2
+---- fingerprint sentinel (schema drift) ----
+sentinel rc=0
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+matrix doc sha16=b923252675e3b2ee bytes=16086
+EVIDENCE-CHAIN FAIL
+---- logs census (plain, mismatch/dangling exit law) ----
+[driver note: prior step-3 census probe used a bogus --check flag (unrecognized-argument exit 2, zero state/archive reads) - invocation-bug honest note,
+census rc=0
+  "section_line_mismatches": [
+      "reason": "R1314 window line was split into two physical lines at archive write (573+1196 chars, one logical line) - pre-fix line-layer splice-defect era artifact (R1257/R1303/R1312 family; the fragment itself cites the same-type repair). Content byte-preserved, zero data loss. Evidence: qa/logs-census-R1688.log section 2c probe."
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+      "dangling": [],
+  "dangling_total": 0,
+  "known_findings_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\census_known_findings.json",
+  "dangling_known": [],
+  "unknown_mismatch_count": 0,
+  "unknown_dangling_count": 0,
+CENSUS-VERDICT DRIFT-CLEAN

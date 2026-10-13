@@ -708,6 +708,20 @@ SUITES = [
     # criteria 12 -> 19.
     ("ledger-curation",
      os.path.join("ledger", "test_curation.py"), 19),
+    # R1923 curation hot_board cross-restart persistence example
+    # window: the theme heat board is pure-derived over THREE
+    # databases (curation registry + live showcase display state
+    # + ledger ownership), so the suite pins derived purity across
+    # full-stack instance restarts - pre-close envelope byte-
+    # identical to the reopened read, zero-cache recompute with
+    # rank flips and curation_id tie-break following after a
+    # post-restart placement/retract, third-instance sequential
+    # reads byte-identical, pure-read law across restarts,
+    # manual-SQL second-derivation cross, product-file sha256
+    # double-proof (suite-only round, zero product changes)
+    # (AC-HBP1..HBP6 pre-registered in state/queue/tech.md).
+    ("ledger-curation-hotpersist",
+     os.path.join("ledger", "test_curation_hotpersist.py"), 6),
     # R1752 citizen civic-behavior points face: earned-only points
     # inside the counts-vs-tokens isolation law (constructor takes
     # NO ledger reference - token domain structurally out of reach),
