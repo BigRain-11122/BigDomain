@@ -1,0 +1,27 @@
+--- section 1: suite run 1 (rc=0 sha16=fcf1d86f3f4f8d70) ---
+PASS AC-DSVP1: anchor world pinned (registered devs ada quota 12 + lin quota 5; devshare w1 explicit paid [(ada,34),(lin,15)] total 49; w2 usage-derived paid [(lin,15),(ada,34)] total 49; cross-face UGC w1 same caller id settles 30 independently = namespace anchor; balances 498/530/0 (funded 600/600 minus the credit packs 200/100 which land in pool:reserve), pool:share 3872, pool:reserve 4100; incentive_windows=3 share-tx=5); five gate probes rejected (not-dev=E_DS_NOT_DEV; dup-devshare=E_INC_WINDOW_DUP; dup-ugc=E_INC_WINDOW_DUP; empty=E_INC_EMPTY; no-usage=E_DS_NO_USAGE); counts and battery frozen across the probe batch; digest=45c6a901355d9c09
+PASS AC-DSVP2: five-piece close->reopen (ds.close -> inc.close -> dk.close -> metered.close -> led.close -> Ledger same db/cfg + MeteredFace + DevKeyFace + DevShareFace + IncentiveFace fresh): read battery byte-identical to the pre-close snapshot (windows history with persisted settled_utc rows + both dev boards with registered/purchased/consumed utc values + five balances), diffs=none; the read-only dock rebuilds over the same incentive_windows values with zero in-memory drift; digest=45c6a901355d9c09
+PASS AC-DSVP3: restart-surviving gates: five probes all rejected with identical codes on instance 2 (not-dev=E_DS_NOT_DEV; dup-devshare=E_INC_WINDOW_DUP; dup-ugc=E_INC_WINDOW_DUP; empty=E_INC_EMPTY; no-usage=E_DS_NO_USAGE); the window idempotence lives in the shared incentive_windows table so both dup gates (devshare namespace and UGC namespace) survive the restart; counts and battery frozen across the probe batch (windows=3 share-tx=5 unchanged, zero movement)
+PASS AC-DSVP4: post-restart continuation: the persisted api_key keeps metering on instance 2 (3 new backtest calls -> ada quota 12->15, board recompute reflects the new usage); settle_from_usage w3 pays [(ada,40)] (gradient 10*3+5*2 on 15 units); the same caller id settles independently in the UGC namespace (w3 -> [(lin,10)] = the namespace law survives the restart); history grows w1/w2 -> w1/w2/ w3 with the old rows preserved; windows 3->5, share-tx 5->7 with seven pool:share debit legs (SQL cross); balances 538/540, pool:share 3822; digest=fbc5521af8d41149
+PASS AC-DSVP5: frozen faces: every pre-existing window row keeps all persisted fields (window_id/ total_paid/settled_utc) byte-identical to the pre-close snapshot - the new w3 row only appends; dup gates across the restart: devshare w3 replay rejected E_INC_WINDOW_DUP, UGC w3 replay rejected E_INC_WINDOW_DUP (namespace-separate, zero movement); registry gate still rejects the non-developer E_DS_NOT_DEV; counts and battery frozen across all three probes
+PASS AC-DSVP6: pure-read law: full battery read twice back-to-back - windows history + both dev boards + five balances byte-identical between the two reads and table counts constant (read faces have zero side effects)
+PASS AC-DSVP7: third instance: five-piece close -> reopen same db once more - battery byte-identical to the instance-2 terminal state (diffs=none, history/ boards/balances stable across a second restart); shipped files untouched (config + devshare/incentive /apidev/metered/ledger sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+--- section 2: double-run byte-identity (1.3s gap, second boundary crossed) ---
+run1 rc=0 sha16=fcf1d86f3f4f8d70
+run2 rc=0 sha16=fcf1d86f3f4f8d70
+stdout byte-identical: YES
+verdict: DOUBLE-RUN-IDENTICAL
+
+
+--- section 3: full RUNNER regression (tee=qa/reconcile-all-R1945.log) ---
+PASS suite ledger-devshare-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.6s
+RUNNER PASS (183/183 suites green, reconcile controls 7/7, 318.1s)
+verdict: RUNNER PASS
+
+--- section 4: suite-matrix regen + --check roundtrip ---
+regen: PASS generated docs/sandbox-suite-matrix.md (17810 bytes) - registry suites=183 criteria=1620 evidence=qa/reconcile-all-R1945.log green=183/183
+check run 1: PASS check: byte-identical (17810 bytes, 183 suites, 1620 criteria)
+check run 2: PASS check: byte-identical (17810 bytes, 183 suites, 1620 criteria)
+verdict: MATRIX-REGEN-CLEAN

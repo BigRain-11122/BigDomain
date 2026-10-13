@@ -1792,6 +1792,8 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-datasub-persist", os.path.join(
         "ledger", "test_datasub_persist.py"), 7),
+    ("ledger-devshare-persist", os.path.join(
+        "ledger", "test_devshare_persist.py"), 7),
 ]
 
 FAILS = 0

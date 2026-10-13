@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T06:16:25+08:00",
+ "export_ts": "2026-10-14T06:44:38+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1944：跨司分账面（settlement）加了可选落盘持久层——关服务重开，两窗分账清单+申领记录+链锚一字不差，第三窗续链（prev_id 接上重启前的链尾），五道闸照常拦截；缺省行为零漂移（原 7 项判据全绿）；总回归 182 套件全绿；证据在 qa/settlement-persist-R1944.log",
-  "latest_artifact": "src/sandbox/ledger/settlement.py（可选持久层+读面三法）+ src/sandbox/ledger/test_settlement_persist.py + qa/settlement-persist-R1944.log，2026-10-14·182 套件 1613 判据 green·新增 ledger-settlement-persist·跨司分账面跨重启持久化例窗",
-  "next_milestone": "下轮 R1945：tech 队列 FIFO=ledger devshare 开发者分成面 persist 认领（R1940 补种·最老开项）"
+  "current": "R1945：开发者分成面（devshare）做了「关服务重开、读数一字不差、闸门照常拦截」验证——分成窗历史、开发者面板、余额跨重启全保真；总回归 183 套件全绿；证据在 qa/devshare-persist-R1945.log 与 qa/reconcile-all-R1945.log",
+  "latest_artifact": "src/sandbox/ledger/test_devshare_persist.py + qa/devshare-persist-R1945.log + qa/reconcile-all-R1945.log，2026-10-14·183 套件 1620 判据 green·新增 ledger-devshare-persist·开发者分成读面族跨重启持久化例窗",
+  "next_milestone": "下轮 R1946：tech 队列 FIFO=ledger apimarket 开发者 API 市场面 persist 认领（R1941 补种·最老开项）"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1945",
+   "R1945 ledger devshare cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940-seeded row; criteria AC-DSVP1..AC-DSVP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (two registered developers with metered usage quota 12/5, explicit w1 + usage-derived w2 both total 49, cross-face UGC w1 same-caller-id 30 namespace anchor, five fail-closed gates rejected zero-drift) -> five-piece close/reopen with the read battery byte-identical (windows history full dump + both dev boards + five balances, persisted settled_utc rows zero in-memory drift) -> restart-surviving gates identical codes -> post-restart real-path continuation (persisted api_key keeps metering, quota 12->15, w3 pays 40, same-id UGC w3 settles 10 independently = namespace law survives the restart, SQL cross seven pool:share debit legs) -> frozen history rows + namespace-separate dup gates -> pure-read law -> third-instance stability; two same-round errata honestly noted (balance anchor missed the buy_credits developer debit into pool:reserve; digest cross-second drift = unmasked spend_tx hex ids + minute_window clock strip, mask widened to three families per the R1902 banded-projection law); RUNNER PASS 183/183 criteria 1613->1620 controls 7/7 318.1s = qa/reconcile-all-R1945.log (SUITES 182->183); matrix regen 183/1620 green --check byte-identical (17810 bytes); census CENSUS-COMPLETE; tech consume 1 reseed 1 (showroom persist seeded; next FIFO head = apimarket persist)."
+  ],
+  [
    "R1944",
    "R1944 ledger settlement cross-restart persist suite 7/7 (P2 tech FIFO head = the R1943 closeout pointer; criteria AC-SEP1..AC-SEP7 pre-registered in tech.md before code): product face = settlement.py optional sqlite persistence mirror (db_path=None default pure-memory path byte-identical, minors R1939 precedent; append-only st_windows/st_claims, zero UPDATE) + read family manifest_view/claims_view/last_window_id + close with E_ST_CLOSED post-close write rejection. Three-instance world on the real product path: anchor (two-window hash chain + three claims bound to manifest ids, battery sha16 1a804c0ff3f3dcf6, SQL cross 2/3) -> close/reopen same db_path with the read family byte-identical (zero in-memory drift) -> five fail-closed gate probes surviving the restart (dup window/dup claim E_ST_PERIOD_DUP, unknown-party/unknown-period/over-limit E_ST_BAD_INPUT, rows frozen) -> real-path continuation: third window prev_id == pre-restart last_window_id (the hash-chain anchor persistence core proof), new claim + verify True, rows 3/4 -> frozen pre-restart windows byte-identical to anchor snapshots + handed-out copies still verify cross-restart -> pure-read law -> third-instance reopen == second end-state + E_ST_CLOSED post-close write rejection + default-path SettlementFace() smoke (zero db files) + hygiene (pure ASCII, zero network imports, zero UPDATE, config sha unchanged, world outside repo); existing ledger-settlement AC-ST1..ST7 7/7 zero regression; RUNNER PASS 182/182 criteria 1606->1613 controls 7/7 405.8s = qa/reconcile-all-R1944.log; matrix regen 182/1613 green --check byte-identical; census DRIFT-CLEAN; fingerprint CLEAN domains=5; evidence six sections qa/settlement-persist-R1944.log, driver src/os/evidence_R1944.py; five-silence: DEC token-diff zero-new, GORD 275<376 archival shrink baseline updated, daily reconcile already in-plate; tech consume 1 reseed 1 (studio persist seeded, queue_tech_open 10->10, next FIFO head = devshare persist)."
   ],
@@ -355,21 +359,17 @@
    "lobby two-board cap/window-cap read cross-restart persist 7/7 (criteria 34->41) + RUNNER 136/136 criteria 1266 + matrix byte-identical + census DRIFT-CLEAN (R1890 evidence-file dialect re-land enforced)"
   ],
   [
-   "R1890",
-   "freetrial funnel cap-window read cross-restart persist 7/7 + RUNNER 136/136 criteria 1259 + census pass"
-  ],
-  [
-   "1944",
+   "1945",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 13,
+  "log_lines_in_window": 15,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
