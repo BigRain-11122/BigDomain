@@ -477,6 +477,17 @@ SUITES = [
     # instance reads pairwise identical; suite-only round, zero product
     # changes (AC-CW8..CW14 pre-registered in state/queue/tech.md).
     ("pay-channel-persist", os.path.join("pay", "test_channel_persist.py"), 7),
+    # R1921 pay channel_status_matrix windowed-read cross-restart DELTA
+    # faces (dedup ruling in state/queue/tech.md, claim line R1921):
+    # post-restart refund migration per-cell follow (granted->closed),
+    # out-of-domain observation row x window x dense orthogonality
+    # across restart, historical-month fixture window across restart;
+    # the R1904 carrier faces (pre-close==reopen identity, new-order
+    # recompute, two-instance sequential reads) ride as control
+    # anchors. Suite-only round, zero product changes
+    # (AC-CHM8..CHM12 pre-registered in state/queue/tech.md).
+    ("pay-channel-migrate-persist", os.path.join(
+        "pay", "test_channel_migrate_persist.py"), 5),
     # R1723 refund conversion-share clawback (R1721 successor): the
     # token-side reverse of the pay_conversion forward entry on a
     # refund close - no overdraft ever (claw capped at min(forward,

@@ -1,0 +1,66 @@
+--- live suite run 1 (exit=0) sha16=ad509cdaf627029d ---
+--- live suite run 2 (exit=0) sha16=ad509cdaf627029d ---
+live byte-identical=True sha16==orphan-log=True
+--- orphan evidence structure ---
+--- suite run 1 (exit=0) present=True
+--- suite run 2 (exit=0) present=True
+double-run byte-identical=True sha16-run1=ad509cdaf6 present=True
+--- runner (exit=0) present=True
+RUNNER PASS (162/162 suites green, reconcile control present=True
+--- matrix regen (exit=0) present=True
+--- matrix check 1 (exit=0) present=True
+--- matrix check 2 (exit=0) present=True
+--- census (exit=0) present=True
+verdict: DRIFT-CLEAN present=True
+--- sentinel (exit=0) present=True
+verdict CLEAN domains=5 present=True
+runner log tail verdict present=True
+--- eol dialect normalize (R1910 law) ---
+channel-migrate-persist-R1921.log crlf-removed=0 bytes 344134->344134
+reconcile-all-R1921.log crlf-removed=0 bytes 341436->341436
+--- live matrix check 1 (exit=0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (15995 bytes, 162 suites, 1474 criteria)
+--- live matrix check 2 (exit=0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (15995 bytes, 162 suites, 1474 criteria)
+--- live census #1 (exit=2) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+[flag] new-dialect: channelmigrate-takeover-R1921.log (class=other)
+census: files=1331 tee=828 baselined=502
+disappeared=0
+flags=1
+verdict: DRIFT-FLAG
+--- live sentinel (exit=0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+note: census #1 flag (if any) is the previous verification run's intermediate takeover-log EOL state; the final census below is the authoritative drift verdict (R1910 normalization family)
+TAKEOVER VERDICT=PASS suite-ident=True orphan-sha-match=True struct=True runner-tail=True matrix=True census=False sentinel=True
+--- takeover-log self-normalize ---
+crlf-removed=13 bytes 2394->2381
+--- final census (exit=0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1331 tee=829 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+FINAL CENSUS VERDICT=PASS
+--- at-rest eol fix + confirming census ---
+crlf-removed=7 bytes 2865->2858 (content zero drift)
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1331 tee=829 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+AT-REST VERDICT=PASS (file pure-LF at rest; appended census text normalized in memory; loop closed)

@@ -1,8 +1,8 @@
 {
- "export_ts": "2026-10-13T16:19:01+08:00",
+ "export_ts": "2026-10-13T17:13:08+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-    "current": "P2 技术队头 FIFO 交付：ugc export 三导出面（提案 feed 分线+城市编年史+热榜索引三产物）跨重启确定性+幂等套件 7/7 全绿——RUNNER 161 套件·判据 1469 全绿零回归；前轮崩溃孤儿接管收口：孤儿半轮已自跑完整证据链，本轮活体复验（双跑 sha16 与孤儿 log 完全一致）+方言修复如实注（RUNNER 证据件 EOL 归一内容零漂·R1910 先例）；迁移幂等 rejected→chronicled 恰一次、hot_index 并列 tie=ts 升序活体钉死、十一月新数据重算零缓存",  "latest_artifact": "src/sandbox/ugc/test_export_persist.py + qa/export-persist-R1920.log + qa/exportpersist-takeover-R1920.log（2026-10-13·161 套件 1469 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：pay channel_status_matrix 窗参读面 persist 例窗（R1918 补种在册）、ledger curation hot_board 热榜 persist 例窗（R1919 补种在册）、lobby room_message_board 房间消息读面 persist 例窗（R1920 补种在册），窗 ≤48h（2026-10-15 前）"},
+    "current": "P2 tech 队头 FIFO 交付：pay channel_status_matrix 渠道×状态 dense 覆盖矩阵窗参读面跨重启持久化例窗接管收口（AC-CHM8..CHM12 全过 SUITE 5/5·双跑 sha16 ad509cdaf627029d 与孤儿 log 一致；RUNNER 162 套件 1474 判据全量零回归；前轮崩溃孤儿活体复验收口：矩阵 --check 显式 --evidence byte-identical+EOL 方言归一+终末 census DRIFT-CLEAN+哨兵 CLEAN domains=5）",  "latest_artifact": "src/sandbox/pay/test_channel_migrate_persist.py + qa/channel-migrate-persist-R1921.log + qa/channelmigrate-takeover-R1921.log（2026-10-13·162 套件 1474 判据 green）",  "next_milestone": "下个 P2 队头 FIFO：ledger curation hot_board 热榜读面 persist 例窗（R1919 补种在队首）→ lobby room_message_board 房间消息读面（R1920 补种）→ ledger showcase 展厅读面族（R1921 补种队尾）（2026-10-14 内推进）"},
  "depts": [
   {
    "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -796,7 +796,7 @@
    "R1874 freetrial conversion_funnel_board 月滚保真例窗交付轮（P2 tech 队头 FIFO 最老可认领行〔R1867 补种〕·轮计分 2=可跑实物）：AC-CVR1..CVR7 判据预注册先于代码〔tech.md R1874 认领注记·AC-CVR 前缀全仓 rg 零占用〕——test_freetrial_funnelroll.py 独立世界冻结钟落地：跨月转化锚（fun-c grant 2026-10+conversion 2026-11=同一行两窗两态·c_cum 1→2 镜像交叉）+端窗快照随窗行进律（active_Nov==active_Oct+granted_Nov−converted_Nov 双计划全过）+旧月窗滚后逐字节保全+rate 窗径卫兵诚实显形（11 月 fp converted 1 over granted 0）+四表计数恒定（2/4/3/0）+零产品字节 pin-only（freetrial.py 不动·冻结钟恢复探针）——SUITE PASS 7/7 首跑全绿零修正+双跑 sha256 CA3B512E... 逐字节同一·reconcile_all SUITES 126→127 判据 1158→1165 接线（ledger-freetrial-funnelroll）+RUNNER PASS 127/127 controls 7/7 178.6s 零回归=qa/reconcile-all-R1874.log+矩阵再生 127/1165 green 12746B --check byte-identical 双跑=qa/matrix-regen-R1874.log·补种 2=queue_tech_open 11（freetrial conversion 读帽窗+lobby 两板读帽窗）·R1874"
   ],
   [
-   "1920",
+   "1921",
    "OSLoop 执行 tick"
   ],
   [
@@ -3790,15 +3790,19 @@
   [
    "2",
    "R1920 ugc export three-outflow faces cross-restart determinism + idempotency 7/7 (criteria AC-EXP1..AC-EXP7 pre-registered in state/queue/tech.md by the crashed round's claim, adopted and verified live by this takeover round; four product files sha256 byte-identical across same-instance re-export + full pipeline-stack restart + November new-data recompute, chronicle-step migration exactly-once idempotency, hot_index score-DESC tie law = stable sort ts-ascending, third-instance sequential identity; suite-only round product bytes unchanged; honest notes: claim's AC-EXP1 W6 feed draft-body clause conflated the pool shape with the shipped feed face (rows carry draft markers, never a body), orphan RUNNER evidence EOL dialect repaired content-neutral per the R1910 CRLF-to-LF law) + RUNNER 161/161 criteria 1462-to-1469 (SUITES 160-to-161) + matrix 15905B byte-identical x2 + census DRIFT-CLEAN + sentinel PASS + takeover verification qa/exportpersist-takeover-R1920.log VERDICT PASS + tech consume 1 + reseed 1 net-flat 8"
+  ],
+  [
+   "2",
+   "R1921 pay channel_status_matrix window-param dense-matrix read face cross-restart persistence 5/5 (criteria AC-CHM8..AC-CHM12 pre-registered in the state/queue/tech.md claim line by the crashed predecessor, adopted and closed by this takeover round; orphan-adoption precedent R550/R551/R1675/R1919/R1920: full evidence chain re-verified live - suite double-run sha16 ad509cdaf627029d byte-identical with the orphan log, RUNNER 162/162 criteria 1469->1474 zero regression, matrix 162/1474 --check byte-identical with explicit --evidence per R1739, EOL dialect normalized per R1910 law (evidence writer-phase 2196 CRLF, zero content drift) + takeover log at-rest pure-LF closure, final census DRIFT-CLEAN flags=0, sentinel CLEAN domains=5; takeover script first-run invocation bug (path as two list items instead of one joined string) honest-noted, product untouched; dense matrix world: control anchor + explicit historical month window + honest-empty future window byte-identical across PayOrders close/reopen with events/ledger dock, post-restart new order recomputes zero-cache with historical windows frozen, post-restart refund edge granted->closed two-cell diff tracks per-cell with history zero-penetration, domain-external observer appended row x window filter keeps dense intersection cells orthogonal across restart, dual-instance sequential reads byte-identical + pure-read law with orders.py/config sha256 double-evidence; suite-only round, product bytes unchanged)"
   ]
  ],
  "self_drive": {
   "window": "2026-10-07..2026-10-13",
   "window_days": 7,
-  "log_lines_in_window": 16,
+  "log_lines_in_window": 18,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 4,
+  "substantive_non_idle_mention_lines": 5,
   "proposals_total": 3,
   "proposals_open": 1,
   "queue_main_open": 6,
