@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T05:19:37+08:00",
+ "export_ts": "2026-10-14T05:42:44+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1942：道具/装扮经济面（props）做了「关服务重开、库存与余额全复原、八道闸照常拦截、重启后新购物照样绑定真实扣款流水、重复购买照拒」的跨重启验证；总回归 180 套件全绿",
-  "latest_artifact": "src/sandbox/ledger/test_props_persist.py + qa/props-persist-R1942.log + qa/reconcile-all-R1942.log，2026-10-14·180 套件 1599 判据 green·新增 ledger-props-persist·道具装扮读面族跨重启持久化例窗",
-  "next_milestone": "下轮 R1943：tech 队列 FIFO=ledger identity 城市身份面读面族 persist 认领（R1938 补种·最老开项）"
+  "current": "R1943：城市身份面（identity）做了「关服务重开、读数一字不差、十五道闸照常拦截」验证——私人房间月租、头像皮肤/奖牌锁领、注册表不可变，跨重启全保真；总回归 181 套件全绿；证据在 qa/identity-persist-R1943.log 与 qa/reconcile-all-R1943.log",
+  "latest_artifact": "src/sandbox/ledger/test_identity_persist.py + qa/identity-persist-R1943.log + qa/reconcile-all-R1943.log，2026-10-14·181 套件 1606 判据 green·新增 ledger-identity-persist·城市身份面跨重启持久化例窗",
+  "next_milestone": "下轮 R1944：tech 队列 FIFO=ledger settlement 跨司分账面 persist 认领（R1939 补种·最老开项）"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1943",
+   "R1943 ledger identity cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1942 closeout pointer; criteria AC-IDP1..AC-IDP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (four-product identity registry + private-room month-10 rental + three permanent claims, all four spends SQL-crossed, digest 7ae19bac6698a5b0) -> reverse-order four-piece close/reopen with the profile/holder battery byte-identical (pure-value read faces, zero clock echo) -> fifteen restart-surviving fail-closed gates (incl. insufficient-balance via the wrap-default E_ID_BAD_ARGS identity-domain surface law) -> post-restart real-path continuation (bob advance renewal month 11 + carol gold-crown claim, both real spend txs, zero-cache recompute) -> frozen registry/occupancy/inventory faces + idempotent re-register + taken gate -> pure-read law -> third-instance stability; two same-round probe-scope errata honestly noted (pool expectation reflow law; dup probe target = own held cosmetic, first-claim-by-another-account legitimately succeeds); claim-row anchor-position erratum repaired same window via triple-assert script; RUNNER PASS 181/181 criteria 1599->1606 controls 7/7 281.2s = qa/reconcile-all-R1943.log (census DRIFT-CLEAN); matrix regen 181/1606 green --check byte-identical (17633 bytes); tech consume 1 reseed 1 (honorcert persist seeded, queue_tech_open 10->10, next FIFO head = settlement persist)."
+  ],
+  [
    "R1942",
    "R1942 ledger props cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1941 closeout pointer; criteria AC-PSP1..PSP7 pre-registered in tech.md before code, with two same-round suite-side probe-scope errata honestly noted: the bad-ref probe needed count=1 to actually reach the ref gate because the product validation order checks count>=1 before the ref, and the freeze comparison wrongly sliced count_credits into the provenance key set - fixed to the five provenance keys excluding count_credits; first run 5/7 -> fixed -> green; R1776 probe-scope precedent family). Double-run stdout byte-identical sha16 748340e88482cdb8. Three-instance world on the real product path (Ledger + PropsFace, props_inventory single table WAL, zero schema touch = fingerprint sentinel CLEAN domains=5): anchor (four purchase spectrum alice hat_gold@15 + jetpack count=3@20 + bob flare count=2@10 with consume to 1 + carol scarf_silk@12, each bound to a real spend tx with SQL cross type=spend + debit leg 4/4; balances 265/490/388/18857; counts inv=4 spend-tx=4) -> close/reopen byte-identical battery replay (inventory replays stored bound_spend_tx/count_credits, balance replays ledger_entries = zero in-memory drift) -> eight restart-surviving gate probes all-reject same codes with frozen counts (cosmetic-consume, over-consume, unknown-item, held-kind drift, unknown-kind, bad-ref, count=0, plus carol over-budget E_NEGATIVE_BALANCE zero charge zero grant) -> real-path continuation (carol new lantern count=4 bound to a new real spend tx; alice jetpack consume 2 then stack re-buy to 2; bob flare consume to 0 then stack re-buy to 3; zero-cache recompute with balances 245/480/363/18912 and counts inv 4->5 spend-tx 4->7) -> frozen provenance faces (anchor rows' inv_id/account/item/kind/bound_spend_tx/granted_utc byte-frozen across restart x continuation; stack rows move count_credits only via product verbs = the stack path only UPDATEs count_credits, provenance stays first-purchase-bound) + dup gate E_PROP_DUP zero charge -> pure-read law -> third-instance stability + config sha unchanged + pure ASCII + zero network imports + world tmp outside repo. RUNNER PASS 180/180 criteria 1592->1599 controls 7/7 282.3s = qa/reconcile-all-R1942.log (ledger-props-persist seat; census DRIFT-CLEAN flags=0 files=1371 tee=869 baselined=502; fingerprint CLEAN domains=5); matrix 180/1599 green --check byte-identical (17547 bytes); evidence six-section qa/props-persist-R1942.log via src/os/evidence_R1942.py; tech consume 1 reseed 1 (effects persist seeded with same-day dedup scans: registry zero effects-persist seat + AC-EFP git-grep rc=1 + base-suite close hits all SQL-probe/cleanup non-restart = true-activity candidate; next FIFO head = ledger identity persist; post-closeout watermark ~79.6KB over the 78500B line = fold R510 adjudication due at next round start)."
   ],
@@ -357,19 +361,15 @@
   [
    "R1888",
    "audit_lineage read-cap window 22/22 + RUNNER 134/134 criteria 1245 + census pass"
-  ],
-  [
-   "R1887",
-   "audit_lineage month-window lens 15/15 + RUNNER 134/134 criteria 1238 + census DRIFT-CLEAN"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 17,
+  "log_lines_in_window": 19,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 4,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

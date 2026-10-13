@@ -170,6 +170,12 @@ SUITES = [
     # PSP7 pre-registered in state/queue/tech.md).
     ("ledger-props-persist", os.path.join(
         "ledger", "test_props_persist.py"), 7),
+    # identity persist window: cross-restart byte-identical replay of
+    # the wrapped identity face over venue+props engines (registry
+    # immutability, 15 fail-closed probes, zero-cache recompute;
+    # AC-IDP1..IDP7 pre-registered in state/queue/tech.md).
+    ("ledger-identity-persist", os.path.join(
+        "ledger", "test_identity_persist.py"), 7),
     ("ledger-incentive",
      os.path.join("ledger", "test_incentive.py"), 7),
     ("ledger-settlement",

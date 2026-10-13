@@ -1,0 +1,86 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-IDP1: anchor world: registry=5 venue_reg=1 occ=1 inv=3 spend_tx=4; balances a/b/c/pool=190/450/201/19159; 4 spends SQL-crossed spend+debit 4/4; holder m10=usr:alice m11=None; profiles rooms a=1 b=0 perms a/b/c=1/1/1; digest=7ae19bac6698a5b0
+PASS AC-IDP2: instance 2 replay on same db/config: battery diffs=none (derived profile/holder faces zero in-memory drift)
+PASS AC-IDP3: 15 restart-surviving probes all-reject [E_ID_UNKNOWN/E_ID_UNKNOWN/E_ID_KIND_MISMATCH/E_ID_KIND_MISMATCH/E_ID_BAD_ARGS/E_ID_BAD_ARGS/E_ID_BAD_ARGS/E_ID_BAD_ARGS/E_ID_BAD_ARGS/E_ID_BAD_ARGS/E_ID_KIND_MISMATCH/E_ID_TAKEN/E_ID_DUP/E_ID_DUP/E_ID_BAD_ARGS] fail-closed: counts frozen reg=5 occ=1 inv=3 spend=4 and battery frozen (zero charge zero rows zero drift)
+PASS AC-IDP4: continuation on instance 2: bob renewal m11 + carol gold-crown both real spend tx SQL-crossed (spend+debit, spend+debit); zero-cache recompute holder m10=usr:alice m11=usr:bob bob profile m11 rooms=1@11; carol perms=2; counts occ=2 inv=4 spend=6 reg=5; balances a/b/c/pool=190/370/171/19269; battery cells moved=6; digest=3dc010770f99aab8
+PASS AC-IDP5: frozen faces across restart x continuation: registry 5 rows byte-frozen=true; occupancy anchor row byte-frozen=true (+1 new row only); inventory anchor rows frozen=true; idempotent re-register idempotent=True zero row change; taken re-rent m10 rejected E_ID_TAKEN zero charge (171==171); counts stable occ=2 inv=4 spend=6
+PASS AC-IDP6: pure-read law: double battery byte-identical (diffs=none) and counts constant occ=2 inv=4 spend=6
+PASS AC-IDP7: instance 3 on same db: battery diffs=none; counts stable reg=5 occ=2 inv=4 spend=6; config sha unchanged=true; non-ascii=0; network-imports=none; world outside repo=true
+SUITE PASS 7/7
+
+sha16 run1=ed60181e822c6358 run2=ed60181e822c6358 byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jux91wv8\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (181/181 suites green, reconcile controls 7/7, 281.2s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (17633 bytes) - registry suites=181 criteria=1606 evidence=qa/reconcile-all-R1943.log green=181/181
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (17633 bytes, 181 suites, 1606 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1373 tee=871 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1943.log
+?? src/os/evidence_R1943.py
+?? src/sandbox/ledger/test_identity_persist.py
+
+VERDICT PASS
