@@ -1415,6 +1415,18 @@ SUITES = [
     # state/queue/tech.md)
     ("ledger-apidev-lifecycletracepersist", os.path.join(
         "ledger", "test_apidev_lifecycletracepersist.py"), 7),
+    # R1911 apidev usage_kind_tally windowed read cross-restart
+    # persistence suite: October mixed-kind six-call anchor on
+    # the rotated chain-b (exact-key attribution; the rotated_out
+    # chain-a read face stays open), full-envelope byte-replay
+    # across the three-piece close/reopen, two November calls on
+    # the pinned key recalculate the clock-following default read
+    # zero-cache while the October explicit-window read stays
+    # byte-frozen; future-window honest empty; third-instance
+    # identity; pure-read law + hygiene (AC-UKP1..AC-UKP7
+    # pre-registered in state/queue/tech.md)
+    ("ledger-apidev-usagekindpersist", os.path.join(
+        "ledger", "test_apidev_usagekindpersist.py"), 7),
 ]
 
 FAILS = 0

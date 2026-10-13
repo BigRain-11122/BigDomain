@@ -1,0 +1,39 @@
+=== [1] suite double-run: test_apidev_usagekindpersist.py AC-UKP1..AC-UKP7 ===
+--- run 1 (rc=0) ---
+PASS AC-UKP1: October anchor: chain-b 6 real call rows (4 visualize + 2 backtest) window=2026-10 (SQL count==6), whole-db oct rows==9, W=2026-10 from chain-b's first call row (month-abstraction law); six-key envelope pinned {api_key, key_name=chain-b, window, by_kind {backtest:2, visualize:4}, total=6, disclaimer}, by_kind == manual SQL GROUP BY cross=True, total==sum(by_kind)=True; default (None) read byte-identical to the explicit October read (frozen clock in October)=True; chain-a (rotated_out, exact-key attribution) {backtest:2}={'backtest': 2}, lone-e {backtest:1}={'backtest': 1} -- zero rotation-ancestry leak into the successor tally
+PASS AC-UKP2: full stack close (reverse dependency order) -> reopen same db/config: October by-kind envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-UKP3: default (None, window echo follows the frozen October clock) replayed byte-identical=True; chain-a (rotated_out key, read face open across restart)=True; lone-e clean key=True -- the derived by-kind face carries zero in-memory state across the restart
+PASS AC-UKP4: frozen clock +23d -> 2 November calls on chain-b (the very key the October profile pins) via the real product path (record-time window=2026-11 SQL count==2): default read RECALCULATED (window echo 2026-11, by_kind {backtest:1, visualize:1}, total 2, and byte-differs from the pre-close default snapshot=True = zero cache), explicit November window read byte-identical to the default November read=True (explicit==default under a clock inside the month)
+PASS AC-UKP5: after the November injection on the same pinned key: October explicit-window read stays FULL-envelope byte-frozen=True (api_calls rows are record-time immutable and the explicit window envelope carries zero clock-following fields), lone-e October read zero-permeated=True, future window 2026-12 honest empty read {by_kind:{}, total:0}=True; telescoping chain-b all-time 8 == oct 6 + nov 2, whole-db 11 == 9 + 2 immutable rows never lost
+PASS AC-UKP6: third instance on the same db: all four post-injection reads (oct explicit / default November / nov explicit / lone-e oct) byte-identical to the second instance (True/True/True/True), and the October explicit read still equals the ORIGINAL pre-close snapshot=True (windowed read survives restart x new-data unscratched, full envelope)
+PASS AC-UKP7: pure read: 8-form read battery on the third face across all three keys (incl. the rotated_out chain-a) moves zero rows (api_calls 11==11, api_dev_keys 3==3, key_events 2==2, reject_events 0==0), usage_kind_tally + _usage_kind_tally segments zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-usagekindpersist: 7/7 criteria pass
+clock restore probe: True
+--- run 2 (rc=0) ---
+PASS AC-UKP1: October anchor: chain-b 6 real call rows (4 visualize + 2 backtest) window=2026-10 (SQL count==6), whole-db oct rows==9, W=2026-10 from chain-b's first call row (month-abstraction law); six-key envelope pinned {api_key, key_name=chain-b, window, by_kind {backtest:2, visualize:4}, total=6, disclaimer}, by_kind == manual SQL GROUP BY cross=True, total==sum(by_kind)=True; default (None) read byte-identical to the explicit October read (frozen clock in October)=True; chain-a (rotated_out, exact-key attribution) {backtest:2}={'backtest': 2}, lone-e {backtest:1}={'backtest': 1} -- zero rotation-ancestry leak into the successor tally
+PASS AC-UKP2: full stack close (reverse dependency order) -> reopen same db/config: October by-kind envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-UKP3: default (None, window echo follows the frozen October clock) replayed byte-identical=True; chain-a (rotated_out key, read face open across restart)=True; lone-e clean key=True -- the derived by-kind face carries zero in-memory state across the restart
+PASS AC-UKP4: frozen clock +23d -> 2 November calls on chain-b (the very key the October profile pins) via the real product path (record-time window=2026-11 SQL count==2): default read RECALCULATED (window echo 2026-11, by_kind {backtest:1, visualize:1}, total 2, and byte-differs from the pre-close default snapshot=True = zero cache), explicit November window read byte-identical to the default November read=True (explicit==default under a clock inside the month)
+PASS AC-UKP5: after the November injection on the same pinned key: October explicit-window read stays FULL-envelope byte-frozen=True (api_calls rows are record-time immutable and the explicit window envelope carries zero clock-following fields), lone-e October read zero-permeated=True, future window 2026-12 honest empty read {by_kind:{}, total:0}=True; telescoping chain-b all-time 8 == oct 6 + nov 2, whole-db 11 == 9 + 2 immutable rows never lost
+PASS AC-UKP6: third instance on the same db: all four post-injection reads (oct explicit / default November / nov explicit / lone-e oct) byte-identical to the second instance (True/True/True/True), and the October explicit read still equals the ORIGINAL pre-close snapshot=True (windowed read survives restart x new-data unscratched, full envelope)
+PASS AC-UKP7: pure read: 8-form read battery on the third face across all three keys (incl. the rotated_out chain-a) moves zero rows (api_calls 11==11, api_dev_keys 3==3, key_events 2==2, reject_events 0==0), usage_kind_tally + _usage_kind_tally segments zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True
+SUITE apidev-usagekindpersist: 7/7 criteria pass
+clock restore probe: True
+double-run stdout byte-identical (CRLF->LF normalized): PASS
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1911.log)
+RUNNER PASS (153/153 suites green, reconcile controls 7/7, 168.1s)
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0, --check rc=0/0, double --check stdout byte-identical: PASS
+PASS generated docs/sandbox-suite-matrix.md (15193 bytes) - registry suites=153 criteria=1407 evidence=qa/reconcile-all-R1911.log green=153/153
+PASS hygiene: pure-ascii source, zero network imports
+=== [4] qa writer census --check ===
+verdict: DRIFT-CLEAN
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+VERDICT PASS
