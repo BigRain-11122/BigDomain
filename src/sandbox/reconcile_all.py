@@ -1546,6 +1546,19 @@ SUITES = [
     # change)
     ("member-expiring-dist-persist", os.path.join(
         "member", "test_expiring_dist_persist.py"), 7),
+    # R1920 UGC export three-outflow faces: same-instance re-export
+    # determinism + chronicle-step migration idempotency (rejected->
+    # chronicled exactly once) + file-byte persistence across the
+    # full pipeline-stack restart (feed per-line / chronicle /
+    # hot_index; the tie law = the stable sort keeps the
+    # items_in_states ts-ascending order inside equal-score
+    # segments; November new data recomputes hot zero-cache while
+    # the untouched line feeds and the record-time rows stay
+    # byte-frozen; a third instance replays byte-identically)
+    # (AC-EXP1..AC-EXP7 pre-registered in state/queue/tech.md;
+    # suite-only round, zero product change)
+    ("ugc-export-persist", os.path.join(
+        "ugc", "test_export_persist.py"), 7),
 ]
 
 FAILS = 0

@@ -1,0 +1,62 @@
+=== [1] suite double-run fresh reproduction: test_export_persist.py AC-EXP1..AC-EXP7 (the takeover re-derives the crashed half's claim instead of trusting it; zero volatile lines: no tmp paths, no ports, no ms timings) ===
+run1 rc=0 lines (8):
+PASS AC-EXP1: chron-step=True registry=True ids=True sql-cross=True canonical=True w6-draft-markers=True credit-mix=True w1w2-score-tie=True shas=e6cac7,98cccb,cdbeb3,ac25ca
+PASS AC-EXP2: four-files-byte-same=True registry-same=True migration-idempotent=True rejected=0 w4-ts-unchanged=True w4-state=chronicled
+PASS AC-EXP3: four-files-replay=True registry-eq=True
+PASS AC-EXP4: fx-frozen=True bd-append=True chron-append=True hot-recompute=True nov-ts=True sql-cross=True shapes=True
+PASS AC-EXP5: observed==derivation=True tie-pairs-ts-asc=True w3w8-28char-tie=True generic-segments=True order=39c3e8,3aa0a3,f2ffa9,0ed845,0e06fb,f8ef6c,186bb6
+PASS AC-EXP6: inst3==inst2-final=True registry-eq=True in-inst3-double-export=True
+PASS AC-EXP7: product-sha-stable=True export-seg-one-UPDATE=True ascii=True net-clean=True registry-wired=True world-db-outside-repo=True clock-restored=True export-residue-cleaned=True criteria-drift=True
+SUITE PASS 7/7
+run2 rc=0 lines (8):
+PASS AC-EXP1: chron-step=True registry=True ids=True sql-cross=True canonical=True w6-draft-markers=True credit-mix=True w1w2-score-tie=True shas=e6cac7,98cccb,cdbeb3,ac25ca
+PASS AC-EXP2: four-files-byte-same=True registry-same=True migration-idempotent=True rejected=0 w4-ts-unchanged=True w4-state=chronicled
+PASS AC-EXP3: four-files-replay=True registry-eq=True
+PASS AC-EXP4: fx-frozen=True bd-append=True chron-append=True hot-recompute=True nov-ts=True sql-cross=True shapes=True
+PASS AC-EXP5: observed==derivation=True tie-pairs-ts-asc=True w3w8-28char-tie=True generic-segments=True order=39c3e8,3aa0a3,f2ffa9,0ed845,0e06fb,f8ef6c,186bb6
+PASS AC-EXP6: inst3==inst2-final=True registry-eq=True in-inst3-double-export=True
+PASS AC-EXP7: product-sha-stable=True export-seg-one-UPDATE=True ascii=True net-clean=True registry-wired=True world-db-outside-repo=True clock-restored=True export-residue-cleaned=True criteria-drift=True
+SUITE PASS 7/7
+criteria-identical=True full-stdout-identical=True (lines 8/8)
+run1 full-stdout sha16=63a3b1d82aa0cc3b run2 full-stdout sha16=63a3b1d82aa0cc3b
+orphan-logged sha16=63a3b1d82aa0cc3b live-reproduction-match=True
+
+=== [2] orphan evidence file verification (qa/export-persist-R1920.log) ===
+file bytes (utf-8): 344208
+section headers: 5
+  === [1] export-persist suite double run ===
+  === [2] full RUNNER regression ===
+  === [3] suite matrix regen + check ===
+  === [4] qa writer census probe ===
+  === [5] fingerprint sentinel ===
+runner terminal: RUNNER PASS (161/161 suites green, reconcile controls 7/7, 287.0s)
+suite green line: PASS suite ugc-export-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 1.0s
+verdict tail: VERDICT PASS present=True
+no runner re-run (cite-only, honest note): a fresh 287s RUNNER would rewrite the per-suite timing evidence this matrix was regenerated from (R1739 explicit-evidence precedent)
+structural-verification=True
+
+=== [3] suite matrix --check x2 (explicit --evidence qa/export-persist-R1920.log; content-only comparison per doc_stamp law) ===
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (15905 bytes, 161 suites, 1469 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1328 tee=826 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS
