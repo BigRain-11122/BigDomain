@@ -190,6 +190,14 @@ SUITES = [
         "ledger", "test_expedite_persist.py"), 7),
     ("ledger-ads",
      os.path.join("ledger", "test_ads.py"), 7),
+    # ads persist window: cross-restart byte-identical replay of
+    # the lineup/holder/board read battery, restart-surviving
+    # gate probes, post-restart continuation on a freed carousel
+    # window and a freed naming window, frozen faces + dup/full
+    # gates, pure-read law, third instance stability (AC-ASP1..
+    # ASP7 pre-registered in state/queue/tech.md).
+    ("ledger-ads-persist", os.path.join(
+        "ledger", "test_ads_persist.py"), 7),
     ("ledger-observation",
      os.path.join("ledger", "test_observation.py"), 7),
     # observation persist window: cross-restart byte-identical

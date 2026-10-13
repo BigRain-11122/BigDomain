@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T03:42:40+08:00",
+ "export_ts": "2026-10-14T04:35:08+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1939：未成年人守护面（minors）做了「关服务重开、监护限配/日消费帽/账面全复原、八道拒付闸照常拦截」的跨重启验证，并把守护账本落成可选 sqlite 持久层（崩溃窗日帽不丢=fail-closed 方向）；总回归 177 套件全绿；本轮=前窗崩溃交付的接管收口（live 复验内容逐行同一后上链）",
-  "latest_artifact": "src/sandbox/minors/test_minors_persist.py + src/sandbox/minors/minors.py（sqlite 持久层）+ qa/minors-persist-R1939.log + qa/reconcile-all-R1939.log，2026-10-14·177 套件 1578 判据 green·新增 minors-guard-persist·守护读面族跨重启持久化例窗",
-  "next_milestone": "下轮 R1940：tech 队列 FIFO=ledger ads 广告位读面族 persist 认领（R1934 补种·最老开项）+雷达窗 6 清单 OH-20261014-cph4.md 今晚 21:40 到窗即过目"
+  "current": "R1940：广告位（ads）面做了「关服务重开、排期看板/独占窗读数全复原、五道闸照常拦截、重启后再下单照样入账」的跨重启验证；总回归 178 套件全绿；本轮=前窗崩溃交付的接管收口（live 复验逐字节同一后上链）",
+  "latest_artifact": "src/sandbox/ledger/test_ads_persist.py + qa/ads-persist-R1940.log + qa/reconcile-all-R1940.log，2026-10-14·178 套件 1585 判据 green·新增 ledger-ads-persist·广告位读面族跨重启持久化例窗",
+  "next_milestone": "下轮 R1941：tech 队列 FIFO=ledger companion 伴生读面族 persist 认领（R1934 补种·最老开项）+雷达窗 6 清单 OH-20261014-cph4.md 今晚 21:40 到窗即过目"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1940",
+   "R1940 ledger ads ad-slot cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1939 closeout pointer; criteria AC-ASP1..ASP7 pre-registered in tech.md before code) + crashed-round orphan-payload takeover closeout (eighth case of the R1937 lineage): the crashed R1940 attempt left all eight payload faces on disk (suite + registration + claim line + regen matrix + six-section evidence + RUNNER carrier + fold R509 already done at round start) with zero failed-run artifacts and only the closeout missing; this round live re-verified (suite double-run sha16 fe8a6f5962e1be68 both runs anchor-matching the evidence record, matrix 178/1585 --check byte-identical 17379B, census DRIFT-CLEAN, fingerprint CLEAN domains=5) and closed out. Three-instance world: anchor (three registered ad units screen/naming/splash + carousel three-advertiser concurrency + naming/splash exclusives, lineup four-window read faces pinned, five gate probes rejected zero-charge, digest f8262014291ca748) -> three-piece reverse-order close/reopen battery byte-identical -> five restart-surviving gates -> post-restart real-path continuation (carol books the freed carousel window + a freed naming window, both bound real spend txs via SQL cross, zero-cache recompute, digest f731c355e29e84c5) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; RUNNER PASS 178/178 criteria 1578->1585 controls 7/7 268.3s = qa/reconcile-all-R1940.log; fold R509 honored (carried by the crashed attempt; archive-preop 79330B verified on disk); tech consume 1 reseed 1 (devshare persist seeded via same-day dedup pre-checks, next FIFO head = ledger companion persist); suite-only round zero product bytes"
+  ],
+  [
    "R1939",
    "R1939 minors guardian cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1938 closeout pointer; criteria AC-MGP1..MGP7 pre-registered in tech.md before code, with the AC-MGP5 same-window erratum = AC-W7 re-gate-first law, R1883 precedent) + crashed-round orphan-payload takeover closeout (seventh case of the R1937 lineage): the crashed R1939 attempt left all eight payload faces on disk with zero failed-run artifacts; this round live re-verified (suite stdout line-for-line identical to the evidence record with all three battery/report/instance digests matching, double-run byte-identical, matrix 177/1578 --check identical; raw-byte sha difference = probe caliber CRLF-vs-LF, not a content difference) and closed out. Product face = minors.py optional sqlite persistence layer (+115 lines: db_path=None default pure-memory path byte-identical drift-free for the 19+70 wiring criteria; db-first mirror so a crash window cannot lose a day-cap spend row = fail-closed persistence for the sec.31 minor-protection compliance face; three tables mg_residents/mg_limits/mg_day_spend, append-only day ledger with UNIQUE(resident,date,ref)). Three-instance world: anchor (four-resident spectrum + 8 refused probes + battery sha16 90ac70fd49071b9e) -> close/reopen byte-identical -> 8 restart-surviving gates -> real-path continuation (kid1 700 recompute + kid3 fresh-resident persistence + adult refused) -> frozen history + re-gate-passing idempotent replay absorbed + conservative re-gate refusal + ref-domain bucket law -> pure-read law -> third-instance stability; RUNNER PASS 177/177 criteria 1571->1578 controls 7/7 290.2s = qa/reconcile-all-R1939.log (census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 177/1578 green --check byte-identical (17303 bytes); proposal-track BD-PROP-004 delivered (window 10-14~10-21, qa evidence monthly archive step); tech consume 1 reseed 1 (settlement persist seeded, next FIFO head = ledger ads persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1939) + checker VERDICT PASS after the fix"
   ],
@@ -359,21 +363,17 @@
    "pay-authorize-persist 读面跨重启持久化例 7/7+RUNNER 133/133+census 全绿"
   ],
   [
-   "R1884",
-   "pay-notify-bannerpersist 跨重启持久化 7/7+RUNNER 132/132+W23 crawl 入册"
-  ],
-  [
-   "1939",
+   "1940",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 17,
+  "log_lines_in_window": 13,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
