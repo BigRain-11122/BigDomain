@@ -1385,7 +1385,19 @@ SUITES = [
     # instance identity; pure-read law + hygiene
     # (AC-RJW8..AC-RJW14 pre-registered in state/queue/tech.md)
     ("ledger-apidev-rejecttallpersist", os.path.join(
-        "ledger", "test_apidev_rejecttallpersist.py"), 7),
+        "ledger", "test_apidev_rejecttallpersist.py"), 7),    # R1909 apidev lifecycle_trace windowed read cross-restart
+    # persistence suite: the pinned active middle key (one real
+    # October rotate_in row) plus a lone terminal-revoked key;
+    # full-envelope byte-replay across the three-piece close/reopen,
+    # one November rotation on the pinned key recalculates the
+    # default full-trail read zero-cache while the October windowed
+    # read freezes at the trail block (full-derived key facts
+    # re-derive, the R1875 window-lens law), lone-e keeps the
+    # full-envelope freeze, third-instance identity; pure-read
+    # law + hygiene (AC-TRW8..AC-TRW14 pre-registered in
+    # state/queue/tech.md)
+    ("ledger-apidev-lifecycletracepersist", os.path.join(
+        "ledger", "test_apidev_lifecycletracepersist.py"), 7),
 ]
 
 FAILS = 0

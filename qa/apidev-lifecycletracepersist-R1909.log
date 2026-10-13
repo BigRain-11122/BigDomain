@@ -1,0 +1,44 @@
+=== [1] suite double-run: test_apidev_lifecycletracepersist.py AC-TRW8..AC-TRW14 ===
+run1 rc=0 (full stdout):
+PASS AC-TRW8: October anchor: chain-b one real rotate_in row record-time W=2026-10 (SQL window count==1, whole-db oct rows==3), windowed envelope 11 keys / default 10 keys pinned, windowed trail == manual SQL ascending window slice=True, chain-b status=active pairs=(from 1, to None), lone-e terminal [revoke] status=revoked, event rows 4 keys=True, lone-e default==window (additive key only)=True
+PASS AC-TRW9: full stack close (reverse order) -> reopen same db/config: October windowed envelope byte-identical to the pre-close snapshot=True, second same-param read self-identical=True
+PASS AC-TRW10: default full-trail read replayed byte-identical=True (10 keys, 1 row), lone-e windowed=True (11 keys), lone-e default=True (10 keys) -- the derived face carries zero in-memory state across the restart
+PASS AC-TRW11: frozen clock +23d -> one November rotation on chain-b (the very key the October windowed read pins) via the real product path (same- transaction same-stamp pair: chain-b rotate_out + chain-c rotate_in, record-time 2026-11 SQL count==1/1): default full-trail read recalculated (total 1->2, byte-differs from the pre-close default snapshot=True = zero cache, status active->rotated_out, rotated_to None->4), November windowed read carries the new rotate_out row exactly
+PASS AC-TRW12: after the November injection on the same pinned key: October windowed read TRAIL block byte-frozen=True (events/total/window echo + five static fields; key_events rows are record-time immutable), the three full-derived key facts re-derived to their designed values=True (the R1875 window-lens law, honest note), lone-e October windowed read FULL-envelope byte-frozen=True (terminal key), closed-chain double-revoke probes both E_AD_ALREADY with zero new rows=True, telescoping chain-b all-time 2 == oct 1 + nov 1, whole-db 5 == 3 + 2 immutable rows never lost
+PASS AC-TRW13: third instance on the same db: all four post-injection reads byte-identical to the second instance (True/True/True/True), and the October windowed read's TRAIL block still equals the ORIGINAL pre-close trail=True (windowed read survives restart x new-data unscratched at the trail level)
+PASS AC-TRW14: pure read: 8-form read battery across both keys plus bad-window x3 and unknown-key gate probes (bad_ok=True, unknown fired=True) moves zero rows (api_calls 0==0, api_dev_keys 4==4, key_events 5==5, reject_events 0==0), lifecycle_trace segment zero write keywords=0, apidev.py sha256 stable=True, config.json byte-stable=True, sources pure-ASCII=True, network imports 0/0=True, runner row wired=True
+SUITE apidev-lifecycletracepersist: 7/7 criteria pass
+clock restore probe: True
+run2 rc=0
+run1 sha16=97dc2990c9a9e123 run2 sha16=97dc2990c9a9e123 byte-identical=True
+
+=== [2] RUNNER full regression ===
+runner rc=0 (runner Tee evidence = qa\reconcile-all-R1909.log)
+RUNNER PASS (151/151 suites green, reconcile controls 7/7, 277.0s)
+
+=== [3] suite matrix regen + --check x2 ===
+regen rc=0
+check1 rc=0 check2 rc=0 byte-identical=True
+check tail: PASS check: docs/sandbox-suite-matrix.md byte-identical (14999 bytes, 151 suites, 1388 criteria)
+
+=== [4] qa writer census --check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1307 tee=805 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census rc=0
+
+=== [5] fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel rc=0
+
+VERDICT PASS
