@@ -1,0 +1,9 @@
+PASS AC-SHVP1: view-keys=True item-keys=True manual-displayed=True sh-four cap 3/3=True chronicle==mirror event_id 1..9=True retract/re-place chain=True tour-stops renumber=True filter-purity=True disclaimer-standing=True
+PASS AC-SHVP2: full-stack close (sh -> led) then rebuild on same paths: eight shapes byte-identical=True double-read self=True
+PASS AC-SHVP3: recompute zero-cache: sh-two 1->2 carried cl_e=True, sh-one 1->0 tour empty=True, event_id continuity 10..12=True old-events frozen=True
+PASS AC-SHVP4: retract-then-re-place legal (sh-one re-carries cl_a with new caption)=True; unknown-showcase fail-closed survives restart (view=True chronicle=True); per-window filter purity=True
+PASS AC-SHVP5: third instance == second-instance final state byte-identical=True sequential double-read self=True october anchor events still == pre-close=True counts-flat=True
+PASS AC-SHVP6: read battery left showcases/exhibit_events/collectibles counts constant ({"collectibles": 7, "exhibit_events": 13, "showcases": 4}); repeat-read pair identical=True
+PASS AC-SHVP7: read-face-segments-strip=True ascii=True net-clean=True registry-wired=True clock-restored=True product-sha-stable=True
+SUITE PASS 7/7
+SUITE-DOUBLE-RUN sha16 cca247c8f0724dca rc 0/0 byte-identical (AC-SHVP1..SHVP7 7/7 x2)

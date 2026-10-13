@@ -1584,6 +1584,21 @@ SUITES = [
     # suite-only round, zero product change)
     ("ugc-export-persist", os.path.join(
         "ugc", "test_export_persist.py"), 7),
+    # R1925 ledger showcase read faces (showcase_view /
+    # chronicle / chronicle_tour) cross-restart persistence
+    # example (the R1921 reseeded queue head, claimed after the
+    # R1920 lobby room_message_board row closed as an in-book
+    # duplicate): pre-close eight-shape snapshot == post-reopen
+    # read byte-identical across the full-stack close/rebuild;
+    # post-restart place/retract recomputes zero-cache with
+    # event_id continuity and tour stop renumbering; retract-
+    # then-re-place chain + unknown-showcase fail-closed gates
+    # survive the restart; a third instance replays the final
+    # state byte-identically while october anchor events stay
+    # frozen (AC-SHVP1..AC-SHVP7 pre-registered in
+    # state/queue/tech.md; suite-only round, zero product change)
+    ("ledger-showcaseview-persist", os.path.join(
+        "ledger", "test_showcase_persist.py"), 7),
 ]
 
 FAILS = 0
