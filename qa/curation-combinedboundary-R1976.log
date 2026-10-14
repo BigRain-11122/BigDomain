@@ -1,0 +1,15 @@
+== suite double-run (subprocess byte capture, LF-normalized) ==
+run1 rc=0 run2 rc=0
+byte-identical=true lf-sha16=e5ce5518f7665a02 crlf1=7 crlf2=7
+run1 stdout bytes=2354 (LF-normalized 2347)
+run2 stdout bytes=2354 (LF-normalized 2347)
+
+-- run1 stdout verbatim (LF) --
+PASS AC-CBW1: zero-curation boundary world (substrate rows live: 3 accounts, 4 certificates, 4 showcases, zero curations registered): boards_combined honest-empty anchor green (hot=[], cold=[], totals {0,0,0}, envelope+disclaimer law, manual SQL totals empty); full-stack close (cu -> sh -> led) then reopen on the same three db paths: joint read byte-identical to the pre-close snapshot (206 bytes, dumps sort_keys)
+PASS AC-CBW2: all-hot boundary world (three themes registered, a live placement inside every theme's member showcases: totals {cu-alpha:2, cu-beta:1, cu-gamma:1}): hot=[cu-alpha(2) rank1, cu-beta(1) rank2, cu-gamma(1) rank3] (-total, id ASC), cold=[]; partition complement law + live hot_board single-source cross green; manual SQL second-derivation totals agree; full-stack close then reopen: joint read byte-identical (562 bytes)
+PASS AC-CBW3: zero-hot boundary world: the all-hot -> zero-hot flip ran ON the reopened instance (all four live placements retracted) and the joint read recomputed zero-cache into the zero-hot boundary shape: hot=[], cold=[cu-alpha, cu-beta, cu-gamma] (id ASC); partition + single-source laws held across the flip; manual SQL totals all zero; full-stack close then reopen: joint read byte-identical (562 bytes)
+PASS AC-CBW4: zero-hot -> mixed boundary escape ON the reopened instance (cl_b re-placed into sh-two, a cu-beta member showcase): joint read recomputed zero-cache into the mixed shape hot=[cu-beta(1)], cold=[cu-alpha, cu-gamma] (id ASC) with partition + single-source laws held; full-stack close then FIFTH instance reopen on the same three db paths: sequential reads byte-identical to the post-escape snapshot and to each other (re-read purity, zero in-memory drift, 560 bytes)
+PASS AC-CBW5: pure-read law: all 4 reopen read batches left curations / curation_members / showcases / exhibit_events / ledger_tx row counts constant (final counts {"curation_members": 4, "curations": 3, "exhibit_events": 9, "ledger_tx": 0, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json) - suite-only round, zero product changes
+PASS AC-CBW6: hygiene: source pure ASCII (19761 bytes), zero network imports on true import lines, boards_combined method source zero write statements, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+-- end run1 stdout --

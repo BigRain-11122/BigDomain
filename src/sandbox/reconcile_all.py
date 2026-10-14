@@ -887,6 +887,28 @@ SUITES = [
     # (AC-CDP1..CDP6 pre-registered in state/queue/explore.md).
     ("ledger-curation-combinedpersist",
      os.path.join("ledger", "test_curation_combinedpersist.py"), 6),
+    # R1976 curation combined hot+cold dual board boundary-world
+    # cross-restart persistence example window (R1975-reseeded
+    # explore-queue row claimed by R1976): the persist-family
+    # laws pinned across the THREE boundary worlds of the joint
+    # read (AC-CJ4 boundary confluence) - zero-curation world
+    # (honest empty both zones), all-hot world (cold zone empty)
+    # and zero-hot world (hot zone empty). Each boundary world
+    # is closed full-stack and reopened on the same three db
+    # paths with the joint read byte-identical to the pre-close
+    # snapshot (single derivation source, zero in-memory drift);
+    # the world-to-world transitions (all-hot -> zero-hot by
+    # retraction, zero-hot -> mixed by re-placement) recompute
+    # zero-cache ON the reopened instances with the
+    # disjoint-union partition law and the live hot_board
+    # single-source cross held after every step; a fifth-instance
+    # sequential read pair is byte-identical (re-read purity);
+    # pure-read law across every read batch; product-file
+    # sha256 double-proof (suite-only round, zero product
+    # changes)
+    # (AC-CBW1..CBW6 pre-registered in state/queue/explore.md).
+    ("ledger-curation-combinedboundary",
+     os.path.join("ledger", "test_curation_combinedboundary.py"), 6),
     # R1926 curation registry / tour read-face family
     # cross-restart persistence example window (R1923-reseeded
     # tech-queue row claimed by R1926): active_curations
