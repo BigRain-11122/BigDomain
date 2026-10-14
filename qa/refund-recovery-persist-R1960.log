@@ -1,0 +1,107 @@
+=== suite double-run (R1880-family stdout-normalized capture) ===
+PASS AC-RRP1: world: A revoked=1 period=expired; B revoked=1 period=expired; C period=active live=1; faces=11; ledger rows=6 (pre-close control identical=True)
+PASS AC-RRP2: restart faces identical=True; diff=[]; faces=11
+PASS AC-RRP3: re-entry A revoked=0 B revoked=0; audit A=1 B=1 (deterministic key converges, zero duplicates)
+PASS AC-RRP4: fresh wired refund D revoked=1 period=expired audit=1; named-face drift=[]; A row stable=True; A audit=1
+PASS AC-RRP5: read-batch row counts stable=True ({"member_audit": 20, "member_credit_events": 7, "member_periods": 4, "member_vouchers": 1, "pay_grants": 4, "pay_orders": 4, "pay_receipts": 4})
+PASS AC-RRP6: second restart identical=True; diff=[]; faces=13
+PASS AC-RRP7: configs sha stable=True; ascii=True; net imports=0; worlds outside repo=True
+SUITE PASS: 7/7
+
+--- second run stdout sha16=6785db0e776b3a97 (first=6785db0e776b3a97) byte-identical=True exit=0/0
+=== full RUNNER regression ===
+hers": 1, "pay_grants": 4, "pay_orders": 4, "pay_receipts": 4})
+  | PASS AC-RRP6: second restart identical=True; diff=[]; faces=13
+  | PASS AC-RRP7: configs sha stable=True; ascii=True; net imports=0; worlds outside repo=True
+  | SUITE PASS: 7/7
+PASS suite member-refund-recovery-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.7s
+PASS suites 198/198 green, expected criteria total=1725
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived PASS
+  | 4 zero-sum-and-mint-identity PASS
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE PASS (8/8 checks)
+PASS reconcile ledger-demo exit=0 (expect 0, clean eight checks)
+  | 1 double-entry-balance PASS
+  | 2 balance-sign-law PASS
+  | 3 materialized-vs-derived FAIL n=1 
+  | 4 zero-sum-and-mint-identity FAIL n=1 sum=1 issued=801 equity=-800
+  | 5 ref-idempotence PASS
+  | 6 content-gate-refs PASS
+  | 7 orphan-entries PASS
+  | 8 cap-scan-and-adjust-lines PASS
+  | RECONCILE FAIL (2/8 checks failed)
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-o65m89_u\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (198/198 suites green, reconcile controls 7/7, 240.4s)
+
+RUNNER exit=0
+=== suite matrix regen ===
+
+matrix regen exit=1
+=== matrix --check double run ===
+sandbox-suite-matrix.md stale (registry/config/evidence drifted)
+  evidence-face: doc-recorded=qa/reconcile-all-R1959.log check-resolved=qa/reconcile-all-R1960.log
+  hint: evidence face-mismatch - the doc was generated against a different evidence file than this check resolved; rerun: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1960.log  then re-run --check to judge true drift
+
+check exit=2/2 byte-identical=True
+
+=== matrix regen (corrected evidence path qa/...) ===
+
+regen rc=1
+=== matrix --check double run (corrected) ===
+concile-all-R1959.log check-resolved=qa/reconcile-all-R1960.log
+  hint: evidence face-mismatch - the doc was generated against a different evidence file than this check resolved; rerun: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1960.log  then re-run --check to judge true drift
+
+check rc=2/2 byte-identical=True
+
+=== matrix regen (repo-root cwd form, doc command form) ===
+PASS generated docs/sandbox-suite-matrix.md (19120 bytes) - registry suites=198 criteria=1725 evidence=qa/reconcile-all-R1960.log green=198/198
+PASS hygiene: pure-ascii source, zero network imports
+
+regen rc=0
+=== matrix --check double run (repo-root cwd form) ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (19120 bytes, 198 suites, 1725 criteria)
+
+check rc=0/0 byte-identical=True

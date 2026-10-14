@@ -1950,6 +1950,14 @@ SUITES = [
     # (AC-GAP1..GAP7 pre-registered in state/queue/tech.md).
     ("ledger-growth-archive-persist", os.path.join(
         "ledger", "test_growth_archive_persist.py"), 7),
+    # R1960 refund-recovery persist seat (R1886 family, R1955
+    # reseed claim): wired instant-converged world across three
+    # restarts - five-face snapshot byte-identity, deterministic
+    # audit-key re-entry convergence (zero duplicates), fresh
+    # wired refund on the restarted instance with named-face
+    # zero-drift, pure-read law, second-restart stability.
+    ("member-refund-recovery-persist", os.path.join(
+        "member", "test_refund_recovery_persist.py"), 7),
 ]
 
 FAILS = 0
