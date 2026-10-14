@@ -252,6 +252,7 @@ def main():
        'fold plan preop sha16 exact')
     ok(plan['archive_header'].startswith('# --- R9001 fold append (')
        and 'fold R455 window' in plan['archive_header'], 'fold plan archive header format')
+    ok(plan['round_label'] == 'R9001', 'fold plan round_label echo (AC-LT25)')
     ok(open(spath, 'rb').read() == pre_state and open(arc, 'rb').read() == pre_arc,
        'fold dry-run zero mutation (state + archive)')
 
@@ -473,6 +474,33 @@ def main():
     ok(rc == 2 and 'gate-exceed' in out, 'slice gate abort exit 2')
     ok(open(mspath2, 'rb').read() == pre2 and open(marc2, 'rb').read() == pre_marc2,
        'slice gate abort zero mutation')
+
+    # ---- fold --round strict form gate (AC-LT25, R1969 slice) ----
+    sgate = tempfile.mkdtemp(prefix='bd-roundgate-')
+    gpath = build_ps_state(sgate, PS_LOGS)
+    gfile = os.path.join(sgate, 'summary.txt')
+    open(gfile, 'w', encoding='utf-8').write(SUMMARY + '\n')
+    gpre = open(gpath, 'rb').read()
+    for bad in ('1968', 'x1968', 'R19', 'R1968x', 'R1968 ', '  R1968', 'r1968'):
+        rc, out, err = run(sgate, 'fold', '--round', bad, '--fold-no', '473',
+                           '--desc', 'bad round form', '--window-tail', '2',
+                           '--summary-file', gfile)
+        ok(rc == 2 and 'must match R + 4+ digits' in err,
+           'fold --round strict gate rejects %r (AC-LT25)' % bad)
+        ok(out == '', 'fold --round gate emits no plan JSON for %r (AC-LT25)' % bad)
+        ok(open(gpath, 'rb').read() == gpre,
+           'fold --round gate zero mutation for %r (AC-LT25)' % bad)
+    rc, out, err = run(sgate, 'fold', '--round', '', '--fold-no', '473',
+                       '--desc', 'empty round', '--window-tail', '2',
+                       '--summary-file', gfile)
+    ok(rc == 2 and open(gpath, 'rb').read() == gpre,
+       'fold --round empty string rejected fail-closed (AC-LT25)')
+    rc, out, err = run(sgate, 'fold', '--round', 'R9009', '--fold-no', '473',
+                       '--desc', 'legal round form', '--window-tail', '2',
+                       '--summary-file', gfile)
+    gplan = json.loads(out)
+    ok(rc == 0 and gplan['round_label'] == 'R9009' and gplan['would_fail'] == [],
+       'fold --round legal form passes + plan round_label echo (AC-LT25)')
 
     # ---- census (AC-LT15..LT17, R1688 slice; non-ASCII markers via escapes) ----
     SEC = '\u00a7'   # section pointer marker

@@ -582,6 +582,12 @@ def cmd_fold(args):
         if not val:
             print('error: %s is required' % req, file=sys.stderr)
             return 2
+    # strict --round form gate (AC-LT25, pre-registered in tech.md R1968
+    # next-slice registry): fail-closed on any non-RNNNN form
+    if not re.fullmatch(r'R\d{4,}', str(args.round)):
+        print('error: --round must match R + 4+ digits like R1968 (got %r)'
+              % (args.round,), file=sys.stderr)
+        return 2
     with open(args.summary_file, encoding='utf-8') as f:
         slines = [l for l in (x.rstrip('\n').rstrip('\r') for x in f) if l.strip()]
     if len(slines) != 1:
@@ -668,7 +674,8 @@ def cmd_fold(args):
     }
     plan = {
         'mode': 'execute' if args.execute else 'dry-run',
-        'round': args.round, 'fold_no': args.fold_no,
+        'round': args.round, 'round_label': args.round,
+        'fold_no': args.fold_no,
         'window_mode': window_mode, 'window_start': w_start,
         'window_end': w_end,
         'window_lines': len(window),
