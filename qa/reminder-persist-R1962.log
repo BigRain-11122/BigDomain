@@ -1,0 +1,34 @@
+=== suite double-run (R1880-family stdout-normalized capture) ===
+PASS
+PASS
+PASS
+PASS
+PASS
+PASS
+PASS
+SUITE
+run2 rc=0; stdout byte-identical (fc /B no differences)
+
+=== RUNNER full regression (Tee canonical evidence) ===
+PASS suite member-reminder-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 0.4s
+PASS reconcile ledger-demo exit=0 (expect 0, clean eight checks)
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+RUNNER PASS (199/199 suites green, reconcile controls 7/7, 193.8s)
+
+=== suite-matrix regen + double --check ===
+PASS generated docs/sandbox-suite-matrix.md (19205 bytes) - registry suites=199 criteria=1732 evidence=qa/reconcile-all-R1962.log green=199/199
+PASS check: docs/sandbox-suite-matrix.md byte-identical (19205 bytes, 199 suites, 1732 criteria) [x2 double-run]
+
+=== census ===
+census: files=1419 tee=917 baselined=502; disappeared=0; flags=0
+verdict: DRIFT-CLEAN (first-attempt shell-capture artifact deleted; Tee re-run law R1924 family)
+
+=== fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+VERDICT PASS (AC-RMP1..RMP7 7/7; RUNNER 199/199 criteria 1725->1732; takeover of crashed-round R1962 orphan payload)

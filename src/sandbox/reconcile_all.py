@@ -1958,6 +1958,19 @@ SUITES = [
     # zero-drift, pure-read law, second-restart stability.
     ("member-refund-recovery-persist", os.path.join(
         "member", "test_refund_recovery_persist.py"), 7),
+    # R1962 reminder authorization + read-face family persist seat
+    # (R1886 family, R1959 reseed claim): grant journal / budget
+    # arithmetic / idempotency keys / W10 dual-timepoint faces /
+    # due-scan re-entry across two full close-reopen restarts -
+    # six-face snapshot byte-identity both faces, budget arithmetic
+    # continues post-restart (once exhaustion + fresh grant
+    # activation), daily-cap counting crosses restart then clears on
+    # day roll, untouched-avatar zero-drift, pure-read law (reminder
+    # module performs zero member.db writes), second-restart terminal
+    # state byte-identical (AC-RMP1..RMP7 pre-registered in
+    # state/queue/tech.md).
+    ("member-reminder-persist", os.path.join(
+        "member", "test_reminder_persist.py"), 7),
 ]
 
 FAILS = 0

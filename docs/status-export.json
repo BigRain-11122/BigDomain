@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-14T15:16:20+08:00",
+  "export_ts": "2026-10-14T17:10:48+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1961: R1960 orphan-payload takeover closeout (twelfth case) - refund-recovery persist suite now committed+pushed on-chain; live re-verify RUNNER PASS 198/198 controls 7/7; matrix 198/1725 byte-identical; fingerprint CLEAN",
-    "latest_artifact": "qa/refund-recovery-persist-R1960.log + src/sandbox/member/test_refund_recovery_persist.py (2026-10-14)",
-    "next_milestone": "P2 tech queue next persist seat (member reminder / pay reconcile / pay sweep_expired / lobby events family) + radar slice OH-20261014-cph4.md review at 21:40 arrival; within 48h"
+    "current": "R1962: member reminder authorization+read-face family cross-restart persist suite on-chain via 13th-case orphan takeover closeout (AC-RMP1..RMP7 7/7; RUNNER 199/199 criteria 1725->1732; live re-verify RUNNER PASS controls 7/7 175.6s; matrix 199/1732 byte-identical; census+fingerprint CLEAN; fold R518 78371->73036B zero token loss)",
+    "latest_artifact": "qa/reminder-persist-R1962.log + qa/reconcile-all-R1962.log + src/sandbox/member/test_reminder_persist.py (2026-10-14)",
+    "next_milestone": "P2 tech queue next persist seat (pay reconcile / pay sweep_expired / lobby events family) + radar slice OH-20261014-cph4.md review at 21:40 arrival; within 48h"
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1962",
+      "R1962: member reminder authorization + read-face family cross-restart persist suite 7/7 (criteria AC-RMP1..RMP7 pre-registered pre-code by the crashed round; grant journal, budget arithmetic, idempotency keys, W10 dual-timepoint faces, due-scan idempotent re-entry, daily-cap day-roll clear, read-face snapshots across double close/reopen restarts, pure-read law, second-restart stability; RUNNER 199/199 criteria 1725->1732; matrix --check byte-identical; sentinel CLEAN domains=5; two-segment crash, third-segment takeover with live re-verify RUNNER PASS 199/199 controls 7/7 175.6s; fold R518 tail-7 78371->73036B 64 tokens zero-loss; DEC +2 acked non-ours D-20261014-08/C-20261014-01; GORD 395->397; tech consume 1 reseed 0 queue 8)"
+    ],
+    [
       "R1960",
       "R1960: member refund-recovery linkage cross-restart persist suite 7/7 (criteria AC-RRP1..RRP7 pre-registered pre-code; wired instant-converged world A/B + live contrast C, full three-piece close/reopen byte-identity, deterministic audit-key re-entry convergence, fresh wired refund on restarted instance with named-face zero-drift, pure-read law, second-restart stability; RUNNER 198/198 criteria 1718->1725; matrix --check byte-identical; sentinel CLEAN domains=5; evidence-path form pitfall honestly noted [suite_matrix --evidence resolves relative to cwd -> repo-root form])"
     ],
@@ -359,22 +363,21 @@
       "R1922 R1921 commit-debt takeover closeout (score 1 honest: no new product artifact this round - the collected debt made R1921's 2-point suite+evidence chain visible on origin; predecessor crashed post-surgery pre-commit, payload verified 7-face PRESENT live before the targeted 12-file commit 18736ac7 + push a3acdbf3..18736ac7; five-still green: DEC 308 token-flat, GORD 358->359 tail-scan exactly one new row 10-13 17:3x @bm-a MV-relay = BigStream MV family zero BigDomain face acknowledged no-action (naive full-file pipe count 365 = header/other-table rows, not the canonical metric), LEDGER zero un-acked transfers, daily reconcile evidence trio in-plate for 10-13; hot_board queue head (R1919 reseed, AC-HB1..HB7 pre-registered) assessed and deferred to next round with full budget - a full suite cadence (writing + RUNNER 162 suites 213.5s + matrix x3 + census + sentinel) does not fit the ~10min remainder, starting it would mint a third consecutive orphan debt; queue_tech_open 8 unchanged)"
     ],
     [
-      "1960",
+      "1962",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-08..2026-10-14",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 1,
+    "substantive_non_idle_mention_lines": 0,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 9,
-    "queue_explore_open": 10,
-    "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
+    "queue_tech_open": 8,
+    "queue_explore_open": 10
   }
 }
