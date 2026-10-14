@@ -1817,6 +1817,12 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-effects-persist", os.path.join(
         "ledger", "test_effects_persist.py"), 7),
+    # honorcert cross-restart persist window (R1948): three-piece
+    # restart world, incremental heal + permanent-certificate law,
+    # replay gates, pure-read law, third instance stability
+    # (AC-HCP1..HCP7 pre-registered in state/queue/tech.md).
+    ("ledger-honorcert-persist", os.path.join(
+        "ledger", "test_honorcert_persist.py"), 7),
 ]
 
 FAILS = 0

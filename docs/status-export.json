@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T07:37:13+08:00",
+ "export_ts": "2026-10-14T08:00:26+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech FIFO: ledger effects cross-restart persist suite delivered 7/7 (AC-EFP1..EFP7, two-piece restart, 9 restart-surviving gates, pre-restart credits keep serving post-restart); RUNNER full regression 185/185 green; fold R511 state waterline honored (79124->72352B)",
-  "latest_artifact": "src/sandbox/ledger/test_effects_persist.py + qa/effects-persist-R1947.log (2026-10-14)",
-  "next_milestone": "next: ledger honorcert persist seat (R1943-seeded FIFO head); window <=48h (by 2026-10-16)"
+  "current": "P2 tech FIFO: ledger honorcert cross-restart persist suite delivered 7/7 (AC-HCP1..HCP7, three-piece restart, incremental heal + permanent-certificate law across restart); RUNNER full regression 186/186 green",
+  "latest_artifact": "src/sandbox/ledger/test_honorcert_persist.py + qa/honorcert-persist-R1948.log (2026-10-14)",
+  "next_milestone": "next: ledger studio persist seat (R1944-seeded FIFO head); window <=48h (by 2026-10-16)"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1948",
+   "ledger honorcert cross-restart persist suite 7/7 (AC-HCP1..HCP7; three-piece restart, incremental heal across restart, permanent-certificate law survives board move + restart, second event namespace, RUNNER 186/186 criteria 1634->1641)"
+  ],
+  [
    "R1947",
    "ledger effects cross-restart persist suite 7/7 (AC-EFP1..EFP7; two-piece restart, 9 gate probes, three-lane frozen faces, pre-restart credits keep serving, RUNNER 185/185, fold R511)"
   ],
@@ -355,21 +359,17 @@
    "member banner_board cap-window read cross-restart persist 7/7 (criteria 17->24 AC-BQ18..BQ24; seed nine-key correction -> 7/11/12-key product truth; oct capped-window envelope byte-identity across restart, new-row zero-cache recompute, old-window freeze, dual live instances identical) + RUNNER 137/137 criteria 1284 + matrix byte-identical + census DRIFT-CLEAN + sentinel CLEAN"
   ],
   [
-   "R1893",
-   "apidev chain_usage read-cap limit 6/6 (criteria 8->14) + RUNNER 136/136 criteria 1277 + matrix byte-identical + census DRIFT-CLEAN + sentinel CLEAN (LU14 count-pin same-round fix 13->12: pre-LU7 RESULTS tally)"
-  ],
-  [
-   "1947",
+   "1948",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 16,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

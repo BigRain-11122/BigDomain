@@ -1,0 +1,94 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-HCP1: anchor world pinned: deterministic board carol 12 / aaron 7 / bob 7 (tie, id asc) / dave 3 with erin a zero-row face; top-3 grant = [(1, 'usr:carol', 12, 'granted'), (2, 'usr:aaron', 7, 'granted'), (3, 'usr:bob', 7, 'granted')] (granted=3), idempotent replay granted=0 already=3 with zero new rows; three certificate rows land in ledger.db with ledger_tx=0 ledger_entries=0 (zero token law - counts stay counts); battery 9 faces snapshotted (certs 2026/2027/2028 + board + five collections), civic tables earns=8 behaviors=3; gate probes (ctor E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS disc=E_HC_NO_DISCLAIMER; year E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; top E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; item E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; read-year E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; referenced-face calls board=0 issue=0 collection=0) all rejected with zero referenced- face calls; counts and battery frozen across the probe batch; digest=29d2bd31cd36c6d2
+PASS AC-HCP2: three-piece close (cl.close + cv.close + led.close - the honorcert face itself owns no storage and carries no close) -> Ledger + CivicPointsFace + CollectiblesFace reopened on the same two dbs with the same config and a fresh HonorCertFace: the read battery (certs 2026/2027/2028 + board + five collections) replays byte-identical to the pre-close snapshot (diffs=none) - the certified flags, the honor order and the collection provenance all re-derive from the persisted civic.db earn rows and ledger.db certificate rows with zero in-memory drift; digest=29d2bd31cd36c6d2
+PASS AC-HCP3: restart-surviving gates: constructor rejects (None faces, missing-attr faces, empty disclaimer) and arg gates (bad years, bad top_n, empty item_id, bad read years) all reject with the identical codes on instance 2 (ctor E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS disc=E_HC_NO_DISCLAIMER; year E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; top E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; item E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; read-year E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS; referenced-face calls board=0 issue=0 collection=0); zero referenced-face calls across the probe batch (the year gate rides the module law, the constructor gates ride the attr checks - nothing in-memory to lose); counts and battery frozen across the probe batch
+PASS AC-HCP4: post-restart continuation: erin earns four poll events on the reopened civic face so the board moves (erin 20 -> rank 1); the re-grant heals incrementally across the restart - [(1, 'usr:erin', 'granted'), (2, 'usr:carol', 'already'), (3, 'usr:aaron', 'already')] (granted=1 already=2, the interrupted-batch heal law live: only the newcomer costs a row, every pre-restart certificate converges to already with zero new rows); bob drops to rank 4, out of the top-3 slice, yet keeps certified=true with his item_id (permanent-certificate law survives the restart - the flag re-derives from the persisted certificate rows, not the live slice); dave earns in 2027 so a second event namespace opens: grant 2027 top-1 lands dave's row (SQL cross: civic-honor:2026 = 4 rows aaron/bob/carol/erin, civic-honor:2027 = ('usr:dave', 'civic-honor-2027'), item_id pinned); collectibles 3->5, civic_earns 8->13, ledger_tx stays 0 (zero token law across the whole window)
+PASS AC-HCP5: frozen faces: every pre-restart certificate row (carol/aaron/bob 2026) keeps all its columns byte-identical across the restart AND the continuation (collectibles rows are immutable - the module's only UPDATE surface is the edition counter, untouched here); the pre-restart civic_earn rows stay byte-identical as a frozen prefix (append-only earns: only new rows land, 8->13); replay gates across the restart: the terminal re-grant returns granted=0 already=3 with zero new rows (the collectibles duplicate law converges to already), and the zero-earn year 2028 grants honestly empty (granted=0 honorees=[]) with zero rows; counts and battery frozen across both replay probes
+PASS AC-HCP6: pure-read law: the full battery (certs 2026/2027/2028 + board + five collections) reads twice back-to-back byte-identical and both-db table counts stay constant - the honor_certs and honor_board derivations are zero-side-effect reads over the two persisted stores
+PASS AC-HCP7: third instance: three-piece close -> reopen the same two dbs once more - battery byte-identical to the instance-2 terminal state (diffs=none; certified flags, honor order and collection provenance stable across a second restart); shipped files untouched (config.json + honorcert/civicpoints/collectibles sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+sha16 run1=cd16d9f6de8d607d run2=cd16d9f6de8d607d byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-by0s1cnj\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (186/186 suites green, reconcile controls 7/7, 224.1s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18068 bytes) - registry suites=186 criteria=1641 evidence=qa/reconcile-all-R1948.log green=186/186
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18068 bytes, 186 suites, 1641 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1384 tee=882 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1948.log
+?? src/os/claim_R1948.py
+?? src/os/claim_payload_R1948.json
+?? src/os/evidence_R1948.py
+?? src/os/hcp_run2.out
+?? src/os/probe2_R1948.out
+?? src/os/probe3_R1948.out
+?? src/os/probe3_R1948.py
+?? src/os/probe_R1948.out
+?? src/os/probe_R1948.py
+?? src/sandbox/ledger/test_honorcert_persist.py
+
+VERDICT PASS
