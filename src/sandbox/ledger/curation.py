@@ -411,3 +411,35 @@ class CurationFace:
         delta_rows = rise + fall + entered + dropped
         return {"hot_board_delta": delta_rows,
                 "disclaimer": self.disclaimer}
+
+    def cold_board(self):
+        """Zero-heat theme board (R1970): every curation whose
+        members show a live on-display total of zero - the honest
+        inverse filter of the heat board, a cold shelf of themes
+        with nothing currently shown. Pure read with zero token
+        movement and zero writes. The single derivation source is
+        the live hot_board() read (reference face, not a copy):
+        the cold rows are exactly the hot rows whose
+        displayed_total is zero, re-ranked 1..N with the row shape
+        unchanged - zero second aggregation engine, zero direct
+        showcase reads, zero cached counters. The hot board's
+        deterministic sort already places the zero-heat block in
+        curation_id ASC order, and the explicit id sort keeps
+        that law independent of the parent ordering. A world with
+        zero curations, or a world where every theme carries live
+        items, returns an honest empty board. Zero RNG, zero time
+        keys, zero insertion-order keys; the envelope carries the
+        standing disclaimer and every row keeps its ai_label."""
+        board = self.hot_board()
+        cold = [row for row in board["hot_board"]
+                if row["displayed_total"] == 0]
+        cold.sort(key=lambda r: r["curation_id"])
+        rows = []
+        for rank, row in enumerate(cold, start=1):
+            rows.append({"rank": rank,
+                         "curation_id": row["curation_id"],
+                         "title": row["title"],
+                         "ai_label": row["ai_label"],
+                         "member_count": row["member_count"],
+                         "displayed_total": row["displayed_total"]})
+        return {"cold_board": rows, "disclaimer": self.disclaimer}

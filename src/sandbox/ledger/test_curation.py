@@ -8,7 +8,11 @@ existed; honesty law) plus the R1753 theme heat board criteria
 AC-HB1..HB5 (hot_board pure-read derived ranking, registered
 before the face existed) plus the R1770 board rank-change diff
 criteria AC-HD1..HD7 (hot_board_delta movement face over two
-caller-held snapshots, registered before the face existed).
+caller-held snapshots, registered before the face existed)
+plus the R1970 zero-heat cold board criteria AC-CB1..CB5
+(cold_board honest inverse filter of the heat board, single
+hot_board derivation source, registered before the face
+existed).
 Each criterion prints PASS/FAIL with evidence; the process exits
 non-zero on any FAIL.
 
@@ -767,6 +771,155 @@ def main():
           % (all_disclaimer_hd, label_map,
              [(r["curation_id"], r["ai_label"])
               for r in dropped_rows]))
+
+    # -- AC-CB1..CB5 zero-heat cold board (R1970) --------------------------
+    cu_cb_empty = CU.CurationFace(sh, DISCLAIMER, os.path.join(
+        tmp, "curation-cb-empty.db"))
+    cb_empty = cu_cb_empty.cold_board()
+    cu_cb_empty.close()
+    ok_cb_empty = cb_empty == {"cold_board": [],
+                               "disclaimer": DISCLAIMER}
+
+    sh.register_showcase("cold-hall", "Cold Hall Window", 3,
+                         False)
+    cu.register_curation("cold-b", "Cold B Route",
+                         ["cold-hall"], True)
+    cu.register_curation("cold-a", "Cold A Route",
+                         ["cold-hall"], False)
+    cb0 = cu.cold_board()
+    key_ok_cb = all(set(r.keys()) == {"rank", "curation_id",
+                                      "title", "ai_label",
+                                      "member_count",
+                                      "displayed_total"}
+                    for r in cb0["cold_board"])
+    zero_ok_cb = all(r["displayed_total"] == 0
+                     for r in cb0["cold_board"])
+    ranks_cb = [r["rank"] for r in cb0["cold_board"]]
+    contig_cb = ranks_cb == list(range(1,
+                                       len(ranks_cb) + 1))
+    label_ok_cb = all(isinstance(r["ai_label"], int) and
+                      not isinstance(r["ai_label"], bool)
+                      for r in cb0["cold_board"])
+    ok_cb1 = (ok_cb_empty
+              and set(cb0.keys()) == {"cold_board",
+                                      "disclaimer"}
+              and key_ok_cb and zero_ok_cb and contig_cb
+              and label_ok_cb
+              and "cold-a" in {r["curation_id"]
+                               for r in cb0["cold_board"]}
+              and "cold-b" in {r["curation_id"]
+                               for r in cb0["cold_board"]})
+    record("AC-CB1", ok_cb1, "cold board envelope keys exact"
+          " {cold_board, disclaimer}; row key set identical"
+          " to hot board rows; every cold row shows"
+          " displayed_total 0 (%d rows); ranks are the"
+          " contiguous 1..N block (%s); every row carries an"
+          " int ai_label; a face over a zero-curation"
+          " registry returns the honest empty board (%s)"
+          % (len(cb0["cold_board"]), contig_cb, ok_cb_empty))
+
+    live_hot = cu.hot_board()["hot_board"]
+    hot_ids = {b["curation_id"] for b in live_hot
+               if b["displayed_total"] > 0}
+    cold_ids = {r["curation_id"] for r in cb0["cold_board"]}
+    all_ids = {b["curation_id"] for b in live_hot}
+    ok_cb2 = (hot_ids | cold_ids == all_ids
+              and not (hot_ids & cold_ids)
+              and hot_ids and cold_ids)
+    cu_all_hot = CU.CurationFace(sh, DISCLAIMER, os.path.join(
+        tmp, "curation-cb-allhot.db"))
+    cu_all_hot.register_curation("only-city", "Only City",
+                                 ["city-hall"], False)
+    ah_hot = cu_all_hot.hot_board()["hot_board"]
+    ah_cold = cu_all_hot.cold_board()
+    cu_all_hot.close()
+    ok_cb_allhot = (ah_cold == {"cold_board": [],
+                                "disclaimer": DISCLAIMER}
+                    and len(ah_hot) == 1
+                    and ah_hot[0]["displayed_total"] > 0)
+    ok_cb2 = ok_cb2 and ok_cb_allhot
+    record("AC-CB2", ok_cb2, "inverse-filter complement law on"
+          " the same live world: cold set %s union hot set %s"
+          " equals the full hot_board id set with an empty"
+          " intersection (both sides non-empty); an all-hot"
+          " world (single curation over a showcase with live"
+          " items, heat %s) returns the honest empty cold"
+          " board (%s)"
+          % (sorted(cold_ids), sorted(hot_ids),
+             ah_hot[0]["displayed_total"] if ah_hot else None,
+             ok_cb_allhot))
+
+    cb0b = cu.cold_board()
+    dump_cb_a = json.dumps(cb0, sort_keys=True,
+                           ensure_ascii=True)
+    dump_cb_b = json.dumps(cb0b, sort_keys=True,
+                           ensure_ascii=True)
+    ids_cb = [r["curation_id"] for r in cb0["cold_board"]]
+    ok_cb3 = (dump_cb_a == dump_cb_b
+              and ids_cb == sorted(ids_cb))
+    record("AC-CB3", ok_cb3, "deterministic curation_id ASC"
+          " order %s (zero RNG, zero time keys, zero"
+          " insertion-order keys - cold-b registered first"
+          " but cold-a ranks first); two calls serialize"
+          " byte-identical (%s)"
+          % (ids_cb,
+             "identical" if dump_cb_a == dump_cb_b else
+             "DRIFT"))
+
+    cb_seg = cu_src[cu_src.index("def cold_board"):]
+    delegate_ok_cb = "self.hot_board()" in cb_seg
+    sql_free_cb = "SELECT" not in cb_seg
+    view_free_cb = "showcase_view" not in cb_seg
+    write_words_cb = [w for w in ("INSERT INTO", "UPDATE ",
+                                  "DELETE ")
+                      if w in cb_seg]
+    rng_cb = "random" not in cb_seg
+    ok_cb4 = (delegate_ok_cb and sql_free_cb
+              and view_free_cb and not write_words_cb
+              and rng_cb)
+    record("AC-CB4", ok_cb4, "single derivation source: the"
+          " cold_board body delegates to the live hot_board()"
+          " read (%s) and carries zero direct curation SQL"
+          " (%s), zero showcase_view calls (%s), zero write"
+          " statements (%s), zero RNG token - the honest"
+          " inverse filter with zero second aggregation"
+          " engine" % (delegate_ok_cb, sql_free_cb,
+                       view_free_cb, write_words_cb))
+
+    counts_cb_a = (_count(conn, "ledger_tx"),
+                   _count(cuconn, "curations"),
+                   _count(cuconn, "curation_members"),
+                   _count(shconn, "showcases"),
+                   _count(shconn, "exhibit_events"))
+    cb1_again = cu.cold_board()
+    cb2_again = cu.cold_board()
+    counts_cb_b = (_count(conn, "ledger_tx"),
+                   _count(cuconn, "curations"),
+                   _count(cuconn, "curation_members"),
+                   _count(shconn, "showcases"),
+                   _count(shconn, "exhibit_events"))
+    non_ascii_cb = sum(1 for ch in cu_src if ord(ch) > 127)
+    banned_hits_cb = [w for w in BANNED_VERBS if w in cu_src]
+    update_hits_cb = [w for w in ("UPDATE curations",
+                                  "UPDATE curation_members")
+                      if w in cu_src]
+    with open(os.path.join(BASE, "config.json"), "rb") as h:
+        cfg_cb = h.read()
+    ok_cb5 = (counts_cb_a == counts_cb_b
+              and cb1_again == cb0 and cb2_again == cb0
+              and non_ascii_cb == 0 and not banned_hits_cb
+              and not update_hits_cb and not net_imports
+              and cfg_cb == cfg_bytes)
+    record("AC-CB5", ok_cb5, "pure read: repeated cold reads"
+          " leave ledger_tx and every showcase/curation row"
+          " count unchanged %s == %s and all three reads"
+          " equal; hard laws carry over for the delivered"
+          " face: module pure ASCII (%d non-ascii), zero"
+          " UPDATE surface (%s), zero circulation verbs"
+          " (%s), zero network imports, shipped config.json"
+          " byte-stable"
+          % (counts_cb_a, counts_cb_b, non_ascii_cb,
+             update_hits_cb, banned_hits_cb))
 
     non_ascii_hd = sum(1 for ch in cu_src if ord(ch) > 127)
     banned_hits_hd = [w for w in BANNED_VERBS if w in cu_src]

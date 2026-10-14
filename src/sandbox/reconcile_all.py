@@ -804,9 +804,14 @@ SUITES = [
     # movement face over two caller-held snapshots (four states
     # rise/fall/entered/dropped, steady rows omitted, zero storage,
     # single hot_board() derivation source) - AC-HD1..HD7 same row,
-    # criteria 12 -> 19.
+    # criteria 12 -> 19. R1970 adds the zero-heat cold board
+    # cold_board honest inverse filter of the heat board (single
+    # live hot_board() derivation source, zero second aggregation
+    # engine, curation_id ASC rank 1..N, honest empty board over
+    # zero-curation and all-hot worlds) - AC-CB1..CB5 same row,
+    # criteria 19 -> 24.
     ("ledger-curation",
-     os.path.join("ledger", "test_curation.py"), 19),
+     os.path.join("ledger", "test_curation.py"), 24),
     # R1923 curation hot_board cross-restart persistence example
     # window: the theme heat board is pure-derived over THREE
     # databases (curation registry + live showcase display state
