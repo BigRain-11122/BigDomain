@@ -1931,6 +1931,25 @@ SUITES = [
     # (AC-SCP1..SCP7 pre-registered in state/queue/tech.md).
     ("ledger-sistercity-persist", os.path.join(
         "ledger", "test_sistercity_persist.py"), 7),
+    # R1959 growth-archive persist seat (R1886 family, R1954
+    # seed): cross-restart window for the resident growth-archive
+    # subscription face - two-piece restart world on the real
+    # product path (Ledger + GrowthArchiveFace; two-month
+    # two-buyer subscriptions each binding exactly one real
+    # spend tx, append-only supply events), full four-element
+    # read battery (two month pages + per-account subscription
+    # views + residents census + compliance, stdout-safe
+    # projections keeping subscribed_utc and spend tx ids
+    # in-db-only) replays byte-identical, seven restart-surviving
+    # gate probes (fail-closed, zero rows, zero charge),
+    # post-restart continuation (new 2099-03 city_story event +
+    # third-month subscription + new-resident subscription with
+    # the 2099-01 page frozen byte-identical = in-month window
+    # isolation), frozen anchor rows + dup-before-spend replay
+    # gate, pure-read law, third instance stability
+    # (AC-GAP1..GAP7 pre-registered in state/queue/tech.md).
+    ("ledger-growth-archive-persist", os.path.join(
+        "ledger", "test_growth_archive_persist.py"), 7),
 ]
 
 FAILS = 0
