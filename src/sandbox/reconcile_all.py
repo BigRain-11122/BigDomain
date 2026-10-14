@@ -936,6 +936,20 @@ SUITES = [
     # (AC-PLP1..PLP7 pre-registered in state/queue/tech.md).
     ("ledger-proposal-persist",
      os.path.join("ledger", "test_proposal_persist.py"), 7),
+    # R1958 tech-queue FIFO head claim (R1953 reseed row): UGC
+    # creator incentive gradient allocator - cross-restart
+    # persistence of the settlement read family: anchor world
+    # (budget-binding window with exact pro-rata integer landing,
+    # collar-binding window), two-piece close -> reopen byte-
+    # identical battery (window projection + balances + incentive
+    # tx join; settled_utc frozen stamps compared in-run),
+    # restart-surviving seven-gate reject batch (same codes same
+    # order, all before any write), continuation recompute
+    # (W3 rides alongside frozen windows, zero-cache), frozen
+    # anchors + replay gates, pure-read law, third instance
+    # (AC-ICP1..ICP7 pre-registered in state/queue/tech.md).
+    ("ledger-incentive-persist",
+     os.path.join("ledger", "test_incentive_persist.py"), 7),
     # R1767 explore-queue row: virtual event ticket face - the
     # liveroom paid-admission variant over the festival schedule-
     # window convention: session registry (UNIQUE key, declared

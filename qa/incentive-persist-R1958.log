@@ -1,0 +1,86 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-ICP1: anchor world: W1 budget-binding 410->400 pro-rata integer landing [('usr:alice', 147), ('usr:bob', 127), ('usr:carol', 126)] (zero rounding loss); W2 collar-binding [('usr:dave', 150)]; four-element snapshot: windows projection [['W1', 400], ['W2', 150]], pool 1450, credits [('usr:alice', 147), ('usr:bob', 127), ('usr:carol', 126), ('usr:dave', 150)], erin/frank zero; settled_utc format law ok=True
+PASS AC-ICP2: close -> new Ledger + new IncentiveFace over the same db: read battery byte-identical (386 bytes) and full raw window rows (settled_utc frozen stamps) byte-identical in-run = zero in-memory drift; seven-gate probe batch on instance one codes ['E_INC_WINDOW_DUP', 'E_INC_EMPTY', 'E_INC_BAD_UNITS', 'E_INC_BAD_ACCOUNT', 'E_INC_DUP_CREATOR', 'E_INC_BAD_PARAM', 'E_INC_BAD_PARAM'] all-reject with four counters flat
+PASS AC-ICP3: restart-surviving gates: probe batch on the reopened instance returns the same code sequence ['E_INC_WINDOW_DUP', 'E_INC_EMPTY', 'E_INC_BAD_UNITS', 'E_INC_BAD_ACCOUNT', 'E_INC_DUP_CREATOR', 'E_INC_BAD_PARAM', 'E_INC_BAD_PARAM'] (seven rejects); four counters flat True across both instances = every reject still fires before any write
+PASS AC-ICP4: post-restart continuation: W3 settles [('usr:alice', 110), ('usr:bob', 75), ('usr:erin', 55)] (240 <= budget, no scaling); balances recompute from ledger truth not cache: alice 147->257 bob 127->202 erin 0->55, pool 1210 = 2000 - 790; window rows 2->3; incentive tx rows 4->7 (new window rides alongside the frozen two)
+PASS AC-ICP5: frozen anchors: W1/W2 full raw rows (settled_utc included) byte-identical after restart + continuation (append-only: 2 -> 3 rows); incentive tx prefix 4 rows byte-identical; replay gates W1 E_INC_WINDOW_DUP / W2 E_INC_WINDOW_DUP both rejected with pool/window/tx counters flat = zero ledger movement
+PASS AC-ICP6: pure-read law: full four-element battery double-call byte-identical; pool / six balances / window rows / tx rows all flat across the read batch (reads pay nothing, zero side effects)
+PASS AC-ICP7: second close -> third instance over the same db: battery byte-identical to the second-instance end state; config.json / incentive.py / ledger.py byte-identical before/after; suite source pure ASCII (0 non-ascii bytes, sha16 b997014021107f5f); 9 imports all stdlib (zero network libraries); world in tempfile.gettempdir(); incentive.py source zero UPDATE statements (append-only law machine-checked); shipped config carries no incentive key
+SUITE PASS (7/7 criteria green)
+
+sha16 run1=39f6b64dc0ebdecb run2=39f6b64dc0ebdecb byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-ecpjvhkq\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (196/196 suites green, reconcile controls 7/7, 285.8s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18921 bytes) - registry suites=196 criteria=1711 evidence=qa/reconcile-all-R1958.log green=196/196
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18921 bytes, 196 suites, 1711 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1411 tee=909 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1958.log
+?? src/os/evidence_R1958.py
+?? src/sandbox/ledger/test_incentive_persist.py
+
+VERDICT PASS
