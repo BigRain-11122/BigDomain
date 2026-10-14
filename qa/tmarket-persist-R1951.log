@@ -1,0 +1,88 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-TMP1: anchor world 4 templates/4 purchases/3 ratings; every purchase binds a real spend (spend+debit on buyer) and a real share (share+credit on creator) 4/4; splits 10->(7,3) 3->(3,0) 7->(5,2); balances a/b/c/dave/reserve/share=417/492/283/100/730/978; counts spend=4 share=4; digest=e11854c258a50d83
+PASS AC-TMP2: instance 2 replay on same db/config with a fresh gate: battery diffs=none; raw three-table rows byte-identical=true (derived faces zero in-memory drift)
+PASS AC-TMP3: 11 restart-surviving probes all-reject [dup-template=E_TM_DUP_TEMPLATE; self-buy=E_TM_SELF_BUY; purchase-dup=E_TM_PURCHASE_DUP; not-buyer=E_TM_NOT_BUYER; rate-dup=E_TM_RATE_DUP; bad-stars=E_TM_BAD_STARS; unknown-buy=E_TM_UNKNOWN_TEMPLATE; unknown-rate=E_TM_UNKNOWN_TEMPLATE; content-gate=E_TM_CONTENT_REJECTED; negative-balance=E_NEGATIVE_BALANCE; bad-account=E_TM_BAD_ACCOUNT] with zero charge, zero rows; battery and counts frozen across the probe batch (tpl=4 pur=4 rat=3 spend=4 share=4)
+PASS AC-TMP4: continuation on instance 2: dave's fresh publish (5th template, gate-clean, ai_label=0) + bob buys dave-tpl (spend+share SQL cross) + dave buys t2 (cross) + carol rates t3=2; zero-cache recompute: market rows=5, t3 rating (1, avg 2.0), t1 purchase_count=2 frozen; counts tpl/pur/rat=5/6/4; balances a/b/c/dave/share=420/488/283/100/972; splits 4->(3,1) 3->(3,0); digest=7101efd7ac9ae01e
+PASS AC-TMP5: anchor rows frozen across restart x continuation (4 template rows incl listed_utc, 4 purchase rows incl purchased_utc + bound txs, 3 rating rows incl rated_utc - byte-identical prefixes of the post-continuation tables, zero UPDATE surface); replay gates: republish=E_TM_DUP_TEMPLATE, re-buy=E_TM_PURCHASE_DUP (zero charge 488==488, zero rows); counts frozen
+PASS AC-TMP6: pure-read law: double battery byte-identical (diffs=none) and counts constant (tpl=5 pur=6 rat=4)
+PASS AC-TMP7: instance 3 on same db: battery diffs=none; counts stable tpl=5 pur=6 rat=4; shipped files untouched (config/tmarket/lobby-config/ledger sha16 stable); non-ascii=0; network-imports=none; world outside repo=true
+SUITE PASS 7/7
+
+sha16 run1=d5b43d5609f5d53e run2=d5b43d5609f5d53e byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-e6ml31xq\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (189/189 suites green, reconcile controls 7/7, 228.6s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18320 bytes) - registry suites=189 criteria=1662 evidence=qa/reconcile-all-R1951.log green=189/189
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18320 bytes, 189 suites, 1662 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1393 tee=891 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1951.log
+?? src/os/claim_R1951.py
+?? src/os/claim_payload_R1951.json
+?? src/os/evidence_R1951.py
+?? src/sandbox/ledger/test_tmarket_persist.py
+
+VERDICT PASS

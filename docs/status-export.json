@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T09:17:55+08:00",
+ "export_ts": "2026-10-14T09:39:55+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech FIFO: ledger showroom cross-restart persist suite delivered 7/7 (AC-SHWP1..SHWP7, four-piece restart: ledger + venue + ads + showroom face, twelve restart-surviving gates, fresh-enterprise + renewal continuation); RUNNER full regression 188/188 green",
-  "latest_artifact": "src/sandbox/ledger/test_showroom_persist.py + qa/showroom-persist-R1950.log (2026-10-14)",
-  "next_milestone": "next: ledger tmarket persist seat (R1946-seeded FIFO head); window <=48h (by 2026-10-16)"
+  "current": "R1951: ledger tmarket cross-restart persist suite delivered (7/7; RUNNER 189/189)",
+  "latest_artifact": "qa/tmarket-persist-R1951.log + src/sandbox/ledger/test_tmarket_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger proposal persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1951",
+   "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
+  ],
+  [
    "R1950",
    "ledger showroom cross-restart persist suite 7/7 (AC-SHWP1..SHWP7; four-piece restart, twelve restart-surviving gates, frozen prefix rows, RUNNER 188/188 criteria 1648->1655)"
   ],
@@ -355,26 +359,22 @@
    "apidev chain_usage cap-window read cross-restart persist 7/7 (criteria AC-LU15..AC-LU21; three-piece full-stack restart, October capped-window envelope byte-identity, November live-key real-call recalc face zero cache with quota alignment, old-window freeze on the injected key itself, telescoping 7+2==9, third-instance sequential identity) + RUNNER 140/140 criteria 1306 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
   ],
   [
-   "R1896",
-   "apidev audit_lineage cap-window read cross-restart persist 7/7 (criteria 22->29 AC-LG23..AC-LG29; three-piece full-stack restart, October capped-window envelope byte-identity, November lone-key revoke recalc face zero cache, old-window freeze across restart x new data, third-instance sequential identity) + RUNNER 139/139 criteria 1299 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
-  ],
-  [
-   "1950",
+   "1951",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 12,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 0,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
   "queue_tech_open": 10,
   "queue_explore_open": 10,
-  "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute; post-fold R512 re-derivation)"
+  "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
  }
 }

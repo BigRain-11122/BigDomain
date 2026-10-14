@@ -1842,6 +1842,19 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("ledger-showroom-persist", os.path.join(
         "ledger", "test_showroom_persist.py"), 7),
+    # R1951 tmarket persist seat of the R1886 family: three-piece
+    # restart world (ledger + gate + tmarket face; the content
+    # gate is the lobby SecGate product re-wired on every
+    # reopen), the full read battery (four template views +
+    # market/rating/sales faces + six balances) replays
+    # byte-identical, eleven restart-surviving gate probes
+    # (fail-closed, zero rows, zero charge), post-restart
+    # continuation (fresh creator publish + two purchases + a new
+    # rating), frozen immutable anchor rows + replay gates,
+    # pure-read law, third instance stability (AC-TMP1..TMP7
+    # pre-registered in state/queue/tech.md).
+    ("ledger-tmarket-persist", os.path.join(
+        "ledger", "test_tmarket_persist.py"), 7),
 ]
 
 FAILS = 0
