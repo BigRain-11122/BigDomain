@@ -1,0 +1,41 @@
+# civic behavior distribution read face - R1977 evidence
+# product face: CivicPointsFace.behavior_distribution (ledger/civicpoints.py, read-face append, zero schema touch)
+# criteria AC-CVD1..CVD6 pre-registered in state/queue/explore.md before the code existed
+# dialect: python single-writer, UTF-8, LF
+
+## SUITE double-run (test_civic_distribution.py)
+
+### run 1
+
+PASS AC-CVD1: registry-complete 4 rows, dormant honest-zero row, aggregates == independent GROUP BY recount, day-limit=True replay-reject=True
+PASS AC-CVD2: per-behavior recount from points_view streams matches board aggregates for 3 behaviors
+PASS AC-CVD3: order ['b-volunteer', 'b-recycle', 'b-report', 'b-dormant']; double-call byte-identical; tie world order ['b-alpha', 'b-zeta']
+PASS AC-CVD4: five-table row sets and counts constant across the read batch (zero write side effects)
+PASS AC-CVD5: zero-registry face returns an honest empty board; ai_label on every row; disclaimer on every envelope
+PASS AC-CVD6: ctor params=['self', 'disclaimer', 'db_path']; schema sha pinned; config sha pinned; ascii=True; no-network-imports=True
+SUITE PASS: 6 criteria, 6 pass, 0 fail
+
+### run 2
+
+PASS AC-CVD1: registry-complete 4 rows, dormant honest-zero row, aggregates == independent GROUP BY recount, day-limit=True replay-reject=True
+PASS AC-CVD2: per-behavior recount from points_view streams matches board aggregates for 3 behaviors
+PASS AC-CVD3: order ['b-volunteer', 'b-recycle', 'b-report', 'b-dormant']; double-call byte-identical; tie world order ['b-alpha', 'b-zeta']
+PASS AC-CVD4: five-table row sets and counts constant across the read batch (zero write side effects)
+PASS AC-CVD5: zero-registry face returns an honest empty board; ai_label on every row; disclaimer on every envelope
+PASS AC-CVD6: ctor params=['self', 'disclaimer', 'db_path']; schema sha pinned; config sha pinned; ascii=True; no-network-imports=True
+SUITE PASS: 6 criteria, 6 pass, 0 fail
+
+### double-run byte identity: SHA256 match
+
+## qa writer census --check
+
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1450 tee=948 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+VERDICT PASS

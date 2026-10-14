@@ -549,3 +549,56 @@ class CivicPointsFace:
                           "events": row["events"]})
         return {"honor_board_competition": board,
                 "disclaimer": self.disclaimer}
+
+    def behavior_distribution(self):
+        """Per-behavior distribution read face (R1977; canon =
+        explore-queue civicpoints successor row, criteria
+        AC-CVD1..CVD6 registered before this code existed):
+        registry-driven per-behavior aggregation over the earn
+        ledger - every REGISTERED behavior appears exactly once,
+        and a behavior with zero earn rows stays on the board with
+        honest zero aggregates (the registry is the row-set
+        authority; an earns-driven GROUP BY would silently drop
+        dormant behaviors, which is exactly the operational
+        blindness this distribution face exists to expose). Per
+        row: the registry echo (title, points_per_event, ai_label)
+        plus the earn-side aggregates events / total_points /
+        participants / last_day, where total_points sums the point
+        values COPIED onto the earn rows at earn time (registered
+        value drift after registration can never rewrite history)
+        and last_day is the most recent earn day or None. Pure
+        read: zero writes, zero storage, zero token movement, zero
+        RNG; the sort key total_points DESC, events DESC,
+        behavior_id ASC is fully deterministic (zero time keys
+        and zero insertion-order keys), so exactly one board
+        order exists per world state. The counts-vs-tokens
+        isolation law is inherited structurally (constructor takes
+        no ledger reference). ai_label rides every row and the
+        standing disclaimer rides the envelope (module law)."""
+        with self._lock:
+            regs = self._conn.execute(
+                "SELECT behavior_id, title, points_per_event,"
+                " ai_label FROM civic_behaviors").fetchall()
+            agg = self._conn.execute(
+                "SELECT behavior_id, COUNT(*), COALESCE(SUM(points),0),"
+                " COUNT(DISTINCT account_id), MAX(at_day)"
+                " FROM civic_earns GROUP BY behavior_id").fetchall()
+        counts = {}
+        for row in agg:
+            counts[row[0]] = (int(row[1]), int(row[2]), int(row[3]),
+                              row[4])
+        board = []
+        for behavior_id, title, points_per_event, ai_label in regs:
+            events, total_points, participants, last_day = counts.get(
+                behavior_id, (0, 0, 0, None))
+            board.append({"behavior_id": behavior_id, "title": title,
+                          "points_per_event": int(points_per_event),
+                          "ai_label": int(ai_label),
+                          "events": events,
+                          "total_points": total_points,
+                          "participants": participants,
+                          "last_day": last_day})
+        board.sort(key=lambda r: (-r["total_points"], -r["events"],
+                                  r["behavior_id"]))
+        return {"behavior_distribution": board,
+                "disclaimer": self.disclaimer}

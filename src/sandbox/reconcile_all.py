@@ -2094,6 +2094,20 @@ SUITES = [
     # (AC-LBP1..AC-LBP7 pre-registered in state/queue/tech.md).
     ("lobby-persist", os.path.join(
         "lobby", "test_lobby_persist.py"), 7),
+    # R1977 civic behavior distribution read face: registry-driven
+    # per-behavior aggregation over the earn ledger - every
+    # registered behavior appears exactly once, zero-earn
+    # behaviors keep honest zero rows (the registry is the
+    # row-set authority; dormant behaviors stay visible); per-row
+    # events / total_points / participants / last_day with the
+    # registry echo (title, points_per_event, ai_label); pure
+    # read (zero writes), deterministic order total_points DESC,
+    # events DESC, behavior_id ASC; cross-source recount from
+    # points_view streams; counts-vs-tokens isolation inherited
+    # structurally (constructor takes no ledger reference)
+    # (AC-CVD1..CVD6 pre-registered in state/queue/explore.md).
+    ("civic-behavior-distribution",
+     os.path.join("ledger", "test_civic_distribution.py"), 6),
 ]
 
 FAILS = 0
