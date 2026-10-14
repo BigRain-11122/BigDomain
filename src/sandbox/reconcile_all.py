@@ -1971,6 +1971,18 @@ SUITES = [
     # state/queue/tech.md).
     ("member-reminder-persist", os.path.join(
         "member", "test_reminder_persist.py"), 7),
+    # pay-reconcile-persist (R1963 claim, R1964 takeover closeout):
+    # the CLI reconcile scanner re-derives its whole verdict from the
+    # three on-disk databases, so closing every writer face and
+    # reopening fresh instances on the same databases must reproduce
+    # the CLI scan byte-for-byte; tamper probes (dangling revoke /
+    # dead-account sent) fail with the same naming before and after
+    # the restart; a post-restart grant recomputes the scan (zero
+    # cache) while pre-restart rows stay frozen (notify tables
+    # untouched); the scanner is pure-read (AC-PRC1..PRC7
+    # pre-registered in state/queue/tech.md).
+    ("pay-reconcile-persist", os.path.join(
+        "pay", "test_pay_reconcile_persist.py"), 7),
 ]
 
 FAILS = 0

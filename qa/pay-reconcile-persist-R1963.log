@@ -1,0 +1,53 @@
+=== pay-reconcile-persist standalone evidence (claim R1963, takeover closeout R1964) ===
+claim row: state/queue/tech.md pay reconcile cross-restart determinism window (AC-PRC1..PRC7 pre-registered before suite code)
+writer: evidence driver (subprocess byte capture, CRLF->LF normalization, binary write = tee dialect)
+
+--- run A stdout (sha16 9ea7773585f52e3a, rc 0) ---
+PASS AC-PRC1: anchor exit=0 checks8/8=True explicit=True notify={'grants': 4, 'revokes': 2, 'sent': 2, 'skipped': 1} conv=3
+PASS AC-PRC2: cross-restart byte-identity=True exit=0
+PASS AC-PRC3: dangling exit=2/2 identical=True dead exit=2/2 identical=True
+PASS AC-PRC4: recompute exit=0 changed=True granted-4=True conv-4=True frozen-prefix=True
+PASS AC-PRC5: in-process verdicts=True counts-stable=True cli-double=True
+PASS AC-PRC6: second-restart byte-identity=True exit=0
+PASS AC-PRC7: ascii=True net-imports=[] reconcile-write-kw=[] thawed=[]
+---- pay reconcile persist acceptance: 7/7 passed
+
+--- run B stdout (sha16 9ea7773585f52e3a, rc 0) ---
+PASS AC-PRC1: anchor exit=0 checks8/8=True explicit=True notify={'grants': 4, 'revokes': 2, 'sent': 2, 'skipped': 1} conv=3
+PASS AC-PRC2: cross-restart byte-identity=True exit=0
+PASS AC-PRC3: dangling exit=2/2 identical=True dead exit=2/2 identical=True
+PASS AC-PRC4: recompute exit=0 changed=True granted-4=True conv-4=True frozen-prefix=True
+PASS AC-PRC5: in-process verdicts=True counts-stable=True cli-double=True
+PASS AC-PRC6: second-restart byte-identity=True exit=0
+PASS AC-PRC7: ascii=True net-imports=[] reconcile-write-kw=[] thawed=[]
+---- pay reconcile persist acceptance: 7/7 passed
+
+--- double-run verdict ---
+byte-identical=true accepted=true
+
+--- RUNNER battery tail (full log = qa/reconcile-all-R1964.log) ---
+PASS suite pay-reconcile-persist exit=0 pass-lines=7 fail-lines=0 criteria=7 1.0s
+PASS suites 200/200 green, expected criteria total=1739
+RUNNER PASS (200/200 suites green, reconcile controls 7/7, 175.1s)
+
+--- matrix regen (--evidence qa/reconcile-all-R1964.log) rc=0 ---
+PASS generated docs/sandbox-suite-matrix.md (19290 bytes) - registry suites=200 criteria=1739 evidence=qa/reconcile-all-R1964.log green=200/200
+PASS hygiene: pure-ascii source, zero network imports
+
+--- matrix --check (stale-doc detector) rc=0 ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (19290 bytes, 200 suites, 1739 criteria)
+
+--- qa writer census rc=0 (summary lines; full census is a per-file listing, trimmed here) ---
+[ps-utf16] ygo-poc-20261008.log bytes=2248 bom=utf-16le crlf=0 bare_lf=15 utf8=no label=no
+counts: tee=921 cmd-raw=15 pwsh-capture=296 ps-utf16=98 other=93
+labeled_selfannounced=28
+total=1423
+verdict: CENSUS-COMPLETE (all 1423 files classified, other=93 honest bucket)
+
+--- fingerprint --check --chain src/sandbox/migration_chains.json rc=0 ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
