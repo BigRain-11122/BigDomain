@@ -1,0 +1,38 @@
+# qa-mtime-probe R1967 (suite_matrix live mtime window re-probe, tech.md L51 claim, R1931 re-probe precedent)
+# command: python src/os/qa_mtime_probe.py --selftest && python src/os/qa_mtime_probe.py (foreground, single-writer LF evidence per R1880 family)
+=== section 1: selftest ===
+SELFTEST PASS: 16 checks, 16 pass, 0 fail
+  PASS f1 distinct==1
+  PASS f1 verdict NORMALIZED-FULL
+  PASS f1 winner==b-good.log
+  PASS f1 tie_peers==2
+  PASS f1 assertions pass
+  PASS f2 distinct==2
+  PASS f2 winner==z-tie.log (skip a-fail, not m-old)
+  PASS f2 verdict NO-LIVE-TIE
+  PASS f2 assertions pass
+  PASS f3 verdict TIE-EXERCISED
+  PASS f3 winner==s-one.log
+  PASS f3 tie_peers==1
+  PASS f3 assertions pass
+  PASS f4 verdict NO-ELIGIBLE-EVIDENCE
+  PASS hygiene pure-ascii source
+  PASS hygiene zero network imports
+exit_code_selftest=0
+=== section 2: live qa/ reading ===
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+files: 1479 (candidates 1423)
+distinct_mtime: 1436
+largest_tie_group: 2
+winner: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-all-R1966.log
+winner_calls_identical: True (3/3)
+tie_peers: 0
+verdict: NO-LIVE-TIE
+note: no live tie at winner mtime: tie-break not exercised this state (honest reading)
+PROBE PASS verdict=NO-LIVE-TIE
+exit_code_live=0
+=== section 3: adjudication (AC-LN4) ===
+live state = scattered (1436 distinct mtime across 1479 files, largest tie group 2, tie_peers=0)
+vs R1931 reading: 1395 files / 1352 distinct (qa/ grew 84 files via recent suite evidence rounds)
+verdict rule AC-LN4: scattered -> leave window open (honest note, negative-result-on-record legal); probe stays mechanical re-runnable closure face; full normalization closes the window
+winner three consecutive calls identical; winner = reconcile-all-R1966.log (newest RUNNER evidence, R1966 takeover round)
