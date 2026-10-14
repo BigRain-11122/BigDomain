@@ -1,0 +1,23 @@
+R1972 curation cold_board cross-restart persistence delivery evidence
+suite: src/sandbox/ledger/test_curation_coldpersist.py
+criteria AC-CZP1..CZP6 pre-registered in state/queue/explore.md (claim written before code; honesty law)
+
+--- run1 (exit=0) ---
+PASS AC-CZP1: pre-restart cold board pinned rank1 cu-beta total=0 members=2, rank2 cu-gamma total=0 members=1 (curation_id ASC); envelope keys ['cold_board', 'disclaimer'], row keys ['ai_label', 'curation_id', 'displayed_total', 'member_count', 'rank', 'title']; cold/hot complementarity: cold {cu-beta, cu-gamma} | hot(>0) {cu-alpha} == all three, disjoint; manual SQL second-derivation totals {"cu-alpha": 2, "cu-beta": 0, "cu-gamma": 0}
+PASS AC-CZP2: full-stack close (cu -> sh -> led) then rebuild on the same three db paths: reopened cold_board == pre-close envelope byte-identical (369 bytes, dumps sort_keys); zero in-memory drift in the derived read
+PASS AC-CZP3: post-restart migrations recompute zero-cache: cold->hot (cl_c placed into sh-two: cu-beta left the cold board, cold=[cu-gamma]) then hot->cold (both live items retracted out of sh-one: cu-alpha entered the cold board, cold=[cu-alpha, cu-gamma] id ASC); complementarity law held after every migration step (cold | hot(>0) == all three, disjoint); envelope differs from both prior snapshots; manual SQL totals {"cu-alpha": 0, "cu-beta": 1, "cu-gamma": 0}
+PASS AC-CZP4: second curation-face restart (third instance on the same db): sequential cold_board reads byte-identical to the post-migration state and to each other (repeat-read purity, zero in-memory drift)
+PASS AC-CZP5: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events / ledger_tx row counts constant ({"curation_members": 4, "curations": 3, "exhibit_events": 5, "ledger_tx": 0, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json)
+PASS AC-CZP6: hygiene: source pure ASCII (14465 bytes), zero network imports on true import lines, cold_board method source zero write statements, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+
+--- run2 (exit=0) ---
+PASS AC-CZP1: pre-restart cold board pinned rank1 cu-beta total=0 members=2, rank2 cu-gamma total=0 members=1 (curation_id ASC); envelope keys ['cold_board', 'disclaimer'], row keys ['ai_label', 'curation_id', 'displayed_total', 'member_count', 'rank', 'title']; cold/hot complementarity: cold {cu-beta, cu-gamma} | hot(>0) {cu-alpha} == all three, disjoint; manual SQL second-derivation totals {"cu-alpha": 2, "cu-beta": 0, "cu-gamma": 0}
+PASS AC-CZP2: full-stack close (cu -> sh -> led) then rebuild on the same three db paths: reopened cold_board == pre-close envelope byte-identical (369 bytes, dumps sort_keys); zero in-memory drift in the derived read
+PASS AC-CZP3: post-restart migrations recompute zero-cache: cold->hot (cl_c placed into sh-two: cu-beta left the cold board, cold=[cu-gamma]) then hot->cold (both live items retracted out of sh-one: cu-alpha entered the cold board, cold=[cu-alpha, cu-gamma] id ASC); complementarity law held after every migration step (cold | hot(>0) == all three, disjoint); envelope differs from both prior snapshots; manual SQL totals {"cu-alpha": 0, "cu-beta": 1, "cu-gamma": 0}
+PASS AC-CZP4: second curation-face restart (third instance on the same db): sequential cold_board reads byte-identical to the post-migration state and to each other (repeat-read purity, zero in-memory drift)
+PASS AC-CZP5: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events / ledger_tx row counts constant ({"curation_members": 4, "curations": 3, "exhibit_events": 5, "ledger_tx": 0, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json)
+PASS AC-CZP6: hygiene: source pure ASCII (14465 bytes), zero network imports on true import lines, cold_board method source zero write statements, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+
+double-run exits: 0,0; stdout byte-identity run1==run2: True (1873 bytes each)

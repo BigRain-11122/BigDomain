@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T22:02:29+08:00",
+ "export_ts": "2026-10-14T23:55:38+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1971: 17th-case orphan takeover closeout - the crashed R1970 cold_board payload was re-verified three-green by the taker (suite 24/24 double-run, RUNNER 202/202 controls 7/7 own re-run, matrix --check byte-identical 202/1763) and committed; zero regression, DEC/ORD flat, radar candidate list arrival-gated.",
-  "latest_artifact": "commit 9300f294 - src/sandbox/ledger/curation.py cold_board read face + qa/curation-coldboard-R1970.log + qa/reconcile-all-R1970.log (2026-10-14)",
-  "next_milestone": "P3 read-face family continues FIFO (cold_board cross-restart persistence window = reseeded head); radar candidate list OH-20261014-cph4 arrival gated (backlog row 1, no fabrication); within 48h."
+  "current": "R1972: 18th-case orphan takeover closeout - the crashed coldpersist suite payload was re-verified three-green by the taker (suite 6/6 double-run, RUNNER 203/203 controls 7/7 own re-run, matrix --check byte-identical 203/1769) and committed; zero regression, DEC/ORD flat, explore queue reseeded to 10.",
+  "latest_artifact": "src/sandbox/ledger/test_curation_coldpersist.py + qa/curation-coldpersist-R1972.log + qa/reconcile-all-R1972.log (2026-10-14)",
+  "next_milestone": "P3 read-face family continues FIFO (cold+hot combined board row = reseeded head); within 48h."
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1972",
+   "R1972: 18th-case crashed-round orphan takeover closeout - the crashed round authored the curation cold_board cross-restart persistence suite (explore head, AC-CZP1..CZP6 pre-registered in the claim row before code) and crashed pre-bookkeeping; the taker re-verified three-green per R1924/R1969/R1971 precedent: suite double-run SUITE PASS 6/6 exit 0/0 decoded byte-identical (PS5.1 redirect UTF-16 dialect re-decoded per R1969 family), full RUNNER battery PASS 203/203 suites green + reconcile controls 7/7 168.3s zero regression (tee to a temp file outside the repo - crashed-round evidence mtime-preserved), suite_matrix --check byte-identical 19535B/203 suites/1769 criteria. Payload committed this round (suite file + SUITES row + matrix regen + done-flip + reseed, explore open=10). Five-silence: DEC 328 rows flat, ORD tail 16:2x flat, no new ledger transfers, BENCH fresh, GORD 403 vs 405 known-shape, BD-PROP-004 in-window (no proposal debt)."
+  ],
+  [
    "R1971",
    "R1971: 17th-case crashed-round orphan takeover closeout - R1970's curation cold_board payload (15 files staged, crashed pre-commit) re-verified three-green by the taker per R1924/R1969 precedent: suite double-run SUITE PASS 24/24 exit 0/0 (own re-run, not log-trusting), full RUNNER battery PASS 202/202 suites green + reconcile controls 7/7 170.1s zero regression, suite_matrix --check byte-identical 19441B/202 suites/1763 criteria. Payload committed 9300f294 (R1970 score-2 product delivery restored into history). Taker hygiene: stray --probe log artifact (runner wrote the flag as a log name) removed; R1970 evidence files mtime-preserved. Five-silence: DEC token-flat, ORD tail 16:2x = baseline (GORD tbl 403 vs 405 known-shape negative drift, zero new orders), no new ledger transfers, radar candidate list OH-20261014-cph4 still pending at the 21:41 window (row 1 gated on external arrival, no fabrication)."
   ],
@@ -355,21 +359,17 @@
    "R1933 liveroom risk-control read-face family cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1931-reseeded claim pointed by the R1932 closeout; dedup pre-scan per the claim row: registry label full-form zero liveroom-persist variant + base-suite source scan test_liveroom.py zero close-reopen examples + AC-LRP prefix zero-occupancy; criteria AC-LRP1..AC-LRP7 pre-registered in state/queue/tech.md before code with three rulings: two-piece stack restart carrier (LiveRoomFace->Ledger close/reopen, the face owns its connection - R1898 precedent), three-session spectrum world (A closed full-history / B open mid-funnel / C zero-cohort honest empty), full-envelope byte comparison face (funnel/transcript/conversion_ledger carry zero timestamp echo - stronger than a projection band, no clock freezing needed); suite test_liveroom_persist.py: control anchor nine pre-close read snapshots + A funnel semantics + manual SQL three-table cross + transcript compliance spine (AI danmaku line carries [ai_label]) + conversion_ledger four-key rows each binding a real spend debit (bound debit sum 2980==total) + balances amy 510/cyd 1010 exact; stack close -> instance-2 same db/cfg reopen replays all nine reads byte-identical (9/9) with a same-param second read self-identical = zero in-memory drift; risk-control law survives the restart (closed-session writers E_LIVE_CLOSED x2, dup window E_LIVE_CONV_DUP zero-charge 510==510, anonymous danmaku E_LIVE_NOT_RESIDENT, unknown session read E_LIVE_UNKNOWN, probe batch left all four table counts and the spend count untouched); post-restart real-path injection on the open session recomputes the B faces zero-cache (entered 3/registered 2/converted 2/total 1490, transcript 6 lines, ledger 2 rows, spend count +1, cyd 20==1010-990) while the closed A and empty C faces stay byte-frozen to the pre-close snapshots; third instance replays the instance-2 final state byte-identically with A/C still equal to the original pre-close snapshots (restart x new-data double burden, zero drift); pure-read law (read battery leaves the four liveroom tables + spend count constant) + hygiene (liveroom.py/ledger.py sha256 double-proof unchanged - suite-only round, shipped config bytes unchanged, pure ASCII, zero network imports, registry row wired, tmp outside repo); SUITE 7/7 double-run byte-identical sha16 B2716DCD3992F0C9 rc 0/0; RUNNER PASS 171/171 suites criteria 1529->1536 controls 7/7 182.5s = qa/reconcile-all-R1933.log; matrix regen 171/1536 green --check byte-identical x2 (16801B); census DRIFT-CLEAN flags=0; fingerprint sentinel CLEAN domains=5; evidence qa/liveroom-persist-R1933.log five sections; tech consume 1 reseed 1 queue_tech_open 9->9 (minors guard read-face family persist seed, dedup pre-scan clean: registry minors/minors-wiring zero persist variant + test_minors.py zero close-reopen examples + AC-MGP zero-occupancy), next FIFO head by board order = tourstate state-face persist)"
   ],
   [
-   "R1932",
-   "R1932 fold R507 honored at round start (80964B over the 78500B line by 2464B = the P-2026-09-25-18 507th knife; tail-16 window R1924..R1931 16 lines 20657B compressed to 1 rolling line kept=0, 25 tokens machine-embedded zero-loss via gen507, verify-then-write 80964->64616B predicted_eq_actual=true, archive R1932-section verbatim + preop backup sha16 92262b48b77d626a, census pass) + member entry-tier activation-receipt read-face family cross-restart persistence delivered (P2 tech FIFO head per the R1931 closeout pointer; dedup double-scan per the R1929 upgraded law: registry label full-form clean + suite-source scan shows the AC-PRP seat closed privileges_for/has_privilege while the activate receipt family has zero cross-restart examples anywhere + AC-ETP three hits all board/log self-references = genuine; criteria AC-ETP1..AC-ETP7 pre-registered in tech.md before code; suite test_entry_tier_persist.py three-instance world on the real product path with a suite-owned tier_patron dock row (entitlement tier:patron): first receipt pinned (tier=patron period_no=1 credits=5 vouchers=catalog expectation) + catalog double-construction identity (config substrate restart identity); closed-bucket-bump renewal receipt (period_no=2, start==first end, stacking law, R1721 world shape); instance-2 same db/cfg/pay reopen replays the live grant idempotently (norm byte-identity, idempotent=True, vouchers_opened key honestly absent, three table counts frozen); post-restart fresh purchase recomputes zero-cache; the refunded dead-source gate refuses replay on the fresh instance while the idempotent lookup would have hit (gate-before-lookup proof); untouched twin norm-frozen + pure-read law (read battery moves zero rows, grant read lens stable); third instance replays byte-identical (double-restart stability) + hygiene (config/member/test_member sha256 double-proof unchanged, pure ASCII, zero network imports, tmp outside repo); SUITE 7/7 double-run byte-identical sha16 d63cd3334f67c456; RUNNER PASS 170/170 suites criteria 1522->1529 controls 7/7 180.0s = qa/reconcile-all-R1932.log; matrix regen 170/1529 green --check byte-identical (row 59 member-entrytier-persist green 0.6s); census DRIFT-CLEAN; evidence qa/entrytier-persist-R1932.log five sections LF-normalized single-writer per the R1884 law; tech consume 1 reseed 0 queue_tech_open 10->9, next FIFO head by board order = liveroom risk-control read-face family persist)"
-  ],
-  [
-   "1971",
+   "1972",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 17,
+  "log_lines_in_window": 19,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 4,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

@@ -826,6 +826,24 @@ SUITES = [
     # (AC-HBP1..HBP6 pre-registered in state/queue/tech.md).
     ("ledger-curation-hotpersist",
      os.path.join("ledger", "test_curation_hotpersist.py"), 6),
+    # R1972 curation cold_board cross-restart persistence example
+    # window (R1970-reseeded explore-queue row claimed by R1972):
+    # the zero-heat cold shelf is the honest inverse filter of the
+    # heat board, pure-derived over THREE databases (curation
+    # registry + live showcase display state + ledger ownership),
+    # so the suite pins derived purity across full-stack instance
+    # restarts PLUS cold<->hot migration continuation - pre-close
+    # envelope byte-identical to the reopened read, cold->hot
+    # (placement into a cold theme's member showcase) and
+    # hot->cold (retracting a hot theme to zero) both recomputed
+    # zero-cache with the cold/hot complementarity law held after
+    # every migration step, third-instance sequential reads
+    # byte-identical, pure-read law across restarts, manual-SQL
+    # second-derivation cross, product-file sha256 double-proof
+    # (suite-only round, zero product changes)
+    # (AC-CZP1..CZP6 pre-registered in state/queue/explore.md).
+    ("ledger-curation-coldpersist",
+     os.path.join("ledger", "test_curation_coldpersist.py"), 6),
     # R1926 curation registry / tour read-face family
     # cross-restart persistence example window (R1923-reseeded
     # tech-queue row claimed by R1926): active_curations
