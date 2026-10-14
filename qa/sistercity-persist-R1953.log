@@ -1,0 +1,102 @@
+--- [1] suite double-run (sistercity persist, R1953; python driver capture, LF single-writer) ---
+PASS AC-SCP1: anchor world 3 twins/5 passes/3 exposures/1 settlement; every purchase binds a real spend (spend+debit on buyer) 8/8; window edges legal (bob @10, carol @20); settle 2026-10 landed as a twin_settlements row (manifest id SQL-matched, total=26, split={"home-admin": 13, "sister-admin": 13}); view counts t1=4/4/2/2; act6=['market-twins'] act40=['festival-twins']; balances a/b/c/d/e/reserve = 91/92/92/97/45/1583; digest=6f0b6cf6e16b8e3c
+PASS AC-SCP2: instance 2 replay on same db/config with a fresh SisterCityFace: battery diffs=none; raw registry/pass/ exposure/settlement rows byte-identical=true (four twin tables carry all persistence - the embedded settlement chain is in-memory by design, manifests persist as rows; stored utc, never clock echoes)
+PASS AC-SCP3: 13 restart-surviving probes all-reject [dup-twin=E_SC_DUP_TWIN; window=E_SC_WINDOW; pass-exists=E_SC_PASS_EXISTS; ref-replay=E_SC_DUP_PASS; exposure-full=E_SC_EXPOSURE_FULL; exposure-replay=E_SC_DUP_EXPOSURE; unknown-buy=E_SC_UNKNOWN_TWIN; unknown-view=E_SC_UNKNOWN_TWIN; unknown-board=E_SC_UNKNOWN_TWIN; bad-account=E_SC_BAD_ACCOUNT; bad-tick=E_SC_BAD_ARGS; settled-replay=E_SC_SETTLED (persisted settlement row gate); no-disclaimer-ctor=E_SC_NO_DISCLAIMER (refused before any connect)] with zero charge, zero rows; battery and counts frozen across the probe batch (registry=3 passes=5 exposures=3 settlements=1 spend=8)
+PASS AC-SCP4: continuation on instance 2: fresh twin lantern-twins registered (4th registry row, ai=0) + erin pass @16 (45->43) + dave exposure @20 (97->95) + fresh-chain settle 2026-11 landed (total=4, sales_rows=2, manifest SQL-matched); zero-cache recompute: act16 twins=['harbor-twins', 'lantern-twins'], view4 counts=1/1, board4 rows erin+dave; balances e=43 d=95 others frozen; counts registry/passes/exposures/settlements/ spend=4/6/4/2/10; digest=5f125cdb4e400229
+PASS AC-SCP5: anchor rows frozen across restart x continuation (3 registry rows incl registered_utc, 5 pass rows incl bound spend_tx + purchased_utc, 3 exposure rows, 1 settlement row incl manifest_json + settled_utc - byte-identical prefixes of the post-continuation tables, zero UPDATE surface); replay gates: re-register=E_SC_DUP_TWIN, re-settle=E_SC_SETTLED fires from the persisted settlement row (zero charge 92==92, zero rows); counts frozen
+PASS AC-SCP6: pure-read law: double battery byte-identical (diffs=none) and counts constant (registry=4 passes=6 exposures=4 settlements=2)
+PASS AC-SCP7: instance 3 on same db: battery diffs=none; counts stable registry=4 passes=6 exposures=4 settlements=2; shipped files untouched (sistercity/settlement/ledger/config sha256 stable); non-ascii=0; network-imports=none; world outside repo=true; sistercity module zero UPDATE surface=true
+SUITE PASS 7/7
+double-run: rc=0/0 stdout-byte-identical=true sha16=6efe271a7c958624/6efe271a7c958624
+verdict PASS
+--- [7] takeover addendum (R1953 closeout; orphan-payload
+takeover per the R1924/R1937/R1940/R1949/R1952 lineage,
+tenth case) ---
+context: the crashed R1953 attempt left the full payload
+on disk (pre-registered AC-SCP1..SCP7 criteria in
+state/queue/tech.md + suite source + RUNNER registration
++ [1] double-run evidence verdict PASS) and crashed before
+its RUNNER/matrix/census/fingerprint/bookkeeping steps
+(state.json untouched at tick 1952). This closeout round
+verified the orphan live: suite single re-run rc=0 SUITE
+PASS 7/7 (all seven AC-SCP lines PASS; the crashed round's
+own double-run byte-identity sha16 6efe271a7c958624 stands
+as the canonical determinism evidence per the R1952
+precedent) and then ran the missing closeout sections
+above (LF single-writer; crashed [1] content preserved
+as-is per the evidence-integrity law).
+dialect note: the crashed round's evidence driver wrote
+the suite stdout raw - its run_once lacked the CRLF->LF
+replace the R1951 template carries (Windows python
+text-mode pipes emit CRLF), leaving 8 CRLF pairs in the
+crashed [1] section. Per the R1884 capture-normalization
+law (R1952 addendum precedent) the whole file is
+normalized to pure LF = the tee class, the healthy census
+dialect; content preserved.
+first-attempt note: this closeout's first driver run
+failed twice by its own wiring - it normalized the [1]
+content only in memory (so the RUNNER's cd7 live-tree
+census probe and the [4] census --check still saw the 8
+CRLF pairs on disk and flagged class=other drift, RUNNER
+rc=1 exactly the R1952 crashed-run signature), and its
+ruling line was hardcoded VERDICT PASS regardless of the
+real verdict (honesty-law violation, caught by the
+driver's own stdout VERDICT FAIL before any bookkeeping;
+evidence file restored to the crashed [1] base by
+restore_R1953.py, driver fixed: disk-write the
+normalized content first, ruling carries the real
+verdict). This re-run is the canonical closeout.
+--- [2] RUNNER (rc 0) tail ---
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-0o70s3j3\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-0o70s3j3\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-0o70s3j3\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (191/191 suites green, reconcile controls 7/7, 253.8s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18496 bytes) - registry suites=191 criteria=1676 evidence=qa/reconcile-all-R1953.log green=191/191
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18496 bytes, 191 suites, 1676 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1399 tee=897 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1953.log
+?? qa/sistercity-persist-R1953.log
+?? src/os/closeout_R1953.py
+?? src/os/closeout_payload_R1953.json
+?? src/os/evidence_R1953.py
+?? src/os/restore_R1953.py
+?? src/os/takeover_R1953.py
+?? src/sandbox/ledger/test_sistercity_persist.py
+VERDICT PASS (takeover closeout ruling: [1] SUITE 7/7
+double-run identical + [2] RUNNER rc=0 + [3]/[3b]
+matrix --check byte-identical rc=0 + [4] census
+rc=0 + [5] fingerprint rc=0)

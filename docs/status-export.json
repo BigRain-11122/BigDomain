@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T10:44:11+08:00",
+ "export_ts": "2026-10-14T12:11:58+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1952: ledger festival cross-restart persist suite delivered (7/7; RUNNER 190/190) + crashed-round orphan-payload takeover closeout",
-  "latest_artifact": "qa/festival-persist-R1952.log + src/sandbox/ledger/test_festival_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger sistercity persist suite) by 2026-10-16"
+  "current": "R1953: ledger sistercity cross-restart persist suite delivered (7/7; RUNNER 191/191) + crashed-round orphan-payload takeover closeout (tenth case)",
+  "latest_artifact": "qa/sistercity-persist-R1953.log + src/sandbox/ledger/test_sistercity_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger metered persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1953",
+   "ledger sistercity cross-restart persist suite 7/7 (AC-SCP1..SCP7; two-piece restart, thirteen restart-surviving gates incl the persisted-settlement replay gate E_SC_SETTLED and the no-disclaimer constructor gate, frozen anchor rows, RUNNER 191/191 criteria 1669->1676) + crashed-round orphan-payload takeover closeout (tenth case: dialect normalization per R1884 capture law, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
+  ],
+  [
    "R1952",
    "ledger festival cross-restart persist suite 7/7 (AC-FCP1..FCP7; three-piece restart, eleven restart-surviving gates incl the collectibles UNIQUE backstop re-probe, commemorative first-purchase linkage, frozen anchor rows, RUNNER 190/190 criteria 1662->1669) + crashed-round orphan-payload takeover closeout (probe invocation bug corrected: fingerprint five-domain CLEAN rc 0; census DRIFT-CLEAN; live suite re-verify rc 0)"
   ],
@@ -355,21 +359,17 @@
    "lobby chat.send idem key-binding semantics 5/5 (criteria AC-S44..S48; same-id different-text = fresh event with both (id,text) keys coexisting, cross-connection replay absorbed = server-instance-scoped cache, different-id same-text = fresh event with per-id keys coexisting, strip / id-strip / truncation normalization all feed the key before the digest, suite-only round product bytes unchanged) + RUNNER 141/141 criteria 1313->1318 (lobby 46->51) + matrix byte-identical x2 + census DRIFT-CLEAN"
   ],
   [
-   "R1898",
-   "eventtickets event_audit_board cap-window read cross-restart persist 7/7 (criteria AC-EAW8..AC-EAW14; two-piece full-stack restart, October capped-window board envelope byte-identity, November tail-slice live-session real purchase+checkin recalc face zero cache, old-window freeze on the injected slice, immutable rows 4/6/3 with telescoping 5+1==6, third-instance five-read sequential identity) + RUNNER 141/141 criteria 1313 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
-  ],
-  [
-   "1952",
+   "1953",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 16,
+  "log_lines_in_window": 18,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

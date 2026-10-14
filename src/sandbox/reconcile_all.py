@@ -1871,6 +1871,24 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-festival-persist", os.path.join(
         "ledger", "test_festival_persist.py"), 7),
+    # R1953 sistercity persist seat (R1886 family, R1948 seed):
+    # cross-restart window for the sister-city cross-city visit
+    # face - two-piece restart world on the real product path
+    # (Ledger + SisterCityFace; the four twin tables carry all
+    # persistence, the embedded settlement chain is in-memory by
+    # design and manifests persist as twin_settlements rows),
+    # full read battery (three twin views + four schedule-window
+    # listings + two audit boards + six balances) replays
+    # byte-identical, thirteen restart-surviving gate probes
+    # (fail-closed, zero rows, zero charge, incl the persisted
+    # settlement replay gate E_SC_SETTLED and the no-disclaimer
+    # constructor gate), post-restart continuation (fresh twin
+    # registration + new visit pass + new exposure booking +
+    # fresh-chain window settle), frozen immutable anchor rows +
+    # replay gates, pure-read law, third instance stability
+    # (AC-SCP1..SCP7 pre-registered in state/queue/tech.md).
+    ("ledger-sistercity-persist", os.path.join(
+        "ledger", "test_sistercity_persist.py"), 7),
 ]
 
 FAILS = 0
