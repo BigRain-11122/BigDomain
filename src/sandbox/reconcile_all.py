@@ -866,6 +866,27 @@ SUITES = [
     # (AC-CJ1..CJ7 pre-registered in state/queue/explore.md).
     ("ledger-curation-combined",
      os.path.join("ledger", "test_curation_combined.py"), 7),
+    # R1975 curation combined hot+cold dual board cross-restart
+    # persistence example window (R1974-reseeded explore-queue
+    # row claimed by R1975): the joint read is pure-derived over
+    # THREE databases (curation registry + live showcase display
+    # state + ledger ownership) from ONE live hot_board() call,
+    # so the suite pins the joint-read derived purity across
+    # full-stack instance restarts PLUS cold<->hot migration
+    # continuation on both zones at once - pre-close envelope
+    # byte-identical to the reopened read (single derivation
+    # source, zero in-memory drift), cold->hot (placement into a
+    # cold theme's member showcase) and hot->cold (retracting a
+    # hot theme to zero) both recomputed zero-cache with the
+    # disjoint-union partition law and the live-hot_board
+    # single-source cross held after every migration step,
+    # third-instance sequential reads byte-identical, pure-read
+    # law across restarts, manual-SQL second-derivation cross,
+    # product-file sha256 double-proof (suite-only round, zero
+    # product changes)
+    # (AC-CDP1..CDP6 pre-registered in state/queue/explore.md).
+    ("ledger-curation-combinedpersist",
+     os.path.join("ledger", "test_curation_combinedpersist.py"), 6),
     # R1926 curation registry / tour read-face family
     # cross-restart persistence example window (R1923-reseeded
     # tech-queue row claimed by R1926): active_curations

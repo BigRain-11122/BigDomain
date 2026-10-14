@@ -1,0 +1,22 @@
+== curation boards_combined cross-restart persistence example window (R1975, AC-CDP1..CDP6) ==
+section 1: suite double-run (subprocess byte capture, LF single-dialect)
+run1 rc=0 run2 rc=0 byte-identical=True sha16=8d8342c97809e2e4
+---- run1 stdout ----
+PASS AC-CDP1: pre-restart joint read pinned: hot=[rank1 cu-alpha total=2 members=1], cold=[rank1 cu-beta total=0 members=2, rank2 cu-gamma total=0 members=1] (id ASC); envelope keys ['cold_board', 'disclaimer', 'hot_board', 'totals'], row keys ['ai_label', 'curation_id', 'displayed_total', 'member_count', 'rank', 'title']; partition law + totals {1,2,3} green; live hot_board() single-source cross green; manual SQL second-derivation totals {"cu-alpha": 2, "cu-beta": 0, "cu-gamma": 0}
+PASS AC-CDP2: full-stack close (cu -> sh -> led) then rebuild on the same three db paths: reopened boards_combined == pre-close envelope byte-identical (560 bytes, dumps sort_keys); the joint read's single derivation source (one live hot_board call) holds zero in-memory drift across the restart
+PASS AC-CDP3: post-restart migrations recompute zero-cache on both zones at once: cold->hot (cl_c placed into sh-two: cu-beta crossed into the hot zone, hot=[cu-alpha(2) rank1, cu-beta(1) rank2], cold=[cu-gamma]) then hot->cold (both live items retracted out of sh-one: cu-alpha crossed into the cold zone, hot=[cu-beta(1)], cold=[cu-alpha, cu-gamma] id ASC); partition + single-source laws held after every migration step; envelope differs from both prior snapshots; manual SQL totals {"cu-alpha": 0, "cu-beta": 1, "cu-gamma": 0}
+PASS AC-CDP4: second curation-face restart (third instance on the same db): sequential boards_combined reads byte-identical to the post-migration state and to each other (joint-read repeat purity, zero in-memory drift)
+PASS AC-CDP5: pure-read law: every read batch left curations / curation_members / showcases / exhibit_events / ledger_tx row counts constant ({"curation_members": 4, "curations": 3, "exhibit_events": 5, "ledger_tx": 0, "showcases": 4}); product files sha256 unchanged (curation.py, showcase.py, both shipped config.json)
+PASS AC-CDP6: hygiene: source pure ASCII (17481 bytes), zero network imports on true import lines, boards_combined method source zero write statements, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+---- run2 stdout tail ----
+PASS AC-CDP6: hygiene: source pure ASCII (17481 bytes), zero network imports on true import lines, boards_combined method source zero write statements, world db in system tmp outside the repo
+SUITE PASS (6/6 criteria green)
+VERDICT PASS
+
+section 2: full RUNNER battery (reconcile_all.py, tee evidence qa/reconcile-all-R1975.log)
+RUNNER PASS (205/205 suites green, reconcile controls 7/7, 177.4s) — first battery run FAIL 204/205: cd7-live-real-tree census DRIFT on this suite evidence file (mixed EOL: subprocess-captured CRLF from suite stdout + LF literals -> crlf-dominant -> pwsh-capture class); root cause = evidence writer, fixed by normalizing subprocess output to LF (writer fixed + file regenerated pure LF crlf=0); census probe re-run DRIFT-CLEAN flags=0; battery re-run green. Census gate caught a real dialect drift - law family R1969 re-proven with new trigger surface (subprocess pipe CRLF entering python-written evidence).
+section 3: suite matrix regen + check
+PASS generated docs/sandbox-suite-matrix.md (19725 bytes) - registry suites=205 criteria=1782 evidence=qa/reconcile-all-R1975.log green=205/205
+PASS check: docs/sandbox-suite-matrix.md byte-identical (19725 bytes, 205 suites, 1782 criteria)
+VERDICT PASS (AC-CDP1..CDP6 suite double-run byte-identical + RUNNER 205/205 + matrix 205/1782 identical)
