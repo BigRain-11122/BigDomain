@@ -1855,6 +1855,22 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("ledger-tmarket-persist", os.path.join(
         "ledger", "test_tmarket_persist.py"), 7),
+    # R1952 festival persist seat (R1886 family, R1947 seed):
+    # cross-restart window for the solar-term / festival
+    # limited-event face - three-instance world on the real
+    # product path (Ledger + CollectiblesFace + FestivalFace),
+    # full read battery (event views / schedule-window listings /
+    # per-event purchase boards / five collection faces / six
+    # balances) replays byte-identical, eleven restart-surviving
+    # gate probes (fail-closed, zero rows, zero charge, incl the
+    # collectibles UNIQUE backstop E_CL_DUP re-probe),
+    # post-restart continuation (fresh event registration + two
+    # new first-purchases granting new commemorative certificates),
+    # frozen immutable anchor rows + replay gates, pure-read law,
+    # third instance stability (AC-FCP1..FCP7 pre-registered in
+    # state/queue/tech.md).
+    ("ledger-festival-persist", os.path.join(
+        "ledger", "test_festival_persist.py"), 7),
 ]
 
 FAILS = 0

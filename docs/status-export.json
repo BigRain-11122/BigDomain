@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T09:39:55+08:00",
+ "export_ts": "2026-10-14T10:44:11+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1951: ledger tmarket cross-restart persist suite delivered (7/7; RUNNER 189/189)",
-  "latest_artifact": "qa/tmarket-persist-R1951.log + src/sandbox/ledger/test_tmarket_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger proposal persist suite) by 2026-10-16"
+  "current": "R1952: ledger festival cross-restart persist suite delivered (7/7; RUNNER 190/190) + crashed-round orphan-payload takeover closeout",
+  "latest_artifact": "qa/festival-persist-R1952.log + src/sandbox/ledger/test_festival_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger sistercity persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1952",
+   "ledger festival cross-restart persist suite 7/7 (AC-FCP1..FCP7; three-piece restart, eleven restart-surviving gates incl the collectibles UNIQUE backstop re-probe, commemorative first-purchase linkage, frozen anchor rows, RUNNER 190/190 criteria 1662->1669) + crashed-round orphan-payload takeover closeout (probe invocation bug corrected: fingerprint five-domain CLEAN rc 0; census DRIFT-CLEAN; live suite re-verify rc 0)"
+  ],
+  [
    "R1951",
    "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
   ],
@@ -355,21 +359,17 @@
    "eventtickets event_audit_board cap-window read cross-restart persist 7/7 (criteria AC-EAW8..AC-EAW14; two-piece full-stack restart, October capped-window board envelope byte-identity, November tail-slice live-session real purchase+checkin recalc face zero cache, old-window freeze on the injected slice, immutable rows 4/6/3 with telescoping 5+1==6, third-instance five-read sequential identity) + RUNNER 141/141 criteria 1313 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
   ],
   [
-   "R1897",
-   "apidev chain_usage cap-window read cross-restart persist 7/7 (criteria AC-LU15..AC-LU21; three-piece full-stack restart, October capped-window envelope byte-identity, November live-key real-call recalc face zero cache with quota alignment, old-window freeze on the injected key itself, telescoping 7+2==9, third-instance sequential identity) + RUNNER 140/140 criteria 1306 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
-  ],
-  [
-   "1951",
+   "1952",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 16,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

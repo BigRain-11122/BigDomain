@@ -1,0 +1,92 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-FCP1: anchor world 3 events/6 purchases; every purchase binds a real spend (spend+debit on buyer) 6/6; window both edges legal (bob @10/@20); first-purchase linkage one cert per (account,event) (bob 2 buys -> [1, 0]); erin pre-award: buy legal flag=0 certs=[{'event_ref': 'festival:lichun-2026', 'item_id': 'festival:lichun-2026'}]; certs total=5; balances a/b/c/d/e/reserve=97/90/95/97/45/1576; counts events=3 purchases=6 spend=6; digest=c056e64349ee93f7
+PASS AC-FCP2: instance 2 replay on same db/config with fresh collectibles + festival faces: battery diffs=none; raw event/purchase/cert rows byte-identical=true (derived faces zero in-memory drift; stored utc, never clock echoes)
+PASS AC-FCP3: 11 restart-surviving probes all-reject [dup-event=E_FE_DUP_EVENT; window=E_FE_WINDOW; limit=E_FE_LIMIT; ref-replay=E_FE_DUP_PURCHASE; sold-out=E_FE_SOLD_OUT; unknown-buy=E_FE_UNKNOWN_EVENT; unknown-view=E_FE_UNKNOWN_EVENT; unknown-board=E_FE_UNKNOWN_EVENT; bad-account=E_FE_BAD_ACCOUNT; bad-tick=E_FE_BAD_ARGS; pre-award-replay=E_CL_DUP] with zero charge, zero rows; battery and counts frozen across the probe batch (events=3 purchases=6 certs=5 spend=6)
+PASS AC-FCP4: continuation on instance 2: fresh event lantern-2027 registered (4th event row, ai_label=0) + dave first-buy ev4 (new cert, flag=1) + erin first-buy ev3 (new cert, flag=1); certs 5->7; both spends SQL-crossed; zero-cache recompute: act16 events=['lichun-2026', 'lantern-2027'], ev3 view purchases=1, board4 first row dave/flag=1; balances d=95 e=41 others frozen; counts events/purchases/spend=4/8/8; digest=e38a620a2ce3c09c
+PASS AC-FCP5: anchor rows frozen across restart x continuation (3 event rows incl registered_utc, 6 purchase rows incl purchased_utc + bound spend_tx + commemorative, 5 certificate rows incl granted_utc - byte-identical prefixes of the post-continuation tables, zero UPDATE surface); replay gates: re-register=E_FE_DUP_EVENT, ref-replay=E_FE_DUP_PURCHASE fires before the limit gate (bob at limit 2, zero charge 90==90, zero rows); counts frozen
+PASS AC-FCP6: pure-read law: double battery byte-identical (diffs=none) and counts constant (events=4 purchases=8 certs=7)
+PASS AC-FCP7: instance 3 on same db: battery diffs=none; counts stable events=4 purchases=8 certs=7; shipped files untouched (festival/collectibles/ledger/config sha256 stable); non-ascii=0; network-imports=none; world outside repo=true; festival module zero UPDATE surface
+SUITE PASS 7/7
+
+--- sha16 run1=f355f4afa6ffa982 run2=f355f4afa6ffa982 byte-identical=true ---
+
+
+--- [2] RUNNER (rc 1) tail ---
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-uafbap0v\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-uafbap0v\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-uafbap0v\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER FAIL (2 failed assertions)
+
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18410 bytes) - registry suites=190 criteria=1669 evidence=qa/reconcile-all-R1951.log green=189/190
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18410 bytes, 190 suites, 1669 criteria)
+
+--- [4] census --check (rc 2) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+[flag] new-dialect: festival-persist-R1952.log (class=other)
+census: files=1396 tee=893 baselined=502
+disappeared=0
+flags=1
+verdict: DRIFT-FLAG
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/festival-persist-R1952.log
+?? qa/reconcile-all-R1952.log
+?? src/sandbox/ledger/test_festival_persist.py
+
+VERDICT FAIL
+--- [7] takeover addendum (R1952 closeout; orphan-payload takeover per the R1924/R1937/R1940/R1949 lineage, ninth case) ---
+context: the crashed R1952 attempt left all payload faces on disk (suite source
++ double-run evidence + RUNNER carrier + matrix regen + census) and crashed
+before its bookkeeping (state.json untouched at tick 1951). This closeout
+round verified the orphan live: suite single re-run rc=0 SUITE PASS 7/7 (all
+seven AC-FCP lines PASS; the crashed round's own double-run byte-identity
+sha16 f355f4afa6ffa982 stands as the canonical determinism evidence - this
+round's ad-hoc PowerShell line-array capture hashes differently by capture
+dialect, not by content).
+probe-bug adjudication: step [5] above failed rc 2 because the crashed
+round's ad-hoc invocation omitted the --chain argument (evidence-writer
+dialect bug, not a product defect). Canonical invocation re-run by the
+takeover round:
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+rc=0
+dialect note: the crashed round's [5]/[6] sections carried 8 CRLF pairs
+appended after its own census step by an ad-hoc PS capture (mixed-EOL
+class=other would flag); content preserved as-is (evidence integrity
+law); the whole file (crashed sections + this addendum) normalized to
+pure LF = the tee class, the healthy census dialect (R1884
+capture-normalization law; R1926 pwsh-capture ban family).
+VERDICT PASS (takeover closeout ruling: [1] SUITE 7/7 double-run identical +
+[2] RUNNER PASS 190/190 controls 7/7 + [3]/[3b] matrix 190 suites / 1669
+criteria --check byte-identical + [4] census DRIFT-CLEAN + [5-corrected]
+fingerprint CLEAN domains=5 rc=0)

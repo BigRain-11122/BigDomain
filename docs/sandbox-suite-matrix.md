@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-14 09:38 +08:00
+- 生成时间: generated: 2026-10-14 10:36 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R1951.log
 - 状态证据: reconcile-all-R1951.log (RUNNER PASS 189/189 suites green, reconcile controls 7/7, 228.6s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 189 | 1662 | 189/189 | R1951 |
+| 190 | 1669 | 189/189 | R1951 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -226,7 +226,8 @@
 | 187 | ledger-studio-persist | ledger/test_studio_persist.py | 7 | green | 0.3 |
 | 188 | ledger-showroom-persist | ledger/test_showroom_persist.py | 7 | green | 0.6 |
 | 189 | ledger-tmarket-persist | ledger/test_tmarket_persist.py | 7 | green | 0.3 |
-|  | 合计 |  | 1662 | green 189 / FAIL 0 / no-evidence 0 |  |
+| 190 | ledger-festival-persist | ledger/test_festival_persist.py | 7 | no-evidence | - |
+|  | 合计 |  | 1669 | green 189 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
