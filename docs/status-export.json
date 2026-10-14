@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T12:53:08+08:00",
+ "export_ts": "2026-10-14T13:09:10+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1954: ledger metered cross-restart persist suite delivered (7/7; RUNNER 192/192) + crashed-round orphan-payload takeover closeout (eleventh case)",
-  "latest_artifact": "qa/metered-persist-R1954.log + src/sandbox/ledger/test_metered_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger reports persist suite) by 2026-10-16"
+  "current": "R1955: ledger reports cross-restart persist suite delivered (7/7; RUNNER 193/193 criteria 1683->1690)",
+  "latest_artifact": "qa/reports-persist-R1955.log + src/sandbox/ledger/test_reports_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger proposal persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1955",
+   "R1955: ledger reports cross-restart persist suite 7/7 (AC-RPP1..RPP7; two-piece restart, immutable three-table persistence, twelve restart-surviving gates same-code, continuation recompute, frozen prefix rows, RUNNER 193/193 criteria 1683->1690; one same-round claim-row erratum honestly noted); tech consume 1 reseed 1 (refund-recovery persist seeded; next FIFO head = ledger proposal persist)"
+  ],
+  [
    "R1954",
    "ledger metered cross-restart persist suite 7/7 (AC-MTP1..MTP7; two-piece restart, credit-counter persistence core, restart-surviving gates, continuation recompute, frozen immutable rows, RUNNER 192/192 criteria 1676->1683) + crashed-round orphan-payload takeover closeout (eleventh case: fold R513 integrity verified, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
   ],
@@ -355,21 +359,17 @@
    "sec_batch banner_queue cap-window read cross-restart persistence 7/7 (criteria AC-SB23..AC-SB29; pre-close snapshot quartet restored byte-identical across SecBatchFace close/reopen, injected 2nd-November row via true path recomputes the default capped read (zero cache) while the October capped+windowed envelope stays frozen byte-identical (record-time immutability = old-window zero permeation), second reopen reads pairwise byte-identical across two live instances, suite-only round product bytes unchanged) + RUNNER 143/143 criteria 1325->1332 (ugc-sec-batch-bannerpersist 7) + matrix byte-identical x2 + census DRIFT-CLEAN"
   ],
   [
-   "R1900",
-   "member expiring_soon board + distribution fold cross-restart persist 7/7 (criteria AC-ES8..AC-ES14; MemberStore close-reopen on the same db/cfg/pay replays the frozen-as_of snapshot quartet byte-identically, same-grant re-activation stays idempotent = db-backed dedup map, new true-path activation recomputes the board zero cache, dual-boundary out-of-window zero echo with 4 live rows in db, third-instance sequential identity) + RUNNER 142/142 criteria 1318->1325 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
-  ],
-  [
-   "1954",
+   "1955",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 16,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
