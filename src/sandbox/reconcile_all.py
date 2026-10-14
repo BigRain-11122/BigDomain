@@ -1830,6 +1830,18 @@ SUITES = [
     # (AC-STP1..STP7 pre-registered in state/queue/tech.md).
     ("ledger-studio-persist", os.path.join(
         "ledger", "test_studio_persist.py"), 7),
+    # R1950 showroom persist seat of the R1886 family: four-piece
+    # restart world (ledger + venue + ads + showroom face, the
+    # bundle granted only through the two referenced products'
+    # public APIs), byte-identical read replay across all six
+    # showroom read faces + carousel/occupancy faces, twelve
+    # restart-surviving gate probes, post-restart continuation
+    # (fresh-enterprise first contract + same-package third-window
+    # renewal), frozen prefix rows + dup-pkg replay gate, pure-read
+    # law, third instance stability (AC-SHWP1..SHWP7
+    # pre-registered in state/queue/tech.md).
+    ("ledger-showroom-persist", os.path.join(
+        "ledger", "test_showroom_persist.py"), 7),
 ]
 
 FAILS = 0
