@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T13:30:14+08:00",
+ "export_ts": "2026-10-14T13:51:27+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1956: ledger proposal cross-restart persist suite delivered (7/7; fold R514 honored at round start; RUNNER 194/194 criteria 1690->1697)",
-  "latest_artifact": "qa/proposal-persist-R1956.log + src/sandbox/ledger/test_proposal_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger clawback persist suite) by 2026-10-16"
+  "current": "R1957: ledger clawback wiring read-face cross-restart persist suite delivered (7/7; fold R515 honored 78783B->73108B; RUNNER 195/195 criteria 1697->1704)",
+  "latest_artifact": "qa/clawback-persist-R1957.log + src/sandbox/pay/test_clawback_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger incentive persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1957",
+   "R1957: ledger clawback wiring read-face cross-restart persist suite 7/7 (AC-CKP1..CKP7; six-order world, close->same-db reopen byte-identical battery, gate codes cross-restart, wired close_refund continuation, frozen anchors, pure-read law, third instance stable) + RUNNER 195/195 criteria 1697->1704 + matrix x2 + census DRIFT-CLEAN + fingerprint CLEAN + fold R515 78783B->73108B"
+  ],
+  [
    "R1956",
    "R1956: ledger proposal cross-restart persist suite 7/7 (AC-PLP1..PLP7; two-piece restart, memorial certificates persist via collectibles public API, twelve restart-surviving gates same-code, crossing award + new registration post-restart continuation, frozen prefix rows, pre-award idempotence across restart, zero-token structure law, RUNNER 194/194 criteria 1690->1697); fold R514 executed at round start (state 81030B -> 73825B); tech consume 1 reseed 1 (pay reconcile persist seeded; next FIFO head = ledger clawback persist)"
   ],
@@ -355,11 +359,7 @@
    "apidev usage_log cap-window read cross-restart persistence 7/7 (criteria AC-UW9..AC-UW15; pre-close snapshot quartet restored byte-identical across the full three-piece stack close/reopen, injected 2 November calls on chain-b -- the very key the October capped read pins in its tail slice -- recompute the default capped and bare reads via the true product path (zero cache) while the October windowed reads stay FULL-envelope byte-frozen (record-time immutability + zero clock-following envelope fields = the claim ruling-3 stronger face, no projection needed), third-instance four-read pairwise identity, 11-form pure-read battery four-table counts flat; suite-only round product bytes unchanged) + RUNNER 145/145 criteria 1339->1346 (ledger-apidev-usagelogpersist 7, SUITES 144->145) + matrix byte-identical x2 + census DRIFT-CLEAN"
   ],
   [
-   "R1902",
-   "apidev dev_board cap-windowed read cross-restart persist suite 7/7 (AC-DBL15..AC-DBL21) + RUNNER 144/144 criteria 1332->1339 + matrix x2 + census DRIFT-CLEAN + sentinel CLEAN; tech consumed 1 + seeded 1 (apidev key_view persist seed)"
-  ],
-  [
-   "1956",
+   "1957",
    "OSLoop 执行 tick"
   ]
  ],

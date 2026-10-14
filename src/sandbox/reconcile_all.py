@@ -575,6 +575,13 @@ SUITES = [
     # shipped byte-stable) + never-break post-commit + heal face
     # (AC-RC1..RC8 pre-registered in state/queue/tech.md).
     ("ledger-clawback", os.path.join("pay", "test_clawback_wiring.py"), 8),
+    # R1957 clawback wiring read-face family cross-restart persistence
+    # (R1952 reseed FIFO head): close->same-db reopen keeps every
+    # read face byte-identical (balances, claw envelopes, replays,
+    # gate codes, wired close_refund), append-only frozen anchors,
+    # pure-read battery, third instance stable (AC-CKP1..CKP7
+    # pre-registered in state/queue/tech.md).
+    ("ledger-clawback-persist", os.path.join("pay", "test_clawback_persist.py"), 7),
     ("member", os.path.join("member", "test_member.py"), 16),
     ("member-entry", os.path.join("member", "test_entry_tier.py"), 7),
     # R1932 member entry-tier activation-receipt read-face family
