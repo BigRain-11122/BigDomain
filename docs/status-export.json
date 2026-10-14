@@ -1,380 +1,384 @@
 {
- "export_ts": "2026-10-15T00:48:14+08:00",
- "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
- "ceo_face": {
-  "current": "R1973: 19th-case orphan takeover closeout - the crashed round's daily-reconcile evidence (RUNNER PASS 203/203, controls 7/7, census DRIFT-CLEAN, suite count zero-drift vs R1972 baseline) and the W25 legal-source harvest (CAC Children PI Protection Regulation, Order No.4, 29 articles, benchmarks 3-place entry) were verified on disk and committed; intelligence-wall conclusion-row gap completed by the taker (dual-row per R1884 precedent); benchmarks_refreshed=2026-10-15; DEC/ORD flat.",
-  "latest_artifact": "qa/reconcile-daily-20261015.log + docs/global-benchmarks.md W25 children-PI block + docs/research/intelligence-wall.md W25 dual rows (2026-10-15)",
-  "next_milestone": "P3 read-face family continues FIFO (cold+hot combined board row = reseeded head); within 48h."
- },
- "depts": [
-  {
-   "n": "OSLoop 自领池（L0·唯一执行面）",
-   "t": "P-47 业务件五件全件收口：规格 5/5+沙箱骨架 5/5 判据自验全绿（68 判据）；P-65 调研面建位 R20；P-67② 全链闭合（研究件 R27+激励智能体设计件 R28·分配层三面 AC-I1..I13 预注册）；P-70⑤ EiGEN 研究判负留痕 R31+集团关单同步 R32；P-76 粉丝经营三线令本司面 R34 毕（用户增长部设立+漏斗映射件·24h 快速件档提前 ~47h）；待办=参数首档 [needs-CEO] 呈批面+bootstrap 打包 blocked 项；P-77 流转提速律③ Git 往返律吸收 R36（启动器补轮首 pull --ff-only·fail-soft）；D-20260925-03 单实例锁活性集团标准吸收 R50（锁段重写=PID 锁+活探查+CreateNew 原子抢+30min 接管窗=1.2×预算·AC-D03 10/10 全绿·test_lock.ps1 常驻可复跑·先行 48h 回执窗内毕）；R122 回执 F-20260925-BD01 已交 HQ-FEEDBACK；R157 满负荷自领承接=P-05 总动员令 3 回执毕；R158 GL204 清理整合令自域梳理执行毕（docs/canon-index.md 判例层：索引 20 域+簇 7+终谳 5+回落 7+四计数·原文保全零删改·新检出「六智能体」计数残留 2 处终谳七大·09-30 治理日呈报件在盘）；R193 token 止血令 ③④ 执行毕（提前 1 天·AC-T1..T4 全过：state.json 热冷整编 396,760B→79,504B〔分日汇总+近 30 轮原文保留+全文备份 logs/〕+backlog done 行 24 行归档+CODELY.md 复核不存在=P-2026-09-25-18 本司面回执）；R196 P-2026-09-26-01 集团技能动员令本司面毕（bigdomain-loop-scan 首技能建+装+README 登记·AC-K1..K5 全过·窗内提前 ~47h）；R256 state.json 再整编 R2（P-2026-09-25-18 ④主刀再执行·R193 预注册 09-29 窗提前〔增速三点实测 1,964B/轮·09-27 周日窗判据锚前将重返 394,294B 基线〕·204,867B→67,410B=-82.9% vs 锚·AC-T2 复用+AC-R1..R5 全过·09-29 基准刷新首项承传在册）；R265 禁待命·自主运转令 P-2026-09-26-03 本司面执行毕（ack 检出即回+自驱单 BD-SD1 策略研究/BD-SD2 设计深化/BD-SD3 运营预演落 backlog 顶·1h 修正=待命面转自驱开单面）+D-20260926-05..11 七行知悉（全非本司执行面·decisions 基线 36→43）；R266 自驱单 BD-SD1 策略研究面毕（冷启动+19.9 会员价值锚研究件 R-20260926-cold-start-strategy 落盘·AC-SD1a..d 全过·19.9 定价基线 web 直采 4 源双源互证〔视频平台 22-25 元四家互证/音乐社区 15 元四家互证/入门档 8 元三家互证〕·定价确认=[needs-CEO] 呈批证据面）+state.json 再整编 R3（P-2026-09-25-18 ④主刀第三刀·79,721B→19,781B=-75.2%〔对 394,294B 锚 -95.0%〕·AC-R31..R35 全过·R226-R255 窗压为分窗汇总+原文全量入 archive §R266 节）；R268 自驱单 BD-SD3 运营预演面毕（禁待令自驱单三件全收口：上线运营预演件落 docs/ops/R-20260926-launch-ops-rehearsal——有人值守慢直播 SOP〔§四封禁级注常驻·开播策略以 BigCompute 风控为准引用〕+封禁级风险应急面〔三级四列+五场景+kill switch 四开关〕+上线日 checklist 草案〔D-7/D-1/当日/首小时四阶段·开闸门=CEO 明示批准 P1 呈批面〕·AC-SD3a..e 全过·docs/ops/ 认领轮建目录首件）；R318 集团批量补录波六新令检出分置（P-04 城市总体规划令本司面=平台共创区块块面调研件当轮闭环〔六必答+AC-CB1..CB4 自验全过·91 行 ≤300·docs/research/R-20260926-city-block-platform-cocreation·与总规 v1.0 卡 9/§五 L88 对齐·B9 司塔两案并列呈 v1.1 裁〕+P-05/06/07 知悉〔非本司派工面〕+P-08 OSS 借力令 ack〔首窗切片件排板·窗至 09-29 21:40·台账落位 P2 呈 HQ-FEEDBACK 三选一裁〕+P-09 次元城市定位变更令 ack〔T2 用户家庭授权层=真 AI 传承商业线承接设计件排 backlog 顶·下轮首项〕）；R320 OSS 借力令首窗切片件毕（P-2026-09-26-08·docs/oss-harvest/OH-20260926-bigdomain.md·五门评估采 blind_watermark〔MIT·14793★·AIGC 隐式标识盲水印〕·落点=任务单 P-47-3c+司级采用登记簿·AC-OH1..OH5 全过·窗内提前 ~71h）；R321 P-47-3c AIGC 隐式标识能力验证件毕（P-2026-09-26-08 首窗落点任务单·套件 src/sandbox/watermark/test_watermark.py SUITE PASS 5/5：清洁往返 exact+JPEG q90 压缩例+裁剪 85% recover.py 恢复例〔直提退化诚实负如实记〕·设计件 docs/spec/implicit-watermark-verify.md 双轨并呈注记·生产接线=bootstrap 期零新代码零 schema·窗内提前 ~69h；R330 集团调研部门建制令 P-2026-09-26-18 本司面毕〔商业化前沿调研部建制回执·复用 docs/research/ 调研面正名扩权 X068·零新编制零新循环零新台账·AC-RD1..RD7 全过·回执窗 09-28 12:00 内提前 ~36h〕；R333=决策审核批 5 行（D-20260927-01/02/04 知悉+D-03 OSS 台账迁集团路径执行+D-05② GORD 全文件扫采纳·decisions 基线 43→48）；R381=P-2026-09-27-02 商业化付费点令本司面「价目正典增补」提案件毕（docs/spec/price-canon-amendment-spec.md·N1-N7 正典落位映射+N2 居民成长档案订阅产品定义·P1 呈批律零执行·AC-PC1..PC6 全过·HQ-FEEDBACK P1 行三裁面）；R405=闲置司自驱动员令四议程本司面承接+19.9 算力包用户旅程 v2 毕（AC-JV1..JV6·C-20260927-01 席位意见出具）；R406=M2 前预备三件毕（店内体验 v2+代币内循环沙盘+UGC 首演方案·AC-M2a..e 全过·P-2026-09-27-07 窗内提前 ~42h）；R407=委员会首案（机构瘦身审视裁并案 P-2026-09-27-06）商业市场席共席侧独立意见出具（HQ-FEEDBACK 行·AC-SS1..SS6·常设议程拉单承 P-2026-09-27-07）；R408=调研部次件动线标杆补锚（docs/research/R-20260927-venue-flow-benchmark·双源直采 teamLab+Meow Wolf 官方页·R318 应用表第 4 行 🟡 挂起收口·AC-RF1..RF5 全过·常设议程拉单承 P-2026-09-27-07）；R411=status-export export_ts 畸形修复+全件刷新（R410 坏值→合法 ISO8601 带时区·根因=naive %z 空串·scan EXPORT 面 FLAG→PASS·AC-EX1..EX5·常设议程拉单承 P-2026-09-27-07）；R412=M4 参观端承载设计件当轮闭环（R318 应用表第 2 行落点收口·T2 件毕解锁·AC-M4a..h 全过·docs/spec/m4-visitor-end-spec·常设议程拉单承 P-2026-09-27-07）；R413=state.json 再整编 R12（P-2026-09-25-18 ④第十二刀·80,457B→72,671B scan 口径·窗 R402..R405 4 轮 8 行压汇总 1 行·AC-R121..R125 全过）+板规执法第四刀（R412 done 行 M4 verbatim 迁档 §R413 节）+R414=membership-spec 呈现面补充输入收口（m4 §六 第 2 行落点·AC-MS1..MS5 全过）+板规执法第五刀（R413 done 行 R12 verbatim 迁档 §R414 节）+R415=常设承接窗项冷启动件 §六 第 3 行挂起收口（公域池规模锚→SD3 预演件 §一 1.0b 消费·AC-CS1..CS5 全过）+板规执法第六刀（R414 done 行 verbatim 迁档 §R415 节）+R416=触线轮整编 R13（state.json 轮首 82,331B 触线→窗 R406..R413 16 行压 1 行·收账后 64773B·AC-R131..R135 全过）+板规执法第七刀（R415 done 行 verbatim 迁档 §R416 节）+R417=fan-growth-funnel §三 挂起条件项收口（CPH4 fan-ops-channels 终稿转引刷新·触发证据三重·四层结论转引零复制·AC-FR1..FR5 全过）+板规执法第八刀（R416 done 行 verbatim 迁档 §R417 节·state 68719B·逐轮轮首实测为准）R418=基准刷新 web 直采 A 片（P-2026-09-27-07 常设承接·P-74 到期 09-29 前 2 天先行：得=Discord Nitro 官方页〔B·$2.99/$9.99 两档〕+网信办标识办法官方页〔A·四部门·2025-09-01 施行·显式/隐式双层条款〕·失败 8 试全注〔Roblox JS 壳/蛋仔官网×2 连接失败/GB 45438×2 检索零效/自有端价 4 试零价格文本=两轮 8 页实测判负收口〕·benchmarks_refreshed→2026-09-27·B 片四源直采拆细 backlog 顶行下轮收口·state 72046B；R419=基准刷新 B 片四源直采收口（微信虚拟支付官方文档 env 沙箱字段+goodsPrice 校验+运营规范族交易类正文+支付 V3 回调/验签双页〔5s 应答窗/15 次重试梯度/验签头四件套〕+msgSecCheck 接口清单·费率面 M 维持〔商户号物理件〕·A+B 片全毕=P-74 周期件提前收口·benchmarks_refreshed=2026-09-27·下次到期 2026-10-04）；R420 D-7 预演复跑（五沙箱 68/68 全绿+对账 dry-run 干净+secret-scan P0=0·launch-ops-rehearsal §三 注记·release-scan/IF 抽查/桌面推演=launch 窗留位·预演≠过门）；R423=state.json 再整编 R14（触线轮 81,350B→63,644B·窗 R414..R419 6 轮 12 行压汇总 1 行+archive §R423 append 节·AC-R141..R145 全过）+GORD 闭口更新知悉（集团 orders Token经济行 dispatched→executed·commit 9cd7260·非本司执行面零动作）；R432=state.json 再整编 R15（P-2026-09-25-18 ④第十五刀·R431 承传注记触线应验 80,731B→63,836B·AC-R151..R155 全过·P-2026-09-27-07 常设承接窗项）；R433=板规执法第十三刀（R432 过当轮 done 行 R15 1 条 verbatim 迁 backlog-done §R433 节·板面净=规约头+bootstrap 行·P-2026-09-27-07 常设承接窗项）·R440=state.json 再整编 R16（窗 R429..R439 22 行 20,758B 压 1 行·80,219B→60,625B=-24.4%·AC-R161..R165 全过·archive append marker 14→15）；R441=板规执法第十四刀（R440 过当轮 done 行 R16 1 条 verbatim 迁 backlog-done §R441 节·板面净=规约头+bootstrap 行·P-2026-09-27-07 常设承接窗项）·R450=state.json 再整编 R17（窗 R440..R449 20 行 20,794B 压 1 行·81,800B→62,238B=-23.9%·AC-R171..R175 全过·archive append marker 15→16）；R457=板规执法第十五刀（R450 过当轮 done 行 R17 1 条 verbatim 迁 backlog-done §R457 节·板面净=规约头+bootstrap 行·R451-R456 idle-fast 漏检补刀如实注·P-2026-09-27-07 常设承接窗项）·R460=state.json 再整编 R18（窗 R451..R459 18 行 14,848B 压 1 行·80,288B→66,338B·AC-R181..R185 全过·archive append marker 16→17）·R461=板规执法第十六刀（R460 过当轮 done 行 R18 1 条 verbatim 迁 backlog-done §R461 节·板面净=规约头+bootstrap 行 2,042B·R441 次轮补刀同构·P-2026-09-27-07 常设承接窗项）·R468=state.json 再整编 R19（80,930B→70,383B=-13.0%·窗 R461..R467 7 轮 14 行压 1 行·AC-R191..R195 全过·P-2026-09-25-18 ④第十九刀+P-2026-09-27-07 常设承接窗项）·R474=state.json 再整编 R20（81,131B→74,187B=-8.6%·窗 R469..R473 5 轮 10 行压 1 行·AC-R201..R205 全过·P-2026-09-25-18 ④第二十刀+P-2026-09-27-07 常设承接窗项）+板规执法第十七刀（R468 过当轮 done 行 R19 1 条 verbatim 迁 backlog-done §R474 节·R469-R473 idle 空转轮补刀·AC-K17a..e 全过·P-2026-09-27-07 常设承接窗项）；R477=state.json 再整编 R21+板规执法第十八刀双项一轮（窗 R474..R476 6 行+冷段 R353..R362 20 行压汇总 2 行·80,893B scan→67573B·log 86→66 项·AC-R211..R215+AC-R212b+AC-K18a..e 全过·P-2026-09-25-18 ④第二十一刀）+DEC C-20260927-01/02 知悉批（council-pending 过会前零执行·decisions 基线 63→70）+GORD P-2026-09-27-09/10 知悉批（executed 评估件·sha16 新基线 88A9C6C3F6B24201）+陈项 09-29 基准刷新注记闭口（R418/R419 09-27 提前收口在册）；R486 state.json 再整编 R22+板规执法第十九刀双项一轮（水位闸 81,806B 越线触发·窗 R478..R485+冷段 R257..R264 压编·整编后 63,398B·AC-R221..R225+AC-R222b+AC-K19a..e 全过）；R500 state.json 再整编 R23+板规执法第二十刀双项一轮（水位闸 81,703B 越线触发·窗 R487..R499 13 轮压编·整编后 68,236B·AC-R231..R235+AC-K20a..e 全过）；R508 state.json 再整编 R24+板规执法第二十一刀双项一轮（水位闸 80,043B 越线触发·窗 R501..R507 7 轮压编·整编后 72940B·AC-R241..R245+AC-K21a..e 全过）；R523 state.json 再整编 R28+板规执法第二十五刀双项一轮（水位闸 80,055B 越线触发·首跑单窗越线 amend 扩窗并入 R27 汇总行·窗 R514..R522 9 轮压编·整编后 79,749B·AC-R281..R285+AC-K25a..e 全过）；R525 state.json 再整编 R29+板规执法第二十六刀双项一轮（水位闸 80,935B 越线触发·amend 扩窗律四候选 probe 实测选中 C′·窗 R508..R524 17 轮压编·整编后 76,020B·AC-R291..R295+AC-K26a..e 全过）；R526 板规执法第二十七刀（R525 过当轮 done 行复选框漏勾补勾+verbatim 迁档 backlog-done §R526 节·scan claimable=1 误计溯源修复=五静③恢复·AC-K27a..f 全过）；R529=P-2026-09-28-02 v2.1 增补令两步适配执行毕（mandate idle-fast 废止改道+创新提案轨·司提案面 docs/proposals.md+BD-PROP-001 首条提案·AC-V21a..e 全过）+state.json 再整编 R30（轮首 81,212B 触线·窗 R508..R528 21 轮压汇总·AC-R301..R305 全过）；R530=集团 QA Smoke Test 自验令（orders L254·charter v1.0）承令执行毕（每日 crawl 3 试 2 得 1 判负+benchmarks C 片刷新〔GB 45438-2025 openstd 直采 M 项收口+回调查单指引 4012075249〕+intelligence-wall 建面 W1..W5+qa/smoke-R530.log+png 证据四件+scan [QA] 判读面+SKILL 双同步+canon-index 21 行·清单四项全过）·R531=PT-20260928-02 承令（板面锚三行+backlog 镜像+④回执呈 HQ·RUN_ID=092301）+分歧合流（bm-c ec6936e merge）+scan [ORD]/[TREE] 双面修复；R532：承 CEO 停摆令（commit+heartbeat 同窗兑现）+v2.0 三线队列 30 条落盘+runbook 建面+安全清理 auto-saves 661.6MB 迁 docs/_trash+PT① self_drive 派生面毕（10-05 首回访数据面就绪）；R532 收口（22:4x）：孤儿产物六件验真定向 commit+O-2026-0928-015/016 BLUEPRINT 承接入律（§一定位升华+§五.8 归属感经济律·词族门自验零命中）+orders L9-L11/dec L71-72/gord U288+O-20260928-1820 回执批+state R31 整编；R533（23:1x）：单执行体退避轮（bonsai 试用会话活跃写盘→只读最小簿记·O-2026-0928-017 检出顺延·lowpoly 知悉）；R534：O-2026-0928-017 承令执行毕（§一补 远期愿景节三令合弧+§五.8 共治权永不售卖红线·词族门自验产品面零命中）+bonsai 试用件留他会话收口不夺单；R535：Ternary-Bonsai 四件套回执验真采纳毕（orders L9 done·R-20260928-bonsai-bd-trial 落盘·verdict=observe·qa/bonsai-bd 21 文件证据定向 commit）；R536：state.json 再整编 R32（80,064B 越线触发·窗 R529..R535 7 轮 20 行压 1 汇总行·pre-op 全量快照=logs/state-log-archive-2026-09.md §R536 节·AC-R321..R325 全过）+板规执法第三十一刀（R532/R535 过当轮 done 行 2 条 verbatim 迁档）+gord U293 知悉（Biggame 派工面）·R537=QA charter 每日 crawl 轮（深度合成规定令12+生成式AI办法令15 A 级双源官方全文直采·AIGC 标识合规链四件齐〔深度合成规定→生成式AI办法→标识办法→GB 45438〕·benchmarks §①③④ 翻新+benchmarks_refreshed=2026-09-29+W6/W7 入墙+smoke-R537 log/png+dec C-20260928-02 知悉批基线 72→75）；R545 state.json 再整编 R33+板规执法第三十二刀双项一轮（水位闸 80,629B 越线触发·窗 R536..R544 9 轮压编·整编后 67,544B·AC-R331..R335+AC-K32a..e 全过）；R550 tech 队列 #4 S8b 阶梯压测三跑实测判负留痕（判负留痕合法·静机控制复测归因件窗控入队 09-30 13:00 后）·R551 R550 收账残留收口轮（会话截断六面残留补齐·板规执法第三十三刀·write-before-verify 违例如实注）；R577 双项轮（O-2026-0929-002 学习件+小程序栈适配注记落盘 docs/ui-assembly-adaptation-bigdomain.md［@BigDomain 面=M4 参观端小程序+大厅 UI 设计面·回执窗内提前 ~35h］+state.json 再整编 R41 终态 74,247B）。R578（双件轮）：R577 收账中断代落 commit 146569e（九产物验真后落·O-2026-0929-002 回执窗内）+C-20260929-01 委员会云端 token 节省案商业市场席席位意见出具（赞成四款·票档归 HQ·P1 边界零执行）；R579（知悉批收账轮）：DEC 75→77 双委员会案归档行判读毕（C-01=R578 席位意见在案·C-02 转办三件全门控或不适用=lane 门控 Biggame/GPU 周报零自有算力不适用/创新轨转化挂提案锚双门）+GORD +4 新行判讫（O-003 治理域/P-2026-09-29-03 审查反思轮=知悉）+板规执法第四十六刀+proposals 派生计数 F3 漂移修正 0/0→1/1（BD-PROP-001 open）·R600：UGC 创作者激励梯度沙箱件（explore 线 #3·IncentiveFace 结算窗梯度分配器=递减边际带状梯度+项圈+预算帽 pro-rata+share 出账+窗幂等·test_incentive.py 7/7·reconcile_all 十二套件 RUNNER PASS 123 判据·AC-IG1..IG7 预注册先行·参数 [needs-CEO] 呈批）+板规执法第六十刀·R601：state.json 再整编 R46（81,124B→67,518B·候选 B·R45 摘要随窗折叠·AC-R461..R465 全过·qa/reorg-R601.log）+跨司结算协议对接落地件（settlement.py SettlementFace=整数分账+manifest 哈希链+verify 交叉+窗幂等+claim 门·test_settlement.py 7/7·reconcile_all 十三套件 130 判据 RUNNER PASS·AC-ST1..ST7 预注册先行全过·分账比例 [needs-CEO] P1 呈批·explore 队列件）·R604：O-2026-0929-013 @BigDomain 派单《吸嘟嘟运营层规格v1》商业化合规复核毕（判据预注册 XD1..XD10 先落板+复核报告 docs/audits/ops-review-20260929-xidudu-operations-v1.md+可复跑机械闸 src/sandbox/opsreview/ 套件 7/7+reconcile_all 扩十五套件 144 判据全绿·真规格机检 6 过/4 注记缺口/0 红线·回执窗 10-02 12:00 内提前 ~2.5 天·O-2026-0929-014 城市×资产联动令知悉）；R605 state.json 再整编 R47+城市场地租赁/店面招商 VenueFace 落地（explore 线 #2·AC-VN1..VN7+AC-R471..R475+AC-K64a..e 全过·reconcile_all 扩十六套件 151 判据·参数 [needs-CEO] P1 呈批）；R843=O-2026-0930-026 国内市场匹配研究批本司切片承令交付（R-20261001-domestic-market-fit·V1..V9·AC-MF1..3=qa/research-R843.log）+GORD 026/2209 判读回执+cut-115 板规刀；R848=QA charter 每日 crawl G 片（未成年人网络保护条例 A 级直采+§①③④ 翻新+wall W11）+fold R125+cut-117+O-013④ 每日首轮核对；R850=审计缺口#2 落地件《城市商业双轨场景推演模型 v0.1》（src/sandbox/citymodel·AC-CCM1..CCM6=qa/citymodel-R850.log·P-2026-10-02-02 自驱续作·P1 只算不裁）；R943 双项一轮：frontdoor v0.7 城市商业方案卡挂载（审计 P-2026-10-02-02 P2-9 缺口回应呈现面·AC-FD7a..f=qa/wiring-R943.log·test_wiring 44/44+六套件零回归+活体重启 healthz=200）+fold R163 水位整编（80,426B→76,909B·AC-R1641..R1645=qa/reorg-R943.log）；R946 双项一轮：frontdoor v0.9 发行面研究卡挂载（审计 P-2026-10-02-02 P2-9 残余三面回应呈现面·AC-FD9a..f=qa/wiring-R946.log·test_wiring 70/70+全量回归 27/27 零回归+活体重启 healthz=200）+fold R164 水位整编（82,046B→76,941B·AC-R1741..R1745=qa/reorg-R946.log）；R949 fold R165 水位整编（81,591B→终态 76,342B·AC-R1651..R1655=qa/reorg-R949.log·队列复核零自然续件=台账维护轮计分 1）；R1018 frontdoor v0.29 N2 居民成长档案面卡（C-20260927-01 采纳序首位 CEO 可见面收口·AC-FD29a..f 全过=qa/frontdoor-v29-R1018.log+RUNNER PASS 28/28 零回归=qa/reconcile-all-R1018.log·活体 31 卡·R1018）；R1052 板规刀 193 cut-only 短轮（滞板 R1051 行 3,926B verbatim 迁 10 月档 §R1052 节·节 98→99·主板 11,064B→9415B·AC-K193a..e=qa/board-R1052.log·台账维护计分 1）；R1154=GORD 五新行判读（O-2026-0930-027 SOP 建制令本司执行回执=《SOP 盘点与补建清单》首窗件 docs/ops/sop-inventory-20261004.md·O-2026-0930-028/029/030+O-20261004-2255 知悉）+雷达 10-04 窗候选清单过目零本司契合件+fold R244+板规刀 238",
-   "s": 1
+  "export_ts": "2026-10-15T02:13:40+08:00",
+  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
+  "ceo_face": {
+    "current": "R1974: 20th-case crashed-round orphan takeover closeout - curation combined hot+cold dual board read face (boards_combined, AC-CJ1..CJ7 pre-registered pre-code in the explore claim row) delivered: taker re-verified three-green personally (suite double-run 7/7 byte-identical sha16 cbdc791f40dc8a21 + full RUNNER battery own re-run PASS 204/204 controls 7/7 168.9s + matrix --check byte-identical 19632B/204 suites/1776 criteria); crashed round's first battery FAIL diagnosed as in-flight-evidence census race (non-payload); fold R521 verified; QA charter same-day evidence pair repaired (smoke-R1974 log+png; W25 crawl delivered earlier by R1973); DEC +2 non-ours acks, GORD 405->413 all non-ours acks, ORD baseline honestly re-anchored.",
+    "latest_artifact": "src/sandbox/ledger/curation.py boards_combined() + test_curation_combined.py (SUITE 7/7) + reconcile_all SUITES row + matrix 204/1776 + qa/smoke-R1974.log/.png (2026-10-15)",
+    "next_milestone": "P3 explore FIFO: combined dual-board cross-restart persistence window (reseeded head), then civic-points behavior-count board read face; within 48h."
   },
-  {
-   "n": "用户增长部（L1·CEO 令 P-76 设立·薄部门 AI 劳动力）",
-   "t": "R-20260924-fan-growth-funnel 落盘（R34·docs/research/ 第 3 件）：三线×三司分工（采集=BigStream/群运营=BigCompute/增长漏斗=本司·引用不复制）+引流→群→共创漏斗四段×承接件映射（五件套判据实指）+合规红线前置（个保法零采集面/微信群控外挂判负/禁诱导分享）+岗位×2（增长专家/CRM 自动化专家·角色制·人名=CEO 保留面）；入群权益钩参数=[needs-CEO] 呈批；群侧触达自动化 blocked on 账号域物理件",
-   "s": 1
-  },
-  {
-   "n": "生产部署面",
-   "t": "blocked on CEO 物理件（微信支付商户号/账号域 msgSecCheck/生产服务器·Phase 1 点灯前不启动）",
-   "s": 2
-  },
-  {
-   "n": "集团转办吸收",
-   "t": "P-62/P-61/P-65/P-66/P-67/P-70 全回执在案（R12~R32）；P-74 交付时效律对账 R34（基准面刷新窗压缩 10-01→09-29）；P-76 粉丝经营三线令本司面 R34 同轮毕；P-77 流转提速律本司面 R36 毕；D-20260925-07~11 决策审核 R122（D-07③ 本司回执毕）；Group Patrol 首班本司=GREEN 零整改（patrol-2026-09-25）；P-2026-09-25-05 算力总动员令 3 本司面 R157 毕（ack+24h 资源清单回执：零自有算力件/OSLoop 现役/在飞 0/可加速活 0=bootstrap 待物理件·⑥路承接=GL204 接件+日面上报保真+PT 消费零本司单）；GL204 清理整合令自域梳理 R158 执行毕（canon-index 判例层落盘·09-30 治理日呈报件在盘）；P-04 创始家庭/P-06 大众内容/P-07 PT-12/P-08 PT-10/P-09 水面令（原 P-04 撞号已由集团顺延改号·L105 实证）=他司面知悉；P-04 撞号+orders 重复行=P2 上报 HQ-FEEDBACK（R157）·R158 P2 更新一行（改号采纳实证+orders 重复行仍在册·集团裁量）；09-26 兜底扫描吸收=token 止血令（orders L34）本司面 ③④ 排板 R192（周日窗 09-27·①BigMoney/②CPH4 他司面）+L35 美术外部审查行=FluxVerse DevLoop 面知悉；R193：P-2026-09-25-18 全面节省云端 token 令（ledger 行随批显形）本司面回执=③④ 执行件同轮毕+P-2026-09-25-12 全员无闲令合规态确认（本司零闲在册·任务板现役）+D-20260926-01~04 知悉（D-01 本司回执核销 D-20260925-03→executed/D-04 本司两连上报采纳=P 号先占律·ledger P-61→P-2026-09-24-82 改号）；P-2026-09-26-01 集团技能动员令本司面 R196 同轮毕（盘点→三问筛→建 bigdomain-loop-scan→装→README 登记·回执含 commit=P-51 送达）；R256=该令 ④主刀再执行回执在案（09-29 预注册窗提前·判据锚证据三点实测）；R265=orders L218 短板盘点批+L219 BigCompute 令知悉（非本司面）+L220 禁待令执行回执（P-2026-09-26-03·ack+自驱单清单）+D-20260926-11 计数 discrepancy P2 上报 HQ-FEEDBACK（本司 R196 回执三载体在案·按 P-51 口径应 4/8）；R267 自驱单 BD-SD2 设计深化面毕（P-47 五件跨件集成设计深化件 docs/spec/integration-deepening-spec.md：契约缝普查 12 缝五列+全用户旅程六段+边界/故障/降级三面深化·AC-SD2a..e 全过·零推倒零双建·沙箱缝行级实勘五处在案·backlog R3 复选框簿记顺手对齐）；R318 六新令回执全落 state log（P-04 城市总体规划令执行回执·块面调研件当轮闭环提前回执窗 ~38h/P-05-07 三令知悉/P-08 OSS 借力令 ack+台账落位 P2 裁决请求 HQ-FEEDBACK/P-09 次元城市令 ack+T2 真 AI 传承商业线承接件排板→R319 承接件毕〔heritage-t2-spec·AC-H1..H6 全过·BigCompute 法务核验件挂待〕/P-10 审计部成立令知悉〔集团审计部直属 CEO·本司=被审计面非执行〕；R330=P-2026-09-26-18 集团调研部门建制令本司面毕（商业化前沿调研部建制回执·复用件声明+首件接产=U231 块面件·AC-RD1..RD7 全过·回执窗 09-28 12:00 内提前 ~36h）；R333 D-20260927-01..05 决策批（01 知悉·⑦ 计数 5/8 仍漏本司=R265 证据行在册·02 知悉·03 执行=OH 切片件迁 cph4/oss-harvest/ 集团台账位+本仓镜像撤〔F-20260926-R318 三选一请求闭口·首窗 09-29 21:40 前交付提前 ~2.5 天〕·04 知悉+自检合规〔本司复审锚全为 commit 落盘稳定件零热追加面锚〕·05 ② 采纳=scan GORD 面全文件扫 sha16=EF1FBAC2FA40D30A 检测）·R380=P-2026-09-27-01 城市最高决策委员会成立令本司面自领接线毕（第 4 席 商业市场=BigCompute+BigDomain·既有会话 mandate 扩展零新增常驻·BLUEPRINT §十二 席位行落盘·转办面集团层文件件=HQ 非本司面知悉·否决窗至 10-04）；R381=P-2026-09-27-02 商业化付费点令执行回执（价目正典增补提案件+HQ P1 呈批行·N3/N6=BigCompute 面·N1/N4/N5/N7 排期池知悉·GORD 新基线 sha16=CC12631F6277278E·lines=240）",
-   "s": 1
-  },
-  {
-   "n": "商业化前沿调研部（虚席·P-2026-09-26-18 建制·集团章程 v1.0）",
-   "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）",
-   "s": 1
+  "depts": [
+    {
+      "n": "OSLoop 自领池（L0·唯一执行面）",
+      "t": "P-47 业务件五件全件收口：规格 5/5+沙箱骨架 5/5 判据自验全绿（68 判据）；P-65 调研面建位 R20；P-67② 全链闭合（研究件 R27+激励智能体设计件 R28·分配层三面 AC-I1..I13 预注册）；P-70⑤ EiGEN 研究判负留痕 R31+集团关单同步 R32；P-76 粉丝经营三线令本司面 R34 毕（用户增长部设立+漏斗映射件·24h 快速件档提前 ~47h）；待办=参数首档 [needs-CEO] 呈批面+bootstrap 打包 blocked 项；P-77 流转提速律③ Git 往返律吸收 R36（启动器补轮首 pull --ff-only·fail-soft）；D-20260925-03 单实例锁活性集团标准吸收 R50（锁段重写=PID 锁+活探查+CreateNew 原子抢+30min 接管窗=1.2×预算·AC-D03 10/10 全绿·test_lock.ps1 常驻可复跑·先行 48h 回执窗内毕）；R122 回执 F-20260925-BD01 已交 HQ-FEEDBACK；R157 满负荷自领承接=P-05 总动员令 3 回执毕；R158 GL204 清理整合令自域梳理执行毕（docs/canon-index.md 判例层：索引 20 域+簇 7+终谳 5+回落 7+四计数·原文保全零删改·新检出「六智能体」计数残留 2 处终谳七大·09-30 治理日呈报件在盘）；R193 token 止血令 ③④ 执行毕（提前 1 天·AC-T1..T4 全过：state.json 热冷整编 396,760B→79,504B〔分日汇总+近 30 轮原文保留+全文备份 logs/〕+backlog done 行 24 行归档+CODELY.md 复核不存在=P-2026-09-25-18 本司面回执）；R196 P-2026-09-26-01 集团技能动员令本司面毕（bigdomain-loop-scan 首技能建+装+README 登记·AC-K1..K5 全过·窗内提前 ~47h）；R256 state.json 再整编 R2（P-2026-09-25-18 ④主刀再执行·R193 预注册 09-29 窗提前〔增速三点实测 1,964B/轮·09-27 周日窗判据锚前将重返 394,294B 基线〕·204,867B→67,410B=-82.9% vs 锚·AC-T2 复用+AC-R1..R5 全过·09-29 基准刷新首项承传在册）；R265 禁待命·自主运转令 P-2026-09-26-03 本司面执行毕（ack 检出即回+自驱单 BD-SD1 策略研究/BD-SD2 设计深化/BD-SD3 运营预演落 backlog 顶·1h 修正=待命面转自驱开单面）+D-20260926-05..11 七行知悉（全非本司执行面·decisions 基线 36→43）；R266 自驱单 BD-SD1 策略研究面毕（冷启动+19.9 会员价值锚研究件 R-20260926-cold-start-strategy 落盘·AC-SD1a..d 全过·19.9 定价基线 web 直采 4 源双源互证〔视频平台 22-25 元四家互证/音乐社区 15 元四家互证/入门档 8 元三家互证〕·定价确认=[needs-CEO] 呈批证据面）+state.json 再整编 R3（P-2026-09-25-18 ④主刀第三刀·79,721B→19,781B=-75.2%〔对 394,294B 锚 -95.0%〕·AC-R31..R35 全过·R226-R255 窗压为分窗汇总+原文全量入 archive §R266 节）；R268 自驱单 BD-SD3 运营预演面毕（禁待令自驱单三件全收口：上线运营预演件落 docs/ops/R-20260926-launch-ops-rehearsal——有人值守慢直播 SOP〔§四封禁级注常驻·开播策略以 BigCompute 风控为准引用〕+封禁级风险应急面〔三级四列+五场景+kill switch 四开关〕+上线日 checklist 草案〔D-7/D-1/当日/首小时四阶段·开闸门=CEO 明示批准 P1 呈批面〕·AC-SD3a..e 全过·docs/ops/ 认领轮建目录首件）；R318 集团批量补录波六新令检出分置（P-04 城市总体规划令本司面=平台共创区块块面调研件当轮闭环〔六必答+AC-CB1..CB4 自验全过·91 行 ≤300·docs/research/R-20260926-city-block-platform-cocreation·与总规 v1.0 卡 9/§五 L88 对齐·B9 司塔两案并列呈 v1.1 裁〕+P-05/06/07 知悉〔非本司派工面〕+P-08 OSS 借力令 ack〔首窗切片件排板·窗至 09-29 21:40·台账落位 P2 呈 HQ-FEEDBACK 三选一裁〕+P-09 次元城市定位变更令 ack〔T2 用户家庭授权层=真 AI 传承商业线承接设计件排 backlog 顶·下轮首项〕）；R320 OSS 借力令首窗切片件毕（P-2026-09-26-08·docs/oss-harvest/OH-20260926-bigdomain.md·五门评估采 blind_watermark〔MIT·14793★·AIGC 隐式标识盲水印〕·落点=任务单 P-47-3c+司级采用登记簿·AC-OH1..OH5 全过·窗内提前 ~71h）；R321 P-47-3c AIGC 隐式标识能力验证件毕（P-2026-09-26-08 首窗落点任务单·套件 src/sandbox/watermark/test_watermark.py SUITE PASS 5/5：清洁往返 exact+JPEG q90 压缩例+裁剪 85% recover.py 恢复例〔直提退化诚实负如实记〕·设计件 docs/spec/implicit-watermark-verify.md 双轨并呈注记·生产接线=bootstrap 期零新代码零 schema·窗内提前 ~69h；R330 集团调研部门建制令 P-2026-09-26-18 本司面毕〔商业化前沿调研部建制回执·复用 docs/research/ 调研面正名扩权 X068·零新编制零新循环零新台账·AC-RD1..RD7 全过·回执窗 09-28 12:00 内提前 ~36h〕；R333=决策审核批 5 行（D-20260927-01/02/04 知悉+D-03 OSS 台账迁集团路径执行+D-05② GORD 全文件扫采纳·decisions 基线 43→48）；R381=P-2026-09-27-02 商业化付费点令本司面「价目正典增补」提案件毕（docs/spec/price-canon-amendment-spec.md·N1-N7 正典落位映射+N2 居民成长档案订阅产品定义·P1 呈批律零执行·AC-PC1..PC6 全过·HQ-FEEDBACK P1 行三裁面）；R405=闲置司自驱动员令四议程本司面承接+19.9 算力包用户旅程 v2 毕（AC-JV1..JV6·C-20260927-01 席位意见出具）；R406=M2 前预备三件毕（店内体验 v2+代币内循环沙盘+UGC 首演方案·AC-M2a..e 全过·P-2026-09-27-07 窗内提前 ~42h）；R407=委员会首案（机构瘦身审视裁并案 P-2026-09-27-06）商业市场席共席侧独立意见出具（HQ-FEEDBACK 行·AC-SS1..SS6·常设议程拉单承 P-2026-09-27-07）；R408=调研部次件动线标杆补锚（docs/research/R-20260927-venue-flow-benchmark·双源直采 teamLab+Meow Wolf 官方页·R318 应用表第 4 行 🟡 挂起收口·AC-RF1..RF5 全过·常设议程拉单承 P-2026-09-27-07）；R411=status-export export_ts 畸形修复+全件刷新（R410 坏值→合法 ISO8601 带时区·根因=naive %z 空串·scan EXPORT 面 FLAG→PASS·AC-EX1..EX5·常设议程拉单承 P-2026-09-27-07）；R412=M4 参观端承载设计件当轮闭环（R318 应用表第 2 行落点收口·T2 件毕解锁·AC-M4a..h 全过·docs/spec/m4-visitor-end-spec·常设议程拉单承 P-2026-09-27-07）；R413=state.json 再整编 R12（P-2026-09-25-18 ④第十二刀·80,457B→72,671B scan 口径·窗 R402..R405 4 轮 8 行压汇总 1 行·AC-R121..R125 全过）+板规执法第四刀（R412 done 行 M4 verbatim 迁档 §R413 节）+R414=membership-spec 呈现面补充输入收口（m4 §六 第 2 行落点·AC-MS1..MS5 全过）+板规执法第五刀（R413 done 行 R12 verbatim 迁档 §R414 节）+R415=常设承接窗项冷启动件 §六 第 3 行挂起收口（公域池规模锚→SD3 预演件 §一 1.0b 消费·AC-CS1..CS5 全过）+板规执法第六刀（R414 done 行 verbatim 迁档 §R415 节）+R416=触线轮整编 R13（state.json 轮首 82,331B 触线→窗 R406..R413 16 行压 1 行·收账后 64773B·AC-R131..R135 全过）+板规执法第七刀（R415 done 行 verbatim 迁档 §R416 节）+R417=fan-growth-funnel §三 挂起条件项收口（CPH4 fan-ops-channels 终稿转引刷新·触发证据三重·四层结论转引零复制·AC-FR1..FR5 全过）+板规执法第八刀（R416 done 行 verbatim 迁档 §R417 节·state 68719B·逐轮轮首实测为准）R418=基准刷新 web 直采 A 片（P-2026-09-27-07 常设承接·P-74 到期 09-29 前 2 天先行：得=Discord Nitro 官方页〔B·$2.99/$9.99 两档〕+网信办标识办法官方页〔A·四部门·2025-09-01 施行·显式/隐式双层条款〕·失败 8 试全注〔Roblox JS 壳/蛋仔官网×2 连接失败/GB 45438×2 检索零效/自有端价 4 试零价格文本=两轮 8 页实测判负收口〕·benchmarks_refreshed→2026-09-27·B 片四源直采拆细 backlog 顶行下轮收口·state 72046B；R419=基准刷新 B 片四源直采收口（微信虚拟支付官方文档 env 沙箱字段+goodsPrice 校验+运营规范族交易类正文+支付 V3 回调/验签双页〔5s 应答窗/15 次重试梯度/验签头四件套〕+msgSecCheck 接口清单·费率面 M 维持〔商户号物理件〕·A+B 片全毕=P-74 周期件提前收口·benchmarks_refreshed=2026-09-27·下次到期 2026-10-04）；R420 D-7 预演复跑（五沙箱 68/68 全绿+对账 dry-run 干净+secret-scan P0=0·launch-ops-rehearsal §三 注记·release-scan/IF 抽查/桌面推演=launch 窗留位·预演≠过门）；R423=state.json 再整编 R14（触线轮 81,350B→63,644B·窗 R414..R419 6 轮 12 行压汇总 1 行+archive §R423 append 节·AC-R141..R145 全过）+GORD 闭口更新知悉（集团 orders Token经济行 dispatched→executed·commit 9cd7260·非本司执行面零动作）；R432=state.json 再整编 R15（P-2026-09-25-18 ④第十五刀·R431 承传注记触线应验 80,731B→63,836B·AC-R151..R155 全过·P-2026-09-27-07 常设承接窗项）；R433=板规执法第十三刀（R432 过当轮 done 行 R15 1 条 verbatim 迁 backlog-done §R433 节·板面净=规约头+bootstrap 行·P-2026-09-27-07 常设承接窗项）·R440=state.json 再整编 R16（窗 R429..R439 22 行 20,758B 压 1 行·80,219B→60,625B=-24.4%·AC-R161..R165 全过·archive append marker 14→15）；R441=板规执法第十四刀（R440 过当轮 done 行 R16 1 条 verbatim 迁 backlog-done §R441 节·板面净=规约头+bootstrap 行·P-2026-09-27-07 常设承接窗项）·R450=state.json 再整编 R17（窗 R440..R449 20 行 20,794B 压 1 行·81,800B→62,238B=-23.9%·AC-R171..R175 全过·archive append marker 15→16）；R457=板规执法第十五刀（R450 过当轮 done 行 R17 1 条 verbatim 迁 backlog-done §R457 节·板面净=规约头+bootstrap 行·R451-R456 idle-fast 漏检补刀如实注·P-2026-09-27-07 常设承接窗项）·R460=state.json 再整编 R18（窗 R451..R459 18 行 14,848B 压 1 行·80,288B→66,338B·AC-R181..R185 全过·archive append marker 16→17）·R461=板规执法第十六刀（R460 过当轮 done 行 R18 1 条 verbatim 迁 backlog-done §R461 节·板面净=规约头+bootstrap 行 2,042B·R441 次轮补刀同构·P-2026-09-27-07 常设承接窗项）·R468=state.json 再整编 R19（80,930B→70,383B=-13.0%·窗 R461..R467 7 轮 14 行压 1 行·AC-R191..R195 全过·P-2026-09-25-18 ④第十九刀+P-2026-09-27-07 常设承接窗项）·R474=state.json 再整编 R20（81,131B→74,187B=-8.6%·窗 R469..R473 5 轮 10 行压 1 行·AC-R201..R205 全过·P-2026-09-25-18 ④第二十刀+P-2026-09-27-07 常设承接窗项）+板规执法第十七刀（R468 过当轮 done 行 R19 1 条 verbatim 迁 backlog-done §R474 节·R469-R473 idle 空转轮补刀·AC-K17a..e 全过·P-2026-09-27-07 常设承接窗项）；R477=state.json 再整编 R21+板规执法第十八刀双项一轮（窗 R474..R476 6 行+冷段 R353..R362 20 行压汇总 2 行·80,893B scan→67573B·log 86→66 项·AC-R211..R215+AC-R212b+AC-K18a..e 全过·P-2026-09-25-18 ④第二十一刀）+DEC C-20260927-01/02 知悉批（council-pending 过会前零执行·decisions 基线 63→70）+GORD P-2026-09-27-09/10 知悉批（executed 评估件·sha16 新基线 88A9C6C3F6B24201）+陈项 09-29 基准刷新注记闭口（R418/R419 09-27 提前收口在册）；R486 state.json 再整编 R22+板规执法第十九刀双项一轮（水位闸 81,806B 越线触发·窗 R478..R485+冷段 R257..R264 压编·整编后 63,398B·AC-R221..R225+AC-R222b+AC-K19a..e 全过）；R500 state.json 再整编 R23+板规执法第二十刀双项一轮（水位闸 81,703B 越线触发·窗 R487..R499 13 轮压编·整编后 68,236B·AC-R231..R235+AC-K20a..e 全过）；R508 state.json 再整编 R24+板规执法第二十一刀双项一轮（水位闸 80,043B 越线触发·窗 R501..R507 7 轮压编·整编后 72940B·AC-R241..R245+AC-K21a..e 全过）；R523 state.json 再整编 R28+板规执法第二十五刀双项一轮（水位闸 80,055B 越线触发·首跑单窗越线 amend 扩窗并入 R27 汇总行·窗 R514..R522 9 轮压编·整编后 79,749B·AC-R281..R285+AC-K25a..e 全过）；R525 state.json 再整编 R29+板规执法第二十六刀双项一轮（水位闸 80,935B 越线触发·amend 扩窗律四候选 probe 实测选中 C′·窗 R508..R524 17 轮压编·整编后 76,020B·AC-R291..R295+AC-K26a..e 全过）；R526 板规执法第二十七刀（R525 过当轮 done 行复选框漏勾补勾+verbatim 迁档 backlog-done §R526 节·scan claimable=1 误计溯源修复=五静③恢复·AC-K27a..f 全过）；R529=P-2026-09-28-02 v2.1 增补令两步适配执行毕（mandate idle-fast 废止改道+创新提案轨·司提案面 docs/proposals.md+BD-PROP-001 首条提案·AC-V21a..e 全过）+state.json 再整编 R30（轮首 81,212B 触线·窗 R508..R528 21 轮压汇总·AC-R301..R305 全过）；R530=集团 QA Smoke Test 自验令（orders L254·charter v1.0）承令执行毕（每日 crawl 3 试 2 得 1 判负+benchmarks C 片刷新〔GB 45438-2025 openstd 直采 M 项收口+回调查单指引 4012075249〕+intelligence-wall 建面 W1..W5+qa/smoke-R530.log+png 证据四件+scan [QA] 判读面+SKILL 双同步+canon-index 21 行·清单四项全过）·R531=PT-20260928-02 承令（板面锚三行+backlog 镜像+④回执呈 HQ·RUN_ID=092301）+分歧合流（bm-c ec6936e merge）+scan [ORD]/[TREE] 双面修复；R532：承 CEO 停摆令（commit+heartbeat 同窗兑现）+v2.0 三线队列 30 条落盘+runbook 建面+安全清理 auto-saves 661.6MB 迁 docs/_trash+PT① self_drive 派生面毕（10-05 首回访数据面就绪）；R532 收口（22:4x）：孤儿产物六件验真定向 commit+O-2026-0928-015/016 BLUEPRINT 承接入律（§一定位升华+§五.8 归属感经济律·词族门自验零命中）+orders L9-L11/dec L71-72/gord U288+O-20260928-1820 回执批+state R31 整编；R533（23:1x）：单执行体退避轮（bonsai 试用会话活跃写盘→只读最小簿记·O-2026-0928-017 检出顺延·lowpoly 知悉）；R534：O-2026-0928-017 承令执行毕（§一补 远期愿景节三令合弧+§五.8 共治权永不售卖红线·词族门自验产品面零命中）+bonsai 试用件留他会话收口不夺单；R535：Ternary-Bonsai 四件套回执验真采纳毕（orders L9 done·R-20260928-bonsai-bd-trial 落盘·verdict=observe·qa/bonsai-bd 21 文件证据定向 commit）；R536：state.json 再整编 R32（80,064B 越线触发·窗 R529..R535 7 轮 20 行压 1 汇总行·pre-op 全量快照=logs/state-log-archive-2026-09.md §R536 节·AC-R321..R325 全过）+板规执法第三十一刀（R532/R535 过当轮 done 行 2 条 verbatim 迁档）+gord U293 知悉（Biggame 派工面）·R537=QA charter 每日 crawl 轮（深度合成规定令12+生成式AI办法令15 A 级双源官方全文直采·AIGC 标识合规链四件齐〔深度合成规定→生成式AI办法→标识办法→GB 45438〕·benchmarks §①③④ 翻新+benchmarks_refreshed=2026-09-29+W6/W7 入墙+smoke-R537 log/png+dec C-20260928-02 知悉批基线 72→75）；R545 state.json 再整编 R33+板规执法第三十二刀双项一轮（水位闸 80,629B 越线触发·窗 R536..R544 9 轮压编·整编后 67,544B·AC-R331..R335+AC-K32a..e 全过）；R550 tech 队列 #4 S8b 阶梯压测三跑实测判负留痕（判负留痕合法·静机控制复测归因件窗控入队 09-30 13:00 后）·R551 R550 收账残留收口轮（会话截断六面残留补齐·板规执法第三十三刀·write-before-verify 违例如实注）；R577 双项轮（O-2026-0929-002 学习件+小程序栈适配注记落盘 docs/ui-assembly-adaptation-bigdomain.md［@BigDomain 面=M4 参观端小程序+大厅 UI 设计面·回执窗内提前 ~35h］+state.json 再整编 R41 终态 74,247B）。R578（双件轮）：R577 收账中断代落 commit 146569e（九产物验真后落·O-2026-0929-002 回执窗内）+C-20260929-01 委员会云端 token 节省案商业市场席席位意见出具（赞成四款·票档归 HQ·P1 边界零执行）；R579（知悉批收账轮）：DEC 75→77 双委员会案归档行判读毕（C-01=R578 席位意见在案·C-02 转办三件全门控或不适用=lane 门控 Biggame/GPU 周报零自有算力不适用/创新轨转化挂提案锚双门）+GORD +4 新行判讫（O-003 治理域/P-2026-09-29-03 审查反思轮=知悉）+板规执法第四十六刀+proposals 派生计数 F3 漂移修正 0/0→1/1（BD-PROP-001 open）·R600：UGC 创作者激励梯度沙箱件（explore 线 #3·IncentiveFace 结算窗梯度分配器=递减边际带状梯度+项圈+预算帽 pro-rata+share 出账+窗幂等·test_incentive.py 7/7·reconcile_all 十二套件 RUNNER PASS 123 判据·AC-IG1..IG7 预注册先行·参数 [needs-CEO] 呈批）+板规执法第六十刀·R601：state.json 再整编 R46（81,124B→67,518B·候选 B·R45 摘要随窗折叠·AC-R461..R465 全过·qa/reorg-R601.log）+跨司结算协议对接落地件（settlement.py SettlementFace=整数分账+manifest 哈希链+verify 交叉+窗幂等+claim 门·test_settlement.py 7/7·reconcile_all 十三套件 130 判据 RUNNER PASS·AC-ST1..ST7 预注册先行全过·分账比例 [needs-CEO] P1 呈批·explore 队列件）·R604：O-2026-0929-013 @BigDomain 派单《吸嘟嘟运营层规格v1》商业化合规复核毕（判据预注册 XD1..XD10 先落板+复核报告 docs/audits/ops-review-20260929-xidudu-operations-v1.md+可复跑机械闸 src/sandbox/opsreview/ 套件 7/7+reconcile_all 扩十五套件 144 判据全绿·真规格机检 6 过/4 注记缺口/0 红线·回执窗 10-02 12:00 内提前 ~2.5 天·O-2026-0929-014 城市×资产联动令知悉）；R605 state.json 再整编 R47+城市场地租赁/店面招商 VenueFace 落地（explore 线 #2·AC-VN1..VN7+AC-R471..R475+AC-K64a..e 全过·reconcile_all 扩十六套件 151 判据·参数 [needs-CEO] P1 呈批）；R843=O-2026-0930-026 国内市场匹配研究批本司切片承令交付（R-20261001-domestic-market-fit·V1..V9·AC-MF1..3=qa/research-R843.log）+GORD 026/2209 判读回执+cut-115 板规刀；R848=QA charter 每日 crawl G 片（未成年人网络保护条例 A 级直采+§①③④ 翻新+wall W11）+fold R125+cut-117+O-013④ 每日首轮核对；R850=审计缺口#2 落地件《城市商业双轨场景推演模型 v0.1》（src/sandbox/citymodel·AC-CCM1..CCM6=qa/citymodel-R850.log·P-2026-10-02-02 自驱续作·P1 只算不裁）；R943 双项一轮：frontdoor v0.7 城市商业方案卡挂载（审计 P-2026-10-02-02 P2-9 缺口回应呈现面·AC-FD7a..f=qa/wiring-R943.log·test_wiring 44/44+六套件零回归+活体重启 healthz=200）+fold R163 水位整编（80,426B→76,909B·AC-R1641..R1645=qa/reorg-R943.log）；R946 双项一轮：frontdoor v0.9 发行面研究卡挂载（审计 P-2026-10-02-02 P2-9 残余三面回应呈现面·AC-FD9a..f=qa/wiring-R946.log·test_wiring 70/70+全量回归 27/27 零回归+活体重启 healthz=200）+fold R164 水位整编（82,046B→76,941B·AC-R1741..R1745=qa/reorg-R946.log）；R949 fold R165 水位整编（81,591B→终态 76,342B·AC-R1651..R1655=qa/reorg-R949.log·队列复核零自然续件=台账维护轮计分 1）；R1018 frontdoor v0.29 N2 居民成长档案面卡（C-20260927-01 采纳序首位 CEO 可见面收口·AC-FD29a..f 全过=qa/frontdoor-v29-R1018.log+RUNNER PASS 28/28 零回归=qa/reconcile-all-R1018.log·活体 31 卡·R1018）；R1052 板规刀 193 cut-only 短轮（滞板 R1051 行 3,926B verbatim 迁 10 月档 §R1052 节·节 98→99·主板 11,064B→9415B·AC-K193a..e=qa/board-R1052.log·台账维护计分 1）；R1154=GORD 五新行判读（O-2026-0930-027 SOP 建制令本司执行回执=《SOP 盘点与补建清单》首窗件 docs/ops/sop-inventory-20261004.md·O-2026-0930-028/029/030+O-20261004-2255 知悉）+雷达 10-04 窗候选清单过目零本司契合件+fold R244+板规刀 238",
+      "s": 1
+    },
+    {
+      "n": "用户增长部（L1·CEO 令 P-76 设立·薄部门 AI 劳动力）",
+      "t": "R-20260924-fan-growth-funnel 落盘（R34·docs/research/ 第 3 件）：三线×三司分工（采集=BigStream/群运营=BigCompute/增长漏斗=本司·引用不复制）+引流→群→共创漏斗四段×承接件映射（五件套判据实指）+合规红线前置（个保法零采集面/微信群控外挂判负/禁诱导分享）+岗位×2（增长专家/CRM 自动化专家·角色制·人名=CEO 保留面）；入群权益钩参数=[needs-CEO] 呈批；群侧触达自动化 blocked on 账号域物理件",
+      "s": 1
+    },
+    {
+      "n": "生产部署面",
+      "t": "blocked on CEO 物理件（微信支付商户号/账号域 msgSecCheck/生产服务器·Phase 1 点灯前不启动）",
+      "s": 2
+    },
+    {
+      "n": "集团转办吸收",
+      "t": "P-62/P-61/P-65/P-66/P-67/P-70 全回执在案（R12~R32）；P-74 交付时效律对账 R34（基准面刷新窗压缩 10-01→09-29）；P-76 粉丝经营三线令本司面 R34 同轮毕；P-77 流转提速律本司面 R36 毕；D-20260925-07~11 决策审核 R122（D-07③ 本司回执毕）；Group Patrol 首班本司=GREEN 零整改（patrol-2026-09-25）；P-2026-09-25-05 算力总动员令 3 本司面 R157 毕（ack+24h 资源清单回执：零自有算力件/OSLoop 现役/在飞 0/可加速活 0=bootstrap 待物理件·⑥路承接=GL204 接件+日面上报保真+PT 消费零本司单）；GL204 清理整合令自域梳理 R158 执行毕（canon-index 判例层落盘·09-30 治理日呈报件在盘）；P-04 创始家庭/P-06 大众内容/P-07 PT-12/P-08 PT-10/P-09 水面令（原 P-04 撞号已由集团顺延改号·L105 实证）=他司面知悉；P-04 撞号+orders 重复行=P2 上报 HQ-FEEDBACK（R157）·R158 P2 更新一行（改号采纳实证+orders 重复行仍在册·集团裁量）；09-26 兜底扫描吸收=token 止血令（orders L34）本司面 ③④ 排板 R192（周日窗 09-27·①BigMoney/②CPH4 他司面）+L35 美术外部审查行=FluxVerse DevLoop 面知悉；R193：P-2026-09-25-18 全面节省云端 token 令（ledger 行随批显形）本司面回执=③④ 执行件同轮毕+P-2026-09-25-12 全员无闲令合规态确认（本司零闲在册·任务板现役）+D-20260926-01~04 知悉（D-01 本司回执核销 D-20260925-03→executed/D-04 本司两连上报采纳=P 号先占律·ledger P-61→P-2026-09-24-82 改号）；P-2026-09-26-01 集团技能动员令本司面 R196 同轮毕（盘点→三问筛→建 bigdomain-loop-scan→装→README 登记·回执含 commit=P-51 送达）；R256=该令 ④主刀再执行回执在案（09-29 预注册窗提前·判据锚证据三点实测）；R265=orders L218 短板盘点批+L219 BigCompute 令知悉（非本司面）+L220 禁待令执行回执（P-2026-09-26-03·ack+自驱单清单）+D-20260926-11 计数 discrepancy P2 上报 HQ-FEEDBACK（本司 R196 回执三载体在案·按 P-51 口径应 4/8）；R267 自驱单 BD-SD2 设计深化面毕（P-47 五件跨件集成设计深化件 docs/spec/integration-deepening-spec.md：契约缝普查 12 缝五列+全用户旅程六段+边界/故障/降级三面深化·AC-SD2a..e 全过·零推倒零双建·沙箱缝行级实勘五处在案·backlog R3 复选框簿记顺手对齐）；R318 六新令回执全落 state log（P-04 城市总体规划令执行回执·块面调研件当轮闭环提前回执窗 ~38h/P-05-07 三令知悉/P-08 OSS 借力令 ack+台账落位 P2 裁决请求 HQ-FEEDBACK/P-09 次元城市令 ack+T2 真 AI 传承商业线承接件排板→R319 承接件毕〔heritage-t2-spec·AC-H1..H6 全过·BigCompute 法务核验件挂待〕/P-10 审计部成立令知悉〔集团审计部直属 CEO·本司=被审计面非执行〕；R330=P-2026-09-26-18 集团调研部门建制令本司面毕（商业化前沿调研部建制回执·复用件声明+首件接产=U231 块面件·AC-RD1..RD7 全过·回执窗 09-28 12:00 内提前 ~36h）；R333 D-20260927-01..05 决策批（01 知悉·⑦ 计数 5/8 仍漏本司=R265 证据行在册·02 知悉·03 执行=OH 切片件迁 cph4/oss-harvest/ 集团台账位+本仓镜像撤〔F-20260926-R318 三选一请求闭口·首窗 09-29 21:40 前交付提前 ~2.5 天〕·04 知悉+自检合规〔本司复审锚全为 commit 落盘稳定件零热追加面锚〕·05 ② 采纳=scan GORD 面全文件扫 sha16=EF1FBAC2FA40D30A 检测）·R380=P-2026-09-27-01 城市最高决策委员会成立令本司面自领接线毕（第 4 席 商业市场=BigCompute+BigDomain·既有会话 mandate 扩展零新增常驻·BLUEPRINT §十二 席位行落盘·转办面集团层文件件=HQ 非本司面知悉·否决窗至 10-04）；R381=P-2026-09-27-02 商业化付费点令执行回执（价目正典增补提案件+HQ P1 呈批行·N3/N6=BigCompute 面·N1/N4/N5/N7 排期池知悉·GORD 新基线 sha16=CC12631F6277278E·lines=240）",
+      "s": 1
+    },
+    {
+      "n": "商业化前沿调研部（虚席·P-2026-09-26-18 建制·集团章程 v1.0）",
+      "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）",
+      "s": 1
+    }
+  ],
+  "outs": [
+    [
+      "大厅 WebSocket（规格+沙箱）",
+      "on",
+      "AC-S1..S13+AC-S8c/S8d/S8e+AC-S14/S15+AC-S16/S17+AC-S18/S19 自验 22/22 全绿（R1773 房间读面 16→18·R1790 room.board 协议接线 18→19·R1791 订阅过滤参数 19→20·R1792 idea 池读面+接线 20→22）"
+    ],
+    [
+      "代币双式账本（规格+沙箱）",
+      "on",
+      "AC-L1..L11 自验 11/11 全绿"
+    ],
+    [
+      "UGC+msgSecCheck 管道（规格+沙箱）",
+      "on",
+      "AC-U1..U12+五窗水位族全绿（R1794..R1799 接线/R1800 完成窗日志/R1801..R1805 读面族/R1806 journal×store 一致性探针 CONSISTENT+DETECTING）"
+    ],
+    [
+      "19.9 支付对接（规格+沙箱）",
+      "on",
+      "AC-Y1..Y14 自验 16/16 全绿"
+    ],
+    [
+      "会员权益/月卡（规格+沙箱）",
+      "on",
+      "AC-M1..M16 自验 16/16 全绿（R14 接管收口·P-47 五件毕）"
+    ],
+    [
+      "用户激励智能体设计件（分配层三面）",
+      "on",
+      "AC-I1..I13 结构判据 13/13+AC-IP1..IP4 blocked（参数 [needs-CEO] 呈批/法务定稿/物理件）·R28 落盘"
+    ],
+    [
+      "用户增长部设立+漏斗映射件",
+      "on",
+      "P-76 回执（24h 快速件档·提前 ~47h）·R-20260924-fan-growth-funnel（R34）"
+    ],
+    [
+      "正典速查索引（GL204 判例层）",
+      "on",
+      "docs/canon-index.md：20 域索引+簇 7+终谳 5+回落 7+四计数报告·原文保全零删改（R158）"
+    ],
+    [
+      "技能件 bigdomain-loop-scan（盘点→三问筛→建→装→登记）",
+      "on",
+      "P-2026-09-26-01 集团技能动员令回执（AC-K1..K5·≤48h 窗内提前 ~47h·R196）"
+    ],
+    [
+      "生产 bootstrap 部署",
+      "wait",
+      "blocked on CEO 物理件（打包/发布一律过集团 release-gate v1.0·P-66）"
+    ],
+    [
+      "禁待令自驱单清单（策略研究/设计深化/运营预演）",
+      "on",
+      "P-2026-09-26-03 回执·BD-SD1 策略研究面毕 R266（R-20260926-cold-start-strategy·web 直采 4 源双源互证）·BD-SD2 设计深化面毕 R267（跨件集成规格 12 缝+三面深化）·BD-SD3 运营预演面毕 R268（三件全收口）"
+    ],
+    [
+      "P-47 跨件集成设计深化件（全用户旅程集成规格）",
+      "on",
+      "BD-SD2 回执（R267）·AC-SD2a..e 全过·12 契约缝五列+旅程六段 J1~J6+边界/故障/降级三面·零新代码零新 schema 零新 API"
+    ],
+    [
+      "上线运营预演件（docs/ops/ 首件）",
+      "on",
+      "BD-SD3 回执（R268）·AC-SD3a..e 全过·有人值守慢直播 SOP+封禁级风险应急面+上线日 checklist 草案·开闸=P1 呈批面零越权"
+    ],
+    [
+      "平台共创区块块面调研件（六必答）",
+      "on",
+      "P-2026-09-26-04 回执·R318 当轮闭环提前 ~38h·AC-CB1..CB4 全过（91 行 ≤300）·总规 v1.1 收口输入（≤09-28 12:00）·B9 司塔两案并列呈"
+    ],
+    [
+      "T2 真 AI 传承商业线承接设计件（次元城市令令文②）",
+      "on",
+      "P-2026-09-26-09 回执·R319 当轮闭环·AC-H1..H6 全过（81 行 ≤150）·BigCompute 法务核验件=上线前置件挂待·定价/开闸=[needs-CEO] 呈批清单（P1 律）"
+    ],
+    [
+      "OSS 借力首窗切片件（OH 台账）",
+      "on",
+      "P-2026-09-26-08 回执·R320 当轮闭环·AC-OH1..OH5 全过·五门评估采 blind_watermark（MIT·14793★·AIGC 隐式标识盲水印）·落点=任务单 P-47-3c+司级采用登记簿·窗内提前 ~71h·R333 台账位迁集团路径 cph4/oss-harvest/OH-20260926-bigdomain.md（D-20260927-03 采③豁免精确口径·唯一台账位·本仓镜像撤）"
+    ],
+    [
+      "AIGC 隐式标识能力验证件（P-47-3c·blind_watermark）",
+      "on",
+      "P-2026-09-26-08 首窗落点回执·R321 当轮闭环·套件 SUITE PASS 5/5（清洁往返 exact+JPEG q90 压缩例+裁剪 85% recover 恢复例·直提退化诚实负如实记）·设计件 docs/spec/implicit-watermark-verify.md·窗内提前 ~69h"
+    ],
+    [
+      "商业化前沿调研部建制回执（P-2026-09-26-18·U247 章程 v1.0）",
+      "on",
+      "R330 当轮闭环·AC-RD1..RD7 全过·docs/research/README.md §三（复用正名 X068·零新编制零新循环零新台账）·首件接产=U231 块面件·观察位+月度统计注记机制 §四·回执窗 09-28 12:00 内提前 ~36h"
+    ],
+    [
+      "价目正典增补提案件（P-2026-09-27-02 本司面）",
+      "on",
+      "docs/spec/price-canon-amendment-spec.md·N1-N7 正典落位映射+N2 居民成长档案订阅产品定义+合规四件套·定价/采纳=[needs-CEO] 呈批（P1 律·CEO+决策委员会商业席位过会）·R381 当轮闭环·主件 R-20260927-commercial-paypoints 引用不复制·P-32 补行 R382=待裁面④ ¥29.9 入门订阅档（主件修正案·溢价叙事 vs 降价拉客）"
+    ],
+    [
+      "19.9 算力包用户旅程 v2（含 ¥29.9 两案备裁）",
+      "on",
+      "P-2026-09-27-07 闲置司自驱动员令四议程之三·R405 当轮闭环·AC-JV1..JV6 全过·docs/spec/journey-19.9-v2-spec.md（54 行·v1=J1~J6 差分八步表+¥29.9 两案证据面）·两案=[needs-CEO] 呈批（C-20260927-01 证据包+商业市场席意见 HQ-FEEDBACK R405：案 A 有条件赞成）·M2 前预备三件 AC-M2a..e 预注册排板 backlog（窗 ≤09-29 ~10:4x）"
+    ],
+    [
+      "M2 前预备三件（店内体验 v2/代币内循环沙盘/UGC 首演方案）",
+      "on",
+      "P-2026-09-27-07 四议程之二·R406 当轮闭环·AC-M2a..e 全过·in-store-experience-v2-spec 38 行（六面 F1..F6 三列）+token-loop-sandbox-spec 63 行（五幕恒等式沙盘·dry-run）+ugc-debut-plan-spec 52 行（三类种子+J1~J6 首演动线）·合规四件套三件齐·窗内提前 ~42h"
+    ],
+    [
+      "委员会首案席位意见（机构瘦身审视裁并案 P-2026-09-27-06）",
+      "on",
+      "商业市场席 BigDomain 共席侧独立意见·R407 当轮闭环·AC-SS1..SS6 全过·有条件赞成（A1 补 patrol 点名零中断硬判据+§4.4 保 P-51 令号寻址+编号口径反向冲突独立发现）·常设议程拉单承 P-2026-09-27-07·过会窗 ≤48h 内提前 ~45h"
+    ],
+    [
+      "调研部次件动线标杆补锚件（P-2026-09-27-07 常设承接）",
+      "on",
+      "docs/research/R-20260927-venue-flow-benchmark.md·48 行 ≤60·双源直采（teamLab Borderless 东京+Meow Wolf 官方页·A 级·营销宣称零采信）·五模式映射 P1..P5 全引在册判据号+应用表三行+R318 🟡 挂起收口翻格·AC-RF1..RF5 全过·R408 当轮闭环"
+    ],
+    [
+      "Ternary-Bonsai 商业文案 advisory 试用（四件套回执）",
+      "on",
+      "P-2026-09-28-07 回执·R535 验真采纳·docs/research/R-20260928-bonsai-bd-trial.md·verdict=observe（adopt 门=O-2175+fleet-allocations §8.4 未启·P1 呈批面）·四件套=部署/速度/共存/质量全过·窗内提前 ~37h"
+    ],
+    [
+      "参观端 3D 三态选型 prep+L1 正版采购 gate 呈报件",
+      "on",
+      "O-2026-0929-007 动员令 @BigDomain 点名件·TourStateFace（src/sandbox/tourstate）SUITE 7/7+RUNNER 14 套件 137 判据全绿·呈报件 docs/spec/m4-visitor-3d-three-state-prep.md·门阵 G1..G5×三态+L131 咬合令回执+呈批两件 D-A/D-B [needs-CEO] P1 只呈批·R602"
+    ],
+    [
+      "48 包正版采购成本锚+预算行回填（D-A 呈批输入件）",
+      "on",
+      "O-2026-0929-007 ②研究线承接·R603·A 级直采 84 件价带+官方自估均值 ≈$50/包+SyntyPass 订阅制发现+EULA 渠道律原文·判负留痕 4 处·粗锚 ≈$2,400+ 全量单购/SyntyPass 询证两口径·qa/cost-anchor-R603.log 四判据全过"
+    ],
+    [
+      "吸嘟嘟运营层规格 v1 商业化合规复核（O-2026-0929-013 派单）",
+      "on",
+      "判据预注册 XD1..XD10+复核报告 docs/audits/ops-review-20260929-xidudu-operations-v1.md（有条件通过·4 注记级缺口补丁文案备供）+机械闸 src/sandbox/opsreview/（套件 7/7+runner 15 套件 144 判据零回归·qa/opsreview-R604.log）·R604·frontdoor v0.28=R1003 前台收口（活体重算面：卡面每渲染重跑真门+漂移检出 XD5 新增 gap 如实显·P2 观察 HQ-FEEDBACK R1003 行）"
+    ],
+    [
+      "席7 附款付费点×合规义务映射表过表件 v1（A 档上线前门机执法）",
+      "on",
+      "src/sandbox/compliance/：32 in-force 付费点全册（C 端 18+B 端 9+直播 3+知识付费 2·N 系池 6 单列）+A 档两行五列全填（雏形 §五 verbatim）+BigCompute 联办列 PENDING 占位+ASCII 机检闸+测试 15 判据 15/15 全绿·BILLING GATE: CLOSED（未过表不得开单收款机关死）·qa/compliance-map-R675.log·R675"
+    ],
+    [
+      "C-20260927-01 沙箱权益目录入门档（¥29.9 入门订阅卡）",
+      "on",
+      "member patron 档+席4/席6 硬判据套件 AC-E1..E7 7/7+member 25 断言零回归+RUNNER 27 套件 231 判据（22/27 绿·4 环境缺口+1 既有疑点分诊在板）·qa/entry-tier-R681.log·R681"
+    ],
+    [
+      "产品面前台静态预览（preview/index.html）",
+      "on",
+      "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）·frontdoor v0.15=R980（Creator Incentive Face 创作者激励梯度面卡·AC-FD15a..f·真探针 12 腿〔梯度+预算窗+项圈+join+幂等〕+合规四件套+单向 share 结构法注·活体重启上线 17 卡）·frontdoor v0.16=R984（Strategy Observation Face 策略共创围观付费面卡·AC-FD16a..f·真探针 15 腿+合规四件套·活体重启上线 18 卡）·frontdoor v0.17=R986（Studio Onboarding Face 工作室入驻年费面卡·AC-FD17a..f·真探针 21 腿+合规四件套+注册行不可变结构法注·活体重启上线 19 卡）·frontdoor v0.18=R987（Ad Slot Face 虚拟展厅/广告位面卡·AC-FD18a..f·真探针 23 腿+合规四件套+venue 引用律结构法注·活体重启上线 20 卡）·frontdoor v0.19=R989（Venue Face 线上活动场地/店面租约面卡·AC-FD19a..f·真探针 26 腿+合规四件套+占用引擎单源引用律结构法注·活体重启上线 21 卡）·frontdoor v0.20=R990（Reports Face 城市数据报告面卡·AC-FD20a..f·真探针 25 腿+结构脱敏九键 descriptor+ent: 企业直购代币层拒诚实结构边界+合规四件套·活体重启上线 22 卡）·frontdoor v0.21=R992（Identity Face 元宇宙身份付费面卡·AC-FD21a..f·真探针 26 腿+props/venue 引擎引用律结构法注+合规四件套·活体重启上线 23 卡）·frontdoor v0.22=R993（Expedite Face 交易大厅加急特权面卡·AC-FD22a..f·真探针 25 腿+合规四件套·活体重启上线 24 卡）·frontdoor v0.23=R995（Enterprise Metered API Face 企业计量 API 面卡·AC-FD23a..f·真探针 30 腿+合规四件套·活体重启上线 25 卡） · frontdoor v0.24 city digital collectibles card (R997: AC-FD24a..f, collectibles.py R619 face reused not copied, 21-leg real probe with nine fail-closed refusals, SUITE PASS 8/8 + RUNNER PASS 27/27 zero regression, live restart 26 cards on 8093)·frontdoor v0.28=R1003（Sibling-Ops Review Gate 兄弟司运营层规格合规门卡·AC-FD28a..f·真门探针 9 腿+活体兄弟仓 spec 每渲染重算+合规四件套·活体重启上线 30 卡）"
+    ],
+    [
+      "2",
+      "water journal delta JSON 引擎侧完整性探针件（R1817·AC-JI1..JI5 预注册先于代码：14 行基线 json_valid0==0+json_tree 非根叶全 integer+叶计数三方对照 tree=24==each=24==产品 Σ len=24 逐位等；坏 JSON 行注入双径检出互证〔SQL json_valid0=1+window_id=15 点名+delta 字面对照== vs 产品 cell_totals() JSONDecodeError 崩响捕获=fail-closed 检出行为证〕；非整值行注入双面检出〔json_valid=1 但 json_tree 非根叶 type=text window_id=16 点名 vs 产品求和段 ValueError（int() 前置执法命中·TypeError/ValueError 族内）=CAST 前提破坏双面〕；两注入行各按 window_id 精确 DELETE 恢复复绿〔行数回 14+valid0==0+叶==0+产品 total==11 在册值复现〕；探针增 [14] 节〔hygiene 顺移 [15]〕+docstring R1817 段·测量面不入 SUITES〔R1727 先例〕·双跑 stdout 逐字节同一 sha256 6AA701CD38E12C78 exit 0/0+[1]..[13] 零回归 PROBE VERDICT CONSISTENT+DETECTING+frozen 四件零产品字节；证据 qa/water-integrity-R1817.log）"
+    ],
+    [
+      "2",
+      "water journal 行级 delta 字面三方对照+json() 往返守恒探针件（R1818·AC-LC1..LC5 预注册先于代码：三径行级对照 14/14〔json_extract 逐键值等+json_type integer+json_quote 叶值字面==json.dumps(值)·json(delta) 重解析回 dict==行 delta·keys-checked=24·空 delta 行 1 行零键恒过〕+引擎规范化字面守恒〔json(delta)==json.dumps(delta, sort_keys=True, 紧凑分隔符) 14/14 逐字节同一〕+写径定点守恒〔raw==json.dumps(json.loads(raw), sort_keys=True) 14/14=写读往返字面守恒〕+纯读〔mode=ro·行数 14==14==14〕·双跑 stdout 逐字节同一 sha256 75a4b784a0842404… exit 0/0+[1]..[14] 零回归 PROBE CONSISTENT+DETECTING+frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-deltaliteral-R1818.log"
+    ],
+    [
+      "2",
+      "water journal ts_utc 引擎侧格式完整性探针件（R1819·AC-TZ1..TZ5 预注册先于代码·前提更正两枚在册=种子 26 字符→实测 27 字符定长+AC-TI 撞名→AC-TZ 全仓无主：基线三查全绿〔LENGTH<>27 违者 0+恒定形 [27]+GLOB 固定数字形违者 0+julianday NULL 0==14〕+月窗谓词三面一致〔SQL substr 月集==monthly_flow month 集==board 行前缀集==['2026-08','2026-10']〕+双注入负路径〔ts 无 CHECK=plain INSERT·月抽象 ts=cur_w 派生承 R1813：短日形 26 字符 GLOB 失配 jd NULL 三面全中+坏历法形 27 字符 GLOB 过 jd NULL 历法面独中 calendar-only=[18] 形/历面独立证·jd NULL==2 点名 [17,18]〕+产品径纯前缀不过验诚实注〔board(cur_w) 11→13+flow windows 11→13=前缀谓词零验证〕+DELETE 恢复复绿〔回 14 行三查 0/0/0+月集==基线+total 回 11〕·双跑 sha256 491214e2…逐字节同一 exit 0/0+PROBE CONSISTENT+DETECTING+[1]..[15] 零回归+[17] 卫生 frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-tsintegrity-R1819.log）"
+    ],
+    [
+      "2",
+      "member banner_board 月窗过滤参数件（R1856·AC-BQ13..BQ17 预注册先于代码：reminder.py banner_board(limit=0, window=None)——显式 YYYY-MM 月窗全切（板行+by_status/by_reason 双 dense 格+total+banner_board_total 一体随窗辖）、14 坏窗形态 fail-closed E_REM_BAD_WINDOW（E_REM_* 词表新码）、双坏门序 limit 先抛、窗×帽正交（溢出块 banner_board_total=窗内化身行全量计数）、缺省面逐字节保真+window 键 additive；套件 17/17 双跑逐字节同一+全量回归 114/114 判据 1054→1059+矩阵 --check ×2+哨兵 CLEAN+census DRIFT-CLEAN（证据件方言病一轮实弹检出修复）=qa/member-bannerboard-window-R1856.log"
+    ]
+  ],
+  "results": [
+    [
+      "R1974",
+      "R1974: 20th-case crashed-round orphan takeover closeout - the crashed R1974 attempt left the curation combined hot+cold dual board payload on disk (boards_combined read face + SUITES row + test file + matrix regen 204/1776 + four qa evidence logs + fold R521 state surgery, crashed pre-closeout). Taker re-verified three-green personally per R1924/R1969/R1971/R1972 precedent: suite double-run SUITE PASS 7/7 exit 0/0 stdout byte-identical sha16 cbdc791f40dc8a21 (subprocess byte capture, PS redirect dialect trap avoided), full RUNNER battery own re-run PASS 204/204 suites green + reconcile controls 7/7 168.9s (tee to %TEMP% outside repo, crashed-round evidence mtime preserved), suite_matrix --check PASS byte-identical 19632B. Crashed round's first battery RUNNER FAIL (2 assertions: cd7-live-real-tree + reconcile-daily-census = self-referential in-flight-evidence race, resolved in its own -2/-3 re-runs) diagnosed non-payload. Explore claim row done-flipped + reseed 1 (combined persist window seed, queue_explore_open 10 held). Five-silence: DEC +2 non-ours acks (D-20261015-01 receipt writeoff batch + D-20261015-02 bigmoney S0 stash-bridge fix), GORD 405->413 eight new rows all non-ours (patrol-fleet O-20261014-2250 group-side acknowledged), ORD baseline re-anchored honestly (current tail = historical 09-28 row; the 10-14 16:2x baseline was R1962's ack of two never-committed external rows since vanished), QA same-day evidence pair repaired (smoke-R1974 log+png; W25 crawl delivered by R1973 earlier the same day). Score 2."
+    ],
+    [
+      "R1973",
+      "R1973: 19th-case orphan takeover closeout (results-row backfill debt collected by R1974) - the crashed round's same-day pair was verified on disk: the 2026-10-15 daily reconcile evidence (RUNNER PASS 203/203, controls 7/7, sentinel + census DRIFT-CLEAN, 190.0s, suite count zero-drift vs R1972 baseline) and the W25 legal-source harvest (CAC Children PI Protection Regulation, Order No.4, 29 articles, benchmarks 3-place entry + intelligence-wall W25 dual rows completed by the taker per the R1884 dual-row precedent); benchmarks_refreshed=2026-10-15; DEC/ORD flat that round. Honest gap noted by R1974: R1973 closed out without the same-day smoke log/png evidence pair - repaired by R1974 per the R1835 chain-continuation precedent, history not rewritten."
+    ],
+    [
+      "R1972",
+      "R1972: 18th-case crashed-round orphan takeover closeout - the crashed round authored the curation cold_board cross-restart persistence suite (explore head, AC-CZP1..CZP6 pre-registered in the claim row before code) and crashed pre-bookkeeping; the taker re-verified three-green per R1924/R1969/R1971 precedent: suite double-run SUITE PASS 6/6 exit 0/0 decoded byte-identical (PS5.1 redirect UTF-16 dialect re-decoded per R1969 family), full RUNNER battery PASS 203/203 suites green + reconcile controls 7/7 168.3s zero regression (tee to a temp file outside the repo - crashed-round evidence mtime-preserved), suite_matrix --check byte-identical 19535B/203 suites/1769 criteria. Payload committed this round (suite file + SUITES row + matrix regen + done-flip + reseed, explore open=10). Five-silence: DEC 328 rows flat, ORD tail 16:2x flat, no new ledger transfers, BENCH fresh, GORD 403 vs 405 known-shape, BD-PROP-004 in-window (no proposal debt)."
+    ],
+    [
+      "R1971",
+      "R1971: 17th-case crashed-round orphan takeover closeout - R1970's curation cold_board payload (15 files staged, crashed pre-commit) re-verified three-green by the taker per R1924/R1969 precedent: suite double-run SUITE PASS 24/24 exit 0/0 (own re-run, not log-trusting), full RUNNER battery PASS 202/202 suites green + reconcile controls 7/7 170.1s zero regression, suite_matrix --check byte-identical 19441B/202 suites/1763 criteria. Payload committed 9300f294 (R1970 score-2 product delivery restored into history). Taker hygiene: stray --probe log artifact (runner wrote the flag as a log name) removed; R1970 evidence files mtime-preserved. Five-silence: DEC token-flat, ORD tail 16:2x = baseline (GORD tbl 403 vs 405 known-shape negative drift, zero new orders), no new ledger transfers, radar candidate list OH-20261014-cph4 still pending at the 21:41 window (row 1 gated on external arrival, no fabrication)."
+    ],
+    [
+      "R1970",
+      "R1970: P3 explore-queue head delivered - curation zero-heat cold board read face (cold_board: honest inverse filter of the theme heat board, single live hot_board() derivation source, zero second aggregation engine, curation_id ASC rank 1..N, honest empty board over zero-curation and all-hot worlds; criteria AC-CB1..CB5 pre-registered in the explore.md row before the code existed). Three artifacts: curation.py cold_board + test_curation.py five cases (SUITE PASS 24/24 double-run exit 0/0, qa/curation-coldboard-R1970.log) + reconcile_all SUITES ledger-curation 19->24 (RUNNER PASS 202/202 criteria 1758->1763 controls 7/7 175.1s, qa/reconcile-all-R1970.log); matrix regen --check byte-identical 202/1763. runner_profile drift face ugc +2.2s flag attributed by isolated re-run (3.4-3.5s isolated ~= 4.1s in-battery = suite growth criteria 19->37 vs the R1681-era baseline, not degradation) and the baseline re-anchored to 202 entries -> DRIFT-CLEAN. Explore queue consumed 1 reseeded 1 (cold_board cross-restart persistence window, persist-family precedent) = 10 held."
+    ],
+    [
+      "R1969",
+      "R1969: 16th-case crashed-round orphan takeover closeout - AC-LT25 fold --round strict-form gate slice (pre-registered in the tech.md R1968 supplementary registry after the R1967 malformed-header census catch; re.fullmatch R+4digits fail-closed exit 2 on 7 bad forms + empty + legal-form pass with round_label echo in the plan JSON) delivered via takeover: suite re-run SUITE PASS 163 checks (evidence re-landed in healthy tee dialect after the taker's own first Tee-Object pass wrote ps-utf16 and tripped the cd7 census new-dialect flag - R1924 family live-fire; runner self-Tee + subprocess LF capture = tee class, census probe exit=0 DRIFT-CLEAN re-green) = qa/logs-toolkit-R1969.log + full battery RUNNER PASS 202/202 suites green controls 7/7 173.1s = qa/reconcile-all-R1969.log; fold R520 round-start waterline reorg executed through the new gate with legal form R1969 (80349->68627B post==predicted, tail-6 window 15758B -> 1 rolling line, 111-token catalog machine-extracted zero-loss, archive section R1969 verbatim 15947B + preop backup sha16 fc7db5edaddc8759); honest note: window strata R1940/R1963 rolling lines and the R1968 line carry pre-existing ? mojibake runs (historical write-path disease; ASCII tokens/numbers/criteria ids intact; fold archived verbatim zero further loss); tech L17 done note attached"
+    ],
+    [
+      "R1969",
+      "R1969: 16th-case crashed-round orphan takeover closeout - AC-LT25 fold --round strict-form gate slice (pre-registered in the tech.md R1968 supplementary registry after the R1967 malformed-header census catch; re.fullmatch R+4digits fail-closed exit 2 on 7 bad forms + empty + legal-form pass with round_label echo in the plan JSON) delivered via takeover: suite re-run SUITE PASS 163 checks (evidence re-landed in healthy tee dialect after the taker's own first Tee-Object pass wrote ps-utf16 and tripped the cd7 census new-dialect flag - R1924 family live-fire; runner self-Tee + subprocess LF capture = tee class, census probe exit=0 DRIFT-CLEAN re-green) = qa/logs-toolkit-R1969.log + full battery RUNNER PASS 202/202 suites green controls 7/7 173.1s = qa/reconcile-all-R1969.log; fold R520 round-start waterline reorg executed through the new gate with legal form R1969 (80349->68627B post==predicted, tail-6 window 15758B -> 1 rolling line, 111-token catalog machine-extracted zero-loss, archive section R1969 verbatim 15947B + preop backup sha16 fc7db5edaddc8759); honest note: window strata R1940/R1963 rolling lines and the R1968 line carry pre-existing ? mojibake runs (historical write-path disease; ASCII tokens/numbers/criteria ids intact; fold archived verbatim zero further loss); tech L17 done note attached"
+    ],
+    [
+      "R1968",
+      "R1968: P3 explore queue-head delivery - proposal progress read-face closed in-round (criteria AC-PP8..AC-PP12 pre-registered in the explore.md row before code; progress_board() pure-read board in proposal.py: envelope {progress_board,disclaimer} + eight-key dense rows, saturated progress law round(min(count,threshold)/threshold*100,2) with overshoot visible via raw signature_count + qualified flag, remaining=max(t-c,0), qualified read-time derivation per the R1766 verdict, deterministic sort (-progress_pct, proposal_id) zero RNG zero insertion-order keys; SUITE 12/12 first-run green double-run byte-identical; RUNNER PASS 202/202 controls 7/7 176.7s criteria 1753->1758 = qa/reconcile-all-R1968.log self-Tee; matrix 202/1758 --check byte-identical x2; fingerprint CLEAN domains=5; five-section evidence qa/proposal-progress-R1968.log VERDICT PASS) + census step caught and closed a fresh finding same-window: the R1967 fold wrote its archive header without the R prefix (--round 1967 -> '# --- 1967 fold append' unrecognized by CEN_HEADER -> its header + 7 verbatim lines misattributed to section R1962 declared 7 actual 15; content zero-loss pure header-form defect) -> byte surgery (+1B 'R' insert, preop backup, census re-run pass=true, remaining 2 mismatches both adjudicated known) = qa/census-archfix-R1968.log + tool-hardening next slice AC-LT25 registered on the logs-toolkit standing line"
+    ],
+    [
+      "R1967",
+      "R1967: fold R519 round-start waterline reorg (78951->74815B, tail-7 7 lines -> 1 rolling line kept=0, 73-token catalog zero-loss via gen519, archive verbatim + preop backup sha16 2a37f3fe813f6e5f, dry-run green then execute post==predicted) + tech-queue head L51 suite_matrix live mtime window probe re-run per R1931 precedent (selftest 16/16; live 1479 files / 1436 distinct / largest tie group 2 / tie_peers=0 / winner reconcile-all-R1966.log three calls identical / NO-LIVE-TIE scattered -> leave window open per AC-LN4, negative-result-on-record legal; evidence qa/qa-mtime-probe-R1967.log) + GORD +1 ack (mainAGENT Phase 1-alpha, dispatcher domain) + ORD known form-drift origin recheck (zero new orders)"
+    ],
+    [
+      "R1966",
+      "R1966: 15th-case orphan takeover closeout - lobby EventStore residual read-face family (count/census_lookup/export_day + import_census whole-table refresh + content-addressed append dedup) cross-restart persistence suite 7/7 (AC-LBP1..LBP7 pre-registered pre-code by the crashed round; crashed round left RUNNER FAIL 201/202 = its own suite evidence file landed pwsh-capture dialect [16 CRLF + 5 bare LF] -> cd7 census drift; takeover: dialect root-cause per R1880 family, live double-run rc 0/0 raw stdout byte-identical, evidence re-landed tee 1519B, full RUNNER self-Tee re-run PASS 202/202 criteria 1746->1753 controls 7/7 173.3s = qa/reconcile-all-R1966.log; matrix 202/1753 byte-identical 19440B; census --check DRIFT-CLEAN flags=0 tee=925; fingerprint CLEAN domains=5; GORD 402->404 two non-ours acks; waterline carry-note state 78744B = fold R519 next round-start; tech queue 6->5; export lag-fix this round: R1965 results row backfilled + tick row 1964->1966 + queue_tech_open 7->5)"
+    ],
+    [
+      "R1965",
+      "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite 7/7 (AC-SWP1..SWP7 pre-registered pre-code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass no-argv shell-capture produced pwsh-capture dialect evidence caught by cd7 census -> deleted + re-run via the runner's own Tee per R1924 precedent)"
+    ],
+    [
+      "R1964",
+      "R1964: pay reconcile cross-restart determinism suite 7/7 via 14th-case orphan takeover closeout (criteria AC-PRC1..PRC7 pre-registered pre-code by the crashed R1963; CLI scanner re-derives its whole verdict from the three on-disk databases: three-avatar three-granted anchor world with per-order conversion share entries and the notify tri-pair spectrum, full three-face close/reopen scan byte-identity, dangling-revoke + dead-sent tamper probes same codes same naming across the restart, post-restart fourth grant zero-cache recompute with the frozen anchor subset byte-identical, pure-read law, second-restart stability, hygiene; one takeover fix = conv-ref frozen-subset lens, sorted-prefix false-negative on content-addressed hex refs, criteria semantics unchanged; crashed ps-utf16 run1 artifact deleted, tee-dialect evidence re-made; RUNNER PASS 200/200 criteria 1732->1739 controls 7/7 175.1s = qa/reconcile-all-R1964.log; matrix 200/1739 --check byte-identical 19290B; census CENSUS-COMPLETE (both new files tee dialect); fingerprint CLEAN domains=5; GORD 397->402 five non-ours acks; ORD face reorg pattern-drift FLAG honestly noted with manual origin-main verification zero new BigDomain orders, baseline unchanged; tech consume 1 reseed 0 queue 8->7)"
+    ],
+    [
+      "R1962",
+      "R1962: member reminder authorization + read-face family cross-restart persist suite 7/7 (criteria AC-RMP1..RMP7 pre-registered pre-code by the crashed round; grant journal, budget arithmetic, idempotency keys, W10 dual-timepoint faces, due-scan idempotent re-entry, daily-cap day-roll clear, read-face snapshots across double close/reopen restarts, pure-read law, second-restart stability; RUNNER 199/199 criteria 1725->1732; matrix --check byte-identical; sentinel CLEAN domains=5; two-segment crash, third-segment takeover with live re-verify RUNNER PASS 199/199 controls 7/7 175.6s; fold R518 tail-7 78371->73036B 64 tokens zero-loss; DEC +2 acked non-ours D-20261014-08/C-20261014-01; GORD 395->397; tech consume 1 reseed 0 queue 8)"
+    ],
+    [
+      "R1960",
+      "R1960: member refund-recovery linkage cross-restart persist suite 7/7 (criteria AC-RRP1..RRP7 pre-registered pre-code; wired instant-converged world A/B + live contrast C, full three-piece close/reopen byte-identity, deterministic audit-key re-entry convergence, fresh wired refund on restarted instance with named-face zero-drift, pure-read law, second-restart stability; RUNNER 198/198 criteria 1718->1725; matrix --check byte-identical; sentinel CLEAN domains=5; evidence-path form pitfall honestly noted [suite_matrix --evidence resolves relative to cwd -> repo-root form])"
+    ],
+    [
+      "R1959",
+      "R1959: ledger growth-archive read-family cross-restart persist suite 7/7 (criteria AC-GAP1..GAP7; two-resident two-month world, every subscription binding exactly one real spend tx, month-window page sections with AIGC label + config-verbatim disclaimer/price_note, seven-gate probe batch same codes on both instances all before any write, two-piece close->reopen byte-identical battery with in-db frozen-ts row comparison, continuation with the 2099-01 page frozen byte-identical = in-month window isolation zero new-data penetration, append-only frozen anchors + dup-before-spend replay gate, pure-read law, third instance stable + hygiene; two same-round harness fixes honestly noted, criterion semantics unchanged; RUNNER 197/197 criteria 1711->1718 (SUITES 196->197); DEC flat; GORD flat; tech consume 1 reseed 1 (member reminder persist seed AC-RMP zero-occupied))"
+    ],
+    [
+      "R1958",
+      "R1958: ledger incentive read-family cross-restart persist suite 7/7 (criteria AC-ICP1..ICP7; anchor world W1 budget-binding 410->400 exact pro-rata integer landing 147/127/126 zero rounding loss + W2 collar-binding 10^6->150, four-element snapshot (window projection + pool/balances + incentive tx credit join + settled_utc format law), two-piece face+ledger close -> reopen byte-identical battery with in-run frozen-ts full-row comparison, seven-gate probe batch same codes same order on both instances all before any write, W3 continuation zero-cache recompute (pool 1210 = 2000-790, win rows 2->3), frozen anchors append-only + replay gates, pure-read law, third instance stable + hygiene (three source files sha-proven, zero UPDATE machine-checked, no incentive key in shipped config); RUNNER 196/196 criteria 1704->1711 (SUITES 195->196); DEC 3 new tokens judged all-HQ-face knowledge-only (D-20261014-05/06/07); GORD +1 non-ours ack (393->394); fold R516 post-closeout tail-5; tech consume 1 reseed 1 (lobby event-store persist seed, AC-LBP zero-occupied)"
+    ],
+    [
+      "R1957",
+      "R1957: ledger clawback wiring read-face cross-restart persist suite 7/7 (AC-CKP1..CKP7; six-order world, close->same-db reopen byte-identical battery, gate codes cross-restart, wired close_refund continuation, frozen anchors, pure-read law, third instance stable) + RUNNER 195/195 criteria 1697->1704 + matrix x2 + census DRIFT-CLEAN + fingerprint CLEAN + fold R515 78783B->73108B"
+    ],
+    [
+      "R1956",
+      "R1956: ledger proposal cross-restart persist suite 7/7 (AC-PLP1..PLP7; two-piece restart, memorial certificates persist via collectibles public API, twelve restart-surviving gates same-code, crossing award + new registration post-restart continuation, frozen prefix rows, pre-award idempotence across restart, zero-token structure law, RUNNER 194/194 criteria 1690->1697); fold R514 executed at round start (state 81030B -> 73825B); tech consume 1 reseed 1 (pay reconcile persist seeded; next FIFO head = ledger clawback persist)"
+    ],
+    [
+      "R1955",
+      "R1955: ledger reports cross-restart persist suite 7/7 (AC-RPP1..RPP7; two-piece restart, immutable three-table persistence, twelve restart-surviving gates same-code, continuation recompute, frozen prefix rows, RUNNER 193/193 criteria 1683->1690; one same-round claim-row erratum honestly noted); tech consume 1 reseed 1 (refund-recovery persist seeded; next FIFO head = ledger proposal persist)"
+    ],
+    [
+      "R1954",
+      "ledger metered cross-restart persist suite 7/7 (AC-MTP1..MTP7; two-piece restart, credit-counter persistence core, restart-surviving gates, continuation recompute, frozen immutable rows, RUNNER 192/192 criteria 1676->1683) + crashed-round orphan-payload takeover closeout (eleventh case: fold R513 integrity verified, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
+    ],
+    [
+      "R1953",
+      "ledger sistercity cross-restart persist suite 7/7 (AC-SCP1..SCP7; two-piece restart, thirteen restart-surviving gates incl the persisted-settlement replay gate E_SC_SETTLED and the no-disclaimer constructor gate, frozen anchor rows, RUNNER 191/191 criteria 1669->1676) + crashed-round orphan-payload takeover closeout (tenth case: dialect normalization per R1884 capture law, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
+    ],
+    [
+      "R1952",
+      "ledger festival cross-restart persist suite 7/7 (AC-FCP1..FCP7; three-piece restart, eleven restart-surviving gates incl the collectibles UNIQUE backstop re-probe, commemorative first-purchase linkage, frozen anchor rows, RUNNER 190/190 criteria 1662->1669) + crashed-round orphan-payload takeover closeout (probe invocation bug corrected: fingerprint five-domain CLEAN rc 0; census DRIFT-CLEAN; live suite re-verify rc 0)"
+    ],
+    [
+      "R1951",
+      "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
+    ],
+    [
+      "R1950",
+      "ledger showroom cross-restart persist suite 7/7 (AC-SHWP1..SHWP7; four-piece restart, twelve restart-surviving gates, frozen prefix rows, RUNNER 188/188 criteria 1648->1655)"
+    ],
+    [
+      "R1949",
+      "ledger studio cross-restart persist suite 7/7 (AC-STP1..STP7; three-piece restart, twelve restart-surviving gates, renewal advance booking, frozen prefix rows, RUNNER 187/187 criteria 1641->1648)"
+    ],
+    [
+      "R1948",
+      "ledger honorcert cross-restart persist suite 7/7 (AC-HCP1..HCP7; three-piece restart, incremental heal across restart, permanent-certificate law survives board move + restart, second event namespace, RUNNER 186/186 criteria 1634->1641)"
+    ],
+    [
+      "R1947",
+      "ledger effects cross-restart persist suite 7/7 (AC-EFP1..EFP7; two-piece restart, 9 gate probes, three-lane frozen faces, pre-restart credits keep serving, RUNNER 185/185, fold R511)"
+    ],
+    [
+      "R1946",
+      "ledger apimarket cross-restart persist suite 7/7 (AC-AMP1..AMP7; four-piece restart, 10 gate probes, frozen rows, RUNNER 184/184)"
+    ],
+    [
+      "R1945",
+      "R1945 ledger devshare cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940-seeded row; criteria AC-DSVP1..AC-DSVP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (two registered developers with metered usage quota 12/5, explicit w1 + usage-derived w2 both total 49, cross-face UGC w1 same-caller-id 30 namespace anchor, five fail-closed gates rejected zero-drift) -> five-piece close/reopen with the read battery byte-identical (windows history full dump + both dev boards + five balances, persisted settled_utc rows zero in-memory drift) -> restart-surviving gates identical codes -> post-restart real-path continuation (persisted api_key keeps metering, quota 12->15, w3 pays 40, same-id UGC w3 settles 10 independently = namespace law survives the restart, SQL cross seven pool:share debit legs) -> frozen history rows + namespace-separate dup gates -> pure-read law -> third-instance stability; two same-round errata honestly noted (balance anchor missed the buy_credits developer debit into pool:reserve; digest cross-second drift = unmasked spend_tx hex ids + minute_window clock strip, mask widened to three families per the R1902 banded-projection law); RUNNER PASS 183/183 criteria 1613->1620 controls 7/7 318.1s = qa/reconcile-all-R1945.log (SUITES 182->183); matrix regen 183/1620 green --check byte-identical (17810 bytes); census CENSUS-COMPLETE; tech consume 1 reseed 1 (showroom persist seeded; next FIFO head = apimarket persist)."
+    ],
+    [
+      "R1944",
+      "R1944 ledger settlement cross-restart persist suite 7/7 (P2 tech FIFO head = the R1943 closeout pointer; criteria AC-SEP1..AC-SEP7 pre-registered in tech.md before code): product face = settlement.py optional sqlite persistence mirror (db_path=None default pure-memory path byte-identical, minors R1939 precedent; append-only st_windows/st_claims, zero UPDATE) + read family manifest_view/claims_view/last_window_id + close with E_ST_CLOSED post-close write rejection. Three-instance world on the real product path: anchor (two-window hash chain + three claims bound to manifest ids, battery sha16 1a804c0ff3f3dcf6, SQL cross 2/3) -> close/reopen same db_path with the read family byte-identical (zero in-memory drift) -> five fail-closed gate probes surviving the restart (dup window/dup claim E_ST_PERIOD_DUP, unknown-party/unknown-period/over-limit E_ST_BAD_INPUT, rows frozen) -> real-path continuation: third window prev_id == pre-restart last_window_id (the hash-chain anchor persistence core proof), new claim + verify True, rows 3/4 -> frozen pre-restart windows byte-identical to anchor snapshots + handed-out copies still verify cross-restart -> pure-read law -> third-instance reopen == second end-state + E_ST_CLOSED post-close write rejection + default-path SettlementFace() smoke (zero db files) + hygiene (pure ASCII, zero network imports, zero UPDATE, config sha unchanged, world outside repo); existing ledger-settlement AC-ST1..ST7 7/7 zero regression; RUNNER PASS 182/182 criteria 1606->1613 controls 7/7 405.8s = qa/reconcile-all-R1944.log; matrix regen 182/1613 green --check byte-identical; census DRIFT-CLEAN; fingerprint CLEAN domains=5; evidence six sections qa/settlement-persist-R1944.log, driver src/os/evidence_R1944.py; five-silence: DEC token-diff zero-new, GORD 275<376 archival shrink baseline updated, daily reconcile already in-plate; tech consume 1 reseed 1 (studio persist seeded, queue_tech_open 10->10, next FIFO head = devshare persist)."
+    ],
+    [
+      "R1943",
+      "R1943 ledger identity cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1942 closeout pointer; criteria AC-IDP1..AC-IDP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (four-product identity registry + private-room month-10 rental + three permanent claims, all four spends SQL-crossed, digest 7ae19bac6698a5b0) -> reverse-order four-piece close/reopen with the profile/holder battery byte-identical (pure-value read faces, zero clock echo) -> fifteen restart-surviving fail-closed gates (incl. insufficient-balance via the wrap-default E_ID_BAD_ARGS identity-domain surface law) -> post-restart real-path continuation (bob advance renewal month 11 + carol gold-crown claim, both real spend txs, zero-cache recompute) -> frozen registry/occupancy/inventory faces + idempotent re-register + taken gate -> pure-read law -> third-instance stability; two same-round probe-scope errata honestly noted (pool expectation reflow law; dup probe target = own held cosmetic, first-claim-by-another-account legitimately succeeds); claim-row anchor-position erratum repaired same window via triple-assert script; RUNNER PASS 181/181 criteria 1599->1606 controls 7/7 281.2s = qa/reconcile-all-R1943.log (census DRIFT-CLEAN); matrix regen 181/1606 green --check byte-identical (17633 bytes); tech consume 1 reseed 1 (honorcert persist seeded, queue_tech_open 10->10, next FIFO head = settlement persist)."
+    ],
+    [
+      "R1942",
+      "R1942 ledger props cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1941 closeout pointer; criteria AC-PSP1..PSP7 pre-registered in tech.md before code, with two same-round suite-side probe-scope errata honestly noted: the bad-ref probe needed count=1 to actually reach the ref gate because the product validation order checks count>=1 before the ref, and the freeze comparison wrongly sliced count_credits into the provenance key set - fixed to the five provenance keys excluding count_credits; first run 5/7 -> fixed -> green; R1776 probe-scope precedent family). Double-run stdout byte-identical sha16 748340e88482cdb8. Three-instance world on the real product path (Ledger + PropsFace, props_inventory single table WAL, zero schema touch = fingerprint sentinel CLEAN domains=5): anchor (four purchase spectrum alice hat_gold@15 + jetpack count=3@20 + bob flare count=2@10 with consume to 1 + carol scarf_silk@12, each bound to a real spend tx with SQL cross type=spend + debit leg 4/4; balances 265/490/388/18857; counts inv=4 spend-tx=4) -> close/reopen byte-identical battery replay (inventory replays stored bound_spend_tx/count_credits, balance replays ledger_entries = zero in-memory drift) -> eight restart-surviving gate probes all-reject same codes with frozen counts (cosmetic-consume, over-consume, unknown-item, held-kind drift, unknown-kind, bad-ref, count=0, plus carol over-budget E_NEGATIVE_BALANCE zero charge zero grant) -> real-path continuation (carol new lantern count=4 bound to a new real spend tx; alice jetpack consume 2 then stack re-buy to 2; bob flare consume to 0 then stack re-buy to 3; zero-cache recompute with balances 245/480/363/18912 and counts inv 4->5 spend-tx 4->7) -> frozen provenance faces (anchor rows' inv_id/account/item/kind/bound_spend_tx/granted_utc byte-frozen across restart x continuation; stack rows move count_credits only via product verbs = the stack path only UPDATEs count_credits, provenance stays first-purchase-bound) + dup gate E_PROP_DUP zero charge -> pure-read law -> third-instance stability + config sha unchanged + pure ASCII + zero network imports + world tmp outside repo. RUNNER PASS 180/180 criteria 1592->1599 controls 7/7 282.3s = qa/reconcile-all-R1942.log (ledger-props-persist seat; census DRIFT-CLEAN flags=0 files=1371 tee=869 baselined=502; fingerprint CLEAN domains=5); matrix 180/1599 green --check byte-identical (17547 bytes); evidence six-section qa/props-persist-R1942.log via src/os/evidence_R1942.py; tech consume 1 reseed 1 (effects persist seeded with same-day dedup scans: registry zero effects-persist seat + AC-EFP git-grep rc=1 + base-suite close hits all SQL-probe/cleanup non-restart = true-activity candidate; next FIFO head = ledger identity persist; post-closeout watermark ~79.6KB over the 78500B line = fold R510 adjudication due at next round start)."
+    ],
+    [
+      "R1941",
+      "R1941 ledger companion cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940 closeout pointer; criteria AC-CMP1..CMP7 pre-registered in tech.md before code, with the same-round pool-expectation erratum 19000->19330 and 19090->19420 = the ledger spend counter-leg flows back to the pool, product-behavior orthodoxy cross-attested by the ads seat 17150 = 20000-3000+150; R1883 AC-PN27 same-round pen-slip precedent; first run 5/7 -> fixed -> green). Double-run stdout byte-identical sha16 dff152fd13809909. Three-instance world on the real product path (Ledger + SecGate lobby-product reference injection + CompanionFace): anchor (jan passes alice/bob fee 120 + feb pass carol fee 90 each bound to one real spend tx; dialogue spectrum alice two archived rounds with same-kind memories twice = append-not-unique + bob one round + carol feb one round = 8 structural ai_label rows; can_ five probes a/b-jan True, c-jan False, c-feb True, a-feb False; transcript windows 4/2/0/2; memory views 2/0/0; subs views 1/1/1; balances 180/380/110/19330; five gate probes all-reject incl. gate-fault = injected fault-gate face rebuilt on the same db fails closed; zero drift across the probe batch) -> close/reopen byte-identical (created_utc = stored values, zero in-memory drift) -> restart-surviving gates -> real-path continuation (carol buys the missing jan pass bound to a real spend tx with SQL cross type=spend + debit leg, denied->allowed flip proven, two new rounds + two memory appends, counts subs 3->4 msgs 8->12 memories 2->4 spend-tx 3->4, balances 180/380/20/19420) -> frozen faces (SQL full-row snapshots of all pre-existing rows byte-frozen incl. granted_utc/created_utc/content_json) + dup/denied/content gates across restart -> pure-read law -> third-instance stability. RUNNER PASS 179/179 criteria 1585->1592 controls 7/7 304.7s = qa/reconcile-all-R1941.log (ledger-companion-persist seat 0.8s, census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 179/1592 green --check byte-identical (17468 bytes); state.json EOL bare-LF repair at round start (25 lines -> 0, 74422B predicted==actual); evidence six-section qa/companion-persist-R1941.log via src/os/evidence_R1941.py; tech consume 1 reseed 1 (apimarket persist seeded with same-day dedup scans: registry zero apimarket-persist seat + AC-AMP git-grep rc=1 + base-suite close hits all cleanup/probe closes non-restart = single-Ledger true-activity candidate; next FIFO head = ledger props persist)."
+    ],
+    [
+      "R1940",
+      "R1940 ledger ads ad-slot cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1939 closeout pointer; criteria AC-ASP1..ASP7 pre-registered in tech.md before code) + crashed-round orphan-payload takeover closeout (eighth case of the R1937 lineage): the crashed R1940 attempt left all eight payload faces on disk (suite + registration + claim line + regen matrix + six-section evidence + RUNNER carrier + fold R509 already done at round start) with zero failed-run artifacts and only the closeout missing; this round live re-verified (suite double-run sha16 fe8a6f5962e1be68 both runs anchor-matching the evidence record, matrix 178/1585 --check byte-identical 17379B, census DRIFT-CLEAN, fingerprint CLEAN domains=5) and closed out. Three-instance world: anchor (three registered ad units screen/naming/splash + carousel three-advertiser concurrency + naming/splash exclusives, lineup four-window read faces pinned, five gate probes rejected zero-charge, digest f8262014291ca748) -> three-piece reverse-order close/reopen battery byte-identical -> five restart-surviving gates -> post-restart real-path continuation (carol books the freed carousel window + a freed naming window, both bound real spend txs via SQL cross, zero-cache recompute, digest f731c355e29e84c5) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; RUNNER PASS 178/178 criteria 1578->1585 controls 7/7 268.3s = qa/reconcile-all-R1940.log; fold R509 honored (carried by the crashed attempt; archive-preop 79330B verified on disk); tech consume 1 reseed 1 (devshare persist seeded via same-day dedup pre-checks, next FIFO head = ledger companion persist); suite-only round zero product bytes"
+    ],
+    [
+      "R1939",
+      "R1939 minors guardian cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1938 closeout pointer; criteria AC-MGP1..MGP7 pre-registered in tech.md before code, with the AC-MGP5 same-window erratum = AC-W7 re-gate-first law, R1883 precedent) + crashed-round orphan-payload takeover closeout (seventh case of the R1937 lineage): the crashed R1939 attempt left all eight payload faces on disk with zero failed-run artifacts; this round live re-verified (suite stdout line-for-line identical to the evidence record with all three battery/report/instance digests matching, double-run byte-identical, matrix 177/1578 --check identical; raw-byte sha difference = probe caliber CRLF-vs-LF, not a content difference) and closed out. Product face = minors.py optional sqlite persistence layer (+115 lines: db_path=None default pure-memory path byte-identical drift-free for the 19+70 wiring criteria; db-first mirror so a crash window cannot lose a day-cap spend row = fail-closed persistence for the sec.31 minor-protection compliance face; three tables mg_residents/mg_limits/mg_day_spend, append-only day ledger with UNIQUE(resident,date,ref)). Three-instance world: anchor (four-resident spectrum + 8 refused probes + battery sha16 90ac70fd49071b9e) -> close/reopen byte-identical -> 8 restart-surviving gates -> real-path continuation (kid1 700 recompute + kid3 fresh-resident persistence + adult refused) -> frozen history + re-gate-passing idempotent replay absorbed + conservative re-gate refusal + ref-domain bucket law -> pure-read law -> third-instance stability; RUNNER PASS 177/177 criteria 1571->1578 controls 7/7 290.2s = qa/reconcile-all-R1939.log (census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 177/1578 green --check byte-identical (17303 bytes); proposal-track BD-PROP-004 delivered (window 10-14~10-21, qa evidence monthly archive step); tech consume 1 reseed 1 (settlement persist seeded, next FIFO head = ledger ads persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1939) + checker VERDICT PASS after the fix"
+    ],
+    [
+      "R1938",
+      "R1938 ledger venue cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1937 closeout pointer; criteria AC-VNP1..VNP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (plaza capacity-2 concurrent rentals + storefront lease/terminate/re-lease spectrum, five gate probes rejected zero-charge, digest c8315611ef644e8f) -> two-piece reverse-order close/reopen with the is_rented/tenant_of/occupancy_ledger battery byte-identical (tick-parameterized pure-value read faces, zero clock echo, no frozen clock needed) -> five restart-surviving gates -> post-restart real-path continuation (freed plaza slot + termination-freed storefront window both re-rented, bound to real spend txs via SQL cross, zero-cache recompute) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; first-run one-anchor fail (world build missed register_venue, not a product defect) fixed same window, honestly noted; RUNNER PASS 176/176 criteria 1564->1571 controls 7/7 211.8s = qa/reconcile-all-R1938.log (census DRIFT-CLEAN); matrix regen 176/1571 green --check byte-identical (17228 bytes); tech consume 1 reseed 1 (identity persist candidate added, queue_tech_open 10->10, next FIFO head = minors persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1938) + checker VERDICT PASS after the fix"
+    ],
+    [
+      "R1937",
+      "R1937 ledger expedite queue-face cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1936 closeout pointer, the R1935-reseeded claim; criteria AC-EPP1..AC-EPP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934/R1936 lineage - the crashed R1937 attempt left suite + registry row + claim + matrix regen + five-section double evidence + the completed fold R508 on disk with zero failed-run artifacts; this window re-verified live (suite re-run SUITE PASS 7/7 + matrix --check byte-identical 17149B 175/1564) then closed out. Three-instance world: anchor (alice five-credit consumption spectrum + bob single + carol empty spine, five gate probes rejected, battery digest 452e9dbb706f35f9, counts credits 6/jobs 4/spend-tx 6, balances 1903/570/400/17127) -> two-piece ef.close->led.close->reopen same db/config replays queue_snapshot + credits_view x3 + four balances byte-identical (persisted timestamps and spend_tx zero in-memory drift) -> five restart-surviving gates same codes zero-charge -> carol real-path purchase epp-c1 bound to a real spend tx (SQL cross type=spend debit leg) landing expedited FIFO position 3 with zero-cache recompute jobs 4->5 carol 400->375 digest 16ccc72771ecb450 -> frozen faces + idempotent old-ref replay across restart + consumed-credit resurrection refused -> pure-read law -> third instance stable; RUNNER PASS 175/175 criteria 1557->1564 controls 7/7 268.1s = qa/reconcile-all-R1937.log (SUITES 174->175, ledger-expedite-persist seat) + matrix regen 175/1564 green --check byte-identical + census DRIFT-CLEAN; evidence five sections qa/expedite-persist-R1937.log, LF-normalized single-writer driver src/os/evidence_R1937.py; fold R508 round-start honored (crashed round's own surgery verified on disk: R1932..R1936 ten lines 16589B -> 1 rolling line, 20 tokens zero-loss, archive verbatim + preop 81429B); tech consume 1 reseed 1 (queue_tech_open 10->10: expedite done -1 + ledger props persist seed +1 with dedup pre-checks, next FIFO head = ledger venue persist); export refresh collected the R1936 tick-row debt (results tick row 'OSLoop 执行 tick' restored with r[0]==1937) + self_drive synced to the checker recompute (W=13 sub=1) + checker VERDICT PASS; suite-only round, zero product bytes"
+    ],
+    [
+      "R1936",
+      "R1936 ledger observation cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1935 closeout pointer; criteria AC-OBP1..OBP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934 lineage - the crashed R1936 attempt left suite+registry+matrix+five-section evidence+the 2026-10-14 daily reconcile on disk with zero failed-run artifacts; this window re-verified live (suite re-run PASS + matrix --check byte-identical) and closed out. Three-instance world: anchor (four accounts, two strategies, alice single-permanent + bob pass window bound to real spend txs, four gate probes rejected, digest c184654e4fe640cb) -> two-piece reverse-order close/reopen with 13 read faces + 5 balances byte-identical (registered_utc persisted value, no clock echo) -> five restart-surviving gates -> post-restart real-path continuation with SQL cross-checks and zero-cache recompute -> frozen faces + window isolation -> pure-read law -> third-instance stability; RUNNER PASS 174/174 criteria 1550->1557 controls 7/7 251.4s = qa/reconcile-daily-20261014.log (dual carrier = the daily reconcile, sentinel ok + profile ok + census DRIFT-CLEAN); matrix regen 174/1557 green --check identical; tech consume 1 reseed 1 (venue persist candidate added, queue_tech_open 10->10, next FIFO head = ledger expedite persist). QA charter daily crawl W24 = Internet Advertising Administrative Measures (SAMR Order No. 72) official fulltext direct-captured into benchmarks + intelligence-wall W24 rows; benchmarks_refreshed=2026-10-14; smoke-R1936 log+png pair delivered; GORD one new row (@bm-c V3 refire receipt, BigStream family, acknowledged no-action, baseline 375->376)."
+    ],
+    [
+      "R1935",
+      "R1935 datasub cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1934 closeout pointer, the R1931-reseeded claim; criteria AC-DSP1..AC-DSP7 pre-registered in tech.md before code with two rulings: the read battery = nine read faces + four balances with full-envelope byte comparison while evidence digests mask the persisted-but-clock-written subscribed_utc and spend_tx fields (R1902 banded-projection law), and the restart carrier = the two-piece full-stack reverse-order close/reopen with a three-instance world): suite test_datasub_persist.py first run all green + double-run stdout byte-identical sha16 c620990d4f1170e8 - anchor world (two datasets monthly 99 ai=0 + quarterly 999 ai=1, four subscriptions across three accounts incl. ada two-window, three delivery rows incl. carol same-window redownload x2, pre-close gate probes all rejected, nine reads + four balances snapshot digest 47106cc3bb36c0a9, manual SQL five-table count cross registry 2 / subs 4 / deliveries 3 / spend-tx 4); close both pieces -> instance-2 same db/config replays all nine reads + four balances byte-identical (zero in-memory drift); seven gate probes all rejected with zero drift (dup window / dup purchase_ref / dup delivery_ref / not-subscribed / cross-period bad window / register conflict + idempotent re-register, counts and balances constant); post-restart real-path continuation (bob Q2 + ada Q1 each -999, carol redelivery zero-token, both new subs bound to real spend tx cross-proven type=spend + debit entry, derived faces recompute zero-cache quarterly subscriber 1->3 / mobility delivery 3->4 / carol 2->3 / reconcile quarterly billed 2997 balanced, balances ada 803 / bob 1002 / pool 17294); frozen faces + two-way zero cross-dataset permeation (descriptor bundle byte==anchor, untouched dave subscription_view frozen, reconcile mobility == anchor+1 delivery only, reconcile quarterly zero mobility permeation); pure-read law + third instance replays the post-continuation state byte-identical (digest 048c19a798da9f9f, five-table counts constant); hygiene config/datasub/ledger sha stable + SUITES row in-book + pure ASCII + zero network imports; RUNNER PASS 173/173 criteria 1543->1550 controls 7/7 243.7s = qa/reconcile-all-R1935.log (SUITES 172->173) + matrix regen 173/1550 green --check byte-identical 16970B + census DRIFT-CLEAN flags=0; evidence five sections qa/datasub-persist-R1935.log, LF-normalized single-writer driver src/os/evidence_R1935.py (R1932 template family); closeout pre-step: R1934 two-line indent disease 8->16 spaces fixed via the canonical eol --fix-indent --execute (73474->73490B, content_eq/json_eq double-proof, R1710 disease-family recurrence honestly noted); tech consume 1 reseed 1 (queue_tech_open 10->10: datasub done -1 + expedite persist seed +1, next FIFO head = ledger observation persist); suite-only round, zero product bytes"
+    ],
+    [
+      "R1934",
+      "R1934 tourstate cross-process cold re-derivation persistence suite 7/7 + orphan-payload takeover closeout (P2 tech FIFO head = the R1933 closeout pointer; orphan-adoption chain R1922/R1924/R1925 one more link: the crashed R1934 attempt left suite + registry row + claim line + two failed RUNNER runs on disk, all five payload faces verified live then committed by this takeover; the two deterministic RUNNER FAILs rooted in a pwsh-capture CRLF artifact (361400B) sitting in qa/ poisoning the live-tree census probe - artifacts deleted, census re-check DRIFT-CLEAN flags=0, full RUNNER re-run tee-native per the R1924 precedent; capture-method correction honestly noted: the first re-run with pipe capture re-offended the CRLF dialect and was caught by census on the spot, the second re-run went through the RUNNER argv[1] tee writer = canonical-capture-path judgment entered; suite test_tourstate_persist.py: tourstate is a pure stateless prep face (zero sqlite, zero file substrate) so the restart carrier is a fresh interpreter subprocess with a self-reentrant --worker flag (stdin single-line JSON in, stdout single-line JSON out, zero temp files): control anchor fresh-subprocess cold re-derivation both legs byte-identical + ids equal; three sequential fresh subprocesses mutually byte-identical == parent baseline (double-restart stability); verify True x2 across the process boundary (stdin JSON roundtrip zero semantic loss); three tampered variants all rejected E_TS_TAMPER by fresh subprocesses (tamper law survives the process boundary); bad-input probes E_TS_BAD_INPUT x3 cross-process deterministic; zero module-state drift (post-activity re-derivation == pre-window capture, original packets verify True, idempotent build-verify cycles); hygiene pure ASCII + zero network imports + tourstate.py sha256 unchanged suite-only round; SUITE 7/7 double-run byte-identical sha16 88c8e6a64e29d2e3; RUNNER PASS 172/172 criteria 1536 to 1543 controls 7/7 202.9s = qa/reconcile-all-R1934.log with the failrun1 evidence preserved (qa/reconcile-all-R1934-failrun1.log); matrix regen 172/1543 green --check byte-identical x2 16885B; census DRIFT-CLEAN; R1933 liveroom evidence 16-line CRLF to LF normalization committed same round (content byte-identical, R1884 dialect-law family); takeover fixup: the tourstate tech.md claim checkbox flipped to checked (crashed round left the done annotation but the box unflipped; after the flip the live queue count matches the in-row claim 9 to 10); five-silence: DEC one new token C-20261013-01 group workspace git-hygiene closeout adjudicated knowledge-only (own-repo hygiene compliant: state 70373B under the 78500B line, zero big files, zero media in git; baseline 308 to 309), GORD four new rows all BigStream MV family acknowledged no-action including the O-20261013-2245 cloud-unlock order (this division keeps zero cloud touchpoints, api=0; baseline 371 to 375); tech consume 1 reseed 2 queue_tech_open 9 to 10, next FIFO head ledger datasub persist (R1931 reseed)"
+    ],
+    [
+      "1974",
+      "OSLoop 执行 tick"
+    ]
+  ],
+  "self_drive": {
+    "window": "2026-10-09..2026-10-15",
+    "window_days": 7,
+    "log_lines_in_window": 16,
+    "idle_fast_mention_lines": 0,
+    "no_pullable_mention_lines": 0,
+    "substantive_non_idle_mention_lines": 2,
+    "proposals_total": 4,
+    "proposals_open": 2,
+    "queue_main_open": 6,
+    "queue_tech_open": 5,
+    "queue_explore_open": 10,
+    "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
   }
- ],
- "outs": [
-  [
-   "大厅 WebSocket（规格+沙箱）",
-   "on",
-   "AC-S1..S13+AC-S8c/S8d/S8e+AC-S14/S15+AC-S16/S17+AC-S18/S19 自验 22/22 全绿（R1773 房间读面 16→18·R1790 room.board 协议接线 18→19·R1791 订阅过滤参数 19→20·R1792 idea 池读面+接线 20→22）"
-  ],
-  [
-   "代币双式账本（规格+沙箱）",
-   "on",
-   "AC-L1..L11 自验 11/11 全绿"
-  ],
-  [
-   "UGC+msgSecCheck 管道（规格+沙箱）",
-   "on",
-   "AC-U1..U12+五窗水位族全绿（R1794..R1799 接线/R1800 完成窗日志/R1801..R1805 读面族/R1806 journal×store 一致性探针 CONSISTENT+DETECTING）"
-  ],
-  [
-   "19.9 支付对接（规格+沙箱）",
-   "on",
-   "AC-Y1..Y14 自验 16/16 全绿"
-  ],
-  [
-   "会员权益/月卡（规格+沙箱）",
-   "on",
-   "AC-M1..M16 自验 16/16 全绿（R14 接管收口·P-47 五件毕）"
-  ],
-  [
-   "用户激励智能体设计件（分配层三面）",
-   "on",
-   "AC-I1..I13 结构判据 13/13+AC-IP1..IP4 blocked（参数 [needs-CEO] 呈批/法务定稿/物理件）·R28 落盘"
-  ],
-  [
-   "用户增长部设立+漏斗映射件",
-   "on",
-   "P-76 回执（24h 快速件档·提前 ~47h）·R-20260924-fan-growth-funnel（R34）"
-  ],
-  [
-   "正典速查索引（GL204 判例层）",
-   "on",
-   "docs/canon-index.md：20 域索引+簇 7+终谳 5+回落 7+四计数报告·原文保全零删改（R158）"
-  ],
-  [
-   "技能件 bigdomain-loop-scan（盘点→三问筛→建→装→登记）",
-   "on",
-   "P-2026-09-26-01 集团技能动员令回执（AC-K1..K5·≤48h 窗内提前 ~47h·R196）"
-  ],
-  [
-   "生产 bootstrap 部署",
-   "wait",
-   "blocked on CEO 物理件（打包/发布一律过集团 release-gate v1.0·P-66）"
-  ],
-  [
-   "禁待令自驱单清单（策略研究/设计深化/运营预演）",
-   "on",
-   "P-2026-09-26-03 回执·BD-SD1 策略研究面毕 R266（R-20260926-cold-start-strategy·web 直采 4 源双源互证）·BD-SD2 设计深化面毕 R267（跨件集成规格 12 缝+三面深化）·BD-SD3 运营预演面毕 R268（三件全收口）"
-  ],
-  [
-   "P-47 跨件集成设计深化件（全用户旅程集成规格）",
-   "on",
-   "BD-SD2 回执（R267）·AC-SD2a..e 全过·12 契约缝五列+旅程六段 J1~J6+边界/故障/降级三面·零新代码零新 schema 零新 API"
-  ],
-  [
-   "上线运营预演件（docs/ops/ 首件）",
-   "on",
-   "BD-SD3 回执（R268）·AC-SD3a..e 全过·有人值守慢直播 SOP+封禁级风险应急面+上线日 checklist 草案·开闸=P1 呈批面零越权"
-  ],
-  [
-   "平台共创区块块面调研件（六必答）",
-   "on",
-   "P-2026-09-26-04 回执·R318 当轮闭环提前 ~38h·AC-CB1..CB4 全过（91 行 ≤300）·总规 v1.1 收口输入（≤09-28 12:00）·B9 司塔两案并列呈"
-  ],
-  [
-   "T2 真 AI 传承商业线承接设计件（次元城市令令文②）",
-   "on",
-   "P-2026-09-26-09 回执·R319 当轮闭环·AC-H1..H6 全过（81 行 ≤150）·BigCompute 法务核验件=上线前置件挂待·定价/开闸=[needs-CEO] 呈批清单（P1 律）"
-  ],
-  [
-   "OSS 借力首窗切片件（OH 台账）",
-   "on",
-   "P-2026-09-26-08 回执·R320 当轮闭环·AC-OH1..OH5 全过·五门评估采 blind_watermark（MIT·14793★·AIGC 隐式标识盲水印）·落点=任务单 P-47-3c+司级采用登记簿·窗内提前 ~71h·R333 台账位迁集团路径 cph4/oss-harvest/OH-20260926-bigdomain.md（D-20260927-03 采③豁免精确口径·唯一台账位·本仓镜像撤）"
-  ],
-  [
-   "AIGC 隐式标识能力验证件（P-47-3c·blind_watermark）",
-   "on",
-   "P-2026-09-26-08 首窗落点回执·R321 当轮闭环·套件 SUITE PASS 5/5（清洁往返 exact+JPEG q90 压缩例+裁剪 85% recover 恢复例·直提退化诚实负如实记）·设计件 docs/spec/implicit-watermark-verify.md·窗内提前 ~69h"
-  ],
-  [
-   "商业化前沿调研部建制回执（P-2026-09-26-18·U247 章程 v1.0）",
-   "on",
-   "R330 当轮闭环·AC-RD1..RD7 全过·docs/research/README.md §三（复用正名 X068·零新编制零新循环零新台账）·首件接产=U231 块面件·观察位+月度统计注记机制 §四·回执窗 09-28 12:00 内提前 ~36h"
-  ],
-  [
-   "价目正典增补提案件（P-2026-09-27-02 本司面）",
-   "on",
-   "docs/spec/price-canon-amendment-spec.md·N1-N7 正典落位映射+N2 居民成长档案订阅产品定义+合规四件套·定价/采纳=[needs-CEO] 呈批（P1 律·CEO+决策委员会商业席位过会）·R381 当轮闭环·主件 R-20260927-commercial-paypoints 引用不复制·P-32 补行 R382=待裁面④ ¥29.9 入门订阅档（主件修正案·溢价叙事 vs 降价拉客）"
-  ],
-  [
-   "19.9 算力包用户旅程 v2（含 ¥29.9 两案备裁）",
-   "on",
-   "P-2026-09-27-07 闲置司自驱动员令四议程之三·R405 当轮闭环·AC-JV1..JV6 全过·docs/spec/journey-19.9-v2-spec.md（54 行·v1=J1~J6 差分八步表+¥29.9 两案证据面）·两案=[needs-CEO] 呈批（C-20260927-01 证据包+商业市场席意见 HQ-FEEDBACK R405：案 A 有条件赞成）·M2 前预备三件 AC-M2a..e 预注册排板 backlog（窗 ≤09-29 ~10:4x）"
-  ],
-  [
-   "M2 前预备三件（店内体验 v2/代币内循环沙盘/UGC 首演方案）",
-   "on",
-   "P-2026-09-27-07 四议程之二·R406 当轮闭环·AC-M2a..e 全过·in-store-experience-v2-spec 38 行（六面 F1..F6 三列）+token-loop-sandbox-spec 63 行（五幕恒等式沙盘·dry-run）+ugc-debut-plan-spec 52 行（三类种子+J1~J6 首演动线）·合规四件套三件齐·窗内提前 ~42h"
-  ],
-  [
-   "委员会首案席位意见（机构瘦身审视裁并案 P-2026-09-27-06）",
-   "on",
-   "商业市场席 BigDomain 共席侧独立意见·R407 当轮闭环·AC-SS1..SS6 全过·有条件赞成（A1 补 patrol 点名零中断硬判据+§4.4 保 P-51 令号寻址+编号口径反向冲突独立发现）·常设议程拉单承 P-2026-09-27-07·过会窗 ≤48h 内提前 ~45h"
-  ],
-  [
-   "调研部次件动线标杆补锚件（P-2026-09-27-07 常设承接）",
-   "on",
-   "docs/research/R-20260927-venue-flow-benchmark.md·48 行 ≤60·双源直采（teamLab Borderless 东京+Meow Wolf 官方页·A 级·营销宣称零采信）·五模式映射 P1..P5 全引在册判据号+应用表三行+R318 🟡 挂起收口翻格·AC-RF1..RF5 全过·R408 当轮闭环"
-  ],
-  [
-   "Ternary-Bonsai 商业文案 advisory 试用（四件套回执）",
-   "on",
-   "P-2026-09-28-07 回执·R535 验真采纳·docs/research/R-20260928-bonsai-bd-trial.md·verdict=observe（adopt 门=O-2175+fleet-allocations §8.4 未启·P1 呈批面）·四件套=部署/速度/共存/质量全过·窗内提前 ~37h"
-  ],
-  [
-   "参观端 3D 三态选型 prep+L1 正版采购 gate 呈报件",
-   "on",
-   "O-2026-0929-007 动员令 @BigDomain 点名件·TourStateFace（src/sandbox/tourstate）SUITE 7/7+RUNNER 14 套件 137 判据全绿·呈报件 docs/spec/m4-visitor-3d-three-state-prep.md·门阵 G1..G5×三态+L131 咬合令回执+呈批两件 D-A/D-B [needs-CEO] P1 只呈批·R602"
-  ],
-  [
-   "48 包正版采购成本锚+预算行回填（D-A 呈批输入件）",
-   "on",
-   "O-2026-0929-007 ②研究线承接·R603·A 级直采 84 件价带+官方自估均值 ≈$50/包+SyntyPass 订阅制发现+EULA 渠道律原文·判负留痕 4 处·粗锚 ≈$2,400+ 全量单购/SyntyPass 询证两口径·qa/cost-anchor-R603.log 四判据全过"
-  ],
-  [
-   "吸嘟嘟运营层规格 v1 商业化合规复核（O-2026-0929-013 派单）",
-   "on",
-   "判据预注册 XD1..XD10+复核报告 docs/audits/ops-review-20260929-xidudu-operations-v1.md（有条件通过·4 注记级缺口补丁文案备供）+机械闸 src/sandbox/opsreview/（套件 7/7+runner 15 套件 144 判据零回归·qa/opsreview-R604.log）·R604·frontdoor v0.28=R1003 前台收口（活体重算面：卡面每渲染重跑真门+漂移检出 XD5 新增 gap 如实显·P2 观察 HQ-FEEDBACK R1003 行）"
-  ],
-  [
-   "席7 附款付费点×合规义务映射表过表件 v1（A 档上线前门机执法）",
-   "on",
-   "src/sandbox/compliance/：32 in-force 付费点全册（C 端 18+B 端 9+直播 3+知识付费 2·N 系池 6 单列）+A 档两行五列全填（雏形 §五 verbatim）+BigCompute 联办列 PENDING 占位+ASCII 机检闸+测试 15 判据 15/15 全绿·BILLING GATE: CLOSED（未过表不得开单收款机关死）·qa/compliance-map-R675.log·R675"
-  ],
-  [
-   "C-20260927-01 沙箱权益目录入门档（¥29.9 入门订阅卡）",
-   "on",
-   "member patron 档+席4/席6 硬判据套件 AC-E1..E7 7/7+member 25 断言零回归+RUNNER 27 套件 231 判据（22/27 绿·4 环境缺口+1 既有疑点分诊在板）·qa/entry-tier-R681.log·R681"
-  ],
-  [
-   "产品面前台静态预览（preview/index.html）",
-   "on",
-   "v0.1=R683（XL-16 首前台）·v0.2=R698（19.9 用户旅程 JV-1..JV-8 节·journey-19.9-v2-spec §一 正典派生·qa/preview-v02-R698.log 8/8）·v0.3=R728 升级本地活体 HTTP URL http://127.0.0.1:8093/（frontdoor.py 纯组合真实面+journey 实跑证据+合规常驻面·qa/xl16-R728.log·重启器 frontdoor_start.bat）·v0.4=R872（M1 挂载面五站互动动线）·v0.5=R875（工程读数实时刷新+AC-S4 修复件随轮）·frontdoor v0.4=R908（Membership Face 四档位+Quality Face 当日回归证据双卡·纯组合零新业务面）·frontdoor v0.5=R941（Minor Guardian Face 守护合规卡·AC-W8）·frontdoor v0.6=R942（M1 可逛切片商业挂载位五站卡·AC-FD6a..f·活体重启上线）·frontdoor v0.7=R943（城市商业方案卡·AC-FD7a..f·审计 P2-9 缺口回应·活体重启上线）·frontdoor v0.8=R945（城市商业双轨场景推演模型实算卡·AC-FD8a..f·L76 定价模型缺口可运行回应·真模型进程内实算·活体重启上线）·frontdoor v0.9=R946（发行面研究卡·AC-FD9a..f·审计 P2-9 残余三面回应·活体重启上线）·frontdoor v0.10=R965（Token Ledger Core Face 代币双式账本核心面卡·AC-FD10a..f·P-47-2 核心面收口·真账本探针+八查对账+篡改检出·活体重启上线）·frontdoor v0.11=R968（UGC+msgSecCheck Pipeline Core Face 管道核心面卡·AC-FD11a..f·P-47-3 核心面收口=前台 P-47 五核心面全挂载·真管道探针 20 腿+合规四件套 config verbatim·活体重启上线 13 卡）·frontdoor v0.12=R975（AIGC Implicit Watermark Face 合规面卡·AC-WM1a..f·真水印探针服务器启动实算+诚实负例+双轨标识+合规四件套·活体重启上线 14 卡）·frontdoor v0.13=R977（Live Room Conversion Face 直播房转化件面卡·AC-FD13a..f·真探针 20 腿+合规四件套·活体重启上线 15 卡）·frontdoor v0.14=R978（City Props Face 城内道具/装扮经济面卡·AC-FD14a..f·真探针 16 腿+合规四件套+次数≠代币隔离律注·活体重启上线 16 卡）·frontdoor v0.15=R980（Creator Incentive Face 创作者激励梯度面卡·AC-FD15a..f·真探针 12 腿〔梯度+预算窗+项圈+join+幂等〕+合规四件套+单向 share 结构法注·活体重启上线 17 卡）·frontdoor v0.16=R984（Strategy Observation Face 策略共创围观付费面卡·AC-FD16a..f·真探针 15 腿+合规四件套·活体重启上线 18 卡）·frontdoor v0.17=R986（Studio Onboarding Face 工作室入驻年费面卡·AC-FD17a..f·真探针 21 腿+合规四件套+注册行不可变结构法注·活体重启上线 19 卡）·frontdoor v0.18=R987（Ad Slot Face 虚拟展厅/广告位面卡·AC-FD18a..f·真探针 23 腿+合规四件套+venue 引用律结构法注·活体重启上线 20 卡）·frontdoor v0.19=R989（Venue Face 线上活动场地/店面租约面卡·AC-FD19a..f·真探针 26 腿+合规四件套+占用引擎单源引用律结构法注·活体重启上线 21 卡）·frontdoor v0.20=R990（Reports Face 城市数据报告面卡·AC-FD20a..f·真探针 25 腿+结构脱敏九键 descriptor+ent: 企业直购代币层拒诚实结构边界+合规四件套·活体重启上线 22 卡）·frontdoor v0.21=R992（Identity Face 元宇宙身份付费面卡·AC-FD21a..f·真探针 26 腿+props/venue 引擎引用律结构法注+合规四件套·活体重启上线 23 卡）·frontdoor v0.22=R993（Expedite Face 交易大厅加急特权面卡·AC-FD22a..f·真探针 25 腿+合规四件套·活体重启上线 24 卡）·frontdoor v0.23=R995（Enterprise Metered API Face 企业计量 API 面卡·AC-FD23a..f·真探针 30 腿+合规四件套·活体重启上线 25 卡） · frontdoor v0.24 city digital collectibles card (R997: AC-FD24a..f, collectibles.py R619 face reused not copied, 21-leg real probe with nine fail-closed refusals, SUITE PASS 8/8 + RUNNER PASS 27/27 zero regression, live restart 26 cards on 8093)·frontdoor v0.28=R1003（Sibling-Ops Review Gate 兄弟司运营层规格合规门卡·AC-FD28a..f·真门探针 9 腿+活体兄弟仓 spec 每渲染重算+合规四件套·活体重启上线 30 卡）"
-  ],
-  [
-   "2",
-   "water journal delta JSON 引擎侧完整性探针件（R1817·AC-JI1..JI5 预注册先于代码：14 行基线 json_valid0==0+json_tree 非根叶全 integer+叶计数三方对照 tree=24==each=24==产品 Σ len=24 逐位等；坏 JSON 行注入双径检出互证〔SQL json_valid0=1+window_id=15 点名+delta 字面对照== vs 产品 cell_totals() JSONDecodeError 崩响捕获=fail-closed 检出行为证〕；非整值行注入双面检出〔json_valid=1 但 json_tree 非根叶 type=text window_id=16 点名 vs 产品求和段 ValueError（int() 前置执法命中·TypeError/ValueError 族内）=CAST 前提破坏双面〕；两注入行各按 window_id 精确 DELETE 恢复复绿〔行数回 14+valid0==0+叶==0+产品 total==11 在册值复现〕；探针增 [14] 节〔hygiene 顺移 [15]〕+docstring R1817 段·测量面不入 SUITES〔R1727 先例〕·双跑 stdout 逐字节同一 sha256 6AA701CD38E12C78 exit 0/0+[1]..[13] 零回归 PROBE VERDICT CONSISTENT+DETECTING+frozen 四件零产品字节；证据 qa/water-integrity-R1817.log）"
-  ],
-  [
-   "2",
-   "water journal 行级 delta 字面三方对照+json() 往返守恒探针件（R1818·AC-LC1..LC5 预注册先于代码：三径行级对照 14/14〔json_extract 逐键值等+json_type integer+json_quote 叶值字面==json.dumps(值)·json(delta) 重解析回 dict==行 delta·keys-checked=24·空 delta 行 1 行零键恒过〕+引擎规范化字面守恒〔json(delta)==json.dumps(delta, sort_keys=True, 紧凑分隔符) 14/14 逐字节同一〕+写径定点守恒〔raw==json.dumps(json.loads(raw), sort_keys=True) 14/14=写读往返字面守恒〕+纯读〔mode=ro·行数 14==14==14〕·双跑 stdout 逐字节同一 sha256 75a4b784a0842404… exit 0/0+[1]..[14] 零回归 PROBE CONSISTENT+DETECTING+frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-deltaliteral-R1818.log"
-  ],
-  [
-   "2",
-   "water journal ts_utc 引擎侧格式完整性探针件（R1819·AC-TZ1..TZ5 预注册先于代码·前提更正两枚在册=种子 26 字符→实测 27 字符定长+AC-TI 撞名→AC-TZ 全仓无主：基线三查全绿〔LENGTH<>27 违者 0+恒定形 [27]+GLOB 固定数字形违者 0+julianday NULL 0==14〕+月窗谓词三面一致〔SQL substr 月集==monthly_flow month 集==board 行前缀集==['2026-08','2026-10']〕+双注入负路径〔ts 无 CHECK=plain INSERT·月抽象 ts=cur_w 派生承 R1813：短日形 26 字符 GLOB 失配 jd NULL 三面全中+坏历法形 27 字符 GLOB 过 jd NULL 历法面独中 calendar-only=[18] 形/历面独立证·jd NULL==2 点名 [17,18]〕+产品径纯前缀不过验诚实注〔board(cur_w) 11→13+flow windows 11→13=前缀谓词零验证〕+DELETE 恢复复绿〔回 14 行三查 0/0/0+月集==基线+total 回 11〕·双跑 sha256 491214e2…逐字节同一 exit 0/0+PROBE CONSISTENT+DETECTING+[1]..[15] 零回归+[17] 卫生 frozen 四件零产品字节·测量面不入 SUITES〔R1727〕·证据 qa/water-tsintegrity-R1819.log）"
-  ],
-  [
-   "2",
-   "member banner_board 月窗过滤参数件（R1856·AC-BQ13..BQ17 预注册先于代码：reminder.py banner_board(limit=0, window=None)——显式 YYYY-MM 月窗全切（板行+by_status/by_reason 双 dense 格+total+banner_board_total 一体随窗辖）、14 坏窗形态 fail-closed E_REM_BAD_WINDOW（E_REM_* 词表新码）、双坏门序 limit 先抛、窗×帽正交（溢出块 banner_board_total=窗内化身行全量计数）、缺省面逐字节保真+window 键 additive；套件 17/17 双跑逐字节同一+全量回归 114/114 判据 1054→1059+矩阵 --check ×2+哨兵 CLEAN+census DRIFT-CLEAN（证据件方言病一轮实弹检出修复）=qa/member-bannerboard-window-R1856.log"
-  ]
- ],
- "results": [
-  [
-   "R1972",
-   "R1972: 18th-case crashed-round orphan takeover closeout - the crashed round authored the curation cold_board cross-restart persistence suite (explore head, AC-CZP1..CZP6 pre-registered in the claim row before code) and crashed pre-bookkeeping; the taker re-verified three-green per R1924/R1969/R1971 precedent: suite double-run SUITE PASS 6/6 exit 0/0 decoded byte-identical (PS5.1 redirect UTF-16 dialect re-decoded per R1969 family), full RUNNER battery PASS 203/203 suites green + reconcile controls 7/7 168.3s zero regression (tee to a temp file outside the repo - crashed-round evidence mtime-preserved), suite_matrix --check byte-identical 19535B/203 suites/1769 criteria. Payload committed this round (suite file + SUITES row + matrix regen + done-flip + reseed, explore open=10). Five-silence: DEC 328 rows flat, ORD tail 16:2x flat, no new ledger transfers, BENCH fresh, GORD 403 vs 405 known-shape, BD-PROP-004 in-window (no proposal debt)."
-  ],
-  [
-   "R1971",
-   "R1971: 17th-case crashed-round orphan takeover closeout - R1970's curation cold_board payload (15 files staged, crashed pre-commit) re-verified three-green by the taker per R1924/R1969 precedent: suite double-run SUITE PASS 24/24 exit 0/0 (own re-run, not log-trusting), full RUNNER battery PASS 202/202 suites green + reconcile controls 7/7 170.1s zero regression, suite_matrix --check byte-identical 19441B/202 suites/1763 criteria. Payload committed 9300f294 (R1970 score-2 product delivery restored into history). Taker hygiene: stray --probe log artifact (runner wrote the flag as a log name) removed; R1970 evidence files mtime-preserved. Five-silence: DEC token-flat, ORD tail 16:2x = baseline (GORD tbl 403 vs 405 known-shape negative drift, zero new orders), no new ledger transfers, radar candidate list OH-20261014-cph4 still pending at the 21:41 window (row 1 gated on external arrival, no fabrication)."
-  ],
-  [
-   "R1970",
-   "R1970: P3 explore-queue head delivered - curation zero-heat cold board read face (cold_board: honest inverse filter of the theme heat board, single live hot_board() derivation source, zero second aggregation engine, curation_id ASC rank 1..N, honest empty board over zero-curation and all-hot worlds; criteria AC-CB1..CB5 pre-registered in the explore.md row before the code existed). Three artifacts: curation.py cold_board + test_curation.py five cases (SUITE PASS 24/24 double-run exit 0/0, qa/curation-coldboard-R1970.log) + reconcile_all SUITES ledger-curation 19->24 (RUNNER PASS 202/202 criteria 1758->1763 controls 7/7 175.1s, qa/reconcile-all-R1970.log); matrix regen --check byte-identical 202/1763. runner_profile drift face ugc +2.2s flag attributed by isolated re-run (3.4-3.5s isolated ~= 4.1s in-battery = suite growth criteria 19->37 vs the R1681-era baseline, not degradation) and the baseline re-anchored to 202 entries -> DRIFT-CLEAN. Explore queue consumed 1 reseeded 1 (cold_board cross-restart persistence window, persist-family precedent) = 10 held."
-  ],
-  [
-   "R1969",
-   "R1969: 16th-case crashed-round orphan takeover closeout - AC-LT25 fold --round strict-form gate slice (pre-registered in the tech.md R1968 supplementary registry after the R1967 malformed-header census catch; re.fullmatch R+4digits fail-closed exit 2 on 7 bad forms + empty + legal-form pass with round_label echo in the plan JSON) delivered via takeover: suite re-run SUITE PASS 163 checks (evidence re-landed in healthy tee dialect after the taker's own first Tee-Object pass wrote ps-utf16 and tripped the cd7 census new-dialect flag - R1924 family live-fire; runner self-Tee + subprocess LF capture = tee class, census probe exit=0 DRIFT-CLEAN re-green) = qa/logs-toolkit-R1969.log + full battery RUNNER PASS 202/202 suites green controls 7/7 173.1s = qa/reconcile-all-R1969.log; fold R520 round-start waterline reorg executed through the new gate with legal form R1969 (80349->68627B post==predicted, tail-6 window 15758B -> 1 rolling line, 111-token catalog machine-extracted zero-loss, archive section R1969 verbatim 15947B + preop backup sha16 fc7db5edaddc8759); honest note: window strata R1940/R1963 rolling lines and the R1968 line carry pre-existing ? mojibake runs (historical write-path disease; ASCII tokens/numbers/criteria ids intact; fold archived verbatim zero further loss); tech L17 done note attached"
-  ],
-  [
-   "R1969",
-   "R1969: 16th-case crashed-round orphan takeover closeout - AC-LT25 fold --round strict-form gate slice (pre-registered in the tech.md R1968 supplementary registry after the R1967 malformed-header census catch; re.fullmatch R+4digits fail-closed exit 2 on 7 bad forms + empty + legal-form pass with round_label echo in the plan JSON) delivered via takeover: suite re-run SUITE PASS 163 checks (evidence re-landed in healthy tee dialect after the taker's own first Tee-Object pass wrote ps-utf16 and tripped the cd7 census new-dialect flag - R1924 family live-fire; runner self-Tee + subprocess LF capture = tee class, census probe exit=0 DRIFT-CLEAN re-green) = qa/logs-toolkit-R1969.log + full battery RUNNER PASS 202/202 suites green controls 7/7 173.1s = qa/reconcile-all-R1969.log; fold R520 round-start waterline reorg executed through the new gate with legal form R1969 (80349->68627B post==predicted, tail-6 window 15758B -> 1 rolling line, 111-token catalog machine-extracted zero-loss, archive section R1969 verbatim 15947B + preop backup sha16 fc7db5edaddc8759); honest note: window strata R1940/R1963 rolling lines and the R1968 line carry pre-existing ? mojibake runs (historical write-path disease; ASCII tokens/numbers/criteria ids intact; fold archived verbatim zero further loss); tech L17 done note attached"
-  ],
-  [
-   "R1968",
-   "R1968: P3 explore queue-head delivery - proposal progress read-face closed in-round (criteria AC-PP8..AC-PP12 pre-registered in the explore.md row before code; progress_board() pure-read board in proposal.py: envelope {progress_board,disclaimer} + eight-key dense rows, saturated progress law round(min(count,threshold)/threshold*100,2) with overshoot visible via raw signature_count + qualified flag, remaining=max(t-c,0), qualified read-time derivation per the R1766 verdict, deterministic sort (-progress_pct, proposal_id) zero RNG zero insertion-order keys; SUITE 12/12 first-run green double-run byte-identical; RUNNER PASS 202/202 controls 7/7 176.7s criteria 1753->1758 = qa/reconcile-all-R1968.log self-Tee; matrix 202/1758 --check byte-identical x2; fingerprint CLEAN domains=5; five-section evidence qa/proposal-progress-R1968.log VERDICT PASS) + census step caught and closed a fresh finding same-window: the R1967 fold wrote its archive header without the R prefix (--round 1967 -> '# --- 1967 fold append' unrecognized by CEN_HEADER -> its header + 7 verbatim lines misattributed to section R1962 declared 7 actual 15; content zero-loss pure header-form defect) -> byte surgery (+1B 'R' insert, preop backup, census re-run pass=true, remaining 2 mismatches both adjudicated known) = qa/census-archfix-R1968.log + tool-hardening next slice AC-LT25 registered on the logs-toolkit standing line"
-  ],
-  [
-   "R1967",
-   "R1967: fold R519 round-start waterline reorg (78951->74815B, tail-7 7 lines -> 1 rolling line kept=0, 73-token catalog zero-loss via gen519, archive verbatim + preop backup sha16 2a37f3fe813f6e5f, dry-run green then execute post==predicted) + tech-queue head L51 suite_matrix live mtime window probe re-run per R1931 precedent (selftest 16/16; live 1479 files / 1436 distinct / largest tie group 2 / tie_peers=0 / winner reconcile-all-R1966.log three calls identical / NO-LIVE-TIE scattered -> leave window open per AC-LN4, negative-result-on-record legal; evidence qa/qa-mtime-probe-R1967.log) + GORD +1 ack (mainAGENT Phase 1-alpha, dispatcher domain) + ORD known form-drift origin recheck (zero new orders)"
-  ],
-  [
-   "R1966",
-   "R1966: 15th-case orphan takeover closeout - lobby EventStore residual read-face family (count/census_lookup/export_day + import_census whole-table refresh + content-addressed append dedup) cross-restart persistence suite 7/7 (AC-LBP1..LBP7 pre-registered pre-code by the crashed round; crashed round left RUNNER FAIL 201/202 = its own suite evidence file landed pwsh-capture dialect [16 CRLF + 5 bare LF] -> cd7 census drift; takeover: dialect root-cause per R1880 family, live double-run rc 0/0 raw stdout byte-identical, evidence re-landed tee 1519B, full RUNNER self-Tee re-run PASS 202/202 criteria 1746->1753 controls 7/7 173.3s = qa/reconcile-all-R1966.log; matrix 202/1753 byte-identical 19440B; census --check DRIFT-CLEAN flags=0 tee=925; fingerprint CLEAN domains=5; GORD 402->404 two non-ours acks; waterline carry-note state 78744B = fold R519 next round-start; tech queue 6->5; export lag-fix this round: R1965 results row backfilled + tick row 1964->1966 + queue_tech_open 7->5)"
-  ],
-  [
-   "R1965",
-   "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite 7/7 (AC-SWP1..SWP7 pre-registered pre-code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass no-argv shell-capture produced pwsh-capture dialect evidence caught by cd7 census -> deleted + re-run via the runner's own Tee per R1924 precedent)"
-  ],
-  [
-   "R1964",
-   "R1964: pay reconcile cross-restart determinism suite 7/7 via 14th-case orphan takeover closeout (criteria AC-PRC1..PRC7 pre-registered pre-code by the crashed R1963; CLI scanner re-derives its whole verdict from the three on-disk databases: three-avatar three-granted anchor world with per-order conversion share entries and the notify tri-pair spectrum, full three-face close/reopen scan byte-identity, dangling-revoke + dead-sent tamper probes same codes same naming across the restart, post-restart fourth grant zero-cache recompute with the frozen anchor subset byte-identical, pure-read law, second-restart stability, hygiene; one takeover fix = conv-ref frozen-subset lens, sorted-prefix false-negative on content-addressed hex refs, criteria semantics unchanged; crashed ps-utf16 run1 artifact deleted, tee-dialect evidence re-made; RUNNER PASS 200/200 criteria 1732->1739 controls 7/7 175.1s = qa/reconcile-all-R1964.log; matrix 200/1739 --check byte-identical 19290B; census CENSUS-COMPLETE (both new files tee dialect); fingerprint CLEAN domains=5; GORD 397->402 five non-ours acks; ORD face reorg pattern-drift FLAG honestly noted with manual origin-main verification zero new BigDomain orders, baseline unchanged; tech consume 1 reseed 0 queue 8->7)"
-  ],
-  [
-   "R1962",
-   "R1962: member reminder authorization + read-face family cross-restart persist suite 7/7 (criteria AC-RMP1..RMP7 pre-registered pre-code by the crashed round; grant journal, budget arithmetic, idempotency keys, W10 dual-timepoint faces, due-scan idempotent re-entry, daily-cap day-roll clear, read-face snapshots across double close/reopen restarts, pure-read law, second-restart stability; RUNNER 199/199 criteria 1725->1732; matrix --check byte-identical; sentinel CLEAN domains=5; two-segment crash, third-segment takeover with live re-verify RUNNER PASS 199/199 controls 7/7 175.6s; fold R518 tail-7 78371->73036B 64 tokens zero-loss; DEC +2 acked non-ours D-20261014-08/C-20261014-01; GORD 395->397; tech consume 1 reseed 0 queue 8)"
-  ],
-  [
-   "R1960",
-   "R1960: member refund-recovery linkage cross-restart persist suite 7/7 (criteria AC-RRP1..RRP7 pre-registered pre-code; wired instant-converged world A/B + live contrast C, full three-piece close/reopen byte-identity, deterministic audit-key re-entry convergence, fresh wired refund on restarted instance with named-face zero-drift, pure-read law, second-restart stability; RUNNER 198/198 criteria 1718->1725; matrix --check byte-identical; sentinel CLEAN domains=5; evidence-path form pitfall honestly noted [suite_matrix --evidence resolves relative to cwd -> repo-root form])"
-  ],
-  [
-   "R1959",
-   "R1959: ledger growth-archive read-family cross-restart persist suite 7/7 (criteria AC-GAP1..GAP7; two-resident two-month world, every subscription binding exactly one real spend tx, month-window page sections with AIGC label + config-verbatim disclaimer/price_note, seven-gate probe batch same codes on both instances all before any write, two-piece close->reopen byte-identical battery with in-db frozen-ts row comparison, continuation with the 2099-01 page frozen byte-identical = in-month window isolation zero new-data penetration, append-only frozen anchors + dup-before-spend replay gate, pure-read law, third instance stable + hygiene; two same-round harness fixes honestly noted, criterion semantics unchanged; RUNNER 197/197 criteria 1711->1718 (SUITES 196->197); DEC flat; GORD flat; tech consume 1 reseed 1 (member reminder persist seed AC-RMP zero-occupied))"
-  ],
-  [
-   "R1958",
-   "R1958: ledger incentive read-family cross-restart persist suite 7/7 (criteria AC-ICP1..ICP7; anchor world W1 budget-binding 410->400 exact pro-rata integer landing 147/127/126 zero rounding loss + W2 collar-binding 10^6->150, four-element snapshot (window projection + pool/balances + incentive tx credit join + settled_utc format law), two-piece face+ledger close -> reopen byte-identical battery with in-run frozen-ts full-row comparison, seven-gate probe batch same codes same order on both instances all before any write, W3 continuation zero-cache recompute (pool 1210 = 2000-790, win rows 2->3), frozen anchors append-only + replay gates, pure-read law, third instance stable + hygiene (three source files sha-proven, zero UPDATE machine-checked, no incentive key in shipped config); RUNNER 196/196 criteria 1704->1711 (SUITES 195->196); DEC 3 new tokens judged all-HQ-face knowledge-only (D-20261014-05/06/07); GORD +1 non-ours ack (393->394); fold R516 post-closeout tail-5; tech consume 1 reseed 1 (lobby event-store persist seed, AC-LBP zero-occupied)"
-  ],
-  [
-   "R1957",
-   "R1957: ledger clawback wiring read-face cross-restart persist suite 7/7 (AC-CKP1..CKP7; six-order world, close->same-db reopen byte-identical battery, gate codes cross-restart, wired close_refund continuation, frozen anchors, pure-read law, third instance stable) + RUNNER 195/195 criteria 1697->1704 + matrix x2 + census DRIFT-CLEAN + fingerprint CLEAN + fold R515 78783B->73108B"
-  ],
-  [
-   "R1956",
-   "R1956: ledger proposal cross-restart persist suite 7/7 (AC-PLP1..PLP7; two-piece restart, memorial certificates persist via collectibles public API, twelve restart-surviving gates same-code, crossing award + new registration post-restart continuation, frozen prefix rows, pre-award idempotence across restart, zero-token structure law, RUNNER 194/194 criteria 1690->1697); fold R514 executed at round start (state 81030B -> 73825B); tech consume 1 reseed 1 (pay reconcile persist seeded; next FIFO head = ledger clawback persist)"
-  ],
-  [
-   "R1955",
-   "R1955: ledger reports cross-restart persist suite 7/7 (AC-RPP1..RPP7; two-piece restart, immutable three-table persistence, twelve restart-surviving gates same-code, continuation recompute, frozen prefix rows, RUNNER 193/193 criteria 1683->1690; one same-round claim-row erratum honestly noted); tech consume 1 reseed 1 (refund-recovery persist seeded; next FIFO head = ledger proposal persist)"
-  ],
-  [
-   "R1954",
-   "ledger metered cross-restart persist suite 7/7 (AC-MTP1..MTP7; two-piece restart, credit-counter persistence core, restart-surviving gates, continuation recompute, frozen immutable rows, RUNNER 192/192 criteria 1676->1683) + crashed-round orphan-payload takeover closeout (eleventh case: fold R513 integrity verified, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
-  ],
-  [
-   "R1953",
-   "ledger sistercity cross-restart persist suite 7/7 (AC-SCP1..SCP7; two-piece restart, thirteen restart-surviving gates incl the persisted-settlement replay gate E_SC_SETTLED and the no-disclaimer constructor gate, frozen anchor rows, RUNNER 191/191 criteria 1669->1676) + crashed-round orphan-payload takeover closeout (tenth case: dialect normalization per R1884 capture law, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
-  ],
-  [
-   "R1952",
-   "ledger festival cross-restart persist suite 7/7 (AC-FCP1..FCP7; three-piece restart, eleven restart-surviving gates incl the collectibles UNIQUE backstop re-probe, commemorative first-purchase linkage, frozen anchor rows, RUNNER 190/190 criteria 1662->1669) + crashed-round orphan-payload takeover closeout (probe invocation bug corrected: fingerprint five-domain CLEAN rc 0; census DRIFT-CLEAN; live suite re-verify rc 0)"
-  ],
-  [
-   "R1951",
-   "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
-  ],
-  [
-   "R1950",
-   "ledger showroom cross-restart persist suite 7/7 (AC-SHWP1..SHWP7; four-piece restart, twelve restart-surviving gates, frozen prefix rows, RUNNER 188/188 criteria 1648->1655)"
-  ],
-  [
-   "R1949",
-   "ledger studio cross-restart persist suite 7/7 (AC-STP1..STP7; three-piece restart, twelve restart-surviving gates, renewal advance booking, frozen prefix rows, RUNNER 187/187 criteria 1641->1648)"
-  ],
-  [
-   "R1948",
-   "ledger honorcert cross-restart persist suite 7/7 (AC-HCP1..HCP7; three-piece restart, incremental heal across restart, permanent-certificate law survives board move + restart, second event namespace, RUNNER 186/186 criteria 1634->1641)"
-  ],
-  [
-   "R1947",
-   "ledger effects cross-restart persist suite 7/7 (AC-EFP1..EFP7; two-piece restart, 9 gate probes, three-lane frozen faces, pre-restart credits keep serving, RUNNER 185/185, fold R511)"
-  ],
-  [
-   "R1946",
-   "ledger apimarket cross-restart persist suite 7/7 (AC-AMP1..AMP7; four-piece restart, 10 gate probes, frozen rows, RUNNER 184/184)"
-  ],
-  [
-   "R1945",
-   "R1945 ledger devshare cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940-seeded row; criteria AC-DSVP1..AC-DSVP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (two registered developers with metered usage quota 12/5, explicit w1 + usage-derived w2 both total 49, cross-face UGC w1 same-caller-id 30 namespace anchor, five fail-closed gates rejected zero-drift) -> five-piece close/reopen with the read battery byte-identical (windows history full dump + both dev boards + five balances, persisted settled_utc rows zero in-memory drift) -> restart-surviving gates identical codes -> post-restart real-path continuation (persisted api_key keeps metering, quota 12->15, w3 pays 40, same-id UGC w3 settles 10 independently = namespace law survives the restart, SQL cross seven pool:share debit legs) -> frozen history rows + namespace-separate dup gates -> pure-read law -> third-instance stability; two same-round errata honestly noted (balance anchor missed the buy_credits developer debit into pool:reserve; digest cross-second drift = unmasked spend_tx hex ids + minute_window clock strip, mask widened to three families per the R1902 banded-projection law); RUNNER PASS 183/183 criteria 1613->1620 controls 7/7 318.1s = qa/reconcile-all-R1945.log (SUITES 182->183); matrix regen 183/1620 green --check byte-identical (17810 bytes); census CENSUS-COMPLETE; tech consume 1 reseed 1 (showroom persist seeded; next FIFO head = apimarket persist)."
-  ],
-  [
-   "R1944",
-   "R1944 ledger settlement cross-restart persist suite 7/7 (P2 tech FIFO head = the R1943 closeout pointer; criteria AC-SEP1..AC-SEP7 pre-registered in tech.md before code): product face = settlement.py optional sqlite persistence mirror (db_path=None default pure-memory path byte-identical, minors R1939 precedent; append-only st_windows/st_claims, zero UPDATE) + read family manifest_view/claims_view/last_window_id + close with E_ST_CLOSED post-close write rejection. Three-instance world on the real product path: anchor (two-window hash chain + three claims bound to manifest ids, battery sha16 1a804c0ff3f3dcf6, SQL cross 2/3) -> close/reopen same db_path with the read family byte-identical (zero in-memory drift) -> five fail-closed gate probes surviving the restart (dup window/dup claim E_ST_PERIOD_DUP, unknown-party/unknown-period/over-limit E_ST_BAD_INPUT, rows frozen) -> real-path continuation: third window prev_id == pre-restart last_window_id (the hash-chain anchor persistence core proof), new claim + verify True, rows 3/4 -> frozen pre-restart windows byte-identical to anchor snapshots + handed-out copies still verify cross-restart -> pure-read law -> third-instance reopen == second end-state + E_ST_CLOSED post-close write rejection + default-path SettlementFace() smoke (zero db files) + hygiene (pure ASCII, zero network imports, zero UPDATE, config sha unchanged, world outside repo); existing ledger-settlement AC-ST1..ST7 7/7 zero regression; RUNNER PASS 182/182 criteria 1606->1613 controls 7/7 405.8s = qa/reconcile-all-R1944.log; matrix regen 182/1613 green --check byte-identical; census DRIFT-CLEAN; fingerprint CLEAN domains=5; evidence six sections qa/settlement-persist-R1944.log, driver src/os/evidence_R1944.py; five-silence: DEC token-diff zero-new, GORD 275<376 archival shrink baseline updated, daily reconcile already in-plate; tech consume 1 reseed 1 (studio persist seeded, queue_tech_open 10->10, next FIFO head = devshare persist)."
-  ],
-  [
-   "R1943",
-   "R1943 ledger identity cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1942 closeout pointer; criteria AC-IDP1..AC-IDP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (four-product identity registry + private-room month-10 rental + three permanent claims, all four spends SQL-crossed, digest 7ae19bac6698a5b0) -> reverse-order four-piece close/reopen with the profile/holder battery byte-identical (pure-value read faces, zero clock echo) -> fifteen restart-surviving fail-closed gates (incl. insufficient-balance via the wrap-default E_ID_BAD_ARGS identity-domain surface law) -> post-restart real-path continuation (bob advance renewal month 11 + carol gold-crown claim, both real spend txs, zero-cache recompute) -> frozen registry/occupancy/inventory faces + idempotent re-register + taken gate -> pure-read law -> third-instance stability; two same-round probe-scope errata honestly noted (pool expectation reflow law; dup probe target = own held cosmetic, first-claim-by-another-account legitimately succeeds); claim-row anchor-position erratum repaired same window via triple-assert script; RUNNER PASS 181/181 criteria 1599->1606 controls 7/7 281.2s = qa/reconcile-all-R1943.log (census DRIFT-CLEAN); matrix regen 181/1606 green --check byte-identical (17633 bytes); tech consume 1 reseed 1 (honorcert persist seeded, queue_tech_open 10->10, next FIFO head = settlement persist)."
-  ],
-  [
-   "R1942",
-   "R1942 ledger props cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1941 closeout pointer; criteria AC-PSP1..PSP7 pre-registered in tech.md before code, with two same-round suite-side probe-scope errata honestly noted: the bad-ref probe needed count=1 to actually reach the ref gate because the product validation order checks count>=1 before the ref, and the freeze comparison wrongly sliced count_credits into the provenance key set - fixed to the five provenance keys excluding count_credits; first run 5/7 -> fixed -> green; R1776 probe-scope precedent family). Double-run stdout byte-identical sha16 748340e88482cdb8. Three-instance world on the real product path (Ledger + PropsFace, props_inventory single table WAL, zero schema touch = fingerprint sentinel CLEAN domains=5): anchor (four purchase spectrum alice hat_gold@15 + jetpack count=3@20 + bob flare count=2@10 with consume to 1 + carol scarf_silk@12, each bound to a real spend tx with SQL cross type=spend + debit leg 4/4; balances 265/490/388/18857; counts inv=4 spend-tx=4) -> close/reopen byte-identical battery replay (inventory replays stored bound_spend_tx/count_credits, balance replays ledger_entries = zero in-memory drift) -> eight restart-surviving gate probes all-reject same codes with frozen counts (cosmetic-consume, over-consume, unknown-item, held-kind drift, unknown-kind, bad-ref, count=0, plus carol over-budget E_NEGATIVE_BALANCE zero charge zero grant) -> real-path continuation (carol new lantern count=4 bound to a new real spend tx; alice jetpack consume 2 then stack re-buy to 2; bob flare consume to 0 then stack re-buy to 3; zero-cache recompute with balances 245/480/363/18912 and counts inv 4->5 spend-tx 4->7) -> frozen provenance faces (anchor rows' inv_id/account/item/kind/bound_spend_tx/granted_utc byte-frozen across restart x continuation; stack rows move count_credits only via product verbs = the stack path only UPDATEs count_credits, provenance stays first-purchase-bound) + dup gate E_PROP_DUP zero charge -> pure-read law -> third-instance stability + config sha unchanged + pure ASCII + zero network imports + world tmp outside repo. RUNNER PASS 180/180 criteria 1592->1599 controls 7/7 282.3s = qa/reconcile-all-R1942.log (ledger-props-persist seat; census DRIFT-CLEAN flags=0 files=1371 tee=869 baselined=502; fingerprint CLEAN domains=5); matrix 180/1599 green --check byte-identical (17547 bytes); evidence six-section qa/props-persist-R1942.log via src/os/evidence_R1942.py; tech consume 1 reseed 1 (effects persist seeded with same-day dedup scans: registry zero effects-persist seat + AC-EFP git-grep rc=1 + base-suite close hits all SQL-probe/cleanup non-restart = true-activity candidate; next FIFO head = ledger identity persist; post-closeout watermark ~79.6KB over the 78500B line = fold R510 adjudication due at next round start)."
-  ],
-  [
-   "R1941",
-   "R1941 ledger companion cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940 closeout pointer; criteria AC-CMP1..CMP7 pre-registered in tech.md before code, with the same-round pool-expectation erratum 19000->19330 and 19090->19420 = the ledger spend counter-leg flows back to the pool, product-behavior orthodoxy cross-attested by the ads seat 17150 = 20000-3000+150; R1883 AC-PN27 same-round pen-slip precedent; first run 5/7 -> fixed -> green). Double-run stdout byte-identical sha16 dff152fd13809909. Three-instance world on the real product path (Ledger + SecGate lobby-product reference injection + CompanionFace): anchor (jan passes alice/bob fee 120 + feb pass carol fee 90 each bound to one real spend tx; dialogue spectrum alice two archived rounds with same-kind memories twice = append-not-unique + bob one round + carol feb one round = 8 structural ai_label rows; can_ five probes a/b-jan True, c-jan False, c-feb True, a-feb False; transcript windows 4/2/0/2; memory views 2/0/0; subs views 1/1/1; balances 180/380/110/19330; five gate probes all-reject incl. gate-fault = injected fault-gate face rebuilt on the same db fails closed; zero drift across the probe batch) -> close/reopen byte-identical (created_utc = stored values, zero in-memory drift) -> restart-surviving gates -> real-path continuation (carol buys the missing jan pass bound to a real spend tx with SQL cross type=spend + debit leg, denied->allowed flip proven, two new rounds + two memory appends, counts subs 3->4 msgs 8->12 memories 2->4 spend-tx 3->4, balances 180/380/20/19420) -> frozen faces (SQL full-row snapshots of all pre-existing rows byte-frozen incl. granted_utc/created_utc/content_json) + dup/denied/content gates across restart -> pure-read law -> third-instance stability. RUNNER PASS 179/179 criteria 1585->1592 controls 7/7 304.7s = qa/reconcile-all-R1941.log (ledger-companion-persist seat 0.8s, census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 179/1592 green --check byte-identical (17468 bytes); state.json EOL bare-LF repair at round start (25 lines -> 0, 74422B predicted==actual); evidence six-section qa/companion-persist-R1941.log via src/os/evidence_R1941.py; tech consume 1 reseed 1 (apimarket persist seeded with same-day dedup scans: registry zero apimarket-persist seat + AC-AMP git-grep rc=1 + base-suite close hits all cleanup/probe closes non-restart = single-Ledger true-activity candidate; next FIFO head = ledger props persist)."
-  ],
-  [
-   "R1940",
-   "R1940 ledger ads ad-slot cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1939 closeout pointer; criteria AC-ASP1..ASP7 pre-registered in tech.md before code) + crashed-round orphan-payload takeover closeout (eighth case of the R1937 lineage): the crashed R1940 attempt left all eight payload faces on disk (suite + registration + claim line + regen matrix + six-section evidence + RUNNER carrier + fold R509 already done at round start) with zero failed-run artifacts and only the closeout missing; this round live re-verified (suite double-run sha16 fe8a6f5962e1be68 both runs anchor-matching the evidence record, matrix 178/1585 --check byte-identical 17379B, census DRIFT-CLEAN, fingerprint CLEAN domains=5) and closed out. Three-instance world: anchor (three registered ad units screen/naming/splash + carousel three-advertiser concurrency + naming/splash exclusives, lineup four-window read faces pinned, five gate probes rejected zero-charge, digest f8262014291ca748) -> three-piece reverse-order close/reopen battery byte-identical -> five restart-surviving gates -> post-restart real-path continuation (carol books the freed carousel window + a freed naming window, both bound real spend txs via SQL cross, zero-cache recompute, digest f731c355e29e84c5) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; RUNNER PASS 178/178 criteria 1578->1585 controls 7/7 268.3s = qa/reconcile-all-R1940.log; fold R509 honored (carried by the crashed attempt; archive-preop 79330B verified on disk); tech consume 1 reseed 1 (devshare persist seeded via same-day dedup pre-checks, next FIFO head = ledger companion persist); suite-only round zero product bytes"
-  ],
-  [
-   "R1939",
-   "R1939 minors guardian cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1938 closeout pointer; criteria AC-MGP1..MGP7 pre-registered in tech.md before code, with the AC-MGP5 same-window erratum = AC-W7 re-gate-first law, R1883 precedent) + crashed-round orphan-payload takeover closeout (seventh case of the R1937 lineage): the crashed R1939 attempt left all eight payload faces on disk with zero failed-run artifacts; this round live re-verified (suite stdout line-for-line identical to the evidence record with all three battery/report/instance digests matching, double-run byte-identical, matrix 177/1578 --check identical; raw-byte sha difference = probe caliber CRLF-vs-LF, not a content difference) and closed out. Product face = minors.py optional sqlite persistence layer (+115 lines: db_path=None default pure-memory path byte-identical drift-free for the 19+70 wiring criteria; db-first mirror so a crash window cannot lose a day-cap spend row = fail-closed persistence for the sec.31 minor-protection compliance face; three tables mg_residents/mg_limits/mg_day_spend, append-only day ledger with UNIQUE(resident,date,ref)). Three-instance world: anchor (four-resident spectrum + 8 refused probes + battery sha16 90ac70fd49071b9e) -> close/reopen byte-identical -> 8 restart-surviving gates -> real-path continuation (kid1 700 recompute + kid3 fresh-resident persistence + adult refused) -> frozen history + re-gate-passing idempotent replay absorbed + conservative re-gate refusal + ref-domain bucket law -> pure-read law -> third-instance stability; RUNNER PASS 177/177 criteria 1571->1578 controls 7/7 290.2s = qa/reconcile-all-R1939.log (census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 177/1578 green --check byte-identical (17303 bytes); proposal-track BD-PROP-004 delivered (window 10-14~10-21, qa evidence monthly archive step); tech consume 1 reseed 1 (settlement persist seeded, next FIFO head = ledger ads persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1939) + checker VERDICT PASS after the fix"
-  ],
-  [
-   "R1938",
-   "R1938 ledger venue cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1937 closeout pointer; criteria AC-VNP1..VNP7 pre-registered in tech.md before code): three-instance world on the real product path - anchor (plaza capacity-2 concurrent rentals + storefront lease/terminate/re-lease spectrum, five gate probes rejected zero-charge, digest c8315611ef644e8f) -> two-piece reverse-order close/reopen with the is_rented/tenant_of/occupancy_ledger battery byte-identical (tick-parameterized pure-value read faces, zero clock echo, no frozen clock needed) -> five restart-surviving gates -> post-restart real-path continuation (freed plaza slot + termination-freed storefront window both re-rented, bound to real spend txs via SQL cross, zero-cache recompute) -> frozen faces + ref-blind dup gate + capacity gate across restart -> pure-read law -> third-instance stability; first-run one-anchor fail (world build missed register_venue, not a product defect) fixed same window, honestly noted; RUNNER PASS 176/176 criteria 1564->1571 controls 7/7 211.8s = qa/reconcile-all-R1938.log (census DRIFT-CLEAN); matrix regen 176/1571 green --check byte-identical (17228 bytes); tech consume 1 reseed 1 (identity persist candidate added, queue_tech_open 10->10, next FIFO head = minors persist).; export refresh collected the tick-row debt (the [:40] results cap dropped the tail tick row 'OSLoop 执行 tick', restored with r[0]==1938) + checker VERDICT PASS after the fix"
-  ],
-  [
-   "R1937",
-   "R1937 ledger expedite queue-face cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1936 closeout pointer, the R1935-reseeded claim; criteria AC-EPP1..AC-EPP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934/R1936 lineage - the crashed R1937 attempt left suite + registry row + claim + matrix regen + five-section double evidence + the completed fold R508 on disk with zero failed-run artifacts; this window re-verified live (suite re-run SUITE PASS 7/7 + matrix --check byte-identical 17149B 175/1564) then closed out. Three-instance world: anchor (alice five-credit consumption spectrum + bob single + carol empty spine, five gate probes rejected, battery digest 452e9dbb706f35f9, counts credits 6/jobs 4/spend-tx 6, balances 1903/570/400/17127) -> two-piece ef.close->led.close->reopen same db/config replays queue_snapshot + credits_view x3 + four balances byte-identical (persisted timestamps and spend_tx zero in-memory drift) -> five restart-surviving gates same codes zero-charge -> carol real-path purchase epp-c1 bound to a real spend tx (SQL cross type=spend debit leg) landing expedited FIFO position 3 with zero-cache recompute jobs 4->5 carol 400->375 digest 16ccc72771ecb450 -> frozen faces + idempotent old-ref replay across restart + consumed-credit resurrection refused -> pure-read law -> third instance stable; RUNNER PASS 175/175 criteria 1557->1564 controls 7/7 268.1s = qa/reconcile-all-R1937.log (SUITES 174->175, ledger-expedite-persist seat) + matrix regen 175/1564 green --check byte-identical + census DRIFT-CLEAN; evidence five sections qa/expedite-persist-R1937.log, LF-normalized single-writer driver src/os/evidence_R1937.py; fold R508 round-start honored (crashed round's own surgery verified on disk: R1932..R1936 ten lines 16589B -> 1 rolling line, 20 tokens zero-loss, archive verbatim + preop 81429B); tech consume 1 reseed 1 (queue_tech_open 10->10: expedite done -1 + ledger props persist seed +1 with dedup pre-checks, next FIFO head = ledger venue persist); export refresh collected the R1936 tick-row debt (results tick row 'OSLoop 执行 tick' restored with r[0]==1937) + self_drive synced to the checker recompute (W=13 sub=1) + checker VERDICT PASS; suite-only round, zero product bytes"
-  ],
-  [
-   "R1936",
-   "R1936 ledger observation cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1935 closeout pointer; criteria AC-OBP1..OBP7 pre-registered in tech.md before code): orphan-payload takeover closeout per the R1922/R1924/R1925/R1934 lineage - the crashed R1936 attempt left suite+registry+matrix+five-section evidence+the 2026-10-14 daily reconcile on disk with zero failed-run artifacts; this window re-verified live (suite re-run PASS + matrix --check byte-identical) and closed out. Three-instance world: anchor (four accounts, two strategies, alice single-permanent + bob pass window bound to real spend txs, four gate probes rejected, digest c184654e4fe640cb) -> two-piece reverse-order close/reopen with 13 read faces + 5 balances byte-identical (registered_utc persisted value, no clock echo) -> five restart-surviving gates -> post-restart real-path continuation with SQL cross-checks and zero-cache recompute -> frozen faces + window isolation -> pure-read law -> third-instance stability; RUNNER PASS 174/174 criteria 1550->1557 controls 7/7 251.4s = qa/reconcile-daily-20261014.log (dual carrier = the daily reconcile, sentinel ok + profile ok + census DRIFT-CLEAN); matrix regen 174/1557 green --check identical; tech consume 1 reseed 1 (venue persist candidate added, queue_tech_open 10->10, next FIFO head = ledger expedite persist). QA charter daily crawl W24 = Internet Advertising Administrative Measures (SAMR Order No. 72) official fulltext direct-captured into benchmarks + intelligence-wall W24 rows; benchmarks_refreshed=2026-10-14; smoke-R1936 log+png pair delivered; GORD one new row (@bm-c V3 refire receipt, BigStream family, acknowledged no-action, baseline 375->376)."
-  ],
-  [
-   "R1935",
-   "R1935 datasub cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1934 closeout pointer, the R1931-reseeded claim; criteria AC-DSP1..AC-DSP7 pre-registered in tech.md before code with two rulings: the read battery = nine read faces + four balances with full-envelope byte comparison while evidence digests mask the persisted-but-clock-written subscribed_utc and spend_tx fields (R1902 banded-projection law), and the restart carrier = the two-piece full-stack reverse-order close/reopen with a three-instance world): suite test_datasub_persist.py first run all green + double-run stdout byte-identical sha16 c620990d4f1170e8 - anchor world (two datasets monthly 99 ai=0 + quarterly 999 ai=1, four subscriptions across three accounts incl. ada two-window, three delivery rows incl. carol same-window redownload x2, pre-close gate probes all rejected, nine reads + four balances snapshot digest 47106cc3bb36c0a9, manual SQL five-table count cross registry 2 / subs 4 / deliveries 3 / spend-tx 4); close both pieces -> instance-2 same db/config replays all nine reads + four balances byte-identical (zero in-memory drift); seven gate probes all rejected with zero drift (dup window / dup purchase_ref / dup delivery_ref / not-subscribed / cross-period bad window / register conflict + idempotent re-register, counts and balances constant); post-restart real-path continuation (bob Q2 + ada Q1 each -999, carol redelivery zero-token, both new subs bound to real spend tx cross-proven type=spend + debit entry, derived faces recompute zero-cache quarterly subscriber 1->3 / mobility delivery 3->4 / carol 2->3 / reconcile quarterly billed 2997 balanced, balances ada 803 / bob 1002 / pool 17294); frozen faces + two-way zero cross-dataset permeation (descriptor bundle byte==anchor, untouched dave subscription_view frozen, reconcile mobility == anchor+1 delivery only, reconcile quarterly zero mobility permeation); pure-read law + third instance replays the post-continuation state byte-identical (digest 048c19a798da9f9f, five-table counts constant); hygiene config/datasub/ledger sha stable + SUITES row in-book + pure ASCII + zero network imports; RUNNER PASS 173/173 criteria 1543->1550 controls 7/7 243.7s = qa/reconcile-all-R1935.log (SUITES 172->173) + matrix regen 173/1550 green --check byte-identical 16970B + census DRIFT-CLEAN flags=0; evidence five sections qa/datasub-persist-R1935.log, LF-normalized single-writer driver src/os/evidence_R1935.py (R1932 template family); closeout pre-step: R1934 two-line indent disease 8->16 spaces fixed via the canonical eol --fix-indent --execute (73474->73490B, content_eq/json_eq double-proof, R1710 disease-family recurrence honestly noted); tech consume 1 reseed 1 (queue_tech_open 10->10: datasub done -1 + expedite persist seed +1, next FIFO head = ledger observation persist); suite-only round, zero product bytes"
-  ],
-  [
-   "R1934",
-   "R1934 tourstate cross-process cold re-derivation persistence suite 7/7 + orphan-payload takeover closeout (P2 tech FIFO head = the R1933 closeout pointer; orphan-adoption chain R1922/R1924/R1925 one more link: the crashed R1934 attempt left suite + registry row + claim line + two failed RUNNER runs on disk, all five payload faces verified live then committed by this takeover; the two deterministic RUNNER FAILs rooted in a pwsh-capture CRLF artifact (361400B) sitting in qa/ poisoning the live-tree census probe - artifacts deleted, census re-check DRIFT-CLEAN flags=0, full RUNNER re-run tee-native per the R1924 precedent; capture-method correction honestly noted: the first re-run with pipe capture re-offended the CRLF dialect and was caught by census on the spot, the second re-run went through the RUNNER argv[1] tee writer = canonical-capture-path judgment entered; suite test_tourstate_persist.py: tourstate is a pure stateless prep face (zero sqlite, zero file substrate) so the restart carrier is a fresh interpreter subprocess with a self-reentrant --worker flag (stdin single-line JSON in, stdout single-line JSON out, zero temp files): control anchor fresh-subprocess cold re-derivation both legs byte-identical + ids equal; three sequential fresh subprocesses mutually byte-identical == parent baseline (double-restart stability); verify True x2 across the process boundary (stdin JSON roundtrip zero semantic loss); three tampered variants all rejected E_TS_TAMPER by fresh subprocesses (tamper law survives the process boundary); bad-input probes E_TS_BAD_INPUT x3 cross-process deterministic; zero module-state drift (post-activity re-derivation == pre-window capture, original packets verify True, idempotent build-verify cycles); hygiene pure ASCII + zero network imports + tourstate.py sha256 unchanged suite-only round; SUITE 7/7 double-run byte-identical sha16 88c8e6a64e29d2e3; RUNNER PASS 172/172 criteria 1536 to 1543 controls 7/7 202.9s = qa/reconcile-all-R1934.log with the failrun1 evidence preserved (qa/reconcile-all-R1934-failrun1.log); matrix regen 172/1543 green --check byte-identical x2 16885B; census DRIFT-CLEAN; R1933 liveroom evidence 16-line CRLF to LF normalization committed same round (content byte-identical, R1884 dialect-law family); takeover fixup: the tourstate tech.md claim checkbox flipped to checked (crashed round left the done annotation but the box unflipped; after the flip the live queue count matches the in-row claim 9 to 10); five-silence: DEC one new token C-20261013-01 group workspace git-hygiene closeout adjudicated knowledge-only (own-repo hygiene compliant: state 70373B under the 78500B line, zero big files, zero media in git; baseline 308 to 309), GORD four new rows all BigStream MV family acknowledged no-action including the O-20261013-2245 cloud-unlock order (this division keeps zero cloud touchpoints, api=0; baseline 371 to 375); tech consume 1 reseed 2 queue_tech_open 9 to 10, next FIFO head ledger datasub persist (R1931 reseed)"
-  ],
-  [
-   "R1933",
-   "R1933 liveroom risk-control read-face family cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1931-reseeded claim pointed by the R1932 closeout; dedup pre-scan per the claim row: registry label full-form zero liveroom-persist variant + base-suite source scan test_liveroom.py zero close-reopen examples + AC-LRP prefix zero-occupancy; criteria AC-LRP1..AC-LRP7 pre-registered in state/queue/tech.md before code with three rulings: two-piece stack restart carrier (LiveRoomFace->Ledger close/reopen, the face owns its connection - R1898 precedent), three-session spectrum world (A closed full-history / B open mid-funnel / C zero-cohort honest empty), full-envelope byte comparison face (funnel/transcript/conversion_ledger carry zero timestamp echo - stronger than a projection band, no clock freezing needed); suite test_liveroom_persist.py: control anchor nine pre-close read snapshots + A funnel semantics + manual SQL three-table cross + transcript compliance spine (AI danmaku line carries [ai_label]) + conversion_ledger four-key rows each binding a real spend debit (bound debit sum 2980==total) + balances amy 510/cyd 1010 exact; stack close -> instance-2 same db/cfg reopen replays all nine reads byte-identical (9/9) with a same-param second read self-identical = zero in-memory drift; risk-control law survives the restart (closed-session writers E_LIVE_CLOSED x2, dup window E_LIVE_CONV_DUP zero-charge 510==510, anonymous danmaku E_LIVE_NOT_RESIDENT, unknown session read E_LIVE_UNKNOWN, probe batch left all four table counts and the spend count untouched); post-restart real-path injection on the open session recomputes the B faces zero-cache (entered 3/registered 2/converted 2/total 1490, transcript 6 lines, ledger 2 rows, spend count +1, cyd 20==1010-990) while the closed A and empty C faces stay byte-frozen to the pre-close snapshots; third instance replays the instance-2 final state byte-identically with A/C still equal to the original pre-close snapshots (restart x new-data double burden, zero drift); pure-read law (read battery leaves the four liveroom tables + spend count constant) + hygiene (liveroom.py/ledger.py sha256 double-proof unchanged - suite-only round, shipped config bytes unchanged, pure ASCII, zero network imports, registry row wired, tmp outside repo); SUITE 7/7 double-run byte-identical sha16 B2716DCD3992F0C9 rc 0/0; RUNNER PASS 171/171 suites criteria 1529->1536 controls 7/7 182.5s = qa/reconcile-all-R1933.log; matrix regen 171/1536 green --check byte-identical x2 (16801B); census DRIFT-CLEAN flags=0; fingerprint sentinel CLEAN domains=5; evidence qa/liveroom-persist-R1933.log five sections; tech consume 1 reseed 1 queue_tech_open 9->9 (minors guard read-face family persist seed, dedup pre-scan clean: registry minors/minors-wiring zero persist variant + test_minors.py zero close-reopen examples + AC-MGP zero-occupancy), next FIFO head by board order = tourstate state-face persist)"
-  ],
-  [
-   "1972",
-   "OSLoop 执行 tick"
-  ]
- ],
- "self_drive": {
-  "window": "2026-10-08..2026-10-14",
-  "window_days": 7,
-  "log_lines_in_window": 19,
-  "idle_fast_mention_lines": 0,
-  "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 4,
-  "proposals_total": 4,
-  "proposals_open": 2,
-  "queue_main_open": 6,
-  "queue_tech_open": 5,
-  "queue_explore_open": 10,
-  "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
- }
 }

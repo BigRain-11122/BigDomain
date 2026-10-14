@@ -1,0 +1,66 @@
+BigDomain QA smoke evidence - round R1974 - 2026-10-15 +08:00
+day work: (1) QA charter daily crawl for 2026-10-15 was delivered by
+R1973 earlier this same day (W25 = CAC Children Personal Information
+Network Protection Regulation, Order No.4, 29 articles, benchmarks
+3-place entry + intelligence-wall W25 dual rows, benchmarks_refreshed=
+2026-10-15); this round repairs the missing same-day evidence pair per
+the R1835 chain-continuation precedent - R1973 closed out without a
+smoke log/png (honest gap noted, not rewritten history); (2) product
+line = 20th-case orphan-payload takeover closeout: curation combined
+hot+cold dual board read face (boards_combined, criteria AC-CJ1..CJ7
+pre-registered in the explore.md claim row before the code existed),
+taker re-verified three-green personally: suite double-run SUITE PASS
+7/7 exit 0/0 stdout byte-identical sha16 cbdc791f40dc8a21 (subprocess
+byte capture - PS redirect dialect trap avoided), full RUNNER battery
+own re-run PASS 204/204 suites green + reconcile controls 7/7 168.9s
+(tee to %TEMP% outside the repo, crashed-round evidence mtime
+preserved), suite_matrix --check PASS byte-identical 19632 bytes /
+204 suites / 1776 criteria; the crashed round's own first battery run
+FAIL (2 assertions: cd7-live-real-tree + reconcile-daily-census =
+self-referential in-flight-evidence race, resolved in its -2/-3
+re-runs 186.4s/184.1s) diagnosed as a non-payload defect; (3)
+five-sill deltas: DEC +2 new owner tokens (D-20261015-01 receipt
+writeoff batch + D-20261015-02 S0 stash-bridge bigmoney structural
+fix - both non-BigDomain execution faces, acknowledged no-action,
+baseline 328->335 rows, token set merged); GORD 405->413 eight new
+rows all BigStream/bm-b/bm-c/hub mainAGENT faces (sole subsidiary-
+wide row = O-20261014-2250 patrol-fleet order: group side already
+built and deployed, the bigdomain domain seat reads existing files,
+zero new artifacts -> acknowledged; O-20261014-1855 night order
+already receipted by R1971, same-number non-new); ORD FLAG adjudicated
+honestly: the current tail 2026-09-28 22:1x is the historical
+co-governance order row (done R534, not a new order); the 2026-10-14
+16:2x baseline was R1962's ack of two never-committed orders rows
+written by an external window, which have since vanished from disk
+(external writer's own withdrawal, not our product; the R1962 receipt
+lives in the state log, zero order content lost from our records) ->
+baseline re-anchored to the current tail token.
+
+--- (1) daily crawl face (charter v1.0, group orders L254 2026-09-28) ---
+today's direct-capture source = W25 children-PI regulation (delivered
+by R1973 ~00:1x this same day: benchmarks sec1 children block + sec3
+source row + sec4 record row + intelligence-wall W25 main + conclusion
+dual rows; benchmarks_refreshed=2026-10-15, next 7-day window
+2026-10-22). This round adds the missing evidence pair only; zero
+re-crawl (already-run-not-rerun law, no fabricated activity).
+
+--- (2) product line (P3 explore head: combined dual board) ---
+payload = curation.py boards_combined() single-envelope read face: hot
+zone = displayed_total>0 rows re-ranked 1..M preserving the parent
+hot_board() (-displayed_total, curation_id) order, cold zone =
+zero-heat rows re-ranked 1..K in curation_id ASC, disjoint by
+construction, union == the single-source snapshot row set (M+K==N),
+envelope keys {hot_board, cold_board, totals, disclaimer}, every row
+keeps its ai_label; reconcile_all SUITES + ledger-curation-combined
+(7 criteria); matrix regen 204 suites / 1776 criteria byte-identical.
+Evidence on disk: qa/curation-combined-R1974.log (SUITE PASS 7 checks,
+double-run byte-identical), qa/reconcile-all-R1974-2.log and -3.log
+(crashed-round green re-runs), %TEMP%/bd-r1974-taker-reconcile.log
+(taker own re-run RUNNER PASS 204/204 168.9s, outside the repo).
+
+--- (3) self-check four items vs charter ---
+daily crawl = W25 delivered this day (R1973); benchmark refreshed =
+2026-10-15 (next 7-day window 2026-10-22; charter 15h cap met same
+day); research chain = A-grade 1-try capture zero negative (R1973
+record); signal wall = W25 dual rows in place (main + conclusion).
+evidence pair = this log + rendered png.

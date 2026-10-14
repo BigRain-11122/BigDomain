@@ -844,6 +844,28 @@ SUITES = [
     # (AC-CZP1..CZP6 pre-registered in state/queue/explore.md).
     ("ledger-curation-coldpersist",
      os.path.join("ledger", "test_curation_coldpersist.py"), 6),
+    # R1974 curation combined hot+cold dual board read face
+    # (R1972-reseeded explore-queue row claimed by R1974): one
+    # envelope presenting the heat board and the cold shelf side
+    # by side - the hot/cold complementary law made visible in a
+    # single read. Single derivation source = ONE live
+    # hot_board() call (reference face, not a copy): hot zone =
+    # heat>0 rows re-ranked 1..M with the parent
+    # (-displayed_total, curation_id) order preserved by the
+    # filter, cold zone = zero-heat rows re-ranked 1..K in
+    # curation_id ASC (the cold_board law); zones disjoint by
+    # construction, union == full snapshot row set (M+K==N),
+    # envelope keys/totals/disclaimer contract, zero-curation
+    # honest empty double board, all-hot and zero-heat boundary
+    # worlds, double-read byte identity, curation+showcase
+    # face close -> reopen over same dbs with the derived read
+    # byte-identical to the pre-close snapshot, ledger_tx and
+    # registry row-count invariance across every read, combined
+    # face source pure ASCII + zero UPDATE + zero network
+    # imports
+    # (AC-CJ1..CJ7 pre-registered in state/queue/explore.md).
+    ("ledger-curation-combined",
+     os.path.join("ledger", "test_curation_combined.py"), 7),
     # R1926 curation registry / tour read-face family
     # cross-restart persistence example window (R1923-reseeded
     # tech-queue row claimed by R1926): active_curations

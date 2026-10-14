@@ -1,0 +1,21 @@
+=== run 1 (subprocess capture, rc=0) ===
+PASS AC-CJ1: envelope keys/totals/disclaimer exact, ai_label kept, mixed world 2/1/3, zero-curation world honest empty
+PASS AC-CJ2: zones disjoint, union==full board, M+K==N==3, hot order heat-DESC/id-ASC ranks 1..2, cold id-ASC rank 1
+PASS AC-CJ3: hot rows key-equal to hot_board rows, cold rows byte-equal to cold_board rows, zero direct showcase reads in the combined face source
+PASS AC-CJ4: all-hot world cold empty hot==N, zero-heat world hot empty cold==N (AC-CB mirror law)
+PASS AC-CJ5: double read byte-identical; curation+showcase faces closed and reopened over same dbs, combined read byte-identical to pre-close snapshot
+PASS AC-CJ6: ledger_tx 0==0, curations 3==3, members 4==4 across every combined read
+PASS AC-CJ7: combined face source pure ASCII, zero UPDATE, zero network imports (4 import lines), prior 6/6 green
+SUITE PASS 7 checks
+
+=== run 2 (subprocess capture, rc=0) ===
+PASS AC-CJ1: envelope keys/totals/disclaimer exact, ai_label kept, mixed world 2/1/3, zero-curation world honest empty
+PASS AC-CJ2: zones disjoint, union==full board, M+K==N==3, hot order heat-DESC/id-ASC ranks 1..2, cold id-ASC rank 1
+PASS AC-CJ3: hot rows key-equal to hot_board rows, cold rows byte-equal to cold_board rows, zero direct showcase reads in the combined face source
+PASS AC-CJ4: all-hot world cold empty hot==N, zero-heat world hot empty cold==N (AC-CB mirror law)
+PASS AC-CJ5: double read byte-identical; curation+showcase faces closed and reopened over same dbs, combined read byte-identical to pre-close snapshot
+PASS AC-CJ6: ledger_tx 0==0, curations 3==3, members 4==4 across every combined read
+PASS AC-CJ7: combined face source pure ASCII, zero UPDATE, zero network imports (4 import lines), prior 6/6 green
+SUITE PASS 7 checks
+
+=== verdict: PASS (rc 0/0, byte-identical=true) ===

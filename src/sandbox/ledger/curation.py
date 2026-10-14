@@ -443,3 +443,55 @@ class CurationFace:
                          "member_count": row["member_count"],
                          "displayed_total": row["displayed_total"]})
         return {"cold_board": rows, "disclaimer": self.disclaimer}
+
+    def boards_combined(self):
+        """Combined hot+cold dual board (R1974): one envelope that
+        presents the heat board and the cold shelf side by side -
+        the hot/cold complementary law made visible in a single
+        read (AC-CJ1..CJ7 were registered in the explore-queue
+        seed row before this code existed; honesty law). Pure
+        read with zero token movement and zero writes. The single
+        derivation source is ONE live hot_board() call (reference
+        face, not a copy): the hot zone is exactly the heat>0
+        rows of that snapshot, re-ranked 1..M with the parent
+        (-displayed_total, curation_id) order preserved by the
+        filter; the cold zone is exactly the zero-heat rows,
+        re-ranked 1..K in curation_id ASC (the cold_board law).
+        The two zones are disjoint by construction and their
+        union is the full snapshot row set (M+K==N) - the
+        complement law enforced on the single source, zero
+        second aggregation engine, zero direct showcase reads,
+        zero cached counters. Zero RNG, zero time keys, zero
+        insertion-order keys; the envelope carries totals and
+        the standing disclaimer, and every row keeps its
+        ai_label."""
+        board = self.hot_board()
+        hot_rows = [row for row in board["hot_board"]
+                    if row["displayed_total"] > 0]
+        cold_rows = [row for row in board["hot_board"]
+                     if row["displayed_total"] == 0]
+        hot_rows.sort(key=lambda r: (-r["displayed_total"],
+                                     r["curation_id"]))
+        cold_rows.sort(key=lambda r: r["curation_id"])
+        hot_out = []
+        for rank, row in enumerate(hot_rows, start=1):
+            hot_out.append({"rank": rank,
+                            "curation_id": row["curation_id"],
+                            "title": row["title"],
+                            "ai_label": row["ai_label"],
+                            "member_count": row["member_count"],
+                            "displayed_total": row["displayed_total"]})
+        cold_out = []
+        for rank, row in enumerate(cold_rows, start=1):
+            cold_out.append({"rank": rank,
+                             "curation_id": row["curation_id"],
+                             "title": row["title"],
+                             "ai_label": row["ai_label"],
+                             "member_count": row["member_count"],
+                             "displayed_total": row["displayed_total"]})
+        return {"hot_board": hot_out,
+                "cold_board": cold_out,
+                "totals": {"hot_count": len(hot_out),
+                           "cold_count": len(cold_out),
+                           "total": len(hot_out) + len(cold_out)},
+                "disclaimer": self.disclaimer}
