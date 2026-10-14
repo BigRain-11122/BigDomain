@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-14T18:10:35+08:00",
+  "export_ts": "2026-10-14T19:12:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1964: pay reconcile cross-restart determinism suite on-chain via 14th-case orphan takeover closeout (crashed R1963 claimed + wrote the suite, run1 evidence 6/7; one evidence-dialect lens fix [conv-ref frozen-subset] semantics unchanged; SUITE 7/7 double-run sha16 9ea7773585f52e3a; RUNNER 200/200 criteria 1732->1739 controls 7/7 175.1s; matrix 200/1739 byte-identical; census CENSUS-COMPLETE; fingerprint CLEAN domains=5)",
-    "latest_artifact": "qa/pay-reconcile-persist-R1963.log + qa/reconcile-all-R1964.log + src/sandbox/pay/test_pay_reconcile_persist.py (2026-10-14)",
-    "next_milestone": "P2 tech queue next persist seat FIFO head (pay sweep_expired / lobby events family); within 48h"
+    "current": "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite on-chain (AC-SWP1..SWP7 pre-registered before code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass ran no-argv shell-capture mode, its Start-Process-redirected evidence file landed pwsh-capture dialect and cd7 census caught it [RUNNER FAIL 200/201] -> deleted + re-run via the runner's own Tee per R1924 precedent, all green)",
+    "latest_artifact": "src/sandbox/pay/test_pay_sweep_persist.py + qa/pay-sweep-persist-R1965.log + qa/reconcile-all-R1965.log (2026-10-14)",
+    "next_milestone": "P2 tech queue next persist seat FIFO head (lobby event-face family, tech L257); within 48h"
   },
   "depts": [
     {

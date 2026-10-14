@@ -1983,6 +1983,17 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("pay-reconcile-persist", os.path.join(
         "pay", "test_pay_reconcile_persist.py"), 7),
+    # pay-sweep-persist (R1965 claim): the timeout-close sweep is a
+    # durability seam - closed-by-timeout orders, drained-window
+    # idempotency, the closed-rebuy bucket law and the grant read
+    # faces survive a close -> reopen on the same databases
+    # byte-identically; a live sweep after the restart closes only
+    # in-window rows while every pre-restart row stays frozen
+    # (append-only prefix law); the read battery is pure and
+    # double-run stable across two restarts (AC-SWP1..SWP7
+    # pre-registered in state/queue/tech.md).
+    ("pay-sweep-persist", os.path.join(
+        "pay", "test_pay_sweep_persist.py"), 7),
 ]
 
 FAILS = 0

@@ -1,0 +1,25 @@
+== pay sweep persist evidence R1965 (AC-SWP1..SWP7) ==
+== run 1 (rc=0) ==
+PASS AC-SWP1: empty-window=0 full=3 drain=0 spectrum ok=True grants A=1 B/C/D=0/0/0 counts={'orders': 4, 'receipts': 1, 'grants': 1}
+PASS AC-SWP2: byte-identity=True drained-persists=0
+PASS AC-SWP3: new-bucket id=e34f7c93db821c62 created=True granted=True grants-D=1 old-closed-frozen=True
+PASS AC-SWP4: sweep=1/0 F=closed others-stable=True grants A=1 F=0
+PASS AC-SWP5: prefix-frozen=True rows orders=4/6 receipts=1/2 grants=1/2
+PASS AC-SWP6: second-restart-identity=True double-run=True counts-stable=True empty-probe=0
+PASS AC-SWP7: ascii=True net-imports=[] thawed=[] results-so-far=6
+---- pay sweep persist acceptance: 7/7 passed
+== run 2 (rc=0) ==
+PASS AC-SWP1: empty-window=0 full=3 drain=0 spectrum ok=True grants A=1 B/C/D=0/0/0 counts={'orders': 4, 'receipts': 1, 'grants': 1}
+PASS AC-SWP2: byte-identity=True drained-persists=0
+PASS AC-SWP3: new-bucket id=e34f7c93db821c62 created=True granted=True grants-D=1 old-closed-frozen=True
+PASS AC-SWP4: sweep=1/0 F=closed others-stable=True grants A=1 F=0
+PASS AC-SWP5: prefix-frozen=True rows orders=4/6 receipts=1/2 grants=1/2
+PASS AC-SWP6: second-restart-identity=True double-run=True counts-stable=True empty-probe=0
+PASS AC-SWP7: ascii=True net-imports=[] thawed=[] results-so-far=6
+---- pay sweep persist acceptance: 7/7 passed
+== verdict ==
+run1_sha256=f00c4ea85fa213db4124d66bd3c2de09b57a96cff7544e1db83eae57d897bae0
+run2_sha256=f00c4ea85fa213db4124d66bd3c2de09b57a96cff7544e1db83eae57d897bae0
+byte_identical=True
+exit_1=0 exit_2=0
+VERDICT: PASS - double-run byte-identical, 7/7 both
