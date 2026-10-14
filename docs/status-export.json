@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-15T07:07:40+08:00",
+ "export_ts": "2026-10-15T07:29:02+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "已交付数据集订阅覆盖榜读面（coverage_board 纯读派生：户数去重律+订阅/交付三计数+三键决定序；全套回归 211/211 绿）",
-  "latest_artifact": "qa/datasub-coverage-R1982.log（2026-10-15）",
-  "next_milestone": "下一窗：覆盖榜跨重启持久化例窗（explore 队列已入列·后继队头展示橱窗撤展统计读面），窗 ≤48h"
+  "current": "已交付展示橱窗撤展统计读面（stats_board 纯读派生：注册表 dense+净流恒等 displayed_now==places−retracts+三键决定序+跨面对账 showcase_view；全套回归 212/212 绿）",
+  "latest_artifact": "qa/showcase-stats-R1983.log（2026-10-15）",
+  "next_milestone": "下一窗：展示橱窗统计榜跨重启持久化例窗（explore 队列已入列·后继队头 lobby 套件 stdout 确定性硬化窗），窗 ≤48h"
  },
  "depts": [
   {
@@ -367,14 +367,18 @@
    "R1982 datasub coverage board read face delivered (P3 explore FIFO head; AC-CVB1..CVB7 pre-registered pre-code) - DatasetSubscriptionFace.coverage_board registry-keyed pure-read derived board: distinct-household subscribers (same account two windows = one household), subscription rows == dataset_view cross-face reconciliation, delivery counts, zero-subscription datasets honest zero rows, three-key deterministic order (2==2 household tie broken by 3>2 subscription rows, zero group id-ASC); three-green: SUITE 7/7 double-run byte-identical + RUNNER PASS 211/211 controls 7/7 271.1s (SUITES 210->211 criteria 1814->1821) + matrix 211/1821 --check byte-identical + census DRIFT-CLEAN after documented re-freeze + profile re-anchored DRIFT-CLEAN + fingerprint CLEAN domains=5; census cd7 first-run catch preserved as enforcement evidence; fold R525 pre-closeout post==predicted; explore consume 1 reseed 1 (open=10)"
   ],
   [
-   "1982",
+   "R1983",
+   "R1983 showcase stats board read face delivered (P3 explore FIFO head; AC-SSB1..SSB7 pre-registered pre-code) - ShowcaseFace.stats_board registry-keyed pure-read per-showcase place/retract count aggregation with the derived displayed_now column; net-flow identity displayed_now == places - retracts machine-checked per row (append-only alternation); dense over the registry with honest zero rows and an honest empty board; three-key decisive order places DESC, retracts DESC, showcase_id ASC; cross-face reconciliation against showcase_view; three-green: SUITE 7/7 double-run byte-identical sha16 4b5908f561799632 + RUNNER PASS 212/212 controls 7/7 178.4s (SUITES 211->212 criteria 1821->1828) + matrix 212/1828 --check byte-identical + fingerprint CLEAN domains=5 + profile DRIFT-CLEAN + census DRIFT-CLEAN flags=0; explore consume 1 reseed 1 (open=10)"
+  ],
+  [
+   "1983",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-09..2026-10-15",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 15,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 0,

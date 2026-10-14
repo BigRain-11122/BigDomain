@@ -348,3 +348,46 @@ class ShowcaseFace:
                  for i, r in enumerate(self._displayed_rows(showcase_id))]
         return {"showcase_id": showcase_id, "slot_cap": slot_cap,
                 "stops": stops, "disclaimer": self.disclaimer}
+
+    def stats_board(self):
+        """Per-showcase exhibit statistics board - registry-keyed
+        pure-read derivation (every registered showcase gets exactly
+        one row; a zero-event showcase shows honest zeros; a
+        zero-registration world returns an honest empty board).
+        places/retracts count the event rows by action;
+        displayed_now counts the items whose latest event overall
+        is a place in this showcase (the same derived state the
+        slot gate and the tour walk use). Net-flow identity per
+        row: displayed_now == places - retracts (the event record
+        alternates per item - every retract follows a place in the
+        same window - so per item the in-window rows pair up and
+        leave at most one trailing place). Sort keys fully
+        deterministic: places DESC, then retracts DESC, then
+        showcase_id ASC. AC-SSB1..AC-SSB7 (R1983)."""
+        with self._lock:
+            reg = self._conn.execute(
+                "SELECT showcase_id, title, ai_label FROM showcases"
+                " ORDER BY showcase_id").fetchall()
+            counts = self._conn.execute(
+                "SELECT showcase_id,"
+                " SUM(CASE WHEN action = 'place' THEN 1 ELSE 0 END),"
+                " SUM(CASE WHEN action = 'retract' THEN 1 ELSE 0 END)"
+                " FROM exhibit_events GROUP BY showcase_id").fetchall()
+            dnow = self._conn.execute(
+                "SELECT showcase_id, COUNT(*) FROM exhibit_events"
+                " WHERE event_id IN (SELECT MAX(event_id) FROM"
+                " exhibit_events GROUP BY cl_id)"
+                " AND action = 'place' GROUP BY showcase_id").fetchall()
+        cmap = {str(r[0]): (int(r[1]), int(r[2])) for r in counts}
+        dmap = {str(r[0]): int(r[1]) for r in dnow}
+        rows = []
+        for sid, title, ai in reg:
+            places, retracts = cmap.get(str(sid), (0, 0))
+            rows.append({"showcase_id": str(sid), "title": title,
+                         "ai_label": int(ai), "places": places,
+                         "retracts": retracts,
+                         "displayed_now": dmap.get(str(sid), 0)})
+        rows.sort(key=lambda r: (-r["places"], -r["retracts"],
+                                 r["showcase_id"]))
+        return {"showcase_stats_board": rows,
+                "disclaimer": self.disclaimer}

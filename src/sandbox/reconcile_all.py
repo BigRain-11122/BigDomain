@@ -2149,6 +2149,17 @@ SUITES = [
     # (AC-CVD1..CVD6 pre-registered in state/queue/explore.md).
     ("civic-behavior-distribution",
      os.path.join("ledger", "test_civic_distribution.py"), 6),
+    # R1983 showcase stats board: registry-keyed pure-read
+    # per-showcase place/retract event count aggregation with the
+    # derived displayed-now column; dense over the showcase
+    # registry (zero-event window shows honest zeros, zero
+    # registration shows an honest empty board); net-flow identity
+    # displayed_now == places - retracts per row; decisive order
+    # places DESC, retracts DESC, showcase_id ASC; pure read with
+    # cross-face reconciliation against showcase_view
+    # (AC-SSB1..AC-SSB7 pre-registered in state/queue/explore.md).
+    ("ledger-showcase-stats",
+     os.path.join("ledger", "test_showcase_stats.py"), 7),
 ]
 
 FAILS = 0
