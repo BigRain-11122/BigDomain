@@ -1978,6 +1978,15 @@ SUITES = [
     # (AC-HCP1..HCP7 pre-registered in state/queue/tech.md).
     ("ledger-honorcert-persist", os.path.join(
         "ledger", "test_honorcert_persist.py"), 7),
+    # honor yearbook cross-restart persist window (R1981): the
+    # yearbook seat of the R1948 honorcert persist family -
+    # pinned anchor + byte-identical restart replay on both
+    # years + live continuation (board move heal + off-slice
+    # permanence + cross-year isolation) + gate survival +
+    # pure-read law + third instance stability (AC-HYP1..HYP6
+    # pre-registered in state/queue/explore.md).
+    ("ledger-honorcert-yearbookpersist", os.path.join(
+        "ledger", "test_honorcert_yearbook_persist.py"), 6),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen

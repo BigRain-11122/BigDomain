@@ -1,0 +1,70 @@
+== honor yearbook cross-restart persist window (R1981) evidence ==
+canon: explore-queue honor-yearbook-persist claim row, AC-HYP1..HYP6 pre-registered before code (honesty law); stack verdict: honorcert owns no storage, persistence lives in civic.db earn rows + ledger.db certificate rows (three-piece close choreography)
+
+-- section 1: acceptance suite double-run --
+run1 exit=0 run2 exit=0 stdout-byte-identical=True
+run1 sha16=2d4383c9a8cf73af run2 sha16=2d4383c9a8cf73af
+  PASS AC-HYP1: anchor world pinned: board carol 12 / aaron 7 / bob 7 (tie, id asc) / dave 3 with erin a zero-row face; top-2 grant granted=2 already=0; yearbook rows=[(1, 'usr:carol', 12, 'civic-honor-2026'), (2, 'usr:aaron', 7, 'civic-honor-2026')] with full item_id echo; envelope keys=['board_size', 'certified_count', 'disclaimer', 'year', 'yearbook'] certified_count=2 board_size=4; honest empty 2027 roster=[] with zero counts; double-call byte-identical=True; composition law: yearbook rows == honor_certs certified subset (2 rows, per-row rank/points/item_id equal=True)
+  PASS AC-HYP2: three-piece close (cl.close + cv.close + led.close - the honorcert face owns no storage and carries no close) -> Ledger + CivicPointsFace + CollectiblesFace + HonorCertFace rebuilt on the same two dbs with the same config: yearbook 2026 replays byte-identical to the pre-close snapshot (sha16=7d8c20d166aa1eff) and the honest empty 2027 roster replays byte-identical too (sha16=85fa3cdc5abd0ba3) - the certified-only filter, the board ranks and the certificate provenance all re-derive from the persisted civic.db earn rows and ledger.db certificate rows with zero in-memory drift; table counts frozen across the restart
+  PASS AC-HYP3: post-restart continuation: erin earns four poll events on the reopened civic face so the board moves (erin 20 -> rank 1); the re-grant heals incrementally across the restart - [(1, 'usr:erin', 'granted'), (2, 'usr:carol', 'already')] (granted=1 already=1: the top-2 slice covers exactly the new top two, the newcomer costs one certificate row and carol converges to already; aaron sits at rank 3, outside the slice, yet keeps his yearbook row at the new board rank - permanent-certificate law across the restart); the yearbook grows to 3 rows [(1, 'usr:erin'), (2, 'usr:carol'), (3, 'usr:aaron')] with bob and dave honestly absent; dave opens the 2027 namespace (grant top-1) so the 2027 roster carries exactly [(1, 'usr:dave', 5, 'civic-honor-2027')] while the 2026 roster reads byte-stable across the 2027 grant (cross-read isolation)
+  PASS AC-HYP4: year gate survives the restart: all 9 bad year forms (E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS/E_HC_BAD_ARGS) reject with E_HC_BAD_ARGS on the reopened instance with zero honor_board calls (the front-door gate rides the module law, nothing in-memory to lose); both-db table snapshots frozen across the probe batch
+  PASS AC-HYP5: pure-read law: the read battery (yearbook 2026 twice + yearbook 2027 + honor_certs 2026) leaves both-db table counts constant (['civic_earns=13', 'collectibles=4', 'ledger_tx=0']) with ledger_tx=0 ledger_entries=0 across the whole window - certificates are platform awards and the yearbook is a zero-token derivation (counts-vs-tokens isolation); yearbook double-call byte-identical=True
+  PASS AC-HYP6: third instance: three-piece close -> rebuild once more on the same two dbs - yearbook 2026 and 2027 read twice back-to-back byte-identical to the instance-2 terminal state and to each other (re-read purity; 2026 sha16=d9332bf66d50cd87, 2027 sha16=12d53913fb8df2f7); shipped files untouched (config.json + honorcert/civicpoints/collectibles sha16 stable=True); suite source pure ASCII (0 non-ascii), zero network imports (0 hits); honor_yearbook method source carries zero write statements (hits=none); world tmp outside repo (yes)
+  SUITE PASS 6/6
+
+-- section 2: writer-census drift discovery --
+census pre-freeze exit=0 (expected drift: this round's new evidence file lands after the last round's baseline - documented re-freeze gate)
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=1457 tee=954 baselined=503
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+-- section 3: baseline re-freeze + clean re-check --
+census re-freeze exit=0
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: update-baseline (re-freeze gate)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  baseline written: writer-census-baseline.json
+    cmd-raw: 15 names
+    pwsh-capture: 296 names
+    ps-utf16: 98 names
+    other: 94 names
+    tee: 954 files (healthy dialect, NOT baselined)
+  --- post-check (self-run after freeze) ---
+  census: files=1457 tee=954 baselined=503
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+  post-check exit=0
+census post-freeze re-check exit=0 DRIFT-CLEAN=True
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=1457 tee=954 baselined=503
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+-- section 4: fingerprint check --
+fingerprint exit=0
+  PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+  PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+  PASS domain=member baseline matches live constructor (R1676 cross-validation)
+  PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+  PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+  verdict CLEAN domains=5
+
+VERDICT PASS (suite 6/6 double-run identical; census re-freeze documented gate -> DRIFT-CLEAN; fingerprint CLEAN)
+
+-- section 5: full regression closeout --
+RUNNER PASS 210/210 suites green, reconcile controls 7/7, 176.9s (SUITES 209->210, criteria 1808->1814 with AC-HYP1..HYP6)
+suite_matrix regen green=210/210 (20206 bytes, 210 suites, 1814 criteria) + --check byte-identical
+census post-RUNNER re-check: flags=0 DRIFT-CLEAN
+evidence twin: qa/reconcile-all-R1981.log (runner Tee)
+DONE R1981
