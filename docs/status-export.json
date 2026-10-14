@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-14T19:12:00+08:00",
+  "export_ts": "2026-10-14T19:30:25+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite on-chain (AC-SWP1..SWP7 pre-registered before code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass ran no-argv shell-capture mode, its Start-Process-redirected evidence file landed pwsh-capture dialect and cd7 census caught it [RUNNER FAIL 200/201] -> deleted + re-run via the runner's own Tee per R1924 precedent, all green)",
-    "latest_artifact": "src/sandbox/pay/test_pay_sweep_persist.py + qa/pay-sweep-persist-R1965.log + qa/reconcile-all-R1965.log (2026-10-14)",
-    "next_milestone": "P2 tech queue next persist seat FIFO head (lobby event-face family, tech L257); within 48h"
+    "current": "R1966: 15th-case orphan takeover closeout - lobby EventStore residual read-face family cross-restart persistence suite on-chain (AC-LBP1..LBP7; count/census_lookup/export_day + import_census whole-table refresh + content-addressed append dedup; the crashed round's own suite evidence file landed pwsh-capture dialect -> RUNNER FAIL 201/202 via the cd7 census drift; takeover: dialect root-cause per the R1880 family, live double-run rc 0/0 raw stdout byte-identical, evidence re-landed tee 1519B, full RUNNER self-Tee re-run PASS 202/202 criteria 1746->1753 controls 7/7 173.3s; matrix 202/1753 byte-identical 19440B; census --check DRIFT-CLEAN flags=0 tee=925; fingerprint CLEAN domains=5)",
+    "latest_artifact": "src/sandbox/lobby/test_lobby_persist.py + qa/lobby-persist-R1966.log + qa/reconcile-all-R1966.log (2026-10-14)",
+    "next_milestone": "P2 tech queue next FIFO head (state/queue/tech.md top open row); within 48h"
   },
   "depts": [
     {
@@ -203,6 +203,14 @@
   ],
   "results": [
     [
+      "R1966",
+      "R1966: 15th-case orphan takeover closeout - lobby EventStore residual read-face family (count/census_lookup/export_day + import_census whole-table refresh + content-addressed append dedup) cross-restart persistence suite 7/7 (AC-LBP1..LBP7 pre-registered pre-code by the crashed round; crashed round left RUNNER FAIL 201/202 = its own suite evidence file landed pwsh-capture dialect [16 CRLF + 5 bare LF] -> cd7 census drift; takeover: dialect root-cause per R1880 family, live double-run rc 0/0 raw stdout byte-identical, evidence re-landed tee 1519B, full RUNNER self-Tee re-run PASS 202/202 criteria 1746->1753 controls 7/7 173.3s = qa/reconcile-all-R1966.log; matrix 202/1753 byte-identical 19440B; census --check DRIFT-CLEAN flags=0 tee=925; fingerprint CLEAN domains=5; GORD 402->404 two non-ours acks; waterline carry-note state 78744B = fold R519 next round-start; tech queue 6->5; export lag-fix this round: R1965 results row backfilled + tick row 1964->1966 + queue_tech_open 7->5)"
+    ],
+    [
+      "R1965",
+      "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite 7/7 (AC-SWP1..SWP7 pre-registered pre-code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass no-argv shell-capture produced pwsh-capture dialect evidence caught by cd7 census -> deleted + re-run via the runner's own Tee per R1924 precedent)"
+    ],
+    [
       "R1964",
       "R1964: pay reconcile cross-restart determinism suite 7/7 via 14th-case orphan takeover closeout (criteria AC-PRC1..PRC7 pre-registered pre-code by the crashed R1963; CLI scanner re-derives its whole verdict from the three on-disk databases: three-avatar three-granted anchor world with per-order conversion share entries and the notify tri-pair spectrum, full three-face close/reopen scan byte-identity, dangling-revoke + dead-sent tamper probes same codes same naming across the restart, post-restart fourth grant zero-cache recompute with the frozen anchor subset byte-identical, pure-read law, second-restart stability, hygiene; one takeover fix = conv-ref frozen-subset lens, sorted-prefix false-negative on content-addressed hex refs, criteria semantics unchanged; crashed ps-utf16 run1 artifact deleted, tee-dialect evidence re-made; RUNNER PASS 200/200 criteria 1732->1739 controls 7/7 175.1s = qa/reconcile-all-R1964.log; matrix 200/1739 --check byte-identical 19290B; census CENSUS-COMPLETE (both new files tee dialect); fingerprint CLEAN domains=5; GORD 397->402 five non-ours acks; ORD face reorg pattern-drift FLAG honestly noted with manual origin-main verification zero new BigDomain orders, baseline unchanged; tech consume 1 reseed 0 queue 8->7)"
     ],
@@ -351,37 +359,21 @@
       "R1926 ledger curation registry/tour read-faces cross-restart persistence suite 7/7 (P2 tech FIFO head, R1923-reseeded claim adopted; criteria AC-CRP1..AC-CRP7 pre-registered in state/queue/tech.md before code: active_curations board + curation_view facts/members + curation_tour global stop-numbering pinned pre-close, CurationFace close -> new instance over the SAME ShowcaseFace and same curation db replays all five forms byte-identical, post-restart placement recompute (sh-two on_display 2->3, tour stop 4 continues the global numbering) and post-restart new registration recompute (cu-gamma rowid tail + positions 1..2) both zero-cache, third-instance seven-form sequential reads byte-identical, pure-read law with product-file sha256 five-file double-proof, hygiene; suite double-run sha16 50e07f254d930710 byte-identical; one suite-side evidence-caliber bug honestly fixed same-round = AC-CRP2 compared a raw dict against a dumps string, product behavior correct per R1883 precedent; dialect incident live-fired twice honestly recorded: capture driver first version did not normalize subprocess stdout (Windows text-mode pipes CRLF) -> both evidence files classified pwsh-capture new-dialect -> RUNNER cd7 false-red 164/165 x2 -> R1884 capture-normalization law enforced: both drivers CRLF->LF normalized, both evidence files re-landed tee-dialect, census DRIFT-CLEAN restored, final RUNNER PASS 165/165 controls 7/7 174.6s = qa/reconcile-all-R1926.log, matrix 165/1494 --check byte-identical 16268B; five-still green: DEC 308 token-flat, GORD 365->366 one new row 18:5x CEO refinement order O-20261013-1830 supplement-2 BigStream MV family acknowledged no-action; tech consume 1 reseed 5 queue_tech_open 6->10 (dedup-checked against RUNNER SUITES labels: pay channel matrix / member civic honor boards / lobby two boards / ugc pool water / eventtickets session boards - zero persist coverage each), next FIFO head = pay channel_status_matrix read-faces persist seed (R1926 reseed))"
     ],
     [
-      "R1925",
-      "R1925 ledger showcase read-faces cross-restart persistence suite 7/7 (criteria AC-SHVP1..AC-SHVP7 pre-registered in the state/queue/tech.md claim by the crashed predecessor, adopted + closed by this takeover round; orphan-adoption chain R550/R551/R1675/R1919/R1920/R1922/R1924: board dual-row edit verified live [lobby room_message_board duplicate row closed zero-delivery - all three claims already covered in-book by R1891 AC-S33/S34/S37 store-level + R1915 AC-S50/S51/S53 protocol-level per the R1916 duplicate-closure precedent], suite double-run sha16 cca247c8f0724dca byte-identical, SUITES registration row wired; dialect incident adjudicated + dispositioned per the R1880/R1883 family: the crashed round's two evidence files in ps-utf16 pre-state broke the reconcile-daily-census cd7-live-real-tree criterion (= the daily-4 RUNNER FAIL 163/164 false-red root cause) - crashed artifacts deleted (71-suite dead run without RUNNER line + crashed daily file; today's daily standing row already covered by -2 verdict=PASS) and the full regression re-run Tee-native: RUNNER PASS 164/164 suites 206.7s controls 7/7 criteria 1480->1487 = qa/reconcile-all-R1925.log, census --check DRIFT-CLEAN flags=0, matrix 164/1487 --check byte-identical 16176B; five-still green: DEC 308 token-flat, GORD 363->365 two new BigStream MV rows acknowledged no-action, LEDGER zero un-acked; tech consume 2 reseed 0 queue_tech_open 8->6, next FIFO head = ledger curation registry/tour read-faces persist seed (R1923 reseed))"
-    ],
-    [
-      "R1924",
-      "R1924 R1923 commit-debt takeover closeout + fold R506 round-start honor (score 1 honest: no new product artifact this round - the collected debt made R1923's 2-point suite+evidence chain visible on origin via commit c76446e9 + push 074ea451..c76446e9; fold R506 = P-2026-09-25-18 506th knife honored at round start per the R1923 carry note: tail-14 R1917..R1923 window 14 lines 22265B -> 1 rolling line kept=0, 49 tokens embedded zero-loss gen506, 78587B -> 59970B predicted_eq_actual, archive verbatim + preop backup sha16 3eb3bccc9e81ba56; five-still green: DEC 308 token-flat, GORD 359->363 four new rows all BigStream MV family acknowledged no-action, LEDGER zero un-acked transfers, daily evidence trio in-plate; HB dual-row backfill + export refresh; lobby room_message_board queue head (R1920 reseed) left to next round full budget; queue_tech_open 8 unchanged)"
-    ],
-    [
-      "R1923",
-      "R1923 ledger curation hot_board read-face cross-restart persistence suite 6/6 (AC-HBP1..HBP6; four-stack close -> same-three-db reopen byte-identical 493B, rank triple-flip + tie-break follow on retract/place, third-instance sequential same, pure-read + product sha four-proofs; round crashed pre-commit, payload 7-face verified + committed by R1924 c76446e9 - heartbeat row backfilled by R1924; RUNNER 163/163 criteria 1474->1480, matrix regen evidence-wired; consume 1 reseed 1)"
-    ],
-    [
-      "R1922",
-      "R1922 R1921 commit-debt takeover closeout (score 1 honest: no new product artifact this round - the collected debt made R1921's 2-point suite+evidence chain visible on origin; predecessor crashed post-surgery pre-commit, payload verified 7-face PRESENT live before the targeted 12-file commit 18736ac7 + push a3acdbf3..18736ac7; five-still green: DEC 308 token-flat, GORD 358->359 tail-scan exactly one new row 10-13 17:3x @bm-a MV-relay = BigStream MV family zero BigDomain face acknowledged no-action (naive full-file pipe count 365 = header/other-table rows, not the canonical metric), LEDGER zero un-acked transfers, daily reconcile evidence trio in-plate for 10-13; hot_board queue head (R1919 reseed, AC-HB1..HB7 pre-registered) assessed and deferred to next round with full budget - a full suite cadence (writing + RUNNER 162 suites 213.5s + matrix x3 + census + sentinel) does not fit the ~10min remainder, starting it would mint a third consecutive orphan debt; queue_tech_open 8 unchanged)"
-    ],
-    [
-      "1964",
+      "1966",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-08..2026-10-14",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 7,
+    "queue_tech_open": 5,
     "queue_explore_open": 10
   }
 }

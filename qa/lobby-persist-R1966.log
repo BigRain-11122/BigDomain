@@ -1,0 +1,22 @@
+--- lobby residual read-face persist window (R1966) ---
+--- double-run byte-identity lens (evidence driver: single writer, utf-8/LF) ---
+--- takeover re-land: crashed-round file was pwsh-capture dialect (census cd7 drift); normalized re-land per R1880 family ---
+--- RUN-1 exit=0 ---
+PASS AC-LBP1: ids=8 import=3 counts={'events': 8, 'census': 3} day2-export=2:0e9aa4192 absent=null
+PASS AC-LBP2: byte-identity=True tables={'events': 8, 'census': 3}
+PASS AC-LBP3: total=10 day2=3 day3=1 old-day-frozen=True census-clean=True
+PASS AC-LBP4: refresh=2 dropped-None=True kept-updated=True new=True events-untouched=10
+PASS AC-LBP5: replay-refused=True rows-frozen=True census-frozen=True
+PASS AC-LBP6: double-run=True tables-stable=True
+PASS AC-LBP7: second-restart=True replay3=True ascii=True net=[] thawed=[] results-so-far=6
+---- lobby residual persist acceptance: 7/7 passed
+--- RUN-2 exit=0 ---
+PASS AC-LBP1: ids=8 import=3 counts={'events': 8, 'census': 3} day2-export=2:0e9aa4192 absent=null
+PASS AC-LBP2: byte-identity=True tables={'events': 8, 'census': 3}
+PASS AC-LBP3: total=10 day2=3 day3=1 old-day-frozen=True census-clean=True
+PASS AC-LBP4: refresh=2 dropped-None=True kept-updated=True new=True events-untouched=10
+PASS AC-LBP5: replay-refused=True rows-frozen=True census-frozen=True
+PASS AC-LBP6: double-run=True tables-stable=True
+PASS AC-LBP7: second-restart=True replay3=True ascii=True net=[] thawed=[] results-so-far=6
+---- lobby residual persist acceptance: 7/7 passed
+DOUBLE-RUN IDENTICAL (rc 0/0)

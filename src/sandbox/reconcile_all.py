@@ -1994,6 +1994,18 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("pay-sweep-persist", os.path.join(
         "pay", "test_pay_sweep_persist.py"), 7),
+    # lobby-persist (R1966 claim): the two lobby board read faces
+    # already carry their close -> reopen persist example in-book
+    # (R1891 at the store level, R1915 at the protocol level); this
+    # suite pins the residual EventStore read faces - count(where),
+    # census_lookup, export_day - plus the import_census whole-table
+    # refresh semantics and the content-addressed append dedup gate,
+    # byte-identical across a close -> reopen on the same database;
+    # post-restart real-path appends re-derive the counts (zero
+    # cache) while pre-restart rows and old-day exports stay frozen
+    # (AC-LBP1..AC-LBP7 pre-registered in state/queue/tech.md).
+    ("lobby-persist", os.path.join(
+        "lobby", "test_lobby_persist.py"), 7),
 ]
 
 FAILS = 0
