@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T12:11:58+08:00",
+ "export_ts": "2026-10-14T12:53:08+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1953: ledger sistercity cross-restart persist suite delivered (7/7; RUNNER 191/191) + crashed-round orphan-payload takeover closeout (tenth case)",
-  "latest_artifact": "qa/sistercity-persist-R1953.log + src/sandbox/ledger/test_sistercity_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger metered persist suite) by 2026-10-16"
+  "current": "R1954: ledger metered cross-restart persist suite delivered (7/7; RUNNER 192/192) + crashed-round orphan-payload takeover closeout (eleventh case)",
+  "latest_artifact": "qa/metered-persist-R1954.log + src/sandbox/ledger/test_metered_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger reports persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1954",
+   "ledger metered cross-restart persist suite 7/7 (AC-MTP1..MTP7; two-piece restart, credit-counter persistence core, restart-surviving gates, continuation recompute, frozen immutable rows, RUNNER 192/192 criteria 1676->1683) + crashed-round orphan-payload takeover closeout (eleventh case: fold R513 integrity verified, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
+  ],
+  [
    "R1953",
    "ledger sistercity cross-restart persist suite 7/7 (AC-SCP1..SCP7; two-piece restart, thirteen restart-surviving gates incl the persisted-settlement replay gate E_SC_SETTLED and the no-disclaimer constructor gate, frozen anchor rows, RUNNER 191/191 criteria 1669->1676) + crashed-round orphan-payload takeover closeout (tenth case: dialect normalization per R1884 capture law, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
   ],
@@ -355,21 +359,17 @@
    "member expiring_soon board + distribution fold cross-restart persist 7/7 (criteria AC-ES8..AC-ES14; MemberStore close-reopen on the same db/cfg/pay replays the frozen-as_of snapshot quartet byte-identically, same-grant re-activation stays idempotent = db-backed dedup map, new true-path activation recomputes the board zero cache, dual-boundary out-of-window zero echo with 4 live rows in db, third-instance sequential identity) + RUNNER 142/142 criteria 1318->1325 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
   ],
   [
-   "R1899",
-   "lobby chat.send idem key-binding semantics 5/5 (criteria AC-S44..S48; same-id different-text = fresh event with both (id,text) keys coexisting, cross-connection replay absorbed = server-instance-scoped cache, different-id same-text = fresh event with per-id keys coexisting, strip / id-strip / truncation normalization all feed the key before the digest, suite-only round product bytes unchanged) + RUNNER 141/141 criteria 1313->1318 (lobby 46->51) + matrix byte-identical x2 + census DRIFT-CLEAN"
-  ],
-  [
-   "1953",
+   "1954",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 18,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

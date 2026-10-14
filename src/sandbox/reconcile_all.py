@@ -234,6 +234,12 @@ SUITES = [
      os.path.join("ledger", "test_studio.py"), 7),
     ("ledger-metered",
      os.path.join("ledger", "test_metered.py"), 7),
+    # R1954 metered cross-restart persist window: two-piece close->
+    # reopen battery, restart-surviving gates, continuation
+    # recompute, frozen anchors, pure-read law, third instance
+    # (AC-MTP1..MTP7 pre-registered in state/queue/tech.md).
+    ("ledger-metered-persist",
+     os.path.join("ledger", "test_metered_persist.py"), 7),
     ("ledger-reports",
      os.path.join("ledger", "test_reports.py"), 7),
     ("ledger-effects",

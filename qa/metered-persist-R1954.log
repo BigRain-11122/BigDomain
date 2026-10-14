@@ -1,0 +1,19 @@
+PASS AC-MTP1: anchor world: 3 clients / 4 packs / 6 calls; credits acme=147 boblab=9 carollab=0 (drained zero-credit anchor); every bound_spend_tx cross-checked in ledger_tx [1, 1, 1]; balanced verdicts [True, True, True]
+PASS AC-MTP2: close -> new Ledger + new MeteredFace over the same db: battery dumps byte-identical (2837B) and three-table SQL dumps byte-identical (13 rows) = zero in-memory drift; the credit counter (only mutable cell) persisted
+PASS AC-MTP3: restart-surviving gates: pack replay E_MT_DUP (bal flat), call replay E_MT_DUP (zero double-charge), unknown client E_MT_UNKNOWN x5 faces, kind gate E_MT_KIND_GATE, zero-credit E_MT_NO_CREDITS, bad args E_MT_BAD_ARGS/E_MT_BAD_ARGS/E_MT_BAD_ARGS/E_MT_BAD_ARGS, conflicting re-register E_MT_DUP; idempotent re-register ok; row counts flat (3, 4, 6) = all rejects fire before any write
+PASS AC-MTP4: post-restart continuation: new pack (real spend, tx cross-checked) + new calls -> acme credits 147+20-1=166, boblab 9-1=8; battery re-read reflects the new state (zero cache); balanced verdicts stay True (acme purchased 170 == consumed 4 + remaining 166)
+PASS AC-MTP5: frozen anchors: original 4 pack rows and 6 call rows byte-identical after restart + continuation (immutable rows); provenance freeze: first-purchase spend tx still bound; only appended rows added (pack count 4 -> 5)
+PASS AC-MTP6: pure-read law: full battery read leaves row counts identical (3, 5, 8); double-call dumps byte-identical
+PASS AC-MTP7: second close -> third instance over the same db: battery byte-identical to the second-instance end state (3 clients x 3 faces); config.json untouched (2320 bytes); metered.py untouched; suite source pure ASCII (0 non-ascii bytes, sha16 a588a251e8ddd160); world in tempfile.gettempdir()
+SUITE PASS (7/7 criteria green)
+
+--- takeover closeout addendum (R1954, eleventh case of the R1924/R1937/R1940/R1949/R1952/R1953 lineage) ---
+crashed round stopped after its RUNNER run, before closeout; state tick untouched at 1953; zero failed-run artifacts
+orphan payload verified: suite + registry row + claim line + evidence log + RUNNER carrier + fold R513 (surgery + archive section R1954 + preop backup all on disk, logs/ gitignored = disk-only preservation)
+live re-verify: suite double-run rc 0/0 stdout byte-identical sha16 df572e18ba1e4d1a; content line-identical 8/8 vs crashed evidence (raw-byte delta = CRLF pipe translation, capture caliber not content, R1884 family)
+fold R513 integrity: preop logs/state-preop-R1954.bak 79950B on disk; archive section R1954 present at line 2061; eol profile layout_ok=true indent_ok=true bare_lf=0
+RUNNER carrier adopted from crashed round (canonical pure-LF dialect, both evidence files zero CRLF): RUNNER PASS 192/192 suites green, reconcile controls 7/7, 429.1s
+matrix regen: 192 suites / 1683 criteria green=192/192 evidence=qa/reconcile-all-R1954.log; --check byte-identical 18583B (explicit + default-face double)
+census --check: DRIFT-CLEAN flags=0 (files=1402 tee=900 baselined=502 disappeared=0)
+fingerprint: verdict CLEAN domains=5 rc=0
+TAKEOVER VERDICT: PASS
