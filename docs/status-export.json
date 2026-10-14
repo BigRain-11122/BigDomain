@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T08:00:26+08:00",
+ "export_ts": "2026-10-14T08:50:21+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "P2 tech FIFO: ledger honorcert cross-restart persist suite delivered 7/7 (AC-HCP1..HCP7, three-piece restart, incremental heal + permanent-certificate law across restart); RUNNER full regression 186/186 green",
-  "latest_artifact": "src/sandbox/ledger/test_honorcert_persist.py + qa/honorcert-persist-R1948.log (2026-10-14)",
-  "next_milestone": "next: ledger studio persist seat (R1944-seeded FIFO head); window <=48h (by 2026-10-16)"
+  "current": "P2 tech FIFO: ledger studio cross-restart persist suite delivered 7/7 (AC-STP1..STP7, three-piece restart: registry + venue occupancy + ledger, twelve restart-surviving gates, renewal advance booking); RUNNER full regression 187/187 green",
+  "latest_artifact": "src/sandbox/ledger/test_studio_persist.py + qa/studio-persist-R1949.log (2026-10-14)",
+  "next_milestone": "next: ledger showroom persist seat (R1945-seeded FIFO head); window <=48h (by 2026-10-16)"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1949",
+   "ledger studio cross-restart persist suite 7/7 (AC-STP1..STP7; three-piece restart, twelve restart-surviving gates, renewal advance booking, frozen prefix rows, RUNNER 187/187 criteria 1641->1648)"
+  ],
+  [
    "R1948",
    "ledger honorcert cross-restart persist suite 7/7 (AC-HCP1..HCP7; three-piece restart, incremental heal across restart, permanent-certificate law survives board move + restart, second event namespace, RUNNER 186/186 criteria 1634->1641)"
   ],
@@ -355,21 +359,17 @@
    "freetrial cap_usage_board cap-window read cross-restart persist 8/8 (criteria AC-CRU8..CRU15; two-grant October world makes the limit=1 overflow block non-trivial; oct capped-window envelope byte-identity across restart + recompute on the November grant (zero cache) + old-window freeze across restart x new data + honest empty month + composition law + dual-reopen sequential identity) + RUNNER 138/138 criteria 1292 + matrix byte-identical x2 + census DRIFT-CLEAN + sentinel CLEAN"
   ],
   [
-   "R1894",
-   "member banner_board cap-window read cross-restart persist 7/7 (criteria 17->24 AC-BQ18..BQ24; seed nine-key correction -> 7/11/12-key product truth; oct capped-window envelope byte-identity across restart, new-row zero-cache recompute, old-window freeze, dual live instances identical) + RUNNER 137/137 criteria 1284 + matrix byte-identical + census DRIFT-CLEAN + sentinel CLEAN"
-  ],
-  [
-   "1948",
+   "1949",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 16,
+  "log_lines_in_window": 18,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

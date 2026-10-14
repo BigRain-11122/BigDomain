@@ -1823,6 +1823,13 @@ SUITES = [
     # (AC-HCP1..HCP7 pre-registered in state/queue/tech.md).
     ("ledger-honorcert-persist", os.path.join(
         "ledger", "test_honorcert_persist.py"), 7),
+    # studio cross-restart persist window (R1949): three-piece
+    # restart world (registry + venue occupancy + ledger), twelve
+    # restart-surviving gates, renewal advance booking, frozen
+    # prefix rows, pure-read law, third instance stability
+    # (AC-STP1..STP7 pre-registered in state/queue/tech.md).
+    ("ledger-studio-persist", os.path.join(
+        "ledger", "test_studio_persist.py"), 7),
 ]
 
 FAILS = 0

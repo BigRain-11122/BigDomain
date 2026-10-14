@@ -1,0 +1,90 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-STP1: anchor world pinned (three registry rows; four onboardings: alice pixelforge [26,26] fee 9800 + alice quantworks [26,26] fee 19800 (same account, two kinds, one year - legal) + carol indienest [26,26] fee 9800 + bob pixelforge [27,27] fee 9800 (independent year windows); balances 20400/10200/200/30000/59200 (pool = 10,000 seeded + 49,200 fees recirculated); counts registry=3 studio-occupancy=4 spend-tx=4; tenant spectrum pixelforge 25N/26A/27B/28N, quantworks 26A/27N, indienest 26C/27N; alice profile@26 = two seats both carrying spend tx, @27 empty, dave @26 empty); twelve gate probes rejected (kind-drift=E_ST_KIND_MISMATCH; bad-kind=E_ST_BAD_ARGS; dup=E_ST_DUP; taken=E_ST_TAKEN; unknown=E_ST_UNKNOWN; bad-acct=E_ST_BAD_ARGS; bad-price=E_ST_BAD_ARGS; bad-year=E_ST_BAD_ARGS; bad-ref=E_ST_BAD_ARGS; ben-unknown=E_ST_UNKNOWN; tenant-bad-year=E_ST_BAD_ARGS; profile-bad-acct=E_ST_BAD_ARGS); counts and battery frozen across the probe batch; digest=16398bb1172dc877
+PASS AC-STP2: three-piece close->reopen (stf.close -> ven.close -> led.close -> Ledger same db/cfg + VenueFace + fresh StudioFace): read battery (benefits x3 + tenant spectra x3 + profiles x5 + five balances) AND the three studio occupancy histories AND the raw registry rows all byte-identical to pre-close snapshots, diffs=none/none/none; registry rows, year windows and bound spend txs replay with zero in-memory drift; digest=16398bb1172dc877
+PASS AC-STP3: restart-surviving gates: all twelve probes rejected with identical codes on instance 2 and in the same order as instance 1 (kind-drift=E_ST_KIND_MISMATCH; bad-kind=E_ST_BAD_ARGS; dup=E_ST_DUP; taken=E_ST_TAKEN; unknown=E_ST_UNKNOWN; bad-acct=E_ST_BAD_ARGS; bad-price=E_ST_BAD_ARGS; bad-year=E_ST_BAD_ARGS; bad-ref=E_ST_BAD_ARGS; ben-unknown=E_ST_UNKNOWN; tenant-bad-year=E_ST_BAD_ARGS; profile-bad-acct=E_ST_BAD_ARGS); counts, battery and occupancy histories frozen across the probe batch (registry/studio-occupancy/spend-tx 3/4/4 unchanged, zero charge, zero rows)
+PASS AC-STP4: post-restart continuation: dave onboards quantworks year 27 fee 19800 (new account, new seat) and alice renews pixelforge year 28 fee 9800 (advance booking) - both bind real spend txs (SQL cross type=spend/spend, debit legs=debit/debit, tx ids not echoed); new gates live on the new seats: dave replay y27 rejected E_ST_DUP, carol hitting quantworks y27 rejected E_ST_TAKEN (both zero charge); read faces recompute zero-cache (tenant quantworks@27 None->dave, pixelforge@28 None->alice, dave profile@27 one quant seat, alice profile@28 one game seat, all rows carrying spend tx); registry untouched by onboarding (still 3 rows); studio occupancy 4->6, spend-tx 4->6, balances dave 10200, alice 10600, pool 88800; digest=4284ab78a785d12c
+PASS AC-STP5: frozen faces: every pre-restart occupancy row keeps all persisted fields byte-identical - the anchor histories replay as the exact byte-identical prefix of the post-continuation histories (kind/account/start/end/terminated/bound_spend_tx; the continuation only appended new rows, prefix law) - and the three registry rows are byte-identical including the registered_utc stamps (rows immutable, zero mutation surface); anchor-seat replay across restart: alice pixelforge y26 still rejected E_ST_DUP (zero new rows, zero charge); idempotent re-registration returns idempotent=True with the registry still at 3 rows; far-future faces honest-empty (alice profile@40 = [], tenant pixelforge@40 = None); counts and battery frozen (3/6/6)
+PASS AC-STP6: pure-read law: full battery (benefits + tenant spectra + profiles + balances) and the three occupancy histories read twice back-to-back - all byte-identical between the two reads and table counts constant (studio read faces have zero side effects, zero token movement)
+PASS AC-STP7: third instance: close all three once more -> reopen same db - battery AND occupancy histories byte-identical to the instance-2 terminal state (diffs=none; registry, year-window seats, renewal bookings and gate behavior all stable across a second restart); shipped files untouched (config/studio/venue/ledger sha16 stable); suite source pure ASCII (0 non-ascii), zero network imports (0 hits), world tmp outside repo (yes)
+SUITE PASS 7/7
+
+sha16 run1=1068ecc27f0ab121 run2=1068ecc27f0ab121 byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-y9hzfemc\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (187/187 suites green, reconcile controls 7/7, 310.5s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18151 bytes) - registry suites=187 criteria=1648 evidence=qa/reconcile-all-R1949.log green=187/187
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18151 bytes, 187 suites, 1648 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1386 tee=884 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/reconcile-all-R1949.log
+?? src/os/claim_R1949.py
+?? src/os/claim_payload_R1949.json
+?? src/os/closeout_R1949.py
+?? src/os/closeout_payload_R1949.json
+?? src/os/evidence_R1949.py
+?? src/sandbox/ledger/test_studio_persist.py
+
+VERDICT PASS
