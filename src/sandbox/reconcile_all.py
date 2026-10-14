@@ -1935,6 +1935,13 @@ SUITES = [
     # state/queue/tech.md).
     ("ledger-datasub-persist", os.path.join(
         "ledger", "test_datasub_persist.py"), 7),
+    # R1982 dataset subscription coverage board: registry-keyed
+    # pure-read derived board (distinct-household subscribers,
+    # subscription rows, delivery counts; three-key deterministic
+    # order; AC-CVB1..CVB7 pre-registered in state/queue/
+    # explore.md).
+    ("ledger-datasub-coverage", os.path.join(
+        "ledger", "test_datasub_coverage.py"), 7),
     ("ledger-devshare-persist", os.path.join(
         "ledger", "test_devshare_persist.py"), 7),
     # R1946 apimarket persist seat of the R1886 family: four-piece

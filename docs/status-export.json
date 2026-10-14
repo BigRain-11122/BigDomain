@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-15T06:36:29+08:00",
+ "export_ts": "2026-10-15T07:07:40+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "交付荣誉年册跨重启持久化例窗：三件 close→重开年册逐字节同一+重启后授证活态续接，全量回归 210/210 绿",
-  "latest_artifact": "qa/honorcert-yearbookpersist-R1981.log（2026-10-15）",
-  "next_milestone": "下一件：API 市场开发者销量榜跨重启持久化例窗（explore 队列后继，窗 ≤48h）"
+  "current": "已交付数据集订阅覆盖榜读面（coverage_board 纯读派生：户数去重律+订阅/交付三计数+三键决定序；全套回归 211/211 绿）",
+  "latest_artifact": "qa/datasub-coverage-R1982.log（2026-10-15）",
+  "next_milestone": "下一窗：覆盖榜跨重启持久化例窗（explore 队列已入列·后继队头展示橱窗撤展统计读面），窗 ≤48h"
  },
  "depts": [
   {
@@ -363,7 +363,11 @@
    "R1941 ledger companion cross-restart persistence suite 7/7 (P2 tech FIFO head = the R1940 closeout pointer; criteria AC-CMP1..CMP7 pre-registered in tech.md before code, with the same-round pool-expectation erratum 19000->19330 and 19090->19420 = the ledger spend counter-leg flows back to the pool, product-behavior orthodoxy cross-attested by the ads seat 17150 = 20000-3000+150; R1883 AC-PN27 same-round pen-slip precedent; first run 5/7 -> fixed -> green). Double-run stdout byte-identical sha16 dff152fd13809909. Three-instance world on the real product path (Ledger + SecGate lobby-product reference injection + CompanionFace): anchor (jan passes alice/bob fee 120 + feb pass carol fee 90 each bound to one real spend tx; dialogue spectrum alice two archived rounds with same-kind memories twice = append-not-unique + bob one round + carol feb one round = 8 structural ai_label rows; can_ five probes a/b-jan True, c-jan False, c-feb True, a-feb False; transcript windows 4/2/0/2; memory views 2/0/0; subs views 1/1/1; balances 180/380/110/19330; five gate probes all-reject incl. gate-fault = injected fault-gate face rebuilt on the same db fails closed; zero drift across the probe batch) -> close/reopen byte-identical (created_utc = stored values, zero in-memory drift) -> restart-surviving gates -> real-path continuation (carol buys the missing jan pass bound to a real spend tx with SQL cross type=spend + debit leg, denied->allowed flip proven, two new rounds + two memory appends, counts subs 3->4 msgs 8->12 memories 2->4 spend-tx 3->4, balances 180/380/20/19420) -> frozen faces (SQL full-row snapshots of all pre-existing rows byte-frozen incl. granted_utc/created_utc/content_json) + dup/denied/content gates across restart -> pure-read law -> third-instance stability. RUNNER PASS 179/179 criteria 1585->1592 controls 7/7 304.7s = qa/reconcile-all-R1941.log (ledger-companion-persist seat 0.8s, census DRIFT-CLEAN flags=0, fingerprint CLEAN domains=5); matrix 179/1592 green --check byte-identical (17468 bytes); state.json EOL bare-LF repair at round start (25 lines -> 0, 74422B predicted==actual); evidence six-section qa/companion-persist-R1941.log via src/os/evidence_R1941.py; tech consume 1 reseed 1 (apimarket persist seeded with same-day dedup scans: registry zero apimarket-persist seat + AC-AMP git-grep rc=1 + base-suite close hits all cleanup/probe closes non-restart = single-Ledger true-activity candidate; next FIFO head = ledger props persist)."
   ],
   [
-   "1981",
+   "R1982",
+   "R1982 datasub coverage board read face delivered (P3 explore FIFO head; AC-CVB1..CVB7 pre-registered pre-code) - DatasetSubscriptionFace.coverage_board registry-keyed pure-read derived board: distinct-household subscribers (same account two windows = one household), subscription rows == dataset_view cross-face reconciliation, delivery counts, zero-subscription datasets honest zero rows, three-key deterministic order (2==2 household tie broken by 3>2 subscription rows, zero group id-ASC); three-green: SUITE 7/7 double-run byte-identical + RUNNER PASS 211/211 controls 7/7 271.1s (SUITES 210->211 criteria 1814->1821) + matrix 211/1821 --check byte-identical + census DRIFT-CLEAN after documented re-freeze + profile re-anchored DRIFT-CLEAN + fingerprint CLEAN domains=5; census cd7 first-run catch preserved as enforcement evidence; fold R525 pre-closeout post==predicted; explore consume 1 reseed 1 (open=10)"
+  ],
+  [
+   "1982",
    "OSLoop 执行 tick"
   ]
  ],

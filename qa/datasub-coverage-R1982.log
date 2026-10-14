@@ -1,0 +1,26 @@
+--- RUN 1 ---
+PASS AC-CVB1: rows=4==registry=4 zero-rows=2 envelope-two-keys=True seven-key-exact=True
+PASS AC-CVB2: groupby-equal=True cross-face-dataset_view=True queues-dedup hh=2-of-3rows=True transit-2hh-2rows=True
+PASS AC-CVB3: order=['ds-queues', 'ds-transit', 'ds-air', 'ds-parks'] sub-tie-broken-3>2=True zero-group-id-asc=True double-dumps-identical=True
+PASS AC-CVB4: disclaimer-resident=True ai-label-0-1-dual=True
+PASS AC-CVB5: three-table digests stable=True ledger_tx 9==9 method-write-words=[] re-read-identical=True
+PASS AC-CVB6: empty-board=True disclaimer-present=True
+PASS AC-CVB7: src-ascii=True net-imports=0 config-sha-stable=True tmp-outside-repo=True module-ascii=True
+SUITE PASS 7/7
+--- RUN 2 ---
+PASS AC-CVB1: rows=4==registry=4 zero-rows=2 envelope-two-keys=True seven-key-exact=True
+PASS AC-CVB2: groupby-equal=True cross-face-dataset_view=True queues-dedup hh=2-of-3rows=True transit-2hh-2rows=True
+PASS AC-CVB3: order=['ds-queues', 'ds-transit', 'ds-air', 'ds-parks'] sub-tie-broken-3>2=True zero-group-id-asc=True double-dumps-identical=True
+PASS AC-CVB4: disclaimer-resident=True ai-label-0-1-dual=True
+PASS AC-CVB5: three-table digests stable=True ledger_tx 9==9 method-write-words=[] re-read-identical=True
+PASS AC-CVB6: empty-board=True disclaimer-present=True
+PASS AC-CVB7: src-ascii=True net-imports=0 config-sha-stable=True tmp-outside-repo=True module-ascii=True
+SUITE PASS 7/7
+DOUBLE-RUN byte-identical=True rc=0/0
+
+--- auxiliary verdicts (same round) ---
+census: --update-baseline re-anchor (R1979 precedent: new evidence logs enter the frozen gate) + --check => verdict DRIFT-CLEAN flags=0 (files=1461 tee=955 baselined=506)
+fingerprint: fingerprint_regen --chain migration_chains.json --check => verdict CLEAN domains=5 (zero schema touch, coverage_board is a pure-read additive method)
+matrix: suite_matrix regen => 211 suites criteria=1821 green=211/211 evidence=qa/reconcile-all-R1982-2.log; --check byte-identical 20301 bytes
+profile: runner_profile DRIFT-FLAG 4 seats (co-resident MV production fleet load window) => --update-baseline re-anchor (R1978 precedent) => DRIFT-CLEAN 211 compared 0 flagged
+full RUNNER: PASS 211/211 suites green controls 7/7 271.1s => qa/reconcile-all-R1982-2.log (first run qa/reconcile-all-R1982.log preserved FAIL evidence: census cd7 pre-freeze catch = the cross-round census enforcement mechanism working as designed)

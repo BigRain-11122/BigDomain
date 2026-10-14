@@ -473,3 +473,45 @@ class DatasetSubscriptionFace:
                 "balanced": (not orphans and not missing_tx),
                 "billed_total_cent": sum(int(s[2]) for s in subs),
                 "disclaimer": self.disclaimer}
+
+    def coverage_board(self):
+        """Dataset-level subscription coverage board (R1982
+        explore-queue row: pure read-time derivation - zero new
+        tables, zero cache counters, zero token movement). Row-set
+        authority is the dataset registry: every registered
+        dataset gets exactly one row, and a never-subscribed
+        dataset stays on the board with honest zero counts.
+        "subscribers" counts DISTINCT accounts per dataset (the
+        household metric: one account subscribed to two windows
+        of the same dataset is still one household), while
+        "subscriptions" counts the immutable subscription rows
+        (the dataset_view subscriber_count metric, so the two
+        read faces reconcile), and "deliveries" counts delivery
+        rows. Deterministic order: subscribers DESC, then
+        subscriptions DESC, then dataset_key ASC (registry PK
+        gives a total order - zero RNG, zero time keys, zero
+        insertion-order keys)."""
+        with self._lock:
+            regs = self._conn.execute(
+                "SELECT dataset_key, title, period, ai_label"
+                " FROM dataset_registry").fetchall()
+            subs = self._conn.execute(
+                "SELECT dataset_key, COUNT(*), COUNT(DISTINCT account)"
+                " FROM dataset_subscriptions GROUP BY dataset_key").fetchall()
+            dels = self._conn.execute(
+                "SELECT dataset_key, COUNT(*) FROM dataset_deliveries"
+                " GROUP BY dataset_key").fetchall()
+        sub_rows = {r[0]: (int(r[1]), int(r[2])) for r in subs}
+        del_rows = {r[0]: int(r[1]) for r in dels}
+        board = []
+        for key, title, period, ai_label in regs:
+            n_rows, n_hh = sub_rows.get(key, (0, 0))
+            board.append({"dataset_key": key, "title": title,
+                          "period": period, "ai_label": int(ai_label),
+                          "subscribers": n_hh,
+                          "subscriptions": n_rows,
+                          "deliveries": del_rows.get(key, 0)})
+        board.sort(key=lambda r: (-r["subscribers"],
+                                 -r["subscriptions"],
+                                 r["dataset_key"]))
+        return {"coverage_board": board, "disclaimer": self.disclaimer}
