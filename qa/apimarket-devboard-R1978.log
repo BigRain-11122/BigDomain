@@ -1,0 +1,34 @@
+== apimarket devboard acceptance suite (run 1) ==
+PASS AC-AMB1: rows=6==listed_devs=6 zero-sales-rows=3 pure-buyer eve absent=True
+PASS AC-AMB2: groupby-equal=True conservation-all-rows=True ada-cross api_sales gross 33==33 dev 24==24 expected-ada-match=True
+PASS AC-AMB3: order=['usr:ada', 'usr:carol', 'usr:gina', 'usr:b-alpha', 'usr:b-zeta', 'usr:dan'] rev-tie carol 10==gina 10 broken by count 2>1=True zero-group account-ASC=True
+PASS AC-AMB4: disclaimer-resident=True six-key-exact=True
+PASS AC-AMB5: three-table digests stable=True ledger_tx 25==25 double-read-identical=True
+PASS AC-AMB6: empty-board=True disclaimer-present=True
+PASS AC-AMB7: src-ascii=True net-imports=0 config-sha-stable=True lobby-sha-stable=True tmp-outside-repo=True module-ascii=True
+SUITE PASS 7/7
+
+== double-run identity ==
+rc1=0 rc2=0 byte-identical=True lf-sha16=0ece834d26cd90a0
+
+== full regression anchors (qa/reconcile-all-R1978.log) ==
+PASS suite ledger-apimarket-devboard exit=0 pass-lines=7 fail-lines=0 criteria=7 0.8s
+PASS suites 208/208 green, expected criteria total=1801
+RUNNER PASS (208/208 suites green, reconcile controls 7/7, 197.8s)
+
+== suite matrix --check ==
+PASS check: docs/sandbox-suite-matrix.md byte-identical (20012 bytes, 208 suites, 1801 criteria)
+
+== honest drift chain (runner_profile) ==
+first verdict: DRIFT-FLAG 2 (minors-wiring +5.3s / ugc-export-persist +4.0s) - full-RUNNER wall-time 197.8s vs 171.6s prior baseline = shared-load noise;
+standalone re-runs: minors-wiring rc=0 SUITE PASS 70/70 in 10.9s (healthy 8-13s band), ugc-export-persist rc=0 SUITE PASS 7/7 in 0.60s (matches 0.6s baseline exactly = pure load noise);
+baseline re-anchored (208 suites absorbed incl. 6 NEW-SUITE entries, R1970 precedent); re-check:
+verdict: DRIFT-CLEAN (208 compared, 0 flagged)
+
+== qa writer census ==
+verdict: CENSUS-COMPLETE (all 1453 files classified, other=93 honest bucket)
+
+== five-domain fingerprint sentinel ==
+verdict CLEAN domains=5
+
+VERDICT PASS (SUITE 7/7 double-run byte-identical; RUNNER 208/208 controls 7/7; matrix 208/1801 green --check identical; profile DRIFT-CLEAN after load-noise re-anchor; census classified; fingerprint CLEAN domains=5)

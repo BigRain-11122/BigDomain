@@ -1933,6 +1933,18 @@ SUITES = [
     # pre-registered in state/queue/tech.md).
     ("ledger-apimarket-persist", os.path.join(
         "ledger", "test_apimarket_persist.py"), 7),
+    # R1978 developer sales board: developer-level sales/revenue
+    # aggregation read face dev_sales_board() - row-set authority
+    # = distinct listing dev_account (listed-but-unsold developer
+    # stays visible with an honest zero row; zero-listing accounts
+    # never appear), six-key row set with per-row gross == dev +
+    # platform conservation (integer split law), deterministic
+    # order dev_revenue DESC / purchase_count DESC / dev_account
+    # ASC, api_sales cross-derivation, pure-read law, empty-market
+    # honest [] (AC-AMB1..AMB7 pre-registered in the R1978
+    # explore-queue claim row).
+    ("ledger-apimarket-devboard", os.path.join(
+        "ledger", "test_apimarket_devboard.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

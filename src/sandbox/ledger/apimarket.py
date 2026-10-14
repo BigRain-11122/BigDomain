@@ -499,3 +499,44 @@ class APIMarketFace:
                            "platform_share": int(r[6]),
                            "spend_tx": r[7], "dev_share_tx": r[8],
                            "purchased_utc": r[9]} for r in rows]}
+
+    def dev_sales_board(self):
+        """Developer-level sales / revenue aggregation board
+        (pre-registered AC-AMB1..AC-AMB7 in the R1978
+        explore-queue row, written before this method existed).
+
+        Row-set authority = the listing side: every distinct
+        dev_account holding at least one listing row gets
+        exactly one board row - a listed-but-unsold developer
+        stays visible with an honest zero row (dormant
+        participants are not hidden), and an account with zero
+        listings never appears. Deterministic order:
+        dev_revenue DESC, then purchase_count DESC, then
+        dev_account ASC. Per-row conservation gross ==
+        dev + platform holds structurally (integer split law).
+        Pure read: zero writes on every table. The envelope
+        carries the resident non-advisory disclaimer."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT l.dev_account, COUNT(DISTINCT"
+                " l.listing_id) AS listing_count,"
+                " COALESCE(SUM(p.price_paid), 0) AS gross,"
+                " COALESCE(SUM(p.dev_share), 0) AS dev_rev,"
+                " COALESCE(SUM(p.platform_share), 0) AS plat_rev,"
+                " COUNT(p.purchase_id) AS purchases"
+                " FROM apimarket_listings l LEFT JOIN"
+                " apimarket_purchases p ON p.listing_id ="
+                " l.listing_id GROUP BY l.dev_account").fetchall()
+            board = []
+            for r in rows:
+                board.append({
+                    "dev_account": r[0],
+                    "listing_count": int(r[1]),
+                    "purchase_count": int(r[5]),
+                    "gross_revenue": int(r[2]),
+                    "dev_revenue": int(r[3]),
+                    "platform_revenue": int(r[4])})
+            board.sort(key=lambda row: (-row["dev_revenue"],
+                                       -row["purchase_count"],
+                                       row["dev_account"]))
+        return {"disclaimer": self.disclaimer, "board": board}
