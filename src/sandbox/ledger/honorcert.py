@@ -159,3 +159,39 @@ class HonorCertFace:
         return {"year": year, "honors": honors,
                 "certified_count": certified_count,
                 "disclaimer": self.disclaimer}
+
+    def honor_yearbook(self, year):
+        """Certified-only yearbook roster read face (R1979; canon =
+        explore-queue honorcert successor row, criteria AC-HY1..HY7
+        registered before this code existed). Single-source
+        derivation: this method walks no board and reads no
+        member collection of its own - it derives purely from the
+        honor_certs read face above and keeps every member whose
+        certified flag is true, in board order. The yearbook is
+        board-scoped by the same honest derivation limit as
+        honor_certs: a member who still holds the year certificate
+        but has fallen off the live board stays outside this view
+        (the certificate itself is permanent inside the
+        collectibles domain). Every row carries the certificate
+        provenance echo (item_id) and the live board rank; a year
+        with zero certified members returns an honest empty
+        roster, never a hide. Pure read: zero writes, zero
+        storage, zero token movement, zero RNG."""
+        derived = self.honor_certs(year)
+        yearbook = []
+        for entry in derived["honors"]:
+            if not entry["certified"]:
+                continue
+            yearbook.append({"board_rank": entry["rank"],
+                             "account_id": entry["account_id"],
+                             "points": entry["points"],
+                             "item_id": entry["item_id"]})
+        certified_count = derived["certified_count"]
+        if certified_count != len(yearbook):
+            raise HonorCertError(
+                E_HC_BAD_ARGS,
+                "yearbook derivation invariant broken")
+        return {"year": derived["year"], "yearbook": yearbook,
+                "certified_count": certified_count,
+                "board_size": len(derived["honors"]),
+                "disclaimer": self.disclaimer}

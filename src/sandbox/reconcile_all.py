@@ -954,6 +954,19 @@ SUITES = [
     # R1755 explore-queue row).
     ("ledger-honorcert",
      os.path.join("ledger", "test_honorcert.py"), 7),
+    # R1979 honor yearbook certified-only roster read face:
+    # single-source derivation from the honor_certs read face
+    # (zero own board walks, zero own collection reads), keeps
+    # certified members in board order with the certificate
+    # provenance echo (item_id) and live board rank; board-scoped
+    # honest derivation limit (off-board certificate holders
+    # stay outside the view, the certificate itself is permanent
+    # in the collectibles domain); zero-certified year returns an
+    # honest empty roster; pure read (zero writes, zero storage,
+    # zero token movement, zero RNG) (AC-HY1..HY7 pre-registered
+    # in the R1979 explore-queue claim row).
+    ("ledger-honorcert-yearbook",
+     os.path.join("ledger", "test_honorcert_yearbook.py"), 7),
     # R1927 civic honor-board cross-restart persistence example
     # window (R1926-reseeded tech-queue row; the R1925 law): the
     # honor_board / honor_board_competition read faces derive

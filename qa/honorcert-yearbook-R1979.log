@@ -1,0 +1,71 @@
+== honor yearbook read face (R1979) evidence ==
+canon: explore-queue idx52 claim row, AC-HY1..HY7 pre-registered before code (honesty law)
+
+-- section 1: acceptance suite double-run --
+run1 exit=0 run2 exit=0 stdout-byte-identical=True
+run1 sha16=c40396e0644ccd28 run2 sha16=c40396e0644ccd28
+  PASS AC-HY1: honor_yearbook callable=True; module import lines=0; zero driver/zero SQL tokens=True; SecGate-free=True
+  PASS AC-HY2: bad-year 9/9 rejected (all ['E_HC_BAD_ARGS', 'E_HC_BAD_ARGS', 'E_HC_BAD_ARGS']); zero honor_board calls=0; civic snapshot unchanged=True
+  PASS AC-HY3: envelope keys=['board_size', 'certified_count', 'disclaimer', 'year', 'yearbook']; yearbook rows=[(1, 'usr:carol', 12, 'civic-honor-2026'), (2, 'usr:aaron', 7, 'civic-honor-2026')]; certified_count=2 board_size=4; uncertified bob/dave excluded=True
+  PASS AC-HY4: board moved (erin 20 rank1); yearbook=[(1, 'usr:erin'), (2, 'usr:carol'), (3, 'usr:aaron')]; certified_count=3 == len=3; board_size=5; aaron keeps row at new board rank after dropping from top-2
+  PASS AC-HY5: zero-earn year 2027 yearbook=[] count=0 board_size=0 (honest empty); over-cap world yearbook size=3==board_size=3 with own item_id echo; 2027 cert rows=0
+  PASS AC-HY6: double-call snapshot equal=True; envelope repeat equal=True; composition: certified subset of honor_certs honors==3 yearbook rows, per-row rank/points/item_id equal=True
+  PASS AC-HY7: module ascii=True zero network imports=0 zero circulation verbs=[] zero dice lib=True; suite true-import network lines=0; shipped config.json byte-stable=True; criteria registered=7
+  SUITE PASS 7/7
+
+-- section 2: writer-census drift discovery --
+census pre-freeze exit=2 (live-fire catch: R1978 evidence file apimarket-devboard-R1978.log landed after that round's census pass and was never re-baselined - honest hygiene-debt note)
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  [flag] new-dialect: apimarket-devboard-R1978.log (class=other)
+  census: files=1455 tee=952 baselined=502
+  disappeared=0
+  flags=1
+  verdict: DRIFT-FLAG
+
+-- section 3: baseline re-freeze + clean re-check --
+census re-freeze exit=0
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: update-baseline (re-freeze gate)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  baseline written: writer-census-baseline.json
+    cmd-raw: 15 names
+    pwsh-capture: 296 names
+    ps-utf16: 98 names
+    other: 94 names
+    tee: 952 files (healthy dialect, NOT baselined)
+  --- post-check (self-run after freeze) ---
+  census: files=1455 tee=952 baselined=503
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+  post-check exit=0
+census post-freeze re-check exit=0 DRIFT-CLEAN=True
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=1455 tee=952 baselined=503
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+-- section 4: fingerprint check --
+fingerprint exit=0
+  PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+  PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+  PASS domain=member baseline matches live constructor (R1676 cross-validation)
+  PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+  PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+  verdict CLEAN domains=5
+
+VERDICT PASS (suite 7/7 double-run identical; census debt closed by documented re-freeze gate; fingerprint CLEAN)
+
+-- section 5: full regression closeout --
+RUNNER PASS 209/209 suites green, reconcile controls 7/7, 178.2s (SUITES 208->209, criteria 1801->1808 with AC-HY1..HY7)
+suite_matrix regen green=209/209 (20102 bytes, 209 suites, 1808 criteria) + --check byte-identical
+evidence twin: qa/reconcile-all-R1979.log (runner Tee)
+DONE R1979
