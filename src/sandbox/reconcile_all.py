@@ -920,6 +920,15 @@ SUITES = [
     # (AC-PP1..PP7 pre-registered in state/queue/explore.md).
     ("ledger-proposal",
      os.path.join("ledger", "test_proposal.py"), 7),
+    # R1956 proposal cross-restart persist window: two-piece close->
+    # reopen battery (byte-identical views/board/two-table SQL),
+    # restart-surviving gates same-code, continuation recompute
+    # (crossing award post-restart, new registration, board rowid
+    # append), frozen anchors + replay gate, pre-award idempotence
+    # across restart, pure-read law, third instance
+    # (AC-PLP1..PLP7 pre-registered in state/queue/tech.md).
+    ("ledger-proposal-persist",
+     os.path.join("ledger", "test_proposal_persist.py"), 7),
     # R1767 explore-queue row: virtual event ticket face - the
     # liveroom paid-admission variant over the festival schedule-
     # window convention: session registry (UNIQUE key, declared

@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-14T13:09:10+08:00",
+ "export_ts": "2026-10-14T13:30:14+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R1955: ledger reports cross-restart persist suite delivered (7/7; RUNNER 193/193 criteria 1683->1690)",
-  "latest_artifact": "qa/reports-persist-R1955.log + src/sandbox/ledger/test_reports_persist.py (2026-10-14)",
-  "next_milestone": "next FIFO persist seat (ledger proposal persist suite) by 2026-10-16"
+  "current": "R1956: ledger proposal cross-restart persist suite delivered (7/7; fold R514 honored at round start; RUNNER 194/194 criteria 1690->1697)",
+  "latest_artifact": "qa/proposal-persist-R1956.log + src/sandbox/ledger/test_proposal_persist.py (2026-10-14)",
+  "next_milestone": "next FIFO persist seat (ledger clawback persist suite) by 2026-10-16"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1956",
+   "R1956: ledger proposal cross-restart persist suite 7/7 (AC-PLP1..PLP7; two-piece restart, memorial certificates persist via collectibles public API, twelve restart-surviving gates same-code, crossing award + new registration post-restart continuation, frozen prefix rows, pre-award idempotence across restart, zero-token structure law, RUNNER 194/194 criteria 1690->1697); fold R514 executed at round start (state 81030B -> 73825B); tech consume 1 reseed 1 (pay reconcile persist seeded; next FIFO head = ledger clawback persist)"
+  ],
+  [
    "R1955",
    "R1955: ledger reports cross-restart persist suite 7/7 (AC-RPP1..RPP7; two-piece restart, immutable three-table persistence, twelve restart-surviving gates same-code, continuation recompute, frozen prefix rows, RUNNER 193/193 criteria 1683->1690; one same-round claim-row erratum honestly noted); tech consume 1 reseed 1 (refund-recovery persist seeded; next FIFO head = ledger proposal persist)"
   ],
@@ -355,21 +359,17 @@
    "apidev dev_board cap-windowed read cross-restart persist suite 7/7 (AC-DBL15..AC-DBL21) + RUNNER 144/144 criteria 1332->1339 + matrix x2 + census DRIFT-CLEAN + sentinel CLEAN; tech consumed 1 + seeded 1 (apidev key_view persist seed)"
   ],
   [
-   "R1901",
-   "sec_batch banner_queue cap-window read cross-restart persistence 7/7 (criteria AC-SB23..AC-SB29; pre-close snapshot quartet restored byte-identical across SecBatchFace close/reopen, injected 2nd-November row via true path recomputes the default capped read (zero cache) while the October capped+windowed envelope stays frozen byte-identical (record-time immutability = old-window zero permeation), second reopen reads pairwise byte-identical across two live instances, suite-only round product bytes unchanged) + RUNNER 143/143 criteria 1325->1332 (ugc-sec-batch-bannerpersist 7) + matrix byte-identical x2 + census DRIFT-CLEAN"
-  ],
-  [
-   "1955",
+   "1956",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-08..2026-10-14",
   "window_days": 7,
-  "log_lines_in_window": 16,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,

@@ -1,0 +1,90 @@
+--- [1] suite double-run (rc 0/0) ---
+PASS AC-PLP1: anchor world: 4 proposals / 8 sign rows; crossing sign night-lights memorial=issued (alice cert SQL cross=1); lantern-fund pre-award crossing memorial=already (cert stays 1, zero double-issue); ledger_tx flat 0 -> 0 (zero-token structure law); twelve-gate probe batch codes ['E_PP_DUP_PROPOSAL', 'E_PP_CONTENT_REJECTED', 'E_PP_BAD_ARGS', 'E_PP_BAD_ARGS', 'E_PP_BAD_ARGS', 'E_PP_UNKNOWN_PROPOSAL', 'E_PP_WINDOW', 'E_PP_WINDOW', 'E_PP_SELF_SIGN', 'E_PP_DUP_SIGN', 'E_PP_BAD_ARGS', 'E_PP_UNKNOWN_PROPOSAL'] all-reject, row counts flat (4, 8) -> (4, 8); derived board qualified=[T,F,F,T] counts=[3,1,2,2]
+PASS AC-PLP2: close -> new Ledger + new CollectiblesFace + new ProposalFace over the same dbs: read battery byte-identical (3228 bytes) and two-table SQL rows byte-identical (4 proposal + 8 sign rows) = zero in-memory drift; memorial certificates survive restart (night-lights=1 lantern-fund=1)
+PASS AC-PLP3: restart-surviving gates: probe batch on the reopened instance returns the same code sequence ['E_PP_DUP_PROPOSAL', 'E_PP_CONTENT_REJECTED', 'E_PP_BAD_ARGS', 'E_PP_BAD_ARGS', 'E_PP_BAD_ARGS', 'E_PP_UNKNOWN_PROPOSAL', 'E_PP_WINDOW', 'E_PP_WINDOW', 'E_PP_SELF_SIGN', 'E_PP_DUP_SIGN', 'E_PP_BAD_ARGS', 'E_PP_UNKNOWN_PROPOSAL'] (twelve rejects); row counts flat (4, 8) -> (4, 8) = every reject still fires before any write
+PASS AC-PLP4: post-restart continuation: quiet-hours 2nd sign crosses (bob memorial=issued, cert SQL cross=1); new proposal harbor-ferry registers (5th row, board rowid order appends last); pier-garden 3rd sign stays under threshold 4 (memorial None); view recompute quiet-hours 1->2 qualified True; counts (5, 10)
+PASS AC-PLP5: frozen anchors: original 4 proposal rows and first 8 sign rows byte-identical after restart + continuation (append-only: proposals 4->5 signs 8->10); pre-restart replay dup-register E_PP_DUP_PROPOSAL / dup-sign E_PP_DUP_SIGN both rejected with counts flat (5, 10) -> (5, 10); ghost view honest reject E_PP_UNKNOWN_PROPOSAL; pre-awarded lantern-fund memorial stays 1 (idempotent, no double-issue across restart)
+PASS AC-PLP6: pure-read law: full battery double-call byte-identical; row counts flat (5, 10); memorial cert counts flat (1, 1, 1) (reads award nothing, zero side effects)
+PASS AC-PLP7: second close -> third instance over the same dbs: battery byte-identical to the second-instance end state (5 proposals x view + board); config.json / proposal.py / collectibles.py / ledger.py / sec_gate.py byte-identical before/after; suite source pure ASCII (0 non-ascii bytes, sha16 515a4667e3264fbb); 10 imports all stdlib (zero network libraries); world in tempfile.gettempdir(); proposal.py source zero UPDATE statements (append-only law machine-checked)
+SUITE PASS (7/7 criteria green)
+
+sha16 run1=42a95371a506f8bf run2=42a95371a506f8bf byte-identical=True
+--- [2] RUNNER (rc 0) tail ---
+PASS reconcile tamper-control exit=2 (expect 2, FAIL detected)
+  | reconcile: PASS checks=8/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-demo exit=0 (expect 0, clean eight checks)
+  | reconcile: FAIL checks=7/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\pay_notify.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [FAIL] amount_match: receipt/order amount mismatch: ['52e3420277e866a4']
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [ok] revoke_ref: revoke rows reference grant history (1 checked)
+  |   [ok] revoke_dead: revocation dead-account discipline ok (1 pairs checked)
+PASS reconcile pay-tamper exit=2 (expect 2, FAIL detected)
+  | reconcile: FAIL checks=6/8
+  |   [mode] notify db: C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\pay-notify-tampered.db (explicit)
+  |   [ok] status_scan: orders by status: {"created": 1, "granted": 2}
+  |   [ok] receipt_match: receipt coverage ok
+  |   [ok] grant_match: grant coverage ok, no dangling paid
+  |   [ok] amount_match: amounts consistent (receipt = locked order price)
+  |   [ok] conversion: conversion entries consistent (1 checked)
+  |   [ok] fiat_scan: ledger schema carries zero fiat fields
+  |   [FAIL] revoke_ref: revoke rows without grant history: ['rv-dangling-demo']
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-106eqpr3\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (194/194 suites green, reconcile controls 7/7, 208.3s)
+--- [3] matrix regen (rc 0) ---
+PASS generated docs/sandbox-suite-matrix.md (18750 bytes) - registry suites=194 criteria=1697 evidence=qa/reconcile-all-R1956.log green=194/194
+PASS hygiene: pure-ascii source, zero network imports
+
+--- [3b] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (18750 bytes, 194 suites, 1697 criteria)
+
+--- [4] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1406 tee=904 baselined=502
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [5] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [6] git status --short ---
+ M docs/sandbox-suite-matrix.md
+ M src/os/state.json
+ M src/sandbox/reconcile_all.py
+ M state/queue/tech.md
+?? qa/proposal-persist-R1956.log
+?? qa/reconcile-all-R1956.log
+?? src/os/claim_R1956.py
+?? src/os/claim_payload_R1956.json
+?? src/os/evidence_R1956.py
+?? src/sandbox/ledger/test_proposal_persist.py
+
+VERDICT PASS
