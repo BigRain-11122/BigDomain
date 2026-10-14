@@ -1,0 +1,46 @@
+=== [1] suite first run: python ledger/test_proposal.py (AC-PP1..PP7 + AC-PP8..PP12) ===
+  | PASS AC-PP1: registry UNIQUE (1 row; dup E_PP_DUP_PROPOSAL rows 1); ai_label persistent (quiet-hours=1); bad args all rejected zero rows (none -> rows 2); unknown read E_PP_UNKNOWN_PROPOSAL
+  | PASS AC-PP2: forbidden word in title -> E_PP_CONTENT_REJECTED; advisory word in body -> E_PP_CONTENT_REJECTED; zero rows stored (2 -> 2); fault gate -> E_PP_GATE_ERROR with 0 rows; unwired gate -> E_PP_NO_GATE / E_PP_NO_GATE
+  | PASS AC-PP3: window edges inclusive (tick 100 -> 1, tick 200 -> 2); outside rejected zero rows (E_PP_WINDOW / E_PP_WINDOW); self-sign E_PP_SELF_SIGN; re-sign E_PP_DUP_SIGN; bad account E_PP_BAD_ARGS; bad tick E_PP_BAD_ARGS; signs 2 rows; ledger_tx constant (0 == 0)
+  | PASS AC-PP4: non-crossing sign zero award calls (0); crossing sign awards (memorial=issued, calls 1, cert rows 1); over-threshold sign no award (1 calls); platform pre-award internalized (memorial=already, certs 1 -> 1, signs 2); unwired collectibles E_PP_BAD_ARGS / E_PP_BAD_ARGS
+  | PASS AC-PP5: view count == SQL COUNT (3 == 3), qualified derived; live derivation (new sign 3 -> 4); board counts (4); read methods zero write statements (none); ledger_tx constant (0 == 0)
+  | PASS AC-PP6: empty disclaimer refused construction (E_PP_NO_DISCLAIMER/E_PP_NO_DISCLAIMER); disclaimer rides every envelope (register/sign/view/board); ai_label persistent on views (quiet-hours=1, night-lights=0); direct ai_label=2 INSERT rejected by DB CHECK (True)
+  | PASS AC-PP7: module pure ASCII (0 non-ascii); zero network imports (0); zero UPDATE surface (none); zero collectibles/ledger direct SQL (none); zero ledger import (False); zero RNG; shipped config.json byte-stable
+  | PASS AC-PP8: empty world honest []; envelope keys ['disclaimer', 'progress_board']; row keys exact (8); dense 4 rows; four-state values pinned (5/3->100.0 rem0 Q; 3/3->100.0 rem0 Q; 1/3->33.33 rem2; 0/4->0.0 rem4): True
+  | PASS AC-PP9: per-row count/threshold == manual SQL; progress_pct == manual arithmetic (overshoot saturated 100.0, not 166.67); remaining == max(t-c,0); qualified == count>=threshold arithmetic
+  | PASS AC-PP10: reverse-registration world still key-ordered (100.0 tie band id-ascending: at-bar < over-pass; then 33.33; then 0.0); double-call json.dumps(sort_keys=True) byte-identical: True
+  | PASS AC-PP11: pure-read (rows 4/4 signs 9/9 constant; double extra calls == first; method source zero write words none; ledger_tx constant 0==0); live derivation (sign 2/3 -> pct 66.67 rem 1; crossing sign -> midway joins the saturated band, order ['at-bar', 'midway', 'over-pass', 'fresh-air'])
+  | PASS AC-PP12: disclaimer rides the envelope; ai_label persistent per registration declaration (over-pass 0, at-bar 1, midway 0, fresh-air 1); method source pure ASCII, zero RNG; shipped config.json byte-stable
+  | SUITE PASS 12/12
+suite exit=0
+
+=== [2] suite double-run determinism (byte-identical stdout) ===
+run1 exit=0 sha16=f9d918f5a5a9b41c
+run2 exit=0 sha16=f9d918f5a5a9b41c
+double-run byte-identical: True (exit codes 0/0)
+
+=== [3] RUNNER full regression (self-teed evidence qa/reconcile-all-R1968.log) ===
+  | | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 17.5s)
+  | | REFUSAL: no eligible daily RUNNER PASS evidence under qa/
+  | | runner: RUNNER PASS (2/2 suites green, reconcile controls 6/6, 14.5s)
+  | PASS suite ledger-proposal exit=0 pass-lines=12 fail-lines=0 criteria=12 0.2s
+  | PASS suites 202/202 green, expected criteria total=1758
+  | RUNNER PASS (202/202 suites green, reconcile controls 7/7, 176.7s)
+
+=== [4] fingerprint sentinel (five-domain schema drift check) ===
+  | PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+  | PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+  | PASS domain=member baseline matches live constructor (R1676 cross-validation)
+  | PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+  | PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+  | verdict CLEAN domains=5
+sentinel exit=0
+
+=== [5] suite matrix regen + double --check ===
+  | PASS generated docs/sandbox-suite-matrix.md (19441 bytes) - registry suites=202 criteria=1758 evidence=qa/reconcile-all-R1968.log green=202/202
+  | PASS check: docs/sandbox-suite-matrix.md byte-identical (19441 bytes, 202 suites, 1758 criteria)
+  | PASS check: docs/sandbox-suite-matrix.md byte-identical (19441 bytes, 202 suites, 1758 criteria)
+matrix --check exits: [0, 0]
+
+VERDICT PASS

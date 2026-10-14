@@ -3,8 +3,9 @@
 co-signature -> threshold crossing triggers the collectibles
 memorial linkage; seed = R-20260928-bigdomain-belonging-economy.md
 + collectibles.py R619). Asserts the pre-registered criteria
-AC-PP1..AC-PP7 from the R1766 explore-queue row (criteria were
-registered before this code existed; honesty law). Each criterion
+AC-PP1..AC-PP7 from the R1766 explore-queue row plus the R1968
+progress-board successor criteria AC-PP8..AC-PP12 (all registered
+before the code they govern existed; honesty law). Each criterion
 prints PASS/FAIL with evidence; the process exits non-zero on any
 FAIL.
 
@@ -397,8 +398,147 @@ def main():
           % (non_ascii, len(net_imports), update_hits or "none",
              second_engine or "none", ledger_ref))
 
+    # -- AC-PP8..AC-PP12 progress board (R1968 read-face successor) ----------
+    pf3_path = os.path.join(tmp, "proposal3.db")
+    pf3 = P.ProposalFace(clt, gate, DISCLAIMER, pf3_path)
+    pp3conn = sqlite3.connect(pf3_path)
+    empty_pb = pf3.progress_board()
+    empty_keys = set(empty_pb.keys())
+    # register in reverse board order (zero insertion-order key probe)
+    pf3.register_proposal("fresh-air", "Fresh air intakes for the arcade",
+                          "Add two green-air intakes at the arcade ends",
+                          "usr:carol", 10, 30, 4, True)
+    pf3.register_proposal("midway", "Midweek market stalls",
+                          "Open the plaza for midweek stall holders",
+                          "usr:dave", 10, 30, 3, False)
+    pf3.register_proposal("at-bar", "At-bar rooftop apiary",
+                          "A rooftop apiary at the required bar",
+                          "usr:frank", 10, 30, 3, True)
+    pf3.register_proposal("over-pass", "Over-pass harbor lanterns",
+                          "Lantern rows past the required bar",
+                          "usr:gina", 10, 30, 3, False)
+    for who in ("bob", "carol", "dave", "erin", "frank"):
+        pf3.sign_proposal("usr:" + who, "over-pass", 12)
+    for who in ("bob", "carol", "dave"):
+        pf3.sign_proposal("usr:" + who, "at-bar", 14)
+    pf3.sign_proposal("usr:bob", "midway", 16)
+    pb1 = pf3.progress_board()
+    rows1 = {r["proposal_id"]: r for r in pb1["progress_board"]}
+    row_keys = {frozenset(r.keys()) for r in pb1["progress_board"]}
+    row_shape = frozenset(("proposal_id", "title", "signature_count",
+                           "threshold", "remaining", "progress_pct",
+                           "qualified", "ai_label"))
+    want_vals = {"over-pass": (5, 3, 0, 100.0, True),
+                 "at-bar": (3, 3, 0, 100.0, True),
+                 "midway": (1, 3, 2, 33.33, False),
+                 "fresh-air": (0, 4, 4, 0.0, False)}
+    vals_ok = all(
+        (rows1[k]["signature_count"], rows1[k]["threshold"],
+         rows1[k]["remaining"], rows1[k]["progress_pct"],
+         rows1[k]["qualified"]) == v for k, v in want_vals.items())
+    ok8 = (empty_pb["progress_board"] == []
+           and empty_keys == {"progress_board", "disclaimer"}
+           and set(pb1.keys()) == {"progress_board", "disclaimer"}
+           and row_keys == {row_shape}
+           and len(pb1["progress_board"]) == 4 and vals_ok)
+    record("AC-PP8", ok8, "empty world honest []; envelope keys"
+          " %s; row keys exact (8); dense 4 rows; four-state values"
+          " pinned (5/3->100.0 rem0 Q; 3/3->100.0 rem0 Q; 1/3->"
+          "33.33 rem2; 0/4->0.0 rem4): %s"
+          % (sorted(empty_keys), vals_ok))
+
+    manual = {}
+    for pid in want_vals:
+        cnt = pp3conn.execute(
+            "SELECT COUNT(*) FROM proposal_signs WHERE proposal_id ="
+            " ?", (pid,)).fetchone()[0]
+        thr = pp3conn.execute(
+            "SELECT threshold FROM proposals WHERE proposal_id = ?",
+            (pid,)).fetchone()[0]
+        manual[pid] = (cnt, int(thr))
+    cross_ok = all(
+        rows1[pid]["signature_count"] == manual[pid][0]
+        and rows1[pid]["threshold"] == manual[pid][1]
+        and rows1[pid]["progress_pct"] == round(
+            min(manual[pid][0], manual[pid][1]) * 100.0
+            / manual[pid][1], 2)
+        and rows1[pid]["remaining"] == max(
+            manual[pid][1] - manual[pid][0], 0)
+        and rows1[pid]["qualified"] == (
+            manual[pid][0] >= manual[pid][1])
+        for pid in want_vals)
+    sat_law = (rows1["over-pass"]["progress_pct"] == 100.0
+               and rows1["over-pass"]["progress_pct"] != 166.67)
+    ok9 = cross_ok and sat_law
+    record("AC-PP9", ok9, "per-row count/threshold == manual SQL;"
+          " progress_pct == manual arithmetic (overshoot saturated"
+          " 100.0, not 166.67); remaining == max(t-c,0); qualified"
+          " == count>=threshold arithmetic")
+
+    order1 = [r["proposal_id"] for r in pb1["progress_board"]]
+    pb2 = pf3.progress_board()
+    dumps_same = (json.dumps(pb1, sort_keys=True)
+                  == json.dumps(pb2, sort_keys=True))
+    ok10 = (order1 == ["at-bar", "over-pass", "midway", "fresh-air"]
+            and dumps_same)
+    record("AC-PP10", ok10, "reverse-registration world still key-"
+          "ordered (100.0 tie band id-ascending: at-bar <"
+          " over-pass; then 33.33; then 0.0); double-call"
+          " json.dumps(sort_keys=True) byte-identical: %s"
+          % dumps_same)
+
+    n_prop_a = _count(pp3conn, "proposals")
+    n_sign_a = _count(pp3conn, "proposal_signs")
+    pb_x = pf3.progress_board()
+    pb_y = pf3.progress_board()
+    n_prop_b = _count(pp3conn, "proposals")
+    n_sign_b = _count(pp3conn, "proposal_signs")
+    src_prog = inspect.getsource(P.ProposalFace.progress_board)
+    write_words = [w for w in ("INSERT", "UPDATE", "DELETE")
+                   if w in src_prog]
+    led_tx11 = _count(ledconn, "ledger_tx")
+    pf3.sign_proposal("usr:carol", "midway", 18)
+    pb_live = pf3.progress_board()
+    live_mid = {r["proposal_id"]: r for r in pb_live["progress_board"]}
+    pf3.sign_proposal("usr:erin", "midway", 20)
+    pb_cross = pf3.progress_board()
+    order_cross = [r["proposal_id"] for r in pb_cross["progress_board"]]
+    ok11 = (n_prop_a == n_prop_b and n_sign_a == n_sign_b
+            and pb_x == pb1 and pb_y == pb1 and not write_words
+            and led_tx11 == led_tx0
+            and live_mid["midway"]["progress_pct"] == 66.67
+            and live_mid["midway"]["remaining"] == 1
+            and live_mid["midway"]["qualified"] is False
+            and order_cross == ["at-bar", "midway", "over-pass",
+                                "fresh-air"])
+    record("AC-PP11", ok11, "pure-read (rows %d/%d signs %d/%d"
+          " constant; double extra calls == first; method source"
+          " zero write words %s; ledger_tx constant %d==%d); live"
+          " derivation (sign 2/3 -> pct 66.67 rem 1; crossing sign"
+          " -> midway joins the saturated band, order %s)"
+          % (n_prop_a, n_prop_b, n_sign_a, n_sign_b,
+             write_words or "none", led_tx11, led_tx0, order_cross))
+
+    rows_final = {r["proposal_id"]: r for r in
+                  pb_cross["progress_board"]}
+    ai_ok = (rows_final["over-pass"]["ai_label"] == 0
+             and rows_final["at-bar"]["ai_label"] == 1
+             and rows_final["midway"]["ai_label"] == 0
+             and rows_final["fresh-air"]["ai_label"] == 1)
+    src_ascii = all(ord(ch) <= 127 for ch in src_prog)
+    with open(os.path.join(BASE, "config.json"), "rb") as handle:
+        cfg_after12 = handle.read()
+    ok12 = (pb_cross["disclaimer"] == DISCLAIMER and ai_ok
+            and src_ascii and "random" not in src_prog
+            and cfg_after12 == cfg_bytes)
+    record("AC-PP12", ok12, "disclaimer rides the envelope; ai_label"
+          " persistent per registration declaration (over-pass 0,"
+          " at-bar 1, midway 0, fresh-air 1); method source pure"
+          " ASCII, zero RNG; shipped config.json byte-stable")
+
     ppconn.close()
     pp2conn.close()
+    pp3conn.close()
     ledconn.close()
     pf.close()
     pf2.close()

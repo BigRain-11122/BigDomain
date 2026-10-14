@@ -926,7 +926,7 @@ SUITES = [
     # ledger reference exists in the module at all)
     # (AC-PP1..PP7 pre-registered in state/queue/explore.md).
     ("ledger-proposal",
-     os.path.join("ledger", "test_proposal.py"), 7),
+    os.path.join("ledger", "test_proposal.py"), 12),
     # R1956 proposal cross-restart persist window: two-piece close->
     # reopen battery (byte-identical views/board/two-table SQL),
     # restart-surviving gates same-code, continuation recompute

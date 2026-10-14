@@ -69,8 +69,10 @@ disclaimer is required at construction and rides every envelope
 (non-advisory law).
 
 Pre-registered criteria AC-PP1..PP7 live in the R1766
-explore-queue row and were written before this code existed
-(honesty law).
+explore-queue row; the R1968 progress-board successor face is
+covered by AC-PP8..AC-PP12 in the R1968 explore-queue row (both
+sets were written before the code they govern existed; honesty
+law).
 """
 
 import datetime
@@ -407,3 +409,42 @@ class ProposalFace:
                           "qualified": count >= int(r[5]),
                           "ai_label": int(r[6])})
         return {"proposals": board, "disclaimer": self.disclaimer}
+
+    def progress_board(self):
+        """Pure-read co-signature progress board (R1968 read-face
+        successor; criteria AC-PP8..AC-PP12 registered in the
+        explore-queue row before this code existed). One row per
+        registered proposal (dense registry axis); the progress
+        percentage saturates at 100.0 once the bar is crossed -
+        progress is closeness to the goal, while the raw
+        signature_count and the qualified flag ride every row so
+        an overshoot stays visible (the face never hides data).
+        remaining counts the signatures still needed; qualified
+        stays the read-time derivation (count >= threshold, the
+        R1766 verdict). Sort keys are fully deterministic: progress
+        descending, proposal id ascending as the tie-break - zero
+        RNG, zero time keys, zero insertion-order keys (the sort
+        absorbs the enumeration order). Live derivation, zero
+        cache: a new sign changes the next read."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT proposal_id, title, threshold, ai_label"
+                " FROM proposals").fetchall()
+            counts = dict(self._conn.execute(
+                "SELECT proposal_id, COUNT(*) FROM proposal_signs"
+                " GROUP BY proposal_id").fetchall())
+        board = []
+        for r in rows:
+            count = int(counts.get(r[0], 0))
+            threshold = int(r[2])
+            board.append({"proposal_id": r[0], "title": r[1],
+                          "signature_count": count,
+                          "threshold": threshold,
+                          "remaining": max(threshold - count, 0),
+                          "progress_pct": round(
+                              min(count, threshold) * 100.0 / threshold, 2),
+                          "qualified": count >= threshold,
+                          "ai_label": int(r[3])})
+        board.sort(key=lambda row: (-row["progress_pct"],
+                                    row["proposal_id"]))
+        return {"progress_board": board, "disclaimer": self.disclaimer}
