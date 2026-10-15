@@ -2288,6 +2288,14 @@ SUITES = [
         # (AC-CVM1..CVM7 pre-registered in state/queue/explore.md).
         ("civic-behavior-monthwindow",
          os.path.join("ledger", "test_civic_monthwindow.py"), 7),
+        # R1998 (takeover closeout): civic behavior month-window read
+        # face cross-restart persistence example window - close -> same
+        # db reopen five-form byte-identity, post-restart earn and
+        # registry continuation, two-restart stability, pure-read law
+        # plus hygiene (AC-CVMP1..CVMP7 pre-registered in the
+        # state/queue/explore.md claim row before this code existed).
+        ("civic-behavior-monthwindow-persist",
+         os.path.join("ledger", "test_civic_monthwindow_persist.py"), 7),
     ]
 
 FAILS = 0

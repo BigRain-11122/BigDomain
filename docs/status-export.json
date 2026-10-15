@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-15T15:37:31+08:00",
+  "export_ts": "2026-10-15T16:56:50+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1997: civic behavior_distribution month-window read face delivered via 29th-case crashed-round takeover closeout (P3 explore FIFO head; AC-CVM1..CVM7 pre-registered in the claim row before code). Product: civicpoints.py behavior_distribution(window) additive extension - _assert_month strict round-trip gate (E_CV_BAD_WINDOW dedicated code, 16 malformed forms fail-closed), default None byte-identical zero-drift, explicit window adds the envelope key additively, empty months keep the registry-complete all-zero board, additive sum law for events/total_points + COUNT(DISTINCT) set-union law for participants (first-draft plain-sum erratum corrected same round per the R1996 AC-CJM6 precedent). Takeover battery all green: suite rerun exit=0 sha-matching the original double-run evidence; RUNNER PASS 222/222 criteria 1891->1898 controls 7/7 223.5s; matrix 222/1898 --check byte-identical 21338B; fingerprint CLEAN domains=5; profile byte-identical PASS; census DRIFT-CLEAN (1495 files); the four unlogged sections re-run and appended as takeover follow-up VERDICT PASS (qa/reconcile-all-R1997.log).",
-    "latest_artifact": "src/sandbox/ledger/civicpoints.py behavior_distribution(window) + src/sandbox/ledger/test_civic_monthwindow.py + qa/civic-monthwindow-R1997.log + qa/reconcile-all-R1997.log (RUNNER PASS 222/222, takeover follow-up VERDICT PASS)",
+    "current": "R1998: civic behavior_distribution month-window read-face cross-restart persistence example window delivered via 30th-case crashed-round takeover closeout (P3 explore FIFO head; AC-CVMP1..CVMP7 pre-registered in the claim row before code; suite-only round - civicpoints.py sha256 pinned unchanged). Five window-form reads (default + 2026-09/10/11/12) byte-identical across close -> same civic.db reopen x2; post-restart earn recompute zero-cache (participants 2->3) and new-registration b-newmoon continues on every window board with honest zero rows; takeover rerun exit=0 dual-face sha anchor matched (bd7f8b0b / 1d621770); RUNNER PASS 223/223 criteria 1898->1905; matrix regen byte-identical; fingerprint CLEAN; profile PASS; census DRIFT-CLEAN after legitimate takeover-dialect re-anchor (R1996 precedent).",
+    "latest_artifact": "src/sandbox/ledger/test_civic_monthwindow_persist.py + qa/civic-monthwindow-persist-R1998.log (SUITE 7/7 double-run byte-identical) + qa/reconcile-all-R1998.log (RUNNER PASS 223/223 criteria 1898->1905, takeover follow-up VERDICT PASS)",
     "next_milestone": "Next explore FIFO head within 48h: apimarket dev_sales_board cross-restart persistence example window (claim-time AC prefix occupancy check); daily-profile observation-window ruling gates open 2026-10-16."
   },
   "depts": [
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1998",
+      "R1998: 30th-case crashed-round takeover closeout - civic behavior_distribution month-window read-face cross-restart persistence example window (P3 explore FIFO head; AC-CVMP1..CVMP7 pre-registered in the claim row before code; suite-only round, civicpoints.py sha256 pinned unchanged). Five read forms (default full-window + 2026-09/10/11/12 windows) byte-identical across close -> same civic.db reopen x2; post-restart earn recompute zero-cache (October window participants 2->3); post-restart registration b-newmoon continues on every window board (honest zero rows Sep/Oct/Dec, first content 1/4/1/2026-11-02 on Nov); old-window frozen; two-restart stability; pure-read law. Takeover verification: suite rerun exit=0, normalized-LF sha bd7f8b0b bytes=2399 == original RUN1/RUN2 segment byte-identical, original check face (rstrip tail NL) sha 1d621770 reproduced - dual-face anchor matched. Full battery takeover rerun: RUNNER PASS 223/223 criteria 1898->1905 (SUITES 222->223) controls 7/7 202.3s; matrix regen 223/1905 --check byte-identical 21444B; fingerprint CLEAN domains=5; profile byte-identical PASS; census takeover-driver dialect file legitimately re-anchored (R1996 precedent) DRIFT-CLEAN flags=0 files=1498 baselined=509; evidence qa/reconcile-all-R1998.log takeover follow-up VERDICT PASS. Group consumption: D-20261015-06 (memory-mechanism fixes + MiniGame deadline) acked non-BD lane; O-20261015-1600/1630 (MV genre techniques + PROMPT-EXPERT-GATE-v1) acked BigStream lane; group orders.md tail merge-conflict marker noted read-only. Fold R533 pre-closeout honored (tail-5 window 9032B -> one rolling line, 19 tokens embedded zero-loss; eol fix-indent first). Explore consume-1 reseed-1 open=10."
+    ],
+    [
       "R1997",
       "R1997: 29th-case crashed-round takeover closeout - civic behavior_distribution month-window read face (P3 explore FIFO head; AC-CVM1..CVM7 pre-registered in the claim row before code). The crashed session finished the whole payload (product + suite double-run + SUITES registration 221->222 + matrix regen 222/1898 + RUNNER PASS 222/222 criteria 1891->1898 controls 7/7 223.5s in qa/reconcile-all-R1997.log) and died pre-closeout before the four battery check sections; taker re-verified green personally per the R1995/R1994 precedent: suite spot re-run exit=0 sha256 anchor-matching the crashed round's double-run byte-identical evidence (a85ee5fb..., bytes=1588), then the four unlogged sections re-run all green and appended as a takeover follow-up (VERDICT PASS, qa/reconcile-all-R1997.log): matrix --check byte-identical 21338B (222 suites, 1898 criteria), fingerprint CLEAN domains=5, profile --daily --check byte-identical PASS, census DRIFT-CLEAN (files=1495 tee=987 baselined=508 flags=0). Product face: behavior_distribution(window) - _assert_month strict round-trip gate with the E_CV_BAD_WINDOW dedicated code (16 malformed forms fail-closed, zero read side-effects), default None byte-identical with the pre-window era, explicit window adds the envelope key additively, empty windows keep the registry-complete all-zero board (dormant rows never vanish), oct/sep cross-window separation both directions verified against an independent prefix-filter recount, default == sept+oct additive sum law for events/total_points with the COUNT(DISTINCT) set-union law for participants (the AC-CVM5 first-draft plain-sum erratum corrected same round, product behavior already right, R1996 AC-CJM6 precedent), pure-read law + ast zero-write scan, schema/config sha pins. Group faces: LEDGER @BigDomain 0, DEC content-addressed new=0 (rows 338->328 = 10-15 group memory-restructure layout drift, auxiliary baseline re-anchored, token set unchanged), ORD tail = O-20261015-1335 already acked, GORD 460==460 flat, bench fresh today, daily reconcile evidence for 10-15 on plate not re-run. fold R532 pre-closeout honored (gauge 76581B -> tail-6 6227B folded to one rolling line kept=0, 7 tokens embedded zero-loss gen532, archive section R1997 six lines verbatim + preop bak; post 74516B verified). Explore consumed 1 reseeded 1 (month-window cross-restart persistence seed), open=10 conserved. Score 2 (product delivery via takeover commit)."
     ],
@@ -355,30 +359,14 @@
       "R1955: ledger reports cross-restart persist suite 7/7 (AC-RPP1..RPP7; two-piece restart, immutable three-table persistence, twelve restart-surviving gates same-code, continuation recompute, frozen prefix rows, RUNNER 193/193 criteria 1683->1690; one same-round claim-row erratum honestly noted); tech consume 1 reseed 1 (refund-recovery persist seeded; next FIFO head = ledger proposal persist)"
     ],
     [
-      "R1954",
-      "ledger metered cross-restart persist suite 7/7 (AC-MTP1..MTP7; two-piece restart, credit-counter persistence core, restart-surviving gates, continuation recompute, frozen immutable rows, RUNNER 192/192 criteria 1676->1683) + crashed-round orphan-payload takeover closeout (eleventh case: fold R513 integrity verified, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
-    ],
-    [
-      "R1953",
-      "ledger sistercity cross-restart persist suite 7/7 (AC-SCP1..SCP7; two-piece restart, thirteen restart-surviving gates incl the persisted-settlement replay gate E_SC_SETTLED and the no-disclaimer constructor gate, frozen anchor rows, RUNNER 191/191 criteria 1669->1676) + crashed-round orphan-payload takeover closeout (tenth case: dialect normalization per R1884 capture law, census DRIFT-CLEAN, fingerprint five-domain CLEAN rc 0)"
-    ],
-    [
-      "R1952",
-      "ledger festival cross-restart persist suite 7/7 (AC-FCP1..FCP7; three-piece restart, eleven restart-surviving gates incl the collectibles UNIQUE backstop re-probe, commemorative first-purchase linkage, frozen anchor rows, RUNNER 190/190 criteria 1662->1669) + crashed-round orphan-payload takeover closeout (probe invocation bug corrected: fingerprint five-domain CLEAN rc 0; census DRIFT-CLEAN; live suite re-verify rc 0)"
-    ],
-    [
-      "R1951",
-      "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
-    ],
-    [
-      "1997",
+      "1998",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,

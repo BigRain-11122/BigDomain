@@ -1,0 +1,29 @@
+# civic behavior_distribution month-window read-face cross-restart persistence example window (R1998)
+# suite: src/sandbox/ledger/test_civic_monthwindow_persist.py (AC-CVMP1..7 pre-registered in the explore-queue claim line before this code existed)
+# discipline: double-run stdout CRLF->LF normalized capture (R1880 family)
+
+===== RUN 1 (exit 0) =====
+PASS AC-CVMP1: pre-close pinning: default envelope keys ['behavior_distribution', 'disclaimer'], window envelopes additive window key; full aggregates volunteer 4/20/2/2026-10-02, report 2/6/2/2026-10-03, recycle 4/8/2/2026-10-03, dormant 0/0/0/None; 2026-09 volunteer 1/5/1 + recycle 1/2/1; 2026-10 volunteer 3/15/2 + report 2/6/2 + recycle 3/6/2; empty 2026-11 / 2026-12 registry-complete zero boards; deterministic order law all forms; all five forms == independent manual SQL GROUP BY cross; double-call identical
+PASS AC-CVMP2: CivicPointsFace close -> new instance over the same civic.db: default + 2026-09 + 2026-10 + 2026-11 + 2026-12 window reads all byte-identical to the pre-close snapshots (sort_keys dumps; zero in-memory drift in the derived month-window read face)
+PASS AC-CVMP3: post-restart earn (dave volunteer @2026-10-05): October window recomputed zero-cache (volunteer 4/20/3/2026-10-05, participants 2 -> 3) and the full-window face follows (5/25/3/2026-10-05), both == manual SQL cross; the September window read stays byte-identical to the pre-close snapshot (old-window frozen); empty 2026-11 / 2026-12 windows stay honest zero
+PASS AC-CVMP4: post-restart registration (b-newmoon ai_label=1) + November earns (alice report @11-01, alice newmoon @11-02): registry continuation across restart - the new behavior appears on every window board (honest zero rows on 2026-09 / 2026-10 / 2026-12, first content 1/4/1/2026-11-02 on the 2026-11 window with report 1/3/1/2026-11-01); original-behavior earn-side aggregates frozen on the September and October windows; full-window end state volunteer 5/25/3 + report 3/9/2 + recycle 4/8/2 + newmoon 1/4/1 + dormant 0 in deterministic order; all five forms == independent manual SQL cross
+PASS AC-CVMP5: second civic-face restart (third instance, same civic.db): all five window-form reads byte-identical to the post-registration state and the repeated read batch identical to itself (repeat-read purity, zero in-memory drift across two restarts)
+PASS AC-CVMP6: pure-read law: every read batch left the civic_earns row count constant (10 == 10, 13 == 13); end-state five-form boards == fresh manual SQL crosses; civicpoints.py sha256 unchanged (suite-only round)
+PASS AC-CVMP7: hygiene: source pure ASCII (21701 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (7/7 criteria green)
+
+===== RUN 2 (exit 0) =====
+PASS AC-CVMP1: pre-close pinning: default envelope keys ['behavior_distribution', 'disclaimer'], window envelopes additive window key; full aggregates volunteer 4/20/2/2026-10-02, report 2/6/2/2026-10-03, recycle 4/8/2/2026-10-03, dormant 0/0/0/None; 2026-09 volunteer 1/5/1 + recycle 1/2/1; 2026-10 volunteer 3/15/2 + report 2/6/2 + recycle 3/6/2; empty 2026-11 / 2026-12 registry-complete zero boards; deterministic order law all forms; all five forms == independent manual SQL GROUP BY cross; double-call identical
+PASS AC-CVMP2: CivicPointsFace close -> new instance over the same civic.db: default + 2026-09 + 2026-10 + 2026-11 + 2026-12 window reads all byte-identical to the pre-close snapshots (sort_keys dumps; zero in-memory drift in the derived month-window read face)
+PASS AC-CVMP3: post-restart earn (dave volunteer @2026-10-05): October window recomputed zero-cache (volunteer 4/20/3/2026-10-05, participants 2 -> 3) and the full-window face follows (5/25/3/2026-10-05), both == manual SQL cross; the September window read stays byte-identical to the pre-close snapshot (old-window frozen); empty 2026-11 / 2026-12 windows stay honest zero
+PASS AC-CVMP4: post-restart registration (b-newmoon ai_label=1) + November earns (alice report @11-01, alice newmoon @11-02): registry continuation across restart - the new behavior appears on every window board (honest zero rows on 2026-09 / 2026-10 / 2026-12, first content 1/4/1/2026-11-02 on the 2026-11 window with report 1/3/1/2026-11-01); original-behavior earn-side aggregates frozen on the September and October windows; full-window end state volunteer 5/25/3 + report 3/9/2 + recycle 4/8/2 + newmoon 1/4/1 + dormant 0 in deterministic order; all five forms == independent manual SQL cross
+PASS AC-CVMP5: second civic-face restart (third instance, same civic.db): all five window-form reads byte-identical to the post-registration state and the repeated read batch identical to itself (repeat-read purity, zero in-memory drift across two restarts)
+PASS AC-CVMP6: pure-read law: every read batch left the civic_earns row count constant (10 == 10, 13 == 13); end-state five-form boards == fresh manual SQL crosses; civicpoints.py sha256 unchanged (suite-only round)
+PASS AC-CVMP7: hygiene: source pure ASCII (21701 bytes), zero network imports on true import lines, world db in system tmp outside the repo
+SUITE PASS (7/7 criteria green)
+
+===== BYTE-IDENTICAL CHECK =====
+run1 sha256: 1d62177071282363c57952f92cc474e0baa5f8dd35cefbfdfc9cc42a61349b29
+run2 sha256: 1d62177071282363c57952f92cc474e0baa5f8dd35cefbfdfc9cc42a61349b29
+byte-identical: True
+VERDICT: PASS
