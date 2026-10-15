@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-15T09:12:44+08:00",
+ "export_ts": "2026-10-15T09:17:40+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "已交付数据集覆盖榜月份窗读面（coverage_board(window)：缺省全窗零漂移+显式 YYYY-MM 月窗按记录时间溯源切片+12 坏窗 fail-closed；崩轮接管收口——原轮证据保全+接管三绿亲验全套回归 214/214 绿）",
-  "latest_artifact": "qa/coverageboard-window-R1985.log（2026-10-15）",
-  "next_milestone": "下一窗：展示橱窗统计榜跨重启持久化例窗（R1983 export 既定后继·explore 队头·后继队头 lobby 套件 stdout 确定性硬化窗），窗 ≤48h"
+  "current": "已交付数据集覆盖榜月窗读面并全量上链（崩轮接管收口：R1985 全套件代码+证据 commit 28988d32 已推送）——产线零回归 RUNNER 214/214",
+  "latest_artifact": "commit 28988d32 + qa/coverageboard-window-R1985.log，2026-10-15",
+  "next_milestone": "下一窗：展示橱窗统计榜跨重启持久化例窗（explore 队头·后续队头 lobby 套件 stdout 确定性硬化窗），窗 ≤48h"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1986",
+   "R1986 double-crash takeover closeout (R1922/R1924/R1928/R1976 family): original R1985 round crashed 08:04 post-RUNNER pre-closeout, its own takeover crashed 08:58 post-fold-R527 pre-surgery with the full payload on disk; this round verified payload 7-face PRESENT (evidence DONE marker + sha16 anchor + explore done note + archive section + preop bak + runner2/matrix anchors), replayed closeout_R1985.py idempotently (state tick 1985 +2 lines 67957->70636B within the fold line, heartbeat +1, export 45-row refresh, gate VERDICT PASS pass=21 fail=0), fixed the inherited matrix-anchor phrasing bug (checker-output string asserted against the file body -> re-anchored to the machine summary row, --check byte-identical 20578B rc=0), directed 20-file commit 28988d32 + push cc0fdca5..28988d32 sha-verified pre/post; R1985 product fully on-chain via this closeout (datasub coverage_board month-window read face AC-CVW1..CVW7, SUITE 7/7 x2 identical sha16 57d176daa223d55f, RUNNER 214/214 criteria 1835->1842, matrix 214/1842); five-silence external faces FLAT (DEC set-diff 0 new, ORD 10-15/16 = 0, LEDGER @BigDomain tail <=10-14, baselines 416/266 kept); explore open=10 conserved; score 1 takeover closeout"
+  ],
+  [
    "R1985",
    "R1985 datasub coverage board month-window read face delivered via crash-takeover closeout (P3 explore FIFO head; AC-CVW1..CVW7 registered at takeover with honest note - original round crashed after its RUNNER with sections 1-3 preserved) - coverage_board(window): default window=None full-window envelope byte-identical zero drift, explicit YYYY-MM window slices each row family by its own record-time provenance stamp (subscriptions by subscribed_utc, deliveries by delivered_utc - the period window never decides the board month, provenance-separation probe), 12 malformed windows fail closed before any read, honest dense zero rows inside a window, all-zero honest-empty month, additive window envelope key, two-piece restart battery byte-identical, pure-read law; three-green self-verified: SUITE 7/7 double-run byte-identical sha16 57d176daa223d55f anchor-matched + RUNNER PASS 214/214 controls 7/7 176.6s (SUITES 213->214 criteria 1835->1842) + matrix 214/1842 --check byte-identical + census DRIFT-CLEAN + fingerprint CLEAN domains=5; first-run cd7 self-flag = takeover Tee ps-utf16 dialect pitfall (R1976/R1969 family), first-run evidence preserved transcoded qa/reconcile-all-R1985b.log; fold R527 tail-5 pre-closeout post==predicted 67957B; explore consume 1 reseed 1 (open=10)"
   ],
@@ -379,14 +383,14 @@
    "R1983 showcase stats board read face delivered (P3 explore FIFO head; AC-SSB1..SSB7 pre-registered pre-code) - ShowcaseFace.stats_board registry-keyed pure-read per-showcase place/retract count aggregation with the derived displayed_now column; net-flow identity displayed_now == places - retracts machine-checked per row (append-only alternation); dense over the registry with honest zero rows and an honest empty board; three-key decisive order places DESC, retracts DESC, showcase_id ASC; cross-face reconciliation against showcase_view; three-green: SUITE 7/7 double-run byte-identical sha16 4b5908f561799632 + RUNNER PASS 212/212 controls 7/7 178.4s (SUITES 211->212 criteria 1821->1828) + matrix 212/1828 --check byte-identical + fingerprint CLEAN domains=5 + profile DRIFT-CLEAN + census DRIFT-CLEAN flags=0; explore consume 1 reseed 1 (open=10)"
   ],
   [
-   "1985",
+   "1986",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-09..2026-10-15",
   "window_days": 7,
-  "log_lines_in_window": 12,
+  "log_lines_in_window": 13,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 0,
