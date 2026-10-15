@@ -2237,6 +2237,20 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-showcase-statscap-persist",
      os.path.join("ledger", "test_showcase_statscappersist.py"), 7),
+    # R1995 explore-queue FIFO head claim (R1968 reseed row):
+    # proposal progress_board cross-restart persistence example
+    # window - full-stack close -> reopen byte-identical board
+    # (dense registry axis, rounded-progress sort, mirror-SQL
+    # third path), restart-surviving gates same-code, new
+    # signature liveness (zero-cache recompute), threshold
+    # crossing + overshoot saturation post-restart (memorial
+    # first-award and honest overshoot count), new registration
+    # dense row, third instance, pure-read law
+    # (AC-PBP1..AC-PBP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-proposal-progresspersist",
+     os.path.join("ledger",
+                  "test_proposal_progresspersist.py"), 7),
 ]
 
 FAILS = 0

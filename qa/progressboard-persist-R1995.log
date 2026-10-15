@@ -1,0 +1,108 @@
+R1995 progress_board persist round evidence
+sections: suite double-run / mtime probe reroll / R1780 observation counter / logs prune
+
+--- suite double-run ---
+run1 exit=0
+
+PASS AC-PBP1: envelope keys=True row keys=True gamma overshoot saturated (count 5 honest, 100.0, remaining 0)=True alpha 66.67/rem1 + beta 25.0/rem3=True delta dense zero row=True order pre=True mirror-SQL==order=True double-read byte-stable=True
+PASS AC-PBP2: full-stack close (proposal -> ledger) then rebuild on same paths + same cfg bytes: progress_board byte-identical=True double-read self-stable=True
+PASS AC-PBP3: post-restart signature: beta 1/4 -> 2/4 zero-cache recompute 25.0->50.0=True remaining 3->2=True receipt count 2=True order ['gamma-pet', 'alpha-pet', 'beta-pet', 'epsilon-pet', 'eta-pet', 'delta-pet']=['gamma-pet', 'alpha-pet', 'beta-pet', 'epsilon-pet', 'eta-pet', 'delta-pet'] untouched rows byte-frozen=True
+PASS AC-PBP4: crossing sign: receipt qualified/memorial issued/100.0/remaining 0=True overshoot sign: saturated 100.0, remaining 0, count 4 honest, memorial None=True 100.0 tie id-asc alpha first=True
+PASS AC-PBP5: post-restart registration: zeta dense row honest zeros (0/5, 0.0, remaining 5, unqualified)=True old rows byte-frozen=True 0.0 tie id-asc delta before zeta=True
+PASS AC-PBP6: third instance == second-instance final state byte-identical=True sequential double-read=True counts flat across read battery {'proposals': 7, 'proposal_signs': 13}=={'proposals': 7, 'proposal_signs': 13}=={'proposals': 7, 'proposal_signs': 13} progress_board source zero write statements ([]) zero RNG
+PASS AC-PBP7: suite pure ASCII=True net-clean=True registry-wired=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+run2 exit=0 byte-identical=True
+--- suite_matrix mtime probe reroll (R1931/R1967 pattern, window stays open awaiting a real flatten event) ---
+exit=0
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+files: 1540 (candidates 1483)
+distinct_mtime: 1496
+largest_tie_group: 2
+winner: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\reconcile-all-R1995.log
+winner_calls_identical: True (3/3)
+tie_peers: 0
+verdict: NO-LIVE-TIE
+note: no live tie at winner mtime: tie-break not exercised this state (honest reading)
+PROBE PASS verdict=NO-LIVE-TIE
+--- R1780 AC-OW3 observation counter (exact marker grep, today's daily log) ---
+live-step marker count=0 -> branch: maintain observation window (7-day rolling re-eval, adjudication 2026-10-16)
+--- logs prune dry-run ---
+exit=0
+{
+  "mode": "dry-run",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {
+    "preop-bak": 79,
+    "round-transcript": 1142,
+    "tmp-script": 39
+  },
+  "to_delete_total": 1260,
+  "floor_skipped": 6,
+  "protected_skipped": 0
+}
+--- logs prune --execute ---
+exit=0
+{
+  "mode": "execute",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {
+    "preop-bak": 79,
+    "round-transcript": 1142,
+    "tmp-script": 39
+  },
+  "to_delete_total": 1260,
+  "floor_skipped": 6,
+  "protected_skipped": 0
+}
+{
+  "deleted": {
+    "tmp-script": 39,
+    "preop-bak": 79,
+    "round-transcript": 1142
+  },
+  "deleted_total": 1260,
+  "failed": 0,
+  "predicted_total": 1260,
+  "prediction_match": true,
+  "mismatch_classes": []
+}
+--- logs prune second --execute (idempotence) ---
+exit=0
+{
+  "mode": "execute",
+  "policy": {
+    "keep_newest": {
+      "tmp-script": 60,
+      "preop-bak": 12,
+      "round-transcript": 300
+    },
+    "floor_seconds": 1800
+  },
+  "to_delete": {},
+  "to_delete_total": 0,
+  "floor_skipped": 6,
+  "protected_skipped": 0
+}
+{
+  "deleted": {},
+  "deleted_total": 0,
+  "failed": 0,
+  "predicted_total": 0,
+  "prediction_match": true,
+  "mismatch_classes": []
+}

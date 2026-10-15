@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T13:18:00+08:00",
+  "export_ts": "2026-10-15T14:05:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1994: took over and closed out R1993's unpushed commit (26th takeover case) - the lobby-suite stdout determinism hardening is now live on remote: uuid4 stub injection + rtt/port/elapsed shape classes, suite 57/57 double-run byte-identical, full regression 219/219 green, matrix 219/1877 regen+check byte-identical, fingerprint CLEAN domains=5.",
-    "latest_artifact": "qa/lobby-det-R1993.log + qa/reconcile-all-R1993.log (RUNNER PASS 219/219) + src/sandbox/lobby/test_client.py (hardened; product files untouched)",
-    "next_milestone": "Next explore FIFO head within 48h: proposal progress_board cross-restart persistence example window (persist family R1889/R1900/R1902 lineage); daily-profile observation-window ruling gates open 2026-10-16 governance window."
+    "current": "R1995: proposal progress_board cross-restart persistence delivered via crashed-round takeover closeout (28th case) - the crashed session finished the suite + full battery (RUNNER 220/220, criteria 1877->1884) then died pre-closeout; taker re-verified green (suite 7/7 rerun, fingerprint CLEAN domains=5, profile byte-identical PASS) and pushed it on-chain; matrix 220/1884 byte-identical, census DRIFT-CLEAN.",
+    "latest_artifact": "src/sandbox/ledger/test_proposal_progresspersist.py + qa/progressboard-persist-R1995.log + qa/reconcile-all-R1995.log (RUNNER PASS 220/220 + takeover follow-up VERDICT PASS)",
+    "next_milestone": "Next explore FIFO head within 48h: persist-family seeds (boards_combined month-window / civic behavior month-window / dev_sales_board persist / stats_board zero-registration boundary); daily-profile observation-window ruling gates open 2026-10-16."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1995",
+      "R1995: 28th-case crashed-round takeover closeout - proposal progress_board cross-restart persistence example window (P3 explore FIFO head; AC-PBP1..PBP7 pre-registered in the claim row before code). The crashed session finished the whole payload (suite + SUITES registration + matrix regen 220/1884 + two evidence logs incl RUNNER PASS 220/220 criteria 1877->1884 controls 7/7 259.4s) and died before any state/closeout byte. Taker re-verified green personally: suite spot re-run SUITE 7/7 exit=0 (anchor-matching the crashed round's double-run byte-identical evidence), fingerprint rerun CLEAN domains=5, profile rerun byte-identical PASS - the two first-battery dialect pseudo-FAILs (doubled-path invocations, R1924 ps-utf16 family) re-run green and appended as a takeover follow-up section (VERDICT PASS, qa/reconcile-all-R1995.log). Suite world: six-proposal mixed registry (gamma overshoot saturated 100.0 with honest raw count, rounded-progress sort with id tie-break, mirror-SQL third path), full-stack close -> same-db/cfg rebuild board byte-identical, post-restart new-signature liveness (zero-cache recompute 25.0->50.0), threshold-crossing + overshoot post-restart (memorial first-award, honest overshoot count), new-registration dense zero row, third instance stable, pure-read law, product sha double-proof (suite-only round). census DRIFT-CLEAN (1488 files), matrix 220/1884 --check byte-identical 21150B. Group faces: O-20261015-1335 (Qwen fleet-swap CEO order 10-15 13:4x) acked knowledge-only (zero BigDomain dispatch lane), ORD baseline 12:3x->13:4x, GORD 424->460 scanner-caliber re-anchor (+36 rows all non-ours receipts), DEC token-flat new=0, LEDGER @BigDomain zero. Explore ledger-debt found and closed: R1993's claimed idem_seen TTL reseed never landed on disk (crash debt, actual open=9 below the >=10 floor) - this round consumed 1, reseeded 2 (progress_board zero-registration boundary seed + the R1993 debt backfill), open 9->10 restored. Score 2 (product delivery on-chain via takeover commit)."
+    ],
+    [
       "R1992",
       "R1992: stats_board cap-window cross-restart persistence example window delivered (P3 explore FIFO head, consume-1/reseed-1). AC-SSTP1..7 pre-registered in the claim line before code: R1990-shaped world pre-close cap family {1,2,50} + default full read (envelope key-sets pinned, capped==tail slices, mirror-SQL third path, honest overflow); full-stack close -> same-db/cfg rebuild read family byte-identical (derived purity across restart); post-restart new registration -> total 5->6 continuation with tail slide [omega,delta]->[delta,zeta] and five old rows frozen; post-restart activity -> zero-cache recompute (alpha {p3,r2,dn1} first, netflow identity, untouched rows frozen); third instance == instance-2 final state byte-identical; pure-read law + hygiene all green. Suite 7/7 first run, double-run byte-identical sha16 dfe5979260a651bf; RUNNER PASS 219/219 criteria 1870->1877 controls 7/7 218.0s (qa/reconcile-all-R1992.log); matrix regen 219/1877 --check byte-identical; census DRIFT-CLEAN (1483 files); fingerprint CLEAN domains=5; runner profile re-anchored. fold R530 honored pre-closeout (state 78444B -> tail-6 window 10523B folded to one 4771B rolling line, 23 tokens mechanically embedded zero-loss, archive verbatim + preop backup, post==predicted 72787B). R1991 closeout layout drift (bare-LF + 8-space from a full json.dumps rewrite, the R1710 disease) caught at the fold gate and repaired canonically (eol --fix + --fix-indent, content/json equivalence verified); this round's closeout is byte-surgical, fixing the disease at the source. explore open=10 conserved (reseed: stats_board zero-registration boundary-world cross-restart seed). Score 2 (runnable/verifiable product artifact)."
     ],
@@ -359,14 +363,14 @@
       "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
     ],
     [
-      "1992",
+      "1995",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,
