@@ -2173,6 +2173,20 @@ SUITES = [
     # (AC-COVP1..AC-COVP7 pre-registered in state/queue/explore.md).
     ("ledger-coverageboard-persist",
      os.path.join("ledger", "test_coverage_board_persist.py"), 7),
+    # R1985 explore-queue FIFO-head claim (R1984 reseed row): the
+    # dataset-subscription coverage board month-window read face
+    # (R1826/R1888 window-parameterization family law): default
+    # window=None full-window byte-identical zero drift, explicit
+    # YYYY-MM window slices each row family by its own record-time
+    # provenance stamp (subscriptions by subscribed_utc, deliveries
+    # by delivered_utc - the period window never decides the board
+    # month), honest dense zero rows inside a window, all-zero
+    # honest-empty month, additive window envelope key, malformed
+    # window fail-closed, cross-restart battery byte identity,
+    # pure-read law, frozen-schema anchor
+    # (AC-CVW1..AC-CVW7 pre-registered in state/queue/explore.md).
+    ("ledger-coverageboard-window",
+     os.path.join("ledger", "test_coverage_board_window.py"), 7),
 ]
 
 FAILS = 0

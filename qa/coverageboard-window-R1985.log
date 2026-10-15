@@ -1,0 +1,93 @@
+== coverage board month-window read face (R1985) evidence ==
+canon: explore-queue coverage-window claim row (R1984 reseed), AC-CVW1..AC-CVW7 pre-registered before code (honesty law); family law: R1826/R1888 window-parameterization (default byte-identical zero drift, additive window envelope key, record-time provenance stamps per row family)
+
+-- section 1: acceptance suite double-run --
+run1 exit=0 run2 exit=0 stdout-byte-identical=True
+run1 sha16=57d176daa223d55f run2 sha16=57d176daa223d55f
+  PASS AC-CVW1: default window=None keeps the full-window envelope exactly {coverage_board,disclaimer} with rows == manual full SQL GROUP BY cross (mobility {2hh,3subs,2dlv} / city-air {1,1,0} / city-parks {1,1,0}); 12 malformed windows (month-13, month-00, short, slash, quarterly form, int, bool, trailing newline, lead space, trailing space, 2-digit-year, long) all fail closed E_DSB_BAD_WINDOW before any read with zero side effects (ds counts {"dataset_deliveries": 2, "dataset_registry": 3, "dataset_subscriptions": 5}, ledger {"spend": 5, "tx_total": 9})
+  PASS AC-CVW2: October window: envelope adds exactly one 'window' key (additive family law); mobility {2hh,2subs,0dlv} (ada+bob October rows; November rows never leak in), city-air {1,1,0} (carol October row), city-parks {0,0,0} honest zero (carol's Q4 subscription recorded in November stays out); every row == manual prefix-SQL cross derivation
+  PASS AC-CVW3: November window: mobility {1hh,1sub,2dlv} - the two delivery rows both carry November record stamps (dlv-ada-1101 period-window 2026-11 + dlv-bob-1001 period-window 2026-10: the provenance-separation probe - a delivery for the October period window recorded in November lands on the November board and never on October), city-parks {1,1,0} (carol Q4 row recorded in November), city-air {0,0,0} honest zero; every row == manual prefix-SQL cross
+  PASS AC-CVW4: month 2025-01 has no records anywhere: the board is the all-zero honest empty - all three registered datasets keep their dense zero rows (registry row-set authority holds inside a window; zero phantom rows, zero dropped rows), deterministic dataset_key ASC order at the all-tie
+  PASS AC-CVW5: two-piece restart (face.close + ledger.close -> new Ledger + new face over the same db paths): the full read battery (default + October + November + honest-empty) is byte-identical across the restart (battery sha16 ce50e7099e56389a) - read-time derivation, zero in-memory drift in every window face
+  PASS AC-CVW6: pure-read law: the full battery (default + three windows) leaves every ds table count and the ledger spend count untouched ({"dataset_deliveries": 2, "dataset_registry": 3, "dataset_subscriptions": 5} / {"spend": 5, "tx_total": 9}); double battery run byte-identical (sha16 ce50e7099e56389a) and equal to the pre-restart battery - zero RNG, zero time keys, registry-PK total order in every window
+  PASS AC-CVW7: hygiene: shipped config.json and ledger.py sha16 unchanged (32b018fad53fb8bc / 4fcbe414fe9d7e5c); the three CREATE TABLE statements byte-identical to the frozen schema anchor (zero schema touch); coverage_board source carries zero INSERT/UPDATE/DELETE (pure read face); suite source pure ASCII; real import lines carry zero network libs
+  SUITE PASS (7/7)
+
+-- section 2: writer-census drift discovery --
+census pre-freeze exit=0 (expected drift: this round's new evidence file lands after the last round's baseline - documented re-freeze gate)
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=1467 tee=960 baselined=507
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+-- section 3: baseline re-freeze + clean re-check --
+census re-freeze exit=0
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: update-baseline (re-freeze gate)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  baseline written: writer-census-baseline.json
+    cmd-raw: 15 names
+    pwsh-capture: 300 names
+    ps-utf16: 98 names
+    other: 94 names
+    tee: 960 files (healthy dialect, NOT baselined)
+  --- post-check (self-run after freeze) ---
+  census: files=1467 tee=960 baselined=507
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+  post-check exit=0
+census post-freeze re-check exit=0 DRIFT-CLEAN=True
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=1467 tee=960 baselined=507
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+-- section 4: fingerprint check --
+fingerprint exit=0
+  PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+  PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+  PASS domain=member baseline matches live constructor (R1676 cross-validation)
+  PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+  PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+  verdict CLEAN domains=5
+
+VERDICT PASS (suite 7/7 double-run identical; census re-freeze documented gate -> DRIFT-CLEAN; fingerprint CLEAN = zero schema touch on the read-face round)
+
+-- section 5: takeover closeout verification (R1985) --
+takeover note: original round crashed after evidence sections
+  1-3 (08:04 window, RUNNER tail reached but summary lost);
+  the takeover round landed the claim/criteria registration in
+  explore.md (honest note: the registration arrived at takeover
+  time - the code predates the board row) and self-ran the
+  three greens below.
+suite double-run re-verify: rc 0/0, stdout byte-identical,
+  sha16 57d176daa223d55f anchor-matched to section 1.
+first RUNNER self-run: FAIL 213/214 - the single cd7 flag was
+  the takeover agent's own Tee write dialect (ps-utf16, the
+  R1976/R1969 pitfall family); log transcoded to the healthy
+  LF-utf8 dialect and preserved as qa/reconcile-all-R1985b.log
+  (first-run evidence kept).
+green RUNNER re-run: PASS 214/214 suites green, reconcile
+  controls 7/7, 176.6s (SUITES 213->214, criteria 1835->1842
+  with AC-CVW1..CVW7) = qa/reconcile-all-R1985b-2.log
+suite_matrix regen green=214/214 (20578 bytes, 214 suites,
+  1842 criteria) + --check byte-identical
+census post-run re-check: files=1470 tee=963 baselined=507
+  flags=0 DRIFT-CLEAN
+fingerprint: CLEAN domains=5 (section 4 above; zero schema
+  touch on the read-face round)
+five-silence external faces (takeover-window probe): DEC token
+  set-diff new=0; ORD order lines dated 10-15/16 = 0; LEDGER
+  @BigDomain tail rows all dated <=10-14; baselines kept
+  (gord 416 / dec-rows 266) = FLAT
+DONE R1985

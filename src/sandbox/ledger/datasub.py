@@ -474,7 +474,7 @@ class DatasetSubscriptionFace:
                 "billed_total_cent": sum(int(s[2]) for s in subs),
                 "disclaimer": self.disclaimer}
 
-    def coverage_board(self):
+    def coverage_board(self, window=None):
         """Dataset-level subscription coverage board (R1982
         explore-queue row: pure read-time derivation - zero new
         tables, zero cache counters, zero token movement). Row-set
@@ -490,17 +490,57 @@ class DatasetSubscriptionFace:
         rows. Deterministic order: subscribers DESC, then
         subscriptions DESC, then dataset_key ASC (registry PK
         gives a total order - zero RNG, zero time keys, zero
-        insertion-order keys)."""
+        insertion-order keys).
+
+        R1985 windowed read (AC-CVW1..CVW7; the R1826/R1888
+        window-parameterization family law): the default
+        window=None keeps the full-window behavior byte-identical
+        (same SQL, same envelope, no extra key); an explicit
+        "YYYY-MM" month window filters each row family by its
+        own record-time provenance stamp - subscriptions by
+        subscribed_utc, deliveries by delivered_utc (substr
+        prefix match, the R1712 record-time law - the period
+        window of a row never decides which month board it
+        lands on). Registered datasets with no in-window
+        activity keep their honest zero rows (the registry
+        row-set authority holds inside a window), and a month
+        with no records anywhere is the all-zero honest empty
+        board. The explicit-window envelope adds exactly one
+        "window" key (additive); the default envelope is
+        byte-identical to the prior shape. A malformed window
+        fails closed E_DSB_BAD_WINDOW before any read (zero
+        side effects)."""
+        w = None
+        if window is not None:
+            w = str(window)
+            if _MONTHLY_RE.match(w) is None:
+                raise DataSubError(E_DSB_BAD_WINDOW,
+                                  "window must be YYYY-MM: %r"
+                                  % (window,))
         with self._lock:
             regs = self._conn.execute(
                 "SELECT dataset_key, title, period, ai_label"
                 " FROM dataset_registry").fetchall()
-            subs = self._conn.execute(
-                "SELECT dataset_key, COUNT(*), COUNT(DISTINCT account)"
-                " FROM dataset_subscriptions GROUP BY dataset_key").fetchall()
-            dels = self._conn.execute(
-                "SELECT dataset_key, COUNT(*) FROM dataset_deliveries"
-                " GROUP BY dataset_key").fetchall()
+            if w is None:
+                subs = self._conn.execute(
+                    "SELECT dataset_key, COUNT(*),"
+                    " COUNT(DISTINCT account)"
+                    " FROM dataset_subscriptions GROUP BY dataset_key"
+                ).fetchall()
+                dels = self._conn.execute(
+                    "SELECT dataset_key, COUNT(*) FROM dataset_deliveries"
+                    " GROUP BY dataset_key").fetchall()
+            else:
+                subs = self._conn.execute(
+                    "SELECT dataset_key, COUNT(*),"
+                    " COUNT(DISTINCT account)"
+                    " FROM dataset_subscriptions"
+                    " WHERE substr(subscribed_utc, 1, 7) = ?"
+                    " GROUP BY dataset_key", (w,)).fetchall()
+                dels = self._conn.execute(
+                    "SELECT dataset_key, COUNT(*) FROM dataset_deliveries"
+                    " WHERE substr(delivered_utc, 1, 7) = ?"
+                    " GROUP BY dataset_key", (w,)).fetchall()
         sub_rows = {r[0]: (int(r[1]), int(r[2])) for r in subs}
         del_rows = {r[0]: int(r[1]) for r in dels}
         board = []
@@ -514,4 +554,8 @@ class DatasetSubscriptionFace:
         board.sort(key=lambda r: (-r["subscribers"],
                                  -r["subscriptions"],
                                  r["dataset_key"]))
-        return {"coverage_board": board, "disclaimer": self.disclaimer}
+        if w is None:
+            return {"coverage_board": board,
+                    "disclaimer": self.disclaimer}
+        return {"window": w, "coverage_board": board,
+                "disclaimer": self.disclaimer}
