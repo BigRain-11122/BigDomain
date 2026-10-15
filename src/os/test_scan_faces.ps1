@@ -59,6 +59,16 @@
 #           absent from the baseline) -> "[DEC] FLAG ... new_tokens=1" and the
 #           dec_new_tok detail names the owner's OWN row (attribution fix);
 #           scan child exits 0.
+#   AC-SC17 [ORD] dual-format law (R2001, tech.md L259): a no-year
+#           '| MM-DD HH:MMx |' tail row NEWER than baseline -> "[ORD] FLAG
+#           last=<raw token>" + ord_last detail (year-only regex was blind).
+#   AC-SC18 [ORD] direction law: own tail OLDER than baseline ->
+#           "[ORD] INFO ... (baseline ahead...)" - never a FLAG (last_order
+#           tracks the group-orders tail since R1998; stale own-tail is not
+#           a new order - R1999 false-FLAG root cure).
+#   AC-SC19 [ORD] wildcard law: baseline x-digit vs concrete same-position
+#           token ("17:4x" vs "17:45") -> "[ORD] PASS" (same row, no
+#           false FLAG).
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -307,6 +317,38 @@ try {
     Assert ($r.text -match 'dec_new_tok D-20261011-07 : .*brand new owner decision row') 'AC-SC16' 'detail line names the owner row itself (attribution fix)'
     Assert ($r.code -eq 0) 'AC-SC16' 'scan child exits 0 with DEC row-owner face active'
 
+    # --- [ORD] dual-format + direction face (R2001, tech.md L259 fix) ---------
+    # AC-SC17: a no-year '| MM-DD HH:MMx |' tail row NEWER than the baseline
+    # must FLAG (dual-format match law: the year-only regex was blind to it).
+    Reset-Sandbox
+    Setup-Fixtures @(
+        '| 2026-09-28 22:1x | older year-format order row | open |',
+        '| 10-15 18:0x | mirrored no-year group order row | open |'
+    ) (New-StateJson '2026-10-15 17:4x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[ORD\] FLAG last=10-15 18:0x baseline=2026-10-15 17:4x') 'AC-SC17' 'no-year tail newer than baseline -> FLAG with raw token'
+    Assert ($r.text -match 'ord_last: .*mirrored no-year group order') 'AC-SC17' 'ord_last detail names the no-year row'
+
+    # AC-SC18: own year-format tail OLDER than baseline -> INFO (baseline
+    # ahead), never a FLAG (R1999 false-FLAG root cure).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | old own order row | open |') (New-StateJson '2026-10-15 18:0x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[ORD\] INFO last=2026-09-28 22:1x baseline=2026-10-15 18:0x \(baseline ahead') 'AC-SC18' 'older own tail vs ahead baseline -> INFO baseline-ahead'
+    Assert ($r.text -notmatch '\[ORD\] FLAG') 'AC-SC18' 'no false FLAG for the stale own-tail face'
+
+    # AC-SC19: wildcard-equal (baseline x-digit vs concrete same row) -> PASS.
+    Reset-Sandbox
+    Setup-Fixtures @(
+        '| 2026-09-28 22:1x | older year-format order row | open |',
+        '| 10-15 17:45 | current no-year order row | open |'
+    ) (New-StateJson '2026-10-15 17:4x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[ORD\] PASS last=10-15 17:45 baseline=2026-10-15 17:4x') 'AC-SC19' 'x-wildcard baseline vs concrete token -> PASS (same row)'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -325,6 +367,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC16, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC19, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

@@ -42,6 +42,23 @@ all_ts = []
 for l in ord_lines:
     all_ts += ts_re.findall(l)
 ord_max_ts = max(all_ts) if all_ts else "none"
+# R2001 dual-format law (tech.md L259): group table rows migrated to the no-year
+# '| MM-DD HH:MMx |' shape on 2026-10-15; a year-only regex reads stale dates.
+# Extract the LAST table-row token in BOTH shapes, normalized to
+# 'YYYY-MM-DD ...' with the file's newest year row (fallback: 2026).
+ord_row_re = re.compile(r"^\|\s*((?:2026-)?\d{2}-\d{2}\s+\S+)")
+ord_year_re = re.compile(r"^\|\s*(\d{4})-")
+ord_last_tok = None
+ord_year = ""
+for l in ord_lines:
+    m = ord_row_re.match(l)
+    if m:
+        ord_last_tok = m.group(1)
+        ym = ord_year_re.match(l)
+        if ym:
+            ord_year = ym.group(1)
+if ord_last_tok and re.match(r"^\d{2}-", ord_last_tok):
+    ord_last_tok = (ord_year or "2026") + "-" + ord_last_tok
 
 # [GORD] baseline rows = last_gord_tbl_rows (orders.md nonblank rows)
 gord_rows = len(ord_lines)
@@ -57,7 +74,7 @@ for g in led_unreplied[:10]:
 print("[DEC] rows=%d tokens=%d new=%d" % (len(dec_rows), len(dec_tokens), len(dec_new)))
 for t in dec_new[:15]:
     print("  NEW-DEC: %s" % t)
-print("[ORD] rows=%d gord_base=%s max_ts=%s atbd_rows=%d" % (gord_rows, gord_base, ord_max_ts, len(ord_atbd)))
+print("[ORD] rows=%d gord_base=%s max_ts=%s last_tok=%s atbd_rows=%d" % (gord_rows, gord_base, ord_max_ts, ord_last_tok, len(ord_atbd)))
 for l in ord_atbd[-8:]:
     print("  ORD-ATBD: %s" % l)
 print("[ORD-TOP] %s" % ord_top[0][:110] if ord_top else "")

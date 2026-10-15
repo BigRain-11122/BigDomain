@@ -177,19 +177,45 @@ if ($modes.Count -eq 0) { $modes += 'no-group-read' }
 Write-Output ("[GROUPSRC] " + ($modes -join ' ') + " | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only")
 
 # --- [ORD] own orders.md LAST table-row token vs baseline (append-newest convention; R531 rework: first-row+HH:MM regex was blind to bottom-appended RUN_ID-format rows) ---
+# R2001 dual-format + direction law (tech.md L259 seed; R1999 takeover rescan evidence):
+# table rows exist in BOTH the legacy year format '| 2026-MM-DD HH:MMx |' and the
+# no-year '| MM-DD HH:MMx |' shape; the year-only regex read a stale 2026-09-28 tail
+# and false-FLAGged every round. last_order has tracked the GROUP orders tail since
+# R1998 (that is where new CEO orders land), so an older own-tail is INFO (baseline
+# ahead), never a FLAG; only a token NEWER than baseline is a new order to judge.
+# Wildcard law: 'x' in either token matches any character at that position.
 try {
   $OO = [System.IO.File]::ReadAllLines((Join-Path $repo 'orders.md'), $utf8)
-  $orows = @($OO | Where-Object { $_ -match '^\|\s*2026-' })
+  $orows = @($OO | Where-Object { $_ -match '^\|\s*(2026-\d{2}-\d{2}|\d{2}-\d{2})\s' })
   $lastRow = [string]($orows | Select-Object -Last 1)
   $topTs = ''
   if ($lastRow -match '^\|\s*([^|]+?)\s*\|') { $topTs = $Matches[1].Trim() }
+  $yr = ''
+  foreach ($rw in $orows) { if ("$rw" -match '^\|\s*(\d{4})-') { $yr = $Matches[1] } }
+  if ($yr -eq '') { $yr = (Get-Date).ToString('yyyy') }
+  $normTs = $topTs
+  if ($normTs -match '^(\d{2})-(\d{2})\s+(.+)$') { $normTs = "$yr-$($Matches[1])-$($Matches[2]) $($Matches[3])" }
+  $baseRaw = ''
+  if ($st -ne $null) { $baseRaw = [string]$st.last_order }
+  $normBase = $baseRaw
+  if ($normBase -match '^(\d{2})-(\d{2})\s+(.+)$') { $normBase = "$yr-$($Matches[1])-$($Matches[2]) $($Matches[3])" }
+  $cmp = 0
+  $n = [Math]::Min($normTs.Length, $normBase.Length)
+  for ($i = 0; $i -lt $n; $i++) {
+    $a = [string]$normTs[$i]; $b = [string]$normBase[$i]
+    if ($a -eq 'x' -or $b -eq 'x' -or $a -eq $b) { continue }
+    if ($a -lt $b) { $cmp = -1 } else { $cmp = 1 }
+    break
+  }
   if ($st -eq $null) {
     Write-Output "[ORD] INFO last=$topTs (state unavailable)"
-  } elseif ($topTs -eq $st.last_order) {
-    Write-Output "[ORD] PASS last=$topTs baseline=$($st.last_order)"
-  } else {
-    Write-Output "[ORD] FLAG last=$topTs baseline=$($st.last_order)"
+  } elseif ($topTs -eq $baseRaw -or $cmp -eq 0) {
+    Write-Output "[ORD] PASS last=$topTs baseline=$baseRaw"
+  } elseif ($cmp -gt 0) {
+    Write-Output "[ORD] FLAG last=$topTs baseline=$baseRaw"
     if ($lastRow.Length -gt 0) { Write-Output "  ord_last: $lastRow" }
+  } else {
+    Write-Output "[ORD] INFO last=$topTs baseline=$baseRaw (baseline ahead: last_order tracks group-orders tail since R1998; own tail older, no new order)"
   }
 } catch { Write-Output '[ORD] FLAG read_failed' }
 

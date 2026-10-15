@@ -117,6 +117,22 @@ try {
     # Sanitize embedded double quotes before Start-Process argument passing.
     if ($prompt.Contains('"')) { $prompt = $prompt.Replace('"', "'") }
     $argLine = '-y -p "' + $prompt + '"'
+    # Cloud concurrency cap preflight (O-20261015-1800 / council case
+    # C-20261015-03 section 3 spec, applied 2026-10-15 R2001): this wrapper
+    # spawns a codely cloud LLM session every 10-min grid slot. Before
+    # ignition count live codely.exe processes; at >= 2 defer this slot
+    # (append defer ledger line + skip; the next grid slot retries).
+    # fail-open by spec: a broken probe NEVER blocks production.
+    $liveCount = -1
+    try { $liveCount = @(Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction SilentlyContinue).Count } catch { $liveCount = -1 }
+    if ($liveCount -ge 2) {
+        Add-Content -Path (Join-Path $logDir 'cloud-cap.log') -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | CLOUD_CAP_DEFER live=$liveCount" -Encoding UTF8
+        Log "cloud-cap defer live=$liveCount (cap >=2, next grid slot retries)"
+        Beat "cloud-cap defer live=$liveCount"
+        exit 0
+    }
+    if ($liveCount -lt 0) { Log 'cloud-cap probe failed - fail-open ignite per spec' }
+
     Log "spawning headless round (budget ${RoundTimeoutMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
     $p = Start-Process -FilePath $codelyPath -ArgumentList $argLine -WorkingDirectory $Project -PassThru -NoNewWindow -RedirectStandardOutput $roundOut -RedirectStandardError $roundErr
     $null = $p.Handle   # materialize handle so ExitCode is readable

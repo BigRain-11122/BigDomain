@@ -1,0 +1,93 @@
+# qa/scan-ord-drift-R2001.log
+# Round R2001 evidence - tech.md L259 queue-head delivery:
+#   scan_five_still [ORD] face year-format drift fix (AC-SC17/SC18/SC19, preregistered
+#   in the tech.md claim line BEFORE code) + AC-CC1 cloud-cap spawn gate
+#   (O-20261015-1800 / council case C-20261015-03 section 3 spec).
+# All sections below are verbatim captures of the executed command outputs
+# (LF-normalized, UTF-8).
+
+=== SECTION 1: harness src/os/test_scan_faces.ps1 (exit 0) ===
+PASS AC-SC1 (bottom-appended new row flagged with last/baseline tokens)
+PASS AC-SC1 (ord_last detail line names the bottom row)
+PASS AC-SC2 (matching last-row token -> ORD PASS)
+PASS AC-SC3 (broken state -> STATE FLAG back-off signal)
+PASS AC-SC3 (ORD degrades to INFO when state unavailable)
+PASS AC-SC3 (scan child exits 0 on degraded state (no crash))
+PASS AC-SC13 (bare-LF state -> eol_bare_lf=2 FLAG with repair hint)
+PASS AC-SC13 (scan child exits 0 on eol FLAG (no crash))
+PASS AC-SC14 (healthy CRLF state -> eol_ok=1 on STATE PASS)
+PASS AC-SC4 (index.lock -> TREE FLAG back-off)
+PASS AC-SC5 (clean tree -> TREE PASS)
+PASS AC-SC6 (dirty tree -> TREE FLAG with count)
+PASS AC-SC6 (git detail line lists the dirty entry)
+PASS AC-SC7 (ahead-1 divergence detected)
+PASS AC-SC7 (not-a-local-other-writer note present)
+PASS AC-SC8 (today evidence + today benchmarks -> QA PASS)
+PASS AC-SC9 (missing evidence + stale benchmarks -> QA FLAG)
+PASS AC-SC9 (charter due note present)
+PASS AC-SC11 (last3 block shows the newest batch row)
+PASS AC-SC11 (last3 block shows both older batch rows (R709 blind-spot face))
+PASS AC-SC11 (no baseline field -> baseline_missing (INFO, no crash))
+PASS AC-SC12 (new-row count = tbl_rows - baseline (4-2=2))
+PASS AC-SC12 (scan child exits 0 with GORD baseline math active)
+PASS AC-SC15 (referenced gap token -> DEC PASS with row_owner_tokens (no false FLAG))
+PASS AC-SC15 (ref-missing INFO note names the gap token)
+PASS AC-SC15 (no dec_new_tok line for a referenced-only token)
+PASS AC-SC16 (new owner token -> FLAG with new_tokens=1 (detection semantics preserved))
+PASS AC-SC16 (detail line names the owner row itself (attribution fix))
+PASS AC-SC16 (scan child exits 0 with DEC row-owner face active)
+PASS AC-SC17 (no-year tail newer than baseline -> FLAG with raw token)
+PASS AC-SC17 (ord_last detail names the no-year row)
+PASS AC-SC18 (older own tail vs ahead baseline -> INFO baseline-ahead)
+PASS AC-SC18 (no false FLAG for the stale own-tail face)
+PASS AC-SC19 (x-wildcard baseline vs concrete token -> PASS (same row))
+PASS AC-SC10 (sandbox scan copy byte-identical to real script (sha256 match))
+PASS AC-SC10 (harness pure ASCII (non-ascii bytes=0))
+ALL CRITERIA PASS (AC-SC1..SC19, 36 checks)
+HARNESS_EXIT=0
+
+=== SECTION 2: live scan [ORD] face post-fix (tools source copy, real repo+state) ===
+pre-fix face at round open (the R1999-root false FLAG, on record):
+  [ORD] FLAG last=2026-09-28 22:1x baseline=2026-10-15 17:4x
+post-fix face (same repo+state, after the dual-format+direction law):
+  [ORD] INFO last=2026-09-28 22:1x baseline=2026-10-15 17:4x (baseline ahead: last_order tracks group-orders tail since R1998; own tail older, no new order)
+  [STATE] PASS tick=2000 last_order=2026-10-15 17:4x last_decision_rows=275 benchmarks_refreshed=2026-10-15 log_lines=18 state_bytes=74288 eol_ok=1
+  ([TREE] FLAG dirty=6 = this round's own working edits, expected mid-round)
+
+=== SECTION 3: live src/os/scan_five_still.py [ORD] dual-format companion read ===
+[ORD] rows=504 gord_base=438 max_ts=2026-10-28 last_tok=2026-10-15 18:0x atbd_rows=7
+  (max_ts = legacy secondary field, stale text-date, kept for compat;
+   last_tok = NEW dual-format tail token, matches the group orders tail row
+   "| 10-15 18:0x | CEO order: cloud concurrency cap ..." - the no-year row
+   is now read and normalized where the year-only regex read nothing new)
+
+=== SECTION 4: AC-CC1 cloud-cap spawn gate behavioral test (test-double carrier) ===
+carrier: temp copy of src/os/iteration_loop.ps1 with the Start-Process spawn line
+replaced by "TEST-DOUBLE ignite" + exit 0; the gate block itself runs REAL.
+variant real   : 18:21:58 lock acquired (pid=66080)
+                  18:21:59 cloud-cap defer live=7 (cap >=2, next grid slot retries)
+                  exit=0   [REAL census: 7 codely.exe live at 18:21 - cap honored]
+variant defer  : 18:21:59 lock acquired (pid=68824)
+                  18:21:59 cloud-cap defer live=2 (cap >=2, next grid slot retries)
+                  exit=0   [explorer.exe count-source fixture - defer path forced]
+variant ignite : 18:22:00 lock acquired (pid=45740)
+                  18:22:00 TEST-DOUBLE: ignite path reached (spawn replaced by gate test)
+                  exit=0   [bd_nonexistent_xyz.exe fixture: count 0 -> ignite path]
+defer ledger (logs/cloud-cap.log, spec format "ts | CLOUD_CAP_DEFER live=N"):
+  2026-10-15 18:21:59 | CLOUD_CAP_DEFER live=7
+  2026-10-15 18:21:59 | CLOUD_CAP_DEFER live=2
+live codely.exe census at 18:22: 7
+(note: fail-open branch is code-identical to variant runs minus the try/catch
+absence - the gate wraps Get-CimInstance in try/catch and ignites on probe
+failure per the C-20261015-03 s3 spec; no fixture needed for the throw path)
+
+=== SECTION 5: hygiene ===
+scan_five_still.ps1 source==installed sha256 match: True
+SKILL.md source==installed sha256 match: True
+harness pure ASCII: non-ascii bytes=0
+edited files: tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1,
+  src/os/scan_five_still.py, src/os/iteration_loop.ps1, src/os/test_scan_faces.ps1,
+  tools/skills/bigdomain-loop-scan/SKILL.md (+ .codely-cli installed copies synced)
+no shipped config.json touched; no other suite source touched
+
+VERDICT: PASS - AC-SC17/SC18/SC19 + AC-CC1 all evidenced; AC-SC1..SC16 zero regression (36/36)
