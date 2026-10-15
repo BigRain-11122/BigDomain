@@ -2216,6 +2216,16 @@ SUITES = [
     # (AC-SSD1..AC-SSD7 pre-registered in state/queue/explore.md).
     ("ledger-showcase-statsdual",
      os.path.join("ledger", "test_showcase_statsdual.py"), 7),
+    # R1990 stats_board dual-window cross-restart persistence
+    # example: full-stack close -> rebuild on the same paths,
+    # dual family byte-identical, post-restart registration and
+    # place/retract activity recompute from disk state alone
+    # (persist family R1889/R1900/R1902; third-instance
+    # stability; pure-read law under restart)
+    # (AC-SSDP1..AC-SSDP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsdual-persist",
+     os.path.join("ledger", "test_showcase_statsdualpersist.py"), 7),
 ]
 
 FAILS = 0

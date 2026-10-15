@@ -1,0 +1,9 @@
+--- RUN1 (stats_board_dual persist suite) ---PASS AC-SSDP1: dual family {1,2,50}: envelope keys=True row keys=True full==direct byte-identical=True order=['beta-win', 'gamma-win', 'alpha-win', 'omega-win', 'delta-win'] capped==tail slices=True mirror==capped(2)=True window honest (total 5, d50 full, d1 truncated tail delta)=True
+PASS AC-SSDP2: full-stack close (sh -> led) then rebuild on same paths + same cfg bytes: dual family {1,2,50} byte-identical=True double-read self-stable=True
+PASS AC-SSDP3: post-restart registration: full zone 5->6 True, zero-event zeta row honest zeros=True, window total 5->6=True, capped(2) tail slid [omega,delta]->[delta,zeta]=True, five old rows byte-frozen=True
+PASS AC-SSDP4: post-restart activity: zero-cache recompute order moved alpha first=True alpha {p3,r2,dn1}=True netflow identity all rows=True untouched rows frozen=True capped(2) tail [omega,zeta]=True
+PASS AC-SSDP5: third instance == second-instance final state byte-identical=True sequential double-read=True counts flat=True
+PASS AC-SSDP6: read battery (dual 1/2/50 + default, twice) leaves counts unchanged {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6} == {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6}, repeat pairs byte-identical, dual method source zero SQL zero writes ([]) zero RNG, exactly ONE stats_board() call (1)
+PASS AC-SSDP7: suite pure ASCII=True net-clean=True registry-wired=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+--- RUN2 (byte-identity check) ---run1_sha16=dca908c94dadfc5a run2_sha16=dca908c94dadfc5a identical=true

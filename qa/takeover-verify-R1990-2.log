@@ -1,0 +1,32 @@
+--- [1] suite double-run (rc 0/0) ---
+sha16 run1=dca908c94dadfc5a run2=dca908c94dadfc5a byte-identical=True matches-claimed=True (dca908c94dadfc5a)
+suite tail: PASS AC-SSDP6: read battery (dual 1/2/50 + default, twice) leaves counts unchanged {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6} == {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6}, repeat pairs byte-identical, dual method source zero SQL zero writes ([]) zero RNG, exactly ONE stats_board() call (1)
+PASS AC-SSDP7: suite pure ASCII=True net-clean=True registry-wired=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+--- [2] matrix --check (rc 0) ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (20945 bytes, 218 suites, 1870 criteria)
+
+--- [3] census --check (rc 0) ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1480 tee=973 baselined=507
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+--- [4] fingerprint --check (rc 0) ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- [5] profile --check (rc 0) ---
+== stale-baseline check ==
+baseline source: qa/reconcile-all-R1990.log
+check: byte-identical PASS
+
+VERDICT PASS

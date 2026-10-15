@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T11:42:06+08:00",
+  "export_ts": "2026-10-15T12:08:19+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1989: 26th-case crashed-round takeover closeout - showcase stats_board dual-window combined board (default full-window + explicit capped-window side by side in one envelope; single derivation source = exactly one live stats_board() call; R1974 single-envelope law applied to the R1988 cap-window family). Original session crashed AFTER its full RUNNER completed (qa/reconcile-all-R1989.log RUNNER PASS 217/217 controls 7/7 201.2s preserved); taker personally re-verified the seven-green chain: suite double-run 7/7 byte-identical sha16 9e351e37725f6283 + matrix 217/1863 --check identical + fingerprint CLEAN x5 + census DRIFT-CLEAN + profile identical + five-silence external FLAT. Honest annotation: the original round's criteria live in its on-disk test source (AC-SSD1..SSD7); the explore claim-row registration was completed by the takeover with explicit annotation (crash happened before queue bookkeeping landed).",
-    "latest_artifact": "src/sandbox/ledger/showcase.py stats_board_dual(limit) + src/sandbox/ledger/test_showcase_statsdual.py (SUITE 7/7 x2 identical) + qa/showcase-statsdual-R1989.log + qa/reconcile-all-R1989.log (RUNNER 217/217) + docs/sandbox-suite-matrix.md 217/1863 (2026-10-15)",
-    "next_milestone": "P3 explore FIFO next head: lobby suite stdout determinization window (R1876 real gap - AC-S3 rtt ms timing / AC-S4 ephemeral fields); WeChat virtual-payment compliance doc face rolling; within 48h."
+    "current": "R1990: stats_board_dual cross-restart persistence example window delivered (AC-SSDP1..SSDP7 pre-registered pre-code; persist-family judgment R1889/R1900/R1902 + R1987 AC-SSBP sibling). Product face: full-stack close then rebuild on the same db_path/cfg bytes/sh_path - the dual read family at caps {1,2,50} is byte-identical across the restart (derived-read purity, zero in-memory drift); post-restart new registration (zeta-win) lands in both zones with honest zeros and the capped tail slid [omega,delta]->[delta,zeta] while the five old rows stay byte-frozen; post-restart place/retract activity recomputes zero-cache (decisive order moved alpha first at 3p/2r/dn1, netflow identity displayed_now==places-retracts held on every row, untouched rows frozen); third-instance reopen == second-instance final state byte-identical; pure-read law under restart (single derivation source = exactly one stats_board() call re-pinned). Three-green: SUITE 7/7 double-run byte-identical sha16 dca908c94dadfc5a + RUNNER PASS 218/218 criteria 1863->1870 controls 7/7 216.6s + matrix 218/1870 --check byte-identical 20945B + census DRIFT-CLEAN flags=0 + fingerprint CLEAN domains=5 + runner_profile re-anchored (baseline source = R1990 log). Dialect-law live-fire same round: fold evidence log first landed ps-utf16 through a PowerShell Tee -> writer-census cd7 flag -> python single-writer utf-8 LF rewrite + full rerun green (R1880/R1883 family, own-produce self-cured). Radar window-7: two new OH lists (biglife tenacity + fluxverse city line) reviewed, zero @BigDomain strong-fit, zero claim legal.",
+    "latest_artifact": "src/sandbox/ledger/test_showcase_statsdualpersist.py (SUITE 7/7 x2 identical) + qa/showcase-statsdualpersist-R1990.log + qa/reconcile-all-R1990.log (RUNNER 218/218) + qa/reorg-R1990.log (fold R529 evidence, dialect-cured) + docs/sandbox-suite-matrix.md 218/1870 (2026-10-15)",
+    "next_milestone": "P3 explore FIFO next head: stats_board cap-window cross-restart persistence seed (reseeded this round); lobby suite stdout determinization window (R1876 real gap) behind it; within 48h."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1990",
+      "R1990: stats_board_dual cross-restart persistence example window delivered (P3 explore FIFO head; AC-SSDP1..SSDP7 pre-registered in the claim row before code). Full-stack close -> rebuild on the same paths: dual family {1,2,50} byte-identical (derived-read purity, zero in-memory drift); post-restart registration lands in both zones with honest zeros and the capped tail slid while old rows stay byte-frozen; post-restart place/retract activity recomputes zero-cache with the decisive order moved (alpha first, netflow identity held on every row, untouched rows frozen); third-instance stability; pure-read law under restart. SUITE 7/7 double-run byte-identical sha16 dca908c94dadfc5a + RUNNER PASS 218/218 criteria 1863->1870 controls 7/7 216.6s + matrix 218/1870 --check byte-identical 20945B + census DRIFT-CLEAN + fingerprint CLEAN domains=5 + profile re-anchored R1990. Dialect-law live-fire: fold evidence log first landed ps-utf16 via PS Tee -> cd7 flag -> python single-writer utf-8 LF rewrite + full rerun green (R1880/R1883 family). Fold R529 pre-closeout tail-4 5681B post==predicted 73889B. Radar window-7 two new OH lists reviewed zero @BigDomain claim (R1154/R1155). Explore consume 1 reseed 1 (stats_board cap-window cross-restart persistence seed), open=10 conserved. Five-silence external FLAT. Score 2."
+    ],
+    [
       "R1989",
       "R1989: 26th-case crashed-round takeover closeout - stats_board_dual(limit) dual-window combined board (AC-SSD1..SSD7; canon = explore-queue stats-board dual-window seed, R1974 single-envelope law applied to the R1988 cap-window family). The crashed attempt died AFTER its full RUNNER completed (qa/reconcile-all-R1989.log complete with RUNNER PASS 217/217 controls 7/7 201.2s, mtime 11:16:39 preserved; suite double-run 7/7 byte-identical sha16 9e351e37725f6283), before any closeout byte landed. Taker personally re-verified the whole green chain per precedent: suite double-run re-run rc 0/0 byte-identical sha16 9e351e37725f6283 (subprocess byte capture, R1880 dialect law), matrix 217/1863 --check byte-identical 20839B, fingerprint CLEAN domains=5 (read-face round, zero schema touch), census DRIFT-CLEAN flags=0, runner_profile --check identical (baseline source = R1989 log), five-silence external FLAT. Product face: one envelope carries exactly four keys (full_board/capped_board/window/disclaimer); single derivation source = exactly ONE live stats_board() call (capped zone = tail slice rows[-limit:] of the same decisive order; total carries the honest full registry count); limit gate fires before any read (positive-int sentinel; 0 rejected as the full-window form already carried by the default zone, also avoiding the rows[-0:] footgun; six bad forms fail-closed on the shared E_SH_BAD_LIMIT family code); zero-registration world returns an honest empty dual board with the window block present. Honest annotation: the original round's pre-registered criteria live verbatim in its on-disk test source header; the explore.md claim-row registration did not land before the crash and was completed by the takeover with explicit annotation (bookkeeping completion, not retroactive fabrication). Explore claim done-flipped + reseed 1 (stats_board_dual cross-restart persistence seed), open=10 conserved. Score 2."
     ],
@@ -355,11 +359,7 @@
       "ledger studio cross-restart persist suite 7/7 (AC-STP1..STP7; three-piece restart, twelve restart-surviving gates, renewal advance booking, frozen prefix rows, RUNNER 187/187 criteria 1641->1648)"
     ],
     [
-      "R1948",
-      "ledger honorcert cross-restart persist suite 7/7 (AC-HCP1..HCP7; three-piece restart, incremental heal across restart, permanent-certificate law survives board move + restart, second event namespace, RUNNER 186/186 criteria 1634->1641)"
-    ],
-    [
-      "1989",
+      "1990",
       "OSLoop 执行 tick"
     ]
   ],
