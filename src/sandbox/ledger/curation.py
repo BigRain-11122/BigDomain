@@ -69,6 +69,7 @@ explore-queue row and were written before this code existed
 
 import datetime
 import os
+import re
 import sqlite3
 import threading
 
@@ -77,8 +78,15 @@ E_CU_DUP_CURATION = "E_CU_DUP_CURATION"
 E_CU_UNKNOWN_CURATION = "E_CU_UNKNOWN_CURATION"
 E_CU_UNKNOWN_SHOWCASE = "E_CU_UNKNOWN_SHOWCASE"
 E_CU_NO_DISCLAIMER = "E_CU_NO_DISCLAIMER"
+E_CU_BAD_WINDOW = "E_CU_BAD_WINDOW"
 
 E_SH_UNKNOWN_SHOWCASE = "E_SH_UNKNOWN_SHOWCASE"  # docked face code
+
+# Strict ASCII month-window form YYYY-MM (R1996): [0-9] classes
+# reject Unicode digit look-alikes; no strip, so a trailing
+# newline or any surrounding whitespace refuses (fail-closed,
+# zero ambiguity).
+_WINDOW_RE = re.compile(r"([0-9]{4})-(0[1-9]|1[0-2])")
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS curations (
@@ -142,6 +150,20 @@ class CurationFace:
         if not curation_id:
             raise CurationError(E_CU_BAD_ARGS, "curation id required")
         return curation_id
+
+    def _assert_window(self, window):
+        """Month-window gate (R1996): strict ASCII YYYY-MM, the
+        dedicated per-parameter family code E_CU_BAD_WINDOW, and
+        the gate fires before any read so even a zero-curation
+        world refuses a malformed window with zero read side
+        effects. None is the default-form sentinel and never
+        reaches here."""
+        if (not isinstance(window, str)
+                or _WINDOW_RE.fullmatch(window) is None):
+            raise CurationError(E_CU_BAD_WINDOW,
+                                "window must be a strict YYYY-MM"
+                                " month string")
+        return window
 
     def _load_register(self, curation_id):
         """Return (row, members) or raise E_CU_UNKNOWN_CURATION."""
@@ -277,7 +299,7 @@ class CurationFace:
                  for r in rows]
         return {"curations": board, "disclaimer": self.disclaimer}
 
-    def hot_board(self):
+    def hot_board(self, window=None):
         """Theme heat board (R1753): every curation ranked by the sum
         of its member showcases' live on-display counts. Pure read
         with zero token movement and zero writes; each member count
@@ -288,7 +310,22 @@ class CurationFace:
         insertion-order keys: displayed_total DESC, then
         curation_id ASC as the tie-break (the PRIMARY KEY gives a
         total order, so exactly one board order exists). A board
-        over zero curations is an honest empty list."""
+        over zero curations is an honest empty list.
+        Month-window scoped form (R1996): an explicit strict
+        YYYY-MM window re-scopes every member count through the
+        ShowcaseFace showcase_view_window public read face - the
+        window heat counts only the items whose latest
+        window-recorded event is a place (the record-time law:
+        events slice by their acted_utc record month, so an item
+        placed in an earlier month with no window-recorded event
+        stays off the window board while remaining on the live
+        all-time board). The window gate fires before any read
+        (E_CU_BAD_WINDOW family code, zero read side effects on
+        refusal); the default None form is byte-for-byte the
+        R1753 contract and only an explicit window adds the
+        envelope window key. AC-CJM1..CJM3 (R1996)."""
+        if window is not None:
+            window = self._assert_window(window)
         with self._lock:
             rows = self._conn.execute(
                 "SELECT curation_id, title, ai_label FROM curations"
@@ -303,7 +340,11 @@ class CurationFace:
         for cid, title, ai_label in rows:
             heat = 0
             for sid in members_by.get(cid, []):
-                view = self.showcase.showcase_view(sid)
+                if window is None:
+                    view = self.showcase.showcase_view(sid)
+                else:
+                    view = self.showcase.showcase_view_window(
+                        sid, window)
                 heat += len(view["displayed"])
             entries.append({"curation_id": cid, "title": title,
                             "ai_label": int(ai_label),
@@ -319,7 +360,10 @@ class CurationFace:
                           "ai_label": entry["ai_label"],
                           "member_count": entry["member_count"],
                           "displayed_total": entry["displayed_total"]})
-        return {"hot_board": board, "disclaimer": self.disclaimer}
+        env = {"hot_board": board, "disclaimer": self.disclaimer}
+        if window is not None:
+            env["window"] = window
+        return env
 
     def hot_board_delta(self, prev_board):
         """Board rank-change diff (R1770): pure-read movement face
@@ -444,7 +488,7 @@ class CurationFace:
                          "displayed_total": row["displayed_total"]})
         return {"cold_board": rows, "disclaimer": self.disclaimer}
 
-    def boards_combined(self):
+    def boards_combined(self, window=None):
         """Combined hot+cold dual board (R1974): one envelope that
         presents the heat board and the cold shelf side by side -
         the hot/cold complementary law made visible in a single
@@ -464,8 +508,22 @@ class CurationFace:
         zero cached counters. Zero RNG, zero time keys, zero
         insertion-order keys; the envelope carries totals and
         the standing disclaimer, and every row keeps its
-        ai_label."""
-        board = self.hot_board()
+        ai_label.
+        Month-window scoped form (R1996): an explicit strict
+        YYYY-MM window re-scopes the single hot_board(window)
+        call, so both zones carry the window-recorded display
+        heat (the record-time law) while the registry stays the
+        dense axis - every registered curation appears (a
+        zero-window-event month yields the honest all-cold
+        board, hot zone empty). The window gate fires before
+        any read (E_CU_BAD_WINDOW family code; the gate stands
+        alone even over a zero-curation world); the default
+        None form is byte-for-byte the R1974 contract and only
+        an explicit window adds the envelope window key.
+        AC-CJM1..CJM7 (R1996)."""
+        if window is not None:
+            window = self._assert_window(window)
+        board = self.hot_board(window)
         hot_rows = [row for row in board["hot_board"]
                     if row["displayed_total"] > 0]
         cold_rows = [row for row in board["hot_board"]
@@ -489,9 +547,12 @@ class CurationFace:
                              "ai_label": row["ai_label"],
                              "member_count": row["member_count"],
                              "displayed_total": row["displayed_total"]})
-        return {"hot_board": hot_out,
-                "cold_board": cold_out,
-                "totals": {"hot_count": len(hot_out),
-                           "cold_count": len(cold_out),
-                           "total": len(hot_out) + len(cold_out)},
-                "disclaimer": self.disclaimer}
+        env = {"hot_board": hot_out,
+               "cold_board": cold_out,
+               "totals": {"hot_count": len(hot_out),
+                          "cold_count": len(cold_out),
+                          "total": len(hot_out) + len(cold_out)}}
+        if window is not None:
+            env["window"] = window
+        env["disclaimer"] = self.disclaimer
+        return env

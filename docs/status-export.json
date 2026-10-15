@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T14:05:00+08:00",
+  "export_ts": "2026-10-15T14:37:14+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1995: proposal progress_board cross-restart persistence delivered via crashed-round takeover closeout (28th case) - the crashed session finished the suite + full battery (RUNNER 220/220, criteria 1877->1884) then died pre-closeout; taker re-verified green (suite 7/7 rerun, fingerprint CLEAN domains=5, profile byte-identical PASS) and pushed it on-chain; matrix 220/1884 byte-identical, census DRIFT-CLEAN.",
-    "latest_artifact": "src/sandbox/ledger/test_proposal_progresspersist.py + qa/progressboard-persist-R1995.log + qa/reconcile-all-R1995.log (RUNNER PASS 220/220 + takeover follow-up VERDICT PASS)",
-    "next_milestone": "Next explore FIFO head within 48h: persist-family seeds (boards_combined month-window / civic behavior month-window / dev_sales_board persist / stats_board zero-registration boundary); daily-profile observation-window ruling gates open 2026-10-16."
+    "current": "R1996: curation boards_combined month-window scoped read face delivered (P3 explore FIFO head; AC-CJM1..CJM7 pre-registered in the claim row before code). Product: showcase.py showcase_view_window public read face (strict YYYY-MM gate, dedicated E_SH_BAD_WINDOW code, window-scoped display state from window-RECORDED events - the record-time law) + curation.py hot_board(window)/boards_combined(window) (E_CU_BAD_WINDOW gate before any read, default None byte-identical, explicit window adds the envelope key). Suite 7/7 double-run byte-identical; RUNNER PASS 221/221 criteria 1884->1891 controls 7/7 207.4s; matrix 221/1891 --check byte-identical; census DRIFT-CLEAN (R1995 takeover-driver evidence file re-baselined per R1979 family); fingerprint CLEAN domains=5; profile DRIFT-CLEAN.",
+    "latest_artifact": "src/sandbox/ledger/curation.py boards_combined(window) + src/sandbox/ledger/showcase.py showcase_view_window + src/sandbox/ledger/test_curation_combinedmonth.py + qa/curation-combinedmonth-R1996.log + qa/reconcile-all-R1996-2.log (RUNNER PASS 221/221)",
+    "next_milestone": "Next explore FIFO head within 48h: civic behavior_distribution month-window read face (AC prefix occupancy check at claim time); daily-profile observation-window ruling gates open 2026-10-16."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1996",
+      "R1996: curation boards_combined month-window scoped read face delivered (P3 explore FIFO head; AC-CJM1..AC-CJM7 pre-registered in the explore.md claim row before code). Product: showcase.py showcase_view_window public read face (strict ASCII YYYY-MM gate with the dedicated E_SH_BAD_WINDOW per-parameter code, gate before any read; window-scoped display state derived from the events RECORDED in the month - the R1712 record-time law via acted_utc prefix) + curation.py hot_board(window)/boards_combined(window) (E_CU_BAD_WINDOW gate, default None form byte-identical to the R1974/R1753 contracts, explicit window adds an additive envelope key, single derivation source = one hot_board(window) call through the ShowcaseFace public face). Window laws pinned: a september placement with zero october records stays off the october board while remaining on the live board; an october placement retracted in november is displayed in october and not in november; a november-registered curation boards in the october window (registration month never decides the board month); the out-of-range month 2099-01 returns the honest empty hot zone + all-cold shelf; 13 malformed windows refuse fail-closed on both faces; full-stack close/reopen keeps all four window boards byte-identical. Suite 7/7 double-run byte-identical sha16 86705794ffd03460 bytes=3585 (one same-round suite-side assertion fix on AC-CJM6 honestly noted: windowed hot_board full-set vs combined hot-zone subset mismatch, product behavior correct); RUNNER PASS 221/221 criteria 1884->1891 (SUITES 220->221) controls 7/7 207.4s = qa/reconcile-all-R1996-2.log (first battery FAIL = census cd7 drift on reconcile-all-R1995.log, the R1995 takeover-driver evidence file never re-baselined - R1979-family hygiene debt, dispositioned by --update-baseline re-freeze, first-run log -1 preserved); matrix 221/1891 regen --check byte-identical 21256B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; profile DRIFT-CLEAN 0 flagged (219 compared). Five-silence flat (ledger @BigDomain zero, DEC new=0, ORD tail = consumed 13:4x baseline, bench fresh today, daily-reconcile same-day evidence in plate). Explore consume 1 reseed 1 (stats_board month-window seed), open=10 conserved. Score 2 (product delivery)."
+    ],
+    [
       "R1995",
       "R1995: 28th-case crashed-round takeover closeout - proposal progress_board cross-restart persistence example window (P3 explore FIFO head; AC-PBP1..PBP7 pre-registered in the claim row before code). The crashed session finished the whole payload (suite + SUITES registration + matrix regen 220/1884 + two evidence logs incl RUNNER PASS 220/220 criteria 1877->1884 controls 7/7 259.4s) and died before any state/closeout byte. Taker re-verified green personally: suite spot re-run SUITE 7/7 exit=0 (anchor-matching the crashed round's double-run byte-identical evidence), fingerprint rerun CLEAN domains=5, profile rerun byte-identical PASS - the two first-battery dialect pseudo-FAILs (doubled-path invocations, R1924 ps-utf16 family) re-run green and appended as a takeover follow-up section (VERDICT PASS, qa/reconcile-all-R1995.log). Suite world: six-proposal mixed registry (gamma overshoot saturated 100.0 with honest raw count, rounded-progress sort with id tie-break, mirror-SQL third path), full-stack close -> same-db/cfg rebuild board byte-identical, post-restart new-signature liveness (zero-cache recompute 25.0->50.0), threshold-crossing + overshoot post-restart (memorial first-award, honest overshoot count), new-registration dense zero row, third instance stable, pure-read law, product sha double-proof (suite-only round). census DRIFT-CLEAN (1488 files), matrix 220/1884 --check byte-identical 21150B. Group faces: O-20261015-1335 (Qwen fleet-swap CEO order 10-15 13:4x) acked knowledge-only (zero BigDomain dispatch lane), ORD baseline 12:3x->13:4x, GORD 424->460 scanner-caliber re-anchor (+36 rows all non-ours receipts), DEC token-flat new=0, LEDGER @BigDomain zero. Explore ledger-debt found and closed: R1993's claimed idem_seen TTL reseed never landed on disk (crash debt, actual open=9 below the >=10 floor) - this round consumed 1, reseeded 2 (progress_board zero-registration boundary seed + the R1993 debt backfill), open 9->10 restored. Score 2 (product delivery on-chain via takeover commit)."
     ],
@@ -363,14 +367,14 @@
       "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
     ],
     [
-      "1995",
+      "1996",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,

@@ -51,6 +51,7 @@ explore-queue row and were written before this code existed
 
 import datetime
 import os
+import re
 import sqlite3
 import threading
 
@@ -67,8 +68,15 @@ E_SH_NO_GATE = "E_SH_NO_GATE"
 E_SH_GATE_ERROR = "E_SH_GATE_ERROR"
 E_SH_NO_DISCLAIMER = "E_SH_NO_DISCLAIMER"
 E_SH_BAD_LIMIT = "E_SH_BAD_LIMIT"
+E_SH_BAD_WINDOW = "E_SH_BAD_WINDOW"
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate code
+
+# Strict ASCII month-window form YYYY-MM (R1996): [0-9] classes
+# reject Unicode digit look-alikes; no strip, so a trailing
+# newline or any surrounding whitespace refuses (fail-closed,
+# zero ambiguity).
+_WINDOW_RE = re.compile(r"([0-9]{4})-(0[1-9]|1[0-2])")
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS showcases (
@@ -154,6 +162,23 @@ class ShowcaseFace:
                 "  GROUP BY cl_id)"
                 " AND action = 'place' AND showcase_id = ?"
                 " ORDER BY event_id", (showcase_id,)).fetchall()
+
+    def _displayed_rows_window(self, showcase_id, window):
+        """Month-window scoped form of _displayed_rows (R1996):
+        the window filter rides INSIDE the latest-event-per-item
+        subquery, so the scoped display state is derived from the
+        events RECORDED in that month alone (the record-time
+        law; an item whose display began in an earlier month and
+        saw no window-recorded event does not appear here - its
+        record lives in the earlier window)."""
+        with self._lock:
+            return self._conn.execute(
+                "SELECT cl_id, owner_id, caption, ai_label, acted_utc,"
+                " event_id FROM exhibit_events WHERE event_id IN"
+                " (SELECT MAX(event_id) FROM exhibit_events"
+                "  WHERE substr(acted_utc, 1, 7) = ? GROUP BY cl_id)"
+                " AND action = 'place' AND showcase_id = ?"
+                " ORDER BY event_id", (window, showcase_id)).fetchall()
 
     def _check_caption(self, caption):
         """Run the injected content gate over resident caption text.
@@ -317,6 +342,41 @@ class ShowcaseFace:
         return {"showcase_id": showcase_id, "title": row[0],
                 "slot_cap": slot_cap, "ai_label": int(row[1]),
                 "displayed": displayed,
+                "disclaimer": self.disclaimer}
+
+    def showcase_view_window(self, showcase_id, window):
+        """Month-window scoped display view (R1996): the same view
+        contract as showcase_view but the displayed list carries
+        only the items whose latest window-recorded event is a
+        place (the record-time law - events are sliced by their
+        acted_utc record month, so an item placed in an earlier
+        month with no window-recorded event stays off this
+        window's view while remaining on the live all-time
+        view). Pure read, zero token movement, zero writes. The
+        window gate fires before any read: the parameter must be
+        a strict ASCII YYYY-MM string (dedicated family code
+        E_SH_BAD_WINDOW, the per-parameter gate-code law); None
+        is not accepted here - the all-time form is the plain
+        showcase_view face. The envelope adds the window key to
+        the showcase_view shape. AC-CJM2 (R1996)."""
+        if (not isinstance(window, str)
+                or _WINDOW_RE.fullmatch(window) is None):
+            raise ShowcaseError(E_SH_BAD_WINDOW,
+                               "window must be a strict YYYY-MM"
+                               " month string")
+        showcase_id, slot_cap = self._assert_showcase(showcase_id)
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT title, ai_label FROM showcases"
+                " WHERE showcase_id = ?", (showcase_id,)).fetchone()
+        displayed = [{"cl_id": int(r[0]), "owner_id": r[1],
+                      "caption": r[2], "ai_label": int(r[3]),
+                      "placed_utc": r[4]}
+                     for r in self._displayed_rows_window(
+                         showcase_id, window)]
+        return {"showcase_id": showcase_id, "window": window,
+                "title": row[0], "slot_cap": slot_cap,
+                "ai_label": int(row[1]), "displayed": displayed,
                 "disclaimer": self.disclaimer}
 
     def chronicle(self, showcase_id=None):

@@ -909,6 +909,31 @@ SUITES = [
     # (AC-CBW1..CBW6 pre-registered in state/queue/explore.md).
     ("ledger-curation-combinedboundary",
      os.path.join("ledger", "test_curation_combinedboundary.py"), 6),
+    # R1996 curation combined hot+cold dual board MONTH-WINDOW
+    # scoped read face (R1976-reseeded explore-queue row claimed
+    # by R1996): an optional explicit strict YYYY-MM window
+    # re-scopes the single hot_board(window) call through the
+    # NEW ShowcaseFace public read face showcase_view_window
+    # (reference, not copy, zero second aggregation engine);
+    # window heat counts only items whose latest window-recorded
+    # event is a place (the record-time law - a september
+    # placement with zero october records stays off the october
+    # window while remaining on the live board; an october
+    # placement retracted in november is displayed in october
+    # and not in november); registry stays the dense axis (every
+    # registered curation boards; out-of-range month = honest
+    # empty hot zone + all-cold shelf); registration month never
+    # decides the board month (november-registered theme boards
+    # in the october window); window gate fires before any read
+    # with the dedicated E_CU_BAD_WINDOW / E_SH_BAD_WINDOW
+    # family codes over 13 malformed forms; default None form
+    # byte-for-byte the R1974/R1753 contracts (only an explicit
+    # window adds the envelope window key); double-read
+    # determinism + full-stack close/reopen byte identity;
+    # pure-read law + hygiene machine-checked
+    # (AC-CJM1..CJM7 pre-registered in state/queue/explore.md).
+    ("ledger-curation-combinedmonth",
+     os.path.join("ledger", "test_curation_combinedmonth.py"), 7),
     # R1926 curation registry / tour read-face family
     # cross-restart persistence example window (R1923-reseeded
     # tech-queue row claimed by R1926): active_curations
