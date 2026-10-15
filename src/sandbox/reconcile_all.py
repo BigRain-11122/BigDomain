@@ -2187,6 +2187,19 @@ SUITES = [
     # (AC-CVW1..AC-CVW7 pre-registered in state/queue/explore.md).
     ("ledger-coverageboard-window",
      os.path.join("ledger", "test_coverage_board_window.py"), 7),
+    # R1987 explore-queue claim (stats_board R1983 seed sibling
+    # gap): the per-showcase statistics board across a full-stack
+    # restart (face close -> ledger close -> fresh ledger +
+    # stateless gate + fresh face on the same db paths): pre-close
+    # board bytes re-derived identically by the reopened face;
+    # post-restart place/retract recompute zero-cache with
+    # untouched rows frozen; cross-window re-place continuation
+    # reconciles with showcase_view; third-instance dual-live
+    # sequential identity; pure-read law; the board rows carry no
+    # time-derived fields so no clock patch is needed
+    # (AC-SSBP1..AC-SSBP7 pre-registered in state/queue/explore.md).
+    ("ledger-statsboard-persist",
+     os.path.join("ledger", "test_stats_board_persist.py"), 7),
 ]
 
 FAILS = 0

@@ -1,0 +1,19 @@
+--- run 1 (rc=0) ---
+PASS AC-SSBP1: fresh zero-registration face returns the honest empty board; pre-close board 5 rows == 5 registered showcases, keys exact, manual-SQL cross=5/5, net identity holds, order=['beta-win', 'gamma-win', 'alpha-win', 'omega-win', 'delta-win'], delta honest zeros, double-read byte-stable
+PASS AC-SSBP2: full-stack close (sh -> led) then rebuild on the same paths: board byte-identical=True re-read self=True (registry rows + event counts re-derived from disk, zero in-memory cache)
+PASS AC-SSBP3: live place moves the zero-event row 0->1 (places and displayed_now), live retract moves retracts 0->1 and displayed_now back to 0; untouched rows byte-frozen=True; net identity holds on every row
+PASS AC-SSBP4: cross-window re-place continues the board (alpha 4/1/3, delta stays 1/1/0); every row reconciles with showcase_view displayed lengths=True; reordered board keeps the decisive order=['alpha-win', 'beta-win', 'gamma-win', 'delta-win', 'omega-win']
+PASS AC-SSBP5: third instance (two live faces) board byte-identical=True; sequential re-reads stable=True; read battery left table counts constant=True
+PASS AC-SSBP6: stats_board method source has zero write statements ([]); read battery left showcases/exhibit_events/collectibles counts constant {'showcases': 5, 'exhibit_events': 18, 'collectibles': 6} == {'showcases': 5, 'exhibit_events': 18, 'collectibles': 6}; repeat-read pair byte-identical=True
+PASS AC-SSBP7: suite ascii=True net-clean=True product-sha-stable=True runner-registered=True world-outside-repo=True clock-pristine=True (no clock patch: board rows carry no time-derived fields) expected=7
+SUITE PASS 7/7
+--- run 2 (rc=0) ---
+PASS AC-SSBP1: fresh zero-registration face returns the honest empty board; pre-close board 5 rows == 5 registered showcases, keys exact, manual-SQL cross=5/5, net identity holds, order=['beta-win', 'gamma-win', 'alpha-win', 'omega-win', 'delta-win'], delta honest zeros, double-read byte-stable
+PASS AC-SSBP2: full-stack close (sh -> led) then rebuild on the same paths: board byte-identical=True re-read self=True (registry rows + event counts re-derived from disk, zero in-memory cache)
+PASS AC-SSBP3: live place moves the zero-event row 0->1 (places and displayed_now), live retract moves retracts 0->1 and displayed_now back to 0; untouched rows byte-frozen=True; net identity holds on every row
+PASS AC-SSBP4: cross-window re-place continues the board (alpha 4/1/3, delta stays 1/1/0); every row reconciles with showcase_view displayed lengths=True; reordered board keeps the decisive order=['alpha-win', 'beta-win', 'gamma-win', 'delta-win', 'omega-win']
+PASS AC-SSBP5: third instance (two live faces) board byte-identical=True; sequential re-reads stable=True; read battery left table counts constant=True
+PASS AC-SSBP6: stats_board method source has zero write statements ([]); read battery left showcases/exhibit_events/collectibles counts constant {'showcases': 5, 'exhibit_events': 18, 'collectibles': 6} == {'showcases': 5, 'exhibit_events': 18, 'collectibles': 6}; repeat-read pair byte-identical=True
+PASS AC-SSBP7: suite ascii=True net-clean=True product-sha-stable=True runner-registered=True world-outside-repo=True clock-pristine=True (no clock patch: board rows carry no time-derived fields) expected=7
+SUITE PASS 7/7
+--- verdict: byte-identical=True sha16=776c18efe8fcb070 (takeover double-run, python single writer LF) ---
