@@ -2226,6 +2226,17 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-showcase-statsdual-persist",
      os.path.join("ledger", "test_showcase_statsdualpersist.py"), 7),
+    # R1992 showcase stats cap-window cross-restart persistence:
+    # the R1988 cap face (tail-window slice + honest overflow
+    # block) across a full-stack instance restart - byte identity
+    # of the cap family {1,2,50} + default full read, post-restart
+    # registration total continuation with tail slide and old-row
+    # freeze, post-restart activity zero-cache recompute, third
+    # instance stability, pure-read law, hygiene (suite-only).
+    # (AC-SSTP1..AC-SSTP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statscap-persist",
+     os.path.join("ledger", "test_showcase_statscappersist.py"), 7),
 ]
 
 FAILS = 0

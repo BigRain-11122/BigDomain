@@ -1,0 +1,14 @@
+--- R1992 showcase stats cap-window cross-restart persistence suite (test_showcase_statscappersist.py) - double run, single python writer utf-8 LF ---
+run1 rc=0 sha16=dfe5979260a651bf
+run2 rc=0 sha16=dfe5979260a651bf
+byte-identical=True
+
+PASS AC-SSTP1: cap family {1,2,50}+default: envelope keys=default-2/capped-6=True row keys=True full==direct=True order=['beta-win', 'gamma-win', 'alpha-win', 'omega-win', 'delta-win'] capped==tail slices=True mirror==capped(2)=True overflow honest (total 5, c50 full returned 5, c1 truncated tail delta)=True
+PASS AC-SSTP2: full-stack close (sh -> led) then rebuild on same paths + same cfg bytes: cap family {1,2,50}+full byte-identical=True double-read self-stable=True
+PASS AC-SSTP3: post-restart registration: full read 5->6=True, zero-event zeta row honest zeros=True, cap total 5->6=True, capped(2) tail slid [omega,delta]->[delta,zeta]=True, five old rows byte-frozen=True
+PASS AC-SSTP4: post-restart activity: zero-cache recompute order moved alpha first=True alpha {p3,r2,dn1}=True netflow identity all rows=True untouched rows frozen=True cap total 6=True capped(2) tail [omega,zeta]=True
+PASS AC-SSTP5: third instance == second-instance final state byte-identical=True sequential double-read=True counts flat=True
+PASS AC-SSTP6: read battery (cap 1/2/50 + default, twice) leaves counts unchanged {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6} == {'showcases': 6, 'exhibit_events': 17, 'collectibles': 6}, repeat pairs byte-identical, stats_board method source zero write statements ([]) zero RNG
+PASS AC-SSTP7: suite pure ASCII=True net-clean=True registry-wired=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+
