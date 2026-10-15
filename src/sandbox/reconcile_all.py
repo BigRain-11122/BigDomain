@@ -2160,6 +2160,19 @@ SUITES = [
     # (AC-SSB1..AC-SSB7 pre-registered in state/queue/explore.md).
     ("ledger-showcase-stats",
      os.path.join("ledger", "test_showcase_stats.py"), 7),
+    # R1984 explore-queue FIFO-head claim (R1982 reseed row): the
+    # dataset-subscription coverage board across a two-piece restart
+    # (face close + ledger close -> new stack over the same db
+    # paths): anchor world with the same-account multi-window
+    # household-dedup law and an honest zero-subscription row,
+    # board byte identity across restart, post-restart live
+    # continuation (new subscription/registration/delivery on the
+    # board face), stable gate codes, append-only frozen row
+    # prefixes with the bound spend-tx SQL cross, pure-read law,
+    # third-instance sequential identity
+    # (AC-COVP1..AC-COVP7 pre-registered in state/queue/explore.md).
+    ("ledger-coverageboard-persist",
+     os.path.join("ledger", "test_coverage_board_persist.py"), 7),
 ]
 
 FAILS = 0

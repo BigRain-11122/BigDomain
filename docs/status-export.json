@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-15T07:29:02+08:00",
+ "export_ts": "2026-10-15T08:12:30+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "已交付展示橱窗撤展统计读面（stats_board 纯读派生：注册表 dense+净流恒等 displayed_now==places−retracts+三键决定序+跨面对账 showcase_view；全套回归 212/212 绿）",
-  "latest_artifact": "qa/showcase-stats-R1983.log（2026-10-15）",
-  "next_milestone": "下一窗：展示橱窗统计榜跨重启持久化例窗（explore 队列已入列·后继队头 lobby 套件 stdout 确定性硬化窗），窗 ≤48h"
+  "current": "已交付数据集订阅覆盖榜跨重启持久化例窗（coverage_board persist：两件栈 close→重开榜逐字节复原+重启后新订阅/新注册/新投递活态续接+五门探针同码+append-only 冻结锚；全套回归 213/213 绿）",
+  "latest_artifact": "qa/coverageboard-persist-R1984.log（2026-10-15）",
+  "next_milestone": "下一窗：展示橱窗统计榜跨重启持久化例窗（explore 队列已入列·R1983 export 既定后继·后继队头 lobby 套件 stdout 确定性硬化窗），窗 ≤48h"
  },
  "depts": [
   {
@@ -203,6 +203,10 @@
  ],
  "results": [
   [
+   "R1984",
+   "R1984 datasub coverage board cross-restart persist window delivered (P3 explore FIFO head, strict file-order topmost open non-gated after the two standing gated rows; AC-COVP1..COVP7 pre-registered pre-code, AC-CVP avoided as R1927-occupied): two-piece stack close->reopen board byte-identity, post-restart live continuation (new bob subscription real spend + city-parks registration lands as honest zero row with air<parks dictionary tie-break + new delivery, mobility {2,3,3}->{3,4,4} zero-cache recompute, untouched rows frozen), five gate probes identical codes across restart, append-only frozen row prefixes with the bound spend-tx SQL cross, pure-read law, third-instance stability; two test-side criteria bugs fixed same round (probe-code assertion form + deliveries rowid insertion-order law vs delivery_ref text order breaking the prefix law); three-green: SUITE 7/7 double-run byte-identical sha16 6c4a8b1d6e5a30d9 + RUNNER PASS 213/213 criteria 1828->1835 controls 7/7 176.8s (first-run census cd7 catch on the new evidence file -> re-freeze -> green; first-run FAIL evidence preserved) + matrix 213/1835 --check byte-identical + fingerprint CLEAN domains=5 + profile DRIFT-CLEAN 211/0 NEW-SUITE + census DRIFT-CLEAN; fold R526 tail-5 pre-closeout post==predicted 74351B; explore consume 1 reseed 1 (open=10); heartbeat R1983 backfill debt collected"
+  ],
+  [
    "R1981",
    "R1981 honor yearbook cross-restart persist window: AC-HYP1..HYP6 all green (SUITE 6/6 double-run identical, RUNNER 210/210 criteria 1808->1814, matrix 210/1814 byte-identical, census DRIFT-CLEAN, fingerprint CLEAN); fold R524 pre-closeout post==predicted 74368B"
   ],
@@ -371,14 +375,14 @@
    "R1983 showcase stats board read face delivered (P3 explore FIFO head; AC-SSB1..SSB7 pre-registered pre-code) - ShowcaseFace.stats_board registry-keyed pure-read per-showcase place/retract count aggregation with the derived displayed_now column; net-flow identity displayed_now == places - retracts machine-checked per row (append-only alternation); dense over the registry with honest zero rows and an honest empty board; three-key decisive order places DESC, retracts DESC, showcase_id ASC; cross-face reconciliation against showcase_view; three-green: SUITE 7/7 double-run byte-identical sha16 4b5908f561799632 + RUNNER PASS 212/212 controls 7/7 178.4s (SUITES 211->212 criteria 1821->1828) + matrix 212/1828 --check byte-identical + fingerprint CLEAN domains=5 + profile DRIFT-CLEAN + census DRIFT-CLEAN flags=0; explore consume 1 reseed 1 (open=10)"
   ],
   [
-   "1983",
+   "1984",
    "OSLoop 执行 tick"
   ]
  ],
  "self_drive": {
   "window": "2026-10-09..2026-10-15",
   "window_days": 7,
-  "log_lines_in_window": 15,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 0,
