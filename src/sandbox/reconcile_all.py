@@ -2296,6 +2296,24 @@ SUITES = [
         # state/queue/explore.md claim row before this code existed).
         ("civic-behavior-monthwindow-persist",
          os.path.join("ledger", "test_civic_monthwindow_persist.py"), 7),
+        # R1999 explore-queue FIFO head claim (R1998 reseed row): civic
+        # honor_board_competition month-window read face - strict
+        # YYYY-MM window slice inside the year scope (year-window
+        # coupling gate, fail-closed before any read), 1224
+        # competition ranks inside the window (ties share the
+        # minimum rank, next distinct skips, account_id ASC
+        # tie-break with zero insertion-order keys), total
+        # cross-window separation both directions, in-year empty
+        # windows and far-year windows honest empty boards,
+        # default full-year call byte-identical with the
+        # pre-window era (zero window key, single-source
+        # derivation over honor_board preserved), explicit-window
+        # envelope carries the window additively, pure-read law +
+        # ast zero-write scan, schema/config pins
+        # (AC-HCW1..HCW7 pre-registered in state/queue/explore.md).
+        ("civic-competition-monthwindow",
+         os.path.join("ledger",
+                      "test_civic_competition_monthwindow.py"), 7),
     ]
 
 FAILS = 0

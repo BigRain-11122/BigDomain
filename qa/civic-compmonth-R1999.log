@@ -1,0 +1,21 @@
+--- RUN 1: test_civic_competition_monthwindow.py (subprocess byte capture, LF-normalized) ---
+exit=0
+PASS AC-HCW1: default == explicit-None byte-identical=True; envelope keys=['disclaimer', 'honor_board_competition']; annual board=[{'rank': 1, 'account_id': 'usr:alice', 'points': 18, 'events': 4}, {'rank': 2, 'account_id': 'usr:bob', 'points': 9, 'events': 3}, {'rank': 3, 'account_id': 'usr:carol', 'points': 7, 'events': 3}] (R1769 semantics anchor); double-call identical
+PASS AC-HCW2: 16 bad window forms all E_CV_BAD_WINDOW; coupling gate (2026 + 2027-01) rejected=True; 5 bad year forms all E_CV_BAD_ARGS; five-table counts constant
+PASS AC-HCW3: oct=[{'rank': 1, 'account_id': 'usr:alice', 'points': 13, 'events': 3}, {'rank': 2, 'account_id': 'usr:bob', 'points': 9, 'events': 3}, {'rank': 3, 'account_id': 'usr:carol', 'points': 5, 'events': 2}] sep=[{'rank': 1, 'account_id': 'usr:alice', 'points': 5, 'events': 1}, {'rank': 2, 'account_id': 'usr:carol', 'points': 2, 'events': 1}]; both == independent prefix-filter recount; zero cross-month leakage either direction (bob absent from sep board = honest zero-earn absence)
+PASS AC-HCW4: tie world oct comp ranks [1,2,3,3,5] exact; aaron before bob despite later earn_id (account_id ASC tie-break, zero insertion-order key); every rank == 1 + strictly-greater manual count; full-year board == oct board rows (envelopes differ by window key)
+PASS AC-HCW5: empty windows 2026-11/2026-12 in-year and far-year 2099-01 (coupling gate forward pass) all honest [] boards; additive law annual==sep+oct per account (points+events); window double-call byte-identical
+PASS AC-HCW6: five-table row sets constant across the windowed read batch; ast scan zero write statements (0 hits)
+PASS AC-HCW7: schema sha pinned; config sha pinned; product ascii=True; no-network-imports=True; honor_board window-free=True; default branch delegates to honor_board=True; civic.db table set=['civic_behaviors', 'civic_earns', 'civic_grants', 'civic_redeems', 'civic_rewards']
+SUITE PASS: 7 criteria, 7 pass, 0 fail
+--- RUN 2: same suite, deterministic double-run ---
+exit=0
+PASS AC-HCW1: default == explicit-None byte-identical=True; envelope keys=['disclaimer', 'honor_board_competition']; annual board=[{'rank': 1, 'account_id': 'usr:alice', 'points': 18, 'events': 4}, {'rank': 2, 'account_id': 'usr:bob', 'points': 9, 'events': 3}, {'rank': 3, 'account_id': 'usr:carol', 'points': 7, 'events': 3}] (R1769 semantics anchor); double-call identical
+PASS AC-HCW2: 16 bad window forms all E_CV_BAD_WINDOW; coupling gate (2026 + 2027-01) rejected=True; 5 bad year forms all E_CV_BAD_ARGS; five-table counts constant
+PASS AC-HCW3: oct=[{'rank': 1, 'account_id': 'usr:alice', 'points': 13, 'events': 3}, {'rank': 2, 'account_id': 'usr:bob', 'points': 9, 'events': 3}, {'rank': 3, 'account_id': 'usr:carol', 'points': 5, 'events': 2}] sep=[{'rank': 1, 'account_id': 'usr:alice', 'points': 5, 'events': 1}, {'rank': 2, 'account_id': 'usr:carol', 'points': 2, 'events': 1}]; both == independent prefix-filter recount; zero cross-month leakage either direction (bob absent from sep board = honest zero-earn absence)
+PASS AC-HCW4: tie world oct comp ranks [1,2,3,3,5] exact; aaron before bob despite later earn_id (account_id ASC tie-break, zero insertion-order key); every rank == 1 + strictly-greater manual count; full-year board == oct board rows (envelopes differ by window key)
+PASS AC-HCW5: empty windows 2026-11/2026-12 in-year and far-year 2099-01 (coupling gate forward pass) all honest [] boards; additive law annual==sep+oct per account (points+events); window double-call byte-identical
+PASS AC-HCW6: five-table row sets constant across the windowed read batch; ast scan zero write statements (0 hits)
+PASS AC-HCW7: schema sha pinned; config sha pinned; product ascii=True; no-network-imports=True; honor_board window-free=True; default branch delegates to honor_board=True; civic.db table set=['civic_behaviors', 'civic_earns', 'civic_grants', 'civic_redeems', 'civic_rewards']
+SUITE PASS: 7 criteria, 7 pass, 0 fail
+--- byte-identity: byte-identical (normalized-LF sha256=f7be4ce256220f530cf4df63527d70955e86f39dd7d5cf0f7741229168ed53e8 bytes=1948) ---

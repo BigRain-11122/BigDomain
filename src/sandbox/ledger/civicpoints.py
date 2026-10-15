@@ -535,7 +535,7 @@ class CivicPointsFace:
                           "events": entry["events"]})
         return {"honor_board": board, "disclaimer": self.disclaimer}
 
-    def honor_board_competition(self, year):
+    def honor_board_competition(self, year, window=None):
         """Competition-ranked annual honor board (R1769): the 1224
         standard competition ranking over the SAME single-source
         aggregation as honor_board - tied accounts share the
@@ -551,7 +551,61 @@ class CivicPointsFace:
         explore-queue row): the top-N certificate slice stays
         ROW-COUNT-BASED (honorcert slices board rows [:top_n]) -
         the competition rank is presentation-only and this face
-        deliberately adds no grant verb."""
+        deliberately adds no grant verb.
+
+        Month-window read (R1999; canon = the explore-queue
+        successor row, criteria AC-HCW1..HCW7 registered before
+        this code existed): an explicit strict YYYY-MM window
+        narrows the same per-account aggregation to the earn rows
+        whose validated at_day falls inside that calendar month
+        (the write-time strict day check makes a prefix match
+        exact) and ranks them with the same 1224 semantics inside
+        the window - a window-scope aggregation shift, the
+        windowed-read family precedent (the R1997
+        behavior_distribution window branch is the same law); the
+        suite cross-checks every window board against an
+        independent prefix-filter recount. The window year must
+        equal the year argument - a window outside the year scope
+        is rejected fail-closed before any read (the no-ambiguity
+        law). The default window=None call keeps the full-year
+        single-source derivation over honor_board and its
+        envelope stays byte-identical with the pre-window era
+        (zero window key); an explicit-window envelope carries the
+        window value additively. Pure read, zero storage, zero
+        RNG."""
+        if (not isinstance(year, str) or len(year) != 4
+                or not (year.isascii() and year.isdigit())):
+            raise CivicError(E_CV_BAD_ARGS,
+                             "year must be exactly 4 ascii digits")
+        if window is not None:
+            window = self._assert_month(window)
+            if window[:4] != year:
+                raise CivicError(E_CV_BAD_WINDOW,
+                                 "window outside year scope: " + window)
+            with self._lock:
+                rows = self._conn.execute(
+                    "SELECT account_id, COALESCE(SUM(points), 0),"
+                    " COUNT(*) FROM civic_earns WHERE at_day LIKE ?"
+                    " GROUP BY account_id",
+                    (window + "-%",)).fetchall()
+            entries = [{"account_id": r[0], "points": int(r[1]),
+                        "events": int(r[2])} for r in rows]
+            entries.sort(key=lambda e: (-e["points"],
+                                        e["account_id"]))
+            board = []
+            prev_points = None
+            prev_rank = 0
+            for pos, entry in enumerate(entries, start=1):
+                if entry["points"] != prev_points:
+                    prev_points = entry["points"]
+                    prev_rank = pos
+                board.append({"rank": prev_rank,
+                              "account_id": entry["account_id"],
+                              "points": entry["points"],
+                              "events": entry["events"]})
+            return {"honor_board_competition": board,
+                    "window": window,
+                    "disclaimer": self.disclaimer}
         dense = self.honor_board(year)["honor_board"]
         board = []
         prev_points = None
