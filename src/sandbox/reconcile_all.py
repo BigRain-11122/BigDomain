@@ -2273,10 +2273,22 @@ SUITES = [
     # dense row, third instance, pure-read law
     # (AC-PBP1..AC-PBP7 pre-registered in
     # state/queue/explore.md).
-    ("ledger-proposal-progresspersist",
-     os.path.join("ledger",
-                  "test_proposal_progresspersist.py"), 7),
-]
+        ("ledger-proposal-progresspersist",
+         os.path.join("ledger",
+                       "test_proposal_progresspersist.py"), 7),
+        # R1997 explore-queue FIFO head claim (R1977 reseed row): civic
+        # behavior distribution month-window read face - strict YYYY-MM
+        # window slice (write-time strict day check makes the prefix
+        # match exact), total cross-window separation both directions,
+        # empty windows keep the registry-complete all-zero board,
+        # default full-window call byte-identical with the pre-window
+        # era (zero window key), explicit-window envelope carries the
+        # window additively, default == sept+oct cross per behavior,
+        # pure-read law + ast zero-write scan, schema/config pins
+        # (AC-CVM1..CVM7 pre-registered in state/queue/explore.md).
+        ("civic-behavior-monthwindow",
+         os.path.join("ledger", "test_civic_monthwindow.py"), 7),
+    ]
 
 FAILS = 0
 

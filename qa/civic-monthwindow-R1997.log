@@ -1,0 +1,16 @@
+# R1997 civic behavior distribution month-window suite evidence (double run)
+# criteria AC-CVM1..AC-CVM7 pre-registered in state/queue/explore.md before the code existed
+# honest erratum: AC-CVM5 first draft asserted a plain per-column sum across the month partition; the red run exposed participants as a COUNT(DISTINCT) union-law dimension, the assertion was corrected to additive sum law for events/total_points + set-union law for participants same round (product behavior was already right; R1996 AC-CJM6 precedent)
+run1 exit=0 run2 exit=0
+stdout byte-identical=True
+stdout sha256=a85ee5fb9e611e1e304a226b356950242dad507fa8537f5ff756f1014c112000 bytes=1588
+VERDICT PASS
+----- run1 stdout -----
+PASS AC-CVM1: default envelope keys sorted=['behavior_distribution', 'disclaimer']; full aggregates={'b-volunteer': (4, 20, 2, '2026-10-02'), 'b-report': (2, 6, 2, '2026-10-03'), 'b-recycle': (4, 8, 2, '2026-10-03'), 'b-dormant': (0, 0, 0, None)}; double-call byte-identical=True
+PASS AC-CVM2: 16 bad window forms all E_CV_BAD_WINDOW; five-table counts constant; window=None == default face
+PASS AC-CVM3: oct={'b-volunteer': (3, 15, 2, '2026-10-02'), 'b-report': (2, 6, 2, '2026-10-03'), 'b-recycle': (3, 6, 2, '2026-10-03'), 'b-dormant': (0, 0, 0, None)} sep={'b-volunteer': (1, 5, 1, '2026-09-28'), 'b-report': (0, 0, 0, None), 'b-recycle': (1, 2, 1, '2026-09-30'), 'b-dormant': (0, 0, 0, None)}; both == independent prefix-filter recount; zero cross-month leakage either direction
+PASS AC-CVM4: empty windows 2026-12/2099-01 keep registry-complete all-zero board; explicit envelope window key additive
+PASS AC-CVM5: additive sum law events/total_points + participants set-union law per behavior; windowed double-call byte-identical; oct order ['b-volunteer', 'b-recycle', 'b-report', 'b-dormant']; tie world full=['b-alpha', 'b-zeta'] oct=['b-zeta', 'b-alpha'] sep=['b-alpha', 'b-zeta'] (id ASC, zero insertion-order key)
+PASS AC-CVM6: five-table row sets constant across the windowed read batch; ast scan zero write statements (0 hits)
+PASS AC-CVM7: schema sha pinned; config sha pinned; product ascii=True; no-network-imports=True; civic.db table set=['civic_behaviors', 'civic_earns', 'civic_grants', 'civic_redeems', 'civic_rewards']
+SUITE PASS: 7 criteria, 7 pass, 0 fail

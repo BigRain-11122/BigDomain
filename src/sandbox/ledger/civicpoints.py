@@ -99,6 +99,7 @@ E_CV_UNKNOWN_REWARD = "E_CV_UNKNOWN_REWARD"
 E_CV_DUP_GRANT = "E_CV_DUP_GRANT"
 E_CV_INSUFFICIENT = "E_CV_INSUFFICIENT"
 E_CV_NO_DISCLAIMER = "E_CV_NO_DISCLAIMER"
+E_CV_BAD_WINDOW = "E_CV_BAD_WINDOW"
 
 REWARD_KINDS = ("cosmetic", "count")
 
@@ -205,6 +206,22 @@ class CivicPointsFace:
         if parsed.strftime("%Y-%m-%d") != at_day:
             raise CivicError(E_CV_BAD_ARGS, "bad at_day: " + at_day)
         return at_day
+
+    def _assert_month(self, window):
+        """Strict calendar-month validation (the _assert_day law
+        applied to the YYYY-MM month window): strptime alone is
+        lenient about zero padding and silently swallows trailing
+        garbage patterns, so the parse is round-tripped and must
+        reproduce the input verbatim."""
+        if not isinstance(window, str):
+            raise CivicError(E_CV_BAD_WINDOW, "window must be a string")
+        try:
+            parsed = datetime.datetime.strptime(window, "%Y-%m")
+        except ValueError:
+            raise CivicError(E_CV_BAD_WINDOW, "bad window: " + window)
+        if parsed.strftime("%Y-%m") != window:
+            raise CivicError(E_CV_BAD_WINDOW, "bad window: " + window)
+        return window
 
     def _load_behavior(self, behavior_id):
         with self._lock:
@@ -550,7 +567,7 @@ class CivicPointsFace:
         return {"honor_board_competition": board,
                 "disclaimer": self.disclaimer}
 
-    def behavior_distribution(self):
+    def behavior_distribution(self, window=None):
         """Per-behavior distribution read face (R1977; canon =
         explore-queue civicpoints successor row, criteria
         AC-CVD1..CVD6 registered before this code existed):
@@ -574,15 +591,44 @@ class CivicPointsFace:
         order exists per world state. The counts-vs-tokens
         isolation law is inherited structurally (constructor takes
         no ledger reference). ai_label rides every row and the
-        standing disclaimer rides the envelope (module law)."""
+        standing disclaimer rides the envelope (module law).
+
+        Month-window read (R1997; canon = the explore-queue
+        successor row, criteria AC-CVM1..CVM7 registered before
+        this code existed): an explicit strict YYYY-MM window
+        slices the same aggregation to the earn rows whose
+        validated at_day falls inside that calendar month (the
+        write-time strict day check makes a prefix match exact);
+        cross-window separation is total (September rows never
+        leak into an October read), and a window with zero earn
+        rows keeps the registry-complete board with honest zero
+        aggregates (the registry stays the row-set authority -
+        out-of-window never means row-set surgery). The default
+        window=None call is the full-window face and its envelope
+        stays byte-identical with the pre-window era (zero
+        window key); an explicit-window envelope carries the
+        window value additively. Pure read, zero storage, zero
+        RNG, one deterministic order for both modes."""
+        if window is not None:
+            window = self._assert_month(window)
         with self._lock:
             regs = self._conn.execute(
                 "SELECT behavior_id, title, points_per_event,"
                 " ai_label FROM civic_behaviors").fetchall()
-            agg = self._conn.execute(
-                "SELECT behavior_id, COUNT(*), COALESCE(SUM(points),0),"
-                " COUNT(DISTINCT account_id), MAX(at_day)"
-                " FROM civic_earns GROUP BY behavior_id").fetchall()
+            if window is None:
+                agg = self._conn.execute(
+                    "SELECT behavior_id, COUNT(*),"
+                    " COALESCE(SUM(points),0),"
+                    " COUNT(DISTINCT account_id), MAX(at_day)"
+                    " FROM civic_earns GROUP BY behavior_id").fetchall()
+            else:
+                agg = self._conn.execute(
+                    "SELECT behavior_id, COUNT(*),"
+                    " COALESCE(SUM(points),0),"
+                    " COUNT(DISTINCT account_id), MAX(at_day)"
+                    " FROM civic_earns WHERE at_day LIKE ?"
+                    " GROUP BY behavior_id",
+                    (window + "-%",)).fetchall()
         counts = {}
         for row in agg:
             counts[row[0]] = (int(row[1]), int(row[2]), int(row[3]),
@@ -600,5 +646,9 @@ class CivicPointsFace:
                           "last_day": last_day})
         board.sort(key=lambda r: (-r["total_points"], -r["events"],
                                   r["behavior_id"]))
+        if window is None:
+            return {"behavior_distribution": board,
+                    "disclaimer": self.disclaimer}
         return {"behavior_distribution": board,
+                "window": window,
                 "disclaimer": self.disclaimer}

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T14:37:14+08:00",
+  "export_ts": "2026-10-15T15:37:31+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1996: curation boards_combined month-window scoped read face delivered (P3 explore FIFO head; AC-CJM1..CJM7 pre-registered in the claim row before code). Product: showcase.py showcase_view_window public read face (strict YYYY-MM gate, dedicated E_SH_BAD_WINDOW code, window-scoped display state from window-RECORDED events - the record-time law) + curation.py hot_board(window)/boards_combined(window) (E_CU_BAD_WINDOW gate before any read, default None byte-identical, explicit window adds the envelope key). Suite 7/7 double-run byte-identical; RUNNER PASS 221/221 criteria 1884->1891 controls 7/7 207.4s; matrix 221/1891 --check byte-identical; census DRIFT-CLEAN (R1995 takeover-driver evidence file re-baselined per R1979 family); fingerprint CLEAN domains=5; profile DRIFT-CLEAN.",
-    "latest_artifact": "src/sandbox/ledger/curation.py boards_combined(window) + src/sandbox/ledger/showcase.py showcase_view_window + src/sandbox/ledger/test_curation_combinedmonth.py + qa/curation-combinedmonth-R1996.log + qa/reconcile-all-R1996-2.log (RUNNER PASS 221/221)",
-    "next_milestone": "Next explore FIFO head within 48h: civic behavior_distribution month-window read face (AC prefix occupancy check at claim time); daily-profile observation-window ruling gates open 2026-10-16."
+    "current": "R1997: civic behavior_distribution month-window read face delivered via 29th-case crashed-round takeover closeout (P3 explore FIFO head; AC-CVM1..CVM7 pre-registered in the claim row before code). Product: civicpoints.py behavior_distribution(window) additive extension - _assert_month strict round-trip gate (E_CV_BAD_WINDOW dedicated code, 16 malformed forms fail-closed), default None byte-identical zero-drift, explicit window adds the envelope key additively, empty months keep the registry-complete all-zero board, additive sum law for events/total_points + COUNT(DISTINCT) set-union law for participants (first-draft plain-sum erratum corrected same round per the R1996 AC-CJM6 precedent). Takeover battery all green: suite rerun exit=0 sha-matching the original double-run evidence; RUNNER PASS 222/222 criteria 1891->1898 controls 7/7 223.5s; matrix 222/1898 --check byte-identical 21338B; fingerprint CLEAN domains=5; profile byte-identical PASS; census DRIFT-CLEAN (1495 files); the four unlogged sections re-run and appended as takeover follow-up VERDICT PASS (qa/reconcile-all-R1997.log).",
+    "latest_artifact": "src/sandbox/ledger/civicpoints.py behavior_distribution(window) + src/sandbox/ledger/test_civic_monthwindow.py + qa/civic-monthwindow-R1997.log + qa/reconcile-all-R1997.log (RUNNER PASS 222/222, takeover follow-up VERDICT PASS)",
+    "next_milestone": "Next explore FIFO head within 48h: apimarket dev_sales_board cross-restart persistence example window (claim-time AC prefix occupancy check); daily-profile observation-window ruling gates open 2026-10-16."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1997",
+      "R1997: 29th-case crashed-round takeover closeout - civic behavior_distribution month-window read face (P3 explore FIFO head; AC-CVM1..CVM7 pre-registered in the claim row before code). The crashed session finished the whole payload (product + suite double-run + SUITES registration 221->222 + matrix regen 222/1898 + RUNNER PASS 222/222 criteria 1891->1898 controls 7/7 223.5s in qa/reconcile-all-R1997.log) and died pre-closeout before the four battery check sections; taker re-verified green personally per the R1995/R1994 precedent: suite spot re-run exit=0 sha256 anchor-matching the crashed round's double-run byte-identical evidence (a85ee5fb..., bytes=1588), then the four unlogged sections re-run all green and appended as a takeover follow-up (VERDICT PASS, qa/reconcile-all-R1997.log): matrix --check byte-identical 21338B (222 suites, 1898 criteria), fingerprint CLEAN domains=5, profile --daily --check byte-identical PASS, census DRIFT-CLEAN (files=1495 tee=987 baselined=508 flags=0). Product face: behavior_distribution(window) - _assert_month strict round-trip gate with the E_CV_BAD_WINDOW dedicated code (16 malformed forms fail-closed, zero read side-effects), default None byte-identical with the pre-window era, explicit window adds the envelope key additively, empty windows keep the registry-complete all-zero board (dormant rows never vanish), oct/sep cross-window separation both directions verified against an independent prefix-filter recount, default == sept+oct additive sum law for events/total_points with the COUNT(DISTINCT) set-union law for participants (the AC-CVM5 first-draft plain-sum erratum corrected same round, product behavior already right, R1996 AC-CJM6 precedent), pure-read law + ast zero-write scan, schema/config sha pins. Group faces: LEDGER @BigDomain 0, DEC content-addressed new=0 (rows 338->328 = 10-15 group memory-restructure layout drift, auxiliary baseline re-anchored, token set unchanged), ORD tail = O-20261015-1335 already acked, GORD 460==460 flat, bench fresh today, daily reconcile evidence for 10-15 on plate not re-run. fold R532 pre-closeout honored (gauge 76581B -> tail-6 6227B folded to one rolling line kept=0, 7 tokens embedded zero-loss gen532, archive section R1997 six lines verbatim + preop bak; post 74516B verified). Explore consumed 1 reseeded 1 (month-window cross-restart persistence seed), open=10 conserved. Score 2 (product delivery via takeover commit)."
+    ],
+    [
       "R1996",
       "R1996: curation boards_combined month-window scoped read face delivered (P3 explore FIFO head; AC-CJM1..AC-CJM7 pre-registered in the explore.md claim row before code). Product: showcase.py showcase_view_window public read face (strict ASCII YYYY-MM gate with the dedicated E_SH_BAD_WINDOW per-parameter code, gate before any read; window-scoped display state derived from the events RECORDED in the month - the R1712 record-time law via acted_utc prefix) + curation.py hot_board(window)/boards_combined(window) (E_CU_BAD_WINDOW gate, default None form byte-identical to the R1974/R1753 contracts, explicit window adds an additive envelope key, single derivation source = one hot_board(window) call through the ShowcaseFace public face). Window laws pinned: a september placement with zero october records stays off the october board while remaining on the live board; an october placement retracted in november is displayed in october and not in november; a november-registered curation boards in the october window (registration month never decides the board month); the out-of-range month 2099-01 returns the honest empty hot zone + all-cold shelf; 13 malformed windows refuse fail-closed on both faces; full-stack close/reopen keeps all four window boards byte-identical. Suite 7/7 double-run byte-identical sha16 86705794ffd03460 bytes=3585 (one same-round suite-side assertion fix on AC-CJM6 honestly noted: windowed hot_board full-set vs combined hot-zone subset mismatch, product behavior correct); RUNNER PASS 221/221 criteria 1884->1891 (SUITES 220->221) controls 7/7 207.4s = qa/reconcile-all-R1996-2.log (first battery FAIL = census cd7 drift on reconcile-all-R1995.log, the R1995 takeover-driver evidence file never re-baselined - R1979-family hygiene debt, dispositioned by --update-baseline re-freeze, first-run log -1 preserved); matrix 221/1891 regen --check byte-identical 21256B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; profile DRIFT-CLEAN 0 flagged (219 compared). Five-silence flat (ledger @BigDomain zero, DEC new=0, ORD tail = consumed 13:4x baseline, bench fresh today, daily-reconcile same-day evidence in plate). Explore consume 1 reseed 1 (stats_board month-window seed), open=10 conserved. Score 2 (product delivery)."
     ],
@@ -367,14 +371,14 @@
       "ledger tmarket persist suite 7/7; RUNNER 189/189 criteria 1655->1662; matrix byte-identical; census DRIFT-CLEAN"
     ],
     [
-      "1996",
+      "1997",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 15,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,
