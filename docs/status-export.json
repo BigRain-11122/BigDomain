@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T12:08:19+08:00",
+  "export_ts": "2026-10-15T12:21:31+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1990: stats_board_dual cross-restart persistence example window delivered (AC-SSDP1..SSDP7 pre-registered pre-code; persist-family judgment R1889/R1900/R1902 + R1987 AC-SSBP sibling). Product face: full-stack close then rebuild on the same db_path/cfg bytes/sh_path - the dual read family at caps {1,2,50} is byte-identical across the restart (derived-read purity, zero in-memory drift); post-restart new registration (zeta-win) lands in both zones with honest zeros and the capped tail slid [omega,delta]->[delta,zeta] while the five old rows stay byte-frozen; post-restart place/retract activity recomputes zero-cache (decisive order moved alpha first at 3p/2r/dn1, netflow identity displayed_now==places-retracts held on every row, untouched rows frozen); third-instance reopen == second-instance final state byte-identical; pure-read law under restart (single derivation source = exactly one stats_board() call re-pinned). Three-green: SUITE 7/7 double-run byte-identical sha16 dca908c94dadfc5a + RUNNER PASS 218/218 criteria 1863->1870 controls 7/7 216.6s + matrix 218/1870 --check byte-identical 20945B + census DRIFT-CLEAN flags=0 + fingerprint CLEAN domains=5 + runner_profile re-anchored (baseline source = R1990 log). Dialect-law live-fire same round: fold evidence log first landed ps-utf16 through a PowerShell Tee -> writer-census cd7 flag -> python single-writer utf-8 LF rewrite + full rerun green (R1880/R1883 family, own-produce self-cured). Radar window-7: two new OH lists (biglife tenacity + fluxverse city line) reviewed, zero @BigDomain strong-fit, zero claim legal.",
-    "latest_artifact": "src/sandbox/ledger/test_showcase_statsdualpersist.py (SUITE 7/7 x2 identical) + qa/showcase-statsdualpersist-R1990.log + qa/reconcile-all-R1990.log (RUNNER 218/218) + qa/reorg-R1990.log (fold R529 evidence, dialect-cured) + docs/sandbox-suite-matrix.md 218/1870 (2026-10-15)",
-    "next_milestone": "P3 explore FIFO next head: stats_board cap-window cross-restart persistence seed (reseeded this round); lobby suite stdout determinization window (R1876 real gap) behind it; within 48h."
+    "current": "R1991: R1990 commit-debt takeover closeout (27th takeover case). The crashed round R1990 had finished its whole closeout state face but died before commit; the taker re-verified the orphan payload chain (suite 7/7 double-run byte-identical sha16 dca908c94dadfc5a matching the claimed value, matrix 218/1870 --check, census DRIFT-CLEAN, fingerprint CLEAN, runner profile --check; VERDICT PASS qa/takeover-verify-R1990-2.log) and put the 23-file payload on-chain (commit fa8f0b3e, push sha-verified): R1990's stats_board_dual cross-restart persistence product (AC-SSDP1..7, RUNNER 218/218 preserved green) is fully delivered. Post-baseline group-orders backfill triage (22 rows, zero BigDomain dispatch faces; receipts: O-20261014-2250 patrol-fleet domain seat live, O-20261015-1030 agent business law v1, O-20261015-1040 24h full-chain audit case C-20261015-01, O-20261015-1055 MV/finance dispatch to other houses, O-20261015-1200 cloud token strict law D-20261015-03 - our loop runs all-local api=0, compliant).",
+    "latest_artifact": "qa/takeover-verify-R1990-2.log (VERDICT PASS) + commit fa8f0b3e (23 files: R1990 stats_board_dual persist product on-chain)",
+    "next_milestone": "P3 explore FIFO next head: stats_board cap-window cross-restart persistence seed (reseeded R1990); with the takeover chain live, next product round within 48h."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1991",
+      "R1991: R1990 commit-debt takeover closeout (27th case). Taker re-verified the orphan payload per R1988 precedent - suite 7/7 x2 byte-identical sha16 dca908c94dadfc5a (matches claimed), matrix 218/1870 --check, census DRIFT-CLEAN, fingerprint CLEAN, profile --check, VERDICT PASS (qa/takeover-verify-R1990-2.log) - then directed 23-file commit fa8f0b3e + push sha-verified 328bab17->fa8f0b3e: R1990's stats_board_dual cross-restart persistence product (AC-SSDP1..7, RUNNER 218/218 log preserved green) fully on-chain. Post-baseline GORD backfill (22 rows after the 10-14 16:2x anchor; ORD-face year-format regex blind spot honestly noted, origin direct-read filled the gap): zero BigDomain dispatch faces; five receipts logged (O-20261014-2250, O-20261015-1030, -1040, -1055, -1200 + D-20261015-03/C-20261015-02 - loop all-local api=0 compliant, canon token-economy v3.0 s10). Baselines re-anchored: last_order 2026-10-15 12:0x, GORD tbl 459->422 (reorg shrink, zero new BD rows), DEC rows 266->336, dec tokens +2. Score 1 (commit-debt closeout, R1924 caliber)."
+    ],
+    [
       "R1990",
       "R1990: stats_board_dual cross-restart persistence example window delivered (P3 explore FIFO head; AC-SSDP1..SSDP7 pre-registered in the claim row before code). Full-stack close -> rebuild on the same paths: dual family {1,2,50} byte-identical (derived-read purity, zero in-memory drift); post-restart registration lands in both zones with honest zeros and the capped tail slid while old rows stay byte-frozen; post-restart place/retract activity recomputes zero-cache with the decisive order moved (alpha first, netflow identity held on every row, untouched rows frozen); third-instance stability; pure-read law under restart. SUITE 7/7 double-run byte-identical sha16 dca908c94dadfc5a + RUNNER PASS 218/218 criteria 1863->1870 controls 7/7 216.6s + matrix 218/1870 --check byte-identical 20945B + census DRIFT-CLEAN + fingerprint CLEAN domains=5 + profile re-anchored R1990. Dialect-law live-fire: fold evidence log first landed ps-utf16 via PS Tee -> cd7 flag -> python single-writer utf-8 LF rewrite + full rerun green (R1880/R1883 family). Fold R529 pre-closeout tail-4 5681B post==predicted 73889B. Radar window-7 two new OH lists reviewed zero @BigDomain claim (R1154/R1155). Explore consume 1 reseed 1 (stats_board cap-window cross-restart persistence seed), open=10 conserved. Five-silence external FLAT. Score 2."
     ],
@@ -355,18 +359,14 @@
       "ledger showroom cross-restart persist suite 7/7 (AC-SHWP1..SHWP7; four-piece restart, twelve restart-surviving gates, frozen prefix rows, RUNNER 188/188 criteria 1648->1655)"
     ],
     [
-      "R1949",
-      "ledger studio cross-restart persist suite 7/7 (AC-STP1..STP7; three-piece restart, twelve restart-surviving gates, renewal advance booking, frozen prefix rows, RUNNER 187/187 criteria 1641->1648)"
-    ],
-    [
-      "1990",
+      "1991",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,
