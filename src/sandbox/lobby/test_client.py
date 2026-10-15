@@ -55,6 +55,37 @@ except ImportError:
 
 from websockets.exceptions import ConnectionClosed  # noqa: E402
 
+# R1876 stdout-determinism hardening (suite fixture layer; product faces
+# untouched): suite-side uuid4 digests come from a deterministic counter
+# stand-in, and server-derived id shapes are canonicalized at display
+# time, so a full default-suite double run is byte-identical.
+_UUID_SEQ = [0]
+
+
+def _det_uuid4():
+    _UUID_SEQ[0] += 1
+    return uuid.UUID(int=_UUID_SEQ[0])
+
+
+uuid.uuid4 = _det_uuid4
+
+
+def _hexshape(value):
+    s = value if isinstance(value, str) else ""
+    if s and all(c in "0123456789abcdef" for c in s):
+        return "<hexid:%d>" % len(s)
+    return value
+
+
+def _actorshape(value):
+    s = value if isinstance(value, str) else ""
+    if "-" in s:
+        head, tail = s.split("-", 1)
+        if head in ("res", "anon") and tail and all(c in "0123456789abcdef" for c in tail):
+            return head + "-<id%d>" % len(tail)
+    return value
+
+
 RESULTS = []
 
 
@@ -206,7 +237,9 @@ def startup_refusal_cases():
         bound_ok = False
     except OSError:
         bound_ok = True  # nothing ever bound = door stayed shut
-    ev.append("port-%d-never-bound=%s" % (probe_port, bound_ok))
+    # R1876 hardening: fixed display slot (no varying port digits); the
+    # probe itself stays ephemeral (R875 collision-safe).
+    ev.append("port-probe(ephemeral)-never-bound=%s" % bound_ok)
     return ok_broken and ok_missing and bound_ok, "; ".join(ev)
 
 
@@ -628,10 +661,12 @@ async def reconnect_cases():
                 and no_fin_premise and rec_ok and after is not None
                 and len(cli.pending) == 0)
         record("AC-S8c", ok_c,
-               "baseline-acked=%s; dead=%s via=%s in %.1fs (keepalive 1s+1s, bound 6s); "
+               "baseline-acked=%s; dead=%s via=%s in %s (keepalive 1s+1s, bound 6s); "
                "proxy-frozen=%s sessions=%d (no-FIN premise); reconnect-direct=%s; "
                "post-recovery-roundtrip=%s pending=%d"
-               % (baseline_ok, dead, how, elapsed, proxy_a.frozen, proxy_a.sessions,
+               % (baseline_ok, dead, how,
+                  "within-bound" if elapsed <= 6.0 else "OVER",
+                  proxy_a.frozen, proxy_a.sessions,
                   rec_ok, after is not None, len(cli.pending)))
         try:
             await cli.ws.close()
@@ -676,9 +711,10 @@ async def reconnect_cases():
                 and post is not None)
         record("AC-S8e", ok_e,
                "armed=%s frozen=%s pending-after-cut=%d; observer-once evt=%s; dead=%s "
-               "via=%s in %.1fs; reconnect=%s; duplicate-ack evt-match=%s id-match=%s "
+               "via=%s in %s; reconnect=%s; duplicate-ack evt-match=%s id-match=%s "
                "code=%s; store-rows=%d; no-rebroadcast=%s; pending=%d; post-roundtrip=%s"
-               % (armed_ok, proxy_b.frozen, 1, orig_evt, dead2, how2, elapsed2, rec2,
+               % (armed_ok, proxy_b.frozen, 1, _hexshape(orig_evt), dead2, how2,
+                  "sub-6s" if elapsed2 <= 6.0 else "OVER", rec2,
                   dup.get("payload", {}).get("evt_id") == orig_evt,
                   dup.get("payload", {}).get("client_msg_id") == mid,
                   dup.get("payload", {}).get("code"), n_rows, silent_obs,
@@ -776,14 +812,18 @@ async def reconnect_cases():
                 and 1 <= retries <= 10
                 and silent_lobby and quant_recv is not None)
         record("AC-S8d", ok_d,
-               "dead=%s via=%s in %.1fs; refusal-drill budget-out=%s "
-               "drill-refusals=%d (retry loop caught+backed off real "
-               "refusals); restart: reconnect=%s retries=%d (>=1, <=10: "
+               "dead=%s via=%s in %s; refusal-drill budget-out=%s "
+               "drill-refusals=%s (retry loop caught+backed off real "
+               "refusals); restart: reconnect=%s retries=%s (>=1, <=10: "
                "not busy-spinning; a corpse-backlog dial may bridge the "
-               "restart on Windows loopback - honest count); room-set "
+               "restart on Windows loopback - R1876: counts display "
+               "range-class for double-run byte-identity); room-set "
                "restored exactly: lobby-isolated=%s quant-received=%s"
-               % (dead3, how3, elapsed3, drill_rec, drill_refusals,
-                  rec3, retries, silent_lobby, quant_recv is not None))
+               % (dead3, how3, "sub-6s" if elapsed3 <= 6.0 else "OVER",
+                  drill_rec,
+                  "caught(>=1)" if drill_refusals >= 1 else "none",
+                  rec3, "in-1..10" if 1 <= retries <= 10 else "OUT",
+                  silent_lobby, quant_recv is not None))
         try:
             await probe.close()
         except Exception:
@@ -3175,8 +3215,12 @@ async def suite():
         ok3 = (rtt_self <= 500 and rtt_other <= 500 and iso_silent
                and got_c.get("room") == "quant"
                and got_c.get("payload", {}).get("text") == "quant only msg")
-        record("AC-S3", ok3, "rtt self=%.1fms other=%.1fms lobby-isolation=%s quant-recv-room=%s"
-               % (rtt_self, rtt_other, iso_silent, got_c.get("room")))
+        # R1876 hardening: ms readouts display as budget-class tokens
+        # (the <=500ms gate is still really measured inside ok3).
+        record("AC-S3", ok3, "rtt self=%s other=%s lobby-isolation=%s quant-recv-room=%s"
+               % ("ok(<=500ms)" if rtt_self <= 500.0 else "over",
+                  "ok(<=500ms)" if rtt_other <= 500.0 else "over",
+                  iso_silent, got_c.get("room")))
 
         # AC-S4: wordlist gate hits rejected (no broadcast, nothing in the
         # public event stream); clean text passes; unwired gate refuses startup
@@ -3221,7 +3265,7 @@ async def suite():
         ok_ai = bool(notice.get("ai_label")) and notice.get("actor") == "system-ai"
         record("AC-S5", ok_spoof and ok_ai,
                "spoof overwritten: ai_generated=%s actor=%s; ai-notice ai_generated=%s label-set=%s"
-               % (spoof.get("ai_generated"), spoof.get("actor"),
+               % (spoof.get("ai_generated"), _actorshape(spoof.get("actor")),
                   notice.get("ai_generated"), bool(notice.get("ai_label"))))
 
         # AC-S7: six-field core + evt_id rows, dedup on replay, jsonl export
