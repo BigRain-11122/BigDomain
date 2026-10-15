@@ -2209,6 +2209,13 @@ SUITES = [
     # (AC-SST1..AC-SST7 pre-registered in state/queue/explore.md).
     ("ledger-showcase-statslimit",
      os.path.join("ledger", "test_showcase_statslimit.py"), 7),
+    # R1989 stats_board dual-window combined board: default
+    # full-window + explicit capped-window side by side in one
+    # envelope (single derivation source; R1974 single-envelope
+    # law applied to the R1988 cap-window family)
+    # (AC-SSD1..AC-SSD7 pre-registered in state/queue/explore.md).
+    ("ledger-showcase-statsdual",
+     os.path.join("ledger", "test_showcase_statsdual.py"), 7),
 ]
 
 FAILS = 0

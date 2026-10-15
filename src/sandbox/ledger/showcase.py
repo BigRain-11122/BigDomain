@@ -412,3 +412,41 @@ class ShowcaseFace:
                 "limit": limit, "total": total,
                 "returned": len(rows),
                 "truncated": len(rows) < total}
+
+    def stats_board_dual(self, limit):
+        """Dual-window combined board (R1989): one envelope that
+        presents the default full-window read and the explicit
+        capped-window read side by side - the boards_combined
+        single-envelope law (R1974) applied to the cap-window
+        family (R1988). Single derivation source: exactly ONE
+        live stats_board() call (reference face, not a copy, no
+        second aggregation engine, zero direct SQL in this
+        body); the full zone is exactly that snapshot's row list
+        and the capped zone is the tail-window slice
+        rows[-limit:] of the same decisive order with the
+        honest overflow block (total carries the full registry
+        count, never the truncated one; a zero-registration
+        world returns an honest empty dual board with the block
+        still present). Pure read, zero writes, zero RNG. The
+        limit gate fires before any read: the dual face exists
+        to present an actual cap beside the full window, so the
+        cap must be a positive int (0 is the full-window form
+        already carried by the default zone; rejecting it also
+        avoids the rows[-0:] == whole-list footgun). Bad forms
+        share the E_SH_BAD_LIMIT family code with a face
+        message. AC-SSD1..AC-SSD7 (R1989)."""
+        if (isinstance(limit, bool) or not isinstance(limit, int)
+                or limit < 1):
+            raise ShowcaseError(
+                E_SH_BAD_LIMIT,
+                "limit must be a positive int for the dual board")
+        board = self.stats_board()
+        full_rows = board["showcase_stats_board"]
+        total = len(full_rows)
+        capped_rows = full_rows[-limit:]
+        return {"full_board": full_rows,
+                "capped_board": capped_rows,
+                "window": {"limit": limit, "total": total,
+                           "returned": len(capped_rows),
+                           "truncated": len(capped_rows) < total},
+                "disclaimer": self.disclaimer}
