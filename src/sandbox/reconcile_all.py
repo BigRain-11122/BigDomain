@@ -2200,6 +2200,15 @@ SUITES = [
     # (AC-SSBP1..AC-SSBP7 pre-registered in state/queue/explore.md).
     ("ledger-statsboard-persist",
      os.path.join("ledger", "test_stats_board_persist.py"), 7),
+    # R1988 explore-queue claim (stats_board cap-window tail read):
+    # limit=0 default keeps the two-key envelope byte-identical;
+    # a positive limit is a decisive-order tail slice with an
+    # honest overflow block (total carries the full registry
+    # count, never the truncated one); the limit gate fires
+    # before any read
+    # (AC-SST1..AC-SST7 pre-registered in state/queue/explore.md).
+    ("ledger-showcase-statslimit",
+     os.path.join("ledger", "test_showcase_statslimit.py"), 7),
 ]
 
 FAILS = 0

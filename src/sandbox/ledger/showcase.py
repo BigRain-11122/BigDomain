@@ -66,6 +66,7 @@ E_SH_CONTENT_REJECTED = "E_SH_CONTENT_REJECTED"
 E_SH_NO_GATE = "E_SH_NO_GATE"
 E_SH_GATE_ERROR = "E_SH_GATE_ERROR"
 E_SH_NO_DISCLAIMER = "E_SH_NO_DISCLAIMER"
+E_SH_BAD_LIMIT = "E_SH_BAD_LIMIT"
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate code
 
@@ -349,7 +350,7 @@ class ShowcaseFace:
         return {"showcase_id": showcase_id, "slot_cap": slot_cap,
                 "stops": stops, "disclaimer": self.disclaimer}
 
-    def stats_board(self):
+    def stats_board(self, limit=0):
         """Per-showcase exhibit statistics board - registry-keyed
         pure-read derivation (every registered showcase gets exactly
         one row; a zero-event showcase shows honest zeros; a
@@ -363,7 +364,19 @@ class ShowcaseFace:
         same window - so per item the in-window rows pair up and
         leave at most one trailing place). Sort keys fully
         deterministic: places DESC, then retracts DESC, then
-        showcase_id ASC. AC-SSB1..AC-SSB7 (R1983)."""
+        showcase_id ASC. AC-SSB1..AC-SSB7 (R1983).
+        Cap-window tail read AC-SST1..AC-SST7 (R1988): limit=0
+        keeps the full-board envelope byte-for-byte; a positive
+        limit is a tail-window slice over the decisive order with
+        an honest overflow block (total carries the full registry
+        count, never the truncated one; a zero-registration world
+        returns an honest empty capped read with the block still
+        present). The limit gate fires before any read."""
+        if (isinstance(limit, bool) or not isinstance(limit, int)
+                or limit < 0):
+            raise ShowcaseError(
+                E_SH_BAD_LIMIT,
+                "limit must be a non-negative int (0 = full board)")
         with self._lock:
             reg = self._conn.execute(
                 "SELECT showcase_id, title, ai_label FROM showcases"
@@ -389,5 +402,13 @@ class ShowcaseFace:
                          "displayed_now": dmap.get(str(sid), 0)})
         rows.sort(key=lambda r: (-r["places"], -r["retracts"],
                                  r["showcase_id"]))
+        if not limit:
+            return {"showcase_stats_board": rows,
+                    "disclaimer": self.disclaimer}
+        total = len(rows)
+        rows = rows[-limit:]
         return {"showcase_stats_board": rows,
-                "disclaimer": self.disclaimer}
+                "disclaimer": self.disclaimer,
+                "limit": limit, "total": total,
+                "returned": len(rows),
+                "truncated": len(rows) < total}

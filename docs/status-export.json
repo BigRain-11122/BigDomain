@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-15T10:07:23+08:00",
+  "export_ts": "2026-10-15T10:54:49+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R1987: 24th-case crashed-round takeover closeout - showcase stats_board cross-restart persistence window (AC-SSBP1..AC-SSBP7 pre-registered pre-code in the explore claim row) delivered: taker re-verified three-green personally (suite double-run 7/7 byte-identical sha16 776c18efe8fcb070 + full RUNNER battery own re-run PASS 215/215 controls 7/7 182.2s + matrix 215/1849 --check byte-identical + census DRIFT-CLEAN + fingerprint/profile green); crashed round's partial RUNNER log preserved as honest evidence; ORD baseline honestly re-anchored (43-row group backfill triaged row-by-row, all BD faces previously acked, zero new executions).",
-    "latest_artifact": "src/sandbox/ledger/test_stats_board_persist.py (SUITE 7/7) + qa/statsboard-persist-R1987.log + qa/reconcile-all-R1987-2.log + docs/sandbox-suite-matrix.md 215/1849 (2026-10-15)",
-    "next_milestone": "P3 explore FIFO: progress_board cross-restart persistence window (open queue), WeChat virtual-payment compliance doc face rolling; within 48h."
+    "current": "R1988: 25th-case crashed-round takeover closeout - showcase stats_board truncated/tail read face (AC-SST1..AC-SST7 pre-registered pre-code by the original session in the explore claim row) delivered: original session's suite double-run 7/7 byte-identical sha16 ae4d85d3dc4f10a2 + complete RUNNER PASS 216/216 controls 7/7 248.9s evidence preserved (crash point = after RUNNER, before closeout); taker personally re-ran matrix regen 216/1856 --check byte-identical + census pass=true + fingerprint CLEAN domains=5 + profile identical; five-silence external FLAT; fold R528 executed pre-closeout.",
+    "latest_artifact": "src/sandbox/ledger/showcase.py stats_board(limit=0) + src/sandbox/ledger/test_showcase_statslimit.py (SUITE 7/7) + qa/showcase-statslimit-R1988.log + qa/reconcile-all-R1988.log + docs/sandbox-suite-matrix.md 216/1856 (2026-10-15)",
+    "next_milestone": "P3 explore FIFO next head (honor yearbook multi-year combined-window read face, open queue); WeChat virtual-payment compliance doc face rolling; within 48h."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R1988",
+      "R1988: 25th-case crashed-round takeover closeout - stats_board(limit=0) cap-window tail read face (AC-SST1..AC-SST7 pre-registered pre-code in the claim row). The crashed attempt died AFTER its full RUNNER completed (qa/reconcile-all-R1988.log complete with RUNNER PASS 216/216 controls 7/7 248.9s summary, mtime preserved; suite double-run 7/7 byte-identical sha16 ae4d85d3dc4f10a2), before any closeout byte landed. Taker verified the complete payload evidence chain per the R1986 precedent (complete-evidence = no re-run of the 248.9s battery) and personally re-ran the remaining greens: suite_matrix regen 216/1856 green=216/216 --check byte-identical 20750B, census pass=true, fingerprint CLEAN domains=5, runner_profile --check identical. Product face: limit=0 keeps the full-board envelope byte-for-byte (existing consumers and the R1983/R1987 suites untouched); a positive limit returns the decisive-order tail slice with an honest overflow block (total carries the full registry count, truncated flag, mirror-SQL third-path cross-check); bad forms (-1/True/'2'/2.5/None) fail-closed on the new E_SH_BAD_LIMIT code before any read. Five-silence external FLAT (DEC set-diff 0, ORD 10-15/16 rows 0, LEDGER tail <=10-14). Fold R528 pre-closeout (tail-6 window 7715B -> 1 rolling line, 9 tokens zero-loss, archive verbatim + preop bak, state 75798 -> 71419B) + eol indent repair of 2 prior-session lines (content-eq). Explore claim done-flipped + reseed 1 (stats board dual-window combined board seed), open=10 conserved. Score 2."
+    ],
+    [
       "R1987",
       "R1987: 24th-case crashed-round takeover closeout - the crashed R1987 attempt died mid-RUNNER (partial log qa/reconcile-all-R1987.log: 86 suites, no summary line, mtime preserved) leaving the claim row + AC-SSBP1..7 pre-registration + suite file + SUITES row on disk. Taker re-verified three-green personally per R1924/R1974/R1985 precedent: suite double-run SUITE PASS 7/7 exit 0/0 stdout byte-identical sha16 776c18efe8fcb070 (subprocess byte capture), full RUNNER battery own re-run PASS 215/215 suites green + reconcile controls 7/7 182.2s (python single writer utf-8 LF), suite_matrix regenerated post-RUNNER 215/1849 green=215/215 --check byte-identical 20665B, census DRIFT-CLEAN flags=0, fingerprint --check rc=0, runner_profile --check byte-identical. Product face: stats_board persists across a full-stack restart (R1925 SHVP carrier: face close -> ledger close -> fresh ledger same db/cfg + stateless gate + fresh face same path) - board bytes re-derived identically, post-restart place/retract recompute zero-cache with untouched rows frozen, cross-window re-place continuation reconciles with showcase_view, third-instance dual-live identity, pure-read law, zero product bytes changed (suite-only round). Explore claim done-flipped + reseed 1 (stats_board cap/tail read face seed, queue_explore_open 10 held). Five-silence: LEDGER @BigDomain live rows 0 (archived tail <=09-30 all answered), DEC token set-diff zero new, ORD 43-row backfill triaged - all BD faces previously acked, GORD baseline 416->459 re-anchored. Score 2."
     ],
@@ -355,18 +359,14 @@
       "ledger effects cross-restart persist suite 7/7 (AC-EFP1..EFP7; two-piece restart, 9 gate probes, three-lane frozen faces, pre-restart credits keep serving, RUNNER 185/185, fold R511)"
     ],
     [
-      "R1946",
-      "ledger apimarket cross-restart persist suite 7/7 (AC-AMP1..AMP7; four-piece restart, 10 gate probes, frozen rows, RUNNER 184/184)"
-    ],
-    [
-      "1987",
+      "1988",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-09..2026-10-15",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 0,

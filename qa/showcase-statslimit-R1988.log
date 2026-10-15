@@ -1,0 +1,20 @@
+=== run1 rc=0 stderr=0B ===
+PASS AC-SST1: no-arg call == explicit limit=0 byte-identical (dumps equal True); default envelope keys exactly ['disclaimer', 'showcase_stats_board'] (zero drift); decisive order intact True
+PASS AC-SST2: five bad forms [-1, True, '2', 2.5, None] all rejected with E_SH_BAD_LIMIT (['E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT']); probe batch leaves row counts unchanged (5, 15) == (5, 15) (gate fires before any read)
+PASS AC-SST3: limit=50 over 5 returns the full board rows (truncated=False, total=5 == returned=5 == registry rows), capped envelope keys exactly ['disclaimer', 'limit', 'returned', 'showcase_stats_board', 'total', 'truncated']
+PASS AC-SST4: limit=2 returns the tail 2 rows of the decisive order ['omega-win', 'delta-win'] (== default full read rows[-2:], == mirror SQL reversed-key LIMIT 2 reversed ['omega-win', 'delta-win']); total stays the honest full count 5 != truncated 2; row field sets unchanged (six keys)
+PASS AC-SST5: limit==total (5/5) returns everything truncated=False; limit=1 returns the single tail row ['delta-win']; a zero-registration world returns an honest empty capped read (rows=[], total=0, returned=0, truncated=False, block keys still present)
+PASS AC-SST6: read battery (default + limit 1/2/50, twice) leaves row counts unchanged (5, 15) == (5, 15) and every double-call dumps pair byte-identical; stats_board method source has zero write statements ([]) and zero RNG
+PASS AC-SST7: suite source pure ASCII (0 non-ascii), showcase.py stays pure ASCII (0 non-ascii) and carries the new signature + E_SH_BAD_LIMIT constant; zero network imports (0); shipped config.json sha256 stable (32b018fad53fb8bc == 32b018fad53fb8bc); world db under system temp outside the repo (True)
+SUITE PASS 7/7
+=== run2 rc=0 stderr=0B ===
+PASS AC-SST1: no-arg call == explicit limit=0 byte-identical (dumps equal True); default envelope keys exactly ['disclaimer', 'showcase_stats_board'] (zero drift); decisive order intact True
+PASS AC-SST2: five bad forms [-1, True, '2', 2.5, None] all rejected with E_SH_BAD_LIMIT (['E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT', 'E_SH_BAD_LIMIT']); probe batch leaves row counts unchanged (5, 15) == (5, 15) (gate fires before any read)
+PASS AC-SST3: limit=50 over 5 returns the full board rows (truncated=False, total=5 == returned=5 == registry rows), capped envelope keys exactly ['disclaimer', 'limit', 'returned', 'showcase_stats_board', 'total', 'truncated']
+PASS AC-SST4: limit=2 returns the tail 2 rows of the decisive order ['omega-win', 'delta-win'] (== default full read rows[-2:], == mirror SQL reversed-key LIMIT 2 reversed ['omega-win', 'delta-win']); total stays the honest full count 5 != truncated 2; row field sets unchanged (six keys)
+PASS AC-SST5: limit==total (5/5) returns everything truncated=False; limit=1 returns the single tail row ['delta-win']; a zero-registration world returns an honest empty capped read (rows=[], total=0, returned=0, truncated=False, block keys still present)
+PASS AC-SST6: read battery (default + limit 1/2/50, twice) leaves row counts unchanged (5, 15) == (5, 15) and every double-call dumps pair byte-identical; stats_board method source has zero write statements ([]) and zero RNG
+PASS AC-SST7: suite source pure ASCII (0 non-ascii), showcase.py stays pure ASCII (0 non-ascii) and carries the new signature + E_SH_BAD_LIMIT constant; zero network imports (0); shipped config.json sha256 stable (32b018fad53fb8bc == 32b018fad53fb8bc); world db under system temp outside the repo (True)
+SUITE PASS 7/7
+=== byte-identical: True ===
+sha16: ae4d85d3dc4f10a2
