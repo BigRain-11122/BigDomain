@@ -2302,6 +2302,20 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-showcase-statscap-persist",
      os.path.join("ledger", "test_showcase_statscappersist.py"), 7),
+    # R2010 explore-queue FIFO head claim (R1992 reseed row):
+    # showcase stats_board zero-registry boundary world
+    # cross-restart example - the three faces (default board,
+    # cap-window tail read, dual combined board) keep honest
+    # empty envelopes byte-identical across a full-stack
+    # restart, bad-limit gates fire before any read, the
+    # post-restart first registration + first place continue
+    # all three faces with zero phantom rows, third instance
+    # stability, pure-read law, hygiene (suite-only).
+    # (AC-SSZB1..AC-SSZB7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsboundary-persist",
+     os.path.join("ledger",
+                   "test_showcase_statsboundarypersist.py"), 7),
     # R1995 explore-queue FIFO head claim (R1968 reseed row):
     # proposal progress_board cross-restart persistence example
     # window - full-stack close -> reopen byte-identical board

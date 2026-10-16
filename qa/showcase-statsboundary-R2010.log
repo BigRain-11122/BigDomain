@@ -1,0 +1,22 @@
+--- SUITE run 1 (AC-SSZB1..AC-SSZB7) ---
+exit=0
+PASS AC-SSZB1: zero-registry world: default envelope keys=['disclaimer', 'showcase_stats_board'] rows empty=True; cap(2) keys=['disclaimer', 'limit', 'returned', 'showcase_stats_board', 'total', 'truncated'] total=0 returned=0 truncated=False=True; dual(2) keys=['capped_board', 'disclaimer', 'full_board', 'window'] window={'limit': 2, 'returned': 0, 'total': 0, 'truncated': False} both zones empty=True; family double-read byte-identical=True
+PASS AC-SSZB2: eleven bad forms (five default + six dual) all rejected E_SH_BAD_LIMIT: True; probe batch leaves counts unchanged {'showcases': 0, 'exhibit_events': 0, 'collectibles': 4} == {'showcases': 0, 'exhibit_events': 0, 'collectibles': 4} (gates fire before any read, independent of the empty data face)
+PASS AC-SSZB3: full-stack close (sh -> led) then rebuild on same paths + same cfg bytes: three-face family {default, cap 1/2/50, dual 1/2/50} byte-identical=True double-read self-stable=True
+PASS AC-SSZB4: post-restart first registration: default face exactly one honest-zero row {p=0 r=0 dn=0 ai=1}; cap(2) total 0->1 returned=1 truncated=False rows==full=True; dual(2) window={'limit': 2, 'total': 1, 'returned': 1, 'truncated': False} capped==full=True; zero phantom (board rows == registry rows == 1)=True; liveness vs pre-restart empty snapshot=True
+PASS AC-SSZB5: post-restart first place: row {p=1 r=0 dn=1} netflow identity holds=True; cap(2) total==1=True dual(2) window total==1=True; cross-face displayed_now == len(showcase_view displayed)==1=True (real product path: collectibles dock reconnect + SecGate caption pass)
+PASS AC-SSZB6: third instance == second-instance final state byte-identical=True sequential double-read=True; repeat read pairs byte-identical=True; read battery leaves counts unchanged {'showcases': 1, 'exhibit_events': 1, 'collectibles': 4} == {'showcases': 1, 'exhibit_events': 1, 'collectibles': 4}
+PASS AC-SSZB7: suite pure ASCII=True net-clean=True registry-wired=True expected-count=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+--- SUITE run 2 ---
+exit=0
+PASS AC-SSZB1: zero-registry world: default envelope keys=['disclaimer', 'showcase_stats_board'] rows empty=True; cap(2) keys=['disclaimer', 'limit', 'returned', 'showcase_stats_board', 'total', 'truncated'] total=0 returned=0 truncated=False=True; dual(2) keys=['capped_board', 'disclaimer', 'full_board', 'window'] window={'limit': 2, 'returned': 0, 'total': 0, 'truncated': False} both zones empty=True; family double-read byte-identical=True
+PASS AC-SSZB2: eleven bad forms (five default + six dual) all rejected E_SH_BAD_LIMIT: True; probe batch leaves counts unchanged {'showcases': 0, 'exhibit_events': 0, 'collectibles': 4} == {'showcases': 0, 'exhibit_events': 0, 'collectibles': 4} (gates fire before any read, independent of the empty data face)
+PASS AC-SSZB3: full-stack close (sh -> led) then rebuild on same paths + same cfg bytes: three-face family {default, cap 1/2/50, dual 1/2/50} byte-identical=True double-read self-stable=True
+PASS AC-SSZB4: post-restart first registration: default face exactly one honest-zero row {p=0 r=0 dn=0 ai=1}; cap(2) total 0->1 returned=1 truncated=False rows==full=True; dual(2) window={'limit': 2, 'total': 1, 'returned': 1, 'truncated': False} capped==full=True; zero phantom (board rows == registry rows == 1)=True; liveness vs pre-restart empty snapshot=True
+PASS AC-SSZB5: post-restart first place: row {p=1 r=0 dn=1} netflow identity holds=True; cap(2) total==1=True dual(2) window total==1=True; cross-face displayed_now == len(showcase_view displayed)==1=True (real product path: collectibles dock reconnect + SecGate caption pass)
+PASS AC-SSZB6: third instance == second-instance final state byte-identical=True sequential double-read=True; repeat read pairs byte-identical=True; read battery leaves counts unchanged {'showcases': 1, 'exhibit_events': 1, 'collectibles': 4} == {'showcases': 1, 'exhibit_events': 1, 'collectibles': 4}
+PASS AC-SSZB7: suite pure ASCII=True net-clean=True registry-wired=True expected-count=True world outside repo=True product-sha stable=True
+SUITE PASS 7/7
+--- DOUBLE-RUN ---
+identical=True sha16=6902a80e9f85094f bytes=2055

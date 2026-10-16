@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-17T06:38:03+08:00",
+  "export_ts": "2026-10-17T07:07:25+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2009: P3 explore FIFO-head claim delivered end-to-end: coverage_board_dual cross-restart persistence example - criteria pre-registered before code (AC-CVDBP1..7), suite test_datasub_coveragedualpersist.py three-instance world (byte-identical dual-battery replay, gate zero-drift, dual-zone continuation with two provenance probes, pure-read law, double-restart stability), SUITE 7/7 double-run identical; full battery RUNNER PASS 229/229 suites green controls 7/7 272.0s zero regression; matrix 229/1947 --check byte-identical; census CENSUS-COMPLETE. Radar window-8 sweep: two new OH lists zero @BigDomain fit (zero claim, legal). fold R541 pre-closeout 78073B->73344B. Score 2.",
-    "latest_artifact": "qa/coveragedual-persist-R2009.log + src/sandbox/ledger/test_datasub_coveragedualpersist.py (SUITE 7/7, RUNNER 229/229 green, 2026-10-17)",
-    "next_milestone": "P3 explore reseed head: coverage dual-board month-roll example (R2010 window; plus P2 tech gated rows unchanged), window <=48h (by 2026-10-19)"
+    "current": "R2010: P3 explore FIFO-head claim delivered end-to-end: showcase stats_board zero-registry boundary cross-restart example - criteria pre-registered before code (AC-SSZB1..7), suite test_showcase_statsboundarypersist.py: the three faces (default board / cap-window tail read / dual combined board) keep honest empty envelopes byte-identical across a full-stack restart; eleven bad-limit forms rejected E_SH_BAD_LIMIT before any read; post-restart first registration + first place continue all three faces with zero phantom rows (netflow identity + cross-face view reconciliation); third-instance stability. SUITE 7/7 double-run identical sha16 6902a80e9f85094f; full battery RUNNER PASS 230/230 suites green controls 7/7 259.6s zero regression; matrix 230/1954 --check byte-identical; fingerprint CLEAN domains=5; profile --check PASS; census re-anchor 515->520 DRIFT-CLEAN. First battery run failed cd7 (live census flagged the pre-battery evidence file = ordering artifact vs the R2009 battery sequence, non-product; first-fail log preserved + re-anchor then green). Score 2.",
+    "latest_artifact": "qa/showcase-statsboundary-R2010.log + src/sandbox/ledger/test_showcase_statsboundarypersist.py (SUITE 7/7, RUNNER 230/230 green, 2026-10-17)",
+    "next_milestone": "P3 explore queue: next open heads (progress_board zero-registry boundary persist, lobby idem_seen TTL window, stats_board month-window read) + R2010 reseed gate-family-across-restart row; P2 tech gated rows unchanged, window <=48h (by 2026-10-19)"
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R2010",
+      "R2010: P3 explore FIFO-head claim delivered: showcase stats_board zero-registry boundary cross-restart example window (the R1992-reseed oldest open row, strict topmost-open claim; criteria AC-SSZB1..AC-SSZB7 pre-registered in the explore.md claim row before code; suite-only round, product files sha256 pinned unchanged). Suite test_showcase_statsboundarypersist.py: boundary world keeps the ledger domain populated (four accounts, four certificates) while the showcase registration axis stays empty - three faces pinned honest-empty (default two-key envelope, cap(2) six-key all-zero overflow block, dual(2) four-key all-zero window), eleven bad-limit forms rejected E_SH_BAD_LIMIT before any read with counts constant, full-stack close (sh->led) -> same-db/cfg rebuild read family {default, cap 1/2/50, dual 1/2/50} byte-identical, post-restart first registration + first place continue all three faces zero-phantom (netflow identity + showcase_view displayed cross-check), third-instance sequential reads byte-identical, pure-read law. SUITE PASS 7/7 double-run stdout byte-identical sha16 6902a80e9f85094f; reconcile_all SUITES wiring ledger-showcase-statsboundary-persist criteria 7 (229->230 suites, 1947->1954 criteria); RUNNER PASS 230/230 suites green controls 7/7 259.6s zero regression (qa/reconcile-all-R2010.log); first battery FAIL preserved (qa/reconcile-all-R2010-firstfail.log: cd7 live census flagged the pre-battery evidence file - ordering artifact vs the R2009 battery sequence which lands evidence after the battery, non-product defect; census --update-baseline legal re-anchor 515->519 (+two R2009 leftover files debt cleaned) then re-run green); matrix regen 230 suites 1954 criteria --check byte-identical 22180B; fingerprint CLEAN domains=5; profile --daily --check PASS; census final 515->520 DRIFT-CLEAN flags=0. Radar: no new OH list since the R2009 window-8 sweep (radar row continues waiting). Explore consume-1 reseed-1 (gate-family-across-restart seed). Score 2."
+    ],
+    [
       "R2009",
       "R2009: P3 explore FIFO-head claim delivered: coverage_board_dual cross-restart persistence example. Criteria AC-CVDBP1..CVDBP7 pre-registered in the explore.md claim row before code (prefix + suite filename git-grep zero-occupied). Suite test_datasub_coveragedualpersist.py: frozen-clock anchor world + manual prefix-SQL cross derivation, close -> same-db reopen four-face battery byte-identical, seven bad windows gate zero-drift (counts constant), post-restart November-record real-path continuation on both zones (new registration city-transit + ada subscription with October period recorded in November + carol October-period air delivery recorded in November = double provenance probe; October window zone rows byte-frozen with zero permeation, November zone air continues 0->1 and transit enters 1hh/1sub/0dlv), pure-read law, double-restart stability. SUITE PASS 7/7, double-run stdout byte-identical sha16 9f7cd3f25179e272. reconcile_all SUITES wiring ledger-datasub-coveragedualpersist criteria 7 (229 suites); RUNNER PASS 229/229 suites green, reconcile controls 7/7, 272.0s zero regression (qa/reconcile-all-R2009.log via battery_R2009 driver); matrix regen 229 suites 1947 criteria --check byte-identical; census CENSUS-COMPLETE 1518 files. Radar window-8 sweep: OH-20261016-biglife + OH-20261015-bigstream both zero @BigDomain hit (case-insensitive search) and non-commercialization fit by the revenue lens = zero claim legal. BigLife R777 review dossier still absent (life/**/*R777* zero hit, external wait). fold R541 pre-closeout: gauge 78073B margin 427B, tail-3 window fold, 37 tokens embedded, first run fail-closed on token-missing(37) + gate-exceed (reserve-bytes semantics = closeout reserve, fixed to 3400) - honest note. Score 2 (runnable artifact + battery growth)."
     ],
@@ -355,18 +359,14 @@
       "R1966: 15th-case orphan takeover closeout - lobby EventStore residual read-face family (count/census_lookup/export_day + import_census whole-table refresh + content-addressed append dedup) cross-restart persistence suite 7/7 (AC-LBP1..LBP7 pre-registered pre-code by the crashed round; crashed round left RUNNER FAIL 201/202 = its own suite evidence file landed pwsh-capture dialect [16 CRLF + 5 bare LF] -> cd7 census drift; takeover: dialect root-cause per R1880 family, live double-run rc 0/0 raw stdout byte-identical, evidence re-landed tee 1519B, full RUNNER self-Tee re-run PASS 202/202 criteria 1746->1753 controls 7/7 173.3s = qa/reconcile-all-R1966.log; matrix 202/1753 byte-identical 19440B; census --check DRIFT-CLEAN flags=0 tee=925; fingerprint CLEAN domains=5; GORD 402->404 two non-ours acks; waterline carry-note state 78744B = fold R519 next round-start; tech queue 6->5; export lag-fix this round: R1965 results row backfilled + tick row 1964->1966 + queue_tech_open 7->5)"
     ],
     [
-      "R1965",
-      "R1965: pay sweep_expired timeout-close read-face family cross-restart persistence suite 7/7 (AC-SWP1..SWP7 pre-registered pre-code; frozen-clock sweep spectrum [empty-window probe zero-write + full-window close edges + drained idempotency] + closed-rebuy new-bucket law across restart + frozen-prefix append-only + live sweep bites only in-window rows + second-restart pure-read determinism; SUITE 7/7 double-run byte-identical; RUNNER PASS 201/201 criteria 1739->1746 controls 7/7 172.2s; matrix 201/1746 byte-identical 19368B; census DRIFT-CLEAN flags=0; fingerprint CLEAN domains=5; honest note: first RUNNER pass no-argv shell-capture produced pwsh-capture dialect evidence caught by cd7 census -> deleted + re-run via the runner's own Tee per R1924 precedent)"
-    ],
-    [
-      "2009",
+      "2010",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-11..2026-10-17",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 1,
