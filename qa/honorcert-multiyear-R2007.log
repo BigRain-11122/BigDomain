@@ -1,0 +1,27 @@
+== R2007 suite double-run evidence ==
+suite: src\sandbox\ledger\test_honorcert_multiyear.py
+run1 exit=0 bytes=1775
+run2 exit=0 bytes=1775
+byte-identical: True
+stdout sha16: 764bb5e5043b82a5
+verdict: PASS
+
+-- run 1 stdout --
+PASS AC-HYM1: envelope keys=['disclaimer', 'totals', 'yearbooks', 'years']; years=['2026', '2027'] (scrambled request canonicalized); block keys=['board_size', 'certified_count', 'year', 'yearbook']; row keys=['account_id', 'board_rank', 'item_id', 'points']; totals={'years_count': 2, 'certified_count': 2, 'board_size': 4, 'distinct_accounts': 2}; zero-earn 2027 block honest empty=True; empty years request honest envelope=True
+PASS AC-HYM2: per-year block == honor_yearbook minus disclaimer (dumps sort_keys)=True; overlap world certified=4 board=6 distinct=2 (carol/aaron in both rosters, counted once each)=True
+PASS AC-HYM3: scrambled request -> ascending years=['2025', '2026', '2027']; zero-earn 2025 honest empty block=True; double-call dumps byte-identical=True; stable request==repeat read=True
+PASS AC-HYM4: non-iterable 6/6 rejected (str/bytes caught at door); bad element forms 9/9 rejected; duplicate year rejected=True; zero honor_board calls on reject batch=0; civic snapshot unchanged=True
+PASS AC-HYM5: 2027 continuation: board_size 2->3 with frank entering (aaron board_rank 2->3)=True, 2026 block frozen=True; 2026 continuation: erin 20pts moves board, yearbook rows=[(1, 'usr:erin'), (2, 'usr:carol'), (3, 'usr:aaron')] certified=3 board_size=5, 2027 block frozen=True
+PASS AC-HYM6: read batch (combined x2 + direct reads) civic/collectibles/ledger_tx snapshot equal=True; combined repeat == prior read=True; method-source write tokens=[] (zero hits)=True
+PASS AC-HYM7: module ascii=True import lines=0 network=0 banned verbs=[] dice lib=True; suite true-import network lines=0; shipped config byte-stable=True; civicpoints/collectibles sha untouched=True/True; face set additive (4 methods callable)=True; criteria registered=7
+SUITE PASS 7/7
+
+-- run 2 stdout --
+PASS AC-HYM1: envelope keys=['disclaimer', 'totals', 'yearbooks', 'years']; years=['2026', '2027'] (scrambled request canonicalized); block keys=['board_size', 'certified_count', 'year', 'yearbook']; row keys=['account_id', 'board_rank', 'item_id', 'points']; totals={'years_count': 2, 'certified_count': 2, 'board_size': 4, 'distinct_accounts': 2}; zero-earn 2027 block honest empty=True; empty years request honest envelope=True
+PASS AC-HYM2: per-year block == honor_yearbook minus disclaimer (dumps sort_keys)=True; overlap world certified=4 board=6 distinct=2 (carol/aaron in both rosters, counted once each)=True
+PASS AC-HYM3: scrambled request -> ascending years=['2025', '2026', '2027']; zero-earn 2025 honest empty block=True; double-call dumps byte-identical=True; stable request==repeat read=True
+PASS AC-HYM4: non-iterable 6/6 rejected (str/bytes caught at door); bad element forms 9/9 rejected; duplicate year rejected=True; zero honor_board calls on reject batch=0; civic snapshot unchanged=True
+PASS AC-HYM5: 2027 continuation: board_size 2->3 with frank entering (aaron board_rank 2->3)=True, 2026 block frozen=True; 2026 continuation: erin 20pts moves board, yearbook rows=[(1, 'usr:erin'), (2, 'usr:carol'), (3, 'usr:aaron')] certified=3 board_size=5, 2027 block frozen=True
+PASS AC-HYM6: read batch (combined x2 + direct reads) civic/collectibles/ledger_tx snapshot equal=True; combined repeat == prior read=True; method-source write tokens=[] (zero hits)=True
+PASS AC-HYM7: module ascii=True import lines=0 network=0 banned verbs=[] dice lib=True; suite true-import network lines=0; shipped config byte-stable=True; civicpoints/collectibles sha untouched=True/True; face set additive (4 methods callable)=True; criteria registered=7
+SUITE PASS 7/7

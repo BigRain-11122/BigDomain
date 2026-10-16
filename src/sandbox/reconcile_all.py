@@ -2029,6 +2029,16 @@ SUITES = [
     # pre-registered in state/queue/explore.md).
     ("ledger-honorcert-yearbookpersist", os.path.join(
         "ledger", "test_honorcert_yearbook_persist.py"), 6),
+    # multi-year combined yearbook read window (R2007): the
+    # honorcert yearbooks_combined face - ascending year-axis
+    # canonicalization, duplicate/shape front door before any
+    # read, single-source derivation from honor_yearbook with
+    # one outer-riding disclaimer, cross-year distinct-account
+    # totals, honest empty envelope, live recompute isolation,
+    # pure-read law (AC-HYM1..HYM7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-honorcert-multiyear", os.path.join(
+        "ledger", "test_honorcert_multiyear.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen

@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-17T04:24:45+08:00",
+ "export_ts": "2026-10-17T05:05:19+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2006: P3 explore queue head claimed and delivered - apimarket dev_sales_board cross-restart persistence example window (R1978 reseed; AC-AMBP1..AMBP7 pre-registered in the explore.md claim row before the suite code existed). The suite pins the developer sales board across full-stack restarts (am -> dk -> metered -> led orderly close, same db_path same cfg four-piece rebuild): board byte-identical after close -> reopen; post-restart purchase recomputes the carol row zero-cache while the ada/dan rows stay byte-frozen; post-restart new developer listing lands the gina honest zero row (dan < gina account ASC); gate family rejects with identical codes (E_AM_NOT_DEV / E_AM_PURCHASE_DUP / E_AM_SELF_BUY / E_AM_UNKNOWN_LISTING) with zero side effects; third instance repeat-read purity; pure-read law + product sha double-proof. Suite-only round, apimarket.py sha256 pinned unchanged. Score 2.",
-  "latest_artifact": "src/sandbox/ledger/test_apimarket_devsalespersist.py + qa/apimarket-devsalespersist-R2006.log (SUITE 7/7 double-run byte-identical sha16 e95c06bf09071403) + qa/reconcile-all-R2006.log (RUNNER PASS 226/226, 2026-10-17)",
-  "next_milestone": "P3 explore queue head: honor yearbook multi-year combined roster read face (R1981 reseed), claimable next round, window <=48h (by 2026-10-19); AC-OW2 rolling re-eval window 2026-10-24"
+  "current": "R2007: P3 explore queue head claimed and delivered - the honor yearbook multi-year combined roster read face (R1981 reseed; AC-HYM1..HYM7 pre-registered in the explore.md claim row before the product code existed). yearbooks_combined(years) is a pure additive read face on honorcert.py: one single envelope carries the ascending year axis, per-year certified-only rosters derived byte-identically from the single honor_yearbook source, and cross-year totals where distinct_accounts counts a resident certified in two years once. Front door is fail-closed (bad shapes, bad year forms, duplicate years all reject before any read lands - zero referenced-face calls on a reject batch), an empty years request is an honest empty envelope, and sibling-year blocks freeze while a continuing year recomputes live. Pure-read law proven; shipped config untouched. Score 2.",
+  "latest_artifact": "src/sandbox/ledger/honorcert.py (yearbooks_combined additive face) + src/sandbox/ledger/test_honorcert_multiyear.py + qa/honorcert-multiyear-R2007.log (SUITE 7/7 double-run byte-identical sha16 764bb5e5043b82a5) + qa/reconcile-all-R2007.log (RUNNER PASS 227/227, 2026-10-17)",
+  "next_milestone": "P3 explore queue head: dataset coverage board dual-window combined read window (R1985 reseed), claimable next round, window <=48h (by 2026-10-19); AC-OW2 rolling re-eval window 2026-10-24"
  },
  "depts": [
   {
@@ -372,6 +372,10 @@
   ],
   [
    "2006",
+   "OSLoop 执行 tick"
+  ],
+  [
+   "2007",
    "OSLoop 执行 tick"
   ]
  ],

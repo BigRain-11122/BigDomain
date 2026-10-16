@@ -195,3 +195,59 @@ class HonorCertFace:
                 "certified_count": certified_count,
                 "board_size": len(derived["honors"]),
                 "disclaimer": self.disclaimer}
+
+    def yearbooks_combined(self, years):
+        """Multi-year combined yearbook roster read face (R2007;
+        canon = explore-queue honorcert successor row, criteria
+        AC-HYM1..HYM7 registered before this code existed).
+        Single derivation source: every per-year roster derives
+        purely from the honor_yearbook read face above (zero
+        second engine, zero direct board walk, zero collection
+        read of its own). The year axis is canonicalized: output
+        years arrive in ascending order (zero insertion-order
+        keys, zero time keys, zero RNG); a duplicate year in the
+        request is rejected without ambiguity; a bare str/bytes
+        years value is rejected at the front door (it would
+        otherwise loop by character); every year is validated
+        BEFORE any referenced read lands, so a reject batch
+        performs zero referenced-face calls. An empty years
+        request is an honest empty combined envelope, mirroring
+        the honest empty roster a zero-earn year returns. The
+        resident disclaimer rides the outer envelope once and
+        the per-year blocks carry no disclaimer key of their
+        own. Pure read: zero writes, zero storage, zero token
+        movement, zero RNG."""
+        if (isinstance(years, (str, bytes))
+                or not hasattr(years, "__iter__")):
+            raise HonorCertError(E_HC_BAD_ARGS,
+                                 "years must be an iterable of"
+                                 " year strings")
+        seen = {}
+        for year in years:
+            self._assert_year(year)
+            if year in seen:
+                raise HonorCertError(E_HC_BAD_ARGS,
+                                     "duplicate year: " + str(year))
+            seen[year] = True
+        ordered = sorted(seen)
+        yearbooks = []
+        certified_total = 0
+        board_total = 0
+        accounts = {}
+        for year in ordered:
+            derived = self.honor_yearbook(year)
+            block = {"year": derived["year"],
+                     "yearbook": derived["yearbook"],
+                     "certified_count": derived["certified_count"],
+                     "board_size": derived["board_size"]}
+            yearbooks.append(block)
+            certified_total += block["certified_count"]
+            board_total += block["board_size"]
+            for row in block["yearbook"]:
+                accounts[row["account_id"]] = True
+        totals = {"years_count": len(yearbooks),
+                  "certified_count": certified_total,
+                  "board_size": board_total,
+                  "distinct_accounts": len(accounts)}
+        return {"years": ordered, "yearbooks": yearbooks,
+                "totals": totals, "disclaimer": self.disclaimer}
