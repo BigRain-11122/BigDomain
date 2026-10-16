@@ -118,13 +118,19 @@ try {
     if ($prompt.Contains('"')) { $prompt = $prompt.Replace('"', "'") }
     $argLine = '-y -p "' + $prompt + '"'
     # Cloud concurrency cap preflight (O-20261015-1800 / council case
-    # C-20261015-03 section 3 spec, applied 2026-10-15 R2001): this wrapper
-    # spawns a codely cloud LLM session every 10-min grid slot. Before
-    # ignition count live codely.exe processes; at >= 2 defer this slot
-    # (append defer ledger line + skip; the next grid slot retries).
-    # fail-open by spec: a broken probe NEVER blocks production.
+    # C-20261015-03 section 3 spec, applied 2026-10-15 R2001; headless-face
+    # fix D-20261017-02 item 1, aligned with bigmoney commit 63943e50b /
+    # C-20261016-05): this wrapper spawns a codely cloud LLM session every
+    # 10-min grid slot. Before ignition count live AUTONOMOUS headless faces
+    # only - cmdline carries ' -p "' (headless -p prompt signature).
+    # Interactive Cowork windows are exempt per O-20261015-1800 sec.2:
+    # counting them starved slots on interactive-heavy machines (R2001 real
+    # reading live=7, all interactive = false-defer face; honest note: this
+    # loop's own rounds are api=0 local, the cap is fleet cloud etiquette).
+    # At >= 2 defer this slot (append defer ledger line + skip; the next grid
+    # slot retries). fail-open by spec: a broken probe NEVER blocks production.
     $liveCount = -1
-    try { $liveCount = @(Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction SilentlyContinue).Count } catch { $liveCount = -1 }
+    try { $liveCount = @((Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction SilentlyContinue) | Where-Object { $_.CommandLine -match ' -p "' }).Count } catch { $liveCount = -1 }
     if ($liveCount -ge 2) {
         Add-Content -Path (Join-Path $logDir 'cloud-cap.log') -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | CLOUD_CAP_DEFER live=$liveCount" -Encoding UTF8
         Log "cloud-cap defer live=$liveCount (cap >=2, next grid slot retries)"

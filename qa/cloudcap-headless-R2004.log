@@ -1,0 +1,29 @@
+=== SECTION 1: AC-CC2 static face (real iteration_loop.ps1) ===
+PASS CC2 marker line present (headless -p cmdline signature)
+PASS CC2 old count-all probe line absent
+PASS CC2 fail-open branch preserved
+PASS CC2 defer ledger spec-format line unchanged
+PASS CC2 provenance comment cites the spec
+PASS CC2 file stays pure ASCII
+baseline live probe B=4 (all codely.exe name-count=4; honest note: this test runs inside a live round, so the session's own headless codely.exe is counted; production gate time has no self)
+PASS baseline probe runs without throwing (fail-open lane intact)
+=== SECTION 2: AC-CC3 defer variant (2 headless fixtures -> defer) ===
+PASS CC3 fixture verify: both fixtures carry headless cmdline signature
+CC3 gate exit=0 run_log=run_20261017_031447.log
+CC3 run log tail: 03:14:47 iteration round start 20261017_031447 | 03:14:47 head pull exit=128: fatal: not a git repository (or any of the parent directories): .git | 03:14:47 codely=C:\Users\sjs20\AppData\Local\Programs\Tuanjie Cowork\cli\bin\win32-x64\codely.exe | 03:14:48 cloud-cap defer live=6 (cap >=2, next grid slot retries)
+PASS CC3 defer path exits 0
+PASS CC3 defer line present in run log
+CC3 ledger tail: 2026-10-17 03:14:48 | CLOUD_CAP_DEFER live=6
+PASS CC3 ledger live==6 (B+2, headless-only counted)
+=== SECTION 3: AC-CC4 exemption variant (interactive-only fixtures -> ignite) ===
+AC-CC4 environment-blocked honest note: baseline B=4 >= 2 (real headless rounds in flight) - exemption variant cannot assert ignite; recorded, not a violation (claim ruling 2)
+=== SECTION 4: AC-CC5 mixed variant (1 headless + 2 interactive -> headless-only count) ===
+PASS CC5 fixture verify: 1 headless + 2 interactive shapes confirmed
+CC5 gate exit=0 run_log=run_20261017_031453.log
+CC5 run log tail: 03:14:53 iteration round start 20261017_031453 | 03:14:53 head pull exit=128: fatal: not a git repository (or any of the parent directories): .git | 03:14:53 codely=C:\Users\sjs20\AppData\Local\Programs\Tuanjie Cowork\cli\bin\win32-x64\codely.exe | 03:14:54 cloud-cap defer live=5 (cap >=2, next grid slot retries)
+CC5 ledger tail: 2026-10-17 03:14:48 | CLOUD_CAP_DEFER live=6 | 2026-10-17 03:14:54 | CLOUD_CAP_DEFER live=5
+PASS CC5 gate exits 0
+PASS CC5 defer fires at headless-only count
+PASS CC5 ledger live==5 (B+1: headless counted, 2 interactive excluded in same probe pass)
+=== SECTION 5: hygiene ===
+PASS fixtures all cleaned, zero residue

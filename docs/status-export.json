@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-17T02:55:00+08:00",
+  "export_ts": "2026-10-17T03:17:39+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2003: DEC D-20261017-01/02 judged non-BigDomain acked (rows 282->348) + ORD 3 new MV-domain rows acked (baseline ORD 2026-10-17 02:1x, GORD 455) + P2 claim: R1780 AC-OW2 observation-window adjudication executed (drift FLAG count=0 -> branch 1, window maintained, rolling re-eval 2026-10-24) + W26 cyberbullying-regulation crawl delivered (Order No.17 fulltext, benchmarks 4-section entry + wall dual rows + smoke pair, benchmarks_refreshed 2026-10-17) + spawn-gate adaptation seed (D-20261017-02 fix pattern) + HB tick-2003 backfill + fold R536. Score 2.",
-    "latest_artifact": "qa/smoke-R2003.log + qa/smoke-R2003.png (W26 crawl evidence pair, 2026-10-17)",
+    "current": "R2004: P2 tech queue head claimed and delivered - cloud-cap spawn gate headless-face adaptation (D-20261017-02 item 1): the iteration_loop.ps1 pre-spawn probe now counts autonomous headless codely faces only (cmdline ' -p \"' signature, aligned with bigmoney 63943e50b / C-20261016-05); interactive Cowork windows exempt per O-20261015-1800 sec.2, fail-open preserved. Behavior harness 16/16 PASS incl. mixed-variant interactive-exclusion proof (live==B+1 with 2 interactive fixtures contributing 0). The R2001 live=7 all-interactive false-defer face is cured. Honest note: this loop's rounds are api=0 local; the cap is fleet cloud-concurrency etiquette. Score 2.",
+    "latest_artifact": "src/os/iteration_loop.ps1 headless-face gate fix + qa/cloudcap-headless-R2004.log (16/16 PASS, 2026-10-17 03:1x)",
     "next_milestone": "P3 explore queue head: civic honor-competition month-window cross-restart persistence example (R1999 reseed) claimable from next round, window <=48h (by 2026-10-19); AC-OW2 rolling re-eval window 2026-10-24"
   },
   "depts": [
@@ -203,6 +203,10 @@
   ],
   "results": [
     [
+      "R2004",
+      "R2004: cloud-cap spawn gate headless-face adaptation delivered (P2 tech queue head, D-20261017-02 item 1, seed registered R2003): iteration_loop.ps1 pre-spawn probe now counts Name='codely.exe' AND CommandLine -match ' -p \"' only - interactive Cowork windows exempt per O-20261015-1800 sec.2, null cmdlines naturally excluded, fail-open preserved, defer block + ledger spec format unchanged, file pure ASCII; fleet-canonical marker aligned with bigmoney commit 63943e50b (C-20261016-05). Behavior harness qa/cloudcap-headless-R2004.log 16/16 PASS: AC-CC2 static six checks; baseline B=4 honest (this session's own headless face + 3 real sibling-lane headless rounds in flight; production gate time has no self); AC-CC3 defer variant live==B+2==6 (2 headless test-doubles); AC-CC4 recorded environment-blocked per pre-registered ruling 2 (B>=2 real rounds in flight cannot be yielded; the AC-CC5 same-pass arithmetic is the behavioral substitute evidence); AC-CC5 mixed variant live==B+1==5 with 2 interactive doubles contributing zero (pre-fix counterfactual 7) - interactive exclusion proven in one probe pass. The R2001 live=7 all-interactive false-defer face (every slot yielded while only chat windows were open) is cured; honest note: this loop is api=0 local, the cap is fleet cloud etiquette. Fixtures = cmd.exe copies named codely.exe, hidden, killed in finally, zero residue. Score 2."
+    ],
+    [
       "R2003",
       "R2003: W26 cyberbullying-regulation crawl delivered (group QA charter daily-crawl face): Regulations on the Governance of Cyberbullying Information (four-department Order No. 17, effective 2024-08-01, 7 chapters 34 articles) official fulltext A-grade direct-capture from cac.gov.cn (1-try search + 1-get, zero negatives), consumed into benchmarks sections 1/2/3/4 + intelligence-wall W26 dual rows; candidate-erratum pair caught pre-record (consumer-protection reg = W10 already on record; comment-service reg = W13 on record in the 2022 revision, the fetched 2017 text repealed); evidence pair qa/smoke-R2003.log+png; benchmarks_refreshed=2026-10-17. P2 claim: the R1780 AC-OW2 observation-window adjudication row (gate arrived with the 2026-10-16 governance window) executed mechanically - live-step marker grep = 11 markers all exit=0, suite-level FAIL lines excluded per AC-OW3 -> drift FLAG count==0 -> branch (1): observation window maintained, rolling re-eval next window 2026-10-24; successor seed row registered. Five-silence deltas: DEC D-20261017-01 (committee process-rules overhaul v2) + D-20261017-02 (three-dim fleet resource allocation) both judged non-BigDomain dispatch faces, acked no-action (rows 282->348, tokens merged; D-20261017-02 clause-1 spawn-gate fix pattern = the R2002-held adaptation trigger -> tech-queue adaptation seed row); ORD 3 new rows 01:1x/01:2x/02:1x all MV-domain acks (baseline -> 2026-10-17 02:1x, GORD 571->455 format-caliber drift); HB debt collected (R2002 heartbeat row lacked the tick marker - this round's row carries tick 2003, history not rewritten); fold R536 pre-closeout (tail-3 window [fold R535 rolling line + R2002 pair] -> one rolling line, 19 tokens embedded zero-loss, post 73103B == predicted). P3 explore head not claimed - honest note: adjudication + crawl + fold consumed the round budget. Score 2 (adjudication piece + legal-source crawl = product-line integrity pieces; honest note: zero new runnable product suite this round)."
     ],
@@ -363,7 +367,7 @@
       "R1959: ledger growth-archive read-family cross-restart persist suite 7/7 (criteria AC-GAP1..GAP7; two-resident two-month world, every subscription binding exactly one real spend tx, month-window page sections with AIGC label + config-verbatim disclaimer/price_note, seven-gate probe batch same codes on both instances all before any write, two-piece close->reopen byte-identical battery with in-db frozen-ts row comparison, continuation with the 2099-01 page frozen byte-identical = in-month window isolation zero new-data penetration, append-only frozen anchors + dup-before-spend replay gate, pure-read law, third instance stable + hygiene; two same-round harness fixes honestly noted, criterion semantics unchanged; RUNNER 197/197 criteria 1711->1718 (SUITES 196->197); DEC flat; GORD flat; tech consume 1 reseed 1 (member reminder persist seed AC-RMP zero-occupied))"
     ],
     [
-      "2003",
+      "2004",
       "OSLoop 执行 tick"
     ]
   ],
@@ -377,7 +381,7 @@
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 6,
+    "queue_tech_open": 5,
     "queue_explore_open": 10,
     "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
   }
