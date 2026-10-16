@@ -2244,6 +2244,14 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-datasub-coveragedual", os.path.join(
         "ledger", "test_datasub_coveragedual.py"), 7),
+    # R2009 explore-queue claim (coverage_board_dual R2008 seed
+    # persist sibling): the dual-window combined coverage board
+    # across a full-stack restart - byte-identical dual battery
+    # replay, gate zero-drift, post-restart dual-zone continuation
+    # (AC-CVDBP1..AC-CVDBP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-datasub-coveragedualpersist", os.path.join(
+        "ledger", "test_datasub_coveragedualpersist.py"), 7),
     # R1987 explore-queue claim (stats_board R1983 seed sibling
     # gap): the per-showcase statistics board across a full-stack
     # restart (face close -> ledger close -> fresh ledger +
