@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-17T05:05:19+08:00",
+ "export_ts": "2026-10-17T06:12:55+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2007: P3 explore queue head claimed and delivered - the honor yearbook multi-year combined roster read face (R1981 reseed; AC-HYM1..HYM7 pre-registered in the explore.md claim row before the product code existed). yearbooks_combined(years) is a pure additive read face on honorcert.py: one single envelope carries the ascending year axis, per-year certified-only rosters derived byte-identically from the single honor_yearbook source, and cross-year totals where distinct_accounts counts a resident certified in two years once. Front door is fail-closed (bad shapes, bad year forms, duplicate years all reject before any read lands - zero referenced-face calls on a reject batch), an empty years request is an honest empty envelope, and sibling-year blocks freeze while a continuing year recomputes live. Pure-read law proven; shipped config untouched. Score 2.",
-  "latest_artifact": "src/sandbox/ledger/honorcert.py (yearbooks_combined additive face) + src/sandbox/ledger/test_honorcert_multiyear.py + qa/honorcert-multiyear-R2007.log (SUITE 7/7 double-run byte-identical sha16 764bb5e5043b82a5) + qa/reconcile-all-R2007.log (RUNNER PASS 227/227, 2026-10-17)",
-  "next_milestone": "P3 explore queue head: dataset coverage board dual-window combined read window (R1985 reseed), claimable next round, window <=48h (by 2026-10-19); AC-OW2 rolling re-eval window 2026-10-24"
+  "current": "R2008: P3 explore queue head claimed and delivered - the dataset coverage board dual-window combined read face (R1985 reseed; AC-CVDB1..AC-CVDB7 pre-registered in the explore.md claim row before the product code existed). coverage_board_dual(window) is a pure additive read face on datasub.py: one single envelope carries the full-window coverage board and the explicit month-window board side by side, both zones derived byte-identically from the single coverage_board source (zero direct queries in the dual body), the window gate fails closed before any read (None and 12 bad forms all reject E_DSB_BAD_WINDOW with zero side effects), the provenance-separation probe proves the period window never decides the board month, the monotonic law (window counts <= full counts) holds per dataset, out-of-window months keep dense all-zero rows, and liveness recompute is zero-cache with untouched rows frozen. First-run one-RED honestly noted: suite fixture defect (two stacks sharing one temp dir collided on the sibling-derived datasub.db) - product untouched, fixed same round. Score 2.",
+  "latest_artifact": "src/sandbox/ledger/datasub.py (coverage_board_dual additive face) + src/sandbox/ledger/test_datasub_coveragedual.py + qa/datasub-coveragedual-R2008.log (SUITE 7/7 double-run byte-identical sha16 1fdcc865b503ac61) + qa/reconcile-all-R2008.log (RUNNER PASS 228/228, 2026-10-17)",
+  "next_milestone": "P3 explore queue head: coverage_board_dual cross-restart persistence window (persist family), claimable next round, window <=48h (by 2026-10-19)"
  },
  "depts": [
   {
@@ -371,11 +371,7 @@
    "R1959: ledger growth-archive read-family cross-restart persist suite 7/7 (criteria AC-GAP1..GAP7; two-resident two-month world, every subscription binding exactly one real spend tx, month-window page sections with AIGC label + config-verbatim disclaimer/price_note, seven-gate probe batch same codes on both instances all before any write, two-piece close->reopen byte-identical battery with in-db frozen-ts row comparison, continuation with the 2099-01 page frozen byte-identical = in-month window isolation zero new-data penetration, append-only frozen anchors + dup-before-spend replay gate, pure-read law, third instance stable + hygiene; two same-round harness fixes honestly noted, criterion semantics unchanged; RUNNER 197/197 criteria 1711->1718 (SUITES 196->197); DEC flat; GORD flat; tech consume 1 reseed 1 (member reminder persist seed AC-RMP zero-occupied))"
   ],
   [
-   "2006",
-   "OSLoop 执行 tick"
-  ],
-  [
-   "2007",
+   "2008",
    "OSLoop 执行 tick"
   ]
  ],

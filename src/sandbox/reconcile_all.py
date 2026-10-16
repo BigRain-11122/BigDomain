@@ -2232,6 +2232,18 @@ SUITES = [
     # (AC-CVW1..AC-CVW7 pre-registered in state/queue/explore.md).
     ("ledger-coverageboard-window",
      os.path.join("ledger", "test_coverage_board_window.py"), 7),
+    # R2008 explore-queue claim (coverage_board R1982/R1985
+    # window reseed): dual-window combined board - the default
+    # full-window board and the explicit month-window board in
+    # one envelope (single derivation source via live
+    # coverage_board delegations, window gate fail-closed
+    # before any read, E_DSB_BAD_WINDOW family, provenance
+    # separation probe, dense zero rows inside a window,
+    # pure-read law, zero-cache liveness)
+    # (AC-CVDB1..AC-CVDB7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-datasub-coveragedual", os.path.join(
+        "ledger", "test_datasub_coveragedual.py"), 7),
     # R1987 explore-queue claim (stats_board R1983 seed sibling
     # gap): the per-showcase statistics board across a full-stack
     # restart (face close -> ledger close -> fresh ledger +

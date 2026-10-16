@@ -559,3 +559,32 @@ class DatasetSubscriptionFace:
                     "disclaimer": self.disclaimer}
         return {"window": w, "coverage_board": board,
                 "disclaimer": self.disclaimer}
+
+    def coverage_board_dual(self, window):
+        """Dual-window combined coverage board (R2008): one
+        envelope that presents the default full-window coverage
+        board and the explicit month-window coverage board side
+        by side - the boards_combined single-envelope law (R1974)
+        applied to the coverage month-window family (R1985; the
+        R1989 dual-board sentinel lineage). Single derivation
+        source: both zones are live coverage_board() delegations
+        (the reference face itself, not a copy - no second
+        aggregation engine, zero direct queries in this body).
+        The window gate fires before any read: the dual face
+        exists to present an actual month window beside the full
+        window, so window must be a strict "YYYY-MM" string (the
+        full-window shape is already carried by the full zone;
+        None fails closed alongside every other bad form). Bad
+        forms share the E_DSB_BAD_WINDOW family code. Pure read,
+        zero writes, zero RNG. AC-CVDB1..AC-CVDB7 (R2008)."""
+        w = str(window)
+        if _MONTHLY_RE.match(w) is None:
+            raise DataSubError(E_DSB_BAD_WINDOW,
+                              "window must be YYYY-MM for the"
+                              " dual board: %r" % (window,))
+        full = self.coverage_board()
+        win = self.coverage_board(w)
+        return {"coverage_board": full["coverage_board"],
+                "coverage_board_window": win["coverage_board"],
+                "window": w,
+                "disclaimer": self.disclaimer}
