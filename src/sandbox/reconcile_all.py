@@ -2314,6 +2314,28 @@ SUITES = [
         ("civic-competition-monthwindow",
          os.path.join("ledger",
                       "test_civic_competition_monthwindow.py"), 7),
+        # R2005 explore-queue FIFO head claim (R1999 reseed row):
+        # civic honor_board_competition month-window read face
+        # cross-restart persistence example window - close ->
+        # new CivicPointsFace over the same civic.db: default
+        # full-year + 2026-09/10/11/12 competition boards all
+        # byte-identical (zero in-memory drift in the derived
+        # 1224 face); post-restart earn recomputes the October
+        # window zero-cache with the tie rank shifting 4 -> 5
+        # while old windows stay byte-frozen; post-restart
+        # behavior registration + November earns land the first
+        # November content and dissolve the full-year tie
+        # live; the gate family (year-window coupling, bad
+        # window, bad year) rejects with identical codes across
+        # the restart before any read, zero row side effects;
+        # third-instance sequential reads byte-identical;
+        # pure-read law + manual SQL + 1224 second-derivation
+        # crosses; product sha256 pinned (suite-only round)
+        # (AC-HCWP1..HCWP7 pre-registered in
+        # state/queue/explore.md).
+        ("civic-competition-monthwindow-persist",
+         os.path.join("ledger",
+                      "test_civic_competition_monthwindowpersist.py"), 7),
     ]
 
 FAILS = 0
