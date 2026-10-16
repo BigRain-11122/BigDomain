@@ -1,0 +1,75 @@
+BigDomain QA smoke evidence - round R2003 - 2026-10-17 +08:00
+day work: (1) QA charter daily crawl for 2026-10-17 delivered this
+round: W26 = Regulations on the Governance of Cyberbullying
+Information (CAC/MPS/MCT/NRTA Order No. 17, signed 2024-06-12,
+effective 2024-08-01, 7 chapters 34 articles), official fulltext
+direct-captured from cac.gov.cn (A-grade, search located 1 try +
+fulltext 1 get, zero negatives), consumed into benchmarks sections
+1/2/3/4 + intelligence-wall W26 dual rows (main + conclusion, R1884
+dual-row precedent); benchmarks_refreshed=2026-10-17 (next 7-day
+window 2026-10-24; charter 15h cap met same day). Candidate-erratum
+pair honestly noted: the consumer-protection-regulation candidate was
+already on record as W10, and the comment-service candidate was
+already on record as W13 (the 2022 revision - the 2017 text fetched
+first had been repealed by it, caught before recording).
+
+--- (1) W26 crawl (group QA Smoke Test charter v1.0, orders L254
+2026-09-28; docs/global-benchmarks.md + docs/research/intelligence-wall.md) ---
+key clauses consumed: art. 8 real-name fail-closed for
+publish/instant-messaging services + account-auth assistance for
+victims; art. 10 three prohibitions (cyberbullying illegal info,
+heat-riding marketing speculation, batch-registration/account-
+manipulation organization) = third anti-farm statute source; arts.
+12-14 feature library + warning model (7 factors) + abnormal-account
+dynamic verification + credit-management blacklist; arts. 15/18/19/21
+stop-transmit + comment/reply/message/barrage/like disposition ladder
++ group-owner management duty + blacklist no-reregister + marketing
+profit-suspension; arts. 23-27 protection mechanisms (blocking
+options + private-message rules + quick forensics + dedicated quick
+complaint entry + minors priority + notice-and-delete channel);
+art. 30 penalty tiers 10k-200k CNY; art. 32 definition; art. 33
+lawful-reporting carve-out. Consumption: P-47(1) lobby [real-name +
+comment disposition + group duty + protection options + forensics/
+evt_id logging] + P-47(3) UGC [feature library + stop-transmit +
+quick-report entry] + P-47(2) anti-farm [art. 10 third source +
+credit blacklist] + bootstrap [quick-report entry + forensics =
+wiring-window hard prerequisite candidates].
+
+--- (2) P2 claim (R1780 AC-OW2 observation-window adjudication row,
+2026-10-16 governance-window gate arrived) ---
+mechanical counter: grep of live-step marker lines across all daily
+evidence logs = 11 markers, all "profile exit=0 (observation-window:
+recorded, not gating)", plus 4 suite-level FAIL judgment lines
+excluded per AC-OW3 (the 10-11 morning double-FAIL was a
+test-fixture defect, not a drift reading) -> drift FLAG count == 0
+-> AC-OW2 branch (1) holds: observation window maintained (not
+promoted to gating, PROFILE_OBSERVATION_WINDOW unchanged), 7-day
+rolling re-evaluation continues, next window 2026-10-24, threshold
+caliber = AC-RP4 family zero-change. Successor rolling-re-eval seed
+row registered in state/queue/tech.md.
+
+--- (3) five-silence deltas honestly noted ---
+DEC 2 new owner tokens judged (D-20261017-01 committee process-rules
+overhaul v2 + D-20261017-02 three-dim fleet resource allocation
+enforcement - both non-BigDomain dispatch faces, acknowledged
+no-action; baselines rows 282->348, tokens merged; D-20261017-02
+clause-1 spawn-gate fix pattern landed in bigmoney = the R2002-held
+adaptation trigger -> tech-queue adaptation seed row registered).
+ORD 3 new rows after the 00:5x baseline (01:1x / 01:2x / 02:1x all
+MV-domain receipts, ack no-action, baseline -> 2026-10-17 02:1x,
+GORD 571->455 table-format caliber drift noted). HB debt collected:
+the R2002 heartbeat row lacked the tick marker (scan [HB] false-red
+root) - this round's row carries tick 2003 in the canonical form,
+history not rewritten. fold R536 pre-closeout honored (round-start
+gauge 76257B + two-line budget over the 78500 line -> tail-3 window
+[fold R535 rolling line + R2002 pair] folded to one rolling line,
+19 tokens mechanically embedded zero-loss, archive section R2003
+verbatim + preop backup, post 73103B == predicted).
+
+--- (4) self-check four items vs charter ---
+daily crawl = W26 delivered this day; benchmark refreshed = 2026-10-17
+(next 7-day window 2026-10-24; charter 15h cap met same day); research
+chain = A-grade 1-try search + 1-get fulltext, zero negatives, zero
+repealed-text mistakes (candidate-erratum pair caught pre-record);
+signal wall = W26 dual rows in place (main + conclusion). evidence
+pair = this log + rendered png.
