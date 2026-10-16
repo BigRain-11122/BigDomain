@@ -1990,6 +1990,16 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboard", os.path.join(
         "ledger", "test_apimarket_devboard.py"), 7),
+    # R2006 developer sales board persist seat of the R1886
+    # family: full-stack am->dk->metered->led close + same
+    # db/cfg rebuild, board byte-identical across two
+    # restarts, post-restart purchase / new-listing zero-cache
+    # continuation, gate family identical codes with zero
+    # side effects, pure-read law + product sha double-proof
+    # (AC-AMBP1..AMBP7 pre-registered in the R2006
+    # explore-queue claim row).
+    ("ledger-apimarket-devsalespersist", os.path.join(
+        "ledger", "test_apimarket_devsalespersist.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

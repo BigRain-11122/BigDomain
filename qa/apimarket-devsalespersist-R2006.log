@@ -1,0 +1,27 @@
+== R2006 suite double-run evidence ==
+suite: src\sandbox\ledger\test_apimarket_devsalespersist.py
+run1 exit=0 bytes=2093
+run2 exit=0 bytes=2093
+byte-identical: True
+stdout sha16: e95c06bf09071403
+verdict: PASS
+
+-- run 1 stdout --
+PASS AC-AMBP1: pre-close pinning: envelope keys ['board', 'disclaimer']; six-key rows; board [(ada,2,3,23,17,6),(carol,1,1,10,7,3),(dan,1,0,0,0,0) honest zero-sale row]; per-row gross == dev + platform; independent two-query manual recomputation cross equal; double-call dumps identical
+PASS AC-AMBP2: full-stack close (am -> dk -> metered -> led) then same db_path same cfg rebuild (Ledger + MeteredFace + DevKeyFace + SecGate + APIMarketFace): the board re-read is byte-identical to the pre-close snapshot (sort_keys dumps; zero in-memory drift in the derived developer sales board)
+PASS AC-AMBP3: post-restart purchase (frank -> carol c1, one spend bound to its tx): the carol row recomputes zero-cache (purchases 1 -> 2, gross 10 -> 20, dev 7 -> 14, platform 3 -> 6) while the ada / dan rows stay byte-frozen; conservation and the manual cross hold; repeat read identical
+PASS AC-AMBP4: post-restart new developer listing (gina key + gina-gamma publish): the board grows 3 -> 4 rows with the gina honest zero row at the tail (dan < gina account ASC inside the zero-revenue group), untouched rows byte-frozen; gate family identical across the restart: off-register publish E_AM_NOT_DEV, purchase replay E_AM_PURCHASE_DUP, self-buy E_AM_SELF_BUY, unknown listing E_AM_UNKNOWN_LISTING - all rejected with the market digests and ledger_tx constant
+PASS AC-AMBP5: second full-stack restart (third instance, same dbs): the board read is byte-identical to the post-listing state and the repeated read batch identical to itself (repeat-read purity, zero in-memory drift across two restarts)
+PASS AC-AMBP6: pure-read law: the pinning / restart / third-instance read batches left the apimarket three-table digests and the ledger_tx count constant (digest equal, tx equal); end-state board == fresh two-query manual cross; apimarket.py + both shipped config.json sha256 unchanged (suite-only round)
+PASS AC-AMBP7: hygiene: source pure ASCII (17033 bytes), zero network imports on true import lines, world db in system tmp outside the repo, criteria count == 7
+SUITE PASS (7/7 criteria green)
+
+-- run 2 stdout --
+PASS AC-AMBP1: pre-close pinning: envelope keys ['board', 'disclaimer']; six-key rows; board [(ada,2,3,23,17,6),(carol,1,1,10,7,3),(dan,1,0,0,0,0) honest zero-sale row]; per-row gross == dev + platform; independent two-query manual recomputation cross equal; double-call dumps identical
+PASS AC-AMBP2: full-stack close (am -> dk -> metered -> led) then same db_path same cfg rebuild (Ledger + MeteredFace + DevKeyFace + SecGate + APIMarketFace): the board re-read is byte-identical to the pre-close snapshot (sort_keys dumps; zero in-memory drift in the derived developer sales board)
+PASS AC-AMBP3: post-restart purchase (frank -> carol c1, one spend bound to its tx): the carol row recomputes zero-cache (purchases 1 -> 2, gross 10 -> 20, dev 7 -> 14, platform 3 -> 6) while the ada / dan rows stay byte-frozen; conservation and the manual cross hold; repeat read identical
+PASS AC-AMBP4: post-restart new developer listing (gina key + gina-gamma publish): the board grows 3 -> 4 rows with the gina honest zero row at the tail (dan < gina account ASC inside the zero-revenue group), untouched rows byte-frozen; gate family identical across the restart: off-register publish E_AM_NOT_DEV, purchase replay E_AM_PURCHASE_DUP, self-buy E_AM_SELF_BUY, unknown listing E_AM_UNKNOWN_LISTING - all rejected with the market digests and ledger_tx constant
+PASS AC-AMBP5: second full-stack restart (third instance, same dbs): the board read is byte-identical to the post-listing state and the repeated read batch identical to itself (repeat-read purity, zero in-memory drift across two restarts)
+PASS AC-AMBP6: pure-read law: the pinning / restart / third-instance read batches left the apimarket three-table digests and the ledger_tx count constant (digest equal, tx equal); end-state board == fresh two-query manual cross; apimarket.py + both shipped config.json sha256 unchanged (suite-only round)
+PASS AC-AMBP7: hygiene: source pure ASCII (17033 bytes), zero network imports on true import lines, world db in system tmp outside the repo, criteria count == 7
+SUITE PASS (7/7 criteria green)
