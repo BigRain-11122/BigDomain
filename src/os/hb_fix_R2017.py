@@ -8,7 +8,7 @@
 import io
 
 P = "heartbeat.txt"
-OLD = u"2026-10-17 20:2x +08:00 R2017:"
+OLD = u"2026-10-17 20:2x +08:00R2017:"
 NEW = (u"2026-10-17 20:2x +08:00 | BigDomain OSLoop alive"
        u" | tick 2017 | R2017:")
 
