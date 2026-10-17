@@ -2450,6 +2450,18 @@ SUITES = [
     ("ledger-showcase-statsmonth-persist",
      os.path.join("ledger",
                   "test_showcase_statsmonthpersist.py"), 7),
+    # R2017 statsmonth zero-registry boundary world persist:
+    # seven-form month-window family on an empty registry stays
+    # honest-empty across a full-stack restart; gates fire
+    # before any read on the empty world; first registration +
+    # first current-month place continue every window form with
+    # honest window splits, zero phantom rows
+    # (AC-SSMZ1..AC-SSMZ7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsmonthboundary-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonthboundarypersist.py"), 7),
     ]
 
 FAILS = 0
