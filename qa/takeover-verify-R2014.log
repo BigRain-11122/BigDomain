@@ -1,0 +1,27 @@
+takeover_verify_R2014 start 2026-10-17 15:17:14
+PROBE amb-sys    py=sys rc=0 out=OK err=
+PROBE amb-venv   py=venv rc=1 out= err=o 13] Permission denied: 'C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe_takeover_r2014_amb-venv.txt'
+PROBE fb-sys     py=sys rc=0 out=OK err=
+RUNNER_ENV=ambient-system-temp tmpdir=C:\Users\sjs20\AppData\Local\Temp
+SUITE replay rc=0/0 bytes=11686/11686 identical=True sha16=7968ed2077e7fedd anchor_match=True
+RUNNER rc=0 RUNNER PASS (231/231 suites green, reconcile controls 7/7, 296.3s)
+MATRIX regen rc=0 check rc=0 PASS check: docs/sandbox-suite-matrix.md byte-identical (22307 bytes, 231 suites, 1976 criteria)
+FINGERPRINT rc=2 fingerprint_regen.py: error: the following arguments are required: --chain
+PROFILE rc=0 check: byte-identical PASS
+CENSUS rc=2 C:\Users\sjs20\AppData\Local\Programs\Python\Python314\python.exe: can't open file 'C:\\Users\\sjs20\\Desktop\
+CENSUS re-anchor rc=2 then recheck rc=2 C:\Users\sjs20\AppData\Local\Programs\Python\Python314\python.exe: can't open file 'C:\\Users\\sjs20\\Desktop\ (documented new-evidence re-anchor, R2010/R1996 precedent)
+ORD_SCAN new_rows_since_09:0x=12 bigdomain_hits=0
+ORD_TAIL_TS=13:5x
+-- battery verdicts --
+PASS suite-anchor-replay
+PASS runner-full-battery
+PASS suite-matrix-check
+FAIL fingerprint-check
+PASS profile-daily-check
+FAIL writer-census-check
+BATTERY FAIL elapsed=375.0s
+--- takeover follow-up (same session, corrected check-face invocations) ---
+first-pass FAIL causes: fingerprint_regen.py requires --chain (migration_chains.json); qa_writer_census.py lives at src/os, not src/sandbox - both were this battery driver's own invocation errors, zero product/env defects
+FINGERPRINT rc=0 verdict CLEAN domains=5
+CENSUS rc=0 verdict: DRIFT-CLEAN
+BATTERY PASS (follow-up: suite-anchor + runner 231/231 controls 7/7 + matrix + profile green at first pass; fingerprint + census green after invocation fix)

@@ -166,7 +166,15 @@ SUITES = [
     # the no-eviction boundary and the cap+1-th distinct key evicts
     # the FIFO oldest (evicted-while-live re-entry) - AC-IDT1..IDT8
     # (57 -> 65).
-    ("lobby", os.path.join("lobby", "test_client.py"), 65),
+    # R2014 (criteria pre-registered R2013) idem gate-order budget
+    # window: the idempotency gate sits BEFORE the rate limit
+    # (server.py "replay costs no budget"), so replays of processed
+    # sends absorb as duplicates without burning, freeing or
+    # extending rate budget while the 5/10s window stays saturated
+    # - fresh-storm + 10-replay storm + 6th-fresh rejection + no-id
+    # control anchor, all on shipped config values - AC-IDB1..IDB7
+    # (65 -> 72).
+    ("lobby", os.path.join("lobby", "test_client.py"), 72),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
