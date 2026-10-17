@@ -1,0 +1,16 @@
+takeover_verify_R2015 start 2026-10-17 16:44
+LOCK age 48s = own round lock (R2015 in-plate payload = orphaned crashed session; no active python on this repo at probe)
+GROUP faces: LEDGER @BigDomain 0 new dispatch rows; DEC tail D-20261017-07 at baseline (356 rows); ORD tail 13:5x at baseline; benchmarks fresh same-day
+SUITE replay: python subprocess byte-capture x2, LF-normalized sha16 cace415bffe9e141 (2512B) identical across mine-run1 / mine-run2 / crashed main log / crashed run2 log; rc=0/0; SUITE PASS 7/7
+  (first PS-redirect capture came out UTF-16 dialect - re-captured via python subprocess per R1880/R1999 dialect-prevention family)
+BATTERY (crashed round final, healthy outside-repo system temp): RUNNER PASS 232/232 suites green controls 7/7 300.5s = qa/reconcile-all-R2015.log
+  attempt1 RUNNER FAIL (3 failed assertions) root-caused as the crashed round's own same-round fixes, both confirmed fixed in the final run:
+    - ledger-showcase-statslimit AC-SST7 exact-signature pin broken by the additive window parameter -> prefix pin (AC-S8a criteria-maintenance precedent)
+    - reconcile-daily-census new-evidence drift -> writer-census-baseline re-anchor (R2010/R1996 new-evidence precedent, +2 evidence rows)
+TAKER four battery faces (system python, ambient system temp):
+MATRIX regen rc=0 PASS generated docs/sandbox-suite-matrix.md (22392 bytes, 232 suites, 1983 criteria, evidence qa/reconcile-all-R2015.log green 232/232); --check rc=0 byte-identical
+FINGERPRINT rc=0 verdict CLEAN domains=5
+PROFILE rc=0 --daily --check byte-identical PASS
+CENSUS rc=0 verdict DRIFT-CLEAN files=1534 flags=0 disappeared=0
+BATTERY PASS (suite anchor-replay + crashed final battery green + four check faces green)
+CLOSEOUT: fold R545 (tail-2 window 4372B -> 1 rolling line, 58 tokens embedded verbatim, state 76509B -> 74431B) + state tick 2015 (77023B, round+tokens appended) + explore queue done-mark + statsmonth persist reseed row + export ceo_face refresh + heartbeat tick-2015 row

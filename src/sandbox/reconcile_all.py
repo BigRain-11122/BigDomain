@@ -2422,6 +2422,23 @@ SUITES = [
         ("ledger-proposal-progressboundary-persist",
          os.path.join("ledger",
                       "test_proposal_progressboundarypersist.py"), 7),
+    # R2015 explore-queue FIFO head claim (R1996 reseed row): the
+    # per-showcase statistics board month-window read face
+    # (R1888/R1998 window-parameterization family law): default
+    # window=None full-window byte-identical zero drift, explicit
+    # strict YYYY-MM window slices places/retracts by the
+    # record-time law (substr(acted_utc, 1, 7)) and displayed_now
+    # by the latest window-recorded event (_displayed_rows_window
+    # law), earlier-month display stays off the later window,
+    # straddle pair reads an honest in-window retract, eventless
+    # month shows dense honest zeros, additive window envelope
+    # key, window x cap orthogonality with the honest overflow
+    # block, malformed window fail-closed after the limit gate,
+    # pure-read law, hygiene
+    # (AC-SSM1..AC-SSM7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsmonth",
+     os.path.join("ledger", "test_showcase_statsmonth.py"), 7),
     ]
 
 FAILS = 0

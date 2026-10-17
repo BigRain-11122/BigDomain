@@ -283,7 +283,14 @@ def main():
     ok7 = (own_non_ascii == 0 and mod_non_ascii == 0
            and not net_imports and sha_before == sha_after
            and S.E_SH_BAD_LIMIT in sh_src
-           and "stats_board(self, limit=0)" in sh_src
+           # R2015 pin modernization (AC-S8a criteria-maintenance
+           # precedent): the R1988 pin matched the exact old
+           # signature string; the R2015 additive month-window
+           # parameter (stats_board(self, limit=0, window=None))
+           # broke the exact match without removing the cap face.
+           # Prefix match keeps the presence check honest across
+           # additive keyword extensions.
+           and "stats_board(self, limit=0" in sh_src
            and os.path.isabs(tmp) and tmp not in os.path.abspath(
                os.path.join(BASE, "..", "..", "..")))
     record("AC-SST7", ok7,

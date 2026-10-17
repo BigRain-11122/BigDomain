@@ -410,7 +410,7 @@ class ShowcaseFace:
         return {"showcase_id": showcase_id, "slot_cap": slot_cap,
                 "stops": stops, "disclaimer": self.disclaimer}
 
-    def stats_board(self, limit=0):
+    def stats_board(self, limit=0, window=None):
         """Per-showcase exhibit statistics board - registry-keyed
         pure-read derivation (every registered showcase gets exactly
         one row; a zero-event showcase shows honest zeros; a
@@ -431,12 +431,47 @@ class ShowcaseFace:
         an honest overflow block (total carries the full registry
         count, never the truncated one; a zero-registration world
         returns an honest empty capped read with the block still
-        present). The limit gate fires before any read."""
+        present). The limit gate fires before any read.
+        Month-window read AC-SSM1..AC-SSM7 (R2015): window=None
+        keeps both default envelopes byte-for-byte; an explicit
+        YYYY-MM window slices every aggregate by the record-time
+        law (substr(acted_utc, 1, 7) - places/retracts count only
+        events recorded in that month; displayed_now counts items
+        whose latest window-recorded event is a place in this
+        showcase, the _displayed_rows_window law). Registry density
+        and the honest-zero law survive the window (an eventless
+        month shows all-zero rows; a zero-registration world
+        returns an honest empty windowed board; a straddle pair -
+        earlier-month place, this-month retract - reads honestly
+        as a retract with no in-window place; the net-flow
+        identity stays a full-board law, not a month-window law).
+        The window gate is strict YYYY-MM fail-closed and fires
+        after the limit gate, before any read; window x limit
+        compose orthogonally (the cap slices the windowed
+        decisive order with the same honest overflow block)."""
         if (isinstance(limit, bool) or not isinstance(limit, int)
                 or limit < 0):
             raise ShowcaseError(
                 E_SH_BAD_LIMIT,
                 "limit must be a non-negative int (0 = full board)")
+        if window is not None and (not isinstance(window, str)
+                                   or _WINDOW_RE.fullmatch(window)
+                                   is None):
+            raise ShowcaseError(
+                E_SH_BAD_WINDOW,
+                "window must be a strict YYYY-MM month string"
+                " or None for the full board")
+        wfilter = ""
+        wargs = ()
+        if window is None:
+            inner = "SELECT MAX(event_id) FROM exhibit_events" \
+                    " GROUP BY cl_id"
+        else:
+            wfilter = " WHERE substr(acted_utc, 1, 7) = ?"
+            wargs = (window,)
+            inner = "SELECT MAX(event_id) FROM exhibit_events" \
+                    " WHERE substr(acted_utc, 1, 7) = ?" \
+                    " GROUP BY cl_id"
         with self._lock:
             reg = self._conn.execute(
                 "SELECT showcase_id, title, ai_label FROM showcases"
@@ -445,12 +480,13 @@ class ShowcaseFace:
                 "SELECT showcase_id,"
                 " SUM(CASE WHEN action = 'place' THEN 1 ELSE 0 END),"
                 " SUM(CASE WHEN action = 'retract' THEN 1 ELSE 0 END)"
-                " FROM exhibit_events GROUP BY showcase_id").fetchall()
+                " FROM exhibit_events" + wfilter +
+                " GROUP BY showcase_id", wargs).fetchall()
             dnow = self._conn.execute(
                 "SELECT showcase_id, COUNT(*) FROM exhibit_events"
-                " WHERE event_id IN (SELECT MAX(event_id) FROM"
-                " exhibit_events GROUP BY cl_id)"
-                " AND action = 'place' GROUP BY showcase_id").fetchall()
+                " WHERE event_id IN (" + inner + ")"
+                " AND action = 'place' GROUP BY showcase_id",
+                wargs).fetchall()
         cmap = {str(r[0]): (int(r[1]), int(r[2])) for r in counts}
         dmap = {str(r[0]): int(r[1]) for r in dnow}
         rows = []
@@ -463,15 +499,22 @@ class ShowcaseFace:
         rows.sort(key=lambda r: (-r["places"], -r["retracts"],
                                  r["showcase_id"]))
         if not limit:
+            if window is None:
+                return {"showcase_stats_board": rows,
+                        "disclaimer": self.disclaimer}
             return {"showcase_stats_board": rows,
-                    "disclaimer": self.disclaimer}
+                    "disclaimer": self.disclaimer,
+                    "window": window}
         total = len(rows)
         rows = rows[-limit:]
-        return {"showcase_stats_board": rows,
-                "disclaimer": self.disclaimer,
-                "limit": limit, "total": total,
-                "returned": len(rows),
-                "truncated": len(rows) < total}
+        env = {"showcase_stats_board": rows,
+               "disclaimer": self.disclaimer,
+               "limit": limit, "total": total,
+               "returned": len(rows),
+               "truncated": len(rows) < total}
+        if window is not None:
+            env["window"] = window
+        return env
 
     def stats_board_dual(self, limit):
         """Dual-window combined board (R1989): one envelope that
