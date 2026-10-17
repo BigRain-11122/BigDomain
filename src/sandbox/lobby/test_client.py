@@ -284,9 +284,14 @@ def heartbeat_mechanism_case():
         t0 = time.perf_counter()
         closed = raw_no_pong_client(8094, deadline=10)
         elapsed = time.perf_counter() - t0
+        # R2012 double-run caught a raw wall-clock drift on this readout
+        # (3.1s vs 3.0s) - the R1876/R1993 determinism hardening missed
+        # it. Classed display per the same family (sub-5s/sub-10s); the
+        # real gate (elapsed < 10) stays in the returned verdict.
+        klass = "sub-5s" if elapsed < 5 else "sub-10s"
         return closed and elapsed < 10, (
-            "server disconnected the no-pong client after %.1fs (test instance interval=1s timeout=2s)"
-            % elapsed)
+            "server disconnected the no-pong client after %s (test instance interval=1s timeout=2s)"
+            % klass)
     finally:
         srv.stop()
 
@@ -2592,6 +2597,195 @@ async def idem_restart_cases():
               sha_config_post == sha_config_pre, ascii_ok))
 
 
+async def idem_boundary_cases():
+    """AC-IDT1..IDT8 (R2012): chat.send idem_seen TTL/FIFO boundary
+    window - four boundary laws the R1892 restart-semantics and R1899
+    key-binding windows left unpinned: (1) the TTL window is FIXED at
+    first processing - an absorbed replay never slides or extends it;
+    (2) a post-expiry resend re-arms the cache with the NEW evt_id, so
+    an immediate replay re-acks the fresh entry, never the original;
+    (3) windows are per-key and stagger independently (a key
+    remembered later is still in-window when an earlier key already
+    expired); (4) len==cap is the no-eviction boundary (both live
+    keys absorb at exactly cap) while the cap+1-th distinct key
+    evicts the oldest in FIFO order (an evicted-while-still-live key
+    re-enters the event flow). Honest boundary note: the
+    exact-instant expiry predicate (expires_at <= now, inclusive)
+    cannot be pinned deterministically against the live monotonic
+    clock inside the server subprocess (R1678 frozen-clock
+    rationale), so this window pins order boundaries with wide
+    margins on both sides instead. Suite-only round: server.py and
+    the shipped config are not modified (R1892/R1899 precedent)."""
+    sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+
+    async def chat_send(ws, room, text, cid):
+        await ws.send(frame("chat.send", room=room,
+                            payload={"text": text}, client_msg_id=cid))
+
+    def chat_rows(db):
+        return db_query(db,
+                        "SELECT COUNT(*) FROM events WHERE type='chat.broadcast'")[0][0]
+
+    async def dup_of(ws, evt_id, cid):
+        return await recv_until(ws, lambda f: f.get("type") == "chat.duplicate"
+                                and f.get("payload", {}).get("client_msg_id") == cid
+                                and f.get("payload", {}).get("evt_id") == evt_id)
+
+    # ---- world 1: fixed-window non-refresh + re-arm + staggered keys
+    # (ttl 1.5s via derived config copy; cap stays at the shipped value) ----
+    cfg_w1 = idem_cfg_copy(ttl=1.5)
+    port_1 = _free_port()
+    srv_1 = ServerProc(port_1, config=cfg_w1, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-b1-"), "events.db"))
+    ws_1 = None
+    try:
+        srv_1.start()
+        ws_1, _, _ = await open_client(port_1)
+        await make_resident(ws_1)
+        await chat_send(ws_1, "lobby", "idt one", "idt-1-a")
+        e_one = await recv_until(ws_1, lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == "idt one")
+        rows_a = chat_rows(srv_1.db)
+        await asyncio.sleep(0.7)   # t+0.7: inside the fixed 1.5s window
+        await chat_send(ws_1, "lobby", "idt one", "idt-1-a")
+        d_one = await dup_of(ws_1, e_one.get("evt_id"), "idt-1-a")
+        ok_idt1 = (d_one is not None
+                   and d_one.get("payload", {}).get("code") == "E_DUPLICATE_MSG"
+                   and chat_rows(srv_1.db) == rows_a)
+        record("AC-IDT1", ok_idt1,
+               "in-window replay at t+0.7 absorbed: dup-evt==orig=%s code-ok=%s "
+               "rows-unchanged=%s"
+               % (d_one is not None,
+                  d_one.get("payload", {}).get("code") == "E_DUPLICATE_MSG",
+                  chat_rows(srv_1.db) == rows_a))
+        await asyncio.sleep(0.2)   # t+0.9: stagger key two's window start
+        await chat_send(ws_1, "lobby", "idt two", "idt-1-b")
+        e_two = await recv_until(ws_1, lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == "idt two")
+        rows_b = chat_rows(srv_1.db)
+        await asyncio.sleep(0.9)   # t+1.8: key one past its 1.5s expiry
+        await chat_send(ws_1, "lobby", "idt one", "idt-1-a")
+        e_one2 = await recv_until(ws_1,
+                                  lambda f: f.get("type") == "chat.broadcast"
+                                  and f.get("payload", {}).get("text") == "idt one"
+                                  and f.get("evt_id") != e_one.get("evt_id"))
+        ok_idt2 = e_one2 is not None and chat_rows(srv_1.db) == rows_b + 1
+        record("AC-IDT2", ok_idt2,
+               "fixed-window non-refresh: resend at t+1.8 re-entered=%s rows %d "
+               "-> %d (the t+0.7 absorption did not slide the 1.5s window)"
+               % (e_one2 is not None, rows_b, chat_rows(srv_1.db)))
+        await chat_send(ws_1, "lobby", "idt one", "idt-1-a")   # immediate replay
+        d_rearm = await dup_of(ws_1, e_one2.get("evt_id"), "idt-1-a")
+        rows_c = chat_rows(srv_1.db)
+        ok_idt3 = (d_rearm is not None
+                   and d_rearm.get("payload", {}).get("evt_id") != e_one.get("evt_id")
+                   and rows_c == rows_b + 1)
+        record("AC-IDT3", ok_idt3,
+               "post-expiry re-arm: immediate replay re-acked the NEW evt=%s "
+               "(orig never re-acked) rows-stable=%s"
+               % (d_rearm is not None
+                  and d_rearm.get("payload", {}).get("evt_id") != e_one.get("evt_id"),
+                  rows_c == rows_b + 1))
+        await chat_send(ws_1, "lobby", "idt two", "idt-1-b")   # key two still live
+        d_two = await dup_of(ws_1, e_two.get("evt_id"), "idt-1-b")
+        ok_idt4 = d_two is not None and chat_rows(srv_1.db) == rows_c
+        record("AC-IDT4", ok_idt4,
+               "per-key staggered windows: key two (remembered t+0.9) still "
+               "absorbed at t+1.8 while key one had already expired=%s "
+               "rows-stable=%s"
+               % (d_two is not None, chat_rows(srv_1.db) == rows_c))
+        rows_final = chat_rows(srv_1.db)
+        ok_idt5 = rows_final == rows_a + 2
+        record("AC-IDT5", ok_idt5,
+               "world-1 store accounting: rows %d -> %d (exactly the three "
+               "fresh entries idt-one/idt-two/idt-one-reentry; every absorbed "
+               "replay added none)"
+               % (rows_a, rows_final))
+    finally:
+        if ws_1 is not None:
+            try:
+                await ws_1.close()
+            except Exception:
+                pass
+        srv_1.stop()
+
+    # ---- world 2: len==cap no-eviction boundary + over-cap FIFO order
+    # (cap=2 via derived config copy; ttl stays at the shipped 300s, so
+    # the probes exercise eviction, not expiry) ----
+    cfg_w2 = idem_cfg_copy(cap=2)
+    port_2 = _free_port()
+    srv_2 = ServerProc(port_2, config=cfg_w2, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-b2-"), "events.db"))
+    ws_2 = None
+    try:
+        srv_2.start()
+        ws_2, _, _ = await open_client(port_2)
+        await make_resident(ws_2)
+        await chat_send(ws_2, "lobby", "idt k1", "idt-2-a")
+        e_k1 = await recv_until(ws_2, lambda f: f.get("type") == "chat.broadcast"
+                                and f.get("payload", {}).get("text") == "idt k1")
+        await chat_send(ws_2, "lobby", "idt k2", "idt-2-b")
+        e_k2 = await recv_until(ws_2, lambda f: f.get("type") == "chat.broadcast"
+                                and f.get("payload", {}).get("text") == "idt k2")
+        rows_cap = chat_rows(srv_2.db)   # len == cap == 2: no eviction yet
+        await chat_send(ws_2, "lobby", "idt k1", "idt-2-a")
+        d_k1 = await dup_of(ws_2, e_k1.get("evt_id"), "idt-2-a")
+        await chat_send(ws_2, "lobby", "idt k2", "idt-2-b")
+        d_k2 = await dup_of(ws_2, e_k2.get("evt_id"), "idt-2-b")
+        ok_idt6 = (d_k1 is not None and d_k2 is not None
+                   and chat_rows(srv_2.db) == rows_cap)
+        record("AC-IDT6", ok_idt6,
+               "len==cap no-eviction boundary: k1-absorbed=%s k2-absorbed=%s "
+               "rows-stable=%s (cap=2 reached, no premature eviction)"
+               % (d_k1 is not None, d_k2 is not None,
+                  chat_rows(srv_2.db) == rows_cap))
+        await chat_send(ws_2, "lobby", "idt k3", "idt-2-c")   # pushes over cap
+        e_k3 = await recv_until(ws_2, lambda f: f.get("type") == "chat.broadcast"
+                                and f.get("payload", {}).get("text") == "idt k3")
+        rows_three = chat_rows(srv_2.db)   # k1 evicted (FIFO oldest)
+        await chat_send(ws_2, "lobby", "idt k2", "idt-2-b")   # survivor absorbs
+        d_k2b = await dup_of(ws_2, e_k2.get("evt_id"), "idt-2-b")
+        await chat_send(ws_2, "lobby", "idt k1", "idt-2-a")   # evicted -> re-entry
+        e_k1b = await recv_until(ws_2,
+                                 lambda f: f.get("type") == "chat.broadcast"
+                                 and f.get("payload", {}).get("text") == "idt k1"
+                                 and f.get("evt_id") != e_k1.get("evt_id"))
+        rows_four = chat_rows(srv_2.db)
+        ok_idt7 = (d_k2b is not None and e_k1b is not None
+                   and rows_three == rows_cap + 1 and rows_four == rows_cap + 2)
+        record("AC-IDT7", ok_idt7,
+               "over-cap FIFO eviction order: survivor-k2-absorbed=%s "
+               "evicted-k1-reentered=%s rows %d -> %d -> %d (evicted while "
+               "still TTL-live, honest re-entry)"
+               % (d_k2b is not None, e_k1b is not None,
+                  rows_cap, rows_three, rows_four))
+    finally:
+        if ws_2 is not None:
+            try:
+                await ws_2.close()
+            except Exception:
+                pass
+        srv_2.stop()
+
+    # ---- AC-IDT8: hygiene (suite-only round) ----
+    sha_server_post = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_post = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+    own_src = inspect.getsource(idem_boundary_cases)
+    ascii_ok = True
+    try:
+        own_src.encode("ascii")
+    except UnicodeEncodeError:
+        ascii_ok = False
+    record("AC-IDT8", sha_server_post == sha_server_pre
+           and sha_config_post == sha_config_pre and ascii_ok,
+           "server.py-unchanged=%s config.json-unchanged=%s section-ascii=%s "
+           "(exact-instant expiry predicate is unpinnable against the live "
+           "monotonic clock in the subprocess server; order boundaries pinned)"
+           % (sha_server_post == sha_server_pre,
+              sha_config_post == sha_config_pre, ascii_ok))
+
+
 async def idem_keybind_cases():
     """AC-S44..S48 (R1899): chat.send idem key binding semantics - the
     dedup key binds the client-supplied id to the exact normalized
@@ -3519,6 +3713,12 @@ async def suite():
     # (same-id-different-text / cross-connection / id-domain / pre-key
     # normalization faces).
     await idem_keybind_cases()
+
+    # AC-IDT1..IDT8 (R2012): chat.send idem_seen TTL/FIFO boundary
+    # window (fixed-window non-refresh / post-expiry re-arm /
+    # per-key staggered windows / len==cap no-eviction / over-cap
+    # FIFO eviction order).
+    await idem_boundary_cases()
 
     # AC-S49..S54 (R1915): room.board protocol face across full
     # server-process restarts (the store-level persist is already

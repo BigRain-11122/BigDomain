@@ -159,7 +159,14 @@ SUITES = [
     # x new data, and a second restart keeps sequential-instance
     # byte identity; pure-read battery + sha256 double-proof hygiene
     # - AC-S49..S54 (51 -> 57).
-    ("lobby", os.path.join("lobby", "test_client.py"), 57),
+    # R2012 idem_seen TTL/FIFO boundary window: the TTL window is
+    # fixed at first processing (an absorbed replay never slides
+    # it), a post-expiry resend re-arms the cache with the NEW
+    # evt_id, windows stagger per-key independently, len==cap is
+    # the no-eviction boundary and the cap+1-th distinct key evicts
+    # the FIFO oldest (evicted-while-live re-entry) - AC-IDT1..IDT8
+    # (57 -> 65).
+    ("lobby", os.path.join("lobby", "test_client.py"), 65),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
