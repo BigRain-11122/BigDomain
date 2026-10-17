@@ -2390,6 +2390,23 @@ SUITES = [
         ("civic-competition-monthwindow-persist",
          os.path.join("ledger",
                       "test_civic_competition_monthwindowpersist.py"), 7),
+        # R2011 explore-queue FIFO head claim (R1995 reseed row):
+        # proposal progress_board zero-registration boundary world
+        # cross-restart example - both zero-param read faces
+        # (progress_board + proposal_board) keep honest empty
+        # envelopes byte-identical across a full-stack restart in
+        # a boundary world (ledger domain populated, registry axis
+        # empty), the write-side gate family fires before any
+        # read, the post-restart first registration + first sign
+        # chain continue the boards with zero phantom rows ending
+        # on the threshold crossing where the memorial linkage
+        # re-proves the collectibles dock reconnection; third
+        # instance stability, pure-read law, hygiene (suite-only)
+        # (AC-PBZB1..AC-PBZB7 pre-registered in
+        # state/queue/explore.md).
+        ("ledger-proposal-progressboundary-persist",
+         os.path.join("ledger",
+                      "test_proposal_progressboundarypersist.py"), 7),
     ]
 
 FAILS = 0
