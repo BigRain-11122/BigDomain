@@ -2462,6 +2462,22 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonthboundarypersist.py"), 7),
+    # R2018 showcase statsmonth post-retraction current-month
+    # live-state cross-restart persistence example window: the
+    # retract-state successor of the statsmonth family (R2016
+    # place-state / R2017 zero-registration boundary already
+    # in register): a current-month retraction through the
+    # real path leaves the current-month window net-flow
+    # identity displayed_now == places - retracts intact on
+    # the place-first world shape, the earlier-month window
+    # stays byte-frozen across the retraction, and the whole
+    # eleven-form read family persists byte-identically
+    # across two full-stack restarts (AC-SSMR1..AC-SSMR7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-showcase-statsmonthretract-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonthretractpersist.py"), 7),
     ]
 
 FAILS = 0

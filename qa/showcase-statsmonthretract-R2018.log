@@ -1,0 +1,23 @@
+--- R2018 evidence: suite double-run byte-identity (LF-normalized) ---
+--- run 1 rc=0 sha16=1a508ff2d6a7281a ---
+PASS AC-SSMR1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMR2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMR3: post-restart first retract (real path, dock reconnected): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMR4: restart #2 (third instance): 11/11 forms byte-identical vs post-retract snapshots drift=[]
+PASS AC-SSMR5: read storm x2 on reopened instance: events constant=True (6 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True
+PASS AC-SSMR6: gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMR7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- run 2 rc=0 sha16=1a508ff2d6a7281a ---
+PASS AC-SSMR1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMR2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMR3: post-restart first retract (real path, dock reconnected): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMR4: restart #2 (third instance): 11/11 forms byte-identical vs post-retract snapshots drift=[]
+PASS AC-SSMR5: read storm x2 on reopened instance: events constant=True (6 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True
+PASS AC-SSMR6: gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMR7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- byte-identity: PASS (bytes=1235) ---
+--- VERDICT PASS ---
