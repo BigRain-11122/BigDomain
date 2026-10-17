@@ -2439,6 +2439,17 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-showcase-statsmonth",
      os.path.join("ledger", "test_showcase_statsmonth.py"), 7),
+    # showcase stats month-window cross-restart persistence
+    # (R2016): seven-form window read family byte-identical
+    # across a full-stack close/reopen, post-restart current-month
+    # real-path recompute and new-month direct-INSERT recompute,
+    # gate family same-code on the restarted instance, third
+    # instance stability, pure-read law, hygiene
+    # (AC-SSMP1..AC-SSMP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsmonth-persist",
+     os.path.join("ledger",
+                  "test_showcase_statsmonthpersist.py"), 7),
     ]
 
 FAILS = 0
