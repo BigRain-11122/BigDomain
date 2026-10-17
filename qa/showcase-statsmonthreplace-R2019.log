@@ -1,0 +1,30 @@
+== R2019 suite double-run evidence ==
+suite: src\sandbox\ledger\test_showcase_statsmonthreplacepersist.py
+run1 exit=0 raw_bytes=1587
+run2 exit=0 raw_bytes=1587
+lf-normalized byte-identical: True
+stdout sha16 (lf-normalized): 8ec2106227a9816f
+verdict: PASS
+
+--- run 1 rc=0 sha16=8ec2106227a9816f ---
+PASS AC-SSMRP1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMRP2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMRP3: post-restart retract (pre-bounce anchor): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMRP4: re-place bounce: already-displayed probe=True; events 6->7 (probe zero-rows); wcur {3,1,2} identity=True (2==3-1); full {6,1,5} identity=True (5==6-1); wprev frozen=True; view_cur=[5, 4] (new place event joins the cur window); chronicle 5xplace+retract+place; tour 5 stops gate re-joins at the tail
+PASS AC-SSMRP5: restart #2 (third instance): 11/11 forms byte-identical vs post-bounce snapshots drift=[] (the re-place live state persists across the restart)
+PASS AC-SSMRP6: read storm x2 on reopened instance: events constant=True (7 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True; gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMRP7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- run 2 rc=0 sha16=8ec2106227a9816f ---
+PASS AC-SSMRP1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMRP2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMRP3: post-restart retract (pre-bounce anchor): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMRP4: re-place bounce: already-displayed probe=True; events 6->7 (probe zero-rows); wcur {3,1,2} identity=True (2==3-1); full {6,1,5} identity=True (5==6-1); wprev frozen=True; view_cur=[5, 4] (new place event joins the cur window); chronicle 5xplace+retract+place; tour 5 stops gate re-joins at the tail
+PASS AC-SSMRP5: restart #2 (third instance): 11/11 forms byte-identical vs post-bounce snapshots drift=[] (the re-place live state persists across the restart)
+PASS AC-SSMRP6: read storm x2 on reopened instance: events constant=True (7 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True; gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMRP7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- byte-identity: PASS (bytes=1579) ---
+--- VERDICT PASS ---
