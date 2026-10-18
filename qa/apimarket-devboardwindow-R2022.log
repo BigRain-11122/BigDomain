@@ -1,0 +1,15 @@
+=== apimarket dev_sales_board month-window read suite (R2022) ===
+--- run-1 output ---
+PASS AC-AMW1: default zero drift: envelope keys ['board', 'disclaimer']; no-arg and window=None calls byte-identical; canonical world [(ada,2,3,23,17,6),(carol,1,1,10,7,3),(dan,1,0,0,0,0)]; per-row gross == dev + platform; independent manual cross equal; double-call identical
+PASS AC-AMW2: window gate fail-closed: 14 bad forms (int/bool/float/empty/short/long/letters/month-13/month-00/slash/one-digit-month/leading-space/trailing-newline/day-segment) all reject E_AM_BAD_WINDOW before any read; empty string is not the default sentinel (None only); digests and ledger_tx constant across the probe batch
+PASS AC-AMW3: month-window slicing: envelope ['board', 'disclaimer', 'window'] with window echo; SEP board [(ada,1,1,10,7,3),(carol,1,1,10,7,3),(dan,0,0,0,0,0)] and OCT board [(ada,1,2,13,10,3),(carol,0,0,0,0,0),(dan,1,0,0,0,0)]; both equal the checker's record-time prefix recomputation (cross-window zero leakage both ways); conservation holds per row; double-call identical
+PASS AC-AMW4: registration-month separation (record-time law): a1 listed 2026-09 but its eve sale recorded 2026-10 - the OCT window carries it (ada OCT purchases == 2 including the Sep-listed sale), the SEP window does not (== 1); the listing's registration month never decides which month its sales land in; dan listed only in OCT so the SEP window keeps a dense zero row (listing_count 0) while OCT shows 1
+PASS AC-AMW5: out-of-range months (2026-08 / 2026-11 / 2099-01): dense ever-listed developer rows with honest zero aggregates, account-ASC order inside the flat zero group, window echo kept, double-call identical; zero-listing market: window read returns honest [] (no phantom rows), default read [] as well, and the window gate still enforces E_AM_BAD_WINDOW on a data-empty face (gate independent of the data face)
+PASS AC-AMW6: additivity cross: for every developer every one of the five keys (all pure-additive) satisfies full == SEP + OCT; OCT order law holds with the flat zero group resolved by account ASC (carol before dan - not listing recency, zero insertion-order keys); window reads deterministic double-call
+PASS AC-AMW7: pure-read law: the full read batch (default + four windows, twice) left the three-table digests and ledger_tx constant; dev_sales_board method source carries zero mutation statements; suite source pure ASCII (20036 bytes), zero network imports on true import lines, both shipped config.json sha256 unchanged, world db in system tmp outside the repo; criteria count == 7
+SUITE PASS (7/7 criteria green)
+--- run-2 verdict ---
+run-2 exit=0
+double-run stdout lf-normalized byte-identical: True
+lf-sha16: 6c5e3b4fabe202b3 bytes=2530
+VERDICT: PASS

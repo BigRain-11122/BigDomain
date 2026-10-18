@@ -70,6 +70,7 @@ E_AM_BAD_SPLIT = "E_AM_BAD_SPLIT"          # AC-AM4 (param face)
 E_AM_NOT_BUYER = "E_AM_NOT_BUYER"          # AC-AM5
 E_AM_RATE_DUP = "E_AM_RATE_DUP"           # AC-AM5
 E_AM_BAD_STARS = "E_AM_BAD_STARS"         # AC-AM5
+E_AM_BAD_WINDOW = "E_AM_BAD_WINDOW"      # R2022 windowed read face
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -121,6 +122,24 @@ CREATE TABLE IF NOT EXISTS apimarket_ratings (
 def _now_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime(
         "%Y-%m-%dT%H:%M:%SZ")
+
+
+def _assert_month(window):
+    """Strict calendar-month validation for the YYYY-MM window
+    (the civicpoints _assert_month law, windowed-read family
+    R1996/R1997/R1999/R2015): strptime alone is lenient about
+    zero padding and silently swallows trailing garbage
+    patterns, so the parse is round-tripped and must reproduce
+    the input verbatim."""
+    if not isinstance(window, str):
+        raise ApiMarketError(E_AM_BAD_WINDOW, "window must be a string")
+    try:
+        parsed = datetime.datetime.strptime(window, "%Y-%m")
+    except ValueError:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad window: " + window)
+    if parsed.strftime("%Y-%m") != window:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad window: " + window)
+    return window
 
 
 def split_amount(price, params=None):
@@ -500,10 +519,12 @@ class APIMarketFace:
                            "spend_tx": r[7], "dev_share_tx": r[8],
                            "purchased_utc": r[9]} for r in rows]}
 
-    def dev_sales_board(self):
+    def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board
         (pre-registered AC-AMB1..AC-AMB7 in the R1978
-        explore-queue row, written before this method existed).
+        explore-queue row; the month-window read face
+        AC-AMW1..AMW7 in the R2022 claim row - both written
+        before this code existed).
 
         Row-set authority = the listing side: every distinct
         dev_account holding at least one listing row gets
@@ -514,19 +535,54 @@ class APIMarketFace:
         dev_revenue DESC, then purchase_count DESC, then
         dev_account ASC. Per-row conservation gross ==
         dev + platform holds structurally (integer split law).
-        Pure read: zero writes on every table. The envelope
-        carries the resident non-advisory disclaimer."""
+        Pure read: zero row mutations on every table. The
+        envelope carries the resident non-advisory disclaimer.
+
+        Month window (windowed-read family, record-time law):
+        an explicit strict YYYY-MM window slices BOTH row
+        families by their own record time - listing_count by
+        the listed_utc prefix, the purchase aggregates by the
+        purchased_utc prefix - while the row set stays the
+        dense ever-listed developer set (a developer with no
+        in-window activity keeps an honest zero row; a
+        listing's registration month never decides which
+        month its sales land in). The window gate runs before
+        any read (fail-closed, dedicated code). Envelope is
+        additive: the default call keeps exactly the two
+        envelope keys; an explicit window adds the window
+        echo key."""
+        if window is not None:
+            window = _assert_month(window)   # gate before any read
         with self._lock:
-            rows = self._conn.execute(
-                "SELECT l.dev_account, COUNT(DISTINCT"
-                " l.listing_id) AS listing_count,"
-                " COALESCE(SUM(p.price_paid), 0) AS gross,"
-                " COALESCE(SUM(p.dev_share), 0) AS dev_rev,"
-                " COALESCE(SUM(p.platform_share), 0) AS plat_rev,"
-                " COUNT(p.purchase_id) AS purchases"
-                " FROM apimarket_listings l LEFT JOIN"
-                " apimarket_purchases p ON p.listing_id ="
-                " l.listing_id GROUP BY l.dev_account").fetchall()
+            if window is None:
+                rows = self._conn.execute(
+                    "SELECT l.dev_account, COUNT(DISTINCT"
+                    " l.listing_id) AS listing_count,"
+                    " COALESCE(SUM(p.price_paid), 0) AS gross,"
+                    " COALESCE(SUM(p.dev_share), 0) AS dev_rev,"
+                    " COALESCE(SUM(p.platform_share), 0) AS plat_rev,"
+                    " COUNT(p.purchase_id) AS purchases"
+                    " FROM apimarket_listings l LEFT JOIN"
+                    " apimarket_purchases p ON p.listing_id ="
+                    " l.listing_id GROUP BY l.dev_account").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT l.dev_account, COUNT(DISTINCT CASE"
+                    " WHEN substr(l.listed_utc, 1, 7) = ? THEN"
+                    " l.listing_id END) AS listing_count,"
+                    " COALESCE(SUM(CASE WHEN substr(p.purchased_utc,"
+                    " 1, 7) = ? THEN p.price_paid END), 0) AS gross,"
+                    " COALESCE(SUM(CASE WHEN substr(p.purchased_utc,"
+                    " 1, 7) = ? THEN p.dev_share END), 0) AS dev_rev,"
+                    " COALESCE(SUM(CASE WHEN substr(p.purchased_utc,"
+                    " 1, 7) = ? THEN p.platform_share END), 0)"
+                    " AS plat_rev, COUNT(CASE WHEN"
+                    " substr(p.purchased_utc, 1, 7) = ? THEN"
+                    " p.purchase_id END) AS purchases"
+                    " FROM apimarket_listings l LEFT JOIN"
+                    " apimarket_purchases p ON p.listing_id ="
+                    " l.listing_id GROUP BY l.dev_account",
+                    (window, window, window, window, window)).fetchall()
             board = []
             for r in rows:
                 board.append({
@@ -539,4 +595,7 @@ class APIMarketFace:
             board.sort(key=lambda row: (-row["dev_revenue"],
                                        -row["purchase_count"],
                                        row["dev_account"]))
-        return {"disclaimer": self.disclaimer, "board": board}
+        env = {"disclaimer": self.disclaimer, "board": board}
+        if window is not None:
+            env["window"] = window
+        return env

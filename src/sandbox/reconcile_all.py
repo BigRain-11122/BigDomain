@@ -2015,6 +2015,18 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devsalespersist", os.path.join(
         "ledger", "test_apimarket_devsalespersist.py"), 7),
+    # R2022 developer sales board month-window read seat of the
+    # windowed-read family: additive window param with default
+    # zero drift, strict YYYY-MM gate before any read (dedicated
+    # E_AM_BAD_WINDOW), record-time dual-family slicing
+    # (listing_count by listed_utc prefix, purchase aggregates
+    # by purchased_utc prefix), dense ever-listed zero rows in
+    # out months, honest [] on a zero-listing market, pure
+    # additivity full == SEP + OCT, pure-read law
+    # (AC-AMW1..AMW7 pre-registered in the R2022
+    # explore-queue claim row).
+    ("ledger-apimarket-devboardwindow", os.path.join(
+        "ledger", "test_apimarket_devboardwindow.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
