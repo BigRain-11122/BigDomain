@@ -2039,6 +2039,22 @@ SUITES = [
     # the R2023 explore-queue claim row).
     ("ledger-apimarket-devboardmonthpersist", os.path.join(
         "ledger", "test_apimarket_devboardmonthpersist.py"), 7),
+    # apimarket dev_sales_board zero-listing boundary world
+    # cross-restart persist window (R2024): boundary isolates
+    # the listing axis only (ledger + devkeys populated,
+    # apimarket three tables zero rows), honest empty envelope
+    # pinned, write-side gate family (off-register publish,
+    # content gate hit, zero price, unknown listing purchase)
+    # rejects before any read with zero side effects on the
+    # empty data face, full-stack restart byte-identical empty
+    # board, post-restart first listing honest-zero dense join
+    # with zero phantoms, first purchase zero-cache recompute
+    # with per-purchase spend/share tx provenance into the
+    # ledger_tx id set, third instance stability
+    # (AC-AMZB1..AMZB7 pre-registered in the R2024
+    # explore-queue claim row).
+    ("ledger-apimarket-devboardboundary", os.path.join(
+        "ledger", "test_apimarket_devboardboundarypersist.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
