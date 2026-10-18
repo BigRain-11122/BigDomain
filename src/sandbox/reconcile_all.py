@@ -2683,6 +2683,24 @@ SUITES = [
     # is unchanged. The suite's own main() prints exactly eight
     # case PASS-lines plus the SUITE summary line (8 criteria).
     ("funnel", os.path.join("funnel", "test_funnel_daily.py"), 8),
+    # R2039 explore-queue FIFO head claim (R2011 reseed row):
+    # proposal register/sign write-side gate family
+    # cross-restart same-code example - the 17-probe battery
+    # (11 register-side: dup id, seven bad-args forms, the
+    # args-before-content-gate order probe, the content-gate
+    # hit; 6 sign/read-side: unknown proposal, outside-window,
+    # window-before-dup order probe, duplicate sign, self
+    # sign, unknown read) rejects with an identical ordered
+    # code vector on instances one/two/three across two
+    # full-stack restarts on a POPULATED registry world, zero
+    # side effects per probe batch, post-restart liveness with
+    # the world-growth battery invariance, zero-token law,
+    # hygiene (suite-only).
+    # (AC-PPG1..AC-PPG7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-proposal-gatepersist",
+     os.path.join("ledger",
+                   "test_proposal_gatepersist.py"), 7),
     ]
 
 FAILS = 0
