@@ -2445,6 +2445,20 @@ SUITES = [
     ("ledger-showcase-statsboundary-persist",
      os.path.join("ledger",
                    "test_showcase_statsboundarypersist.py"), 7),
+    # R2035 explore-queue FIFO head claim (R2010 reseed row):
+    # showcase stats_board bad-argument gate family
+    # cross-restart same-code example - the 21-probe battery
+    # (5 default limit forms + 6 dual limit forms + 9 window
+    # forms + the dual-bad order probe) rejects with an
+    # identical ordered code vector on instances one/two/three
+    # across two full-stack restarts, zero side effects per
+    # probe batch on the populated face, post-restart liveness,
+    # pure-read law, hygiene (suite-only).
+    # (AC-SGB1..AC-SGB7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsgatepersist",
+     os.path.join("ledger",
+                   "test_showcase_statsgatepersist.py"), 7),
     # R1995 explore-queue FIFO head claim (R1968 reseed row):
     # proposal progress_board cross-restart persistence example
     # window - full-stack close -> reopen byte-identical board
