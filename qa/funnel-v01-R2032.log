@@ -1,0 +1,9 @@
+PASS AC-FN1 four-ring series + determinism
+PASS AC-FN2 honest zero-book + classification
+PASS AC-FN3 six-domain routing + unrouted archive
+PASS AC-FN4 order idempotency + empty honesty
+PASS AC-FN5 three-face account + identity
+PASS AC-FN6 gate fail-closed + clean shipped config
+PASS AC-FN7 rollup full envelope + delta
+PASS zero-row rejection on bad args/files
+SUITE PASS 8/8
