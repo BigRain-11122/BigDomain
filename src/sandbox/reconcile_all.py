@@ -2476,6 +2476,19 @@ SUITES = [
     ("ledger-showcase-viewwindow-gatepersist",
      os.path.join("ledger",
                    "test_showcase_viewwindow_gatepersist.py"), 7),
+    # R2038 explore-queue FIFO head claim (R2036 reseed row):
+    # showcase_view_window month-window slice cross-restart
+    # persistence example window - full-stack close -> reopen
+    # window-scoped read family byte-identical, post-restart
+    # new place / new retract window liveness (the record-time
+    # month law, months derived from stored events - zero wall
+    # clock), cross-showcase write isolation, pure-read law,
+    # third instance, hygiene (suite-only).
+    # (AC-SVWP1..AC-SVWP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-viewwindow-persist",
+     os.path.join("ledger",
+                   "test_showcase_viewwindow_persist.py"), 7),
     # R1995 explore-queue FIFO head claim (R1968 reseed row):
     # proposal progress_board cross-restart persistence example
     # window - full-stack close -> reopen byte-identical board
