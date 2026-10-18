@@ -1,0 +1,89 @@
+BigDomain QA smoke evidence - round R2020 - 2026-10-18 +08:00
+day work: (1) the R2019-held QA charter daily-crawl flag discharged
+this round (the 36th-case takeover closeout had honestly noted "QA
+crawl FLAG not run this round = next round first item"); (2) the
+daily-reconcile standing row executed same-day (first OSLoop round
+of 2026-10-18); (3) five-silence group faces judged: DEC
+D-20261018-01 + group-orders tail batch; (4) fold R550 honored.
+
+--- (1) daily reconcile standing row (O-2026-0930-027, runbook sec.1) ---
+python src/sandbox/reconcile_daily.py ->
+RECONCILE-DAILY 20261018 verdict=PASS exit=0 runner_exit=0
+sentinel=ok profile=ok census=ok
+RUNNER PASS (236/236 suites green, reconcile controls 7/7, 226.1s)
+evidence: qa/reconcile-daily-20261018.log (auto-derived same-day
+path, zero overwrite of prior evidence). G0 green, zero escalation,
+standing row continues.
+
+--- (2) W27 crawl (group QA Smoke Test charter v1.0, orders L254
+2026-09-28; docs/global-benchmarks.md + docs/research/intelligence-wall.md) ---
+W27 = Regulations on Security Assessment for Internet Information
+Services with Public-opinion or Social-mobilization Attributes
+(CAC + MPS, issued 2018-11-15, effective 2018-11-30, 17 articles),
+official fulltext direct-captured A-grade from gov.cn policy library
+(zhengce/zhengceku/2018-11/30/content_5457763.htm; 1-try search +
+1-get, zero negatives).
+key clauses consumed:
+- art. 2 scope: enumerated services include chatrooms, messaging
+  groups, mini-programs, info sharing, live streaming = our visitor
+  mini-program and lobby rooms directly named;
+- art. 3 five self-assessment triggers: (1) launch of such a service
+  or adding such a function = PRE-LAUNCH assessment gate; (2) new
+  tech/application causing material change (AIGC pipeline face);
+  (3) material user-scale growth; (4) illegal-harmful info spread;
+  (5) written notice from city-plus CAC or MPS;
+- art. 5 eight assessment items incl. security-management officer +
+  content-review staff (bootstrap staffing statute source no.7),
+  real-name verification + registration retention, log retention
+  (account / operation time / type / source addr / port / hardware
+  features + posting records), unlawful-info prevention/disposition
+  records for accounts and group names/nicknames/profiles/marks,
+  PI protection + anti-spread + anti-mobilization-loss technical
+  measures, complaint and report handling, assistance mechanisms for
+  CAC supervision and for MPS/state-security work;
+- art. 6 report four content items; art. 7 submission law: via the
+  National Internet Security Management Service Platform to the
+  local city-plus CAC branch and public-security organ; triggers
+  (1)(2) = submit BEFORE launch/function-addition; triggers
+  (3)(4)(5) = within 30 working days;
+- art. 8-10 written review / on-site inspection / expert panel;
+- art. 12-13 non-assessment = notified to assess; refusal = public
+  risk notice on the platform + supervision + lawful handling.
+consumption: launch-ops launch gate (security-assessment step statute
+body, closes the W13 "new-function security gate" candidate) +
+P-47(1) lobby [scope + log retention] + P-47(3) UGC [disposition
+records + AIGC change assessment face] + bootstrap [platform account
++ submission channel = wiring-window prerequisite; staffing source
+no.7].
+benchmarks_refreshed=2026-10-18 (next 7-day window 2026-10-25;
+charter 15h cap met same day). 4-place entry: sec.1 new regulatory
+block + sec.2 execution-standard row 11 + sec.3 source row + sec.4
+record row; intelligence-wall W27 dual rows (main + conclusion,
+R1884 dual-row precedent).
+
+--- (3) five-silence deltas honestly noted ---
+DEC 1 new owner token judged: D-20261018-01 (BigCompute
+restoration-watch ruling; the decision note itself states "BigDomain
+zero new pending rulings", executor = night shift -> non-BigDomain
+dispatch face, acknowledged no-action; baseline rows 356->360,
+tokens merged +D-20261018-01).
+GORD tail batch 10-18 01:53..13:5x five lines all MV-production-lane
+dispatches (@bm-c local i2v burn, @bm-b whisper anchor batch, bm-d
+V100 expansion; zero BigDomain execution faces) -> acked no-action;
+baseline last_order -> 2026-10-18 13:5x; table rows 455 flat,
+gord_new_rows=0.
+fold R550 closeout-precedent honored (round-start gauge 76983B +
+closeout budget over the 78500 line -> tail-3 window [fold R549
+rolling line + R2019 round + R2019 tokens] = 4885B folded to one
+rolling line, 66 tokens mechanically embedded zero-loss, archive
+section verbatim + preop backup logs/state-preop-R2020.bak,
+post 76531B under the line, json.loads verified).
+
+--- (4) self-check four items vs charter ---
+daily crawl = W27 delivered this day; benchmark refreshed =
+2026-10-18 (next 7-day window 2026-10-25; charter 15h cap met same
+day); research chain = A-grade 1-try search + 1-get fulltext, zero
+negatives, zero repealed-text mistakes; signal wall = W27 dual rows
+in place (main + conclusion). evidence pair = this log + rendered
+png. daily reconcile same-day stamp = this round is the first round
+of the day and it delivered the stamp itself.
