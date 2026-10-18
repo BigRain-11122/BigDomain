@@ -2130,6 +2130,21 @@ SUITES = [
     ("ledger-honorcert-yearbook-zeroboundary", os.path.join(
         "ledger", "test_honorcert_yearbook_zeroboundarypersist.py"),
      7),
+    # honorcert yearbook zero-earn boundary gate-family
+    # cross-restart same-code window (R2028): the 14-probe
+    # front-door rejection battery (the R2027 AC-HYZB2 probe
+    # face) rejects with the identical code vector on the
+    # pre-close instance and on both full-stack restart
+    # instances, the counting wrapper keeps its per-instance
+    # 0/1 call semantics, the empty-board grant probe returns
+    # the same granted=0 receipt on every instance with zero
+    # phantom awards, the honest empty envelope stays
+    # byte-identical across the whole window, and the window is
+    # zero-token end to end (AC-HYZG1..HYZG7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-honorcert-yearbook-zeroboundarygate", os.path.join(
+        "ledger",
+        "test_honorcert_yearbook_zeroboundarygatepersist.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen

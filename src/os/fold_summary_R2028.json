@@ -1,0 +1,3 @@
+{
+ "template": "2026-10-18 R2028 收账谱滚窗收拢行·fold R558 承 R2028 收账前置裁定兑现（本轮收账前 gauge 实测 state 76986B+R2028 round+tokens 收账预算必越 78500B 线＝P-2026-09-25-18 第五百五十八刀·开窗序=fold 先于本轮收账 append〔R2026/R2027 同位先例〕·窗=tail 3：fold R557 滚窗行+R2027 round line+R2027 tokens＝3 行 %%WINBYTES%%B 压 1 滚窗行 kept=0·%%TOKCOUNT%% token 全字面嵌零丢失〔catalog 机械提取零手抄·生成器程序化拼接 gen558〕·原文全量保全=archive §R2028 节 3 行 verbatim+preop 备份件 logs/state-preop-R2028.bak+git 史〕——承前滚窗注记：fold R557 滚窗行〔承 fold R551..R556 滚窗域+R2017..R2026 主线谱〕与 R2027 主线行已折入本行，其 token 域全字面随行〔各轮详细叙事 live verbatim in archive 对应节〕——R2027=honorcert 零挣边界世界跨重启例窗交付轮〔AC-HYZB1..HYZB7 全过：三件栈重启逐字节同一+重启后首挣/首授零幻影续接+门族先于任何读 14 探针全拒 E_HC_BAD_ARGS 计数器 0/1 活证+RUNNER 243/243 判据 2053→2060+方言坑实录=PS 捕获首跑 census cd7 FAIL→python 单写者重落 DRIFT-CLEAN〕——catalog: %%TOKENS%%"
+}

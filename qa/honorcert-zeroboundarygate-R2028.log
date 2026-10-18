@@ -1,0 +1,580 @@
+=== R2028 honorcert yearbook zero-earn boundary gate-family cross-restart suite ===
+PASS AC-HYZG1: instance-1 gate vector baseline on the zero-earn boundary world: 14 reject probes (nine yearbooks_combined faces: non-iterable int/None, bare str, bytes, duplicate year, bad alpha/int/None/unicode-digit element years; five grant_year_honors faces: bad year, bool/zero/negative top_n, blank item_id) all raise HonorCertError E_HC_BAD_ARGS; the counting wrapper sees zero honor_board calls across the whole reject batch (0) and then exactly 1 call on the one valid control request (per-instance counter is live); the probe batch leaves every table count identical (8 counters, rejects carry zero side effects); the code vector is recorded as the cross-restart baseline
+PASS AC-HYZG2: instance-2 same-code law: the three-piece close (cl -> cv -> led) and same-path same-config rebuild replay the 14-probe battery with the IDENTICAL code vector (byte-equal to the instance-1 baseline, all E_HC_BAD_ARGS 14/14); the fresh counting wrapper keeps its per-instance semantics (0 reject-batch calls, 1 control call - the counter is wrapper-local so each restart starts honest); the probe batch again leaves every table count identical
+PASS AC-HYZG3: instance-3 same-code law (second restart): the second three-piece close and rebuild replay the 14-probe battery with the identical code vector again (byte-equal across all three instances); the counting wrapper keeps 0/1 semantics; the probe batch leaves every table count identical - the front-door gate family carries zero drift across both full-stack restarts
+PASS AC-HYZG4: empty-board grant probe returns the same receipt on all three instances: each grant_year_honors(2026, 2, civic-honor-2026) call answers granted=0/already=0/honorees=[] (identical across instances); manual SQL cross: civic-honor:2026 certificate rows=0 (zero phantom awards), the festival certificate stays the only collectibles row (festival rows=1, total=1)
+PASS AC-HYZG5: probes never perturb the honest empty envelope: on every instance the four-year request form replays byte-identical before the probe batch, after it, and across the double read (per-instance stable); the envelope is byte-identical across all three instances (cross-instance stable); the pinned values hold - years=[2025..2028] ascending, every block yearbook==[]/certified_count==0/ board_size==0, totals={'years_count': 4, 'certified_count': 0, 'board_size': 0, 'distinct_accounts': 0}, key sets exactly the family contract (sha16=6050646112c70c2f)
+PASS AC-HYZG6: pure-read law + zero-token account: the whole window (three instances x battery x grant probe x read storm) leaves every table count identical to the freshly-built world (8 counters frozen end-to-end) with ledger_tx=0 and ledger_entries=0 throughout - the ensure, reject, and certificate axes all bypass the token ledger; the instance-3 read storm replays the envelope byte-identical (replay purity)
+PASS AC-HYZG7: hygiene: shipped files untouched (config.json + honorcert/civicpoints/collectibles sha16 stable=True); suite source pure ASCII (0 non-ascii chars), zero network imports (0 hits); yearbooks_combined AND grant_year_honors method sources carry zero write statements (hits=none); world tmp outside repo (yes); criteria registered=7
+SUITE PASS 7/7
+
+--- second run (byte capture) ---
+run1 rc=0 run2 rc=0 byte-identical=True sha16=f3fc6544fa0561d3 bytes=3230
+SUITE-DOUBLE-RUN PASS sha16=f3fc6544fa0561d3
+EVIDENCE-WRITER python single-writer utf-8 LF (R1880 dialect law)
+
+=== battery tail (qa/reconcile-all-R20282.log) ===
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-pm1pnovt\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-pm1pnovt\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-pm1pnovt\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (244/244 suites green, reconcile controls 7/7, 268.8s)
+
+=== matrix regen + check ===
+PASS generated docs/sandbox-suite-matrix.md (23788 bytes) - registry suites=244 criteria=2067 evidence=qa/reconcile-all-R2028-2.log green=244/244
+PASS hygiene: pure-ascii source, zero network imports
+matrix regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (23788 bytes, 244 suites, 2067 criteria)
+matrix check exit=0
+
+=== census update + check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: update-baseline (re-freeze gate)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+baseline written: writer-census-baseline.json
+  cmd-raw: 15 names
+  pwsh-capture: 312 names
+  ps-utf16: 98 names
+  other: 100 names
+  tee: 1042 files (healthy dialect, NOT baselined)
+--- post-check (self-run after freeze) ---
+census: files=1567 tee=1042 baselined=525
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+post-check exit=0
+census update exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1567 tee=1042 baselined=525
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census check exit=0
+
+=== fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+fingerprint exit=0
+
+=== runner profile compare + check ===
+== runner wall-time profile ==
+target: qa/reconcile-all-R2028-2.log
+runner: RUNNER PASS (244/244 suites green, reconcile controls 7/7, 268.8s)
+parsed: suites=244 criteria_total=2067 suite_seconds_sum=267.5 runner_total=268.8
+registry: ALIGNED (SUITES has 244 entries)
+profile (rank label seconds criteria sec-per-criterion):
+  1 lobby 38.7 72 0.54
+  2 watermark-sweep 26.1 6 4.35
+  3 watermark-scale-refine 18.3 6 3.05
+  4 minors-wiring 16.9 70 0.24
+  5 watermark-scale-unknown 15.1 6 2.52
+  6 watermark-scale-recover 8.9 7 1.27
+  7 schema-migrate 7.6 21 0.36
+  8 ugc 7.4 37 0.20
+  9 pay-notify-revoke 5.9 7 0.84
+  10 fingerprint-regen 4.0 16 0.25
+  11 watermark-bindbit 3.8 7 0.54
+  12 pay 3.2 16 0.20
+  13 watermark-dualbit 2.8 7 0.40
+  14 member 2.6 16 0.16
+  15 member-banner-board 2.1 17 0.12
+  16 pay-notify-wiring 2.1 7 0.30
+  17 reconcile-daily-census 2.1 8 0.26
+  18 watermark-robust 2.1 6 0.35
+  19 pay-reconcile-persist 2.0 7 0.29
+  20 member-refund-recovery 1.9 7 0.27
+  21 ledger-clawback 1.7 8 0.21
+  22 watermark 1.7 5 0.34
+  23 pay-authorize-idem 1.5 7 0.21
+  24 dual-track 1.4 7 0.20
+  25 member-expiring 1.4 7 0.20
+  26 pay-revoke-reconcile 1.3 7 0.19
+  27 tourstate-persist 1.3 7 0.19
+  28 pay-channel-window 1.2 7 0.17
+  29 reconcile-daily-sentinel 1.2 8 0.15
+  30 opsreview 1.1 7 0.16
+  31 suite-matrix-discovery 1.1 16 0.07
+  32 ugc-verdict-water 1.1 7 0.16
+  33 pay-channel-matrix 1.0 7 0.14
+  34 pay-notify-bannerlimit 1.0 8 0.12
+  35 pay-notify-bannerpersist 0.9 7 0.13
+  36 pay-v3-real 0.9 9 0.10
+  37 pay-v3-window 0.9 6 0.15
+  38 ugc-sec-batch 0.9 22 0.04
+  39 member-expiring-dist 0.8 7 0.11
+  40 pay-authorize 0.8 7 0.11
+  41 pay-notify 0.8 7 0.11
+  42 ugc-export-persist 0.8 7 0.11
+  43 ugc-submit-water 0.8 7 0.11
+  44 member-banner-roll 0.7 7 0.10
+  45 minors-persist 0.7 7 0.10
+  46 ugc-drain-waterpersist 0.7 7 0.10
+  47 ugc-water-journal 0.7 7 0.10
+  48 ugc-water-journalcap 0.7 7 0.10
+  49 ledger 0.6 11 0.05
+  50 ledger-curation 0.6 24 0.02
+  51 ledger-freetrial-caproll 0.6 7 0.09
+  52 ledger-honorcert-yearbookpersist 0.6 6 0.10
+  53 ledger-showcase-statsdual-persist 0.6 7 0.09
+  54 member-privileges-persist 0.6 7 0.09
+  55 member-reminder-scanwire 0.6 7 0.09
+  56 pay-authorize-persist 0.6 7 0.09
+  57 pay-notify-bannerroll 0.6 7 0.09
+  58 pay-v3 0.6 14 0.04
+  59 ugc-pool-waterpersist 0.6 7 0.09
+  60 ugc-reviewdesk-persist 0.6 7 0.09
+  61 ledger-apidev-chainusage 0.5 14 0.04
+  62 ledger-apidev-devboard-ancestry 0.5 7 0.07
+  63 ledger-apidev-devboardpersist 0.5 7 0.07
+  64 ledger-clawback-persist 0.5 7 0.07
+  65 ledger-coverageboard-persist 0.5 7 0.07
+  66 ledger-datasub-coveragedual 0.5 7 0.07
+  67 ledger-proposal-persist 0.5 7 0.07
+  68 ledger-showcase-stats 0.5 7 0.07
+  69 ledger-statsboard-persist 0.5 7 0.07
+  70 member-banner-queue-caproll 0.5 7 0.07
+  71 member-banner-queue-window 0.5 7 0.07
+  72 member-entrytier-persist 0.5 7 0.07
+  73 pay-channel-migrate-persist 0.5 5 0.10
+  74 pay-notify-bannerwin 0.5 7 0.07
+  75 pay-sweep-persist 0.5 7 0.07
+  76 ugc-drain-water 0.5 6 0.08
+  77 ugc-sec-batch-rowpersist 0.5 7 0.07
+  78 ledger-apidev-keyviewpersist 0.4 7 0.06
+  79 ledger-apidev-lifecycle 0.4 8 0.05
+  80 ledger-apimarket 0.4 7 0.06
+  81 ledger-apimarket-devboard 0.4 7 0.06
+  82 ledger-apimarket-devboardwindow 0.4 7 0.06
+  83 ledger-coverageboard-window 0.4 7 0.06
+  84 ledger-curation-combined 0.4 7 0.06
+  85 ledger-curation-combinedboundary 0.4 6 0.07
+  86 ledger-curation-combinedmonth 0.4 7 0.06
+  87 ledger-curation-combinedpersist 0.4 6 0.07
+  88 ledger-curation-hotpersist 0.4 6 0.07
+  89 ledger-datasub-coverage 0.4 7 0.06
+  90 ledger-datasub-coveragedualpersist 0.4 7 0.06
+  91 ledger-devshare-persist 0.4 7 0.06
+  92 ledger-eventtickets 0.4 14 0.03
+  93 ledger-freetrial 0.4 7 0.06
+  94 ledger-freetrial-callengine 0.4 8 0.05
+  95 ledger-freetrial-funnelcap 0.4 7 0.06
+  96 ledger-freetrial-funnelpersist 0.4 7 0.06
+  97 ledger-freetrial-funnelroll 0.4 7 0.06
+  98 ledger-honorcert 0.4 7 0.06
+  99 ledger-honorcert-yearbookspersist 0.4 7 0.06
+  100 ledger-showcase-statsdual 0.4 7 0.06
+  101 ledger-showcase-statslimit 0.4 7 0.06
+  102 member-banner-queue-limit 0.4 8 0.05
+  103 member-banner-queue-persist 0.4 7 0.06
+  104 member-expiring-dist-persist 0.4 7 0.06
+  105 member-expiring-soon-persist 0.4 7 0.06
+  106 member-refund-recovery-persist 0.4 7 0.06
+  107 member-reminder-persist 0.4 7 0.06
+  108 pay-channel-persist 0.4 7 0.06
+  109 reconcile-daily-profile 0.4 7 0.06
+  110 ugc-batch-water 0.4 6 0.07
+  111 ugc-pool-delta 0.4 7 0.06
+  112 ugc-pool-water 0.4 7 0.06
+  113 ugc-sec-batch-roll 0.4 7 0.06
+  114 ugc-sec-batch-rowsroll 0.4 7 0.06
+  115 citymodel 0.3 10 0.03
+  116 civic-behavior-distribution 0.3 6 0.05
+  117 civic-behavior-monthwindow-persist 0.3 7 0.04
+  118 ledger-ads 0.3 7 0.04
+  119 ledger-ads-persist 0.3 7 0.04
+  120 ledger-apidev 0.3 7 0.04
+  121 ledger-apidev-chainusagepersist 0.3 7 0.04
+  122 ledger-apidev-devboard-limit 0.3 14 0.02
+  123 ledger-apidev-devboard-roll 0.3 7 0.04
+  124 ledger-apidev-keyviewwin 0.3 7 0.04
+  125 ledger-apidev-lifecycletrace 0.3 14 0.02
+  126 ledger-apidev-lifecycletracepersist 0.3 7 0.04
+  127 ledger-apidev-lineage 0.3 22 0.01
+  128 ledger-apidev-lineagepersist 0.3 7 0.04
+  129 ledger-apidev-rate 0.3 7 0.04
+  130 ledger-apidev-reject 0.3 7 0.04
+  131 ledger-apidev-rejecttallpersist 0.3 7 0.04
+  132 ledger-apidev-rejectwin 0.3 7 0.04
+  133 ledger-apidev-usagekind 0.3 8 0.04
+  134 ledger-apidev-usagekindpersist 0.3 7 0.04
+  135 ledger-apidev-usagelog 0.3 7 0.04
+  136 ledger-apidev-usagelogpersist 0.3 7 0.04
+  137 ledger-apidev-usagewin 0.3 8 0.04
+  138 ledger-apimarket-devboardboundary 0.3 7 0.04
+  139 ledger-apimarket-devboardmonthpersist 0.3 7 0.04
+  140 ledger-apimarket-devsalespersist 0.3 7 0.04
+  141 ledger-apimarket-persist 0.3 7 0.04
+  142 ledger-civicpersist 0.3 7 0.04
+  143 ledger-companion-persist 0.3 7 0.04
+  144 ledger-curation-coldpersist 0.3 6 0.05
+  145 ledger-curation-regpersist 0.3 7 0.04
+  146 ledger-datasub-persist 0.3 7 0.04
+  147 ledger-devshare 0.3 7 0.04
+  148 ledger-eventtickets-boardpersist 0.3 7 0.04
+  149 ledger-eventtickets-boardwin 0.3 7 0.04
+  150 ledger-eventtickets-roll 0.3 7 0.04
+  151 ledger-eventtickets-sessionpersist 0.3 7 0.04
+  152 ledger-expedite 0.3 7 0.04
+  153 ledger-expedite-persist 0.3 7 0.04
+  154 ledger-festival-persist 0.3 7 0.04
+  155 ledger-freetrial-callaccount 0.3 8 0.04
+  156 ledger-freetrial-callkind 0.3 8 0.04
+  157 ledger-freetrial-callmonth 0.3 7 0.04
+  158 ledger-freetrial-callplan 0.3 8 0.04
+  159 ledger-freetrial-caplimit 0.3 7 0.04
+  160 ledger-freetrial-cappersist 0.3 8 0.04
+  161 ledger-freetrial-capusage 0.3 8 0.04
+  162 ledger-freetrial-fivepersist 0.3 7 0.04
+  163 ledger-freetrial-funnel 0.3 7 0.04
+  164 ledger-freetrial-funnelwin 0.3 7 0.04
+  165 ledger-growth-archive-persist 0.3 7 0.04
+  166 ledger-honorcert-multiyear 0.3 7 0.04
+  167 ledger-honorcert-persist 0.3 7 0.04
+  168 ledger-honorcert-yearbook 0.3 7 0.04
+  169 ledger-incentive 0.3 7 0.04
+  170 ledger-incentive-persist 0.3 7 0.04
+  171 ledger-observation-persist 0.3 7 0.04
+  172 ledger-proposal 0.3 12 0.02
+  173 ledger-showcase 0.3 7 0.04
+  174 ledger-showcase-statscap-persist 0.3 7 0.04
+  175 ledger-showcase-statsmonth-persist 0.3 7 0.04
+  176 ledger-showcase-statsmonth-rere-persist 0.3 7 0.04
+  177 ledger-showcase-statsmonthboundary-persist 0.3 7 0.04
+  178 ledger-showcase-statsmonthreplace-persist 0.3 7 0.04
+  179 ledger-showcase-statsmonthretract-persist 0.3 7 0.04
+  180 ledger-showcaseview-persist 0.3 7 0.04
+  181 ledger-showroom 0.3 7 0.04
+  182 ledger-showroom-persist 0.3 7 0.04
+  183 ledger-sistercity-persist 0.3 7 0.04
+  184 ledger-studio-persist 0.3 7 0.04
+  185 ledger-tmarket 0.3 7 0.04
+  186 ledger-tmarket-persist 0.3 7 0.04
+  187 ledger-venue 0.3 7 0.04
+  188 ledger-venue-persist 0.3 7 0.04
+  189 liveroom-persist 0.3 7 0.04
+  190 lobby-persist 0.3 7 0.04
+  191 member-balanceface-persist 0.3 7 0.04
+  192 member-banner-board-persist 0.3 7 0.04
+  193 member-birthcert-persist 0.3 7 0.04
+  194 ugc-ingest-waterwire 0.3 6 0.05
+  195 ugc-sec-batch-bannerpersist 0.3 7 0.04
+  196 ugc-water-celltotals 0.3 7 0.04
+  197 ugc-water-journalwin 0.3 7 0.04
+  198 ugc-water-kindtally 0.3 7 0.04
+  199 ugc-water-monthlyflow 0.3 7 0.04
+  200 benchgate 0.2 11 0.02
+  201 civic-behavior-monthwindow 0.2 7 0.03
+  202 civic-competition-monthwindow 0.2 7 0.03
+  203 civic-competition-monthwindow-persist 0.2 7 0.03
+  204 compliance 0.2 15 0.01
+  205 ledger-civicpoints 0.2 20 0.01
+  206 ledger-collectibles 0.2 7 0.03
+  207 ledger-collectibles-persist 0.2 7 0.03
+  208 ledger-companion 0.2 7 0.03
+  209 ledger-datasub 0.2 7 0.03
+  210 ledger-effects 0.2 7 0.03
+  211 ledger-effects-persist 0.2 7 0.03
+  212 ledger-eventtickets-boardlimit 0.2 7 0.03
+  213 ledger-eventtickets-telescope 0.2 6 0.03
+  214 ledger-festival 0.2 7 0.03
+  215 ledger-freetrial-callroll 0.2 7 0.03
+  216 ledger-growth-archive 0.2 7 0.03
+  217 ledger-honorcert-yearbook-zeroboundary 0.2 7 0.03
+  218 ledger-honorcert-yearbook-zeroboundarygate 0.2 7 0.03
+  219 ledger-honorcert-yearbooksubsetaxis 0.2 7 0.03
+  220 ledger-identity 0.2 7 0.03
+  221 ledger-identity-persist 0.2 7 0.03
+  222 ledger-metered 0.2 7 0.03
+  223 ledger-metered-persist 0.2 7 0.03
+  224 ledger-observation 0.2 7 0.03
+  225 ledger-proposal-progressboundary-persist 0.2 7 0.03
+  226 ledger-proposal-progresspersist 0.2 7 0.03
+  227 ledger-props 0.2 7 0.03
+  228 ledger-props-persist 0.2 7 0.03
+  229 ledger-reports 0.2 7 0.03
+  230 ledger-reports-persist 0.2 7 0.03
+  231 ledger-settlement-persist 0.2 7 0.03
+  232 ledger-showcase-statsboundary-persist 0.2 7 0.03
+  233 ledger-showcase-statsmonth 0.2 7 0.03
+  234 ledger-sistercity 0.2 7 0.03
+  235 ledger-studio 0.2 7 0.03
+  236 liveroom 0.2 10 0.02
+  237 member-entry 0.2 7 0.03
+  238 runner-profile-daily 0.2 12 0.02
+  239 tourstate 0.2 7 0.03
+  240 ugc-water-journalboardpersist 0.2 7 0.03
+  241 ugc-water-journalroll 0.2 7 0.03
+  242 ugc-water-sisterpersist 0.2 12 0.02
+  243 ledger-settlement 0.1 7 0.01
+  244 minors 0.1 19 0.01
+top5-hotspots: lobby 38.7s, watermark-sweep 26.1s, watermark-scale-refine 18.3s, minors-wiring 16.9s, watermark-scale-unknown 15.1s
+== drift compare vs qa/reconcile-all-R2019.log ==
+threshold: drift iff cur > base + max(2.0s, 0.5*base)
+suite lobby base=39.7s cur=38.7s delta=-1.0s slack=19.85s OK
+suite watermark-sweep base=26.9s cur=26.1s delta=-0.8s slack=13.45s OK
+suite watermark-scale-refine base=20.0s cur=18.3s delta=-1.7s slack=10.00s OK
+suite minors-wiring base=12.4s cur=16.9s delta=+4.5s slack=6.20s OK
+suite watermark-scale-unknown base=16.6s cur=15.1s delta=-1.5s slack=8.30s OK
+suite watermark-scale-recover base=9.8s cur=8.9s delta=-0.9s slack=4.90s OK
+suite schema-migrate base=8.5s cur=7.6s delta=-0.9s slack=4.25s OK
+suite ugc base=6.4s cur=7.4s delta=+1.0s slack=3.20s OK
+suite pay-notify-revoke base=5.5s cur=5.9s delta=+0.4s slack=2.75s OK
+suite fingerprint-regen base=5.3s cur=4.0s delta=-1.3s slack=2.65s OK
+suite watermark-bindbit base=4.5s cur=3.8s delta=-0.7s slack=2.25s OK
+suite pay base=3.4s cur=3.2s delta=-0.2s slack=2.00s OK
+suite watermark-dualbit base=4.3s cur=2.8s delta=-1.5s slack=2.15s OK
+suite member base=2.4s cur=2.6s delta=+0.2s slack=2.00s OK
+suite member-banner-board base=1.3s cur=2.1s delta=+0.8s slack=2.00s OK
+suite pay-notify-wiring base=1.3s cur=2.1s delta=+0.8s slack=2.00s OK
+suite reconcile-daily-census base=1.3s cur=2.1s delta=+0.8s slack=2.00s OK
+suite watermark-robust base=2.8s cur=2.1s delta=-0.7s slack=2.00s OK
+suite pay-reconcile-persist base=1.8s cur=2.0s delta=+0.2s slack=2.00s OK
+suite member-refund-recovery base=1.1s cur=1.9s delta=+0.8s slack=2.00s OK
+suite ledger-clawback base=2.0s cur=1.7s delta=-0.3s slack=2.00s OK
+suite watermark base=1.8s cur=1.7s delta=-0.1s slack=2.00s OK
+suite pay-authorize-idem base=1.6s cur=1.5s delta=-0.1s slack=2.00s OK
+suite dual-track base=1.8s cur=1.4s delta=-0.4s slack=2.00s OK
+suite member-expiring base=1.1s cur=1.4s delta=+0.3s slack=2.00s OK
+suite pay-revoke-reconcile base=1.5s cur=1.3s delta=-0.2s slack=2.00s OK
+suite tourstate-persist base=1.7s cur=1.3s delta=-0.4s slack=2.00s OK
+suite pay-channel-window base=1.0s cur=1.2s delta=+0.2s slack=2.00s OK
+suite reconcile-daily-sentinel base=0.9s cur=1.2s delta=+0.3s slack=2.00s OK
+suite opsreview base=1.6s cur=1.1s delta=-0.5s slack=2.00s OK
+suite suite-matrix-discovery base=1.4s cur=1.1s delta=-0.3s slack=2.00s OK
+suite ugc-verdict-water base=0.7s cur=1.1s delta=+0.4s slack=2.00s OK
+suite pay-channel-matrix base=1.0s cur=1.0s delta=+0.0s slack=2.00s OK
+suite pay-notify-bannerlimit base=0.5s cur=1.0s delta=+0.5s slack=2.00s OK
+suite pay-notify-bannerpersist base=0.4s cur=0.9s delta=+0.5s slack=2.00s OK
+suite pay-v3-real base=0.6s cur=0.9s delta=+0.3s slack=2.00s OK
+suite pay-v3-window base=0.6s cur=0.9s delta=+0.3s slack=2.00s OK
+suite ugc-sec-batch base=0.7s cur=0.9s delta=+0.2s slack=2.00s OK
+suite member-expiring-dist base=0.6s cur=0.8s delta=+0.2s slack=2.00s OK
+suite pay-authorize base=0.5s cur=0.8s delta=+0.3s slack=2.00s OK
+suite pay-notify base=0.9s cur=0.8s delta=-0.1s slack=2.00s OK
+suite ugc-export-persist base=1.0s cur=0.8s delta=-0.2s slack=2.00s OK
+suite ugc-submit-water base=0.6s cur=0.8s delta=+0.2s slack=2.00s OK
+suite member-banner-roll base=0.3s cur=0.7s delta=+0.4s slack=2.00s OK
+suite minors-persist base=0.3s cur=0.7s delta=+0.4s slack=2.00s OK
+suite ugc-drain-waterpersist base=0.9s cur=0.7s delta=-0.2s slack=2.00s OK
+suite ugc-water-journal base=0.7s cur=0.7s delta=+0.0s slack=2.00s OK
+suite ugc-water-journalcap base=0.3s cur=0.7s delta=+0.4s slack=2.00s OK
+suite ledger base=1.0s cur=0.6s delta=-0.4s slack=2.00s OK
+suite ledger-curation base=0.4s cur=0.6s delta=+0.2s slack=2.00s OK
+suite ledger-freetrial-caproll base=0.3s cur=0.6s delta=+0.3s slack=2.00s OK
+suite ledger-honorcert-yearbookpersist base=0.4s cur=0.6s delta=+0.2s slack=2.00s OK
+suite ledger-showcase-statsdual-persist base=0.3s cur=0.6s delta=+0.3s slack=2.00s OK
+suite member-privileges-persist base=0.4s cur=0.6s delta=+0.2s slack=2.00s OK
+suite member-reminder-scanwire base=0.5s cur=0.6s delta=+0.1s slack=2.00s OK
+suite pay-authorize-persist base=0.5s cur=0.6s delta=+0.1s slack=2.00s OK
+suite pay-notify-bannerroll base=0.4s cur=0.6s delta=+0.2s slack=2.00s OK
+suite pay-v3 base=0.4s cur=0.6s delta=+0.2s slack=2.00s OK
+suite ugc-pool-waterpersist base=0.6s cur=0.6s delta=+0.0s slack=2.00s OK
+suite ugc-reviewdesk-persist base=0.8s cur=0.6s delta=-0.2s slack=2.00s OK
+suite ledger-apidev-chainusage base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-devboard-ancestry base=0.3s cur=0.5s delta=+0.2s slack=2.00s OK
+suite ledger-apidev-devboardpersist base=0.3s cur=0.5s delta=+0.2s slack=2.00s OK
+suite ledger-clawback-persist base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ledger-coverageboard-persist base=0.7s cur=0.5s delta=-0.2s slack=2.00s OK
+suite ledger-datasub-coveragedual base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite ledger-proposal-persist base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite ledger-showcase-stats base=0.3s cur=0.5s delta=+0.2s slack=2.00s OK
+suite ledger-statsboard-persist base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite member-banner-queue-caproll base=0.3s cur=0.5s delta=+0.2s slack=2.00s OK
+suite member-banner-queue-window base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite member-entrytier-persist base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-channel-migrate-persist base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite pay-notify-bannerwin base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite pay-sweep-persist base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite ugc-drain-water base=0.5s cur=0.5s delta=+0.0s slack=2.00s OK
+suite ugc-sec-batch-rowpersist base=0.4s cur=0.5s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-keyviewpersist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-apidev-lifecycle base=0.5s cur=0.4s delta=-0.1s slack=2.00s OK
+suite ledger-apimarket base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-apimarket-devboard base=0.5s cur=0.4s delta=-0.1s slack=2.00s OK
+suite ledger-apimarket-devboardwindow NEW-SUITE (no baseline entry)
+suite ledger-coverageboard-window base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-curation-combined base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-curation-combinedboundary base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-curation-combinedmonth base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-curation-combinedpersist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-curation-hotpersist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-datasub-coverage base=0.5s cur=0.4s delta=-0.1s slack=2.00s OK
+suite ledger-datasub-coveragedualpersist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-devshare-persist base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-eventtickets base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-freetrial base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-freetrial-callengine base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-freetrial-funnelcap base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-funnelpersist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-freetrial-funnelroll base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-honorcert base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-honorcert-yearbookspersist NEW-SUITE (no baseline entry)
+suite ledger-showcase-statsdual base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ledger-showcase-statslimit base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite member-banner-queue-limit base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite member-banner-queue-persist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite member-expiring-dist-persist base=0.6s cur=0.4s delta=-0.2s slack=2.00s OK
+suite member-expiring-soon-persist base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite member-refund-recovery-persist base=0.5s cur=0.4s delta=-0.1s slack=2.00s OK
+suite member-reminder-persist base=0.5s cur=0.4s delta=-0.1s slack=2.00s OK
+suite pay-channel-persist base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite reconcile-daily-profile base=0.6s cur=0.4s delta=-0.2s slack=2.00s OK
+suite ugc-batch-water base=0.4s cur=0.4s delta=+0.0s slack=2.00s OK
+suite ugc-pool-delta base=0.6s cur=0.4s delta=-0.2s slack=2.00s OK
+suite ugc-pool-water base=0.8s cur=0.4s delta=-0.4s slack=2.00s OK
+suite ugc-sec-batch-roll base=0.3s cur=0.4s delta=+0.1s slack=2.00s OK
+suite ugc-sec-batch-rowsroll base=0.2s cur=0.4s delta=+0.2s slack=2.00s OK
+suite citymodel base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite civic-behavior-distribution base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite civic-behavior-monthwindow-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-ads base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-ads-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-apidev-chainusagepersist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-devboard-limit base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-devboard-roll base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-keyviewwin base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-lifecycletrace base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-lifecycletracepersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-lineage base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-lineagepersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-rate base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-reject base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-rejecttallpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-rejectwin base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-usagekind base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ledger-apidev-usagekindpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-usagelog base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-apidev-usagelogpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-apidev-usagewin base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ledger-apimarket-devboardboundary NEW-SUITE (no baseline entry)
+suite ledger-apimarket-devboardmonthpersist NEW-SUITE (no baseline entry)
+suite ledger-apimarket-devsalespersist base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-apimarket-persist base=0.7s cur=0.3s delta=-0.4s slack=2.00s OK
+suite ledger-civicpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-companion-persist base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-curation-coldpersist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-curation-regpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-datasub-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-devshare base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-eventtickets-boardpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-eventtickets-boardwin base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-eventtickets-roll base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-eventtickets-sessionpersist base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-expedite base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-expedite-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-festival-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-freetrial-callaccount base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-freetrial-callkind base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-freetrial-callmonth base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-callplan base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-caplimit base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-cappersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-capusage base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-fivepersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-freetrial-funnel base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ledger-freetrial-funnelwin base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-growth-archive-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-honorcert-multiyear base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-honorcert-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-honorcert-yearbook base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ledger-incentive base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-incentive-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-observation-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-proposal base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-showcase base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showcase-statscap-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showcase-statsmonth-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showcase-statsmonth-rere-persist NEW-SUITE (no baseline entry)
+suite ledger-showcase-statsmonthboundary-persist base=0.2s cur=0.3s delta=+0.1s slack=2.00s OK
+suite ledger-showcase-statsmonthreplace-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-showcase-statsmonthretract-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showcaseview-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-showroom base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ledger-showroom-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-sistercity-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-studio-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ledger-tmarket base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-tmarket-persist base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ledger-venue base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ledger-venue-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite liveroom-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite lobby-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite member-balanceface-persist base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite member-banner-board-persist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite member-birthcert-persist base=0.5s cur=0.3s delta=-0.2s slack=2.00s OK
+suite ugc-ingest-waterwire base=0.4s cur=0.3s delta=-0.1s slack=2.00s OK
+suite ugc-sec-batch-bannerpersist base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ugc-water-celltotals base=0.6s cur=0.3s delta=-0.3s slack=2.00s OK
+suite ugc-water-journalwin base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ugc-water-kindtally base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite ugc-water-monthlyflow base=0.3s cur=0.3s delta=+0.0s slack=2.00s OK
+suite benchgate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite civic-behavior-monthwindow base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite civic-competition-monthwindow base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite civic-competition-monthwindow-persist base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite compliance base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-civicpoints base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-collectibles base=0.7s cur=0.2s delta=-0.5s slack=2.00s OK
+suite ledger-collectibles-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-companion base=0.5s cur=0.2s delta=-0.3s slack=2.00s OK
+suite ledger-datasub base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-effects base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-effects-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-eventtickets-boardlimit base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ledger-eventtickets-telescope base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite ledger-festival base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite ledger-freetrial-callroll base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-growth-archive base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite ledger-honorcert-yearbook-zeroboundary NEW-SUITE (no baseline entry)
+suite ledger-honorcert-yearbook-zeroboundarygate NEW-SUITE (no baseline entry)
+suite ledger-honorcert-yearbooksubsetaxis NEW-SUITE (no baseline entry)
+suite ledger-identity base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite ledger-identity-persist base=0.5s cur=0.2s delta=-0.3s slack=2.00s OK
+suite ledger-metered base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-metered-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-observation base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-proposal-progressboundary-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-proposal-progresspersist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-props base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-props-persist base=0.5s cur=0.2s delta=-0.3s slack=2.00s OK
+suite ledger-reports base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-reports-persist base=0.4s cur=0.2s delta=-0.2s slack=2.00s OK
+suite ledger-settlement-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-showcase-statsboundary-persist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-showcase-statsmonth base=0.5s cur=0.2s delta=-0.3s slack=2.00s OK
+suite ledger-sistercity base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-studio base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite liveroom base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite member-entry base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite runner-profile-daily base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite tourstate base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ugc-water-journalboardpersist base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ugc-water-journalroll base=0.2s cur=0.2s delta=+0.0s slack=2.00s OK
+suite ugc-water-sisterpersist base=0.3s cur=0.2s delta=-0.1s slack=2.00s OK
+suite ledger-settlement base=0.2s cur=0.1s delta=-0.1s slack=2.00s OK
+suite minors base=0.1s cur=0.1s delta=+0.0s slack=2.00s OK
+total-shared base=272.9s cur=265.2s delta=-7.7s slack=136.45s OK (shared=236 labels)
+verdict: DRIFT-CLEAN (236 compared, 0 flagged)
+profile compare exit=0
+== stale-baseline check ==
+baseline source: qa/reconcile-all-R2019.log
+check: byte-identical PASS
+profile check exit=0
+
+=== runner profile daily check ===
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+profile daily exit=0
