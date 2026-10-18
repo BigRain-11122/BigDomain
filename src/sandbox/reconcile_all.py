@@ -2027,6 +2027,18 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboardwindow", os.path.join(
         "ledger", "test_apimarket_devboardwindow.py"), 7),
+    # apimarket dev_sales_board month-window cross-restart
+    # persist window (R2023): pre-close pinning of the default /
+    # SEP / OCT window boards + record-time separation probe,
+    # full-stack restart byte-identical reads, post-restart NOV
+    # continuation with frozen SEP / OCT boards and zero-cache
+    # NOV / default recompute, bad-window gate family identical
+    # codes on all three instances, append-only frozen row
+    # prefixes + per-purchase ledger tx provenance, third
+    # instance stability (AC-AMWP1..AMWP7 pre-registered in
+    # the R2023 explore-queue claim row).
+    ("ledger-apimarket-devboardmonthpersist", os.path.join(
+        "ledger", "test_apimarket_devboardmonthpersist.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

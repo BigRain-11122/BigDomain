@@ -1,0 +1,74 @@
+=== R2023 apimarket dev_sales_board month-window persist suite ===
+PASS AC-AMWP1: pre-close pinning: default envelope ['board', 'disclaimer'], window envelope adds the echo key; default / SEP / OCT boards pinned [(ada,2,3,23,17,6),(carol,1,1,10,7,3),(dan,1,0,0,0,0)] / [(ada,1,1,10,7,3),(carol,1,1,10,7,3),(dan,0,0,0,0,0)] / [(ada,1,2,13,10,3),(carol,0,0,0,0,0),(dan,1,0,0,0,0)]; per-row conservation; record-time prefix manual cross equal on all three reads; double-call identical; separation probe a1 listed 2026-09 but its eve sale recorded 2026-10; 14 bad window forms all reject E_AM_BAD_WINDOW before any read with digests and ledger_tx constant
+PASS AC-AMWP2: full-stack close (am -> dk -> metered -> led) then same db_path same cfg bytes rebuild: default / SEP / OCT window reads all byte-identical to the pre-close snapshots (sort_keys dumps; window echo key survives the restart; zero in-memory drift in the derived month-window boards)
+PASS AC-AMWP3: post-restart continuation at the NOV frozen clock (carol publishes c2 price 5; bob buys dan's OCT-listed d1; eve buys c2, both purchases recorded NOV): SEP and OCT window boards stay byte-frozen to the pre-close snapshots (cross-window zero leakage); the NOV board recomputes zero-cache and equals the manual cross [(dan,0,1,7,5,2),(carol,1,1,5,4,1),(ada,0,0,0,0,0)]; the default board grows to [(ada,2,3,23,17,6),(carol,2,2,15,11,4),(dan,1,1,7,5,2)] == manual recompute and differs from the pre-close default; conservation holds per row
+PASS AC-AMWP4: gate family identical codes across the restart: the 14 bad window forms all reject E_AM_BAD_WINDOW on the restarted instance (code-face assertion) with the market digests and ledger_tx constant across the probe batch
+PASS AC-AMWP5: append-only frozen prefixes + ledger provenance: the original four listing rows and four purchase rows are byte-frozen as rowid prefixes across the restart and the continuation (new rows pure tail appends); all six purchases carry non-empty pairwise distinct spend_tx and dev_share_tx strings, every one present in the ledger_tx id set (cross-db provenance, spend and share legs disjoint); the two NOV purchases grew ledger_tx by exactly 4 (spend + share per purchase)
+PASS AC-AMWP6: pure-read law: the restart + continuation read batches (default + four windows, twice) left the apimarket three-table digests and ledger_tx constant; dev_sales_board method source carries zero mutation statements; the five product files (apimarket.py, apidev.py, ledger.py, both shipped config.json) sha256 unchanged - suite-only round
+PASS AC-AMWP7: third instance (second full-stack restart, same dbs): default / SEP / OCT / NOV reads byte-identical to the instance-two end state (SEP / OCT still equal the original pre-close snapshots) and repeat reads identical to themselves; the bad-window gate family rejects identically on the third instance with zero side effects; hygiene: suite source pure ASCII (23938 bytes), zero network imports on true import lines, world db in system tmp outside the repo, criteria count == 7
+SUITE PASS (7/7 criteria green)
+
+--- second run (byte capture) ---
+run1 rc=0 run2 rc=0 byte-identical=True sha16=8c81a689059ffc48 bytes=3022
+SUITE-DOUBLE-RUN PASS sha16=8c81a689059ffc48
+
+=== battery tail (qa/reconcile-all-R2023.log) ===
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jmchirgo\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jmchirgo\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-jmchirgo\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (239/239 suites green, reconcile controls 7/7, 199.6s)
+
+=== matrix regen + check ===
+PASS generated docs/sandbox-suite-matrix.md (23195 bytes) - registry suites=239 criteria=2032 evidence=qa/reconcile-all-R2023.log green=239/239
+PASS hygiene: pure-ascii source, zero network imports
+matrix regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (23195 bytes, 239 suites, 2032 criteria)
+matrix check exit=0
+
+=== census update + check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: update-baseline (re-freeze gate)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+baseline written: writer-census-baseline.json
+  cmd-raw: 15 names
+  pwsh-capture: 312 names
+  ps-utf16: 98 names
+  other: 99 names
+  tee: 1031 files (healthy dialect, NOT baselined)
+--- post-check (self-run after freeze) ---
+census: files=1555 tee=1031 baselined=524
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+post-check exit=0
+census update exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1555 tee=1031 baselined=524
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census check exit=0
+
+=== fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+fingerprint exit=0
+
+=== runner profile daily check ===
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+profile exit=0
+erratum note: the first collect pass invoked the fingerprint sentinel with a bare chain path (FileNotFoundError, exit 1) and an early append captured unnormalized CRLF child stdout - both corrected in this regenerated log (LF-only, corrected chain path, verdict CLEAN domains=5)
