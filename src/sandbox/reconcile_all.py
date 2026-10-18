@@ -2115,6 +2115,21 @@ SUITES = [
     # pre-registered in state/queue/explore.md).
     ("ledger-honorcert-yearbooksubsetaxis", os.path.join(
         "ledger", "test_honorcert_yearbook_subsetaxis.py"), 7),
+    # honorcert yearbook zero-earn boundary cross-restart window
+    # (R2027): a real product-path world where the ledger and
+    # collectibles domains hold data (four ensured accounts, two
+    # registered behaviors, one festival-namespace certificate)
+    # while the earn axis is empty returns an honest empty
+    # combined envelope across the request family, survives the
+    # three-piece stack restart byte-identical, keeps every
+    # front-door gate enforcing before any referenced read, and
+    # continues with zero phantom after the restart's first earn
+    # and first grant (festival certificate never leaks into a
+    # block; re-grant idempotent) (AC-HYZB1..HYZB7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-honorcert-yearbook-zeroboundary", os.path.join(
+        "ledger", "test_honorcert_yearbook_zeroboundarypersist.py"),
+     7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen
