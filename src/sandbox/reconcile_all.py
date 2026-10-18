@@ -2631,6 +2631,14 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonthrerepersist.py"), 7),
+    # R2033 (criteria pre-registered in the backlog R2033 claim row
+    # BEFORE this wiring existed - honesty law; AC-FN8): the
+    # FUNNEL-LOOP v0.1 four-ring suite (docs/ops/
+    # FUNNEL-AUTOMATION-PLAN-v1.md; AC-FN1..FN7 delivered R2032)
+    # enters the daily battery. Pure wiring - the suite file itself
+    # is unchanged. The suite's own main() prints exactly eight
+    # case PASS-lines plus the SUITE summary line (8 criteria).
+    ("funnel", os.path.join("funnel", "test_funnel_daily.py"), 8),
     ]
 
 FAILS = 0

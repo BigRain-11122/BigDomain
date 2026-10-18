@@ -59,6 +59,7 @@ import datetime
 import json
 import os
 import sqlite3
+import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CONFIG = os.path.join(BASE, "config.json")
@@ -408,3 +409,83 @@ class FunnelDaily:
         r4 = self.book_token_flows(flows_inbox, day)
         env = self.rollup(day)
         return {"ring1": r1, "ring2": r2, "ring3": r3, "ring4": r4, "envelope": env}
+
+
+def main(argv=None):
+    """FUNNEL-STEP daily CLI face (R2033 wiring; canon plan section 3:
+    an independently runnable CLI in the reconcile_daily shape - the
+    OSLoop daily round calls this with the CALLER-INJECTED day, so the
+    zero-wall-clock law of the library stays intact (--day required).
+
+    Default carrier paths live under the repo-root state/funnel/ face
+    (plan section 3): funnel.db + inbox/leads + inbox/orders +
+    inbox/flows. Missing inbox dirs are created empty HERE, in the
+    wiring layer - this CLI is the caller, so the library law (the
+    caller provides the inbox dirs) is unchanged.
+
+    Evidence face: the envelope prints as ascii-escaped JSON (coding
+    law - the evidence log stays single-dialect ASCII no matter what
+    the UTF-8 config carries). Exit 0 = gate PASS; exit 2 = gate FAIL
+    (fail-closed: a banned-word hit never books a green day); a bad
+    --day raises E_FN_BAD_ARGS (zero new rows). Pure ASCII source.
+    """
+    import argparse
+
+    state_face = os.path.normpath(
+        os.path.join(BASE, "..", "..", "..", "state", "funnel"))
+    parser = argparse.ArgumentParser(
+        description="FUNNEL-STEP daily four-ring run (plan section 3)")
+    parser.add_argument("--day", required=True,
+                        help="YYYY-MM-DD, caller-injected (zero wall-clock)")
+    parser.add_argument("--db",
+                        default=os.path.join(state_face, "funnel.db"))
+    parser.add_argument("--leads-inbox",
+                        default=os.path.join(state_face, "inbox", "leads"))
+    parser.add_argument("--orders-inbox",
+                        default=os.path.join(state_face, "inbox", "orders"))
+    parser.add_argument("--flows-inbox",
+                        default=os.path.join(state_face, "inbox", "flows"))
+    parser.add_argument("--config", default=DEFAULT_CONFIG)
+    parser.add_argument("--evidence", default=None,
+                        help="optional self-tee evidence log path (utf-8"
+                             " no-BOM, LF - single dialect by construction;"
+                             " the shell never owns the evidence bytes)")
+    args = parser.parse_args(argv)
+
+    os.makedirs(os.path.dirname(os.path.abspath(args.db)), exist_ok=True)
+    for d in (args.leads_inbox, args.orders_inbox, args.flows_inbox):
+        os.makedirs(d, exist_ok=True)
+
+    f = FunnelDaily(args.db, config_path=args.config)
+    try:
+        out = f.run_daily(args.leads_inbox, args.orders_inbox,
+                          args.flows_inbox, args.day)
+    finally:
+        f.close()
+    env = out["envelope"]
+    lines = [
+        "FUNNEL-DAILY day=%s db=%s" % (args.day, args.db),
+        "ring1 leads: files=%d seen=%d new=%d"
+        % (out["ring1"]["files_leads"], out["ring1"]["leads_seen"],
+           out["ring1"]["leads_new"]),
+        "ring2 dispatches: new=%d routes=%s"
+        % (out["ring2"]["dispatches_new"],
+           json.dumps(out["ring2"]["routes"], sort_keys=True)),
+        "ring3 orders: seen=%d new=%d"
+        % (out["ring3"]["orders_seen"], out["ring3"]["orders_new"]),
+        "ring4 flows: seen=%d new=%d"
+        % (out["ring4"]["flows_seen"], out["ring4"]["flows_new"]),
+        "envelope %s" % json.dumps(env, ensure_ascii=True, sort_keys=True),
+        "FUNNEL-DAILY %s gate=%s verdict=%s"
+        % (args.day, env["gate"], env["verdict_line"]),
+    ]
+    for line in lines:
+        print(line)
+    if args.evidence:
+        with open(args.evidence, "w", encoding="utf-8", newline="\n") as h:
+            h.write("\n".join(lines) + "\n")
+    return 0 if env["gate"] == "PASS" else 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -37,3 +37,5 @@ docs/_trash/
 .codely-cli/
 # Codely browser-tool session artifacts (page snapshots/console logs; evidence lives in qa/)
 .playwright-mcp/
+# FUNNEL-LOOP carrier sqlite db (state/funnel: binary data face, evidence lives in qa/)
+state/funnel/*.db
