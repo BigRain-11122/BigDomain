@@ -1,0 +1,23 @@
+--- R2021 evidence: suite double-run byte-identity (LF-normalized) ---
+--- run 1 rc=0 sha16=687c63db8e0e1303 ---
+PASS AC-SSMRR1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMRR2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMRR3: post-restart retract (R2018 law re-anchored): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMRR4: re-place bounce (R2019 law re-anchored): already-displayed probe=True; events 6->7 (probe zero-rows); wcur {3,1,2} identity=True (2==3-1); full {6,1,5} identity=True (5==6-1); wprev frozen=True; view_cur=[5, 4]; chronicle 5xplace+retract+place; tour 5 stops gate re-joins at the tail
+PASS AC-SSMRR5: re-retraction core: events 7->8 (ledger_tx constant=True); wcur {3,2,1} identity=True (1==3-2); full {6,2,4} identity=True (4==6-2); wprev frozen=True; view_prev frozen=True; view_cur=[5] (gate leaves again); chronicle 5xplace+retract+place+retract; tour 4 stops; not-displayed probe=True zero-rows=True
+PASS AC-SSMRR6: restart #2 (third instance): 11/11 forms byte-identical vs post-re-retract snapshots drift=[] (the re-retract live state persists across the restart); read storm x2: events constant=True (8 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True; gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMRR7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- run 2 rc=0 sha16=687c63db8e0e1303 ---
+PASS AC-SSMRR1: mixed-month world anchors: full alpha {5,0,5} mu {0,0,0} identity=True; wprev {3,0,3}; wcur {2,0,2}; view prev=[1, 2, 3] cur=[4, 5]; chronicle 5xplace; tour 5 stops
+PASS AC-SSMRR2: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 11/11 forms byte-identical drift=[]
+PASS AC-SSMRR3: post-restart retract (R2018 law re-anchored): wcur {2,1,1} identity=True; full {5,1,4} identity=True; wprev byte-frozen=True; view_prev frozen=True; view_cur=[5]; chronicle 5xplace+retract; tour 4 stops
+PASS AC-SSMRR4: re-place bounce (R2019 law re-anchored): already-displayed probe=True; events 6->7 (probe zero-rows); wcur {3,1,2} identity=True (2==3-1); full {6,1,5} identity=True (5==6-1); wprev frozen=True; view_cur=[5, 4]; chronicle 5xplace+retract+place; tour 5 stops gate re-joins at the tail
+PASS AC-SSMRR5: re-retraction core: events 7->8 (ledger_tx constant=True); wcur {3,2,1} identity=True (1==3-2); full {6,2,4} identity=True (4==6-2); wprev frozen=True; view_prev frozen=True; view_cur=[5] (gate leaves again); chronicle 5xplace+retract+place+retract; tour 4 stops; not-displayed probe=True zero-rows=True
+PASS AC-SSMRR6: restart #2 (third instance): 11/11 forms byte-identical vs post-re-retract snapshots drift=[] (the re-retract live state persists across the restart); read storm x2: events constant=True (8 rows), both passes byte-identical and equal to the restart-2 snapshots=True, counts stable=True, stats_board source zero writes=True; gate family identical pre/post restart=True; 9 bad windows -> E_SH_BAD_WINDOW=True; 4 bad limits -> E_SH_BAD_LIMIT=True; limit-gate-first order probe=E_SH_BAD_LIMIT
+PASS AC-SSMRR7: product sha stable=True (showcase.py + both config.json); suite pure ASCII=True; zero network imports=True; world outside repo=True; double-run face carried by the evidence harness
+SUITE PASS 7/7
+
+--- byte-identity: PASS (bytes=1858) ---
+--- VERDICT PASS ---

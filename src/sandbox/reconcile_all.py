@@ -2496,6 +2496,27 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonthreplacepersist.py"), 7),
+    # R2021 showcase statsmonth post-re-place re-retraction
+    # live-state cross-restart persistence example window:
+    # the re-retract successor of the statsmonth family
+    # (R2016 place-state / R2017 zero-registration boundary /
+    # R2018 retract-state / R2019 re-place bounce already in
+    # register): after the re-place bounce, retracting the
+    # re-placed item again through the real path keeps the
+    # current-month window net-flow identity
+    # displayed_now == places - retracts intact on the
+    # re-retracted shape ({3,2,1}: 1 == 3 - 2), the
+    # re-retract event joins the current-month window and
+    # continues the view/chronicle/tour faces, the old-month
+    # window stays byte-frozen, the not-displayed gate refuses
+    # a further retraction, and the re-retracted live state
+    # persists byte-identically across a second full-stack
+    # restart (AC-SSMRR1..AC-SSMRR7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsmonth-rere-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonthrerepersist.py"), 7),
     ]
 
 FAILS = 0
