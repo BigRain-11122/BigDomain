@@ -2374,6 +2374,13 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-datasub-coveragedualpersist", os.path.join(
         "ledger", "test_datasub_coveragedualpersist.py"), 7),
+    # R2030 explore-queue claim (the R2009 reseed month-roll
+    # seat): cross-month recorded world, the roll-moment
+    # freeze law, month-diff telescoping, two restarts
+    # (AC-CVMR1..AC-CVMR7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-datasub-coveragemonthroll", os.path.join(
+        "ledger", "test_datasub_coveragemonthroll.py"), 7),
     # R1987 explore-queue claim (stats_board R1983 seed sibling
     # gap): the per-showcase statistics board across a full-stack
     # restart (face close -> ledger close -> fresh ledger +
