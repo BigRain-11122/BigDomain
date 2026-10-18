@@ -18,9 +18,19 @@
 #             (young -> skip, old -> takeover). Protects the one in-flight
 #             old-format round across the standard transition.
 #   AC-D03-7  atomic grab: FileMode.CreateNew on an existing path throws.
-#   AC-D03-8  takeover floor default = 30 min = 1.2 x 25-min round budget.
+#   AC-D03-8  takeover floor default = 288 min = 1.2 x 240-min v2 hard-cap
+#             budget (D-20261019-04 port; the 1.2 x budget formula is
+#             unchanged, the value scales with the v2 budget).
 #   AC-D03-9  encoding law: iteration_loop.ps1 is pure ASCII.
 #   AC-D03-10 static parse of iteration_loop.ps1: 0 parser errors.
+#   AC-D03-11 v2 liveness-gated budget present (D-20261019-04 port; canonical
+#             = quant/bigmoney/Tools/iteration_loop.ps1 945c3f60): params
+#             $RoundSilenceMinutes=25 + $RoundTimeoutMinutes=240, the
+#             silence-kill + hard-cap log faces, recursive Kill-RoundTree +
+#             Stop-RoundTreeChecked post-kill self-check (ZOMBIE_SURVIVOR).
+#   AC-D03-12 the 25-min wall-clock guillotine is GONE (fleet dead-window
+#             epidemic root cause, O-20261018-0948 lineage): no 'ROUND
+#             TIMEOUT' string, no single-shot WaitForExit(budget) wait.
 #
 # SAFETY: the lock block is EXTRACTED VERBATIM from the real launcher by
 # marker comments (single source of truth, zero drift) and runs in CHILD
@@ -135,9 +145,9 @@ try {
     try { $fsx = [System.IO.File]::Open($tmpLock, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write); $fsx.Close() } catch { $threw = $true }
     Assert $threw 'AC-D03-7' 'CreateNew threw on existing path'
 
-    # AC-D03-8: takeover floor default = 30 (1.2 x 25-min budget).
+    # AC-D03-8: takeover floor default = 288 (1.2 x 240-min v2 budget).
     $rawLauncher = [System.IO.File]::ReadAllText($launcher)
-    Assert ($rawLauncher.Contains('[int]$LockMaxAgeMinutes = 30')) 'AC-D03-8' 'floor default 30'
+    Assert ($rawLauncher.Contains('[int]$LockMaxAgeMinutes = 288')) 'AC-D03-8' 'floor default 288 (1.2 x 240)'
 
     # AC-D03-9: encoding law - launcher stays pure ASCII.
     $bytes = [System.IO.File]::ReadAllBytes($launcher)
@@ -150,12 +160,21 @@ try {
     $perr = $null
     [System.Management.Automation.Language.Parser]::ParseFile($launcher, [ref]$tok, [ref]$perr) | Out-Null
     Assert (@($perr).Count -eq 0) 'AC-D03-10' ("parse errors=" + @($perr).Count)
+
+    # AC-D03-11: v2 liveness-gated budget faces present (D-20261019-04 port).
+    Assert ($rawLauncher.Contains('[int]$RoundSilenceMinutes = 25') -and $rawLauncher.Contains('[int]$RoundTimeoutMinutes = 240')) 'AC-D03-11' 'v2 params: hard-cap 240 + silence 25'
+    Assert ($rawLauncher.Contains('ROUND SILENCE-KILL') -and $rawLauncher.Contains('ROUND HARD-CAP')) 'AC-D03-11' 'evidence-based kill log faces'
+    Assert ($rawLauncher.Contains('function Kill-RoundTree') -and $rawLauncher.Contains('function Stop-RoundTreeChecked') -and $rawLauncher.Contains('ZOMBIE_SURVIVOR')) 'AC-D03-11' 'recursive tree kill + post-kill self-check'
+
+    # AC-D03-12: the wall-clock guillotine is gone (dead-window root cause).
+    Assert (-not $rawLauncher.Contains('ROUND TIMEOUT')) 'AC-D03-12' 'no ROUND TIMEOUT string'
+    Assert (-not $rawLauncher.Contains('WaitForExit($RoundTimeoutMinutes * 60 * 1000)')) 'AC-D03-12' 'no single-shot wall-clock wait'
 }
 finally {
     if ($liveProc -and (Get-Process -Id $liveProc.Id -ErrorAction SilentlyContinue)) { Stop-Process -Id $liveProc.Id -Force -ErrorAction SilentlyContinue }
     Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output 'ALL CRITERIA PASS (AC-D03-1..10)'; exit 0 }
+if ($script:fail -eq 0) { Write-Output 'ALL CRITERIA PASS (AC-D03-1..12)'; exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

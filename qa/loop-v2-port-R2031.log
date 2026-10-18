@@ -1,0 +1,85 @@
+qa/loop-v2-port-R2031.log - D-20261019-04 execution evidence
+Ruling: D-20261019-04 (cross-company iteration_loop v2 activity-gated budget port,
+@BigDomain seat named executor; canonical = quant/bigmoney/Tools/iteration_loop.ps1
+commit 945c3f60; lineage = CEO root-cause order O-20261018-0948 dead-window epidemic).
+Port target: src/os/iteration_loop.ps1 (was: 25-min wall-clock WaitForExit kill +
+one-level child kill, the fleet "died pre-closeout" epidemic member).
+Run: 2026-10-19, powershell -NoProfile -ExecutionPolicy Bypass -File src\os\test_lock.ps1
+
+--- RUN 1 (after criteria preregistration + port, before comment reword) ---
+PASS AC-D03-1 (grab with no lock, acquired)
+PASS AC-D03-1 (lock content == child pid)
+PASS AC-D03-2 (live holder young lock -> skip)
+PASS AC-D03-2 (lock untouched by skip)
+PASS AC-D03-3 (dead pid prepared)
+PASS AC-D03-3 (dead holder young lock -> skip)
+PASS AC-D03-3 (lock untouched by skip)
+PASS AC-D03-4 (dead holder stale lock -> takeover)
+PASS AC-D03-4 (re-grabbed lock records taker pid)
+PASS AC-D03-5 (hung live holder stale lock -> takeover)
+PASS AC-D03-6 (legacy young -> skip)
+PASS AC-D03-6 (legacy stale -> takeover)
+PASS AC-D03-7 (CreateNew threw on existing path)
+PASS AC-D03-8 (floor default 288 (1.2 x 240))
+PASS AC-D03-9 (non-ascii bytes=0)
+PASS AC-D03-10 (parse errors=0)
+PASS AC-D03-11 (v2 params: hard-cap 240 + silence 25)
+PASS AC-D03-11 (evidence-based kill log faces)
+PASS AC-D03-11 (recursive tree kill + post-kill self-check)
+FAIL AC-D03-12 (no ROUND TIMEOUT string)
+PASS AC-D03-12 (no single-shot wall-clock wait)
+FAILURES=1
+TEST_EXIT=2
+Honest trace: the FAIL was the new v2 header comment quoting the bm-a historical
+evidence line (run_20261018_064801.log 07:13:02 "ROUND TIMEOUT") verbatim; the
+criterion is a raw-text absence scan and correctly flagged it. Criterion NOT
+weakened; the comment was reworded to keep the evidence while dropping the
+literal guillotine string ("wall-clock timeout kill").
+
+--- RUN 2 (final, after comment reword) ---
+PASS AC-D03-1 (grab with no lock, acquired)
+PASS AC-D03-1 (lock content == child pid)
+PASS AC-D03-2 (live holder young lock -> skip)
+PASS AC-D03-2 (lock untouched by skip)
+PASS AC-D03-3 (dead pid prepared)
+PASS AC-D03-3 (dead holder young lock -> skip)
+PASS AC-D03-3 (lock untouched by skip)
+PASS AC-D03-4 (dead holder stale lock -> takeover)
+PASS AC-D03-4 (re-grabbed lock records taker pid)
+PASS AC-D03-5 (hung live holder stale lock -> takeover)
+PASS AC-D03-6 (legacy young -> skip)
+PASS AC-D03-6 (legacy stale -> takeover)
+PASS AC-D03-7 (CreateNew threw on existing path)
+PASS AC-D03-8 (floor default 288 (1.2 x 240))
+PASS AC-D03-9 (non-ascii bytes=0)
+PASS AC-D03-10 (parse errors=0)
+PASS AC-D03-11 (v2 params: hard-cap 240 + silence 25)
+PASS AC-D03-11 (evidence-based kill log faces)
+PASS AC-D03-11 (recursive tree kill + post-kill self-check)
+PASS AC-D03-12 (no ROUND TIMEOUT string)
+PASS AC-D03-12 (no single-shot wall-clock wait)
+ALL CRITERIA PASS (AC-D03-1..12)
+TEST_EXIT=0
+
+--- residual old-pattern grep (post-port launcher, expect zero hits) ---
+Select-String 'ROUND TIMEOUT|WaitForExit\(\$RoundTimeoutMinutes \* 60' -> (empty)
+
+--- port face summary (mechanically verified) ---
+1. params: LockMaxAgeMinutes 30 -> 288 (1.2 x 240, D-20260925-03 formula kept,
+   value scales with the v2 budget; a stale floor would take over legitimate
+   long rounds the same way the old wall clock killed them);
+   RoundTimeoutMinutes 25 -> 240 (hard cap); RoundSilenceMinutes = 25 (new).
+2. kill logic: single-shot WaitForExit(budget) wall-clock kill REMOVED; v2
+   watch loop polls in 30s slices, activity = round stdout/stderr redirect
+   files gaining bytes; silence-kill at >=25min zero output (true hang
+   evidence); hard-cap at >=240min total.
+3. kill mechanics: one-level child kill REPLACED by recursive Kill-RoundTree
+   (breadth-first descendant chain, seen-set guards PID-reuse, 256-node bound,
+   deepest-first) + Stop-RoundTreeChecked post-kill self-check logging
+   ZOMBIE_SURVIVOR rows (2026-10-17 lane-starvation lesson, never silent).
+4. lock block: behavior byte-identical (markers + body kept verbatim; harness
+   still extracts and passes AC-D03-1..7); comment-only floor wording update.
+5. cloud-cap preflight, git head-pull, heartbeat, self-heal recipe: untouched.
+6. launcher re-read from disk on every task fire -> port takes effect on the
+   next grid slot, zero re-registration.
+VERDICT: D-20261019-04 @BigDomain seat port COMPLETE - AC-D03-1..12 all green.

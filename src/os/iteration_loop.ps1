@@ -6,12 +6,35 @@
 # OS task is the only 10-min channel that survives closed windows (:x4 lane,
 # see cph4/cadence.md 10-min lane table). Every beat: guards -> spawn ONE
 # headless codely round (src/os/iteration_prompt.txt driven) -> heartbeat.
-# Round budget 25 min; overlap prevented by logs/round.lock + task-level
-# IgnoreNew. Lock = group single-instance standard D-20260925-03 (2026-09-25
-# decision round; originated from this loop's R13/R14 stale-takeover incident
-# report): PID-recorded lock + pre-takeover holder liveness probe + atomic
-# CreateNew grab + takeover floor 1.2 x budget (30 min). Verified by
-# src/os/test_lock.ps1.
+# v2 LIVENESS-GATED BUDGET (2026-10-19 port per ruling D-20261019-04 - cross-
+# company iteration_loop v2 activity-gated budget port case; canonical source
+# = quant/bigmoney/Tools/iteration_loop.ps1 commit 945c3f60; lineage = CEO
+# root-cause order O-20261018-0948 dead-window epidemic surgery): the original
+# 2026-09-24 port carried a 25-min WALL-CLOCK kill inherited from the
+# MiniGame short-round pattern - every legitimate long round crossing 25 min
+# was tree-killed mid-flight (fleet-wide "died pre-closeout" epidemic, 50+
+# absorb generations of evidence, bm-a run_20261018_064801.log 07:13:02
+# wall-clock timeout kill). v2 kills ONLY on EVIDENCE:
+#   - silence kill: $RoundSilenceMinutes (25) of ZERO output activity (the
+#     round's stdout/stderr redirect files gained no bytes = true hang), or
+#   - hard cap: $RoundTimeoutMinutes (240) of total age.
+# A productive long round streams tool output continuously and is NEVER
+# killed by wall clock alone. Kills are RECURSIVE TREE kills (breadth-first
+# descendant chain, seen-set guards PID-reuse cycles, 256-node bound,
+# deepest-first) plus a post-kill self-check logging ZOMBIE_SURVIVOR rows
+# (never silent). The task re-reads this file from disk on every fire, so
+# the port takes effect on the next grid slot with zero re-registration.
+# The agent-side soft budget stays 25 min per src/os/iteration_prompt.txt -
+# the prompt disciplines scope; the launcher only guards against true hangs.
+#
+# Overlap prevented by logs/round.lock + task-level IgnoreNew. Lock = group
+# single-instance standard D-20260925-03 (2026-09-25 decision round;
+# originated from this loop's R13/R14 stale-takeover incident report):
+# PID-recorded lock + pre-takeover holder liveness probe + atomic CreateNew
+# grab + takeover floor 1.2 x round budget. v2 coherence: the floor scales
+# with the budget (1.2 x 240 = 288 min) - a stale floor would take over
+# legitimate long rounds exactly the way the old wall clock did. Verified by
+# src/os/test_lock.ps1 (AC-D03-1..12).
 #
 # ENCODING RULE: this file must stay PURE ASCII. powershell.exe 5.1 decodes
 # BOM-less .ps1 as ANSI/GBK and swallows quote bytes after multibyte sequences.
@@ -24,8 +47,10 @@
 param(
     [string]$Project = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
     # takeover floor: 1.2 x round budget per group standard D-20260925-03
-    [int]$LockMaxAgeMinutes = 30,
-    [int]$RoundTimeoutMinutes = 25
+    # (v2: 1.2 x 240min hard-cap budget = 288min)
+    [int]$LockMaxAgeMinutes = 288,
+    [int]$RoundTimeoutMinutes = 240,
+    [int]$RoundSilenceMinutes = 25
 )
 $ErrorActionPreference = 'Continue'
 Set-Location $Project
@@ -46,6 +71,51 @@ function Beat([string]$m) {
     Add-Content -Path $heart -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') osloop: $m" -Encoding UTF8
 }
 
+# v2 kill helpers (D-20261019-04 port from canonical 945c3f60): recursive
+# tree kill + post-kill self-check. The 2026-10-17 lane-starvation root
+# cause: one-level kills left deep-tree survivors which kept counting into
+# the cloud cap. Collect the descendant chain breadth-first (seen-set guards
+# PID-reuse cycles, 256-node bound), kill deepest-first, then re-scan: any
+# survivor logs a ZOMBIE_SURVIVOR row for the audit lane (child-clear
+# verification, never silent).
+function Kill-RoundTree([int]$rootPid) {
+    $seen = @{}
+    $frontier = @($rootPid)
+    $ordered = @()
+    while ($frontier.Count -gt 0 -and $ordered.Count -lt 256) {
+        $next = @()
+        foreach ($pp in $frontier) {
+            $kids = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$pp" -ErrorAction SilentlyContinue)
+            foreach ($k in $kids) {
+                if (-not $seen.ContainsKey($k.ProcessId)) {
+                    $seen[$k.ProcessId] = $true
+                    $ordered += $k.ProcessId
+                    $next += $k.ProcessId
+                }
+            }
+        }
+        $frontier = $next
+    }
+    if ($ordered.Count -gt 1) { [array]::Reverse($ordered) }
+    foreach ($procId in $ordered) { Stop-Process -Id $procId -Force -ErrorAction SilentlyContinue }
+    Stop-Process -Id $rootPid -Force -ErrorAction SilentlyContinue
+    return ,$ordered
+}
+function Stop-RoundTreeChecked([int]$rootPid, [string]$why) {
+    $killed = Kill-RoundTree $rootPid
+    Log "kill tree ($why): root=$rootPid descendants_killed=$($killed.Count)"
+    Start-Sleep -Seconds 2
+    $survivors = 0
+    foreach ($procId in $killed) {
+        if (Get-Process -Id $procId -ErrorAction SilentlyContinue) {
+            $survivors++
+            Log "ZOMBIE_SURVIVOR pid=$procId survived tree-kill ($why) -- audit lane face"
+        }
+    }
+    if ($survivors -eq 0) { Log "kill tree self-check ($why): 0 survivors (child-clear verified)" }
+    return $survivors
+}
+
 # ---- single-instance lock begin (D-20260925-03) ----
 # Group single-instance standard (decision D-20260925-03, 2026-09-25 round;
 # originated from this loop's R13/R14 stale-takeover incident report; paradigm
@@ -53,7 +123,7 @@ function Beat([string]$m) {
 #   - the lock file records the holder PID (written+flushed+closed at once,
 #     no held handle);
 #   - before any takeover the holder PID is probed for liveness and the
-#     takeover floor is 1.2 x round budget (30 min): a dead holder alone is
+#     takeover floor is 1.2 x round budget (288 min at v2 defaults): a dead holder alone is
 #     NOT takeover proof - its orphaned child round may still be writing
 #     (R13 lesson); heartbeat touching was explicitly rejected by the call;
 #   - the lock is removed only after death/overage is confirmed, then the
@@ -139,21 +209,41 @@ try {
     }
     if ($liveCount -lt 0) { Log 'cloud-cap probe failed - fail-open ignite per spec' }
 
-    Log "spawning headless round (budget ${RoundTimeoutMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
+    Log "spawning headless round (hard-cap ${RoundTimeoutMinutes}min, silence-kill ${RoundSilenceMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
     $p = Start-Process -FilePath $codelyPath -ArgumentList $argLine -WorkingDirectory $Project -PassThru -NoNewWindow -RedirectStandardOutput $roundOut -RedirectStandardError $roundErr
     $null = $p.Handle   # materialize handle so ExitCode is readable
-    if (-not $p.WaitForExit($RoundTimeoutMinutes * 60 * 1000)) {
-        Log "ROUND TIMEOUT after ${RoundTimeoutMinutes}min - killing headless process tree"
-        try {
-            Get-CimInstance Win32_Process -Filter "ParentProcessId=$($p.Id)" -ErrorAction SilentlyContinue |
-                ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
-            Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
-        } catch { Log "kill failed: $_" }
-        Beat "round timeout killed (age over ${RoundTimeoutMinutes}min)"
-        exit 3
+    # v2 liveness budget (D-20261019-04 port, canonical 945c3f60): poll in 30s
+    # slices. "Activity" = the round's stdout/stderr redirect files gaining
+    # bytes. Kill ONLY on evidence of a hang (silent for $RoundSilenceMinutes)
+    # or the $RoundTimeoutMinutes hard cap. A productive long round streams
+    # tool output continuously and is never killed by wall clock alone (the
+    # 25-min guillotine that caused the dead-window epidemic is gone).
+    $startAt = Get-Date
+    $lastMove = Get-Date
+    $lastSize = -1L
+    while (-not $p.WaitForExit(30000)) {
+        $size = 0L
+        foreach ($f in @($roundOut, $roundErr)) {
+            try { $fi = Get-Item $f -ErrorAction SilentlyContinue; if ($fi) { $size += $fi.Length } } catch { }
+        }
+        if ($size -ne $lastSize) { $lastSize = $size; $lastMove = Get-Date }
+        $silentMin = ((Get-Date) - $lastMove).TotalMinutes
+        $totalMin = ((Get-Date) - $startAt).TotalMinutes
+        if ($silentMin -ge $RoundSilenceMinutes) {
+            Log "ROUND SILENCE-KILL: no output for $([int]$silentMin)min (total $([int]$totalMin)min) - killing headless process tree"
+            try { $null = Stop-RoundTreeChecked $p.Id 'silence-kill' } catch { Log "kill failed: $_" }
+            Beat "round silence-killed (no output $([int]$silentMin)min, total $([int]$totalMin)min)"
+            exit 3
+        }
+        if ($totalMin -ge $RoundTimeoutMinutes) {
+            Log "ROUND HARD-CAP after ${RoundTimeoutMinutes}min - killing headless process tree"
+            try { $null = Stop-RoundTreeChecked $p.Id 'hard-cap' } catch { Log "kill failed: $_" }
+            Beat "round hard-cap killed (age over ${RoundTimeoutMinutes}min)"
+            exit 3
+        }
     }
     $p.Refresh()
-    Log "headless round finished exit=$($p.ExitCode)"
+    Log "headless round finished exit=$($p.ExitCode) (ran $([int]((Get-Date) - $startAt).TotalMinutes)min)"
     Beat "round done exit=$($p.ExitCode)"
     exit $p.ExitCode
 }

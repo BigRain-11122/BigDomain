@@ -1,0 +1,3 @@
+{
+ "template": "2026-10-19 R2031 收账谱滚窗收拢行·fold R561 承 R2031 收账前置裁定兑现（本轮收账前 gauge 实测 state 77571B+R2031 round+tokens 收账预算必越 78500B 线＝P-2026-09-25-18 第五百六十一刀·开窗序=fold 先于本轮收账 append〔R2029/R2030 同位先例〕·窗=tail 3：fold R560 滚窗行+R2030 round line+R2030 tokens＝3 行 %%WINBYTES%%B 压 1 滚窗行 kept=0·%%TOKCOUNT%% token 全字面嵌零丢失〔catalog 机械提取零手抄·生成器程序化拼接 gen561〕·原文全量保全=archive §R2031 节 3 行 verbatim+preop 备份件 logs/state-preop-R2031.bak+git 史〕）——承前滚窗注记：fold R560 滚窗行〔承 fold R551..R559 滚窗域+R2017..R2029 主线谱〕与 R2030 主线行已折入本行，其 token 域全字面随行〔各轮详细叙事 live verbatim in archive 对应节〕——R2030=datasub 覆盖榜双窗并读板月滚例窗 38th 崩轮接管收口轮〔AC-CVMR1..CVMR7：十月活滚锚+滚月瞬间十月冻结+月差分望远镜律+跨重启三形电池逐字节同一+重启后滚动续接+纯读律+卫生门〕——catalog: %%TOKENS%%"
+}
