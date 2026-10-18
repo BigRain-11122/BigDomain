@@ -2094,6 +2094,17 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-honorcert-multiyear", os.path.join(
         "ledger", "test_honorcert_multiyear.py"), 7),
+    # multi-year combined yearbook cross-restart persist window
+    # (R2025): the yearbooks_combined seat of the persist family
+    # - three-piece close/rebuild on the same two dbs replays
+    # the scrambled-request combined envelope byte-identical,
+    # post-restart 2026/2027 block live continuation with the
+    # permanent-certificate and cross-read isolation laws, the
+    # front-door gate surviving the restart with zero
+    # referenced-face calls, zero-token pure-read law (AC-HYCP1..
+    # HYCP7 pre-registered in state/queue/explore.md).
+    ("ledger-honorcert-yearbookspersist", os.path.join(
+        "ledger", "test_honorcert_yearbooks_persist.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen

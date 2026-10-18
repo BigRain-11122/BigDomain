@@ -1,0 +1,73 @@
+=== R2025 honorcert yearbooks_combined cross-restart persist suite ===
+PASS AC-HYCP1: anchor multi-year world pinned: scrambled request ['2028', '2026', '2025', '2027'] -> ascending years ['2025', '2026', '2027', '2028']; per-block values pinned (2025/2028 honest empty blocks, 2026 board carol 12 / aaron 7 with full item_id echo, 2027 carol 5 / aaron 2); totals={'years_count': 4, 'certified_count': 4, 'board_size': 6, 'distinct_accounts': 2} (carol/aaron overlap in both rosters yet distinct_accounts=2); envelope keys=['disclaimer', 'totals', 'yearbooks', 'years']; per-block == honor_yearbook minus disclaimer (dumps)=True; double-call byte-identical=True
+PASS AC-HYCP2: three-piece close (cl.close + cv.close + led.close - the honorcert face owns no storage and carries no close) -> Ledger + CivicPointsFace + CollectiblesFace + HonorCertFace rebuilt on the same two dbs with the same config: the combined multi-year envelope replays byte-identical to the pre-close snapshot (sha16=a47cbdb6230c12c7) and a second same-params read re-confirms it (sha16=a47cbdb6230c12c7) - the ascending year axis, the certified-only rosters, the board ranks, the certificate provenance and the totals all re-derive from the persisted civic.db earn rows and ledger.db certificate rows with zero in-memory drift; table counts frozen across the restart
+PASS AC-HYCP3: post-restart continuation: erin earns four poll events on the reopened civic face so the 2026 board moves (erin 20 -> rank 1); the re-grant heals incrementally across the restart - honorees=[(1, 'usr:erin', 'granted'), (2, 'usr:carol', 'already')] (granted=1 already=1: the top-2 slice covers exactly the new top two, erin costs one certificate row and carol converges to already; aaron sits at rank 3, outside the slice, yet keeps his yearbook row at the new board rank - permanent-certificate law across the restart); the 2026 block grows to 3 rows [(1, 'usr:erin'), (2, 'usr:carol'), (3, 'usr:aaron')]; the 2027 block stays frozen=True and the 2025/2028 honest empty blocks stay empty; the fresh combined read differs from the pre-restart snapshot (zero-cache live recompute)=True
+PASS AC-HYCP4: post-restart new-window continuation: frank earns four poll events in 2027 so the 2027 board moves (frank 20 -> rank 1); the re-grant heals across the restart - honorees=[(1, 'usr:frank', 'granted'), (2, 'usr:carol', 'already')] (granted=1 already=1); the 2027 block grows to 3 rows [(1, 'usr:frank'), (2, 'usr:carol'), (3, 'usr:aaron')]; the 2026 block stays byte-frozen across the 2027 grant (cross-read isolation)=True; totals={'years_count': 4, 'certified_count': 6, 'board_size': 8, 'distinct_accounts': 4} (distinct accounts now 4: carol/aaron/erin/frank); item_id provenance clean (2026 rows echo civic-honor-2026, 2027 rows echo civic-honor-2027)
+PASS AC-HYCP5: front-door gate survives the restart: non-iterable 6/6 forms rejected (str/bytes caught at the door); bad element forms 9/9 rejected; duplicate year rejected=True; zero honor_board calls across the whole probe batch=0 (every reject lands before any referenced-face call - the gate rides the module law, nothing in-memory to lose); both-db table snapshots frozen across the probe batch
+PASS AC-HYCP6: second restart: three-piece close -> rebuild once more on the same two dbs - the combined multi-year envelope reads twice back-to-back byte-identical to the instance-2 terminal state (sha16=6f234d459d6e2b26) and to each other (re-read purity); a two-year subset request returns exactly the 2026+2027 axis (subset law); the read battery leaves both-db table counts constant with ledger_tx=0 and ledger_entries=0 across the whole window - certificates are platform awards and the combined face is a zero-token derivation
+PASS AC-HYCP7: hygiene: shipped files untouched (config.json + honorcert/civicpoints/collectibles sha16 stable=True); suite source pure ASCII (0 non-ascii chars), zero network imports (0 hits); yearbooks_combined method source carries zero write statements (hits=none); world tmp outside repo (yes); criteria registered=7
+SUITE PASS 7/7
+
+--- second run (byte capture) ---
+run1 rc=0 run2 rc=0 byte-identical=True sha16=cee8e630e7bc27be bytes=4009
+SUITE-DOUBLE-RUN PASS sha16=cee8e630e7bc27be
+
+=== battery tail (qa/reconcile-all-R2025.log) ===
+  |   [FAIL] revoke_dead: dead account AV-PAY-DEMO-1/tpl_pay_success_pending_ceo sent after cutoff: ['sn-dead-demo']
+PASS reconcile pay-tamper-revokes exit=2 (expect 2, revoke FAILs detected and named)
+  | PASS: 6 checks clean (member=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wv5p8d5o\member.db pay=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wv5p8d5o\member-pay.db ledger=C:\Users\sjs20\AppData\Local\Temp\reconcile-all-wv5p8d5o\member-ledger.db)
+PASS reconcile member-demo exit=0 (expect 0, clean six checks)
+  | FAIL: 1 finding(s); first: check5: credit event 3f7e99be07aef4dc: audit row missing
+  |   - check5: credit event 3f7e99be07aef4dc: audit row missing
+PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
+RUNNER PASS (241/241 suites green, reconcile controls 7/7, 198.7s)
+
+=== matrix regen + check ===
+PASS generated docs/sandbox-suite-matrix.md (23414 bytes) - registry suites=241 criteria=2046 evidence=qa/reconcile-all-R2025.log green=241/241
+PASS hygiene: pure-ascii source, zero network imports
+matrix regen exit=0
+PASS check: docs/sandbox-suite-matrix.md byte-identical (23414 bytes, 241 suites, 2046 criteria)
+matrix check exit=0
+
+=== census update + check ===
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: update-baseline (re-freeze gate)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+baseline written: writer-census-baseline.json
+  cmd-raw: 15 names
+  pwsh-capture: 312 names
+  ps-utf16: 98 names
+  other: 99 names
+  tee: 1035 files (healthy dialect, NOT baselined)
+--- post-check (self-run after freeze) ---
+census: files=1559 tee=1035 baselined=524
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+post-check exit=0
+census update exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=1559 tee=1035 baselined=524
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+census check exit=0
+
+=== fingerprint sentinel ===
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+fingerprint exit=0
+
+=== runner profile daily check ===
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+profile exit=0
