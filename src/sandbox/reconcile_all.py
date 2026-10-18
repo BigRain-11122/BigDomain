@@ -2145,6 +2145,22 @@ SUITES = [
     ("ledger-honorcert-yearbook-zeroboundarygate", os.path.join(
         "ledger",
         "test_honorcert_yearbook_zeroboundarygatepersist.py"), 7),
+    # honorcert grant idempotency axis + top_n gate-family
+    # cross-restart same-code window (R2029): on a positive-earn
+    # world the already-granted idempotency gate converges every
+    # replayed honoree to "already" with zero new rows and that
+    # convergence survives both full-stack restarts (the
+    # duplicate law lives in the collectibles domain), the
+    # post-restart incremental heal re-grants exactly the new
+    # board head while a demoted member keeps the yearbook row
+    # (certificate permanence x on-board derivation), and the
+    # 8-probe top_n cap-boundary battery (bad year, six bad
+    # top_n forms, blank item_id) rejects with the identical
+    # code vector on all three instances before any referenced
+    # honor_board call lands (AC-HYGG1..HYGG7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-honorcert-grantgate-persist", os.path.join(
+        "ledger", "test_honorcert_grantgatepersist.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen
