@@ -1,0 +1,127 @@
+BigDomain QA smoke evidence - round R2034 - 2026-10-19 +08:00
+day work: (1) the R2033-held QA charter daily-crawl flag discharged
+this round (R2033 closeout had honestly left "[QA] FLAG: today smoke
+png/log zero + bench_today=False = charter daily crawl round not run
+= next-round first-item candidate"); (2) two standing rows verified
+same-day stamps, not rerun per the ran-today law; (3) five-silence
+group faces all green, zero new dispatches for BigDomain.
+
+--- (1) W28 crawl (group QA Smoke Test charter v1.0, orders L254
+2026-09-28; docs/global-benchmarks.md + docs/research/intelligence-wall.md) ---
+W28 = Personal Information Protection Law of the PRC (PIPL, 13th NPC
+Standing Committee 30th session 2021-08-20 passed, effective
+2021-11-01, 8 chapters 74 articles), official fulltext direct-captured
+A-grade from cac.gov.cn (2021-08/20/c_1631050028355286.htm, source
+note China NPC website; 1-try search + 1-get; the initial gov.cn
+/xinwen content_5632486 URL guess 404'd - negative honestly recorded).
+This closes the upstream-law chain: W19 (account-info rule), W23 (data
+regulation) and W25 (children rule) all cite "personal information
+protection law" as their parent statute - W28 captures that parent
+fulltext itself.
+key clauses consumed:
+- art. 4 definition: PI = info recorded electronically or otherwise
+  relating to identified/identifiable natural persons, EXCLUDING
+  anonymized info; processing = collect/store/use/process/transmit/
+  provide/publicize/delete full chain;
+- art. 6 minimal necessity: explicit+reasonable purpose, directly
+  related, least-impact means, collection limited to the minimum
+  scope, no over-collection;
+- art. 13 seven lawful bases (consent / contract necessity / statutory
+  duty / public-health emergency / public-interest reporting /
+  lawfully-published info / others);
+- art. 14 consent informed-voluntary-explicit + RE-consent on change
+  of purpose/means/kind; art. 15 convenient withdrawal channel;
+- art. 16 no refusing products/services because the individual
+  declines consent or withdraws it (processing that IS necessary for
+  providing the product/service excepted) - member authorization face
+  "no-consent-no-service" ban, layered with the W20 mini-program
+  privacy gate (undeclared APIs disabled by platform) into two doors;
+- art. 17 four notification items (identity+contact / purpose-means-
+  kinds-retention / rights channel / others), change notification,
+  rules public and easy to keep;
+- art. 21 entrustment: supervision + no exceeding scope + return-or-
+  delete on termination + no sub-delegation without consent;
+- art. 24 automated decision-making: transparency + fair and just
+  results + NO UNREASONABLE DIFFERENTIAL TREATMENT ON TRANSACTION
+  PRICES (= big-data price-discrimination ban, FIRST direct statutory
+  source; W10/W17/W23 three prior regulations now converge) + push/
+  marketing must offer a non-personalized option OR a convenient
+  rejection way + right to explanation and to refuse purely-automated
+  decisions with major impact - P-47(5) entitlement "priority filter"
+  and the 19.9 one-price canon at the highest statute level;
+- art. 28-31 sensitive PI: biometric/religious/special-identity/
+  medical-health/financial-account/location + PI of minors under 14;
+  specific purpose + full necessity + strict protection + SEPARATE
+  consent; art. 31 guardian consent + "shall formulate dedicated
+  personal information processing rules" = upstream statute of W25
+  child regulation (its art. 8 dedicated rules);
+- art. 45-47 access/copy promptly + transfer path + correction +
+  FIVE proactive deletion grounds; art. 50 convenient rights channel
+  + reasoned refusal + litigation right;
+- art. 51 six security measures (internal rules / classified mgmt /
+  encryption+de-identification / access rights+training / incident
+  plan / others);
+- art. 54 PERIODIC COMPLIANCE AUDIT (upstream twin of the reconcile
+  family); art. 55 PRE-EVENT PIA five triggers (sensitive PI /
+  automated decision / entrust-provide-publicize / cross-border /
+  other major impact) + art. 56 PIA report and records kept >= 3
+  years (same shape as W23 art. 12);
+- art. 57 breach response; art. 58 important-platform duties (scale
+  threshold NOT met - honest note, duties like notification not
+  waived); art. 66 penalties: warning+confiscation+<=1M CNY, severe
+  <=50M CNY or 5% of last-year turnover + officer 100K-1M +
+  officer ban - same magnitude tier as W11 minors regulation.
+benchmarks_refreshed=2026-10-19 (next 7-day window 2026-10-26;
+charter 15h cap met same day). 4-place entry: sec.1 new base-law
+block + sec.2 exec-standard row 12 + sec.3 source row + sec.4 record
+row; intelligence-wall W28 dual rows (main + conclusion, R1884
+dual-row precedent). consumption: P-47(2) member authorization face
+[art. 13/14/15/16 + sensitive separate consent] + P-47(5) [art. 24
+price-discrimination ban + non-personalized option] + P-47(1) visitor
+mini-program [art. 17 notification + art. 16 layering] + census/
+avatar lifecycle [five deletion grounds + access/copy/correct] +
+art. 55 PIA = NEW hard-prereq candidate for the P-47 design-doc
+four-piece set + audit faces [art. 54/56 >=3y records] + bootstrap
+[art. 52 PI-protection officer once scale reached].
+
+--- (2) standing rows, same-day stamps verified, zero rerun ---
+reconcile daily standing row (O-2026-0930-027): qa/reconcile-daily-
+20261019.log already on disk (R2031 same-day stamp) -> ran-today,
+not rerun. FUNNEL daily standing row (FUNNEL-AUTOMATION-PLAN-v1
+sec.3/4, 72h self-continuation window <=10-31): qa/funnel-daily-
+20261019.log already on disk (R2033 same-day stamp, gate PASS honest
+zero-envelope) -> ran-today, not rerun.
+
+--- (3) five-silence deltas honestly noted ---
+ledger @BigDomain: zero new rows (atbd_rows=0). DEC: 372 rows flat
+(known tokens 198, C-20261018-02 = inline-reference INFO face, not
+a new row). GORD: tbl 455 flat, tail line 10-19 02:18 = V5.9 MV
+delivery receipt (BigStream production face, zero BigDomain dispatch
+- acked R2033, acked again this scan, no action). own orders tail
+older than baseline (INFO baseline-ahead, no new order). tree clean,
+lock 0. benchmarks refreshed THIS round from 10-18 to 10-19.
+
+--- (4) self-check four items vs charter ---
+daily crawl = W28 delivered this day (PIPL fulltext, A-grade);
+benchmark refreshed = 2026-10-19 (next 7-day window 2026-10-26;
+charter 15h cap met same day); research chain = A-grade 1-try search
++ 1-get fulltext, one initial-URL 404 negative recorded honestly,
+zero repealed-text mistakes; signal wall = W28 dual rows in place
+(main + conclusion). evidence pair = this log + rendered png.
+standing-row stamps = both same-day evidence files verified on disk.
+fold R564 honored at closeout (round-start gauge 77159B + closeout
+budget over the 78500 line -> tail-3 window [fold R563 rolling +
+R2033 round + R2033 tokens] folded to one rolling line, 114 tokens
+mechanically embedded zero-loss, archive section verbatim + preop
+backup logs/state-preop-R2034.bak).
+Honest second-knife note: the R2034 round+tokens append then landed
+at 79038B = 538B OVER the 78500 water line (the round line weighed
+more than the 3000B reserve assumed by the fold gate) -> same-round
+remedy fold R565 executed immediately: tail-3 window [fold R564
+rolling + R2034 round line + R2034 tokens] folded to one rolling
+line (token presence re-verified zero-loss, archive verbatim, preop
+backup), final state back under the line (post-fold gauge 75527B,
+margin 2973B, fold_needed=false, layout_ok, bare_lf=0).
+Water-line law P-2026-09-25-18 invariant restored within the same
+round; no over-gate state was committed to git.
+
