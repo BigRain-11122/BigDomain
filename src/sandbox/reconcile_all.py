@@ -2459,6 +2459,23 @@ SUITES = [
     ("ledger-showcase-statsgatepersist",
      os.path.join("ledger",
                    "test_showcase_statsgatepersist.py"), 7),
+    # R2036 explore-queue FIFO head claim (R2035 reseed row):
+    # showcase_view_window bad-window gate family cross-restart
+    # same-code - 15 bad window forms (non-str types incl. the
+    # windowed-face None law, non-strict YYYY-MM shapes) plus
+    # the window-before-showcase order probe and the
+    # good-window unknown-showcase probe reject with an
+    # identical ordered code vector (16x E_SH_BAD_WINDOW + 1x
+    # E_SH_UNKNOWN_SHOWCASE) on instances one/two/three across
+    # two full-stack restarts, zero side effects per probe batch
+    # on the populated face, post-restart liveness (real write
+    # on a new showcase, cross-showcase read isolation),
+    # pure-read law, hygiene (suite-only).
+    # (AC-SVW1..AC-SVW7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-viewwindow-gatepersist",
+     os.path.join("ledger",
+                   "test_showcase_viewwindow_gatepersist.py"), 7),
     # R1995 explore-queue FIFO head claim (R1968 reseed row):
     # proposal progress_board cross-restart persistence example
     # window - full-stack close -> reopen byte-identical board
