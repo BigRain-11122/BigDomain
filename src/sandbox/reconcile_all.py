@@ -2105,6 +2105,16 @@ SUITES = [
     # HYCP7 pre-registered in state/queue/explore.md).
     ("ledger-honorcert-yearbookspersist", os.path.join(
         "ledger", "test_honorcert_yearbooks_persist.py"), 7),
+    # multi-year combined yearbook subset-axis semantics window
+    # (R2026): the yearbooks_combined request-family hardening -
+    # strictly descending full-set canonicalization, single-year /
+    # two-year / all-empty-years request families, same-year-set
+    # multi-form folding (list/tuple/scrambled/set/frozenset/
+    # generator all byte-identical), single-source cross over the
+    # whole family, zero-token pure-read law (AC-HYS1..HYS7
+    # pre-registered in state/queue/explore.md).
+    ("ledger-honorcert-yearbooksubsetaxis", os.path.join(
+        "ledger", "test_honorcert_yearbook_subsetaxis.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
     # restart world (registry + venue occupancy + ledger), twelve
     # restart-surviving gates, renewal advance booking, frozen
