@@ -2701,6 +2701,24 @@ SUITES = [
     ("ledger-proposal-gatepersist",
      os.path.join("ledger",
                    "test_proposal_gatepersist.py"), 7),
+    # R2040 explore-queue FIFO head claim (R2039 reseed row):
+    # proposal gate family ZERO-REGISTRATION boundary world
+    # cross-restart same-code example - the boundary-state gap
+    # fill beside the R2039 populated-world face: the identical
+    # ordered R2011 AC-PBZB2 8-probe battery (sign-side unknown
+    # proposal, six register bad-args, content-gate hit)
+    # rejects with an identical ordered code vector on
+    # instances one/two/three across two full-stack restarts
+    # on a zero-registration boundary world, zero side
+    # effects per probe batch, honest empty envelopes
+    # byte-identical around every batch and across all
+    # instances, zero-token law with zero phantom memorial
+    # awards, hygiene (suite-only).
+    # (AC-PBZG1..AC-PBZG7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-proposal-gateboundary-persist",
+     os.path.join("ledger",
+                   "test_proposal_gateboundarypersist.py"), 7),
     ]
 
 FAILS = 0
