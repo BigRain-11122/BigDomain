@@ -2794,6 +2794,18 @@ SUITES = [
     # (AC-FRS1..AC-FRS8 pre-registered in state/queue/tech.md.)
     ("funnel-rescan",
      os.path.join("funnel", "test_funnel_rescan.py"), 8),
+    # R2051 tech FIFO head claim (R2047 reseed row): late-arrival
+    # re-rollup on an already-booked day - a late inbox row for day D
+    # books on the re-run, the day-D counts re-derive and the rollups
+    # face still holds exactly one row, a second re-run is
+    # byte-identical, the earlier day's stored envelope is frozen
+    # while D's delta stays anchored to it, the conservation identity
+    # survives a late spend, a late duplicate id is a no-op, the
+    # correction propagates into the next day's delta, and the
+    # hygiene face is read off the parsed AST.
+    # (AC-FRL1..AC-FRL8 pre-registered in state/queue/tech.md.)
+    ("funnel-rerollup",
+     os.path.join("funnel", "test_funnel_rerollup.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
