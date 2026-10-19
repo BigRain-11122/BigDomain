@@ -2063,6 +2063,25 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboardboundary", os.path.join(
         "ledger", "test_apimarket_devboardboundarypersist.py"), 7),
+    # apimarket dev_sales_board month-window zero-listing
+    # boundary cross-restart persist window (R2045): the
+    # zero-listing boundary world (R2024 posture - listing
+    # axis empty, ledger + devkeys populated) pinned on the
+    # month-window read family (default + SEP / OCT / NOV /
+    # 2099-01 honest empty envelopes with echo keys), the
+    # fourteen bad-window gate family rejecting before any
+    # read on the empty data face, full-stack restart
+    # byte-identical, post-restart first listing dense
+    # window-face join (record month carries listing_count,
+    # every other month keeps the honest dense zero row),
+    # first purchase NOV-window zero-cache recompute with the
+    # OCT listing family byte-frozen (record-time dual-family
+    # law) and spend/share tx provenance, third instance
+    # stability with identical gate codes
+    # (AC-AMWZB1..AMWZB7 pre-registered in the R2045
+    # explore-queue claim row).
+    ("ledger-apimarket-devboardmonthboundary", os.path.join(
+        "ledger", "test_apimarket_devboardmonthboundarypersist.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
