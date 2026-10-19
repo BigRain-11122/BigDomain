@@ -2764,6 +2764,20 @@ SUITES = [
     # (AC-FCG1..FCG7 pre-registered in state/queue/tech.md.)
     ("funnel-cli-gates",
      os.path.join("funnel", "test_funnel_cli_gates.py"), 7),
+    # R2049 tech-queue FIFO head claim (R2047 reseed row, second
+    # seed): funnel four-ring counter cross-restart persistence -
+    # source rows, the stored rollup envelope bytes, same-day replay
+    # idempotency, the disk-read previous-day delta (with a
+    # fresh-db null control), a double restart cycle, the stored
+    # gate/hits column coherence, and hygiene. The delta criterion
+    # was amended during delivery: the first draft said "six keys
+    # all zero", which is not what a day-over-day delta means -
+    # honestly re-registered as each day-scoped key equal to minus
+    # the day-one value with the lifetime outstanding delta at zero
+    # (the zero-delta face is the AC-FPR5 fresh-db control).
+    # (AC-FPR1..AC-FPR8 pre-registered in state/queue/tech.md.)
+    ("funnel-persist",
+     os.path.join("funnel", "test_funnel_persist.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
