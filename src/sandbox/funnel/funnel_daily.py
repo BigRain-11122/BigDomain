@@ -334,6 +334,39 @@ class FunnelDaily:
             }
         return out
 
+    # ---- per-sku order totals read face ----
+
+    def sku_totals(self, day=None):
+        """Per-sku order totals read face (R2054, AC-FST1..AC-FST8).
+
+        A pure read over the append-only orders table (zero writes,
+        zero cache, no wall clock): one bucket per sku that appears in
+        the window, carrying the order count and the summed
+        amount_cent, in ascending sku (byte) order. The blank sku ("")
+        is a legitimate bucket of its own - an order row may honestly
+        carry no sku yet - and is never merged into a named sku.
+        Window law: day=None reads the lifetime order book; an
+        explicit day reads only that day's rows; a day with no rows is
+        an honest empty face ({}), not an error. A bad day form raises
+        E_FN_BAD_ARGS before any row is touched.
+        """
+        if day is not None:
+            _assert_day(day)
+        sql = ("SELECT sku, COUNT(*), COALESCE(SUM(amount_cent),0) "
+               "FROM orders WHERE 1=1")
+        params = []
+        if day is not None:
+            sql += " AND day=?"
+            params.append(day)
+        sql += " GROUP BY sku ORDER BY sku"
+        out = {}
+        for sku, count, amount in self.db.execute(sql, params).fetchall():
+            out[str(sku)] = {
+                "orders": int(count),
+                "amount_cent": int(amount),
+            }
+        return out
+
     # ---- rollup + lightweight compliance gate ----
 
     def rollup(self, day):

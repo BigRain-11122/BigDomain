@@ -1,0 +1,9 @@
+PASS AC-FST1 empty order book
+PASS AC-FST2 lifetime sku aggregation
+PASS AC-FST3 day window law
+PASS AC-FST4 blank sku bucket
+PASS AC-FST5 idempotent booking totals
+PASS AC-FST6 bad day fail-closed
+PASS AC-FST7 pure read and restart stability
+PASS AC-FST8 hygiene and determinism
+SUITE PASS 8/8

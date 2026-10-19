@@ -2832,6 +2832,21 @@ SUITES = [
     # state/queue/tech.md before the suite existed.)
     ("funnel-account",
      os.path.join("funnel", "test_funnel_account.py"), 8),
+    # R2054 tech-queue FIFO head claim (R2052 reseed row): the
+    # funnel per-sku order totals read face - the rollup counts
+    # orders per day and the ledger face reads flows, but the
+    # orders table had no sku-grouped unit/amount aggregation at
+    # all. A pure read: one bucket per sku, sorted sku order, the
+    # blank sku as its own bucket (never merged into a named one),
+    # lifetime vs explicit-day window with an honest empty day,
+    # re-booking the same inbox leaves the totals unchanged,
+    # bad-day fail-closed with zero row touch, zero writes plus
+    # cross-restart byte-identical reads, and hygiene (ASCII, zero
+    # network, zero wall clock, deterministic). (AC-FST1..AC-FST8
+    # pre-registered in state/queue/tech.md before the suite
+    # existed.)
+    ("funnel-sku",
+     os.path.join("funnel", "test_funnel_sku.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
