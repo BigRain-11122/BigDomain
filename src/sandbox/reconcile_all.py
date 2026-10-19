@@ -2706,6 +2706,26 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonthstraddlepersist.py"), 7),
+    # R2044 explore-queue FIFO head claim (R2043 reseed row):
+    # statsmonth double-straddle pair exception-deepening
+    # example - TWO previous-month fixture places retracted
+    # through the real path in the current month read {0,2,0}
+    # in the current-month window (0 != 0-2, the deepened
+    # honest exception); after the restart the two freed
+    # slots re-place one at a time: {1,2,1} (1 != 1-2, the
+    # leading-retract multi-pair variant) then {2,2,2}
+    # (2 != 2-2) - the closed-yet-still-broken terminal
+    # shape: the window identity stays broken for straddle
+    # rows even after full closure because the window can
+    # never see the previous-month original places, while
+    # the full board keeps the per-row identity at every
+    # step ({3,2,1}, {4,2,2}, {5,2,3}).
+    # (AC-SMDS1..AC-SMDS7 pre-registered in
+    # state/queue/explore.md.)
+    ("ledger-showcase-statsmonth-straddle2-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonth_straddle2persist.py"), 7),
     # R2033 (criteria pre-registered in the backlog R2033 claim row
     # BEFORE this wiring existed - honesty law; AC-FN8): the
     # FUNNEL-LOOP v0.1 four-ring suite (docs/ops/
