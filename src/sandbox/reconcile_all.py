@@ -2683,6 +2683,29 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonthrerepersist.py"), 7),
+    # R2043 explore-queue FIFO head claim (R2021 reseed row):
+    # statsmonth family cross-month STRADDLE-pair net-flow
+    # identity exception cross-restart persistence example -
+    # the positive closure of the R2018/R2019 claim rulings
+    # that kept straddle pairs out of those worlds: an item
+    # placed in a previous month (R1730 fixture law) and
+    # retracted through the real path in the current month
+    # reads {0,1,0} in the current-month window where the
+    # month-window identity displayed_now == places - retracts
+    # honestly BREAKS (0 != 0 - 1) while the full board keeps
+    # the per-row identity ({3,1,2}: 2 == 3 - 1); the
+    # post-restart re-place closes the straddle into the
+    # leading-retract variant {1,1,1} (1 != 1 - 1) with the
+    # full board still holding per row ({4,1,3}: 3 == 4 - 1);
+    # the old-month window stays byte-frozen, the
+    # view/chronicle/tour faces continue, and both live states
+    # persist byte-identically across two full-stack restarts.
+    # (AC-SMST1..AC-SMST7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-statsmonth-straddle-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonthstraddlepersist.py"), 7),
     # R2033 (criteria pre-registered in the backlog R2033 claim row
     # BEFORE this wiring existed - honesty law; AC-FN8): the
     # FUNNEL-LOOP v0.1 four-ring suite (docs/ops/
