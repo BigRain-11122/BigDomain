@@ -1,0 +1,22 @@
+=== funnel CLI gates suite double-run evidence (R2048) ===
+--- run A exit=0 lf-sha16=044bd37efb4f98e2 ---
+PASS AC-FCG1 bad-day family clean fail-closed
+PASS AC-FCG2 parser boundary SystemExit 2
+PASS AC-FCG3 evidence-path pre-gate
+PASS AC-FCG4 inbox-path pre-gate
+PASS AC-FCG5 good-path control + self-tee
+PASS AC-FCG6 gate-FAIL exit law preserved
+PASS AC-FCG7 wiring confinement + zero regression
+SUITE PASS 7/7
+--- run B exit=0 lf-sha16=044bd37efb4f98e2 ---
+PASS AC-FCG1 bad-day family clean fail-closed
+PASS AC-FCG2 parser boundary SystemExit 2
+PASS AC-FCG3 evidence-path pre-gate
+PASS AC-FCG4 inbox-path pre-gate
+PASS AC-FCG5 good-path control + self-tee
+PASS AC-FCG6 gate-FAIL exit law preserved
+PASS AC-FCG7 wiring confinement + zero regression
+SUITE PASS 7/7
+double-run byte-identical: YES
+orphan cross-match: raw-stream sha16 8f29b21a8aaa7afa == orphan evidence value (chain closure; raw stream = child stdout pre-LF-normalization, embedded bodies LF-normalized per the R2023/R2045 dialect law)
+VERDICT PASS

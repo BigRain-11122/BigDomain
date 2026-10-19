@@ -2753,6 +2753,17 @@ SUITES = [
     # is unchanged. The suite's own main() prints exactly eight
     # case PASS-lines plus the SUITE summary line (8 criteria).
     ("funnel", os.path.join("funnel", "test_funnel_daily.py"), 8),
+    # R2048 tech-queue FIFO head claim (R2047 reseed row): funnel
+    # CLI bad-args gate family - the wiring layer absorbs every
+    # reject into ONE clean E_FN_BAD_ARGS line + exit 2 (the
+    # reconcile_daily family contract), the day is validated before
+    # any disk artifact exists, the gate-FAIL exit law and the
+    # library raise law stay intact (probe draft one had a
+    # substring false positive on datetime.timedelta, fixed with
+    # call-paren pinning before delivery; criteria unchanged).
+    # (AC-FCG1..FCG7 pre-registered in state/queue/tech.md.)
+    ("funnel-cli-gates",
+     os.path.join("funnel", "test_funnel_cli_gates.py"), 7),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

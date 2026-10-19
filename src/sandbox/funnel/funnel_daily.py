@@ -426,8 +426,12 @@ def main(argv=None):
     Evidence face: the envelope prints as ascii-escaped JSON (coding
     law - the evidence log stays single-dialect ASCII no matter what
     the UTF-8 config carries). Exit 0 = gate PASS; exit 2 = gate FAIL
-    (fail-closed: a banned-word hit never books a green day); a bad
-    --day raises E_FN_BAD_ARGS (zero new rows). Pure ASCII source.
+    (fail-closed: a banned-word hit never books a green day). A
+    rejected argument face - bad --day, an uncreatable wiring path,
+    an unreadable carrier/config - prints ONE clean E_FN_BAD_ARGS
+    line and exits 2, never a traceback (AC-FCG family, the
+    reconcile_daily contract); a bad --day rejects before any disk
+    artifact exists. Pure ASCII source.
     """
     import argparse
 
@@ -452,16 +456,41 @@ def main(argv=None):
                              " the shell never owns the evidence bytes)")
     args = parser.parse_args(argv)
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.db)), exist_ok=True)
-    for d in (args.leads_inbox, args.orders_inbox, args.flows_inbox):
-        os.makedirs(d, exist_ok=True)
+    # CLI fail-closed gate family (AC-FCG, R2048): every reject is
+    # ONE clean E_FN_BAD_ARGS line + exit 2 (reconcile_daily family
+    # contract) - never a traceback. Order: the day is validated
+    # FIRST (a bad day leaves zero disk artifacts), then the
+    # wiring-layer path creations are pre-gated, then the carrier
+    # phase absorbs the library raises. The library raise law itself
+    # is untouched (wiring-layer confinement, AC-FCG7).
+    def _clean_reject():
+        print(E_FN_BAD_ARGS)
+        return 2
 
-    f = FunnelDaily(args.db, config_path=args.config)
     try:
-        out = f.run_daily(args.leads_inbox, args.orders_inbox,
-                          args.flows_inbox, args.day)
-    finally:
-        f.close()
+        _assert_day(args.day)
+    except FunnArgError:
+        return _clean_reject()
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(args.db)),
+                    exist_ok=True)
+        for d in (args.leads_inbox, args.orders_inbox, args.flows_inbox):
+            os.makedirs(d, exist_ok=True)
+        if args.evidence:
+            os.makedirs(
+                os.path.dirname(os.path.abspath(args.evidence)),
+                exist_ok=True)
+    except OSError:
+        return _clean_reject()
+    try:
+        f = FunnelDaily(args.db, config_path=args.config)
+        try:
+            out = f.run_daily(args.leads_inbox, args.orders_inbox,
+                              args.flows_inbox, args.day)
+        finally:
+            f.close()
+    except (FunnArgError, ValueError, sqlite3.Error, OSError):
+        return _clean_reject()
     env = out["envelope"]
     lines = [
         "FUNNEL-DAILY day=%s db=%s" % (args.day, args.db),
@@ -482,8 +511,12 @@ def main(argv=None):
     for line in lines:
         print(line)
     if args.evidence:
-        with open(args.evidence, "w", encoding="utf-8", newline="\n") as h:
-            h.write("\n".join(lines) + "\n")
+        try:
+            with open(args.evidence, "w", encoding="utf-8",
+                      newline="\n") as h:
+                h.write("\n".join(lines) + "\n")
+        except OSError:
+            return _clean_reject()
     return 0 if env["gate"] == "PASS" else 2
 
 
