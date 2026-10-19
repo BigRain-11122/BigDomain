@@ -2806,6 +2806,19 @@ SUITES = [
     # (AC-FRL1..AC-FRL8 pre-registered in state/queue/tech.md.)
     ("funnel-rerollup",
      os.path.join("funnel", "test_funnel_rerollup.py"), 8),
+    # R2052 tech-queue FIFO head claim (R2047 reseed row, fourth
+    # seed): the funnel conservation identity over a multi-day chain
+    # - the lifetime outstanding == granted - spent on every day of a
+    # four-day world, the day-window / lifetime separation, key-by-key
+    # delta closure, the pre-registered arithmetic chain, an empty
+    # day with zero penetration, three-account coherence (stored
+    # envelope vs booking-time SQL vs gate), whole-chain replay
+    # idempotence (amended during delivery: the lifetime face
+    # re-derives on rewrite, so byte identity is asserted on a
+    # newest-day replay while day windows stay frozen), and hygiene.
+    # (AC-FCV1..AC-FCV8 pre-registered in state/queue/tech.md.)
+    ("funnel-conservation",
+     os.path.join("funnel", "test_funnel_conservation.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

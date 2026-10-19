@@ -1,0 +1,33 @@
+FUNNEL-CONSERVATION R2052 evidence (multi-day chain identity)
+==============================================================
+[1] suite source
+path=src/sandbox/funnel/test_funnel_conservation.py
+criteria=AC-FCV1..AC-FCV8 (pre-registered in state/queue/tech.md R2052 claim row BEFORE the suite existed)
+
+[2] first run (exit=0)
+PASS AC-FCV1 per-day lifetime identity
+PASS AC-FCV2 day window vs lifetime separation
+PASS AC-FCV3 delta chain key-by-key closure
+PASS AC-FCV4 pre-registered arithmetic chain
+PASS AC-FCV5 empty day zero penetration
+PASS AC-FCV6 three-account coherence
+PASS AC-FCV7 whole-chain replay idempotent
+PASS AC-FCV8 hygiene
+SUITE PASS 8/8
+
+[3] second run (exit=0)
+PASS AC-FCV1 per-day lifetime identity
+PASS AC-FCV2 day window vs lifetime separation
+PASS AC-FCV3 delta chain key-by-key closure
+PASS AC-FCV4 pre-registered arithmetic chain
+PASS AC-FCV5 empty day zero penetration
+PASS AC-FCV6 three-account coherence
+PASS AC-FCV7 whole-chain replay idempotent
+PASS AC-FCV8 hygiene
+SUITE PASS 8/8
+
+[4] determinism
+stdout_sha16_run1=38b2dddcab94d89e
+stdout_sha16_run2=38b2dddcab94d89e
+double_run_identical=yes
+verdict=PASS
