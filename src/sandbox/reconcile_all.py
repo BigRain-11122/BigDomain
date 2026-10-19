@@ -2719,6 +2719,27 @@ SUITES = [
     ("ledger-proposal-gateboundary-persist",
      os.path.join("ledger",
                    "test_proposal_gateboundarypersist.py"), 7),
+    # R2041 explore-queue FIFO head claim (R2040 reseed row):
+    # proposal sign-side bad-args gate family cross-restart
+    # same-code example - the three-shape gap fill beside the
+    # R2039/R2040 batteries (neither carried the sign-side
+    # account/id/tick argument gates): an ordered 12-probe
+    # battery (1 well-formed control reaching the unknown
+    # branch, 11 bad-args probes: 4 account shape, 2 proposal
+    # id shape, 5 tick shape) rejects with the identical pinned
+    # code vector on instances one/two/three across two
+    # full-stack restarts on a zero-registration boundary
+    # world; the control probe versus the bad-args probes is
+    # the mechanical proof of the bad-args-before-unknown
+    # ordering law, zero side effects per probe batch, honest
+    # empty envelopes byte-identical around every batch,
+    # zero-token law with zero phantom memorial awards,
+    # hygiene (suite-only).
+    # (AC-PSG1..AC-PSG7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-proposal-signbadargs-persist",
+     os.path.join("ledger",
+                   "test_proposal_signbadargspersist.py"), 7),
     ]
 
 FAILS = 0
