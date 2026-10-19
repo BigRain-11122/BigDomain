@@ -2980,18 +2980,276 @@ async def idem_budget_gateorder_cases():
         idb_so_far = len([1 for ac, _ in RESULTS
                           if ac.startswith("AC-IDB")])
         reg_line = ('("lobby", os.path.join("lobby",'
-                    ' "test_client.py"), 72)')
+                    ' "test_client.py"), 79)')
         reg_src = open(os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             "..", "reconcile_all.py"), encoding="utf-8").read()
         reg_ok = reg_line in reg_src
         record("AC-IDB7", reg_ok and idb_so_far == 6,
-               "delivery: reconcile_all SUITES lobby row 57->65->72 "
-               "registered=%s; AC-IDB criteria counted %d before this "
+               "delivery: reconcile_all SUITES lobby row "
+               "57->65->72->79 registered=%s (R2042 drift: the "
+               "AC-IDR1..IDR7 section grows the registered count; "
+               "this face keeps pinning the CURRENT registration); "
+               "AC-IDB criteria counted %d before this "
                "record (7 with it); the full-battery RUNNER pass and "
                "the suite-matrix --check byte-identical face are "
                "carried by the evidence log qa/idem-budget-R2014.log"
                % (reg_ok, idb_so_far))
+    finally:
+        for ws in (ws_a, ws_b):
+            if ws is not None:
+                try:
+                    await ws.close()
+                except Exception:
+                    pass
+        srv.stop()
+
+
+async def idem_expired_rebilling_cases():
+    """AC-IDR1..IDR7 (criteria pre-registered R2042 in the
+    state/queue/explore.md claim row, implemented here): chat.send
+    idem_seen expired-resend billing window - the junction of the
+    R2012 TTL boundary (a post-expiry resend re-enters the event
+    flow) and the R2014 gate-order budget law (an in-window replay
+    absorbs before the rate limit and costs no budget): a resend
+    whose idem TTL has EXPIRED is billed as a fresh unit. At a
+    saturated 5/10s rate window it answers E_RATE_LIMIT (never
+    chat.duplicate); a rejected expired resend does not re-arm the
+    cache (server.py arms only after the rate pass, on the
+    successful broadcast); and on a clean window it passes the
+    rate gate and really consumes a budget slot (the 5th distinct
+    fresh send is then rejected). Behavioral-proof method (R2014
+    precedent): send_times/violations live inside the server
+    subprocess and cannot be read directly, so the billing claims
+    are pinned by their behavioral equivalents; per-account
+    violation counts stay below the 3-violation 60s mute trigger
+    throughout (A ends at 2, B at 1). Derived idem config (ttl
+    1.5s via idem_cfg_copy; rate/mute stay at the shipped values);
+    the shipped config.json file is never modified (R2012/R2014
+    suite-only precedent)."""
+    sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
+    sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
+
+    async def chat_send(ws, room, text, cid):
+        await ws.send(frame("chat.send", room=room,
+                            payload={"text": text}, client_msg_id=cid))
+
+    def chat_rows(db):
+        return db_query(db,
+                        "SELECT COUNT(*) FROM events"
+                        " WHERE type='chat.broadcast'")[0][0]
+
+    def is_rate_reject(f):
+        # both rejection shapes count (R2014 predicate): pre-mute
+        # violations answer err.rate_limit (send_rate_limit) while
+        # the mute-triggered rejections answer sec.reject
+        return (f.get("payload", {}).get("code") == "E_RATE_LIMIT"
+                and f.get("type") in ("err.rate_limit",
+                                      "sec.reject"))
+
+    async def dup_of(ws, evt_id, cid):
+        return await recv_until(ws, lambda f: f.get("type") == "chat.duplicate"
+                                and f.get("payload", {}).get("client_msg_id") == cid
+                                and f.get("payload", {}).get("evt_id") == evt_id)
+
+    cfg = idem_cfg_copy(ttl=1.5)
+    port = _free_port()
+    srv = ServerProc(port, config=cfg, db=os.path.join(
+        tempfile.mkdtemp(prefix="lobby-idem-exb-"), "events.db"))
+    ws_a = None
+    ws_b = None
+    try:
+        srv.start()
+        ws_a, _, _ = await open_client(port)
+        await make_resident(ws_a)
+
+        # saturate account A's 5/10s window: five fresh sends, each
+        # a unique (client_msg_id, text) pair.
+        orig_evts = {}
+        for i in range(5):
+            cid = "idr-a%d" % i
+            text = "idr a %d" % i
+            await chat_send(ws_a, "lobby", text, cid)
+            e = await recv_until(ws_a, lambda f: (
+                f.get("type") == "chat.broadcast"
+                and f.get("payload", {}).get("text") == text))
+            orig_evts[cid] = e.get("evt_id")
+        rows_sat = chat_rows(srv.db)
+
+        # ---- AC-IDR1: in-TTL replay absorbed at saturation (the
+        # control leg of the AC-IDR2 divergence, re-anchored inside
+        # the short-TTL world) ----
+        await chat_send(ws_a, "lobby", "idr a 0", "idr-a0")
+        d1 = await dup_of(ws_a, orig_evts["idr-a0"], "idr-a0")
+        ok_idr1 = (d1 is not None
+                   and d1.get("payload", {}).get("code")
+                   == "E_DUPLICATE_MSG"
+                   and rows_sat == 5
+                   and chat_rows(srv.db) == rows_sat)
+        record("AC-IDR1", ok_idr1,
+               "saturated 5/10s window (%d rows), in-TTL replay of "
+               "the (id,text) absorbed chat.duplicate code=%s "
+               "evt==original=%s rows-unchanged=%s zero rate contact"
+               % (rows_sat,
+                  d1.get("payload", {}).get("code"),
+                  d1.get("payload", {}).get("evt_id")
+                  == orig_evts["idr-a0"],
+                  chat_rows(srv.db) == rows_sat))
+
+        # ---- AC-IDR2: the expired resend is billed as a fresh unit
+        # at saturation (junction core: same world, same saturated
+        # position, only the TTL state differs) ----
+        await asyncio.sleep(1.7)   # past the 1.5s idem ttl; the 10s
+        # rate window is still saturated by the five fresh sends
+        await chat_send(ws_a, "lobby", "idr a 0", "idr-a0")
+        f_rj = await recv_until(ws_a, is_rate_reject)
+        ok_idr2 = (f_rj is not None
+                   and chat_rows(srv.db) == rows_sat)
+        record("AC-IDR2", ok_idr2,
+               "same (id,text), same saturated position, TTL "
+               "expired: answer-type=%s code=%s rows-unchanged=%s "
+               "(violation #1; the in-TTL twin answered "
+               "chat.duplicate, so the expired resend walked the "
+               "fresh path into the rate gate = billed as a fresh "
+               "unit)"
+               % (f_rj.get("type") if f_rj is not None else None,
+                  f_rj.get("payload", {}).get("code")
+                  if f_rj is not None else None,
+                  chat_rows(srv.db) == rows_sat))
+
+        # ---- AC-IDR3: a rejected expired resend does not re-arm
+        # the cache (the arm sits after the rate pass, on the
+        # successful broadcast) ----
+        await chat_send(ws_a, "lobby", "idr a 0", "idr-a0")
+        f_rj2 = await recv_until(ws_a, is_rate_reject)
+        ok_idr3 = (f_rj2 is not None
+                   and chat_rows(srv.db) == rows_sat)
+        record("AC-IDR3", ok_idr3,
+               "second expired resend rate-rejected again "
+               "(violation #2, not dup, not mute)=%s "
+               "rows-unchanged=%s - the rejected resend did NOT "
+               "re-arm the idem cache, so arming follows the "
+               "successful broadcast, never the attempt"
+               % (f_rj2 is not None,
+                  chat_rows(srv.db) == rows_sat))
+
+        # ---- account B on a fresh rate budget: the clean-window
+        # burn face. Four fresh sends leave 4/5 slots; the victim
+        # key vX is armed now and expires with the 1.5s ttl. ----
+        ws_b, _, _ = await open_client(port)
+        await make_resident(ws_b)
+        b_orig = {}
+        for j in range(4):
+            cid = "idr-bvx" if j == 0 else "idr-b%d" % j
+            text = "idr b vx" if j == 0 else "idr b %d" % j
+            await chat_send(ws_b, "lobby", text, cid)
+            e = await recv_until(ws_b, lambda f: (
+                f.get("type") == "chat.broadcast"
+                and f.get("payload", {}).get("text") == text))
+            b_orig[cid] = e.get("evt_id")
+        rows_b4 = chat_rows(srv.db)
+
+        # ---- AC-IDR4: the expired resend burns a real budget slot
+        # on the clean window ----
+        await asyncio.sleep(1.8)   # vX's 1.5s ttl expired; B's 10s
+        # window still holds the four fresh sends (4/5 slots)
+        await chat_send(ws_b, "lobby", "idr b vx", "idr-bvx")
+        e_rebill = await recv_until(ws_b, lambda f: (
+            f.get("type") == "chat.broadcast"
+            and f.get("payload", {}).get("text") == "idr b vx"
+            and f.get("evt_id") != b_orig["idr-bvx"]))
+        ok_idr4 = (e_rebill is not None
+                   and rows_b4 == rows_sat + 4
+                   and chat_rows(srv.db) == rows_b4 + 1)
+        record("AC-IDR4", ok_idr4,
+               "expired resend passed the 4/5 rate gate and "
+               "broadcast a NEW evt (not the original)=%s: "
+               "fresh-entry=%s rows %d -> %d - the resend consumed "
+               "the 5th budget slot, it is not a free pass"
+               % (e_rebill is not None
+                  and e_rebill.get("evt_id") != b_orig["idr-bvx"],
+                  e_rebill is not None, rows_b4,
+                  chat_rows(srv.db)))
+
+        # ---- AC-IDR5: the successful billed resend re-arms the
+        # cache, so the immediate replay is absorbed again (the
+        # free-replay law restored; R2012 AC-IDT3 re-arm face in
+        # the budget context) ----
+        await chat_send(ws_b, "lobby", "idr b vx", "idr-bvx")
+        d5 = await dup_of(ws_b, e_rebill.get("evt_id"), "idr-bvx")
+        ok_idr5 = (d5 is not None
+                   and d5.get("payload", {}).get("evt_id")
+                   == e_rebill.get("evt_id")
+                   and chat_rows(srv.db) == rows_b4 + 1)
+        record("AC-IDR5", ok_idr5,
+               "immediate replay re-acked the NEW evt (re-arm after "
+               "the billed resend)=%s rows-stable=%s - the expired "
+               "resend is billed once, then the free-replay law is "
+               "restored"
+               % (d5 is not None
+                  and d5.get("payload", {}).get("evt_id")
+                  == e_rebill.get("evt_id"),
+                  chat_rows(srv.db) == rows_b4 + 1))
+
+        # ---- AC-IDR6: slot-burn exhaustion proof (the 5th
+        # distinct fresh send is rejected because the expired
+        # resend really holds the 5th slot) ----
+        await chat_send(ws_b, "lobby", "idr b four", "idr-b4")
+        f_b5 = await recv_until(ws_b, is_rate_reject)
+        ok_idr6 = (f_b5 is not None
+                   and chat_rows(srv.db) == rows_b4 + 1)
+        record("AC-IDR6", ok_idr6,
+               "B's 5th distinct fresh send rejected E_RATE_LIMIT "
+               "(B violation #1): window proven full=%s "
+               "rows-stable=%s - the expired resend's slot was "
+               "really consumed (a free resend would have left "
+               "this send the 5th slot)"
+               % (f_b5 is not None,
+                  chat_rows(srv.db) == rows_b4 + 1))
+
+        # ---- AC-IDR7: hygiene + delivery ----
+        sha_server_post = hashlib.sha256(
+            open(SERVER, "rb").read()).hexdigest()
+        sha_config_post = hashlib.sha256(
+            open(CONFIG, "rb").read()).hexdigest()
+        own_src = inspect.getsource(idem_expired_rebilling_cases)
+        ascii_ok = True
+        try:
+            own_src.encode("ascii")
+        except UnicodeEncodeError:
+            ascii_ok = False
+        net_ok = not any(
+            ln.strip().startswith(("import requests", "import urllib",
+                                   "import http", "from requests",
+                                   "from urllib", "from http",
+                                   "import socket", "import aiohttp",
+                                   "import httpx"))
+            for ln in own_src.splitlines())
+        idr_so_far = len([1 for ac, _ in RESULTS
+                          if ac.startswith("AC-IDR")])
+        reg_line = ('("lobby", os.path.join("lobby",'
+                    ' "test_client.py"), 79)')
+        reg_src = open(os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..", "reconcile_all.py"), encoding="utf-8").read()
+        reg_ok = reg_line in reg_src
+        rows_total = chat_rows(srv.db)
+        record("AC-IDR7", sha_server_post == sha_server_pre
+               and sha_config_post == sha_config_pre and ascii_ok
+               and net_ok and reg_ok and idr_so_far == 6
+               and rows_total == rows_sat + 5,
+               "server.py-unchanged=%s config.json-unchanged=%s "
+               "section-ascii=%s true-import-lines-zero-network=%s "
+               "delivery: reconcile_all SUITES lobby row 72->79 "
+               "registered=%s; AC-IDR criteria counted %d before "
+               "this record (7 with it); whole-window store "
+               "accounting rows=%d (A5 + B4 + B-resend 1); the "
+               "full-battery RUNNER pass and the suite-matrix "
+               "--check byte-identical face are carried by the "
+               "evidence log qa/idem-expired-R2042.log"
+               % (sha_server_post == sha_server_pre,
+                  sha_config_post == sha_config_pre, ascii_ok,
+                  net_ok, reg_ok, idr_so_far, rows_total))
     finally:
         for ws in (ws_a, ws_b):
             if ws is not None:
@@ -3943,6 +4201,17 @@ async def suite():
     # stays saturated (fresh-storm + 10-replay storm + 6th-fresh
     # rejection + no-id control anchor, shipped config values).
     await idem_budget_gateorder_cases()
+
+    # AC-IDR1..IDR7 (R2042): idem_seen expired-resend billing window
+    # - the junction of the R2012 TTL boundary and the R2014
+    # gate-order budget law: a TTL-expired resend of the same
+    # (id,text) is billed as a fresh unit (saturated-window
+    # E_RATE_LIMIT divergence vs in-TTL dup absorption, no re-arm
+    # on rejection, real budget-slot burn on a clean window with
+    # the exhaustion proof, re-armed free replay after the billed
+    # resend; behavioral-proof method, violations stay below the
+    # mute trigger).
+    await idem_expired_rebilling_cases()
 
     # AC-S49..S54 (R1915): room.board protocol face across full
     # server-process restarts (the store-level persist is already

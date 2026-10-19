@@ -174,7 +174,15 @@ SUITES = [
     # - fresh-storm + 10-replay storm + 6th-fresh rejection + no-id
     # control anchor, all on shipped config values - AC-IDB1..IDB7
     # (65 -> 72).
-    ("lobby", os.path.join("lobby", "test_client.py"), 72),
+    # R2042 idem_seen expired-resend billing window: a TTL-expired
+    # resend of the same (id,text) is billed as a fresh unit - at
+    # saturation it answers E_RATE_LIMIT instead of absorbing as a
+    # duplicate, a rejected expired resend does not re-arm the
+    # cache, and on a clean window it really consumes a budget slot
+    # (5th-fresh exhaustion proof + re-armed free replay after the
+    # billed resend; behavioral-proof method, violations below the
+    # mute trigger) - AC-IDR1..IDR7 (72 -> 79).
+    ("lobby", os.path.join("lobby", "test_client.py"), 79),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of

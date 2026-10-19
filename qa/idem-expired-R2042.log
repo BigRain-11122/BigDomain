@@ -1,0 +1,87 @@
+idem-expired-rebilling window double-run driver (R2042)
+run1 rc=0 run2 rc=0
+stdout byte-identical (CRLF->LF normalized): True
+sha16 run1=08985e19a94054ae bytes=13470
+AC-IDR records: 7/8 pass
+suite tail: SUITE PASS (79/79 criteria pass)
+---- run1 stdout (full) ----
+PASS AC-S1: first frame type=sys.hello payload keys=['risk_doc', 'rooms', 'v']
+PASS AC-S6: frame2 type=sys.risk_warning persistent=True text_len=115
+PASS AC-S2: spectator-rejected=True not-broadcast=True spectator-receives=True
+PASS AC-S3: rtt self=ok(<=500ms) other=ok(<=500ms) lobby-isolation=True quant-recv-room=quant
+PASS AC-S4: refusal[empty-wordlist-config rc=2 offline=True; missing-config rc=2 offline=True; port-probe(ephemeral)-never-bound=True]; gate1=True gate2=True no-broadcast=True clean-passed=True rejected-in-stream=0/0
+PASS AC-S5: spoof overwritten: ai_generated=False actor=res-<id8>; ai-notice ai_generated=True label-set=True
+PASS AC-S7: last row repo=domain/BigDomain zone=lobby all-fields-set=True; replay-rejected=True; jsonl-export=True evt_id=51912e056f999f9d
+PASS AC-S9: violations-err.rate_limit=True; 3rd-violation-mute-sec.reject=sec.reject muted_until-in-future=True; muted-hold=True (60s unmute path not awaited in suite; window asserted via muted_until)
+PASS AC-S10: chat->chat.broadcast(room=lobby); idea->pool-stub idea_id=True; store-types=['chat.broadcast', 'idea.submit']
+PASS AC-S16: board==manual-sql=True rooms=['lobby', 'quant'] ai_generated=True actor=system disclaimer-match=True fresh-reflection=True legacy-reject=True
+PASS AC-S17: single==py-slice==manual-sql=True multi+unknown=True empty=True bad-forms-reject=[True, True, True, True, True, True] default-none-full=True
+PASS AC-S8a: config-30/60=True banner-ok=True; server disconnected the no-pong client after sub-5s (test instance interval=1s timeout=2s)
+PASS AC-S8c: baseline-acked=True; dead=True via=ConnectionClosedError in within-bound (keepalive 1s+1s, bound 6s); proxy-frozen=True sessions=1 (no-FIN premise); reconnect-direct=True; post-recovery-roundtrip=True pending=0
+PASS AC-S8e: armed=True frozen=True pending-after-cut=1; observer-once evt=<hexid:16>; dead=True via=ConnectionClosedError in sub-6s; reconnect=True; duplicate-ack evt-match=True id-match=True code=E_DUPLICATE_MSG; store-rows=1; no-rebroadcast=True; pending=0; post-roundtrip=True
+PASS AC-S8d: dead=True via=ConnectionClosedError in sub-6s; refusal-drill budget-out=False drill-refusals=caught(>=1) (retry loop caught+backed off real refusals); restart: reconnect=True retries=in-1..10 (>=1, <=10: not busy-spinning; a corpse-backlog dial may bridge the restart on Windows loopback - R1876: counts display range-class for double-run byte-identity); room-set restored exactly: lobby-isolated=True quant-received=True
+PASS AC-S14: empty-board=True envelope-keys=['disclaimer', 'room_message_board']; rows=[{'room': 'lobby', 'messages': 2, 'actors': 2}, {'room': 'quant', 'messages': 3, 'actors': 2}] row-keys-exact=True; manual-sql-cross=True scope(events=7 board-msgs=5 non-chat-excluded)=True; insertion-order-independent=True; live-rederive=True
+PASS AC-S15: row-counts-stable=True ([8, 0]); zero-write-method-src=True; deterministic=True; bad-disclaimer-construction-refused ['empty=True', 'whitespace=True', 'non-str=True']; legacy-no-disclaimer-face-refused=True; live-db cross=True rooms=['lobby', 'quant']
+PASS AC-S18: empty-board=True rows=[{'room': 'cocreate', 'ideas': 3, 'actors': 2}, {'room': 'lab', 'ideas': 1, 'actors': 1}] manual-sql-cross=True scope(events=6 board-ideas=4)=True insertion-order-independent=True live-rederive=True; row-counts-stable=True zero-write-src=True deterministic=True bad-disclaimer ['empty=True', 'whitespace=True', 'non-str=True'] legacy-refused=True live-db-cross=True pools=['cocreate']
+PASS AC-S19: restart-survival(board==manual=True ideas>0=True keys=['board', 'disclaimer'] disclaimer-match=True ai_generated=True actor=system); fresh-reflection=True (2->3); filter=True empty=True unknown=True bad-rejects=[True, True, True, True, True, True] default-full=True legacy-reject=True
+PASS AC-S20: default-shape=True window-rows=True order=True empty=True manual-sql=True reorder-independent=True scope=True
+PASS AC-S21: bads14 x 2 boards all E_LS_BAD_WINDOW=True (28 rejects); zero-side-effects events 7==7; disclaimer-gate-outermost=True
+PASS AC-S22: row-counts-stable=True zero-write-src=True det-room=True det-idea=True default-unchanged=True live-db-cross=True (month=2026-10 rows=2)
+PASS AC-S23: nov-grid-born=True nov-manual-sql=True oct-snapshot-kept=True no-leak-either-way=True (oct msgs 3+3 / ideas 2+2)
+PASS AC-S24: default-both-months=True windows-partition-default=True pre-roll-default==oct-window=True
+PASS AC-S25: events-total=12 (oct 6 + nov 6, non-counted 2)=True type-isolation=True pure-read=True oct-reread-stable=True
+PASS AC-S26: default-2keys-full-6zones=True cap-6keys-total6-returned2-truncated=True tail==full[-2:]=True
+PASS AC-S27: 10/10 bad-limit x 2 boards rejected E_LS_BAD_LIMIT; events flat 16==16; double-bad->limit gate wins=True; bad-window-only=True; disclaimer-outermost=True
+PASS AC-S28: tail slice == mirror SQL (zone DESC LIMIT N reversed) on n=1/3/4 x both boards, zone-ascending kept=True
+PASS AC-S29: window-before-cap: nov total=2 (in-window, not global 6); windowed cap rows == windowed full tail; no re-order; windowed-cap envelope exactly 6 keys (no window echo)=True
+PASS AC-S30: empty board + zero-row month keep the 4-key block honest (total=0 truncated=False); limit==total full return; limit=1 tail-1=True
+PASS AC-S31: row-counts-stable=True zero-write-src=True det-byte-identical=True live-db-cross=True (month=2026-10 returned=2 total=2)
+PASS AC-S32: 6 zones ascending=True; cap total=6 returned=2 tail-2=True; windowed-cap 6 keys (no window echo)=True
+PASS AC-S33: close -> reopen same db: six read faces byte-identical=True
+PASS AC-S34: default recomputed (eta 7th zone=True, delta ideas=2)=True; oct window reads frozen byte-identical=True; nov window carries new rows=True
+PASS AC-S35: oct cap total stays 6 (zero nov penetration)=True; nov cap total=2 own-window=True; empty month 2026-12 honest empty 4-key block=True
+PASS AC-S36: events/census_cache counts flat across the read batch (15==15)=True
+PASS AC-S37: third instance == second-instance state=True; oct window reads still == original pre-close snapshots=True
+PASS AC-S38: ascii=True net_imports=[] cfg_unchanged=True store_unchanged=True world_outside_repo=True
+PASS AC-S39: replay absorbed: dup-frame-evt_id==orig=True code-ok=True reason-processed=True rows-unchanged=True observer-silent=True
+PASS AC-S40: post-restart replay re-entered the event flow: new-evt=True rows 1 -> 2 (in-memory cache dies with the process - honest boundary)
+PASS AC-S41: in-TTL replay absorbed=True; after ttl expiry the resend re-enters as a fresh event=True rows 1 -> 2
+PASS AC-S42: cap=2: evicted-key replay re-entered=True; re-remembered key absorbed=True survivor c3 absorbed=True; next-oldest survivor c2 evicted by the re-remember -> re-entered=True; rows 3 + 1 + 0 + 0 + 1 = 5
+PASS AC-S43: server.py-unchanged=True config.json-unchanged=True section-ascii=True
+PASS AC-S44: same-id different-text fresh-evt=True; both keys coexist (alpha->E1, beta->E2)=True; rows 2 stable=True
+PASS AC-S45: cross-connection replay absorbed=True rows-unchanged=True observer-silent=True (cache is server-instance scoped)
+PASS AC-S46: different-id same-text fresh-evt=True; per-id keys coexist (a->E4, b->E5)=True; rows 2 stable=True
+PASS AC-S47: strip-face stored+absorbed=True/True; id-normalized absorbed=True; truncation stored(2000)+absorbed=True/True; rows 3 stable=True
+PASS AC-S48: server.py-unchanged=True config.json-unchanged=True section-ascii=True
+PASS AC-IDT1: in-window replay at t+0.7 absorbed: dup-evt==orig=True code-ok=True rows-unchanged=True
+PASS AC-IDT2: fixed-window non-refresh: resend at t+1.8 re-entered=True rows 2 -> 3 (the t+0.7 absorption did not slide the 1.5s window)
+PASS AC-IDT3: post-expiry re-arm: immediate replay re-acked the NEW evt=True (orig never re-acked) rows-stable=True
+PASS AC-IDT4: per-key staggered windows: key two (remembered t+0.9) still absorbed at t+1.8 while key one had already expired=True rows-stable=True
+PASS AC-IDT5: world-1 store accounting: rows 1 -> 3 (exactly the three fresh entries idt-one/idt-two/idt-one-reentry; every absorbed replay added none)
+PASS AC-IDT6: len==cap no-eviction boundary: k1-absorbed=True k2-absorbed=True rows-stable=True (cap=2 reached, no premature eviction)
+PASS AC-IDT7: over-cap FIFO eviction order: survivor-k2-absorbed=True evicted-k1-reentered=True rows 2 -> 3 -> 4 (evicted while still TTL-live, honest re-entry)
+PASS AC-IDT8: server.py-unchanged=True config.json-unchanged=True section-ascii=True (exact-instant expiry predicate is unpinnable against the live monotonic clock in the subprocess server; order boundaries pinned)
+PASS AC-IDB1: 5/10s window saturated by five fresh sends (5 rows) then a replayed (id,text) answered chat.duplicate code=E_DUPLICATE_MSG evt==original=True and zero E_RATE_LIMIT (a rate-path replay would have failed the duplicate wait)
+PASS AC-IDB2: 10 consecutive replays of one (id,text) all duplicate, store rows unchanged 5 -> 5 (behavioral zero-budget proof: a budget-burning replay would have tripped the 3-violation mute and the 4th+ replay would answer E_RATE_LIMIT muted; send_times/violations live in the subprocess and are pinned by this behavioral equivalent)
+PASS AC-IDB5: dup-absorb storm side effects: store rows 5 == 5 saturated count, bystander-second-broadcast=False (duplicates never re-broadcast, never re-land)
+PASS AC-IDB3: 6th fresh send (new id + new text) still rejected E_RATE_LIMIT after the 10-replay storm: the window was neither freed nor extended by the replays (violation #1, below the 3-violation mute)
+PASS AC-IDB4: no-client_msg_id send at the same saturated position also rejected E_RATE_LIMIT (control anchor; violation #2 - the duplicate path returns ahead of the rate check while every non-duplicate path hits it)
+PASS AC-IDB6: server.py-unchanged=True config.json-unchanged=True section-ascii=True true-import-lines-zero-network=True (shipped values throughout, no derived config copy this window; the double-run byte-identity face is carried by the evidence log qa/idem-budget-R2014.log)
+PASS AC-IDB7: delivery: reconcile_all SUITES lobby row 57->65->72->79 registered=True (R2042 drift: the AC-IDR1..IDR7 section grows the registered count; this face keeps pinning the CURRENT registration); AC-IDB criteria counted 6 before this record (7 with it); the full-battery RUNNER pass and the suite-matrix --check byte-identical face are carried by the evidence log qa/idem-budget-R2014.log
+PASS AC-IDR1: saturated 5/10s window (5 rows), in-TTL replay of the (id,text) absorbed chat.duplicate code=E_DUPLICATE_MSG evt==original=True rows-unchanged=True zero rate contact
+PASS AC-IDR2: same (id,text), same saturated position, TTL expired: answer-type=err.rate_limit code=E_RATE_LIMIT rows-unchanged=True (violation #1; the in-TTL twin answered chat.duplicate, so the expired resend walked the fresh path into the rate gate = billed as a fresh unit)
+PASS AC-IDR3: second expired resend rate-rejected again (violation #2, not dup, not mute)=True rows-unchanged=True - the rejected resend did NOT re-arm the idem cache, so arming follows the successful broadcast, never the attempt
+PASS AC-IDR4: expired resend passed the 4/5 rate gate and broadcast a NEW evt (not the original)=True: fresh-entry=True rows 9 -> 10 - the resend consumed the 5th budget slot, it is not a free pass
+PASS AC-IDR5: immediate replay re-acked the NEW evt (re-arm after the billed resend)=True rows-stable=True - the expired resend is billed once, then the free-replay law is restored
+PASS AC-IDR6: B's 5th distinct fresh send rejected E_RATE_LIMIT (B violation #1): window proven full=True rows-stable=True - the expired resend's slot was really consumed (a free resend would have left this send the 5th slot)
+PASS AC-IDR7: server.py-unchanged=True config.json-unchanged=True section-ascii=True true-import-lines-zero-network=True delivery: reconcile_all SUITES lobby row 72->79 registered=True; AC-IDR criteria counted 6 before this record (7 with it); whole-window store accounting rows=10 (A5 + B4 + B-resend 1); the full-battery RUNNER pass and the suite-matrix --check byte-identical face are carried by the evidence log qa/idem-expired-R2042.log
+PASS AC-S49: board==manual==expected=True envelope-facts=True filter-subseq=True empty=True default-none==full=True w=2026-10 mirror-window==full=True chat-rows=3=True
+PASS AC-S50: restart reproduces protocol reads byte-identical: full=True filter=True empty=True double-read-self=True
+PASS AC-S51: post-restart live data recomputed: full!=pre=True ==manual==expected=True lobby-filter=True quant-frozen==pre=True chat-rows 3 -> 4
+PASS AC-S52: nov-window==[arena 1/1]=True store-full==expected=True; restarted server protocol read == store read byte-identical=True manual-cross=True
+PASS AC-S53: oct-window frozen across restart-x-nov-row=True nov-window==[arena 1/1]=True; second restart sequential reads byte-identical: full=True quant=True
+PASS AC-S54: read-battery row-counts stable=True ([6, 3]); server.py=True store.py=True config.json=True unchanged; section-ascii=True
+PASS AC-S11: full: keys=12 subset=True name-match=True deep-water-leak=[]; subset=True forbidden=True honorary-zero-render=True unknown=True
+PASS AC-S12: receipt-evt_id=True queued-row=True gate-rejects=True ungated-rows=0
+PASS AC-S13: snapshot-200-as_of=True census-subset=True 404=404/404 405=405/405/405 ro-write-refused=True files-unchanged=True
+SUITE PASS (79/79 criteria pass)
