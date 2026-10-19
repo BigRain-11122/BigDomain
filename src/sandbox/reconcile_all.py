@@ -2819,6 +2819,19 @@ SUITES = [
     # (AC-FCV1..AC-FCV8 pre-registered in state/queue/tech.md.)
     ("funnel-conservation",
      os.path.join("funnel", "test_funnel_conservation.py"), 8),
+    # R2053 tech-queue FIFO head claim (R2052 reseed row, fifth
+    # seed): the per-account token ledger read face - flows grouped
+    # by account into granted/spent/outstanding three keys in
+    # sorted-account order, the sum of per-account outstanding
+    # closing the lifetime rollup total, the day-window vs lifetime
+    # vs honest-empty-day law, the blank account as its own bucket,
+    # an honest negative overdraft (no clamp), cross-restart
+    # byte-identical reads with zero writes, pure-read plus
+    # bad-day fail-closed, and hygiene (ASCII, zero network, zero
+    # wall clock). (AC-FAR1..AC-FAR8 pre-registered in
+    # state/queue/tech.md before the suite existed.)
+    ("funnel-account",
+     os.path.join("funnel", "test_funnel_account.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

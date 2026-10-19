@@ -1,0 +1,9 @@
+PASS AC-FAR1 per-account three keys
+PASS AC-FAR2 lifetime identity closure
+PASS AC-FAR3 day window law
+PASS AC-FAR4 blank account bucket
+PASS AC-FAR5 honest overdraft
+PASS AC-FAR6 cross-restart persistence
+PASS AC-FAR7 pure read and fail-closed
+PASS AC-FAR8 hygiene
+SUITE PASS 8/8

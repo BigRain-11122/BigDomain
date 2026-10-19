@@ -290,6 +290,50 @@ class FunnelDaily:
         self.db.commit()
         return {"flows_seen": seen, "flows_new": new}
 
+    # ---- per-account token ledger read face ----
+
+    def account_ledger(self, day=None):
+        """Per-account granted/spent/outstanding read face (R2053).
+
+        A pure read over the append-only flows table (zero writes, zero
+        cache, no wall clock): one row per account that appears in the
+        window, in sorted-account order, each carrying the three keys.
+        The blank account ("") is a legitimate bucket of its own - a
+        flow row may honestly carry no account yet - and is never
+        merged into a named account. An account whose spend exceeds its
+        grant reports a negative outstanding (honest overdraft, never
+        clamped to zero). Window law: day=None reads the lifetime
+        ledger; an explicit day reads only that day's rows; a day with
+        no rows is an honest empty face ({}), not an error. A bad day
+        form raises E_FN_BAD_ARGS before any row is touched.
+        """
+        if day is not None:
+            _assert_day(day)
+        sql = ("SELECT account, kind, COALESCE(SUM(amount),0) "
+               "FROM flows WHERE 1=1")
+        params = []
+        if day is not None:
+            sql += " AND day=?"
+            params.append(day)
+        sql += " GROUP BY account, kind"
+        accounts = {}
+        for account, kind, total in self.db.execute(sql, params).fetchall():
+            bucket = accounts.setdefault(
+                str(account), {"granted": 0, "spent": 0})
+            if kind == "grant":
+                bucket["granted"] = int(total)
+            elif kind == "spend":
+                bucket["spent"] = int(total)
+        out = {}
+        for account in sorted(accounts):
+            bucket = accounts[account]
+            out[account] = {
+                "granted": bucket["granted"],
+                "spent": bucket["spent"],
+                "outstanding": bucket["granted"] - bucket["spent"],
+            }
+        return out
+
     # ---- rollup + lightweight compliance gate ----
 
     def rollup(self, day):
