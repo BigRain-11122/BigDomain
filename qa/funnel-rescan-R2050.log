@@ -1,0 +1,26 @@
+# R2050 funnel inbox cross-day re-scan suite (AC-FRS1..AC-FRS8)
+
+--- section 1: acceptance suite ---
+PASS AC-FRS1 first-write-wins on source tables
+PASS AC-FRS2 cross-day new-count arithmetic
+PASS AC-FRS3 day window vs lifetime account
+PASS AC-FRS4 dispatch full-table re-scan
+PASS AC-FRS5 same-day replay with history
+PASS AC-FRS6 earlier-day envelope frozen
+PASS AC-FRS7 prev-day delta closure
+PASS AC-FRS8 hygiene
+SUITE PASS 8/8
+suite exit=0
+
+--- section 2: full battery (qa/reconcile-all-R2050.log) ---
+RUNNER PASS (259/259 suites green, reconcile controls 7/7, 335.8s)
+fail lines: 0
+
+--- section 3: suite matrix check ---
+PASS check: docs/sandbox-suite-matrix.md byte-identical (25301 bytes, 259 suites, 2182 criteria)
+matrix check exit=0
+
+--- section 4: hygiene ---
+suite source pure ASCII: True (AC-FRS8 self-check)
+shipped config.json + funnel_daily.py sha256 unchanged: True (AC-FRS8)
+zero network imports / zero wall-clock calls: True (AST audit)

@@ -2778,6 +2778,22 @@ SUITES = [
     # (AC-FPR1..AC-FPR8 pre-registered in state/queue/tech.md.)
     ("funnel-persist",
      os.path.join("funnel", "test_funnel_persist.py"), 8),
+    # R2050 tech-queue FIFO head claim (R2047 reseed row): funnel
+    # inbox cross-day re-scan idempotency + first-write-wins
+    # attribution - the three keyed source tables keep the first
+    # day's row when the same id reappears on a later day with a
+    # different payload, day ring counters book only new ids, the
+    # day-window counts stay separate from the lifetime outstanding
+    # face, the dispatches full-table re-scan books only new leads,
+    # the earlier day's stored envelope stays byte-frozen, and the
+    # prev-day delta closes over the previous day. One criterion was
+    # amended during delivery: "old-day envelope re-derive is byte
+    # identical" is not the product semantics - the lifetime
+    # outstanding key follows the whole ledger, so the dual face is
+    # registered instead (day-scoped keys frozen, lifetime key live).
+    # (AC-FRS1..AC-FRS8 pre-registered in state/queue/tech.md.)
+    ("funnel-rescan",
+     os.path.join("funnel", "test_funnel_rescan.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
