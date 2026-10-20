@@ -2889,6 +2889,23 @@ SUITES = [
     # the suite or the product change existed.)
     ("funnel-inbox",
      os.path.join("funnel", "test_funnel_inbox.py"), 8),
+    # R2058 tech-queue FIFO head claim (R2054 reseed row): the funnel
+    # per-sku order totals read face across restarts - the gap AC-FST7
+    # left behind (it proves only a single close/reopen of the same
+    # face). Three-instance cascade on a three-day order world: the
+    # first instance anchors lifetime plus three day windows plus a
+    # no-row day; the reopened instance reproduces all five
+    # byte-for-byte; a late day-three batch then grows the lifetime
+    # face (the blank sku stays its own bucket, the new sku takes its
+    # byte-order position) while day one and two stay frozen;
+    # re-booking the original inbox is idempotent across the restart;
+    # no-row days stay honest empty; the read path is pure and the
+    # restart writes nothing; a second restart keeps the injected
+    # state stable at a pinned row count; hygiene is AST-checked.
+    # (AC-FSP1..AC-FSP8 pre-registered in state/queue/tech.md before
+    # the suite existed.)
+    ("funnel-sku-persist",
+     os.path.join("funnel", "test_funnel_sku_persist.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
