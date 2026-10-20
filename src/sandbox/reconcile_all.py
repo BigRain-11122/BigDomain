@@ -2862,6 +2862,21 @@ SUITES = [
     # state/queue/tech.md before the suite existed.)
     ("funnel-route",
      os.path.join("funnel", "test_funnel_route.py"), 8),
+    # R2056 tech-queue FIFO head claim (R2052 reseed row): the funnel
+    # daily CLI multi-day evidence determinism - the CLI accepted
+    # --evidence (R2033) and the rejected-argument family was pinned
+    # (AC-FCG, R2048), but no example covered a D1/D2/D3 chain. This
+    # suite drives the real subprocess: one evidence file per day with
+    # strict LF/utf-8 and byte equality to the stdout block, day
+    # isolation, chain-rerun determinism (day-window keys frozen, the
+    # lifetime key recomputing by product design - amended at delivery
+    # time), printed envelope equals the stored rollup, the gate/exit
+    # contract pair, evidence purity (ASCII, no repo path, no
+    # un-injected date), source-table idempotency and hygiene.
+    # (AC-FCC1..AC-FCC8 pre-registered in state/queue/tech.md before
+    # the suite existed.)
+    ("funnel-cli-chain",
+     os.path.join("funnel", "test_funnel_cli_chain.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

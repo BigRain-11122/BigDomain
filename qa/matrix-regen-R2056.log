@@ -1,0 +1,2 @@
+PASS generated docs/sandbox-suite-matrix.md (25752 bytes) - registry suites=265 criteria=2230 evidence=qa/reconcile-all-R2056.log green=265/265
+PASS hygiene: pure-ascii source, zero network imports

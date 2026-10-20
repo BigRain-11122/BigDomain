@@ -1,0 +1,9 @@
+PASS AC-FCC1 single-day self-tee bytes
+PASS AC-FCC2 multi-day chain day isolation
+PASS AC-FCC3 chain rerun determinism (day-window law)
+PASS AC-FCC4 envelope equals stored rollup
+PASS AC-FCC5 gate/exit contract pair
+PASS AC-FCC6 evidence purity
+PASS AC-FCC7 source-table idempotency
+PASS AC-FCC8 hygiene + zero drift
+SUITE PASS 8/8
