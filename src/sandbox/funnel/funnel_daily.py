@@ -394,6 +394,41 @@ class FunnelDaily:
             }
         return out
 
+    # ---- ranked per-sku order totals read face ----
+
+    def sku_top(self, limit, day=None):
+        """Ranked per-sku order totals read face (R2059, AC-FTP1..AC-FTP8).
+
+        A pure read built on top of sku_totals (zero extra SQL, zero
+        writes, zero cache, no wall clock): the same buckets, sorted by
+        summed amount_cent descending with ties broken by ascending sku
+        (byte) order, cut to the first `limit` buckets. Each row is
+        {rank, sku, orders, amount_cent} with rank starting at 1 and
+        running without gaps. The blank sku is an ordinary bucket of its
+        own and competes for rank like any named bucket.
+
+        Window law matches sku_totals: day=None ranks the lifetime order
+        book; an explicit day ranks that day only; a day with no rows is
+        an honest empty list ([]), never padding or phantom rows. A
+        non-positive or non-integer limit raises E_FN_BAD_ARGS before any
+        row is touched - a top-n face with n < 1 is meaningless, so it
+        fails closed rather than returning an empty list.
+        """
+        if isinstance(limit, bool) or not isinstance(limit, int) or limit < 1:
+            raise FunnArgError(E_FN_BAD_ARGS)
+        totals = self.sku_totals(day)
+        ranked = sorted(totals.items(),
+                        key=lambda pair: (-pair[1]["amount_cent"], pair[0]))
+        out = []
+        for rank, (sku, bucket) in enumerate(ranked[:limit], 1):
+            out.append({
+                "rank": rank,
+                "sku": sku,
+                "orders": bucket["orders"],
+                "amount_cent": bucket["amount_cent"],
+            })
+        return out
+
     # ---- dispatch route distribution read face ----
 
     def route_tally(self, day=None):

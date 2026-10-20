@@ -2906,6 +2906,20 @@ SUITES = [
     # the suite existed.)
     ("funnel-sku-persist",
      os.path.join("funnel", "test_funnel_sku_persist.py"), 8),
+    # R2059 tech-queue FIFO head claim (R2054 reseed row): the funnel
+    # ranked per-sku order totals read face - sku_totals answers "what
+    # is in the book?" but nothing ranked the buckets by money, so the
+    # amount leaderboard face was missing. sku_top cuts the same buckets
+    # by summed amount descending, ties broken by ascending sku byte
+    # order, with a dense rank column and a prefix-only cap (no padding,
+    # no phantom rows); the blank sku competes as its own bucket, a
+    # non-positive or non-integer cap fails closed, day windows match
+    # sku_totals, and the read is pure across restarts. (AC-FTP1..AC-FTP8
+    # pre-registered in state/queue/tech.md before the suite existed;
+    # AC-FTP8 amended in-window from "no clock library" to "no wall
+    # clock calls" because datetime is the day-validation import.)
+    ("funnel-sku-top",
+     os.path.join("funnel", "test_funnel_sku_top.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

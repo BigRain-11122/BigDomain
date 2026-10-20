@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-20T17:40:29+08:00",
+  "export_ts": "2026-10-20T18:18:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2058 P2 tech-queue FIFO head, skipping the gated heads (docker host missing, member refunded schema design-gated, suite-matrix live-normalized window awaiting a real git-checkout mtime event, daily profile window time-gated to 10-24): the funnel per-sku order totals read face across restarts, the gap AC-FST7 left behind (it proves only a single close/reopen). AC-FSP1..AC-FSP8 pre-registered before the suite existed. Three-instance cascade over a three-day order world: instance one anchors the lifetime face plus three day windows plus an honest no-row day; the reopened instance reproduces all five byte-for-byte; a late day-three batch grows the lifetime book (named bucket 3->4 orders, 5980->6480 cent; blank sku stays its own bucket 1->2; the new sku takes its byte-order slot) while day one and two stay frozen; re-booking the original inbox after the restart is idempotent; the read path and the restart write nothing; a second restart keeps the injected state stable at nine orders. Suite SUITE 8/8, double-run sha16 1DFDF3FCECC14343; battery RUNNER 267/267 suites + controls 7/7 258.5s; matrix 267/2246 --check byte-identical; fold R580 pre-closeout. One delivery-time criteria amendment (3->4, not 3->5; amounts were right). Queue hygiene: one true-live reseed from a code-face finding (sku str coercion). Score 2.",
-    "latest_artifact": "src/sandbox/funnel/test_funnel_sku_persist.py + qa/reconcile-all-R2058.log (SUITE PASS 8/8 AC-FSP1..8, double-run sha16 1DFDF3FCECC14343; RUNNER PASS 267/267 suites + controls 7/7 258.5s; suite-matrix 267/2246 byte-identical, 2026-10-20)",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31 (day-3 stamp next round); building-plan committee tri-report <=10-25 (plan doc ready); weekly dead-doc deletion inside the 10-19..10-26 rectification window; QA charter W30 crawl; window <=48h (by 2026-10-22)"
+    "current": "R2059 P2 tech-queue FIFO head after the gated heads (docker host, member refunded schema window, live-mtime window and the 10-24 profile window all skipped as blocked): the funnel ranked per-sku order totals read face - sku_totals answered 'what is in the book?' but nothing ranked the buckets by money. FunnelDaily.sku_top(limit, day) is a pure read on top of sku_totals: summed amount_cent descending, ties broken by ascending sku byte order, a dense rank column, a prefix-only cap (no padding, no phantom rows), the blank sku competing as its own bucket, a non-positive or non-integer cap failing closed with zero rows touched, day windows matching sku_totals, deterministic across restarts. AC-FTP1..AC-FTP8 were pre-registered in the queue before the suite existed, and AC-FTP8 was amended in-window ('no clock library' -> 'no wall clock calls') because datetime is the day-validation import. Battery green: 268/268 suites.",
+    "latest_artifact": "src/sandbox/funnel/test_funnel_sku_top.py + FunnelDaily.sku_top in src/sandbox/funnel/funnel_daily.py (SUITE PASS 8/8; battery qa/reconcile-all-R2059.log, 268/268 suites + controls 7/7) - 2026-10-20 18:17 +08:00",
+    "next_milestone": "R2060 (within 48h): next claimable tech-queue seed - the phone-amount tie-saturation window for sku_top (AC-FTZ) or the late-batch ranking-perturbation window (AC-FTL), whichever clears the dedup grep first; reseeded tech queue is back at 13 open items."
   },
   "depts": [
     {
@@ -203,11 +203,15 @@
   ],
   "results": [
     [
+      "R2059",
+      "R2059 P2 tech-queue FIFO head after the gated heads (docker host, member refunded schema window, live-mtime window and the 10-24 profile window all skipped as blocked): the funnel ranked per-sku order totals read face - sku_totals answered 'what is in the book?' but nothing ranked the buckets by money. FunnelDaily.sku_top(limit, day) is a pure read on top of sku_totals: summed amount_cent descending, ties broken by ascending sku byte order, a dense rank column, a prefix-only cap (no padding, no phantom rows), the blank sku competing as its own bucket, a non-positive or non-integer cap failing closed with zero rows touched, day windows matching sku_totals, deterministic across restarts. AC-FTP1..AC-FTP8 were pre-registered in the queue before the suite existed, and AC-FTP8 was amended in-window ('no clock library' -> 'no wall clock calls') because datetime is the day-validation import. Battery green: 268/268 suites."
+    ],
+    [
       "R2058",
       "R2058 P2 tech-queue FIFO head, skipping the gated heads (docker host missing, member refunded schema design-gated, suite-matrix live-normalized window awaiting a real git-checkout mtime event, daily profile window time-gated to 10-24): the funnel per-sku order totals read face across restarts, the gap AC-FST7 left behind (it proves only a single close/reopen). AC-FSP1..AC-FSP8 pre-registered before the suite existed. Three-instance cascade over a three-day order world: instance one anchors the lifetime face plus three day windows plus an honest no-row day; the reopened instance reproduces all five byte-for-byte; a late day-three batch grows the lifetime book (named bucket 3->4 orders, 5980->6480 cent; blank sku stays its own bucket 1->2; the new sku takes its byte-order slot) while day one and two stay frozen; re-booking the original inbox after the restart is idempotent; the read path and the restart write nothing; a second restart keeps the injected state stable at nine orders. Suite SUITE 8/8, double-run sha16 1DFDF3FCECC14343; battery RUNNER 267/267 suites + controls 7/7 258.5s; matrix 267/2246 --check byte-identical; fold R580 pre-closeout. One delivery-time criteria amendment (3->4, not 3->5; amounts were right). Queue hygiene: one true-live reseed from a code-face finding (sku str coercion). Score 2."
     ],
     [
-      "2058",
+      "2059",
       "OSLoop 执行 tick"
     ],
     [
@@ -426,14 +430,14 @@
   "self_drive": {
     "window": "2026-10-14..2026-10-20",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 4,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 1,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 10,
+    "queue_tech_open": 13,
     "queue_explore_open": 10,
     "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
   },
