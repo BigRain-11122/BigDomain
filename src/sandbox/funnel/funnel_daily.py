@@ -46,10 +46,12 @@ docs/ops/FUNNEL-AUTOMATION-PLAN-v1.md section 4, AC-FN1..AC-FN7):
     persisted, fail-closed.
   - banned words and standing lines live in config.json (a UTF-8
     data file; this .py source stays pure ASCII - coding law).
-  - inbox hygiene: every inbox file is read and fully validated
-    BEFORE any row of that ring is written (all-or-nothing per ring;
-    a bad file means E_FN_BAD_ARGS and zero new rows - the
-    zero-row rejection law).
+  - inbox hygiene: an inbox entry is a regular file with the exact
+    lower-case .json suffix; every other entry (other suffixes,
+    directories) is junk and is skipped without being opened. Every
+    in-contract file is read and fully validated BEFORE any row of
+    that ring is written (all-or-nothing per ring; a bad file means
+    E_FN_BAD_ARGS and zero new rows - the zero-row rejection law).
 
 Hard laws: append-only source rows, zero dice, zero network
 imports, zero wall-clock reads, pure ASCII source.
@@ -172,13 +174,38 @@ class FunnelDaily:
     # ---- shared inbox loader (all-or-nothing per ring) ----
 
     def _load_inbox(self, inbox_dir):
+        """Read one inbox directory under the classification law.
+
+        An inbox entry is a REGULAR FILE whose name ends in the exact
+        lower-case suffix ".json" - that is the whole inbox contract.
+        Everything else is junk and is skipped honestly, never opened
+        and never recursed into: other suffixes (including .JSON /
+        .Json - suffix matching is byte-exact), bare names, and
+        directories (even one literally named "fake.json", which is a
+        directory, not a file). Junk is a data-face hygiene matter, not
+        an error.
+
+        A file that IS in the contract but cannot be honoured - bad
+        JSON text, invalid UTF-8, an unreadable file, or a decoded
+        value that is not an object - rejects the whole ring with
+        E_FN_BAD_ARGS before any row of that ring is written (the
+        zero-row rejection law). Every such face raises FunnArgError:
+        no JSONDecodeError / UnicodeDecodeError / IsADirectoryError
+        escapes the library boundary.
+        """
         _assert_inbox(inbox_dir)
         rows = []
         for name in sorted(os.listdir(inbox_dir)):
             if not name.endswith(".json"):
                 continue
-            with open(os.path.join(inbox_dir, name), encoding="utf-8") as h:
-                item = json.load(h)
+            path = os.path.join(inbox_dir, name)
+            if not os.path.isfile(path):
+                continue
+            try:
+                with open(path, encoding="utf-8") as h:
+                    item = json.load(h)
+            except (ValueError, OSError):
+                raise FunnArgError(E_FN_BAD_ARGS)
             if not isinstance(item, dict):
                 raise FunnArgError(E_FN_BAD_ARGS)
             rows.append(item)

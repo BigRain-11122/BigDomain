@@ -2877,6 +2877,18 @@ SUITES = [
     # the suite existed.)
     ("funnel-cli-chain",
      os.path.join("funnel", "test_funnel_cli_chain.py"), 8),
+    # R2057 tech-queue FIFO head claim (R2052 reseed row): the funnel
+    # inbox classification law - an inbox entry is a regular file with
+    # the exact lower-case .json suffix, everything else (other
+    # suffixes, directories including one named "fake.json") is junk
+    # skipped unopened and never recursed into; a bad in-contract file
+    # (bad JSON text, non-object value, empty file, undecodable bytes)
+    # rejects the whole ring with FunnArgError before any row is
+    # written, and no decoder error escapes the library boundary.
+    # (AC-FIN1..AC-FIN8 pre-registered in state/queue/tech.md before
+    # the suite or the product change existed.)
+    ("funnel-inbox",
+     os.path.join("funnel", "test_funnel_inbox.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
