@@ -2847,6 +2847,21 @@ SUITES = [
     # existed.)
     ("funnel-sku",
      os.path.join("funnel", "test_funnel_sku.py"), 8),
+    # R2055 tech-queue FIFO head claim (R2052 reseed row): the
+    # funnel dispatch route distribution read face - ring 2 reports
+    # the routes of one run only and the rollup counts dispatches
+    # per day, so the cross-round dispatches-by-route face did not
+    # exist. A pure read: one bucket per route, sorted route order,
+    # the honest unrouted archive as its own bucket (never merged
+    # into a named route), an unknown route kept instead of dropped,
+    # lifetime vs explicit-day window with an honest empty day,
+    # idempotent re-dispatch, bad-day fail-closed with zero row
+    # touch, zero writes plus cross-restart byte-identical reads,
+    # and hygiene (ASCII, zero network, zero wall clock,
+    # deterministic). (AC-FRT1..AC-FRT8 pre-registered in
+    # state/queue/tech.md before the suite existed.)
+    ("funnel-route",
+     os.path.join("funnel", "test_funnel_route.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

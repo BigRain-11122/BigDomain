@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-20T07:20:53+08:00",
+  "export_ts": "2026-10-20T08:49:17+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2054 tech-queue FIFO head claim (R2052 reseed seed 6): the funnel per-sku order totals read face. AC-FST1..AC-FST8 pre-registered in the tech.md claim row BEFORE the code existed. funnel_daily.py grows sku_totals(day=None): a pure read over the append-only orders table grouped by sku into order count plus summed amount_cent in ascending sku order, the blank sku as its own bucket (never merged into a named one), lifetime vs explicit-day window with an honest empty day, re-booking the same inbox leaving the totals unchanged, bad day forms rejecting E_FN_BAD_ARGS before any row is touched, and zero writes with cross-restart byte-identical reads. Suite test_funnel_sku.py SUITE 8/8, double-run stdout byte-identical; wiring reconcile_all SUITES + (funnel-sku, 8 criteria); full battery RUNNER PASS 263/263 suites green + controls 7/7 455.1s = qa/reconcile-all-R2054.log; matrix regen 263 suites / 2214 criteria --check byte-identical; census DRIFT-CLEAN. Honest note: the first run failed 260/263 on three em-dash bytes in a new reconcile_all comment (three registry-ASCII hygiene suites abort on decode), fixed to ASCII and re-ran green. tech open 10. Score 2.",
-    "latest_artifact": "src/sandbox/funnel/funnel_daily.py sku_totals + src/sandbox/funnel/test_funnel_sku.py + qa/reconcile-all-R2054.log (SUITE PASS 8/8 AC-FST1..8; RUNNER PASS 263/263 suites + controls 7/7 455.1s after the ASCII fix; suite-matrix 263/2214 byte-identical; census DRIFT-CLEAN, 2026-10-20)",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31 (day-2 stamp on disk, day-3 stamp next round); building-plan committee tri-report <=10-25 (plan doc ready); tech queue next head (funnel dispatch route distribution read face, reseed seed 7); weekly dead-doc deletion inside the 10-19..10-26 rectification window; QA charter W30 crawl; window <=48h (by 2026-10-22)"
+    "current": "R2055 tech-queue FIFO head claim (R2052 reseed seed 7): the funnel dispatch route distribution read face. AC-FRT1..AC-FRT8 pre-registered in the tech.md claim row BEFORE the code existed. funnel_daily.py grows route_tally(day=None): a pure read over the append-only dispatches table grouped by route into the dispatch count, ascending route order, the honest unrouted archive as its own bucket (never merged into a named route), an unknown route kept as its own key instead of dropped, lifetime vs explicit-day window with an honest empty day, idempotent re-dispatch, bad day forms rejecting E_FN_BAD_ARGS before any row is touched, and zero writes with cross-restart byte-identical reads. Suite test_funnel_route.py SUITE 8/8 first-run green; wiring reconcile_all SUITES + (funnel-route, 8 criteria); full battery RUNNER PASS 264/264 suites green + controls 7/7 455.1s = qa/reconcile-all-R2055.log; matrix regen 264 suites / 2222 criteria --check byte-identical; census pass=true; fold R577 pre-closeout (74961B, predicted==actual). tech open 9. Score 2.",
+    "latest_artifact": "src/sandbox/funnel/funnel_daily.py route_tally + src/sandbox/funnel/test_funnel_route.py + qa/reconcile-all-R2055.log (SUITE PASS 8/8 AC-FRT1..8 first-run green; RUNNER PASS 264/264 suites + controls 7/7 455.1s; suite-matrix 264/2222 byte-identical; census pass=true, 2026-10-20)",
+    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31 (day-2 stamp on disk, day-3 stamp next round); building-plan committee tri-report <=10-25 (plan doc ready); tech queue next head (funnel multi-day CLI evidence determinism, reseed seed 8); weekly dead-doc deletion inside the 10-19..10-26 rectification window; QA charter W30 crawl; window <=48h (by 2026-10-22)"
   },
   "depts": [
     {
@@ -203,12 +203,16 @@
   ],
   "results": [
     [
-      "R2054",
-      "R2054 tech-queue FIFO head claim (R2052 reseed seed 6): the funnel per-sku order totals read face. AC-FST1..AC-FST8 pre-registered in the tech.md claim row BEFORE the code existed. funnel_daily.py grows sku_totals(day=None): a pure read over the append-only orders table grouped by sku into order count plus summed amount_cent in ascending sku order, the blank sku as its own bucket (never merged into a named one), lifetime vs explicit-day window with an honest empty day, re-booking the same inbox leaving the totals unchanged, bad day forms rejecting E_FN_BAD_ARGS before any row is touched, and zero writes with cross-restart byte-identical reads. Suite test_funnel_sku.py SUITE 8/8, double-run stdout byte-identical; wiring reconcile_all SUITES + (funnel-sku, 8 criteria); full battery RUNNER PASS 263/263 suites green + controls 7/7 455.1s = qa/reconcile-all-R2054.log; matrix regen 263 suites / 2214 criteria --check byte-identical; census DRIFT-CLEAN. Honest note: the first run failed 260/263 on three em-dash bytes in a new reconcile_all comment (three registry-ASCII hygiene suites abort on decode), fixed to ASCII and re-ran green. tech open 10. Score 2."
+      "R2055",
+      "R2055 tech-queue FIFO head claim (R2052 reseed seed 7): the funnel dispatch route distribution read face. AC-FRT1..AC-FRT8 pre-registered in the tech.md claim row BEFORE the code existed. funnel_daily.py grows route_tally(day=None): a pure read over the append-only dispatches table grouped by route into the dispatch count, ascending route order, the honest unrouted archive as its own bucket (never merged into a named route), an unknown route kept as its own key instead of dropped, lifetime vs explicit-day window with an honest empty day, idempotent re-dispatch, bad day forms rejecting E_FN_BAD_ARGS before any row is touched, and zero writes with cross-restart byte-identical reads. Suite test_funnel_route.py SUITE 8/8 first-run green; wiring reconcile_all SUITES + (funnel-route, 8 criteria); full battery RUNNER PASS 264/264 suites green + controls 7/7 455.1s = qa/reconcile-all-R2055.log; matrix regen 264 suites / 2222 criteria --check byte-identical; census pass=true; fold R577 pre-closeout (74961B, predicted==actual). tech open 9. Score 2."
     ],
     [
-      "2054",
+      "2055",
       "OSLoop 执行 tick"
+    ],
+    [
+      "R2054",
+      "R2054 tech-queue FIFO head claim (R2052 reseed seed 6): the funnel per-sku order totals read face. AC-FST1..AC-FST8 pre-registered in the tech.md claim row BEFORE the code existed. funnel_daily.py grows sku_totals(day=None): a pure read over the append-only orders table grouped by sku into order count plus summed amount_cent in ascending sku order, the blank sku as its own bucket (never merged into a named one), lifetime vs explicit-day window with an honest empty day, re-booking the same inbox leaving the totals unchanged, bad day forms rejecting E_FN_BAD_ARGS before any row is touched, and zero writes with cross-restart byte-identical reads. Suite test_funnel_sku.py SUITE 8/8, double-run stdout byte-identical; wiring reconcile_all SUITES + (funnel-sku, 8 criteria); full battery RUNNER PASS 263/263 suites green + controls 7/7 455.1s = qa/reconcile-all-R2054.log; matrix regen 263 suites / 2214 criteria --check byte-identical; census DRIFT-CLEAN. Honest note: the first run failed 260/263 on three em-dash bytes in a new reconcile_all comment (three registry-ASCII hygiene suites abort on decode), fixed to ASCII and re-ran green. tech open 10. Score 2."
     ],
     [
       "R2053",
@@ -413,11 +417,11 @@
     "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 2,
+    "substantive_non_idle_mention_lines": 1,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 10,
+    "queue_tech_open": 9,
     "queue_explore_open": 10,
     "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
   },

@@ -367,6 +367,36 @@ class FunnelDaily:
             }
         return out
 
+    # ---- dispatch route distribution read face ----
+
+    def route_tally(self, day=None):
+        """Dispatch route distribution read face (R2055, AC-FRT1..AC-FRT8).
+
+        A pure read over the append-only dispatches table (zero writes,
+        zero cache, no wall clock): one bucket per route that appears
+        in the window, carrying the dispatch count, in ascending route
+        (byte) order. The "unrouted" bucket is the honest no-match
+        archive and is never merged into a named route; a route outside
+        the six-domain table (only reachable through a direct row
+        write) keeps its own key instead of being dropped. Window law:
+        day=None reads the lifetime distribution; an explicit day
+        reads only that day's rows; a day with no rows is an honest
+        empty face ({}), not an error. A bad day form raises
+        E_FN_BAD_ARGS before any row is touched.
+        """
+        if day is not None:
+            _assert_day(day)
+        sql = "SELECT route, COUNT(*) FROM dispatches WHERE 1=1"
+        params = []
+        if day is not None:
+            sql += " AND day=?"
+            params.append(day)
+        sql += " GROUP BY route ORDER BY route"
+        out = {}
+        for route, count in self.db.execute(sql, params).fetchall():
+            out[str(route)] = int(count)
+        return out
+
     # ---- rollup + lightweight compliance gate ----
 
     def rollup(self, day):
