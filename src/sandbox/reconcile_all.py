@@ -2920,6 +2920,16 @@ SUITES = [
     # clock calls" because datetime is the day-validation import.)
     ("funnel-sku-top",
      os.path.join("funnel", "test_funnel_sku_top.py"), 8),
+    # R2060 tech-queue FIFO head claim (R2057 reseed row): the funnel
+    # dispatch route distribution read face across restarts - three-day
+    # anchor world, byte-identical reopen, post-restart injection with
+    # the already-read day windows frozen, idempotent inbox re-drop,
+    # honest empty day, pure read (restart writes no rows), a third
+    # instance that does not drift again, and the hygiene face.
+    # (AC-FRTP1..AC-FRTP8 pre-registered in state/queue/tech.md before
+    # the suite existed.)
+    ("funnel-route-persist",
+     os.path.join("funnel", "test_funnel_route_persist.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

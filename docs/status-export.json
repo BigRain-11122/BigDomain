@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-20T18:18:00+08:00",
+  "export_ts": "2026-10-24T01:36:55+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2059 P2 tech-queue FIFO head after the gated heads (docker host, member refunded schema window, live-mtime window and the 10-24 profile window all skipped as blocked): the funnel ranked per-sku order totals read face - sku_totals answered 'what is in the book?' but nothing ranked the buckets by money. FunnelDaily.sku_top(limit, day) is a pure read on top of sku_totals: summed amount_cent descending, ties broken by ascending sku byte order, a dense rank column, a prefix-only cap (no padding, no phantom rows), the blank sku competing as its own bucket, a non-positive or non-integer cap failing closed with zero rows touched, day windows matching sku_totals, deterministic across restarts. AC-FTP1..AC-FTP8 were pre-registered in the queue before the suite existed, and AC-FTP8 was amended in-window ('no clock library' -> 'no wall clock calls') because datetime is the day-validation import. Battery green: 268/268 suites.",
-    "latest_artifact": "src/sandbox/funnel/test_funnel_sku_top.py + FunnelDaily.sku_top in src/sandbox/funnel/funnel_daily.py (SUITE PASS 8/8; battery qa/reconcile-all-R2059.log, 268/268 suites + controls 7/7) - 2026-10-20 18:17 +08:00",
-    "next_milestone": "R2060 (within 48h): next claimable tech-queue seed - the phone-amount tie-saturation window for sku_top (AC-FTZ) or the late-batch ranking-perturbation window (AC-FTL), whichever clears the dedup grep first; reseeded tech queue is back at 13 open items."
+    "current": "R2060: funnel dispatch route distribution read face now has a cross-restart contract - the same db reopened answers byte-identically, a later day's injection moves the lifetime face while already-read day windows stay frozen, a re-dropped inbox stays idempotent, a third instance does not drift, and a pure read writes zero rows. 8/8 suite, battery 269/269 suites green.",
+    "latest_artifact": "src/sandbox/funnel/test_funnel_route_persist.py + reconcile_all wiring (SUITE PASS 8/8; battery qa/reconcile-all-R2060.log, 269/269 suites + controls 7/7) - 2026-10-24 01:5x +08:00",
+    "next_milestone": "R2061 (within 48h): first readable tech-queue row after the four encoding-damaged sku_top seeds - either the funnel evidence same-path overwrite/rotation law (AC-FCR) or the CLI cwd/ambient-encoding independence window (AC-FCW), whichever clears the dedup grep first; tech queue open 12."
   },
   "depts": [
     {
@@ -199,6 +199,10 @@
     [
       "2",
       "member banner_board 月窗过滤参数件（R1856·AC-BQ13..BQ17 预注册先于代码：reminder.py banner_board(limit=0, window=None)——显式 YYYY-MM 月窗全切（板行+by_status/by_reason 双 dense 格+total+banner_board_total 一体随窗辖）、14 坏窗形态 fail-closed E_REM_BAD_WINDOW（E_REM_* 词表新码）、双坏门序 limit 先抛、窗×帽正交（溢出块 banner_board_total=窗内化身行全量计数）、缺省面逐字节保真+window 键 additive；套件 17/17 双跑逐字节同一+全量回归 114/114 判据 1054→1059+矩阵 --check ×2+哨兵 CLEAN+census DRIFT-CLEAN（证据件方言病一轮实弹检出修复）=qa/member-bannerboard-window-R1856.log"
+    ],
+    [
+      "2",
+      "R2060 tech-queue FIFO head claim (R2057 reseed row): funnel dispatch route distribution read face across restarts. AC-FRTP1..AC-FRTP8 pre-registered in state/queue/tech.md before the suite existed. Three-day anchor world books 9 dispatch rows (game2/life1/media1/platform1/quant1/unrouted3); a reopened instance answers the five faces byte-identically; a D3 batch-2 injection books exactly 2 rows, moves the lifetime face to 11 rows (media2/unrouted4) while the D1/D2 windows stay byte-frozen and D3 recomputes honestly; re-dropping the D1 inbox books zero leads and zero dispatches; an empty day is an honest {} at every point; three read batches touch no row and no schema; a third instance reproduces the terminal faces and still shows the original D1 anchor; hygiene is read off the parsed AST with the shipped config hash unchanged. SUITE PASS 8/8, double-run stdout byte-identical sha16 D034A8AA5326B77F = qa/funnel-route-persist-R2060.log; wired into reconcile_all SUITES (funnel-route-persist, 8) - RUNNER PASS 269/269 suites + controls 7/7 232.8s = qa/reconcile-all-R2060.log; matrix regen 269 suites/2262 criteria --check byte-identical; tech open 13->12. Honest note: the four R2059 sku_top seed rows are encoding-damaged ('?' in place of the Chinese text) and were skipped."
     ]
   ],
   "results": [
@@ -211,7 +215,7 @@
       "R2058 P2 tech-queue FIFO head, skipping the gated heads (docker host missing, member refunded schema design-gated, suite-matrix live-normalized window awaiting a real git-checkout mtime event, daily profile window time-gated to 10-24): the funnel per-sku order totals read face across restarts, the gap AC-FST7 left behind (it proves only a single close/reopen). AC-FSP1..AC-FSP8 pre-registered before the suite existed. Three-instance cascade over a three-day order world: instance one anchors the lifetime face plus three day windows plus an honest no-row day; the reopened instance reproduces all five byte-for-byte; a late day-three batch grows the lifetime book (named bucket 3->4 orders, 5980->6480 cent; blank sku stays its own bucket 1->2; the new sku takes its byte-order slot) while day one and two stay frozen; re-booking the original inbox after the restart is idempotent; the read path and the restart write nothing; a second restart keeps the injected state stable at nine orders. Suite SUITE 8/8, double-run sha16 1DFDF3FCECC14343; battery RUNNER 267/267 suites + controls 7/7 258.5s; matrix 267/2246 --check byte-identical; fold R580 pre-closeout. One delivery-time criteria amendment (3->4, not 3->5; amounts were right). Queue hygiene: one true-live reseed from a code-face finding (sku str coercion). Score 2."
     ],
     [
-      "2059",
+      "2060",
       "OSLoop 执行 tick"
     ],
     [
@@ -425,31 +429,35 @@
     [
       "R2052",
       "R2052 tech-queue FIFO head claim (R2047 reseed seed 4): funnel conservation identity over a multi-day chain. AC-FCV1..AC-FCV8 pre-registered in the tech.md claim row BEFORE the suite existed. Four booked days D1..D4 (lifetime balance 60/90/60/50) plus an empty D5: the envelope's outstanding equals the flows table's grant-minus-spend on every booking, day windows stay separate from the lifetime face with zero penetration both ways, delta_prev_day closes key-by-key over the chain, the pre-registered arithmetic chain holds, the empty day books zero windows with a frozen lifetime face, stored rollups agree with booking-time SQL and the gate verdict, a whole-chain replay books nothing and leaves every day window frozen, and hygiene is read off the parsed AST. Two honest in-round corrections: AC-FCV1/2/6 first compared the final ledger against early-day envelopes (the lifetime face only holds at booking time) - switched to booking-time snapshots; AC-FCV7's first wording demanded byte-identical stored envelopes per day, which the shipped re-derivation law cannot satisfy (same family as R2050 AC-FRS6) - re-registered as day-window freeze plus final-ledger lifetime face plus byte identity on a newest-day replay. Wiring: reconcile_all SUITES plus funnel-conservation (8 criteria); full battery RUNNER PASS 261/261 suites green + controls 7/7 357.9s = qa/reconcile-all-R2052.log (260-suite baseline zero regression); matrix regen 261 suites / 2198 criteria --check byte-identical; census re-frozen DRIFT-CLEAN (files=1614 flags=0); tech open 6->5. Score 2."
+    ],
+    [
+      "R2060",
+      "P2 tech-queue FIFO head claim (funnel route cross-restart persistence, AC-FRTP1..AC-FRTP8 pre-registered first) + full battery green + matrix regenerated/checked. Group orders caught up from 2026-10-20 00:5x to 2026-10-23 23:56: T0 cloud-off gate acknowledged, local-only automation continues, weekend cloud window noted; the uncommitted BigDomain iteration_loop gate piece (10-20 18:27) committed for a clean tree. Score 2."
     ]
   ],
   "self_drive": {
-    "window": "2026-10-14..2026-10-20",
+    "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 4,
+    "log_lines_in_window": 5,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 1,
+    "substantive_non_idle_mention_lines": 2,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 13,
+    "queue_tech_open": 12,
     "queue_explore_open": 10,
-    "method": "machine-derived from state.json log per BD-PROP-001 caliber (check_export_consistency.recompute)"
+    "method": "machine-derived from src/os/state.json log and queue files"
   },
-  "window": "2026-10-14..2026-10-20",
+  "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 3,
+  "log_lines_in_window": 5,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 0,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
-  "queue_tech_open": 7,
+  "queue_tech_open": 12,
   "queue_explore_open": 10
 }

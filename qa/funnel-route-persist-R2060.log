@@ -1,0 +1,13 @@
+FUNNEL ROUTE PERSIST R2060
+run1 sha16=D034A8AA5326B77F
+run2 sha16=D034A8AA5326B77F
+identical=True
+PASS AC-FRTP1 three-day anchor world
+PASS AC-FRTP2 restart byte-identical
+PASS AC-FRTP3 post-restart injection, old windows frozen
+PASS AC-FRTP4 idempotent re-drop across restart
+PASS AC-FRTP5 lifetime drift and honest empty day
+PASS AC-FRTP6 pure read and restart zero write
+PASS AC-FRTP7 second restart stability
+PASS AC-FRTP8 hygiene and determinism
+SUITE PASS 8/8
