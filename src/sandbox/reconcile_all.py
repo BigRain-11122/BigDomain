@@ -2412,6 +2412,18 @@ SUITES = [
     # state/queue/explore.md).
     ("ledger-datasub-coveragemonthroll", os.path.join(
         "ledger", "test_datasub_coveragemonthroll.py"), 7),
+    # R2066 explore-queue claim (the R2030 month-roll seat
+    # successor): the coverage bad-window gate family across
+    # three instances - the ordered ten-form probe vector
+    # (seven dual + three board) answers the single family code,
+    # the dual-face reject performs zero coverage_board
+    # delegations while each board probe lands exactly one,
+    # probe batches leave world digests constant, interleaved
+    # sequencing proves no latching gate and the post-battery
+    # write path stays alive (AC-CVGG1..AC-CVGG8 pre-registered
+    # in state/queue/explore.md).
+    ("ledger-datasub-coveragegatepersist", os.path.join(
+        "ledger", "test_datasub_coveragegatepersist.py"), 8),
     # R1987 explore-queue claim (stats_board R1983 seed sibling
     # gap): the per-showcase statistics board across a full-stack
     # restart (face close -> ledger close -> fresh ledger +
