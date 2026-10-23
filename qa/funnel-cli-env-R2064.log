@@ -1,0 +1,22 @@
+--- suite run 1 exit=0 ---
+PASS AC-FCW1 module-anchored defaults
+PASS AC-FCW2 cwd-independent full run
+PASS AC-FCW3 ambient cp936 byte identity
+PASS AC-FCW4 module-derived config default
+PASS AC-FCW5 explicit relative paths stay cwd-relative
+PASS AC-FCW6 default_paths pure read
+PASS AC-FCW7 hygiene
+PASS AC-FCW8 gate law environment-independent
+SUITE PASS 8/8
+--- suite run 2 exit=0 ---
+PASS AC-FCW1 module-anchored defaults
+PASS AC-FCW2 cwd-independent full run
+PASS AC-FCW3 ambient cp936 byte identity
+PASS AC-FCW4 module-derived config default
+PASS AC-FCW5 explicit relative paths stay cwd-relative
+PASS AC-FCW6 default_paths pure read
+PASS AC-FCW7 hygiene
+PASS AC-FCW8 gate law environment-independent
+SUITE PASS 8/8
+--- battery ---
+RUNNER PASS (272/272 suites green, reconcile controls 7/7, 245.6s)

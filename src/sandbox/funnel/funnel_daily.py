@@ -66,6 +66,31 @@ import sys
 BASE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CONFIG = os.path.join(BASE, "config.json")
 
+
+def default_paths():
+    """Absolute carrier defaults, anchored to THIS module (AC-FCW, R2064).
+
+    The CLI defaults must not depend on the caller's working directory:
+    the state face is derived from the module file's own location, so a
+    run from any cwd lands on the same repo-root state/funnel carrier.
+    Explicitly passed paths stay the caller's business (cwd-relative
+    strings are honoured as given) - two separate laws.
+
+    Pure read by construction: it only joins strings, so calling it can
+    never create a carrier, an inbox or an evidence directory.
+    """
+    state_face = os.path.normpath(
+        os.path.join(BASE, "..", "..", "..", "state", "funnel"))
+    return {
+        "base": BASE,
+        "state_face": state_face,
+        "db": os.path.join(state_face, "funnel.db"),
+        "leads_inbox": os.path.join(state_face, "inbox", "leads"),
+        "orders_inbox": os.path.join(state_face, "inbox", "orders"),
+        "flows_inbox": os.path.join(state_face, "inbox", "flows"),
+        "config": DEFAULT_CONFIG,
+    }
+
 E_FN_BAD_ARGS = "E_FN_BAD_ARGS"
 
 DOMAIN_ROUTES = (
@@ -661,21 +686,16 @@ def main(argv=None):
     """
     import argparse
 
-    state_face = os.path.normpath(
-        os.path.join(BASE, "..", "..", "..", "state", "funnel"))
+    defaults = default_paths()
     parser = argparse.ArgumentParser(
         description="FUNNEL-STEP daily four-ring run (plan section 3)")
     parser.add_argument("--day", required=True,
                         help="YYYY-MM-DD, caller-injected (zero wall-clock)")
-    parser.add_argument("--db",
-                        default=os.path.join(state_face, "funnel.db"))
-    parser.add_argument("--leads-inbox",
-                        default=os.path.join(state_face, "inbox", "leads"))
-    parser.add_argument("--orders-inbox",
-                        default=os.path.join(state_face, "inbox", "orders"))
-    parser.add_argument("--flows-inbox",
-                        default=os.path.join(state_face, "inbox", "flows"))
-    parser.add_argument("--config", default=DEFAULT_CONFIG)
+    parser.add_argument("--db", default=defaults["db"])
+    parser.add_argument("--leads-inbox", default=defaults["leads_inbox"])
+    parser.add_argument("--orders-inbox", default=defaults["orders_inbox"])
+    parser.add_argument("--flows-inbox", default=defaults["flows_inbox"])
+    parser.add_argument("--config", default=defaults["config"])
     parser.add_argument("--evidence", default=None,
                         help="optional self-tee evidence log path (utf-8"
                              " no-BOM, LF - single dialect by construction;"

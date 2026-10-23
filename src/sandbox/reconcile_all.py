@@ -2948,6 +2948,18 @@ SUITES = [
     # pre-registered in state/queue/tech.md before the suite existed.)
     ("funnel-evidence-rotate",
      os.path.join("funnel", "test_funnel_evidence_rotate.py"), 8),
+    # R2064 tech-queue FIFO head claim (R2056 reseed row): the funnel
+    # CLI external-environment independence window - default_paths()
+    # is the single module-anchored source for the carrier defaults
+    # (so any cwd lands on the same repo-root state/funnel face and
+    # produces byte-identical stdout/evidence), an ambient
+    # PYTHONIOENCODING=cp936 shell changes no byte of the ASCII face,
+    # explicitly passed relative paths stay cwd-relative (the second
+    # law), and the gate verdict stays environment-independent.
+    # (AC-FCW1..AC-FCW8 pre-registered in state/queue/tech.md before
+    # the suite or the product face existed.)
+    ("funnel-cli-env",
+     os.path.join("funnel", "test_funnel_cli_env.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
