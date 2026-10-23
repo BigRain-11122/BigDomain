@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T03:19:50+08:00",
+  "export_ts": "2026-10-24T03:50:09+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2061: the funnel order book now has a declared sku type gate - an absent sku stays the honest blank bucket, a JSON scalar takes one canonical text form (int 5 -> '5', true -> 'true'), and a list/dict sku rejects the whole ring with zero new rows instead of booking a Python repr garbage string. Full battery 270/270 green, and today's daily reconciliation plus the funnel daily step both passed.",
-    "latest_artifact": "src/sandbox/funnel/funnel_daily.py sku type gate + src/sandbox/funnel/test_funnel_sku_gate.py (SUITE PASS 8/8) + reconcile_all wiring; evidence qa/funnel-sku-gate-R2061.log (RUNNER PASS 270/270 suites + controls 7/7, 220.1s), qa/reconcile-daily-20261024.log (verdict=PASS), qa/funnel-daily-20261024.log (gate=PASS) - 2026-10-24T03:19:50+08:00",
-    "next_milestone": "R2062 (within 48h): the group line-4 business-skill research contribution at docs/research/R-20261024-bigdomain-skill-scan.md (>=8 dated links, >=2 conflict points, <=3 actionable items, group deadline 2026-10-26); after that the next readable tech-queue head (funnel evidence same-path rotation law or the CLI cwd/ambient encoding independence window). Tech queue open 11."
+    "current": "R2062: the funnel daily CLI evidence face now has a declared overwrite and rotation law - reusing one --evidence path across days keeps only the newest run (zero append), putting {day} in the path keeps one file per day, and any other brace form is rejected cleanly before any directory is created. Full battery 271/271 green.",
+    "latest_artifact": "src/sandbox/funnel/funnel_daily.py _resolve_evidence() + src/sandbox/funnel/test_funnel_evidence_rotate.py (SUITE PASS 8/8) + reconcile_all wiring; evidence qa/funnel-evidence-rotate-R2062.log, qa/reconcile-all-R2062.log (RUNNER PASS 271/271 suites + controls 7/7, 212.5s), docs/sandbox-suite-matrix.md (271 suites / 2278 criteria) - 2026-10-24T03:50:09+08:00",
+    "next_milestone": "R2063 (within 48h): the next readable tech-queue head - funnel CLI cwd/ambient-encoding independence window, or the funnel multi-day evidence same-path rotation follow-up if a consumer asks for it. The group line-4 business-skill research contribution (docs/research/R-20261024-bigdomain-skill-scan.md, group deadline 2026-10-26) stays on the board as the next documentation deliverable. Tech queue open 10."
   },
   "depts": [
     {
@@ -203,6 +203,10 @@
     [
       "2",
       "R2060 tech-queue FIFO head claim (R2057 reseed row): funnel dispatch route distribution read face across restarts. AC-FRTP1..AC-FRTP8 pre-registered in state/queue/tech.md before the suite existed. Three-day anchor world books 9 dispatch rows (game2/life1/media1/platform1/quant1/unrouted3); a reopened instance answers the five faces byte-identically; a D3 batch-2 injection books exactly 2 rows, moves the lifetime face to 11 rows (media2/unrouted4) while the D1/D2 windows stay byte-frozen and D3 recomputes honestly; re-dropping the D1 inbox books zero leads and zero dispatches; an empty day is an honest {} at every point; three read batches touch no row and no schema; a third instance reproduces the terminal faces and still shows the original D1 anchor; hygiene is read off the parsed AST with the shipped config hash unchanged. SUITE PASS 8/8, double-run stdout byte-identical sha16 D034A8AA5326B77F = qa/funnel-route-persist-R2060.log; wired into reconcile_all SUITES (funnel-route-persist, 8) - RUNNER PASS 269/269 suites + controls 7/7 232.8s = qa/reconcile-all-R2060.log; matrix regen 269 suites/2262 criteria --check byte-identical; tech open 13->12. Honest note: the four R2059 sku_top seed rows are encoding-damaged ('?' in place of the Chinese text) and were skipped."
+    ],
+    [
+      "2",
+      "funnel 证据件覆盖/轮转律（R2062·AC-FCR1..FCR8 预注册先于代码：无占位符 --evidence 路径=历史单件覆盖面〔每次 w 重写·跨日复用不追加〕；唯一字面 {day} 占位=按日轮转面〔两日各落一件·互不改写〕；其余花括号形态 exit 2+一行 E_FN_BAD_ARGS+零盘面产物〔拒于 makedirs 前〕；空串视同未传；证据写唯一模式 \"w\" 零追加机检+同路径二跑 size 不翻倍；utf-8 无 BOM 零 CR 恰一尾换行；套件 8/8 双跑同一+电池 271/271+矩阵 271/2278 byte-identical·证据 qa/funnel-evidence-rotate-R2062.log）"
     ]
   ],
   "results": [
@@ -215,7 +219,7 @@
       "R2058 P2 tech-queue FIFO head, skipping the gated heads (docker host missing, member refunded schema design-gated, suite-matrix live-normalized window awaiting a real git-checkout mtime event, daily profile window time-gated to 10-24): the funnel per-sku order totals read face across restarts, the gap AC-FST7 left behind (it proves only a single close/reopen). AC-FSP1..AC-FSP8 pre-registered before the suite existed. Three-instance cascade over a three-day order world: instance one anchors the lifetime face plus three day windows plus an honest no-row day; the reopened instance reproduces all five byte-for-byte; a late day-three batch grows the lifetime book (named bucket 3->4 orders, 5980->6480 cent; blank sku stays its own bucket 1->2; the new sku takes its byte-order slot) while day one and two stay frozen; re-booking the original inbox after the restart is idempotent; the read path and the restart write nothing; a second restart keeps the injected state stable at nine orders. Suite SUITE 8/8, double-run sha16 1DFDF3FCECC14343; battery RUNNER 267/267 suites + controls 7/7 258.5s; matrix 267/2246 --check byte-identical; fold R580 pre-closeout. One delivery-time criteria amendment (3->4, not 3->5; amounts were right). Queue hygiene: one true-live reseed from a code-face finding (sku str coercion). Score 2."
     ],
     [
-      "2061",
+      "2062",
       "OSLoop 执行 tick"
     ],
     [
@@ -437,31 +441,35 @@
     [
       "R2061",
       "P2 tech-queue FIFO head claim: the funnel ring-3 order sku type gate (AC-FSK1..AC-FSK8 pre-registered before the suite existed). Ruling: absent sku keeps the honest blank bucket, JSON scalars take one declared canonical text form, containers reject the whole ring with E_FN_BAD_ARGS and zero new rows. New suite SUITE PASS 8/8, battery RUNNER PASS 270/270 + controls 7/7, matrix 270 suites / 2270 criteria byte-identical. Also closed the due-today AC-OW2 rolling re-evaluation (drift markers exit=2 count = 0, observation window kept, next 2026-10-31), ran the daily reconciliation and the funnel daily standing lines (both PASS), normalized three R2060 evidence logs from the pwsh-capture dialect back to utf-8 LF (census DRIFT-CLEAN), and repaired state.json's CRLF layout before the fold. Score 2."
+    ],
+    [
+      "R2062",
+      "R2062 P2 tech-queue FIFO head after the gated heads: the funnel multi-day evidence overwrite/rotation law. The R2056 reseed row found that the CLI --evidence face opened its target with mode \"w\", so a same-path reuse across days silently lost the earlier bytes and there was no way to ask for one file per day. AC-FCR1..AC-FCR8 were pre-registered in the claim row BEFORE the suite existed. Delivered _resolve_evidence(): a brace-free path keeps the historical single-file overwrite face; the literal {day} token exactly once expands to the caller-injected day (per-day rotation); any other brace form raises E_FN_BAD_ARGS before the wiring layer creates a directory, so a bad template leaves zero disk artifacts. New suite test_funnel_evidence_rotate.py SUITE PASS 8/8 with a byte-identical rerun; wired into reconcile_all SUITES (funnel-evidence-rotate, 8); full battery RUNNER PASS 271/271 suites + controls 7/7 212.5s; matrix regenerated 271 suites / 2278 criteria and byte-identical on two --check runs. Honest notes: two delivery-time criteria repairs were made in-window (the AC-FCR1 day-marker count was written as 2 where a payload carries 1; AC-FCR3 first compared two different consumption states and now resets the carrier on the same paths before comparing stdout). Score 2."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 1,
+    "substantive_non_idle_mention_lines": 2,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 10,
     "queue_explore_open": 10,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 5,
+  "log_lines_in_window": 6,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 2,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
-  "queue_tech_open": 12,
+  "queue_tech_open": 10,
   "queue_explore_open": 10
 }

@@ -2939,6 +2939,15 @@ SUITES = [
     # state/queue/tech.md before the suite existed.)
     ("funnel-sku-gate",
      os.path.join("funnel", "test_funnel_sku_gate.py"), 8),
+    # R2062 tech-queue FIFO head claim (R2056 reseed row): the funnel
+    # evidence overwrite/rotation law - a brace-free --evidence path
+    # keeps the historical single-file overwrite face, the literal
+    # {day} token selects one file per day, any other brace form
+    # rejects before the wiring layer creates directories, and the
+    # write is always zero-append single-dialect. (AC-FCR1..AC-FCR8
+    # pre-registered in state/queue/tech.md before the suite existed.)
+    ("funnel-evidence-rotate",
+     os.path.join("funnel", "test_funnel_evidence_rotate.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

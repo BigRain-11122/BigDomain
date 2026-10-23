@@ -609,6 +609,34 @@ class FunnelDaily:
         return {"ring1": r1, "ring2": r2, "ring3": r3, "ring4": r4, "envelope": env}
 
 
+_EVIDENCE_TOKEN = "{day}"
+
+
+def _resolve_evidence(path, day):
+    """Resolve the optional --evidence rotation template (AC-FCR, R2062).
+
+    Law: a path WITHOUT braces keeps the historical single-file face -
+    each run rewrites that one file (mode "w"), so a same-path reuse
+    across days overwrites the earlier bytes; that is the zero-append
+    carrier, never an accumulating log. A path may carry the literal
+    {day} token exactly once to select the rotating per-day face (the
+    token expands to the caller-injected --day, so a multi-day chain
+    keeps one file per day). Any other brace form is a bad argument:
+    the reject happens here, before the wiring layer creates any
+    directory, so a bad template leaves zero disk artifacts.
+    """
+    if not path:
+        return None
+    if "{" in path or "}" in path:
+        if path.count(_EVIDENCE_TOKEN) != 1:
+            raise FunnArgError(E_FN_BAD_ARGS)
+        if "{" in path.replace(_EVIDENCE_TOKEN, "") or \
+                "}" in path.replace(_EVIDENCE_TOKEN, ""):
+            raise FunnArgError(E_FN_BAD_ARGS)
+        return path.replace(_EVIDENCE_TOKEN, day)
+    return path
+
+
 def main(argv=None):
     """FUNNEL-STEP daily CLI face (R2033 wiring; canon plan section 3:
     an independently runnable CLI in the reconcile_daily shape - the
@@ -651,7 +679,10 @@ def main(argv=None):
     parser.add_argument("--evidence", default=None,
                         help="optional self-tee evidence log path (utf-8"
                              " no-BOM, LF - single dialect by construction;"
-                             " the shell never owns the evidence bytes)")
+                             " the shell never owns the evidence bytes);"
+                             " the literal {day} expands to --day so a"
+                             " caller can keep one file per day, otherwise"
+                             " the single path is rewritten each run")
     args = parser.parse_args(argv)
 
     # CLI fail-closed gate family (AC-FCG, R2048): every reject is
@@ -670,13 +701,17 @@ def main(argv=None):
     except FunnArgError:
         return _clean_reject()
     try:
+        evidence = _resolve_evidence(args.evidence, args.day)
+    except FunnArgError:
+        return _clean_reject()
+    try:
         os.makedirs(os.path.dirname(os.path.abspath(args.db)),
                     exist_ok=True)
         for d in (args.leads_inbox, args.orders_inbox, args.flows_inbox):
             os.makedirs(d, exist_ok=True)
-        if args.evidence:
+        if evidence:
             os.makedirs(
-                os.path.dirname(os.path.abspath(args.evidence)),
+                os.path.dirname(os.path.abspath(evidence)),
                 exist_ok=True)
     except OSError:
         return _clean_reject()
@@ -708,9 +743,9 @@ def main(argv=None):
     ]
     for line in lines:
         print(line)
-    if args.evidence:
+    if evidence:
         try:
-            with open(args.evidence, "w", encoding="utf-8",
+            with open(evidence, "w", encoding="utf-8",
                       newline="\n") as h:
                 h.write("\n".join(lines) + "\n")
         except OSError:

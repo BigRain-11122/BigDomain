@@ -1,0 +1,27 @@
+== section 1: suite test_funnel_evidence_rotate.py (rc=0) ==
+PASS AC-FCR1 same-path overwrite first-proof
+PASS AC-FCR2 {day} per-day rotation
+PASS AC-FCR3 no-brace face zero drift
+PASS AC-FCR4 bad placeholder fail-closed
+PASS AC-FCR5 empty evidence means absent
+PASS AC-FCR6 zero-append machine check
+PASS AC-FCR7 evidence dialect
+PASS AC-FCR8 hygiene
+SUITE PASS 8/8
+== section 2: determinism rerun (rc=0) ==
+PASS AC-FCR1 same-path overwrite first-proof
+PASS AC-FCR2 {day} per-day rotation
+PASS AC-FCR3 no-brace face zero drift
+PASS AC-FCR4 bad placeholder fail-closed
+PASS AC-FCR5 empty evidence means absent
+PASS AC-FCR6 zero-append machine check
+PASS AC-FCR7 evidence dialect
+PASS AC-FCR8 hygiene
+SUITE PASS 8/8
+== section 3: matrix --check (rc=0) ==
+PASS check: docs/sandbox-suite-matrix.md byte-identical (26236 bytes, 271 suites, 2278 criteria)
+== section 4: hygiene face (rc=0) ==
+funnel_daily.py sha256=975fa6ea0bc94f56cd8a12842b126fd7a4c037ca1849d64bf74e931e5490d314
+suite sha256=5e10ed52dd460e3226c1c8d9f0099f360a0929b225f2815ff9cb30cc5ce12e44
+== section 5: runner line ==
+RUNNER PASS (271/271 suites green, reconcile controls 7/7) = qa/reconcile-all-R2062.log
