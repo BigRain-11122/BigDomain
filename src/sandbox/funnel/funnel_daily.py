@@ -141,6 +141,33 @@ def _assert_inbox(inbox_dir):
         raise FunnArgError(E_FN_BAD_ARGS)
 
 
+def _sku_text(value):
+    """Canonical text form of an order sku (R2061, AC-FSK family).
+
+    The orders.sku column is a NOT NULL descriptive text field, so an
+    absent sku is the honest blank bucket (""), never an error. A JSON
+    scalar has a deterministic text form and is stringified exactly:
+    text verbatim, integers as decimal digits, floats via their
+    shortest repr, booleans as the lower-case JSON literals "true" /
+    "false" (never Python's "True"). A container (list / dict) has no
+    stable data identity - its repr is a language artifact, not data -
+    so it rejects the whole ring with E_FN_BAD_ARGS under the zero-row
+    law instead of booking garbage the read faces would then have to
+    carry forever.
+    """
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return "%d" % value
+    if isinstance(value, float):
+        return repr(value)
+    raise FunnArgError(E_FN_BAD_ARGS)
+
+
 def _classify_lead(text):
     low = str(text).lower()
     for domain, keys in DOMAIN_ROUTES:
@@ -272,13 +299,15 @@ class FunnelDaily:
             amount = item.get("amount_cent", 0)
             if not isinstance(amount, int) or amount < 0:
                 raise FunnArgError(E_FN_BAD_ARGS)
+            _sku_text(item.get("sku", ""))
         seen, new = 0, 0
         for item in rows:
             seen += 1
             cur = self.db.execute(
                 "INSERT OR IGNORE INTO orders "
                 "(order_id, day, sku, amount_cent) VALUES (?,?,?,?)",
-                (item["order_id"], day, str(item.get("sku", "")), item.get("amount_cent", 0)),
+                (item["order_id"], day, _sku_text(item.get("sku", "")),
+                 item.get("amount_cent", 0)),
             )
             new += cur.rowcount
         self.db.commit()

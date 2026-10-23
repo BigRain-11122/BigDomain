@@ -2930,6 +2930,15 @@ SUITES = [
     # the suite existed.)
     ("funnel-route-persist",
      os.path.join("funnel", "test_funnel_route_persist.py"), 8),
+    # R2061 tech-queue FIFO head claim (R2058 discovery row): the
+    # funnel ring-3 order sku type gate - absent sku stays the blank
+    # bucket, JSON scalars take one declared canonical text form,
+    # containers reject the whole ring (E_FN_BAD_ARGS, zero rows), the
+    # idempotency key law is untouched, and the read faces bucket on
+    # the canonical form. (AC-FSK1..AC-FSK8 pre-registered in
+    # state/queue/tech.md before the suite existed.)
+    ("funnel-sku-gate",
+     os.path.join("funnel", "test_funnel_sku_gate.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
