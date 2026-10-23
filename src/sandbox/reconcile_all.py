@@ -2063,6 +2063,10 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboardboundary", os.path.join(
         "ledger", "test_apimarket_devboardboundarypersist.py"), 7),
+    # apimarket dev_sales_board zero-listing boundary GATE family
+    # across restart instances (R2065 explore-queue claim row).
+    ("ledger-apimarket-devboardgatepersist", os.path.join(
+        "ledger", "test_apimarket_devboardgatepersist.py"), 8),
     # apimarket dev_sales_board month-window zero-listing
     # boundary cross-restart persist window (R2045): the
     # zero-listing boundary world (R2024 posture - listing

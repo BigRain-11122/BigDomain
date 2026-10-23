@@ -1,0 +1,55 @@
+PASS AC-AMZG1: instance one control anchor: zero-listing boundary world (ledger + devkeys populated, apimarket three tables at zero rows), empty board envelope with keys ['board', 'disclaimer'], battery code vector ['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING'] == reference, unregistered publisher carrying a forbidden word rejects E_AM_NOT_DEV (registry gate precedes the content gate), probe batch leaves digests / ledger_tx / board / manual board constant
+PASS AC-AMZG2: restart instance two (ordered close am -> dk -> metered -> led, same db_path same cfg bytes): battery code vector ['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING'] identical to the instance-one reference, ordering witness E_AM_NOT_DEV, probe batch zero side effects (digests, ledger_tx, board and manual board constant), board still empty
+PASS AC-AMZG3: restart instance three (second full-stack restart): battery code vector ['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING'] identical again, ordering witness E_AM_NOT_DEV, probe batch zero side effects on the third instance
+PASS AC-AMZG4: three-instance invariance: the ordered four-code vector is pairwise identical across instances one/two/three (['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING'] = ['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING'] = ['E_AM_NOT_DEV', 'E_AM_CONTENT_REJECTED', 'E_AM_BAD_PRICE', 'E_AM_UNKNOWN_LISTING']), the full probe history leaves the board at the honest empty state (zero phantom rows across two restarts)
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 57
++ ... BigDomain"; python src\sandbox\ledger\test_apimarket_devboardgatepers ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\test_apimarket_devboardgatepersist.py", li
+ne 449, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\test_apimarket_devboardgatepersist.py", li
+ne 325, in main
+    w2 = probe(lambda: am2.publish_api(
+        "usr:carol", "carol-word-svc",
+        "title says " + bad_word,
+        "registered developer with a forbidden word", PAYLOAD,
+        5, False), A.E_AM_CONTENT_REJECTED)
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\test_apimarket_devboardgatepersist.py", li
+ne 170, in probe
+    fn()
+    ~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\test_apimarket_devboardgatepersist.py", li
+ne 325, in <lambda>
+    w2 = probe(lambda: am2.publish_api(
+                       ~~~~~~~~~~~~~~~^
+        "usr:carol", "carol-word-svc",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "title says " + bad_word,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+        "registered developer with a forbidden word", PAYLOAD,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        5, False), A.E_AM_CONTENT_REJECTED)
+        ^^^^^^^^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\apimarket.py", line 274, in publish_api
+    if not self._is_registered_dev(dev_account):
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\apimarket.py", line 240, in _is_registered
+_dev
+    board = self.devkeys.dev_board(dev_account)
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\ledger\apidev.py", line 729, in dev_board
+    rows = self._conn.execute(
+           ~~~~~~~~~~~~~~~~~~^
+        "SELECT key_id, key_name, metered_client, api_key,"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        " WHERE dev_account = ? ORDER BY key_id",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        (dev_account,)).fetchall()
+        ^^^^^^^^^^^^^^^
+sqlite3.ProgrammingError: Cannot operate on a closed database.
