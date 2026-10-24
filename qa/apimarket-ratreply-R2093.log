@@ -1,0 +1,9 @@
+PASS AC-AMRP1: door keys=True envelope=True rows=2 answered=1 reply_count=1
+PASS AC-AMRP2: codes={'buyer': 'E_AM_NOT_OWNER', 'other_dev': 'E_AM_NOT_OWNER', 'empty_account': 'E_AM_BAD_ACCOUNT', 'dev_prefix': 'E_AM_BAD_ACCOUNT'} reply rows 1->1
+PASS AC-AMRP3: order=[('account_first', True), ('id_before_text', True), ('text_before_exists', True), ('unknown_rating', True), ('owner_after_exists', True), ('dup_last', True)] id_shapes={'E_AM_BAD_ARGS'} text_shapes={'E_AM_BAD_REPLY'} rows=1
+PASS AC-AMRP4: unknown listing='E_AM_UNKNOWN_LISTING' retired reply readable=True rating agg intact=True
+PASS AC-AMRP5: dup code='E_AM_REPLY_DUP' rows=1 text preserved=True stamp preserved=True
+PASS AC-AMRP6: ledger tx frozen=True pools frozen=True frozen tables=True ratings byte-identical=True reply rows=2
+PASS AC-AMRP7: instance1==2==3 byte-identical=True reply rows=2 2 2
+PASS AC-AMRP8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

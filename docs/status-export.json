@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T19:52:00+08:00",
+  "export_ts": "2026-10-24T19:42:46+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2091: the developer API marketplace now answers the buyer's own account question - one pure-read aggregate envelope with spend, refunds, net spend, the exact developer/platform split, own rating average and both watch counts (history vs live).",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_profile) + src/sandbox/ledger/test_apimarket_buyerprofile.py + qa/apimarket-buyerprofile-R2091.log (SUITE PASS 8/8, double-run evidence files byte-identical sha256 7b5b7fa5d7391cb7; wired as ledger-apimarket-buyerprofile; battery 297/297 suites + controls 7/7 = qa/reconcile-all-R2091.log; suite matrix 297 suites / 2482 criteria byte-identical).",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
+    "current": "R2093: the developer API marketplace trust surface now has two arrows - a seller can answer a rating exactly once (append-only, ownership-gated) and every listing shows which reviews still await a reply.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (reply_to_rating / api_rating_replies) + src/sandbox/ledger/test_apimarket_ratingreply.py + qa/apimarket-ratreply-R2093.log (SUITE PASS 8/8, double-run byte-identical sha16 44e8a409ac202984; wired as ledger-apimarket-ratreply; battery 298/298 suites + controls 7/7 = qa/reconcile-all-R2093.log; suite matrix 298 suites / 2490 criteria byte-identical)",
+    "next_milestone": "FUNNEL 72h self-continuity acceptance restarts 2026-10-24 (day-1) and runs to 2026-10-27 <=10-31; nine-company automation plan committee tri-report <=10-25; next product window <=48h (by 2026-10-26)"
   },
   "depts": [
     {

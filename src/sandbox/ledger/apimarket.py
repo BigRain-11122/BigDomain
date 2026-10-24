@@ -84,6 +84,9 @@ E_AM_UNKNOWN_PURCHASE = "E_AM_UNKNOWN_PURCHASE"  # AC-AMRF2
 E_AM_ALREADY_REFUNDED = "E_AM_ALREADY_REFUNDED"  # AC-AMRF4
 E_AM_REFUND_UNFUNDABLE = "E_AM_REFUND_UNFUNDABLE"  # AC-AMRF5
 E_AM_NOT_REFUNDED = "E_AM_NOT_REFUNDED"      # AC-AMRF7
+E_AM_UNKNOWN_RATING = "E_AM_UNKNOWN_RATING"  # AC-AMRP4
+E_AM_REPLY_DUP = "E_AM_REPLY_DUP"          # AC-AMRP5
+E_AM_BAD_REPLY = "E_AM_BAD_REPLY"          # AC-AMRP3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -172,6 +175,15 @@ CREATE TABLE IF NOT EXISTS apimarket_unwatchings (
     listing_id INTEGER NOT NULL,
     unwatched_utc TEXT NOT NULL,
     UNIQUE (watch_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_rating_replies (
+    reply_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rating_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    reply_text TEXT NOT NULL,
+    replied_utc TEXT NOT NULL,
+    UNIQUE (rating_id)
 );
 CREATE TABLE IF NOT EXISTS apimarket_refunds (
     refund_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -1050,6 +1062,67 @@ class APIMarketFace:
         return {"rating_id": cur.lastrowid, "listing_id": listing_id,
                 "buyer_id": buyer_id, "stars": stars}
 
+    def reply_to_rating(self, dev_account, rating_id, text):
+        """Seller-side response door on one immutable rating
+        (AC-AMRP1..AC-AMRP5, pre-registered in the R2093
+        explore-queue row BEFORE this code existed): only the
+        seller who owns the rated listing may answer, exactly once
+        per rating. The pinned gate order is account shape, then
+        rating id shape, then reply text shape, then rating
+        existence, then ownership, then the duplicate state - every
+        refusal is fail-closed with zero rows written. The reply is
+        append-only and never rewrites the rating: api_ratings
+        aggregates stay byte-identical and zero tokens move."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if (not isinstance(rating_id, int) or isinstance(rating_id, bool)
+                or rating_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(rating_id))
+        if not isinstance(text, str):
+            raise ApiMarketError(E_AM_BAD_REPLY, "text must be str")
+        body = text.strip()
+        if (not body or len(body) > 500
+                or any(ord(ch) < 32 or ord(ch) == 127 for ch in body)):
+            raise ApiMarketError(E_AM_BAD_REPLY, str(text)[:40])
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT listing_id FROM apimarket_ratings"
+                " WHERE rating_id = ?", (rating_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_RATING,
+                                     str(rating_id))
+            listing_id = int(row[0])
+            owner = self._conn.execute(
+                "SELECT dev_account FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            if owner is None or owner[0] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, rating_id))
+            dup = self._conn.execute(
+                "SELECT reply_id FROM apimarket_rating_replies"
+                " WHERE rating_id = ?", (rating_id,)).fetchone()
+            if dup is not None:
+                raise ApiMarketError(E_AM_REPLY_DUP, str(rating_id))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_rating_replies"
+                    " (rating_id, listing_id, dev_account, reply_text,"
+                    " replied_utc) VALUES (?,?,?,?,?)",
+                    (rating_id, listing_id, dev_account, body, stamp))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiMarketError(E_AM_REPLY_DUP, str(rating_id))
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"reply_id": cur.lastrowid, "rating_id": rating_id,
+                "listing_id": listing_id, "dev_account": dev_account,
+                "reply_text": body, "replied_utc": stamp,
+                "disclaimer": self.disclaimer}
+
     # -- read faces -----------------------------------------------------------
 
     def _agg_rating(self, listing_id):
@@ -1197,6 +1270,39 @@ class APIMarketFace:
                 "rating_avg": avg, "disclaimer": self.disclaimer,
                 "ratings": [{"buyer_id": r[0], "stars": int(r[1]),
                              "rated_utc": r[2]} for r in rows]}
+
+    def api_rating_replies(self, listing_id):
+        """Per-listing rating conversation surface (AC-AMRP1): one
+        row per rating ordered by rating_id, unanswered rows carry
+        reply=None so the seller sees what still awaits a voice.
+        Retired listings stay readable with their replies
+        (AC-AMRP4) and the envelope carries the resident
+        non-advisory disclaimer. Pure read: zero row mutations."""
+        with self._lock:
+            self._require_listing(listing_id)
+            rows = self._conn.execute(
+                "SELECT r.rating_id, r.buyer_id, r.stars, r.rated_utc,"
+                " p.reply_id, p.dev_account, p.reply_text, p.replied_utc"
+                " FROM apimarket_ratings r LEFT JOIN"
+                " apimarket_rating_replies p ON p.rating_id ="
+                " r.rating_id WHERE r.listing_id = ?"
+                " ORDER BY r.rating_id", (listing_id,)).fetchall()
+            n_rate, _avg = self._agg_rating(listing_id)
+            out = []
+            for r in rows:
+                reply = None
+                if r[4] is not None:
+                    reply = {"reply_id": int(r[4]),
+                             "dev_account": r[5],
+                             "reply_text": r[6],
+                             "replied_utc": r[7]}
+                out.append({"rating_id": int(r[0]), "buyer_id": r[1],
+                            "stars": int(r[2]), "rated_utc": r[3],
+                            "reply": reply})
+            n_reply = sum(1 for r in out if r["reply"] is not None)
+        return {"listing_id": listing_id, "rating_count": n_rate,
+                "reply_count": n_reply,
+                "disclaimer": self.disclaimer, "rows": out}
 
     def api_price_history(self, listing_id):
         """Asking-price history surface (AC-AMPR7): the immutable

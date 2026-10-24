@@ -2269,6 +2269,13 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-buyerprofile", os.path.join(
         "ledger", "test_apimarket_buyerprofile.py"), 8),
+    # apimarket seller rating-reply door - the missing response leg
+    # of the two-arrow trust surface (one immutable reply per rating,
+    # ownership gate, retired listing stays answerable) - criteria
+    # AC-AMRP1..AC-AMRP8 pre-registered in the R2093 explore-queue
+    # claim row BEFORE this suite existed.
+    ("ledger-apimarket-ratreply", os.path.join(
+        "ledger", "test_apimarket_ratingreply.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
