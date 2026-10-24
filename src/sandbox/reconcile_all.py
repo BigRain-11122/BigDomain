@@ -2288,6 +2288,14 @@ SUITES = [
     # purchase gate and api_supply.
     ("ledger-apimarket-restock", os.path.join(
         "ledger", "test_apimarket_restock.py"), 8),
+    # AC-AMI1..AC-AMI8 pre-registered in the R2096 explore-queue
+    # claim row BEFORE this suite existed: the seller-side
+    # unanswered-rating inbox read face (all ratings of the seller
+    # merged across listings, only the unanswered ones, oldest debt
+    # first, conversation arithmetic, effective stars, retired
+    # listings keep their debt, seller isolation, pure read).
+    ("ledger-apimarket-sellerinbox", os.path.join(
+        "ledger", "test_apimarket_sellerinbox.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

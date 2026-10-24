@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T22:35:00+08:00",
+  "export_ts": "2026-10-24T20:32:33+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2095: 卖家侧补货门上线——一个售罄的限量服务现在可以补仓而不必发新链接、不丢历史；每次补货一行追加式台账，有效库存=声明值+历次补货之和。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (restock_api / api_supply_history / apimarket_supply_revisions / _supply_full) + src/sandbox/ledger/test_apimarket_restock.py + qa/apimarket-restock-R2095.log (SUITE PASS 8/8, double-run byte-identical sha16 8C05E53DEACA2760) + qa/reconcile-all-R2095.log (RUNNER PASS 300/300 suites, 2506 criteria, controls 7/7, 252.4s)",
-    "next_milestone": "下个里程碑：在同一产品线上继续补商业化前可验证的缺口（默认序位=apimarket 交易面），当窗預注册判据后落码并全电池验证；时限 24h 内（当前交付环节已为同日闭环）。"
+    "current": "R2096: 卖家待答评价收件箱上线——卖家现在有三件在售也不用逐张翻，一个只列未回应评分的队列按「最旧债务在前」跨全部挂牌合并返回。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_seller_inbox) + src/sandbox/ledger/test_apimarket_sellerinbox.py + qa/apimarket-sellerinbox-R2096.log (SUITE PASS 8/8, double-run byte-identical sha16 998e0884860f1349) + qa/reconcile-all-R2096.log (RUNNER PASS 301/301 suites, 2514 criteria, controls 7/7, 311.1s)",
+    "next_milestone": "下个里程碑：在同一条 apimarket 产品线上继续补商业化前可验证的缺口（当窗预注册判据后落码并全电池验证）；时限 24h 内（交付环节已为同日闭环）。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 卖家待答评价收件箱（api_seller_inbox）",
+      "on",
+      "R2096：只列未回应评分并跨该卖家全部挂牌合并·最旧债务在前（rated_utc 升序、同戳按 rating_id）·八键信封+七键行·会话守恒 answered+unanswered==total（回一条队列减一总数不变）·星级走单一生效值缝·退役不销债·卖家隔离+诚实空信封·账户形门前置 fail-closed·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMI1..AMI8·电池 301/301 套件 2514 判据）"
+    ],
     [
       "apimarket 供给补货门（restock_api / api_supply_history）",
       "on",
@@ -277,6 +282,10 @@
     ]
   ],
   "results": [
+    [
+      "R2096",
+      "R2096: the developer API market closes the seller triage gap behind its reply door. api_rating_replies answers one listing at a time, so a seller with N live listings had to open N faces and count the unanswered ratings by hand. api_seller_inbox merges every rating across the seller's listings and returns only the unanswered ones, ordered by rating time then rating id so the oldest debt is always first; an eight-key envelope keeps the conversation arithmetic (answered + unanswered == total) so a reply drains the queue without rewriting history; the star column reads through the one effective-value seam; a retired listing keeps its unanswered rating; seller isolation and an honest empty inbox are pinned; the account shape gate fails closed before any read; and the face is pure read with zero token movement and byte-identical across three instances. AC-AMI1..AC-AMI8 pre-registered before the code; suite 8/8 double-run identical sha16 998e0884860f1349; battery RUNNER PASS 301/301 suites plus controls 7/7 in 311.1s; matrix 301 suites / 2514 criteria byte-identical."
+    ],
     [
       "R2094",
       "R2094: the rating face was the last write-once axis on the market's trust surface - one immutable stamp per buyer and listing, E_AM_RATE_DUP forever, so a mis-clicked star stayed welded to a seller's reputation while refunds, retirement and re-listing all had remedy doors. This window adds the correction leg: an append-only apimarket_rating_revisions table (previous and new stars, base row never rewritten) and revise_rating with a pinned gate order (account shape, rating-id shape, existence, ownership, star shape, unchanged state), where the unchanged check reads the EFFECTIVE value so revising back to an earlier value stays legal and the first stamp is never rewritten. api_rating_history answers base stars, ordered revisions, effective stars and the revision count. One effective-star seam feeds all five aggregate faces (api_view, api_ratings, api_rating_replies, dev_profile, api_buyer_profile) at once while rating_count never moves - a revision is not a new rating - and never-revised ratings stay byte-identical to the old contract, proven by the legacy suites re-running green. Suite 8/8 double-run identical, battery 299/299 suites plus controls 7/7, matrix 299 suites / 2498 criteria byte-identical."
@@ -641,10 +650,10 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 20,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 22,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

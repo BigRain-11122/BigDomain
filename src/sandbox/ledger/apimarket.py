@@ -1533,6 +1533,74 @@ class APIMarketFace:
                                "stars": int(x[2]),
                                "revised_utc": x[3]} for x in revs]}
 
+    def api_seller_inbox(self, dev_account):
+        """Seller-side unanswered-rating inbox (pre-registered
+        AC-AMI1..AC-AMI8 in the R2096 explore-queue claim row BEFORE
+        this code existed): the work queue the reply door never had.
+
+        api_rating_replies answers one listing at a time, so a seller
+        with N live listings has to open N faces and count the gaps
+        by hand. This face merges every rating row across the
+        seller's listings and returns ONLY the unanswered ones,
+        oldest debt first (rated_utc ascending, then rating_id).
+        The envelope keeps the conversation arithmetic - answered +
+        unanswered == total - so a reply visibly drains the queue
+        without rewriting any row. The star column reads through the
+        one effective-value seam, a retired listing keeps its
+        unanswered rating (retirement does not erase the seller's
+        obligation) and the title is the effective metadata value.
+        The account shape gate is prefix-only by the truthful
+        R2077/R2078 finding and runs before any read - a prefix-valid
+        account with no ratings gets an honest empty inbox. Pure
+        read: zero row mutations and zero token movement. The
+        envelope carries the resident non-advisory disclaimer."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            totals = self._conn.execute(
+                "SELECT COUNT(*), COUNT(DISTINCT r.listing_id),"
+                " COUNT(p.reply_id) FROM apimarket_ratings r"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = r.listing_id"
+                " LEFT JOIN apimarket_rating_replies p"
+                " ON p.rating_id = r.rating_id"
+                " WHERE l.dev_account = ?", (dev_account,)).fetchone()
+            rows = self._conn.execute(
+                "SELECT r.rating_id, r.listing_id, r.buyer_id,"
+                " r.stars, r.rated_utc, l.listing_key, l.title,"
+                " l.description FROM apimarket_ratings r"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = r.listing_id"
+                " LEFT JOIN apimarket_rating_replies p"
+                " ON p.rating_id = r.rating_id"
+                " WHERE l.dev_account = ? AND p.reply_id IS NULL"
+                " ORDER BY r.rated_utc, r.rating_id",
+                (dev_account,)).fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[1])
+                eff_title = self._metadata_state(
+                    listing_id, r[6], r[7])[0]
+                out.append({"rating_id": int(r[0]),
+                            "listing_id": listing_id,
+                            "listing_key": r[5],
+                            "title": eff_title,
+                            "buyer_id": r[2],
+                            "stars": self._effective_stars(
+                                int(r[0]), int(r[3])),
+                            "rated_utc": r[4]})
+        total = int(totals[0])
+        answered = int(totals[2])
+        oldest = out[0]["rated_utc"] if out else None
+        return {"dev_account": dev_account,
+                "rated_listing_count": int(totals[1]),
+                "total_rating_count": total,
+                "answered_count": answered,
+                "unanswered_count": len(out),
+                "oldest_unanswered_utc": oldest,
+                "disclaimer": self.disclaimer,
+                "rows": out}
+
     def api_price_history(self, listing_id):
         """Asking-price history surface (AC-AMPR7): the immutable
         base price plus every append-only revision in order, the

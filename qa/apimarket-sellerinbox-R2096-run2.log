@@ -1,0 +1,9 @@
+PASS AC-AMI1: envelope keys ok=True rows=[1, 2, 3, 4] count=4 answered=0 oldest='2026-10-05T00:00:01Z'
+PASS AC-AMI2: stamps=[('2026-10-05T00:00:01Z', 1), ('2026-10-05T00:00:02Z', 2), ('2026-10-05T00:00:02Z', 3), ('2026-10-05T00:00:03Z', 4)] ordered=True merged-across-listings=True tie-break-by-rating-id=True
+PASS AC-AMI3: total=4 answered=1 unanswered=3 ids=[2, 3, 4] oldest='2026-10-05T00:00:02Z'
+PASS AC-AMI4: queue star=2 revision=2 listing avg=3.5 count=2
+PASS AC-AMI5: ids after delist=[2, 3, 4] count=3 rated_listings=2
+PASS AC-AMI6: frank rows=[5] dana ids=[2, 3, 4] empty=[] bad={'E_AM_BAD_ACCOUNT'} blank='E_AM_BAD_ACCOUNT'
+PASS AC-AMI7: ledger tx frozen=True pools frozen=True thirteen-table digests frozen=True replies frozen=True repeat identical=True
+PASS AC-AMI8: three instances byte-identical=True runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8
