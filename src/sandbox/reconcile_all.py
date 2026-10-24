@@ -2296,6 +2296,16 @@ SUITES = [
     # listings keep their debt, seller isolation, pure read).
     ("ledger-apimarket-sellerinbox", os.path.join(
         "ledger", "test_apimarket_sellerinbox.py"), 8),
+    # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
+    # claim row BEFORE this suite existed: the seller-side monthly
+    # revenue timeline read face (cash basis - a sale books in the
+    # UTC month of its purchase, a refund books in the UTC month it
+    # was refunded and never rewrites the sale month, so a later
+    # month refund shows an honestly negative net there; lifetime
+    # conservation against raw rows, seller isolation, honest empty
+    # envelope, account gate before any read, pure read).
+    ("ledger-apimarket-revenuemonths", os.path.join(
+        "ledger", "test_apimarket_revenuemonths.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

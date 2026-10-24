@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T20:32:33+08:00",
+  "export_ts": "2026-10-24T20:54:10+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2096: 卖家待答评价收件箱上线——卖家现在有三件在售也不用逐张翻，一个只列未回应评分的队列按「最旧债务在前」跨全部挂牌合并返回。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_seller_inbox) + src/sandbox/ledger/test_apimarket_sellerinbox.py + qa/apimarket-sellerinbox-R2096.log (SUITE PASS 8/8, double-run byte-identical sha16 998e0884860f1349) + qa/reconcile-all-R2096.log (RUNNER PASS 301/301 suites, 2514 criteria, controls 7/7, 311.1s)",
+    "current": "R2097: 卖家月度营收时间线上线——「我这个月赚了多少」现在有一面直接回答（成交按月入账、退款按退款月入账，跨月退款如实显示负净额）。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_revenue_months) + src/sandbox/ledger/test_apimarket_revenuemonths.py + qa/apimarket-revenuemonths-R2097.log (SUITE PASS 8/8, double-run byte-identical sha16 9FE983151240B394) + qa/reconcile-all-R2097.log (RUNNER PASS 302/302 suites, 2522 criteria, controls 7/7, 428.8s)",
     "next_milestone": "下个里程碑：在同一条 apimarket 产品线上继续补商业化前可验证的缺口（当窗预注册判据后落码并全电池验证）；时限 24h 内（交付环节已为同日闭环）。"
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 卖家月度营收时间线读面（api_revenue_months）",
+      "on",
+      "R2097：现金制月度营收（成交按 purchased_utc 月、退款按 refunded_utc 月且不改写原成交月·跨月退款如实负净）·九键信封+十键行按 month 升序·行内 gross==dev+platform 与 net==gross−refunded·终身守恒对原始 purchase/refund 行交叉核对（23/10/13）·卖家隔离+诚实空信封·账户形门前置 fail-closed·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-REVM1..REVM8·电池 302/302 套件 2522 判据）"
+    ],
     [
       "apimarket 卖家待答评价收件箱（api_seller_inbox）",
       "on",
@@ -282,6 +287,10 @@
     ]
   ],
   "results": [
+    [
+      "R2097",
+      "R2097: the developer API market gains the per-seller month axis its money face never had. api_sales answers row by row (the caller must bucket), dev_profile answers lifetime totals with no time axis, and api_market_stats answers the whole market, so nothing answered what one seller earned in one month - and the gap between the month a sale books in and the month its refund lands in was invisible. api_revenue_months is a nine-key envelope with ten-key month rows ordered ascending: a sale books in the UTC month of its purchase, a refund books in the UTC month it was refunded and never rewrites the sale month, so a later-month refund shows an honestly negative net there while the original month stays byte-frozen; the 23:59:59Z / 00:00:00Z boundary splits buckets; every row keeps gross == dev_share + platform_share and net == gross - refunded; lifetime totals cross-check against the raw purchase and refund rows (23 = 10 + 13, refunded 10, net 13); seller isolation, an honest empty envelope and the fail-closed account gate are pinned; the face is pure read with frozen digests, constant ledger tx set and pools, and byte-identical across three instances. AC-REVM1..AC-REVM8 pre-registered before the code; suite 8/8 double-run identical sha16 9FE983151240B394; battery RUNNER PASS 302/302 suites plus controls 7/7 in 428.8s; matrix 302 suites / 2522 criteria byte-identical. One defect disclosed and fixed in-window: the refund query aliased f.amount without naming the alias in FROM, so sqlite refused the column before any evidence was written."
+    ],
     [
       "R2096",
       "R2096: the developer API market closes the seller triage gap behind its reply door. api_rating_replies answers one listing at a time, so a seller with N live listings had to open N faces and count the unanswered ratings by hand. api_seller_inbox merges every rating across the seller's listings and returns only the unanswered ones, ordered by rating time then rating id so the oldest debt is always first; an eight-key envelope keeps the conversation arithmetic (answered + unanswered == total) so a reply drains the queue without rewriting history; the star column reads through the one effective-value seam; a retired listing keeps its unanswered rating; seller isolation and an honest empty inbox are pinned; the account shape gate fails closed before any read; and the face is pure read with zero token movement and byte-identical across three instances. AC-AMI1..AC-AMI8 pre-registered before the code; suite 8/8 double-run identical sha16 998e0884860f1349; battery RUNNER PASS 301/301 suites plus controls 7/7 in 311.1s; matrix 301 suites / 2514 criteria byte-identical."
