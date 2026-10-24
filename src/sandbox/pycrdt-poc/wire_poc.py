@@ -3,7 +3,9 @@
 Pre-registered acceptance criteria AC-YC1..YC6 live in src/os/backlog.md
 (this row was written BEFORE this code ran - honesty law).
 Single-command rerun: python src/sandbox/pycrdt-poc/wire_poc.py
-Evidence: qa/pycrdt-wire-R1847.log (written by this run, pure ascii).
+Pinned upgrade window (AC-YCU1..YCU8, D-20261024-09 item C3):
+  python src/sandbox/pycrdt-poc/wire_poc.py --pin "pycrdt==0.14.10" --evidence qa/pycrdt-upgrade-R2080.log
+Evidence: qa/pycrdt-wire-R1847.log by default (written by this run, pure ascii).
 Opponent piece reused read-only from src/sandbox/ygo-poc (js/node_modules
 yjs@13.6.33 + data/fixtures). Hygiene: vendor/ pip target is gitignored,
 zero system-env pollution, zero network imports in shipped test code.
@@ -19,7 +21,11 @@ VENDOR = os.path.join(BASE, "vendor")
 OUT = os.path.join(BASE, "out")
 FIX = os.path.normpath(os.path.join(BASE, "..", "ygo-poc", "data", "fixtures"))
 QA = os.path.normpath(os.path.join(BASE, "..", "..", "..", "qa"))
-LOG = os.path.join(QA, "pycrdt-wire-R1847.log")
+DEFAULT_LOG = os.path.join(QA, "pycrdt-wire-R1847.log")
+DEFAULT_PINS = ["pycrdt", "pycrdt-websocket"]
+# module-level so the log writer stays a single seam for every caller
+LOG = DEFAULT_LOG
+PINS = list(DEFAULT_PINS)
 
 LINES = []
 FAILURES = []
@@ -41,12 +47,52 @@ def flush_log():
         f.write("\n".join(LINES) + "\n")
 
 
-def main():
+def parse_args(argv):
+    """Resolve --evidence/--evidence-free defaults; None means usage error (exit 2).
+
+    Defaults preserve the R1847 behaviour byte for byte: no pin means the
+    unpinned `pycrdt` requirement and the original evidence path.
+    """
+    global LOG, PINS
+    log_path = DEFAULT_LOG
+    pins = list(DEFAULT_PINS)
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--evidence":
+            if i + 1 >= len(argv) or not argv[i + 1]:
+                print("usage error: --evidence needs a path")
+                return None
+            log_path = os.path.abspath(argv[i + 1])
+            i += 2
+            continue
+        if arg == "--pin":
+            if i + 1 >= len(argv) or not argv[i + 1]:
+                print("usage error: --pin needs a requirement string")
+                return None
+            pins = [argv[i + 1], "pycrdt-websocket"]
+            i += 2
+            continue
+        print("usage error: unknown argument %r" % arg)
+        return None
+    LOG = log_path
+    PINS = pins
+    return (log_path, pins)
+
+
+def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    parsed = parse_args(argv)
+    if parsed is None:
+        return 2
+    log("--- invocation ---")
+    log("argv=%s" % json.dumps(argv))
+    log("evidence=%s" % LOG)
+    log("pins=%s" % json.dumps(PINS))
     log("--- AC-YC1 pip install (prereq D live) ---")
-    log("cmd: python -m pip install --target <pycrdt-poc>/vendor pycrdt pycrdt-websocket")
+    log("cmd: python -m pip install --target <pycrdt-poc>/vendor %s" % " ".join(PINS))
     proc = subprocess.run(
-        [sys.executable, "-m", "pip", "install", "--target", VENDOR,
-         "pycrdt", "pycrdt-websocket"],
+        [sys.executable, "-m", "pip", "install", "--target", VENDOR] + PINS,
         capture_output=True, text=True,
     )
     out_text = (proc.stdout or "") + (proc.stderr or "")
@@ -65,6 +111,9 @@ def main():
     from pycrdt import Array, Doc, Map, Text
 
     log("pycrdt version=%s" % getattr(pycrdt, "__version__", "unknown"))
+    dist = sorted(d for d in os.listdir(VENDOR)
+                  if d.startswith("pycrdt-") and d.endswith(".dist-info"))
+    log("pycrdt dist-info=%s" % json.dumps(dist))
 
     def read_fixture(name):
         with open(os.path.join(FIX, name), "rb") as f:
