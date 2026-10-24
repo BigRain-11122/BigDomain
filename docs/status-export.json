@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T10:50:16+08:00",
+  "export_ts": "2026-10-24T18:20:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2075: the live-room opening face now pins its minor-guard front-door order - the five cheap doors reject without ever consulting the guard, the three guard-bearing forms reach it exactly once each, a refused session id stays unused, and the minor live ban survives two full restarts from the guard's own store.",
-    "latest_artifact": "src/sandbox/liveroom/test_liveroom_minorguard_persist.py + qa/liveroom-minorguard-R2075.log (SUITE PASS 8/8 double-run identical stdout sha16 18b56de00d27a767; RUNNER PASS 283/283 suites + controls 7/7 229.7s = qa/reconcile-all-R2075.log; suite-matrix 283 suites / 2370 criteria byte-identical, 2026-10-24)",
+    "current": "R2076: the daily compliance crawl captured the amended (2025-03-18) Network Trade Supervision Measures as current law - auto-renewal must be reminded before acceptance AND before each renewal date with an anytime cancel option and no unreasonable fees, live video must be kept at least three years, and commercial messages must stop immediately on refusal.",
+    "latest_artifact": "docs/global-benchmarks.md W30 block + docs/research/intelligence-wall.md W30 dual rows + qa/smoke-R2076.log/png (A-grade samr.gov.cn fulltext including the 2025 order No.101 amendment; benchmarks_refreshed 2026-10-24, 2026-10-24); plus qa_mtime_probe.py live re-run verdict NO-LIVE-TIE keeping the suite-matrix window honestly open.",
     "next_milestone": "2026-10-25: the nine-company automation build plan (funnel four-ring spec + 72h self-continuation acceptance to 10-31) goes to the council three-in-one submission; P-47 design sets stay gated on the CEO merchant/server physical parts."
   },
   "depts": [
@@ -215,6 +215,10 @@
     [
       "2",
       "开播面 minor-guard 前置门序+跨重启封禁持久件（R2075）：src/sandbox/liveroom/test_liveroom_minorguard_persist.py 8 判据全绿（SUITE 8/8 双跑同一 sha16 18b56de00d27a767·电池 283/283·矩阵 283/2370 --check byte-identical·证据 qa/liveroom-minorguard-R2075.log）——五廉价门零 check_live、三守卫门各 1 次、拒绝不占 session id、零 token、两次全栈重启封禁仍在、读面跨实例字节同一、无 guard 旧路不变"
+    ],
+    [
+      "2",
+      "合规基线与证据件（R2076）：QA 日爬 W30 直采《网络交易监督管理办法》2025-03-18 修正后现行全文（A 级 samr.gov.cn·1 检索+1 直取零额外判负）——§① 新法规块+§③ 源行+§④ 记录三处入册+情报墙 W30 双行；消费落点=P-47⑤ 月卡自动续费双时点+随时取消+不得收不合理费用（第十八条）与 W10/W18 互证、P-47④ 搭售默认禁+格式条款六禁、P-47③ 评价与流量五禁、P-47① 直播视频 ≥3 年留档、member 推送拒收即停；benchmarks_refreshed=2026-10-24；同轮 state.json 裸 LF=30 修复（内容与 JSON 等价校验过）+suite_matrix live mtime 探针复验 NO-LIVE-TIE 如实留窗开；证据 qa/smoke-R2076.log+png"
     ]
   ],
   "results": [
@@ -505,15 +509,19 @@
     [
       "R2075",
       "R2075 overdue OSS 72h row closed (two new slices, zero @BigDomain hits, zero-claim) plus a new liveroom minor-guard front-door suite: the five cheap doors reject with zero check_live calls while the three guard-bearing forms reach it once each, a refused session id stays unused, the minor live ban survives two full-stack restarts, read faces stay byte-identical and the guard-free face is unchanged. AC-LGM1..AC-LGM8 pre-registered; 8/8 double-run sha16 18b56de00d27a767; RUNNER 283/283 + controls 7/7 229.7s; matrix 283/2370 --check byte-identical."
+    ],
+    [
+      "R2076",
+      "R2076 QA charter daily crawl W30: the Network Trade Supervision Measures (SAMR order No.37, effective 2021-05-01, amended by order No.101 dated 2025-03-18) captured as A-grade current fulltext from samr.gov.cn in 1 search + 1 get with zero extra negatives. Entered as a benchmarks sec.1 block + sec.3 source row + sec.4 record (sec.2 deliberately unchanged, noted honestly) and W30 dual rows on the intelligence wall. Consumption: auto-renewal dual-point notice plus anytime cancel and no unreasonable fees (art.18) cross-proves the month-card rule chain with W10/W18; bundling never defaulted and six format-clause bans (arts.17/21) for the payment/contract face; reviews and traffic five bans (arts.14/15) for UGC; live video kept three years (art.20); commercial-message immediate opt-out (art.16); 30-day termination notice and 3-year archives (arts.23/24/31). benchmarks_refreshed=2026-10-24. Same round: state.json bare-LF=30 repaired (content and JSON equality verified), suite_matrix live mtime probe re-run honestly -> NO-LIVE-TIE with the queue window left OPEN. Both daily standing rows already stamped today and not re-run. Evidence qa/smoke-R2076.log + png. Score 2."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 3,
+    "log_lines_in_window": 4,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 3,
+    "substantive_non_idle_mention_lines": 4,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
