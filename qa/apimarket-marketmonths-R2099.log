@@ -1,0 +1,9 @@
+PASS AC-AMMM1: keys ok=True months=['2026-08', '2026-09', '2026-10'] month_count=3
+PASS AC-AMMM2: aug={sales:1 gross:10 b:1 s:1 l:1} sep={sales:3 gross:18 b:3 s:2 l:3} oct={sales:0 refunds:1 refunded:10 b:0 s:0 l:0}
+PASS AC-AMMM3: rows consistent=[True, True, True, True, True, True, True, True, True] d1=(7, 3) aug net dev=7 oct net dev=-7
+PASS AC-AMMM4: face/stats/raw gross=28/28/28 sales=4/4/4 refunded=10/10/10 net=18 dev=14/14/14 plat=4/4/4 seller-union months=['2026-08', '2026-09', '2026-10'] all rows equal=True
+PASS AC-AMMM5: aug frozen=True oct net=-10 (negative allowed)
+PASS AC-AMMM6: ledger tx frozen=True pools frozen=True thirteen-table digests frozen=True repeat identical=True kwargs=TypeError True
+PASS AC-AMMM7: three instances byte-identical=True empty market=(0, [])
+PASS AC-AMMM8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

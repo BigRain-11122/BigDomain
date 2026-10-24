@@ -2313,6 +2313,16 @@ SUITES = [
     # envelope, account gate before any read, pure read).
     ("ledger-apimarket-revenuemonths", os.path.join(
         "ledger", "test_apimarket_revenuemonths.py"), 8),
+    # AC-AMMM1..AC-AMMM8 pre-registered in the R2099 explore-queue
+    # claim row BEFORE this suite existed: the market-wide monthly
+    # trade timeline (cash basis - a sale books in the UTC month of
+    # its purchase, a refund books in the UTC month it was refunded
+    # and never rewrites the sale month; participant counts from
+    # purchases only so a refund-only month honestly reports zero;
+    # lifetime conservation against api_market_stats, the raw rows and
+    # the union of every seller's revenue months; no-arg pure read).
+    ("ledger-apimarket-marketmonths", os.path.join(
+        "ledger", "test_apimarket_marketmonths.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

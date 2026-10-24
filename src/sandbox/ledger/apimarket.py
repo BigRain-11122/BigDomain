@@ -1693,6 +1693,105 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "months": months}
 
+    def api_market_months(self):
+        """Market-wide monthly trade timeline (pre-registered
+        AC-AMMM1..AC-AMMM8 in the R2099 explore-queue row BEFORE
+        this code existed).
+
+        api_revenue_months answers one seller's cash-basis months
+        and api_market_stats answers the whole market with lifetime
+        aggregates only, so between the two there was no
+        market-level time axis: a trend, a month-on-month comparison
+        or a monthly settlement view had to walk every seller and
+        rebucket the row faces by hand. This face closes that gap on
+        the same cash basis law: a sale books in the UTC month of
+        purchased_utc, a refund books in the UTC month of
+        refunded_utc and never rewrites the month the sale landed
+        in, so a refund booked in a later month shows an honestly
+        negative net there.
+
+        Participant counts (buyer_count, seller_count,
+        listing_count) are purchase-derived only, so a refund-only
+        month honestly reports zero participants alongside its
+        refund rows. No arguments, so no gate: pure read, zero row
+        mutations and zero token movement.
+        """
+        with self._lock:
+            sales = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.dev_share,"
+                " p.platform_share, p.purchased_utc, l.dev_account,"
+                " p.listing_id FROM apimarket_purchases p JOIN"
+                " apimarket_listings l ON"
+                " l.listing_id = p.listing_id").fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.amount, f.dev_share, f.platform_share,"
+                " f.refunded_utc FROM apimarket_refunds f").fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "sales_count": 0, "gross": 0,
+                        "refund_count": 0, "refunded": 0,
+                        "dev_share": 0, "platform_share": 0,
+                        "refunded_dev_share": 0,
+                        "refunded_platform_share": 0,
+                        "buyers": set(), "sellers": set(),
+                        "listings": set()})
+
+        for buyer, price, dev_share, platform_share, stamp, dev, \
+                listing_id in sales:
+            b = bucket(str(stamp)[:7])
+            b["sales_count"] += 1
+            b["gross"] += int(price)
+            b["dev_share"] += int(dev_share)
+            b["platform_share"] += int(platform_share)
+            b["buyers"].add(buyer)
+            b["sellers"].add(dev)
+            b["listings"].add(int(listing_id))
+        for amount, dev_share, platform_share, stamp in refunds:
+            b = bucket(str(stamp)[:7])
+            b["refund_count"] += 1
+            b["refunded"] += int(amount)
+            b["refunded_dev_share"] += int(dev_share)
+            b["refunded_platform_share"] += int(platform_share)
+
+        months = []
+        for month in sorted(buckets):
+            b = buckets[month]
+            months.append({
+                "month": month,
+                "sales_count": b["sales_count"],
+                "gross": b["gross"],
+                "refund_count": b["refund_count"],
+                "refunded": b["refunded"],
+                "net": b["gross"] - b["refunded"],
+                "dev_share": b["dev_share"],
+                "platform_share": b["platform_share"],
+                "dev_share_net": (b["dev_share"]
+                                  - b["refunded_dev_share"]),
+                "platform_share_net": (b["platform_share"]
+                                       - b["refunded_platform_share"]),
+                "buyer_count": len(b["buyers"]),
+                "seller_count": len(b["sellers"]),
+                "listing_count": len(b["listings"]),
+            })
+        return {"month_count": len(months),
+                "lifetime_sales_count": sum(
+                    m["sales_count"] for m in months),
+                "lifetime_gross": sum(m["gross"] for m in months),
+                "lifetime_refund_count": sum(
+                    m["refund_count"] for m in months),
+                "lifetime_refunded": sum(
+                    m["refunded"] for m in months),
+                "lifetime_net": sum(m["net"] for m in months),
+                "lifetime_dev_revenue": sum(
+                    m["dev_share_net"] for m in months),
+                "lifetime_platform_revenue": sum(
+                    m["platform_share_net"] for m in months),
+                "disclaimer": self.disclaimer,
+                "months": months}
+
     def api_price_history(self, listing_id):
         """Asking-price history surface (AC-AMPR7): the immutable
         base price plus every append-only revision in order, the

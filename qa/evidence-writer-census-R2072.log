@@ -1,7 +1,8 @@
-file_count=1660
+file_count=1731
 [ps-utf16] ads-R622.log bytes=4070 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
 [tee] ads-persist-R1940.log bytes=7719 bom=utf-8 crlf=0 bare_lf=87 utf8=yes label=no
 [tee] ads-runner-R622.log bytes=34193 bom=utf-8 crlf=0 bare_lf=325 utf8=yes label=no
+[tee] api-str-straddle-R2073.log bytes=6412 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
 [ps-utf16] apidev-R1700-runner.log bytes=191264 bom=utf-16le crlf=0 bare_lf=773 utf8=no label=no
 [ps-utf16] apidev-R1700.log bytes=3374 bom=utf-16le crlf=0 bare_lf=11 utf8=no label=no
 [pwsh-capture] apidev-chainusage-R1833.log bytes=5564 bom=utf-8 crlf=38 bare_lf=35 utf8=yes label=no
@@ -36,6 +37,9 @@ file_count=1660
 [pwsh-capture] apidev-usagewin-roll-R1739.log bytes=138280 bom=utf-8 crlf=1101 bare_lf=0 utf8=yes label=no
 [pwsh-capture] apidev-window-anchor-R1748.log bytes=12727 bom=utf-8 crlf=110 bare_lf=0 utf8=yes label=no
 [pwsh-capture] apimarket-R1763.log bytes=1395 bom=utf-8 crlf=14 bare_lf=0 utf8=yes label=no
+[tee] apimarket-buyerprofile-R2091-run2.log bytes=651 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-buyerprofile-R2091.log bytes=651 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-delist-R2078.log bytes=605781 bom=utf-8 crlf=0 bare_lf=3364 utf8=yes label=no
 [other] apimarket-devboard-R1978.log bytes=2178 bom=utf-8 crlf=8 bare_lf=26 utf8=yes label=no
 [tee] apimarket-devboardboundary-R2024.log bytes=5859 bom=utf-8 crlf=0 bare_lf=73 utf8=yes label=no
 [tee] apimarket-devboardgate-R2065-attempt1.log bytes=4184 bom=utf-8 crlf=0 bare_lf=55 utf8=yes label=no
@@ -43,8 +47,43 @@ file_count=1660
 [tee] apimarket-devboardmonthboundary-R2045.log bytes=78875 bom=utf-8 crlf=0 bare_lf=1408 utf8=yes label=no
 [tee] apimarket-devboardmonthpersist-R2023.log bytes=6385 bom=utf-8 crlf=0 bare_lf=74 utf8=yes label=no
 [tee] apimarket-devboardwindow-R2022.log bytes=2757 bom=utf-8 crlf=0 bare_lf=15 utf8=yes label=no
+[tee] apimarket-devprofile-R2085-run2.log bytes=1028 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-devprofile-R2085.log bytes=1028 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
 [pwsh-capture] apimarket-devsalespersist-R2006.log bytes=4436 bom=utf-8 crlf=16 bare_lf=11 utf8=yes label=no
+[tee] apimarket-library-R2081-run2.log bytes=822 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-library-R2081.log bytes=822 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-marketmonths-R2099-run2.log bytes=912 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-marketmonths-R2099.log bytes=912 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-marketstats-R2090-run2.log bytes=594 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-marketstats-R2090.log bytes=594 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-metadata-R2083-run2.log bytes=1892 bom=utf-8 crlf=0 bare_lf=13 utf8=yes label=no
+[tee] apimarket-metadata-R2083.log bytes=1892 bom=utf-8 crlf=0 bare_lf=13 utf8=yes label=no
 [tee] apimarket-persist-R1946.log bytes=8474 bom=utf-8 crlf=0 bare_lf=89 utf8=yes label=no
+[tee] apimarket-pricerev-R2079.log bytes=604750 bom=utf-8 crlf=0 bare_lf=3347 utf8=yes label=no
+[tee] apimarket-ratingagg-R2077.log bytes=4852 bom=utf-8 crlf=0 bare_lf=48 utf8=yes label=no
+[tee] apimarket-ratingrev-R2094-run2.log bytes=1100 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-ratingrev-R2094.log bytes=1100 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-ratreply-R2093-run2.log bytes=988 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-ratreply-R2093.log bytes=988 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-refund-R2088-run2.log bytes=1083 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-refund-R2088.log bytes=1083 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-relist-R2089-run2.log bytes=1306 bom=utf-8 crlf=0 bare_lf=11 utf8=yes label=no
+[tee] apimarket-relist-R2089.log bytes=1306 bom=utf-8 crlf=0 bare_lf=11 utf8=yes label=no
+[tee] apimarket-restock-R2095-run2.log bytes=1401 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-restock-R2095.log bytes=1401 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-revenuemonths-R2097-run2.log bytes=852 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-revenuemonths-R2097.log bytes=852 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-search-R2082-run2.log bytes=1373 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-search-R2082.log bytes=1373 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-searchpage-R2084-run2.log bytes=1206 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-searchpage-R2084.log bytes=1206 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-searchsort-R2098-run2.log bytes=1349 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-searchsort-R2098.log bytes=1349 bom=utf-8 crlf=0 bare_lf=10 utf8=yes label=no
+[tee] apimarket-sellerinbox-R2096-run2.log bytes=924 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-sellerinbox-R2096.log bytes=924 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-supply-R2087-run2.log bytes=1125 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-supply-R2087.log bytes=1125 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
+[tee] apimarket-watchlist-R2086.log bytes=978 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
 [ps-utf16] authorize-R1719.log bytes=232734 bom=utf-16le crlf=0 bare_lf=975 utf8=no label=no
 [tee] authorize-idem-R1886.log bytes=2436 bom=utf-8 crlf=0 bare_lf=36 utf8=yes label=no
 [tee] authorize-persist-R1885.log bytes=2264 bom=utf-8 crlf=0 bare_lf=33 utf8=yes label=no
@@ -360,6 +399,7 @@ file_count=1660
 [tee] eventtickets-sessionpersist-R1930.log bytes=4004 bom=utf-8 crlf=0 bare_lf=36 utf8=yes label=no
 [tee] eventtickets-telescope-R1867.log bytes=4185 bom=utf-8 crlf=0 bare_lf=28 utf8=yes label=no
 [tee] evidence-battery-R1992.log bytes=3706 bom=utf-8 crlf=0 bare_lf=56 utf8=yes label=no
+[pwsh-capture] evidence-writer-census-R2072.log bytes=147818 bom=utf-8 crlf=1667 bare_lf=0 utf8=yes label=no
 [ps-utf16] expedite-R620.log bytes=2950 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
 [tee] expedite-persist-R1937.log bytes=6744 bom=utf-8 crlf=0 bare_lf=79 utf8=yes label=no
 [tee] expedite-runner-R620.log bytes=32064 bom=utf-8 crlf=0 bare_lf=316 utf8=yes label=no
@@ -500,6 +540,7 @@ file_count=1660
 [tee] export-consistency-R2062.log bytes=1134 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
 [tee] export-consistency-R2064.log bytes=1132 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
 [tee] export-consistency-R2066.log bytes=1132 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
+[tee] export-consistency-R2099.log bytes=1134 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
 [pwsh-capture] export-fix-R1218.log bytes=1852 bom=utf-8 crlf=20 bare_lf=0 utf8=yes label=no
 [tee] export-persist-R1920.log bytes=344208 bom=utf-8 crlf=0 bare_lf=2222 utf8=yes label=no
 [tee] exportpersist-takeover-R1920.log bytes=4271 bom=utf-8 crlf=0 bare_lf=62 utf8=yes label=no
@@ -571,6 +612,7 @@ file_count=1660
 [other] holiday-readiness-R693.log bytes=1945 bom=utf-8-sig crlf=43 bare_lf=0 utf8=yes label=no
 [other] honorcert-R1755.log bytes=5248 bom=utf-8-sig crlf=4 bare_lf=25 utf8=yes label=no
 [tee] honorcert-grantgate-R2029.log bytes=35665 bom=utf-8 crlf=0 bare_lf=582 utf8=yes label=no
+[tee] honorcert-grantwidth-R2074.log bytes=3068 bom=utf-8 crlf=0 bare_lf=9 utf8=yes label=no
 [pwsh-capture] honorcert-multiyear-R2007.log bytes=3794 bom=utf-8 crlf=16 bare_lf=11 utf8=yes label=no
 [tee] honorcert-persist-R1948.log bytes=9470 bom=utf-8 crlf=0 bare_lf=94 utf8=yes label=no
 [tee] honorcert-subsetaxis-R2026.log bytes=34566 bom=utf-8 crlf=0 bare_lf=575 utf8=yes label=no
@@ -592,6 +634,7 @@ file_count=1660
 [pwsh-capture] journey-demo-R607.log bytes=6934 bom=utf-8 crlf=51 bare_lf=0 utf8=yes label=no
 [other] ledger-clawback-R1723.log bytes=2297 bom=utf-8-sig crlf=39 bare_lf=0 utf8=yes label=no
 [other] liveroom-R608.log bytes=1642 bom=utf-8-sig crlf=11 bare_lf=0 utf8=yes label=no
+[tee] liveroom-minorguard-R2075.log bytes=2857 bom=utf-8 crlf=0 bare_lf=11 utf8=yes label=no
 [tee] liveroom-persist-R1933.log bytes=6066 bom=utf-8 crlf=0 bare_lf=60 utf8=yes label=no
 [tee] liveroom-runner-R608.log bytes=29056 bom=utf-8 crlf=0 bare_lf=298 utf8=yes label=no
 [other] load-S8b-R550.log bytes=3902 bom=utf-8-sig crlf=8 bare_lf=36 utf8=yes label=no
@@ -686,6 +729,8 @@ file_count=1660
 [ps-utf16] props-R599.log bytes=1644 bom=utf-16le crlf=0 bare_lf=8 utf8=no label=no
 [tee] props-persist-R1942.log bytes=5962 bom=utf-8 crlf=0 bare_lf=86 utf8=yes label=no
 [ps-utf16] props-runner-R599.log bytes=42826 bom=utf-16le crlf=0 bare_lf=211 utf8=no label=no
+[tee] pycrdt-upgrade-R2080-run2.log bytes=3469 bom=utf-8 crlf=0 bare_lf=31 utf8=yes label=no
+[tee] pycrdt-upgrade-R2080.log bytes=2591 bom=utf-8 crlf=0 bare_lf=31 utf8=yes label=no
 [tee] pycrdt-wire-R1847.log bytes=2316 bom=utf-8 crlf=0 bare_lf=26 utf8=yes label=no
 [pwsh-capture] qa-decode-probe-R1781.log bytes=63022 bom=utf-8 crlf=1051 bare_lf=5 utf8=yes label=no
 [tee] qa-mtime-probe-R1967.log bytes=1828 bom=utf-8 crlf=0 bare_lf=38 utf8=yes label=no
@@ -986,6 +1031,31 @@ file_count=1660
 [tee] reconcile-all-R2070.log bytes=588842 bom=utf-8 crlf=0 bare_lf=3267 utf8=yes label=no
 [tee] reconcile-all-R2071.log bytes=591532 bom=utf-8 crlf=0 bare_lf=3276 utf8=yes label=no
 [tee] reconcile-all-R2072.log bytes=592132 bom=utf-8 crlf=0 bare_lf=3286 utf8=yes label=no
+[tee] reconcile-all-R2073.log bytes=595298 bom=utf-8 crlf=0 bare_lf=3295 utf8=yes label=no
+[tee] reconcile-all-R2074.log bytes=598496 bom=utf-8 crlf=0 bare_lf=3305 utf8=yes label=no
+[tee] reconcile-all-R2075.log bytes=601274 bom=utf-8 crlf=0 bare_lf=3316 utf8=yes label=no
+[tee] reconcile-all-R2077.log bytes=602440 bom=utf-8 crlf=0 bare_lf=3326 utf8=yes label=no
+[tee] reconcile-all-R2080.log bytes=604753 bom=utf-8 crlf=0 bare_lf=3347 utf8=yes label=no
+[tee] reconcile-all-R2081.log bytes=605768 bom=utf-8 crlf=0 bare_lf=3359 utf8=yes label=yes
+[tee] reconcile-all-R2082.log bytes=607192 bom=utf-8 crlf=0 bare_lf=3369 utf8=yes label=no
+[tee] reconcile-all-R2083.log bytes=609065 bom=utf-8 crlf=0 bare_lf=3381 utf8=yes label=yes
+[tee] reconcile-all-R2084.log bytes=610329 bom=utf-8 crlf=0 bare_lf=3391 utf8=yes label=no
+[tee] reconcile-all-R2085-2.log bytes=611463 bom=utf-8 crlf=0 bare_lf=3402 utf8=yes label=no
+[tee] reconcile-all-R2085-3.log bytes=611484 bom=utf-8 crlf=0 bare_lf=3402 utf8=yes label=no
+[tee] reconcile-all-R2085.log bytes=611461 bom=utf-8 crlf=0 bare_lf=3402 utf8=yes label=no
+[tee] reconcile-all-R2086.log bytes=612593 bom=utf-8 crlf=0 bare_lf=3412 utf8=yes label=no
+[tee] reconcile-all-R2087.log bytes=613830 bom=utf-8 crlf=0 bare_lf=3422 utf8=yes label=no
+[tee] reconcile-all-R2088.log bytes=615033 bom=utf-8 crlf=0 bare_lf=3432 utf8=yes label=no
+[tee] reconcile-all-R2089.log bytes=616388 bom=utf-8 crlf=0 bare_lf=3442 utf8=yes label=no
+[tee] reconcile-all-R2090.log bytes=617176 bom=utf-8 crlf=0 bare_lf=3453 utf8=yes label=yes
+[tee] reconcile-all-R2091.log bytes=617953 bom=utf-8 crlf=0 bare_lf=3463 utf8=yes label=yes
+[tee] reconcile-all-R2093.log bytes=619065 bom=utf-8 crlf=0 bare_lf=3473 utf8=yes label=yes
+[tee] reconcile-all-R2094.log bytes=620213 bom=utf-8 crlf=0 bare_lf=3482 utf8=yes label=no
+[tee] reconcile-all-R2095.log bytes=621734 bom=utf-8 crlf=0 bare_lf=3492 utf8=yes label=no
+[tee] reconcile-all-R2096.log bytes=622784 bom=utf-8 crlf=0 bare_lf=3502 utf8=yes label=no
+[tee] reconcile-all-R2097.log bytes=623840 bom=utf-8 crlf=0 bare_lf=3513 utf8=yes label=yes
+[tee] reconcile-all-R2098.log bytes=626155 bom=utf-8 crlf=0 bare_lf=3544 utf8=yes label=yes
+[pwsh-capture] reconcile-all-R2099.log bytes=629886 bom=utf-8 crlf=3534 bare_lf=0 utf8=yes label=yes
 [tee] reconcile-all-R594.log bytes=17284 bom=utf-8 crlf=0 bare_lf=170 utf8=yes label=no
 [tee] reconcile-all-R595.log bytes=18760 bom=utf-8 crlf=0 bare_lf=191 utf8=yes label=no
 [tee] reconcile-all-R908.log bytes=47557 bom=utf-8 crlf=0 bare_lf=388 utf8=yes label=no
@@ -1567,6 +1637,7 @@ file_count=1660
 [tee] smoke-R2020.log bytes=5074 bom=utf-8 crlf=0 bare_lf=89 utf8=yes label=no
 [tee] smoke-R2034.log bytes=7631 bom=utf-8 crlf=0 bare_lf=127 utf8=yes label=no
 [tee] smoke-R2048.log bytes=5307 bom=utf-8 crlf=0 bare_lf=20 utf8=yes label=no
+[tee] smoke-R2076.log bytes=6273 bom=utf-8 crlf=0 bare_lf=23 utf8=yes label=no
 [tee] smoke-R530.log bytes=3475 bom=utf-8 crlf=0 bare_lf=47 utf8=yes label=no
 [tee] smoke-R537.log bytes=4116 bom=utf-8 crlf=0 bare_lf=61 utf8=yes label=no
 [tee] smoke-R628.log bytes=6312 bom=utf-8 crlf=0 bare_lf=83 utf8=yes label=no
@@ -1659,9 +1730,9 @@ file_count=1660
 [tee] xl16-R728.log bytes=1645 bom=utf-8 crlf=0 bare_lf=33 utf8=yes label=no
 [other] xl16-cleanup-R711.log bytes=500 bom=utf-8-sig crlf=8 bare_lf=0 utf8=yes label=no
 [ps-utf16] ygo-poc-20261008.log bytes=2248 bom=utf-16le crlf=0 bare_lf=15 utf8=no label=no
-counts: tee=1134 cmd-raw=15 pwsh-capture=313 ps-utf16=98 other=100
-labeled_selfannounced=62
-total=1660
-verdict: CENSUS-COMPLETE (all 1660 files classified, other=100 honest bucket)
-fingerprint stable=True files=1715
+counts: tee=1203 cmd-raw=15 pwsh-capture=315 ps-utf16=98 other=100
+labeled_selfannounced=70
+total=1731
+verdict: CENSUS-COMPLETE (all 1731 files classified, other=100 honest bucket)
+fingerprint stable=True files=1788
 verdict CENSUS-READ-ONLY PASS
