@@ -2777,6 +2777,17 @@ SUITES = [
      os.path.join(
          "ledger",
          "test_showcase_statsmonth_straddle2persist.py"), 7),
+    # R2071 (criteria pre-registered in the explore-queue claim row
+    # BEFORE this suite existed - honesty law; AC-SMTR1..AC-SMTR7):
+    # the post-closure retract THIRD shape of the statsmonth
+    # straddle family ({2,3,1} with the negative-rhs break, plus the
+    # {3,3,2} bounce pinned in passing) enters the battery. Pure
+    # wiring - the suite file itself is unchanged; its own main()
+    # prints seven AC PASS-lines plus the SUITE summary line.
+    ("ledger-showcase-statsmonth-straddle3-persist",
+     os.path.join(
+         "ledger",
+         "test_showcase_statsmonth_straddle3persist.py"), 7),
     # R2033 (criteria pre-registered in the backlog R2033 claim row
     # BEFORE this wiring existed - honesty law; AC-FN8): the
     # FUNNEL-LOOP v0.1 four-ring suite (docs/ops/

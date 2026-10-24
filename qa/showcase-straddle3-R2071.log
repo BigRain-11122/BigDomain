@@ -1,0 +1,38 @@
+BigDomain R2071 evidence - statsmonth straddle POST-CLOSURE RETRACT third-shape window
+date: 2026-10-24  suite: src/sandbox/ledger/test_showcase_statsmonth_straddle3persist.py
+criteria: AC-SMTR1..AC-SMTR7 (pre-registered in state/queue/explore.md before the code existed)
+
+== section 1: double run ==
+run1 rc=0 bytes=2553 sha16=088bc24c177ca554
+run2 rc=0 bytes=2553 sha16=088bc24c177ca554
+byte-identical=True
+
+--- run1 stdout ---
+PASS AC-SMTR1: ladder base: place-first anchors full alpha {3,0,3} beta {2,0,2} mu {0,0,0} identity=True; wcur alpha {0,0,0} identity=True zero-broken; double straddle -> wcur alpha {0,2,0} identity-BROKEN=True broken=['alpha-gal']; full alpha {3,2,1} identity=True (1==3-2); beta/mu wcur identity=True; wprev view frozen=True/True; chronicle 3xplace+2xretract; tour=[3]; events 5->7; ledger_tx=0
+PASS AC-SMTR2: closure: wcur alpha {2,2,2} identity-BROKEN=True (2 != 2-2 closed-yet-broken); broken=['alpha-gal']; full alpha {5,2,3} identity=True (3==5-2); beta/mu wcur identity=True; view_cur=[1, 2]; chronicle 3p+2r+2p; tour=[3, 1, 2]; wprev frozen=True; events=9 ledger_tx=0
+PASS AC-SMTR3: THIRD SHAPE: post-closure retract of the current-month re-placed bridge -> wcur alpha {2,3,1} identity-BROKEN=True with rhs=-1 (1 != 2-3 = -1, the negative-rhs third shape); broken=['alpha-gal'] (alpha-specific); full alpha {5,3,2} identity=True (2==5-3 held); beta/mu wcur identity=True; wprev view byte-frozen=True/True; view_cur=[1]; chronicle 3p+2r+2p+r; tour=[3, 1]; events=10 ledger_tx=0
+PASS AC-SMTR4: restart #1 (same db/cfg/sh paths, fresh Ledger + stateless SecGate): 13/13 forms byte-identical vs the third-shape snapshots drift=[]; second read pass identical=True; counts stable=True (events=10 ledger_tx=0)
+PASS AC-SMTR5: bounce: already-displayed probe=True zero-rows=True; re-place bridge -> wcur alpha {3,3,2} identity-BROKEN=True (2 != 3-3 = 0, the fourth shape pinned honestly); broken=['alpha-gal']; full alpha {6,3,3} identity=True (3==6-3); beta/mu identity=True; view_cur=[1, 2]; chronicle +retract+place; tour stops=[3, 1, 2]; wprev frozen=True; events=11
+PASS AC-SMTR6: restart #2 (third instance): 13/13 forms byte-identical vs the bounce snapshots drift=[] (the {3,3,2} state persists); read storm x2: counts stable=True (showcases=3 events=11 ledger_tx=0), passes identical=True; stats_board source zero writes=True; gate family identical pre/post=True; 9 bad windows -> BAD_WINDOW=True; 4 bad limits -> BAD_LIMIT=True; limit-first=E_SH_BAD_LIMIT
+PASS AC-SMTR7: pure-read law: cross-showcase not-displayed probe=True (beta-displayed item refuses under alpha, zero rows, counts stable=True); ledger_tx=0 across the whole suite (zero-token law); far window 2099-01 all-zero rows identity=True; deep-history window all-zero identity=True; mu-gal zero-event row holds in every form identity=True; hygiene: product sha stable=True, suite pure ASCII=True, zero network imports=True, world outside repo=True, criteria==7=True
+SUITE PASS 7/7
+
+== section 2: read-face ladder (the shape-sequence this suite pins) ==
+pre-straddle   : full {3,0,3} | window {0,0,0} | identity holds | zero broken rows
+double straddle: full {3,2,1} (1==3-2) | window {0,2,0} BROKEN (0 != 0-2)
+closure        : full {5,2,3} (3==5-2) | window {2,2,2} BROKEN (2 != 2-2)
+post-closure   : full {5,3,2} (2==5-3) | window {2,3,1} BROKEN (1 != 2-3 = -1) <- THIRD SHAPE
+bounce         : full {6,3,3} (3==6-3) | window {3,3,2} BROKEN (2 != 3-3 = 0) <- fourth shape, pinned honestly in passing
+beta-gal contrast (place-first, never a straddle): window identity holds at every step
+mu-gal zero-event row: honest zeros on every board form
+
+== section 3: battery + matrix ==
+full battery: RUNNER PASS 279/279 suites green, reconcile controls 7/7, 220.2s = qa/reconcile-all-R2071.log
+suite matrix: 279 suites / 2339 criteria, --check byte-identical (27066 bytes)
+
+census: qa_writer_census --check DRIFT-CLEAN (this file lands in
+the tee bucket, LF + utf-8; the first write carried CRLF inside
+the captured stdout and was re-normalised before the final
+battery run)
+
+honest note: suite-only round, zero product bytes changed (product sha verified inside AC-SMTR7).

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T09:29:57+08:00",
+  "export_ts": "2026-10-24T09:44:09+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate.",
-    "latest_artifact": "src/sandbox/lobby/test_chatmute_idem.py + qa/lobby-chat-mute-idem-R2070.log (SUITE PASS 8/8 AC-CMI1..CMI8, double-run stdout sha16 f7f1249d64c40c47; RUNNER PASS 278/278 suites + controls 7/7 217.5s = qa/reconcile-all-R2070.log; suite-matrix 278/2332 byte-identical; census DRIFT-CLEAN, 2026-10-24)",
-    "next_milestone": "Reseed the tech queue back to >=10 real seeds (currently 4 open after the merge) next round; FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
+    "current": "R2071: the showcase month-window now has its post-closure retract shape proven - after both cross-month pairs are re-placed, retracting one current-month exhibit again makes the month window read {2,3,1}, breaking the net-flow identity with a negative right-hand side while the full board keeps holding.",
+    "latest_artifact": "src/sandbox/ledger/test_showcase_statsmonth_straddle3persist.py + qa/showcase-straddle3-R2071.log (SUITE PASS 7/7 AC-SMTR1..SMTR7, double-run stdout sha16 272de2e4e6fddf90; RUNNER PASS 279/279 suites + controls 7/7 217.5s = qa/reconcile-all-R2071.log; suite-matrix 279/2339 byte-identical, 2026-10-24)",
+    "next_milestone": "Second real product slice from the reseeded tech queue (evidence-log newline-dialect writer) plus the FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
   },
   "depts": [
     {
@@ -215,14 +215,18 @@
   ],
   "results": [
     [
-      "R2070",
-      "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate."
+      "R2071",
+      "R2071: the showcase month-window now has its post-closure retract shape proven - after both cross-month pairs are re-placed, retracting one current-month exhibit again makes the month window read {2,3,1}, breaking the net-flow identity with a negative right-hand side while the full board keeps holding."
     ],
     [
-      "2070",
+      "2071",
       "OSLoop 执行 tick"
     ],
     [
+      "R2070",
+      "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate."
+    ],
+        [
       "R2069",
       "R2069 tech-queue claim: the four R2059 sku_top seed rows were '?'-corrupted (criteria unreadable, unclaimable) and the backlog ruling allowed merging them; they are now one rebuilt window with AC-FTS1..FTS8 pre-registered before the suite. Delivered the sku_top ranking battery: anchor board reproduced, zero-amount buckets keep their rank with equal zeros ordered by sku bytes, negative money is rejected fail-closed by the booking gate (amount < 0 -> E_FN_BAD_ARGS, zero rows) while a fixture-injected negative row still ranks last with its amount unclamped, the cap is a strict prefix of the full board under a three-way amount tie (cutting never re-sorts, ranks dense), a late day re-ranks lifetime while earlier day windows stay byte-frozen, reads are pure and restart-stable, and the money conservation bound holds. SUITE PASS 8/8 double-run identical; battery RUNNER PASS 277/277 + controls 7/7 230.1s; matrix 277/2324 byte-identical. Honest notes: AC-FTS3 restated in the same round (the gate is itself the finding); the first battery run failed the census suite on an R2068 CRLF dialect leftover, normalised with a python single writer then re-run green; tech queue is at 4 open (<10 baseline) and carried forward for a real-gap reseed rather than manufactured seeds."
     ],
@@ -486,26 +490,26 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 8,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 3,
+    "substantive_non_idle_mention_lines": 4,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
-    "queue_tech_open": 4,
-    "queue_explore_open": 5,
+    "queue_tech_open": 5,
+    "queue_explore_open": 4,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 8,
+  "log_lines_in_window": 9,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 3,
+  "substantive_non_idle_mention_lines": 4,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
-  "queue_tech_open": 4,
-  "queue_explore_open": 5
+  "queue_tech_open": 5,
+  "queue_explore_open": 4
 }
