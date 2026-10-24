@@ -2086,6 +2086,24 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboardmonthboundary", os.path.join(
         "ledger", "test_apimarket_devboardmonthboundarypersist.py"), 7),
+    # apimarket dev_sales_board three-month purchase straddle
+    # cross-restart persist window (R2073): the loaded world
+    # (OCT listing + NOV first purchase grown by a DEC third
+    # month on both an OCT listing and a NOV listing) pinned on
+    # the exact boundary-second law (month-end 23:59:59Z and
+    # next-month 00:00:00Z land on opposite sides, each counted
+    # exactly once), three-window zero-permeation (earlier
+    # window snapshots stay byte-frozen while later months
+    # accumulate), the DEC window showing purchase aggregates on
+    # zero listing_count rows, three-month conservation
+    # (OCT + NOV + DEC == lifetime, per developer and total,
+    # purchase ids partitioned), the dense ever-listed row set
+    # on every window, three-instance restart stability and the
+    # fourteen-form bad-window gate family on the loaded world
+    # (AC-AMSTR1..AMSTR7 pre-registered in the R2073
+    # explore-queue claim row).
+    ("ledger-apimarket-devboardmonthstraddle", os.path.join(
+        "ledger", "test_apimarket_devboardmonth_straddlepersist.py"), 7),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
