@@ -2254,6 +2254,12 @@ SUITES = [
     # explore-queue claim row.
     ("ledger-apimarket-refund", os.path.join(
         "ledger", "test_apimarket_refund.py"), 8),
+    # apimarket listing re-listing (relist) door - the missing
+    # return leg of the delist face, plus the api_listing_lifecycle
+    # read face - AC-AMRL1..AMRL8 pre-registered in the R2089
+    # explore-queue claim row.
+    ("ledger-apimarket-relist", os.path.join(
+        "ledger", "test_apimarket_relist.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

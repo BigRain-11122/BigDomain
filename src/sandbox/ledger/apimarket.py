@@ -74,6 +74,7 @@ E_AM_BAD_WINDOW = "E_AM_BAD_WINDOW"      # R2022 windowed read face
 E_AM_DELISTED = "E_AM_DELISTED"           # AC-AMD5 (retired listing)
 E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
 E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
+E_AM_ALREADY_LIVE = "E_AM_ALREADY_LIVE"    # AC-AMRL2 (relist on live)
 E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
 E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
 E_AM_WATCH_DUP = "E_AM_WATCH_DUP"          # AC-AMWL5
@@ -134,7 +135,14 @@ CREATE TABLE IF NOT EXISTS apimarket_delistings (
     listing_id INTEGER NOT NULL,
     dev_account TEXT NOT NULL,
     delisted_utc TEXT NOT NULL,
-    UNIQUE (listing_id)
+    cycle INTEGER NOT NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS apimarket_relistings (
+    relist_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    relisted_utc TEXT NOT NULL,
+    cycle INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_price_revisions (
     revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -282,6 +290,52 @@ class APIMarketFace:
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.executescript(_SCHEMA)
         self._ensure_supply_column()
+        self._ensure_lifecycle_schema()
+
+    def _ensure_lifecycle_schema(self):
+        """Idempotent forward migration for databases written
+        before the re-list axis existed (AC-AMRL8). The old
+        apimarket_delistings carried UNIQUE(listing_id) - one
+        terminal retirement per listing - which the cycle law must
+        relax, and SQLite cannot drop a constraint in place, so the
+        table is rebuilt once: same rows, same ids, cycle 1. The
+        rebuild runs only when the legacy shape is actually
+        present, so an already-migrated database is never touched
+        and every existing retirement keeps its original stamp."""
+        cols = [r[1] for r in self._conn.execute(
+            "PRAGMA table_info(apimarket_delistings)").fetchall()]
+        row = self._conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type = 'table'"
+            " AND name = 'apimarket_delistings'").fetchone()
+        flat = str(row[0] or "").upper().replace(" ", "") \
+            if row is not None else ""
+        legacy_unique = "UNIQUE(LISTING_ID)" in flat
+        if "cycle" in cols and not legacy_unique:
+            return
+        self._conn.execute("BEGIN IMMEDIATE")
+        try:
+            self._conn.execute(
+                "ALTER TABLE apimarket_delistings RENAME TO"
+                " apimarket_delistings_legacy")
+            self._conn.execute(
+                "CREATE TABLE apimarket_delistings ("
+                " delist_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                " listing_id INTEGER NOT NULL,"
+                " dev_account TEXT NOT NULL,"
+                " delisted_utc TEXT NOT NULL,"
+                " cycle INTEGER NOT NULL DEFAULT 1)")
+            cycle_expr = "cycle" if "cycle" in cols else "1"
+            self._conn.execute(
+                "INSERT INTO apimarket_delistings (delist_id,"
+                " listing_id, dev_account, delisted_utc, cycle)"
+                " SELECT delist_id, listing_id, dev_account,"
+                " delisted_utc, %s FROM apimarket_delistings_legacy"
+                " ORDER BY delist_id" % cycle_expr)
+            self._conn.execute("DROP TABLE apimarket_delistings_legacy")
+            self._conn.execute("COMMIT")
+        except BaseException:
+            self._conn.execute("ROLLBACK")
+            raise
 
     def _ensure_supply_column(self):
         """Idempotent forward migration for databases written
@@ -442,13 +496,31 @@ class APIMarketFace:
             raise ApiMarketError(E_AM_UNKNOWN_LISTING, str(listing_id))
         return row
 
-    def _delisted_utc(self, listing_id):
-        """Append-only delisting stamp of one listing (None when
-        still live). Caller holds the lock."""
+    def _cycle_state(self, listing_id):
+        """(cycle, delisted, delisted_utc) of one listing under the
+        cycle law (AC-AMRL1). Publishing opens cycle 1; a delisting
+        closes the cycle it lands in; a re-listing opens the next
+        one. The current cycle is therefore one plus the number of
+        append-only re-listing rows, and the listing is retired only
+        when a delisting row exists FOR THAT cycle - so a listing
+        that was retired and re-listed is live again without any row
+        ever being rewritten. Caller holds the lock."""
+        opened = self._conn.execute(
+            "SELECT MAX(cycle) FROM apimarket_relistings"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+        cycle = 1 if opened is None else int(opened)
         row = self._conn.execute(
             "SELECT delisted_utc FROM apimarket_delistings"
-            " WHERE listing_id = ?", (listing_id,)).fetchone()
-        return None if row is None else row[0]
+            " WHERE listing_id = ? AND cycle = ?",
+            (listing_id, cycle)).fetchone()
+        return cycle, row is not None, (None if row is None else row[0])
+
+    def _delisted_utc(self, listing_id):
+        """Append-only retirement stamp of one listing's CURRENT
+        cycle (None when live). Every read face keeps one seam, so
+        the re-list door flips all of them at once. Caller holds
+        the lock."""
+        return self._cycle_state(listing_id)[2]
 
     def _current_price(self, listing_id, base_price=None):
         """Newest append-only revision wins; with no revision the
@@ -500,13 +572,14 @@ class APIMarketFace:
         """Retire one listing (the seller-side door this face never
         had). Gate order pinned by AC-AMD4: account shape first,
         then the listing shape/existence gate, then ownership, then
-        the already-retired state. Exactly one append-only
-        apimarket_delistings row per listing (UNIQUE listing_id);
-        a repeat answers E_AM_ALREADY_DELISTED with zero new rows,
-        so the first delisted_utc is never rewritten. Delisting
-        moves zero tokens and deletes nothing: purchases and
-        ratings stay on the books, the market board just stops
-        offering the row."""
+        the already-retired state. One append-only
+        apimarket_delistings row per closed cycle; a repeat answers
+        E_AM_ALREADY_DELISTED with zero new rows, so the first
+        delisted_utc of that cycle is never rewritten (a re-listed
+        listing opens a new cycle and can be retired again -
+        AC-AMRL3). Delisting moves zero tokens and deletes nothing:
+        purchases and ratings stay on the books, the market board
+        just stops offering the row."""
         if not str(dev_account or "").startswith("usr:"):
             raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
         with self._lock:
@@ -514,7 +587,8 @@ class APIMarketFace:
             if listing[1] != dev_account:
                 raise ApiMarketError(E_AM_NOT_OWNER,
                                      "%s/%s" % (dev_account, listing_id))
-            if self._delisted_utc(listing_id) is not None:
+            cycle, retired, _stamp = self._cycle_state(listing_id)
+            if retired:
                 raise ApiMarketError(E_AM_ALREADY_DELISTED,
                                      str(listing_id))
             key = self._conn.execute(
@@ -525,8 +599,9 @@ class APIMarketFace:
             try:
                 self._conn.execute(
                     "INSERT INTO apimarket_delistings (listing_id,"
-                    " dev_account, delisted_utc) VALUES (?,?,?)",
-                    (listing_id, dev_account, stamp))
+                    " dev_account, delisted_utc, cycle)"
+                    " VALUES (?,?,?,?)",
+                    (listing_id, dev_account, stamp, cycle))
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
                 self._conn.execute("ROLLBACK")
@@ -538,6 +613,54 @@ class APIMarketFace:
         return {"listing_id": listing_id, "dev_account": dev_account,
                 "listing_key": key, "delisted": True,
                 "delisted_utc": stamp, "already": False,
+                "disclaimer": self.disclaimer}
+
+    def relist_api(self, dev_account, listing_id):
+        """Seller-side re-listing door: the missing return leg of
+        the retirement door (AC-AMRL1/AC-AMRL2, pre-registered in
+        the R2089 explore-queue row BEFORE this code existed).
+        Retirement was terminal - a seller who fixed a broken
+        service or came back after a pause had to publish a new
+        listing_key and lose the purchases, ratings and price
+        history attached to the old row. This window opens cycle
+        N+1 instead: one append-only apimarket_relistings row, no
+        row rewritten, and the listing is live again with every
+        historical aggregate intact.
+
+        Gate order pinned by AC-AMRL2: account shape first, then
+        the listing shape/existence gate, then ownership, then the
+        already-live state (a live listing has nothing to re-open,
+        so it answers E_AM_ALREADY_LIVE). A refused call writes
+        zero rows and moves zero tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            cycle, retired, _stamp = self._cycle_state(listing_id)
+            if not retired:
+                raise ApiMarketError(E_AM_ALREADY_LIVE, str(listing_id))
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            stamp = _now_utc()
+            new_cycle = cycle + 1
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute(
+                    "INSERT INTO apimarket_relistings (listing_id,"
+                    " dev_account, relisted_utc, cycle)"
+                    " VALUES (?,?,?,?)",
+                    (listing_id, dev_account, stamp, new_cycle))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"listing_id": listing_id, "dev_account": dev_account,
+                "listing_key": key, "cycle": new_cycle,
+                "relisted_utc": stamp, "live": True, "already": False,
                 "disclaimer": self.disclaimer}
 
     def revise_price(self, dev_account, listing_id, token_price):
@@ -983,20 +1106,68 @@ class APIMarketFace:
                 "delisted_utc": stamp,
                 "disclaimer": self.disclaimer}
 
+    def api_listing_lifecycle(self, listing_id):
+        """Per-listing lifecycle surface (AC-AMRL5/AC-AMRL6): the
+        full retirement/re-listing history as ordered append-only
+        events, plus the derived current cycle and live state.
+        Before this face the only lifecycle answer was api_view's
+        delisted pair - a caller could see that a listing is live
+        but never that it had been retired and re-opened twice.
+        Pure read: zero rows written, zero token movement."""
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            cycle, retired, stamp = self._cycle_state(listing_id)
+            delists = self._conn.execute(
+                "SELECT listing_id, delisted_utc, cycle FROM"
+                " apimarket_delistings WHERE listing_id = ?"
+                " ORDER BY delist_id", (listing_id,)).fetchall()
+            relists = self._conn.execute(
+                "SELECT listing_id, relisted_utc, cycle FROM"
+                " apimarket_relistings WHERE listing_id = ?"
+                " ORDER BY relist_id", (listing_id,)).fetchall()
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+        events = [{"event": "delist", "cycle": int(r[2]),
+                   "utc": r[1]} for r in delists]
+        events += [{"event": "relist", "cycle": int(r[2]),
+                    "utc": r[1]} for r in relists]
+        # A re-listing row marks the START of its cycle, a delisting
+        # row the END of its own, so re-list sorts first within a
+        # cycle number and the event stream reads open/close/open.
+        events.sort(key=lambda e: (e["cycle"],
+                                   0 if e["event"] == "relist" else 1))
+        return {"listing_id": int(listing[0]),
+                "dev_account": listing[1],
+                "listing_key": key,
+                "cycle": cycle,
+                "live": not retired,
+                "delisted": retired,
+                "delisted_utc": stamp,
+                "delist_count": len(delists),
+                "relist_count": len(relists),
+                "history": events,
+                "disclaimer": self.disclaimer}
+
     def api_board(self):
         """Whole-market listing surface: every row carries the
         declared AIGC label (presentation-face law, AC-AM6); the
         envelope carries the resident disclaimer. Retired listings
         are excluded from the market board (AC-AMD6) while their
         history stays readable through api_view/api_ratings/
-        api_sales. Pure read."""
+        api_sales. A listing re-listed after retirement is offered
+        again (AC-AMRL4): the exclusion is per CURRENT cycle, not
+        per listing ever retired. Pure read."""
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
                 " description, token_price, ai_label"
                 " FROM apimarket_listings"
-                " WHERE listing_id NOT IN (SELECT listing_id FROM"
-                " apimarket_delistings)"
+                " WHERE listing_id NOT IN (SELECT d.listing_id FROM"
+                " apimarket_delistings d WHERE d.cycle ="
+                " COALESCE((SELECT MAX(r.cycle) FROM"
+                " apimarket_relistings r WHERE r.listing_id ="
+                " d.listing_id), 1))"
                 " ORDER BY listing_id").fetchall()
             out = []
             for r in rows:

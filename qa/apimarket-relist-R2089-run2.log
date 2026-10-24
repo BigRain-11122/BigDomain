@@ -1,0 +1,11 @@
+R2089 apimarket re-list (relist) door + api_listing_lifecycle suite
+PASS AC-AMRL1: envelope8=True cycle=2 rows=1 board=[1, 2] search=[1, 2] profile_live=2 history=[('delist', 1), ('relist', 2)]
+PASS AC-AMRL2: accounts=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_UNKNOWN_LISTING', 'E_AM_BAD_ACCOUNT'] ids=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown=E_AM_UNKNOWN_LISTING nonowner-live=E_AM_NOT_OWNER owner-live=E_AM_ALREADY_LIVE frozen=True
+PASS AC-AMRL3: delist_cycles=[1, 2, 3] relist_cycles=[2, 3] stamps_nonempty=True clock_second_resolution_repeats=True current_stamp=True
+PASS AC-AMRL4: retired_board=[2] retired_search=[2] all=[2, 1] gina_retired=E_AM_DELISTED cycle4=4 live_board=[1, 2] new_tx=2 bob_dup=E_AM_PURCHASE_DUP
+PASS AC-AMRL5: life_keys=True cycle=4 counts=3/3 history_len=6 exact=True
+PASS AC-AMRL6: digests_frozen=True tx_frozen=True unknown=E_AM_UNKNOWN_LISTING bad_ids=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-AMRL7: three instances identical=True restart_cycle=4 restart_history=6
+PASS AC-AMRL8: legacy_cycle1=1 legacy_stamp_preserved=True unique_indexes_left=0 relist_cycle=2 redelist_ok=True product_files_unchanged=True
+SUITE PASS 8/8
+exit=0

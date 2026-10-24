@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T17:30:46+08:00",
+  "export_ts": "2026-10-24T18:02:39+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2088: the developer API marketplace now has a post-sale remedy door - a buyer can refund a purchase, the four ledger legs put buyer, seller and both pools back to their pre-purchase balances exactly, a refunded unit returns to the shelf so another buyer can take it, and a seller who already spent the proceeds fails the refund closed with zero tokens moved.",
-    "latest_artifact": "src/sandbox/ledger/test_apimarket_refund.py + qa/apimarket-refund-R2088.log (SUITE PASS 8/8 double-run identical sha16 0526d2a53ffebbf6; RUNNER PASS 294/294 suites, 2458 criteria, controls 7/7, 280.3s = qa/reconcile-all-R2088.log; suite-matrix 294 suites / 2458 criteria byte-identical, 2026-10-24)",
+    "current": "R2089: the developer API marketplace can now re-list a retired listing - one append-only re-list row opens the next lifecycle cycle, every read face flips live again through one seam, and the listing keeps its purchases, ratings and price history; the old one-way retirement also migrates forward once, preserving every existing stamp at cycle 1.",
+    "latest_artifact": "src/sandbox/ledger/test_apimarket_relist.py + qa/apimarket-relist-R2089.log (SUITE PASS 8/8 double-run identical sha16 5777d786de279b83; RUNNER PASS 295/295 suites, 2466 criteria, controls 7/7, 516.5s = qa/reconcile-all-R2089.log; suite-matrix 295 suites / 2466 criteria byte-identical, 2026-10-24)",
     "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
   },
   "depts": [
@@ -597,18 +597,22 @@
     [
       "R2079",
       "R2079: the apimarket listing face gains an append-only price revision door - revise_price with a pinned gate order, same-price refusal, base price preserved and the newest revision live, purchase at the current price with the integer split intact, the new api_price_history read face, retired-history readability, zero token movement and cross-restart byte identity. AC-AMPR1..AC-AMPR8 pre-registered; 8/8 double-run sha16 4055f5fa735e3efd; RUNNER 286/286 + controls 7/7 409.2s; matrix 286/2394 --check byte-identical."
+    ],
+    [
+      "R2089",
+      "R2089: the apimarket listing face gains the missing return leg of retirement - relist_api opens cycle N+1 with one append-only row, the current cycle is MAX(relist cycle) or 1 and a listing is retired only when a delist row exists for that cycle, so every read face (view/board/search/watchlist/library/profile/supply) flips live through a single seam and historical purchases, ratings and repricing survive. Gate order account/listing/ownership/already-live with E_AM_ALREADY_LIVE; new api_listing_lifecycle read face answers the deterministic open/close event stream; legacy databases rebuild once (SQLite cannot drop UNIQUE(listing_id)) preserving delist_id and stamps at cycle 1. AC-AMRL1..AMRL8 pre-registered; 8/8 double-run sha16 5777d786de279b83; RUNNER 295/295 + controls 7/7 516.5s; matrix 295/2466 --check byte-identical. Honest findings: the first cycle derivation double-counted (fixed before evidence), and second-resolution clocks can repeat stamps - cycle number is the ordering authority. Score 2."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 16,
+    "log_lines_in_window": 17,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 5,
     "proposals_open": 3,
-    "queue_main_open": 6,
+    "queue_main_open": 0,
     "queue_tech_open": 4,
     "queue_explore_open": 1,
     "method": "machine-derived from src/os/state.json log and queue files"
