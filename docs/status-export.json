@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T19:05:00+08:00",
+  "export_ts": "2026-10-24T19:52:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2090: the developer API marketplace can now answer 'how big is this market' - one pure-read overview envelope with the live/retired split, participant counts, settled volume after refunds and the net developer/platform split, with every conservation law pinned.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_market_stats) + src/sandbox/ledger/test_apimarket_marketstats.py + qa/apimarket-marketstats-R2090.log (SUITE PASS 8/8 double-run identical sha16 18f3bfdd615d655b; RUNNER PASS 296/296 suites, 2474 criteria, controls 7/7, 235.7s = qa/reconcile-all-R2090.log; suite-matrix 296 suites / 2474 criteria byte-identical, 2026-10-24)",
+    "current": "R2091: the developer API marketplace now answers the buyer's own account question - one pure-read aggregate envelope with spend, refunds, net spend, the exact developer/platform split, own rating average and both watch counts (history vs live).",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_profile) + src/sandbox/ledger/test_apimarket_buyerprofile.py + qa/apimarket-buyerprofile-R2091.log (SUITE PASS 8/8, double-run evidence files byte-identical sha256 7b5b7fa5d7391cb7; wired as ledger-apimarket-buyerprofile; battery 297/297 suites + controls 7/7 = qa/reconcile-all-R2091.log; suite matrix 297 suites / 2482 criteria byte-identical).",
     "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
   },
   "depts": [
@@ -259,6 +259,11 @@
       "pycrdt vendor 升级窗（0.14.8→0.14.10·A/C fixtures 回归）",
       "on",
       "R2080：D-20261024-09 ④ C3 兑现——净装 0.14.10 单 dist-info 零源码构建+A/C 双向 wire-compat 全过+双跑判据行逐行同一（qa/pycrdt-upgrade-R2080.log·AC-YCU1..YCU8）"
+    ],
+    [
+      "apimarket 买家账户档案读面（api_buyer_profile）",
+      "on",
+      "R2091：十七键只读聚合信封（花费/退款/净花费/开发与平台分账/本人评价均值/关注历史与活跃集）·花费与池双守恒整数精确·退款只降净侧·账户门前置 fail-closed·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMBY1..AMBY8）"
     ]
   ],
   "results": [
@@ -303,7 +308,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2090",
+      "2092",
       "OSLoop 执行 tick"
     ],
     [
@@ -605,15 +610,23 @@
     [
       "R2090",
       "R2090: apimarket market-wide overview read face (api_market_stats). AC-AMMS1..AC-AMMS8 pre-registered in the explore-queue row BEFORE the code existed. Fifteen-key envelope: listing/live/retired counts, dev_count, buyer_count, purchase/refund/net_purchase counts, gross/refunded/net gross tokens, net dev and platform revenue, avg_live_price and the resident disclaimer. Laws pinned: partition conservation, integer trade conservation (gross == net + refunded, net == dev + platform), delist and relist move only the partition counters while every historical aggregate stays byte-frozen, a refund lowers the net side only while purchase_count and buyer_count keep the trades that happened, cross-face agreement with dev_sales_board, cross-restart byte identity and the pure-read law. SUITE PASS 8/8 double-run sha16 18f3bfdd615d655b; wired ledger-apimarket-marketstats (8); RUNNER PASS 296/296 suites + controls 7/7 235.7s; matrix 296 suites / 2474 criteria --check byte-identical. Honest note: one in-window repair of the cross-face assertion (wrong board key) before any evidence was written. Score 2."
+    ],
+    [
+      "R2091",
+      "R2092",
+      "R2092: closeout of the interrupted R2091 window. The previous window completed the buyer profile product and its evidence but died before commit (HEAD stayed at tick 2090 with six modified and four untracked files), so this round verified instead of rebuilding: both evidence logs are byte-identical (sha256 7b5b7fa5d7391cb7, LF, zero CRLF), the suite re-ran green 8/8 twice, qa/reconcile-all-R2091.log ends in RUNNER PASS 297/297 suites with controls 7/7, and the evidence census is CENSUS-COMPLETE over 1709 files. One real gap was closed at its birth station: the suite matrix had not been regenerated for the new suite (check reported stale with an evidence face mismatch), so it was rebuilt against the R2091 evidence at 297 suites / 2482 criteria and now checks byte-identical. The export face had cited an unverifiable suite sha16 and now cites the verified evidence-file hash. Score 2."
+    ],
+    [
+      "R2091: apimarket buyer account profile (api_buyer_profile) - aggregates only, so the row face stays api_library with zero duplication. Seventeen-key envelope: purchase/refund/net-purchase counts, listing_count, gross_spent, refunded_total, net_spent, dev_paid, platform_paid, rating_count, avg_rating, watch_count, live_watch_count, first/last purchase stamps, disclaimer. Laws: spend conservation (net == gross - refunded, purchases == net + refunded); pool conservation (dev_paid + platform_paid == net_spent, integer exact); a refund lowers only the net side while purchase and listing counts keep the trades that happened; rating aggregates from this buyer's own ratings only (3.5 / 5.0 / None); watch_count counts every append-only row while live_watch_count counts the active set; prefix-only account gate first, four bad forms fail closed with digests, tx set and product shas frozen; cross-restart byte identity on three instances. AC-AMBY1..AMBY8 pre-registered before the code; 8/8 double-run evidence files byte-identical sha256 7b5b7fa5d7391cb7; wired ledger-apimarket-buyerprofile (8); battery 297/297; matrix 297 suites / 2482 criteria byte-identical. Honest notes: two battery attempts failed only on the census live-tree probe because this window's evidence log streamed CRLF (dialect artifact, not a product regression) - fixed with an LF normalizing runner, census suite re-verified green 8/8. Score 2."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

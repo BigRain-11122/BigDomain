@@ -1993,3 +1993,85 @@ class APIMarketFace:
                 "platform_revenue": int(paid[3]) - int(back[3]),
                 "avg_live_price": avg_price,
                 "disclaimer": self.disclaimer}
+
+    def api_buyer_profile(self, buyer_id):
+        """Buyer-side trust/account face (pre-registered
+        AC-AMBY1..AC-AMBY8 in the R2091 explore-queue row BEFORE
+        this code existed): the resident's own account in one
+        envelope.
+
+        The reading chain had a seller profile (dev_profile), a
+        market overview (api_market_stats) and a buyer library
+        (api_library) that lists rows, but nothing answered the
+        buyer's aggregate question "what has this account spent,
+        got back and rated". Aggregates only - the row face stays
+        api_library, so this face never duplicates it.
+
+        Laws pinned by the suite: spend conservation (net_spent ==
+        gross_spent - refunded_total and purchase_count ==
+        net_purchase_count + refund_count); pool conservation
+        (dev_paid + platform_paid == net_spent exactly, integer
+        split); a refund lowers only the net side while
+        purchase_count and listing_count keep counting the trades
+        that did happen; rating aggregates come from this buyer's
+        own ratings only and are None on an honest empty history;
+        watch_count counts every append-only watch row while
+        live_watch_count counts the active set (a watch with no
+        unwatch row), so an unwatch never erases history; the
+        account shape gate is prefix-only and runs before any
+        read; a prefix-valid account with no history gets an
+        honest zero envelope, not an error. Pure read: zero row
+        mutations and zero token movement, and the envelope
+        carries the resident non-advisory disclaimer."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            paid = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(price_paid), 0),"
+                " COALESCE(SUM(dev_share), 0),"
+                " COALESCE(SUM(platform_share), 0),"
+                " COUNT(DISTINCT listing_id), MIN(purchased_utc),"
+                " MAX(purchased_utc) FROM apimarket_purchases"
+                " WHERE buyer_id = ?", (buyer_id,)).fetchone()
+            back = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0),"
+                " COALESCE(SUM(dev_share), 0),"
+                " COALESCE(SUM(platform_share), 0)"
+                " FROM apimarket_refunds WHERE buyer_id = ?",
+                (buyer_id,)).fetchone()
+            rate = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(stars), 0)"
+                " FROM apimarket_ratings WHERE buyer_id = ?",
+                (buyer_id,)).fetchone()
+            watch = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_watchlist"
+                " WHERE buyer_id = ?", (buyer_id,)).fetchone()
+            live_watch = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_watchlist w"
+                " WHERE w.buyer_id = ? AND NOT EXISTS"
+                " (SELECT 1 FROM apimarket_unwatchings u"
+                " WHERE u.watch_id = w.watch_id)",
+                (buyer_id,)).fetchone()
+            purchase_count = int(paid[0])
+            refund_count = int(back[0])
+            gross = int(paid[1])
+            refunded = int(back[1])
+            rating_count = int(rate[0])
+        return {"buyer_id": buyer_id,
+                "purchase_count": purchase_count,
+                "refund_count": refund_count,
+                "net_purchase_count": purchase_count - refund_count,
+                "listing_count": int(paid[4]),
+                "gross_spent": gross,
+                "refunded_total": refunded,
+                "net_spent": gross - refunded,
+                "dev_paid": int(paid[2]) - int(back[2]),
+                "platform_paid": int(paid[3]) - int(back[3]),
+                "rating_count": rating_count,
+                "avg_rating": (float(rate[1]) / rating_count
+                               if rating_count else None),
+                "watch_count": int(watch[0]),
+                "live_watch_count": int(live_watch[0]),
+                "first_purchase_utc": paid[5],
+                "last_purchase_utc": paid[6],
+                "disclaimer": self.disclaimer}

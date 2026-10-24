@@ -2262,6 +2262,13 @@ SUITES = [
         "ledger", "test_apimarket_relist.py"), 8),
     ("ledger-apimarket-marketstats", os.path.join(
         "ledger", "test_apimarket_marketstats.py"), 8),
+    # apimarket buyer account profile - the aggregate counterpart of
+    # dev_profile (sellers) and api_market_stats (whole market), with
+    # aggregates only so the row face stays api_library - criteria
+    # AC-AMBY1..AC-AMBY8 pre-registered in the R2091 explore-queue
+    # claim row BEFORE this suite existed.
+    ("ledger-apimarket-buyerprofile", os.path.join(
+        "ledger", "test_apimarket_buyerprofile.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
