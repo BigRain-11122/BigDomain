@@ -1,0 +1,10 @@
+PASS AC-AML1: envelope keys=True rows=2 total_spent=13 row keys=True order=[1, 2]
+PASS AC-AML2: carol rows=1 total=10 erin empty=True dana(dev) empty=True purchase table rows=3
+PASS AC-AML3: retired row delisted=True stamp match=True price_paid=3 live row delisted=False order=[1, 2]
+PASS AC-AML4: bob current=15 paid=10 carol current=15 paid=10 totals bob=13 carol=10
+PASS AC-AML5: pre-rating=[None, None] bob d1=5 bob d2=None carol d1=2
+PASS AC-AML6: bad forms=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests frozen=True bare usr: empty=True
+PASS AC-AML7: repeat identical=True digests frozen=True ledger tx set constant=True
+PASS AC-AML8: instance1==2==3 byte-identical=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0 world outside repo=True
+SUITE 8/8

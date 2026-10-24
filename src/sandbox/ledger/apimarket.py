@@ -718,6 +718,69 @@ class APIMarketFace:
                            "spend_tx": r[7], "dev_share_tx": r[8],
                            "purchased_utc": r[9]} for r in rows]}
 
+    def api_library(self, buyer_id):
+        """Buyer-side purchase library surface (pre-registered
+        AC-AML1..AC-AML8 in the R2081 explore-queue row BEFORE this
+        code existed): every purchase row of that buyer, ordered by
+        purchase_id, joined to its listing metadata, with the live
+        asking price, the retirement stamp and this buyer's own
+        rating.
+
+        The buyer face is deliberately separate from api_sales: the
+        seller view answers "who bought from me and what did I
+        earn", this view answers "what did I buy and what do I own
+        now". A retired listing stays in the library with its
+        delisted flag (purchase history is not destroyed by
+        retirement), price_paid is the historical amount actually
+        charged while current_price is the live asking price, and
+        my_rating is this buyer's own stars only (None before the
+        rating) - another buyer's rating never leaks. The account
+        shape gate is prefix-only by the truthful R2077/R2078
+        finding and runs before any read; a prefix-valid account
+        with no purchases gets an honest empty library, not an
+        error. Pure read: zero row mutations and zero token
+        movement. The envelope carries the resident non-advisory
+        disclaimer."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p.purchase_id, p.listing_id, l.listing_key,"
+                " l.title, l.dev_account, p.price_paid, p.dev_share,"
+                " p.platform_share, p.spend_tx, p.purchased_utc,"
+                " l.token_price FROM apimarket_purchases p JOIN"
+                " apimarket_listings l ON l.listing_id ="
+                " p.listing_id WHERE p.buyer_id = ?"
+                " ORDER BY p.purchase_id", (buyer_id,)).fetchall()
+            out = []
+            total = 0
+            for r in rows:
+                listing_id = int(r[1])
+                stamp = self._delisted_utc(listing_id)
+                rating = self._conn.execute(
+                    "SELECT stars FROM apimarket_ratings"
+                    " WHERE buyer_id = ? AND listing_id = ?",
+                    (buyer_id, listing_id)).fetchone()
+                total += int(r[5])
+                out.append({"purchase_id": int(r[0]),
+                            "listing_id": listing_id,
+                            "listing_key": r[2], "title": r[3],
+                            "dev_account": r[4],
+                            "price_paid": int(r[5]),
+                            "dev_share": int(r[6]),
+                            "platform_share": int(r[7]),
+                            "spend_tx": r[8],
+                            "purchased_utc": r[9],
+                            "current_price": self._current_price(
+                                listing_id, int(r[10])),
+                            "delisted": stamp is not None,
+                            "delisted_utc": stamp,
+                            "my_rating": (None if rating is None
+                                          else int(rating[0]))})
+        return {"buyer_id": buyer_id, "purchase_count": len(out),
+                "total_spent": total, "disclaimer": self.disclaimer,
+                "purchases": out}
+
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board
         (pre-registered AC-AMB1..AC-AMB7 in the R1978

@@ -2159,6 +2159,21 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-pricerev", os.path.join(
         "ledger", "test_apimarket_pricerev.py"), 8),
+    # R2081 explore-queue self-seeded and self-claimed row: the
+    # buyer-side purchase library face (api_library) the market
+    # never had - one five-key envelope with fourteen-key rows,
+    # purchase_count/total_spent derived from the rows, strict
+    # buyer isolation (developer account carries no self-purchase
+    # rows, prefix-valid account with no purchases gets an honest
+    # empty library), retired listings staying readable with their
+    # delist stamp, price_paid vs current_price separation, the
+    # buyer's own my_rating only, the account gate fail-closed
+    # before any read, the pure-read law (zero row mutations, zero
+    # token movement) and cross-restart byte identity; criteria
+    # count (AC-AML1..AC-AML8 pre-registered in the R2081
+    # explore-queue claim row).
+    ("ledger-apimarket-buyerlibrary", os.path.join(
+        "ledger", "test_apimarket_library.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
