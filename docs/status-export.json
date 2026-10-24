@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T03:05:00+08:00",
+ "export_ts": "2026-10-25T04:20:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2109：结算报告多了「挂牌全史档案」——七张逐挂牌历史面（单品视图/生命周期/改价史/改文案史/补货史/评价/卖家回应）此前除自家套件外没有任何产品消费者（与 R2101/R2106/R2108 同一种空转形态），报告只按市场/卖家/买家三段陈述，运营者要回答「这一件为什么不卖」还得手工逐个挂牌翻六张面。本窗把这个缺口补上：每次采集对市场里的每一件挂牌（含已下架件，挂牌集由 api_search(include_delisted=True) 从市场自身派生，不写死名册）现读七面，页面在 Listings 之后新增 Listing dossiers 段——每件一个档案块，开头是生效视图，下面依次是改价史/改文案史/补货史/生命周期/评价/回应六张子表；机读契约 v3→v4 加法升级（信封仍恰三键、旧键一字不动），旧报告字典缺键时诚实空态。",
-  "latest_artifact": "preview/apimarket-report-dossiers.html（19841B·sha256 f44cbcce47be1c5b·可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+每件挂牌全史档案+卖家/买家全表）+ preview/apimarket-report-dossiers.json（32688B·schema 4）+ src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_dossier.py + qa/apimarket-dossier-R2109.log（SUITE PASS 8/8·双跑判据行同一 sha16 915219ceea4998b2）+ qa/reconcile-all-R2109-3.log（RUNNER PASS 314/314 suites + controls 7/7）",
-  "next_milestone": "48 小时内：把档案段变成「可核对的对账单」——现在每块给的是一条时间线，缺的是跨块汇总（同一卖家多件挂牌的改价次数、补货总量、生命周期开闭次数能一眼对齐）与档案段的机读侧车（--dossier-out，按 listing_id 给结构化块，供自动化比对两次采集之间的变化）；其后是把公共活动流与档案块互相跳锚（活动行点挂牌直接落到该件档案），让页面从「账本」变成「可追的账本」。两项均不依赖 CEO 物理件。"
+  "current": "R2110：结算报告多了「买家全史」——买家库（买了什么、还拥有什么）、关注清单、退款溯源、评分史四张面此前在生产代码里零调用点（与 R2101/R2106/R2108/R2109 同一种空转形态）；更实的一条：评分史面只收 rating_id，而任何列表级读面都不给 rating_id（只在卖家待答收件箱里露过），所以那张面事实上不可能被调用。本窗给评分行加法暴露 rating_id，再把四张面接进报告唯一消费者：每个买家名下新增四张子表（持有库/关注/退款/评分史），空态诚实呈现；机读契约 v4→v5 加法升级（信封仍恰三键、旧键一字不动）。",
+  "latest_artifact": "preview/apimarket-report-buyers.html（24167B·sha256 981a59af8f83823e·可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+挂牌全史档案+每个买家的持有库/关注/退款/评分史+卖家全表）+ preview/apimarket-report-buyers.json（38330B·schema 5）+ src/sandbox/ledger/apimarket_report.py + qa/apimarket-buyerhistory-R2110.log（SUITE PASS 10/10·双跑判据行同一 sha16 50999cbdeecb5975）+ qa/reconcile-all-R2110.log（RUNNER PASS 315/315 suites + controls 7/7·404.5s）",
+  "next_milestone": "48 小时内：继续把零消费者的读面接进产品面，并给买家全史相机读侧车（--buyer-history-out，按 buyer_id 给结构化四块，便于自动化比对两次采集）；商户号未到之前不碰支付对接，本地沙箱与证据链照跑。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告买家全史档案段（library/watchlist/refund/rating-history 四面接线 + REPORT_SCHEMA 4→5）",
+   "on",
+   "R2110：四张买家侧历史面此前零产品调用点，且 api_rating_history 的 rating_id 入参无任何列表级读面暴露（事实不可达）；本窗给评分行加法暴露 rating_id，每买家名下新增四张子表（持有库/关注/退款/评分史），空态诚实呈现；呈看件 preview/apimarket-report-buyers.html"
+  ],
   [
    "apimarket 结算报告挂牌全史档案段（dossiers 接线 + REPORT_SCHEMA 3→4）",
    "on",
@@ -343,6 +348,10 @@
  ],
  "results": [
   [
+   "R2110",
+   "R2110: buyer history section on the settlement report. The four buyer-side faces (api_library, api_watchlist, api_refund, api_rating_history) had zero product call sites, and the last one was unreachable by construction because its only handle, rating_id, was never exposed on a listing-wide face - the rating rows now carry it as an additive key. collect_buyer_history() reads the four faces once per buyer into a history block with exactly BUYER_HISTORY_KEYS; refund rows are the provenance envelopes minus the resident disclaimer; rating_history_rows folds base-only ratings into one base row and revised ones into one row per revision. render_html adds four sub-tables per buyer with honest empty states; REPORT_SCHEMA moves 4 -> 5 additively with every v4 value equal to its direct face call and a legacy degrade path. Suite 10/10 double-run sha16 50999cbdeecb5975; battery 315/315 + controls 7/7 404.5s; matrix 315/2628 byte-identical; census CENSUS-COMPLETE files=1769 flags=0. Repairs disclosed: the dossier and workbench suites pinned the exact buyer key set and the dossier suite pinned schema == 4, so both now pin a literal v4 SUBSET and >= 4; rich_world wrote watches with the real clock, so the determinism face failed until both clocks were pinned."
+  ],
+  [
    "R2109",
    "R2109: the report finally consumes the per-listing history faces. The seven of them (view, lifecycle, price history, metadata history, supply history, ratings, replies) had zero product call sites - only their own suites and bookkeeping lines - the no-consumer idle form R2101, R2106 and R2108 each closed in turn. collect_dossiers() reads all seven once per listing, and the listing set comes from the market itself through api_search(include_delisted=True), so a retired listing keeps its dossier and nothing is hardcoded. The page gains a Listing dossiers section between Listings and Sellers: one block per listing, the effective view plus six sub-tables, all escaped, every empty sub-table honest. REPORT_SCHEMA moves 3 -> 4 additively. AC-AMLD1..AC-AMLD8 pre-registered before the code (eight anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 915219ceea4998b2; wired ledger-apimarket-reportdossier (8); battery RUNNER PASS 314/314 suites plus controls 7/7 in 296.4s; matrix 314 suites / 2620 criteria --check byte-identical; census DRIFT-CLEAN files=1767; preview preview/apimarket-report-dossiers.html (19841B, sha256 f44cbcce47be1c5b) plus .json (32688B, schema 4). Honest notes: the R2108 suite pinned the schema as a literal 3 and now follows the module constant instead (same repair pattern R2108 used on R2106); the first battery run was 313/314 with reconcile-daily-census cd7 as the only red because this window's evidence logs arrived in the pwsh-capture dialect - normalized by a python single writer to utf-8 LF, census DRIFT-CLEAN, and the FAIL log preserved; the shell tool killed the first battery re-run at its five-minute no-output limit, so that truncated partial log was discarded (not a test failure) and the detached re-run landed as -3."
   ],
@@ -435,7 +444,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2108",
+   "2110",
    "OSLoop 执行 tick"
   ],
   [

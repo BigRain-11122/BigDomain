@@ -1508,7 +1508,13 @@ class APIMarketFace:
                 " apimarket_ratings WHERE listing_id = ?"
                 " ORDER BY rating_id", (listing_id,)).fetchall()
             n_rate, avg = self._agg_rating(listing_id)
-            rows = [{"buyer_id": r[1],
+            # R2110 additive key: rating_id is the ONLY handle that
+            # api_rating_history accepts, and no listing-wide face
+            # exposed it before (it surfaced only through the seller
+            # inbox, and only for unanswered rows), so the history face
+            # was unreachable from any aggregate read. Existing keys
+            # keep their values.
+            rows = [{"rating_id": int(r[0]), "buyer_id": r[1],
                      "stars": self._effective_stars(int(r[0]), int(r[2])),
                      "rated_utc": r[3]} for r in rows]
         return {"listing_id": listing_id, "rating_count": n_rate,

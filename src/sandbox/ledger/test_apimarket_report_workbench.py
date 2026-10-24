@@ -200,9 +200,14 @@ def check_same_source(db):
 def check_contract(tmp, db):
     report = collect_with(db)
     blocks = sorted(report["buyers"])
-    keys_ok = all(sorted(report["buyers"][b]) ==
-                  ["months", "profile", "todo", "watch_alerts"]
-                  for b in blocks)
+    # R2110 repaired this birth station: the four v2 keys stay pinned as
+    # a literal SUBSET because later additive bumps add buyer keys
+    # (v5 adds "history"); pinning the exact set would flag every
+    # additive face as a regression.
+    keys_ok = all(
+        set(["months", "profile", "todo", "watch_alerts"]) <=
+        set(report["buyers"][b])
+        for b in blocks)
     led, mtr, dk, am = open_stack(db)
     try:
         v1_ok = all(report["buyers"][b]["profile"] ==

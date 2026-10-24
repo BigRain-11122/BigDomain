@@ -1,0 +1,28 @@
+PASS AC-AMBD1 buyers=['usr:bob', 'usr:carol', 'usr:erin'] keys_ok=True
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-cjvw4ll8\bh.html (24858 bytes, sha256 142df0b03e957982)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-cjvw4ll8\bh.json (39512 bytes, schema 5)
+PASS AC-AMBD5 schema=5 top=True buyer=True old=True env=True json_same=True
+PASS AC-AMBD2 same_source=True watch_count 0->1 grew=True
+PASS AC-AMBD3 counts=usr:bob:1/1,usr:carol:0/0,usr:erin:1/1 order/live/absent/direct=True
+PASS AC-AMBD4 rating_id_key=True owner=True effective=True flat=True base=1 rev=1
+PASS AC-AMBD6 heads=True blocks=True empty_states=True cols=True
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-cjvw4ll8\esc.html (28542 bytes, sha256 da0f0709336f3a38)
+attention findings: 5 (severity {"warn": 5})
+PASS AC-AMBD6-esc raw_absent=True escaped=True markers=True
+PASS AC-AMBD7-read digest_same=True tx=18 buyers=3
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d1-60pmvqxq\d.html (24858 bytes, sha256 142df0b03e957982)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d1-60pmvqxq\d.json (39512 bytes, schema 5)
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d2-8bqfa270\d.html (24858 bytes, sha256 142df0b03e957982)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d2-8bqfa270\d.json (39512 bytes, schema 5)
+PASS AC-AMBD7-det html_sha16=142df0b03e957982 json_same=True
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_attention.py rc=0
+  child test_apimarket_report_json.py rc=0
+  child test_apimarket_report_workbench.py rc=0
+  child test_apimarket_report_activity.py rc=0
+  child test_apimarket_report_dossier.py rc=0
+PASS AC-AMBD8 degrade=True(len=20864) rc=[0, 0, 0, 0, 0, 0] wired=True
+SUITE PASS 10/10

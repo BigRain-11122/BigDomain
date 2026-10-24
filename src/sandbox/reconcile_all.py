@@ -2380,6 +2380,12 @@ SUITES = [
     # and the JSON contract moves 3 -> 4 additively.
     ("ledger-apimarket-reportdossier", os.path.join(
         "ledger", "test_apimarket_report_dossier.py"), 8),
+    # R2110 buyer history on the report generator: library, watchlist,
+    # refund provenance and rating history finally have a consumer, and
+    # the rating rows expose rating_id so the history face is reachable;
+    # the JSON contract moves 4 -> 5 additively.
+    ("ledger-apimarket-buyerhistory", os.path.join(
+        "ledger", "test_apimarket_report_buyerhistory.py"), 8),
     # R2105 buyer-side rating-debt queue: the mirror of the R2096
     # seller inbox - only the purchases still awaiting a rating,
     # oldest debt first, with the refund precedence pinned.

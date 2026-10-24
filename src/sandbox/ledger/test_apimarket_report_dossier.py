@@ -18,7 +18,8 @@ Criteria:
     the market itself reports through api_search(include_delisted=True),
     each block carries exactly DOSSIER_KEYS eight keys and every
     sub-face names that same listing.
-  AC-AMLD2 Additive contract: REPORT_SCHEMA == 4, the JSON envelope
+  AC-AMLD2 Additive contract: REPORT_SCHEMA >= 4 (the v4 contract;
+    later additive bumps only raise it), the JSON envelope
     still has exactly schema_version/report/attention, every earlier
     report key keeps its value and the buyer blocks keep their keys.
   AC-AMLD3 Same source + no cache: every block equals the direct face
@@ -225,9 +226,13 @@ def check_contract(tmp, db):
                   and report["activity"] == am.api_market_feed(
                       limit=R.FEED_LIMIT)
                   and report["attention"] == R.collect_attention(am, report))
+        # R2110 repaired this birth station: the v4 buyer key set below
+        # stays pinned as a literal SUBSET, because the additive v5 bump
+        # adds the "history" key. Pinning the exact set here would make
+        # every later additive buyer face look like a regression.
         buyer_ok = all(
-            sorted(report["buyers"][b]) == ["months", "profile", "todo",
-                                            "watch_alerts"]
+            set(["months", "profile", "todo", "watch_alerts"]) <=
+            set(report["buyers"][b])
             for b in report["buyers"])
     finally:
         am.close()
@@ -240,8 +245,8 @@ def check_contract(tmp, db):
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
     env_ok = sorted(doc) == ["attention", "report", "schema_version"]
     record("AC-AMLD2",
-           R.REPORT_SCHEMA == 4 and keys_ok and old_ok and buyer_ok
-           and env_ok and doc.get("schema_version") == 4
+           R.REPORT_SCHEMA >= 4 and keys_ok and old_ok and buyer_ok
+           and env_ok and doc.get("schema_version") == R.REPORT_SCHEMA
            and doc["report"]["dossiers"] == report["dossiers"],
            "schema=%d top=%s old=%s buyer=%s env=%s json_same=%s"
            % (R.REPORT_SCHEMA, keys_ok, old_ok, buyer_ok, env_ok,

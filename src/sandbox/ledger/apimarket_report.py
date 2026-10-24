@@ -18,10 +18,18 @@ had zero product call sites (the no-consumer idle form again), so the
 report now carries an "activity" block read fresh on every collect and
 renders it as the Public activity section (schema 2 -> 3, additive).
 
+R2110 wires the buyer's own history in: api_library, api_watchlist,
+api_refund and api_rating_history had zero product call sites (the same
+idle form), and api_rating_history was in fact unreachable because its
+only handle, rating_id, was not exposed on any listing-wide face - so
+the rating rows now carry it (additive key) and the report renders a
+Buyer dossiers section (schema 4 -> 5, additive).
+
 Faces consumed (read-only): api_market_stats, api_market_months,
 api_revenue_months, api_buyer_profile, api_buyer_months, api_board,
 api_sales, api_seller_inbox, api_buyer_todo, api_watch_alerts,
-api_supply, api_market_feed.
+api_supply, api_market_feed, api_library, api_watchlist, api_refund,
+api_rating_history.
 
 Usage:
     python apimarket_report.py --db ledger.db --seed --out report.html
@@ -66,7 +74,12 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # v3 (R2108) is the same additive shape: the envelope keys are still
 # exactly schema_version/report/attention and the report gains one key
 # (activity) while every earlier key keeps its value.
-REPORT_SCHEMA = 4
+# v4 (R2109) adds the dossiers key the same way.
+# v5 (R2110) adds the history key inside every buyer block: the envelope
+# is unchanged and every earlier buyer key keeps its value.
+REPORT_SCHEMA = 5
+
+BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
 DOSSIER_KEYS = ("view", "lifecycle", "price_history",
                 "metadata_history", "supply", "supply_history",
@@ -199,6 +212,41 @@ def collect_dossiers(am):
     return out
 
 
+def collect_buyer_history(am, buyers):
+    """Read the four buyer-side history faces once per buyer.
+
+    R2110: api_library, api_watchlist, api_refund and
+    api_rating_history had zero product call sites, and the last one
+    could not even be reached - its only handle, rating_id, was not
+    exposed by any listing-wide face. The rating rows carry it now
+    (additive key), so this collector resolves each rated purchase to
+    its rating id through api_ratings and reads the history behind it.
+    Every value is re-read on each call: nothing is cached. Refund rows
+    are the eleven-key provenance envelopes with the resident
+    disclaimer stripped so the table stays one row shape."""
+    out = {}
+    for buyer in sorted(buyers):
+        library = am.api_library(buyer)
+        refunds = []
+        history = []
+        for row in library["purchases"]:
+            if row["refunded"]:
+                env = am.api_refund(row["purchase_id"])
+                refunds.append(dict((k, v) for k, v in env.items()
+                                    if k != "disclaimer"))
+            if row["my_rating"] is None:
+                continue
+            for rated in am.api_ratings(row["listing_id"])["ratings"]:
+                if rated["buyer_id"] == buyer:
+                    history.append(
+                        am.api_rating_history(rated["rating_id"]))
+        out[buyer] = {"library": library,
+                      "watchlist": am.api_watchlist(buyer),
+                      "refunds": refunds,
+                      "rating_history": history}
+    return out
+
+
 def collect(am):
     """Read every settlement face once and return the report payload.
 
@@ -227,12 +275,14 @@ def collect(am):
             "sales": sales[dev],
             "profile": am.dev_profile(dev),
         }
+    histories = collect_buyer_history(am, buyers)
     for buyer in sorted(buyers):
         report["buyers"][buyer] = {
             "profile": am.api_buyer_profile(buyer),
             "months": am.api_buyer_months(buyer),
             "todo": am.api_buyer_todo(buyer),
             "watch_alerts": am.api_watch_alerts(buyer),
+            "history": histories[buyer],
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
     report["dossiers"] = collect_dossiers(am)
@@ -485,6 +535,66 @@ def dossier_block(dossiers):
     return "\n".join(out)
 
 
+BUYER_HISTORY_EMPTY = ("no purchases, watches, refunds or ratings for"
+                       " this buyer yet")
+
+
+def rating_history_rows(history):
+    """Flatten the per-rating history envelopes into one table.
+
+    A rating with no revision is still a fact (its base stamp), so it
+    renders as a single "base" row; a revised rating renders one row per
+    append-only revision. Every row keeps the same seven columns, which
+    is why basis/stamp are projected here instead of nesting the raw
+    envelopes."""
+    rows = []
+    for env in history or []:
+        revisions = env.get("revisions") or []
+        if not revisions:
+            rows.append({"rating_id": env.get("rating_id"),
+                         "listing_id": env.get("listing_id"),
+                         "basis": "base",
+                         "base_stars": env.get("base_stars"),
+                         "previous_stars": None,
+                         "stars": env.get("base_stars"),
+                         "stamp": env.get("rated_utc")})
+            continue
+        for rev in revisions:
+            rows.append({"rating_id": env.get("rating_id"),
+                         "listing_id": env.get("listing_id"),
+                         "basis": "revision",
+                         "base_stars": env.get("base_stars"),
+                         "previous_stars": rev.get("previous_stars"),
+                         "stars": rev.get("stars"),
+                         "stamp": rev.get("revised_utc")})
+    rows.sort(key=lambda r: (r["rating_id"],
+                             0 if r["basis"] == "base" else 1,
+                             str(r["stamp"])))
+    return rows
+
+
+def buyer_history_block(history):
+    """The four sub-tables of one buyer's own history.
+
+    Each table degrades to an honest empty state, so a buyer who only
+    ever bought (no watches, no refunds, no ratings) still renders."""
+    history = history or {}
+    library = history.get("library") or {}
+    purchases = library.get("purchases") or []
+    out = ["<h3>library (%d purchase(s))</h3>" % len(purchases)]
+    out.append(row_table(purchases, "no purchases"))
+    watches = (history.get("watchlist") or {}).get("watches") or []
+    out.append("<h3>watchlist (%d)</h3>" % len(watches))
+    out.append(row_table(watches, "no watches"))
+    refunds = history.get("refunds") or []
+    out.append("<h3>refunds (%d)</h3>" % len(refunds))
+    out.append(row_table(refunds, "no refunds"))
+    history_rows = rating_history_rows(history.get("rating_history"))
+    out.append("<h3>rating history (%d row(s))</h3>" % len(history_rows))
+    out.append(row_table(history_rows, "no ratings"))
+    return "\n".join(out)
+
+
 def render_html(report):
     parts = []
     parts.append("<!DOCTYPE html>")
@@ -554,6 +664,10 @@ def render_html(report):
         parts.append("<h3>%s - watch alerts (%d)</h3>"
                      % (esc(buyer), len(alerts)))
         parts.append(row_table(alerts, "no watch alerts"))
+        # R2110 buyer history: a block built by an older caller carries
+        # no history key, so the four tables degrade to honest empties.
+        parts.append("<h3>%s - buyer history</h3>" % esc(buyer))
+        parts.append(buyer_history_block(block.get("history")))
 
     parts.append("<footer>%s</footer>" % esc(report["market"].get(
         "disclaimer") or DISCLAIMER))
