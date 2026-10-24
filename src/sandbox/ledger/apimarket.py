@@ -74,6 +74,7 @@ E_AM_BAD_WINDOW = "E_AM_BAD_WINDOW"      # R2022 windowed read face
 E_AM_DELISTED = "E_AM_DELISTED"           # AC-AMD5 (retired listing)
 E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
 E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
+E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -125,6 +126,13 @@ CREATE TABLE IF NOT EXISTS apimarket_delistings (
     dev_account TEXT NOT NULL,
     delisted_utc TEXT NOT NULL,
     UNIQUE (listing_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_price_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    token_price INTEGER NOT NULL CHECK (token_price > 0),
+    revised_utc TEXT NOT NULL
 );
 """
 
@@ -334,6 +342,35 @@ class APIMarketFace:
             " WHERE listing_id = ?", (listing_id,)).fetchone()
         return None if row is None else row[0]
 
+    def _current_price(self, listing_id, base_price=None):
+        """Newest append-only revision wins; with no revision the
+        immutable listing row speaks. Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT token_price FROM apimarket_price_revisions"
+            " WHERE listing_id = ? ORDER BY revision_id DESC LIMIT 1",
+            (listing_id,)).fetchone()
+        if row is not None:
+            return int(row[0])
+        if base_price is not None:
+            return int(base_price)
+        return int(self._conn.execute(
+            "SELECT token_price FROM apimarket_listings"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+
+    def _revision_stats(self, listing_id):
+        """(revision_count, latest revised_utc or None). Caller
+        holds the lock."""
+        row = self._conn.execute(
+            "SELECT COUNT(*), MAX(revision_id)"
+            " FROM apimarket_price_revisions WHERE listing_id = ?",
+            (listing_id,)).fetchone()
+        latest_utc = None
+        if row[1] is not None:
+            latest_utc = self._conn.execute(
+                "SELECT revised_utc FROM apimarket_price_revisions"
+                " WHERE revision_id = ?", (row[1],)).fetchone()[0]
+        return int(row[0]), latest_utc
+
     def delist_api(self, dev_account, listing_id):
         """Retire one listing (the seller-side door this face never
         had). Gate order pinned by AC-AMD4: account shape first,
@@ -378,6 +415,61 @@ class APIMarketFace:
                 "delisted_utc": stamp, "already": False,
                 "disclaimer": self.disclaimer}
 
+    def revise_price(self, dev_account, listing_id, token_price):
+        """Seller-side repricing door (AC-AMPR1..AMPR4): one
+        append-only revision row per call, never an UPDATE - the
+        listing row stays immutable and every historical asking
+        price survives in order. Gate order is pinned by
+        AC-AMPR3: account shape first, then the listing
+        shape/existence gate, then ownership, then the retired
+        state, then the price shape, then the no-op state. A
+        same-price call is refused with E_AM_PRICE_UNCHANGED and
+        zero new rows; revising back to an older price is legal
+        because it is a change against the CURRENT price.
+        Repricing moves zero tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if (not isinstance(token_price, int)
+                    or isinstance(token_price, bool)
+                    or token_price <= 0):
+                raise ApiMarketError(E_AM_BAD_PRICE, str(token_price))
+            previous = self._current_price(listing_id, listing[2])
+            if token_price == previous:
+                raise ApiMarketError(E_AM_PRICE_UNCHANGED,
+                                     str(token_price))
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_price_revisions"
+                    " (listing_id, dev_account, token_price,"
+                    " revised_utc) VALUES (?,?,?,?)",
+                    (listing_id, dev_account, token_price, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+            count, _latest = self._revision_stats(listing_id)
+        return {"revision_id": cur.lastrowid,
+                "listing_id": listing_id,
+                "dev_account": dev_account,
+                "listing_key": key,
+                "previous_price": previous,
+                "token_price": token_price,
+                "revision_count": count,
+                "revised_utc": stamp,
+                "disclaimer": self.disclaimer}
+
     # -- purchase + split domain -------------------------------------------
 
     def purchase_api(self, buyer_id, listing_id, ref):
@@ -410,7 +502,7 @@ class APIMarketFace:
             if row is not None:
                 raise ApiMarketError(E_AM_PURCHASE_DUP,
                                      "%s/%s" % (buyer_id, listing_id))
-            price = int(listing[2])
+            price = self._current_price(listing_id, listing[2])
             dev_share, platform_share = split_amount(
                 price, self.params)
             self.led.ensure_account(buyer_id,
@@ -518,9 +610,14 @@ class APIMarketFace:
                 " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
             n_rate, avg = self._agg_rating(listing_id)
             stamp = self._delisted_utc(listing_id)
+            current = self._current_price(listing_id, int(row[5]))
+            n_rev, latest_rev = self._revision_stats(listing_id)
         return {"listing_id": int(row[0]), "dev_account": row[1],
                 "listing_key": row[2], "title": row[3],
-                "description": row[4], "token_price": int(row[5]),
+                "description": row[4], "token_price": current,
+                "base_token_price": int(row[5]),
+                "revision_count": n_rev,
+                "latest_revision_utc": latest_rev,
                 "ai_label": int(row[6]), "listed_utc": row[7],
                 "purchase_count": int(n_buy), "rating_count": n_rate,
                 "rating_avg": avg,
@@ -547,7 +644,9 @@ class APIMarketFace:
                 n_rate, avg = self._agg_rating(int(r[0]))
                 out.append({"listing_id": int(r[0]),
                             "dev_account": r[1], "listing_key": r[2],
-                            "title": r[3], "token_price": int(r[4]),
+                            "title": r[3],
+                            "token_price": self._current_price(
+                                int(r[0]), int(r[4])),
                             "ai_label": int(r[5]),
                             "rating_count": n_rate, "rating_avg": avg})
         return {"disclaimer": self.disclaimer, "listings": out}
@@ -566,6 +665,33 @@ class APIMarketFace:
                 "rating_avg": avg, "disclaimer": self.disclaimer,
                 "ratings": [{"buyer_id": r[0], "stars": int(r[1]),
                              "rated_utc": r[2]} for r in rows]}
+
+    def api_price_history(self, listing_id):
+        """Asking-price history surface (AC-AMPR7): the immutable
+        base price plus every append-only revision in order, the
+        current price and the revision count. Per-listing
+        isolation; a retired listing's history stays readable.
+        Pure read."""
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            base = int(listing[2])
+            rows = self._conn.execute(
+                "SELECT revision_id, dev_account, token_price,"
+                " revised_utc FROM apimarket_price_revisions"
+                " WHERE listing_id = ? ORDER BY revision_id",
+                (listing_id,)).fetchall()
+            current = self._current_price(listing_id, base)
+            stamp = self._delisted_utc(listing_id)
+        return {"listing_id": listing_id, "base_price": base,
+                "current_price": current,
+                "revision_count": len(rows),
+                "delisted": stamp is not None,
+                "delisted_utc": stamp,
+                "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(r[0]),
+                               "dev_account": r[1],
+                               "token_price": int(r[2]),
+                               "revised_utc": r[3]} for r in rows]}
 
     def api_sales(self, dev_account):
         """Per-developer sales ledger view: every purchase row of

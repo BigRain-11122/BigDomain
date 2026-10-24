@@ -2141,6 +2141,24 @@ SUITES = [
     # claim row).
     ("ledger-apimarket-delist", os.path.join(
         "ledger", "test_apimarket_delist.py"), 8),
+    # R2079 explore-queue self-seeded and self-claimed row: the
+    # apimarket listing price-revision (repricing) door - one
+    # append-only revision row per call with a nine-key envelope,
+    # the base price preserved and the newest revision live; the
+    # pinned gate order (account shape, listing shape/existence,
+    # ownership, retired state, price shape, unchanged state); the
+    # same-price refusal with zero rows while a revise-back is
+    # legal; purchase charged at the current price with the integer
+    # split law intact and older purchase rows keeping their
+    # price_paid; retirement interaction (repricing refused,
+    # history readable, board exclusion unchanged); the
+    # api_price_history read face, the api_view additive pair and
+    # per-listing isolation; cross-restart byte identity and zero
+    # token movement across the revision batch; hygiene, criteria
+    # count (AC-AMPR1..AC-AMPR8 pre-registered in the R2079
+    # explore-queue claim row).
+    ("ledger-apimarket-pricerev", os.path.join(
+        "ledger", "test_apimarket_pricerev.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
