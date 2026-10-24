@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T14:35:00+08:00",
+  "export_ts": "2026-10-24T15:05:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2083: sellers can now fix a listing after publishing - edit_listing revises the title/description with a full append-only history (the old values are never lost) and the market, search and single-listing views all read the current text.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (edit_listing + api_metadata_history) + src/sandbox/ledger/test_apimarket_metadata.py (AC-AMME1..AC-AMME8, SUITE 8/8 double-run sha16 f7154fb2400a1d88) + qa/apimarket-metadata-R2083.log + qa/reconcile-all-R2083.log (RUNNER 289/289 + controls 7/7 217.6s)",
+    "current": "R2084: the market's discovery door is paged - callers can now ask for page N of a growing market (limit/offset), see the honest total and whether more rows remain, while the old no-parameter call stays byte-identical.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_search limit/offset paging) + src/sandbox/ledger/test_apimarket_searchpage.py (AC-AMPG1..AC-AMPG8, SUITE 8/8 double-run sha16 f35327efe31c9d50) + qa/apimarket-searchpage-R2084.log + qa/reconcile-all-R2084.log (RUNNER 290/290 + controls 7/7 259.2s)",
     "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 发现面分页轴（api_search limit/offset）",
+      "on",
+      "R2084：可选 limit(int>=1)/offset(int>=0) 切片已排序行·缺省两参时信封与行面逐字节保持 R2082 契约（四键+五键 criteria）·分页信封增 limit/offset/total/returned/truncated 而 count 恒等于本页行数·两形门先于任何读·total 派生自过滤后集合·纯读零 token（SUITE 8/8·AC-AMPG1..AMPG8·电池 290/290 套件 2426 判据）"
+    ],
     [
       "apimarket 市场发现读面（api_search）",
       "on",
@@ -242,6 +247,10 @@
     ]
   ],
   "results": [
+    [
+      "R2084",
+      "R2084: the developer API market's discovery door gains paging - optional limit/offset slice the already-ordered rows with an honest pre-page total and a truncated flag, the bad-shape gates fail closed before any read and behind the account and price-band gates, totals derive from the filtered set, and the no-parameter call stays byte-identical to the R2082 contract; suite 8/8 double-run identical, battery 290/290 + controls 7/7, matrix 290/2426 byte-identical."
+    ],
     [
       "R2082",
       "R2082: the developer API market gains a discovery door - api_search matches a case-insensitive keyword over title or listing_key only, filters by seller and by a price band on the CURRENT asking price, hides retired listings unless explicitly included, pins the gate order (keyword, seller, price band incl. the inverted form, flag type) before any read, orders rows by current price then listing_id, and stays pure-read with zero token movement; suite 8/8 double-run identical, battery 288/288 + controls 7/7, matrix 288/2410 byte-identical."

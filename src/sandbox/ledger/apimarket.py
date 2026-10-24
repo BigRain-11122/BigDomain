@@ -955,7 +955,8 @@ class APIMarketFace:
                 "purchases": out}
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
-                   max_price=None, include_delisted=False):
+                   max_price=None, include_delisted=False,
+                   limit=None, offset=None):
         """Market discovery surface (pre-registered AC-AMSQ1..AMSQ8
         in the R2082 explore-queue row BEFORE this code existed).
 
@@ -980,7 +981,23 @@ class APIMarketFace:
         then listing_id ascending (cheapest first, stable). Pure
         read: zero row mutations and zero token movement. The
         envelope carries the resident non-advisory disclaimer and
-        an echo of the normalized criteria."""
+        an echo of the normalized criteria.
+
+        Paging axis (pre-registered AC-AMPG1..AMPG8 in the R2084
+        explore-queue row BEFORE this code existed): the face used
+        to return the whole matching set, so a resident could not
+        ask for page N of a growing market, nor learn the total.
+        Optional limit (int >= 1) and offset (int >= 0) slice the
+        already-ordered rows; total is the pre-page match count,
+        count stays len(listings) (the page length), and truncated
+        says whether rows remain after this page. Gate order is
+        pinned and fail-closed BEFORE any read: keyword, seller,
+        price band, include_delisted type, limit shape, offset
+        shape. Backward-compatibility law: when NEITHER paging
+        parameter is given the envelope and rows stay byte-
+        identical to the R2082 contract (the four legacy keys, the
+        five legacy criteria keys); the paging keys appear only
+        when paging is requested."""
         kw = None
         if keyword is not None:
             if not isinstance(keyword, str):
@@ -1000,6 +1017,16 @@ class APIMarketFace:
         if not isinstance(include_delisted, bool):
             raise ApiMarketError(E_AM_BAD_ARGS,
                                  "include_delisted must be bool")
+        if limit is not None:
+            if (isinstance(limit, bool) or not isinstance(limit, int)
+                    or limit < 1):
+                raise ApiMarketError(E_AM_BAD_ARGS, "bad limit: %r"
+                                     % (limit,))
+        if offset is not None:
+            if (isinstance(offset, bool) or not isinstance(offset, int)
+                    or offset < 0):
+                raise ApiMarketError(E_AM_BAD_ARGS, "bad offset: %r"
+                                     % (offset,))
         needle = None if kw is None else kw.casefold()
         with self._lock:
             rows = self._conn.execute(
@@ -1038,14 +1065,34 @@ class APIMarketFace:
                             "delisted_utc": stamp})
             out.sort(key=lambda row: (row["token_price"],
                                       row["listing_id"]))
+        total = len(out)
+        paged = limit is not None or offset is not None
+        start = 0 if offset is None else offset
+        page = out[start:] if limit is None else out[start:start + limit]
+        if not paged:
+            return {"disclaimer": self.disclaimer,
+                    "criteria": {"keyword": kw,
+                                 "dev_account": dev_account,
+                                 "min_price": low,
+                                 "max_price": high,
+                                 "include_delisted": include_delisted},
+                    "count": total,
+                    "listings": out}
         return {"disclaimer": self.disclaimer,
                 "criteria": {"keyword": kw,
                              "dev_account": dev_account,
                              "min_price": low,
                              "max_price": high,
-                             "include_delisted": include_delisted},
-                "count": len(out),
-                "listings": out}
+                             "include_delisted": include_delisted,
+                             "limit": limit,
+                             "offset": offset},
+                "count": len(page),
+                "returned": len(page),
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+                "truncated": (start + len(page)) < total,
+                "listings": page}
 
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board

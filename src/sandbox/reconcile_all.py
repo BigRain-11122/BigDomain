@@ -2183,6 +2183,18 @@ SUITES = [
     # pre-registered in the R2082 explore-queue claim row).
     ("ledger-apimarket-search", os.path.join(
         "ledger", "test_apimarket_search.py"), 8),
+    # R2084 discovery paging seat: the optional limit/offset axis on
+    # api_search with the backward-compatibility law (no paging
+    # parameters => the R2082 envelope byte-identical), page
+    # stitching conservation, the boundary tie-break, bound
+    # clamping (limit == total, limit > total, offset at/past the
+    # end, tail crossing), the fail-closed limit/offset gate family
+    # and its order after the account and price-band gates, totals
+    # derived from the filtered set, the pure-read law and
+    # cross-restart byte identity (AC-AMPG1..AC-AMPG8
+    # pre-registered in the R2084 explore-queue claim row).
+    ("ledger-apimarket-searchpaging", os.path.join(
+        "ledger", "test_apimarket_searchpage.py"), 8),
     # R2083 listing metadata revision seat: the append-only
     # apimarket_listing_revisions row with the listing row's base
     # metadata never rewritten, partial-edit semantics, the pinned

@@ -1,0 +1,10 @@
+PASS AC-AMPG1: legacy keys=True criteria keys=True count=4 none-pair identical=True ids=[2, 4, 1, 5]
+PASS AC-AMPG2: stitched=[2, 4, 3, 1, 5] unpaged=[2, 4, 3, 1, 5] sizes=[2, 2, 1] totals=[5, 5, 5] truncated=[True, True, False] paged keys=True
+PASS AC-AMPG3: walk=[2, 4, 3, 1, 5] unpaged=[2, 4, 3, 1, 5] adjacent disjoint=True tie pair=[(2, 3), (4, 3)]
+PASS AC-AMPG4: limit==total=(4, False) limit>total=(4, False) offset==total=(0, [], False) offset>total=(0, 4) tail=(1, False) crossing truncated=True
+PASS AC-AMPG5: bad limits=[True, True, True, True, True] bad offsets=[True, True, True, True] account gate first=True price band first=True shared-code flag/limit=True digests frozen=True
+PASS AC-AMPG6: default total=4 retired total=5 keyword totals=(1, 2) keyword ids=([1], [3, 1]) erin total=1 band ids=[1] echo={'keyword': None, 'dev_account': None, 'min_price': None, 'max_price': None, 'include_delisted': False, 'limit': 2, 'offset': 1}
+PASS AC-AMPG7: repeat identical=True digests frozen=True tx constant=True tx count=6
+PASS AC-AMPG8: instance1==2==3 byte-identical=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0 world outside repo=True
+SUITE 8/8
