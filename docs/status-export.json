@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T12:34:11+08:00",
+  "export_ts": "2026-10-24T12:47:56+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2080: the pycrdt vendor was upgraded from 0.14.8 to 0.14.10 (the two-patch debt flagged in this morning's group decision D-20261024-09 item 4) and the existing A/C fixtures still close both ways - yjs 13.6.33 -> pycrdt and pycrdt -> yjs - with the whole battery green.",
-    "latest_artifact": "src/sandbox/pycrdt-poc/wire_poc.py (--pin/--evidence) + qa/pycrdt-upgrade-R2080.log (AC-YCU1..YCU8, double-run criterion lines identical) + qa/reconcile-all-R2080.log (RUNNER 286/286 + controls 7/7 291.4s)",
+    "current": "R2081: the developer API market now has a buyer-side purchase library (api_library) - a resident can finally see every listing it bought, what it actually paid versus the live asking price, whether the item was retired, and its own rating, with strict buyer isolation.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_library) + src/sandbox/ledger/test_apimarket_library.py (AC-AML1..AC-AML8, SUITE 8/8 double-run sha16 f3130b5e09e208d0) + qa/apimarket-library-R2081.log + qa/reconcile-all-R2081.log (RUNNER 287/287 + controls 7/7 298.1s)",
     "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 买家侧已购库读面",
+      "on",
+      "R2081：api_library 五键信封+十四键行·买家隔离·退役挂牌历史可读·历史实付与现行标价分离·my_rating 仅本人·账户门前置·纯读零 token（SUITE 8/8·AC-AML1..AML8·电池 287/287 套件 2402 判据）"
+    ],
     [
       "apimarket 挂牌退役（下架）面",
       "on",
@@ -232,6 +237,10 @@
     ]
   ],
   "results": [
+    [
+      "R2081",
+      "R2081: the buyer-side purchase library lands on the developer API market - one five-key envelope with fourteen-key rows derived from the purchase rows themselves, strict buyer isolation (no cross-buyer leakage, the developer account carries no self-purchase rows, a prefix-valid account with no purchases gets an honest empty library), retired listings staying readable with their delist stamp, price_paid separated from the live current_price, my_rating limited to the buyers own stars, the account gate fail-closed before any read, and the pure-read law with zero token movement; suite 8/8 double-run identical, battery 287/287 + controls 7/7, matrix 287/2402 byte-identical."
+    ],
     [
       "R2080",
       "R2080: the vendored pycrdt moved from 0.14.8 to 0.14.10 with the A/C fixture regression intact - the forward yjs fixtures (single client, concurrent merge, state-vector diff) replay exactly and the reverse leg closes inside yjs 13.6.33, two consecutive pinned runs give line-for-line identical criterion output, and the full battery stays green at 286/286 suites plus 7/7 controls. AC-YCU1..AC-YCU8 pre-registered before the code; honest boundary: the reverse leg needed the gitignored ygo-poc node_modules restored via npm ci from the committed lockfile."
