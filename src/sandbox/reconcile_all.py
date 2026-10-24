@@ -3107,6 +3107,14 @@ SUITES = [
     # state/queue/explore.md before the suite existed.)
     ("lobby-chat-mute-idem",
      os.path.join("lobby", "test_chatmute_idem.py"), 8),
+    # R2072 evidence single-writer helper: one LF/utf-8 writer for
+    # evidence logs (normalise before write, atomic replace, post-write
+    # dialect assertion) plus a read-only census wiring check - the
+    # recurring CRLF/LF mixture that failed reconcile-daily-census cd7
+    # in R2068/R2069/R2070 gets a mechanical birth-place guard.
+    # (AC-EVD1..AC-EVD8 pre-registered in state/queue/tech.md R2072.)
+    ("os-evidence-writer",
+     os.path.join("..", "os", "test_evidence_writer.py"), 8),
     ]
 
 FAILS = 0

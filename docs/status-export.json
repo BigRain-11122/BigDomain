@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T09:44:09+08:00",
+  "export_ts": "2026-10-24T10:07:31+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2071: the showcase month-window now has its post-closure retract shape proven - after both cross-month pairs are re-placed, retracting one current-month exhibit again makes the month window read {2,3,1}, breaking the net-flow identity with a negative right-hand side while the full board keeps holding.",
-    "latest_artifact": "src/sandbox/ledger/test_showcase_statsmonth_straddle3persist.py + qa/showcase-straddle3-R2071.log (SUITE PASS 7/7 AC-SMTR1..SMTR7, double-run stdout sha16 272de2e4e6fddf90; RUNNER PASS 279/279 suites + controls 7/7 217.5s = qa/reconcile-all-R2071.log; suite-matrix 279/2339 byte-identical, 2026-10-24)",
-    "next_milestone": "Second real product slice from the reseeded tech queue (evidence-log newline-dialect writer) plus the FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
+    "current": "R2072: evidence logs now have one canonical single writer - every EOL form is normalised to LF, the bytes are encoded before any disk touch, the fresh file is classified and must read as the tee dialect or the writer raises, and the whole qa/ history can be classified read-only (1660 files: 1134 tee, 526 other) and repaired on the EOL axis only.",
+    "latest_artifact": "src/os/evidence_writer.py + src/os/test_evidence_writer.py + src/os/evidence_census_R2072.py + qa/evidence-writer-census-R2072.log (SUITE PASS 8/8 double-run stdout sha16 d39cf3aa81ac525120cd548859250b1d7a2c56937c9ded3d7321478d798659c5; RUNNER PASS 280/280 suites + controls 7/7 222.4s = qa/reconcile-all-R2072.log; suite-matrix 280/2347 byte-identical, 2026-10-24)",
+    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
   },
   "depts": [
     {
@@ -215,14 +215,18 @@
   ],
   "results": [
     [
-      "R2071",
-      "R2071: the showcase month-window now has its post-closure retract shape proven - after both cross-month pairs are re-placed, retracting one current-month exhibit again makes the month window read {2,3,1}, breaking the net-flow identity with a negative right-hand side while the full board keeps holding."
+      "R2072",
+      "R2072: evidence logs now have one canonical single writer - every EOL form is normalised to LF, the bytes are encoded before any disk touch, the fresh file is classified and must read as the tee dialect or the writer raises, and the whole qa/ history can be classified read-only (1660 files: 1134 tee, 526 other) and repaired on the EOL axis only."
     ],
     [
-      "2071",
+      "2072",
       "OSLoop 执行 tick"
     ],
     [
+      "R2071",
+      "R2071: the showcase month-window now has its post-closure retract shape proven - after both cross-month pairs are re-placed, retracting one current-month exhibit again makes the month window read {2,3,1}, breaking the net-flow identity with a negative right-hand side while the full board keeps holding."
+    ],
+        [
       "R2070",
       "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate."
     ],
@@ -490,26 +494,26 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 4,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 5,
+    "queue_tech_open": 4,
     "queue_explore_open": 4,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 9,
+  "log_lines_in_window": 10,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 4,
+  "substantive_non_idle_mention_lines": 5,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
-  "queue_tech_open": 5,
+  "queue_tech_open": 4,
   "queue_explore_open": 4
 }
