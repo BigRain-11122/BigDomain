@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T13:58:17+08:00",
+  "export_ts": "2026-10-24T14:35:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2082: the developer API market now has a discovery door (api_search) - a resident can search by keyword (title or key), filter by seller, filter by a price band on the current asking price, and optionally include retired listings, instead of enumerating the whole board.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_search) + src/sandbox/ledger/test_apimarket_search.py (AC-AMSQ1..AC-AMSQ8, SUITE 8/8 double-run sha16 5AB7CE8BC9512B05) + qa/apimarket-search-R2082.log + qa/reconcile-all-R2082.log (RUNNER 288/288 + controls 7/7 290.1s)",
+    "current": "R2083: sellers can now fix a listing after publishing - edit_listing revises the title/description with a full append-only history (the old values are never lost) and the market, search and single-listing views all read the current text.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (edit_listing + api_metadata_history) + src/sandbox/ledger/test_apimarket_metadata.py (AC-AMME1..AC-AMME8, SUITE 8/8 double-run sha16 f7154fb2400a1d88) + qa/apimarket-metadata-R2083.log + qa/reconcile-all-R2083.log (RUNNER 289/289 + controls 7/7 217.6s)",
     "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [

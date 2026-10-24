@@ -2183,6 +2183,19 @@ SUITES = [
     # pre-registered in the R2082 explore-queue claim row).
     ("ledger-apimarket-search", os.path.join(
         "ledger", "test_apimarket_search.py"), 8),
+    # R2083 listing metadata revision seat: the append-only
+    # apimarket_listing_revisions row with the listing row's base
+    # metadata never rewritten, partial-edit semantics, the pinned
+    # gate order (account, listing, ownership, retired, field
+    # shape, content pre-gate, no-change), ownership/existence
+    # refusals, retired-listing refusal with readable history, the
+    # no-change refusal with the legal revise-back, effective
+    # metadata on api_view/api_board/api_search plus the new
+    # api_metadata_history read face, zero token movement and
+    # cross-restart byte identity (AC-AMME1..AC-AMME8
+    # pre-registered in the R2083 explore-queue claim row).
+    ("ledger-apimarket-metadata", os.path.join(
+        "ledger", "test_apimarket_metadata.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

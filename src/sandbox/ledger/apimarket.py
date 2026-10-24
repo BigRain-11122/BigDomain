@@ -75,6 +75,7 @@ E_AM_DELISTED = "E_AM_DELISTED"           # AC-AMD5 (retired listing)
 E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
 E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
 E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
+E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -132,6 +133,14 @@ CREATE TABLE IF NOT EXISTS apimarket_price_revisions (
     listing_id INTEGER NOT NULL,
     dev_account TEXT NOT NULL,
     token_price INTEGER NOT NULL CHECK (token_price > 0),
+    revised_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_listing_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
     revised_utc TEXT NOT NULL
 );
 """
@@ -383,6 +392,23 @@ class APIMarketFace:
                 " WHERE revision_id = ?", (row[1],)).fetchone()[0]
         return int(row[0]), latest_utc
 
+    def _metadata_state(self, listing_id, base_title, base_description):
+        """(effective_title, effective_description, revision_count,
+        latest_revised_utc). The newest append-only metadata
+        revision wins; with no revision the immutable listing row
+        speaks. Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT title, description, revised_utc FROM"
+            " apimarket_listing_revisions WHERE listing_id = ?"
+            " ORDER BY revision_id DESC LIMIT 1",
+            (listing_id,)).fetchone()
+        count = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_listing_revisions"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+        if row is None:
+            return base_title, base_description, 0, None
+        return row[0], row[1], count, row[2]
+
     def delist_api(self, dev_account, listing_id):
         """Retire one listing (the seller-side door this face never
         had). Gate order pinned by AC-AMD4: account shape first,
@@ -479,6 +505,97 @@ class APIMarketFace:
                 "previous_price": previous,
                 "token_price": token_price,
                 "revision_count": count,
+                "revised_utc": stamp,
+                "disclaimer": self.disclaimer}
+
+    def edit_listing(self, dev_account, listing_id, title=None,
+                     description=None):
+        """Seller-side metadata revision door (pre-registered
+        AC-AMME1..AMME8 in the R2083 explore-queue row BEFORE this
+        code existed).
+
+        publish_api writes the title and the description exactly
+        once: after a listing exists there was no legal way to fix
+        a typo or improve the copy - republishing collides with
+        UNIQUE(dev_account, listing_key) and delisting is
+        terminal. Price has revise_price, lifecycle has
+        delist_api, metadata had nothing. This face closes it with
+        one append-only apimarket_listing_revisions row per change;
+        the listing row itself is never rewritten, so the original
+        metadata survives as base forever (AC-AMME1).
+
+        Either field may be omitted, in which case the current
+        effective value carries into the new revision - every
+        revision row stores the full effective pair, so history is
+        self-describing (AC-AMME2).
+
+        Gate order is pinned by AC-AMME3, every gate before any
+        write: account shape, then listing shape/existence, then
+        ownership, then the retired state, then field shape (at
+        least one field, non-blank string), then the content gate
+        on every supplied field (msgSecCheck pre-gate: a rejected
+        edit stores zero rows and leaves the effective metadata
+        untouched), then the no-change state. A same-values call
+        answers E_AM_METADATA_UNCHANGED with zero new rows;
+        revising back to an older value is legal because the
+        comparison is against the CURRENT effective pair
+        (AC-AMME6). Editing moves zero tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if title is None and description is None:
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "title or description required")
+            if title is not None and (not isinstance(title, str)
+                                      or not title.strip()):
+                raise ApiMarketError(E_AM_BAD_ARGS, str(title))
+            if description is not None and (
+                    not isinstance(description, str)
+                    or not description.strip()):
+                raise ApiMarketError(E_AM_BAD_ARGS, str(description))
+            base = self._conn.execute(
+                "SELECT listing_key, title, description FROM"
+                " apimarket_listings WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            cur_title, cur_desc, count, _latest = self._metadata_state(
+                listing_id, base[1], base[2])
+            new_title = cur_title if title is None else title
+            new_desc = cur_desc if description is None else description
+            if title is not None:
+                self._gate_check(title)   # zero rows on rejection
+            if description is not None:
+                self._gate_check(description)
+            if new_title == cur_title and new_desc == cur_desc:
+                raise ApiMarketError(E_AM_METADATA_UNCHANGED,
+                                     str(listing_id))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_listing_revisions"
+                    " (listing_id, dev_account, title, description,"
+                    " revised_utc) VALUES (?,?,?,?,?)",
+                    (listing_id, dev_account, new_title, new_desc,
+                     stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"listing_id": listing_id,
+                "dev_account": dev_account,
+                "listing_key": base[0],
+                "revision_id": cur.lastrowid,
+                "previous_title": cur_title,
+                "previous_description": cur_desc,
+                "title": new_title,
+                "description": new_desc,
+                "metadata_revision_count": count + 1,
                 "revised_utc": stamp,
                 "disclaimer": self.disclaimer}
 
@@ -624,10 +741,15 @@ class APIMarketFace:
             stamp = self._delisted_utc(listing_id)
             current = self._current_price(listing_id, int(row[5]))
             n_rev, latest_rev = self._revision_stats(listing_id)
+            eff_title, eff_desc, n_meta, latest_meta = \
+                self._metadata_state(listing_id, row[3], row[4])
         return {"listing_id": int(row[0]), "dev_account": row[1],
-                "listing_key": row[2], "title": row[3],
-                "description": row[4], "token_price": current,
+                "listing_key": row[2], "title": eff_title,
+                "description": eff_desc, "token_price": current,
                 "base_token_price": int(row[5]),
+                "base_title": row[3], "base_description": row[4],
+                "metadata_revision_count": n_meta,
+                "latest_metadata_revision_utc": latest_meta,
                 "revision_count": n_rev,
                 "latest_revision_utc": latest_rev,
                 "ai_label": int(row[6]), "listed_utc": row[7],
@@ -647,19 +769,22 @@ class APIMarketFace:
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
-                " token_price, ai_label FROM apimarket_listings"
+                " description, token_price, ai_label"
+                " FROM apimarket_listings"
                 " WHERE listing_id NOT IN (SELECT listing_id FROM"
                 " apimarket_delistings)"
                 " ORDER BY listing_id").fetchall()
             out = []
             for r in rows:
                 n_rate, avg = self._agg_rating(int(r[0]))
+                eff_title, _eff_desc, _n_meta, _latest_meta = \
+                    self._metadata_state(int(r[0]), r[3], r[4])
                 out.append({"listing_id": int(r[0]),
                             "dev_account": r[1], "listing_key": r[2],
-                            "title": r[3],
+                            "title": eff_title,
                             "token_price": self._current_price(
-                                int(r[0]), int(r[4])),
-                            "ai_label": int(r[5]),
+                                int(r[0]), int(r[5])),
+                            "ai_label": int(r[6]),
                             "rating_count": n_rate, "rating_avg": avg})
         return {"disclaimer": self.disclaimer, "listings": out}
 
@@ -704,6 +829,42 @@ class APIMarketFace:
                                "dev_account": r[1],
                                "token_price": int(r[2]),
                                "revised_utc": r[3]} for r in rows]}
+
+    def api_metadata_history(self, listing_id):
+        """Listing metadata history surface (pre-registered
+        AC-AMME7 in the R2083 explore-queue row BEFORE this code
+        existed): the immutable base title/description plus every
+        append-only revision in order, the current effective pair
+        and the revision count. Per-listing isolation; a retired
+        listing's history stays readable (AC-AMME5). Pure read."""
+        with self._lock:
+            self._require_listing(listing_id)
+            base = self._conn.execute(
+                "SELECT title, description FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            rows = self._conn.execute(
+                "SELECT revision_id, dev_account, title, description,"
+                " revised_utc FROM apimarket_listing_revisions"
+                " WHERE listing_id = ? ORDER BY revision_id",
+                (listing_id,)).fetchall()
+            eff_title, eff_desc, count, latest = self._metadata_state(
+                listing_id, base[0], base[1])
+            stamp = self._delisted_utc(listing_id)
+        return {"listing_id": listing_id,
+                "base_title": base[0],
+                "base_description": base[1],
+                "title": eff_title,
+                "description": eff_desc,
+                "revision_count": count,
+                "latest_revision_utc": latest,
+                "delisted": stamp is not None,
+                "delisted_utc": stamp,
+                "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(r[0]),
+                               "dev_account": r[1],
+                               "title": r[2],
+                               "description": r[3],
+                               "revised_utc": r[4]} for r in rows]}
 
     def api_sales(self, dev_account):
         """Per-developer sales ledger view: every purchase row of
@@ -843,8 +1004,8 @@ class APIMarketFace:
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
-                " token_price, ai_label FROM apimarket_listings"
-                " ORDER BY listing_id").fetchall()
+                " description, token_price, ai_label FROM"
+                " apimarket_listings ORDER BY listing_id").fetchall()
             out = []
             for r in rows:
                 listing_id = int(r[0])
@@ -853,11 +1014,13 @@ class APIMarketFace:
                     continue
                 if dev_account is not None and r[1] != dev_account:
                     continue
+                eff_title, _eff_desc, _n_meta, _latest_meta = \
+                    self._metadata_state(listing_id, r[3], r[4])
                 if needle is not None:
-                    hay = (str(r[3]) + "\n" + str(r[2])).casefold()
+                    hay = (str(eff_title) + "\n" + str(r[2])).casefold()
                     if needle not in hay:
                         continue
-                price = self._current_price(listing_id, int(r[4]))
+                price = self._current_price(listing_id, int(r[5]))
                 if low is not None and price < low:
                     continue
                 if high is not None and price > high:
@@ -866,9 +1029,9 @@ class APIMarketFace:
                 out.append({"listing_id": listing_id,
                             "dev_account": r[1],
                             "listing_key": r[2],
-                            "title": r[3],
+                            "title": eff_title,
                             "token_price": price,
-                            "ai_label": int(r[5]),
+                            "ai_label": int(r[6]),
                             "rating_count": n_rate,
                             "rating_avg": avg,
                             "delisted": stamp is not None,

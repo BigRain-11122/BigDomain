@@ -1,0 +1,13 @@
+# apimarket listing metadata revision suite evidence R2083 (run 1)
+# suite src/sandbox/ledger/test_apimarket_metadata.py SUITE PASS 8/8
+# stdout sha256 f7154fb2400a1d88301e9d9e1caa631d30018f4285175f887ee0ac4c13914c8d
+PASS AC-AMME1: keys=True prev=('Risk Scan API', 'portfolio risk scan endpoint') new=('Risk Scan API v2', 'portfolio risk scan endpoint') base untouched=True rows=1
+PASS AC-AMME2: desc-only carries title='Risk Scan API v2' title-only carries desc='probe endpoint for the scan pipeline' counts=(2,1)
+PASS AC-AMME3: content=['E_AM_CONTENT_REJECTED', 'E_AM_CONTENT_REJECTED'] order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_UNKNOWN_LISTING', 'E_AM_NOT_OWNER', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_CONTENT_REJECTED', 'E_AM_METADATA_UNCHANGED'] digests frozen=True view frozen=True
+PASS AC-AMME4: accounts=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix='E_AM_NOT_OWNER' listings=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown='E_AM_UNKNOWN_LISTING' owners=['E_AM_NOT_OWNER', 'E_AM_NOT_OWNER'] frozen=True
+PASS AC-AMME5: retired edit='E_AM_DELISTED' zero-rev history=('Macro Feed API',0,True) revised-then-retired history=('Risk Scan API v2',2,True)
+PASS AC-AMME6: same='E_AM_METADATA_UNCHANGED' desc-same='E_AM_METADATA_UNCHANGED' revise-back new='Scan Probe API' prev='Scan Probe API v2' rows=1->2
+PASS AC-AMME7: view='Orbit Probe API v2'/'probe endpoint for the scan pipeline' base=('Scan Probe API', 'probe endpoint for the scan pipeline') count=3 board='Orbit Probe API v2' old-hit=0 new-hit=[3] hist3=['Scan Probe API v2', 'Scan Probe API', 'Orbit Probe API v2'] hist1 rows=2
+PASS AC-AMME8: zero tokens=True reads frozen=True instance1==2==3==4=True wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0 world outside repo=True
+SUITE 8/8
