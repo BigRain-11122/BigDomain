@@ -330,6 +330,12 @@ def collect_attention(am, report):
                 add("negative_net", "warn", dev,
                     "seller net %d in %s" % (row["net"], row["month"]),
                     row["month"])
+        for row in am.api_listing_demand(dev)["rows"]:
+            if row["watcher_count"] >= 2 and row["converted_count"] == 0:
+                add("unconverted_demand", "warn", dev,
+                    "%d watcher(s) on %s with no sale yet"
+                    % (row["watcher_count"], row["title"]),
+                    row["listing_key"])
     for listing in report["board"]["listings"]:
         supply = am.api_supply(listing["listing_id"])
         if supply["sold_out"]:

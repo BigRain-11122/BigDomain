@@ -1,0 +1,124 @@
+{
+ "attention": {
+  "finding_count": 6,
+  "findings": [
+   {
+    "detail": "buyer net -10 in 2026-10",
+    "kind": "negative_net",
+    "ref": "2026-10",
+    "severity": "warn",
+    "subject": "usr:bob"
+   },
+   {
+    "detail": "seller net -10 in 2026-10",
+    "kind": "negative_net",
+    "ref": "2026-10",
+    "severity": "warn",
+    "subject": "usr:dana"
+   },
+   {
+    "detail": "buyer net -5 in 2026-10",
+    "kind": "negative_net",
+    "ref": "2026-10",
+    "severity": "warn",
+    "subject": "usr:erin"
+   },
+   {
+    "detail": "seller net -5 in 2026-10",
+    "kind": "negative_net",
+    "ref": "2026-10",
+    "severity": "warn",
+    "subject": "usr:frank"
+   },
+   {
+    "detail": "2 unanswered rating(s); oldest 2026-09-22T09:00:00Z",
+    "kind": "rating_debt",
+    "ref": "2026-09-22T09:00:00Z",
+    "severity": "warn",
+    "subject": "usr:dana"
+   },
+   {
+    "detail": "2 watcher(s) on Chart Render API with no sale yet",
+    "kind": "unconverted_demand",
+    "ref": "chart-render",
+    "severity": "warn",
+    "subject": "usr:frank"
+   }
+  ],
+  "severity_counts": {
+   "warn": 6
+  }
+ },
+ "attention_kinds": [
+  "negative_net",
+  "rating_debt",
+  "unconverted_demand"
+ ],
+ "board_size": 3,
+ "demand": {
+  "usr:dana": {
+   "converted_count": 0,
+   "dev_account": "usr:dana",
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listing_count": 2,
+   "pending_count": 0,
+   "rows": [
+    {
+     "converted_count": 0,
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "newest_watch_utc": null,
+     "oldest_watch_utc": null,
+     "pending_count": 0,
+     "title": "Risk Scan API",
+     "watcher_count": 0
+    },
+    {
+     "converted_count": 0,
+     "current_price": 3,
+     "delisted": false,
+     "delisted_utc": null,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "newest_watch_utc": null,
+     "oldest_watch_utc": null,
+     "pending_count": 0,
+     "title": "Macro Feed API",
+     "watcher_count": 0
+    }
+   ],
+   "total_watchers": 0
+  },
+  "usr:frank": {
+   "converted_count": 0,
+   "dev_account": "usr:frank",
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listing_count": 1,
+   "pending_count": 2,
+   "rows": [
+    {
+     "converted_count": 0,
+     "current_price": 5,
+     "delisted": false,
+     "delisted_utc": null,
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "newest_watch_utc": "2026-08-31T23:59:59Z",
+     "oldest_watch_utc": "2026-08-31T23:59:59Z",
+     "pending_count": 2,
+     "title": "Chart Render API",
+     "watcher_count": 2
+    }
+   ],
+   "total_watchers": 2
+  }
+ },
+ "demand_listing": 3,
+ "watchers_added": [
+  "usr:bob",
+  "usr:carol"
+ ]
+}

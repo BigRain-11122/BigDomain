@@ -1,0 +1,10 @@
+PASS AC-AMDM1: keys=True rows=[(1, 3), (2, 2), (3, 0)] total=5 conv=2 pend=3 d4=(0, None)
+PASS AC-AMDM2: unwatch=2 rewatch=3 history_rows=4 d2_after=1
+PASS AC-AMDM3: d1 after refund conv=0 pend=3; non-watcher purchase conv=0; row sums=True env sums=True
+PASS AC-AMDM8: consumer findings=[('unconverted_demand', 'usr:dana', 'risk-scan')] reconcile-wire=True ascii=True/True
+PASS AC-AMDM4: frank=[(4, 1)] dana_keys=['macro-feed', 'quiet-api', 'risk-scan'] empty=(0, []) bad=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests=True
+PASS AC-AMDM5: retired=True stamp='2026-10-06T00:00:20Z' watchers=1 price=20 title='Risk Scan API v2'
+PASS AC-AMDM6: three identical=True digests=True tx=True pools=True
+PASS AC-AMDM7: dana identical twice=True frank identical=True disclaimer=True
+
+SUITE PASS 8/8

@@ -2303,6 +2303,14 @@ SUITES = [
     # listings keep their debt, seller isolation, pure read).
     ("ledger-apimarket-sellerinbox", os.path.join(
         "ledger", "test_apimarket_sellerinbox.py"), 8),
+    # AC-AMDM1..AC-AMDM8 pre-registered in the R2112 explore-queue
+    # claim row BEFORE this suite existed: the seller-side demand read
+    # face (every listing of the seller as a row, live watches only,
+    # net conversion through unrefunded purchases, retired listings
+    # keep demand, effective-metadata and current-price seams, seller
+    # isolation, pure read) plus the report attention consumer.
+    ("ledger-apimarket-listingdemand", os.path.join(
+        "ledger", "test_apimarket_listingdemand.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

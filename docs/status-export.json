@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T04:40:20+08:00",
+ "export_ts": "2026-10-25T05:41:41+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2111：市场账本多了一张「退款登记簿」——退款此前只能按购买号（api_refund）或按买家（买家全史段）单笔查，全市场「这个月退了多少、哪家卖家退得最多、哪件挂牌在退」没有任何一面回答，运营对账要手工并表。本窗把这面补齐：按时间窗+卖家+挂牌三重过滤，一次读 app 只追加的退款行，同时给出按月、按卖家、按行三段分组（同一行集派生，金额逐字段取自存储值、分账守恒）；报表页新增 Refund register 段三张表，机读契约 v5→v6 加法升级（信封仍恰三键、旧键不动）。另：本窗是接手中断窗（产物已在盘上未提交），全部判据在本窗实跑复验。",
-  "latest_artifact": "preview/apimarket-report-refunds.html（可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+挂牌全史档案+退款登记簿三表+卖家全表+买家全史）+ preview/apimarket-report-refunds.json（schema 6）+ src/sandbox/ledger/apimarket.py（api_refund_register）+ src/sandbox/ledger/apimarket_report.py（refund_block / REPORT_SCHEMA 5→6）+ qa/apimarket-refundregister-R2111.log（SUITE PASS 13/13·双跑判据行同一 sha16 189ab027aac404a4）+ qa/reconcile-all-R2111.log（RUNNER PASS 316/316 suites + controls 7/7·564.3s）",
-  "next_milestone": "48 小时内：给卖家补「需求信号」面（一件挂牌被多少人关注、关注后多久成交）并给活动流加逐挂牌过滤，两者都接进报告唯一消费者而不是再造第九张孤儿读面；商户号未到之前不碰支付对接，本地沙箱与证据链照跑。"
+  "current": "R2112 卖家侧需求读面（api_listing_demand）落地：市场一直只有买家侧的关注面，卖家看不到「我这一件有多少人在看、关注之后有没有成交」。本轮补上——每一件挂牌都成行（零关注与已下架件也在），只计活关注（撤关注不计、再关注不叠加），转化按净额算（只有未退款的购买才算成交，退款把买家送回待转化），现价与标题走既有单缝，纯读零 token；同一窗把它接进结算报告的待办摘要（≥2 人关注且零成交 → 未转化需求告警），所以它不是又一个没人用的面。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_listing_demand）+ src/sandbox/ledger/apimarket_report.py（unconverted_demand 家族）+ src/sandbox/ledger/test_apimarket_listingdemand.py（SUITE PASS 8/8，双跑逐位同一 sha16 0df8247b62369ec1）+ qa/apimarket-listingdemand-R2112.log + qa/reconcile-all-R2112.log（RUNNER PASS 317/317 suites + controls 7/7，757.1s）+ docs/sandbox-suite-matrix.md（317 suites / 2644 criteria，--check 逐字节同） + preview/apimarket-demand-R2112.json（种子演示世界加两条关注后，api_listing_demand 的卖家行与 attention 的 unconverted_demand 告警实录）",
+  "next_milestone": "48 小时内：公共活动流的逐挂牌过滤（api_market_feed 增 listing_id 参数，卖家/买家停在某一挂牌页面上就能看「这一件最近发生了什么」，不必再翻七张逐挂牌面并表）+ 商家号到位前的支付合规路径继续设计态——两项都不需要物理件。"
  },
  "depts": [
   {
@@ -349,6 +349,16 @@
    "apimarket 买家账户档案读面（api_buyer_profile）",
    "on",
    "R2091：十七键只读聚合信封（花费/退款/净花费/开发与平台分账/本人评价均值/关注历史与活跃集）·花费与池双守恒整数精确·退款只降净侧·账户门前置 fail-closed·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMBY1..AMBY8）"
+  ],
+  [
+   "apimarket 卖家侧需求读面（api_listing_demand）",
+   "on",
+   "R2112：七键信封 + 十一键行，卖家每件挂牌都成行（含零关注/已下架）；只计活关注（撤关注不计数、再关注不叠加）；净转化（未退款购买才算成交，退款回待转化）；converted+pending==watcher_count 逐行守恒；现价/有效标题走既有单缝；卖家隔离+诚实空信封+前缀门先于任读；纯读零 token 与跨重启字节同一；同窗接线报告 attention 的 unconverted_demand 家族。SUITE 8/8 双跑、电池 317/317、矩阵 317/2644 逐字节同。AC-AMDM1..AC-AMDM8。"
+  ],
+  [
+   "apimarket 卖家侧需求读面（api_listing_demand）",
+   "on",
+   "R2112：七键信封 + 十一键行，卖家每件挂牌都成行（含零关注/已下架）；只计活关注（撤关注不计数、再关注不叠加）；净转化（未退款购买才算成交，退款回待转化）；converted+pending==watcher_count 逐行守恒；现价/有效标题走既有单缝；卖家隔离+诚实空信封+前缀门先于任读；纯读零 token 与跨重启字节同一；同窗接线报告 attention 的 unconverted_demand 家族。SUITE 8/8 双跑、电池 317/317、矩阵 317/2644 逐字节同。AC-AMDM1..AC-AMDM8。"
   ]
  ],
  "results": [
@@ -453,7 +463,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2110",
+   "2112",
    "OSLoop 执行 tick"
   ],
   [
@@ -771,6 +781,12 @@
   [
    "R2101",
    "R2101: the market read faces finally have a consumer. R2096..R2100 shipped five faces whose only call sites were tests and bookkeeping (the no-consumer idle form); instead of a sixth face this window shipped apimarket_report.py, a deterministic one-command report generator that reads market totals, the market month table, the live board, per-seller revenue months with sales rows and per-buyer profile/months once each (participants derived from the market, never hardcoded) and renders one self-contained offline HTML ledger with every dynamic string escaped and the standing AIGC/disclaimer markers. AC-AMRPT1..8 pre-registered before the code; suite 9/9 double-run identical sha16 51ccbb0d28367251; battery 306/306 suites plus controls 7/7 in 293.7s; matrix 306 suites / 2555 criteria --check byte-identical; census DRIFT-CLEAN. Two disclosed in-window findings: the first determinism attempt failed because the ledger's content-addressed tx ids embed the wall clock (both clocks are now patched in the seeder) and the first battery cd7 flagged the new CRLF evidence logs (regenerated as bare-LF UTF-8)."
+  ],
+  [
+   "R2112：apimarket 卖家侧需求读面（api_listing_demand）。AC-AMDM1..AC-AMDM8 在 R2111 种下的 explore 队头行里先注册、后写码。七键信封/十一键行，卖家每件挂牌（含零关注与已下架）都成行，行序全序 (-watcher_count, listing_id)；活关注律（有 unwatch 行的 watch 不计，撤关注−1、再关注+1 不叠加）；净转化律（未退款购买才转化，退款回 pending，逐行 converted+pending==watcher_count，信封合计==行和）；卖家隔离 + 前缀合法无挂牌的诚实空信封 + 前缀门先于任读（九表指纹/ledger_tx/池余额 五次拒绝恒不变）；退役保留需求并带戳，现价走现价缝、标题走有效元数据缝；纯读三连调用指纹不变；三实例两次重启字节同一；同窗给报告 attention 加 unconverted_demand（≥2 关注且零成交 → warn）证明不是无消费者闲置面。SUITE PASS 8/8 双跑逐位同一 sha16 0df8247b62369ec1；接线 ledger-apimarket-listingdemand(8)；电池 RUNNER PASS 317/317 + controls 7/7 757.1s；矩阵 317/2644 --check 逐字节同；census DRIFT-CLEAN flags=0。诚实注：首轮证据用 PS 重定向写成 UTF-16 被 census 判 ps-utf16，改 LF/utf-8 写入器重生成后清零；首跑 AC-AMDM3 误用关注者当非关注者，窗内改正后才出证据。Score 2。"
+  ],
+  [
+   "R2112：apimarket 卖家侧需求读面（api_listing_demand）。AC-AMDM1..AC-AMDM8 在 R2111 种下的 explore 队头行里先注册、后写码。七键信封/十一键行，卖家每件挂牌（含零关注与已下架）都成行，行序全序 (-watcher_count, listing_id)；活关注律（有 unwatch 行的 watch 不计，撤关注−1、再关注+1 不叠加）；净转化律（未退款购买才转化，退款回 pending，逐行 converted+pending==watcher_count，信封合计==行和）；卖家隔离 + 前缀合法无挂牌的诚实空信封 + 前缀门先于任读（九表指纹/ledger_tx/池余额 五次拒绝恒不变）；退役保留需求并带戳，现价走现价缝、标题走有效元数据缝；纯读三连调用指纹不变；三实例两次重启字节同一；同窗给报告 attention 加 unconverted_demand（≥2 关注且零成交 → warn）证明不是无消费者闲置面。SUITE PASS 8/8 双跑逐位同一 sha16 0df8247b62369ec1；接线 ledger-apimarket-listingdemand(8)；电池 RUNNER PASS 317/317 + controls 7/7 757.1s；矩阵 317/2644 --check 逐字节同；census DRIFT-CLEAN flags=0。诚实注：首轮证据用 PS 重定向写成 UTF-16 被 census 判 ps-utf16，改 LF/utf-8 写入器重生成后清零；首跑 AC-AMDM3 误用关注者当非关注者，窗内改正后才出证据。Score 2。"
   ]
  ],
  "self_drive": {
@@ -784,7 +800,6 @@
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 2,
-  "method": "machine-derived from src/os/state.json log and queue files"
+  "queue_explore_open": 2
  }
 }

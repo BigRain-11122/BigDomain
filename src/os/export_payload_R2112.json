@@ -1,0 +1,16 @@
+{
+ "window": "2026-10-19..2026-10-25",
+ "window_days": 7,
+ "proposal_open_marker": "状态 open",
+ "ceo_current": "R2112 卖家侧需求读面（api_listing_demand）落地：市场一直只有买家侧的关注面，卖家看不到「我这一件有多少人在看、关注之后有没有成交」。本轮补上——每一件挂牌都成行（零关注与已下架件也在），只计活关注（撤关注不计、再关注不叠加），转化按净额算（只有未退款的购买才算成交，退款把买家送回待转化），现价与标题走既有单缝，纯读零 token；同一窗把它接进结算报告的待办摘要（≥2 人关注且零成交 → 未转化需求告警），所以它不是又一个没人用的面。",
+ "ceo_latest": "src/sandbox/ledger/apimarket.py（api_listing_demand）+ src/sandbox/ledger/apimarket_report.py（unconverted_demand 家族）+ src/sandbox/ledger/test_apimarket_listingdemand.py（SUITE PASS 8/8，双跑逐位同一 sha16 0df8247b62369ec1）+ qa/apimarket-listingdemand-R2112.log + qa/reconcile-all-R2112.log（RUNNER PASS 317/317 suites + controls 7/7，757.1s）+ docs/sandbox-suite-matrix.md（317 suites / 2644 criteria，--check 逐字节同） + preview/apimarket-demand-R2112.json（种子演示世界加两条关注后，api_listing_demand 的卖家行与 attention 的 unconverted_demand 告警实录）",
+ "ceo_next": "48 小时内：公共活动流的逐挂牌过滤（api_market_feed 增 listing_id 参数，卖家/买家停在某一挂牌页面上就能看「这一件最近发生了什么」，不必再翻七张逐挂牌面并表）+ 商家号到位前的支付合规路径继续设计态——两项都不需要物理件。",
+ "out_row": [
+  "apimarket 卖家侧需求读面（api_listing_demand）",
+  "on",
+  "R2112：七键信封 + 十一键行，卖家每件挂牌都成行（含零关注/已下架）；只计活关注（撤关注不计数、再关注不叠加）；净转化（未退款购买才算成交，退款回待转化）；converted+pending==watcher_count 逐行守恒；现价/有效标题走既有单缝；卖家隔离+诚实空信封+前缀门先于任读；纯读零 token 与跨重启字节同一；同窗接线报告 attention 的 unconverted_demand 家族。SUITE 8/8 双跑、电池 317/317、矩阵 317/2644 逐字节同。AC-AMDM1..AC-AMDM8。"
+ ],
+ "result_row": [
+  "R2112：apimarket 卖家侧需求读面（api_listing_demand）。AC-AMDM1..AC-AMDM8 在 R2111 种下的 explore 队头行里先注册、后写码。七键信封/十一键行，卖家每件挂牌（含零关注与已下架）都成行，行序全序 (-watcher_count, listing_id)；活关注律（有 unwatch 行的 watch 不计，撤关注−1、再关注+1 不叠加）；净转化律（未退款购买才转化，退款回 pending，逐行 converted+pending==watcher_count，信封合计==行和）；卖家隔离 + 前缀合法无挂牌的诚实空信封 + 前缀门先于任读（九表指纹/ledger_tx/池余额 五次拒绝恒不变）；退役保留需求并带戳，现价走现价缝、标题走有效元数据缝；纯读三连调用指纹不变；三实例两次重启字节同一；同窗给报告 attention 加 unconverted_demand（≥2 关注且零成交 → warn）证明不是无消费者闲置面。SUITE PASS 8/8 双跑逐位同一 sha16 0df8247b62369ec1；接线 ledger-apimarket-listingdemand(8)；电池 RUNNER PASS 317/317 + controls 7/7 757.1s；矩阵 317/2644 --check 逐字节同；census DRIFT-CLEAN flags=0。诚实注：首轮证据用 PS 重定向写成 UTF-16 被 census 判 ps-utf16，改 LF/utf-8 写入器重生成后清零；首跑 AC-AMDM3 误用关注者当非关注者，窗内改正后才出证据。Score 2。"
+ ]
+}

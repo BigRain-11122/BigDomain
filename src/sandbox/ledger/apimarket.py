@@ -2296,6 +2296,93 @@ class APIMarketFace:
                 "alert_count": len(alerts),
                 "disclaimer": self.disclaimer, "alerts": alerts}
 
+    def api_listing_demand(self, dev_account):
+        """Seller-side demand read face (pre-registered
+        AC-AMDM1..AC-AMDM8 in the R2112 explore-queue claim row
+        BEFORE this code existed): the demand signal the seller
+        never had.
+
+        The watch surface is buyer-side only - api_watchlist takes a
+        buyer_id, and api_view / dev_profile / api_supply carry no
+        watch count - so a seller could not answer "how many
+        residents are watching this listing, and did watching turn
+        into a sale". That is the first-hand signal for pricing and
+        restocking decisions, and the gap every listing page shows
+        before its first purchase.
+
+        Every listing of the seller becomes a row, including a
+        listing with zero watchers and a retired one (retirement
+        does not erase demand). watcher_count counts LIVE watches
+        only: a watch row with no append-only unwatch row. The
+        conversion law is net, matching the scarcity seam - a watch
+        converts when that buyer holds a purchase of this listing
+        that has not been refunded - so a refund returns the buyer
+        to pending rather than leaving a permanent fake conversion.
+        derived fields: title through the one effective-metadata seam
+        and current_price through the one current-price seam.
+
+        The account shape gate is prefix-only (the truthful
+        R2077/R2078 finding) and runs before any read; a prefix-valid
+        account with no listings gets an honest empty envelope. Rows
+        are a total order on (-watcher_count, listing_id) so the
+        hottest shelf is always first and ties are stable. Pure read:
+        zero row mutations and zero token movement. The envelope
+        carries the resident non-advisory disclaimer."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, listing_key, title, description,"
+                " token_price FROM apimarket_listings"
+                " WHERE dev_account = ? ORDER BY listing_id",
+                (dev_account,)).fetchall()
+            rows = []
+            for r in listings:
+                listing_id = int(r[0])
+                demand = self._conn.execute(
+                    "SELECT COUNT(*),"
+                    " COALESCE(SUM(CASE WHEN EXISTS (SELECT 1"
+                    " FROM apimarket_purchases p"
+                    " WHERE p.listing_id = w.listing_id"
+                    " AND p.buyer_id = w.buyer_id"
+                    " AND NOT EXISTS (SELECT 1 FROM"
+                    " apimarket_refunds f WHERE f.purchase_id ="
+                    " p.purchase_id)) THEN 1 ELSE 0 END), 0),"
+                    " MIN(w.watched_utc), MAX(w.watched_utc)"
+                    " FROM apimarket_watchlist w"
+                    " WHERE w.listing_id = ?"
+                    " AND NOT EXISTS (SELECT 1 FROM"
+                    " apimarket_unwatchings u"
+                    " WHERE u.watch_id = w.watch_id)",
+                    (listing_id,)).fetchone()
+                watchers = int(demand[0])
+                converted = int(demand[1])
+                delisted, delisted_utc = self._cycle_state(listing_id)[1:]
+                title = self._metadata_state(listing_id, r[2], r[3])[0]
+                rows.append({
+                    "listing_id": listing_id,
+                    "listing_key": r[1],
+                    "title": title,
+                    "delisted": delisted,
+                    "delisted_utc": delisted_utc,
+                    "current_price": self._current_price(
+                        listing_id, r[4]),
+                    "watcher_count": watchers,
+                    "converted_count": converted,
+                    "pending_count": watchers - converted,
+                    "oldest_watch_utc": demand[2],
+                    "newest_watch_utc": demand[3]})
+            rows.sort(key=lambda x: (-x["watcher_count"],
+                                     x["listing_id"]))
+        return {"dev_account": dev_account,
+                "listing_count": len(rows),
+                "total_watchers": sum(x["watcher_count"] for x in rows),
+                "converted_count": sum(x["converted_count"]
+                                       for x in rows),
+                "pending_count": sum(x["pending_count"] for x in rows),
+                "disclaimer": self.disclaimer,
+                "rows": rows}
+
     def api_supply(self, listing_id):
         """Scarcity read face (AC-AMSP1): the declared supply,
         the units sold (derived from the immutable purchase rows),
