@@ -1,0 +1,9 @@
+PASS AC-AMWL1: envelope=True rows=2 order=[1, 2] prices=[15, 3] purchased=[True, False]
+PASS AC-AMWL2: carol rows=1 erin empty=True dana(dev) empty=True
+PASS AC-AMWL3: unwatch watch_id=True rows kept=3 rew id=4 rew2 id=5 history=[1, 4, 5] unwatch history=[1, 2] missing=E_AM_NOT_WATCHED repeat=E_AM_NOT_WATCHED
+PASS AC-AMWL4: watched-before-retire kept=True stamp match=True new watch refused=E_AM_DELISTED
+PASS AC-AMWL5: bad accounts=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] unknown=E_AM_UNKNOWN_LISTING retired-before-dup=E_AM_DELISTED dup=E_AM_WATCH_DUP bad ids=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] frozen=True
+PASS AC-AMWL6: repeat identical=True digests frozen=True ledger tx set constant=True
+PASS AC-AMWL7: instance1==2==3 byte-identical=True history counts=(3, 2) (3, 2) (3, 2)
+PASS AC-AMWL8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

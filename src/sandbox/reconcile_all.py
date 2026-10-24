@@ -2222,6 +2222,18 @@ SUITES = [
     # pre-registered in the R2083 explore-queue claim row).
     ("ledger-apimarket-metadata", os.path.join(
         "ledger", "test_apimarket_metadata.py"), 8),
+    # R2086 buyer-side watchlist seat: the pre-purchase intent face
+    # (watch_api / unwatch_api / api_watchlist) with two append-only
+    # tables, the pinned gate order (account, listing, retired,
+    # duplicate), retired-new refusal while watched-before-retire
+    # stays visible, unwatch-then-rewatch keeping both historical
+    # rows while the live set holds exactly one, the first unwatch
+    # stamp never rewritten, buyer isolation and honest empty
+    # envelopes, zero token movement with frozen digests, and
+    # cross-restart byte identity (AC-AMWL1..AC-AMWL8
+    # pre-registered in the R2086 explore-queue claim row).
+    ("ledger-apimarket-watchlist", os.path.join(
+        "ledger", "test_apimarket_watchlist.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

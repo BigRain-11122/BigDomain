@@ -76,6 +76,8 @@ E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
 E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
 E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
 E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
+E_AM_WATCH_DUP = "E_AM_WATCH_DUP"          # AC-AMWL5
+E_AM_NOT_WATCHED = "E_AM_NOT_WATCHED"      # AC-AMWL3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -142,6 +144,20 @@ CREATE TABLE IF NOT EXISTS apimarket_listing_revisions (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     revised_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_watchlist (
+    watch_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    buyer_id TEXT NOT NULL,
+    listing_id INTEGER NOT NULL,
+    watched_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_unwatchings (
+    unwatch_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    watch_id INTEGER NOT NULL,
+    buyer_id TEXT NOT NULL,
+    listing_id INTEGER NOT NULL,
+    unwatched_utc TEXT NOT NULL,
+    UNIQUE (watch_id)
 );
 """
 
@@ -953,6 +969,160 @@ class APIMarketFace:
         return {"buyer_id": buyer_id, "purchase_count": len(out),
                 "total_spent": total, "disclaimer": self.disclaimer,
                 "purchases": out}
+
+    def _active_watch(self, buyer_id, listing_id):
+        """The buyer's live watch row for one listing, or None.
+        Active = a watch row with no unwatch row pointing at its
+        watch_id (append-only history: an unwatched row is kept,
+        never deleted, and a later re-watch writes a NEW row).
+        Caller holds the lock."""
+        return self._conn.execute(
+            "SELECT w.watch_id, w.watched_utc FROM apimarket_watchlist w"
+            " WHERE w.buyer_id = ? AND w.listing_id = ? AND NOT EXISTS"
+            " (SELECT 1 FROM apimarket_unwatchings u WHERE u.watch_id ="
+            " w.watch_id) ORDER BY w.watch_id DESC LIMIT 1",
+            (buyer_id, listing_id)).fetchone()
+
+    def watch_api(self, buyer_id, listing_id):
+        """Buyer-side watch door (pre-registered AC-AMWL1..AMWL8 in
+        the R2086 explore-queue row BEFORE this code existed).
+
+        Every read face on this market answers one narrow question,
+        but a resident weighing a purchase had nowhere to keep a
+        listing for later - no bookmark, no price-watch, no short
+        list. This door closes that pre-purchase intent gap: one
+        append-only apimarket_watchlist row per watch call.
+
+        Gate order pinned by AC-AMWL5: account shape first, then
+        the listing shape/existence gate, then the retired state,
+        then the duplicate state. A retired listing cannot be newly
+        watched (E_AM_DELISTED) - but a listing watched BEFORE it
+        was retired stays in the watchlist with its stamp, because
+        retirement never rewrites history (AC-AMWL4). A repeat
+        watch of a live listing answers E_AM_WATCH_DUP with zero
+        new rows, so the first watched_utc is never rewritten.
+        Watching moves zero tokens.
+
+        There is deliberately no table-level UNIQUE(buyer, listing):
+        a re-watch after an unwatch must be able to keep both
+        historical rows, so the live-row uniqueness is enforced by
+        the gate under the write lock instead (single writer)."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if self._active_watch(buyer_id, listing_id) is not None:
+                raise ApiMarketError(E_AM_WATCH_DUP,
+                                     "%s/%s" % (buyer_id, listing_id))
+            key, title = self._conn.execute(
+                "SELECT listing_key, title FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_watchlist (buyer_id,"
+                    " listing_id, watched_utc) VALUES (?,?,?)",
+                    (buyer_id, listing_id, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"watch_id": cur.lastrowid, "buyer_id": buyer_id,
+                "listing_id": int(listing_id), "listing_key": key,
+                "title": title,
+                "dev_account": listing[1], "watched_utc": stamp,
+                "already": False, "disclaimer": self.disclaimer}
+
+    def unwatch_api(self, buyer_id, listing_id):
+        """Buyer-side unwatch door (AC-AMWL3): one append-only
+        apimarket_unwatchings row pointing at the live watch row.
+        The watch row itself is never deleted or updated, so the
+        watch history survives; the live set is derived by
+        excluding watched rows that have an unwatch row. Gate order
+        is pinned: account shape, then listing shape/existence,
+        then the not-watched state (E_AM_NOT_WATCHED with zero new
+        rows). A retired listing may still be unwatched - removal
+        from a personal list is always allowed. Moves zero
+        tokens."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            active = self._active_watch(buyer_id, listing_id)
+            if active is None:
+                raise ApiMarketError(E_AM_NOT_WATCHED,
+                                     "%s/%s" % (buyer_id, listing_id))
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_unwatchings (watch_id,"
+                    " buyer_id, listing_id, unwatched_utc)"
+                    " VALUES (?,?,?,?)",
+                    (int(active[0]), buyer_id, int(listing_id), stamp))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiMarketError(E_AM_NOT_WATCHED,
+                                     "%s/%s" % (buyer_id, listing_id))
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"unwatch_id": cur.lastrowid,
+                "watch_id": int(active[0]), "buyer_id": buyer_id,
+                "listing_id": int(listing_id), "listing_key": key,
+                "watched_utc": active[1], "unwatched_utc": stamp,
+                "already": False, "disclaimer": self.disclaimer}
+
+    def api_watchlist(self, buyer_id):
+        """Buyer-side watchlist read face (AC-AMWL1): the live
+        watch rows of one buyer, ordered by watch_id, each joined to
+        its listing metadata with the current asking price, the
+        retirement stamp and this buyer's own purchase flag.
+        Unwatched history rows are excluded from the live view but
+        stay on disk. Envelope keys: buyer_id, watch_count,
+        disclaimer, watches; watch_count is derived from the rows
+        (F3: no hardcoded numbers). The account shape gate runs
+        before any read; a prefix-valid account with no watches
+        gets an honest empty envelope. Pure read: zero row
+        mutations and zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.watch_id, w.listing_id, l.listing_key,"
+                " l.title, l.dev_account, l.token_price, w.watched_utc"
+                " FROM apimarket_watchlist w JOIN apimarket_listings l"
+                " ON l.listing_id = w.listing_id WHERE w.buyer_id = ?"
+                " AND NOT EXISTS (SELECT 1 FROM apimarket_unwatchings u"
+                " WHERE u.watch_id = w.watch_id)"
+                " ORDER BY w.watch_id", (buyer_id,)).fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[1])
+                owned = self._conn.execute(
+                    "SELECT 1 FROM apimarket_purchases WHERE buyer_id = ?"
+                    " AND listing_id = ?",
+                    (buyer_id, listing_id)).fetchone()
+                stamp = self._delisted_utc(listing_id)
+                out.append({"watch_id": int(r[0]),
+                            "listing_id": listing_id,
+                            "listing_key": r[2], "title": r[3],
+                            "dev_account": r[4],
+                            "current_price": self._current_price(
+                                listing_id, int(r[5])),
+                            "delisted": stamp is not None,
+                            "delisted_utc": stamp,
+                            "purchased": owned is not None,
+                            "watched_utc": r[6]})
+        return {"buyer_id": buyer_id, "watch_count": len(out),
+                "disclaimer": self.disclaimer, "watches": out}
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
                    max_price=None, include_delisted=False,
