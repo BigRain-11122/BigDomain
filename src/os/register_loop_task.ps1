@@ -31,5 +31,23 @@ if ($add -eq 0) { $add = 10 }   # already sitting on :x4 -> take the next one
 $start = $start.AddMinutes($add)
 $t = New-ScheduledTaskTrigger -Once -At $start -RepetitionInterval (New-TimeSpan -Minutes 10) -RepetitionDuration (New-TimeSpan -Days 3650)
 $s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 35)
-Register-ScheduledTask -TaskName 'BigDomain-OSLoop' -Action $a -Trigger $t -Settings $s -Force | Out-Null
+# Principal: S4U is the group-wide law for every lane task on this machine
+# (2026-09-29 ruling: an InteractiveToken lane ran headless child processes
+# whose consoles flashed on the active desktop; 2026-10-15 regression on the
+# Bigmoney loop showed the default comes back whenever a registrar omits the
+# principal). Registered without -Principal Windows defaults to
+# InteractiveToken, so the principal is always passed explicitly here.
+$who = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$p = New-ScheduledTaskPrincipal -UserId $who -LogonType S4U -RunLevel Limited
+try {
+    Register-ScheduledTask -TaskName 'BigDomain-OSLoop' -Action $a -Trigger $t -Settings $s -Principal $p -Force -ErrorAction Stop | Out-Null
+} catch {
+    # Registration of an S4U principal needs an elevated shell; report the
+    # failure instead of claiming success (a registrar that prints
+    # "registered" after an access-denied leaves the old definition in place
+    # and hides the drift).
+    Write-Output ("FAILED: " + $_.Exception.Message)
+    Write-Output "the existing task definition was left untouched; re-run from an elevated shell to apply S4U"
+    exit 1
+}
 Write-Output "registered BigDomain-OSLoop (project=$Project, lane :x4), first fire $start"
