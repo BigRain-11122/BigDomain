@@ -15,7 +15,10 @@ Criteria:
   AC-AMAF1 Same source + no cache: the activity block equals a direct
     api_market_feed(limit=FEED_LIMIT) call on the same database, and a
     publication made after a collect shows up on the very next one.
-  AC-AMAF2 Additive contract: REPORT_SCHEMA == 3, the JSON envelope
+  AC-AMAF2 Additive contract: REPORT_SCHEMA >= 3 (the R2109 dossier
+    block bumped it 3 -> 4, so the assertion tracks the module constant
+    instead of a frozen number - honest correction noted in the R2109
+    claim row), the JSON envelope
     still has exactly schema_version/report/attention, every earlier
     report key keeps its value and the buyer blocks keep their keys.
   AC-AMAF3 HTML surface: the Public activity section states shown of
@@ -167,7 +170,7 @@ def check_same_source(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    keys_ok = sorted(report) == sorted(OLD_KEYS + ["activity"])
+    keys_ok = sorted(report) == sorted(OLD_KEYS + ["activity", "dossiers"])
     buyer_keys = sorted({tuple(sorted(block))
                          for block in report["buyers"].values()})
     led, mtr, dk, am = open_stack(db)
@@ -191,8 +194,8 @@ def check_contract(tmp, db):
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
     env_ok = sorted(doc) == ["attention", "report", "schema_version"]
     record("AC-AMAF2",
-           R.REPORT_SCHEMA == 3 and keys_ok and old_ok and buyer_ok
-           and env_ok and doc.get("schema_version") == 3
+           R.REPORT_SCHEMA >= 3 and keys_ok and old_ok and buyer_ok
+           and env_ok and doc.get("schema_version") == R.REPORT_SCHEMA
            and doc["report"]["activity"] == report["activity"],
            "schema=%d top=%s old=%s buyer=%s env=%s buyer_keys=%s"
            % (R.REPORT_SCHEMA, keys_ok, old_ok, buyer_ok, env_ok,

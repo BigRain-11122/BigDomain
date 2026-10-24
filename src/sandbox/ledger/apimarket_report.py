@@ -66,7 +66,12 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # v3 (R2108) is the same additive shape: the envelope keys are still
 # exactly schema_version/report/attention and the report gains one key
 # (activity) while every earlier key keeps its value.
-REPORT_SCHEMA = 3
+REPORT_SCHEMA = 4
+
+DOSSIER_KEYS = ("view", "lifecycle", "price_history",
+                "metadata_history", "supply", "supply_history",
+                "ratings", "rating_replies")
+DOSSIER_EMPTY = "no listings in this market"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -165,6 +170,35 @@ def seed_demo(am, led, dk):
     return {"listings": [d1, d2, d3], "refunded": [p1, p4]}
 
 
+def collect_dossiers(am):
+    """Read every per-listing history face once for every listing the
+    market holds, live or retired.
+
+    The report so far was market-wide, seller-wide and buyer-wide; the
+    per-listing history faces (price, metadata, supply, lifecycle,
+    ratings, replies) had no consumer at all, so an operator asking why
+    one listing is not selling had to open six faces by hand. The
+    listing set is derived from the market itself through api_search
+    with include_delisted=True, so a retired listing keeps its dossier
+    (retirement erases no history). Each call re-reads the faces -
+    nothing is cached."""
+    rows = am.api_search(include_delisted=True)["listings"]
+    out = {}
+    for row in rows:
+        listing_id = int(row["listing_id"])
+        out[str(listing_id)] = {
+            "view": am.api_view(listing_id),
+            "lifecycle": am.api_listing_lifecycle(listing_id),
+            "price_history": am.api_price_history(listing_id),
+            "metadata_history": am.api_metadata_history(listing_id),
+            "supply": am.api_supply(listing_id),
+            "supply_history": am.api_supply_history(listing_id),
+            "ratings": am.api_ratings(listing_id),
+            "rating_replies": am.api_rating_replies(listing_id),
+        }
+    return out
+
+
 def collect(am):
     """Read every settlement face once and return the report payload.
 
@@ -201,6 +235,7 @@ def collect(am):
             "watch_alerts": am.api_watch_alerts(buyer),
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
+    report["dossiers"] = collect_dossiers(am)
     report["attention"] = collect_attention(am, report)
     return report
 
@@ -391,6 +426,7 @@ header .sub{margin-top:6px;font-size:13px;opacity:.9}
 .marker{margin-top:12px;font-size:12px;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:8px 10px}
 h2{font-size:17px;margin:30px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
 h3{font-size:14px;margin:18px 0 8px;color:var(--muted)}
+h4{font-size:12px;margin:12px 0 6px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;margin-bottom:14px}
 th,td{border:1px solid var(--line);padding:6px 8px;text-align:right}
 th{background:#eef1f8;font-weight:600;text-align:center}
@@ -399,6 +435,54 @@ table.kv td{text-align:left}
 .empty{color:var(--muted);font-size:13px;padding:6px 2px}
 footer{margin-top:36px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 """
+
+
+def dossier_block(dossiers):
+    """One dossier per listing: the full history of a single shelf.
+
+    Each block opens with the effective view row, then the four
+    append-only timelines (price, metadata, supply, lifecycle) and the
+    two trust faces (ratings, replies). Every dynamic string is escaped
+    and every sub-table degrades to an honest empty state, so a listing
+    with no revisions renders instead of raising."""
+    if not dossiers:
+        return "<p class=\"empty\">%s</p>" % esc(DOSSIER_EMPTY)
+    out = []
+    for key in sorted(dossiers, key=lambda k: int(k)):
+        block = dossiers[key] or {}
+        view = block.get("view") or {}
+        title = view.get("title") or view.get("listing_key") or key
+        state = "retired" if view.get("delisted") else "live"
+        out.append("<h3>#%s %s (%s)</h3>"
+                   % (esc(view.get("listing_id", key)), esc(title),
+                      esc(state)))
+        out.append(scalar_rows(view))
+        price = block.get("price_history") or {}
+        out.append("<h4>price history (%s revision(s))</h4>"
+                   % esc(price.get("revision_count", 0)))
+        out.append(row_table(price.get("revisions"), "no price revisions"))
+        meta = block.get("metadata_history") or {}
+        out.append("<h4>metadata history (%s revision(s))</h4>"
+                   % esc(meta.get("revision_count", 0)))
+        out.append(row_table(meta.get("revisions"),
+                             "no metadata revisions"))
+        supply = block.get("supply_history") or {}
+        out.append("<h4>supply history (%s restock(s))</h4>"
+                   % esc(supply.get("restock_count", 0)))
+        out.append(row_table(supply.get("history"), "no restocks"))
+        life = block.get("lifecycle") or {}
+        out.append("<h4>lifecycle (%s event(s))</h4>"
+                   % esc(len(life.get("history") or [])))
+        out.append(row_table(life.get("history"), "no lifecycle events"))
+        ratings = block.get("ratings") or {}
+        out.append("<h4>ratings (%s)</h4>"
+                   % esc(ratings.get("rating_count", 0)))
+        out.append(row_table(ratings.get("ratings"), "no ratings"))
+        replies = block.get("rating_replies") or {}
+        out.append("<h4>replies (%s)</h4>"
+                   % esc(replies.get("reply_count", 0)))
+        out.append(row_table(replies.get("rows"), "no replies"))
+    return "\n".join(out)
 
 
 def render_html(report):
@@ -434,6 +518,12 @@ def render_html(report):
     parts.append("<h2>Listings</h2>")
     parts.append(row_table(report["board"].get("listings"),
                            "no live listings"))
+
+    parts.append("<h2>Listing dossiers</h2>")
+    # same degrade rule as the attention/activity blocks: an older
+    # report dict carries no dossier key, so the page renders the
+    # honest empty state instead of raising.
+    parts.append(dossier_block(report.get("dossiers") or {}))
 
     parts.append("<h2>Sellers</h2>")
     for dev in sorted(report["sellers"]):

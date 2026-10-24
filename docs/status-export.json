@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T02:15:00+08:00",
+ "export_ts": "2026-10-25T03:05:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2108：结算报告多了「公共活动」一段——R2107 造的活动流此前没有任何产品消费者（只有自己的套件），本窗把它接进唯一消费者 apimarket_report：每次采集现读流尾最新 40 条，页面在 Attention 之后新增 Public activity 表（时间/事件/挂牌/标题/细节/数值六列，数值格把金额、份数、星级、价格折成一格），机读契约 v2→v3 加法升级（信封仍恰三键、旧键一字不动），旧报告字典缺键时诚实空态。",
-  "latest_artifact": "preview/apimarket-report-activity.html（14444B·sha256 26d2448d6d14b89d·可直接双击打开：市场总账+月度时间线+待办+公共活动流+卖家/买家全表）+ preview/apimarket-report-activity.json（21777B·schema 3）+ src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_activity.py + qa/apimarket-activity-R2108.log（SUITE PASS 8/8·双跑同一 sha16 0d6f12bb569e107b）+ qa/reconcile-all-R2108.log（RUNNER PASS 313/313 suites + controls 7/7·297.1s）",
-  "next_milestone": "48 小时内：给活动流做「按类聚焦」与「时间窗」两个消费面——结算页现在只给全市场最近 40 条，运营者想只看成交/退款/评价三类或只看某一天时仍要自己筛（feed 已支持 kinds 与 since/until，缺的是报告侧的参数面与第二段表格）；其后是把活动流接进 HTML 的跳转锚（点卖家直接跳到月表），让页面从「账本」变成「可追的账本」。两项均不依赖 CEO 物理件。"
+  "current": "R2109：结算报告多了「挂牌全史档案」——七张逐挂牌历史面（单品视图/生命周期/改价史/改文案史/补货史/评价/卖家回应）此前除自家套件外没有任何产品消费者（与 R2101/R2106/R2108 同一种空转形态），报告只按市场/卖家/买家三段陈述，运营者要回答「这一件为什么不卖」还得手工逐个挂牌翻六张面。本窗把这个缺口补上：每次采集对市场里的每一件挂牌（含已下架件，挂牌集由 api_search(include_delisted=True) 从市场自身派生，不写死名册）现读七面，页面在 Listings 之后新增 Listing dossiers 段——每件一个档案块，开头是生效视图，下面依次是改价史/改文案史/补货史/生命周期/评价/回应六张子表；机读契约 v3→v4 加法升级（信封仍恰三键、旧键一字不动），旧报告字典缺键时诚实空态。",
+  "latest_artifact": "preview/apimarket-report-dossiers.html（19841B·sha256 f44cbcce47be1c5b·可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+每件挂牌全史档案+卖家/买家全表）+ preview/apimarket-report-dossiers.json（32688B·schema 4）+ src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_dossier.py + qa/apimarket-dossier-R2109.log（SUITE PASS 8/8·双跑判据行同一 sha16 915219ceea4998b2）+ qa/reconcile-all-R2109-3.log（RUNNER PASS 314/314 suites + controls 7/7）",
+  "next_milestone": "48 小时内：把档案段变成「可核对的对账单」——现在每块给的是一条时间线，缺的是跨块汇总（同一卖家多件挂牌的改价次数、补货总量、生命周期开闭次数能一眼对齐）与档案段的机读侧车（--dossier-out，按 listing_id 给结构化块，供自动化比对两次采集之间的变化）；其后是把公共活动流与档案块互相跳锚（活动行点挂牌直接落到该件档案），让页面从「账本」变成「可追的账本」。两项均不依赖 CEO 物理件。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告挂牌全史档案段（dossiers 接线 + REPORT_SCHEMA 3→4）",
+   "on",
+   "R2109：七张逐挂牌历史面（api_view / api_listing_lifecycle / api_price_history / api_metadata_history / api_supply_history / api_ratings / api_rating_replies）此前零产品调用点（只有各自套件与簿记行），本窗把它们接进唯一消费者 apimarket_report.collect_dossiers()——挂牌集由 api_search(include_delisted=True) 从市场自身派生（含退役件，零硬编码名册），每块恰八键且逐面 listing_id 与键一致；HTML 在 Listings 之后新增 Listing dossiers 段（每件一个 h3 块：生效视图 kv 表 + 改价史/改文案史/补货史/生命周期/评价/回应六张子表，全动态串转义、空子表诚实空态、无挂牌市场诚实空态）；机读契约 v3→v4 加法升级（信封仍恰 schema_version/report/attention·旧键值与直调面逐键相等·buyer 块键集不变·旧 report 缺键降级空态）。判据 AC-AMLD1..AC-AMLD8 预注册于代码前（八锚 git grep -F 零占用 rc=1）：派生同源·加法契约·同源等价+零缓存（改价后下一轮档案同步变化）·退役留存·HTML 面·转义与标识·纯读（13 表摘要+ledger_tx 恒定）·确定性+降级+回归。套件 8/8 双跑判据行同一 sha16 915219ceea4998b2；接线 ledger-apimarket-reportdossier(8)；census DRIFT-CLEAN files=1765；呈看件 preview/apimarket-report-dossiers.html sha256 f44cbcce47be1c5b。诚实注=R2108 套件曾把 REPORT_SCHEMA 写死为 3，本窗加法升级撞红后改为动态对照模块常量（v3 键集仍写死），双处留痕；首份证据件因 shell 捕获 CRLF 被 census 判 pwsh-capture，python 单写者归一为 utf-8 LF 后复绿（首个 FAIL 电池件 qa/reconcile-all-R2109.log 保全）。"
+  ],
   [
    "apimarket 结算报告公共活动流段（activity 接线 + REPORT_SCHEMA 2→3）",
    "on",
@@ -337,6 +342,10 @@
   ]
  ],
  "results": [
+  [
+   "R2109",
+   "R2109: the report finally consumes the per-listing history faces. The seven of them (view, lifecycle, price history, metadata history, supply history, ratings, replies) had zero product call sites - only their own suites and bookkeeping lines - the no-consumer idle form R2101, R2106 and R2108 each closed in turn. collect_dossiers() reads all seven once per listing, and the listing set comes from the market itself through api_search(include_delisted=True), so a retired listing keeps its dossier and nothing is hardcoded. The page gains a Listing dossiers section between Listings and Sellers: one block per listing, the effective view plus six sub-tables, all escaped, every empty sub-table honest. REPORT_SCHEMA moves 3 -> 4 additively. AC-AMLD1..AC-AMLD8 pre-registered before the code (eight anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 915219ceea4998b2; wired ledger-apimarket-reportdossier (8); battery RUNNER PASS 314/314 suites plus controls 7/7 in 296.4s; matrix 314 suites / 2620 criteria --check byte-identical; census DRIFT-CLEAN files=1767; preview preview/apimarket-report-dossiers.html (19841B, sha256 f44cbcce47be1c5b) plus .json (32688B, schema 4). Honest notes: the R2108 suite pinned the schema as a literal 3 and now follows the module constant instead (same repair pattern R2108 used on R2106); the first battery run was 313/314 with reconcile-daily-census cd7 as the only red because this window's evidence logs arrived in the pwsh-capture dialect - normalized by a python single writer to utf-8 LF, census DRIFT-CLEAN, and the FAIL log preserved; the shell tool killed the first battery re-run at its five-minute no-output limit, so that truncated partial log was discarded (not a test failure) and the detached re-run landed as -3."
+  ],
   [
    "R2108",
    "R2108: the report finally consumes the public activity feed. The R2107 api_market_feed had zero product call sites (only its own suite and bookkeeping lines) - the no-consumer idle form - so instead of a sixth face this window wired it into the one consumer: collect() reads api_market_feed(limit=FEED_LIMIT=40) fresh on every call, the page renders a Public activity section with six pinned columns and a value cell folding amount/units/stars/price, and REPORT_SCHEMA moves 2 -> 3 additively (envelope still exactly schema_version/report/attention, every earlier key keeps its value, buyer blocks unchanged, a legacy report dict degrades to the honest empty state). AC-AMAF1..AC-AMAF8 pre-registered before the code (six anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 0d6f12bb569e107b; wired ledger-apimarket-activity (8); battery RUNNER PASS 313/313 suites plus controls 7/7 in 297.1s; matrix 313 suites / 2612 criteria --check byte-identical; census DRIFT-CLEAN files=1762; preview preview/apimarket-report-activity.html (14444B, sha256 26d2448d6d14b89d) plus .json (21777B, schema 3). Honest note: the R2106 suite had REPORT_SCHEMA == 2 as a literal, so the additive bump broke it; that assertion now follows the module constant while its v2 key sets stay pinned as literals."
@@ -749,10 +758,10 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 32,
+  "log_lines_in_window": 34,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 32,
+  "substantive_non_idle_mention_lines": 34,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

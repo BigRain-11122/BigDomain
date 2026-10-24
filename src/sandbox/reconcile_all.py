@@ -2373,6 +2373,13 @@ SUITES = [
     # contract moves 2 -> 3 additively.
     ("ledger-apimarket-activity", os.path.join(
         "ledger", "test_apimarket_report_activity.py"), 8),
+    # R2109 listing dossiers on the report generator: the seven
+    # per-listing history faces (view / lifecycle / price / metadata /
+    # supply / ratings / replies) now have a consumer - every collect
+    # reads them for every listing the market holds, live or retired,
+    # and the JSON contract moves 3 -> 4 additively.
+    ("ledger-apimarket-reportdossier", os.path.join(
+        "ledger", "test_apimarket_report_dossier.py"), 8),
     # R2105 buyer-side rating-debt queue: the mirror of the R2096
     # seller inbox - only the purchases still awaiting a rating,
     # oldest debt first, with the refund precedence pinned.
