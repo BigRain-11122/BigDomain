@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-24T22:58:52+08:00",
+ "export_ts": "2026-10-24T23:23:21+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2101: 给 API 市场的读面接上第一个真消费者——一条命令把市场总账、月度时间轴、上架清单、各家卖方的月度收入与流水、各买方的花费档案与月表，渲染成一份可离线双击打开的 HTML 账本。",
-  "latest_artifact": "preview/apimarket-report.html (11678 bytes, sha256 7e72fc73229e5418) + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report.py + qa/apimarket-report-R2101.log (SUITE PASS 9/9, double-run byte-identical sha16 51ccbb0d28367251) + qa/reconcile-all-R2101.log (RUNNER PASS 306/306 suites, 2555 criteria, controls 7/7, 293.7s)",
-  "next_milestone": "下一轮：把该报告接进 preview 预览页（一行入口链接）并把月表接到已在跑的导出面；窗 ≤24h，同窗闭合 306 套回归。"
+  "current": "R2102: 结算报告从「账本」升级为「待办台」——同一份离线 HTML 顶部先列出需要动作的三类发现（卖家欠评价回应 / 售罄货架 / 负净结算月），并另出一份机器可读 JSON 供自动化消费；全部从既有读面派生，纯读零 token。",
+  "latest_artifact": "preview/apimarket-report-attention.html + preview/apimarket-attention.json (5 warn findings) + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_attention.py + qa/apimarket-attention-R2102.log (SUITE PASS 9/9, double-run byte-identical sha16 8ef3f643ea01d2a2) + qa/reconcile-all-R2102.log (RUNNER PASS 307/307 suites, 2564 criteria, controls 7/7, 232.4s)",
+  "next_milestone": "下一步（≤48h）：给同一份报告加一节「本月结算摘要」把市场月表与卖家/买家月表对照成一句话结论，并把 Attention JSON 接进每日对账常设行的消费面。"
  },
  "depts": [
   {

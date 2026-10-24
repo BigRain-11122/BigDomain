@@ -1,0 +1,43 @@
+{
+ "finding_count": 5,
+ "findings": [
+  {
+   "detail": "buyer net -10 in 2026-10",
+   "kind": "negative_net",
+   "ref": "2026-10",
+   "severity": "warn",
+   "subject": "usr:bob"
+  },
+  {
+   "detail": "seller net -10 in 2026-10",
+   "kind": "negative_net",
+   "ref": "2026-10",
+   "severity": "warn",
+   "subject": "usr:dana"
+  },
+  {
+   "detail": "buyer net -5 in 2026-10",
+   "kind": "negative_net",
+   "ref": "2026-10",
+   "severity": "warn",
+   "subject": "usr:erin"
+  },
+  {
+   "detail": "seller net -5 in 2026-10",
+   "kind": "negative_net",
+   "ref": "2026-10",
+   "severity": "warn",
+   "subject": "usr:frank"
+  },
+  {
+   "detail": "2 unanswered rating(s); oldest 2026-09-22T09:00:00Z",
+   "kind": "rating_debt",
+   "ref": "2026-09-22T09:00:00Z",
+   "severity": "warn",
+   "subject": "usr:dana"
+  }
+ ],
+ "severity_counts": {
+  "warn": 5
+ }
+}

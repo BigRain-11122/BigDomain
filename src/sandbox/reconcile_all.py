@@ -2339,6 +2339,13 @@ SUITES = [
     # pure read, no external reference).
     ("ledger-apimarket-report", os.path.join(
         "ledger", "test_apimarket_report.py"), 9),
+    # R2102 attention digest on the same report generator: the
+    # statement-shaped R2101 page now opens with an ordered operator
+    # to-do list derived from the faces (seller inbox debt, sold-out
+    # shelves, negative settlement months) plus a machine-readable
+    # ASCII JSON sidecar, both pure read.
+    ("ledger-apimarket-attention", os.path.join(
+        "ledger", "test_apimarket_report_attention.py"), 9),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

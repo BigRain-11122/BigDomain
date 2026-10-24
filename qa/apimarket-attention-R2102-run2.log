@@ -1,0 +1,10 @@
+PASS AC-AMAT1-empty empty market => findings=0 counts={} empty-text=True
+PASS AC-AMAT1-derived fixture world => 4 findings, kinds=['negative_net', 'rating_debt', 'sold_out']
+PASS AC-AMAT2 sold_out=sold 1/1 supply=True; rating_debt=unanswered 1 oldest 2026-09-12T09:00:00Z; negative_net=[('usr:bob', '2026-10', -10), ('usr:dana', '2026-10', -10)]
+PASS AC-AMAT3 sorted total order, high=1/warn=3, replay identical
+PASS AC-AMAT4 reply clears debt (3 left), restock clears sold-out (2 left)
+PASS AC-AMAT5 Attention precedes Sellers=True esc=True raw-tag-absent=True
+PASS AC-AMAT6 rc=0/0 matches-in-memory=True ascii=True lf=True identical=True
+PASS AC-AMAT7 digest stable=True tx 11==11 pools stable=True
+PASS AC-AMAT8 reconcile_all registers ledger-apimarket-attention=True
+SUITE PASS 9/9

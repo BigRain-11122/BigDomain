@@ -178,7 +178,67 @@ def collect(am):
             "profile": am.api_buyer_profile(buyer),
             "months": am.api_buyer_months(buyer),
         }
+    report["attention"] = collect_attention(am, report)
     return report
+
+
+SEVERITY = {"high": 0, "warn": 1, "info": 2}
+
+
+def collect_attention(am, report):
+    """Derive an ordered operator to-do list from the read faces.
+
+    R2101 turned the settlement faces into a statement; a statement
+    still leaves the reader to spot what needs action. Every signal
+    below already exists on a face (seller inbox debt, shelf state,
+    negative settlement months) but no face aggregates them, so the
+    report derives them here - never from a hardcoded roster, and
+    never cached: each call re-reads the faces."""
+    findings = []
+
+    def add(kind, severity, subject, detail, ref):
+        findings.append({"kind": kind, "severity": severity,
+                         "subject": subject, "detail": detail,
+                         "ref": ref})
+
+    for dev in sorted(report["sellers"]):
+        inbox = am.api_seller_inbox(dev)
+        if inbox["unanswered_count"] > 0:
+            add("rating_debt", "warn", dev,
+                "%d unanswered rating(s); oldest %s"
+                % (inbox["unanswered_count"],
+                   inbox["oldest_unanswered_utc"]),
+                inbox["oldest_unanswered_utc"] or "")
+        for row in report["sellers"][dev]["revenue_months"]["months"]:
+            if row["net"] < 0:
+                add("negative_net", "warn", dev,
+                    "seller net %d in %s" % (row["net"], row["month"]),
+                    row["month"])
+    for listing in report["board"]["listings"]:
+        supply = am.api_supply(listing["listing_id"])
+        if supply["sold_out"]:
+            add("sold_out", "high",
+                "listing:%d" % supply["listing_id"],
+                "%s sold %d of %d units"
+                % (listing.get("title") or supply["listing_key"],
+                   supply["sold"], supply["supply"]),
+                supply["listing_key"])
+    for buyer in sorted(report["buyers"]):
+        for row in report["buyers"][buyer]["months"]["months"]:
+            if row["net"] < 0:
+                add("negative_net", "warn", buyer,
+                    "buyer net %d in %s" % (row["net"], row["month"]),
+                    row["month"])
+
+    findings.sort(key=lambda f: (SEVERITY[f["severity"]], f["kind"],
+                                 f["subject"], f["detail"]))
+    counts = {}
+    for item in findings:
+        counts[item["severity"]] = counts.get(item["severity"], 0) + 1
+    return {"finding_count": len(findings),
+            "severity_counts": dict((k, counts[k])
+                                    for k in sorted(counts)),
+            "findings": findings}
 
 
 def esc(value):
@@ -217,6 +277,32 @@ def row_table(rows, empty_text="no rows"):
 
 def month_table(envelope):
     return row_table(envelope.get("months"), "no rows")
+
+
+ATTENTION_EMPTY = ("no findings - every seller inbox is clear,"
+                   " every shelf is in stock, no negative settlement"
+                   " month")
+
+
+def attention_block(attention):
+    findings = attention.get("findings") or []
+    if not findings:
+        return "<p class=\"empty\">%s</p>" % esc(ATTENTION_EMPTY)
+    counts = attention.get("severity_counts") or {}
+    summary = ", ".join("%s=%s" % (esc(k), esc(counts[k]))
+                        for k in sorted(counts))
+    out = ["<p>%s finding(s): %s</p>"
+           % (esc(attention.get("finding_count")), summary)]
+    out.append("<table>")
+    out.append("<tr><th>severity</th><th>kind</th><th>subject</th>"
+               "<th>detail</th><th>ref</th></tr>")
+    for item in findings:
+        out.append("<tr>%s</tr>"
+                   % "".join("<td>%s</td>" % esc(item.get(key))
+                             for key in ("severity", "kind", "subject",
+                                         "detail", "ref")))
+    out.append("</table>")
+    return "\n".join(out)
 
 
 STYLE = """
@@ -259,6 +345,12 @@ def render_html(report):
     parts.append("<h2>Market month timeline</h2>")
     parts.append(month_table(report["market_months"]))
 
+    parts.append("<h2>Attention</h2>")
+    # backward-compatible: a report dict built by an older caller (the
+    # R2101 suite's synthetic escape fixture) carries no attention
+    # block, so the page degrades to the honest empty state.
+    parts.append(attention_block(report.get("attention") or {}))
+
     parts.append("<h2>Listings</h2>")
     parts.append(row_table(report["board"].get("listings"),
                            "no live listings"))
@@ -298,7 +390,21 @@ def build_parser():
                         help="path of the HTML report to write")
     parser.add_argument("--seed", action="store_true",
                         help="seed the deterministic demo market first")
+    parser.add_argument("--attention-out", default=None,
+                        help="optional path for the attention findings"
+                             " as machine-readable JSON (ASCII escaped)")
     return parser
+
+
+def write_attention_json(path, attention):
+    payload = json.dumps(attention, sort_keys=True, indent=1,
+                         ensure_ascii=True) + "\n"
+    out_dir = os.path.dirname(os.path.abspath(path))
+    if out_dir and not os.path.isdir(out_dir):
+        os.makedirs(out_dir)
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(payload)
+    return len(payload)
 
 
 def main(argv=None):
@@ -318,6 +424,15 @@ def main(argv=None):
         digest = hashlib.sha256(page.encode("utf-8")).hexdigest()
         print("report written: %s (%d bytes, sha256 %s)"
               % (args.out, len(page.encode("utf-8")), digest[:16]))
+        attention = report["attention"]
+        print("attention findings: %d (severity %s)"
+              % (attention["finding_count"],
+                 json.dumps(attention["severity_counts"],
+                            sort_keys=True)))
+        if args.attention_out:
+            size = write_attention_json(args.attention_out, attention)
+            print("attention json written: %s (%d bytes)"
+                  % (args.attention_out, size))
         return 0
     finally:
         if am is not None:
