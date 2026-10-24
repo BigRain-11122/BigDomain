@@ -2323,6 +2323,14 @@ SUITES = [
     # the union of every seller's revenue months; no-arg pure read).
     ("ledger-apimarket-marketmonths", os.path.join(
         "ledger", "test_apimarket_marketmonths.py"), 8),
+    # R2100 buyer-side monthly spend mirror: eleven-key envelope with
+    # eleven-key month rows on the same cash-basis law (purchase books
+    # in the purchased_utc month, refund in the refunded_utc month and
+    # never rewriting the purchase month), buyer isolation, lifetime
+    # conservation against api_buyer_profile and the raw rows, pure
+    # read with zero token movement.
+    ("ledger-apimarket-buyermonths", os.path.join(
+        "ledger", "test_apimarket_buyermonths.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

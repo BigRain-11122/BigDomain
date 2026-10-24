@@ -2790,3 +2790,107 @@ class APIMarketFace:
                 "first_purchase_utc": paid[5],
                 "last_purchase_utc": paid[6],
                 "disclaimer": self.disclaimer}
+
+    def api_buyer_months(self, buyer_id):
+        """Buyer-side monthly spend timeline (pre-registered
+        AC-AMBM1..AC-AMBM8 in the R2100 explore-queue row BEFORE this
+        code existed).
+
+        The resident-side mirror of api_revenue_months. The seller
+        side had a cash-basis month table, but the buyer side only
+        had api_buyer_profile (lifetime aggregates) and api_library
+        (rows): nobody answered "what did this account spend in
+        October, and what came back", and the difference between the
+        month a purchase books in and the month its refund lands in
+        was invisible on the row faces. A statement period, a monthly
+        budget view or a month-on-month comparison all needed the
+        caller to rebucket rows by hand.
+
+        Cash basis is pinned deliberately and symmetrically: a
+        purchase is booked in the UTC month of its purchased_utc and
+        a refund is booked in the UTC month of its refunded_utc -
+        never rewriting the month the purchase landed in. A refund
+        that lands in a later month therefore produces an honestly
+        negative net there while the original month stays
+        byte-frozen. listing_count is purchase-derived only, so a
+        refund-only month honestly reports zero listings beside its
+        refund row. Only months with activity appear. Pure read:
+        zero row mutations and zero token movement.
+        """
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        with self._lock:
+            purchases = self._conn.execute(
+                "SELECT p.price_paid, p.dev_share, p.platform_share,"
+                " p.purchased_utc, p.listing_id"
+                " FROM apimarket_purchases p WHERE p.buyer_id = ?",
+                (buyer,)).fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.amount, f.dev_share, f.platform_share,"
+                " f.refunded_utc FROM apimarket_refunds f"
+                " WHERE f.buyer_id = ?", (buyer,)).fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "purchase_count": 0,
+                        "gross_spent": 0, "refund_count": 0,
+                        "refunded": 0, "dev_paid": 0,
+                        "platform_paid": 0,
+                        "refunded_dev_share": 0,
+                        "refunded_platform_share": 0,
+                        "listings": set()})
+
+        for price, dev_share, platform_share, stamp, listing_id in \
+                purchases:
+            b = bucket(str(stamp)[:7])
+            b["purchase_count"] += 1
+            b["gross_spent"] += int(price)
+            b["dev_paid"] += int(dev_share)
+            b["platform_paid"] += int(platform_share)
+            b["listings"].add(int(listing_id))
+        for amount, dev_share, platform_share, stamp in refunds:
+            b = bucket(str(stamp)[:7])
+            b["refund_count"] += 1
+            b["refunded"] += int(amount)
+            b["refunded_dev_share"] += int(dev_share)
+            b["refunded_platform_share"] += int(platform_share)
+
+        months = []
+        for month in sorted(buckets):
+            b = buckets[month]
+            months.append({
+                "month": month,
+                "purchase_count": b["purchase_count"],
+                "gross_spent": b["gross_spent"],
+                "refund_count": b["refund_count"],
+                "refunded": b["refunded"],
+                "net": b["gross_spent"] - b["refunded"],
+                "dev_paid": b["dev_paid"],
+                "platform_paid": b["platform_paid"],
+                "dev_paid_net": (b["dev_paid"]
+                                 - b["refunded_dev_share"]),
+                "platform_paid_net": (b["platform_paid"]
+                                      - b["refunded_platform_share"]),
+                "listing_count": len(b["listings"]),
+            })
+        return {"buyer_id": buyer,
+                "month_count": len(months),
+                "lifetime_purchase_count": sum(
+                    m["purchase_count"] for m in months),
+                "lifetime_gross_spent": sum(
+                    m["gross_spent"] for m in months),
+                "lifetime_refund_count": sum(
+                    m["refund_count"] for m in months),
+                "lifetime_refunded": sum(
+                    m["refunded"] for m in months),
+                "lifetime_net_spent": sum(
+                    m["net"] for m in months),
+                "lifetime_dev_paid": sum(
+                    m["dev_paid_net"] for m in months),
+                "lifetime_platform_paid": sum(
+                    m["platform_paid_net"] for m in months),
+                "disclaimer": self.disclaimer,
+                "months": months}

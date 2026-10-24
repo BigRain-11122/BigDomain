@@ -1,0 +1,10 @@
+PASS AC-AMBM1: keys ok=True months=['2026-08', '2026-09', '2026-10'] month_count=3
+PASS AC-AMBM2: aug={p:1 g:10 l:1} sep={p:2 g:8 l:2} oct={p:0 refunds:1 refunded:10 net:-10 l:0}
+PASS AC-AMBM3: rows consistent=[True, True, True, True, True, True, True, True, True] d1 split=(7, 3) aug net dev=7 oct net dev=-7
+PASS AC-AMBM4: face/profile/raw gross=18/18/18 purchases=3/3/3 refunded=10/10/10 net=8 dev=7/7/7 plat=1/1/1 net split d2+d3=(7, 1)
+PASS AC-AMBM5: carol months=['2026-09'] gross=10 | dave empty=[] keys=True | bad account gate=True
+PASS AC-AMBM6: ledger tx frozen=True pools frozen=True thirteen-table digests frozen=True repeat identical=True
+PASS AC-AMBM7: three-instance bob byte-identical=True carol replay=True
+PASS AC-AMBM8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8
+RUN1 rc=0 sha16=0B3398051DD02331 RUN2 rc=0 sha16=0B3398051DD02331 identical=True

@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T21:47:49+08:00",
+  "export_ts": "2026-10-24T22:19:30+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2099: API 市场现在能按月看交易趋势了——每个月成交多少、退了多少、净额多少、多少买家卖家参与，一眼看清；跨月退款的月份如实显示负净额，原始成交月的数据永久不变。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_market_months 市场月度时间线) + src/sandbox/ledger/test_apimarket_marketmonths.py + qa/apimarket-marketmonths-R2099.log (SUITE PASS 8/8, double-run byte-identical sha16 F23CAEF425FF1326) + qa/reconcile-all-R2099.log (RUNNER PASS 304/304 suites, 2538 criteria, controls 7/7, 238.3s)",
+    "current": "R2100: API 市场现在买家侧也能按月看账了——每个月的购买、退款、净花费、开发与平台分账一眼看清；跨月退款的月份如实显示负净额，原始购买月的数据永久不变。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_months 买家月度消费时间线) + src/sandbox/ledger/test_apimarket_buyermonths.py + qa/apimarket-buyermonths-R2100.log (SUITE PASS 8/8, double-run byte-identical sha16 0B3398051DD02331) + qa/reconcile-all-R2100.log (RUNNER PASS 305/305 suites, 2546 criteria, controls 7/7, 277.4s)",
     "next_milestone": "下个里程碑：继续在同一条 apimarket 产品线补齐商业化前可验证的缺口（当窗预注册判据后落码并全电池验证）；时限 24h 内（交付环节已为同日闭环）。"
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 买家月度消费时间线读面（api_buyer_months）",
+      "on",
+      "R2100：十一键信封+十一键行按月升序·现金制（购买按 purchased_utc 月·退款按 refunded_utc 月且不改写原购买月·跨月退款如实负净）·listing_count 仅由购买派生（仅退款月为 0）·行内 gross==dev+platform 与 net==dev_net+platform_net·终身守恒对 api_buyer_profile 与原始 purchase/refund 行（18/10/8）·买家隔离+诚实空信封+账户形门前置·纯读零 token 零行变更·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMBM1..AMBM8·电池 305/305 套件 2546 判据）"
+    ],
     [
       "apimarket 全市场月度成交时间线读面（api_market_months）",
       "on",
@@ -297,6 +302,10 @@
     ]
   ],
   "results": [
+    [
+      "R2100",
+      "R2100: the developer API market gains the resident-side time axis, the mirror of the seller month table. api_buyer_profile answers lifetime aggregates, api_library answers rows, and nothing answered what one account spent in one month - and the gap between the month a purchase books in and the month its refund lands in was invisible on every row face. api_buyer_months is an eleven-key envelope with eleven-key month rows ordered ascending on the same pinned cash-basis law: a purchase books in the UTC month of its purchase, a refund books in the UTC month it was refunded and never rewrites the purchase month, so a later refund shows an honestly negative net there while the original month stays byte-frozen; the 23:59:59Z / 00:00:00Z boundary splits buckets. listing_count is purchase-derived only, so a refund-only month honestly reports zero listings beside its refund row. Every row keeps gross_spent == dev_paid + platform_paid, net == gross_spent - refunded and net == dev_paid_net + platform_paid_net. Lifetime totals are conserved against both api_buyer_profile and the raw purchase/refund rows (18 gross, 10 refunded, 8 net, and the net split equals the untouched purchases exactly). Strict buyer isolation, an honest empty envelope and the prefix-only account gate are pinned. The face is a pure read with frozen thirteen-table digests, a constant ledger tx set and constant pool balances, and stays byte-identical across three instances. AC-AMBM1..AC-AMBM8 pre-registered before the code existed (four anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run identical sha16 0B3398051DD02331 (qa/apimarket-buyermonths-R2100.log + run2, utf-8 LF); wired ledger-apimarket-buyermonths (8); battery RUNNER PASS 305/305 suites plus controls 7/7 in 277.4s; matrix 305 suites / 2546 criteria --check byte-identical. Honest notes: (a) the first battery attempt failed only reconcile-daily-census cd7 because the previous round's qa/reconcile-all-R2099.log carried the pwsh-capture dialect - rebuilt as utf-8 LF with every line preserved and the census baseline re-frozen after disposition, then green; (b) a stray --help artifact produced by an earlier runner probe was moved byte-preserved into .codely-cli/tmp/. Score 2."
+    ],
     [
       "R2099",
       "R2099: the developer API market gains the market-level time axis it never had. api_revenue_months answers one seller's cash-basis months and api_market_stats answers the whole market with lifetime aggregates only, so a trend, a month-on-month comparison or a monthly settlement view had to walk every seller and rebucket the row faces by hand - and a refund landing in a later month than its sale was invisible at the market level. api_market_months is a no-argument pure read: a ten-key envelope with thirteen-key month rows ordered ascending. A sale books in the UTC month of its purchase, a refund books in the UTC month it was refunded and never rewrites the sale month, so a later refund shows an honestly negative net there while the original month stays byte-frozen; the 23:59:59Z / 00:00:00Z boundary splits buckets. Participant counts (buyer_count, seller_count, listing_count) are purchase-derived only, so a refund-only month honestly reports zero participants beside its refund rows. Every row keeps gross == dev_share + platform_share, net == gross - refunded and net == dev_share_net + platform_share_net. Lifetime totals are conserved across three independent faces - this face, api_market_stats and the raw purchase/refund rows - and the market table equals the per-month union of every seller's api_revenue_months, so the two time faces cannot drift apart. The face is a pure read with frozen thirteen-table digests, a constant ledger tx set and constant pool balances, refuses an unexpected keyword with TypeError rather than silently ignoring it, and stays byte-identical across three instances. AC-AMMM1..AC-AMMM8 pre-registered before the code existed (four anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run identical sha16 F23CAEF425FF1326 (qa/apimarket-marketmonths-R2099.log + run2, utf-8 LF); wired ledger-apimarket-marketmonths (8); battery RUNNER PASS 304/304 suites plus controls 7/7 in 238.3s; matrix 304 suites / 2538 criteria --check byte-identical. One defect found and fixed in-window, disclosed: the empty-market leg of AC-AMMM7 first reused the world ledger directory, and because APIMarketFace derives apimarket.db from dirname(ledger.db_path) the empty stack saw the seeded market; the leg now builds its own subdirectory and the empty envelope is honestly zero. Score 2."
