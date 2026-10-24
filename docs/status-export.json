@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T12:05:00+08:00",
+ "export_ts": "2026-10-25T01:40:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2105：买家侧的「我还有哪些评价没写」队列。卖家一侧 R2096 已有一张待回评价收件箱，买家一侧却只能翻整张已购库表用眼睛找空星级——本窗补上镜像面 api_buyer_todo：只返回未评且未退款的购买行，最老债务优先，评分一次即结清该挂牌，下架不勾销债务（仍带 delisted 与最后现价），三个计数逐账户守恒。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_todo) + src/sandbox/ledger/test_apimarket_buyertodo.py + preview/apimarket-buyer-todo.json (演示世界：5 件购 = 3 待评/1 已评/1 已退) + qa/apimarket-buyertodo-R2105.log (SUITE PASS 8/8, 双跑 sha16 0f41cd3542ed7501) + qa/reconcile-daily-20261025.log (RUNNER PASS 310/310 suites, 2588 判据, controls 7/7, 282.8s)",
-  "next_milestone": "48 小时窗内：把待答评价队列接入 apimarket 结算报告（Attention 摘要已存在，买家债务可直接成为其第三条信号族），让居民在同一张页面上看到「我该回的评价」与「我该写的评价」；仍被商户号卡住的支付与合规路径件照旧待 CEO 物理件。"
+  "current": "R2106：把「住了人」这件事真正接进账本报告。上一轮刚交付的关注警报面（api_watch_alerts）与待答评价队列（api_buyer_todo）在全仓没有任何产品调用点，只被套件和簿记行引用——报告能看账，却看不见「谁的评分还欠着、谁的关注有什么动静」。本窗把两面接进唯一消费者 apimarket_report：每个买家块每次采集都现读这两面，页面按买家渲染「评分债务」与「关注动态」两张表（空队列诚实空态），机读契约 REPORT_SCHEMA 1→2 为纯加法升级（信封仍恰三键，v1 键逐字节不变），旧合成报告仍可渲染。",
+  "latest_artifact": "preview/apimarket-report-workbench.html（13915B，sha256 0921f7cadc501310，每买家带 rating debt / watch alerts 两表）+ preview/apimarket-report-workbench.json（18474B，schema 2）+ src/sandbox/ledger/apimarket_report.py（collect 增 todo/watch_alerts，render_html 增两表）+ src/sandbox/ledger/test_apimarket_report_workbench.py + qa/apimarket-reportworkbench-R2106.log（SUITE PASS 8/8，双跑判据行同一 sha16 6034ffa4c5f805d5）+ qa/reconcile-all-R2106.log（RUNNER PASS 311/311 suites + controls 7/7，239.9s）",
+  "next_milestone": "48 小时窗内：把关注动态接入报告的待办摘要（Alert 摘要现只覆盖卖家评价债/售罄/负净月三类信号，住民侧价格变动尚无摘要位），并给报告加一个「按买家筛选」的离线切片入口，让单个居民也能拿到自己那一页；支付/合规路径件继续待 CEO 物理件（商户号）。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告住民工作台面（买家块 todo/watch_alerts + REPORT_SCHEMA 2）",
+   "on",
+   "R2106：R2104 关注警报面与 R2105 待答评价队列此前零产品调用点（产出无消费者）。本窗把两面接进唯一消费者 apimarket_report.collect()：每个买家块增 todo/watch_alerts 两键且每次采集现读（评分一笔→下一轮 pending 减一并进 rated），HTML 段每买家在月表后渲染「rating debt」「watch alerts」两表（行数与信封计数一致·空队列诚实空态·动态串全转义·marker/disclaimer 仍在），REPORT_SCHEMA 1→2 纯加法升级（信封仍恰三键·v1 键逐字节不变·旧合成 report 无新键仍可渲染）。判据 AC-AMWB1..AC-AMWB8 预注册于代码前（四锚 git grep -F 零占用 rc=1）；套件 SUITE PASS 8/8 双跑判据行同一 sha16 6034ffa4c5f805d5（qa/apimarket-reportworkbench-R2106.log + -2）；接线 ledger-apimarket-reportworkbench(8)；电池 RUNNER PASS 311/311 suites + controls 7/7 239.9s；矩阵 311/2596 --check byte-identical；census DRIFT-CLEAN files=1756。"
+  ],
   [
    "apimarket 买家待答评价队列（api_buyer_todo）",
    "on",
@@ -322,6 +327,10 @@
   ]
  ],
  "results": [
+  [
+   "R2106",
+   "R2106: the two newest resident faces finally have a consumer. api_watch_alerts (R2104) and api_buyer_todo (R2105) had zero product call sites - only suites and bookkeeping lines named them - so the market report could show the books but not who still owes a rating or whose watches moved. Every buyer block in collect() now carries todo and watch_alerts, read fresh on each collect (rating a pending purchase drains the queue in the very next collect), and the page renders a rating-debt table plus a watch-alerts table per buyer with honest empty states and full escaping. REPORT_SCHEMA moves 1 -> 2 as an additive bump: the JSON envelope still carries exactly schema_version/report/attention, every v1 buyer key keeps its value, and a legacy report dict without the new keys still renders instead of raising. AC-AMWB1..AC-AMWB8 pre-registered before the code (four anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 6034ffa4c5f805d5; wired ledger-apimarket-reportworkbench (8); battery RUNNER PASS 311/311 suites plus controls 7/7 in 239.9s; matrix 311 suites / 2596 criteria --check byte-identical; census DRIFT-CLEAN; preview/apimarket-report-workbench.html sha256 0921f7cadc501310. Three honest notes: the first determinism attempt failed because the activity seeder patched only A._now_utc while the ledger tx ids embed L.now_utc (both patched now); the first alert seed watched an already-purchased listing, which the alert face correctly silences, so a different buyer watches instead; the battery was first invoked with --evidence although the runner takes a positional path, writing a stray root file that was removed."
+  ],
   [
    "R2105",
    "R2105: the buyer side finally has its rating-debt queue. api_buyer_todo answers the one question a resident with twenty purchases could not: which of my purchases still owe a rating. Only unrated, unrefunded purchase rows come back, oldest debt first (purchased_utc, purchase_id); per-row state is disjoint with pinned precedence rated > refunded > pending so rated+refunded+pending==purchase_count holds for every account; one rating settles that listing (the purchase gate already forbids a repeat purchase of the same listing, so the queue is duplicate-free by construction); a retired listing keeps its debt with delisted=True and its last live asking price while price_paid stays historical. Account shape gate before any read, pure read (ten table digests and the ledger tx set unchanged), byte-identical cross-restart reads on three instances. Suite 8/8 double-run sha16 0f41cd3542ed7501; battery RUNNER PASS 310/310 suites plus controls 7/7 in 282.8s; matrix 310 suites / 2588 criteria byte-identical; census DRIFT-CLEAN."

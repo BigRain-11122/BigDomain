@@ -2352,6 +2352,12 @@ SUITES = [
     # automation gets a stable shape instead of scraping HTML.
     ("ledger-apimarket-reportjson", os.path.join(
         "ledger", "test_apimarket_report_json.py"), 8),
+    # R2106 resident workbench on the same report generator: every buyer
+    # block now reads the two newest resident faces (rating-debt queue
+    # and watch alert feed) on every collect, with the additive schema
+    # bump 1 -> 2 and a legacy-dict degrade path.
+    ("ledger-apimarket-reportworkbench", os.path.join(
+        "ledger", "test_apimarket_report_workbench.py"), 8),
     # apimarket buyer watch alert feed - the resident-side events of
     # the R2086 watchlist (price move / sold out / retired), derived
     # from the price-at-watch seam.

@@ -1,0 +1,23 @@
+PASS AC-AMWB1 same_source=True pending 1->0 rated 1->2 usr:bob:pending=0/alerts=1,usr:carol:pending=1/alerts=0,usr:erin:pending=0/alerts=0
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-main-d9qjqts_\wb.html (13728 bytes, sha256 0bfe5c62f70f0bd0)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-main-d9qjqts_\wb.json (18563 bytes, schema 2)
+PASS AC-AMWB2 schema=2 blocks=True v1=True env=['attention', 'report', 'schema_version'] keys=[['months', 'profile', 'todo', 'watch_alerts'], ['months', 'profile', 'todo', 'watch_alerts'], ['months', 'profile', 'todo', 'watch_alerts']]
+PASS AC-AMWB3 heads=True empty_state=True usr:bob:0/1,usr:carol:0/0,usr:erin:0/0
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-main-d9qjqts_\esc.html (15831 bytes, sha256 62cecd16ddea4032)
+attention findings: 5 (severity {"warn": 5})
+PASS AC-AMWB4 raw_tag_absent=True escaped_present=True marker=True
+PASS AC-AMWB5 digest_same=True tx=20 buyers=4
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-d1-ph9mriji\d.html (13915 bytes, sha256 0921f7cadc501310)
+attention findings: 4 (severity {"warn": 4})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-d1-ph9mriji\d.json (18474 bytes, schema 2)
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-d2-gfz9svzx\d.html (13915 bytes, sha256 0921f7cadc501310)
+attention findings: 4 (severity {"warn": 4})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-workbench-d2-gfz9svzx\d.json (18474 bytes, schema 2)
+PASS AC-AMWB6 html_same=True json_same=True html_sha16=0921f7cadc501310
+PASS AC-AMWB7 len=14972
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_attention.py rc=0
+  child test_apimarket_report_json.py rc=0
+PASS AC-AMWB8 rc=[0, 0, 0] wired=True
+SUITE PASS 8/8

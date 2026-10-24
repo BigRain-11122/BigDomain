@@ -55,7 +55,9 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 
 # Machine-readable contract version for --json-out. Bump only on a
 # breaking change to the envelope keys or the per-face payload shape.
-REPORT_SCHEMA = 1
+# v2 (R2106) is an ADDITIVE bump: every v1 key keeps its value, and a
+# buyer block gains the two resident faces todo/watch_alerts.
+REPORT_SCHEMA = 2
 
 # Rows whose values are already month tables are rendered as tables, not
 # as scalar key/value pairs.
@@ -181,6 +183,8 @@ def collect(am):
         report["buyers"][buyer] = {
             "profile": am.api_buyer_profile(buyer),
             "months": am.api_buyer_months(buyer),
+            "todo": am.api_buyer_todo(buyer),
+            "watch_alerts": am.api_watch_alerts(buyer),
         }
     report["attention"] = collect_attention(am, report)
     return report
@@ -376,6 +380,18 @@ def render_html(report):
         parts.append("<h3>%s</h3>" % esc(buyer))
         parts.append(scalar_rows(block["profile"]))
         parts.append(month_table(block["months"]))
+        # R2106 resident workbench: a buyer block built by an older
+        # caller carries neither key, so the page degrades to the
+        # honest empty state instead of raising.
+        todo = block.get("todo") or {}
+        pending = todo.get("pending") or []
+        parts.append("<h3>%s - rating debt (%d)</h3>"
+                     % (esc(buyer), len(pending)))
+        parts.append(row_table(pending, "no pending ratings"))
+        alerts = (block.get("watch_alerts") or {}).get("alerts") or []
+        parts.append("<h3>%s - watch alerts (%d)</h3>"
+                     % (esc(buyer), len(alerts)))
+        parts.append(row_table(alerts, "no watch alerts"))
 
     parts.append("<footer>%s</footer>" % esc(report["market"].get(
         "disclaimer") or DISCLAIMER))
