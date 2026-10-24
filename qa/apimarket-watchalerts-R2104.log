@@ -1,0 +1,9 @@
+PASS AC-WAL1: envelope keys=5 rows=5 row keys=[13] watch=8 alert=5 empty=(0, 0)
+PASS AC-WAL2: tie-stamp at_watch=5 drop at_watch=10 current=6 delta=-4
+PASS AC-WAL3: keys=['drop', 'retire', 'rise', 'sold1', 'sold2', 'tie'] retire=['delisted'] rise=['price_rise'] drop delta=-4 sold=['sold_out', 'sold_out']
+PASS AC-WAL4: ordered=True distinct=True double-run identical=True
+PASS AC-WAL5: carol keys=['sold1'] bob watch=8 settled silent=True unwatched silent=True watched-then-retired=True
+PASS AC-WAL6: bad-account codes=['E_AM_BAD_ACCOUNT'] digests frozen=True tx frozen=True
+PASS AC-WAL7: instance1==2==3 byte-identical=True
+PASS AC-WAL8: runner wiring=True ascii=True network imports=0 world outside repo=True watch rows=10 product shas=5
+SUITE 8/8

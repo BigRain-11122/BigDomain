@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-24T23:59:00+08:00",
+ "export_ts": "2026-10-25T00:45:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2103: 结算报告有了稳定的机读契约——一条命令除离线 HTML 外还输出版本化 JSON（schema_version/report/attention，纯 ASCII，原子落盘），自动化/仪表盘可直接消费，不再需要抓屏或重跑读面。",
-  "latest_artifact": "preview/apimarket-report.json (15736B, schema 1) + preview/apimarket-report-json.html + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_json.py + qa/apimarket-reportjson-R2103.log (SUITE PASS 8/8, double-run criterion lines identical) + qa/reconcile-all-R2103-2.log (RUNNER PASS 308/308 suites, 2572 criteria, controls 7/7, 314.3s)",
-  "next_milestone": "下一步（≤48h）：让机读契约有第二个消费者——把 report.json 接进每日对账常设行，输出一行「市场毛额/净额/待办数」的日差对照，使契约不只被写出也被读取。"
+  "current": "R2104: 关注面第一次会「说话」——住民的关注清单现在自带事件流：降价/涨价（对关注那一刻的标价比较）、限量售罄、已下架四类警报由既有读面派生，同价/已购/已取消一律静默，不再需要自己翻表比对。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py (api_watch_alerts + _price_at_instant) + src/sandbox/ledger/test_apimarket_watchalerts.py + qa/apimarket-watchalerts-R2104.log (SUITE PASS 8/8, double-run sha16 40678012174f1573) + qa/reconcile-all-R2104.log (RUNNER PASS 309/309 suites, 2580 criteria, controls 7/7, 275.0s)",
+  "next_milestone": "下一步（≤48h）：把警报面接进结算报告——report 的 Attention 段增加「住民可见警报数」并与机读 JSON 同源投影，让运营者与住民看到同一份事件事实。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 买家关注警报面（api_watch_alerts）",
+   "on",
+   "R2104：四键信封+十三键行·四类派生信号（delisted/sold_out/price_drop/price_rise）·price_at_watch 经新增 _price_at_instant 缝（revised_utc<=watched_utc 最新修订·同戳按 revision_id·base 兜底）·退役优先不叠价信号·同价/已购/已取消静默·severity 钉死·全序 (rank,listing_id)·账户门前置·纯读零 token·跨重启三实例字节同一。AC-WAL1..AC-WAL8 预注册于代码前（五锚 git grep -F 零占用 rc=1）；套件 SUITE PASS 8/8 双跑判据行同一 sha16 40678012174f1573（qa/apimarket-watchalerts-R2104.log+run2）；接线 ledger-apimarket-watchalerts(8)；电池 RUNNER PASS 309/309 suites + controls 7/7 275.0s；矩阵 309/2580 --check byte-identical；census DRIFT-CLEAN files=1748 flags=0。"
+  ],
   [
    "结算报告机读 JSON 契约（apimarket_report.py --json-out）",
    "on",
@@ -312,6 +317,10 @@
   ]
  ],
  "results": [
+  [
+   "R2104",
+   "R2104: the watchlist finally reports what happened. The R2086 watch face answers what a buyer is watching, but a resident had to diff the table by hand to notice a price move, a sold-out shelf or a retirement. api_watch_alerts derives four kinds from faces that already exist: price_drop and price_rise against the asking price AT THE WATCH INSTANT (a new _price_at_instant seam - the newest append-only revision stamped at or before watched_utc, ties by revision_id, base row otherwise, so a later revision never rewrites what an earlier instant saw), sold_out through the one scarcity seam api_supply uses, and delisted from the current cycle state. A retired listing answers delisted only, an unchanged price is silent, a watch the buyer already purchased is settled and silent, an unwatched row is silent, and severities are pinned per kind. The envelope is four keys with a thirteen-key row shape carrying a signed delta, the list is a total order on (rank, listing_id), the account shape gate runs before any read and the face is a pure read. Suite builds a nine-listing world on one mutable clock behind A._now_utc so the tie-stamp boundary is testable without sleeping. AC-WAL1..AC-WAL8 pre-registered before the code; 8/8 double-run byte-identical sha16 40678012174f1573; wired ledger-apimarket-watchalerts (8); battery RUNNER PASS 309/309 suites plus controls 7/7 in 275.0s; matrix 309 suites / 2580 criteria --check byte-identical; census DRIFT-CLEAN. Two in-window corrections disclosed: the first draft expected alerts for an already-purchased watch and for a flat price, both against the silence law, so the seed was rebuilt with a dedicated tie-stamp listing instead of weakening the criteria."
+  ],
   [
    "R2103",
    "R2103: the settlement report finally has a stable machine-readable contract. R2101/R2102 shipped an offline HTML page and an attention sidecar, so automation had to scrape or re-derive. --json-out writes a versioned envelope (schema_version/report/attention, REPORT_SCHEMA=1) that is a pure projection of the same collect() dict the page consumes, so the two artifacts cannot disagree; it serializes fully before any disk touch and publishes with temp plus os.replace, so an empty or directory target exits 2 with no half artifact and a nested directory is created on demand. Suite pins the contract shape, ASCII/LF purity, same-source equality against a fresh collect() plus attention-sidecar byte identity, partition and trade conservation on the JSON market block, participant derivation straight from api_board plus api_sales, seeded determinism, the pure-read law via thirteen table digests and the ledger tx count, atomic-write behaviour, and HTML byte identity with and without the flag (a purely additive surface). AC-AMJ1..AC-AMJ8 pre-registered before the code; suite 8/8 double-run criterion lines identical; wired ledger-apimarket-reportjson (8); battery RUNNER PASS 308/308 suites plus controls 7/7 in 314.3s; matrix 308 suites / 2572 criteria --check byte-identical. Honest note: the R2101 suite's AC-AMRPT8 counted the bare label substring in reconcile_all.py, so the longer new label made it 2; it now counts the quoted exact label, and the first battery FAIL (307/308) is preserved as the trace."
@@ -702,9 +711,9 @@
   ]
  ],
  "self_drive": {
-  "window": "2026-10-18..2026-10-24",
+  "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 25,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 25,

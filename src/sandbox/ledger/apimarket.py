@@ -671,6 +671,22 @@ class APIMarketFace:
             "SELECT token_price FROM apimarket_listings"
             " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
 
+    def _price_at_instant(self, listing_id, base_price, instant):
+        """Asking price as of one instant (AC-WAL2): the newest
+        append-only revision stamped at or before the instant wins,
+        ties broken by revision_id; with no such revision the
+        immutable base row speaks. A later revision never rewrites
+        the price an earlier instant already saw. Caller holds the
+        lock."""
+        row = self._conn.execute(
+            "SELECT token_price FROM apimarket_price_revisions"
+            " WHERE listing_id = ? AND revised_utc <= ?"
+            " ORDER BY revised_utc DESC, revision_id DESC LIMIT 1",
+            (listing_id, instant)).fetchone()
+        if row is not None:
+            return int(row[0])
+        return int(base_price)
+
     def _revision_stats(self, listing_id):
         """(revision_count, latest revised_utc or None). Caller
         holds the lock."""
@@ -2163,6 +2179,90 @@ class APIMarketFace:
                             "watched_utc": r[6]})
         return {"buyer_id": buyer_id, "watch_count": len(out),
                 "disclaimer": self.disclaimer, "watches": out}
+
+    _WATCH_ALERT_RANK = {"delisted": 0, "sold_out": 1,
+                         "price_drop": 2, "price_rise": 3}
+    _WATCH_ALERT_SEVERITY = {"delisted": "high", "sold_out": "warn",
+                             "price_drop": "info", "price_rise": "info"}
+
+    def api_watch_alerts(self, buyer_id):
+        """Buyer-side watch alert feed (AC-WAL1..AC-WAL5, criteria
+        pre-registered in the R2104 queue row BEFORE this code
+        existed). api_watchlist answers what a buyer is watching;
+        nothing answered what happened to those watches, so a
+        resident had to diff the table by hand. This face derives
+        the events from the faces that already exist:
+
+          - price_drop / price_rise against the asking price at the
+            watch instant (the newest revision stamped at or before
+            watched_utc, base row otherwise - AC-WAL2);
+          - sold_out through the one scarcity seam api_supply uses;
+          - delisted from the current cycle state.
+
+        A retired listing answers delisted only (its price is moot);
+        an equal price is silent (no invented signal); a watch the
+        buyer already purchased is settled and silent; an unwatched
+        watch row is silent. Severity is pinned per kind and the
+        list is a total order on (rank, listing_id). The account
+        shape gate runs before any read; a prefix-valid account with
+        no watches gets an honest empty envelope. Pure read: zero
+        row mutations, zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.watch_id, w.listing_id, l.listing_key,"
+                " l.title, l.dev_account, l.token_price, w.watched_utc"
+                " FROM apimarket_watchlist w JOIN apimarket_listings l"
+                " ON l.listing_id = w.listing_id WHERE w.buyer_id = ?"
+                " AND NOT EXISTS (SELECT 1 FROM apimarket_unwatchings u"
+                " WHERE u.watch_id = w.watch_id)"
+                " ORDER BY w.watch_id", (buyer_id,)).fetchall()
+            alerts = []
+            for r in rows:
+                listing_id = int(r[1])
+                owned = self._conn.execute(
+                    "SELECT 1 FROM apimarket_purchases WHERE buyer_id = ?"
+                    " AND listing_id = ?",
+                    (buyer_id, listing_id)).fetchone()
+                if owned is not None:
+                    continue
+                base_price = int(r[5])
+                at_watch = self._price_at_instant(
+                    listing_id, base_price, r[6])
+                current = self._current_price(listing_id, base_price)
+                stamp = self._delisted_utc(listing_id)
+                _supply, _sold, _remaining, sold_out = \
+                    self._supply_state(listing_id)
+                kinds = []
+                if stamp is not None:
+                    kinds.append("delisted")
+                else:
+                    if sold_out:
+                        kinds.append("sold_out")
+                    if current < at_watch:
+                        kinds.append("price_drop")
+                    elif current > at_watch:
+                        kinds.append("price_rise")
+                for kind in kinds:
+                    alerts.append({
+                        "watch_id": int(r[0]),
+                        "listing_id": listing_id,
+                        "listing_key": r[2], "title": r[3],
+                        "dev_account": r[4],
+                        "kind": kind,
+                        "severity": self._WATCH_ALERT_SEVERITY[kind],
+                        "price_at_watch": at_watch,
+                        "current_price": current,
+                        "delta": current - at_watch,
+                        "delisted": stamp is not None,
+                        "sold_out": sold_out,
+                        "watched_utc": r[6]})
+            alerts.sort(key=lambda a: (self._WATCH_ALERT_RANK[a["kind"]],
+                                       a["listing_id"]))
+        return {"buyer_id": buyer_id, "watch_count": len(rows),
+                "alert_count": len(alerts),
+                "disclaimer": self.disclaimer, "alerts": alerts}
 
     def api_supply(self, listing_id):
         """Scarcity read face (AC-AMSP1): the declared supply,

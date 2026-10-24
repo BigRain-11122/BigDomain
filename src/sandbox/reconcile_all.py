@@ -2352,6 +2352,11 @@ SUITES = [
     # automation gets a stable shape instead of scraping HTML.
     ("ledger-apimarket-reportjson", os.path.join(
         "ledger", "test_apimarket_report_json.py"), 8),
+    # apimarket buyer watch alert feed - the resident-side events of
+    # the R2086 watchlist (price move / sold out / retired), derived
+    # from the price-at-watch seam.
+    ("ledger-apimarket-watchalerts", os.path.join(
+        "ledger", "test_apimarket_watchalerts.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
