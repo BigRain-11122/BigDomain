@@ -2121,6 +2121,26 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-ratingagg", os.path.join(
         "ledger", "test_apimarket_ratingagg.py"), 8),
+    # R2078 explore-queue self-seeded and self-claimed row: the
+    # apimarket listing retirement (delist) door the face never had
+    # - one append-only delisting row per listing with a seven-key
+    # envelope; the ownership gate; the repeat-delist refusal that
+    # never rewrites the first stamp; the bad-args gate family and
+    # its order (account shape, then listing shape/existence, then
+    # ownership - an unknown listing probed by a non-owner answers
+    # UNKNOWN_LISTING); purchase fail-closed on a retired listing
+    # with the delist gate preceding the self-buy gate while a live
+    # listing stays purchasable; the read-face semantics (additive
+    # delisted pair with every historical aggregate unchanged, the
+    # board excluding retired rows, ratings/sales history still
+    # answering, developer board keeping listing-side row
+    # authority); two full-stack restarts; zero token movement from
+    # the retirement batch (only the live purchase's spend+share
+    # pair lands); hygiene, criteria count
+    # (AC-AMD1..AC-AMD8 pre-registered in the R2078 explore-queue
+    # claim row).
+    ("ledger-apimarket-delist", os.path.join(
+        "ledger", "test_apimarket_delist.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

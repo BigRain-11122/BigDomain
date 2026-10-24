@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T12:05:00+08:00",
+  "export_ts": "2026-10-24T11:37:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2077: the API marketplace rating face now has its aggregate law pinned - a buyer who never bought cannot rate, a repeat rating is refused and never overwrites, the star check runs before the listing lookup, and averages are exact (3.75 for four raters, 30/7 for seven).",
-    "latest_artifact": "src/sandbox/ledger/test_apimarket_ratingagg.py (SUITE PASS 8/8 double-run, AC-AMRT1..AC-AMRT8) + qa/apimarket-ratingagg-R2077.log + qa/reconcile-all-R2077.log (RUNNER PASS 284/284, 2026-10-24); state gauge closed by fold R585 (81105B -> 30268B).",
-    "next_milestone": "2026-10-25: the nine-company automation build plan goes to the council three-in-one submission (funnel four-ring spec + 72h self-continuation acceptance to 10-31); next window continues the explore queue (merchant-id row stays gated) and the funnel daily evidence chain."
+    "current": "R2078: 开发者 API 市场补上了卖家侧的退役（下架）门——此前挂牌一旦发布永不可撤。现在只有挂牌属主能下架，下架后新买家一律被拒且不扣币，重复下架被拒且首次下架时间不被改写，市场板不再展示该挂牌，但历史购买/评价/开发者销售账全部照常可查。",
+    "latest_artifact": "src/sandbox/ledger/test_apimarket_delist.py + src/sandbox/ledger/apimarket.py（SUITE PASS 8/8 双跑同一, AC-AMD1..AC-AMD8）+ qa/apimarket-delist-R2078.log + 全电池 RUNNER PASS 285/285 套件 2386 判据（2026-10-24）。",
+    "next_milestone": "2026-10-25: 九司自动化建设案进委员会三合一呈报（漏斗四环规格+72h 自续验收 ≤10-31）；下轮继续 explore 队列（商户号项仍 gated）与 funnel 每日证据链。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 挂牌退役（下架）面",
+      "on",
+      "R2078：append-only 下架事件账+属主门+购买 fail-closed+市场板剔除而历史读面保全（SUITE 8/8·AC-AMD1..AMD8·电池 285/285 套件 2386 判据）"
+    ],
     [
       "大厅 WebSocket（规格+沙箱）",
       "on",
@@ -223,11 +228,15 @@
   ],
   "results": [
     [
+      "R2078",
+      "R2078: the developer API market gained the seller-side retirement door it never had - only the listing owner can delist, a retired listing refuses every new purchase without moving tokens, a repeat delist never rewrites the first stamp, the market board stops offering the row while purchases, ratings and the developer sales book stay readable, and the whole state survives two full-stack restarts."
+    ],
+    [
       "R2073",
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2077",
+      "2078",
       "OSLoop 执行 tick"
     ],
     [
@@ -522,10 +531,10 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

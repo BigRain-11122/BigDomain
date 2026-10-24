@@ -71,6 +71,9 @@ E_AM_NOT_BUYER = "E_AM_NOT_BUYER"          # AC-AM5
 E_AM_RATE_DUP = "E_AM_RATE_DUP"           # AC-AM5
 E_AM_BAD_STARS = "E_AM_BAD_STARS"         # AC-AM5
 E_AM_BAD_WINDOW = "E_AM_BAD_WINDOW"      # R2022 windowed read face
+E_AM_DELISTED = "E_AM_DELISTED"           # AC-AMD5 (retired listing)
+E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
+E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -115,6 +118,13 @@ CREATE TABLE IF NOT EXISTS apimarket_ratings (
     stars INTEGER NOT NULL CHECK (stars IN (1, 2, 3, 4, 5)),
     rated_utc TEXT NOT NULL,
     UNIQUE (buyer_id, listing_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_delistings (
+    delist_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    delisted_utc TEXT NOT NULL,
+    UNIQUE (listing_id)
 );
 """
 
@@ -316,6 +326,58 @@ class APIMarketFace:
             raise ApiMarketError(E_AM_UNKNOWN_LISTING, str(listing_id))
         return row
 
+    def _delisted_utc(self, listing_id):
+        """Append-only delisting stamp of one listing (None when
+        still live). Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT delisted_utc FROM apimarket_delistings"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()
+        return None if row is None else row[0]
+
+    def delist_api(self, dev_account, listing_id):
+        """Retire one listing (the seller-side door this face never
+        had). Gate order pinned by AC-AMD4: account shape first,
+        then the listing shape/existence gate, then ownership, then
+        the already-retired state. Exactly one append-only
+        apimarket_delistings row per listing (UNIQUE listing_id);
+        a repeat answers E_AM_ALREADY_DELISTED with zero new rows,
+        so the first delisted_utc is never rewritten. Delisting
+        moves zero tokens and deletes nothing: purchases and
+        ratings stay on the books, the market board just stops
+        offering the row."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_ALREADY_DELISTED,
+                                     str(listing_id))
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute(
+                    "INSERT INTO apimarket_delistings (listing_id,"
+                    " dev_account, delisted_utc) VALUES (?,?,?)",
+                    (listing_id, dev_account, stamp))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiMarketError(E_AM_ALREADY_DELISTED,
+                                     str(listing_id))
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"listing_id": listing_id, "dev_account": dev_account,
+                "listing_key": key, "delisted": True,
+                "delisted_utc": stamp, "already": False,
+                "disclaimer": self.disclaimer}
+
     # -- purchase + split domain -------------------------------------------
 
     def purchase_api(self, buyer_id, listing_id, ref):
@@ -335,6 +397,8 @@ class APIMarketFace:
             raise ApiMarketError(E_AM_BAD_ARGS, "purchase ref required")
         with self._lock:
             listing = self._require_listing(listing_id)
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
             if listing[1] == buyer_id:
                 raise ApiMarketError(E_AM_SELF_BUY,
                                      "%s on own listing %s"
@@ -453,21 +517,30 @@ class APIMarketFace:
                 "SELECT COUNT(*) FROM apimarket_purchases"
                 " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
             n_rate, avg = self._agg_rating(listing_id)
+            stamp = self._delisted_utc(listing_id)
         return {"listing_id": int(row[0]), "dev_account": row[1],
                 "listing_key": row[2], "title": row[3],
                 "description": row[4], "token_price": int(row[5]),
                 "ai_label": int(row[6]), "listed_utc": row[7],
                 "purchase_count": int(n_buy), "rating_count": n_rate,
-                "rating_avg": avg, "disclaimer": self.disclaimer}
+                "rating_avg": avg,
+                "delisted": stamp is not None,
+                "delisted_utc": stamp,
+                "disclaimer": self.disclaimer}
 
     def api_board(self):
         """Whole-market listing surface: every row carries the
         declared AIGC label (presentation-face law, AC-AM6); the
-        envelope carries the resident disclaimer. Pure read."""
+        envelope carries the resident disclaimer. Retired listings
+        are excluded from the market board (AC-AMD6) while their
+        history stays readable through api_view/api_ratings/
+        api_sales. Pure read."""
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
                 " token_price, ai_label FROM apimarket_listings"
+                " WHERE listing_id NOT IN (SELECT listing_id FROM"
+                " apimarket_delistings)"
                 " ORDER BY listing_id").fetchall()
             out = []
             for r in rows:
