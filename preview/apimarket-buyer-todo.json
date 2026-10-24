@@ -1,0 +1,43 @@
+{
+  "buyer_id": "usr:bob",
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "pending": [
+    {
+      "current_price": 11,
+      "delisted": true,
+      "dev_account": "usr:dana",
+      "listing_id": 5,
+      "listing_key": "epsilon",
+      "price_paid": 7,
+      "purchase_id": 1,
+      "purchased_utc": "2026-10-25T09:00:00Z",
+      "title": "Service Epsilon"
+    },
+    {
+      "current_price": 5,
+      "delisted": false,
+      "dev_account": "usr:dana",
+      "listing_id": 4,
+      "listing_key": "delta",
+      "price_paid": 5,
+      "purchase_id": 4,
+      "purchased_utc": "2026-10-25T09:30:00Z",
+      "title": "Service Delta"
+    },
+    {
+      "current_price": 10,
+      "delisted": false,
+      "dev_account": "usr:dana",
+      "listing_id": 1,
+      "listing_key": "alpha",
+      "price_paid": 10,
+      "purchase_id": 5,
+      "purchased_utc": "2026-10-25T09:50:00Z",
+      "title": "Service Alpha"
+    }
+  ],
+  "pending_count": 3,
+  "purchase_count": 5,
+  "rated_count": 1,
+  "refunded_count": 1
+}
