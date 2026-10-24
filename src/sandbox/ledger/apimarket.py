@@ -160,6 +160,18 @@ def _assert_month(window):
     return window
 
 
+def _price_bound(value, name):
+    """Positive-integer price bound for the discovery band
+    (AC-AMSQ6): None means unbounded, every other form must be a
+    real positive int - bool is not an int here."""
+    if value is None:
+        return None
+    if (not isinstance(value, int) or isinstance(value, bool)
+            or value <= 0):
+        raise ApiMarketError(E_AM_BAD_PRICE, str(value))
+    return int(value)
+
+
 def split_amount(price, params=None):
     """Pure integer split (AC-AM4): floor for both legs first, then
     the remainder is distributed one token at a time in input
@@ -780,6 +792,97 @@ class APIMarketFace:
         return {"buyer_id": buyer_id, "purchase_count": len(out),
                 "total_spent": total, "disclaimer": self.disclaimer,
                 "purchases": out}
+
+    def api_search(self, keyword=None, dev_account=None, min_price=None,
+                   max_price=None, include_delisted=False):
+        """Market discovery surface (pre-registered AC-AMSQ1..AMSQ8
+        in the R2082 explore-queue row BEFORE this code existed).
+
+        The five existing read faces each answer one narrow
+        question (one listing, one seller, one buyer's library,
+        the whole board); a resident looking for a usable service
+        could only enumerate everything. This face answers "which
+        listings match my need": a case-insensitive keyword
+        substring over title OR listing_key (description is
+        deliberately NOT searched), an optional seller filter, an
+        optional price band applied to the CURRENT asking price
+        (the newest revision wins, so a repriced listing moves
+        bands), and an explicit include_delisted switch (retired
+        listings are hidden by default; when included they carry
+        their retirement stamp and their revision-derived price).
+
+        Gate order is pinned by AC-AMSQ6 - every gate runs before
+        any read: keyword shape, then seller shape, then the price
+        band (including the inverted band form), then the
+        include_delisted type. Refusals are fail-closed with zero
+        side effects. Rows are ordered by current price ascending,
+        then listing_id ascending (cheapest first, stable). Pure
+        read: zero row mutations and zero token movement. The
+        envelope carries the resident non-advisory disclaimer and
+        an echo of the normalized criteria."""
+        kw = None
+        if keyword is not None:
+            if not isinstance(keyword, str):
+                raise ApiMarketError(E_AM_BAD_ARGS, str(keyword))
+            stripped = keyword.strip()
+            if not stripped:
+                raise ApiMarketError(E_AM_BAD_ARGS, "keyword blank")
+            kw = stripped
+        if dev_account is not None:
+            if (not isinstance(dev_account, str)
+                    or not dev_account.startswith("usr:")):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        low = _price_bound(min_price, "min_price")
+        high = _price_bound(max_price, "max_price")
+        if low is not None and high is not None and low > high:
+            raise ApiMarketError(E_AM_BAD_PRICE, "min_price>max_price")
+        if not isinstance(include_delisted, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS,
+                                 "include_delisted must be bool")
+        needle = None if kw is None else kw.casefold()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT listing_id, dev_account, listing_key, title,"
+                " token_price, ai_label FROM apimarket_listings"
+                " ORDER BY listing_id").fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[0])
+                stamp = self._delisted_utc(listing_id)
+                if stamp is not None and not include_delisted:
+                    continue
+                if dev_account is not None and r[1] != dev_account:
+                    continue
+                if needle is not None:
+                    hay = (str(r[3]) + "\n" + str(r[2])).casefold()
+                    if needle not in hay:
+                        continue
+                price = self._current_price(listing_id, int(r[4]))
+                if low is not None and price < low:
+                    continue
+                if high is not None and price > high:
+                    continue
+                n_rate, avg = self._agg_rating(listing_id)
+                out.append({"listing_id": listing_id,
+                            "dev_account": r[1],
+                            "listing_key": r[2],
+                            "title": r[3],
+                            "token_price": price,
+                            "ai_label": int(r[5]),
+                            "rating_count": n_rate,
+                            "rating_avg": avg,
+                            "delisted": stamp is not None,
+                            "delisted_utc": stamp})
+            out.sort(key=lambda row: (row["token_price"],
+                                      row["listing_id"]))
+        return {"disclaimer": self.disclaimer,
+                "criteria": {"keyword": kw,
+                             "dev_account": dev_account,
+                             "min_price": low,
+                             "max_price": high,
+                             "include_delisted": include_delisted},
+                "count": len(out),
+                "listings": out}
 
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board

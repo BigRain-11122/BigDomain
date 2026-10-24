@@ -2174,6 +2174,15 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-buyerlibrary", os.path.join(
         "ledger", "test_apimarket_library.py"), 8),
+    # R2082 market discovery seat: the keyword axis (title OR
+    # listing_key only, case-insensitive), the seller axis, the
+    # price band applied to the current asking price, the
+    # retirement switch, the pinned gate family and gate order,
+    # the ordering law (price ASC then listing_id), the pure-read
+    # law and cross-restart byte identity (AC-AMSQ1..AMSQ8
+    # pre-registered in the R2082 explore-queue claim row).
+    ("ledger-apimarket-search", os.path.join(
+        "ledger", "test_apimarket_search.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
