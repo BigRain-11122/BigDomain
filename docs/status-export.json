@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T15:26:19+08:00",
+  "export_ts": "2026-10-24T16:32:28+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2086: a resident can now keep a listing for later - the market's first pre-purchase intent face: watch a listing, unwatch it, and read your watchlist with the live asking price, the retirement stamp and whether you already own it.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (watch_api / unwatch_api / api_watchlist + two append-only tables) + src/sandbox/ledger/test_apimarket_watchlist.py (AC-AMWL1..AC-AMWL8, SUITE 8/8 double-run sha16 032d413219868a7e) + qa/apimarket-watchlist-R2086.log + qa/reconcile-all-R2086.log (RUNNER 292/292 + controls 7/7 394.6s)",
-    "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
+    "current": "R2087: the developer API market gains its first scarcity face - a seller can declare how many units a listing sells (or leave it unlimited), a sold-out listing refuses the next buyer before spending a token, and any resident can ask how many units are sold and how many remain.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (publish_api optional supply + purchase E_AM_SUPPLY_EXHAUSTED gate + api_supply read face + idempotent supply-column migration) + src/sandbox/ledger/test_apimarket_supply.py (AC-AMSP1..AMSP8, SUITE 8/8 double-run sha16 BD9A1A34C2C1878E) + qa/reconcile-all-R2087.log (battery 293/293 suites, 2450 criteria) + docs/suite-matrix.md - 2026-10-24 R2087",
+    "next_milestone": "next round: pick the next queue head; merchant id still gates the commercial faces - target within 48h (2026-10-26)"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 供给/售罄轴（publish_api supply + E_AM_SUPPLY_EXHAUSTED + api_supply）",
+      "on",
+      "R2087：可限量挂牌·售罄门位于买家专属门之后与账本移动之前·只读供给面全派生自不可变 purchase 行·旧库幂等补列·纯读零 token（SUITE 8/8 双跑·AC-AMSP1..AMSP8·电池 293/293 套件 2450 判据）"
+    ],
     [
       "apimarket 买家侧收藏/关注门（watch_api / unwatch_api / api_watchlist）",
       "on",
@@ -257,6 +262,10 @@
     ]
   ],
   "results": [
+    [
+      "R2087",
+      "R2087: the developer API market gains its first scarcity face. publish_api accepts an optional supply (None = unlimited, otherwise int >= 1) behind a pre-lock shape gate that stores zero rows and burns zero content-gate calls on a bad declaration; purchase_api refuses the next buyer with E_AM_SUPPLY_EXHAUSTED after the buyer-specific gates and before any ledger movement, so a sold-out refusal is free of side effects and a repeat buyer of the last unit still hears the precise duplicate cause; api_supply answers supply, sold, remaining and sold_out entirely derived from the immutable purchase rows; and databases written before this axis are migrated in place, their rows keeping supply NULL and staying infinitely purchasable. Suite 8/8 double-run byte-identical, battery 293/293 suites (2450 criteria)."
+    ],
     [
       "R2086",
       "R2086: the developer API market gains its first buyer-side intent face - watch_api / unwatch_api / api_watchlist. Two append-only tables keep every watch and unwatch event, so a re-watch keeps both historical rows while the live set holds exactly one and the first unwatch stamp is never rewritten. The pinned gate order (account, listing, retired, duplicate) fails closed with zero side effects; a retired listing cannot be newly watched but one watched before retirement stays visible with its stamp and revision-derived price. The ten-key rows carry the live asking price and this buyer's own purchase flag, buyer isolation and honest empty envelopes are pinned, zero tokens move, eight table digests stay frozen, and the whole family is byte-identical across three instances. Suite 8/8 double-run identical, battery 292/292 + controls 7/7, matrix 292/2442 byte-identical."
@@ -592,7 +601,7 @@
     "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 8,

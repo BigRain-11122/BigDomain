@@ -2234,6 +2234,15 @@ SUITES = [
     # pre-registered in the R2086 explore-queue claim row).
     ("ledger-apimarket-watchlist", os.path.join(
         "ledger", "test_apimarket_watchlist.py"), 8),
+    # R2087 supply axis: the scarcity face nobody had (publish
+    # gains an optional supply, purchase gains the exhaustion gate
+    # after the buyer-specific gates and before any ledger
+    # movement, api_supply reads supply/sold/remaining/sold_out
+    # derived from the immutable purchase rows), plus the
+    # idempotent pre-supply-database migration (AC-AMSP1..AMSP8
+    # pre-registered in the R2087 explore-queue claim row).
+    ("ledger-apimarket-supply", os.path.join(
+        "ledger", "test_apimarket_supply.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

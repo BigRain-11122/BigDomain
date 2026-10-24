@@ -78,6 +78,7 @@ E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
 E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
 E_AM_WATCH_DUP = "E_AM_WATCH_DUP"          # AC-AMWL5
 E_AM_NOT_WATCHED = "E_AM_NOT_WATCHED"      # AC-AMWL3
+E_AM_SUPPLY_EXHAUSTED = "E_AM_SUPPLY_EXHAUSTED"  # AC-AMSP3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -100,6 +101,7 @@ CREATE TABLE IF NOT EXISTS apimarket_listings (
     token_price INTEGER NOT NULL CHECK (token_price > 0),
     ai_label INTEGER NOT NULL CHECK (ai_label IN (0, 1)),
     listed_utc TEXT NOT NULL,
+    supply INTEGER,
     UNIQUE (dev_account, listing_key)
 );
 CREATE TABLE IF NOT EXISTS apimarket_purchases (
@@ -260,6 +262,20 @@ class APIMarketFace:
                                       isolation_level=None)
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.executescript(_SCHEMA)
+        self._ensure_supply_column()
+
+    def _ensure_supply_column(self):
+        """Idempotent forward migration for databases written
+        before the supply axis existed (AC-AMSP7): the column is
+        added only when absent, so old rows keep supply NULL and
+        stay infinitely purchasable - the pre-change behaviour is
+        preserved byte for byte."""
+        cols = [r[1] for r in self._conn.execute(
+            "PRAGMA table_info(apimarket_listings)").fetchall()]
+        if "supply" not in cols:
+            self._conn.execute(
+                "ALTER TABLE apimarket_listings ADD COLUMN supply"
+                " INTEGER")
 
     def _check_params(self):
         p = self.params
@@ -295,10 +311,30 @@ class APIMarketFace:
         board = self.devkeys.dev_board(dev_account)
         return len(board.get("keys", [])) > 0
 
+    def _supply_state(self, listing_id):
+        """Derived scarcity state of one listing (AC-AMSP1): the
+        declared supply (None = unlimited), the sold count read
+        from the immutable purchase rows, the remaining units and
+        the sold-out flag. Nothing is stored twice - remaining is
+        always derived, so a refused purchase can never desync
+        the count. Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT supply FROM apimarket_listings WHERE listing_id = ?",
+            (listing_id,)).fetchone()
+        supply = row[0] if row is not None else None
+        sold = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_purchases"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+        if supply is None:
+            return None, sold, None, False
+        remaining = max(0, int(supply) - sold)
+        return int(supply), sold, remaining, remaining == 0
+
     # -- listing domain ----------------------------------------------------
 
     def publish_api(self, dev_account, listing_key, title,
-                    description, payload, token_price, ai_generated):
+                    description, payload, token_price, ai_generated,
+                    supply=None):
         """List one developer service: the registry gate runs
         first (off-register publishers never reach the content
         gate, so no msgSecCheck call is burned - AC-AM2), then
@@ -324,6 +360,15 @@ class APIMarketFace:
                                  "service payload required")
         if not isinstance(ai_generated, bool):
             raise ApiMarketError(E_AM_BAD_ARGS, "ai_generated must be bool")
+        # Supply is a pre-lock shape gate (AC-AMSP5): a malformed
+        # scarcity declaration is refused before the registry read
+        # and before any msgSecCheck call, so a bad supply burns
+        # zero gate calls and stores zero rows. None = unlimited.
+        if (supply is not None
+                and (not isinstance(supply, int) or isinstance(supply, bool)
+                     or supply < 1)):
+            raise ApiMarketError(E_AM_BAD_ARGS,
+                                 "supply must be int >= 1 or None")
         body = json.dumps(payload, sort_keys=True)
         with self._lock:
             if not self._is_registered_dev(dev_account):
@@ -341,10 +386,10 @@ class APIMarketFace:
                 cur = self._conn.execute(
                     "INSERT INTO apimarket_listings (dev_account,"
                     " listing_key, title, description, payload_json,"
-                    " token_price, ai_label, listed_utc)"
-                    " VALUES (?,?,?,?,?,?,?,?)",
+                    " token_price, ai_label, listed_utc, supply)"
+                    " VALUES (?,?,?,?,?,?,?,?,?)",
                     (dev_account, key, t, d, body, token_price,
-                     1 if ai_generated else 0, _now_utc()))
+                     1 if ai_generated else 0, _now_utc(), supply))
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
                 self._conn.execute("ROLLBACK")
@@ -355,7 +400,8 @@ class APIMarketFace:
         return {"listing_id": cur.lastrowid, "dev_account": dev_account,
                 "listing_key": key, "title": t,
                 "token_price": token_price,
-                "ai_label": 1 if ai_generated else 0}
+                "ai_label": 1 if ai_generated else 0,
+                "supply": supply}
 
     def _require_listing(self, listing_id):
         """Validation + lookup under no lock (caller holds it).
@@ -646,6 +692,16 @@ class APIMarketFace:
                 (buyer_id, listing_id)).fetchone()
             if row is not None:
                 raise ApiMarketError(E_AM_PURCHASE_DUP,
+                                     "%s/%s" % (buyer_id, listing_id))
+            # Supply gate (AC-AMSP3/AC-AMSP4): refused AFTER the
+            # buyer-specific gates, so a repeat buyer of the last
+            # unit still hears the precise DUP cause, and BEFORE
+            # any ledger movement, so a sold-out refusal never
+            # spends a token.
+            _supply, _sold, remaining, _sold_out = \
+                self._supply_state(listing_id)
+            if remaining == 0:
+                raise ApiMarketError(E_AM_SUPPLY_EXHAUSTED,
                                      "%s/%s" % (buyer_id, listing_id))
             price = self._current_price(listing_id, listing[2])
             dev_share, platform_share = split_amount(
@@ -1123,6 +1179,30 @@ class APIMarketFace:
                             "watched_utc": r[6]})
         return {"buyer_id": buyer_id, "watch_count": len(out),
                 "disclaimer": self.disclaimer, "watches": out}
+
+    def api_supply(self, listing_id):
+        """Scarcity read face (AC-AMSP1): the declared supply,
+        the units sold (derived from the immutable purchase rows),
+        the remaining units and the sold-out flag, plus the
+        resident disclaimer. A listing published WITHOUT a supply
+        keeps the pre-change contract: supply None, remaining
+        None, sold_out False - unlimited. Pure read, zero token
+        movement."""
+        with self._lock:
+            self._require_listing(listing_id)
+            row = self._conn.execute(
+                "SELECT listing_key, dev_account, listed_utc"
+                " FROM apimarket_listings WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            supply, sold, remaining, sold_out = \
+                self._supply_state(listing_id)
+        return {"listing_id": int(listing_id),
+                "listing_key": row[0],
+                "dev_account": row[1],
+                "supply": supply, "sold": sold,
+                "remaining": remaining, "sold_out": sold_out,
+                "listed_utc": row[2],
+                "disclaimer": self.disclaimer}
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
                    max_price=None, include_delisted=False,

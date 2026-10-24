@@ -1,0 +1,9 @@
+PASS AC-AMSP1: keys=True d1 supply/sold/remaining/sold_out=(2, 2, 0, True) d2=(None, 2, None, False)
+PASS AC-AMSP2: view keys=True board keys=True library keys=True unlimited after third sale sold=3 remaining=None
+PASS AC-AMSP3: refused=E_AM_SUPPLY_EXHAUSTED digests frozen=True token set constant=True balance frozen=True sold still 2=True
+PASS AC-AMSP4: bad accounts=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] unknown=E_AM_UNKNOWN_LISTING self=E_AM_SELF_BUY dup=E_AM_PURCHASE_DUP retired=E_AM_DELISTED purchases frozen=True
+PASS AC-AMSP5: bad supplies=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] gate calls on bad=0 rows on bad=0 good supply=1 gate calls on good=2
+PASS AC-AMSP6: repeat identical=True digests frozen=True ledger tx set constant=True
+PASS AC-AMSP7: supply column count=1/1 stable=True legacy before=(None, 0, None, False) after one sale=(1, None) after two=(2, False)
+PASS AC-AMSP8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True restart identity=True
+SUITE 8/8
