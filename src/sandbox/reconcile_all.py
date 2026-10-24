@@ -2221,6 +2221,13 @@ SUITES = [
     # (AC-HYGW1..HYGW8 pre-registered in state/queue/explore.md).
     ("ledger-honorcert-grantwidthworld", os.path.join(
         "ledger", "test_honorcert_grantwidthworld.py"), 8),
+    # R2075 liveroom open-session minor-guard front-door law: the cheap
+    # doors reject before the guard while the three guard-bearing forms
+    # reach check_live once each, a refused session id stays unused, the
+    # minor live ban survives two full-stack restarts and a guard-free
+    # face keeps the old behaviour (AC-LGM1..AC-LGM8 pre-registered).
+    ("liveroom-minorguard-persist", os.path.join(
+        "liveroom", "test_liveroom_minorguard_persist.py"), 8),
     ("ledger-honorcert-grantgate-persist", os.path.join(
         "ledger", "test_honorcert_grantgatepersist.py"), 7),
     # studio cross-restart persist window (R1949): three-piece

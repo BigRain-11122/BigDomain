@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T10:32:24+08:00",
+  "export_ts": "2026-10-24T10:50:16+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2074: the honor-certificate grant now answers the slice-WIDTH axis on a world whose certificates are already issued - a narrower re-run keeps every holder certified with zero new rows, a wider re-run grants exactly the untouched members, an over-range top_n clamps to the board instead of erroring, and a replay with a different item_id keeps the first award.",
-    "latest_artifact": "src/sandbox/ledger/test_honorcert_grantwidthworld.py + qa/honorcert-grantwidth-R2074.log (SUITE PASS 8/8 double-run identical stdout sha16 88ed30e07938bc15; RUNNER PASS 282/282 suites + controls 7/7 246.0s = qa/reconcile-all-R2074.log; suite-matrix 282 suites / 2362 criteria byte-identical, 2026-10-24)",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
+    "current": "R2075: the live-room opening face now pins its minor-guard front-door order - the five cheap doors reject without ever consulting the guard, the three guard-bearing forms reach it exactly once each, a refused session id stays unused, and the minor live ban survives two full restarts from the guard's own store.",
+    "latest_artifact": "src/sandbox/liveroom/test_liveroom_minorguard_persist.py + qa/liveroom-minorguard-R2075.log (SUITE PASS 8/8 double-run identical stdout sha16 18b56de00d27a767; RUNNER PASS 283/283 suites + controls 7/7 229.7s = qa/reconcile-all-R2075.log; suite-matrix 283 suites / 2370 criteria byte-identical, 2026-10-24)",
+    "next_milestone": "2026-10-25: the nine-company automation build plan (funnel four-ring spec + 72h self-continuation acceptance to 10-31) goes to the council three-in-one submission; P-47 design sets stay gated on the CEO merchant/server physical parts."
   },
   "depts": [
     {
@@ -211,6 +211,10 @@
     [
       "0",
       "城市群线④业务技能扫描贡献件（R2063·集团令 2026-10-23 23:3x·死线 2026-10-26 提前兑现）：docs/research/R-20261024-bigdomain-skill-scan.md 34 行 ≤60 契约·10 条各带发布/生效日+官方域可点链接·三态结论〔采用 8/待验 1〕·冲突 3 条〔C1 小程序虚拟支付专用商户号=C 端虚拟商品唯一通道·禁普通支付与外链·推翻现行单商户 JSAPI 设想；C2 GB 45438-2025 显式+隐式双轨标识·我方仅显式文案行+blind_watermark 试点·隐式元数据无字段落点；C3 pycrdt vendor 0.14.8 vs 已发布 0.14.10〔Provider.synced 初次同步事件+跨线程清理修复〕〕·可验收动作 3 条〔A1 支付件补节/A2 UGC 隐式元数据+msgSecCheck 4000min·200万日配额表/A3 pycrdt 0.14.10 轮子复验〕·B 级费率口径注明待官方复核·零登录态抓取·HQ-FEEDBACK 指针一行已呈线④汇总席·诚实注=本轮无新可跑件按执行协议记 0 分"
+    ],
+    [
+      "2",
+      "开播面 minor-guard 前置门序+跨重启封禁持久件（R2075）：src/sandbox/liveroom/test_liveroom_minorguard_persist.py 8 判据全绿（SUITE 8/8 双跑同一 sha16 18b56de00d27a767·电池 283/283·矩阵 283/2370 --check byte-identical·证据 qa/liveroom-minorguard-R2075.log）——五廉价门零 check_live、三守卫门各 1 次、拒绝不占 session id、零 token、两次全栈重启封禁仍在、读面跨实例字节同一、无 guard 旧路不变"
     ]
   ],
   "results": [
@@ -219,7 +223,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2074",
+      "2075",
       "OSLoop 执行 tick"
     ],
     [
@@ -497,31 +501,24 @@
     [
       "R2074",
       "R2074 P3 explore-queue head reclaimed on the slice-WIDTH reading: the already-granted honor world answers narrower (top_n=1 -> one already, permanence keeps alice certified), wider (top_n=4 -> the two untouched members granted, holders already), out-of-range (top_n=9 clamps to board length, no reject) and foreign-item_id (first grant stays the award) forms with the certificate row set constant around the gate battery and byte-identical across two full-stack restarts. AC-HYGW1..HYGW8 pre-registered before the suite; 8/8 double-run sha16 88ed30e07938bc15; RUNNER 282/282 + controls 7/7 246.0s; matrix 282/2362 --check byte-identical."
+    ],
+    [
+      "R2075",
+      "R2075 overdue OSS 72h row closed (two new slices, zero @BigDomain hits, zero-claim) plus a new liveroom minor-guard front-door suite: the five cheap doors reject with zero check_live calls while the three guard-bearing forms reach it once each, a refused session id stays unused, the minor live ban survives two full-stack restarts, read faces stay byte-identical and the guard-free face is unchanged. AC-LGM1..AC-LGM8 pre-registered; 8/8 double-run sha16 18b56de00d27a767; RUNNER 283/283 + controls 7/7 229.7s; matrix 283/2370 --check byte-identical."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 2,
+    "log_lines_in_window": 3,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 2,
+    "substantive_non_idle_mention_lines": 3,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 2,
+    "queue_explore_open": 1,
     "method": "machine-derived from src/os/state.json log and queue files"
-  },
-  "window": "2026-10-18..2026-10-24",
-  "window_days": 7,
-  "log_lines_in_window": 2,
-  "idle_fast_mention_lines": 0,
-  "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 2,
-  "proposals_total": 5,
-  "proposals_open": 3,
-  "queue_main_open": 6,
-  "queue_tech_open": 4,
-  "queue_explore_open": 2
+  }
 }
