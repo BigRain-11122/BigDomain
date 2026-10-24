@@ -1,0 +1,12 @@
+PASS AC-AMFL1: keys=10 default_same=True a=5 b=3 market=8
+PASS AC-AMFL2: shapes=8 window_first=True inverted_first=True kinds=True limit=True frozen=True
+PASS AC-AMFL3: total=0 returned=0 listing=999999 kinds_kept=True
+PASS AC-AMFL4: merged=8 market=8 disjoint=True
+PASS AC-AMFL5: kinds=2 window=3 tail=2/5 truncated=True
+PASS AC-AMFL6: identical=True frozen=True tx_frozen=True
+report written: C:\Users\sjs20\AppData\Local\Temp\amfeedlisting-h1xpbbig\s.html (14076 bytes, sha256 f3f9f6c097c893f2)
+attention findings: 1 (severity {"warn": 1})
+report json written: C:\Users\sjs20\AppData\Local\Temp\amfeedlisting-h1xpbbig\s.json (23400 bytes, schema 7)
+PASS AC-AMFL7: schema=7 keys=9 same=True heads=True env=['attention', 'report', 'schema_version']
+PASS AC-AMFL8: runner=True cfgs=True ascii=True
+SUITE 8/8 PASS

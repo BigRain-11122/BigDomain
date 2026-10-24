@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T05:41:41+08:00",
+ "export_ts": "2026-10-25T06:24:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2112 卖家侧需求读面（api_listing_demand）落地：市场一直只有买家侧的关注面，卖家看不到「我这一件有多少人在看、关注之后有没有成交」。本轮补上——每一件挂牌都成行（零关注与已下架件也在），只计活关注（撤关注不计、再关注不叠加），转化按净额算（只有未退款的购买才算成交，退款把买家送回待转化），现价与标题走既有单缝，纯读零 token；同一窗把它接进结算报告的待办摘要（≥2 人关注且零成交 → 未转化需求告警），所以它不是又一个没人用的面。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_listing_demand）+ src/sandbox/ledger/apimarket_report.py（unconverted_demand 家族）+ src/sandbox/ledger/test_apimarket_listingdemand.py（SUITE PASS 8/8，双跑逐位同一 sha16 0df8247b62369ec1）+ qa/apimarket-listingdemand-R2112.log + qa/reconcile-all-R2112.log（RUNNER PASS 317/317 suites + controls 7/7，757.1s）+ docs/sandbox-suite-matrix.md（317 suites / 2644 criteria，--check 逐字节同） + preview/apimarket-demand-R2112.json（种子演示世界加两条关注后，api_listing_demand 的卖家行与 attention 的 unconverted_demand 告警实录）",
-  "next_milestone": "48 小时内：公共活动流的逐挂牌过滤（api_market_feed 增 listing_id 参数，卖家/买家停在某一挂牌页面上就能看「这一件最近发生了什么」，不必再翻七张逐挂牌面并表）+ 商家号到位前的支付合规路径继续设计态——两项都不需要物理件。"
+  "current": "R2113 公共活动流的逐挂牌过滤落地：以前市场动态只能按时间/类型/条数看，买家或卖家停在一件挂牌的页面上没法问「这一件最近发生了什么」（要自己翻七张历史面并表，只有离线报告里做过）。本轮给动态流加了按挂牌过滤，并把它接进结算报告——每件挂牌的档案块下多一张「近期活动」表，价格改动、补货、成交、评价、下架都按时间排好；同一件挂牌的历史从此一眼可读。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_market_feed 增 listing_id 过滤）+ src/sandbox/ledger/apimarket_report.py（挂牌档案 feed 键 + 近期活动子表，REPORT_SCHEMA 6→7 加法）+ src/sandbox/ledger/test_apimarket_marketfeed_listing.py（SUITE PASS 8/8，双跑判据行同一 sha16 2754320e137abf5e）+ qa/apimarket-feedlisting-R2113.log（与 -2） + qa/reconcile-all-R2113.log（RUNNER PASS 318/318 suites + controls 7/7，556.3s）+ docs/sandbox-suite-matrix.md（318 suites / 2652 criteria，--check 逐字节同）",
+  "next_milestone": "48 小时内：卖家侧「这一件为什么卖不动」的组合视图（把需求/库存/退款/评价欠债按挂牌合成一屏，避免再逐面切换）+ 商家号到位前的支付合规路径继续设计态——两项都不需要物理件。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 公共活动流逐挂牌过滤（api_market_feed listing_id）+ 挂牌档案近期活动子表 + REPORT_SCHEMA 6→7",
+   "on",
+   "R2113：市场动态流（R2107）只能按时间窗、事件类型与条数切，买家/卖家停在一件挂牌页面上无法回答「这一件最近发生了什么」——该件历史散在七张逐挂牌面，只有离线报告的档案段（R2109）替人并过表。本窗给 feed 加可选 listing_id：形门（bool/str/float/0/负 → E_AM_BAD_ARGS）排在 limit 门之后、任何读之前；信封新增 listing_id 回显键，缺省调用与 R2107 契约逐字节同一；形合法但市场不存在的 id 给诚实空流（feed 是流过滤器，api_view 才是实体面）；与窗口/类型/条数复合，total 恒为截断前计数；他挂牌事件零渗透、逐挂牌流拼接恰等于全市场流。消费面：collect_dossiers 每块新增 feed 键（DOSSIER_KEYS 8→9，同源等于直调），HTML 挂牌档案每块用既有六列渲染器画「近期活动」子表并诚实空态，REPORT_SCHEMA 6→7 加法升级（信封仍恰三键，旧键值不变）。判据 AC-AMFL1..AC-AMFL8 预注册于代码之前（五锚 git grep -F 零占用 rc=1）；套件 SUITE PASS 8/8 双跑判据行同一 sha16 2754320e137abf5e（qa/apimarket-feedlisting-R2113.log + -2）；接线 ledger-apimarket-feedlisting(8)；电池 RUNNER PASS 318/318 suites + controls 7/7 556.3s；矩阵 318 suites/2652 criteria --check byte-identical；census DRIFT-CLEAN files=1772 flags=0。诚实注：首跑电池唯一红为 census cd7（在途证据件是 PowerShell UTF-16 方言），改「电池写 TEMP + 结束后 python 单写者转 utf-8 LF 入 qa/」后复绿，首份 FAIL 件未留档如实记；两处写死 schema==6 的断点改为动态对照模块常量；AC-AMFL5 窗口期望值按实测钉死（该窗 3 事件）未放宽判据。"
+  ],
   [
    "apimarket 市场级退款登记簿（api_refund_register）+ 报表 Refund register 段 + REPORT_SCHEMA 5→6",
    "on",
@@ -362,6 +367,10 @@
   ]
  ],
  "results": [
+  [
+   "R2113",
+   "R2113: the market activity feed gains the one axis it never had - a per-listing filter - and, more importantly, a consumer for it. The stream could be sliced by time window, kind family and tail limit, but a buyer or seller on one listing page could not ask what happened to that shelf; the per-listing history lived in seven faces nobody merged outside the offline report. api_market_feed now accepts listing_id with its shape gate after the limit gate and before any read, echoes it in a new envelope key so a default call stays byte-identical to the R2107 contract, answers an honest empty feed for a shape-valid id the market does not hold (a stream filter, not an entity lookup), and composes with window/kind/limit while total stays pre-truncation. Every report dossier block now carries that listing's feed (DOSSIER_KEYS 8 -> 9, same-source as a direct call at FEED_LIMIT) and the page renders a recent-activity sub-table through the existing six-column renderer with its honest empty state; REPORT_SCHEMA moves 6 -> 7 additively with the envelope still exactly three keys. AC-AMFL1..AC-AMFL8 pre-registered before the code (five anchors git grep -F zero-occupancy rc=1); suite 8/8 double-run criterion lines identical sha16 2754320e137abf5e; wired ledger-apimarket-feedlisting (8); battery RUNNER PASS 318/318 suites plus controls 7/7 in 556.3s; matrix 318 suites / 2652 criteria --check byte-identical; census DRIFT-CLEAN files=1772 flags=0. Three honest notes: (a) the first battery was 317/318 with reconcile-daily-census cd7 as the only red because the in-flight evidence log was a PowerShell UTF-16 tee artifact - the battery now writes to TEMP and a python single writer transcodes it to utf-8 LF afterwards, after which census is green (that first FAIL log was deleted before the re-run and is honestly unarchived); (b) the buyerhistory and refundregister suites pinned schema as a literal 6 and now follow the module constant while keeping their v5/v6 key sets literal; (c) the AC-AMFL5 window expectation was written wrong twice before being pinned to the measured three-event truth."
+  ],
   [
    "R2111",
    "R2111: closeout of the interrupted refund-register window. The market now has a refund register face (api_refund_register) - refunds were reachable only one purchase at a time or one buyer at a time, so the operator question 'what came back this month across the whole market, which seller absorbed the most and where does it sit per listing' had no face; one read of the append-only refund rows now answers it with three groupings over the same row set (UTC month, developer, rows), a half-open window, seller and listing filters, a pinned gate order before any read and the pure-read law. The settlement report consumes it in a Refund register section with three tables and an honest empty state, and REPORT_SCHEMA moves 5 -> 6 additively. Verification this window: suite double-run rc=0/0 with identical verdict-line sha16 189ab027aac404a4, evidence pair ending SUITE PASS 13/13 with the six sibling report suites green as children; battery RUNNER PASS 316/316 suites plus controls 7/7 in 564.3s; the suite matrix had not been regenerated for the new suite (stale check with an evidence face mismatch), rebuilt against the R2111 battery log at 316 suites / 2636 criteria and byte-identical on re-check; census DRIFT-CLEAN files=1771 flags=0. The explore queue emptied on the claim, so two fresh rows were seeded (seller-side listing demand face; per-listing activity filter), both anchors git grep -F zero-occupancy rc=1."
@@ -792,7 +801,7 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 36,
+  "log_lines_in_window": 37,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 36,
@@ -800,6 +809,6 @@
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 2
+  "queue_explore_open": 1
  }
 }

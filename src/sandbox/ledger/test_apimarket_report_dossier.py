@@ -170,6 +170,8 @@ def direct_block(db, listing_id):
             "supply_history": am.api_supply_history(listing_id),
             "ratings": am.api_ratings(listing_id),
             "rating_replies": am.api_rating_replies(listing_id),
+            "feed": am.api_market_feed(listing_id=listing_id,
+                                       limit=R.FEED_LIMIT),
         }
     finally:
         am.close()

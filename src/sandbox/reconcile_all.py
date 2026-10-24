@@ -2375,6 +2375,11 @@ SUITES = [
     # merged into one ordered, windowable, kind-filterable stream.
     ("ledger-apimarket-marketfeed", os.path.join(
         "ledger", "test_apimarket_marketfeed.py"), 8),
+    # R2113 per-listing filter on that feed: listing_id narrows the same
+    # stream to one shelf, and every dossier block now carries the
+    # listing's own activity tail (schema 6 -> 7 additive).
+    ("ledger-apimarket-feedlisting", os.path.join(
+        "ledger", "test_apimarket_marketfeed_listing.py"), 8),
     # R2108 activity section on the report generator: the R2107 feed now
     # has a consumer - every collect reads the newest FEED_LIMIT events
     # into an activity block, the page renders them, and the JSON

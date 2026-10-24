@@ -74,8 +74,9 @@ ROW_KEYS = {"kind", "event_utc", "ref_id", "listing_id",
             "listing_key", "title", "dev_account", "token_price",
             "stars", "previous_stars", "amount", "units", "detail"}
 
-ENVELOPE_KEYS = {"kinds", "since_utc", "until_utc", "limit", "total",
-                 "returned", "truncated", "disclaimer", "events"}
+ENVELOPE_KEYS = {"kinds", "since_utc", "until_utc", "listing_id",
+                 "limit", "total", "returned", "truncated",
+                 "disclaimer", "events"}
 
 TABLES = ("apimarket_listings", "apimarket_purchases",
           "apimarket_ratings", "apimarket_rating_revisions",

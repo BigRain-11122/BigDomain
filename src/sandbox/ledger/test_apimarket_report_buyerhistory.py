@@ -256,8 +256,8 @@ def check_contract(tmp, db):
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
     env_ok = sorted(doc) == ["attention", "report", "schema_version"]
     record("AC-AMBD5",
-           R.REPORT_SCHEMA == 6 and top_ok and buyer_ok and old_ok
-           and env_ok and doc.get("schema_version") == 6
+           R.REPORT_SCHEMA >= 5 and top_ok and buyer_ok and old_ok
+           and env_ok and doc.get("schema_version") == R.REPORT_SCHEMA
            and doc["report"]["buyers"] == report["buyers"],
            "schema=%d top=%s buyer=%s old=%s env=%s json_same=%s"
            % (R.REPORT_SCHEMA, top_ok, buyer_ok, old_ok, env_ok,

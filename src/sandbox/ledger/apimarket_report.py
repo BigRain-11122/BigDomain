@@ -80,7 +80,10 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # v6 (R2111) adds the market-wide refunds register key at the report
 # top level (same additive rule: no envelope change, no earlier value
 # touched).
-REPORT_SCHEMA = 6
+# v7 (R2113) adds the per-listing feed key inside every dossier block:
+# the envelope is unchanged and every earlier dossier key keeps its
+# value.
+REPORT_SCHEMA = 7
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -90,7 +93,7 @@ REFUND_EMPTY = "no refunds in this market"
 
 DOSSIER_KEYS = ("view", "lifecycle", "price_history",
                 "metadata_history", "supply", "supply_history",
-                "ratings", "rating_replies")
+                "ratings", "rating_replies", "feed")
 DOSSIER_EMPTY = "no listings in this market"
 
 # How many of the newest activity events the report keeps. The feed's
@@ -215,6 +218,8 @@ def collect_dossiers(am):
             "supply_history": am.api_supply_history(listing_id),
             "ratings": am.api_ratings(listing_id),
             "rating_replies": am.api_rating_replies(listing_id),
+            "feed": am.api_market_feed(listing_id=listing_id,
+                                       limit=FEED_LIMIT),
         }
     return out
 
@@ -551,7 +556,8 @@ def dossier_block(dossiers):
 
     Each block opens with the effective view row, then the four
     append-only timelines (price, metadata, supply, lifecycle) and the
-    two trust faces (ratings, replies). Every dynamic string is escaped
+    two trust faces (ratings, replies) and the per-listing activity
+    tail (R2113). Every dynamic string is escaped
     and every sub-table degrades to an honest empty state, so a listing
     with no revisions renders instead of raising."""
     if not dossiers:
@@ -591,6 +597,11 @@ def dossier_block(dossiers):
         out.append("<h4>replies (%s)</h4>"
                    % esc(replies.get("reply_count", 0)))
         out.append(row_table(replies.get("rows"), "no replies"))
+        feed = block.get("feed") or {}
+        out.append("<h4>recent activity (%s of %s event(s))</h4>"
+                   % (esc(feed.get("returned", 0)),
+                      esc(feed.get("total", 0))))
+        out.append(activity_block(feed))
     return "\n".join(out)
 
 

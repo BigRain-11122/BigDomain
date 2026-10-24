@@ -2842,7 +2842,7 @@ class APIMarketFace:
                 "listings": rows}
 
     def api_market_feed(self, since_utc=None, until_utc=None,
-                        kinds=None, limit=None):
+                        kinds=None, limit=None, listing_id=None):
         """Market-wide public activity feed (criteria AC-AMF1..AC-AMF8
         pre-registered in the R2107 explore-queue row BEFORE this
         code existed).
@@ -2871,9 +2871,20 @@ class APIMarketFace:
         N events (the tail of the ordered stream) and returns them
         ascending; total is always the pre-truncation count.
 
-        Gate order is pinned by AC-AMF6 - window shape, inverted
-        window, kinds shape, limit shape - and every gate runs BEFORE
-        any read, fail-closed with zero side effects. The row shape
+        listing_id (AC-AMFL1..AC-AMFL8, pre-registered in the R2113
+        explore-queue row BEFORE this code existed) narrows the same
+        stream to one shelf, so an operator looking at one listing can
+        answer "what happened to this one" without opening the seven
+        per-listing history faces and merging them by hand. It composes
+        with every earlier axis; a shape-valid id the market does not
+        hold answers an honest empty feed, because the feed is a stream
+        filter rather than an entity lookup (api_view is that entity
+        face).
+
+        Gate order is pinned by AC-AMF6 and extended by AC-AMFL2 -
+        window shape, inverted window, kinds shape, limit shape, then
+        listing shape - and every gate runs BEFORE any read,
+        fail-closed with zero side effects. The row shape
         is a fixed thirteen keys with None for fields that do not
         apply to a kind, and no buyer identity is exposed (the feed
         is public). Pure read: zero row mutations, zero token
@@ -2906,6 +2917,15 @@ class APIMarketFace:
                     or limit < 1):
                 raise ApiMarketError(E_AM_BAD_ARGS,
                                      "bad limit: %r" % (limit,))
+        only = None
+        if listing_id is not None:
+            if (isinstance(listing_id, bool)
+                    or not isinstance(listing_id, int)
+                    or listing_id < 1):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "bad listing_id: %r"
+                                     % (listing_id,))
+            only = int(listing_id)
         with self._lock:
             listings = {}
             for r in self._conn.execute(
@@ -2916,6 +2936,8 @@ class APIMarketFace:
 
             def add(kind, stamp, ref, listing_id, **extra):
                 if wanted is not None and kind not in wanted:
+                    return
+                if only is not None and only != int(listing_id):
                     return
                 base = listings.get(int(listing_id))
                 if base is None:
@@ -2933,8 +2955,8 @@ class APIMarketFace:
                 row.update(extra)
                 events.append(row)
 
-            for listing_id, base in listings.items():
-                add("published", base[4], listing_id, listing_id,
+            for lid, base in listings.items():
+                add("published", base[4], lid, lid,
                     token_price=base[3])
             for r in self._conn.execute(
                     "SELECT revision_id, listing_id, token_price,"
@@ -2991,6 +3013,7 @@ class APIMarketFace:
                           else list(_FEED_KINDS)),
                 "since_utc": since_utc,
                 "until_utc": until_utc,
+                "listing_id": only,
                 "limit": limit,
                 "total": total,
                 "returned": len(shown),
