@@ -2260,6 +2260,8 @@ SUITES = [
     # explore-queue claim row.
     ("ledger-apimarket-relist", os.path.join(
         "ledger", "test_apimarket_relist.py"), 8),
+    ("ledger-apimarket-marketstats", os.path.join(
+        "ledger", "test_apimarket_marketstats.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

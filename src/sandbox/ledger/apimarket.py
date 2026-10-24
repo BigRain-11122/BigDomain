@@ -1909,3 +1909,87 @@ class APIMarketFace:
                 "first_listed_utc": first_listed,
                 "disclaimer": self.disclaimer,
                 "listings": rows}
+
+    def api_market_stats(self):
+        """Market-wide overview read face (pre-registered
+        AC-AMMS1..AC-AMMS8 in the R2090 explore-queue row BEFORE
+        this code existed): the whole market in one envelope.
+
+        The ten existing read faces each answer one narrow
+        question - one listing (api_view), one listing's ratings,
+        price history and metadata history, one seller's trust
+        face (dev_profile), the seller board (dev_sales_board),
+        one buyer's library (api_library), the whole board
+        (api_board), one search page (api_search), one listing's
+        supply (api_supply) and its lifecycle. None answers "how
+        big is this market": the live vs retired split, how many
+        developers and buyers participate, how much volume
+        actually settled after refunds, and which share of it
+        reached the developers. This face closes the top of the
+        reading chain.
+
+        Laws pinned by the suite: partition conservation
+        (listing_count == live + retired); trade conservation
+        (gross_tokens == net_gross_tokens + refunded_tokens and
+        net_gross_tokens == dev_revenue + platform_revenue
+        exactly, integer split); retirement only moves the
+        partition counters while every historical aggregate stays
+        byte-frozen; a refund lowers the net gross and both net
+        pools by exactly the refunded amounts while
+        purchase_count and buyer_count keep counting the trades
+        that did happen; a re-listing puts the listing back on
+        the live side without touching history. No arguments, so
+        no gate: the face is a pure read with zero row mutations
+        and zero token movement, and the envelope carries the
+        resident non-advisory disclaimer."""
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id FROM apimarket_listings"
+                " ORDER BY listing_id").fetchall()
+            listing_count = len(listings)
+            live = 0
+            retired = 0
+            price_sum = 0
+            for r in listings:
+                listing_id = int(r[0])
+                if self._delisted_utc(listing_id) is None:
+                    live += 1
+                    price_sum += self._current_price(listing_id)
+                else:
+                    retired += 1
+            dev_count = int(self._conn.execute(
+                "SELECT COUNT(DISTINCT dev_account)"
+                " FROM apimarket_listings").fetchone()[0])
+            buyer_count = int(self._conn.execute(
+                "SELECT COUNT(DISTINCT buyer_id)"
+                " FROM apimarket_purchases").fetchone()[0])
+            paid = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(price_paid), 0),"
+                " COALESCE(SUM(dev_share), 0),"
+                " COALESCE(SUM(platform_share), 0)"
+                " FROM apimarket_purchases").fetchone()
+            back = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0),"
+                " COALESCE(SUM(dev_share), 0),"
+                " COALESCE(SUM(platform_share), 0)"
+                " FROM apimarket_refunds").fetchone()
+            purchase_count = int(paid[0])
+            refund_count = int(back[0])
+            gross = int(paid[1])
+            refunded = int(back[1])
+            avg_price = (float(price_sum) / live) if live else None
+        return {"listing_count": listing_count,
+                "live_listing_count": live,
+                "retired_listing_count": retired,
+                "dev_count": dev_count,
+                "buyer_count": buyer_count,
+                "purchase_count": purchase_count,
+                "refund_count": refund_count,
+                "net_purchase_count": purchase_count - refund_count,
+                "gross_tokens": gross,
+                "refunded_tokens": refunded,
+                "net_gross_tokens": gross - refunded,
+                "dev_revenue": int(paid[2]) - int(back[2]),
+                "platform_revenue": int(paid[3]) - int(back[3]),
+                "avg_live_price": avg_price,
+                "disclaimer": self.disclaimer}
