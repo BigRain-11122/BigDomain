@@ -349,7 +349,7 @@ def main():
         out_tmp = os.path.join(tmp, "s.html")
         R.main(["--db", db_path, "--out", out_tmp, "--json-out", js_tmp])
         doc = json.loads(io.open(js_tmp, "r", encoding="utf-8").read())
-        ok7 = (R.REPORT_SCHEMA == 7
+        ok7 = (R.REPORT_SCHEMA >= 7
                and len(R.DOSSIER_KEYS) == 9
                and "feed" in R.DOSSIER_KEYS
                and same and heads

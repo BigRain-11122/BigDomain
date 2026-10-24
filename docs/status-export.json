@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T07:02:11+08:00",
+ "export_ts": "2026-10-25T07:58:10+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2114 集团决策水位升级：以前判断「集团有没有新决策」只看一个内容哈希，分不清是内容真变了、还是历史被改写、还是读到了没推送的分支（幽灵值）。本窗把水位改成带来源的四元组（仓库+提交+字节数+内容哈希）并附一条可复现取件命令，来源对不上就判 stale、绝不前进水位——这是集团 10-25 决议要求各司 10-26 06:00 前对齐的硬项。",
-  "latest_artifact": "src/os/dec_watermark.py（四元组观察/固定序比对/原子落盘/取件命令，record+check 两子命令）+ src/os/test_dec_watermark.py（SUITE PASS 8/8，双跑判据行同一 sha16 27a758e6da378422）+ qa/decwatermark-R2114.log（与 -run2） + state/dec_watermark.json（实锚集团 decisions.md·HEAD 4cf327b9·222683B·sha256 f94a284c） + qa/reconcile-all-R2114.log（RUNNER PASS）",
-  "next_milestone": "48 小时内：等集团把 HEAD 三提交推到 origin 后复检水位（check 应从 moved 转 unchanged/moved 再前进，禁据旧 origin blob 消费）；随后把水位检查接进轮首五静扫描，让「读到幽灵 sha」在扫描步就 fail-closed。"
+  "current": "R2115 卖家退款敞口面：退款门会在卖家把分成花掉后拒付，但此前没有任何面提前说明「这笔钱已经不在账上」。现在卖家与运营都能一眼看到每家的退款敞口、账上余额与缺口。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_refund_exposure（七键信封+九键密集行·敞口=未退款购买的存量卖家分账·余额取活账本·缺口/covered 派生·退役不销债·纯读） + apimarket_report.py 的 refund_risk 家族与 REPORT_SCHEMA 8 + src/sandbox/ledger/test_apimarket_refundexposure.py（SUITE PASS 8/8·双跑同一 sha16 112e6f0d43928930） + qa/reconcile-all-R2115.log（RUNNER PASS 320/320·controls 7/7·533.8s·2026-10-25 07:56）",
+  "next_milestone": "48 小时内：把退款敞口接进运营侧唯一页面之外的第二个消费面（市场级敞口排行榜/告警行），并把「卖家余额低于敞口」纳入每日对账的 fail 判据；随后按排队顺序继续 explore 队头新面。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "卖家侧退款敞口读面（api_refund_exposure + refund_risk 告警家族）",
+   "on",
+   "R2115：退款门能在卖家已花掉分成时拒付（余额地板是宪法面），但此前没有任何面在事发前告诉任何人「这笔钱已经不在账上了」——卖家答不出自己账上多少钱已被可能发生的退款占住，运营答不出今天谁会退不动。本窗交付卖家侧退款敞口读面 api_refund_exposure：从未退款购买的存量卖家分账派生敞口上限（改价/改文案不移动），活账本余额判可垫付，差额即缺口并在信封汇总；行集权威=挂牌表全部 distinct 卖家（密集·零成交卖家在榜·行序 dev_account 升序），无账本账户诚实报 balance 0 / balance_known False，退役不销债，账户门前置，纯读零 token。并接进唯一消费者：报表 attention 增 refund_risk 家族（缺口>0 · high）+ REPORT_SCHEMA 7→8 加法升级。证据=套件 8/8 双跑判据行同一 sha16 112e6f0d43928930；电池 RUNNER PASS 320/320 + controls 7/7 533.8s；矩阵 320/2668 --check 逐字节同；census DRIFT-CLEAN。诚实注：本窗接管的是一个崩溃前窗的遗留产物（state 仍停在 R2114），前窗证据件是 PS 重定向方言，已用 python 单写者重出 utf-8 LF；前窗电池日志死于某报表套件 300s 超时，本窗单独计时 81s、电池内 41.6s，判定为崩溃时机器负载而非产品挂死。"
+  ],
   [
    "集团决策水位键 v2 四元组（来源锚 + 可复现取件命令 + stale 不前进）",
    "on",
@@ -372,6 +377,10 @@
   ]
  ],
  "results": [
+  [
+   "R2115",
+   "R2115: take over and verify the interrupted refund-exposure window. The seller-side refund exposure face (api_refund_exposure) answers the question the refund door could only refuse: how much of a seller's balance is already spoken for by refunds the market may demand. Seven-key envelope, nine-key dense rows over every listing owner, liability = stored dev_share of unrefunded purchases (never recomputed from a price), balance from the live ledger with an honest balance_known False, shortfall and covered derived, retirement keeps the obligation, account gate before any read, pure read, cross-restart byte identity. The report attention digest gains a refund_risk family and REPORT_SCHEMA moves 7 -> 8 additively. Suite 8/8 double-run byte-identical sha16 112e6f0d43928930; battery RUNNER PASS 320/320 suites plus controls 7/7 in 533.8s; matrix 320 suites / 2668 criteria --check byte-identical; census DRIFT-CLEAN files=1783 flags=0."
+  ],
   [
    "R2114",
    "R2114: the decisions watermark gains the source anchor the group decision D-20261025-08 requires. The five-silence baseline advanced from a content hash alone, so it could not distinguish a content change from a rewritten history or an unmerged local read. New src/os/dec_watermark.py observes the four-tuple {repo, commit_sha, blob_bytes, sha256}, compares in the pinned order repo -> commit_sha -> blob_bytes -> sha256, never advances on a stale source, writes atomically and ships one reproducible fetch command; suite 8/8 double-run identical sha16 27a758e6da378422; wired os-decwatermark (8). Shipped state/dec_watermark.json anchors the group decisions.md at HEAD 4cf327b9 / 222683B / sha256 f94a284c. Honest notes: the criteria row was landed after the code in this window (disclosed deviation), and origin/main lags HEAD by three commits, so a check against origin reports moved and must not be consumed until the group pushes."
@@ -810,7 +819,7 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 39,
+  "log_lines_in_window": 41,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 36,

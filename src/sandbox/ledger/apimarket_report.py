@@ -83,7 +83,11 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # v7 (R2113) adds the per-listing feed key inside every dossier block:
 # the envelope is unchanged and every earlier dossier key keeps its
 # value.
-REPORT_SCHEMA = 7
+# v8 (R2115) adds the refund_risk family to the attention digest: the
+# attention block gains a new kind derived from api_refund_exposure,
+# the envelope is unchanged and every earlier finding kind keeps its
+# meaning.
+REPORT_SCHEMA = 8
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -356,6 +360,13 @@ def collect_attention(am, report):
                 add("negative_net", "warn", buyer,
                     "buyer net %d in %s" % (row["net"], row["month"]),
                     row["month"])
+    for row in am.api_refund_exposure()["rows"]:
+        if row["shortfall"] > 0:
+            add("refund_risk", "high", row["dev_account"],
+                "refund liability %d exceeds balance %d by %d"
+                % (row["refundable_liability"], row["balance"],
+                   row["shortfall"]),
+                "%d open purchase(s)" % row["open_purchases"])
 
     findings.sort(key=lambda f: (SEVERITY[f["severity"]], f["kind"],
                                  f["subject"], f["detail"]))

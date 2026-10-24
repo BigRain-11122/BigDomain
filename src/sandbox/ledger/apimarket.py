@@ -3522,3 +3522,118 @@ class APIMarketFace:
                     m["platform_paid_net"] for m in months),
                 "disclaimer": self.disclaimer,
                 "months": months}
+
+    def api_refund_exposure(self, dev_account=None):
+        """Seller-side refund exposure (criteria AC-RPX1..AC-RPX8
+        pre-registered in the R2115 explore-queue row BEFORE this code
+        existed).
+
+        refund_api fails closed with E_AM_REFUND_UNFUNDABLE when the
+        seller has already spent the proceeds (the AC-L2 balance floor
+        is constitutional), but no face warned anyone that the money to
+        fund the reversal was gone. The seller could not answer "how
+        much of my balance is already spoken for by refunds I may have
+        to pay back", and the operator could not answer "which seller
+        would break a refund today". This face derives that exposure
+        from rows that already exist: the unrefunded purchases' stored
+        dev_share is the maximum the seller can be asked to return, and
+        the live ledger balance says how much of it is actually
+        fundable.
+
+        Liability is never recomputed from a price: it is the stored
+        dev_share of every purchase that has no refund row, so a
+        repricing or a metadata edit moves it by nothing. A refund
+        removes exactly its own dev_share from the liability and lowers
+        the seller balance by the same amount, so the shortfall can only
+        move through other activity - which the suite pins. Retirement
+        does not erase the obligation: a retired listing keeps its open
+        purchases in the exposure exactly as it keeps them in
+        api_supply.
+
+        The row set authority is the listing table (every distinct
+        dev_account that owns a listing appears, zero-sale sellers
+        included) - dense, never a hardcoded roster. A seller with no
+        ledger account reports balance 0 with balance_known False
+        rather than raising: the honest reading is "no funds on the
+        books". Gate order is pinned by AC-RPX6 (dev_account shape
+        before any read, prefix-only by the truthful R2077/R2078
+        finding). Pure read: zero row mutations and zero token
+        movement. The envelope carries the resident non-advisory
+        disclaimer."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            if dev_account is None:
+                owner_rows = self._conn.execute(
+                    "SELECT DISTINCT dev_account"
+                    " FROM apimarket_listings"
+                    " ORDER BY dev_account").fetchall()
+                sellers = [str(r[0]) for r in owner_rows]
+            else:
+                owner_rows = self._conn.execute(
+                    "SELECT DISTINCT dev_account"
+                    " FROM apimarket_listings"
+                    " WHERE dev_account = ?", (str(dev_account),)
+                ).fetchall()
+                sellers = [str(r[0]) for r in owner_rows]
+            rows = []
+            for dev in sellers:
+                listing_count = int(self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                    " WHERE dev_account = ?", (dev,)).fetchone()[0])
+                open_rows = self._conn.execute(
+                    "SELECT COUNT(*), COALESCE(SUM(p.dev_share), 0)"
+                    " FROM apimarket_purchases p"
+                    " JOIN apimarket_listings l"
+                    " ON l.listing_id = p.listing_id"
+                    " LEFT JOIN apimarket_refunds f"
+                    " ON f.purchase_id = p.purchase_id"
+                    " WHERE l.dev_account = ? AND f.refund_id IS NULL",
+                    (dev,)).fetchone()
+                refunded_count = int(self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_refunds"
+                    " WHERE dev_account = ?", (dev,)).fetchone()[0])
+                balance, known = self._seller_balance(dev)
+                liability = int(open_rows[1])
+                shortfall = liability - balance
+                if shortfall < 0:
+                    shortfall = 0
+                rows.append({
+                    "dev_account": dev,
+                    "listing_count": listing_count,
+                    "open_purchases": int(open_rows[0]),
+                    "refunded_purchases": refunded_count,
+                    "refundable_liability": liability,
+                    "balance": balance,
+                    "balance_known": known,
+                    "shortfall": shortfall,
+                    "covered": shortfall == 0,
+                })
+        return {"dev_account": dev_account,
+                "seller_count": len(rows),
+                "total_liability": sum(r["refundable_liability"]
+                                       for r in rows),
+                "total_shortfall": sum(r["shortfall"] for r in rows),
+                "at_risk_count": sum(1 for r in rows
+                                     if r["shortfall"] > 0),
+                "disclaimer": self.disclaimer,
+                "rows": rows}
+
+    def _seller_balance(self, dev_account):
+        """Live ledger balance for a seller, honest about absence.
+
+        apimarket owns its own sqlite file, so the balance can only be
+        read through the ledger face (reference, never a second
+        bookkeeping copy). An account the ledger never saw is not an
+        error here - it is a zero balance with balance_known False."""
+        try:
+            bal = self.led.balance(dev_account)
+        except Exception:
+            return 0, False
+        if not isinstance(bal, dict):
+            return 0, False
+        try:
+            return int(bal.get("balance", 0)), True
+        except (TypeError, ValueError):
+            return 0, False

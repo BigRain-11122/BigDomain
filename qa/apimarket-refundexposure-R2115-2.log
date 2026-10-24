@@ -1,0 +1,10 @@
+PASS AC-RPX1: keys=True rows=True owners=['usr:dana', 'usr:frank', 'usr:gina', 'usr:hermes'] single=True hermes_known=False
+PASS AC-RPX2: dana_liab=17 frank_liab=7 pinned=True cross=True conserv=True repricing_stable=True total 24 -> 24
+PASS AC-RPX3: liab 17->14 open=2 refunded=1 balance 17->14 shortfall_moved=False frank_frozen=True
+PASS AC-RPX4: thin shortfall=10 covered=False full shortfall=0 covered=True hermes known=False
+PASS AC-RPX5: liability 14 -> 14 after delist, delisted=True
+PASS AC-RPX6: codes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_frozen=True tx_frozen=True empty=True
+PASS AC-RPX7: pure=True restart_identical=True dana_identical=True
+PASS AC-RPX8: at_risk=['usr:dana'] risk_findings=1 severity_ok=True contract=True wired=True shipped=True
+
+SUITE PASS 8/8

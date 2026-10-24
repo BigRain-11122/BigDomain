@@ -2311,6 +2311,18 @@ SUITES = [
     # isolation, pure read) plus the report attention consumer.
     ("ledger-apimarket-listingdemand", os.path.join(
         "ledger", "test_apimarket_listingdemand.py"), 8),
+    # AC-RPX1..AC-RPX8 registered in the R2115 explore-queue claim row
+    # before this suite existed (honesty note: the product code landed
+    # earlier in the same window, disclosed in that row): the seller
+    # refund exposure face - unrefunded purchases' stored dev_share
+    # against the live ledger balance, dense listing-owned row set,
+    # liability never recomputed from a price, refunds moving both
+    # sides by the same amount, the funding/covered law, retirement
+    # keeping the obligation, the account gate before any read, pure
+    # read, cross-restart identity and the report attention consumer
+    # (refund_risk family, REPORT_SCHEMA 8).
+    ("ledger-apimarket-refundexposure", os.path.join(
+        "ledger", "test_apimarket_refundexposure.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the
