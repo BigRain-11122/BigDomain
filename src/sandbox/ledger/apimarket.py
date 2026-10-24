@@ -88,6 +88,8 @@ E_AM_UNKNOWN_RATING = "E_AM_UNKNOWN_RATING"  # AC-AMRP4
 E_AM_REPLY_DUP = "E_AM_REPLY_DUP"          # AC-AMRP5
 E_AM_BAD_REPLY = "E_AM_BAD_REPLY"          # AC-AMRP3
 E_AM_RATING_UNCHANGED = "E_AM_RATING_UNCHANGED"  # AC-AMRV4
+E_AM_BAD_UNITS = "E_AM_BAD_UNITS"          # AC-AMRS2 (restock shape)
+E_AM_SUPPLY_UNLIMITED = "E_AM_SUPPLY_UNLIMITED"  # AC-AMRS2 (no base)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -209,6 +211,13 @@ CREATE TABLE IF NOT EXISTS apimarket_refunds (
     reason TEXT NOT NULL,
     UNIQUE (purchase_id),
     CHECK (dev_share + platform_share = amount)
+);
+CREATE TABLE IF NOT EXISTS apimarket_supply_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    add_units INTEGER NOT NULL CHECK (add_units > 0),
+    restocked_utc TEXT NOT NULL
 );
 """
 
@@ -406,17 +415,29 @@ class APIMarketFace:
         board = self.devkeys.dev_board(dev_account)
         return len(board.get("keys", [])) > 0
 
-    def _supply_state(self, listing_id):
-        """Derived scarcity state of one listing (AC-AMSP1): the
-        declared supply (None = unlimited), the sold count read
-        from the immutable purchase rows, the remaining units and
-        the sold-out flag. Nothing is stored twice - remaining is
-        always derived, so a refused purchase can never desync
-        the count. Caller holds the lock."""
+    def _supply_full(self, listing_id):
+        """Complete derived scarcity state of one listing (AC-AMRS1):
+        the declared base supply (None = unlimited), the restocked
+        units appended after it, the EFFECTIVE supply, the sold
+        count read from the immutable purchase rows, the remaining
+        units, the sold-out flag and the restock count. Nothing is
+        stored twice - the effective supply is base plus the
+        append-only restock rows and the remaining count is always
+        derived, so a refused purchase can never desync either.
+        Caller holds the lock."""
         row = self._conn.execute(
             "SELECT supply FROM apimarket_listings WHERE listing_id = ?",
             (listing_id,)).fetchone()
-        supply = row[0] if row is not None else None
+        base = row[0] if row is not None else None
+        # AC-AMRS1: the restock axis is a sum, never a rewrite -
+        # the listing row stays immutable and every restock event
+        # survives in apimarket_supply_revisions in order.
+        totals = self._conn.execute(
+            "SELECT COUNT(*), COALESCE(SUM(add_units), 0)"
+            " FROM apimarket_supply_revisions"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()
+        restock_count = int(totals[0])
+        restocked = int(totals[1])
         bought = int(self._conn.execute(
             "SELECT COUNT(*) FROM apimarket_purchases"
             " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
@@ -426,10 +447,92 @@ class APIMarketFace:
             "SELECT COUNT(*) FROM apimarket_refunds"
             " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
         sold = max(0, bought - refunded)
-        if supply is None:
-            return None, sold, None, False
-        remaining = max(0, int(supply) - sold)
-        return int(supply), sold, remaining, remaining == 0
+        if base is None:
+            return (None, None, restocked, sold, None, False,
+                    restock_count)
+        effective = int(base) + restocked
+        remaining = max(0, effective - sold)
+        return (int(base), effective, restocked, sold, remaining,
+                remaining == 0, restock_count)
+
+    def _supply_state(self, listing_id):
+        """Derived scarcity tuple (AC-AMSP1/AC-AMRS5): the effective
+        supply (None = unlimited), the sold count, the remaining
+        units and the sold-out flag. One single seam behind both the
+        purchase gate and api_supply, so a restock moves every
+        surface at once. Caller holds the lock."""
+        _base, effective, _restocked, sold, remaining, sold_out, \
+            _count = self._supply_full(listing_id)
+        return effective, sold, remaining, sold_out
+
+    # -- supply domain -----------------------------------------------------
+
+    def restock_api(self, dev_account, listing_id, add_units):
+        """Seller-side supply replenishment door (pre-registered
+        AC-AMRS1..AC-AMRS8 in the R2095 explore-queue row BEFORE
+        this code existed). Supply used to be write-once at publish
+        time: a listing that sold out was dead forever and the
+        seller had to publish a new listing_key, losing the
+        purchases, ratings and price history attached to the old
+        row. This window adds the replenishment leg as a cycle-safe
+        sum: one append-only apimarket_supply_revisions row per
+        call, never an UPDATE, so the base declaration and every
+        earlier restock survive in order.
+
+        Gate order pinned by AC-AMRS2: account shape first, then
+        the listing shape/existence gate, then ownership, then the
+        retired state, then the units shape, then the unlimited
+        state (a listing published without a supply has no shelf to
+        replenish, so it answers E_AM_SUPPLY_UNLIMITED instead of
+        inventing one). A refused call writes zero rows and moves
+        zero tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if (not isinstance(add_units, int)
+                    or isinstance(add_units, bool) or add_units < 1):
+                raise ApiMarketError(E_AM_BAD_UNITS, str(add_units))
+            (base, _effective, _restocked, _sold, _remaining,
+             _sold_out, _count) = self._supply_full(listing_id)
+            if base is None:
+                raise ApiMarketError(E_AM_SUPPLY_UNLIMITED,
+                                     str(listing_id))
+            key = self._conn.execute(
+                "SELECT listing_key FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_supply_revisions"
+                    " (listing_id, dev_account, add_units, restocked_utc)"
+                    " VALUES (?,?,?,?)",
+                    (listing_id, dev_account, add_units, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+            (base, effective, restocked, _sold, remaining,
+             sold_out, count) = self._supply_full(listing_id)
+        return {"revision_id": cur.lastrowid,
+                "listing_id": listing_id,
+                "dev_account": dev_account,
+                "listing_key": key,
+                "add_units": add_units,
+                "base_supply": base,
+                "restocked_units": restocked,
+                "effective_supply": effective,
+                "remaining": remaining,
+                "sold_out": sold_out,
+                "restock_count": count,
+                "restocked_utc": stamp,
+                "disclaimer": self.disclaimer}
 
     # -- listing domain ----------------------------------------------------
 
@@ -1816,14 +1919,62 @@ class APIMarketFace:
                 "SELECT listing_key, dev_account, listed_utc"
                 " FROM apimarket_listings WHERE listing_id = ?",
                 (listing_id,)).fetchone()
-            supply, sold, remaining, sold_out = \
-                self._supply_state(listing_id)
+            (base_supply, supply, restocked, sold, remaining,
+             sold_out, restock_count) = self._supply_full(listing_id)
         return {"listing_id": int(listing_id),
                 "listing_key": row[0],
                 "dev_account": row[1],
                 "supply": supply, "sold": sold,
                 "remaining": remaining, "sold_out": sold_out,
+                "base_supply": base_supply,
+                "restocked_units": restocked,
+                "restock_count": restock_count,
                 "listed_utc": row[2],
+                "disclaimer": self.disclaimer}
+
+    def api_supply_history(self, listing_id):
+        """Per-listing replenishment history (AC-AMRS4): the base
+        declaration plus every append-only restock event in
+        revision_id order, each carrying the running effective
+        supply after that event, and the derived end state. The
+        revision_id - not the timestamp - is the ordering
+        authority: the clock is second-resolution, so two restocks
+        inside one second are legal and still ordered. Pure read:
+        zero rows written, zero token movement."""
+        if (not isinstance(listing_id, int) or isinstance(listing_id, bool)
+                or listing_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        with self._lock:
+            self._require_listing(listing_id)
+            row = self._conn.execute(
+                "SELECT listing_key, dev_account FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            (base_supply, effective, restocked, sold, remaining,
+             sold_out, restock_count) = self._supply_full(listing_id)
+            rows = self._conn.execute(
+                "SELECT revision_id, add_units, restocked_utc"
+                " FROM apimarket_supply_revisions"
+                " WHERE listing_id = ? ORDER BY revision_id",
+                (listing_id,)).fetchall()
+        history = []
+        running = base_supply
+        for revision_id, add_units, stamp in rows:
+            if running is not None:
+                running = int(running) + int(add_units)
+            history.append({"revision_id": int(revision_id),
+                            "add_units": int(add_units),
+                            "effective_supply": running,
+                            "restocked_utc": stamp})
+        return {"listing_id": int(listing_id),
+                "listing_key": row[0],
+                "dev_account": row[1],
+                "base_supply": base_supply,
+                "restocked_units": restocked,
+                "effective_supply": effective,
+                "restock_count": restock_count,
+                "sold": sold, "remaining": remaining,
+                "sold_out": sold_out,
+                "history": history,
                 "disclaimer": self.disclaimer}
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,

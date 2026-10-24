@@ -81,8 +81,14 @@ BAD_ACCOUNTS = ["", "bob", None]
 BAD_LISTING_IDS = [0, -1, True, "1", None]
 BAD_SUPPLIES = [0, -1, True, "2", 1.5, [], {}]
 
+# R2095 contract absorption: the replenishment axis added three
+# additive keys (base_supply / restocked_units / restock_count) to
+# the same envelope. The pre-existing criteria are unchanged - a
+# listing with no restock rows still reports base_supply equal to
+# the declared supply and restocked_units/restock_count zero.
 SUPPLY_KEYS = {"listing_id", "listing_key", "dev_account", "supply",
                "sold", "remaining", "sold_out", "listed_utc",
+               "base_supply", "restocked_units", "restock_count",
                "disclaimer"}
 
 VIEW_KEYS = {"listing_id", "dev_account", "listing_key", "title",

@@ -1,0 +1,9 @@
+PASS AC-AMRS1: door keys=True base/restocked/effective=1/2/3 immutable base=True view stable=True no-restock listing stable=True
+PASS AC-AMRS2: account=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_NOT_OWNER', 'E_AM_BAD_ACCOUNT'] unknown=E_AM_UNKNOWN_LISTING owner=E_AM_NOT_OWNER retired=E_AM_DELISTED units=['E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS'] unlimited=E_AM_SUPPLY_UNLIMITED frozen=True rows=1
+PASS AC-AMRS3: sold-out again=3/True exhausted=E_AM_SUPPLY_EXHAUSTED evan balance=300 restock2 eff=4 remaining=1 after-refund sold/rem=2/2
+PASS AC-AMRS4: envelope=True running=[3, 4] same-second ids=3/4 empty-history=True bad-ids=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-AMRS5: supply==history=True base=1/1 view stable across restock=True market stats frozen=True d4 eff/rem=4/4
+PASS AC-AMRS6: bad units=['E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS', 'E_AM_BAD_UNITS'] rows=[2, 0, 0, 2]->[2, 0, 0, 3] equal-add restocks legal=True tx frozen=True pools frozen=True
+PASS AC-AMRS7: read batch pure=True restart identity=True history rows=(2, 3) wired=True ascii=True product files=True
+PASS AC-AMRS8: legacy cols=True table=True supply/base/rem=None/None/None history=[] refusal=E_AM_SUPPLY_UNLIMITED rows=0 product files=True
+SUITE 8/8

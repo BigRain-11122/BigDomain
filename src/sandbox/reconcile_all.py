@@ -2281,6 +2281,13 @@ SUITES = [
     # door + rating history face + one effective-value seam.
     ("ledger-apimarket-ratingrev", os.path.join(
         "ledger", "test_apimarket_ratingrev.py"), 8),
+    # AC-AMRS1..AC-AMRS8 pre-registered in the R2095 explore-queue
+    # claim row BEFORE this suite existed: seller supply-replenishment
+    # door (append-only restock rows, effective supply = base + sum),
+    # replenishment history face and one scarcity seam behind both the
+    # purchase gate and api_supply.
+    ("ledger-apimarket-restock", os.path.join(
+        "ledger", "test_apimarket_restock.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

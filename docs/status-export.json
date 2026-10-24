@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T22:05:00+08:00",
+  "export_ts": "2026-10-24T22:35:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2094: the developer API marketplace trust face gained its last missing remedy - a buyer can now revise the stars he left (append-only revisions, base stamp untouched) and every aggregate surface answers the revised value from one seam while a never-revised rating stays byte-identical to the old contract.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (revise_rating / api_rating_history / apimarket_rating_revisions / _effective_stars) + src/sandbox/ledger/test_apimarket_ratingrev.py + qa/apimarket-ratingrev-R2094.log (SUITE PASS 8/8, double-run byte-identical sha16 5C81C1396D898F1F; wired as ledger-apimarket-ratingrev; battery 299/299 suites with 2498 criteria + controls 7/7 = qa/reconcile-all-R2094.log; suite matrix 299 suites / 2498 criteria byte-identical)",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance runs 2026-10-24 (day-1) to 2026-10-27 <=10-31; nine-company automation plan committee tri-report <=10-25; next product window <=48h (by 2026-10-26)"
+    "current": "R2095: 卖家侧补货门上线——一个售罄的限量服务现在可以补仓而不必发新链接、不丢历史；每次补货一行追加式台账，有效库存=声明值+历次补货之和。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (restock_api / api_supply_history / apimarket_supply_revisions / _supply_full) + src/sandbox/ledger/test_apimarket_restock.py + qa/apimarket-restock-R2095.log (SUITE PASS 8/8, double-run byte-identical sha16 8C05E53DEACA2760) + qa/reconcile-all-R2095.log (RUNNER PASS 300/300 suites, 2506 criteria, controls 7/7, 252.4s)",
+    "next_milestone": "下个里程碑：在同一产品线上继续补商业化前可验证的缺口（默认序位=apimarket 交易面），当窗預注册判据后落码并全电池验证；时限 24h 内（当前交付环节已为同日闭环）。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 供给补货门（restock_api / api_supply_history）",
+      "on",
+      "R2095：append-only apimarket_supply_revisions（每次一行·base 行不改写）·有效供给=base+SUM(add_units)·门序账号/列表/归属/退役/数量/无限库存·售罄清零与再次售罄·退款只回货不改声明供给·历史面洗流累计·无补货历史列表逐字节保旧·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMRS1..AMRS8·电池 300/300 套件 2506 判据）"
+    ],
     [
       "apimarket 买家评价可修订门（revise_rating / api_rating_history）",
       "on",
@@ -627,6 +632,10 @@
     ],
     [
       "R2091: apimarket buyer account profile (api_buyer_profile) - aggregates only, so the row face stays api_library with zero duplication. Seventeen-key envelope: purchase/refund/net-purchase counts, listing_count, gross_spent, refunded_total, net_spent, dev_paid, platform_paid, rating_count, avg_rating, watch_count, live_watch_count, first/last purchase stamps, disclaimer. Laws: spend conservation (net == gross - refunded, purchases == net + refunded); pool conservation (dev_paid + platform_paid == net_spent, integer exact); a refund lowers only the net side while purchase and listing counts keep the trades that happened; rating aggregates from this buyer's own ratings only (3.5 / 5.0 / None); watch_count counts every append-only row while live_watch_count counts the active set; prefix-only account gate first, four bad forms fail closed with digests, tx set and product shas frozen; cross-restart byte identity on three instances. AC-AMBY1..AMBY8 pre-registered before the code; 8/8 double-run evidence files byte-identical sha256 7b5b7fa5d7391cb7; wired ledger-apimarket-buyerprofile (8); battery 297/297; matrix 297 suites / 2482 criteria byte-identical. Honest notes: two battery attempts failed only on the census live-tree probe because this window's evidence log streamed CRLF (dialect artifact, not a product regression) - fixed with an LF normalizing runner, census suite re-verified green 8/8. Score 2."
+    ],
+    [
+      "R2095",
+      "供给面此前一次写死：publish_api 声明 supply 后永无修改门，售罄即死锁，卖家要么发新 listing_key 丢掉购买/评价/调价历史。R2095 补上回货腿：restock_api 写入 append-only apimarket_supply_revisions，有效供给=base+SUM(add_units)，base 行永不改写；门序钉死为 账号形态→列表形态/存在→归属→退役态→数量形态→无限库存态，六类错码全覆盖、拒绝零行零 token；补货后售罄清零、新购买可遍历新分额直到再次 E_AM_SUPPLY_EXHAUSTED，退款只回货不改声明供给；api_supply 增三个可加键且无补货历史列表逐字节保旧；api_supply_history 返回洗流累计有效供给，序权威=revision_id（秒粒度时钟不作序）；无 supply 列的旧库一次性迁移且仍为无限。SUITE PASS 8/8 双跑字节同一 sha16 8C05E53DEACA2760；接线 ledger-apimarket-restock(8)；电池 RUNNER PASS 300/300 + controls 7/7 252.4s；矩阵 300/2506 --check 逐字节同；census CENSUS-COMPLETE。诚实注：首版元组错位被 AC-AMRS1 当场抓出并修正；账号门为诚实前缀检查（\"usr:\" 落归属门）；旧 supply 套件按可加字段合同吸收键集（无判据放宽）。Score 2."
     ]
   ],
   "self_drive": {
