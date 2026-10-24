@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T11:37:00+08:00",
+  "export_ts": "2026-10-24T12:14:22+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2078: 开发者 API 市场补上了卖家侧的退役（下架）门——此前挂牌一旦发布永不可撤。现在只有挂牌属主能下架，下架后新买家一律被拒且不扣币，重复下架被拒且首次下架时间不被改写，市场板不再展示该挂牌，但历史购买/评价/开发者销售账全部照常可查。",
-    "latest_artifact": "src/sandbox/ledger/test_apimarket_delist.py + src/sandbox/ledger/apimarket.py（SUITE PASS 8/8 双跑同一, AC-AMD1..AC-AMD8）+ qa/apimarket-delist-R2078.log + 全电池 RUNNER PASS 285/285 套件 2386 判据（2026-10-24）。",
-    "next_milestone": "2026-10-25: 九司自动化建设案进委员会三合一呈报（漏斗四环规格+72h 自续验收 ≤10-31）；下轮继续 explore 队列（商户号项仍 gated）与 funnel 每日证据链。"
+    "current": "R2079: the developer API marketplace now lets a seller reprice a listing without losing history - each change is one append-only revision row, the original price stays on the listing, buyers are charged the current price, and a retired listing keeps its full price history readable.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (revise_price + api_price_history) + src/sandbox/ledger/test_apimarket_pricerev.py + qa/apimarket-pricerev-R2079.log (SUITE PASS 8/8 double-run identical; RUNNER 286/286 + controls 7/7 409.2s; matrix 286/2394 --check byte-identical)",
+    "next_milestone": "Next rubric door on the same face (by 2026-10-26): a discovery/search read face OR a listing payload revision, decided by the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [
     {
@@ -526,15 +526,19 @@
     [
       "R2077",
       "R2077: the apimarket rating face pins purchaser-only plus append-only immutability, the star gate before the listing lookup, exact averages (3.75 and 30/7 by float repr), cross-listing isolation, cross-restart byte identity and zero token movement; suite 8/8, battery 284/284"
+    ],
+    [
+      "R2079",
+      "R2079: the apimarket listing face gains an append-only price revision door - revise_price with a pinned gate order, same-price refusal, base price preserved and the newest revision live, purchase at the current price with the integer split intact, the new api_price_history read face, retired-history readability, zero token movement and cross-restart byte identity. AC-AMPR1..AC-AMPR8 pre-registered; 8/8 double-run sha16 4055f5fa735e3efd; RUNNER 286/286 + controls 7/7 409.2s; matrix 286/2394 --check byte-identical."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 6,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

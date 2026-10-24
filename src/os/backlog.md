@@ -1,3 +1,4 @@
+- [x] P3 explore head (R2079): apimarket listing price revision - append-only repricing door with the pinned gate order, same-price refusal, current-price purchase, api_price_history read face, retired-history readability, zero token movement and cross-restart byte identity [done 2026-10-24 R2079]. Criteria AC-AMPR1..AC-AMPR8 pre-registered before code; suite 8/8 double-run sha16 4055f5fa735e3efd; battery 286/286 + controls 7/7 409.2s; matrix 286/2394 --check byte-identical; census re-anchored DRIFT-CLEAN. Same row marked in state/queue/explore.md.
 # BigDomain 认领工作板（backlog）
 
 > 认领制：自正典任务板 `tasks.md` 迁六件起版（CPH4 Labs 巡检批 2026-09-24 代迁）。取最上一条未完成项为当轮焦点；完成标 `[done 日期]` 并同步勾选 `tasks.md` 对应项；做不完拆细、剩余部分写回顶行；全部依赖 CEO 物理件的项=不可认领（如实待物理件，不造活）。
