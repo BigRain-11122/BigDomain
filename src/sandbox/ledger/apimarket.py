@@ -87,6 +87,7 @@ E_AM_NOT_REFUNDED = "E_AM_NOT_REFUNDED"      # AC-AMRF7
 E_AM_UNKNOWN_RATING = "E_AM_UNKNOWN_RATING"  # AC-AMRP4
 E_AM_REPLY_DUP = "E_AM_REPLY_DUP"          # AC-AMRP5
 E_AM_BAD_REPLY = "E_AM_BAD_REPLY"          # AC-AMRP3
+E_AM_RATING_UNCHANGED = "E_AM_RATING_UNCHANGED"  # AC-AMRV4
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -132,6 +133,15 @@ CREATE TABLE IF NOT EXISTS apimarket_ratings (
     stars INTEGER NOT NULL CHECK (stars IN (1, 2, 3, 4, 5)),
     rated_utc TEXT NOT NULL,
     UNIQUE (buyer_id, listing_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_rating_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rating_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    buyer_id TEXT NOT NULL,
+    previous_stars INTEGER NOT NULL,
+    stars INTEGER NOT NULL CHECK (stars IN (1, 2, 3, 4, 5)),
+    revised_utc TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_delistings (
     delist_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -1123,14 +1133,92 @@ class APIMarketFace:
                 "reply_text": body, "replied_utc": stamp,
                 "disclaimer": self.disclaimer}
 
+    def revise_rating(self, buyer_id, rating_id, stars):
+        """Buyer-side rating revision door (pre-registered
+        AC-AMRV1..AC-AMRV8 in the R2094 explore-queue row BEFORE
+        this code existed).
+
+        The rating face used to be write-once: one immutable stamp
+        per (buyer, listing) and E_AM_RATE_DUP forever, so a
+        mis-clicked star stayed welded to the seller's reputation -
+        the only trust axis on this market with no remedy door
+        (refunds, retirement and re-listing all have one). Each
+        revision appends one apimarket_rating_revisions row and
+        never rewrites the base rating row; the effective star
+        value is the newest revision, else the base stamp.
+
+        Gate order pinned by AC-AMRV2: account shape, rating-id
+        shape, existence, ownership, star shape, unchanged state.
+        Revising back to an earlier value stays legal (the gate
+        compares against the EFFECTIVE value, not the base), and a
+        same-value revision answers E_AM_RATING_UNCHANGED with
+        zero new rows so the first stamp is never rewritten.
+        Revising moves zero tokens and does not change
+        rating_count - a revision is not a new rating."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if (not isinstance(rating_id, int) or isinstance(rating_id, bool)
+                or rating_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(rating_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT listing_id, buyer_id, stars FROM"
+                " apimarket_ratings WHERE rating_id = ?",
+                (rating_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_RATING,
+                                     str(rating_id))
+            if row[1] != buyer_id:
+                raise ApiMarketError(E_AM_NOT_BUYER,
+                                     "%s/%s" % (buyer_id, rating_id))
+            if (not isinstance(stars, int) or isinstance(stars, bool)
+                    or stars < 1 or stars > 5):
+                raise ApiMarketError(E_AM_BAD_STARS, str(stars))
+            listing_id = int(row[0])
+            previous = self._effective_stars(rating_id, int(row[2]))
+            if stars == previous:
+                raise ApiMarketError(E_AM_RATING_UNCHANGED,
+                                     "%s/%s" % (rating_id, stars))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_rating_revisions"
+                    " (rating_id, listing_id, buyer_id, previous_stars,"
+                    " stars, revised_utc) VALUES (?,?,?,?,?,?)",
+                    (rating_id, listing_id, buyer_id, previous, stars,
+                     stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"revision_id": cur.lastrowid, "rating_id": rating_id,
+                "listing_id": listing_id, "buyer_id": buyer_id,
+                "previous_stars": previous, "stars": stars,
+                "revised_utc": stamp, "disclaimer": self.disclaimer}
+
     # -- read faces -----------------------------------------------------------
 
-    def _agg_rating(self, listing_id):
+    def _effective_stars(self, rating_id, base_stars):
+        """Effective star value of one rating: the newest
+        append-only revision, else the immutable base stamp
+        (AC-AMRV5 single seam - every aggregate reads through
+        here). Caller holds the lock."""
         row = self._conn.execute(
-            "SELECT COUNT(*), COALESCE(AVG(stars), 0)"
-            " FROM apimarket_ratings WHERE listing_id = ?",
-            (listing_id,)).fetchone()
-        return int(row[0]), float(row[1])
+            "SELECT stars FROM apimarket_rating_revisions"
+            " WHERE rating_id = ? ORDER BY revision_id DESC LIMIT 1",
+            (rating_id,)).fetchone()
+        return int(base_stars) if row is None else int(row[0])
+
+    def _agg_rating(self, listing_id):
+        rows = self._conn.execute(
+            "SELECT rating_id, stars FROM apimarket_ratings"
+            " WHERE listing_id = ?", (listing_id,)).fetchall()
+        if not rows:
+            return 0, 0.0
+        total = sum(self._effective_stars(int(r[0]), int(r[1]))
+                    for r in rows)
+        return len(rows), float(total) / len(rows)
 
     def api_view(self, listing_id):
         """One listing surface: metadata + declared AIGC label +
@@ -1262,14 +1350,16 @@ class APIMarketFace:
         with self._lock:
             self._require_listing(listing_id)
             rows = self._conn.execute(
-                "SELECT buyer_id, stars, rated_utc FROM"
+                "SELECT rating_id, buyer_id, stars, rated_utc FROM"
                 " apimarket_ratings WHERE listing_id = ?"
                 " ORDER BY rating_id", (listing_id,)).fetchall()
             n_rate, avg = self._agg_rating(listing_id)
+            rows = [{"buyer_id": r[1],
+                     "stars": self._effective_stars(int(r[0]), int(r[2])),
+                     "rated_utc": r[3]} for r in rows]
         return {"listing_id": listing_id, "rating_count": n_rate,
                 "rating_avg": avg, "disclaimer": self.disclaimer,
-                "ratings": [{"buyer_id": r[0], "stars": int(r[1]),
-                             "rated_utc": r[2]} for r in rows]}
+                "ratings": rows}
 
     def api_rating_replies(self, listing_id):
         """Per-listing rating conversation surface (AC-AMRP1): one
@@ -1297,12 +1387,48 @@ class APIMarketFace:
                              "reply_text": r[6],
                              "replied_utc": r[7]}
                 out.append({"rating_id": int(r[0]), "buyer_id": r[1],
-                            "stars": int(r[2]), "rated_utc": r[3],
+                            "stars": self._effective_stars(
+                                int(r[0]), int(r[2])),
+                            "rated_utc": r[3],
                             "reply": reply})
             n_reply = sum(1 for r in out if r["reply"] is not None)
         return {"listing_id": listing_id, "rating_count": n_rate,
                 "reply_count": n_reply,
                 "disclaimer": self.disclaimer, "rows": out}
+
+    def api_rating_history(self, rating_id):
+        """Rating revision history surface (AC-AMRV7): the immutable
+        base stamp, every append-only revision in order, the
+        effective star value and the revision count. Per-rating
+        isolation; an unknown rating answers E_AM_UNKNOWN_RATING and
+        a bad id answers E_AM_BAD_ARGS before any read. Pure read:
+        zero row mutations, zero token movement."""
+        if (not isinstance(rating_id, int) or isinstance(rating_id, bool)
+                or rating_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(rating_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT listing_id, buyer_id, stars, rated_utc FROM"
+                " apimarket_ratings WHERE rating_id = ?",
+                (rating_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_RATING,
+                                     str(rating_id))
+            revs = self._conn.execute(
+                "SELECT revision_id, previous_stars, stars, revised_utc"
+                " FROM apimarket_rating_revisions WHERE rating_id = ?"
+                " ORDER BY revision_id", (rating_id,)).fetchall()
+            base = int(row[2])
+            effective = (base if not revs else int(revs[-1][2]))
+        return {"rating_id": rating_id, "listing_id": int(row[0]),
+                "buyer_id": row[1], "base_stars": base,
+                "effective_stars": effective,
+                "revision_count": len(revs),
+                "rated_utc": row[3], "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(x[0]),
+                               "previous_stars": int(x[1]),
+                               "stars": int(x[2]),
+                               "revised_utc": x[3]} for x in revs]}
 
     def api_price_history(self, listing_id):
         """Asking-price history surface (AC-AMPR7): the immutable
@@ -1972,10 +2098,11 @@ class APIMarketFace:
                     " FROM apimarket_purchases WHERE listing_id = ?",
                     (listing_id,)).fetchone()
                 rc, ravg = self._agg_rating(listing_id)
-                stars = self._conn.execute(
-                    "SELECT COALESCE(SUM(stars), 0)"
-                    " FROM apimarket_ratings WHERE listing_id = ?",
-                    (listing_id,)).fetchone()[0]
+                star_rows = self._conn.execute(
+                    "SELECT rating_id, stars FROM apimarket_ratings"
+                    " WHERE listing_id = ?", (listing_id,)).fetchall()
+                stars = sum(self._effective_stars(int(x[0]), int(x[1]))
+                            for x in star_rows)
                 if stamp is None:
                     live += 1
                 else:
@@ -2146,9 +2273,12 @@ class APIMarketFace:
                 " FROM apimarket_refunds WHERE buyer_id = ?",
                 (buyer_id,)).fetchone()
             rate = self._conn.execute(
-                "SELECT COUNT(*), COALESCE(SUM(stars), 0)"
+                "SELECT rating_id, stars"
                 " FROM apimarket_ratings WHERE buyer_id = ?",
-                (buyer_id,)).fetchone()
+                (buyer_id,)).fetchall()
+            rate_count = len(rate)
+            rate_sum = sum(self._effective_stars(int(r[0]), int(r[1]))
+                           for r in rate)
             watch = self._conn.execute(
                 "SELECT COUNT(*) FROM apimarket_watchlist"
                 " WHERE buyer_id = ?", (buyer_id,)).fetchone()
@@ -2162,7 +2292,7 @@ class APIMarketFace:
             refund_count = int(back[0])
             gross = int(paid[1])
             refunded = int(back[1])
-            rating_count = int(rate[0])
+            rating_count = rate_count
         return {"buyer_id": buyer_id,
                 "purchase_count": purchase_count,
                 "refund_count": refund_count,
@@ -2174,7 +2304,7 @@ class APIMarketFace:
                 "dev_paid": int(paid[2]) - int(back[2]),
                 "platform_paid": int(paid[3]) - int(back[3]),
                 "rating_count": rating_count,
-                "avg_rating": (float(rate[1]) / rating_count
+                "avg_rating": (float(rate_sum) / rating_count
                                if rating_count else None),
                 "watch_count": int(watch[0]),
                 "live_watch_count": int(live_watch[0]),

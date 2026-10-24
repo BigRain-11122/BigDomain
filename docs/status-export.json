@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T19:42:46+08:00",
+  "export_ts": "2026-10-24T22:05:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2093: the developer API marketplace trust surface now has two arrows - a seller can answer a rating exactly once (append-only, ownership-gated) and every listing shows which reviews still await a reply.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (reply_to_rating / api_rating_replies) + src/sandbox/ledger/test_apimarket_ratingreply.py + qa/apimarket-ratreply-R2093.log (SUITE PASS 8/8, double-run byte-identical sha16 44e8a409ac202984; wired as ledger-apimarket-ratreply; battery 298/298 suites + controls 7/7 = qa/reconcile-all-R2093.log; suite matrix 298 suites / 2490 criteria byte-identical)",
-    "next_milestone": "FUNNEL 72h self-continuity acceptance restarts 2026-10-24 (day-1) and runs to 2026-10-27 <=10-31; nine-company automation plan committee tri-report <=10-25; next product window <=48h (by 2026-10-26)"
+    "current": "R2094: the developer API marketplace trust face gained its last missing remedy - a buyer can now revise the stars he left (append-only revisions, base stamp untouched) and every aggregate surface answers the revised value from one seam while a never-revised rating stays byte-identical to the old contract.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (revise_rating / api_rating_history / apimarket_rating_revisions / _effective_stars) + src/sandbox/ledger/test_apimarket_ratingrev.py + qa/apimarket-ratingrev-R2094.log (SUITE PASS 8/8, double-run byte-identical sha16 5C81C1396D898F1F; wired as ledger-apimarket-ratingrev; battery 299/299 suites with 2498 criteria + controls 7/7 = qa/reconcile-all-R2094.log; suite matrix 299 suites / 2498 criteria byte-identical)",
+    "next_milestone": "FUNNEL 72h self-continuity acceptance runs 2026-10-24 (day-1) to 2026-10-27 <=10-31; nine-company automation plan committee tri-report <=10-25; next product window <=48h (by 2026-10-26)"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 买家评价可修订门（revise_rating / api_rating_history）",
+      "on",
+      "R2094：append-only apimarket_rating_revisions（每次修订一行·base 评分行永不改写）+ 门序（账户形→评分号形→存在→归属→星级形→无变化）·E_AM_RATING_UNCHANGED 按生效值判定（改回更早值合法·首戳不改写）·api_rating_history 读面（base+有序修订+生效值+修订数）·单一生效值缝喂五处聚合（api_view / api_ratings / api_rating_replies / dev_profile / api_buyer_profile）而 rating_count 恒不变·未修订评分逐字节保旧契约·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMRV1..AMRV8·电池 299/299 套件 2498 判据）"
+    ],
     [
       "apimarket 供给/售罄轴（publish_api supply + E_AM_SUPPLY_EXHAUSTED + api_supply）",
       "on",
@@ -267,6 +272,10 @@
     ]
   ],
   "results": [
+    [
+      "R2094",
+      "R2094: the rating face was the last write-once axis on the market's trust surface - one immutable stamp per buyer and listing, E_AM_RATE_DUP forever, so a mis-clicked star stayed welded to a seller's reputation while refunds, retirement and re-listing all had remedy doors. This window adds the correction leg: an append-only apimarket_rating_revisions table (previous and new stars, base row never rewritten) and revise_rating with a pinned gate order (account shape, rating-id shape, existence, ownership, star shape, unchanged state), where the unchanged check reads the EFFECTIVE value so revising back to an earlier value stays legal and the first stamp is never rewritten. api_rating_history answers base stars, ordered revisions, effective stars and the revision count. One effective-star seam feeds all five aggregate faces (api_view, api_ratings, api_rating_replies, dev_profile, api_buyer_profile) at once while rating_count never moves - a revision is not a new rating - and never-revised ratings stay byte-identical to the old contract, proven by the legacy suites re-running green. Suite 8/8 double-run identical, battery 299/299 suites plus controls 7/7, matrix 299 suites / 2498 criteria byte-identical."
+    ],
     [
       "R2088",
       "R2088: the developer API marketplace now has a post-sale remedy door - a buyer can refund a purchase, the four ledger legs put buyer, seller and both pools back to their pre-purchase balances exactly, a refunded unit returns to the shelf so another buyer can take it, and a seller who already spent the proceeds fails the refund closed with zero tokens moved."

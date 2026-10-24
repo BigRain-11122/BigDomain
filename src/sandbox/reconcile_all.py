@@ -2276,6 +2276,11 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-ratreply", os.path.join(
         "ledger", "test_apimarket_ratingreply.py"), 8),
+    # AC-AMRV1..AC-AMRV8 pre-registered in the R2094 explore-queue
+    # claim row BEFORE this suite existed: buyer rating revision
+    # door + rating history face + one effective-value seam.
+    ("ledger-apimarket-ratingrev", os.path.join(
+        "ledger", "test_apimarket_ratingrev.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
