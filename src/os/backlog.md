@@ -16,6 +16,8 @@
 - [x] P3 explore head (R2079): apimarket listing price revision - append-only repricing door with the pinned gate order, same-price refusal, current-price purchase, api_price_history read face, retired-history readability, zero token movement and cross-restart byte identity [done 2026-10-24 R2079]. Criteria AC-AMPR1..AC-AMPR8 pre-registered before code; suite 8/8 double-run sha16 4055f5fa735e3efd; battery 286/286 + controls 7/7 409.2s; matrix 286/2394 --check byte-identical; census re-anchored DRIFT-CLEAN. Same row marked in state/queue/explore.md.
 # BigDomain 认领工作板（backlog）
 
+- [x] P3 explore 自补种并同窗认领（R2098）：apimarket 发现面排序轴（api_search 的 sort）——发现门（R2082）与分页轴（R2084）齐备而行序写死为「现价升序再 id 升序」：最贵/评价最好/卖得最好/最新四种真实诉求调用方只能取全量自排，且分页无法表达「那个序的第 N 页」=发现性第三块缺口。本窗补五序轴（price_asc 别名/price_desc/rating/sales=净售出/newest=上架戳），每形全序 id 兜底、六形命中集相同、分页复合、坏 sort 门先于任何读（计数连接代理 reads=0 实证）、sort 缺省时旧契约逐字节不变。判据 AC-AMSR1..AC-AMSR8 预注册于代码前（五锚全仓 git grep -F 零占用 rc=1）。[done 2026-10-24 R2098]套件 SUITE PASS 8/8 双跑同一 sha16 f45708287987fc98（qa/apimarket-searchsort-R2098.log+run2）；接线 ledger-apimarket-searchsort(8)；电池 RUNNER PASS 303/303 suites+controls 7/7 229.5s=qa/reconcile-all-R2098.log；矩阵 303 suites/2530 criteria --check byte-identical；census DRIFT-CLEAN
+
 > 认领制：自正典任务板 `tasks.md` 迁六件起版（CPH4 Labs 巡检批 2026-09-24 代迁）。取最上一条未完成项为当轮焦点；完成标 `[done 日期]` 并同步勾选 `tasks.md` 对应项；做不完拆细、剩余部分写回顶行；全部依赖 CEO 物理件的项=不可认领（如实待物理件，不造活）。
 > 双板律：本板=认领/进度工作面；`tasks.md`=正典任务板。两板同六件起版，完成态两板同步。
 > 集团转办扫描（见 `iteration_prompt.txt` 开轮五步②）新入项排顶行——ledger 未回执行 @BigDomain 转办（如 P-2026-09-24-42 的 §四价目「成交执行面」分工注记半项）由扫描步入板，不在此预录。

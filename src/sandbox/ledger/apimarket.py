@@ -222,6 +222,15 @@ CREATE TABLE IF NOT EXISTS apimarket_supply_revisions (
 """
 
 
+# Discovery sort modes (AC-AMSR2, pre-registered in the R2098
+# explore-queue row BEFORE this code existed). The default (None)
+# keeps the R2082 ordering - current price ascending, then
+# listing_id ascending - so a caller that never passes a sort token
+# reads a byte-identical contract.
+_SEARCH_SORT_MODES = ("price_asc", "price_desc", "rating", "sales",
+                      "newest")
+
+
 def _now_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime(
         "%Y-%m-%dT%H:%M:%SZ")
@@ -2130,7 +2139,7 @@ class APIMarketFace:
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
                    max_price=None, include_delisted=False,
-                   limit=None, offset=None):
+                   limit=None, offset=None, sort=None):
         """Market discovery surface (pre-registered AC-AMSQ1..AMSQ8
         in the R2082 explore-queue row BEFORE this code existed).
 
@@ -2171,7 +2180,32 @@ class APIMarketFace:
         parameter is given the envelope and rows stay byte-
         identical to the R2082 contract (the four legacy keys, the
         five legacy criteria keys); the paging keys appear only
-        when paging is requested."""
+        when paging is requested.
+
+        Sort axis (pre-registered AC-AMSR1..AMSR8 in the R2098
+        explore-queue row BEFORE this code existed): the row order
+        used to be frozen at current-price ascending, so a resident
+        who wanted the flagship listing, the best rated, the best
+        selling or the newest had to take the whole set and re-sort
+        locally - and paging could not express "page N of THAT
+        order". Optional sort accepts exactly the five tokens
+        price_asc / price_desc / rating / sales / newest (module
+        constant _SEARCH_SORT_MODES). Every mode is a total order
+        with a listing_id ascending tie-break, so the matched id set
+        is identical across modes (order-only axis) and page
+        stitching reproduces that mode's full order. rating orders
+        by rating_avg desc, then rating_count desc, then id (an
+        unrated listing reads 0.0 and sinks); sales orders by the
+        NET sold count - purchases minus refunds, floored at zero,
+        the same quantity api_supply reports; newest orders by
+        listed_utc desc then id. The sort gate runs after the
+        keyword / seller / price-band / include_delisted / limit /
+        offset gates and before any read, fail-closed. Backward-
+        compatibility law: when sort is None the criteria echo
+        carries NO sort key, so the envelope and rows stay byte-
+        identical to the pre-sort contract; the key appears only
+        when a token is given. Pure read: zero row mutations and
+        zero token movement."""
         kw = None
         if keyword is not None:
             if not isinstance(keyword, str):
@@ -2201,13 +2235,27 @@ class APIMarketFace:
                     or offset < 0):
                 raise ApiMarketError(E_AM_BAD_ARGS, "bad offset: %r"
                                      % (offset,))
+        # AC-AMSR4: the sort shape gate is the last gate and still
+        # runs BEFORE any read - a refused token touches no table.
+        if sort is None:
+            sort_mode = None
+        else:
+            if not isinstance(sort, str):
+                raise ApiMarketError(E_AM_BAD_ARGS, "bad sort: %r"
+                                     % (sort,))
+            token = sort.strip()
+            if token not in _SEARCH_SORT_MODES:
+                raise ApiMarketError(E_AM_BAD_ARGS, "bad sort: %r"
+                                     % (sort,))
+            sort_mode = token
         needle = None if kw is None else kw.casefold()
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
-                " description, token_price, ai_label FROM"
+                " description, token_price, ai_label, listed_utc FROM"
                 " apimarket_listings ORDER BY listing_id").fetchall()
             out = []
+            listed_by = {}
             for r in rows:
                 listing_id = int(r[0])
                 stamp = self._delisted_utc(listing_id)
@@ -2227,6 +2275,7 @@ class APIMarketFace:
                 if high is not None and price > high:
                     continue
                 n_rate, avg = self._agg_rating(listing_id)
+                listed_by[listing_id] = r[7]
                 out.append({"listing_id": listing_id,
                             "dev_account": r[1],
                             "listing_key": r[2],
@@ -2237,29 +2286,58 @@ class APIMarketFace:
                             "rating_avg": avg,
                             "delisted": stamp is not None,
                             "delisted_utc": stamp})
-            out.sort(key=lambda row: (row["token_price"],
-                                      row["listing_id"]))
+            # AC-AMSR2: five total orders, each tie-broken by
+            # listing_id ascending. The net-sold rank is read through
+            # the one scarcity seam so a refund lowers the rank in
+            # exactly the same step it lowers api_supply.sold.
+            if sort_mode is None or sort_mode == "price_asc":
+                out.sort(key=lambda row: (row["token_price"],
+                                          row["listing_id"]))
+            elif sort_mode == "price_desc":
+                out.sort(key=lambda row: row["listing_id"])
+                out.sort(key=lambda row: row["token_price"],
+                         reverse=True)
+            elif sort_mode == "rating":
+                out.sort(key=lambda row: row["listing_id"])
+                out.sort(key=lambda row: (row["rating_avg"],
+                                          row["rating_count"]),
+                         reverse=True)
+            elif sort_mode == "sales":
+                sold_by = {}
+                for row in out:
+                    _eff, sold, _rem, _so = self._supply_state(
+                        row["listing_id"])
+                    sold_by[row["listing_id"]] = int(sold)
+                out.sort(key=lambda row: row["listing_id"])
+                out.sort(key=lambda row: sold_by[row["listing_id"]],
+                         reverse=True)
+            else:  # newest
+                out.sort(key=lambda row: row["listing_id"])
+                out.sort(key=lambda row: listed_by[row["listing_id"]],
+                         reverse=True)
         total = len(out)
         paged = limit is not None or offset is not None
         start = 0 if offset is None else offset
         page = out[start:] if limit is None else out[start:start + limit]
+        # AC-AMSR1: the sort key is echoed only when a token is
+        # given, so the pre-sort criteria/env contract stays
+        # byte-identical for every caller that never sorts.
+        criteria = {"keyword": kw,
+                    "dev_account": dev_account,
+                    "min_price": low,
+                    "max_price": high,
+                    "include_delisted": include_delisted}
+        if sort_mode is not None:
+            criteria["sort"] = sort_mode
         if not paged:
             return {"disclaimer": self.disclaimer,
-                    "criteria": {"keyword": kw,
-                                 "dev_account": dev_account,
-                                 "min_price": low,
-                                 "max_price": high,
-                                 "include_delisted": include_delisted},
+                    "criteria": criteria,
                     "count": total,
                     "listings": out}
+        criteria["limit"] = limit
+        criteria["offset"] = offset
         return {"disclaimer": self.disclaimer,
-                "criteria": {"keyword": kw,
-                             "dev_account": dev_account,
-                             "min_price": low,
-                             "max_price": high,
-                             "include_delisted": include_delisted,
-                             "limit": limit,
-                             "offset": offset},
+                "criteria": criteria,
                 "count": len(page),
                 "returned": len(page),
                 "total": total,

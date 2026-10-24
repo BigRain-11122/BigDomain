@@ -1,0 +1,10 @@
+PASS AC-AMSR1: legacy keys=True criteria keys=True count=5 alias rows identical=True alias criteria sort='price_asc' paged-no-sort has sort key=False
+PASS AC-AMSR2: default=[2, 4, 1, 5, 6] price_asc=[2, 4, 1, 5, 6] price_desc=[6, 5, 1, 2, 4] rating=[5, 1, 6, 2, 4] sales=[4, 1, 6, 2, 5] newest=[4, 2, 6, 5, 1] sales pre-refund=[4, 1, 5, 6, 2]
+PASS AC-AMSR3: walks match orders=True adjacent overlap=[] same id set=True totals=[5] repeat identical=True
+PASS AC-AMSR4: bad sorts all rejected=True account gate first=True price band first=True stripped token echo='newest' zero-read gate=True reads=0 digests frozen=True
+PASS AC-AMSR5: seller sets invariant=True dana price order=[2, 1, 5, 6] band set=[1, 5] retired set=[1, 2, 3, 4, 5, 6]
+PASS AC-AMSR6: stitched matches every order=True truncated flags=[True, True, False] clamps=(5,False)/(5,False)/(0,5) echo={'keyword': None, 'dev_account': None, 'min_price': None, 'max_price': None, 'include_delisted': False, 'sort': 'sales', 'limit': 2, 'offset': 1}
+PASS AC-AMSR7: repeat identical=True digests frozen=True tx constant=True row keys=True supply sold after refund=0 sales rank moved by refund=True rating rank kept=True
+PASS AC-AMSR8: instance1==2==3 byte-identical=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0 world outside repo=True
+SUITE 8/8

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T20:54:10+08:00",
+  "export_ts": "2026-10-24T22:12:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2097: 卖家月度营收时间线上线——「我这个月赚了多少」现在有一面直接回答（成交按月入账、退款按退款月入账，跨月退款如实显示负净额）。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_revenue_months) + src/sandbox/ledger/test_apimarket_revenuemonths.py + qa/apimarket-revenuemonths-R2097.log (SUITE PASS 8/8, double-run byte-identical sha16 9FE983151240B394) + qa/reconcile-all-R2097.log (RUNNER PASS 302/302 suites, 2522 criteria, controls 7/7, 428.8s)",
-    "next_milestone": "下个里程碑：在同一条 apimarket 产品线上继续补商业化前可验证的缺口（当窗预注册判据后落码并全电池验证）；时限 24h 内（交付环节已为同日闭环）。"
+    "current": "R2098: API 市场发现面可以按需排序了——最贵、评价最好、卖得最好、最新上架的，五种排序都能直接要，和分页一起用（老调用方不传排序参数时行为一字不变）。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_search sort 轴) + src/sandbox/ledger/test_apimarket_searchsort.py + qa/apimarket-searchsort-R2098.log (SUITE PASS 8/8, double-run byte-identical sha16 f45708287987fc98) + qa/reconcile-all-R2098.log (RUNNER PASS 303/303 suites, 2530 criteria, controls 7/7, 229.5s)",
+    "next_milestone": "下个里程碑：继续在同一条 apimarket 产品线补齐商业化前可验证的缺口（当窗预注册判据后落码并全电池验证）；时限 24h 内（交付环节已为同日闭环）。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 发现面排序轴（api_search sort）",
+      "on",
+      "R2098：五序轴（price_asc/price_desc/rating/sales/newest）·每形全序且 id 升序兜底·rating=均值降序再评数降序·sales=净售出（购买−退款·与 api_supply 同值）·newest=上架戳降序·六形命中集完全相同（只动序不动行集）·分页复合（limit=1 逐页复现各形全序）·账户门与价格带门先于 sort 门且坏 sort 零读（计数连接代理实证 reads=0）·sort 缺省时信封/criteria/行面逐字节保持旧契约（criteria 不含 sort 键）·纯读零 token·跨重启三实例字节同一（SUITE 8/8 双跑·AC-AMSR1..AMSR8·电池 303/303 套件 2530 判据）"
+    ],
     [
       "apimarket 卖家月度营收时间线读面（api_revenue_months）",
       "on",
@@ -287,6 +292,10 @@
     ]
   ],
   "results": [
+    [
+      "R2098",
+      "R2098: the developer API market's discovery door gains the order axis it never had. api_search had a keyword match, a seller filter, a price band and (since R2084) paging, but the row order was frozen at current price ascending - a resident who wanted the flagship listing, the best rated, the best selling or the newest had to take the whole set and re-sort locally, and a paged read could not express 'page N of THAT order'. Optional sort accepts exactly five tokens: price_asc (the legacy order as an alias), price_desc, rating (rating_avg desc, then rating_count desc, then listing_id), sales (the NET sold count - purchases minus refunds, floored at zero, read through the same scarcity seam api_supply reports - then id) and newest (listed_utc desc, then id). Every mode is a total order with an id tie-break, so adjacent pages never overlap, a limit=1 walk reproduces that mode's full order, and all six forms return the SAME matched id set with a sort-invariant total - sorting never gains or loses a row. The sort gate is the last gate and still runs before any read, proven with a counting-connection proxy (zero execute calls on a refused token) and by frozen table digests; the account gate and the price-band gate both measurably precede it. Backward-compatibility law: with sort omitted the criteria echo carries NO sort key, so the envelope and rows stay byte-identical to the pre-sort contract. The pure-read law and the refund/rank correspondence are pinned together: a refund drops the listing in the sales order exactly where it drops api_supply.sold, while the rating order and the ten-key row shape stay untouched. AC-AMSR1..AC-AMSR8 pre-registered before the code; suite 8/8 double-run identical sha16 f45708287987fc98 (qa/apimarket-searchsort-R2098.log + run2, utf-8 LF); wired ledger-apimarket-searchsort (8); battery RUNNER PASS 303/303 suites plus controls 7/7 in 229.5s; matrix 303 suites / 2530 criteria byte-identical; census DRIFT-CLEAN. Honest notes: (a) the newest axis is observed on fixture-set listed_utc stamps (publish resolution is one second, so six listings would otherwise tie) - documented in the suite docstring, no product file touched; (b) the AC-AMSR1 wording was refined before delivery from 'envelope byte-identical' to 'row face byte-identical, criteria gains the sort key' because the echo honestly reflects the caller's parameter; (c) the first battery attempt was killed at the 5-minute no-output limit and the second streamed through a PowerShell tee, whose UTF-16 dialect tripped the writer census - the green run streams through a python single writer emitting LF bytes."
+    ],
     [
       "R2097",
       "R2097: the developer API market gains the per-seller month axis its money face never had. api_sales answers row by row (the caller must bucket), dev_profile answers lifetime totals with no time axis, and api_market_stats answers the whole market, so nothing answered what one seller earned in one month - and the gap between the month a sale books in and the month its refund lands in was invisible. api_revenue_months is a nine-key envelope with ten-key month rows ordered ascending: a sale books in the UTC month of its purchase, a refund books in the UTC month it was refunded and never rewrites the sale month, so a later-month refund shows an honestly negative net there while the original month stays byte-frozen; the 23:59:59Z / 00:00:00Z boundary splits buckets; every row keeps gross == dev_share + platform_share and net == gross - refunded; lifetime totals cross-check against the raw purchase and refund rows (23 = 10 + 13, refunded 10, net 13); seller isolation, an honest empty envelope and the fail-closed account gate are pinned; the face is pure read with frozen digests, constant ledger tx set and pools, and byte-identical across three instances. AC-REVM1..AC-REVM8 pre-registered before the code; suite 8/8 double-run identical sha16 9FE983151240B394; battery RUNNER PASS 302/302 suites plus controls 7/7 in 428.8s; matrix 302 suites / 2522 criteria byte-identical. One defect disclosed and fixed in-window: the refund query aliased f.amount without naming the alias in FROM, so sqlite refused the column before any evidence was written."

@@ -2195,6 +2195,13 @@ SUITES = [
     # pre-registered in the R2084 explore-queue claim row).
     ("ledger-apimarket-searchpaging", os.path.join(
         "ledger", "test_apimarket_searchpage.py"), 8),
+    # R2098 discovery sort seat: api_search gained the five-token
+    # order axis (price_desc / rating / sales / newest plus the
+    # price_asc alias) on top of the R2082 discovery door and the
+    # R2084 paging axis, with the legacy contract byte-identical
+    # (AC-AMSR1..AC-AMSR8 pre-registered in the R2098 claim row).
+    ("ledger-apimarket-searchsort", os.path.join(
+        "ledger", "test_apimarket_searchsort.py"), 8),
     # R2085 seller-profile seat: the public dev_profile read face
     # with the thirteen-key envelope and nine-key rows, the
     # partition law (listing_count == live + retired, sales and
