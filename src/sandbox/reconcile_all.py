@@ -2208,6 +2208,19 @@ SUITES = [
     # code vector on all three instances before any referenced
     # honor_board call lands (AC-HYGG1..HYGG7 pre-registered in
     # state/queue/explore.md).
+    # grant slice-width axis on the already-granted honor world
+    # (R2074): a narrower re-run (top_n=1) leaves the row set and
+    # the certify flags untouched while alice keeps her permanent
+    # certificate, a wider re-run (top_n=4) grants exactly the two
+    # untouched members, an out-of-range top_n=9 CLAMPS to board
+    # length instead of rejecting, a replay with a different
+    # item_id keeps the first-grant award, the eight-form front-door
+    # battery stays orthogonal to the idempotency axis (row set
+    # constant around the batch), and both width forms replay
+    # byte-identical across two full-stack restarts
+    # (AC-HYGW1..HYGW8 pre-registered in state/queue/explore.md).
+    ("ledger-honorcert-grantwidthworld", os.path.join(
+        "ledger", "test_honorcert_grantwidthworld.py"), 8),
     ("ledger-honorcert-grantgate-persist", os.path.join(
         "ledger", "test_honorcert_grantgatepersist.py"), 7),
     # studio cross-restart persist window (R1949): three-piece
