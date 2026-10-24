@@ -1,0 +1,36 @@
+or: lobby chat mute/idempotency boundary suite (R2070)
+suite: src/sandbox/lobby/test_chatmute_idem.py
+
+== section 1: suite run one ==
+PASS AC-CMI1 idem-before-rate ordering
+PASS AC-CMI2 expired rebill triple mutes
+PASS AC-CMI3 fresh send inside mute
+PASS AC-CMI4 in-TTL replay immunity while muted
+PASS AC-CMI5 mute expiry resumes
+PASS AC-CMI6 refusals leave no ledger rows
+PASS AC-CMI7 orthogonal gates keep counters
+PASS AC-CMI8 hygiene
+SUITE PASS 8/8
+exit=0 stdout sha16=9c4700bc276a9123
+
+== section 2: suite run two (determinism) ==
+PASS AC-CMI1 idem-before-rate ordering
+PASS AC-CMI2 expired rebill triple mutes
+PASS AC-CMI3 fresh send inside mute
+PASS AC-CMI4 in-TTL replay immunity while muted
+PASS AC-CMI5 mute expiry resumes
+PASS AC-CMI6 refusals leave no ledger rows
+PASS AC-CMI7 orthogonal gates keep counters
+PASS AC-CMI8 hygiene
+SUITE PASS 8/8
+exit=0 stdout sha16=9c4700bc276a9123
+double-run identical=True
+
+== section 3: full battery summary (qa/reconcile-all-R2070.log) ==
+PASS suite lobby-chat-mute-idem exit=0 pass-lines=8 fail-lines=0 criteria=8 0.4s
+RUNNER PASS (278/278 suites green, reconcile controls 7/7, 217.5s)
+
+== section 4: suite-matrix check ==
+PASS check: docs/sandbox-suite-matrix.md byte-identical (26939 bytes, 278 suites, 2332 criteria)
+matrix check exit=0
+

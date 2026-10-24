@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T09:07:21+08:00",
+  "export_ts": "2026-10-24T09:29:57+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2069: the funnel sku_top money leaderboard is now pinned on its hard edges - zero-amount buckets keep their rank, negative money is refused by the booking gate while an injected negative row still shows at the last rank unclamped, the cap is a strict prefix of the full board even with three tied amounts, and a late day re-ranks the lifetime face while older day windows freeze.",
-    "latest_artifact": "src/sandbox/funnel/test_funnel_sku_top_rank.py + qa/funnel-sku-top-rank-R2069.log (SUITE PASS 8/8 AC-FTS1..FTS8, double-run stdout sha16 a893167b821c00c4; RUNNER PASS 277/277 suites + controls 7/7 230.1s = qa/reconcile-all-R2069.log; suite-matrix 277/2324 byte-identical; those four '?'-corrupted R2059 seed rows are now rebuilt into this one readable window, 2026-10-24)",
-    "next_milestone": "Reseed the tech queue back to >=10 real seeds (currently 4 open after the merge) next round; FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25."
+    "current": "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate.",
+    "latest_artifact": "src/sandbox/lobby/test_chatmute_idem.py + qa/lobby-chat-mute-idem-R2070.log (SUITE PASS 8/8 AC-CMI1..CMI8, double-run stdout sha16 f7f1249d64c40c47; RUNNER PASS 278/278 suites + controls 7/7 217.5s = qa/reconcile-all-R2070.log; suite-matrix 278/2332 byte-identical; census DRIFT-CLEAN, 2026-10-24)",
+    "next_milestone": "Reseed the tech queue back to >=10 real seeds (currently 4 open after the merge) next round; FUNNEL 72h self-continuity acceptance <=10-31; nine-company automation plan committee tri-report <=10-25; next window <=48h (by 2026-10-26)"
   },
   "depts": [
     {
@@ -215,6 +215,14 @@
   ],
   "results": [
     [
+      "R2070",
+      "R2070: the lobby chat mute window now has its boundary proven - a replayed message still answers as a duplicate inside a mute (no budget, no violation, no ledger row) while an expired replay is refused, and the mute counter only ever belongs to the rate gate."
+    ],
+    [
+      "2070",
+      "OSLoop 执行 tick"
+    ],
+    [
       "R2069",
       "R2069 tech-queue claim: the four R2059 sku_top seed rows were '?'-corrupted (criteria unreadable, unclaimable) and the backlog ruling allowed merging them; they are now one rebuilt window with AC-FTS1..FTS8 pre-registered before the suite. Delivered the sku_top ranking battery: anchor board reproduced, zero-amount buckets keep their rank with equal zeros ordered by sku bytes, negative money is rejected fail-closed by the booking gate (amount < 0 -> E_FN_BAD_ARGS, zero rows) while a fixture-injected negative row still ranks last with its amount unclamped, the cap is a strict prefix of the full board under a three-way amount tie (cutting never re-sorts, ranks dense), a late day re-ranks lifetime while earlier day windows stay byte-frozen, reads are pure and restart-stable, and the money conservation bound holds. SUITE PASS 8/8 double-run identical; battery RUNNER PASS 277/277 + controls 7/7 230.1s; matrix 277/2324 byte-identical. Honest notes: AC-FTS3 restated in the same round (the gate is itself the finding); the first battery run failed the census suite on an R2068 CRLF dialect leftover, normalised with a python single writer then re-run green; tech queue is at 4 open (<10 baseline) and carried forward for a real-gap reseed rather than manufactured seeds."
     ],
@@ -225,10 +233,6 @@
     [
       "R2066",
       "R2066: the dataset coverage month-window gate is now proven restart-invariant - the same ten malformed windows are rejected with the same family code on three separate instances, and no zone read can happen before the gate."
-    ],
-    [
-      "2069",
-      "OSLoop 执行 tick"
     ],
     [
       "R2059",
@@ -482,26 +486,26 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 7,
+    "log_lines_in_window": 8,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 2,
+    "substantive_non_idle_mention_lines": 3,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 6,
+    "queue_explore_open": 5,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 6,
+  "log_lines_in_window": 8,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 1,
+  "substantive_non_idle_mention_lines": 3,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
-  "queue_tech_open": 9,
-  "queue_explore_open": 6
+  "queue_tech_open": 4,
+  "queue_explore_open": 5
 }

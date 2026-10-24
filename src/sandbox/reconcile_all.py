@@ -3080,6 +3080,22 @@ SUITES = [
     ("ledger-proposal-signbadargs-loadedpersist",
      os.path.join("ledger",
                    "test_proposal_signbadargspersist_loaded.py"), 7),
+    # R2070 explore-queue FIFO head claim (R2042 seed row): the lobby
+    # chat mute / idempotency boundary family - the idem gate sits
+    # after the content gates and before the rate/mute gate, so an
+    # in-TTL (client_msg_id, text) replay still answers
+    # chat.duplicate inside a mute window (no budget, no violation,
+    # no store row) while an expired replay falls through into the
+    # mute refusal; the idem cache is lobby-scoped, so a second
+    # connection can seed a key a muted connection replays to a
+    # duplicate; mute accounting belongs to the rate gate alone (the
+    # five orthogonal refusals keep the counters at zero); a
+    # deterministic fake clock replaces server.time so windows move
+    # without sleeps, and the shipped config is only TTL-compressed
+    # in memory. (AC-CMI1..AC-CMI8 pre-registered in
+    # state/queue/explore.md before the suite existed.)
+    ("lobby-chat-mute-idem",
+     os.path.join("lobby", "test_chatmute_idem.py"), 8),
     ]
 
 FAILS = 0
