@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T12:47:56+08:00",
+  "export_ts": "2026-10-24T13:58:17+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2081: the developer API market now has a buyer-side purchase library (api_library) - a resident can finally see every listing it bought, what it actually paid versus the live asking price, whether the item was retired, and its own rating, with strict buyer isolation.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_library) + src/sandbox/ledger/test_apimarket_library.py (AC-AML1..AC-AML8, SUITE 8/8 double-run sha16 f3130b5e09e208d0) + qa/apimarket-library-R2081.log + qa/reconcile-all-R2081.log (RUNNER 287/287 + controls 7/7 298.1s)",
+    "current": "R2082: the developer API market now has a discovery door (api_search) - a resident can search by keyword (title or key), filter by seller, filter by a price band on the current asking price, and optionally include retired listings, instead of enumerating the whole board.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_search) + src/sandbox/ledger/test_apimarket_search.py (AC-AMSQ1..AC-AMSQ8, SUITE 8/8 double-run sha16 5AB7CE8BC9512B05) + qa/apimarket-search-R2082.log + qa/reconcile-all-R2082.log (RUNNER 288/288 + controls 7/7 290.1s)",
     "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 市场发现读面（api_search）",
+      "on",
+      "R2082：关键词（title/listing_key 子串）·卖家过滤·现价价格带·退役开关·门序先于任何读·现价升序+id 升序·纯读零 token（SUITE 8/8·AC-AMSQ1..AMSQ8·电池 288/288 套件 2410 判据）"
+    ],
     [
       "apimarket 买家侧已购库读面",
       "on",
@@ -237,6 +242,10 @@
     ]
   ],
   "results": [
+    [
+      "R2082",
+      "R2082: the developer API market gains a discovery door - api_search matches a case-insensitive keyword over title or listing_key only, filters by seller and by a price band on the CURRENT asking price, hides retired listings unless explicitly included, pins the gate order (keyword, seller, price band incl. the inverted form, flag type) before any read, orders rows by current price then listing_id, and stays pure-read with zero token movement; suite 8/8 double-run identical, battery 288/288 + controls 7/7, matrix 288/2410 byte-identical."
+    ],
     [
       "R2081",
       "R2081: the buyer-side purchase library lands on the developer API market - one five-key envelope with fourteen-key rows derived from the purchase rows themselves, strict buyer isolation (no cross-buyer leakage, the developer account carries no self-purchase rows, a prefix-valid account with no purchases gets an honest empty library), retired listings staying readable with their delist stamp, price_paid separated from the live current_price, my_rating limited to the buyers own stars, the account gate fail-closed before any read, and the pure-read law with zero token movement; suite 8/8 double-run identical, battery 287/287 + controls 7/7, matrix 287/2402 byte-identical."
@@ -553,10 +562,10 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 8,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 8,
