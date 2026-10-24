@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T07:09:56+08:00",
+  "export_ts": "2026-10-24T09:05:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2066: the dataset coverage month-window gate is now proven restart-invariant - the same ten malformed windows are rejected with the same family code on three separate instances, and no zone read can happen before the gate.",
-    "latest_artifact": "src/sandbox/ledger/test_datasub_coveragegatepersist.py + qa/reconcile-all-R2066.log (SUITE PASS 8/8 AC-CVGG1..8, double-run stdout sha16 0d666ff57396faa1; RUNNER PASS 274/274 suites + controls 7/7 218.3s; suite-matrix 274/2302 byte-identical, 2026-10-24)",
+    "current": "R2067: the showcase window view now survives the retracted world across restarts - an empty window read with a full append-only chronicle persists byte-identically, and a re-place bounce after restart lands in the same record-month window read.",
+    "latest_artifact": "src/sandbox/ledger/test_showcase_viewwindow_replacepersist.py + qa/reconcile-all-R2067.log (SUITE PASS 7/7 AC-SVRP1..7, double-run stdout sha16 7f40aefb4e0d4b22; RUNNER PASS 275/275 suites + controls 7/7 221.6s; suite-matrix 275/2309 byte-identical, 2026-10-24)",
     "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31 (day-3 stamp next round); nine-company automation plan committee tri-report <=10-25; weekly dead-doc deletion inside the 10-19..10-26 rectification window; next window <=48h (by 2026-10-26)"
   },
   "depts": [
@@ -219,7 +219,7 @@
       "R2066: the dataset coverage month-window gate is now proven restart-invariant - the same ten malformed windows are rejected with the same family code on three separate instances, and no zone read can happen before the gate."
     ],
     [
-      "2066",
+      "2067",
       "OSLoop 执行 tick"
     ],
     [
@@ -465,31 +465,35 @@
     [
       "R2065",
       "R2065 P3 explore-queue FIFO head after the gated tech heads: the apimarket developer sales board zero-listing boundary GATE family across restart instances two and three. AC-AMZG1..AC-AMZG8 pre-registered in the claim note BEFORE the suite existed. A fixed-order four-probe battery (unregistered publisher with a clean title, registered developer with a forbidden word, zero price, unknown listing purchase) replays on a fresh instance and after two full-stack ordered restarts: the code vector E_AM_NOT_DEV/E_AM_CONTENT_REJECTED/E_AM_BAD_PRICE/ E_AM_UNKNOWN_LISTING is pairwise identical across all three instances, the registry gate keeps precedence over the content gate everywhere (an unregistered publisher carrying a forbidden word still rejects E_AM_NOT_DEV, burning no msgSecCheck), the probe batch leaves the three apimarket tables, the ledger_tx id set and the board dump untouched, and a legitimate publish plus purchase still works afterwards (board exactly (usr:ada, 1, 1, 10, 7, 3), both provenance tx ids in the ledger set). SUITE PASS 8/8 with a byte-identical rerun (stdout sha16 FE5C4F882F921D1B); wired ledger-apimarket-devboardgatepersist (8) into reconcile_all SUITES; battery RUNNER PASS 273/273 suites + controls 7/7 217.1s = qa/reconcile-all-R2065.log; matrix 273 suites / 2294 criteria --check byte-identical. Honest notes: (a) the first attempt raised sqlite3.ProgrammingError because AC-AMZG5 probed instance two after its ordered close - reworked onto the still-open third instance, the aborted run is preserved as qa/apimarket-devboardgate-R2065-attempt1.log; (b) the first three evidence logs came out of shell tee in the UTF-16 dialect and tripped the writer census - all three were transcoded to utf-8 LF and later captures buffer stdout before writing, census DRIFT-CLEAN (files=1647 flags=0). Daily reconciliation and funnel daily standing lines were already run today and were not re-run. explore open 10 -> 9. Score 2."
+    ],
+    [
+      "R2067",
+      "R2067 P3 explore-queue FIFO head: the showcase window-view re-place bounce across restart. AC-SVRP1..AC-SVRP7 pre-registered before the suite existed. The retracted world (empty all-time and window reads, full append-only chronicle, empty tour) persists byte-identically across a full-stack close/reopen; a post-restart re-place bounce returns the item to the all-time view, its record-month window view and the tour while a second place rejects E_SH_ALREADY_DISPLAYED; a second retract -> re-place cycle repeats the bounce (chronicle 4 -> 7) with the untouched showcase byte-frozen; the bounce final state crosses a second restart onto a third instance with the pure-read law held and gate codes stable. SUITE PASS 7/7 (double-run sha16 7f40aefb4e0d4b22); RUNNER PASS 275/275 suites + controls 7/7 221.6s; suite-matrix 275/2309 --check byte-identical. Honest notes: in-window fix of the month derivation (chronicle instead of the empty display) and normalization of three CRLF/UTF-16 evidence files to utf-8 LF before the green re-run."
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
     "queue_tech_open": 9,
-    "queue_explore_open": 8,
+    "queue_explore_open": 7,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 9,
+  "log_lines_in_window": 11,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 5,
+  "substantive_non_idle_mention_lines": 7,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
   "queue_tech_open": 9,
-  "queue_explore_open": 9
+  "queue_explore_open": 7
 }

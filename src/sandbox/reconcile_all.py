@@ -2532,6 +2532,22 @@ SUITES = [
     ("ledger-showcase-viewwindow-persist",
      os.path.join("ledger",
                    "test_showcase_viewwindow_persist.py"), 7),
+    # R2067 explore-queue FIFO head claim (R2038 reseed row):
+    # showcase window-view re-place bounce across restart - the
+    # retracted world (empty window reads, full append-only
+    # chronicle) persists byte-identically, post-restart re-place
+    # bounce returns the item to the all-time view, its
+    # record-month window view and the tour, a second
+    # retract -> re-place cycle repeats the bounce, the
+    # untouched showcase stays byte-frozen, the bounce final
+    # state crosses a second restart onto a third instance,
+    # gate codes stay stable across restarts, pure-read law,
+    # hygiene (suite-only).
+    # (AC-SVRP1..AC-SVRP7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-showcase-viewwindow-replacepersist",
+     os.path.join("ledger",
+                   "test_showcase_viewwindow_replacepersist.py"), 7),
     # R1995 explore-queue FIFO head claim (R1968 reseed row):
     # proposal progress_board cross-restart persistence example
     # window - full-stack close -> reopen byte-identical board
