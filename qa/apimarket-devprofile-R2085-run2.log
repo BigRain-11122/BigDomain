@@ -1,0 +1,10 @@
+PASS AC-AMDP1: envelope keys=True rows=2 row keys=True order=[1, 2] first_listed_shape=True
+PASS AC-AMDP2: counts=2/2/0 sales=4 gross=26 dev+plat=20/6 paid_sum=26
+PASS AC-AMDP3: live=1 retired=1 d2 delisted=True stamp match=True d2 sales=2 totals sales=4 gross=26 ratings=4
+PASS AC-AMDP4: dana count=4 avg=3.75 (3.5/4.0 rows) frank count=7 avg=4.285714285714286 zero-rating gina=0/0.0
+PASS AC-AMDP5: gina empty=True dana/frank ids disjoint=True bob(dev) empty=True purchase rows=11
+PASS AC-AMDP6: bad forms=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests frozen=True bare usr: empty=True
+PASS AC-AMDP7: repeat identical=True digests frozen=True tx constant=True d1 price 10->15 gross kept=26 board agreement=True
+PASS AC-AMDP8: instance1==2==3 byte-identical=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0 world outside repo=True
+SUITE 8/8

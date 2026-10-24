@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T15:05:00+08:00",
+  "export_ts": "2026-10-24T15:08:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2084: the market's discovery door is paged - callers can now ask for page N of a growing market (limit/offset), see the honest total and whether more rows remain, while the old no-parameter call stays byte-identical.",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_search limit/offset paging) + src/sandbox/ledger/test_apimarket_searchpage.py (AC-AMPG1..AC-AMPG8, SUITE 8/8 double-run sha16 f35327efe31c9d50) + qa/apimarket-searchpage-R2084.log + qa/reconcile-all-R2084.log (RUNNER 290/290 + controls 7/7 259.2s)",
+    "current": "R2085: the market now has a public seller profile - a buyer standing at a listing can see who the seller is: live vs retired listings, historical sales and revenue, and a cross-listing rating average, with an honest empty profile for a seller who has never listed.",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (dev_profile) + src/sandbox/ledger/test_apimarket_devprofile.py (AC-AMDP1..AC-AMDP8, SUITE 8/8 double-run sha16 a085f9d56f80a681) + qa/apimarket-devprofile-R2085.log + qa/reconcile-all-R2085-3.log (RUNNER 291/291 + controls 7/7 245.4s)",
     "next_milestone": "Next rubric door on the apimarket or funnel face (by 2026-10-26) under the same pre-registration discipline; bootstrap deployment stays blocked on the CEO physical items (merchant id, server, keys)."
   },
   "depts": [
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket 卖家公开档案读面（dev_profile）",
+      "on",
+      "R2085：十三键信封+九键行（按 listing_id 升序）·分区守恒（listing_count==live+retired==行数·销售与毛利由行派生·gross==dev+platform 整数分账精确）·退役挂牌留存并继续贡献历史成交与评价·跨挂牌评价聚合（3.75 与 30/7=4.285714285714286 双钉·逐行与 api_ratings 一致）·卖家隔离+合法前缀空台账诚实空档案·账户门前置且六表摘要冻结·纯读零 token·与 dev_sales_board/api_view 跨面一致·跨重启字节同一（SUITE 8/8·AC-AMDP1..AMDP8·电池 291/291 套件 2434 判据）"
+    ],
     [
       "apimarket 发现面分页轴（api_search limit/offset）",
       "on",
@@ -247,6 +252,10 @@
     ]
   ],
   "results": [
+    [
+      "R2085",
+      "R2085: the developer API market gains the public seller profile it never had - dev_profile answers who a seller is with a thirteen-key envelope of nine-key rows: the live/retired listing split, historical sales and revenue closing exactly on the integer split, retired listings keeping their history, a cross-listing rating aggregate pinned at 3.75 and 30/7 with per-listing agreement against api_ratings, strict seller isolation plus an honest empty profile, the fail-closed account gate before any read, pure-read with zero token movement, cross-face agreement with dev_sales_board and api_view, and cross-restart byte identity; suite 8/8 double-run identical, battery 291/291 + controls 7/7, matrix 291/2434 byte-identical."
+    ],
     [
       "R2084",
       "R2084: the developer API market's discovery door gains paging - optional limit/offset slice the already-ordered rows with an honest pre-page total and a truncated flag, the bad-shape gates fail closed before any read and behind the account and price-band gates, totals derive from the filtered set, and the no-parameter call stays byte-identical to the R2082 contract; suite 8/8 double-run identical, battery 290/290 + controls 7/7, matrix 290/2426 byte-identical."

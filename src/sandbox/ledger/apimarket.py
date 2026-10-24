@@ -1174,3 +1174,98 @@ class APIMarketFace:
         if window is not None:
             env["window"] = window
         return env
+
+    def dev_profile(self, dev_account):
+        """Public seller-profile read face (pre-registered
+        AC-AMDP1..AC-AMDP8 in the R2085 explore-queue row BEFORE
+        this code existed): one developer's own trust face - the
+        listing split (live vs retired), the historical sales and
+        revenue aggregates, the cross-listing rating aggregate and
+        the per-listing breakdown.
+
+        The nine existing read faces each answer one narrow
+        question (one listing, the whole board, one listing's
+        ratings, one seller's own sales, one buyer's library, the
+        search result, the market-wide seller board); none answers
+        "who is this seller". This face closes the discovery
+        chain: a retired listing stays visible with its delist
+        stamp and keeps contributing its historical sales and
+        ratings, so retirement never rewrites the trust history.
+        The account shape gate is prefix-only by the truthful
+        R2077/R2078 finding and runs before any read - a
+        prefix-valid account with no listing rows gets an honest
+        empty profile (zeros, first_listed_utc None, empty
+        listings), never an error. Pure read: zero row mutations
+        and zero token movement. The envelope carries the resident
+        non-advisory disclaimer."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, listing_key, title, token_price,"
+                " listed_utc FROM apimarket_listings WHERE"
+                " dev_account = ? ORDER BY listing_id",
+                (dev_account,)).fetchall()
+            rows = []
+            live = 0
+            retired = 0
+            sales_count = 0
+            gross = 0
+            dev_rev = 0
+            plat_rev = 0
+            rating_count = 0
+            star_sum = 0
+            first_listed = None
+            for r in listings:
+                listing_id = int(r[0])
+                stamp = self._delisted_utc(listing_id)
+                sale = self._conn.execute(
+                    "SELECT COUNT(*), COALESCE(SUM(price_paid), 0),"
+                    " COALESCE(SUM(dev_share), 0),"
+                    " COALESCE(SUM(platform_share), 0)"
+                    " FROM apimarket_purchases WHERE listing_id = ?",
+                    (listing_id,)).fetchone()
+                rc, ravg = self._agg_rating(listing_id)
+                stars = self._conn.execute(
+                    "SELECT COALESCE(SUM(stars), 0)"
+                    " FROM apimarket_ratings WHERE listing_id = ?",
+                    (listing_id,)).fetchone()[0]
+                if stamp is None:
+                    live += 1
+                else:
+                    retired += 1
+                sales_count += int(sale[0])
+                gross += int(sale[1])
+                dev_rev += int(sale[2])
+                plat_rev += int(sale[3])
+                rating_count += rc
+                star_sum += int(stars)
+                listed_utc = r[4]
+                if first_listed is None or listed_utc < first_listed:
+                    first_listed = listed_utc
+                rows.append({
+                    "listing_id": listing_id,
+                    "listing_key": r[1],
+                    "title": r[2],
+                    "token_price": self._current_price(
+                        listing_id, int(r[3])),
+                    "delisted": stamp is not None,
+                    "delisted_utc": stamp,
+                    "sales_count": int(sale[0]),
+                    "rating_count": rc,
+                    "avg_rating": ravg})
+            avg_rating = (0.0 if rating_count == 0
+                          else float(star_sum) / rating_count)
+        return {"dev_account": dev_account,
+                "listing_count": len(rows),
+                "live_listing_count": live,
+                "retired_listing_count": retired,
+                "sales_count": sales_count,
+                "gross_sales": gross,
+                "dev_revenue": dev_rev,
+                "platform_revenue": plat_rev,
+                "rating_count": rating_count,
+                "avg_rating": avg_rating,
+                "first_listed_utc": first_listed,
+                "disclaimer": self.disclaimer,
+                "listings": rows}

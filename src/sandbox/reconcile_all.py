@@ -2195,6 +2195,20 @@ SUITES = [
     # pre-registered in the R2084 explore-queue claim row).
     ("ledger-apimarket-searchpaging", os.path.join(
         "ledger", "test_apimarket_searchpage.py"), 8),
+    # R2085 seller-profile seat: the public dev_profile read face
+    # with the thirteen-key envelope and nine-key rows, the
+    # partition law (listing_count == live + retired, sales and
+    # gross derived from rows, integer split closing exactly), the
+    # retired-listing-stays rule with unrewritten history, the
+    # cross-listing rating aggregate pinned at 3.75 and 30/7 with
+    # per-listing agreement against api_ratings, seller isolation
+    # plus the honest empty profile, the fail-closed account gate
+    # family, the pure-read law with cross-face agreement against
+    # dev_sales_board and api_view, and cross-restart byte identity
+    # (AC-AMDP1..AC-AMDP8 pre-registered in the R2085
+    # explore-queue claim row).
+    ("ledger-apimarket-devprofile", os.path.join(
+        "ledger", "test_apimarket_devprofile.py"), 8),
     # R2083 listing metadata revision seat: the append-only
     # apimarket_listing_revisions row with the listing row's base
     # metadata never rewritten, partial-edit semantics, the pinned
