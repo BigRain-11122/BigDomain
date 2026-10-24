@@ -2104,6 +2104,23 @@ SUITES = [
     # explore-queue claim row).
     ("ledger-apimarket-devboardmonthstraddle", os.path.join(
         "ledger", "test_apimarket_devboardmonth_straddlepersist.py"), 7),
+    # apimarket rating aggregate precision and gate-order window
+    # (R2077): the AC-AM5 single-rating seat grown into the
+    # aggregate surface - count/float-average/rater-order pinned
+    # across api_view, api_board and api_ratings; purchaser-only
+    # plus append-only immutability (repeat rejected, first value
+    # preserved); the bad-args gate family and its order (account
+    # gate before star gate, star gate before the listing lookup
+    # so an unknown listing with bad stars answers BAD_STARS);
+    # aggregate arithmetic exactness (4 raters 3.75, 7 raters
+    # 30/7 by float repr, single rater float(stars), zero-rater
+    # listing 0.0/0); cross-listing zero permeation; cross-restart
+    # byte identity of the five read faces; the pure-read law and
+    # zero token movement (the rating face never touches the
+    # ledger) (AC-AMRT1..AC-AMRT8 pre-registered in the R2077
+    # explore-queue claim row).
+    ("ledger-apimarket-ratingagg", os.path.join(
+        "ledger", "test_apimarket_ratingagg.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

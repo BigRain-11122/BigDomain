@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-24T10:59:41+08:00",
+  "export_ts": "2026-10-24T12:05:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2076: the daily compliance crawl captured the amended (2025-03-18) Network Trade Supervision Measures as current law - auto-renewal must be reminded before acceptance AND before each renewal date with an anytime cancel option and no unreasonable fees, live video must be kept at least three years, and commercial messages must stop immediately on refusal.",
-    "latest_artifact": "docs/global-benchmarks.md W30 block + docs/research/intelligence-wall.md W30 dual rows + qa/smoke-R2076.log/png (A-grade samr.gov.cn fulltext including the 2025 order No.101 amendment; benchmarks_refreshed 2026-10-24, 2026-10-24); plus qa_mtime_probe.py live re-run verdict NO-LIVE-TIE keeping the suite-matrix window honestly open.",
-    "next_milestone": "2026-10-25: the nine-company automation build plan (funnel four-ring spec + 72h self-continuation acceptance to 10-31) goes to the council three-in-one submission; P-47 design sets stay gated on the CEO merchant/server physical parts."
+    "current": "R2077: the API marketplace rating face now has its aggregate law pinned - a buyer who never bought cannot rate, a repeat rating is refused and never overwrites, the star check runs before the listing lookup, and averages are exact (3.75 for four raters, 30/7 for seven).",
+    "latest_artifact": "src/sandbox/ledger/test_apimarket_ratingagg.py (SUITE PASS 8/8 double-run, AC-AMRT1..AC-AMRT8) + qa/apimarket-ratingagg-R2077.log + qa/reconcile-all-R2077.log (RUNNER PASS 284/284, 2026-10-24); state gauge closed by fold R585 (81105B -> 30268B).",
+    "next_milestone": "2026-10-25: the nine-company automation build plan goes to the council three-in-one submission (funnel four-ring spec + 72h self-continuation acceptance to 10-31); next window continues the explore queue (merchant-id row stays gated) and the funnel daily evidence chain."
   },
   "depts": [
     {
@@ -227,7 +227,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2075",
+      "2077",
       "OSLoop 执行 tick"
     ],
     [
@@ -513,15 +513,19 @@
     [
       "R2076",
       "R2076 QA charter daily crawl W30: the Network Trade Supervision Measures (SAMR order No.37, effective 2021-05-01, amended by order No.101 dated 2025-03-18) captured as A-grade current fulltext from samr.gov.cn in 1 search + 1 get with zero extra negatives. Entered as a benchmarks sec.1 block + sec.3 source row + sec.4 record (sec.2 deliberately unchanged, noted honestly) and W30 dual rows on the intelligence wall. Consumption: auto-renewal dual-point notice plus anytime cancel and no unreasonable fees (art.18) cross-proves the month-card rule chain with W10/W18; bundling never defaulted and six format-clause bans (arts.17/21) for the payment/contract face; reviews and traffic five bans (arts.14/15) for UGC; live video kept three years (art.20); commercial-message immediate opt-out (art.16); 30-day termination notice and 3-year archives (arts.23/24/31). benchmarks_refreshed=2026-10-24. Same round: state.json bare-LF=30 repaired (content and JSON equality verified), suite_matrix live mtime probe re-run honestly -> NO-LIVE-TIE with the queue window left OPEN. Both daily standing rows already stamped today and not re-run. Evidence qa/smoke-R2076.log + png. Score 2."
+    ],
+    [
+      "R2077",
+      "R2077: the apimarket rating face pins purchaser-only plus append-only immutability, the star gate before the listing lookup, exact averages (3.75 and 30/7 by float repr), cross-listing isolation, cross-restart byte identity and zero token movement; suite 8/8, battery 284/284"
     ]
   ],
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 4,
+    "log_lines_in_window": 5,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 4,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
