@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-24T09:05:00+08:00",
+  "export_ts": "2026-10-24T08:47:11+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2067: the showcase window view now survives the retracted world across restarts - an empty window read with a full append-only chronicle persists byte-identically, and a re-place bounce after restart lands in the same record-month window read.",
-    "latest_artifact": "src/sandbox/ledger/test_showcase_viewwindow_replacepersist.py + qa/reconcile-all-R2067.log (SUITE PASS 7/7 AC-SVRP1..7, double-run stdout sha16 7f40aefb4e0d4b22; RUNNER PASS 275/275 suites + controls 7/7 221.6s; suite-matrix 275/2309 byte-identical, 2026-10-24)",
+    "current": "R2068: the proposal sign-side bad-args gate family is now pinned on a LOADED world - the same ordered reject vector on three instances across two restarts, with the three business gates behind the shape gates still reachable.",
+    "latest_artifact": "src/sandbox/ledger/test_proposal_signbadargspersist_loaded.py + qa/reconcile-all-R2068.log (SUITE PASS 7/7 AC-PSL1..7, double-run stdout sha16 f282a63b115cdf2a; RUNNER PASS 276/276 suites + controls 7/7 217.0s; suite-matrix 276/2316 byte-identical, 2026-10-24)",
     "next_milestone": "FUNNEL 72h self-continuity acceptance <=10-31 (day-3 stamp next round); nine-company automation plan committee tri-report <=10-25; weekly dead-doc deletion inside the 10-19..10-26 rectification window; next window <=48h (by 2026-10-26)"
   },
   "depts": [
@@ -215,11 +215,15 @@
   ],
   "results": [
     [
+      "R2068",
+      "R2068 P3 explore-queue FIFO head: the proposal sign-side bad-args gate family on a loaded world. The R2041 boundary-world battery grew into a 15-probe ordered battery over two registered proposals and three landed signs (pp-alpha 2/3, pp-beta 1/2, both unqualified): one control on a ghost id reaches the unknown branch, eleven shape probes on the KNOWN id answer BAD_ARGS and never WINDOW/SELF/DUP (the loaded-world half of the ordering law), and the three business gates stay reachable exactly once each. The vector is byte-identical on instances one/two/three across two full-stack restarts; registry counts, all four read faces and the qualified state never move; zero token and zero phantom memorial. SUITE PASS 7/7, battery 276/276, matrix 276/2316 byte-identical. Honest note: the state log arrived over the waterline in a bare-LF layout, so the CRLF canonical and the 16-space indent were restored (content-eq verified) and the R2061..R2067 tail was folded as R583 before the closeout append."
+    ],
+    [
       "R2066",
       "R2066: the dataset coverage month-window gate is now proven restart-invariant - the same ten malformed windows are rejected with the same family code on three separate instances, and no zone read can happen before the gate."
     ],
     [
-      "2067",
+      "2068",
       "OSLoop 执行 tick"
     ],
     [
@@ -474,26 +478,26 @@
   "self_drive": {
     "window": "2026-10-18..2026-10-24",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 1,
     "proposals_total": 4,
     "proposals_open": 2,
     "queue_main_open": 6,
     "queue_tech_open": 9,
-    "queue_explore_open": 7,
+    "queue_explore_open": 6,
     "method": "machine-derived from src/os/state.json log and queue files"
   },
   "window": "2026-10-18..2026-10-24",
   "window_days": 7,
-  "log_lines_in_window": 11,
+  "log_lines_in_window": 6,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 7,
+  "substantive_non_idle_mention_lines": 1,
   "proposals_total": 4,
   "proposals_open": 2,
   "queue_main_open": 6,
   "queue_tech_open": 9,
-  "queue_explore_open": 7
+  "queue_explore_open": 6
 }

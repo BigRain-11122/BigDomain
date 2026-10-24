@@ -3049,6 +3049,27 @@ SUITES = [
     ("ledger-proposal-signbadargs-persist",
      os.path.join("ledger",
                    "test_proposal_signbadargspersist.py"), 7),
+    # R2068 explore-queue FIFO head claim (R2041 reseed successor):
+    # proposal sign-side bad-args gate family LOADED-WORLD
+    # cross-restart same-code example - R2041 pinned the three
+    # shape gates on a zero-registration boundary world, this
+    # window pins them on a loaded world (two proposals, three
+    # signs) where the shape gates have live business gates
+    # behind them: an ordered 15-probe battery (1 control on a
+    # ghost id, 11 shape probes on the KNOWN id, 3 orthogonal
+    # business-gate probes) rejects with the identical pinned
+    # vector on instances one/two/three across two full-stack
+    # restarts, proving both the bad-args-before-{window,self,
+    # dup} ordering law and that the three business gates stay
+    # reachable; loaded read faces byte-identical around every
+    # batch and across restarts, qualified state never flips,
+    # zero-token with zero phantom memorial, hygiene
+    # (suite-only).
+    # (AC-PSL1..AC-PSL7 pre-registered in
+    # state/queue/explore.md).
+    ("ledger-proposal-signbadargs-loadedpersist",
+     os.path.join("ledger",
+                   "test_proposal_signbadargspersist_loaded.py"), 7),
     ]
 
 FAILS = 0
