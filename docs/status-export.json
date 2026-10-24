@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T06:24:00+08:00",
+ "export_ts": "2026-10-25T07:02:11+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2113 公共活动流的逐挂牌过滤落地：以前市场动态只能按时间/类型/条数看，买家或卖家停在一件挂牌的页面上没法问「这一件最近发生了什么」（要自己翻七张历史面并表，只有离线报告里做过）。本轮给动态流加了按挂牌过滤，并把它接进结算报告——每件挂牌的档案块下多一张「近期活动」表，价格改动、补货、成交、评价、下架都按时间排好；同一件挂牌的历史从此一眼可读。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_market_feed 增 listing_id 过滤）+ src/sandbox/ledger/apimarket_report.py（挂牌档案 feed 键 + 近期活动子表，REPORT_SCHEMA 6→7 加法）+ src/sandbox/ledger/test_apimarket_marketfeed_listing.py（SUITE PASS 8/8，双跑判据行同一 sha16 2754320e137abf5e）+ qa/apimarket-feedlisting-R2113.log（与 -2） + qa/reconcile-all-R2113.log（RUNNER PASS 318/318 suites + controls 7/7，556.3s）+ docs/sandbox-suite-matrix.md（318 suites / 2652 criteria，--check 逐字节同）",
-  "next_milestone": "48 小时内：卖家侧「这一件为什么卖不动」的组合视图（把需求/库存/退款/评价欠债按挂牌合成一屏，避免再逐面切换）+ 商家号到位前的支付合规路径继续设计态——两项都不需要物理件。"
+  "current": "R2114 集团决策水位升级：以前判断「集团有没有新决策」只看一个内容哈希，分不清是内容真变了、还是历史被改写、还是读到了没推送的分支（幽灵值）。本窗把水位改成带来源的四元组（仓库+提交+字节数+内容哈希）并附一条可复现取件命令，来源对不上就判 stale、绝不前进水位——这是集团 10-25 决议要求各司 10-26 06:00 前对齐的硬项。",
+  "latest_artifact": "src/os/dec_watermark.py（四元组观察/固定序比对/原子落盘/取件命令，record+check 两子命令）+ src/os/test_dec_watermark.py（SUITE PASS 8/8，双跑判据行同一 sha16 27a758e6da378422）+ qa/decwatermark-R2114.log（与 -run2） + state/dec_watermark.json（实锚集团 decisions.md·HEAD 4cf327b9·222683B·sha256 f94a284c） + qa/reconcile-all-R2114.log（RUNNER PASS）",
+  "next_milestone": "48 小时内：等集团把 HEAD 三提交推到 origin 后复检水位（check 应从 moved 转 unchanged/moved 再前进，禁据旧 origin blob 消费）；随后把水位检查接进轮首五静扫描，让「读到幽灵 sha」在扫描步就 fail-closed。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "集团决策水位键 v2 四元组（来源锚 + 可复现取件命令 + stale 不前进）",
+   "on",
+   "R2114：五静水位此前只存内容哈希，分不清「内容变了」与「历史被改写/读到未合入分支」（正是 D-08 描述的幽灵 sha 事故）。本窗落地集团水位键 v2 四元组工具（src/os/dec_watermark.py）：观察 {repo, commit_sha, blob_bytes, sha256}、按 repo→commit_sha→blob_bytes→sha256 固定序比对、判 new/legacy/unchanged/moved/stale、stale 一律不前进且文件字节不动、先全量序列化再 temp+os.replace 原子落盘、并附一条可复现取件命令；套件 8/8 双跑判据行同一；接线 os-decwatermark(8)；落仓水位件实锚集团 decisions.md（HEAD 4cf327b9·222683B·sha256 f94a284c）。诚实注两处：判据行在本窗代码之后落板（出生站偏差已披露）；集团 origin/main 落后 HEAD 三提交，故锚实际消费源 HEAD，对 origin 的 check 报 moved、按律不得据旧 blob 消费。"
+  ],
   [
    "apimarket 公共活动流逐挂牌过滤（api_market_feed listing_id）+ 挂牌档案近期活动子表 + REPORT_SCHEMA 6→7",
    "on",
@@ -367,6 +372,10 @@
   ]
  ],
  "results": [
+  [
+   "R2114",
+   "R2114: the decisions watermark gains the source anchor the group decision D-20261025-08 requires. The five-silence baseline advanced from a content hash alone, so it could not distinguish a content change from a rewritten history or an unmerged local read. New src/os/dec_watermark.py observes the four-tuple {repo, commit_sha, blob_bytes, sha256}, compares in the pinned order repo -> commit_sha -> blob_bytes -> sha256, never advances on a stale source, writes atomically and ships one reproducible fetch command; suite 8/8 double-run identical sha16 27a758e6da378422; wired os-decwatermark (8). Shipped state/dec_watermark.json anchors the group decisions.md at HEAD 4cf327b9 / 222683B / sha256 f94a284c. Honest notes: the criteria row was landed after the code in this window (disclosed deviation), and origin/main lags HEAD by three commits, so a check against origin reports moved and must not be consumed until the group pushes."
+  ],
   [
    "R2113",
    "R2113: the market activity feed gains the one axis it never had - a per-listing filter - and, more importantly, a consumer for it. The stream could be sliced by time window, kind family and tail limit, but a buyer or seller on one listing page could not ask what happened to that shelf; the per-listing history lived in seven faces nobody merged outside the offline report. api_market_feed now accepts listing_id with its shape gate after the limit gate and before any read, echoes it in a new envelope key so a default call stays byte-identical to the R2107 contract, answers an honest empty feed for a shape-valid id the market does not hold (a stream filter, not an entity lookup), and composes with window/kind/limit while total stays pre-truncation. Every report dossier block now carries that listing's feed (DOSSIER_KEYS 8 -> 9, same-source as a direct call at FEED_LIMIT) and the page renders a recent-activity sub-table through the existing six-column renderer with its honest empty state; REPORT_SCHEMA moves 6 -> 7 additively with the envelope still exactly three keys. AC-AMFL1..AC-AMFL8 pre-registered before the code (five anchors git grep -F zero-occupancy rc=1); suite 8/8 double-run criterion lines identical sha16 2754320e137abf5e; wired ledger-apimarket-feedlisting (8); battery RUNNER PASS 318/318 suites plus controls 7/7 in 556.3s; matrix 318 suites / 2652 criteria --check byte-identical; census DRIFT-CLEAN files=1772 flags=0. Three honest notes: (a) the first battery was 317/318 with reconcile-daily-census cd7 as the only red because the in-flight evidence log was a PowerShell UTF-16 tee artifact - the battery now writes to TEMP and a python single writer transcodes it to utf-8 LF afterwards, after which census is green (that first FAIL log was deleted before the re-run and is honestly unarchived); (b) the buyerhistory and refundregister suites pinned schema as a literal 6 and now follow the module constant while keeping their v5/v6 key sets literal; (c) the AC-AMFL5 window expectation was written wrong twice before being pinned to the measured three-event truth."
@@ -801,7 +810,7 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 37,
+  "log_lines_in_window": 39,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 36,

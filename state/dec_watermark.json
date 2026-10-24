@@ -1,0 +1,12 @@
+{
+ "blob_bytes": 222683,
+ "commit_sha": "4cf327b9a517a816097c38f431817761ce150653",
+ "fetch": "git -C \"C:/Users/sjs20/Desktop/FluxGroup\" cat-file blob 4cf327b9a517a816097c38f431817761ce150653:docs/decisions.md",
+ "format": "watermark-v2",
+ "path": "docs/decisions.md",
+ "recorded_utc": "2026-10-24T22:34:00Z",
+ "ref": "HEAD",
+ "repo": "git@github.com:BigRain-11122/FluxGroup.git",
+ "repo_path": "C:/Users/sjs20/Desktop/FluxGroup",
+ "sha256": "f94a284c1b5531baa6b0b95e9f9625df3e5a74a44514ea5816f6507a89ee8b29"
+}

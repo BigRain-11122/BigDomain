@@ -1,0 +1,9 @@
+PASS AC-DWM1: verdict=new keys=4 bytes=36 match=True
+PASS AC-DWM2: rc=0 bytes=36 same=True
+PASS AC-DWM3: same=True ascii=True lf=True tmp=False
+PASS AC-DWM4: verdict=unchanged untouched=True
+PASS AC-DWM5: check=moved advanced=True
+PASS AC-DWM6: check=stale record=stale untouched=True
+PASS AC-DWM7: check=stale record=stale note=True untouched=True
+PASS AC-DWM8: ascii=True usage=2 runner=True shipped=True fetch=True
+SUITE 8/8 PASS

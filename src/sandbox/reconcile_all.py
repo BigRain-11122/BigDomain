@@ -2411,6 +2411,12 @@ SUITES = [
     # oldest debt first, with the refund precedence pinned.
     ("ledger-apimarket-buyertodo", os.path.join(
         "ledger", "test_apimarket_buyertodo.py"), 8),
+    # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
+    # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
+    # reproducible fetch command, with the pinned comparison order and
+    # a stale source that never advances the watermark.
+    ("os-decwatermark", os.path.join(
+        "..", "os", "test_dec_watermark.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and
