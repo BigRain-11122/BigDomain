@@ -13,9 +13,15 @@ sites outside tests and bookkeeping - the "no consumer" idle form. This
 module is the missing consumer: one command turns the settlement faces
 into a self-contained, offline-openable HTML ledger report.
 
+R2108 wires the public activity stream in: the R2107 api_market_feed
+had zero product call sites (the no-consumer idle form again), so the
+report now carries an "activity" block read fresh on every collect and
+renders it as the Public activity section (schema 2 -> 3, additive).
+
 Faces consumed (read-only): api_market_stats, api_market_months,
 api_revenue_months, api_buyer_profile, api_buyer_months, api_board,
-api_sales.
+api_sales, api_seller_inbox, api_buyer_todo, api_watch_alerts,
+api_supply, api_market_feed.
 
 Usage:
     python apimarket_report.py --db ledger.db --seed --out report.html
@@ -57,7 +63,15 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # breaking change to the envelope keys or the per-face payload shape.
 # v2 (R2106) is an ADDITIVE bump: every v1 key keeps its value, and a
 # buyer block gains the two resident faces todo/watch_alerts.
-REPORT_SCHEMA = 2
+# v3 (R2108) is the same additive shape: the envelope keys are still
+# exactly schema_version/report/attention and the report gains one key
+# (activity) while every earlier key keeps its value.
+REPORT_SCHEMA = 3
+
+# How many of the newest activity events the report keeps. The feed's
+# limit keeps the TAIL of the ordered stream, so the page always shows
+# what happened most recently, and total still reports the full count.
+FEED_LIMIT = 40
 
 # Rows whose values are already month tables are rendered as tables, not
 # as scalar key/value pairs.
@@ -186,6 +200,7 @@ def collect(am):
             "todo": am.api_buyer_todo(buyer),
             "watch_alerts": am.api_watch_alerts(buyer),
         }
+    report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
     report["attention"] = collect_attention(am, report)
     return report
 
@@ -313,6 +328,58 @@ def attention_block(attention):
     return "\n".join(out)
 
 
+ACTIVITY_EMPTY = "no market events"
+ACTIVITY_COLUMNS = ("event_utc", "kind", "listing", "title", "detail",
+                    "value")
+
+
+def event_value(row):
+    """One readable cell for the varying part of an event row.
+
+    The feed's row shape is fixed at thirteen keys with None where a
+    field does not apply, so each kind carries its payload in a
+    different column. The pinned precedence below turns whichever one
+    is set into a single short string, so the section keeps a stable
+    six-column table instead of thirteen mostly empty ones."""
+    if row.get("amount") is not None:
+        return "amount %s" % row.get("amount")
+    if row.get("units") is not None:
+        return "units %s" % row.get("units")
+    if row.get("stars") is not None:
+        if row.get("previous_stars") is not None:
+            return "stars %s (was %s)" % (row.get("stars"),
+                                          row.get("previous_stars"))
+        return "stars %s" % row.get("stars")
+    if row.get("token_price") is not None:
+        return "price %s" % row.get("token_price")
+    return ""
+
+
+def activity_block(activity):
+    events = activity.get("events") or []
+    total = activity.get("total")
+    shown = activity.get("returned", len(events))
+    head = "showing %s of %s event(s)" % (esc(shown), esc(total))
+    if activity.get("truncated"):
+        head = head + " (newest first kept)"
+    if not events:
+        return ("<p class=\"empty\">%s</p>"
+                % esc(ACTIVITY_EMPTY))
+    out = ["<p>%s</p>" % head]
+    out.append("<table>")
+    out.append("<tr>%s</tr>"
+               % "".join("<th>%s</th>" % esc(col)
+                         for col in ACTIVITY_COLUMNS))
+    for row in events:
+        cells = (row.get("event_utc"), row.get("kind"),
+                 row.get("listing_key"), row.get("title"),
+                 row.get("detail"), event_value(row))
+        out.append("<tr>%s</tr>"
+                   % "".join("<td>%s</td>" % esc(cell) for cell in cells))
+    out.append("</table>")
+    return "\n".join(out)
+
+
 STYLE = """
 :root{--ink:#182033;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;--accent:#3b5bdb;--ok:#2f9e44}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -358,6 +425,11 @@ def render_html(report):
     # R2101 suite's synthetic escape fixture) carries no attention
     # block, so the page degrades to the honest empty state.
     parts.append(attention_block(report.get("attention") or {}))
+
+    parts.append("<h2>Public activity</h2>")
+    # same degrade rule for the R2108 activity block: an older report
+    # dict renders the honest empty state instead of raising.
+    parts.append(activity_block(report.get("activity") or {}))
 
     parts.append("<h2>Listings</h2>")
     parts.append(row_table(report["board"].get("listings"),

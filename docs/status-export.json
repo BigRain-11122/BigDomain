@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T02:20:00+08:00",
+ "export_ts": "2026-10-25T02:15:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2107：给市场装上「刚刚发生了什么」这一面。此前三十余个读面各自回答当前状态（单品/卖家/买家/月度/检索/关注），没有人能把新挂牌、改价、改标题、补货、下架、复架、成交、评分、评分修订、卖家回应、退款十一条append-only 事件线合成一条时间线；住民和运营者都得逐面翻表。本窗交付全市场公共活动流 api_market_feed：十一种事件一条升序流、固定十三键行、半开窗口、kind 过滤、尾部截断（取最新 N 条而 total 不变），同秒事件按固定 kind 序再按 ref_id 排定，重复运行同库逐字节同一；行面不含任何买家身份；门序全部先于读且拒绝零副作用。",
-  "latest_artifact": "preview/apimarket-market-feed.json（3967B，演示世界 11 条事件、排序 ASCII） + src/sandbox/ledger/apimarket.py（新增 api_market_feed 与 _FEED_KINDS/_assert_instant 缝） + src/sandbox/ledger/test_apimarket_marketfeed.py + qa/apimarket-marketfeed-R2107.log（SUITE PASS 8/8，双跑判据行同一 sha16 0860c0b610a4ac5c） + qa/reconcile-all-R2107.log（RUNNER PASS 312/312 suites + controls 7/7，262.4s）",
-  "next_milestone": "48 小时窗内：把活动流接进唯一消费者 apimarket_report（新增一节最近活动与机读 events 块，REPORT_SCHEMA 2→3 加法升级，旧报告仍可渲染）；再给feed 补一个按卖家或按挂牌的窄化参数（当前只有全市场面，单个卖家看自己的动静仍要全量拉取后本地筛）。支付/合规路径件继续待 CEO 物理件（商户号）。"
+  "current": "R2108：结算报告多了「公共活动」一段——R2107 造的活动流此前没有任何产品消费者（只有自己的套件），本窗把它接进唯一消费者 apimarket_report：每次采集现读流尾最新 40 条，页面在 Attention 之后新增 Public activity 表（时间/事件/挂牌/标题/细节/数值六列，数值格把金额、份数、星级、价格折成一格），机读契约 v2→v3 加法升级（信封仍恰三键、旧键一字不动），旧报告字典缺键时诚实空态。",
+  "latest_artifact": "preview/apimarket-report-activity.html（14444B·sha256 26d2448d6d14b89d·可直接双击打开：市场总账+月度时间线+待办+公共活动流+卖家/买家全表）+ preview/apimarket-report-activity.json（21777B·schema 3）+ src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_activity.py + qa/apimarket-activity-R2108.log（SUITE PASS 8/8·双跑同一 sha16 0d6f12bb569e107b）+ qa/reconcile-all-R2108.log（RUNNER PASS 313/313 suites + controls 7/7·297.1s）",
+  "next_milestone": "48 小时内：给活动流做「按类聚焦」与「时间窗」两个消费面——结算页现在只给全市场最近 40 条，运营者想只看成交/退款/评价三类或只看某一天时仍要自己筛（feed 已支持 kinds 与 since/until，缺的是报告侧的参数面与第二段表格）；其后是把活动流接进 HTML 的跳转锚（点卖家直接跳到月表），让页面从「账本」变成「可追的账本」。两项均不依赖 CEO 物理件。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告公共活动流段（activity 接线 + REPORT_SCHEMA 2→3）",
+   "on",
+   "R2108：R2107 的 api_market_feed 此前零产品调用点（只有套件与簿记行），本窗把它接进唯一消费者 apimarket_report.collect()——每次采集现读 api_market_feed(limit=FEED_LIMIT=40)，HTML 在 Attention 之后新增 Public activity 段（固定六列·数值格把 amount/units/stars/price 折成一格·shown/total 摘要·无事件诚实空态），机读契约 v2→v3 加法升级（信封仍恰 schema_version/report/attention·旧键逐字节不动·buyer 块键集不变·缺键旧 report 降级空态）。判据 AC-AMAF1..AC-AMAF8 预注册于代码前（六锚 git grep -F 零占用 rc=1）：同源等价+零缓存·加法契约·HTML 面·转义与标识·纯读（13 表摘要+ledger_tx 恒定）·双种子逐字节同一·降级·回归+接线。套件 8/8 双跑同一 sha16 0d6f12bb569e107b；接线 ledger-apimarket-activity(8)；电池 RUNNER PASS 313/313 + controls 7/7 297.1s；矩阵 313/2612 --check byte-identical；census DRIFT-CLEAN files=1762；呈看件 preview/apimarket-report-activity.html sha256 26d2448d6d14b89d。诚实注=R2106 套件曾把 REPORT_SCHEMA 写死为 2，加法升级撞红后改为动态对照模块常量（v2 键集仍写死），双处留痕。"
+  ],
   [
    "apimarket 全市场公共活动流（api_market_feed）",
    "on",
@@ -333,6 +338,10 @@
  ],
  "results": [
   [
+   "R2108",
+   "R2108: the report finally consumes the public activity feed. The R2107 api_market_feed had zero product call sites (only its own suite and bookkeeping lines) - the no-consumer idle form - so instead of a sixth face this window wired it into the one consumer: collect() reads api_market_feed(limit=FEED_LIMIT=40) fresh on every call, the page renders a Public activity section with six pinned columns and a value cell folding amount/units/stars/price, and REPORT_SCHEMA moves 2 -> 3 additively (envelope still exactly schema_version/report/attention, every earlier key keeps its value, buyer blocks unchanged, a legacy report dict degrades to the honest empty state). AC-AMAF1..AC-AMAF8 pre-registered before the code (six anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 0d6f12bb569e107b; wired ledger-apimarket-activity (8); battery RUNNER PASS 313/313 suites plus controls 7/7 in 297.1s; matrix 313 suites / 2612 criteria --check byte-identical; census DRIFT-CLEAN files=1762; preview preview/apimarket-report-activity.html (14444B, sha256 26d2448d6d14b89d) plus .json (21777B, schema 3). Honest note: the R2106 suite had REPORT_SCHEMA == 2 as a literal, so the additive bump broke it; that assertion now follows the module constant while its v2 key sets stay pinned as literals."
+  ],
+  [
    "R2107",
    "R2107: the market-wide public activity feed (api_market_feed). Eleven append-only event families merge into one ordered public stream with a fixed thirteen-key row shape (no buyer identity), a half-open window, a kind filter normalized to the module rank, and a tail truncation law. The total order is proven write-order independent by a same-second restock/price pair. Gate order runs before any read with frozen thirteen-table digests; per-kind counts agree with the existing faces; two instances replay byte-identically. AC-AMF1..AC-AMF8 pre-registered; 8/8 double-run sha16 0860c0b610a4ac5c; RUNNER 312/312 + controls 7/7 262.4s; matrix 312/2604 --check byte-identical; census DRIFT-CLEAN."
   ],
@@ -417,7 +426,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2099",
+   "2108",
    "OSLoop 执行 tick"
   ],
   [
@@ -740,14 +749,14 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 32,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 25,
+  "substantive_non_idle_mention_lines": 32,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
-  "queue_tech_open": 5,
+  "queue_tech_open": 4,
   "queue_explore_open": 1,
   "method": "machine-derived from src/os/state.json log and queue files"
  }

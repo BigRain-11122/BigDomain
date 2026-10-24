@@ -2367,6 +2367,12 @@ SUITES = [
     # merged into one ordered, windowable, kind-filterable stream.
     ("ledger-apimarket-marketfeed", os.path.join(
         "ledger", "test_apimarket_marketfeed.py"), 8),
+    # R2108 activity section on the report generator: the R2107 feed now
+    # has a consumer - every collect reads the newest FEED_LIMIT events
+    # into an activity block, the page renders them, and the JSON
+    # contract moves 2 -> 3 additively.
+    ("ledger-apimarket-activity", os.path.join(
+        "ledger", "test_apimarket_report_activity.py"), 8),
     # R2105 buyer-side rating-debt queue: the mirror of the R2096
     # seller inbox - only the purchases still awaiting a rating,
     # oldest debt first, with the refund precedence pinned.

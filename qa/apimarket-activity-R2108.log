@@ -1,0 +1,9 @@
+PASS AC-AMAF1 same_source=True total 11->12 tail=published/4
+PASS AC-AMAF2 schema=3 top=True old=True buyer=True env=True buyer_keys=[('months', 'profile', 'todo', 'watch_alerts')]
+PASS AC-AMAF3 heads=True rows=13 returned=12 summary=True empty=True
+PASS AC-AMAF4 raw_absent=True escaped=True markers=True
+PASS AC-AMAF5 digest_same=True tx=16 returned=13
+PASS AC-AMAF6 html_same=True json_same=True html_sha16=26d2448d6d14b89d
+PASS AC-AMAF7 len=13266
+PASS AC-AMAF8 rc=[0, 0, 0, 0] wired=True
+SUITE PASS 8/8

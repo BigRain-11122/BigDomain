@@ -16,9 +16,10 @@ Criteria:
     watch_alerts equal to a direct call on the same database, and each
     collect re-reads them (rating a purchase moves the queue in the
     very next collect).
-  AC-AMWB2 Additive contract: REPORT_SCHEMA == 2, the JSON envelope
-    still has exactly schema_version/report/attention, and the v1
-    buyer keys profile/months are unchanged.
+  AC-AMWB2 Additive contract: the JSON envelope still has exactly
+    schema_version/report/attention, schema_version equals the module
+    constant (2 at birth; the R2108 activity block bumps it to 3
+    additively), and the v1 buyer keys profile/months are unchanged.
   AC-AMWB3 HTML surface: each buyer block renders a "rating debt" and
     a "watch alerts" table whose row counts equal the envelope counts,
     with an explicit empty state.
@@ -218,9 +219,13 @@ def check_contract(tmp, db):
     R.main(["--db", db, "--out", out, "--json-out", js])
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
     env_ok = sorted(doc) == ["attention", "report", "schema_version"]
+    # R2108 erratum: this assertion was born hardcoded to 2. The R2108
+    # activity block is another ADDITIVE bump (3) that keeps every v2
+    # key in place, so the version check follows the module while the
+    # v2 key sets above stay pinned as literals.
     record("AC-AMWB2",
-           R.REPORT_SCHEMA == 2 and keys_ok and v1_ok and env_ok
-           and doc.get("schema_version") == 2,
+           R.REPORT_SCHEMA >= 2 and keys_ok and v1_ok and env_ok
+           and doc.get("schema_version") == R.REPORT_SCHEMA,
            "schema=%d blocks=%s v1=%s env=%s keys=%s"
            % (R.REPORT_SCHEMA, keys_ok, v1_ok, sorted(doc),
               [sorted(report["buyers"][b]) for b in blocks]))
