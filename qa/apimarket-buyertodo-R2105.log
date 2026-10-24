@@ -1,0 +1,9 @@
+PASS AC-AMBT1: envelope keys=7 row keys=[9] bad codes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] empty purchases=0 gate wrote nothing=True
+PASS AC-AMBT2: order=['epsilon', 'delta', 'alpha'] double-run identical=True row keys=9
+PASS AC-AMBT3: repeat purchase code='E_AM_PURCHASE_DUP' queue unchanged=True pending 3->2 rated 2->3
+PASS AC-AMBT4: refunded=1 gamma pending=False eta pending=False
+PASS AC-AMBT5: delisted=True current=11 price_paid=7
+PASS AC-AMBT6: rated=3 refunded=1 pending=2 purchases=6 carol pending=['zeta']
+PASS AC-AMBT7: digests stable=True tx stable=True instance 1==2==3=True
+PASS AC-AMBT8: runner wiring=True ascii=True network imports=0 world outside repo=True product shas=5
+SUITE 8/8

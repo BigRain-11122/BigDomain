@@ -2891,6 +2891,95 @@ class APIMarketFace:
                 "last_purchase_utc": paid[6],
                 "disclaimer": self.disclaimer}
 
+    def api_buyer_todo(self, buyer_id):
+        """Buyer-side rating-debt queue (criteria AC-AMBT1..AC-AMBT8
+        pre-registered in the R2105 explore-queue row BEFORE this code
+        existed): the work queue the rating door never had.
+
+        api_library shows every purchase with its own stars, and
+        api_buyer_profile counts the ratings, but a resident holding
+        twenty purchases still has to page through the library and
+        eyeball which rows carry a None. The seller side got that
+        queue in R2096 (api_seller_inbox); this is its buyer-side
+        mirror: only the purchases still awaiting a rating, oldest
+        debt first (purchased_utc ascending, then purchase_id).
+
+        Duplicate-free by construction, pinned by AC-AMBT3: the
+        purchase gate already forbids a second purchase of the same
+        listing (E_AM_PURCHASE_DUP), and one rating settles a listing,
+        so the queue can never carry the same listing twice - a
+        rejected repeat purchase leaves the queue byte-identical.
+
+        Per-purchase-row state is disjoint with pinned precedence
+        rated > refunded > pending, so
+        rated_count + refunded_count + pending_count == purchase_count
+        for every account (AC-AMBT6). A refunded purchase leaves the
+        queue (the transaction was reversed) but a refunded row whose
+        listing still carries this buyer's stars counts as rated,
+        because a rating is the settlement act that actually happened.
+        Truthful note: rate_api itself still accepts a rating on a
+        refunded purchase, so this face is a prompt, never a gate.
+
+        Retirement does not erase the debt: a delisted listing keeps
+        its pending row with delisted=True and its live asking price
+        read through the one current-price seam (AC-AMBT5). The
+        account shape gate is prefix-only by the truthful R2077/R2078
+        finding and runs before any read; a prefix-valid account with
+        no purchases gets an honest empty queue. Pure read: zero row
+        mutations and zero token movement. The envelope carries the
+        resident non-advisory disclaimer."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p.purchase_id, p.listing_id, l.listing_key,"
+                " l.title, l.dev_account, p.price_paid,"
+                " p.purchased_utc, l.token_price"
+                " FROM apimarket_purchases p JOIN apimarket_listings l"
+                " ON l.listing_id = p.listing_id"
+                " WHERE p.buyer_id = ?"
+                " ORDER BY p.purchased_utc, p.purchase_id",
+                (buyer_id,)).fetchall()
+            rated = 0
+            refunded = 0
+            pending_rows = 0
+            pending = []
+            for r in rows:
+                listing_id = int(r[1])
+                stars = self._conn.execute(
+                    "SELECT stars FROM apimarket_ratings"
+                    " WHERE buyer_id = ? AND listing_id = ?",
+                    (buyer_id, listing_id)).fetchone()
+                if stars is not None:
+                    rated += 1
+                    continue
+                back = self._conn.execute(
+                    "SELECT refund_id FROM apimarket_refunds"
+                    " WHERE purchase_id = ?", (int(r[0]),)).fetchone()
+                if back is not None:
+                    refunded += 1
+                    continue
+                pending_rows += 1
+                stamp = self._delisted_utc(listing_id)
+                pending.append({
+                    "purchase_id": int(r[0]),
+                    "listing_id": listing_id,
+                    "listing_key": r[2],
+                    "title": r[3],
+                    "dev_account": r[4],
+                    "price_paid": int(r[5]),
+                    "purchased_utc": r[6],
+                    "delisted": stamp is not None,
+                    "current_price": self._current_price(
+                        listing_id, int(r[7]))})
+        return {"buyer_id": buyer_id,
+                "purchase_count": len(rows),
+                "rated_count": rated,
+                "refunded_count": refunded,
+                "pending_count": pending_rows,
+                "disclaimer": self.disclaimer,
+                "pending": pending}
+
     def api_buyer_months(self, buyer_id):
         """Buyer-side monthly spend timeline (pre-registered
         AC-AMBM1..AC-AMBM8 in the R2100 explore-queue row BEFORE this

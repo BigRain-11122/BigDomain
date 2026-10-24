@@ -2357,6 +2357,11 @@ SUITES = [
     # from the price-at-watch seam.
     ("ledger-apimarket-watchalerts", os.path.join(
         "ledger", "test_apimarket_watchalerts.py"), 8),
+    # R2105 buyer-side rating-debt queue: the mirror of the R2096
+    # seller inbox - only the purchases still awaiting a rating,
+    # oldest debt first, with the refund precedence pinned.
+    ("ledger-apimarket-buyertodo", os.path.join(
+        "ledger", "test_apimarket_buyertodo.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

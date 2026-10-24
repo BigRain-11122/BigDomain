@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T00:45:00+08:00",
+ "export_ts": "2026-10-25T12:05:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2104: 关注面第一次会「说话」——住民的关注清单现在自带事件流：降价/涨价（对关注那一刻的标价比较）、限量售罄、已下架四类警报由既有读面派生，同价/已购/已取消一律静默，不再需要自己翻表比对。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py (api_watch_alerts + _price_at_instant) + src/sandbox/ledger/test_apimarket_watchalerts.py + qa/apimarket-watchalerts-R2104.log (SUITE PASS 8/8, double-run sha16 40678012174f1573) + qa/reconcile-all-R2104.log (RUNNER PASS 309/309 suites, 2580 criteria, controls 7/7, 275.0s)",
-  "next_milestone": "下一步（≤48h）：把警报面接进结算报告——report 的 Attention 段增加「住民可见警报数」并与机读 JSON 同源投影，让运营者与住民看到同一份事件事实。"
+  "current": "R2105：买家侧的「我还有哪些评价没写」队列。卖家一侧 R2096 已有一张待回评价收件箱，买家一侧却只能翻整张已购库表用眼睛找空星级——本窗补上镜像面 api_buyer_todo：只返回未评且未退款的购买行，最老债务优先，评分一次即结清该挂牌，下架不勾销债务（仍带 delisted 与最后现价），三个计数逐账户守恒。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_todo) + src/sandbox/ledger/test_apimarket_buyertodo.py + preview/apimarket-buyer-todo.json (演示世界：5 件购 = 3 待评/1 已评/1 已退) + qa/apimarket-buyertodo-R2105.log (SUITE PASS 8/8, 双跑 sha16 0f41cd3542ed7501) + qa/reconcile-daily-20261025.log (RUNNER PASS 310/310 suites, 2588 判据, controls 7/7, 282.8s)",
+  "next_milestone": "48 小时窗内：把待答评价队列接入 apimarket 结算报告（Attention 摘要已存在，买家债务可直接成为其第三条信号族），让居民在同一张页面上看到「我该回的评价」与「我该写的评价」；仍被商户号卡住的支付与合规路径件照旧待 CEO 物理件。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 买家待答评价队列（api_buyer_todo）",
+   "on",
+   "R2105：七键信封+九键行，最老债务优先；逐行状态 rated > refunded > pending 优先级钉死故三计数==购买数；重复购买被购买门拒（E_AM_PURCHASE_DUP）故队列构造性无重复；下架不勾销债务且现价走唯一现价缝；账户门在任何读之前、纯读零 token 动、三实例跨重启字节同一（AC-AMBT1..AC-AMBT8 预注册先于代码·零占用锚 rc=1）；证据=qa/apimarket-buyertodo-R2105.log 8/8 双跑同一 sha16 0f41cd3542ed7501；电池 310/310·矩阵 310/2588 --check byte-identical·census DRIFT-CLEAN"
+  ],
   [
    "apimarket 买家关注警报面（api_watch_alerts）",
    "on",
@@ -317,6 +322,10 @@
   ]
  ],
  "results": [
+  [
+   "R2105",
+   "R2105: the buyer side finally has its rating-debt queue. api_buyer_todo answers the one question a resident with twenty purchases could not: which of my purchases still owe a rating. Only unrated, unrefunded purchase rows come back, oldest debt first (purchased_utc, purchase_id); per-row state is disjoint with pinned precedence rated > refunded > pending so rated+refunded+pending==purchase_count holds for every account; one rating settles that listing (the purchase gate already forbids a repeat purchase of the same listing, so the queue is duplicate-free by construction); a retired listing keeps its debt with delisted=True and its last live asking price while price_paid stays historical. Account shape gate before any read, pure read (ten table digests and the ledger tx set unchanged), byte-identical cross-restart reads on three instances. Suite 8/8 double-run sha16 0f41cd3542ed7501; battery RUNNER PASS 310/310 suites plus controls 7/7 in 282.8s; matrix 310 suites / 2588 criteria byte-identical; census DRIFT-CLEAN."
+  ],
   [
    "R2104",
    "R2104: the watchlist finally reports what happened. The R2086 watch face answers what a buyer is watching, but a resident had to diff the table by hand to notice a price move, a sold-out shelf or a retirement. api_watch_alerts derives four kinds from faces that already exist: price_drop and price_rise against the asking price AT THE WATCH INSTANT (a new _price_at_instant seam - the newest append-only revision stamped at or before watched_utc, ties by revision_id, base row otherwise, so a later revision never rewrites what an earlier instant saw), sold_out through the one scarcity seam api_supply uses, and delisted from the current cycle state. A retired listing answers delisted only, an unchanged price is silent, a watch the buyer already purchased is settled and silent, an unwatched row is silent, and severities are pinned per kind. The envelope is four keys with a thirteen-key row shape carrying a signed delta, the list is a total order on (rank, listing_id), the account shape gate runs before any read and the face is a pure read. Suite builds a nine-listing world on one mutable clock behind A._now_utc so the tie-stamp boundary is testable without sleeping. AC-WAL1..AC-WAL8 pre-registered before the code; 8/8 double-run byte-identical sha16 40678012174f1573; wired ledger-apimarket-watchalerts (8); battery RUNNER PASS 309/309 suites plus controls 7/7 in 275.0s; matrix 309 suites / 2580 criteria --check byte-identical; census DRIFT-CLEAN. Two in-window corrections disclosed: the first draft expected alerts for an already-purchased watch and for a flat price, both against the silence law, so the seed was rebuilt with a dedicated tie-stamp listing instead of weakening the criteria."
