@@ -1,0 +1,31 @@
+funnel sku_top ranking semantics battery - R2069 evidence
+suite: src/sandbox/funnel/test_funnel_sku_top_rank.py
+criteria: AC-FTS1..AC-FTS8 (pre-registered in state/queue/tech.md
+before the suite existed; AC-FTS3 restated in the same round after
+the booking gate proved negative amounts unreachable via the product
+path - gate rejects fail-closed, injected rows still rank honestly)
+run1 rc=0 run2 rc=0 stdout sha16 a893167b821c00c4 (byte-identical double run)
+
+--- run1 stdout ---
+PASS AC-FTS1 anchor board
+PASS AC-FTS2 zero buckets keep rank
+PASS AC-FTS3 negative bucket last
+PASS AC-FTS4 equal-amount cut prefix
+PASS AC-FTS5 late arrival re-rank
+PASS AC-FTS6 pure read and restart
+PASS AC-FTS7 determinism and money bound
+PASS AC-FTS8 hygiene and registry
+SUITE PASS 8/8
+
+--- battery ---
+battery: RUNNER PASS 277/277 suites green, controls 7/7, 230.1s
+evidence: qa/reconcile-all-R2069.log
+matrix: docs/sandbox-suite-matrix.md 277 suites 2324 criteria
+--check byte-identical
+
+--- note ---
+The first battery run failed one suite (reconcile-daily-census cd7
+live DRIFT-FLAG) on a pwsh-capture dialect leftover from R2068
+(qa/proposal-signbadargs-loaded-R2068.log had CRLF endings). It was
+normalised to LF with a python single writer (content bytes equal),
+census returned DRIFT-CLEAN, and the battery was re-run to green.

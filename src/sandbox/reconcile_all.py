@@ -2992,6 +2992,16 @@ SUITES = [
     # the suite or the product face existed.)
     ("funnel-cli-env",
      os.path.join("funnel", "test_funnel_cli_env.py"), 8),
+    # R2069 tech-queue claim (rebuilt R2059 seed window): the sku_top
+    # ranking semantics battery - zero-amount buckets keep their rank,
+    # negative-amount buckets rank last without clamping or dropping,
+    # the cap is a strict prefix of the full board even with three tied
+    # amounts (cutting never re-sorts), a late day re-ranks the lifetime
+    # face while earlier day windows stay byte-frozen, and the money
+    # conservation bound holds. (AC-FTS1..AC-FTS8 pre-registered in
+    # state/queue/tech.md before the suite existed.)
+    ("funnel-sku-top-rank",
+     os.path.join("funnel", "test_funnel_sku_top_rank.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery
