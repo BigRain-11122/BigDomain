@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T01:40:00+08:00",
+ "export_ts": "2026-10-25T02:20:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2106：把「住了人」这件事真正接进账本报告。上一轮刚交付的关注警报面（api_watch_alerts）与待答评价队列（api_buyer_todo）在全仓没有任何产品调用点，只被套件和簿记行引用——报告能看账，却看不见「谁的评分还欠着、谁的关注有什么动静」。本窗把两面接进唯一消费者 apimarket_report：每个买家块每次采集都现读这两面，页面按买家渲染「评分债务」与「关注动态」两张表（空队列诚实空态），机读契约 REPORT_SCHEMA 1→2 为纯加法升级（信封仍恰三键，v1 键逐字节不变），旧合成报告仍可渲染。",
-  "latest_artifact": "preview/apimarket-report-workbench.html（13915B，sha256 0921f7cadc501310，每买家带 rating debt / watch alerts 两表）+ preview/apimarket-report-workbench.json（18474B，schema 2）+ src/sandbox/ledger/apimarket_report.py（collect 增 todo/watch_alerts，render_html 增两表）+ src/sandbox/ledger/test_apimarket_report_workbench.py + qa/apimarket-reportworkbench-R2106.log（SUITE PASS 8/8，双跑判据行同一 sha16 6034ffa4c5f805d5）+ qa/reconcile-all-R2106.log（RUNNER PASS 311/311 suites + controls 7/7，239.9s）",
-  "next_milestone": "48 小时窗内：把关注动态接入报告的待办摘要（Alert 摘要现只覆盖卖家评价债/售罄/负净月三类信号，住民侧价格变动尚无摘要位），并给报告加一个「按买家筛选」的离线切片入口，让单个居民也能拿到自己那一页；支付/合规路径件继续待 CEO 物理件（商户号）。"
+  "current": "R2107：给市场装上「刚刚发生了什么」这一面。此前三十余个读面各自回答当前状态（单品/卖家/买家/月度/检索/关注），没有人能把新挂牌、改价、改标题、补货、下架、复架、成交、评分、评分修订、卖家回应、退款十一条append-only 事件线合成一条时间线；住民和运营者都得逐面翻表。本窗交付全市场公共活动流 api_market_feed：十一种事件一条升序流、固定十三键行、半开窗口、kind 过滤、尾部截断（取最新 N 条而 total 不变），同秒事件按固定 kind 序再按 ref_id 排定，重复运行同库逐字节同一；行面不含任何买家身份；门序全部先于读且拒绝零副作用。",
+  "latest_artifact": "preview/apimarket-market-feed.json（3967B，演示世界 11 条事件、排序 ASCII） + src/sandbox/ledger/apimarket.py（新增 api_market_feed 与 _FEED_KINDS/_assert_instant 缝） + src/sandbox/ledger/test_apimarket_marketfeed.py + qa/apimarket-marketfeed-R2107.log（SUITE PASS 8/8，双跑判据行同一 sha16 0860c0b610a4ac5c） + qa/reconcile-all-R2107.log（RUNNER PASS 312/312 suites + controls 7/7，262.4s）",
+  "next_milestone": "48 小时窗内：把活动流接进唯一消费者 apimarket_report（新增一节最近活动与机读 events 块，REPORT_SCHEMA 2→3 加法升级，旧报告仍可渲染）；再给feed 补一个按卖家或按挂牌的窄化参数（当前只有全市场面，单个卖家看自己的动静仍要全量拉取后本地筛）。支付/合规路径件继续待 CEO 物理件（商户号）。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 全市场公共活动流（api_market_feed）",
+   "on",
+   "R2107：十一种 append-only 事件族（published/relisted/price_revised/metadata_revised/restocked/purchased/rated/rating_revised/rating_replied/refunded/delisted）合并为一条升序公共时间线，行面固定十三键、非适用字段为 None、不含买家身份；半开窗口 [since,until) 严格形状+倒置拒绝；kinds 过滤归一为模块固定秩序；limit 取最新 N 条而 total 为截断前计数；全序 (event_utc,kind_rank,ref_id) 由同秒 restock/改价对证明与写入顺序无关；窗口形→倒置→kinds→limit 门序先于任何读，十三表摘要与账本 tx 集恒定；逐 kind 计数与既有读面一致；两实例跨重启逐字节同一。判据 AC-AMF1..AC-AMF8 预注册于代码前（五锚 git grep -F 零占用 rc=1）；套件 8/8 双跑同一 sha16 0860c0b610a4ac5c；接线 ledger-apimarket-marketfeed(8)；电池 RUNNER PASS 312/312 + controls 7/7 262.4s；矩阵 312/2604 --check byte-identical；census DRIFT-CLEAN files=1759。诚实注=首次电池调用被截断管道提前杀死，证据件止于 ledger-studio，本窗无管道重跑全电池并只保留绿件。"
+  ],
   [
    "apimarket 结算报告住民工作台面（买家块 todo/watch_alerts + REPORT_SCHEMA 2）",
    "on",
@@ -327,6 +332,10 @@
   ]
  ],
  "results": [
+  [
+   "R2107",
+   "R2107: the market-wide public activity feed (api_market_feed). Eleven append-only event families merge into one ordered public stream with a fixed thirteen-key row shape (no buyer identity), a half-open window, a kind filter normalized to the module rank, and a tail truncation law. The total order is proven write-order independent by a same-second restock/price pair. Gate order runs before any read with frozen thirteen-table digests; per-kind counts agree with the existing faces; two instances replay byte-identically. AC-AMF1..AC-AMF8 pre-registered; 8/8 double-run sha16 0860c0b610a4ac5c; RUNNER 312/312 + controls 7/7 262.4s; matrix 312/2604 --check byte-identical; census DRIFT-CLEAN."
+  ],
   [
    "R2106",
    "R2106: the two newest resident faces finally have a consumer. api_watch_alerts (R2104) and api_buyer_todo (R2105) had zero product call sites - only suites and bookkeeping lines named them - so the market report could show the books but not who still owes a rating or whose watches moved. Every buyer block in collect() now carries todo and watch_alerts, read fresh on each collect (rating a pending purchase drains the queue in the very next collect), and the page renders a rating-debt table plus a watch-alerts table per buyer with honest empty states and full escaping. REPORT_SCHEMA moves 1 -> 2 as an additive bump: the JSON envelope still carries exactly schema_version/report/attention, every v1 buyer key keeps its value, and a legacy report dict without the new keys still renders instead of raising. AC-AMWB1..AC-AMWB8 pre-registered before the code (four anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 6034ffa4c5f805d5; wired ledger-apimarket-reportworkbench (8); battery RUNNER PASS 311/311 suites plus controls 7/7 in 239.9s; matrix 311 suites / 2596 criteria --check byte-identical; census DRIFT-CLEAN; preview/apimarket-report-workbench.html sha256 0921f7cadc501310. Three honest notes: the first determinism attempt failed because the activity seeder patched only A._now_utc while the ledger tx ids embed L.now_utc (both patched now); the first alert seed watched an already-purchased listing, which the alert face correctly silences, so a different buyer watches instead; the battery was first invoked with --evidence although the runner takes a positional path, writing a stray root file that was removed."

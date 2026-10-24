@@ -230,6 +230,15 @@ CREATE TABLE IF NOT EXISTS apimarket_supply_revisions (
 _SEARCH_SORT_MODES = ("price_asc", "price_desc", "rating", "sales",
                       "newest")
 
+# Public activity feed kinds. The tuple order IS the same-second
+# tie-break rank (AC-AMF2, pre-registered in the R2107 queue row
+# BEFORE this code existed).
+_FEED_KINDS = ("published", "relisted", "price_revised",
+               "metadata_revised", "restocked", "purchased",
+               "rated", "rating_revised", "rating_replied",
+               "refunded", "delisted")
+_FEED_KIND_RANK = {k: i for i, k in enumerate(_FEED_KINDS)}
+
 
 def _now_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime(
@@ -252,6 +261,23 @@ def _assert_month(window):
     if parsed.strftime("%Y-%m") != window:
         raise ApiMarketError(E_AM_BAD_WINDOW, "bad window: " + window)
     return window
+
+
+def _assert_instant(value, label):
+    """Strict UTC instant shape for the feed window (AC-AMF3): the
+    same round-trip law _assert_month uses, so zero padding and
+    trailing garbage cannot slip through. None is handled by the
+    caller; every other form must be a real string."""
+    if not isinstance(value, str):
+        raise ApiMarketError(E_AM_BAD_WINDOW, label + " must be a string")
+    try:
+        parsed = datetime.datetime.strptime(
+            value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad " + label + ": " + value)
+    if parsed.strftime("%Y-%m-%dT%H:%M:%SZ") != value:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad " + label + ": " + value)
+    return value
 
 
 def _price_bound(value, name):
@@ -2721,6 +2747,163 @@ class APIMarketFace:
                 "first_listed_utc": first_listed,
                 "disclaimer": self.disclaimer,
                 "listings": rows}
+
+    def api_market_feed(self, since_utc=None, until_utc=None,
+                        kinds=None, limit=None):
+        """Market-wide public activity feed (criteria AC-AMF1..AC-AMF8
+        pre-registered in the R2107 explore-queue row BEFORE this
+        code existed).
+
+        Every read face answers a question about the market's current
+        state; nothing answered "what just happened here". Eleven
+        append-only event families already exist in separate tables,
+        so a resident or an operator had to open eleven faces and
+        merge the timeline by hand. This face merges them into one
+        chronologically ordered stream:
+
+          - published / delisted / relisted from the lifecycle rows
+            (the current listing title and seller are joined in);
+          - price_revised and metadata_revised (the revised title
+            rides in detail) and restocked (units);
+          - purchased (price_paid, no buyer identity) and refunded
+            (amount plus reason);
+          - rated and rating_revised (stars plus previous_stars) and
+            rating_replied (reply text).
+
+        The window is half-open [since_utc, until_utc), both bounds
+        optional; the order is ascending (event_utc, kind_rank,
+        ref_id) with the module-fixed kind rank, so a same-second
+        batch has one stable answer. kinds narrows the family and is
+        normalized to the pinned rank order. limit keeps the NEWEST
+        N events (the tail of the ordered stream) and returns them
+        ascending; total is always the pre-truncation count.
+
+        Gate order is pinned by AC-AMF6 - window shape, inverted
+        window, kinds shape, limit shape - and every gate runs BEFORE
+        any read, fail-closed with zero side effects. The row shape
+        is a fixed thirteen keys with None for fields that do not
+        apply to a kind, and no buyer identity is exposed (the feed
+        is public). Pure read: zero row mutations, zero token
+        movement."""
+        if since_utc is not None:
+            _assert_instant(since_utc, "since_utc")
+        if until_utc is not None:
+            _assert_instant(until_utc, "until_utc")
+        if (since_utc is not None and until_utc is not None
+                and since_utc > until_utc):
+            raise ApiMarketError(E_AM_BAD_WINDOW, "since_utc>until_utc")
+        wanted = None
+        if kinds is not None:
+            if (isinstance(kinds, str)
+                    or not isinstance(kinds, (list, tuple))):
+                raise ApiMarketError(E_AM_BAD_ARGS, "bad kinds")
+            tokens = []
+            for token in kinds:
+                if (not isinstance(token, str)
+                        or token not in _FEED_KIND_RANK):
+                    raise ApiMarketError(E_AM_BAD_ARGS,
+                                         "bad kind: %r" % (token,))
+                if token not in tokens:
+                    tokens.append(token)
+            if not tokens:
+                raise ApiMarketError(E_AM_BAD_ARGS, "kinds empty")
+            wanted = tuple(sorted(tokens, key=_FEED_KIND_RANK.get))
+        if limit is not None:
+            if (isinstance(limit, bool) or not isinstance(limit, int)
+                    or limit < 1):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "bad limit: %r" % (limit,))
+        with self._lock:
+            listings = {}
+            for r in self._conn.execute(
+                    "SELECT listing_id, listing_key, title, dev_account,"
+                    " token_price, listed_utc FROM apimarket_listings"):
+                listings[int(r[0])] = (r[1], r[2], r[3], int(r[4]), r[5])
+            events = []
+
+            def add(kind, stamp, ref, listing_id, **extra):
+                if wanted is not None and kind not in wanted:
+                    return
+                base = listings.get(int(listing_id))
+                if base is None:
+                    return
+                if since_utc is not None and stamp < since_utc:
+                    return
+                if until_utc is not None and stamp >= until_utc:
+                    return
+                row = {"kind": kind, "event_utc": stamp,
+                       "ref_id": int(ref), "listing_id": int(listing_id),
+                       "listing_key": base[0], "title": base[1],
+                       "dev_account": base[2], "token_price": None,
+                       "stars": None, "previous_stars": None,
+                       "amount": None, "units": None, "detail": None}
+                row.update(extra)
+                events.append(row)
+
+            for listing_id, base in listings.items():
+                add("published", base[4], listing_id, listing_id,
+                    token_price=base[3])
+            for r in self._conn.execute(
+                    "SELECT revision_id, listing_id, token_price,"
+                    " revised_utc FROM apimarket_price_revisions"):
+                add("price_revised", r[3], r[0], r[1],
+                    token_price=int(r[2]))
+            for r in self._conn.execute(
+                    "SELECT revision_id, listing_id, title, revised_utc"
+                    " FROM apimarket_listing_revisions"):
+                add("metadata_revised", r[3], r[0], r[1], detail=r[2])
+            for r in self._conn.execute(
+                    "SELECT revision_id, listing_id, add_units,"
+                    " restocked_utc FROM apimarket_supply_revisions"):
+                add("restocked", r[3], r[0], r[1], units=int(r[2]))
+            for r in self._conn.execute(
+                    "SELECT purchase_id, listing_id, price_paid,"
+                    " purchased_utc FROM apimarket_purchases"):
+                add("purchased", r[3], r[0], r[1],
+                    token_price=int(r[2]))
+            for r in self._conn.execute(
+                    "SELECT rating_id, listing_id, stars, rated_utc"
+                    " FROM apimarket_ratings"):
+                add("rated", r[3], r[0], r[1], stars=int(r[2]))
+            for r in self._conn.execute(
+                    "SELECT revision_id, listing_id, previous_stars,"
+                    " stars, revised_utc FROM apimarket_rating_revisions"):
+                add("rating_revised", r[4], r[0], r[1],
+                    previous_stars=int(r[2]), stars=int(r[3]))
+            for r in self._conn.execute(
+                    "SELECT reply_id, listing_id, reply_text, replied_utc"
+                    " FROM apimarket_rating_replies"):
+                add("rating_replied", r[3], r[0], r[1], detail=r[2])
+            for r in self._conn.execute(
+                    "SELECT refund_id, listing_id, amount, reason,"
+                    " refunded_utc FROM apimarket_refunds"):
+                add("refunded", r[4], r[0], r[1], amount=int(r[2]),
+                    detail=r[3])
+            for r in self._conn.execute(
+                    "SELECT delist_id, listing_id, delisted_utc"
+                    " FROM apimarket_delistings"):
+                add("delisted", r[2], r[0], r[1])
+            for r in self._conn.execute(
+                    "SELECT relist_id, listing_id, relisted_utc"
+                    " FROM apimarket_relistings"):
+                add("relisted", r[2], r[0], r[1])
+            events.sort(key=lambda e: (e["event_utc"],
+                                       _FEED_KIND_RANK[e["kind"]],
+                                       e["ref_id"]))
+            total = len(events)
+            shown = events
+            if limit is not None and total > limit:
+                shown = events[-limit:]
+        return {"kinds": (list(wanted) if wanted is not None
+                          else list(_FEED_KINDS)),
+                "since_utc": since_utc,
+                "until_utc": until_utc,
+                "limit": limit,
+                "total": total,
+                "returned": len(shown),
+                "truncated": total > len(shown),
+                "disclaimer": self.disclaimer,
+                "events": shown}
 
     def api_market_stats(self):
         """Market-wide overview read face (pre-registered

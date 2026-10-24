@@ -1,0 +1,9 @@
+PASS AC-AMF1: kinds=11 rows=11 distinct=11 keys=[13]
+PASS AC-AMF2: order=['published', 'price_revised', 'restocked', 'metadata_revised', 'purchased', 'rated', 'rating_revised', 'rating_replied', 'refunded', 'delisted', 'relisted'] stable=True same-second pair=['price_revised', 'restocked']
+PASS AC-AMF3: window=['price_revised', 'restocked', 'metadata_revised'] empty_total=0 refusals=True
+PASS AC-AMF4: pick=['published', 'rated'] echo=['published', 'rated'] dedupe=True
+PASS AC-AMF5: tail=['refunded', 'delisted', 'relisted'] total=11 returned=3 truncated=True
+PASS AC-AMF6: gate order=True digests frozen=True
+PASS AC-AMF7: counts={'published': 1, 'price_revised': 1, 'restocked': 1, 'metadata_revised': 1, 'purchased': 1, 'rated': 1, 'rating_revised': 1, 'rating_replied': 1, 'refunded': 1, 'delisted': 1, 'relisted': 1} digests frozen=True
+PASS AC-AMF8: buyer keys=True restart identical=True
+SUITE 8/8 PASS
