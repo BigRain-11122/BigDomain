@@ -1,0 +1,38 @@
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\report.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\report.json (15736 bytes, schema 1)
+PASS AC-AMJ1 exit=0 ascii=True lf=True keys=['attention', 'report', 'schema_version'] schema=1
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\report2.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+attention json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\attention.json (849 bytes)
+PASS AC-AMJ2 report_equal=True attention_bytes_equal=True
+PASS AC-AMJ3 partition=True trade=True gross=28 net=13 refunded=15
+PASS AC-AMJ4 sellers=['usr:dana', 'usr:frank'] buyers=['usr:bob', 'usr:carol', 'usr:erin']
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-a-0d_9fnoz\r.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-a-0d_9fnoz\r.json (15736 bytes, schema 1)
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-b-a2t2oty8\r.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-b-a2t2oty8\r.json (15736 bytes, schema 1)
+PASS AC-AMJ5 sha256=4cee6d12cf3264f3b3719e11ad0444b8ca0ef78c7f06b60614d63cc99feb894b
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\pr.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\pr.json (15736 bytes, schema 1)
+PASS AC-AMJ6 digest=e079fc30b5cc96fd tx=16
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\at.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\at.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\at.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-main-0aub6jx1\sub\deep.json (15736 bytes, schema 1)
+PASS AC-AMJ7 empty=2 dir=2 tmp_survivors=0 nested=True
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-n1-6ix0ryio\r.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-n2-jjd_pwff\r.html (12414 bytes, sha256 bb28f5d6472abf41)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-reportjson-n2-jjd_pwff\r.json (15736 bytes, schema 1)
+PASS AC-AMJ8 html_identical=True wired=True
+SUITE PASS 8/8
+json-out failed: --json-out needs a file path, got: ''
+json-out failed: --json-out needs a file path, got: 'C:\\Users\\sjs20\\AppData\\Local\\Temp\\apimarket-reportjson-main-0aub6jx1\\adir'

@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-24T23:23:21+08:00",
+ "export_ts": "2026-10-24T23:59:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2102: 结算报告从「账本」升级为「待办台」——同一份离线 HTML 顶部先列出需要动作的三类发现（卖家欠评价回应 / 售罄货架 / 负净结算月），并另出一份机器可读 JSON 供自动化消费；全部从既有读面派生，纯读零 token。",
-  "latest_artifact": "preview/apimarket-report-attention.html + preview/apimarket-attention.json (5 warn findings) + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_attention.py + qa/apimarket-attention-R2102.log (SUITE PASS 9/9, double-run byte-identical sha16 8ef3f643ea01d2a2) + qa/reconcile-all-R2102.log (RUNNER PASS 307/307 suites, 2564 criteria, controls 7/7, 232.4s)",
-  "next_milestone": "下一步（≤48h）：给同一份报告加一节「本月结算摘要」把市场月表与卖家/买家月表对照成一句话结论，并把 Attention JSON 接进每日对账常设行的消费面。"
+  "current": "R2103: 结算报告有了稳定的机读契约——一条命令除离线 HTML 外还输出版本化 JSON（schema_version/report/attention，纯 ASCII，原子落盘），自动化/仪表盘可直接消费，不再需要抓屏或重跑读面。",
+  "latest_artifact": "preview/apimarket-report.json (15736B, schema 1) + preview/apimarket-report-json.html + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_report_json.py + qa/apimarket-reportjson-R2103.log (SUITE PASS 8/8, double-run criterion lines identical) + qa/reconcile-all-R2103-2.log (RUNNER PASS 308/308 suites, 2572 criteria, controls 7/7, 314.3s)",
+  "next_milestone": "下一步（≤48h）：让机读契约有第二个消费者——把 report.json 接进每日对账常设行，输出一行「市场毛额/净额/待办数」的日差对照，使契约不只被写出也被读取。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "结算报告机读 JSON 契约（apimarket_report.py --json-out）",
+   "on",
+   "R2103：REPORT_SCHEMA=1 + api_report_payload()（同一份 collect() 的纯投影，与 HTML 不可能不一致）+ write_report_json()（先全量序列化再 temp+os.replace，空串/目录路径 fail-closed exit 2 且零半件）+ --json-out。信封恰 schema_version/report/attention，纯 ASCII/LF。判据 AC-AMJ1..AMJ8 预注册于代码前（七锚 git grep -F 零占用 rc=1）；套件 SUITE PASS 8/8 双跑判据行同一（qa/apimarket-reportjson-R2103.log+run2）；接线 ledger-apimarket-reportjson(8)；电池 RUNNER PASS 308/308 suites + controls 7/7 314.3s（qa/reconcile-all-R2103-2.log）；矩阵 308/2572 --check byte-identical。诚实注=R2101 的 AC-AMRPT8 裸标签子串计数被新标签顶成 2，本窗改为精确引号计数，首个电池 FAIL 证据保全。"
+  ],
   [
    "API 市场结算账本报告生成器（apimarket_report.py）",
    "on",
@@ -307,6 +312,10 @@
   ]
  ],
  "results": [
+  [
+   "R2103",
+   "R2103: the settlement report finally has a stable machine-readable contract. R2101/R2102 shipped an offline HTML page and an attention sidecar, so automation had to scrape or re-derive. --json-out writes a versioned envelope (schema_version/report/attention, REPORT_SCHEMA=1) that is a pure projection of the same collect() dict the page consumes, so the two artifacts cannot disagree; it serializes fully before any disk touch and publishes with temp plus os.replace, so an empty or directory target exits 2 with no half artifact and a nested directory is created on demand. Suite pins the contract shape, ASCII/LF purity, same-source equality against a fresh collect() plus attention-sidecar byte identity, partition and trade conservation on the JSON market block, participant derivation straight from api_board plus api_sales, seeded determinism, the pure-read law via thirteen table digests and the ledger tx count, atomic-write behaviour, and HTML byte identity with and without the flag (a purely additive surface). AC-AMJ1..AC-AMJ8 pre-registered before the code; suite 8/8 double-run criterion lines identical; wired ledger-apimarket-reportjson (8); battery RUNNER PASS 308/308 suites plus controls 7/7 in 314.3s; matrix 308 suites / 2572 criteria --check byte-identical. Honest note: the R2101 suite's AC-AMRPT8 counted the bare label substring in reconcile_all.py, so the longer new label made it 2; it now counts the quoted exact label, and the first battery FAIL (307/308) is preserved as the trace."
+  ],
   [
    "R2100",
    "R2100: the developer API market gains the resident-side time axis, the mirror of the seller month table. api_buyer_profile answers lifetime aggregates, api_library answers rows, and nothing answered what one account spent in one month - and the gap between the month a purchase books in and the month its refund lands in was invisible on every row face. api_buyer_months is an eleven-key envelope with eleven-key month rows ordered ascending on the same pinned cash-basis law: a purchase books in the UTC month of its purchase, a refund books in the UTC month it was refunded and never rewrites the purchase month, so a later refund shows an honestly negative net there while the original month stays byte-frozen; the 23:59:59Z / 00:00:00Z boundary splits buckets. listing_count is purchase-derived only, so a refund-only month honestly reports zero listings beside its refund row. Every row keeps gross_spent == dev_paid + platform_paid, net == gross_spent - refunded and net == dev_paid_net + platform_paid_net. Lifetime totals are conserved against both api_buyer_profile and the raw purchase/refund rows (18 gross, 10 refunded, 8 net, and the net split equals the untouched purchases exactly). Strict buyer isolation, an honest empty envelope and the prefix-only account gate are pinned. The face is a pure read with frozen thirteen-table digests, a constant ledger tx set and constant pool balances, and stays byte-identical across three instances. AC-AMBM1..AC-AMBM8 pre-registered before the code existed (four anchors git grep -F zero-occupancy, rc=1); suite 8/8 double-run identical sha16 0B3398051DD02331 (qa/apimarket-buyermonths-R2100.log + run2, utf-8 LF); wired ledger-apimarket-buyermonths (8); battery RUNNER PASS 305/305 suites plus controls 7/7 in 277.4s; matrix 305 suites / 2546 criteria --check byte-identical. Honest notes: (a) the first battery attempt failed only reconcile-daily-census cd7 because the previous round's qa/reconcile-all-R2099.log carried the pwsh-capture dialect - rebuilt as utf-8 LF with every line preserved and the census baseline re-frozen after disposition, then green; (b) a stray --help artifact produced by an earlier runner probe was moved byte-preserved into .codely-cli/tmp/. Score 2."

@@ -2346,6 +2346,12 @@ SUITES = [
     # ASCII JSON sidecar, both pure read.
     ("ledger-apimarket-attention", os.path.join(
         "ledger", "test_apimarket_report_attention.py"), 9),
+    # R2103 machine-readable contract on the same report generator: the
+    # versioned ASCII envelope (schema_version/report/attention) wraps
+    # the same collect() dict the page consumes and lands atomically, so
+    # automation gets a stable shape instead of scraping HTML.
+    ("ledger-apimarket-reportjson", os.path.join(
+        "ledger", "test_apimarket_report_json.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

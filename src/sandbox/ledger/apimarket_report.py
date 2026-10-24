@@ -53,6 +53,10 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
           " by BigDomain OSLoop; every price is a service listing, not"
           " investment advice.")
 
+# Machine-readable contract version for --json-out. Bump only on a
+# breaking change to the envelope keys or the per-face payload shape.
+REPORT_SCHEMA = 1
+
 # Rows whose values are already month tables are rendered as tables, not
 # as scalar key/value pairs.
 TABLE_KEYS = ("months",)
@@ -379,6 +383,42 @@ def render_html(report):
     return "\n".join(parts) + "\n"
 
 
+def api_report_payload(report):
+    """Wrap an already collected report in the versioned JSON envelope.
+
+    The payload is a pure projection of the same collect() dict the
+    HTML renderer consumes, so the two artifacts can never disagree."""
+    return {"schema_version": REPORT_SCHEMA,
+            "report": report,
+            "attention": report.get("attention") or {}}
+
+
+def write_report_json(path, report):
+    """Write the machine-readable report atomically.
+
+    Serialization happens in full before anything touches disk, and the
+    file is published with temp+os.replace, so a failure leaves no
+    half-written artifact behind."""
+    payload = json.dumps(api_report_payload(report), sort_keys=True,
+                         indent=1, ensure_ascii=True) + "\n"
+    target = os.path.abspath(path)
+    if not path or os.path.isdir(target):
+        raise ValueError("--json-out needs a file path, got: %r" % (path,))
+    out_dir = os.path.dirname(target)
+    if out_dir and not os.path.isdir(out_dir):
+        os.makedirs(out_dir)
+    tmp = target + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(payload)
+        os.replace(tmp, target)
+    except Exception:
+        if os.path.isfile(tmp):
+            os.remove(tmp)
+        raise
+    return len(payload)
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="apimarket_report.py",
@@ -393,6 +433,10 @@ def build_parser():
     parser.add_argument("--attention-out", default=None,
                         help="optional path for the attention findings"
                              " as machine-readable JSON (ASCII escaped)")
+    parser.add_argument("--json-out", default=None,
+                        help="optional path for the whole report as a"
+                             " versioned machine-readable JSON payload"
+                             " (ascii escaped, atomic write)")
     return parser
 
 
@@ -433,6 +477,14 @@ def main(argv=None):
             size = write_attention_json(args.attention_out, attention)
             print("attention json written: %s (%d bytes)"
                   % (args.attention_out, size))
+        if args.json_out is not None:
+            try:
+                size = write_report_json(args.json_out, report)
+            except (OSError, ValueError) as exc:
+                sys.stderr.write("json-out failed: %s\n" % exc)
+                return 2
+            print("report json written: %s (%d bytes, schema %d)"
+                  % (args.json_out, size, REPORT_SCHEMA))
         return 0
     finally:
         if am is not None:

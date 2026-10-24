@@ -253,7 +253,7 @@ def check_self_contained(page):
 def check_wiring():
     with open(RECONCILE, "r", encoding="utf-8") as handle:
         text = handle.read()
-    label = "ledger-apimarket-report"
+    label = "\"ledger-apimarket-report\""
     ok = (label in text
           and "test_apimarket_report.py" in text
           and text.count(label) == 1)
