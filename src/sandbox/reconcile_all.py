@@ -2331,6 +2331,14 @@ SUITES = [
     # read with zero token movement.
     ("ledger-apimarket-buyermonths", os.path.join(
         "ledger", "test_apimarket_buyermonths.py"), 8),
+    # R2101 first CONSUMER of the market read faces: the settlement
+    # report generator renders market totals, the market month table,
+    # seller month tables with their sales rows and buyer profiles with
+    # their month tables into one self-contained offline HTML page
+    # (deterministic, fully escaped, standing AIGC/disclaimer markers,
+    # pure read, no external reference).
+    ("ledger-apimarket-report", os.path.join(
+        "ledger", "test_apimarket_report.py"), 9),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

@@ -1,0 +1,26 @@
+usage: apimarket_report.py [-h] --db DB --out OUT [--seed]
+apimarket_report.py: error: unrecognized arguments: --nope
+usage: apimarket_report.py [-h] --db DB --out OUT [--seed]
+apimarket_report.py: error: the following arguments are required: --db
+usage: apimarket_report.py [-h] --db DB --out OUT [--seed]
+
+Render the BigDomain API market settlement ledger as a self-contained HTML
+report (read faces only).
+
+options:
+  -h, --help  show this help message and exit
+  --db DB     path to the ledger sqlite file
+  --out OUT   path of the HTML report to write
+  --seed      seed the deterministic demo market first
+PASS AC-AMRPT1 help_exit0=True unknown_exit2=True missing_db_exit2=True
+PASS AC-AMRPT2 sha16 7e72fc73229e5418 vs 7e72fc73229e5418
+PASS AC-AMRPT3 stats_cells=14/14 month_rows=3/3
+PASS AC-AMRPT4 sellers=usr:dana:3/3,usr:frank:2/2 buyers=3
+PASS AC-AMRPT5 esc_probe=True hostile_escaped=True disclaimer_inline=True marker=True
+PASS AC-AMRPT6 digest_equal=True tx 16/16 pools_held=True
+PASS AC-AMRPT7 bytes=11678 external_refs=0 script=False
+PASS AC-AMRPT8 label_count=1
+PASS AC-AMRPT1b cli_exit=0 file_matches_render=True
+
+SUITE PASS 9/9
+SUITE-SHA16 51ccbb0d28367251
