@@ -3080,6 +3080,146 @@ class APIMarketFace:
                 "last_purchase_utc": paid[6],
                 "disclaimer": self.disclaimer}
 
+    def api_refund_register(self, since_utc=None, until_utc=None,
+                            dev_account=None, listing_id=None):
+        """Market-wide refund register (criteria AC-AMRR1..AC-AMRR8
+        pre-registered in the R2111 explore-queue row BEFORE this code
+        existed).
+
+        Refunds were reachable only one purchase at a time
+        (api_refund(purchase_id)) or one buyer at a time (the R2110
+        buyer history block). Nothing answered the operator's question
+        "what came back this month across the whole market, which
+        seller absorbed the most, and where does it sit per listing",
+        so every settlement reconciliation merged those two views by
+        hand. This face reads the append-only apimarket_refunds rows
+        once and answers it in one envelope: the filtered rows plus
+        three groupings over exactly the same rows (by UTC month of
+        refunded_utc, by developer, and the rows themselves).
+
+        The window is half-open [since_utc, until_utc) on the stored
+        refunded_utc stamp, both bounds optional; dev_account and
+        listing_id narrow the same row set. Groupings are derived, not
+        cached: months ascending by month, by_dev ascending by account,
+        rows ascending by (refunded_utc, refund_id), so a same-second
+        batch has one stable answer. Money is never recomputed - every
+        amount, dev_share and platform_share is the stored value, and
+        dev_share + platform_share == amount holds per stored row
+        (table CHECK), so the totals conserve exactly.
+
+        Gate order is pinned by AC-AMRR6 - window shapes, inverted
+        window, dev_account shape, listing_id shape - and every gate
+        runs BEFORE any read, fail-closed with zero side effects. Pure
+        read: zero row mutations and zero token movement. The envelope
+        carries the resident non-advisory disclaimer."""
+        if since_utc is not None:
+            _assert_instant(since_utc, "since_utc")
+        if until_utc is not None:
+            _assert_instant(until_utc, "until_utc")
+        if (since_utc is not None and until_utc is not None
+                and since_utc > until_utc):
+            raise ApiMarketError(E_AM_BAD_WINDOW, "since_utc>until_utc")
+        if dev_account is not None:
+            if not isinstance(dev_account, str) or not dev_account:
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "bad dev_account: %r" % (dev_account,))
+        if listing_id is not None:
+            if (isinstance(listing_id, bool)
+                    or not isinstance(listing_id, int)
+                    or listing_id <= 0):
+                raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        sql = ("SELECT f.refund_id, f.purchase_id, f.listing_id,"
+               " f.buyer_id, f.dev_account, f.amount, f.dev_share,"
+               " f.platform_share, f.refund_tx, f.refunded_utc,"
+               " f.reason, l.listing_key, l.title"
+               " FROM apimarket_refunds f"
+               " LEFT JOIN apimarket_listings l"
+               " ON l.listing_id = f.listing_id")
+        clauses = []
+        args = []
+        if since_utc is not None:
+            clauses.append("f.refunded_utc >= ?")
+            args.append(since_utc)
+        if until_utc is not None:
+            clauses.append("f.refunded_utc < ?")
+            args.append(until_utc)
+        if dev_account is not None:
+            clauses.append("f.dev_account = ?")
+            args.append(dev_account)
+        if listing_id is not None:
+            clauses.append("f.listing_id = ?")
+            args.append(int(listing_id))
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
+        sql += " ORDER BY f.refunded_utc, f.refund_id"
+        with self._lock:
+            rows = self._conn.execute(sql, tuple(args)).fetchall()
+        refunds = []
+        months = []
+        by_dev = []
+        month_index = {}
+        dev_index = {}
+        amount_total = 0
+        dev_total = 0
+        plat_total = 0
+        for r in rows:
+            amount = int(r[5])
+            dev_share = int(r[6])
+            platform_share = int(r[7])
+            stamp = r[9]
+            month = stamp[:7]
+            refunds.append({
+                "refund_id": int(r[0]),
+                "purchase_id": int(r[1]),
+                "listing_id": int(r[2]),
+                "listing_key": r[11],
+                "title": r[12],
+                "buyer_id": r[3],
+                "dev_account": r[4],
+                "amount": amount,
+                "dev_share": dev_share,
+                "platform_share": platform_share,
+                "refund_tx": r[8],
+                "refunded_utc": stamp,
+                "reason": r[10]})
+            for table, index, key in ((months, month_index, month),
+                                      (by_dev, dev_index, r[4])):
+                bucket = index.get(key)
+                if bucket is None:
+                    if table is months:
+                        bucket = {"month": key, "refund_count": 0,
+                                  "amount": 0, "dev_share": 0,
+                                  "platform_share": 0}
+                    else:
+                        bucket = {"dev_account": key,
+                                  "refund_count": 0, "amount": 0,
+                                  "dev_share": 0,
+                                  "platform_share": 0}
+                    index[key] = bucket
+                    table.append(bucket)
+                bucket["refund_count"] += 1
+                bucket["amount"] += amount
+                bucket["dev_share"] += dev_share
+                bucket["platform_share"] += platform_share
+            amount_total += amount
+            dev_total += dev_share
+            plat_total += platform_share
+        months.sort(key=lambda row: row["month"])
+        by_dev.sort(key=lambda row: row["dev_account"])
+        return {"kind": "api_refund_register",
+                "since_utc": since_utc,
+                "until_utc": until_utc,
+                "dev_account": dev_account,
+                "listing_id": listing_id,
+                "refund_count": len(refunds),
+                "amount": amount_total,
+                "dev_share": dev_total,
+                "platform_share": plat_total,
+                "months": months,
+                "by_dev": by_dev,
+                "refunds": refunds,
+                "disclaimer": self.disclaimer}
+
     def api_buyer_todo(self, buyer_id):
         """Buyer-side rating-debt queue (criteria AC-AMBT1..AC-AMBT8
         pre-registered in the R2105 explore-queue row BEFORE this code

@@ -2386,6 +2386,13 @@ SUITES = [
     # the JSON contract moves 4 -> 5 additively.
     ("ledger-apimarket-buyerhistory", os.path.join(
         "ledger", "test_apimarket_report_buyerhistory.py"), 8),
+    # R2111 market-wide refund register: one row set answers the
+    # operator refund question (window + seller + listing filters,
+    # month/developer/row groupings, exact money conservation) and the
+    # settlement report renders it; the JSON contract moves 5 -> 6
+    # additively.
+    ("ledger-apimarket-refundregister", os.path.join(
+        "ledger", "test_apimarket_report_refundregister.py"), 8),
     # R2105 buyer-side rating-debt queue: the mirror of the R2096
     # seller inbox - only the purchases still awaiting a rating,
     # oldest debt first, with the refund precedence pinned.

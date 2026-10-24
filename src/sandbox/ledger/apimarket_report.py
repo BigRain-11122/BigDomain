@@ -77,9 +77,16 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # v4 (R2109) adds the dossiers key the same way.
 # v5 (R2110) adds the history key inside every buyer block: the envelope
 # is unchanged and every earlier buyer key keeps its value.
-REPORT_SCHEMA = 5
+# v6 (R2111) adds the market-wide refunds register key at the report
+# top level (same additive rule: no envelope change, no earlier value
+# touched).
+REPORT_SCHEMA = 6
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
+
+REFUND_KEYS = ("refunds", "months", "by_dev")
+
+REFUND_EMPTY = "no refunds in this market"
 
 DOSSIER_KEYS = ("view", "lifecycle", "price_history",
                 "metadata_history", "supply", "supply_history",
@@ -285,6 +292,7 @@ def collect(am):
             "history": histories[buyer],
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
+    report["refunds"] = am.api_refund_register()
     report["dossiers"] = collect_dossiers(am)
     report["attention"] = collect_attention(am, report)
     return report
@@ -465,6 +473,51 @@ def activity_block(activity):
     return "\n".join(out)
 
 
+REFUND_MONTH_COLUMNS = ("month", "refund_count", "amount", "dev_share",
+                        "platform_share")
+REFUND_DEV_COLUMNS = ("dev_account", "refund_count", "amount",
+                      "dev_share", "platform_share")
+REFUND_ROW_COLUMNS = ("refunded_utc", "listing_key", "title",
+                      "dev_account", "buyer_id", "amount", "reason")
+
+
+def refund_block(register):
+    """Render the market-wide refund register (R2111, AC-AMRR8).
+
+    The three groupings come from api_refund_register over one row set,
+    so the page never merges faces by hand. An older report dict built
+    before this key existed renders the honest empty state instead of
+    raising."""
+    rows = register.get("refunds") or []
+    months = register.get("months") or []
+    by_dev = register.get("by_dev") or []
+    count = register.get("refund_count")
+    if count is None:
+        count = len(rows)
+    head = "%s refund(s) totalling %s token(s) - dev %s / platform %s" % (
+        esc(count), esc(register.get("amount")),
+        esc(register.get("dev_share")), esc(register.get("platform_share")))
+    out = ["<p>%s</p>" % head]
+    if not rows:
+        out.append("<p class=\"empty\">%s</p>" % esc(REFUND_EMPTY))
+        return "\n".join(out)
+    for label, columns, data in (
+            ("by month", REFUND_MONTH_COLUMNS, months),
+            ("by developer", REFUND_DEV_COLUMNS, by_dev),
+            ("rows", REFUND_ROW_COLUMNS, rows)):
+        out.append("<h3>refunds %s (%d)</h3>" % (esc(label), len(data)))
+        out.append("<table>")
+        out.append("<tr>%s</tr>"
+                   % "".join("<th>%s</th>" % esc(col)
+                             for col in columns))
+        for row in data:
+            out.append("<tr>%s</tr>"
+                       % "".join("<td>%s</td>" % esc(row.get(col))
+                                 for col in columns))
+        out.append("</table>")
+    return "\n".join(out)
+
+
 STYLE = """
 :root{--ink:#182033;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;--accent:#3b5bdb;--ok:#2f9e44}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -624,6 +677,11 @@ def render_html(report):
     # same degrade rule for the R2108 activity block: an older report
     # dict renders the honest empty state instead of raising.
     parts.append(activity_block(report.get("activity") or {}))
+
+    parts.append("<h2>Refund register</h2>")
+    # same degrade rule for the R2111 register: an older report dict
+    # renders the honest empty state instead of raising.
+    parts.append(refund_block(report.get("refunds") or {}))
 
     parts.append("<h2>Listings</h2>")
     parts.append(row_table(report["board"].get("listings"),

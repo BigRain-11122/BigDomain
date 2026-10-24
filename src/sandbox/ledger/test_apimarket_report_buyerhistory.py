@@ -77,6 +77,9 @@ TABLES = ("apimarket_listings", "apimarket_purchases",
           "apimarket_supply_revisions")
 V4_KEYS = ["activity", "attention", "board", "buyers", "dossiers",
            "market", "market_months", "sellers"]
+# R2111 additive bump: the report gained the top-level refunds key, so
+# the pinned top-level set includes it (no earlier key changed).
+V6_KEYS = V4_KEYS + ["refunds"]
 V4_BUYER_KEYS = ["months", "profile", "todo", "watch_alerts"]
 HEADS = ("library (", "watchlist (", "refunds (", "rating history (")
 
@@ -228,7 +231,7 @@ def check_shape(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    top_ok = sorted(report) == sorted(V4_KEYS)
+    top_ok = sorted(report) == sorted(V6_KEYS)
     buyer_ok = all(sorted(block) == sorted(V4_BUYER_KEYS + ["history"])
                    for block in report["buyers"].values())
     led, mtr, dk, am = open_stack(db)
@@ -253,8 +256,8 @@ def check_contract(tmp, db):
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
     env_ok = sorted(doc) == ["attention", "report", "schema_version"]
     record("AC-AMBD5",
-           R.REPORT_SCHEMA == 5 and top_ok and buyer_ok and old_ok
-           and env_ok and doc.get("schema_version") == 5
+           R.REPORT_SCHEMA == 6 and top_ok and buyer_ok and old_ok
+           and env_ok and doc.get("schema_version") == 6
            and doc["report"]["buyers"] == report["buyers"],
            "schema=%d top=%s buyer=%s old=%s env=%s json_same=%s"
            % (R.REPORT_SCHEMA, top_ok, buyer_ok, old_ok, env_ok,

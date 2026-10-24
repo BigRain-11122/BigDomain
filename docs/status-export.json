@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T04:20:00+08:00",
+ "export_ts": "2026-10-25T04:40:20+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2110：结算报告多了「买家全史」——买家库（买了什么、还拥有什么）、关注清单、退款溯源、评分史四张面此前在生产代码里零调用点（与 R2101/R2106/R2108/R2109 同一种空转形态）；更实的一条：评分史面只收 rating_id，而任何列表级读面都不给 rating_id（只在卖家待答收件箱里露过），所以那张面事实上不可能被调用。本窗给评分行加法暴露 rating_id，再把四张面接进报告唯一消费者：每个买家名下新增四张子表（持有库/关注/退款/评分史），空态诚实呈现；机读契约 v4→v5 加法升级（信封仍恰三键、旧键一字不动）。",
-  "latest_artifact": "preview/apimarket-report-buyers.html（24167B·sha256 981a59af8f83823e·可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+挂牌全史档案+每个买家的持有库/关注/退款/评分史+卖家全表）+ preview/apimarket-report-buyers.json（38330B·schema 5）+ src/sandbox/ledger/apimarket_report.py + qa/apimarket-buyerhistory-R2110.log（SUITE PASS 10/10·双跑判据行同一 sha16 50999cbdeecb5975）+ qa/reconcile-all-R2110.log（RUNNER PASS 315/315 suites + controls 7/7·404.5s）",
-  "next_milestone": "48 小时内：继续把零消费者的读面接进产品面，并给买家全史相机读侧车（--buyer-history-out，按 buyer_id 给结构化四块，便于自动化比对两次采集）；商户号未到之前不碰支付对接，本地沙箱与证据链照跑。"
+  "current": "R2111：市场账本多了一张「退款登记簿」——退款此前只能按购买号（api_refund）或按买家（买家全史段）单笔查，全市场「这个月退了多少、哪家卖家退得最多、哪件挂牌在退」没有任何一面回答，运营对账要手工并表。本窗把这面补齐：按时间窗+卖家+挂牌三重过滤，一次读 app 只追加的退款行，同时给出按月、按卖家、按行三段分组（同一行集派生，金额逐字段取自存储值、分账守恒）；报表页新增 Refund register 段三张表，机读契约 v5→v6 加法升级（信封仍恰三键、旧键不动）。另：本窗是接手中断窗（产物已在盘上未提交），全部判据在本窗实跑复验。",
+  "latest_artifact": "preview/apimarket-report-refunds.html（可直接双击打开：市场总账+月度时间线+待办+公共活动+在架清单+挂牌全史档案+退款登记簿三表+卖家全表+买家全史）+ preview/apimarket-report-refunds.json（schema 6）+ src/sandbox/ledger/apimarket.py（api_refund_register）+ src/sandbox/ledger/apimarket_report.py（refund_block / REPORT_SCHEMA 5→6）+ qa/apimarket-refundregister-R2111.log（SUITE PASS 13/13·双跑判据行同一 sha16 189ab027aac404a4）+ qa/reconcile-all-R2111.log（RUNNER PASS 316/316 suites + controls 7/7·564.3s）",
+  "next_milestone": "48 小时内：给卖家补「需求信号」面（一件挂牌被多少人关注、关注后多久成交）并给活动流加逐挂牌过滤，两者都接进报告唯一消费者而不是再造第九张孤儿读面；商户号未到之前不碰支付对接，本地沙箱与证据链照跑。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 市场级退款登记簿（api_refund_register）+ 报表 Refund register 段 + REPORT_SCHEMA 5→6",
+   "on",
+   "R2111：退款此前只能逐笔（api_refund(purchase_id)）或逐买家（R2110 买家全史段）取，没有任何面回答「本月全市场退了多少 / 哪家卖家退款最多 / 哪个挂牌在退」，运营对账必须手工并表。本窗补 api_refund_register(since_utc, until_utc, dev_account, listing_id)：半开窗口 [since, until)、卖家与挂牌过滤可叠加，一次读取 append-only 的 apimarket_refunds 行集，再对同一行集派生三段分组（按 refunded_utc 的 UTC 月升序 / 按 dev_account / 按 (refunded_utc, refund_id) 升序），金额从不重算（每行 dev_share+platform_share==amount，三段合计与总额守恒）；门序钉死为窗口形→窗口倒置→卖家形→挂牌形，全部门先于任何读、拒绝零副作用；面为纯读（零行变更、零 token 流动）。报表侧：collect() 增 refunds 块每次现读，HTML 在挂牌档案之后新增 Refund register 段（by month / by developer / rows 三表 + 诚实空态 + 全动态串转义），REPORT_SCHEMA 5→6 加法升级（信封仍恰 schema_version/report/attention，v5 各键值与直调面逐键相等，缺键旧报表降级渲染）。判据 AC-AMRR1..AC-AMRR8 预注册于代码之前（六锚 git grep -F 零占用 rc=1，2026-10-25）。证据：套件 SUITE PASS 13/13 双跑判据行同一 sha16 189ab027aac404a4（qa/apimarket-refundregister-R2111.log + -2，六个兄弟报表套件作为子进程 flake-free 全 rc=0）；接线 ledger-apimarket-refundregister(13)；电池 RUNNER PASS 316/316 suites + controls 7/7 564.3s（qa/reconcile-all-R2111.log）；矩阵 316 suites/2636 criteria --check byte-identical；census DRIFT-CLEAN files=1771 flags=0；呈看件 preview/apimarket-report-refunds.html + .json（schema 6）。诚实注：本轮开在中断窗上（前窗产物已在盘未提交，state 仍停在 R2110），因此本轮以复验+收口为主，并发现矩阵未按新套件重生成（check 报 stale 且证据面不一致），已按 R2111 证据重建后转绿。"
+  ],
   [
    "apimarket 结算报告买家全史档案段（library/watchlist/refund/rating-history 四面接线 + REPORT_SCHEMA 4→5）",
    "on",
@@ -347,6 +352,10 @@
   ]
  ],
  "results": [
+  [
+   "R2111",
+   "R2111: closeout of the interrupted refund-register window. The market now has a refund register face (api_refund_register) - refunds were reachable only one purchase at a time or one buyer at a time, so the operator question 'what came back this month across the whole market, which seller absorbed the most and where does it sit per listing' had no face; one read of the append-only refund rows now answers it with three groupings over the same row set (UTC month, developer, rows), a half-open window, seller and listing filters, a pinned gate order before any read and the pure-read law. The settlement report consumes it in a Refund register section with three tables and an honest empty state, and REPORT_SCHEMA moves 5 -> 6 additively. Verification this window: suite double-run rc=0/0 with identical verdict-line sha16 189ab027aac404a4, evidence pair ending SUITE PASS 13/13 with the six sibling report suites green as children; battery RUNNER PASS 316/316 suites plus controls 7/7 in 564.3s; the suite matrix had not been regenerated for the new suite (stale check with an evidence face mismatch), rebuilt against the R2111 battery log at 316 suites / 2636 criteria and byte-identical on re-check; census DRIFT-CLEAN files=1771 flags=0. The explore queue emptied on the claim, so two fresh rows were seeded (seller-side listing demand face; per-listing activity filter), both anchors git grep -F zero-occupancy rc=1."
+  ],
   [
    "R2110",
    "R2110: buyer history section on the settlement report. The four buyer-side faces (api_library, api_watchlist, api_refund, api_rating_history) had zero product call sites, and the last one was unreachable by construction because its only handle, rating_id, was never exposed on a listing-wide face - the rating rows now carry it as an additive key. collect_buyer_history() reads the four faces once per buyer into a history block with exactly BUYER_HISTORY_KEYS; refund rows are the provenance envelopes minus the resident disclaimer; rating_history_rows folds base-only ratings into one base row and revised ones into one row per revision. render_html adds four sub-tables per buyer with honest empty states; REPORT_SCHEMA moves 4 -> 5 additively with every v4 value equal to its direct face call and a legacy degrade path. Suite 10/10 double-run sha16 50999cbdeecb5975; battery 315/315 + controls 7/7 404.5s; matrix 315/2628 byte-identical; census CENSUS-COMPLETE files=1769 flags=0. Repairs disclosed: the dossier and workbench suites pinned the exact buyer key set and the dossier suite pinned schema == 4, so both now pin a literal v4 SUBSET and >= 4; rich_world wrote watches with the real clock, so the determinism face failed until both clocks were pinned."
@@ -767,15 +776,15 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 34,
+  "log_lines_in_window": 36,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 34,
+  "substantive_non_idle_mention_lines": 36,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 1,
+  "queue_explore_open": 2,
   "method": "machine-derived from src/os/state.json log and queue files"
  }
 }

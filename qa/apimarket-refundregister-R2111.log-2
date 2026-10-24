@@ -1,0 +1,30 @@
+PASS AC-AMRR1 keys=True count=2 rows=2 rows_ok=True
+PASS AC-AMRR1-empty count=0 sums=0/0/0 empty_text=True
+PASS AC-AMRR2 same=True dev=True/1 listing=True/1 grew=True
+PASS AC-AMRR3 half_open=True/['2026-10-02T00:00:00Z'] empty=True inverted=E_AM_BAD_WINDOW inter=True/1
+PASS AC-AMRR4 per_row=True split=True totals=True months=True dev=True order=True
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-main-1hpwwh17\c.html (26266 bytes, sha256 44cfc9dc7fe45096)
+attention findings: 6 (severity {"warn": 6})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-main-1hpwwh17\c.json (41699 bytes, schema 6)
+PASS AC-AMRR5 schema=6 keys=True buyers=True old=True env=True json_same=True
+PASS AC-AMRR6 forms=11 bad=[] digests_same=True
+PASS AC-AMRR7-read digest=13b43bd96040eb19 tx=17
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d1-exyvkeoc\d.html (25254 bytes, sha256 5074953de674f88d)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d1-exyvkeoc\d.json (39928 bytes, schema 6)
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d2-d6931c3r\d.html (25254 bytes, sha256 5074953de674f88d)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d2-d6931c3r\d.json (39928 bytes, schema 6)
+PASS AC-AMRR7-det html_sha16=5074953de674f88d json_same=True
+PASS AC-AMRR8-html heads=True marker=True section_len=1235
+PASS AC-AMRR8-degrade empty=no refunds in this market
+PASS AC-AMRR8-escape escaped=True
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_attention.py rc=0
+  child test_apimarket_report_json.py rc=0
+  child test_apimarket_report_workbench.py rc=0
+  child test_apimarket_report_activity.py rc=0
+  child test_apimarket_report_dossier.py rc=0
+  child test_apimarket_report_buyerhistory.py rc=0
+PASS AC-AMRR8-regress rc=[0, 0, 0, 0, 0, 0, 0] wired=True
+SUITE PASS 13/13

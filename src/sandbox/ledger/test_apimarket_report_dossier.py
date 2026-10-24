@@ -217,7 +217,7 @@ def check_shape(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    keys_ok = sorted(report) == sorted(OLD_KEYS + ["dossiers"])
+    keys_ok = sorted(report) == sorted(OLD_KEYS + ["dossiers", "refunds"])
     led, mtr, dk, am = open_stack(db)
     try:
         old_ok = (report["market"] == am.api_market_stats()
