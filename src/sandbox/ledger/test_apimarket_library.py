@@ -75,13 +75,14 @@ RECONCILE = os.path.join(os.path.dirname(BASE), "reconcile_all.py")
 BAD_ACCOUNTS = ["", "bob", None]
 
 ENVELOPE_KEYS = {"buyer_id", "purchase_count", "total_spent",
+                 "refund_count", "total_refunded", "net_spent",
                  "disclaimer", "purchases"}
 
 ROW_KEYS = {"purchase_id", "listing_id", "listing_key", "title",
             "dev_account", "price_paid", "dev_share",
             "platform_share", "spend_tx", "purchased_utc",
             "current_price", "delisted", "delisted_utc",
-            "my_rating"}
+            "my_rating", "refunded", "refunded_utc", "refund_tx"}
 
 TABLES = ("apimarket_listings", "apimarket_purchases",
           "apimarket_ratings", "apimarket_delistings",

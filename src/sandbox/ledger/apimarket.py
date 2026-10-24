@@ -79,6 +79,10 @@ E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
 E_AM_WATCH_DUP = "E_AM_WATCH_DUP"          # AC-AMWL5
 E_AM_NOT_WATCHED = "E_AM_NOT_WATCHED"      # AC-AMWL3
 E_AM_SUPPLY_EXHAUSTED = "E_AM_SUPPLY_EXHAUSTED"  # AC-AMSP3
+E_AM_UNKNOWN_PURCHASE = "E_AM_UNKNOWN_PURCHASE"  # AC-AMRF2
+E_AM_ALREADY_REFUNDED = "E_AM_ALREADY_REFUNDED"  # AC-AMRF4
+E_AM_REFUND_UNFUNDABLE = "E_AM_REFUND_UNFUNDABLE"  # AC-AMRF5
+E_AM_NOT_REFUNDED = "E_AM_NOT_REFUNDED"      # AC-AMRF7
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -160,6 +164,21 @@ CREATE TABLE IF NOT EXISTS apimarket_unwatchings (
     listing_id INTEGER NOT NULL,
     unwatched_utc TEXT NOT NULL,
     UNIQUE (watch_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_refunds (
+    refund_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    purchase_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    buyer_id TEXT NOT NULL,
+    dev_account TEXT NOT NULL,
+    amount INTEGER NOT NULL CHECK (amount > 0),
+    dev_share INTEGER NOT NULL CHECK (dev_share >= 0),
+    platform_share INTEGER NOT NULL CHECK (platform_share >= 0),
+    refund_tx TEXT NOT NULL,
+    refunded_utc TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    UNIQUE (purchase_id),
+    CHECK (dev_share + platform_share = amount)
 );
 """
 
@@ -322,9 +341,15 @@ class APIMarketFace:
             "SELECT supply FROM apimarket_listings WHERE listing_id = ?",
             (listing_id,)).fetchone()
         supply = row[0] if row is not None else None
-        sold = int(self._conn.execute(
+        bought = int(self._conn.execute(
             "SELECT COUNT(*) FROM apimarket_purchases"
             " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+        # AC-AMRF6: a refunded unit returns to the shelf, so the
+        # shelf count is the NET of immutable purchases and refunds.
+        refunded = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_refunds"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+        sold = max(0, bought - refunded)
         if supply is None:
             return None, sold, None, False
         remaining = max(0, int(supply) - sold)
@@ -739,6 +764,124 @@ class APIMarketFace:
                 "spend_tx": spend_tx, "dev_share_tx": share_tx,
                 "disclaimer": self.disclaimer}
 
+    # -- refund domain -------------------------------------------------------
+
+    def refund_api(self, buyer_id, purchase_id, reason=None):
+        """Buyer-side refund door (pre-registered AC-AMRF1..AC-AMRF8
+        in the R2088 explore-queue row BEFORE this code existed).
+
+        Every forward door on this market was irreversible: a
+        purchase spent tokens and wrote one immutable row, so a
+        buyer who received nothing usable had no remedy and a
+        seller had no return leg. This window adds the post-sale
+        remedy face: one append-only apimarket_refunds row per
+        purchase (UNIQUE(purchase_id)), and a four-entry ledger
+        reversal that puts buyer, seller and both pools back to
+        their pre-purchase balances exactly (integer split law,
+        zero rounding).
+
+        Gate order pinned by AC-AMRF3: account shape, then the
+        purchase-id shape, then purchase existence, then ownership,
+        then the already-refunded state, then the seller-side
+        funding check. The funding check exists because the AC-L2
+        balance floor is constitutional - the seller leg is
+        debited, so a seller who already spent the proceeds cannot
+        fund the reversal; that case fails closed with
+        E_AM_REFUND_UNFUNDABLE and moves zero tokens rather than
+        overdrawing an account (refuse, never chase).
+
+        The ledger ref is derived from the purchase id, never from
+        the caller: the ledger's UNIQUE(ref) is a second
+        idempotency key behind the market gate, so a double refund
+        cannot book twice even if the row gate were bypassed."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if (not isinstance(purchase_id, int) or isinstance(purchase_id, bool)
+                or purchase_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(purchase_id))
+        text = "" if reason is None else str(reason).strip()
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT listing_id, buyer_id, price_paid, dev_share,"
+                " platform_share FROM apimarket_purchases"
+                " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_PURCHASE,
+                                     str(purchase_id))
+            listing_id = int(row[0])
+            if row[1] != buyer_id:
+                raise ApiMarketError(E_AM_NOT_BUYER,
+                                     "%s/%s" % (buyer_id, purchase_id))
+            done = self._conn.execute(
+                "SELECT refund_id FROM apimarket_refunds"
+                " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+            if done is not None:
+                raise ApiMarketError(E_AM_ALREADY_REFUNDED,
+                                     str(purchase_id))
+            listing = self._require_listing(listing_id)
+            dev_account = listing[1]
+            amount = int(row[2])
+            dev_share = int(row[3])
+            platform_share = int(row[4])
+            # Funding gate (AC-AMRF5): the seller leg is a debit,
+            # so the reversal may only be booked when the seller
+            # still holds the proceeds. Checked BEFORE any movement
+            # so a refusal leaves the ledger byte-identical.
+            bal = self.led.balance(dev_account)
+            dev_balance = int(bal.get("balance", 0)) if isinstance(
+                bal, dict) else int(bal)
+            if dev_balance < dev_share:
+                raise ApiMarketError(
+                    E_AM_REFUND_UNFUNDABLE,
+                    "%s needs %d has %d" % (dev_account, dev_share,
+                                            dev_balance))
+            entries = [(buyer_id, "credit", amount),
+                       ("pool:reserve", "debit", amount)]
+            if dev_share > 0:
+                entries.append((dev_account, "debit", dev_share))
+                entries.append(("pool:share", "credit", dev_share))
+            ref = "apimarket:refund:%d" % purchase_id
+            memo = ("apimarket refund purchase=%d listing=%d buyer=%s"
+                    % (purchase_id, listing_id, buyer_id))
+            if text:
+                memo += " reason=" + text
+            refund_tx = self.led.adjust(entries, ref, memo,
+                                        ref_type="order")
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_refunds (purchase_id,"
+                    " listing_id, buyer_id, dev_account, amount,"
+                    " dev_share, platform_share, refund_tx,"
+                    " refunded_utc, reason) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    (purchase_id, listing_id, buyer_id, dev_account,
+                     amount, dev_share, platform_share, refund_tx,
+                     _now_utc(), text))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiMarketError(E_AM_ALREADY_REFUNDED,
+                                     str(purchase_id))
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"refund_id": cur.lastrowid,
+                "purchase_id": purchase_id, "listing_id": listing_id,
+                "buyer_id": buyer_id, "dev_account": dev_account,
+                "amount": amount, "dev_share": dev_share,
+                "platform_share": platform_share,
+                "refund_tx": refund_tx,
+                "refunded_utc": self._refund_stamp(purchase_id),
+                "reason": text, "disclaimer": self.disclaimer}
+
+    def _refund_stamp(self, purchase_id):
+        """The stored refund stamp of one purchase (caller holds no
+        lock requirement: single row read)."""
+        row = self._conn.execute(
+            "SELECT refunded_utc FROM apimarket_refunds"
+            " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+        return None if row is None else row[0]
+
     # -- rating domain -------------------------------------------------------
 
     def rate_api(self, buyer_id, listing_id, stars):
@@ -809,6 +952,12 @@ class APIMarketFace:
             n_buy = self._conn.execute(
                 "SELECT COUNT(*) FROM apimarket_purchases"
                 " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+            ref_row = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0)"
+                " FROM apimarket_refunds WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            n_refund = int(ref_row[0])
+            refunded_total = int(ref_row[1])
             n_rate, avg = self._agg_rating(listing_id)
             stamp = self._delisted_utc(listing_id)
             current = self._current_price(listing_id, int(row[5]))
@@ -827,6 +976,9 @@ class APIMarketFace:
                 "ai_label": int(row[6]), "listed_utc": row[7],
                 "purchase_count": int(n_buy), "rating_count": n_rate,
                 "rating_avg": avg,
+                "refund_count": n_refund,
+                "refunded_total": refunded_total,
+                "net_purchase_count": int(n_buy) - n_refund,
                 "delisted": stamp is not None,
                 "delisted_utc": stamp,
                 "disclaimer": self.disclaimer}
@@ -952,8 +1104,19 @@ class APIMarketFace:
                 " apimarket_listings l ON l.listing_id ="
                 " p.listing_id WHERE l.dev_account = ?"
                 " ORDER BY p.purchase_id", (dev_account,)).fetchall()
+            refs = {}
+            for r in self._conn.execute(
+                    "SELECT f.purchase_id, f.amount, f.refunded_utc,"
+                    " f.refund_tx FROM apimarket_refunds f JOIN"
+                    " apimarket_purchases p ON p.purchase_id ="
+                    " f.purchase_id JOIN apimarket_listings l ON"
+                    " l.listing_id = p.listing_id WHERE"
+                    " l.dev_account = ?", (dev_account,)).fetchall():
+                refs[int(r[0])] = (int(r[1]), r[2], r[3])
         return {"dev_account": dev_account,
                 "disclaimer": self.disclaimer,
+                "refunded_count": len(refs),
+                "refunded_total": sum(v[0] for v in refs.values()),
                 "sales": [{"purchase_id": int(r[0]),
                            "listing_id": int(r[1]),
                            "listing_key": r[2], "buyer_id": r[3],
@@ -961,7 +1124,13 @@ class APIMarketFace:
                            "dev_share": int(r[5]),
                            "platform_share": int(r[6]),
                            "spend_tx": r[7], "dev_share_tx": r[8],
-                           "purchased_utc": r[9]} for r in rows]}
+                           "purchased_utc": r[9],
+                           "refunded": int(r[0]) in refs,
+                           "refunded_utc": refs.get(
+                               int(r[0]), (0, None, None))[1],
+                           "refund_tx": refs.get(
+                               int(r[0]), (0, None, None))[2]}
+                          for r in rows]}
 
     def api_library(self, buyer_id):
         """Buyer-side purchase library surface (pre-registered
@@ -999,6 +1168,8 @@ class APIMarketFace:
                 " ORDER BY p.purchase_id", (buyer_id,)).fetchall()
             out = []
             total = 0
+            refunded_total = 0
+            refund_count = 0
             for r in rows:
                 listing_id = int(r[1])
                 stamp = self._delisted_utc(listing_id)
@@ -1006,7 +1177,14 @@ class APIMarketFace:
                     "SELECT stars FROM apimarket_ratings"
                     " WHERE buyer_id = ? AND listing_id = ?",
                     (buyer_id, listing_id)).fetchone()
+                refund = self._conn.execute(
+                    "SELECT amount, refunded_utc, refund_tx"
+                    " FROM apimarket_refunds WHERE purchase_id = ?",
+                    (int(r[0]),)).fetchone()
                 total += int(r[5])
+                if refund is not None:
+                    refund_count += 1
+                    refunded_total += int(refund[0])
                 out.append({"purchase_id": int(r[0]),
                             "listing_id": listing_id,
                             "listing_key": r[2], "title": r[3],
@@ -1021,10 +1199,51 @@ class APIMarketFace:
                             "delisted": stamp is not None,
                             "delisted_utc": stamp,
                             "my_rating": (None if rating is None
-                                          else int(rating[0]))})
+                                          else int(rating[0])),
+                            "refunded": refund is not None,
+                            "refunded_utc": (None if refund is None
+                                             else refund[1]),
+                            "refund_tx": (None if refund is None
+                                          else refund[2])})
         return {"buyer_id": buyer_id, "purchase_count": len(out),
-                "total_spent": total, "disclaimer": self.disclaimer,
+                "total_spent": total,
+                "refund_count": refund_count,
+                "total_refunded": refunded_total,
+                "net_spent": total - refunded_total,
+                "disclaimer": self.disclaimer,
                 "purchases": out}
+
+    def api_refund(self, purchase_id):
+        """Refund provenance read face (AC-AMRF7): the eleven-key
+        envelope of one append-only refund row. An unknown purchase
+        answers E_AM_UNKNOWN_PURCHASE and a live (never refunded)
+        purchase answers E_AM_NOT_REFUNDED - an honest absence, not
+        an empty envelope. Pure read: zero row mutations, zero
+        token movement."""
+        if (not isinstance(purchase_id, int) or isinstance(purchase_id, bool)
+                or purchase_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(purchase_id))
+        with self._lock:
+            exists = self._conn.execute(
+                "SELECT 1 FROM apimarket_purchases"
+                " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+            if exists is None:
+                raise ApiMarketError(E_AM_UNKNOWN_PURCHASE,
+                                     str(purchase_id))
+            row = self._conn.execute(
+                "SELECT refund_id, purchase_id, listing_id, buyer_id,"
+                " dev_account, amount, dev_share, platform_share,"
+                " refund_tx, refunded_utc, reason FROM apimarket_refunds"
+                " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+        if row is None:
+            raise ApiMarketError(E_AM_NOT_REFUNDED, str(purchase_id))
+        return {"refund_id": int(row[0]), "purchase_id": int(row[1]),
+                "listing_id": int(row[2]), "buyer_id": row[3],
+                "dev_account": row[4], "amount": int(row[5]),
+                "dev_share": int(row[6]),
+                "platform_share": int(row[7]),
+                "refund_tx": row[8], "refunded_utc": row[9],
+                "reason": row[10], "disclaimer": self.disclaimer}
 
     def _active_watch(self, buyer_id, listing_id):
         """The buyer's live watch row for one listing, or None.

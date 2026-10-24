@@ -1,0 +1,9 @@
+PASS AC-AMRF1: keys=True amount/dev/platform=(3, 3, 0) balances moved=True restored exactly=True
+PASS AC-AMRF2: bad accounts=['E_AM_BAD_ACCOUNT'] bad ids=['E_AM_BAD_ARGS'] unknown=E_AM_UNKNOWN_PURCHASE non-buyer=E_AM_NOT_BUYER digests frozen=True tx set frozen=True
+PASS AC-AMRF3: probes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_UNKNOWN_PURCHASE', 'E_AM_NOT_BUYER']
+PASS AC-AMRF4: repeat=E_AM_ALREADY_REFUNDED rows=1 stamp/tx unchanged=True digests frozen=True
+PASS AC-AMRF5: dev balance 14 -> 0 refused=E_AM_REFUND_UNFUNDABLE frozen=True funded refund=True buyer restored=True seller nets 6
+PASS AC-AMRF6: shelf after refund=(1, 1, False) after resale=(2, 0, True) re-buy=E_AM_PURCHASE_DUP
+PASS AC-AMRF7: view=(1, 10, 2) library=(1, 10, 0, True) sales=(2,13) bob rating kept=[5] api_refund not-refunded=E_AM_NOT_REFUNDED unknown=E_AM_UNKNOWN_PURCHASE bad=['E_AM_BAD_ARGS']
+PASS AC-AMRF8: pure read=True restart identity=True legacy table=True legacy probe=E_AM_UNKNOWN_PURCHASE wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

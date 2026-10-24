@@ -2243,6 +2243,17 @@ SUITES = [
     # pre-registered in the R2087 explore-queue claim row).
     ("ledger-apimarket-supply", os.path.join(
         "ledger", "test_apimarket_supply.py"), 8),
+    # R2088 refund / return axis: the buyer-side remedy door that
+    # the irreversible purchase face never had (append-only refund
+    # rows keyed on the purchase id, the four-entry ledger reversal
+    # restoring buyer/seller/both pools exactly, the pinned gate
+    # order, the no-overdraft funding gate, the refunded unit
+    # returning to the shelf, additive refund columns on
+    # api_view/api_library/api_sales and the api_refund provenance
+    # face) - AC-AMRF1..AMRF8 pre-registered in the R2088
+    # explore-queue claim row.
+    ("ledger-apimarket-refund", os.path.join(
+        "ledger", "test_apimarket_refund.py"), 8),
     # R1947 effects persist seat of the R1886 family: two-piece
     # restart (the face rides the same ledger.db with its own
     # connection), byte-identical read replay across credits and

@@ -92,11 +92,13 @@ VIEW_KEYS = {"listing_id", "dev_account", "listing_key", "title",
              "latest_metadata_revision_utc", "revision_count",
              "latest_revision_utc", "ai_label", "listed_utc",
              "purchase_count", "rating_count", "rating_avg",
+             "refund_count", "refunded_total", "net_purchase_count",
              "delisted", "delisted_utc", "disclaimer"}
 
 BOARD_KEYS = {"disclaimer", "listings"}
 
 LIBRARY_KEYS = {"buyer_id", "purchase_count", "total_spent",
+                "refund_count", "total_refunded", "net_spent",
                 "disclaimer", "purchases"}
 
 TABLES = ("apimarket_listings", "apimarket_purchases",
