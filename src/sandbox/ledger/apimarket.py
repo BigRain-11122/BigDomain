@@ -3802,6 +3802,86 @@ class APIMarketFace:
         except (TypeError, ValueError):
             return 0, False
 
+    def api_seller_ledger(self, dev_account, limit=None):
+        """Seller settlement statement (criteria AC-AMLG1..AC-AMLG8
+        pre-registered in the R2126 explore-queue row BEFORE this code
+        existed).
+
+        The market answers a seller's gross rows (api_sales), monthly
+        cash (api_revenue_months), lifetime aggregates (dev_profile,
+        api_market_stats) and refund exposure (api_refund_exposure), but
+        no face answered the two questions a seller actually asks:
+        "how much money do I have right now" and "which ledger entries
+        produced it". ledger.bill is the only face that renders
+        per-account entries, and it had zero product consumers.
+
+        This face joins the live account balance (single seam:
+        _seller_balance, the same helper refund_api and
+        api_refund_exposure already trust; no second bookkeeping copy)
+        with that account's entries, newest first. Limit truncates the
+        OLDEST tail, so the most recent movement is always visible; a
+        limit above the cap clamps instead of rejecting, while a
+        non-int / bool / sub-one limit fails closed. An account the
+        ledger never saw is not an error: balance 0 with balance_known
+        False and an empty statement. Pure read: zero row mutations and
+        zero token movement. The envelope carries the resident
+        non-advisory disclaimer."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if limit is None:
+            limit = 50
+        else:
+            if (isinstance(limit, bool) or not isinstance(limit, int)
+                    or limit < 1):
+                raise ApiMarketError(E_AM_BAD_ARGS, "limit=%r" % (limit,))
+            if limit > 500:
+                limit = 500
+        balance, known = self._seller_balance(dev_account)
+        entries = []
+        try:
+            bill = self.led.bill(dev_account, limit)
+        except Exception:
+            bill = None
+        if isinstance(bill, dict):
+            raw = bill.get("items")
+            if isinstance(raw, list):
+                for item in raw:
+                    if not isinstance(item, dict):
+                        continue
+                    try:
+                        amount = int(item.get("amount", 0))
+                    except (TypeError, ValueError):
+                        amount = 0
+                    row = {
+                        "tx_id": str(item.get("tx_id", "")),
+                        "ts_utc": item.get("ts_utc"),
+                        "type": item.get("type"),
+                        "action": item.get("action"),
+                        "ref": item.get("ref"),
+                        "ref_type": item.get("ref_type"),
+                        "direction": item.get("direction"),
+                        "amount": amount,
+                        "memo": item.get("memo"),
+                        "source_ai": bool(item.get("source_ai")),
+                    }
+                    if item.get("source_ai") and "ai_label" in item:
+                        row["ai_label"] = item.get("ai_label")
+                    entries.append(row)
+        credit_total = sum(e["amount"] for e in entries
+                           if e["direction"] == "credit")
+        debit_total = sum(e["amount"] for e in entries
+                          if e["direction"] == "debit")
+        return {"dev_account": str(dev_account),
+                "balance": balance,
+                "balance_known": known,
+                "entry_count": len(entries),
+                "credit_total": credit_total,
+                "debit_total": debit_total,
+                "net": credit_total - debit_total,
+                "limit": limit,
+                "disclaimer": self.disclaimer,
+                "entries": entries}
+
     # -- pre-purchase Q&A (R2118) ---------------------------------------------
 
     def ask_question(self, buyer_id, listing_id, text):

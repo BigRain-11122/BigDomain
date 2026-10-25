@@ -1,0 +1,11 @@
+{
+ "busy_skipped": 0,
+ "bytes": 199750024,
+ "candidates": 1094,
+ "failed": 0,
+ "mib": 190.5,
+ "min_age_hours": 24.0,
+ "mode": "dry-run",
+ "removed": 0,
+ "root": "C:\\Users\\sjs20\\AppData\\Local\\Temp"
+}

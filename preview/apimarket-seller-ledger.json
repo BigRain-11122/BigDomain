@@ -1,0 +1,78 @@
+{
+  "empty_account": {
+    "balance": 0,
+    "balance_known": false,
+    "credit_total": 0,
+    "debit_total": 0,
+    "dev_account": "usr:nobody",
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "entries": [],
+    "entry_count": 0,
+    "limit": 50,
+    "net": 0
+  },
+  "generated_utc": "2026-10-25T09:00:20Z",
+  "kind": "seller-settlement-statement",
+  "note": "AIGC sandbox artifact: deterministic demo world, not investment advice",
+  "seller": {
+    "balance": 5,
+    "balance_known": true,
+    "credit_total": 10,
+    "debit_total": 5,
+    "dev_account": "usr:dev-lin",
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "entries": [
+      {
+        "action": "spend",
+        "amount": 2,
+        "direction": "debit",
+        "memo": null,
+        "ref": "PREVIEW-PAYOUT",
+        "ref_type": "order",
+        "source_ai": false,
+        "ts_utc": "2026-10-25T10:06:31Z",
+        "tx_id": "eab177d4c358ffa9",
+        "type": "spend"
+      },
+      {
+        "action": "adjust",
+        "amount": 3,
+        "direction": "debit",
+        "memo": "apimarket refund purchase=2 listing=2 buyer=usr:noah reason=buyer changed mind",
+        "ref": "apimarket:refund:2",
+        "ref_type": "order",
+        "source_ai": false,
+        "ts_utc": "2026-10-25T10:06:31Z",
+        "tx_id": "dc301692ef662ecb",
+        "type": "adjust"
+      },
+      {
+        "action": "apimarket_dev_share",
+        "amount": 3,
+        "direction": "credit",
+        "memo": null,
+        "ref": "apimarket:share:ef2bfae6de63846c",
+        "ref_type": "settlement",
+        "source_ai": false,
+        "ts_utc": "2026-10-25T10:06:31Z",
+        "tx_id": "8b5d81ef191ef706",
+        "type": "share"
+      },
+      {
+        "action": "apimarket_dev_share",
+        "amount": 7,
+        "direction": "credit",
+        "memo": null,
+        "ref": "apimarket:share:2e9e4a93cc84074a",
+        "ref_type": "settlement",
+        "source_ai": false,
+        "ts_utc": "2026-10-25T10:06:31Z",
+        "tx_id": "151f2d74cd441d13",
+        "type": "share"
+      }
+    ],
+    "entry_count": 4,
+    "limit": 50,
+    "net": 5
+  }
+}

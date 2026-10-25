@@ -2323,6 +2323,16 @@ SUITES = [
     # (refund_risk family, REPORT_SCHEMA 8).
     ("ledger-apimarket-refundexposure", os.path.join(
         "ledger", "test_apimarket_refundexposure.py"), 8),
+    # AC-AMLG1..AC-AMLG8 pre-registered in the R2126 explore-queue
+    # claim row BEFORE this suite existed: the seller settlement
+    # statement face - the live ledger balance joined to that
+    # account's own entries newest first, derived credit/debit
+    # totals, oldest-tail truncation, the purchase-credit and
+    # refund-debit semantics, zero movement from publish/repricing/
+    # metadata/restock/lifecycle, the gate family and its order,
+    # honest absence, pure read and cross-restart identity.
+    ("ledger-apimarket-sellerledger", os.path.join(
+        "ledger", "test_apimarket_sellerledger.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

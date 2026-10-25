@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T17:21:54+08:00",
+ "export_ts": "2026-10-25T18:52:09+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2125 分发义务段接进运营报表：R2124 立起的实名/公示/审核三面此前在产品里零消费者（只有各自的套件提到它们），运营页既看不到「哪些在售挂牌还没过审」，也看不到「哪些卖家没实名」。本轮把两面读面原样接进结算报表唯一消费者，并由公开展示面自身派生未实名卖家缺口表，页面新增「Distribution duty」段三张表（待审队列/公开展示/未实名卖家），机读契约 14→15 加法升级。",
-  "latest_artifact": "preview/apimarket-report-duty.html + preview/apimarket-report-duty.json（schema 15）；src/sandbox/ledger/test_apimarket_report_duty.py（SUITE 8/8 双跑判据行同一 sha16 4974FAC99349B0B9）；qa/apimarket-reportduty-R2125.log + -run2；qa/reconcile-all-R2125d.log（RUNNER PASS 329/329 套件 + 控制 7/7，638.9 秒）；docs/suite-matrix.md（329 套件 / 2740 判据，--check 逐字节同一）",
-  "next_milestone": "48 小时内：①把审核门真正接进 publish_api（未过审/未实名不得上架），并为「上架前强制实名 + 三类拒绝逐条可验」预注册判据后交付；②同窗补「举报入口」义务面（R2123 法规普查列出而我方仍缺的第四面），接进同一报表段。"
+  "current": "R2126 卖家结算对账单面（api_seller_ledger）收口：市场此前给卖家毛行（api_sales）、月度现金、终身聚合与退款敞口，却没有任何一面回答「我此刻账上多少钱、这些钱是哪几笔流水来的」——全产品唯一能出逐笔流水的 ledger.bill 零调用点。本轮把两者接起来：余额走既有单缝（refund 门与敞口面已信任的同一 helper，不建第二本账），流水按时间倒序，credit/debit/net 全部由行派生，limit 截最旧尾巴、超帽钳制、坏形 fail-closed，从未开过户的账户诚实报「账上无钱」而不是报错。同轮执行隔夜 D-20261025-15 的本司归因面：apimarket 套件 62 处建临时世界、零处回收，%TEMP% 堆到 24,057 目录/6.52GB——新工具按「名族+世界签名件+年龄」三重锚定并先改名再删（活进程持有的世界一律跳过），清走 23,317 个世界回收 5.83GB，零 busy 零失败。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_seller_ledger + src/sandbox/ledger/test_apimarket_sellerledger.py（本窗双跑 rc=0/0，判据行逐字节同一 sha16 1f3922da8bff2e62；证据 qa/apimarket-sellerledger-R2126-verifya.log / -verifyb.log）；qa/reconcile-all-R2126b.log（RUNNER PASS 330/330 套件 + 控制 7/7，699.6 秒）；docs/sandbox-suite-matrix.md（330 套件 / 2748 判据，--check 逐字节同一）；src/os/sweep_suite_tmp.py + qa/tmp-sweep-R2126-execute.json（回收 23,317 世界 / 5,975.19 MiB）；呈看件 preview/apimarket-seller-ledger.json",
+  "next_milestone": "48 小时内：①把临时世界清理接到出生站（电池跑完只删本轮新建且过归属锚的世界，判据 AC-TMP1..AC-TMP8 已预注册于 state/queue/tech.md），使 5.83GB 清理不是一次性止血；②补上「上架前强制实名/未过审不得上架」的 publish 门接线（R2124 三面至今只是可读面，未拦发布），并把审核结果接进同一报表段。"
  },
  "depts": [
   {
@@ -34,6 +34,17 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 卖家结算对账单面（api_seller_ledger：活余额单缝 + 本账户逐笔流水 + 派生借贷合计）",
+   "on",
+   "R2126：市场给了卖家毛行（api_sales）、月度现金（api_revenue_months）、终身聚合（dev_profile / api_market_stats）与退款敞口（api_refund_exposure），却没有任何一面回答「我此刻账上有多少钱、这些钱是哪几笔流水来的」；全产品唯一能出逐笔流水的 ledger.bill 在 git grep -F 上零产品调用点（产出无消费者）。本窗把两者接起来：api_seller_ledger(dev_account, limit=None) 用活账本余额（走既有单缝 _seller_balance，refund 门与敞口面已信任的同一 helper，不建第二本账）+ 该账户 append-only 流水合成对账单。十键信封、行键固定，entry_count == len(entries)，credit_total/debit_total/net 全部由行派生（net == credit − debit），流水按 ts_utc 降序（同时刻按条目序），limit 截掉的是最旧尾巴因此最新一笔永远可见、超帽 500 钳制而不拒、bool/非整/小于 1 一律 fail-closed；从未建户的账户诚实报 balance 0 / balance_known False / 空流水，已建户但无流水报 balance_known True / 空流水；面为纯读（零行变更、零 token 移动、两池余额恒定），三实例跨重启逐字节同一。判据 AC-AMLG1..AC-AMLG8 预注册于 state/queue/explore.md 同名行且先于代码。证据=本窗双跑 rc=0/0 判据行逐字节同一 sha16 1f3922da8bff2e62（qa/apimarket-sellerledger-R2126-verifya.log + -verifyb.log，经证据单写者落 utf-8 LF=tee 方言）；接线 ledger-apimarket-sellerledger(8)；电池 qa/reconcile-all-R2126b.log RUNNER PASS 330/330 套件 + 控制 7/7 699.6s 且其 mtime 晚于全部代码改动；矩阵按该电池重生成后 --check 逐字节同一（330 套件 / 2748 判据）；census 套件在电池内绿。诚实注：本轮接管的是中断前窗的遗留产物（state 仍停在 R2125、树里已有产品与套件未提交），前窗红电池 qa/reconcile-all-R2126.log 原样保留；本窗未重跑全量电池，新增的 sweep 工具与矩阵件不改变任何套件行为。",
+   "2026-10-25"
+  ],
+  [
+   "套件临时世界清理工具（sweep_suite_tmp.py：三重归属锚 + rename 探针 + 回收读数）",
+   "on",
+   "R2126 执行隔夜决策 D-20261025-15 的本司归因面：apimarket 验收套件以 tempfile.mkdtemp 建世界却从不回收（62 处 mkdtemp、零 rmtree），%TEMP% 实测 24,057 个目录、6.52GB，且 24h 年龄阈值只覆盖 190MB（说明再生速度远高于清理速度）。新工具只在一个目录同时满足三条锚时才动手：①名族匹配本司套件前缀（apimarket-*/apimarket_* 或 am<family>-）；②含本司世界签名件（apimarket.db / ledger.db / member*.db / empty.html / config.json 之一）；③mtime 早于年龄策略。删除前先改名为瞬态名——Windows 下活进程持文件时改名必失败，因此正在跑的套件世界一律跳过而不是被半删；改名成功才递归删除，rmtree 失败会改回原名。本次 --min-age-hours 1 --execute：候选 23,317、删除 23,317、busy 0、failed 0、回收 5,975.19 MiB，留下 1,070 个新世界按设计交给下一轮。工具与读数在盘（src/os/sweep_suite_tmp.py、qa/tmp-sweep-R2126-dryrun.json、qa/tmp-sweep-R2126-execute.json），出生站接线（电池结束时清本轮新建世界）连同 AC-TMP1..AC-TMP8 判据入 state/queue/tech.md 顶行待做。"
+  ],
   [
    "apimarket 结算报告分发义务段（duty block：待审队列 + 公开展示 + 未实名缺口 + REPORT_SCHEMA 14→15）",
    "on",
@@ -428,6 +439,10 @@
  ],
  "results": [
   [
+   "R2126",
+   "R2126: closeout of the interrupted seller-ledger window plus the overnight TEMP attribution sweep. This window opened on a crashed predecessor (product diff, suite, two evidence logs, a preview JSON and the queue claim rows already on disk while state.json still ended at R2125, no index.lock, no live battery), so the work was verified rather than rebuilt and every figure is re-measured here. Product: api_seller_ledger joins the live account balance - read through the ONE seam _seller_balance that refund_api and api_refund_exposure already trust, so there is no second bookkeeping copy - to that account's own append-only ledger entries newest first; credit/debit/net are derived from the rows, entry_count equals the row count, limit truncates the OLDEST tail (the newest movement always stays visible) with an over-cap clamp and a fail-closed non-int/bool/sub-one gate, an account the ledger never saw reports balance 0 with balance_known False and an empty statement, and the face is a pure read with frozen digests, constant pools and byte-identical replay on three instances. ledger.bill was the only per-account entry face in the product and had zero consumers, so the 'how much do I have and which entries produced it' gap is closed. Verification: suite double-run in this window rc=0/0 with byte-identical criterion lines sha16 1f3922da8bff2e62 (qa/apimarket-sellerledger-R2126-verifya.log + -verifyb.log, written through the canonical evidence writer as utf-8 LF tee dialect after the first PowerShell-captured copies came out UTF-16 and were discarded); wired ledger-apimarket-sellerledger (8); the green battery qa/reconcile-all-R2126b.log is RUNNER PASS 330/330 suites plus controls 7/7 in 699.6s with an mtime that postdates every code change, while the predecessor's red battery is preserved; the matrix was regenerated against that battery and checks byte-identical at 330 suites / 2748 criteria; the census suites are green inside the battery. Five-silence: five new decision tokens D-20261025-14..18 judged (14 CEO execution receipts, 16 BigCompute breathability, 17 OSS log slimming, 18 BigCompute proposal canon = acknowledged with zero action; 15 = EXECUTED on our side, see below), ledger zero new @BigDomain rows, group orders tail advanced to 2026-10-25 18:2x, benchmarks fresh today. D-20261025-15 execution: our own suites were the named leak (62 mkdtemp, zero rmtree, 24,057 worlds / 6.52GB). New tool src/os/sweep_suite_tmp.py deletes only when the name matches our prefix family AND the directory carries one of our world signature files AND it is older than the policy, and it renames before deleting so a live suite's world is skipped instead of half-removed; the 1h pass removed 23,317 worlds and reclaimed 5,975.19 MiB with zero busy and zero failed, leaving 1,070 newer worlds by design. Honest boundary: the birth-site fix (sweeping a battery's own worlds when it finishes) is queued with pre-registered criteria AC-TMP1..AC-TMP8 rather than patched blind, because wiring it into reconcile_all.py without re-running the 700s battery would leave the green claim describing older code."
+  ],
+  [
    "R2125",
    "R2125: recovery closeout of the distribution-duty block on the settlement report. The R2124 provider identity, public display and review faces had zero product consumers, so the operator page could not answer which live listings still await a review or which sellers disclose no identity. collect_duty() reads the review-queue and public-display envelopes once each and derives the undisclosed-seller gap from the public envelope alone (one reading, so the two cannot drift; nothing cached), the page gains a Distribution duty section with three tables and honest empty states, and REPORT_SCHEMA moves 14 -> 15 additively with the envelope still exactly schema_version/report/attention. Suite 8/8 with criterion lines byte-identical across the double run (criteria sha16 4974FAC99349B0B9); wired ledger-apimarket-reportduty (8). Verification: the predecessor's battery was red on eight assertions because six older report suites pinned exact key-set equality and exact schema literals, so those birth stations were relaxed to subset and >= forms and the full battery re-ran RUNNER PASS 329/329 suites plus controls 7/7 in 638.9s (qa/reconcile-all-R2125d.log); the suite matrix was regenerated to 329 suites / 2740 criteria and checks byte-identical; the census suite is green inside the battery. Honest notes: two truncated battery logs from my own attempts killed by the five-minute no-output tool rule were deleted (not test failures), and the predecessor's red battery log qa/reconcile-all-R2125.log is preserved unrewritten. Five-silence: decisions zero new content-addressed tokens with the v2 watermark re-recorded after a commit-only move, ledger zero new @BigDomain rows, group orders baseline unchanged, benchmarks inside 7 days."
   ],
@@ -568,7 +583,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2125",
+   "2126",
    "OSLoop 执行 tick"
   ],
   [
@@ -909,14 +924,14 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 22,
+  "log_lines_in_window": 23,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 22,
+  "substantive_non_idle_mention_lines": 23,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
-  "queue_tech_open": 4,
+  "queue_tech_open": 5,
   "queue_explore_open": 1
  }
 }

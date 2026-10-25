@@ -1,0 +1,10 @@
+PASS AC-AMLG1: keys=True count=4 credit=17 debit=7 net=10 rows=4
+PASS AC-AMLG2: seam=True independent=True bob=True live=True
+PASS AC-AMLG3: ordered=True full=5 one=True three_prefix=True clamp=True
+PASS AC-AMLG4: base=5 publish=5 maintenance=5 buy=6 refund=7 credit=True debit=True
+PASS AC-AMLG5: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] limit=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] order='E_AM_BAD_ACCOUNT' digests_frozen=True tx_frozen=True
+PASS AC-AMLG6: ghost=False idle_known=True idle_rows=0
+PASS AC-AMLG7: pure=True restart_all=True restart_limited=True idle=True
+PASS AC-AMLG8: wired=True ascii=True no_net_import=True shipped=True
+
+SUITE PASS 8/8
