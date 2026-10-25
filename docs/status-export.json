@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T01:34:00+08:00",
+ "export_ts": "2026-10-26T03:05:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "apimarket 分类目录轴（publish_api 可选 category + api_search 精确分类过滤 + api_categories 目录读面）：市场此前没有品类概念，买家只能靠关键词猜、卖家无法声明品类、运营答不出市场构成。本轮补三件：上架门增可选品类（锁前形状门·坏声明零行零 msgSecCheck）；搜索增精确品类过滤（门序钉死·不传过滤时 criteria 逐字节保旧五键契约）；新增品类目录读面（live/retired 分区·现价带·未分类桶使守恒律恒成立·纯读零 token）。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（category 列 + publish_api 品类门 + api_search category 过滤 + api_categories 目录面 + api_view 增补键）+ src/sandbox/ledger/test_apimarket_category.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 2675B841C3D5A4D4，证据 qa/apimarket-category-R2132.log / -run2.log）；qa/reconcile-all-R2132.log（RUNNER PASS 336/336 套件 + 控制 7/7，944.0s）；docs/sandbox-suite-matrix.md（336 套件 / 2796 判据，--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①把品类目录接进结算报告与搜索侧栏（目录面至今零产品消费者）；②给品类加卖家侧声明修订门（当前品类只能在上架时声明一次）；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架）。"
+  "current": "apimarket 审核周期律（resubmit_listing + api_seller_reviews + 判决按周期派生）：审核此前是一次性判决（表级 UNIQUE(listing_id)），被拒=永久死亡——卖家改好描述也只能重开挂牌、丢掉原挂牌的成交/评价/改价史，公开面永久挂着首次拒绝理由，且卖家没有任何面回答「我哪些在等审、哪些被拒、为什么」。本轮补三件：审核周期=1+复送次数（旧判决落周期 1 且戳不改写）；卖家复送门（门序钉死·拒绝零行零 token）；卖家侧审核状态读面（含退役件·隔离·诚实空·纯读）。队列面与公开面同时改读当前周期，复送后重新入队一次、公开状态按 已拒→待审→已通过 翻转。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_reviews 重建带 cycle + apimarket_review_resubmits 表 + resubmit_listing + api_seller_reviews + 两面改缝）+ src/sandbox/ledger/test_apimarket_reviewcycle.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 8AEE7AFA01ED0E99，证据 qa/apimarket-reviewcycle-R2133.log / -run2.log）；qa/reconcile-all-R2133.log（RUNNER PASS 337/337 套件 + 控制 7/7，1156.4s）；docs/sandbox-suite-matrix.md（337 套件 / 2804 判据，--check 逐字节同一）。",
+  "next_milestone": "48 小时内：①把审核周期接进结算报告分发义务段（当前只给待审队列，看不到复送史与被拒理由分布）；②给审核面加平台侧驳回理由码（现在理由为自由文本，运营无法统计）；③复核「未过审不得上架」这条门是否真正接进购买门（当前公开面只展示状态，购买门未拦）。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 审核周期律（resubmit_listing + api_seller_reviews + 判决按周期派生）",
+   "on",
+   "R2133：R2124 的分发义务三件把审核写成一次性判决——apimarket_reviews 表级 UNIQUE(listing_id) 加 E_AM_ALREADY_REVIEWED，于是「被拒」等于永久死亡：卖家改好描述或补了资质只能新开 listing_key，丢掉原挂牌的成交、评价、改价与元数据全部历史；公开面会永久挂着第一次的拒绝理由；而卖家侧没有任何读面回答「我名下哪些在等审、哪些被拒、理由是什么」（api_review_queue 是运营者全市场队列，api_public_listings 是外部读者视角）。这正是 R2089 用「退役→复架周期律」解过的同一条死路，本轮照同一周期律补齐：上架开周期 1，复送开下一周期，判决只在周期内一次性，当前判决=当前周期那行。产品三分：①审核表一次性重建为带 cycle 并 UNIQUE(listing_id, cycle)，旧判决落周期 1 且 reviewed_utc 逐字节不改写（SQLite 不能就地删约束，表重建一次，已迁移库二次打开零改动）；②resubmit_listing 门序钉死为 账户形→挂牌形/存在→归属→退役当前周期→当前周期待审→当前周期已通过→本周期已复送，三个新码 E_AM_ALREADY_RESUBMITTED / E_AM_REVIEW_PENDING / E_AM_REVIEW_APPROVED，任一拒绝零行零 token；③api_seller_reviews 卖家状态面（八键信封 + 十键行，含退役挂牌，标题走元数据缝、价格走现价缝，隔离、诚实空、纯读）。api_review_queue 与 api_public_listings 改读同一 _current_review 缝，所以复送的挂牌恰好重新入队一次、公开状态按 已拒→待审→已通过 翻转且旧理由不残留。判据 AC-AMRC1..AC-AMRC8 预注册在 R2133 explore 队列行、先于代码（十锚 git grep -F 零占用 rc=1）。证据：套件双跑 rc=0/0 判据行逐字节同一 sha16 8AEE7AFA01ED0E99（qa/apimarket-reviewcycle-R2133.log + -run2.log，utf-8 LF 单写者）；接线 ledger-apimarket-reviewcycle(8)；电池 qa/reconcile-all-R2133.log RUNNER PASS 337/337 套件 + 控制 7/7 1156.4s（TMP RECLAIM 181.96 MiB）；矩阵 337 套件 / 2804 判据 --check 逐字节同一。诚实注两处：①API 级 E_AM_ALREADY_RESUBMITTED 臂在公开门上不可达（复送开的下一周期按构造是 pending），故以表级 UNIQUE(listing_id, cycle) 的 IntegrityError 探针证明第二幂等键，与 LEDGER UNIQUE(ref) 同型；②首次电池两次被杀（第一次管道缓冲吞流、第二次缓冲过五分钟无输出线），两份都零证据件产生、非测试失败，第三次直连流式一次跑绿。",
+   "2026-10-26"
+  ],
   [
    "apimarket 分类目录轴（publish_api 可选 category + api_search 精确分类过滤 + api_categories 目录读面）",
    "on",
@@ -475,6 +481,10 @@
  ],
  "results": [
   [
+   "R2133",
+   "R2133: the developer API market's review gate was write-once per LISTING - apimarket_reviews carried UNIQUE(listing_id) and review_listing answered E_AM_ALREADY_REVIEWED - so a refusal was terminal: a seller who fixed the description or supplied the missing qualification had to publish a new listing_key and lose that listing's purchases, ratings, repricing history and metadata history, the public face kept showing the first refusal reason forever, and the seller had no face at all answering which of their listings wait, which were refused and why. This is the same dead end the retirement door had before the re-list cycle law (R2089), so this window closes it the same way. Publishing opens review cycle 1; resubmit_listing opens the next cycle behind the pinned gate order (account shape, listing existence, ownership, retired state, current verdict pending or approved, duplicate) and every refusal writes zero rows and moves zero tokens; a verdict stays write-once PER CYCLE, so the table is rebuilt once to UNIQUE(listing_id, cycle) while every existing verdict keeps cycle 1 and its original stamp; and one seam (_current_review) now feeds api_review_queue, api_public_listings and the new seller-side api_seller_reviews, so a resubmitted listing re-enters the operator queue exactly once and the public state flips refused -> pending -> approved with the old reason never leaking into the new cycle. api_seller_reviews answers the seller's own question with an eight-key envelope and ten-key rows over every listing including retired ones, strict isolation, an honest empty envelope and a pure read. Five-silence scan clean (zero new decision tokens against the stored baseline, zero new @BigDomain ledger rows, one new group order row at 2026-10-25 22:4x on the MV face acknowledged with baseline advanced, benchmarks inside 7 days, tree clean, no lock, both daily standing rows already stamped today, all four tech heads and the single explore row gated). Criteria AC-AMRC1..AC-AMRC8 were pre-registered in the R2133 explore-queue row BEFORE the code existed (ten anchors git grep -F zero-occupancy rc=1). Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 8AEE7AFA01ED0E99 (qa/apimarket-reviewcycle-R2133.log + -run2.log, utf-8 LF single writer); wired ledger-apimarket-reviewcycle(8); battery qa/reconcile-all-R2133.log RUNNER PASS 337/337 suites plus controls 7/7 in 1156.4s (TMP RECLAIM 181.96 MiB); matrix regenerated to 337 suites / 2804 criteria and byte-identical on check. Honest notes: (a) the API-level E_AM_ALREADY_RESUBMITTED arm is unreachable through the public door because the cycle a resubmit opens is pending by construction, so the second idempotency key is proven by a direct table-level UNIQUE(listing_id, cycle) IntegrityError probe (the gate stays as belt-and-braces, same shape as the ledger UNIQUE(ref) key); (b) the first two battery invocations were killed by the shell tool - the first through a pipeline that swallowed the stream, the second buffered past the five-minute no-output rule - both produced zero evidence artifacts and were not test failures; the third invocation streamed directly and went green in one pass."
+  ],
+  [
    "R2132",
    "R2132: the developer API market gains the category directory, the first information-architecture layer it never had. Every one of the twenty-plus faces could answer one listing, one seller, one buyer, the whole board, a search, a sort or a page, but nothing could answer what the market is made of: a listing carried only a key, a title and a description, so discovery rested entirely on guessing keywords, a seller could not declare what class of service it offers, and an operator could not report the taxonomy. This window adds three pieces. publish_api accepts an optional category behind a pre-lock shape gate (None = uncategorized, a trimmed string of at most 40 characters is stored, every other form is refused before the registry read and before any msgSecCheck call, so a bad declaration stores zero rows and burns zero gate calls). api_search accepts an exact category filter whose gate runs after include_delisted and before the paging and sort gates, and whose criteria key is echoed ONLY when a filter is given, so a caller that never filters keeps the five-key legacy criteria contract byte for byte; the filter composes with keyword, seller, price band, retirement switch, sort and paging. api_categories answers the directory: five-key envelope, six-key rows ordered by category, live/retired partition with min and max live price read through the current-price seam, and an honest uncategorized bucket so the conservation law holds on every world including the ones written before the axis existed. api_view carries the declaration additively, and databases written before this axis are migrated in place by an idempotent column add whose old rows keep category NULL while staying listed, searchable and purchasable. Criteria AC-AMCT1..AC-AMCT8 were pre-registered in the R2132 explore-queue row BEFORE the code existed (six anchors git grep -F zero-occupancy rc=1). Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 2675B841C3D5A4D4 (qa/apimarket-category-R2132.log + -run2.log, utf-8 LF); wired ledger-apimarket-category (8); battery qa/reconcile-all-R2132.log RUNNER PASS 336/336 suites plus controls 7/7 in 944.0s with TMP RECLAIM 175.53 MiB; matrix regenerated to 336 suites / 2796 criteria and byte-identical on check. Honest notes: the first battery was red at 333/336 because three older suites pinned exact row/view key sets, so test_apimarket_search AC-AMSQ1, test_apimarket_searchsort AC-AMSR7 and test_apimarket_supply AC-AMSP2 were relaxed to subset form (the pinned legacy keys must still all be present) with every semantic assertion kept and all three re-running 8/8; that red log was overwritten by the green re-run of the same filename, so no red artifact survives. Five-silence: three new decision tokens judged (all other seats' faces, acknowledged), one ledger line pointing at an HQ-FEEDBACK staleness R2130 already paid off (verified by file mtime), orders baseline unchanged, benchmarks inside 7 days."
   ],
@@ -643,7 +653,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2132",
+   "2133",
    "OSLoop 执行 tick"
   ],
   [
@@ -984,10 +994,10 @@
  "self_drive": {
   "window": "2026-10-20..2026-10-26",
   "window_days": 7,
-  "log_lines_in_window": 23,
+  "log_lines_in_window": 24,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 23,
+  "substantive_non_idle_mention_lines": 24,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

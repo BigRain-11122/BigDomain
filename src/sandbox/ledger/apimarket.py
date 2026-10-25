@@ -104,6 +104,9 @@ E_AM_UNKNOWN_CLAIM = "E_AM_UNKNOWN_CLAIM"  # AC-AMCR3 (no such claim)
 E_AM_BAD_RESPONSE = "E_AM_BAD_RESPONSE"    # AC-AMCR3 (answer shape)
 E_AM_CLAIM_ANSWERED = "E_AM_CLAIM_ANSWERED"  # AC-AMCR4 (one answer)
 E_AM_CLAIM_WITHDRAWN = "E_AM_CLAIM_WITHDRAWN"  # AC-AMCW4 (one withdrawal)
+E_AM_ALREADY_RESUBMITTED = "E_AM_ALREADY_RESUBMITTED"  # AC-AMRC2
+E_AM_REVIEW_PENDING = "E_AM_REVIEW_PENDING"  # AC-AMRC2 (no verdict yet)
+E_AM_REVIEW_APPROVED = "E_AM_REVIEW_APPROVED"  # AC-AMRC2 (already live)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -264,7 +267,17 @@ CREATE TABLE IF NOT EXISTS apimarket_reviews (
     decision TEXT NOT NULL CHECK (decision IN ('approve', 'refuse')),
     reason TEXT NOT NULL,
     reviewed_utc TEXT NOT NULL,
-    UNIQUE (listing_id)
+    cycle INTEGER NOT NULL DEFAULT 1,
+    UNIQUE (listing_id, cycle)
+);
+CREATE TABLE IF NOT EXISTS apimarket_review_resubmits (
+    resubmit_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    cycle INTEGER NOT NULL,
+    note TEXT NOT NULL,
+    resubmitted_utc TEXT NOT NULL,
+    UNIQUE (listing_id, cycle)
 );
 CREATE TABLE IF NOT EXISTS apimarket_claims (
     claim_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -430,6 +443,56 @@ class APIMarketFace:
         self._ensure_supply_column()
         self._ensure_category_column()
         self._ensure_lifecycle_schema()
+        self._ensure_review_cycle_schema()
+
+    def _ensure_review_cycle_schema(self):
+        """Idempotent forward migration for databases written
+        before the review-cycle axis existed (AC-AMRC7). The old
+        apimarket_reviews carried UNIQUE(listing_id) - one terminal
+        verdict per listing - which the cycle law must relax, and
+        SQLite cannot drop a constraint in place, so the table is
+        rebuilt once: same rows, same ids, cycle 1. The rebuild runs
+        only when the legacy shape is actually present, so an
+        already-migrated database is never touched and every
+        existing verdict keeps its original stamp."""
+        cols = [r[1] for r in self._conn.execute(
+            "PRAGMA table_info(apimarket_reviews)").fetchall()]
+        row = self._conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type = 'table'"
+            " AND name = 'apimarket_reviews'").fetchone()
+        flat = str(row[0] or "").upper().replace(" ", "") \
+            if row is not None else ""
+        legacy_unique = "UNIQUE(LISTING_ID)" in flat
+        if "cycle" in cols and not legacy_unique:
+            return
+        self._conn.execute("BEGIN IMMEDIATE")
+        try:
+            self._conn.execute(
+                "ALTER TABLE apimarket_reviews RENAME TO"
+                " apimarket_reviews_legacy")
+            self._conn.execute(
+                "CREATE TABLE apimarket_reviews ("
+                " review_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                " listing_id INTEGER NOT NULL,"
+                " decision TEXT NOT NULL CHECK"
+                " (decision IN ('approve','refuse')),"
+                " reason TEXT NOT NULL,"
+                " reviewed_utc TEXT NOT NULL,"
+                " cycle INTEGER NOT NULL DEFAULT 1,"
+                " UNIQUE (listing_id, cycle))")
+            cycle_expr = "cycle" if "cycle" in cols else "1"
+            self._conn.execute(
+                "INSERT INTO apimarket_reviews (review_id,"
+                " listing_id, decision, reason, reviewed_utc,"
+                " cycle) SELECT review_id, listing_id, decision,"
+                " reason, reviewed_utc, %s FROM"
+                " apimarket_reviews_legacy ORDER BY review_id"
+                % cycle_expr)
+            self._conn.execute("DROP TABLE apimarket_reviews_legacy")
+            self._conn.execute("COMMIT")
+        except BaseException:
+            self._conn.execute("ROLLBACK")
+            raise
 
     def _ensure_lifecycle_schema(self):
         """Idempotent forward migration for databases written
@@ -787,6 +850,28 @@ class APIMarketFace:
         the re-list door flips all of them at once. Caller holds
         the lock."""
         return self._cycle_state(listing_id)[2]
+
+    def _review_cycle(self, listing_id):
+        """Current review cycle of one listing (AC-AMRC1). Cycle 1
+        is the publish-time submission; every seller resubmit after
+        a refusal opens the next one, so the current cycle is the
+        highest append-only resubmit row (or 1). Caller holds the
+        lock."""
+        row = self._conn.execute(
+            "SELECT MAX(cycle) FROM apimarket_review_resubmits"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0]
+        return 1 if row is None else int(row)
+
+    def _current_review(self, listing_id):
+        """(decision, reason, reviewed_utc) of one listing's CURRENT
+        review cycle, or None while that cycle is still pending
+        (AC-AMRC5). One seam keeps api_public_listings, the operator
+        queue and the seller status face from drifting. Caller holds
+        the lock."""
+        return self._conn.execute(
+            "SELECT decision, reason, reviewed_utc FROM"
+            " apimarket_reviews WHERE listing_id = ? AND cycle = ?",
+            (listing_id, self._review_cycle(listing_id))).fetchone()
 
     def _current_price(self, listing_id, base_price=None):
         """Newest append-only revision wins; with no revision the
@@ -4576,10 +4661,7 @@ class APIMarketFace:
                     "SELECT provider_name, credit_code FROM"
                     " apimarket_providers WHERE dev_account = ?",
                     (r[1],)).fetchone()
-                rev = self._conn.execute(
-                    "SELECT decision, reason, reviewed_utc FROM"
-                    " apimarket_reviews WHERE listing_id = ?",
-                    (listing_id,)).fetchone()
+                rev = self._current_review(listing_id)
                 eff_title = self._metadata_state(
                     listing_id, r[3], r[4])[0]
                 out.append({
@@ -4623,20 +4705,148 @@ class APIMarketFace:
             raise ApiMarketError(E_AM_BAD_REASON, str(listing_id))
         with self._lock:
             self._require_listing(listing_id)
+            cycle = self._review_cycle(listing_id)
             row = self._conn.execute(
                 "SELECT review_id FROM apimarket_reviews"
-                " WHERE listing_id = ?", (listing_id,)).fetchone()
+                " WHERE listing_id = ? AND cycle = ?",
+                (listing_id, cycle)).fetchone()
             if row is not None:
                 raise ApiMarketError(E_AM_ALREADY_REVIEWED,
                                      str(listing_id))
             stamp = _now_utc()
             self._conn.execute(
                 "INSERT INTO apimarket_reviews"
-                " (listing_id, decision, reason, reviewed_utc)"
-                " VALUES (?, ?, ?, ?)",
-                (listing_id, decision, text, stamp))
+                " (listing_id, decision, reason, reviewed_utc, cycle)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (listing_id, decision, text, stamp, cycle))
         return {"listing_id": listing_id, "decision": decision,
-                "reason": text, "reviewed_utc": stamp}
+                "reason": text, "reviewed_utc": stamp,
+                "review_cycle": cycle}
+
+    def resubmit_listing(self, dev_account, listing_id, note=""):
+        """Seller-side re-submission door after a refusal (criteria
+        AC-AMRC1..AC-AMRC8 pre-registered in the R2133 explore-queue
+        row BEFORE this code existed).
+
+        Before this door a refusal was terminal: apimarket_reviews
+        carried UNIQUE(listing_id) and review_listing refused a
+        repeat verdict, so a seller who fixed the description or
+        supplied the missing qualification had to publish a brand
+        new listing_key and lose that listing's purchases, ratings,
+        repricing history and metadata history. This is the same
+        dead end the retirement door had before the re-list cycle
+        law (AC-AMRL1), so it is closed the same way: a refusal
+        ends its cycle, a resubmission opens the next one, and the
+        current verdict is the row of the current cycle.
+
+        Gate order pinned by AC-AMRC2: account shape, listing
+        shape/existence, ownership, the retired state, the current
+        cycle's verdict (pending or approved cannot be
+        resubmitted), then the duplicate resubmission. Every
+        refusal writes zero rows and moves zero tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        text = str(note or "").strip()
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            _cycle, retired, _stamp = self._cycle_state(listing_id)
+            if retired:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            cycle = self._review_cycle(listing_id)
+            row = self._conn.execute(
+                "SELECT decision FROM apimarket_reviews"
+                " WHERE listing_id = ? AND cycle = ?",
+                (listing_id, cycle)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_REVIEW_PENDING,
+                                     str(listing_id))
+            if row[0] != "refuse":
+                raise ApiMarketError(E_AM_REVIEW_APPROVED,
+                                     str(listing_id))
+            dup = self._conn.execute(
+                "SELECT resubmit_id FROM apimarket_review_resubmits"
+                " WHERE listing_id = ? AND cycle = ?",
+                (listing_id, cycle + 1)).fetchone()
+            if dup is not None:
+                raise ApiMarketError(E_AM_ALREADY_RESUBMITTED,
+                                     str(listing_id))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                self._conn.execute(
+                    "INSERT INTO apimarket_review_resubmits"
+                    " (listing_id, dev_account, cycle, note,"
+                    " resubmitted_utc) VALUES (?,?,?,?,?)",
+                    (listing_id, dev_account, cycle + 1, text, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+            new_cycle = cycle + 1
+        return {"listing_id": listing_id, "dev_account": dev_account,
+                "cycle": new_cycle, "note": text,
+                "state": "pending", "resubmitted_utc": stamp,
+                "disclaimer": self.disclaimer}
+
+    def api_seller_reviews(self, dev_account):
+        """Seller-side review status face (AC-AMRC6). The operator
+        had api_review_queue and the outside reader had
+        api_public_listings, but a seller could not answer "which of
+        my listings are waiting, which were refused and why". One
+        row per listing of that seller (retired rows included, with
+        the retirement flag), carrying the CURRENT review cycle and
+        its verdict. Pure read: zero rows written, zero token
+        movement."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT listing_id, listing_key, title, description,"
+                " token_price FROM apimarket_listings"
+                " WHERE dev_account = ? ORDER BY listing_id",
+                (dev_account,)).fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[0])
+                _c, retired, _s = self._cycle_state(listing_id)
+                cycle = self._review_cycle(listing_id)
+                rev = self._conn.execute(
+                    "SELECT decision, reason, reviewed_utc FROM"
+                    " apimarket_reviews WHERE listing_id = ?"
+                    " AND cycle = ?", (listing_id, cycle)).fetchone()
+                n_resub = self._conn.execute(
+                    "SELECT COUNT(*) FROM"
+                    " apimarket_review_resubmits WHERE listing_id = ?",
+                    (listing_id,)).fetchone()[0]
+                out.append({
+                    "listing_id": listing_id,
+                    "listing_key": r[1],
+                    "title": self._metadata_state(
+                        listing_id, r[2], r[3])[0],
+                    "token_price": self._current_price(
+                        listing_id, int(r[4])),
+                    "delisted": retired,
+                    "review_cycle": cycle,
+                    "review_state": ({"approve": "approved",
+                                      "refuse": "refused"}[rev[0]]
+                                     if rev else "pending"),
+                    "review_reason": (rev[1] if rev
+                                      and rev[0] == "refuse" else None),
+                    "reviewed_utc": (rev[2] if rev else None),
+                    "resubmit_count": int(n_resub),
+                })
+        states = [x["review_state"] for x in out]
+        return {"dev_account": dev_account,
+                "listing_count": len(out),
+                "pending_count": states.count("pending"),
+                "approved_count": states.count("approved"),
+                "refused_count": states.count("refused"),
+                "resubmit_count": sum(x["resubmit_count"] for x in out),
+                "disclaimer": self.disclaimer,
+                "rows": out}
 
     def api_review_queue(self):
         """Unreviewed live listings, oldest first (AC-AMPI6). The
@@ -4648,8 +4858,11 @@ class APIMarketFace:
                 "SELECT l.listing_id, l.dev_account, l.listing_key,"
                 " l.title, l.description, l.token_price, l.listed_utc"
                 " FROM apimarket_listings l"
-                " WHERE l.listing_id NOT IN (SELECT listing_id FROM"
-                " apimarket_reviews)"
+                " WHERE l.listing_id NOT IN (SELECT rv.listing_id FROM"
+                " apimarket_reviews rv WHERE rv.cycle = COALESCE("
+                "(SELECT MAX(rs.cycle) FROM"
+                " apimarket_review_resubmits rs WHERE rs.listing_id ="
+                " rv.listing_id), 1))"
                 " AND l.listing_id NOT IN (SELECT d.listing_id FROM"
                 " apimarket_delistings d WHERE d.cycle ="
                 " COALESCE((SELECT MAX(r.cycle) FROM"

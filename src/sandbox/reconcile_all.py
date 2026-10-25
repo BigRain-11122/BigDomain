@@ -2377,6 +2377,15 @@ SUITES = [
     # idempotent pre-category migration and restart identity.
     ("ledger-apimarket-category", os.path.join(
         "ledger", "test_apimarket_category.py"), 8),
+    # AC-AMRC1..AC-AMRC8 pre-registered in the R2133 explore-queue row
+    # BEFORE this suite existed: the review cycle law - a refusal is no
+    # longer terminal, the seller resubmission door, the queue and
+    # public faces reading the current cycle verdict through one seam,
+    # the seller-side review status face, the write-once-per-cycle
+    # history, zero token movement, the idempotent pre-cycle migration
+    # and restart identity.
+    ("ledger-apimarket-reviewcycle", os.path.join(
+        "ledger", "test_apimarket_reviewcycle.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

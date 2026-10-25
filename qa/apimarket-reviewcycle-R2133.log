@@ -1,0 +1,10 @@
+PASS AC-AMRC1: keys=['cycle', 'dev_account', 'disclaimer', 'listing_id', 'note', 'resubmitted_utc', 'state'] cycle=2 rows=[1, 2] verdict_cycle=2 public='approved'
+PASS AC-AMRC2: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] ids=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown='E_AM_UNKNOWN_LISTING' owner='E_AM_NOT_OWNER' retired='E_AM_DELISTED' pending='E_AM_REVIEW_PENDING' approved='E_AM_REVIEW_APPROVED' order='E_AM_BAD_ACCOUNT'/'E_AM_UNKNOWN_LISTING' frozen=True
+PASS AC-AMRC3: twice='E_AM_ALREADY_REVIEWED' unique='INTEGRITY' cycles=[1, 2] third_row=True env3=3 resubmits=2
+PASS AC-AMRC4: queue=[4, 5] pending=2 public_pending=2
+PASS AC-AMRC5: refused='refused' pending='pending' approved='approved'
+PASS AC-AMRC6: dana=5/3/2 resub=2 erin=1 empty=0 bad=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] frozen=True
+PASS AC-AMRC7: cols=['review_id', 'listing_id', 'decision', 'reason', 'reviewed_utc', 'cycle'] legacy='legacy refusal' queue=0 idem=True
+PASS AC-AMRC8: tx=True frozen=True restarts=2 wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8
