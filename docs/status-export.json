@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T00:08:00+08:00",
+ "export_ts": "2026-10-26T00:13:17+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "售后申诉应答面（respond_claim + api_claims 应答扩展）：上一轮给了买家开单门与三视队列，但卖家在整条申诉链上没有任何应答面——买家的申诉只有「退款」这一种回音，而退款在卖家分成已花时会拒绝；队列的 status 也只有 open/refunded 两态，把「已应答」和「无人理」混成一态。本轮补一张只追加的申诉应答表（一诉一答）与卖家应答门，门序钉死为 账户形→申诉号形→应答文形→申诉存在→归属→已退款→重复，任一拒绝零行零 token；队列行加应答三键与回答计数，状态派生升级为 已退款 > 已应答 > 待应答，且申诉行与应答行都不被改写。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_claim_responses 表 + respond_claim + api_claims 应答扩展）+ src/sandbox/ledger/test_apimarket_claims_respond.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 B31D3E40E5585EC7，证据 qa/apimarket-claims-respond-R2130.log / -run2.log）；qa/reconcile-all-R2130.log（RUNNER PASS 334/334 套件 + 控制 7/7，758.7s）；docs/sandbox-suite-matrix.md（334 套件 / 2780 判据，--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①把申诉队列（含应答态与未应答债务）接进结算报告与卖家注意力清单，补上它作为纯读面缺的消费者；②申诉、退款、评价债三条售后队列合成一个卖家工作面；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架）。"
+  "current": "售后申诉撤诉收口门（withdraw_claim + api_claims 撤诉扩展）：开单门与应答门之后，申诉链仍没有「关闭」动作——买家误开单、线下已和解、卖家私下补发，申诉都永久停在待答或已答，持续污染卖家待办与全市场队列（退款是唯一出口，而分成已花时退款门会拒绝）。本轮补一张只追加的撤诉表（一诉一撤）与买家撤诉门，门序钉死为 账户形→申诉号形→申诉存在→归属→已退款→重复，任一拒绝零行零 token；队列行加撤诉戳与撤诉计数，状态派生升级为 已退款 > 已撤诉 > 已应答 > 待应答，且申诉行、应答行、撤诉行三行都不被改写。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_claim_withdrawals 表 + withdraw_claim + api_claims 撤诉扩展）+ src/sandbox/ledger/test_apimarket_claims_withdraw.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 8590DC5AB2B93F8D，证据 qa/apimarket-claims-withdraw-R2131.log / -run2.log）；qa/reconcile-all-R2131.log（RUNNER PASS 335/335 套件 + 控制 7/7，834.3s）；docs/sandbox-suite-matrix.md（335 套件 / 2788 判据，--check 逐字节同一）。",
+  "next_milestone": "48 小时内：①把申诉队列（含已撤诉/已应答/待答/已退款四态与债务年龄）接进结算报告与卖家注意力清单，补上它作为纯读面缺的消费者；②申诉、退款、评价债三条售后队列合成一个卖家工作面；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架）。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 申诉撤诉收口门（withdraw_claim + api_claims 撤诉扩展：一诉一撤 + 状态 已退款>已撤诉>已应答>待应答 + 撤诉计数）",
+   "on",
+   "R2131：R2129 给了买家开单门与三视队列、R2130 给了卖家应答门，但整条申诉链仍没有「关闭」动作——误开单、线下已和解、卖家私下补发都会让申诉永久停在待答或已答，持续污染卖家待办与全市场队列，而退款是唯一出口且分成已花时会 fail-closed。本窗补一张 append-only apimarket_claim_withdrawals（UNIQUE(claim_id)，无 UPDATE/DELETE 面）与买家撤诉门 withdraw_claim，门序钉死为 账户形→申诉号形→申诉存在→归属（本单买家）→已退款→重复（新码 E_AM_CLAIM_WITHDRAWN），任一拒绝零行零 token；api_claims 行加 withdrawn_utc、信封加 withdrawn_count，状态派生单缝升级为 refunded > withdrawn > answered > open，所以应答后撤诉会把申诉收口而申诉行与应答行都逐字节不改写，撤诉后到账的退款仍报 refunded；三视共用同一行集，四计数按过滤后集合派生，面为纯读。判据 AC-AMCW1..AC-AMCW8 预注册在 R2131 explore 队列行里、先于代码（九锚 git grep -F 零占用 rc=1）。本窗证据：套件双跑 rc=0/0 判据行逐字节同一 sha16 8590DC5AB2B93F8D（qa/apimarket-claims-withdraw-R2131.log + -run2.log，单写者 UTF-8 LF）；R2130 旧套件回归保留全部断言、仅把信封/行键断言放宽为子集以容加法，电池内仍 8/8；接线 ledger-apimarket-claims-withdraw(8)；电池 qa/reconcile-all-R2131.log RUNNER PASS 335/335 套件 + 控制 7/7 834.3s（TMP RECLAIM 175.46 MiB）；矩阵 335 套件 / 2788 判据 --check 逐字节同一；census DRIFT-CLEAN files=1841 flags=0。诚实注两处：首次电池调用把 runner 路径写成相对 src/ 的形式，0.1s 内 rc=2 且未跑到任何套件，随后真跑覆盖了那份短日志，故本轮没有红电池可留档；结算报告至今未消费申诉面，该消费者接线是后继切片，不在本轮宣称范围内。",
+   "2026-10-25"
+  ],
   [
    "apimarket 申诉应答面（respond_claim + api_claims 应答扩展：一诉一答 + 状态 已退款>已应答>待应答 + 回答计数）",
    "on",
@@ -462,6 +468,14 @@
   ]
  ],
  "results": [
+  [
+   "R2131",
+   "R2131: five-silence scan came back fully clean (decisions.md zero new content-addressed tokens against the stored baseline, ledger zero new @BigDomain rows, group orders baseline unchanged at 2026-10-25 18:2x, benchmarks refreshed 2026-10-25 inside 7 days, tree clean with no index.lock, both daily standing rows already stamped today and not re-run) while every open head stayed gated - four tech rows (docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, live-mtime row waiting on a real normalized-mtime event) and the single explore row (merchant id) - so this window seeded a fresh P3 row in the SAME window with AC-AMCW1..AC-AMCW8 pre-registered BEFORE the code existed (the AC-AMCW prefix, withdraw_claim, apimarket_claim_withdrawals, E_AM_CLAIM_WITHDRAWN, withdrawn_utc, the suite name and the ledger-apimarket-claims-withdraw runner label were all git grep -F zero-occupancy anchored 2026-10-25 rc=1). Product: the closing act of the post-sale claim chain. After the R2129 claim door a buyer could open a claim and after the R2130 answer door a seller could reply, but nothing could close one: a claim opened by mistake, settled off-platform or fixed privately stayed open or answered forever and kept polluting the seller queue and the market-wide queue, because a refund was the only exit and that door fails closed once the seller spent the proceeds. apimarket.py grows one append-only apimarket_claim_withdrawals table (UNIQUE(claim_id), no UPDATE/DELETE surface) and withdraw_claim with the pinned gate order account shape, claim-id shape, claim existence, ownership (the claim's own buyer), already-refunded, duplicate; the new code is E_AM_CLAIM_WITHDRAWN and every refusal writes zero rows and moves zero tokens. api_claims gains the additive withdrawn_utc key and withdrawn_count, and the status seam is now refunded > withdrawn > answered > open in one place, so a withdrawal after a seller answer closes the claim without rewriting either the claim row or the response row while a refund landing later still wins. The R2130 answer suite kept every assertion and only relaxed its envelope/row key checks to subset form so the additive keys cannot break it; it still passes 8/8 inside the battery. Verification: suite src/sandbox/ledger/test_apimarket_claims_withdraw.py SUITE PASS 8/8, double-run rc=0/0 with byte-identical criterion lines sha16 8590DC5AB2B93F8D (qa/apimarket-claims-withdraw-R2131.log + -run2.log, single-writer UTF-8 LF through evidence_writer); wired ledger-apimarket-claims-withdraw (8); full battery qa/reconcile-all-R2131.log RUNNER PASS 335/335 suites plus controls 7/7 in 834.3s with TMP RECLAIM candidates=547 removed=547 reclaimed=175.46 MiB; suite matrix regenerated to 335 suites / 2788 criteria and --check byte-identical; census DRIFT-CLEAN files=1841 flags=0. Honest notes: the first battery invocation used a runner path relative to src/ and died in 0.1s with rc=2 before any suite ran, and the real run overwrote that short log in this window, so no red battery exists for this round; the settlement report still does not consume the claim faces, and that consumer wiring is stated as a separate future slice rather than claimed here."
+  ],
+  [
+   "R2130",
+   "R2130: this window seeded and claimed a fresh P3 row in the SAME window with AC-AMCR1..AC-AMCR8 pre-registered BEFORE the code existed - the seller side of the post-sale claim. apimarket.py grows one append-only apimarket_claim_responses table (UNIQUE(claim_id)) and respond_claim with the pinned gate order account shape, claim-id shape, response text shape, claim existence, ownership, already-refunded, duplicate, three new codes (E_AM_UNKNOWN_CLAIM, E_AM_BAD_RESPONSE, E_AM_CLAIM_ANSWERED) and zero rows / zero tokens on every refusal. api_claims gains the additive response_id/response_text/responded_utc trio and answered_count, and the status seam is refunded > answered > open in one place. Suite 8/8 double-run with byte-identical criterion lines sha16 B31D3E40E5585EC7; battery 334/334 plus controls 7/7 in 758.7s; matrix 334 suites / 2780 criteria byte-identical. HQ-FEEDBACK paid off the ledger point-naming with one honest row."
+  ],
   [
    "R2129",
    "R2129: closeout of the interrupted post-sale claim-registry window. The market could refuse a refund (E_AM_REFUND_UNFUNDABLE when the seller already spent the proceeds) but the buyer had no surface to lodge the dispute and the seller had no queue of disputed purchases - the last after-sale axis with neither a write door nor a read face. apimarket.py now carries one append-only apimarket_claims table (UNIQUE(purchase_id)) and two faces: open_claim with the pinned gate order (account shape, purchase-id shape, claim-text shape, purchase existence, ownership, already-refunded, duplicate) where every refusal writes zero rows and moves zero tokens and the disputed price_paid is frozen with the row; api_claims answers the buyer, seller and market views from the same append-only set through one filter pair, derives status/refund_id/refunded_utc from the refunds table only (a later refund flips the status and the claim row is never rewritten), orders by (opened_utc, claim_id) oldest debt first and stays a pure read. AC-AMCL1..AC-AMCL8 were pre-registered in the R2129 explore-queue row before the code existed. Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 DD78DEA166E4F82F (qa/apimarket-claims-R2129-verifya.log + -verifyb.log); wired ledger-apimarket-claims (8); battery qa/reconcile-all-R2129.log RUNNER PASS 333/333 suites plus controls 7/7 in 589.4s; matrix 333 suites / 2772 criteria --check byte-identical; census green inside the battery. Also delivered src/os/battery_stream.py, a reusable streamed single-writer battery driver replacing the per-round throwaway helper. Honest notes: this window took over an interrupted predecessor (payload on disk, state still at R2128, no index.lock, no live battery) and verified rather than rebuilt it; two red batteries were both non-product - my own evidence carried CRLF (census dialect drift, firstfail log preserved) and a 79 percent machine load pushed a cascading report suite past the 300s per-suite cap (that suite passes 13/13 standalone, timeout log preserved). Five-silence: decisions zero new content-addressed tokens, ledger zero new @BigDomain rows, group orders baseline unchanged, benchmarks inside 7 days."
@@ -960,7 +974,7 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 26,
+  "log_lines_in_window": 28,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 26,

@@ -2361,6 +2361,14 @@ SUITES = [
     # identity.
     ("ledger-apimarket-claims-respond", os.path.join(
         "ledger", "test_apimarket_claims_respond.py"), 8),
+    # AC-AMCW1..AC-AMCW8 pre-registered in the R2131 explore-queue
+    # claim row BEFORE this suite existed: the buyer withdrawal door
+    # that closes a claim - one append-only withdrawal per claim, the
+    # pinned gate order, a one-seam status derivation
+    # (refunded > withdrawn > answered > open), the withdrawal key on
+    # all three queue views, pure read, restart identity.
+    ("ledger-apimarket-claims-withdraw", os.path.join(
+        "ledger", "test_apimarket_claims_withdraw.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

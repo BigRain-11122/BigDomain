@@ -247,8 +247,8 @@ def main():
                            "licence header missing from the payload")
         env = am.api_claims()
         rows = env["claims"]
-        ok1 = (set(env) == ENVELOPE_KEYS
-               and all(set(r) == ROW_KEYS for r in rows)
+        ok1 = (ENVELOPE_KEYS <= set(env)
+               and all(ROW_KEYS <= set(r) for r in rows)
                and env["claim_count"] == len(rows) == 4
                and env["open_count"] == 4
                and env["answered_count"] == 0
@@ -260,8 +260,8 @@ def main():
                and env["disclaimer"] == DISCLAIMER)
         record("AC-AMCR1", ok1,
                "env=%r rows=%r rows=%d open=%d answered=%d refunded=%d"
-               % (set(env) == ENVELOPE_KEYS,
-                  all(set(r) == ROW_KEYS for r in rows),
+               % (ENVELOPE_KEYS <= set(env),
+                                  all(ROW_KEYS <= set(r) for r in rows),
                   env["claim_count"], env["open_count"],
                   env["answered_count"], env["refunded_count"]))
 

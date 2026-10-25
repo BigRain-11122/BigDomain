@@ -1,0 +1,10 @@
+PASS AC-AMCW1: door=True env=True row=True rows=4 open=3 answered=0 refunded=0 withdrawn=1
+PASS AC-AMCW2: answered_before='answered' withdrawn_after='withdrawn' rows_frozen=True refunded_after='refunded' counts=(1, 0, 1, 2)
+PASS AC-AMCW3: account={'E_AM_BAD_ACCOUNT'} id={'E_AM_BAD_ARGS'} unknown='E_AM_UNKNOWN_CLAIM' owner=['E_AM_NOT_BUYER', 'E_AM_NOT_BUYER'] refunded='E_AM_ALREADY_REFUNDED' dup='E_AM_CLAIM_WITHDRAWN' order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_UNKNOWN_CLAIM', 'E_AM_UNKNOWN_CLAIM'] frozen=True
+PASS AC-AMCW4: rows=[(1, 'usr:bob', '2026-10-06T00:02:00Z'), (2, 'usr:bob', '2026-10-06T00:03:10Z')] stamps=['2026-10-06T00:02:00Z', '2026-10-06T00:03:10Z'] rows=2
+PASS AC-AMCW5: bob=2/2 dave=2/1 dana=4/2 carol=0 both=2 gates=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT']
+PASS AC-AMCW6: three_runs=True frozen=True tx_constant=True balance=True
+PASS AC-AMCW7: restart_market=True restart_buyer=True restart_seller=True
+PASS AC-AMCW8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

@@ -103,6 +103,7 @@ E_AM_BAD_CLAIM = "E_AM_BAD_CLAIM"          # AC-AMCL3 (claim text shape)
 E_AM_UNKNOWN_CLAIM = "E_AM_UNKNOWN_CLAIM"  # AC-AMCR3 (no such claim)
 E_AM_BAD_RESPONSE = "E_AM_BAD_RESPONSE"    # AC-AMCR3 (answer shape)
 E_AM_CLAIM_ANSWERED = "E_AM_CLAIM_ANSWERED"  # AC-AMCR4 (one answer)
+E_AM_CLAIM_WITHDRAWN = "E_AM_CLAIM_WITHDRAWN"  # AC-AMCW4 (one withdrawal)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -281,6 +282,12 @@ CREATE TABLE IF NOT EXISTS apimarket_claim_responses (
     dev_account TEXT NOT NULL,
     response_text TEXT NOT NULL,
     replied_utc TEXT NOT NULL,
+    UNIQUE (claim_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_claim_withdrawals (
+    claim_id INTEGER PRIMARY KEY,
+    buyer_id TEXT NOT NULL,
+    withdrawn_utc TEXT NOT NULL,
     UNIQUE (claim_id)
 );
 """
@@ -4682,6 +4689,66 @@ class APIMarketFace:
                 "response_text": text, "replied_utc": stamp,
                 "status": "answered", "disclaimer": self.disclaimer}
 
+    def withdraw_claim(self, buyer_id, claim_id):
+        """Buyer-side withdrawal door that closes a post-sale claim
+        (criteria AC-AMCW1..AC-AMCW8 pre-registered in the R2131
+        explore-queue row BEFORE this code existed).
+
+        After the R2129 claim door and the R2130 answer door the chain
+        still had no closing act: a claim opened by mistake, settled
+        off-platform, or fixed privately stayed open (or answered)
+        forever and kept polluting the seller queue and the market-wide
+        queue. A refund was the only way out, and the refund door fails
+        closed once the seller spent the proceeds. This door writes
+        exactly one append-only apimarket_claim_withdrawals row per
+        claim (UNIQUE on claim_id) and never rewrites the claim or the
+        seller answer, so a withdrawal is evidence, not a status flag.
+
+        Gate order pinned by AC-AMCW3: buyer account shape, claim-id
+        shape, claim existence, ownership (the claim's own buyer), the
+        already-refunded state, then the duplicate withdrawal. Every
+        refusal writes zero rows and moves zero tokens. A refund landing
+        after a withdrawal still wins the derived status
+        (refunded > withdrawn > answered > open)."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if (not isinstance(claim_id, int) or isinstance(claim_id, bool)
+                or claim_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(claim_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT buyer_id, purchase_id, listing_id, dev_account,"
+                " price_paid, claim_text, opened_utc"
+                " FROM apimarket_claims WHERE claim_id = ?",
+                (claim_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_CLAIM, str(claim_id))
+            if row[0] != buyer_id:
+                raise ApiMarketError(E_AM_NOT_BUYER,
+                                     "%s/%s" % (buyer_id, claim_id))
+            if self._refund_stamp(int(row[1])) is not None:
+                raise ApiMarketError(E_AM_ALREADY_REFUNDED,
+                                     str(claim_id))
+            seen = self._conn.execute(
+                "SELECT claim_id FROM apimarket_claim_withdrawals"
+                " WHERE claim_id = ?", (claim_id,)).fetchone()
+            if seen is not None:
+                raise ApiMarketError(E_AM_CLAIM_WITHDRAWN, str(claim_id))
+            stamp = _now_utc()
+            try:
+                self._conn.execute(
+                    "INSERT INTO apimarket_claim_withdrawals (claim_id,"
+                    " buyer_id, withdrawn_utc) VALUES (?,?,?)",
+                    (claim_id, buyer_id, stamp))
+            except sqlite3.IntegrityError:
+                raise ApiMarketError(E_AM_CLAIM_WITHDRAWN, str(claim_id))
+        return {"claim_id": claim_id, "purchase_id": int(row[1]),
+                "listing_id": int(row[2]), "buyer_id": buyer_id,
+                "dev_account": row[3], "price_paid": int(row[4]),
+                "claim_text": row[5], "opened_utc": row[6],
+                "withdrawn_utc": stamp, "status": "withdrawn",
+                "disclaimer": self.disclaimer}
+
     def api_claims(self, buyer_id=None, dev_account=None):
         """Post-sale claim queue (AC-AMCL5/AC-AMCL6) - one read face for
         the three views the market needs: the buyer's own claims, a
@@ -4691,15 +4758,16 @@ class APIMarketFace:
 
         Ordering is (opened_utc, claim_id) ascending, so the oldest debt
         is always first and a same-second batch has one stable answer.
-        status / refund_id / refunded_utc are derived at read time from
-        the refund table and the seller answers are joined from
-        apimarket_claim_responses (AC-AMCR2: refunded beats answered
-        beats open) - neither the claim row nor the response row is ever
-        rewritten, and a refund landing later flips the status without
-        touching either. price_paid is the stored purchase amount (the
-        disputed face), not the listing's current asking price. Pure
-        read: zero row mutations, zero token movement. A retired listing
-        keeps its claims."""
+        status / refund_id / refunded_utc / withdrawn_utc are derived at
+        read time from the refund table and the seller answers are joined
+        from apimarket_claim_responses (AC-AMCR2 / AC-AMCW2: refunded
+        beats withdrawn beats answered beats open) - neither the claim
+        row, the response row nor the withdrawal row is ever rewritten,
+        and a refund landing later flips the status without touching any
+        of them. price_paid is the stored purchase amount (the disputed
+        face), not the listing's current asking price. Pure read: zero
+        row mutations, zero token movement. A retired listing keeps its
+        claims."""
         if buyer_id is not None and not str(buyer_id or "").startswith(
                 "usr:"):
             raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
@@ -4709,14 +4777,17 @@ class APIMarketFace:
         sql = ("SELECT c.claim_id, c.purchase_id, c.listing_id,"
                " c.buyer_id, c.dev_account, c.price_paid, c.claim_text,"
                " c.opened_utc, l.title, f.refund_id, f.refunded_utc,"
-               " r.response_id, r.response_text, r.replied_utc"
+               " r.response_id, r.response_text, r.replied_utc,"
+               " w.withdrawn_utc"
                " FROM apimarket_claims c"
                " LEFT JOIN apimarket_listings l"
                " ON l.listing_id = c.listing_id"
                " LEFT JOIN apimarket_refunds f"
                " ON f.purchase_id = c.purchase_id"
                " LEFT JOIN apimarket_claim_responses r"
-               " ON r.claim_id = c.claim_id")
+               " ON r.claim_id = c.claim_id"
+               " LEFT JOIN apimarket_claim_withdrawals w"
+               " ON w.claim_id = c.claim_id")
         clauses = []
         args = []
         if buyer_id is not None:
@@ -4735,6 +4806,8 @@ class APIMarketFace:
             refunded = r[9] is not None
             if refunded:
                 status = "refunded"
+            elif r[14] is not None:
+                status = "withdrawn"
             elif r[11] is not None:
                 status = "answered"
             else:
@@ -4753,13 +4826,17 @@ class APIMarketFace:
                         "refunded_utc": r[10],
                         "response_id": r[11],
                         "response_text": r[12],
-                        "responded_utc": r[13]})
+                        "responded_utc": r[13],
+                        "withdrawn_utc": r[14]})
         refunded_count = sum(1 for x in out if x["status"] == "refunded")
         answered_count = sum(1 for x in out if x["status"] == "answered")
+        withdrawn_count = sum(1 for x in out if x["status"] == "withdrawn")
         return {"buyer_id": buyer_id, "dev_account": dev_account,
                 "claim_count": len(out),
-                "open_count": len(out) - refunded_count - answered_count,
+                "open_count": (len(out) - refunded_count
+                               - answered_count - withdrawn_count),
                 "answered_count": answered_count,
                 "refunded_count": refunded_count,
+                "withdrawn_count": withdrawn_count,
                 "disclaimer": self.disclaimer,
                 "claims": out}
