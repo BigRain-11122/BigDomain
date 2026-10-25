@@ -39,3 +39,6 @@ docs/_trash/
 .playwright-mcp/
 # FUNNEL-LOOP carrier sqlite db (state/funnel: binary data face, evidence lives in qa/)
 state/funnel/*.db
+# apimarket preview runs write sqlite dbs next to their HTML/JSON samples; the
+# tracked evidence is the rendered .html/.json pair, the binary db is disposable
+preview/*.db

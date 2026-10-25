@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T14:51:18+08:00",
+ "export_ts": "2026-10-25T15:30:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2122：结算报告的 CSV 明细导出（--csv-out 三表：市场月表/卖家月表/买家月表）。财务与表格工具消费方此前只能抓屏或自己解析 JSON；本件从报表同一次采集的月行投影（零重算零二次读面），表头钉死、UTF-8 无 BOM、LF 行尾、RFC4180 转义，先全量序列化再逐件原子替换（坏目标 fail-closed 零残留），页面与 JSON 逐字节不变（REPORT_SCHEMA 仍 14，CSV 自带 CSV_SCHEMA=1）。诚实注：上一窗被轮时预算中断在电池中途，本窗完成核验与收口；首跑电池因本窗重写 qa 证据日志与实时 census 竞态失败，红日志保留、干净重跑全绿。",
-  "latest_artifact": "preview/apimarket-settlement-csv/（market_months.csv 255B / seller_months.csv 311B / buyer_months.csv 368B，可直接导入表格工具）+ preview/apimarket-report-csv.html 与 .json（schema 14）+ src/sandbox/ledger/test_apimarket_settlement_csv.py（SUITE 8/8 双跑判据行同一 criteria_sha16 12212a7309151f1e，qa/apimarket-settlementcsv-R2122.log + -run2）+ qa/reconcile-all-R2122c.log（电池 RUNNER PASS 327/327 suites + controls 7/7 620.6s）+ docs/sandbox-suite-matrix.md（327 suites / 2724 criteria --check 逐字节同一）+ docs/global-benchmarks.md W31 片与 intelligence-wall W31 双行。",
-  "next_milestone": "48 小时内：把 W31《网络交易平台收费行为合规指南》的诚实缺口做成实物——结算报表侧补「费率公示面」（收费项目/规则/标准/计费方法单页并指向逐笔明细），同时起一份改规台账骨架（征求意见窗 + 生效前三年版本档）；同窗消化 D-20261025-10 的推送三要素行与 D-20261025-13 立令前实读自守。"
+  "current": "R2123：QA charter 日爬 W32——《移动互联网应用程序信息服务管理规定》官方全文直采（网信办 2022-06-14 公布·2022-08-01 施行·27 条·cac.gov.cn 官网全文页）。关键发现：第二条把「互联网小程序平台」明确写进「应用程序分发服务」定义，本司因此落在分发平台义务域（此前本司合规档只把小程序当「应用程序提供者」单边理解，平台半边一直缺）。由此补出四项本仓完全空缺的面：①提供者复合实名认证（第十九条）②名称与统一社会信用代码公示（第十九条）③上架审核三拒（第二十条：违法不良名称图标简介／与真实身份不符／业务违法，且数据造假与违规收集个人信息即不得服务）④醒目便捷投诉举报入口（第二十二条）。此外第十七/十八条省级备案与分类备案、第十四条新功能上线安全评估都属于上线前硬前置。",
+  "latest_artifact": "qa/smoke-R2123.log 与 qa/smoke-R2123.png（真实日志渲染 1880x741，非合成图） + docs/global-benchmarks.md §①「平台分发义务链」块 + §③ 源行 + §④ W32 记录行 + docs/research/intelligence-wall.md W32 双行（主行+结论行） + .gitignore 新增 preview/*.db（四个沙箱 sqlite 残留不再污染工作树）",
+  "next_milestone": "48 小时内：把 W32 的四项空缺做成实物——apimarket 起一个「上架审核」最小可测门（三类拒绝逐条可验：违法不良名称图标简介／与真实身份不符／业务违法），并把提供者实名与公示字段作为加法列接入挂牌行（现仅 dev_account 字符串句柄）；同窗把 art.14 安全评估写进 launch-ops 上线闸清单。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 上架义务缺口（提供者实名／公示／审核三拒／举报入口）识别 + 分发平台法源入册",
+   "on",
+   "R2123：QA charter 日爬 W32 直采《移动互联网应用程序信息服务管理规定》官方全文（A 级·1 检索+1 直取零负例），发现第二条把「互联网小程序平台」写进应用程序分发服务定义——本司不只扮演应用程序提供者，同时落在分发平台第三章义务域。把四条义务对照本仓实证：`git grep -F` 面名 api_dev_identity / real_name / verified_dev / api_complaints / review_reject / audit_listing / platform_disclosure 零产品命中（仅旧 qa 日志叙述行提到 complaint），即提供者实名层、公示层、审核三拒层、举报入口层四者全缺；挂牌行身份只有 dev_account 字符串句柄。入册三处（benchmarks §① 新块／§③ 源行／§④ W32 记录）+ 情报墙 W32 双行（主行+结论行）。同轮树卫生：preview/*.db 入 .gitignore，四个未跟踪 sqlite 残留清零。证据 qa/smoke-R2123.log + png。诚实注：本轮为文档与登记面产出，未改产品代码，故未重跑套件/矩阵/电池；判据方向已写进下个里程碑。"
+  ],
   [
    "apimarket 结算报告 CSV 明细导出（--csv-out 三表 + CSV_SCHEMA=1）",
    "on",
@@ -410,6 +415,10 @@
   ]
  ],
  "results": [
+  [
+   "R2123",
+   "R2123: the QA charter daily crawl for W32 captured the official full text of the Provisions on the Administration of Mobile Internet Application Information Services (CAC, promulgated 2022-06-14, effective 2022-08-01, 27 articles) from cac.gov.cn with one search hit and one direct get and zero negatives. The registry had zero prior hits for this regulation, so it is a blank spot rather than a re-crawl. The finding that changes our own file: article 2 names the internet mini-program platform explicitly inside the definition of an application distribution service, so this company sits on the chapter-3 distribution-platform duty face as well, where until now the compliance file only modelled the mini-program side as an application provider. Four obligations were then checked against the actual repository: provider real-name verification (art.19), public display of provider name and unified social credit code (art.19), the three-class review refusal on listing and update (art.20, plus barring service where download counts or rating metrics are fabricated or personal information is unlawfully collected), and a conspicuous complaint-and-report entry (art.22). git grep -F over api_dev_identity, real_name, verified_dev, api_complaints, review_reject, audit_listing and platform_disclosure returns zero product hits (only narrative lines inside older qa logs), so all four faces are genuinely absent while the only provider identity carried is a dev_account string handle. Entry went into three places on the benchmark file (a new section-1 platform duty chain block, a section-3 source row and a section-4 W32 record row) plus dual rows on the intelligence wall, and the tree hygiene item landed as preview/*.db in .gitignore so four untracked sandbox sqlite files stop showing up as noise. Honest note: this round produced documentation and registry artifacts only, no product code changed, so the suite battery, matrix and census were deliberately not re-run; the criteria direction is recorded in the next milestone. Evidence qa/smoke-R2123.log plus the png rendered from that real log."
+  ],
   [
    "R2122",
    "R2122: the settlement CSV bundle. The report had an HTML page and a versioned JSON envelope, but a finance or spreadsheet consumer still had to scrape the page or parse the JSON itself. --csv-out now writes three month tables (market 13 columns, seller 11, buyer 12) projected from the same collect() dict the page renders, so no cell can disagree with the table the operator sees; headers are pinned module tuples, files are UTF-8 without BOM with LF endings and RFC4180 quoting, everything is serialised in memory before any disk touch and each file is published with temp plus os.replace (a bad target raises before any disk touch, an exception cleans the temps), and the HTML and JSON artifacts stay byte-identical with or without the flag because REPORT_SCHEMA stays 14 and the CSV bundle carries its own CSV_SCHEMA=1 contract. Suite 8/8 double run with identical criterion lines (criteria_sha16 12212a7309151f1e); runner label ledger-apimarket-settlementcsv(8); clean battery 327/327 suites plus controls 7/7 (qa/reconcile-all-R2122c.log; the first run's two live-census race failures are preserved in qa/reconcile-all-R2122b.log and disclosed); matrix 327 suites / 2724 criteria --check byte-identical; census DRIFT-CLEAN files=1807 flags=0; preview artifacts regenerated."
@@ -880,10 +889,10 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 43,
+  "log_lines_in_window": 46,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 43,
+  "substantive_non_idle_mention_lines": 46,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
