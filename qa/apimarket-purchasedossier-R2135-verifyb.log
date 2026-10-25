@@ -1,0 +1,10 @@
+PASS AC-AMPD1: keys=True categories=['backtest', None, 'tools'] split=7+3==10
+PASS AC-AMPD2: roles=('buyer', 'seller') identical-apart-from-role=True third parties=['E_AM_NOT_PARTY', 'E_AM_NOT_PARTY', 'E_AM_NOT_PARTY'] digests frozen=True
+PASS AC-AMPD3: fresh trio=(None, None, None) rated=5 revised stars=2 count=1 stamp=True
+PASS AC-AMPD4: p2 open='open' answered='answered' refunded='refunded' refund amount=10 p5 withdrawn='withdrawn' p6 withdrawn+refunded='refunded'
+PASS AC-AMPD5: states={'p1_rated': 'rated', 'p2_refunded': 'refunded', 'p3_open': 'open', 'p4_answered': 'answered', 'p5_withdrawn': 'withdrawn', 'p7_settled': 'settled'}
+PASS AC-AMPD6: pid forms=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] account forms=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] order=['E_AM_BAD_ACCOUNT', 'E_AM_UNKNOWN_PURCHASE', 'E_AM_BAD_ARGS'] digests frozen=True
+PASS AC-AMPD7: repeat identical=True digests frozen=True tx frozen=True retired delisted=True price_paid=4 current=11
+PASS AC-AMPD8: instance1==2==3=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0
+SUITE 8/8

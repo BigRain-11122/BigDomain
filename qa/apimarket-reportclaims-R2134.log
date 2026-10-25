@@ -1,4 +1,4 @@
-﻿PASS AC-AMCLM1 keys=9 rows=4 count=1 states=answered1,open1,refunded1,withdrawn1
+PASS AC-AMCLM1 keys=9 rows=4 count=1 states=answered1,open1,refunded1,withdrawn1
 PASS AC-AMCLM2 same=True count 4->5
 PASS AC-AMCLM3 states=answered=answered,open=open,refunded=refunded,withdrawn=withdrawn
 PASS AC-AMCLM4 debt=1 subjects=usr:dana open_sellers=1

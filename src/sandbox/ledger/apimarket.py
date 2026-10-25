@@ -79,6 +79,7 @@ E_AM_PRICE_UNCHANGED = "E_AM_PRICE_UNCHANGED"  # AC-AMPR4
 E_AM_METADATA_UNCHANGED = "E_AM_METADATA_UNCHANGED"  # AC-AMME6
 E_AM_WATCH_DUP = "E_AM_WATCH_DUP"          # AC-AMWL5
 E_AM_NOT_WATCHED = "E_AM_NOT_WATCHED"      # AC-AMWL3
+E_AM_NOT_PARTY = "E_AM_NOT_PARTY"          # AC-AMPD2 (dossier viewer gate)
 E_AM_SUPPLY_EXHAUSTED = "E_AM_SUPPLY_EXHAUSTED"  # AC-AMSP3
 E_AM_UNKNOWN_PURCHASE = "E_AM_UNKNOWN_PURCHASE"  # AC-AMRF2
 E_AM_ALREADY_REFUNDED = "E_AM_ALREADY_REFUNDED"  # AC-AMRF4
@@ -5169,3 +5170,167 @@ class APIMarketFace:
                 "withdrawn_count": withdrawn_count,
                 "disclaimer": self.disclaimer,
                 "claims": out}
+
+    def api_purchase_dossier(self, purchase_id, account):
+        """One purchase's whole story (criteria AC-AMPD1..AC-AMPD8
+        pre-registered in the R2135 explore-queue row BEFORE this code
+        existed).
+
+        Every face on this market answers one corner of a trade:
+        api_library lists a buyer's purchases, api_refund returns one
+        refund row, api_claims returns the claim queue, api_seller_ledger
+        and api_buyer_ledger return the cash movements. Nobody answered
+        "what actually happened to THIS purchase" - so a support ticket
+        or a settlement dispute had to be assembled by hand from four
+        faces. This face is that assembly, read-only.
+
+        The viewer must be a party: the buyer of record answers
+        viewer_role "buyer", the seller of record answers "seller", and
+        they see the identical dossier apart from that one key; anybody
+        else is refused with E_AM_NOT_PARTY before a single row is read
+        beyond the purchase lookup (AC-AMPD2).
+
+        Gate order pinned by AC-AMPD6: purchase-id shape, then account
+        shape, then purchase existence, then party membership. The
+        account gate is a plain non-empty-string gate because this face
+        serves two different roles (the buyer faces use the usr: prefix,
+        the developer faces use the registry), so a prefix rule here
+        would be a lie about one of them.
+
+        The three nested blocks are honest absences, never empty shells:
+        refund is None until a refund row exists, rating is None until
+        this buyer rates, claim is None until a claim is opened
+        (AC-AMPD3). claim.status uses the api_claims precedence
+        (refunded beats withdrawn beats answered beats open) and is
+        recomputed here from the same append-only tables, so a refund
+        landing later flips it without rewriting anything (AC-AMPD4).
+
+        ticket_state is the single-word summary of the same evidence,
+        with the pinned precedence refunded > withdrawn > answered >
+        open > rated > settled (AC-AMPD5). Pure read: zero row
+        mutations, zero token movement, and a retired listing keeps its
+        dossier with its stamp while price_paid stays the historical
+        amount charged (AC-AMPD7)."""
+        if (not isinstance(purchase_id, int) or isinstance(purchase_id, bool)
+                or purchase_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(purchase_id))
+        if not isinstance(account, str) or not account.strip():
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, account)
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT p.purchase_id, p.listing_id, l.listing_key,"
+                " l.title, l.category, p.buyer_id, l.dev_account,"
+                " p.price_paid, p.dev_share, p.platform_share,"
+                " p.spend_tx, p.purchased_utc, l.token_price"
+                " FROM apimarket_purchases p JOIN apimarket_listings l"
+                " ON l.listing_id = p.listing_id"
+                " WHERE p.purchase_id = ?", (purchase_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_PURCHASE,
+                                     str(purchase_id))
+            listing_id = int(row[1])
+            buyer_id = row[5]
+            dev_account = row[6]
+            if account == buyer_id:
+                role = "buyer"
+            elif account == dev_account:
+                role = "seller"
+            else:
+                raise ApiMarketError(E_AM_NOT_PARTY, account)
+            stamp = self._delisted_utc(listing_id)
+            current = self._current_price(listing_id, int(row[12]))
+            refund_row = self._conn.execute(
+                "SELECT refund_id, amount, dev_share, platform_share,"
+                " refund_tx, refunded_utc, reason FROM apimarket_refunds"
+                " WHERE purchase_id = ?", (purchase_id,)).fetchone()
+            rating_row = self._conn.execute(
+                "SELECT rating_id, stars FROM apimarket_ratings"
+                " WHERE buyer_id = ? AND listing_id = ?",
+                (buyer_id, listing_id)).fetchone()
+            claim_row = self._conn.execute(
+                "SELECT c.claim_id, c.claim_text, c.opened_utc,"
+                " r.refund_id, r.refunded_utc, a.response_id,"
+                " a.response_text, a.replied_utc, w.withdrawn_utc"
+                " FROM apimarket_claims c"
+                " LEFT JOIN apimarket_refunds r"
+                " ON r.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses a"
+                " ON a.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id"
+                " WHERE c.purchase_id = ?", (purchase_id,)).fetchone()
+            refund = None
+            if refund_row is not None:
+                refund = {"refund_id": int(refund_row[0]),
+                          "amount": int(refund_row[1]),
+                          "dev_share": int(refund_row[2]),
+                          "platform_share": int(refund_row[3]),
+                          "refund_tx": refund_row[4],
+                          "refunded_utc": refund_row[5],
+                          "reason": refund_row[6]}
+            rating = None
+            if rating_row is not None:
+                rating_id = int(rating_row[0])
+                revisions = self._conn.execute(
+                    "SELECT COUNT(*), MAX(revised_utc)"
+                    " FROM apimarket_rating_revisions WHERE rating_id = ?",
+                    (rating_id,)).fetchone()
+                rating = {"rating_id": rating_id,
+                          "stars": self._effective_stars(
+                              rating_id, int(rating_row[1])),
+                          "revision_count": int(revisions[0]),
+                          "revised_utc": revisions[1]}
+            claim = None
+            claim_status = None
+            if claim_row is not None:
+                if claim_row[3] is not None:
+                    claim_status = "refunded"
+                elif claim_row[8] is not None:
+                    claim_status = "withdrawn"
+                elif claim_row[5] is not None:
+                    claim_status = "answered"
+                else:
+                    claim_status = "open"
+                claim = {"claim_id": int(claim_row[0]),
+                         "claim_text": claim_row[1],
+                         "opened_utc": claim_row[2],
+                         "status": claim_status,
+                         "refund_id": claim_row[3],
+                         "refunded_utc": claim_row[4],
+                         "response_id": claim_row[5],
+                         "response_text": claim_row[6],
+                         "responded_utc": claim_row[7],
+                         "withdrawn_utc": claim_row[8]}
+            if refund is not None:
+                ticket_state = "refunded"
+            elif claim_status == "withdrawn":
+                ticket_state = "withdrawn"
+            elif claim_status == "answered":
+                ticket_state = "answered"
+            elif claim_status == "open":
+                ticket_state = "open"
+            elif rating is not None:
+                ticket_state = "rated"
+            else:
+                ticket_state = "settled"
+        return {"purchase_id": int(row[0]),
+                "listing_id": listing_id,
+                "listing_key": row[2],
+                "title": row[3],
+                "category": row[4],
+                "buyer_id": buyer_id,
+                "dev_account": dev_account,
+                "viewer_role": role,
+                "price_paid": int(row[7]),
+                "dev_share": int(row[8]),
+                "platform_share": int(row[9]),
+                "spend_tx": row[10],
+                "purchased_utc": row[11],
+                "current_price": current,
+                "delisted": stamp is not None,
+                "delisted_utc": stamp,
+                "refund": refund,
+                "rating": rating,
+                "claim": claim,
+                "ticket_state": ticket_state,
+                "disclaimer": self.disclaimer}

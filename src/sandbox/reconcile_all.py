@@ -2504,6 +2504,12 @@ SUITES = [
     # the JSON schema moves 16 -> 17 additively.
     ("ledger-apimarket-reportclaims", os.path.join(
         "ledger", "test_apimarket_report_claims.py"), 8),
+    # R2135 single-purchase dossier (api_purchase_dossier): one trade's
+    # whole story behind one party-gated read face, because a support
+    # ticket or a settlement dispute had to be assembled by hand from
+    # api_library + api_refund + api_claims + the ledger statements.
+    ("ledger-apimarket-purchasedossier", os.path.join(
+        "ledger", "test_apimarket_purchasedossier.py"), 8),
     # R2117 seller-side rating quality scorecard (api_seller_quality):
     # star distribution, reply coverage and one quality row per shelf,
     # wired into every seller block plus a quality_risk attention
