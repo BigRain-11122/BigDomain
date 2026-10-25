@@ -2369,6 +2369,14 @@ SUITES = [
     # all three queue views, pure read, restart identity.
     ("ledger-apimarket-claims-withdraw", os.path.join(
         "ledger", "test_apimarket_claims_withdraw.py"), 8),
+    # AC-AMCN1..AC-AMCN8 pre-registered in the R2137 explore-queue row
+    # BEFORE this suite existed: the buyer follow-up note that makes the
+    # claim thread two-way - one append-only note per claim, the pinned
+    # gate order, the claim thread read face with its enumerated event
+    # stream and same-second rank, the disputed flag, party gating,
+    # pure read and restart identity.
+    ("ledger-apimarket-claimnote", os.path.join(
+        "ledger", "test_apimarket_claimnote.py"), 8),
     # AC-AMCT1..AC-AMCT8 pre-registered in the R2132 explore-queue row
     # BEFORE this suite existed: the category directory axis - the
     # publish-time category declaration and its pre-gate, the exact

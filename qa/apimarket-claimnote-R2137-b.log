@@ -1,0 +1,10 @@
+PASS AC-AMCN1: keys=10 text='still failing after the redeploy' rows=1
+PASS AC-AMCN2: keys=15 kinds=['opened', 'answered', 'note'] roles='buyer' same=True
+PASS AC-AMCN3: acct={'E_AM_BAD_ACCOUNT'} ids={'E_AM_BAD_ARGS'} text={'E_AM_BAD_NOTE'} order='E_AM_BAD_NOTE'/'E_AM_BAD_ACCOUNT' dup=E_AM_CLAIM_NOTE_DUP refunded=E_AM_ALREADY_REFUNDED withdrawn=E_AM_CLAIM_WITHDRAWN
+PASS AC-AMCN4: probe=INTEGRITY before='still failing after the redeploy' no_update=True
+PASS AC-AMCN5: yields={1: ('refunded', False, ['opened', 'answered', 'note', 'refunded']), 2: ('refunded', False, ['opened', 'refunded']), 3: ('withdrawn', False, ['opened', 'note', 'withdrawn']), 4: ('open', False, ['opened'])}
+PASS AC-AMCN6: party={'E_AM_NOT_PARTY'} acct={'E_AM_BAD_ACCOUNT'} ids={'E_AM_BAD_ARGS'} runs=True frozen=True tx=True
+PASS AC-AMCN7: restart_buyer=True restart_seller=True restart_queue=True
+PASS AC-AMCN8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

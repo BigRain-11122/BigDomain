@@ -105,6 +105,8 @@ E_AM_UNKNOWN_CLAIM = "E_AM_UNKNOWN_CLAIM"  # AC-AMCR3 (no such claim)
 E_AM_BAD_RESPONSE = "E_AM_BAD_RESPONSE"    # AC-AMCR3 (answer shape)
 E_AM_CLAIM_ANSWERED = "E_AM_CLAIM_ANSWERED"  # AC-AMCR4 (one answer)
 E_AM_CLAIM_WITHDRAWN = "E_AM_CLAIM_WITHDRAWN"  # AC-AMCW4 (one withdrawal)
+E_AM_BAD_NOTE = "E_AM_BAD_NOTE"            # AC-AMCN3 (note shape)
+E_AM_CLAIM_NOTE_DUP = "E_AM_CLAIM_NOTE_DUP"  # AC-AMCN4 (one note)
 E_AM_ALREADY_RESUBMITTED = "E_AM_ALREADY_RESUBMITTED"  # AC-AMRC2
 E_AM_REVIEW_PENDING = "E_AM_REVIEW_PENDING"  # AC-AMRC2 (no verdict yet)
 E_AM_REVIEW_APPROVED = "E_AM_REVIEW_APPROVED"  # AC-AMRC2 (already live)
@@ -321,6 +323,14 @@ CREATE TABLE IF NOT EXISTS apimarket_claim_withdrawals (
     claim_id INTEGER PRIMARY KEY,
     buyer_id TEXT NOT NULL,
     withdrawn_utc TEXT NOT NULL,
+    UNIQUE (claim_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_claim_notes (
+    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    claim_id INTEGER NOT NULL,
+    buyer_id TEXT NOT NULL,
+    note_text TEXT NOT NULL,
+    noted_utc TEXT NOT NULL,
     UNIQUE (claim_id)
 );
 """
@@ -5240,6 +5250,167 @@ class APIMarketFace:
                 "dev_account": row[3], "price_paid": int(row[4]),
                 "claim_text": row[5], "opened_utc": row[6],
                 "withdrawn_utc": stamp, "status": "withdrawn",
+                "disclaimer": self.disclaimer}
+
+    def add_claim_note(self, buyer_id, claim_id, note_text):
+        """Buyer follow-up on a post-sale claim (criteria
+        AC-AMCN1..AC-AMCN8 pre-registered in the R2137 explore-queue row
+        BEFORE this code existed).
+
+        R2129 gave the buyer a claim door, R2130 the seller one answer
+        and R2131 a withdrawal, so the thread stayed one-way: after the
+        seller answered, a buyer who did not accept that answer had only
+        two exits - withdraw (give up) or wait for a refund the seller
+        may never issue - and neither side could tell an accepted answer
+        from a disputed one. This door writes exactly one append-only
+        apimarket_claim_notes row per claim (UNIQUE on claim_id) and
+        never rewrites the claim, the answer, the withdrawal or the
+        refund, so a follow-up is evidence, not a status flag.
+
+        Gate order pinned by AC-AMCN3: buyer account shape, claim-id
+        shape, note text shape, claim existence, ownership (the claim's
+        own buyer), the already-refunded state, the withdrawn state,
+        then the duplicate note. Every refusal writes zero rows and
+        moves zero tokens."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if (not isinstance(claim_id, int) or isinstance(claim_id, bool)
+                or claim_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(claim_id))
+        text = (note_text.strip() if isinstance(note_text, str) else None)
+        if not text or len(text) > 500:
+            raise ApiMarketError(E_AM_BAD_NOTE, str(note_text)[:40])
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT buyer_id, purchase_id, listing_id, dev_account"
+                " FROM apimarket_claims WHERE claim_id = ?",
+                (claim_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_CLAIM, str(claim_id))
+            if row[0] != buyer_id:
+                raise ApiMarketError(E_AM_NOT_BUYER,
+                                     "%s/%s" % (buyer_id, claim_id))
+            if self._refund_stamp(int(row[1])) is not None:
+                raise ApiMarketError(E_AM_ALREADY_REFUNDED, str(claim_id))
+            gone = self._conn.execute(
+                "SELECT claim_id FROM apimarket_claim_withdrawals"
+                " WHERE claim_id = ?", (claim_id,)).fetchone()
+            if gone is not None:
+                raise ApiMarketError(E_AM_CLAIM_WITHDRAWN, str(claim_id))
+            seen = self._conn.execute(
+                "SELECT note_id FROM apimarket_claim_notes"
+                " WHERE claim_id = ?", (claim_id,)).fetchone()
+            if seen is not None:
+                raise ApiMarketError(E_AM_CLAIM_NOTE_DUP, str(claim_id))
+            stamp = _now_utc()
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_claim_notes (claim_id,"
+                    " buyer_id, note_text, noted_utc) VALUES (?,?,?,?)",
+                    (claim_id, buyer_id, text, stamp))
+            except sqlite3.IntegrityError:
+                raise ApiMarketError(E_AM_CLAIM_NOTE_DUP, str(claim_id))
+        return {"note_id": cur.lastrowid, "claim_id": claim_id,
+                "purchase_id": int(row[1]),
+                "listing_id": int(row[2]), "buyer_id": buyer_id,
+                "dev_account": row[3], "note_text": text,
+                "noted_utc": stamp, "status": "noted",
+                "disclaimer": self.disclaimer}
+
+    def api_claim_thread(self, claim_id, account):
+        """One claim's whole conversation (criteria AC-AMCN1..AC-AMCN8
+        pre-registered in the R2137 explore-queue row BEFORE this code
+        existed).
+
+        The claim queue answers "what is still owed" but each row is one
+        snapshot; the buyer and the seller had no single face reading
+        the order of acts inside one claim (opened, answered,
+        followed-up, withdrawn, refunded) and no signal separating a
+        seller answer the buyer accepted from one the buyer pushed back
+        on. This face returns the enumerated event stream, ordered by
+        stamp and then by a pinned same-second rank
+        (opened < answered < note < withdrawn < refunded), plus the
+        disputed flag (a follow-up exists and the claim is neither
+        refunded nor withdrawn).
+
+        Party gating: only the claim's own buyer and the claim's own
+        seller may read it (viewer_role buyer/seller); any other account
+        is refused with E_AM_NOT_PARTY before the stream is built. Gate
+        order: account shape, claim-id shape, existence, party. Pure
+        read: zero row mutations, zero token movement."""
+        if not str(account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, account)
+        if (not isinstance(claim_id, int) or isinstance(claim_id, bool)
+                or claim_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(claim_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT c.purchase_id, c.listing_id, c.buyer_id,"
+                " c.dev_account, c.price_paid, c.claim_text,"
+                " c.opened_utc, l.title"
+                " FROM apimarket_claims c"
+                " LEFT JOIN apimarket_listings l"
+                " ON l.listing_id = c.listing_id"
+                " WHERE c.claim_id = ?", (claim_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_CLAIM, str(claim_id))
+            if account == row[2]:
+                role = "buyer"
+            elif account == row[3]:
+                role = "seller"
+            else:
+                raise ApiMarketError(E_AM_NOT_PARTY,
+                                     "%s/%s" % (account, claim_id))
+            answered = self._conn.execute(
+                "SELECT response_text, replied_utc"
+                " FROM apimarket_claim_responses WHERE claim_id = ?",
+                (claim_id,)).fetchone()
+            note = self._conn.execute(
+                "SELECT note_text, noted_utc"
+                " FROM apimarket_claim_notes WHERE claim_id = ?",
+                (claim_id,)).fetchone()
+            gone = self._conn.execute(
+                "SELECT withdrawn_utc FROM apimarket_claim_withdrawals"
+                " WHERE claim_id = ?", (claim_id,)).fetchone()
+            refund = self._conn.execute(
+                "SELECT refund_id, refunded_utc FROM apimarket_refunds"
+                " WHERE purchase_id = ?", (int(row[0]),)).fetchone()
+        refunded = refund is not None
+        withdrawn = gone is not None
+        if refunded:
+            status = "refunded"
+        elif withdrawn:
+            status = "withdrawn"
+        elif answered is not None:
+            status = "answered"
+        else:
+            status = "open"
+        events = [{"kind": "opened", "utc": row[6],
+                   "actor": row[2], "text": row[5], "rank": 0}]
+        if answered is not None:
+            events.append({"kind": "answered", "utc": answered[1],
+                           "actor": row[3], "text": answered[0],
+                           "rank": 1})
+        if note is not None:
+            events.append({"kind": "note", "utc": note[1],
+                           "actor": row[2], "text": note[0],
+                           "rank": 2})
+        if withdrawn:
+            events.append({"kind": "withdrawn", "utc": gone[0],
+                           "actor": row[2], "text": None, "rank": 3})
+        if refunded:
+            events.append({"kind": "refunded", "utc": refund[1],
+                           "actor": "market", "text": None, "rank": 4})
+        events.sort(key=lambda e: (e["utc"], e["rank"]))
+        return {"claim_id": claim_id, "purchase_id": int(row[0]),
+                "listing_id": int(row[1]),
+                "listing_title": row[7], "buyer_id": row[2],
+                "dev_account": row[3], "viewer_role": role,
+                "price_paid": int(row[4]), "claim_text": row[5],
+                "opened_utc": row[6], "status": status,
+                "disputed": bool(note is not None
+                                 and status in ("open", "answered")),
+                "event_count": len(events), "events": events,
                 "disclaimer": self.disclaimer}
 
     def api_claims(self, buyer_id=None, dev_account=None):
