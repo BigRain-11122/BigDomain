@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T15:30:00+08:00",
+ "export_ts": "2026-10-25T15:36:55+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2123：QA charter 日爬 W32——《移动互联网应用程序信息服务管理规定》官方全文直采（网信办 2022-06-14 公布·2022-08-01 施行·27 条·cac.gov.cn 官网全文页）。关键发现：第二条把「互联网小程序平台」明确写进「应用程序分发服务」定义，本司因此落在分发平台义务域（此前本司合规档只把小程序当「应用程序提供者」单边理解，平台半边一直缺）。由此补出四项本仓完全空缺的面：①提供者复合实名认证（第十九条）②名称与统一社会信用代码公示（第十九条）③上架审核三拒（第二十条：违法不良名称图标简介／与真实身份不符／业务违法，且数据造假与违规收集个人信息即不得服务）④醒目便捷投诉举报入口（第二十二条）。此外第十七/十八条省级备案与分类备案、第十四条新功能上线安全评估都属于上线前硬前置。",
-  "latest_artifact": "qa/smoke-R2123.log 与 qa/smoke-R2123.png（真实日志渲染 1880x741，非合成图） + docs/global-benchmarks.md §①「平台分发义务链」块 + §③ 源行 + §④ W32 记录行 + docs/research/intelligence-wall.md W32 双行（主行+结论行） + .gitignore 新增 preview/*.db（四个沙箱 sqlite 残留不再污染工作树）",
-  "next_milestone": "48 小时内：把 W32 的四项空缺做成实物——apimarket 起一个「上架审核」最小可测门（三类拒绝逐条可验：违法不良名称图标简介／与真实身份不符／业务违法），并把提供者实名与公示字段作为加法列接入挂牌行（现仅 dev_account 字符串句柄）；同窗把 art.14 安全评估写进 launch-ops 上线闸清单。"
+  "current": "R2124 平台分发义务面三件落地：提供者实名登记（append-only·每开发者恒一行·名称与统一社会信用代码去空白非空·门序 账户→名称→代码→注册表→重复，任一拒绝零落库零代币移动）、公开展示层（每张在售挂牌一行：已实名显示提供者名称与信用代码，未实名诚实标 null+disclosure_ok=false，带 AIGC 标识、现价与审核态 pending/approved/refused，拒绝才带理由，退役牌不入榜）、审核拒绝面（一牌一行 append-only·只收 approve/refuse·拒绝必须写理由·重复审核拒收）与待审队列（按 listed_utc/listing_id 升序，计数与公开展示面待审集合恒等）。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_providers / apimarket_reviews 两张新表 + register_provider / api_provider_identity / api_public_listings / review_listing / api_review_queue 五面）；src/sandbox/ledger/test_apimarket_provideridentity.py（SUITE 8/8 双跑逐字节同一 sha16 2f20f340d48a87cb）；qa/apimarket-provideridentity-R2124.log + -2；qa/regression-R2124.log（相邻三套件 7/7、8/8、8/8 全绿）；src/sandbox/reconcile_all.py 新接线 ledger-apimarket-provideridentity(8)",
+  "next_milestone": "48 小时内：把审核门真正接进 publish_api（未过审/未实名不得上架），并为「上架前强制实名 + 三类拒绝逐条可验」预注册判据；同步把这五面接进结算报表（提供者公示段 + 待审队列段 + REPORT_SCHEMA 加法升级），让运营者在一页上同时看到未实名货架、待审积压与被拒原因。"
  },
  "depts": [
   {
@@ -411,6 +411,12 @@
    "apimarket 买家侧我的问答全史读面（api_buyer_questions + 买家块消费）",
    "on",
    "R2119：R2118 的售前问答只给了卖家合并队列，提问方仍要逐挂牌翻线程。本窗补 api_buyer_questions（八键信封+十键行·全序 asked_utc/question_id·已答未答同列·跨挂牌合并·标题走现行元数据缝·退役不销史·买家隔离·诚实空·纯读零 token）+ 报表买家区块 questions 键与 my questions 表 + REPORT_SCHEMA 11→12 加法升级；套件 8/8 双跑同一 sha16 b8fac883087334de；电池 324/324 suites + controls 7/7 1008.5s；矩阵 324/2700 逐字节同；census DRIFT-CLEAN。诚实注：三处旧套件的买家键集断言由「等于」放宽为「包含既有键」（出生站修复，加法升级合法）；首跑电池 320/324 与 census 漂移均为先接线未更新矩阵/基线，按序补齐后全绿。",
+   "2026-10-25"
+  ],
+  [
+   "apimarket 平台分发义务面三件（提供者实名 + 公开展示 + 审核拒绝）",
+   "on",
+   "R2124：R2123 法规普查实证分发平台义务域在产品面完全空缺（提供者身份只是裸 dev_account 字符串）。本窗补三面五方法两张 append-only 表；判据 AC-AMPI1..AC-AMPI8 先于代码预注册（十锚零占用 rc=1）；套件 8/8 双跑逐字节同一 sha16；相邻三套件回归全绿；诚实边界=未跑全量电池与矩阵、publish 强制接线留后继切片。",
    "2026-10-25"
   ]
  ],
@@ -884,18 +890,16 @@
   [
    "R2119",
    "R2119 买家侧问答全史：R2118 把售前问答立起来后，卖方有 api_seller_questions（跨挂牌未答债务队列），提问的住民却仍只能逐挂牌打开 api_listing_qna 再手工并表。本窗交付 api_buyer_questions(buyer_id)：只读合并面（信封恰八键、行恰十键、全序 (asked_utc, question_id)、question_count==len(rows)、answered+unanswered==question_count、oldest_open_utc 取首个未答行、已答行的 answer_text/answered_utc 与线程面同值、跨挂牌合并、标题取当前元数据修订、退役挂牌仍可读、严格买家隔离、前缀合法零提问账户诚实空、纯读零 token）并接进唯一消费者（买家区块 questions 键 + HTML my questions 表 + 旧报表缺键降级 + REPORT_SCHEMA 11→12 加法升级，信封仍恰三键）。判据 AC-AMBQ1..AC-AMBQ8 预注册于代码前，四锚 git grep -F 零占用 rc=1。SUITE 8/8 双跑判据行同一 sha16 b8fac883087334de（qa/apimarket-buyerquestions-R2119.log + -run2）；接线 ledger-apimarket-buyerquestions(8)；电池 RUNNER PASS 324/324 suites + controls 7/7 1008.5s（qa/reconcile-all-R2119.log）；矩阵 324 suites / 2700 criteria --check 逐字节同；census DRIFT-CLEAN；呈看件 preview/apimarket-report-buyerquestions.html 18121B sha256 bd375970052a6781 + .json 30303B schema 12 sha256 c86157d24bc9d3d4。三处出生站修复如实披露：test_apimarket_report_demand（AC-AMDS2）、test_apimarket_report_refundregister（AC-AMRR5）、test_apimarket_report_buyerhistory（AC-AMBD5）原先冻结买家键集等于旧集，本轮加法键使其失败，改为「旧键全部仍在」仍证明兼容；首跑电池 320/324（另含 census cd7 因新证据件未入基线）由矩阵重生成+基线更新后复跑转绿。Score 2。"
+  ],
+  [
+   "R2124",
+   "R2124 平台分发义务面三件：register_provider/api_provider_identity 实名层、api_public_listings 公开展示层、review_listing/api_review_queue 审核拒绝面。套件 SUITE 8/8 双跑逐字节同一（qa/apimarket-provideridentity-R2124.log + -2）；相邻回归 test_apimarket 7/7 + marketstats 8/8 + watchlist 8/8（qa/regression-R2124.log）；接线 ledger-apimarket-provideridentity(8)。诚实声明：本轮未跑 reconcile 全量电池、未重生成 suite matrix、未把审核门接进 publish_api（零回归取舍，写进预算行与队列行）。"
   ]
  ],
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 46,
-  "idle_fast_mention_lines": 0,
-  "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 46,
-  "proposals_total": 5,
-  "proposals_open": 3,
-  "queue_main_open": 6,
+  "queue_main_open": 2,
   "queue_tech_open": 4,
   "queue_explore_open": 1
  }

@@ -93,6 +93,11 @@ E_AM_SUPPLY_UNLIMITED = "E_AM_SUPPLY_UNLIMITED"  # AC-AMRS2 (no base)
 E_AM_BAD_QUESTION = "E_AM_BAD_QUESTION"      # AC-AMQA2 (question shape)
 E_AM_UNKNOWN_QUESTION = "E_AM_UNKNOWN_QUESTION"  # AC-AMQA3
 E_AM_ALREADY_ANSWERED = "E_AM_ALREADY_ANSWERED"  # AC-AMQA3
+E_AM_BAD_PROVIDER = "E_AM_BAD_PROVIDER"    # AC-AMPI2 (name/credit shape)
+E_AM_PROVIDER_DUP = "E_AM_PROVIDER_DUP"    # AC-AMPI2 (one per dev)
+E_AM_BAD_DECISION = "E_AM_BAD_DECISION"    # AC-AMPI5 (approve/refuse only)
+E_AM_BAD_REASON = "E_AM_BAD_REASON"        # AC-AMPI5 (refusal needs reason)
+E_AM_ALREADY_REVIEWED = "E_AM_ALREADY_REVIEWED"  # AC-AMPI5
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -237,6 +242,22 @@ CREATE TABLE IF NOT EXISTS apimarket_answers (
     answer_text TEXT NOT NULL,
     answered_utc TEXT NOT NULL,
     UNIQUE (question_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_providers (
+    provider_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dev_account TEXT NOT NULL,
+    provider_name TEXT NOT NULL,
+    credit_code TEXT NOT NULL,
+    registered_utc TEXT NOT NULL,
+    UNIQUE (dev_account)
+);
+CREATE TABLE IF NOT EXISTS apimarket_reviews (
+    review_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    decision TEXT NOT NULL CHECK (decision IN ('approve', 'refuse')),
+    reason TEXT NOT NULL,
+    reviewed_utc TEXT NOT NULL,
+    UNIQUE (listing_id)
 );
 """
 
@@ -4163,3 +4184,189 @@ class APIMarketFace:
                                  if count else None),
                 "disclaimer": self.disclaimer,
                 "rows": rows}
+
+    def register_provider(self, dev_account, provider_name, credit_code):
+        """Real-name provider registration for the distribution-duty
+        face (AC-AMPI1..AC-AMPI2, pre-registered in the R2124
+        explore-queue row BEFORE this code existed).
+
+        The marketplace has always identified a seller by a bare
+        dev_account string, so nothing answered "who is behind this
+        shelf". This is the append-only real-name layer: exactly one
+        row per developer, name and unified social credit code held
+        trimmed and non-empty, no update and no delete surface. Gate
+        order is account shape, name shape, credit shape, registry
+        (the existing dev-key read face), then duplicate - so a
+        refusal stores zero rows. Registration moves no tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        name = str(provider_name or "").strip()
+        if not name:
+            raise ApiMarketError(E_AM_BAD_PROVIDER, "provider name required")
+        code = str(credit_code or "").strip()
+        if not code:
+            raise ApiMarketError(E_AM_BAD_PROVIDER, "credit code required")
+        with self._lock:
+            if not self._is_registered_dev(dev_account):
+                raise ApiMarketError(E_AM_NOT_DEV, dev_account)
+            row = self._conn.execute(
+                "SELECT provider_id FROM apimarket_providers"
+                " WHERE dev_account = ?", (dev_account,)).fetchone()
+            if row is not None:
+                raise ApiMarketError(E_AM_PROVIDER_DUP, dev_account)
+            stamp = _now_utc()
+            self._conn.execute(
+                "INSERT INTO apimarket_providers"
+                " (dev_account, provider_name, credit_code,"
+                " registered_utc) VALUES (?, ?, ?, ?)",
+                (dev_account, name, code, stamp))
+        return {"dev_account": dev_account, "provider_name": name,
+                "credit_code": code, "registered_utc": stamp}
+
+    def api_provider_identity(self, dev_account):
+        """Provider identity read face (AC-AMPI3). A registered
+        developer gets the four registered fields; an in-shape
+        account with no registration gets an honest empty envelope
+        instead of an error (a provider who has not registered yet
+        is a normal state, not a fault). Pure read."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT provider_name, credit_code, registered_utc"
+                " FROM apimarket_providers WHERE dev_account = ?",
+                (dev_account,)).fetchone()
+        if row is None:
+            return {"dev_account": dev_account, "registered": False,
+                    "provider_name": None, "credit_code": None,
+                    "registered_utc": None, "disclosure_ok": False,
+                    "disclaimer": self.disclaimer}
+        return {"dev_account": dev_account, "registered": True,
+                "provider_name": row[0], "credit_code": row[1],
+                "registered_utc": row[2], "disclosure_ok": True,
+                "disclaimer": self.disclaimer}
+
+    def api_public_listings(self):
+        """Public display layer (AC-AMPI4) - the face an outside
+        reader would see: one row per LIVE listing carrying the
+        registered provider name and unified social credit code, the
+        AIGC label, the current price, and the review state. An
+        unregistered provider is shown honestly (null identity plus
+        disclosure_ok false) rather than hidden. Review state is
+        pending (no review row), approved or refused, and only a
+        refusal carries its reason. Ordered by listing_id. Pure
+        read."""
+        live_sql = (
+            "SELECT l.listing_id, l.dev_account, l.listing_key,"
+            " l.title, l.description, l.token_price, l.ai_label,"
+            " l.listed_utc FROM apimarket_listings l"
+            " WHERE l.listing_id NOT IN (SELECT d.listing_id FROM"
+            " apimarket_delistings d WHERE d.cycle ="
+            " COALESCE((SELECT MAX(r.cycle) FROM"
+            " apimarket_relistings r WHERE r.listing_id ="
+            " d.listing_id), 1)) ORDER BY l.listing_id")
+        with self._lock:
+            rows = self._conn.execute(live_sql).fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[0])
+                prov = self._conn.execute(
+                    "SELECT provider_name, credit_code FROM"
+                    " apimarket_providers WHERE dev_account = ?",
+                    (r[1],)).fetchone()
+                rev = self._conn.execute(
+                    "SELECT decision, reason, reviewed_utc FROM"
+                    " apimarket_reviews WHERE listing_id = ?",
+                    (listing_id,)).fetchone()
+                eff_title = self._metadata_state(
+                    listing_id, r[3], r[4])[0]
+                out.append({
+                    "listing_id": listing_id,
+                    "dev_account": r[1],
+                    "listing_key": r[2],
+                    "title": eff_title,
+                    "token_price": self._current_price(
+                        listing_id, int(r[5])),
+                    "ai_label": int(r[6]),
+                    "listed_utc": r[7],
+                    "provider_name": prov[0] if prov else None,
+                    "credit_code": prov[1] if prov else None,
+                    "disclosure_ok": prov is not None,
+                    "review_state": ({"approve": "approved",
+                                      "refuse": "refused"}[rev[0]]
+                                     if rev else "pending"),
+                    "review_reason": (rev[1] if rev
+                                      and rev[0] == "refuse" else None),
+                    "reviewed_utc": (rev[2] if rev else None),
+                })
+        registered = [x for x in out if x["disclosure_ok"]]
+        pending = [x for x in out if x["review_state"] == "pending"]
+        return {"listing_count": len(out),
+                "disclosure_ok_count": len(registered),
+                "review_pending_count": len(pending),
+                "disclaimer": self.disclaimer,
+                "listings": out}
+
+    def review_listing(self, listing_id, decision, reason=""):
+        """Listing review gate (AC-AMPI5) - the platform side of the
+        distribution duty: approve or refuse one live or retired
+        listing with exactly one append-only row. A refusal must say
+        why (a silent refusal is useless to the seller and to any
+        later appeal); a repeat decision on the same listing is
+        refused with zero new rows. No token moves here."""
+        if decision not in ("approve", "refuse"):
+            raise ApiMarketError(E_AM_BAD_DECISION, str(decision))
+        text = str(reason or "").strip()
+        if decision == "refuse" and not text:
+            raise ApiMarketError(E_AM_BAD_REASON, str(listing_id))
+        with self._lock:
+            self._require_listing(listing_id)
+            row = self._conn.execute(
+                "SELECT review_id FROM apimarket_reviews"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            if row is not None:
+                raise ApiMarketError(E_AM_ALREADY_REVIEWED,
+                                     str(listing_id))
+            stamp = _now_utc()
+            self._conn.execute(
+                "INSERT INTO apimarket_reviews"
+                " (listing_id, decision, reason, reviewed_utc)"
+                " VALUES (?, ?, ?, ?)",
+                (listing_id, decision, text, stamp))
+        return {"listing_id": listing_id, "decision": decision,
+                "reason": text, "reviewed_utc": stamp}
+
+    def api_review_queue(self):
+        """Unreviewed live listings, oldest first (AC-AMPI6). The
+        operator's work queue for the review face: retired shelves
+        are absent, and the pending count equals the public face's
+        pending set so the two cannot drift. Pure read."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT l.listing_id, l.dev_account, l.listing_key,"
+                " l.title, l.description, l.token_price, l.listed_utc"
+                " FROM apimarket_listings l"
+                " WHERE l.listing_id NOT IN (SELECT listing_id FROM"
+                " apimarket_reviews)"
+                " AND l.listing_id NOT IN (SELECT d.listing_id FROM"
+                " apimarket_delistings d WHERE d.cycle ="
+                " COALESCE((SELECT MAX(r.cycle) FROM"
+                " apimarket_relistings r WHERE r.listing_id ="
+                " d.listing_id), 1))"
+                " ORDER BY l.listed_utc, l.listing_id").fetchall()
+            out = []
+            for r in rows:
+                listing_id = int(r[0])
+                out.append({
+                    "listing_id": listing_id,
+                    "dev_account": r[1],
+                    "listing_key": r[2],
+                    "title": self._metadata_state(
+                        listing_id, r[3], r[4])[0],
+                    "token_price": self._current_price(
+                        listing_id, int(r[5])),
+                    "listed_utc": r[6],
+                })
+        return {"pending_count": len(out),
+                "disclaimer": self.disclaimer,
+                "rows": out}

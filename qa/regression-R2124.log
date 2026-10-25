@@ -1,0 +1,6 @@
+== test_apimarket.py rc=0 ==
+SUITE PASS 7/7
+== test_apimarket_marketstats.py rc=0 ==
+SUITE PASS 8/8
+== test_apimarket_watchlist.py rc=0 ==
+SUITE 8/8

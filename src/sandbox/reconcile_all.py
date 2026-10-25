@@ -2455,6 +2455,13 @@ SUITES = [
     # 12 -> 13 additively.
     ("ledger-apimarket-selleranswers", os.path.join(
         "ledger", "test_apimarket_selleranswers.py"), 8),
+    # R2124 distribution-duty faces: provider real-name registration
+    # (append-only, one row per developer), the public display layer
+    # (registered name plus unified social credit code shown per live
+    # listing, unregistered shown honestly) and the review refusal
+    # gate with its pending queue.
+    ("ledger-apimarket-provideridentity", os.path.join(
+        "ledger", "test_apimarket_provideridentity.py"), 8),
     # R2121 slow-answer attention family: the seller-side answered
     # ledger already measured the wait, so the digest surfaces a reply
     # older than one day as a sortable operator to-do item; the JSON

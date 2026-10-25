@@ -1,0 +1,9 @@
+PASS AC-AMPI1: keys=['credit_code', 'dev_account', 'provider_name', 'registered_utc'] name='Dana Labs' code='91310000MA1K3XYZ12' rows=1
+PASS AC-AMPI2: accounts={'E_AM_BAD_ACCOUNT'} names={'E_AM_BAD_PROVIDER'} codes={'E_AM_BAD_PROVIDER'} order='E_AM_BAD_PROVIDER' notdev='E_AM_NOT_DEV' dup='E_AM_PROVIDER_DUP' digests_same=True tx_same=True
+PASS AC-AMPI3: registered=True name='Dana Labs' empty=False bad={'E_AM_BAD_ACCOUNT'}
+PASS AC-AMPI4: count=3 disclosure=2 pending=1 states={'alpha': 'approved', 'beta': 'refused', 'zeta': 'pending'} retired_excluded=True
+PASS AC-AMPI5: decision='E_AM_BAD_DECISION' reason='E_AM_BAD_REASON' unknown='E_AM_UNKNOWN_LISTING' dup='E_AM_ALREADY_REVIEWED' approved='approve' refusals_zero_rows=True tx_same=True
+PASS AC-AMPI6: queue=[5, 6] order=True public_pending=2
+PASS AC-AMPI7: digests_same=True tx_same=True tables=17 instances=True
+PASS AC-AMPI8: wired=True ascii=True net=0 unregistered_publish=True
+SUITE 8/8
