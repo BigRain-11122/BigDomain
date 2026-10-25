@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T20:05:00+08:00",
+ "export_ts": "2026-10-25T22:42:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "买家结算对账单面（api_buyer_ledger）：卖家早就有「我账上多少钱、哪几笔流水来的」对账单，买家一直没有——购买扣款与退款回冲在账本里早就有数，却没有任何产品面去读。本轮把活余额（走退款门与敞口面已信任的同一缝）与该账户自己的逐笔流水合成对账单，并接进结算报告的买家段；没交易过的账户也不报错，而是诚实给出余额 0 与空流水。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_buyer_ledger）+ src/sandbox/ledger/apimarket_report.py（买家块 ledger 键与流水表·REPORT_SCHEMA 15→16）+ src/sandbox/ledger/test_apimarket_buyerledger.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 208F2CDBF9962B6F，证据 qa/apimarket-buyerledger-R2128.log / -run2.log）；qa/reconcile-all-R2128.log（RUNNER PASS 332/332 套件 + 控制 7/7，649.9s）；docs/sandbox-suite-matrix.md（332 套件 / 2764 判据，--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①把 R2124 的三张分发义务面接进上架门（未过审/未实名不得上架），目前它们只是可读面；②挽客侧（买家/卖家）对账单合成一张结算页，让「我该收多少、该付多少」一眼可见；③把电池每轮回收读数接进日报，使清扫成为可见趋势。"
+  "current": "售后申诉登记面（open_claim + api_claims）：退款门在卖家已花掉分成时会拒绝且「不追讨」，此后买家在全产品没有任何能落地申诉的地方，卖家也拿不到「哪些成交被投诉」的队列——申诉是当时唯一既无写门也无读面的售后轴。本轮补一张只追加的申诉表（一笔成交一张）与两个面：买家开单（争议金额随单冻结，事后改价改不了争议标的），以及买家/卖家/全市场三视合并队列（状态只由退款表派生，退款落地即自动转已退款，申诉行永不改写）。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_claims 表 + open_claim + api_claims）+ src/sandbox/ledger/test_apimarket_claims.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 DD78DEA166E4F82F，证据 qa/apimarket-claims-R2129-verifya.log / -verifyb.log）+ src/os/battery_stream.py（可复用电池流式单写者证据器）；qa/reconcile-all-R2129.log（RUNNER PASS 333/333 套件 + 控制 7/7，589.4s）；docs/sandbox-suite-matrix.md（333 套件 / 2772 判据，--check 逐字节同一）。",
+  "next_milestone": "48 小时内：①把申诉队列接进结算报告（运营者在报表里就能看到争议清单与未解决时长），目前它只有面没有消费者；②申诉与退款、评价债三条售后队列合成一个卖家工作面，避免三处翻表；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架），补上分发义务的执法端。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 售后申诉登记面（open_claim + api_claims：一购一诉 + 三视合并队列 + 状态由退款表派生）",
+   "on",
+   "R2129：退款门在卖家已花分成时 fail-closed E_AM_REFUND_UNFUNDABLE，口径是「拒绝不追讨」——此后买家在全产品没有任何能落地申诉的面（退款敞口只告诉卖家缺口、买家待办只收评价债、卖家收件箱只收未回应评分），卖家也没有一张「哪些成交被投诉」的队列，申诉因此是唯一既无写门也无读面的售后轴。本窗补一张 append-only apimarket_claims（UNIQUE(purchase_id)，争议金额 price_paid 随单冻结，事后改价改不了争议标的）与两面：open_claim 的门序钉死为 账户形→购买号形→申诉文形→购买存在→归属→已退款→重复，任一拒绝零行零 token；api_claims 用同一 append-only 行集回答买家视、卖家视与全市场视（两过滤可叠加=交集，无参=全市场），状态/退款号/退款戳全部由退款表在读取时派生，因此退款落地后同一 claim_id 自动转 refunded 而申诉行逐字节不被改写，行序 (opened_utc, claim_id) 最旧债务在前，退役挂牌的申诉照旧可读，面为纯读。判据 AC-AMCL1..AC-AMCL8 预注册在 R2129 explore 队列行里、先于代码（八锚 git grep -F 零占用 rc=1）。本窗证据：套件双跑 rc=0/0 判据行逐字节同一 sha16 DD78DEA166E4F82F（qa/apimarket-claims-R2129-verifya.log + -verifyb.log，单写者 utf-8 LF）；接线 ledger-apimarket-claims(8)；电池 qa/reconcile-all-R2129.log RUNNER PASS 333/333 套件 + 控制 7/7 589.4s；矩阵按该电池重生成后 --check 逐字节同一（333 套件 / 2772 判据）；census 电池内绿。同窗另交付 src/os/battery_stream.py：可复用的电池流式单写者证据器（逐行回显使五分钟无输出规则不会腰斩长电池，证据按裸 LF UTF-8 落盘），取代此前每轮一次性驱动脚本。诚实注三处：①本窗开在中断前窗上（06:2x 后无提交，state 仍停在 R2128，产物已在盘未提交、无 index.lock、无活电池），故以复验收口为主、未改产品代码；②首份自采证据经 subprocess 字节捕获带 CRLF，被判 census pwsh-capture 漂移，归一为 LF 后转 DRIFT-CLEAN（红电池 qa/reconcile-all-R2129-firstfail.log 原样保留）；③第二次电池在 79% 机器负载下把级联报表套件 ledger-apimarket-refundregister 顶过 300s 单套件上限（该套件单独流式重跑 SUITE PASS 13/13，非产品挂死；超时件 qa/reconcile-all-R2129-timeout.log 原样保留），第三次电池全绿。",
+   "2026-10-25"
+  ],
   [
    "apimarket buyer settlement statement (api_buyer_ledger: live balance through the same seam + this buyer's own entries)",
    "on",
@@ -450,6 +456,10 @@
   ]
  ],
  "results": [
+  [
+   "R2129",
+   "R2129: closeout of the interrupted post-sale claim-registry window. The market could refuse a refund (E_AM_REFUND_UNFUNDABLE when the seller already spent the proceeds) but the buyer had no surface to lodge the dispute and the seller had no queue of disputed purchases - the last after-sale axis with neither a write door nor a read face. apimarket.py now carries one append-only apimarket_claims table (UNIQUE(purchase_id)) and two faces: open_claim with the pinned gate order (account shape, purchase-id shape, claim-text shape, purchase existence, ownership, already-refunded, duplicate) where every refusal writes zero rows and moves zero tokens and the disputed price_paid is frozen with the row; api_claims answers the buyer, seller and market views from the same append-only set through one filter pair, derives status/refund_id/refunded_utc from the refunds table only (a later refund flips the status and the claim row is never rewritten), orders by (opened_utc, claim_id) oldest debt first and stays a pure read. AC-AMCL1..AC-AMCL8 were pre-registered in the R2129 explore-queue row before the code existed. Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 DD78DEA166E4F82F (qa/apimarket-claims-R2129-verifya.log + -verifyb.log); wired ledger-apimarket-claims (8); battery qa/reconcile-all-R2129.log RUNNER PASS 333/333 suites plus controls 7/7 in 589.4s; matrix 333 suites / 2772 criteria --check byte-identical; census green inside the battery. Also delivered src/os/battery_stream.py, a reusable streamed single-writer battery driver replacing the per-round throwaway helper. Honest notes: this window took over an interrupted predecessor (payload on disk, state still at R2128, no index.lock, no live battery) and verified rather than rebuilt it; two red batteries were both non-product - my own evidence carried CRLF (census dialect drift, firstfail log preserved) and a 79 percent machine load pushed a cascading report suite past the 300s per-suite cap (that suite passes 13/13 standalone, timeout log preserved). Five-silence: decisions zero new content-addressed tokens, ledger zero new @BigDomain rows, group orders baseline unchanged, benchmarks inside 7 days."
+  ],
   [
    "R2128",
    "R2128: the developer API market gains the buyer-side settlement statement, the mirror of the R2126 seller statement. api_buyer_ledger joins the live account balance - read through the one seam _seller_balance that refund_api and api_refund_exposure already trust, so no second bookkeeping copy exists - with that account's own append-only ledger entries newest first; credit/debit/net are derived from the visible rows, entry_count equals the row count, limit truncates the OLDEST tail so the newest movement always stays visible, an over-cap limit clamps at 500 while a non-int/bool/sub-one limit fails closed, an account the ledger never saw answers balance 0 with balance_known False and an empty statement, and the face is a pure read with zero row mutations and zero token movement. Consumers: every buyer block in the settlement report carries a ledger key read fresh on each collect, the page renders a statement table with an honest empty state, and REPORT_SCHEMA moves 15 -> 16 additively. Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 208F2CDBF9962B6F and identical evidence files sha16 95c90803e141af17; battery qa/reconcile-all-R2128.log RUNNER PASS 332/332 suites plus controls 7/7 in 649.9s; matrix 332 suites / 2764 criteria --check byte-identical. This window took over an interrupted predecessor and verified the payload rather than rebuilding it; its red first battery is preserved, and its two real defects (a half-written report module, an unpatched ledger clock in the determinism seeder) were repaired before the green run. Five-silence: decisions zero new content-addressed tokens, ledger zero new @BigDomain rows, group orders baseline unchanged, benchmarks inside 7 days."
@@ -944,10 +954,10 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 24,
+  "substantive_non_idle_mention_lines": 26,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

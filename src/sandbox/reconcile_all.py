@@ -2344,6 +2344,15 @@ SUITES = [
     # absence, pure read and cross-restart identity.
     ("ledger-apimarket-buyerledger", os.path.join(
         "ledger", "test_apimarket_buyerledger.py"), 8),
+    # AC-AMCL1..AC-AMCL8 pre-registered in the R2129 explore-queue
+    # claim row BEFORE this suite existed: the post-sale claim
+    # registry - one append-only claim per purchase (disputed price
+    # stored with it), status derived from the refunds table only,
+    # the pinned gate order, buyer/seller/market views through one
+    # filter pair, oldest-first queue, pure read and cross-restart
+    # identity.
+    ("ledger-apimarket-claims", os.path.join(
+        "ledger", "test_apimarket_claims.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

@@ -1,0 +1,10 @@
+PASS AC-AMCL1: door=True env=True rows=3 open=3 refunded=0
+PASS AC-AMCL2: row_frozen=True status=refunded open=2 refunded=1
+PASS AC-AMCL3: acc=8 pid=6 text=5 biz=['E_AM_UNKNOWN_PURCHASE', 'E_AM_NOT_BUYER', 'E_AM_ALREADY_REFUNDED', 'E_AM_CLAIM_DUP'] order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_BAD_CLAIM', 'E_AM_UNKNOWN_PURCHASE', 'E_AM_ALREADY_REFUNDED'] frozen=True
+PASS AC-AMCL4: unique=True rows=[1, 2, 3]
+PASS AC-AMCL5: bob=2 dave=1 dana=3 carol=0 both=1 gates=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT']
+PASS AC-AMCL6: order=[('2026-10-06T00:01:00Z', 1), ('2026-10-06T00:01:01Z', 2), ('2026-10-06T00:01:01Z', 3)] ties=[2, 3]
+PASS AC-AMCL7: pure=True restart_market=True restart_buyer=True restart_seller=True
+PASS AC-AMCL8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8
