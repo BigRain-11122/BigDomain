@@ -25,11 +25,21 @@ only handle, rating_id, was not exposed on any listing-wide face - so
 the rating rows now carry it (additive key) and the report renders a
 Buyer dossiers section (schema 4 -> 5, additive).
 
+R2117 wires the seller's rating scorecard in: dev_profile carried an
+average with no shape, api_seller_inbox only the unanswered rows and
+api_ratings / api_rating_replies one listing at a time, so a seller had
+to merge them by hand and an operator could not see which live shelf is
+being dragged down by low ratings. Every seller block now carries the
+quality face and renders a star-shape / reply-coverage / per-shelf
+table, the attention digest grows a quality_risk family, and the schema
+moves 9 -> 10 additively.
+
 Faces consumed (read-only): api_market_stats, api_market_months,
 api_revenue_months, api_buyer_profile, api_buyer_months, api_board,
 api_sales, api_seller_inbox, api_buyer_todo, api_watch_alerts,
 api_supply, api_market_feed, api_library, api_watchlist, api_refund,
-api_rating_history.
+api_rating_history, api_listing_demand, api_refund_exposure,
+api_seller_quality.
 
 Usage:
     python apimarket_report.py --db ledger.db --seed --out report.html
@@ -91,7 +101,11 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # face api_listing_demand had no block consumer (it surfaced only
 # through the attention digest), so the envelope is still unchanged and
 # every earlier seller key keeps its value.
-REPORT_SCHEMA = 9
+# v10 (R2117) adds the quality key inside every seller block (the
+# seller-side rating scorecard face) and a quality_risk attention
+# family; the envelope is still unchanged and every earlier seller key
+# keeps its value.
+REPORT_SCHEMA = 10
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -105,6 +119,8 @@ DOSSIER_KEYS = ("view", "lifecycle", "price_history",
 DOSSIER_EMPTY = "no listings in this market"
 
 DEMAND_EMPTY = "no listings for this seller"
+
+QUALITY_EMPTY = "no ratings for this seller"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -297,6 +313,7 @@ def collect(am):
             "sales": sales[dev],
             "profile": am.dev_profile(dev),
             "demand": am.api_listing_demand(dev),
+            "quality": am.api_seller_quality(dev),
         }
     histories = collect_buyer_history(am, buyers)
     for buyer in sorted(buyers):
@@ -351,6 +368,15 @@ def collect_attention(am, report):
                 add("unconverted_demand", "warn", dev,
                     "%d watcher(s) on %s with no sale yet"
                     % (row["watcher_count"], row["title"]),
+                    row["listing_key"])
+        quality = report["sellers"][dev].get("quality") or {}
+        for row in quality.get("rows") or []:
+            if (not row["retired"] and row["rating_count"] >= 2
+                    and row["rating_avg"] <= 2.5):
+                add("quality_risk", "warn", dev,
+                    "%s rated %.2f over %d rating(s)"
+                    % (row["title"] or row["listing_key"],
+                       row["rating_avg"], row["rating_count"]),
                     row["listing_key"])
     for listing in report["board"]["listings"]:
         supply = am.api_supply(listing["listing_id"])
@@ -683,6 +709,39 @@ def buyer_history_block(history):
     return "\n".join(out)
 
 
+def quality_rows(quality):
+    """Flatten each listing's star distribution into one cell so the
+    table stays readable; the envelope-level buckets get their own
+    table above it."""
+    out = []
+    for row in quality.get("rows") or []:
+        dist = row.get("star_distribution") or {}
+        out.append({
+            "listing_id": row.get("listing_id"),
+            "title": row.get("title"),
+            "retired": row.get("retired"),
+            "rating_count": row.get("rating_count"),
+            "rating_avg": row.get("rating_avg"),
+            "reply_count": row.get("reply_count"),
+            "unanswered_count": row.get("unanswered_count"),
+            "lowest_stars": row.get("lowest_stars"),
+            "distribution": " ".join("%s*%d" % (key, dist[key])
+                                      for key in sorted(dist)),
+        })
+    return out
+
+
+def quality_block(quality):
+    if not quality:
+        return "<p class=\"empty\">%s</p>" % esc(QUALITY_EMPTY)
+    dist = quality.get("star_distribution") or {}
+    buckets = [{"stars": key, "count": dist[key]}
+               for key in sorted(dist)]
+    return "\n".join([scalar_rows(quality),
+                      row_table(buckets, QUALITY_EMPTY),
+                      row_table(quality_rows(quality), QUALITY_EMPTY)])
+
+
 def render_html(report):
     parts = []
     parts.append("<!DOCTYPE html>")
@@ -747,6 +806,15 @@ def render_html(report):
         parts.append("<h3>%s - seller demand (%d)</h3>"
                      % (esc(dev), len(demand_rows)))
         parts.append(row_table(demand_rows, DEMAND_EMPTY))
+        # R2117 seller quality: the rating scorecard (star shape, reply
+        # coverage, one row per shelf). An older caller's block carries
+        # no quality key, so the section degrades to the honest empty
+        # state instead of raising.
+        quality = block.get("quality") or {}
+        parts.append("<h3>%s - seller quality (%d)</h3>"
+                     % (esc(dev),
+                        len(quality.get("rows") or [])))
+        parts.append(quality_block(quality))
 
     parts.append("<h2>Buyers</h2>")
     for buyer in sorted(report["buyers"]):

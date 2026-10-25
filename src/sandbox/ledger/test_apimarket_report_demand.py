@@ -193,7 +193,13 @@ def check_contract(db):
     report = collect_with(db)
     payload = R.api_report_payload(report)
     keys = tuple(sorted(payload.keys()))
-    schema_ok = (payload["schema_version"] == R.REPORT_SCHEMA == 9)
+    # birth station: this criterion pinned schema 9 when the seller
+    # demand block was born (R2116). R2117 added the seller quality key
+    # as an ADDITIVE bump (9 -> 10), so the assertion follows the module
+    # constant instead of pinning a literal while still proving the
+    # envelope shape the additive rule promises.
+    schema_ok = (payload["schema_version"] == R.REPORT_SCHEMA
+                 and R.REPORT_SCHEMA >= 9)
     legacy = True
     led, mtr, dk, am = open_stack(db)
     try:

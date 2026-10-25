@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T09:07:30+08:00",
+ "export_ts": "2026-10-25T09:45:41+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2116 报表卖家需求段：api_listing_demand（R2112 卖家需求读面）原先是全部读面里唯一没有区块消费者的面——只在报表的待办摘要里间接露头，卖家在结算报表页上看不到「每一件挂牌有多少人在看、关注有没有变成成交」。本轮把它接进唯一消费者：每个卖家区块新增 demand 键（每次采集现读），报表上新增 seller demand 表（每挂牌一行、热度降序、退役仍在榜、诚实空态），机读契约 schema 8→9 加法升级。",
-  "latest_artifact": "src/sandbox/ledger/apimarket_report.py（卖家区块 demand + seller demand 表 + REPORT_SCHEMA 9）；src/sandbox/ledger/test_apimarket_report_demand.py（SUITE PASS 8/8，双跑判据行同一 sha16 ac9ad1ed0ce44396）；qa/apimarket-reportdemand-R2116.log + -run2；qa/reconcile-all-R2116.log（RUNNER PASS 321/321 suites + controls 7/7 673.7s）；docs/sandbox-suite-matrix.md（321 suites / 2676 criteria --check 逐字节同）；呈看件：preview/apimarket-report-demand.html（28317B sha256 ec0764df3bea3995）与 preview/apimarket-report-demand.json（47526B schema 9 sha256 d4b4d49cf5dae260）",
-  "next_milestone": "48 小时内：给结算报告加 CSV 明细导出（--csv-out，市场/卖家/买家/挂牌四张明细表），让这份报表不只可看、还能被表格工具直接消费；同时把 P-47 ⑤ 权益/月卡面设计件推进到 docs/spec/。两项都不需要物理件。"
+  "current": "卖家口碑面从“碎的三块”合成一张记分表：新增只读面 api_seller_quality（五档星级分布 + 平均分 + 回应覆盖（reply/unanswered/coverage）+ 逐挂牌质量行，退役挂牌保留历史、未评挂牌给诚实零行），并接进结算报表：每个卖家区块新增 quality 键与质量表（分布表 + 逐上架商品表），待办摘要新增 quality_risk 家族直接标出「在售且 ≥2 条评分且均分 ≤2.5」的拖后腿商品；机读契约 schema 9→10 加法升级（旧键全部不变）。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_quality）；src/sandbox/ledger/apimarket_report.py（卖家区块 quality + 质量表 + quality_risk + REPORT_SCHEMA 10）；src/sandbox/ledger/test_apimarket_sellerquality.py（SUITE PASS 8/8，双跑判据行同一 sha16 09e175d251dd9d31）；qa/apimarket-sellerquality-R2117.log + -run2；qa/reconcile-all-R2117.log（RUNNER PASS 322/322 suites + controls 7/7 725.3s）；docs/sandbox-suite-matrix.md（322 suites / 2684 criteria --check 逐字节同）；呈看件：preview/apimarket-report-quality.html（38142B sha256 5d904aabfad20dd2）与 preview/apimarket-report-quality.json（67667B schema 10 sha256 016542f070b058e9）；时间戳 2026-10-25T09:45:41+08:00",
+  "next_milestone": "48 小时内：给结算报表加 CSV 明细导出（--csv-out，市场/卖家/买家/挂牌/质量五张明细表），让这份报表不只可看、还能被表格工具直接消费；同步把 P-47 ⑤ 权益/月卡面设计件推进到 docs/spec/。两项都不需要物理件。"
  },
  "depts": [
   {
@@ -383,6 +383,10 @@
   ]
  ],
  "results": [
+  [
+   "R2117",
+   "R2117: seller-side rating quality scorecard (api_seller_quality) plus its report consumer. The reputation surface was scattered across dev_profile (average, no shape), api_seller_inbox (unanswered rows only) and api_ratings / api_rating_replies (one listing at a time), so neither a seller nor the operator could answer what shape the reputation has, which shelf drags it, or what share of ratings has a reply. Twelve-key envelope, ten-key row per listing, five ordered star buckets read through the one effective-value seam (a revision moves exactly its own units), reply coverage, low_rated_count that counts live shelves with at least two ratings only, dense row set from the listing table with retired shelves kept, account gate before any read, pure read and cross-restart byte identity. Every seller block gains a quality key and a rendered quality section, the attention digest gains a quality_risk family and REPORT_SCHEMA moves 9 -> 10 additively. Suite 8/8 double-run byte-identical sha16 09e175d251dd9d31; battery RUNNER PASS 322/322 suites plus controls 7/7 in 725.3s; matrix 322 suites / 2684 criteria --check byte-identical; census DRIFT-CLEAN 8/8."
+  ],
   [
    "R2115",
    "R2115: take over and verify the interrupted refund-exposure window. The seller-side refund exposure face (api_refund_exposure) answers the question the refund door could only refuse: how much of a seller's balance is already spoken for by refunds the market may demand. Seven-key envelope, nine-key dense rows over every listing owner, liability = stored dev_share of unrefunded purchases (never recomputed from a price), balance from the live ledger with an honest balance_known False, shortfall and covered derived, retirement keeps the obligation, account gate before any read, pure read, cross-restart byte identity. The report attention digest gains a refund_risk family and REPORT_SCHEMA moves 7 -> 8 additively. Suite 8/8 double-run byte-identical sha16 112e6f0d43928930; battery RUNNER PASS 320/320 suites plus controls 7/7 in 533.8s; matrix 320 suites / 2668 criteria --check byte-identical; census DRIFT-CLEAN files=1783 flags=0."

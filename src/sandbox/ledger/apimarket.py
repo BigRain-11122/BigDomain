@@ -3620,6 +3620,130 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "rows": rows}
 
+    def api_seller_quality(self, dev_account=None):
+        """Seller-side rating quality scorecard (criteria
+        AC-AMQL1..AC-AMQL8 pre-registered in the R2117 explore-queue
+        row BEFORE this code existed).
+
+        The reputation surface was scattered across three faces:
+        dev_profile carries a cross-listing average with no shape,
+        api_seller_inbox carries only the unanswered rows, and
+        api_ratings / api_rating_replies open one listing at a time.
+        So no face answered "what shape is my reputation, which shelf
+        drags it, and what share of ratings has a reply" - a seller
+        with N listings had to open N faces and merge by hand, and an
+        operator could not see which live shelf is being dragged down
+        by low ratings.
+
+        This face merges them once: a five-bucket star distribution,
+        the average through the one effective-value seam (a rating
+        revision moves exactly one bucket and never re-derives from
+        the original stamp), reply coverage, and one quality row per
+        listing. Retirement does not erase the record (a retired
+        shelf keeps its rows and its ratings) but low_rated_count
+        counts live shelves only - a shelf nobody can buy no longer
+        costs a buyer anything. The row set authority is the listing
+        table (dense: every listing the seller owns appears, with a
+        zero-rating row for shelves nobody rated yet), ordered by
+        listing_id.
+
+        The account shape gate is prefix-only by the truthful
+        R2077/R2078 finding and runs before any read - a prefix-valid
+        account with no listings gets an honest empty envelope. Pure
+        read: zero row mutations and zero token movement. The
+        envelope carries the resident non-advisory disclaimer."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            if dev_account is None:
+                owner_rows = self._conn.execute(
+                    "SELECT DISTINCT dev_account"
+                    " FROM apimarket_listings"
+                    " ORDER BY dev_account").fetchall()
+            else:
+                owner_rows = self._conn.execute(
+                    "SELECT DISTINCT dev_account"
+                    " FROM apimarket_listings"
+                    " WHERE dev_account = ?", (str(dev_account),)
+                ).fetchall()
+            sellers = [str(r[0]) for r in owner_rows]
+            rows = []
+            for dev in sellers:
+                listing_rows = self._conn.execute(
+                    "SELECT listing_id, listing_key, title, description"
+                    " FROM apimarket_listings WHERE dev_account = ?"
+                    " ORDER BY listing_id", (dev,)).fetchall()
+                for lr in listing_rows:
+                    listing_id = int(lr[0])
+                    title = self._metadata_state(
+                        listing_id, lr[2], lr[3])[0]
+                    retired = self._cycle_state(listing_id)[1]
+                    ratings = self._conn.execute(
+                        "SELECT r.rating_id, r.stars,"
+                        " (SELECT COUNT(*) FROM"
+                        "  apimarket_rating_replies p"
+                        "  WHERE p.rating_id = r.rating_id)"
+                        " FROM apimarket_ratings r"
+                        " WHERE r.listing_id = ?"
+                        " ORDER BY r.rating_id", (listing_id,)).fetchall()
+                    buckets = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}
+                    star_total = 0
+                    answered = 0
+                    lowest = None
+                    for rating in ratings:
+                        stars = self._effective_stars(
+                            int(rating[0]), int(rating[1]))
+                        key = str(stars)
+                        buckets[key] = buckets.get(key, 0) + 1
+                        star_total += stars
+                        if int(rating[2]) > 0:
+                            answered += 1
+                        if lowest is None or stars < lowest:
+                            lowest = stars
+                    count = len(ratings)
+                    rows.append({
+                        "listing_id": listing_id,
+                        "listing_key": lr[1],
+                        "title": title,
+                        "retired": bool(retired),
+                        "rating_count": count,
+                        "rating_avg": (float(star_total) / count
+                                       if count else 0.0),
+                        "unanswered_count": count - answered,
+                        "reply_count": answered,
+                        "lowest_stars": lowest,
+                        "star_distribution": dict(
+                            (k, buckets[k]) for k in sorted(buckets)),
+                    })
+        total_count = sum(r["rating_count"] for r in rows)
+        total_replies = sum(r["reply_count"] for r in rows)
+        distribution = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}
+        for row in rows:
+            for key in distribution:
+                distribution[key] = (distribution[key]
+                                     + row["star_distribution"].get(key, 0))
+        star_sum = sum(int(k) * distribution[k] for k in distribution)
+        low_rated = sum(
+            1 for r in rows
+            if not r["retired"] and r["rating_count"] >= 2
+            and r["rating_avg"] <= 2.5)
+        return {"dev_account": dev_account,
+                "seller_count": len(sellers),
+                "listing_count": len(rows),
+                "rating_count": total_count,
+                "reply_count": total_replies,
+                "unanswered_count": total_count - total_replies,
+                "reply_coverage": (round(float(total_replies)
+                                         / total_count, 4)
+                                   if total_count else None),
+                "rating_avg": (float(star_sum) / total_count
+                               if total_count else 0.0),
+                "star_distribution": distribution,
+                "low_rated_count": low_rated,
+                "disclaimer": self.disclaimer,
+                "rows": rows}
+
     def _seller_balance(self, dev_account):
         """Live ledger balance for a seller, honest about absence.
 

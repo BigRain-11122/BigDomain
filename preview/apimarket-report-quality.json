@@ -1,0 +1,2498 @@
+{
+ "attention": {
+  "finding_count": 3,
+  "findings": [
+   {
+    "detail": "Chart Render API rated 1.50 over 2 rating(s)",
+    "kind": "quality_risk",
+    "ref": "chart-render",
+    "severity": "warn",
+    "subject": "usr:frank"
+   },
+   {
+    "detail": "3 unanswered rating(s); oldest 2026-10-01T09:00:00Z",
+    "kind": "rating_debt",
+    "ref": "2026-10-01T09:00:00Z",
+    "severity": "warn",
+    "subject": "usr:dana"
+   },
+   {
+    "detail": "2 unanswered rating(s); oldest 2026-10-02T09:00:00Z",
+    "kind": "rating_debt",
+    "ref": "2026-10-02T09:00:00Z",
+    "severity": "warn",
+    "subject": "usr:frank"
+   }
+  ],
+  "severity_counts": {
+   "warn": 3
+  }
+ },
+ "report": {
+  "activity": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "events": [
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-08-20T10:00:00Z",
+     "kind": "published",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-08-20T10:00:00Z",
+     "kind": "published",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "previous_stars": null,
+     "ref_id": 2,
+     "stars": null,
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:frank",
+     "event_utc": "2026-08-20T10:00:00Z",
+     "kind": "published",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "previous_stars": null,
+     "ref_id": 3,
+     "stars": null,
+     "title": "Chart Render API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-08-20T10:00:00Z",
+     "kind": "published",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 4,
+     "stars": null,
+     "title": "Quiet API",
+     "token_price": 7,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-08-31T23:59:59Z",
+     "kind": "purchased",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-09-01T00:00:00Z",
+     "kind": "purchased",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 2,
+     "stars": null,
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-09-05T12:00:00Z",
+     "kind": "purchased",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 3,
+     "stars": null,
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-09-05T12:00:00Z",
+     "kind": "purchased",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "previous_stars": null,
+     "ref_id": 4,
+     "stars": null,
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:frank",
+     "event_utc": "2026-09-20T08:30:00Z",
+     "kind": "purchased",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "previous_stars": null,
+     "ref_id": 5,
+     "stars": null,
+     "title": "Chart Render API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:frank",
+     "event_utc": "2026-09-20T08:30:00Z",
+     "kind": "purchased",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "previous_stars": null,
+     "ref_id": 6,
+     "stars": null,
+     "title": "Chart Render API",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-09-28T08:30:00Z",
+     "kind": "purchased",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 7,
+     "stars": null,
+     "title": "Quiet API",
+     "token_price": 7,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-09-28T08:30:00Z",
+     "kind": "purchased",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 8,
+     "stars": null,
+     "title": "Quiet API",
+     "token_price": 7,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-01T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": 5,
+     "title": "Risk Scan API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-01T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 2,
+     "stars": 4,
+     "title": "Risk Scan API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-01T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 3,
+     "stars": 2,
+     "title": "Risk Scan API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-01T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "previous_stars": null,
+     "ref_id": 4,
+     "stars": 5,
+     "title": "Macro Feed API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:frank",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "previous_stars": null,
+     "ref_id": 5,
+     "stars": 1,
+     "title": "Chart Render API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:frank",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "previous_stars": null,
+     "ref_id": 6,
+     "stars": 2,
+     "title": "Chart Render API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 7,
+     "stars": 1,
+     "title": "Quiet API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "rated",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 8,
+     "stars": 1,
+     "title": "Quiet API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": "thanks for the review",
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "rating_replied",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Risk Scan API",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:gina",
+     "event_utc": "2026-10-02T09:00:00Z",
+     "kind": "delisted",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Quiet API",
+     "token_price": null,
+     "units": null
+    }
+   ],
+   "kinds": [
+    "published",
+    "relisted",
+    "price_revised",
+    "metadata_revised",
+    "restocked",
+    "purchased",
+    "rated",
+    "rating_revised",
+    "rating_replied",
+    "refunded",
+    "delisted"
+   ],
+   "limit": 40,
+   "listing_id": null,
+   "returned": 22,
+   "since_utc": null,
+   "total": 22,
+   "truncated": false,
+   "until_utc": null
+  },
+  "attention": {
+   "finding_count": 3,
+   "findings": [
+    {
+     "detail": "Chart Render API rated 1.50 over 2 rating(s)",
+     "kind": "quality_risk",
+     "ref": "chart-render",
+     "severity": "warn",
+     "subject": "usr:frank"
+    },
+    {
+     "detail": "3 unanswered rating(s); oldest 2026-10-01T09:00:00Z",
+     "kind": "rating_debt",
+     "ref": "2026-10-01T09:00:00Z",
+     "severity": "warn",
+     "subject": "usr:dana"
+    },
+    {
+     "detail": "2 unanswered rating(s); oldest 2026-10-02T09:00:00Z",
+     "kind": "rating_debt",
+     "ref": "2026-10-02T09:00:00Z",
+     "severity": "warn",
+     "subject": "usr:frank"
+    }
+   ],
+   "severity_counts": {
+    "warn": 3
+   }
+  },
+  "board": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listings": [
+    {
+     "ai_label": 0,
+     "dev_account": "usr:dana",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "rating_avg": 3.6666666666666665,
+     "rating_count": 3,
+     "title": "Risk Scan API",
+     "token_price": 10
+    },
+    {
+     "ai_label": 1,
+     "dev_account": "usr:dana",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "rating_avg": 5.0,
+     "rating_count": 1,
+     "title": "Macro Feed API",
+     "token_price": 3
+    },
+    {
+     "ai_label": 0,
+     "dev_account": "usr:frank",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "rating_avg": 1.5,
+     "rating_count": 2,
+     "title": "Chart Render API",
+     "token_price": 10
+    }
+   ]
+  },
+  "buyers": {
+   "usr:bob": {
+    "history": {
+     "library": {
+      "buyer_id": "usr:bob",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "net_spent": 20,
+      "purchase_count": 2,
+      "purchases": [
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:dana",
+        "dev_share": 7,
+        "listing_id": 1,
+        "listing_key": "risk-scan",
+        "my_rating": 5,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 1,
+        "purchased_utc": "2026-08-31T23:59:59Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "4da9daa56dacc78b",
+        "title": "Risk Scan API"
+       },
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:frank",
+        "dev_share": 7,
+        "listing_id": 3,
+        "listing_key": "chart-render",
+        "my_rating": 1,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 5,
+        "purchased_utc": "2026-09-20T08:30:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "21171f7e7c2b4b17",
+        "title": "Chart Render API"
+       }
+      ],
+      "refund_count": 0,
+      "total_refunded": 0,
+      "total_spent": 20
+     },
+     "rating_history": [
+      {
+       "base_stars": 5,
+       "buyer_id": "usr:bob",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 5,
+       "listing_id": 1,
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 1,
+       "revision_count": 0,
+       "revisions": []
+      },
+      {
+       "base_stars": 1,
+       "buyer_id": "usr:bob",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 1,
+       "listing_id": 3,
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 5,
+       "revision_count": 0,
+       "revisions": []
+      }
+     ],
+     "refunds": [],
+     "watchlist": {
+      "buyer_id": "usr:bob",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "watch_count": 0,
+      "watches": []
+     }
+    },
+    "months": {
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_dev_paid": 14,
+     "lifetime_gross_spent": 20,
+     "lifetime_net_spent": 20,
+     "lifetime_platform_paid": 6,
+     "lifetime_purchase_count": 2,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "month_count": 2,
+     "months": [
+      {
+       "dev_paid": 7,
+       "dev_paid_net": 7,
+       "gross_spent": 10,
+       "listing_count": 1,
+       "month": "2026-08",
+       "net": 10,
+       "platform_paid": 3,
+       "platform_paid_net": 3,
+       "purchase_count": 1,
+       "refund_count": 0,
+       "refunded": 0
+      },
+      {
+       "dev_paid": 7,
+       "dev_paid_net": 7,
+       "gross_spent": 10,
+       "listing_count": 1,
+       "month": "2026-09",
+       "net": 10,
+       "platform_paid": 3,
+       "platform_paid_net": 3,
+       "purchase_count": 1,
+       "refund_count": 0,
+       "refunded": 0
+      }
+     ]
+    },
+    "profile": {
+     "avg_rating": 3.0,
+     "buyer_id": "usr:bob",
+     "dev_paid": 14,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_purchase_utc": "2026-08-31T23:59:59Z",
+     "gross_spent": 20,
+     "last_purchase_utc": "2026-09-20T08:30:00Z",
+     "listing_count": 2,
+     "live_watch_count": 0,
+     "net_purchase_count": 2,
+     "net_spent": 20,
+     "platform_paid": 6,
+     "purchase_count": 2,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "watch_count": 0
+    },
+    "todo": {
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "pending": [],
+     "pending_count": 0,
+     "purchase_count": 2,
+     "rated_count": 2,
+     "refunded_count": 0
+    },
+    "watch_alerts": {
+     "alert_count": 0,
+     "alerts": [],
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "watch_count": 0
+    }
+   },
+   "usr:carol": {
+    "history": {
+     "library": {
+      "buyer_id": "usr:carol",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "net_spent": 20,
+      "purchase_count": 2,
+      "purchases": [
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:dana",
+        "dev_share": 7,
+        "listing_id": 1,
+        "listing_key": "risk-scan",
+        "my_rating": 4,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 2,
+        "purchased_utc": "2026-09-01T00:00:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "78d4b341b29da5b0",
+        "title": "Risk Scan API"
+       },
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:frank",
+        "dev_share": 7,
+        "listing_id": 3,
+        "listing_key": "chart-render",
+        "my_rating": 2,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 6,
+        "purchased_utc": "2026-09-20T08:30:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "c0dbc8942432c1ec",
+        "title": "Chart Render API"
+       }
+      ],
+      "refund_count": 0,
+      "total_refunded": 0,
+      "total_spent": 20
+     },
+     "rating_history": [
+      {
+       "base_stars": 4,
+       "buyer_id": "usr:carol",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 4,
+       "listing_id": 1,
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 2,
+       "revision_count": 0,
+       "revisions": []
+      },
+      {
+       "base_stars": 2,
+       "buyer_id": "usr:carol",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 2,
+       "listing_id": 3,
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 6,
+       "revision_count": 0,
+       "revisions": []
+      }
+     ],
+     "refunds": [],
+     "watchlist": {
+      "buyer_id": "usr:carol",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "watch_count": 0,
+      "watches": []
+     }
+    },
+    "months": {
+     "buyer_id": "usr:carol",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_dev_paid": 14,
+     "lifetime_gross_spent": 20,
+     "lifetime_net_spent": 20,
+     "lifetime_platform_paid": 6,
+     "lifetime_purchase_count": 2,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_paid": 14,
+       "dev_paid_net": 14,
+       "gross_spent": 20,
+       "listing_count": 2,
+       "month": "2026-09",
+       "net": 20,
+       "platform_paid": 6,
+       "platform_paid_net": 6,
+       "purchase_count": 2,
+       "refund_count": 0,
+       "refunded": 0
+      }
+     ]
+    },
+    "profile": {
+     "avg_rating": 3.0,
+     "buyer_id": "usr:carol",
+     "dev_paid": 14,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_purchase_utc": "2026-09-01T00:00:00Z",
+     "gross_spent": 20,
+     "last_purchase_utc": "2026-09-20T08:30:00Z",
+     "listing_count": 2,
+     "live_watch_count": 0,
+     "net_purchase_count": 2,
+     "net_spent": 20,
+     "platform_paid": 6,
+     "purchase_count": 2,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "watch_count": 0
+    },
+    "todo": {
+     "buyer_id": "usr:carol",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "pending": [],
+     "pending_count": 0,
+     "purchase_count": 2,
+     "rated_count": 2,
+     "refunded_count": 0
+    },
+    "watch_alerts": {
+     "alert_count": 0,
+     "alerts": [],
+     "buyer_id": "usr:carol",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "watch_count": 0
+    }
+   },
+   "usr:dave": {
+    "history": {
+     "library": {
+      "buyer_id": "usr:dave",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "net_spent": 17,
+      "purchase_count": 2,
+      "purchases": [
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:dana",
+        "dev_share": 7,
+        "listing_id": 1,
+        "listing_key": "risk-scan",
+        "my_rating": 2,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 3,
+        "purchased_utc": "2026-09-05T12:00:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "eac5c44802b0b0e7",
+        "title": "Risk Scan API"
+       },
+       {
+        "current_price": 7,
+        "delisted": true,
+        "delisted_utc": "2026-10-02T09:00:00Z",
+        "dev_account": "usr:gina",
+        "dev_share": 5,
+        "listing_id": 4,
+        "listing_key": "quiet-api",
+        "my_rating": 1,
+        "platform_share": 2,
+        "price_paid": 7,
+        "purchase_id": 7,
+        "purchased_utc": "2026-09-28T08:30:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "6489d2060634841a",
+        "title": "Quiet API"
+       }
+      ],
+      "refund_count": 0,
+      "total_refunded": 0,
+      "total_spent": 17
+     },
+     "rating_history": [
+      {
+       "base_stars": 2,
+       "buyer_id": "usr:dave",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 2,
+       "listing_id": 1,
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 3,
+       "revision_count": 0,
+       "revisions": []
+      },
+      {
+       "base_stars": 1,
+       "buyer_id": "usr:dave",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 1,
+       "listing_id": 4,
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 7,
+       "revision_count": 0,
+       "revisions": []
+      }
+     ],
+     "refunds": [],
+     "watchlist": {
+      "buyer_id": "usr:dave",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "watch_count": 0,
+      "watches": []
+     }
+    },
+    "months": {
+     "buyer_id": "usr:dave",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_dev_paid": 12,
+     "lifetime_gross_spent": 17,
+     "lifetime_net_spent": 17,
+     "lifetime_platform_paid": 5,
+     "lifetime_purchase_count": 2,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_paid": 12,
+       "dev_paid_net": 12,
+       "gross_spent": 17,
+       "listing_count": 2,
+       "month": "2026-09",
+       "net": 17,
+       "platform_paid": 5,
+       "platform_paid_net": 5,
+       "purchase_count": 2,
+       "refund_count": 0,
+       "refunded": 0
+      }
+     ]
+    },
+    "profile": {
+     "avg_rating": 1.5,
+     "buyer_id": "usr:dave",
+     "dev_paid": 12,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_purchase_utc": "2026-09-05T12:00:00Z",
+     "gross_spent": 17,
+     "last_purchase_utc": "2026-09-28T08:30:00Z",
+     "listing_count": 2,
+     "live_watch_count": 0,
+     "net_purchase_count": 2,
+     "net_spent": 17,
+     "platform_paid": 5,
+     "purchase_count": 2,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "watch_count": 0
+    },
+    "todo": {
+     "buyer_id": "usr:dave",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "pending": [],
+     "pending_count": 0,
+     "purchase_count": 2,
+     "rated_count": 2,
+     "refunded_count": 0
+    },
+    "watch_alerts": {
+     "alert_count": 0,
+     "alerts": [],
+     "buyer_id": "usr:dave",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "watch_count": 0
+    }
+   },
+   "usr:erin": {
+    "history": {
+     "library": {
+      "buyer_id": "usr:erin",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "net_spent": 10,
+      "purchase_count": 2,
+      "purchases": [
+       {
+        "current_price": 3,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:dana",
+        "dev_share": 3,
+        "listing_id": 2,
+        "listing_key": "macro-feed",
+        "my_rating": 5,
+        "platform_share": 0,
+        "price_paid": 3,
+        "purchase_id": 4,
+        "purchased_utc": "2026-09-05T12:00:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "d9abd47bcd3c5780",
+        "title": "Macro Feed API"
+       },
+       {
+        "current_price": 7,
+        "delisted": true,
+        "delisted_utc": "2026-10-02T09:00:00Z",
+        "dev_account": "usr:gina",
+        "dev_share": 5,
+        "listing_id": 4,
+        "listing_key": "quiet-api",
+        "my_rating": 1,
+        "platform_share": 2,
+        "price_paid": 7,
+        "purchase_id": 8,
+        "purchased_utc": "2026-09-28T08:30:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "b04ae52dcf48b1ae",
+        "title": "Quiet API"
+       }
+      ],
+      "refund_count": 0,
+      "total_refunded": 0,
+      "total_spent": 10
+     },
+     "rating_history": [
+      {
+       "base_stars": 5,
+       "buyer_id": "usr:erin",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 5,
+       "listing_id": 2,
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 4,
+       "revision_count": 0,
+       "revisions": []
+      },
+      {
+       "base_stars": 1,
+       "buyer_id": "usr:erin",
+       "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+       "effective_stars": 1,
+       "listing_id": 4,
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 8,
+       "revision_count": 0,
+       "revisions": []
+      }
+     ],
+     "refunds": [],
+     "watchlist": {
+      "buyer_id": "usr:erin",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "watch_count": 0,
+      "watches": []
+     }
+    },
+    "months": {
+     "buyer_id": "usr:erin",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_dev_paid": 8,
+     "lifetime_gross_spent": 10,
+     "lifetime_net_spent": 10,
+     "lifetime_platform_paid": 2,
+     "lifetime_purchase_count": 2,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_paid": 8,
+       "dev_paid_net": 8,
+       "gross_spent": 10,
+       "listing_count": 2,
+       "month": "2026-09",
+       "net": 10,
+       "platform_paid": 2,
+       "platform_paid_net": 2,
+       "purchase_count": 2,
+       "refund_count": 0,
+       "refunded": 0
+      }
+     ]
+    },
+    "profile": {
+     "avg_rating": 3.0,
+     "buyer_id": "usr:erin",
+     "dev_paid": 8,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_purchase_utc": "2026-09-05T12:00:00Z",
+     "gross_spent": 10,
+     "last_purchase_utc": "2026-09-28T08:30:00Z",
+     "listing_count": 2,
+     "live_watch_count": 0,
+     "net_purchase_count": 2,
+     "net_spent": 10,
+     "platform_paid": 2,
+     "purchase_count": 2,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "watch_count": 0
+    },
+    "todo": {
+     "buyer_id": "usr:erin",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "pending": [],
+     "pending_count": 0,
+     "purchase_count": 2,
+     "rated_count": 2,
+     "refunded_count": 0
+    },
+    "watch_alerts": {
+     "alert_count": 0,
+     "alerts": [],
+     "buyer_id": "usr:erin",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "watch_count": 0
+    }
+   }
+  },
+  "dossiers": {
+   "1": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-08-20T10:00:00Z",
+       "kind": "published",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Risk Scan API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-08-31T23:59:59Z",
+       "kind": "purchased",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Risk Scan API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-09-01T00:00:00Z",
+       "kind": "purchased",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 2,
+       "stars": null,
+       "title": "Risk Scan API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-09-05T12:00:00Z",
+       "kind": "purchased",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 3,
+       "stars": null,
+       "title": "Risk Scan API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-01T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": 5,
+       "title": "Risk Scan API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-01T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 2,
+       "stars": 4,
+       "title": "Risk Scan API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-01T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 3,
+       "stars": 2,
+       "title": "Risk Scan API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": "thanks for the review",
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "rating_replied",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Risk Scan API",
+       "token_price": null,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 1,
+     "returned": 8,
+     "since_utc": null,
+     "total": 8,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 0,
+     "delisted": false,
+     "delisted_utc": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [],
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "live": true,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "portfolio risk scan endpoint",
+     "base_title": "Risk Scan API",
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "portfolio risk scan endpoint",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 1,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Risk Scan API"
+    },
+    "price_history": {
+     "base_price": 10,
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "rating_count": 3,
+     "reply_count": 1,
+     "rows": [
+      {
+       "buyer_id": "usr:bob",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 1,
+       "reply": {
+        "dev_account": "usr:dana",
+        "replied_utc": "2026-10-02T09:00:00Z",
+        "reply_id": 1,
+        "reply_text": "thanks for the review"
+       },
+       "stars": 5
+      },
+      {
+       "buyer_id": "usr:carol",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 2,
+       "reply": null,
+       "stars": 4
+      },
+      {
+       "buyer_id": "usr:dave",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 3,
+       "reply": null,
+       "stars": 2
+      }
+     ]
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "rating_avg": 3.6666666666666665,
+     "rating_count": 3,
+     "ratings": [
+      {
+       "buyer_id": "usr:bob",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 1,
+       "stars": 5
+      },
+      {
+       "buyer_id": "usr:carol",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 2,
+       "stars": 4
+      },
+      {
+       "buyer_id": "usr:dave",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 3,
+       "stars": 2
+      }
+     ]
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 3,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 3,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "portfolio risk scan endpoint",
+     "base_title": "Risk Scan API",
+     "base_token_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "portfolio risk scan endpoint",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 3,
+     "purchase_count": 3,
+     "rating_avg": 3.6666666666666665,
+     "rating_count": 3,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Risk Scan API",
+     "token_price": 10
+    }
+   },
+   "2": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-08-20T10:00:00Z",
+       "kind": "published",
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "previous_stars": null,
+       "ref_id": 2,
+       "stars": null,
+       "title": "Macro Feed API",
+       "token_price": 3,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-09-05T12:00:00Z",
+       "kind": "purchased",
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "previous_stars": null,
+       "ref_id": 4,
+       "stars": null,
+       "title": "Macro Feed API",
+       "token_price": 3,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-01T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "previous_stars": null,
+       "ref_id": 4,
+       "stars": 5,
+       "title": "Macro Feed API",
+       "token_price": null,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 2,
+     "returned": 3,
+     "since_utc": null,
+     "total": 3,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 0,
+     "delisted": false,
+     "delisted_utc": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [],
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "live": true,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "daily macro data feed",
+     "base_title": "Macro Feed API",
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "daily macro data feed",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 2,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Macro Feed API"
+    },
+    "price_history": {
+     "base_price": 3,
+     "current_price": 3,
+     "delisted": false,
+     "delisted_utc": null,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "rating_count": 1,
+     "reply_count": 0,
+     "rows": [
+      {
+       "buyer_id": "usr:erin",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 4,
+       "reply": null,
+       "stars": 5
+      }
+     ]
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "rating_avg": 5.0,
+     "rating_count": 1,
+     "ratings": [
+      {
+       "buyer_id": "usr:erin",
+       "rated_utc": "2026-10-01T09:00:00Z",
+       "rating_id": 4,
+       "stars": 5
+      }
+     ]
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 1,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 1,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 1,
+     "base_description": "daily macro data feed",
+     "base_title": "Macro Feed API",
+     "base_token_price": 3,
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "daily macro data feed",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 1,
+     "purchase_count": 1,
+     "rating_avg": 5.0,
+     "rating_count": 1,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Macro Feed API",
+     "token_price": 3
+    }
+   },
+   "3": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:frank",
+       "event_utc": "2026-08-20T10:00:00Z",
+       "kind": "published",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "previous_stars": null,
+       "ref_id": 3,
+       "stars": null,
+       "title": "Chart Render API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:frank",
+       "event_utc": "2026-09-20T08:30:00Z",
+       "kind": "purchased",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "previous_stars": null,
+       "ref_id": 5,
+       "stars": null,
+       "title": "Chart Render API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:frank",
+       "event_utc": "2026-09-20T08:30:00Z",
+       "kind": "purchased",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "previous_stars": null,
+       "ref_id": 6,
+       "stars": null,
+       "title": "Chart Render API",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:frank",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "previous_stars": null,
+       "ref_id": 5,
+       "stars": 1,
+       "title": "Chart Render API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:frank",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "previous_stars": null,
+       "ref_id": 6,
+       "stars": 2,
+       "title": "Chart Render API",
+       "token_price": null,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 3,
+     "returned": 5,
+     "since_utc": null,
+     "total": 5,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 0,
+     "delisted": false,
+     "delisted_utc": null,
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [],
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "live": true,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "render charts from data",
+     "base_title": "Chart Render API",
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "render charts from data",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 3,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Chart Render API"
+    },
+    "price_history": {
+     "base_price": 10,
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "rating_count": 2,
+     "reply_count": 0,
+     "rows": [
+      {
+       "buyer_id": "usr:bob",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 5,
+       "reply": null,
+       "stars": 1
+      },
+      {
+       "buyer_id": "usr:carol",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 6,
+       "reply": null,
+       "stars": 2
+      }
+     ]
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "rating_avg": 1.5,
+     "rating_count": 2,
+     "ratings": [
+      {
+       "buyer_id": "usr:bob",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 5,
+       "stars": 1
+      },
+      {
+       "buyer_id": "usr:carol",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 6,
+       "stars": 2
+      }
+     ]
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 2,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 2,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "render charts from data",
+     "base_title": "Chart Render API",
+     "base_token_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "render charts from data",
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 2,
+     "purchase_count": 2,
+     "rating_avg": 1.5,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Chart Render API",
+     "token_price": 10
+    }
+   },
+   "4": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-08-20T10:00:00Z",
+       "kind": "published",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 4,
+       "stars": null,
+       "title": "Quiet API",
+       "token_price": 7,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-09-28T08:30:00Z",
+       "kind": "purchased",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 7,
+       "stars": null,
+       "title": "Quiet API",
+       "token_price": 7,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-09-28T08:30:00Z",
+       "kind": "purchased",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 8,
+       "stars": null,
+       "title": "Quiet API",
+       "token_price": 7,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 7,
+       "stars": 1,
+       "title": "Quiet API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "rated",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 8,
+       "stars": 1,
+       "title": "Quiet API",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:gina",
+       "event_utc": "2026-10-02T09:00:00Z",
+       "kind": "delisted",
+       "listing_id": 4,
+       "listing_key": "quiet-api",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Quiet API",
+       "token_price": null,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 4,
+     "returned": 6,
+     "since_utc": null,
+     "total": 6,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 1,
+     "delisted": true,
+     "delisted_utc": "2026-10-02T09:00:00Z",
+     "dev_account": "usr:gina",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [
+      {
+       "cycle": 1,
+       "event": "delist",
+       "utc": "2026-10-02T09:00:00Z"
+      }
+     ],
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "live": false,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "a listing retired after launch",
+     "base_title": "Quiet API",
+     "delisted": true,
+     "delisted_utc": "2026-10-02T09:00:00Z",
+     "description": "a listing retired after launch",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 4,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Quiet API"
+    },
+    "price_history": {
+     "base_price": 7,
+     "current_price": 7,
+     "delisted": true,
+     "delisted_utc": "2026-10-02T09:00:00Z",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 4,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 4,
+     "rating_count": 2,
+     "reply_count": 0,
+     "rows": [
+      {
+       "buyer_id": "usr:dave",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 7,
+       "reply": null,
+       "stars": 1
+      },
+      {
+       "buyer_id": "usr:erin",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 8,
+       "reply": null,
+       "stars": 1
+      }
+     ]
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 4,
+     "rating_avg": 1.0,
+     "rating_count": 2,
+     "ratings": [
+      {
+       "buyer_id": "usr:dave",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 7,
+       "stars": 1
+      },
+      {
+       "buyer_id": "usr:erin",
+       "rated_utc": "2026-10-02T09:00:00Z",
+       "rating_id": 8,
+       "stars": 1
+      }
+     ]
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:gina",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 2,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:gina",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 2,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "a listing retired after launch",
+     "base_title": "Quiet API",
+     "base_token_price": 7,
+     "delisted": true,
+     "delisted_utc": "2026-10-02T09:00:00Z",
+     "description": "a listing retired after launch",
+     "dev_account": "usr:gina",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-08-20T10:00:00Z",
+     "listing_id": 4,
+     "listing_key": "quiet-api",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 2,
+     "purchase_count": 2,
+     "rating_avg": 1.0,
+     "rating_count": 2,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Quiet API",
+     "token_price": 7
+    }
+   }
+  },
+  "market": {
+   "avg_live_price": 7.666666666666667,
+   "buyer_count": 4,
+   "dev_count": 3,
+   "dev_revenue": 48,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "gross_tokens": 67,
+   "listing_count": 4,
+   "live_listing_count": 3,
+   "net_gross_tokens": 67,
+   "net_purchase_count": 8,
+   "platform_revenue": 19,
+   "purchase_count": 8,
+   "refund_count": 0,
+   "refunded_tokens": 0,
+   "retired_listing_count": 1
+  },
+  "market_months": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "lifetime_dev_revenue": 48,
+   "lifetime_gross": 67,
+   "lifetime_net": 67,
+   "lifetime_platform_revenue": 19,
+   "lifetime_refund_count": 0,
+   "lifetime_refunded": 0,
+   "lifetime_sales_count": 8,
+   "month_count": 2,
+   "months": [
+    {
+     "buyer_count": 1,
+     "dev_share": 7,
+     "dev_share_net": 7,
+     "gross": 10,
+     "listing_count": 1,
+     "month": "2026-08",
+     "net": 10,
+     "platform_share": 3,
+     "platform_share_net": 3,
+     "refund_count": 0,
+     "refunded": 0,
+     "sales_count": 1,
+     "seller_count": 1
+    },
+    {
+     "buyer_count": 4,
+     "dev_share": 41,
+     "dev_share_net": 41,
+     "gross": 57,
+     "listing_count": 4,
+     "month": "2026-09",
+     "net": 57,
+     "platform_share": 16,
+     "platform_share_net": 16,
+     "refund_count": 0,
+     "refunded": 0,
+     "sales_count": 7,
+     "seller_count": 3
+    }
+   ]
+  },
+  "refunds": {
+   "amount": 0,
+   "by_dev": [],
+   "dev_account": null,
+   "dev_share": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "kind": "api_refund_register",
+   "listing_id": null,
+   "months": [],
+   "platform_share": 0,
+   "refund_count": 0,
+   "refunds": [],
+   "since_utc": null,
+   "until_utc": null
+  },
+  "sellers": {
+   "usr:dana": {
+    "demand": {
+     "converted_count": 0,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 2,
+     "pending_count": 0,
+     "rows": [
+      {
+       "converted_count": 0,
+       "current_price": 10,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Risk Scan API",
+       "watcher_count": 0
+      },
+      {
+       "converted_count": 0,
+       "current_price": 3,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Macro Feed API",
+       "watcher_count": 0
+      }
+     ],
+     "total_watchers": 0
+    },
+    "profile": {
+     "avg_rating": 4.0,
+     "dev_account": "usr:dana",
+     "dev_revenue": 24,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_listed_utc": "2026-08-20T10:00:00Z",
+     "gross_sales": 33,
+     "listing_count": 2,
+     "listings": [
+      {
+       "avg_rating": 3.6666666666666665,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "rating_count": 3,
+       "sales_count": 3,
+       "title": "Risk Scan API",
+       "token_price": 10
+      },
+      {
+       "avg_rating": 5.0,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "rating_count": 1,
+       "sales_count": 1,
+       "title": "Macro Feed API",
+       "token_price": 3
+      }
+     ],
+     "live_listing_count": 2,
+     "platform_revenue": 9,
+     "rating_count": 4,
+     "retired_listing_count": 0,
+     "sales_count": 4
+    },
+    "quality": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 2,
+     "low_rated_count": 0,
+     "rating_avg": 4.0,
+     "rating_count": 4,
+     "reply_count": 1,
+     "reply_coverage": 0.25,
+     "rows": [
+      {
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "lowest_stars": 2,
+       "rating_avg": 3.6666666666666665,
+       "rating_count": 3,
+       "reply_count": 1,
+       "retired": false,
+       "star_distribution": {
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 1,
+        "5": 1
+       },
+       "title": "Risk Scan API",
+       "unanswered_count": 2
+      },
+      {
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "lowest_stars": 5,
+       "rating_avg": 5.0,
+       "rating_count": 1,
+       "reply_count": 0,
+       "retired": false,
+       "star_distribution": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+       },
+       "title": "Macro Feed API",
+       "unanswered_count": 1
+      }
+     ],
+     "seller_count": 1,
+     "star_distribution": {
+      "1": 0,
+      "2": 1,
+      "3": 0,
+      "4": 1,
+      "5": 2
+     },
+     "unanswered_count": 3
+    },
+    "revenue_months": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_gross": 33,
+     "lifetime_net": 33,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "lifetime_sales_count": 4,
+     "month_count": 2,
+     "months": [
+      {
+       "dev_share": 7,
+       "dev_share_net": 7,
+       "gross": 10,
+       "month": "2026-08",
+       "net": 10,
+       "platform_share": 3,
+       "platform_share_net": 3,
+       "refund_count": 0,
+       "refunded": 0,
+       "sales_count": 1
+      },
+      {
+       "dev_share": 17,
+       "dev_share_net": 17,
+       "gross": 23,
+       "month": "2026-09",
+       "net": 23,
+       "platform_share": 6,
+       "platform_share_net": 6,
+       "refund_count": 0,
+       "refunded": 0,
+       "sales_count": 3
+      }
+     ]
+    },
+    "sales": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "refunded_count": 0,
+     "refunded_total": 0,
+     "sales": [
+      {
+       "buyer_id": "usr:bob",
+       "dev_share": 7,
+       "dev_share_tx": "462ce2173503309b",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 1,
+       "purchased_utc": "2026-08-31T23:59:59Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "4da9daa56dacc78b"
+      },
+      {
+       "buyer_id": "usr:carol",
+       "dev_share": 7,
+       "dev_share_tx": "42cb7456638c1b69",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 2,
+       "purchased_utc": "2026-09-01T00:00:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "78d4b341b29da5b0"
+      },
+      {
+       "buyer_id": "usr:dave",
+       "dev_share": 7,
+       "dev_share_tx": "b198ada7c1952c08",
+       "listing_id": 1,
+       "listing_key": "risk-scan",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 3,
+       "purchased_utc": "2026-09-05T12:00:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "eac5c44802b0b0e7"
+      },
+      {
+       "buyer_id": "usr:erin",
+       "dev_share": 3,
+       "dev_share_tx": "9531006504b6dd0a",
+       "listing_id": 2,
+       "listing_key": "macro-feed",
+       "platform_share": 0,
+       "price_paid": 3,
+       "purchase_id": 4,
+       "purchased_utc": "2026-09-05T12:00:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "d9abd47bcd3c5780"
+      }
+     ]
+    }
+   },
+   "usr:frank": {
+    "demand": {
+     "converted_count": 0,
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 1,
+     "pending_count": 0,
+     "rows": [
+      {
+       "converted_count": 0,
+       "current_price": 10,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Chart Render API",
+       "watcher_count": 0
+      }
+     ],
+     "total_watchers": 0
+    },
+    "profile": {
+     "avg_rating": 1.5,
+     "dev_account": "usr:frank",
+     "dev_revenue": 14,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_listed_utc": "2026-08-20T10:00:00Z",
+     "gross_sales": 20,
+     "listing_count": 1,
+     "listings": [
+      {
+       "avg_rating": 1.5,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "rating_count": 2,
+       "sales_count": 2,
+       "title": "Chart Render API",
+       "token_price": 10
+      }
+     ],
+     "live_listing_count": 1,
+     "platform_revenue": 6,
+     "rating_count": 2,
+     "retired_listing_count": 0,
+     "sales_count": 2
+    },
+    "quality": {
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 1,
+     "low_rated_count": 1,
+     "rating_avg": 1.5,
+     "rating_count": 2,
+     "reply_count": 0,
+     "reply_coverage": 0.0,
+     "rows": [
+      {
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "lowest_stars": 1,
+       "rating_avg": 1.5,
+       "rating_count": 2,
+       "reply_count": 0,
+       "retired": false,
+       "star_distribution": {
+        "1": 1,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 0
+       },
+       "title": "Chart Render API",
+       "unanswered_count": 2
+      }
+     ],
+     "seller_count": 1,
+     "star_distribution": {
+      "1": 1,
+      "2": 1,
+      "3": 0,
+      "4": 0,
+      "5": 0
+     },
+     "unanswered_count": 2
+    },
+    "revenue_months": {
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_gross": 20,
+     "lifetime_net": 20,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "lifetime_sales_count": 2,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_share": 14,
+       "dev_share_net": 14,
+       "gross": 20,
+       "month": "2026-09",
+       "net": 20,
+       "platform_share": 6,
+       "platform_share_net": 6,
+       "refund_count": 0,
+       "refunded": 0,
+       "sales_count": 2
+      }
+     ]
+    },
+    "sales": {
+     "dev_account": "usr:frank",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "refunded_count": 0,
+     "refunded_total": 0,
+     "sales": [
+      {
+       "buyer_id": "usr:bob",
+       "dev_share": 7,
+       "dev_share_tx": "9f0f84554d7ed7a5",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 5,
+       "purchased_utc": "2026-09-20T08:30:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "21171f7e7c2b4b17"
+      },
+      {
+       "buyer_id": "usr:carol",
+       "dev_share": 7,
+       "dev_share_tx": "ffc2d84cc8cb3a6e",
+       "listing_id": 3,
+       "listing_key": "chart-render",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 6,
+       "purchased_utc": "2026-09-20T08:30:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "c0dbc8942432c1ec"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "schema_version": 10
+}

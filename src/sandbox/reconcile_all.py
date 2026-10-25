@@ -2429,6 +2429,12 @@ SUITES = [
     # JSON schema moves 8 -> 9 additively.
     ("ledger-apimarket-reportdemand", os.path.join(
         "ledger", "test_apimarket_report_demand.py"), 8),
+    # R2117 seller-side rating quality scorecard (api_seller_quality):
+    # star distribution, reply coverage and one quality row per shelf,
+    # wired into every seller block plus a quality_risk attention
+    # family, so the JSON schema moves 9 -> 10 additively.
+    ("ledger-apimarket-sellerquality", os.path.join(
+        "ledger", "test_apimarket_sellerquality.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and
