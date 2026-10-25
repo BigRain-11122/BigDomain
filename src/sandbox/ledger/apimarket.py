@@ -127,6 +127,7 @@ CREATE TABLE IF NOT EXISTS apimarket_listings (
     ai_label INTEGER NOT NULL CHECK (ai_label IN (0, 1)),
     listed_utc TEXT NOT NULL,
     supply INTEGER,
+    category TEXT,
     UNIQUE (dev_account, listing_key)
 );
 CREATE TABLE IF NOT EXISTS apimarket_purchases (
@@ -427,6 +428,7 @@ class APIMarketFace:
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._conn.executescript(_SCHEMA)
         self._ensure_supply_column()
+        self._ensure_category_column()
         self._ensure_lifecycle_schema()
 
     def _ensure_lifecycle_schema(self):
@@ -486,6 +488,20 @@ class APIMarketFace:
             self._conn.execute(
                 "ALTER TABLE apimarket_listings ADD COLUMN supply"
                 " INTEGER")
+
+    def _ensure_category_column(self):
+        """Idempotent forward migration for databases written
+        before the category axis existed (AC-AMCT8): the column is
+        added only when absent, so old rows keep category NULL and
+        stay listed, searchable and purchasable - the pre-change
+        behaviour is preserved - while the directory face reports
+        them honestly in its uncategorized bucket."""
+        cols = [r[1] for r in self._conn.execute(
+            "PRAGMA table_info(apimarket_listings)").fetchall()]
+        if "category" not in cols:
+            self._conn.execute(
+                "ALTER TABLE apimarket_listings ADD COLUMN category"
+                " TEXT")
 
     def _check_params(self):
         p = self.params
@@ -644,7 +660,7 @@ class APIMarketFace:
 
     def publish_api(self, dev_account, listing_key, title,
                     description, payload, token_price, ai_generated,
-                    supply=None):
+                    supply=None, category=None):
         """List one developer service: the registry gate runs
         first (off-register publishers never reach the content
         gate, so no msgSecCheck call is burned - AC-AM2), then
@@ -679,6 +695,23 @@ class APIMarketFace:
                      or supply < 1)):
             raise ApiMarketError(E_AM_BAD_ARGS,
                                  "supply must be int >= 1 or None")
+        # Category is the same kind of pre-lock shape gate
+        # (AC-AMCT1): a malformed taxonomy declaration is refused
+        # before the registry read and before any msgSecCheck call,
+        # so a bad category burns zero gate calls and stores zero
+        # rows. None = uncategorized.
+        if category is None:
+            cat = None
+        else:
+            if not isinstance(category, str):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "category must be str or None")
+            cat = category.strip()
+            if not cat:
+                raise ApiMarketError(E_AM_BAD_ARGS, "category blank")
+            if len(cat) > 40:
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "category too long")
         body = json.dumps(payload, sort_keys=True)
         with self._lock:
             if not self._is_registered_dev(dev_account):
@@ -696,10 +729,12 @@ class APIMarketFace:
                 cur = self._conn.execute(
                     "INSERT INTO apimarket_listings (dev_account,"
                     " listing_key, title, description, payload_json,"
-                    " token_price, ai_label, listed_utc, supply)"
-                    " VALUES (?,?,?,?,?,?,?,?,?)",
+                    " token_price, ai_label, listed_utc, supply,"
+                    " category)"
+                    " VALUES (?,?,?,?,?,?,?,?,?,?)",
                     (dev_account, key, t, d, body, token_price,
-                     1 if ai_generated else 0, _now_utc(), supply))
+                     1 if ai_generated else 0, _now_utc(), supply,
+                     cat))
                 self._conn.execute("COMMIT")
             except sqlite3.IntegrityError:
                 self._conn.execute("ROLLBACK")
@@ -711,7 +746,7 @@ class APIMarketFace:
                 "listing_key": key, "title": t,
                 "token_price": token_price,
                 "ai_label": 1 if ai_generated else 0,
-                "supply": supply}
+                "supply": supply, "category": cat}
 
     def _require_listing(self, listing_id):
         """Validation + lookup under no lock (caller holds it).
@@ -1452,7 +1487,8 @@ class APIMarketFace:
         with self._lock:
             row = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
-                " description, token_price, ai_label, listed_utc"
+                " description, token_price, ai_label, listed_utc,"
+                " category"
                 " FROM apimarket_listings WHERE listing_id = ?",
                 (listing_id,)).fetchone()
             if row is None:
@@ -1483,6 +1519,7 @@ class APIMarketFace:
                 "revision_count": n_rev,
                 "latest_revision_utc": latest_rev,
                 "ai_label": int(row[6]), "listed_utc": row[7],
+                "category": row[8],
                 "purchase_count": int(n_buy), "rating_count": n_rate,
                 "rating_avg": avg,
                 "refund_count": n_refund,
@@ -2528,7 +2565,7 @@ class APIMarketFace:
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
                    max_price=None, include_delisted=False,
-                   limit=None, offset=None, sort=None):
+                   limit=None, offset=None, sort=None, category=None):
         """Market discovery surface (pre-registered AC-AMSQ1..AMSQ8
         in the R2082 explore-queue row BEFORE this code existed).
 
@@ -2614,6 +2651,20 @@ class APIMarketFace:
         if not isinstance(include_delisted, bool):
             raise ApiMarketError(E_AM_BAD_ARGS,
                                  "include_delisted must be bool")
+        # AC-AMCT3/AC-AMCT6: the category shape gate runs after the
+        # include_delisted gate and before the paging/sort gates,
+        # always BEFORE any read, so a refused taxonomy touches no
+        # table. Matching is exact on the trimmed declaration (no
+        # case folding - documented honestly in the queue row).
+        if category is None:
+            cat = None
+        else:
+            if not isinstance(category, str):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "bad category: %r" % (category,))
+            cat = category.strip()
+            if not cat:
+                raise ApiMarketError(E_AM_BAD_ARGS, "category blank")
         if limit is not None:
             if (isinstance(limit, bool) or not isinstance(limit, int)
                     or limit < 1):
@@ -2641,7 +2692,8 @@ class APIMarketFace:
         with self._lock:
             rows = self._conn.execute(
                 "SELECT listing_id, dev_account, listing_key, title,"
-                " description, token_price, ai_label, listed_utc FROM"
+                " description, token_price, ai_label, listed_utc,"
+                " category FROM"
                 " apimarket_listings ORDER BY listing_id").fetchall()
             out = []
             listed_by = {}
@@ -2651,6 +2703,8 @@ class APIMarketFace:
                 if stamp is not None and not include_delisted:
                     continue
                 if dev_account is not None and r[1] != dev_account:
+                    continue
+                if cat is not None and (r[8] or "") != cat:
                     continue
                 eff_title, _eff_desc, _n_meta, _latest_meta = \
                     self._metadata_state(listing_id, r[3], r[4])
@@ -2673,6 +2727,7 @@ class APIMarketFace:
                             "ai_label": int(r[6]),
                             "rating_count": n_rate,
                             "rating_avg": avg,
+                            "category": r[8],
                             "delisted": stamp is not None,
                             "delisted_utc": stamp})
             # AC-AMSR2: five total orders, each tie-broken by
@@ -2718,6 +2773,11 @@ class APIMarketFace:
                     "include_delisted": include_delisted}
         if sort_mode is not None:
             criteria["sort"] = sort_mode
+        # AC-AMCT2: the category key is echoed only when a filter is
+        # given, so a caller that never filters keeps the pre-change
+        # criteria contract byte for byte.
+        if cat is not None:
+            criteria["category"] = cat
         if not paged:
             return {"disclaimer": self.disclaimer,
                     "criteria": criteria,
@@ -2734,6 +2794,62 @@ class APIMarketFace:
                 "offset": offset,
                 "truncated": (start + len(page)) < total,
                 "listings": page}
+
+    def api_categories(self):
+        """Category directory (pre-registered AC-AMCT1..AC-AMCT8 in
+        the R2132 explore-queue row BEFORE this code existed): the
+        marketplace had no notion of a product category, so a buyer
+        could only guess keywords and an operator could not answer
+        "what is this market made of". This face answers it: one row
+        per declared category with partition counts and the live
+        price band, plus an honest uncategorized bucket so the
+        conservation law holds on every world (including the ones
+        written before the axis existed). Prices are the CURRENT
+        asking price (a repricing moves the band in the same step
+        it moves api_search); retirement moves the partition
+        counters only, and a re-listed listing returns to live.
+        Rows are ordered by category ascending; the bucket is exact
+        on the stored declaration (trimmed at publish time, no case
+        folding). Pure read: zero row mutations, zero token
+        movement."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT listing_id, token_price, category FROM"
+                " apimarket_listings ORDER BY listing_id").fetchall()
+            groups = {}
+            uncategorized = 0
+            for r in rows:
+                lid = int(r[0])
+                cat = r[2]
+                if cat is None:
+                    uncategorized += 1
+                    continue
+                g = groups.get(cat)
+                if g is None:
+                    g = {"category": cat, "listing_count": 0,
+                         "live_listing_count": 0,
+                         "retired_listing_count": 0,
+                         "_prices": []}
+                    groups[cat] = g
+                g["listing_count"] += 1
+                if self._delisted_utc(lid) is None:
+                    g["live_listing_count"] += 1
+                    g["_prices"].append(
+                        self._current_price(lid, int(r[1])))
+                else:
+                    g["retired_listing_count"] += 1
+            out = []
+            for cat in sorted(groups):
+                g = groups[cat]
+                prices = g.pop("_prices")
+                g["min_live_price"] = min(prices) if prices else None
+                g["max_live_price"] = max(prices) if prices else None
+                out.append(g)
+        return {"category_count": len(out),
+                "listing_count": len(rows),
+                "uncategorized_count": uncategorized,
+                "disclaimer": self.disclaimer,
+                "categories": out}
 
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board

@@ -2369,6 +2369,14 @@ SUITES = [
     # all three queue views, pure read, restart identity.
     ("ledger-apimarket-claims-withdraw", os.path.join(
         "ledger", "test_apimarket_claims_withdraw.py"), 8),
+    # AC-AMCT1..AC-AMCT8 pre-registered in the R2132 explore-queue row
+    # BEFORE this suite existed: the category directory axis - the
+    # publish-time category declaration and its pre-gate, the exact
+    # api_search filter, and the api_categories directory with its
+    # conservation law, partition/live-price law, pure read, the
+    # idempotent pre-category migration and restart identity.
+    ("ledger-apimarket-category", os.path.join(
+        "ledger", "test_apimarket_category.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

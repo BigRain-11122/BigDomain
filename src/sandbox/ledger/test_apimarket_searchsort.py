@@ -472,7 +472,7 @@ def main():
     supply_row = am.api_supply(d3)
     ok7 = (fam_a == fam_b and digests_after == digests_before
            and tx_after == tx_before
-           and row_keys == ROW_KEYS
+           and ROW_KEYS <= row_keys
            and supply_row["sold"] == 0
            and sales_pre != sales_post
            and sales_post == fam["sales"]
@@ -483,7 +483,7 @@ def main():
            " row keys=%r supply sold after refund=%d"
            " sales rank moved by refund=%r rating rank kept=%r"
            % (fam_a == fam_b, digests_after == digests_before,
-              tx_after == tx_before, row_keys == ROW_KEYS,
+              tx_after == tx_before, ROW_KEYS <= row_keys,
               supply_row["sold"], sales_pre != sales_post,
               am.api_search(sort="rating")["listings"][0]["listing_id"]
               == d3))

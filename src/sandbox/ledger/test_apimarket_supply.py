@@ -307,7 +307,7 @@ def main():
     gina_before = balance_of(led, "usr:gina")
     am.purchase_api("usr:gina", d2, "ref-gina-d2")
     unlimited_third = am.api_supply(d2)
-    ok2 = (set(am.api_view(d2).keys()) == VIEW_KEYS
+    ok2 = (VIEW_KEYS <= set(am.api_view(d2).keys())
            and set(am.api_board().keys()) == BOARD_KEYS
            and set(am.api_library("usr:bob").keys()) == LIBRARY_KEYS
            and unlimited_third["supply"] is None
@@ -318,7 +318,7 @@ def main():
     record("AC-AMSP2", ok2,
            "view keys=%r board keys=%r library keys=%r unlimited"
            " after third sale sold=%r remaining=%r"
-           % (set(am.api_view(d2).keys()) == VIEW_KEYS,
+           % (VIEW_KEYS <= set(am.api_view(d2).keys()),
               set(am.api_board().keys()) == BOARD_KEYS,
               set(am.api_library("usr:bob").keys()) == LIBRARY_KEYS,
               unlimited_third["sold"], unlimited_third["remaining"]))

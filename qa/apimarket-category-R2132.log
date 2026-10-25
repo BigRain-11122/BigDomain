@@ -1,0 +1,10 @@
+PASS AC-AMCT1: col=True d1='data' d2='data' d4=None bad=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] blank=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] long='E_AM_BAD_ARGS' gate_calls_bad=0 gate_calls_good=2 trim='tools'
+PASS AC-AMCT2: legacy_keys=['count', 'criteria', 'disclaimer', 'listings'] criteria=['dev_account', 'include_delisted', 'keyword', 'max_price', 'min_price'] count=5 uncategorized_buy=7
+PASS AC-AMCT3: data=[2, 1] case=0 trim=[2, 1] kw=[2] nlp=[5] seller=[2, 1] band=[1]/[2] page=[1] sort=[1, 2]
+PASS AC-AMCT4: keys=True rowkeys=True cats=['data', 'nlp', 'render'] total=5 uncat=1 count=3
+PASS AC-AMCT5: base=3/10 delist=1/1 relist=2/0 reprice=20/20
+PASS AC-AMCT6: order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_PRICE'] bad=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] blank=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] digests_frozen=True tx=True
+PASS AC-AMCT7: dir_repeat=True search_repeat=True digests=True tx=True
+PASS AC-AMCT8: migrated=True idempotent=True restarts=2 wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

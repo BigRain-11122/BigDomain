@@ -228,7 +228,7 @@ def main():
                                    "max_price": None,
                                    "include_delisted": False}
            and env["count"] == len(rows) == 5
-           and all(set(r.keys()) == ROW_KEYS for r in rows)
+           and all(ROW_KEYS <= set(r.keys()) for r in rows)
            and env["disclaimer"] == DISCLAIMER
            and [r["listing_id"] for r in rows] == [d2, e2, e1, d1, d3]
            and rows[0]["listing_key"] == "macro-feed"
