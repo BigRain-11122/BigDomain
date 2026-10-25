@@ -3882,6 +3882,81 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "entries": entries}
 
+    def api_buyer_ledger(self, buyer_id, limit=None):
+        """Buyer settlement statement (criteria AC-AMLGB1..AC-AMLGB8
+        pre-registered in the R2128 explore-queue row BEFORE this code
+        existed).
+
+        R2126 gave the seller a statement; the buyer side still had no
+        face answering "how much money do I have right now and which
+        ledger entries produced it". A buyer carries row faces
+        (api_library), cash months (api_buyer_months) and lifetime
+        aggregates (api_buyer_profile), yet the ledger movements a
+        purchase debits and a refund credits had zero product
+        consumers. The seam is the same one the seller statement
+        trusts - _seller_balance reads any usr: account - so no second
+        bookkeeping copy exists. Limit truncates the OLDEST tail (the
+        newest movement stays visible), an over-cap limit clamps, and a
+        non-int / bool / sub-one limit fails closed. An account the
+        ledger never saw is not an error: balance 0 with
+        balance_known False and an empty statement. Pure read: zero
+        row mutations and zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if limit is None:
+            limit = 50
+        else:
+            if (isinstance(limit, bool) or not isinstance(limit, int)
+                    or limit < 1):
+                raise ApiMarketError(E_AM_BAD_ARGS, "limit=%r" % (limit,))
+            if limit > 500:
+                limit = 500
+        balance, known = self._seller_balance(buyer_id)
+        entries = []
+        try:
+            bill = self.led.bill(buyer_id, limit)
+        except Exception:
+            bill = None
+        if isinstance(bill, dict):
+            raw = bill.get("items")
+            if isinstance(raw, list):
+                for item in raw:
+                    if not isinstance(item, dict):
+                        continue
+                    try:
+                        amount = int(item.get("amount", 0))
+                    except (TypeError, ValueError):
+                        amount = 0
+                    row = {
+                        "tx_id": str(item.get("tx_id", "")),
+                        "ts_utc": item.get("ts_utc"),
+                        "type": item.get("type"),
+                        "action": item.get("action"),
+                        "ref": item.get("ref"),
+                        "ref_type": item.get("ref_type"),
+                        "direction": item.get("direction"),
+                        "amount": amount,
+                        "memo": item.get("memo"),
+                        "source_ai": bool(item.get("source_ai")),
+                    }
+                    if item.get("source_ai") and "ai_label" in item:
+                        row["ai_label"] = item.get("ai_label")
+                    entries.append(row)
+        credit_total = sum(e["amount"] for e in entries
+                           if e["direction"] == "credit")
+        debit_total = sum(e["amount"] for e in entries
+                          if e["direction"] == "debit")
+        return {"buyer_id": str(buyer_id),
+                "balance": balance,
+                "balance_known": known,
+                "entry_count": len(entries),
+                "credit_total": credit_total,
+                "debit_total": debit_total,
+                "net": credit_total - debit_total,
+                "limit": limit,
+                "disclaimer": self.disclaimer,
+                "entries": entries}
+
     # -- pre-purchase Q&A (R2118) ---------------------------------------------
 
     def ask_question(self, buyer_id, listing_id, text):

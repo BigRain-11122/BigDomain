@@ -130,7 +130,7 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # review" or "which sellers disclose no identity". The block carries
 # the two envelopes verbatim plus the derived disclosure gaps; the
 # envelope above is unchanged and every earlier block keeps its value.
-REPORT_SCHEMA = 15
+REPORT_SCHEMA = 16
 
 # One day. A seller who leaves a buyer waiting longer than this shows
 # up in the attention digest; the boundary stays silent on the exact
@@ -155,6 +155,12 @@ QUALITY_EMPTY = "no ratings for this seller"
 QUESTIONS_EMPTY = "no open questions for this seller"
 MY_QUESTIONS_EMPTY = "no questions asked by this buyer"
 ANSWERS_EMPTY = "no answered questions for this seller"
+
+# R2128 buyer settlement statement: the seller statement face had a
+# consumer (the seller block), the new mirror face gets its own table in
+# the buyer block, and a block built by an older caller degrades to this
+# honest empty state instead of raising.
+LEDGER_EMPTY = "no ledger entries for this buyer"
 
 # R2125 distribution duty: the R2124 faces are read verbatim into the
 # report, and the seller-side disclosure gap is derived from the public
@@ -230,6 +236,16 @@ def seed_demo(am, led, dk):
     report exercises a real settlement surface rather than one month of
     toy rows."""
     clock = Clock()
+    # R2128: the buyer statement renders ledger entry stamps, and the
+    # funding entries below are written before any market action, so
+    # the clock patch has to cover them too - otherwise two demo
+    # worlds differ by a wall-clock stamp in the funding rows and the
+    # report stops being deterministic (found by the dossier suite's
+    # determinism face in the R2128 battery).
+    orig_now = A._now_utc
+    orig_led_now = L.now_utc
+    A._now_utc = clock.now_utc
+    L.now_utc = clock.now_utc
     led.mint_to_pool("pool:reserve", 9000, "SETTLE-REPORT-A",
                      "settlement")
     led.mint_to_pool("pool:share", 9000, "SETTLE-REPORT-S",
@@ -242,10 +258,6 @@ def seed_demo(am, led, dk):
     dk.issue_key("usr:dana", "dana-key", 10, ["backtest"], False)
     dk.issue_key("usr:frank", "frank-key", 10, ["backtest"], False)
 
-    orig_now = A._now_utc
-    orig_led_now = L.now_utc
-    A._now_utc = clock.now_utc
-    L.now_utc = clock.now_utc
     try:
         clock.value = "2026-08-20T10:00:00Z"
         d1 = am.publish_api("usr:dana", "risk-scan", "Risk Scan API",
@@ -410,6 +422,7 @@ def collect(am):
             "todo": am.api_buyer_todo(buyer),
             "watch_alerts": am.api_watch_alerts(buyer),
             "questions": am.api_buyer_questions(buyer),
+            "ledger": am.api_buyer_ledger(buyer),
             "history": histories[buyer],
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
@@ -1029,6 +1042,15 @@ def render_html(report):
         parts.append("<h3>%s - my questions (%d)</h3>"
                      % (esc(buyer), len(my_rows)))
         parts.append(row_table(my_rows, MY_QUESTIONS_EMPTY))
+        # R2128 buyer settlement statement: the mirror of the seller
+        # statement. A block built by an older caller carries no ledger
+        # key, so the table degrades to the honest empty state.
+        statement = block.get("ledger") or {}
+        entries = statement.get("entries") or []
+        parts.append("<h3>%s - ledger statement (balance %s, %d row(s))</h3>"
+                     % (esc(buyer), esc(statement.get("balance")),
+                        len(entries)))
+        parts.append(row_table(entries, LEDGER_EMPTY))
         # R2110 buyer history: a block built by an older caller carries
         # no history key, so the four tables degrade to honest empties.
         parts.append("<h3>%s - buyer history</h3>" % esc(buyer))

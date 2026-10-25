@@ -2333,6 +2333,17 @@ SUITES = [
     # honest absence, pure read and cross-restart identity.
     ("ledger-apimarket-sellerledger", os.path.join(
         "ledger", "test_apimarket_sellerledger.py"), 8),
+    # AC-AMLGB1..AC-AMLGB8 pre-registered in the R2128 explore-queue
+    # claim row BEFORE this suite existed: the buyer settlement
+    # statement (the mirror of the seller statement) - live balance
+    # through the same seam plus the buyer's own entries newest first,
+    # derived credit/debit totals, oldest-tail truncation, the
+    # purchase-debit and refund-credit semantics, zero movement from
+    # publish/repricing/metadata/restock/lifecycle/rating/reply/
+    # watch/question doors, the gate family and its order, honest
+    # absence, pure read and cross-restart identity.
+    ("ledger-apimarket-buyerledger", os.path.join(
+        "ledger", "test_apimarket_buyerledger.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the
