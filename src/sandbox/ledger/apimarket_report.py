@@ -87,7 +87,11 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # attention block gains a new kind derived from api_refund_exposure,
 # the envelope is unchanged and every earlier finding kind keeps its
 # meaning.
-REPORT_SCHEMA = 8
+# v9 (R2116) adds the demand key inside every seller block: the read
+# face api_listing_demand had no block consumer (it surfaced only
+# through the attention digest), so the envelope is still unchanged and
+# every earlier seller key keeps its value.
+REPORT_SCHEMA = 9
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -99,6 +103,8 @@ DOSSIER_KEYS = ("view", "lifecycle", "price_history",
                 "metadata_history", "supply", "supply_history",
                 "ratings", "rating_replies", "feed")
 DOSSIER_EMPTY = "no listings in this market"
+
+DEMAND_EMPTY = "no listings for this seller"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -290,6 +296,7 @@ def collect(am):
             "revenue_months": am.api_revenue_months(dev),
             "sales": sales[dev],
             "profile": am.dev_profile(dev),
+            "demand": am.api_listing_demand(dev),
         }
     histories = collect_buyer_history(am, buyers)
     for buyer in sorted(buyers):
@@ -731,6 +738,15 @@ def render_html(report):
         parts.append("<h3>%s - sales rows (%d)</h3>"
                      % (esc(dev), len(rows)))
         parts.append(row_table(rows, "no sales"))
+        # R2116 seller demand: every listing of the seller with its live
+        # watcher count and net conversion, hottest shelf first. A block
+        # built by an older caller carries no demand key, so the table
+        # degrades to the honest empty state.
+        demand = block.get("demand") or {}
+        demand_rows = demand.get("rows") or []
+        parts.append("<h3>%s - seller demand (%d)</h3>"
+                     % (esc(dev), len(demand_rows)))
+        parts.append(row_table(demand_rows, DEMAND_EMPTY))
 
     parts.append("<h2>Buyers</h2>")
     for buyer in sorted(report["buyers"]):

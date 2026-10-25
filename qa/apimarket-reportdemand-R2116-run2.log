@@ -1,0 +1,12 @@
+PASS AC-AMDS1 same=True -> usr:dana:rows=2/watchers=3,usr:frank:rows=1/watchers=0; re-read 3->4
+PASS AC-AMDS2 keys=attention,report,schema_version schema=9 legacy=True buyerkeys={('history', 'months', 'profile', 'todo', 'watch_alerts')}
+PASS AC-AMDS3 heads=usr:dana - seller demand (2)|usr:frank - seller demand (1) degrade=True
+PASS AC-AMDS4 escaped=True marker=True disclaimer=True
+PASS AC-AMDS5 digest=024bc93ea2c22907 tx=16
+PASS AC-AMDS6 html=ec0764df3bea3995 json=3ef7125a57fd64ee
+PASS AC-AMDS7 dense=True retired=True d1(w/c/p)=2/1/1 d2(c/p)=1/1
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_attention.py rc=0
+  child test_apimarket_report_json.py rc=0
+PASS AC-AMDS8 rc=[0, 0, 0] wired=True
+SUITE PASS 8/8

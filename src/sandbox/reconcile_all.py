@@ -2423,6 +2423,12 @@ SUITES = [
     # oldest debt first, with the refund precedence pinned.
     ("ledger-apimarket-buyertodo", os.path.join(
         "ledger", "test_apimarket_buyertodo.py"), 8),
+    # R2116 seller demand block on the settlement report: the last read
+    # face without a block consumer now renders one table per seller
+    # (live watchers, net conversions, retired shelves kept) and the
+    # JSON schema moves 8 -> 9 additively.
+    ("ledger-apimarket-reportdemand", os.path.join(
+        "ledger", "test_apimarket_report_demand.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and

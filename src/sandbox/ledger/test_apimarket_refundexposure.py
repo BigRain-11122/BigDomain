@@ -493,8 +493,13 @@ def main():
                          if f["subject"] in ("usr:frank", "usr:gina",
                                              "usr:hermes")]
         payload = RPT.api_report_payload(report)
-        contract_ok = (RPT.REPORT_SCHEMA == 8
-                       and payload["schema_version"] == 8
+        # birth station: this criterion pinned schema 8 when the
+        # refund_risk family was born (R2115). R2116 added the seller
+        # demand block as an ADDITIVE bump (8 -> 9), so the assertion
+        # follows the module constant instead of pinning a literal while
+        # still proving the envelope shape the additive rule promises.
+        contract_ok = (RPT.REPORT_SCHEMA >= 8
+                       and payload["schema_version"] == RPT.REPORT_SCHEMA
                        and set(payload) == {"schema_version", "report",
                                             "attention"}
                        and set(payload["report"]) == set(report))

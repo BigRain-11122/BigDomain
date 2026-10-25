@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T07:58:10+08:00",
+ "export_ts": "2026-10-25T09:07:30+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2115 卖家退款敞口面：退款门会在卖家把分成花掉后拒付，但此前没有任何面提前说明「这笔钱已经不在账上」。现在卖家与运营都能一眼看到每家的退款敞口、账上余额与缺口。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_refund_exposure（七键信封+九键密集行·敞口=未退款购买的存量卖家分账·余额取活账本·缺口/covered 派生·退役不销债·纯读） + apimarket_report.py 的 refund_risk 家族与 REPORT_SCHEMA 8 + src/sandbox/ledger/test_apimarket_refundexposure.py（SUITE PASS 8/8·双跑同一 sha16 112e6f0d43928930） + qa/reconcile-all-R2115.log（RUNNER PASS 320/320·controls 7/7·533.8s·2026-10-25 07:56）",
-  "next_milestone": "48 小时内：把退款敞口接进运营侧唯一页面之外的第二个消费面（市场级敞口排行榜/告警行），并把「卖家余额低于敞口」纳入每日对账的 fail 判据；随后按排队顺序继续 explore 队头新面。"
+  "current": "R2116 报表卖家需求段：api_listing_demand（R2112 卖家需求读面）原先是全部读面里唯一没有区块消费者的面——只在报表的待办摘要里间接露头，卖家在结算报表页上看不到「每一件挂牌有多少人在看、关注有没有变成成交」。本轮把它接进唯一消费者：每个卖家区块新增 demand 键（每次采集现读），报表上新增 seller demand 表（每挂牌一行、热度降序、退役仍在榜、诚实空态），机读契约 schema 8→9 加法升级。",
+  "latest_artifact": "src/sandbox/ledger/apimarket_report.py（卖家区块 demand + seller demand 表 + REPORT_SCHEMA 9）；src/sandbox/ledger/test_apimarket_report_demand.py（SUITE PASS 8/8，双跑判据行同一 sha16 ac9ad1ed0ce44396）；qa/apimarket-reportdemand-R2116.log + -run2；qa/reconcile-all-R2116.log（RUNNER PASS 321/321 suites + controls 7/7 673.7s）；docs/sandbox-suite-matrix.md（321 suites / 2676 criteria --check 逐字节同）；呈看件：preview/apimarket-report-demand.html（28317B sha256 ec0764df3bea3995）与 preview/apimarket-report-demand.json（47526B schema 9 sha256 d4b4d49cf5dae260）",
+  "next_milestone": "48 小时内：给结算报告加 CSV 明细导出（--csv-out，市场/卖家/买家/挂牌四张明细表），让这份报表不只可看、还能被表格工具直接消费；同时把 P-47 ⑤ 权益/月卡面设计件推进到 docs/spec/。两项都不需要物理件。"
  },
  "depts": [
   {
@@ -374,6 +374,12 @@
    "apimarket 卖家侧需求读面（api_listing_demand）",
    "on",
    "R2112：七键信封 + 十一键行，卖家每件挂牌都成行（含零关注/已下架）；只计活关注（撤关注不计数、再关注不叠加）；净转化（未退款购买才算成交，退款回待转化）；converted+pending==watcher_count 逐行守恒；现价/有效标题走既有单缝；卖家隔离+诚实空信封+前缀门先于任读；纯读零 token 与跨重启字节同一；同窗接线报告 attention 的 unconverted_demand 家族。SUITE 8/8 双跑、电池 317/317、矩阵 317/2644 逐字节同。AC-AMDM1..AC-AMDM8。"
+  ],
+  [
+   "apimarket 报表卖家需求段（seller demand block）",
+   "on",
+   "R2116：把最后一个无区块消费者的读面 api_listing_demand 接进结算报表——卖家区块 demand 键（每次采集现读，无缓存）+ HTML seller demand 表（每挂牌一行、热度降序、退役仍在榜、旧报表字典降级诚实空态）+ REPORT_SCHEMA 8→9 加法升级（信封与既有卖家键逐键不变）；套件 8/8 双跑同一 sha16；电池 321/321；矩阵 321/2676 逐字节同；census 干净。诚实注：R2115 的 schema 字面断言改跟随模块常量；首轮电池日志 CRLF 被判 census 漂移，改 LF 写入器重跑后全绿。",
+   "2026-10-25"
   ]
  ],
  "results": [
@@ -490,7 +496,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2112",
+   "2116",
    "OSLoop 执行 tick"
   ],
   [
@@ -814,15 +820,19 @@
   ],
   [
    "R2112：apimarket 卖家侧需求读面（api_listing_demand）。AC-AMDM1..AC-AMDM8 在 R2111 种下的 explore 队头行里先注册、后写码。七键信封/十一键行，卖家每件挂牌（含零关注与已下架）都成行，行序全序 (-watcher_count, listing_id)；活关注律（有 unwatch 行的 watch 不计，撤关注−1、再关注+1 不叠加）；净转化律（未退款购买才转化，退款回 pending，逐行 converted+pending==watcher_count，信封合计==行和）；卖家隔离 + 前缀合法无挂牌的诚实空信封 + 前缀门先于任读（九表指纹/ledger_tx/池余额 五次拒绝恒不变）；退役保留需求并带戳，现价走现价缝、标题走有效元数据缝；纯读三连调用指纹不变；三实例两次重启字节同一；同窗给报告 attention 加 unconverted_demand（≥2 关注且零成交 → warn）证明不是无消费者闲置面。SUITE PASS 8/8 双跑逐位同一 sha16 0df8247b62369ec1；接线 ledger-apimarket-listingdemand(8)；电池 RUNNER PASS 317/317 + controls 7/7 757.1s；矩阵 317/2644 --check 逐字节同；census DRIFT-CLEAN flags=0。诚实注：首轮证据用 PS 重定向写成 UTF-16 被 census 判 ps-utf16，改 LF/utf-8 写入器重生成后清零；首跑 AC-AMDM3 误用关注者当非关注者，窗内改正后才出证据。Score 2。"
+  ],
+  [
+   "R2116",
+   "R2116 报表卖家需求段：R2112 的 api_listing_demand 是最后一个没有区块消费者的读面（只在 attention 摘要里间接出现），本窗把它接进结算报告的唯一消费者——卖家区块新增 demand 键（每次 collect 现读，证明无缓存：采集后再关注一件，下一次采集 watcher 计数+1）， HTML 卖家段新增 seller demand 表（每挂牌一行、热度降序、退役仍在榜、旧报表字典降级诚实空态、敌意标题转义、AIGC 标记与免责声明在位），REPORT_SCHEMA 8→9 加法升级（信封仍恰 schema_version/report/attention，既有卖家键与买家键逐键不变）。判据 AC-AMDS1..AC-AMDS8 先于代码钉定，四锚零占用 rc=1。SUITE PASS 8/8 双跑判据行同一 sha16 ac9ad1ed0ce44396（qa/apimarket-reportdemand-R2116.log + -run2）；接线 ledger-apimarket-reportdemand(8)；电池 RUNNER PASS 321/321 suites + controls 7/7 673.7s（qa/reconcile-all-R2116.log）；矩阵 321 suites / 2676 criteria --check 逐字节同；census DRIFT-CLEAN files=1786 flags=0；呈看件 preview/apimarket-report-demand.html 28317B sha256 ec0764df3bea3995 + .json 47526B schema 9 sha256 d4b4d49cf5dae260。诚实注：同窗修两处出生站断言——R2115 AC-RPX8 把 schema 钉成字面 8，加法升级后改为跟随模块常量（仍证明信封形状）；首轮电池日志经 PowerShell 重定向写成 CRLF 被判 pwsh-capture 漂移，改 LF 写入器重跑后 census 套件转绿。Score 2。"
   ]
  ],
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 41,
+  "log_lines_in_window": 40,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 36,
+  "substantive_non_idle_mention_lines": 40,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
