@@ -2429,6 +2429,12 @@ SUITES = [
     # JSON schema moves 8 -> 9 additively.
     ("ledger-apimarket-reportdemand", os.path.join(
         "ledger", "test_apimarket_report_demand.py"), 8),
+    # R2125 distribution-duty block on the settlement report: the R2124
+    # review queue and public-display envelopes plus the derived
+    # undisclosed-seller gaps, so the JSON schema moves 14 -> 15
+    # additively.
+    ("ledger-apimarket-reportduty", os.path.join(
+        "ledger", "test_apimarket_report_duty.py"), 8),
     # R2117 seller-side rating quality scorecard (api_seller_quality):
     # star distribution, reply coverage and one quality row per shelf,
     # wired into every seller block plus a quality_risk attention

@@ -124,7 +124,13 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # per-row response seconds, so the report turns a slow reply into a
 # sortable operator to-do item. The envelope is still unchanged and
 # every earlier family keeps its findings.
-REPORT_SCHEMA = 14
+# v15 (R2125) adds the distribution-duty block: the R2124 real-name,
+# public-display and review faces had no consumer at all, so the
+# operator page could not answer "which live listings still await a
+# review" or "which sellers disclose no identity". The block carries
+# the two envelopes verbatim plus the derived disclosure gaps; the
+# envelope above is unchanged and every earlier block keeps its value.
+REPORT_SCHEMA = 15
 
 # One day. A seller who leaves a buyer waiting longer than this shows
 # up in the attention digest; the boundary stays silent on the exact
@@ -149,6 +155,13 @@ QUALITY_EMPTY = "no ratings for this seller"
 QUESTIONS_EMPTY = "no open questions for this seller"
 MY_QUESTIONS_EMPTY = "no questions asked by this buyer"
 ANSWERS_EMPTY = "no answered questions for this seller"
+
+# R2125 distribution duty: the R2124 faces are read verbatim into the
+# report, and the seller-side disclosure gap is derived from the public
+# envelope alone (never from a second roster), so the two can never
+# disagree.
+DUTY_KEYS = ("review_queue", "public", "undisclosed_sellers")
+DUTY_EMPTY = "no listings under distribution duty"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -333,6 +346,30 @@ def collect_buyer_history(am, buyers):
     return out
 
 
+def collect_duty(am):
+    """Read the distribution-duty faces once for the settlement report.
+
+    R2124 built the real-name registration, public-display and review
+    faces, and nothing consumed them: a git-grep for their names found
+    only their own suites, so the operator page could not answer which
+    live listings still await review or which sellers disclose no
+    identity. The two envelopes are carried verbatim, and the seller
+    gap table is DERIVED from the public envelope (the rows whose
+    disclosure_ok is false), never from a second roster, so the two
+    readings cannot drift. Nothing is cached - each call re-reads."""
+    public = am.api_public_listings()
+    gaps = {}
+    for row in public["listings"]:
+        if not row["disclosure_ok"]:
+            dev = row["dev_account"]
+            gaps[dev] = gaps.get(dev, 0) + 1
+    return {"review_queue": am.api_review_queue(),
+            "public": public,
+            "undisclosed_sellers": [
+                {"dev_account": dev, "listing_count": count}
+                for dev, count in sorted(gaps.items())]}
+
+
 def collect(am):
     """Read every settlement face once and return the report payload.
 
@@ -378,6 +415,9 @@ def collect(am):
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
     report["refunds"] = am.api_refund_register()
     report["dossiers"] = collect_dossiers(am)
+    # R2125: the R2124 duty faces had no consumer; the operator page
+    # carries their work queue and the derived disclosure gap now.
+    report["duty"] = collect_duty(am)
     report["attention"] = collect_attention(am, report)
     return report
 
@@ -651,6 +691,51 @@ def refund_block(register):
     return "\n".join(out)
 
 
+DUTY_QUEUE_COLUMNS = ("listing_id", "dev_account", "listing_key",
+                      "title", "token_price", "listed_utc")
+DUTY_PUBLIC_COLUMNS = ("listing_id", "dev_account", "listing_key",
+                       "title", "token_price", "provider_name",
+                       "credit_code", "disclosure_ok", "review_state",
+                       "review_reason", "reviewed_utc")
+
+
+def duty_rows(envelope, columns):
+    """Project a duty envelope's rows onto one pinned column list.
+
+    The pinned lists keep the table shape stable across markets (the
+    review queue and the public layer carry different row widths),
+    while any extra key the faces may grow later is simply not shown.
+    """
+    out = []
+    for row in envelope.get("rows") or envelope.get("listings") or []:
+        out.append(dict((col, row.get(col)) for col in columns))
+    return out
+
+
+def duty_block(duty):
+    """Distribution-duty section (R2125): the review work queue, the
+    public display layer and the derived undisclosed-seller gaps.
+
+    An older report dict carries no duty key at all, so the section
+    degrades to the honest empty state instead of raising."""
+    if not duty:
+        return "<p class=\"empty\">%s</p>" % esc(DUTY_EMPTY)
+    queue = duty.get("review_queue") or {}
+    public = duty.get("public") or {}
+    gaps = duty.get("undisclosed_sellers") or []
+    out = ["<h3>pending review (%s)</h3>"
+           % esc(queue.get("pending_count")),
+           row_table(duty_rows(queue, DUTY_QUEUE_COLUMNS),
+                     "no listings awaiting review"),
+           "<h3>public display (%s)</h3>"
+           % esc(public.get("listing_count")),
+           row_table(duty_rows(public, DUTY_PUBLIC_COLUMNS),
+                     "no live listings"),
+           "<h3>undisclosed sellers (%d)</h3>" % len(gaps),
+           row_table(gaps, "every seller discloses an identity")]
+    return "\n".join(out)
+
+
 STYLE = """
 :root{--ink:#182033;--muted:#6b7280;--line:#e5e7eb;--bg:#f7f8fa;--accent:#3b5bdb;--ok:#2f9e44}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -854,6 +939,12 @@ def render_html(report):
     # same degrade rule for the R2111 register: an older report dict
     # renders the honest empty state instead of raising.
     parts.append(refund_block(report.get("refunds") or {}))
+
+    parts.append("<h2>Distribution duty</h2>")
+    # R2125: same degrade rule as the other new sections - an older
+    # report dict carries no duty key, so the page renders the honest
+    # empty state instead of raising.
+    parts.append(duty_block(report.get("duty") or {}))
 
     parts.append("<h2>Listings</h2>")
     parts.append(row_table(report["board"].get("listings"),

@@ -1,0 +1,12 @@
+PASS AC-AMDD1 same=True pending 3->2 left=True
+PASS AC-AMDD2 keys=attention,report,schema_version schema=15 same=True dutykeys=public,review_queue,undisclosed_sellers
+PASS AC-AMDD3 heads=2/3/2 degrade=True
+PASS AC-AMDD4 escaped=True marker=True disclaimer=True
+PASS AC-AMDD5 digest=503f409f3b4cb039 tx=16
+PASS AC-AMDD6 html=0ff1c28b05e1ef75 json=2b044d35fd31d1f6
+PASS AC-AMDD7 dense=True queue=[] gaps=['usr:frank'] checks=all-pass
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_attention.py rc=0
+  child test_apimarket_report_json.py rc=0
+PASS AC-AMDD8 rc=[0, 0, 0] wired=True
+SUITE PASS 8/8

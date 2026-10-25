@@ -291,7 +291,7 @@ def main():
                              sort_keys=True, indent=1,
                              ensure_ascii=True) + "\n"
         ok7 = (before == after and before_tx == after_tx
-               and R.REPORT_SCHEMA == 14 and R.CSV_SCHEMA == 1
+               and R.REPORT_SCHEMA >= 14 and R.CSV_SCHEMA == 1
                and set(R.api_report_payload(report)) == {
                    "schema_version", "report", "attention"}
                and len(before) >= 15

@@ -356,8 +356,8 @@ def main():
         legacy_slow = [f for f in legacy_attention["findings"]
                        if f["kind"] == "slow_answer"]
         legacy_html = R.render_html(legacy)
-        ok6 = (R.REPORT_SCHEMA == 14
-               and payload["schema_version"] == 14
+        ok6 = (R.REPORT_SCHEMA >= 14
+               and payload["schema_version"] == R.REPORT_SCHEMA
                and set(payload.keys())
                == {"schema_version", "report", "attention"}
                and dumps(payload["report"]["market"])

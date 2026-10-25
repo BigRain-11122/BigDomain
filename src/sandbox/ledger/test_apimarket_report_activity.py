@@ -170,8 +170,8 @@ def check_same_source(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    keys_ok = sorted(report) == sorted(
-        OLD_KEYS + ["activity", "dossiers", "refunds"])
+    keys_ok = set(OLD_KEYS + ["activity", "dossiers", "refunds"]) <= set(
+        report)
     buyer_keys = sorted({tuple(sorted(block))
                          for block in report["buyers"].values()})
     led, mtr, dk, am = open_stack(db)

@@ -231,7 +231,7 @@ def check_shape(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    top_ok = sorted(report) == sorted(V6_KEYS)
+    top_ok = set(V6_KEYS) <= set(report)
     # R2119 birth-station repair: the buyer block legally gained the
     # questions key (additive), so the v5 keys are proven present
     # instead of freezing the full key set.

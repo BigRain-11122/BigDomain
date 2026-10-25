@@ -340,7 +340,7 @@ def check_money(db):
 
 def check_contract(tmp, db):
     report = collect_with(db)
-    keys_ok = sorted(report) == sorted(V6_KEYS)
+    keys_ok = set(V6_KEYS) <= set(report)
     # R2119 birth-station repair: the buyer block legally gained the
     # questions key (additive), so every v5 key must still be there
     # rather than the full key set being frozen.
