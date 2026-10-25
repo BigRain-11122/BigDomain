@@ -109,7 +109,7 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # pre-purchase Q&A queue) and a question_debt attention family; the
 # envelope is still unchanged and every earlier seller key keeps its
 # value.
-REPORT_SCHEMA = 11
+REPORT_SCHEMA = 12
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -127,6 +127,7 @@ DEMAND_EMPTY = "no listings for this seller"
 QUALITY_EMPTY = "no ratings for this seller"
 
 QUESTIONS_EMPTY = "no open questions for this seller"
+MY_QUESTIONS_EMPTY = "no questions asked by this buyer"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -329,6 +330,7 @@ def collect(am):
             "months": am.api_buyer_months(buyer),
             "todo": am.api_buyer_todo(buyer),
             "watch_alerts": am.api_watch_alerts(buyer),
+            "questions": am.api_buyer_questions(buyer),
             "history": histories[buyer],
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
@@ -856,6 +858,15 @@ def render_html(report):
         parts.append("<h3>%s - watch alerts (%d)</h3>"
                      % (esc(buyer), len(alerts)))
         parts.append(row_table(alerts, "no watch alerts"))
+        # R2119 buyer Q&A history: the asking side now has the merged
+        # view the seller side already had. An older caller's block
+        # carries no questions key, so the section degrades to the
+        # honest empty state instead of raising.
+        questions = block.get("questions") or {}
+        my_rows = questions.get("rows") or []
+        parts.append("<h3>%s - my questions (%d)</h3>"
+                     % (esc(buyer), len(my_rows)))
+        parts.append(row_table(my_rows, MY_QUESTIONS_EMPTY))
         # R2110 buyer history: a block built by an older caller carries
         # no history key, so the four tables degrade to honest empties.
         parts.append("<h3>%s - buyer history</h3>" % esc(buyer))

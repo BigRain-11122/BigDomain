@@ -1,0 +1,18 @@
+{
+ "window": "2026-10-19..2026-10-25",
+ "window_days": 7,
+ "proposal_open_marker": "状态 open",
+ "ceo_current": "R2119 买家侧「我的问答全史」：上一轮（R2118）刚把售前问答立起来，提问方却只能一件挂牌一件挂牌地翻线程（api_listing_qna），卖方反而已经有跨挂牌合并的待答队列。本轮补上提问方的合并视图 api_buyer_questions：一个住民在 N 件挂牌上问过什么、哪些还悬着、卖家回过什么，一次读完（最旧在前、已答未答同列、退役挂牌仍可读、标题取现行元数据、严格买家隔离），并接进结算报表的买家区块与 my questions 表，机读契约 schema 11→12 加法升级。",
+ "ceo_latest": "src/sandbox/ledger/apimarket.py（api_buyer_questions 读面）；src/sandbox/ledger/apimarket_report.py（买家区块 questions + my questions 表 + REPORT_SCHEMA 12）；src/sandbox/ledger/test_apimarket_buyerquestions.py（SUITE 8/8，双跑判据行同一 sha16 b8fac883087334de）；qa/apimarket-buyerquestions-R2119.log + -run2；qa/reconcile-all-R2119.log（RUNNER PASS 324/324 suites + controls 7/7 1008.5s）；docs/sandbox-suite-matrix.md（324 suites / 2700 criteria --check 逐字节同）；呈看件：preview/apimarket-report-buyerquestions.html（18121B sha256 bd375970052a6781）与 .json（30303B schema 12 sha256 c86157d24bc9d3d4）",
+ "ceo_next": "48 小时内：给卖家公开档案 dev_profile 补问答公示统计（提问数/已答数/未答最旧时长），让买家在决定买之前就能看到这个卖家到底回不回问；同窗把结算报告缺的 CSV 明细导出（--csv-out）补上，不做完不宣称。",
+ "out_row": [
+  "apimarket 买家侧我的问答全史读面（api_buyer_questions + 买家块消费）",
+  "on",
+  "R2119：R2118 的售前问答只给了卖家合并队列，提问方仍要逐挂牌翻线程。本窗补 api_buyer_questions（八键信封+十键行·全序 asked_utc/question_id·已答未答同列·跨挂牌合并·标题走现行元数据缝·退役不销史·买家隔离·诚实空·纯读零 token）+ 报表买家区块 questions 键与 my questions 表 + REPORT_SCHEMA 11→12 加法升级；套件 8/8 双跑同一 sha16 b8fac883087334de；电池 324/324 suites + controls 7/7 1008.5s；矩阵 324/2700 逐字节同；census DRIFT-CLEAN。诚实注：三处旧套件的买家键集断言由「等于」放宽为「包含既有键」（出生站修复，加法升级合法）；首跑电池 320/324 与 census 漂移均为先接线未更新矩阵/基线，按序补齐后全绿。",
+  "2026-10-25"
+ ],
+ "result_row": [
+  "R2119",
+  "R2119 买家侧问答全史：R2118 把售前问答立起来后，卖方有 api_seller_questions（跨挂牌未答债务队列），提问的住民却仍只能逐挂牌打开 api_listing_qna 再手工并表。本窗交付 api_buyer_questions(buyer_id)：只读合并面（信封恰八键、行恰十键、全序 (asked_utc, question_id)、question_count==len(rows)、answered+unanswered==question_count、oldest_open_utc 取首个未答行、已答行的 answer_text/answered_utc 与线程面同值、跨挂牌合并、标题取当前元数据修订、退役挂牌仍可读、严格买家隔离、前缀合法零提问账户诚实空、纯读零 token）并接进唯一消费者（买家区块 questions 键 + HTML my questions 表 + 旧报表缺键降级 + REPORT_SCHEMA 11→12 加法升级，信封仍恰三键）。判据 AC-AMBQ1..AC-AMBQ8 预注册于代码前，四锚 git grep -F 零占用 rc=1。SUITE 8/8 双跑判据行同一 sha16 b8fac883087334de（qa/apimarket-buyerquestions-R2119.log + -run2）；接线 ledger-apimarket-buyerquestions(8)；电池 RUNNER PASS 324/324 suites + controls 7/7 1008.5s（qa/reconcile-all-R2119.log）；矩阵 324 suites / 2700 criteria --check 逐字节同；census DRIFT-CLEAN；呈看件 preview/apimarket-report-buyerquestions.html 18121B sha256 bd375970052a6781 + .json 30303B schema 12 sha256 c86157d24bc9d3d4。三处出生站修复如实披露：test_apimarket_report_demand（AC-AMDS2）、test_apimarket_report_refundregister（AC-AMRR5）、test_apimarket_report_buyerhistory（AC-AMBD5）原先冻结买家键集等于旧集，本轮加法键使其失败，改为「旧键全部仍在」仍证明兼容；首跑电池 320/324（另含 census cd7 因新证据件未入基线）由矩阵重生成+基线更新后复跑转绿。Score 2。"
+ ]
+}

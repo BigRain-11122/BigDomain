@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T03:05:00+08:00",
+ "export_ts": "2026-10-25T11:32:20+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2118：市场补上了「售前问答」——此前所有信任面都在成交之后（评分、改评、卖家回应、退款、卖家收件箱都要先成交），住民下单前想问卖家一句话没有任何入口，卖家的回答也不会被下一个买家看到。本窗加了两张只追加表与四个面：买家提问、卖家回答（一问一答·首答不改写·只有挂牌主人能回）、单件挂牌的公开问答串（退役件仍可读）、卖家的未答问题队列（跨挂牌合并·最旧在前）。报表每位卖家多一张「open questions」表，待办摘要多一类「问题债」，机读契约 v10→v11 加法升级。",
-  "latest_artifact": "preview/apimarket-report-questions.html（31595B·sha256 a867482420650057·可直接双击打开：市场总账+月度时间线+待办+公共活动流+退款登记+挂牌档案+卖家全表含新「open questions」表）+ preview/apimarket-report-questions.json（51808B·schema 11·sha256 72c5b99b02dfdff2）+ src/sandbox/ledger/apimarket.py + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_qna.py + qa/apimarket-qna-R2118.log（SUITE PASS 8/8·双跑同一 sha16 71f323af6eb63175）+ qa/reconcile-all-R2118.log",
-  "next_milestone": "48 小时内：给问答面补「卖家批量回答/关闭问题」与「提问前的相似问题聚合」两条消费面——现在卖家只能一条条回，同一问题被反复提问时仍要重复打一遍；下一步是回答时按相似度提示「已有回答可引用」，并把关闭（不再需要回答）做成只追加状态行，让问题债不被永久的无效问题拖住。两项均不依赖 CEO 物理件。"
+  "current": "R2119 买家侧「我的问答全史」：上一轮（R2118）刚把售前问答立起来，提问方却只能一件挂牌一件挂牌地翻线程（api_listing_qna），卖方反而已经有跨挂牌合并的待答队列。本轮补上提问方的合并视图 api_buyer_questions：一个住民在 N 件挂牌上问过什么、哪些还悬着、卖家回过什么，一次读完（最旧在前、已答未答同列、退役挂牌仍可读、标题取现行元数据、严格买家隔离），并接进结算报表的买家区块与 my questions 表，机读契约 schema 11→12 加法升级。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_buyer_questions 读面）；src/sandbox/ledger/apimarket_report.py（买家区块 questions + my questions 表 + REPORT_SCHEMA 12）；src/sandbox/ledger/test_apimarket_buyerquestions.py（SUITE 8/8，双跑判据行同一 sha16 b8fac883087334de）；qa/apimarket-buyerquestions-R2119.log + -run2；qa/reconcile-all-R2119.log（RUNNER PASS 324/324 suites + controls 7/7 1008.5s）；docs/sandbox-suite-matrix.md（324 suites / 2700 criteria --check 逐字节同）；呈看件：preview/apimarket-report-buyerquestions.html（18121B sha256 bd375970052a6781）与 .json（30303B schema 12 sha256 c86157d24bc9d3d4）",
+  "next_milestone": "48 小时内：给卖家公开档案 dev_profile 补问答公示统计（提问数/已答数/未答最旧时长），让买家在决定买之前就能看到这个卖家到底回不回问；同窗把结算报告缺的 CSV 明细导出（--csv-out）补上，不做完不宣称。"
  },
  "depts": [
   {
@@ -385,6 +385,12 @@
    "on",
    "R2116：把最后一个无区块消费者的读面 api_listing_demand 接进结算报表——卖家区块 demand 键（每次采集现读，无缓存）+ HTML seller demand 表（每挂牌一行、热度降序、退役仍在榜、旧报表字典降级诚实空态）+ REPORT_SCHEMA 8→9 加法升级（信封与既有卖家键逐键不变）；套件 8/8 双跑同一 sha16；电池 321/321；矩阵 321/2676 逐字节同；census 干净。诚实注：R2115 的 schema 字面断言改跟随模块常量；首轮电池日志 CRLF 被判 census 漂移，改 LF 写入器重跑后全绿。",
    "2026-10-25"
+  ],
+  [
+   "apimarket 买家侧我的问答全史读面（api_buyer_questions + 买家块消费）",
+   "on",
+   "R2119：R2118 的售前问答只给了卖家合并队列，提问方仍要逐挂牌翻线程。本窗补 api_buyer_questions（八键信封+十键行·全序 asked_utc/question_id·已答未答同列·跨挂牌合并·标题走现行元数据缝·退役不销史·买家隔离·诚实空·纯读零 token）+ 报表买家区块 questions 键与 my questions 表 + REPORT_SCHEMA 11→12 加法升级；套件 8/8 双跑同一 sha16 b8fac883087334de；电池 324/324 suites + controls 7/7 1008.5s；矩阵 324/2700 逐字节同；census DRIFT-CLEAN。诚实注：三处旧套件的买家键集断言由「等于」放宽为「包含既有键」（出生站修复，加法升级合法）；首跑电池 320/324 与 census 漂移均为先接线未更新矩阵/基线，按序补齐后全绿。",
+   "2026-10-25"
   ]
  ],
  "results": [
@@ -509,7 +515,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2116",
+   "2119",
    "OSLoop 执行 tick"
   ],
   [
@@ -837,19 +843,23 @@
   [
    "R2116",
    "R2116 报表卖家需求段：R2112 的 api_listing_demand 是最后一个没有区块消费者的读面（只在 attention 摘要里间接出现），本窗把它接进结算报告的唯一消费者——卖家区块新增 demand 键（每次 collect 现读，证明无缓存：采集后再关注一件，下一次采集 watcher 计数+1）， HTML 卖家段新增 seller demand 表（每挂牌一行、热度降序、退役仍在榜、旧报表字典降级诚实空态、敌意标题转义、AIGC 标记与免责声明在位），REPORT_SCHEMA 8→9 加法升级（信封仍恰 schema_version/report/attention，既有卖家键与买家键逐键不变）。判据 AC-AMDS1..AC-AMDS8 先于代码钉定，四锚零占用 rc=1。SUITE PASS 8/8 双跑判据行同一 sha16 ac9ad1ed0ce44396（qa/apimarket-reportdemand-R2116.log + -run2）；接线 ledger-apimarket-reportdemand(8)；电池 RUNNER PASS 321/321 suites + controls 7/7 673.7s（qa/reconcile-all-R2116.log）；矩阵 321 suites / 2676 criteria --check 逐字节同；census DRIFT-CLEAN files=1786 flags=0；呈看件 preview/apimarket-report-demand.html 28317B sha256 ec0764df3bea3995 + .json 47526B schema 9 sha256 d4b4d49cf5dae260。诚实注：同窗修两处出生站断言——R2115 AC-RPX8 把 schema 钉成字面 8，加法升级后改为跟随模块常量（仍证明信封形状）；首轮电池日志经 PowerShell 重定向写成 CRLF 被判 pwsh-capture 漂移，改 LF 写入器重跑后 census 套件转绿。Score 2。"
+  ],
+  [
+   "R2119",
+   "R2119 买家侧问答全史：R2118 把售前问答立起来后，卖方有 api_seller_questions（跨挂牌未答债务队列），提问的住民却仍只能逐挂牌打开 api_listing_qna 再手工并表。本窗交付 api_buyer_questions(buyer_id)：只读合并面（信封恰八键、行恰十键、全序 (asked_utc, question_id)、question_count==len(rows)、answered+unanswered==question_count、oldest_open_utc 取首个未答行、已答行的 answer_text/answered_utc 与线程面同值、跨挂牌合并、标题取当前元数据修订、退役挂牌仍可读、严格买家隔离、前缀合法零提问账户诚实空、纯读零 token）并接进唯一消费者（买家区块 questions 键 + HTML my questions 表 + 旧报表缺键降级 + REPORT_SCHEMA 11→12 加法升级，信封仍恰三键）。判据 AC-AMBQ1..AC-AMBQ8 预注册于代码前，四锚 git grep -F 零占用 rc=1。SUITE 8/8 双跑判据行同一 sha16 b8fac883087334de（qa/apimarket-buyerquestions-R2119.log + -run2）；接线 ledger-apimarket-buyerquestions(8)；电池 RUNNER PASS 324/324 suites + controls 7/7 1008.5s（qa/reconcile-all-R2119.log）；矩阵 324 suites / 2700 criteria --check 逐字节同；census DRIFT-CLEAN；呈看件 preview/apimarket-report-buyerquestions.html 18121B sha256 bd375970052a6781 + .json 30303B schema 12 sha256 c86157d24bc9d3d4。三处出生站修复如实披露：test_apimarket_report_demand（AC-AMDS2）、test_apimarket_report_refundregister（AC-AMRR5）、test_apimarket_report_buyerhistory（AC-AMBD5）原先冻结买家键集等于旧集，本轮加法键使其失败，改为「旧键全部仍在」仍证明兼容；首跑电池 320/324（另含 census cd7 因新证据件未入基线）由矩阵重生成+基线更新后复跑转绿。Score 2。"
   ]
  ],
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 41,
+  "log_lines_in_window": 42,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 41,
+  "substantive_non_idle_mention_lines": 42,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 0
+  "queue_explore_open": 1
  }
 }

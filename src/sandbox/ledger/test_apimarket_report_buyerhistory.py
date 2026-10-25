@@ -232,7 +232,10 @@ def check_shape(db):
 def check_contract(tmp, db):
     report = collect_with(db)
     top_ok = sorted(report) == sorted(V6_KEYS)
-    buyer_ok = all(sorted(block) == sorted(V4_BUYER_KEYS + ["history"])
+    # R2119 birth-station repair: the buyer block legally gained the
+    # questions key (additive), so the v5 keys are proven present
+    # instead of freezing the full key set.
+    buyer_ok = all(set(V4_BUYER_KEYS + ["history"]) <= set(block)
                    for block in report["buyers"].values())
     led, mtr, dk, am = open_stack(db)
     try:

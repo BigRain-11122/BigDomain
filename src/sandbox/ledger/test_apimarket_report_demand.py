@@ -215,9 +215,14 @@ def check_contract(db):
         dk.close()
         mtr.close()
         led.close()
-    expected = {("history", "months", "profile", "todo", "watch_alerts")}
+    # R2119 birth-station repair: the buyer block legally gained the
+    # questions key (additive), so this check proves the v5 keys are
+    # still all present instead of freezing the full key set.
+    expected = ("history", "months", "profile", "todo", "watch_alerts")
     record("AC-AMDS2", keys == ("attention", "report", "schema_version")
-           and schema_ok and legacy and buyer_keys == expected,
+           and schema_ok and legacy
+           and all(set(expected) <= set(keyset)
+                   for keyset in buyer_keys),
            "keys=%s schema=%s legacy=%s buyerkeys=%s"
            % (",".join(keys), payload["schema_version"], legacy,
               buyer_keys))

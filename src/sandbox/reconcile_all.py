@@ -2442,6 +2442,12 @@ SUITES = [
     # attention family, so the JSON schema moves 10 -> 11 additively.
     ("ledger-apimarket-qna", os.path.join(
         "ledger", "test_apimarket_qna.py"), 8),
+    # R2119 buyer-side question history (api_buyer_questions): the
+    # asking side gets the merged view the seller side already had,
+    # wired into every buyer block plus a my-questions table, so the
+    # JSON schema moves 11 -> 12 additively.
+    ("ledger-apimarket-buyerquestions", os.path.join(
+        "ledger", "test_apimarket_buyerquestions.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and

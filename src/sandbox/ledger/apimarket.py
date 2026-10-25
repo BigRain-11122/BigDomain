@@ -4019,3 +4019,69 @@ class APIMarketFace:
                                           if rows else None),
                 "disclaimer": self.disclaimer,
                 "rows": rows}
+
+    def api_buyer_questions(self, buyer_id):
+        """Buyer-side question history across every listing
+        (AC-AMBQ1..AC-AMBQ5, pre-registered in the R2119 explore-queue
+        row BEFORE this code existed).
+
+        R2118 opened the pre-purchase Q&A doors, but the asking side
+        could only read one thread at a time (api_listing_qna) while
+        the answering side already had a merged queue
+        (api_seller_questions). A resident who asked on N listings had
+        to open N threads and merge by hand to answer "what did I ask,
+        what is still open, what did the seller say back".
+
+        This face merges every question of one buyer into a single time
+        line (total order on asked_utc then question_id): open and
+        answered rows live side by side, the title is read through the
+        one metadata revision seam, and a retired listing keeps its
+        history readable. Strict buyer isolation; a prefix-valid
+        account with no questions gets an honest empty envelope. Pure
+        read: zero row mutations and zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT q.question_id, q.listing_id, l.listing_key,"
+                " l.title, l.description, l.dev_account,"
+                " q.question_text, q.asked_utc,"
+                " a.answer_text, a.answered_utc"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " WHERE q.buyer_id = ?"
+                " ORDER BY q.asked_utc, q.question_id",
+                (buyer_id,)).fetchall()
+            rows = []
+            listings = set()
+            for r in raw:
+                listings.add(int(r[1]))
+                rows.append({
+                    "question_id": int(r[0]),
+                    "listing_id": int(r[1]),
+                    "listing_key": r[2],
+                    "title": self._metadata_state(
+                        int(r[1]), r[3], r[4])[0],
+                    "dev_account": r[5],
+                    "question_text": r[6],
+                    "asked_utc": r[7],
+                    "answered": r[8] is not None,
+                    "answer_text": r[8],
+                    "answered_utc": r[9],
+                })
+        answered = sum(1 for row in rows if row["answered"])
+        oldest_open = None
+        for row in rows:
+            if not row["answered"]:
+                oldest_open = row["asked_utc"]
+                break
+        return {"buyer_id": buyer_id,
+                "listing_count": len(listings),
+                "question_count": len(rows),
+                "answered_count": answered,
+                "unanswered_count": len(rows) - answered,
+                "oldest_open_utc": oldest_open,
+                "disclaimer": self.disclaimer,
+                "rows": rows}

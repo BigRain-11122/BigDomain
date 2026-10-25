@@ -1,0 +1,9 @@
+PASS AC-AMBQ1: envelope=True rows=2 newbie=(0,[]) disclaimer=True
+PASS AC-AMBQ2: bob=2 carol=2 overlap=[] seller_empty=True
+PASS AC-AMBQ3: order=[('2026-10-25T09:00:00Z', 1), ('2026-10-25T09:20:00Z', 3)] counts=(2,1,1) oldest='2026-10-25T09:20:00Z' answer='yes, up to 500 calls per batch'
+PASS AC-AMBQ4: listings=2 question_count=2 title='Service Beta'->'Service Beta v2' keys=True
+PASS AC-AMBQ5: gamma_rows=1 title='Service Gamma' retired=True thread_q=1
+PASS AC-AMBQ6: codes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_same=True tx_same=True read_stable=True
+PASS AC-AMBQ7: instances identical=True preclose_equal=True
+PASS AC-AMBQ8: schema=12 keys=True questions=(3,2) page=True escaped=True legacy=True wired=True ascii=True net=0
+SUITE 8/8

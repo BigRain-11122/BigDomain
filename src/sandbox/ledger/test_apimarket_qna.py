@@ -515,7 +515,7 @@ def main():
                                                    "import http"))]
         outside = not os.path.abspath(tmp).startswith(
             os.path.abspath(os.path.join(BASE, "..", "..", "..")))
-        ok8 = (R.REPORT_SCHEMA == 11
+        ok8 = (R.REPORT_SCHEMA >= 11
                and "questions" in block
                and block["questions"]["unanswered_count"] == 3
                and "question_debt" in kinds

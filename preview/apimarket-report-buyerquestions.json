@@ -1,0 +1,1111 @@
+{
+ "attention": {
+  "finding_count": 1,
+  "findings": [
+   {
+    "detail": "3 unanswered question(s); oldest 2026-10-25T09:20:00Z",
+    "kind": "question_debt",
+    "ref": "2026-10-25T09:20:00Z",
+    "severity": "warn",
+    "subject": "usr:dana"
+   }
+  ],
+  "severity_counts": {
+   "warn": 1
+  }
+ },
+ "report": {
+  "activity": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "events": [
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-25T08:00:00Z",
+     "kind": "published",
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Service Alpha",
+     "token_price": 10,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-25T08:00:00Z",
+     "kind": "delisted",
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Service Gamma",
+     "token_price": null,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-25T08:10:00Z",
+     "kind": "published",
+     "listing_id": 2,
+     "listing_key": "beta",
+     "previous_stars": null,
+     "ref_id": 2,
+     "stars": null,
+     "title": "Service Beta",
+     "token_price": 8,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-25T08:20:00Z",
+     "kind": "published",
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "previous_stars": null,
+     "ref_id": 3,
+     "stars": null,
+     "title": "Service Gamma",
+     "token_price": 6,
+     "units": null
+    },
+    {
+     "amount": null,
+     "detail": null,
+     "dev_account": "usr:dana",
+     "event_utc": "2026-10-25T09:00:00Z",
+     "kind": "purchased",
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "previous_stars": null,
+     "ref_id": 1,
+     "stars": null,
+     "title": "Service Alpha",
+     "token_price": 10,
+     "units": null
+    }
+   ],
+   "kinds": [
+    "published",
+    "relisted",
+    "price_revised",
+    "metadata_revised",
+    "restocked",
+    "purchased",
+    "rated",
+    "rating_revised",
+    "rating_replied",
+    "refunded",
+    "delisted"
+   ],
+   "limit": 40,
+   "listing_id": null,
+   "returned": 5,
+   "since_utc": null,
+   "total": 5,
+   "truncated": false,
+   "until_utc": null
+  },
+  "attention": {
+   "finding_count": 1,
+   "findings": [
+    {
+     "detail": "3 unanswered question(s); oldest 2026-10-25T09:20:00Z",
+     "kind": "question_debt",
+     "ref": "2026-10-25T09:20:00Z",
+     "severity": "warn",
+     "subject": "usr:dana"
+    }
+   ],
+   "severity_counts": {
+    "warn": 1
+   }
+  },
+  "board": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listings": [
+    {
+     "ai_label": 0,
+     "dev_account": "usr:dana",
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "title": "Service Alpha",
+     "token_price": 10
+    },
+    {
+     "ai_label": 0,
+     "dev_account": "usr:dana",
+     "listing_id": 2,
+     "listing_key": "beta",
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "title": "Service Beta",
+     "token_price": 8
+    }
+   ]
+  },
+  "buyers": {
+   "usr:bob": {
+    "history": {
+     "library": {
+      "buyer_id": "usr:bob",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "net_spent": 10,
+      "purchase_count": 1,
+      "purchases": [
+       {
+        "current_price": 10,
+        "delisted": false,
+        "delisted_utc": null,
+        "dev_account": "usr:dana",
+        "dev_share": 7,
+        "listing_id": 1,
+        "listing_key": "alpha",
+        "my_rating": null,
+        "platform_share": 3,
+        "price_paid": 10,
+        "purchase_id": 1,
+        "purchased_utc": "2026-10-25T09:00:00Z",
+        "refund_tx": null,
+        "refunded": false,
+        "refunded_utc": null,
+        "spend_tx": "06367a3ed76862ed",
+        "title": "Service Alpha"
+       }
+      ],
+      "refund_count": 0,
+      "total_refunded": 0,
+      "total_spent": 10
+     },
+     "rating_history": [],
+     "refunds": [],
+     "watchlist": {
+      "buyer_id": "usr:bob",
+      "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+      "watch_count": 0,
+      "watches": []
+     }
+    },
+    "months": {
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_dev_paid": 7,
+     "lifetime_gross_spent": 10,
+     "lifetime_net_spent": 10,
+     "lifetime_platform_paid": 3,
+     "lifetime_purchase_count": 1,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_paid": 7,
+       "dev_paid_net": 7,
+       "gross_spent": 10,
+       "listing_count": 1,
+       "month": "2026-10",
+       "net": 10,
+       "platform_paid": 3,
+       "platform_paid_net": 3,
+       "purchase_count": 1,
+       "refund_count": 0,
+       "refunded": 0
+      }
+     ]
+    },
+    "profile": {
+     "avg_rating": null,
+     "buyer_id": "usr:bob",
+     "dev_paid": 7,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_purchase_utc": "2026-10-25T09:00:00Z",
+     "gross_spent": 10,
+     "last_purchase_utc": "2026-10-25T09:00:00Z",
+     "listing_count": 1,
+     "live_watch_count": 0,
+     "net_purchase_count": 1,
+     "net_spent": 10,
+     "platform_paid": 3,
+     "purchase_count": 1,
+     "rating_count": 0,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "watch_count": 0
+    },
+    "questions": {
+     "answered_count": 1,
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 2,
+     "oldest_open_utc": "2026-10-25T09:30:00Z",
+     "question_count": 2,
+     "rows": [
+      {
+       "answer_text": "yes, up to 500 calls per batch",
+       "answered": true,
+       "answered_utc": "2026-10-25T09:40:00Z",
+       "asked_utc": "2026-10-25T09:10:00Z",
+       "dev_account": "usr:dana",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "question_id": 1,
+       "question_text": "does this support batch calls?",
+       "title": "Service Alpha"
+      },
+      {
+       "answer_text": null,
+       "answered": false,
+       "answered_utc": null,
+       "asked_utc": "2026-10-25T09:30:00Z",
+       "dev_account": "usr:dana",
+       "listing_id": 2,
+       "listing_key": "beta",
+       "question_id": 3,
+       "question_text": "what is the rate limit?",
+       "title": "Service Beta"
+      }
+     ],
+     "unanswered_count": 1
+    },
+    "todo": {
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "pending": [
+      {
+       "current_price": 10,
+       "delisted": false,
+       "dev_account": "usr:dana",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "price_paid": 10,
+       "purchase_id": 1,
+       "purchased_utc": "2026-10-25T09:00:00Z",
+       "title": "Service Alpha"
+      }
+     ],
+     "pending_count": 1,
+     "purchase_count": 1,
+     "rated_count": 0,
+     "refunded_count": 0
+    },
+    "watch_alerts": {
+     "alert_count": 0,
+     "alerts": [],
+     "buyer_id": "usr:bob",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "watch_count": 0
+    }
+   }
+  },
+  "dossiers": {
+   "1": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-25T08:00:00Z",
+       "kind": "published",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Service Alpha",
+       "token_price": 10,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-25T09:00:00Z",
+       "kind": "purchased",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Service Alpha",
+       "token_price": 10,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 1,
+     "returned": 2,
+     "since_utc": null,
+     "total": 2,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 0,
+     "delisted": false,
+     "delisted_utc": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [],
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "live": true,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "service payload alpha",
+     "base_title": "Service Alpha",
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "service payload alpha",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 1,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Service Alpha"
+    },
+    "price_history": {
+     "base_price": 10,
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "rating_count": 0,
+     "reply_count": 0,
+     "rows": []
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 1,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "ratings": []
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-10-25T08:00:00Z",
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 1,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 1,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "service payload alpha",
+     "base_title": "Service Alpha",
+     "base_token_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "service payload alpha",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-10-25T08:00:00Z",
+     "listing_id": 1,
+     "listing_key": "alpha",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 1,
+     "purchase_count": 1,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Service Alpha",
+     "token_price": 10
+    }
+   },
+   "2": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-25T08:10:00Z",
+       "kind": "published",
+       "listing_id": 2,
+       "listing_key": "beta",
+       "previous_stars": null,
+       "ref_id": 2,
+       "stars": null,
+       "title": "Service Beta",
+       "token_price": 8,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 2,
+     "returned": 1,
+     "since_utc": null,
+     "total": 1,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 0,
+     "delisted": false,
+     "delisted_utc": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [],
+     "listing_id": 2,
+     "listing_key": "beta",
+     "live": true,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "service payload beta",
+     "base_title": "Service Beta",
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "service payload beta",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 2,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Service Beta"
+    },
+    "price_history": {
+     "base_price": 8,
+     "current_price": 8,
+     "delisted": false,
+     "delisted_utc": null,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "rating_count": 0,
+     "reply_count": 0,
+     "rows": []
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 2,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "ratings": []
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-10-25T08:10:00Z",
+     "listing_id": 2,
+     "listing_key": "beta",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 0,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 2,
+     "listing_key": "beta",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 0,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "service payload beta",
+     "base_title": "Service Beta",
+     "base_token_price": 8,
+     "delisted": false,
+     "delisted_utc": null,
+     "description": "service payload beta",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-10-25T08:10:00Z",
+     "listing_id": 2,
+     "listing_key": "beta",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 0,
+     "purchase_count": 0,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Service Beta",
+     "token_price": 8
+    }
+   },
+   "3": {
+    "feed": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "events": [
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-25T08:00:00Z",
+       "kind": "delisted",
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "previous_stars": null,
+       "ref_id": 1,
+       "stars": null,
+       "title": "Service Gamma",
+       "token_price": null,
+       "units": null
+      },
+      {
+       "amount": null,
+       "detail": null,
+       "dev_account": "usr:dana",
+       "event_utc": "2026-10-25T08:20:00Z",
+       "kind": "published",
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "previous_stars": null,
+       "ref_id": 3,
+       "stars": null,
+       "title": "Service Gamma",
+       "token_price": 6,
+       "units": null
+      }
+     ],
+     "kinds": [
+      "published",
+      "relisted",
+      "price_revised",
+      "metadata_revised",
+      "restocked",
+      "purchased",
+      "rated",
+      "rating_revised",
+      "rating_replied",
+      "refunded",
+      "delisted"
+     ],
+     "limit": 40,
+     "listing_id": 3,
+     "returned": 2,
+     "since_utc": null,
+     "total": 2,
+     "truncated": false,
+     "until_utc": null
+    },
+    "lifecycle": {
+     "cycle": 1,
+     "delist_count": 1,
+     "delisted": true,
+     "delisted_utc": "2026-10-25T08:00:00Z",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "history": [
+      {
+       "cycle": 1,
+       "event": "delist",
+       "utc": "2026-10-25T08:00:00Z"
+      }
+     ],
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "live": false,
+     "relist_count": 0
+    },
+    "metadata_history": {
+     "base_description": "service payload gamma",
+     "base_title": "Service Gamma",
+     "delisted": true,
+     "delisted_utc": "2026-10-25T08:00:00Z",
+     "description": "service payload gamma",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_revision_utc": null,
+     "listing_id": 3,
+     "revision_count": 0,
+     "revisions": [],
+     "title": "Service Gamma"
+    },
+    "price_history": {
+     "base_price": 6,
+     "current_price": 6,
+     "delisted": true,
+     "delisted_utc": "2026-10-25T08:00:00Z",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "revision_count": 0,
+     "revisions": []
+    },
+    "rating_replies": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "rating_count": 0,
+     "reply_count": 0,
+     "rows": []
+    },
+    "ratings": {
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_id": 3,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "ratings": []
+    },
+    "supply": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listed_utc": "2026-10-25T08:20:00Z",
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 0,
+     "sold_out": false,
+     "supply": null
+    },
+    "supply_history": {
+     "base_supply": null,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "effective_supply": null,
+     "history": [],
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "remaining": null,
+     "restock_count": 0,
+     "restocked_units": 0,
+     "sold": 0,
+     "sold_out": false
+    },
+    "view": {
+     "ai_label": 0,
+     "base_description": "service payload gamma",
+     "base_title": "Service Gamma",
+     "base_token_price": 6,
+     "delisted": true,
+     "delisted_utc": "2026-10-25T08:00:00Z",
+     "description": "service payload gamma",
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "latest_metadata_revision_utc": null,
+     "latest_revision_utc": null,
+     "listed_utc": "2026-10-25T08:20:00Z",
+     "listing_id": 3,
+     "listing_key": "gamma",
+     "metadata_revision_count": 0,
+     "net_purchase_count": 0,
+     "purchase_count": 0,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "refund_count": 0,
+     "refunded_total": 0,
+     "revision_count": 0,
+     "title": "Service Gamma",
+     "token_price": 6
+    }
+   }
+  },
+  "market": {
+   "avg_live_price": 9.0,
+   "buyer_count": 1,
+   "dev_count": 1,
+   "dev_revenue": 7,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "gross_tokens": 10,
+   "listing_count": 3,
+   "live_listing_count": 2,
+   "net_gross_tokens": 10,
+   "net_purchase_count": 1,
+   "platform_revenue": 3,
+   "purchase_count": 1,
+   "refund_count": 0,
+   "refunded_tokens": 0,
+   "retired_listing_count": 1
+  },
+  "market_months": {
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "lifetime_dev_revenue": 7,
+   "lifetime_gross": 10,
+   "lifetime_net": 10,
+   "lifetime_platform_revenue": 3,
+   "lifetime_refund_count": 0,
+   "lifetime_refunded": 0,
+   "lifetime_sales_count": 1,
+   "month_count": 1,
+   "months": [
+    {
+     "buyer_count": 1,
+     "dev_share": 7,
+     "dev_share_net": 7,
+     "gross": 10,
+     "listing_count": 1,
+     "month": "2026-10",
+     "net": 10,
+     "platform_share": 3,
+     "platform_share_net": 3,
+     "refund_count": 0,
+     "refunded": 0,
+     "sales_count": 1,
+     "seller_count": 1
+    }
+   ]
+  },
+  "refunds": {
+   "amount": 0,
+   "by_dev": [],
+   "dev_account": null,
+   "dev_share": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "kind": "api_refund_register",
+   "listing_id": null,
+   "months": [],
+   "platform_share": 0,
+   "refund_count": 0,
+   "refunds": [],
+   "since_utc": null,
+   "until_utc": null
+  },
+  "sellers": {
+   "usr:dana": {
+    "demand": {
+     "converted_count": 0,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 3,
+     "pending_count": 0,
+     "rows": [
+      {
+       "converted_count": 0,
+       "current_price": 10,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Service Alpha",
+       "watcher_count": 0
+      },
+      {
+       "converted_count": 0,
+       "current_price": 8,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 2,
+       "listing_key": "beta",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Service Beta",
+       "watcher_count": 0
+      },
+      {
+       "converted_count": 0,
+       "current_price": 6,
+       "delisted": true,
+       "delisted_utc": "2026-10-25T08:00:00Z",
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "newest_watch_utc": null,
+       "oldest_watch_utc": null,
+       "pending_count": 0,
+       "title": "Service Gamma",
+       "watcher_count": 0
+      }
+     ],
+     "total_watchers": 0
+    },
+    "profile": {
+     "avg_rating": 0.0,
+     "dev_account": "usr:dana",
+     "dev_revenue": 7,
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "first_listed_utc": "2026-10-25T08:00:00Z",
+     "gross_sales": 10,
+     "listing_count": 3,
+     "listings": [
+      {
+       "avg_rating": 0.0,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "rating_count": 0,
+       "sales_count": 1,
+       "title": "Service Alpha",
+       "token_price": 10
+      },
+      {
+       "avg_rating": 0.0,
+       "delisted": false,
+       "delisted_utc": null,
+       "listing_id": 2,
+       "listing_key": "beta",
+       "rating_count": 0,
+       "sales_count": 0,
+       "title": "Service Beta",
+       "token_price": 8
+      },
+      {
+       "avg_rating": 0.0,
+       "delisted": true,
+       "delisted_utc": "2026-10-25T08:00:00Z",
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "rating_count": 0,
+       "sales_count": 0,
+       "title": "Service Gamma",
+       "token_price": 6
+      }
+     ],
+     "live_listing_count": 2,
+     "platform_revenue": 3,
+     "rating_count": 0,
+     "retired_listing_count": 1,
+     "sales_count": 1
+    },
+    "quality": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 3,
+     "low_rated_count": 0,
+     "rating_avg": 0.0,
+     "rating_count": 0,
+     "reply_count": 0,
+     "reply_coverage": null,
+     "rows": [
+      {
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "lowest_stars": null,
+       "rating_avg": 0.0,
+       "rating_count": 0,
+       "reply_count": 0,
+       "retired": false,
+       "star_distribution": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+       },
+       "title": "Service Alpha",
+       "unanswered_count": 0
+      },
+      {
+       "listing_id": 2,
+       "listing_key": "beta",
+       "lowest_stars": null,
+       "rating_avg": 0.0,
+       "rating_count": 0,
+       "reply_count": 0,
+       "retired": false,
+       "star_distribution": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+       },
+       "title": "Service Beta",
+       "unanswered_count": 0
+      },
+      {
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "lowest_stars": null,
+       "rating_avg": 0.0,
+       "rating_count": 0,
+       "reply_count": 0,
+       "retired": true,
+       "star_distribution": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+       },
+       "title": "Service Gamma",
+       "unanswered_count": 0
+      }
+     ],
+     "seller_count": 1,
+     "star_distribution": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0
+     },
+     "unanswered_count": 0
+    },
+    "questions": {
+     "answered_count": 1,
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "listing_count": 3,
+     "oldest_unanswered_utc": "2026-10-25T09:20:00Z",
+     "rows": [
+      {
+       "asked_utc": "2026-10-25T09:20:00Z",
+       "buyer_id": "usr:carol",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "question_id": 2,
+       "question_text": "is there a sample response?",
+       "title": "Service Alpha"
+      },
+      {
+       "asked_utc": "2026-10-25T09:30:00Z",
+       "buyer_id": "usr:bob",
+       "listing_id": 2,
+       "listing_key": "beta",
+       "question_id": 3,
+       "question_text": "what is the rate limit?",
+       "title": "Service Beta"
+      },
+      {
+       "asked_utc": "2026-10-25T10:00:00Z",
+       "buyer_id": "usr:carol",
+       "listing_id": 3,
+       "listing_key": "gamma",
+       "question_id": 4,
+       "question_text": "does this include history?",
+       "title": "Service Gamma"
+      }
+     ],
+     "total_question_count": 4,
+     "unanswered_count": 3
+    },
+    "revenue_months": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "lifetime_gross": 10,
+     "lifetime_net": 10,
+     "lifetime_refund_count": 0,
+     "lifetime_refunded": 0,
+     "lifetime_sales_count": 1,
+     "month_count": 1,
+     "months": [
+      {
+       "dev_share": 7,
+       "dev_share_net": 7,
+       "gross": 10,
+       "month": "2026-10",
+       "net": 10,
+       "platform_share": 3,
+       "platform_share_net": 3,
+       "refund_count": 0,
+       "refunded": 0,
+       "sales_count": 1
+      }
+     ]
+    },
+    "sales": {
+     "dev_account": "usr:dana",
+     "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+     "refunded_count": 0,
+     "refunded_total": 0,
+     "sales": [
+      {
+       "buyer_id": "usr:bob",
+       "dev_share": 7,
+       "dev_share_tx": "761a41c93fc2bd36",
+       "listing_id": 1,
+       "listing_key": "alpha",
+       "platform_share": 3,
+       "price_paid": 10,
+       "purchase_id": 1,
+       "purchased_utc": "2026-10-25T09:00:00Z",
+       "refund_tx": null,
+       "refunded": false,
+       "refunded_utc": null,
+       "spend_tx": "06367a3ed76862ed"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "schema_version": 12
+}
