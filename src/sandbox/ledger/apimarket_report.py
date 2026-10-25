@@ -109,7 +109,7 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # pre-purchase Q&A queue) and a question_debt attention family; the
 # envelope is still unchanged and every earlier seller key keeps its
 # value.
-REPORT_SCHEMA = 12
+REPORT_SCHEMA = 13
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -128,6 +128,7 @@ QUALITY_EMPTY = "no ratings for this seller"
 
 QUESTIONS_EMPTY = "no open questions for this seller"
 MY_QUESTIONS_EMPTY = "no questions asked by this buyer"
+ANSWERS_EMPTY = "no answered questions for this seller"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -322,6 +323,7 @@ def collect(am):
             "demand": am.api_listing_demand(dev),
             "quality": am.api_seller_quality(dev),
             "questions": am.api_seller_questions(dev),
+            "answers": am.api_seller_answers(dev),
         }
     histories = collect_buyer_history(am, buyers)
     for buyer in sorted(buyers):
@@ -839,6 +841,15 @@ def render_html(report):
         parts.append("<h3>%s - open questions (%d)</h3>"
                      % (esc(dev), len(question_rows)))
         parts.append(row_table(question_rows, QUESTIONS_EMPTY))
+        # R2120 answered-question ledger: the open queue above proves
+        # the debt, this proves the service. An older caller's block
+        # carries no answers key, so the table degrades to the honest
+        # empty state instead of raising.
+        answers = block.get("answers") or {}
+        answer_rows = answers.get("rows") or []
+        parts.append("<h3>%s - answered questions (%d)</h3>"
+                     % (esc(dev), len(answer_rows)))
+        parts.append(row_table(answer_rows, ANSWERS_EMPTY))
 
     parts.append("<h2>Buyers</h2>")
     for buyer in sorted(report["buyers"]):

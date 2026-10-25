@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T11:32:20+08:00",
+ "export_ts": "2026-10-25T11:59:42+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2119 买家侧「我的问答全史」：上一轮（R2118）刚把售前问答立起来，提问方却只能一件挂牌一件挂牌地翻线程（api_listing_qna），卖方反而已经有跨挂牌合并的待答队列。本轮补上提问方的合并视图 api_buyer_questions：一个住民在 N 件挂牌上问过什么、哪些还悬着、卖家回过什么，一次读完（最旧在前、已答未答同列、退役挂牌仍可读、标题取现行元数据、严格买家隔离），并接进结算报表的买家区块与 my questions 表，机读契约 schema 11→12 加法升级。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_buyer_questions 读面）；src/sandbox/ledger/apimarket_report.py（买家区块 questions + my questions 表 + REPORT_SCHEMA 12）；src/sandbox/ledger/test_apimarket_buyerquestions.py（SUITE 8/8，双跑判据行同一 sha16 b8fac883087334de）；qa/apimarket-buyerquestions-R2119.log + -run2；qa/reconcile-all-R2119.log（RUNNER PASS 324/324 suites + controls 7/7 1008.5s）；docs/sandbox-suite-matrix.md（324 suites / 2700 criteria --check 逐字节同）；呈看件：preview/apimarket-report-buyerquestions.html（18121B sha256 bd375970052a6781）与 .json（30303B schema 12 sha256 c86157d24bc9d3d4）",
-  "next_milestone": "48 小时内：给卖家公开档案 dev_profile 补问答公示统计（提问数/已答数/未答最旧时长），让买家在决定买之前就能看到这个卖家到底回不回问；同窗把结算报告缺的 CSV 明细导出（--csv-out）补上，不做完不宣称。"
+  "current": "R2120 卖家侧「已答问答全史 + 响应时延记分」：R2118 立的售前问答只让卖家看见还没答的债（rows 仅未答行），答过的只剩一个计数；一个在 N 件挂牌上答过话的卖家要回答「我答过什么、答了什么、每个买家等了多久」只能逐件挂牌翻线程。本轮补 api_seller_answers：跨挂牌合并的已答台账（最旧在前、每行整秒时延、最快/最慢/均值、触及买家数、退役挂牌仍可读、标题取现行元数据、严格卖家隔离），并接进结算报表卖家区块与 answered questions 表，机读契约 schema 12→13 加法升级。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_answers 读面）；src/sandbox/ledger/apimarket_report.py（卖家区块 answers + answered questions 表 + REPORT_SCHEMA 13）；src/sandbox/ledger/test_apimarket_selleranswers.py（SUITE 8/8 双跑判据行同一 sha16；qa/apimarket-selleranswers-R2120.log + -run2）；qa/reconcile-all-R2120.log（电池 325/325 suites + controls 7/7 527.6s）；docs/sandbox-suite-matrix.md（325 suites / 2708 criteria --check 逐字节同）；呈看件：preview/apimarket-report-selleranswers.html 与 .json（schema 13）",
+  "next_milestone": "48 小时内：给结算报告的 attention 摘要补「答得太慢」家族（已答问题超过阈值仍在榜 → warn），让运营者不用逐行看时延就能发现服务滑坡；同窗把本轮读面的买家侧镜像补齐（买家能看见自己每个问题等了多久），不做完不宣称。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 卖家侧已答问答全史 + 响应时延记分读面（api_seller_answers + 卖家块消费）",
+   "on",
+   "R2120：R2118 的卖家问答面只给未答债务队列（api_seller_questions 的 rows 仅未答行，已答只是一个计数），R2119 又只补了买家侧全史，于是卖家侧没有任何面回答「我答过什么、答了什么、每个买家等了多久」。本窗补 api_seller_answers(dev_account)：十一键信封 + 十一键行，总序 (answered_utc, question_id)，每行 response_seconds 为整秒差，fastest/slowest/mean_seconds 由行派生，buyer_count 与首末戳同时给出；标题走单一元数据修订缝（edit_listing 后即现新标题），退役挂牌的已答历史仍可读，未答问题不进本面（仍在 api_seller_questions 且两面的已答计数逐值相等），严格卖家隔离（前缀合法的买家账户得诚实空信封），账户门 fail-closed，纯读零 token（十五表摘要与 ledger_tx 集恒定），三实例跨重启字节同一。消费者=报表卖家区块 answers 键（每次 collect 现读）+ HTML answered questions 表（诚实空态、敌意文本转义、旧块缺键降级）+ REPORT_SCHEMA 12→13 加法升级（信封仍恰 schema_version/report/attention）。判据 AC-AMSA1..AC-AMSA8 预注册于代码前（四锚 git grep -F 零占用 rc=1）；套件 8/8 双跑判据行同一；接线 ledger-apimarket-selleranswers(8)；电池与矩阵全绿；呈看件 preview/apimarket-report-selleranswers.html + .json。诚实注：套件内一处读稳定性断言先比了编辑前快照（测试侧缺陷，改为连续两次新读）；预注册行里的表数由十二改十五（按实测 schema，先于套件）；test_apimarket_buyerquestions.py 的 schema 字面断言改为跟随模块常量。",
+   "2026-10-25"
+  ],
   [
    "apimarket 售前问答面（ask/answer + 公开问答串 + 卖家未答队列 + 报表消费者）",
    "on",
@@ -395,6 +401,10 @@
  ],
  "results": [
   [
+   "R2120",
+   "R2120: the seller-side answered-question ledger. api_seller_questions proved only the open debt - its rows carry unanswered questions and the answered side is a single number - while api_listing_qna opens one shelf at a time, so a seller who answered on N listings had to open N threads, merge by hand, and could not answer any service-level question (how long did the slowest buyer wait, what is the mean). api_seller_answers merges every answered question of one seller into a single time line: eleven-key envelope, eleven-key rows, total order on (answered_utc, question_id), per-row response_seconds as the exact whole-second gap, fastest / slowest / mean latency, buyer_count and both end stamps, the title read through the one metadata revision seam, retired shelves keeping their answered history, strict seller isolation, a fail-closed account gate, pure read (fifteen table digests and the ledger tx set frozen) and byte-identical reads across three restarts. Consumer: every seller block gains an answers key read fresh, the page renders an answered-questions table with an honest empty state, and REPORT_SCHEMA moves 12 -> 13 additively. Suite 8/8 double-run criterion lines identical; battery and matrix green; preview/apimarket-report-selleranswers.html plus .json (schema 13). Two honest disclosures: a test-side read-stability assertion first compared a pre-edit snapshot and now compares two consecutive fresh reads; the pre-registration row's table count was corrected from twelve to fifteen against the measured schema before the suite existed. One birth-station repair: the buyerquestions suite pinned the schema literal and now follows the module constant."
+  ],
+  [
    "R2118",
    "R2118: the first pre-purchase Q&A face on the market. Every trust face so far was post-purchase (ratings, revisions, replies, refunds, seller inbox), so a resident deciding whether to buy had no way to ask the seller anything and the answer could never reach the next buyer. Two append-only tables (apimarket_questions, apimarket_answers with UNIQUE(question_id)) and four faces: ask_question (pinned order account -> listing shape -> existence -> retired -> text shape), answer_question (account -> question shape -> text shape -> existence -> ownership -> already answered, first stamp never rewritten), api_listing_qna (ten-key envelope, eight-key rows, total order on asked_utc then question_id, retired threads readable, per-listing isolation) and api_seller_questions (unanswered only, merged across listings, oldest first, retirement keeps the debt, strict seller isolation). Consumer: seller blocks carry questions, the page renders an open-questions table, attention gains question_debt, REPORT_SCHEMA 10 -> 11 additively. AC-AMQA1..AC-AMQA8 pre-registered before the code (nine anchors zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 71f323af6eb63175; wired ledger-apimarket-qna (8); battery RUNNER PASS 323/323 suites plus controls 7/7 in 495.6s; matrix 323 suites / 2692 criteria --check byte-identical; census DRIFT-CLEAN files=1792 flags=0; preview preview/apimarket-report-questions.html (31595B, sha256 a867482420650057). Honest note: the first double-run differed because one evidence line printed a Python set; it now prints a sorted list and the re-captured pair is identical."
   ],
@@ -515,7 +525,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2119",
+   "2120",
    "OSLoop 执行 tick"
   ],
   [
@@ -860,6 +870,6 @@
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 1
+  "queue_explore_open": 2
  }
 }

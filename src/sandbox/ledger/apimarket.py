@@ -4085,3 +4085,81 @@ class APIMarketFace:
                 "oldest_open_utc": oldest_open,
                 "disclaimer": self.disclaimer,
                 "rows": rows}
+
+    def api_seller_answers(self, dev_account):
+        """Seller-side answered-question ledger across every listing
+        (AC-AMSA1..AC-AMSA8, pre-registered in the R2120 explore-queue
+        row BEFORE this code existed).
+
+        api_seller_questions only proves the OPEN debt: its rows carry
+        unanswered questions and the answered side is a single number.
+        api_listing_qna opens one shelf at a time, so a seller who has
+        answered on N listings had to open N threads and merge by hand
+        to answer "what did I answer, what did I say, how long did each
+        buyer wait". This face merges every ANSWERED question of one
+        seller into a single time line (total order on answered_utc
+        then question_id), reports the service-level latency in whole
+        seconds (fastest / slowest / mean), reads the title through the
+        one metadata revision seam, and keeps a retired listing's
+        history readable. Strict seller isolation; a prefix-valid
+        account with no answers gets an honest empty envelope. Pure
+        read: zero row mutations and zero token movement."""
+
+        def _seconds(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing_rows = self._conn.execute(
+                "SELECT listing_id FROM apimarket_listings"
+                " WHERE dev_account = ? ORDER BY listing_id",
+                (dev_account,)).fetchall()
+            raw = self._conn.execute(
+                "SELECT q.question_id, a.answer_id, q.listing_id,"
+                " l.listing_key, l.title, l.description, q.buyer_id,"
+                " q.question_text, q.asked_utc, a.answer_text,"
+                " a.answered_utc"
+                " FROM apimarket_answers a"
+                " JOIN apimarket_questions q"
+                " ON q.question_id = a.question_id"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " WHERE l.dev_account = ?"
+                " ORDER BY a.answered_utc, q.question_id",
+                (dev_account,)).fetchall()
+            rows = []
+            for r in raw:
+                rows.append({
+                    "question_id": int(r[0]),
+                    "answer_id": int(r[1]),
+                    "listing_id": int(r[2]),
+                    "listing_key": r[3],
+                    "title": self._metadata_state(
+                        int(r[2]), r[4], r[5])[0],
+                    "buyer_id": r[6],
+                    "question_text": r[7],
+                    "asked_utc": r[8],
+                    "answer_text": r[9],
+                    "answered_utc": r[10],
+                    "response_seconds": _seconds(r[8], r[10]),
+                })
+            buyers = {row["buyer_id"] for row in rows}
+            latencies = [row["response_seconds"] for row in rows]
+        count = len(rows)
+        return {"dev_account": dev_account,
+                "listing_count": len(listing_rows),
+                "answered_count": count,
+                "buyer_count": len(buyers),
+                "first_answered_utc": (rows[0]["answered_utc"]
+                                       if rows else None),
+                "latest_answered_utc": (rows[-1]["answered_utc"]
+                                        if rows else None),
+                "fastest_seconds": min(latencies) if latencies else None,
+                "slowest_seconds": max(latencies) if latencies else None,
+                "mean_seconds": ((sum(latencies) // count)
+                                 if count else None),
+                "disclaimer": self.disclaimer,
+                "rows": rows}

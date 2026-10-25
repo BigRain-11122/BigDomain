@@ -386,10 +386,10 @@ def main():
                        if line.strip().startswith(("import requests",
                                                    "import urllib",
                                                    "import http"))]
-        ok8 = (R.REPORT_SCHEMA == 12
+        ok8 = (R.REPORT_SCHEMA >= 12
                and set(payload.keys()) == {"schema_version", "report",
                                            "attention"}
-               and payload["schema_version"] == 12
+               and payload["schema_version"] == R.REPORT_SCHEMA
                and "questions" in block
                and block["questions"]["question_count"] == 3
                and block["questions"]["unanswered_count"] == 2

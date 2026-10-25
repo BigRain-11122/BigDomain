@@ -2448,6 +2448,13 @@ SUITES = [
     # JSON schema moves 11 -> 12 additively.
     ("ledger-apimarket-buyerquestions", os.path.join(
         "ledger", "test_apimarket_buyerquestions.py"), 8),
+    # R2120 seller-side answered-question ledger (api_seller_answers):
+    # the proving side of the Q&A service - what was answered, what was
+    # said, and how long each buyer waited - wired into every seller
+    # block plus an answered-questions table, so the JSON schema moves
+    # 12 -> 13 additively.
+    ("ledger-apimarket-selleranswers", os.path.join(
+        "ledger", "test_apimarket_selleranswers.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and
