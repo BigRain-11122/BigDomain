@@ -1,0 +1,11 @@
+PASS AC-TMP1 anchors hold: signature-less and foreign-name worlds are not candidates
+PASS AC-TMP1 age leg: fresh worlds are not age candidates
+PASS AC-TMP2 rename probe: a locked world is skipped as busy and survives untouched
+PASS AC-TMP3 window isolation: pre-run worlds stay out of reach
+PASS AC-TMP4 report: nine-key envelope, candidates == removed + busy + failed, our live world removed
+PASS AC-TMP5 idempotent: a freed world is reclaimed once, the next pass removes zero, pre-run worlds intact
+PASS AC-TMP6 reuse: battery loads the tool by path, holds no second sweep implementation, prints the reclaim line
+PASS AC-TMP6 fail-open: the tool stays callable after a missing-tool probe
+PASS AC-TMP7 fixture classes: missing signature kept, age window kept, busy kept, idle world removed
+PASS AC-TMP8 hygiene: ASCII-only sources, zero network imports, ledger-tmp-sweep wired into the battery
+SUITE PASS 10/10

@@ -89,6 +89,86 @@ def candidates(root, min_age_hours):
     return out
 
 
+def created_at(stat):
+    """Creation time proxy: real birth time where the platform has it,
+    Windows st_ctime (creation) otherwise st_mtime."""
+    birth = getattr(stat, "st_birthtime", None)
+    if birth is not None:
+        return birth
+    if sys.platform == "win32":
+        return stat.st_ctime
+    return stat.st_mtime
+
+
+def run_candidates(root, started_at):
+    """Worlds created AT OR AFTER started_at with the same two content
+    anchors (name family + signature file).
+
+    This is the battery-window leg: the age policy of candidates() is
+    replaced by an explicit window so a run only ever reclaims what it
+    itself just produced. Anything that existed before started_at is
+    never a candidate, even when it matches - that keeps a concurrent
+    window's worlds and older evidence worlds out of reach (AC-TMP3).
+    """
+    out = []
+    try:
+        entries = os.scandir(root)
+    except OSError:
+        return out
+    for entry in entries:
+        try:
+            if not entry.is_dir(follow_symlinks=False):
+                continue
+            stat = entry.stat(follow_symlinks=False)
+            if created_at(stat) < started_at:
+                continue
+            if not NAME_RE.match(entry.name):
+                continue
+            if not has_signature(entry.path):
+                continue
+        except OSError:
+            continue
+        out.append(entry.path)
+    out.sort()
+    return out
+
+
+def sweep_run_temps(root, started_at, execute=True):
+    """Reclaim only this run's own worlds (AC-TMP1..AC-TMP6).
+
+    Shares the ownership anchors and the rename-probe delete with the
+    standalone sweep - one implementation, two callers (AC-TMP6).
+    Returns a report dict; never raises for a single bad directory.
+    """
+    cands = run_candidates(root, started_at)
+    removed = 0
+    busy = 0
+    failed = 0
+    reclaimed = 0
+    for path in cands:
+        ok, size, reason = sweep(path, execute)
+        if ok:
+            removed += 1
+            reclaimed += size
+        elif reason == "dry-run":
+            continue
+        elif reason == "busy-or-locked":
+            busy += 1
+        else:
+            failed += 1
+    return {
+        "root": root,
+        "started_at": started_at,
+        "mode": "execute" if execute else "dry-run",
+        "candidates": len(cands),
+        "removed": removed,
+        "busy_skipped": busy,
+        "failed": failed,
+        "bytes": reclaimed,
+        "mib": round(reclaimed / 1048576.0, 2),
+    }
+
+
 def sweep(path, execute):
     """Delete one world. Returns (removed, bytes, skipped_reason)."""
     size = dir_bytes(path)

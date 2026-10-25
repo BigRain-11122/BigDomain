@@ -3545,6 +3545,13 @@ SUITES = [
     # (AC-EVD1..AC-EVD8 pre-registered in state/queue/tech.md R2072.)
     ("os-evidence-writer",
      os.path.join("..", "os", "test_evidence_writer.py"), 8),
+    # R2126 birth-place cleanup for the sandbox worlds themselves: the
+    # battery reclaims only what it just created, behind the same name /
+    # signature anchors and the same rename probe the standalone sweep
+    # uses (D-20261025-15 TEMP governance, owner-side fix).
+    # (AC-TMP1..AC-TMP8 pre-registered in state/queue/tech.md R2126.)
+    ("ledger-tmp-sweep",
+     os.path.join("..", "os", "test_tmp_sweep.py"), 8),
     ]
 
 FAILS = 0
@@ -3626,6 +3633,30 @@ def phase_suites():
          "suites %d/%d green, expected criteria total=%d"
          % (green, len(SUITES), total))
     return green == len(SUITES)
+
+
+TMP_TOOL = os.path.join(BASE, os.pardir, "os", "sweep_suite_tmp.py")
+
+
+def sweep_run_worlds(started_at):
+    """AC-TMP1..AC-TMP6: reclaim only the sandbox worlds this very run
+    created, through the one ownership/probe implementation that lives
+    in src/os/sweep_suite_tmp.py (reuse, never a second copy).
+
+    Fail-open by contract: a missing or broken tool leaves the battery
+    verdict untouched. Returns a report dict or None.
+    """
+    import importlib.util
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "sweep_suite_tmp", TMP_TOOL)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.sweep_run_temps(
+            tempfile.gettempdir(), started_at, execute=True)
+    except Exception as exc:  # noqa: BLE001 - fail-open is the contract
+        print("TMP RECLAIM skipped: %s" % exc.__class__.__name__, flush=True)
+        return None
 
 
 def build_demo_state(db_path):
@@ -3895,6 +3926,13 @@ def main(argv):
         phase_member_reconcile(tmp)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+    reclaim = sweep_run_worlds(t0)
+    if reclaim is not None:
+        print("TMP RECLAIM candidates=%d removed=%d busy=%d failed=%d "
+              "reclaimed=%.2f MiB"
+              % (reclaim["candidates"], reclaim["removed"],
+                 reclaim["busy_skipped"], reclaim["failed"],
+                 reclaim["mib"]), flush=True)
     if FAILS == 0 and suites_ok:
         print("RUNNER PASS (%d/%d suites green, reconcile controls 7/7, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
