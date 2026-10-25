@@ -2353,6 +2353,14 @@ SUITES = [
     # identity.
     ("ledger-apimarket-claims", os.path.join(
         "ledger", "test_apimarket_claims.py"), 8),
+    # AC-AMCR1..AC-AMCR8 pre-registered in the R2130 explore-queue
+    # claim row BEFORE this suite existed: the seller answer door for a
+    # claim - one append-only response per claim, the pinned gate order,
+    # a one-seam status derivation with refunded beating answered, the
+    # answer keys on all three queue views, pure read and restart
+    # identity.
+    ("ledger-apimarket-claims-respond", os.path.join(
+        "ledger", "test_apimarket_claims_respond.py"), 8),
     # AC-REVM1..AC-REVM8 pre-registered in the R2097 explore-queue
     # claim row BEFORE this suite existed: the seller-side monthly
     # revenue timeline read face (cash basis - a sale books in the

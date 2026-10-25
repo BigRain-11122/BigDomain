@@ -14,6 +14,11 @@ and the seller had no queue of disputed purchases. This slot pins:
 
   - the ten-key door envelope, the seven-key queue envelope and the
     twelve-key row, with claim_count == len(claims) == open + refunded;
+    (relaxed 2026-10-25 by R2130: the envelope and row assertions are
+    subset checks so the additive answer fields and answered_count the
+    R2130 seller-response window added do not break this contract, and
+    the new table joined the digest set; every R2129 assertion still
+    holds unchanged)
   - status derived from the refunds table only (a claim row carries no
     status column and is never rewritten when a refund lands later);
   - the gate family and its order: account, purchase-id shape, claim
@@ -92,7 +97,7 @@ TABLES = ("apimarket_listings", "apimarket_purchases",
           "apimarket_rating_replies", "apimarket_refunds",
           "apimarket_supply_revisions", "apimarket_questions",
           "apimarket_answers", "apimarket_providers", "apimarket_reviews",
-          "apimarket_claims")
+          "apimarket_claims", "apimarket_claim_responses")
 
 BAD_ACCOUNTS = [None, "", "bob", "USR:bob", " usr:bob", 42, True, []]
 BAD_PURCHASES = [0, -1, "1", True, 2.5, []]
@@ -238,8 +243,8 @@ def main():
         env = am.api_claims()
         rows = env["claims"]
         ok1 = (set(c1) == DOOR_KEYS
-               and set(env) == ENVELOPE_KEYS
-               and all(set(r) == ROW_KEYS for r in rows)
+               and ENVELOPE_KEYS <= set(env)
+               and all(ROW_KEYS <= set(r) for r in rows)
                and env["claim_count"] == len(rows) == 3
                and env["open_count"] == 3
                and env["refunded_count"] == 0
@@ -249,8 +254,10 @@ def main():
                and c1["listing_id"] == ids["d1"]
                and env["disclaimer"] == DISCLAIMER)
         record("AC-AMCL1", ok1,
-               "door=%r env=%r rows=%d open=%d refunded=%d"
-               % (set(c1) == DOOR_KEYS, set(env) == ENVELOPE_KEYS,
+               "door=%r env_subset=%r rows_subset=%r rows=%d open=%d"
+               " refunded=%d"
+               % (set(c1) == DOOR_KEYS, ENVELOPE_KEYS <= set(env),
+                  all(ROW_KEYS <= set(r) for r in rows),
                   env["claim_count"], env["open_count"],
                   env["refunded_count"]))
 

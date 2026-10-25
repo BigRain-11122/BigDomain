@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T22:42:00+08:00",
+ "export_ts": "2026-10-26T00:08:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "售后申诉登记面（open_claim + api_claims）：退款门在卖家已花掉分成时会拒绝且「不追讨」，此后买家在全产品没有任何能落地申诉的地方，卖家也拿不到「哪些成交被投诉」的队列——申诉是当时唯一既无写门也无读面的售后轴。本轮补一张只追加的申诉表（一笔成交一张）与两个面：买家开单（争议金额随单冻结，事后改价改不了争议标的），以及买家/卖家/全市场三视合并队列（状态只由退款表派生，退款落地即自动转已退款，申诉行永不改写）。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_claims 表 + open_claim + api_claims）+ src/sandbox/ledger/test_apimarket_claims.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 DD78DEA166E4F82F，证据 qa/apimarket-claims-R2129-verifya.log / -verifyb.log）+ src/os/battery_stream.py（可复用电池流式单写者证据器）；qa/reconcile-all-R2129.log（RUNNER PASS 333/333 套件 + 控制 7/7，589.4s）；docs/sandbox-suite-matrix.md（333 套件 / 2772 判据，--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①把申诉队列接进结算报告（运营者在报表里就能看到争议清单与未解决时长），目前它只有面没有消费者；②申诉与退款、评价债三条售后队列合成一个卖家工作面，避免三处翻表；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架），补上分发义务的执法端。"
+  "current": "售后申诉应答面（respond_claim + api_claims 应答扩展）：上一轮给了买家开单门与三视队列，但卖家在整条申诉链上没有任何应答面——买家的申诉只有「退款」这一种回音，而退款在卖家分成已花时会拒绝；队列的 status 也只有 open/refunded 两态，把「已应答」和「无人理」混成一态。本轮补一张只追加的申诉应答表（一诉一答）与卖家应答门，门序钉死为 账户形→申诉号形→应答文形→申诉存在→归属→已退款→重复，任一拒绝零行零 token；队列行加应答三键与回答计数，状态派生升级为 已退款 > 已应答 > 待应答，且申诉行与应答行都不被改写。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_claim_responses 表 + respond_claim + api_claims 应答扩展）+ src/sandbox/ledger/test_apimarket_claims_respond.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 B31D3E40E5585EC7，证据 qa/apimarket-claims-respond-R2130.log / -run2.log）；qa/reconcile-all-R2130.log（RUNNER PASS 334/334 套件 + 控制 7/7，758.7s）；docs/sandbox-suite-matrix.md（334 套件 / 2780 判据，--check 逐字节同一）。",
+  "next_milestone": "48 小时内：①把申诉队列（含应答态与未应答债务）接进结算报告与卖家注意力清单，补上它作为纯读面缺的消费者；②申诉、退款、评价债三条售后队列合成一个卖家工作面；③把 R2124 的审核门真正接进上架门（未过审/未实名不得上架）。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 申诉应答面（respond_claim + api_claims 应答扩展：一诉一答 + 状态 已退款>已应答>待应答 + 回答计数）",
+   "on",
+   "R2130：R2129 只给了买家开单门与三视队列，卖家在整条申诉链上没有任何应答面——买家的申诉只有退款一种回音，而退款在卖家分成已花时 fail-closed；队列 status 只有 open/refunded，把「已应答」与「无人理」混成同一态，这是售后链最后一环缺写门。本窗补一张 append-only apimarket_claim_responses（UNIQUE(claim_id)，无 UPDATE/DELETE 面）与 respond_claim，门序钉死为 账户形→申诉号形→应答文形→申诉存在→归属→已退款→重复（三个新码 E_AM_UNKNOWN_CLAIM / E_AM_BAD_RESPONSE / E_AM_CLAIM_ANSWERED），任一拒绝零行零 token；api_claims 行加 response_id/response_text/responded_utc 三键、信封加 answered_count，状态派生单缝升级为 refunded > answered > open（应答后退款仍报已退款，而两行都不被改写）；三视（买家/卖家/全市场）共用同一行集，计数按过滤后集合派生，面为纯读。判据 AC-AMCR1..AC-AMCR8 预注册在 R2130 explore 队列行里、先于代码（九锚 git grep -F 零占用 rc=1；answered_count 为复用字段名，已在行内如实注明不作锚）。本窗证据：套件双跑 rc=0/0 判据行逐字节同一 sha16 B31D3E40E5585EC7（qa/apimarket-claims-respond-R2130.log + -run2.log，单写者 ASCII LF）；R2129 旧套件回归 SUITE PASS 8/8（信封/行断言放宽为子集以容应答加法，原断言不减）；接线 ledger-apimarket-claims-respond(8)；电池 qa/reconcile-all-R2130.log RUNNER PASS 334/334 套件 + 控制 7/7 758.7s（TMP RECLAIM 171.16 MiB）；矩阵 334 套件 / 2780 判据 --check 逐字节同一。同窗另兑现 ledger 10-25 夜班点名（HQ-FEEDBACK 逾 24h 未更新）一行。",
+   "2026-10-25"
+  ],
   [
    "apimarket 售后申诉登记面（open_claim + api_claims：一购一诉 + 三视合并队列 + 状态由退款表派生）",
    "on",

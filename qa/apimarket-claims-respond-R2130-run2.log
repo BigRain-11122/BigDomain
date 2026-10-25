@@ -1,0 +1,10 @@
+PASS AC-AMCR1: env=True rows=True rows=4 open=4 answered=0 refunded=0
+PASS AC-AMCR2: door_keys=True answered=True refunded_wins=True row_frozen=True resp_frozen=True open=3 answered=0 refunded=1
+PASS AC-AMCR3: acc=8 cid=6 text=5 biz=['E_AM_UNKNOWN_CLAIM', 'E_AM_NOT_OWNER', 'E_AM_ALREADY_REFUNDED', 'E_AM_ALREADY_REFUNDED'] order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_BAD_RESPONSE', 'E_AM_UNKNOWN_CLAIM', 'E_AM_NOT_OWNER'] frozen=True
+PASS AC-AMCR4: dup=E_AM_CLAIM_ANSWERED unique=True stamps=['2026-10-06T00:02:00Z', '2026-10-06T00:04:00Z'] no_update=True
+PASS AC-AMCR5: bob=2 dave=2 dana=4 carol=0 both=2 answered=1 gates=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT']
+PASS AC-AMCR6: three_runs=True frozen=True tx_constant=True
+PASS AC-AMCR7: restart_market=True restart_buyer=True restart_seller=True
+PASS AC-AMCR8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8
