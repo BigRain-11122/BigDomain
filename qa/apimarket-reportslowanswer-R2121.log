@@ -1,0 +1,9 @@
+PASS AC-AMSL1: findings=4 keys=True seconds=[90000, 172801, 200000, 200000] boundary=1
+PASS AC-AMSL2: pairs=[('usr:dana', 1, 200000), ('usr:dana', 3, 172801), ('usr:dana', 4, 90000), ('usr:erin', 2, 200000)]
+PASS AC-AMSL3: got=[(200000, 'usr:dana'), (200000, 'usr:erin'), (172801, 'usr:dana'), (90000, 'usr:dana')] want=[(200000, 'usr:dana'), (200000, 'usr:erin'), (172801, 'usr:dana'), (90000, 'usr:dana')] double_run=True
+PASS AC-AMSL4: before=4 after=5 added=1
+PASS AC-AMSL5: severity=['warn'] other_kinds=['question_debt']
+PASS AC-AMSL6: schema=14 envelope=['attention', 'report', 'schema_version'] legacy_slow=0
+PASS AC-AMSL7: digest stable=True tx 3==3 restart_identical=True
+PASS AC-AMSL8: row=True detail=True empty=True wired=True ascii=True net=True outside=True
+SUITE PASS 8/8

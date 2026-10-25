@@ -109,7 +109,17 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # pre-purchase Q&A queue) and a question_debt attention family; the
 # envelope is still unchanged and every earlier seller key keeps its
 # value.
-REPORT_SCHEMA = 13
+# v14 (R2121) adds the slow_answer family to the attention digest: the
+# seller block already carries the answered-question ledger with its
+# per-row response seconds, so the report turns a slow reply into a
+# sortable operator to-do item. The envelope is still unchanged and
+# every earlier family keeps its findings.
+REPORT_SCHEMA = 14
+
+# One day. A seller who leaves a buyer waiting longer than this shows
+# up in the attention digest; the boundary stays silent on the exact
+# second (strictly over, pinned by AC-AMSL1).
+SLOW_ANSWER_SECONDS = 86400
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -356,10 +366,13 @@ def collect_attention(am, report):
     never cached: each call re-reads the faces."""
     findings = []
 
-    def add(kind, severity, subject, detail, ref):
+    def add(kind, severity, subject, detail, ref, sort_hint=0):
+        # sort_hint is a family-local secondary key (smaller first); it
+        # never reaches the published finding, so the five-key shape
+        # stays fixed for every family.
         findings.append({"kind": kind, "severity": severity,
                          "subject": subject, "detail": detail,
-                         "ref": ref})
+                         "ref": ref, "_sort": sort_hint})
 
     for dev in sorted(report["sellers"]):
         inbox = am.api_seller_inbox(dev)
@@ -396,6 +409,20 @@ def collect_attention(am, report):
                     % (row["title"] or row["listing_key"],
                        row["rating_avg"], row["rating_count"]),
                     row["listing_key"])
+        # Slow answers: the answered-question ledger already measured
+        # the wait, so the digest only has to surface it. A retired
+        # shelf keeps its slow answers (retirement does not erase the
+        # service record), and a legacy report block without the key
+        # simply contributes nothing.
+        answers = report["sellers"][dev].get("answers") or {}
+        for row in answers.get("rows") or []:
+            seconds = row.get("response_seconds")
+            if seconds is not None and seconds > SLOW_ANSWER_SECONDS:
+                add("slow_answer", "warn", dev,
+                    "question %d on listing %d answered after %d s"
+                    % (row["question_id"], row["listing_id"], seconds),
+                    "question:%d" % row["question_id"],
+                    sort_hint=-int(seconds))
     for listing in report["board"]["listings"]:
         supply = am.api_supply(listing["listing_id"])
         if supply["sold_out"]:
@@ -420,7 +447,10 @@ def collect_attention(am, report):
                 "%d open purchase(s)" % row["open_purchases"])
 
     findings.sort(key=lambda f: (SEVERITY[f["severity"]], f["kind"],
-                                 f["subject"], f["detail"]))
+                                 f.get("_sort", 0), f["subject"],
+                                 f["detail"]))
+    for item in findings:
+        item.pop("_sort", None)
     counts = {}
     for item in findings:
         counts[item["severity"]] = counts.get(item["severity"], 0) + 1

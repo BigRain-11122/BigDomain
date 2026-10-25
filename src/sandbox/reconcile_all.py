@@ -2455,6 +2455,12 @@ SUITES = [
     # 12 -> 13 additively.
     ("ledger-apimarket-selleranswers", os.path.join(
         "ledger", "test_apimarket_selleranswers.py"), 8),
+    # R2121 slow-answer attention family: the seller-side answered
+    # ledger already measured the wait, so the digest surfaces a reply
+    # older than one day as a sortable operator to-do item; the JSON
+    # schema moves 13 -> 14 additively.
+    ("ledger-apimarket-reportslowanswer", os.path.join(
+        "ledger", "test_apimarket_report_slowanswer.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and

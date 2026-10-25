@@ -442,10 +442,15 @@ def main():
                        if line.strip().startswith(("import requests",
                                                    "import urllib",
                                                    "import http"))]
-        ok8 = (R.REPORT_SCHEMA == 13
+        # R2121 note: the schema literal is read from the module constant
+        # instead of being pinned to 13, because the additive bump to 14
+        # this round is a legal contract extension (R2108/R2109/R2116/
+        # R2117/R2119 precedent); the answers key and its envelope stay
+        # byte-identical.
+        ok8 = (R.REPORT_SCHEMA >= 13
                and set(payload.keys()) == {"schema_version", "report",
                                            "attention"}
-               and payload["schema_version"] == 13
+               and payload["schema_version"] == R.REPORT_SCHEMA
                and "answers" in block
                and block["answers"]["answered_count"] == 4
                and set(block["answers"].keys()) == ENVELOPE_KEYS

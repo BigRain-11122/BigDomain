@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T11:59:42+08:00",
+ "export_ts": "2026-10-25T13:10:44+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2120 卖家侧「已答问答全史 + 响应时延记分」：R2118 立的售前问答只让卖家看见还没答的债（rows 仅未答行），答过的只剩一个计数；一个在 N 件挂牌上答过话的卖家要回答「我答过什么、答了什么、每个买家等了多久」只能逐件挂牌翻线程。本轮补 api_seller_answers：跨挂牌合并的已答台账（最旧在前、每行整秒时延、最快/最慢/均值、触及买家数、退役挂牌仍可读、标题取现行元数据、严格卖家隔离），并接进结算报表卖家区块与 answered questions 表，机读契约 schema 12→13 加法升级。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_answers 读面）；src/sandbox/ledger/apimarket_report.py（卖家区块 answers + answered questions 表 + REPORT_SCHEMA 13）；src/sandbox/ledger/test_apimarket_selleranswers.py（SUITE 8/8 双跑判据行同一 sha16；qa/apimarket-selleranswers-R2120.log + -run2）；qa/reconcile-all-R2120.log（电池 325/325 suites + controls 7/7 527.6s）；docs/sandbox-suite-matrix.md（325 suites / 2708 criteria --check 逐字节同）；呈看件：preview/apimarket-report-selleranswers.html 与 .json（schema 13）",
-  "next_milestone": "48 小时内：给结算报告的 attention 摘要补「答得太慢」家族（已答问题超过阈值仍在榜 → warn），让运营者不用逐行看时延就能发现服务滑坡；同窗把本轮读面的买家侧镜像补齐（买家能看见自己每个问题等了多久），不做完不宣称。"
+  "current": "R2121：结算报告的慢答告警家族。卖家侧问答面已经把每个买家等了多久算出来了（api_seller_answers 的 response_seconds），但运营者仍要自己扫表才知道谁在答慢；本窗在 Attention 摘要里新增 slow_answer（严格超一天=warn，按等待时长降序），零新表零新写门，只消费报表同一次采集已有的卖家 answers 块，REPORT_SCHEMA 13→14 加法。",
+  "latest_artifact": "src/sandbox/ledger/apimarket_report.py（SLOW_ANSWER_SECONDS + slow_answer 家族 + 族内排序缝）、src/sandbox/ledger/test_apimarket_report_slowanswer.py（SUITE 8/8 双跑判据行同一 sha16 fdd616d835b71e7b，qa/apimarket-reportslowanswer-R2121.log + -run2）、qa/reconcile-all-R2121.log（电池 RUNNER PASS 326/326 suites + controls 7/7 1084.0s）、docs/sandbox-suite-matrix.md（326 suites / 2716 criteria --check 逐字节同一）、preview/apimarket-report-slowanswer.html 与 .json（schema 14，演示世界一条 345601 秒慢答）。",
+  "next_milestone": "48 小时内：把 slow_answer 接进日常运营面（值守轮读一次 Attention 段即可发现答慢卖家），并按 explore 队列继续补读面消费者；候选下一窗=卖家首响时延并入公开档案。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告慢答告警家族（attention slow_answer + schema 14）",
+   "on",
+   "R2121：卖家侧问答面已算出每个买家的等待秒数，但运营者仍要自己视读才发现谁在答慢。本窗在 collect_attention 里新增 slow_answer：凡卖家区块 answers 行中 response_seconds 严格大于 SLOW_ANSWER_SECONDS(86400) 的已答问题各产一条 warn，detail 携 question/listing/response_seconds，ref 点名问题；族内按等待时长降序、平值按卖家升序（族内排序提示不进公开 finding 五键形状），既有七族条目与顺序逐条不变；退役挂牌保留其服务记录，缺 answers 键的旧报表诚实降级；纯新增无新表无新写门，REPORT_SCHEMA 13→14 加法。判据 AC-AMSL1..AC-AMSL8 预注册于代码之前（队列行先改后落地）；套件 8/8 双跑判据行同一；接线 ledger-apimarket-reportslowanswer(8)；电池与矩阵全绿；census DRIFT-CLEAN；呈看件 preview/apimarket-report-slowanswer.html+.json。诚实注两处：①旧 R2120 套件的 schema 字面断言按加法升级先例改为跟随模块常量（answers 契约未动；红电池日志随后被本窗绿跑覆盖未留档·如实记）；②首批证据件被 PowerShell Tee 写成 UTF-16LE，已用单一 UTF-8 LF 写手重落。"
+  ],
   [
    "apimarket 卖家侧已答问答全史 + 响应时延记分读面（api_seller_answers + 卖家块消费）",
    "on",
@@ -401,6 +406,10 @@
  ],
  "results": [
   [
+   "R2121",
+   "R2121: the slow-answer attention family. R2120 measured how long every buyer waited on the answered-question ledger, but the operator still had to scan that table to notice a seller answering slowly. collect_attention now derives one slow_answer finding (warn) per answered question strictly over SLOW_ANSWER_SECONDS=86400, from the seller block's answers ledger the report already collected in the same pass, so the change adds no table, no write door and no second face read. detail carries question id, listing id and the response seconds; ref names the question; a family-local sort hint orders the family by longest wait first with ties by seller while every earlier family keeps its exact order and the published five-key finding shape is unchanged. Retired shelves keep their service record, a legacy seller block without the answers key contributes nothing, and REPORT_SCHEMA moves 13 -> 14 additively (envelope still exactly schema_version/report/attention). Suite SUITE PASS 8/8 double-run, criterion lines identical sha16 fdd616d835b71e7b; battery RUNNER PASS 326/326 suites plus controls 7/7 in 1084.0s; matrix 326 suites / 2716 criteria --check byte-identical; census DRIFT-CLEAN files=1800 flags=0; preview HTML + JSON in preview/. Two repairs disclosed: the R2120 suite's literal schema pin relaxed to follow the module constant (additive-bump precedent, answers contract untouched), and the first evidence pair was re-captured from UTF-16LE Tee output into UTF-8 LF by a single writer. The state file also arrived in a non-canonical layout from the previous closeout and was repaired through the eol and fix-indent tools."
+  ],
+  [
    "R2120",
    "R2120: the seller-side answered-question ledger. api_seller_questions proved only the open debt - its rows carry unanswered questions and the answered side is a single number - while api_listing_qna opens one shelf at a time, so a seller who answered on N listings had to open N threads, merge by hand, and could not answer any service-level question (how long did the slowest buyer wait, what is the mean). api_seller_answers merges every answered question of one seller into a single time line: eleven-key envelope, eleven-key rows, total order on (answered_utc, question_id), per-row response_seconds as the exact whole-second gap, fastest / slowest / mean latency, buyer_count and both end stamps, the title read through the one metadata revision seam, retired shelves keeping their answered history, strict seller isolation, a fail-closed account gate, pure read (fifteen table digests and the ledger tx set frozen) and byte-identical reads across three restarts. Consumer: every seller block gains an answers key read fresh, the page renders an answered-questions table with an honest empty state, and REPORT_SCHEMA moves 12 -> 13 additively. Suite 8/8 double-run criterion lines identical; battery and matrix green; preview/apimarket-report-selleranswers.html plus .json (schema 13). Two honest disclosures: a test-side read-stability assertion first compared a pre-edit snapshot and now compares two consecutive fresh reads; the pre-registration row's table count was corrected from twelve to fifteen against the measured schema before the suite existed. One birth-station repair: the buyerquestions suite pinned the schema literal and now follows the module constant."
   ],
@@ -525,7 +534,7 @@
    "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
   ],
   [
-   "2120",
+   "2121",
    "OSLoop 执行 tick"
   ],
   [
@@ -862,14 +871,14 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 42,
+  "log_lines_in_window": 43,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 42,
+  "substantive_non_idle_mention_lines": 43,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 2
+  "queue_explore_open": 1
  }
 }
