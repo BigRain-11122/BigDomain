@@ -1,0 +1,13 @@
+PASS AC-CSVM1: files=['buyer_months.csv', 'market_months.csv', 'seller_months.csv'] cols=[13, 11, 12] bom_free=True lf_only=True
+PASS AC-CSVM2: rows market=3 sellers=5 buyers=6
+PASS AC-CSVM3: counts=3/5/6 keys=['2026-08', '2026-09', '2026-10'] sellers=[('usr:dana', '2026-08'), ('usr:dana', '2026-09'), ('usr:dana', '2026-10'), ('usr:frank', '2026-09'), ('usr:frank', '2026-10')]
+PASS AC-CSVM4: numeric_quoted=True roundtrip=['x,y', 'q"z', 'l1\nl2']
+PASS AC-CSVM5: errors=['ValueError', 'ValueError'] leftovers=['already-a-file', 'api_lifecycle.db', 'api_lifecycle.db-shm', 'api_lifecycle.db-wal', 'api_rejects.db', 'api_rejects.db-shm', 'api_rejects.db-wal', 'apimarket.db', 'apimarket.db-shm', 'apimarket.db-wal', 'bundle1', 'ledger.db', 'ledger.db-shm', 'ledger.db-wal']
+PASS AC-CSVM6: sha16={'market_months.csv': 'd1e95bb7f18529c8', 'seller_months.csv': 'df7e21dc19ff4387', 'buyer_months.csv': 'ac55fab83dd72542'}
+PASS AC-CSVM7: tables=16 digests_stable=True tx 16==16 schema=14/1
+report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-csv-main-l9yl9g7p\cli\report.html (31202 bytes, sha256 b7dcb9012b50d70f)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-csv-main-l9yl9g7p\cli\report.json (52261 bytes, schema 14)
+settlement csv written: C:\Users\sjs20\AppData\Local\Temp\apimarket-csv-main-l9yl9g7p\cli\csv (3 files, 934 bytes, schema 1)
+PASS AC-CSVM8: cli_exit=0 files=['buyer_months.csv', 'market_months.csv', 'seller_months.csv'] html=True json=True wired=True ascii=True
+SUITE PASS 8/8

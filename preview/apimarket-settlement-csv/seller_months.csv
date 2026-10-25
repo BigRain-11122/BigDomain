@@ -1,0 +1,6 @@
+dev_account,month,sales_count,gross,refund_count,refunded,net,dev_share,platform_share,dev_share_net,platform_share_net
+usr:dana,2026-08,1,10,0,0,10,7,3,7,3
+usr:dana,2026-09,2,13,0,0,13,10,3,10,3
+usr:dana,2026-10,0,0,1,10,-10,0,0,-7,-3
+usr:frank,2026-09,1,5,0,0,5,4,1,4,1
+usr:frank,2026-10,0,0,1,5,-5,0,0,-4,-1

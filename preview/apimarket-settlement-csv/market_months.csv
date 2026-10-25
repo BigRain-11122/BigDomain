@@ -1,0 +1,4 @@
+month,sales_count,gross,refund_count,refunded,net,dev_share,platform_share,dev_share_net,platform_share_net,buyer_count,seller_count,listing_count
+2026-08,1,10,0,0,10,7,3,7,3,1,1,1
+2026-09,3,18,0,0,18,14,4,14,4,3,2,3
+2026-10,0,0,2,15,-15,0,0,-11,-4,0,0,0

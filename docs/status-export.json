@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T13:10:44+08:00",
+ "export_ts": "2026-10-25T14:51:18+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "R2121：结算报告的慢答告警家族。卖家侧问答面已经把每个买家等了多久算出来了（api_seller_answers 的 response_seconds），但运营者仍要自己扫表才知道谁在答慢；本窗在 Attention 摘要里新增 slow_answer（严格超一天=warn，按等待时长降序），零新表零新写门，只消费报表同一次采集已有的卖家 answers 块，REPORT_SCHEMA 13→14 加法。",
-  "latest_artifact": "src/sandbox/ledger/apimarket_report.py（SLOW_ANSWER_SECONDS + slow_answer 家族 + 族内排序缝）、src/sandbox/ledger/test_apimarket_report_slowanswer.py（SUITE 8/8 双跑判据行同一 sha16 fdd616d835b71e7b，qa/apimarket-reportslowanswer-R2121.log + -run2）、qa/reconcile-all-R2121.log（电池 RUNNER PASS 326/326 suites + controls 7/7 1084.0s）、docs/sandbox-suite-matrix.md（326 suites / 2716 criteria --check 逐字节同一）、preview/apimarket-report-slowanswer.html 与 .json（schema 14，演示世界一条 345601 秒慢答）。",
-  "next_milestone": "48 小时内：把 slow_answer 接进日常运营面（值守轮读一次 Attention 段即可发现答慢卖家），并按 explore 队列继续补读面消费者；候选下一窗=卖家首响时延并入公开档案。"
+  "current": "R2122：结算报告的 CSV 明细导出（--csv-out 三表：市场月表/卖家月表/买家月表）。财务与表格工具消费方此前只能抓屏或自己解析 JSON；本件从报表同一次采集的月行投影（零重算零二次读面），表头钉死、UTF-8 无 BOM、LF 行尾、RFC4180 转义，先全量序列化再逐件原子替换（坏目标 fail-closed 零残留），页面与 JSON 逐字节不变（REPORT_SCHEMA 仍 14，CSV 自带 CSV_SCHEMA=1）。诚实注：上一窗被轮时预算中断在电池中途，本窗完成核验与收口；首跑电池因本窗重写 qa 证据日志与实时 census 竞态失败，红日志保留、干净重跑全绿。",
+  "latest_artifact": "preview/apimarket-settlement-csv/（market_months.csv 255B / seller_months.csv 311B / buyer_months.csv 368B，可直接导入表格工具）+ preview/apimarket-report-csv.html 与 .json（schema 14）+ src/sandbox/ledger/test_apimarket_settlement_csv.py（SUITE 8/8 双跑判据行同一 criteria_sha16 12212a7309151f1e，qa/apimarket-settlementcsv-R2122.log + -run2）+ qa/reconcile-all-R2122c.log（电池 RUNNER PASS 327/327 suites + controls 7/7 620.6s）+ docs/sandbox-suite-matrix.md（327 suites / 2724 criteria --check 逐字节同一）+ docs/global-benchmarks.md W31 片与 intelligence-wall W31 双行。",
+  "next_milestone": "48 小时内：把 W31《网络交易平台收费行为合规指南》的诚实缺口做成实物——结算报表侧补「费率公示面」（收费项目/规则/标准/计费方法单页并指向逐笔明细），同时起一份改规台账骨架（征求意见窗 + 生效前三年版本档）；同窗消化 D-20261025-10 的推送三要素行与 D-20261025-13 立令前实读自守。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 结算报告 CSV 明细导出（--csv-out 三表 + CSV_SCHEMA=1）",
+   "on",
+   "R2122：报告此前只有 HTML 与 JSON 两个观面，财务/表格工具消费方只能抓屏或自己解析 JSON。本窗新增 --csv-out：market_months.csv / seller_months.csv / buyer_months.csv 三张月表，从 collect() 同一次采集的月行投影（零重算、零二次读面），表头钉死为模块列元组，UTF-8 无 BOM、LF 行尾、RFC4180 引号转义；写盘先全量序列化再逐件 temp+os.replace，空串或已存在文件路径走 ValueError fail-closed 且不留半件与 .tmp；HTML 与 JSON 在传与不传旗标时逐字节同一，REPORT_SCHEMA 维持 14，CSV 自带 CSV_SCHEMA=1 独立契约。判据 AC-CSVM1..CSVM8 预注册于代码之前；套件 8/8 双跑判据行同一；接线 ledger-apimarket-settlementcsv(8)；电池 327/327 与矩阵逐字节同一；census DRIFT-CLEAN；呈看件 preview/apimarket-settlement-csv/ + apimarket-report-csv.html/.json。诚实注：落盘窗被轮时预算中断，收口由本窗完成；首跑电池两断言失败系本窗重写 qa 证据日志与实时 census 竞态（自因），红日志 qa/reconcile-all-R2122b.log 保留。"
+  ],
   [
    "apimarket 结算报告慢答告警家族（attention slow_answer + schema 14）",
    "on",
@@ -405,6 +410,10 @@
   ]
  ],
  "results": [
+  [
+   "R2122",
+   "R2122: the settlement CSV bundle. The report had an HTML page and a versioned JSON envelope, but a finance or spreadsheet consumer still had to scrape the page or parse the JSON itself. --csv-out now writes three month tables (market 13 columns, seller 11, buyer 12) projected from the same collect() dict the page renders, so no cell can disagree with the table the operator sees; headers are pinned module tuples, files are UTF-8 without BOM with LF endings and RFC4180 quoting, everything is serialised in memory before any disk touch and each file is published with temp plus os.replace (a bad target raises before any disk touch, an exception cleans the temps), and the HTML and JSON artifacts stay byte-identical with or without the flag because REPORT_SCHEMA stays 14 and the CSV bundle carries its own CSV_SCHEMA=1 contract. Suite 8/8 double run with identical criterion lines (criteria_sha16 12212a7309151f1e); runner label ledger-apimarket-settlementcsv(8); clean battery 327/327 suites plus controls 7/7 (qa/reconcile-all-R2122c.log; the first run's two live-census race failures are preserved in qa/reconcile-all-R2122b.log and disclosed); matrix 327 suites / 2724 criteria --check byte-identical; census DRIFT-CLEAN files=1807 flags=0; preview artifacts regenerated."
+  ],
   [
    "R2121",
    "R2121: the slow-answer attention family. R2120 measured how long every buyer waited on the answered-question ledger, but the operator still had to scan that table to notice a seller answering slowly. collect_attention now derives one slow_answer finding (warn) per answered question strictly over SLOW_ANSWER_SECONDS=86400, from the seller block's answers ledger the report already collected in the same pass, so the change adds no table, no write door and no second face read. detail carries question id, listing id and the response seconds; ref names the question; a family-local sort hint orders the family by longest wait first with ties by seller while every earlier family keeps its exact order and the published five-key finding shape is unchanged. Retired shelves keep their service record, a legacy seller block without the answers key contributes nothing, and REPORT_SCHEMA moves 13 -> 14 additively (envelope still exactly schema_version/report/attention). Suite SUITE PASS 8/8 double-run, criterion lines identical sha16 fdd616d835b71e7b; battery RUNNER PASS 326/326 suites plus controls 7/7 in 1084.0s; matrix 326 suites / 2716 criteria --check byte-identical; census DRIFT-CLEAN files=1800 flags=0; preview HTML + JSON in preview/. Two repairs disclosed: the R2120 suite's literal schema pin relaxed to follow the module constant (additive-bump precedent, answers contract untouched), and the first evidence pair was re-captured from UTF-16LE Tee output into UTF-8 LF by a single writer. The state file also arrived in a non-canonical layout from the previous closeout and was repaired through the eol and fix-indent tools."

@@ -2461,6 +2461,12 @@ SUITES = [
     # schema moves 13 -> 14 additively.
     ("ledger-apimarket-reportslowanswer", os.path.join(
         "ledger", "test_apimarket_report_slowanswer.py"), 8),
+    # R2122 settlement CSV bundle: the market / seller / buyer month
+    # tables projected from the same collect() dict as three pinned
+    # RFC4180 files (LF, atomic write), with the HTML and JSON artifacts
+    # unchanged (CSV_SCHEMA=1, REPORT_SCHEMA stays 14).
+    ("ledger-apimarket-settlementcsv", os.path.join(
+        "ledger", "test_apimarket_settlement_csv.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and

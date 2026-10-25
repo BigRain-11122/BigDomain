@@ -44,6 +44,14 @@ api_seller_quality.
 Usage:
     python apimarket_report.py --db ledger.db --seed --out report.html
     python apimarket_report.py --db ledger.db --out report.html
+    python apimarket_report.py --db ledger.db --out report.html \
+        --json-out report.json --csv-out settlement/
+
+R2122 adds the settlement CSV bundle (--csv-out): three month tables
+(market / seller / buyer) projected from the same collect() dict, each
+with a pinned header, LF endings and an atomic write. CSV_SCHEMA is its
+own contract, so REPORT_SCHEMA stays at 14 and the HTML and JSON
+artifacts are byte-identical whether or not the flag is passed.
 
 ASCII source. The rendered report is UTF-8 with LF endings, carries the
 standing presentation-face markers (sandbox/AIGC label line and the
@@ -51,8 +59,10 @@ resident non-advisory disclaimer) and references no external resource.
 """
 
 import argparse
+import csv
 import hashlib
 import html
+import io
 import json
 import os
 import sys
@@ -144,6 +154,26 @@ ANSWERS_EMPTY = "no answered questions for this seller"
 # limit keeps the TAIL of the ordered stream, so the page always shows
 # what happened most recently, and total still reports the full count.
 FEED_LIMIT = 40
+
+# R2122 settlement CSV export: a separate projection of the same
+# collect() month tables, so the JSON envelope contract above stays at
+# v14 and --csv-out is a purely additive artifact.
+CSV_SCHEMA = 1
+CSV_FILES = ("market_months.csv", "seller_months.csv",
+             "buyer_months.csv")
+MARKET_MONTH_COLUMNS = (
+    "month", "sales_count", "gross", "refund_count", "refunded",
+    "net", "dev_share", "platform_share", "dev_share_net",
+    "platform_share_net", "buyer_count", "seller_count",
+    "listing_count")
+SELLER_MONTH_COLUMNS = (
+    "dev_account", "month", "sales_count", "gross", "refund_count",
+    "refunded", "net", "dev_share", "platform_share", "dev_share_net",
+    "platform_share_net")
+BUYER_MONTH_COLUMNS = (
+    "buyer_id", "month", "purchase_count", "gross_spent",
+    "refund_count", "refunded", "net", "dev_paid", "platform_paid",
+    "dev_paid_net", "platform_paid_net", "listing_count")
 
 # Rows whose values are already month tables are rendered as tables, not
 # as scalar key/value pairs.
@@ -955,6 +985,77 @@ def write_report_json(path, report):
     return len(payload)
 
 
+def csv_payloads(report):
+    """Build the three settlement CSV texts from one collected report.
+
+    R2122: the page and the JSON envelope are both read faces, but a
+    finance or spreadsheet consumer still had to scrape the page or
+    parse the JSON itself. This projection re-uses the month rows the
+    report already collected - no face is read twice and nothing is
+    recomputed - so a CSV cell can never disagree with the table the
+    operator sees on the page."""
+    seller_rows = []
+    for dev in sorted(report["sellers"]):
+        for row in report["sellers"][dev]["revenue_months"]["months"]:
+            seller_rows.append(dict(row, dev_account=dev))
+    buyer_rows = []
+    for buyer in sorted(report["buyers"]):
+        for row in report["buyers"][buyer]["months"]["months"]:
+            buyer_rows.append(dict(row, buyer_id=buyer))
+    return {
+        "market_months.csv": _csv_text(
+            MARKET_MONTH_COLUMNS, report["market_months"]["months"]),
+        "seller_months.csv": _csv_text(SELLER_MONTH_COLUMNS,
+                                       seller_rows),
+        "buyer_months.csv": _csv_text(BUYER_MONTH_COLUMNS, buyer_rows),
+    }
+
+
+def _csv_text(columns, rows):
+    """Render one RFC4180 table with LF endings, header first."""
+    buf = io.StringIO()
+    writer = csv.writer(buf, lineterminator="\n")
+    writer.writerow(columns)
+    for row in rows:
+        writer.writerow([row[col] for col in columns])
+    return buf.getvalue()
+
+
+def write_report_csv(out_dir, report):
+    """Write the settlement CSV bundle atomically.
+
+    Everything is serialized in memory first; a bad target (empty value
+    or an existing file) fails before any disk touch, and each file is
+    published with temp + os.replace so a failure leaves no half
+    artifact and no .tmp survivor."""
+    if not out_dir:
+        raise ValueError("--csv-out needs a directory path, got: %r"
+                         % (out_dir,))
+    target = os.path.abspath(out_dir)
+    if os.path.isfile(target):
+        raise ValueError("--csv-out needs a directory path, got a file:"
+                         " %r" % (out_dir,))
+    payloads = csv_payloads(report)
+    if not os.path.isdir(target):
+        os.makedirs(target)
+    temps = []
+    try:
+        for name in CSV_FILES:
+            tmp = os.path.join(target, name + ".tmp")
+            with open(tmp, "w", encoding="utf-8", newline="") as handle:
+                handle.write(payloads[name])
+            temps.append((tmp, os.path.join(target, name)))
+        for tmp, final in temps:
+            os.replace(tmp, final)
+    except Exception:
+        for tmp, _final in temps:
+            if os.path.isfile(tmp):
+                os.remove(tmp)
+        raise
+    return dict((name, len(payloads[name].encode("utf-8")))
+                for name in CSV_FILES)
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="apimarket_report.py",
@@ -973,6 +1074,9 @@ def build_parser():
                         help="optional path for the whole report as a"
                              " versioned machine-readable JSON payload"
                              " (ascii escaped, atomic write)")
+    parser.add_argument("--csv-out", default=None,
+                        help="optional directory for the settlement CSV"
+                             " bundle (three month tables, LF endings)")
     return parser
 
 
@@ -1021,6 +1125,16 @@ def main(argv=None):
                 return 2
             print("report json written: %s (%d bytes, schema %d)"
                   % (args.json_out, size, REPORT_SCHEMA))
+        if args.csv_out is not None:
+            try:
+                sizes = write_report_csv(args.csv_out, report)
+            except (OSError, ValueError) as exc:
+                sys.stderr.write("csv-out failed: %s\n" % exc)
+                return 2
+            print("settlement csv written: %s (%d files, %d bytes,"
+                  " schema %d)"
+                  % (args.csv_out, len(sizes), sum(sizes.values()),
+                     CSV_SCHEMA))
         return 0
     finally:
         if am is not None:
