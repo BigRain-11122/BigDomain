@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T03:05:00+08:00",
+ "export_ts": "2026-10-26T04:05:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "apimarket 审核周期律（resubmit_listing + api_seller_reviews + 判决按周期派生）：审核此前是一次性判决（表级 UNIQUE(listing_id)），被拒=永久死亡——卖家改好描述也只能重开挂牌、丢掉原挂牌的成交/评价/改价史，公开面永久挂着首次拒绝理由，且卖家没有任何面回答「我哪些在等审、哪些被拒、为什么」。本轮补三件：审核周期=1+复送次数（旧判决落周期 1 且戳不改写）；卖家复送门（门序钉死·拒绝零行零 token）；卖家侧审核状态读面（含退役件·隔离·诚实空·纯读）。队列面与公开面同时改读当前周期，复送后重新入队一次、公开状态按 已拒→待审→已通过 翻转。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（apimarket_reviews 重建带 cycle + apimarket_review_resubmits 表 + resubmit_listing + api_seller_reviews + 两面改缝）+ src/sandbox/ledger/test_apimarket_reviewcycle.py（SUITE PASS 8/8 双跑 rc=0/0，判据行 sha16 8AEE7AFA01ED0E99，证据 qa/apimarket-reviewcycle-R2133.log / -run2.log）；qa/reconcile-all-R2133.log（RUNNER PASS 337/337 套件 + 控制 7/7，1156.4s）；docs/sandbox-suite-matrix.md（337 套件 / 2804 判据，--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①把审核周期接进结算报告分发义务段（当前只给待审队列，看不到复送史与被拒理由分布）；②给审核面加平台侧驳回理由码（现在理由为自由文本，运营无法统计）；③复核「未过审不得上架」这条门是否真正接进购买门（当前公开面只展示状态，购买门未拦）。"
+  "current": "apimarket 结算报告新接售后申诉段：api_claims 此前买家/卖家/运营三种视角都答了，但全仓零消费者，运营离线账本上看不到「哪些售后申诉还没了结、哪家卖家欠答复、最久等了多久」。现在报表直接带市场级申诉信封、Claims 段（四状态计数 + 逐行明细）和按卖家派生的 claim_debt 待办告警。",
+  "latest_artifact": "preview/apimarket-report-claims-demo.html（45714B，四状态各一条申诉的演示账本） + preview/apimarket-report-claims-demo.json（76032B，schema 17） + src/sandbox/ledger/apimarket_report.py（REPORT_SCHEMA 16→17：claims 块 + claim_debt 族 + Claims 段）",
+  "next_milestone": "48 小时内：把 api_seller_ledger（R2126 卖家结算对账单面，至今零消费者）接进报表成为卖家段，或把申诉久悬阈值（>72h 未答复升 high）做成可配置告警；两者都保持报表纯读、单一消费者、判据先注册。"
  },
  "depts": [
   {
@@ -477,6 +477,12 @@
    "on",
    "R2124：R2123 法规普查实证分发平台义务域在产品面完全空缺（提供者身份只是裸 dev_account 字符串）。本窗补三面五方法两张 append-only 表；判据 AC-AMPI1..AC-AMPI8 先于代码预注册（十锚零占用 rc=1）；套件 8/8 双跑逐字节同一 sha16；相邻三套件回归全绿；诚实边界=未跑全量电池与矩阵、publish 强制接线留后继切片。",
    "2026-10-25"
+  ],
+  [
+   "apimarket 结算报告售后申诉段（claims block + claim_debt 告警族）",
+   "on",
+   "api_claims 三视读面零消费者的缺口由报表吃掉：市场级申诉信封原样入报告、Claims 段四状态计数与逐行明细、按卖家一条 claim_debt（warn，最旧 opened_utc 为 ref）。判据 AC-AMCLM1..AC-AMCLM8 预注册先于代码（九锚零占用）；套件 8/8 双跑判据行同一 sha16 DAC0C53AFD2A9D1E；接线 ledger-apimarket-reportclaims；报表族回归六套全绿；矩阵 338 suites/2812 criteria --check 逐字节同。诚实边界=本轮未跑全量电池（预算 25 分钟 vs 电池约 19 分钟），矩阵证据面仍引 R2133 电池。",
+   "2026-10-26"
   ]
  ],
  "results": [
@@ -989,15 +995,19 @@
   [
    "R2124",
    "R2124 平台分发义务面三件：register_provider/api_provider_identity 实名层、api_public_listings 公开展示层、review_listing/api_review_queue 审核拒绝面。套件 SUITE 8/8 双跑逐字节同一（qa/apimarket-provideridentity-R2124.log + -2）；相邻回归 test_apimarket 7/7 + marketstats 8/8 + watchlist 8/8（qa/regression-R2124.log）；接线 ledger-apimarket-provideridentity(8)。诚实声明：本轮未跑 reconcile 全量电池、未重生成 suite matrix、未把审核门接进 publish_api（零回归取舍，写进预算行与队列行）。"
+  ],
+  [
+   "R2134",
+   "2026-10-26 R2134 (five-silence scan: decisions.md carries zero new content-addressed tokens against the stored baseline - 183 unique tokens, all already consumed; the 276-line row count is reflow drift only; ledger carries zero new @BigDomain rows; group orders unchanged at 2026-10-25 22:4x, the BigStream re-cut order already acknowledged in R2133; benchmarks refreshed 2026-10-25 inside 7 days; tree clean, no index.lock; all four tech heads stayed gated - docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, live-mtime row waiting on a real normalized-mtime event - and the single explore row is gated on the merchant id) - so this window seeded and claimed a fresh P3 row in the SAME window with AC-AMCLM1..AC-AMCLM8 pre-registered BEFORE the code existed (nine anchors - the AC-AMCLM prefix, claim_block, CLAIM_COLUMNS, CLAIM_EMPTY, claim_debt, the Claims heading, the suite name, the runner label and report[\"claims\"] - were all git grep -F zero-occupancy anchored 2026-10-26, zero matches) - the post-sale claim block. Product: api_claims already answered the buyer view, the seller view and the operator view, but a git grep found no consumer at all, so the operator's offline ledger could not answer which post-sale claims are still unresolved, which seller owes an answer and how long the oldest has waited. The report now carries the market-wide envelope verbatim (nine keys, sixteen-key rows), renders a Claims section with the four status counters and every row, and derives one claim_debt attention finding per seller holding at least one open claim (warn, oldest opened_utc as ref, sellers with only retired listings included because the set comes from the claim rows not the live board). Suite src/sandbox/ledger/test_apimarket_report_claims.py SUITE PASS 8/8 double-run, criterion lines byte-identical sha16 DAC0C53AFD2A9D1E (qa/apimarket-reportclaims-R2134.log + -run2.log); wired ledger-apimarket-reportclaims(8); report-family regression green (report rc0, attention 9/9, json 8/8, duty 8/8, refundregister 13/13, workbench 8/8); matrix regenerated at 338 suites / 2812 criteria and --check byte-identical. Visible artifacts: preview/apimarket-report-claims-demo.html (45714B) and .json (76032B, schema 17) carrying one claim of each status plus the claim_debt finding, and the seeded honest empty-state pair preview/apimarket-report-claims.html/.json. Honest notes: (a) the full reconcile battery was NOT run this window - it needs about 19 minutes against a 25-minute budget, so the evidence base is the double-run, the report-family regression and the matrix check, and the matrix evidence face still cites the R2133 battery (338 suites, green=337/338 on that face); (b) the first suite run failed AC-AMCLM1 on an unsorted expected-key tuple and AC-AMCLM4 on a hardcoded '1 open claim(s)' after the same-source check added a second open claim - both were expectation-side defects fixed before any evidence was written."
   ]
  ],
  "self_drive": {
   "window": "2026-10-20..2026-10-26",
   "window_days": 7,
-  "log_lines_in_window": 24,
+  "log_lines_in_window": 26,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 24,
+  "substantive_non_idle_mention_lines": 26,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

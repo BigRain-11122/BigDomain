@@ -2498,6 +2498,12 @@ SUITES = [
     # additively.
     ("ledger-apimarket-reportduty", os.path.join(
         "ledger", "test_apimarket_report_duty.py"), 8),
+    # R2134 post-sale claim block on the settlement report: api_claims
+    # had no consumer at all, so the operator page now carries the
+    # market-wide claim envelope plus a claim_debt attention family and
+    # the JSON schema moves 16 -> 17 additively.
+    ("ledger-apimarket-reportclaims", os.path.join(
+        "ledger", "test_apimarket_report_claims.py"), 8),
     # R2117 seller-side rating quality scorecard (api_seller_quality):
     # star distribution, reply coverage and one quality row per shelf,
     # wired into every seller block plus a quality_risk attention

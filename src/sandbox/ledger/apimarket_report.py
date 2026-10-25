@@ -130,7 +130,12 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # review" or "which sellers disclose no identity". The block carries
 # the two envelopes verbatim plus the derived disclosure gaps; the
 # envelope above is unchanged and every earlier block keeps its value.
-REPORT_SCHEMA = 16
+# v17 (R2134) adds the market-wide claims block (the post-sale claim
+# queue api_claims had no consumer at all, so unresolved claim debt was
+# invisible on the operator page) plus the claim_debt attention family
+# derived from that same block; the envelope is still unchanged and
+# every earlier block keeps its value.
+REPORT_SCHEMA = 17
 
 # One day. A seller who leaves a buyer waiting longer than this shows
 # up in the attention digest; the boundary stays silent on the exact
@@ -427,6 +432,9 @@ def collect(am):
         }
     report["activity"] = am.api_market_feed(limit=FEED_LIMIT)
     report["refunds"] = am.api_refund_register()
+    # R2134: the post-sale claim queue had no product consumer at all;
+    # the operator page now carries the market-wide claim envelope.
+    report["claims"] = am.api_claims()
     report["dossiers"] = collect_dossiers(am)
     # R2125: the R2124 duty faces had no consumer; the operator page
     # carries their work queue and the derived disclosure gap now.
@@ -456,6 +464,21 @@ def collect_attention(am, report):
         findings.append({"kind": kind, "severity": severity,
                          "subject": subject, "detail": detail,
                          "ref": ref, "_sort": sort_hint})
+
+    # R2134: unresolved post-sale claims grouped by the seller who owes
+    # an answer. The face returns rows ordered by (opened_utc, claim_id)
+    # ascending, so the head of each group is the oldest debt. Sellers
+    # whose listings are all retired still owe an answer, so this set is
+    # built from the claim rows rather than from the live board.
+    open_claims = {}
+    for row in (report.get("claims") or {}).get("claims") or []:
+        if row.get("status") == "open":
+            open_claims.setdefault(row["dev_account"], []).append(row)
+    for dev in sorted(open_claims):
+        debt = open_claims[dev]
+        add("claim_debt", "warn", dev,
+            "%d open claim(s); oldest %s"
+            % (len(debt), debt[0]["opened_utc"]), debt[0]["opened_utc"])
 
     for dev in sorted(report["sellers"]):
         inbox = am.api_seller_inbox(dev)
@@ -701,6 +724,45 @@ def refund_block(register):
                        % "".join("<td>%s</td>" % esc(row.get(col))
                                  for col in columns))
         out.append("</table>")
+    return "\n".join(out)
+
+
+CLAIM_COLUMNS = ("claim_id", "opened_utc", "listing_title", "dev_account",
+                 "buyer_id", "price_paid", "claim_text", "status",
+                 "response_id", "response_text", "responded_utc",
+                 "refund_id", "refunded_utc", "withdrawn_utc",
+                 "purchase_id", "listing_id")
+CLAIM_EMPTY = "no post-sale claims in this market"
+
+
+def claim_block(claims):
+    """Render the market-wide post-sale claim queue (R2134, AC-AMCLM7).
+
+    Every value comes from api_claims over one row set, so the page
+    never merges faces by hand. An older report dict built before this
+    key existed renders the honest empty state instead of raising."""
+    rows = claims.get("claims") or []
+    count = claims.get("claim_count")
+    if count is None:
+        count = len(rows)
+    head = "%s claim(s): open %s / answered %s / refunded %s / withdrawn %s" % (
+        esc(count), esc(claims.get("open_count")),
+        esc(claims.get("answered_count")),
+        esc(claims.get("refunded_count")),
+        esc(claims.get("withdrawn_count")))
+    out = ["<p>%s</p>" % head]
+    if not rows:
+        out.append("<p class=\"empty\">%s</p>" % esc(CLAIM_EMPTY))
+        return "\n".join(out)
+    out.append("<table>")
+    out.append("<tr>%s</tr>"
+               % "".join("<th>%s</th>" % esc(col)
+                         for col in CLAIM_COLUMNS))
+    for row in rows:
+        out.append("<tr>%s</tr>"
+                   % "".join("<td>%s</td>" % esc(row.get(col))
+                             for col in CLAIM_COLUMNS))
+    out.append("</table>")
     return "\n".join(out)
 
 
@@ -952,6 +1014,12 @@ def render_html(report):
     # same degrade rule for the R2111 register: an older report dict
     # renders the honest empty state instead of raising.
     parts.append(refund_block(report.get("refunds") or {}))
+
+    parts.append("<h2>Claims</h2>")
+    # R2134: same degrade rule - an older report dict carries no claims
+    # key, so the page renders the honest empty state instead of
+    # raising.
+    parts.append(claim_block(report.get("claims") or {}))
 
     parts.append("<h2>Distribution duty</h2>")
     # R2125: same degrade rule as the other new sections - an older

@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-10-26 02:06 +08:00
+- 生成时间: generated: 2026-10-26 02:38 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2133.log
 - 状态证据: reconcile-all-R2133.log (RUNNER PASS 337/337 suites green, reconcile controls 7/7, 1156.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 337 | 2804 | 337/337 | R2133 |
+| 338 | 2812 | 337/337 | R2133 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -286,95 +286,96 @@
 | 247 | ledger-apimarket-buyertodo | ledger/test_apimarket_buyertodo.py | 8 | green | 0.6 |
 | 248 | ledger-apimarket-reportdemand | ledger/test_apimarket_report_demand.py | 8 | green | 7.3 |
 | 249 | ledger-apimarket-reportduty | ledger/test_apimarket_report_duty.py | 8 | green | 7.3 |
-| 250 | ledger-apimarket-sellerquality | ledger/test_apimarket_sellerquality.py | 8 | green | 0.6 |
-| 251 | ledger-apimarket-qna | ledger/test_apimarket_qna.py | 8 | green | 0.6 |
-| 252 | ledger-apimarket-buyerquestions | ledger/test_apimarket_buyerquestions.py | 8 | green | 0.5 |
-| 253 | ledger-apimarket-selleranswers | ledger/test_apimarket_selleranswers.py | 8 | green | 0.5 |
-| 254 | ledger-apimarket-provideridentity | ledger/test_apimarket_provideridentity.py | 8 | green | 0.5 |
-| 255 | ledger-apimarket-reportslowanswer | ledger/test_apimarket_report_slowanswer.py | 8 | green | 0.5 |
-| 256 | ledger-apimarket-settlementcsv | ledger/test_apimarket_settlement_csv.py | 8 | green | 1.2 |
-| 257 | os-decwatermark | ../os/test_dec_watermark.py | 8 | green | 8.3 |
-| 258 | ledger-effects-persist | ledger/test_effects_persist.py | 7 | green | 0.4 |
-| 259 | ledger-honorcert-persist | ledger/test_honorcert_persist.py | 7 | green | 0.6 |
-| 260 | ledger-honorcert-yearbookpersist | ledger/test_honorcert_yearbook_persist.py | 6 | green | 0.4 |
-| 261 | ledger-honorcert-multiyear | ledger/test_honorcert_multiyear.py | 7 | green | 0.4 |
-| 262 | ledger-honorcert-yearbookspersist | ledger/test_honorcert_yearbooks_persist.py | 7 | green | 0.8 |
-| 263 | ledger-honorcert-yearbooksubsetaxis | ledger/test_honorcert_yearbook_subsetaxis.py | 7 | green | 0.4 |
-| 264 | ledger-honorcert-yearbook-zeroboundary | ledger/test_honorcert_yearbook_zeroboundarypersist.py | 7 | green | 0.3 |
-| 265 | ledger-honorcert-yearbook-zeroboundarygate | ledger/test_honorcert_yearbook_zeroboundarygatepersist.py | 7 | green | 0.3 |
-| 266 | ledger-honorcert-grantwidthworld | ledger/test_honorcert_grantwidthworld.py | 8 | green | 0.4 |
-| 267 | liveroom-minorguard-persist | liveroom/test_liveroom_minorguard_persist.py | 8 | green | 0.4 |
-| 268 | ledger-honorcert-grantgate-persist | ledger/test_honorcert_grantgatepersist.py | 7 | green | 0.5 |
-| 269 | ledger-studio-persist | ledger/test_studio_persist.py | 7 | green | 0.3 |
-| 270 | ledger-showroom-persist | ledger/test_showroom_persist.py | 7 | green | 1.4 |
-| 271 | ledger-tmarket-persist | ledger/test_tmarket_persist.py | 7 | green | 0.5 |
-| 272 | ledger-festival-persist | ledger/test_festival_persist.py | 7 | green | 0.6 |
-| 273 | ledger-sistercity-persist | ledger/test_sistercity_persist.py | 7 | green | 0.5 |
-| 274 | ledger-growth-archive-persist | ledger/test_growth_archive_persist.py | 7 | green | 0.4 |
-| 275 | member-refund-recovery-persist | member/test_refund_recovery_persist.py | 7 | green | 0.8 |
-| 276 | member-reminder-persist | member/test_reminder_persist.py | 7 | green | 1.4 |
-| 277 | pay-reconcile-persist | pay/test_pay_reconcile_persist.py | 7 | green | 2.1 |
-| 278 | pay-sweep-persist | pay/test_pay_sweep_persist.py | 7 | green | 0.9 |
-| 279 | lobby-persist | lobby/test_lobby_persist.py | 7 | green | 0.3 |
-| 280 | civic-behavior-distribution | ledger/test_civic_distribution.py | 6 | green | 0.4 |
-| 281 | ledger-showcase-stats | ledger/test_showcase_stats.py | 7 | green | 0.6 |
-| 282 | ledger-coverageboard-persist | ledger/test_coverage_board_persist.py | 7 | green | 0.4 |
-| 283 | ledger-coverageboard-window | ledger/test_coverage_board_window.py | 7 | green | 0.4 |
-| 284 | ledger-datasub-coveragedual | ledger/test_datasub_coveragedual.py | 7 | green | 0.5 |
-| 285 | ledger-datasub-coveragedualpersist | ledger/test_datasub_coveragedualpersist.py | 7 | green | 0.6 |
-| 286 | ledger-datasub-coveragemonthroll | ledger/test_datasub_coveragemonthroll.py | 7 | green | 0.4 |
-| 287 | ledger-datasub-coveragegatepersist | ledger/test_datasub_coveragegatepersist.py | 8 | green | 0.7 |
-| 288 | ledger-statsboard-persist | ledger/test_stats_board_persist.py | 7 | green | 0.9 |
-| 289 | ledger-showcase-statslimit | ledger/test_showcase_statslimit.py | 7 | green | 1.0 |
-| 290 | ledger-showcase-statsdual | ledger/test_showcase_statsdual.py | 7 | green | 0.5 |
-| 291 | ledger-showcase-statsdual-persist | ledger/test_showcase_statsdualpersist.py | 7 | green | 0.6 |
-| 292 | ledger-showcase-statscap-persist | ledger/test_showcase_statscappersist.py | 7 | green | 0.5 |
-| 293 | ledger-showcase-statsboundary-persist | ledger/test_showcase_statsboundarypersist.py | 7 | green | 0.5 |
-| 294 | ledger-showcase-statsgatepersist | ledger/test_showcase_statsgatepersist.py | 7 | green | 0.4 |
-| 295 | ledger-showcase-viewwindow-gatepersist | ledger/test_showcase_viewwindow_gatepersist.py | 7 | green | 1.2 |
-| 296 | ledger-showcase-viewwindow-persist | ledger/test_showcase_viewwindow_persist.py | 7 | green | 0.4 |
-| 297 | ledger-showcase-viewwindow-replacepersist | ledger/test_showcase_viewwindow_replacepersist.py | 7 | green | 0.3 |
-| 298 | ledger-proposal-progresspersist | ledger/test_proposal_progresspersist.py | 7 | green | 0.4 |
-| 299 | civic-behavior-monthwindow | ledger/test_civic_monthwindow.py | 7 | green | 0.3 |
-| 300 | civic-behavior-monthwindow-persist | ledger/test_civic_monthwindow_persist.py | 7 | green | 0.2 |
-| 301 | civic-competition-monthwindow | ledger/test_civic_competition_monthwindow.py | 7 | green | 0.3 |
-| 302 | civic-competition-monthwindow-persist | ledger/test_civic_competition_monthwindowpersist.py | 7 | green | 0.3 |
-| 303 | ledger-proposal-progressboundary-persist | ledger/test_proposal_progressboundarypersist.py | 7 | green | 0.3 |
-| 304 | ledger-showcase-statsmonth | ledger/test_showcase_statsmonth.py | 7 | green | 0.5 |
-| 305 | ledger-showcase-statsmonth-persist | ledger/test_showcase_statsmonthpersist.py | 7 | green | 0.4 |
-| 306 | ledger-showcase-statsmonthboundary-persist | ledger/test_showcase_statsmonthboundarypersist.py | 7 | green | 0.3 |
-| 307 | ledger-showcase-statsmonthretract-persist | ledger/test_showcase_statsmonthretractpersist.py | 7 | green | 0.5 |
-| 308 | ledger-showcase-statsmonthreplace-persist | ledger/test_showcase_statsmonthreplacepersist.py | 7 | green | 1.1 |
-| 309 | ledger-showcase-statsmonth-rere-persist | ledger/test_showcase_statsmonthrerepersist.py | 7 | green | 0.5 |
-| 310 | ledger-showcase-statsmonth-straddle-persist | ledger/test_showcase_statsmonthstraddlepersist.py | 7 | green | 0.5 |
-| 311 | ledger-showcase-statsmonth-straddle2-persist | ledger/test_showcase_statsmonth_straddle2persist.py | 7 | green | 0.5 |
-| 312 | ledger-showcase-statsmonth-straddle3-persist | ledger/test_showcase_statsmonth_straddle3persist.py | 7 | green | 0.6 |
-| 313 | funnel | funnel/test_funnel_daily.py | 8 | green | 1.3 |
-| 314 | funnel-cli-gates | funnel/test_funnel_cli_gates.py | 7 | green | 0.5 |
-| 315 | funnel-persist | funnel/test_funnel_persist.py | 8 | green | 1.8 |
-| 316 | funnel-rescan | funnel/test_funnel_rescan.py | 8 | green | 2.3 |
-| 317 | funnel-rerollup | funnel/test_funnel_rerollup.py | 8 | green | 3.2 |
-| 318 | funnel-conservation | funnel/test_funnel_conservation.py | 8 | green | 2.5 |
-| 319 | funnel-account | funnel/test_funnel_account.py | 8 | green | 1.3 |
-| 320 | funnel-sku | funnel/test_funnel_sku.py | 8 | green | 2.1 |
-| 321 | funnel-route | funnel/test_funnel_route.py | 8 | green | 1.4 |
-| 322 | funnel-cli-chain | funnel/test_funnel_cli_chain.py | 8 | green | 5.2 |
-| 323 | funnel-inbox | funnel/test_funnel_inbox.py | 8 | green | 0.8 |
-| 324 | funnel-sku-persist | funnel/test_funnel_sku_persist.py | 8 | green | 1.9 |
-| 325 | funnel-sku-top | funnel/test_funnel_sku_top.py | 8 | green | 1.4 |
-| 326 | funnel-route-persist | funnel/test_funnel_route_persist.py | 8 | green | 0.4 |
-| 327 | funnel-sku-gate | funnel/test_funnel_sku_gate.py | 8 | green | 0.8 |
-| 328 | funnel-evidence-rotate | funnel/test_funnel_evidence_rotate.py | 8 | green | 1.7 |
-| 329 | funnel-cli-env | funnel/test_funnel_cli_env.py | 8 | green | 2.7 |
-| 330 | funnel-sku-top-rank | funnel/test_funnel_sku_top_rank.py | 8 | green | 1.2 |
-| 331 | ledger-proposal-gatepersist | ledger/test_proposal_gatepersist.py | 7 | green | 0.3 |
-| 332 | ledger-proposal-gateboundary-persist | ledger/test_proposal_gateboundarypersist.py | 7 | green | 0.2 |
-| 333 | ledger-proposal-signbadargs-persist | ledger/test_proposal_signbadargspersist.py | 7 | green | 0.2 |
-| 334 | ledger-proposal-signbadargs-loadedpersist | ledger/test_proposal_signbadargspersist_loaded.py | 7 | green | 0.2 |
-| 335 | lobby-chat-mute-idem | lobby/test_chatmute_idem.py | 8 | green | 0.3 |
-| 336 | os-evidence-writer | ../os/test_evidence_writer.py | 8 | green | 0.6 |
-| 337 | ledger-tmp-sweep | ../os/test_tmp_sweep.py | 8 | green | 0.2 |
-|  | 合计 |  | 2804 | green 337 / FAIL 0 / no-evidence 0 |  |
+| 250 | ledger-apimarket-reportclaims | ledger/test_apimarket_report_claims.py | 8 | no-evidence | - |
+| 251 | ledger-apimarket-sellerquality | ledger/test_apimarket_sellerquality.py | 8 | green | 0.6 |
+| 252 | ledger-apimarket-qna | ledger/test_apimarket_qna.py | 8 | green | 0.6 |
+| 253 | ledger-apimarket-buyerquestions | ledger/test_apimarket_buyerquestions.py | 8 | green | 0.5 |
+| 254 | ledger-apimarket-selleranswers | ledger/test_apimarket_selleranswers.py | 8 | green | 0.5 |
+| 255 | ledger-apimarket-provideridentity | ledger/test_apimarket_provideridentity.py | 8 | green | 0.5 |
+| 256 | ledger-apimarket-reportslowanswer | ledger/test_apimarket_report_slowanswer.py | 8 | green | 0.5 |
+| 257 | ledger-apimarket-settlementcsv | ledger/test_apimarket_settlement_csv.py | 8 | green | 1.2 |
+| 258 | os-decwatermark | ../os/test_dec_watermark.py | 8 | green | 8.3 |
+| 259 | ledger-effects-persist | ledger/test_effects_persist.py | 7 | green | 0.4 |
+| 260 | ledger-honorcert-persist | ledger/test_honorcert_persist.py | 7 | green | 0.6 |
+| 261 | ledger-honorcert-yearbookpersist | ledger/test_honorcert_yearbook_persist.py | 6 | green | 0.4 |
+| 262 | ledger-honorcert-multiyear | ledger/test_honorcert_multiyear.py | 7 | green | 0.4 |
+| 263 | ledger-honorcert-yearbookspersist | ledger/test_honorcert_yearbooks_persist.py | 7 | green | 0.8 |
+| 264 | ledger-honorcert-yearbooksubsetaxis | ledger/test_honorcert_yearbook_subsetaxis.py | 7 | green | 0.4 |
+| 265 | ledger-honorcert-yearbook-zeroboundary | ledger/test_honorcert_yearbook_zeroboundarypersist.py | 7 | green | 0.3 |
+| 266 | ledger-honorcert-yearbook-zeroboundarygate | ledger/test_honorcert_yearbook_zeroboundarygatepersist.py | 7 | green | 0.3 |
+| 267 | ledger-honorcert-grantwidthworld | ledger/test_honorcert_grantwidthworld.py | 8 | green | 0.4 |
+| 268 | liveroom-minorguard-persist | liveroom/test_liveroom_minorguard_persist.py | 8 | green | 0.4 |
+| 269 | ledger-honorcert-grantgate-persist | ledger/test_honorcert_grantgatepersist.py | 7 | green | 0.5 |
+| 270 | ledger-studio-persist | ledger/test_studio_persist.py | 7 | green | 0.3 |
+| 271 | ledger-showroom-persist | ledger/test_showroom_persist.py | 7 | green | 1.4 |
+| 272 | ledger-tmarket-persist | ledger/test_tmarket_persist.py | 7 | green | 0.5 |
+| 273 | ledger-festival-persist | ledger/test_festival_persist.py | 7 | green | 0.6 |
+| 274 | ledger-sistercity-persist | ledger/test_sistercity_persist.py | 7 | green | 0.5 |
+| 275 | ledger-growth-archive-persist | ledger/test_growth_archive_persist.py | 7 | green | 0.4 |
+| 276 | member-refund-recovery-persist | member/test_refund_recovery_persist.py | 7 | green | 0.8 |
+| 277 | member-reminder-persist | member/test_reminder_persist.py | 7 | green | 1.4 |
+| 278 | pay-reconcile-persist | pay/test_pay_reconcile_persist.py | 7 | green | 2.1 |
+| 279 | pay-sweep-persist | pay/test_pay_sweep_persist.py | 7 | green | 0.9 |
+| 280 | lobby-persist | lobby/test_lobby_persist.py | 7 | green | 0.3 |
+| 281 | civic-behavior-distribution | ledger/test_civic_distribution.py | 6 | green | 0.4 |
+| 282 | ledger-showcase-stats | ledger/test_showcase_stats.py | 7 | green | 0.6 |
+| 283 | ledger-coverageboard-persist | ledger/test_coverage_board_persist.py | 7 | green | 0.4 |
+| 284 | ledger-coverageboard-window | ledger/test_coverage_board_window.py | 7 | green | 0.4 |
+| 285 | ledger-datasub-coveragedual | ledger/test_datasub_coveragedual.py | 7 | green | 0.5 |
+| 286 | ledger-datasub-coveragedualpersist | ledger/test_datasub_coveragedualpersist.py | 7 | green | 0.6 |
+| 287 | ledger-datasub-coveragemonthroll | ledger/test_datasub_coveragemonthroll.py | 7 | green | 0.4 |
+| 288 | ledger-datasub-coveragegatepersist | ledger/test_datasub_coveragegatepersist.py | 8 | green | 0.7 |
+| 289 | ledger-statsboard-persist | ledger/test_stats_board_persist.py | 7 | green | 0.9 |
+| 290 | ledger-showcase-statslimit | ledger/test_showcase_statslimit.py | 7 | green | 1.0 |
+| 291 | ledger-showcase-statsdual | ledger/test_showcase_statsdual.py | 7 | green | 0.5 |
+| 292 | ledger-showcase-statsdual-persist | ledger/test_showcase_statsdualpersist.py | 7 | green | 0.6 |
+| 293 | ledger-showcase-statscap-persist | ledger/test_showcase_statscappersist.py | 7 | green | 0.5 |
+| 294 | ledger-showcase-statsboundary-persist | ledger/test_showcase_statsboundarypersist.py | 7 | green | 0.5 |
+| 295 | ledger-showcase-statsgatepersist | ledger/test_showcase_statsgatepersist.py | 7 | green | 0.4 |
+| 296 | ledger-showcase-viewwindow-gatepersist | ledger/test_showcase_viewwindow_gatepersist.py | 7 | green | 1.2 |
+| 297 | ledger-showcase-viewwindow-persist | ledger/test_showcase_viewwindow_persist.py | 7 | green | 0.4 |
+| 298 | ledger-showcase-viewwindow-replacepersist | ledger/test_showcase_viewwindow_replacepersist.py | 7 | green | 0.3 |
+| 299 | ledger-proposal-progresspersist | ledger/test_proposal_progresspersist.py | 7 | green | 0.4 |
+| 300 | civic-behavior-monthwindow | ledger/test_civic_monthwindow.py | 7 | green | 0.3 |
+| 301 | civic-behavior-monthwindow-persist | ledger/test_civic_monthwindow_persist.py | 7 | green | 0.2 |
+| 302 | civic-competition-monthwindow | ledger/test_civic_competition_monthwindow.py | 7 | green | 0.3 |
+| 303 | civic-competition-monthwindow-persist | ledger/test_civic_competition_monthwindowpersist.py | 7 | green | 0.3 |
+| 304 | ledger-proposal-progressboundary-persist | ledger/test_proposal_progressboundarypersist.py | 7 | green | 0.3 |
+| 305 | ledger-showcase-statsmonth | ledger/test_showcase_statsmonth.py | 7 | green | 0.5 |
+| 306 | ledger-showcase-statsmonth-persist | ledger/test_showcase_statsmonthpersist.py | 7 | green | 0.4 |
+| 307 | ledger-showcase-statsmonthboundary-persist | ledger/test_showcase_statsmonthboundarypersist.py | 7 | green | 0.3 |
+| 308 | ledger-showcase-statsmonthretract-persist | ledger/test_showcase_statsmonthretractpersist.py | 7 | green | 0.5 |
+| 309 | ledger-showcase-statsmonthreplace-persist | ledger/test_showcase_statsmonthreplacepersist.py | 7 | green | 1.1 |
+| 310 | ledger-showcase-statsmonth-rere-persist | ledger/test_showcase_statsmonthrerepersist.py | 7 | green | 0.5 |
+| 311 | ledger-showcase-statsmonth-straddle-persist | ledger/test_showcase_statsmonthstraddlepersist.py | 7 | green | 0.5 |
+| 312 | ledger-showcase-statsmonth-straddle2-persist | ledger/test_showcase_statsmonth_straddle2persist.py | 7 | green | 0.5 |
+| 313 | ledger-showcase-statsmonth-straddle3-persist | ledger/test_showcase_statsmonth_straddle3persist.py | 7 | green | 0.6 |
+| 314 | funnel | funnel/test_funnel_daily.py | 8 | green | 1.3 |
+| 315 | funnel-cli-gates | funnel/test_funnel_cli_gates.py | 7 | green | 0.5 |
+| 316 | funnel-persist | funnel/test_funnel_persist.py | 8 | green | 1.8 |
+| 317 | funnel-rescan | funnel/test_funnel_rescan.py | 8 | green | 2.3 |
+| 318 | funnel-rerollup | funnel/test_funnel_rerollup.py | 8 | green | 3.2 |
+| 319 | funnel-conservation | funnel/test_funnel_conservation.py | 8 | green | 2.5 |
+| 320 | funnel-account | funnel/test_funnel_account.py | 8 | green | 1.3 |
+| 321 | funnel-sku | funnel/test_funnel_sku.py | 8 | green | 2.1 |
+| 322 | funnel-route | funnel/test_funnel_route.py | 8 | green | 1.4 |
+| 323 | funnel-cli-chain | funnel/test_funnel_cli_chain.py | 8 | green | 5.2 |
+| 324 | funnel-inbox | funnel/test_funnel_inbox.py | 8 | green | 0.8 |
+| 325 | funnel-sku-persist | funnel/test_funnel_sku_persist.py | 8 | green | 1.9 |
+| 326 | funnel-sku-top | funnel/test_funnel_sku_top.py | 8 | green | 1.4 |
+| 327 | funnel-route-persist | funnel/test_funnel_route_persist.py | 8 | green | 0.4 |
+| 328 | funnel-sku-gate | funnel/test_funnel_sku_gate.py | 8 | green | 0.8 |
+| 329 | funnel-evidence-rotate | funnel/test_funnel_evidence_rotate.py | 8 | green | 1.7 |
+| 330 | funnel-cli-env | funnel/test_funnel_cli_env.py | 8 | green | 2.7 |
+| 331 | funnel-sku-top-rank | funnel/test_funnel_sku_top_rank.py | 8 | green | 1.2 |
+| 332 | ledger-proposal-gatepersist | ledger/test_proposal_gatepersist.py | 7 | green | 0.3 |
+| 333 | ledger-proposal-gateboundary-persist | ledger/test_proposal_gateboundarypersist.py | 7 | green | 0.2 |
+| 334 | ledger-proposal-signbadargs-persist | ledger/test_proposal_signbadargspersist.py | 7 | green | 0.2 |
+| 335 | ledger-proposal-signbadargs-loadedpersist | ledger/test_proposal_signbadargspersist_loaded.py | 7 | green | 0.2 |
+| 336 | lobby-chat-mute-idem | lobby/test_chatmute_idem.py | 8 | green | 0.3 |
+| 337 | os-evidence-writer | ../os/test_evidence_writer.py | 8 | green | 0.6 |
+| 338 | ledger-tmp-sweep | ../os/test_tmp_sweep.py | 8 | green | 0.2 |
+|  | 合计 |  | 2812 | green 337 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

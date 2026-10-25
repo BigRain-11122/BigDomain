@@ -1,0 +1,12 @@
+﻿PASS AC-AMCLM1 keys=9 rows=4 count=1 states=answered1,open1,refunded1,withdrawn1
+PASS AC-AMCLM2 same=True count 4->5
+PASS AC-AMCLM3 states=answered=answered,open=open,refunded=refunded,withdrawn=withdrawn
+PASS AC-AMCLM4 debt=1 subjects=usr:dana open_sellers=1
+PASS AC-AMCLM5 keys=attention,report,schema_version schema=17 same=True
+PASS AC-AMCLM6 digest=f3823d1177345dcd tx=27
+PASS AC-AMCLM7 heads=16 rows=5 degrade=True escape=True
+  child test_apimarket_report.py rc=0
+  child test_apimarket_report_json.py rc=0
+  child test_apimarket_report_refundregister.py rc=0
+PASS AC-AMCLM8 rc=[0, 0, 0] wired=True
+SUITE PASS 8/8
