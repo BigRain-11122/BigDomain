@@ -2435,6 +2435,13 @@ SUITES = [
     # family, so the JSON schema moves 9 -> 10 additively.
     ("ledger-apimarket-sellerquality", os.path.join(
         "ledger", "test_apimarket_sellerquality.py"), 8),
+    # R2118 pre-purchase Q&A (ask_question / answer_question /
+    # api_listing_qna / api_seller_questions): the ask and answer
+    # doors, the public listing thread and the seller open-question
+    # queue, wired into every seller block plus a question_debt
+    # attention family, so the JSON schema moves 10 -> 11 additively.
+    ("ledger-apimarket-qna", os.path.join(
+        "ledger", "test_apimarket_qna.py"), 8),
     # R2114 source-anchored decisions watermark v2 (D-20261025-08): the
     # four-tuple {repo, commit_sha, blob_bytes, sha256} plus a
     # reproducible fetch command, with the pinned comparison order and

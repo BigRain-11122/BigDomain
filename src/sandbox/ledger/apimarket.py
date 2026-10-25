@@ -90,6 +90,9 @@ E_AM_BAD_REPLY = "E_AM_BAD_REPLY"          # AC-AMRP3
 E_AM_RATING_UNCHANGED = "E_AM_RATING_UNCHANGED"  # AC-AMRV4
 E_AM_BAD_UNITS = "E_AM_BAD_UNITS"          # AC-AMRS2 (restock shape)
 E_AM_SUPPLY_UNLIMITED = "E_AM_SUPPLY_UNLIMITED"  # AC-AMRS2 (no base)
+E_AM_BAD_QUESTION = "E_AM_BAD_QUESTION"      # AC-AMQA2 (question shape)
+E_AM_UNKNOWN_QUESTION = "E_AM_UNKNOWN_QUESTION"  # AC-AMQA3
+E_AM_ALREADY_ANSWERED = "E_AM_ALREADY_ANSWERED"  # AC-AMQA3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -218,6 +221,22 @@ CREATE TABLE IF NOT EXISTS apimarket_supply_revisions (
     dev_account TEXT NOT NULL,
     add_units INTEGER NOT NULL CHECK (add_units > 0),
     restocked_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_questions (
+    question_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    buyer_id TEXT NOT NULL,
+    question_text TEXT NOT NULL,
+    asked_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_answers (
+    answer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    answer_text TEXT NOT NULL,
+    answered_utc TEXT NOT NULL,
+    UNIQUE (question_id)
 );
 """
 
@@ -3761,3 +3780,242 @@ class APIMarketFace:
             return int(bal.get("balance", 0)), True
         except (TypeError, ValueError):
             return 0, False
+
+    # -- pre-purchase Q&A (R2118) ---------------------------------------------
+
+    def ask_question(self, buyer_id, listing_id, text):
+        """Buyer-side pre-purchase question door (AC-AMQA1/AC-AMQA2,
+        pre-registered in the R2118 explore-queue row BEFORE this
+        code existed).
+
+        Every trust face on this market is post-purchase: ratings,
+        rating revisions, seller replies, refunds and the seller
+        inbox all require a sale first, so a resident deciding
+        whether to buy had no way to ask the seller anything and a
+        seller's answer could never be seen by the next buyer. One
+        append-only question row per call - the text is stored
+        verbatim (stripped) and never rewritten.
+
+        Gate order pinned by AC-AMQA2: account shape, listing-id
+        shape, listing existence, retired state, then text shape
+        (empty, over 500 chars, or carrying control characters).
+        Every refusal is fail-closed with zero rows written."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        if (not isinstance(listing_id, int) or isinstance(listing_id, bool)
+                or listing_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        with self._lock:
+            row = self._require_listing(listing_id)
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if not isinstance(text, str):
+                raise ApiMarketError(E_AM_BAD_QUESTION,
+                                     "text must be str")
+            body = text.strip()
+            if (not body or len(body) > 500
+                    or any(ord(ch) < 32 or ord(ch) == 127
+                           for ch in body)):
+                raise ApiMarketError(E_AM_BAD_QUESTION, str(text)[:40])
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_questions (listing_id,"
+                    " buyer_id, question_text, asked_utc)"
+                    " VALUES (?,?,?,?)",
+                    (listing_id, buyer_id, body, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"question_id": cur.lastrowid, "listing_id": listing_id,
+                "dev_account": str(row[1]), "buyer_id": buyer_id,
+                "question_text": body, "asked_utc": stamp,
+                "answered": False, "disclaimer": self.disclaimer}
+
+    def answer_question(self, dev_account, question_id, text):
+        """Seller-side answer door on one question (AC-AMQA3).
+
+        Exactly one append-only answer per question and only the
+        seller who owns the questioned listing may write it. The
+        first stamp is never rewritten: a second answer answers
+        E_AM_ALREADY_ANSWERED with zero new rows, and the question
+        row itself is never touched.
+
+        Gate order pinned by AC-AMQA3: account shape, question-id
+        shape, answer text shape, question existence, ownership,
+        already-answered state."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if (not isinstance(question_id, int) or isinstance(question_id, bool)
+                or question_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(question_id))
+        if not isinstance(text, str):
+            raise ApiMarketError(E_AM_BAD_REPLY, "text must be str")
+        body = text.strip()
+        if (not body or len(body) > 500
+                or any(ord(ch) < 32 or ord(ch) == 127 for ch in body)):
+            raise ApiMarketError(E_AM_BAD_REPLY, str(text)[:40])
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT listing_id FROM apimarket_questions"
+                " WHERE question_id = ?", (question_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_QUESTION,
+                                     str(question_id))
+            listing_id = int(row[0])
+            owner = self._conn.execute(
+                "SELECT dev_account FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            if owner is None or owner[0] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, question_id))
+            dup = self._conn.execute(
+                "SELECT answer_id FROM apimarket_answers"
+                " WHERE question_id = ?", (question_id,)).fetchone()
+            if dup is not None:
+                raise ApiMarketError(E_AM_ALREADY_ANSWERED,
+                                     str(question_id))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_answers (question_id,"
+                    " listing_id, dev_account, answer_text, answered_utc)"
+                    " VALUES (?,?,?,?,?)",
+                    (question_id, listing_id, dev_account, body, stamp))
+                self._conn.execute("COMMIT")
+            except sqlite3.IntegrityError:
+                self._conn.execute("ROLLBACK")
+                raise ApiMarketError(E_AM_ALREADY_ANSWERED,
+                                     str(question_id))
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"answer_id": cur.lastrowid, "question_id": question_id,
+                "listing_id": listing_id, "dev_account": dev_account,
+                "answer_text": body, "answered_utc": stamp,
+                "disclaimer": self.disclaimer}
+
+    def api_listing_qna(self, listing_id):
+        """Public Q&A thread of one listing (AC-AMQA4).
+
+        Ten-key envelope with eight-key rows, ordered as a total
+        order on (asked_utc, question_id) so a double run is
+        byte-identical and the oldest question is always first. A
+        retired listing keeps its whole thread readable - retirement
+        hides the shelf from the board, it never erases what buyers
+        and the seller already said. Pure read: zero row mutations
+        and zero token movement."""
+        if (not isinstance(listing_id, int) or isinstance(listing_id, bool)
+                or listing_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        with self._lock:
+            row = self._require_listing(listing_id)
+            listing_key = self._conn.execute(
+                "SELECT listing_key, title, description"
+                " FROM apimarket_listings WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            title = self._metadata_state(
+                listing_id, listing_key[1], listing_key[2])[0]
+            retired = self._delisted_utc(listing_id) is not None
+            raw = self._conn.execute(
+                "SELECT q.question_id, q.buyer_id, q.question_text,"
+                " q.asked_utc, a.answer_text, a.answered_utc,"
+                " a.dev_account"
+                " FROM apimarket_questions q"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " WHERE q.listing_id = ?"
+                " ORDER BY q.asked_utc, q.question_id",
+                (listing_id,)).fetchall()
+            questions = [{
+                "question_id": int(r[0]),
+                "buyer_id": r[1],
+                "question_text": r[2],
+                "asked_utc": r[3],
+                "answered": r[4] is not None,
+                "answer_text": r[4],
+                "answered_utc": r[5],
+                "dev_account": r[6],
+            } for r in raw]
+        answered = sum(1 for q in questions if q["answered"])
+        oldest = None
+        for q in questions:
+            if not q["answered"]:
+                oldest = q["asked_utc"]
+                break
+        return {"listing_id": listing_id,
+                "listing_key": listing_key[0],
+                "title": title,
+                "retired": bool(retired),
+                "question_count": len(questions),
+                "answered_count": answered,
+                "unanswered_count": len(questions) - answered,
+                "oldest_unanswered_utc": oldest,
+                "disclaimer": self.disclaimer,
+                "questions": questions}
+
+    def api_seller_questions(self, dev_account):
+        """Seller-side unanswered-question queue (AC-AMQA5).
+
+        The mirror of api_seller_inbox for the pre-purchase side:
+        api_listing_qna opens one shelf at a time, so a seller with
+        N listings had to open N threads and count the gaps by
+        hand. This face merges every listing of the seller and
+        returns ONLY the questions still waiting, oldest debt
+        first, so answering one drains the queue without rewriting
+        any row. Retired shelves keep their debt (the answer is
+        still owed to the buyer). Strict seller isolation; a
+        prefix-valid account with no listings gets an honest empty
+        envelope. Pure read, zero token movement."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing_rows = self._conn.execute(
+                "SELECT listing_id, listing_key, title, description"
+                " FROM apimarket_listings WHERE dev_account = ?"
+                " ORDER BY listing_id", (dev_account,)).fetchall()
+            totals = self._conn.execute(
+                "SELECT COUNT(*), SUM(CASE WHEN a.answer_id IS NOT NULL"
+                " THEN 1 ELSE 0 END)"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " WHERE l.dev_account = ?", (dev_account,)).fetchone()
+            total = int(totals[0] or 0)
+            answered = int(totals[1] or 0)
+            raw = self._conn.execute(
+                "SELECT q.question_id, q.listing_id, l.listing_key,"
+                " l.title, l.description, q.buyer_id,"
+                " q.question_text, q.asked_utc"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " WHERE l.dev_account = ? AND a.answer_id IS NULL"
+                " ORDER BY q.asked_utc, q.question_id",
+                (dev_account,)).fetchall()
+            rows = []
+            for r in raw:
+                rows.append({
+                    "question_id": int(r[0]),
+                    "listing_id": int(r[1]),
+                    "listing_key": r[2],
+                    "title": self._metadata_state(
+                        int(r[1]), r[3], r[4])[0],
+                    "buyer_id": r[5],
+                    "question_text": r[6],
+                    "asked_utc": r[7],
+                })
+        return {"dev_account": dev_account,
+                "listing_count": len(listing_rows),
+                "total_question_count": total,
+                "answered_count": answered,
+                "unanswered_count": total - answered,
+                "oldest_unanswered_utc": (rows[0]["asked_utc"]
+                                          if rows else None),
+                "disclaimer": self.disclaimer,
+                "rows": rows}

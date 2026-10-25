@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-25T09:45:41+08:00",
+ "export_ts": "2026-10-25T03:05:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "卖家口碑面从“碎的三块”合成一张记分表：新增只读面 api_seller_quality（五档星级分布 + 平均分 + 回应覆盖（reply/unanswered/coverage）+ 逐挂牌质量行，退役挂牌保留历史、未评挂牌给诚实零行），并接进结算报表：每个卖家区块新增 quality 键与质量表（分布表 + 逐上架商品表），待办摘要新增 quality_risk 家族直接标出「在售且 ≥2 条评分且均分 ≤2.5」的拖后腿商品；机读契约 schema 9→10 加法升级（旧键全部不变）。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_quality）；src/sandbox/ledger/apimarket_report.py（卖家区块 quality + 质量表 + quality_risk + REPORT_SCHEMA 10）；src/sandbox/ledger/test_apimarket_sellerquality.py（SUITE PASS 8/8，双跑判据行同一 sha16 09e175d251dd9d31）；qa/apimarket-sellerquality-R2117.log + -run2；qa/reconcile-all-R2117.log（RUNNER PASS 322/322 suites + controls 7/7 725.3s）；docs/sandbox-suite-matrix.md（322 suites / 2684 criteria --check 逐字节同）；呈看件：preview/apimarket-report-quality.html（38142B sha256 5d904aabfad20dd2）与 preview/apimarket-report-quality.json（67667B schema 10 sha256 016542f070b058e9）；时间戳 2026-10-25T09:45:41+08:00",
-  "next_milestone": "48 小时内：给结算报表加 CSV 明细导出（--csv-out，市场/卖家/买家/挂牌/质量五张明细表），让这份报表不只可看、还能被表格工具直接消费；同步把 P-47 ⑤ 权益/月卡面设计件推进到 docs/spec/。两项都不需要物理件。"
+  "current": "R2118：市场补上了「售前问答」——此前所有信任面都在成交之后（评分、改评、卖家回应、退款、卖家收件箱都要先成交），住民下单前想问卖家一句话没有任何入口，卖家的回答也不会被下一个买家看到。本窗加了两张只追加表与四个面：买家提问、卖家回答（一问一答·首答不改写·只有挂牌主人能回）、单件挂牌的公开问答串（退役件仍可读）、卖家的未答问题队列（跨挂牌合并·最旧在前）。报表每位卖家多一张「open questions」表，待办摘要多一类「问题债」，机读契约 v10→v11 加法升级。",
+  "latest_artifact": "preview/apimarket-report-questions.html（31595B·sha256 a867482420650057·可直接双击打开：市场总账+月度时间线+待办+公共活动流+退款登记+挂牌档案+卖家全表含新「open questions」表）+ preview/apimarket-report-questions.json（51808B·schema 11·sha256 72c5b99b02dfdff2）+ src/sandbox/ledger/apimarket.py + src/sandbox/ledger/apimarket_report.py + src/sandbox/ledger/test_apimarket_qna.py + qa/apimarket-qna-R2118.log（SUITE PASS 8/8·双跑同一 sha16 71f323af6eb63175）+ qa/reconcile-all-R2118.log",
+  "next_milestone": "48 小时内：给问答面补「卖家批量回答/关闭问题」与「提问前的相似问题聚合」两条消费面——现在卖家只能一条条回，同一问题被反复提问时仍要重复打一遍；下一步是回答时按相似度提示「已有回答可引用」，并把关闭（不再需要回答）做成只追加状态行，让问题债不被永久的无效问题拖住。两项均不依赖 CEO 物理件。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket 售前问答面（ask/answer + 公开问答串 + 卖家未答队列 + 报表消费者）",
+   "on",
+   "R2118：市场所有信任面都在成交之后，售前无任何联系通道。本窗加两张只追加表（apimarket_questions / apimarket_answers·UNIQUE(question_id)）与四个面：ask_question（门序=账户形→挂牌形→存在→退役→正文形·退役件拒新问）、answer_question（门序=账户形→问题号形→正文形→存在→归属→已回答·首答戳永不被改写）、api_listing_qna（十键信封+八键行·(asked_utc, question_id) 全序·answered+unanswered==question_count·退役挂牌整串仍可读·逐挂牌隔离）、api_seller_questions（八键信封+七键行·只给未答·跨挂牌合并·最旧在前·退役不销债·卖家隔离·诚实空）。消费者=报表卖家区块 questions 键+HTML open-questions 表+attention question_debt 家族+REPORT_SCHEMA 10→11 加法升级（信封仍恰三键·旧键逐字节不动·缺键旧报表降级空态）。判据 AC-AMQA1..AC-AMQA8 预注册于代码前（九锚 git grep -F 零占用 rc=1）：门与行形·提问门序 fail-closed·回答门与首戳·串面律·卖家队列律·纯读（13 表摘要+ledger_tx 恒定）·跨重启三实例字节同一·消费者/接线/卫生。套件 8/8 双跑同一 sha16 71f323af6eb63175；接线 ledger-apimarket-qna(8)；电池 RUNNER PASS 323/323 suites plus controls 7/7 in 495.6s；矩阵 323 suites / 2692 criteria --check byte-identical；census DRIFT-CLEAN files=1792 flags=0；呈看件 preview/apimarket-report-questions.html sha256 a867482420650057。诚实注=首轮双跑不同一，根因是证据行打印 Python set（哈希随机序），改为 sorted list 后重新采集即逐字节同一。"
+  ],
   [
    "卖家侧退款敞口读面（api_refund_exposure + refund_risk 告警家族）",
    "on",
@@ -383,6 +388,10 @@
   ]
  ],
  "results": [
+  [
+   "R2118",
+   "R2118: the first pre-purchase Q&A face on the market. Every trust face so far was post-purchase (ratings, revisions, replies, refunds, seller inbox), so a resident deciding whether to buy had no way to ask the seller anything and the answer could never reach the next buyer. Two append-only tables (apimarket_questions, apimarket_answers with UNIQUE(question_id)) and four faces: ask_question (pinned order account -> listing shape -> existence -> retired -> text shape), answer_question (account -> question shape -> text shape -> existence -> ownership -> already answered, first stamp never rewritten), api_listing_qna (ten-key envelope, eight-key rows, total order on asked_utc then question_id, retired threads readable, per-listing isolation) and api_seller_questions (unanswered only, merged across listings, oldest first, retirement keeps the debt, strict seller isolation). Consumer: seller blocks carry questions, the page renders an open-questions table, attention gains question_debt, REPORT_SCHEMA 10 -> 11 additively. AC-AMQA1..AC-AMQA8 pre-registered before the code (nine anchors zero-occupancy, rc=1); suite 8/8 double-run criterion lines identical sha16 71f323af6eb63175; wired ledger-apimarket-qna (8); battery RUNNER PASS 323/323 suites plus controls 7/7 in 495.6s; matrix 323 suites / 2692 criteria --check byte-identical; census DRIFT-CLEAN files=1792 flags=0; preview preview/apimarket-report-questions.html (31595B, sha256 a867482420650057). Honest note: the first double-run differed because one evidence line printed a Python set; it now prints a sorted list and the re-captured pair is identical."
+  ],
   [
    "R2117",
    "R2117: seller-side rating quality scorecard (api_seller_quality) plus its report consumer. The reputation surface was scattered across dev_profile (average, no shape), api_seller_inbox (unanswered rows only) and api_ratings / api_rating_replies (one listing at a time), so neither a seller nor the operator could answer what shape the reputation has, which shelf drags it, or what share of ratings has a reply. Twelve-key envelope, ten-key row per listing, five ordered star buckets read through the one effective-value seam (a revision moves exactly its own units), reply coverage, low_rated_count that counts live shelves with at least two ratings only, dense row set from the listing table with retired shelves kept, account gate before any read, pure read and cross-restart byte identity. Every seller block gains a quality key and a rendered quality section, the attention digest gains a quality_risk family and REPORT_SCHEMA moves 9 -> 10 additively. Suite 8/8 double-run byte-identical sha16 09e175d251dd9d31; battery RUNNER PASS 322/322 suites plus controls 7/7 in 725.3s; matrix 322 suites / 2684 criteria --check byte-identical; census DRIFT-CLEAN 8/8."
@@ -833,14 +842,14 @@
  "self_drive": {
   "window": "2026-10-19..2026-10-25",
   "window_days": 7,
-  "log_lines_in_window": 40,
+  "log_lines_in_window": 41,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 40,
+  "substantive_non_idle_mention_lines": 41,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 1
+  "queue_explore_open": 0
  }
 }

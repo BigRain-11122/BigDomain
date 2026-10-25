@@ -105,7 +105,11 @@ MARKER = ("AIGC / sandbox artifact: synthetic demo data rendered locally"
 # seller-side rating scorecard face) and a quality_risk attention
 # family; the envelope is still unchanged and every earlier seller key
 # keeps its value.
-REPORT_SCHEMA = 10
+# v11 (R2118) adds the questions key inside every seller block (the
+# pre-purchase Q&A queue) and a question_debt attention family; the
+# envelope is still unchanged and every earlier seller key keeps its
+# value.
+REPORT_SCHEMA = 11
 
 BUYER_HISTORY_KEYS = ("library", "watchlist", "refunds", "rating_history")
 
@@ -121,6 +125,8 @@ DOSSIER_EMPTY = "no listings in this market"
 DEMAND_EMPTY = "no listings for this seller"
 
 QUALITY_EMPTY = "no ratings for this seller"
+
+QUESTIONS_EMPTY = "no open questions for this seller"
 
 # How many of the newest activity events the report keeps. The feed's
 # limit keeps the TAIL of the ordered stream, so the page always shows
@@ -314,6 +320,7 @@ def collect(am):
             "profile": am.dev_profile(dev),
             "demand": am.api_listing_demand(dev),
             "quality": am.api_seller_quality(dev),
+            "questions": am.api_seller_questions(dev),
         }
     histories = collect_buyer_history(am, buyers)
     for buyer in sorted(buyers):
@@ -358,6 +365,13 @@ def collect_attention(am, report):
                 % (inbox["unanswered_count"],
                    inbox["oldest_unanswered_utc"]),
                 inbox["oldest_unanswered_utc"] or "")
+        questions = report["sellers"][dev].get("questions") or {}
+        if questions.get("unanswered_count", 0) > 0:
+            add("question_debt", "warn", dev,
+                "%d unanswered question(s); oldest %s"
+                % (questions["unanswered_count"],
+                   questions.get("oldest_unanswered_utc")),
+                questions.get("oldest_unanswered_utc") or "")
         for row in report["sellers"][dev]["revenue_months"]["months"]:
             if row["net"] < 0:
                 add("negative_net", "warn", dev,
@@ -815,6 +829,14 @@ def render_html(report):
                      % (esc(dev),
                         len(quality.get("rows") or [])))
         parts.append(quality_block(quality))
+        # R2118 pre-purchase Q&A: the seller's open question queue. An
+        # older caller's block carries no questions key, so the table
+        # degrades to the honest empty state instead of raising.
+        questions = block.get("questions") or {}
+        question_rows = questions.get("rows") or []
+        parts.append("<h3>%s - open questions (%d)</h3>"
+                     % (esc(dev), len(question_rows)))
+        parts.append(row_table(question_rows, QUESTIONS_EMPTY))
 
     parts.append("<h2>Buyers</h2>")
     for buyer in sorted(report["buyers"]):
