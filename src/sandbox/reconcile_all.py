@@ -2510,6 +2510,15 @@ SUITES = [
     # api_library + api_refund + api_claims + the ledger statements.
     ("ledger-apimarket-purchasedossier", os.path.join(
         "ledger", "test_apimarket_purchasedossier.py"), 8),
+    # R2136 provider identity revision leg (revise_provider /
+    # api_provider_history): register_provider was write-once per
+    # developer while the unified social credit code is the published
+    # disclosure field, so one wrong character was a permanent
+    # mis-disclosure. Append-only revisions behind one effective-value
+    # seam keep the identity and public display faces byte-identical
+    # until a revision exists.
+    ("ledger-apimarket-providerrev", os.path.join(
+        "ledger", "test_apimarket_providerrev.py"), 8),
     # R2117 seller-side rating quality scorecard (api_seller_quality):
     # star distribution, reply coverage and one quality row per shelf,
     # wired into every seller block plus a quality_risk attention

@@ -108,8 +108,17 @@ E_AM_CLAIM_WITHDRAWN = "E_AM_CLAIM_WITHDRAWN"  # AC-AMCW4 (one withdrawal)
 E_AM_ALREADY_RESUBMITTED = "E_AM_ALREADY_RESUBMITTED"  # AC-AMRC2
 E_AM_REVIEW_PENDING = "E_AM_REVIEW_PENDING"  # AC-AMRC2 (no verdict yet)
 E_AM_REVIEW_APPROVED = "E_AM_REVIEW_APPROVED"  # AC-AMRC2 (already live)
+E_AM_PROVIDER_UNREGISTERED = "E_AM_PROVIDER_UNREGISTERED"  # AC-AMPV2
+E_AM_PROVIDER_UNCHANGED = "E_AM_PROVIDER_UNCHANGED"  # AC-AMPV3
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
+
+# Provider identity field caps (AC-AMPV2): the disclosure name and
+# the unified social credit code are both published verbatim, so one
+# shared shape keeps the registration door and the revision door from
+# diverging.
+_PROVIDER_NAME_MAX = 120
+_PROVIDER_CODE_MAX = 64
 
 # Sandbox-only split defaults ([needs-CEO] adoption face, AC-AM4):
 # the developer leg is first in apportion order, so the single
@@ -261,6 +270,15 @@ CREATE TABLE IF NOT EXISTS apimarket_providers (
     credit_code TEXT NOT NULL,
     registered_utc TEXT NOT NULL,
     UNIQUE (dev_account)
+);
+CREATE TABLE IF NOT EXISTS apimarket_provider_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dev_account TEXT NOT NULL,
+    previous_provider_name TEXT NOT NULL,
+    previous_credit_code TEXT NOT NULL,
+    provider_name TEXT NOT NULL,
+    credit_code TEXT NOT NULL,
+    revised_utc TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_reviews (
     review_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -4573,6 +4591,111 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "rows": rows}
 
+    def _provider_state(self, dev_account):
+        """Effective provider identity (AC-AMPV4) - one seam for the
+        identity read face, the public display layer and the revision
+        door. The base provider row is append-only, so the effective
+        pair is the base pair overlaid by the NEWEST revision row;
+        with zero revisions this returns exactly the base values, so
+        every pre-existing caller keeps its byte-identical output.
+        Callers hold the write lock."""
+        row = self._conn.execute(
+            "SELECT provider_name, credit_code, registered_utc"
+            " FROM apimarket_providers WHERE dev_account = ?",
+            (dev_account,)).fetchone()
+        if row is None:
+            return None
+        rev = self._conn.execute(
+            "SELECT provider_name, credit_code, revised_utc"
+            " FROM apimarket_provider_revisions WHERE dev_account = ?"
+            " ORDER BY revision_id DESC LIMIT 1",
+            (dev_account,)).fetchone()
+        count = self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_provider_revisions"
+            " WHERE dev_account = ?", (dev_account,)).fetchone()[0]
+        return {"base_provider_name": row[0],
+                "base_credit_code": row[1],
+                "registered_utc": row[2],
+                "provider_name": rev[0] if rev is not None else row[0],
+                "credit_code": rev[1] if rev is not None else row[1],
+                "revision_count": int(count),
+                "latest_revised_utc": (rev[2] if rev is not None
+                                       else None)}
+
+    def revise_provider(self, dev_account, provider_name=None,
+                        credit_code=None):
+        """Provider identity revision door (AC-AMPV1..AC-AMPV3,
+        pre-registered in the R2136 explore-queue row BEFORE this code
+        existed).
+
+        register_provider was write-once per developer: one row behind
+        UNIQUE(dev_account) with no update and no delete surface, while
+        the unified social credit code is the disclosure field the
+        public layer publishes verbatim. A single wrong character at
+        registration was therefore a permanent mis-disclosure with no
+        remedy - the same dead end that price (R2079), metadata
+        (R2083), supply (R2095) and rating (R2094) each had before
+        their revision leg landed.
+
+        This is that leg: exactly one append-only
+        apimarket_provider_revisions row per call, the base provider
+        row never rewritten. Omitted fields carry the current
+        effective value into the row, so every row stores the full
+        effective pair. Gate order pinned by AC-AMPV2: account shape,
+        registration existence, field shape, then no-change judged
+        against the effective value (so a revise-back to an earlier
+        value is legal while an identical consecutive call is
+        refused). Every refusal writes zero rows and moves zero
+        tokens."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            state = self._provider_state(dev_account)
+            if state is None:
+                raise ApiMarketError(E_AM_PROVIDER_UNREGISTERED,
+                                     dev_account)
+            name = None
+            if provider_name is not None:
+                if not isinstance(provider_name, str):
+                    raise ApiMarketError(E_AM_BAD_PROVIDER,
+                                         "provider name shape")
+                name = provider_name.strip()
+                if not name or len(name) > _PROVIDER_NAME_MAX:
+                    raise ApiMarketError(E_AM_BAD_PROVIDER,
+                                         "provider name shape")
+            code = None
+            if credit_code is not None:
+                if not isinstance(credit_code, str):
+                    raise ApiMarketError(E_AM_BAD_PROVIDER,
+                                         "credit code shape")
+                code = credit_code.strip()
+                if not code or len(code) > _PROVIDER_CODE_MAX:
+                    raise ApiMarketError(E_AM_BAD_PROVIDER,
+                                         "credit code shape")
+            if name is None and code is None:
+                raise ApiMarketError(E_AM_BAD_PROVIDER,
+                                     "no field to revise")
+            new_name = state["provider_name"] if name is None else name
+            new_code = state["credit_code"] if code is None else code
+            if (new_name == state["provider_name"]
+                    and new_code == state["credit_code"]):
+                raise ApiMarketError(E_AM_PROVIDER_UNCHANGED,
+                                     dev_account)
+            stamp = _now_utc()
+            cur = self._conn.execute(
+                "INSERT INTO apimarket_provider_revisions"
+                " (dev_account, previous_provider_name,"
+                " previous_credit_code, provider_name, credit_code,"
+                " revised_utc) VALUES (?,?,?,?,?,?)",
+                (dev_account, state["provider_name"],
+                 state["credit_code"], new_name, new_code, stamp))
+            revision_id = cur.lastrowid
+        return {"revision_id": revision_id, "dev_account": dev_account,
+                "previous_provider_name": state["provider_name"],
+                "previous_credit_code": state["credit_code"],
+                "provider_name": new_name, "credit_code": new_code,
+                "revised_utc": stamp}
+
     def register_provider(self, dev_account, provider_name, credit_code):
         """Real-name provider registration for the distribution-duty
         face (AC-AMPI1..AC-AMPI2, pre-registered in the R2124
@@ -4589,10 +4712,10 @@ class APIMarketFace:
         if not str(dev_account or "").startswith("usr:"):
             raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
         name = str(provider_name or "").strip()
-        if not name:
+        if not name or len(name) > _PROVIDER_NAME_MAX:
             raise ApiMarketError(E_AM_BAD_PROVIDER, "provider name required")
         code = str(credit_code or "").strip()
-        if not code:
+        if not code or len(code) > _PROVIDER_CODE_MAX:
             raise ApiMarketError(E_AM_BAD_PROVIDER, "credit code required")
         with self._lock:
             if not self._is_registered_dev(dev_account):
@@ -4620,19 +4743,60 @@ class APIMarketFace:
         if not str(dev_account or "").startswith("usr:"):
             raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
         with self._lock:
-            row = self._conn.execute(
-                "SELECT provider_name, credit_code, registered_utc"
-                " FROM apimarket_providers WHERE dev_account = ?",
-                (dev_account,)).fetchone()
-        if row is None:
+            state = self._provider_state(dev_account)
+        if state is None:
             return {"dev_account": dev_account, "registered": False,
                     "provider_name": None, "credit_code": None,
                     "registered_utc": None, "disclosure_ok": False,
                     "disclaimer": self.disclaimer}
         return {"dev_account": dev_account, "registered": True,
-                "provider_name": row[0], "credit_code": row[1],
-                "registered_utc": row[2], "disclosure_ok": True,
+                "provider_name": state["provider_name"],
+                "credit_code": state["credit_code"],
+                "registered_utc": state["registered_utc"],
+                "disclosure_ok": True,
                 "disclaimer": self.disclaimer}
+
+    def api_provider_history(self, dev_account):
+        """Provider identity history (AC-AMPV5) - the return leg the
+        registration door never had: which identity is published right
+        now, what it was registered as, and every revision in order.
+        An in-shape account with no registration gets an honest empty
+        envelope (a provider who has not registered yet is a normal
+        state, not a fault). Pure read."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            state = self._provider_state(dev_account)
+            if state is None:
+                return {"dev_account": dev_account, "registered": False,
+                        "provider_name": None, "credit_code": None,
+                        "base_provider_name": None,
+                        "base_credit_code": None, "registered_utc": None,
+                        "revision_count": 0,
+                        "latest_revised_utc": None, "revisions": [],
+                        "disclaimer": self.disclaimer}
+            rows = self._conn.execute(
+                "SELECT revision_id, previous_provider_name,"
+                " previous_credit_code, provider_name, credit_code,"
+                " revised_utc FROM apimarket_provider_revisions"
+                " WHERE dev_account = ? ORDER BY revision_id",
+                (dev_account,)).fetchall()
+        return {"dev_account": dev_account, "registered": True,
+                "provider_name": state["provider_name"],
+                "credit_code": state["credit_code"],
+                "base_provider_name": state["base_provider_name"],
+                "base_credit_code": state["base_credit_code"],
+                "registered_utc": state["registered_utc"],
+                "revision_count": state["revision_count"],
+                "latest_revised_utc": state["latest_revised_utc"],
+                "disclaimer": self.disclaimer,
+                "revisions": [
+                    {"revision_id": r[0],
+                     "previous_provider_name": r[1],
+                     "previous_credit_code": r[2],
+                     "provider_name": r[3],
+                     "credit_code": r[4],
+                     "revised_utc": r[5]} for r in rows]}
 
     def api_public_listings(self):
         """Public display layer (AC-AMPI4) - the face an outside
@@ -4658,10 +4822,7 @@ class APIMarketFace:
             out = []
             for r in rows:
                 listing_id = int(r[0])
-                prov = self._conn.execute(
-                    "SELECT provider_name, credit_code FROM"
-                    " apimarket_providers WHERE dev_account = ?",
-                    (r[1],)).fetchone()
+                prov = self._provider_state(r[1])
                 rev = self._current_review(listing_id)
                 eff_title = self._metadata_state(
                     listing_id, r[3], r[4])[0]
@@ -4674,8 +4835,10 @@ class APIMarketFace:
                         listing_id, int(r[5])),
                     "ai_label": int(r[6]),
                     "listed_utc": r[7],
-                    "provider_name": prov[0] if prov else None,
-                    "credit_code": prov[1] if prov else None,
+                    "provider_name": (prov["provider_name"]
+                                      if prov is not None else None),
+                    "credit_code": (prov["credit_code"]
+                                    if prov is not None else None),
                     "disclosure_ok": prov is not None,
                     "review_state": ({"approve": "approved",
                                       "refuse": "refused"}[rev[0]]

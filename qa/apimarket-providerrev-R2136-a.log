@@ -1,0 +1,10 @@
+PASS AC-AMPV1: rev1=('Dana Data Lab II', '91310000MA1K000001') rev2=('Dana Data Lab II', '91310000MA1K000009') effective='Dana Data Lab II'/'91310000MA1K000009' base='Dana Data Lab' revision_count=2
+PASS AC-AMPV2: accounts=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] names=['E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER'] codes=['E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER', 'E_AM_BAD_PROVIDER'] empty=['E_AM_BAD_PROVIDER'] order=['E_AM_PROVIDER_UNREGISTERED', 'E_AM_PROVIDER_UNREGISTERED', 'E_AM_BAD_ACCOUNT'] frozen=True
+PASS AC-AMPV3: unchanged=['E_AM_PROVIDER_UNCHANGED', 'E_AM_PROVIDER_UNCHANGED', 'E_AM_PROVIDER_UNCHANGED'] count before=2 after=3 revise-back=('Dana Data Lab II', 'Dana Data Lab') again=['E_AM_PROVIDER_UNCHANGED']
+PASS AC-AMPV4: identity keys=True fred=('Fred Feed Works', '91310000MA1K000002') gina=(False, None) public row keys=True
+PASS AC-AMPV5: keys=True counted=(3, 3) ids=[1, 2, 3] chain=[('Dana Data Lab', 'Dana Data Lab II', '91310000MA1K000001', '91310000MA1K000001'), ('Dana Data Lab II', 'Dana Data Lab II', '91310000MA1K000001', '91310000MA1K000009'), ('Dana Data Lab II', 'Dana Data Lab', '91310000MA1K000009', '91310000MA1K000009')] latest=True
+PASS AC-AMPV6: faces repeat identical=True public repeat identical=True digests frozen=True tx frozen=True
+PASS AC-AMPV7: dana rows=[('Dana Data Lab Final', '91310000MA1K000077'), ('Dana Data Lab Final', '91310000MA1K000077')] other keys stable=True fred untouched=True
+PASS AC-AMPV8: instance1==2==3=True runner wiring=True
+HYGIENE: consumer shas stable=True suite ascii=True network imports=0
+SUITE 8/8
