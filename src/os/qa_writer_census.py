@@ -84,6 +84,16 @@ the census and check faces still write NOTHING inside any qa/ dir;
 --update-baseline writes exactly ONE file - the baseline itself -
 and only as an explicit operator re-freeze action.
 
+Per-file disposition (R2151 AC-CDN1..AC-CDN8, pre-registered in
+state/queue/tech.md BEFORE this code): a baselined non-tee file that
+was legitimately rebuilt in the healthy tee dialect otherwise flags
+class-migrated forever, whose only exit was a whole-baseline re-freeze
+that would also mask unrelated drift. `--accept NAME` (repeatable)
+drops one rebuilt file from the baseline after checking that it is
+baselined, still present, and currently class=tee; every refusal
+leaves the baseline byte-identical, and a second accept of the same
+file reports already-reconciled without a write.
+
 Evidence: qa/selflabel-chain-R1836.log (R1836); qa/
 writer-census-drift-R1841.log (this window).
 """
@@ -226,19 +236,7 @@ def write_baseline(target, path):
         lines.append("no *.log candidates under target dir (refusal)")
         return lines, 3, None
     base = dict((c, lists[c]) for c in BASELINE_CLASSES)
-    text = json.dumps(base, indent=2, sort_keys=True) + "\n"
-    d = os.path.dirname(os.path.abspath(path))
-    fd, tmp = tempfile.mkstemp(prefix=".wc-baseline-", dir=d)
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(text)
-        os.replace(tmp, path)
-    except BaseException:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
-        raise
+    _write_baseline_json(path, base)
     lines.append("baseline written: %s" % os.path.basename(path))
     for c in BASELINE_CLASSES:
         lines.append("  %s: %d names" % (c, len(base[c])))
@@ -313,6 +311,80 @@ def check_against_baseline(target, path):
     lines.append("verdict: %s" % ("DRIFT-CLEAN" if flags == 0
                                  else "DRIFT-FLAG"))
     return lines, (0 if flags == 0 else 2)
+
+
+def _write_baseline_json(path, base):
+    """Atomic deterministic baseline write (AC-WCB1 / AC-CDN6):
+    full serialize first, tempfile + os.replace, zero timestamps."""
+    text = json.dumps(base, indent=2, sort_keys=True) + "\n"
+    d = os.path.dirname(os.path.abspath(path))
+    fd, tmp = tempfile.mkstemp(prefix=".wc-baseline-", dir=d)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def accept_reconciled(target, path, name):
+    """Per-file disposition face (R2151 AC-CDN3..AC-CDN7).
+
+    A baselined non-tee file that was legitimately rebuilt in the
+    healthy tee dialect is dropped from the baseline, so --check can
+    return to DRIFT-CLEAN without re-freezing the whole baseline and
+    masking unrelated drift. Refusals never touch the baseline file.
+    Returns (lines, exit_code)."""
+    lines = []
+    if not os.path.exists(path):
+        lines.append("baseline file missing: %s" % os.path.basename(path))
+        lines.append("hint: run --update-baseline first "
+                     "(probe not deployed - honest refusal, "
+                     "zero fabricated empty baseline)")
+        return lines, 2
+    try:
+        with io.open(path, "r", encoding="utf-8") as fh:
+            base = json.load(fh)
+    except (OSError, ValueError) as exc:
+        lines.append("baseline unreadable: %s (%s)"
+                     % (os.path.basename(path), exc.__class__.__name__))
+        return lines, 2
+    for c in BASELINE_CLASSES:
+        if c not in base:
+            lines.append("baseline malformed: missing class key %s" % c)
+            return lines, 2
+    base_of = {}
+    for c in BASELINE_CLASSES:
+        for n in base[c]:
+            base_of[n] = c
+    fpath = os.path.join(target, name)
+    if not os.path.isfile(fpath):
+        lines.append("refused: %s not on disk (disappeared face is info, "
+                     "not an accept)" % name)
+        return lines, 2
+    row = classify_file(fpath)
+    if row["class"] != "tee":
+        lines.append("refused: %s is class=%s (rebuild it as utf-8+LF "
+                     "tee dialect first)" % (name, row["class"]))
+        return lines, 2
+    if name not in base_of:
+        total = sum(len(base[c]) for c in BASELINE_CLASSES)
+        lines.append("already-reconciled: %s (tee, not baselined)" % name)
+        lines.append("baseline: %s" % os.path.abspath(path))
+        lines.append("reconciled=%d" % total)
+        return lines, 0
+    prior = base_of[name]
+    base[prior] = sorted(n for n in base[prior] if n != name)
+    clean = dict((c, sorted(base[c])) for c in BASELINE_CLASSES)
+    _write_baseline_json(path, clean)
+    lines.append("accepted: %s (base=%s cur=tee)" % (name, prior))
+    lines.append("baseline: %s" % os.path.abspath(path))
+    lines.append("reconciled=%d" % len(clean[prior]))
+    return lines, 0
 
 
 def _hygiene_lines():
@@ -542,6 +614,11 @@ def main(argv=None):
                         help="baseline path (default: "
                              "writer-census-baseline.json under "
                              "target dir)")
+    parser.add_argument("--accept", action="append", default=None,
+                        metavar="NAME",
+                        help="per-file disposition: drop a baselined "
+                             "file that was rebuilt in the tee dialect "
+                             "from the baseline (repeatable, R2151)")
     if argv is None:
         argv = sys.argv[1:]
     args = parser.parse_args(argv)
@@ -549,6 +626,9 @@ def main(argv=None):
         parser.error("--check and --update-baseline are mutually "
                      "exclusive (re-freeze only after drift "
                      "disposition, R1713 AC-BF4 law)")
+    if args.accept and (args.check or args.update_baseline):
+        parser.error("--accept is a disposition face of its own; "
+                     "do not combine it with --check/--update-baseline")
     print("probe: qa writer-mode census (BigDomain R1836 AC-SL3; "
           "R1841 baseline+drift AC-WCB1..WCB6)")
     if args.selftest:
@@ -567,6 +647,18 @@ def main(argv=None):
         lines, code = check_against_baseline(target, bpath)
         for line in lines:
             print(line)
+        return code
+    if args.accept:
+        print("mode: accept (per-file disposition)")
+        print("dir: %s" % target)
+        print("baseline: %s" % bpath)
+        code = 0
+        for name in args.accept:
+            lines, sub = accept_reconciled(target, bpath, name)
+            for line in lines:
+                print(line)
+            if sub != 0:
+                code = 2
         return code
     if args.update_baseline:
         print("mode: update-baseline (re-freeze gate)")

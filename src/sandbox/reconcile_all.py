@@ -3713,7 +3713,14 @@ SUITES = [
     # uses (D-20261025-15 TEMP governance, owner-side fix).
     # (AC-TMP1..AC-TMP8 pre-registered in state/queue/tech.md R2126.)
     ("ledger-tmp-sweep",
-     os.path.join("..", "os", "test_tmp_sweep.py"), 8),
+     os.path.join("..", "os", "test_tmp_sweep.py"), 18),
+    # R2151: the writer-census drift detector itself gets negative
+    # coverage (three shell-capture dialects must be caught by name)
+    # and a per-file disposition face so a rebuilt file can return to
+    # DRIFT-CLEAN without a whole-baseline re-freeze.
+    # (AC-CDN1..AC-CDN8 pre-registered in state/queue/tech.md R2151.)
+    ("ledger-census-negative",
+     os.path.join("..", "os", "test_census_negative.py"), 12),
     ]
 
 FAILS = 0

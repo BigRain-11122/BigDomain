@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T02:28:32+08:00",
+  "export_ts": "2026-10-27T03:40:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮把临时目录清扫的「误删风险」堵死：清扫只承认真正的世界文件——名字像但不属于本司的、签名名被目录占用的、藏在深目录里的、他司同前缀的目录一律不动，并在套件里把这些负例逐条钉死。顺带按官方文档核清了小程序虚拟支付的硬规矩：虚拟商品只能走虚拟支付、平台开通商户号、结算 T+3、iOS 走 Apple 支付——19.9 月卡的设计前提要改。",
-    "latest_artifact": "src/os/sweep_suite_tmp.py（签名判据收紧为普通文件且非链接）+ src/os/test_tmp_sweep.py（10→18 判据，AC-TSN1..AC-TSN8）双跑逐字节同一 sha16 9a362acc85d50a2c + 证据 qa/tmp-sweep-neg-R2150-a.log / -b.log + QA 冒烟 qa/smoke-R2150.log / qa/smoke-R2150.png（2026-10-27 02:2x）",
-    "next_milestone": "48 小时内：把「虚拟支付通道」写进 P-47④ 支付对接设计件（通道正身 / 平台开商户号 / T+3 结算 / iOS 双端四件），并再生一次套件矩阵。"
+    "current": "本轮补的是「证据体检」自己的漏洞：它以前能把坏文件抓出来，但文件修好之后仍然永远报红，唯一出路是把整本基线重冻结（会顺手掩盖别的未处理问题）。现在可以逐件确认「这件已修好」并让它转绿，坏文件仍然一律抓、一律拒。",
+    "latest_artifact": "src/os/qa_writer_census.py 新增 --accept 逐件确认面 + src/os/test_census_negative.py（12 判据）双跑逐字节同一 sha16 3e67b1858537e8ed，证据 qa/census-negative-R2151-a.log / -b.log（2026-10-27 03:1x）；census 自检 26/26、实库 --check flags=0",
+    "next_milestone": "48 小时内：把「虚拟支付通道」写进 P-47④ 支付对接设计件（通道正身 / 平台开商户号 / T+3 结算 / iOS 双端四件），并在提交后重跑每日对账把绿电池与当日证据补齐。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "writer-census negative family + per-file disposition face (AC-CDN1..AC-CDN8)",
+      "on",
+      "R2151: the R1841 drift detector could name the three shell-capture dialects but had no way back - a file rebuilt in the healthy tee dialect kept flagging class-migrated forever, and the only exit was a whole-baseline re-freeze that would also mask unrelated drift. qa_writer_census.py now grows accept_reconciled plus a repeatable --accept NAME: one baselined, still-present, now-tee file is dropped from its class list (tee files are never baselined), while four refusal forms (not baselined and still bad, baselined but not rebuilt, disappeared, baseline missing) leave the baseline byte-identical and a second accept reports already-reconciled without a write. The atomic writer is one shared helper behind both the freeze and the accept face. New suite test_census_negative.py pins 12 criteria: the three negative dialects named with exit 2, the rebuilt path back to DRIFT-CLEAN, the refusal family, idempotency and determinism, no silent auto-heal, atomic-write hygiene, the audit lines and the R1841 selftest staying green. Evidence: SUITE PASS 12/12 double-run byte-identical sha16 3e67b1858537e8ed (qa/census-negative-R2151-a.log and -b.log); wired ledger-census-negative(12); the R2150 leftover tmp-sweep expected count corrected 8 to 18. Honest notes: the first negative fixture used a pure-ASCII payload whose gbk and utf-8 bytes coincide, so it classified as pwsh-capture and reddened AC-CDN1 until a Chinese sentinel was written with escapes; the first battery attempt died to a buffering pipe and was re-run through the streaming writer, where 352/353 suites were green and the single red is reconcile-daily-census cd8 shipped-clean=False - a self-reference that cannot pass before the commit which carries the changed file."
+    ],
     [
       "tmp sweep ownership anchors: negative-example window (AC-TSN1..AC-TSN8)",
       "on",
@@ -567,6 +572,10 @@
     ]
   ],
   "results": [
+    [
+      "R2151",
+      "R2151: five-silence scan clean (64 log lines, three ledger rows already paid, 288 decision rows / 212 content-addressed tokens with zero new, group orders tail advanced to the 2026-10-27 00:40 bm-b order on another seat execution face, benchmarks and QA stamps inside their gates, clean tree, no index.lock). The tech head was claimable, so the window claimed it and registered AC-CDN1..AC-CDN8 before the code: the negative-family window of the evidence-dialect census. Product: a per-file disposition face for the drift detector - accept_reconciled plus --accept NAME drops one baselined file that was legitimately rebuilt in the tee dialect, so a repaired file can reach DRIFT-CLEAN without a whole-baseline re-freeze, while four refusal forms leave the baseline byte-identical and a repeat accept is a no-write already-reconciled. New suite test_census_negative.py 12 criteria, wired ledger-census-negative(12), tmp-sweep expected count corrected 8 to 18. Verification: SUITE PASS 12/12 double-run sha16 3e67b1858537e8ed, census selftest 26/26, live --check flags=0 over 1912 files. Battery: 352/353 green in 729.8s with the one red being the census suite shipped-clean assertion against the very file this window changed, which cannot pass pre-commit; a committed-tree daily re-run closes it. FUNNEL daily row ran for 2026-10-27 (gate PASS, honest zero)."
+    ],
     [
       "R2150",
       "R2150: five-silence scan found the state log carrying 71 bare-LF lines from the previous closeout (repaired with the logs toolkit before anything else, verified post_bare_lf 0), three ledger rows already paid off, decisions.md at 288 rows / 212 content-addressed tokens with zero new against the stored baseline, the group orders baseline unchanged, benchmarks one day inside the gate and a clean tree with no index.lock. The tech head was claimable, so the window claimed it and registered AC-TSN1..AC-TSN8 in the queue line BEFORE the code: the negative-example window of the tmp-sweep ownership anchors. Product: has_signature now accepts a signature only as a regular file that is not a link - a directory occupying the name, a link, a foreign same-prefix name and a nested world are all rejected, and the suite pins each family plus a closed delete domain (a recording proxy proves sweep() sees exactly the candidate set and the negative trees stay byte-identical). Verification: SUITE PASS 18/18 first run, double run byte-identical sha16 9a362acc85d50a2c. The daily quality crawl added one A-graded official source (virtual payment for enterprises and sole traders: virtual goods must use the mini-program virtual payment channel, the platform opens the merchant account, settlement is T+3, iOS needs 8.0.68+ and goes through Apple payment, refunds inside 180 days return the fee) with three honest negatives recorded, refreshed benchmark sections 1/3/4 and appended signal W34 plus its conclusion row, and backfilled heartbeat ticks 2148-2150. Honest gaps: the suite matrix was not regenerated this window, and the virtual payment fee rate, personal-subject category rules, sandbox boundary and deposit interaction remain M notes."

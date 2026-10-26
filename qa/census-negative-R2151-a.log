@@ -1,0 +1,14 @@
+suite: writer-census negative family (R2151 AC-CDN1..8)
+PASS AC-CDN2 new tee file is a normal product, zero flag
+PASS AC-CDN1 three negative dialects caught by name, exit 2
+PASS AC-CDN2 rebuilt+accepted returns to DRIFT-CLEAN exit 0
+PASS AC-CDN2 baseline keeps four sorted classes, tee unbaselined
+PASS AC-CDN3 not-baselined bad dialect refused, baseline intact
+PASS AC-CDN3 baselined non-tee file refused, baseline intact
+PASS AC-CDN3 disappeared + missing baseline refused
+PASS AC-CDN5 no silent auto-heal without accept
+PASS AC-CDN7 audit lines carry file, baseline path, count
+PASS AC-CDN6 atomic write, no temp residue, others unchanged
+PASS AC-CDN4 second accept idempotent and deterministic
+PASS AC-CDN8 hygiene, selftest green, wiring label, count 12
+SUITE PASS 12/12 criteria
