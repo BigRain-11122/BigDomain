@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T02:20:00+08:00",
+  "export_ts": "2026-10-27T02:28:32+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "开发者 API 市场这轮补上了买家自己的支出账：住民能看到自己的钱分别花到哪些品类、退回来多少、净花了多少，哪些品类一分没花就不出现，卖家给了多少钱跟平台抽走多少钱也分得清。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py 新增 api_buyer_category_spend + 套件 src/sandbox/ledger/test_apimarket_buyercategoryspend.py 8/8 双跑逐字节同一 sha16 1fafaf4cfe387bc6 + 证据 qa/apimarket-buyercategoryspend-R2149-a.log / -b.log — 2026-10-27 02:1x",
-    "next_milestone": "48 小时内：把这条支出轴接进结算报告的买家段，并补买家侧卖家维度排行；商户号仍未到，支付与权益设计件继续先行。"
+    "current": "本轮把临时目录清扫的「误删风险」堵死：清扫只承认真正的世界文件——名字像但不属于本司的、签名名被目录占用的、藏在深目录里的、他司同前缀的目录一律不动，并在套件里把这些负例逐条钉死。顺带按官方文档核清了小程序虚拟支付的硬规矩：虚拟商品只能走虚拟支付、平台开通商户号、结算 T+3、iOS 走 Apple 支付——19.9 月卡的设计前提要改。",
+    "latest_artifact": "src/os/sweep_suite_tmp.py（签名判据收紧为普通文件且非链接）+ src/os/test_tmp_sweep.py（10→18 判据，AC-TSN1..AC-TSN8）双跑逐字节同一 sha16 9a362acc85d50a2c + 证据 qa/tmp-sweep-neg-R2150-a.log / -b.log + QA 冒烟 qa/smoke-R2150.log / qa/smoke-R2150.png（2026-10-27 02:2x）",
+    "next_milestone": "48 小时内：把「虚拟支付通道」写进 P-47④ 支付对接设计件（通道正身 / 平台开商户号 / T+3 结算 / iOS 双端四件），并再生一次套件矩阵。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "tmp sweep ownership anchors: negative-example window (AC-TSN1..AC-TSN8)",
+      "on",
+      "R2150: the birth-site sweep (R2127) deletes temp worlds behind three anchors - a name-family regex, a world signature file and an age/window gate - and none of those anchors had ever been tested against the shapes they are meant to reject, so a false match would delete another window's live world. This window closed that: has_signature now counts a signature only as a regular file that is not a link, because a bare name match let a directory merely called apimarket.db (or a junction) qualify a foreign or half-built tree. The suite grew from 10 to 18 criteria: four same-prefix foreign name shapes (apimarket with no separator, amzzz-x, APIMARKET-x, apimarketx-x) stay non-candidates on both the age leg and the battery-window leg even when they carry a real signature; a nested same-name world is invisible because the scan is root-level; all seven signature names occupied by directories leave every world non-candidate; the seven-family positive control proves the tightening kills nothing; a recording proxy over sweep() proves the delete domain equals the candidate set exactly and every negative tree is byte-identical afterwards (relative path + per-file sha256 snapshot); both legs agree; a missing root and a plain file return empty without raising; sources stay ASCII with zero network imports and the ledger-tmp-sweep label is untouched. Verification: SUITE PASS 18/18 on the first run, double run byte-identical sha16 9a362acc85d50a2c (qa/tmp-sweep-neg-R2150-a.log and -b.log, single-writer UTF-8 LF after CRLF normalisation). Same window: the daily quality crawl fetched four official pages and kept one A-graded source (the mini-program virtual payment doc for enterprises and sole traders) with three honest negatives, the benchmark sections 1/3/4 and signal W34 were refreshed, and the heartbeat rows were backfilled."
+    ],
     [
       "apimarket buyer-side category spend (api_buyer_category_spend)",
       "on",
@@ -562,6 +567,10 @@
     ]
   ],
   "results": [
+    [
+      "R2150",
+      "R2150: five-silence scan found the state log carrying 71 bare-LF lines from the previous closeout (repaired with the logs toolkit before anything else, verified post_bare_lf 0), three ledger rows already paid off, decisions.md at 288 rows / 212 content-addressed tokens with zero new against the stored baseline, the group orders baseline unchanged, benchmarks one day inside the gate and a clean tree with no index.lock. The tech head was claimable, so the window claimed it and registered AC-TSN1..AC-TSN8 in the queue line BEFORE the code: the negative-example window of the tmp-sweep ownership anchors. Product: has_signature now accepts a signature only as a regular file that is not a link - a directory occupying the name, a link, a foreign same-prefix name and a nested world are all rejected, and the suite pins each family plus a closed delete domain (a recording proxy proves sweep() sees exactly the candidate set and the negative trees stay byte-identical). Verification: SUITE PASS 18/18 first run, double run byte-identical sha16 9a362acc85d50a2c. The daily quality crawl added one A-graded official source (virtual payment for enterprises and sole traders: virtual goods must use the mini-program virtual payment channel, the platform opens the merchant account, settlement is T+3, iOS needs 8.0.68+ and goes through Apple payment, refunds inside 180 days return the fee) with three honest negatives recorded, refreshed benchmark sections 1/3/4 and appended signal W34 plus its conclusion row, and backfilled heartbeat ticks 2148-2150. Honest gaps: the suite matrix was not regenerated this window, and the virtual payment fee rate, personal-subject category rules, sandbox boundary and deposit interaction remain M notes."
+    ],
     [
       "R2149",
       "R2149: five-silence scan clean - decisions.md 288 rows / 213 content-addressed tokens with zero new against the stored baseline, the ledger's two @BigDomain patrol rows already paid off with zero unreplied, the group orders baseline unchanged at the 2026-10-26 22:36 dispatch-deck row, benchmarks refreshed 2026-10-26 inside the seven-day gate, tree clean with no index.lock; all four tech heads stayed gated (docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, the live-mtime row waiting on a real normalized-mtime event) and the single explore row was gated on the merchant id, so this window seeded and claimed a fresh P3 row in the SAME window with AC-BCS1..AC-BCS8 registered BEFORE the code existed (six anchors - AC-BCS, api_buyer_category_spend, the suite name, the runner label, and the two key sets on this face - all git grep -F zero-occupancy against HEAD, rc=1). Product: the buyer side finally answers 'where did my money go' - api_buyer_category_spend buckets this buyer's spend by effective category, with purchase-side row authority so a category the buyer never bought in stays absent, the one effective-category seam so a revise_category moves the spend in the same step, per-row trade conservation, cash totals identical to api_buyer_months' lifetime figures, purchase-derived listing_count against distinct seller_count, None avg_net_price when nothing settled, the pinned account-then-flag gate order and a pure read. Verification: suite double-run with byte-identical evidence files sha16 1fafaf4cfe387bc6, six adjacent suites green, matrix 352 suites / 2924 criteria byte-identical. Two honest notes are recorded: the first suite run was 7/8 on a test-side seed defect (a missing refund call, repaired in the fixture without relaxing a criterion), and both queues were under the self-drive standing floor, so nine explore seeds and six tech seeds were landed in this window rather than manufactured work."

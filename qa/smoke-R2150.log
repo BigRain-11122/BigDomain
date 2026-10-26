@@ -1,0 +1,35 @@
+BigDomain QA smoke evidence R2150 (charter v1.0, group orders L254)
+generated: 2026-10-27  round tick: 2150
+
+1) daily crawl (charter item 1)
+   attempts: 5 official-domain fetches
+   usable A source: developers.weixin.qq.com virtual-payment.html (virtual payment, enterprise/sole trader)
+   rejected: product/ index (nav shell, no clause text)
+   rejected: product/jiaoyilei/ (returns a 2026-03-25 video-channel promotion agreement, wrong document)
+   rejected: virtual-payment/person.html (returns TenPay Global generic payment rules, not the personal virtual payment page)
+   virtual-payment.html path attempt 1: 404
+   result: 1 new A-graded source, 3 honest negatives, zero key
+
+2) benchmark refresh (charter item 2, 15h ceiling)
+   benchmarks_refreshed in state: 2026-10-27
+   sections updated: (1) payment compliance bullet, (3) wechat-ecosystem source row, (4) update record W34
+
+3) research source chain (charter item 3)
+   every W34 claim carries the official URL and the fetch date
+   unstated items kept as M notes: fee rate, personal-subject categories, sandbox boundary, deposit interaction
+
+4) intelligence wall (charter item 4)
+   W34 main row + W34 conclusion row appended (source link + grade + consumption point)
+
+5) product change verified this round (AC-TSN1..AC-TSN8, P2 tech)
+   suite: src/os/test_tmp_sweep.py  PASS lines: 18
+   run A sha16: 9a362acc85d50a2c
+   run B sha16: 9a362acc85d50a2c
+   byte-identical: True
+   product: has_signature accepts a signature only as a regular file that is not a link
+
+6) honest gaps in this window
+   - the full reconcile battery outcome is recorded in state.json log and in the commit message, not repeated here
+   - the suite matrix was not regenerated in this window
+   - the fee rate and personal-subject virtual payment rules remain M notes (the official page states 'a certain rate' only)
+

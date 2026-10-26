@@ -57,12 +57,28 @@ def dir_bytes(path):
     return total
 
 
+def _signature_file(root, name):
+    """A signature counts only as a regular file that is not a link.
+
+    A bare name match let any world that merely reserved the name (a
+    directory called apimarket.db, or a junction pointing elsewhere)
+    pass the anchor, which is exactly the shape a foreign or half-built
+    tree takes (AC-TSN3).
+    """
+    full = os.path.join(root, name)
+    try:
+        return os.path.isfile(full) and not os.path.islink(full)
+    except OSError:
+        return False
+
+
 def has_signature(path):
     try:
         names = os.listdir(path)
     except OSError:
         return False
-    return any(name in SIGNATURES for name in names)
+    return any(_signature_file(path, name) for name in names
+               if name in SIGNATURES)
 
 
 def candidates(root, min_age_hours):

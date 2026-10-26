@@ -1,0 +1,19 @@
+PASS AC-TMP1 anchors hold: signature-less and foreign-name worlds are not candidates
+PASS AC-TMP1 age leg: fresh worlds are not age candidates
+PASS AC-TMP2 rename probe: a locked world is skipped as busy and survives untouched
+PASS AC-TMP3 window isolation: pre-run worlds stay out of reach
+PASS AC-TMP4 report: nine-key envelope, candidates == removed + busy + failed, our live world removed
+PASS AC-TMP5 idempotent: a freed world is reclaimed once, the next pass removes zero, pre-run worlds intact
+PASS AC-TMP6 reuse: battery loads the tool by path, holds no second sweep implementation, prints the reclaim line
+PASS AC-TMP6 fail-open: the tool stays callable after a missing-tool probe
+PASS AC-TMP7 fixture classes: missing signature kept, age window kept, busy kept, idle world removed
+PASS AC-TMP8 hygiene: ASCII-only sources, zero network imports, ledger-tmp-sweep wired into the battery
+PASS AC-TSN1 prefix negatives: four name shapes carrying a real signature stay non-candidates on both legs
+PASS AC-TSN2 depth negatives: a nested world is invisible to both legs and its tree is unchanged
+PASS AC-TSN3 signature shape: all seven signature names as directories leave every world non-candidate
+PASS AC-TSN4 positive control: seven signature families stay candidates on both legs after the tightening
+PASS AC-TSN5 delete domain: sweep() sees exactly the candidates and every negative tree is byte-identical afterwards
+PASS AC-TSN6 both legs: identical negative verdicts, identical positive control set
+PASS AC-TSN7 bad roots: missing path and plain file return empty lists on both legs
+PASS AC-TSN8 hygiene: ASCII-only sources, zero network imports, signature helper in place, ledger-tmp-sweep still wired
+SUITE PASS 18/18

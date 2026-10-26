@@ -6,8 +6,14 @@ line BEFORE this code): the battery reclaims only the worlds it just
 created, behind the same three ownership anchors and the same rename
 probe the standalone tool already uses. ASCII-only source; stdlib only;
 zero network; exit 0 = green.
+
+AC-TSN1..AC-TSN8 (pre-registered in state/queue/tech.md R2150 claim
+line BEFORE this code): the negative-example families of the same three
+anchors - same-prefix but foreign names, nested worlds, and a signature
+name occupied by a directory - plus a closed delete domain.
 """
 
+import hashlib
 import os
 import sys
 import tempfile
@@ -165,6 +171,142 @@ def main():
            and '"ledger-tmp-sweep"' in runner_src,
            "AC-TMP8 hygiene: ASCII-only sources, zero network imports, "
            "ledger-tmp-sweep wired into the battery")
+
+        # ------------------------------------------------------------------
+        # R2150 negative-example window (AC-TSN1..AC-TSN8).
+        # ------------------------------------------------------------------
+        def snapshot(base_path):
+            seen = {}
+            for base, _dirs, files in os.walk(base_path):
+                rel = os.path.relpath(base, base_path)
+                seen[rel + "/"] = "dir"
+                for name in files:
+                    full = os.path.join(base, name)
+                    with open(full, "rb") as fh:
+                        seen[os.path.join(rel, name)] = hashlib.sha256(
+                            fh.read()).hexdigest()
+            return seen
+
+        def world_with(root_path, name, sig):
+            world = os.path.join(root_path, name)
+            os.makedirs(world)
+            with open(os.path.join(world, sig), "w", encoding="ascii") as fh:
+                fh.write("x")
+            return world
+
+        negroot = tempfile.mkdtemp(prefix="bd-tmpwsneg-")
+        posroot = tempfile.mkdtemp(prefix="bd-tmpwspos-")
+        try:
+            time.sleep(0.05)
+            nstart = time.time()
+            time.sleep(0.05)
+
+            # AC-TSN1: same prefix without separator, a foreign family, a
+            # case variant and a glued suffix stay non-candidates on both
+            # legs even when a real signature file is present.
+            prefix_neg = ["apimarket", "amzzz-x", "APIMARKET-x",
+                          "apimarketx-x"]
+            for name in prefix_neg:
+                mk(negroot, name)
+            ok(SW.run_candidates(negroot, nstart) == []
+               and SW.candidates(negroot, -1.0) == []
+               and sorted(os.listdir(negroot)) == sorted(prefix_neg),
+               "AC-TSN1 prefix negatives: four name shapes carrying a real "
+               "signature stay non-candidates on both legs")
+
+            # AC-TSN2: the scan is root-level only, so a nested world is
+            # invisible and its tree is left byte-identical.
+            nest = os.path.join(negroot, "sub")
+            mk(nest, "apimarket-nested")
+            nest_before = snapshot(nest)
+            ok(SW.run_candidates(negroot, nstart) == []
+               and snapshot(nest) == nest_before
+               and os.path.isfile(os.path.join(nest, "apimarket-nested",
+                                               SIGNATURE)),
+               "AC-TSN2 depth negatives: a nested world is invisible to "
+               "both legs and its tree is unchanged")
+
+            # AC-TSN3: a directory occupying a signature name is not a
+            # world signature (the tightening under test).
+            for idx, sig in enumerate(SW.SIGNATURES):
+                world = mk(negroot, "apimarket-sig%d" % idx, sig=False)
+                os.makedirs(os.path.join(world, sig))
+            ok(SW.run_candidates(negroot, nstart) == []
+               and SW.candidates(negroot, -1.0) == []
+               and len([n for n in os.listdir(negroot)
+                        if n.startswith("apimarket-sig")])
+               == len(SW.SIGNATURES),
+               "AC-TSN3 signature shape: all seven signature names as "
+               "directories leave every world non-candidate")
+
+            # AC-TSN4: the tightening does not kill the positive control -
+            # every signature family as a regular file is still a world.
+            pos_paths = [world_with(posroot, "apimarket-pos%d" % idx, sig)
+                         for idx, sig in enumerate(SW.SIGNATURES)]
+            run_leg = SW.run_candidates(posroot, nstart)
+            age_leg = SW.candidates(posroot, -1.0)
+            ok(sorted(run_leg) == sorted(pos_paths)
+               and sorted(age_leg) == sorted(pos_paths),
+               "AC-TSN4 positive control: seven signature families stay "
+               "candidates on both legs after the tightening")
+
+            # AC-TSN5: the delete domain is closed over the candidate set.
+            neg_before = snapshot(negroot)
+            real_sweep = SW.sweep
+            touched = []
+
+            def recording_sweep(path, execute=True):
+                touched.append(os.path.abspath(path))
+                return real_sweep(path, execute)
+
+            SW.sweep = recording_sweep
+            try:
+                pos_report = SW.sweep_run_temps(posroot, nstart, execute=True)
+            finally:
+                SW.sweep = real_sweep
+            ok(bool(touched)
+               and sorted(touched) == sorted(os.path.abspath(p)
+                                             for p in pos_paths)
+               and pos_report["removed"] == len(pos_paths)
+               and snapshot(negroot) == neg_before,
+               "AC-TSN5 delete domain: sweep() sees exactly the candidates "
+               "and every negative tree is byte-identical afterwards")
+
+            # AC-TSN6: both legs agree on the negatives and share the
+            # positive control set.
+            ok(SW.run_candidates(negroot, nstart) == []
+               and SW.candidates(negroot, -1.0) == []
+               and set(run_leg) & set(age_leg) == set(pos_paths),
+               "AC-TSN6 both legs: identical negative verdicts, identical "
+               "positive control set")
+
+            # AC-TSN7: a missing root and a plain file are both empty and
+            # never raise.
+            missing = os.path.join(negroot, "no-such-dir")
+            plain = os.path.join(negroot, "plainfile.txt")
+            with open(plain, "w", encoding="ascii") as fh:
+                fh.write("x")
+            ok(SW.run_candidates(missing, nstart) == []
+               and SW.candidates(missing, -1.0) == []
+               and SW.run_candidates(plain, nstart) == []
+               and SW.candidates(plain, -1.0) == [],
+               "AC-TSN7 bad roots: missing path and plain file return "
+               "empty lists on both legs")
+
+            # AC-TSN8: hygiene - ASCII sources, no network imports, the
+            # existing runner label untouched, tightened helper present.
+            tool_src = read(os.path.join(HERE, "sweep_suite_tmp.py"))
+            suite_src = read(os.path.abspath(__file__))
+            ok(tool_src.encode("ascii") and suite_src.encode("ascii")
+               and "urllib" not in tool_src and "requests" not in tool_src
+               and "_signature_file" in tool_src
+               and '"ledger-tmp-sweep"' in runner_src,
+               "AC-TSN8 hygiene: ASCII-only sources, zero network imports, "
+               "signature helper in place, ledger-tmp-sweep still wired")
+        finally:
+            import shutil as _sh
+            _sh.rmtree(negroot, ignore_errors=True)
+            _sh.rmtree(posroot, ignore_errors=True)
 
         print("SUITE PASS %d/%d" % (CHECKS, CHECKS))
         return 0
