@@ -1,0 +1,8 @@
+{
+  "note": "Known historical coverage gaps of the round ledger lines, seeded 2026-10-27 R2152 from a live audit of src/os/state.json. R2090 and R2095 carry a round narrative but no ledger line (their closeout batches were superseded by the R2140 carry-over round). The gate subtracts this baseline so only NEW drift turns red; shrink this list, never grow it silently.",
+  "missing": [
+    2090,
+    2095
+  ],
+  "orphan": []
+}

@@ -3721,6 +3721,14 @@ SUITES = [
     # (AC-CDN1..AC-CDN8 pre-registered in state/queue/tech.md R2151.)
     ("ledger-census-negative",
      os.path.join("..", "os", "test_census_negative.py"), 12),
+    # R2152: the round ledger line that the F3 law and the
+    # status-export self_drive face derive from gets a machine check -
+    # pinned parse, bad-shape family with its gate order, the
+    # narrative/ledger coverage law, the tail window and a live gate
+    # over state.json.
+    # (AC-LGR1..AC-LGR8 pre-registered in state/queue/tech.md R2152.)
+    ("os-ledger-lines",
+     os.path.join("..", "os", "test_ledger_lines.py"), 8),
     ]
 
 FAILS = 0

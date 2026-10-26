@@ -1,0 +1,10 @@
+suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+PASS AC-LGR1 canonical parse, units and approx marker resolved
+PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+PASS AC-LGR3 coverage law derives missing and orphan rounds
+PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+PASS AC-LGR5 zero false positives, typo caught by coverage law
+PASS AC-LGR6 api is a pure integer and always carries a reason
+PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+PASS AC-LGR8 live gate clean, two historical gaps baselined, hygiene
+SUITE PASS 8/8 criteria
