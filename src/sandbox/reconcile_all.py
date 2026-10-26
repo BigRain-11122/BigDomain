@@ -2202,6 +2202,14 @@ SUITES = [
     # (AC-AMSR1..AC-AMSR8 pre-registered in the R2098 claim row).
     ("ledger-apimarket-searchsort", os.path.join(
         "ledger", "test_apimarket_searchsort.py"), 8),
+    # R2142 discovery availability seat: api_search gained the
+    # bool-only in_stock axis (buyable rows / sold-out rows) read
+    # through the one scarcity seam, with the legacy contract
+    # byte-identical when unfiltered, the pinned gate order and
+    # partition law against api_supply (AC-AMAV1..AC-AMAV8
+    # pre-registered in the R2142 explore-queue claim row).
+    ("ledger-apimarket-searchstock", os.path.join(
+        "ledger", "test_apimarket_searchstock.py"), 8),
     # R2085 seller-profile seat: the public dev_profile read face
     # with the thirteen-key envelope and nine-key rows, the
     # partition law (listing_count == live + retired, sales and

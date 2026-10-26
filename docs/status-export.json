@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-26T11:15:11+08:00",
+  "export_ts": "2026-10-26T12:09:35+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮把开发者 API 市场的「品类需求面」做出来了：哪个品类真的卖得动（成交/退款/净额/买家数）现在有一面可查，并与全市场统计逐项对得上。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_category_demand（品类需求面）+ qa/apimarket-categorydemand-R2141-a.log（8/8 双跑）+ docs/sandbox-suite-matrix.md（345 套件 / 2868 判据）— 2026-10-26 11:15",
-    "next_milestone": "48 小时内：把这面接进卖家侧看板（选品/定价用）并跑一轮全量回归；商户号仍未到，支付与权益设计件继续先行。"
+    "current": "本轮把开发者 API 市场的发现面补齐了「只给我还能买的」这条轴：售罄与有货不再同形，买家搜完可直接过滤到可买件或售罄件（后者正是卖家的补货队列）。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_search in_stock 过滤+ qa/apimarket-searchstock-R2142-a.log（8/8 双跑）+ docs/sandbox-suite-matrix.md（346 套件 / 2876 判据） — 2026-10-26 12:09",
+    "next_milestone": "48 小时内：跑完整全量电池（本轮预算未及），并把这轴接进结算报告/看板；商户号仍未到，支付与权益设计件继续先行。"
   },
   "depts": [
     {
@@ -523,6 +523,11 @@
       "apimarket per-category demand (api_category_demand)",
       "on",
       "R2141: api_categories answered the SUPPLY side of a category (listing counts plus the live price band) while api_market_stats aggregated the whole market, api_listing_demand one listing, dev_sales_board one seller and api_market_months one month - so no face answered which categories actually SELL. api_category_demand(include_uncategorized=True) closes that gap: listing-side row authority with the honest uncategorized bucket last, per-row and global partition conservation, per-row trade conservation (gross == net + refunded, net_purchase == purchase - refund) with cross-face identity against api_market_stats on the default call, buyer_count as a within-category distinct count while the envelope counts distinct buyers over the included rows, retirement and re-listing moving only the partition counters, a refund lowering the net side of one category only, avg_net_price = net_gross / net_purchase (None when nothing settled), and a bool gate that fails closed before any read. Suite SUITE PASS 8/8 double-run byte-identical sha16 2a1f5dbec1f1e160 (qa/apimarket-categorydemand-R2141-a.log and -b.log); full battery RUNNER PASS 345/345 suites plus controls 7/7 in 961.8s (qa/reconcile-all-R2141.log); matrix 345 suites / 2868 criteria --check byte-identical."
+    ],
+    [
+      "apimarket discovery availability axis (api_search in_stock)",
+      "on",
+      "R2142: the discovery face could filter by keyword, seller, price band, category and retired state, order by five modes and page, but a sold-out listing and a buyable one were byte-identical, so a buyer had to read every row and call api_supply per listing. api_search now accepts an optional bool-only in_stock that keeps the buyable rows (True) or the sold-out rows (False, the seller's restock queue) through the one scarcity seam, so a purchase, a refund and a restock move a listing across the filter in exactly the step they move api_supply.sold_out. Laws pinned by AC-AMAV1..AC-AMAV8: the legacy contract stays byte-identical when the filter is absent, the bool gate sits after the category gate and before paging/sort and fails closed with every table digest and the ledger tx set frozen, True plus False partitions the unfiltered set exactly, the axis composes with every other filter while paging totals derive from the filtered set, all five sort modes keep their total order over the subset, and honest empties, the retired-listing rule, cross-restart byte identity and the pure-read law all hold. Suite SUITE PASS 8/8 double-run byte-identical sha16 001304dcd96edb53 (qa/apimarket-searchstock-R2142-a.log and -b.log); five adjacent suites rc=0 each; matrix 346 suites / 2876 criteria --check byte-identical."
     ]
   ],
   "results": [
@@ -723,7 +728,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2141",
+      "2142",
       "OSLoop 执行 tick"
     ],
     [
@@ -1067,19 +1072,23 @@
     [
       "R2141",
       "R2141: seeded and claimed a fresh P3 explore row in the same window with AC-AMCD1..AC-AMCD8 pre-registered BEFORE the code existed (six anchors git grep -F zero-occupancy, rc=1) and delivered the per-category demand face. Product change in src/sandbox/ledger/apimarket.py (api_category_demand). Verification: new suite 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 2a1f5dbec1f1e160 (qa/apimarket-categorydemand-R2141-a.log and -b.log, single-writer UTF-8 LF); registration ledger-apimarket-categorydemand(8); full battery RUNNER PASS 345/345 plus controls 7/7 in 961.8s with TMP RECLAIM 276.22 MiB (qa/reconcile-all-R2141.log); suite matrix 345 suites / 2868 criteria --check byte-identical. Group acknowledgement: PT-20261026-01/02/03 (patrol intake) - the BigDomain-relevant piece is the local-line liveness and push proof closed by this round. Honest disclosure: the AC-AMCD7 fixture expectation was first written as buyer_count 4 while the measurement was 5 (u1 buys in both the tools category and the bucket); the pre-registered criterion speaks about the distinct buyer count over the INCLUDED rows, so the fixture expectation was corrected rather than the criterion weakened."
+    ],
+    [
+      "R2142",
+      "R2142: seeded and claimed a fresh P3 explore row in the same window with AC-AMAV1..AC-AMAV8 pre-registered BEFORE the code existed (four anchors git grep -F zero-occupancy, rc=1) and delivered the discovery availability axis. Product change in src/sandbox/ledger/apimarket.py (api_search in_stock). Verification: new suite 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 001304dcd96edb53 (qa/apimarket-searchstock-R2142-a.log and -b.log, single-writer UTF-8 LF); registration ledger-apimarket-searchstock(8); five adjacent suites rc=0 each (search, searchpaging, searchsort, category, supply); suite matrix 346 suites / 2876 criteria --check byte-identical. Honest disclosures: (a) the first filter cut compared the sold-out flag against the wrong polarity and kept exactly the sold-out rows, caught by AC-AMAV3 before any evidence was written; (b) the first identity view included the retired row whose delisted_utc is a wall-clock stamp, so the digest varied between processes rather than between restarts, and the view now uses the non-retired filter; (c) the evidence driver pins PYTHONHASHSEED=0 because three evidence lines echo set reprs; (d) the full battery was NOT run this round (25-minute budget) and is the first item of the next round."
     ]
   ],
   "self_drive": {
     "window": "2026-10-20..2026-10-26",
     "window_days": 7,
-    "log_lines_in_window": 22,
+    "log_lines_in_window": 23,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 22,
+    "substantive_non_idle_mention_lines": 23,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 1
+    "queue_explore_open": 2
   }
 }

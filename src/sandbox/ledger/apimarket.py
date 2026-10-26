@@ -2679,7 +2679,8 @@ class APIMarketFace:
 
     def api_search(self, keyword=None, dev_account=None, min_price=None,
                    max_price=None, include_delisted=False,
-                   limit=None, offset=None, sort=None, category=None):
+                   limit=None, offset=None, sort=None, category=None,
+                   in_stock=None):
         """Market discovery surface (pre-registered AC-AMSQ1..AMSQ8
         in the R2082 explore-queue row BEFORE this code existed).
 
@@ -2745,7 +2746,25 @@ class APIMarketFace:
         carries NO sort key, so the envelope and rows stay byte-
         identical to the pre-sort contract; the key appears only
         when a token is given. Pure read: zero row mutations and
-        zero token movement."""
+        zero token movement.
+
+        Availability axis (pre-registered AC-AMAV1..AC-AMAV8 in the
+        R2142 explore-queue row BEFORE this code existed): the face
+        could filter by category, order by five modes and page, but
+        nothing answered "show me only what I can still buy" - a
+        sold-out listing and a buyable one were byte-identical here,
+        so a buyer had to read every row and call api_supply per
+        listing. Optional in_stock (bool only) keeps the buyable
+        rows (True) or the sold-out rows (False, the seller's
+        restock queue) through the one scarcity seam
+        (_supply_state), so a purchase, a refund and a restock move
+        a listing across the filter in exactly the step they move
+        api_supply.sold_out. The gate runs after the category gate
+        and before the paging/sort gates, fail-closed BEFORE any
+        read. Backward-compatibility law: when in_stock is None the
+        criteria echo carries NO in_stock key and the envelope and
+        rows stay byte-identical to the pre-change contract; row
+        keys never change."""
         kw = None
         if keyword is not None:
             if not isinstance(keyword, str):
@@ -2779,6 +2798,16 @@ class APIMarketFace:
             cat = category.strip()
             if not cat:
                 raise ApiMarketError(E_AM_BAD_ARGS, "category blank")
+        # AC-AMAV2: the availability gate is a bool-only shape gate
+        # that runs after the category gate and BEFORE the paging
+        # and sort gates, always before any read.
+        if in_stock is None:
+            stock = None
+        else:
+            if not isinstance(in_stock, bool):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     "bad in_stock: %r" % (in_stock,))
+            stock = in_stock
         if limit is not None:
             if (isinstance(limit, bool) or not isinstance(limit, int)
                     or limit < 1):
@@ -2831,6 +2860,15 @@ class APIMarketFace:
                     continue
                 if high is not None and price > high:
                     continue
+                # AC-AMAV3: availability is read through the one
+                # scarcity seam, so the filter and api_supply always
+                # agree on which rows are buyable.
+                if stock is not None:
+                    _eff, _sold, _rem, sold_out = \
+                        self._supply_state(listing_id)
+                    buyable = not sold_out
+                    if buyable != stock:
+                        continue
                 n_rate, avg = self._agg_rating(listing_id)
                 listed_by[listing_id] = r[7]
                 out.append({"listing_id": listing_id,
@@ -2892,6 +2930,11 @@ class APIMarketFace:
         # criteria contract byte for byte.
         if cat is not None:
             criteria["category"] = cat
+        # AC-AMAV1: the availability key is echoed only when the
+        # filter is given, so a caller that never filters keeps the
+        # pre-change criteria contract byte for byte.
+        if stock is not None:
+            criteria["in_stock"] = stock
         if not paged:
             return {"disclaimer": self.disclaimer,
                     "criteria": criteria,
