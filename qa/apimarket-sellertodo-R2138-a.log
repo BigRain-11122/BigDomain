@@ -1,0 +1,9 @@
+PASS AC-AMTD1: envelope ok=True total=7 r=2 q=2 co=2 cd=1 listings=2 oldest='2026-10-05T00:00:01Z'/'claim_open'
+PASS AC-AMTD2: rating=True question=True claim_open=True disputed=True family-set=7
+PASS AC-AMTD3: statuses=[(1, 'open'), (2, 'answered'), (4, 'answered'), (5, 'open')] queue-claims=[1, 2, 5] answered-no-note-excluded=True withdrawn-still-excluded=True
+PASS AC-AMTD4: sequence=[('2026-10-05T00:00:01Z', 'claim_open'), ('2026-10-05T00:00:03Z', 'question'), ('2026-10-05T00:00:05Z', 'rating'), ('2026-10-05T00:00:05Z', 'question'), ('2026-10-05T00:00:07Z', 'rating'), ('2026-10-05T00:00:08Z', 'claim_open'), ('2026-10-05T00:00:09Z', 'claim_disputed')] identical-repeat=True
+PASS AC-AMTD5: retired-debt-kept=True frank=1 empty=[] isolated=True
+PASS AC-AMTD6: bad-codes=['E_AM_BAD_ACCOUNT'] blank='E_AM_BAD_ACCOUNT' tables-frozen=True ledger-frozen=True
+PASS AC-AMTD7: pure-read=True drain-steps=[6, 5, 4, 5, 4, 3] final=3 kinds=['question', 'rating', 'claim_disputed']
+PASS AC-AMTD8: three-instances-identical=True runner-wiring=True consumer-shas-stable=True ascii=True network-imports=0 world-outside-repo=True
+SUITE 8/8

@@ -3720,6 +3720,143 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "pending": pending}
 
+    def api_seller_todo(self, dev_account):
+        """Seller-side unified duty queue (criteria AC-AMTD1..AC-AMTD8
+        pre-registered in the R2138 explore-queue row BEFORE this code
+        existed).
+
+        Every seller obligation already had its own face -
+        api_seller_inbox carries unanswered ratings, api_seller_questions
+        unanswered questions, api_claims the claim queue the seller has to
+        filter by hand, and the R2137 disputed state lived only inside one
+        claim thread. So a seller holding N listings had to open four
+        faces and merge them by hand to answer "what do I owe right now,
+        and how long has the oldest one waited". The buyer side got that
+        merged queue in R2105 (api_buyer_todo); this is its seller mirror.
+
+        Four families, pinned by AC-AMTD2:
+          rating          an unanswered rating on any listing of the seller
+          question        an unanswered question on any listing
+          claim_open      a claim nobody has answered yet
+          claim_disputed  a claim the seller answered AND the buyer then
+                          restated (a follow-up note exists) - the state
+                          R2137 introduced, which no queue could see
+        Claim status is derived at read time through the same precedence
+        api_claims uses (refunded > withdrawn > answered > open), so a
+        refund or a withdrawal silently drains the queue without
+        rewriting any row and never adds one.
+
+        Ordering is (since_utc, kind_rank, ref_id) ascending with a pinned
+        kind rank rating < question < claim_open < claim_disputed, so the
+        oldest debt is always first and a same-second batch has one stable
+        answer. Retirement does not erase a debt. The account shape gate is
+        prefix-only by the truthful R2077/R2078 finding and runs before
+        any read; a prefix-valid account with no debt gets an honest empty
+        envelope. Pure read: zero row mutations and zero token movement.
+        The envelope carries the resident non-advisory disclaimer."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        kind_rank = {"rating": 0, "question": 1,
+                     "claim_open": 2, "claim_disputed": 3}
+        with self._lock:
+            ratings = self._conn.execute(
+                "SELECT r.rating_id, r.listing_id, l.listing_key,"
+                " l.title, r.buyer_id, r.rated_utc"
+                " FROM apimarket_ratings r"
+                " JOIN apimarket_listings l ON l.listing_id = r.listing_id"
+                " LEFT JOIN apimarket_rating_replies p"
+                " ON p.rating_id = r.rating_id"
+                " WHERE l.dev_account = ? AND p.reply_id IS NULL",
+                (dev_account,)).fetchall()
+            questions = self._conn.execute(
+                "SELECT q.question_id, q.listing_id, l.listing_key,"
+                " l.title, q.buyer_id, q.asked_utc, q.question_text"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " WHERE l.dev_account = ? AND a.answer_id IS NULL",
+                (dev_account,)).fetchall()
+            claims = self._conn.execute(
+                "SELECT c.claim_id, c.listing_id, l.listing_key, l.title,"
+                " c.buyer_id, c.claim_text, c.opened_utc, f.refund_id,"
+                " w.withdrawn_utc, r.response_id, n.noted_utc,"
+                " n.note_text"
+                " FROM apimarket_claims c"
+                " JOIN apimarket_listings l ON l.listing_id = c.listing_id"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses r"
+                " ON r.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_notes n"
+                " ON n.claim_id = c.claim_id"
+                " WHERE c.dev_account = ?",
+                (dev_account,)).fetchall()
+        rows = []
+        for r in ratings:
+            rows.append({"kind": "rating",
+                         "ref_id": int(r[0]),
+                         "listing_id": int(r[1]),
+                         "listing_key": r[2],
+                         "listing_title": r[3],
+                         "counterparty": r[4],
+                         "since_utc": r[5],
+                         "detail": None})
+        for q in questions:
+            rows.append({"kind": "question",
+                         "ref_id": int(q[0]),
+                         "listing_id": int(q[1]),
+                         "listing_key": q[2],
+                         "listing_title": q[3],
+                         "counterparty": q[4],
+                         "since_utc": q[5],
+                         "detail": q[6]})
+        for c in claims:
+            # AC-AMTD3: refunded and withdrawn claims are closed and
+            # never enter the queue; an answered claim with no follow-up
+            # note is waiting on the buyer, not on the seller.
+            if c[7] is not None or c[8] is not None:
+                continue
+            if c[9] is None:
+                rows.append({"kind": "claim_open",
+                             "ref_id": int(c[0]),
+                             "listing_id": int(c[1]),
+                             "listing_key": c[2],
+                             "listing_title": c[3],
+                             "counterparty": c[4],
+                             "since_utc": c[6],
+                             "detail": c[5]})
+            elif c[10] is not None:
+                rows.append({"kind": "claim_disputed",
+                             "ref_id": int(c[0]),
+                             "listing_id": int(c[1]),
+                             "listing_key": c[2],
+                             "listing_title": c[3],
+                             "counterparty": c[4],
+                             "since_utc": c[10],
+                             "detail": c[11]})
+        rows.sort(key=lambda x: (x["since_utc"],
+                                 kind_rank[x["kind"]],
+                                 x["ref_id"]))
+        rating_count = sum(1 for x in rows if x["kind"] == "rating")
+        question_count = sum(1 for x in rows if x["kind"] == "question")
+        claim_open_count = sum(1 for x in rows if x["kind"] == "claim_open")
+        claim_disputed_count = sum(1 for x in rows
+                                   if x["kind"] == "claim_disputed")
+        return {"dev_account": dev_account,
+                "total_count": len(rows),
+                "rating_count": rating_count,
+                "question_count": question_count,
+                "claim_open_count": claim_open_count,
+                "claim_disputed_count": claim_disputed_count,
+                "listing_count": len({x["listing_id"] for x in rows}),
+                "oldest_utc": rows[0]["since_utc"] if rows else None,
+                "oldest_kind": rows[0]["kind"] if rows else None,
+                "rows": rows,
+                "disclaimer": self.disclaimer}
+
     def api_buyer_months(self, buyer_id):
         """Buyer-side monthly spend timeline (pre-registered
         AC-AMBM1..AC-AMBM8 in the R2100 explore-queue row BEFORE this

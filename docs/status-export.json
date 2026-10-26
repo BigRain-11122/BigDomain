@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T08:03:21+08:00",
+ "export_ts": "2026-10-26T08:53:12+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "申诉线程变双向：卖家答完之后，买家现在可以追加一次说明，买卖双方读同一条事件流（开单→应答→追加→撤诉→退款），并由 disputed 标志区分「已接受的应答」与「仍在争议的应答」——此前这两种行逐字节同形。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（add_claim_note + api_claim_thread + apimarket_claim_notes）+ src/sandbox/ledger/test_apimarket_claimnote.py（SUITE PASS 8/8 双跑 rc=0/0，判据行逐字节同一 sha16 f57e2a8909fa5ed1，证据 qa/apimarket-claimnote-R2137-a.log / -b.log）+ qa/reconcile-all-R2137.log（RUNNER PASS 341/341 套件 + 控制 7/7，1044.8s）+ docs/sandbox-suite-matrix.md（341 suites / 2836 criteria (341/341 green)，--check 逐字节同一）；附 HQ-FEEDBACK 今日 P-32 行（D-20261026-09 点名回执）。",
-  "next_milestone": "48 小时内：把申诉面接进结算报告的运营段（未了结申诉与争议中申诉按等待时长排序，直接进报表 Attention 族），让运营不必逐单点开线程；同窗把申诉线程的 disputed 事件补进公共活动流，使「一笔交易的争议如何收场」在市场时间线上可见。"
+  "current": "卖家终于有了一条待办队列：一个面同时答「还欠谁评价回应、谁的提问没答、哪些申诉无人理、哪些已答但买家仍在争议」，最久的债排最前。此前四条债分散在四个面上，持 N 件挂牌的卖家要手工并表；买家侧早有对称的待办面。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_todo）+ src/sandbox/ledger/test_apimarket_sellertodo.py（SUITE PASS 8/8 双跑 rc=0/0，判据行逐字节同一 sha16 90a25827ef3d2a8b，证据 qa/apimarket-sellertodo-R2138-a.log / -b.log）+ qa/reconcile-all-R2138.log（RUNNER PASS 342/342 套件 + 控制 7/7，953.0s）+ docs/sandbox-suite-matrix.md（342 suites / 2844 criteria，--check 逐字节同一）",
+  "next_milestone": "48 小时内：把卖家待办面接进结算报告的卖家区块（每个卖家一条按年龄排序的待办表 + attention 家族一条超期未理告警），让运营不必逐个卖家点开四个面；同窗把 disputed 申诉计入市场待办汇总，使「一笔交易的争议如何收场」在运营台账上可见。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket seller unified duty queue (api_seller_todo)",
+   "on",
+   "R2138: every seller obligation already had its own face - api_seller_inbox carries unanswered ratings, api_seller_questions unanswered questions, api_claims the queue the seller must filter by hand, and the R2137 disputed state lived only inside one claim thread - so a seller holding N listings had to open four faces and merge them by hand, while the buyer side had api_buyer_todo since R2105. api_seller_todo(dev_account) is that merged queue: an eleven-key envelope with eight-key rows over four families (rating, question, claim_open, claim_disputed), claim status derived through the same precedence api_claims uses (refunded > withdrawn > answered > open) so a refund or a withdrawal drains the queue without rewriting a row and an answered claim with no follow-up note stays out because the ball is with the buyer, ordering (since_utc, kind_rank, ref_id) with the pinned kind rank rating < question < claim_open < claim_disputed, retirement not erasing a debt, strict seller isolation, an honest empty envelope, the prefix-only account gate before any read, and a pure read with zero row mutations and zero token movement. Criteria AC-AMTD1..AC-AMTD8 were pre-registered in the explore-queue row BEFORE the code existed (four anchors git grep -F zero-occupancy, rc=1). Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 90a25827ef3d2a8b (qa/apimarket-sellertodo-R2138-a.log + -b.log, single-writer utf-8 LF); wired ledger-apimarket-sellertodo(8); five adjacent suites re-ran green (sellerinbox, buyertodo, claims, claimnote, purchasedossier - 8/8 each); full battery qa/reconcile-all-R2138.log RUNNER PASS 342/342 suites plus controls 7/7 in 953.0s; matrix regenerated to 342 suites / 2844 criteria and byte-identical on check.",
+   "2026-10-26"
+  ],
   [
    "apimarket claim follow-up note + claim thread (add_claim_note / api_claim_thread)",
    "on",
@@ -503,6 +509,10 @@
   ]
  ],
  "results": [
+  [
+   "R2138",
+   "R2138: the developer API market gains the seller-side unified duty queue, the mirror of R2105's buyer todo. api_seller_todo answers the one question a seller with N listings could not: what do I owe right now and how long has the oldest item waited. Four families merge into one ordered list - unanswered ratings, unanswered questions, claims nobody has answered, and the disputed claims R2137 introduced (answered and then restated by the buyer) - with claim status derived through the same precedence api_claims uses, so refunds and withdrawals drain the queue without rewriting any row and an answered claim with no follow-up note correctly stays out. The pinned total order is (since_utc, kind_rank, ref_id) with rating < question < claim_open < claim_disputed, conservation holds (total_count == the four family counts == the row count, listing_count == the distinct listings in the rows), retirement keeps the debt, a prefix-valid account with no debt gets an honest empty envelope, the account gate runs before any read and the face is a pure read. Suite 8/8 double-run sha16 90a25827ef3d2a8b; five adjacent suites green; battery RUNNER PASS 342/342 plus controls 7/7 in 953.0s; matrix 342 suites / 2844 criteria byte-identical. Honest note: the first suite run was 7/8 on two test-side defects (a seeded rating left unanswered on the second seller, and a ref_id-only row lookup colliding across tables) - both repaired in the test, no criterion relaxed."
+  ],
   [
    "R2137",
    "R2137: the post-sale claim thread is no longer one-way. The append-only apimarket_claim_notes table (UNIQUE per claim, no UPDATE/DELETE surface) backs add_claim_note with the gate order account -> claim-id shape -> note shape -> existence -> ownership -> already-refunded -> withdrawn -> duplicate (two new codes, zero rows and zero tokens on every refusal), and api_claim_thread answers one claim's whole conversation for the two parties only: fifteen keys, events ordered by stamp then a pinned same-second rank, disputed true exactly when a follow-up exists and the claim is neither refunded nor withdrawn, buyer and seller payloads byte-identical apart from viewer_role. api_claims is untouched so every existing consumer keeps its contract. Suite 8/8 double-run sha16 f57e2a8909fa5ed1; battery RUNNER PASS 341/341 plus controls 7/7 in 1044.8s; matrix 341 suites / 2836 criteria (341/341 green) --check byte-identical; census clean. Weekly dead-doc sweep: zero candidates across 28 docs, reported honestly."

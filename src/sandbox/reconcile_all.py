@@ -2518,6 +2518,14 @@ SUITES = [
     # api_library + api_refund + api_claims + the ledger statements.
     ("ledger-apimarket-purchasedossier", os.path.join(
         "ledger", "test_apimarket_purchasedossier.py"), 8),
+    # R2138 seller unified duty queue (api_seller_todo): the four
+    # seller obligations each lived on their own face (unanswered
+    # ratings, unanswered questions, the claim queue and the R2137
+    # disputed state), so a seller with N listings had to open four
+    # faces and merge them by hand. This is the buyer-side
+    # api_buyer_todo mirror.
+    ("ledger-apimarket-sellertodo", os.path.join(
+        "ledger", "test_apimarket_sellertodo.py"), 8),
     # R2136 provider identity revision leg (revise_provider /
     # api_provider_history): register_provider was write-once per
     # developer while the unified social credit code is the published
