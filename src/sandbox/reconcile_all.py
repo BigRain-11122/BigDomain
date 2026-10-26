@@ -2225,6 +2225,14 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed).
     ("ledger-apimarket-listingposition", os.path.join(
         "ledger", "test_apimarket_listingposition.py"), 8),
+    # R2148 nearest-neighbour seat: api_similar_listings, the
+    # discovery door that answers "what else is like this one"
+    # without making the caller restate its category and price band,
+    # ordered by a pinned total order on price distance so the
+    # neighbour set is auditable (AC-AMSI1..AC-AMSI8 pre-registered
+    # in the R2148 explore-queue claim row BEFORE this suite existed).
+    ("ledger-apimarket-similar", os.path.join(
+        "ledger", "test_apimarket_similar.py"), 8),
     # R2085 seller-profile seat: the public dev_profile read face
     # with the thirteen-key envelope and nine-key rows, the
     # partition law (listing_count == live + retired, sales and

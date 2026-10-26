@@ -3601,6 +3601,108 @@ class APIMarketFace:
                 "truncated": len(rivals) < len(members),
                 "disclaimer": self.disclaimer}
 
+    def api_similar_listings(self, listing_id, limit=None,
+                             include_delisted=False):
+        """Nearest-neighbour discovery face (criteria
+        AC-AMSI1..AC-AMSI8 pre-registered in the R2148
+        explore-queue row BEFORE this code existed).
+
+        Every other discovery door makes the caller state the
+        criteria first: api_search wants a keyword, a seller, a
+        price band or a category, api_categories describes what a
+        bucket is made of, api_category_demand asks whether it
+        sells and api_listing_position ranks one listing inside its
+        bucket. Nothing answered the buyer's most natural follow-up
+        after opening one listing - "what else is like this one" -
+        so a caller had to read the listing, harvest its category
+        and price, then rebuild the same neighbour set by hand and
+        sort it themselves.
+
+        This face pins the definition of "similar" the market never
+        had: the candidate set is the listing's EFFECTIVE category
+        bucket minus the head, ordered by asking-price distance from
+        the head, then price, then listing_id, so the order is a
+        total order and two equally distant neighbours never swap
+        between calls. Price rides current price, rating rides the
+        effective stars and net sales ride the scarcity seam, so a
+        repricing, a rating revision, a refund or a restock moves
+        the neighbour set in the same step it moves every other read
+        face - and no listing row is ever rewritten. An
+        uncategorized head only recruits uncategorized listings
+        (zero cross-bucket permeation) and a retired head stays
+        readable so history is not erased. Pure read: zero row
+        mutations, zero token movement."""
+        if (not isinstance(listing_id, int) or isinstance(listing_id, bool)
+                or listing_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        with self._lock:
+            self._require_listing(listing_id)
+            if limit is not None:
+                if (not isinstance(limit, int) or isinstance(limit, bool)
+                        or limit < 1):
+                    raise ApiMarketError(E_AM_BAD_ARGS, str(limit))
+            if not isinstance(include_delisted, bool):
+                raise ApiMarketError(E_AM_BAD_ARGS,
+                                     str(include_delisted))
+            head = self._conn.execute(
+                "SELECT listing_id, dev_account, listing_key, title,"
+                " description, token_price, category"
+                " FROM apimarket_listings WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            category = self._category_state(listing_id, head[6])[0]
+            head_price = int(self._current_price(listing_id,
+                                                int(head[5])))
+            head_stamp = self._delisted_utc(listing_id)
+            rows = self._conn.execute(
+                "SELECT listing_id, dev_account, listing_key,"
+                " title, description, token_price, category"
+                " FROM apimarket_listings ORDER BY listing_id").fetchall()
+            candidates = []
+            for r in rows:
+                lid = int(r[0])
+                if lid == int(listing_id):
+                    continue
+                if self._category_state(lid, r[6])[0] != category:
+                    continue
+                stamp = self._delisted_utc(lid)
+                if stamp is not None and not include_delisted:
+                    continue
+                price = int(self._current_price(lid, int(r[5])))
+                eff_title, _eff_desc, _n_meta, _latest = \
+                    self._metadata_state(lid, r[3], r[4])
+                n_rate, avg = self._agg_rating(lid)
+                candidates.append({
+                    "listing_id": lid,
+                    "dev_account": r[1],
+                    "listing_key": r[2],
+                    "title": eff_title,
+                    "current_price": price,
+                    "price_delta": price - head_price,
+                    "abs_price_delta": abs(price - head_price),
+                    "rating_count": n_rate,
+                    "rating_avg": avg,
+                    "net_sales": int(self._supply_full(lid)[3]),
+                    "live": stamp is None,
+                    "delisted_utc": stamp})
+            candidates.sort(key=lambda m: (m["abs_price_delta"],
+                                           m["current_price"],
+                                           m["listing_id"]))
+            total = len(candidates)
+            picked = candidates if limit is None else candidates[:limit]
+            picked = [dict(m) for m in picked]
+        return {"listing_id": int(listing_id),
+                "category": category,
+                "live": head_stamp is None,
+                "delisted_utc": head_stamp,
+                "current_price": head_price,
+                "include_delisted": include_delisted,
+                "limit": limit,
+                "total": total,
+                "returned": len(picked),
+                "truncated": len(picked) < total,
+                "rows": picked,
+                "disclaimer": self.disclaimer}
+
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board
         (pre-registered AC-AMB1..AC-AMB7 in the R1978
