@@ -1,0 +1,9 @@
+PASS AC-AMBC1: envelope-keys=True rows=3 need=3 wait=1 disp=1 ref=1 wd=1 oldest='2026-10-05T00:00:01Z'
+PASS AC-AMBC2: api-status=[(1, 'answered'), (2, 'answered'), (3, 'answered'), (4, 'refunded'), (5, 'withdrawn'), (6, 'answered'), (7, 'open')] queue=[1, 2, 3] refunded-excluded=True withdrawn-excluded=True disputed-excluded=True
+PASS AC-AMBC3: row={'listing_title': 'Risk Scan API', 'price_paid': 10, 'claim_text': 'scan returns 500', 'response_text': 'rolled back the deploy'} order=[1, 2, 3]
+PASS AC-AMBC4: sequence=[('2026-10-05T00:00:01Z', 1), ('2026-10-05T00:00:03Z', 2), ('2026-10-05T00:00:03Z', 3)] identical-repeat=True tie-by-id=True
+PASS AC-AMBC5: retired-kept=True stored-price=6 carol=1 isolated=True empty=[]
+PASS AC-AMBC6: bad-codes=['E_AM_BAD_ACCOUNT'] blank='E_AM_BAD_ACCOUNT' tables-frozen=True ledger-frozen=True
+PASS AC-AMBC7: pure-read=True drains=[4, 3, 2, 1] final-queue=[3]
+PASS AC-AMBC8: three-instances-identical=True runner-wiring=True consumer-shas-stable=True ascii=True network-imports=0 world-outside-repo=True
+SUITE 8/8

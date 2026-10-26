@@ -2532,6 +2532,15 @@ SUITES = [
     # api_buyer_todo mirror.
     ("ledger-apimarket-sellertodo", os.path.join(
         "ledger", "test_apimarket_sellertodo.py"), 8),
+    # R2140 buyer post-sale decision queue (api_buyer_claim_todo): the
+    # claim thread became two-way across R2129..R2137, but the ball
+    # only changed hands silently - R2138 had to state that an
+    # answered claim with no note stays out of the SELLER queue
+    # "because the ball is with the buyer", and nothing told the
+    # buyer. Five disjoint states with pinned precedence, only the
+    # needs_decision rows queued, pushed from the append-only tables.
+    ("ledger-apimarket-buyerclaimtodo", os.path.join(
+        "ledger", "test_apimarket_buyerclaimtodo.py"), 8),
     # R2136 provider identity revision leg (revise_provider /
     # api_provider_history): register_provider was write-once per
     # developer while the unified social credit code is the published

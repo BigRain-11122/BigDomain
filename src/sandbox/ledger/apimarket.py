@@ -3745,6 +3745,118 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "pending": pending}
 
+    def api_buyer_claim_todo(self, buyer_id):
+        """Buyer-side post-sale decision queue (criteria
+        AC-AMBC1..AC-AMBC8 pre-registered in the R2140 explore-queue
+        row BEFORE this code existed).
+
+        R2129 gave the buyer a claim door, R2130 the seller one
+        answer, R2131 a withdrawal and R2137 a follow-up note, so the
+        thread became two-way - but the ball only ever changed hands
+        silently. R2138 had to state its own rule out loud: an
+        answered claim with no follow-up stays out of the SELLER
+        queue "because the ball is with the buyer". Nothing told the
+        buyer that the ball had arrived. api_claims lists the row
+        with status answered, api_claim_thread opens one claim, and
+        neither is a queue, so a buyer holding several claims had to
+        read every row and decide by hand which ones await a
+        decision.
+
+        This face is the buyer-side mirror of api_seller_todo,
+        restricted to the one claim family that is genuinely a BUYER
+        duty. States are disjoint with pinned precedence
+        refunded > withdrawn > disputed > needs_decision > waiting
+        (AC-AMBC2): refunded and withdrawn are settled; disputed
+        means the buyer already pushed back and the ball is with the
+        seller; needs_decision means the seller answered and no
+        follow-up exists yet; waiting means no answer has landed.
+        Only needs_decision rows enter the queue, and every claim
+        lands in exactly one of the five counters, so
+        claim_count == needs_decision + waiting + disputed +
+        refunded + withdrawn.
+
+        The rows are pushed, never stored: an answer fills the queue,
+        a follow-up or a refund drains it, and no claim row, answer
+        row, note row or refund row is ever rewritten. Ordering is
+        (opened_utc, claim_id) ascending so the oldest debt is
+        always first, and oldest_waiting_utc reports how long the
+        buyer's longest unanswered claim has waited. A retired
+        listing keeps its answered claim, and price_paid is the
+        stored purchase amount, not the listing's current asking
+        price. The account shape gate is prefix-only per the
+        R2077/R2078 finding and runs before any read; a prefix-valid
+        account with no claims gets an honest empty envelope. Pure
+        read: zero row mutations and zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        sql = ("SELECT c.claim_id, c.purchase_id, c.listing_id,"
+               " c.price_paid, c.claim_text, c.opened_utc,"
+               " c.dev_account, l.title, r.response_text, r.replied_utc,"
+               " w.withdrawn_utc, f.refund_id, n.note_id"
+               " FROM apimarket_claims c"
+               " LEFT JOIN apimarket_listings l"
+               " ON l.listing_id = c.listing_id"
+               " LEFT JOIN apimarket_claim_responses r"
+               " ON r.claim_id = c.claim_id"
+               " LEFT JOIN apimarket_claim_withdrawals w"
+               " ON w.claim_id = c.claim_id"
+               " LEFT JOIN apimarket_refunds f"
+               " ON f.purchase_id = c.purchase_id"
+               " LEFT JOIN apimarket_claim_notes n"
+               " ON n.claim_id = c.claim_id"
+               " WHERE c.buyer_id = ?"
+               " ORDER BY c.opened_utc, c.claim_id")
+        with self._lock:
+            rows = self._conn.execute(sql, (buyer_id,)).fetchall()
+        base = []
+        for r in rows:
+            if r[11] is not None:
+                state = "refunded"
+            elif r[10] is not None:
+                state = "withdrawn"
+            elif r[12] is not None:
+                state = "disputed"
+            elif r[8] is not None:
+                state = "needs_decision"
+            else:
+                state = "waiting"
+            base.append((r, state))
+        queue = []
+        oldest_waiting = None
+        for r, state in base:
+            if state == "waiting":
+                if oldest_waiting is None or r[5] < oldest_waiting:
+                    oldest_waiting = r[5]
+                continue
+            if state != "needs_decision":
+                continue
+            queue.append({
+                "claim_id": int(r[0]),
+                "purchase_id": int(r[1]),
+                "listing_id": int(r[2]),
+                "listing_title": r[7],
+                "dev_account": r[6],
+                "price_paid": int(r[3]),
+                "claim_text": r[4],
+                "opened_utc": r[5],
+                "response_text": r[8],
+                "responded_utc": r[9]})
+        counts = {}
+        for _r, state in base:
+            counts[state] = counts.get(state, 0) + 1
+        return {"buyer_id": buyer_id,
+                "claim_count": len(base),
+                "needs_decision_count": len(queue),
+                "waiting_count": counts.get("waiting", 0),
+                "disputed_count": counts.get("disputed", 0),
+                "refunded_count": counts.get("refunded", 0),
+                "withdrawn_count": counts.get("withdrawn", 0),
+                "oldest_needs_decision_utc":
+                    queue[0]["opened_utc"] if queue else None,
+                "oldest_waiting_utc": oldest_waiting,
+                "disclaimer": self.disclaimer,
+                "claims": queue}
+
     def api_seller_todo(self, dev_account):
         """Seller-side unified duty queue (criteria AC-AMTD1..AC-AMTD8
         pre-registered in the R2138 explore-queue row BEFORE this code
