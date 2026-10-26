@@ -136,6 +136,16 @@ CREATE TABLE IF NOT EXISTS rollups (
   gate TEXT NOT NULL,
   hits TEXT NOT NULL DEFAULT '[]'
 );
+CREATE TABLE IF NOT EXISTS rescan_conflicts (
+  conflict_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ring TEXT NOT NULL,
+  natural_key TEXT NOT NULL,
+  booked_day TEXT NOT NULL,
+  booked_text TEXT NOT NULL,
+  offered_day TEXT NOT NULL,
+  offered_text TEXT NOT NULL,
+  UNIQUE(ring, natural_key, offered_text)
+);
 """
 
 _COUNT_KEYS = (
@@ -191,6 +201,19 @@ def _sku_text(value):
     if isinstance(value, float):
         return repr(value)
     raise FunnArgError(E_FN_BAD_ARGS)
+
+
+def _payload_text(parts):
+    """Canonical comparable text of a money row's DATA payload.
+
+    The natural key (order_id / flow_id) identifies a row; the payload
+    is the data that row claims. Two submissions of the same key are
+    the same claim only when this text matches, so the comparison is
+    delimiter-free (a JSON array in its compact, ASCII-escaped form)
+    and can never be confused by a sku or account that happens to
+    contain the separator.
+    """
+    return json.dumps(list(parts), ensure_ascii=True, separators=(",", ":"))
 
 
 def _classify_lead(text):
@@ -312,6 +335,84 @@ class FunnelDaily:
         self.db.commit()
         return {"dispatches_new": new, "routes": routes}
 
+    # ---- rescan divergence register (R2155, AC-FSW family) ----
+
+    def _record_conflict(self, ring, natural_key, booked_day, booked_text,
+                         offered_day, offered_text):
+        """Register one divergence: the key was offered a DIFFERENT claim.
+
+        First-write-wins keeps the booked row (append-only, never
+        rewritten), so a later submission of the same natural key with
+        different data would otherwise vanish silently. That silence is
+        unacceptable on a money ledger: two sources disagreeing about
+        the amount of one order is a fact the operator must be able to
+        read. The row is append-only and de-duplicated by
+        UNIQUE(ring, natural_key, offered_text) - an identical
+        divergent claim is registered once no matter how many times or
+        on how many days it is re-submitted, while a genuinely
+        different claim gets its own row.
+        """
+        self.db.execute(
+            "INSERT OR IGNORE INTO rescan_conflicts "
+            "(ring, natural_key, booked_day, booked_text, offered_day, "
+            "offered_text) VALUES (?,?,?,?,?,?)",
+            (ring, natural_key, booked_day, booked_text, offered_day,
+             offered_text),
+        )
+
+    def book_conflicts(self, day=None):
+        """Registered rescan divergences, money rings only (AC-FSW5/6).
+
+        A pure read over the append-only register (zero writes, zero
+        cache, no wall clock): envelope keys are exactly
+        {conflict_count, by_ring, rows}, with conflict_count ==
+        len(rows) == sum(by_ring.values()) and rows ascending by
+        conflict_id (insertion order, so a re-derivation is stable).
+        Window law: day=None reads the lifetime register; an explicit
+        day reads only the conflicts FIRST presented on that day -
+        re-submitting the same divergence later never moves
+        offered_day, so the day face counts presentations, not
+        retries. A day with no conflicts is an honest empty envelope,
+        not an error. A bad day form raises E_FN_BAD_ARGS before any
+        row is read.
+
+        Scope law (honest boundary): rings 1 and 2 are NOT registered
+        here. A lead's text disagreement is a UGC content-safety matter
+        (the msgSecCheck pipeline), not something this bookkeeping
+        register arbitrates; their first-write-wins law still holds and
+        is pinned by the suite.
+        """
+        if day is not None:
+            _assert_day(day)
+        sql = ("SELECT conflict_id, ring, natural_key, booked_day, "
+               "booked_text, offered_day, offered_text "
+               "FROM rescan_conflicts")
+        params = []
+        if day is not None:
+            sql += " WHERE offered_day=?"
+            params.append(day)
+        sql += " ORDER BY conflict_id"
+        rows = []
+        by_ring = {}
+        for (cid, ring, key, booked_day, booked_text, offered_day,
+             offered_text) in self.db.execute(sql, params).fetchall():
+            rows.append({
+                "conflict_id": int(cid),
+                "ring": str(ring),
+                "natural_key": str(key),
+                "booked_day": str(booked_day),
+                "booked_text": str(booked_text),
+                "offered_day": str(offered_day),
+                "offered_text": str(offered_text),
+            })
+            ring = str(ring)
+            by_ring[ring] = by_ring.get(ring, 0) + 1
+        return {
+            "conflict_count": len(rows),
+            "by_ring": {k: by_ring[k] for k in sorted(by_ring)},
+            "rows": rows,
+        }
+
     # ---- ring 3: order bookkeeping ----
 
     def book_orders(self, inbox_dir, day):
@@ -328,11 +429,25 @@ class FunnelDaily:
         seen, new = 0, 0
         for item in rows:
             seen += 1
+            order_id = item["order_id"]
+            sku = _sku_text(item.get("sku", ""))
+            amount = item.get("amount_cent", 0)
+            booked = self.db.execute(
+                "SELECT day, sku, amount_cent FROM orders "
+                "WHERE order_id=?",
+                (order_id,),
+            ).fetchone()
+            if booked is not None:
+                booked_text = _payload_text((booked[1], booked[2]))
+                offered_text = _payload_text((sku, amount))
+                if booked_text != offered_text:
+                    self._record_conflict(
+                        "orders", order_id, str(booked[0]), booked_text,
+                        day, offered_text)
             cur = self.db.execute(
                 "INSERT OR IGNORE INTO orders "
                 "(order_id, day, sku, amount_cent) VALUES (?,?,?,?)",
-                (item["order_id"], day, _sku_text(item.get("sku", "")),
-                 item.get("amount_cent", 0)),
+                (order_id, day, sku, amount),
             )
             new += cur.rowcount
         self.db.commit()
@@ -356,16 +471,27 @@ class FunnelDaily:
         seen, new = 0, 0
         for item in rows:
             seen += 1
+            flow_id = item["flow_id"]
+            account = str(item.get("account", ""))
+            kind = item["kind"]
+            amount = item["amount"]
+            booked = self.db.execute(
+                "SELECT day, account, kind, amount FROM flows "
+                "WHERE flow_id=?",
+                (flow_id,),
+            ).fetchone()
+            if booked is not None:
+                booked_text = _payload_text(
+                    (booked[1], booked[2], booked[3]))
+                offered_text = _payload_text((account, kind, amount))
+                if booked_text != offered_text:
+                    self._record_conflict(
+                        "flows", flow_id, str(booked[0]), booked_text,
+                        day, offered_text)
             cur = self.db.execute(
                 "INSERT OR IGNORE INTO flows "
                 "(flow_id, day, account, kind, amount) VALUES (?,?,?,?,?)",
-                (
-                    item["flow_id"],
-                    day,
-                    str(item.get("account", "")),
-                    item["kind"],
-                    item["amount"],
-                ),
+                (flow_id, day, account, kind, amount),
             )
             new += cur.rowcount
         self.db.commit()

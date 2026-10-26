@@ -3605,6 +3605,19 @@ SUITES = [
     # state/queue/tech.md before the suite existed.)
     ("funnel-sku-top-rank",
      os.path.join("funnel", "test_funnel_sku_top_rank.py"), 8),
+    # R2155 tech-queue FIFO head claim (R2149 reseed row): funnel
+    # first-write-wins made auditable - a later submission of an
+    # already-booked natural key carrying DIFFERENT money data used to
+    # vanish in silence (INSERT OR IGNORE kept the first row). The two
+    # money rings now register that divergence once per distinct claim
+    # in an append-only table read by book_conflicts(); rings 1/2 keep
+    # first-write-wins without registration (lead-text divergence is a
+    # UGC content-safety matter, not a bookkeeping ruling). Ring return
+    # dictionaries and every read face are unchanged (pure addition).
+    # (AC-FSW1..AC-FSW8 pre-registered in state/queue/tech.md before
+    # the suite or the product face existed.)
+    ("funnel-firstwrite",
+     os.path.join("funnel", "test_funnel_firstwrite.py"), 8),
     # R2039 explore-queue FIFO head claim (R2011 reseed row):
     # proposal register/sign write-side gate family
     # cross-restart same-code example - the 17-probe battery

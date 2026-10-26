@@ -1,0 +1,9 @@
+PASS AC-FSW1 first write wins orders
+PASS AC-FSW2 divergence registered once
+PASS AC-FSW3 first write wins flows
+PASS AC-FSW4 rings 1/2 boundary
+PASS AC-FSW5 read face contract
+PASS AC-FSW6 day window first offer
+PASS AC-FSW7 pure read and persistence
+PASS AC-FSW8 hygiene and wiring
+SUITE PASS 8/8
