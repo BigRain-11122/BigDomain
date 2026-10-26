@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-26T12:09:35+08:00",
+  "export_ts": "2026-10-26T12:47:00+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "本轮把开发者 API 市场的发现面补齐了「只给我还能买的」这条轴：售罄与有货不再同形，买家搜完可直接过滤到可买件或售罄件（后者正是卖家的补货队列）。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_search in_stock 过滤+ qa/apimarket-searchstock-R2142-a.log（8/8 双跑）+ docs/sandbox-suite-matrix.md（346 套件 / 2876 判据） — 2026-10-26 12:09",
-    "next_milestone": "48 小时内：跑完整全量电池（本轮预算未及），并把这轴接进结算报告/看板；商户号仍未到，支付与权益设计件继续先行。"
+    "current": "本轮把开发者 API 市场的信任面补上了最后一条救济路：卖家对评价的回应不再是一锤子买卖，买家改星后卖家能重新说话，且每次修订都留底。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py 的 revise_reply + api_reply_history + qa/apimarket-replyrev-R2143-a.log（8/8 双跑）+ qa/regress-replyrev-R2143.log（七套件零回归） — 2026-10-26 12:45",
+    "next_milestone": "48 小时内：这条回应修订轴接进结算报告与市场活动流，并让全量电池覆盖本轮最终代码；商户号仍未到，支付与权益设计件继续先行。"
   },
   "depts": [
     {
@@ -528,6 +528,11 @@
       "apimarket discovery availability axis (api_search in_stock)",
       "on",
       "R2142: the discovery face could filter by keyword, seller, price band, category and retired state, order by five modes and page, but a sold-out listing and a buyable one were byte-identical, so a buyer had to read every row and call api_supply per listing. api_search now accepts an optional bool-only in_stock that keeps the buyable rows (True) or the sold-out rows (False, the seller's restock queue) through the one scarcity seam, so a purchase, a refund and a restock move a listing across the filter in exactly the step they move api_supply.sold_out. Laws pinned by AC-AMAV1..AC-AMAV8: the legacy contract stays byte-identical when the filter is absent, the bool gate sits after the category gate and before paging/sort and fails closed with every table digest and the ledger tx set frozen, True plus False partitions the unfiltered set exactly, the axis composes with every other filter while paging totals derive from the filtered set, all five sort modes keep their total order over the subset, and honest empties, the retired-listing rule, cross-restart byte identity and the pure-read law all hold. Suite SUITE PASS 8/8 double-run byte-identical sha16 001304dcd96edb53 (qa/apimarket-searchstock-R2142-a.log and -b.log); five adjacent suites rc=0 each; matrix 346 suites / 2876 criteria --check byte-identical."
+    ],
+    [
+      "apimarket seller reply-revision leg (revise_reply)",
+      "on",
+      "R2143: reply_to_rating was write-once behind UNIQUE(rating_id) and E_AM_REPLY_DUP, while the rating revision door (R2094) lets the buyer change the stars at any time, so a seller who answered under five stars stayed welded to that sentence when the same rating became one star - the last write-once axis on the trust face without a remedy leg (price, metadata, supply, rating and provider identity all grew one, and the review face got a cycle law in R2133). apimarket.py now grows an append-only apimarket_reply_revisions table and revise_reply, with the pinned gate order account shape, reply-id shape, text shape, existence, ownership, unchanged state; the unchanged gate is judged against the EFFECTIVE text so a revise-back stays legal while the first stamp is never rewritten; a retired listing keeps its reply leg revisable; and one seam (_effective_reply) feeds api_rating_replies so the conversation face and the new api_reply_history can never disagree. Laws pinned by AC-AMRY1..AC-AMRY8: the append-only contract with a byte-frozen base row, every refusal fail-closed with all table digests, the ledger tx set and the four account balances frozen, the history envelope and its ordered revision rows, the pure-read law, orthogonality with the buyer-side rating revision in both directions, and cross-restart byte identity on three instances. Suite SUITE PASS 8/8 double-run rc=0/0 with identical per-criterion verdicts (qa/apimarket-replyrev-R2143-a.log and -b.log, single-writer UTF-8 LF); seven adjacent suites rc=0 each; matrix regenerated and --check byte-identical."
     ]
   ],
   "results": [
@@ -728,7 +733,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2142",
+      "2143",
       "OSLoop 执行 tick"
     ],
     [
@@ -1076,19 +1081,23 @@
     [
       "R2142",
       "R2142: seeded and claimed a fresh P3 explore row in the same window with AC-AMAV1..AC-AMAV8 pre-registered BEFORE the code existed (four anchors git grep -F zero-occupancy, rc=1) and delivered the discovery availability axis. Product change in src/sandbox/ledger/apimarket.py (api_search in_stock). Verification: new suite 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 001304dcd96edb53 (qa/apimarket-searchstock-R2142-a.log and -b.log, single-writer UTF-8 LF); registration ledger-apimarket-searchstock(8); five adjacent suites rc=0 each (search, searchpaging, searchsort, category, supply); suite matrix 346 suites / 2876 criteria --check byte-identical. Honest disclosures: (a) the first filter cut compared the sold-out flag against the wrong polarity and kept exactly the sold-out rows, caught by AC-AMAV3 before any evidence was written; (b) the first identity view included the retired row whose delisted_utc is a wall-clock stamp, so the digest varied between processes rather than between restarts, and the view now uses the non-retired filter; (c) the evidence driver pins PYTHONHASHSEED=0 because three evidence lines echo set reprs; (d) the full battery was NOT run this round (25-minute budget) and is the first item of the next round."
+    ],
+    [
+      "R2143",
+      "R2143: honoured the R2142 battery carry-over, then seeded and claimed a fresh P3 explore row in the same window with AC-AMRY1..AC-AMRY8 pre-registered BEFORE the code existed (eight anchors git grep -F zero-occupancy, rc=1) and delivered the seller reply-revision leg. Product change in src/sandbox/ledger/apimarket.py (append-only apimarket_reply_revisions + revise_reply + api_reply_history + the _effective_reply seam into api_rating_replies). Verification: new suite 8/8 double-run rc=0/0 with identical per-criterion verdicts (qa/apimarket-replyrev-R2143-a.log and -b.log); registration ledger-apimarket-replyrev(8); seven adjacent suites rc=0 each (ratingreply, ratingrev, ratingagg, sellerinbox, sellerquality, marketfeed, purchasedossier) = qa/regress-replyrev-R2143.log; suite matrix regenerated and --check byte-identical. Honest disclosures: (a) the first cut expected the bare 'usr:' account form to fail the shape gate, but it passes that gate by the R2077/R2078 prefix precedent and is then stopped by the ownership gate, so the test expectation was corrected instead of the criteria being loosened; (b) the rating-revision orthogonality probe first compared whole envelopes, which necessarily move when the star value moves, and now compares the reply row itself; (c) the two suite runs report different envelope sha16 values because each run seeds its own world with its own wall-clock stamps, so the double-run caliber is the per-criterion verdict list, not whole-file bytes; (d) a first battery launched before the product diff landed was killed once its mixed baseline was spotted and produced no evidence file, and the battery quoted above was run on the final content; (e) the public activity feed keeps the historical rating_replied event with the wording said at that moment and a reply revision is deliberately not a new feed kind in this slice, so the feed is history while the history and conversation faces carry the current text - stated as a boundary, not left as a silent gap."
     ]
   ],
   "self_drive": {
     "window": "2026-10-20..2026-10-26",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 23,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 2
+    "queue_explore_open": 1
   }
 }

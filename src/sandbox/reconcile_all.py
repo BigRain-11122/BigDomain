@@ -2210,6 +2210,13 @@ SUITES = [
     # pre-registered in the R2142 explore-queue claim row).
     ("ledger-apimarket-searchstock", os.path.join(
         "ledger", "test_apimarket_searchstock.py"), 8),
+    # R2143 seller reply-revision seat: revise_reply +
+    # api_reply_history + apimarket_reply_revisions, the last
+    # write-once axis on the trust face to gain a remedy door
+    # (AC-AMRY1..AC-AMRY8 pre-registered in the R2143
+    # explore-queue claim row BEFORE this suite existed).
+    ("ledger-apimarket-replyrev", os.path.join(
+        "ledger", "test_apimarket_replyrev.py"), 8),
     # R2085 seller-profile seat: the public dev_profile read face
     # with the thirteen-key envelope and nine-key rows, the
     # partition law (listing_count == live + retired, sales and

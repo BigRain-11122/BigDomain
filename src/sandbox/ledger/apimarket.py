@@ -112,6 +112,8 @@ E_AM_REVIEW_PENDING = "E_AM_REVIEW_PENDING"  # AC-AMRC2 (no verdict yet)
 E_AM_REVIEW_APPROVED = "E_AM_REVIEW_APPROVED"  # AC-AMRC2 (already live)
 E_AM_PROVIDER_UNREGISTERED = "E_AM_PROVIDER_UNREGISTERED"  # AC-AMPV2
 E_AM_PROVIDER_UNCHANGED = "E_AM_PROVIDER_UNCHANGED"  # AC-AMPV3
+E_AM_UNKNOWN_REPLY = "E_AM_UNKNOWN_REPLY"      # AC-AMRY2 (no such reply)
+E_AM_REPLY_UNCHANGED = "E_AM_REPLY_UNCHANGED"  # AC-AMRY3 (same text)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -226,6 +228,16 @@ CREATE TABLE IF NOT EXISTS apimarket_rating_replies (
     reply_text TEXT NOT NULL,
     replied_utc TEXT NOT NULL,
     UNIQUE (rating_id)
+);
+CREATE TABLE IF NOT EXISTS apimarket_reply_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reply_id INTEGER NOT NULL,
+    rating_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    previous_text TEXT NOT NULL,
+    reply_text TEXT NOT NULL,
+    revised_utc TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_refunds (
     refund_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -1507,6 +1519,81 @@ class APIMarketFace:
                 "reply_text": body, "replied_utc": stamp,
                 "disclaimer": self.disclaimer}
 
+    def revise_reply(self, dev_account, reply_id, text):
+        """Seller-side reply revision door (pre-registered
+        AC-AMRY1..AC-AMRY8 in the R2143 explore-queue claim row
+        BEFORE this code existed).
+
+        The reply face was write-once: one immutable row per rating
+        behind UNIQUE(rating_id) and E_AM_REPLY_DUP forever. Once
+        R2094 let the buyer revise the stars, a seller who answered
+        "glad it worked" under five stars stayed welded to that
+        sentence when the same rating became one star - the last
+        write-once axis on the trust face without a remedy door
+        (price, metadata, supply, rating and provider identity all
+        grew one). Each revision appends one
+        apimarket_reply_revisions row and never rewrites the base
+        reply; the effective text is the newest revision, else the
+        base stamp.
+
+        Gate order pinned by AC-AMRY2: account shape, reply-id
+        shape, text shape, existence, ownership, unchanged state.
+        The unchanged gate compares against the EFFECTIVE text, so
+        revising back to an earlier wording stays legal while a
+        same-text revision answers E_AM_REPLY_UNCHANGED with zero
+        new rows (the first stamp is never rewritten). A retired
+        listing keeps its reply leg revisable - retirement freezes
+        the shelf, not the duty to answer (AC-AMRY4). Revising
+        moves zero tokens and touches no star value: rating
+        aggregates stay byte-identical (AC-AMRY7)."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if (not isinstance(reply_id, int) or isinstance(reply_id, bool)
+                or reply_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(reply_id))
+        if not isinstance(text, str):
+            raise ApiMarketError(E_AM_BAD_REPLY, "text must be str")
+        body = text.strip()
+        if (not body or len(body) > 500
+                or any(ord(ch) < 32 or ord(ch) == 127 for ch in body)):
+            raise ApiMarketError(E_AM_BAD_REPLY, str(text)[:40])
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT rating_id, listing_id, dev_account, reply_text"
+                " FROM apimarket_rating_replies WHERE reply_id = ?",
+                (reply_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_REPLY,
+                                     str(reply_id))
+            if row[2] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, reply_id))
+            rating_id = int(row[0])
+            listing_id = int(row[1])
+            previous = self._effective_reply(reply_id, row[3])
+            if body == previous:
+                raise ApiMarketError(E_AM_REPLY_UNCHANGED,
+                                     "%s/%s" % (reply_id, body[:40]))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_reply_revisions"
+                    " (reply_id, rating_id, listing_id, dev_account,"
+                    " previous_text, reply_text, revised_utc)"
+                    " VALUES (?,?,?,?,?,?,?)",
+                    (reply_id, rating_id, listing_id, dev_account,
+                     previous, body, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"revision_id": cur.lastrowid, "reply_id": reply_id,
+                "rating_id": rating_id, "listing_id": listing_id,
+                "dev_account": dev_account,
+                "previous_text": previous, "reply_text": body,
+                "revised_utc": stamp, "disclaimer": self.disclaimer}
+
     def revise_rating(self, buyer_id, rating_id, stars):
         """Buyer-side rating revision door (pre-registered
         AC-AMRV1..AC-AMRV8 in the R2094 explore-queue row BEFORE
@@ -1583,6 +1670,16 @@ class APIMarketFace:
             " WHERE rating_id = ? ORDER BY revision_id DESC LIMIT 1",
             (rating_id,)).fetchone()
         return int(base_stars) if row is None else int(row[0])
+
+    def _effective_reply(self, reply_id, base_text):
+        """Effective reply text of one rating reply: the newest
+        append-only revision, else the immutable base stamp
+        (AC-AMRY4 single seam). Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT reply_text FROM apimarket_reply_revisions"
+            " WHERE reply_id = ? ORDER BY revision_id DESC LIMIT 1",
+            (reply_id,)).fetchone()
+        return base_text if row is None else row[0]
 
     def _agg_rating(self, listing_id):
         rows = self._conn.execute(
@@ -1766,7 +1863,8 @@ class APIMarketFace:
                 if r[4] is not None:
                     reply = {"reply_id": int(r[4]),
                              "dev_account": r[5],
-                             "reply_text": r[6],
+                             "reply_text": self._effective_reply(
+                                 int(r[4]), r[6]),
                              "replied_utc": r[7]}
                 out.append({"rating_id": int(r[0]), "buyer_id": r[1],
                             "stars": self._effective_stars(
@@ -1810,6 +1908,53 @@ class APIMarketFace:
                 "revisions": [{"revision_id": int(x[0]),
                                "previous_stars": int(x[1]),
                                "stars": int(x[2]),
+                               "revised_utc": x[3]} for x in revs]}
+
+    def api_reply_history(self, reply_id):
+        """Reply revision history surface (AC-AMRY5): the immutable
+        base wording, every append-only revision in order, the
+        effective text and the revision count, alongside the star
+        value the reply currently answers (the buyer may have
+        revised it since). An unknown reply answers
+        E_AM_UNKNOWN_REPLY and a bad id answers E_AM_BAD_ARGS before
+        any read. Pure read: zero row mutations, zero tokens."""
+        if (not isinstance(reply_id, int) or isinstance(reply_id, bool)
+                or reply_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(reply_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT rating_id, listing_id, dev_account, reply_text,"
+                " replied_utc FROM apimarket_rating_replies"
+                " WHERE reply_id = ?", (reply_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_REPLY,
+                                     str(reply_id))
+            rating_id = int(row[0])
+            rated = self._conn.execute(
+                "SELECT buyer_id, stars FROM apimarket_ratings"
+                " WHERE rating_id = ?", (rating_id,)).fetchone()
+            revs = self._conn.execute(
+                "SELECT revision_id, previous_text, reply_text,"
+                " revised_utc FROM apimarket_reply_revisions"
+                " WHERE reply_id = ? ORDER BY revision_id",
+                (reply_id,)).fetchall()
+            base = row[3]
+            effective = base if not revs else revs[-1][2]
+            stars = (0 if rated is None
+                     else self._effective_stars(rating_id,
+                                                int(rated[1])))
+            buyer = "" if rated is None else rated[0]
+        return {"reply_id": reply_id, "rating_id": rating_id,
+                "listing_id": int(row[1]), "dev_account": row[2],
+                "buyer_id": buyer, "stars": stars,
+                "effective_text": effective, "base_text": base,
+                "revision_count": len(revs),
+                "latest_revised_utc": (None if not revs
+                                       else revs[-1][3]),
+                "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(x[0]),
+                               "previous_text": x[1],
+                               "reply_text": x[2],
                                "revised_utc": x[3]} for x in revs]}
 
     def api_seller_inbox(self, dev_account):

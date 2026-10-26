@@ -1,0 +1,9 @@
+PASS AC-AMRY1: keys=['dev_account', 'disclaimer', 'listing_id', 'previous_text', 'rating_id', 'reply_id', 'reply_text', 'revised_utc', 'revision_id'] base_frozen=True revs=1 prev='glad it worked' new='thanks for the feedback'
+PASS AC-AMRY2: account={'E_AM_BAD_ACCOUNT'} prefix='E_AM_NOT_OWNER' id={'E_AM_BAD_ARGS'} text={'E_AM_BAD_REPLY'} order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_BAD_REPLY', 'E_AM_UNKNOWN_REPLY', 'E_AM_NOT_OWNER'] unknown='E_AM_UNKNOWN_REPLY' digests=True tx=True
+PASS AC-AMRY3: same=E_AM_REPLY_UNCHANGED count_after_same=1 first_stamp_frozen=True series=['thanks for the feedback', 'glad it worked', 'thanks for the feedback']
+PASS AC-AMRY4: seam='thanks for the feedback' unanswered=True retired_effective='sorry - full refund was issued' base_frozen=True
+PASS AC-AMRY5: env_keys=True row_keys=True base='glad it worked' effective='thanks for the feedback' count=3 unknown=E_AM_UNKNOWN_REPLY bad=E_AM_BAD_ARGS
+PASS AC-AMRY6: repeat=True tx_equal=True balances_equal=True digests_equal=True sha16=bac8a3e155218bc3
+PASS AC-AMRY7: text_frozen_on_rating_rev=True stars_moved=True stars_frozen_on_reply_rev=True text_moved=True count=2 avg=3.0000
+PASS AC-AMRY8: sha16=f0642a36565c7e3e identical=True files_equal=True registered=True ascii=True
+SUITE PASS 8/8

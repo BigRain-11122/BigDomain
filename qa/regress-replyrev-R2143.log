@@ -1,0 +1,7 @@
+test_apimarket_ratingreply.py rc=0 SUITE 8/8
+test_apimarket_ratingrev.py rc=0 SUITE 8/8
+test_apimarket_ratingagg.py rc=0 SUITE PASS 8/8 criteria=8
+test_apimarket_sellerinbox.py rc=0 SUITE 8/8
+test_apimarket_sellerquality.py rc=0 SUITE PASS 8/8
+test_apimarket_marketfeed.py rc=0 SUITE 8/8 PASS
+test_apimarket_purchasedossier.py rc=0 SUITE 8/8
