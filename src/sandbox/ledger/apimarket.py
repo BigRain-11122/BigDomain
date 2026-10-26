@@ -2965,6 +2965,133 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "categories": out}
 
+    def api_category_demand(self, include_uncategorized=True):
+        """Per-category demand face (criteria AC-AMCD1..AC-AMCD8
+        pre-registered in the R2141 explore-queue row BEFORE this
+        code existed).
+
+        api_categories answers the SUPPLY side of one category (how
+        many listings, at what asking price); nothing answered which
+        categories actually SELL. api_market_stats aggregates the whole
+        market, api_listing_demand one listing, dev_sales_board one
+        seller and api_market_months one month, so a seller choosing
+        what to build and an operator setting prices had no category
+        reading at all.
+
+        Row authority is the listing side: every declared category
+        holding at least one listing row gets exactly one row (a
+        listed-but-unsold category stays visible with honest zero trade
+        columns), plus the honest uncategorized bucket for rows written
+        before the axis existed (category None). Order is category
+        ascending with the bucket last.
+
+        Laws pinned by the suite: partition conservation per row and
+        globally; trade conservation per row (gross == net_gross +
+        refunded, net_purchase == purchase - refund) and cross-face
+        identity with api_market_stats on the default call; buyer_count
+        is a distinct count WITHIN each category (the same buyer
+        legitimately counts once per category) while the envelope
+        buyer_count is the distinct count over the included rows;
+        retirement and re-listing only move the partition counters
+        while every historical aggregate stays byte-frozen; a refund
+        lowers the net side of the refunded listing's category only and
+        leaves purchase_count and buyer_count intact; avg_net_price is
+        net_gross_tokens / net_purchase_count, None when nothing
+        settled.
+
+        Gate: include_uncategorized must be a bool and is checked before
+        any read (fail-closed E_AM_BAD_ARGS). Pure read: zero row
+        mutations, zero token movement, and the envelope carries the
+        resident non-advisory disclaimer."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS,
+                                 str(include_uncategorized))
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, category FROM apimarket_listings"
+                " ORDER BY listing_id").fetchall()
+            purchases = self._conn.execute(
+                "SELECT listing_id, buyer_id, price_paid"
+                " FROM apimarket_purchases").fetchall()
+            refunds = self._conn.execute(
+                "SELECT p.listing_id, f.amount"
+                " FROM apimarket_refunds f"
+                " JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id").fetchall()
+            groups = {}
+            for r in listings:
+                cat = r[1]
+                g = groups.get(cat)
+                if g is None:
+                    g = {"listing_count": 0, "live": 0, "retired": 0,
+                         "purchase_count": 0, "refund_count": 0,
+                         "gross": 0, "refunded": 0, "buyers": set()}
+                    groups[cat] = g
+                g["listing_count"] += 1
+                if self._delisted_utc(int(r[0])) is None:
+                    g["live"] += 1
+                else:
+                    g["retired"] += 1
+            owner = {int(r[0]): r[1] for r in listings}
+            for r in purchases:
+                g = groups.get(owner.get(int(r[0])))
+                if g is None:
+                    continue
+                g["purchase_count"] += 1
+                g["gross"] += int(r[2])
+                g["buyers"].add(r[1])
+            for r in refunds:
+                g = groups.get(owner.get(int(r[0])))
+                if g is None:
+                    continue
+                g["refund_count"] += 1
+                g["refunded"] += int(r[1])
+        order = sorted([c for c in groups if c is not None])
+        if None in groups:
+            order.append(None)
+        rows = []
+        buyers = set()
+        for cat in order:
+            if cat is None and not include_uncategorized:
+                continue
+            g = groups[cat]
+            net_purchase = g["purchase_count"] - g["refund_count"]
+            net_gross = g["gross"] - g["refunded"]
+            rows.append({
+                "category": cat,
+                "listing_count": g["listing_count"],
+                "live_listing_count": g["live"],
+                "retired_listing_count": g["retired"],
+                "purchase_count": g["purchase_count"],
+                "buyer_count": len(g["buyers"]),
+                "refund_count": g["refund_count"],
+                "net_purchase_count": net_purchase,
+                "gross_tokens": g["gross"],
+                "refunded_tokens": g["refunded"],
+                "net_gross_tokens": net_gross,
+                "avg_net_price": (float(net_gross) / net_purchase
+                                  if net_purchase else None)})
+            buyers |= g["buyers"]
+        return {"category_count": len(rows),
+                "listing_count": sum(r["listing_count"] for r in rows),
+                "live_listing_count": sum(
+                    r["live_listing_count"] for r in rows),
+                "retired_listing_count": sum(
+                    r["retired_listing_count"] for r in rows),
+                "purchase_count": sum(
+                    r["purchase_count"] for r in rows),
+                "buyer_count": len(buyers),
+                "refund_count": sum(r["refund_count"] for r in rows),
+                "net_purchase_count": sum(
+                    r["net_purchase_count"] for r in rows),
+                "gross_tokens": sum(r["gross_tokens"] for r in rows),
+                "refunded_tokens": sum(
+                    r["refunded_tokens"] for r in rows),
+                "net_gross_tokens": sum(
+                    r["net_gross_tokens"] for r in rows),
+                "categories": rows,
+                "disclaimer": self.disclaimer}
+
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board
         (pre-registered AC-AMB1..AC-AMB7 in the R1978

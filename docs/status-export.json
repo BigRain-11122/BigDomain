@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-26T09:58:00+08:00",
+  "export_ts": "2026-10-26T11:15:11+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "我的申诉链现在会在该我出手时出声：卖家一应答，这条申诉就自动进入我的决定队列；我一追问、撤诉或拿到退款，它就自动出队——不用再逐条翻申诉列表自己判断哪些在等我。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py · api_buyer_claim_todo（买家申诉决定队列）· qa/apimarket-buyerclaimtodo-R2140-a.log（8/8 双跑）· docs/sandbox-suite-matrix.md（344 套件 / 2860 判据）· 2026-10-26 09:53",
-    "next_milestone": "48 小时内：给队列补「最久等待」的时长信号消费面（oldest_waiting_utc 已就位）并把买家侧其余债务族（评分待评之外）复核一遍，同时跑下一轮全量电池与矩阵复验。"
+    "current": "本轮把开发者 API 市场的「品类需求面」做出来了：哪个品类真的卖得动（成交/退款/净额/买家数）现在有一面可查，并与全市场统计逐项对得上。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py 的 api_category_demand（品类需求面）+ qa/apimarket-categorydemand-R2141-a.log（8/8 双跑）+ docs/sandbox-suite-matrix.md（345 套件 / 2868 判据）— 2026-10-26 11:15",
+    "next_milestone": "48 小时内：把这面接进卖家侧看板（选品/定价用）并跑一轮全量回归；商户号仍未到，支付与权益设计件继续先行。"
   },
   "depts": [
     {
@@ -518,6 +518,11 @@
       "on",
       "申诉链 R2129 开单／R2130 应答／R2131 撤诉／R2137 追问已双向，但「球换手」从不出声——R2138 明写已应答无追问不进卖家队列是因为球在买家手上，却没有任何一面告诉买家；api_claims 只是状态列、api_claim_thread 只开单条线索。本面五态单缝派生 refunded>withdrawn>disputed>needs_decision>waiting，只有 needs_decision 入队；十一键信封 + 十键行；应答推入、追问/撤诉/退款抽干，零行改写；退役留存、存档价不变；前缀账户门前置、二十表摘要与 ledger_tx 集冻结、纯读零 token。判据 AC-AMBC1..AC-AMBC8 预注册（六锚 git grep -F 零占用 rc=1 先于代码），套件 8/8 双跑判据行逐字节同一 sha16 957d5e92666d9ed4，接线 ledger-apimarket-buyerclaimtodo(8)，全量电池 344/344 + 控制 7/7，矩阵 344/2860 --check 逐字节同一。",
       "2026-10-26"
+    ],
+    [
+      "apimarket per-category demand (api_category_demand)",
+      "on",
+      "R2141: api_categories answered the SUPPLY side of a category (listing counts plus the live price band) while api_market_stats aggregated the whole market, api_listing_demand one listing, dev_sales_board one seller and api_market_months one month - so no face answered which categories actually SELL. api_category_demand(include_uncategorized=True) closes that gap: listing-side row authority with the honest uncategorized bucket last, per-row and global partition conservation, per-row trade conservation (gross == net + refunded, net_purchase == purchase - refund) with cross-face identity against api_market_stats on the default call, buyer_count as a within-category distinct count while the envelope counts distinct buyers over the included rows, retirement and re-listing moving only the partition counters, a refund lowering the net side of one category only, avg_net_price = net_gross / net_purchase (None when nothing settled), and a bool gate that fails closed before any read. Suite SUITE PASS 8/8 double-run byte-identical sha16 2a1f5dbec1f1e160 (qa/apimarket-categorydemand-R2141-a.log and -b.log); full battery RUNNER PASS 345/345 suites plus controls 7/7 in 961.8s (qa/reconcile-all-R2141.log); matrix 345 suites / 2868 criteria --check byte-identical."
     ]
   ],
   "results": [
@@ -718,7 +723,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2140",
+      "2141",
       "OSLoop 执行 tick"
     ],
     [
@@ -1058,15 +1063,19 @@
     [
       "R2140",
       "R2140 先清 R2139 遗留：全量电池补跑（首轮两红=上一轮四件证据方言漂移 + 报表申诉套件在负载下越过 300s 单套件上限，方言归一后普查 DRIFT-CLEAN、该套件单独复跑 8/8 218s 证负载非产品缺陷，红电池原样保留为 -firstfail），重跑 RUNNER PASS 344/344 + 控制 7/7 671.4s，矩阵 344 suites / 2860 criteria --check 逐字节同一。产品=api_buyer_claim_todo 买家申诉决定队列：五态派生、只收 needs_decision、推送不落库、纯读零 token、跨两轮重启字节同一。诚实注=首跑 7/8 红于两处测试侧缺陷（claim_count 误比队列行数、改价先于退役触发门序），修测试不放宽判据；state 折卷 R589 后水位 73207B（闸 78500B），折卷前内容逐字进 archive。"
+    ],
+    [
+      "R2141",
+      "R2141: seeded and claimed a fresh P3 explore row in the same window with AC-AMCD1..AC-AMCD8 pre-registered BEFORE the code existed (six anchors git grep -F zero-occupancy, rc=1) and delivered the per-category demand face. Product change in src/sandbox/ledger/apimarket.py (api_category_demand). Verification: new suite 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 2a1f5dbec1f1e160 (qa/apimarket-categorydemand-R2141-a.log and -b.log, single-writer UTF-8 LF); registration ledger-apimarket-categorydemand(8); full battery RUNNER PASS 345/345 plus controls 7/7 in 961.8s with TMP RECLAIM 276.22 MiB (qa/reconcile-all-R2141.log); suite matrix 345 suites / 2868 criteria --check byte-identical. Group acknowledgement: PT-20261026-01/02/03 (patrol intake) - the BigDomain-relevant piece is the local-line liveness and push proof closed by this round. Honest disclosure: the AC-AMCD7 fixture expectation was first written as buyer_count 4 while the measurement was 5 (u1 buys in both the tools category and the bucket); the pre-registered criterion speaks about the distinct buyer count over the INCLUDED rows, so the fixture expectation was corrected rather than the criterion weakened."
     ]
   ],
   "self_drive": {
     "window": "2026-10-20..2026-10-26",
     "window_days": 7,
-    "log_lines_in_window": 21,
+    "log_lines_in_window": 22,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 21,
+    "substantive_non_idle_mention_lines": 22,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

@@ -2269,6 +2269,13 @@ SUITES = [
         "ledger", "test_apimarket_relist.py"), 8),
     ("ledger-apimarket-marketstats", os.path.join(
         "ledger", "test_apimarket_marketstats.py"), 8),
+    # apimarket per-category demand - the demand counterpart of the
+    # api_categories supply directory, with the same partition and
+    # trade conservation laws as api_market_stats - criteria
+    # AC-AMCD1..AC-AMCD8 pre-registered in the R2141 explore-queue
+    # claim row BEFORE this suite existed.
+    ("ledger-apimarket-categorydemand", os.path.join(
+        "ledger", "test_apimarket_categorydemand.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

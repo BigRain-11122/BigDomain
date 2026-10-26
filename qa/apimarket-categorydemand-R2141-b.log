@@ -1,0 +1,9 @@
+PASS AC-AMCD1: env_keys=13 exact=True row_keys=True rows=3 empty_rows=0
+PASS AC-AMCD2: cats=['data', 'tools', None] count=3 listings=5/5/0
+PASS AC-AMCD3: purchases=7 gross=49 net=49 stats=7/49/49
+PASS AC-AMCD4: data=2 tools=3 uncat=1 envelope=5 row_sum=6 distinct=2
+PASS AC-AMCD5: live=2->1 retired=1 frozen=True relist_back=True
+PASS AC-AMCD6: refund=10 data_net=23->13 avg=6.5 tools_frozen=True
+PASS AC-AMCD7: rows=2 listing_drop=1 purchase_drop=1 buyer=5 gates=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-AMCD8: sha16=2a1f5dbec1f1e160 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8
