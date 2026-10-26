@@ -3729,6 +3729,14 @@ SUITES = [
     # (AC-LGR1..AC-LGR8 pre-registered in state/queue/tech.md R2152.)
     ("os-ledger-lines",
      os.path.join("..", "os", "test_ledger_lines.py"), 8),
+    # R2153: the double-run identity dialect gets one dialect instead of
+    # two - explicit bytes/conclusions modes, claim verification against
+    # the files (a byte claim that does not hold is a false claim) and a
+    # read-only audit of the whole qa/ evidence directory with a shipped
+    # known-defect baseline.
+    # (AC-RID1..AC-RID8 pre-registered in state/queue/tech.md R2153.)
+    ("os-run-identity",
+     os.path.join("..", "os", "test_run_identity.py"), 8),
     ]
 
 FAILS = 0

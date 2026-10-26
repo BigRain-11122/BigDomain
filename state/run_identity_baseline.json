@@ -1,0 +1,10 @@
+{
+  "note": "Pre-existing double-run identity defects found by the R2153 audit of qa/. Only NEW (base, class) problems turn the gate red; a baselined class never masks another class in the same pair. These are disclosed, not silently healed.",
+  "known": [
+    {
+      "base": "apimarket-buyermonths-R2100",
+      "classes": ["E_FALSE_BYTE_CLAIM"],
+      "why": "The driver verdict line (RUN1 rc=0 sha16=0B3398051DD02331 RUN2 rc=0 sha16=0B3398051DD02331 identical=True) was appended to the primary log only, so that file carries one extra line the run2 file does not. The criteria are identical (8/8) and both declared digests do reproduce from the payload view, so only the byte-claim class is defective: the sentence 'identical=True' describes the suite stdout, not the pair of evidence files."
+    }
+  ]
+}

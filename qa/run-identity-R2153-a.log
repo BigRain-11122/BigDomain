@@ -1,0 +1,11 @@
+suite: double-run identity dialect (R2153 AC-RID1..AC-RID8)
+PASS AC-RID1 normalize/digest16/mode gate, bytes implies conclusions
+PASS AC-RID2 criterion parse, multi-leg legal, conflict and suite laws
+PASS AC-RID3 payload drift tolerated, verdict/added/removed named
+PASS AC-RID4 bytes strict, conclusions-equal pair stays bytes False
+PASS AC-RID5 body-only claims, silence gate, false claim and digest
+PASS AC-RID6 pairing shapes, unpaired and -2 ignored, stable order
+PASS AC-RID7 CLI 0/2/3, stable JSON keys, zero writes
+PASS AC-RID8 live audit gated clean, baseline parse, hygiene, wiring
+SUITE PASS 8/8 criteria
+RUN1 rc=0 sha16=1155d8b16494c313 RUN2 rc=0 sha16=1155d8b16494c313 identical=True
