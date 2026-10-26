@@ -2463,6 +2463,12 @@ SUITES = [
     # listing's own activity tail (schema 6 -> 7 additive).
     ("ledger-apimarket-feedlisting", os.path.join(
         "ledger", "test_apimarket_marketfeed_listing.py"), 8),
+    # R2139 seller dimension on that feed: dev_account narrows the same
+    # stream to the shelves ONE seller owns, so a seller reads a single
+    # timeline of their own events instead of merging N per-listing
+    # answers by hand; the envelope echoes the filter only when given.
+    ("ledger-apimarket-feeddev", os.path.join(
+        "ledger", "test_apimarket_feeddev.py"), 8),
     # R2108 activity section on the report generator: the R2107 feed now
     # has a consumer - every collect reads the newest FEED_LIMIT events
     # into an activity block, the page renders them, and the JSON

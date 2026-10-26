@@ -3143,7 +3143,8 @@ class APIMarketFace:
                 "listings": rows}
 
     def api_market_feed(self, since_utc=None, until_utc=None,
-                        kinds=None, limit=None, listing_id=None):
+                        kinds=None, limit=None, listing_id=None,
+                        dev_account=None):
         """Market-wide public activity feed (criteria AC-AMF1..AC-AMF8
         pre-registered in the R2107 explore-queue row BEFORE this
         code existed).
@@ -3182,9 +3183,23 @@ class APIMarketFace:
         filter rather than an entity lookup (api_view is that entity
         face).
 
-        Gate order is pinned by AC-AMF6 and extended by AC-AMFL2 -
-        window shape, inverted window, kinds shape, limit shape, then
-        listing shape - and every gate runs BEFORE any read,
+        dev_account (AC-AMSF1..AC-AMSF8, pre-registered in the R2139
+        explore-queue row BEFORE this code existed) narrows the same
+        stream to the shelves ONE seller owns, so a seller holding N
+        listings can read a single timeline of their own market events
+        instead of calling the per-listing filter N times and merging
+        the answers by hand. All eleven event families already carry
+        the seller of record through their listing row, so the filter
+        is a stream predicate and nothing is joined twice. A
+        shape-valid account that owns no listing answers an honest
+        empty feed; the key is echoed in the envelope ONLY when a
+        filter is given, so a caller that never filters keeps the
+        R2107 contract byte-identical.
+
+        Gate order is pinned by AC-AMF6 and extended by AC-AMFL2 and
+        AC-AMSF2 - window shape, inverted window, kinds shape, limit
+        shape, listing shape, then seller shape - and every gate runs
+        BEFORE any read,
         fail-closed with zero side effects. The row shape
         is a fixed thirteen keys with None for fields that do not
         apply to a kind, and no buyer identity is exposed (the feed
@@ -3227,6 +3242,11 @@ class APIMarketFace:
                                      "bad listing_id: %r"
                                      % (listing_id,))
             only = int(listing_id)
+        dev = None
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, str(dev_account))
+            dev = str(dev_account)
         with self._lock:
             listings = {}
             for r in self._conn.execute(
@@ -3242,6 +3262,8 @@ class APIMarketFace:
                     return
                 base = listings.get(int(listing_id))
                 if base is None:
+                    return
+                if dev is not None and base[2] != dev:
                     return
                 if since_utc is not None and stamp < since_utc:
                     return
@@ -3310,17 +3332,20 @@ class APIMarketFace:
             shown = events
             if limit is not None and total > limit:
                 shown = events[-limit:]
-        return {"kinds": (list(wanted) if wanted is not None
-                          else list(_FEED_KINDS)),
-                "since_utc": since_utc,
-                "until_utc": until_utc,
-                "listing_id": only,
-                "limit": limit,
-                "total": total,
-                "returned": len(shown),
-                "truncated": total > len(shown),
-                "disclaimer": self.disclaimer,
-                "events": shown}
+        env = {"kinds": (list(wanted) if wanted is not None
+                         else list(_FEED_KINDS)),
+               "since_utc": since_utc,
+               "until_utc": until_utc,
+               "listing_id": only,
+               "limit": limit,
+               "total": total,
+               "returned": len(shown),
+               "truncated": total > len(shown),
+               "disclaimer": self.disclaimer}
+        if dev is not None:
+            env["dev_account"] = dev
+        env["events"] = shown
+        return env
 
     def api_market_stats(self):
         """Market-wide overview read face (pre-registered

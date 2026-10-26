@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T08:53:12+08:00",
+ "export_ts": "2026-10-26T11:12:00+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "卖家终于有了一条待办队列：一个面同时答「还欠谁评价回应、谁的提问没答、哪些申诉无人理、哪些已答但买家仍在争议」，最久的债排最前。此前四条债分散在四个面上，持 N 件挂牌的卖家要手工并表；买家侧早有对称的待办面。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_seller_todo）+ src/sandbox/ledger/test_apimarket_sellertodo.py（SUITE PASS 8/8 双跑 rc=0/0，判据行逐字节同一 sha16 90a25827ef3d2a8b，证据 qa/apimarket-sellertodo-R2138-a.log / -b.log）+ qa/reconcile-all-R2138.log（RUNNER PASS 342/342 套件 + 控制 7/7，953.0s）+ docs/sandbox-suite-matrix.md（342 suites / 2844 criteria，--check 逐字节同一）",
-  "next_milestone": "48 小时内：把卖家待办面接进结算报告的卖家区块（每个卖家一条按年龄排序的待办表 + attention 家族一条超期未理告警），让运营不必逐个卖家点开四个面；同窗把 disputed 申诉计入市场待办汇总，使「一笔交易的争议如何收场」在运营台账上可见。"
+  "current": "卖家的活动流终于能按自己看：一个持多件挂牌的卖家，此前只能在市场上一条条读「这件挂牌最近发生了什么」，再自己按时间并表；现在一个过滤参数就把名下全部挂牌的成交、改价、补货、评价、下架、退款等事件合成一条自己的时间线。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（api_market_feed 增 dev_account 卖家维度）+ src/sandbox/ledger/test_apimarket_feeddev.py（SUITE PASS 8/8 双跑，判据行逐字节同一 sha16 34dfb01fbeee267d，证据 qa/apimarket-feeddev-R2139-a.log / -b.log）+ 相邻两套件回归 8/8（qa/regress-marketfeed-R2139.log、qa/regress-feedlisting-R2139.log）+ qa/smoke-R2139.log + qa/smoke-R2139.png（QA charter 当日 crawl：W33《网络交易平台规则监督管理办法》官方全文入册）",
+  "next_milestone": "48 小时内：把「平台规则发布/版本留档」这一整块产品缺口补上最小读面——法规普查发现本仓没有任何规则文本的面（有费率修订史 revise_price，却没有规则版本史），故下一刀做规则版本读面（版本号/生效时间/公示日/征求意见窗/历史版本可下载，五要素）；同窗把上一轮欠下的全量电池补跑绿（本轮 25 分钟预算只跑了新套件与相邻两套件，如实记录在案）。"
  },
  "depts": [
   {
@@ -34,6 +34,12 @@
   }
  ],
  "outs": [
+  [
+   "apimarket activity feed seller dimension (api_market_feed dev_account filter)",
+   "on",
+   "R2139: the market activity feed could be sliced by time window, event family, tail limit (R2107) and one shelf at a time (R2113), but nothing answered what happened across everything ONE seller lists. A seller holding N listings had to call the per-listing filter N times and merge the answers by hand - the only place that merge ever existed was the offline report dossiers. api_market_feed now accepts an optional dev_account and filters the same eleven append-only event families through their listing row, so no family is joined twice. Laws pinned by AC-AMSF1..AC-AMSF8: the envelope gains exactly one key (dev_account) and ONLY when the filter is given, so a default call stays byte-identical to the R2107/R2113 contract (ten envelope keys, thirteen row keys); the seller shape gate sits AFTER the window, inverted-window, kinds, limit and listing gates and is prefix-only per the R2077/R2078 precedent (a bare 'usr:' passes the gate and answers an honest empty stream), with zero rows and zero tokens touched on every refusal (thirteen table digests plus the ledger tx set frozen across the whole battery); the per-seller streams partition the market stream exactly - disjoint, and their union is the market stream; seller x kinds, seller x window, seller x limit and seller x listing all equal the set intersections, and limit keeps the tail of the FILTERED stream while total stays the pre-truncation count; a seller's retired listing keeps its historical events; the face is a pure read and replays byte-identically after a full-stack restart. Verification: suite double-run rc=0/0 with byte-identical criterion lines sha16 34dfb01fbeee267d (qa/apimarket-feeddev-R2139-a.log and -b.log, single-writer UTF-8 LF); wired ledger-apimarket-feeddev(8); the two adjacent feed suites re-ran 8/8 each (qa/regress-marketfeed-R2139.log, qa/regress-feedlisting-R2139.log). Honest boundary: the full battery was NOT run this round (25-minute budget) and is the first item of the next round's queue.",
+   "2026-10-26"
+  ],
   [
    "apimarket seller unified duty queue (api_seller_todo)",
    "on",
@@ -509,6 +515,10 @@
   ]
  ],
  "results": [
+  [
+   "R2139",
+   "R2139: the market activity feed gains its seller dimension. api_market_feed(..., dev_account=) narrows the same eleven-family stream to the shelves one seller owns, closing the last 'merge it by hand' gap on the public activity face: a seller with N listings reads one own timeline instead of N per-listing answers. The envelope echoes the filter only when given (default calls stay byte-identical to the R2107/R2113 contract), the prefix-only seller gate runs last and before any read, per-seller streams partition the market stream exactly, every composition axis equals the set intersection, limit keeps the tail of the filtered stream with total pre-truncation, retired listings keep their history, and the face stays pure-read and restart-stable. Suite 8/8 double-run, criterion lines byte-identical sha16 34dfb01fbeee267d; wired ledger-apimarket-feeddev(8); adjacent feed regressions 8/8 each. Same round carried the QA charter daily crawl: W33 = the Measures on the Supervision of Online Trading Platform Rules (SAMR + CAC Order No.116, effective 2026-02-01) captured A-grade from samr.gov.cn after a gov.cn JS-shell miss, entered in benchmarks section-1 block, section-3 source row and section-4 record plus wall W33 main and conclusion rows; the row names the product gap it exposes (no platform-rule publication or version-archive face, git grep -F zero hits for rule_version/platform_rules/announce). Honest notes: (a) the state file arrived with 68 bare-LF lines and was repaired through logs_toolkit eol --fix (content_eq/json_eq/verify_pass true), the heartbeat lag of six ticks was backfilled to 2139; (b) the pre-registration row text was recorded after the product edit in the same window while the zero-occupancy anchor check ran before it, disclosed in the row itself; (c) the first suite run was 6/8 on two test-side expectation errors (a bare 'usr:' passes the prefix-only gate, and the pinned window really holds four events), both repaired in the test with no criterion relaxed; (d) the full battery was not run this round and the charter smoke log says so explicitly."
+  ],
   [
    "R2138",
    "R2138: the developer API market gains the seller-side unified duty queue, the mirror of R2105's buyer todo. api_seller_todo answers the one question a seller with N listings could not: what do I owe right now and how long has the oldest item waited. Four families merge into one ordered list - unanswered ratings, unanswered questions, claims nobody has answered, and the disputed claims R2137 introduced (answered and then restated by the buyer) - with claim status derived through the same precedence api_claims uses, so refunds and withdrawals drain the queue without rewriting any row and an answered claim with no follow-up note correctly stays out. The pinned total order is (since_utc, kind_rank, ref_id) with rating < question < claim_open < claim_disputed, conservation holds (total_count == the four family counts == the row count, listing_count == the distinct listings in the rows), retirement keeps the debt, a prefix-valid account with no debt gets an honest empty envelope, the account gate runs before any read and the face is a pure read. Suite 8/8 double-run sha16 90a25827ef3d2a8b; five adjacent suites green; battery RUNNER PASS 342/342 plus controls 7/7 in 953.0s; matrix 342 suites / 2844 criteria byte-identical. Honest note: the first suite run was 7/8 on two test-side defects (a seeded rating left unanswered on the second seller, and a ref_id-only row lookup colliding across tables) - both repaired in the test, no criterion relaxed."

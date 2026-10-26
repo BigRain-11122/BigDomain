@@ -1,0 +1,12 @@
+PASS AC-AMSF1: keys=11 legacy=True dana=8 erin=2 market=10
+PASS AC-AMSF2: shapes=8 win=True inv=True kinds=True limit=True listing=True frozen=True
+PASS AC-AMSF3: union=10 market=10 disjoint=True
+PASS AC-AMSF4: kinds=3 window=4 tail=3/8 listing=5
+PASS AC-AMSF5: ghost=0 retired_kept=True
+report written: C:\Users\sjs20\AppData\Local\Temp\amfeeddev-3i9a_2zo\s.html (22998 bytes, sha256 4361485335595cb2)
+attention findings: 1 (severity {"warn": 1})
+report json written: C:\Users\sjs20\AppData\Local\Temp\amfeeddev-3i9a_2zo\s.json (39310 bytes, schema 17)
+PASS AC-AMSF7: schema=17 keys=9 dossier_feed_same=True env=['attention', 'report', 'schema_version']
+PASS AC-AMSF6: identical=True frozen=True restart=True erin_restart=True
+PASS AC-AMSF8: runner=True cfgs=True ascii=True
+SUITE 8/8 PASS

@@ -1,0 +1,61 @@
+BigDomain QA Smoke Test - round R2139 - 2026-10-26 +08:00
+order: group orders.md L254 (2026-09-28 ~10:xx) - QA Smoke Test self-verify mandate, charter v1.0
+charter BigDomain checklist item 1 (daily crawl >= 1 new source), judged below with on-disk evidence
+scan entry state: [QA] FLAG today_png=0 today_log=0 bench_today=False (charter daily crawl round due)
+round mode note: normal round - scan also reported [STATE] bare-LF=68 (repaired with
+    logs_toolkit eol --fix --execute, content_eq/json_eq/verify_pass true) and [HB] heartbeat
+    lag 6 (backfilled in closeout).
+
+[1] crawl at least one new data source today: PASS
+    fetches this round (web fetch, zero-key, read-only; 2 searches / 2 full-text fetches / 1 hit / 1 miss):
+    a. gov.cn/gongbao/2026/issue_12666/202604/content_7065115.html - MISS (JS navigation shell,
+       zero body text; same failure family as the W22/W23 gov.cn policy-library misses)
+    b. samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html - HIT
+       (A-level official issuer page: SAMR + CAC Order No.116, published 2025-12-18,
+       effective 2026-02-01, Measures on the Supervision of Online Trading Platform Rules;
+       article-by-article text captured: art.4 platform-rule definition incl. transaction and
+       dispute-handling / personal-information / IP sub-rules, art.5 principle plus four bans,
+       art.7 continuous home-page publication and downloadable reading, art.8 bold prominent
+       notice for fees and dispute resolution, art.9 in-page search, art.10 home-page public
+       consultation, art.11 consultation records kept >= 3 years, art.12 >= 7 days pre-publicity
+       and >= 15 days for large-scale or materially significant changes, art.13 reasonable
+       transition period, art.14 no unreasonable conditions on exit and refunds per the
+       pre-amendment rules, art.15 three years of historical versions readable and downloadable,
+       art.16 no forced or defaulted consent, art.17 major-matter consultation mechanism,
+       art.18 regulate unlawful and immorally induced conduct through the rules)
+
+[2] benchmark face refreshed today: PASS
+    docs/global-benchmarks.md section-1 platform-rule-supervision block (line 226) +
+    section-3 source row (line 272) + section-4 record row (line 305, last line);
+    section-2 deliberately no new row (the existing 13 execution-standard rows already cover
+    the judgement surface, this entry is clause-level reinforcement), noted honestly in the
+    record row; state.json benchmarks_refreshed = 2026-10-26 (next 7-day expiry 2026-11-02)
+
+[3] research signal on the intelligence wall: PASS
+    docs/research/intelligence-wall.md W33 main row (line 85) + W33 conclusion row (line 86);
+    consumption anchors: P-47(5) membership/auto-renewal amendment chain, P-47(2) token ledger,
+    P-47(4) payment refund law, P-47(3) UGC conduct rules; the row also names the product gap
+    this statute exposes (no platform-rule publication / version-archive face in this repo,
+    verified with git grep -F zero hits for rule_version / platform_rules / announce)
+
+[4] self-check items: PASS
+    a. daily crawl - one new A-level source captured and registered (8 W-slices in the last
+       seven days: W27 10-18, W28 10-19, W29 10-20, W30 10-24, W31 10-25, W32 10-25, W33 10-26)
+    b. benchmark 15h rule - face refreshed today inside the window
+    c. research source chain - every claim above carries the official URL and the article number
+    d. signal wall - both rows present (main + conclusion), consumption anchors named
+
+[5] product increment this round (separate from the charter crawl): PASS
+    apimarket seller dimension on the market activity feed
+    (api_market_feed + optional dev_account, criteria AC-AMSF1..AC-AMSF8)
+    suite src/sandbox/ledger/test_apimarket_feeddev.py SUITE 8/8 PASS double-run,
+    criteria lines byte-identical sha16 34dfb01fbeee267d
+    evidence qa/apimarket-feeddev-R2139-a.log and -b.log (single-writer UTF-8 LF)
+    adjacent regressions: ledger-apimarket-marketfeed 8/8 PASS, ledger-apimarket-feedlisting 8/8 PASS
+    honest boundary: the full battery was NOT run this round (25-minute budget); the new suite
+    and the two feed suites it touches were run directly and are recorded in
+    qa/regress-marketfeed-R2139.log and qa/regress-feedlisting-R2139.log
+
+verdict: charter items 1-4 PASS with on-disk evidence; item 5 product increment PASS with
+    double-run evidence; full-battery coverage for this round is honestly absent and is the
+    first item of the next round's queue.
