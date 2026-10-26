@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-26T07:02:59+08:00",
+ "export_ts": "2026-10-26T08:03:21+08:00",
  "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
  "ceo_face": {
-  "current": "平台主体身份修订腿（revise_provider / api_provider_history）：开发者实名登记此前是一次性写死的——一行 UNIQUE(dev_account)，既无修改门也无删除面，而统一社会信用代码正是对外公示面逐字展示的字段，登记时错一个字符就是永久错误公示且无任何更正路径（价格/元数据/供给/评价四条写一次轴都已陆续补上修订腿，唯身份没补）。本轮补齐：每次修订只写一行只追加记录、基础行永不改写；门序钉死为 账户形→未登记→字段形→无变化（无变化按生效值判定，改回旧值合法、连续同值拒绝且首戳不改写）；身份面与公开公示面同走一条生效值缝，所以一次修订即刻改变该卖家所有在售挂牌对外披露的名字与信用代码，而零修订时两面输出逐字节不变。",
-  "latest_artifact": "src/sandbox/ledger/apimarket.py（revise_provider + api_provider_history + apimarket_provider_revisions + 单缝 _provider_state）+ src/sandbox/ledger/test_apimarket_providerrev.py（SUITE PASS 8/8 双跑 rc=0/0·判据行逐字节同一·证据 qa/apimarket-providerrev-R2136-a.log / -b.log·utf-8 LF）；qa/reconcile-all-R2136c.log（RUNNER PASS 340/340 套件 + 控制 7/7·1495.4s）；docs/sandbox-suite-matrix.md（340 套件 / 2828 判据·--check 逐字节同一）。",
-  "next_milestone": "48 小时内：①给「被审拒 / 未实名 / 未过审」三类挂牌接上真正的上架硬门（今天仍只是可读面，被拒的挂牌照旧可被购买）；②把买家/卖家两张对账单合成一张结算页；③把电池回收读数接进每日报告，让清扫成为可见趋势。"
+  "current": "申诉线程变双向：卖家答完之后，买家现在可以追加一次说明，买卖双方读同一条事件流（开单→应答→追加→撤诉→退款），并由 disputed 标志区分「已接受的应答」与「仍在争议的应答」——此前这两种行逐字节同形。",
+  "latest_artifact": "src/sandbox/ledger/apimarket.py（add_claim_note + api_claim_thread + apimarket_claim_notes）+ src/sandbox/ledger/test_apimarket_claimnote.py（SUITE PASS 8/8 双跑 rc=0/0，判据行逐字节同一 sha16 f57e2a8909fa5ed1，证据 qa/apimarket-claimnote-R2137-a.log / -b.log）+ qa/reconcile-all-R2137.log（RUNNER PASS 341/341 套件 + 控制 7/7，1044.8s）+ docs/sandbox-suite-matrix.md（341 suites / 2836 criteria (341/341 green)，--check 逐字节同一）；附 HQ-FEEDBACK 今日 P-32 行（D-20261026-09 点名回执）。",
+  "next_milestone": "48 小时内：把申诉面接进结算报告的运营段（未了结申诉与争议中申诉按等待时长排序，直接进报表 Attention 族），让运营不必逐单点开线程；同窗把申诉线程的 disputed 事件补进公共活动流，使「一笔交易的争议如何收场」在市场时间线上可见。"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "apimarket claim follow-up note + claim thread (add_claim_note / api_claim_thread)",
+   "on",
+   "Seller answers were a dead end for the buyer: after one response the only exits were withdrawal or a refund the seller may never fund, and an accepted answer and a disputed one were indistinguishable. add_claim_note appends exactly one buyer follow-up per claim behind the pinned gate order; api_claim_thread returns the ordered event stream for buyer and seller with a disputed flag; api_claims keeps its exact keys."
+  ],
   [
    "apimarket provider identity revision leg (revise_provider + api_provider_history): the published social credit code is now correctable without losing the base registration",
    "on",
@@ -498,6 +503,10 @@
   ]
  ],
  "results": [
+  [
+   "R2137",
+   "R2137: the post-sale claim thread is no longer one-way. The append-only apimarket_claim_notes table (UNIQUE per claim, no UPDATE/DELETE surface) backs add_claim_note with the gate order account -> claim-id shape -> note shape -> existence -> ownership -> already-refunded -> withdrawn -> duplicate (two new codes, zero rows and zero tokens on every refusal), and api_claim_thread answers one claim's whole conversation for the two parties only: fifteen keys, events ordered by stamp then a pinned same-second rank, disputed true exactly when a follow-up exists and the claim is neither refunded nor withdrawn, buyer and seller payloads byte-identical apart from viewer_role. api_claims is untouched so every existing consumer keeps its contract. Suite 8/8 double-run sha16 f57e2a8909fa5ed1; battery RUNNER PASS 341/341 plus controls 7/7 in 1044.8s; matrix 341 suites / 2836 criteria (341/341 green) --check byte-identical; census clean. Weekly dead-doc sweep: zero candidates across 28 docs, reported honestly."
+  ],
   [
    "R2136",
    "R2136: the developer API market closes the last write-once axis on its disclosure face. register_provider wrote one immutable row per developer, so a typo in the published unified social credit code was permanent; revise_provider now appends one revision row per change (base row untouched) behind the pinned gate order account shape -> registration -> field shape -> no-change against the effective value, with E_AM_PROVIDER_UNREGISTERED and E_AM_PROVIDER_UNCHANGED and zero rows / zero tokens on every refusal; A -> B -> A is legal while a repeat of the current value is refused and the first stamp is never rewritten; one seam (_provider_state) feeds api_provider_identity, api_public_listings and the new api_provider_history, so a revision moves every live listing's published identity at once while zero-revision behaviour stays byte-identical. Suite 8/8 double-run with identical criterion lines; wired ledger-apimarket-providerrev(8); battery RUNNER PASS 340/340 suites plus controls 7/7 in 1495.4s; matrix 340 suites / 2828 criteria byte-identical; census DRIFT-CLEAN 1867 files zero flags. Environment notes disclosed: the first evidence batch arrived in the PowerShell UTF-16 dialect (census caught it, red log preserved) and two battery drivers died before running a suite, after which the repo's streaming single-writer driver ran the full battery green in one pass."
