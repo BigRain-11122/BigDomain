@@ -1,0 +1,10 @@
+PASS AC-AMAW1: keys=9 rows=1 base_unchanged=True rev=four units left
+PASS AC-AMAW2: gate=True digests=True tx=True rows=1
+PASS AC-AMAW3: seam=True back=True cross=True unchanged=True rows=3
+PASS AC-AMAW4: retired_revisable=True retired_face=ships in five business days history=1/1
+PASS AC-AMAW5: shape=True order=True values=True errors=True
+PASS AC-AMAW6: answered=3/3 mean=3900/3900 latency=3900/3900 queue_same=True
+PASS AC-AMAW7: history_same=True faces_same=True digests=True tx=True
+PASS AC-AMAW8: restarts=2/2 wired=True ascii=True
+
+SUITE PASS 8/8

@@ -114,6 +114,8 @@ E_AM_PROVIDER_UNREGISTERED = "E_AM_PROVIDER_UNREGISTERED"  # AC-AMPV2
 E_AM_PROVIDER_UNCHANGED = "E_AM_PROVIDER_UNCHANGED"  # AC-AMPV3
 E_AM_UNKNOWN_REPLY = "E_AM_UNKNOWN_REPLY"      # AC-AMRY2 (no such reply)
 E_AM_REPLY_UNCHANGED = "E_AM_REPLY_UNCHANGED"  # AC-AMRY3 (same text)
+E_AM_UNKNOWN_ANSWER = "E_AM_UNKNOWN_ANSWER"    # AC-AMAW2 (no such answer)
+E_AM_ANSWER_UNCHANGED = "E_AM_ANSWER_UNCHANGED"  # AC-AMAW2 (same text)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -237,6 +239,16 @@ CREATE TABLE IF NOT EXISTS apimarket_reply_revisions (
     dev_account TEXT NOT NULL,
     previous_text TEXT NOT NULL,
     reply_text TEXT NOT NULL,
+    revised_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_answer_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    answer_id INTEGER NOT NULL,
+    question_id INTEGER NOT NULL,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    previous_text TEXT NOT NULL,
+    answer_text TEXT NOT NULL,
     revised_utc TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_refunds (
@@ -5080,7 +5092,7 @@ class APIMarketFace:
             raw = self._conn.execute(
                 "SELECT q.question_id, q.buyer_id, q.question_text,"
                 " q.asked_utc, a.answer_text, a.answered_utc,"
-                " a.dev_account"
+                " a.dev_account, a.answer_id"
                 " FROM apimarket_questions q"
                 " LEFT JOIN apimarket_answers a"
                 " ON a.question_id = q.question_id"
@@ -5093,7 +5105,9 @@ class APIMarketFace:
                 "question_text": r[2],
                 "asked_utc": r[3],
                 "answered": r[4] is not None,
-                "answer_text": r[4],
+                "answer_text": (None if r[4] is None
+                                else self._effective_answer(int(r[7]),
+                                                            r[4])),
                 "answered_utc": r[5],
                 "dev_account": r[6],
             } for r in raw]
@@ -5203,7 +5217,7 @@ class APIMarketFace:
                 "SELECT q.question_id, q.listing_id, l.listing_key,"
                 " l.title, l.description, l.dev_account,"
                 " q.question_text, q.asked_utc,"
-                " a.answer_text, a.answered_utc"
+                " a.answer_text, a.answered_utc, a.answer_id"
                 " FROM apimarket_questions q"
                 " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
                 " LEFT JOIN apimarket_answers a"
@@ -5225,7 +5239,9 @@ class APIMarketFace:
                     "question_text": r[6],
                     "asked_utc": r[7],
                     "answered": r[8] is not None,
-                    "answer_text": r[8],
+                    "answer_text": (None if r[8] is None
+                                    else self._effective_answer(
+                                        int(r[10]), r[8])),
                     "answered_utc": r[9],
                 })
         answered = sum(1 for row in rows if row["answered"])
@@ -5299,7 +5315,7 @@ class APIMarketFace:
                     "buyer_id": r[6],
                     "question_text": r[7],
                     "asked_utc": r[8],
-                    "answer_text": r[9],
+                    "answer_text": self._effective_answer(int(r[1]), r[9]),
                     "answered_utc": r[10],
                     "response_seconds": _seconds(r[8], r[10]),
                 })
@@ -5320,6 +5336,136 @@ class APIMarketFace:
                                  if count else None),
                 "disclaimer": self.disclaimer,
                 "rows": rows}
+
+    def revise_answer(self, dev_account, answer_id, text):
+        """Seller-side answer revision door (pre-registered
+        AC-AMAW1..AC-AMAW8 in the R2145 explore-queue claim row
+        BEFORE this code existed).
+
+        The answer face was write-once: one immutable row per
+        question behind UNIQUE(question_id) and E_AM_ALREADY_ANSWERED
+        forever, so an answer that named a stock level or a delivery
+        window stayed welded to the shelf after the stock moved or
+        the listing was repriced. Every other write-once axis grew a
+        remedy door (price R2079, metadata R2083, supply R2095,
+        rating R2094, reply R2143, provider identity R2136), which
+        made the answer the last one without. Each revision appends
+        one apimarket_answer_revisions row and never rewrites the
+        base answer; the effective text is the newest revision, else
+        the base stamp.
+
+        Gate order pinned by AC-AMAW2: account shape, answer-id
+        shape, text shape, existence, ownership, unchanged state.
+        The unchanged gate compares against the EFFECTIVE text, so
+        revising back to an earlier wording stays legal while a
+        same-text revision answers E_AM_ANSWER_UNCHANGED with zero
+        new rows. A retired listing keeps its answer leg revisable -
+        retirement freezes the shelf, not the duty to answer
+        (AC-AMAW4). Revising moves zero tokens and changes no
+        answered/unanswered counter: a revision is not a new answer
+        (AC-AMAW6)."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if (not isinstance(answer_id, int) or isinstance(answer_id, bool)
+                or answer_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(answer_id))
+        if not isinstance(text, str):
+            raise ApiMarketError(E_AM_BAD_REPLY, "text must be str")
+        body = text.strip()
+        if (not body or len(body) > 500
+                or any(ord(ch) < 32 or ord(ch) == 127 for ch in body)):
+            raise ApiMarketError(E_AM_BAD_REPLY, str(text)[:40])
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT question_id, listing_id, dev_account,"
+                " answer_text FROM apimarket_answers"
+                " WHERE answer_id = ?", (answer_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_ANSWER,
+                                     str(answer_id))
+            if row[2] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, answer_id))
+            question_id = int(row[0])
+            listing_id = int(row[1])
+            previous = self._effective_answer(answer_id, row[3])
+            if body == previous:
+                raise ApiMarketError(E_AM_ANSWER_UNCHANGED,
+                                     "%s/%s" % (answer_id, body[:40]))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_answer_revisions"
+                    " (answer_id, question_id, listing_id, dev_account,"
+                    " previous_text, answer_text, revised_utc)"
+                    " VALUES (?,?,?,?,?,?,?)",
+                    (answer_id, question_id, listing_id, dev_account,
+                     previous, body, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"revision_id": cur.lastrowid, "answer_id": answer_id,
+                "question_id": question_id, "listing_id": listing_id,
+                "dev_account": dev_account,
+                "previous_text": previous, "answer_text": body,
+                "revised_utc": stamp, "disclaimer": self.disclaimer}
+
+    def _effective_answer(self, answer_id, base_text):
+        """Effective answer text: the newest append-only revision,
+        else the immutable base stamp (AC-AMAW3 single seam for
+        api_listing_qna, api_buyer_questions and api_seller_answers).
+        Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT answer_text FROM apimarket_answer_revisions"
+            " WHERE answer_id = ? ORDER BY revision_id DESC LIMIT 1",
+            (answer_id,)).fetchone()
+        return base_text if row is None else row[0]
+
+    def api_answer_history(self, answer_id):
+        """Answer revision history surface (AC-AMAW5): the immutable
+        base wording, every append-only revision in order, the
+        effective text and the revision count, alongside the question
+        the answer belongs to. An unknown answer answers
+        E_AM_UNKNOWN_ANSWER and a bad id answers E_AM_BAD_ARGS before
+        any read. Pure read: zero row mutations, zero tokens."""
+        if (not isinstance(answer_id, int) or isinstance(answer_id, bool)
+                or answer_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(answer_id))
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT question_id, listing_id, dev_account,"
+                " answer_text, answered_utc FROM apimarket_answers"
+                " WHERE answer_id = ?", (answer_id,)).fetchone()
+            if row is None:
+                raise ApiMarketError(E_AM_UNKNOWN_ANSWER,
+                                     str(answer_id))
+            question_id = int(row[0])
+            question = self._conn.execute(
+                "SELECT buyer_id, question_text FROM apimarket_questions"
+                " WHERE question_id = ?", (question_id,)).fetchone()
+            revs = self._conn.execute(
+                "SELECT revision_id, previous_text, answer_text,"
+                " revised_utc FROM apimarket_answer_revisions"
+                " WHERE answer_id = ? ORDER BY revision_id",
+                (answer_id,)).fetchall()
+            base = row[3]
+            effective = base if not revs else revs[-1][2]
+            buyer = "" if question is None else question[0]
+            asked = "" if question is None else question[1]
+        return {"answer_id": answer_id, "question_id": question_id,
+                "listing_id": int(row[1]), "dev_account": row[2],
+                "buyer_id": buyer, "question_text": asked,
+                "effective_text": effective, "base_text": base,
+                "revision_count": len(revs),
+                "latest_revised_utc": (None if not revs
+                                       else revs[-1][3]),
+                "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(x[0]),
+                               "previous_text": x[1],
+                               "answer_text": x[2],
+                               "revised_utc": x[3]} for x in revs]}
 
     def _provider_state(self, dev_account):
         """Effective provider identity (AC-AMPV4) - one seam for the

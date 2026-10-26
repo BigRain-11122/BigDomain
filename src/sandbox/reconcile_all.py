@@ -2606,6 +2606,12 @@ SUITES = [
     # 12 -> 13 additively.
     ("ledger-apimarket-selleranswers", os.path.join(
         "ledger", "test_apimarket_selleranswers.py"), 8),
+    # R2145 answer-revision leg: answer_question was write-once while
+    # every other commodity axis grew a remedy door; one append-only
+    # revision table plus a single effective-text seam shared by the
+    # three public Q&A read faces.
+    ("ledger-apimarket-answerrev", os.path.join(
+        "ledger", "test_apimarket_answerrev.py"), 8),
     # R2124 distribution-duty faces: provider real-name registration
     # (append-only, one row per developer), the public display layer
     # (registered name plus unified social credit code shown per live
