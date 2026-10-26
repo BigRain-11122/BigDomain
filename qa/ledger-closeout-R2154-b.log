@@ -1,0 +1,10 @@
+suite: round closing station (R2154 AC-LGN1..AC-LGN8)
+PASS AC-LGN1 report keys pinned, deterministic, verdict in closed set
+PASS AC-LGN2 default target is the newest narrative round
+PASS AC-LGN3 four bad closing shapes all BAD_SHAPE with one error
+PASS AC-LGN4 older round after a settled one is NOT_MONOTONIC
+PASS AC-LGN5 missing closing line refused, lone ledger line legal
+PASS AC-LGN6 CLI prints one LEDGER OK on success only
+PASS AC-LGN7 state file untouched by the gate, zero network imports
+PASS AC-LGN8 legacy faces unchanged, live log closes clean
+SUITE PASS 8/8 criteria

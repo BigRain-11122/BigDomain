@@ -3737,6 +3737,13 @@ SUITES = [
     # (AC-RID1..AC-RID8 pre-registered in state/queue/tech.md R2153.)
     ("os-run-identity",
      os.path.join("..", "os", "test_run_identity.py"), 8),
+    # R2154: the round's closing station - the ledger line this window
+    # just wrote is checked where it is written (parseable, settleable
+    # reason, newer than everything already settled) instead of being
+    # discovered by a later window, with one LEDGER OK <round> echo.
+    # (AC-LGN1..AC-LGN8 pre-registered in state/queue/tech.md R2154.)
+    ("os-ledger-closeout",
+     os.path.join("..", "os", "test_ledger_closeout.py"), 8),
     ]
 
 FAILS = 0

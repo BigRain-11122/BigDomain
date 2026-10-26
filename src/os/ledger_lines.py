@@ -299,6 +299,129 @@ def format_report(report):
     return out
 
 
+CLOSEOUT_KEYS = ("round", "verdict", "ledger_line", "errors",
+                 "previous_round")
+CLOSEOUT_VERDICTS = ("OK", "MISSING", "BAD_SHAPE", "NOT_MONOTONIC")
+
+
+def _scan_entries(lines):
+    """Split a log window into ledger entries and narrative rounds.
+
+    Ledger entries keep the position of the line, its round number, the
+    parsed payload (None when the shape is broken) and the error.
+    Positions are 0-based here and reported 1-based by the caller.
+    """
+    entries = []
+    narrative = []
+    for index, raw in enumerate(lines):
+        line = raw if isinstance(raw, str) else str(raw)
+        kind = classify(line)
+        if kind == "ledger":
+            try:
+                parsed = parse_ledger_line(line)
+                entries.append((index, parsed["round"], parsed, None))
+            except LedgerLineError as exc:
+                round_no = int(LEDGER_PREFIX_RE.match(line).group(1))
+                entries.append((index, round_no, None, exc))
+        elif kind == "round":
+            narrative.append((index,
+                              int(NARRATIVE_RE.match(line).group(1))))
+    return entries, narrative
+
+
+def check_closeout(lines, round_no=None):
+    """Check the closing station of ONE round (R2154; AC-LGN1..AC-LGN8).
+
+    The whole-window audit answers "is the log consistent" only after
+    the fact. This face answers the question the closing step itself
+    must ask before it may declare the round shut: is the line this
+    round just wrote parseable, does it carry a settleable reason, and
+    is it newer than everything already settled before it.
+
+    round_no=None targets the newest narrative round; an int targets
+    that round explicitly (which is how a closeout names its own round).
+    Gate order is pinned: absence, then broken shape, then ordering -
+    fail-closed on the earliest missing evidence.
+
+    Deterministic, read-only, zero network.
+    """
+    text_lines = [line if isinstance(line, str) else str(line)
+                  for line in lines]
+    entries, narrative = _scan_entries(text_lines)
+    if round_no is None:
+        if narrative:
+            target = max(item[1] for item in narrative)
+        elif entries:
+            target = max(item[1] for item in entries)
+        else:
+            raise LedgerLineError(
+                "E_LGN_NO_ROUND",
+                "the window holds no round line and no ledger line")
+    else:
+        if not isinstance(round_no, int) or round_no < 1:
+            raise LedgerLineError("E_LGN_BAD_ARGS",
+                                  "round must be a positive integer")
+        target = round_no
+    errors = []
+    target_entries = [item for item in entries if item[1] == target]
+    anchor = None
+    if target_entries:
+        anchor = target_entries[-1][0]
+    else:
+        target_narrative = [item[0] for item in narrative if item[1] == target]
+        if target_narrative:
+            anchor = target_narrative[-1]
+        else:
+            anchor = len(text_lines)
+    previous = [item[1] for item in entries if item[0] < anchor]
+    previous_round = max(previous) if previous else None
+    ledger_line = None
+    if not target_entries:
+        verdict = "MISSING"
+        errors.append({"code": "E_LGN_MISSING",
+                       "detail": "round %d has no ledger line before the "
+                                 "closing station" % target})
+    else:
+        index, _, parsed, exc = target_entries[-1]
+        ledger_line = index + 1
+        if exc is not None:
+            verdict = "BAD_SHAPE"
+            errors.append({"code": exc.code, "detail": exc.detail,
+                           "line": ledger_line})
+        elif previous_round is not None and target <= previous_round:
+            verdict = "NOT_MONOTONIC"
+            errors.append({
+                "code": "E_LGN_NOT_MONOTONIC",
+                "detail": "round %d is not newer than the settled round %d"
+                          % (target, previous_round),
+                "line": ledger_line,
+            })
+        else:
+            verdict = "OK"
+    return {
+        "round": target,
+        "verdict": verdict,
+        "ledger_line": ledger_line,
+        "errors": errors,
+        "previous_round": previous_round,
+    }
+
+
+def format_closeout(report):
+    """Render a closeout verdict as printable ASCII lines."""
+    out = [
+        "closeout round=%d verdict=%s line=%s previous=%s"
+        % (report["round"], report["verdict"],
+           "none" if report["ledger_line"] is None
+           else str(report["ledger_line"]),
+           "none" if report["previous_round"] is None
+           else str(report["previous_round"])),
+    ]
+    for item in report["errors"]:
+        out.append("error %s: %s" % (item["code"], item["detail"]))
+    return out
+
+
 def _stderr(message):
     sys.stderr.write(message + "\n")
     sys.stderr.flush()
@@ -311,6 +434,8 @@ def main(argv=None):
     as_json = False
     baseline_path = default_baseline_path()
     use_baseline = True
+    closeout = False
+    round_no = None
     index = 0
     while index < len(args):
         arg = args[index]
@@ -322,6 +447,18 @@ def main(argv=None):
         elif arg == "--no-baseline":
             use_baseline = False
             index += 1
+        elif arg == "--closeout":
+            closeout = True
+            index += 1
+        elif arg == "--round":
+            if index + 1 >= len(args) or not args[index + 1].isdigit():
+                _stderr("E_LGN_BAD_ARGS: --round needs a positive integer")
+                return 2
+            round_no = int(args[index + 1])
+            if round_no < 1:
+                _stderr("E_LGN_BAD_ARGS: --round needs a positive integer")
+                return 2
+            index += 2
         elif arg == "--baseline":
             if index + 1 >= len(args):
                 _stderr("E_LGR_BAD_ARGS: --baseline needs a path")
@@ -352,12 +489,25 @@ def main(argv=None):
                             "state.json")
     try:
         log = load_state_log(path)
-        report = audit(log, tail)
-        if use_baseline:
-            report = apply_baseline(report, load_baseline(baseline_path))
+        if closeout:
+            report = check_closeout(log, round_no)
+        else:
+            report = audit(log, tail)
+            if use_baseline:
+                report = apply_baseline(report, load_baseline(baseline_path))
     except (IOError, OSError, ValueError) as exc:
         _stderr("E_LGR_NO_STATE: %s" % exc)
         return 3
+    if closeout:
+        if as_json:
+            sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
+        elif report["verdict"] == "OK":
+            # AC-LGN6: the passing gate prints exactly one line.
+            sys.stdout.write("LEDGER OK %d\n" % report["round"])
+        else:
+            for line in format_closeout(report):
+                sys.stdout.write(line + "\n")
+        return 0 if report["verdict"] == "OK" else 2
     if as_json:
         sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
     else:
