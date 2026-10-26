@@ -1,0 +1,8 @@
+$ suite_matrix.py --out docs/suite-matrix.md
+rc=0
+PASS generated docs/suite-matrix.md (33861 bytes) - registry suites=350 criteria=2908 evidence=qa/reconcile-all-R2146.log green=349/350
+PASS hygiene: pure-ascii source, zero network imports
+
+$ suite_matrix.py --check --out docs/suite-matrix.md
+rc=0
+PASS check: docs/suite-matrix.md byte-identical (33861 bytes, 350 suites, 2908 criteria)

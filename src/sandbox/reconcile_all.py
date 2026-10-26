@@ -2612,6 +2612,12 @@ SUITES = [
     # three public Q&A read faces.
     ("ledger-apimarket-answerrev", os.path.join(
         "ledger", "test_apimarket_answerrev.py"), 8),
+    # R2147 category-revision leg: the last write-once declaration on
+    # the listing row gets an append-only remedy door plus one
+    # effective-bucket seam shared by the catalog, demand, discovery
+    # filter and competitive bucket, and a history face.
+    ("ledger-apimarket-categoryrev", os.path.join(
+        "ledger", "test_apimarket_categoryrev.py"), 8),
     # R2124 distribution-duty faces: provider real-name registration
     # (append-only, one row per developer), the public display layer
     # (registered name plus unified social credit code shown per live

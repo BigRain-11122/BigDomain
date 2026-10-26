@@ -1,0 +1,10 @@
+PASS AC-AMCG1: keys=9 rows=1 base='Backtest'/'Backtest' cat='Data'
+PASS AC-AMCG2: gate=True digests=True tx=True rows=1
+PASS AC-AMCG3: view=True search=True catalog=True demand=True
+PASS AC-AMCG4: unchanged=True back=2 nulled=True cross=True restored=True rows=5
+PASS AC-AMCG5: shape=True order=True values=True errors=True
+PASS AC-AMCG6: before='Backtest'/3/min7 after='Data'/2/min6
+PASS AC-AMCG7: stats_stable=True conservation=True history_same=True faces_same=True digests=True tx=True
+PASS AC-AMCG8: restarts=2/2 wired=True ascii=True
+
+SUITE PASS 8/8

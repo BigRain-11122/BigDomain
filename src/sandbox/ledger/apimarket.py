@@ -116,6 +116,7 @@ E_AM_UNKNOWN_REPLY = "E_AM_UNKNOWN_REPLY"      # AC-AMRY2 (no such reply)
 E_AM_REPLY_UNCHANGED = "E_AM_REPLY_UNCHANGED"  # AC-AMRY3 (same text)
 E_AM_UNKNOWN_ANSWER = "E_AM_UNKNOWN_ANSWER"    # AC-AMAW2 (no such answer)
 E_AM_ANSWER_UNCHANGED = "E_AM_ANSWER_UNCHANGED"  # AC-AMAW2 (same text)
+E_AM_CATEGORY_UNCHANGED = "E_AM_CATEGORY_UNCHANGED"  # AC-AMCG1 (same bucket)
 
 _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 
@@ -125,6 +126,11 @@ _CONTENT_REJECTED_CODE = "E_CONTENT_REJECTED"  # lobby SecGate hit
 # diverging.
 _PROVIDER_NAME_MAX = 120
 _PROVIDER_CODE_MAX = 64
+
+# Category declaration cap: the publish door and the revision door
+# share one bound so the two shape gates can never diverge (the
+# 40-char literal used to live inline in publish_api).
+_CATEGORY_MAX = 40
 
 # Sandbox-only split defaults ([needs-CEO] adoption face, AC-AM4):
 # the developer leg is first in apportion order, so the single
@@ -206,6 +212,14 @@ CREATE TABLE IF NOT EXISTS apimarket_listing_revisions (
     dev_account TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
+    revised_utc TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS apimarket_category_revisions (
+    revision_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    listing_id INTEGER NOT NULL,
+    dev_account TEXT NOT NULL,
+    previous_category TEXT,
+    category TEXT,
     revised_utc TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS apimarket_watchlist (
@@ -825,7 +839,7 @@ class APIMarketFace:
             cat = category.strip()
             if not cat:
                 raise ApiMarketError(E_AM_BAD_ARGS, "category blank")
-            if len(cat) > 40:
+            if len(cat) > _CATEGORY_MAX:
                 raise ApiMarketError(E_AM_BAD_ARGS,
                                      "category too long")
         body = json.dumps(payload, sort_keys=True)
@@ -987,6 +1001,36 @@ class APIMarketFace:
         if row is None:
             return base_title, base_description, 0, None
         return row[0], row[1], count, row[2]
+
+    def _category_state(self, listing_id, base_category):
+        """(effective_category, revision_count, latest_revised_utc).
+        The newest append-only category revision wins; with no
+        revision the declaration made at publish time speaks. This
+        is the ONE seam every category reader goes through, so a
+        revision moves the catalog, the demand face, the discovery
+        filter and the competitive bucket in exactly one step.
+        Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT category, revised_utc FROM"
+            " apimarket_category_revisions WHERE listing_id = ?"
+            " ORDER BY revision_id DESC LIMIT 1",
+            (listing_id,)).fetchone()
+        count = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_category_revisions"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()[0])
+        if row is None:
+            return base_category, 0, None
+        return row[0], count, row[1]
+
+    def _effective_category(self, listing_id):
+        """Effective category of one listing (no revision stats).
+        Caller holds the lock."""
+        base = self._conn.execute(
+            "SELECT category FROM apimarket_listings"
+            " WHERE listing_id = ?", (listing_id,)).fetchone()
+        if base is None:
+            raise ApiMarketError(E_AM_UNKNOWN_LISTING, str(listing_id))
+        return self._category_state(listing_id, base[0])[0]
 
     def delist_api(self, dev_account, listing_id):
         """Retire one listing (the seller-side door this face never
@@ -1226,6 +1270,90 @@ class APIMarketFace:
                 "title": new_title,
                 "description": new_desc,
                 "metadata_revision_count": count + 1,
+                "revised_utc": stamp,
+                "disclaimer": self.disclaimer}
+
+    def revise_category(self, dev_account, listing_id, category=None):
+        """Seller-side category revision door (criteria
+        AC-AMCG1..AC-AMCG8 pre-registered in the R2147 explore-queue
+        row BEFORE this code existed).
+
+        publish_api declares a category exactly once and that
+        declaration was the last write-once declaration on the
+        listing row with no remedy leg: edit_listing repairs title
+        and description only, revise_price and revise_category's
+        siblings each have their own revision table, but a seller
+        who filed a service under the wrong bucket was stuck with
+        it forever. The miscategorisation then poisoned four read
+        faces at once - the catalog directory, the demand face,
+        the discovery category filter and the competitive bucket -
+        because every one of them read the stored declaration.
+
+        This face adds one append-only apimarket_category_revisions
+        row per change; the listing row is never rewritten, so the
+        original declaration survives as base forever (AC-AMCG1).
+        Passing None re-files the listing into the honest
+        uncategorized bucket, which is a legal move and not a
+        deletion.
+
+        Gate order is pinned by AC-AMCG2, every gate before any
+        write: account shape, listing shape/existence, ownership,
+        the retired state, category shape (None or a non-blank
+        string within the publish cap), then the no-change state. A
+        same-bucket call answers E_AM_CATEGORY_UNCHANGED with zero
+        new rows while revising back to an earlier bucket stays
+        legal, because the comparison is against the CURRENT
+        effective bucket (AC-AMCG4). Revising moves zero tokens and
+        touches no purchase, rating or refund row."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing = self._require_listing(listing_id)
+            if listing[1] != dev_account:
+                raise ApiMarketError(E_AM_NOT_OWNER,
+                                     "%s/%s" % (dev_account, listing_id))
+            if self._delisted_utc(listing_id) is not None:
+                raise ApiMarketError(E_AM_DELISTED, str(listing_id))
+            if category is None:
+                new_cat = None
+            else:
+                if not isinstance(category, str):
+                    raise ApiMarketError(E_AM_BAD_ARGS,
+                                         "category must be str or None")
+                new_cat = category.strip()
+                if not new_cat:
+                    raise ApiMarketError(E_AM_BAD_ARGS,
+                                         "category blank")
+                if len(new_cat) > _CATEGORY_MAX:
+                    raise ApiMarketError(E_AM_BAD_ARGS,
+                                         "category too long")
+            base = self._conn.execute(
+                "SELECT listing_key, category FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            cur_cat, count, _latest = self._category_state(
+                listing_id, base[1])
+            if new_cat == cur_cat:
+                raise ApiMarketError(E_AM_CATEGORY_UNCHANGED,
+                                     str(listing_id))
+            stamp = _now_utc()
+            self._conn.execute("BEGIN IMMEDIATE")
+            try:
+                cur = self._conn.execute(
+                    "INSERT INTO apimarket_category_revisions"
+                    " (listing_id, dev_account, previous_category,"
+                    " category, revised_utc) VALUES (?,?,?,?,?)",
+                    (listing_id, dev_account, cur_cat, new_cat, stamp))
+                self._conn.execute("COMMIT")
+            except BaseException:
+                self._conn.execute("ROLLBACK")
+                raise
+        return {"listing_id": listing_id,
+                "dev_account": dev_account,
+                "listing_key": base[0],
+                "revision_id": cur.lastrowid,
+                "previous_category": cur_cat,
+                "category": new_cat,
+                "category_revision_count": count + 1,
                 "revised_utc": stamp,
                 "disclaimer": self.disclaimer}
 
@@ -1732,6 +1860,8 @@ class APIMarketFace:
             n_rev, latest_rev = self._revision_stats(listing_id)
             eff_title, eff_desc, n_meta, latest_meta = \
                 self._metadata_state(listing_id, row[3], row[4])
+            eff_cat, n_cat_rev, latest_cat = self._category_state(
+                listing_id, row[8])
         return {"listing_id": int(row[0]), "dev_account": row[1],
                 "listing_key": row[2], "title": eff_title,
                 "description": eff_desc, "token_price": current,
@@ -1742,7 +1872,10 @@ class APIMarketFace:
                 "revision_count": n_rev,
                 "latest_revision_utc": latest_rev,
                 "ai_label": int(row[6]), "listed_utc": row[7],
-                "category": row[8],
+                "category": eff_cat,
+                "base_category": row[8],
+                "category_revision_count": n_cat_rev,
+                "latest_category_revision_utc": latest_cat,
                 "purchase_count": int(n_buy), "rating_count": n_rate,
                 "rating_avg": avg,
                 "refund_count": n_refund,
@@ -2280,6 +2413,41 @@ class APIMarketFace:
                                "dev_account": r[1],
                                "title": r[2],
                                "description": r[3],
+                               "revised_utc": r[4]} for r in rows]}
+
+    def api_category_history(self, listing_id):
+        """Category history surface (pre-registered AC-AMCG5 in the
+        R2147 explore-queue row BEFORE this code existed): the
+        declaration made at publish time plus every append-only
+        revision in order, the CURRENT effective bucket and the
+        revision count, so a seller and an operator can both read
+        how a listing moved between buckets. Per-listing isolation;
+        a retired listing's history stays readable. Pure read."""
+        with self._lock:
+            self._require_listing(listing_id)
+            base = self._conn.execute(
+                "SELECT category FROM apimarket_listings"
+                " WHERE listing_id = ?", (listing_id,)).fetchone()
+            rows = self._conn.execute(
+                "SELECT revision_id, dev_account, previous_category,"
+                " category, revised_utc FROM apimarket_category_revisions"
+                " WHERE listing_id = ? ORDER BY revision_id",
+                (listing_id,)).fetchall()
+            eff_cat, count, latest = self._category_state(
+                listing_id, base[0])
+            stamp = self._delisted_utc(listing_id)
+        return {"listing_id": listing_id,
+                "base_category": base[0],
+                "category": eff_cat,
+                "revision_count": count,
+                "latest_revision_utc": latest,
+                "delisted": stamp is not None,
+                "delisted_utc": stamp,
+                "disclaimer": self.disclaimer,
+                "revisions": [{"revision_id": int(r[0]),
+                               "dev_account": r[1],
+                               "previous_category": r[2],
+                               "category": r[3],
                                "revised_utc": r[4]} for r in rows]}
 
     def api_sales(self, dev_account):
@@ -3004,7 +3172,12 @@ class APIMarketFace:
                     continue
                 if dev_account is not None and r[1] != dev_account:
                     continue
-                if cat is not None and (r[8] or "") != cat:
+                # AC-AMCG6: the category filter and the row value
+                # both read the one effective-bucket seam, so a
+                # revision moves discovery in the same step it moves
+                # the catalog and the demand face.
+                eff_cat = self._category_state(listing_id, r[8])[0]
+                if cat is not None and (eff_cat or "") != cat:
                     continue
                 eff_title, _eff_desc, _n_meta, _latest_meta = \
                     self._metadata_state(listing_id, r[3], r[4])
@@ -3036,7 +3209,7 @@ class APIMarketFace:
                             "ai_label": int(r[6]),
                             "rating_count": n_rate,
                             "rating_avg": avg,
-                            "category": r[8],
+                            "category": eff_cat,
                             "delisted": stamp is not None,
                             "delisted_utc": stamp})
             # AC-AMSR2: five total orders, each tie-broken by
@@ -3134,7 +3307,10 @@ class APIMarketFace:
             uncategorized = 0
             for r in rows:
                 lid = int(r[0])
-                cat = r[2]
+                # AC-AMCG6: one effective-bucket seam for every
+                # category reader, so the directory re-buckets a
+                # listing the moment its category is revised.
+                cat = self._category_state(lid, r[2])[0]
                 if cat is None:
                     uncategorized += 1
                     continue
@@ -3219,8 +3395,13 @@ class APIMarketFace:
                 " JOIN apimarket_purchases p"
                 " ON p.purchase_id = f.purchase_id").fetchall()
             groups = {}
+            # AC-AMCG6: demand buckets read the one effective-bucket
+            # seam, so trade aggregates follow a revised category in
+            # the same step as the catalog and discovery faces.
+            owner = {int(r[0]): self._category_state(int(r[0]), r[1])[0]
+                     for r in listings}
             for r in listings:
-                cat = r[1]
+                cat = owner[int(r[0])]
                 g = groups.get(cat)
                 if g is None:
                     g = {"listing_count": 0, "live": 0, "retired": 0,
@@ -3232,7 +3413,6 @@ class APIMarketFace:
                     g["live"] += 1
                 else:
                     g["retired"] += 1
-            owner = {int(r[0]): r[1] for r in listings}
             for r in purchases:
                 g = groups.get(owner.get(int(r[0])))
                 if g is None:
@@ -3337,19 +3517,17 @@ class APIMarketFace:
                 " description, token_price, category"
                 " FROM apimarket_listings WHERE listing_id = ?",
                 (listing_id,)).fetchone()
-            category = head[6]
-            if category is None:
-                rows = self._conn.execute(
-                    "SELECT listing_id, dev_account, listing_key,"
-                    " title, description, token_price"
-                    " FROM apimarket_listings WHERE category IS NULL"
-                    " ORDER BY listing_id").fetchall()
-            else:
-                rows = self._conn.execute(
-                    "SELECT listing_id, dev_account, listing_key,"
-                    " title, description, token_price"
-                    " FROM apimarket_listings WHERE category = ?"
-                    " ORDER BY listing_id", (category,)).fetchall()
+            # AC-AMCG6: the competitive bucket is the EFFECTIVE
+            # bucket, so a revised listing competes in its new
+            # category and leaves the old one in the same step.
+            category = self._category_state(listing_id, head[6])[0]
+            rows = self._conn.execute(
+                "SELECT listing_id, dev_account, listing_key,"
+                " title, description, token_price, category"
+                " FROM apimarket_listings ORDER BY listing_id").fetchall()
+            rows = [r for r in rows
+                    if self._category_state(int(r[0]), r[6])[0]
+                    == category]
             members = []
             for r in rows:
                 lid = int(r[0])
@@ -6438,6 +6616,8 @@ class APIMarketFace:
             else:
                 raise ApiMarketError(E_AM_NOT_PARTY, account)
             stamp = self._delisted_utc(listing_id)
+            effective_category = self._category_state(
+                listing_id, row[4])[0]
             current = self._current_price(listing_id, int(row[12]))
             refund_row = self._conn.execute(
                 "SELECT refund_id, amount, dev_share, platform_share,"
@@ -6517,7 +6697,7 @@ class APIMarketFace:
                 "listing_id": listing_id,
                 "listing_key": row[2],
                 "title": row[3],
-                "category": row[4],
+                "category": effective_category,
                 "buyer_id": buyer_id,
                 "dev_account": dev_account,
                 "viewer_role": role,

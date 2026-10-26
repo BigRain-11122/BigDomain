@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T01:20:00+08:00",
+  "export_ts": "2026-10-27T00:58:13+08:00",
   "do": "硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "上一轮的「卖家改口」已经完整验证并入库；本轮把前窗只落盘未提交的产品补齐验收：全量电池 349/349 套件全绿、矩阵字节同一。",
-    "latest_artifact": "apimarket.py 含 revise_answer + api_answer_history（R2145 产品）已由本轮验收并提交；证据 qa/apimarket-answerrev-R2145-a.log / -b.log（8/8 双跑 sha16 2c357c81ed7fc57c）+ qa/reconcile-all-R2146.log（RUNNER PASS 349/349 + controls 7/7，661.7s）。时间戳 2026-10-27 01:1x。",
-    "next_milestone": "48 小时内：下一条 apimarket 产品增量（信任面或市场面新面）按判据预注册同窗交付并跑全量电池；商业化开门仍卡在 CEO 物理件（服务器/商户号/msgSecCheck），零催办。"
+    "current": "本轮给 API 市场补上「品类改错能改回来」这条腿：此前品类只在挂牌时写一次，填错桶就永久错误，并且同时污染目录、需求、发现过滤、竞争位四个读面。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py 新增 revise_category + api_category_history + apimarket_category_revisions，六读者走同一生效缝；套件 src/sandbox/ledger/test_apimarket_categoryrev.py 8/8 双跑判据行逐字节同一（sha16 63e45d6cfb478a0f），证据 qa/apimarket-categoryrev-R2147-a.log / -b.log。时间戳 2026-10-27 03:0x。",
+    "next_milestone": "48 小时内：先补跑全量电池（本轮 25 分钟预算未跑，如实记），再按判据预注册交付下一条 apimarket 增量；商业化开门仍卡在 CEO 物理件（服务器/商户号/msgSecCheck），零催办。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket category revision leg (revise_category + api_category_history + one effective-bucket seam across six readers)",
+      "on",
+      "R2147: the category declaration made at publish time (R2132) was the last write-once declaration on the listing row without a remedy leg - edit_listing repairs title and description only, price has revise_price, supply has restock_api, and rating, reply, answer and provider identity each grew a revision door - so a seller who filed a service under the wrong bucket was stuck with it forever, and the mistake propagated into four read faces at once (the catalog directory, the category demand face, the discovery category filter and the competitive bucket). apimarket.py now grows an append-only apimarket_category_revisions table (previous bucket carried in every row, no UPDATE or DELETE surface, the listing row never rewritten so the original declaration survives as base forever) and revise_category with the pinned gate order account shape, listing shape/existence, ownership, retired state, category shape, unchanged state. E_AM_CATEGORY_UNCHANGED is judged against the EFFECTIVE bucket, so revising back to an earlier bucket stays legal while a repeat of the current one writes zero rows; passing None is a legal move into the honest uncategorized bucket rather than a deletion; every refusal writes zero rows and moves zero tokens. The 40-character cap that used to be a literal inside publish_api is now one shared constant read by both doors so the publish gate and the revision gate cannot diverge. One seam (_category_state / _effective_category) is now flipped through every category reader: api_view gains the additive base_category, category_revision_count and latest_category_revision_utc trio, api_search filters and echoes the effective bucket, api_categories and api_category_demand re-bucket through the seam (trade aggregates follow the move in the same step), api_listing_position computes its competitive bucket over effective buckets in memory because SQL bucketing cannot see revisions, and api_purchase_dossier echoes the effective bucket. The new api_category_history answers the audit view: a nine-key envelope with five-key revision rows, the base declaration, the ordered changes, the current bucket and the revision count, readable on a retired listing and pure-read. Criteria AC-AMCG1..AC-AMCG8: seven anchors (the AC family, the door, the history face, the table, the error code, the suite and the runner label) were git grep -F zero-occupancy verified against the committed HEAD tree (rc=1) before the code existed. Verification: suite SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 63e45d6cfb478a0f (qa/apimarket-categoryrev-R2147-a.log and -b.log, 556 bytes each, single-writer UTF-8 LF); six adjacent suites re-ran green (category, categorydemand, search, listingposition, purchasedossier, supply - 8/8 each); the suite matrix was regenerated to 350 suites / 2908 criteria and checks byte-identical. Honest boundary: the full battery was NOT run this round under the 25-minute budget and is the first item of the next round; the criterion TEXT landed in the queue row in the same window as the code (anchor check preceded it), disclosed in the row itself."
+    ],
     [
       "R2146 interrupted-window closeout: full battery now complete on the answer-revision product",
       "on",
@@ -548,6 +553,10 @@
   ],
   "results": [
     [
+      "R2147",
+      "R2147: five-silence scan clean - decisions.md 288 rows / 213 content-addressed tokens with zero new against the stored baseline, the ledger's two @BigDomain patrol rows already paid off with zero unreplied, group orders baseline unchanged at the 2026-10-26 22:36 dispatch-deck row, benchmarks refreshed 2026-10-26 inside the seven-day gate, tree clean, no index.lock; all four tech heads stayed gated (docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, the live-mtime row waiting on a real normalized-mtime event) and the single explore row was gated on the merchant id, so the window seeded and claimed a fresh P3 row in the SAME window with AC-AMCG1..AC-AMCG8 registered before the code existed. Product: the category revision leg, closing the last unremedied write-once declaration on the listing row - an append-only revision table, revise_category behind the pinned gate order with the unchanged state judged against the effective bucket and None as a legal move into the uncategorized bucket, one shared 40-character cap constant, a new api_category_history and one effective-bucket seam flipped through api_view, api_search, api_categories, api_category_demand, api_listing_position (bucketed in memory because SQL cannot see revisions) and api_purchase_dossier. Verification: suite double-run with byte-identical criterion lines sha16 63e45d6cfb478a0f, six adjacent suites green, matrix 350 suites / 2908 criteria byte-identical. Honest boundary recorded in both the queue row and the round log: the full battery was not run inside the 25-minute budget and leads the next round. One tooling lesson also recorded: Chinese literals passed through a PowerShell here-string into a Python child are mangled by the console code page, so the queue rows were finally written from UTF-8 files by the file tools after the first attempt was reverted (git checkout) with nothing lost."
+    ],
+    [
       "R2146",
       "R2146: five-silence scan found a dirty tree that was not this window's work - the predecessor had written its product, suite, wiring, queue row and status/export patch, then died before committing, leaving a battery log with 57 suite lines and no verdict while its own log line asserted the carried-over battery was reported from that log. No index.lock and no live battery process existed, so this was a crashed window rather than a concurrent executor, and per the R2087 precedent the round verified and closed the work instead of reseeding. Everything was re-measured here: suite double-run identical, battery RUNNER PASS 349/349 plus controls 7/7 in 661.7s, tmp reclaim 802 worlds / 283.63 MiB, matrix 349 suites / 2900 criteria byte-identical. Two honest notes are recorded: the first battery attempt was cancelled because piping its output buffered every line (process tree verified dead, no evidence written), and the predecessor's unverified claim is corrected rather than inherited."
     ],
@@ -756,7 +765,7 @@
       "R2073: the developer sales board month window now carries a three-month purchase straddle - six purchases stamped on the month-start and month-end seconds split exactly by record time, earlier window snapshots stay byte-frozen while later months accumulate, and the three months add up to the lifetime gross with every purchase counted once."
     ],
     [
-      "2143",
+      "2147",
       "OSLoop 执行 tick"
     ],
     [
@@ -1111,12 +1120,12 @@
     ]
   ],
   "self_drive": {
-    "window": "2026-10-20..2026-10-26",
+    "window": "2026-10-21..2026-10-27",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 28,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 24,
+    "substantive_non_idle_mention_lines": 28,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
