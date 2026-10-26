@@ -2307,6 +2307,13 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-categorydemand", os.path.join(
         "ledger", "test_apimarket_categorydemand.py"), 8),
+    # apimarket buyer-side spend broken down by category - the
+    # resident mirror of api_category_demand, purchase-side row
+    # authority, effective-category seam and cash totals identical to
+    # api_buyer_months - criteria AC-BCS1..AC-BCS8 pre-registered in
+    # the R2149 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-buyercategoryspend", os.path.join(
+        "ledger", "test_apimarket_buyercategoryspend.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

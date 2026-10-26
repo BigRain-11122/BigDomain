@@ -1,0 +1,9 @@
+PASS AC-BCS1: env_keys=14 exact=True row_keys=True rows=3 empty_rows=0
+PASS AC-BCS2: bob=['data', 'tools', None] carol=['data', 'tools'] dave=['media']
+PASS AC-BCS3: data=13 tools=7 none=5 total=25 months=25
+PASS AC-BCS4: listings=4 row_sum=4 sellers=2 row_seller_sum=3
+PASS AC-BCS5: carol_data net=0 refunded=10 avg=None tools_avg=7.0
+PASS AC-BCS6: moved_tools=10 demand_data=2 demand_tools=3 roundtrip=True
+PASS AC-BCS7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] flag=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix_rows=0 switch_rows=2 frozen=True
+PASS AC-BCS8: sha16=5e1a5b5f793deb2d identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8
