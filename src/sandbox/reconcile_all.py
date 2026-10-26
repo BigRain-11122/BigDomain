@@ -2217,6 +2217,14 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed).
     ("ledger-apimarket-replyrev", os.path.join(
         "ledger", "test_apimarket_replyrev.py"), 8),
+    # R2144 competitive-position seat: api_listing_position, the
+    # seller's standing inside its own category bucket on the three
+    # buyer axes (asking price, net sales, effective rating), with
+    # the bucket slice returned so the rank is auditable
+    # (AC-AMPOS1..AC-AMPOS8 pre-registered in the R2144
+    # explore-queue claim row BEFORE this suite existed).
+    ("ledger-apimarket-listingposition", os.path.join(
+        "ledger", "test_apimarket_listingposition.py"), 8),
     # R2085 seller-profile seat: the public dev_profile read face
     # with the thirteen-key envelope and nine-key rows, the
     # partition law (listing_count == live + retired, sales and

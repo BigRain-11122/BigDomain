@@ -3280,6 +3280,137 @@ class APIMarketFace:
                 "categories": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_listing_position(self, listing_id, limit=None):
+        """Competitive standing of one listing inside its own
+        category (criteria AC-AMPOS1..AC-AMPOS8 pre-registered in
+        the R2144 explore-queue row BEFORE this code existed).
+
+        The catalog face answers what a category is made of and the
+        demand face answers whether it sells, but nothing answered
+        the seller's own question: "where do I stand against the
+        people I am actually competing with". This face ranks one
+        listing inside its own category bucket on the three axes a
+        buyer weighs - asking price, net sales and effective rating
+        - and returns the bucket slice so the rank is auditable
+        rather than asserted.
+
+        Laws pinned by the suite: ranks are POSITIONS in a total
+        order (never dense ranks), so ties are broken by listing_id
+        ascending and two equal prices still get distinct ranks;
+        price and rating ride their one seam (_current_price and
+        _agg_rating) so a repricing or a rating revision moves the
+        rank in the same step it moves every other read face; net
+        sales rides the scarcity seam (_supply_full) so a refund
+        lowers a rank without touching a listing row; the bucket is
+        the stored category declaration exactly, with the
+        uncategorized listings forming their own bucket (no cross
+        bucket permeation); retired listings stay in their bucket
+        and keep their ranks (history is not erased) while the
+        live/retired partition is reported; the bucket is ordered
+        by (current_price, listing_id) ascending and an optional
+        limit keeps the CHEAPEST head while category_size keeps
+        reporting the full bucket. Pure read: zero row mutations,
+        zero token movement."""
+        if (not isinstance(listing_id, int) or isinstance(listing_id, bool)
+                or listing_id <= 0):
+            raise ApiMarketError(E_AM_BAD_ARGS, str(listing_id))
+        with self._lock:
+            self._require_listing(listing_id)
+            if limit is not None:
+                if (not isinstance(limit, int) or isinstance(limit, bool)
+                        or limit < 1):
+                    raise ApiMarketError(E_AM_BAD_ARGS, str(limit))
+            head = self._conn.execute(
+                "SELECT listing_id, dev_account, listing_key, title,"
+                " description, token_price, category"
+                " FROM apimarket_listings WHERE listing_id = ?",
+                (listing_id,)).fetchone()
+            category = head[6]
+            if category is None:
+                rows = self._conn.execute(
+                    "SELECT listing_id, dev_account, listing_key,"
+                    " title, description, token_price"
+                    " FROM apimarket_listings WHERE category IS NULL"
+                    " ORDER BY listing_id").fetchall()
+            else:
+                rows = self._conn.execute(
+                    "SELECT listing_id, dev_account, listing_key,"
+                    " title, description, token_price"
+                    " FROM apimarket_listings WHERE category = ?"
+                    " ORDER BY listing_id", (category,)).fetchall()
+            members = []
+            for r in rows:
+                lid = int(r[0])
+                stamp = self._delisted_utc(lid)
+                eff_title, _eff_desc, _n_meta, _latest = \
+                    self._metadata_state(lid, r[3], r[4])
+                n_rate, avg = self._agg_rating(lid)
+                members.append({
+                    "listing_id": lid,
+                    "dev_account": r[1],
+                    "listing_key": r[2],
+                    "title": eff_title,
+                    "current_price": int(self._current_price(
+                        lid, int(r[5]))),
+                    "net_sales": int(self._supply_full(lid)[3]),
+                    "rating_count": n_rate,
+                    "rating_avg": avg,
+                    "live": stamp is None,
+                    "delisted_utc": stamp})
+            by_price = sorted(
+                members, key=lambda m: (m["current_price"],
+                                        m["listing_id"]))
+            by_sales = sorted(
+                members, key=lambda m: (-m["net_sales"],
+                                        m["listing_id"]))
+            by_rating = sorted(
+                members, key=lambda m: (-m["rating_avg"],
+                                        -m["rating_count"],
+                                        m["listing_id"]))
+            price_rank = {}; sales_rank = {}; rating_rank = {}
+            for index, m in enumerate(by_price):
+                price_rank[m["listing_id"]] = index + 1
+            for index, m in enumerate(by_sales):
+                sales_rank[m["listing_id"]] = index + 1
+            for index, m in enumerate(by_rating):
+                rating_rank[m["listing_id"]] = index + 1
+            me = [m for m in members
+                  if m["listing_id"] == int(listing_id)][0]
+            cheaper = len([m for m in members
+                           if m["current_price"] < me["current_price"]])
+            pricier = len([m for m in members
+                           if m["current_price"] > me["current_price"]])
+            prices = [m["current_price"] for m in members]
+            rivals = by_price if limit is None else by_price[:limit]
+            rivals = [dict(m) for m in rivals]
+        return {"listing_id": me["listing_id"],
+                "listing_key": head[2],
+                "title": me["title"],
+                "dev_account": head[1],
+                "category": category,
+                "live": me["live"],
+                "delisted_utc": me["delisted_utc"],
+                "current_price": me["current_price"],
+                "net_sales": me["net_sales"],
+                "rating_count": me["rating_count"],
+                "rating_avg": me["rating_avg"],
+                "price_rank": price_rank[me["listing_id"]],
+                "sales_rank": sales_rank[me["listing_id"]],
+                "rating_rank": rating_rank[me["listing_id"]],
+                "cheaper_count": cheaper,
+                "pricier_count": pricier,
+                "category_size": len(members),
+                "category_live_count": len(
+                    [m for m in members if m["live"]]),
+                "category_retired_count": len(
+                    [m for m in members if not m["live"]]),
+                "category_min_price": min(prices),
+                "category_max_price": max(prices),
+                "rivals": rivals,
+                "returned": len(rivals),
+                "truncated": len(rivals) < len(members),
+                "disclaimer": self.disclaimer}
+
     def dev_sales_board(self, window=None):
         """Developer-level sales / revenue aggregation board
         (pre-registered AC-AMB1..AC-AMB7 in the R1978

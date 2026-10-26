@@ -1,0 +1,9 @@
+PASS AC-AMPOS1: envelope=25 keys rows=10 keys; data bucket [2, 3, 1]; uncategorized [4, 5]; tools singleton rank 1; effective title carried with base row preserved
+PASS AC-AMPOS2: price rank 2->1 after 5->2; base row still 5 and current 2; equal prices at 3 give distinct positions 1/2 by listing_id; band min/max tracked; ranks [1, 2, 3]
+PASS AC-AMPOS3: tie at net 2 broken by id (l2 rank 1, l3 rank 2); after one refund l2 net 1 and rank 3 while l3 is rank 1 and l1 rank 2; the purchase rows are untouched (2 gross, 1 net)
+PASS AC-AMPOS4: avg 4.5 rank 1; revising 4->1 drops to 3.0 and swaps with l2 (rank 2); revising back to 5 restores rank 1; the unrated listing is last and rating_count never moved
+PASS AC-AMPOS5: retired l2 keeps its bucket slot, ranks, 1 net sale and two ratings while the partition reads 2 live / 1 retired; a re-listing returns it live with history intact
+PASS AC-AMPOS6: six bad ids ['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']; unknown listing; five bad limits ['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']; unknown-listing-plus-bad-limit answers UNKNOWN_LISTING (listing gate first); limit keeps the cheapest head with category_size intact; 24 table digests and 16 ledger transactions frozen
+PASS AC-AMPOS7: twelve calls across six buckets leave 24 table digests and 16 ledger transactions unchanged; the face body carries no INSERT; same call twice is byte-identical
+PASS AC-AMPOS8: three instances agree byte for byte on three buckets (sha256 5428decf3ed79ece); product files unchanged; runner label registered; suite source pure ASCII
+SUITE PASS 8/8
