@@ -1,0 +1,4 @@
+test_apimarket_listingvelocity.py rc=0 SUITE PASS 8/8
+test_apimarket_relist.py rc=0 SUITE PASS 8/8
+test_apimarket_marketdaily.py rc=0 SUITE 8/8
+test_apimarket_claimlatency.py rc=0 SUITE PASS 8/8

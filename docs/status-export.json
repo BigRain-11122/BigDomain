@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T07:52:00+08:00",
-  "do": "R2179 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the refund family now answers the payback question: how long from a sale to the money coming back, as a six-band latency partition, refund-only aggregates and a monthly leg on stamp-derived durations",
+  "export_ts": "2026-10-28T09:20:00+08:00",
+  "do": "R2180 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the lifecycle family now answers the return leg: how long a retired shelf stayed off the market before it came back, one closed retirement cycle at a time, with a running gap reported honestly as no duration at all",
   "ceo_face": {
-    "current": "R2179: shipped api_refund_latency - refund settlement time in six bands plus average/median/p90 extremes and a monthly leg, all derived from the two stored stamps of each purchase (suite 8/8 double-run byte-identical), and ran the deferred full reconcile battery on the committed tree",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_refund_latency) + src/sandbox/ledger/test_apimarket_refundlatency.py + qa/apimarket-refundlatency-R2179-a.log and -b.log (SUITE PASS 8/8, sha256 1e7158b1...) + qa/reconcile-all-R2179.log - 2026-10-28",
-    "next_milestone": "R2180: fingerprint/profile follow-up on this tree (the suite matrix was already regenerated to 377 suites / 3138 criteria and reads back byte-identical), then the next explore-queue head (api_relist_gap) - ETA 2026-10-29, within 48h",
-    "last_artifact": "qa/apimarket-refundlatency-R2179-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2180: shipped api_relist_gap - retirement-to-re-listing durations paired cycle by cycle from the two stored stamps, a running gap reported as pending with no duration, pooled average/median/extremes with a disclosed market benchmark (suite 8/8 double-run byte-identical)",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_relist_gap) + src/sandbox/ledger/test_apimarket_relistgap.py + qa/apimarket-relistgap-R2180-a.log and -b.log (SUITE PASS 8/8, sha256 00d9efa1...) + qa/regression-R2180.log - 2026-10-28",
+    "next_milestone": "R2181: the deferred full reconcile battery and suite-matrix regeneration on this tree, then the next explore-queue head (api_market_seller_cohort) - ETA 2026-10-29, within 48h",
+    "last_artifact": "qa/apimarket-relistgap-R2180-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "retirement to re-listing gap (api_relist_gap)",
+      "on",
+      "R2180: the lifecycle family answered the raw event stream, the shelf-to-sale duration and the live set, but never how long a shelf stayed off the market before it came back - so a seller repairing a service in a day read identically to one abandoning it for a quarter. The new face pairs each delisting row in cycle c only with the re-listing row that opens cycle c+1, derives every duration from the two stored stamps alone, reports a running gap as a pending row with no duration that never enters an aggregate, skips an orphan delisting rather than fabricating one, and carries a market-wide pooled benchmark beside the seller-scoped aggregates. Suite 8/8 double-run byte-identical, wired as ledger-apimarket-relistgap(8)."
+    ],
     [
       "apimarket refund latency distribution (api_refund_latency)",
       "on",
@@ -132,6 +137,10 @@
     ]
   ],
   "results": [
+    [
+      "R2180",
+      "R2180: five-silence clean (240 rows / 159 D-C tokens, zero new; ledger zero unreplied; group orders unchanged at 03:0x; benchmarks inside 7 days; tree clean). P1 rows stayed blocked-on-CEO, all four tech heads gated and the head of the explore queue is the merchant-gated benchmark row, so the window claimed the first real seed and shipped api_relist_gap: closed retirement cycles paired cycle by cycle on stored stamps only, a running gap with no duration, pooled average/median/extremes with a disclosed market benchmark, suite 8/8 double-run byte-identical and four adjacent suites green. Honest notes: the first run was 2/8 on a own fixture defect (a by-listing stamp rewrite collapsed a two-cycle history), fixed in the fixture without relaxing a criterion; the full battery and matrix regeneration are the next round first item; the loop task principal is still InteractiveToken and S4U needs an elevated window."
+    ],
     [
       "R2179",
       "R2179: five-silence clean (240 rows / 163 D-C tokens, zero new; ledger zero unreplied; group orders unchanged at 03:0x; benchmarks inside 7 days; tree clean). P1 rows stayed blocked-on-CEO and all four tech heads gated, so the explore queue head shipped: api_refund_latency answers the refund payback period with stamp-only durations, a left-closed right-open six-band partition, refund-only aggregates, same-date and one-week crossings and a contiguous monthly leg with honest zero months; suite 8/8 double-run byte-identical, five adjacent regressions green, battery run on the committed tree"
@@ -232,14 +241,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 122,
+    "log_lines_in_window": 124,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 51,
+    "substantive_non_idle_mention_lines": 52,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 10
+    "queue_explore_open": 9
   }
 }

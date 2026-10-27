@@ -1,0 +1,9 @@
+PASS AC-ARG1: keys=True rows=True empty=0 seller=0
+PASS AC-ARG2: gaps=[172800, 864000, 86400, 691200, 86400] shift=True
+PASS AC-ARG3: pending=True frank=2 gina=1 resolved=True
+PASS AC-ARG4: avg=380160.0 median=172800.0 fastest=86400/3 slowest=864000/2
+PASS AC-ARG5: gaps=[864000, 691200, 172800, 86400, 86400] pending_tail=1
+PASS AC-ARG6: bench=True moved=True roundtrip=True
+PASS AC-ARG7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=0 frozen=True tx=True
+PASS AC-ARG8: life=True retired=True sha16=2a9f4f5f4dc1885f identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

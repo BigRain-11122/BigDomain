@@ -8423,6 +8423,186 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "rows": rows}
 
+    def api_relist_gap(self, dev_account=None):
+        """Retirement to re-listing gap (criteria AC-ARG1..AC-ARG8
+        pre-registered in the R2180 explore claim row BEFORE this code
+        existed; the AC-ARG prefix, api_relist_gap,
+        test_apimarket_relistgap and ledger-apimarket-relistgap were
+        all git-grep zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_listing_lifecycle answers the raw event stream,
+        api_listing_velocity answers shelf-to-sale and the position /
+        similarity faces answer the live set - so "how long was this
+        shelf off the market before it came back" had no face, and a
+        seller that repairs a service in a day read identically to one
+        that abandons it for a quarter.
+
+        Pairing law: a delisting row in cycle c pairs only with the
+        re-listing row that OPENS cycle c+1 (the earliest such stamp),
+        so one row is one closed retirement cycle. A delisting row with
+        no return row whose own cycle is the current cycle is a gap
+        still running: it is reported as a pending row with no duration
+        (never zero) and never enters an aggregate. An orphan
+        delisting row (older cycle, no return) is skipped rather than
+        fabricated.
+
+        gap_seconds is an integer derived only from the two stored
+        stamps, never a wall clock, and clamped at zero for the
+        disclosed out-of-order boundary.
+
+        Aggregates cover completed gaps only: avg is the pooled mean,
+        median is the middle value (or the midpoint of the two
+        middles), fastest and slowest pick the extremes with
+        listing_id ascending then from_cycle ascending as the
+        tie-break, and all four are None when nothing closed in scope.
+        market_avg_seconds is deliberately NOT scoped - it pools every
+        completed gap in the whole market so a seller reading its own
+        rows still has a comparable benchmark; that asymmetry is
+        disclosed rather than hidden.
+
+        Category buckets ride the one effective-category seam
+        (_effective_category), so revise_category moves a row and its
+        bucket in one step.
+
+        Gates run before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT), and the bare usr: prefix reads
+        honestly empty. Pure read: zero row mutations, zero token
+        movement, and the envelope carries the resident non-advisory
+        disclaimer."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _secs(earlier, later):
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        def _mean(values):
+            if not values:
+                return None
+            return float(sum(values)) / len(values)
+
+        def _median(values):
+            if not values:
+                return None
+            ordered = sorted(values)
+            mid = len(ordered) // 2
+            if len(ordered) % 2:
+                return float(ordered[mid])
+            return (float(ordered[mid - 1]) + ordered[mid]) / 2.0
+
+        with self._lock:
+            owners = {}
+            for r in self._conn.execute(
+                    "SELECT listing_id, dev_account, listing_key FROM"
+                    " apimarket_listings ORDER BY listing_id").fetchall():
+                owners[int(r[0])] = (r[1], r[2])
+
+            def _gaps_of(listing_id):
+                """Completed and pending gap rows of one listing, in
+                the pairing law. Caller holds the lock."""
+                out = []
+                current = self._cycle_state(listing_id)[0]
+                delists = self._conn.execute(
+                    "SELECT cycle, delisted_utc FROM apimarket_delistings"
+                    " WHERE listing_id = ? ORDER BY delist_id",
+                    (listing_id,)).fetchall()
+                for cycle, stamp in delists:
+                    cycle = int(cycle)
+                    back = self._conn.execute(
+                        "SELECT MIN(relisted_utc) FROM"
+                        " apimarket_relistings WHERE listing_id = ?"
+                        " AND cycle = ?", (listing_id, cycle + 1)
+                    ).fetchone()
+                    returned = None if back is None else back[0]
+                    if returned is not None:
+                        out.append({
+                            "listing_id": listing_id,
+                            "listing_key": owners[listing_id][1],
+                            "category": self._effective_category(
+                                listing_id),
+                            "from_cycle": cycle,
+                            "to_cycle": cycle + 1,
+                            "delisted_utc": stamp,
+                            "relisted_utc": returned,
+                            "gap_seconds": max(0, _secs(stamp, returned)),
+                            "pending": False})
+                    elif cycle == current:
+                        out.append({
+                            "listing_id": listing_id,
+                            "listing_key": owners[listing_id][1],
+                            "category": self._effective_category(
+                                listing_id),
+                            "from_cycle": cycle,
+                            "to_cycle": None,
+                            "delisted_utc": stamp,
+                            "relisted_utc": None,
+                            "gap_seconds": None,
+                            "pending": True})
+                return out
+
+            market_completed = []
+            market_rows = []
+            for listing_id in sorted(owners):
+                rows_of = _gaps_of(listing_id)
+                for row in rows_of:
+                    if not row["pending"]:
+                        market_completed.append(row["gap_seconds"])
+                market_rows += rows_of
+
+            if dev_account is None:
+                scoped_rows = market_rows
+            else:
+                scoped_rows = [row for row in market_rows
+                               if owners[row["listing_id"]][0] == dev_account]
+
+            completed = [row for row in scoped_rows if not row["pending"]]
+            pending = [row for row in scoped_rows if row["pending"]]
+            # Slowest responsiveness on top; ties by listing then cycle.
+            completed.sort(key=lambda x: (-x["gap_seconds"],
+                                          x["listing_id"],
+                                          x["from_cycle"]))
+            pending.sort(key=lambda x: (x["delisted_utc"], x["listing_id"]))
+            scoped = [row["gap_seconds"] for row in completed]
+            listing_count = len(set(row["listing_id"]
+                                    for row in scoped_rows))
+
+            fastest = None
+            slowest = None
+            fastest_id = None
+            slowest_id = None
+            if scoped:
+                fastest = min(scoped)
+                slowest = max(scoped)
+                fastest_row = min(
+                    (r for r in completed
+                     if r["gap_seconds"] == fastest),
+                    key=lambda r: (r["listing_id"], r["from_cycle"]))
+                slowest_row = min(
+                    (r for r in completed
+                     if r["gap_seconds"] == slowest),
+                    key=lambda r: (r["listing_id"], r["from_cycle"]))
+                fastest_id = fastest_row["listing_id"]
+                slowest_id = slowest_row["listing_id"]
+
+        return {
+            "dev_account": dev_account,
+            "listing_count": listing_count,
+            "gap_count": len(completed),
+            "pending_count": len(pending),
+            "avg_seconds": _mean(scoped),
+            "median_seconds": _median(scoped),
+            "fastest_seconds": fastest,
+            "slowest_seconds": slowest,
+            "fastest_listing_id": fastest_id,
+            "slowest_listing_id": slowest_id,
+            "market_avg_seconds": _mean(market_completed),
+            "rows": completed + pending,
+            "disclaimer": self.disclaimer}
+
     def api_seller_concentration(self, dev_account=None):
         """Seller-side buyer concentration face (criteria
         AC-SBC1..AC-SBC8 pre-registered in the R2170 explore claim

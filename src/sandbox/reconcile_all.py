@@ -2378,6 +2378,13 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-listingvelocity", os.path.join(
         "ledger", "test_apimarket_listingvelocity.py"), 8),
+    # apimarket retirement to re-listing gap - each closed retirement
+    # cycle paired with the return that opens the next one, a running
+    # gap reported without a duration, and the pooled durations - 
+    # criteria AC-ARG1..AC-ARG8 pre-registered in the R2180
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-relistgap", os.path.join(
+        "ledger", "test_apimarket_relistgap.py"), 8),
     # apimarket seller-side buyer concentration - the purchase-side
     # roll with the refund law (a fully refunded buyer stays at zero
     # weight), the share / herfindahl / pareto laws on integers, the
