@@ -2342,6 +2342,14 @@ SUITES = [
     ("ledger-apimarket-watchconversion", os.path.join(
         "ledger", "test_apimarket_watchconversion.py"), 8),
     # apimarket category refund months - the per-category per-month
+    # buyer star-giving tendency - the five-bucket distribution, the
+    # harsh/neutral/generous split, the effective-stars seam with its
+    # revision counters and the market-relative tendency_delta that the
+    # buyer profile count and average never answered - criteria
+    # AC-BRP1..AC-BRP8 pre-registered in the R2164 explore-queue claim
+    # row BEFORE this suite existed.
+    ("ledger-apimarket-buyerratingpattern", os.path.join(
+        "ledger", "test_apimarket_buyerratingpattern.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -1,0 +1,5 @@
+test_apimarket_buyerprofile.py :: SUITE PASS 8/8
+test_apimarket_ratingagg.py :: SUITE PASS 8/8 criteria=8
+test_apimarket_ratingrev.py :: SUITE 8/8
+test_apimarket_sellerquality.py :: SUITE PASS 8/8
+test_apimarket_buyersellerspend.py :: SUITE PASS 8/8

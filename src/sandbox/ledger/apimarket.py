@@ -4998,6 +4998,111 @@ class APIMarketFace:
                 "categories": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_buyer_rating_pattern(self, buyer_id):
+        """Buyer star-giving tendency (criteria AC-BRP1..AC-BRP8
+        pre-registered in the R2164 explore-queue row BEFORE this code
+        existed).
+
+        api_buyer_profile answers only rating_count and an average, so
+        the question "is this resident consistently harsh or generous,
+        is it stricter than the market, and how did the stars spread"
+        had no face. This is an aggregate face - the row face stays
+        api_ratings / api_rating_history, so nothing is duplicated.
+
+        Laws pinned by the suite: distribution conservation (the five
+        buckets sum to rating_count and to harsh+neutral+generous),
+        star_sum from the buckets, avg as star_sum/count with None on
+        an honest empty, min/max as measured extremes, and the three
+        ratios None rather than a fake zero where nothing was rated.
+        Every star value reads through the one effective-stars seam, so
+        revise_rating moves the whole envelope in one step and a revert
+        restores it byte for byte, while revision_count and
+        revised_rating_count keep the history. Counts come from this
+        buyer's own ratings only - the single declared exception is
+        market_avg_stars, which is the whole market by design - and
+        delisting, relisting or a refund never removes a rating.
+        tendency_delta is avg - market_avg and None when either side is
+        absent, negative meaning harsher than the market.
+        purchase_count counts every purchase including refunded ones,
+        and rating_coverage is rating_count/purchase_count (None with
+        zero purchases). Gate: prefix-only account shape before any read
+        (fail-closed E_AM_BAD_ACCOUNT); a prefix-valid unknown account
+        gets an honest zero envelope. Pure read: zero row mutations,
+        zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        with self._lock:
+            mine = self._conn.execute(
+                "SELECT rating_id, listing_id, stars"
+                " FROM apimarket_ratings WHERE buyer_id = ?",
+                (buyer,)).fetchall()
+            revs = self._conn.execute(
+                "SELECT r.rating_id, COUNT(*) FROM"
+                " apimarket_rating_revisions r"
+                " JOIN apimarket_ratings g"
+                " ON g.rating_id = r.rating_id"
+                " WHERE g.buyer_id = ? GROUP BY r.rating_id",
+                (buyer,)).fetchall()
+            market = self._conn.execute(
+                "SELECT rating_id, stars FROM apimarket_ratings"
+            ).fetchall()
+            bought = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_purchases"
+                " WHERE buyer_id = ?", (buyer,)).fetchone()
+        buckets = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}
+        star_sum = 0
+        low = None
+        high = None
+        listings = set()
+        for rid, lid, base in mine:
+            stars = self._effective_stars(int(rid), int(base))
+            buckets[str(stars)] += 1
+            star_sum += stars
+            listings.add(int(lid))
+            if low is None or stars < low:
+                low = stars
+            if high is None or stars > high:
+                high = stars
+        count = len(mine)
+        market_sum = 0
+        for rid, base in market:
+            market_sum += self._effective_stars(int(rid), int(base))
+        market_avg = (float(market_sum) / len(market)
+                      if market else None)
+        avg = (float(star_sum) / count) if count else None
+        harsh = buckets["1"] + buckets["2"]
+        neutral = buckets["3"]
+        generous = buckets["4"] + buckets["5"]
+        purchases = int(bought[0]) if bought else 0
+        delta = None
+        if avg is not None and market_avg is not None:
+            delta = avg - market_avg
+        return {
+            "buyer_id": buyer,
+            "rating_count": count,
+            "listing_count": len(listings),
+            "revision_count": sum(int(r[1]) for r in revs),
+            "revised_rating_count": len(revs),
+            "star_sum": star_sum,
+            "avg_stars": avg,
+            "min_stars": low,
+            "max_stars": high,
+            "harsh_count": harsh,
+            "neutral_count": neutral,
+            "generous_count": generous,
+            "harsh_ratio": (float(harsh) / count if count else None),
+            "generous_ratio": (float(generous) / count
+                               if count else None),
+            "market_avg_stars": market_avg,
+            "tendency_delta": delta,
+            "purchase_count": purchases,
+            "rating_coverage": (float(count) / purchases
+                                if purchases else None),
+            "star_distribution": dict(
+                (k, buckets[k]) for k in sorted(buckets)),
+            "disclaimer": self.disclaimer}
+
     def api_buyer_profile(self, buyer_id):
         """Buyer-side trust/account face (pre-registered
         AC-AMBY1..AC-AMBY8 in the R2091 explore-queue row BEFORE
