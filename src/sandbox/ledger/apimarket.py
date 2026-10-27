@@ -2951,6 +2951,159 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "rows": rows}
 
+    def api_watch_conversion(self, dev_account=None,
+                             include_uncategorized=True):
+        """Watch-to-purchase conversion funnel (criteria AC-WCV1..
+        AC-WCV8 pre-registered in the R2149 explore seed claimed in
+        R2162, criteria landed in that claim row BEFORE this code
+        existed).
+
+        api_listing_demand (R2112) counts watchers and converts per
+        listing, but it answers counts only: no conversion RATE, no
+        latency, no market-wide or seller-wide aggregate - and its
+        conversion predicate asks only whether the buyer holds an
+        unrefunded purchase, ignoring ORDER, so a purchase that
+        happened BEFORE the watch is counted as a conversion and
+        manufactures a fake funnel forever.
+
+        This face pins the directional law. A live watch (a watch
+        row with no append-only unwatch row, the same authority as
+        api_listing_demand) resolves to exactly one state:
+
+          - converted: the buyer's unrefunded purchase is stamped at
+            or after the watch stamp (equal stamps convert with zero
+            seconds);
+          - pre_owned: the unrefunded purchase predates the watch (or
+            the buyer already owned it), which can never convert and
+            is therefore excluded from the funnel denominator;
+          - pending: no purchase yet, or the purchase was refunded
+            (the net law: a refund returns the buyer to pending).
+
+        Latency is derived ONLY from the two stored stamps - never a
+        wall clock - so it is an integer and cannot be negative by
+        construction. avg is pooled over every converted watch (not
+        the mean of the per-category means) and the median is the
+        middle value, or the midpoint for an even count; all four
+        latency fields are None when nothing converted.
+
+        Rows take the WATCH side: a category holding no watched
+        listing never appears even when the market lists there, the
+        order is category ascending with the honest uncategorized
+        bucket last, and the six counters add up to the envelope.
+        Conversion RATE is deliberately not additive: the envelope
+        rate is the pooled rate, not the mean of the row rates.
+
+        Scope: no dev_account = the operator's market-wide view, a
+        dev_account narrows to that seller's listings with strict
+        isolation. Gates run before any read: the usr: prefix
+        account shape and the bool-only include_uncategorized
+        (fail-closed E_AM_BAD_ACCOUNT / E_AM_BAD_ARGS). Retirement
+        neither clears a watch nor a conversion. Pure read: zero row
+        mutations, zero token movement, and the envelope carries the
+        resident non-advisory disclaimer."""
+
+        def _seconds(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS,
+                                 "include_uncategorized must be a bool")
+        sql = ("SELECT w.watch_id, w.listing_id, w.watched_utc,"
+               " p.purchased_utc,"
+               " (SELECT 1 FROM apimarket_refunds f"
+               " WHERE f.purchase_id = p.purchase_id)"
+               " FROM apimarket_watchlist w"
+               " JOIN apimarket_listings l"
+               " ON l.listing_id = w.listing_id"
+               " LEFT JOIN apimarket_purchases p"
+               " ON p.listing_id = w.listing_id"
+               " AND p.buyer_id = w.buyer_id"
+               " WHERE NOT EXISTS (SELECT 1 FROM apimarket_unwatchings u"
+               " WHERE u.watch_id = w.watch_id)")
+        args = ()
+        if dev_account is not None:
+            sql += " AND l.dev_account = ?"
+            args = (str(dev_account),)
+        sql += " ORDER BY w.watch_id"
+        with self._lock:
+            raw = self._conn.execute(sql, args).fetchall()
+            watches = []
+            for r in raw:
+                category = self._effective_category(int(r[1]))
+                if category is None and not include_uncategorized:
+                    continue
+                purchased = r[3]
+                refunded = r[4] is not None
+                if purchased is None or refunded:
+                    state, seconds = "pending", None
+                else:
+                    delta = _seconds(r[2], purchased)
+                    if delta < 0:
+                        state, seconds = "pre_owned", None
+                    else:
+                        state, seconds = "converted", delta
+                watches.append({"category": category, "state": state,
+                                "seconds": seconds,
+                                "watched_utc": r[2]})
+
+        def _block(items):
+            total = len(items)
+            pre_owned = sum(1 for w in items
+                            if w["state"] == "pre_owned")
+            converted = [w["seconds"] for w in items
+                         if w["state"] == "converted"]
+            funnel = total - pre_owned
+            pending = [w["watched_utc"] for w in items
+                       if w["state"] == "pending"]
+            if converted:
+                ordered = sorted(converted)
+                mid = len(ordered) // 2
+                median = (float(ordered[mid]) if len(ordered) % 2
+                          else (ordered[mid - 1] + ordered[mid]) / 2.0)
+                avg = float(sum(ordered)) / len(ordered)
+            else:
+                ordered = []
+                median = None
+                avg = None
+            return {
+                "watch_count": total,
+                "pre_owned_count": pre_owned,
+                "funnel_count": funnel,
+                "converted_count": len(converted),
+                "pending_count": funnel - len(converted),
+                "conversion_rate": (float(len(converted)) / funnel
+                                    if funnel else None),
+                "avg_convert_seconds": avg,
+                "median_convert_seconds": median,
+                "fastest_convert_seconds": (ordered[0] if ordered
+                                            else None),
+                "slowest_convert_seconds": (ordered[-1] if ordered
+                                            else None),
+                "oldest_pending_watch_utc": (min(pending) if pending
+                                            else None)}
+
+        envelope = _block(watches)
+        rows = []
+        categories = sorted(set(w["category"] for w in watches),
+                            key=lambda c: (c is None, c))
+        for category in categories:
+            row = {"category": category}
+            row.update(_block([w for w in watches
+                               if w["category"] == category]))
+            rows.append(row)
+        out = {"dev_account": dev_account,
+               "include_uncategorized": include_uncategorized,
+               "disclaimer": self.disclaimer}
+        out.update(envelope)
+        out["categories"] = rows
+        return out
+
     def api_supply(self, listing_id):
         """Scarcity read face (AC-AMSP1): the declared supply,
         the units sold (derived from the immutable purchase rows),

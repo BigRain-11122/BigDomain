@@ -1,0 +1,9 @@
+PASS AC-WCV1: env_keys=15 exact=True row_keys=True cats=3 empty_cats=0
+PASS AC-WCV2: watch=8 pre=2 funnel=6 conv=3 pend=3 demand_d1_conv=2
+PASS AC-WCV3: fast=1 slow=300 avg=133.66666666666666 median=100.0 tools=(150.5, 150.5)
+PASS AC-WCV4: order=['data', 'tools', None] sum_ok=True rate=0.5 row_rate_mean=0.38888888888888884 pool=133.66666666666666 row_avg_mean=125.25
+PASS AC-WCV5: dana={'watch_count': 4, 'pre_owned_count': 1, 'funnel_count': 3, 'converted_count': 1, 'pending_count': 2} frank={'watch_count': 4, 'pre_owned_count': 1, 'funnel_count': 3, 'converted_count': 2, 'pending_count': 1} gina=0 add_ok=True
+PASS AC-WCV6: moved_data=4 unc_gone=True roundtrip=True retire_silent=True relist_silent=True
+PASS AC-WCV7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] args=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] prefix=0 excluded=7 frozen=True tx=True
+PASS AC-WCV8: sha16=cc3abcdc8af89c87 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

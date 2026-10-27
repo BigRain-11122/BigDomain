@@ -2332,6 +2332,15 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-repeatpurchase", os.path.join(
         "ledger", "test_apimarket_repeatpurchase.py"), 8),
+    # apimarket watch-to-purchase conversion funnel - the conversion
+    # rate, the conversion latency and the DIRECTIONAL law (a purchase
+    # stamped before the watch can never convert) that the listing
+    # demand counters never answered, watch-side category rows with the
+    # pooled (non-additive) rate and average - criteria AC-WCV1..AC-WCV8
+    # pre-registered in the R2162 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-watchconversion", os.path.join(
+        "ledger", "test_apimarket_watchconversion.py"), 8),
     # apimarket asking-price distribution - the quartiles, median,
     # ninetieth percentile and spread that the catalog band, the
     # single listing position and the market average never answered;
