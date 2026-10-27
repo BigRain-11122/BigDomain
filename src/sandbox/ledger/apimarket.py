@@ -8748,3 +8748,117 @@ class APIMarketFace:
                 "last_month": out[-1]["month"] if out else None,
                 "disclaimer": self.disclaimer,
                 "months": out}
+
+    def api_market_buyer_retention(self):
+        """Market-wide monthly buyer retention matrix.
+
+        Criteria AC-BRT1..AC-BRT8 were registered in the R2175
+        explore-queue row BEFORE this code existed (honesty law: the
+        AC-BRT prefix, this face name, cohort_month, retention_rate,
+        cumulative_retention, the suite name and the runner label were
+        all git-grep zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        The cohort face answers how many buyers in a month were new
+        versus returning and the repeat face answers the lifetime
+        question, but neither follows a first-purchase cohort forward
+        through later months, so "do the residents who arrived in
+        January still buy in March" was unreadable. This face pins the
+        matrix on the same net authority the cohort face uses: a
+        refunded purchase is not a purchase, so a refund removes that
+        month from the buyer activity and, when it was the buyer
+        earliest month, moves the cohort origin forward. A buyer whose
+        every purchase was refunded disappears entirely instead of
+        showing a zero row.
+
+        Every cohort gets a contiguous cell grid from its own month to
+        the last active month in the world, so offset 0 is always the
+        whole cohort (rate 1.0) and the cumulative column never
+        decreases. No arguments, so no gate: pure read, zero row
+        mutations and zero token movement.
+        """
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.purchased_utc"
+                " FROM apimarket_purchases p WHERE NOT EXISTS"
+                " (SELECT 1 FROM apimarket_refunds f WHERE"
+                " f.purchase_id = p.purchase_id)").fetchall()
+
+        activity = {}
+        for buyer, price, stamp in rows:
+            month = str(stamp)[:7]
+            slot = activity.setdefault(buyer, {}).setdefault(
+                month, [0, 0])
+            slot[0] += 1
+            slot[1] += int(price)
+
+        origin = {buyer: min(months)
+                  for buyer, months in activity.items()}
+
+        def index_of(month):
+            year, part = month.split("-")
+            return int(year) * 12 + (int(part) - 1)
+
+        def name_of(index):
+            return "%04d-%02d" % (index // 12, index % 12 + 1)
+
+        months_seen = sorted(set(month for months in activity.values()
+                                 for month in months))
+        last_index = index_of(months_seen[-1]) if months_seen else None
+
+        cohorts = []
+        retained_total = 0
+        for month in sorted(set(origin.values())):
+            members = sorted(b for b in origin if origin[b] == month)
+            size = len(members)
+            gross = sum(activity[b][month][1] for b in members)
+            cells = []
+            cumulative = set()
+            start = index_of(month)
+            for offset in range(0, last_index - start + 1):
+                name = name_of(start + offset)
+                hits = set(b for b in members if name in activity[b])
+                cumulative |= hits
+                cells.append({
+                    "offset": offset,
+                    "month": name,
+                    "retained_buyer_count": len(hits),
+                    "retention_rate": len(hits) / float(size),
+                    "cumulative_retained_buyer_count": len(cumulative),
+                    "cumulative_retention_rate": (len(cumulative)
+                                                  / float(size)),
+                })
+            later = sum(1 for b in members
+                        if any(m > month for m in activity[b]))
+            retained_total += later
+            cohorts.append({
+                "cohort_month": month,
+                "cohort_size": size,
+                "cohort_gross": gross,
+                "retained_buyer_count": later,
+                "retention_rate": later / float(size),
+                "max_offset": cells[-1]["offset"],
+                "cells": cells,
+            })
+
+        buyer_count = len(activity)
+        return {
+            "cohort_count": len(cohorts),
+            "buyer_count": buyer_count,
+            "purchase_count": sum(slot[0] for months in
+                                  activity.values()
+                                  for slot in months.values()),
+            "gross": sum(slot[1] for months in activity.values()
+                         for slot in months.values()),
+            "month_count": len(months_seen),
+            "first_cohort": (cohorts[0]["cohort_month"]
+                             if cohorts else None),
+            "last_cohort": (cohorts[-1]["cohort_month"]
+                            if cohorts else None),
+            "max_offset": (max(row["max_offset"] for row in cohorts)
+                           if cohorts else None),
+            "retained_buyer_count": retained_total,
+            "retention_rate": ((retained_total / float(buyer_count))
+                               if buyer_count else None),
+            "disclaimer": self.disclaimer,
+            "cohorts": cohorts,
+        }

@@ -2395,6 +2395,13 @@ SUITES = [
         "ledger", "test_apimarket_pricevolatility.py"), 8),
     ("ledger-apimarket-buyercohort", os.path.join(
         "ledger", "test_apimarket_buyercohort.py"), 8),
+    # monthly buyer retention matrix (net-purchase cohort origin, a
+    # contiguous cell grid from the cohort month to the last active
+    # month, exact and cumulative retention, refund recomputation) -
+    # criteria AC-BRT1..AC-BRT8 pre-registered in the R2175
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-buyerretention", os.path.join(
+        "ledger", "test_apimarket_buyerretention.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

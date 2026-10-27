@@ -1,0 +1,9 @@
+PASS AC-BRT1: env_keys=12 exact=True row_keys=True cell_keys=True empty=[] args=['TypeError', 'TypeError', 'TypeError', 'TypeError', 'TypeError', 'TypeError']
+PASS AC-BRT2: cohorts=['2026-01', '2026-02', '2026-03', '2026-04'] sizes=[2, 1, 1, 1] grosses=[13, 10, 5, 5]
+PASS AC-BRT3: grid=True roll_months=['2026-12', '2027-01', '2027-02'] roll_counts=[1, 0, 1]
+PASS AC-BRT4: jan=[2, 2, 1, 0] feb=[1, 0, 1] mar=[1, 1] apr=[1] env_ret=4 rate=0.8
+PASS AC-BRT5: sum_gross=33 env_gross=59 purchase=10 env_purchase=10 sum_ret=4 env_ret=4
+PASS AC-BRT6: cohorts=['2026-01', '2026-02', '2026-03'] sizes=[('2026-01', 1), ('2026-02', 2), ('2026-03', 1)] gross=51 buyers=4 ret=3 rate=0.75 feb_cells=[2, 0, 1]
+PASS AC-BRT7: identical=True frozen=True tx=True sha16=57bc547049959376
+PASS AC-BRT8: sha16=57bc547049959376 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8
