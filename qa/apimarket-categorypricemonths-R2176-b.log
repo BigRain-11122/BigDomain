@@ -1,0 +1,9 @@
+PASS AC-CPM1: env_keys=7 exact=True row_keys=True cell_keys=True empty=[] gate=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-CPM2: months=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06'] as_of=True jan_cells=['data', 'tools']
+PASS AC-CPM3: prices=[10, 20, 30, 40] mar_p50=17.0 apr_p50=22.0
+PASS AC-CPM4: jan=['data', 'tools'] mar=['data', 'tools'] apr=['data2', 'tools'] history=1
+PASS AC-CPM5: live=[2, 1, 2, 2, 2, 4] feb_cats=['data'] mar_tools=4
+PASS AC-CPM6: live=[2, 1, 2, 2, 2, 4] p50=[7.0, 20.0, 17.0, 22.0, 22.0, 5.0] change=[None, 13.0, -3.0, 5.0, 0.0, -17.0] percentiles=(2,3.5,5.0,14.5) listing_count=4 filtered_jun=(3, 4.0)
+PASS AC-CPM7: identical=True frozen=True tx=True sha16=8799f2852b08e491
+PASS AC-CPM8: sha16=8799f2852b08e491 zero_live=[0, 0, 0, 1] zero_p50=[None, None, None, 3.0] identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

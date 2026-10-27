@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T07:05:00+08:00",
-  "do": "R2175 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the buyer side now has a retention matrix that follows a first-purchase cohort forward in time; the product line stays pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-28T06:19:47+08:00",
+  "do": "R2176 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the asking price now has a time axis: every category's month-end price is rebuilt from the append-only revision history; the product line stays pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2175: new read face api_market_buyer_retention - monthly buyer retention matrix over the net-purchase axis, suite 8/8 double-run identical",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_market_buyer_retention) + src/sandbox/ledger/test_apimarket_buyerretention.py + qa/apimarket-buyerretention-R2175-a.log / -b.log (SUITE PASS 8/8, criterion sha16 db8cecdb915740ce) - 2026-10-28",
-    "next_milestone": "R2176: discharge the deferred full battery plus the suite-matrix regeneration, then the next claimable queue head with its acceptance criteria registered before the code (window <= 48h)",
+    "current": "R2176: new read face api_category_price_months - per-category monthly asking-price trend rebuilt point-in-time at every UTC month end, suite 8/8 double-run identical",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_category_price_months, _category_at_instant, _alive_at_instant) + src/sandbox/ledger/test_apimarket_categorypricemonths.py + qa/apimarket-categorypricemonths-R2176-a.log / -b.log (SUITE PASS 8/8, sha256 f172196584ffaec4ce57feebb1157da38a5af102b2fa508bf5da9344d8cbb286) - 2026-10-28",
+    "next_milestone": "R2177 (by 2026-10-29): discharge the deferred full battery plus the suite-matrix regeneration on the committed tree, then the next claimable queue head; the product remains blocked on the merchant id physical item",
     "last_artifact": "qa/reconcile-all-R2174.log (373/373 suites green, DRIFT-CLEAN census) (2026-10-28)"
   },
   "depts": [
@@ -119,6 +119,11 @@
       "apimarket category revision leg (revise_category + api_category_history + one effective-bucket seam across six readers)",
       "on",
       "R2147: the category declaration made at publish time (R2132) was the last write-once declaration on the listing row without a remedy leg - edit_listing repairs title and description only, price has revise_price, supply has restock_api, and rating, reply, answer and provider identity each grew a revision door - so a seller who filed a service under the wrong bucket was stuck with it forever, and the mistake propagated into four read faces at once (the catalog directory, the category demand face, the discovery category filter and the competitive bucket). apimarket.py now grows an append-only apimarket_category_revisions table (previous bucket carried in every row, no UPDATE or DELETE surface, the listing row never rewritten so the original declaration survives as base forever) and revise_category with the pinned gate order account shape, listing shape/existence, ownership, retired state, category shape, unchanged state. E_AM_CATEGORY_UNCHANGED is judged against the EFFECTIVE bucket, so revising back to an earlier bucket stays legal while a repeat of the current one writes zero rows; passing None is a legal move into the honest uncategorized bucket rather than a deletion; every refusal writes zero rows and moves zero tokens. The 40-character cap that used to be a literal inside publish_api is now one shared constant read by both doors so the publish gate and the revision gate cannot diverge. One seam (_category_state / _effective_category) is now flipped through every category reader: api_view gains the additive base_category, category_revision_count and latest_category_revision_utc trio, api_search filters and echoes the effective bucket, api_categories and api_category_demand re-bucket through the seam (trade aggregates follow the move in the same step), api_listing_position computes its competitive bucket over effective buckets in memory because SQL bucketing cannot see revisions, and api_purchase_dossier echoes the effective bucket. The new api_category_history answers the audit view: a nine-key envelope with five-key revision rows, the base declaration, the ordered changes, the current bucket and the revision count, readable on a retired listing and pure-read. Criteria AC-AMCG1..AC-AMCG8: seven anchors (the AC family, the door, the history face, the table, the error code, the suite and the runner label) were git grep -F zero-occupancy verified against the committed HEAD tree (rc=1) before the code existed. Verification: suite SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 63e45d6cfb478a0f (qa/apimarket-categoryrev-R2147-a.log and -b.log, 556 bytes each, single-writer UTF-8 LF); six adjacent suites re-ran green (category, categorydemand, search, listingposition, purchasedossier, supply - 8/8 each); the suite matrix was regenerated to 350 suites / 2908 criteria and checks byte-identical. Honest boundary: the full battery was NOT run this round under the 25-minute budget and is the first item of the next round; the criterion TEXT landed in the queue row in the same window as the code (anchor check preceded it), disclosed in the row itself."
+    ],
+    [
+      "category price trend (api_category_price_months)",
+      "on",
+      "R2176: the two asking-price faces were current-state snapshots and every time axis answered turnover, so how each category's asking price moved month by month had no face. The new face rebuilds the catalog at every UTC month end from the append-only price, category, delist and relist history, keeps a contiguous window with honest zero months and reports the median step month over month."
     ]
   ],
   "results": [
@@ -201,19 +206,23 @@
     [
       "R2173",
       "R2173: five-silence scan clean (275 rows / 187 D-C tokens, six apparent additions all artefacts or other-seat body-text marks, baseline re-anchored to 186; ledger no new @BigDomain row; group orders tail unchanged; benchmarks inside 7 days; tree clean). Product: api_market_buyer_cohort with AC-MBC1..AC-MBC8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 8ac2f16174227042), wired as ledger-apimarket-buyercohort(8), four adjacent regressions green, census DRIFT-CLEAN files=1976 flags=0. Honest note: full battery and matrix regeneration deferred to R2174 and recorded as debt."
+    ],
+    [
+      "R2176",
+      "R2176: five-silence clean (163 D/C tokens vs a 181 baseline, three other-seat rows acknowledged and the baseline re-anchored; ledger and group orders unchanged; benchmarks inside 7 days; tree clean). The explore queue was empty, so the window reseeded and claimed it: api_category_price_months rebuilds every category's month-end asking price from the append-only revision history on a contiguous window with honest zero months. SUITE PASS 8/8 double-run byte-identical, five adjacent regressions green, wired ledger-apimarket-categorypricemonths. Honest debt: full battery and matrix regeneration deferred to R2177."
     ]
   ],
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 53,
+    "log_lines_in_window": 120,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 51,
     "proposals_total": 5,
     "proposals_open": 3,
-    "queue_main_open": 6,
+    "queue_main_open": 8,
     "queue_tech_open": 4,
-    "queue_explore_open": 0
+    "queue_explore_open": 2
   }
 }

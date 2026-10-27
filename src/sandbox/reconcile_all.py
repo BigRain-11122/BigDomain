@@ -2402,6 +2402,13 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-buyerretention", os.path.join(
         "ledger", "test_apimarket_buyerretention.py"), 8),
+    # per-category monthly asking-price trend (point-in-time rebuild at
+    # every UTC month end from the append-only price, category, delist
+    # and relist history, contiguous window with honest zero months,
+    # median change series) - criteria AC-CPM1..AC-CPM8 pre-registered
+    # in the R2176 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-categorypricemonths", os.path.join(
+        "ledger", "test_apimarket_categorypricemonths.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

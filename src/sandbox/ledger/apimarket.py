@@ -486,6 +486,41 @@ def split_amount(price, params=None):
     return dev, platform
 
 
+def _month_end(month):
+    """Last second of one UTC calendar month, as a stored instant
+    (AC-CPM2): the point-in-time sample of the category price trend.
+    The month is validated on the same round-trip law _assert_month
+    uses, so a malformed key can never silently sample a neighbouring
+    month."""
+    clean = _assert_month(month)
+    parsed = datetime.datetime.strptime(clean, "%Y-%m")
+    if parsed.month == 12:
+        following = datetime.datetime(parsed.year + 1, 1, 1)
+    else:
+        following = datetime.datetime(parsed.year, parsed.month + 1, 1)
+    last = following - datetime.timedelta(seconds=1)
+    return last.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _contiguous_months(months):
+    """Inclusive contiguous month list between the first and the last
+    key (AC-CPM2): a month with no event at all still gets its sample,
+    so an honest zero row is visible instead of silently absent."""
+    if not months:
+        return []
+    first = datetime.datetime.strptime(_assert_month(months[0]), "%Y-%m")
+    last = datetime.datetime.strptime(_assert_month(months[-1]), "%Y-%m")
+    out = []
+    year, month = first.year, first.month
+    while (year, month) <= (last.year, last.month):
+        out.append("%04d-%02d" % (year, month))
+        if month == 12:
+            year, month = year + 1, 1
+        else:
+            month += 1
+    return out
+
+
 def percentile(sorted_values, q):
     """Linear-interpolation percentile (AC-MPP3): the position on the
     ascending sample list is pos = (n - 1) * q and the value is
@@ -8861,4 +8896,182 @@ class APIMarketFace:
                                if buyer_count else None),
             "disclaimer": self.disclaimer,
             "cohorts": cohorts,
+        }
+
+    # -- point-in-time catalog helpers (AC-CPM3..AC-CPM5, R2176) ------
+
+    def _alive_at_instant(self, listing_id, listed_utc, instant):
+        """(alive) of one listing at one instant under the cycle law
+        generalized on the time axis (AC-CPM5).
+
+        Cycle 1 opens at the publish stamp, every append-only
+        re-listing row opens its own cycle at its stamp, and a cycle is
+        closed by the delisting row FOR THAT cycle. A listing is live
+        at an instant when at least one cycle was already open there
+        and had not yet been answered by its own delisting row - so a
+        listing retired and later re-listed is honestly absent in
+        between and present again afterwards, while no row is ever
+        rewritten. Caller holds the lock."""
+        cycles = [(1, str(listed_utc))]
+        for relisted_utc, cycle in self._conn.execute(
+                "SELECT relisted_utc, cycle FROM apimarket_relistings"
+                " WHERE listing_id = ? ORDER BY relist_id",
+                (listing_id,)).fetchall():
+            cycles.append((int(cycle), str(relisted_utc)))
+        closed = {}
+        for cycle, delisted_utc in self._conn.execute(
+                "SELECT cycle, delisted_utc FROM apimarket_delistings"
+                " WHERE listing_id = ? ORDER BY delist_id",
+                (listing_id,)).fetchall():
+            closed.setdefault(int(cycle), str(delisted_utc))
+        for cycle, opened_utc in cycles:
+            if opened_utc > instant:
+                continue
+            shut = closed.get(cycle)
+            if shut is None or shut > instant:
+                return True
+        return False
+
+    def _category_at_instant(self, listing_id, base_category, instant):
+        """Effective category as of one instant (AC-CPM4): the newest
+        append-only category revision stamped at or before the instant
+        wins, ties broken by revision_id; with no such revision the
+        declaration made at publish time speaks. A later revision never
+        rewrites the bucket an earlier instant already saw. This is the
+        time-axis sibling of _category_state. Caller holds the lock."""
+        row = self._conn.execute(
+            "SELECT category FROM apimarket_category_revisions"
+            " WHERE listing_id = ? AND revised_utc <= ?"
+            " ORDER BY revised_utc DESC, revision_id DESC LIMIT 1",
+            (listing_id, instant)).fetchone()
+        if row is not None:
+            return row[0]
+        return base_category
+
+    def api_category_price_months(self, include_uncategorized=True):
+        """Per-category monthly asking-price trend (criteria
+        AC-CPM1..AC-CPM8 pre-registered in the R2176 explore-queue row
+        BEFORE this code existed).
+
+        Both asking-price faces are snapshots of the current state:
+        api_market_price_percentiles gives one distribution and
+        api_categories one min/max band per bucket. The time axis the
+        market already had answers turnover (api_market_months,
+        api_category_demand, api_category_refund_months), never the
+        question "how did each category's asking price move from month
+        to month". The material for a point-in-time rebuild was already
+        on the append-only books - publish stamps, price revisions,
+        category revisions, delistings and re-listings - but no face
+        read them as a timeline.
+
+        Sampling law: one observation per UTC month, taken at that
+        month's LAST second (as_of). For every listing the price comes
+        from _price_at_instant and the bucket from
+        _category_at_instant, and liveness from _alive_at_instant, so a
+        revision stamped in the last second of a month counts there
+        while one stamped at the next month's first second does not.
+        The window is contiguous from the first event month to the last
+        event month, so a month with no event at all still appears with
+        honest zeros instead of vanishing.
+
+        Row authority is the listing side. Order is category ascending
+        with the uncategorized bucket last; with
+        include_uncategorized=False that bucket leaves both the rows and
+        the month/global aggregates. Prices are integers off the ledger,
+        percentiles use the pinned linear-interpolation helper, and
+        p50_change is this month's median minus the previous month's
+        (None when either side is absent, so a zero month honestly
+        breaks the series rather than reporting a fake jump).
+
+        Gate: include_uncategorized must be a real bool, fail-closed
+        with E_AM_BAD_ARGS before any read. Pure read: zero row
+        mutations and zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, token_price, category, listed_utc"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            events = set()
+            for row in listings:
+                events.add(str(row[3])[:7])
+            for table, column in (
+                    ("apimarket_price_revisions", "revised_utc"),
+                    ("apimarket_category_revisions", "revised_utc"),
+                    ("apimarket_delistings", "delisted_utc"),
+                    ("apimarket_relistings", "relisted_utc")):
+                for stamp, in self._conn.execute(
+                        "SELECT " + column + " FROM " + table
+                ).fetchall():
+                    events.add(str(stamp)[:7])
+            months = _contiguous_months(sorted(events))
+            sampled = {}
+            seen = set()
+            for listing_id, base_price, base_category, listed_utc \
+                    in listings:
+                listing_id = int(listing_id)
+                for month in months:
+                    as_of = _month_end(month)
+                    if not self._alive_at_instant(
+                            listing_id, listed_utc, as_of):
+                        continue
+                    price = self._price_at_instant(
+                        listing_id, int(base_price), as_of)
+                    bucket = self._category_at_instant(
+                        listing_id, base_category, as_of)
+                    if bucket is None and not include_uncategorized:
+                        continue
+                    slot = sampled.setdefault(month, {})
+                    slot.setdefault(bucket, []).append(price)
+                    seen.add(listing_id)
+
+        rows = []
+        previous_median = None
+        categories_seen = set()
+        for month in months:
+            slot = sampled.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot:
+                ordered.append(None)
+            prices = sorted(p for values in slot.values()
+                            for p in values)
+            cells = []
+            for bucket in ordered:
+                values = sorted(slot[bucket])
+                cells.append({
+                    "category": bucket,
+                    "live_listing_count": len(values),
+                    "min_price": values[0],
+                    "max_price": values[-1],
+                    "p50_price": percentile(values, 0.5),
+                })
+                categories_seen.add(bucket)
+            median = percentile(prices, 0.5)
+            rows.append({
+                "month": month,
+                "as_of": _month_end(month),
+                "live_listing_count": len(prices),
+                "category_count": len(cells),
+                "min_price": prices[0] if prices else None,
+                "max_price": prices[-1] if prices else None,
+                "p25_price": percentile(prices, 0.25),
+                "p50_price": median,
+                "p75_price": percentile(prices, 0.75),
+                "mean_price": ((float(sum(prices)) / len(prices))
+                               if prices else None),
+                "p50_change": ((median - previous_median)
+                               if median is not None
+                               and previous_median is not None else None),
+                "categories": cells,
+            })
+            previous_median = median
+        return {
+            "month_count": len(rows),
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "listing_count": len(seen),
+            "category_count": len(categories_seen),
+            "disclaimer": self.disclaimer,
+            "months": rows,
         }
