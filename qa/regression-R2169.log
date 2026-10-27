@@ -1,0 +1,6 @@
+regression-R2169 adjacent suites (rc all zero)
+test_apimarket_watchconversion.py rc=0 SUITE PASS 8/8
+test_apimarket_repeatpurchase.py rc=0 SUITE PASS 8/8
+test_apimarket_listingposition.py rc=0 SUITE PASS 8/8
+test_apimarket_marketmonths.py rc=0 SUITE 8/8
+test_apimarket_pricepercentiles.py rc=0 SUITE PASS 8/8

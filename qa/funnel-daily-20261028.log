@@ -1,0 +1,7 @@
+FUNNEL-DAILY day=2026-10-28 db=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\state\funnel\funnel.db
+ring1 leads: files=0 seen=0 new=0
+ring2 dispatches: new=0 routes={}
+ring3 orders: seen=0 new=0
+ring4 flows: seen=0 new=0
+envelope {"counts": {"dispatches_day": 0, "leads_day": 0, "orders_day": 0, "token_granted_day": 0, "token_outstanding_total": 0, "token_spent_day": 0}, "day": "2026-10-28", "delta_prev_day": {"dispatches_day": 0, "leads_day": 0, "orders_day": 0, "token_granted_day": 0, "token_outstanding_total": 0, "token_spent_day": 0}, "focus": "business=commercialization-funnel metric=four-ring daily counts (leads=0 dispatches=0 orders=0 token_flow=0) target=pipeline readiness; real revenue stays gated on the CEO physical prerequisites", "gate": "PASS", "hits": [], "standing_lines": {"aigc": "AI \u751f\u6210\u5185\u5bb9\u6807\u8bc6\uff1a\u672c\u5448\u73b0\u9762\u5185\u5bb9\u542b AI \u751f\u6210\u6210\u5206\uff1b\u7b56\u7565\u7ed3\u679c=\u5386\u53f2\u56de\u6d4b\u7814\u7a76\u5c55\u793a\uff0c\u975e\u6295\u987e\u5efa\u8bae\u3002"}, "verdict_line": "flat: honest zero-activity day (pre-commercialization steady state, zero fabricated counts)"}
+FUNNEL-DAILY 2026-10-28 gate=PASS verdict=flat: honest zero-activity day (pre-commercialization steady state, zero fabricated counts)

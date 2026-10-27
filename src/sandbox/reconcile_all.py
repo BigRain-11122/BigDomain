@@ -2368,6 +2368,16 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-refundpropensity", os.path.join(
         "ledger", "test_apimarket_buyerrefundpropensity.py"), 8),
+    # apimarket shelf-to-sale velocity - the time from the cycle
+    # opening (the latest re-listing at or before the sale, else the
+    # published stamp) to the first NET sale, with an honestly unsold
+    # shelf that never drags the mean to zero, the pooled average and
+    # median, the fastest / slowest extremes and the MARKET-scoped
+    # category benchmark that stays comparable under a seller scope -
+    # criteria AC-LV1..AC-LV8 pre-registered in the R2169 explore-queue
+    # claim row BEFORE this suite existed.
+    ("ledger-apimarket-listingvelocity", os.path.join(
+        "ledger", "test_apimarket_listingvelocity.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

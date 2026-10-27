@@ -1,0 +1,9 @@
+PASS AC-LV1: env_keys=13 exact=True row_keys=True rows=7 empty_rows=0
+PASS AC-LV2: f1_opened='2026-06-01T00:00:00Z' f1_elapsed=172800 d1_opened='2026-05-01T00:00:00Z' d1_elapsed=172800
+PASS AC-LV3: d2_unsold=True counts=(7, 5, 2) dana=(3, 2, 1)
+PASS AC-LV4: f4_elapsed=0 f4_opened='2026-07-01T00:00:00Z' ints_non_negative=True
+PASS AC-LV5: market={'avg_seconds': 311040.0, 'median_seconds': 172800.0, 'fastest_seconds': 0, 'slowest_seconds': 864000} dana={'avg_seconds': 259200.0, 'median_seconds': 259200.0, 'fastest_seconds': 172800, 'slowest_seconds': 345600}
+PASS AC-LV6: bench=True moved=True roundtrip=True
+PASS AC-LV7: relist_law=True life=True acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=0 frozen=True tx=True
+PASS AC-LV8: sha16=3ae8e6ff6d7ab1d8 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

@@ -8122,3 +8122,214 @@ class APIMarketFace:
             "smoothing_strength": _RFP_SMOOTH,
             "smoothed_refund_rate": smoothed,
             "disclaimer": self.disclaimer}
+
+    def api_listing_velocity(self, dev_account=None):
+        """Listing shelf-to-sale velocity (criteria AC-LV1..AC-LV8
+        pre-registered in the R2169 explore claim row BEFORE this
+        code existed; the R2166 seed asked for it, the anchors AC-LV,
+        first_sale_utc, category_avg_seconds, shelf_opened_utc,
+        sold_count, unsold_count and market_avg_seconds were all
+        git-grep zero-occupancy against HEAD 2026-10-28, rc=1, and
+        opened_utc was already taken 23 times by the claim chain, so
+        the start key yields to shelf_opened_utc).
+
+        The market answers event rows (api_market_feed), one trade
+        end to end (api_purchase_dossier), the cash month
+        (api_revenue_months) and the repricing history
+        (api_price_history) - but nothing ever answered "how long
+        did this shelf sit before it sold". Without that, a seller
+        cannot tell a high price from a bad description from a dead
+        category.
+
+        The start stamp follows the cycle law (R2089). Publishing
+        opens cycle 1; a re-listing opens the next one. For the
+        first qualifying sale the shelf opened at the LATEST
+        re-listing stamp at or before that sale, or at the immutable
+        listed_utc when there is none - so a sale inside cycle 3 is
+        measured from the cycle 3 opening, and a re-listing that
+        happens AFTER the sale can never move the measured elapsed
+        time.
+
+        The sale authority is net: only a purchase with no
+        append-only refund row is a candidate, and the first sale is
+        the earliest stamp among them. A listing whose only purchase
+        was refunded is therefore honestly UNSOLD (elapsed None,
+        never zero), and an unsold row never enters an aggregate -
+        the seed's explicit law that an unsold shelf must not drag
+        the mean toward zero.
+
+        elapsed_seconds is an integer derived only from the two
+        stored stamps, never a wall clock, and non-negative by
+        construction - except one disclosed boundary: a fixture
+        whose purchase stamp predates every opening stamp is
+        measured from the original listed_utc and clamped at zero
+        rather than reported as a negative duration.
+
+        Aggregates are over the SCOPED sold rows: avg is the pooled
+        mean, median is the middle value (or the midpoint of the two
+        middles), fastest and slowest pick the extremes with
+        listing_id ascending as the tie-break for both, and all four
+        are None when nothing sold in scope.
+
+        category_avg_seconds and market_avg_seconds are deliberately
+        NOT scoped: both are pooled over the WHOLE market, so a
+        seller reading its own rows still has a comparable
+        benchmark. That asymmetry is disclosed rather than hidden.
+        Category buckets ride the one effective-category seam
+        (_category_state), so revise_category moves a row and its
+        bucket average in one step.
+
+        Gates run before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT), and the bare usr: prefix
+        reads honestly empty. Retirement after the sale keeps the
+        historical elapsed and only flips the delisted flag. Pure
+        read: zero row mutations, zero token movement, and the
+        envelope carries the resident non-advisory disclaimer."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _secs(earlier, later):
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        def _mean(values):
+            if not values:
+                return None
+            return float(sum(values)) / len(values)
+
+        def _median(values):
+            if not values:
+                return None
+            ordered = sorted(values)
+            mid = len(ordered) // 2
+            if len(ordered) % 2:
+                return float(ordered[mid])
+            return (float(ordered[mid - 1]) + ordered[mid]) / 2.0
+
+        with self._lock:
+            def _first_net_sale(listing_id):
+                row = self._conn.execute(
+                    "SELECT MIN(p.purchased_utc) FROM"
+                    " apimarket_purchases p WHERE p.listing_id = ?"
+                    " AND NOT EXISTS (SELECT 1 FROM apimarket_refunds f"
+                    " WHERE f.purchase_id = p.purchase_id)",
+                    (listing_id,)).fetchone()
+                if row is None or row[0] is None:
+                    return None
+                return row[0]
+
+            def _shelf_opened_utc(listing_id, listed_utc, sale_utc):
+                row = self._conn.execute(
+                    "SELECT MAX(relisted_utc) FROM apimarket_relistings"
+                    " WHERE listing_id = ? AND relisted_utc <= ?",
+                    (listing_id, sale_utc)).fetchone()
+                if row is not None and row[0] is not None:
+                    return row[0]
+                return listed_utc
+
+            # The market pool is measured once, over every listing,
+            # so the benchmark stays comparable under a seller scope.
+            market_elapsed = []
+            by_category = {}
+            for m in self._conn.execute(
+                    "SELECT listing_id, listed_utc FROM apimarket_listings"
+                    " ORDER BY listing_id").fetchall():
+                market_id = int(m[0])
+                market_first = _first_net_sale(market_id)
+                if market_first is None:
+                    continue
+                market_open = _shelf_opened_utc(market_id, m[1],
+                                                market_first)
+                elapsed = max(0, _secs(market_open, market_first))
+                market_elapsed.append(elapsed)
+                bucket = self._effective_category(market_id)
+                by_category.setdefault(bucket, []).append(elapsed)
+
+            sql = ("SELECT listing_id, listing_key, title, description,"
+                   " token_price, listed_utc FROM apimarket_listings")
+            args = ()
+            if dev_account is not None:
+                sql += " WHERE dev_account = ?"
+                args = (dev_account,)
+            sql += " ORDER BY listing_id"
+            listings = self._conn.execute(sql, args).fetchall()
+
+            rows = []
+            scoped_elapsed = []
+            for r in listings:
+                listing_id = int(r[0])
+                first = _first_net_sale(listing_id)
+                delisted = self._cycle_state(listing_id)[1]
+                bucket = self._effective_category(listing_id)
+                if first is None:
+                    rows.append({
+                        "listing_id": listing_id,
+                        "listing_key": r[1],
+                        "title": self._metadata_state(
+                            listing_id, r[2], r[3])[0],
+                        "category": bucket,
+                        "delisted": delisted,
+                        "current_price": self._current_price(
+                            listing_id, r[4]),
+                        "shelf_opened_utc": None,
+                        "first_sale_utc": None,
+                        "elapsed_seconds": None,
+                        "category_avg_seconds": _mean(
+                            by_category.get(bucket, [])),
+                        "unsold": True})
+                    continue
+                opened = _shelf_opened_utc(listing_id, r[5], first)
+                elapsed = max(0, _secs(opened, first))
+                scoped_elapsed.append(elapsed)
+                rows.append({
+                    "listing_id": listing_id,
+                    "listing_key": r[1],
+                    "title": self._metadata_state(
+                        listing_id, r[2], r[3])[0],
+                    "category": bucket,
+                    "delisted": delisted,
+                    "current_price": self._current_price(
+                        listing_id, r[4]),
+                    "shelf_opened_utc": opened,
+                    "first_sale_utc": first,
+                    "elapsed_seconds": elapsed,
+                    "category_avg_seconds": _mean(
+                        by_category.get(bucket, [])),
+                    "unsold": False})
+            rows.sort(key=lambda x: (
+                x["unsold"],
+                0 if x["elapsed_seconds"] is None
+                else x["elapsed_seconds"],
+                x["listing_id"]))
+
+            sold = [x for x in rows if not x["unsold"]]
+            fastest = None
+            slowest = None
+            fastest_id = None
+            slowest_id = None
+            if sold:
+                fastest = min(x["elapsed_seconds"] for x in sold)
+                slowest = max(x["elapsed_seconds"] for x in sold)
+                fastest_id = min(x["listing_id"] for x in sold
+                                 if x["elapsed_seconds"] == fastest)
+                slowest_id = min(x["listing_id"] for x in sold
+                                 if x["elapsed_seconds"] == slowest)
+
+        return {
+            "dev_account": dev_account,
+            "listing_count": len(rows),
+            "sold_count": len(sold),
+            "unsold_count": len(rows) - len(sold),
+            "avg_seconds": _mean(scoped_elapsed),
+            "median_seconds": _median(scoped_elapsed),
+            "fastest_seconds": fastest,
+            "slowest_seconds": slowest,
+            "fastest_listing_id": fastest_id,
+            "slowest_listing_id": slowest_id,
+            "market_avg_seconds": _mean(market_elapsed),
+            "disclaimer": self.disclaimer,
+            "rows": rows}

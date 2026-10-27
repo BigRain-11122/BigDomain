@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T00:52:00+08:00",
-  "do": "R2168 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - product line still pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-28T02:09:43+08:00",
+  "do": "R2169 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - the shelf-to-sale velocity face is the first product that answers how long a listing sits before it sells; the line stays pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2168: the R2167 carry-over verification debt is cleared - full battery green 368/368 suites and the suite matrix regenerated to 368 suites / 3066 criteria",
-    "latest_artifact": "qa/reconcile-all-R2168.log (RUNNER PASS 368/368 suites + controls 7/7 in 863.0s, DRIFT-CLEAN census) + docs/sandbox-suite-matrix.md (368 suites / 3066 criteria, 2026-10-28)",
-    "next_milestone": "R2169: the next explore head - the apimarket listing sales-velocity face (api_listing_velocity), criteria pre-registered before the code (ETA 2026-10-28, within 48h)",
-    "last_artifact": "qa/reconcile-all-R2168.log + docs/sandbox-suite-matrix.md (2026-10-28 00:5x)"
+    "current": "R2169: new product - the apimarket shelf-to-sale velocity face (api_listing_velocity), 13-key envelope plus 11-key rows, suite 8/8 double-run green",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_listing_velocity) + src/sandbox/ledger/test_apimarket_listingvelocity.py + qa/apimarket-listingvelocity-R2169-a.log / -b.log (SUITE PASS 8/8, sha16 9ef38bfde9ba1c27, 2026-10-28)",
+    "next_milestone": "R2170: the full battery plus the deferred reconcile-daily standing row first (the honest carry-over of R2169), then the next explore or tech head (ETA 2026-10-28, within 48h)",
+    "last_artifact": "qa/apimarket-listingvelocity-R2169-a.log + qa/regression-R2169.log (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "apimarket shelf-to-sale velocity (api_listing_velocity)",
+      "on",
+      "R2169: event rows, one trade end to end, the cash month and the repricing history existed, but nothing answered how long a shelf sat before it sold - so a high price, a bad description and a dead category were indistinguishable. The new face measures from the cycle opening (latest re-listing at or before the first NET sale, else the published stamp), reports an honestly unsold shelf that never drags the mean to zero, and carries a MARKET-scoped category benchmark that stays comparable under a seller scope."
+    ],
     [
       "buyer refund propensity (api_buyer_refund_propensity)",
       "on",
@@ -113,6 +118,10 @@
     ]
   ],
   "results": [
+    [
+      "R2169",
+      "R2169: five-silence scan clean (275 decision rows / 181 tokens, zero new; ledger no new @BigDomain row; group orders advanced by the 01:45 fleet event round #3, acknowledged zero action; benchmarks inside 7 days; tree clean). The P3 explore head was claimed with AC-LV1..AC-LV8 registered before the code, and the product is APIMarketFace.api_listing_velocity - cycle-opening start law, net sale authority, integer elapsed seconds derived only from stored stamps, pooled average and median, fastest/slowest extremes with the listing_id tie-break, and the MARKET-scoped category benchmark over the one effective-category seam. Suite SUITE PASS 8/8 double-run byte-identical (sha16 9ef38bfde9ba1c27), wired ledger-apimarket-listingvelocity(8), five adjacent suites green, the daily funnel row PASS with the honest zero-activity envelope. Honest notes: the first AC-LV6 run failed on a wrong fixture expectation (corrected test, no relaxed implementation), and the full battery plus reconcile-daily were deferred to next round on the 25-minute budget."
+    ],
     [
       "R2168",
       "R2168: five-silence scan clean at open (275 decision rows / 181 content-addressed tokens, four NEW - D-20261028-01..04 - and all another seat face, acknowledged with zero action and the baseline re-anchored after the group-side rotation; ledger carries no new @BigDomain row; group orders tail advanced to the 2026-10-28 00:15 trio, all fleet face; benchmarks fresh; clean tree, no index.lock). The round discharged the R2167 carry-over - the battery and matrix regeneration that round owed its own product - rather than opening a new face, because a mid-battery edit would have made the later suites read a tree the evidence does not describe. Battery RUNNER PASS 368/368 suites plus controls 7/7 in 863.0s (qa/reconcile-all-R2168.log, single-writer UTF-8 LF via src/os/battery_stream.py) with the birth-site tmp sweep reclaiming 826/826 worlds and 294.29 MiB inside the same window; the four post-battery sections all PASS in one new helper src/os/battery_followup_R2168.py - matrix to 368 suites / 3066 criteria read back byte-identical, fingerprint CLEAN over five domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=1961 flags=0. Honest notes: a shell sleep used to watch the battery was cancelled by the five-minute no-output rule while the battery itself finished rc=0 with no orphan and no evidence loss; heartbeat.txt was 14 ticks behind and was backfilled 2154..2168; no new product face this round."
@@ -193,6 +202,6 @@
     "proposals_open": 3,
     "queue_main_open": 8,
     "queue_tech_open": 5,
-    "queue_explore_open": 2
+    "queue_explore_open": 1
   }
 }
