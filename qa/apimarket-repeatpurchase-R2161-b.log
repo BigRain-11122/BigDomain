@@ -1,0 +1,9 @@
+PASS AC-RPT1: env_keys=12 exact=True row_keys=True cats=3 empty_cats=0
+PASS AC-RPT2: market={'purchase_count': 7, 'buyer_count': 3, 'repeat_buyer_count': 3, 'repeat_purchase_count': 4} dana={'purchase_count': 3, 'buyer_count': 2, 'repeat_buyer_count': 1, 'repeat_rate': 0.5}
+PASS AC-RPT3: frank={'buyer_count': 3, 'repeat_buyer_count': 1, 'repeat_rate': 0.3333333333333333} gina={'buyer_count': 0, 'purchase_count': 0} market_repeat=3 dana_repeat=1
+PASS AC-RPT4: order=['data', 'tools', None] rows=[('data', 2, 1), ('tools', 4, 1), (None, 1, 0)] sum=7 envelope=7
+PASS AC-RPT5: market_max=3 top='usr:bob' dana_top='usr:bob' frank_top='usr:dave'
+PASS AC-RPT6: data_purchases=2->3 unc_present=False roundtrip=True
+PASS AC-RPT7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix_rows=0 repeat=True frozen=True tx=True
+PASS AC-RPT8: sha16=0631fcaccddccbb6 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

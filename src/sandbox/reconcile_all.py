@@ -2322,6 +2322,16 @@ SUITES = [
     # row BEFORE this suite existed.
     ("ledger-apimarket-buyersellerspend", os.path.join(
         "ledger", "test_apimarket_buyersellerspend.py"), 8),
+    # apimarket repeat-purchase structure - the retention axis the row
+    # faces, the buyer profile, the seller profile and the category
+    # demand face all stopped short of; net-purchase counting authority
+    # so a refunded purchase never fakes a one-time buyer, seller and
+    # market scopes with the honest difference between them, and
+    # purchase-side category rows on the effective-bucket seam -
+    # criteria AC-RPT1..AC-RPT8 pre-registered in the R2161
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-repeatpurchase", os.path.join(
+        "ledger", "test_apimarket_repeatpurchase.py"), 8),
     # apimarket asking-price distribution - the quartiles, median,
     # ninetieth percentile and spread that the catalog band, the
     # single listing position and the market average never answered;

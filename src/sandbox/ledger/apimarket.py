@@ -3788,6 +3788,106 @@ class APIMarketFace:
                 "sellers": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_repeat_purchase(self, dev_account=None):
+        """Repeat-purchase structure of one seller, or of the whole
+        market (criteria AC-RPT1..AC-RPT8 pre-registered in the R2161
+        explore-queue row BEFORE this code existed).
+
+        Every existing read face stops short of the retention
+        question. The library gives rows, the buyer profile gives
+        lifetime aggregates, the seller profile gives gross totals and
+        the category demand face gives volumes - none of them answers
+        "does the same resident come back and buy a second time". This
+        face counts buyers and their purchases inside one scope (a
+        seller, or the whole market when dev_account is None) and
+        derives the repeat structure from those counts.
+
+        Laws pinned by the suite: the counting authority is NET
+        purchases - a refunded purchase counts neither in the numerator
+        nor in the denominator, so a buyer whose only purchase was
+        refunded disappears entirely instead of being misread as a
+        one-time buyer; a buyer is a repeat buyer when she holds two or
+        more net purchases inside the scope; repeat_purchase_count is
+        purchase_count minus buyer_count (every purchase beyond a
+        buyer's first); repeat_rate is the share of buyers who came
+        back and is None when there are no buyers; category rows ride
+        the one effective-category seam, are ordered with the honest
+        uncategorized bucket last, and take PURCHASE-side authority
+        (a category with stock but zero purchases stays absent). The
+        scope laws differ honestly: one purchase from each of two
+        sellers is a repeat for the market and not a repeat for either
+        seller, and both readings are correct. Pure read: zero row
+        mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account).startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        scope = None if dev_account is None else str(dev_account)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, category, dev_account"
+                " FROM apimarket_listings").fetchall()
+            purchases = self._conn.execute(
+                "SELECT purchase_id, listing_id, buyer_id"
+                " FROM apimarket_purchases").fetchall()
+            refunded = set(int(r[0]) for r in self._conn.execute(
+                "SELECT purchase_id FROM apimarket_refunds"))
+            cat_of = {}
+            seller_of = {}
+            for r in listings:
+                lid = int(r[0])
+                cat_of[lid] = self._category_state(lid, r[1])[0]
+                seller_of[lid] = r[2]
+            per_buyer = {}
+            per_cat = {}
+            for pid, lid, buyer in purchases:
+                if int(pid) in refunded:
+                    continue
+                lid = int(lid)
+                if scope is not None and seller_of.get(lid) != scope:
+                    continue
+                per_buyer[buyer] = per_buyer.get(buyer, 0) + 1
+                cat = cat_of.get(lid)
+                bucket = per_cat.get(cat)
+                if bucket is None:
+                    bucket = {}
+                    per_cat[cat] = bucket
+                bucket[buyer] = bucket.get(buyer, 0) + 1
+
+        def summarise(counts):
+            buyers = len(counts)
+            bought = sum(counts.values())
+            repeat = sum(1 for n in counts.values() if n >= 2)
+            return {"buyer_count": buyers,
+                    "repeat_buyer_count": repeat,
+                    "one_time_buyer_count": buyers - repeat,
+                    "repeat_rate": (float(repeat) / buyers
+                                    if buyers else None),
+                    "purchase_count": bought,
+                    "repeat_purchase_count": bought - buyers,
+                    "avg_purchases_per_buyer": (float(bought) / buyers
+                                                if buyers else None)}
+
+        top = None
+        top_n = 0
+        for buyer in sorted(per_buyer):
+            n = per_buyer[buyer]
+            if n >= 2 and n > top_n:
+                top = buyer
+                top_n = n
+        categories = []
+        for cat in sorted(per_cat,
+                          key=lambda c: (c is None, c or "")):
+            row = {"category": cat}
+            row.update(summarise(per_cat[cat]))
+            categories.append(row)
+        env = {"dev_account": scope}
+        env.update(summarise(per_buyer))
+        env["max_purchases"] = max(per_buyer.values()) if per_buyer else 0
+        env["top_repeat_buyer"] = top
+        env["categories"] = categories
+        env["disclaimer"] = self.disclaimer
+        return env
+
     def api_listing_position(self, listing_id, limit=None):
         """Competitive standing of one listing inside its own
         category (criteria AC-AMPOS1..AC-AMPOS8 pre-registered in

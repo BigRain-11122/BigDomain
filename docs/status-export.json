@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T12:10:00+08:00",
-  "do": "R2159 closeout: 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
+  "export_ts": "2026-10-27T10:10:34+08:00",
+  "do": "R2161 R2161 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2160 asking-price distribution face: the market now publishes quartiles, median, ninetieth percentile and spread, one row per category, so a seller can see which band its asking price lands in",
-    "latest_artifact": "qa/apimarket-pricepercentiles-R2160-a.log / -b.log (SUITE PASS 8/8, sha16 ff840010150c2c23) + src/sandbox/ledger/apimarket.py (api_market_price_percentiles, written 2026-10-27)",
-    "next_milestone": "battery green on the committed tree (362/362 + controls 7/7, matrix 362 suites / 3018 criteria byte-identical); next round: next claimable explore head (within 48h)"
+    "current": "R2161 repeat-purchase face: the market now reports whether the same resident comes back - buyers, repeat buyers, the repeat rate and the top repeat buyer per seller and per category, counted on net purchases only",
+    "latest_artifact": "qa/apimarket-repeatpurchase-R2161-a.log / -b.log (SUITE PASS 8/8, sha16 04fa0a8015207f95) + src/sandbox/ledger/apimarket.py (api_repeat_purchase, written 2026-10-27)",
+    "next_milestone": "battery green on the committed tree (363/363 + controls 7/7, matrix 363 suites / 3026 criteria byte-identical); then the next claimable explore head (within 48h)"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "repeat-purchase structure (api_repeat_purchase)",
+      "on",
+      "R2161: the library gives rows, the buyer profile lifetime aggregates, the seller profile gross totals and the category demand face volumes - none of them answered whether the same resident comes back, which is the most direct read of repeat business there is. api_repeat_purchase(dev_account=None) returns a twelve-key envelope with eight-key category rows. The counting authority is NET purchases: a refunded purchase enters neither the numerator nor the denominator, so a buyer whose only purchase was refunded disappears instead of being misread as a one-time buyer. repeat_purchase_count is purchase_count minus buyer_count, repeat_rate is None with zero buyers, and the extremes carry an account-name tie-break. The scopes differ honestly and the suite pins it: one purchase from each of two sellers is a repeat for the market and not a repeat for either seller. Category rows ride the one effective-bucket seam with purchase-side authority, and the additive law is pinned in two halves - purchase counts add up to the envelope while repeat counts do not, because a cross-bucket repeat is invisible inside each bucket. Suite 8/8 double-run byte-identical sha16 04fa0a8015207f95, wired ledger-apimarket-repeatpurchase(8); three adjacent buyer-family suites green."
+    ],
     [
       "claim response latency scorecard (api_claim_latency)",
       "on",
@@ -93,6 +98,10 @@
   ],
   "results": [
     [
+      "R2161",
+      "R2161: five-silence scan clean at open (294 decision rows / 210 content-addressed tokens with zero new against the baseline; three ledger patrol rows already paid; group orders baseline unchanged at the 2026-10-26 22:36 deck row; benchmarks fresh today; clean tree, no index.lock). P1 rows blocked-on-CEO, the weekly proposal duty met by BD-PROP-005 and the four tech heads gated, so the window claimed the P3 explore FIFO head (the R2149 repeat-purchase seed) and registered AC-RPT1..AC-RPT8 in the queue row BEFORE the code. Product: api_repeat_purchase, described in the outs row. Honest note: the first draft of AC-RPT4 wrote the row-sum of repeat counts as a conservation and went red before any evidence landed (sum 2 vs envelope 4 - exactly the cross-bucket effect), so the criterion was re-pinned to the measured structure and no implementation relaxed. Boundary: the full battery and matrix regeneration were not run inside the 25-minute budget and lead the next round."
+    ],
+    [
       "R2160",
       "R2160: five-silence scan clean at open (294 decision rows / 210 content-addressed tokens, zero new, baseline re-anchored after a group-side rotation; three ledger patrol rows already paid; group orders baseline unchanged at the 2026-10-26 22:36 deck row; benchmarks fresh today; clean tree, no index.lock; both daily standing rows already on disk). P1 rows blocked-on-CEO and the weekly proposal duty met by BD-PROP-005, so the window claimed the P3 explore FIFO head (asking-price distribution) with AC-MPP1..AC-MPP8 registered before the code. Product: api_market_price_percentiles - a fourteen-key envelope over eight-key per-category rows; linear-interpolation quantiles pinned at 3.25/5.5/7.75/9.1 on [1..10]; live scope by default with retired rows on request; partition conservation and the global-equals-row-aggregate identity; the single effective category and price seams move it in one step; trades never do. Suite 8/8 double-run sha16 ff840010150c2c23, wired ledger-apimarket-pricepercentiles(8); eight adjacent suites green; battery 362/362 + controls 7/7 in 715.2s; matrix 362/3018 byte-identical; fingerprint, profile and census clean."
     ],
@@ -144,14 +153,14 @@
   "self_drive": {
     "window": "2026-10-21..2026-10-27",
     "window_days": 7,
-    "log_lines_in_window": 41,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 41,
+    "substantive_non_idle_mention_lines": 39,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 8
+    "queue_explore_open": 5
   }
 }
