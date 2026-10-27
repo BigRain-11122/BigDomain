@@ -1,0 +1,9 @@
+PASS AC-MHH1: env_keys=16 exact=True grid=(24, 7, 168) empty_zero=(0, None)
+PASS AC-MHH2: sales=(6, 6, 6, 6) gross=(45, 45, 45) refunds=(2, 2, 2, 2) refunded=(20, 20, 20) net=25
+PASS AC-MHH3: h9=(2, 13) h22=(0, 1, -10) sun=(2, 16, 6) cross_face=True
+PASS AC-MHH4: env=(4, 2) hour_sum=(5, 5) h9=(1, 1) refund_only_zero=True
+PASS AC-MHH5: peak_hour=9 peak_day=6 tie_hour=4 (sun 2/16 vs mon 2/13)
+PASS AC-MHH6: stats=True months=True feed=True delist_same=True relist_same=True
+PASS AC-MHH7: repeat=True frozen=True tx=True args=['TypeError', 'TypeError', 'TypeError', 'TypeError', 'TypeError']
+PASS AC-MHH8: sha16=6c7c62a2b4a722c3 identical=True tx_equal=True digests_equal=True files_equal=True registered=True ascii=True
+SUITE PASS 8/8

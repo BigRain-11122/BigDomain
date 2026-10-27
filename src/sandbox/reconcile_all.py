@@ -2350,6 +2350,14 @@ SUITES = [
     # row BEFORE this suite existed.
     ("ledger-apimarket-buyerratingpattern", os.path.join(
         "ledger", "test_apimarket_buyerratingpattern.py"), 8),
+    # apimarket market activity heatmap - the always-complete 24-hour /
+    # 7-weekday / 168-cell grid over the cash-basis trade pair, with
+    # participant authority per bucket, the peak law (count, then gross,
+    # then the lower index) and refund-only buckets that never become a
+    # peak - criteria AC-MHH1..AC-MHH8 pre-registered in the R2165
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-hourheatmap", os.path.join(
+        "ledger", "test_apimarket_hourheatmap.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

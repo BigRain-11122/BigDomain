@@ -71,6 +71,7 @@ E_AM_NOT_BUYER = "E_AM_NOT_BUYER"          # AC-AM5
 E_AM_RATE_DUP = "E_AM_RATE_DUP"           # AC-AM5
 E_AM_BAD_STARS = "E_AM_BAD_STARS"         # AC-AM5
 E_AM_BAD_WINDOW = "E_AM_BAD_WINDOW"      # R2022 windowed read face
+E_AM_BAD_STAMP = "E_AM_BAD_STAMP"        # AC-MHH3 hour heatmap parse
 E_AM_DELISTED = "E_AM_DELISTED"           # AC-AMD5 (retired listing)
 E_AM_NOT_OWNER = "E_AM_NOT_OWNER"         # AC-AMD2 (ownership gate)
 E_AM_ALREADY_DELISTED = "E_AM_ALREADY_DELISTED"  # AC-AMD3
@@ -385,6 +386,24 @@ _SEARCH_SORT_MODES = ("price_asc", "price_desc", "rating", "sales",
 # Public activity feed kinds. The tuple order IS the same-second
 # tie-break rank (AC-AMF2, pre-registered in the R2107 queue row
 # BEFORE this code existed).
+_WEEKDAY_NAMES = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+
+def _stamp_hour_weekday(stamp):
+    """UTC hour-of-day and weekday index (Mon=0) of one stored
+    instant (AC-MHH3). Strict round-trip parse on the same law
+    _assert_instant uses, so no lenient strptime form can shift a
+    trade into a neighbouring bucket."""
+    text = str(stamp)
+    try:
+        parsed = datetime.datetime.strptime(text, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        raise ApiMarketError(E_AM_BAD_STAMP, "bad stamp: " + text)
+    if parsed.strftime("%Y-%m-%dT%H:%M:%SZ") != text:
+        raise ApiMarketError(E_AM_BAD_STAMP, "bad stamp: " + text)
+    return parsed.weekday(), parsed.hour
+
+
 _FEED_KINDS = ("published", "relisted", "price_revised",
                "metadata_revised", "restocked", "purchased",
                "rated", "rating_revised", "rating_replied",
@@ -2372,6 +2391,139 @@ class APIMarketFace:
                     m["platform_share_net"] for m in months),
                 "disclaimer": self.disclaimer,
                 "months": months}
+
+    def api_market_hour_heatmap(self):
+        """Market activity-by-time heatmap (pre-registered
+        AC-MHH1..AC-MHH8 in the R2165 explore-queue row BEFORE this
+        code existed).
+
+        Every time axis the market had was a month: api_market_months
+        sums the whole market per UTC month, api_revenue_months one
+        seller's cash months, api_buyer_months one resident's months
+        and api_category_refund_months one category's refund months,
+        while api_market_feed is an event list. Nothing answered the
+        far coarser-grained operating question - which hour of the
+        day and which weekday the market actually trades in - so a
+        seller picking a publish or repricing moment, or an operator
+        sizing support cover, had no face at all.
+
+        The row authority is the same append-only trade pair the
+        monthly face uses, on the same cash-basis law: a sale books
+        in the UTC hour/weekday of purchased_utc and a refund books
+        in the hour/weekday of refunded_utc, never rewriting the
+        bucket the sale landed in. The grid is always complete (24
+        hour rows, 7 weekday rows, 168 cells) so an honest zero row
+        is visible instead of absent. No arguments, so no gate: pure
+        read, zero row mutations and zero token movement.
+        """
+        with self._lock:
+            sales = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.purchased_utc,"
+                " l.dev_account FROM apimarket_purchases p JOIN"
+                " apimarket_listings l ON"
+                " l.listing_id = p.listing_id").fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.amount, f.refunded_utc"
+                " FROM apimarket_refunds f").fetchall()
+
+        hours = [{"hour": hour, "sales_count": 0, "gross": 0,
+                  "refund_count": 0, "refunded": 0,
+                  "buyers": set(), "sellers": set()}
+                 for hour in range(24)]
+        weekdays = [{"weekday": day,
+                     "weekday_name": _WEEKDAY_NAMES[day],
+                     "sales_count": 0, "gross": 0,
+                     "refund_count": 0, "refunded": 0,
+                     "buyers": set(), "sellers": set()}
+                    for day in range(7)]
+        cells = [[{"sales_count": 0, "refund_count": 0}
+                  for _hour in range(24)] for _day in range(7)]
+        lifetime_buyers = set()
+        lifetime_sellers = set()
+
+        for buyer, price, stamp, dev in sales:
+            day, hour = _stamp_hour_weekday(stamp)
+            for bucket in (hours[hour], weekdays[day]):
+                bucket["sales_count"] += 1
+                bucket["gross"] += int(price)
+                bucket["buyers"].add(buyer)
+                bucket["sellers"].add(dev)
+            cells[day][hour]["sales_count"] += 1
+            lifetime_buyers.add(buyer)
+            lifetime_sellers.add(dev)
+        for amount, stamp in refunds:
+            day, hour = _stamp_hour_weekday(stamp)
+            for bucket in (hours[hour], weekdays[day]):
+                bucket["refund_count"] += 1
+                bucket["refunded"] += int(amount)
+            cells[day][hour]["refund_count"] += 1
+
+        hour_rows = [{"hour": b["hour"],
+                      "sales_count": b["sales_count"],
+                      "gross": b["gross"],
+                      "refund_count": b["refund_count"],
+                      "refunded": b["refunded"],
+                      "net": b["gross"] - b["refunded"],
+                      "buyer_count": len(b["buyers"]),
+                      "seller_count": len(b["sellers"])}
+                     for b in hours]
+        weekday_rows = [{"weekday": b["weekday"],
+                         "weekday_name": b["weekday_name"],
+                         "sales_count": b["sales_count"],
+                         "gross": b["gross"],
+                         "refund_count": b["refund_count"],
+                         "refunded": b["refunded"],
+                         "net": b["gross"] - b["refunded"],
+                         "buyer_count": len(b["buyers"]),
+                         "seller_count": len(b["sellers"])}
+                        for b in weekdays]
+        cell_rows = [{"weekday": day, "hour": hour,
+                      "sales_count": cells[day][hour]["sales_count"],
+                      "refund_count": cells[day][hour]["refund_count"]}
+                     for day in range(7) for hour in range(24)]
+
+        gross = sum(r["gross"] for r in hour_rows)
+        refunded = sum(r["refunded"] for r in hour_rows)
+        sales_count = sum(r["sales_count"] for r in hour_rows)
+        busiest_hour = None
+        busiest_weekday = None
+        for row in hour_rows:
+            if busiest_hour is None or (
+                    row["sales_count"], row["gross"], -row["hour"]) > (
+                    busiest_hour["sales_count"], busiest_hour["gross"],
+                    -busiest_hour["hour"]):
+                busiest_hour = row
+        for row in weekday_rows:
+            if busiest_weekday is None or (
+                    row["sales_count"], row["gross"],
+                    -row["weekday"]) > (
+                    busiest_weekday["sales_count"],
+                    busiest_weekday["gross"],
+                    -busiest_weekday["weekday"]):
+                busiest_weekday = row
+        if sales_count == 0:
+            busiest_hour = None
+            busiest_weekday = None
+
+        return {"hour_count": len(hour_rows),
+                "weekday_count": len(weekday_rows),
+                "cell_count": len(cell_rows),
+                "sales_count": sales_count,
+                "gross": gross,
+                "refund_count": sum(
+                    r["refund_count"] for r in hour_rows),
+                "refunded": refunded,
+                "net": gross - refunded,
+                "buyer_count": len(lifetime_buyers),
+                "seller_count": len(lifetime_sellers),
+                "busiest_hour": (None if busiest_hour is None
+                                 else busiest_hour["hour"]),
+                "busiest_weekday": (None if busiest_weekday is None
+                                    else busiest_weekday["weekday"]),
+                "disclaimer": self.disclaimer,
+                "hours": hour_rows,
+                "weekdays": weekday_rows,
+                "cells": cell_rows}
 
     def api_price_history(self, listing_id):
         """Asking-price history surface (AC-AMPR7): the immutable
