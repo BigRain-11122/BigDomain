@@ -2393,6 +2393,8 @@ SUITES = [
     # R2171 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-pricevolatility", os.path.join(
         "ledger", "test_apimarket_pricevolatility.py"), 8),
+    ("ledger-apimarket-buyercohort", os.path.join(
+        "ledger", "test_apimarket_buyercohort.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

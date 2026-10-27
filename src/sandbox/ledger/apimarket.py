@@ -8657,3 +8657,94 @@ class APIMarketFace:
             "most_repriced_listing": core["most_repriced_listing"],
             "disclaimer": self.disclaimer,
             "rows": core["rows"]}
+
+    def api_market_buyer_cohort(self):
+        """Market-wide monthly buyer cohort (new versus returning).
+
+        Criteria AC-MBC1..AC-MBC8 were registered in the R2173
+        explore-queue row BEFORE this code existed (honesty law: the
+        AC-MBC prefix, this face name, new_buyer_count,
+        returning_buyer_count, the suite name and the runner label
+        were all git-grep zero-occupancy against HEAD 2026-10-28,
+        rc=1).
+
+        api_market_months carries money and participant counts but
+        cannot separate a first-time buyer from a resident who came
+        back, and api_repeat_purchase answers the lifetime question
+        only, so the month-by-month cohort was unreadable. This face
+        pins it on the one net authority: a refunded purchase is not
+        a purchase, so a refund removes that buyer from the month and,
+        when that month was their earliest, moves their cohort origin
+        to the next month they actually paid in. A month whose every
+        purchase was refunded disappears rather than showing a zero
+        row - the honest asymmetry against the cash-basis months face,
+        which keeps a refund-only month.
+
+        No arguments, so no gate: pure read, zero row mutations and
+        zero token movement.
+        """
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.purchased_utc"
+                " FROM apimarket_purchases p WHERE NOT EXISTS"
+                " (SELECT 1 FROM apimarket_refunds f WHERE"
+                " f.purchase_id = p.purchase_id)").fetchall()
+
+        first = {}
+        months = {}
+        for buyer, price, stamp in rows:
+            month = str(stamp)[:7]
+            if buyer not in first or month < first[buyer]:
+                first[buyer] = month
+            b = months.setdefault(month, {"buyers": set(),
+                                          "purchase_count": 0,
+                                          "gross": 0})
+            b["buyers"].add(buyer)
+            b["purchase_count"] += 1
+            b["gross"] += int(price)
+
+        activity = {}
+        for buyer, price, stamp in rows:
+            activity.setdefault(buyer, set()).add(str(stamp)[:7])
+        repeat_buyer_count = sum(1 for stamps in activity.values()
+                                 if len(stamps) > 1)
+
+        out = []
+        for month in sorted(months):
+            b = months[month]
+            new_purchases = 0
+            for buyer, price, stamp in rows:
+                if str(stamp)[:7] == month and first[buyer] == month:
+                    new_purchases += 1
+            new_buyer_count = sum(1 for buyer in b["buyers"]
+                                  if first[buyer] == month)
+            buyers = len(b["buyers"])
+            out.append({
+                "month": month,
+                "purchase_count": b["purchase_count"],
+                "gross": b["gross"],
+                "buyer_count": buyers,
+                "new_buyer_count": new_buyer_count,
+                "returning_buyer_count": buyers - new_buyer_count,
+                "new_purchase_count": new_purchases,
+                "returning_purchase_count": (b["purchase_count"]
+                                             - new_purchases),
+                "avg_purchases_per_buyer": (b["purchase_count"]
+                                            / float(buyers)),
+            })
+
+        purchase_count = sum(row["purchase_count"] for row in out)
+        buyer_count = len(activity)
+        return {"month_count": len(out),
+                "purchase_count": purchase_count,
+                "gross": sum(row["gross"] for row in out),
+                "buyer_count": buyer_count,
+                "repeat_buyer_count": repeat_buyer_count,
+                "repeat_rate": ((repeat_buyer_count / float(buyer_count))
+                                if buyer_count else None),
+                "returning_purchase_count": sum(
+                    row["returning_purchase_count"] for row in out),
+                "first_month": out[0]["month"] if out else None,
+                "last_month": out[-1]["month"] if out else None,
+                "disclaimer": self.disclaimer,
+                "months": out}

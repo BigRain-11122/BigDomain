@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T05:19:40+08:00",
-  "do": "R2172 the sandbox developer-API marketplace and the OS evidence toolchain for the silicon-domain public co-creation platform - the evidence writer now repairs a whole directory in one closed batch; the product line stays pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-28T05:52:00+08:00",
+  "do": "R2173 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market can now read its own monthly buyer cohort (new versus returning); the product line stays pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2172: new tool - evidence_writer --check-dir / --fix-dir repairs a whole evidence directory in one batch (validate everything first, repair only the flagged .log files, roll back on any failure), suite 8/8 double-run green; a live reading of qa/ reports 1974 files, 529 flagged historical dialects",
-    "latest_artifact": "src/os/evidence_writer.py (check_dir / fix_dir) + src/os/test_evidence_writer_dir.py + qa/evidence-writer-dir-R2172-a.log / -b.log (SUITE PASS 8/8, sha16 52d7cd6fcf9ff17f) - 2026-10-28",
-    "next_milestone": "R2173: the deferred full reconcile battery plus matrix regeneration on the new tree, then the next claimable queue head with its criteria registered before the code (ETA 2026-10-28, within 48h)",
-    "last_artifact": "qa/evidence-writer-dir-R2172-a.log / -b.log (537 bytes each, byte-identical, bare LF) (2026-10-28)"
+    "current": "R2173: new read face api_market_buyer_cohort - per UTC month, how many buyers were new versus returning, with the refund recomputation law and conservation against the months and repeat faces; suite 8/8 double-run green and wired into the battery",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_market_buyer_cohort) + src/sandbox/ledger/test_apimarket_buyercohort.py + qa/apimarket-buyercohort-R2173-a.log / -b.log (SUITE PASS 8/8, sha256 8ac2f16174227042) - 2026-10-28",
+    "next_milestone": "R2174: the deferred full reconcile battery plus matrix regeneration on the new tree, then the next claimable queue head with its criteria registered before the code (ETA 2026-10-28, within 48h)",
+    "last_artifact": "qa/apimarket-buyercohort-R2173-a.log / -b.log (897 bytes each, byte-identical, bare LF) (2026-10-28)"
   },
   "depts": [
     {
@@ -193,12 +193,16 @@
     [
       "R2146",
       "R2146: five-silence scan found a dirty tree that was not this window's work - the predecessor had written its product, suite, wiring, queue row and status/export patch, then died before committing, leaving a battery log with 57 suite lines and no verdict while its own log line asserted the carried-over battery was reported from that log. No index.lock and no live battery process existed, so this was a crashed window rather than a concurrent executor, and per the R2087 precedent the round verified and closed the work instead of reseeding. Everything was re-measured here: suite double-run identical, battery RUNNER PASS 349/349 plus controls 7/7 in 661.7s, tmp reclaim 802 worlds / 283.63 MiB, matrix 349 suites / 2900 criteria byte-identical. Two honest notes are recorded: the first battery attempt was cancelled because piping its output buffered every line (process tree verified dead, no evidence written), and the predecessor's unverified claim is corrected rather than inherited."
+    ],
+    [
+      "R2173",
+      "R2173: five-silence scan clean (275 rows / 187 D-C tokens, six apparent additions all artefacts or other-seat body-text marks, baseline re-anchored to 186; ledger no new @BigDomain row; group orders tail unchanged; benchmarks inside 7 days; tree clean). Product: api_market_buyer_cohort with AC-MBC1..AC-MBC8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 8ac2f16174227042), wired as ledger-apimarket-buyercohort(8), four adjacent regressions green, census DRIFT-CLEAN files=1976 flags=0. Honest note: full battery and matrix regeneration deferred to R2174 and recorded as debt."
     ]
   ],
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 52,
+    "log_lines_in_window": 53,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 51,
@@ -206,6 +210,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 1
+    "queue_explore_open": 0
   }
 }

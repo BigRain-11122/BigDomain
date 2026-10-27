@@ -1,0 +1,9 @@
+PASS AC-MBC1: env_keys=11 exact=True row_keys=True empty=[] args=['TypeError', 'TypeError', 'TypeError', 'TypeError', 'TypeError', 'TypeError']
+PASS AC-MBC2: months=[('2026-01', 1, 1, 0), ('2026-02', 2, 1, 1), ('2026-03', 3, 2, 1)]
+PASS AC-MBC3: purchases=6 buyers=4 repeat=1 rate=0.25 ret_purch=2 jan_buyers=1 mar_new=2 carol_library=2
+PASS AC-MBC4: grosses=[10, 8, 20] total=38
+PASS AC-MBC5: sum_p=6 env_p=6 months_face=8 sum_b=4 env_b=4 repeat=(1, 1) month_order=['2026-01', '2026-02', '2026-03']
+PASS AC-MBC6: one={'month_count': 1, 'purchase_count': 2, 'buyer_count': 1, 'repeat_buyer_count': 0, 'repeat_rate': 0.0} all_refunded={'month_count': 0, 'buyer_count': 0, 'purchase_count': 0}
+PASS AC-MBC7: identical=True frozen=True tx=True sha16=6812b58faa3a2756
+PASS AC-MBC8: sha16=6812b58faa3a2756 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8
