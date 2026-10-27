@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T20:59:52+08:00",
-  "do": "R2163 R2162 R2161 the sandbox developer-API marketplace read faces (catalog, demand, months, refunds, claims, ratings) for the silicon-domain public co-creation platform - product line still pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-27T22:21:25+08:00",
+  "do": "R2164 R2163 R2162 the sandbox developer-API marketplace read faces (catalog, demand, months, refunds, claims, ratings, price distribution, repeat purchase) for the silicon-domain public co-creation platform - product line still pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2163 category refund months: the market can now answer whether a category's refund load this month is abnormal - per category per UTC month gross, refunds and net on a cash basis, with a refund-only month showing a negative net instead of a fake sale and two deliberately separate extremes (worst rate among months that settled something, largest refund amount over all months)",
-    "latest_artifact": "qa/apimarket-categoryrefundmonths-R2163-a.log / -b.log (SUITE PASS 8/8, evidence sha16 fa87745a78b8dc7c) + src/sandbox/ledger/apimarket.py (api_category_refund_months, written 2026-10-27)",
-    "next_milestone": "full battery green on the committed tree plus a truthful suite-matrix regeneration, then the next claimable explore head (within 48h)"
+    "current": "R2164 buyer star-giving tendency: the market can now answer whether a resident is consistently harsh or generous - the five-bucket star distribution, the harsh/neutral/generous split with ratios, purchase coverage, and a market-relative tendency_delta that says how far this resident sits from the whole-market average.",
+    "latest_artifact": "qa/apimarket-buyerratingpattern-R2164-a.log / -b.log (SUITE PASS 8/8, evidence sha16 4e86f6f72ea4ac12) + src/sandbox/ledger/apimarket.py (api_buyer_rating_pattern, written 2026-10-27)",
+    "next_milestone": "next claimable explore head (market hour/day activity heatmap seed) inside 48h, with a fresh full battery and matrix regen in the same window"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer rating pattern (api_buyer_rating_pattern)",
+      "on",
+      "R2164: api_buyer_profile answered only rating_count and an average, so whether a resident is consistently harsh or generous, whether it is stricter than the market, and how its stars spread had no face - the first judgement of rating credibility and of suspected score-padding. api_buyer_rating_pattern(buyer_id) returns a twenty-key aggregate envelope with the five-bucket star_distribution: distribution conservation both ways, star_sum from the buckets, avg/min/max honest None on an empty history, harsh (<=2), neutral (3) and generous (>=4) with their ratios, purchase coverage over every purchase including refunded ones, and a market-relative tendency_delta (negative = harsher than the market). Every star reads through the effective-stars seam, so a revision moves the whole envelope in one step while the base stamp is never rewritten and the revision counters keep the history; delisting, relisting and refunds never remove a rating. Run origin of the design: the R2149 reseed row, claimed with AC-BRP1..AC-BRP8 registered before the code. Suite 8/8 double-run byte-identical sha16 4e86f6f72ea4ac12, wired ledger-apimarket-buyerratingpattern(8); five adjacent suites green; full battery 366/366 plus controls 7/7 in 834.2s; matrix regenerated to 366 suites / 3050 criteria and --check byte-identical."
+    ],
     [
       "watch-to-purchase funnel (api_watch_conversion)",
       "on",
