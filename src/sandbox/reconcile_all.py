@@ -2322,6 +2322,13 @@ SUITES = [
     # row BEFORE this suite existed.
     ("ledger-apimarket-buyersellerspend", os.path.join(
         "ledger", "test_apimarket_buyersellerspend.py"), 8),
+    # apimarket claim response latency scorecard - every claim leg as a
+    # duration measured from the claim's own opened stamp, never a wall
+    # clock, with the seller aggregates - criteria AC-CLT1..AC-CLT8
+    # pre-registered in the R2159 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-claimlatency", os.path.join(
+        "ledger", "test_apimarket_claimlatency.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

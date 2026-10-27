@@ -6946,6 +6946,139 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "claims": out}
 
+    def api_claim_latency(self, dev_account=None):
+        """Seller-side claim response latency scorecard (criteria
+        AC-CLT1..AC-CLT8 pre-registered in the R2149 explore-queue
+        claim row BEFORE this code existed).
+
+        The claim chain grew one door per round - open (R2129),
+        respond (R2130), withdraw (R2131), note (R2137) - and the
+        question and answer faces already scored their waiting time
+        (api_seller_answers reports fastest/slowest/mean seconds), but
+        the claim chain never produced a latency figure at all:
+        api_seller_todo lists only the unanswered rows, api_claims
+        carries status columns, api_claim_thread opens one thread. So
+        nobody could answer "does this seller answer within a day, or
+        does it sit on claims", which is the historical half of the
+        same service question the todo queue answers for the present.
+
+        This face reports, per claim, every leg of the chain as a
+        duration measured from the claim's own opened_utc: the seller
+        response, the buyer follow-up note, the withdrawal and the
+        refund. Durations are derived ONLY from two stored stamps -
+        never from a wall clock - and a leg that never happened is
+        None rather than zero, so an unanswered claim can never look
+        fast. A negative duration cannot arise: every action row
+        references a claim that already exists, so its stamp is
+        necessarily later.
+
+        Status follows the same seam as api_claims (refunded beats
+        withdrawn beats answered beats open), so a later refund adds
+        refund_seconds without rewriting the response leg, and an
+        answered-then-withdrawn claim keeps both stamps and both
+        durations.
+
+        The account gate is the usr: prefix gate of the seller
+        scorecard family (api_seller_quality), which is the truthful
+        one here because every claim's dev_account comes from a
+        listing owned by a usr: account; the default None is the
+        operator's market-wide view. Strict seller isolation; a
+        prefix-valid account with no claims gets an honest empty
+        envelope. Pure read: zero row mutations, zero token movement.
+        The envelope carries the resident non-advisory disclaimer."""
+
+        def _elapsed(earlier, later):
+            if later is None:
+                return None
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        sql = ("SELECT c.claim_id, c.purchase_id, c.listing_id,"
+               " c.buyer_id, c.dev_account, c.price_paid, c.opened_utc,"
+               " f.refunded_utc, w.withdrawn_utc, r.replied_utc,"
+               " n.noted_utc"
+               " FROM apimarket_claims c"
+               " LEFT JOIN apimarket_refunds f"
+               " ON f.purchase_id = c.purchase_id"
+               " LEFT JOIN apimarket_claim_responses r"
+               " ON r.claim_id = c.claim_id"
+               " LEFT JOIN apimarket_claim_withdrawals w"
+               " ON w.claim_id = c.claim_id"
+               " LEFT JOIN apimarket_claim_notes n"
+               " ON n.claim_id = c.claim_id")
+        args = ()
+        if dev_account is not None:
+            sql += " WHERE c.dev_account = ?"
+            args = (str(dev_account),)
+        sql += " ORDER BY c.opened_utc, c.claim_id"
+        with self._lock:
+            raw = self._conn.execute(sql, args).fetchall()
+        claims = []
+        for r in raw:
+            opened = r[6]
+            responded = r[9]
+            refunded = r[7]
+            withdrawn = r[8]
+            noted = r[10]
+            if refunded is not None:
+                status = "refunded"
+            elif withdrawn is not None:
+                status = "withdrawn"
+            elif responded is not None:
+                status = "answered"
+            else:
+                status = "open"
+            claims.append({
+                "claim_id": int(r[0]),
+                "purchase_id": int(r[1]),
+                "listing_id": int(r[2]),
+                "buyer_id": r[3],
+                "dev_account": r[4],
+                "price_paid": int(r[5]),
+                "opened_utc": opened,
+                "status": status,
+                "responded_utc": responded,
+                "response_seconds": _elapsed(opened, responded),
+                "noted_utc": noted,
+                "note_seconds": _elapsed(opened, noted),
+                "withdrawn_utc": withdrawn,
+                "withdraw_seconds": _elapsed(opened, withdrawn),
+                "refunded_utc": refunded,
+                "refund_seconds": _elapsed(opened, refunded),
+            })
+        latencies = sorted(c["response_seconds"] for c in claims
+                           if c["response_seconds"] is not None)
+        count = len(claims)
+        answered = len(latencies)
+        if latencies:
+            mid = len(latencies) // 2
+            median = (float(latencies[mid]) if len(latencies) % 2
+                      else (latencies[mid - 1] + latencies[mid]) / 2.0)
+            avg = float(sum(latencies)) / answered
+        else:
+            median = None
+            avg = None
+        stamps = [c["responded_utc"] for c in claims
+                  if c["responded_utc"] is not None]
+        return {"dev_account": dev_account,
+                "claim_count": count,
+                "answered_count": answered,
+                "unanswered_count": count - answered,
+                "response_coverage": (round(float(answered) / count, 4)
+                                      if count else None),
+                "avg_response_seconds": avg,
+                "median_response_seconds": median,
+                "fastest_seconds": (latencies[0] if latencies else None),
+                "slowest_seconds": (latencies[-1] if latencies else None),
+                "latest_response_utc": max(stamps) if stamps else None,
+                "disclaimer": self.disclaimer,
+                "claims": claims}
+
     def api_purchase_dossier(self, purchase_id, account):
         """One purchase's whole story (criteria AC-AMPD1..AC-AMPD8
         pre-registered in the R2135 explore-queue row BEFORE this code
