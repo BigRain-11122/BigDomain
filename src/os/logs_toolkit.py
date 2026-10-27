@@ -86,6 +86,82 @@ def classify(name):
     return 'other'
 
 
+EVIDENCE_LOG_CLASS = 'qa-evidence'
+EVIDENCE_OTHER_CLASS = 'evidence-other'
+# Every class that retention must never select. The two evidence classes are
+# here because qa/ is the shipped proof surface, not a log scratch area.
+PROTECTED_CLASSES = frozenset(['archive-md', 'lock', 'other',
+                               EVIDENCE_LOG_CLASS, EVIDENCE_OTHER_CLASS])
+
+
+def classify_evidence(name):
+    """Classify a qa/ evidence-directory filename.
+
+    Evidence is grouped by kind rather than by retention family: a .log is
+    a run record, anything else is a side-car artifact.
+    """
+    if name.endswith('.log'):
+        return EVIDENCE_LOG_CLASS
+    return EVIDENCE_OTHER_CLASS
+
+
+def _root_classifier(label):
+    """The logs/ root keeps the historical classifier; every other root is
+    treated as an evidence root (label `logs` is the only special case, so a
+    caller naming a root `logs` always gets the legacy dialect)."""
+    return classify if label == 'logs' else classify_evidence
+
+
+def inventory_scan(roots):
+    """Adaptive multi-root inventory (AC-LTI1..AC-LTI7).
+
+    roots: ordered list of (label, directory). Every regular file is counted
+    once per (st_dev, st_ino) - a second appearance of the same inode
+    (overlapping roots, hard links) is reported in `duplicates` instead of
+    being counted again, so the catalog can never be inflated by a root
+    declared twice. Nothing is cached: a file that appears between two calls
+    is seen by the second one.
+
+    Raises ValueError when a root is not a directory, so a caller cannot get
+    a green reading for a root it failed to read.
+    """
+    seen = {}
+    classes = {}
+    root_stats = {}
+    counted = 0
+    duplicates = 0
+    for label, path in roots:
+        if not os.path.isdir(path):
+            raise ValueError('root is not a directory: %s=%s' % (label, path))
+        classify_fn = _root_classifier(label)
+        files = 0
+        for entry in sorted(os.scandir(path), key=lambda e: e.name):
+            if not entry.is_file():
+                continue
+            files += 1
+            counted += 1
+            try:
+                # os.stat(path), not entry.stat(): the scandir-cached stat on
+                # Windows reports st_dev/st_ino as 0 for every entry, which
+                # would collapse the whole tree into one inode.
+                st = os.stat(entry.path)
+            except OSError:
+                continue
+            key = (st.st_dev, st.st_ino)
+            if key in seen:
+                duplicates += 1
+                continue
+            seen[key] = entry.path
+            c = classify_fn(entry.name)
+            slot = classes.setdefault(c, {'count': 0, 'bytes': 0})
+            slot['count'] += 1
+            slot['bytes'] += st.st_size
+        root_stats[label] = {'dir': path, 'files': files}
+    return {'classes': classes, 'roots': root_stats,
+            'counted_entries': counted, 'total_files': len(seen),
+            'duplicates': duplicates}
+
+
 def classify_log_line(line):
     """Classify a state.json log entry for tail inventory."""
     if 'tokens:' in line:
@@ -123,30 +199,55 @@ def cmd_gauge(args):
     return 0
 
 
+def inventory_roots(args):
+    """Resolve the inventory roots for one CLI call.
+
+    The logs/ root is always first (historical contract). `--roots LABEL=DIR`
+    appends explicit roots in declaration order; `--with-qa` appends qa/ when
+    no `qa` label was declared. Returns (roots, error_code).
+    """
+    roots = [('logs', os.path.join(args.root, 'logs'))]
+    labels = {'logs'}
+    for spec in (getattr(args, 'roots', None) or []):
+        if '=' not in spec:
+            print('error: --roots expects LABEL=DIR', file=sys.stderr)
+            return None, 2
+        label, path = spec.split('=', 1)
+        label, path = label.strip(), path.strip()
+        if not label or not path:
+            print('error: --roots expects LABEL=DIR', file=sys.stderr)
+            return None, 2
+        if label in labels:
+            print('error: duplicate root label: %s' % label, file=sys.stderr)
+            return None, 2
+        labels.add(label)
+        full = path if os.path.isabs(path) else os.path.join(args.root, path)
+        roots.append((label, full))
+    if getattr(args, 'with_qa', False) and 'qa' not in labels:
+        roots.append(('qa', os.path.join(args.root, 'qa')))
+    return roots, 0
+
+
 def cmd_inventory(args):
-    d = os.path.join(args.root, 'logs')
-    stats = {}
-    for entry in os.scandir(d):
-        if not entry.is_file():
-            continue
-        c = classify(entry.name)
-        s = stats.setdefault(c, {'count': 0, 'bytes': 0})
-        s['count'] += 1
-        try:
-            s['bytes'] += entry.stat().st_size
-        except OSError:
-            pass
-    out = {'logs_dir': d, 'classes': {}}
-    total = 0
-    for c in sorted(stats):
-        s = stats[c]
-        total += s['count']
+    roots, rc = inventory_roots(args)
+    if roots is None:
+        return rc
+    scan = inventory_scan(roots)
+    out = {'logs_dir': roots[0][1], 'classes': {}}
+    for c in sorted(scan['classes']):
+        s = scan['classes'][c]
         out['classes'][c] = {
             'count': s['count'], 'mb': round(s['bytes'] / 1048576.0, 2),
-            'protected': c in ('archive-md', 'lock') or c == 'other',
+            'protected': c in PROTECTED_CLASSES,
             'prunable': c in PRUNE_KEEP,
         }
-    out['total_files'] = total
+    out['total_files'] = scan['total_files']
+    # Extra keys appear only when more than one root was declared, so the
+    # historical single-root contract stays byte-identical (AC-LTI1).
+    if len(roots) > 1:
+        out['roots'] = scan['roots']
+        out['counted_entries'] = scan['counted_entries']
+        out['duplicates'] = scan['duplicates']
     print(json.dumps(out, ensure_ascii=False, indent=2))
     return 0
 
@@ -934,7 +1035,13 @@ def main(argv=None):
     sub = p.add_subparsers(dest='cmd', required=True)
 
     sub.add_parser('gauge', help='water report for src/os/state.json')
-    sub.add_parser('inventory', help='logs/ class breakdown')
+    pi = sub.add_parser('inventory', help='logs/ class breakdown')
+    pi.add_argument('--with-qa', action='store_true',
+                    help='also inventory qa/ evidence (qa-evidence / evidence-other)')
+    pi.add_argument('--roots', action='append', metavar='LABEL=DIR',
+                    help='extra root to inventory (repeatable; label `logs` '
+                         'keeps the legacy classifier, any other label is '
+                         'treated as an evidence root)')
     pt = sub.add_parser('tail', help='state.json log tail inventory')
     pt.add_argument('-n', type=int, default=10)
     pp = sub.add_parser('prune', help='logs/ retention enforcement')

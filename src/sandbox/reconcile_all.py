@@ -3757,6 +3757,14 @@ SUITES = [
     # (AC-LGN1..AC-LGN8 pre-registered in state/queue/tech.md R2154.)
     ("os-ledger-closeout",
      os.path.join("..", "os", "test_ledger_closeout.py"), 8),
+    # R2156: the logs/ inventory learns to read the qa/ evidence tree -
+    # default byte identity, growth adaptivity, inode de-duplication across
+    # overlapping roots and hard links, fail-closed root gates and retention
+    # protection, so a "whole disk" census can no longer be green while
+    # blind to the proof files the rounds produce.
+    # (AC-LTI1..AC-LTI8 pre-registered in state/queue/tech.md R2156.)
+    ("os-logs-inventory",
+     os.path.join("..", "os", "test_logs_inventory.py"), 8),
     ]
 
 FAILS = 0

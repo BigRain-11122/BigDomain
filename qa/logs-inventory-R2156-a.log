@@ -1,0 +1,32 @@
+PASS AC-LTI1 default output key set is exactly {logs_dir, classes, total_files}
+PASS AC-LTI1 default total_files == 78 == sum of class counts
+PASS AC-LTI1 legacy classifier counts unchanged (2/1/72/2/1)
+PASS AC-LTI1 protected/prunable flags keep the historical meaning
+PASS AC-LTI1 zero omission: class sum equals the logs/ file count
+PASS AC-LTI2 roots face names both roots
+PASS AC-LTI2 qa/*.log -> qa-evidence (5), everything else -> evidence-other (2)
+PASS AC-LTI2 counted_entries 85 == duplicates 0 + total_files 85
+PASS AC-LTI2 class counts plus duplicates account for every scanned entry
+PASS AC-LTI2 per-root entry counts are 78 and 7
+PASS AC-LTI3 three new evidence files raise total_files by exactly 3
+PASS AC-LTI3 qa-evidence count rises 5 -> 8 (adaptive, uncached)
+PASS AC-LTI3 zero omission after growth: root count == directory count
+PASS AC-LTI4 both overlapping roots report their own 10 entries
+PASS AC-LTI4 counted 98, unique 88, duplicates 10
+PASS AC-LTI4 class counts are not doubled by the second root
+PASS AC-LTI5 cross-root hard link adds one duplicate, zero new files
+PASS AC-LTI5 the linked inode is not counted a second time under qa-evidence
+PASS AC-LTI6 root spec without "=" exits 2 and prints no JSON
+PASS AC-LTI6 missing root directory exits 3 and prints no JSON
+PASS AC-LTI6 duplicate root label exits 2 and prints no JSON
+PASS AC-LTI7 both evidence classes are protected and non-prunable
+PASS AC-LTI7 prune selects 10 old logs/ tmp-scripts (70 past the floor - keep 60)
+PASS AC-LTI7 every prune victim lives under logs/, none under qa/
+PASS AC-LTI7 no evidence filename appears in the prune plan
+PASS AC-LTI7 prune dry-run reports the same 10 victims and stays a dry run
+PASS AC-LTI7 the evidence tree is byte-frozen by a prune dry-run
+PASS AC-LTI8 tool source is pure ASCII
+PASS AC-LTI8 tool source has zero network imports
+PASS AC-LTI8 two runs produce byte-identical output
+PASS AC-LTI8 wired into reconcile_all as os-logs-inventory
+SUITE PASS 31/31
