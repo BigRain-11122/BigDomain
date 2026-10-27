@@ -8333,3 +8333,163 @@ class APIMarketFace:
             "market_avg_seconds": _mean(market_elapsed),
             "disclaimer": self.disclaimer,
             "rows": rows}
+
+    def api_seller_concentration(self, dev_account=None):
+        """Seller-side buyer concentration face (criteria
+        AC-SBC1..AC-SBC8 pre-registered in the R2170 explore claim
+        row BEFORE this code existed; the AC-SBC prefix,
+        api_seller_concentration, pareto_buyer_count, herfindahl,
+        test_apimarket_concentration and ledger-apimarket-concentration
+        were all git-grep zero-occupancy against HEAD 2026-10-28,
+        rc=1).
+
+        The seller side already counts repeat purchases
+        (api_repeat_purchase), quality (api_seller_quality), balances
+        (api_seller_ledger) and gross volume (dev_sales_board); the
+        buyer side has its mirror image (api_buyer_seller_spend). None
+        of them answers the seller's own existential question: "how
+        many residents is my net revenue hanging on, how much of it
+        rides on the single biggest one, and what happens if that one
+        leaves". Retention counts events, not money weight; a sales
+        board totals money, not distribution.
+
+        Everything is derived from purchases x refunds x listings - no
+        new table. The row authority is the PURCHASE side: a resident
+        the seller never sold to stays absent even when the seller has
+        live stock. Revenue authority is NET: a buyer whose only
+        purchase was refunded stays on the roll (the purchase happened)
+        but contributes zero weight, so a fully refunded buyer is never
+        silently deleted and never inflates a share.
+
+        Derived figures: share is the buyer's net revenue over the
+        scoped net total (None when that total is zero, never a fake
+        zero); cumulative_share walks the pinned order and reaches
+        exactly 1.0 on the last row; top1_share is the head row and
+        top3_share sums the first three (an honest two-row scope sums
+        two, it is not padded); herfindahl is the sum of squared shares
+        times 10000 computed from the exact fractions and rounded to
+        two places, so one buyer reads 10000.0 and n equal buyers read
+        10000/n; pareto_buyer_count is the smallest k whose cumulative
+        net reaches 80% of the total, decided on integers (cum*5 >=
+        total*4) so a boundary buyer that lands exactly on 80% is
+        counted.
+
+        Scope law: dev_account None is the whole market
+        (scope == 'market', market_herfindahl None - the face never
+        benchmarks itself against itself); a seller scope carries the
+        market-wide herfindahl as a comparable benchmark, computed by
+        the same law, so it can be checked against the unscoped call.
+
+        Gates run before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT), and the bare usr: prefix reads
+        honestly empty. Pure read: zero row mutations, zero token
+        movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _concentration(scope):
+            sql = ("SELECT p.buyer_id, COUNT(p.purchase_id),"
+                   " SUM(p.price_paid),"
+                   " SUM(CASE WHEN f.purchase_id IS NULL"
+                   " THEN 0 ELSE 1 END),"
+                   " SUM(CASE WHEN f.purchase_id IS NULL"
+                   " THEN 0 ELSE f.amount END)"
+                   " FROM apimarket_purchases p"
+                   " JOIN apimarket_listings l"
+                   " ON l.listing_id = p.listing_id"
+                   " LEFT JOIN apimarket_refunds f"
+                   " ON f.purchase_id = p.purchase_id")
+            args = ()
+            if scope is not None:
+                sql += " WHERE l.dev_account = ?"
+                args = (scope,)
+            sql += " GROUP BY p.buyer_id ORDER BY p.buyer_id"
+            buyers = []
+            for r in self._conn.execute(sql, args).fetchall():
+                purchases = int(r[1])
+                refunds = int(r[3] or 0)
+                gross = int(r[2] or 0)
+                refunded = int(r[4] or 0)
+                buyers.append({
+                    "buyer_id": r[0],
+                    "purchase_count": purchases,
+                    "refund_count": refunds,
+                    "net_purchase_count": purchases - refunds,
+                    "gross_revenue": gross,
+                    "refunded_tokens": refunded,
+                    "net_revenue": gross - refunded})
+            buyers.sort(key=lambda x: (-x["net_revenue"], x["buyer_id"]))
+            total_gross = sum(b["gross_revenue"] for b in buyers)
+            total_refunded = sum(b["refunded_tokens"] for b in buyers)
+            total_net = total_gross - total_refunded
+            squares = []
+            running = 0
+            for index, b in enumerate(buyers, 1):
+                running += b["net_revenue"]
+                if total_net > 0:
+                    exact = float(b["net_revenue"]) / total_net
+                    b["share"] = round(exact, 6)
+                    b["cumulative_share"] = round(
+                        float(running) / total_net, 6)
+                    squares.append(exact * exact)
+                else:
+                    b["share"] = None
+                    b["cumulative_share"] = None
+                b["rank"] = index
+            pareto = None
+            if total_net > 0:
+                running = 0
+                for index, b in enumerate(buyers, 1):
+                    running += b["net_revenue"]
+                    if running * 5 >= total_net * 4:
+                        pareto = index
+                        break
+            herfindahl = (round(sum(squares) * 10000, 2)
+                          if total_net > 0 else None)
+            shares = ([b["share"] for b in buyers]
+                      if total_net > 0 else [])
+            return {
+                "purchase_count": sum(b["purchase_count"]
+                                      for b in buyers),
+                "refund_count": sum(b["refund_count"] for b in buyers),
+                "buyer_count": len(buyers),
+                "refunded_buyers": sum(
+                    1 for b in buyers if b["refund_count"] > 0),
+                "gross_revenue": total_gross,
+                "refunded_tokens": total_refunded,
+                "net_revenue": total_net,
+                "top1_share": shares[0] if shares else None,
+                "top3_share": (round(sum(shares[:3]), 6)
+                               if shares else None),
+                "herfindahl": herfindahl,
+                "pareto_buyer_count": pareto,
+                "buyers": buyers}
+
+        with self._lock:
+            if dev_account is None:
+                core = _concentration(None)
+                market_herfindahl = None
+                scope = "market"
+            else:
+                core = _concentration(dev_account)
+                market_herfindahl = _concentration(None)["herfindahl"]
+                scope = "seller"
+
+        return {
+            "dev_account": dev_account,
+            "purchase_count": core["purchase_count"],
+            "refund_count": core["refund_count"],
+            "buyer_count": core["buyer_count"],
+            "refunded_buyers": core["refunded_buyers"],
+            "gross_revenue": core["gross_revenue"],
+            "refunded_tokens": core["refunded_tokens"],
+            "net_revenue": core["net_revenue"],
+            "top1_share": core["top1_share"],
+            "top3_share": core["top3_share"],
+            "herfindahl": core["herfindahl"],
+            "pareto_buyer_count": core["pareto_buyer_count"],
+            "market_herfindahl": market_herfindahl,
+            "scope": scope,
+            "disclaimer": self.disclaimer,
+            "buyers": core["buyers"]}

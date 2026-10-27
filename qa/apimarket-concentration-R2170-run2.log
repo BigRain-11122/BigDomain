@@ -1,0 +1,9 @@
+PASS AC-SBC1: env_keys=16 exact=True row_keys=True rows=11 empty_rows=0
+PASS AC-SBC2: order=['usr:dave', 'usr:bob', 'usr:carol', 'usr:erin'] ranks=[1, 2, 3, 4] cum=[0.4, 0.7, 1.0, 1.0] monotone=True
+PASS AC-SBC3: net=100 gross=130 refunded=30 counts=(5, 1, 4, 1) bob=(2, 30) erin=(1, 0)
+PASS AC-SBC4: shares=[0.4, 0.3, 0.3, 0.0] sum=1.0 top1=0.4 top3=1.0 ivan=(1, None, None)
+PASS AC-SBC5: dana=3400.0 exact=3400.0 gina=5000.0 hana=10000.0 jade=6800.0
+PASS AC-SBC6: dana=3 hana=1 gina=2 jade=1 market=4
+PASS AC-SBC7: scope='market' benchmark=True bob=80 acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=0
+PASS AC-SBC8: sha16=39160127ab235cb1 stable=True identical=True frozen=True tx_equal=True files_equal=True registered=True
+SUITE PASS 8/8

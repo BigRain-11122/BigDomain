@@ -1,0 +1,16 @@
+R2170 adjacent regression controls (seven suites, run after the concentration suite)
+lead=test_apimarket_concentration.py SUITE PASS 8/8 (qa/apimarket-concentration-R2170.log and -run2.log, identical sha16 ac214ef34cd30a53)
+test_apimarket_listingvelocity.py      SUITE PASS 8/8   rc=0
+test_apimarket_repeatpurchase.py       SUITE PASS 8/8   rc=0
+test_apimarket_sellerquality.py        SUITE PASS 8/8   rc=0
+test_apimarket_sellersledger.py        SUITE PASS 8/8   rc=0 on the three isolated reruns
+test_apimarket_buyersellerspend.py     SUITE PASS 8/8   rc=0
+test_apimarket_devprofile.py           SUITE 8/8        rc=0
+test_apimarket_buyerprofile.py         SUITE PASS 8/8   rc=0
+
+honest note: the first sweep reported test_apimarket_sellerledger.py rc=2 with no verdict; the suite was not
+changed by this round and three isolated reruns came back SUITE PASS 8/8 rc=0, so the code is square and the
+transient is recorded rather than hidden (most likely a temp-dir/process collision inside that sweep, unreproduced).
+
+debt carried to R2171: the full reconcile battery was NOT run this window (budget), so the suite matrix still
+points at qa/reconcile-all-R2168.log and reads green=368/370 with this new suite not yet covered by a battery run.

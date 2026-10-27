@@ -2378,6 +2378,14 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-listingvelocity", os.path.join(
         "ledger", "test_apimarket_listingvelocity.py"), 8),
+    # apimarket seller-side buyer concentration - the purchase-side
+    # roll with the refund law (a fully refunded buyer stays at zero
+    # weight), the share / herfindahl / pareto laws on integers, the
+    # market-wide benchmark carried under a seller scope and strict
+    # seller isolation - criteria AC-SBC1..AC-SBC8 pre-registered in
+    # the R2170 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-concentration", os.path.join(
+        "ledger", "test_apimarket_concentration.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

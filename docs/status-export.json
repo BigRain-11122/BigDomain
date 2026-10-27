@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T02:09:43+08:00",
-  "do": "R2169 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - the shelf-to-sale velocity face is the first product that answers how long a listing sits before it sells; the line stays pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-28T03:20:49+08:00",
+  "do": "R2170 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - the buyer concentration face is the first product that answers how many residents a seller's net revenue hangs on; the line stays pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2169: new product - the apimarket shelf-to-sale velocity face (api_listing_velocity), 13-key envelope plus 11-key rows, suite 8/8 double-run green",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_listing_velocity) + src/sandbox/ledger/test_apimarket_listingvelocity.py + qa/apimarket-listingvelocity-R2169-a.log / -b.log (SUITE PASS 8/8, sha16 9ef38bfde9ba1c27, 2026-10-28)",
-    "next_milestone": "R2170: the full battery plus the deferred reconcile-daily standing row first (the honest carry-over of R2169), then the next explore or tech head (ETA 2026-10-28, within 48h)",
-    "last_artifact": "qa/apimarket-listingvelocity-R2169-a.log + qa/regression-R2169.log (2026-10-28)"
+    "current": "R2170: new product - the apimarket seller-side buyer concentration face (api_seller_concentration), 16-key envelope plus 10-key rows, suite 8/8 double-run green",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_seller_concentration) + src/sandbox/ledger/test_apimarket_concentration.py + qa/apimarket-concentration-R2170.log / -run2.log (SUITE PASS 8/8, sha16 ac214ef34cd30a53, 2026-10-28)",
+    "next_milestone": "R2171: the full reconcile battery first (368/370 is the honest carry-over of this window), then the next explore or tech head (ETA 2026-10-28, within 48h)",
+    "last_artifact": "qa/apimarket-concentration-R2170-adjacent.log (seven adjacent suites) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller-side buyer concentration (api_seller_concentration)",
+      "on",
+      "R2170: repeat purchases counted events, the sales board totalled money and the buyer mirror face let only the buyer look - so a seller could not tell how many residents its net revenue hangs on or how much rides on the biggest one. The new face derives the roll from purchases x refunds (a fully refunded buyer stays at zero weight), reports share, top1/top3, a herfindahl computed from exact fractions and a pareto buyer count decided on integers, and carries the market-wide herfindahl as a comparable benchmark under a seller scope."
+    ],
     [
       "apimarket shelf-to-sale velocity (api_listing_velocity)",
       "on",
