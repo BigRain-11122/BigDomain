@@ -8493,3 +8493,167 @@ class APIMarketFace:
             "scope": scope,
             "disclaimer": self.disclaimer,
             "buyers": core["buyers"]}
+
+    def api_price_volatility(self, dev_account=None):
+        """Seller repricing-discipline face (criteria AC-PVC1..AC-PVC8
+        pre-registered in the R2171 explore claim row BEFORE this code
+        existed; the AC-PVC prefix, api_price_volatility,
+        test_apimarket_pricevolatility, ledger-apimarket-pricevolatility,
+        avg_reprice_pct and repricing_sellers were all git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        Every existing price face is a snapshot cross-section:
+        api_price_history answers one listing, api_listing_position
+        ranks one listing inside its category,
+        api_market_price_percentiles describes the live asking prices and
+        api_listing_velocity measures shelf life. None of them answers
+        the seller's own operating question: how often do I reprice, by
+        how much, up or down, and is my repricing magnitude sane next to
+        the market. Repricing is the seller's only high-frequency
+        action and it was invisible on the time axis.
+
+        Everything is derived from apimarket_price_revisions x
+        apimarket_listings - no new table. The row authority is the
+        REPRICING side, deliberately the mirror of api_board /
+        api_categories: a listing that has live stock but was never
+        repriced does NOT appear, so repriced_listing_count equals the
+        row count and listing_count is the honest denominator.
+
+        Magnitude law: every step percentage is
+        round((new - previous) / previous * 100, 2) where previous is the
+        base price or the prior revision in revision_id order - derived
+        only from two stored prices, never from a wall clock, never a
+        rewrite of history. The row total_pct is base to current by the
+        same law. A same-price revision is refused at the write side
+        (E_AM_PRICE_UNCHANGED), so every step is strictly up or strictly
+        down and revision_count == up_count + down_count holds per row.
+
+        Aggregation is POOLED over every step (not a mean of row means):
+        avg_reprice_pct is the arithmetic mean of all steps,
+        median_reprice_pct takes the odd middle or the even midpoint,
+        max_reprice_pct keeps the sign of the largest absolute step, and
+        net_direction_pct is the signed sum of every step. With zero
+        steps all of them are None, never a fabricated 0.0.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market', market_avg_reprice_pct None - the face never benchmarks
+        itself against itself); a seller scope carries the market-wide
+        pooled average as a comparable benchmark computed by the same
+        law, so it can be checked against the unscoped call, and sellers
+        never leak into each other.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on the
+        usr: prefix shape); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _volatility(scope):
+            sql = ("SELECT listing_id, listing_key, title, description,"
+                   " token_price FROM apimarket_listings")
+            args = ()
+            if scope is not None:
+                sql += " WHERE dev_account = ?"
+                args = (scope,)
+            sql += " ORDER BY listing_id"
+            listings = self._conn.execute(sql, args).fetchall()
+            rows = []
+            steps = []
+            for r in listings:
+                listing_id = int(r[0])
+                base = int(r[4])
+                revisions = self._conn.execute(
+                    "SELECT token_price FROM apimarket_price_revisions"
+                    " WHERE listing_id = ? ORDER BY revision_id",
+                    (listing_id,)).fetchall()
+                if not revisions:
+                    continue
+                local = []
+                previous = base
+                up = 0
+                down = 0
+                for rev in revisions:
+                    price = int(rev[0])
+                    local.append(round(
+                        (price - previous) * 100.0 / previous, 2))
+                    if price > previous:
+                        up += 1
+                    elif price < previous:
+                        down += 1
+                    previous = price
+                current = previous
+                title, _desc, _count, _latest = self._metadata_state(
+                    listing_id, r[2], r[3])
+                steps.extend(local)
+                rows.append({
+                    "listing_id": listing_id,
+                    "listing_key": r[1],
+                    "title": title,
+                    "revision_count": len(local),
+                    "up_count": up,
+                    "down_count": down,
+                    "base_price": base,
+                    "current_price": current,
+                    "total_pct": round(
+                        (current - base) * 100.0 / base, 2)})
+            rows.sort(key=lambda x: (-x["revision_count"],
+                                    -abs(x["total_pct"]),
+                                    x["listing_id"]))
+            ordered = sorted(steps)
+            count = len(ordered)
+            if count:
+                avg = round(sum(ordered) / count, 2)
+                if count % 2:
+                    median = ordered[count // 2]
+                else:
+                    middle = count // 2
+                    median = round((ordered[middle - 1]
+                                    + ordered[middle]) / 2.0, 2)
+                peak = max(ordered, key=lambda x: (abs(x), -x))
+                net = round(sum(ordered), 2)
+            else:
+                avg = None
+                median = None
+                peak = None
+                net = None
+            return {
+                "listing_count": len(listings),
+                "repriced_listing_count": len(rows),
+                "revision_count": count,
+                "up_count": sum(1 for x in steps if x > 0),
+                "down_count": sum(1 for x in steps if x < 0),
+                "net_direction_pct": net,
+                "avg_reprice_pct": avg,
+                "median_reprice_pct": median,
+                "max_reprice_pct": peak,
+                "most_repriced_listing": (rows[0]["listing_id"]
+                                          if rows else None),
+                "rows": rows}
+
+        with self._lock:
+            if dev_account is None:
+                core = _volatility(None)
+                market_avg = None
+                scope = "market"
+            else:
+                core = _volatility(dev_account)
+                market_avg = _volatility(None)["avg_reprice_pct"]
+                scope = "seller"
+
+        return {
+            "dev_account": dev_account,
+            "scope": scope,
+            "listing_count": core["listing_count"],
+            "repriced_listing_count": core["repriced_listing_count"],
+            "revision_count": core["revision_count"],
+            "up_count": core["up_count"],
+            "down_count": core["down_count"],
+            "net_direction_pct": core["net_direction_pct"],
+            "avg_reprice_pct": core["avg_reprice_pct"],
+            "median_reprice_pct": core["median_reprice_pct"],
+            "max_reprice_pct": core["max_reprice_pct"],
+            "market_avg_reprice_pct": market_avg,
+            "most_repriced_listing": core["most_repriced_listing"],
+            "disclaimer": self.disclaimer,
+            "rows": core["rows"]}

@@ -1,0 +1,9 @@
+PASS AC-PVC1: keys=15 rowkeys=True empty=(0, [], None) empty_seller_rows=[]
+PASS AC-PVC2: order=[4, 1, 2] f1_absent=True listing_count=4 most=4
+PASS AC-PVC3: a1=(10, 9, -10.0) a2=(50.0,) g1=(50.0, 2, 1)
+PASS AC-PVC4: per_row=True rev=6 up=4 down=2 net=130.0 avg=21.67 med=22.5 max=100.0
+PASS AC-PVC5: market_scope='market' dana=(3, 15.0, 20.0) benchmark=21.67 frank=[]
+PASS AC-PVC6: history=True buy=True delist=True relist=True untouched=True moved_total=65.0
+PASS AC-PVC7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=0 idem=True frozen=True tx=True
+PASS AC-PVC8: sha16=c7515f4193d390f8 identical=True frozen=True files_equal=True registered=True ascii=True
+SUITE PASS 8/8

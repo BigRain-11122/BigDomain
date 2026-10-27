@@ -2386,6 +2386,13 @@ SUITES = [
     # the R2170 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-concentration", os.path.join(
         "ledger", "test_apimarket_concentration.py"), 8),
+    # seller repricing discipline (step percentages derived only from
+    # two stored prices, repricing-side row authority, pooled mean /
+    # median / absolute peak / signed sum, market benchmark under a
+    # seller scope) - criteria AC-PVC1..AC-PVC8 pre-registered in the
+    # R2171 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-pricevolatility", os.path.join(
+        "ledger", "test_apimarket_pricevolatility.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

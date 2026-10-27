@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T03:20:49+08:00",
-  "do": "R2170 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - the buyer concentration face is the first product that answers how many residents a seller's net revenue hangs on; the line stays pre-commercial and blocked on the physical items only.",
+  "export_ts": "2026-10-28T05:08:55+08:00",
+  "do": "R2171 the sandbox developer-API marketplace read faces for the silicon-domain public co-creation platform - the seller repricing-discipline face is live and the whole 371-suite battery is green on the committed tree; the product line stays pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2170: new product - the apimarket seller-side buyer concentration face (api_seller_concentration), 16-key envelope plus 10-key rows, suite 8/8 double-run green",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_seller_concentration) + src/sandbox/ledger/test_apimarket_concentration.py + qa/apimarket-concentration-R2170.log / -run2.log (SUITE PASS 8/8, sha16 ac214ef34cd30a53, 2026-10-28)",
-    "next_milestone": "R2171: the full reconcile battery first (368/370 is the honest carry-over of this window), then the next explore or tech head (ETA 2026-10-28, within 48h)",
-    "last_artifact": "qa/apimarket-concentration-R2170-adjacent.log (seven adjacent suites) (2026-10-28)"
+    "current": "R2171: new product - the apimarket seller repricing-discipline face (api_price_volatility), 15-key envelope plus 9-key rows, suite 8/8 double-run green, and the full battery now 371/371 green (the two-round debt is cleared)",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_price_volatility) + src/sandbox/ledger/test_apimarket_pricevolatility.py + qa/apimarket-pricevolatility-R2171-a.log / -b.log (SUITE PASS 8/8, sha256 cb259362a43d843c) + qa/reconcile-all-R2171.log (371/371, 696.1s) - 2026-10-28",
+    "next_milestone": "R2172: the next claimable explore head (a fresh repricing or trust-metric gap) with its criteria registered before the code, plus the daily funnel row (ETA 2026-10-28, within 48h)",
+    "last_artifact": "docs/sandbox-suite-matrix.md (371 suites / 3090 criteria, 35857 bytes, byte-identical --check) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller repricing discipline (api_price_volatility)",
+      "on",
+      "R2171: every price face answered a snapshot cross-section, so the seller's own high-frequency action - repricing - had no time-axis reading. The new face derives step percentages from two stored prices only and reports pooled mean, median, absolute peak and a signed sum against a market benchmark under a seller scope; a listing with live stock but no revision stays honestly absent."
+    ],
     [
       "seller-side buyer concentration (api_seller_concentration)",
       "on",
@@ -114,15 +119,13 @@
       "R2146 interrupted-window closeout: full battery now complete on the answer-revision product",
       "on",
       "R2145 (seller answer-revision leg) had written its product diff, suite, wiring, queue row and state/export patch but was killed before committing and before the battery finished - the tree was dirty, the battery log stopped at 57 of 349 suites and the round's own log line claimed a result it did not have. This window reopened on that state, verified nothing was merely inherited, and closed it: the answer-revision suite re-ran rc=0/0 twice with byte-identical criterion lines (sha16 2c357c81ed7fc57c), the full battery completed RUNNER PASS 349/349 suites plus controls 7/7 in 661.7s (qa/reconcile-all-R2146.log, single-writer UTF-8 LF; the truncated predecessor log is preserved verbatim), the tmp-sweep birth-site cleanup reclaimed 802 of 802 worlds and 283.63 MiB inside that battery window (which is exactly the discharge route D-20261026-17 assigns this company), and the suite matrix was regenerated against this battery to 349 suites / 2900 criteria with --check byte-identical. Group faces consumed: decisions.md grew by a 28-token dispatch batch (D-20261026-15..28, of which only D-17 touches us and merely confirms the cleanup channel above) plus a further five D-20261027 rows, all other seats' faces, acknowledged with zero action; the group orders baseline advanced to the 2026-10-26 22:36 dispatch-deck row, routed to the night round."
-    ],
-    [
-      "apimarket seller answer-revision leg (revise_answer + api_answer_history)",
-      "on",
-      "R2145: the answer door opened in R2118 was write-once - one immutable apimarket_answers row per question behind UNIQUE(question_id) and E_AM_ALREADY_ANSWERED - while every other commodity axis already had a remedy leg (price R2079, metadata R2083, supply R2095, rating R2094, reply R2143, provider identity R2136). A seller who answered 'thirty units in stock' or 'ships in two business days' stayed welded to that sentence after the shelf sold out or the window moved, and buyers kept reading a stale promise. apimarket.py now grows an append-only apimarket_answer_revisions table (answer_id, question_id, listing_id, dev_account, previous_text, answer_text, revised_utc) plus revise_answer(dev_account, answer_id, text) with the pinned gate order account shape, answer-id shape, text shape, existence, ownership, unchanged state, and a nine-key envelope. The unchanged gate is judged against the EFFECTIVE text, so revising back to an earlier wording stays legal while the base stamp is never rewritten, and a retired listing keeps its answer leg revisable because retirement freezes the shelf, not the duty to answer. One seam (_effective_answer) now feeds all three public Q&A read faces - api_listing_qna, api_buyer_questions and api_seller_answers - so a single revision moves every face in the same step, and api_answer_history answers the audit view: twelve keys with the base wording, every ordered revision and the effective text. Law pinned by AC-AMAW6: a revision is not a new answer, so answered/unanswered counters, the open-question queue and the first-response latency all stay byte-frozen. Criteria AC-AMAW1..AC-AMAW8 were pre-registered in the explore-queue row BEFORE the code existed (eight anchors git grep -F zero-occupancy rc=1, 2026-10-26). Verification: suite src/sandbox/ledger/test_apimarket_answerrev.py SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 2c357c81ed7fc57c (qa/apimarket-answerrev-R2145-a.log and -b.log, single-writer UTF-8 LF); wired as ledger-apimarket-answerrev(8); four adjacent suites re-ran rc=0 each (qna, buyerquestions, selleranswers, report). Honest notes: two test-side defects were caught before any evidence existed (the market face owns its own database file, and api_buyer_questions returns rows under the 'rows' key) and were fixed in the test without relaxing a criterion; the full battery carried over from R2144 was re-launched on the clean tree in this window and its result is reported from its own log.",
-      "2026-10-26"
     ]
   ],
   "results": [
+    [
+      "R2171",
+      "R2171: five-silence scan clean (275 rows / 187 tokens, the one apparent addition is the known D-20260930-1 truncation artefact; ledger no new row; group orders unchanged at 03:0x; benchmarks inside 7 days; tree clean). Two-round battery debt discharged: the first run failed honestly on three CRLF evidence files (R2170's two suite logs plus HEAD's R2168 bundle) which were normalised on the newline axis only and re-baselined DRIFT-CLEAN, then RUNNER PASS 371/371 + controls 7/7 696.1s with matrix 371/3090 byte-identical, fingerprint CLEAN, profile PASS and census flags=0. New product: api_price_volatility with AC-PVC1..AC-PVC8 pre-registered before the code, SUITE PASS 8/8 double-run (sha256 cb259362a43d843c). Honest notes: one criterion text correction disclosed pre-evidence (15 envelope keys), and three files were polluted by an accidental follow-up invocation and reverted from git first."
+    ],
     [
       "R2169",
       "R2169: five-silence scan clean (275 decision rows / 181 tokens, zero new; ledger no new @BigDomain row; group orders advanced by the 01:45 fleet event round #3, acknowledged zero action; benchmarks inside 7 days; tree clean). The P3 explore head was claimed with AC-LV1..AC-LV8 registered before the code, and the product is APIMarketFace.api_listing_velocity - cycle-opening start law, net sale authority, integer elapsed seconds derived only from stored stamps, pooled average and median, fastest/slowest extremes with the listing_id tie-break, and the MARKET-scoped category benchmark over the one effective-category seam. Suite SUITE PASS 8/8 double-run byte-identical (sha16 9ef38bfde9ba1c27), wired ledger-apimarket-listingvelocity(8), five adjacent suites green, the daily funnel row PASS with the honest zero-activity envelope. Honest notes: the first AC-LV6 run failed on a wrong fixture expectation (corrected test, no relaxed implementation), and the full battery plus reconcile-daily were deferred to next round on the 25-minute budget."
@@ -190,22 +193,18 @@
     [
       "R2145",
       "R2145: five-silence scan came back with one real finding and one artifact. decisions.md holds 211 unique content-addressed tokens over 309 rows; the seventeen tokens absent from the stored baseline are all pre-10-19 rows restored by a group-side file rotation (D-20261015-01..06, O-20261015-1049..2305, T-20261012-01, P-20261018-03 and siblings), every one another seat's execution face, so they were acknowledged with zero action and the baseline was advanced to the full current set - disclosed as rotation rather than new law. The ledger's two @BigDomain patrol rows carry one company piece, the HQ-FEEDBACK freshness ask, paid off in this window with a numbered P-32 line (the previous one was R2137). Group orders stayed at the 2026-10-26 09:30 baseline, benchmarks were refreshed 2026-10-26 inside the seven-day gate, the tree was clean with no index.lock, all four tech heads stayed gated (docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, live-mtime row awaiting a real event) and the single explore row was gated on the merchant id - so the window seeded and claimed a fresh P3 row in the same window with AC-AMAW1..AC-AMAW8 registered before the code existed (eight anchors git grep -F zero-occupancy rc=1). Product: the seller answer-revision leg. The answer door has been write-once since R2118, so a seller's answer stayed welded to a shelf that had already sold out or to a delivery window that had already moved, while price, metadata, supply, rating, reply and provider identity all had remedy legs. revise_answer appends one apimarket_answer_revisions row behind the pinned gate order, judged unchanged against the EFFECTIVE text so a revise-back stays legal and the base stamp is never rewritten; a retired listing stays revisable; one seam feeds api_listing_qna, api_buyer_questions and api_seller_answers so the three faces cannot disagree; api_answer_history answers the base wording, the ordered revisions and the effective text; and a revision moves no counter and no first-response latency because it is not a new answer. Verification: suite SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 2c357c81ed7fc57c (qa/apimarket-answerrev-R2145-a.log and -b.log); wired ledger-apimarket-answerrev(8); four adjacent suites rc=0 each. Honest notes: two test-side defects were caught before evidence was written (the market face owns its own database file; api_buyer_questions returns rows under 'rows') and fixed without relaxing any criterion; the battery carried over from R2144 was re-launched on the clean tree and its result is quoted from the log, not assumed."
-    ],
-    [
-      "2162",
-      "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
-    "window": "2026-10-21..2026-10-27",
+    "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 46,
+    "log_lines_in_window": 51,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 45,
+    "substantive_non_idle_mention_lines": 50,
     "proposals_total": 5,
     "proposals_open": 3,
-    "queue_main_open": 8,
+    "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   }
