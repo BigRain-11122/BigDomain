@@ -2418,6 +2418,16 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-marketdaily", os.path.join(
         "ledger", "test_apimarket_marketdaily.py"), 8),
+    # refund latency distribution (stamp-only durations from the sale
+    # to the money coming back, a left-closed right-open six-band
+    # partition, five aggregates over refunded rows only, same-date and
+    # one-week crossings, a contiguous monthly leg with honest zero
+    # months) that the refund propensity, register, exposure and
+    # category-month faces never answered - criteria AC-RFLT1..AC-RFLT8
+    # pre-registered in the R2179 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-refundlatency", os.path.join(
+        "ledger", "test_apimarket_refundlatency.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -1,0 +1,9 @@
+PASS AC-RFLT1: keys ok=True bands=['0-1h', '1-6h', '6-24h', '1-3d', '3-7d', '7d+'] band rows ok=True month rows ok=True
+PASS AC-RFLT2: stamp latencies=[30, 3600, 36000, 4233600] all non-negative=True clock-shift identical=True unrefunded excluded from averages=True
+PASS AC-RFLT3: band counts=[1, 1, 1, 0, 0, 1] sum=4 refunded sum=33 boundary 3600 lands in 1-6h=True over_week=1 same_day=3
+PASS AC-RFLT4: avg=1068307.5 median=19800.0 p90=4233600 fastest=30 slowest=4233600
+PASS AC-RFLT5: months=['2026-08', '2026-09'] count sums=4 aug=(1, 30.0) sep=(3, 36000.0) zero-month shape proven by helper=True
+PASS AC-RFLT6: purchases face/raw/stats=6/6/6 refunds=4/4/4 rate=0.6667 band refunded==stats refunded (33/33)
+PASS AC-RFLT7: repeat identical=True args rejected=True digests frozen=True ledger tx frozen=True pools frozen=True
+PASS AC-RFLT8: three instances identical=True empty world=(0, 0, 0, []) wired=True consumer shas stable=True ascii=True net imports=0 outside repo=True
+SUITE 8/8

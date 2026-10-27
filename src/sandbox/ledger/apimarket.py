@@ -467,6 +467,31 @@ def _day_sequence(first, last):
     return out
 
 
+def _refund_latency_seconds(purchased_utc, refunded_utc):
+    """Elapsed seconds between the two stored stamps of one refund
+    (AC-RFLT2). Both are strict UTC instants written by this module's
+    own doors, so parsing them is the whole derivation - never a wall
+    clock - and a leg that never happened is the caller's None, never
+    a zero."""
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    start = datetime.datetime.strptime(str(purchased_utc), fmt)
+    end = datetime.datetime.strptime(str(refunded_utc), fmt)
+    return int((end - start).total_seconds())
+
+
+# Latency bands, lower inclusive and upper exclusive, so a stamp on a
+# boundary belongs to the UPPER band and the bands stay exhaustive
+# without overlap (AC-RFLT3).
+_REFUND_LATENCY_BANDS = (
+    ("0-1h", 0, 3600),
+    ("1-6h", 3600, 21600),
+    ("6-24h", 21600, 86400),
+    ("1-3d", 86400, 259200),
+    ("3-7d", 259200, 604800),
+    ("7d+", 604800, None),
+)
+
+
 def _assert_instant(value, label):
     """Strict UTC instant shape for the feed window (AC-AMF3): the
     same round-trip law _assert_month uses, so zero padding and
@@ -9259,4 +9284,132 @@ class APIMarketFace:
                 if active_rows else None),
             "disclaimer": self.disclaimer,
             "days": days,
+        }
+
+    def api_refund_latency(self):
+        """Market-wide refund latency distribution (criteria
+        AC-RFLT1..AC-RFLT8 pre-registered in the R2179 explore-queue
+        claim row BEFORE this code existed).
+
+        The refund family - propensity, register, exposure and
+        category_refund_months - answers money and headcount only, so
+        "how long from the sale to the money coming back" had no face
+        at all. A slow settlement, a backlogged after-sales desk and a
+        healthy refund therefore read identically, and a seller
+        planning cash flow could not see the payback period.
+
+        Every latency here is derived ONLY from two stored stamps of
+        the SAME purchase: purchased_utc and refunded_utc. Nothing
+        reads a wall clock, an unrefunded purchase contributes no
+        latency at all (unrefunded_count keeps it visible instead of
+        pretending it took zero seconds), and a leg that happened is
+        always at or after its purchase.
+
+        The distribution is reported as a six-band partition (lower
+        bound inclusive, upper exclusive, so a boundary stamp belongs
+        to the upper band and the bands stay exhaustive and disjoint),
+        five aggregates over refunded rows only - average, median,
+        nearest-rank p90, fastest and slowest - plus two named
+        crossings (the refunds that landed on the same UTC date as the
+        sale, and the ones that took a week or more). The monthly leg
+        buckets a refund by the month it LANDED and runs contiguously
+        from the first to the last refund month, so a month with no
+        refund is an honest zero row with None statistics rather than
+        a gap. Pure read, no arguments: zero row mutations and zero
+        token movement. The envelope carries the resident non-advisory
+        disclaimer."""
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT f.refunded_utc, f.amount,"
+                " p.purchased_utc, p.price_paid"
+                " FROM apimarket_refunds f JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id"
+                " ORDER BY f.refund_id").fetchall()
+            purchase_count = int(self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_purchases"
+            ).fetchone()[0])
+
+        latencies = []
+        amounts = []
+        same_day = 0
+        month_cells = {}
+        for refunded_utc, amount, purchased_utc, price_paid in raw:
+            seconds = _refund_latency_seconds(purchased_utc,
+                                             refunded_utc)
+            latencies.append(seconds)
+            amounts.append(int(amount))
+            if str(refunded_utc)[:10] == str(purchased_utc)[:10]:
+                same_day += 1
+            month = str(refunded_utc)[:7]
+            cell = month_cells.setdefault(month, [])
+            cell.append(seconds)
+
+        ordered = sorted(latencies)
+        refund_count = len(ordered)
+        month_names = sorted(month_cells)
+        months = []
+        if month_names:
+            for month in _contiguous_months(month_names):
+                values = sorted(month_cells.get(month, []))
+                if values:
+                    mid = len(values) // 2
+                    median = (float(values[mid]) if len(values) % 2
+                              else (values[mid - 1] + values[mid]) / 2.0)
+                    months.append({
+                        "month": month,
+                        "refund_count": len(values),
+                        "median_refund_seconds": median,
+                        "avg_refund_seconds": round(
+                            float(sum(values)) / len(values), 2),
+                        "slowest_seconds": values[-1]})
+                else:
+                    months.append({
+                        "month": month,
+                        "refund_count": 0,
+                        "median_refund_seconds": None,
+                        "avg_refund_seconds": None,
+                        "slowest_seconds": None})
+
+        pairs = list(zip(latencies, amounts))
+        bands = []
+        for label, lower, upper in _REFUND_LATENCY_BANDS:
+            in_band = [p for p in pairs
+                       if p[0] >= lower and (upper is None
+                                             or p[0] < upper)]
+            bands.append({
+                "band": label,
+                "lower_seconds": lower,
+                "upper_seconds": upper,
+                "refund_count": len(in_band),
+                "refunded": sum(p[1] for p in in_band)})
+
+        if ordered:
+            mid = len(ordered) // 2
+            median = (float(ordered[mid]) if len(ordered) % 2
+                      else (ordered[mid - 1] + ordered[mid]) / 2.0)
+            avg = round(float(sum(ordered)) / len(ordered), 2)
+            rank = int(-(-len(ordered) * 9 // 10))
+            p90 = ordered[rank - 1]
+        else:
+            median = None
+            avg = None
+            p90 = None
+        over_week = len([s for s in ordered if s >= 604800])
+        return {
+            "purchase_count": purchase_count,
+            "refund_count": refund_count,
+            "unrefunded_count": purchase_count - refund_count,
+            "refund_rate": (round(float(refund_count) / purchase_count, 4)
+                            if purchase_count else None),
+            "avg_refund_seconds": avg,
+            "median_refund_seconds": median,
+            "p90_refund_seconds": p90,
+            "fastest_seconds": ordered[0] if ordered else None,
+            "slowest_seconds": ordered[-1] if ordered else None,
+            "same_day_count": same_day,
+            "over_week_count": over_week,
+            "month_count": len(months),
+            "bands": bands,
+            "months": months,
+            "disclaimer": self.disclaimer,
         }
