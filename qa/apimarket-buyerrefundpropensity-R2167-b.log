@@ -1,0 +1,9 @@
+PASS AC-RFP1: env_keys=16 exact=True empty=(0, None, None) bob_keys=16
+PASS AC-RFP2: bob=(4, 1, 0.25) carol=(1, 1.0) dave=(20, 8, 0.4) frank=(20, 0.0) erin=(0, None)
+PASS AC-RFP3: bob amount=0.11538461538461539 count=0.25 carol=1.0 dave=0.4 frank=0.0
+PASS AC-RFP4: market=0.2222222222222222 deltas=(0.02777777777777779, 0.7777777777777778, 0.1777777777777778, -0.2222222222222222) erin_delta=None
+PASS AC-RFP5: carol raw=1.0 smooth=0.29292929292929293 dave raw=0.4 smooth=0.34074074074074073 frank=0.07407407407407408
+PASS AC-RFP6: frank before=(0, 0.0) after=(1, 0.05, 10) profile=(1, 10) delist_same=True cross_face=True
+PASS AC-RFP7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=(0, None) repeat=True frozen=True tx=True
+PASS AC-RFP8: sha16=f843a292ad3ac1ae identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

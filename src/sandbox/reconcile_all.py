@@ -2358,6 +2358,16 @@ SUITES = [
     # explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-hourheatmap", os.path.join(
         "ledger", "test_apimarket_hourheatmap.py"), 8),
+    # the buyer refund-propensity face - the refund count and amount
+    # normalised by the resident own purchase base (every purchase
+    # counts, refunds are one per purchase), the market count-rate
+    # benchmark with its honest None edges, and the low-sample
+    # shrinkage whose deviation is scaled by exactly n/(n+K) so a
+    # one-purchase history cannot read as more dangerous than a long
+    # one - criteria AC-RFP1..AC-RFP8 pre-registered in the R2166
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-refundpropensity", os.path.join(
+        "ledger", "test_apimarket_buyerrefundpropensity.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

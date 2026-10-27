@@ -54,6 +54,10 @@ import os
 import sqlite3
 import threading
 
+# Refund-propensity prior weight, in purchases, applied to the market
+# rate by the shrinkage form of api_buyer_refund_propensity (AC-RFP4).
+_RFP_SMOOTH = 10
+
 E_AM_BAD_ACCOUNT = "E_AM_BAD_ACCOUNT"      # AC-AM1 / AC-AM7
 E_AM_BAD_ARGS = "E_AM_BAD_ARGS"            # AC-AM1 / AC-AM7
 E_AM_BAD_PRICE = "E_AM_BAD_PRICE"          # AC-AM1 / AC-AM7
@@ -8035,3 +8039,86 @@ class APIMarketFace:
                 "claim": claim,
                 "ticket_state": ticket_state,
                 "disclaimer": self.disclaimer}
+
+    def api_buyer_refund_propensity(self, buyer_id):
+        """Buyer refund propensity normalised against the buyer's own
+        purchase base and the market (criteria AC-RFP1..AC-RFP8
+        pre-registered in the R2166 explore-queue seed row BEFORE this
+        code existed).
+
+        api_buyer_profile gives lifetime refunded amount and refund
+        count, api_refund_register lists rows and api_refund_exposure
+        is the seller-side shortfall; none of them normalises refunds
+        by how much this resident actually bought, so a buyer with one
+        refund out of three purchases and a buyer with one out of
+        thirty read the same refund_count, and there was no market
+        benchmark to compare either against.
+
+        Laws pinned by the suite: the denominator is the whole purchase
+        base including refunded purchases (a refund is one per purchase
+        behind UNIQUE(purchase_id), so refund_count never exceeds
+        purchase_count and the rate lives in [0,1]); the amount axis is
+        refunded_tokens/gross_spent with None rather than a fake zero;
+        the market benchmark is the same count ratio over the whole
+        market; the observed rate delta is raw minus market and None
+        when either side is absent; and the smoothed rate is the
+        shrinkage form (x + K*m)/(n + K), which means the deviation
+        from the market is scaled by exactly n/(n+K) - a one-purchase
+        history cannot read as more dangerous than a long one merely
+        because of its size. Refund authority is the append-only
+        apimarket_refunds table joined to purchases, so a later refund
+        moves the numbers in the same step it moves the profile, while
+        delisting or relisting never touches them. Gate: prefix-only
+        account shape before any read (fail-closed E_AM_BAD_ACCOUNT); a
+        prefix-valid account with no history gets an honest zero
+        envelope. Pure read: zero row mutations, zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        with self._lock:
+            mine = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(price_paid), 0)"
+                " FROM apimarket_purchases WHERE buyer_id = ?",
+                (buyer,)).fetchone()
+            back = self._conn.execute(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0)"
+                " FROM apimarket_refunds WHERE buyer_id = ?",
+                (buyer,)).fetchone()
+            market = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_purchases").fetchone()
+            market_back = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_refunds").fetchone()
+        purchases = int(mine[0])
+        refunds = int(back[0])
+        gross = int(mine[1])
+        refunded = int(back[1])
+        market_purchases = int(market[0])
+        market_refunds = int(market_back[0])
+        rate = (float(refunds) / purchases) if purchases else None
+        amount_rate = (float(refunded) / gross) if gross else None
+        market_rate = (float(market_refunds) / market_purchases
+                       if market_purchases else None)
+        delta = None
+        if rate is not None and market_rate is not None:
+            delta = rate - market_rate
+        smoothed = None
+        if purchases and market_rate is not None:
+            k = _RFP_SMOOTH
+            smoothed = ((refunds + k * market_rate) / (purchases + k))
+        return {
+            "buyer_id": buyer,
+            "purchase_count": purchases,
+            "refund_count": refunds,
+            "non_refunded_purchase_count": purchases - refunds,
+            "gross_spent": gross,
+            "refunded_tokens": refunded,
+            "net_spent": gross - refunded,
+            "refund_rate": rate,
+            "refund_amount_rate": amount_rate,
+            "market_purchase_count": market_purchases,
+            "market_refund_count": market_refunds,
+            "market_refund_rate": market_rate,
+            "refund_rate_delta": delta,
+            "smoothing_strength": _RFP_SMOOTH,
+            "smoothed_refund_rate": smoothed,
+            "disclaimer": self.disclaimer}
