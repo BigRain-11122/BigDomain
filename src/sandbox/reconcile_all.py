@@ -2341,6 +2341,15 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-watchconversion", os.path.join(
         "ledger", "test_apimarket_watchconversion.py"), 8),
+    # apimarket category refund months - the per-category per-month
+    # refund load (cash-basis bucketing, a refund-only month carrying
+    # zero trade, honest None rates wherever nothing settled, the two
+    # dissociated extremes) that the category demand, market months and
+    # refund register faces never answered - criteria AC-CRM1..AC-CRM8
+    # pre-registered in the R2163 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-categoryrefundmonths", os.path.join(
+        "ledger", "test_apimarket_categoryrefundmonths.py"), 8),
     # apimarket asking-price distribution - the quartiles, median,
     # ninetieth percentile and spread that the catalog band, the
     # single listing position and the market average never answered;

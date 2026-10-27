@@ -1,0 +1,9 @@
+PASS AC-CRM1: env_keys=14 exact=True row_keys=True month_keys=True cats=3 empty_cats=0
+PASS AC-CRM2: data_months=[('2026-08', 10, 0, 10), ('2026-09', 13, 0, 13), ('2026-10', 0, 10, -10), ('2026-11', 0, 13, -13)]
+PASS AC-CRM3: tools_gross=10->30 tools_refunded=5->25 roundtrip=True
+PASS AC-CRM4: gross=37/37 refunded=32/32 trades=6/6 refunds=5/5 months=4 cats=3
+PASS AC-CRM5: oct=(0, 1, None) nov=(0, 2, None) uncat=(4, 4, 1)
+PASS AC-CRM6: order=['data', 'tools', None] worst='2026-10'@1.6666666666666667 top='2026-11'
+PASS AC-CRM7: codes=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] strict=(2, 33, 28) repeated=True frozen=True tx=True
+PASS AC-CRM8: sha16=b36b6c53af9c8895 identical=True strict=True tx_equal=True frozen=True files_equal=True registered=True
+SUITE PASS 8/8

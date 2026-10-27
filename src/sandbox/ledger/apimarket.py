@@ -4041,6 +4041,169 @@ class APIMarketFace:
         env["disclaimer"] = self.disclaimer
         return env
 
+    def api_category_refund_months(self, include_uncategorized=True):
+        """Category-by-month refund timeline (criteria AC-CRM1..AC-CRM8
+        pre-registered in the R2149 explore-queue row BEFORE this code
+        existed).
+
+        Three faces sit next to the question this one answers and none
+        of them answers it: api_category_demand sums a category over
+        its whole life, api_market_months sums the whole market per
+        month and api_refund_register lists refunds one by one, so
+        "is THIS category's refund load abnormal THIS month" - the
+        question a seller asks before committing to a line of
+        business - had to be rebuilt by hand from three joins.
+
+        Laws pinned by the suite: cash basis - a sale books in the
+        UTC month of purchased_utc and a refund books in the UTC month
+        of refunded_utc, and a refund never rewrites the month its
+        sale landed in, so a refund landing later shows an honestly
+        negative net in its own month and the sale month stays
+        untouched; refund authority is the refund register joined to
+        its purchase, so a refund-only month reports zero trade_count
+        next to a positive refund_count instead of inventing a sale;
+        category ownership rides the one effective-category seam
+        (_category_state), so a revise_category moves both gross and
+        refunded in one step and a revert restores byte-identically;
+        refund_rate is refunded/gross and is None - never a fake zero
+        - when the month or the category settled nothing; months are
+        ordered ascending (YYYY-MM compares as a string), categories
+        ascending with the honest uncategorized bucket last.
+
+        Gate: include_uncategorized must be a bool and is checked
+        before any read (fail-closed E_AM_BAD_ARGS); excluding the
+        bucket removes those rows from every figure rather than
+        dropping them into a category. Pure read: zero row mutations,
+        zero token movement, repeated calls byte-identical."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS,
+                                 str(include_uncategorized))
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, category"
+                " FROM apimarket_listings").fetchall()
+            sales = self._conn.execute(
+                "SELECT listing_id, price_paid, purchased_utc"
+                " FROM apimarket_purchases").fetchall()
+            refunds = self._conn.execute(
+                "SELECT p.listing_id, f.amount, f.refunded_utc"
+                " FROM apimarket_refunds f"
+                " JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id").fetchall()
+            owner = {int(r[0]): self._category_state(int(r[0]), r[1])[0]
+                     for r in listings}
+        cats = {}
+
+        def cat_bucket(cat):
+            b = cats.get(cat)
+            if b is None:
+                b = {"gross": 0, "refund_count": 0, "refunded": 0,
+                     "trade_count": 0, "months": {}}
+                cats[cat] = b
+            return b
+
+        def month_bucket(b, month):
+            m = b["months"].get(month)
+            if m is None:
+                m = {"month": month, "gross": 0, "refund_count": 0,
+                     "refunded": 0, "trade_count": 0}
+                b["months"][month] = m
+            return m
+
+        for listing_id, price, stamp in sales:
+            cat = owner.get(int(listing_id))
+            if cat is None and not include_uncategorized:
+                continue
+            b = cat_bucket(cat)
+            gross = int(price)
+            b["gross"] += gross
+            b["trade_count"] += 1
+            m = month_bucket(b, str(stamp)[:7])
+            m["gross"] += gross
+            m["trade_count"] += 1
+        for listing_id, amount, stamp in refunds:
+            cat = owner.get(int(listing_id))
+            if cat is None and not include_uncategorized:
+                continue
+            b = cat_bucket(cat)
+            refunded = int(amount)
+            b["refunded"] += refunded
+            b["refund_count"] += 1
+            m = month_bucket(b, str(stamp)[:7])
+            m["refunded"] += refunded
+            m["refund_count"] += 1
+
+        def rate(gross, refunded):
+            return (float(refunded) / gross) if gross > 0 else None
+
+        rows = []
+        for cat in sorted(cats, key=lambda c: (c is None, c or "")):
+            b = cats[cat]
+            months = []
+            for month in sorted(b["months"]):
+                m = b["months"][month]
+                months.append({
+                    "month": month,
+                    "gross": m["gross"],
+                    "refund_count": m["refund_count"],
+                    "refunded": m["refunded"],
+                    "net": m["gross"] - m["refunded"],
+                    "refund_rate": rate(m["gross"], m["refunded"])})
+            rows.append({
+                "category": cat,
+                "gross": b["gross"],
+                "refund_count": b["refund_count"],
+                "refunded": b["refunded"],
+                "net": b["gross"] - b["refunded"],
+                "refund_rate": rate(b["gross"], b["refunded"]),
+                "trade_count": b["trade_count"],
+                "months": months})
+
+        totals = {}
+        for b in cats.values():
+            for month, m in b["months"].items():
+                t = totals.get(month)
+                if t is None:
+                    t = {"gross": 0, "refund_count": 0, "refunded": 0,
+                         "trade_count": 0}
+                    totals[month] = t
+                t["gross"] += m["gross"]
+                t["refund_count"] += m["refund_count"]
+                t["refunded"] += m["refunded"]
+                t["trade_count"] += m["trade_count"]
+        worst_month = None
+        worst_rate = None
+        for month in sorted(totals):
+            r = rate(totals[month]["gross"], totals[month]["refunded"])
+            if r is None:
+                continue
+            if worst_rate is None or r > worst_rate:
+                worst_month = month
+                worst_rate = r
+        top_month = None
+        top_refunded = 0
+        for month in sorted(totals):
+            if totals[month]["refunded"] > top_refunded:
+                top_month = month
+                top_refunded = totals[month]["refunded"]
+        env = {
+            "include_uncategorized": include_uncategorized,
+            "category_count": len(rows),
+            "month_count": len(totals),
+            "trade_count": sum(b["trade_count"] for b in cats.values()),
+            "gross": sum(b["gross"] for b in cats.values()),
+            "refund_count": sum(b["refund_count"] for b in cats.values()),
+            "refunded": sum(b["refunded"] for b in cats.values()),
+        }
+        env["net"] = env["gross"] - env["refunded"]
+        env["refund_rate"] = rate(env["gross"], env["refunded"])
+        env["worst_refund_month"] = worst_month
+        env["worst_refund_rate"] = worst_rate
+        env["top_refund_month"] = top_month
+        env["categories"] = rows
+        env["disclaimer"] = self.disclaimer
+        return env
+
     def api_listing_position(self, listing_id, limit=None):
         """Competitive standing of one listing inside its own
         category (criteria AC-AMPOS1..AC-AMPOS8 pre-registered in

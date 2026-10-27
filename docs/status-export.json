@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T20:18:47+08:00",
-  "do": "R2162 R2161 R2161 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
+  "export_ts": "2026-10-27T20:59:52+08:00",
+  "do": "R2163 R2162 R2161 the sandbox developer-API marketplace read faces (catalog, demand, months, refunds, claims, ratings) for the silicon-domain public co-creation platform - product line still pre-commercial and blocked on the physical items only.",
   "ceo_face": {
-    "current": "R2162 watch-conversion funnel: the market can now answer whether watching leads to buying - watch, pre-owned, funnel, converted and pending counts plus the conversion rate and the time to convert, with the direction fixed (a purchase made BEFORE the watch is not a conversion)",
-    "latest_artifact": "qa/apimarket-watchconversion-R2162-a.log / -b.log (SUITE PASS 8/8, criterion sha16 cc3abcdc8af89c87, evidence sha16 b30e3f920d0005da) + src/sandbox/ledger/apimarket.py (api_watch_conversion, written 2026-10-27)",
-    "next_milestone": "battery green on the committed tree plus a truthful matrix regeneration (the two items the last two windows owed); then the next claimable explore head (within 48h)"
+    "current": "R2163 category refund months: the market can now answer whether a category's refund load this month is abnormal - per category per UTC month gross, refunds and net on a cash basis, with a refund-only month showing a negative net instead of a fake sale and two deliberately separate extremes (worst rate among months that settled something, largest refund amount over all months)",
+    "latest_artifact": "qa/apimarket-categoryrefundmonths-R2163-a.log / -b.log (SUITE PASS 8/8, evidence sha16 fa87745a78b8dc7c) + src/sandbox/ledger/apimarket.py (api_category_refund_months, written 2026-10-27)",
+    "next_milestone": "full battery green on the committed tree plus a truthful suite-matrix regeneration, then the next claimable explore head (within 48h)"
   },
   "depts": [
     {
