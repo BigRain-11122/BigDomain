@@ -463,6 +463,27 @@ def split_amount(price, params=None):
     return dev, platform
 
 
+def percentile(sorted_values, q):
+    """Linear-interpolation percentile (AC-MPP3): the position on the
+    ascending sample list is pos = (n - 1) * q and the value is
+    interpolated between the two neighbouring samples. With one
+    sample there is nothing to interpolate, so every quantile is that
+    sample. Deterministic, zero RNG, no third-party dependency."""
+    n = len(sorted_values)
+    if n == 0:
+        return None
+    pos = (n - 1) * q
+    lo = int(pos)
+    hi = lo + 1 if pos > lo else lo
+    if hi >= n:
+        return float(sorted_values[n - 1])
+    frac = pos - lo
+    low = float(sorted_values[lo])
+    if not frac:
+        return low
+    return low + (float(sorted_values[hi]) - low) * frac
+
+
 class ApiMarketError(Exception):
     def __init__(self, code, detail=""):
         super().__init__(str(code) + (": " + str(detail) if detail else ""))
@@ -4462,6 +4483,103 @@ class APIMarketFace:
                 "dev_revenue": int(paid[2]) - int(back[2]),
                 "platform_revenue": int(paid[3]) - int(back[3]),
                 "avg_live_price": avg_price,
+                "disclaimer": self.disclaimer}
+
+    def api_market_price_percentiles(self, include_delisted=False):
+        """Market-wide asking-price distribution (criteria
+        AC-MPP1..AC-MPP8 pre-registered in the R2160 explore-queue
+        claim row BEFORE this code existed).
+
+        Gap: api_categories answers only the per-bucket min/max band,
+        api_listing_position answers one listing's rank inside its own
+        bucket and api_market_stats carries a single avg_live_price.
+        Nowhere could a seller learn where its asking price sits in the
+        market distribution, and an operator had no pricing benchmark -
+        the quartiles, the median, the ninetieth percentile and the
+        spread were absent.
+
+        Scope: LIVE listings by default; a retired listing enters only
+        when include_delisted is True, and its historical price is then
+        read through the same price seam (a retirement never rewrites
+        the asking price). This is an ASKING-PRICE face, not a
+        turnover face: purchases, refunds and ratings never move the
+        distribution, while revise_price moves it in one step.
+
+        Percentiles are the linear-interpolation method pinned by
+        AC-MPP3 - position pos = (n - 1) * q on the ascending sample
+        list, interpolated between the two neighbouring samples, with
+        one sample covering every quantile. Rows are one per effective
+        category bucket (the uncategorized bucket last, mirroring
+        api_categories) so the global envelope is exactly the
+        aggregate of its rows: listing_count == live + retired == the
+        sum over rows, the global minimum is the smallest row minimum
+        and the global maximum the largest row maximum.
+
+        Gate: include_delisted must be a real bool, fail-closed with
+        E_AM_BAD_ARGS before any read. Pure read: zero row mutations,
+        zero token movement; the envelope carries the resident
+        non-advisory disclaimer."""
+        if not isinstance(include_delisted, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_delisted)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, token_price, category FROM"
+                " apimarket_listings ORDER BY listing_id").fetchall()
+            buckets = {}
+            all_prices = []
+            live_total = 0
+            retired_total = 0
+            for r in listings:
+                listing_id = int(r[0])
+                retired = self._delisted_utc(listing_id) is not None
+                if retired and not include_delisted:
+                    continue
+                price = int(self._current_price(listing_id, int(r[1])))
+                cat = self._category_state(listing_id, r[2])[0]
+                b = buckets.get(cat)
+                if b is None:
+                    b = {"category": cat, "live": 0, "retired": 0,
+                         "prices": []}
+                    buckets[cat] = b
+                if retired:
+                    b["retired"] += 1
+                    retired_total += 1
+                else:
+                    b["live"] += 1
+                    live_total += 1
+                b["prices"].append(price)
+                all_prices.append(price)
+            rows = []
+            ordered = sorted(c for c in buckets if c is not None)
+            if None in buckets:
+                ordered.append(None)
+            for cat in ordered:
+                b = buckets[cat]
+                vals = sorted(b["prices"])
+                rows.append({
+                    "category": cat,
+                    "listing_count": len(vals),
+                    "live_listing_count": b["live"],
+                    "retired_listing_count": b["retired"],
+                    "min_price": vals[0],
+                    "max_price": vals[-1],
+                    "mean_price": float(sum(vals)) / len(vals),
+                    "p50_price": percentile(vals, 0.5)})
+        vals = sorted(all_prices)
+        return {"listing_count": len(vals),
+                "live_listing_count": live_total,
+                "retired_listing_count": retired_total,
+                "min_price": vals[0] if vals else None,
+                "max_price": vals[-1] if vals else None,
+                "p25_price": percentile(vals, 0.25),
+                "p50_price": percentile(vals, 0.5),
+                "p75_price": percentile(vals, 0.75),
+                "p90_price": percentile(vals, 0.9),
+                "mean_price": (float(sum(vals)) / len(vals)
+                               if vals else None),
+                "spread": (vals[-1] - vals[0]) if vals else None,
+                "category_count": len(rows),
+                "categories": rows,
                 "disclaimer": self.disclaimer}
 
     def api_buyer_profile(self, buyer_id):

@@ -2322,6 +2322,15 @@ SUITES = [
     # row BEFORE this suite existed.
     ("ledger-apimarket-buyersellerspend", os.path.join(
         "ledger", "test_apimarket_buyersellerspend.py"), 8),
+    # apimarket asking-price distribution - the quartiles, median,
+    # ninetieth percentile and spread that the catalog band, the
+    # single listing position and the market average never answered;
+    # live scope by default, one row per effective category bucket,
+    # the linear-interpolation quantile law and an asking-price (not
+    # turnover) face - criteria AC-MPP1..AC-MPP8 pre-registered in
+    # the R2160 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-pricepercentiles", os.path.join(
+        "ledger", "test_apimarket_pricepercentiles.py"), 8),
     # apimarket claim response latency scorecard - every claim leg as a
     # duration measured from the claim's own opened stamp, never a wall
     # clock, with the seller aggregates - criteria AC-CLT1..AC-CLT8
