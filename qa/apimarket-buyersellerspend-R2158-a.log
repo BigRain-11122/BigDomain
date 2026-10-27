@@ -1,0 +1,9 @@
+PASS AC-BSS1: env_keys=15 exact=True row_keys=True rows=2 empty_rows=0
+PASS AC-BSS2: bob=['usr:dana', 'usr:frank'] carol_net=[('usr:frank', 7), ('usr:dana', 0)] dave=['usr:gina']
+PASS AC-BSS3: dana=18 frank=7 total=25 bcs_total=25 frozen=True
+PASS AC-BSS4: shares=[0.72, 0.28] sum=1 carol=[1.0, 0.0] erin=[None]
+PASS AC-BSS5: carol_dana net=0 listings=1 avg=None frank_avg=7.0
+PASS AC-BSS6: dana_cats=2->1 bcs_cats=3->2 roundtrip=True
+PASS AC-BSS7: acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix_rows=0 repeat=True frozen=True tx=True
+PASS AC-BSS8: sha16=ffe0d09921e4add7 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

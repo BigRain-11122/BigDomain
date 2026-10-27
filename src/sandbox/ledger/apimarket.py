@@ -3622,6 +3622,151 @@ class APIMarketFace:
                 "categories": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_buyer_seller_spend(self, buyer_id):
+        """Buyer-side spend broken down by seller (criteria
+        AC-BSS1..AC-BSS8 pre-registered in the R2158 explore-queue row
+        BEFORE this code existed).
+
+        The category axis (api_buyer_category_spend) answers "where did
+        my money go", but inside one category the seller composition
+        stayed unanswered: how many different sellers did this resident
+        actually pay, which one took the largest share, and is the
+        resident bound to a single counterparty? The face is derived
+        from purchases joined to listings - no new table.
+
+        Row authority is the PURCHASE side: a seller this buyer never
+        bought from stays absent even when the seller has live stock
+        (the mirror of api_category_demand's listing-side authority).
+        The order is a TOTAL order (-net_spent, -gross_spent,
+        dev_account) so rank is a position in it, never a dense rank.
+
+        Laws pinned by the suite: trade conservation per row
+        (gross_spent == net_spent + refunded_tokens, net_purchase_count
+        == purchase_count - refund_count, dev_paid + platform_paid ==
+        gross_spent, dev_paid_net + platform_paid_net == net_spent);
+        envelope totals are the row sums and its six cash figures equal
+        api_buyer_category_spend's default call on the same world;
+        net_share is net_spent / total net spend and becomes None for
+        every row when the total is not positive; a refund lowers the
+        net side only and never removes a purchase, a listing or the
+        seller from the board; category_count is a distinct count over
+        the one effective-category seam, so revise_category moves it in
+        the same step as the catalog and category faces. Gate: account
+        shape before any read (fail-closed E_AM_BAD_ACCOUNT). Pure read:
+        zero row mutations, zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, category, dev_account"
+                " FROM apimarket_listings").fetchall()
+            purchases = self._conn.execute(
+                "SELECT p.purchase_id, p.listing_id, p.price_paid,"
+                " p.dev_share, p.platform_share"
+                " FROM apimarket_purchases p WHERE p.buyer_id = ?",
+                (buyer,)).fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.purchase_id, f.amount, f.dev_share,"
+                " f.platform_share FROM apimarket_refunds f"
+                " JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id"
+                " WHERE p.buyer_id = ?", (buyer,)).fetchall()
+            cat_of = {}
+            seller_of = {}
+            for r in listings:
+                lid = int(r[0])
+                cat_of[lid] = self._category_state(lid, r[1])[0]
+                seller_of[lid] = r[2]
+            groups = {}
+
+            def row_for(dev):
+                g = groups.get(dev)
+                if g is None:
+                    g = {"purchase_count": 0, "refund_count": 0,
+                         "gross": 0, "refunded": 0, "dev_paid": 0,
+                         "platform_paid": 0, "refund_dev": 0,
+                         "refund_platform": 0, "listings": set(),
+                         "categories": set()}
+                    groups[dev] = g
+                return g
+
+            bought = {}
+            for pid, lid, price, dshare, pshare in purchases:
+                lid = int(lid)
+                bought[int(pid)] = lid
+                dev = seller_of.get(lid)
+                g = row_for(dev)
+                g["purchase_count"] += 1
+                g["gross"] += int(price)
+                g["dev_paid"] += int(dshare)
+                g["platform_paid"] += int(pshare)
+                g["listings"].add(lid)
+                g["categories"].add(cat_of.get(lid))
+            for pid, amount, dshare, pshare in refunds:
+                lid = bought.get(int(pid))
+                if lid is None:
+                    continue
+                g = row_for(seller_of.get(lid))
+                g["refund_count"] += 1
+                g["refunded"] += int(amount)
+                g["refund_dev"] += int(dshare)
+                g["refund_platform"] += int(pshare)
+        net_by_dev = {}
+        for dev, g in groups.items():
+            net_by_dev[dev] = g["gross"] - g["refunded"]
+        order = sorted(net_by_dev,
+                       key=lambda d: (-net_by_dev[d],
+                                      -groups[d]["gross"], str(d)))
+        total_net = sum(net_by_dev.values())
+        rows = []
+        listings_total = set()
+        for idx, dev in enumerate(order, 1):
+            g = groups[dev]
+            net_purchase = g["purchase_count"] - g["refund_count"]
+            net_spent = net_by_dev[dev]
+            rows.append({
+                "dev_account": dev,
+                "rank": idx,
+                "purchase_count": g["purchase_count"],
+                "refund_count": g["refund_count"],
+                "net_purchase_count": net_purchase,
+                "gross_spent": g["gross"],
+                "refunded_tokens": g["refunded"],
+                "net_spent": net_spent,
+                "dev_paid": g["dev_paid"],
+                "platform_paid": g["platform_paid"],
+                "dev_paid_net": g["dev_paid"] - g["refund_dev"],
+                "platform_paid_net": (g["platform_paid"]
+                                      - g["refund_platform"]),
+                "listing_count": len(g["listings"]),
+                "category_count": len(g["categories"]),
+                "avg_net_spend": (float(net_spent) / net_purchase
+                                  if net_purchase else None),
+                "net_share": (float(net_spent) / total_net
+                              if total_net > 0 else None)})
+            listings_total |= g["listings"]
+        return {"buyer_id": buyer,
+                "seller_count": len(rows),
+                "purchase_count": sum(
+                    r["purchase_count"] for r in rows),
+                "refund_count": sum(r["refund_count"] for r in rows),
+                "net_purchase_count": sum(
+                    r["net_purchase_count"] for r in rows),
+                "gross_spent": sum(r["gross_spent"] for r in rows),
+                "refunded_tokens": sum(
+                    r["refunded_tokens"] for r in rows),
+                "net_spent": sum(r["net_spent"] for r in rows),
+                "dev_paid": sum(r["dev_paid"] for r in rows),
+                "platform_paid": sum(
+                    r["platform_paid"] for r in rows),
+                "dev_paid_net": sum(r["dev_paid_net"] for r in rows),
+                "platform_paid_net": sum(
+                    r["platform_paid_net"] for r in rows),
+                "listing_count": len(listings_total),
+                "sellers": rows,
+                "disclaimer": self.disclaimer}
+
     def api_listing_position(self, listing_id, limit=None):
         """Competitive standing of one listing inside its own
         category (criteria AC-AMPOS1..AC-AMPOS8 pre-registered in

@@ -2314,6 +2314,14 @@ SUITES = [
     # the R2149 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-buyercategoryspend", os.path.join(
         "ledger", "test_apimarket_buyercategoryspend.py"), 8),
+    # apimarket buyer-side spend broken down by seller - the seller
+    # composition axis of the resident spend picture, purchase-side row
+    # authority with a total order whose rank is a position, and cash
+    # totals identical to api_buyer_category_spend - criteria
+    # AC-BSS1..AC-BSS8 pre-registered in the R2158 explore-queue claim
+    # row BEFORE this suite existed.
+    ("ledger-apimarket-buyersellerspend", os.path.join(
+        "ledger", "test_apimarket_buyersellerspend.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

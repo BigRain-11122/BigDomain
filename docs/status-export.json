@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T08:37:13+08:00",
-  "do": "R2157 closeout: 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
+  "export_ts": "2026-10-27T08:48:08+08:00",
+  "do": "R2158 closeout: 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2157 ledger-baseline semantics: the gate's only exemption channel is now pinned (stale entries reported, one entry exempts one round, broken baseline fails closed)",
-    "latest_artifact": "qa/ledger-baseline-R2157-a.log / -b.log (SUITE PASS 8/8, sha16 6f21c98c4a83c71f) + qa/reconcile-all-R2157.log (RUNNER PASS 359/359 + controls 7/7, 776.5s, written 2026-10-27)",
-    "next_milestone": "next round: claim the next claimable tech/explore head and regenerate wiring evidence; the R2156 battery debt is closed (within 48h)"
+    "current": "R2158 buyer-side seller spend face: the seller composition of one resident spend picture (how many sellers, who took the largest share, am I bound to one counterparty) - purchase-side authority, total order with positional rank, cash totals identical to the category axis",
+    "latest_artifact": "qa/apimarket-buyersellerspend-R2158-a.log / -b.log (SUITE PASS 8/8, sha16 ac96f9b873874383) + src/sandbox/ledger/apimarket.py (api_buyer_seller_spend, written 2026-10-27)",
+    "next_milestone": "next round: full battery + suite-matrix regen (the R2158 deferral, within 48h) and then the next claimable explore head"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer-side seller spend face: seller composition, positional rank, share of net spend (AC-BSS1..AC-BSS8)",
+      "on",
+      "R2158: the category axis answered where the money went, but inside one category the seller composition stayed unanswered - how many sellers this resident actually paid, which one took the largest share, and whether the resident is bound to a single counterparty. api_buyer_seller_spend derives it from purchases joined to listings with no new table: purchase-side row authority (a seller with live stock this buyer never bought from stays absent), a total order (-net_spent, -gross_spent, dev_account) so rank is a position and never a dense rank, four per-row conservation laws plus envelope sums, six cash figures identical to api_buyer_category_spend, net_share = net_spent / total with every row None when the total is not positive, refunds lowering only the net side while purchase/listing/seller survive, category_count riding the one effective-category seam, a seven-form account gate before any read and cross-restart byte identity. Suite 8/8 double-run sha16 ac96f9b873874383."
+    ],
     [
       "ledger gate baseline semantics: stale reporting + fail-closed baseline (AC-LGB1..AC-LGB8)",
       "on",
@@ -83,6 +88,10 @@
   ],
   "results": [
     [
+      "R2158",
+      "R2158: five-silence scan clean at open (294 decision rows / 238 content-addressed tokens with zero new against the baseline, the D-20261027-01..10 set unchanged and all another seat face; three ledger patrol rows already paid; group orders baseline unchanged at the 2026-10-26 22:36 deck row; benchmarks fresh today; clean tree, no index.lock; today standing rows already on disk). P1 canonical rows stay blocked-on-CEO and the weekly proposal duty is met by BD-PROP-005, and all four tech heads stayed gated, so this window claimed the P3 explore FIFO head (the R2149 reseed row) and registered AC-BSS1..AC-BSS8 in the queue line BEFORE the code, with the honest note that the AC-BSS and api_buyer_seller_spend occupancy is the seed row text itself. Product: the buyer-side seller spend face described in the outs row. Evidence: SUITE PASS 8/8 double-run byte-identical sha16 ac96f9b873874383 wired ledger-apimarket-buyersellerspend(8), four adjacent buyer-family suites green. Honest boundary: full battery and matrix regen deferred to the next round (25 minute budget)."
+    ],
+    [
       "R2157",
       "R2157: five-silence scan clean at open (294 decision rows / 217 content-addressed tokens with zero new against the baseline, the D-20261027-01..10 set unchanged and all another seat's face; three ledger patrol rows already paid; group orders baseline unchanged at the 2026-10-26 22:36 deck row; benchmarks fresh today; clean tree, no index.lock; today's standing rows already on disk). P1 canonical rows stay blocked-on-CEO and the weekly proposal duty is met by BD-PROP-005, so this window claimed the P2 tech FIFO head (the R2152 seed row) and registered AC-LGB1..AC-LGB8 in the queue line BEFORE the code, with the honest note that the E_LGR_BAD_BASELINE anchor already existed twice in the module so the work there is wiring and assertions. Product: the ledger baseline now reports stale entries instead of keeping them silently, exempts exactly one round per entry, never suppresses a broken line, and fails closed under its own code on a malformed baseline (two real defects fixed: an AttributeError crash on a top-level non-object baseline and the generic ValueError handler mislabelling it as a missing state file). Verification: suite SUITE PASS 8/8 double-run byte-identical sha16 6f21c98c4a83c71f, wired os-ledger-baseline(8), old ledger suite 8/8, live gate CLEAN. The R2156 carry-over was closed in the same window: battery RUNNER PASS 359/359 plus controls 7/7 in 776.5s with TMP RECLAIM 805/805 worlds and 288.11 MiB, matrix regenerated to 359 suites / 2994 criteria with --check byte-identical."
     ],
@@ -122,14 +131,14 @@
   "self_drive": {
     "window": "2026-10-21..2026-10-27",
     "window_days": 7,
-    "log_lines_in_window": 39,
+    "log_lines_in_window": 41,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 39,
+    "substantive_non_idle_mention_lines": 41,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 10
+    "queue_explore_open": 9
   }
 }
