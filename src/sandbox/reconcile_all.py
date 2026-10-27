@@ -2409,6 +2409,15 @@ SUITES = [
     # in the R2176 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-categorypricemonths", os.path.join(
         "ledger", "test_apimarket_categorypricemonths.py"), 8),
+    # calendar-day trade timeline (cash-basis day bucketing, a
+    # contiguous grid with honest zero days, inclusive start_day /
+    # end_day clipping, an honest empty window, extremes over active
+    # days only) that the month face, the hour-of-day heatmap and the
+    # event feed never answered - criteria AC-MDL1..AC-MDL8
+    # pre-registered in the R2178 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-marketdaily", os.path.join(
+        "ledger", "test_apimarket_marketdaily.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -438,6 +438,35 @@ def _assert_month(window):
     return window
 
 
+def _assert_day(day):
+    """Strict calendar-day validation for the YYYY-MM-DD window
+    (AC-MDL6): the same round-trip law _assert_month uses, so a
+    zero-unpadded, trailing-garbage or impossible date (2026-02-30)
+    cannot silently shift a trade into a neighbouring day."""
+    if not isinstance(day, str):
+        raise ApiMarketError(E_AM_BAD_WINDOW, "day must be a string")
+    try:
+        parsed = datetime.datetime.strptime(day, "%Y-%m-%d")
+    except ValueError:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad day: " + day)
+    if parsed.strftime("%Y-%m-%d") != day:
+        raise ApiMarketError(E_AM_BAD_WINDOW, "bad day: " + day)
+    return day
+
+
+def _day_sequence(first, last):
+    """Every UTC calendar day from first to last inclusive, both ends
+    already validated (AC-MDL4): the honest zero days inside an
+    activity extent belong to the answer, they are not a gap."""
+    cursor = datetime.datetime.strptime(first, "%Y-%m-%d").date()
+    limit = datetime.datetime.strptime(last, "%Y-%m-%d").date()
+    out = []
+    while cursor <= limit:
+        out.append(cursor.isoformat())
+        cursor += datetime.timedelta(days=1)
+    return out
+
+
 def _assert_instant(value, label):
     """Strict UTC instant shape for the feed window (AC-AMF3): the
     same round-trip law _assert_month uses, so zero padding and
@@ -9074,4 +9103,160 @@ class APIMarketFace:
             "category_count": len(categories_seen),
             "disclaimer": self.disclaimer,
             "months": rows,
+        }
+
+    def api_market_daily(self, start_day=None, end_day=None):
+        """Market-wide CALENDAR-DAY trade timeline (pre-registered
+        AC-MDL1..AC-MDL8 in the R2178 explore-queue row BEFORE this
+        code existed).
+
+        Every existing time axis stops short of a date: api_market_
+        months answers one UTC month, api_market_hour_heatmap answers
+        an hour-of-day x weekday slot aggregated across the whole
+        history, api_market_buyer_retention answers cohort month
+        cells, and api_market_feed answers event rows. So the daily
+        settlement sheet an operator actually reads - "what did the
+        market do on 2026-09-15, and which calendar day was the
+        busiest" - had no face, and answering it meant pulling every
+        purchase row and bucketing by hand.
+
+        Same cash-basis law as api_market_months, one granularity
+        finer: a sale books on the UTC day of purchased_utc, a refund
+        books on the UTC day of refunded_utc and never rewrites the
+        day the sale landed in, so a refund-day row honestly carries
+        a negative net beside zero participants.
+
+        The series is CONTIGUOUS over the activity extent: every day
+        from the first to the last activity day is present, and a day
+        with no trade at all appears as an honest zero row instead of
+        vanishing. Optional start_day / end_day (YYYY-MM-DD, inclusive)
+        clip the same grid; a window holding no activity answers an
+        honest empty envelope rather than a fabricated row set. The
+        envelope lifetime_* figures are the WINDOW totals (equal to
+        the whole history on a default call), so rows and envelope
+        can never disagree.
+
+        busiest_day is the active day with the highest net (ties to
+        the earliest day), quietest_active_day the active day with the
+        lowest net (ties to the earliest), and avg_net_per_active_day
+        the mean net over active days only - a zero day is not a
+        business day and never drags that mean down. Pure read: zero
+        row mutations, zero token movement.
+        """
+        start = None if start_day is None else _assert_day(start_day)
+        end = None if end_day is None else _assert_day(end_day)
+        if start is not None and end is not None and start > end:
+            raise ApiMarketError(
+                E_AM_BAD_WINDOW,
+                "window inverted: " + start + " > " + end)
+        with self._lock:
+            sales = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.dev_share,"
+                " p.platform_share, p.purchased_utc, l.dev_account,"
+                " p.listing_id FROM apimarket_purchases p JOIN"
+                " apimarket_listings l ON"
+                " l.listing_id = p.listing_id").fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.amount, f.dev_share, f.platform_share,"
+                " f.refunded_utc FROM apimarket_refunds f").fetchall()
+
+        buckets = {}
+
+        def bucket(day):
+            return buckets.setdefault(
+                day, {"sales_count": 0, "gross": 0,
+                      "refund_count": 0, "refunded": 0,
+                      "dev_share": 0, "platform_share": 0,
+                      "refunded_dev_share": 0,
+                      "refunded_platform_share": 0,
+                      "buyers": set(), "sellers": set(),
+                      "listings": set()})
+
+        for buyer, price, dev_share, platform_share, stamp, dev, \
+                listing_id in sales:
+            b = bucket(str(stamp)[:10])
+            b["sales_count"] += 1
+            b["gross"] += int(price)
+            b["dev_share"] += int(dev_share)
+            b["platform_share"] += int(platform_share)
+            b["buyers"].add(buyer)
+            b["sellers"].add(dev)
+            b["listings"].add(int(listing_id))
+        for amount, dev_share, platform_share, stamp in refunds:
+            b = bucket(str(stamp)[:10])
+            b["refund_count"] += 1
+            b["refunded"] += int(amount)
+            b["refunded_dev_share"] += int(dev_share)
+            b["refunded_platform_share"] += int(platform_share)
+
+        active = sorted(buckets)
+        first = last = None
+        if active:
+            first = active[0] if start is None else max(start, active[0])
+            last = active[-1] if end is None else min(end, active[-1])
+
+        days = []
+        if first is not None and first <= last:
+            for day in _day_sequence(first, last):
+                b = buckets.get(day)
+                if b is None:
+                    days.append({
+                        "day": day, "sales_count": 0, "gross": 0,
+                        "refund_count": 0, "refunded": 0, "net": 0,
+                        "dev_share": 0, "platform_share": 0,
+                        "dev_share_net": 0, "platform_share_net": 0,
+                        "buyer_count": 0, "seller_count": 0,
+                        "listing_count": 0})
+                    continue
+                days.append({
+                    "day": day,
+                    "sales_count": b["sales_count"],
+                    "gross": b["gross"],
+                    "refund_count": b["refund_count"],
+                    "refunded": b["refunded"],
+                    "net": b["gross"] - b["refunded"],
+                    "dev_share": b["dev_share"],
+                    "platform_share": b["platform_share"],
+                    "dev_share_net": (b["dev_share"]
+                                      - b["refunded_dev_share"]),
+                    "platform_share_net": (b["platform_share"]
+                                           - b["refunded_platform_share"]),
+                    "buyer_count": len(b["buyers"]),
+                    "seller_count": len(b["sellers"]),
+                    "listing_count": len(b["listings"]),
+                })
+
+        active_rows = [r for r in days
+                       if r["sales_count"] or r["refund_count"]]
+        busiest = None
+        quietest = None
+        if active_rows:
+            busiest = min(active_rows,
+                          key=lambda r: (-r["net"], r["day"]))["day"]
+            quietest = min(active_rows,
+                           key=lambda r: (r["net"], r["day"]))["day"]
+        lifetime_net = sum(r["net"] for r in days)
+        return {
+            "day_count": len(days),
+            "active_day_count": len(active_rows),
+            "zero_day_count": len(days) - len(active_rows),
+            "window_start": days[0]["day"] if days else None,
+            "window_end": days[-1]["day"] if days else None,
+            "lifetime_sales_count": sum(r["sales_count"] for r in days),
+            "lifetime_gross": sum(r["gross"] for r in days),
+            "lifetime_refund_count": sum(r["refund_count"]
+                                         for r in days),
+            "lifetime_refunded": sum(r["refunded"] for r in days),
+            "lifetime_net": lifetime_net,
+            "lifetime_dev_revenue": sum(r["dev_share_net"]
+                                        for r in days),
+            "lifetime_platform_revenue": sum(r["platform_share_net"]
+                                             for r in days),
+            "busiest_day": busiest,
+            "quietest_active_day": quietest,
+            "avg_net_per_active_day": (
+                round(float(lifetime_net) / len(active_rows), 2)
+                if active_rows else None),
+            "disclaimer": self.disclaimer,
+            "days": days,
         }

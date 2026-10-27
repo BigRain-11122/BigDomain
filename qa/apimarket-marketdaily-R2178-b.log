@@ -1,0 +1,9 @@
+PASS AC-MDL1: keys ok=True day_count=33 window=2026-08-31..2026-10-02 ordered=True
+PASS AC-MDL2: aug31={s:1 g:10 b:1 s:1 l:1} sep01={s:1 g:10} oct02={s:0 r:1 refunded:10 net:-10 parts:0/0/0}
+PASS AC-MDL3: rows consistent=True envelope==sums=True raw g/s/rf/n=28/4/10/1 net=18 dev=14 plat=4 d1=(7, 3)
+PASS AC-MDL4: unique=True contiguous=True active=5 zero=28 sum=33 quiet rows all-zero=True
+PASS AC-MDL5: month rebucket equal=True months=['2026-08', '2026-09', '2026-10'] face/stats gross=28/28 net=18/18 dev=14/14 plat=4/4
+PASS AC-MDL6: start_only(31 d, g=8) end_only(2 d, g=20) both(6 d) one_day(1 d) outside(0 d) gates=True inverted=True digests frozen=True
+PASS AC-MDL7: busiest='2026-08-31' (tie 08-31/09-01 at 10) quietest='2026-10-02' avg=3.6
+PASS AC-MDL8: ledger tx frozen=True pools frozen=True digests frozen=True repeat identical=True three instances identical=True empty=(0, []) wired=True consumer shas stable=True ascii=True net imports=0 outside repo=True
+SUITE 8/8
