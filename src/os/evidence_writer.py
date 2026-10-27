@@ -28,9 +28,35 @@ BEFORE this code, R2072 claim):
   * AC-EVD8  CLI: --check exits 0 tee / 2 non-tee / 3 missing;
              --fix rewrites then prints the post class.
 
+Directory batch face (AC-EVDB1..AC-EVDB8, pre-registered in
+state/queue/tech.md R2172 claim BEFORE this code):
+  * AC-EVDB1  check_dir returns the six-key envelope {dir, file_count,
+              tee_count, flagged_count, skipped_count, rows} with the
+              six-key census rows {name, class, bytes, crlf, bare_lf,
+              utf8}; candidates are the directory's direct regular,
+              non-symlink, exactly suffix ".log" files, in name order
+              (no recursion).
+  * AC-EVDB2  check_dir is read-only (bytes and mtime unchanged) and
+              raises on a missing path.
+  * AC-EVDB3  fix_dir rewrites only files classified non-tee; healthy
+              candidates are not touched at all.
+  * AC-EVDB4  fix_dir rows report before/after bytes and lines, both
+              measured from bytes read back off disk; the line table
+              outside the newline axis is preserved.
+  * AC-EVDB5  an unfixable candidate (non utf-8) fails the whole batch
+              BEFORE any write.
+  * AC-EVDB6  a write failure mid-batch restores every already-written
+              candidate byte for byte (no temp residue).
+  * AC-EVDB7  CLI --check-dir exits 0/2/3 and prints per-file plus a
+              summary line; --fix-dir is idempotent.
+  * AC-EVDB8  ASCII stdlib source, no wall clock, wired into the
+              reconcile battery as os-evidence-writer-dir(8).
+
 Usage:
     python src/os/evidence_writer.py --check qa/<evidence>.log
     python src/os/evidence_writer.py --fix qa/<evidence>.log
+    python src/os/evidence_writer.py --check-dir qa
+    python src/os/evidence_writer.py --fix-dir qa
 In-process:
     from evidence_writer import write_evidence
     write_evidence("qa/foo.log", "line one\r\nline two")
@@ -134,6 +160,125 @@ def fix_file(path):
     return write_evidence(path, text)
 
 
+LOG_SUFFIX = ".log"
+
+
+def _dir_entries(path):
+    """Return (candidate names, skipped entry count) for one directory.
+
+    Only direct, regular, non-symlink files whose name ends with the
+    lowercase ".log" suffix are candidates (AC-EVDB1). No recursion.
+    """
+    if not os.path.isdir(path):
+        raise EvidenceDialectError("evidence directory missing: %s" % path)
+    names = []
+    skipped = 0
+    for name in sorted(os.listdir(path)):
+        full = os.path.join(path, name)
+        if (name.endswith(LOG_SUFFIX) and not os.path.islink(full)
+                and os.path.isfile(full)):
+            names.append(name)
+        else:
+            skipped += 1
+    return names, skipped
+
+
+def check_dir(path):
+    """Read-only dialect census over one directory (AC-EVDB1/EVD2)."""
+    names, skipped = _dir_entries(path)
+    rows = []
+    for name in names:
+        row = check_file(os.path.join(path, name))
+        rows.append({"name": name, "class": row["class"],
+                     "bytes": row["bytes"], "crlf": row["crlf"],
+                     "bare_lf": row["bare_lf"], "utf8": row["utf8"]})
+    tee = len([row for row in rows if row["class"] == TEE])
+    return {"dir": os.path.abspath(path), "file_count": len(rows),
+            "tee_count": tee, "flagged_count": len(rows) - tee,
+            "skipped_count": skipped, "rows": rows}
+
+
+def _read_raw(path):
+    with open(path, "rb") as stream:
+        return stream.read()
+
+
+def _raw_lines(raw):
+    """Decode strictly and count lines; a bad byte fails the batch."""
+    try:
+        return raw.decode("utf-8", "strict").splitlines()
+    except UnicodeDecodeError as exc:
+        raise EvidenceDialectError(
+            "cannot normalise non utf-8 evidence: %s"
+            % exc.__class__.__name__)
+
+
+def _restore(path, raw):
+    """Put the original bytes back atomically (rollback leg, AC-EVDB6)."""
+    parent = os.path.dirname(os.path.abspath(path))
+    handle, tmp = tempfile.mkstemp(prefix=".evd-", suffix=".tmp", dir=parent)
+    try:
+        with os.fdopen(handle, "wb") as stream:
+            stream.write(raw)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def fix_dir(path):
+    """Normalise every flagged candidate, reporting before/after (AC-EVDB3..6).
+
+    Validation (classification and strict utf-8 decode) completes for the
+    whole batch before the first byte is written; a write failure restores
+    every already-written file to its original bytes.
+    """
+    names, skipped = _dir_entries(path)
+    plan = []
+    for name in names:
+        full = os.path.join(path, name)
+        row = check_file(full)
+        raw = _read_raw(full)
+        plan.append({"name": name, "path": full, "raw": raw,
+                     "class_before": row["class"],
+                     "before_bytes": len(raw),
+                     "lines": _raw_lines(raw)})
+    written = []
+    try:
+        for item in plan:
+            if item["class_before"] == TEE:
+                continue
+            write_evidence(item["path"], item["raw"].decode("utf-8"))
+            written.append(item)
+    except BaseException:
+        for item in written:
+            _restore(item["path"], item["raw"])
+        raise
+    rows = []
+    for item in plan:
+        after = _read_raw(item["path"])
+        after_rows = _raw_lines(after)
+        if after_rows != item["lines"]:
+            if item["path"] in [w["path"] for w in written]:
+                _restore(item["path"], item["raw"])
+            raise EvidenceDialectError(
+                "line content changed by normalisation: %s" % item["name"])
+        rows.append({"name": item["name"],
+                     "before_bytes": item["before_bytes"],
+                     "before_lines": len(item["lines"]),
+                     "after_bytes": len(after),
+                     "after_lines": len(after_rows),
+                     "class_before": item["class_before"],
+                     "class_after": check_file(item["path"])["class"],
+                     "changed": item["class_before"] != TEE})
+    fixed = len(written)
+    return {"dir": os.path.abspath(path), "file_count": len(rows),
+            "fixed_count": fixed, "skipped_count": skipped, "rows": rows}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="single-writer evidence log helper (LF law)")
@@ -142,7 +287,40 @@ def main(argv=None):
                        help="classify one evidence file (read-only)")
     group.add_argument("--fix", metavar="PATH",
                        help="normalise one evidence file to LF/utf-8")
+    group.add_argument("--check-dir", metavar="DIR", dest="check_dir",
+                       help="classify every *.log in one directory (read-only)")
+    group.add_argument("--fix-dir", metavar="DIR", dest="fix_dir",
+                       help="normalise every flagged *.log in one directory")
     args = parser.parse_args(argv)
+
+    if args.check_dir:
+        try:
+            envelope = check_dir(args.check_dir)
+        except EvidenceDialectError:
+            print("MISSING %s" % args.check_dir)
+            return EXIT_MISSING
+        for row in envelope["rows"]:
+            print("check-dir name=%s class=%s bytes=%d crlf=%d"
+                  % (row["name"], row["class"], row["bytes"], row["crlf"]))
+        print("dir files=%d tee=%d flagged=%d"
+              % (envelope["file_count"], envelope["tee_count"],
+                 envelope["flagged_count"]))
+        return EXIT_TEE if envelope["flagged_count"] == 0 else EXIT_FLAG
+
+    if args.fix_dir:
+        try:
+            envelope = fix_dir(args.fix_dir)
+        except EvidenceDialectError as exc:
+            print("REFUSED %s: %s" % (args.fix_dir, exc))
+            return EXIT_FLAG
+        for row in envelope["rows"]:
+            print("fix-dir name=%s class=%s->%s bytes=%d->%d lines=%d->%d"
+                  % (row["name"], row["class_before"], row["class_after"],
+                     row["before_bytes"], row["after_bytes"],
+                     row["before_lines"], row["after_lines"]))
+        print("dir fixed=%d skipped=%d"
+              % (envelope["fixed_count"], envelope["skipped_count"]))
+        return EXIT_TEE
 
     if args.check:
         try:

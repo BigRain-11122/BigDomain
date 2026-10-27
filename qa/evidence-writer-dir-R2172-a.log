@@ -1,0 +1,9 @@
+PASS AC-EVDB1 six-key envelope, .log-only candidates, name order
+PASS AC-EVDB2 check_dir writes nothing and refuses a missing dir
+PASS AC-EVDB3 healthy and non-candidate files are untouched
+PASS AC-EVDB4 before/after byte and line report, EOL-only change
+PASS AC-EVDB5 non utf-8 candidate fails the batch before any write
+PASS AC-EVDB6 write failure rolls every written file back
+PASS AC-EVDB7 CLI 0/2/3, per-file report, idempotent second fix
+PASS AC-EVDB8 ASCII stdlib source and battery wiring in place
+SUITE PASS 8/8 checks

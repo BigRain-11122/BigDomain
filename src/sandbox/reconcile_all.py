@@ -3823,6 +3823,12 @@ SUITES = [
     # (AC-EVD1..AC-EVD8 pre-registered in state/queue/tech.md R2072.)
     ("os-evidence-writer",
      os.path.join("..", "os", "test_evidence_writer.py"), 8),
+    # R2172 directory batch face for the same writer: census a whole
+    # directory, repair only the flagged .log files, report before and
+    # after bytes/lines, and roll the batch back on any failure.
+    # (AC-EVDB1..AC-EVDB8 pre-registered in state/queue/tech.md R2172.)
+    ("os-evidence-writer-dir",
+     os.path.join("..", "os", "test_evidence_writer_dir.py"), 8),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
