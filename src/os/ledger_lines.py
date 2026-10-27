@@ -24,7 +24,9 @@ it.
 
 Known historical gaps live in state/ledger_gaps.json: the audit reports
 every gap, and the CLI subtracts the baseline so only NEW drift turns
-the gate red.
+the gate red. Each entry exempts one round and one round only; an entry
+whose gap no longer exists is reported as stale (R2157; AC-LGB3/AC-LGB4)
+so the exemption list cannot rot into a silent junk drawer.
 
 Exit codes: 0 clean, 2 dirty or bad arguments, 3 state file missing or
 unparseable. Stdlib only, ASCII source, zero network.
@@ -203,6 +205,9 @@ def load_baseline(path):
     except (IOError, OSError, ValueError) as exc:
         raise LedgerLineError("E_LGR_BAD_BASELINE",
                               "%s is unreadable: %s" % (path, exc))
+    if not isinstance(data, dict):
+        raise LedgerLineError("E_LGR_BAD_BASELINE",
+                              "%s must hold a JSON object" % path)
     out = {}
     for key in ("missing", "orphan"):
         values = data.get(key, [])
@@ -216,18 +221,31 @@ def load_baseline(path):
 
 
 def apply_baseline(report, baseline):
-    """Subtract known historical gaps and recompute the gate verdict."""
+    """Subtract known historical gaps and recompute the gate verdict.
+
+    Each baseline entry exempts exactly its own round number and
+    nothing else. A baseline entry whose gap is gone from the report is
+    reported back as STALE (R2157; AC-LGB3/AC-LGB4): a stale entry is a
+    maintenance signal, not drift, so it never flips the verdict - but
+    it is never silently kept either, because a baseline that quietly
+    grows into a junk drawer makes every future exemption unreadable.
+    This function never rewrites the baseline file.
+    """
     known_missing = baseline.get("missing", [])
     known_orphan = baseline.get("orphan", [])
-    new_missing = [n for n in report["rounds_without_ledger"]
-                   if n not in known_missing]
-    new_orphan = [n for n in report["ledger_without_round"]
-                  if n not in known_orphan]
+    current_missing = report["rounds_without_ledger"]
+    current_orphan = report["ledger_without_round"]
+    new_missing = [n for n in current_missing if n not in known_missing]
+    new_orphan = [n for n in current_orphan if n not in known_orphan]
+    stale_missing = [n for n in known_missing if n not in current_missing]
+    stale_orphan = [n for n in known_orphan if n not in current_orphan]
     out = dict(report)
     out["baseline_missing"] = len(known_missing)
     out["baseline_orphan"] = len(known_orphan)
     out["new_missing"] = new_missing
     out["new_orphan"] = new_orphan
+    out["stale_missing"] = stale_missing
+    out["stale_orphan"] = stale_orphan
     out["clean"] = not report["errors"] and not new_missing and not new_orphan
     return out
 
@@ -295,6 +313,13 @@ def format_report(report):
         out.append("new_orphan: %s"
                    % (",".join(str(n) for n in report["new_orphan"])
                       or "none"))
+        stale = report["stale_missing"] + report["stale_orphan"]
+        if stale:
+            out.append("stale: missing=%s orphan=%s"
+                       % (",".join(str(n) for n in
+                                   report["stale_missing"]) or "none",
+                          ",".join(str(n) for n in
+                                   report["stale_orphan"]) or "none"))
     out.append("VERDICT %s" % ("CLEAN" if report["clean"] else "DIRTY"))
     return out
 
@@ -495,6 +520,11 @@ def main(argv=None):
             report = audit(log, tail)
             if use_baseline:
                 report = apply_baseline(report, load_baseline(baseline_path))
+    except LedgerLineError as exc:
+        # AC-LGB5: a broken baseline names its own code instead of being
+        # relabelled as a missing state file.
+        _stderr("%s: %s" % (exc.code, exc.detail))
+        return 3
     except (IOError, OSError, ValueError) as exc:
         _stderr("E_LGR_NO_STATE: %s" % exc)
         return 3

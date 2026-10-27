@@ -1,0 +1,10 @@
+suite: ledger baseline semantics (R2157 AC-LGB1..AC-LGB8)
+PASS AC-LGB1 stale keys added, existing keys and clean law kept
+PASS AC-LGB2 one entry exempts one round, errors never suppressed
+PASS AC-LGB3 stale baseline entries reported, not silently kept
+PASS AC-LGB4 stale line only when stale, JSON always carries keys
+PASS AC-LGB5 four broken baselines fail closed, zero writes
+PASS AC-LGB6 absent baseline equals --no-baseline, zero writes
+PASS AC-LGB7 unknown keys ignored, absent keys empty, lists independent
+PASS AC-LGB8 live gate clean, shipped baseline fresh, hygiene, runner seat
+SUITE PASS 8/8 criteria

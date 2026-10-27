@@ -3742,6 +3742,14 @@ SUITES = [
     # (AC-LGR1..AC-LGR8 pre-registered in state/queue/tech.md R2152.)
     ("os-ledger-lines",
      os.path.join("..", "os", "test_ledger_lines.py"), 8),
+    # R2157: the baseline is the gate's only exemption channel, so its
+    # semantics are pinned - one entry exempts one round only, a stale
+    # entry is reported instead of rotting quietly, a broken baseline
+    # fails closed under its own code with zero writes, and an absent
+    # baseline equals --no-baseline.
+    # (AC-LGB1..AC-LGB8 pre-registered in state/queue/tech.md R2157.)
+    ("os-ledger-baseline",
+     os.path.join("..", "os", "test_ledger_baseline.py"), 8),
     # R2153: the double-run identity dialect gets one dialect instead of
     # two - explicit bytes/conclusions modes, claim verification against
     # the files (a byte claim that does not hold is a false claim) and a

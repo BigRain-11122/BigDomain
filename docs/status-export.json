@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-27T08:10:03+08:00",
-  "do": "R2156 closeout: 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
+  "export_ts": "2026-10-27T08:37:13+08:00",
+  "do": "R2157 closeout: 硅基域·公众共创元宙平台商业化：大厅/共创/UGC/代币内循环/会员权益/直播转化件（平台产品运营面·店内闭环）",
   "ceo_face": {
-    "current": "R2156 adaptive inventory window: building the evidence tree into the log catalog (product change + suite green)",
-    "latest_artifact": "qa/logs-inventory-R2156-a.log / -b.log (SUITE PASS 31/31, sha16 729292074a238996, written 2026-10-27)",
-    "next_milestone": "next round first item: full reconcile battery + suite-matrix regeneration over the new wiring (within 48h)"
+    "current": "R2157 ledger-baseline semantics: the gate's only exemption channel is now pinned (stale entries reported, one entry exempts one round, broken baseline fails closed)",
+    "latest_artifact": "qa/ledger-baseline-R2157-a.log / -b.log (SUITE PASS 8/8, sha16 6f21c98c4a83c71f) + qa/reconcile-all-R2157.log (RUNNER PASS 359/359 + controls 7/7, 776.5s, written 2026-10-27)",
+    "next_milestone": "next round: claim the next claimable tech/explore head and regenerate wiring evidence; the R2156 battery debt is closed (within 48h)"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "ledger gate baseline semantics: stale reporting + fail-closed baseline (AC-LGB1..AC-LGB8)",
+      "on",
+      "R2157: the round-ledger baseline is the gate's ONLY exemption channel, and only its happy path had ever been asserted - nothing pinned whether one entry could exempt more than its own gap, whether an entry whose gap was already healed stayed forever and turned the list into a junk drawer, which exit code a broken baseline produced, or whether an absent baseline path meant the same as --no-baseline. apply_baseline now reports stale_missing and stale_orphan, the baseline round numbers absent from the current gap sets: a stale entry is a maintenance signal, so it never flips the verdict, but it is never silently kept either. Each entry exempts exactly one round (a baseline naming R701 against a {R701,R702} gap leaves R702 red) and nothing ever suppresses a broken line. format_report prints exactly one stale line when any staleness exists and none when it does not, so the default face stays byte-identical to the R2152 contract, while --json always carries both keys. Two real defects were found and fixed in-window: load_baseline crashed with AttributeError on a top-level non-object baseline, and main's generic ValueError handler mislabelled a broken baseline as E_LGR_NO_STATE. A broken baseline now fails closed under its own code with exit 3, empty stdout, byte-identical file and no temp residue; an absent path equals --no-baseline and is never created. Deliverables: src/os/ledger_lines.py, src/os/test_ledger_baseline.py. Evidence: SUITE PASS 8/8 double-run with byte-identical evidence sha16 6f21c98c4a83c71f (run_identity judges bytes and conclusions identical); wired os-ledger-baseline(8); old os-ledger-lines 8/8 zero regression; live gate VERDICT CLEAN with an empty stale set. Same window closed the R2156 debt: battery RUNNER PASS 359/359 plus controls 7/7 in 776.5s and matrix 359 suites / 2994 criteria byte-identical."
+    ],
     [
       "adaptive multi-root inventory + evidence tree in the catalog (AC-LTI1..AC-LTI8)",
       "on",
@@ -78,6 +83,10 @@
   ],
   "results": [
     [
+      "R2157",
+      "R2157: five-silence scan clean at open (294 decision rows / 217 content-addressed tokens with zero new against the baseline, the D-20261027-01..10 set unchanged and all another seat's face; three ledger patrol rows already paid; group orders baseline unchanged at the 2026-10-26 22:36 deck row; benchmarks fresh today; clean tree, no index.lock; today's standing rows already on disk). P1 canonical rows stay blocked-on-CEO and the weekly proposal duty is met by BD-PROP-005, so this window claimed the P2 tech FIFO head (the R2152 seed row) and registered AC-LGB1..AC-LGB8 in the queue line BEFORE the code, with the honest note that the E_LGR_BAD_BASELINE anchor already existed twice in the module so the work there is wiring and assertions. Product: the ledger baseline now reports stale entries instead of keeping them silently, exempts exactly one round per entry, never suppresses a broken line, and fails closed under its own code on a malformed baseline (two real defects fixed: an AttributeError crash on a top-level non-object baseline and the generic ValueError handler mislabelling it as a missing state file). Verification: suite SUITE PASS 8/8 double-run byte-identical sha16 6f21c98c4a83c71f, wired os-ledger-baseline(8), old ledger suite 8/8, live gate CLEAN. The R2156 carry-over was closed in the same window: battery RUNNER PASS 359/359 plus controls 7/7 in 776.5s with TMP RECLAIM 805/805 worlds and 288.11 MiB, matrix regenerated to 359 suites / 2994 criteria with --check byte-identical."
+    ],
+    [
       "R2156",
       "R2156: five-silence scan clean at open (294 decision rows / 217 content-addressed tokens with zero new, three ledger patrol rows already paid, group orders baseline unchanged at the 2026-10-26 22:36 deck row, benchmarks fresh today, clean tree, no index.lock). The P2 tech head was claimable, so AC-LTI1..AC-LTI8 were registered in the queue line before the code: the adaptive inventory window. Product: multi-root inventory with an inode de-duplication law, evidence classes that retention can never select, default byte identity for the historical single-root contract, fail-closed root gates, and an uncached growth reading. Verification: SUITE PASS 31/31 double-run byte-identical sha16 729292074a238996, legacy logs_toolkit suite 163 checks green, wired os-logs-inventory(8). Battery and matrix regen NOT run (launch cancelled by the shell pipe; no evidence, no orphan) - the next round first item."
     ],
@@ -113,14 +122,14 @@
   "self_drive": {
     "window": "2026-10-21..2026-10-27",
     "window_days": 7,
-    "log_lines_in_window": 37,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 37,
+    "substantive_non_idle_mention_lines": 39,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 5,
+    "queue_tech_open": 4,
     "queue_explore_open": 10
   }
 }
