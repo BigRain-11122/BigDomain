@@ -8525,6 +8525,214 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "months": months}
 
+    def api_category_claim_months(self, include_uncategorized=True):
+        """Per-category monthly after-sales claim pressure (criteria
+        AC-CKM1..AC-CKM8 registered in the R2213 explore-queue seed row
+        BEFORE this code existed; AC-CKM, claim_category_cells and
+        category_claim_count were git grep -F zero-occupancy at HEAD
+        2026-10-29, rc=1, while the face, suite and wiring names were
+        occupied only by the seed row text).
+
+        api_market_claim_months answers the whole market on a month
+        axis, api_claims the three present status views,
+        api_claim_latency how long each leg took and
+        api_category_refund_months the refunded money by category -
+        so WHICH CATEGORIES absorb after-sales claim pressure month
+        over month had no face: the market rows had to be split by
+        hand and a category drowning in claims read exactly like a
+        quiet one. That is the reading behind category risk pricing.
+
+        Two pinned laws. The BOOKING law books a claim in the UTC
+        month of its own committed opened_utc and in the category in
+        force AT THAT INSTANT (_category_at_instant), so a later
+        revise_category moves neither an already-booked month nor its
+        bucket (AC-CKM2). The MONEY law keeps money on the claim
+        side: claim_amount sums the price_paid frozen at open and
+        refunded_amount sums the refund amount joined through the
+        claim's purchase, so a refund with no claim never appears here
+        - that cash month lives in api_market_months (AC-CKM3).
+
+        Status follows the api_claims seam (refunded beats withdrawn
+        beats answered beats open) so the four counts always partition
+        claim_count. Month rows are the contiguous grid from the first
+        to the last claiming month, so a month with no claim carries an
+        honest zero row whose refund_rate is None rather than a
+        fabricated 0.0. Cells are ordered by category ascending with
+        the uncategorized bucket last, and each cell's running_claim is
+        the monotone per-category lifetime accumulator (AC-CKM4,
+        AC-CKM5). include_uncategorized=False drops that bucket AND
+        recomputes every aggregate; the flag must be a real bool and
+        any other value fails closed with E_AM_BAD_ARGS before any read
+        (AC-CKM6). The peak takes the largest claim_count, breaks ties
+        toward the earlier month and never peaks on a zero month.
+
+        Pure read: zero row mutations, zero token movement, repeated
+        calls byte-identical. The envelope carries the resident
+        non-advisory disclaimer."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT c.claim_id, c.price_paid, c.opened_utc,"
+                " c.listing_id, l.category,"
+                " f.refunded_utc, f.amount, w.withdrawn_utc,"
+                " r.replied_utc"
+                " FROM apimarket_claims c"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = c.listing_id"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses r"
+                " ON r.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id"
+                " ORDER BY c.claim_id").fetchall()
+            events = []
+            for _cid, price, opened, listing_id, base_category, \
+                    refunded, amount, withdrawn, replied in raw:
+                category = self._category_at_instant(
+                    int(listing_id), base_category, opened)
+                if category is None and not include_uncategorized:
+                    continue
+                if refunded is not None:
+                    state = "refunded"
+                elif withdrawn is not None:
+                    state = "withdrawn"
+                elif replied is not None:
+                    state = "answered"
+                else:
+                    state = "open"
+                events.append((
+                    str(opened)[:7], category, int(price),
+                    int(amount) if refunded is not None else 0, state))
+        months = _contiguous_months(sorted({e[0] for e in events}))
+        per_month = {}
+        categories = set()
+        for month, category, price, amount, state in events:
+            slot = per_month.setdefault(month, {})
+            cell = slot.setdefault(category, {
+                "claim_count": 0, "open_count": 0, "answered_count": 0,
+                "withdrawn_count": 0, "refunded_count": 0,
+                "claim_amount": 0, "refunded_amount": 0})
+            cell["claim_count"] += 1
+            cell[state + "_count"] += 1
+            cell["claim_amount"] += price
+            cell["refunded_amount"] += amount
+            categories.add(category)
+        running = {}
+        running_total = 0
+        month_rows = []
+        for month in months:
+            slot = per_month.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot:
+                ordered.append(None)
+            cells = []
+            row_count = 0
+            row_open = 0
+            row_answered = 0
+            row_withdrawn = 0
+            row_refunded = 0
+            row_amount = 0
+            row_refunded_amount = 0
+            for category in ordered:
+                cell = slot.get(category)
+                if cell is None:
+                    claim = 0
+                    open_c = 0
+                    answered = 0
+                    withdrawn_c = 0
+                    refunded_c = 0
+                    amount = 0
+                    refunded_amount = 0
+                else:
+                    claim = cell["claim_count"]
+                    open_c = cell["open_count"]
+                    answered = cell["answered_count"]
+                    withdrawn_c = cell["withdrawn_count"]
+                    refunded_c = cell["refunded_count"]
+                    amount = cell["claim_amount"]
+                    refunded_amount = cell["refunded_amount"]
+                cell_running = running.get(category, 0) + claim
+                running[category] = cell_running
+                cells.append({
+                    "category": category,
+                    "claim_count": claim,
+                    "open_count": open_c,
+                    "answered_count": answered,
+                    "withdrawn_count": withdrawn_c,
+                    "refunded_count": refunded_c,
+                    "claim_amount": amount,
+                    "refunded_amount": refunded_amount,
+                    "refund_rate": (round(refunded_c / float(claim), 4)
+                                    if claim else None),
+                    "avg_claim_amount": (float(amount) / claim
+                                          if claim else None),
+                    "running_claim": cell_running,
+                })
+                row_count += claim
+                row_open += open_c
+                row_answered += answered
+                row_withdrawn += withdrawn_c
+                row_refunded += refunded_c
+                row_amount += amount
+                row_refunded_amount += refunded_amount
+            running_total += row_count
+            month_rows.append({
+                "month": month,
+                "claim_count": row_count,
+                "open_count": row_open,
+                "answered_count": row_answered,
+                "withdrawn_count": row_withdrawn,
+                "refunded_count": row_refunded,
+                "claim_amount": row_amount,
+                "refunded_amount": row_refunded_amount,
+                "refund_rate": (round(row_refunded / float(row_count), 4)
+                                if row_count else None),
+                "category_count": len(cells),
+                "running_claim": running_total,
+                "categories": cells,
+            })
+        total = sum(row["claim_count"] for row in month_rows)
+        total_open = sum(row["open_count"] for row in month_rows)
+        total_answered = sum(row["answered_count"] for row in month_rows)
+        total_withdrawn = sum(row["withdrawn_count"] for row in month_rows)
+        total_refunded = sum(row["refunded_count"] for row in month_rows)
+        total_amount = sum(row["claim_amount"] for row in month_rows)
+        total_refunded_amount = sum(
+            row["refunded_amount"] for row in month_rows)
+        peak_month = None
+        peak_claim_count = None
+        for row in month_rows:
+            if row["claim_count"] <= 0:
+                continue
+            if (peak_claim_count is None
+                    or row["claim_count"] > peak_claim_count):
+                peak_month = row["month"]
+                peak_claim_count = row["claim_count"]
+        return {
+            "claim_count": total,
+            "open_count": total_open,
+            "answered_count": total_answered,
+            "withdrawn_count": total_withdrawn,
+            "refunded_count": total_refunded,
+            "claim_amount": total_amount,
+            "refunded_amount": total_refunded_amount,
+            "refund_rate": (round(total_refunded / float(total), 4)
+                            if total else None),
+            "category_count": len(categories),
+            "month_count": len(month_rows),
+            "active_month_count": sum(
+                1 for row in month_rows if row["claim_count"] > 0),
+            "peak_month": peak_month,
+            "peak_claim_count": peak_claim_count,
+            "first_month": month_rows[0]["month"] if month_rows else None,
+            "last_month": month_rows[-1]["month"] if month_rows else None,
+            "latest_month_claim_count": (
+                month_rows[-1]["claim_count"] if month_rows else 0),
+            "disclaimer": self.disclaimer,
+            "months": month_rows}
+
     def api_purchase_dossier(self, purchase_id, account):
         """One purchase's whole story (criteria AC-AMPD1..AC-AMPD8
         pre-registered in the R2135 explore-queue row BEFORE this code

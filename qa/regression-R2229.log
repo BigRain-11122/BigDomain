@@ -1,0 +1,8 @@
+=== ADJACENT REGRESSIONS ===
+test_apimarket_claimmonths.py rc=0 SUITE PASS 8/8
+test_apimarket_categoryquestionmonths.py rc=0 SUITE 8/8
+test_apimarket_claims.py rc=0 SUITE PASS 8/8
+test_apimarket_claimlatency.py rc=0 SUITE PASS 8/8
+test_apimarket_categoryrefundmonths.py rc=0 SUITE PASS 8/8
+test_apimarket_buyerclaimmonths.py rc=0 SUITE 8/8
+test_apimarket_categorydemand.py rc=0 SUITE PASS 8/8

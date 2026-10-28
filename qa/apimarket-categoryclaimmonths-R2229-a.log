@@ -1,0 +1,13 @@
+PASS AC-CKM1: env_keys=18 exact=True rows=True cells=True empty=(0, None, [], None)
+PASS AC-CKM2: grid=['2026-01', '2026-02', '2026-03'] jan=[('data', 2), ('tools', 1), (None, 1)] mar=[('audio', 1), ('tools', 1)] totals=(6, 4)
+PASS AC-CKM3: jan=(1, 1, 1, 1, 40, 10) jan_tools=(1, 1.0) totals=(6, 2, 2, 1, 1) rate=0.1667
+PASS AC-CKM4: months=3 active=2 feb=(0, None) running=[4, 4, 6]
+PASS AC-CKM5: order=['data', 'tools', None]/['audio', 'tools'] narrow=['data', 'tools'] narrow_totals=(5, 1, 3, 3)
+PASS AC-CKM6: codes=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] digests_same=True tx_same=True
+PASS AC-CKM7: market=(6, 2, 2, 1, 1) self=(6, 2, 2, 1, 1) nonzero=['2026-01', '2026-03']
+PASS AC-CKM8: sums=(6, 2, 1) cells=6 peak=('2026-01', 4) pure=(True, True)
+RESTART_SAME True
+WIRED True
+ASCII_LF True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

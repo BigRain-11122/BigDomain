@@ -2577,6 +2577,20 @@ SUITES = [
     # seed row in the R2215 window, anchors checked before the code.
     ("ledger-apimarket-categoryquestionmonths", os.path.join(
         "ledger", "test_apimarket_categoryquestionmonths.py"), 8),
+    # per-category monthly after-sales claim pressure (the booking law
+    # that books a claim in the month of its own opened_utc AND in the
+    # category in force at that instant, the api_claims status seam
+    # partitioning claim_count, money on the claim side so a refund with
+    # no claim never appears, the contiguous grid with an honest zero
+    # month, per-cell running accumulators, the uncategorized bucket
+    # last and the include_uncategorized scope that recomputes every
+    # aggregate, the fail-closed bool gate, cross-face identity with
+    # api_market_claim_months, the earlier-month peak tie-break and the
+    # pure-read/restart law)
+    # - criteria AC-CKM1..AC-CKM8 registered in the R2213 explore
+    # seed row in the R2229 window, anchors checked before the code.
+    ("ledger-apimarket-categoryclaimmonths", os.path.join(
+        "ledger", "test_apimarket_categoryclaimmonths.py"), 8),
     # market-wide monthly retirement / re-listing timeline (the
     # cash-basis double stamp that never rewrites the delisting month,
     # the contiguous grid with an honest zero month, the same-month
