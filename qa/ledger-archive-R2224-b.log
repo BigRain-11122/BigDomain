@@ -1,0 +1,10 @@
+suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA8)
+PASS AC-LGA1 archive loader keeps log lines in order, drops markers, rewrites nothing
+PASS AC-LGA2 union floor passes where the live-only floor fails
+PASS AC-LGA3 live drift still gates even with a full archive
+PASS AC-LGA4 archived gaps are informational, never gated
+PASS AC-LGA5 tail scopes the live window only
+PASS AC-LGA6 bad archive input fails closed with zero stdout
+PASS AC-LGA7 default face byte-identical, only the counts block and one scope line differ
+PASS AC-LGA8 real tree floor met on the union, drift clean, hygiene
+SUITE PASS 8/8 criteria

@@ -274,18 +274,24 @@ def run():
     live_log = LL.load_state_log(os.path.join(BASE, "state.json"))
     base_path = LL.default_baseline_path()
     shipped = LL.load_baseline(base_path)
-    gated = LL.apply_baseline(LL.audit(live_log), shipped)
+    # R2224: the gate reads the coverage scope (live plus folded archive)
+    # so an exemption list measured before a fold keeps its meaning.
+    scope = LL.audit_scope(
+        LL.load_archive_lines(None, os.path.join(BASE, "state.json")),
+        live_log)
+    gated = LL.apply_baseline(scope, shipped)
     deterministic = (json.dumps(gated, sort_keys=True)
                      == json.dumps(gated, sort_keys=True))
     check(gated["clean"] is True
           and gated["new_missing"] == [] and gated["new_orphan"] == []
           and gated["stale_missing"] == [] and gated["stale_orphan"] == []
+          and LL.coverage_floor(gated) is True
           and shipped["missing"] == [2090, 2095]
           and not net and deterministic
           and LABEL in runner_src
           and EXPECTED_CRITERIA == 8,
-          "AC-LGB8 live gate clean, shipped baseline fresh, hygiene, "
-          "runner seat")
+          "AC-LGB8 live gate clean on the coverage scope, shipped "
+          "baseline fresh, hygiene, runner seat")
 
 
 def main():

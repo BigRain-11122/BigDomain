@@ -30,6 +30,17 @@ so the exemption list cannot rot into a silent junk drawer.
 
 Exit codes: 0 clean, 2 dirty or bad arguments, 3 state file missing or
 unparseable. Stdlib only, ASCII source, zero network.
+
+Audit scope (R2224; AC-LGA1..AC-LGA8): a fold moves the oldest log lines
+out of state.json into logs/state-log-archive-*.md, so a live-only
+coverage floor cannot be met once the live array is folded (R2223
+measured the 78500B waterline and a 30-line live floor to be mutually
+unsatisfiable at current line sizes). audit_scope() therefore takes its
+counts from the union of the live window and the archive sections, while
+errors and the actionable gap set stay LIVE-only: an archive section is
+frozen history no later round may rewrite, so a gap there is reported as
+archived_missing / archived_orphan and never gates. The default CLI face
+does not read the archive; --archives DIR switches to the scoped face.
 """
 
 import io
@@ -261,6 +272,119 @@ def load_state_log(path):
     return log
 
 
+ARCHIVE_PREFIX = "state-log-archive-"
+ARCHIVE_SUFFIX = ".md"
+COMMENT_PREFIX = "#"
+MIN_COVERAGE_LINES = 30
+
+
+def default_logs_dir(state_path=None):
+    """The logs/ directory beside the repository root of a state file."""
+    if state_path is None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        state_path = os.path.join(here, "state.json")
+    root = os.path.dirname(os.path.abspath(state_path))
+    return os.path.normpath(os.path.join(root, "..", "..", "logs"))
+
+
+def archive_files(logs_dir):
+    """Archive section files in a logs directory, oldest month first."""
+    if not os.path.isdir(logs_dir):
+        raise LedgerLineError("E_LGR_BAD_ARCHIVE",
+                              "%s is not a directory" % logs_dir)
+    names = sorted(name for name in os.listdir(logs_dir)
+                   if name.startswith(ARCHIVE_PREFIX)
+                   and name.endswith(ARCHIVE_SUFFIX))
+    return [os.path.join(logs_dir, name) for name in names]
+
+
+def load_archive(path):
+    """Log lines out of one folded archive section file (R2224).
+
+    '#' lines are the rebuild header and the '# --- R<n>' fold-window
+    markers, never log lines; blank lines are dropped too. Everything
+    else is a line the fold moved out of state.json verbatim, so it is
+    returned unmodified - no normalisation, and the file is never
+    rewritten.
+    """
+    lines = []
+    try:
+        handle = io.open(path, "r", encoding="utf-8")
+    except (IOError, OSError) as exc:
+        raise LedgerLineError("E_LGR_BAD_ARCHIVE",
+                              "%s is unreadable: %s" % (path, exc))
+    try:
+        for raw in handle:
+            text = raw.rstrip("\n").rstrip("\r")
+            if not text.strip() or text.startswith(COMMENT_PREFIX):
+                continue
+            lines.append(text)
+    except UnicodeDecodeError as exc:
+        raise LedgerLineError("E_LGR_BAD_ARCHIVE",
+                              "%s is not valid utf-8: %s" % (path, exc))
+    finally:
+        handle.close()
+    return lines
+
+
+def load_archive_lines(logs_dir=None, state_path=None):
+    """Every archive section line, oldest section first."""
+    if logs_dir is None:
+        logs_dir = default_logs_dir(state_path)
+    out = []
+    for path in archive_files(logs_dir):
+        out.extend(load_archive(path))
+    return out
+
+
+def coverage_floor(report, minimum=MIN_COVERAGE_LINES):
+    """The coverage floor both live-gate suites pin (R2224)."""
+    return (report["ledger_lines"] >= minimum
+            and report["round_lines"] >= minimum)
+
+
+def audit_scope(archive_lines, live_lines, tail=None):
+    """Audit the coverage scope: live window plus folded archive (R2224).
+
+    Counts (total_lines, ledger_lines, round_lines, other_lines) come
+    from the UNION, because a round the fold moved into an archive
+    section is still a round that was closed - it left the live array,
+    not the history. The actionable set (errors, rounds_without_ledger,
+    ledger_without_round) comes from the LIVE window only, because that
+    is the only place a later round can still introduce drift: an
+    archive section is byte-verbatim frozen history that no round may
+    rewrite, so a gap found there is a fact and is reported as
+    archived_missing / archived_orphan, never used to gate.
+
+    `tail` cuts the live window and never the union counts - which is
+    exactly the conflict R2223 measured: the fold empties the live
+    array, so a live-only floor can never be met again while the union
+    floor keeps reading the whole history.
+    """
+    live_report = audit(live_lines, tail)
+    live_full = audit(live_lines)
+    archive_report = audit(archive_lines)
+    out = dict(live_report)
+    out["scope"] = "live+archive"
+    out["archive_lines"] = archive_report["total_lines"]
+    out["live_lines"] = live_full["total_lines"]
+    out["archive_ledger_lines"] = archive_report["ledger_lines"]
+    out["archive_round_lines"] = archive_report["round_lines"]
+    out["live_ledger_lines"] = live_full["ledger_lines"]
+    out["live_round_lines"] = live_full["round_lines"]
+    out["total_lines"] = archive_report["total_lines"] + live_full["total_lines"]
+    out["ledger_lines"] = (archive_report["ledger_lines"]
+                           + live_full["ledger_lines"])
+    out["round_lines"] = (archive_report["round_lines"]
+                          + live_full["round_lines"])
+    out["other_lines"] = (archive_report["other_lines"]
+                          + live_full["other_lines"])
+    out["archived_missing"] = archive_report["rounds_without_ledger"]
+    out["archived_orphan"] = archive_report["ledger_without_round"]
+    out["clean"] = live_report["clean"]
+    return out
+
+
 def import_roots(source_text):
     """Collect the root module names of every import statement."""
     roots = []
@@ -295,6 +419,13 @@ def format_report(report):
         % (report["ledger_lines"], report["round_lines"],
            report["other_lines"]),
     ]
+    if "scope" in report:
+        out.append("scope: %s archive_lines=%d live_lines=%d "
+                   "archived_missing=%d archived_orphan=%d"
+                   % (report["scope"], report["archive_lines"],
+                      report["live_lines"],
+                      len(report["archived_missing"]),
+                      len(report["archived_orphan"])))
     for item in report["errors"]:
         out.append("error %s line %d: %s"
                    % (item["code"], item["line"], item["detail"]))
@@ -461,6 +592,7 @@ def main(argv=None):
     use_baseline = True
     closeout = False
     round_no = None
+    archives_dir = None
     index = 0
     while index < len(args):
         arg = args[index]
@@ -483,6 +615,12 @@ def main(argv=None):
             if round_no < 1:
                 _stderr("E_LGN_BAD_ARGS: --round needs a positive integer")
                 return 2
+            index += 2
+        elif arg == "--archives":
+            if index + 1 >= len(args):
+                _stderr("E_LGR_BAD_ARGS: --archives needs a directory")
+                return 2
+            archives_dir = args[index + 1]
             index += 2
         elif arg == "--baseline":
             if index + 1 >= len(args):
@@ -517,7 +655,11 @@ def main(argv=None):
         if closeout:
             report = check_closeout(log, round_no)
         else:
-            report = audit(log, tail)
+            if archives_dir is not None:
+                report = audit_scope(
+                    load_archive_lines(archives_dir), log, tail)
+            else:
+                report = audit(log, tail)
             if use_baseline:
                 report = apply_baseline(report, load_baseline(baseline_path))
     except LedgerLineError as exc:

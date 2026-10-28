@@ -251,13 +251,21 @@ def run():
         runner_src = handle.read()
     live_log = LL.load_state_log(os.path.join(BASE, "state.json"))
     live = LL.audit(live_log)
+    # R2224: the floor is measured on the coverage scope (live plus the
+    # folded archive sections) because a fold moves a round out of the
+    # live array, not out of the history; the drift set stays LIVE-only.
+    scope = LL.audit_scope(
+        LL.load_archive_lines(None, os.path.join(BASE, "state.json")),
+        live_log)
     base_path = LL.default_baseline_path()
     baseline = LL.load_baseline(base_path)
-    gated = LL.apply_baseline(live, baseline)
+    gated = LL.apply_baseline(scope, baseline)
     with io.open(base_path, "r", encoding="utf-8") as handle:
         shipped = json.load(handle)
-    check(live["errors"] == []
-          and live["ledger_lines"] >= 30 and live["round_lines"] >= 30
+    check(scope["errors"] == []
+          and LL.coverage_floor(scope)
+          and scope["live_ledger_lines"] == live["ledger_lines"]
+          and scope["ledger_lines"] >= scope["live_ledger_lines"]
           and live["rounds_without_ledger"] == [2090, 2095]
           and live["ledger_without_round"] == []
           and gated["new_missing"] == [] and gated["new_orphan"] == []
@@ -266,7 +274,8 @@ def run():
           and shipped["orphan"] == []
           and not net and LABEL in runner_src
           and EXPECTED_CRITERIA == 8,
-          "AC-LGR8 live gate clean, two historical gaps baselined, hygiene")
+          "AC-LGR8 live gate clean on the coverage scope, two historical "
+          "gaps baselined, hygiene")
 
 
 def main():

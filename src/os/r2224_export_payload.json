@@ -1,0 +1,10 @@
+{
+  "ceo_face": {
+    "current": "R2224：把账本覆盖律改成归档感知。R2223 实测出「活日志至少 30 条轮账行 + 30 条轮述行」与「78500B 水位闸」在当前行长下互斥（30/30 要约 70 行，水位闸只容约 50 行），所以折叠永远落不了地。本轮不动窗口而是换审计口径：计数取「活窗口 ∪ 归档节」的并集，坏形与新缺账行仍只认活窗口（归档是冻结历史，谁也不能改），归档里的缺口只报 archived_missing / archived_orphan，永不当门。实测真实树：活 230 行/归档 17850 行、并集轮账 240 条/轮述 1772 条、归档缺口 786/54 只报不拦、活缺口仍是 2090/2095 且在既有 baseline 下、判 CLEAN。两条在役活门套件（AC-LGR8/AC-LGB8）已迁到新口径，下一轮折叠可以落地。",
+    "latest_artifact": "src/os/test_ledger_archive.py 套件 8/8 双跑字节同一 sha16 9e3d1225726f1194（qa/ledger-archive-R2224-a.log + -b.log）+ src/os/ledger_lines.py 新增 audit_scope/load_archive/coverage_floor 六面与 --archives CLI（2026-10-29）",
+    "next_milestone": "R2225（≤48h）：先做水线折叠（现在覆盖律已归档感知，折叠不再触红），再跑全量对账电池 + 套件矩阵再生（矩阵现记 410 套，树已 411）"
+  },
+  "out_name": "账本覆盖律归档感知（R2224）",
+  "out_text": "新增 ledger_lines.audit_scope：计数=活窗口∪归档节并集，可裁决集合（errors/缺账/孤账）仅认活窗口；归档缺口只报 archived_missing/archived_orphan 永不进 baseline、永不当门；tail 只裁活窗口不缩并集。新套件 test_ledger_archive.py 8/8 双跑字节同一（sha16 9e3d1225726f1194），六邻套件全绿（ledger-lines/baseline/closeout/run-identity/census-negative/logs-toolkit），证据单写者落盘、普查 DRIFT-CLEAN flags=0；AC-LGR8/AC-LGB8 已迁到 scope 律。诚实修正=R2223 设计注说要把 2090/2095 移进归档审计并把 baseline 清空，实测两缺口是活日志事实，移进=假账，故 baseline 原样保留。诚实债务=折叠与全量电池+矩阵再生顺延 R2225。",
+  "result_text": "归档感知覆盖律交付：audit_scope + load_archive + coverage_floor + --archives；套件 8/8 双跑字节同一 sha16 9e3d1225726f1194；六邻套件全绿；census DRIFT-CLEAN；AC-LGR8/AC-LGB8 迁移完成；折叠与电池记录为 R2225 债务"
+}
