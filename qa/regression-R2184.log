@@ -1,0 +1,6 @@
+rc=0 test_apimarket_pricepercentiles.py SUITE PASS 8/8
+rc=0 test_apimarket_marketstats.py SUITE PASS 8/8
+rc=0 test_apimarket_marketdaily.py SUITE 8/8
+rc=0 test_apimarket_refundlatency.py SUITE 8/8
+rc=0 test_apimarket_concentration.py SUITE PASS 8/8
+rc=0 test_apimarket_categorydemand.py SUITE PASS 8/8

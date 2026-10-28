@@ -5345,6 +5345,135 @@ class APIMarketFace:
                 "categories": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_market_ticket_size(self, dev_account=None,
+                               include_refunded=False):
+        """Achieved ticket-size distribution (criteria
+        AC-MTS1..AC-MTS8 pre-registered in the R2184 explore-queue
+        claim row BEFORE this code existed; the AC-MTS prefix,
+        ledger-apimarket-ticketsize, p90_ticket and _ticket_sample
+        were git-grep zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        Gap: api_market_price_percentiles quantiles the ASKING price
+        of what is still on the shelf, api_listing_position ranks one
+        listing inside its bucket, api_market_daily and the month
+        faces carry cash totals and api_repeat_purchase counts
+        buyers. Nothing answered what a sale actually COSTS in this
+        market, so in a world where prices are revised the asking
+        p50 and the achieved p50 are different quantities and an
+        operator had no turnover benchmark at all.
+
+        Authority: one ticket per apimarket_purchases row, valued at
+        its own immutable price_paid - revise_price and delist_api
+        never rewrite a historical ticket. The default scope is NET:
+        a refunded purchase leaves the sample (a refund is not
+        revenue), and include_refunded=True puts it back, which is
+        what makes the two calls line up exactly with
+        api_market_stats on both axes (see the docstring block on
+        conservation below). Ticket counts therefore read sale_count
+        rather than ticket_count: ticket_count is already the
+        eventtickets face's own key and this face does not borrow it.
+
+        Conservation: rows are one per effective category bucket (the
+        uncategorized bucket last, mirroring api_categories) and the
+        envelope is exactly the aggregate of its rows - sale_count,
+        gross_tokens and refunded_tokens each sum over rows. Scope
+        law: dev_account None is the whole market (scope ==
+        'market'); a seller scope (scope == 'seller') carries strict
+        isolation, and a single-seller world makes the two reads
+        identical apart from the scope/dev_account pair.
+
+        Percentiles reuse the AC-MPP3 linear-interpolation law
+        through the same module-level percentile() seam, so the two
+        distribution faces can never drift apart. Gate order is
+        pinned: the seller account shape first (fail-closed
+        E_AM_BAD_ACCOUNT), then the include_refunded bool gate
+        (fail-closed E_AM_BAD_ARGS), both before any read. Pure read:
+        zero row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        if not isinstance(include_refunded, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_refunded)
+        with self._lock:
+            sql = ("SELECT p.listing_id, p.price_paid, l.dev_account,"
+                   " l.category, f.purchase_id"
+                   " FROM apimarket_purchases p"
+                   " JOIN apimarket_listings l"
+                   " ON l.listing_id = p.listing_id"
+                   " LEFT JOIN apimarket_refunds f"
+                   " ON f.purchase_id = p.purchase_id")
+            args = ()
+            if dev_account is not None:
+                sql += " WHERE l.dev_account = ?"
+                args = (dev_account,)
+            sql += " ORDER BY p.purchase_id"
+            rows_in = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            all_tickets = []
+            refunded_total = 0
+            gross_total = 0
+            for r in rows_in:
+                listing_id = int(r[0])
+                price = int(r[1])
+                refunded = r[4] is not None
+                if refunded and not include_refunded:
+                    continue
+                cat = self._category_state(listing_id, r[3])[0]
+                b = buckets.get(cat)
+                if b is None:
+                    b = {"category": cat, "tickets": [],
+                         "refunded_count": 0, "gross": 0,
+                         "refunded": 0}
+                    buckets[cat] = b
+                b["tickets"].append(price)
+                b["gross"] += price
+                gross_total += price
+                if refunded:
+                    b["refunded_count"] += 1
+                    b["refunded"] += price
+                    refunded_total += price
+                all_tickets.append(price)
+            rows = []
+            ordered = sorted(c for c in buckets if c is not None)
+            if None in buckets:
+                ordered.append(None)
+            for cat in ordered:
+                b = buckets[cat]
+                vals = sorted(b["tickets"])
+                rows.append({
+                    "category": cat,
+                    "sale_count": len(vals),
+                    "refunded_sale_count": b["refunded_count"],
+                    "gross_tokens": b["gross"],
+                    "refunded_tokens": b["refunded"],
+                    "net_gross_tokens": b["gross"] - b["refunded"],
+                    "min_ticket": vals[0],
+                    "max_ticket": vals[-1],
+                    "mean_ticket": float(sum(vals)) / len(vals),
+                    "p50_ticket": percentile(vals, 0.5)})
+        vals = sorted(all_tickets)
+        return {"scope": ("market" if dev_account is None else "seller"),
+                "dev_account": dev_account,
+                "include_refunded": include_refunded,
+                "sale_count": len(vals),
+                "refunded_sale_count": sum(
+                    row["refunded_sale_count"] for row in rows),
+                "gross_tokens": gross_total,
+                "refunded_tokens": refunded_total,
+                "net_gross_tokens": gross_total - refunded_total,
+                "min_ticket": vals[0] if vals else None,
+                "p25_ticket": percentile(vals, 0.25),
+                "p50_ticket": percentile(vals, 0.5),
+                "p75_ticket": percentile(vals, 0.75),
+                "p90_ticket": percentile(vals, 0.9),
+                "max_ticket": vals[-1] if vals else None,
+                "mean_ticket": (float(sum(vals)) / len(vals)
+                                if vals else None),
+                "spread": (vals[-1] - vals[0]) if vals else None,
+                "category_count": len(rows),
+                "categories": rows,
+                "disclaimer": self.disclaimer}
+
     def api_buyer_rating_pattern(self, buyer_id):
         """Buyer star-giving tendency (criteria AC-BRP1..AC-BRP8
         pre-registered in the R2164 explore-queue row BEFORE this code

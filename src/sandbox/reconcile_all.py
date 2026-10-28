@@ -2469,6 +2469,13 @@ SUITES = [
     # the R2160 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-pricepercentiles", os.path.join(
         "ledger", "test_apimarket_pricepercentiles.py"), 8),
+    # apimarket achieved ticket-size distribution - what a sale actually
+    # costs, net-refund authority by default, cross-face identity with
+    # the market stats on both axes - criteria AC-MTS1..AC-MTS8
+    # pre-registered in the R2184 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-ticketsize", os.path.join(
+        "ledger", "test_apimarket_ticketsize.py"), 8),
     # apimarket claim response latency scorecard - every claim leg as a
     # duration measured from the claim's own opened stamp, never a wall
     # clock, with the seller aggregates - criteria AC-CLT1..AC-CLT8

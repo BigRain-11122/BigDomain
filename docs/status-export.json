@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T21:40:00+08:00",
-  "do": "R2183 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a resident can now price a whole watchlist: what the buyable shelves would cost together, which shelves are already bought, retired or sold out, and how much the saved ones have dropped since the watch",
+  "export_ts": "2026-10-28T23:05:00+08:00",
+  "do": "R2184 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read what sales actually COST: the achieved ticket-size distribution per category, refund-adjusted, beside the asking-price distribution that was already on the shelf",
   "ceo_face": {
-    "current": "R2183: shipped api_watch_budget - a fourteen-key budget reading over the live watchlist with one bucket per row (purchased / delisted / sold_out / buyable), spend authority on the buyable bucket alone, and savings that never net a price rise against a genuine drop (suite 8/8 double-run byte-identical, four neighbours green); the R2182 battery debt is cleared as well (380/380 suites, matrix 380/3162 byte-identical, census DRIFT-CLEAN)",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_watch_budget) + src/sandbox/ledger/test_apimarket_watchbudget.py + qa/apimarket-watchbudget-R2183-a.log and -b.log (SUITE PASS 8/8, sha256 19d87a47...) + qa/reconcile-all-R2183.log (RUNNER PASS 380/380) - 2026-10-28",
-    "next_milestone": "R2184: fresh full battery including the new watch-budget suite, then the next explore seed (R2178 6/10, api_market_ticket_size - achieved ticket-size distribution) - ETA 2026-10-29, within 48h",
-    "last_artifact": "qa/apimarket-watchbudget-R2183-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2184: shipped api_market_ticket_size - the achieved ticket distribution (quartiles, median, ninetieth percentile, spread) over real sale rows at their own immutable price, net of refunds by default with an include_refunded axis that lines up exactly with the market cash stats on both sides (suite 8/8 double-run byte-identical, six neighbours green); the full battery including the new suite is green (382/382 suites)",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_market_ticket_size) + src/sandbox/ledger/test_apimarket_ticketsize.py + qa/apimarket-ticketsize-R2184-a.log and -b.log (SUITE PASS 8/8, sha256 9756078494370546) + qa/reconcile-all-R2184-2.log (RUNNER PASS 382/382, 649.1s) - 2026-10-28",
+    "next_milestone": "R2185: next explore seed (R2178 7/10, api_buyer_concentration - the buyer-side mirror of the seller concentration index) plus the reconciled suite matrix - ETA 2026-10-29, within 48h",
+    "last_artifact": "qa/apimarket-ticketsize-R2184-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "achieved ticket-size distribution (api_market_ticket_size)",
+      "on",
+      "R2184: the asking-price percentiles quantile what is still on the shelf, the position face ranks one listing inside its bucket and the cash faces total money - so what a sale actually costs had no face, and in a market where prices are revised the asking p50 and the achieved p50 are different quantities. The new face values each purchase at its own immutable price_paid (a revision or a delisting never rewrites a historical ticket), is NET by default because a refund is not revenue and puts the refunded purchase back under include_refunded, and both axes line up exactly with api_market_stats on purchase_count, net_purchase_count, gross, refunded and net. Quantiles reuse the AC-MPP3 linear-interpolation seam so the two distribution faces cannot drift; rows are one per effective category bucket with the uncategorized bucket last and sum to the envelope; a seller scope is strictly isolated and a single-seller world matches the market scope apart from the scope pair. Suite 8/8 double-run byte-identical, wired as ledger-apimarket-ticketsize(8)."
+    ],
     [
       "retirement to re-listing gap (api_relist_gap)",
       "on",
@@ -138,10 +143,6 @@
   ],
   "results": [
     [
-      "R2177",
-      "R2177: five-silence scan clean (240 decision rows / 163 D-C tokens with zero additions against the stored baseline; ledger three patrol rows already paid with zero unreplied; group orders unchanged at the 2026-10-28 03:0x fleet event round #4; benchmarks inside seven days; tree clean, no index.lock). The P1 rows stay blocked-on-CEO, all four tech heads stayed gated and the single explore row is gated on the merchant id, so the window discharged the debt R2176 recorded instead of opening a new face. Three runs, all disclosed: the first was cancelled by the five-minute no-output rule through a truncating selector (process tree verified dead, zero evidence written); the second FAILED honestly at 374/375 with the two assertions being reconcile-daily-census cd7 and the criteria total, root cause a committed two-round-old log with 35 CRLF lines among 4497, fixed by the existing single-writer evidence_writer --fix on the newline axis only (713555 to 713520 bytes, content preserved) after which the census read DRIFT-CLEAN; the third, on the repaired tree, read RUNNER PASS 375/375 plus controls 7/7 in 649.2s with the birth-site sweep reclaiming 841/841 worlds and 298.70 MiB, then the four follow-up sections all PASS (matrix 375/3122 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=1983). No product code changed, so the honest product score is zero. The local-lane S4U item is re-checked and still open: the loop task principal reads Interactive and registering S4U needs an elevated shell."
-    ],
-    [
       "R2174",
       "R2174: five-silence scan clean (275 rows / 181 D-C tokens against a 186-token baseline with zero additions - the five absentees are the known body-text marks already acknowledged in R2173 and dropped by the group-side rotation, baseline re-anchored to 181; ledger no new row; group orders unchanged at 03:0x; benchmarks inside 7 days; tree clean). R2173's recorded debt discharged with no product code change: RUNNER PASS 373/373 suites + controls 7/7 in 653.4s with the birth-site sweep reclaiming 835/835 worlds (296.94 MiB), then matrix regen 373 suites / 3106 criteria byte-identical, fingerprint CLEAN, profile PASS and census DRIFT-CLEAN flags=0. Honest note: the first invocation was cancelled by the five-minute no-output rule through a truncating output selector; ownership check found no surviving child and no partial evidence, so it was re-run as a direct stream."
     ],
@@ -236,19 +237,23 @@
     [
       "R2183",
       "R2183: five-silence scan clean with zero new decision tokens (baseline re-anchored 163->159) and no new orders. Debt cleared: battery RUNNER PASS 380/380 + controls 7/7 660.8s with matrix 380/3162 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN. Product: api_watch_budget with AC-WBG1..AC-WBG8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 19d87a47cd089df6), wired as ledger-apimarket-watchbudget(8), four adjacent suites green. Honest notes: the AC-WBG7 refund clause was corrected to the measured purchase seam, and a fresh battery including the new suite is recorded as R2184's first item."
+    ],
+    [
+      "R2184",
+      "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ]
   ],
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 130,
+    "log_lines_in_window": 132,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 58,
+    "substantive_non_idle_mention_lines": 60,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 6
+    "queue_explore_open": 5
   }
 }
