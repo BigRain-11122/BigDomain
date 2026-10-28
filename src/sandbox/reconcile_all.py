@@ -2663,6 +2663,18 @@ SUITES = [
     # the R2217 window (disclosed - the R2137/R2141/R2144 precedent).
     ("ledger-apimarket-sellerreplymonths", os.path.join(
         "ledger", "test_apimarket_sellerreplymonths.py"), 8),
+    # apimarket seller monthly replenishment cadence - the booking law
+    # (a revision books in its own restocked_utc month, an unlimited
+    # shelf never carries one), the cadence law over a scope's own
+    # consecutive revisions with honest None gaps, the direction law
+    # (thickening/thinning/flat over the last two active months), the
+    # conservation and integer-floor average, the peak law with the
+    # earlier-month tie-break, the scope law with the cross-face
+    # identity against api_seller_supply, and the pure-read law -
+    # criteria AC-RSM1..AC-RSM9 registered in the R2213 explore-queue
+    # seed row claimed in R2222 BEFORE this suite existed.
+    ("ledger-apimarket-sellerrestockmonths", os.path.join(
+        "ledger", "test_apimarket_sellerrestockmonths.py"), 9),
     # apimarket market-wide monthly watch-to-purchase conversion - the
     # booking law (a watch books in its own watched_utc month and an
     # unwatch never moves it, the disclosed asymmetry against the live

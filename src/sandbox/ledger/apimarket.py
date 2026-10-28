@@ -13251,6 +13251,212 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         return out
 
+    def api_seller_restock_months(self, dev_account=None):
+        """Seller-side monthly replenishment cadence (criteria
+        AC-RSM1..AC-RSM9 pre-registered in the R2213 explore-queue
+        seed row BEFORE this code existed).
+
+        api_supply_history answers ONE listing's revision chain and
+        api_seller_supply answers a live snapshot rollup, so the two
+        questions a shop's supply health really turns on - how often
+        does it replenish, and is the replenishment growing or
+        shrinking - had no time axis: a shop that restocked ten units
+        a month all year read exactly like one that dumped forty in
+        January and then went quiet.
+
+        Booking law (AC-RSM2): every append-only
+        apimarket_supply_revisions row books in the UTC month of its
+        own immutable restocked_utc, so a later restock never
+        rewrites an earlier month, and a month that carried no
+        restock is an honest zero row rather than a silently absent
+        one.
+
+        Cadence law (AC-RSM3): the inter-restock gap is measured
+        between consecutive revisions in revision_id order - the
+        ordering authority the restock chain already trusts, because
+        the clock is second resolution and two restocks inside one
+        second are legal (api_supply_history). A negative inter-stamp
+        interval (clock skew) clamps to zero instead of inventing
+        time travel, and a scope with fewer than two revisions
+        carries None gaps rather than a fabricated zero.
+
+        Direction law (AC-RSM4): trend compares the units_added of
+        the last two ACTIVE months - 'thickening' when the newer is
+        larger, 'thinning' when it is smaller, 'flat' when equal -
+        and is None with fewer than two active months, so a shop that
+        restocked once is never handed a direction it did not have.
+
+        Conservation (AC-RSM5): the row restock_count and units_added
+        sum to the envelope totals, every row average is the same
+        integer floor the neighbouring month faces use, and the
+        running accumulators end at the envelope totals.
+
+        Peak law (AC-RSM6): the peak takes the highest monthly
+        units_added with ties resolved to the EARLIER month, and a
+        zero month is never a peak, so an empty world reports None
+        instead of inventing a month.
+
+        Scope law (AC-RSM7): dev_account None is the whole market
+        (scope == 'market', market_mean_units_per_restock None - the
+        face never benchmarks itself against itself); a seller scope
+        carries the market-wide pooled mean computed by the same law
+        and other sellers never leak in. The envelope restock_count
+        and units_added agree with api_seller_supply on the same
+        scope (total_restock_count / total_restocked_units).
+
+        The account shape gate runs before any read, so a bad account
+        fails closed; a prefix-valid account with no restock history
+        gets an honest empty envelope. Pure read: zero row mutations
+        and zero token movement."""
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _flow(scope):
+            sql = ("SELECT revision_id, listing_id, add_units,"
+                   " restocked_utc FROM apimarket_supply_revisions")
+            args = ()
+            if scope is not None:
+                sql += " WHERE dev_account = ?"
+                args = (str(scope),)
+            sql += " ORDER BY revision_id"
+            raw = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            listings = set()
+            gaps = []
+            units_seen = []
+            previous = None
+            total_units = 0
+            total_count = 0
+            for _rev, listing_id, units, stamp in raw:
+                stamp = str(stamp)
+                month = stamp[:7]
+                units = int(units)
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "units": 0, "listings": set(),
+                         "largest": 0, "first": stamp, "last": stamp}
+                    buckets[month] = b
+                b["count"] += 1
+                b["units"] += units
+                b["listings"].add(int(listing_id))
+                if units > b["largest"]:
+                    b["largest"] = units
+                if stamp < b["first"]:
+                    b["first"] = stamp
+                if stamp > b["last"]:
+                    b["last"] = stamp
+                if previous is not None:
+                    delta = int(
+                        (datetime.datetime.strptime(stamp, fmt)
+                         - datetime.datetime.strptime(previous, fmt)
+                         ).total_seconds())
+                    gaps.append(delta if delta > 0 else 0)
+                previous = stamp
+                total_units += units
+                total_count += 1
+                units_seen.append(units)
+                listings.add(int(listing_id))
+            months = []
+            running_count = 0
+            running_units = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "restock_count": 0,
+                        "units_added": 0,
+                        "listing_count": 0,
+                        "avg_units_per_restock": None,
+                        "largest_restock_units": None,
+                        "first_restock_utc": None,
+                        "last_restock_utc": None,
+                        "running_restock_count": running_count,
+                        "running_units_added": running_units})
+                    continue
+                running_count += b["count"]
+                running_units += b["units"]
+                months.append({
+                    "month": month,
+                    "restock_count": b["count"],
+                    "units_added": b["units"],
+                    "listing_count": len(b["listings"]),
+                    "avg_units_per_restock": b["units"] // b["count"],
+                    "largest_restock_units": b["largest"],
+                    "first_restock_utc": b["first"],
+                    "last_restock_utc": b["last"],
+                    "running_restock_count": running_count,
+                    "running_units_added": running_units})
+            active = [row for row in months if row["restock_count"] > 0]
+            if len(active) >= 2:
+                newer = active[-1]["units_added"]
+                older = active[-2]["units_added"]
+                if newer > older:
+                    trend = "thickening"
+                elif newer < older:
+                    trend = "thinning"
+                else:
+                    trend = "flat"
+            else:
+                trend = None
+            peak_month = None
+            peak_units = None
+            for row in months:
+                if row["units_added"] > 0 and (
+                        peak_units is None
+                        or row["units_added"] > peak_units):
+                    peak_month = row["month"]
+                    peak_units = row["units_added"]
+            return {
+                "restock_count": total_count,
+                "units_added": total_units,
+                "listing_count": len(listings),
+                "month_count": len(months),
+                "active_month_count": len(active),
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "peak_month": peak_month,
+                "peak_units_added": peak_units,
+                "latest_month_units_added": (
+                    months[-1]["units_added"] if months else 0),
+                "avg_units_per_restock": ((total_units // total_count)
+                                          if total_count else None),
+                "largest_restock_units": (max(units_seen)
+                                          if units_seen else None),
+                "smallest_restock_units": (min(units_seen)
+                                           if units_seen else None),
+                "mean_gap_seconds": ((sum(gaps) // len(gaps))
+                                     if gaps else None),
+                "max_gap_seconds": (max(gaps) if gaps else None),
+                "trend": trend,
+                "months": months}
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        with self._lock:
+            core = _flow(dev_account)
+            if dev_account is None:
+                market_mean = None
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                ).fetchone()[0]
+            else:
+                market_mean = _flow(None)["avg_units_per_restock"]
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                    " WHERE dev_account = ?",
+                    (str(dev_account),)).fetchone()[0]
+        out = {
+            "scope": ("market" if dev_account is None else "seller"),
+            "dev_account": (None if dev_account is None
+                            else str(dev_account)),
+            "owned_listing_count": int(owned),
+            "market_mean_units_per_restock": market_mean}
+        out.update(core)
+        out["disclaimer"] = self.disclaimer
+        return out
+
     def api_market_relist_months(self):
         """Market-wide monthly retirement / re-listing timeline (criteria
         AC-MRM1..AC-MRM8 pre-registered in the R2189 seed 9/10

@@ -1,0 +1,11 @@
+PASS AC-RSM1: env_keys=22 exact=True row_keys=True empty=(0, [], None)
+PASS AC-RSM2: grid=['2026-01', '2026-02', '2026-03'] jan=(2, 12) mar=(2, 7) totals=(4, 19) unlimited=('E_AM_SUPPLY_UNLIMITED', 4)
+PASS AC-RSM3: dana=(1843200, 3888000) gina=(None, None) hana=5097600 market=(1296000, 2246400)
+PASS AC-RSM4: dana='thinning' hana='flat' gina=None market='thinning' hana_grid=['2026-02', '2026-03', '2026-04']
+PASS AC-RSM5: counts=[2, 0, 2] units=[12, 0, 7] avg=(4, 6, 3) running=[12, 12, 19] extremes=(7, 3)
+PASS AC-RSM6: peak=('2026-01', 12) feb=(0, None, 12) hana=('2026-02', 2) gina=('2026-01', 4)
+PASS AC-RSM7: supply=(4, 19, 3) face=(4, 19, 3, 3) market=(7, 27, 4, 5, 3) gina=(4, 1) hana=(4, 3)
+PASS AC-RSM8: gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] deterministic=True digests_same=True tx_same=True
+PASS AC-RSM9: bytes_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 9/9

@@ -1,0 +1,8 @@
+test_apimarket_supply.py                     rc=0 SUITE 8/8
+test_apimarket_sellersupply.py               rc=0 SUITE PASS 8/8
+test_apimarket_marketsupplymonths.py         rc=0 SUITE 8/8
+test_apimarket_categorysupplymonths.py       rc=0 SUITE PASS 8/8
+test_apimarket_marketrelistmonths.py         rc=0 SUITE 8/8
+test_apimarket_relist.py                     rc=0 SUITE PASS 8/8
+test_apimarket_relistgap.py                  rc=0 SUITE PASS 8/8
+ADJACENT 7/7 rc=0

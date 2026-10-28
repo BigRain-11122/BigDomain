@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-29T01:56:27+08:00",
- "do": "R2221 verification round on the silicon-domain co-creation platform: the whole sandbox plant re-verified on the committed tree, with zero product code touched by design",
+ "export_ts": "2026-10-29T02:04:30+08:00",
+ "do": "R2222 product round on the silicon-domain co-creation platform: a new apimarket seller monthly replenishment cadence face, its nine-criteria suite and seven adjacent supply suites",
  "ceo_face": {
-  "current": "R2221: the whole plant was re-verified against the exact commit the last product round left behind - every one of the 410 sandbox suites green, the seven reconcile controls still catching tampering, the suite matrix in docs/sandbox-suite-matrix.md regenerated to 410 suites / 3402 criteria, the five migration fingerprints clean, and the evidence-writer census clean on both legs",
-  "latest_artifact": "qa/reconcile-all-R2221.log (749889 bytes, single UTF-8 LF writer) + docs/sandbox-suite-matrix.md regenerated 410/410 (2026-10-29)",
-  "next_milestone": "R2222 within 24h: a new apimarket product face from the open explore seed R2213 (five of six rows still unclaimed) on this freshly verified tree"
+  "current": "R2222: the developer-API marketplace gained a seller monthly restock cadence reading - how often a shop replenishes and whether the replenishment is growing or shrinking, which no face answered before (one answered a single listing revision chain, another a live snapshot rollup)",
+  "latest_artifact": "qa/apimarket-sellerrestockmonths-R2222-a.log and -b.log (SUITE PASS 9/9, double-run byte-identical criterion sha16 b660f5532cc28c36) + qa/regression-R2222.log (7/7 adjacent suites) (2026-10-29)",
+  "next_milestone": "R2223 within 24h: the carried full reconcile battery plus suite-matrix regeneration on this window tree, behind the state.json waterline fold (gauge 400092B against the 78500B gate)"
  },
  "depts": [
   {
@@ -34,6 +34,11 @@
   }
  ],
  "outs": [
+  [
+   "seller monthly replenishment cadence (api_seller_restock_months)",
+   "on",
+   "R2222: the revision-history face answers one listing and the supply rollup answers the present snapshot, so a shop restocking ten units every month read exactly like one that dumped forty in January and went quiet. The new face books each append-only revision in its own restocked_utc month, measures the cadence over a scope own consecutive revisions in revision_id order (clock skew clamps to zero, fewer than two revisions carries honest None gaps), derives a thickening / thinning / flat direction over the last two active months, keeps a contiguous grid with an honest zero month, conserves counts and units with an integer-floor average, and takes the market pooled mean as a benchmark only for a seller scope while agreeing exactly with api_seller_supply."
+  ],
   [
    "market-wide monthly watch-to-purchase conversion (api_market_conversion_months)",
    "on",
@@ -272,6 +277,10 @@
  ],
  "results": [
   [
+   "R2222",
+   "R2222: five-silence scan at open flagged two debts and cleared the rest - 236 bare-LF closeout lines in state.json repaired to a clean CRLF layout, heartbeat lag 1 backfilled 2220 -> 2222, ledger PASS with 3 @BigDomain rows and zero conflicts, decisions PASS with no new row, orders baseline-ahead with no new order, benchmarks and QA fresh, export under 24h, clean tree. Product: one new apimarket face (twenty-two-key envelope, ten-key month rows, booking cadence direction conservation peak scope and cross-face laws) with a 9-criteria suite double-run byte-identical (sha16 b660f5532cc28c36), wired as ledger-apimarket-sellerrestockmonths(9), seven adjacent supply and relist suites green, PRODUCT_SHA_STABLE True. Honest debts: the full battery and the suite-matrix regeneration did not run, and the state waterline fold was carried - both registered at the top of backlog for R2223."
+  ],
+  [
    "R2221",
    "R2221: five-silence scan clean with an exact decision-token match (zero new against a 185-token baseline), the carried battery debt discharged on the committed 8a904359 tree - RUNNER PASS 410/410 suites plus controls 7/7 in 1013.5s with 908/908 tmp worlds reclaimed, then matrix regenerated to 410 suites / 3402 criteria, fingerprint chain CLEAN over five domains, runner profile check PASS and the qa writer census DRIFT-CLEAN on both legs; no product code changed by design, so the product score is honestly zero."
   ],
@@ -500,7 +509,7 @@
   "queue_main_open": 6,
   "queue_tech_open": 4,
   "queue_explore_open": 7,
-  "tick": 2221,
-  "round": "R2221"
+  "tick": 2222,
+  "round": "R2222"
  }
 }
