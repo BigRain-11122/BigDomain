@@ -1,0 +1,6 @@
+test_apimarket_buyersellerspend.py rc=0 SUITE PASS 8/8
+test_apimarket_buyercategoryspend.py rc=0 SUITE PASS 8/8
+test_apimarket_concentration.py rc=0 SUITE PASS 8/8
+test_apimarket_buyerprofile.py rc=0 SUITE PASS 8/8
+test_apimarket_library.py rc=0 SUITE 8/8
+test_apimarket_repeatpurchase.py rc=0 SUITE PASS 8/8

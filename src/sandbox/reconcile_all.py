@@ -2401,6 +2401,15 @@ SUITES = [
     # the R2170 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-concentration", os.path.join(
         "ledger", "test_apimarket_concentration.py"), 8),
+    # buyer-side spend concentration (two independent axes - one bucket
+    # per seller and one per effective category - with the shared
+    # total-order / share / herfindahl / pareto law, purchase-side row
+    # authority, net spend authority keeping a fully refunded seller at
+    # zero weight, cross-face identity with api_buyer_seller_spend and
+    # strict buyer isolation) - criteria AC-BC1..AC-BC8 pre-registered
+    # in the R2178 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-buyerconcentration", os.path.join(
+        "ledger", "test_apimarket_buyerconcentration.py"), 8),
     # seller repricing discipline (step percentages derived only from
     # two stored prices, repricing-side row authority, pooled mean /
     # median / absolute peak / signed sum, market benchmark under a

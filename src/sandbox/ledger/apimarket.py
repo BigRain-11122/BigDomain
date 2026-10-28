@@ -8994,6 +8994,190 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "buyers": core["buyers"]}
 
+    def api_buyer_concentration(self, buyer_id):
+        """Buyer-side spend concentration face (criteria AC-BC1..AC-BC8
+        pre-registered in the R2178 explore claim row BEFORE this code
+        existed). Occupancy honesty note: ledger-apimarket-buyerconcentration
+        was git-grep zero-occupancy against HEAD 2026-10-28 (rc=1), while
+        api_buyer_concentration, buyer_herfindahl and
+        test_apimarket_buyerconcentration were already on HEAD only as
+        TEXT (the R2178 seed row and its payload, the R2184 closeout and
+        export), never in the code face - apimarket.py and the suite file
+        were both untouched on HEAD, the R2137/R2141 disclosure precedent.
+
+        api_seller_concentration answers the seller's question - how
+        many residents is my net revenue hanging on. On the buyer side
+        api_buyer_seller_spend lists the sellers and their shares and
+        api_buyer_category_spend does the same per category, but
+        neither gives an index, so "is this resident's spend all on one
+        counterparty, or on one category" had no face.
+
+        Two independent axes are computed from the same purchase rows:
+        one bucket per seller and one bucket per effective category
+        (through the single _category_state seam, so a category
+        revision moves this face in exactly one step). Row authority is
+        the PURCHASE side: a seller this buyer never paid stays absent
+        even when it has live stock. Spend authority is NET: a fully
+        refunded purchase keeps its seller and its category on the roll
+        at zero weight, so nothing is silently deleted and no share is
+        ever inflated.
+
+        Both axes share one concentration law: total order
+        (-net_spend, -gross_spend, key ascending), rank 1..n, share
+        against the scoped net total (None when that total is not
+        positive, never a fake zero), cumulative_share landing exactly
+        on 1.0 on the last row, top1 as the head, an honest top3 (two
+        buckets sum two, never padded), herfindahl from the exact
+        fractions squared, times 10000 and rounded to two places (one
+        bucket reads 10000.0, n equal buckets read 10000/n), and
+        pareto_count as the smallest k whose cumulative net reaches 80%
+        decided on integers (cum * 5 >= total * 4) so a bucket landing
+        exactly on 80% is counted.
+
+        Gate: the usr: account shape runs before any read (fail-closed
+        E_AM_BAD_ACCOUNT); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+
+        buyer = str(buyer_id)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, category, dev_account"
+                " FROM apimarket_listings").fetchall()
+            cat_of = {}
+            seller_of = {}
+            for r in listings:
+                lid = int(r[0])
+                cat_of[lid] = self._category_state(lid, r[1])[0]
+                seller_of[lid] = r[2]
+            purchases = self._conn.execute(
+                "SELECT p.purchase_id, p.listing_id, p.price_paid"
+                " FROM apimarket_purchases p WHERE p.buyer_id = ?",
+                (buyer,)).fetchall()
+            refunds = self._conn.execute(
+                "SELECT f.purchase_id, f.amount FROM apimarket_refunds f"
+                " JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id"
+                " WHERE p.buyer_id = ?", (buyer,)).fetchall()
+            seller_groups = {}
+            cat_groups = {}
+            bought = {}
+
+            def bucket(store, key):
+                g = store.get(key)
+                if g is None:
+                    g = {"purchase_count": 0, "refund_count": 0,
+                         "gross_spend": 0, "refunded_tokens": 0,
+                         "listings": set()}
+                    store[key] = g
+                return g
+
+            for pid, lid, price in purchases:
+                lid = int(lid)
+                bought[int(pid)] = lid
+                for store, key in ((seller_groups, seller_of.get(lid)),
+                                   (cat_groups, cat_of.get(lid))):
+                    g = bucket(store, key)
+                    g["purchase_count"] += 1
+                    g["gross_spend"] += int(price)
+                    g["listings"].add(lid)
+            for pid, amount in refunds:
+                lid = bought.get(int(pid))
+                if lid is None:
+                    continue
+                for store, key in ((seller_groups, seller_of.get(lid)),
+                                   (cat_groups, cat_of.get(lid))):
+                    g = bucket(store, key)
+                    g["refund_count"] += 1
+                    g["refunded_tokens"] += int(amount)
+
+        def concentrate(store, key_name):
+            entries = []
+            for key, g in store.items():
+                entries.append({
+                    key_name: key,
+                    "purchase_count": g["purchase_count"],
+                    "refund_count": g["refund_count"],
+                    "net_purchase_count": (g["purchase_count"]
+                                           - g["refund_count"]),
+                    "gross_spend": g["gross_spend"],
+                    "refunded_tokens": g["refunded_tokens"],
+                    "net_spend": (g["gross_spend"]
+                                  - g["refunded_tokens"]),
+                    "listing_count": len(g["listings"])})
+            entries.sort(key=lambda r: (-r["net_spend"],
+                                        -r["gross_spend"],
+                                        str(r[key_name])))
+            total_net = sum(r["net_spend"] for r in entries)
+            squares = []
+            running = 0
+            for index, r in enumerate(entries, 1):
+                running += r["net_spend"]
+                if total_net > 0:
+                    exact = float(r["net_spend"]) / total_net
+                    r["share"] = round(exact, 6)
+                    r["cumulative_share"] = round(
+                        float(running) / total_net, 6)
+                    squares.append(exact * exact)
+                else:
+                    r["share"] = None
+                    r["cumulative_share"] = None
+                r["rank"] = index
+            shares = ([r["share"] for r in entries]
+                      if total_net > 0 else [])
+            pareto = None
+            if total_net > 0:
+                running = 0
+                for index, r in enumerate(entries, 1):
+                    running += r["net_spend"]
+                    if running * 5 >= total_net * 4:
+                        pareto = index
+                        break
+            return {
+                "bucket_count": len(entries),
+                "purchase_count": sum(r["purchase_count"]
+                                      for r in entries),
+                "refund_count": sum(r["refund_count"] for r in entries),
+                "refunded_buckets": sum(
+                    1 for r in entries if r["refund_count"] > 0),
+                "gross_spend": sum(r["gross_spend"] for r in entries),
+                "refunded_tokens": sum(r["refunded_tokens"]
+                                       for r in entries),
+                "net_spend": total_net,
+                "top1_share": shares[0] if shares else None,
+                "top3_share": (round(sum(shares[:3]), 6)
+                               if shares else None),
+                "herfindahl": (round(sum(squares) * 10000, 2)
+                               if total_net > 0 else None),
+                "pareto_count": pareto,
+                "rows": entries}
+
+        sellers = concentrate(seller_groups, "dev_account")
+        cats = concentrate(cat_groups, "category")
+
+        return {
+            "buyer_id": buyer,
+            "purchase_count": sellers["purchase_count"],
+            "refund_count": sellers["refund_count"],
+            "seller_count": sellers["bucket_count"],
+            "category_count": cats["bucket_count"],
+            "refunded_sellers": sellers["refunded_buckets"],
+            "gross_spend": sellers["gross_spend"],
+            "refunded_tokens": sellers["refunded_tokens"],
+            "net_spend": sellers["net_spend"],
+            "top1_seller_share": sellers["top1_share"],
+            "top3_seller_share": sellers["top3_share"],
+            "seller_herfindahl": sellers["herfindahl"],
+            "pareto_seller_count": sellers["pareto_count"],
+            "top1_category_share": cats["top1_share"],
+            "top3_category_share": cats["top3_share"],
+            "category_herfindahl": cats["herfindahl"],
+            "pareto_category_count": cats["pareto_count"],
+            "disclaimer": self.disclaimer,
+            "sellers": sellers["rows"],
+            "categories": cats["rows"]}
+
     def api_price_volatility(self, dev_account=None):
         """Seller repricing-discipline face (criteria AC-PVC1..AC-PVC8
         pre-registered in the R2171 explore claim row BEFORE this code

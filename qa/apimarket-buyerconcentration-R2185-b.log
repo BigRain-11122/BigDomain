@@ -1,0 +1,9 @@
+PASS AC-BC1: env_keys=20 exact=True seller_keys=True cat_keys=True empty_rows=(0, 0)
+PASS AC-BC2: sellers=['usr:frank', 'usr:dana', 'usr:gina'] cats=['tools', 'data'] ranks=([1, 2, 3], [1, 2]) cum_s=[0.5, 0.8, 1.0] cum_c=[0.8, 1.0]
+PASS AC-BC3: bob_net=100 bob_gross=100 erin=(1, 1, 0, 30) erin_seller=(0, 0, None)
+PASS AC-BC4: seller_shares=[0.5, 0.3, 0.2] cats=[0.8, 0.2] top1s=0.5 top1c=0.8 erin=(None, None, None)
+PASS AC-BC5: bob_s=3800.0 exact_s=3800.0 bob_c=6800.0 exact_c=6800.0 jade=(5000.0, 10000.0) kate=10000.0
+PASS AC-BC6: bob=(2, 1) jade=(2, 1) kate=1
+PASS AC-BC7: gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=(0, 0) cross=True spend=(100, 100) kate_rows=['usr:frank']
+PASS AC-BC8: sha16=130b0b95ff20b171 stable=True identical=True frozen=True tx_equal=True files_equal=True registered=True
+SUITE PASS 8/8
