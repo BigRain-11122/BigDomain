@@ -9294,6 +9294,185 @@ class APIMarketFace:
             "sellers": sellers["rows"],
             "categories": cats["rows"]}
 
+    def api_seller_category_mix(self, dev_account=None):
+        """Seller-side category revenue mix face (criteria
+        AC-SCM1..AC-SCM8 pre-registered in the R2189 explore claim row
+        BEFORE this code existed; the AC-SCM prefix,
+        api_seller_category_mix, test_apimarket_sellercategorymix and
+        ledger-apimarket-sellercategorymix were git-grep zero-occupancy
+        against HEAD 2026-10-28, rc=1).
+
+        The seller side already answers how many residents the revenue
+        hangs on (api_seller_concentration) and the buyer side answers
+        both of its axes (api_buyer_concentration), but no face answers
+        the seller's own portfolio question: "which categories is my
+        money actually coming from, and how lopsided is that mix". A
+        seller holding live stock in five categories with sales in one
+        could not read that concentration anywhere.
+
+        Row authority is the PURCHASE side: a category the seller never
+        sold in stays absent even when it has live stock there. Revenue
+        authority is NET: a category whose only sale was refunded stays
+        on the roll at zero weight, so it is never silently dropped and
+        never inflates a share. Every category is resolved through the
+        single _category_state seam, so a category revision moves this
+        face in exactly one step.
+
+        Concentration law (shared with api_seller_concentration and
+        api_buyer_concentration): total order (-net_revenue,
+        -gross_revenue, category ascending with the unclassified bucket
+        pinned LAST), rank 1..n, share against the scoped net total
+        (None when it is not positive, never a fake zero),
+        cumulative_share landing exactly on 1.0 on the last row, top1 as
+        the head row, an honest top3 (two buckets sum two, never
+        padded), herfindahl from the exact fractions squared times 10000
+        rounded to two places (one bucket reads 10000.0, n equal buckets
+        read 10000/n), and pareto_category_count as the smallest k whose
+        cumulative net reaches 80%, decided on integers (cum * 5 >=
+        total * 4) so a bucket landing exactly on 80% is counted.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market', market_herfindahl None - the face never benchmarks
+        itself against itself); a seller scope carries the market-wide
+        category herfindahl as a comparable benchmark, computed by the
+        same law.
+
+        Gate: the usr: account shape runs before any read (fail-closed
+        E_AM_BAD_ACCOUNT); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if dev_account is not None and not str(
+                dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def mix(scope):
+            with self._lock:
+                listings = self._conn.execute(
+                    "SELECT listing_id, category, dev_account"
+                    " FROM apimarket_listings").fetchall()
+                cat_of = {}
+                seller_of = {}
+                for r in listings:
+                    lid = int(r[0])
+                    cat_of[lid] = self._category_state(lid, r[1])[0]
+                    seller_of[lid] = r[2]
+                groups = {}
+                key_of_purchase = {}
+                for pid, lid, price in self._conn.execute(
+                        "SELECT purchase_id, listing_id, price_paid"
+                        " FROM apimarket_purchases").fetchall():
+                    pid = int(pid)
+                    lid = int(lid)
+                    if scope is not None and seller_of.get(lid) != scope:
+                        continue
+                    key = cat_of.get(lid)
+                    g = groups.get(key)
+                    if g is None:
+                        g = {"purchase_count": 0, "refund_count": 0,
+                             "gross_revenue": 0, "refunded_tokens": 0,
+                             "listings": set()}
+                        groups[key] = g
+                    g["purchase_count"] += 1
+                    g["gross_revenue"] += int(price)
+                    g["listings"].add(lid)
+                    key_of_purchase[pid] = key
+                for pid, amount in self._conn.execute(
+                        "SELECT purchase_id, amount"
+                        " FROM apimarket_refunds").fetchall():
+                    key = key_of_purchase.get(int(pid))
+                    if key is None:
+                        continue
+                    g = groups[key]
+                    g["refund_count"] += 1
+                    g["refunded_tokens"] += int(amount)
+
+            rows = []
+            for key, g in groups.items():
+                rows.append({
+                    "category": key,
+                    "purchase_count": g["purchase_count"],
+                    "refund_count": g["refund_count"],
+                    "net_purchase_count": (g["purchase_count"]
+                                           - g["refund_count"]),
+                    "gross_revenue": g["gross_revenue"],
+                    "refunded_tokens": g["refunded_tokens"],
+                    "net_revenue": (g["gross_revenue"]
+                                    - g["refunded_tokens"]),
+                    "listing_count": len(g["listings"])})
+            rows.sort(key=lambda r: (-r["net_revenue"],
+                                     -r["gross_revenue"],
+                                     r["category"] is None,
+                                     str(r["category"] or "")))
+            total_net = sum(r["net_revenue"] for r in rows)
+            squares = []
+            running = 0
+            for index, r in enumerate(rows, 1):
+                running += r["net_revenue"]
+                if total_net > 0:
+                    exact = float(r["net_revenue"]) / total_net
+                    r["share"] = round(exact, 6)
+                    r["cumulative_share"] = round(
+                        float(running) / total_net, 6)
+                    squares.append(exact * exact)
+                else:
+                    r["share"] = None
+                    r["cumulative_share"] = None
+                r["rank"] = index
+            shares = ([r["share"] for r in rows]
+                      if total_net > 0 else [])
+            pareto = None
+            if total_net > 0:
+                running = 0
+                for index, r in enumerate(rows, 1):
+                    running += r["net_revenue"]
+                    if running * 5 >= total_net * 4:
+                        pareto = index
+                        break
+            return {
+                "purchase_count": sum(r["purchase_count"]
+                                      for r in rows),
+                "refund_count": sum(r["refund_count"] for r in rows),
+                "category_count": len(rows),
+                "refunded_categories": sum(
+                    1 for r in rows if r["refund_count"] > 0),
+                "gross_revenue": sum(r["gross_revenue"] for r in rows),
+                "refunded_tokens": sum(r["refunded_tokens"]
+                                       for r in rows),
+                "net_revenue": total_net,
+                "top1_share": shares[0] if shares else None,
+                "top3_share": (round(sum(shares[:3]), 6)
+                               if shares else None),
+                "herfindahl": (round(sum(squares) * 10000, 2)
+                               if total_net > 0 else None),
+                "pareto_category_count": pareto,
+                "rows": rows}
+
+        if dev_account is None:
+            core = mix(None)
+            market_herfindahl = None
+            scope = "market"
+        else:
+            core = mix(dev_account)
+            market_herfindahl = mix(None)["herfindahl"]
+            scope = "seller"
+
+        return {
+            "scope": scope,
+            "dev_account": dev_account,
+            "purchase_count": core["purchase_count"],
+            "refund_count": core["refund_count"],
+            "category_count": core["category_count"],
+            "refunded_categories": core["refunded_categories"],
+            "gross_revenue": core["gross_revenue"],
+            "refunded_tokens": core["refunded_tokens"],
+            "net_revenue": core["net_revenue"],
+            "top1_share": core["top1_share"],
+            "top3_share": core["top3_share"],
+            "herfindahl": core["herfindahl"],
+            "pareto_category_count": core["pareto_category_count"],
+            "market_herfindahl": market_herfindahl,
+            "disclaimer": self.disclaimer,
+            "rows": core["rows"]}
+
     def api_price_volatility(self, dev_account=None):
         """Seller repricing-discipline face (criteria AC-PVC1..AC-PVC8
         pre-registered in the R2171 explore claim row BEFORE this code

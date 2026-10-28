@@ -1,0 +1,9 @@
+PASS AC-SCM1: env_keys=16 exact=True row_keys=True empty=(0, 0)
+PASS AC-SCM2: order=['tools', 'data', 'music', None, 'art'] ranks=[1, 2, 3, 4, 5] cum=[0.5, 0.8, 0.9, 1.0, 1.0]
+PASS AC-SCM3: sums=(8, 1, 130, 30) art=(1, 1, 0)
+PASS AC-SCM4: sum=1.000000000000 top1=0.5 top3=0.9 dana=(0.8, 1.0)
+PASS AC-SCM5: h=3600.0 pareto=2 dana=(6800.0, 1) lia=(5000.0, 2) gina=(10000.0, 1) bench=(None, 3600.0)
+PASS AC-SCM6: moved=(50, 10) restored=True zero=(1, 0, None)
+PASS AC-SCM7: gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] prefix=(0, 0) cross_demand=True dana=[('tools', 40), ('data', 10)] ivan=[(None, 10)]
+PASS AC-SCM8: sha16=6209d8f555ea72c8 stable=True identical=True frozen=True tx_equal=True files_equal=True registered=True
+SUITE PASS 8/8

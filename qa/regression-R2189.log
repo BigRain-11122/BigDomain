@@ -1,0 +1,6 @@
+buyerconcentration       rc=0 SUITE PASS 8/8
+categorydemand           rc=0 SUITE PASS 8/8
+categoryrefundmonths     rc=0 SUITE PASS 8/8
+concentration(seller)    rc=0 SUITE PASS 8/8
+pricevolatility          rc=0 SUITE PASS 8/8
+sellersupply             rc=0 SUITE PASS 8/8

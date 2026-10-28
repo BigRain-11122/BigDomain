@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T12:38:25+08:00",
-  "do": "R2188 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
+  "export_ts": "2026-10-28T12:53:05+08:00",
+  "do": "R2189 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller can now read which categories their net revenue actually comes from and how lopsided that mix is, instead of guessing from a market-wide category table",
   "ceo_face": {
-    "current": "R2188 seller supply rollup: a seller now reads the whole shop in one call - live vs retired listings, tracked vs unlimited shelves, units declared, sold, remaining, sold-out and low-stock counts, all riding the same scarcity seam the purchase gate uses",
-    "latest_artifact": "qa/apimarket-sellersupply-R2188-a.log / -b.log (SUITE 8/8, criterion sha16 728821d514d5c693) + src/sandbox/ledger/apimarket.py (api_seller_supply, written 2026-10-28)",
-    "next_milestone": "full reconcile battery plus suite-matrix regeneration, then an explore-queue reseed (the last real seed was claimed this round) - both within 48h",
-    "last_artifact": "qa/apimarket-categoryvelocitymonths-R2186-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2189 seller category mix: a seller now reads the shop's revenue by category in one call - category count, per-category gross/refunded/net and share, top1/top3 share, a concentration index and the count of categories carrying 80% of the money, plus the market-wide index for comparison",
+    "latest_artifact": "qa/apimarket-sellercategorymix-R2189-a.log / -b.log (SUITE 8/8, evidence sha256 0558eaee431465e9, byte-identical) + qa/regression-R2189.log (six adjacent suites) + src/sandbox/ledger/apimarket.py (api_seller_category_mix, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration (R2190 first item), then claim the next explore seed - within 48h",
+    "last_artifact": "qa/apimarket-sellercategorymix-R2189-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {

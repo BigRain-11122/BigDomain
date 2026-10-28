@@ -2410,6 +2410,8 @@ SUITES = [
     # in the R2178 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-buyerconcentration", os.path.join(
         "ledger", "test_apimarket_buyerconcentration.py"), 8),
+    ("ledger-apimarket-sellercategorymix", os.path.join(
+        "ledger", "test_apimarket_sellercategorymix.py"), 8),
     # seller repricing discipline (step percentages derived only from
     # two stored prices, repricing-side row authority, pooled mean /
     # median / absolute peak / signed sum, market benchmark under a
