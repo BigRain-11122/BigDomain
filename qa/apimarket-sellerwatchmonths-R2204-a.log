@@ -1,0 +1,10 @@
+PASS AC-SWM1: env_keys=13 exact=True row_keys=True scope='seller'/'market' empty=(0, [])
+PASS AC-SWM2: dana_jan=(2, 0) dana_may=(0, 1, -1) lia_mar=(1, 1, 0) gina=(1, 1)
+PASS AC-SWM3: dana_grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'] feb=(0, 2) gina_grid=['2026-03', '2026-04']
+PASS AC-SWM4: live=1/1/2/4
+PASS AC-SWM5: sums=(2, 1, 2, 2) busiest='2026-01'/'2026-01'/'2026-03'/'2026-01'
+PASS AC-SWM6: identity=True bare=0 isolated=True
+PASS AC-SWM7: gates=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_same=True tx_same=True bytes_same=True
+PASS AC-SWM8: wired=True src_lf=True test_ascii_lf=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

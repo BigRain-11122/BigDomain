@@ -11972,6 +11972,138 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
         }
 
+    def api_seller_watch_months(self, dev_account=None):
+        """Seller-side monthly watch-inflow timeline (criteria
+        AC-SWM1..AC-SWM8 pre-registered in the R2202 explore-queue seed
+        row BEFORE this code existed; the AC-SWM prefix,
+        api_seller_watch_months, test_apimarket_sellerwatchmonths and
+        ledger-apimarket-sellerwatchmonths were git-grep zero-occupancy
+        against HEAD 2026-10-28, rc=1).
+
+        api_market_watch_months answers the whole market on the same
+        cash-basis law and api_watch_conversion answers one conversion
+        funnel, so a seller holding N shelves had no month-by-month
+        view of attention on its own stock: a shelf that went cold in
+        March and one that was always quiet read identically.
+
+        The booking law is shared with the market face, deliberately:
+        a watch books in the UTC month of watched_utc, an unwatch in
+        the UTC month of unwatched_utc, and a later unwatch never
+        rewrites the month the watch landed in, so a pure-unwatch month
+        carries an honestly negative net. active_count is the running
+        net from the first month, so the last row equals the live watch
+        count.
+
+        Month rows are the contiguous grid from the first to the last
+        event month, so a month with no event still carries an honest
+        zero row with a flat active_count.
+
+        Rows carry no seller_count because the scope is one seller;
+        buyer_count and listing_count are event-derived per month while
+        the envelope carries lifetime distinct counts (the envelope is
+        therefore honestly <= the row sums).
+
+        Scope: no dev_account is the market view and must agree with
+        api_market_watch_months on every shared key; a dev_account
+        narrows to that seller's listings with strict isolation. Gates
+        run before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT). Pure read: zero row mutations,
+        zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        sql = ("SELECT w.buyer_id, w.listing_id, w.watched_utc,"
+               " u.unwatched_utc FROM apimarket_watchlist w"
+               " JOIN apimarket_listings l ON l.listing_id = w.listing_id"
+               " LEFT JOIN apimarket_unwatchings u"
+               " ON u.watch_id = w.watch_id")
+        args = ()
+        if dev_account is not None:
+            sql += " WHERE l.dev_account = ?"
+            args = (str(dev_account),)
+        sql += " ORDER BY w.watch_id"
+        with self._lock:
+            rows = self._conn.execute(sql, args).fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "watch_count": 0,
+                        "unwatch_count": 0, "buyers": set(),
+                        "listings": set()})
+
+        live_watch_count = 0
+        watch_total = 0
+        unwatch_total = 0
+        buyers = set()
+        listings = set()
+
+        for buyer, listing_id, watched_utc, unwatched_utc in rows:
+            lid = int(listing_id)
+            b = bucket(str(watched_utc)[:7])
+            b["watch_count"] += 1
+            watch_total += 1
+            b["buyers"].add(buyer)
+            b["listings"].add(lid)
+            buyers.add(buyer)
+            listings.add(lid)
+            if unwatched_utc is None:
+                live_watch_count += 1
+                continue
+            b2 = bucket(str(unwatched_utc)[:7])
+            b2["unwatch_count"] += 1
+            unwatch_total += 1
+            b2["buyers"].add(buyer)
+            b2["listings"].add(lid)
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                b = {"month": month, "watch_count": 0,
+                     "unwatch_count": 0, "buyers": set(),
+                     "listings": set()}
+            net = b["watch_count"] - b["unwatch_count"]
+            running += net
+            months.append({
+                "month": month,
+                "watch_count": b["watch_count"],
+                "unwatch_count": b["unwatch_count"],
+                "net_count": net,
+                "active_count": running,
+                "buyer_count": len(b["buyers"]),
+                "listing_count": len(b["listings"]),
+            })
+
+        busiest_month = None
+        busiest_watch_count = None
+        for row in months:
+            if row["watch_count"] <= 0:
+                continue
+            if (busiest_watch_count is None
+                    or row["watch_count"] > busiest_watch_count):
+                busiest_month = row["month"]
+                busiest_watch_count = row["watch_count"]
+
+        return {
+            "scope": "market" if dev_account is None else "seller",
+            "dev_account": None if dev_account is None
+            else str(dev_account),
+            "month_count": len(months),
+            "watch_count": watch_total,
+            "unwatch_count": unwatch_total,
+            "net_count": watch_total - unwatch_total,
+            "live_watch_count": live_watch_count,
+            "buyer_count": len(buyers),
+            "listing_count": len(listings),
+            "busiest_month": busiest_month,
+            "busiest_watch_count": busiest_watch_count,
+            "months": months,
+            "disclaimer": self.disclaimer,
+        }
+
     def api_rating_reply_latency(self, dev_account=None):
         """Seller-side rating reply latency scorecard (criteria
         AC-RRL1..AC-RRL8 pre-registered in the R2189 explore-queue

@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T19:29:41+08:00",
-  "do": "R2203 R2202 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the trust face now answers its monthly flow, so a seller whose stars fell after a service change no longer reads like one that was always low",
+  "export_ts": "2026-10-28T19:42:24+08:00",
+  "do": "R2204 R2203 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller now reads how attention on its own shelves moves month by month, so a shelf that went cold in March no longer reads like one that was always quiet",
   "ceo_face": {
-    "current": "R2203 buyer-side monthly refund flow: a resident now reads how much money came back in each month and whether a refund landed in the purchase month or a later one",
-    "latest_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b...) + qa/reconcile-all-R2203.log (RUNNER PASS 398/398 suites, controls 7/7, 857.7s) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)",
-    "next_milestone": "next explore seed (seller-side monthly watch inflow) with its criteria registered before the code, on top of a clean 398-suite battery (within 48h)",
-    "last_artifact": "qa/apimarket-ratingmonths-R2202-a.log / -b.log (SUITE 8/8, sha256 cd6a1d56b949289b769c2a3807058ba665d5bfff216059a9ce2757462ee7af40) + docs/status-export.json (2026-10-28)"
+    "current": "R2204 seller-side monthly watch inflow: api_seller_watch_months(dev_account) gives a seller its own month-by-month watch timeline with an honest running active count, and the market scope agrees with api_market_watch_months on every shared key",
+    "latest_artifact": "qa/apimarket-sellerwatchmonths-R2204-a.log / -b.log (SUITE 8/8, sha256 abca82e587f18f3a..., byte-identical double run) + qa/regression-R2204.log (six adjacent watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_watch_months, written 2026-10-28)",
+    "next_milestone": "next explore seed with its criteria registered before the code, on top of the deferred full reconcile battery and suite-matrix regeneration (R2205 first item, within 48h)",
+    "last_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b...) + qa/reconcile-all-R2203.log (RUNNER PASS 398/398 suites, controls 7/7, 857.7s) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller-side monthly watch inflow (api_seller_watch_months)",
+      "on",
+      "R2204: api_market_watch_months aggregates the whole market and api_watch_conversion answers one conversion funnel, so a seller holding N shelves had no month-by-month view of attention on its own stock. api_seller_watch_months(dev_account=None) returns a thirteen-key envelope with seven-key month rows on the same cash-basis double stamp the market face uses: a watch books in the UTC month of watched_utc, an unwatch in the month of unwatched_utc and never rewrites the watch month, so a pure-unwatch month carries an honestly negative net while the running active_count lands exactly on live_watch_count. The contiguous grid carries an honest zero month with a flat accumulator; buyer_count and listing_count are event-derived per month while the envelope carries lifetime distinct counts; the busiest month takes the earlier-month tie-break; the market scope equals api_market_watch_months on every shared key while a seller scope narrows with strict isolation; the usr: gate runs before any read, digests and the ledger_tx set stay frozen, and the face is byte-identical across three instances over two full-stack restarts."
+    ],
     [
       "buyer-side monthly refund flow (api_buyer_refund_months)",
       "on",
@@ -218,6 +223,10 @@
   ],
   "results": [
     [
+      "R2204",
+      "R2204: five-silence scan clean (261 rows / 170 D-C-O tokens, zero new against the stored baseline; the only movement is two rotation artefacts dropping out, so the baseline is re-anchored to the measured 170; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_watch_months(dev_account=None) - the seller-side monthly watch-inflow timeline on the cash-basis double stamp shared with the market face, a contiguous grid with an honest zero month and a flat accumulator, the running active_count landing on live_watch_count, a pure-unwatch month carrying an honestly negative net, event-derived monthly participants against lifetime distinct counts in the envelope, the busiest-month tie-break, scope identity with api_market_watch_months plus strict seller isolation, the usr: gate before any read, frozen digests and a constant ledger_tx set, and three-instance byte identity across two restarts. SUITE PASS 8/8 double-run byte-identical sha256 abca82e587f18f3a; six adjacent watch-family suites green. Honest note: the full battery and matrix regeneration were NOT run this window (25-minute budget, R2168 mixed-tree rule) and are R2205 first item."
+    ],
+    [
       "R2203",
       "R2203: five-silence scan clean (261 rows / 172 D-C-O tokens, zero new against the stored 174-token baseline because the two apparent additions are the rotation-restored O-family citations inside other seats' rows; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_buyer_refund_months with AC-BRM1..AC-BRM8 registered in the R2203 queue row BEFORE the code - the refunded_utc booking law that never rewrites the purchase month, the contiguous grid with honest zero months carried by the running accumulator, money and split conservation against the raw join, the pooled average against a mean of monthly means, the same-month settlement count, distinct participant counts with the disclosed asymmetry, cross-face identity with api_buyer_profile and strict buyer isolation, the earlier-month peak tie-break, and a pure read with frozen digests and three-instance byte identity. Suite SUITE PASS 8/8 on both runs with byte-identical evidence (sha256 d530197188a7ef2b, 911 bytes, crlf=0), wired ledger-apimarket-buyerrefundmonths(8), five adjacent refund and buyer suites green. Honest notes: one test-side row-sum expectation was wrong on the first run and was fixed in the test, and the evidence was normalised from the child's CRLF pipe output to LF by a single writer. The full battery and matrix regeneration were not run in this window and are R2204's first item."
     ],
@@ -394,6 +403,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 8
+    "queue_explore_open": 7
   }
 }

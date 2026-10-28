@@ -2523,6 +2523,15 @@ SUITES = [
     # R2189 seed 3/10 explore-queue claim row in the R2192 window.
     ("ledger-apimarket-marketwatchmonths", os.path.join(
         "ledger", "test_apimarket_marketwatchmonths.py"), 8),
+    # seller-side monthly watch-inflow timeline (the shared cash-basis
+    # double stamp on a seller scope, the contiguous grid with a flat
+    # zero month, the running net landing on the live count, the
+    # busiest-month tie-break, scope identity with the market face plus
+    # strict isolation, the account gate and the pure-read/restart law)
+    # - criteria AC-SWM1..AC-SWM8 registered in the R2202 seed explore
+    # claim row BEFORE the code, in the R2204 window.
+    ("ledger-apimarket-sellerwatchmonths", os.path.join(
+        "ledger", "test_apimarket_sellerwatchmonths.py"), 8),
     # market-wide monthly retirement / re-listing timeline (the
     # cash-basis double stamp that never rewrites the delisting month,
     # the contiguous grid with an honest zero month, the same-month
