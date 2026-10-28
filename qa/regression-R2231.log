@@ -1,0 +1,7 @@
+test_apimarket_questionmonths.py rc=0 SUITE 8/8
+test_apimarket_categoryquestionmonths.py rc=0 SUITE 8/8
+test_apimarket_sellermonths.py rc=0 SUITE 8/8
+test_apimarket_buyerquestions.py rc=0 SUITE 8/8
+test_apimarket_selleranswers.py rc=0 SUITE 8/8
+test_apimarket_answerrev.py rc=0 SUITE PASS 8/8
+# note: no separate test_apimarket_sellerquestions.py exists; the seller lifetime inbox is covered by questionmonths/buyerquestions/selleranswers above

@@ -1,0 +1,10 @@
+PASS AC-SQM1: env_keys=18 exact=True row_keys=True empty=(0, [], None)
+PASS AC-SQM2: grid=['2026-01', '2026-02', '2026-03'] jan=(2, 2) mar=(2, 1) totals=(4, 3, 0.75)
+PASS AC-SQM3: months=3 feb=(0, None) running=([2, 2, 4], [2, 2, 3])
+PASS AC-SQM4: jan=(2, 1) mar=(2, 2) envelope=(4, 3)
+PASS AC-SQM5: active=2 latest=2 peak=('2026-01', 2)
+PASS AC-SQM6: gina=(1, 1, 1, 1) dana=(4, 3, 4)
+PASS AC-SQM7: raw_open_market=(4, 1, 5, 4, 1, 5)
+PASS AC-SQM8: gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] bytes_same=True digests_same=True tx_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

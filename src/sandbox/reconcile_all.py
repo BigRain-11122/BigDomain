@@ -2634,6 +2634,19 @@ SUITES = [
     # seed 2/8 row BEFORE the code, in the R2206 window.
     ("ledger-apimarket-sellermonths", os.path.join(
         "ledger", "test_apimarket_sellermonths.py"), 8),
+    # seller-side INCOMING question pressure on the month axis (a
+    # question books in the month of its own asked_utc and the
+    # answering leg is credited to the ASKING month, so a March
+    # discharge of a January question raises only January; the
+    # contiguous grid with an honest zero row whose answer_rate is
+    # None, both monotone running accumulators landing on the envelope
+    # totals, event-derived participants, the earlier-month peak
+    # tie-break, strict seller isolation, the owned-listing envelope
+    # and the pure-read law) - criteria AC-SQM1..AC-SQM8 registered in
+    # the R2230 explore-queue seed 1/6 row BEFORE the code, in the
+    # R2231 window.
+    ("ledger-apimarket-sellerquestionmonths", os.path.join(
+        "ledger", "test_apimarket_sellerquestionmonths.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution
