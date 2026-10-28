@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T19:20:00+08:00",
+  "export_ts": "2026-10-28T20:45:00+08:00",
   "do": "R2201 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the marketplace now answers the monthly rhythm of repricing, so a seller that hunts for a price once and one that drifts quietly read differently",
   "ceo_face": {
     "current": "R2201 monthly repricing cadence: the market reads how often each seller reprices per month, by how much, up or down, and how the cadence drifts",
     "latest_artifact": "qa/apimarket-sellerpricecadence-R2201-a.log / -b.log (SUITE 8/8, sha256 04e6993630129652, criterion sha16 cee4c13c8af77f83) + src/sandbox/ledger/apimarket.py (api_seller_price_cadence_months, written 2026-10-28)",
-    "next_milestone": "full reconcile battery and suite-matrix regeneration carried from this window, then an explore-queue reseed because the standing line is down to one merchant-gated row (within 48h)",
-    "last_artifact": "docs/sandbox-suite-matrix.md (394 suites / 3274 criteria, 38217 bytes) (2026-10-28)"
+    "next_milestone": "explore-queue reseed (the standing line is down to one merchant-gated row) plus the next product face with its criteria pre-registered (within 48h)",
+    "last_artifact": "qa/reconcile-all-R2201.log (396/396 suites, controls 7/7, 890.1s) + docs/sandbox-suite-matrix.md (396 suites / 3290 criteria, 38449 bytes) + qa/apimarket-sellerpricecadence-R2201-a.log / -b.log (SUITE 8/8, sha256 04e6993630129652) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "full reconcile battery 396/396 with matrix regeneration",
+      "on",
+      "R2201: the R2200 window recorded this debt and could not run it, so it was discharged on the committed tree after the product face landed. RUNNER PASS 396/396 suites green plus reconcile controls 7/7 in 890.1s, evidence written by a driver that streams the child output line by line as utf-8 LF so the live census never reads the running log in a shell dialect, with the birth-site tmp sweep inside the same window reclaiming 881 of 881 candidate worlds and 311.62 MiB at busy=0 failed=0. The suite matrix was regenerated against that run to 396 suites / 3290 criteria (38449 bytes, green=396/396) and read back byte-identical, the baseline fingerprint chain read CLEAN over five domains, and the writer census read DRIFT-CLEAN with files=2056 flags=0. Two red attempts are preserved verbatim (qa/reconcile-all-R2201-red.log and -red2.log): both failed only on cd7-live-real-tree, because the first driver wrote the child's CRLF output straight into the live evidence file and the census therefore classified this window's own battery log as pwsh-capture mid-run. The remedy was in the driver - line-by-line LF streaming with a flush - and the baseline was never widened."
+    ],
     [
       "monthly repricing cadence (api_seller_price_cadence_months)",
       "on",
@@ -202,6 +207,10 @@
     ]
   ],
   "results": [
+    [
+      "R2201 battery",
+      "R2201 battery outcome: RUNNER PASS 396/396 suites green plus controls 7/7 in 890.1s (qa/reconcile-all-R2201.log, 734988 bytes, crlf=0), TMP RECLAIM 881/881 worlds and 311.62 MiB, matrix 396 suites / 3290 criteria byte-identical, fingerprint CLEAN over five domains, census DRIFT-CLEAN flags=0. Two red attempts preserved and root-caused to the driver's CRLF streaming, fixed at the driver; no baseline widening."
+    ],
     [
       "R2201",
       "R2201: five-silence scan clean (251 rows / 166 D-C tokens against a 172-token baseline with zero new, the six absentees being the known body-text citations dropped by the group-side rotation, so the baseline is re-anchored; ledger three paid-off patrol rows; group orders tail unchanged at the 15:01 fleet dispatch, aware-no-action; benchmarks inside the seven-day gate; tree clean, no index.lock). The P1 rows stay blocked-on-CEO, the weekly proposal duty is met by BD-PROP-005, the tech heads stayed gated and the head above the seeds is the merchant-gated benchmark row, so the window claimed the LAST real seed (R2189 10/10) with AC-SPC1..AC-SPC8 registered in that row BEFORE the code: api_seller_price_cadence_months. Verification: SUITE 8/8 double-run byte-identical sha256 04e6993630129652 (834 bytes each, class=tee, crlf=0) with criterion sha16 cee4c13c8af77f83, wired ledger-apimarket-sellerpricecadencemonths(8), four adjacent price-family suites green. Honest notes: three test-side expectations were wrong on the first run and were fixed in the test (participant row sums 6, the up/down split 4/4, and a byte-identity comparison that mixed two scopes), never by widening the implementation; the first evidence attempt went through a PowerShell redirection and produced UTF-16, so it was discarded and rewritten through the python single writer; the full battery and matrix regeneration are the next round's first item (the R2168 mixed-tree rule)."
