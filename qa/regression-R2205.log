@@ -1,0 +1,6 @@
+test_apimarket_qna.py rc=0 SUITE 8/8
+test_apimarket_buyerquestions.py rc=0 SUITE 8/8
+test_apimarket_selleranswers.py rc=0 SUITE 8/8
+test_apimarket_ratingmonths.py rc=0 SUITE 8/8
+test_apimarket_marketwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_claimmonths.py rc=0 SUITE PASS 8/8

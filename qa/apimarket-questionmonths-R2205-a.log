@@ -1,0 +1,10 @@
+PASS AC-MQM1: env_keys=16 exact=True row_keys=True empty=(0, None, [], None)
+PASS AC-MQM2: grid=['2026-01', '2026-02', '2026-03'] jan=(3, 2) mar=(3, 1) totals=(6, 3)
+PASS AC-MQM3: months=3 active=2 feb=(0, None) running=[3, 3, 6]
+PASS AC-MQM4: sums=(6, 3, 3) rate=0.5 participants=(6, 2, 3) jan=(3, 2, 2) mar=(3, 2, 3)
+PASS AC-MQM5: peak=('2026-01', 3) empty=(None, None)
+PASS AC-MQM6: dana=(4, 2) gina=(2, 1) buyer=(6, 3) env=(6, 3)
+PASS AC-MQM7: typeerror=4/4 deterministic=True digests_same=True tx_same=True
+PASS AC-MQM8: bytes_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

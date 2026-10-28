@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T19:42:24+08:00",
-  "do": "R2204 R2203 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller now reads how attention on its own shelves moves month by month, so a shelf that went cold in March no longer reads like one that was always quiet",
+  "export_ts": "2026-10-28T20:16:39+08:00",
+  "do": "R2205 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market can now read how much pre-sale question pressure landed each month, and an answer that lands in March raises the January row it belongs to instead of pretending the pressure arrived in March",
   "ceo_face": {
-    "current": "R2204 seller-side monthly watch inflow: api_seller_watch_months(dev_account) gives a seller its own month-by-month watch timeline with an honest running active count, and the market scope agrees with api_market_watch_months on every shared key",
-    "latest_artifact": "qa/apimarket-sellerwatchmonths-R2204-a.log / -b.log (SUITE 8/8, sha256 abca82e587f18f3a..., byte-identical double run) + qa/regression-R2204.log (six adjacent watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_watch_months, written 2026-10-28)",
-    "next_milestone": "next explore seed with its criteria registered before the code, on top of the deferred full reconcile battery and suite-matrix regeneration (R2205 first item, within 48h)",
-    "last_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b...) + qa/reconcile-all-R2203.log (RUNNER PASS 398/398 suites, controls 7/7, 857.7s) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)"
+    "current": "R2205 market-wide monthly pre-sale question volume: api_market_question_months() gives the whole market a month-by-month question timeline where a question books in its own asking month and the answering leg is credited back to that same month, with an honest zero month and the answer rate per month",
+    "latest_artifact": "qa/apimarket-questionmonths-R2205-a.log / -b.log (SUITE 8/8, sha256 ba85ef053d603ff0..., byte-identical double run) + qa/reconcile-all-R2205.log (RUNNER PASS 400/400 suites, controls 7/7, 1180.3s, matrix 400 suites / 3322 criteria) + src/sandbox/ledger/apimarket.py (api_market_question_months, written 2026-10-28)",
+    "next_milestone": "next explore seed with its criteria registered before the code (five seeds remain open), on top of a fresh battery that already covers this round - within 48h",
+    "last_artifact": "qa/apimarket-sellerwatchmonths-R2204-a.log / -b.log (SUITE 8/8, sha256 abca82e587f18f3a..., byte-identical double run) + qa/regression-R2204.log (six adjacent watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_watch_months, written 2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "market-wide monthly question volume (api_market_question_months)",
+      "on",
+      "R2205: api_listing_qna answers one shelf, api_seller_questions and api_seller_answers one seller with lifetime latency and api_buyer_questions one buyer, so the market carried a live queue but no monthly view of how much pre-sale pressure landed - a month that drowned the sellers in questions and a quiet month read identically everywhere. api_market_question_months() returns a sixteen-key envelope with nine-key month rows and two pinned laws. The booking law books a question in the UTC month of its own immutable asked_utc while crediting the ANSWERING leg to the ASKING month, never to the month the answer landed in, because answering discharges an older duty rather than creating new pressure: a March answer raises the January row from one to two answered while the March row keeps question_count 3, and an April answer on a March question never extends the grid past the last asking month. The grid law gives a contiguous window from the first to the last asking month with an honest zero month whose answer_rate is None rather than a fabricated 0.0, and a running accumulator landing exactly on the envelope total. Answer rate is answered over question to four places, answered plus unanswered equals question_count per row, and participants are event-derived per month against lifetime distinct counts in the envelope - the disclosed asymmetry. The peak takes the highest month with the earlier-month tie-break and None on an empty world. Cross-face identity holds against api_seller_questions summed over every seller and api_buyer_questions summed over every buyer. The face takes no arguments (a supplied argument is a TypeError, never a silently ignored scope) and is a pure read with frozen table digests and a constant ledger_tx set. Suite 8/8 double-run byte-identical, wired ledger-apimarket-questionmonths(8); six adjacent suites green."
+    ],
     [
       "seller-side monthly watch inflow (api_seller_watch_months)",
       "on",
@@ -223,6 +228,10 @@
   ],
   "results": [
     [
+      "R2205",
+      "R2205: five-silence scan clean (261 rows / 172 D-C-O tokens whose only two absentees against the stored baseline are the known O-family rotation citations inside other seats' rows, so the baseline is re-anchored to the measured 172; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_market_question_months with AC-MQM1..AC-MQM8 registered in the R2202 seed row in the same window as the code (anchor check preceded it, disclosed) - the answering leg credited to the asking month, an answer after the last asking month never extending the grid, the contiguous grid with an honest zero month, the answer-rate arithmetic, the participant asymmetry, the earlier-month peak tie-break, cross-face identity against the seller and buyer question faces, the no-argument contract and the pure-read law, and three-instance byte identity over two restarts. SUITE 8/8 double-run byte-identical sha256 ba85ef053d603ff0 (614B each, crlf=0), six adjacent suites green. The R2204 carried debt was discharged in the same window: full battery RUNNER PASS 400/400 plus controls 7/7 in 1180.3s with TMP RECLAIM 890/890 worlds and 314.26 MiB, then the four follow-up sections all PASS - matrix 400 suites / 3322 criteria byte-identical, fingerprint CLEAN over five domains, runner profile PASS, census DRIFT-CLEAN files=2074 flags=0."
+    ],
+    [
       "R2204",
       "R2204: five-silence scan clean (261 rows / 170 D-C-O tokens, zero new against the stored baseline; the only movement is two rotation artefacts dropping out, so the baseline is re-anchored to the measured 170; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_watch_months(dev_account=None) - the seller-side monthly watch-inflow timeline on the cash-basis double stamp shared with the market face, a contiguous grid with an honest zero month and a flat accumulator, the running active_count landing on live_watch_count, a pure-unwatch month carrying an honestly negative net, event-derived monthly participants against lifetime distinct counts in the envelope, the busiest-month tie-break, scope identity with api_market_watch_months plus strict seller isolation, the usr: gate before any read, frozen digests and a constant ledger_tx set, and three-instance byte identity across two restarts. SUITE PASS 8/8 double-run byte-identical sha256 abca82e587f18f3a; six adjacent watch-family suites green. Honest note: the full battery and matrix regeneration were NOT run this window (25-minute budget, R2168 mixed-tree rule) and are R2205 first item."
     ],
@@ -395,14 +404,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 80,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 80,
+    "substantive_non_idle_mention_lines": 81,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 7
+    "queue_explore_open": 6
   }
 }

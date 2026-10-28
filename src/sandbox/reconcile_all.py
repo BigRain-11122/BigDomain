@@ -2543,6 +2543,17 @@ SUITES = [
     # claim row BEFORE the code, in the R2200 window.
     ("ledger-apimarket-ratingmonths", os.path.join(
         "ledger", "test_apimarket_ratingmonths.py"), 8),
+    # market-wide pre-sale question volume on the month axis (the
+    # booking law that credits the answering leg to the asking month, an
+    # answer landing after the last asking month never extending the
+    # grid, the contiguous grid with an honest zero month, the answer
+    # rate arithmetic, the participant asymmetry, the earlier-month peak
+    # tie-break, cross-face identity against the seller and buyer
+    # question faces, and the pure-read law) - criteria
+    # AC-MQM1..AC-MQM8 registered in the R2202 explore-queue seed row
+    # BEFORE the code, in the R2205 window.
+    ("ledger-apimarket-questionmonths", os.path.join(
+        "ledger", "test_apimarket_questionmonths.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution

@@ -11848,6 +11848,142 @@ class APIMarketFace:
             out["disclaimer"] = self.disclaimer
             return out
 
+    def api_market_question_months(self):
+        """Market-wide monthly pre-sale question volume (criteria
+        AC-MQM1..AC-MQM8 pre-registered in the R2202 explore-queue
+        seed row BEFORE this code existed; the AC-MQM prefix,
+        api_market_question_months, test_apimarket_questionmonths,
+        ledger-apimarket-questionmonths, question_month_count and
+        asked_month were all git-grep zero-occupancy against HEAD
+        2026-10-28, rc=1).
+
+        The question family answers one shelf (api_listing_qna), one
+        seller (api_seller_questions, api_seller_answers) and one
+        buyer (api_buyer_questions), so the market carried a live
+        queue but no monthly view of how much pre-sale pressure
+        landed: a month that drowned the sellers in questions and a
+        quiet month read identically on every existing face, and
+        "is demand for information about this catalog rising or
+        cooling" had no reading at all. This face closes that gap on
+        the same booking law the trade timeline uses.
+
+        Booking law: a question books in the UTC month of its own
+        immutable asked_utc (AC-MQM2). The ANSWERING leg is credited
+        to the ASKING month, never to the month the answer landed
+        in - answering is a duty discharged against an older
+        question, not new pressure, so a question asked in January
+        and answered in March raises the January row's answered
+        count and leaves the March row's question_count untouched.
+        The answered flag is the presence of the append-only answer
+        row; nothing reads a wall clock.
+
+        Month rows are the contiguous grid from the first to the
+        last asking month, so a month with no question carries an
+        honest zero row whose answer_rate is None rather than a
+        fabricated 0.0 (AC-MQM3). running_question is the monotone
+        lifetime accumulator and its last value equals the envelope
+        question_count.
+
+        Participants are event-derived: a month counts the distinct
+        buyers, sellers and listings behind the questions booked in
+        that month, while the envelope carries lifetime distinct
+        counts, so the envelope is honestly <= the row sums
+        (AC-MQM4).
+
+        No arguments, so no gate: pure read, zero row mutations and
+        zero token movement."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT q.question_id, q.buyer_id, q.listing_id,"
+                " q.asked_utc, l.dev_account, a.answer_id"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " ORDER BY q.question_id").fetchall()
+
+        buckets = {}
+        buyers = set()
+        sellers = set()
+        listings = set()
+        for r in rows:
+            month = str(r[3])[:7]
+            b = buckets.get(month)
+            if b is None:
+                b = {"count": 0, "answered": 0, "buyers": set(),
+                     "sellers": set(), "listings": set()}
+                buckets[month] = b
+            b["count"] += 1
+            if r[5] is not None:
+                b["answered"] += 1
+            b["buyers"].add(r[1])
+            b["sellers"].add(r[4])
+            b["listings"].add(int(r[2]))
+            buyers.add(r[1])
+            sellers.add(r[4])
+            listings.add(int(r[2]))
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({
+                    "month": month,
+                    "question_count": 0,
+                    "answered_count": 0,
+                    "unanswered_count": 0,
+                    "answer_rate": None,
+                    "buyer_count": 0,
+                    "seller_count": 0,
+                    "listing_count": 0,
+                    "running_question": running})
+                continue
+            running += b["count"]
+            months.append({
+                "month": month,
+                "question_count": b["count"],
+                "answered_count": b["answered"],
+                "unanswered_count": b["count"] - b["answered"],
+                "answer_rate": round(
+                    b["answered"] / float(b["count"]), 4),
+                "buyer_count": len(b["buyers"]),
+                "seller_count": len(b["sellers"]),
+                "listing_count": len(b["listings"]),
+                "running_question": running})
+
+        total = sum(row["question_count"] for row in months)
+        answered = sum(row["answered_count"] for row in months)
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["question_count"] > 0 and (
+                    peak_count is None
+                    or row["question_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["question_count"]
+        return {
+            "question_count": total,
+            "answered_count": answered,
+            "unanswered_count": total - answered,
+            "answer_rate": (round(answered / float(total), 4)
+                            if total else None),
+            "buyer_count": len(buyers),
+            "seller_count": len(sellers),
+            "listing_count": len(listings),
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["question_count"] > 0),
+            "peak_month": peak_month,
+            "peak_question_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_month_question_count": (
+                months[-1]["question_count"] if months else 0),
+            "disclaimer": self.disclaimer,
+            "months": months}
+
     def api_market_watch_months(self):
         """Market-wide watch-volume monthly timeline (criteria
         AC-MWM1..AC-MWM8 pre-registered in the R2189 seed 3/10
