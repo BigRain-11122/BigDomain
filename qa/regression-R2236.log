@@ -1,0 +1,65 @@
+RUNNER R2236 adjacent trust-family regressions
+== test_apimarket_ratingmonths.py rc=0 SUITE 8/8
+PASS AC-RTM1: env_keys=19 exact=True row_keys=True empty=(0, None, [])
+PASS AC-RTM2: grid=['2026-01', '2026-02', '2026-03'] jan=(2, 7, 3.5, 1) mar=(2, 5) revised=1
+PASS AC-RTM3: months=3 active=2 feb=(0, None) running=[2, 2, 4]
+PASS AC-RTM4: counts=4 stars=12 avg=3.0 five/low=(1, 2) buyers=(3, 2, 2)
+PASS AC-RTM5: peak=('2026-01', 2) empty=(None, None)
+PASS AC-RTM6: dana=(3, 2.67, 2) gina=(1, 4.0) market_avg=3.0
+PASS AC-RTM7: refused=8/8 bare=(0, []) digests_same=True tx_same=True quality=(3, 2.67)
+PASS AC-RTM8: digests_same=True tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
+== test_apimarket_sellerquality.py rc=0 SUITE PASS 8/8
+PASS AC-AMQL1: keys=True rows=True order=True dense=True single=True ghost=True retired=True
+PASS AC-AMQL2: buckets={'1': 3, '2': 2, '3': 0, '4': 1, '5': 2} sum=8 rows=8 avg=2.625 coverage=0.125
+PASS AC-AMQL3: delta={'1': 1, '2': 1, '3': 0, '4': -1, '5': -1} count=4 d1={'1': 1, '2': 2, '3': 0, '4': 0, '5': 0} avg=1.6666666666666667 stamp_same=True
+PASS AC-AMQL4: d1_unanswered=2->1 reply=2 coverage=0.5 per_row=True
+PASS AC-AMQL5: market=2 live_low=[(1, 3, 1.6667), (3, 2, 1.5)] dana=1 frank=1 gina=0
+PASS AC-AMQL6: codes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_frozen=True prefix_ok=True
+PASS AC-AMQL7: repeat=True restart=True tx_frozen=True pools_frozen=True digests_frozen=True
+PASS AC-AMQL8: blocks=True risk=['usr:dana', 'usr:frank'] expected=['usr:dana', 'usr:frank'] contract=True html=True wired=True shipped=True
+
+SUITE PASS 8/8
+CRITERIA LINE sha16 be99003ff8f0263b
+== test_apimarket_sellerinbox.py rc=0 SUITE 8/8
+PASS AC-AMI1: envelope keys ok=True rows=[1, 2, 3, 4] count=4 answered=0 oldest='2026-10-05T00:00:01Z'
+PASS AC-AMI2: stamps=[('2026-10-05T00:00:01Z', 1), ('2026-10-05T00:00:02Z', 2), ('2026-10-05T00:00:02Z', 3), ('2026-10-05T00:00:03Z', 4)] ordered=True merged-across-listings=True tie-break-by-rating-id=True
+PASS AC-AMI3: total=4 answered=1 unanswered=3 ids=[2, 3, 4] oldest='2026-10-05T00:00:02Z'
+PASS AC-AMI4: queue star=2 revision=2 listing avg=3.5 count=2
+PASS AC-AMI5: ids after delist=[2, 3, 4] count=3 rated_listings=2
+PASS AC-AMI6: frank rows=[5] dana ids=[2, 3, 4] empty=[] bad={'E_AM_BAD_ACCOUNT'} blank='E_AM_BAD_ACCOUNT'
+PASS AC-AMI7: ledger tx frozen=True pools frozen=True thirteen-table digests frozen=True replies frozen=True repeat identical=True
+PASS AC-AMI8: three instances byte-identical=True runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8
+== test_apimarket_ratingrev.py rc=0 SUITE 8/8
+PASS AC-AMRV1: door keys=True prev/base=5/5 rows=1 base untouched=True
+PASS AC-AMRV2: account=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_NOT_BUYER', 'E_AM_BAD_ACCOUNT'] id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown-before-stars=E_AM_UNKNOWN_RATING not-buyer=E_AM_NOT_BUYER/E_AM_NOT_BUYER stars=['E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS'] frozen=True rows=1
+PASS AC-AMRV3: prev-chain=[(5, 1), (1, 4), (4, 1)] ids increasing=True effective/base=1/5 back-to-older legal=True
+PASS AC-AMRV4: same-value=E_AM_RATING_UNCHANGED rows=3/3 effective=1 first stamp stable=True
+PASS AC-AMRV5: view=2/2.5 ratings=[2, 3] profile=3.0 buyer=3.0
+PASS AC-AMRV6: d2 view/ratings byte-identical=True clean history=True
+PASS AC-AMRV7: envelope=True revisions=[1, 4, 1, 2] bad-id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown=E_AM_UNKNOWN_RATING
+PASS AC-AMRV8: tables frozen=True tx frozen=True reply binding stable=True restart identity=True revision rows=5 wired=True ascii=True
+SUITE 8/8
+== test_apimarket_ratingreply.py rc=0 SUITE 8/8
+PASS AC-AMRP1: door keys=True envelope=True rows=2 answered=1 reply_count=1
+PASS AC-AMRP2: codes={'buyer': 'E_AM_NOT_OWNER', 'other_dev': 'E_AM_NOT_OWNER', 'empty_account': 'E_AM_BAD_ACCOUNT', 'dev_prefix': 'E_AM_BAD_ACCOUNT'} reply rows 1->1
+PASS AC-AMRP3: order=[('account_first', True), ('id_before_text', True), ('text_before_exists', True), ('unknown_rating', True), ('owner_after_exists', True), ('dup_last', True)] id_shapes={'E_AM_BAD_ARGS'} text_shapes={'E_AM_BAD_REPLY'} rows=1
+PASS AC-AMRP4: unknown listing='E_AM_UNKNOWN_LISTING' retired reply readable=True rating agg intact=True
+PASS AC-AMRP5: dup code='E_AM_REPLY_DUP' rows=1 text preserved=True stamp preserved=True
+PASS AC-AMRP6: ledger tx frozen=True pools frozen=True frozen tables=True ratings byte-identical=True reply rows=2
+PASS AC-AMRP7: instance1==2==3 byte-identical=True reply rows=2 2 2
+PASS AC-AMRP8: runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8
+== test_apimarket_ratingreplylatency.py rc=0 SUITE PASS 8/8
+PASS AC-RRL1: empty_keys=True empty_rows=True open_rows=5 order=[1, 2, 3, 4, 5]
+PASS AC-RRL2: r1=600 r3=0 r5=60 pending=None/None
+PASS AC-RRL3: codes=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_frozen=True dana=4 frank=1 unknown=0 bare_prefix=0
+PASS AC-RRL4: lat=[0, 60, 600] avg=220.0 median=60.0 coverage=0.6 dana_avg=300.0 frank_avg=60.0
+PASS AC-RRL5: order=[1, 5, 3, 2, 4] dana=[1, 3, 2, 4] frank=[5]
+PASS AC-RRL6: text_moved=True latency_frozen=True star_moved=True restored=True
+PASS AC-RRL7: inbox_total=4 inbox_open=2 market_open=2 oldest=True pure=True
+PASS AC-RRL8: restart=True wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

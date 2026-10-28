@@ -12056,6 +12056,203 @@ class APIMarketFace:
             out["disclaimer"] = self.disclaimer
             return out
 
+    def api_seller_rating_months(self, dev_account=None):
+        """Monthly rating intake AND star level on both scopes
+        (criteria AC-SRT1..AC-SRT8 pre-registered in the R2230 4/6
+        explore-queue claim row BEFORE this code existed; anchor
+        check at HEAD 2026-10-29: the AC-SRT prefix and the face
+        name were occupied only by that seed row text and the R2230
+        closeout script, while test_apimarket_sellerratingmonths,
+        ledger-apimarket-sellerratingmonths and star_mean were git
+        grep -F zero-occupancy rc=1).
+
+        api_market_rating_months carries the market axis and
+        api_seller_quality the lifetime star shape per seller, so a
+        seller could not see whether its intake and its level are
+        improving: a shop whose stars fell after a service change
+        and one that was always mediocre read identically at the
+        same lifetime average. This face puts one seller's rating
+        intake on the month axis, with the five-bucket histogram
+        and the reply coverage that face never carried.
+
+        Booking law (AC-SRT2): a rating books in the UTC month of
+        its own immutable rated_utc. A revision never moves the
+        month and never adds one - it moves the EFFECTIVE stars
+        that the row reads, through the single _effective_stars
+        seam the rest of the trust face already trusts, so a
+        January rating revised to one star still counts in January
+        and lowers that row's mean. Nothing reads a wall clock.
+
+        Grid law (AC-SRT3): rows are the contiguous grid from the
+        first to the last rating month, so a month with no rating
+        carries an honest zero row whose avg_stars is None and
+        whose reply_coverage is None rather than a fabricated 0.0;
+        running_rating is the monotone accumulator and its last
+        value equals the envelope rating_count.
+
+        Star law (AC-SRT4): the five histogram buckets sum to the
+        row's rating_count, low_star_count counts stars <= 2, and
+        the row average is the two-decimal mean of that row's
+        effective stars. The envelope average is POOLED over every
+        rating in scope, never a mean of monthly means.
+
+        Reply law (AC-SRT5): replied_count per row is the presence
+        of the append-only reply row (the same seam
+        api_rating_replies reads), so a reply landing months later
+        raises its own rating's month and never invents or moves
+        another month.
+
+        Scope law (AC-SRT6): dev_account None is the whole market
+        and reports market_avg_stars None - the face never
+        benchmarks itself against itself; a seller scope carries
+        the market-wide pooled average and other sellers never
+        leak in. Envelope buyer_count is DISTINCT over the
+        included rows, so it can be smaller than the row sums.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on
+        the usr: prefix shape); the bare usr: prefix reads honestly
+        empty. Pure read: zero row mutations, zero token
+        movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        replied = set()
+        for rep in self._conn.execute(
+                "SELECT DISTINCT rating_id"
+                " FROM apimarket_rating_replies").fetchall():
+            replied.add(int(rep[0]))
+
+        def _flow(scope):
+            sql = ("SELECT r.rating_id, r.stars, r.rated_utc,"
+                   " r.buyer_id FROM apimarket_ratings r"
+                   " JOIN apimarket_listings l"
+                   " ON l.listing_id = r.listing_id")
+            args = ()
+            if scope is not None:
+                sql += " WHERE l.dev_account = ?"
+                args = (scope,)
+            sql += " ORDER BY r.rating_id"
+            rows = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            buyers = set()
+            for r in rows:
+                rating_id = int(r[0])
+                stars = self._effective_stars(rating_id, int(r[1]))
+                month = str(r[2])[:7]
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "star_sum": 0, "five": 0,
+                         "four": 0, "three": 0, "two": 0, "one": 0,
+                         "low": 0, "replied": 0, "buyers": set()}
+                    buckets[month] = b
+                b["count"] += 1
+                b["star_sum"] += stars
+                if stars == 5:
+                    b["five"] += 1
+                elif stars == 4:
+                    b["four"] += 1
+                elif stars == 3:
+                    b["three"] += 1
+                elif stars == 2:
+                    b["two"] += 1
+                else:
+                    b["one"] += 1
+                if stars <= 2:
+                    b["low"] += 1
+                if rating_id in replied:
+                    b["replied"] += 1
+                b["buyers"].add(r[3])
+                buyers.add(r[3])
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "rating_count": 0,
+                        "buyer_count": 0,
+                        "star_sum": 0,
+                        "avg_stars": None,
+                        "five_star_count": 0,
+                        "four_star_count": 0,
+                        "three_star_count": 0,
+                        "two_star_count": 0,
+                        "one_star_count": 0,
+                        "low_star_count": 0,
+                        "replied_count": 0,
+                        "reply_coverage": None,
+                        "running_rating": running})
+                    continue
+                running += b["count"]
+                months.append({
+                    "month": month,
+                    "rating_count": b["count"],
+                    "buyer_count": len(b["buyers"]),
+                    "star_sum": b["star_sum"],
+                    "avg_stars": round(
+                        b["star_sum"] / float(b["count"]), 2),
+                    "five_star_count": b["five"],
+                    "four_star_count": b["four"],
+                    "three_star_count": b["three"],
+                    "two_star_count": b["two"],
+                    "one_star_count": b["one"],
+                    "low_star_count": b["low"],
+                    "replied_count": b["replied"],
+                    "reply_coverage": round(
+                        b["replied"] / float(b["count"]), 4),
+                    "running_rating": running})
+            total = sum(row["rating_count"] for row in months)
+            star_sum = sum(row["star_sum"] for row in months)
+            replied_total = sum(row["replied_count"] for row in months)
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["rating_count"] > 0 and (
+                        peak_count is None
+                        or row["rating_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["rating_count"]
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["rating_count"] > 0),
+                "rating_count": total,
+                "buyer_count": len(buyers),
+                "star_sum": star_sum,
+                "avg_stars": (round(star_sum / float(total), 2)
+                              if total else None),
+                "five_star_count": sum(
+                    row["five_star_count"] for row in months),
+                "low_star_count": sum(
+                    row["low_star_count"] for row in months),
+                "replied_count": replied_total,
+                "reply_coverage": (round(replied_total / float(total), 4)
+                                   if total else None),
+                "peak_month": peak_month,
+                "peak_rating_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_rating_count": (
+                    months[-1]["rating_count"] if months else 0),
+                "months": months}
+
+        with self._lock:
+            core = _flow(dev_account)
+            if dev_account is None:
+                market_avg = None
+            else:
+                market_avg = _flow(None)["avg_stars"]
+            out = {
+                "scope": ("market" if dev_account is None
+                          else "seller"),
+                "dev_account": dev_account}
+            out.update(core)
+            out["market_avg_stars"] = market_avg
+            out["disclaimer"] = self.disclaimer
+            return out
+
     def api_market_question_months(self):
         """Market-wide monthly pre-sale question volume (criteria
         AC-MQM1..AC-MQM8 pre-registered in the R2202 explore-queue

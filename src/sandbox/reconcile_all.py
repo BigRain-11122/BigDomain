@@ -2602,6 +2602,18 @@ SUITES = [
     # claim row BEFORE the code, in the R2200 window.
     ("ledger-apimarket-ratingmonths", os.path.join(
         "ledger", "test_apimarket_ratingmonths.py"), 8),
+    # seller monthly rating intake with the five-bucket histogram and
+    # the reply coverage column (the booking law on rated_utc where a
+    # revision moves the effective stars without moving the month, the
+    # contiguous grid with an honest zero month, the star law with the
+    # pooled envelope average that is never a mean of monthly means, the
+    # reply seam reused, the market benchmark on a seller scope only,
+    # cross-face identity with api_market_rating_months, the fail-closed
+    # account gate and the pure-read law) - criteria AC-SRT1..AC-SRT8
+    # registered in the R2230 4/6 explore-queue claim row BEFORE the
+    # code, in the R2236 window.
+    ("ledger-apimarket-sellerratingmonths", os.path.join(
+        "ledger", "test_apimarket_sellerratingmonths.py"), 8),
     # market-wide pre-sale question volume on the month axis (the
     # booking law that credits the answering leg to the asking month, an
     # answer landing after the last asking month never extending the
