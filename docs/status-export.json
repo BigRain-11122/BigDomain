@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T04:20:00+08:00",
-  "do": "水线折叠落地（R2225）",
+  "export_ts": "2026-10-29T03:44:14+08:00",
+  "do": "买家价格反应面（R2226）",
   "ceo_face": {
-    "current": "R2225：把卡了三轮的 state.json 水线折叠真正落了地。R2223 实测出「活日志 30/30 硬律」与「78500B 水位闸」互斥，R2224 把账本覆盖律改成归档感知，本轮就借这个修法动刀：折叠 591 把 200 行（R2209..R2224）逐字节追加进 10 月归档，原位留一条摘要行点名全部 436 个 token，state.json 从 410,064B 降到 55,509B，水位闸余量 22,991B、fold_needed=False，census 节段完整性 pass=True 零未知不符。中途一次自纠：首跑窗口 1:200 把 R2211 的叙事与账本行切开，活面报出 rounds_without_ledger=2211，已按备份逐字节回滚、裁掉误追加的归档节（回到 4,264,954B）并改 1:201 重做。顺带把两条历史豁免清空并证明其性质：归档里 R2090 与 R2095 各自的 tokens 账本行都在，旧基线属活窗截断假象而非真缺口，state/ledger_gaps.json 已清空。验证：三件账本门套件 8/8/8 全绿，全量电池 412/412 套件 + 控制 7/7（958.8s），矩阵 412 套件/3419 判据 byte-identical，指纹五域 CLEAN，证据方言普查 DRIFT-CLEAN。",
-    "latest_artifact": "src/os/state.json 55,509B（折叠 591 后，水位闸余量 22,991B）+ logs/state-log-archive-2026-10.md 新增 R2225 折叠节（200 行逐字节）+ qa/reconcile-all-R2225.log（749,755B 起，单写者 utf-8 LF）（2026-10-29）",
-    "next_milestone": "R2226（≤48h）：水位闸已腾出约 23KB 余量，回到产品面——认领 explore 队头（商家号门控行之后的真种子）补产品增量；折叠工艺已可复用，下一次水位到期（约 20 轮后）按同一窗口律执行"
+    "current": "R2226 完成 apimarket 买家侧价格反应面 api_buyer_price_reaction：把「关注后价格动了的货架里我到底买了多少」做成一面读图——关注时点价作锚（之后的修订不改写它），观测价优先取冻结的成交价、否则取读时现价，按降/平/涨三桶分别给出转化率与均价差。八条判据全过（8/8），双跑判据行逐字节同一（sha16 556eb1bad9590a46），六条相邻关注/价格族套件全绿，接线 ledger-apimarket-buyerpricereaction。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py → api_buyer_price_reaction；套件 src/sandbox/ledger/test_apimarket_buyerpricereaction.py；证据 qa/apimarket-buyerpricereaction-R2226-a.log 与 -b.log；相邻回归 qa/regression-R2226.log（2026-10-29）",
+    "next_milestone": "48h 内：邻近中的新产品面需配一轮全量电池 + 套件矩阵再生（R2226 因 25 分钟预算未跑，已记为下轮首项）；explore 队列剩 3 条真种子，下轮可认领队头（卖家月度回头客占比）。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer price-reaction face (api_buyer_price_reaction)",
+      "on",
+      "R2226: api_watch_alerts reports what moved after a watch and api_watch_budget reports the current structure, but nothing linked the movement to the purchase - of the shelves that fell after I watched them, how many did I actually buy, the elasticity reading behind both pricing and the reminder feature. The new face pins the watch-time price anchor (newest append-only revision stamped at or before watched_utc, ties by revision_id, base row otherwise, so a later revision never re-dates it), the observed price (frozen price_paid of the buyer own unrefunded purchase when one exists, else the on-record current price, never a wall clock), the drop / flat / rise direction law with the pre_owned exemption from the funnel while still bucketed, the conversion law shared with api_watch_conversion (a refund returns the watch to pending), the None-not-zero rate law, three-way bucket conservation, the integer-floor average and both extremes. Evidence: SUITE 8/8 double-run with byte-identical criterion lines (sha16 556eb1bad9590a46, qa/apimarket-buyerpricereaction-R2226-a.log and -b.log, utf-8 LF written directly by python); wired as ledger-apimarket-buyerpricereaction(8); six adjacent watch and price-family suites green (qa/regression-R2226.log). Honest debt: the full reconcile battery and the suite-matrix regeneration were NOT run in this 25-minute window (the R2168 mixed-tree rule) and are the next round first item."
+    ],
     [
       "state.json waterline fold under the archive-aware coverage law (R2225)",
       "on",

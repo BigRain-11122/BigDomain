@@ -14671,3 +14671,133 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         out["months"] = rows
         return out
+
+    def api_buyer_price_reaction(self, buyer_id):
+            """Buyer-side price-reaction face (criteria AC-BPR1..AC-BPR8
+            registered in the R2213 explore-seed row before this code, see
+            the R2226 claim row; the AC-BPR prefix, reaction_count,
+            observed_price, delta_sum and largest_drop were git-grep
+            zero-occupancy against HEAD 2026-10-29, rc=1).
+
+            api_watch_alerts reports what moved after a watch and
+            api_watch_budget reports the current structure, but nothing
+            linked the movement to the purchase: of the shelves that
+            fell after I watched them, how many did I actually buy. That
+            elasticity reading is the acceptance evidence behind both the
+            pricing face and the reminder feature.
+
+            Anchor law (AC-BPR2): the watch-time price is the newest
+            append-only revision stamped at or before watched_utc, ties by
+            revision_id, the immutable base row otherwise, so a later
+            revision never re-dates what the watch already saw.
+
+            Observed price (AC-BPR3): the price_paid of the buyer's
+            unrefunded purchase on that listing when one exists, else the
+            current price at read time. delta = observed - anchor, an
+            integer derived only from stored values, never a wall clock.
+
+            Direction law (AC-BPR4): delta below zero is a drop, zero is
+            flat, above zero is a rise. A pre_owned watch (an unrefunded
+            purchase stamped before the watch) still lands in its direction
+            bucket but never enters the funnel.
+
+            Conversion law (AC-BPR5), shared with api_watch_conversion: a
+            watch converts only when the unrefunded purchase is stamped at
+            or after watched_utc; a refunded purchase returns the watch to
+            pending. conversion_rate is converted over funnel, None when
+            the funnel is empty and never a fabricated zero.
+
+            Strict buyer isolation; an honest empty envelope for a
+            prefix-valid buyer with no watches; the usr: shape gate fails
+            closed before any read. Pure read: zero row mutations, zero
+            token movement."""
+            if not str(buyer_id or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+            with self._lock:
+                rows = self._conn.execute(
+                    "SELECT w.watch_id, w.listing_id, w.watched_utc,"
+                    " l.dev_account, l.token_price FROM apimarket_watchlist w"
+                    " JOIN apimarket_listings l ON l.listing_id = w.listing_id"
+                    " WHERE w.buyer_id = ? ORDER BY w.watch_id",
+                    (str(buyer_id),)).fetchall()
+                owned = {}
+                for lid, stamp, paid in self._conn.execute(
+                        "SELECT p.listing_id, p.purchased_utc, p.price_paid"
+                        " FROM apimarket_purchases p LEFT JOIN apimarket_refunds r"
+                        " ON r.purchase_id = p.purchase_id"
+                        " WHERE p.buyer_id = ? AND r.refund_id IS NULL"
+                        " ORDER BY p.purchased_utc, p.purchase_id",
+                        (str(buyer_id),)).fetchall():
+                    owned.setdefault(int(lid), []).append(
+                        (str(stamp), int(paid)))
+                events = []
+                for _watch_id, listing_id, watched_utc, dev, base_price in rows:
+                    lid = int(listing_id)
+                    watched = str(watched_utc)
+                    anchor = self._price_at_instant(lid, base_price, watched)
+                    mine = owned.get(lid, [])
+                    after = [p for p in mine if p[0] >= watched]
+                    before = [p for p in mine if p[0] < watched]
+                    if after:
+                        state = "converted"
+                        observed = after[0][1]
+                    elif before:
+                        state = "pre_owned"
+                        observed = before[-1][1]
+                    else:
+                        state = "pending"
+                        observed = self._current_price(lid, base_price)
+                    delta = int(observed) - int(anchor)
+                    if delta < 0:
+                        direction = "drop"
+                    elif delta > 0:
+                        direction = "rise"
+                    else:
+                        direction = "flat"
+                    events.append({"direction": direction, "state": state,
+                                   "delta": delta, "dev": dev, "listing": lid})
+
+            def _block(items):
+                total = len(items)
+                pre_owned = sum(1 for e in items
+                                if e["state"] == "pre_owned")
+                converted = sum(1 for e in items
+                                if e["state"] == "converted")
+                funnel = total - pre_owned
+                deltas = [e["delta"] for e in items]
+                drops = [d for d in deltas if d < 0]
+                rises = [d for d in deltas if d > 0]
+                delta_sum = sum(deltas)
+                return {
+                    "watch_count": total,
+                    "pre_owned_count": pre_owned,
+                    "funnel_count": funnel,
+                    "converted_count": converted,
+                    "pending_count": funnel - converted,
+                    "conversion_rate": (float(converted) / funnel
+                                        if funnel else None),
+                    "delta_sum": delta_sum,
+                    "avg_delta": (delta_sum // total if total else None),
+                    "largest_drop": min(drops) if drops else None,
+                    "largest_rise": max(rises) if rises else None}
+
+            envelope = _block(events)
+            directions = []
+            for name in ("drop", "flat", "rise"):
+                row = {"direction": name}
+                row.update(_block([e for e in events
+                                  if e["direction"] == name]))
+                directions.append(row)
+            out = {"scope": "buyer",
+                   "buyer_id": str(buyer_id),
+                   "listing_count": len(set(e["listing"] for e in events)),
+                   "seller_count": len(set(e["dev"] for e in events))}
+            out.update(envelope)
+            for row in directions:
+                out[row["direction"] + "_count"] = row["watch_count"]
+                out[row["direction"] + "_converted_count"] = row[
+                    "converted_count"]
+                out[row["direction"] + "_rate"] = row["conversion_rate"]
+            out["disclaimer"] = self.disclaimer
+            out["directions"] = directions
+            return out

@@ -2685,6 +2685,16 @@ SUITES = [
     # explore-queue seed row claimed in R2219 BEFORE this suite existed.
     ("ledger-apimarket-marketconversionmonths", os.path.join(
         "ledger", "test_apimarket_marketconversionmonths.py"), 8),
+    # apimarket buyer price-reaction face - the watch-time price anchor
+    # (a later revision never re-dates it), the observed price (frozen
+    # purchase price_paid for a converted watch, on-record values
+    # otherwise), the drop/flat/rise direction law with the pre_owned
+    # exemption from the funnel, and the bucket conservation plus the
+    # integer-floor average and both extremes - criteria AC-BPR1..
+    # AC-BPR8 registered in the R2213 explore-seed row claimed in R2226
+    # BEFORE this suite existed.
+    ("ledger-apimarket-buyerpricereaction", os.path.join(
+        "ledger", "test_apimarket_buyerpricereaction.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -1,0 +1,10 @@
+PASS AC-BPR1: env_keys=25 exact=True row_keys=True order=True empty=(0, None, None)
+PASS AC-BPR2: revisions=[8, 11] current=11 drop_count=1 largest_drop=-2
+PASS AC-BPR3: bob_delta_sum=0 bob_drop=(1, -2) kit_rise=(1, 4) kit_flat=(1, 0)
+PASS AC-BPR4: bob=(1, 1, 1) kit=(0, 1, 1) erin=(0, 1, 0) erin_flat=(1, 0, 1)
+PASS AC-BPR5: kit=(0, 2, 0.0) bob=(3, 1.0) erin_rate=None kit_rates=(0.0, 0.0)
+PASS AC-BPR6: table=3 sums=(3, 0, 3) avg=(0, 2, 0) extremes=-2/2
+PASS AC-BPR7: gates=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] digests_same=True tx_same=True bytes_same=True unwatch_kept=(2, 3)
+PASS AC-BPR8: wired=True src_lf=True test_ascii_lf=True
+PASS PRODUCT_SHA_STABLE True
+SUITE 8/8
