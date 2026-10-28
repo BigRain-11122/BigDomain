@@ -5,6 +5,11 @@
       "base": "apimarket-buyermonths-R2100",
       "classes": ["E_FALSE_BYTE_CLAIM"],
       "why": "The driver verdict line (RUN1 rc=0 sha16=0B3398051DD02331 RUN2 rc=0 sha16=0B3398051DD02331 identical=True) was appended to the primary log only, so that file carries one extra line the run2 file does not. The criteria are identical (8/8) and both declared digests do reproduce from the payload view, so only the byte-claim class is defective: the sentence 'identical=True' describes the suite stdout, not the pair of evidence files."
+    },
+    {
+      "base": "reconcile-all-R2230",
+      "classes": ["E_FALSE_BYTE_CLAIM"],
+      "why": "This stem is a BATTERY log, not one suite's double run. The primary leg is the RED first attempt (RUNNER FAIL, 2 failed assertions) and the run2 leg is the post-fix rerun on the next committed tree (RUNNER PASS 415/415 in 1001.0s), so the two files legitimately differ by 44 lines and 2139 bytes. The byte-claim class is raised by the 420/421 per-suite sentences inside the bodies ('byte-identical=True' on a suite's own a/b legs), which describe those suite pairs and never this file pair. Disclosed here rather than renaming the archive, because a battery log cannot be reproduced to the same bytes; R2233 adopts the forward convention that a correction rerun is named -retry so it is never read as a pair suffix."
     }
   ]
 }
