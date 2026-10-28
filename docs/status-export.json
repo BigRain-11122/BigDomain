@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T11:49:27+08:00",
-  "do": "R2186 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
+  "export_ts": "2026-10-28T12:24:21+08:00",
+  "do": "R2187 R2186 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
   "ceo_face": {
-    "current": "R2186: shipped api_category_velocity_months - every net sale bucketed by its own UTC purchase month, a contiguous window over SALE months with honest zero rows, the cycle-opening duration law (a re-listed shelf is measured from its new cycle), sale-instant category buckets, per-month avg/median/fastest/slowest plus a whole-history market benchmark and a sell-through conservation law (suite 8/8 double-run byte-identical, four neighbours green); the full battery is deferred and disclosed as debt for R2187",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_category_velocity_months) + src/sandbox/ledger/test_apimarket_categoryvelocitymonths.py + qa/apimarket-categoryvelocitymonths-R2186-a.log and -b.log (SUITE PASS 8/8, double-run identical 898B each) - 2026-10-28",
-    "next_milestone": "R2187: discharge this round's battery debt (full reconcile battery plus the suite-matrix regeneration) and open the next explore seed (R2178 9/10, api_refund_reasons with a pinned normalisation law) - ETA 2026-10-29, within 48h",
+    "current": "R2187 refund reason distribution: an operator can now read why money came back - one bucket per reason as written (case and whitespace folded, different spellings kept apart), an honest unlabeled bucket ordered last and excluded from the leading cause, plus share and average per bucket",
+    "latest_artifact": "qa/apimarket-refundreasons-R2187-a.log / -b.log (SUITE 8/8, criterion sha16 7e206dc697aefec5) + src/sandbox/ledger/apimarket.py (api_refund_reasons, written 2026-10-28)",
+    "next_milestone": "next claimable explore seed (the seller supply roll-up, seed 10/10) with its criteria pre-registered first (within 48h)",
     "last_artifact": "qa/apimarket-categoryvelocitymonths-R2186-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "refund reason distribution (api_refund_reasons)",
+      "on",
+      "R2187: apimarket_refunds has always stored a free-text reason, yet api_refund answered one purchase, api_refund_register listed rows inside a window and api_refund_latency measured time - so 'is this refund load a quality problem or a description mismatch', the primary input of any content-quality and after-sales improvement, could not be read without pulling every row by hand. api_refund_reasons() returns a thirteen-key envelope with eight-key reason rows and pins the bucketing law: the key is the stored text through strip() and lower() only, so case and surrounding-whitespace variants collapse into one bucket while a different spelling stays a different bucket (no stemming, no synonym merging). An empty reason is an HONEST bucket carrying reason=None, ordered last no matter how large it is, and excluded from top_reason - a world where nobody wrote a reason never claims a leading cause. Rows conserve against the envelope and the raw tables (count, amount, dev plus platform split), share and average are derived from the rows with None instead of a fabricated zero, and the total order (-refund_count, -refunded, reason) keeps equally sized buckets from swapping between calls. Suite 8/8 double-run byte-identical criterion lines sha16 7e206dc697aefec5, wired ledger-apimarket-refundreasons(8); five adjacent refund-family suites green."
+    ],
     [
       "buyer-side spend concentration (api_buyer_concentration)",
       "on",
@@ -148,6 +153,10 @@
   ],
   "results": [
     [
+      "R2187",
+      "R2187: five-silence scan clean (240 rows / 163 D-C tokens with zero new - the stored baseline still names two O- tokens the group-side rotation no longer exposes, so it was re-anchored to the measured 163; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; the only tree difference was a phantom status entry whose bytes match HEAD exactly, verified with hash-object --no-filters). Product: api_refund_reasons with AC-RFR1..AC-RFR8 pre-registered in the R2178 seed row BEFORE the code, thirteen-key envelope, strip+lower bucket law, honest unlabeled bucket last and excluded from the leading cause, row/envelope/split conservation, share and average with None instead of fake zeros, a total order, one-step freshness on a new refund, retirement as a proven no-op, cross-face identity with api_market_stats and api_refund_register, pure read with frozen digests and frozen ledger_tx, empty world shape and three-instance byte identity after two restarts."
+    ],
+    [
       "R2172",
       "R2172: five-silence scan clean (275 rows / 181 D-C tokens, zero new; the 12:00 string in the group orders is a deadline inside the 01:45 row, not a new order; ledger no new row; benchmarks inside 7 days; tree clean). Product: evidence_writer check_dir / fix_dir with AC-EVDB1..AC-EVDB8 pre-registered before the code, SUITE PASS 8/8 double-run (sha16 52d7cd6fcf9ff17f), wired as os-evidence-writer-dir(8), adjacent writer suite still 8/8. Live reading: qa/ files=1974 tee=1445 flagged=529 left untouched by design. Honest notes: lone CR is invisible to the census (class still tee, stated in the fixture not relaxed in the product); the rollback assertion switched from mtime to byte equality; the full battery and matrix regen were deferred to R2173."
     ],
@@ -251,14 +260,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 134,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 62,
+    "substantive_non_idle_mention_lines": 39,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 4
+    "queue_explore_open": 2
   }
 }

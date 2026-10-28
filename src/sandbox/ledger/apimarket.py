@@ -10512,3 +10512,116 @@ class APIMarketFace:
             "months": months,
             "disclaimer": self.disclaimer,
         }
+
+    def api_refund_reasons(self):
+        """Market-wide refund reason distribution (criteria
+        AC-RFR1..AC-RFR8 pre-registered in the R2178 explore-queue
+        seed row BEFORE this code existed).
+
+        apimarket_refunds has always stored a free-text reason but no
+        face ever aggregated it: api_refund answers one purchase,
+        api_refund_register lists rows inside a window and
+        api_refund_latency measures time, so "is this refund load a
+        quality problem or a description mismatch" - the primary
+        input of any content-quality and after-sales improvement -
+        could not be read without pulling every row by hand.
+
+        The bucket key is derived from the stored text by strip() and
+        lower() only. That is deliberately narrow: case and
+        surrounding-whitespace variants collapse into one bucket,
+        while a different spelling stays a different bucket - this
+        face never stems, never merges synonyms and never guesses,
+        so the distribution reports what was actually written. An
+        empty text (None or blank) is an HONEST bucket rather than a
+        silent drop: it carries reason=None, is ordered last no
+        matter how large it is, and is excluded from top_reason so a
+        world where nobody wrote a reason never claims a leading
+        cause.
+
+        Row authority is the refund side, money is the stored
+        amount of each refund row, and every aggregate is derived
+        from those rows only. Pure read, no arguments: zero row
+        mutations and zero token movement. The envelope carries the
+        resident non-advisory disclaimer."""
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT reason, amount, dev_share, platform_share"
+                " FROM apimarket_refunds ORDER BY refund_id").fetchall()
+            purchase_count = int(self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_purchases"
+            ).fetchone()[0])
+
+        buckets = {}
+        refunded_total = 0
+        for reason, amount, dev_share, platform_share in raw:
+            text = "" if reason is None else str(reason).strip().lower()
+            key = text or None
+            cell = buckets.get(key)
+            if cell is None:
+                cell = buckets[key] = {
+                    "reason": key,
+                    "refund_count": 0,
+                    "refunded": 0,
+                    "dev_share": 0,
+                    "platform_share": 0,
+                }
+            cell["refund_count"] += 1
+            cell["refunded"] += int(amount)
+            cell["dev_share"] += int(dev_share)
+            cell["platform_share"] += int(platform_share)
+            refunded_total += int(amount)
+
+        refund_count = len(raw)
+        labeled = [c for k, c in buckets.items() if k is not None]
+        unlabeled = buckets.get(None)
+        labeled_count = sum(c["refund_count"] for c in labeled)
+        unlabeled_count = 0 if unlabeled is None else unlabeled[
+            "refund_count"]
+
+        rows = []
+        for cell in sorted(buckets.values(), key=lambda c: (
+                1 if c["reason"] is None else 0,
+                -c["refund_count"], -c["refunded"], c["reason"] or "")):
+            count = cell["refund_count"]
+            rows.append({
+                "reason": cell["reason"],
+                "refund_count": count,
+                "refunded": cell["refunded"],
+                "dev_share": cell["dev_share"],
+                "platform_share": cell["platform_share"],
+                "share": (round(float(count) / refund_count, 4)
+                          if refund_count else None),
+                "avg_amount": (round(float(cell["refunded"]) / count, 2)
+                               if count else None),
+            })
+
+        top_reason = None
+        top_reason_count = None
+        top_reason_share = None
+        if labeled:
+            best = sorted(labeled, key=lambda c: (-c["refund_count"],
+                                                 -c["refunded"],
+                                                 c["reason"]))[0]
+            top_reason = best["reason"]
+            top_reason_count = best["refund_count"]
+            top_reason_share = (round(float(top_reason_count)
+                                      / labeled_count, 4)
+                                if labeled_count else None)
+
+        return {
+            "purchase_count": purchase_count,
+            "refund_count": refund_count,
+            "refund_rate": (round(float(refund_count) / purchase_count, 4)
+                            if purchase_count else None),
+            "labeled_count": labeled_count,
+            "unlabeled_count": unlabeled_count,
+            "reason_count": len(rows),
+            "refunded_total": refunded_total,
+            "avg_refunded": (round(float(refunded_total) / refund_count, 2)
+                             if refund_count else None),
+            "top_reason": top_reason,
+            "top_reason_count": top_reason_count,
+            "top_reason_share": top_reason_share,
+            "by_reason": rows,
+            "disclaimer": self.disclaimer,
+        }

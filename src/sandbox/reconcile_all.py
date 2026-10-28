@@ -2469,6 +2469,16 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-refundlatency", os.path.join(
         "ledger", "test_apimarket_refundlatency.py"), 8),
+    # refund reason distribution (a strip+lower bucket key that folds
+    # case and whitespace yet never merges different spellings, an
+    # honest unlabeled bucket ordered last and excluded from the leading
+    # cause, row/envelope/split conservation, a total order and
+    # one-step freshness) that the refund register, refund door and
+    # market stats faces never answered - criteria AC-RFR1..AC-RFR8
+    # pre-registered in the R2187 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-refundreasons", os.path.join(
+        "ledger", "test_apimarket_refundreasons.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

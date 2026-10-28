@@ -1,0 +1,9 @@
+PASS AC-RFR1: keys ok=True row keys ok=True rows=4 disclaimer ok=True
+PASS AC-RFR2: labeled=['late service', 'description mismatch', 'refunded by mistake'] unlabeled last=True fold 2/20=(2, 20) counts labeled+unlabeled=4+2 == 6
+PASS AC-RFR3: purchases=7 refunds=6/6 refunded sum=41/41 dev+plat per row ok=True dev=31 plat=10 total=41
+PASS AC-RFR4: shares=[0.3333, 0.1667, 0.1667, 0.3333] share sum=1.0 avg late=10.0 unlabeled=7.5 envelope avg=6.83
+PASS AC-RFR5: order=['late service', 'description mismatch', 'refunded by mistake', None] ties broken by name=True unlabeled last while holding 2 refunds
+PASS AC-RFR6: top='late service' count=2 share=0.5 over labeled=4 (unlabeled 2 excluded)
+PASS AC-RFR7: clock-shift identical=True args rejected=True digests frozen=True tx frozen=True pools frozen=True stats refunds=6/6 register refunds=6/6 retirement no-op=True fresh step=7/46 top='late service'
+PASS AC-RFR8: three instances identical=True empty world=(0, [], None) wired=True consumer shas stable=True ascii=True net imports=0 outside repo=True
+SUITE 8/8
