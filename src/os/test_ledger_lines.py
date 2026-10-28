@@ -262,20 +262,29 @@ def run():
     gated = LL.apply_baseline(scope, baseline)
     with io.open(base_path, "r", encoding="utf-8") as handle:
         shipped = json.load(handle)
+    # R2225: the fold moved the two long-standing live gaps into the archive,
+    # where both rounds carry their own ledger line, so the live gap set is
+    # empty, the shipped exemption list is empty, and the archive face proves
+    # the two rounds were healed rather than genuinely missing.
+    archive_lines = LL.load_archive_lines(None, os.path.join(BASE, "state.json"))
     check(scope["errors"] == []
           and LL.coverage_floor(scope)
           and scope["live_ledger_lines"] == live["ledger_lines"]
-          and scope["ledger_lines"] >= scope["live_ledger_lines"]
-          and live["rounds_without_ledger"] == [2090, 2095]
+          and scope["ledger_lines"] > scope["live_ledger_lines"]
+          and live["rounds_without_ledger"] == []
           and live["ledger_without_round"] == []
+          and 2090 not in scope["archived_missing"]
+          and 2095 not in scope["archived_missing"]
+          and any("R2090 tokens:" in line for line in archive_lines)
+          and any("R2095 tokens:" in line for line in archive_lines)
           and gated["new_missing"] == [] and gated["new_orphan"] == []
           and gated["clean"] is True
-          and shipped["missing"] == [2090, 2095]
+          and shipped["missing"] == []
           and shipped["orphan"] == []
           and not net and LABEL in runner_src
           and EXPECTED_CRITERIA == 8,
-          "AC-LGR8 live gate clean on the coverage scope, two historical "
-          "gaps baselined, hygiene")
+          "AC-LGR8 live gate clean on the coverage scope, folded gaps proven "
+          "healed by the archive, exemption list empty, hygiene")
 
 
 def main():

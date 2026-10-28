@@ -282,11 +282,15 @@ def run():
     gated = LL.apply_baseline(scope, shipped)
     deterministic = (json.dumps(gated, sort_keys=True)
                      == json.dumps(gated, sort_keys=True))
+    # R2225: the fold moved the two formerly exempt rounds into the archive,
+    # where both carry their own ledger line, so the exemption list is empty
+    # and the stale report is empty by construction (the R2224 law).
     check(gated["clean"] is True
           and gated["new_missing"] == [] and gated["new_orphan"] == []
           and gated["stale_missing"] == [] and gated["stale_orphan"] == []
           and LL.coverage_floor(gated) is True
-          and shipped["missing"] == [2090, 2095]
+          and shipped["missing"] == []
+          and shipped["orphan"] == []
           and not net and deterministic
           and LABEL in runner_src
           and EXPECTED_CRITERIA == 8,

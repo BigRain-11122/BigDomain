@@ -1,8 +1,5 @@
 {
-  "note": "Known historical coverage gaps of the round ledger lines, seeded 2026-10-27 R2152 from a live audit of src/os/state.json. R2090 and R2095 carry a round narrative but no ledger line (their closeout batches were superseded by the R2140 carry-over round). The gate subtracts this baseline so only NEW drift turns red; shrink this list, never grow it silently.",
-  "missing": [
-    2090,
-    2095
-  ],
+  "note": "Known historical coverage gaps of the round ledger lines. Seeded 2026-10-27 R2152 with R2090 and R2095, which the live window then reported as rounds without a ledger line. The R2225 fold (fold 591, window 1:201) moved those rounds into logs/state-log-archive-2026-10.md, where both carry their own 'R2090 tokens:' and 'R2095 tokens:' ledger line - so the two exemptions were a live-window truncation artifact, not real gaps, and the list is emptied here per the R2224 stale-baseline law (an archived gap is reported as archived_missing/archived_orphan and never gates). Keep this list empty unless a genuinely new live gap is proven: shrink, never grow quietly.",
+  "missing": [],
   "orphan": []
 }

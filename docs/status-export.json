@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T02:58:00+08:00",
-  "do": "账本覆盖律归档感知（R2224）",
+  "export_ts": "2026-10-29T04:20:00+08:00",
+  "do": "水线折叠落地（R2225）",
   "ceo_face": {
-    "current": "R2224：把账本覆盖律改成归档感知。R2223 实测出「活日志至少 30 条轮账行 + 30 条轮述行」与「78500B 水位闸」在当前行长下互斥（30/30 要约 70 行，水位闸只容约 50 行），所以折叠永远落不了地。本轮不动窗口而是换审计口径：计数取「活窗口 ∪ 归档节」的并集，坏形与新缺账行仍只认活窗口（归档是冻结历史，谁也不能改），归档里的缺口只报 archived_missing / archived_orphan，永不当门。实测真实树：活 230 行/归档 17850 行、并集轮账 240 条/轮述 1772 条、归档缺口 786/54 只报不拦、活缺口仍是 2090/2095 且在既有 baseline 下、判 CLEAN。两条在役活门套件（AC-LGR8/AC-LGB8）已迁到新口径，下一轮折叠可以落地。",
-    "latest_artifact": "src/os/test_ledger_archive.py 套件 8/8 双跑字节同一 sha16 9e3d1225726f1194（qa/ledger-archive-R2224-a.log + -b.log）+ src/os/ledger_lines.py 新增 audit_scope/load_archive/coverage_floor 六面与 --archives CLI（2026-10-29）",
-    "next_milestone": "R2225（≤48h）：先做水线折叠（现在覆盖律已归档感知，折叠不再触红），再跑全量对账电池 + 套件矩阵再生（矩阵现记 410 套，树已 411）"
+    "current": "R2225：把卡了三轮的 state.json 水线折叠真正落了地。R2223 实测出「活日志 30/30 硬律」与「78500B 水位闸」互斥，R2224 把账本覆盖律改成归档感知，本轮就借这个修法动刀：折叠 591 把 200 行（R2209..R2224）逐字节追加进 10 月归档，原位留一条摘要行点名全部 436 个 token，state.json 从 410,064B 降到 55,509B，水位闸余量 22,991B、fold_needed=False，census 节段完整性 pass=True 零未知不符。中途一次自纠：首跑窗口 1:200 把 R2211 的叙事与账本行切开，活面报出 rounds_without_ledger=2211，已按备份逐字节回滚、裁掉误追加的归档节（回到 4,264,954B）并改 1:201 重做。顺带把两条历史豁免清空并证明其性质：归档里 R2090 与 R2095 各自的 tokens 账本行都在，旧基线属活窗截断假象而非真缺口，state/ledger_gaps.json 已清空。验证：三件账本门套件 8/8/8 全绿，全量电池 412/412 套件 + 控制 7/7（958.8s），矩阵 412 套件/3419 判据 byte-identical，指纹五域 CLEAN，证据方言普查 DRIFT-CLEAN。",
+    "latest_artifact": "src/os/state.json 55,509B（折叠 591 后，水位闸余量 22,991B）+ logs/state-log-archive-2026-10.md 新增 R2225 折叠节（200 行逐字节）+ qa/reconcile-all-R2225.log（749,755B 起，单写者 utf-8 LF）（2026-10-29）",
+    "next_milestone": "R2226（≤48h）：水位闸已腾出约 23KB 余量，回到产品面——认领 explore 队头（商家号门控行之后的真种子）补产品增量；折叠工艺已可复用，下一次水位到期（约 20 轮后）按同一窗口律执行"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "state.json waterline fold under the archive-aware coverage law (R2225)",
+      "on",
+      "R2223 measured that the waterline gate and the old live-gate law were mutually unsatisfiable and reverted the fold on evidence; R2224 made the coverage law archive-aware; this round finally executed the surgery it unblocked. Fold 591 moved log lines 1:201 (R2209..R2211 including the R2211 self-heal line, then R2212..R2224) verbatim into logs/state-log-archive-2026-10.md behind one summary line naming all 436 window tokens under the tool's own PAT, taking state.json from 410,064B to 55,509B with predicted_eq_actual true and token_missing empty. The first attempt on window 1:200 split the R2211 narrative from its ledger line and turned the live face red with rounds_without_ledger=2211, so it was reverted byte-exact from the pre-op backup, the archive section it had appended was trimmed back to 4,264,954B, and the fold was redone on the pair-aligned window - disclosed rather than hidden. The exemption list also fulfilled the R2224 design and its premise was proven rather than assumed: the archive carries both 'R2090 tokens:' and 'R2095 tokens:' lines, so the two long-standing live gaps were a window-truncation artefact and state/ledger_gaps.json is now empty, with AC-LGR8 and AC-LGB8 re-pinned to the folded reality (live gap set empty, exemption list empty, folded rounds present as ledger lines in the archive). Both ledger faces read VERDICT CLEAN (live ledger=13 round=18; scoped live+archive ledger=241 round=1773), the three gate suites are 8/8/8, and the folded tree carries a full RUNNER PASS 412/412 suites plus controls 7/7 in 958.8s with TMP RECLAIM 910/910 worlds and 320.12 MiB, matrix 412 suites / 3419 criteria byte-identical, fingerprint CLEAN over five domains, profile PASS and census DRIFT-CLEAN."
+    ],
     [
       "seller monthly replenishment cadence (api_seller_restock_months)",
       "on",
@@ -287,6 +292,10 @@
   ],
   "results": [
     [
+      "R2225",
+      "R2225: five-silence scan found only an EOL/indent debt from the R2224 closeout (repaired first), zero new decision tokens, the same paid-off ledger rows, an unchanged orders baseline and fresh benchmarks. The window claimed the fold row R2223 and R2224 both carried and executed fold 591 on the pair-aligned window 1:201 after one disclosed self-correction (window 1:200 split the R2211 pair, reverted byte-exact and redone): state.json 410064B -> 55509B, token_missing [], gauge fold_needed False with 22991B of margin, census pass=True. The exemption list was emptied on proof - the archive carries both R2090 and R2095 ledger lines, so the old live gaps were a truncation artefact - and two live-gate criteria were re-pinned; three gate suites 8/8/8; full battery RUNNER PASS 412/412 plus controls 7/7 in 958.8s with TMP RECLAIM 910/910 worlds and 320.12 MiB; follow-up matrix 412 suites / 3419 criteria byte-identical, fingerprint CLEAN five domains, profile PASS, census DRIFT-CLEAN. The waterline is unblocked for the first time since R2223 measured the conflict."
+    ],
+    [
       "R2222",
       "R2222: five-silence scan at open flagged two debts and cleared the rest - 236 bare-LF closeout lines in state.json repaired to a clean CRLF layout, heartbeat lag 1 backfilled 2220 -> 2222, ledger PASS with 3 @BigDomain rows and zero conflicts, decisions PASS with no new row, orders baseline-ahead with no new order, benchmarks and QA fresh, export under 24h, clean tree. Product: one new apimarket face (twenty-two-key envelope, ten-key month rows, booking cadence direction conservation peak scope and cross-face laws) with a 9-criteria suite double-run byte-identical (sha16 b660f5532cc28c36), wired as ledger-apimarket-sellerrestockmonths(9), seven adjacent supply and relist suites green, PRODUCT_SHA_STABLE True. Honest debts: the full battery and the suite-matrix regeneration did not run, and the state waterline fold was carried - both registered at the top of backlog for R2223."
     ],
@@ -518,10 +527,10 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 101,
+    "log_lines_in_window": 103,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 101,
+    "substantive_non_idle_mention_lines": 103,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
