@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T14:05:00+08:00",
-  "do": "R2191 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a buyer can now read whether their watchlist attention leans to categories or to one seller, instead of inferring it from a shelf-by-shelf list",
+  "export_ts": "2026-10-28T20:15:00+08:00",
+  "do": "R2192 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a market operator can now read whether watch demand on a shelf is heating up or cooling down month by month, instead of seeing only a live stock",
   "ceo_face": {
-    "current": "R2191 buyer watch-intent category mix: a monitored resident now reads their own wishlist as categories - how many live watches, how many already bought, how many open, how many on retired listings, which seller dominates each category, and how lopsided the whole intent is (share, top1, top3, a concentration index, and the smallest number of categories that carries 80% of the attention), with the market-wide index beside it as context",
-    "latest_artifact": "qa/apimarket-buyerwatchcategorymix-R2191-a.log / -b.log (SUITE 8/8, criterion sha16 e2c39b9bc9789c22) + qa/regression-R2191.log + qa/reconcile-all-R2191.log (RUNNER PASS 389/389, controls 7/7, 852.7s) + docs/sandbox-suite-matrix.md (389 suites / 3234 criteria) + src/sandbox/ledger/apimarket.py (api_buyer_watch_category_mix, written 2026-10-28)",
-    "next_milestone": "explore seed 3/10 (market-wide watch demand by month) with its criteria pre-registered first; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
-    "last_artifact": "qa/apimarket-sellerrefundreasons-R2190-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2192 market-wide watch-volume monthly timeline: every watch and every unwatch now lands on a UTC month, so the shelf reads as a trend - watches, unwatches, net flow, the running live stock, participants per month, the contiguous month grid with an honest zero month, and the busiest month - instead of a single undifferentiated counter",
+    "latest_artifact": "qa/apimarket-marketwatchmonths-R2192-a.log / -b.log (SUITE 8/8, criterion sha16 9bb72b073bc7dc22, 577B each) + qa/regression-R2192.log (six watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_watch_months, written 2026-10-28)",
+    "next_milestone": "explore seed 4/10 (seller answer-latency face) with its criteria registered first, plus the carried R2193 first item (full reconcile battery and suite-matrix regeneration); the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
+    "last_artifact": "qa/apimarket-buyerwatchcategorymix-R2191-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "market-wide watch-volume monthly timeline (api_market_watch_months)",
+      "on",
+      "R2192: the watch family answered one listing, one buyer's budget, one buyer's conversion and one buyer's category mix, so the market had a live stock but no monthly flow. api_market_watch_months() returns a twelve-key envelope with eight-key month rows over the contiguous month grid: watches book in the watched_utc month, unwatches in the unwatched_utc month and never rewrite the watch month, so a pure-unwatch month is honestly negative; the running active_count lands on the live watch count; participants are event-derived per month with lifetime distinct counts in the envelope; the busiest month breaks ties on the earlier month and a pure-unwatch month never peaks; empty world answers None instead of a fabricated month."
+    ],
     [
       "buyer watch-intent category mix (api_buyer_watch_category_mix)",
       "on",
@@ -154,14 +159,13 @@
       "apimarket buyer-side category spend (api_buyer_category_spend)",
       "on",
       "R2149: the buyer side had a time axis (api_buyer_months), a lifetime aggregate (api_buyer_profile), a row face (api_library) and two statements, and the market had a per-category demand face - but nothing answered the resident's own question 'where did my money go', so a budget review or a category cap meant pulling the library, resolving each listing's category and rebucketing by hand. api_buyer_category_spend(buyer_id, include_uncategorized=True) is that mirror: a fourteen-key envelope with fourteen-key category-ordered rows and the honest uncategorized bucket last. Row authority is the PURCHASE side, which is the deliberate difference from api_category_demand: a category this buyer never bought in stays absent even when the market holds listings there, because the face answers a spending question rather than a supply question. Buckets come from the one effective-category seam, so a revise_category moves the buyer's spend in the same step it moves the catalog and demand faces, and summing every buyer's rows reproduces api_category_demand exactly. Laws pinned by AC-BCS1..AC-BCS8: per-row trade conservation (gross_spent == net_spent + refunded_tokens, net_purchase_count == purchase_count - refund_count, dev_paid + platform_paid == gross_spent, and the net splits never exceed the gross ones), cash totals identical to api_buyer_months' lifetime figures on the default call, listing_count purchase-derived so a refund never erases the listing while seller_count is distinct WITHIN the row and distinct over the envelope, avg_net_price = net_spent / net_purchase (None when nothing settled), a refund lowering only its own category's net side, the pinned gate order (account shape then the bool switch, both before any read), the uncategorized switch, and a pure read with zero row mutations and zero token movement. Verification: suite SUITE PASS 8/8 double-run with byte-identical evidence files sha16 1fafaf4cfe387bc6 (qa/apimarket-buyercategoryspend-R2149-a.log and -b.log, single-writer UTF-8 LF); wired ledger-apimarket-buyercategoryspend(8); six adjacent suites green; matrix 352 suites / 2924 criteria --check byte-identical. Honest note: the first run was 7/8 on a test-side seed defect (the fixture never issued carol's refund), repaired in the seed with no criterion relaxed. Queue hygiene: explore and tech queues were both under the self-drive standing floor, so nine explore seeds and six tech seeds landed in the same window, each a real gap with no anchor occupancy."
-    ],
-    [
-      "apimarket category revision leg (revise_category + api_category_history + one effective-bucket seam across six readers)",
-      "on",
-      "R2147: the category declaration made at publish time (R2132) was the last write-once declaration on the listing row without a remedy leg - edit_listing repairs title and description only, price has revise_price, supply has restock_api, and rating, reply, answer and provider identity each grew a revision door - so a seller who filed a service under the wrong bucket was stuck with it forever, and the mistake propagated into four read faces at once (the catalog directory, the category demand face, the discovery category filter and the competitive bucket). apimarket.py now grows an append-only apimarket_category_revisions table (previous bucket carried in every row, no UPDATE or DELETE surface, the listing row never rewritten so the original declaration survives as base forever) and revise_category with the pinned gate order account shape, listing shape/existence, ownership, retired state, category shape, unchanged state. E_AM_CATEGORY_UNCHANGED is judged against the EFFECTIVE bucket, so revising back to an earlier bucket stays legal while a repeat of the current one writes zero rows; passing None is a legal move into the honest uncategorized bucket rather than a deletion; every refusal writes zero rows and moves zero tokens. The 40-character cap that used to be a literal inside publish_api is now one shared constant read by both doors so the publish gate and the revision gate cannot diverge. One seam (_category_state / _effective_category) is now flipped through every category reader: api_view gains the additive base_category, category_revision_count and latest_category_revision_utc trio, api_search filters and echoes the effective bucket, api_categories and api_category_demand re-bucket through the seam (trade aggregates follow the move in the same step), api_listing_position computes its competitive bucket over effective buckets in memory because SQL bucketing cannot see revisions, and api_purchase_dossier echoes the effective bucket. The new api_category_history answers the audit view: a nine-key envelope with five-key revision rows, the base declaration, the ordered changes, the current bucket and the revision count, readable on a retired listing and pure-read. Criteria AC-AMCG1..AC-AMCG8: seven anchors (the AC family, the door, the history face, the table, the error code, the suite and the runner label) were git grep -F zero-occupancy verified against the committed HEAD tree (rc=1) before the code existed. Verification: suite SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 63e45d6cfb478a0f (qa/apimarket-categoryrev-R2147-a.log and -b.log, 556 bytes each, single-writer UTF-8 LF); six adjacent suites re-ran green (category, categorydemand, search, listingposition, purchasedossier, supply - 8/8 each); the suite matrix was regenerated to 350 suites / 2908 criteria and checks byte-identical. Honest boundary: the full battery was NOT run this round under the 25-minute budget and is the first item of the next round; the criterion TEXT landed in the queue row in the same window as the code (anchor check preceded it), disclosed in the row itself."
     ]
   ],
   "results": [
+    [
+      "R2192",
+      "R2192: five-silence scan clean (251 rows / 175 tokens, five new tokens all HQ or patrol bookkeeping, receipts recorded by number and the 175-token baseline adopted; ledger patrol rows already paid; group orders tail unchanged; benchmarks inside the gate; tree clean). Product api_market_watch_months with AC-MWM1..AC-MWM8 registered in the seed 3/10 row in this same window (disclosed, not strictly before the code) - twelve-key envelope, contiguous month grid with an honest zero month, cash-basis double stamp including a negative pure-unwatch month, running active_count on the live count, event-derived participants, busiest-month tie-break, no-argument pure read. SUITE 8/8 double-run byte-identical sha16 9bb72b073bc7dc22, six watch-family suites green; full battery and matrix deferred to R2193."
+    ],
     [
       "R2191",
       "R2191: five-silence scan clean (251 rows / 159 tokens, zero new against the 170-token baseline; ledger patrol rows already paid off; group orders tail unchanged, acknowledged with zero action; benchmarks inside the gate; tree clean). Product api_buyer_watch_category_mix with AC-BWCM1..AC-BWCM8 pre-registered in the seed 2/10 row BEFORE the code - seventeen-key envelope, live-watch authority, purchased/open/delisted conservation, the shared concentration law (herfindahl 10000.0/5000.0/2244.9, pareto on integers counting an exact 80%), the seller axis with tie-break, the single category seam, strict isolation and the market benchmark. SUITE 8/8 double-run identical sha16 e2c39b9bc9789c22 (860B, crlf=0); six adjacent regressions green; debt cleared - full battery 389/389 + controls 7/7 852.7s, matrix 389/3234 byte-identical, census DRIFT-CLEAN flags=0. Honest notes: criteria key-count miscount corrected in-window before code; three first-run reds were this window's own expectations corrected in the TEST (pareto 4 not 6, kit tie order data-first, 1e-5 share tolerance); no product defect."
@@ -278,10 +282,6 @@
     [
       "R2184",
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
-    ],
-    [
-      "R2185",
-      "R2185: five-silence scan clean with the decision baseline unchanged at 159 stored tokens (the four extra live tokens are the already-acknowledged body-text citations), so zero domain action. Product: api_buyer_concentration with AC-BC1..AC-BC8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 e1657003677c5abf), wired as ledger-apimarket-buyerconcentration(8), six adjacent suites green. Full battery RUNNER PASS 383/383 in 649.5s with the birth-site sweep reclaiming 860/860 worlds, 304.86 MiB, busy=0 failed=0."
     ]
   ],
   "self_drive": {
@@ -295,6 +295,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 9
+    "queue_explore_open": 8
   }
 }

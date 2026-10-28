@@ -2506,6 +2506,14 @@ SUITES = [
     # R2189 seed 2/10 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-buyerwatchcategorymix", os.path.join(
         "ledger", "test_apimarket_buyerwatchcategorymix.py"), 8),
+    # market-wide watch-volume monthly timeline (the cash-basis double
+    # stamp, the contiguous month grid with an honest zero month, the
+    # running active_count landing on the live watch count, the
+    # event-derived participant law, the busiest-month tie-break and
+    # the pure-read law) - criteria AC-MWM1..AC-MWM8 registered in the
+    # R2189 seed 3/10 explore-queue claim row in the R2192 window.
+    ("ledger-apimarket-marketwatchmonths", os.path.join(
+        "ledger", "test_apimarket_marketwatchmonths.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -1,0 +1,10 @@
+PASS AC-MWM1: env_keys=12 exact=True row_keys=True empty=(0, []) TypeError=True
+PASS AC-MWM2: jan=(3, 0, 3) mar=(2, 1, 1) apr=(1, 0, 1) may=(0, 1, -1)
+PASS AC-MWM3: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'] feb_flat=True sums=6/2 live=4
+PASS AC-MWM4: jan=(3, 2) mar=(3, 2) may=(1, 1) lifetime=(4, 3, 3)
+PASS AC-MWM5: busiest='2026-01' count=3 empty=(None, None)
+PASS AC-MWM6: buyers=3/0/0/1 live=4
+PASS AC-MWM7: digests_same=True tx_same=True bytes_same=True len=1100
+PASS AC-MWM8: wired=True src_lf=True test_ascii_lf=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

@@ -11286,3 +11286,127 @@ class APIMarketFace:
             "rows": core["rows"],
             "disclaimer": self.disclaimer,
         }
+
+    def api_market_watch_months(self):
+        """Market-wide watch-volume monthly timeline (criteria
+        AC-MWM1..AC-MWM8 pre-registered in the R2189 seed 3/10
+        explore-queue claim row BEFORE this code existed; the AC-MWM
+        label, api_market_watch_months, test_apimarket_marketwatchmonths
+        and ledger-apimarket-marketwatchmonths were git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        The watch family answers one listing (api_watchlist), one
+        buyer's budget (api_watch_budget), one buyer's conversion
+        (api_watch_conversion) and one buyer's category mix
+        (api_buyer_watch_category_mix), so the whole market carried a
+        live stock but no monthly flow: "is demand for this shelf
+        heating up or cooling down" had no face. This face closes that
+        gap on the same cash-basis law the trade months use: a watch
+        books in the UTC month of watched_utc, an unwatch books in the
+        UTC month of unwatched_utc and never rewrites the month the
+        watch landed in, so a later unwatch shows an honestly negative
+        net there.
+
+        Month rows are the contiguous grid from the first to the last
+        event month, so a month with no event at all still carries an
+        honest zero row and a flat active_count. active_count is the
+        running net from the first month, so the last row equals the
+        live watch count (unwatched rows stay on disk but leave the
+        live set).
+
+        Participants are event-derived only: a month counts the
+        distinct buyers, sellers and listings behind the events booked
+        in that month, while the envelope carries lifetime distinct
+        counts (so the envelope is honestly <= the row sums).
+
+        No arguments, so no gate: pure read, zero row mutations and
+        zero token movement."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.buyer_id, w.listing_id, w.watched_utc,"
+                " l.dev_account, u.unwatched_utc FROM apimarket_watchlist w"
+                " JOIN apimarket_listings l ON l.listing_id = w.listing_id"
+                " LEFT JOIN apimarket_unwatchings u"
+                " ON u.watch_id = w.watch_id ORDER BY w.watch_id").fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "watch_count": 0,
+                        "unwatch_count": 0, "buyers": set(),
+                        "sellers": set(), "listings": set()})
+
+        live_watch_count = 0
+        watch_total = 0
+        unwatch_total = 0
+        buyers = set()
+        sellers = set()
+        listings = set()
+
+        for buyer, listing_id, watched_utc, dev, unwatched_utc in rows:
+            lid = int(listing_id)
+            b = bucket(str(watched_utc)[:7])
+            b["watch_count"] += 1
+            watch_total += 1
+            b["buyers"].add(buyer)
+            b["sellers"].add(dev)
+            b["listings"].add(lid)
+            buyers.add(buyer)
+            sellers.add(dev)
+            listings.add(lid)
+            if unwatched_utc is None:
+                live_watch_count += 1
+                continue
+            b2 = bucket(str(unwatched_utc)[:7])
+            b2["unwatch_count"] += 1
+            unwatch_total += 1
+            b2["buyers"].add(buyer)
+            b2["sellers"].add(dev)
+            b2["listings"].add(lid)
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                b = {"month": month, "watch_count": 0,
+                     "unwatch_count": 0, "buyers": set(),
+                     "sellers": set(), "listings": set()}
+            net = b["watch_count"] - b["unwatch_count"]
+            running += net
+            months.append({
+                "month": month,
+                "watch_count": b["watch_count"],
+                "unwatch_count": b["unwatch_count"],
+                "net_count": net,
+                "active_count": running,
+                "buyer_count": len(b["buyers"]),
+                "seller_count": len(b["sellers"]),
+                "listing_count": len(b["listings"]),
+            })
+
+        busiest_month = None
+        busiest_watch_count = None
+        for row in months:
+            if row["watch_count"] <= 0:
+                continue
+            if (busiest_watch_count is None
+                    or row["watch_count"] > busiest_watch_count):
+                busiest_month = row["month"]
+                busiest_watch_count = row["watch_count"]
+
+        return {
+            "month_count": len(months),
+            "watch_count": watch_total,
+            "unwatch_count": unwatch_total,
+            "net_count": watch_total - unwatch_total,
+            "live_watch_count": live_watch_count,
+            "buyer_count": len(buyers),
+            "seller_count": len(sellers),
+            "listing_count": len(listings),
+            "busiest_month": busiest_month,
+            "busiest_watch_count": busiest_watch_count,
+            "months": months,
+            "disclaimer": self.disclaimer,
+        }
