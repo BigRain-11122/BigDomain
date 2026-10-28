@@ -2540,6 +2540,16 @@ SUITES = [
     # claim row BEFORE the code, in the R2204 window.
     ("ledger-apimarket-sellerwatchmonths", os.path.join(
         "ledger", "test_apimarket_sellerwatchmonths.py"), 8),
+    # buyer-side monthly watch flow (the cash-basis double stamp on the
+    # buyer axis, the contiguous grid whose zero month sits next to a
+    # month that only carried a purchase, the keyword-free directional
+    # conversion law booked in the WATCH month, conservation and both
+    # peak laws, cross-face identity with api_watchlist plus strict
+    # isolation, the account gate and the pure-read/restart law)
+    # - criteria AC-BWM1..AC-BWM8 registered in the R2213 explore claim
+    # row BEFORE the code, in the R2213 window.
+    ("ledger-apimarket-buyerwatchmonths", os.path.join(
+        "ledger", "test_apimarket_buyerwatchmonths.py"), 8),
     # market-wide monthly retirement / re-listing timeline (the
     # cash-basis double stamp that never rewrites the delisting month,
     # the contiguous grid with an honest zero month, the same-month

@@ -12399,6 +12399,160 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
         }
 
+    def api_buyer_watch_months(self, buyer_id):
+        """Buyer-side monthly watch flow (criteria AC-BWM1..AC-BWM8
+        pre-registered in the R2213 explore-queue claim row BEFORE this
+        code existed; the AC-BWM prefix, api_buyer_watch_months,
+        test_apimarket_buyerwatchmonths, ledger-apimarket-buyerwatchmonths,
+        opened_month, net_watch_change, live_watch_at_month_end and
+        _watch_events were all git-grep zero-occupancy against HEAD
+        2026-10-28, rc=1; watch_month_count was already taken by
+        api_market_watch_months, so this face uses month_count).
+
+        api_market_watch_months answers the whole market and
+        api_seller_watch_months one seller, both on a monthly axis,
+        while the buyer side carried only a live category mix
+        (api_buyer_watch_category_mix) and a lifetime funnel
+        (api_watch_conversion). So one resident's own attention
+        timeline - is my interest heating up or cooling down, and how
+        much of what I watched this month did I actually buy - had no
+        face at all.
+
+        Booking law (AC-BWM2) is shared with both sibling faces: a
+        watch books in the UTC month of watched_utc, an unwatch in the
+        UTC month of unwatched_utc, and a later unwatch never rewrites
+        the month the watch landed in, so a pure-unwatch month carries
+        an honestly negative net_count. Month rows are the contiguous
+        grid from the first to the last event month, so a month with no
+        event carries an honest zero row (AC-BWM3) and active_count is
+        the running net whose last value is the live watch count.
+
+        Conversion law (AC-BWM4) is this face's own axis and it is
+        deliberately directional: a watch converts when the buyer holds
+        an UNREFUNDED purchase on that listing stamped at or after
+        watched_utc, and the conversion is booked in the WATCH month -
+        the same "credit the answering leg to the asking month" rule
+        the question face pins. A purchase that happened before the
+        watch is not a conversion (the R2162 directional law), and a
+        refunded purchase stops converting.
+
+        Strict buyer isolation; an honest empty envelope for a
+        prefix-valid buyer with no watches; the usr: shape gate fails
+        closed before any read. Pure read: zero row mutations, zero
+        token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.watch_id, w.listing_id, w.watched_utc,"
+                " l.dev_account, u.unwatched_utc FROM apimarket_watchlist w"
+                " JOIN apimarket_listings l ON l.listing_id = w.listing_id"
+                " LEFT JOIN apimarket_unwatchings u"
+                " ON u.watch_id = w.watch_id WHERE w.buyer_id = ?"
+                " ORDER BY w.watch_id", (str(buyer_id),)).fetchall()
+            owned = {}
+            for pid, lid, stamp in self._conn.execute(
+                    "SELECT p.purchase_id, p.listing_id, p.purchased_utc"
+                    " FROM apimarket_purchases p LEFT JOIN apimarket_refunds r"
+                    " ON r.purchase_id = p.purchase_id"
+                    " WHERE p.buyer_id = ? AND r.refund_id IS NULL",
+                    (str(buyer_id),)).fetchall():
+                owned.setdefault(int(lid), []).append(str(stamp))
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "watch_count": 0,
+                        "unwatch_count": 0, "converted_count": 0,
+                        "listings": set(), "sellers": set()})
+
+        live_watch_count = 0
+        watch_total = 0
+        unwatch_total = 0
+        converted_total = 0
+        listings = set()
+        sellers = set()
+
+        for watch_id, listing_id, watched_utc, dev, unwatched_utc in rows:
+            lid = int(listing_id)
+            watch_month = str(watched_utc)[:7]
+            b = bucket(watch_month)
+            b["watch_count"] += 1
+            b["listings"].add(lid)
+            b["sellers"].add(dev)
+            watch_total += 1
+            listings.add(lid)
+            sellers.add(dev)
+            for stamp in owned.get(lid, ()):
+                if stamp >= str(watched_utc):
+                    b["converted_count"] += 1
+                    converted_total += 1
+                    break
+            if unwatched_utc is None:
+                live_watch_count += 1
+                continue
+            b2 = bucket(str(unwatched_utc)[:7])
+            b2["unwatch_count"] += 1
+            b2["listings"].add(lid)
+            b2["sellers"].add(dev)
+            unwatch_total += 1
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                b = {"month": month, "watch_count": 0,
+                     "unwatch_count": 0, "converted_count": 0,
+                     "listings": set(), "sellers": set()}
+            net = b["watch_count"] - b["unwatch_count"]
+            running += net
+            months.append({
+                "month": month,
+                "watch_count": b["watch_count"],
+                "unwatch_count": b["unwatch_count"],
+                "net_count": net,
+                "active_count": running,
+                "converted_count": b["converted_count"],
+                "listing_count": len(b["listings"]),
+                "seller_count": len(b["sellers"]),
+            })
+
+        busiest_month = None
+        busiest_watch_count = None
+        converted_month = None
+        converted_month_count = None
+        for row in months:
+            if row["watch_count"] > 0 and (
+                    busiest_watch_count is None
+                    or row["watch_count"] > busiest_watch_count):
+                busiest_month = row["month"]
+                busiest_watch_count = row["watch_count"]
+            if row["converted_count"] > 0 and (
+                    converted_month_count is None
+                    or row["converted_count"] > converted_month_count):
+                converted_month = row["month"]
+                converted_month_count = row["converted_count"]
+
+        return {
+            "scope": "buyer",
+            "buyer_id": str(buyer_id),
+            "month_count": len(months),
+            "watch_count": watch_total,
+            "unwatch_count": unwatch_total,
+            "net_count": watch_total - unwatch_total,
+            "live_watch_count": live_watch_count,
+            "converted_count": converted_total,
+            "converted_month": converted_month,
+            "listing_count": len(listings),
+            "seller_count": len(sellers),
+            "busiest_month": busiest_month,
+            "busiest_watch_count": busiest_watch_count,
+            "months": months,
+            "disclaimer": self.disclaimer,
+        }
+
     def api_category_watch_months(self, include_uncategorized=True):
         """Per-category monthly watch flow (criteria AC-CWM1..AC-CWM8
         pre-registered in the R2210 explore-queue claim row BEFORE this
