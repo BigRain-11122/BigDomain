@@ -11934,3 +11934,144 @@ class APIMarketFace:
                 "oldest_unreplied_utc": min(owed) if owed else None,
                 "disclaimer": self.disclaimer,
                 "rows": rows}
+
+    def api_market_relist_months(self):
+        """Market-wide monthly retirement / re-listing timeline (criteria
+        AC-MRM1..AC-MRM8 pre-registered in the R2189 seed 9/10
+        explore-queue claim row BEFORE this code existed; the AC-MRM
+        prefix, api_market_relist_months, test_apimarket_marketrelistmonths,
+        ledger-apimarket-marketrelistmonths and running_delist were all
+        git-grep zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_relist_gap answers one listing's retirement-to-return
+        interval (the pairing law), api_listing_lifecycle answers the
+        raw open/close event rows and api_market_months answers cash -
+        so "how many shelves left the market this month, how many came
+        back, and is the return rate deteriorating" had no face, and a
+        return-heavy delisting wave read identically to a normal
+        seasonal rotation.
+
+        Cash-basis double stamp: a delisting books in the UTC month of
+        its own delisted_utc and a re-listing books in the UTC month of
+        its own relisted_utc, so a December return never rewrites the
+        October month the shelf left in.
+
+        Month rows are the contiguous grid from the first to the last
+        event month, so a month with no event carries an honest zero
+        row. relist_rate is the SAME-MONTH FLOW RATIO relist/delist and
+        is None (never a fabricated zero) when a month carries no
+        delisting; pairing one specific delisting with one specific
+        re-listing stays the job of api_relist_gap, and that asymmetry
+        is disclosed rather than hidden.
+
+        running_delist / running_relist are the monotone lifetime
+        accumulators from the first month, so the last row equals the
+        envelope totals, and every envelope quantity is derived from the
+        rows rather than written down.
+
+        Peaks take the highest monthly count with ties resolved to the
+        EARLIER month, and a zero-event month is never a peak, so an
+        empty world reports None instead of inventing a month.
+
+        No arguments, so no gate: pure read, zero row mutations, zero
+        token movement, and the envelope carries the resident
+        non-advisory disclaimer."""
+        with self._lock:
+            delists = self._conn.execute(
+                "SELECT listing_id, dev_account, delisted_utc FROM"
+                " apimarket_delistings ORDER BY delist_id").fetchall()
+            relists = self._conn.execute(
+                "SELECT listing_id, dev_account, relisted_utc FROM"
+                " apimarket_relistings ORDER BY relist_id").fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"month": month, "delist_count": 0,
+                        "relist_count": 0, "sellers": set(),
+                        "listings": set()})
+
+        sellers = set()
+        listings = set()
+
+        for listing_id, dev, stamp in delists:
+            lid = int(listing_id)
+            b = bucket(str(stamp)[:7])
+            b["delist_count"] += 1
+            b["sellers"].add(dev)
+            b["listings"].add(lid)
+            sellers.add(dev)
+            listings.add(lid)
+
+        for listing_id, dev, stamp in relists:
+            lid = int(listing_id)
+            b = bucket(str(stamp)[:7])
+            b["relist_count"] += 1
+            b["sellers"].add(dev)
+            b["listings"].add(lid)
+            sellers.add(dev)
+            listings.add(lid)
+
+        months = []
+        running_delist = 0
+        running_relist = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                b = {"month": month, "delist_count": 0,
+                     "relist_count": 0, "sellers": set(),
+                     "listings": set()}
+            running_delist += b["delist_count"]
+            running_relist += b["relist_count"]
+            months.append({
+                "month": month,
+                "delist_count": b["delist_count"],
+                "relist_count": b["relist_count"],
+                "net_count": b["delist_count"] - b["relist_count"],
+                "relist_rate": (round(
+                    float(b["relist_count"]) / b["delist_count"], 4)
+                    if b["delist_count"] else None),
+                "seller_count": len(b["sellers"]),
+                "listing_count": len(b["listings"]),
+                "running_delist": running_delist,
+                "running_relist": running_relist,
+            })
+
+        peak_delist_month = None
+        peak_delist_count = None
+        peak_relist_month = None
+        peak_relist_count = None
+        for row in months:
+            if row["delist_count"] > 0 and (
+                    peak_delist_count is None
+                    or row["delist_count"] > peak_delist_count):
+                peak_delist_month = row["month"]
+                peak_delist_count = row["delist_count"]
+            if row["relist_count"] > 0 and (
+                    peak_relist_count is None
+                    or row["relist_count"] > peak_relist_count):
+                peak_relist_month = row["month"]
+                peak_relist_count = row["relist_count"]
+
+        delist_total = sum(row["delist_count"] for row in months)
+        relist_total = sum(row["relist_count"] for row in months)
+
+        return {
+            "month_count": len(months),
+            "delist_count": delist_total,
+            "relist_count": relist_total,
+            "net_count": delist_total - relist_total,
+            "relist_rate": (round(float(relist_total) / delist_total, 4)
+                            if delist_total else None),
+            "seller_count": len(sellers),
+            "listing_count": len(listings),
+            "peak_delist_month": peak_delist_month,
+            "peak_delist_count": peak_delist_count,
+            "peak_relist_month": peak_relist_month,
+            "peak_relist_count": peak_relist_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "months": months,
+            "disclaimer": self.disclaimer,
+        }

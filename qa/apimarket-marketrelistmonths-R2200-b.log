@@ -1,0 +1,10 @@
+PASS AC-MRM1: env_keys=15 exact=True row_keys=True rows=5 empty=(0, None, [])
+PASS AC-MRM2: jan=(2, 0, 0.0) mar=(1, 1, 1.0) apr=(0, 1, None) may=(1, 1)
+PASS AC-MRM3: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'] feb=(0, None) sums=4/3 running=[2, 2, 3, 3, 4]/[0, 0, 1, 2, 3]
+PASS AC-MRM4: envelope=0.75 rows=[0.0, None, 1.0, None, 1.0]
+PASS AC-MRM5: jan=(2, 2) mar=(2, 2) apr=(1, 1) lifetime=(3, 3)
+PASS AC-MRM6: peaks=('2026-01', 2)/('2026-03', 1) empty=(None, None, None, None)
+PASS AC-MRM7: gap=3 pending=1 delist=4 relist=3
+PASS AC-MRM8: digests_same=True tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
