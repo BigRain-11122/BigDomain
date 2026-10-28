@@ -1,0 +1,6 @@
+{
+  "do": "verification debt R2233 (full battery + matrix on the committed tree)",
+  "current": "R2233 验证轮：把 R2232 欠下的全量对账电池清掉。第一次跑红（417 套件里 2 套挂：口径来自两处真实证据卫生缺陷，不是产品逻辑）——R2231 的两支卖家提问证据被 PowerShell 管道写成 CRLF，走路器口径普查被记成 pwsh-capture；另一处是 R2230 电池首跑红/重跑绿的两份日志被身份审计当成「双跑同字节对」。已修：R2231 两支证据用唯一 python 写入器归一化为 utf-8/LF（内容零改动，763→753 字节，两支同 sha16 2207807e14fc2f88）；R2230 那对按 R2153 同一披露惯例写进随仓基线（新增 why 说明它是电池日志不是套件双跑，并定下今后「修后重跑」一律命名为 -retry，不再落成对后缀）。修完在已提交树上重跑：RUNNER PASS 417/417 套件、对账控制 7/7，1023.4 秒，出生地临时世界回收 920/920、323.06 MiB；四项后处理全过（矩阵重生成 417 套件/3459 判据并回读一致、指纹链五域 CLEAN、runner profile 日检 PASS、证据写入普查 DRIFT-CLEAN）。产品分诚实为零——本轮是验证债，没有新增产品功能。",
+  "latest_artifact": "qa/reconcile-all-R2233.log（417/417 绿 + 四项后处理 VERDICT PASS，754KB，单写者 utf-8 LF，CRLF=0）；docs/sandbox-suite-matrix.md（40690 字节，417 套件 / 3459 判据，green=417/417）；src/os/evidence_normalize_R2233.py；state/run_identity_baseline.json（新增 reconcile-all-R2230 披露条目）；2026-10-29",
+  "next_milestone": "48 小时内：清完验证债后回到产品面——抽 explore 队头 R2230 3/6 种子，做 api_market_backlog_months（全市场月度未答提问积压时间线，AC-MBM1..AC-MBM8 已在队列行预注册），随后按 4/6/5/6/6/6 顺序推进；支付/月卡/大厅仍卡在 CEO 物理件（平台名裁决、服务器、域名备案、商户号、msgSecCheck），零催办。"
+}
