@@ -1,0 +1,9 @@
+PASS AC-WBG1: envelope keys=14 rows=7 row keys=[10] watch=7 empty=(0, []) ordered=True
+PASS AC-WBG2: buckets=[('bought', 'purchased'), ('drop', 'buyable'), ('flat', 'buyable'), ('retire', 'delisted'), ('rise', 'buyable'), ('sold', 'sold_out'), ('soldret', 'delisted')] counts(b,p,d,s)=(3, 1, 2, 1) sum=7
+PASS AC-WBG3: total=21 avg=7.0 min=6 max=8 empty trio=(0, None, None, None)
+PASS AC-WBG4: drop saved=4 rise saved=0 purchased saved=2 envelope savings=4 dropped=1
+PASS AC-WBG5: bad-account codes=['E_AM_BAD_ACCOUNT'] digests frozen=True tx frozen=True
+PASS AC-WBG6: watch_count wl=7 face=7 purchased wl=1 face=1 after retire flat: delisted=3 buyable=2 total=13
+PASS AC-WBG7: refund bucket='purchased' purchased=1 buyable=2 total=13 unwatch 7->6 rewatch->7 new-id=10 carol=(1, 1, 0, 0)
+PASS AC-WBG8: instance1==2==3=True runner wiring=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

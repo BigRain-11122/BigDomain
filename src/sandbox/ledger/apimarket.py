@@ -3109,6 +3109,108 @@ class APIMarketFace:
                 "alert_count": len(alerts),
                 "disclaimer": self.disclaimer, "alerts": alerts}
 
+    _WATCH_BUDGET_BUCKETS = ("purchased", "delisted", "sold_out",
+                             "buyable")
+
+    def api_watch_budget(self, buyer_id):
+        """Buyer-side watchlist budget face (AC-WBG1..AC-WBG8,
+        criteria pre-registered in the R2178 explore-queue seed row
+        BEFORE this code existed).
+
+        api_watchlist answers which rows a resident is watching and
+        api_watch_alerts answers what happened to them; neither
+        answered the question every buyer actually asks before a
+        purchase decision - "what would it cost me to take the whole
+        watchlist". This face rolls the live watches into a budget
+        reading.
+
+        One bucket per live watch row in a pinned precedence
+        (AC-WBG2): purchased first (already bought, so no potential
+        spend), then delisted, then sold_out, then buyable - a
+        delisted row never double-reports as sold out. The four
+        bucket counts sum to watch_count (partition conservation).
+
+        Spend authority is the buyable bucket only: the total is the
+        sum of those rows' current asking prices (AC-WBG3), min/max
+        are the extremes of that same bucket with a listing_id
+        tie-break, and avg is the total over buyable_count, which is
+        None rather than a fabricated zero when the bucket is empty.
+
+        savings_from_drops sums max(0, price_at_watch - current) over
+        the buyable rows only, so a rise elsewhere never nets a
+        genuine drop down (AC-WBG4); dropped_count is the number of
+        buyable rows whose price fell. A row in another bucket still
+        reports its own saved figure but contributes nothing to the
+        envelope.
+
+        Rows are a total order on (current_price, listing_id). The
+        account shape gate is prefix-only and runs before any read; a
+        prefix-valid account with no watches gets an honest empty
+        envelope. Pure read: zero row mutations, zero token
+        movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.watch_id, w.listing_id, l.listing_key,"
+                " l.title, l.dev_account, l.token_price, w.watched_utc"
+                " FROM apimarket_watchlist w JOIN apimarket_listings l"
+                " ON l.listing_id = w.listing_id WHERE w.buyer_id = ?"
+                " AND NOT EXISTS (SELECT 1 FROM apimarket_unwatchings u"
+                " WHERE u.watch_id = w.watch_id)"
+                " ORDER BY w.watch_id", (buyer_id,)).fetchall()
+            out = []
+            counts = dict((b, 0) for b in self._WATCH_BUDGET_BUCKETS)
+            for r in rows:
+                listing_id = int(r[1])
+                base_price = int(r[5])
+                owned = self._conn.execute(
+                    "SELECT 1 FROM apimarket_purchases WHERE buyer_id = ?"
+                    " AND listing_id = ?",
+                    (buyer_id, listing_id)).fetchone()
+                stamp = self._delisted_utc(listing_id)
+                _supply, _sold, _remaining, sold_out = \
+                    self._supply_state(listing_id)
+                current = self._current_price(listing_id, base_price)
+                at_watch = self._price_at_instant(
+                    listing_id, base_price, r[6])
+                if owned is not None:
+                    bucket = "purchased"
+                elif stamp is not None:
+                    bucket = "delisted"
+                elif sold_out:
+                    bucket = "sold_out"
+                else:
+                    bucket = "buyable"
+                counts[bucket] += 1
+                out.append({"watch_id": int(r[0]),
+                            "listing_id": listing_id,
+                            "listing_key": r[2], "title": r[3],
+                            "dev_account": r[4], "bucket": bucket,
+                            "current_price": current,
+                            "price_at_watch": at_watch,
+                            "saved": max(0, at_watch - current),
+                            "watched_utc": r[6]})
+        out.sort(key=lambda w: (w["current_price"], w["listing_id"]))
+        buyable = [w for w in out if w["bucket"] == "buyable"]
+        total = sum(w["current_price"] for w in buyable)
+        dropped = [w for w in buyable if w["saved"] > 0]
+        return {"buyer_id": buyer_id, "watch_count": len(out),
+                "buyable_count": counts["buyable"],
+                "purchased_count": counts["purchased"],
+                "delisted_count": counts["delisted"],
+                "sold_out_count": counts["sold_out"],
+                "total_potential_spend": total,
+                "avg_potential_price": (
+                    None if not buyable else total / float(len(buyable))),
+                "min_potential_price": (
+                    None if not buyable else buyable[0]["current_price"]),
+                "max_potential_price": (
+                    None if not buyable else buyable[-1]["current_price"]),
+                "savings_from_drops": sum(w["saved"] for w in dropped),
+                "dropped_count": len(dropped),
+                "disclaimer": self.disclaimer, "watches": out}
+
     def api_listing_demand(self, dev_account):
         """Seller-side demand read face (pre-registered
         AC-AMDM1..AC-AMDM8 in the R2112 explore-queue claim row

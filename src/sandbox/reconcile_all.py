@@ -2661,6 +2661,11 @@ SUITES = [
     # from the price-at-watch seam.
     ("ledger-apimarket-watchalerts", os.path.join(
         "ledger", "test_apimarket_watchalerts.py"), 8),
+    # R2183 buyer watchlist budget: live watches rolled into a spend
+    # reading with one bucket per row (purchased > delisted > sold_out
+    # > buyable) and savings that never net a rise against a drop.
+    ("ledger-apimarket-watchbudget", os.path.join(
+        "ledger", "test_apimarket_watchbudget.py"), 8),
     # R2107 public activity feed: eleven append-only event families
     # merged into one ordered, windowable, kind-filterable stream.
     ("ledger-apimarket-marketfeed", os.path.join(

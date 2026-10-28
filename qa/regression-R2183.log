@@ -1,0 +1,4 @@
+test_apimarket_watchlist.py rc=0 SUITE 8/8
+test_apimarket_watchalerts.py rc=0 SUITE 8/8
+test_apimarket_watchconversion.py rc=0 SUITE PASS 8/8
+test_apimarket_listingdemand.py rc=0 SUITE PASS 8/8
