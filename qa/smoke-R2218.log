@@ -1,0 +1,57 @@
+BigDomain QA smoke evidence - R2218 - 2026-10-29 (window ~00:2x-00:5x +08:00)
+charter: docs/qa-smoke-test-charter.md v1.0 (group orders L254 2026-09-28) - daily crawl round
+scope: daily crawl + benchmark refresh + research source chain + signal wall landing
+kind: evidence log, single writer utf-8 LF, derived from real files on disk
+
+[1] DAILY CRAWL - PASS
+  fetches this round: 2 (first-party only, no login, no key)
+  a) developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/virtual-payment.html
+     -> official community announcement "虚拟支付业务运营指南" (WeChat team, last edited 10-12), full text served
+  b) developers.weixin.qq.com/miniprogram/product/
+     -> product index page, content served as navigation shell only (no norms body) -> honest negative, no claim made
+  conclusion 3 hard constraints captured:
+    1 seven typical virtual-service forms must use mini-program virtual payment on all terminals;
+      when only those categories are present the platform withdraws the plain WeChat Pay capability on
+      Android and every non-iOS system
+    2 hybrid service (virtual goods + physical goods) is classified as virtual payment as a whole
+    3 exemptions limited to online medical consultation (licensed institution/doctor) and legal advice
+      (licensed lawyer/firm)
+  relevance to BigDomain: the P-47 product body (virtual tokens, unlocks, subscriptions, tips, co-creation)
+  falls inside those forms, so the single-merchant JSAPI route is unusable for this product
+  (second independent official confirmation of the W34 finding)
+
+[2] BENCHMARK 15H LAW - PASS
+  docs/global-benchmarks.md section 4 updated row appended for 2026-10-29
+  state.json benchmarks_refreshed = 2026-10-29, next due 2026-11-05 (7-day law)
+  previous baseline was 2026-10-27, so the refresh is event-driven (hard-constraint domain), not stale-driven
+
+[3] RESEARCH SOURCE CHAIN - PASS
+  every claim above carries an A-grade first-party URL + capture time; zero key, zero login
+  negative result (b) recorded as a negative result, never as a positive claim
+
+[4] SIGNAL WALL - PASS
+  docs/research/intelligence-wall.md row W35 appended (date, signal, source link + grade + capture time,
+  consumption landing, status = verified)
+  consumption landing = P-47 payment-design item: add a category-classification leading section
+  (self-declared category -> virtual payment -> wx.requestVirtualPayment family) plus one BLUEPRINT
+  section 4/7 route note; bootstrap physical-prerequisite list row refined
+
+daily standing items this round:
+  FUNNEL daily 2026-10-29: gate PASS, honest empty envelope (four-ring zero counts, outstanding total 0),
+    evidence qa/funnel-daily-20261029.log
+  reconcile daily 2026-10-29: see the appended gate line below when present
+
+honest notes:
+  the first reconcile-daily invocation was cancelled by the five-minute no-output rule (the wrapper prints
+  only a final verdict line); ownership was checked - zero reconcile process alive, the partial evidence
+  file qa/reconcile-daily-20261029.log (475870 bytes) is preserved and never overwritten, and the rerun
+  writes its own dated suffix per the runbook
+
+[5] DAILY GATE - reconcile daily 2026-10-29 (first invocation cancelled by the five-minute
+    no-output rule and preserved, rerun in the same window):
+    runner RUNNER PASS 409/409 suites green, reconcile controls 7/7, 1015.7s
+    sentinel exit=0 (fingerprint chain CLEAN, 5 domains) elapsed=0.6s
+    profile exit=0 (observation window: recorded, not gating)
+    census exit=0 elapsed=7.4s files=2110 tee=1582 baselined=528 disappeared=0 flags=0 verdict DRIFT-CLEAN
+    wrapper exit code 0 elapsed=1024s -> day verdict PASS
+    evidence qa/reconcile-daily-20261029-2.log (748017 bytes, single writer utf-8 LF)

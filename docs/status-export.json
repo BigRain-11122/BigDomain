@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T00:06:58+08:00",
-  "do": "R2217 product round on the silicon-domain public co-creation platform sandbox: the seller monthly rating-reply cadence closes the last conversation chain without a time axis, and the suite proves it 8/8 on two identical runs",
+  "export_ts": "2026-10-29T00:58:00+08:00",
+  "do": "R2218 harness round on the silicon-domain co-creation platform: the QA charter daily crawl round produced a real first-party intelligence gain (official virtual-payment operations guide) plus both daily standing gates, with the benchmark ledger and the signal wall refreshed from that source",
   "ceo_face": {
-    "current": "R2217 new apimarket read face api_seller_reply_months: replies booked on their own replied_utc month, cross-month latency with the backlog split, a contiguous grid with honest zero months, the market/seller scope law and cross-face identity against api_rating_reply_latency - SUITE PASS 8/8 double-run byte-identical",
-    "latest_artifact": "qa/apimarket-sellerreplymonths-R2217-a.log + qa/apimarket-sellerreplymonths-R2217-b.log (882 bytes each, class=tee crlf=0) + src/sandbox/ledger/test_apimarket_sellerreplymonths.py + qa/regression-R2217.log (8/8 adjacent suites green)",
-    "next_milestone": "R2218 within 48h: discharge the battery debt - full reconcile battery plus suite-matrix regeneration on the committed tree, then claim the next open explore seed"
+    "current": "R2218: daily crawl found the official rule that seven virtual-service forms must use mini-program virtual payment on all terminals and that the plain WeChat Pay capability is withdrawn on Android when only those categories are present, plus the hybrid virtual+physical classification and the two exemptions; consumption = P-47 payment design must lead with a category-classification section (the single-merchant JSAPI route is unusable for this product). FUNNEL daily 2026-10-29 gate PASS. reconcile daily 2026-10-29 gate: RUNNER PASS 409/409 suites + controls 7/7 in 1015.7s, sentinel exit=0, profile exit=0, census DRIFT-CLEAN flags=0",
+    "latest_artifact": "qa/smoke-R2218.log + qa/smoke-R2218.png (real log rendered, 48 lines) ; docs/research/intelligence-wall.md row W35 ; docs/global-benchmarks.md section 4 row 2026-10-29 ; qa/funnel-daily-20261029.log ; qa/reconcile-daily-20261029-2.log (partial first run preserved at qa/reconcile-daily-20261029.log)",
+    "next_milestone": "R2219 within 48h: write the P-47 payment-design category-classification section (self-declared category -> virtual payment -> wx.requestVirtualPayment family) with pre-registered acceptance criteria, and clear any battery debt the daily gate leaves open"
   },
   "depts": [
     {
