@@ -1,0 +1,8 @@
+PASS test_apimarket_supply.py SUITE 8/8
+PASS test_apimarket_sellersupply.py SUITE PASS 8/8
+PASS test_apimarket_categorysupplymonths.py SUITE PASS 8/8
+PASS test_apimarket_categorypricemonths.py SUITE PASS 8/8
+PASS test_apimarket_feedmonths.py SUITE 8/8
+PASS test_apimarket_marketrelistmonths.py SUITE 8/8
+PASS test_apimarket_relist.py SUITE PASS 8/8
+PASS test_apimarket_relistgap.py SUITE PASS 8/8

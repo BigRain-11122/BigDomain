@@ -2550,6 +2550,19 @@ SUITES = [
     # row BEFORE the code, in the R2213 window.
     ("ledger-apimarket-buyerwatchmonths", os.path.join(
         "ledger", "test_apimarket_buyerwatchmonths.py"), 8),
+    # market-wide monthly supply timeline (the gross flow booked in
+    # each event's own stamp month - cycles opened at publish and at
+    # each re-list, closed at delist, units added by publish and
+    # restock, units sold net of refunds - over a contiguous grid
+    # with an honest zero month, the month-end sampling law on live
+    # shelves and distinct sellers, conservation three ways including
+    # the running opened-minus-closed identity, both peak laws with
+    # the earlier-month tie-break, the honest empty market-scope
+    # envelope and the pure-read/restart law)
+    # - criteria AC-MSM1..AC-MSM8 registered in the R2214 explore
+    # claim row BEFORE the code, in the R2214 window.
+    ("ledger-apimarket-marketsupplymonths", os.path.join(
+        "ledger", "test_apimarket_marketsupplymonths.py"), 8),
     # market-wide monthly retirement / re-listing timeline (the
     # cash-basis double stamp that never rewrites the delisting month,
     # the contiguous grid with an honest zero month, the same-month

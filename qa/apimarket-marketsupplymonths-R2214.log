@@ -1,0 +1,10 @@
+PASS AC-MSM1: env_keys=17 exact=True row_keys=True scope='market' empty=(0, [])
+PASS AC-MSM2: jan=8 feb=1 mar=4 may=1 jun=-1 totals=(4, 1, 12, 1)
+PASS AC-MSM3: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06'] apr=(0, 0, 0, 2)
+PASS AC-MSM4: jan=(3, 2, 8) feb_rem=7 mar=(2, 0, 11) jun=(3, 11)
+PASS AC-MSM5: cells=True running=True listing_count=3
+PASS AC-MSM6: peak=('2026-01', 3) open=('2026-01', 3) mom=1
+PASS AC-MSM7: empty_rows=[] account_keys=False rows=6
+PASS AC-MSM8: digests_same=True tx_same=True bytes_same=True wired=True ascii_lf=True
+PASS PRODUCT_SHA_STABLE True
+SUITE 8/8

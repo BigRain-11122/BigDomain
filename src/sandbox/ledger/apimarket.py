@@ -13771,3 +13771,180 @@ class APIMarketFace:
                 months[-1]["event_count"] if months else 0),
             "disclaimer": self.disclaimer,
             "months": months}
+
+    def api_market_supply_months(self):
+        """Market-wide monthly supply timeline (criteria AC-MSM1..AC-MSM8
+        pre-registered in the R2214 explore-queue claim row BEFORE this
+        code existed; the AC-MSM prefix, api_market_supply_months,
+        test_apimarket_marketsupplymonths, ledger-apimarket-
+        marketsupplymonths, net_shop_change, units_added, units_sold,
+        live_shop_at_month_end and _shop_flow_events were all git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        The family answers asking price by month
+        (api_category_price_months), per-category shelves by month
+        (api_category_supply_months) and per-listing supply snapshots
+        (api_supply / api_supply_history), but no face answered the
+        WHOLE MARKET's shelf position month over month together with its
+        gross flow. So "is the market I buy in thickening or thinning"
+        could only be answered by summing category rows by hand, and the
+        gross movement - how many shelves opened and closed, how many
+        units entered and left the book - had no face at all.
+
+        Flow law (AC-MSM2) books every event in the UTC month of its own
+        immutable stamp: a cycle opens at the publish stamp and again at
+        each re-listing stamp, a cycle closes at its own delisting stamp,
+        units_added is the finite base supply declared by a publish plus
+        the restock units stamped that month, and units_sold is purchases
+        net of refunds stamped that month - so a month that carried only
+        a refund is honestly negative. A later event never rewrites an
+        earlier month.
+
+        Grid law (AC-MSM3): rows run contiguous first..last over the
+        union of every supply-and-movement event month (publish, restock,
+        delist, relist, purchase, refund), so a month with no event still
+        appears as an honest zero row. Price revisions and category
+        revisions are deliberately NOT events: they move no shelf and no
+        unit.
+
+        Sampling law (AC-MSM4) is the sibling faces' own: one snapshot
+        per month taken at that month's last second through
+        _alive_at_instant and _supply_at_instant, so a sale or restock
+        stamped in the last second counts there and one at the next
+        month's first second does not. An unlimited shelf is reported as
+        unlimited rather than as zero remaining.
+
+        Conservation (AC-MSM5): live_listing_count == in_stock +
+        sold_out + unlimited on every row, remaining_units counts only
+        finite shelves, and live_listing_count equals the running
+        opened_count minus the running closed_count at the same month,
+        because a live listing holds exactly one open cycle. Pure read:
+        zero row mutations and zero token movement."""
+
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, supply, dev_account, listed_utc"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            events = {}
+
+            def bump(month, key, value):
+                slot = events.setdefault(month, {})
+                slot[key] = slot.get(key, 0) + value
+
+            for _listing_id, base_supply, _dev, listed_utc in listings:
+                month = str(listed_utc)[:7]
+                bump(month, "opened_count", 1)
+                if base_supply is not None:
+                    bump(month, "units_added", int(base_supply))
+            for stamp, in self._conn.execute(
+                    "SELECT relisted_utc FROM apimarket_relistings"
+            ).fetchall():
+                bump(str(stamp)[:7], "opened_count", 1)
+            for stamp, in self._conn.execute(
+                    "SELECT delisted_utc FROM apimarket_delistings"
+            ).fetchall():
+                bump(str(stamp)[:7], "closed_count", 1)
+            for stamp, units in self._conn.execute(
+                    "SELECT restocked_utc, add_units"
+                    " FROM apimarket_supply_revisions"
+            ).fetchall():
+                bump(str(stamp)[:7], "units_added", int(units))
+            for stamp, in self._conn.execute(
+                    "SELECT purchased_utc FROM apimarket_purchases"
+            ).fetchall():
+                bump(str(stamp)[:7], "units_sold", 1)
+            for stamp, in self._conn.execute(
+                    "SELECT refunded_utc FROM apimarket_refunds"
+            ).fetchall():
+                bump(str(stamp)[:7], "units_sold", -1)
+
+            months = _contiguous_months(sorted(events))
+            sampled = {}
+            for listing_id, base_supply, dev_account, listed_utc \
+                    in listings:
+                listing_id = int(listing_id)
+                for month in months:
+                    as_of = _month_end(month)
+                    if not self._alive_at_instant(
+                            listing_id, listed_utc, as_of):
+                        continue
+                    _effective, _sold, remaining, sold_out = \
+                        self._supply_at_instant(
+                            listing_id, base_supply, as_of)
+                    sampled.setdefault(month, []).append(
+                        (remaining, sold_out, dev_account))
+
+        rows = []
+        opened_running = 0
+        closed_running = 0
+        for month in months:
+            slot = events.get(month, {})
+            opened = slot.get("opened_count", 0)
+            closed = slot.get("closed_count", 0)
+            opened_running += opened
+            closed_running += closed
+            seen = sampled.get(month, [])
+            in_stock = sum(1 for remaining, out, _dev in seen
+                           if remaining is not None and not out)
+            sold_out = sum(1 for remaining, out, _dev in seen
+                           if remaining is not None and out)
+            unlimited = sum(1 for remaining, _out, _dev in seen
+                            if remaining is None)
+            remaining_units = sum(remaining for remaining, _out, _dev
+                                  in seen if remaining is not None)
+            rows.append({
+                "month": month,
+                "as_of": _month_end(month),
+                "opened_count": opened,
+                "closed_count": closed,
+                "net_shop_change": opened - closed,
+                "live_listing_count": len(seen),
+                "seller_count": len(set(dev for _r, _o, dev in seen)),
+                "in_stock_listing_count": in_stock,
+                "sold_out_listing_count": sold_out,
+                "unlimited_listing_count": unlimited,
+                "remaining_units": remaining_units,
+                "units_added": slot.get("units_added", 0),
+                "units_sold": slot.get("units_sold", 0),
+            })
+
+        peak_month = None
+        peak_count = None
+        busiest_open_month = None
+        busiest_open_count = None
+        for row in rows:
+            if row["live_listing_count"] > 0 and (
+                    peak_count is None
+                    or row["live_listing_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["live_listing_count"]
+            if row["opened_count"] > 0 and (
+                    busiest_open_count is None
+                    or row["opened_count"] > busiest_open_count):
+                busiest_open_month = row["month"]
+                busiest_open_count = row["opened_count"]
+        month_over_month_change = None
+        if len(rows) >= 2:
+            month_over_month_change = (
+                rows[-1]["live_listing_count"]
+                - rows[-2]["live_listing_count"])
+        return {
+            "scope": "market",
+            "month_count": len(rows),
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "listing_count": len(listings),
+            "seller_count": len(set(str(row[2]) for row in listings)),
+            "peak_month": peak_month,
+            "peak_live_listing_count": peak_count,
+            "month_over_month_change": month_over_month_change,
+            "busiest_open_month": busiest_open_month,
+            "busiest_open_count": busiest_open_count,
+            "opened_total": opened_running,
+            "closed_total": closed_running,
+            "units_added_total": sum(row["units_added"] for row in rows),
+            "units_sold_total": sum(row["units_sold"] for row in rows),
+            "disclaimer": self.disclaimer,
+            "months": rows,
+        }
