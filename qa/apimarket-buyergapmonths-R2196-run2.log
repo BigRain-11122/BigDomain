@@ -1,0 +1,10 @@
+PASS AC-BGM1: empty_ok=True env_ok=True
+PASS AC-BGM2: activity=5 purchases=6 pairs=[('2026-09', '2026-10', 1, 0), ('2026-10', '2026-12', 2, 1), ('2026-12', '2027-01', 1, 0), ('2027-01', '2027-03', 2, 1)]
+PASS AC-BGM3: activity=4 purchases=5 pairs=[('2026-09', '2026-10', 1, 0), ('2026-10', '2027-01', 3, 2), ('2027-01', '2027-03', 2, 1)]
+PASS AC-BGM4: law=True rows=3 chain=['2026-09', '2026-10', '2027-01', '2027-03']
+PASS AC-BGM5: gap_count=3 dormant=3 avg=1.0 median=1 max=2 longest=['2026-10', '2027-01']
+PASS AC-BGM6: default=['2027-03', 0] given=3 same=0 bad=[] order='E_AM_BAD_ACCOUNT'
+PASS AC-BGM7: pure=True carol=[1, [], None] bare=0
+PASS AC-BGM8: restart=True wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

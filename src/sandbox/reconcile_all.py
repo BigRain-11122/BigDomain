@@ -2553,6 +2553,13 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-claimlatency", os.path.join(
         "ledger", "test_apimarket_claimlatency.py"), 8),
+    # apimarket buyer purchase-gap rhythm - activity on NET purchase
+    # months, gap_months == span_months - 1, aggregates plus a trailing
+    # silence measured against an explicit as_of and never a wall clock
+    # - criteria AC-BGM1..AC-BGM8 pre-registered in the R2189
+    # explore-queue seed 7/10 row BEFORE this suite existed.
+    ("ledger-apimarket-buyergapmonths", os.path.join(
+        "ledger", "test_apimarket_buyergapmonths.py"), 8),
     # apimarket market-wide claim monthly timeline - claims bucketed on
     # their own opened month with the api_claims status seam and the
     # frozen disputed money - criteria AC-MCM1..AC-MCM8 pre-registered

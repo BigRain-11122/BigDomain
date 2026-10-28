@@ -454,6 +454,14 @@ def _assert_day(day):
     return day
 
 
+def _month_index(month):
+    """Absolute month ordinal for a YYYY-MM already validated by
+    _assert_month (AC-BGM4): year times twelve plus the zero-based
+    month, so a cross-year difference is plain arithmetic and never a
+    calendar lookup."""
+    return int(month[:4]) * 12 + int(month[5:7]) - 1
+
+
 def _day_sequence(first, last):
     """Every UTC calendar day from first to last inclusive, both ends
     already validated (AC-MDL4): the honest zero days inside an
@@ -6361,6 +6369,110 @@ class APIMarketFace:
                     m["platform_paid_net"] for m in months),
                 "disclaimer": self.disclaimer,
                 "months": months}
+
+    def api_buyer_gap_months(self, buyer_id, as_of=None):
+        """Buyer-side purchase-gap rhythm (criteria AC-BGM1..AC-BGM8
+        pre-registered in the R2189 explore-queue seed 7/10 row BEFORE
+        this code existed).
+
+        api_buyer_months answers the money in each month and
+        api_market_buyer_retention answers the market-wide survival
+        curve, so the rhythm of ONE resident - how many months passed
+        between two purchases of the same account, how long the
+        longest silence ran, how many months sit dormant inside the
+        observed extent - had no face at all; a repurchase cadence and
+        a sleeping account read identically on the two live faces.
+
+        Activity is the NET purchase month, the same authority the
+        repeat-purchase and retention faces use: a purchase row that
+        has been refunded is not a purchase, so a refund can REMOVE an
+        activity month (and, when it was the earliest, move the origin
+        forward) - disclosed, never silently patched over. A month
+        carrying only refunds is therefore not an activity month.
+
+        gap_months counts the EMPTY months strictly between two
+        consecutive activity months and span_months counts the
+        distance of the pair, so gap_months == span_months - 1 for
+        every row (two consecutive calendar months have gap 0 - the
+        rhythm was unbroken, not absent). No wall clock is read: the
+        trailing silence is measured against as_of, which defaults to
+        the buyer's own last activity month (hence 0), and an as_of
+        that precedes the last activity month is refused fail-closed.
+        Pure read: zero row mutations and zero token movement.
+        """
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        if as_of is not None:
+            _assert_month(as_of)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT p.purchased_utc FROM apimarket_purchases p"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = p.purchase_id"
+                " WHERE p.buyer_id = ? AND f.purchase_id IS NULL",
+                (buyer,)).fetchall()
+
+        months = sorted({str(row[0])[:7] for row in rows})
+        if as_of is not None and months:
+            if _month_index(as_of) < _month_index(months[-1]):
+                raise ApiMarketError(E_AM_BAD_WINDOW,
+                                     "as_of precedes last activity: "
+                                     + as_of)
+        observed = months[-1] if months else None
+        as_of_month = as_of if as_of is not None else observed
+
+        gaps = []
+        for index in range(1, len(months)):
+            span = _month_index(months[index]) - _month_index(
+                months[index - 1])
+            gaps.append({"from_month": months[index - 1],
+                         "to_month": months[index],
+                         "span_months": span,
+                         "gap_months": span - 1})
+
+        values = [g["gap_months"] for g in gaps]
+        if values:
+            ordered = sorted(values)
+            middle = len(ordered) // 2
+            if len(ordered) % 2:
+                median = ordered[middle]
+            else:
+                median = (ordered[middle - 1] + ordered[middle]) / 2.0
+            longest = max(values)
+            longest_row = [g for g in gaps
+                           if g["gap_months"] == longest][0]
+            longest_from = longest_row["from_month"]
+            longest_to = longest_row["to_month"]
+            avg = sum(values) / float(len(values))
+        else:
+            median = None
+            longest = None
+            longest_from = None
+            longest_to = None
+            avg = None
+
+        if as_of_month is not None and observed is not None:
+            trailing = _month_index(as_of_month) - _month_index(observed)
+        else:
+            trailing = None
+
+        return {"buyer_id": buyer,
+                "activity_month_count": len(months),
+                "purchase_count": len(rows),
+                "first_activity_month": months[0] if months else None,
+                "last_activity_month": observed,
+                "gap_count": len(gaps),
+                "dormant_months_total": sum(values),
+                "avg_gap_months": avg,
+                "median_gap_months": median,
+                "max_gap_months": longest,
+                "longest_from_month": longest_from,
+                "longest_to_month": longest_to,
+                "as_of_month": as_of_month,
+                "trailing_dormant_months": trailing,
+                "disclaimer": self.disclaimer,
+                "gaps": gaps}
 
     def api_refund_exposure(self, dev_account=None):
         """Seller-side refund exposure (criteria AC-RPX1..AC-RPX8
