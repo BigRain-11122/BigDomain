@@ -11984,6 +11984,165 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months}
 
+    def api_seller_answer_months(self, dev_account):
+        """Seller-side monthly answer cadence (criteria AC-SAM1..AC-SAM8
+        pre-registered in the R2202 explore-queue seed 2/8 row BEFORE
+        this code existed; the AC-SAM prefix, api_seller_answer_months,
+        test_apimarket_sellermonths, ledger-apimarket-sellermonths,
+        backlog_count and running_answered were git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1; the face name
+        appears only inside the seed row that proposes it).
+
+        api_seller_answers reports lifetime fastest / slowest / mean
+        latency and a single answered count, so a seller who answered
+        everything promptly last quarter and went silent this month
+        read exactly like one that never answered at all: cadence had
+        no face. This face puts the same answers on the month axis.
+
+        Cadence law (AC-SAM2): an answer books in the UTC month of its
+        own immutable answered_utc - the month the seller actually did
+        the work - never the month the question was asked. A seller
+        who goes silent therefore reads as an honest zero row rather
+        than being flattered by old questions still sitting in the
+        queue, and a month that only discharged January backlog shows
+        its whole volume in the month the seller showed up.
+
+        Latency law (AC-SAM3): response_seconds is always measured
+        from the question's own asked_utc to the answer's
+        answered_utc, so a cross-month discharge carries its true
+        older wait instead of a flattering near-zero; each month's
+        fastest / slowest / mean are over the answers BOOKED in that
+        month, the mean is the same integer floor api_seller_answers
+        uses, and a zero month carries honest None latencies rather
+        than a fabricated 0. backlog_count counts the answers booked
+        in the month whose question was asked in an earlier month, so
+        backlog_count + same_month_count == answered_count per row
+        (AC-SAM4).
+
+        Month rows are the contiguous grid from the first to the last
+        answering month, running_answered is the monotone lifetime
+        accumulator whose last value equals the envelope
+        answered_count, and the peak takes the highest month with the
+        earlier-month tie-break (AC-SAM5).
+
+        Strict seller isolation on the same account gate as
+        api_seller_answers: a non-prefix account answers
+        E_AM_BAD_ACCOUNT before any read, while a prefix-valid account
+        with no answers gets an honest empty envelope. Envelope
+        listing_count is every listing the seller owns (the
+        api_seller_answers identity), while each row counts only the
+        listings answered in that month, so row sums are honestly
+        <= the envelope (AC-SAM6). Pure read: zero row mutations and
+        zero token movement."""
+        def _seconds(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            listing_count = self._conn.execute(
+                "SELECT COUNT(*) FROM apimarket_listings"
+                " WHERE dev_account = ?", (dev_account,)).fetchone()[0]
+            raw = self._conn.execute(
+                "SELECT q.asked_utc, a.answered_utc, q.buyer_id,"
+                " q.listing_id"
+                " FROM apimarket_answers a"
+                " JOIN apimarket_questions q"
+                " ON q.question_id = a.question_id"
+                " JOIN apimarket_listings l ON l.listing_id = q.listing_id"
+                " WHERE l.dev_account = ?"
+                " ORDER BY a.answered_utc, a.answer_id",
+                (dev_account,)).fetchall()
+
+        buckets = {}
+        buyers = set()
+        answered_listings = set()
+        latencies = []
+        backlog_total = 0
+        for r in raw:
+            month = str(r[1])[:7]
+            seconds = _seconds(r[0], r[1])
+            b = buckets.get(month)
+            if b is None:
+                b = {"count": 0, "backlog": 0, "buyers": set(),
+                     "listings": set(), "latencies": []}
+                buckets[month] = b
+            b["count"] += 1
+            if str(r[0])[:7] < month:
+                b["backlog"] += 1
+                backlog_total += 1
+            b["buyers"].add(r[2])
+            b["listings"].add(int(r[3]))
+            b["latencies"].append(seconds)
+            buyers.add(r[2])
+            answered_listings.add(int(r[3]))
+            latencies.append(seconds)
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({
+                    "month": month,
+                    "answered_count": 0,
+                    "backlog_count": 0,
+                    "same_month_count": 0,
+                    "buyer_count": 0,
+                    "listing_count": 0,
+                    "fastest_seconds": None,
+                    "slowest_seconds": None,
+                    "mean_seconds": None,
+                    "running_answered": running})
+                continue
+            running += b["count"]
+            months.append({
+                "month": month,
+                "answered_count": b["count"],
+                "backlog_count": b["backlog"],
+                "same_month_count": b["count"] - b["backlog"],
+                "buyer_count": len(b["buyers"]),
+                "listing_count": len(b["listings"]),
+                "fastest_seconds": min(b["latencies"]),
+                "slowest_seconds": max(b["latencies"]),
+                "mean_seconds": sum(b["latencies"]) // b["count"],
+                "running_answered": running})
+
+        total = sum(row["answered_count"] for row in months)
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["answered_count"] > 0 and (
+                    peak_count is None
+                    or row["answered_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["answered_count"]
+        return {
+            "dev_account": dev_account,
+            "scope": "seller",
+            "answered_count": total,
+            "backlog_answered_count": backlog_total,
+            "buyer_count": len(buyers),
+            "listing_count": int(listing_count),
+            "answered_listing_count": len(answered_listings),
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["answered_count"] > 0),
+            "peak_month": peak_month,
+            "peak_answered_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_month_answered_count": (
+                months[-1]["answered_count"] if months else 0),
+            "fastest_seconds": min(latencies) if latencies else None,
+            "slowest_seconds": max(latencies) if latencies else None,
+            "mean_seconds": (sum(latencies) // total) if total else None,
+            "disclaimer": self.disclaimer,
+            "months": months}
+
     def api_market_watch_months(self):
         """Market-wide watch-volume monthly timeline (criteria
         AC-MWM1..AC-MWM8 pre-registered in the R2189 seed 3/10

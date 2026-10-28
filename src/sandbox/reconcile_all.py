@@ -2554,6 +2554,16 @@ SUITES = [
     # BEFORE the code, in the R2205 window.
     ("ledger-apimarket-questionmonths", os.path.join(
         "ledger", "test_apimarket_questionmonths.py"), 8),
+    # seller answer cadence on the month axis (an answer books in the
+    # month of its own answered_utc, never the asked month, so a silent
+    # seller reads as an honest zero row; latency still measured across
+    # the boundary, the backlog split, the contiguous grid with None
+    # latencies on a zero month, the running accumulator, the peak
+    # tie-break, strict seller isolation and the pure-read law) -
+    # criteria AC-SAM1..AC-SAM8 registered in the R2202 explore-queue
+    # seed 2/8 row BEFORE the code, in the R2206 window.
+    ("ledger-apimarket-sellermonths", os.path.join(
+        "ledger", "test_apimarket_sellermonths.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution

@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T20:16:39+08:00",
-  "do": "R2205 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market can now read how much pre-sale question pressure landed each month, and an answer that lands in March raises the January row it belongs to instead of pretending the pressure arrived in March",
+  "export_ts": "2026-10-28T21:05:00+08:00",
+  "do": "R2206 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market can now read a seller's answering cadence month by month instead of one lifetime average: an answer books in the month the seller actually did the work, a silent month is an honest zero, and backlog discharged from an older month carries its true older wait.",
   "ceo_face": {
-    "current": "R2205 market-wide monthly pre-sale question volume: api_market_question_months() gives the whole market a month-by-month question timeline where a question books in its own asking month and the answering leg is credited back to that same month, with an honest zero month and the answer rate per month",
-    "latest_artifact": "qa/apimarket-questionmonths-R2205-a.log / -b.log (SUITE 8/8, sha256 ba85ef053d603ff0..., byte-identical double run) + qa/reconcile-all-R2205.log (RUNNER PASS 400/400 suites, controls 7/7, 1180.3s, matrix 400 suites / 3322 criteria) + src/sandbox/ledger/apimarket.py (api_market_question_months, written 2026-10-28)",
-    "next_milestone": "next explore seed with its criteria registered before the code (five seeds remain open), on top of a fresh battery that already covers this round - within 48h",
-    "last_artifact": "qa/apimarket-sellerwatchmonths-R2204-a.log / -b.log (SUITE 8/8, sha256 abca82e587f18f3a..., byte-identical double run) + qa/regression-R2204.log (six adjacent watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_watch_months, written 2026-10-28)"
+    "current": "R2206 seller monthly answer cadence: api_seller_answer_months() puts each answer in the month the seller actually answered, keeps the true cross-month wait, splits backlog from same-month work and shows a silent month as an honest zero",
+    "latest_artifact": "qa/apimarket-sellermonths-R2206-a.log / -b.log (SUITE 8/8, sha256 3970c1195027e827..., byte-identical double run) + qa/regression-R2206.log (seven adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_answer_months, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration on this tree (matrix 400 -> 401 suites), then the next explore seed with its criteria registered before the code - within 48h",
+    "last_artifact": "qa/apimarket-questionmonths-R2205-a.log / -b.log (SUITE 8/8, sha256 ba85ef053d603ff0..., byte-identical double run) + qa/reconcile-all-R2205.log (RUNNER PASS 400/400 suites, controls 7/7, 1180.3s, matrix 400 suites / 3322 criteria) + src/sandbox/ledger/apimarket.py (api_market_question_months, written 2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller monthly answer cadence (api_seller_answer_months)",
+      "on",
+      "R2206: a seller whose answers are prompt one quarter and silent the next read exactly like one that never answered, because the lifetime latency face carries one flat aggregate. The face books each answer in the UTC month of its own answered_utc, keeps response seconds measured from the question's asked_utc so a cross-month discharge keeps its true older wait, splits backlog from same-month work per row, keeps an honest zero month with None latencies, runs a monotone accumulator and takes the earlier-month peak tie-break, all identical to api_seller_answers on the envelope."
+    ],
     [
       "market-wide monthly question volume (api_market_question_months)",
       "on",
@@ -228,6 +233,10 @@
   ],
   "results": [
     [
+      "R2206",
+      "R2206: five-silence scan clean with four apparent new decision tokens, all citation-only inside other seats' rows, so zero domain action and the baseline re-anchored at 176. Product: api_seller_answer_months with AC-SAM1..AC-SAM8 anchored before the code and the criterion text in the same window (disclosed), SUITE PASS 8/8 double-run byte-identical (sha256 3970c1195027e827), wired as ledger-apimarket-sellermonths(8), seven adjacent suites green. Honest debt: full battery and suite-matrix regeneration deferred to R2207."
+    ],
+    [
       "R2205",
       "R2205: five-silence scan clean (261 rows / 172 D-C-O tokens whose only two absentees against the stored baseline are the known O-family rotation citations inside other seats' rows, so the baseline is re-anchored to the measured 172; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_market_question_months with AC-MQM1..AC-MQM8 registered in the R2202 seed row in the same window as the code (anchor check preceded it, disclosed) - the answering leg credited to the asking month, an answer after the last asking month never extending the grid, the contiguous grid with an honest zero month, the answer-rate arithmetic, the participant asymmetry, the earlier-month peak tie-break, cross-face identity against the seller and buyer question faces, the no-argument contract and the pure-read law, and three-instance byte identity over two restarts. SUITE 8/8 double-run byte-identical sha256 ba85ef053d603ff0 (614B each, crlf=0), six adjacent suites green. The R2204 carried debt was discharged in the same window: full battery RUNNER PASS 400/400 plus controls 7/7 in 1180.3s with TMP RECLAIM 890/890 worlds and 314.26 MiB, then the four follow-up sections all PASS - matrix 400 suites / 3322 criteria byte-identical, fingerprint CLEAN over five domains, runner profile PASS, census DRIFT-CLEAN files=2074 flags=0."
     ],
@@ -404,7 +413,7 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 83,
+    "log_lines_in_window": 85,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 81,
@@ -412,6 +421,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 6
+    "queue_explore_open": 5
   }
 }
