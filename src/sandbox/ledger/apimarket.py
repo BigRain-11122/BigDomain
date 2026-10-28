@@ -10920,3 +10920,193 @@ class APIMarketFace:
             "by_reason": rows,
             "disclaimer": self.disclaimer,
         }
+
+    def api_seller_refund_reasons(self, dev_account=None):
+        """Seller-side refund reason structure (criteria
+        AC-SRR1..AC-SRR8 pre-registered in the R2190 explore claim row
+        BEFORE this code existed; test_apimarket_sellerrefundreasons,
+        ledger-apimarket-sellerrefundreasons, market_refund_share and
+        reason_herfindahl were git-grep -F zero-occupancy against HEAD
+        2026-10-28, rc=1).
+
+        The refund family answers money, headcount, time and the
+        market-wide reason distribution (api_refund_reasons), and
+        api_seller_quality carries the seller's refund count and
+        amount, but no face answers the seller's own question: "what
+        are my refunds actually caused by". A seller could not tell
+        whether the load came from a description that does not match
+        the shelf or from a service that keeps breaking, because the
+        two live in the same free-text column on someone else's roll.
+
+        Bucket law is deliberately the same narrow one as the market
+        face: the key is the stored text through strip() and lower()
+        only, so case and surrounding-whitespace variants collapse
+        while a different spelling stays a different bucket - never
+        stemmed, never merged by synonym, never guessed. An empty text
+        (None or blank) is an HONEST bucket carrying reason=None,
+        ordered LAST no matter how large it is, and excluded from
+        top_reason. It remains one bucket of the concentration
+        measure, because an unwritten cause is still a share of the
+        load.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market', market_refund_rate and market_refund_share are None
+        - the face never benchmarks itself against itself); a seller
+        scope carries the market-wide refund rate and this seller's
+        share of the market refunded total as comparable benchmarks.
+        Refund rows are attributed by the stored dev_account, so
+        another seller's refunds never enter this envelope.
+
+        Gate: the usr: account shape runs before any read
+        (fail-closed E_AM_BAD_ACCOUNT); the bare usr: prefix reads
+        honestly empty. Pure read: zero row mutations, zero token
+        movement. The envelope carries the resident non-advisory
+        disclaimer."""
+        if dev_account is not None and not str(
+                dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def rollup(scope):
+            with self._lock:
+                if scope is None:
+                    raw = self._conn.execute(
+                        "SELECT reason, amount, dev_share,"
+                        " platform_share, listing_id"
+                        " FROM apimarket_refunds"
+                        " ORDER BY refund_id").fetchall()
+                    purchase_count = int(self._conn.execute(
+                        "SELECT COUNT(*) FROM apimarket_purchases"
+                    ).fetchone()[0])
+                else:
+                    raw = self._conn.execute(
+                        "SELECT reason, amount, dev_share,"
+                        " platform_share, listing_id"
+                        " FROM apimarket_refunds"
+                        " WHERE dev_account = ?"
+                        " ORDER BY refund_id", (scope,)).fetchall()
+                    purchase_count = int(self._conn.execute(
+                        "SELECT COUNT(*) FROM apimarket_purchases p"
+                        " JOIN apimarket_listings l"
+                        " ON l.listing_id = p.listing_id"
+                        " WHERE l.dev_account = ?", (scope,)
+                    ).fetchone()[0])
+
+            buckets = {}
+            for reason, amount, dev_share, platform_share, lid in raw:
+                text = ("" if reason is None
+                        else str(reason).strip().lower())
+                key = text or None
+                cell = buckets.get(key)
+                if cell is None:
+                    cell = buckets[key] = {
+                        "reason": key,
+                        "refund_count": 0,
+                        "refunded": 0,
+                        "dev_share": 0,
+                        "platform_share": 0,
+                        "listing_ids": set(),
+                    }
+                cell["refund_count"] += 1
+                cell["refunded"] += int(amount)
+                cell["dev_share"] += int(dev_share)
+                cell["platform_share"] += int(platform_share)
+                cell["listing_ids"].add(int(lid))
+
+            refund_count = len(raw)
+            refunded_total = sum(int(r[1]) for r in raw)
+            labeled = [c for k, c in buckets.items() if k is not None]
+            unlabeled = buckets.get(None)
+            labeled_count = sum(c["refund_count"] for c in labeled)
+            unlabeled_count = (0 if unlabeled is None
+                               else unlabeled["refund_count"])
+
+            rows = []
+            for cell in sorted(buckets.values(), key=lambda c: (
+                    1 if c["reason"] is None else 0,
+                    -c["refund_count"], -c["refunded"],
+                    c["reason"] or "")):
+                count = cell["refund_count"]
+                rows.append({
+                    "reason": cell["reason"],
+                    "refund_count": count,
+                    "refunded": cell["refunded"],
+                    "dev_share": cell["dev_share"],
+                    "platform_share": cell["platform_share"],
+                    "share": (round(float(count) / refund_count, 4)
+                              if refund_count else None),
+                    "avg_amount": (round(
+                        float(cell["refunded"]) / count, 2)
+                        if count else None),
+                    "listing_count": len(cell["listing_ids"]),
+                })
+
+            top_reason = None
+            top_reason_count = None
+            top_reason_share = None
+            if labeled:
+                best = sorted(labeled, key=lambda c: (
+                    -c["refund_count"], -c["refunded"],
+                    c["reason"]))[0]
+                top_reason = best["reason"]
+                top_reason_count = best["refund_count"]
+                top_reason_share = (round(
+                    float(top_reason_count) / labeled_count, 4)
+                    if labeled_count else None)
+
+            herfindahl = None
+            if refund_count:
+                herfindahl = round(sum(
+                    (float(c["refund_count"]) / refund_count) ** 2
+                    for c in buckets.values()) * 10000, 2)
+
+            return {
+                "purchase_count": purchase_count,
+                "refund_count": refund_count,
+                "refund_rate": (round(
+                    float(refund_count) / purchase_count, 4)
+                    if purchase_count else None),
+                "refunded_total": refunded_total,
+                "labeled_count": labeled_count,
+                "unlabeled_count": unlabeled_count,
+                "reason_count": len(rows),
+                "top_reason": top_reason,
+                "top_reason_count": top_reason_count,
+                "top_reason_share": top_reason_share,
+                "reason_herfindahl": herfindahl,
+                "rows": rows,
+            }
+
+        if dev_account is None:
+            core = rollup(None)
+            market_refund_rate = None
+            market_refund_share = None
+            scope = "market"
+        else:
+            core = rollup(dev_account)
+            market = rollup(None)
+            market_refund_rate = market["refund_rate"]
+            market_refund_share = (
+                round(float(core["refunded_total"])
+                      / market["refunded_total"], 4)
+                if market["refunded_total"] else None)
+            scope = "seller"
+
+        return {
+            "scope": scope,
+            "dev_account": dev_account,
+            "purchase_count": core["purchase_count"],
+            "refund_count": core["refund_count"],
+            "refund_rate": core["refund_rate"],
+            "refunded_total": core["refunded_total"],
+            "labeled_count": core["labeled_count"],
+            "unlabeled_count": core["unlabeled_count"],
+            "reason_count": core["reason_count"],
+            "top_reason": core["top_reason"],
+            "top_reason_count": core["top_reason_count"],
+            "top_reason_share": core["top_reason_share"],
+            "reason_herfindahl": core["reason_herfindahl"],
+            "market_refund_rate": market_refund_rate,
+            "market_refund_share": market_refund_share,
+            "rows": core["rows"],
+            "disclaimer": self.disclaimer,
+        }

@@ -1,0 +1,9 @@
+PASS AC-SRR1: keys ok=True row keys ok=True rows=4 scope='seller'/'market' bare refunds=0 bare rows=[]
+PASS AC-SRR2: labeled=['late service', 'description mismatch', 'refunded by mistake'] unlabeled last=True late bucket=(2, 20, 1) frank refunds=1 buckets=[None]
+PASS AC-SRR3: purchases=5 refunds=5/5 refunded sum=36/36 splits ok=True dev=27 plat=9 total=36 rate=1.0
+PASS AC-SRR4: shares=[0.4, 0.2, 0.2, 0.2] sum=1.0 avg late=10.0 unlabeled=10.0 top='late service'/2/0.5 frank top=None
+PASS AC-SRR5: order=['late service', 'description mismatch', 'refunded by mistake', None] tie by name=True herfindahl dana=2800.0 frank=10000.0 market=2777.78
+PASS AC-SRR6: market benchmarks none=True/True market refunds=6/41 seller rate=0.8571 share=0.878 frank=0.8571/0.122 isolated=True
+PASS AC-SRR7: clock-shift identical=True digests frozen=True tx frozen=True pools frozen=True dana quality refunds=5/5 market identity ok=True retirement no-op=True dana rows stable=True benchmark moved to 1.0/0.7826 frank step=2/10/'late service' market=7/46
+PASS AC-SRR8: gate forms=[('', 'E_AM_BAD_ACCOUNT'), ('dana', 'E_AM_BAD_ACCOUNT'), (123, 'E_AM_BAD_ACCOUNT'), ('USR:dana', 'E_AM_BAD_ACCOUNT'), (' usr:dana', 'E_AM_BAD_ACCOUNT')] three instances identical=True empty=(0, [], None) wired=True consumer shas stable=True ascii=True net imports=0 outside repo=True
+SUITE 8/8

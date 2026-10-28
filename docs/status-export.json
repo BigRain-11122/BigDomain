@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T12:53:05+08:00",
-  "do": "R2189 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller can now read which categories their net revenue actually comes from and how lopsided that mix is, instead of guessing from a market-wide category table",
+  "export_ts": "2026-10-28T13:11:25+08:00",
+  "do": "R2190 R2190 R2189 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller can now read which categories their net revenue actually comes from and how lopsided that mix is, instead of guessing from a market-wide category table",
   "ceo_face": {
-    "current": "R2189 seller category mix: a seller now reads the shop's revenue by category in one call - category count, per-category gross/refunded/net and share, top1/top3 share, a concentration index and the count of categories carrying 80% of the money, plus the market-wide index for comparison",
-    "latest_artifact": "qa/apimarket-sellercategorymix-R2189-a.log / -b.log (SUITE 8/8, evidence sha256 0558eaee431465e9, byte-identical) + qa/regression-R2189.log (six adjacent suites) + src/sandbox/ledger/apimarket.py (api_seller_category_mix, written 2026-10-28)",
-    "next_milestone": "full reconcile battery plus suite-matrix regeneration (R2190 first item), then claim the next explore seed - within 48h",
+    "current": "R2190 seller refund reasons: a seller now reads why their own money came back - one row per reason as written (case and whitespace folded, spellings kept apart), an honest unlabeled row pinned last and excluded from the leading cause, share/average per row, a concentration index, and the market refund rate plus this seller's share of the market refunded total as benchmarks",
+    "latest_artifact": "qa/apimarket-sellerrefundreasons-R2190-a.log / -b.log (SUITE 8/8, criterion sha16 aea3ccbc7c14b8f2) + qa/regression-R2190.log + src/sandbox/ledger/apimarket.py (api_seller_refund_reasons, written 2026-10-28)",
+    "next_milestone": "full reconcile battery and suite-matrix regeneration carried from this window, then explore seed 2/10 (buyer watchlist category mix) with its criteria pre-registered first (within 48h)",
     "last_artifact": "qa/apimarket-sellercategorymix-R2189-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller refund reason structure (api_seller_refund_reasons)",
+      "on",
+      "R2190: api_refund_reasons aggregates the refund reason text market-wide and api_seller_quality carries only the seller's refund count and amount, so a seller could not read what their own refunds are caused by - a description mismatch and a service that keeps breaking were indistinguishable on their own ledger. api_seller_refund_reasons(dev_account=None) returns a seventeen-key envelope with eight-key reason rows and keeps the same narrow bucket law as the market face (strip() and lower() only; case and surrounding whitespace fold, a different spelling stays a different bucket, no stemming and no synonym merging). An empty reason is an HONEST bucket carrying reason=None, pinned LAST however large, excluded from top_reason and still counted as one bucket of the concentration measure. Refund rows are attributed by the stored dev_account so another seller's refunds never enter the envelope, and the seller purchase denominator comes from purchases joined to that seller's listings. Conservation holds against the scoped raw tables (count, amount, dev plus platform split, labeled plus unlabeled equals the refund count); share, average and top share are derived from the rows with None instead of a fabricated zero; reason_herfindahl is exact fractions (one bucket 10000.0, four buckets of 2/1/1/1 over five refunds 2800.0, the six-refund market 2777.78); and the total order (-refund_count, -refunded, reason ascending with the unlabeled bucket last) is stable between calls. The market scope never benchmarks itself (both benchmark keys None) while a seller scope carries the market refund rate and its own share of the market refunded total (0.878 for dana, 0.122 for frank). Suite 8/8 double-run byte-identical criterion lines sha16 aea3ccbc7c14b8f2, wired ledger-apimarket-sellerrefundreasons(8); six adjacent refund and seller suites green."
+    ],
     [
       "seller supply rollup (api_seller_supply)",
       "on",
@@ -158,7 +163,11 @@
   ],
   "results": [
     [
-      "2188",
+      "R2190",
+      "R2190: five-silence scan clean (251 rows / 170 D-C tokens with zero new against the stored baseline; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_refund_reasons with AC-SRR1..AC-SRR8 pre-registered in the R2189 seed row BEFORE the code - seventeen-key envelope, the shared narrow bucket law scoped by the stored dev_account, honest unlabeled bucket last and excluded from the leading cause, scoped conservation against the raw tables, share/average/top share with None instead of fake zeros, exact-fraction herfindahl, market benchmarks on a seller scope and None on the market scope, a pure read with frozen digests and frozen ledger_tx, three-instance byte identity after two restarts and five gate forms failing closed before any read. Honest notes: the first run read 6/8 red on two of this window's own expectations (2800.0 not 3200.0; api_seller_quality carries no refund count, so api_refund_register is the cross-face witness) and one real test defect (double dumps on the retirement snapshot, plus a benchmark key that legitimately moves) - all three fixed in the TEST, no implementation loosened; the full battery and matrix regeneration are first-item debt for R2191."
+    ],
+    [
+      "2190",
       "OSLoop 执行 tick",
       "R2188 closed: counters machine-derived from src/os/state.json and the queue/proposal faces"
     ],
@@ -274,14 +283,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 65,
+    "log_lines_in_window": 67,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 65,
+    "substantive_non_idle_mention_lines": 67,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 1
+    "queue_explore_open": 10
   }
 }

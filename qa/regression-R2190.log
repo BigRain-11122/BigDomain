@@ -1,0 +1,6 @@
+test_apimarket_refundreasons.py rc=0 SUITE 8/8
+test_apimarket_refund.py rc=0 SUITE 8/8
+test_apimarket_refundlatency.py rc=0 SUITE 8/8
+test_apimarket_refundexposure.py rc=0 SUITE PASS 8/8
+test_apimarket_sellercategorymix.py rc=0 SUITE PASS 8/8
+test_apimarket_sellerquality.py rc=0 SUITE PASS 8/8

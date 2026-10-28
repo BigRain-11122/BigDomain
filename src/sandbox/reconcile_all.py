@@ -2489,6 +2489,13 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-refundreasons", os.path.join(
         "ledger", "test_apimarket_refundreasons.py"), 8),
+    # seller-side refund reason structure (the same narrow bucket law
+    # scoped by the stored dev_account, the seller's own purchase
+    # denominator, market benchmarks on a seller scope and None on the
+    # market scope) - criteria AC-SRR1..AC-SRR8 pre-registered in the
+    # R2190 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-sellerrefundreasons", os.path.join(
+        "ledger", "test_apimarket_sellerrefundreasons.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and
