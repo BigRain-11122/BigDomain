@@ -1,0 +1,9 @@
+PASS AC-MSC1: envelope=12 keys, rows=9 keys, empty=(0,'None',None,None), arg_forms=all TypeError
+PASS AC-MSC2: listed=5 relisted=1 envelope=(6,1) subset=True
+PASS AC-MSC3: rows=[('2026-01', 1, 1, 0), ('2026-02', 2, 1, 1), ('2026-03', 2, 1, 1), ('2026-04', 1, 0, 1)] seller_count=3 repeat=2 rate=0.666667 relist_sellers=1 backdated=True
+PASS AC-MSC4: partitions=True row_sums=True envelope_totals=True
+PASS AC-MSC5: keys=['2026-01', '2026-02', '2026-03', '2026-04'] order=True first_last=True no_zero=True retirement_noop=True
+PASS AC-MSC6: four adjacent faces byte-identical=True
+PASS AC-MSC7: three calls identical=True tables frozen=True ledger_tx=2 write_free=True
+PASS AC-MSC8: four post-restart instances identical=True files_frozen=True wired=True ascii=True lf=True
+SUITE PASS 8/8

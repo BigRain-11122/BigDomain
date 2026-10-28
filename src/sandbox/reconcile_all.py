@@ -2378,6 +2378,14 @@ SUITES = [
     # claim row BEFORE this suite existed.
     ("ledger-apimarket-listingvelocity", os.path.join(
         "ledger", "test_apimarket_listingvelocity.py"), 8),
+    # apimarket monthly seller cohort - one listing event per
+    # listing row and one re-listing event per re-listing row, the
+    # cohort law (new exactly once, earliest month across the whole
+    # history), the repeat-seller law and the honest empty -
+    # criteria AC-MSC1..AC-MSC8 pre-registered in the R2181
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-sellercohort", os.path.join(
+        "ledger", "test_apimarket_sellercohort.py"), 8),
     # apimarket retirement to re-listing gap - each closed retirement
     # cycle paired with the return that opens the next one, a running
     # gap reported without a duration, and the pooled durations - 
