@@ -2424,6 +2424,15 @@ SUITES = [
     # in the R2176 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-categorypricemonths", os.path.join(
         "ledger", "test_apimarket_categorypricemonths.py"), 8),
+    # per-category monthly SUPPLY trend (point-in-time rebuild at every
+    # UTC month end from publish stamps, restocks, purchases, refunds,
+    # delistings, re-listings and category revisions: in-stock /
+    # sold-out / unlimited split, units still buyable, contiguous
+    # window with honest zero months) - criteria AC-CSM1..AC-CSM8
+    # pre-registered in the R2182 explore-queue claim row BEFORE this
+    # suite existed.
+    ("ledger-apimarket-categorysupplymonths", os.path.join(
+        "ledger", "test_apimarket_categorysupplymonths.py"), 8),
     # calendar-day trade timeline (cash-basis day bucketing, a
     # contiguous grid with honest zero days, inclusive start_day /
     # end_day clipping, an honest empty window, extremes over active

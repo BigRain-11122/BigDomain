@@ -9282,6 +9282,201 @@ class APIMarketFace:
             return row[0]
         return base_category
 
+    def _supply_at_instant(self, listing_id, base_supply, instant):
+        """(effective, sold, remaining, sold_out) of one listing at one
+        instant, derived only from stored stamps (AC-CSM4).
+
+        A purchase counts once its own stamp is at or before the
+        instant and a refund hands its unit back to the shelf from the
+        refund stamp on - the same net law _supply_full applies, only
+        restricted to the stamps the instant has already seen, so no
+        later sale can ever leak backwards into an earlier month end.
+        A restock adds only from its own stamp on. A listing with no
+        declared base supply is unlimited: effective and remaining are
+        None and it can never be sold out (the same honest asymmetry
+        _supply_full reports). Caller holds the lock."""
+        bought = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_purchases"
+            " WHERE listing_id = ? AND purchased_utc <= ?",
+            (listing_id, instant)).fetchone()[0])
+        refunded = int(self._conn.execute(
+            "SELECT COUNT(*) FROM apimarket_refunds"
+            " WHERE listing_id = ? AND refunded_utc <= ?",
+            (listing_id, instant)).fetchone()[0])
+        sold = max(0, bought - refunded)
+        if base_supply is None:
+            return (None, sold, None, False)
+        restocked = int(self._conn.execute(
+            "SELECT COALESCE(SUM(add_units), 0)"
+            " FROM apimarket_supply_revisions"
+            " WHERE listing_id = ? AND restocked_utc <= ?",
+            (listing_id, instant)).fetchone()[0])
+        effective = int(base_supply) + restocked
+        remaining = max(0, effective - sold)
+        return (effective, sold, remaining, remaining == 0)
+
+    def api_category_supply_months(self, include_uncategorized=True):
+        """Per-category monthly SUPPLY trend (criteria AC-CSM1..AC-CSM8
+        pre-registered in the R2182 explore-queue row BEFORE this code
+        existed).
+
+        Every other catalog face is a snapshot: api_categories reports
+        the current live/retired split and price band, api_listing_
+        position one shelf against its rivals, and the demand faces
+        answer lifetime turnover. api_category_price_months answers
+        how the ASKING PRICE moved, never how much of the category was
+        actually still on sale - so "is this category shrinking or
+        expanding" had to be inferred from prices and trades. The
+        material for a rebuild sat on the append-only books (publish
+        stamps with the declared base supply, restocks, purchases,
+        refunds, delistings and re-listings), but no face read them as
+        a supply timeline.
+
+        Sampling law: one observation per UTC month, taken at that
+        month's LAST second, exactly as api_category_price_months does.
+        Liveness comes from _alive_at_instant (the cycle law
+        generalized on the time axis), the bucket from
+        _category_at_instant, and the shelf arithmetic from
+        _supply_at_instant, so a restock or a sale stamped in the last
+        second of a month counts there and one at the next month's
+        first second does not.
+
+        The window is contiguous from the first event month to the
+        last, where the supply-side events are publish stamps,
+        restocks, category revisions, delistings and re-listings, so a
+        month with no event still appears as an honest zero row. Price
+        revisions are deliberately NOT events here: they move no unit,
+        which is why this window may differ from the price face's own
+        and is disclosed.
+
+        Rows are the listing side: a listing is present at a month end
+        only when a cycle was open there. Each month splits its live
+        listings into in-stock, sold-out and unlimited shelves and
+        reports the units still buyable, so conservation holds three
+        ways (month == sum of cells, live == in-stock + sold-out +
+        unlimited, and remaining_units only ever counts finite
+        shelves). Category cells are ordered ascending with the
+        uncategorized bucket last; include_uncategorized=False removes
+        that bucket from cells and from both aggregates.
+
+        Gate: include_uncategorized must be a real bool, fail-closed
+        with E_AM_BAD_ARGS before any read. Pure read: zero row
+        mutations and zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, supply, category, listed_utc"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            events = set()
+            for row in listings:
+                events.add(str(row[3])[:7])
+            for table, column in (
+                    ("apimarket_supply_revisions", "restocked_utc"),
+                    ("apimarket_category_revisions", "revised_utc"),
+                    ("apimarket_delistings", "delisted_utc"),
+                    ("apimarket_relistings", "relisted_utc")):
+                for stamp, in self._conn.execute(
+                        "SELECT " + column + " FROM " + table
+                ).fetchall():
+                    events.add(str(stamp)[:7])
+            months = _contiguous_months(sorted(events))
+            sampled = {}
+            seen = set()
+            for listing_id, base_supply, base_category, listed_utc \
+                    in listings:
+                listing_id = int(listing_id)
+                for month in months:
+                    as_of = _month_end(month)
+                    if not self._alive_at_instant(
+                            listing_id, listed_utc, as_of):
+                        continue
+                    bucket = self._category_at_instant(
+                        listing_id, base_category, as_of)
+                    if bucket is None and not include_uncategorized:
+                        continue
+                    _effective, _sold, remaining, sold_out = \
+                        self._supply_at_instant(
+                            listing_id, base_supply, as_of)
+                    slot = sampled.setdefault(month, {})
+                    slot.setdefault(bucket, []).append(
+                        (remaining, sold_out))
+                    seen.add(listing_id)
+
+        rows = []
+        categories_seen = set()
+        for month in months:
+            slot = sampled.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot:
+                ordered.append(None)
+            cells = []
+            month_live = 0
+            month_in_stock = 0
+            month_sold_out = 0
+            month_unlimited = 0
+            month_remaining = 0
+            for bucket in ordered:
+                values = slot[bucket]
+                unlimited = sum(1 for remaining, _out in values
+                                if remaining is None)
+                in_stock = sum(1 for remaining, out in values
+                               if remaining is not None and not out)
+                sold_out = sum(1 for remaining, out in values
+                               if remaining is not None and out)
+                remaining_units = sum(r for r, _out in values
+                                      if r is not None)
+                cells.append({
+                    "category": bucket,
+                    "live_listing_count": len(values),
+                    "in_stock_listing_count": in_stock,
+                    "sold_out_listing_count": sold_out,
+                    "unlimited_listing_count": unlimited,
+                    "remaining_units": remaining_units,
+                })
+                categories_seen.add(bucket)
+                month_live += len(values)
+                month_in_stock += in_stock
+                month_sold_out += sold_out
+                month_unlimited += unlimited
+                month_remaining += remaining_units
+            rows.append({
+                "month": month,
+                "as_of": _month_end(month),
+                "live_listing_count": month_live,
+                "category_count": len(cells),
+                "in_stock_listing_count": month_in_stock,
+                "sold_out_listing_count": month_sold_out,
+                "unlimited_listing_count": month_unlimited,
+                "remaining_units": month_remaining,
+                "categories": cells,
+            })
+        peak_month = None
+        peak_count = None
+        for row in rows:
+            if peak_month is None \
+                    or row["live_listing_count"] > peak_count:
+                peak_month = row["month"]
+                peak_count = row["live_listing_count"]
+        month_over_month_change = None
+        if len(rows) >= 2:
+            month_over_month_change = (
+                rows[-1]["live_listing_count"]
+                - rows[-2]["live_listing_count"])
+        return {
+            "month_count": len(rows),
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "listing_count": len(seen),
+            "category_count": len(categories_seen),
+            "peak_month": peak_month,
+            "peak_live_listing_count": peak_count,
+            "month_over_month_change": month_over_month_change,
+            "disclaimer": self.disclaimer,
+            "months": rows,
+        }
+
     def api_category_price_months(self, include_uncategorized=True):
         """Per-category monthly asking-price trend (criteria
         AC-CPM1..AC-CPM8 pre-registered in the R2176 explore-queue row

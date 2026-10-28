@@ -1,0 +1,9 @@
+PASS AC-CSM1: env_keys=10 exact=True row_keys=True cell_keys=True empty=[] gate=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-CSM2: months=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06'] as_of_ok=True price_revision_excluded=True
+PASS AC-CSM3: conserved=True listing_count=3 category_count=4
+PASS AC-CSM4: d1_remaining=[2, 1, 5, 5, 5] u1_remaining=[1, 1, 1, 0, 0] u1_sold_out=[0, 0, 0, 1, 1]
+PASS AC-CSM5: live=[3, 3, 3, 3, 2, 3] may_unlimited=0 zero_live=[0, 0, 0, 1] zero_feb_cells=[]
+PASS AC-CSM6: peak='2026-01'/3 delta=1 jun_cells=['data2', 'tools', 'None'] filtered_jun=(2, 5)
+PASS AC-CSM7: identical=True frozen=True tx=True sha16=4bc4398a3e139780
+PASS AC-CSM8: sha16=4bc4398a3e139780 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

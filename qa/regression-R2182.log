@@ -1,0 +1,17 @@
+R2182 adjacent regressions for the category supply trend face
+(ledger-apimarket-categorysupplymonths, 8 criteria AC-CSM1..AC-CSM8)
+
+suite                                          rc   verdict
+test_apimarket_categorypricemonths.py           0   SUITE PASS 8/8
+test_apimarket_category.py                      0   SUITE PASS 8/8
+test_apimarket_categorydemand.py                0   SUITE PASS 8/8
+test_apimarket_supply.py                        0   SUITE 8/8
+test_apimarket_listingposition.py               0   SUITE PASS 8/8
+test_apimarket_sellercohort.py                  0   SUITE PASS 8/8
+
+All six neighbour suites stay green with the new face in the tree; the
+new face is a pure read and mutates no table (proved by frozen digests
+inside the suite itself).
+
+Not run this window: the full battery and the suite-matrix
+regeneration (25-minute budget) - first item of the next round.
