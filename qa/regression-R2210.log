@@ -1,0 +1,9 @@
+test_apimarket_marketwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_sellerwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_buyerwatchcategorymix.py rc=0 SUITE 8/8
+test_apimarket_category.py rc=0 SUITE PASS 8/8
+test_apimarket_categorysupplymonths.py rc=0 SUITE PASS 8/8
+test_apimarket_categorypricemonths.py rc=0 SUITE PASS 8/8
+test_apimarket_categoryvelocitymonths.py rc=0 SUITE PASS 8/8
+test_apimarket_categoryrefundmonths.py rc=0 SUITE PASS 8/8
+ADJACENT 8/8 green

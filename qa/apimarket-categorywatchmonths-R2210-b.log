@@ -1,0 +1,10 @@
+PASS AC-CWM1: env_keys=15 exact=True row_keys=True cell_keys=True empty=(0, [], None)
+PASS AC-CWM2: jan=(4, 0) mar=(1, 1, 0) mar_data=(1, 1, 0) may=(0, 1, -1) may_tools=(1,)
+PASS AC-CWM3: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'] feb=(0, 4, 0)
+PASS AC-CWM4: apr_cats=['analytics', 'data'] analytics=1 jan_cats=['data', 'tools', None]
+PASS AC-CWM5: cells=True sums=(7, 2, 5)/(6, 2, 4) last_row_active=5 market=(7, 2, 5)
+PASS AC-CWM6: buyers=4/9 peak=('2026-01', 4) mom=-2 trimmed=(3, -2)
+PASS AC-CWM7: trim_cats=['analytics', 'data', 'tools'] trim_jan=(3, 2) gates=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] frozen=True
+PASS AC-CWM8: bytes_same=True wired=True ascii_lf=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

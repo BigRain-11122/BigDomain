@@ -2523,6 +2523,14 @@ SUITES = [
     # R2189 seed 3/10 explore-queue claim row in the R2192 window.
     ("ledger-apimarket-marketwatchmonths", os.path.join(
         "ledger", "test_apimarket_marketwatchmonths.py"), 8),
+    # per-category monthly watch flow (the cash-basis double stamp on a
+    # category axis, the contiguous grid with an honest zero month, the
+    # category-at-the-event-instant law, conservation three ways,
+    # participant distinctness, the include_uncategorized gate and the
+    # pure-read/restart law) - criteria AC-CWM1..AC-CWM8 registered in
+    # the R2210 explore-queue claim row BEFORE the code.
+    ("ledger-apimarket-categorywatchmonths", os.path.join(
+        "ledger", "test_apimarket_categorywatchmonths.py"), 8),
     # seller-side monthly watch-inflow timeline (the shared cash-basis
     # double stamp on a seller scope, the contiguous grid with a flat
     # zero month, the running net landing on the live count, the

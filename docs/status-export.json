@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T23:10:00+08:00",
-  "do": "R2209 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a resident can now read their own after-sales history month by month: each claim stays in the month it was opened however late it resolves, a quiet month is an honest zero, and the face separates closed claims from open ones and counts the months the buyer had to push back.",
+  "export_ts": "2026-10-28T23:45:00+08:00",
+  "do": "R2210 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now see which categories gain or lose attention month by month: a watch books in the month it happened and an unwatch in its own month, so a category that went cold reads as a negative net instead of vanishing.",
   "ceo_face": {
-    "current": "R2209 buyer monthly claim flow: api_buyer_claim_months() books each claim in the month it was opened however late it resolves, runs a contiguous grid with honest zero months, partitions the four states with a closed share and counts the buyer's own follow-up notes",
-    "latest_artifact": "qa/apimarket-buyerclaimmonths-R2209-a.log / -b.log (SUITE 8/8, sha256 55ac56980c0025be..., byte-identical double run) + qa/regression-R2209.log (eight adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_buyer_claim_months, written 2026-10-28)",
-    "next_milestone": "full reconcile battery plus suite-matrix regeneration on this tree (matrix 402 -> 403 suites), then the next explore seed with its criteria registered before the code - within 48h",
+    "current": "R2210 per-category monthly watch flow: api_category_watch_months() reports watch/unwatch/net/active per category per month on a contiguous grid with honest zero months, attributes each event to the category in force at that instant, and can drop the uncategorized bucket with every aggregate recomputed",
+    "latest_artifact": "qa/apimarket-categorywatchmonths-R2210-a.log / -b.log (SUITE 8/8, sha256 a591c291b72f0712..., byte-identical double run) + qa/regression-R2210.log (eight adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_category_watch_months, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration on this tree (matrix 402 -> 403 suites), then the last open R2202 seed with its criteria registered before the code - within 48h",
     "last_artifact": "qa/reconcile-all-R2208.log (RUNNER PASS 402/402, 742241 bytes, single-writer utf-8 LF, CRLF=0) + docs/sandbox-suite-matrix.md (402 suites / 3338 criteria, 39079 bytes) + src/os/battery_followup_R2208.py (written 2026-10-28)"
   },
   "depts": [

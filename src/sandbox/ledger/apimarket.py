@@ -12399,6 +12399,173 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
         }
 
+    def api_category_watch_months(self, include_uncategorized=True):
+        """Per-category monthly watch flow (criteria AC-CWM1..AC-CWM8
+        pre-registered in the R2210 explore-queue claim row BEFORE this
+        code existed; the AC-CWM prefix,
+        test_apimarket_categorywatchmonths,
+        ledger-apimarket-categorywatchmonths, category_watch_month_count
+        and watched_category were git-grep zero-occupancy against HEAD
+        2026-10-28, rc=1).
+
+        api_market_watch_months answers the whole market on a monthly
+        axis and api_seller_watch_months one seller's stock, while
+        api_buyer_watch_category_mix is one buyer's live snapshot and
+        api_categories a supply snapshot. Nothing answered which
+        CATEGORIES gain attention month over month, so a buyer rush into
+        one bucket read exactly like a flat market once the per-buyer
+        mixes were aggregated by hand.
+
+        The booking law is the market watch face's cash-basis law: a
+        watch books in the UTC month of watched_utc, an unwatch in the
+        UTC month of unwatched_utc, and a later unwatch never rewrites
+        the month the watch landed in, so a pure-unwatch month carries
+        an honestly negative net. The bucket is the category in force AT
+        THE EVENT INSTANT (_category_at_instant), so a later category
+        revision never moves a month already booked.
+
+        The month window is contiguous from the first event month to the
+        last, so a month with no event still carries an honest zero row.
+        active_count is the running net per category from the first
+        month, so the last month's cell active counts sum to the live
+        watch count. Cells are ordered by category ascending with the
+        uncategorized bucket last.
+
+        include_uncategorized=False drops that bucket from the cells AND
+        recomputes every aggregate without it. The flag must be a real
+        bool: any other value fails closed with E_AM_BAD_ARGS before any
+        read. Pure read: zero row mutations and zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT w.buyer_id, w.listing_id, w.watched_utc,"
+                " l.category, u.unwatched_utc FROM apimarket_watchlist w"
+                " JOIN apimarket_listings l ON l.listing_id = w.listing_id"
+                " LEFT JOIN apimarket_unwatchings u"
+                " ON u.watch_id = w.watch_id ORDER BY w.watch_id"
+            ).fetchall()
+            events = []
+            for buyer, listing_id, watched_utc, base_category, \
+                    unwatched_utc in rows:
+                listing_id = int(listing_id)
+                events.append((
+                    str(watched_utc)[:7], 1, buyer, listing_id,
+                    self._category_at_instant(
+                        listing_id, base_category, watched_utc)))
+                if unwatched_utc is not None:
+                    events.append((
+                        str(unwatched_utc)[:7], -1, buyer, listing_id,
+                        self._category_at_instant(
+                            listing_id, base_category, unwatched_utc)))
+
+        months = _contiguous_months(sorted({event[0] for event in events}))
+        per_month = {}
+        buyers = set()
+        listings = set()
+        categories = set()
+        watch_total = 0
+        unwatch_total = 0
+        for month, sign, buyer, listing_id, category in events:
+            if category is None and not include_uncategorized:
+                continue
+            slot = per_month.setdefault(month, {})
+            cell = slot.setdefault(category, {
+                "watch_count": 0, "unwatch_count": 0,
+                "buyers": set(), "listings": set()})
+            if sign > 0:
+                cell["watch_count"] += 1
+                watch_total += 1
+            else:
+                cell["unwatch_count"] += 1
+                unwatch_total += 1
+            cell["buyers"].add(buyer)
+            cell["listings"].add(listing_id)
+            buyers.add(buyer)
+            listings.add(listing_id)
+            categories.add(category)
+
+        running = {}
+        month_rows = []
+        for month in months:
+            slot = per_month.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot and include_uncategorized:
+                ordered.append(None)
+            cells = []
+            month_watch = 0
+            month_unwatch = 0
+            for category in ordered:
+                cell = slot.get(category)
+                if cell is None:
+                    watch = 0
+                    unwatch = 0
+                    cell_buyers = set()
+                    cell_listings = set()
+                else:
+                    watch = cell["watch_count"]
+                    unwatch = cell["unwatch_count"]
+                    cell_buyers = cell["buyers"]
+                    cell_listings = cell["listings"]
+                net = watch - unwatch
+                active = running.get(category, 0) + net
+                running[category] = active
+                cells.append({
+                    "category": category,
+                    "watch_count": watch,
+                    "unwatch_count": unwatch,
+                    "net_count": net,
+                    "active_count": active,
+                    "buyer_count": len(cell_buyers),
+                    "listing_count": len(cell_listings),
+                })
+                month_watch += watch
+                month_unwatch += unwatch
+            month_rows.append({
+                "month": month,
+                "watch_count": month_watch,
+                "unwatch_count": month_unwatch,
+                "net_count": month_watch - month_unwatch,
+                "active_count": sum(running.values()),
+                "category_count": len(cells),
+                "categories": cells,
+            })
+
+        live_watch_count = (month_rows[-1]["active_count"]
+                            if month_rows else 0)
+        peak_month = None
+        peak_watch_count = None
+        for row in month_rows:
+            if row["watch_count"] <= 0:
+                continue
+            if (peak_watch_count is None
+                    or row["watch_count"] > peak_watch_count):
+                peak_month = row["month"]
+                peak_watch_count = row["watch_count"]
+        month_over_month_change = None
+        if len(month_rows) >= 2:
+            month_over_month_change = (
+                month_rows[-1]["watch_count"]
+                - month_rows[-2]["watch_count"])
+
+        return {
+            "month_count": len(month_rows),
+            "first_month": month_rows[0]["month"] if month_rows else None,
+            "last_month": month_rows[-1]["month"] if month_rows else None,
+            "watch_count": watch_total,
+            "unwatch_count": unwatch_total,
+            "net_count": watch_total - unwatch_total,
+            "live_watch_count": live_watch_count,
+            "category_count": len(categories),
+            "buyer_count": len(buyers),
+            "listing_count": len(listings),
+            "peak_month": peak_month,
+            "peak_watch_count": peak_watch_count,
+            "month_over_month_change": month_over_month_change,
+            "disclaimer": self.disclaimer,
+            "months": month_rows,
+        }
+
     def api_rating_reply_latency(self, dev_account=None):
         """Seller-side rating reply latency scorecard (criteria
         AC-RRL1..AC-RRL8 pre-registered in the R2189 explore-queue
