@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T11:09:56+08:00",
-  "do": "R2185 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read whether one resident's spend is concentrated on a single counterparty or a single category, with the same herfindahl/pareto vocabulary the seller side already uses",
+  "export_ts": "2026-10-28T11:49:27+08:00",
+  "do": "R2186 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
   "ceo_face": {
-    "current": "R2185: shipped api_buyer_concentration - the buyer-side mirror of the seller concentration index, computed on two independent axes (sellers and effective categories) from the same purchase rows: share, cumulative share, top1/top3, herfindahl, pareto count, with a fully refunded seller kept on the roll at zero weight and strict buyer isolation (suite 8/8 double-run byte-identical, five neighbours green); the full battery including the new suite is green (383/383 suites)",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_buyer_concentration) + src/sandbox/ledger/test_apimarket_buyerconcentration.py + qa/apimarket-buyerconcentration-R2185-a.log and -b.log (SUITE PASS 8/8, sha256 e1657003677c5abf) + qa/reconcile-all-R2185-2.log (RUNNER PASS 383/383, 649.5s) - 2026-10-28",
-    "next_milestone": "R2186: next explore seed (R2178 8/10, api_category_velocity_months - the per-category sale-speed monthly trend) plus the regenerated suite matrix - ETA 2026-10-29, within 48h",
-    "last_artifact": "qa/apimarket-buyerconcentration-R2185-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2186: shipped api_category_velocity_months - every net sale bucketed by its own UTC purchase month, a contiguous window over SALE months with honest zero rows, the cycle-opening duration law (a re-listed shelf is measured from its new cycle), sale-instant category buckets, per-month avg/median/fastest/slowest plus a whole-history market benchmark and a sell-through conservation law (suite 8/8 double-run byte-identical, four neighbours green); the full battery is deferred and disclosed as debt for R2187",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py (api_category_velocity_months) + src/sandbox/ledger/test_apimarket_categoryvelocitymonths.py + qa/apimarket-categoryvelocitymonths-R2186-a.log and -b.log (SUITE PASS 8/8, double-run identical 898B each) - 2026-10-28",
+    "next_milestone": "R2187: discharge this round's battery debt (full reconcile battery plus the suite-matrix regeneration) and open the next explore seed (R2178 9/10, api_refund_reasons with a pinned normalisation law) - ETA 2026-10-29, within 48h",
+    "last_artifact": "qa/apimarket-categoryvelocitymonths-R2186-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {

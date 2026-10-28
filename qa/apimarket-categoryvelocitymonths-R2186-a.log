@@ -1,0 +1,9 @@
+PASS AC-CVMT1: env_keys=13 exact=True row_keys=True cell_keys=True empty=[] gate=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-CVMT2: months=['2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07'] zero_months=['2026-03', '2026-05'] price_rev_excluded=True
+PASS AC-CVMT3: feb=['tools'] apr_cells=[None, 'tools'] total=7
+PASS AC-CVMT4: carol=4017600 erin=2678400 faye=3585599 bob=3585600 gus=15422400
+PASS AC-CVMT5: jun_avg=3131999.5 jun_median=3131999.5 peak='2026-04' mom=0 market_avg=6603428.428571428
+PASS AC-CVMT6: july_buckets=['data2', 'tools'] filtered_sale=6 filtered_cat=2
+PASS AC-CVMT7: identical=True frozen=True tx=True sha16=518143eef0df16d4
+PASS AC-CVMT8: sha16=518143eef0df16d4 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

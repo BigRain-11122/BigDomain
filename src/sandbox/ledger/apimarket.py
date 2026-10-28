@@ -10020,6 +10020,215 @@ class APIMarketFace:
             "months": rows,
         }
 
+    def api_category_velocity_months(self, include_uncategorized=True):
+        """Per-category monthly SELL-THROUGH velocity (criteria
+        AC-CVMT1..AC-CVMT8 registered in the R2186 explore-queue row
+        BEFORE this code existed; the seed row asked for the face in
+        R2178 and every anchor was re-measured there - the proposed
+        AC-CVM prefix turned out to be occupied by the civicpoints
+        AC-CVM1..CVM7 family, 194 hits, so the prefix is AC-CVMT with
+        zero occupancy, and ledger-apimarket-categoryvelocitymonths,
+        peak_sale_count and sale_month_count were zero-occupancy too).
+
+        api_listing_velocity answers each shelf once, as a LIFETIME
+        pooled figure with a whole-history market benchmark;
+        api_category_price_months answers how the asking price moved
+        and api_category_supply_months how many units were still on
+        the shelf. None of them puts a sale on a calendar month, so
+        "is this category harder to sell this month than last month"
+        had no face at all, and a month with zero sales was invisible
+        instead of honestly empty.
+
+        Sampling law: each NET sale is bucketed by the UTC month of its
+        own purchased_utc stamp (a sale at the month's last second
+        lands in that month, one at the next month's first second does
+        not), and the window is CONTIGUOUS from the first to the last
+        SALE month, so a month with no sale shows an honest zero row.
+        That window is deliberately different from the price and
+        supply faces, whose window is built from catalog events, and
+        the difference is disclosed rather than hidden.
+
+        Sale authority is net, exactly as api_listing_velocity: a
+        purchase carrying an append-only refund row enters neither a
+        count nor an aggregate, and the refund does not move the sale
+        into the refund month - it removes it. A listing whose only
+        purchase was refunded therefore contributes no row at all, and
+        a month whose only sales were refunded reads as a zero month
+        with avg None, never a fake zero duration.
+
+        The measured duration follows the cycle law (R2089): the shelf
+        opened at the LATEST re-listing stamp at or before that sale,
+        or at the immutable listed_utc when there is none, so a sale
+        inside cycle 3 is measured from the cycle 3 opening and a
+        re-listing AFTER the sale can never move the figure. Durations
+        are integers derived only from two stored stamps, never a wall
+        clock, and clamped at zero for the one disclosed boundary where
+        a fixture's purchase stamp predates every opening stamp.
+
+        The category bucket is the effective bucket AT THE SALE INSTANT
+        through _category_at_instant, so a category revision stamped
+        after the sale never re-files history - the time-axis sibling
+        of the seam api_listing_velocity uses today.
+
+        Aggregates are pooled inside their own month (avg is the mean,
+        median the middle value or the midpoint of the two middles),
+        fastest picks the smallest duration with listing_id ascending
+        as the tie-break and slowest the largest duration with the same
+        tie-break; all four are None on a zero month. market_avg_
+        seconds and market_median_seconds are deliberately NOT scoped
+        by month or by bucket - they are the whole-history benchmark a
+        seller compares one month against - and each month row carries
+        the same market_avg_seconds so a single row is readable alone.
+
+        Gates: include_uncategorized must be a real bool, fail-closed
+        with E_AM_BAD_ARGS before any read. With False the None bucket
+        leaves the cells and both aggregates. Pure read: zero row
+        mutations, zero token movement, and the resident non-advisory
+        disclaimer rides the envelope."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _dur(earlier, later):
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        def _mean(values):
+            if not values:
+                return None
+            return float(sum(values)) / len(values)
+
+        def _median(values):
+            if not values:
+                return None
+            ordered = sorted(values)
+            mid = len(ordered) // 2
+            if len(ordered) % 2:
+                return float(ordered[mid])
+            return (float(ordered[mid - 1]) + ordered[mid]) / 2.0
+
+        with self._lock:
+            bases = {}
+            for listing_id, base_category, listed_utc in self._conn.execute(
+                    "SELECT listing_id, category, listed_utc"
+                    " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall():
+                bases[int(listing_id)] = (base_category, str(listed_utc))
+            sales = self._conn.execute(
+                "SELECT p.listing_id, p.purchased_utc FROM"
+                " apimarket_purchases p WHERE NOT EXISTS ("
+                "SELECT 1 FROM apimarket_refunds f"
+                " WHERE f.purchase_id = p.purchase_id)"
+                " ORDER BY p.purchased_utc, p.purchase_id").fetchall()
+            records = []
+            for listing_id, purchased_utc in sales:
+                listing_id = int(listing_id)
+                sale_utc = str(purchased_utc)
+                base_category, listed_utc = bases[listing_id]
+                row = self._conn.execute(
+                    "SELECT MAX(relisted_utc) FROM apimarket_relistings"
+                    " WHERE listing_id = ? AND relisted_utc <= ?",
+                    (listing_id, sale_utc)).fetchone()
+                opened = (row[0] if row is not None and row[0] is not None
+                          else listed_utc)
+                bucket = self._category_at_instant(
+                    listing_id, base_category, sale_utc)
+                records.append({
+                    "listing_id": listing_id,
+                    "month": sale_utc[:7],
+                    "category": bucket,
+                    "elapsed": max(0, _dur(opened, sale_utc))})
+
+        kept = [r for r in records
+                if include_uncategorized or r["category"] is not None]
+        months = _contiguous_months(
+            sorted(set(r["month"] for r in kept)))
+        all_elapsed = [r["elapsed"] for r in kept]
+        market_avg = _mean(all_elapsed)
+        market_median = _median(all_elapsed)
+
+        sampled = {}
+        seen = set()
+        for r in kept:
+            sampled.setdefault(r["month"], []).append(r)
+            seen.add(r["listing_id"])
+
+        rows = []
+        categories_seen = set()
+        for month in months:
+            slot = sampled.get(month, [])
+            buckets = {}
+            for r in slot:
+                buckets.setdefault(r["category"], []).append(r)
+            ordered = sorted(b for b in buckets if b is not None)
+            if None in buckets:
+                ordered.append(None)
+            cells = []
+            for bucket in ordered:
+                values = [x["elapsed"] for x in buckets[bucket]]
+                cells.append({
+                    "category": bucket,
+                    "sale_count": len(values),
+                    "listing_count": len(set(x["listing_id"]
+                                              for x in buckets[bucket])),
+                    "avg_seconds": _mean(values),
+                    "median_seconds": _median(values)})
+                categories_seen.add(bucket)
+            durations = [r["elapsed"] for r in slot]
+            fastest = None
+            fastest_id = None
+            slowest = None
+            slowest_id = None
+            if slot:
+                fastest = min(durations)
+                fastest_id = min(r["listing_id"] for r in slot
+                                 if r["elapsed"] == fastest)
+                slowest = max(durations)
+                slowest_id = min(r["listing_id"] for r in slot
+                                 if r["elapsed"] == slowest)
+            rows.append({
+                "month": month,
+                "as_of": _month_end(month),
+                "sale_count": len(slot),
+                "listing_count": len(set(r["listing_id"] for r in slot)),
+                "category_count": len(cells),
+                "avg_seconds": _mean(durations),
+                "median_seconds": _median(durations),
+                "fastest_seconds": fastest,
+                "slowest_seconds": slowest,
+                "fastest_listing_id": fastest_id,
+                "slowest_listing_id": slowest_id,
+                "market_avg_seconds": market_avg,
+                "categories": cells})
+
+        peak_month = None
+        peak_sales = None
+        for row in rows:
+            if peak_month is None or row["sale_count"] > peak_sales:
+                peak_month = row["month"]
+                peak_sales = row["sale_count"]
+        month_over_month_change = None
+        if len(rows) >= 2:
+            month_over_month_change = (rows[-1]["sale_count"]
+                                      - rows[-2]["sale_count"])
+        return {
+            "month_count": len(rows),
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "sale_count": len(kept),
+            "listing_count": len(seen),
+            "category_count": len(categories_seen),
+            "peak_month": peak_month,
+            "peak_sale_count": peak_sales,
+            "month_over_month_change": month_over_month_change,
+            "market_avg_seconds": market_avg,
+            "market_median_seconds": market_median,
+            "disclaimer": self.disclaimer,
+            "months": rows,
+        }
+
     def api_market_daily(self, start_day=None, end_day=None):
         """Market-wide CALENDAR-DAY trade timeline (pre-registered
         AC-MDL1..AC-MDL8 in the R2178 explore-queue row BEFORE this

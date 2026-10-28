@@ -2440,6 +2440,14 @@ SUITES = [
     # window with honest zero months) - criteria AC-CSM1..AC-CSM8
     # pre-registered in the R2182 explore-queue claim row BEFORE this
     # suite existed.
+    # apimarket per-category monthly sell-through velocity - each NET
+    # sale bucketed by its own purchased_utc month, a contiguous window
+    # over SALE months (zero months are honest rows), the cycle-opening
+    # duration law and the sale-instant category seam - criteria
+    # AC-CVMT1..AC-CVMT8 pre-registered in the R2186 explore-queue row
+    # BEFORE this suite existed.
+    ("ledger-apimarket-categoryvelocitymonths", os.path.join(
+        "ledger", "test_apimarket_categoryvelocitymonths.py"), 8),
     ("ledger-apimarket-categorysupplymonths", os.path.join(
         "ledger", "test_apimarket_categorysupplymonths.py"), 8),
     # calendar-day trade timeline (cash-basis day bucketing, a
