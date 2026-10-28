@@ -1,0 +1,7 @@
+test_apimarket_sellerrestockmonths.py rc=0 SUITE 9/9
+test_apimarket_sellermonths.py rc=0 SUITE 8/8
+test_apimarket_repeatpurchase.py rc=0 SUITE PASS 8/8
+test_apimarket_buyercohort.py rc=0 SUITE PASS 8/8
+test_apimarket_sellercohort.py rc=0 SUITE PASS 8/8
+test_apimarket_sellerreplymonths.py rc=0 SUITE 8/8
+test_apimarket_marketconversionmonths.py rc=0 SUITE 8/8

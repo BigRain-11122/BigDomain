@@ -14801,3 +14801,148 @@ class APIMarketFace:
             out["disclaimer"] = self.disclaimer
             out["directions"] = directions
             return out
+
+    def api_seller_repeat_months(self, dev_account):
+        """Seller-side monthly returning-buyer share (criteria
+        AC-SRB1..AC-SRB8 pre-registered in the R2213 explore-seed row
+        claimed in R2228 BEFORE this code existed; the AC-SRB prefix
+        was chosen because AC-SRM is already occupied by
+        api_seller_reply_months, and repeat_share / first_seller_month
+        / returning_share / repeat_gross were git-grep zero-occupancy
+        against HEAD 2026-10-29, rc=1).
+
+        api_repeat_purchase answers the lifetime question only, and
+        api_market_buyer_cohort reads new-versus-returning at MARKET
+        scope over the active months only, so a seller could not read
+        "was this month carried by regulars or by newcomers". This
+        face pins the same net authority on ONE seller and on a
+        contiguous month grid.
+
+        Net authority (AC-SRB2): a refunded purchase is not a
+        purchase, so a refund removes that buyer from the month; when
+        that month was the buyer's earliest at this seller their
+        first month moves forward, and a buyer whose every purchase
+        was refunded disappears entirely rather than showing a zero
+        contribution.
+
+        Returning law (AC-SRB3): a buyer counts as returning in a
+        month only when their first net-purchase month at this seller
+        is strictly earlier than that month. Two purchases inside one
+        month are NOT returning here, which is deliberately different
+        from api_repeat_purchase's two-or-more-purchases lifetime law;
+        the asymmetry is disclosed and asserted by the suite.
+
+        Grid and accumulation (AC-SRB4): months run contiguously from
+        the first to the last active month, a month with no trade
+        keeps an honest zero row whose returning_share is None, and
+        the envelope buyer_count always equals the sum of the rows'
+        new_buyer_count because each buyer is credited to exactly one
+        newcomer month. Pure read: zero row mutations and zero token
+        movement."""
+        if not str(dev_account or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT p.buyer_id, p.price_paid, p.purchased_utc"
+                " FROM apimarket_purchases p"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = p.listing_id"
+                " WHERE l.dev_account = ? AND NOT EXISTS"
+                " (SELECT 1 FROM apimarket_refunds f"
+                "  WHERE f.purchase_id = p.purchase_id)"
+                " ORDER BY p.purchased_utc, p.purchase_id",
+                (dev_account,)).fetchall()
+
+        first = {}
+        activity = {}
+        buckets = {}
+        for buyer, price, stamp in raw:
+            month = str(stamp)[:7]
+            if buyer not in first or month < first[buyer]:
+                first[buyer] = month
+            activity.setdefault(buyer, set()).add(month)
+            b = buckets.setdefault(month, {"purchases": []})
+            b["purchases"].append((buyer, int(price)))
+
+        months = []
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({
+                    "month": month,
+                    "purchase_count": 0,
+                    "gross": 0,
+                    "buyer_count": 0,
+                    "new_buyer_count": 0,
+                    "returning_buyer_count": 0,
+                    "returning_share": None,
+                    "new_purchase_count": 0,
+                    "returning_purchase_count": 0,
+                    "new_gross": 0,
+                    "returning_gross": 0})
+                continue
+            buyers = {}
+            gross = 0
+            new_purchases = 0
+            new_gross = 0
+            for buyer, price in b["purchases"]:
+                gross += price
+                buyers.setdefault(buyer, 0)
+                buyers[buyer] += 1
+                if first[buyer] == month:
+                    new_purchases += 1
+                    new_gross += price
+            new_buyers = sum(1 for buyer in buyers
+                             if first[buyer] == month)
+            buyer_count = len(buyers)
+            returning = buyer_count - new_buyers
+            months.append({
+                "month": month,
+                "purchase_count": len(b["purchases"]),
+                "gross": gross,
+                "buyer_count": buyer_count,
+                "new_buyer_count": new_buyers,
+                "returning_buyer_count": returning,
+                "returning_share": (float(returning) / buyer_count
+                                    if buyer_count else None),
+                "new_purchase_count": new_purchases,
+                "returning_purchase_count": (len(b["purchases"])
+                                             - new_purchases),
+                "new_gross": new_gross,
+                "returning_gross": gross - new_gross})
+
+        buyer_count = len(activity)
+        repeat_buyer_count = sum(
+            1 for stamps in activity.values() if len(stamps) > 1)
+        peak_month = None
+        peak_returning = None
+        for row in months:
+            if row["returning_buyer_count"] > 0 and (
+                    peak_returning is None
+                    or row["returning_buyer_count"] > peak_returning):
+                peak_month = row["month"]
+                peak_returning = row["returning_buyer_count"]
+        return {
+            "dev_account": dev_account,
+            "scope": "seller",
+            "buyer_count": buyer_count,
+            "repeat_buyer_count": repeat_buyer_count,
+            "repeat_rate": (float(repeat_buyer_count) / buyer_count
+                            if buyer_count else None),
+            "purchase_count": sum(row["purchase_count"]
+                                  for row in months),
+            "gross": sum(row["gross"] for row in months),
+            "new_gross": sum(row["new_gross"] for row in months),
+            "returning_gross": sum(row["returning_gross"]
+                                   for row in months),
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["purchase_count"] > 0),
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "peak_month": peak_month,
+            "peak_returning_buyer_count": peak_returning,
+            "latest_month_returning_share": (
+                months[-1]["returning_share"] if months else None),
+            "disclaimer": self.disclaimer,
+            "months": months}

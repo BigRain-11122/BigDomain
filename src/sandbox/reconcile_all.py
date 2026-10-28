@@ -2695,6 +2695,18 @@ SUITES = [
     # BEFORE this suite existed.
     ("ledger-apimarket-buyerpricereaction", os.path.join(
         "ledger", "test_apimarket_buyerpricereaction.py"), 8),
+    # apimarket seller-side monthly returning-buyer face - the net
+    # authority (a refund removes the buyer from the month, moves a
+    # seller-first month forward and erases a fully refunded buyer), the
+    # returning law that only a strictly earlier seller-first month
+    # counts (the disclosed asymmetry against api_repeat_purchase's
+    # two-or-more-purchases lifetime law), the contiguous year-crossing
+    # grid with honest zero rows, the newcomer credit and money-split
+    # conservation, strict seller isolation and the prefix gate -
+    # criteria AC-SRB1..AC-SRB8 registered in the R2213 explore-seed row
+    # claimed in R2228 BEFORE this suite existed.
+    ("ledger-apimarket-sellerrepeatmonths", os.path.join(
+        "ledger", "test_apimarket_sellerrepeatmonths.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and
