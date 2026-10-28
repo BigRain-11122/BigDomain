@@ -1,0 +1,10 @@
+PASS AC-MBM1: env_keys=11 exact=True row_keys=True empty=(0, [], 0, None)
+PASS AC-MBM2: jan=(3, 1, 2) feb=(0, 0, 2) mar=(3, 1, 4) apr=(0, 1, 3) totals=(6, 3, 3)
+PASS AC-MBM3: grid=['2026-01', '2026-02', '2026-03', '2026-04'] months=4 feb=(0, 0, 0, 2) cumulative=[3, 3, 6, 6]
+PASS AC-MBM4: net=[2, 0, 2, -1] deltas=[2, 0, 2, -1] rates=(0.6667, 0.6667, 0.5) net_ok=True rate_ok=True
+PASS AC-MBM5: peak=('2026-03', 4) jan_feb_tie=(2, 2) empty=(None, None)
+PASS AC-MBM6: arrivals=(6, 3, 3) env=(6, 3, 3) arrival_grid=['2026-01', '2026-02', '2026-03']
+PASS AC-MBM7: typeerror=4/4 deterministic=True digests_same=True tx_same=True
+PASS AC-MBM8: bytes_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

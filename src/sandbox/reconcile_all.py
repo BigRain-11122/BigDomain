@@ -2660,6 +2660,10 @@ SUITES = [
     # row BEFORE the code, in the R2232 window.
     ("ledger-apimarket-buyeranswerwait", os.path.join(
         "ledger", "test_apimarket_buyeranswerwait.py"), 8),
+    # apimarket market-wide monthly question backlog - the debt
+    # axis (open at month end) the arrival and inbox faces lack
+    ("ledger-apimarket-backlogmonths", os.path.join(
+        "ledger", "test_apimarket_backlogmonths.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution

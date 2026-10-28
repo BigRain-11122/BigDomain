@@ -1,0 +1,4 @@
+test_apimarket_questionmonths.py rc=0 SUITE 8/8
+test_apimarket_sellerquestionmonths.py rc=0 SUITE 8/8
+test_apimarket_buyeranswerwait.py rc=0 SUITE 8/8
+test_apimarket_categoryquestionmonths.py rc=0 SUITE 8/8

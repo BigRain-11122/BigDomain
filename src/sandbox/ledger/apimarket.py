@@ -12192,6 +12192,108 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months}
 
+    def api_market_backlog_months(self):
+        """Market-wide monthly pre-sale question backlog (criteria
+        AC-MBM1..AC-MBM8 pre-registered in the R2230 explore-queue
+        seed row BEFORE this code existed; the AC-MBM prefix,
+        api_market_backlog_months, test_apimarket_backlogmonths,
+        ledger-apimarket-backlogmonths, backlog_month_count,
+        open_at_month_end and answered_at were all git grep -F
+        zero-occupancy against HEAD 2026-10-29, rc=1).
+
+        api_seller_inbox reports the PRESENT debt and
+        api_market_question_months the monthly ARRIVALS, so whether
+        the whole market's open question debt grew or shrank month
+        over month had no reading at all: a market that answered as
+        fast as it was asked and one whose queue doubled every month
+        carried the same arrival rows.
+
+        The open-at-month-end law (AC-MBM2) is derived only from the
+        two immutable stamps: a question is open at a month end when
+        its asked_utc is at or before that end and it carries no
+        answer, or an answered_utc strictly after that end. An answer
+        landing in a later month therefore closes the debt in THAT
+        month and never re-dates the asking month.
+
+        The grid (AC-MBM3) is the contiguous span of every month
+        carrying either an asking or an answering event - the UNION,
+        a deliberately disclosed difference from the arrival face, so
+        a month that only discharges older questions still shows the
+        debt shrinking instead of vanishing. net_change obeys
+        net_change == asked_count - answered_count == the month-end
+        delta (AC-MBM4), and open_rate is None rather than a
+        fabricated 0.0 on a zero cumulative denominator.
+
+        No arguments, so no gate: pure read, zero row mutations and
+        zero token movement."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT q.question_id, q.asked_utc, a.answered_utc"
+                " FROM apimarket_questions q"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " ORDER BY q.question_id").fetchall()
+
+        asked = {}
+        answered = {}
+        pairs = []
+        for r in rows:
+            asked_utc = str(r[1])
+            answered_utc = (str(r[2]) if r[2] is not None else None)
+            pairs.append((asked_utc, answered_utc))
+            key = asked_utc[:7]
+            asked[key] = asked.get(key, 0) + 1
+            if answered_utc is not None:
+                akey = answered_utc[:7]
+                answered[akey] = answered.get(akey, 0) + 1
+
+        months = []
+        cumulative = 0
+        for month in _contiguous_months(
+                sorted(set(list(asked.keys()) + list(answered.keys())))):
+            end = _month_end(month)
+            open_count = 0
+            for asked_utc, answered_utc in pairs:
+                if asked_utc <= end and (
+                        answered_utc is None or answered_utc > end):
+                    open_count += 1
+            asked_in = asked.get(month, 0)
+            answered_in = answered.get(month, 0)
+            cumulative += asked_in
+            months.append({
+                "month": month,
+                "asked_count": asked_in,
+                "answered_count": answered_in,
+                "net_change": asked_in - answered_in,
+                "open_at_month_end": open_count,
+                "cumulative_asked": cumulative,
+                "open_rate": (round(open_count / float(cumulative), 4)
+                              if cumulative else None)})
+
+        total_asked = sum(row["asked_count"] for row in months)
+        total_answered = sum(row["answered_count"] for row in months)
+        peak_month = None
+        peak_open = None
+        for row in months:
+            if row["open_at_month_end"] > 0 and (
+                    peak_open is None
+                    or row["open_at_month_end"] > peak_open):
+                peak_month = row["month"]
+                peak_open = row["open_at_month_end"]
+        return {
+            "month_count": len(months),
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "asked_count": total_asked,
+            "answered_count": total_answered,
+            "open_count": total_asked - total_answered,
+            "peak_month": peak_month,
+            "peak_open_count": peak_open,
+            "latest_month_open_count": (
+                months[-1]["open_at_month_end"] if months else 0),
+            "disclaimer": self.disclaimer,
+            "months": months}
+
     def api_category_question_months(self, include_uncategorized=True):
         """Per-category monthly pre-sale question volume (criteria
         AC-CQM1..AC-CQM8 pre-registered in the R2213 explore-queue

@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T06:24:34+08:00",
-  "do": "verification debt R2233 (full battery + matrix on the committed tree)",
+  "export_ts": "2026-10-29T06:33:37+08:00",
+  "do": "product window R2234: apimarket market monthly question backlog",
   "ceo_face": {
-    "current": "R2233 验证轮：把 R2232 欠下的全量对账电池清掉。第一次跑红（417 套件里 2 套挂：口径来自两处真实证据卫生缺陷，不是产品逻辑）——R2231 的两支卖家提问证据被 PowerShell 管道写成 CRLF，走路器口径普查被记成 pwsh-capture；另一处是 R2230 电池首跑红/重跑绿的两份日志被身份审计当成「双跑同字节对」。已修：R2231 两支证据用唯一 python 写入器归一化为 utf-8/LF（内容零改动，763→753 字节，两支同 sha16 2207807e14fc2f88）；R2230 那对按 R2153 同一披露惯例写进随仓基线（新增 why 说明它是电池日志不是套件双跑，并定下今后「修后重跑」一律命名为 -retry，不再落成对后缀）。修完在已提交树上重跑：RUNNER PASS 417/417 套件、对账控制 7/7，1023.4 秒，出生地临时世界回收 920/920、323.06 MiB；四项后处理全过（矩阵重生成 417 套件/3459 判据并回读一致、指纹链五域 CLEAN、runner profile 日检 PASS、证据写入普查 DRIFT-CLEAN）。产品分诚实为零——本轮是验证债，没有新增产品功能。",
-    "latest_artifact": "qa/reconcile-all-R2233.log（417/417 绿 + 四项后处理 VERDICT PASS，754KB，单写者 utf-8 LF，CRLF=0）；docs/sandbox-suite-matrix.md（40690 字节，417 套件 / 3459 判据，green=417/417）；src/os/evidence_normalize_R2233.py；state/run_identity_baseline.json（新增 reconcile-all-R2230 披露条目）；2026-10-29",
-    "next_milestone": "48 小时内：清完验证债后回到产品面——抽 explore 队头 R2230 3/6 种子，做 api_market_backlog_months（全市场月度未答提问积压时间线，AC-MBM1..AC-MBM8 已在队列行预注册），随后按 4/6/5/6/6/6 顺序推进；支付/月卡/大厅仍卡在 CEO 物理件（平台名裁决、服务器、域名备案、商户号、msgSecCheck），零催办。"
+    "current": "R2234 产品窗：新增「全市场售前问答积压月度面」api_market_backlog_months——此前只有每月新增提问（到达面）与卖家当下欠债（收件箱），「整个市场的提问积压在变多还是变少」无面可读。本面用两条不可变时间戳（asked_utc / answered_utc）定义月末未答数：晚月才回答的那笔在晚月才消债、绝不回写提问月；网格取提问月与回答月的并集，于是「只有回答、没有提问」的月份也能看见积压下降（2026-04 由 4 降到 3），零事件月保留诚实持平行。单测 8/8 双跑逐字节同一（727B×2，utf-8 LF）。",
+    "latest_artifact": "src/sandbox/ledger/apimarket.py 新增 api_market_backlog_months；src/sandbox/ledger/test_apimarket_backlogmonths.py（8 判据）；qa/apimarket-backlogmonths-R2234-a.log 与 -b.log（各 727B，逐字节同一，utf-8 LF）；qa/regression-R2234.log（相邻四套件 8/8 全绿）；src/os/evidence_R2234.py 单写者证据器；接线 ledger-apimarket-backlogmonths(8)。时间 2026-10-29 07:0x",
+    "next_milestone": "48 小时内：①R2235 首项=全量电池 + 套件矩阵重生成（本窗 25 分钟预算只跑了新套件与四邻域，验证欠账如实挂账），判据=RUNNER PASS 含新标签、矩阵 green 数==套件数、census flags=0；②随后按 explore 队头推进 R2230 4/6 卖家月度评价值（api_seller_rating_months）与 5/6 品类关注转化月度面，或按 tech 队头补 retry-naming 闸规则（R2233 红灯出生）。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "market monthly question backlog face (R2234)",
+      "on",
+      "apimarket.api_market_backlog_months(): the open-at-month-end law over the two immutable stamps (a later answer closes the debt in its own month and never re-dates the asking month), the contiguous asking/answering UNION grid with an honest zero-event month and an answer-only month that shrinks the debt, per-row net-flow conservation against the month-end delta, open_rate None on a zero denominator, the earlier-month peak tie-break, identity with api_market_question_months on 6 asked / 3 answered / 3 open; SUITE PASS 8/8 double-run byte-identical (qa/apimarket-backlogmonths-R2234-a.log and -b.log, 727B each), wired ledger-apimarket-backlogmonths(8)"
+    ],
     [
       "verification debt closed on a green battery (R2233)",
       "on",
@@ -337,6 +342,10 @@
   ],
   "results": [
     [
+      "R2234",
+      "P3 explore head claim (R2230 seed 3/6, criteria AC-MBM1..AC-MBM8 pre-registered in the queue row before the code). Product: api_market_backlog_months closes the market-wide question-backlog gap - eleven-key envelope, seven-key month rows, the open-at-month-end law derived only from asked_utc/answered_utc, the asking/answering union grid (February flat at 2, April shrinking 4 -> 3), net_change == asked - answered == the month-end delta per row, open_rate None on a zero denominator, the earlier-month peak tie-break (March 4 over the January/February tie of 2), identity with api_market_question_months on 6/3/3 while the grids honestly differ, and a pure read. Evidence: SUITE PASS 8/8 double-run byte-identical (qa/apimarket-backlogmonths-R2234-a.log and -b.log, 727B each, utf-8 LF single writer), wired ledger-apimarket-backlogmonths(8), four adjacent suites green. Honest debt: the full battery and matrix regeneration are the R2235 first item."
+    ],
+    [
       "R2233",
       "P2 verification debt (the item R2232 designated first): full reconcile battery plus matrix regeneration on the committed tree, with the state fold measured (67142B < 78500B waterline, not due). First run RED: RUNNER FAIL, 3 failed assertions, 1021.7s, 415/417. Two real defects: (1) the two R2231 seller-question evidence legs were PowerShell captures (763B, 10 CRLF, 0 LF) so the census flagged pwsh-capture; normalised through one python writer to utf-8 LF, payload untouched, both legs sha16 2207807e14fc2f88, census then DRIFT-CLEAN; (2) the battery pair reconcile-all-R2230.log/-run2.log raised E_FALSE_BYTE_CLAIM because the suffix means a pair while the file is a RED-then-rerun pair (44 lines / 2139 bytes apart, the class raised by 420/421 suite-internal sentences); disclosed in state/run_identity_baseline.json under the R2153 convention and the forward -retry naming rule queued. Second run on the committed fix tree HEAD cdbddf30 GREEN: RUNNER PASS 417/417 + controls 7/7, 1023.4s, TMP RECLAIM 920/920 worlds / 323.06 MiB; follow-ups all PASS (matrix 417 suites / 3459 criteria in 40690 bytes green=417/417, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN). Product score honestly zero - no product code shipped."
     ],
@@ -603,11 +612,11 @@
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 4,
-    "queue_explore_open": 5,
-    "log_lines_in_window": 3,
+    "queue_tech_open": 5,
+    "queue_explore_open": 4,
+    "log_lines_in_window": 4,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 3
+    "substantive_non_idle_mention_lines": 4
   }
-}
+}
