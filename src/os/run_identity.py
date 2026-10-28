@@ -62,6 +62,19 @@ PAIR_SUFFIXES = (
     ("-run2", ""),
 )
 
+# R2238 (AC-RTN3): a correction RETRY is a rerun of a stem whose earlier
+# RUNNER verdict differed. It is not the second leg of an identity pair,
+# so the auditor never pairs it and never reads its body as a claim.
+RETRY_SUFFIX = "-retry"
+RETRY_RE = re.compile(r"^(.+?)" + re.escape(RETRY_SUFFIX) + r"(\d*)$")
+
+
+def is_retry_name(name):
+    """True when an evidence file name is a correction retry leg."""
+    if not name.endswith(".log"):
+        return False
+    return RETRY_RE.match(name[:-4]) is not None
+
 
 class IdentityError(ValueError):
     """Raised with a machine-readable .code."""
@@ -345,6 +358,8 @@ def find_pairs(directory):
     seen = set()
     for name in names:
         if not name.endswith(".log"):
+            continue
+        if is_retry_name(name):
             continue
         for base, left, right in _pair_suffixes(name):
             left_name = base + left + ".log"

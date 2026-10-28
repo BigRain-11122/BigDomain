@@ -4289,6 +4289,13 @@ SUITES = [
     # (AC-RID1..AC-RID8 pre-registered in state/queue/tech.md R2153.)
     ("os-run-identity",
      os.path.join("..", "os", "test_run_identity.py"), 8),
+    # R2238: a correction rerun of an evidence stem gets its own -retry
+    # suffix instead of sharing -run2 with the double-run identity pair,
+    # so the identity auditor never reads a rerun body as a file-pair
+    # claim and the known-defect baseline stops growing for that class.
+    # (AC-RTN1..AC-RTN6 pre-registered in state/queue/tech.md R2238.)
+    ("os-retry-naming",
+     os.path.join("..", "os", "test_os_retry_naming.py"), 9),
     # R2154: the round's closing station - the ledger line this window
     # just wrote is checked where it is written (parseable, settleable
     # reason, newer than everything already settled) instead of being

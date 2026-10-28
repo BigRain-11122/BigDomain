@@ -1,0 +1,10 @@
+PASS AC-RTN1 first retry leg is -retry with the base intact
+PASS AC-RTN1 later retries count up from one base stem
+PASS AC-RTN2 -run2/-2 fail closed with codes and write nothing
+PASS AC-RTN3 only the real identity pair is paired
+PASS AC-RTN3b a lying identity pair still fails, retry not counted
+PASS AC-RTN4 census classes retry, legacy and identity apart
+PASS AC-RTN5 resolve_rerun: retry for a moved verdict, pair refused
+PASS AC-RTN6 CLI exit codes, census line and next-name face
+PASS AC-RTN6b source is pure ASCII and the suite is registered
+SUITE PASS 9/8
