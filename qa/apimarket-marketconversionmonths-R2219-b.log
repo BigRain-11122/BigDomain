@@ -1,0 +1,10 @@
+PASS AC-MCV1: env_keys=15 exact=True row_keys=True empty=(0, [], None)
+PASS AC-MCV2: grid=['2026-01', '2026-02', '2026-03'] jan_w=4 mar_w=4 env_w=8 live_w=7
+PASS AC-MCV3: jan=(1, 2, 1) mar=(0, 3, 1) env=(1, 5, 2)
+PASS AC-MCV4: zero_month=True sums=True grid=3
+PASS AC-MCV5: pooled=604800.0 mean_of_means=525600.0 jan=(0.6666666666666666, 129600.0) mar=(0.75, 921600.0)
+PASS AC-MCV6: keys=['2026-01', '2026-02', '2026-03'] mar=(2, 2, 0.5) env=(4, 3, 0.5714285714285714)
+PASS AC-MCV7: deterministic=True digests_same=True tx_same=True no_kwarg=True
+PASS AC-MCV8: bytes_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

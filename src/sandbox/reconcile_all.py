@@ -2663,6 +2663,16 @@ SUITES = [
     # the R2217 window (disclosed - the R2137/R2141/R2144 precedent).
     ("ledger-apimarket-sellerreplymonths", os.path.join(
         "ledger", "test_apimarket_sellerreplymonths.py"), 8),
+    # apimarket market-wide monthly watch-to-purchase conversion - the
+    # booking law (a watch books in its own watched_utc month and an
+    # unwatch never moves it, the disclosed asymmetry against the live
+    # set funnel face), the directional law shared with
+    # api_watch_conversion, the contiguous grid with an honest zero
+    # month, the pooled rate and latency law and the refund-to-pending
+    # net law - criteria AC-MCV1..AC-MCV8 registered in the R2213
+    # explore-queue seed row claimed in R2219 BEFORE this suite existed.
+    ("ledger-apimarket-marketconversionmonths", os.path.join(
+        "ledger", "test_apimarket_marketconversionmonths.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and
