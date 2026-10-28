@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T22:29:03+08:00",
-  "do": "R2213 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the buyer side now has its own monthly attention timeline, and a watch's conversion is booked in the month it was watched, so a resident can read whether interest is heating up and how much of it actually became a purchase",
+  "export_ts": "2026-10-28T23:21:00+08:00",
+  "do": "R2214 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole market now has a monthly supply timeline, so an operator can read whether shelves are thickening or thinning without summing categories, and how many units actually entered and left the book each month",
   "ceo_face": {
-    "current": "R2213 api_buyer_watch_months(buyer_id): the buyer-side monthly watch flow - fifteen-key envelope, contiguous grid with an honest zero month, the directional conversion law (unrefunded purchase at or after the watch, booked in the WATCH month), both peak laws and cross-face identity with api_watchlist",
-    "latest_artifact": "qa/apimarket-buyerwatchmonths-R2213.log / -b.log (SUITE 8/8, sha16 5f454d4f3cbdde83, byte-identical double run) + src/sandbox/ledger/apimarket.py (api_buyer_watch_months, written 2026-10-28 23:2x) + commit f2123263",
-    "next_milestone": "a fresh explore seed from the ten reseeded rows, plus the suite matrix regeneration against this battery, within 48h",
-    "last_artifact": "qa/reconcile-all-R2213.log (RUNNER PASS 406/406 suites green + controls 7/7 in 872.1s, 746304 bytes, single-writer UTF-8 LF, census DRIFT-CLEAN files=2094) + docs/sandbox-suite-matrix.md (406 suites / 3370 criteria, 39495 bytes, green=406/406) + src/os/battery_followup_R2213.py"
+    "current": "R2214 api_market_supply_months(): market-wide monthly supply timeline - seventeen-key envelope, gross flow booked in each event's own stamp month, contiguous grid with an honest zero month, month-end shelves with distinct seller breadth, conservation three ways and both peak laws",
+    "latest_artifact": "qa/apimarket-marketsupplymonths-R2214.log / -b.log (SUITE 8/8, sha16 BFD33232DFDF1A97, byte-identical double run) + src/sandbox/ledger/apimarket.py (api_market_supply_months) + commit 648cc017",
+    "next_milestone": "claim the next open explore seed (the remaining R2213 reseeds) and keep the suite matrix regenerated against this battery, within 48h",
+    "last_artifact": "qa/reconcile-all-R2214.log (VERDICT PASS (R2214 post-battery follow-up: matrix regen+check; fingerprint; profile; census update-baseline + check), 747049 bytes, single-writer UTF-8 LF) + docs/sandbox-suite-matrix.md (407 suites / 3378 criteria, green=407) + src/os/battery_followup_R2214.py"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "market-wide monthly supply timeline (api_market_supply_months)",
+      "on",
+      "R2214: the family answered asking price by month, per-category shelves by month and per-listing supply snapshots, but never the whole market's shelf position plus its gross flow. The new face books every event in its own stamp month (cycles opened at publish and re-list, closed at delist, units added by publish and restock, units sold net of refunds so a refund-only month is negative), runs a contiguous grid with an honest zero month over supply-and-movement events only, samples month-end shelves with distinct seller breadth through _alive_at_instant and _supply_at_instant, conserves three ways including running opened-minus-closed equal to the live shelf count, takes the earlier month on both peak ties, and returns an honest empty market envelope with no account key. SUITE PASS 8/8 double-run byte-identical sha16 BFD33232DFDF1A97, wired ledger-apimarket-marketsupplymonths(8), eight adjacent suites green."
+    ],
     [
       "monthly activity-volume timeline (api_market_feed_months)",
       "on",
@@ -253,6 +258,10 @@
   ],
   "results": [
     [
+      "R2214",
+      "R2214: five-silence scan clean with the comma-joined decision baseline split before diffing (nine apparent additions, all citation artifacts and regex-truncated suffixes, so zero domain action and the baseline re-anchored), a stale R2213 seed marked done, and api_market_supply_months claimed with AC-MSM1..AC-MSM8 registered before the code. SUITE PASS 8/8 double-run byte-identical sha16 BFD33232DFDF1A97, wired as ledger-apimarket-marketsupplymonths(8), eight adjacent suites green. battery on the committed tree: RUNNER PASS 407/407 suites green plus reconcile controls 7/7 in 951.7s (qa/reconcile-all-R2214.log, 747049 bytes, single-writer UTF-8 LF through battery_stream.py), with the birth-site tmp sweep inside the same window reclaiming 317.78 MiB over 902 candidates; VERDICT PASS (R2214 post-battery follow-up: matrix regen+check; fingerprint; profile; census update-baseline + check)."
+    ],
+    [
       "R2209",
       "R2209: five-silence scan clean with four apparent decision tokens, all citation-only inside other seats' rows, so zero domain action and the baseline re-anchored. Product: api_buyer_claim_months with AC-BCM1..AC-BCM8 anchored and registered before the code, SUITE PASS 8/8 double-run byte-identical body sha256 55ac56980c0025be7ca7a60cdd2b5849a665692d40a2c0c95fad34cda7bdbcf2, wired as ledger-apimarket-buyerclaimmonths(8), eight adjacent claim-family suites green. Honest debt: full battery and suite-matrix regeneration deferred to R2210."
     ],
@@ -449,14 +458,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 91,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 89,
+    "substantive_non_idle_mention_lines": 91,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 11
+    "queue_explore_open": 10
   }
 }

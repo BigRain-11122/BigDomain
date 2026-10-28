@@ -28,11 +28,23 @@ def read(path):
 
 def evidence_facts():
     text = read(EVIDENCE)
-    runner = re.search(
+    found = re.findall(
         r"RUNNER (PASS|FAIL) \((\d+)/(\d+) suites green,"
         r" reconcile controls (\d+)/(\d+), ([0-9.]+)s\)", text)
-    if runner is None:
+    if not found:
         raise SystemExit("no RUNNER line in evidence")
+
+    class _Runner(object):
+        """The top-level runner line is the LAST match in the log; the
+        inner suites print their own two-suite RUNNER lines first."""
+
+        def __init__(self, groups):
+            self._groups = groups
+
+        def group(self, index):
+            return self._groups[index - 1]
+
+    runner = _Runner(found[-1])
     reclaim = re.search(
         r"TMP RECLAIM candidates=(\d+) removed=(\d+) busy=(\d+)"
         r" failed=(\d+) reclaimed=([0-9.]+) MiB", text)
@@ -171,9 +183,16 @@ def main():
         "supply/relist/price suites green (qa/regression-R2214.log). %s, "
         "and the four follow-up sections then all passed (%s). Product "
         "committed as %s and pushed before the battery so the battery walked "
-        "a committed tree. Honest gap: the explore queue now holds the "
-        "remaining R2213 seeds, so the next window claims from those rather "
-        "than reseeding." % (SHA16, SPEC, battery, follow, matrix, PRODUCT))
+        "a committed tree; %s. Honest gap: the first battery of this window "
+        "was RED on a non-product cause - the regression log this window "
+        "generated carried the child's CR at each line end, so "
+        "cd7-live-real-tree read it as a pwsh-capture dialect and exited 2 - "
+        "and that red log is preserved as reconcile-all-R2214-red.log; the "
+        "remedy was the birth site (the log is regenerated LF-only and the "
+        "census then read DRIFT-CLEAN before the re-run). The explore queue "
+        "still holds the remaining R2213 seeds, so the next window claims "
+        "from those rather than reseeding."
+        % (SHA16, SPEC, battery, follow, PRODUCT, matrix))
 
     tokens = ("R2214 tokens: local=~70k api=0 api_reason="
               "five-silence scan with the stored comma baseline split "
