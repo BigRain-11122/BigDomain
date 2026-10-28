@@ -1,0 +1,6 @@
+adjacent regressions R2203
+test_apimarket_refundlatency.py rc=0 SUITE 8/8
+test_apimarket_refundreasons.py rc=0 SUITE 8/8
+test_apimarket_sellerrefundreasons.py rc=0 SUITE 8/8
+test_apimarket_categoryrefundmonths.py rc=0 SUITE PASS 8/8
+test_apimarket_buyerprofile.py rc=0 SUITE PASS 8/8

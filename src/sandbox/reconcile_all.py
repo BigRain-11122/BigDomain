@@ -2546,6 +2546,11 @@ SUITES = [
     # the code, in the R2201 window.
     ("ledger-apimarket-sellerpricecadencemonths", os.path.join(
         "ledger", "test_apimarket_sellerpricecadencemonths.py"), 8),
+    # buyer-side monthly refund flow (a refund books in the UTC month of its
+    # own refunded_utc, never the purchase month, with honest zero months and
+    # the pooled money average)
+    ("ledger-apimarket-buyerrefundmonths", os.path.join(
+        "ledger", "test_apimarket_buyerrefundmonths.py"), 8),
     # rating reply latency (the waiting time between a buyer rating and
     # the seller's first reply, the outstanding half kept as None rather
     # than a fabricated zero, the total order, and the revision seams

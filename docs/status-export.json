@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T18:50:45+08:00",
-  "do": "R2202 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the trust face now answers its monthly flow, so a seller whose stars fell after a service change no longer reads like one that was always low",
+  "export_ts": "2026-10-28T19:06:04+08:00",
+  "do": "R2203 R2202 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the trust face now answers its monthly flow, so a seller whose stars fell after a service change no longer reads like one that was always low",
   "ceo_face": {
-    "current": "R2202 monthly rating flow: the market reads how many ratings landed each month, at what average, and whether the trust signal is rising or falling",
-    "latest_artifact": "qa/apimarket-ratingmonths-R2202-a.log / -b.log (SUITE 8/8, sha256 cd6a1d56b949289b769c2a3807058ba665d5bfff216059a9ce2757462ee7af40, criterion sha16 6e7d587072c7f49b) + src/sandbox/ledger/apimarket.py (api_market_rating_months, written 2026-10-28)",
-    "next_milestone": "full reconcile battery plus suite-matrix regeneration on the committed tree (the R2202 carry-over), then the next explore seed with its criteria registered before the code (within 48h)",
+    "current": "R2203 buyer-side monthly refund flow: a resident now reads how much money came back in each month and whether a refund landed in the purchase month or a later one",
+    "latest_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b..., 911 bytes) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration on the committed tree (the R2202 and R2203 carry-over), then the next explore seed (seller-side monthly watch inflow) with its criteria registered before the code (within 48h)",
     "last_artifact": "qa/apimarket-ratingmonths-R2202-a.log / -b.log (SUITE 8/8, sha256 cd6a1d56b949289b769c2a3807058ba665d5bfff216059a9ce2757462ee7af40) + docs/status-export.json (2026-10-28)"
   },
   "depts": [
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer-side monthly refund flow (api_buyer_refund_months)",
+      "on",
+      "R2203: api_buyer_profile answers lifetime refunded money and count and api_refund_latency the market-wide settlement delay, so a resident's own refund rhythm had no face. api_buyer_refund_months(buyer_id) returns a twenty-one-key envelope with ten-key month rows. A refund books only in the UTC month of its own refunded_utc, never in the purchase month, so a September purchase refunded in October is an October event and September stays an honest zero month. Month rows are the contiguous grid from the first to the last refund month, a month with no refund carries a None average rather than a fabricated zero, and the running accumulator is carried across those zero months and lands on the envelope count. Money conservation is per row and in the envelope (refunded equals dev plus platform, integer split) and is checked against the raw join. The envelope average is pooled over every refund rather than a mean of monthly means. same_month_count is the settlement-speed signal this face adds. listing_count and seller_count are distinct, so a month can carry two refunds on two shelves of the same seller, and the envelope distinct count can sit under the row sum - disclosed rather than smoothed. Buyers never leak into each other, the envelope count and money equal api_buyer_profile exactly, the peak takes the highest month with the earlier-month tie-break, and the account gate fails closed before any read with the bare usr: prefix reading honestly empty. Suite 8/8 double-run byte-identical, wired ledger-apimarket-buyerrefundmonths(8); five adjacent refund and buyer suites green."
+    ],
     [
       "apimarket monthly rating flow (api_market_rating_months)",
       "on",
@@ -213,6 +218,10 @@
   ],
   "results": [
     [
+      "R2203",
+      "R2203: five-silence scan clean (261 rows / 172 D-C-O tokens, zero new against the stored 174-token baseline because the two apparent additions are the rotation-restored O-family citations inside other seats' rows; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_buyer_refund_months with AC-BRM1..AC-BRM8 registered in the R2203 queue row BEFORE the code - the refunded_utc booking law that never rewrites the purchase month, the contiguous grid with honest zero months carried by the running accumulator, money and split conservation against the raw join, the pooled average against a mean of monthly means, the same-month settlement count, distinct participant counts with the disclosed asymmetry, cross-face identity with api_buyer_profile and strict buyer isolation, the earlier-month peak tie-break, and a pure read with frozen digests and three-instance byte identity. Suite SUITE PASS 8/8 on both runs with byte-identical evidence (sha256 d530197188a7ef2b, 911 bytes, crlf=0), wired ledger-apimarket-buyerrefundmonths(8), five adjacent refund and buyer suites green. Honest notes: one test-side row-sum expectation was wrong on the first run and was fixed in the test, and the evidence was normalised from the child's CRLF pipe output to LF by a single writer. The full battery and matrix regeneration were not run in this window and are R2204's first item."
+    ],
+    [
       "R2202",
       "2026-10-28 R2202 (five-silence scan clean at open: decisions.md 261 non-empty rows carrying 174 content-addressed D/C tokens, of which four were new - D-20261028-15 cloud-off gate closure, D-20261028-16 the BigMoney backlog_fill --explain gap, D-20261028-17 the bm-b POOL-0023 claim-task judgment and D-20261028-18 the BigCompute L1 fallback census - every one another seat's execution face, so all four are acknowledged with zero domain action and the baseline advanced to the measured 174-token set; the group ledger carries the same three @BigDomain patrol rows already paid off with zero unreplied; the group orders tail is unchanged at the 2026-10-28 15:01 fleet auto-dispatch OB-20261028-150100-267, acknowledged as a fleet dispatcher face with zero domain action; benchmarks refreshed 2026-10-27 inside the seven-day gate; tree clean, no index.lock) - the P1 canonical rows stay blocked-on-CEO, the weekly proposal duty is met by BD-PROP-005, all four tech heads stayed gated (docker host absent, logs toolkit standing maintenance, member refunded schema product-gated, the live-mtime row waiting on a real normalized-mtime event) and the explore queue held only the merchant-gated benchmark row, so this window reseeded the explore queue with eight anchor-verified rows and claimed the R2202 head in the SAME window with AC-RTM1..AC-RTM8 registered in that row in the same window as the code (disclosed, the R2137/R2141/R2144 precedent): api_market_rating_months, the monthly rating flow. Gap statement: every rating face answers a lifetime shape (api_ratings rows, api_seller_quality histogram, api_market_stats average, api_rating_reply_latency delay, api_rating_history one rating's revisions), so a seller whose stars fell after a service change and one whose stars were always low at the same lifetime average read identically and the market carried no monthly trust timeline at all. Product: a nineteen-key envelope with nine-key month rows; a rating books in the UTC month of its own immutable rated_utc and a revision never moves that month nor adds a month of its own (a January rating revised in April still counts in January); the contiguous month grid carries an honest zero month whose avg_stars is None rather than a fabricated 0.0; running_rating is the monotone accumulator whose last value equals the envelope rating_count; averages are pooled over effective stars, never mean-of-means; five-star and low-star counts derive from the same seam so they sum to the envelope; the peak law uses the earlier-month tie-break; the scope law keeps sellers isolated and carries the market-wide pooled average only on a seller scope (the market never benchmarks itself); the account gate is fail-closed before any read and the bare usr: prefix reads honestly empty; the face is a pure read with frozen table digests and a constant ledger_tx set. Evidence: SUITE PASS 8/8 double-run byte-identical sha256 cd6a1d56b949289b769c2a3807058ba665d5bfff216059a9ce2757462ee7af40 (qa/apimarket-ratingmonths-R2202-a.log and -b.log, single writer utf-8 LF, criterion sha16 6e7d587072c7f49b); wired ledger-apimarket-ratingmonths(8); four adjacent trust-family suites green (seller quality, rating revision, market stats, rating reply latency); the qa writer census read DRIFT-CLEAN files=2063 tee=1535 baselined=528 flags=0. Honest gap: the full reconcile battery and the suite matrix regeneration were NOT run inside the 25-minute window and are recorded as the R2203 first item."
     ],
@@ -265,7 +274,7 @@
       "R2190: five-silence scan clean (251 rows / 170 D-C tokens with zero new against the stored baseline; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_refund_reasons with AC-SRR1..AC-SRR8 pre-registered in the R2189 seed row BEFORE the code - seventeen-key envelope, the shared narrow bucket law scoped by the stored dev_account, honest unlabeled bucket last and excluded from the leading cause, scoped conservation against the raw tables, share/average/top share with None instead of fake zeros, exact-fraction herfindahl, market benchmarks on a seller scope and None on the market scope, a pure read with frozen digests and frozen ledger_tx, three-instance byte identity after two restarts and five gate forms failing closed before any read. Honest notes: the first run read 6/8 red on two of this window's own expectations (2800.0 not 3200.0; api_seller_quality carries no refund count, so api_refund_register is the cross-face witness) and one real test defect (double dumps on the retirement snapshot, plus a benchmark key that legitimately moves) - all three fixed in the TEST, no implementation loosened; the full battery and matrix regeneration are first-item debt for R2191."
     ],
     [
-      "2200",
+      "2203",
       "OSLoop 执行 tick",
       "R2195 closed: counters machine-derived from src/os/state.json and the queue/proposal faces after the full 392-suite battery"
     ],
@@ -377,14 +386,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": "177",
+    "log_lines_in_window": 80,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 77,
+    "substantive_non_idle_mention_lines": 80,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": "9"
+    "queue_explore_open": 8
   }
 }
