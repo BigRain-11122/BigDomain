@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T19:06:04+08:00",
+  "export_ts": "2026-10-28T19:29:41+08:00",
   "do": "R2203 R2202 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the trust face now answers its monthly flow, so a seller whose stars fell after a service change no longer reads like one that was always low",
   "ceo_face": {
     "current": "R2203 buyer-side monthly refund flow: a resident now reads how much money came back in each month and whether a refund landed in the purchase month or a later one",
-    "latest_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b..., 911 bytes) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)",
-    "next_milestone": "full reconcile battery plus suite-matrix regeneration on the committed tree (the R2202 and R2203 carry-over), then the next explore seed (seller-side monthly watch inflow) with its criteria registered before the code (within 48h)",
+    "latest_artifact": "qa/apimarket-buyerrefundmonths-R2203-a.log / -b.log (SUITE 8/8, sha256 d530197188a7ef2b...) + qa/reconcile-all-R2203.log (RUNNER PASS 398/398 suites, controls 7/7, 857.7s) + src/sandbox/ledger/apimarket.py (api_buyer_refund_months, written 2026-10-28)",
+    "next_milestone": "next explore seed (seller-side monthly watch inflow) with its criteria registered before the code, on top of a clean 398-suite battery (within 48h)",
     "last_artifact": "qa/apimarket-ratingmonths-R2202-a.log / -b.log (SUITE 8/8, sha256 cd6a1d56b949289b769c2a3807058ba665d5bfff216059a9ce2757462ee7af40) + docs/status-export.json (2026-10-28)"
   },
   "depts": [
