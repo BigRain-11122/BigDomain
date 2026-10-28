@@ -1,0 +1,9 @@
+test_apimarket_questionmonths.py rc=0 SUITE 8/8
+test_apimarket_qna.py rc=0 SUITE 8/8
+test_apimarket_buyerquestions.py rc=0 SUITE 8/8
+test_apimarket_categorywatchmonths.py rc=0 SUITE 8/8
+test_apimarket_categorysupplymonths.py rc=0 SUITE PASS 8/8
+test_apimarket_category.py rc=0 SUITE PASS 8/8
+test_apimarket_categoryrev.py rc=0 SUITE PASS 8/8
+test_apimarket_sellercategorymix.py rc=0 SUITE PASS 8/8
+REGRESSION 8/8 GREEN

@@ -11984,6 +11984,199 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months}
 
+    def api_category_question_months(self, include_uncategorized=True):
+        """Per-category monthly pre-sale question volume (criteria
+        AC-CQM1..AC-CQM8 pre-registered in the R2213 explore-queue
+        seed row BEFORE this code existed; the AC-CQM prefix,
+        api_category_question_months,
+        test_apimarket_categoryquestionmonths,
+        ledger-apimarket-categoryquestionmonths,
+        category_question_count and question_category_cells were all
+        git grep -F zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_market_question_months answers the whole market on a
+        monthly axis, api_seller_questions and api_seller_answers one
+        seller, api_buyer_questions one buyer and api_listing_qna one
+        shelf, while the category faces answer supply, price and watch
+        flow by month. Nothing answered WHICH CATEGORIES absorb
+        pre-sale pressure month over month, so a bucket that was
+        drowning in questions read exactly like a quiet one once the
+        market rows were split by hand.
+
+        Two pinned laws. The BOOKING law books a question in the UTC
+        month of its own immutable asked_utc and in the category in
+        force AT THAT INSTANT (_category_at_instant), so a later
+        category revision never moves a month already booked
+        (AC-CQM2). The ANSWERING law credits the answered leg to the
+        ASKING month and to the asking bucket, never to the month or
+        the bucket the answer landed in: answering discharges an older
+        duty rather than creating new pressure, so a question asked in
+        January and answered in March raises the January row and
+        leaves March untouched, and an answer landing after the last
+        asking month never extends the grid (AC-CQM3).
+
+        Month rows are the contiguous grid from the first to the last
+        asking month, so a month with no question carries an honest
+        zero row whose answer_rate is None rather than a fabricated
+        0.0. Cells are ordered by category ascending with the
+        uncategorized bucket last, and each cell's running_question is
+        the monotone per-category lifetime accumulator (AC-CQM4).
+
+        include_uncategorized=False drops the uncategorized bucket
+        from the cells AND recomputes every aggregate without it, so
+        the same book reads honestly under both scopes; the flag must
+        be a real bool and any other value fails closed with
+        E_AM_BAD_ARGS before any read (AC-CQM6). Pure read: zero row
+        mutations and zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT q.buyer_id, q.listing_id, q.asked_utc,"
+                " l.dev_account, l.category, a.answer_id"
+                " FROM apimarket_questions q"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = q.listing_id"
+                " LEFT JOIN apimarket_answers a"
+                " ON a.question_id = q.question_id"
+                " ORDER BY q.question_id").fetchall()
+            events = []
+            for buyer, listing_id, asked_utc, dev, base_category, \
+                    answer_id in rows:
+                listing_id = int(listing_id)
+                category = self._category_at_instant(
+                    listing_id, base_category, asked_utc)
+                if category is None and not include_uncategorized:
+                    continue
+                events.append((str(asked_utc)[:7], buyer, dev,
+                               listing_id, category,
+                               answer_id is not None))
+
+        months = _contiguous_months(
+            sorted({event[0] for event in events}))
+        per_month = {}
+        buyers = set()
+        sellers = set()
+        listings = set()
+        categories = set()
+        for month, buyer, dev, listing_id, category, answered in events:
+            slot = per_month.setdefault(month, {})
+            cell = slot.setdefault(category, {
+                "question_count": 0, "answered_count": 0,
+                "buyers": set(), "sellers": set(), "listings": set()})
+            cell["question_count"] += 1
+            if answered:
+                cell["answered_count"] += 1
+            cell["buyers"].add(buyer)
+            cell["sellers"].add(dev)
+            cell["listings"].add(listing_id)
+            buyers.add(buyer)
+            sellers.add(dev)
+            listings.add(listing_id)
+            categories.add(category)
+
+        running = {}
+        running_total = 0
+        month_rows = []
+        for month in months:
+            slot = per_month.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot:
+                ordered.append(None)
+            cells = []
+            month_question = 0
+            month_answered = 0
+            for category in ordered:
+                cell = slot.get(category)
+                if cell is None:
+                    question = 0
+                    answered = 0
+                    cell_buyers = set()
+                    cell_sellers = set()
+                    cell_listings = set()
+                else:
+                    question = cell["question_count"]
+                    answered = cell["answered_count"]
+                    cell_buyers = cell["buyers"]
+                    cell_sellers = cell["sellers"]
+                    cell_listings = cell["listings"]
+                cell_running = running.get(category, 0) + question
+                running[category] = cell_running
+                cells.append({
+                    "category": category,
+                    "question_count": question,
+                    "answered_count": answered,
+                    "unanswered_count": question - answered,
+                    "answer_rate": (round(
+                        answered / float(question), 4)
+                        if question else None),
+                    "buyer_count": len(cell_buyers),
+                    "seller_count": len(cell_sellers),
+                    "listing_count": len(cell_listings),
+                    "running_question": cell_running,
+                })
+                month_question += question
+                month_answered += answered
+            running_total += month_question
+            month_buyers = set()
+            month_sellers = set()
+            month_listings = set()
+            for category in ordered:
+                cell = slot.get(category)
+                if cell is None:
+                    continue
+                month_buyers |= cell["buyers"]
+                month_sellers |= cell["sellers"]
+                month_listings |= cell["listings"]
+            month_rows.append({
+                "month": month,
+                "question_count": month_question,
+                "answered_count": month_answered,
+                "unanswered_count": month_question - month_answered,
+                "answer_rate": (round(
+                    month_answered / float(month_question), 4)
+                    if month_question else None),
+                "category_count": len(cells),
+                "buyer_count": len(month_buyers),
+                "seller_count": len(month_sellers),
+                "listing_count": len(month_listings),
+                "running_question": running_total,
+                "categories": cells,
+            })
+
+        total = sum(row["question_count"] for row in month_rows)
+        answered_total = sum(row["answered_count"] for row in month_rows)
+        peak_month = None
+        peak_question_count = None
+        for row in month_rows:
+            if row["question_count"] <= 0:
+                continue
+            if (peak_question_count is None
+                    or row["question_count"] > peak_question_count):
+                peak_month = row["month"]
+                peak_question_count = row["question_count"]
+        return {
+            "question_count": total,
+            "answered_count": answered_total,
+            "unanswered_count": total - answered_total,
+            "answer_rate": (round(answered_total / float(total), 4)
+                            if total else None),
+            "buyer_count": len(buyers),
+            "seller_count": len(sellers),
+            "listing_count": len(listings),
+            "category_count": len(categories),
+            "month_count": len(month_rows),
+            "active_month_count": sum(
+                1 for row in month_rows if row["question_count"] > 0),
+            "peak_month": peak_month,
+            "peak_question_count": peak_question_count,
+            "first_month": month_rows[0]["month"] if month_rows else None,
+            "last_month": month_rows[-1]["month"] if month_rows else None,
+            "latest_month_question_count": (
+                month_rows[-1]["question_count"] if month_rows else 0),
+            "disclaimer": self.disclaimer,
+            "months": month_rows}
+
     def api_seller_answer_months(self, dev_account):
         """Seller-side monthly answer cadence (criteria AC-SAM1..AC-SAM8
         pre-registered in the R2202 explore-queue seed 2/8 row BEFORE

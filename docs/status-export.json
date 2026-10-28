@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T23:21:00+08:00",
-  "do": "R2214 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole market now has a monthly supply timeline, so an operator can read whether shelves are thickening or thinning without summing categories, and how many units actually entered and left the book each month",
+  "export_ts": "2026-10-28T23:29:38+08:00",
+  "do": "R2215 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - pre-sale question pressure is now readable per category and per month, so an operator can see which buckets buyers are interrogating and which sellers actually answered, without splitting the market rows by hand",
   "ceo_face": {
-    "current": "R2214 api_market_supply_months(): market-wide monthly supply timeline - seventeen-key envelope, gross flow booked in each event's own stamp month, contiguous grid with an honest zero month, month-end shelves with distinct seller breadth, conservation three ways and both peak laws",
-    "latest_artifact": "qa/apimarket-marketsupplymonths-R2214.log / -b.log (SUITE 8/8, sha16 BFD33232DFDF1A97, byte-identical double run) + src/sandbox/ledger/apimarket.py (api_market_supply_months) + commit 648cc017",
-    "next_milestone": "claim the next open explore seed (the remaining R2213 reseeds) and keep the suite matrix regenerated against this battery, within 48h",
-    "last_artifact": "qa/reconcile-all-R2214.log (VERDICT PASS (R2214 post-battery follow-up: matrix regen+check; fingerprint; profile; census update-baseline + check), 747049 bytes, single-writer UTF-8 LF) + docs/sandbox-suite-matrix.md (407 suites / 3378 criteria, green=407) + src/os/battery_followup_R2214.py"
+    "current": "R2215 api_category_question_months(): per-category monthly pre-sale question volume - seventeen-key envelope, eleven-key month rows and nine-key category cells; a question books in its own asked month and in the category in force at that instant, the answered leg is credited to the asking month and bucket, the grid is contiguous with an honest zero month, and the include_uncategorized flag recomputes every aggregate",
+    "latest_artifact": "qa/apimarket-categoryquestionmonths-R2215-a.log / -b.log (SUITE 8/8, sha16 67FA315C9C7097AA, byte-identical double run) + qa/regression-R2215.log (8/8 adjacent suites green) + src/sandbox/ledger/apimarket.py (api_category_question_months)",
+    "next_milestone": "run the full reconcile battery plus the suite-matrix regeneration on the committed tree, then claim the next open R2213 explore seed - within 48h",
+    "last_artifact": "src/sandbox/ledger/test_apimarket_categoryquestionmonths.py (23945 bytes, ASCII, CRLF 0) + src/sandbox/reconcile_all.py wiring ledger-apimarket-categoryquestionmonths(8) + state/queue/explore.md claim row with AC-CQM1..AC-CQM8"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "per-category monthly pre-sale question volume (api_category_question_months)",
+      "on",
+      "R2215: the question family answered one shelf, one seller, one buyer and the whole market by month, while the category faces answered supply, price and watch flow - nothing said which buckets absorb pre-sale pressure over time. The new face books each question in its own asked_utc month and in the category in force at that instant, credits the answered leg to the asking month and bucket, runs a contiguous grid with an honest zero month, keeps a monotone running total plus per-cell running counts, orders cells by category ascending with the uncategorized bucket last, recomputes every aggregate under include_uncategorized=False, fails closed on a non-bool, holds cross-face identity with the market and seller question faces, and is a pure read. SUITE PASS 8/8 double-run byte-identical sha16 67FA315C9C7097AA, wired ledger-apimarket-categoryquestionmonths(8), eight adjacent suites green."
+    ],
     [
       "market-wide monthly supply timeline (api_market_supply_months)",
       "on",
@@ -258,6 +263,10 @@
   ],
   "results": [
     [
+      "R2215",
+      "R2215: five-silence scan clean with the comma baseline split and the seven known rotation artifacts re-anchored to zero new rows; the stale R2214 explore row closed and api_category_question_months claimed with the anchor check before the code. SUITE PASS 8/8 double-run byte-identical sha16 67FA315C9C7097AA, wired as ledger-apimarket-categoryquestionmonths(8), eight adjacent suites green. Honest gap: the full reconcile battery and the matrix regeneration were deferred to R2216 on the committed tree (the R2168 mixed-tree rule plus the 25-minute window)."
+    ],
+    [
       "R2214",
       "R2214: five-silence scan clean with the comma-joined decision baseline split before diffing (nine apparent additions, all citation artifacts and regex-truncated suffixes, so zero domain action and the baseline re-anchored), a stale R2213 seed marked done, and api_market_supply_months claimed with AC-MSM1..AC-MSM8 registered before the code. SUITE PASS 8/8 double-run byte-identical sha16 BFD33232DFDF1A97, wired as ledger-apimarket-marketsupplymonths(8), eight adjacent suites green. battery on the committed tree: RUNNER PASS 407/407 suites green plus reconcile controls 7/7 in 951.7s (qa/reconcile-all-R2214.log, 747049 bytes, single-writer UTF-8 LF through battery_stream.py), with the birth-site tmp sweep inside the same window reclaiming 317.78 MiB over 902 candidates; VERDICT PASS (R2214 post-battery follow-up: matrix regen+check; fingerprint; profile; census update-baseline + check)."
     ],
@@ -458,14 +467,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 91,
+    "log_lines_in_window": 92,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 91,
+    "substantive_non_idle_mention_lines": 92,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 10
+    "queue_explore_open": 8
   }
 }

@@ -2563,6 +2563,20 @@ SUITES = [
     # claim row BEFORE the code, in the R2214 window.
     ("ledger-apimarket-marketsupplymonths", os.path.join(
         "ledger", "test_apimarket_marketsupplymonths.py"), 8),
+    # per-category monthly pre-sale question volume (the booking law
+    # that books a question in its own asked_utc month and in the
+    # category in force at that instant, the answering law that
+    # credits the answered leg to the ASKING month and bucket, the
+    # contiguous grid with an honest zero month, per-cell running
+    # accumulators, the uncategorized bucket last and the
+    # include_uncategorized scope that recomputes every aggregate,
+    # the fail-closed bool gate, cross-face identity with the market
+    # and seller question faces, the earlier-month peak tie-break and
+    # the pure-read/restart law)
+    # - criteria AC-CQM1..AC-CQM8 registered in the R2213 explore
+    # seed row in the R2215 window, anchors checked before the code.
+    ("ledger-apimarket-categoryquestionmonths", os.path.join(
+        "ledger", "test_apimarket_categoryquestionmonths.py"), 8),
     # market-wide monthly retirement / re-listing timeline (the
     # cash-basis double stamp that never rewrites the delisting month,
     # the contiguous grid with an honest zero month, the same-month

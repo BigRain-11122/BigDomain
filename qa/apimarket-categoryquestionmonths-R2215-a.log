@@ -1,0 +1,13 @@
+PASS AC-CQM1: env_keys=17 exact=True rows=True cells=True empty=(0, None, [], None)
+PASS AC-CQM2: grid=['2026-01', '2026-02', '2026-03'] jan=[('data', 2), ('tools', 2), (None, 1)] mar=[('audio', 1), ('tools', 1)] totals=(7, 4) cats=4
+PASS AC-CQM3: jan=(5, 2) jan_data=(2, 1) mar=(2, 1) totals=(7, 3)
+PASS AC-CQM4: months=3 active=2 feb=(0, None) running=[5, 5, 7]
+PASS AC-CQM5: order=['data', 'tools', None]/['audio', 'tools'] narrow=['data', 'tools'] narrow_totals=(6, 3, 3, 3)
+PASS AC-CQM6: codes=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] digests_same=True tx_same=True
+PASS AC-CQM7: market=(7, 3) sellers=(7, 3) dana/gina=(5, 2)
+PASS AC-CQM8: sums=(7, 3, 4)/7 rate=0.4286 peak=('2026-01', 5) parts=(7, 2, 4) pure=(True, True)
+RESTART_SAME True
+WIRED True
+ASCII_LF True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
