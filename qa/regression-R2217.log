@@ -1,0 +1,9 @@
+ratingreplylatency rc=0 SUITE PASS 8/8
+ratingmonths rc=0 SUITE 8/8
+sellermonths rc=0 SUITE 8/8
+ratingrev rc=0 SUITE 8/8
+replyrev rc=0 SUITE PASS 8/8
+sellercategorymix rc=0 SUITE PASS 8/8
+claimlatency rc=0 SUITE PASS 8/8
+marketrelistmonths rc=0 SUITE 8/8
+REGRESSION 8/8 green

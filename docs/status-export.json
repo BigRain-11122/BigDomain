@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T23:52:00+08:00",
-  "do": "R2216 verification closeout of the silicon-domain public co-creation platform sandbox: the whole reconcile battery plus the suite matrix now cover the R2215 per-category question face on the committed tree, so there is no verification debt behind the product line",
+  "export_ts": "2026-10-29T00:06:58+08:00",
+  "do": "R2217 product round on the silicon-domain public co-creation platform sandbox: the seller monthly rating-reply cadence closes the last conversation chain without a time axis, and the suite proves it 8/8 on two identical runs",
   "ceo_face": {
-    "current": "R2216 verification closeout (no new product face): the full reconcile battery on the committed tree - 408/408 suites green plus 7/7 reconcile controls in 1075.4s, the suite matrix regenerated to 408 suites / 3386 criteria and read back byte-identical, the fingerprint chain CLEAN over five domains, the runner profile check PASS and the qa writer census DRIFT-CLEAN with zero flags",
-    "latest_artifact": "qa/reconcile-all-R2216.log (RUNNER PASS 408/408 + controls 7/7, four post-battery sections appended) + docs/sandbox-suite-matrix.md (408 suites / 3386 criteria, 39724 bytes) + src/os/battery_followup_R2216.py",
-    "next_milestone": "R2217 within 48h: claim one of the eight open explore seeds and ship a new apimarket read face with an 8-criteria double-run suite, then re-run the battery on the committed tree"
+    "current": "R2217 new apimarket read face api_seller_reply_months: replies booked on their own replied_utc month, cross-month latency with the backlog split, a contiguous grid with honest zero months, the market/seller scope law and cross-face identity against api_rating_reply_latency - SUITE PASS 8/8 double-run byte-identical",
+    "latest_artifact": "qa/apimarket-sellerreplymonths-R2217-a.log + qa/apimarket-sellerreplymonths-R2217-b.log (882 bytes each, class=tee crlf=0) + src/sandbox/ledger/test_apimarket_sellerreplymonths.py + qa/regression-R2217.log (8/8 adjacent suites green)",
+    "next_milestone": "R2218 within 48h: discharge the battery debt - full reconcile battery plus suite-matrix regeneration on the committed tree, then claim the next open explore seed"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "seller monthly rating-reply cadence (api_seller_reply_months)",
+      "on",
+      "R2217: api_rating_reply_latency answered only a lifetime scorecard, so a seller that replied within an hour last quarter and went silent this month read like one that never answered. The new face books each reply in the UTC month of its own immutable replied_utc (never the rating month), always measures reply seconds rated->replied across the boundary with the integer-floor month mean and None on a zero month, splits backlog from same-month replies, runs a contiguous grid with a monotone running_replied landing on the envelope total, takes the earlier month on a peak tie, carries the market pooled mean for a seller scope and none for the market scope, agrees with api_rating_reply_latency on counts, coverage, extremes and the oldest-owed stamp, and is a pure read with frozen digests and a constant ledger_tx set. SUITE PASS 8/8 double-run byte-identical sha256 ef48995e, wired ledger-apimarket-sellerreplymonths(8), eight adjacent suites green."
+    ],
     [
       "per-category monthly pre-sale question volume (api_category_question_months)",
       "on",
@@ -262,6 +267,10 @@
   ],
   "results": [
     [
+      "R2217",
+      "R2217: five-silence scan clean with an exact decision-token match, the explore head seed api_seller_reply_months claimed after a zero-occupancy anchor check, one new product face with an 8-criteria suite double-run to byte-identical evidence, eight adjacent trust/month suites green, and the full battery plus matrix regeneration deferred to R2218 as recorded debt."
+    ],
+    [
       "R2215",
       "R2215: five-silence scan clean with the comma baseline split and the seven known rotation artifacts re-anchored to zero new rows; the stale R2214 explore row closed and api_category_question_months claimed with the anchor check before the code. SUITE PASS 8/8 double-run byte-identical sha16 67FA315C9C7097AA, wired as ledger-apimarket-categoryquestionmonths(8), eight adjacent suites green. Honest gap: the full reconcile battery and the matrix regeneration were deferred to R2216 on the committed tree (the R2168 mixed-tree rule plus the 25-minute window)."
     ],
@@ -464,7 +473,7 @@
     ]
   ],
   "self_drive": {
-    "window": "2026-10-22..2026-10-28",
+    "window": "2026-10-23..2026-10-29",
     "window_days": 7,
     "log_lines_in_window": 94,
     "idle_fast_mention_lines": 0,
@@ -474,6 +483,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 8
+    "queue_explore_open": 7
   }
 }

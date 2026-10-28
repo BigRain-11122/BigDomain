@@ -2653,6 +2653,16 @@ SUITES = [
     # R2193 window.
     ("ledger-apimarket-ratingreplylatency", os.path.join(
         "ledger", "test_apimarket_ratingreplylatency.py"), 8),
+    # seller monthly rating-reply cadence (a reply books in the month of
+    # its own replied_utc never the rating month, latency still measured
+    # across the boundary, the backlog split, the contiguous grid with
+    # None latencies on a zero month, the running accumulator, the peak
+    # tie-break, the scope law with cross-face identity against
+    # api_rating_reply_latency, and the pure-read law) - criteria
+    # AC-SRM1..AC-SRM8 registered in the R2213 explore-queue seed row in
+    # the R2217 window (disclosed - the R2137/R2141/R2144 precedent).
+    ("ledger-apimarket-sellerreplymonths", os.path.join(
+        "ledger", "test_apimarket_sellerreplymonths.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and

@@ -13045,6 +13045,212 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "rows": rows}
 
+    def api_seller_reply_months(self, dev_account=None):
+        """Seller-side monthly rating-reply cadence (criteria
+        AC-SRM1..AC-SRM8 pre-registered in the R2213 explore-queue
+        seed row BEFORE this code existed).
+
+        api_rating_reply_latency answers the LIFETIME latency
+        scorecard of a seller - fastest, slowest, mean and the
+        present debt - so a seller that answered every rating within
+        an hour last quarter and then went silent this month reads
+        exactly like one that never answered at all: the trust
+        chain had no time axis. This face puts the same replies on
+        the month axis, the last conversation chain to get one (the
+        question chain earned it in R2206, the claim chain in R2194).
+
+        Cadence law (AC-SRM2): a reply books in the UTC month of its
+        own immutable replied_utc - the month the seller actually
+        did the work - never the month the rating was left. A seller
+        who goes quiet therefore reads as an honest zero row
+        instead of being flattered by old ratings still sitting in
+        the inbox, and a month that only discharged January backlog
+        shows its whole volume in the month the seller showed up.
+
+        Latency law (AC-SRM3): reply_seconds is always measured from
+        the rating's own rated_utc to the first reply's replied_utc,
+        so a cross-month discharge carries its true older wait
+        instead of a flattering near-zero. A later reply revision
+        (R2143) can change the effective text but never moves the
+        clock, because the timing reads the immutable reply row
+        stamp. Each month's fastest / slowest / mean are over the
+        replies BOOKED in that month and the mean is the same
+        integer floor the neighbouring month faces use; a zero month
+        carries honest None latencies rather than a fabricated 0.
+        backlog_count counts the replies booked in the month whose
+        rating was left in an earlier month, so backlog_count +
+        same_month_count == replied_count per row (AC-SRM4).
+
+        Month rows are the contiguous grid from the first to the
+        last replying month, running_replied is the monotone
+        lifetime accumulator whose last value equals the envelope
+        replied_count, and the peak takes the highest month with the
+        earlier-month tie-break (AC-SRM5).
+
+        Scope law (AC-SRM6): dev_account None is the whole market
+        (scope == 'market', market_mean_seconds None - the face
+        never benchmarks itself against itself); a seller scope
+        carries the market-wide pooled mean computed by the same law
+        and other sellers never leak in. The envelope rating_count,
+        replied_count, unreplied_count, reply_coverage,
+        fastest_seconds, slowest_seconds and oldest_unreplied_utc
+        agree with api_rating_reply_latency on the same scope, while
+        the row sums are honestly <= the envelope for listings
+        because one listing can be answered in two different months.
+
+        Strict isolation on the usr: account gate, which fails closed
+        before any read; a prefix-valid account with no ratings gets
+        an honest empty envelope. Pure read: zero row mutations and
+        zero token movement."""
+        def _seconds(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _flow(scope):
+            sql = ("SELECT r.rating_id, r.rated_utc, r.buyer_id,"
+                   " r.listing_id, p.replied_utc"
+                   " FROM apimarket_ratings r"
+                   " JOIN apimarket_listings l"
+                   " ON l.listing_id = r.listing_id"
+                   " LEFT JOIN apimarket_rating_replies p"
+                   " ON p.rating_id = r.rating_id")
+            args = ()
+            if scope is not None:
+                sql += " WHERE l.dev_account = ?"
+                args = (str(scope),)
+            sql += " ORDER BY r.rating_id"
+            raw = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            buyers = set()
+            listings = set()
+            latencies = []
+            backlog_total = 0
+            same_total = 0
+            rating_count = 0
+            replied = 0
+            owed = []
+            for r in raw:
+                rating_count += 1
+                rated_utc = str(r[1])
+                replied_utc = r[4]
+                if replied_utc is None:
+                    owed.append(rated_utc)
+                    continue
+                replied += 1
+                month = str(replied_utc)[:7]
+                seconds = _seconds(rated_utc, replied_utc)
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "backlog": 0, "buyers": set(),
+                         "listings": set(), "latencies": []}
+                    buckets[month] = b
+                b["count"] += 1
+                if rated_utc[:7] < month:
+                    b["backlog"] += 1
+                    backlog_total += 1
+                else:
+                    same_total += 1
+                b["buyers"].add(r[2])
+                b["listings"].add(int(r[3]))
+                b["latencies"].append(seconds)
+                buyers.add(r[2])
+                listings.add(int(r[3]))
+                latencies.append(seconds)
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "replied_count": 0,
+                        "backlog_count": 0,
+                        "same_month_count": 0,
+                        "buyer_count": 0,
+                        "listing_count": 0,
+                        "fastest_seconds": None,
+                        "slowest_seconds": None,
+                        "mean_seconds": None,
+                        "running_replied": running})
+                    continue
+                running += b["count"]
+                months.append({
+                    "month": month,
+                    "replied_count": b["count"],
+                    "backlog_count": b["backlog"],
+                    "same_month_count": b["count"] - b["backlog"],
+                    "buyer_count": len(b["buyers"]),
+                    "listing_count": len(b["listings"]),
+                    "fastest_seconds": min(b["latencies"]),
+                    "slowest_seconds": max(b["latencies"]),
+                    "mean_seconds": (sum(b["latencies"]) // b["count"]),
+                    "running_replied": running})
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["replied_count"] > 0 and (
+                        peak_count is None
+                        or row["replied_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["replied_count"]
+            return {
+                "rating_count": rating_count,
+                "replied_count": replied,
+                "unreplied_count": rating_count - replied,
+                "reply_coverage": (round(float(replied) / rating_count, 4)
+                                   if rating_count else None),
+                "backlog_reply_count": backlog_total,
+                "same_month_reply_count": same_total,
+                "buyer_count": len(buyers),
+                "listing_count": len(listings),
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["replied_count"] > 0),
+                "peak_month": peak_month,
+                "peak_replied_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_replied_count": (
+                    months[-1]["replied_count"] if months else 0),
+                "fastest_seconds": (min(latencies) if latencies
+                                    else None),
+                "slowest_seconds": (max(latencies) if latencies
+                                    else None),
+                "mean_seconds": ((sum(latencies) // replied)
+                                 if replied else None),
+                "oldest_unreplied_utc": min(owed) if owed else None,
+                "months": months}
+
+        with self._lock:
+            core = _flow(dev_account)
+            if dev_account is None:
+                market_mean = None
+            else:
+                market_mean = _flow(None)["mean_seconds"]
+            if dev_account is None:
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings").fetchone()[0]
+            else:
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                    " WHERE dev_account = ?",
+                    (str(dev_account),)).fetchone()[0]
+        out = {
+            "scope": ("market" if dev_account is None else "seller"),
+            "dev_account": (None if dev_account is None
+                            else str(dev_account)),
+            "owned_listing_count": int(owned),
+            "market_mean_seconds": market_mean}
+        out.update(core)
+        out["disclaimer"] = self.disclaimer
+        return out
+
     def api_market_relist_months(self):
         """Market-wide monthly retirement / re-listing timeline (criteria
         AC-MRM1..AC-MRM8 pre-registered in the R2189 seed 9/10
