@@ -1,0 +1,10 @@
+PASS AC-BWCM1: env_keys=17 exact=True row_keys=True empty=(0, 0)
+PASS AC-BWCM2: order=['tools', 'data', 'art', 'music', None] ranks=[1, 2, 3, 4, 5] cum=[0.285714, 0.571429, 0.714286, 0.857143, 1.0]
+PASS AC-BWCM3: sum_w=7 sum_p=1 sum_o=6 sum_d=1 live=7 per_row=True
+PASS AC-BWCM4: shares=[0.285714, 0.285714, 0.142857, 0.142857, 0.142857] top1=0.285714 top3=0.714285 h=2244.90 pareto=4
+PASS AC-BWCM5: tools_row=(2, 'usr:dana', 0.5) env_top='usr:dana' share=0.285714
+PASS AC-BWCM6: moved=['tools', 'art', 'music', None, 'data'] reverted_same=True kit=4 market=2857.14 flags=[True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+PASS AC-BWCM7: digests_same=True tx_same=8 bytes_same=True len=1626
+PASS AC-BWCM8: gate=[True, True, True, True, True, True, True, True] bare=0 wired=True ascii_lf=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

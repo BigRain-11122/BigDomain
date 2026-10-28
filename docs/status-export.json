@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T13:11:25+08:00",
-  "do": "R2190 R2190 R2189 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a seller can now read which categories their net revenue actually comes from and how lopsided that mix is, instead of guessing from a market-wide category table",
+  "export_ts": "2026-10-28T14:05:00+08:00",
+  "do": "R2191 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a buyer can now read whether their watchlist attention leans to categories or to one seller, instead of inferring it from a shelf-by-shelf list",
   "ceo_face": {
-    "current": "R2190 seller refund reasons: a seller now reads why their own money came back - one row per reason as written (case and whitespace folded, spellings kept apart), an honest unlabeled row pinned last and excluded from the leading cause, share/average per row, a concentration index, and the market refund rate plus this seller's share of the market refunded total as benchmarks",
-    "latest_artifact": "qa/apimarket-sellerrefundreasons-R2190-a.log / -b.log (SUITE 8/8, criterion sha16 aea3ccbc7c14b8f2) + qa/regression-R2190.log + src/sandbox/ledger/apimarket.py (api_seller_refund_reasons, written 2026-10-28)",
-    "next_milestone": "full reconcile battery and suite-matrix regeneration carried from this window, then explore seed 2/10 (buyer watchlist category mix) with its criteria pre-registered first (within 48h)",
-    "last_artifact": "qa/apimarket-sellercategorymix-R2189-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2191 buyer watch-intent category mix: a monitored resident now reads their own wishlist as categories - how many live watches, how many already bought, how many open, how many on retired listings, which seller dominates each category, and how lopsided the whole intent is (share, top1, top3, a concentration index, and the smallest number of categories that carries 80% of the attention), with the market-wide index beside it as context",
+    "latest_artifact": "qa/apimarket-buyerwatchcategorymix-R2191-a.log / -b.log (SUITE 8/8, criterion sha16 e2c39b9bc9789c22) + qa/regression-R2191.log + qa/reconcile-all-R2191.log (RUNNER PASS 389/389, controls 7/7, 852.7s) + docs/sandbox-suite-matrix.md (389 suites / 3234 criteria) + src/sandbox/ledger/apimarket.py (api_buyer_watch_category_mix, written 2026-10-28)",
+    "next_milestone": "explore seed 3/10 (market-wide watch demand by month) with its criteria pre-registered first; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
+    "last_artifact": "qa/apimarket-sellerrefundreasons-R2190-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer watch-intent category mix (api_buyer_watch_category_mix)",
+      "on",
+      "R2191: the watch side answered row counts, live state and spend, but not the intent question - seven watches over five categories with two at one seller read as nothing. api_buyer_watch_category_mix(buyer_id) returns a seventeen-key envelope with eleven-key category rows: live-watch row authority with the purchased/open/delisted split made explicit, the single category seam, the shared total-order/share/herfindahl/pareto-on-integers law with the unclassified bucket pinned last, a per-row and envelope-wide seller axis with the dev_account tie-break, strict buyer isolation and the market-wide watch index as context. Suite 8/8 double-run byte-identical; six adjacent suites green; 389-suite battery and matrix regenerated in the same window."
+    ],
     [
       "seller refund reason structure (api_seller_refund_reasons)",
       "on",
@@ -154,14 +159,13 @@
       "apimarket category revision leg (revise_category + api_category_history + one effective-bucket seam across six readers)",
       "on",
       "R2147: the category declaration made at publish time (R2132) was the last write-once declaration on the listing row without a remedy leg - edit_listing repairs title and description only, price has revise_price, supply has restock_api, and rating, reply, answer and provider identity each grew a revision door - so a seller who filed a service under the wrong bucket was stuck with it forever, and the mistake propagated into four read faces at once (the catalog directory, the category demand face, the discovery category filter and the competitive bucket). apimarket.py now grows an append-only apimarket_category_revisions table (previous bucket carried in every row, no UPDATE or DELETE surface, the listing row never rewritten so the original declaration survives as base forever) and revise_category with the pinned gate order account shape, listing shape/existence, ownership, retired state, category shape, unchanged state. E_AM_CATEGORY_UNCHANGED is judged against the EFFECTIVE bucket, so revising back to an earlier bucket stays legal while a repeat of the current one writes zero rows; passing None is a legal move into the honest uncategorized bucket rather than a deletion; every refusal writes zero rows and moves zero tokens. The 40-character cap that used to be a literal inside publish_api is now one shared constant read by both doors so the publish gate and the revision gate cannot diverge. One seam (_category_state / _effective_category) is now flipped through every category reader: api_view gains the additive base_category, category_revision_count and latest_category_revision_utc trio, api_search filters and echoes the effective bucket, api_categories and api_category_demand re-bucket through the seam (trade aggregates follow the move in the same step), api_listing_position computes its competitive bucket over effective buckets in memory because SQL bucketing cannot see revisions, and api_purchase_dossier echoes the effective bucket. The new api_category_history answers the audit view: a nine-key envelope with five-key revision rows, the base declaration, the ordered changes, the current bucket and the revision count, readable on a retired listing and pure-read. Criteria AC-AMCG1..AC-AMCG8: seven anchors (the AC family, the door, the history face, the table, the error code, the suite and the runner label) were git grep -F zero-occupancy verified against the committed HEAD tree (rc=1) before the code existed. Verification: suite SUITE PASS 8/8 double-run rc=0/0 with byte-identical criterion lines sha16 63e45d6cfb478a0f (qa/apimarket-categoryrev-R2147-a.log and -b.log, 556 bytes each, single-writer UTF-8 LF); six adjacent suites re-ran green (category, categorydemand, search, listingposition, purchasedossier, supply - 8/8 each); the suite matrix was regenerated to 350 suites / 2908 criteria and checks byte-identical. Honest boundary: the full battery was NOT run this round under the 25-minute budget and is the first item of the next round; the criterion TEXT landed in the queue row in the same window as the code (anchor check preceded it), disclosed in the row itself."
-    ],
-    [
-      "category price trend (api_category_price_months)",
-      "on",
-      "R2176: the two asking-price faces were current-state snapshots and every time axis answered turnover, so how each category's asking price moved month by month had no face. The new face rebuilds the catalog at every UTC month end from the append-only price, category, delist and relist history, keeps a contiguous window with honest zero months and reports the median step month over month."
     ]
   ],
   "results": [
+    [
+      "R2191",
+      "R2191: five-silence scan clean (251 rows / 159 tokens, zero new against the 170-token baseline; ledger patrol rows already paid off; group orders tail unchanged, acknowledged with zero action; benchmarks inside the gate; tree clean). Product api_buyer_watch_category_mix with AC-BWCM1..AC-BWCM8 pre-registered in the seed 2/10 row BEFORE the code - seventeen-key envelope, live-watch authority, purchased/open/delisted conservation, the shared concentration law (herfindahl 10000.0/5000.0/2244.9, pareto on integers counting an exact 80%), the seller axis with tie-break, the single category seam, strict isolation and the market benchmark. SUITE 8/8 double-run identical sha16 e2c39b9bc9789c22 (860B, crlf=0); six adjacent regressions green; debt cleared - full battery 389/389 + controls 7/7 852.7s, matrix 389/3234 byte-identical, census DRIFT-CLEAN flags=0. Honest notes: criteria key-count miscount corrected in-window before code; three first-run reds were this window's own expectations corrected in the TEST (pareto 4 not 6, kit tie order data-first, 1e-5 share tolerance); no product defect."
+    ],
     [
       "R2190",
       "R2190: five-silence scan clean (251 rows / 170 D-C tokens with zero new against the stored baseline; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_refund_reasons with AC-SRR1..AC-SRR8 pre-registered in the R2189 seed row BEFORE the code - seventeen-key envelope, the shared narrow bucket law scoped by the stored dev_account, honest unlabeled bucket last and excluded from the leading cause, scoped conservation against the raw tables, share/average/top share with None instead of fake zeros, exact-fraction herfindahl, market benchmarks on a seller scope and None on the market scope, a pure read with frozen digests and frozen ledger_tx, three-instance byte identity after two restarts and five gate forms failing closed before any read. Honest notes: the first run read 6/8 red on two of this window's own expectations (2800.0 not 3200.0; api_seller_quality carries no refund count, so api_refund_register is the cross-face witness) and one real test defect (double dumps on the retirement snapshot, plus a benchmark key that legitimately moves) - all three fixed in the TEST, no implementation loosened; the full battery and matrix regeneration are first-item debt for R2191."
@@ -283,14 +287,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 67,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 67,
+    "substantive_non_idle_mention_lines": 68,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 10
+    "queue_explore_open": 9
   }
 }

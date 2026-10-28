@@ -9473,6 +9473,182 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "rows": core["rows"]}
 
+    def api_buyer_watch_category_mix(self, buyer_id):
+        """Buyer-side watch-intent category mix face (criteria
+        AC-BWCM1..AC-BWCM8 pre-registered in the R2189 seed 2/10
+        explore claim row BEFORE this code existed; the AC-BWCM1 label,
+        test_apimarket_buyerwatchcategorymix and
+        ledger-apimarket-buyerwatchcategorymix were git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1; the face name
+        appears at HEAD only as that seed row's subject).
+
+        api_watchlist answers how many rows a buyer watches,
+        api_watch_budget answers their live state, and
+        api_buyer_category_spend answers where the money went. None
+        answered the intent question: "is my attention biased to
+        categories or to sellers". A resident watching six rows across
+        five categories with two of them at one seller could not read
+        that anywhere.
+
+        Row authority is the LIVE watch side: an unwatched row leaves
+        the roll (its history stays on disk), a watch on a retired
+        listing stays on the roll and is counted as delisted, and a
+        watch the buyer already purchased stays counted with the
+        purchased/open split made explicit. Each listing resolves its
+        category through the single _category_state seam, so one
+        revision moves exactly one bucket.
+
+        Total order (-watch_count, -open_count, category ascending with
+        the unclassified bucket pinned LAST), rank 1..n, share against
+        the scoped watch total (None when it is not positive, never a
+        fake zero), cumulative_share landing exactly on 1.0 on the last
+        row, top1 as the head, an honest top3, herfindahl from the
+        exact fractions squared times 10000 rounded to two places, and
+        pareto_category_count as the smallest k whose cumulative watch
+        count reaches 80%, decided on integers (cum * 5 >= total * 4)
+        so a bucket landing exactly on 80% is counted.
+
+        Seller axis: every row carries its distinct seller count, the
+        seller holding the most of that row (ties resolved on the
+        dev_account ascending) and that seller's share of the row; the
+        envelope names the buyer-wide top seller by the same law.
+
+        Scope law: the face is always one buyer's scope, so it never
+        benchmarks itself; it carries the market-wide watch category
+        herfindahl and watch count as comparable context, computed by
+        the same law over every live watch row.
+
+        Gate: the usr: account shape runs before any read (fail-closed
+        E_AM_BAD_ACCOUNT); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+
+        def mix(scope):
+            with self._lock:
+                sql = ("SELECT w.listing_id, l.category, l.dev_account"
+                       " FROM apimarket_watchlist w JOIN apimarket_listings l"
+                       " ON l.listing_id = w.listing_id"
+                       " WHERE NOT EXISTS (SELECT 1 FROM apimarket_unwatchings u"
+                       " WHERE u.watch_id = w.watch_id)")
+                if scope is None:
+                    watches = self._conn.execute(sql).fetchall()
+                else:
+                    watches = self._conn.execute(
+                        sql + " AND w.buyer_id = ?", (scope,)).fetchall()
+                owned = set()
+                if scope is not None:
+                    owned = set(int(r[0]) for r in self._conn.execute(
+                        "SELECT listing_id FROM apimarket_purchases"
+                        " WHERE buyer_id = ?", (scope,)).fetchall())
+                groups = {}
+                for r in watches:
+                    lid = int(r[0])
+                    key = self._category_state(lid, r[1])[0]
+                    g = groups.get(key)
+                    if g is None:
+                        g = {"watch_count": 0, "purchased_count": 0,
+                             "delisted_count": 0, "sellers": {}}
+                        groups[key] = g
+                    g["watch_count"] += 1
+                    if lid in owned:
+                        g["purchased_count"] += 1
+                    if self._delisted_utc(lid) is not None:
+                        g["delisted_count"] += 1
+                    seller = r[2]
+                    g["sellers"][seller] = g["sellers"].get(seller, 0) + 1
+
+            rows = []
+            all_sellers = {}
+            for key, g in groups.items():
+                ranked = sorted(g["sellers"].items(),
+                                key=lambda kv: (-kv[1], kv[0]))
+                for seller, count in g["sellers"].items():
+                    all_sellers[seller] = all_sellers.get(seller, 0) + count
+                rows.append({
+                    "category": key,
+                    "watch_count": g["watch_count"],
+                    "purchased_count": g["purchased_count"],
+                    "open_count": (g["watch_count"]
+                                   - g["purchased_count"]),
+                    "delisted_count": g["delisted_count"],
+                    "seller_count": len(g["sellers"]),
+                    "top_seller": ranked[0][0],
+                    "top_seller_share": round(
+                        float(ranked[0][1]) / g["watch_count"], 6)})
+            rows.sort(key=lambda r: (-r["watch_count"],
+                                     -r["open_count"],
+                                     r["category"] is None,
+                                     str(r["category"] or "")))
+            total = sum(r["watch_count"] for r in rows)
+            squares = []
+            running = 0
+            for index, r in enumerate(rows, 1):
+                running += r["watch_count"]
+                if total > 0:
+                    exact = float(r["watch_count"]) / total
+                    r["share"] = round(exact, 6)
+                    r["cumulative_share"] = round(
+                        float(running) / total, 6)
+                    squares.append(exact * exact)
+                else:
+                    r["share"] = None
+                    r["cumulative_share"] = None
+                r["rank"] = index
+            shares = ([r["share"] for r in rows] if total > 0 else [])
+            pareto = None
+            if total > 0:
+                running = 0
+                for index, r in enumerate(rows, 1):
+                    running += r["watch_count"]
+                    if running * 5 >= total * 4:
+                        pareto = index
+                        break
+            sellers_ranked = sorted(all_sellers.items(),
+                                    key=lambda kv: (-kv[1], kv[0]))
+            return {
+                "watch_count": total,
+                "category_count": len(rows),
+                "purchased_count": sum(r["purchased_count"]
+                                       for r in rows),
+                "open_count": sum(r["open_count"] for r in rows),
+                "delisted_count": sum(r["delisted_count"]
+                                      for r in rows),
+                "seller_count": len(all_sellers),
+                "top_seller": (sellers_ranked[0][0]
+                               if sellers_ranked else None),
+                "top_seller_share": (round(
+                    float(sellers_ranked[0][1]) / total, 6)
+                    if total > 0 else None),
+                "top1_share": shares[0] if shares else None,
+                "top3_share": (round(sum(shares[:3]), 6)
+                               if shares else None),
+                "herfindahl": (round(sum(squares) * 10000, 2)
+                               if total > 0 else None),
+                "pareto_category_count": pareto,
+                "rows": rows}
+
+        core = mix(buyer_id)
+        market = mix(None)
+        return {
+            "buyer_id": buyer_id,
+            "watch_count": core["watch_count"],
+            "category_count": core["category_count"],
+            "purchased_count": core["purchased_count"],
+            "open_count": core["open_count"],
+            "delisted_count": core["delisted_count"],
+            "seller_count": core["seller_count"],
+            "top_seller": core["top_seller"],
+            "top_seller_share": core["top_seller_share"],
+            "top1_share": core["top1_share"],
+            "top3_share": core["top3_share"],
+            "herfindahl": core["herfindahl"],
+            "pareto_category_count": core["pareto_category_count"],
+            "market_watch_count": market["watch_count"],
+            "market_herfindahl": market["herfindahl"],
+            "disclaimer": self.disclaimer,
+            "rows": core["rows"]}
+
     def api_price_volatility(self, dev_account=None):
         """Seller repricing-discipline face (criteria AC-PVC1..AC-PVC8
         pre-registered in the R2171 explore claim row BEFORE this code

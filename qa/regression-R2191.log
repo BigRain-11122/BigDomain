@@ -1,0 +1,8 @@
+R2191 adjacent regressions around api_buyer_watch_category_mix
+test_apimarket_watchlist.py rc=0 SUITE 8/8
+test_apimarket_watchbudget.py rc=0 SUITE 8/8
+test_apimarket_watchalerts.py rc=0 SUITE 8/8
+test_apimarket_watchconversion.py rc=0 SUITE PASS 8/8
+test_apimarket_buyercategoryspend.py rc=0 SUITE PASS 8/8
+test_apimarket_sellercategorymix.py rc=0 SUITE PASS 8/8
+ALL_GREEN True

@@ -2496,6 +2496,16 @@ SUITES = [
     # R2190 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-sellerrefundreasons", os.path.join(
         "ledger", "test_apimarket_sellerrefundreasons.py"), 8),
+    # buyer watch-intent category mix (the live-watch row authority, the
+    # purchased/open/delisted split on the roll, the (-watch_count,
+    # -open_count, category) order with the unclassified bucket pinned
+    # last, the share/herfindahl/pareto-on-integers law, the per-row and
+    # envelope seller axis with the dev_account tie-break, the single
+    # category seam, strict buyer isolation and the market-wide
+    # benchmark) - criteria AC-BWCM1..AC-BWCM8 pre-registered in the
+    # R2189 seed 2/10 explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-buyerwatchcategorymix", os.path.join(
+        "ledger", "test_apimarket_buyerwatchcategorymix.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and
