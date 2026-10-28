@@ -2581,6 +2581,14 @@ SUITES = [
     # the pooled money average)
     ("ledger-apimarket-buyerrefundmonths", os.path.join(
         "ledger", "test_apimarket_buyerrefundmonths.py"), 8),
+    # buyer-side monthly claim flow (a claim books in the UTC month of its
+    # own opened_utc, a later refund never re-dates it nor invents a row
+    # in the refund month, honest zero months carried flat, the five-state
+    # partition, the closed share and the buyer follow-up note count) -
+    # criteria AC-BCM1..AC-BCM8 registered in the R2209 explore-queue
+    # claim row BEFORE the code.
+    ("ledger-apimarket-buyerclaimmonths", os.path.join(
+        "ledger", "test_apimarket_buyerclaimmonths.py"), 8),
     # rating reply latency (the waiting time between a buyer rating and
     # the seller's first reply, the outstanding half kept as None rather
     # than a fabricated zero, the total order, and the revision seams

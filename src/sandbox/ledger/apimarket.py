@@ -13149,3 +13149,180 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months,
         }
+
+    def api_buyer_claim_months(self, buyer_id):
+        """Buyer-side monthly claim flow (criteria AC-BCM1..AC-BCM8
+        pre-registered in the R2209 explore-queue claim row BEFORE this
+        code existed; the AC-BCM prefix, test_apimarket_buyerclaimmonths,
+        ledger-apimarket-buyerclaimmonths, resolved_share, noted_count,
+        closed_count and running_claim_count were all git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_buyer_claim_todo answers the present debt (only the claims
+        waiting on this buyer) and api_market_claim_months aggregates
+        the whole market, so one resident's own claim pressure over time
+        was unreadable: a resident who opened one claim in June and one
+        long-running dispute in October read identically on the debt
+        queue, which carries no dates at all.
+
+        Booking law (AC-BCM2): a claim books ONLY in the UTC month of
+        its own opened_utc and nothing later moves it. A refund landing
+        two months after the claim neither re-dates it nor invents a row
+        in the refund month, so the money of that refund is attributed
+        to the month the claim was opened and the amount frozen at open
+        is never rewritten. That is deliberately different from
+        api_buyer_refund_months, which books refund cash in the month
+        the money came back: the two faces answer different questions
+        (claim pressure versus cash flow) and both are honest.
+
+        Month rows run the contiguous grid from the first to the last
+        claim month, so a month with no claim carries an honest zero row
+        whose average is None rather than a fabricated 0.0, and the
+        running accumulator is carried flat across it (AC-BCM3).
+
+        Partition and conservation (AC-BCM4): open + answered +
+        withdrawn + refunded == claim_count per row and in the envelope,
+        closed_count == refunded_count + withdrawn_count,
+        resolved_share == closed / claim_count reading None at zero
+        claims, and running_claim_count is monotone with its last row
+        equal to the envelope total. The status seam is the api_claims
+        precedence refunded > withdrawn > answered > open, so every
+        claim lands in exactly one bucket (AC-BCM5).
+
+        noted_count is the buyer-side signal this face adds: the claims
+        of that month carrying an append-only follow-up note, counted
+        regardless of how the claim later resolved, because filing a
+        note is the moment the buyer disagreed with the answer. The
+        envelope average is POOLED over every claim in scope, never a
+        mean of monthly means (AC-BCM6).
+
+        Single-buyer scope: the usr: prefix gate runs before any read
+        (fail-closed E_AM_BAD_ACCOUNT), the bare usr: prefix reads
+        honestly empty, another buyer's claims never leak and a retired
+        listing keeps its claim history. peak_month takes the largest
+        claim_count with ties resolved to the EARLIER month, a zero
+        month is never a peak and an empty world reads None (AC-BCM7).
+
+        Pure read: zero row mutations, zero token movement, repeated
+        calls and post-restart instances byte-identical (AC-BCM8)."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT c.claim_id, c.price_paid, c.opened_utc,"
+                " f.refunded_utc, f.amount, w.withdrawn_utc,"
+                " r.replied_utc,"
+                " (SELECT COUNT(*) FROM apimarket_claim_notes n"
+                " WHERE n.claim_id = c.claim_id)"
+                " FROM apimarket_claims c"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses r"
+                " ON r.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id"
+                " WHERE c.buyer_id = ? ORDER BY c.claim_id",
+                (buyer,)).fetchall()
+
+        buckets = {}
+        for _cid, price, opened, _refunded, amount, withdrawn, \
+                replied, notes in raw:
+            month = str(opened)[:7]
+            b = buckets.get(month)
+            if b is None:
+                b = {"claim_count": 0, "open_count": 0,
+                     "answered_count": 0, "withdrawn_count": 0,
+                     "refunded_count": 0, "claim_amount": 0,
+                     "refunded_amount": 0, "noted_count": 0}
+                buckets[month] = b
+            b["claim_count"] += 1
+            b["claim_amount"] += int(price)
+            if _refunded is not None:
+                b["refunded_count"] += 1
+                b["refunded_amount"] += int(amount)
+            elif withdrawn is not None:
+                b["withdrawn_count"] += 1
+            elif replied is not None:
+                b["answered_count"] += 1
+            else:
+                b["open_count"] += 1
+            if int(notes or 0) > 0:
+                b["noted_count"] += 1
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({
+                    "month": month,
+                    "claim_count": 0,
+                    "open_count": 0,
+                    "answered_count": 0,
+                    "withdrawn_count": 0,
+                    "refunded_count": 0,
+                    "claim_amount": 0,
+                    "refunded_amount": 0,
+                    "avg_claim_amount": None,
+                    "noted_count": 0,
+                    "running_claim_count": running})
+                continue
+            running += b["claim_count"]
+            months.append({
+                "month": month,
+                "claim_count": b["claim_count"],
+                "open_count": b["open_count"],
+                "answered_count": b["answered_count"],
+                "withdrawn_count": b["withdrawn_count"],
+                "refunded_count": b["refunded_count"],
+                "claim_amount": b["claim_amount"],
+                "refunded_amount": b["refunded_amount"],
+                "avg_claim_amount": round(
+                    float(b["claim_amount"]) / b["claim_count"], 2),
+                "noted_count": b["noted_count"],
+                "running_claim_count": running})
+
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["claim_count"] > 0 and (
+                    peak_count is None
+                    or row["claim_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["claim_count"]
+        total = sum(row["claim_count"] for row in months)
+        closed = sum(row["refunded_count"] + row["withdrawn_count"]
+                     for row in months)
+        claim_amount = sum(row["claim_amount"] for row in months)
+        return {
+            "buyer_id": buyer,
+            "scope": "buyer",
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["claim_count"] > 0),
+            "claim_count": total,
+            "open_count": sum(row["open_count"] for row in months),
+            "answered_count": sum(row["answered_count"]
+                                  for row in months),
+            "withdrawn_count": sum(row["withdrawn_count"]
+                                   for row in months),
+            "refunded_count": sum(row["refunded_count"]
+                                  for row in months),
+            "closed_count": closed,
+            "resolved_share": (round(float(closed) / total, 4)
+                               if total else None),
+            "claim_amount": claim_amount,
+            "refunded_amount": sum(row["refunded_amount"]
+                                   for row in months),
+            "avg_claim_amount": (round(
+                float(claim_amount) / total, 2) if total else None),
+            "noted_count": sum(row["noted_count"] for row in months),
+            "peak_month": peak_month,
+            "peak_claim_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_month_claim_count": (
+                months[-1]["claim_count"] if months else None),
+            "disclaimer": self.disclaimer,
+            "months": months}

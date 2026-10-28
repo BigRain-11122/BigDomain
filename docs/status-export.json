@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T20:58:00+08:00",
-  "do": "R2208 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole 402-suite battery plus the matrix regeneration was re-run on the committed tree, so the last product face is now covered by the full suite instead of its own eight criteria.",
+  "export_ts": "2026-10-28T23:10:00+08:00",
+  "do": "R2209 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a resident can now read their own after-sales history month by month: each claim stays in the month it was opened however late it resolves, a quiet month is an honest zero, and the face separates closed claims from open ones and counts the months the buyer had to push back.",
   "ceo_face": {
-    "current": "R2208 verification round: full reconcile battery 402/402 suites green plus controls 7/7 in 1001.3s on the committed tree, with the suite matrix regenerated to 402 suites / 3338 criteria",
-    "latest_artifact": "qa/reconcile-all-R2208.log (RUNNER PASS 402/402, 742241 bytes, single-writer utf-8 LF, CRLF=0) + docs/sandbox-suite-matrix.md (402 suites / 3338 criteria, 39079 bytes) + src/os/battery_followup_R2208.py (written 2026-10-28)",
-    "next_milestone": "next explore seed from the queue (buyer-side monthly claim flow) with its criteria registered before the code, then the battery on the resulting tree - within 48h",
-    "last_artifact": "qa/apimarket-marketprovidermonths-R2207-a.log / -b.log (SUITE PASS 8/8, sha256 38d3afc97fd712f7..., byte-identical double run) + qa/regression-R2207.log (five adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_provider_months, written 2026-10-28)"
+    "current": "R2209 buyer monthly claim flow: api_buyer_claim_months() books each claim in the month it was opened however late it resolves, runs a contiguous grid with honest zero months, partitions the four states with a closed share and counts the buyer's own follow-up notes",
+    "latest_artifact": "qa/apimarket-buyerclaimmonths-R2209-a.log / -b.log (SUITE 8/8, sha256 55ac56980c0025be..., byte-identical double run) + qa/regression-R2209.log (eight adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_buyer_claim_months, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration on this tree (matrix 402 -> 403 suites), then the next explore seed with its criteria registered before the code - within 48h",
+    "last_artifact": "qa/reconcile-all-R2208.log (RUNNER PASS 402/402, 742241 bytes, single-writer utf-8 LF, CRLF=0) + docs/sandbox-suite-matrix.md (402 suites / 3338 criteria, 39079 bytes) + src/os/battery_followup_R2208.py (written 2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "buyer monthly claim flow (api_buyer_claim_months)",
+      "on",
+      "R2209: the buyer claim debt face carries no dates at all, so one claim in June and a long dispute in October read identically. The new face books each claim in the UTC month of its own opened_utc and never re-dates it when a refund lands later, runs a contiguous grid with honest zero months and a flat accumulator, partitions the four states, reports closed_count and resolved_share, keeps a pooled average distinct from a mean of monthly means, and counts the follow-up notes the buyer filed."
+    ],
     [
       "full reconcile battery 402/402 with matrix regeneration",
       "on",
@@ -243,6 +248,10 @@
   ],
   "results": [
     [
+      "R2209",
+      "R2209: five-silence scan clean with four apparent decision tokens, all citation-only inside other seats' rows, so zero domain action and the baseline re-anchored. Product: api_buyer_claim_months with AC-BCM1..AC-BCM8 anchored and registered before the code, SUITE PASS 8/8 double-run byte-identical body sha256 55ac56980c0025be7ca7a60cdd2b5849a665692d40a2c0c95fad34cda7bdbcf2, wired as ledger-apimarket-buyerclaimmonths(8), eight adjacent claim-family suites green. Honest debt: full battery and suite-matrix regeneration deferred to R2210."
+    ],
+    [
       "R2208",
       "R2208: five-silence scan clean (261 rows / 172 D-C-O tokens equal to the stored baseline exactly - zero new, zero dropped, so zero domain action; three ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch, aware-no-action; benchmarks inside the seven-day gate; tree clean, no index.lock). P1 rows stay blocked-on-CEO, the weekly proposal duty is met by BD-PROP-005 and all four tech heads stayed gated, so the window discharged the R2207 debt: full battery RUNNER PASS 402/402 suites plus controls 7/7 in 1001.3s with TMP RECLAIM 892/892 worlds and 314.85 MiB, then four follow-up sections all PASS in the same evidence file - matrix 402 suites / 3338 criteria (39079 bytes), fingerprint CLEAN five domains, runner profile PASS, census DRIFT-CLEAN files=2081 flags=0. No product code changed, so the product score is honestly zero; three explore seeds from the R2202 reseed remain for the next round."
     ],
@@ -431,7 +440,7 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 91,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 85,
@@ -439,6 +448,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 4
+    "queue_explore_open": 3
   }
 }

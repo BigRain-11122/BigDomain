@@ -1,0 +1,10 @@
+PASS AC-BCM1: env_keys=22 exact=True rows=5 empty=(0, 0, None, None) sig=True
+PASS AC-BCM2: raw_months=['2026-06', '2026-10'] jun=(2, 14, 10) oct=(3, 17, 6) refund_grid=['2026-06', '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'] money=16/16
+PASS AC-BCM3: month_count=5 active=2 zeros=True carried=(2, 2, 2, 5)
+PASS AC-BCM4: partition=True counts=(5, 1, 1, 1, 2) closed=(3, 0.6) share=0.6 raw=5/31 running=[2, 2, 2, 2, 5]
+PASS AC-BCM5: states=['refunded', 'answered', 'withdrawn', 'refunded', 'open'] counts=(1, 1, 1, 2)
+PASS AC-BCM6: noted=1 pooled=6.2 month_means=[7.0, 5.67] mean_of_means=6.33 latest=3
+PASS AC-BCM7: carol=(1, ['2026-09'], 0.0) dave=(2, ['2026-08', '2026-09', '2026-10'], '2026-08') peak=('2026-10', 3) market=8
+PASS AC-BCM8: gates=True bare=(0, 0) digests_same=True tables=27 tx_same=True bytes=True wired=True crossface=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
