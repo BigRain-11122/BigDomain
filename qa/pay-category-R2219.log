@@ -1,0 +1,11 @@
+pay category-classification chapter verification - R2219 - 2026-10-29
+spec: docs/spec/payment-integration-spec.md v0.2 (section 0-bis added, footer bumped)
+AC-PAYCAT1 PASS catalog_rows=7 (6 virtual families + 1 standard real-service family) matches the section 0 product enumeration
+AC-PAYCAT2 PASS wx.requestVirtualPayment named as the single C-side API family; adapters.py channel pair ('virtual','standard') literal=True; jsapi occurrences in pay code=0; spec JSAPI mentions are prohibitions only (7 lines reviewed)
+AC-PAYCAT3 PASS hybrid law present (virtual+physical whole-classified virtual, no split-order bypass, a future physical face requires a chapter change)
+AC-PAYCAT4 PASS both exemptions recorded (online consultation, legal advice) and declared not claimed by this company
+AC-PAYCAT5 PASS four risk rows retrievable: R1 android/non-iOS plain wechat pay closure, R2 physical item, R3 funding cadence, R4 category self-declaration final review
+AC-PAYCAT6 PASS W34 triple aligned (channel/API family, subject prerequisites, T+3 / 180 days / iOS 45-60 days); the section 0 standard-channel line limited to real services
+honest note: the first AC-PAYCAT2 probe returned False because its own regex matched the criterion TEXT (line 73 quotes the forbidden phrase); a targeted re-check of all 7 JSAPI lines shows prohibitions only
+regression: src/sandbox/pay/test_pay.py 16/16 passed; src/sandbox/pay/test_channel_matrix.py SUITE PASS 7/7
+verdict: PASS (design deliverable, product score 1 point, no new code)
