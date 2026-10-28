@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T16:53:41+08:00",
-  "do": "R2200 R2199 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole 394-suite safety net was re-run on the committed tree and all four verification faces read green, so every market face shipped so far is covered by a fresh battery",
+  "export_ts": "2026-10-28T19:20:00+08:00",
+  "do": "R2201 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the marketplace now answers the monthly rhythm of repricing, so a seller that hunts for a price once and one that drifts quietly read differently",
   "ceo_face": {
-    "current": "R2200 market-wide retirement timeline: the market now reads how many shelves left and how many came back each month, with the return rate honestly empty on a pure-return month",
-    "latest_artifact": "qa/apimarket-marketrelistmonths-R2200-a.log / -b.log (SUITE 8/8, sha256 aa34b84df93acf93, criterion sha16 6b74f063474a408f) + src/sandbox/ledger/apimarket.py (api_market_relist_months, written 2026-10-28)",
-    "next_milestone": "full reconcile battery and suite-matrix regeneration carried from this window, then explore seed 10/10 (seller price cadence months) with its criteria pre-registered first (within 48h)",
+    "current": "R2201 monthly repricing cadence: the market reads how often each seller reprices per month, by how much, up or down, and how the cadence drifts",
+    "latest_artifact": "qa/apimarket-sellerpricecadence-R2201-a.log / -b.log (SUITE 8/8, sha256 04e6993630129652, criterion sha16 cee4c13c8af77f83) + src/sandbox/ledger/apimarket.py (api_seller_price_cadence_months, written 2026-10-28)",
+    "next_milestone": "full reconcile battery and suite-matrix regeneration carried from this window, then an explore-queue reseed because the standing line is down to one merchant-gated row (within 48h)",
     "last_artifact": "docs/sandbox-suite-matrix.md (394 suites / 3274 criteria, 38217 bytes) (2026-10-28)"
   },
   "depts": [
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "monthly repricing cadence (api_seller_price_cadence_months)",
+      "on",
+      "R2201: api_price_volatility answers lifetime repricing magnitude and api_price_step_distribution the lifetime band shape - both whole-history scalars, so a seller repricing twelve times in one month and then going silent read exactly like one adjusting once a month. api_seller_price_cadence_months(dev_account=None) returns an eighteen-key envelope with nine-key month rows derived only from apimarket_price_revisions x apimarket_listings (no new table). Step attribution law: each revision's step is round((new-previous)/previous*100, 2) against the price that was actually live - the base declaration or the prior revision in revision_id order - and books in the UTC month of its OWN revised_utc, so a December repricing never rewrites the October step (proved by freezing the October row across a later batch). Month rows are the contiguous grid from the first to the last revision month, so a month with no repricing carries an honest row whose average is None rather than a fabricated 0.0; running_revision is the monotone lifetime accumulator landing exactly on the envelope total; per-row up + down == revision_count because the write side refuses a same-price revision; the signed net can be negative. Magnitude is POOLED over every step (30.0 on the fixture) rather than a mean of monthly means (29.17), and a single-step month equals its own step. Participant counts are distinct over the included rows, so they can be smaller than the row sums - a disclosed asymmetry. The market scope never benchmarks itself (market_avg_abs_step_pct None) while a seller scope carries the market-wide pooled average computed by the same law, sellers never leak, and the peak takes the highest monthly revision count with a tie resolved to the earlier month and never a zero month. The usr: prefix gate runs before any read, the bare prefix reads honestly empty, and the face is a pure read with frozen table digests, a constant ledger_tx set and three-instance byte identity after restarts. Suite 8/8 double-run byte-identical sha256 04e6993630129652, wired ledger-apimarket-sellerpricecadencemonths(8); four adjacent price-family suites green."
+    ],
     [
       "market-wide retirement / re-listing timeline (api_market_relist_months)",
       "on",
@@ -198,6 +203,10 @@
   ],
   "results": [
     [
+      "R2201",
+      "R2201: five-silence scan clean (251 rows / 166 D-C tokens against a 172-token baseline with zero new, the six absentees being the known body-text citations dropped by the group-side rotation, so the baseline is re-anchored; ledger three paid-off patrol rows; group orders tail unchanged at the 15:01 fleet dispatch, aware-no-action; benchmarks inside the seven-day gate; tree clean, no index.lock). The P1 rows stay blocked-on-CEO, the weekly proposal duty is met by BD-PROP-005, the tech heads stayed gated and the head above the seeds is the merchant-gated benchmark row, so the window claimed the LAST real seed (R2189 10/10) with AC-SPC1..AC-SPC8 registered in that row BEFORE the code: api_seller_price_cadence_months. Verification: SUITE 8/8 double-run byte-identical sha256 04e6993630129652 (834 bytes each, class=tee, crlf=0) with criterion sha16 cee4c13c8af77f83, wired ledger-apimarket-sellerpricecadencemonths(8), four adjacent price-family suites green. Honest notes: three test-side expectations were wrong on the first run and were fixed in the test (participant row sums 6, the up/down split 4/4, and a byte-identity comparison that mixed two scopes), never by widening the implementation; the first evidence attempt went through a PowerShell redirection and produced UTF-16, so it was discarded and rewritten through the python single writer; the full battery and matrix regeneration are the next round's first item (the R2168 mixed-tree rule)."
+    ],
+    [
       "R2200",
       "R2200: five-silence scan clean (251 rows / 172 D-C-O tokens, the two apparent additions being the rotation-restored O-family citations inside other seats' rows, baseline re-anchored; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_market_relist_months with AC-MRM1..AC-MRM8 registered in the R2189 seed 9/10 queue row BEFORE the code - cash-basis double stamp that never rewrites the delisting month, the contiguous grid with an honest zero month, the same-month flow ratio that stays None on a pure-return month, conservation against the raw tables and the two running accumulators, event-derived participants, the earlier-month peak tie-break, cross-face identity with api_relist_gap (three closed gaps plus one pending equal to the four delistings), and a pure read with frozen digests, constant ledger_tx and three-instance byte identity. Suite SUITE PASS 8/8 on both runs with byte-identical evidence (sha256 aa34b84df93acf93), wired ledger-apimarket-marketrelistmonths(8), five adjacent suites green. Honest note: the full battery and matrix regeneration were not run in this window and are R2201's first item."
     ],
@@ -350,7 +359,7 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 77,
+    "log_lines_in_window": 173,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 77,
@@ -358,6 +367,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 3
+    "queue_explore_open": 1
   }
 }

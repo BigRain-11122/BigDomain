@@ -12075,3 +12075,191 @@ class APIMarketFace:
             "months": months,
             "disclaimer": self.disclaimer,
         }
+
+    def api_seller_price_cadence_months(self, dev_account=None):
+        """Monthly repricing cadence on both scopes (criteria
+        AC-SPC1..AC-SPC8 pre-registered in the R2189 seed 10/10
+        explore-queue claim row BEFORE this code existed; the AC-SPC
+        prefix, api_seller_price_cadence_months and
+        test_apimarket_sellerpricecadencemonths were git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_price_volatility answers lifetime repricing magnitude
+        (how many up, how many down, how large on average) and
+        api_price_step_distribution answers the lifetime band shape.
+        Both are whole-history scalars, so a seller that repriced
+        twelve times in one month and then went silent for a quarter
+        reads exactly like one that adjusted once a month for a year.
+        Repricing is the seller's only high-frequency operation and it
+        had no time axis.
+
+        Step attribution law: each revision's step is
+        round((new - previous) / previous * 100, 2) with previous the
+        base declaration or the prior revision in revision_id order,
+        and the step books in the UTC month of THAT revision's own
+        revised_utc. A later revision never rewrites the step an
+        earlier month already measured, so a cross-month chain
+        measures each link against the price that was actually live
+        (AC-SPC2).
+
+        Month rows are the contiguous grid from the first to the last
+        revision month, so a month with no repricing carries an honest
+        zero row whose monthly average is None rather than a
+        fabricated 0.0 (AC-SPC3). running_revision is the monotone
+        lifetime accumulator and the last row equals the envelope
+        total (AC-SPC5). The write side refuses a same-price revision
+        (E_AM_PRICE_UNCHANGED), so every step is strictly up or
+        strictly down and up + down == revision_count holds per row.
+
+        Magnitude is POOLED, never a mean of monthly means: a month
+        average is the arithmetic mean of that month's absolute step
+        percentages and the envelope average is the mean over every
+        step in scope, so the two can be checked against each other
+        (AC-SPC6). Zero steps answer None.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market' and market_avg_abs_step_pct None - the face never
+        benchmarks itself against itself); a seller scope carries the
+        market-wide pooled average computed by the same law, and
+        sellers never leak into each other (AC-SPC7). Envelope
+        listing_count / seller_count are DISTINCT over the included
+        rows, so they can be smaller than the row sums - the disclosed
+        asymmetry the other timeline faces carry.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on the
+        usr: prefix shape); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _cadence(scope):
+            sql = ("SELECT listing_id, dev_account, token_price"
+                   " FROM apimarket_listings")
+            args = ()
+            if scope is not None:
+                sql += " WHERE dev_account = ?"
+                args = (scope,)
+            sql += " ORDER BY listing_id"
+            listings = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            sellers = set()
+            listing_ids = set()
+            all_steps = []
+            for r in listings:
+                listing_id = int(r[0])
+                dev = r[1]
+                previous = int(r[2])
+                revisions = self._conn.execute(
+                    "SELECT token_price, revised_utc FROM"
+                    " apimarket_price_revisions WHERE listing_id = ?"
+                    " ORDER BY revision_id", (listing_id,)).fetchall()
+                for rev in revisions:
+                    price = int(rev[0])
+                    pct = round(
+                        (price - previous) * 100.0 / previous, 2)
+                    month = str(rev[1])[:7]
+                    b = buckets.get(month)
+                    if b is None:
+                        b = {"up": 0, "down": 0, "abs": [],
+                             "sellers": set(), "listings": set()}
+                        buckets[month] = b
+                    if pct > 0:
+                        b["up"] += 1
+                    elif pct < 0:
+                        b["down"] += 1
+                    b["abs"].append(abs(pct))
+                    b["sellers"].add(dev)
+                    b["listings"].add(listing_id)
+                    all_steps.append(abs(pct))
+                    sellers.add(dev)
+                    listing_ids.add(listing_id)
+                    previous = price
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "revision_count": 0,
+                        "up_count": 0,
+                        "down_count": 0,
+                        "net_count": 0,
+                        "listing_count": 0,
+                        "seller_count": 0,
+                        "avg_abs_step_pct": None,
+                        "running_revision": running})
+                    continue
+                count = b["up"] + b["down"]
+                running += count
+                months.append({
+                    "month": month,
+                    "revision_count": count,
+                    "up_count": b["up"],
+                    "down_count": b["down"],
+                    "net_count": b["up"] - b["down"],
+                    "listing_count": len(b["listings"]),
+                    "seller_count": len(b["sellers"]),
+                    "avg_abs_step_pct": round(
+                        sum(b["abs"]) / len(b["abs"]), 2),
+                    "running_revision": running})
+            total = sum(row["revision_count"] for row in months)
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["revision_count"] > 0 and (
+                        peak_count is None
+                        or row["revision_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["revision_count"]
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["revision_count"] > 0),
+                "revision_count": total,
+                "up_count": sum(row["up_count"] for row in months),
+                "down_count": sum(row["down_count"] for row in months),
+                "listing_count": len(listing_ids),
+                "seller_count": len(sellers),
+                "avg_abs_step_pct": (round(sum(all_steps)
+                                           / len(all_steps), 2)
+                                     if all_steps else None),
+                "peak_month": peak_month,
+                "peak_revision_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_revision_count": (
+                    months[-1]["revision_count"] if months else None),
+                "months": months}
+
+        with self._lock:
+            if dev_account is None:
+                core = _cadence(None)
+                market_avg = None
+                scope = "market"
+            else:
+                core = _cadence(dev_account)
+                market_avg = _cadence(None)["avg_abs_step_pct"]
+                scope = "seller"
+
+        return {
+            "dev_account": dev_account,
+            "scope": scope,
+            "month_count": core["month_count"],
+            "active_month_count": core["active_month_count"],
+            "revision_count": core["revision_count"],
+            "up_count": core["up_count"],
+            "down_count": core["down_count"],
+            "listing_count": core["listing_count"],
+            "seller_count": core["seller_count"],
+            "avg_abs_step_pct": core["avg_abs_step_pct"],
+            "peak_month": core["peak_month"],
+            "peak_revision_count": core["peak_revision_count"],
+            "first_month": core["first_month"],
+            "last_month": core["last_month"],
+            "latest_month_revision_count": core[
+                "latest_month_revision_count"],
+            "market_avg_abs_step_pct": market_avg,
+            "disclaimer": self.disclaimer,
+            "months": core["months"]}

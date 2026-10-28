@@ -2534,6 +2534,16 @@ SUITES = [
     # claim row BEFORE the code, in the R2200 window.
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
+    # seller repricing cadence on the month axis (the step attribution
+    # law that never rewrites an earlier month, the contiguous grid with
+    # an honest zero month, conservation including the up/down split, the
+    # monotone running accumulator, the pooled magnitude law that the
+    # mean-of-monthly-means answers differently, the scope law with the
+    # peak tie-break, and the pure-read law) - criteria AC-SPC1..AC-SPC8
+    # registered in the R2189 seed 10/10 explore-queue claim row BEFORE
+    # the code, in the R2201 window.
+    ("ledger-apimarket-sellerpricecadencemonths", os.path.join(
+        "ledger", "test_apimarket_sellerpricecadencemonths.py"), 8),
     # rating reply latency (the waiting time between a buyer rating and
     # the seller's first reply, the outstanding half kept as None rather
     # than a fabricated zero, the total order, and the revision seams

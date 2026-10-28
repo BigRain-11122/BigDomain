@@ -1,0 +1,10 @@
+PASS AC-SPC1: env_keys=18 exact=True rows=0 empty=(0, None, None) published_only=0 sig=True
+PASS AC-SPC2: octTwin=(3, 1, 2, 16.67) octNow=(3, 1, 2, 16.67) dec=(2, 22.5) frozen=True
+PASS AC-SPC3: market_grid=['2026-10', '2026-11', '2026-12'] lia_grid=['2026-10', '2026-11', '2026-12'] lia_nov=(0, None, 1) active=2
+PASS AC-SPC4: sums=8/8 raw=8 split=True distinct=(3, 3) rowsum=(6, 6)
+PASS AC-SPC5: nets=[-1, 1, 0] running=[3, 6, 8] monotone=True total=8
+PASS AC-SPC6: pooled=30.0 month_means=[16.67, 48.33, 22.5] mean_of_means=29.17 gina=21.67 dana=43.33
+PASS AC-SPC7: peak=('2026-10', 3) market_avg=(None, 30.0) lia=('2026-10', 1) dana=('2026-10', 2, 3) gina=('2026-11', 2, 3) scopesum=8
+PASS AC-SPC8: gates=True bare=(0, 0) digests_same=True tables=27 tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
