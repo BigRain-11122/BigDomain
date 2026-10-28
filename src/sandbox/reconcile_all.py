@@ -2553,6 +2553,13 @@ SUITES = [
     # suite existed.
     ("ledger-apimarket-claimlatency", os.path.join(
         "ledger", "test_apimarket_claimlatency.py"), 8),
+    # apimarket market-wide claim monthly timeline - claims bucketed on
+    # their own opened month with the api_claims status seam and the
+    # frozen disputed money - criteria AC-MCM1..AC-MCM8 pre-registered
+    # in the R2189 explore-queue seed 6/10 row BEFORE this suite
+    # existed.
+    ("ledger-apimarket-claimmonths", os.path.join(
+        "ledger", "test_apimarket_claimmonths.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

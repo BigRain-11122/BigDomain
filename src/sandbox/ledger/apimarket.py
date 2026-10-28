@@ -8310,6 +8310,109 @@ class APIMarketFace:
                 "disclaimer": self.disclaimer,
                 "claims": claims}
 
+    def api_market_claim_months(self):
+        """Market-wide claim timeline bucketed by the month a claim was
+        opened (criteria AC-MCM1..AC-MCM8 pre-registered in the R2189
+        explore-queue seed 6/10 row BEFORE this code existed).
+
+        api_claims answers the three present views (buyer, seller,
+        market) on current status only and api_claim_latency answers how
+        long each leg took, so the question operations actually asks -
+        "is this month's after-sales pressure seasonal or an incident" -
+        had no face at all: claim load, resolution mix and the frozen
+        disputed money had to be rebucketed by hand from the row faces.
+
+        Laws pinned by the suite: a claim books in the UTC month of its
+        own opened_utc and nothing later moves it - a refund landing two
+        months after the claim neither shifts it nor invents a row in
+        the refund month, and a month with no claim is never fabricated;
+        status follows the api_claims seam (refunded beats withdrawn
+        beats answered beats open) so the four counts always partition
+        claim_count, and every stamp is kept when a later refund lands;
+        money is on the claim side only - claim_amount sums the
+        price_paid frozen at open and refunded_amount sums the refund
+        register amount joined through the claim's purchase, so a refund
+        with no claim never appears here (that cash month lives in
+        api_market_months); avg_claim_amount is claim_amount divided by
+        the row's claim_count; months ascend by YYYY-MM, peak_month
+        takes the largest claim_count and breaks ties toward the earlier
+        month; an empty world reports empty months with None extremes
+        rather than a fabricated zero month.
+
+        No arguments, so no gate: pure read, zero row mutations, zero
+        token movement, repeated calls byte-identical. The envelope
+        carries the resident non-advisory disclaimer."""
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT c.claim_id, c.price_paid, c.opened_utc,"
+                " f.refunded_utc, f.amount, w.withdrawn_utc,"
+                " r.replied_utc"
+                " FROM apimarket_claims c"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses r"
+                " ON r.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id").fetchall()
+        buckets = {}
+        for _cid, price, opened, refunded, amount, withdrawn, \
+                replied in raw:
+            month = str(opened)[:7]
+            b = buckets.get(month)
+            if b is None:
+                b = {"claim_count": 0, "open_count": 0,
+                     "answered_count": 0, "withdrawn_count": 0,
+                     "refunded_count": 0, "claim_amount": 0,
+                     "refunded_amount": 0}
+                buckets[month] = b
+            b["claim_count"] += 1
+            b["claim_amount"] += int(price)
+            if refunded is not None:
+                b["refunded_count"] += 1
+                b["refunded_amount"] += int(amount)
+            elif withdrawn is not None:
+                b["withdrawn_count"] += 1
+            elif replied is not None:
+                b["answered_count"] += 1
+            else:
+                b["open_count"] += 1
+        months = []
+        peak_month = None
+        peak_count = 0
+        for month in sorted(buckets):
+            b = buckets[month]
+            months.append({
+                "month": month,
+                "claim_count": b["claim_count"],
+                "open_count": b["open_count"],
+                "answered_count": b["answered_count"],
+                "withdrawn_count": b["withdrawn_count"],
+                "refunded_count": b["refunded_count"],
+                "claim_amount": b["claim_amount"],
+                "refunded_amount": b["refunded_amount"],
+                "avg_claim_amount": (float(b["claim_amount"])
+                                     / b["claim_count"])})
+            if b["claim_count"] > peak_count:
+                peak_month = month
+                peak_count = b["claim_count"]
+        return {"month_count": len(months),
+                "claim_count": sum(m["claim_count"] for m in months),
+                "open_count": sum(m["open_count"] for m in months),
+                "answered_count": sum(m["answered_count"]
+                                      for m in months),
+                "withdrawn_count": sum(m["withdrawn_count"]
+                                       for m in months),
+                "refunded_count": sum(m["refunded_count"]
+                                      for m in months),
+                "claim_amount": sum(m["claim_amount"] for m in months),
+                "refunded_amount": sum(m["refunded_amount"]
+                                       for m in months),
+                "first_month": (months[0]["month"] if months else None),
+                "last_month": (months[-1]["month"] if months else None),
+                "peak_month": peak_month,
+                "disclaimer": self.disclaimer,
+                "months": months}
+
     def api_purchase_dossier(self, purchase_id, account):
         """One purchase's whole story (criteria AC-AMPD1..AC-AMPD8
         pre-registered in the R2135 explore-queue row BEFORE this code

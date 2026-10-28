@@ -1,0 +1,10 @@
+PASS AC-MCM1: empty_ok=True env_ok=True months=['2026-09', '2026-10']
+PASS AC-MCM2: months=['2026-09', '2026-10'] sept=2 octo=2
+PASS AC-MCM3: partition=True sept=[1, 0, 1, 0] octo=[0, 1, 0, 1]
+PASS AC-MCM4: claim_amount=26 refunded_amount=3 (the claim-less refund of 5 is excluded) avg=[10.0, 3.0]
+PASS AC-MCM5: totals=True first='2026-09' last='2026-10' peak='2026-09' (2 vs 2 tie -> earlier month)
+PASS AC-MCM6: claims_rows=4 face_rows=4 agree=True
+PASS AC-MCM7: pure=True restart_a=True restart_b=True
+PASS AC-MCM8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

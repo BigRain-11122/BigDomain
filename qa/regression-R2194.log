@@ -1,0 +1,7 @@
+test_apimarket_claimlatency.py rc=0 SUITE PASS 8/8
+test_apimarket_claims.py rc=0 SUITE PASS 8/8
+test_apimarket_claims_respond.py rc=0 SUITE PASS 8/8
+test_apimarket_claims_withdraw.py rc=0 SUITE PASS 8/8
+test_apimarket_claimnote.py rc=0 SUITE PASS 8/8
+test_apimarket_marketmonths.py rc=0 SUITE 8/8
+test_apimarket_report_claims.py rc=0 SUITE PASS 8/8

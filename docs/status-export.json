@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T14:11:13+08:00",
-  "do": "R2193 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a market operator can now read how long buyers waited for a seller answer on their rating, next to the debt that is still outstanding, instead of only the stars they gave",
+  "export_ts": "2026-10-28T14:59:00+08:00",
+  "do": "R2194 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a market operator can now read after-sales pressure month by month: how many claims landed, how they resolved, and how much disputed money is still frozen in each month",
   "ceo_face": {
-    "current": "R2193 rating reply latency: every rating now carries the whole-second wait between the buyer's stars and the seller's first reply, the unanswered half stays an honest None instead of a zero, and the scorecard reports coverage, average, median, fastest, slowest and the oldest outstanding rating for one seller or the whole market",
-    "latest_artifact": "qa/apimarket-ratingreplylatency-R2193-a.log / -b.log (SUITE 8/8, criterion sha16 260c70a495390bfa, 770B each) + qa/regression-R2193.log (four trust-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_rating_reply_latency, written 2026-10-28)",
-    "next_milestone": "R2194 first item is the full reconcile battery plus the suite matrix regeneration carrying ledger-apimarket-ratingreplylatency; explore seed 6/10 (market claim volume by month) is the next claimable face; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
-    "last_artifact": "qa/apimarket-marketwatchmonths-R2192-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2194 market claim months: every claim is booked in the UTC month it was opened and never moves afterwards, each month splits into open/answered/withdrawn/refunded, and the disputed money is reported on the claim side only so a refund without a claim is honestly excluded",
+    "latest_artifact": "qa/apimarket-claimmonths-R2194-a.log / -b.log (SUITE 8/8, criterion sha16 E75BD1AD96A99D21, 595B each) + qa/regression-R2194.log (seven adjacent claim-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_claim_months, written 2026-10-28)",
+    "next_milestone": "R2195 first item is the full reconcile battery plus the suite matrix regeneration carrying ledger-apimarket-claimmonths (deferred twice); explore seed 7/10 (buyer purchase-gap months) is the next claimable face; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
+    "last_artifact": "qa/apimarket-claimmonths-R2194-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "market claim monthly timeline (api_market_claim_months)",
+      "on",
+      "R2194: api_claims answered the three present views on current status only and api_claim_latency answered how long each claim leg took, so 'is this month's after-sales pressure seasonal or an incident' had no face. api_market_claim_months() returns a thirteen-key envelope with nine-key month rows: a claim books in the UTC month of its own opened_utc and no later resolution moves it (the October claim refunded on 2026-12-01 keeps its October row and no December row is fabricated); status follows the api_claims seam refunded>withdrawn>answered>open and the four counts always partition claim_count; money is claim-side only - claim_amount is the price_paid frozen at open and refunded_amount is the refund register reached through the claim's purchase, so a refund with no claim never appears; months ascend, first/last are the measured extremes and peak_month breaks a count tie toward the earlier month; the empty world reports empty months with None extremes. Suite 8/8 double-run byte-identical criterion sha16 E75BD1AD96A99D21, wired ledger-apimarket-claimmonths(8), seven adjacent claim-family suites green."
+    ],
     [
       "rating reply latency scorecard (api_rating_reply_latency)",
       "on",
@@ -167,6 +172,10 @@
     ]
   ],
   "results": [
+    [
+      "R2194",
+      "R2194: five-silence scan clean (251 decision rows / 170 content-addressed tokens, four apparent additions verified as citation-only inside other companies' rows so the baseline was re-anchored, three ledger patrol rows already paid, group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY round #4, benchmarks inside the gate, clean tree, no index.lock). The P3 explore head was claimable: seed 4/10 was closed as negative with its evidence (api_seller_answers already reports per-seller fastest/slowest/mean latency - R2193 had rejected it but never marked the row), and seed 6/10 was claimed with AC-MCM1..AC-MCM8 registered in the queue row before the code: api_market_claim_months, the market-wide claim monthly timeline. Verification: SUITE PASS 8/8 double-run byte-identical criterion sha16 E75BD1AD96A99D21, wired ledger-apimarket-claimmonths(8), seven adjacent suites green. Honest notes: the fixture first called open_claim with the purchase envelope instead of the nested id (test-side fix, no criterion relaxed), and the full battery plus matrix regeneration were not run in the 25-minute window - the second consecutive carry, first item of R2195."
+    ],
     [
       "R2193",
       "R2193: five-silence scan clean (251 rows / 166 D-C tokens with zero new, the nine stored-but-absent tokens are known citations and rotation artefacts so the baseline was re-anchored to 166; ledger patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x fleet event round #4; benchmarks inside the seven-day gate; tree clean). The window rejected explore seed 4/10 with evidence (api_seller_answers R2120 already scores seller answer latency) rather than manufacturing a duplicate, then claimed seed 5/10 with AC-RRL1..AC-RRL8 registered in that row and shipped api_rating_reply_latency: two-stamp integer latency, None instead of a fake zero for the outstanding half, coverage / average / median parity / fastest / slowest / latest reply / oldest outstanding, the pinned total order, revision seams that freeze history, cross-face agreement with api_seller_inbox, a pure read and cross-restart byte identity. SUITE 8/8 double-run identical sha16 260c70a495390bfa (770B, single writer utf-8 LF); four adjacent suites green. Honest notes: one test-side scope error (dana inbox total versus market total) was corrected in the TEST, and the full battery plus matrix regeneration are R2194 first-item debt."
@@ -304,6 +313,6 @@
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 7
+    "queue_explore_open": 5
   }
 }
