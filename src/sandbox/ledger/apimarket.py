@@ -11410,3 +11410,135 @@ class APIMarketFace:
             "months": months,
             "disclaimer": self.disclaimer,
         }
+
+    def api_rating_reply_latency(self, dev_account=None):
+        """Seller-side rating reply latency scorecard (criteria
+        AC-RRL1..AC-RRL8 pre-registered in the R2189 explore-queue
+        seed row BEFORE this code existed; seed 5/10).
+
+        Gap: the trust face grew a reply door (R2093), a reply
+        revision leg (R2143) and a reply history face, the present
+        debt has its own queue (api_seller_inbox), and the two
+        neighbouring conversation chains already score their waiting
+        time (api_seller_answers reports fastest/slowest/mean seconds
+        for questions, api_claim_latency reports every claim leg).
+        Nobody measured how long a RATING sat before the seller
+        answered it, so a seller that replies the same hour and one
+        that answers a fortnight later read identically on
+        api_seller_quality (star shape only) and on api_seller_inbox
+        (present debt only). Service quality was therefore half
+        readable: what buyers said, never how long they waited for
+        the answer.
+
+        Latency is measured to the FIRST reply stamp only - the
+        immutable apimarket_rating_replies.replied_utc minus the
+        rating's own rated_utc - derived from two stored stamps and
+        never from a wall clock. A later reply revision (R2143) can
+        change the effective text but never moves a historical
+        latency; the effective text is read through the one
+        _effective_reply seam and the effective stars through
+        _effective_stars, so a failed reply is repaired in one step
+        without rewriting the clock. An unanswered rating is None,
+        never zero, and enters no aggregate, so it can never look
+        fast. A negative latency cannot arise: a reply row
+        references a rating that already exists.
+
+        Row authority is the rating side, so the face answers both
+        halves at once: what was answered and how slowly, and what
+        is still owed. Order is a total order - answered rows by
+        descending latency then rating_id (the slowest service
+        first), pending rows after them by rated_utc then rating_id.
+
+        The account gate is the usr: prefix gate of the seller
+        scorecard family (api_seller_quality / api_seller_inbox) and
+        runs before any read; None is the operator's market-wide
+        view. Strict seller isolation; a prefix-valid account with
+        no ratings gets an honest empty envelope. Pure read: zero
+        row mutations, zero token movement. The envelope carries the
+        resident non-advisory disclaimer."""
+
+        def _elapsed(earlier, later):
+            if later is None:
+                return None
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+        sql = ("SELECT r.rating_id, r.listing_id, r.buyer_id,"
+               " r.stars, r.rated_utc, l.dev_account, l.listing_key,"
+               " l.title, l.description, p.reply_id, p.reply_text,"
+               " p.replied_utc"
+               " FROM apimarket_ratings r"
+               " JOIN apimarket_listings l ON l.listing_id = r.listing_id"
+               " LEFT JOIN apimarket_rating_replies p"
+               " ON p.rating_id = r.rating_id")
+        args = ()
+        if dev_account is not None:
+            sql += " WHERE l.dev_account = ?"
+            args = (str(dev_account),)
+        sql += " ORDER BY r.rating_id"
+        with self._lock:
+            raw = self._conn.execute(sql, args).fetchall()
+            rows = []
+            for r in raw:
+                rating_id = int(r[0])
+                listing_id = int(r[1])
+                title = self._metadata_state(
+                    listing_id, r[7], r[8])[0]
+                stars = self._effective_stars(rating_id, int(r[3]))
+                reply_id = None if r[9] is None else int(r[9])
+                reply_text = (None if reply_id is None
+                              else self._effective_reply(reply_id, r[10]))
+                replied_utc = r[11]
+                rows.append({
+                    "rating_id": rating_id,
+                    "listing_id": listing_id,
+                    "listing_key": r[6],
+                    "title": title,
+                    "dev_account": r[5],
+                    "buyer_id": r[2],
+                    "stars": stars,
+                    "rated_utc": r[4],
+                    "replied": replied_utc is not None,
+                    "reply_id": reply_id,
+                    "replied_utc": replied_utc,
+                    "reply_text": reply_text,
+                    "latency_seconds": _elapsed(r[4], replied_utc),
+                })
+        answered = [x for x in rows if x["latency_seconds"] is not None]
+        pending = [x for x in rows if x["latency_seconds"] is None]
+        answered.sort(key=lambda x: (-x["latency_seconds"],
+                                     x["rating_id"]))
+        pending.sort(key=lambda x: (x["rated_utc"], x["rating_id"]))
+        rows = answered + pending
+        latencies = sorted(x["latency_seconds"] for x in answered)
+        count = len(rows)
+        replied = len(answered)
+        if latencies:
+            mid = len(latencies) // 2
+            median = (float(latencies[mid]) if len(latencies) % 2
+                      else (latencies[mid - 1] + latencies[mid]) / 2.0)
+            avg = float(sum(latencies)) / replied
+        else:
+            median = None
+            avg = None
+        stamps = [x["replied_utc"] for x in answered]
+        owed = [x["rated_utc"] for x in pending]
+        return {"dev_account": dev_account,
+                "rating_count": count,
+                "replied_count": replied,
+                "unreplied_count": count - replied,
+                "reply_coverage": (round(float(replied) / count, 4)
+                                   if count else None),
+                "avg_seconds": avg,
+                "median_seconds": median,
+                "fastest_seconds": (latencies[0] if latencies else None),
+                "slowest_seconds": (latencies[-1] if latencies else None),
+                "latest_reply_utc": max(stamps) if stamps else None,
+                "oldest_unreplied_utc": min(owed) if owed else None,
+                "disclaimer": self.disclaimer,
+                "rows": rows}

@@ -1,0 +1,35 @@
+== test_apimarket_ratingrev.py ==
+PASS AC-AMRV1: door keys=True prev/base=5/5 rows=1 base untouched=True
+PASS AC-AMRV2: account=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_NOT_BUYER', 'E_AM_BAD_ACCOUNT'] id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown-before-stars=E_AM_UNKNOWN_RATING not-buyer=E_AM_NOT_BUYER/E_AM_NOT_BUYER stars=['E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS'] frozen=True rows=1
+PASS AC-AMRV3: prev-chain=[(5, 1), (1, 4), (4, 1)] ids increasing=True effective/base=1/5 back-to-older legal=True
+PASS AC-AMRV4: same-value=E_AM_RATING_UNCHANGED rows=3/3 effective=1 first stamp stable=True
+PASS AC-AMRV5: view=2/2.5 ratings=[2, 3] profile=3.0 buyer=3.0
+PASS AC-AMRV6: d2 view/ratings byte-identical=True clean history=True
+PASS AC-AMRV7: envelope=True revisions=[1, 4, 1, 2] bad-id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown=E_AM_UNKNOWN_RATING
+PASS AC-AMRV8: tables frozen=True tx frozen=True reply binding stable=True restart identity=True revision rows=5 wired=True ascii=True
+SUITE 8/8
+
+== test_apimarket_ratreply.py ==
+C:\Users\sjs20\AppData\Local\Programs\Python\Python314\python.exe: can't open file 'C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\sandbox\\ledger\\test_apimarket_ratreply.py': [Errno 2] No such file or directory
+
+== test_apimarket_replyrev.py ==
+PASS AC-AMRY1: keys=['dev_account', 'disclaimer', 'listing_id', 'previous_text', 'rating_id', 'reply_id', 'reply_text', 'revised_utc', 'revision_id'] base_frozen=True revs=1 prev='glad it worked' new='thanks for the feedback'
+PASS AC-AMRY2: account={'E_AM_BAD_ACCOUNT'} prefix='E_AM_NOT_OWNER' id={'E_AM_BAD_ARGS'} text={'E_AM_BAD_REPLY'} order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ARGS', 'E_AM_BAD_REPLY', 'E_AM_UNKNOWN_REPLY', 'E_AM_NOT_OWNER'] unknown='E_AM_UNKNOWN_REPLY' digests=True tx=True
+PASS AC-AMRY3: same=E_AM_REPLY_UNCHANGED count_after_same=1 first_stamp_frozen=True series=['thanks for the feedback', 'glad it worked', 'thanks for the feedback']
+PASS AC-AMRY4: seam='thanks for the feedback' unanswered=True retired_effective='sorry - full refund was issued' base_frozen=True
+PASS AC-AMRY5: env_keys=True row_keys=True base='glad it worked' effective='thanks for the feedback' count=3 unknown=E_AM_UNKNOWN_REPLY bad=E_AM_BAD_ARGS
+PASS AC-AMRY6: repeat=True tx_equal=True balances_equal=True digests_equal=True sha16=86f325a3e216b5c7
+PASS AC-AMRY7: text_frozen_on_rating_rev=True stars_moved=True stars_frozen_on_reply_rev=True text_moved=True count=2 avg=3.0000
+PASS AC-AMRY8: sha16=a5161598e50a1320 identical=True files_equal=True registered=True ascii=True
+SUITE PASS 8/8
+
+== test_apimarket_sellerinbox.py ==
+PASS AC-AMI1: envelope keys ok=True rows=[1, 2, 3, 4] count=4 answered=0 oldest='2026-10-05T00:00:01Z'
+PASS AC-AMI2: stamps=[('2026-10-05T00:00:01Z', 1), ('2026-10-05T00:00:02Z', 2), ('2026-10-05T00:00:02Z', 3), ('2026-10-05T00:00:03Z', 4)] ordered=True merged-across-listings=True tie-break-by-rating-id=True
+PASS AC-AMI3: total=4 answered=1 unanswered=3 ids=[2, 3, 4] oldest='2026-10-05T00:00:02Z'
+PASS AC-AMI4: queue star=2 revision=2 listing avg=3.5 count=2
+PASS AC-AMI5: ids after delist=[2, 3, 4] count=3 rated_listings=2
+PASS AC-AMI6: frank rows=[5] dana ids=[2, 3, 4] empty=[] bad={'E_AM_BAD_ACCOUNT'} blank='E_AM_BAD_ACCOUNT'
+PASS AC-AMI7: ledger tx frozen=True pools frozen=True thirteen-table digests frozen=True replies frozen=True repeat identical=True
+PASS AC-AMI8: three instances byte-identical=True runner wiring=True consumer shas stable=True ascii=True network imports=0 world outside repo=True
+SUITE 8/8

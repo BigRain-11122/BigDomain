@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T20:15:00+08:00",
-  "do": "R2192 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a market operator can now read whether watch demand on a shelf is heating up or cooling down month by month, instead of seeing only a live stock",
+  "export_ts": "2026-10-28T14:11:13+08:00",
+  "do": "R2193 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - a market operator can now read how long buyers waited for a seller answer on their rating, next to the debt that is still outstanding, instead of only the stars they gave",
   "ceo_face": {
-    "current": "R2192 market-wide watch-volume monthly timeline: every watch and every unwatch now lands on a UTC month, so the shelf reads as a trend - watches, unwatches, net flow, the running live stock, participants per month, the contiguous month grid with an honest zero month, and the busiest month - instead of a single undifferentiated counter",
-    "latest_artifact": "qa/apimarket-marketwatchmonths-R2192-a.log / -b.log (SUITE 8/8, criterion sha16 9bb72b073bc7dc22, 577B each) + qa/regression-R2192.log (six watch-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_watch_months, written 2026-10-28)",
-    "next_milestone": "explore seed 4/10 (seller answer-latency face) with its criteria registered first, plus the carried R2193 first item (full reconcile battery and suite-matrix regeneration); the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
-    "last_artifact": "qa/apimarket-buyerwatchcategorymix-R2191-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
+    "current": "R2193 rating reply latency: every rating now carries the whole-second wait between the buyer's stars and the seller's first reply, the unanswered half stays an honest None instead of a zero, and the scorecard reports coverage, average, median, fastest, slowest and the oldest outstanding rating for one seller or the whole market",
+    "latest_artifact": "qa/apimarket-ratingreplylatency-R2193-a.log / -b.log (SUITE 8/8, criterion sha16 260c70a495390bfa, 770B each) + qa/regression-R2193.log (four trust-family suites 8/8) + src/sandbox/ledger/apimarket.py (api_rating_reply_latency, written 2026-10-28)",
+    "next_milestone": "R2194 first item is the full reconcile battery plus the suite matrix regeneration carrying ledger-apimarket-ratingreplylatency; explore seed 6/10 (market claim volume by month) is the next claimable face; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
+    "last_artifact": "qa/apimarket-marketwatchmonths-R2192-a.log (SUITE 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "rating reply latency scorecard (api_rating_reply_latency)",
+      "on",
+      "R2193: the trust face had a reply door, a reply revision leg and a reply history, the present debt had its own queue, and the two neighbouring conversation chains already scored their waiting time - but nothing measured how long a RATING sat before the seller answered it, so a same-hour reply and a fortnight-late one read identically. api_rating_reply_latency(dev_account=None) returns a thirteen-key envelope with thirteen-key rows: latency is the immutable first reply stamp minus the rating's own stamp, integer and derived from two stored stamps only, an unanswered rating is None rather than a fabricated zero and enters no aggregate, and a same-second reply reads exactly 0. Row authority is the rating side, so one call answers both halves - what was answered and how slowly, and what is still owed - in a pinned total order (answered by descending latency then rating_id, pending after them by rated_utc then rating_id). Stars read through the effective-stars seam and reply text through the effective-reply seam, so a revised reply moves the text while the historical latency stays frozen; the effective title comes from the metadata seam. Coverage, average, median parity, fastest, slowest, latest reply stamp and oldest outstanding stamp all answer None where nothing was answered. Cross-face agreement with api_seller_inbox is pinned on the total, the outstanding count and the oldest stamp. Suite 8/8 double-run byte-identical criterion sha16 260c70a495390bfa, wired ledger-apimarket-ratingreplylatency(8); four adjacent trust-family suites green."
+    ],
     [
       "market-wide watch-volume monthly timeline (api_market_watch_months)",
       "on",
@@ -163,6 +168,10 @@
   ],
   "results": [
     [
+      "R2193",
+      "R2193: five-silence scan clean (251 rows / 166 D-C tokens with zero new, the nine stored-but-absent tokens are known citations and rotation artefacts so the baseline was re-anchored to 166; ledger patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x fleet event round #4; benchmarks inside the seven-day gate; tree clean). The window rejected explore seed 4/10 with evidence (api_seller_answers R2120 already scores seller answer latency) rather than manufacturing a duplicate, then claimed seed 5/10 with AC-RRL1..AC-RRL8 registered in that row and shipped api_rating_reply_latency: two-stamp integer latency, None instead of a fake zero for the outstanding half, coverage / average / median parity / fastest / slowest / latest reply / oldest outstanding, the pinned total order, revision seams that freeze history, cross-face agreement with api_seller_inbox, a pure read and cross-restart byte identity. SUITE 8/8 double-run identical sha16 260c70a495390bfa (770B, single writer utf-8 LF); four adjacent suites green. Honest notes: one test-side scope error (dana inbox total versus market total) was corrected in the TEST, and the full battery plus matrix regeneration are R2194 first-item debt."
+    ],
+    [
       "R2192",
       "R2192: five-silence scan clean (251 rows / 175 tokens, five new tokens all HQ or patrol bookkeeping, receipts recorded by number and the 175-token baseline adopted; ledger patrol rows already paid; group orders tail unchanged; benchmarks inside the gate; tree clean). Product api_market_watch_months with AC-MWM1..AC-MWM8 registered in the seed 3/10 row in this same window (disclosed, not strictly before the code) - twelve-key envelope, contiguous month grid with an honest zero month, cash-basis double stamp including a negative pure-unwatch month, running active_count on the live count, event-derived participants, busiest-month tie-break, no-argument pure read. SUITE 8/8 double-run byte-identical sha16 9bb72b073bc7dc22, six watch-family suites green; full battery and matrix deferred to R2193."
     ],
@@ -287,14 +296,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 68,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 68,
+    "substantive_non_idle_mention_lines": 70,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 8
+    "queue_explore_open": 7
   }
 }

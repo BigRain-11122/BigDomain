@@ -2514,6 +2514,14 @@ SUITES = [
     # R2189 seed 3/10 explore-queue claim row in the R2192 window.
     ("ledger-apimarket-marketwatchmonths", os.path.join(
         "ledger", "test_apimarket_marketwatchmonths.py"), 8),
+    # rating reply latency (the waiting time between a buyer rating and
+    # the seller's first reply, the outstanding half kept as None rather
+    # than a fabricated zero, the total order, and the revision seams
+    # leaving the historical clock untouched) - criteria AC-RRL1..AC-RRL8
+    # registered in the R2189 seed 5/10 explore-queue claim row in the
+    # R2193 window.
+    ("ledger-apimarket-ratingreplylatency", os.path.join(
+        "ledger", "test_apimarket_ratingreplylatency.py"), 8),
     # refund load (cash-basis bucketing, a refund-only month carrying
     # zero trade, honest None rates wherever nothing settled, the two
     # dissociated extremes) that the category demand, market months and
