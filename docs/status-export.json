@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-10-29T05:05:00+08:00",
+  "export_ts": "2026-10-29T05:16:25+08:00",
   "do": "product round R2229 (per-category monthly claim pressure face)",
   "ceo_face": {
     "current": "R2229 是产品轮：给 API 市场补了「按品类的月度售后索赔压力面」（api_category_claim_months）。此前市场月度面只答全市场、退款面只答金额，一个品类这月被投诉几次、投诉是开放还是已答/已撤/已退款、钱冻结多少退回多少，只能人工拆表；现在一眼看清哪个品类在吸索赔压力、以及它随时间在变好还是变坏，这就是品类风险定价的读数。",
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "verification debt closed + evidence defect fixed (R2230)",
+      "on",
+      "full battery green on the repaired tree: RUNNER PASS 415/415 suites + controls 7/7, criteria total 3443 in 1001.0s; the first run was red because the R2228 evidence files were UTF-16LE from a shell redirection, regenerated via one python writer (SHA16 5D930765EFFC2574, 701B each, CRLF=0); matrix 415/3443 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN"
+    ],
     [
       "按品类的月度售后索赔压力面（api_category_claim_months）",
       "on",
@@ -312,6 +317,10 @@
   ],
   "results": [
     [
+      "R2230",
+      "P2 verification debt (the item R2229 designated first): full reconcile battery plus four follow-up sections on the committed tree. First run RED - the census suite cd7-live-real-tree flagged new-dialect ps-utf16 on the two R2228 evidence files, a real defect from a shell redirection (UTF-16LE + BOM), not the autocrlf artefact. Repaired by re-executing the actual suite twice through one python writer (rc=0/0, 8 criteria, identical criterion lines, SHA16 5D930765EFFC2574, 701B, no BOM, CRLF=0, nothing transcoded, no assertion relaxed); census then DRIFT-CLEAN flags=0. Second run GREEN: RUNNER PASS 415/415 suites, controls 7/7, criteria total 3443, 1001.0s, TMP RECLAIM 916/916 worlds / 321.89 MiB; follow-ups appended to the same evidence log all PASS (matrix 415 suites / 3443 criteria byte-identical, fingerprint CLEAN 5 domains, runner profile --daily --check PASS, census re-frozen then DRIFT-CLEAN). Product score honestly zero - no product code shipped. Explore pool was exhausted, so six fresh seeds were registered with pre-registered criteria (head api_seller_question_months AC-SQM1..AC-SQM8) and the stale R2202 row was closed. Honest notes: the follow-up runner's first pass appended to the red log by a copy slip (that file was restored to its runner output and the trailing BATTERY summary line is disclosed in the state log instead of faked back); the loop task still needs an elevated S4U re-registration."
+    ],
+    [
       "R2229",
       "P3 explore head claim: apimarket api_category_claim_months - the per-category monthly after-sales claim pressure face. Booking law (own opened_utc month AND the category in force at that instant), the api_claims status seam partitioning claim_count, money on the claim side so a refund with no claim never appears, the contiguous grid with an honest zero month, the uncategorized bucket last with the flag recomputing every aggregate, six bad flag forms failing closed before any read, cross-face identity on seven shared totals against api_market_claim_months, the earlier-month peak tie-break and three-instance byte identity over two restarts. SUITE PASS 8/8 double-run byte-identical sha16 018F0A7C4BBA3C27; wired ledger-apimarket-categoryclaimmonths(8); seven adjacent suites green. Battery and matrix regeneration carried to R2230."
     ],
@@ -452,7 +461,7 @@
       "R2169: five-silence scan clean (275 decision rows / 181 tokens, zero new; ledger no new @BigDomain row; group orders advanced by the 01:45 fleet event round #3, acknowledged zero action; benchmarks inside 7 days; tree clean). The P3 explore head was claimed with AC-LV1..AC-LV8 registered before the code, and the product is APIMarketFace.api_listing_velocity - cycle-opening start law, net sale authority, integer elapsed seconds derived only from stored stamps, pooled average and median, fastest/slowest extremes with the listing_id tie-break, and the MARKET-scoped category benchmark over the one effective-category seam. Suite SUITE PASS 8/8 double-run byte-identical (sha16 9ef38bfde9ba1c27), wired ledger-apimarket-listingvelocity(8), five adjacent suites green, the daily funnel row PASS with the honest zero-activity envelope. Honest notes: the first AC-LV6 run failed on a wrong fixture expectation (corrected test, no relaxed implementation), and the full battery plus reconcile-daily were deferred to next round on the 25-minute budget."
     ],
     [
-      "2229",
+      "2230",
       "R2168: five-silence scan clean at open (275 decision rows / 181 content-addressed tokens, four NEW - D-20261028-01..04 - and all another seat face, acknowledged with zero action and the baseline re-anchored after the group-side rotation; ledger carries no new @BigDomain row; group orders tail advanced to the 2026-10-28 00:15 trio, all fleet face; benchmarks fresh; clean tree, no index.lock). The round discharged the R2167 carry-over - the battery and matrix regeneration that round owed its own product - rather than opening a new face, because a mid-battery edit would have made the later suites read a tree the evidence does not describe. Battery RUNNER PASS 368/368 suites plus controls 7/7 in 863.0s (qa/reconcile-all-R2168.log, single-writer UTF-8 LF via src/os/battery_stream.py) with the birth-site tmp sweep reclaiming 826/826 worlds and 294.29 MiB inside the same window; the four post-battery sections all PASS in one new helper src/os/battery_followup_R2168.py - matrix to 368 suites / 3066 criteria read back byte-identical, fingerprint CLEAN over five domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=1961 flags=0. Honest notes: a shell sleep used to watch the battery was cancelled by the five-minute no-output rule while the battery itself finished rc=0 with no orphan and no evidence loss; heartbeat.txt was 14 ticks behind and was backfilled 2154..2168; no new product face this round."
     ],
     [
@@ -496,7 +505,7 @@
       "R2151: five-silence scan clean (64 log lines, three ledger rows already paid, 288 decision rows / 212 content-addressed tokens with zero new, group orders tail advanced to the 2026-10-27 00:40 bm-b order on another seat execution face, benchmarks and QA stamps inside their gates, clean tree, no index.lock). The tech head was claimable, so the window claimed it and registered AC-CDN1..AC-CDN8 before the code: the negative-family window of the evidence-dialect census. Product: a per-file disposition face for the drift detector - accept_reconciled plus --accept NAME drops one baselined file that was legitimately rebuilt in the tee dialect, so a repaired file can reach DRIFT-CLEAN without a whole-baseline re-freeze, while four refusal forms leave the baseline byte-identical and a repeat accept is a no-write already-reconciled. New suite test_census_negative.py 12 criteria, wired ledger-census-negative(12), tmp-sweep expected count corrected 8 to 18. Verification: SUITE PASS 12/12 double-run sha16 3e67b1858537e8ed, census selftest 26/26, live --check flags=0 over 1912 files. Battery: 352/353 green in 729.8s with the one red being the census suite shipped-clean assertion against the very file this window changed, which cannot pass pre-commit; a committed-tree daily re-run closes it. FUNNEL daily row ran for 2026-10-27 (gate PASS, honest zero)."
     ],
     [
-      "2229",
+      "2230",
       "R2150: five-silence scan found the state log carrying 71 bare-LF lines from the previous closeout (repaired with the logs toolkit before anything else, verified post_bare_lf 0), three ledger rows already paid off, decisions.md at 288 rows / 212 content-addressed tokens with zero new against the stored baseline, the group orders baseline unchanged, benchmarks one day inside the gate and a clean tree with no index.lock. The tech head was claimable, so the window claimed it and registered AC-TSN1..AC-TSN8 in the queue line BEFORE the code: the negative-example window of the tmp-sweep ownership anchors. Product: has_signature now accepts a signature only as a regular file that is not a link - a directory occupying the name, a link, a foreign same-prefix name and a nested world are all rejected, and the suite pins each family plus a closed delete domain (a recording proxy proves sweep() sees exactly the candidate set and the negative trees stay byte-identical). Verification: SUITE PASS 18/18 first run, double run byte-identical sha16 9a362acc85d50a2c. The daily quality crawl added one A-graded official source (virtual payment for enterprises and sole traders: virtual goods must use the mini-program virtual payment channel, the platform opens the merchant account, settlement is T+3, iOS needs 8.0.68+ and goes through Apple payment, refunds inside 180 days return the fee) with three honest negatives recorded, refreshed benchmark sections 1/3/4 and appended signal W34 plus its conclusion row, and backfilled heartbeat ticks 2148-2150. Honest gaps: the suite matrix was not regenerated this window, and the virtual payment fee rate, personal-subject category rules, sandbox boundary and deposit interaction remain M notes."
     ],
     [
@@ -532,7 +541,7 @@
       "R2183: five-silence scan clean with zero new decision tokens (baseline re-anchored 163->159) and no new orders. Debt cleared: battery RUNNER PASS 380/380 + controls 7/7 660.8s with matrix 380/3162 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN. Product: api_watch_budget with AC-WBG1..AC-WBG8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 19d87a47cd089df6), wired as ledger-apimarket-watchbudget(8), four adjacent suites green. Honest notes: the AC-WBG7 refund clause was corrected to the measured purchase seam, and a fresh battery including the new suite is recorded as R2184's first item."
     ],
     [
-      "2229",
+      "2230",
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
@@ -544,7 +553,7 @@
       "2026-10-29 R2219 (five-silence scan clean at open: decisions.md 274 non-empty rows carrying 185 content-addressed D/C/O/T tokens; the five D-20261029-01..05 rows were already judged and folded into the stored baseline by R2218, so zero new this window and zero domain action; the group ledger carries the same three @BigDomain patrol rows already paid off with zero unreplied; the group orders tail advanced by ONE row, the 2026-10-29 00:52 CEO-PROXY fleet event round R2.46, which is the fleet dispatcher execution face and not a domain face, so it is logged aware-no-action and the own-orders baseline advances to 00:52; benchmarks refreshed 2026-10-29 inside the seven-day gate; tree clean, no index.lock) - the P1 canonical board head was CLAIMABLE this window, which had not been true for many rounds: R2218 added a P-47 item-four row (payment integration design, category-classification chapter) with criteria AC-PAYCAT1..6 pre-registered BEFORE the edit, so that row was claimed instead of opening a new explore face, because the official rule it encodes can invalidate the whole C-side payment route. Product: docs/spec/payment-integration-spec.md v0.1 -> v0.2 - a new section 0-bis 'category classification (compliance front chapter)' carrying (1) a seven-row category self-declaration table mapping every product family to an official form and a channel/API family, (2) channel-name and API-family uniqueness with wx.requestVirtualPayment as the single C-side family and JSAPI declared unused for virtual goods on every terminal, (3) the hybrid virtual+physical whole-classification law plus the no-new-physical-surface non-goal, (4) both official exemptions recorded and expressly not claimed, (5) a four-row risk and prerequisite table (the android/non-iOS plain WeChat Pay capability is withdrawn when only virtual categories are present; opening virtual payment is a CEO physical item; T+3 settlement with the 180-day refund fee boundary and the iOS 45-60 day Apple settlement; a wrong category self-declaration costs the whole terminal payment capability), and (6) the W34 three-way consistency mapping. The section 0 standard-channel line was limited to real services and the footer bumped with a revision record. Verification: qa/pay-category-R2219.log carries the six criterion readings plus the code-side assertions (adapters.py channel pair literal=True, jsapi occurrences in pay code = 0) and the regression (pay acceptance 16/16, channel matrix SUITE PASS 7/7). Honest note: the first AC-PAYCAT2 probe read False because its own regex matched the criterion text that quotes the forbidden phrase; a targeted re-read of all seven JSAPI lines showed prohibitions only, and the criterion was not relaxed. Product score honestly 1 point (a real spec file change, no new runnable code); the explore queue still holds seven open seeds behind the merchant-gated payment row."
     ],
     [
-      "2229",
+      "2230",
       "OSLoop 执行 tick"
     ],
     [
@@ -559,14 +568,14 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 19,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 2
+    "queue_explore_open": 8
   }
 }
