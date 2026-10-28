@@ -2419,6 +2419,15 @@ SUITES = [
     # R2171 explore-queue claim row BEFORE this suite existed.
     ("ledger-apimarket-pricevolatility", os.path.join(
         "ledger", "test_apimarket_pricevolatility.py"), 8),
+    # repricing STEP-SIZE BAND distribution (five pinned bands with
+    # half-open intervals and the upper bound included, five bands
+    # always present, count conservation per band and across faces,
+    # share law, pooled absolute aggregates, smallest-magnitude tie
+    # break for the modal band, market benchmark under a seller scope)
+    # - criteria AC-PSD1..AC-PSD8 pre-registered in the R2198
+    # explore-queue claim row BEFORE this suite existed.
+    ("ledger-apimarket-pricesteps", os.path.join(
+        "ledger", "test_apimarket_pricesteps.py"), 8),
     ("ledger-apimarket-buyercohort", os.path.join(
         "ledger", "test_apimarket_buyercohort.py"), 8),
     # monthly buyer retention matrix (net-purchase cohort origin, a

@@ -10028,6 +10028,183 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "rows": core["rows"]}
 
+    _STEP_BANDS = (
+        ("micro", 0.0, 2.0),
+        ("small", 2.0, 10.0),
+        ("medium", 10.0, 25.0),
+        ("large", 25.0, 50.0),
+        ("sweep", 50.0, None),
+    )
+
+    @staticmethod
+    def _step_band(abs_pct):
+        """Band name for an absolute step percentage (AC-PSD2).
+
+        Half-open intervals, lower bound included and upper open, so a
+        boundary value lands in the LARGER band: exactly 2.0 is small,
+        10.0 is medium, 50.0 is large and 50.01 is sweep. Zero cannot
+        occur (the write side refuses a same-price revision) and
+        answers None."""
+        if abs_pct <= 0.0:
+            return None
+        for name, lower, upper in APIMarketFace._STEP_BANDS:
+            if upper is None:
+                if abs_pct >= lower:
+                    return name
+            elif lower <= abs_pct < upper:
+                return name
+        return None
+
+    def api_price_step_distribution(self, dev_account=None):
+        """Repricing step-size band distribution (criteria
+        AC-PSD1..AC-PSD8 were registered in the R2198 explore claim row
+        BEFORE this code existed; the AC-PSD prefix and this face name
+        only ever appeared inside that seed row text, while
+        test_apimarket_pricesteps, ledger-apimarket-pricesteps,
+        step_band, band_share, most_common_band and _STEP_BANDS were all
+        git-grep zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_price_history lists the revisions of one listing and
+        api_price_volatility collapses every step into scalar
+        aggregates (mean, median, extremes) plus per-listing counts.
+        Neither answers how large a typical repricing step is, so a
+        market made of timid micro-adjustments and one made of
+        half-price cuts read identically on the volatility face. This
+        face buckets EVERY step by its absolute percentage into five
+        pinned bands - micro, small, medium, large, sweep - and reports
+        counts, direction split, shares and within-band magnitudes.
+
+        Everything is derived from apimarket_price_revisions x
+        apimarket_listings - no new table. The step arithmetic is the
+        volatility law exactly: round((new - previous) / previous * 100,
+        2) where previous is the base price or the prior revision in
+        revision_id order, derived only from two stored prices, never
+        from a wall clock.
+
+        The five bands are ALWAYS present in the fixed order above,
+        even on an empty world, because a missing band and an empty
+        band must not be confused. Band boundaries are half-open with
+        the lower bound included, so a boundary value lands in the
+        larger band.
+
+        Aggregates are pooled over absolute step values (never a mean
+        of band means); with zero steps all three are None, never a
+        fabricated 0.0. most_common_band takes the largest count and
+        breaks a tie toward the SMALLER magnitude band.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market', market_avg_abs_step_pct None - never a self
+        benchmark); a seller scope carries the market-wide pooled mean
+        of absolute steps as a comparable benchmark computed by the
+        same law, and sellers never leak into each other.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on the
+        usr: prefix shape); the bare usr: prefix reads honestly empty.
+        Pure read: zero row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _dist(scope):
+            sql = "SELECT listing_id, token_price FROM apimarket_listings"
+            args = ()
+            if scope is not None:
+                sql += " WHERE dev_account = ?"
+                args = (scope,)
+            sql += " ORDER BY listing_id"
+            listings = self._conn.execute(sql, args).fetchall()
+            steps = []
+            for r in listings:
+                listing_id = int(r[0])
+                previous = int(r[1])
+                for rev in self._conn.execute(
+                        "SELECT token_price FROM apimarket_price_revisions"
+                        " WHERE listing_id = ? ORDER BY revision_id",
+                        (listing_id,)).fetchall():
+                    price = int(rev[0])
+                    steps.append(round(
+                        (price - previous) * 100.0 / previous, 2))
+                    previous = price
+            total = len(steps)
+            bands = []
+            for name, lower, upper in self._STEP_BANDS:
+                seq = [s for s in steps
+                       if self._step_band(abs(s)) == name]
+                count = len(seq)
+                up = sum(1 for s in seq if s > 0)
+                down = sum(1 for s in seq if s < 0)
+                bands.append({
+                    "band": name,
+                    "lower_pct": lower,
+                    "upper_pct": upper,
+                    "step_count": count,
+                    "up_count": up,
+                    "down_count": down,
+                    "step_share": (count / total) if total else None,
+                    "up_share": (up / count) if count else None,
+                    "avg_abs_pct": (
+                        round(sum(abs(s) for s in seq) / count, 2)
+                        if count else None),
+                    "max_abs_pct": (max(abs(s) for s in seq)
+                                    if count else None)})
+            ordered = sorted(abs(s) for s in steps)
+            count = len(ordered)
+            if count:
+                avg = round(sum(ordered) / count, 2)
+                if count % 2:
+                    median = ordered[count // 2]
+                else:
+                    middle = count // 2
+                    median = round((ordered[middle - 1]
+                                    + ordered[middle]) / 2.0, 2)
+                peak = ordered[-1]
+            else:
+                avg = None
+                median = None
+                peak = None
+            winner = None
+            best = 0
+            for row in bands:
+                if row["step_count"] > best:
+                    best = row["step_count"]
+                    winner = row["band"]
+            return {
+                "revision_count": total,
+                "band_count": sum(1 for row in bands
+                                  if row["step_count"] > 0),
+                "up_count": sum(1 for s in steps if s > 0),
+                "down_count": sum(1 for s in steps if s < 0),
+                "avg_abs_step_pct": avg,
+                "median_abs_step_pct": median,
+                "max_abs_step_pct": peak,
+                "most_common_band": winner,
+                "bands": bands}
+
+        with self._lock:
+            if dev_account is None:
+                core = _dist(None)
+                market_avg = None
+                scope = "market"
+            else:
+                core = _dist(dev_account)
+                market_avg = _dist(None)["avg_abs_step_pct"]
+                scope = "seller"
+
+        return {
+            "dev_account": dev_account,
+            "scope": scope,
+            "revision_count": core["revision_count"],
+            "band_count": core["band_count"],
+            "up_count": core["up_count"],
+            "down_count": core["down_count"],
+            "avg_abs_step_pct": core["avg_abs_step_pct"],
+            "median_abs_step_pct": core["median_abs_step_pct"],
+            "max_abs_step_pct": core["max_abs_step_pct"],
+            "market_avg_abs_step_pct": market_avg,
+            "most_common_band": core["most_common_band"],
+            "disclaimer": self.disclaimer,
+            "bands": core["bands"]}
+
     def api_market_buyer_cohort(self):
         """Market-wide monthly buyer cohort (new versus returning).
 

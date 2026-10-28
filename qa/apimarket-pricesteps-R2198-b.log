@@ -1,0 +1,9 @@
+PASS AC-PSD1: keys=13 bandkeys=True order=['micro', 'small', 'medium', 'large', 'sweep'] empty=(0, None, 5)
+PASS AC-PSD2: law=True bounds=True counts={'micro': 2, 'small': 2, 'medium': 2, 'large': 1, 'sweep': 1}
+PASS AC-PSD3: per_band=True rev=8/8 up=7/7 down=1/1 band_count=5
+PASS AC-PSD4: sum=1.0 shares=[0.25, 0.25, 0.25, 0.125, 0.125] medium_up=0.5
+PASS AC-PSD5: band_avg={'micro': 1.0, 'small': 3.5, 'medium': 10.0, 'large': 25.0, 'sweep': 100.0} pooled=(19.25, 7.5, 100.0)
+PASS AC-PSD6: tie={'micro': 2, 'small': 2, 'medium': 2} most='micro' empty=None
+PASS AC-PSD7: market_bench=None dana=(3, 1.33, 'micro') erin=(3, 8.33, 'medium') frank=0 acct=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] frozen=True idem=True
+PASS AC-PSD8: sha16=d7a3d48b0aabb5ad buy=True delist=True relist=True move=(True, 9, 2, 3, 'medium') identical=True files_equal=True registered=True
+SUITE PASS 8/8
