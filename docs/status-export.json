@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T15:33:04+08:00",
-  "do": "R2196 R2195 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole 392-suite safety net was re-run and all four verification faces read green, so every market face shipped so far is covered by a fresh battery instead of a two-round-old one",
+  "export_ts": "2026-10-28T15:55:00+08:00",
+  "do": "R2197 R2196 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole 393-suite safety net was re-run on the committed tree and all four verification faces read green, so every market face shipped so far is covered by a fresh battery",
   "ceo_face": {
-    "current": "R2196 buyer purchase-gap rhythm: a resident can now read how many months sat between their own purchases, how long the longest silence ran and how much of the observed stretch was dormant - a regular repurchase cadence and a sleeping account no longer read the same",
-    "latest_artifact": "qa/apimarket-buyergapmonths-R2196.log / -run2.log (SUITE PASS 8/8 double-run, 747 bytes each, criterion sha16 74c0420f27a6d2b7) + src/sandbox/ledger/apimarket.py (api_buyer_gap_months, written 2026-10-28)",
-    "next_milestone": "R2197 runs the full reconcile battery plus suite-matrix regeneration carried from this window, then claims explore seed 8/10 (price step distribution) with its criteria pre-registered first; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
-    "last_artifact": "qa/reconcile-all-R2195.log (RUNNER PASS 392/392 suites, controls 7/7) (2026-10-28)"
+    "current": "R2197 verification debt cleared: the full 393-suite reconcile battery plus matrix regeneration now cover every market face shipped to date, on the committed tree, with zero product code changed",
+    "latest_artifact": "qa/reconcile-all-R2197.log (RUNNER PASS 393/393 suites + controls 7/7, 911.9s; matrix 393 suites / 3266 criteria, fingerprint CLEAN, census DRIFT-CLEAN, 2026-10-28)",
+    "next_milestone": "R2198 claims explore seed 8/10 with its criteria pre-registered before the code, then a new battery covers it; the P1 commercial rows and the merchant-number benchmark row stay blocked on CEO physical items (within 48h)",
+    "last_artifact": "docs/sandbox-suite-matrix.md (393 suites / 3266 criteria, 38123 bytes) (2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "full reconcile battery 393/393 with matrix regeneration",
+      "on",
+      "R2197: the R2196 window recorded the same debt and could not run it, so this round changed no product code (a battery walking the tree would read a mixed tree, the R2168 rule) and discharged it. RUNNER PASS 393/393 suites green plus reconcile controls 7/7 in 911.9s, evidence written by src/os/battery_stream.py as single-writer utf-8 LF (734236 bytes after the four sections were appended and newline-normalized) rather than a shell redirection, with the birth-site tmp sweep inside the same window reclaiming 874 of 874 candidate worlds and 309.57 MiB at busy=0 failed=0. Four post-battery sections then all passed in a new helper src/os/battery_followup_R2197.py and were appended to the same evidence file: the matrix regenerated to 393 suites / 3266 criteria and read back (38123 bytes, green=393/393), the baseline fingerprint chain CLEAN over five domains, the runner profile --daily --check PASS, and the writer census re-frozen then read DRIFT-CLEAN on both legs. Honest note: the follow-up helper first appended CRLF child output to an LF file, so the census read class=other; it now normalizes on append and the log was repaired on the newline axis only (734271 -> 734236 bytes, line count intact). Honest score: zero product points - this round bought back verification debt and says so."
+    ],
     [
       "buyer purchase-gap rhythm (api_buyer_gap_months)",
       "on",
@@ -183,6 +188,10 @@
   ],
   "results": [
     [
+      "R2197",
+      "R2197: five-silence scan clean (251 rows / 170 D/C tokens with zero new against the stored baseline, the two O-family rotation citations dropped and the baseline re-anchored to 170; three ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 03:0x fleet event round #4; benchmarks inside the seven-day gate; both daily standing rows for 2026-10-28 already on disk; tree clean, no index.lock). The P1 rows stay blocked-on-CEO, the weekly proposal duty is met by BD-PROP-005 and all four tech heads stayed gated, so the window discharged the R2196 debt: full battery RUNNER PASS 393/393 suites plus controls 7/7 in 911.9s with TMP RECLAIM 874/874 worlds and 309.57 MiB, then four follow-up sections all PASS in the same evidence file - matrix 393 suites / 3266 criteria (38123 bytes), fingerprint CLEAN five domains, runner profile PASS, census DRIFT-CLEAN files=2048 flags=0. No product code changed, so the product score is honestly zero; explore seeds 8/10..10/10 remain for the next round."
+    ],
+    [
       "R2196",
       "R2196: five-silence scan clean (251 rows / 172 content tokens with the two O-family rotation citations re-anchored and zero BigDomain action; ledger three paid-off patrol rows; group orders tail unchanged; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_buyer_gap_months with AC-BGM1..AC-BGM8 pre-registered in the R2189 seed 7/10 row BEFORE the code - net-purchase activity months, the gap_months == span_months - 1 law, aggregates with the earlier tie break, as_of-based trailing silence with no wall clock, the fail-closed as_of family after the account gate, a pure read with frozen digests and buyer isolation, and two-restart byte identity. Evidence: SUITE PASS 8/8 double-run rc=0/0, 747 bytes each, criterion sha16 74c0420f27a6d2b7, five adjacent buyer suites green. Honest notes: the first attempt failed in the test world (the purchase door is unique on buyer+listing, so one shelf per purchase was published) and the full battery plus matrix regeneration are R2197 first-item debt."
     ],
@@ -323,10 +332,10 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 73,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 73,
+    "substantive_non_idle_mention_lines": 74,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
