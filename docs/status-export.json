@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-28T21:05:00+08:00",
-  "do": "R2206 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market can now read a seller's answering cadence month by month instead of one lifetime average: an answer books in the month the seller actually did the work, a silent month is an honest zero, and backlog discharged from an older month carries its true older wait.",
+  "export_ts": "2026-10-28T20:33:31+08:00",
+  "do": "R2207 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the real-name provider layer now has a time axis: registrations and identity revisions are bucketed by their own stamps, a month with no identity event is an honest zero, and one developer revising twice in a month counts as one seller and not two.",
   "ceo_face": {
-    "current": "R2206 seller monthly answer cadence: api_seller_answer_months() puts each answer in the month the seller actually answered, keeps the true cross-month wait, splits backlog from same-month work and shows a silent month as an honest zero",
-    "latest_artifact": "qa/apimarket-sellermonths-R2206-a.log / -b.log (SUITE 8/8, sha256 3970c1195027e827..., byte-identical double run) + qa/regression-R2206.log (seven adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_answer_months, written 2026-10-28)",
+    "current": "R2207 market-wide provider-identity monthly timeline: api_market_provider_months() books each registration and each identity revision in the month of its own stamp, keeps a base registration in its original month forever, reports an honest zero month and separates sellers from events",
+    "latest_artifact": "qa/apimarket-marketprovidermonths-R2207-a.log / -b.log (SUITE PASS 8/8, sha256 38d3afc97fd712f7..., byte-identical double run) + qa/regression-R2207.log (five adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_provider_months, written 2026-10-28)",
     "next_milestone": "full reconcile battery plus suite-matrix regeneration on this tree (matrix 400 -> 401 suites), then the next explore seed with its criteria registered before the code - within 48h",
-    "last_artifact": "qa/apimarket-questionmonths-R2205-a.log / -b.log (SUITE 8/8, sha256 ba85ef053d603ff0..., byte-identical double run) + qa/reconcile-all-R2205.log (RUNNER PASS 400/400 suites, controls 7/7, 1180.3s, matrix 400 suites / 3322 criteria) + src/sandbox/ledger/apimarket.py (api_market_question_months, written 2026-10-28)"
+    "last_artifact": "qa/apimarket-sellermonths-R2206-a.log / -b.log (SUITE 8/8, sha256 3970c1195027e827..., byte-identical double run) + qa/regression-R2206.log (seven adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_seller_answer_months, written 2026-10-28)"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "market-wide provider-identity monthly timeline (api_market_provider_months)",
+      "on",
+      "R2207: api_provider_identity answers one developer's published pair and api_provider_history one developer's revision rows, so the real-name layer carried no time axis and a churn of identity redeclarations - the disclosure field the public layer publishes verbatim - was invisible. The face books a base registration in the month of its own registered_utc and a revision in the month of its own revised_utc, builds a contiguous grid with honest zero months, keeps event_count == registration_count + revision_count, counts one developer registering once and revising twice as one seller and three events, runs a monotone running_revision whose last row equals the envelope total, and takes the earlier-month peak tie-break."
+    ],
     [
       "seller monthly answer cadence (api_seller_answer_months)",
       "on",
@@ -233,6 +238,10 @@
   ],
   "results": [
     [
+      "R2207",
+      "R2207: five-silence scan clean (261 rows / 172 D-C-O tokens with zero new; four absentees are known body-text citations dropped by the group rotation, so the baseline is re-anchored to the measured set; ledger patrol rows already paid; group orders tail unchanged at the 2026-10-28 15:01 fleet dispatch; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_market_provider_months with AC-PIM1..AC-PIM8 registered in the R2202 seed row BEFORE the code, SUITE PASS 8/8 double-run byte-identical (sha256 38d3afc97fd712f7), wired as ledger-apimarket-marketprovidermonths(8), five adjacent suites green. Honest debt: full battery and suite-matrix regeneration deferred to R2208."
+    ],
+    [
       "R2206",
       "R2206: five-silence scan clean with four apparent new decision tokens, all citation-only inside other seats' rows, so zero domain action and the baseline re-anchored at 176. Product: api_seller_answer_months with AC-SAM1..AC-SAM8 anchored before the code and the criterion text in the same window (disclosed), SUITE PASS 8/8 double-run byte-identical (sha256 3970c1195027e827), wired as ledger-apimarket-sellermonths(8), seven adjacent suites green. Honest debt: full battery and suite-matrix regeneration deferred to R2207."
     ],
@@ -413,14 +422,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 85,
+    "log_lines_in_window": 87,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 81,
+    "substantive_non_idle_mention_lines": 83,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 5
+    "queue_explore_open": 4
   }
 }

@@ -2634,6 +2634,14 @@ SUITES = [
     # existed.
     ("ledger-apimarket-claimmonths", os.path.join(
         "ledger", "test_apimarket_claimmonths.py"), 8),
+    # apimarket market-wide monthly provider-identity redeclaration
+    # timeline - base registrations and revision rows bucketed on
+    # their OWN utc stamp, contiguous grid with honest zero months,
+    # distinct-account law and the monotone lifetime accumulator -
+    # criteria AC-PIM1..AC-PIM8 pre-registered in the R2202
+    # explore-queue seed row BEFORE this suite existed.
+    ("ledger-apimarket-marketprovidermonths", os.path.join(
+        "ledger", "test_apimarket_marketprovidermonths.py"), 8),
     # apimarket buyer account profile - the aggregate counterpart of
     # dev_profile (sellers) and api_market_stats (whole market), with
     # aggregates only so the row face stays api_library - criteria

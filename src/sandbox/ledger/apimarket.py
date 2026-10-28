@@ -13014,3 +13014,138 @@ class APIMarketFace:
                 months[-1]["refunded"] if months else None),
             "disclaimer": self.disclaimer,
             "months": months}
+
+    def api_market_provider_months(self):
+        """Market-wide monthly provider-identity redeclaration timeline
+        (criteria AC-PIM1..AC-PIM8 pre-registered in the R2202 seed row
+        in state/queue/explore.md BEFORE this code existed; the AC-PIM
+        prefix, test_apimarket_marketprovidermonths,
+        ledger-apimarket-marketprovidermonths and
+        redeclared_seller_count were all git-grep zero-occupancy against
+        HEAD 2026-10-28, rc=1).
+
+        api_provider_identity answers one developer's published pair and
+        api_provider_history answers one developer's revision rows, so
+        the market carried no time axis on the real-name layer at all
+        and "how often is provider identity redeclared, and is the shop
+        front changing faster this quarter" had no face. That matters
+        because the unified social credit code is the disclosure field
+        the public layer publishes verbatim, so a churn of revisions is
+        a change in who is actually behind the shelves.
+
+        Booking law: a base registration books in the UTC month of its
+        own registered_utc and a revision books in the UTC month of its
+        own revised_utc, so a November revision never rewrites the
+        September month the registration landed in, and the base row is
+        never re-dated by the revision that followed it.
+
+        Month rows are the contiguous grid from the first to the last
+        event month, so a month carrying no identity event gets an
+        honest zero row with a None redeclaration rate instead of a
+        fabricated 0.0. event_count == registration_count +
+        revision_count per row and in the envelope, and
+        redeclared_seller_count <= seller_count because a
+        redeclaration is a subset of the month's identity events.
+
+        The distinct-account law is the honest reason this face is not a
+        row count alone: one developer that registers once and revises
+        twice inside one month is ONE seller and THREE events, so
+        seller_count and event_count diverge deliberately.
+        avg_revisions_per_redeclared_seller is the pooled lifetime
+        quotient and reads None (never a fake zero) when nobody
+        redeclared.
+
+        running_revision is the monotone lifetime accumulator, so the
+        last row equals the envelope total; the peak takes the highest
+        monthly revision count with ties resolved to the EARLIER month,
+        and a zero-event month is never a peak.
+
+        No arguments, so no gate: pure read, zero row mutations, zero
+        token movement, and the envelope carries the resident
+        non-advisory disclaimer."""
+        with self._lock:
+            regs = self._conn.execute(
+                "SELECT dev_account, registered_utc FROM"
+                " apimarket_providers ORDER BY provider_id").fetchall()
+            revs = self._conn.execute(
+                "SELECT dev_account, revised_utc FROM"
+                " apimarket_provider_revisions"
+                " ORDER BY revision_id").fetchall()
+
+        buckets = {}
+
+        def bucket(month):
+            return buckets.setdefault(
+                month, {"registration_count": 0, "revision_count": 0,
+                        "sellers": set(), "redeclared": set()})
+
+        sellers = set()
+        redeclared = set()
+
+        for dev, stamp in regs:
+            b = bucket(str(stamp)[:7])
+            b["registration_count"] += 1
+            b["sellers"].add(dev)
+            sellers.add(dev)
+
+        for dev, stamp in revs:
+            b = bucket(str(stamp)[:7])
+            b["revision_count"] += 1
+            b["sellers"].add(dev)
+            b["redeclared"].add(dev)
+            sellers.add(dev)
+            redeclared.add(dev)
+
+        months = []
+        running_revision = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                b = {"registration_count": 0, "revision_count": 0,
+                     "sellers": set(), "redeclared": set()}
+            running_revision += b["revision_count"]
+            events = b["registration_count"] + b["revision_count"]
+            months.append({
+                "month": month,
+                "registration_count": b["registration_count"],
+                "revision_count": b["revision_count"],
+                "event_count": events,
+                "seller_count": len(b["sellers"]),
+                "redeclared_seller_count": len(b["redeclared"]),
+                "redeclaration_rate": (round(
+                    float(b["revision_count"]) / events, 4)
+                    if events else None),
+                "running_revision": running_revision,
+            })
+
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["revision_count"] > 0 and (
+                    peak_count is None
+                    or row["revision_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["revision_count"]
+
+        registration_total = sum(r["registration_count"] for r in months)
+        revision_total = sum(r["revision_count"] for r in months)
+        stamps = ([str(s) for _dev, s in regs]
+                  + [str(s) for _dev, s in revs])
+        return {
+            "month_count": len(months),
+            "registration_count": registration_total,
+            "revision_count": revision_total,
+            "event_count": registration_total + revision_total,
+            "seller_count": len(sellers),
+            "redeclared_seller_count": len(redeclared),
+            "avg_revisions_per_redeclared_seller": (round(
+                float(revision_total) / len(redeclared), 4)
+                if redeclared else None),
+            "peak_revision_month": peak_month,
+            "peak_revision_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_event_utc": max(stamps) if stamps else None,
+            "disclaimer": self.disclaimer,
+            "months": months,
+        }

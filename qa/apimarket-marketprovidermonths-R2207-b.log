@@ -1,0 +1,10 @@
+PASS AC-PIM1: empty_ok=True env_ok=True months=['2026-09', '2026-10', '2026-11']
+PASS AC-PIM2: sept=2/2 nov=0/2 base=('Dana Labs', '91310000AAAA') effective=('Dana Group', '91310000CCCC')
+PASS AC-PIM3: months=['2026-09', '2026-10', '2026-11'] oct=(0, None, 2)
+PASS AC-PIM4: partition=True totals=(2, 4, 6)
+PASS AC-PIM5: subset=True sept=(4, 2, 1) nov=(2, 1, 1) env=(2, 1)
+PASS AC-PIM6: running=[2, 2, 4] peak='2026-09'/2 avg=4.0
+PASS AC-PIM7: pure=True restart_a=True restart_b=True empty_avg_none=True
+PASS AC-PIM8: wired=True ascii=True no_net=True shipped=True outside=True
+
+SUITE PASS 8/8

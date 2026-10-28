@@ -1,0 +1,5 @@
+test_apimarket_provideridentity.py         rc=0 SUITE 8/8
+test_apimarket_providerrev.py              rc=0 SUITE 8/8
+test_apimarket_marketrelistmonths.py       rc=0 SUITE 8/8
+test_apimarket_claimmonths.py              rc=0 SUITE PASS 8/8
+test_apimarket_marketmonths.py             rc=0 SUITE 8/8
