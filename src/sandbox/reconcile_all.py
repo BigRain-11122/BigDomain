@@ -2532,6 +2532,8 @@ SUITES = [
     # api_relist_gap, and the pure-read law) - criteria
     # AC-MRM1..AC-MRM8 registered in the R2189 seed 9/10 explore-queue
     # claim row BEFORE the code, in the R2200 window.
+    ("ledger-apimarket-ratingmonths", os.path.join(
+        "ledger", "test_apimarket_ratingmonths.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution

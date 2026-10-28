@@ -11679,6 +11679,175 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
         }
 
+    def api_market_rating_months(self, dev_account=None):
+        """Monthly rating flow on both scopes (criteria
+        AC-RTM1..AC-RTM8 pre-registered in the R2202 explore-queue
+        claim row BEFORE this code existed; the AC-RTM prefix,
+        api_market_rating_months, test_apimarket_ratingmonths,
+        ledger-apimarket-ratingmonths, rating_month_count and
+        rated_month were all git-grep zero-occupancy against HEAD
+        2026-10-28, rc=1).
+
+        Every rating face answers a LIFETIME shape: api_ratings
+        lists rows, api_seller_quality a five-bucket histogram,
+        api_market_stats a single average, api_rating_reply_latency
+        the answer delay and api_rating_history one rating's
+        revisions. None of them carries a time axis, so a seller
+        whose stars fell after a service change and one whose stars
+        were always low at the same lifetime average read
+        identically, and the market carried no monthly rating flow
+        at all.
+
+        Booking law: a rating books in the UTC month of its own
+        immutable rated_utc, and a revision NEVER moves the month -
+        it only moves the effective star value that the month row
+        reads, so a January rating revised in April still counts in
+        January (AC-RTM2). Stars ride the single _effective_stars
+        seam the rest of the trust face already trusts.
+
+        Month rows are the contiguous grid from the first to the
+        last rating month, so a month with no rating carries an
+        honest zero row whose avg_stars is None rather than a
+        fabricated 0.0 (AC-RTM3). running_rating is the monotone
+        lifetime accumulator and its last value equals the envelope
+        rating_count (AC-RTM4).
+
+        avg_stars is the arithmetic mean of the EFFECTIVE stars in
+        that month rounded to two places, and the envelope average
+        is pooled over every rating in scope, never a mean of
+        monthly means (AC-RTM5). Zero ratings answer None.
+
+        Scope law: dev_account None is the whole market (scope ==
+        'market' and market_avg_stars None - the face never
+        benchmarks itself against itself); a seller scope carries
+        the market-wide pooled average computed by the same law and
+        other sellers never leak in (AC-RTM6). Envelope buyer_count
+        is DISTINCT over the included rows, so it can be smaller
+        than the row sums - the disclosed asymmetry the other
+        timeline faces carry.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on
+        the usr: prefix shape); the bare usr: prefix reads honestly
+        empty. Pure read: zero row mutations, zero token
+        movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        revised = set()
+        for rev in self._conn.execute(
+                "SELECT DISTINCT rating_id"
+                " FROM apimarket_rating_revisions").fetchall():
+            revised.add(int(rev[0]))
+
+        def _flow(scope):
+            sql = ("SELECT r.rating_id, r.stars, r.rated_utc,"
+                   " r.buyer_id FROM apimarket_ratings r"
+                   " JOIN apimarket_listings l"
+                   " ON l.listing_id = r.listing_id")
+            args = ()
+            if scope is not None:
+                sql += " WHERE l.dev_account = ?"
+                args = (scope,)
+            sql += " ORDER BY r.rating_id"
+            rows = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            buyers = set()
+            for r in rows:
+                rating_id = int(r[0])
+                stars = self._effective_stars(rating_id, int(r[1]))
+                month = str(r[2])[:7]
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "star_sum": 0, "five": 0,
+                         "low": 0, "buyers": set(), "revised": 0}
+                    buckets[month] = b
+                b["count"] += 1
+                b["star_sum"] += stars
+                if stars == 5:
+                    b["five"] += 1
+                if stars <= 2:
+                    b["low"] += 1
+                if rating_id in revised:
+                    b["revised"] += 1
+                b["buyers"].add(r[3])
+                buyers.add(r[3])
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "rating_count": 0,
+                        "buyer_count": 0,
+                        "star_sum": 0,
+                        "avg_stars": None,
+                        "five_star_count": 0,
+                        "low_star_count": 0,
+                        "revised_count": 0,
+                        "running_rating": running})
+                    continue
+                running += b["count"]
+                months.append({
+                    "month": month,
+                    "rating_count": b["count"],
+                    "buyer_count": len(b["buyers"]),
+                    "star_sum": b["star_sum"],
+                    "avg_stars": round(
+                        b["star_sum"] / float(b["count"]), 2),
+                    "five_star_count": b["five"],
+                    "low_star_count": b["low"],
+                    "revised_count": b["revised"],
+                    "running_rating": running})
+            total = sum(row["rating_count"] for row in months)
+            star_sum = sum(row["star_sum"] for row in months)
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["rating_count"] > 0 and (
+                        peak_count is None
+                        or row["rating_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["rating_count"]
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["rating_count"] > 0),
+                "rating_count": total,
+                "buyer_count": len(buyers),
+                "star_sum": star_sum,
+                "avg_stars": (round(star_sum / float(total), 2)
+                              if total else None),
+                "five_star_count": sum(
+                    row["five_star_count"] for row in months),
+                "low_star_count": sum(
+                    row["low_star_count"] for row in months),
+                "revised_rating_count": sum(
+                    row["revised_count"] for row in months),
+                "peak_month": peak_month,
+                "peak_rating_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_rating_count": (
+                    months[-1]["rating_count"] if months else 0),
+                "months": months}
+
+        with self._lock:
+            core = _flow(dev_account)
+            if dev_account is None:
+                market_avg = None
+            else:
+                market_avg = _flow(None)["avg_stars"]
+            out = {
+                "scope": ("market" if dev_account is None
+                          else "seller"),
+                "dev_account": dev_account}
+            out.update(core)
+            out["market_avg_stars"] = market_avg
+            out["disclaimer"] = self.disclaimer
+            return out
+
     def api_market_watch_months(self):
         """Market-wide watch-volume monthly timeline (criteria
         AC-MWM1..AC-MWM8 pre-registered in the R2189 seed 3/10

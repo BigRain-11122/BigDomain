@@ -1,0 +1,10 @@
+CMD=test_apimarket_marketstats.py RC=0
+PASS AC-AMMS1: keys=15 exact=True loaded=3 empty=0 avg=None
+PASS AC-AMMS2: listing=3/3/0 dev=2 buyers=10 distinct=2/10 avg=6.666666666666667
+PASS AC-AMMS3: purchases=11 refunds=0 net_purchases=11 gross=75 net=75 dev+plat=55/20 paid=11/75
+PASS AC-AMMS4: delist=2/1 relist_back=True frozen=True avg=8.5
+PASS AC-AMMS5: refund=7/5/2 purchases=11 buyers=10 net=68/75
+PASS AC-AMMS6: board_rows=2 gross_sum=75 market_gross=75 purchase_sum=11 market_purchases=11
+PASS AC-AMMS7: sha16=e440e95df7fd1382 identical=True
+PASS AC-AMMS8: tx_equal=True digests_equal=True files_equal=True tx=35
+SUITE PASS 8/8

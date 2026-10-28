@@ -1,0 +1,10 @@
+CMD=test_apimarket_ratingrev.py RC=0
+PASS AC-AMRV1: door keys=True prev/base=5/5 rows=1 base untouched=True
+PASS AC-AMRV2: account=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_NOT_BUYER', 'E_AM_BAD_ACCOUNT'] id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown-before-stars=E_AM_UNKNOWN_RATING not-buyer=E_AM_NOT_BUYER/E_AM_NOT_BUYER stars=['E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS', 'E_AM_BAD_STARS'] frozen=True rows=1
+PASS AC-AMRV3: prev-chain=[(5, 1), (1, 4), (4, 1)] ids increasing=True effective/base=1/5 back-to-older legal=True
+PASS AC-AMRV4: same-value=E_AM_RATING_UNCHANGED rows=3/3 effective=1 first stamp stable=True
+PASS AC-AMRV5: view=2/2.5 ratings=[2, 3] profile=3.0 buyer=3.0
+PASS AC-AMRV6: d2 view/ratings byte-identical=True clean history=True
+PASS AC-AMRV7: envelope=True revisions=[1, 4, 1, 2] bad-id=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] unknown=E_AM_UNKNOWN_RATING
+PASS AC-AMRV8: tables frozen=True tx frozen=True reply binding stable=True restart identity=True revision rows=5 wired=True ascii=True
+SUITE 8/8

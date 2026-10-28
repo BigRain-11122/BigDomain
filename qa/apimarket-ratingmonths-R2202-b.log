@@ -1,0 +1,11 @@
+CMD=test_apimarket_ratingmonths.py RC=0
+PASS AC-RTM1: env_keys=19 exact=True row_keys=True empty=(0, None, [])
+PASS AC-RTM2: grid=['2026-01', '2026-02', '2026-03'] jan=(2, 7, 3.5, 1) mar=(2, 5) revised=1
+PASS AC-RTM3: months=3 active=2 feb=(0, None) running=[2, 2, 4]
+PASS AC-RTM4: counts=4 stars=12 avg=3.0 five/low=(1, 2) buyers=(3, 2, 2)
+PASS AC-RTM5: peak=('2026-01', 2) empty=(None, None)
+PASS AC-RTM6: dana=(3, 2.67, 2) gina=(1, 4.0) market_avg=3.0
+PASS AC-RTM7: refused=8/8 bare=(0, []) digests_same=True tx_same=True quality=(3, 2.67)
+PASS AC-RTM8: digests_same=True tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
