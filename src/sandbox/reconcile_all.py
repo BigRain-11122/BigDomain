@@ -2562,6 +2562,17 @@ SUITES = [
     # BEFORE the code, in the R2205 window.
     ("ledger-apimarket-questionmonths", os.path.join(
         "ledger", "test_apimarket_questionmonths.py"), 8),
+    # monthly activity-volume timeline over the merged feed (every event
+    # books in the month of its own immutable stamp and a revision is its
+    # own event, the contiguous grid with an honest zero month, the
+    # three-way conservation of family counts, the earlier-month peak
+    # tie-break and the pinned feed rank on a family tie, the window /
+    # kinds / seller filters composing as in api_market_feed, the
+    # fail-closed gate chain, cross-face identity against the feed
+    # total, and the pure-read law) - criteria AC-FMD1..AC-FMD8
+    # registered in the R2212 explore-queue claim row BEFORE the code.
+    ("ledger-apimarket-feedmonths", os.path.join(
+        "ledger", "test_apimarket_feedmonths.py"), 8),
     # seller answer cadence on the month axis (an answer books in the
     # month of its own answered_utc, never the asked month, so a silent
     # seller reads as an honest zero row; latency still measured across

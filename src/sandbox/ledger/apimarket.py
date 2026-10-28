@@ -13493,3 +13493,127 @@ class APIMarketFace:
                 months[-1]["claim_count"] if months else None),
             "disclaimer": self.disclaimer,
             "months": months}
+
+    def api_market_feed_months(self, since_utc=None, until_utc=None,
+                               kinds=None, dev_account=None):
+        """Monthly activity-volume timeline over the merged feed
+        (criteria AC-FMD1..AC-FMD8 pre-registered in the R2212
+        explore-queue claim row BEFORE this code existed; the AC-FMD
+        prefix, test_apimarket_feedmonths, ledger-apimarket-feedmonths,
+        feed_month_count and monthly_event were all git-grep
+        zero-occupancy against HEAD 2026-10-28, rc=1).
+
+        api_market_feed answers "what just happened" as one flat
+        ordered stream behind a half-open window, so the SHAPE of
+        activity over months - a burst month against a quiet one - can
+        only be counted by hand. Every month face already shipped
+        reads a single family (ratings, questions, answers, watch,
+        supply), so the merged market volume had no time axis at all.
+
+        Booking law (AC-FMD2): each event books in the UTC month of its
+        own immutable stamp, and a revision is its own event in its own
+        month rather than a rewrite of the month it revises. Nothing
+        reads a wall clock, so the same rows always answer the same
+        grid.
+
+        Month rows are the contiguous grid from the first to the last
+        booking month, and a month with no event carries an honest zero
+        row (event_count 0, empty by_kind, None busiest_kind, flat
+        running_total) instead of being silently absent (AC-FMD3).
+        Conservation holds three ways: each row's by_kind sums to its
+        event_count, the monthly counts sum to the envelope event_total,
+        and the envelope by_kind sums to the same total (AC-FMD4).
+
+        peak_month ignores zero months and takes the EARLIER month on a
+        tie; busiest_kind is the envelope-wide leader resolved by the
+        module-pinned feed rank on a tie (AC-FMD5).
+
+        The window, kinds and seller filters compose exactly as in
+        api_market_feed, whose gate chain this face reuses so the
+        refusal order stays pinned and fail-closed before any read
+        (AC-FMD6, AC-FMD7). Because the events come from that same
+        seam, event_total is exactly api_market_feed(...)["total"] for
+        the same arguments (AC-FMD8), and the read is pure: zero row
+        mutations, zero token movement."""
+        feed = self.api_market_feed(since_utc=since_utc,
+                                    until_utc=until_utc, kinds=kinds,
+                                    limit=None, listing_id=None,
+                                    dev_account=dev_account)
+        buckets = {}
+        for event in feed["events"]:
+            month = str(event["event_utc"])[:7]
+            b = buckets.get(month)
+            if b is None:
+                b = {"count": 0, "by_kind": {}}
+                buckets[month] = b
+            b["count"] += 1
+            by_kind = b["by_kind"]
+            by_kind[event["kind"]] = by_kind.get(event["kind"], 0) + 1
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({"month": month,
+                               "event_count": 0,
+                               "by_kind": {},
+                               "busiest_kind": None,
+                               "active_kind_count": 0,
+                               "running_total": running})
+                continue
+            running += b["count"]
+            ordered = {}
+            for kind in sorted(b["by_kind"], key=_FEED_KIND_RANK.get):
+                ordered[kind] = b["by_kind"][kind]
+            busiest = None
+            for kind in ordered:
+                if busiest is None or ordered[kind] > ordered[busiest]:
+                    busiest = kind
+            months.append({"month": month,
+                           "event_count": b["count"],
+                           "by_kind": ordered,
+                           "busiest_kind": busiest,
+                           "active_kind_count": len(ordered),
+                           "running_total": running})
+        total = sum(row["event_count"] for row in months)
+        totals = {}
+        for row in months:
+            for kind, count in row["by_kind"].items():
+                totals[kind] = totals.get(kind, 0) + count
+        by_kind_total = {}
+        for kind in _FEED_KINDS:
+            if totals.get(kind):
+                by_kind_total[kind] = totals[kind]
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["event_count"] > 0 and (
+                    peak_count is None
+                    or row["event_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["event_count"]
+        busiest_kind = None
+        for kind in by_kind_total:
+            if busiest_kind is None or (
+                    by_kind_total[kind] > by_kind_total[busiest_kind]):
+                busiest_kind = kind
+        return {
+            "scope": ("market" if dev_account is None else "seller"),
+            "dev_account": dev_account,
+            "since_utc": since_utc,
+            "until_utc": until_utc,
+            "kinds": list(feed["kinds"]),
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["event_count"] > 0),
+            "event_total": total,
+            "by_kind": by_kind_total,
+            "busiest_kind": busiest_kind,
+            "peak_month": peak_month,
+            "peak_event_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_month_event_count": (
+                months[-1]["event_count"] if months else 0),
+            "disclaimer": self.disclaimer,
+            "months": months}

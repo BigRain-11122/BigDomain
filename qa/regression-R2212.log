@@ -1,0 +1,10 @@
+PASS suite test_apimarket_marketfeed.py rc=0 SUITE 8/8 PASS
+PASS suite test_apimarket_feeddev.py rc=0 SUITE 8/8 PASS
+PASS suite test_apimarket_marketfeed_listing.py rc=0 SUITE 8/8 PASS
+PASS suite test_apimarket_ratingmonths.py rc=0 SUITE 8/8
+PASS suite test_apimarket_questionmonths.py rc=0 SUITE 8/8
+PASS suite test_apimarket_sellermonths.py rc=0 SUITE 8/8
+PASS suite test_apimarket_categorywatchmonths.py rc=0 SUITE 8/8
+PASS suite test_apimarket_marketrelistmonths.py rc=0 SUITE 8/8
+PASS suite test_apimarket_marketstats.py rc=0 SUITE PASS 8/8
+ADJACENT 9/9 green

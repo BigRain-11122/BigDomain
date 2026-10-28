@@ -1,11 +1,11 @@
 {
- "export_ts": "2026-10-28T22:05:00+08:00",
- "do": "R2211 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the whole suite now proves the R2210 per-category monthly watch flow on the committed tree, so the market's attention timeline is verified by 404 suites rather than by its own eight criteria.",
+ "export_ts": "2026-10-28T21:54:55+08:00",
+ "do": "R2212 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - the market now has a monthly activity-volume timeline over all eleven event families, so a burst month and a quiet month are one call apart instead of a hand merge",
  "ceo_face": {
-  "current": "R2211 verification of the R2210 face: api_category_watch_months() watch/unwatch/net/active per category per month with honest zero months and the category in force at each event instant is now inside a green 404-suite battery, so the face is protected by the whole regression line, not just its own criteria",
-  "latest_artifact": "qa/apimarket-categorywatchmonths-R2210-a.log / -b.log (SUITE 8/8, sha256 a591c291b72f0712..., byte-identical double run) + qa/regression-R2210.log (eight adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_category_watch_months, written 2026-10-28)",
-  "next_milestone": "the last open R2202 explore seed api_market_feed_months (monthly event-volume timeline), criteria registered in the queue row before the code and a suite double-run, within 48h",
-  "last_artifact": "qa/reconcile-all-R2211.log (RUNNER PASS 404/404 suites green + controls 7/7 in 980.0s, 744224 bytes after the four follow-up sections, single-writer utf-8 LF via src/os/battery_stream.py, TMP RECLAIM 896/896 worlds / 316.02 MiB) + docs/sandbox-suite-matrix.md (404 suites / 3354 criteria, 39296 bytes, green=404/404) + src/os/battery_followup_R2211.py (written 2026-10-28)"
+  "current": "R2212 api_market_feed_months(): the monthly activity-volume timeline over the merged feed - every event books in the month of its own immutable stamp, the grid is contiguous with honest zero months, family counts conserve three ways, and the total is byte-equal to the feed's own total",
+  "latest_artifact": "qa/apimarket-feedmonths-R2212-a.log / -b.log (SUITE 8/8, sha256 81bfdc06e8cf58e2..., byte-identical double run) + qa/regression-R2212.log (nine adjacent suites 8/8) + src/sandbox/ledger/apimarket.py (api_market_feed_months, written 2026-10-28 22:5x)",
+  "next_milestone": "the full reconcile battery plus the suite-matrix regeneration on the committed R2212 tree (verification debt), and a fresh explore reseed because only one gated row remains, within 48h",
+  "last_artifact": "qa/reconcile-all-R2211.log (RUNNER PASS 404/404 suites green + controls 7/7 in 980.0s, 744224 bytes after the four follow-up sections) + docs/sandbox-suite-matrix.md (404 suites / 3354 criteria, 39296 bytes, green=404/404) + src/os/battery_followup_R2211.py"
  },
  "depts": [
   {
@@ -35,6 +35,11 @@
   }
  ],
  "outs": [
+  [
+   "monthly activity-volume timeline (api_market_feed_months)",
+   "on",
+   "R2212: the feed answered what just happened as one flat stream behind a window, so the shape of activity over months was only countable by hand and every shipped month face read a single family. The new face merges all eleven families onto the month axis: seventeen-key envelope, six-key month rows, a revision as its own event in its own month, a contiguous grid with honest zero months and a flat accumulator, three-way conservation, the earlier-month peak and the pinned-rank family tie-break, the window and kinds and seller filters composed as the feed, the same fail-closed gate chain, and event_total byte-equal to the feed's total by construction. SUITE PASS 8/8 double-run byte-identical sha256 81bfdc06e8cf58e2..., wired ledger-apimarket-feedmonths(8), nine adjacent suites green."
+  ],
   [
    "buyer monthly claim flow (api_buyer_claim_months)",
    "on",
@@ -328,7 +333,7 @@
    "R2190: five-silence scan clean (251 rows / 170 D-C tokens with zero new against the stored baseline; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_refund_reasons with AC-SRR1..AC-SRR8 pre-registered in the R2189 seed row BEFORE the code - seventeen-key envelope, the shared narrow bucket law scoped by the stored dev_account, honest unlabeled bucket last and excluded from the leading cause, scoped conservation against the raw tables, share/average/top share with None instead of fake zeros, exact-fraction herfindahl, market benchmarks on a seller scope and None on the market scope, a pure read with frozen digests and frozen ledger_tx, three-instance byte identity after two restarts and five gate forms failing closed before any read. Honest notes: the first run read 6/8 red on two of this window's own expectations (2800.0 not 3200.0; api_seller_quality carries no refund count, so api_refund_register is the cross-face witness) and one real test defect (double dumps on the retirement snapshot, plus a benchmark key that legitimately moves) - all three fixed in the TEST, no implementation loosened; the full battery and matrix regeneration are first-item debt for R2191."
   ],
   [
-   "2203",
+   "2212",
    "OSLoop 执行 tick",
    "R2195 closed: counters machine-derived from src/os/state.json and the queue/proposal faces after the full 392-suite battery"
   ],
@@ -435,19 +440,23 @@
   [
    "R2184",
    "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
+  ],
+  [
+   "R2212",
+   "R2212: five-silence scan clean with the decision baseline an exact 174-token match and zero new rows, so zero domain action. Product: api_market_feed_months with AC-FMD1..AC-FMD8 registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 81bfdc06e8cf58e2e9382d6213ed37c40d71ca985d2ec2f061716fae94dd5a6e), wired as ledger-apimarket-feedmonths(8), nine adjacent suites green. Full battery NOT run this window and recorded as the R2213 first item."
   ]
  ],
  "self_drive": {
   "window": "2026-10-22..2026-10-28",
   "window_days": 7,
-  "log_lines_in_window": 91,
+  "log_lines_in_window": 89,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 85,
+  "substantive_non_idle_mention_lines": 89,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
   "queue_tech_open": 4,
-  "queue_explore_open": 3
+  "queue_explore_open": 1
  }
 }

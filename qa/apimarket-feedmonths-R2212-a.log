@@ -1,0 +1,10 @@
+PASS AC-FMD1: env_keys=17 exact=True row_keys=True empty=(0, 0, [], None)
+PASS AC-FMD2: grid=['2026-01', '2026-02', '2026-03', '2026-04'] jan={'published': 3, 'price_revised': 1, 'purchased': 2, 'rated': 2} mar={'purchased': 2, 'rated': 2, 'delisted': 1} apr={'rating_revised': 1, 'rating_replied': 1} total=15
+PASS AC-FMD3: months=4 active=3 feb=(0, {}, None) running=[8, 8, 13, 15]
+PASS AC-FMD4: counts=15 kinds_sum=15 rows_ok=True by_kind={'published': 3, 'price_revised': 1, 'purchased': 4, 'rated': 4, 'rating_revised': 1, 'rating_replied': 1, 'delisted': 1} rated=(4, 4)
+PASS AC-FMD5: peak=('2026-01', 8) busiest='purchased' jan='published' mar='purchased' apr='rating_revised'
+PASS AC-FMD6: dana=11 gina=4 picked=(['purchased', 'rated'], 8) windowed=(5, ['2026-03']) bare=(0, [])
+PASS AC-FMD7: window=6/6 inverted=1 kinds=7/7 acct=8/8 digests_same=True tx_same=True
+PASS AC-FMD8: feed_identity=(15, 15, 8, 8) digests_same=True tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
