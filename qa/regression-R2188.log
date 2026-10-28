@@ -1,0 +1,6 @@
+rc=0 test_apimarket_supply.py SUITE 8/8
+rc=0 test_apimarket_restock.py SUITE 8/8
+rc=0 test_apimarket_categorysupplymonths.py SUITE PASS 8/8
+rc=0 test_apimarket_sellertodo.py SUITE 8/8
+rc=0 test_apimarket_delist.py SUITE PASS 8/8 criteria=8
+rc=0 test_apimarket_relist.py SUITE PASS 8/8

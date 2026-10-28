@@ -1,0 +1,9 @@
+PASS AC-SSUP1: env_keys=16 exact=True row_keys=True empty=[] gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT']
+PASS AC-SSUP2: live=5 retired=1 cycle_identical=True
+PASS AC-SSUP3: tracked=4 unlimited=1 d3={'listing_id': 3, 'listing_key': 'loose-pack', 'delisted': False, 'supply': None, 'base_supply': None, 'restocked_units': 0, 'restock_count': 0, 'sold': 0, 'remaining': None, 'sold_out': False, 'low_stock': False}
+PASS AC-SSUP4: effective=11 sold=0 remaining=11 restock=0/0
+PASS AC-SSUP5: start=(0, 3, False, False) one=(1, 2, False, False) two=(2, 1, False, True) soldout=(2, 0, True, True) refund=(1, 1, False, True) restock=(1, 3, False, False) again=(2, 2, False, False)
+PASS AC-SSUP6: default=2 zero=1 zero_rows=(False, True) wide=4 bad=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS'] order=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT']
+PASS AC-SSUP7: identical=True frozen=True tx=True ordered=True isolated=True sha16=728821d514d5c693
+PASS AC-SSUP8: sha16=728821d514d5c693 identical=True tx_equal=True digests_equal=True files_equal=True registered=True
+SUITE PASS 8/8

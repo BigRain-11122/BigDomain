@@ -2448,6 +2448,14 @@ SUITES = [
     # BEFORE this suite existed.
     ("ledger-apimarket-categoryvelocitymonths", os.path.join(
         "ledger", "test_apimarket_categoryvelocitymonths.py"), 8),
+    # seller-side supply rollup - every listing the seller owns
+    # rolled into live/retired partitions, tracked vs unlimited
+    # shelves, sold-out and low-stock counts and four derived
+    # totals, all riding the single _supply_full seam - criteria
+    # AC-SSUP1..AC-SSUP8 pre-registered in the R2178 10/10
+    # explore-queue row BEFORE this suite existed.
+    ("ledger-apimarket-sellersupply", os.path.join(
+        "ledger", "test_apimarket_sellersupply.py"), 8),
     ("ledger-apimarket-categorysupplymonths", os.path.join(
         "ledger", "test_apimarket_categorysupplymonths.py"), 8),
     # calendar-day trade timeline (cash-basis day bucketing, a

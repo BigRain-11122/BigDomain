@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-28T12:24:21+08:00",
-  "do": "R2187 R2186 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
+  "export_ts": "2026-10-28T12:38:25+08:00",
+  "do": "R2188 the sandbox developer-API marketplace and the OS toolchain for the silicon-domain public co-creation platform - an operator can now read, month by month, how long each category takes to actually sell, so a category that got harder to sell stops hiding behind a lifetime average",
   "ceo_face": {
-    "current": "R2187 refund reason distribution: an operator can now read why money came back - one bucket per reason as written (case and whitespace folded, different spellings kept apart), an honest unlabeled bucket ordered last and excluded from the leading cause, plus share and average per bucket",
-    "latest_artifact": "qa/apimarket-refundreasons-R2187-a.log / -b.log (SUITE 8/8, criterion sha16 7e206dc697aefec5) + src/sandbox/ledger/apimarket.py (api_refund_reasons, written 2026-10-28)",
-    "next_milestone": "next claimable explore seed (the seller supply roll-up, seed 10/10) with its criteria pre-registered first (within 48h)",
+    "current": "R2188 seller supply rollup: a seller now reads the whole shop in one call - live vs retired listings, tracked vs unlimited shelves, units declared, sold, remaining, sold-out and low-stock counts, all riding the same scarcity seam the purchase gate uses",
+    "latest_artifact": "qa/apimarket-sellersupply-R2188-a.log / -b.log (SUITE 8/8, criterion sha16 728821d514d5c693) + src/sandbox/ledger/apimarket.py (api_seller_supply, written 2026-10-28)",
+    "next_milestone": "full reconcile battery plus suite-matrix regeneration, then an explore-queue reseed (the last real seed was claimed this round) - both within 48h",
     "last_artifact": "qa/apimarket-categoryvelocitymonths-R2186-a.log (SUITE PASS 8/8, double-run byte-identical) (2026-10-28)"
   },
   "depts": [
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "seller supply rollup (api_seller_supply)",
+      "on",
+      "R2188: api_supply and api_supply_history answer ONE listing and api_seller_todo answers one duty row, so a seller holding N shelves had to call api_supply N times to learn the shop's stock position. api_seller_supply(dev_account, low_stock_threshold=1) returns a sixteen-key envelope with eleven-key rows: listing table as row authority (retired shelves included, ordered by listing_id), explicit live/retired and tracked/unlimited partitions, four aggregate laws (total_sold counts every row while the two supply totals read tracked rows only and answer None when nothing is tracked), and one scarcity law riding the single _supply_full seam so a purchase, a refund or a restock moves the rollup in the same step it moves the per-listing faces. The low-stock threshold defaults to 1 (0 counts only sold-out shelves) and fails closed on bool/str/float/negative forms after the account gate. Suite 8/8 double-run byte-identical, wired ledger-apimarket-sellersupply(8); six adjacent supply/lifecycle suites green."
+    ],
     [
       "refund reason distribution (api_refund_reasons)",
       "on",
@@ -153,6 +158,15 @@
   ],
   "results": [
     [
+      "2188",
+      "OSLoop 执行 tick",
+      "R2188 closed: counters machine-derived from src/os/state.json and the queue/proposal faces"
+    ],
+    [
+      "R2188",
+      "R2188: five-silence scan clean (251 rows / 170 D-C tokens with zero new; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4; benchmarks inside the seven-day gate; tree clean, no index.lock). Product: api_seller_supply with AC-SSUP1..AC-SSUP8 pre-registered in the R2178 10/10 seed row BEFORE the code - sixteen-key envelope, two explicit partitions, four aggregate laws, the one-step scarcity seam, the threshold law with the account gate first, a pure read with frozen digests and strict seller isolation, and cross-restart byte identity with the runner wiring. Suite 8/8 double-run byte-identical sha16 728821d514d5c693; six adjacent suites green; census DRIFT-CLEAN flags=0 after the birth-site newline repair of the predecessor battery log. Honest: the first run was 5/8 red on this window's own fixture arithmetic (tracked total 11 not 13, pre-unlimited sales 5 not 6) and the TEST was corrected, not the implementation. The full battery and matrix regeneration are recorded as R2189 first-item debt."
+    ],
+    [
       "R2187",
       "R2187: five-silence scan clean (240 rows / 163 D-C tokens with zero new - the stored baseline still names two O- tokens the group-side rotation no longer exposes, so it was re-anchored to the measured 163; ledger three @BigDomain patrol rows already paid off; group orders tail unchanged at the 2026-10-28 03:0x CEO-PROXY fleet event round #4, acknowledged with zero domain action; benchmarks inside the seven-day gate; the only tree difference was a phantom status entry whose bytes match HEAD exactly, verified with hash-object --no-filters). Product: api_refund_reasons with AC-RFR1..AC-RFR8 pre-registered in the R2178 seed row BEFORE the code, thirteen-key envelope, strip+lower bucket law, honest unlabeled bucket last and excluded from the leading cause, row/envelope/split conservation, share and average with None instead of fake zeros, a total order, one-step freshness on a new refund, retirement as a proven no-op, cross-face identity with api_market_stats and api_refund_register, pure read with frozen digests and frozen ledger_tx, empty world shape and three-instance byte identity after two restarts."
     ],
@@ -260,14 +274,14 @@
   "self_drive": {
     "window": "2026-10-22..2026-10-28",
     "window_days": 7,
-    "log_lines_in_window": 39,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 39,
+    "substantive_non_idle_mention_lines": 65,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 2
+    "queue_explore_open": 1
   }
 }
