@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T03:44:14+08:00",
-  "do": "买家价格反应面（R2226）",
+  "export_ts": "2026-10-29T04:29:00+08:00",
+  "do": "battery round R2227 (413/413 suites + controls 7/7)",
   "ceo_face": {
-    "current": "R2226 完成 apimarket 买家侧价格反应面 api_buyer_price_reaction：把「关注后价格动了的货架里我到底买了多少」做成一面读图——关注时点价作锚（之后的修订不改写它），观测价优先取冻结的成交价、否则取读时现价，按降/平/涨三桶分别给出转化率与均价差。八条判据全过（8/8），双跑判据行逐字节同一（sha16 556eb1bad9590a46），六条相邻关注/价格族套件全绿，接线 ledger-apimarket-buyerpricereaction。",
-    "latest_artifact": "src/sandbox/ledger/apimarket.py → api_buyer_price_reaction；套件 src/sandbox/ledger/test_apimarket_buyerpricereaction.py；证据 qa/apimarket-buyerpricereaction-R2226-a.log 与 -b.log；相邻回归 qa/regression-R2226.log（2026-10-29）",
-    "next_milestone": "48h 内：邻近中的新产品面需配一轮全量电池 + 套件矩阵再生（R2226 因 25 分钟预算未跑，已记为下轮首项）；explore 队列剩 3 条真种子，下轮可认领队头（卖家月度回头客占比）。"
+    "current": "R2227 是验证轮：把 R2226 记下的「下轮首项」欠账清掉——在已提交的干净树上跑了一遍全量对账电池。结果全绿：413 个套件全过 + 7 项对账控制全过（996.5 秒），比 R2225 多出的那一个套件正是 R2226 新增的买家价格反应面，证明新面确实接进了跑批、且周边八个套件一个没坏。电池窗内顺带清掉出生点临时目录 912 个（320.71 MiB）。四节后续检查也全过：套件矩阵再生到 413 套件 / 3427 判据并回读，五域指纹链 CLEAN，跑批画像 --daily --check 一致，证据书写方言普查 DRIFT-CLEAN（2127 文件、零告警）。本轮产品分如实记 0——买到的是确定性，不是新功能。",
+    "latest_artifact": "qa/reconcile-all-R2227.log（752,799B·单写者 utf-8 LF·含四节 follow-up 与 VERDICT PASS）；docs/sandbox-suite-matrix.md（40,254B·413 套件/3427 判据）；新增 src/os/battery_followup_R2227.py；2026-10-29",
+    "next_milestone": "48h 内：回产品面——认领 explore 队头真种子（商家号门控行之后的「卖家月度回头客占比」api_seller_repeat_months），八条判据预注册后出产品增量；电池欠账已清零，下一轮到期时再跑。"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "Full reconcile battery R2227 on the committed R2226 tree (413/413 suites + controls 7/7)",
+      "on",
+      "R2226 shipped api_buyer_price_reaction and recorded the full battery plus matrix regeneration as its first next item. This round discharged that debt on the clean committed tree 49a7637f with no product code touched (the R2168 mixed-tree rule). Battery: RUNNER PASS 413/413 suites green plus reconcile controls 7/7 in 996.5s, evidence qa/reconcile-all-R2227.log (752799 bytes, CRLF=0 lone CR=0, single-writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), with the birth-site tmp sweep inside the same battery window reclaiming candidates=912 removed=912 busy=0 failed=0 reclaimed=320.71 MiB. Suites moved 412 -> 413 against R2225, which is exactly the R2226 suite joining the registry. The four post-battery sections all passed in the new src/os/battery_followup_R2227.py and were appended to the same log: suite matrix regenerated to 413 suites / 3427 criteria (docs/sandbox-suite-matrix.md, 40254 bytes, evidence header 413/413 green, git diff +333/-332 lines for the one new suite row) and read back, baseline fingerprint chain CLEAN over five domains, runner profile --daily --check PASS, and the qa writer census re-frozen then DRIFT-CLEAN on both legs (files=2127 tee=1599 baselined=528, flags=0). Product score honestly zero - this window bought certainty that the newest face is wired and that no adjacent face regressed."
+    ],
     [
       "buyer price-reaction face (api_buyer_price_reaction)",
       "on",
@@ -297,6 +302,10 @@
   ],
   "results": [
     [
+      "R2227",
+      "R2227: five-silence scan clean at open (274 decision rows / 180 content-addressed tokens, the four apparent additions all known group-side rotation artefacts, zero genuinely new; ledger rows paid off; orders baseline unchanged; benchmarks fresh; tree clean). The window claimed the verification debt R2226 recorded as its next first item and ran it on the committed tree 49a7637f with zero product code changes: full reconcile battery RUNNER PASS 413/413 suites plus controls 7/7 in 996.5s (one suite more than R2225, the R2226 face), TMP RECLAIM 912/912 worlds and 320.71 MiB, then four follow-up sections PASS in a new script - matrix 413 suites / 3427 criteria read back, fingerprint CLEAN five domains, runner profile PASS, writer census DRIFT-CLEAN files=2127 flags=0. Evidence qa/reconcile-all-R2227.log 752799 bytes utf-8 LF single writer."
+    ],
+    [
       "R2225",
       "R2225: five-silence scan found only an EOL/indent debt from the R2224 closeout (repaired first), zero new decision tokens, the same paid-off ledger rows, an unchanged orders baseline and fresh benchmarks. The window claimed the fold row R2223 and R2224 both carried and executed fold 591 on the pair-aligned window 1:201 after one disclosed self-correction (window 1:200 split the R2211 pair, reverted byte-exact and redone): state.json 410064B -> 55509B, token_missing [], gauge fold_needed False with 22991B of margin, census pass=True. The exemption list was emptied on proof - the archive carries both R2090 and R2095 ledger lines, so the old live gaps were a truncation artefact - and two live-gate criteria were re-pinned; three gate suites 8/8/8; full battery RUNNER PASS 412/412 plus controls 7/7 in 958.8s with TMP RECLAIM 910/910 worlds and 320.12 MiB; follow-up matrix 412 suites / 3419 criteria byte-identical, fingerprint CLEAN five domains, profile PASS, census DRIFT-CLEAN. The waterline is unblocked for the first time since R2223 measured the conflict."
     ],
@@ -517,7 +526,7 @@
       "2026-10-29 R2219 (five-silence scan clean at open: decisions.md 274 non-empty rows carrying 185 content-addressed D/C/O/T tokens; the five D-20261029-01..05 rows were already judged and folded into the stored baseline by R2218, so zero new this window and zero domain action; the group ledger carries the same three @BigDomain patrol rows already paid off with zero unreplied; the group orders tail advanced by ONE row, the 2026-10-29 00:52 CEO-PROXY fleet event round R2.46, which is the fleet dispatcher execution face and not a domain face, so it is logged aware-no-action and the own-orders baseline advances to 00:52; benchmarks refreshed 2026-10-29 inside the seven-day gate; tree clean, no index.lock) - the P1 canonical board head was CLAIMABLE this window, which had not been true for many rounds: R2218 added a P-47 item-four row (payment integration design, category-classification chapter) with criteria AC-PAYCAT1..6 pre-registered BEFORE the edit, so that row was claimed instead of opening a new explore face, because the official rule it encodes can invalidate the whole C-side payment route. Product: docs/spec/payment-integration-spec.md v0.1 -> v0.2 - a new section 0-bis 'category classification (compliance front chapter)' carrying (1) a seven-row category self-declaration table mapping every product family to an official form and a channel/API family, (2) channel-name and API-family uniqueness with wx.requestVirtualPayment as the single C-side family and JSAPI declared unused for virtual goods on every terminal, (3) the hybrid virtual+physical whole-classification law plus the no-new-physical-surface non-goal, (4) both official exemptions recorded and expressly not claimed, (5) a four-row risk and prerequisite table (the android/non-iOS plain WeChat Pay capability is withdrawn when only virtual categories are present; opening virtual payment is a CEO physical item; T+3 settlement with the 180-day refund fee boundary and the iOS 45-60 day Apple settlement; a wrong category self-declaration costs the whole terminal payment capability), and (6) the W34 three-way consistency mapping. The section 0 standard-channel line was limited to real services and the footer bumped with a revision record. Verification: qa/pay-category-R2219.log carries the six criterion readings plus the code-side assertions (adapters.py channel pair literal=True, jsapi occurrences in pay code = 0) and the regression (pay acceptance 16/16, channel matrix SUITE PASS 7/7). Honest note: the first AC-PAYCAT2 probe read False because its own regex matched the criterion text that quotes the forbidden phrase; a targeted re-read of all seven JSAPI lines showed prohibitions only, and the criterion was not relaxed. Product score honestly 1 point (a real spec file change, no new runnable code); the explore queue still holds seven open seeds behind the merchant-gated payment row."
     ],
     [
-      "2224",
+      "2227",
       "OSLoop 执行 tick"
     ],
     [
@@ -532,14 +541,14 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 103,
+    "log_lines_in_window": 16,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 103,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
     "queue_tech_open": 4,
-    "queue_explore_open": 5
+    "queue_explore_open": 4
   }
 }
