@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T07:10:52+08:00",
-  "do": "product window R2236: seller monthly rating intake and star level (explore seed R2230 4/6)",
+  "export_ts": "2026-10-29T07:35:00+08:00",
+  "do": "product window R2237: per-category monthly watch-to-purchase conversion (explore seed R2230 5/6) plus the state fold",
   "ceo_face": {
-    "current": "R2236 \u4ea7\u54c1\u7a97\uff1aapimarket \u65b0\u589e\u5356\u5bb6\u6708\u5ea6\u8bc4\u5206\u6444\u5165\u9762 api_seller_rating_months\u2014\u2014\u6b64\u524d\u5e02\u573a\u6709\u6708\u5ea6\u8f74\u3001\u5356\u5bb6\u53ea\u6709\u7ec8\u8eab\u661f\u7ea7\u5f62\u72b6\uff0c\u6240\u4ee5\u300e\u670d\u52a1\u53d8\u5dee\u540e\u661f\u7ea7\u4e0b\u6ed1\u7684\u5e97\u300f\u4e0e\u300e\u4e00\u76f4\u5e73\u5eb8\u7684\u5e97\u300f\u8bfb\u6570\u4e00\u6837\u3002\u672c\u8f6e\u8865\u4e0a\u6bcf\u4e2a\u5356\u5bb6\u9010\u6708\u7684\u8bc4\u5206\u6570/\u661f\u7ea7\u5747\u503c/\u4e94\u6876\u5206\u5e03/\u56de\u5e94\u8986\u76d6\u7387\uff0c\u5e76\u8bc1\u660e\u4fe1\u5c01\u5747\u503c\u662f\u6c60\u5316 3.25\uff08\u6708\u5747\u503c\u7684\u5747\u503c\u662f 3.5\uff09\uff0c\u4e00\u6761\u4e00\u6708\u8bc4\u5206\u4e09\u6708\u6539\u661f\u4ecd\u7559\u5728\u6b63\u6708\u5e76\u62c9\u4f4e\u8be5\u884c\u5747\u503c\u3002",
-    "latest_artifact": "qa/apimarket-sellerratingmonths-R2236-a.log \u4e0e -b.log\uff08\u5404 692 \u5b57\u8282\u00b7\u5355\u5199\u8005 utf-8 LF\u00b7\u96f6 CR\u00b7SUITE 8/8 \u53cc\u8dd1\u5224\u636e\u884c\u540c\u4e00 sha16 DF8438421FC9A211\uff09+ qa/regression-R2236.log\uff08\u516d\u6761\u76f8\u90bb\u4fe1\u4efb\u65cf\u5957\u4ef6 8/8 \u5168\u7eff\uff09\uff1b\u4ee3\u7801\u9762 src/sandbox/ledger/apimarket.py:12059 api_seller_rating_months\uff0c\u5957\u4ef6 src/sandbox/ledger/test_apimarket_sellerratingmonths.py\uff0c\u63a5\u7ebf ledger-apimarket-sellerratingmonths(8)\u3002\u65f6\u95f4\u6233 2026-10-29\u3002",
-    "next_milestone": "R2237\uff08\u226448h\uff09\uff1a\u628a\u672c\u8f6e\u6b20\u8d26\u7ed3\u6e05\u2014\u2014state.json \u5df2\u8fbe 83849B\u3001\u8d8a\u8fc7 78500B \u6c34\u4f4d\u95f8\uff0c\u9700\u5148\u505a\u4e00\u8f6e\u6298\u53e0\uff1b\u968f\u540e\u5728\u5df2\u63d0\u4ea4\u6811\u4e0a\u8dd1\u5168\u91cf\u5bf9\u8d26\u7535\u6c60\uff08418\u2192419 \u5957\u4ef6\uff0c\u672c\u8f6e\u65b0\u5957\u4ef6\u5165\u518c\uff09+ \u5957\u4ef6\u77e9\u9635\u518d\u751f\uff0c\u8ba9\u672c\u8f6e\u4ea7\u54c1\u9762\u7531\u6574\u6761\u7535\u6c60\u8986\u76d6\u800c\u4e0d\u53ea\u662f\u5b83\u81ea\u5df1\u7684\u516b\u5224\u636e\u3002"
+    "current": "R2237 \u4ea7\u54c1\u7a97\u53e3\uff1aapimarket \u5206\u7c7b\u76ee\u6708\u5ea6\u300c\u5173\u6ce8\u2192\u4e70\u5355\u8f6c\u5316\u300d\u9762 api_category_watch_conversion_months\uff08\u63a2\u7d22\u79cd\u5b50 R2230 5/6\uff09\uff1a\u5173\u6ce8\u8ba1\u5165\u5176\u81ea\u8eab\u6708\u4efd\u3001\u53d6\u6d88\u4e0d\u7b97\u4e8b\u4ef6\u3001\u8d2d\u4e70\u4e0d\u56de\u6eaf\u6539\u6708\uff1b\u8f6c\u5316/\u5148\u62e5\u6709/\u60ac\u7f6e\u4e09\u817f\u4e0e\u9000\u6b3e\u5373\u53d6\u6d88\u8f6c\u5316\uff1b\u5206\u7c7b\u5f52\u5c5e\u53d6\u300c\u5173\u6ce8\u90a3\u4e00\u77ac\u95f4\u300d\u7684\u7c7b\u76ee\uff08\u6539\u7c7b\u4e0d\u56de\u6539\u65e7\u6708\uff09\uff1b\u5e02\u573a\u57fa\u51c6\u5217\u4e0d\u53d7\u5254\u9664\u5f00\u5173\u5f71\u54cd\uff1b\u4e0e\u5173\u6ce8\u91cf\u9762\u3001\u5e02\u573a\u8f6c\u5316\u9762\u4e09\u65b9\u6052\u7b49\u3002\u540c\u7a97\u628a state.json \u65e5\u5fd7\u8001\u7a97\u53e3\u6298\u53e0\u5165\u6863\uff0883849B\u2192 53651B\uff0c\u6c34\u4f4d\u9600\u6062\u590d\u5b89\u5168\u4f59\u91cf\uff09\u3002",
+    "latest_artifact": "qa/apimarket-categorywatchconversionmonths-R2237-a.log \u4e0e -b.log\uff08\u5404 904 \u5b57\u8282\u00b7utf-8 LF\u00b7\u96f6 CR\u00b7SUITE 8/8 \u53cc\u8dd1\u5224\u636e\u540c\u4e00 sha16 50e5228778f319c9\uff09+ qa/regression-R2237.log\uff08\u516d\u90bb\u57df\u5747 8/8\uff09\uff1b\u4ea7\u54c1\u4f53 src/sandbox/ledger/apimarket.py api_category_watch_conversion_months\uff1b\u65f6\u95f4\u6233 2026-10-29\u3002",
+    "next_milestone": "R2238\uff08\u7a97 \u226448h\uff09\uff1a\u5728\u63d0\u4ea4\u6811\u4e0a\u8dd1\u5168\u91cf\u5bf9\u8d26\u7535\u6c60 + \u5957\u4ef6\u77e9\u9635\u518d\u751f\uff08\u9884\u671f 418\u2192419 \u5957\u4ef6 / 3467\u21923475 \u5224\u636e\uff0c+8 \u5373\u672c\u7a97\u65b0\u5957\u4ef6\uff09\uff0c\u5e76\u7ee7\u7eed\u63a8\u8fdb\u63a2\u7d22\u79cd\u5b50 R2230 6/6\uff08\u5356\u5bb6\u4ef7\u683c\u5bf9\u9700\u6c42\u54cd\u5e94\uff09\u3002"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "per-category monthly watch-to-purchase conversion face (R2237)",
+      "on",
+      "api_category_watch_conversion_months(include_uncategorized=True): sixteen-key envelope, fourteen-key month rows, twelve-key category cells; the watch-month cohort law (an unwatch is not an event, a purchase never re-dates the month); the three legs (converted at or after the watch stamp incl. equal stamps at zero seconds, pre_owned excluded from the funnel, pending that also absorbs a refunded purchase so the April cancellation lands as a real 0.0 and a pre_owned-only January cell reads None); contiguous JAN..MAY grid with a zero February carrying None rate and None latencies; the watch-instant category seam; the TRUE market benchmark column that survives the trimmed view (0.5 row against a 1/3 benchmark); identity with api_category_watch_months (7 watches) and api_market_conversion_months (2 converted / 1 pre_owned / 4 pending); pooled 216000.0 average and median against 172800/259200 extremes; seven-form bool gate failing closed before any read. Evidence: SUITE 8/8 double-run byte-identical criterion sha16 50e5228778f319c9 (904B per leg, utf-8 LF by src/os/evidence_R2237.py), wired ledger-apimarket-categorywatchconversionmonths(8), six adjacent suites green."
+    ],
     [
       "seller monthly rating intake face shipped (R2236)",
       "on",
@@ -352,6 +357,10 @@
   ],
   "results": [
     [
+      "R2237",
+      "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
+    ],
+    [
       "R2236",
       "product window: explore head seed R2230 4/6 delivered as api_seller_rating_months; SUITE PASS 8/8 double-run with byte-identical criterion lines (sha16 DF8438421FC9A211, 692B per leg, single-writer utf-8 LF, zero CR); six adjacent trust-family suites green 8/8; PRODUCT_SHA_STABLE True; honest notes = the AC-SRT1 key count was corrected nineteen -> twenty before the suite (the resident disclaimer is an envelope key, disclosed, nothing relaxed), the first run read 5/8 and all three reds were this-window expectations, and two own-script defects in the evidence driver were fixed in-window; carried debt = the state fold (83849B over the 78500B waterline), the full battery and the matrix regeneration, all three the R2237 first item."
     ],
@@ -627,14 +636,14 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 19,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 5,
     "proposals_open": 3,
-    "queue_main_open": 6,
+    "queue_main_open": 9,
     "queue_tech_open": 5,
-    "queue_explore_open": 3
+    "queue_explore_open": 2
   }
 }

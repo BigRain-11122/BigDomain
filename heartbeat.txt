@@ -1,1 +1,1 @@
-2236 tick 2026-10-29 R2236 product window: api_seller_rating_months (explore R2230 4/6) - suite 8/8 double-run; battery+fold carried
+2237 tick 2026-10-29 R2237 product window: api_category_watch_conversion_months (explore R2230 5/6) - suite 8/8 double-run; state fold 83849B->53651B; battery carried to R2238

@@ -15767,3 +15767,181 @@ class APIMarketFace:
                 months[-1]["returning_share"] if months else None),
             "disclaimer": self.disclaimer,
             "months": months}
+
+    def api_category_watch_conversion_months(
+            self, include_uncategorized=True):
+        """Per-category monthly watch-to-purchase conversion (criteria
+        AC-CWC1..AC-CWC8 pre-registered in the R2230 explore seed row
+        5/6 BEFORE this code existed; the AC-CWC prefix,
+        test_apimarket_categorywatchconversionmonths,
+        ledger-apimarket-categorywatchconversionmonths,
+        category_conversion_month_count and market_conversion_rate were
+        git-grep zero-occupancy against HEAD 2026-10-29, rc=1).
+
+        api_market_conversion_months answers the whole market on a
+        month axis, api_watch_conversion one listing's lifetime funnel
+        and api_category_watch_months the watch volume alone, so
+        whether one CATEGORY's attention actually turned into sales,
+        month over month, had no face - a bucket flooded with watchers
+        who never buy read exactly like a converting one once the
+        market rate was quoted.
+
+        Booking law, identical to the market face: a watch books ONLY
+        in the UTC month of its own watched_utc, an unwatch is not an
+        event for this face, and a purchase never re-dates the month.
+        Directional law: converted when the buyer's unrefunded purchase
+        on that listing is stamped at or after the watch stamp (equal
+        stamps convert at zero seconds); pre_owned when the unrefunded
+        purchase predates the watch, which can never convert and is
+        excluded from the funnel denominator; pending when there is no
+        purchase or the purchase was refunded, so a later refund cancels
+        a conversion in its own month without moving any month key.
+
+        The bucket is the category in force AT THE WATCH INSTANT
+        (_category_at_instant), so a later category revision never moves
+        a month already booked.
+
+        Rate and latency: conversion_rate is converted over funnel,
+        None when the funnel is empty and never a fabricated zero; a
+        month whose only rows are pre_owned reads None rather than 0.0.
+        The average is pooled over every converted watch in scope (not
+        the mean of the month means), the median is the middle value or
+        the midpoint for an even count, and all four latency fields are
+        None when nothing converted.
+
+        The grid is contiguous from the first to the last watch month,
+        so a month with no watch carries an honest zero row.
+
+        market_conversion_rate is the TRUE market rate of that month
+        computed over every watch regardless of this face's flag, so it
+        stays a stable benchmark column on both the month rows and the
+        category cells even when include_uncategorized=False drops a
+        bucket and recomputes every other aggregate without it. The flag
+        must be a real bool: any other value fails closed with
+        E_AM_BAD_ARGS before any read. Pure read: zero row mutations and
+        zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+
+        def _secs(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT w.watch_id, w.watched_utc, w.listing_id,"
+                " l.category, p.purchased_utc,"
+                " (SELECT 1 FROM apimarket_refunds f"
+                " WHERE f.purchase_id = p.purchase_id)"
+                " FROM apimarket_watchlist w"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = w.listing_id"
+                " LEFT JOIN apimarket_purchases p"
+                " ON p.listing_id = w.listing_id"
+                " AND p.buyer_id = w.buyer_id"
+                " ORDER BY w.watch_id").fetchall()
+            watches = []
+            for r in raw:
+                category = self._category_at_instant(
+                    int(r[2]), r[3], r[1])
+                purchased = r[4]
+                if purchased is None or r[5] is not None:
+                    state, seconds = "pending", None
+                else:
+                    delta = _secs(r[1], purchased)
+                    if delta < 0:
+                        state, seconds = "pre_owned", None
+                    else:
+                        state, seconds = "converted", delta
+                watches.append({"month": str(r[1])[:7],
+                                "category": category,
+                                "state": state,
+                                "seconds": seconds})
+
+        def _block(items):
+            total = len(items)
+            pre_owned = sum(1 for w in items
+                            if w["state"] == "pre_owned")
+            converted = sorted(w["seconds"] for w in items
+                               if w["state"] == "converted")
+            funnel = total - pre_owned
+            if converted:
+                mid = len(converted) // 2
+                median = (float(converted[mid]) if len(converted) % 2
+                          else (converted[mid - 1]
+                                + converted[mid]) / 2.0)
+                avg = float(sum(converted)) / len(converted)
+                fastest = converted[0]
+                slowest = converted[-1]
+            else:
+                median = None
+                avg = None
+                fastest = None
+                slowest = None
+            return {
+                "watch_count": total,
+                "pre_owned_count": pre_owned,
+                "funnel_count": funnel,
+                "converted_count": len(converted),
+                "pending_count": funnel - len(converted),
+                "conversion_rate": (float(len(converted)) / funnel
+                                    if funnel else None),
+                "avg_convert_seconds": avg,
+                "median_convert_seconds": median,
+                "fastest_convert_seconds": fastest,
+                "slowest_convert_seconds": slowest}
+
+        grid = _contiguous_months(sorted(set(w["month"]
+                                             for w in watches)))
+        per_month = {}
+        categories = set()
+        for watch in watches:
+            if watch["category"] is None and not include_uncategorized:
+                continue
+            per_month.setdefault(watch["month"], {}).setdefault(
+                watch["category"], []).append(watch)
+            categories.add(watch["category"])
+
+        market_benchmark = {}
+        for watch in watches:
+            market_benchmark.setdefault(
+                watch["month"], []).append(watch)
+        market_rate = {}
+        for month, items in market_benchmark.items():
+            market_rate[month] = _block(items)["conversion_rate"]
+
+        rows = []
+        for month in grid:
+            slot = per_month.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot and include_uncategorized:
+                ordered.append(None)
+            benchmark = market_rate.get(month)
+            cells = []
+            included = []
+            for category in ordered:
+                items = slot.get(category, [])
+                cell = {"category": category}
+                cell.update(_block(items))
+                cell["market_conversion_rate"] = benchmark
+                cells.append(cell)
+                included.extend(items)
+            row = {"month": month}
+            row.update(_block(included))
+            row["market_conversion_rate"] = benchmark
+            row["category_count"] = len(cells)
+            row["categories"] = cells
+            rows.append(row)
+
+        out = {"month_count": len(rows),
+               "first_month": rows[0]["month"] if rows else None,
+               "last_month": rows[-1]["month"] if rows else None}
+        out.update(_block(watches if include_uncategorized
+                          else [w for w in watches
+                                if w["category"] is not None]))
+        out["category_count"] = len(categories)
+        out["disclaimer"] = self.disclaimer
+        out["months"] = rows
+        return out

@@ -1,0 +1,6 @@
+test_apimarket_categorywatchmonths.py rc=0 SUITE 8/8
+test_apimarket_marketconversionmonths.py rc=0 SUITE 8/8
+test_apimarket_watchconversion.py rc=0 SUITE PASS 8/8
+test_apimarket_marketwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_sellerwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_buyerwatchmonths.py rc=0 SUITE 8/8

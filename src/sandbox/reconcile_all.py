@@ -2531,6 +2531,16 @@ SUITES = [
     # the R2210 explore-queue claim row BEFORE the code.
     ("ledger-apimarket-categorywatchmonths", os.path.join(
         "ledger", "test_apimarket_categorywatchmonths.py"), 8),
+    # per-category monthly watch-to-purchase conversion (the watch-month
+    # cohort law, the converted/pre_owned/pending legs with a refunded
+    # purchase reading pending, the contiguous grid with a None rate on
+    # a zero month, the watch-instant category seam, the true-market
+    # benchmark column, conservation and identity against the two source
+    # faces, the include_uncategorized gate and the pure-read law) -
+    # criteria AC-CWC1..AC-CWC8 registered in the R2230 explore seed row
+    # 5/6 BEFORE the code, in the R2237 window.
+    ("ledger-apimarket-categorywatchconversionmonths", os.path.join(
+        "ledger", "test_apimarket_categorywatchconversionmonths.py"), 8),
     # seller-side monthly watch-inflow timeline (the shared cash-basis
     # double stamp on a seller scope, the contiguous grid with a flat
     # zero month, the running net landing on the live count, the
