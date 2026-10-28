@@ -2647,6 +2647,19 @@ SUITES = [
     # R2231 window.
     ("ledger-apimarket-sellerquestionmonths", os.path.join(
         "ledger", "test_apimarket_sellerquestionmonths.py"), 8),
+    # buyer-side ANSWER WAIT on the month axis (an answer books in the
+    # month of its own answered_utc, so a February question discharged
+    # in March leaves February an honest zero row; the wait is measured
+    # asked->answered with the integer floor mean, honest None
+    # latencies on a zero month, the backlog split, the monotone
+    # running accumulator landing on the envelope total, the
+    # earlier-month peak tie-break, strict buyer isolation, the
+    # asked-side envelope against the answered-side rows, the
+    # api_buyer_questions identity and the pure-read law) - criteria
+    # AC-BAW1..AC-BAW8 registered in the R2230 explore-queue seed 2/6
+    # row BEFORE the code, in the R2232 window.
+    ("ledger-apimarket-buyeranswerwait", os.path.join(
+        "ledger", "test_apimarket_buyeranswerwait.py"), 8),
     ("ledger-apimarket-marketrelistmonths", os.path.join(
         "ledger", "test_apimarket_marketrelistmonths.py"), 8),
     # seller repricing cadence on the month axis (the step attribution

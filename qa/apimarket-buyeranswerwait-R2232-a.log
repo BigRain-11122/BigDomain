@@ -1,0 +1,10 @@
+PASS AC-BAW1: env_keys=21 exact=True row_keys=True empty=(0, [], None)
+PASS AC-BAW2: grid=['2026-01', '2026-02', '2026-03'] months=[2, 0, 2] totals=(6, 4, 2, 0.6667)
+PASS AC-BAW3: jan=(21607, 1296000, 658803) mar=(10800, 2160000, 1085400) env=(10800, 2160000, 872101)
+PASS AC-BAW4: split=[(0, 2, 2), (0, 0, 0), (1, 1, 2)] running=[2, 2, 4]
+PASS AC-BAW5: active=2 latest=2 peak=('2026-01', 2)
+PASS AC-BAW6: cy=(1, 1, 1, 1) bo=(6, 4, 3)
+PASS AC-BAW7: lifetime=(6, 4, 2, 3) env=(6, 4, 3, 2) rows=[(1, 2), (0, 0), (2, 2)]
+PASS AC-BAW8: gate=['E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT', 'E_AM_BAD_ACCOUNT'] bytes_same=True digests_same=True tx_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
