@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T16:06:12+08:00",
-  "do": "product window R2263 on the P2 tech head: the queue-only residue state_seq reports is split into FOLDED (aged out of the log window) and NEVER-LOGGED (a round that claimed a queue row and left no log item), so a silently dropped ledger line can no longer hide behind a residue count that looks honest either way.",
+  "export_ts": "2026-10-29T16:33:13+08:00",
+  "do": "verification window R2264 on the debt register first item: the whole reconcile battery and the suite matrix were re-proven on the committed tree with zero product code changed, so the R2263 reader is covered by every suite and not only by its own plus neighbours.",
   "ceo_face": {
-    "current": "R2263 产品窗：队列已完成轮次与日志的残差不再是「一个数」，而是分成了两类——本该随日志窗口滚出去的（FOLDED）和从未写进日志的（NEVER-LOGGED）。此前 state_seq 报「156 个已完成轮次在日志里找不到」，但分不清是合法滚出还是真的漏写，于是一条被静默丢掉的台账行，看起来和正常老化一模一样。本轮把它变成读数：必须显式给出窗口下界，每一条盖章轮次被判为 已记录 / 已滚出 / 从未记录，三类计数必须相加等于盖章总数才出判决，盖章与标签的判定法直接从 state_seq 复用（套件把这两个函数打桩来证明没有第二份实现），只读零写、输入不可读时 fail-closed 退出 3。",
-    "latest_artifact": "src/os/queue_only_reconcile.py（新面·6 判据 AC-QOC1..AC-QOC6）+ qa/queue-only-R2263.log（双跑判据行逐字节同一·1839B·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出——本轮用的是它自己接管证据仪式）+ 五邻域套件同批全绿·接线 os-queue-only(6)",
-    "next_milestone": "R2264 验证窗：本轮改了 src/os 并新增套件与接线，按 R2168 混树律下一窗先还验证债——在已提交树上跑全量对账电池 + 套件矩阵再生（预期 436 套件 / 3593 判据，较 R2262 的 435/3587 恰为本轮新套件），零产品代码改动；随后四个 follow-up 段全 PASS。",
-    "next_milestone_due": "2026-10-31T04:06:12+08:00",
-    "last_artifact": "qa/queue-only-R2263.log（R2263·2026-10-29）"
+    "current": "R2264 是验证轮：在已提交的树上重跑全量回归，不碰产品码。电池一次通过 436/436 套件 + 7/7 控制项（856.5s），矩阵再生到 436 套件 / 3593 判据，指纹 CLEAN、跑手档 PASS、证据写者普查 DRIFT-CLEAN（files=2210 flags=0）。本轮零产品码改动，得分诚实地记 0 分；目的是把上一轮新增的队列残留分类器纳入全量回归，避免「自己的套件绿、邻域其实已断」的假绿。",
+    "latest_artifact": "qa/reconcile-all-R2264.log（769785B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（436 套件 / 3593 判据·42342B·green=436/436）+ 四段收尾工具 src/os/battery_followup_R2264.py",
+    "last_artifact": "src/os/queue_only_reconcile.py（新面·6 判据 AC-QOC1..AC-QOC6）+ qa/queue-only-R2263.log（双跑判据行逐字节同一·1839B·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出——本轮用的是它自己接管证据仪式）+ 五邻域套件同批全绿·接线 os-queue-only(6)",
+    "next_milestone": "R2265 回到产品面：认领队头可交付行（R2263 补种的 log_floor 技术行，或 explore 队头 api_seller_refund_months），判据先写进队列行再动代码，锚点先验零占用；预计 2026-10-30 前出可跑实物",
+    "next_milestone_due": "2026-10-30T23:59:59+08:00"
   },
   "depts": [
     {
@@ -167,7 +167,7 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2263",
+      "2264",
       "OSLoop 执行 tick"
     ],
     [
@@ -181,6 +181,10 @@
     [
       "R2262",
       "R2262 verification window on the debt register first item (reconcile-battery-R2262): first run RED, RUNNER FAIL with 2 failed assertions in 861.6s (qa/reconcile-all-R2262.log, kept as the red leg) - suite reconcile-daily-census criterion cd7-live-real-tree exit=2 drift, plus the aggregate control that counts green suites (434/435) and the criteria total. The root cause was a real evidence-hygiene defect, not a flake: qa/reconcile-all-R2260.log carried 35 CRLF lines because the R2260 follow-up appended captured subprocess bodies verbatim, and the census re-freeze in that same follow-up ran BEFORE the append, so the file was frozen as tee and the next census would always see class=other. Repair: src/os/evidence_normalize_R2262.py rewrites the file through run_identity.normalize - crlf 35->0, bare_cr 0, payload line set identical, sha16 2b9e9a1afbff90ba before and after (768425B -> 768390B) - and the census re-checked DRIFT-CLEAN with files=2207 flags=0. Second run on the committed repair tree (commit bf07f5e5): RUNNER PASS 435/435 suites plus controls 7/7 in 745.3s, expected criteria total=3587, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2262-retry.log, single-writer utf-8 LF through battery_stream.py, never a shell redirection). Four follow-up sections all PASS via src/os/battery_followup_R2262.py, which now CRLF-normalizes every captured body and runs the census LAST: matrix regenerated to 435 suites / 3587 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42285B, green=435/435), fingerprint chain CLEAN over five domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2208 tee=1679 baselined=529 flags=0, and the log's own EOL self-check crlf=0 bare_cr=0 bom=False over 769003B. The +1 suite / +6 criteria against R2260 is exactly the R2261 os-evidence-capture suite joining the registry. Zero product code changed (the R2168 mixed-tree rule), so the honest score is 0 product points; the two new modules are the repair helper and the hardened follow-up."
+    ],
+    [
+      "R2264",
+      "R2264 verification window on the debt register first item (product-face-R2264 = reconcile battery): zero product code changed (the R2168 mixed-tree rule). RUNNER PASS 436/436 suites plus controls 7/7 in 856.5s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2264.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total 3593. Four follow-up sections all PASS via src/os/battery_followup_R2264.py - matrix 436 suites / 3593 criteria byte-identical (42342B, green=436/436), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2210 tee=1681 baselined=529 disappeared=0 flags=0, VERDICT PASS. The +1 suite / +6 criteria against R2262 is exactly the R2263 os-queue-only suite joining the registry and the pre-registered prediction matched the measured total exactly. Honest score 0 product points; heartbeat.txt backfilled ticks 2260..2264 from the state log. Register row closed, successor product-face-R2265 opened first=yes."
     ]
   ],
   "self_drive": {
