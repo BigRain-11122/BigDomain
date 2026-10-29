@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T13:04:36+08:00",
-  "do": "verification window R2254: the full reconcile battery plus the suite-matrix regeneration run on the committed tree with zero product code changed (the R2168 mixed-tree rule) - RUNNER PASS 431/431 suites plus controls 7/7 in 881.2s, matrix 431 suites / 3564 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN",
+  "export_ts": "2026-10-29T13:13:07+08:00",
+  "do": "product window R2255: the claim-to-file link becomes a reading (src/os/round_evidence.py) - every round that claims SUITE PASS or RUNNER PASS in its own log item must have a qa/ file naming that exact round token; SUITE PASS 6/6 double-run byte-identical criterion sha16 3C0E17EAD15E9B61, five adjacent os suites green, live reading rounds=13 claiming=11 with_files=11 missing=0 verdict=EVIDENCE-OK; the full battery and the suite-matrix regeneration carry to R2256",
   "ceo_face": {
-    "current": "R2254 验证窗：把 R2253 的两个新面接进全量体检——431 套件全绿、3564 条判据、矩阵逐字节同一，指纹/画像/证据普查全过。本轮没有新产品面（0 分，只买回验证欠账）。",
-    "latest_artifact": "qa/reconcile-all-R2254.log（764782B·单写者 UTF-8 LF·RUNNER PASS 431/431·881.2s）+ docs/sandbox-suite-matrix.md（41967B·green=431/431）·2026-10-29",
-    "next_milestone": "R2255 回到产品面：认领队列头一张新读面，判据先写进队列行再动代码；今天的体检结果作为它的覆盖背书",
-    "next_milestone_due": "2026-10-30T10:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2254.log + docs/sandbox-suite-matrix.md（R2254·2026-10-29）"
+    "current": "R2255 产品面：回合声称有证据、证据件是否真的在盘，现在是一道能跑的读数（src/os/round_evidence.py）。实况：13 个回合里 11 个声称通过，11 个都有对应 qa/ 证据件，缺口 0（EVIDENCE-OK）。同窗补种一条真活种子，三线队列回到 main 5/5、tech 10/10、explore 10/10。",
+    "latest_artifact": "qa/round-evidence-R2255-a.log / -b.log（各 452B，单写者 UTF-8 LF，双跑判据行逐字节同一 sha16 3C0E17EAD15E9B61）；src/os/round_evidence.py（新读数）；qa/regression-R2255.log（五邻接全绿）；2026-10-29 13:1x",
+    "next_milestone": "R2256：在已提交树上跑全量电池 + 套件矩阵再生（预计 432 套件 / 3570 判据），把本轮新读数纳入全量覆盖",
+    "next_milestone_due": "2026-10-30T12:00:00+08:00",
+    "last_artifact": "qa/round-evidence-R2255-a.log + -b.log（R2255·2026-10-29）"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "round evidence reader: a round claiming SUITE PASS must have a qa/ file naming that round",
+      "on",
+      "R2255: src/os/round_evidence.py extracts only each log item own round label (body mentions of older rounds invent no obligation), maps whole round tokens in qa/ file names (R2254 never borrows R22541), pins the claim markers, reports claiming rounds with zero files at exit 2, reads an empty log as EMPTY and a broken state.json as exit 3; suite 6/6 double-run byte-identical, wired os-round-evidence(6)"
+    ],
     [
       "export freshness gate: the CEO-visible face is now judged on time as well as shape (R2250)",
       "on",
@@ -98,10 +103,6 @@
     ]
   ],
   "results": [
-    [
-      "R2252",
-      "verification window on the debt register first item: full reconcile battery RUNNER PASS 430/430 suites plus controls 7/7 in 798.1s, tmp reclaim 932/932 worlds 326.57 MiB, four follow-up sections all PASS (matrix 430 suites / 3558 criteria byte-identical, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2188 flags=0), VERDICT PASS; the +2 suites and +12 criteria against R2249 are exactly the R2250 export-freshness and R2251 debt-append suites joining the registry; zero product code changed on the committed tree (the R2168 mixed-tree rule)"
-    ],
     [
       "R2251",
       "product window on the P2 tech head (R2248 a seed): the debt register gets a writer that uses the reader own law - build_row/plan/append_row in src/os/debt_append.py, a duplicate item and a second open first=yes refused before any byte changes, one atomic replace proved by a read-back equal to the prediction, a dry run that writes nothing, CLI 0/2/3/5 and a pinned --json order; criteria AC-DEBTA1..AC-DEBTA6 pre-registered in the queue row BEFORE the code; SUITE PASS 6/6 double-run byte-identical criterion sha16 5FE50139B98BB77F, five adjacent os suites green, wired os-debt-append(6); the close dropped the tech floor to 9/10 so one real gap row (debt_close, AC-DEBC1..6) was seeded and the gauge reads FLOOR-MET 10/10; the battery and the matrix regeneration were not run and stay first=yes in state/debt.md"
@@ -171,21 +172,25 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2254",
+      "2255",
       "OSLoop 执行 tick"
     ],
     [
       "R2254",
       "R2254 verification window on the committed tree: RUNNER PASS 431/431 suites green plus reconcile controls 7/7 in 881.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3564; four follow-up sections all PASS via src/os/battery_followup_R2254.py - matrix 431 suites / 3564 criteria read back byte-identical (41967B, green=431/431), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2192 tee=1663 baselined=529 flags=0. The +1 suite / +6 criteria against R2252 is exactly the R2253 os-queue-row suite joining the registry. Register row reconcile-battery-R2254 closed, successor product-face-R2255 opened as first=yes. Zero product code changed: a 0-point verification window."
+    ],
+    [
+      "R2255",
+      "R2255 product window on the P2 tech head: round_evidence.py with its six pre-pinned criteria (AC-RQE1..AC-RQE6, disclosed prefix substitution from the occupied AC-REV family), SUITE PASS 6/6 double-run byte-identical criterion sha16 3C0E17EAD15E9B61 (452B legs, single writer utf-8 LF), five adjacent os suites green (fails=0), live EVIDENCE-OK rounds=13 claiming=11 with_files=11 missing=0 files=2192, one gap seed row landed and the floor gauge closed FLOOR-MET main 5/5 tech 10/10 explore 10/10; battery and matrix regeneration registered first=yes as reconcile-battery-R2256"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

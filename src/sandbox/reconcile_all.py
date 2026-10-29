@@ -4402,6 +4402,15 @@ SUITES = [
     # R2248 b seed BEFORE the code existed.)
     ("os-queue-row",
      os.path.join("..", "os", "test_queue_row.py"), 6),
+    # R2255: the claim-to-file link becomes a reading - a round that says
+    # SUITE PASS in its own log item must have a qa/ file naming that exact
+    # round token, so a passing claim can no longer stand on prose alone.
+    # (AC-RQE1..AC-RQE6 pinned in state/queue/tech.md as the R2248 c seed
+    # BEFORE the code existed; the AC-REV prefix that seed suggested was
+    # already occupied by other criteria families, so AC-RQE was registered
+    # instead - disclosed, no criterion relaxed.)
+    ("os-round-evidence",
+     os.path.join("..", "os", "test_round_evidence.py"), 6),
     ]
 
 FAILS = 0

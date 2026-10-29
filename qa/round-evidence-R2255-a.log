@@ -1,0 +1,9 @@
+RUN A rc=0 suite=test_round_evidence.py
+round_evidence suite (expected criteria 6)
+PASS AC-RQE1 own round label extracted, body mentions ignored
+PASS AC-RQE2 whole round token mapped, fragments refused
+PASS AC-RQE3 pinned claim markers, prose is not a claim
+PASS AC-RQE4 missing evidence reported, exit 2
+PASS AC-RQE5 honest empty, absent and broken state exit 3
+PASS AC-RQE6 pure read, ASCII source, no network, wired, byte-stable json
+SUITE PASS 6/6

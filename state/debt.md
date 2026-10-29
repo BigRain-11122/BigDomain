@@ -18,8 +18,10 @@ column-0 checkbox starts one.
 
 ## Open
 
+- [ ] opened=R2255 | item=reconcile-battery-R2256 | note=R2255 changed src/os (round_evidence.py, test_round_evidence.py, evidence_R2255.py), one runner entry and three queue/board files; the newest slice is only covered by its own six criteria plus five neighbours, so the next window runs the full battery and the suite-matrix regeneration on the committed tree with zero product code changed (the R2168 mixed-tree rule) | first=yes
+
 - [ ] opened=R2231 | item=loop-s4u-reconcile | note=BigDomain-OSLoop principal reads InteractiveToken, which the 2026-09-29 machine law forbids for lane tasks; repair needs an elevated shell (twenty-third consecutive disclosure at R2254) | first=no
-- [ ] opened=R2254 | item=product-face-R2255 | note=battery is clear again (431 suites / 3564 criteria on the committed tree), the floors read main 5/5 tech 10/10 explore 10/10 FLOOR-MET and the P1 canonical rows stay blocked-on-CEO, so R2255 claims the top real queue row and ships one product face; pre-register its criteria INSIDE the queue row before the code, run the zero-occupancy anchor check at HEAD before writing anything, and do not run the battery in the same window as a product edit unless the tree is committed first (the R2168 mixed-tree rule) | first=yes
+- [x] opened=R2254 | item=product-face-R2255 | note=discharged at R2255: the register named it first=yes, the floors read main 5/5 tech 9/10 explore 10/10 at open (tech was short by the one row this window consumed, so one real gap row was seeded in the same window and the gauge closed at FLOOR-MET 10/10), the P1 canonical rows stay blocked-on-CEO, so the window claimed the top real tech row (the R2248 c seed round_evidence) and shipped one product face with its criteria pinned in the row BEFORE the code; battery debt opened as its successor | closed=R2255
 
 ## Closed
 
