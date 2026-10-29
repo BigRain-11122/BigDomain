@@ -1,0 +1,11 @@
+RUN A rc=0 suite=test_apimarket_categoryratingmonths.py
+PASS AC-CRA1: env_keys=15 exact=True rows=True cells=True empty=(0, None, None)
+PASS AC-CRA2: jan_tools=(2, 5) mar_data=(1, 3) grid=['2026-01', '2026-02', '2026-03', '2026-04']
+PASS AC-CRA3: feb=(0, None, [], 3) active=3 months=4 running=[3, 3, 4, 6]
+PASS AC-CRA4: sum=True jan_tools=(2.5, 0, 1) env_avg=3.17 pooled=3.17 mom=3.28
+PASS AC-CRA5: jan_cells=2 jan_data=(1, 2) mar_cells=1 buckets=3
+PASS AC-CRA6: full=(6, 3) tight=(5, 2) flag_gate=7/7
+PASS AC-CRA7: repeat=True cross=(6, 5, 3.17) digests=True tx=True
+PASS AC-CRA8: bytes_same=True wired=True ascii=True crlf_clean=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

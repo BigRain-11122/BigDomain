@@ -2635,6 +2635,16 @@ SUITES = [
     # code, in the R2236 window.
     ("ledger-apimarket-sellerratingmonths", os.path.join(
         "ledger", "test_apimarket_sellerratingmonths.py"), 8),
+    # per-category monthly rating intake on the month axis (the
+    # booking law on rated_utc with the revision seam moving only the
+    # effective stars, the category seam so a later revise_category
+    # never rewrites a booked month, the contiguous grid with an honest
+    # zero month, the cells summing into their row, the pooled envelope
+    # average, the uncategorized flag, and the pure-read law) -
+    # criteria AC-CRA1..AC-CRA8 registered in the R2240 explore-queue
+    # 2/6 seed row BEFORE the code, in the R2242 window.
+    ("ledger-apimarket-categoryratingmonths", os.path.join(
+        "ledger", "test_apimarket_categoryratingmonths.py"), 8),
     # market-wide pre-sale question volume on the month axis (the
     # booking law that credits the answering leg to the asking month, an
     # answer landing after the last asking month never extending the

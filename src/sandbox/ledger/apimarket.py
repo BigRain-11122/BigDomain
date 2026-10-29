@@ -15946,6 +15946,146 @@ class APIMarketFace:
         out["months"] = rows
         return out
 
+    def api_category_rating_months(self, include_uncategorized=True):
+        """Per-category monthly rating intake and star level (criteria
+        AC-CRA1..AC-CRA8 pre-registered in the R2240 explore-queue
+        seed row 2/6 BEFORE this code existed; the seed suggested the
+        prefix AC-CRM2, which collides with the AC-CRM2 criterion the
+        category-refund suite already ships, so a fresh non-colliding
+        AC-CRA prefix was registered in that same claim row instead -
+        disclosed, no criterion relaxed. Anchor check at HEAD
+        2026-10-29: test_apimarket_categoryratingmonths,
+        ledger-apimarket-categoryratingmonths and
+        rating_category_cell were git grep -F zero-occupancy rc=1,
+        while the face name appeared only in the seed row and the
+        seed-queue script).
+
+        api_market_rating_months and api_seller_rating_months both
+        publish the month axis, but never by category, so a bucket
+        whose service quality moved reads exactly like the market
+        average around it: a category drowning in two-star intakes
+        and one carried by five-star intakes are the same shape once
+        only the global column is quoted.
+
+        Booking law: a rating books in the UTC month of its own
+        immutable rated_utc, and a revision never moves the month nor
+        adds one - it only moves the EFFECTIVE stars through the
+        single _effective_stars seam, so a January five-star rating
+        revised to one star still counts in January and lowers that
+        row's mean.
+
+        Bucket law: the bucket is the category in force AT THE
+        RATING INSTANT (_category_at_instant), so a later
+        revise_category never rewrites a month already booked, while
+        ratings landing after the revision fall into the new bucket.
+        A listing with no declared category forms its own
+        uncategorized bucket, never silently merged into a named one.
+
+        Grid law: rows are the contiguous grid from the first to the
+        last rating month, so a month with no rating carries an
+        honest zero row whose average is None rather than a
+        fabricated 0.0, and running_rating stays flat across it.
+
+        Star law: the envelope average is POOLED over every rating in
+        scope, never a mean of the monthly means; each month row is
+        the sum of its category cells, and each cell is the pooled
+        reading of that bucket in that month.
+
+        Flag law: include_uncategorized must be a real bool - any
+        other value fails closed with E_AM_BAD_ARGS before any read.
+        False drops the uncategorized bucket and recomputes every
+        aggregate without it. Pure read: zero row mutations and zero
+        token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT r.rating_id, r.stars, r.rated_utc,"
+                " r.listing_id, r.buyer_id, l.category"
+                " FROM apimarket_ratings r"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = r.listing_id"
+                " ORDER BY r.rating_id").fetchall()
+            samples = []
+            for r in raw:
+                samples.append({
+                    "month": str(r[2])[:7],
+                    "category": self._category_at_instant(
+                        int(r[3]), r[5], r[2]),
+                    "stars": self._effective_stars(
+                        int(r[0]), int(r[1])),
+                    "buyer": r[4]})
+
+        def _block(items):
+            total = len(items)
+            star_sum = sum(item["stars"] for item in items)
+            return {
+                "rating_count": total,
+                "buyer_count": len(set(i["buyer"] for i in items)),
+                "star_sum": star_sum,
+                "avg_stars": (round(star_sum / float(total), 2)
+                              if total else None),
+                "five_star_count": sum(1 for i in items
+                                       if i["stars"] == 5),
+                "low_star_count": sum(1 for i in items
+                                      if i["stars"] <= 2)}
+
+        grid = _contiguous_months(sorted(set(s["month"]
+                                             for s in samples)))
+        per_month = {}
+        for sample in samples:
+            if sample["category"] is None and not include_uncategorized:
+                continue
+            per_month.setdefault(sample["month"], {}).setdefault(
+                sample["category"], []).append(sample)
+
+        rows = []
+        running = 0
+        for month in grid:
+            slot = per_month.get(month, {})
+            ordered = sorted(c for c in slot if c is not None)
+            if None in slot and include_uncategorized:
+                ordered.append(None)
+            cells = []
+            included = []
+            for category in ordered:
+                items = slot.get(category, [])
+                cell = {"category": category}
+                cell.update(_block(items))
+                cells.append(cell)
+                included.extend(items)
+            running += len(included)
+            row = {"month": month}
+            row.update(_block(included))
+            row["category_count"] = len(cells)
+            row["running_rating"] = running
+            row["categories"] = cells
+            rows.append(row)
+
+        scoped = [s for s in samples
+                  if include_uncategorized or s["category"] is not None]
+        out = {"month_count": len(rows),
+               "active_month_count": sum(
+                   1 for row in rows if row["rating_count"] > 0),
+               "first_month": rows[0]["month"] if rows else None,
+               "last_month": rows[-1]["month"] if rows else None}
+        out.update(_block(scoped))
+        out["category_count"] = len(set(s["category"] for s in scoped))
+        peak_month = None
+        peak_count = None
+        for row in rows:
+            if row["rating_count"] > 0 and (
+                    peak_count is None
+                    or row["rating_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["rating_count"]
+        out["peak_month"] = peak_month
+        out["peak_rating_count"] = peak_count
+        out["disclaimer"] = self.disclaimer
+        out["months"] = rows
+        return out
+
     def api_seller_price_demand_months(self, dev_account=None):
         """Monthly repricing response to demand (criteria
         AC-SPD1..AC-SPD8 pre-registered in the R2240 explore-queue
