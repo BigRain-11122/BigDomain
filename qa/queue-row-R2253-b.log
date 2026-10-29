@@ -1,0 +1,9 @@
+RUN B rc=0 suite=test_queue_row.py
+queue_row suite (expected criteria 6)
+PASS AC-QROW1 row law reused from queue_floor, narrow row shape
+PASS AC-QROW2 two declaration forms pass, bare rows refused
+PASS AC-QROW3 gated rows exempt and reported, claimable refused
+PASS AC-QROW4 refusal names file and line, counts conserve
+PASS AC-QROW5 CLI codes 0/2/3, --json pinned and byte-stable
+PASS AC-QROW6 pure read, ASCII source, no network, wired
+SUITE PASS 6/6

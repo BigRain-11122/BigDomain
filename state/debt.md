@@ -19,6 +19,7 @@ column-0 checkbox starts one.
 ## Open
 
 - [ ] opened=R2231 | item=loop-s4u-reconcile | note=BigDomain-OSLoop principal reads InteractiveToken, which the 2026-09-29 machine law forbids for lane tasks; repair needs an elevated shell (twenty-first consecutive disclosure at R2251) | first=no
+- [ ] opened=R2253 | item=reconcile-battery-R2254 | note=R2253 changed src/os (queue_row.py, test_queue_row.py, wire_R2253.py, evidence_R2253.py), one runner entry and two queue files; the full battery and the suite-matrix regeneration were not run in the 25-minute window (the R2168 mixed-tree rule), so run them on the committed tree first thing at R2254 | first=yes
 
 ## Closed
 

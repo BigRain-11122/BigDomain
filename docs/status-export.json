@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T12:26:00+08:00",
-  "do": "verification window R2252: the debt register first item is closed on the committed tree - full reconcile battery RUNNER PASS 430/430 suites plus controls 7/7 in 798.1s (qa/reconcile-all-R2252.log), then matrix 430 suites / 3558 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2188; zero product code changed",
+  "export_ts": "2026-10-29T12:41:00+08:00",
+  "do": "product window R2253: the queue gains a pre-registration gate - src/os/queue_row.py refuses a claimable open row that names no criteria prefix (two pinned forms, gated rows exempt but reported), suite 6/6 double-run byte-identical, live reading claimable=25 prefixed=16 violations=9 GATE-DEBT",
   "ceo_face": {
-    "current": "R2252 验证轮：把 R2250/R2251 两批新代码交给全量电池，430 套件全绿（含两个新套件），验证欠账清零",
-    "latest_artifact": "qa/reconcile-all-R2252.log（764259B·单写者 UTF-8 LF·含 RUNNER PASS 430/430 + 四段跟进结果 + VERDICT PASS）+ docs/sandbox-suite-matrix.md（430 套件 / 3558 判据·41900B）·2026-10-29 R2252",
-    "next_milestone": "R2253 回到产品面：认领 tech/explore 队头（两条队列均 10/10 达标），预注册判据后交付一个新读面，并在同窗补满验证",
-    "next_milestone_due": "2026-10-30T13:20:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2252.log + docs/sandbox-suite-matrix.md（R2252·2026-10-29）"
+    "current": "R2253 产品窗：队列预注册闸上线——可认领的开行必须写明判据前缀，闸读活队列 25 可认领 / 16 已声明 / 9 条历史欠账（如实报红不豁免）",
+    "latest_artifact": "src/os/queue_row.py + qa/queue-row-R2253-a.log（453B·单写者 UTF-8 LF·SUITE PASS 6/6 双跑逐字节同一 sha16 FEA1FEEF8476A141）·2026-10-29 R2253",
+    "next_milestone": "R2254：先清验证欠账（全量电池 + 套件矩阵再生，含新接线的 os-queue-row(6)），再按队列闸自己报出的欠账补一条豁免登记面",
+    "next_milestone_due": "2026-10-31T10:00:00+08:00",
+    "last_artifact": "src/os/queue_row.py + qa/queue-row-R2253-a.log（R2253·2026-10-29）"
   },
   "depts": [
     {
@@ -90,6 +90,11 @@
       "per-category monthly watch-to-purchase conversion face (R2237)",
       "on",
       "api_category_watch_conversion_months(include_uncategorized=True): sixteen-key envelope, fourteen-key month rows, twelve-key category cells; the watch-month cohort law (an unwatch is not an event, a purchase never re-dates the month); the three legs (converted at or after the watch stamp incl. equal stamps at zero seconds, pre_owned excluded from the funnel, pending that also absorbs a refunded purchase so the April cancellation lands as a real 0.0 and a pre_owned-only January cell reads None); contiguous JAN..MAY grid with a zero February carrying None rate and None latencies; the watch-instant category seam; the TRUE market benchmark column that survives the trimmed view (0.5 row against a 1/3 benchmark); identity with api_category_watch_months (7 watches) and api_market_conversion_months (2 converted / 1 pre_owned / 4 pending); pooled 216000.0 average and median against 172800/259200 extremes; seven-form bool gate failing closed before any read. Evidence: SUITE 8/8 double-run byte-identical criterion sha16 50e5228778f319c9 (904B per leg, utf-8 LF by src/os/evidence_R2237.py), wired ledger-apimarket-categorywatchconversionmonths(8), six adjacent suites green."
+    ],
+    [
+      "queue pre-registration gate (R2253)",
+      "on",
+      "src/os/queue_row.py: a claimable open queue row must name its criteria prefix, so pre-registration is a gate instead of a habit. Two pinned forms (Criteria prefix AC-<TOKEN>, Criteria AC-<TOKEN><n>), the row law imported from queue_floor rather than re-implemented, gated rows exempt but still reported, every refusal carrying file/line/excerpt. Suite 6/6 double-run byte-identical sha16 FEA1FEEF8476A141 through the single-writer evidence script, wired as os-queue-row(6). Live reading: 25 claimable, 16 prefixed, 9 legacy violations reported as debt."
     ]
   ],
   "results": [
@@ -166,17 +171,17 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2252",
+      "2253",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
