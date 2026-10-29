@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T14:32:31+08:00",
-  "do": "product window R2259: a seed's face name is now a reading instead of a hand-run git grep - one module with two scopes (HEAD and the working tree including untracked files), a FREE/OCCUPIED verdict whose counts reconcile, and a refusal on any hit",
+  "export_ts": "2026-10-29T14:59:40+08:00",
+  "do": "verification window R2260: the full reconcile battery ran on the committed R2259 tree (5d1cbce7) with zero product code changed - 434/434 suites green plus controls 7/7 in 732.0s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB, expected criteria total 3581, then the four post-battery sections all PASS (matrix 434 suites / 3581 criteria byte-identical, fingerprint CLEAN over 5 domains, runner profile --daily --check PASS, qa writer census DRIFT-CLEAN files=2204); no product face this window, only the verification debt",
   "ceo_face": {
-    "current": "R2259 产品窗：把「播种前的名字零占用检查」从一条手敲的 git grep 变成可跑读面——src/os/seed_anchor.py 双作用域检查（HEAD 已提交版本 + 工作树含未跟踪文件），命中逐条点名（针/作用域/文件/行），FREE/OCCUPIED 判决与计数互相对得上，任何命中一律拒绝播种（退出码 2 + REFUSE TO SEED）。判据 AC-SAN1..AC-SAN5 先写进队列行再动代码，锚点 HEAD 零占用检查存档。套件 5/5 双跑逐字节同一（sha16 42FAF3CADB8BEEF9），五个相邻套件全绿，已接线 os-seed-anchor(5)。实测：文本里出现过的名字 seed_anchor 读作 OCCUPIED，而新标签 os-seed-anchor 在 HEAD 仍 FREE、只在工作树里被占用——这正是第二作用域存在的理由。",
-    "latest_artifact": "qa/seed-anchor-R2259-a.log 与 -b.log（各 429B，双跑判据行逐字节同一）、qa/regression-R2259.log（相邻五套件 fails=0）、src/os/seed_anchor.py、src/os/test_seed_anchor.py；2026-10-29",
-    "next_milestone": "R2260 验证轮：在已提交树上跑全量对账电池 + 套件矩阵重生成（零产品代码改动，R2168 混合树律），把本轮新套件纳入整批回归",
+    "current": "R2260 验证窗：全量电池在已提交的 R2259 树上跑完，434/434 套件全绿（判据 3581·732.0s），电池后四段（矩阵再生 / 指纹链 / runner profile / qa 写入者普查）全 PASS。本轮无新产品功能——买的是确定性：R2259 新增的 seed_anchor 套件现已由全量电池覆盖，不再只靠它自己五条判据加邻居。",
+    "latest_artifact": "qa/reconcile-all-R2260.log（电池完整证据·434/434 绿·TMP 回收 932/932 世界）+ docs/sandbox-suite-matrix.md（434 套件 / 3581 判据·42181B）·2026-10-29",
+    "next_milestone": "R2261 产品窗：认领 tech/explore 队头可交付行，判据先写进队列行再动代码，交付一件可跑/可看/可用的实物",
     "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/seed-anchor-R2259-a.log（R2259，2026-10-29）"
+    "last_artifact": "qa/reconcile-all-R2260.log（R2260·2026-10-29）"
   },
   "depts": [
     {
@@ -163,17 +163,21 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2259",
+      "2260",
       "OSLoop 执行 tick"
+    ],
+    [
+      "R2260",
+      "R2260 verification window on the debt register first item (reconcile-battery-R2260): RUNNER PASS 434/434 suites plus controls 7/7 in 732.0s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2260.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total=3581; four follow-up sections all PASS via src/os/battery_followup_R2260.py - matrix regenerated to 434 suites / 3581 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42181B, green=434/434), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2204 tee=1675 baselined=529 flags=0, VERDICT PASS. The +1 suite / +5 criteria against R2258 is exactly the R2259 os-seed-anchor suite joining the registry. Zero product code changed (the R2168 mixed-tree rule), so the honest score is 0 product points; state.json measured 78004B against the 78500B waterline, so fold R594 ran first (log lines 1:25, 36907 content bytes, 514 tokens, token_missing empty, 78004B -> 45329B, predicted==actual)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 16,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
