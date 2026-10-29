@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2265 suite=src/os/test_log_floor.py legs=2
+== LEG A rc=0 digest=88509D0867078485
+PASS AC-LFL1 one pinned shape; a missing file is UNPINNED at exit 2, four malformed files are refused
+PASS AC-LFL2 a floor newer than the oldest live label is refused before any verdict; a floor equal to it is PINNED
+PASS AC-LFL3 a declared round earlier than the floor it declares is refused (E_LFL_DECL_ORDER)
+PASS AC-LFL4 a forward bump with no new declaration row is DRIFT naming both rounds; a declared move is PINNED
+PASS AC-LFL5 CLI exits 0/0/2/3 as pinned, --json is byte-stable over the seven keys, and the reading writes nothing
+LIVE LOG FLOOR floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED
+PASS AC-LFL6 pure ASCII, stdlib only, the label law read through state_seq, wired as os-log-floor(6), live reading issued
+SUITE PASS 6/6
+== LEG B rc=0 digest=88509D0867078485
+PASS AC-LFL1 one pinned shape; a missing file is UNPINNED at exit 2, four malformed files are refused
+PASS AC-LFL2 a floor newer than the oldest live label is refused before any verdict; a floor equal to it is PINNED
+PASS AC-LFL3 a declared round earlier than the floor it declares is refused (E_LFL_DECL_ORDER)
+PASS AC-LFL4 a forward bump with no new declaration row is DRIFT naming both rounds; a declared move is PINNED
+PASS AC-LFL5 CLI exits 0/0/2/3 as pinned, --json is byte-stable over the seven keys, and the reading writes nothing
+LIVE LOG FLOOR floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED
+PASS AC-LFL6 pure ASCII, stdlib only, the label law read through state_seq, wired as os-log-floor(6), live reading issued
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_only_reconcile.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_round_evidence.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=88509D0867078485

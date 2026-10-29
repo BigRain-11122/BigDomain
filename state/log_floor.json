@@ -1,0 +1,12 @@
+{
+  "floor": "R2249",
+  "declared_by": "R2265",
+  "reason": "R2263 derived this floor from the log's smallest label, which is blind at the window bottom edge: if the oldest logged round is itself the dropped one, nothing above it registers as debt. The floor is hereby declared and dated so it can only move through a new declaration row.",
+  "declarations": [
+    {
+      "floor": "R2249",
+      "declared_by": "R2265",
+      "reason": "first explicit declaration, set equal to the R2263 derived floor (oldest live log label) so the boundary is dated instead of inferred"
+    }
+  ]
+}

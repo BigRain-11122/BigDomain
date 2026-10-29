@@ -4442,6 +4442,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-only",
      os.path.join("..", "os", "test_queue_only_reconcile.py"), 6),
+    # R2265: the queue-only floor as a dated declaration. Its live reading
+    # derived that floor from the log's own smallest label, which is blind at
+    # the window bottom edge; a declared and dated floor can only move through
+    # a new declaration row, and a silent forward bump is DRIFT.
+    # (AC-LFL1..AC-LFL6 pinned in state/queue/tech.md as the R2263 seed row
+    # BEFORE the code existed.)
+    ("os-log-floor",
+     os.path.join("..", "os", "test_log_floor.py"), 6),
     ]
 
 FAILS = 0

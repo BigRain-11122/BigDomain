@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-29T16:33:13+08:00",
-  "do": "verification window R2264 on the debt register first item: the whole reconcile battery and the suite matrix were re-proven on the committed tree with zero product code changed, so the R2263 reader is covered by every suite and not only by its own plus neighbours.",
+  "export_ts": "2026-10-29T16:48:14+08:00",
+  "do": "product window R2265 on the debt register first item: the queue-only floor is now a dated declaration file instead of a number derived from the very log it judges, so the window bottom edge can no longer read RECONCILED while a ledger line is missing.",
   "ceo_face": {
-    "current": "R2264 是验证轮：在已提交的树上重跑全量回归，不碰产品码。电池一次通过 436/436 套件 + 7/7 控制项（856.5s），矩阵再生到 436 套件 / 3593 判据，指纹 CLEAN、跑手档 PASS、证据写者普查 DRIFT-CLEAN（files=2210 flags=0）。本轮零产品码改动，得分诚实地记 0 分；目的是把上一轮新增的队列残留分类器纳入全量回归，避免「自己的套件绿、邻域其实已断」的假绿。",
-    "latest_artifact": "qa/reconcile-all-R2264.log（769785B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（436 套件 / 3593 判据·42342B·green=436/436）+ 四段收尾工具 src/os/battery_followup_R2264.py",
-    "last_artifact": "src/os/queue_only_reconcile.py（新面·6 判据 AC-QOC1..AC-QOC6）+ qa/queue-only-R2263.log（双跑判据行逐字节同一·1839B·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出——本轮用的是它自己接管证据仪式）+ 五邻域套件同批全绿·接线 os-queue-only(6)",
-    "next_milestone": "R2265 回到产品面：认领队头可交付行（R2263 补种的 log_floor 技术行，或 explore 队头 api_seller_refund_months），判据先写进队列行再动代码，锚点先验零占用；预计 2026-10-30 前出可跑实物",
+    "current": "R2265 回到产品面，交付一个可跑实物：把「日志窗口下沿」这条判断从猜测变成文件声明。此前队列残留分类器自己从日志里推出地板轮号，若日志最老的一轮恰好就是丢掉的那一轮，缺口就永远看不见、判决照样读「已对账」。现在地板写进 state/log_floor.json（轮号+宣布轮+理由），并在判定前先自检声明本身是否自洽，再拒绝「比日志最老轮更新的地板」，最后把「没有新宣布行却悄悄前移的地板」判为漂移并点名两个轮号。判据 AC-LFL1..AC-LFL6 先写进行再动代码；双跑判据行逐字节同一（digest 88509D0867078485），五邻域套件同批全绿。实测输出：floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED，退出码 0。",
+    "latest_artifact": "qa/log-floor-R2265.log（2018B·双跑判据行同一·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出）+ state/log_floor.json（地板声明件：floor R2249 / declared_by R2265 / 1 条宣布行）+ src/os/log_floor.py",
+    "last_artifact": "qa/reconcile-all-R2264.log（769785B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（436 套件 / 3593 判据·42342B·green=436/436）+ 四段收尾工具 src/os/battery_followup_R2264.py",
+    "next_milestone": "R2266 先跑全量回归电池（本窗动了 src/os，按混树律先提交后验），再认领队头可交付行 queue_floor_decl——把「声明件」真正接进分裂器，消除声明与实际切分各说各话的缝",
     "next_milestone_due": "2026-10-30T23:59:59+08:00"
   },
   "depts": [
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "log floor as a dated declaration: the queue-only floor can no longer be inferred from the log it judges (R2265)",
+      "on",
+      "R2265: src/os/log_floor.py reads one pinned state/log_floor.json (floor, declared_by, reason, non-empty declarations rows) and answers three questions without guessing - is the declaration present and shaped as pinned (a missing file reads UNPINNED at exit 2, never a fabricated pass), is its own declaration consistent (a floor predating the round that declared it is refused E_LFL_DECL_ORDER before the file is used to measure anything), and is the effective floor still the one last declared (a bump with no new declaration row is DRIFT with BOTH rounds named, because a silent forward bump is exactly the failure the declaration exists to stop). A floor newer than the live log smallest label is refused too (E_LFL_FLOOR_AHEAD) because it would relabel real debt as age. The label law is imported from state_seq and the suite proves it by patching extract_labels. Criteria AC-LFL1..AC-LFL6 were pinned in state/queue/tech.md as the R2263 seed BEFORE the code, anchor check at HEAD zero-occupancy except prose and state files. Evidence: SUITE PASS 6/6 double-run with identical criterion digest 88509D0867078485 (qa/log-floor-R2265.log, 2018B, single writer utf-8 LF through the R2261 evidence_capture callable, which also ran five adjacent os suites green in the same capture), wired os-log-floor(6). Live: LOG FLOOR floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED, rc=0. Three defects found by the suite were fixed in the module, never by widening a criterion."
+    ],
     [
       "seed anchor reader: a seed's face name is provably free at HEAD and in the working tree (R2259)",
       "on",
@@ -167,7 +172,7 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2264",
+      "2265",
       "OSLoop 执行 tick"
     ],
     [
@@ -185,15 +190,19 @@
     [
       "R2264",
       "R2264 verification window on the debt register first item (product-face-R2264 = reconcile battery): zero product code changed (the R2168 mixed-tree rule). RUNNER PASS 436/436 suites plus controls 7/7 in 856.5s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2264.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total 3593. Four follow-up sections all PASS via src/os/battery_followup_R2264.py - matrix 436 suites / 3593 criteria byte-identical (42342B, green=436/436), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2210 tee=1681 baselined=529 disappeared=0 flags=0, VERDICT PASS. The +1 suite / +6 criteria against R2262 is exactly the R2263 os-queue-only suite joining the registry and the pre-registered prediction matched the measured total exactly. Honest score 0 product points; heartbeat.txt backfilled ticks 2260..2264 from the state log. Register row closed, successor product-face-R2265 opened first=yes."
+    ],
+    [
+      "R2265",
+      "R2265 product window on the debt register first item (product-face-R2265): the top deliverable tech row - the R2263 log_floor seed, six criteria already pinned BEFORE the code - shipped as src/os/log_floor.py plus state/log_floor.json plus src/os/test_log_floor.py. The queue-only floor was derived from the log own smallest label, which is blind at the window bottom edge: if the oldest logged round is itself the dropped one, nothing above it registers as debt and the verdict reads RECONCILED while a ledger line is missing. It is now a dated declaration with one pinned shape, judged for self-consistency before it is used to measure anything, refused when newer than the live oldest label, and DRIFT with both rounds named when it moves without a new declaration row. SUITE PASS 6/6 double-run identical criterion digest 88509D0867078485 (qa/log-floor-R2265.log 2018B, single writer utf-8 LF through the R2261 evidence_capture callable, five adjacent os suites green in the same capture), wired os-log-floor(6). LIVE LOG FLOOR floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED rc=0. The claim dropped tech to 9/10 so one real gap row was seeded (queue_floor_decl, AC-FDL1..AC-FDL6 pre-registered, six anchors zero-occupancy rc=1) and the gauge closed FLOOR-MET main 5/5 tech 10/10 explore 10/10. Honest seam disclosed rather than left as prose: the declaration has exactly one consumer, this reader, while queue_only_reconcile still takes its floor as a caller literal - that divergence is the seed above. Battery and matrix regeneration carry to R2266 (the R2168 mixed-tree rule). Honest score 2 points (one product face with its own suite)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
