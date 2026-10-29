@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T11:45:00+08:00",
-  "do": "product window R2250: the CEO-visible face gets its time axis judged (24h age gate, 48h milestone window, honest unknown when no due stamp is published), suite 6/6 double-run byte-identical, five adjacent os suites green, consistency checker re-run green",
+  "export_ts": "2026-10-29T12:04:44+08:00",
+  "do": "product window R2251: the debt register gets a writer that uses the reader own law (src/os/debt_append.py, AC-DEBTA1..6 pre-registered), suite 6/6 double-run byte-identical sha16 5FE50139B98BB77F, five adjacent os suites green, one seeding row keeps the tech floor at 10/10; the battery and the matrix regeneration carry to R2252",
   "ceo_face": {
-    "current": "R2250 產品輪：CEO 可見面補上「時間」這條軸。原本 docs/status-export.json 只被檢查形狀與派生（三行非空、export_ts 可解析、self_drive 重算、tick 行），於是「形狀完美但已是兩天前的面」和「里程碑報到三週後」都算綠。新件 src/os/export_freshness.py 只判時間：導出面齡對 24h 新鮮閘、公告里程碑對 48h 窗，時鐘由調用方注入故可重現；四種判決窮盡（FRESH／STALE-FACE／STALE-WINDOW／UNVERIFIABLE-WINDOW），未公布到期戳記一律報「不可判定」而非假綠（exit 4）；無 UTC 偏移的時間戳直接拒絕（E_EXP_BAD_TS）而非假設本地時區。形狀與派生仍歸 check_export_consistency，故非重複造輪——改動後一致性檢查重跑 exit 0。本窗導出面開始公布 next_milestone_due，閘因此由「不可判定」轉為 FRESH。",
-    "latest_artifact": "src/os/export_freshness.py（時間閘本體，四判決＋時鐘注入＋到期戳記未知不假綠）＋ src/os/test_export_freshness.py（AC-EXP1..AC-EXP6 判據套件 6/6）＋ qa/export-freshness-R2250-a.log / -b.log（單寫者 utf-8 LF 雙跑，466B 各，判據行 sha16 6B9DC44593508471 逐位元組同一）＋ qa/regression-R2250.log（五鄰套件全綠）；時間戳 2026-10-29 11:4x",
-    "next_milestone": "R2251 先還驗證債：在已提交樹上跑全量電池＋矩陣再生（state/debt.md 已登記 first=yes；R2168 混樹律＝電池窗內不改產品代碼），預計套件 428→429、判據 3546→3552（＝本窗 os-export-freshness(6) 入冊，須以實測對位不得沿用推算）；窗 ≤48h",
-    "next_milestone_due": "2026-10-30T11:45:00+08:00",
-    "last_artifact": "src/os/export_freshness.py + qa/export-freshness-R2250-a.log（R2250，2026-10-29 11:4x）；證據雙跑同一 sha16 6B9DC44593508471"
+    "current": "R2251 已收：债务登记册的写入口落地（debt_append·一行命令追加登记行·重复项与第二个 first=yes 前置拒绝·原子替换+读回证）",
+    "latest_artifact": "src/os/debt_append.py + src/os/test_debt_append.py（AC-DEBTA1..6 全绿）+ qa/debt-append-R2251-a.log / -b.log（双跑逐字节同一 sha16 5FE50139B98BB77F）+ qa/regression-R2251.log（邻接 5 套件零失败）·生成于 2026-10-29 R2251",
+    "next_milestone": "R2252：全量对账电池 + 套件矩阵再生跑在已提交树（预计套件 >=429·判据 >=3552），随后回到产品面继续清 tech 队头",
+    "next_milestone_due": "2026-10-31T12:04:44+08:00",
+    "last_artifact": "src/os/debt_append.py + qa/debt-append-R2251-a.log（R2251·2026-10-29）"
   },
   "depts": [
     {
@@ -94,6 +94,10 @@
   ],
   "results": [
     [
+      "R2251",
+      "product window on the P2 tech head (R2248 a seed): the debt register gets a writer that uses the reader own law - build_row/plan/append_row in src/os/debt_append.py, a duplicate item and a second open first=yes refused before any byte changes, one atomic replace proved by a read-back equal to the prediction, a dry run that writes nothing, CLI 0/2/3/5 and a pinned --json order; criteria AC-DEBTA1..AC-DEBTA6 pre-registered in the queue row BEFORE the code; SUITE PASS 6/6 double-run byte-identical criterion sha16 5FE50139B98BB77F, five adjacent os suites green, wired os-debt-append(6); the close dropped the tech floor to 9/10 so one real gap row (debt_close, AC-DEBC1..6) was seeded and the gauge reads FLOOR-MET 10/10; the battery and the matrix regeneration were not run and stay first=yes in state/debt.md"
+    ],
+    [
       "R2250",
       "product window on the P2 tech head: the export face's time axis as a reading - 24h age gate, 48h milestone window, honest unknown on a missing due stamp, refused naive stamps, four exhaustive verdicts, injected clock, CLI 0/2/3/4/5 and a pinned --json key order, wired into the runner and proved by a byte-identical double run plus five adjacent suites; the battery and the matrix regeneration are the R2251 first item and are registered in state/debt.md"
     ],
@@ -158,7 +162,7 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2250",
+      "2251",
       "OSLoop 执行 tick"
     ]
   ],

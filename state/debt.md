@@ -18,8 +18,8 @@ column-0 checkbox starts one.
 
 ## Open
 
-- [ ] opened=R2250 | item=reconcile-battery-and-matrix | note=R2250 changed src/os (export_freshness.py, test_export_freshness.py, evidence_R2250.py), src/sandbox/reconcile_all.py and two queue files; the battery and the matrix regeneration must run on the committed tree (the R2168 mixed-tree rule) | first=yes
-- [ ] opened=R2231 | item=loop-s4u-reconcile | note=BigDomain-OSLoop principal reads InteractiveToken, which the 2026-09-29 machine law forbids for lane tasks; repair needs an elevated shell (twentieth consecutive disclosure at R2250) | first=no
+- [ ] opened=R2250 | item=reconcile-battery-and-matrix | note=R2250 changed src/os (export_freshness.py, test_export_freshness.py, evidence_R2250.py) and R2251 added src/os/debt_append.py, test_debt_append.py and evidence_R2251.py plus one runner and two queue files; the battery and the matrix regeneration must run on the committed tree (the R2168 mixed-tree rule) | first=yes
+- [ ] opened=R2231 | item=loop-s4u-reconcile | note=BigDomain-OSLoop principal reads InteractiveToken, which the 2026-09-29 machine law forbids for lane tasks; repair needs an elevated shell (twenty-first consecutive disclosure at R2251) | first=no
 
 ## Closed
 

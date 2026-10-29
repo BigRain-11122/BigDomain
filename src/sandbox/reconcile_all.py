@@ -4384,6 +4384,15 @@ SUITES = [
     # R2240 d seed BEFORE the code existed.)
     ("os-export-freshness",
      os.path.join("..", "os", "test_export_freshness.py"), 6),
+    # R2251: the debt register gets a writer that uses the reader's own law -
+    # a row appended at the end of the Open block, a duplicate item and a
+    # second first=yes refused before any byte changes, one atomic replace
+    # proved by a read-back equal to the prediction, and a dry run that
+    # writes nothing. Without it the register only grows by hand.
+    # (AC-DEBTA1..AC-DEBTA6 pre-registered in state/queue/tech.md as the
+    # R2248 a seed BEFORE the code existed.)
+    ("os-debt-append",
+     os.path.join("..", "os", "test_debt_append.py"), 6),
     ]
 
 FAILS = 0
