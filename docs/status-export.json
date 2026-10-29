@@ -1,11 +1,12 @@
 {
-  "export_ts": "2026-10-29T11:20:00+08:00",
-  "do": "verification window R2249: full reconcile battery PASS 428/428 plus controls 7/7 in 1165.7s with 932/932 tmp worlds reclaimed, then matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2181",
+  "export_ts": "2026-10-29T11:45:00+08:00",
+  "do": "product window R2250: the CEO-visible face gets its time axis judged (24h age gate, 48h milestone window, honest unknown when no due stamp is published), suite 6/6 double-run byte-identical, five adjacent os suites green, consistency checker re-run green",
   "ceo_face": {
-    "current": "R2249 驗證輪：R2248 欠下的全量電池在已提交樹（c6784fca）上跑通——RUNNER PASS 428/428 套件＋控制 7/7（1165.7s，出生站回收 932/932 世界 326.57 MiB），四段後續全 PASS：矩陣 428 套件／3546 判據逐位元組回讀同一、指紋五域 CLEAN、runner profile --daily --check PASS、寫手普查重凍結後 DRIFT-CLEAN files=2181 flags=0。增量實測非推算＝套件 427→428／判據 3538→3546 恰為 R2248 註冊的 os-debt-register(8)。本輪零產品代碼改動（0 分驗證輪），下一輪回產品面；佇列地板 main 5/5·tech 10/10·explore 10/10 全 MET。",
-    "latest_artifact": "qa/reconcile-all-R2249.log（全量電池 428/428＋四段後續全 PASS，763410B 起於 RUNNER 收尾，單寫者 utf-8 LF）＋ src/os/battery_followup_R2249.py（矩陣再生／指紋／profile／普查四段單寫者 runner，VERDICT PASS）＋ docs/sandbox-suite-matrix.md（428 套件／3546 判據，41753B，逐位元組回讀同一）；時間戳 2026-10-29",
-    "next_milestone": "R2250 回產品面：認領 state/queue 隊頭（tech 10 條／explore 10 條可領），判據先寫進佇列行再動代碼，錨檢（git grep -F 對 HEAD 零佔用）先行；同窗不得再跑電池（R2168 混樹律），窗 ≤48h",
-    "last_artifact": "state/debt.md + src/os/battery_followup_R2249.py（R2249，2026-10-29 11:0x）；證據 qa/reconcile-all-R2249.log"
+    "current": "R2250 產品輪：CEO 可見面補上「時間」這條軸。原本 docs/status-export.json 只被檢查形狀與派生（三行非空、export_ts 可解析、self_drive 重算、tick 行），於是「形狀完美但已是兩天前的面」和「里程碑報到三週後」都算綠。新件 src/os/export_freshness.py 只判時間：導出面齡對 24h 新鮮閘、公告里程碑對 48h 窗，時鐘由調用方注入故可重現；四種判決窮盡（FRESH／STALE-FACE／STALE-WINDOW／UNVERIFIABLE-WINDOW），未公布到期戳記一律報「不可判定」而非假綠（exit 4）；無 UTC 偏移的時間戳直接拒絕（E_EXP_BAD_TS）而非假設本地時區。形狀與派生仍歸 check_export_consistency，故非重複造輪——改動後一致性檢查重跑 exit 0。本窗導出面開始公布 next_milestone_due，閘因此由「不可判定」轉為 FRESH。",
+    "latest_artifact": "src/os/export_freshness.py（時間閘本體，四判決＋時鐘注入＋到期戳記未知不假綠）＋ src/os/test_export_freshness.py（AC-EXP1..AC-EXP6 判據套件 6/6）＋ qa/export-freshness-R2250-a.log / -b.log（單寫者 utf-8 LF 雙跑，466B 各，判據行 sha16 6B9DC44593508471 逐位元組同一）＋ qa/regression-R2250.log（五鄰套件全綠）；時間戳 2026-10-29 11:4x",
+    "next_milestone": "R2251 先還驗證債：在已提交樹上跑全量電池＋矩陣再生（state/debt.md 已登記 first=yes；R2168 混樹律＝電池窗內不改產品代碼），預計套件 428→429、判據 3546→3552（＝本窗 os-export-freshness(6) 入冊，須以實測對位不得沿用推算）；窗 ≤48h",
+    "next_milestone_due": "2026-10-30T11:45:00+08:00",
+    "last_artifact": "src/os/export_freshness.py + qa/export-freshness-R2250-a.log（R2250，2026-10-29 11:4x）；證據雙跑同一 sha16 6B9DC44593508471"
   },
   "depts": [
     {
@@ -35,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "export freshness gate: the CEO-visible face is now judged on time as well as shape (R2250)",
+      "on",
+      "R2250: docs/status-export.json is the only surface the CEO reads, and the round book requires three lines with the next milestone inside 48h, but every existing check was about shape and derivation - a perfectly shaped face two days old passed, and so did a milestone announced three weeks out. src/os/export_freshness.py measures only the missing axis: the age of the face against a 24h freshness gate and the announced milestone against a 48h window, with the clock injected by the caller so a reading is reproducible and testable. Verdicts are four and exhaustive (FRESH / STALE-FACE / STALE-WINDOW / UNVERIFIABLE-WINDOW); a face that publishes no next_milestone_due reads as an honest unknown on its own exit code (4) rather than as a fabricated pass, and a stamp without a UTC offset is refused (E_EXP_BAD_TS) instead of being assumed local, because the face is written by different writers across the day. Shape and derivation stay with check_export_consistency, which was re-run green after the change, so this window added no second wheel. Evidence: SUITE PASS 6/6 double-run byte-identical criterion sha16 6B9DC44593508471 (qa/export-freshness-R2250-a.log / -b.log, 466B each, single writer utf-8 LF), five adjacent os suites green (qa/regression-R2250.log, 4878B), wired os-export-freshness(6). The live reading at the R2249 face was verdict=UNVERIFIABLE-WINDOW age=0.3h; this window's refresh publishes next_milestone_due so the gate now reads FRESH."
+    ],
     [
       "full reconcile battery and suite-matrix regeneration re-proven on the committed R2248 tree (R2249)",
       "on",
@@ -87,6 +93,10 @@
     ]
   ],
   "results": [
+    [
+      "R2250",
+      "product window on the P2 tech head: the export face's time axis as a reading - 24h age gate, 48h milestone window, honest unknown on a missing due stamp, refused naive stamps, four exhaustive verdicts, injected clock, CLI 0/2/3/4/5 and a pinned --json key order, wired into the runner and proved by a byte-identical double run plus five adjacent suites; the battery and the matrix regeneration are the R2251 first item and are registered in state/debt.md"
+    ],
     [
       "R2249",
       "verification window on the carried first item: full battery RUNNER PASS 428/428 plus controls 7/7 in 1165.7s, tmp reclaim 932/932 worlds 326.57 MiB, four follow-up sections all PASS (matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2181 flags=0). Zero product code changed, so a 0-point window; the register row reconcile-battery-and-matrix is closed and the only open row left is the elevated-shell S4U item; the floors read main 5/5 tech 10/10 explore 10/10 FLOOR-MET, so R2250 opens on the product face."
@@ -148,17 +158,17 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2249",
+      "2250",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 8,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

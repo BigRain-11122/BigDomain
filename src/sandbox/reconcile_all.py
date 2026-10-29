@@ -4375,6 +4375,15 @@ SUITES = [
     # AC-DEBT7 and AC-DEBT8 landed in the same window as the code.)
     ("os-debt-register",
      os.path.join("..", "os", "test_debt_register.py"), 8),
+    # R2250: the CEO-visible face gets its time axis judged - the export's
+    # age against the 24h freshness gate and the announced milestone
+    # against the 48h window, with a missing due stamp reported as an
+    # honest unknown instead of a fabricated pass. Shape and derivation
+    # stay with check_export_consistency, so this is not a second wheel.
+    # (AC-EXP1..AC-EXP6 pre-registered in state/queue/tech.md as the
+    # R2240 d seed BEFORE the code existed.)
+    ("os-export-freshness",
+     os.path.join("..", "os", "test_export_freshness.py"), 6),
     ]
 
 FAILS = 0

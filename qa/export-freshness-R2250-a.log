@@ -1,0 +1,8 @@
+RUN A rc=0 suite=test_export_freshness.py
+PASS AC-EXP1 ceo_face publishes three non-empty lines or refuses
+PASS AC-EXP2 stamps need an explicit UTC offset and the age is measured
+PASS AC-EXP3 the 48h milestone window is judged, absent due reads unknown
+PASS AC-EXP4 the age gate flips the verdict to STALE-FACE
+PASS AC-EXP5 CLI exits 0/2/3/4/5 and --json keeps the pinned key order
+PASS AC-EXP6 source is ASCII, clock-free, read-only and runner-wired
+SUITE PASS 6/6

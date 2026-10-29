@@ -1,0 +1,75 @@
+RUNNER R2250 adjacent os regressions
+== test_queue_floor.py rc=0 SUITE PASS 8/8
+PASS AC-QF1 report and row keys pinned, deterministic, verdict in the closed set
+PASS AC-QF2 only column-0 boxed rows count, exact box letters only
+PASS AC-QF3 seven gate marker forms excluded from claimable, still counted as open
+PASS AC-QF4 floors pinned to 5/10/10, shortfall clamps at zero, total sums the queues
+PASS AC-QF5 empty queue reads an honest zero, absent queue reads MISSING with the whole floor as shortfall
+PASS AC-QF6 CLI exits 0/2/3 on met/short/missing, bad flags exit 2, JSON parses and is byte-stable
+PASS AC-QF7 one line carries every queue, live tree matches an independent recount
+PASS AC-QF8 gauge is a pure read, source ASCII with zero network imports and wired as os-queue-floor(8)
+SUITE PASS 8/8
+== test_debt_register.py rc=0 SUITE PASS 8/8
+PASS AC-DEBT1 report and row keys pinned, deterministic, open and done rows parse
+PASS AC-DEBT2 two first flags refused, one reads through, none reads honestly empty
+PASS AC-DEBT3 a row carried three windows is stale, two is not, and an unaged reading says stale=unknown
+PASS AC-DEBT4 CLI exits 0/2/4/3/5 on clean/open/stale/bad-input/bad-flags, JSON parses and is byte-stable
+PASS AC-DEBT5 a register with no rows reads clean, a missing file is reported absent instead of silently clean
+PASS AC-DEBT6 the register is a pure read, source ASCII with zero network and zero clock imports
+PASS AC-DEBT7 the live register parses and matches an independent recount of open and done rows
+PASS AC-DEBT8 wired as os-debt-register(8) in the battery runner
+SUITE PASS 8/8
+== test_state_io.py rc=0 SUITE PASS 8/8 criteria=8
+PASS AC-SIO1 layout measured from bytes (clean vs drift, live size)
+PASS AC-SIO2 canon forces CRLF+16-space items, payload unchanged
+PASS AC-SIO3 bad item count and bad JSON refused, nothing written
+PASS AC-SIO4 payload change refused, old bytes byte-identical
+PASS AC-SIO5 atomic write, read-back proof, zero temp residue
+PASS AC-SIO6 dry plan writes nothing, execute lands on prediction
+PASS AC-SIO7 CLI codes 0/2/3, pinned --json keys, second fix no-op
+PASS AC-SIO8 ASCII, stdlib-only, offline, wired as os-state-io
+SUITE PASS 8/8 criteria=8
+== test_ledger_closeout.py rc=0 SUITE PASS 8/8 criteria
+suite: round closing station (R2154 AC-LGN1..AC-LGN8)
+PASS AC-LGN1 report keys pinned, deterministic, verdict in closed set
+PASS AC-LGN2 default target is the newest narrative round
+PASS AC-LGN3 four bad closing shapes all BAD_SHAPE with one error
+PASS AC-LGN4 older round after a settled one is NOT_MONOTONIC
+PASS AC-LGN5 missing closing line refused, lone ledger line legal
+PASS AC-LGN6 CLI prints one LEDGER OK on success only
+PASS AC-LGN7 state file untouched by the gate, zero network imports
+PASS AC-LGN8 legacy faces unchanged, live log closes clean
+SUITE PASS 8/8 criteria
+== test_logs_inventory.py rc=0 SUITE PASS 31/31
+PASS AC-LTI1 default output key set is exactly {logs_dir, classes, total_files}
+PASS AC-LTI1 default total_files == 78 == sum of class counts
+PASS AC-LTI1 legacy classifier counts unchanged (2/1/72/2/1)
+PASS AC-LTI1 protected/prunable flags keep the historical meaning
+PASS AC-LTI1 zero omission: class sum equals the logs/ file count
+PASS AC-LTI2 roots face names both roots
+PASS AC-LTI2 qa/*.log -> qa-evidence (5), everything else -> evidence-other (2)
+PASS AC-LTI2 counted_entries 85 == duplicates 0 + total_files 85
+PASS AC-LTI2 class counts plus duplicates account for every scanned entry
+PASS AC-LTI2 per-root entry counts are 78 and 7
+PASS AC-LTI3 three new evidence files raise total_files by exactly 3
+PASS AC-LTI3 qa-evidence count rises 5 -> 8 (adaptive, uncached)
+PASS AC-LTI3 zero omission after growth: root count == directory count
+PASS AC-LTI4 both overlapping roots report their own 10 entries
+PASS AC-LTI4 counted 98, unique 88, duplicates 10
+PASS AC-LTI4 class counts are not doubled by the second root
+PASS AC-LTI5 cross-root hard link adds one duplicate, zero new files
+PASS AC-LTI5 the linked inode is not counted a second time under qa-evidence
+PASS AC-LTI6 root spec without "=" exits 2 and prints no JSON
+PASS AC-LTI6 missing root directory exits 3 and prints no JSON
+PASS AC-LTI6 duplicate root label exits 2 and prints no JSON
+PASS AC-LTI7 both evidence classes are protected and non-prunable
+PASS AC-LTI7 prune selects 10 old logs/ tmp-scripts (70 past the floor - keep 60)
+PASS AC-LTI7 every prune victim lives under logs/, none under qa/
+PASS AC-LTI7 no evidence filename appears in the prune plan
+PASS AC-LTI7 prune dry-run reports the same 10 victims and stays a dry run
+PASS AC-LTI7 the evidence tree is byte-frozen by a prune dry-run
+PASS AC-LTI8 tool source is pure ASCII
+PASS AC-LTI8 tool source has zero network imports
+PASS AC-LTI8 two runs produce byte-identical output
+PASS AC-LTI8 wired into reconcile_all as os-logs-inventory
+SUITE PASS 31/31
