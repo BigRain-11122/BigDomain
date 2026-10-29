@@ -1,9 +1,9 @@
 {
-  "export_ts": "2026-10-29T08:58:00+08:00",
+  "export_ts": "2026-10-29T08:18:51+08:00",
   "do": "product window R2241: the seller-scope watch-to-purchase conversion face lands, so a shop can finally read whether its own watchers turned into buyers month over month",
   "ceo_face": {
     "current": "R2241 产品轮：卖家侧「我的关注有没有变成成交」这一面落地 - api_seller_watch_conversion_months 把每个关注按自己的 UTC 月入桶（取关不算事件、成交不重写月份），三腿转成/先买后关/挂起逐行守恒，连续网格带诚实零月（二月无关注，改价与取关都不算），dana 2 关注 1 成交（0.5）、lia 4 关注 1 先买 1 成交 2 挂起（1/3）、全市场 6 关注 2 成交（0.4）；卖家行的 market_conversion_rate 列出当月真实市场转化率（一月 0.5 / 三月 0.5 / 四月 0.0 / 二月诚实 None），市场视角自身不给自己挂基准；两卖家计数之和恰等于市场、未知卖家诚实空。判据 AC-SWCV1..8 全部通过。",
-    "latest_artifact": "qa/apimarket-sellerwatchconversionmonths-R2241-a.log 与 -b.log（各 617 字节，双跑逐字节同一，判据行 sha16 774347968EA72ECE） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2241.log（相邻六套件 fails=0）；时间戳 2026-10-29 08:5x",
+    "latest_artifact": "qa/apimarket-sellerwatchconversionmonths-R2241-a.log 与 -b.log（各 617 字节，双跑逐字节同一，判据行 sha16 774347968EA72ECE） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2241.log（相邻六套件 fails=0）；时间戳 2026-10-29 08:18",
     "next_milestone": "R2242（48 小时内）：补跑全量对账电池与套件矩阵再生（本轮因 25 分钟预算未跑，记录在案）；并把 tech 8/10、explore 6/10 的队列地板欠账用真实缺口补齐；另有一项悬挂的本地事项=BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
   },
   "depts": [
