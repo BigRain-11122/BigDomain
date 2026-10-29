@@ -18,7 +18,6 @@ column-0 checkbox starts one.
 
 ## Open
 
-- [ ] opened=R2250 | item=reconcile-battery-and-matrix | note=R2250 changed src/os (export_freshness.py, test_export_freshness.py, evidence_R2250.py) and R2251 added src/os/debt_append.py, test_debt_append.py and evidence_R2251.py plus one runner and two queue files; the battery and the matrix regeneration must run on the committed tree (the R2168 mixed-tree rule) | first=yes
 - [ ] opened=R2231 | item=loop-s4u-reconcile | note=BigDomain-OSLoop principal reads InteractiveToken, which the 2026-09-29 machine law forbids for lane tasks; repair needs an elevated shell (twenty-first consecutive disclosure at R2251) | first=no
 
 ## Closed
@@ -28,3 +27,5 @@ column-0 checkbox starts one.
 - [x] opened=R2247 | item=queue-seeding | note=floors were short by 10 at the R2247 closeout (tech 5/10, explore 5/10 claimable); ten seed rows with pre-registered criteria landed here, every anchor checked zero-occupancy against HEAD, and the gauge now reads main 5/5 tech 10/10 explore 10/10 FLOOR-MET | closed=R2248
 
 - [x] opened=R2244 | item=reconcile-battery-and-matrix | note=deferred by R2244/R2245/R2246, run to RUNNER PASS 427/427 plus the four follow-up sections at R2247 | closed=R2247
+
+- [x] opened=R2250 | item=reconcile-battery-and-matrix | note=R2250 changed src/os (export_freshness.py, test_export_freshness.py, evidence_R2250.py) and R2251 added src/os/debt_append.py, test_debt_append.py and evidence_R2251.py plus one runner and two queue files; closed at R2252 on the committed tree = RUNNER PASS 430/430 suites plus controls 7/7 in 798.1s, tmp reclaim 932/932 worlds 326.57 MiB, then matrix 430 suites / 3558 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2188 | closed=R2252

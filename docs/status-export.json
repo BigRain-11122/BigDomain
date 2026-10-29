@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T12:04:44+08:00",
-  "do": "product window R2251: the debt register gets a writer that uses the reader own law (src/os/debt_append.py, AC-DEBTA1..6 pre-registered), suite 6/6 double-run byte-identical sha16 5FE50139B98BB77F, five adjacent os suites green, one seeding row keeps the tech floor at 10/10; the battery and the matrix regeneration carry to R2252",
+  "export_ts": "2026-10-29T12:26:00+08:00",
+  "do": "verification window R2252: the debt register first item is closed on the committed tree - full reconcile battery RUNNER PASS 430/430 suites plus controls 7/7 in 798.1s (qa/reconcile-all-R2252.log), then matrix 430 suites / 3558 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2188; zero product code changed",
   "ceo_face": {
-    "current": "R2251 已收：债务登记册的写入口落地（debt_append·一行命令追加登记行·重复项与第二个 first=yes 前置拒绝·原子替换+读回证）",
-    "latest_artifact": "src/os/debt_append.py + src/os/test_debt_append.py（AC-DEBTA1..6 全绿）+ qa/debt-append-R2251-a.log / -b.log（双跑逐字节同一 sha16 5FE50139B98BB77F）+ qa/regression-R2251.log（邻接 5 套件零失败）·生成于 2026-10-29 R2251",
-    "next_milestone": "R2252：全量对账电池 + 套件矩阵再生跑在已提交树（预计套件 >=429·判据 >=3552），随后回到产品面继续清 tech 队头",
-    "next_milestone_due": "2026-10-31T12:04:44+08:00",
-    "last_artifact": "src/os/debt_append.py + qa/debt-append-R2251-a.log（R2251·2026-10-29）"
+    "current": "R2252 验证轮：把 R2250/R2251 两批新代码交给全量电池，430 套件全绿（含两个新套件），验证欠账清零",
+    "latest_artifact": "qa/reconcile-all-R2252.log（764259B·单写者 UTF-8 LF·含 RUNNER PASS 430/430 + 四段跟进结果 + VERDICT PASS）+ docs/sandbox-suite-matrix.md（430 套件 / 3558 判据·41900B）·2026-10-29 R2252",
+    "next_milestone": "R2253 回到产品面：认领 tech/explore 队头（两条队列均 10/10 达标），预注册判据后交付一个新读面，并在同窗补满验证",
+    "next_milestone_due": "2026-10-30T13:20:00+08:00",
+    "last_artifact": "qa/reconcile-all-R2252.log + docs/sandbox-suite-matrix.md（R2252·2026-10-29）"
   },
   "depts": [
     {
@@ -94,6 +94,10 @@
   ],
   "results": [
     [
+      "R2252",
+      "verification window on the debt register first item: full reconcile battery RUNNER PASS 430/430 suites plus controls 7/7 in 798.1s, tmp reclaim 932/932 worlds 326.57 MiB, four follow-up sections all PASS (matrix 430 suites / 3558 criteria byte-identical, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2188 flags=0), VERDICT PASS; the +2 suites and +12 criteria against R2249 are exactly the R2250 export-freshness and R2251 debt-append suites joining the registry; zero product code changed on the committed tree (the R2168 mixed-tree rule)"
+    ],
+    [
       "R2251",
       "product window on the P2 tech head (R2248 a seed): the debt register gets a writer that uses the reader own law - build_row/plan/append_row in src/os/debt_append.py, a duplicate item and a second open first=yes refused before any byte changes, one atomic replace proved by a read-back equal to the prediction, a dry run that writes nothing, CLI 0/2/3/5 and a pinned --json order; criteria AC-DEBTA1..AC-DEBTA6 pre-registered in the queue row BEFORE the code; SUITE PASS 6/6 double-run byte-identical criterion sha16 5FE50139B98BB77F, five adjacent os suites green, wired os-debt-append(6); the close dropped the tech floor to 9/10 so one real gap row (debt_close, AC-DEBC1..6) was seeded and the gauge reads FLOOR-MET 10/10; the battery and the matrix regeneration were not run and stay first=yes in state/debt.md"
     ],
@@ -162,17 +166,17 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2251",
+      "2252",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

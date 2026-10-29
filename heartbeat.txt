@@ -4,3 +4,4 @@
 2243 tick 2026-10-29 R2243 verification window: state fold R593 (82086 -> 13228 bytes, 53 -> 5 log lines, 497 tokens kept) after an eol+indent layout repair; reconcile battery PASS 424/424 green, controls 7/7, criteria 3516, 1024.4s
 2249 tick 2026-10-29 R2249 verification window: reconcile battery PASS 428/428 green + controls 7/7 in 1165.7s, tmp reclaim 932/932 worlds 326.57 MiB, matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2181; register row closed
 2251 tick 2026-10-29 R2251 product window: debt_append (AC-DEBTA1..6) suite 6/6 double-run sha16 5FE50139B98BB77F; adjacent 5 suites green; seeding row debt_close (AC-DEBC1..6) FLOOR-MET 10/10; battery+matrix carried to R2252
+2252 tick 2026-10-29 R2252 verification window: debt register first item closed - battery PASS 430/430 + controls 7/7, matrix 430/3558 byte-identical, census DRIFT-CLEAN; no product code changed
