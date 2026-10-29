@@ -1,3 +1,4 @@
 2237 tick 2026-10-29 R2237 product window: api_category_watch_conversion_months (explore R2230 5/6) - suite 8/8 double-run; state fold 83849B->53651B; battery carried to R2238
 2241 tick 2026-10-29 R2241 product window: api_seller_watch_conversion_months (explore R2240 a) - suite 8/8 double-run; battery + matrix regeneration carried to R2242
 2242 tick 2026-10-29 R2242 product window: api_category_rating_months (explore R2240 b) - suite 8/8 double-run; battery + matrix regeneration carried to R2243
+2243 tick 2026-10-29 R2243 verification window: state fold R593 (82086 -> 13228 bytes, 53 -> 5 log lines, 497 tokens kept) after an eol+indent layout repair; reconcile battery PASS 424/424 green, controls 7/7, criteria 3516, 1024.4s

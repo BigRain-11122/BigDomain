@@ -1,0 +1,6 @@
+os-logs-toolkit rc=0 SUITE PASS 163 checks
+os-ledger-archive rc=0 SUITE PASS 8/8 criteria
+os-ledger-lines rc=0 SUITE PASS 8/8 criteria
+os-evidence-writer rc=0 SUITE PASS 8/8 checks
+os-run-identity rc=0 SUITE PASS 8/8 criteria
+os-export-consistency rc=0 VERDICT PASS

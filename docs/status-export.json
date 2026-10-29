@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T08:30:00+08:00",
-  "do": "product window R2242: the per-category monthly rating intake lands, so a category whose service quality moved can no longer hide behind the market average",
+  "export_ts": "2026-10-29T08:53:48+08:00",
+  "do": "verification window R2243: the state log was folded back under the waterline after a real layout repair, and the full reconcile battery re-proved the committed tree",
   "ceo_face": {
-    "current": "R2242 产品轮：品类维度的月度评分面落地 - api_category_rating_months 让每个品类按自己的 UTC 月入桶（改星只动生效星不动月份、改品类不回溯已入桶月份），月份行带品类单元逐格可读；一月 tools 2 条（均值 2.5，因为 bo 的五星被改成一星但仍留在二月之前的一月桶）、data 1 条（2.0）；二月诚实零月（均值 None、累计不跳）；三月 ed 的评分落在改名后的 data 桶；四月 data 5 星 + 未分类 4 星；整信 pooled 均值 3.17（月均值均值 3.28，两者刻意不同）；include_uncategorized=False 一键剔除未分类并重算（6/19/3.17/3 桶 → 5/15/3.0/2 桶）。判据 AC-CRA1..8 全部通过。",
-    "latest_artifact": "qa/apimarket-categoryratingmonths-R2242-a.log 与 -b.log（各 671 字节，双跑逐字节同一） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2242.log（相邻六套件 fails=0）；时间戳 2026-10-29 08:2x",
-    "next_milestone": "R2243（48 小时内）：补跑全量对账电池与套件矩阵再生（本轮因 25 分钟预算未跑，记录在案）；并把 tech 8/10、explore 5/10 的队列地板欠账用真实缺口补齐；另有一项悬挂的本地事项=BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
+    "current": "R2243 驗證輪：state 日誌摺疊回水位線下（82149 → 13228 字節，53 行 → 5 行，496 個窗口 token 全數保留，附錄原文入檔），且先修好真實佈局病（LF/縮進漂移由 LF 寫入器造成，eol+indent 兩步修復、寫前content 與 JSON 雙重等價驗證）；全套對賬電池在同一棵提交樹上重跑PASS 424/424 套件、判據 424/424、1024.4s。本輪未出新產品面，如實記錄。",
+    "latest_artifact": "qa/reconcile-all-R2243.log（PASS 424/424，762400 字節，單寫者 utf-8 LF）+ logs/state-log-archive-2026-10.md 摺疊附錄（原文 73169 字節） + 折疊後 src/os/state.json（13228 字節）；時間戳 2026-10-29 08:53",
+    "next_milestone": "R2244（48 小時內）：回到 explore 隊頭的真產品面（R2240 c seller-scoped monthly refund flow，AC 判據先預註冊），並把 tech 隊頭的 state_fold 包裝件做成可重用件——本輪三步手動（eol→indent→fold）正是它要消掉的風險面"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "state fold R593 + reconcile battery (R2243)",
+      "on",
+      "logs_toolkit eol --fix then --fix-indent repaired a measured layout drift (0 CRLF, 53/53 items off the 16-space canon) before the fold; fold R593 moved log lines 1:49 into one rolling line with token_missing empty over 497 tokens; the archive appendix kept the window verbatim under pre-op sha16 ab46927e87e6f9d9; the battery came back PASS 424/424 with criteria total 3516 in 1024.4s. No product code changed."
+    ],
     [
       "per-category monthly rating intake face (R2242)",
       "on",
@@ -367,6 +372,10 @@
   ],
   "results": [
     [
+      "R2243",
+      "verification window on the two debts R2242 declared: layout repair + fold R593 + full reconcile battery re-proof on the committed tree; the five-silence scan found zero new decision tokens (baseline re-anchored 190 -> 187, the three losses being the known T-20261026 truncation artefacts) and zero new group orders; carry = one product face for R2244"
+    ],
+    [
       "R2242",
       "product window on the explore head seed R2240 b: api_category_rating_months closes the per-category month gap - SUITE 8/8 with a double-run byte-identical pair (671B per leg, single-writer utf-8 LF), six adjacent rating/category suites green, PRODUCT_SHA_STABLE True; disclosed substitution of the seed's colliding AC-CRM2 prefix with a fresh AC-CRA one; honest debt = the full battery and the matrix regeneration deferred to R2243, both queues under the standing floor (tech 8, explore 5), and the loop task still needing an elevated S4U re-registration."
     ],
@@ -635,7 +644,7 @@
       "2026-10-29 R2219 (five-silence scan clean at open: decisions.md 274 non-empty rows carrying 185 content-addressed D/C/O/T tokens; the five D-20261029-01..05 rows were already judged and folded into the stored baseline by R2218, so zero new this window and zero domain action; the group ledger carries the same three @BigDomain patrol rows already paid off with zero unreplied; the group orders tail advanced by ONE row, the 2026-10-29 00:52 CEO-PROXY fleet event round R2.46, which is the fleet dispatcher execution face and not a domain face, so it is logged aware-no-action and the own-orders baseline advances to 00:52; benchmarks refreshed 2026-10-29 inside the seven-day gate; tree clean, no index.lock) - the P1 canonical board head was CLAIMABLE this window, which had not been true for many rounds: R2218 added a P-47 item-four row (payment integration design, category-classification chapter) with criteria AC-PAYCAT1..6 pre-registered BEFORE the edit, so that row was claimed instead of opening a new explore face, because the official rule it encodes can invalidate the whole C-side payment route. Product: docs/spec/payment-integration-spec.md v0.1 -> v0.2 - a new section 0-bis 'category classification (compliance front chapter)' carrying (1) a seven-row category self-declaration table mapping every product family to an official form and a channel/API family, (2) channel-name and API-family uniqueness with wx.requestVirtualPayment as the single C-side family and JSAPI declared unused for virtual goods on every terminal, (3) the hybrid virtual+physical whole-classification law plus the no-new-physical-surface non-goal, (4) both official exemptions recorded and expressly not claimed, (5) a four-row risk and prerequisite table (the android/non-iOS plain WeChat Pay capability is withdrawn when only virtual categories are present; opening virtual payment is a CEO physical item; T+3 settlement with the 180-day refund fee boundary and the iOS 45-60 day Apple settlement; a wrong category self-declaration costs the whole terminal payment capability), and (6) the W34 three-way consistency mapping. The section 0 standard-channel line was limited to real services and the footer bumped with a revision record. Verification: qa/pay-category-R2219.log carries the six criterion readings plus the code-side assertions (adapters.py channel pair literal=True, jsapi occurrences in pay code = 0) and the regression (pay acceptance 16/16, channel matrix SUITE PASS 7/7). Honest note: the first AC-PAYCAT2 probe read False because its own regex matched the criterion text that quotes the forbidden phrase; a targeted re-read of all seven JSAPI lines showed prohibitions only, and the criterion was not relaxed. Product score honestly 1 point (a real spec file change, no new runnable code); the explore queue still holds seven open seeds behind the merchant-gated payment row."
     ],
     [
-      "2235",
+      "2243",
       "OSLoop 执行 tick"
     ],
     [
@@ -658,10 +667,10 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 2,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 2,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
