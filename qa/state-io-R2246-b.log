@@ -1,0 +1,10 @@
+RUN B rc=0 suite=test_state_io.py
+PASS AC-SIO1 layout measured from bytes (clean vs drift, live size)
+PASS AC-SIO2 canon forces CRLF+16-space items, payload unchanged
+PASS AC-SIO3 bad item count and bad JSON refused, nothing written
+PASS AC-SIO4 payload change refused, old bytes byte-identical
+PASS AC-SIO5 atomic write, read-back proof, zero temp residue
+PASS AC-SIO6 dry plan writes nothing, execute lands on prediction
+PASS AC-SIO7 CLI codes 0/2/3, pinned --json keys, second fix no-op
+PASS AC-SIO8 ASCII, stdlib-only, offline, wired as os-state-io
+SUITE PASS 8/8 criteria=8

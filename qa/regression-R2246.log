@@ -1,0 +1,87 @@
+RUNNER R2246 adjacent os regressions
+== test_state_fold.py rc=0 SUITE PASS 6/6
+PASS AC-SF1 waterline verdict from the disk size, margin exact, closed verdict set and pinned report keys
+PASS AC-SF2 window moves verbatim with byte sum, tokens covered, prefix and suffix intact and the plan keys pinned
+PASS AC-SF3 verbatim appendix, old bytes a strict prefix, second append stacks, create only on demand, missing fails closed
+PASS AC-SF4 --check is byte-for-byte read-only with exit 0 clear / 2 due or bad flags / 3 unreadable
+PASS AC-SF5 plan idempotent, bounds/token/gate refusals write nothing, one execute lands on its prediction and re-checks clear
+PASS AC-SF6 source ASCII, stdlib only, no network, predicate single owned and wired as os-state-fold(6)
+SUITE PASS 6/6
+== test_queue_floor.py rc=0 SUITE PASS 8/8
+PASS AC-QF1 report and row keys pinned, deterministic, verdict in the closed set
+PASS AC-QF2 only column-0 boxed rows count, exact box letters only
+PASS AC-QF3 seven gate marker forms excluded from claimable, still counted as open
+PASS AC-QF4 floors pinned to 5/10/10, shortfall clamps at zero, total sums the queues
+PASS AC-QF5 empty queue reads an honest zero, absent queue reads MISSING with the whole floor as shortfall
+PASS AC-QF6 CLI exits 0/2/3 on met/short/missing, bad flags exit 2, JSON parses and is byte-stable
+PASS AC-QF7 one line carries every queue, live tree matches an independent recount
+PASS AC-QF8 gauge is a pure read, source ASCII with zero network imports and wired as os-queue-floor(8)
+SUITE PASS 8/8
+== test_logs_inventory.py rc=0 SUITE PASS 31/31
+PASS AC-LTI1 default output key set is exactly {logs_dir, classes, total_files}
+PASS AC-LTI1 default total_files == 78 == sum of class counts
+PASS AC-LTI1 legacy classifier counts unchanged (2/1/72/2/1)
+PASS AC-LTI1 protected/prunable flags keep the historical meaning
+PASS AC-LTI1 zero omission: class sum equals the logs/ file count
+PASS AC-LTI2 roots face names both roots
+PASS AC-LTI2 qa/*.log -> qa-evidence (5), everything else -> evidence-other (2)
+PASS AC-LTI2 counted_entries 85 == duplicates 0 + total_files 85
+PASS AC-LTI2 class counts plus duplicates account for every scanned entry
+PASS AC-LTI2 per-root entry counts are 78 and 7
+PASS AC-LTI3 three new evidence files raise total_files by exactly 3
+PASS AC-LTI3 qa-evidence count rises 5 -> 8 (adaptive, uncached)
+PASS AC-LTI3 zero omission after growth: root count == directory count
+PASS AC-LTI4 both overlapping roots report their own 10 entries
+PASS AC-LTI4 counted 98, unique 88, duplicates 10
+PASS AC-LTI4 class counts are not doubled by the second root
+PASS AC-LTI5 cross-root hard link adds one duplicate, zero new files
+PASS AC-LTI5 the linked inode is not counted a second time under qa-evidence
+PASS AC-LTI6 root spec without "=" exits 2 and prints no JSON
+PASS AC-LTI6 missing root directory exits 3 and prints no JSON
+PASS AC-LTI6 duplicate root label exits 2 and prints no JSON
+PASS AC-LTI7 both evidence classes are protected and non-prunable
+PASS AC-LTI7 prune selects 10 old logs/ tmp-scripts (70 past the floor - keep 60)
+PASS AC-LTI7 every prune victim lives under logs/, none under qa/
+PASS AC-LTI7 no evidence filename appears in the prune plan
+PASS AC-LTI7 prune dry-run reports the same 10 victims and stays a dry run
+PASS AC-LTI7 the evidence tree is byte-frozen by a prune dry-run
+PASS AC-LTI8 tool source is pure ASCII
+PASS AC-LTI8 tool source has zero network imports
+PASS AC-LTI8 two runs produce byte-identical output
+PASS AC-LTI8 wired into reconcile_all as os-logs-inventory
+SUITE PASS 31/31
+== test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+PASS AC-LGR1 canonical parse, units and approx marker resolved
+PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+PASS AC-LGR3 coverage law derives missing and orphan rounds
+PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+PASS AC-LGR5 zero false positives, typo caught by coverage law
+PASS AC-LGR6 api is a pure integer and always carries a reason
+PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+PASS AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+SUITE PASS 8/8 criteria
+== test_ledger_archive.py rc=0 SUITE PASS 8/8 criteria
+suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA8)
+PASS AC-LGA1 archive loader keeps log lines in order, drops markers, rewrites nothing
+PASS AC-LGA2 union floor passes where the live-only floor fails
+PASS AC-LGA3 live drift still gates even with a full archive
+PASS AC-LGA4 archived gaps are informational, never gated
+PASS AC-LGA5 tail scopes the live window only
+PASS AC-LGA6 bad archive input fails closed with zero stdout
+PASS AC-LGA7 default face byte-identical, only the counts block and one scope line differ
+PASS AC-LGA8 real tree floor met on the union, drift clean, hygiene
+SUITE PASS 8/8 criteria
+== test_ledger_closeout.py rc=0 SUITE PASS 8/8 criteria
+suite: round closing station (R2154 AC-LGN1..AC-LGN8)
+PASS AC-LGN1 report keys pinned, deterministic, verdict in closed set
+PASS AC-LGN2 default target is the newest narrative round
+PASS AC-LGN3 four bad closing shapes all BAD_SHAPE with one error
+PASS AC-LGN4 older round after a settled one is NOT_MONOTONIC
+PASS AC-LGN5 missing closing line refused, lone ledger line legal
+PASS AC-LGN6 CLI prints one LEDGER OK on success only
+PASS AC-LGN7 state file untouched by the gate, zero network imports
+PASS AC-LGN8 legacy faces unchanged, live log closes clean
+SUITE PASS 8/8 criteria
+== live state_io.py --check rc=0
+STATE IO CANON-CLEAN bytes=25370 crlf=24 bare_lf=0 lone_cr=0 log_items=14 off_indent=0 predicted=25370 written=0

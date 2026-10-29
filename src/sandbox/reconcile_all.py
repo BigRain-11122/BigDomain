@@ -4359,6 +4359,14 @@ SUITES = [
     # (AC-SF1..AC-SF6 pre-registered in state/queue/tech.md R2240 b.)
     ("os-state-fold",
      os.path.join("..", "os", "test_state_fold.py"), 6),
+    # R2246: the state.json write canon as one callable - the bare-LF and
+    # off-indent drift repaired by hand twice (R2243, R2245) now has a
+    # measured layout report, a payload-preserving canonical rewrite and an
+    # atomic write that refuses any payload change.
+    # (AC-SIO1..AC-SIO8 pre-registered in state/queue/tech.md as the R2246
+    # claim.)
+    ("os-state-io",
+     os.path.join("..", "os", "test_state_io.py"), 8),
     ]
 
 FAILS = 0
