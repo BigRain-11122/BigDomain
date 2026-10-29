@@ -4367,6 +4367,14 @@ SUITES = [
     # claim.)
     ("os-state-io",
      os.path.join("..", "os", "test_state_io.py"), 8),
+    # R2248: carried debt becomes a readable register instead of log prose -
+    # column-0 rows with known keys only, unknown and duplicate keys
+    # refused, at most one first item, a three-window staleness alarm with
+    # its own exit code, honest empty and honest absent readings.
+    # (AC-DEBT1..AC-DEBT6 pre-registered in state/queue/tech.md R2240 c;
+    # AC-DEBT7 and AC-DEBT8 landed in the same window as the code.)
+    ("os-debt-register",
+     os.path.join("..", "os", "test_debt_register.py"), 8),
     ]
 
 FAILS = 0

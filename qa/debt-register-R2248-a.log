@@ -1,0 +1,10 @@
+RUN A rc=0 suite=test_debt_register.py
+PASS AC-DEBT1 report and row keys pinned, deterministic, open and done rows parse
+PASS AC-DEBT2 two first flags refused, one reads through, none reads honestly empty
+PASS AC-DEBT3 a row carried three windows is stale, two is not, and an unaged reading says stale=unknown
+PASS AC-DEBT4 CLI exits 0/2/4/3/5 on clean/open/stale/bad-input/bad-flags, JSON parses and is byte-stable
+PASS AC-DEBT5 a register with no rows reads clean, a missing file is reported absent instead of silently clean
+PASS AC-DEBT6 the register is a pure read, source ASCII with zero network and zero clock imports
+PASS AC-DEBT7 the live register parses and matches an independent recount of open and done rows
+PASS AC-DEBT8 wired as os-debt-register(8) in the battery runner
+SUITE PASS 8/8
