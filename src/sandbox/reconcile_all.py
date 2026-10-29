@@ -4411,6 +4411,14 @@ SUITES = [
     # instead - disclosed, no criterion relaxed.)
     ("os-round-evidence",
      os.path.join("..", "os", "test_round_evidence.py"), 6),
+    # R2257: the round sequence becomes a reading - the tick, the log items'
+    # own round labels and the queue's done stamps are compared, so a skipped
+    # round, a reused label or a label that goes backwards can no longer hide
+    # behind a log that looks the same either way.
+    # (AC-SEQ1..AC-SEQ6 pinned in state/queue/tech.md as the R2248 d seed
+    # BEFORE the code existed.)
+    ("os-state-seq",
+     os.path.join("..", "os", "test_state_seq.py"), 6),
     ]
 
 FAILS = 0

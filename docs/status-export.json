@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T13:42:00+08:00",
-  "do": "verification window R2256: the full reconcile battery and the suite-matrix regeneration re-proven on the committed tree with zero product code changed - RUNNER PASS 432/432 suites plus controls 7/7 in 852.6s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, matrix 432 suites / 3570 criteria read back byte-identical, fingerprint CLEAN over 5 domains, runner profile PASS, writer census DRIFT-CLEAN files=2196 flags=0; the R2255 round-evidence suite is now covered by the whole battery",
+  "export_ts": "2026-10-29T13:51:00+08:00",
+  "do": "product window R2257: the R2248 d seed shipped as src/os/state_seq.py - the round sequence (the tick, the log items' own round labels and the queues' done stamps) is now a reading, so a skipped round, a reused label or a label that goes backwards can no longer hide behind a log that looks the same either way; SUITE PASS 6/6 double-run byte-identical criterion sha16 93B363F778BE65E1, five adjacent os suites green (fails=0), wired os-state-seq(6); the live gate reads SEQUENCE-OK gaps=0 repeats=0 backwards=0 tick_lead=0 over 16 distinct rounds and its first live read found 156 queue done stamps carrying no log item, which is seeded as the next real row instead of being swept",
   "ceo_face": {
-    "current": "R2256 验证窗：R2255 新写的回合证据读数已由全量电池覆盖。实况=432/432 套件全绿 + 控制面 7/7，判据总数 3570（比 R2254 多 1 套件 6 判据，正是 R2255 那条新套件入册），出生站清理 932/932 世界回收 326.57 MiB，套件矩阵 432/3570 回读逐字节同一，指纹五域 CLEAN，写者普查 DRIFT-CLEAN。本轮零产品代码改动，是一轮只买回确定性的 0 分验证窗。",
-    "latest_artifact": "qa/reconcile-all-R2256.log（765306B，单写者 UTF-8 LF，含电池四段 follow-up 与 VERDICT PASS）；docs/sandbox-suite-matrix.md（42046B，432 套件 / 3570 判据，green=432/432）；src/os/battery_followup_R2256.py（新四段助手）；2026-10-29 21:4x",
-    "next_milestone": "R2257：回到产品面——认领 tech 队头真活行，判据先写进队列行再写代码，出货一件可跑实物（预计 25 分钟内单面带套件与双跑证据）",
+    "current": "R2257 产品窗：出货一件可跑实物——回合序列读数器 src/os/state_seq.py（tick / 日志各条自己的回合号 / 队列 done 戳三面对照）。判据 AC-SEQ1..6 先写进队列行再写代码，锚检 HEAD 零占用；套件 6/6 全绿双跑判据行逐字节同一，五个相邻套件零回归，已接线 os-state-seq(6)。活闸实况=SEQUENCE-OK：16 个回合号、跨 2242..2257、缺口 0、重复 0、倒序 0、tick 与最大回合号恰好对齐（tick_lead=0）。首读即抓到真问题：156 条队列 done 戳没有对应日志行——已如实登记为下一活行，不扫掉不掩盖。",
+    "latest_artifact": "qa/state-seq-R2257-a.log 与 -b.log（各 478B，SUITE PASS 6/6 双跑逐字节同一，单写者 UTF-8 LF）；qa/regression-R2257.log（五个相邻os 套件 fails=0）；src/os/state_seq.py（产品件）；src/os/test_state_seq.py（6 判据套件）；2026-10-29 13:5x",
+    "next_milestone": "R2258：清验证债——在已提交树上跑全量电池（zero product code changed，R2168 混合树律），随后再生套件矩阵并回读逐字节同一",
     "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2256.log（R2256·2026-10-29）"
+    "last_artifact": "qa/state-seq-R2257-a.log（R2257·2026-10-29）"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "round sequence reader: the tick, the log's own round labels and the queues' done stamps compared (R2257)",
+      "on",
+      "R2257: src/os/state_seq.py reads the tick as an int with tick_lead = tick - largest label and fails closed (E_SEQ_BAD_STATE, exit 3) instead of fabricating one, counts only each log item's OWN round label by importing the round_evidence law rather than re-implementing it, lists gaps inside the known span only (nothing invented before the first or after the last round), and reports repeats and backwards as separate readings. Criteria AC-SEQ1..AC-SEQ6 were pinned in state/queue/tech.md as the R2248 d seed BEFORE the code, with a zero-occupancy anchor check at HEAD (E_SEQ / os-state-seq / test_state_seq rc=1). Evidence: SUITE PASS 6/6 double-run byte-identical criterion sha16 93B363F778BE65E1 (qa/state-seq-R2257-a.log and -b.log, 478B each, single writer utf-8 LF through src/os/evidence_R2257.py, never a shell redirection), five adjacent os suites green (qa/regression-R2257.log, fails=0), wired os-state-seq(6). Live reading at closeout: labels=48 distinct=16 span=2242..2257 gaps=0 repeats=0 backwards=0 tick=2257 tick_lead=0 queue_done=164 queue_only=156 verdict=SEQUENCE-OK. Honest disclosure: the first AC-SEQ4 wording (labels written more than once) was falsified by its own live gate - a round legitimately writes several items in a row, so 15 of 15 rounds flagged; the implemented law now reads a repeat as a label returning after a DIFFERENT round intervened, the suite pins both sides and no assertion was relaxed."
+    ],
     [
       "full reconcile battery and suite-matrix regeneration re-proven on the committed tree (R2256)",
       "on",
@@ -109,6 +114,10 @@
   ],
   "results": [
     [
+      "R2257",
+      "R2257 product window: the R2248 d seed shipped as src/os/state_seq.py with AC-SEQ1..AC-SEQ6 pinned in state/queue/tech.md BEFORE the code and a zero-occupancy anchor check at HEAD. SUITE PASS 6/6 double-run byte-identical criterion sha16 93B363F778BE65E1 (qa/state-seq-R2257-a.log and -b.log, 478B each, single writer utf-8 LF through src/os/evidence_R2257.py), five adjacent os suites green (qa/regression-R2257.log, fails=0), wired os-state-seq(6). Live gate: STATE SEQUENCE labels=48 distinct=16 span=2242..2257 gaps=0 repeats=0 backwards=0 tick=2257 tick_lead=0 queue_done=164 queue_only=156 verdict=SEQUENCE-OK. First live read produced two real findings carried instead of swept: 156 queue done stamps have no log item (the log window is folded to 15 rounds) and tick_lead is 0. The AC-SEQ4 wording was corrected at the gate from 'written more than once' to 'returns after a different round intervened' - disclosed, no assertion relaxed. Tech floor refilled in the same window with one real gap row (queue_only_reconcile, AC-QOC1..6 pre-registered, five anchors zero-occupancy rc=1), gauge FLOOR-MET main 5/5 tech 10/10 explore 10/10. Register row product-face-R2257 closed, successor reconcile-battery-R2258 opened as first=yes."
+    ],
+    [
       "R2256",
       "R2256 verification window on the committed tree: RUNNER PASS 432/432 suites green plus controls 7/7 in 852.6s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3570; four follow-up sections all PASS via src/os/battery_followup_R2256.py - matrix 432 suites / 3570 criteria read back byte-identical (42046B, green=432/432), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2196 tee=1667 baselined=529 flags=0. The +1 suite / +6 criteria against R2254 is exactly the R2255 os-round-evidence suite joining the registry. Register row reconcile-battery-R2256 closed, successor product-face-R2257 opened as first=yes. Zero product code changed: a 0-point verification window."
     ],
@@ -181,7 +190,7 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2256",
+      "2257",
       "OSLoop 执行 tick"
     ],
     [
