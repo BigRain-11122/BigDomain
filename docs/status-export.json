@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-29T10:21:56+08:00",
-  "do": "product window R2248: carried debt becomes a register with a checker (state/debt.md + src/os/debt_register.py, AC-DEBT1..8 green 8/8) and the standing floors are back to FLOOR-MET (main 5/5 tech 10/10 explore 10/10)",
+  "export_ts": "2026-10-29T11:20:00+08:00",
+  "do": "verification window R2249: full reconcile battery PASS 428/428 plus controls 7/7 in 1165.7s with 932/932 tmp worlds reclaimed, then matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2181",
   "ceo_face": {
-    "current": "R2248 产品轮：债务登记册 + 检查器落盘（state/debt.md、src/os/debt_register.py，判据 AC-DEBT1..8 全绿 8/8·双跑逐字节一致），并把队列补回地板（main 5/5·tech 10/10·explore 10/10，十条种子均过零占用锚检）。登记册实况=open 2 done 2 stale 1 carried 17（卡在提权壳的 S4U 项）。",
-    "latest_artifact": "qa/reconcile-all-R2247.log（全量電池 427/427＋四段後續全 PASS，單寫者 utf-8 LF）＋ src/os/battery_followup_R2247.py（矩陣再生／指紋／profile／普查四段單寫者 runner）＋ docs/sandbox-suite-matrix.md（427 套件／3538 判據，41673B，逐位元組回讀同一）；時間戳 2026-10-29",
-    "next_milestone": "R2249 先跑全量电池 + 矩阵重生成（本轮改了 src/os、电池runner与两个队列文件，必须在已提交树上验证；R2168 混树律），窗 ≤48h",
-    "last_artifact": "state/debt.md + src/os/debt_register.py（R2248，2026-10-29 12:0x）；证据 qa/debt-register-R2248-a.log / -b.log，回归 qa/regression-R2248.log"
+    "current": "R2249 驗證輪：R2248 欠下的全量電池在已提交樹（c6784fca）上跑通——RUNNER PASS 428/428 套件＋控制 7/7（1165.7s，出生站回收 932/932 世界 326.57 MiB），四段後續全 PASS：矩陣 428 套件／3546 判據逐位元組回讀同一、指紋五域 CLEAN、runner profile --daily --check PASS、寫手普查重凍結後 DRIFT-CLEAN files=2181 flags=0。增量實測非推算＝套件 427→428／判據 3538→3546 恰為 R2248 註冊的 os-debt-register(8)。本輪零產品代碼改動（0 分驗證輪），下一輪回產品面；佇列地板 main 5/5·tech 10/10·explore 10/10 全 MET。",
+    "latest_artifact": "qa/reconcile-all-R2249.log（全量電池 428/428＋四段後續全 PASS，763410B 起於 RUNNER 收尾，單寫者 utf-8 LF）＋ src/os/battery_followup_R2249.py（矩陣再生／指紋／profile／普查四段單寫者 runner，VERDICT PASS）＋ docs/sandbox-suite-matrix.md（428 套件／3546 判據，41753B，逐位元組回讀同一）；時間戳 2026-10-29",
+    "next_milestone": "R2250 回產品面：認領 state/queue 隊頭（tech 10 條／explore 10 條可領），判據先寫進佇列行再動代碼，錨檢（git grep -F 對 HEAD 零佔用）先行；同窗不得再跑電池（R2168 混樹律），窗 ≤48h",
+    "last_artifact": "state/debt.md + src/os/battery_followup_R2249.py（R2249，2026-10-29 11:0x）；證據 qa/reconcile-all-R2249.log"
   },
   "depts": [
     {
@@ -35,6 +35,11 @@
     }
   ],
   "outs": [
+    [
+      "full reconcile battery and suite-matrix regeneration re-proven on the committed R2248 tree (R2249)",
+      "on",
+      "R2249: the register row that R2248 opened as its own first item is closed on the committed tree (c6784fca) with zero product code changed. Full reconcile battery RUNNER PASS 428/428 suites green plus reconcile controls 7/7 in 1165.7s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2249.log, 763410B at RUNNER close, single-writer utf-8 LF through src/os/battery_stream.py). Four post-battery sections all PASS through src/os/battery_followup_R2249.py: matrix 428 suites / 3546 criteria read back byte-identical (41753B, green=428/428), fingerprint CLEAN over 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2181 tee=1652 baselined=529 flags=0, VERDICT PASS. Deltas measured against R2247 rather than assumed: 427 -> 428 suites and 3538 -> 3546 criteria are exactly the R2248 os-debt-register suite (8 criteria) joining the registry, so that suite is now covered by the whole battery and not only by its own suite plus neighbours. state.json measured at 37423B against the 78500B waterline, so no fold is due. Honest score: a 0-point verification window."
+    ],
     [
       "debt register + checker, and the standing floors restored (R2248)",
       "on",
@@ -82,6 +87,10 @@
     ]
   ],
   "results": [
+    [
+      "R2249",
+      "verification window on the carried first item: full battery RUNNER PASS 428/428 plus controls 7/7 in 1165.7s, tmp reclaim 932/932 worlds 326.57 MiB, four follow-up sections all PASS (matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2181 flags=0). Zero product code changed, so a 0-point window; the register row reconcile-battery-and-matrix is closed and the only open row left is the elevated-shell S4U item; the floors read main 5/5 tech 10/10 explore 10/10 FLOOR-MET, so R2250 opens on the product face."
+    ],
     [
       "R2248",
       "product window: carried debt is a register instead of log prose (state/debt.md + src/os/debt_register.py, AC-DEBT1..8 green 8/8, double-run byte-identical criterion sha16 8230EE0683CCB6EB, five adjacent os suites green), the ten-row seeding duty is discharged and the floors read FLOOR-MET; the full battery and the matrix regeneration were NOT run (25-minute budget, R2168 mixed-tree rule) and are the registered first item for R2249"
@@ -139,17 +148,17 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2248",
+      "2249",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 7,
+    "log_lines_in_window": 8,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

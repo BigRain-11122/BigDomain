@@ -2,3 +2,4 @@
 2241 tick 2026-10-29 R2241 product window: api_seller_watch_conversion_months (explore R2240 a) - suite 8/8 double-run; battery + matrix regeneration carried to R2242
 2242 tick 2026-10-29 R2242 product window: api_category_rating_months (explore R2240 b) - suite 8/8 double-run; battery + matrix regeneration carried to R2243
 2243 tick 2026-10-29 R2243 verification window: state fold R593 (82086 -> 13228 bytes, 53 -> 5 log lines, 497 tokens kept) after an eol+indent layout repair; reconcile battery PASS 424/424 green, controls 7/7, criteria 3516, 1024.4s
+2249 tick 2026-10-29 R2249 verification window: reconcile battery PASS 428/428 green + controls 7/7 in 1165.7s, tmp reclaim 932/932 worlds 326.57 MiB, matrix 428 suites / 3546 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2181; register row closed
