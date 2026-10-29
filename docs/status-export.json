@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T15:16:57+08:00",
-  "do": "product window R2261 on the debt register first item: the per-round evidence ritual is now one callable (src/os/evidence_capture.py) - two legs of the same suite, a digest over the PASS/FAIL lines only, refusals before anything is written when a leg or an adjacent suite is red, one single-writer utf-8 LF body with a read-back proof and a refused second write, and its own exit codes per refusal",
+  "export_ts": "2026-10-29T15:54:17+08:00",
+  "do": "verification window R2262 on the debt register first item: the full reconcile battery on the committed tree went RED first (reconcile-daily-census cd7 drift) because the R2260 battery evidence log carried 35 CRLF lines appended by that round's own follow-up AFTER it froze the census baseline; the log was rewritten through run_identity.normalize (crlf 35->0, payload line set identical) and the battery was re-run on the committed repair tree to RUNNER PASS",
   "ceo_face": {
-    "current": "R2261 产品窗：证据仪式收成一件可调用工具 src/os/evidence_capture.py——双跑同一套件、只对 PASS/FAIL 行取摘要（墙钟差异不会伪造不一致）、红线腿/邻套件红一律在写文件之前拒绝、证据体单写者 utf-8 LF 落盘并回读校验、同路径二次写拒绝；本轮自己的证据就是由这件新工具产出的（legs=2 identical=True adjacent=5 verdict=CAPTURED）。",
-    "latest_artifact": "qa/evidence-capture-R2261.log（本轮证据·1886B·六条判据 6/6 首跑全绿·五个相邻 os 套件全绿）+ src/os/evidence_capture.py（9509B，替代 91 份 326455B 的手抄仪式）+ qa/evidence-cli-R2261.log（CLI 实弹 rc=0）·2026-10-29",
-    "next_milestone": "R2262 验证窗：在已提交树上跑全量对账电池 + 套件矩阵再生（覆盖本轮新增 os-evidence-capture 套件），电池清后再接产品面 evidence_parity（把 91 份旧仪式脚本逐份判等，为分批退役取证）。",
+    "current": "R2262 验证窗：在已提交树上跑全量对账电池。首跑 RED——435 套件里 reconcile-daily-census 的 cd7 检出证据漂移，根因是 R2260 电池日志被当轮 followup 追加了 35 个 CRLF 行，而县级普查基线在该追加之前就已冻结（同一轮内先后次序造成的盲区）。修复=经 run_identity.normalize 重写该日志（CRLF 35→0，行集合逐行判等，sha16 不变）并落可复用修复件；随后在修复提交树上重跑：RUNNER PASS 435/435 套件 + 控制 7/7，745.3s，判据 3587。",
+    "latest_artifact": "qa/reconcile-all-R2262-retry.log（本轮绿灯电池证据·769KB·单写者 utf-8 LF·EOL 自检 crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（435 套件 / 3587 判据·42285B·green=435/435）+ src/os/battery_followup_R2262.py（追加段强制 CRLF 归一、普查移到最后）+ src/os/evidence_normalize_R2262.py 2026-10-29",
+    "next_milestone": "R2263 产品窗：债务登记首位 product-face-R2263，从 tech 队头 evidence_parity（把 91 份旧仪式脚本与新证据工具逐份判等，为分批退役取证）或 explore 队头取一件可跑产品面",
     "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/evidence-capture-R2261.log（R2261·2026-10-29）"
+    "last_artifact": "qa/reconcile-all-R2262-retry.log（R2262·2026-10-29）"
   },
   "depts": [
     {
@@ -163,7 +163,7 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2261",
+      "2262",
       "OSLoop 执行 tick"
     ],
     [
@@ -173,6 +173,10 @@
     [
       "R2261",
       "R2261 product window on the debt register first item (product-face-R2261): the top deliverable tech row (the R2259 evidence_capture seed) shipped as src/os/evidence_capture.py with AC-EVC1..AC-EVC6 pinned in that queue row BEFORE the code; anchor check at HEAD 2026-10-29 gave os-evidence-capture / test_evidence_capture / E_EVC zero-occupancy rc=1 while evidence_capture / AC-EVC hit only six text files (disclosed text occupancy, zero code occupancy). SUITE PASS 6/6 on the first run with no criterion relaxed, wired os-evidence-capture(6). This window's own evidence was produced BY the new callable instead of by an eighty-ninth hand-typed copy: EVIDENCE CAPTURE round=R2261 legs=2 identical=True adjacent=5 fails=0 verdict=CAPTURED (qa/evidence-capture-R2261.log, 1886B, single writer utf-8 LF through src/os/evidence_R2261.py, never a shell redirection) plus a live CLI run on test_queue_floor.py rc=0 (qa/evidence-cli-R2261.log). The AC-EVC6 census measured 91 legacy scripts / 326455B against the 9509B callable (the count includes the thin R2261 driver, disclosed). Marking the row done dropped tech claimable to 9 against its floor of 10, so one real gap row was seeded in the same window (evidence_parity, AC-EVP1..AC-EVP6 pre-registered, five anchors git grep -F rc=1) and the gauge closed FLOOR-MET main 5/5 tech 10/10 explore 10/10. Honest score: one product face with its own suite, so 2 points. The full reconcile battery and the suite-matrix regeneration carry to R2262 (the R2168 mixed-tree rule) and are registered first=yes."
+    ],
+    [
+      "R2262",
+      "R2262 verification window on the debt register first item (reconcile-battery-R2262): first run RED, RUNNER FAIL with 2 failed assertions in 861.6s (qa/reconcile-all-R2262.log, kept as the red leg) - suite reconcile-daily-census criterion cd7-live-real-tree exit=2 drift, plus the aggregate control that counts green suites (434/435) and the criteria total. The root cause was a real evidence-hygiene defect, not a flake: qa/reconcile-all-R2260.log carried 35 CRLF lines because the R2260 follow-up appended captured subprocess bodies verbatim, and the census re-freeze in that same follow-up ran BEFORE the append, so the file was frozen as tee and the next census would always see class=other. Repair: src/os/evidence_normalize_R2262.py rewrites the file through run_identity.normalize - crlf 35->0, bare_cr 0, payload line set identical, sha16 2b9e9a1afbff90ba before and after (768425B -> 768390B) - and the census re-checked DRIFT-CLEAN with files=2207 flags=0. Second run on the committed repair tree (commit bf07f5e5): RUNNER PASS 435/435 suites plus controls 7/7 in 745.3s, expected criteria total=3587, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2262-retry.log, single-writer utf-8 LF through battery_stream.py, never a shell redirection). Four follow-up sections all PASS via src/os/battery_followup_R2262.py, which now CRLF-normalizes every captured body and runs the census LAST: matrix regenerated to 435 suites / 3587 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42285B, green=435/435), fingerprint chain CLEAN over five domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2208 tee=1679 baselined=529 flags=0, and the log's own EOL self-check crlf=0 bare_cr=0 bom=False over 769003B. The +1 suite / +6 criteria against R2260 is exactly the R2261 os-evidence-capture suite joining the registry. Zero product code changed (the R2168 mixed-tree rule), so the honest score is 0 product points; the two new modules are the repair helper and the hardened follow-up."
     ]
   ],
   "self_drive": {

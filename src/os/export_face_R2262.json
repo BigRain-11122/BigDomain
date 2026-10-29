@@ -1,0 +1,7 @@
+{
+  "current": "R2262 验证窗：在已提交树上跑全量对账电池。首跑 RED——435 套件里 reconcile-daily-census 的 cd7 检出证据漂移，根因是 R2260 电池日志被当轮 followup 追加了 35 个 CRLF 行，而县级普查基线在该追加之前就已冻结（同一轮内先后次序造成的盲区）。修复=经 run_identity.normalize 重写该日志（CRLF 35→0，行集合逐行判等，sha16 不变）并落可复用修复件；随后在修复提交树上重跑：RUNNER PASS 435/435 套件 + 控制 7/7，745.3s，判据 3587。",
+  "latest_artifact": "qa/reconcile-all-R2262-retry.log（本轮绿灯电池证据·769KB·单写者 utf-8 LF·EOL 自检 crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（435 套件 / 3587 判据·42285B·green=435/435）+ src/os/battery_followup_R2262.py（追加段强制 CRLF 归一、普查移到最后）+ src/os/evidence_normalize_R2262.py 2026-10-29",
+  "next_milestone": "R2263 产品窗：债务登记首位 product-face-R2263，从 tech 队头 evidence_parity（把 91 份旧仪式脚本与新证据工具逐份判等，为分批退役取证）或 explore 队头取一件可跑产品面",
+  "next_milestone_due": "2026-10-30T12:00:00+08:00",
+  "last_artifact": "qa/reconcile-all-R2262-retry.log（R2262·2026-10-29）"
+}
