@@ -4426,6 +4426,13 @@ SUITES = [
     # row BEFORE the code existed.)
     ("os-seed-anchor",
      os.path.join("..", "os", "test_seed_anchor.py"), 5),
+    # R2261: the per-round evidence ritual becomes one callable - double run,
+    # criterion digest, single-writer utf-8 LF body, adjacent batch and live
+    # line, refusing before any file is created when a leg is red.
+    # (AC-EVC1..AC-EVC6 pinned in state/queue/tech.md as the R2259 seed row
+    # BEFORE the code existed.)
+    ("os-evidence-capture",
+     os.path.join("..", "os", "test_evidence_capture.py"), 6),
     ]
 
 FAILS = 0

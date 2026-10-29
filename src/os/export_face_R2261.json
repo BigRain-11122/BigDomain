@@ -1,0 +1,7 @@
+{
+  "current": "R2261 产品窗：证据仪式收成一件可调用工具 src/os/evidence_capture.py——双跑同一套件、只对 PASS/FAIL 行取摘要（墙钟差异不会伪造不一致）、红线腿/邻套件红一律在写文件之前拒绝、证据体单写者 utf-8 LF 落盘并回读校验、同路径二次写拒绝；本轮自己的证据就是由这件新工具产出的（legs=2 identical=True adjacent=5 verdict=CAPTURED）。",
+  "latest_artifact": "qa/evidence-capture-R2261.log（本轮证据·1886B·六条判据 6/6 首跑全绿·五个相邻 os 套件全绿）+ src/os/evidence_capture.py（9509B，替代 91 份 326455B 的手抄仪式）+ qa/evidence-cli-R2261.log（CLI 实弹 rc=0）·2026-10-29",
+  "next_milestone": "R2262 验证窗：在已提交树上跑全量对账电池 + 套件矩阵再生（覆盖本轮新增 os-evidence-capture 套件），电池清后再接产品面 evidence_parity（把 91 份旧仪式脚本逐份判等，为分批退役取证）。",
+  "next_milestone_due": "2026-10-30T12:00:00+08:00",
+  "last_artifact": "qa/evidence-capture-R2261.log（R2261·2026-10-29）"
+}

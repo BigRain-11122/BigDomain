@@ -1,0 +1,32 @@
+EVIDENCE CAPTURE round=R2261 suite=test_evidence_capture.py legs=2
+== LEG A rc=0 digest=595A4FA5634D6A8E
+evidence_capture suite (expected criteria 6)
+PASS AC-EVC1 two legs same criterion digest, wall clock differs
+PASS AC-EVC2 utf-8 LF single trailing newline, reuse refused
+PASS AC-EVC3 adjacent order recorded, red leg refuses with no file
+PASS AC-EVC4 three refusals each with its own code, zero residue
+PASS AC-EVC5 CLI 0/2/3/4/5 with byte-stable pinned json
+  measured legacy_files=92 legacy_bytes=329431 callable_bytes=9509
+PASS AC-EVC6 pure ASCII, no network, wired, legacy pile byte-wider
+SUITE PASS 6/6
+== LEG B rc=0 digest=595A4FA5634D6A8E
+evidence_capture suite (expected criteria 6)
+PASS AC-EVC1 two legs same criterion digest, wall clock differs
+PASS AC-EVC2 utf-8 LF single trailing newline, reuse refused
+PASS AC-EVC3 adjacent order recorded, red leg refuses with no file
+PASS AC-EVC4 three refusals each with its own code, zero residue
+PASS AC-EVC5 CLI 0/2/3/4/5 with byte-stable pinned json
+  measured legacy_files=92 legacy_bytes=329431 callable_bytes=9509
+PASS AC-EVC6 pure ASCII, no network, wired, legacy pile byte-wider
+SUITE PASS 6/6
+== ADJACENT 5
+== test_seed_anchor.py rc=0 SUITE PASS 5/5
+== test_state_seq.py rc=0 SUITE PASS 6/6
+== test_round_evidence.py rc=0 SUITE PASS 6/6
+== test_queue_row.py rc=0 SUITE PASS 6/6
+== test_queue_floor.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=5 fails=0 digest=595A4FA5634D6A8E
+
+EVIDENCE CAPTURE round=R2261 legs=2 identical=True adjacent=5 digest=595A4FA5634D6A8E
+LIVE cli rc=0 file=True EVIDENCE CAPTURE round=R2261 suite=test_queue_floor.py legs=2 identical=True adjacent=0 fails=0 offending=None evidence=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\evidence-cli-R2261.log bytes=1669 verdict=CAPTURED
+LIVE note: this window evidence was written by the new callable, not by a fresh copy of the ritual
