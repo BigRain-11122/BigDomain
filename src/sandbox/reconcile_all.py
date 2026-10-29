@@ -4433,6 +4433,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-evidence-capture",
      os.path.join("..", "os", "test_evidence_capture.py"), 6),
+    # R2263: the queue-only residue that state_seq reports is split against a
+    # declared log-window floor into FOLDED (aged out of the log window) and
+    # NEVER-LOGGED (a round that claimed a queue row and left no log item), so
+    # a silently dropped ledger line cannot hide behind a residue count that
+    # looks honest either way.
+    # (AC-QOC1..AC-QOC6 pinned in state/queue/tech.md as the R2257 seed row
+    # BEFORE the code existed.)
+    ("os-queue-only",
+     os.path.join("..", "os", "test_queue_only_reconcile.py"), 6),
     ]
 
 FAILS = 0

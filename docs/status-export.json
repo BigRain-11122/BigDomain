@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T15:54:17+08:00",
-  "do": "verification window R2262 on the debt register first item: the full reconcile battery on the committed tree went RED first (reconcile-daily-census cd7 drift) because the R2260 battery evidence log carried 35 CRLF lines appended by that round's own follow-up AFTER it froze the census baseline; the log was rewritten through run_identity.normalize (crlf 35->0, payload line set identical) and the battery was re-run on the committed repair tree to RUNNER PASS",
+  "export_ts": "2026-10-29T16:06:12+08:00",
+  "do": "product window R2263 on the P2 tech head: the queue-only residue state_seq reports is split into FOLDED (aged out of the log window) and NEVER-LOGGED (a round that claimed a queue row and left no log item), so a silently dropped ledger line can no longer hide behind a residue count that looks honest either way.",
   "ceo_face": {
-    "current": "R2262 验证窗：在已提交树上跑全量对账电池。首跑 RED——435 套件里 reconcile-daily-census 的 cd7 检出证据漂移，根因是 R2260 电池日志被当轮 followup 追加了 35 个 CRLF 行，而县级普查基线在该追加之前就已冻结（同一轮内先后次序造成的盲区）。修复=经 run_identity.normalize 重写该日志（CRLF 35→0，行集合逐行判等，sha16 不变）并落可复用修复件；随后在修复提交树上重跑：RUNNER PASS 435/435 套件 + 控制 7/7，745.3s，判据 3587。",
-    "latest_artifact": "qa/reconcile-all-R2262-retry.log（本轮绿灯电池证据·769KB·单写者 utf-8 LF·EOL 自检 crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（435 套件 / 3587 判据·42285B·green=435/435）+ src/os/battery_followup_R2262.py（追加段强制 CRLF 归一、普查移到最后）+ src/os/evidence_normalize_R2262.py 2026-10-29",
-    "next_milestone": "R2263 产品窗：债务登记首位 product-face-R2263，从 tech 队头 evidence_parity（把 91 份旧仪式脚本与新证据工具逐份判等，为分批退役取证）或 explore 队头取一件可跑产品面",
-    "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2262-retry.log（R2262·2026-10-29）"
+    "current": "R2263 产品窗：队列已完成轮次与日志的残差不再是「一个数」，而是分成了两类——本该随日志窗口滚出去的（FOLDED）和从未写进日志的（NEVER-LOGGED）。此前 state_seq 报「156 个已完成轮次在日志里找不到」，但分不清是合法滚出还是真的漏写，于是一条被静默丢掉的台账行，看起来和正常老化一模一样。本轮把它变成读数：必须显式给出窗口下界，每一条盖章轮次被判为 已记录 / 已滚出 / 从未记录，三类计数必须相加等于盖章总数才出判决，盖章与标签的判定法直接从 state_seq 复用（套件把这两个函数打桩来证明没有第二份实现），只读零写、输入不可读时 fail-closed 退出 3。",
+    "latest_artifact": "src/os/queue_only_reconcile.py（新面·6 判据 AC-QOC1..AC-QOC6）+ qa/queue-only-R2263.log（双跑判据行逐字节同一·1839B·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出——本轮用的是它自己接管证据仪式）+ 五邻域套件同批全绿·接线 os-queue-only(6)",
+    "next_milestone": "R2264 验证窗：本轮改了 src/os 并新增套件与接线，按 R2168 混树律下一窗先还验证债——在已提交树上跑全量对账电池 + 套件矩阵再生（预期 436 套件 / 3593 判据，较 R2262 的 435/3587 恰为本轮新套件），零产品代码改动；随后四个 follow-up 段全 PASS。",
+    "next_milestone_due": "2026-10-31T04:06:12+08:00",
+    "last_artifact": "qa/queue-only-R2263.log（R2263·2026-10-29）"
   },
   "depts": [
     {
@@ -99,6 +99,10 @@
   ],
   "results": [
     [
+      "R2263",
+      "R2263 product window on the debt register first item (product-face-R2263): the top deliverable tech row (the R2257 queue_only_reconcile seed, criteria already pinned in that row BEFORE the code) shipped as src/os/queue_only_reconcile.py - the queue-only residue state_seq reports is split against a mandatory floor into LOGGED / FOLDED / NEVER-LOGGED, the stamp and label law imported from state_seq and proven by patching it in the suite, the three counts required to sum to the stamp count before a verdict, zero writes and a fail-closed exit 3 on unreadable input. SUITE PASS 6/6 two legs byte-identical (qa/queue-only-R2263.log 1839B, single writer utf-8 LF through the R2261 evidence_capture callable, dogfooded so this window own evidence ran as one call), five adjacent os suites green in the same capture, wired os-queue-only(6). LIVE QUEUE ONLY floor=R2249 stamps=166 logged=5 folded=161 never_logged=0 max_stamp=2261 verdict=RECONCILED - a previously unreconciled residue is now classified. Battery and matrix regeneration carry to R2264 (the R2168 mixed-tree rule)."
+    ],
+    [
       "R2259",
       "R2259 product window on the debt register first item: the R2248 e seed shipped as src/os/seed_anchor.py with AC-SAN1..AC-SAN5 pinned in state/queue/tech.md BEFORE the code and a zero-occupancy anchor check at HEAD. SUITE PASS 5/5 double-run byte-identical criterion sha16 42FAF3CADB8BEEF9 (qa/seed-anchor-R2259-a.log and -b.log, 429B each, single writer utf-8 LF), five adjacent os suites green (qa/regression-R2259.log, fails=0), wired os-seed-anchor(5). Live reading: seed_anchor OCCUPIED head=31 tree=52 (text occupancy), os-seed-anchor FREE at HEAD head=0 and occupied only in the working tree. One implementation defect found by the suite and fixed in the module (the HEAD leg passed the revision before the pattern so git read HEAD as the needle; now an explicit -e), no criterion relaxed. Tech floor refilled in the same window with one real gap row (evidence_capture, AC-EVC1..AC-EVC6 pre-registered, five anchors zero-occupancy rc=1), gauge FLOOR-MET main 5/5 tech 10/10 explore 10/10. Register row product-face-R2259 closed, successor reconcile-battery-R2260 opened as first=yes; the battery and the matrix regeneration carry to R2260 (the R2168 mixed-tree rule)."
     ],
@@ -163,7 +167,7 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2262",
+      "2263",
       "OSLoop 执行 tick"
     ],
     [
@@ -182,10 +186,10 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

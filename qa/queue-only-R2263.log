@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2263 suite=src/os/test_queue_only_reconcile.py legs=2
+== LEG A rc=0 digest=F12E62E8AD3A94F7
+PASS AC-QOC1 stamps and labels read through state_seq, no second implementation
+PASS AC-QOC2 LOGGED/FOLDED/NEVER-LOGGED are exhaustive, sum to the stamp count, and the floor boundary is at-or-above
+PASS AC-QOC3 the floor is mandatory, integer-only, and refused before any read
+PASS AC-QOC4 zero writes, unreadable input fails closed, empty queues read honestly empty
+PASS AC-QOC5 CLI exits 0/2/2/2/3 as pinned and --json carries the nine pinned keys byte-stably
+LIVE QUEUE ONLY floor=R2249 stamps=166 logged=5 folded=161 never_logged=0 max_stamp=2261 verdict=RECONCILED
+PASS AC-QOC6 pure ASCII, stdlib only, wired as os-queue-only(6), live reading reconciled
+SUITE PASS 6/6
+== LEG B rc=0 digest=F12E62E8AD3A94F7
+PASS AC-QOC1 stamps and labels read through state_seq, no second implementation
+PASS AC-QOC2 LOGGED/FOLDED/NEVER-LOGGED are exhaustive, sum to the stamp count, and the floor boundary is at-or-above
+PASS AC-QOC3 the floor is mandatory, integer-only, and refused before any read
+PASS AC-QOC4 zero writes, unreadable input fails closed, empty queues read honestly empty
+PASS AC-QOC5 CLI exits 0/2/2/2/3 as pinned and --json carries the nine pinned keys byte-stably
+LIVE QUEUE ONLY floor=R2249 stamps=166 logged=5 folded=161 never_logged=0 max_stamp=2261 verdict=RECONCILED
+PASS AC-QOC6 pure ASCII, stdlib only, wired as os-queue-only(6), live reading reconciled
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_round_evidence.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=F12E62E8AD3A94F7
