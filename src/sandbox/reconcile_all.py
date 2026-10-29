@@ -4419,6 +4419,13 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-state-seq",
      os.path.join("..", "os", "test_state_seq.py"), 6),
+    # R2259: a seed's face name must be provably unoccupied before it lands -
+    # the HEAD revision and the working tree (uncommitted + untracked) are
+    # grepped literally, the counts reconcile, and any hit refuses to seed.
+    # (AC-SAN1..AC-SAN5 pinned in state/queue/tech.md as the R2248 e seed
+    # row BEFORE the code existed.)
+    ("os-seed-anchor",
+     os.path.join("..", "os", "test_seed_anchor.py"), 5),
     ]
 
 FAILS = 0

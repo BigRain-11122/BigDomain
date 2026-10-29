@@ -1,0 +1,6 @@
+RUNNER R2259 adjacent os regressions
+== test_state_seq.py rc=0 SUITE PASS 6/6
+== test_round_evidence.py rc=0 SUITE PASS 6/6
+== test_queue_row.py rc=0 SUITE PASS 6/6
+== test_queue_floor.py rc=0 SUITE PASS 8/8
+== test_debt_register.py rc=0 SUITE PASS 8/8

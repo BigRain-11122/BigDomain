@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T14:20:13+08:00",
-  "do": "verification window R2258: the R2257 state-sequence suite is now covered by the whole battery instead of only its own suite plus neighbours - RUNNER PASS 433/433 suites and controls 7/7 in 989.7s, then matrix 433 suites / 3576 criteria byte-identical, fingerprint CLEAN over 5 domains, profile PASS and census DRIFT-CLEAN files=2200; zero product code changed, so this window buys back debt rather than shipping a face",
+  "export_ts": "2026-10-29T14:32:31+08:00",
+  "do": "product window R2259: a seed's face name is now a reading instead of a hand-run git grep - one module with two scopes (HEAD and the working tree including untracked files), a FREE/OCCUPIED verdict whose counts reconcile, and a refusal on any hit",
   "ceo_face": {
-    "current": "R2258 验证轮：把 R2257 新加的轮次序列套件纳入全量回归——整批 433/433 套件全绿 + 对账控制 7/7（989.7s，出生地临时件回收 932/932 世界 326.57 MiB，busy=0 failed=0），随后四段跟进全过：套件矩阵重生成 433 套件 / 3576 判据并回读逐字节同一、指纹链 5 域 CLEAN、runner profile PASS、写入者普查 DRIFT-CLEAN（files=2200）。本轮不动任何产品代码，如实记 0 分验证轮，只把上轮欠的验证债还清。",
-    "latest_artifact": "qa/reconcile-all-R2258.log（765852B，RUNNER PASS 433/433 + 四段跟进 VERDICT PASS）、docs/sandbox-suite-matrix.md（42111B，433 套件/3576 判据，green=433/433）；辅助件 src/os/battery_followup_R2258.py（四段单写者跟进器）；2026-10-29 14:2x",
-    "next_milestone": "R2259 回到产品面：领最上一条真队列行，判据先写进队列行再动代码，锚点 HEAD 零占用检查先行，交一件可跑实物（套件 + 双跑证据）",
+    "current": "R2259 产品窗：把「播种前的名字零占用检查」从一条手敲的 git grep 变成可跑读面——src/os/seed_anchor.py 双作用域检查（HEAD 已提交版本 + 工作树含未跟踪文件），命中逐条点名（针/作用域/文件/行），FREE/OCCUPIED 判决与计数互相对得上，任何命中一律拒绝播种（退出码 2 + REFUSE TO SEED）。判据 AC-SAN1..AC-SAN5 先写进队列行再动代码，锚点 HEAD 零占用检查存档。套件 5/5 双跑逐字节同一（sha16 42FAF3CADB8BEEF9），五个相邻套件全绿，已接线 os-seed-anchor(5)。实测：文本里出现过的名字 seed_anchor 读作 OCCUPIED，而新标签 os-seed-anchor 在 HEAD 仍 FREE、只在工作树里被占用——这正是第二作用域存在的理由。",
+    "latest_artifact": "qa/seed-anchor-R2259-a.log 与 -b.log（各 429B，双跑判据行逐字节同一）、qa/regression-R2259.log（相邻五套件 fails=0）、src/os/seed_anchor.py、src/os/test_seed_anchor.py；2026-10-29",
+    "next_milestone": "R2260 验证轮：在已提交树上跑全量对账电池 + 套件矩阵重生成（零产品代码改动，R2168 混合树律），把本轮新套件纳入整批回归",
     "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2258.log（R2258，2026-10-29）"
+    "last_artifact": "qa/seed-anchor-R2259-a.log（R2259，2026-10-29）"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "seed anchor reader: a seed's face name is provably free at HEAD and in the working tree (R2259)",
+      "on",
+      "R2259: src/os/seed_anchor.py turns the hand-run git grep into a reading. The HEAD scope answers what a landed seed would collide with; the working-tree scope (git grep --untracked) answers what a sibling window that wrote but did not commit would collide with, so an uncommitted edit and an untracked file both count. Every hit carries needle, scope, file and line, the FREE/OCCUPIED verdict reconciles against head/tree/per-needle counts, --limit bounds the detail with an honest truncated flag, and any hit refuses to seed (E_SAN_OCCUPIED, CLI 2 with REFUSE TO SEED) while FREE exits 0, bad flags 2 and a non-repository or git failure 3. GIT_CEILING_DIRECTORIES is pinned to the parent of the scanned root so a plain directory cannot borrow an enclosing repository. Criteria AC-SAN1..AC-SAN5 were pinned in state/queue/tech.md as the R2248 e seed BEFORE the code, with a zero-occupancy anchor check at HEAD (os-seed-anchor / test_seed_anchor / E_SAN rc=1). Evidence: SUITE PASS 5/5 double-run byte-identical criterion sha16 42FAF3CADB8BEEF9 (qa/seed-anchor-R2259-a.log and -b.log, 429B each, single writer utf-8 LF through src/os/evidence_R2259.py), five adjacent os suites green (qa/regression-R2259.log, fails=0), wired os-seed-anchor(5). Live: seed_anchor OCCUPIED head=31 tree=52 (text occupancy, disclosed) while the fresh label os-seed-anchor reads FREE at HEAD and only becomes occupied in the working tree. Honest defect: the first HEAD leg put the revision before the pattern, git consumed HEAD as the needle, and every HEAD scan read zero - fixed in the module with an explicit -e, no criterion relaxed."
+    ],
     [
       "round sequence reader: the tick, the log's own round labels and the queues' done stamps compared (R2257)",
       "on",
@@ -90,29 +95,13 @@
       "state fold R593 + reconcile battery (R2243)",
       "on",
       "logs_toolkit eol --fix then --fix-indent repaired a measured layout drift (0 CRLF, 53/53 items off the 16-space canon) before the fold; fold R593 moved log lines 1:49 into one rolling line with token_missing empty over 497 tokens; the archive appendix kept the window verbatim under pre-op sha16 ab46927e87e6f9d9; the battery came back PASS 424/424 with criteria total 3516 in 1024.4s. No product code changed."
-    ],
-    [
-      "per-category monthly rating intake face (R2242)",
-      "on",
-      "api_category_rating_months(include_uncategorized=True): fifteen-key envelope, ten-key month rows, seven-key category cells; the rated_utc booking law with a revision moving only the effective stars through the single _effective_stars seam (January tools cell keeps two ratings with its mean falling 4.5 -> 2.5); the category seam (_category_at_instant) so a March revise_category never rewrites the January tools cell while later ratings land in the new data cell; the uncategorized listing forming its own bucket; the contiguous JAN..APR grid with an honest zero February whose average and cells are None and whose accumulator stays flat; cells summing exactly into their row on count and star sum; the pooled envelope mean 3.17 proven different from the 3.28 mean of monthly means; include_uncategorized=False dropping the bucket and recomputing every aggregate (6/19/3.17/3 -> 5/15/3.0/2) while seven non-bool shapes fail closed before any read; frozen digests and a constant ledger_tx set. Evidence: SUITE 8/8 double-run byte-identical (671B per leg, utf-8 LF by src/os/evidence_R2242.py), wired ledger-apimarket-categoryratingmonths(8), six adjacent suites green (qa/regression-R2242.log, fails=0)."
-    ],
-    [
-      "seller-scoped monthly watch-to-purchase conversion face (R2241)",
-      "on",
-      "api_seller_watch_conversion_months(dev_account=None): twenty-key envelope, fourteen-key month rows; the watch-month cohort law with an unwatch proven not to be an event (dana keeps 2 watches across a February unwatch and the February row stays an honest zero); the three legs (converted at or after the watch stamp incl. equal stamps at zero seconds, pre_owned excluded from the funnel, pending that also absorbs a refunded purchase) conserving per row and in the envelope; contiguous grid with None rate and None latencies on the zero month; strict isolation partitioning the market (2+4 watches, 1+1 converted, 0+1 pre_owned, 1+2 pending); the monthly market benchmark column a seller reads against (0.5 / None / 0.5 / 0.0 with 0.4 pooled) while the market scope carries none of its own; identity with api_market_conversion_months on all ten shared keys and the month grid, and with api_seller_watch_months per seller; seven-form usr: gate failing closed before any read with frozen digests and a constant ledger_tx set. Evidence: SUITE 8/8 double-run byte-identical criterion sha16 774347968EA72ECE (617B per leg, utf-8 LF by src/os/evidence_R2241.py), wired ledger-apimarket-sellerwatchconversionmonths(8), six adjacent suites green (qa/regression-R2241.log, fails=0)."
-    ],
-    [
-      "per-category monthly watch-to-purchase conversion face (R2237)",
-      "on",
-      "api_category_watch_conversion_months(include_uncategorized=True): sixteen-key envelope, fourteen-key month rows, twelve-key category cells; the watch-month cohort law (an unwatch is not an event, a purchase never re-dates the month); the three legs (converted at or after the watch stamp incl. equal stamps at zero seconds, pre_owned excluded from the funnel, pending that also absorbs a refunded purchase so the April cancellation lands as a real 0.0 and a pre_owned-only January cell reads None); contiguous JAN..MAY grid with a zero February carrying None rate and None latencies; the watch-instant category seam; the TRUE market benchmark column that survives the trimmed view (0.5 row against a 1/3 benchmark); identity with api_category_watch_months (7 watches) and api_market_conversion_months (2 converted / 1 pre_owned / 4 pending); pooled 216000.0 average and median against 172800/259200 extremes; seven-form bool gate failing closed before any read. Evidence: SUITE 8/8 double-run byte-identical criterion sha16 50e5228778f319c9 (904B per leg, utf-8 LF by src/os/evidence_R2237.py), wired ledger-apimarket-categorywatchconversionmonths(8), six adjacent suites green."
-    ],
-    [
-      "queue pre-registration gate (R2253)",
-      "on",
-      "src/os/queue_row.py: a claimable open queue row must name its criteria prefix, so pre-registration is a gate instead of a habit. Two pinned forms (Criteria prefix AC-<TOKEN>, Criteria AC-<TOKEN><n>), the row law imported from queue_floor rather than re-implemented, gated rows exempt but still reported, every refusal carrying file/line/excerpt. Suite 6/6 double-run byte-identical sha16 FEA1FEEF8476A141 through the single-writer evidence script, wired as os-queue-row(6). Live reading: 25 claimable, 16 prefixed, 9 legacy violations reported as debt."
     ]
   ],
   "results": [
+    [
+      "R2259",
+      "R2259 product window on the debt register first item: the R2248 e seed shipped as src/os/seed_anchor.py with AC-SAN1..AC-SAN5 pinned in state/queue/tech.md BEFORE the code and a zero-occupancy anchor check at HEAD. SUITE PASS 5/5 double-run byte-identical criterion sha16 42FAF3CADB8BEEF9 (qa/seed-anchor-R2259-a.log and -b.log, 429B each, single writer utf-8 LF), five adjacent os suites green (qa/regression-R2259.log, fails=0), wired os-seed-anchor(5). Live reading: seed_anchor OCCUPIED head=31 tree=52 (text occupancy), os-seed-anchor FREE at HEAD head=0 and occupied only in the working tree. One implementation defect found by the suite and fixed in the module (the HEAD leg passed the revision before the pattern so git read HEAD as the needle; now an explicit -e), no criterion relaxed. Tech floor refilled in the same window with one real gap row (evidence_capture, AC-EVC1..AC-EVC6 pre-registered, five anchors zero-occupancy rc=1), gauge FLOOR-MET main 5/5 tech 10/10 explore 10/10. Register row product-face-R2259 closed, successor reconcile-battery-R2260 opened as first=yes; the battery and the matrix regeneration carry to R2260 (the R2168 mixed-tree rule)."
+    ],
     [
       "R2258",
       "R2258 verification window on the committed tree: RUNNER PASS 433/433 suites green plus reconcile controls 7/7 in 989.7s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3576; four follow-up sections all PASS via src/os/battery_followup_R2258.py - matrix 433 suites / 3576 criteria read back byte-identical (42111B, green=433/433), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2200 tee=1671 baselined=529 flags=0. The +1 suite / +6 criteria against R2256 is exactly the R2257 os-state-seq suite joining the registry. Register row reconcile-battery-R2258 closed, successor product-face-R2259 opened as first=yes. Zero product code changed: a 0-point verification window."
@@ -174,45 +163,17 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "R2236",
-      "product window: explore head seed R2230 4/6 delivered as api_seller_rating_months; SUITE PASS 8/8 double-run with byte-identical criterion lines (sha16 DF8438421FC9A211, 692B per leg, single-writer utf-8 LF, zero CR); six adjacent trust-family suites green 8/8; PRODUCT_SHA_STABLE True; honest notes = the AC-SRT1 key count was corrected nineteen -> twenty before the suite (the resident disclaimer is an envelope key, disclosed, nothing relaxed), the first run read 5/8 and all three reds were this-window expectations, and two own-script defects in the evidence driver were fixed in-window; carried debt = the state fold (83849B over the 78500B waterline), the full battery and the matrix regeneration, all three the R2237 first item."
-    ],
-    [
-      "R2235",
-      "verification window: RUNNER PASS 418/418 suites + controls 7/7 in 1050.4s on the committed tree; four follow-up sections all PASS (matrix 418/3467, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2146 flags=0); no product code changed"
-    ],
-    [
-      "R2167",
-      "R2168: five-silence scan clean at open (275 decision rows / 181 content-addressed tokens, four NEW - D-20261028-01..04 - and all another seat face, acknowledged with zero action and the baseline re-anchored after the group-side rotation; ledger carries no new @BigDomain row; group orders tail advanced to the 2026-10-28 00:15 trio, all fleet face; benchmarks fresh; clean tree, no index.lock). The round discharged the R2167 carry-over - the battery and matrix regeneration that round owed its own product - rather than opening a new face, because a mid-battery edit would have made the later suites read a tree the evidence does not describe. Battery RUNNER PASS 368/368 suites plus controls 7/7 in 863.0s (qa/reconcile-all-R2168.log, single-writer UTF-8 LF via src/os/battery_stream.py) with the birth-site tmp sweep reclaiming 826/826 worlds and 294.29 MiB inside the same window; the four post-battery sections all PASS in one new helper src/os/battery_followup_R2168.py - matrix to 368 suites / 3066 criteria read back byte-identical, fingerprint CLEAN over five domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=1961 flags=0. Honest notes: a shell sleep used to watch the battery was cancelled by the five-minute no-output rule while the battery itself finished rc=0 with no orphan and no evidence loss; heartbeat.txt was 14 ticks behind and was backfilled 2154..2168; no new product face this round."
-    ],
-    [
-      "R2149",
-      "R2150: five-silence scan found the state log carrying 71 bare-LF lines from the previous closeout (repaired with the logs toolkit before anything else, verified post_bare_lf 0), three ledger rows already paid off, decisions.md at 288 rows / 212 content-addressed tokens with zero new against the stored baseline, the group orders baseline unchanged, benchmarks one day inside the gate and a clean tree with no index.lock. The tech head was claimable, so the window claimed it and registered AC-TSN1..AC-TSN8 in the queue line BEFORE the code: the negative-example window of the tmp-sweep ownership anchors. Product: has_signature now accepts a signature only as a regular file that is not a link - a directory occupying the name, a link, a foreign same-prefix name and a nested world are all rejected, and the suite pins each family plus a closed delete domain (a recording proxy proves sweep() sees exactly the candidate set and the negative trees stay byte-identical). Verification: SUITE PASS 18/18 first run, double run byte-identical sha16 9a362acc85d50a2c. The daily quality crawl added one A-graded official source (virtual payment for enterprises and sole traders: virtual goods must use the mini-program virtual payment channel, the platform opens the merchant account, settlement is T+3, iOS needs 8.0.68+ and goes through Apple payment, refunds inside 180 days return the fee) with three honest negatives recorded, refreshed benchmark sections 1/3/4 and appended signal W34 plus its conclusion row, and backfilled heartbeat ticks 2148-2150. Honest gaps: the suite matrix was not regenerated this window, and the virtual payment fee rate, personal-subject category rules, sandbox boundary and deposit interaction remain M notes."
-    ],
-    [
-      "R2212",
-      "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
-    ],
-    [
-      "2258",
+      "2259",
       "OSLoop 执行 tick"
-    ],
-    [
-      "R2254",
-      "R2254 verification window on the committed tree: RUNNER PASS 431/431 suites green plus reconcile controls 7/7 in 881.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3564; four follow-up sections all PASS via src/os/battery_followup_R2254.py - matrix 431 suites / 3564 criteria read back byte-identical (41967B, green=431/431), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2192 tee=1663 baselined=529 flags=0. The +1 suite / +6 criteria against R2252 is exactly the R2253 os-queue-row suite joining the registry. Register row reconcile-battery-R2254 closed, successor product-face-R2255 opened as first=yes. Zero product code changed: a 0-point verification window."
-    ],
-    [
-      "R2255",
-      "R2255 product window on the P2 tech head: round_evidence.py with its six pre-pinned criteria (AC-RQE1..AC-RQE6, disclosed prefix substitution from the occupied AC-REV family), SUITE PASS 6/6 double-run byte-identical criterion sha16 3C0E17EAD15E9B61 (452B legs, single writer utf-8 LF), five adjacent os suites green (fails=0), live EVIDENCE-OK rounds=13 claiming=11 with_files=11 missing=0 files=2192, one gap seed row landed and the floor gauge closed FLOOR-MET main 5/5 tech 10/10 explore 10/10; battery and matrix regeneration registered first=yes as reconcile-battery-R2256"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 15,
+    "log_lines_in_window": 16,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

@@ -1,0 +1,8 @@
+RUN A rc=0 suite=test_seed_anchor.py
+seed_anchor suite (expected criteria 5)
+PASS AC-SAN1 HEAD scope names exact committed hits, absent reads zero
+PASS AC-SAN2 tree scope sees the uncommitted and untracked hits
+PASS AC-SAN3 verdict, reconciling counts, honest limit and truncation
+PASS AC-SAN4 occupancy refuses, codes 0/2/3 hold, tree untouched
+PASS AC-SAN5 pure ASCII, no network, wired, byte-stable pinned json
+SUITE PASS 5/5
