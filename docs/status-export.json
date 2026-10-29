@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-10-29T16:48:14+08:00",
-  "do": "product window R2265 on the debt register first item: the queue-only floor is now a dated declaration file instead of a number derived from the very log it judges, so the window bottom edge can no longer read RECONCILED while a ledger line is missing.",
+  "export_ts": "2026-10-29T17:18:33+08:00",
+  "do": "product + verification window R2266 on the debt register first item: the pinned queue floor finally has a consumer, so the declaration and the splitter can no longer disagree silently; then the full battery re-proved the committed tree at 438 suites / 3605 criteria.",
   "ceo_face": {
-    "current": "R2265 回到产品面，交付一个可跑实物：把「日志窗口下沿」这条判断从猜测变成文件声明。此前队列残留分类器自己从日志里推出地板轮号，若日志最老的一轮恰好就是丢掉的那一轮，缺口就永远看不见、判决照样读「已对账」。现在地板写进 state/log_floor.json（轮号+宣布轮+理由），并在判定前先自检声明本身是否自洽，再拒绝「比日志最老轮更新的地板」，最后把「没有新宣布行却悄悄前移的地板」判为漂移并点名两个轮号。判据 AC-LFL1..AC-LFL6 先写进行再动代码；双跑判据行逐字节同一（digest 88509D0867078485），五邻域套件同批全绿。实测输出：floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED，退出码 0。",
-    "latest_artifact": "qa/log-floor-R2265.log（2018B·双跑判据行同一·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出）+ state/log_floor.json（地板声明件：floor R2249 / declared_by R2265 / 1 条宣布行）+ src/os/log_floor.py",
-    "last_artifact": "qa/reconcile-all-R2264.log（769785B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False）+ docs/sandbox-suite-matrix.md（436 套件 / 3593 判据·42342B·green=436/436）+ 四段收尾工具 src/os/battery_followup_R2264.py",
-    "next_milestone": "R2266 先跑全量回归电池（本窗动了 src/os，按混树律先提交后验），再认领队头可交付行 queue_floor_decl——把「声明件」真正接进分裂器，消除声明与实际切分各说各话的缝",
+    "current": "R2266 交付一个可跑实物并顺带把最新切片纳入全量回归：把 R2265 写下的「地板声明」真正接上消费面。此前 state/log_floor.json 可以读 PINNED，而分类器实际切分用的是命令行传进来的另一个轮号，两边不一致没人吭声。新解析器只认声明（import log_floor.audit，不重写形状、不直接读声明行），声明 UNPINNED / DRIFT / 自洽性被拒 / 文件坏时一律不给地板、各带自己的错误码，绝不回落到默认值；命令行给的地板会被「比对」而不是「相信」——相同读 AGREES，不同读 DISAGREES 并同时点名两个轮号；整个读数不写盘、不读时钟（临时世界与真实 state/ 树在读数前后摘要完全一致）。判据 AC-FDL1..AC-FDL6 先写在队列行里再动代码；双跑判据行逐字节同一（digest 8023A5283DEA3FE8），五邻域套件同批全绿。实测输出：floor=R2249 caller=- oldest_label=R2249 declarations=1 verdict=AGREES，退出码 0。随后在已提交树上跑全量电池：438/438 套件绿 + 控制 7/7、756.3s，矩阵 438/3605 逐字节同一，指纹 CLEAN，profile PASS，census DRIFT-CLEAN，VERDICT PASS。",
+    "latest_artifact": "qa/queue-floor-decl-R2266.log（2091B·双跑判据行同一·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出）+ src/os/queue_floor_decl.py + src/os/test_queue_floor_decl.py",
+    "last_artifact": "qa/reconcile-all-R2266.log（771553B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False·438/438 套件 + 控制 7/7）+ docs/sandbox-suite-matrix.md（438 套件 / 3605 判据·42489B·green=438/438）+ 四段收尾工具 src/os/battery_followup_R2266.py",
+    "next_milestone": "R2267 认领本窗新种的队头行 queue_only_floor_wire：让分类器自己从声明取地板（--floor-from-declaration），并拒绝「同时给两个地板来源」的歧义，把声明与切分彻底焊死",
     "next_milestone_due": "2026-10-30T23:59:59+08:00"
   },
   "depts": [
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "queue floor declaration gets a consumer: the pinned floor and the splitter can no longer disagree silently (R2266)",
+      "on",
+      "R2266: R2265 pinned the queue-only floor in state/log_floor.json, but nothing consumed it - queue_only_reconcile --floor still takes a caller literal, so the file could read PINNED while every actual split used another number and that divergence was invisible. src/os/queue_floor_decl.py joins the two faces: it loads the declaration through log_floor.audit (imported, so the shape is never re-derived and the suite proves a patched verdict flows straight through), hands back NO floor on UNPINNED / DRIFT / a consistency refusal / unreadable input with its own code each, compares a caller-supplied floor instead of trusting it (equal reads AGREES, different reads DISAGREES naming both rounds), and writes nothing and reads no clock so a reading is reproducible. Criteria AC-FDL1..AC-FDL6 were pinned in state/queue/tech.md as the R2265 seed row BEFORE the code; anchor check at HEAD gave AC-FDL / floor_from_declaration / E_FDL / test_queue_floor_decl / os-queue-floor-decl zero-occupancy rc=1. Evidence: SUITE PASS 6/6 double-run with identical criterion digest 8023A5283DEA3FE8 (qa/queue-floor-decl-R2266.log, 2091B, single writer utf-8 LF through the R2261 evidence_capture callable, which also ran five adjacent os suites green in the same capture), wired os-queue-floor-decl(6). Live: QUEUE FLOOR DECL floor=R2249 caller=- oldest_label=R2249 declarations=1 verdict=AGREES, rc=0. Three defects found by the suite were fixed in this window's own test, never by widening a criterion. The declared floor is now the only source of a floor, but the splitter is not yet wired to it - that seam is the registered AC-QFW seed, disclosed rather than claimed."
+    ],
     [
       "log floor as a dated declaration: the queue-only floor can no longer be inferred from the log it judges (R2265)",
       "on",
@@ -172,7 +177,7 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2265",
+      "2266",
       "OSLoop 执行 tick"
     ],
     [
@@ -194,15 +199,19 @@
     [
       "R2265",
       "R2265 product window on the debt register first item (product-face-R2265): the top deliverable tech row - the R2263 log_floor seed, six criteria already pinned BEFORE the code - shipped as src/os/log_floor.py plus state/log_floor.json plus src/os/test_log_floor.py. The queue-only floor was derived from the log own smallest label, which is blind at the window bottom edge: if the oldest logged round is itself the dropped one, nothing above it registers as debt and the verdict reads RECONCILED while a ledger line is missing. It is now a dated declaration with one pinned shape, judged for self-consistency before it is used to measure anything, refused when newer than the live oldest label, and DRIFT with both rounds named when it moves without a new declaration row. SUITE PASS 6/6 double-run identical criterion digest 88509D0867078485 (qa/log-floor-R2265.log 2018B, single writer utf-8 LF through the R2261 evidence_capture callable, five adjacent os suites green in the same capture), wired os-log-floor(6). LIVE LOG FLOOR floor=R2249 declared=R2249 oldest_label=R2249 declarations=1 verdict=PINNED rc=0. The claim dropped tech to 9/10 so one real gap row was seeded (queue_floor_decl, AC-FDL1..AC-FDL6 pre-registered, six anchors zero-occupancy rc=1) and the gauge closed FLOOR-MET main 5/5 tech 10/10 explore 10/10. Honest seam disclosed rather than left as prose: the declaration has exactly one consumer, this reader, while queue_only_reconcile still takes its floor as a caller literal - that divergence is the seed above. Battery and matrix regeneration carry to R2266 (the R2168 mixed-tree rule). Honest score 2 points (one product face with its own suite)."
+    ],
+    [
+      "R2266",
+      "R2266 product plus verification window on the debt register first item (product-face-R2266): the window shipped the product face FIRST so the battery could measure a committed tree, then ran the full battery on that commit (14f95a42) instead of a mixed one. PRODUCT: src/os/queue_floor_decl.py plus src/os/test_queue_floor_decl.py - the declared floor finally has a consumer, so state/log_floor.json can no longer read PINNED while the actual split uses another number. The resolver imports log_floor.audit (a patched verdict flows straight through; no shape function and no direct row indexing), hands back NO floor on UNPINNED / DRIFT / a consistency refusal / unreadable input with its own code each, compares a caller floor instead of trusting it (equal AGREES, different DISAGREES naming both rounds), and writes nothing and reads no clock. Criteria AC-FDL1..AC-FDL6 were already pinned INSIDE the R2265 seed row BEFORE the code. SUITE PASS 6/6 double-run identical criterion digest 8023A5283DEA3FE8 (qa/queue-floor-decl-R2266.log, 2091B, single writer utf-8 LF through the R2261 evidence_capture callable), five adjacent os suites green (log_floor, queue_only_reconcile, state_seq, evidence_capture, seed_anchor), wired os-queue-floor-decl(6). LIVE QUEUE FLOOR DECL floor=R2249 caller=- oldest_label=R2249 declarations=1 verdict=AGREES rc=0. VERIFICATION: RUNNER PASS 438/438 suites plus controls 7/7 in 756.3s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2266.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total=3605; four follow-up sections all PASS via src/os/battery_followup_R2266.py - matrix 438 suites / 3605 criteria byte-identical (42489B, green=438/438), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, census re-frozen then DRIFT-CLEAN files=2213 tee=1684 baselined=529 flags=0, VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False over 771553B. Honest correction: the register predicted +1 suite / +6 criteria against R2264; measured +2 / +12 (438/3605) because the R2265 os-log-floor suite had never been battery-covered either - both deltas resolve exactly to os-log-floor (6) and os-queue-floor-decl (6). Honest score 2 points, plus one real gap row seeded (queue_only_floor_wire, AC-QFW1..AC-QFW6 pre-registered, six anchors zero-occupancy) to keep the tech floor at 10/10."
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
