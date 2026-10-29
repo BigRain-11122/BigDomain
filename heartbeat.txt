@@ -6,3 +6,6 @@
 2251 tick 2026-10-29 R2251 product window: debt_append (AC-DEBTA1..6) suite 6/6 double-run sha16 5FE50139B98BB77F; adjacent 5 suites green; seeding row debt_close (AC-DEBC1..6) FLOOR-MET 10/10; battery+matrix carried to R2252
 2252 tick 2026-10-29 R2252 verification window: debt register first item closed - battery PASS 430/430 + controls 7/7, matrix 430/3558 byte-identical, census DRIFT-CLEAN; no product code changed
 2255 tick 2026-10-29 R2255 product window: round_evidence.py (claim-to-file reader, AC-RQE1..6) - suite 6/6 double-run; floor seeded to 10/10; battery carried to R2256
+2256 tick 2026-10-29 R2256 verification window: reconcile battery PASS 432/432 + controls 7/7 in 852.6s, matrix 432/3570 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2196; register row closed
+2257 tick 2026-10-29 R2257 product window: state_seq.py (round sequence as a reading, AC-SEQ1..6) suite 6/6 double-run sha16 93B363F778BE65E1; adjacent 5 suites green; SEQUENCE-OK gaps=0; tech floor refilled; battery carried to R2258
+2258 tick 2026-10-29 R2258 verification window: reconcile battery PASS 433/433 + controls 7/7 in 989.7s, tmp reclaim 932/932 worlds, matrix 433/3576 byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN files=2200; row closed, product-face-R2259 opened
