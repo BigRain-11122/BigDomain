@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T13:13:07+08:00",
-  "do": "product window R2255: the claim-to-file link becomes a reading (src/os/round_evidence.py) - every round that claims SUITE PASS or RUNNER PASS in its own log item must have a qa/ file naming that exact round token; SUITE PASS 6/6 double-run byte-identical criterion sha16 3C0E17EAD15E9B61, five adjacent os suites green, live reading rounds=13 claiming=11 with_files=11 missing=0 verdict=EVIDENCE-OK; the full battery and the suite-matrix regeneration carry to R2256",
+  "export_ts": "2026-10-29T13:42:00+08:00",
+  "do": "verification window R2256: the full reconcile battery and the suite-matrix regeneration re-proven on the committed tree with zero product code changed - RUNNER PASS 432/432 suites plus controls 7/7 in 852.6s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, matrix 432 suites / 3570 criteria read back byte-identical, fingerprint CLEAN over 5 domains, runner profile PASS, writer census DRIFT-CLEAN files=2196 flags=0; the R2255 round-evidence suite is now covered by the whole battery",
   "ceo_face": {
-    "current": "R2255 产品面：回合声称有证据、证据件是否真的在盘，现在是一道能跑的读数（src/os/round_evidence.py）。实况：13 个回合里 11 个声称通过，11 个都有对应 qa/ 证据件，缺口 0（EVIDENCE-OK）。同窗补种一条真活种子，三线队列回到 main 5/5、tech 10/10、explore 10/10。",
-    "latest_artifact": "qa/round-evidence-R2255-a.log / -b.log（各 452B，单写者 UTF-8 LF，双跑判据行逐字节同一 sha16 3C0E17EAD15E9B61）；src/os/round_evidence.py（新读数）；qa/regression-R2255.log（五邻接全绿）；2026-10-29 13:1x",
-    "next_milestone": "R2256：在已提交树上跑全量电池 + 套件矩阵再生（预计 432 套件 / 3570 判据），把本轮新读数纳入全量覆盖",
+    "current": "R2256 验证窗：R2255 新写的回合证据读数已由全量电池覆盖。实况=432/432 套件全绿 + 控制面 7/7，判据总数 3570（比 R2254 多 1 套件 6 判据，正是 R2255 那条新套件入册），出生站清理 932/932 世界回收 326.57 MiB，套件矩阵 432/3570 回读逐字节同一，指纹五域 CLEAN，写者普查 DRIFT-CLEAN。本轮零产品代码改动，是一轮只买回确定性的 0 分验证窗。",
+    "latest_artifact": "qa/reconcile-all-R2256.log（765306B，单写者 UTF-8 LF，含电池四段 follow-up 与 VERDICT PASS）；docs/sandbox-suite-matrix.md（42046B，432 套件 / 3570 判据，green=432/432）；src/os/battery_followup_R2256.py（新四段助手）；2026-10-29 21:4x",
+    "next_milestone": "R2257：回到产品面——认领 tech 队头真活行，判据先写进队列行再写代码，出货一件可跑实物（预计 25 分钟内单面带套件与双跑证据）",
     "next_milestone_due": "2026-10-30T12:00:00+08:00",
-    "last_artifact": "qa/round-evidence-R2255-a.log + -b.log（R2255·2026-10-29）"
+    "last_artifact": "qa/reconcile-all-R2256.log（R2256·2026-10-29）"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "full reconcile battery and suite-matrix regeneration re-proven on the committed tree (R2256)",
+      "on",
+      "R2256: the register row that R2255 opened as first=yes is closed on the committed tree with zero product code changed (the R2168 mixed-tree rule). Full reconcile battery RUNNER PASS 432/432 suites green plus reconcile controls 7/7 in 852.6s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2256.log, 765306B at RUNNER close, single-writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), expected criteria total=3570. Four post-battery sections then all PASS through the new single-writer helper src/os/battery_followup_R2256.py: matrix regenerated to 432 suites / 3570 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42046B, green=432/432), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2196 tee=1667 baselined=529 disappeared=0 flags=0, VERDICT PASS. The deltas against R2254 (431 suites / 3564 criteria) are +1 suite and +6 criteria, exactly the R2255 os-round-evidence suite joining the registry, so the newest slice is covered by the whole battery and not only by its own suite plus neighbours. Honest score: a 0-point verification window."
+    ],
     [
       "round evidence reader: a round claiming SUITE PASS must have a qa/ file naming that round",
       "on",
@@ -103,6 +108,10 @@
     ]
   ],
   "results": [
+    [
+      "R2256",
+      "R2256 verification window on the committed tree: RUNNER PASS 432/432 suites green plus controls 7/7 in 852.6s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3570; four follow-up sections all PASS via src/os/battery_followup_R2256.py - matrix 432 suites / 3570 criteria read back byte-identical (42046B, green=432/432), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2196 tee=1667 baselined=529 flags=0. The +1 suite / +6 criteria against R2254 is exactly the R2255 os-round-evidence suite joining the registry. Register row reconcile-battery-R2256 closed, successor product-face-R2257 opened as first=yes. Zero product code changed: a 0-point verification window."
+    ],
     [
       "R2251",
       "product window on the P2 tech head (R2248 a seed): the debt register gets a writer that uses the reader own law - build_row/plan/append_row in src/os/debt_append.py, a duplicate item and a second open first=yes refused before any byte changes, one atomic replace proved by a read-back equal to the prediction, a dry run that writes nothing, CLI 0/2/3/5 and a pinned --json order; criteria AC-DEBTA1..AC-DEBTA6 pre-registered in the queue row BEFORE the code; SUITE PASS 6/6 double-run byte-identical criterion sha16 5FE50139B98BB77F, five adjacent os suites green, wired os-debt-append(6); the close dropped the tech floor to 9/10 so one real gap row (debt_close, AC-DEBC1..6) was seeded and the gauge reads FLOOR-MET 10/10; the battery and the matrix regeneration were not run and stay first=yes in state/debt.md"
@@ -172,7 +181,7 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2255",
+      "2256",
       "OSLoop 执行 tick"
     ],
     [
@@ -187,10 +196,10 @@
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
