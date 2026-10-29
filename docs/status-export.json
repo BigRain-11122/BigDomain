@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T12:41:00+08:00",
-  "do": "product window R2253: the queue gains a pre-registration gate - src/os/queue_row.py refuses a claimable open row that names no criteria prefix (two pinned forms, gated rows exempt but reported), suite 6/6 double-run byte-identical, live reading claimable=25 prefixed=16 violations=9 GATE-DEBT",
+  "export_ts": "2026-10-29T13:04:36+08:00",
+  "do": "verification window R2254: the full reconcile battery plus the suite-matrix regeneration run on the committed tree with zero product code changed (the R2168 mixed-tree rule) - RUNNER PASS 431/431 suites plus controls 7/7 in 881.2s, matrix 431 suites / 3564 criteria byte-identical, fingerprint CLEAN, profile PASS, census DRIFT-CLEAN",
   "ceo_face": {
-    "current": "R2253 产品窗：队列预注册闸上线——可认领的开行必须写明判据前缀，闸读活队列 25 可认领 / 16 已声明 / 9 条历史欠账（如实报红不豁免）",
-    "latest_artifact": "src/os/queue_row.py + qa/queue-row-R2253-a.log（453B·单写者 UTF-8 LF·SUITE PASS 6/6 双跑逐字节同一 sha16 FEA1FEEF8476A141）·2026-10-29 R2253",
-    "next_milestone": "R2254：先清验证欠账（全量电池 + 套件矩阵再生，含新接线的 os-queue-row(6)），再按队列闸自己报出的欠账补一条豁免登记面",
-    "next_milestone_due": "2026-10-31T10:00:00+08:00",
-    "last_artifact": "src/os/queue_row.py + qa/queue-row-R2253-a.log（R2253·2026-10-29）"
+    "current": "R2254 验证窗：把 R2253 的两个新面接进全量体检——431 套件全绿、3564 条判据、矩阵逐字节同一，指纹/画像/证据普查全过。本轮没有新产品面（0 分，只买回验证欠账）。",
+    "latest_artifact": "qa/reconcile-all-R2254.log（764782B·单写者 UTF-8 LF·RUNNER PASS 431/431·881.2s）+ docs/sandbox-suite-matrix.md（41967B·green=431/431）·2026-10-29",
+    "next_milestone": "R2255 回到产品面：认领队列头一张新读面，判据先写进队列行再动代码；今天的体检结果作为它的覆盖背书",
+    "next_milestone_due": "2026-10-30T10:00:00+08:00",
+    "last_artifact": "qa/reconcile-all-R2254.log + docs/sandbox-suite-matrix.md（R2254·2026-10-29）"
   },
   "depts": [
     {
@@ -171,17 +171,21 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2253",
+      "2254",
       "OSLoop 执行 tick"
+    ],
+    [
+      "R2254",
+      "R2254 verification window on the committed tree: RUNNER PASS 431/431 suites green plus reconcile controls 7/7 in 881.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3564; four follow-up sections all PASS via src/os/battery_followup_R2254.py - matrix 431 suites / 3564 criteria read back byte-identical (41967B, green=431/431), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2192 tee=1663 baselined=529 flags=0. The +1 suite / +6 criteria against R2252 is exactly the R2253 os-queue-row suite joining the registry. Register row reconcile-battery-R2254 closed, successor product-face-R2255 opened as first=yes. Zero product code changed: a 0-point verification window."
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
