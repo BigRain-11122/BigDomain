@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T08:09:47+08:00",
-  "do": "product window R2240: the last seed of the R2230 family ships as api_seller_price_demand_months, joining the repricing, watch and question month axes so a seller can read whether it moved the price when demand arrived",
+  "export_ts": "2026-10-29T08:58:00+08:00",
+  "do": "product window R2241: the seller-scope watch-to-purchase conversion face lands, so a shop can finally read whether its own watchers turned into buyers month over month",
   "ceo_face": {
-    "current": "R2240 产品轮：卖家「改价是否跟着需求走」这一面落地——api_seller_price_demand_months 把改价、关注、取关、提问四腿按各自 UTC 月并入一张连续网格（OCT..DEC），响应月=有改价且有需求、需求月=净关注>0 或有提问，市场 0.5 / dana 1.0 / lia 0.0 / gina 0.0；净关注为 0 的十一月即使有两次改价也诚实记为非需求月，十二月有提问无改价记为非响应月；卖家隔离与四腿分账守恒，市场基准不自比，峰值并列取较早月。判据 AC-SPD1..8 全部通过。",
-    "latest_artifact": "qa/apimarket-sellerpricedemandmonths-R2240-a.log 与 -b.log（各 869 字节，双跑逐字节同一，sha256 9f8fcd66b6e836c6b96d53ddd11e25a31b94b2a7fce3eca77c1375f9b1fe6bab） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2240.log（相邻四套件 8/8×4）；时间戳 2026-10-29 08:09",
-    "next_milestone": "R2241（48 小时内）：补跑全量对账电池与套件矩阵再生（本轮因 25 分钟预算未跑，记录在案）；并把 explore 7/10、tech 8/10 的队列地板欠账继续用真实缺口补齐；另有一项悬挂的本地事项=BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
+    "current": "R2241 产品轮：卖家侧「我的关注有没有变成成交」这一面落地 - api_seller_watch_conversion_months 把每个关注按自己的 UTC 月入桶（取关不算事件、成交不重写月份），三腿转成/先买后关/挂起逐行守恒，连续网格带诚实零月（二月无关注，改价与取关都不算），dana 2 关注 1 成交（0.5）、lia 4 关注 1 先买 1 成交 2 挂起（1/3）、全市场 6 关注 2 成交（0.4）；卖家行的 market_conversion_rate 列出当月真实市场转化率（一月 0.5 / 三月 0.5 / 四月 0.0 / 二月诚实 None），市场视角自身不给自己挂基准；两卖家计数之和恰等于市场、未知卖家诚实空。判据 AC-SWCV1..8 全部通过。",
+    "latest_artifact": "qa/apimarket-sellerwatchconversionmonths-R2241-a.log 与 -b.log（各 617 字节，双跑逐字节同一，判据行 sha16 774347968EA72ECE） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2241.log（相邻六套件 fails=0）；时间戳 2026-10-29 08:5x",
+    "next_milestone": "R2242（48 小时内）：补跑全量对账电池与套件矩阵再生（本轮因 25 分钟预算未跑，记录在案）；并把 tech 8/10、explore 6/10 的队列地板欠账用真实缺口补齐；另有一项悬挂的本地事项=BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "seller-scoped monthly watch-to-purchase conversion face (R2241)",
+      "on",
+      "api_seller_watch_conversion_months(dev_account=None): twenty-key envelope, fourteen-key month rows; the watch-month cohort law with an unwatch proven not to be an event (dana keeps 2 watches across a February unwatch and the February row stays an honest zero); the three legs (converted at or after the watch stamp incl. equal stamps at zero seconds, pre_owned excluded from the funnel, pending that also absorbs a refunded purchase) conserving per row and in the envelope; contiguous grid with None rate and None latencies on the zero month; strict isolation partitioning the market (2+4 watches, 1+1 converted, 0+1 pre_owned, 1+2 pending); the monthly market benchmark column a seller reads against (0.5 / None / 0.5 / 0.0 with 0.4 pooled) while the market scope carries none of its own; identity with api_market_conversion_months on all ten shared keys and the month grid, and with api_seller_watch_months per seller; seven-form usr: gate failing closed before any read with frozen digests and a constant ledger_tx set. Evidence: SUITE 8/8 double-run byte-identical criterion sha16 774347968EA72ECE (617B per leg, utf-8 LF by src/os/evidence_R2241.py), wired ledger-apimarket-sellerwatchconversionmonths(8), six adjacent suites green (qa/regression-R2241.log, fails=0)."
+    ],
     [
       "per-category monthly watch-to-purchase conversion face (R2237)",
       "on",
@@ -357,6 +362,10 @@
   ],
   "results": [
     [
+      "R2241",
+      "product window on the explore head seed R2240 a: api_seller_watch_conversion_months closes the seller-scope gap - SUITE 8/8 on the first run, double-run byte-identical (617B per leg, criterion sha16 774347968EA72ECE, single-writer utf-8 LF), six adjacent watch/conversion suites green, PRODUCT_SHA_STABLE True; honest debt = the full battery and the matrix regeneration deferred to R2242, both queues still under the standing floor (tech 8, explore 6), and the loop task still needs an elevated S4U re-registration."
+    ],
+    [
       "R2237",
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
@@ -647,7 +656,7 @@
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 4,
-    "queue_explore_open": 2
+    "queue_tech_open": 8,
+    "queue_explore_open": 6
   }
 }

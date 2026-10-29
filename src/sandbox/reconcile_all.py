@@ -2550,6 +2550,17 @@ SUITES = [
     # claim row BEFORE the code, in the R2204 window.
     ("ledger-apimarket-sellerwatchmonths", os.path.join(
         "ledger", "test_apimarket_sellerwatchmonths.py"), 8),
+    # seller-scoped monthly watch-to-purchase conversion (the watch-month
+    # cohort law with an unwatch proven not to be an event, the three
+    # legs with pre_owned excluded from the funnel, the contiguous grid
+    # with an honest zero month, strict isolation partitioning the
+    # market, the monthly market benchmark column that the market scope
+    # itself never carries, identity against api_market_conversion_months
+    # and api_seller_watch_months, the usr: gate and the pure-read law)
+    # - criteria AC-SWCV1..AC-SWCV8 registered in the R2240 explore seed
+    # row a BEFORE the code, in the R2241 window.
+    ("ledger-apimarket-sellerwatchconversionmonths", os.path.join(
+        "ledger", "test_apimarket_sellerwatchconversionmonths.py"), 8),
     # buyer-side monthly watch flow (the cash-basis double stamp on the
     # buyer axis, the contiguous grid whose zero month sits next to a
     # month that only carried a purchase, the keyword-free directional

@@ -16161,3 +16161,166 @@ class APIMarketFace:
             "last_month": core["last_month"],
             "months": core["months"],
             "disclaimer": self.disclaimer}
+
+    def api_seller_watch_conversion_months(self, dev_account=None):
+        """Seller-scoped monthly watch-to-purchase conversion (criteria
+        AC-SWCV1..AC-SWCV8 pre-registered in the R2240 explore-queue
+        claim row BEFORE this code existed; the AC-SWCV prefix,
+        test_apimarket_sellerwatchconversionmonths and
+        ledger-apimarket-sellerwatchconversionmonths were git-grep
+        zero-occupancy against HEAD 2026-10-29, rc=1, the face name
+        appearing only in the seed row text and its seeding script).
+
+        api_market_conversion_months answers the whole market on a
+        month axis, api_category_watch_conversion_months one category
+        and api_watch_conversion one listing over its lifetime, so a
+        seller holding N shelves could not read whether its OWN
+        attention converted month over month: a shop whose watchers
+        stopped buying in March read exactly like one whose watchers
+        never bought.
+
+        Booking law, shared with the market and category faces: a
+        watch books ONLY in the UTC month of its own watched_utc. An
+        unwatch is not an event for this face, so a withdrawn watch
+        keeps the month it landed in and its unwatch month gains no
+        weight; a purchase never re-dates the watch month.
+
+        Directional law: converted when the buyer's unrefunded
+        purchase on that listing is stamped at or after the watch
+        stamp (equal stamps convert at zero seconds); pre_owned when
+        the unrefunded purchase predates the watch, which can never
+        convert and is excluded from the funnel denominator; pending
+        when there is no purchase or the purchase was refunded, so a
+        later refund cancels a conversion in the watch's own month
+        without moving any month key.
+
+        Rate and latency: conversion_rate is converted over funnel,
+        None when the funnel is empty and never a fabricated zero; the
+        average is pooled over every converted watch in scope (not the
+        mean of the month means), the median is the middle value or the
+        midpoint for an even count, and all four latency fields are
+        None when nothing converted.
+
+        The grid is contiguous from the first to the last watch month,
+        so a month with no watch carries an honest zero row.
+
+        Benchmark: the market scope publishes no self-benchmark
+        (market_conversion_rate is None on both rows and envelope),
+        while a seller scope carries the TRUE market rate of that
+        month on every row plus the pooled market rate in the envelope,
+        so a seller rate can always be read against the market.
+
+        Scope: the usr: prefix account shape fails closed with
+        E_AM_BAD_ACCOUNT before any read; a prefix-valid seller with no
+        watches reads an honest empty envelope, never the market.
+        buyer_count and listing_count are event-derived per row while
+        the envelope carries lifetime distinct counts. Pure read: zero
+        row mutations and zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _secs(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT w.watch_id, w.buyer_id, w.listing_id,"
+                " w.watched_utc, l.dev_account, p.purchased_utc,"
+                " (SELECT 1 FROM apimarket_refunds f"
+                " WHERE f.purchase_id = p.purchase_id)"
+                " FROM apimarket_watchlist w"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = w.listing_id"
+                " LEFT JOIN apimarket_purchases p"
+                " ON p.listing_id = w.listing_id"
+                " AND p.buyer_id = w.buyer_id"
+                " ORDER BY w.watch_id").fetchall()
+            watches = []
+            for r in raw:
+                purchased = r[5]
+                if purchased is None or r[6] is not None:
+                    state, seconds = "pending", None
+                else:
+                    delta = _secs(r[3], purchased)
+                    if delta < 0:
+                        state, seconds = "pre_owned", None
+                    else:
+                        state, seconds = "converted", delta
+                watches.append({"month": str(r[3])[:7],
+                                "seller": str(r[4]),
+                                "buyer": r[1],
+                                "listing": int(r[2]),
+                                "state": state,
+                                "seconds": seconds})
+
+        def _block(items):
+            total = len(items)
+            pre_owned = sum(1 for w in items
+                            if w["state"] == "pre_owned")
+            converted = sorted(w["seconds"] for w in items
+                               if w["state"] == "converted")
+            funnel = total - pre_owned
+            if converted:
+                mid = len(converted) // 2
+                median = (float(converted[mid]) if len(converted) % 2
+                          else (converted[mid - 1]
+                                + converted[mid]) / 2.0)
+                avg = float(sum(converted)) / len(converted)
+                fastest = converted[0]
+                slowest = converted[-1]
+            else:
+                median = None
+                avg = None
+                fastest = None
+                slowest = None
+            return {
+                "watch_count": total,
+                "pre_owned_count": pre_owned,
+                "funnel_count": funnel,
+                "converted_count": len(converted),
+                "pending_count": funnel - len(converted),
+                "conversion_rate": (float(len(converted)) / funnel
+                                    if funnel else None),
+                "avg_convert_seconds": avg,
+                "median_convert_seconds": median,
+                "fastest_convert_seconds": fastest,
+                "slowest_convert_seconds": slowest,
+                "buyer_count": len(set(w["buyer"] for w in items)),
+                "listing_count": len(set(w["listing"] for w in items))}
+
+        seller = None if dev_account is None else str(dev_account)
+        scoped = [w for w in watches
+                  if seller is None or w["seller"] == seller]
+
+        per_month_market = {}
+        for watch in watches:
+            per_month_market.setdefault(watch["month"], []).append(watch)
+        benchmark = {}
+        for month, items in per_month_market.items():
+            benchmark[month] = _block(items)["conversion_rate"]
+
+        grid = _contiguous_months(sorted(set(w["month"] for w in scoped)))
+        rows = []
+        for month in grid:
+            row = {"month": month}
+            row.update(_block([w for w in scoped if w["month"] == month]))
+            row["market_conversion_rate"] = (
+                None if seller is None else benchmark.get(month))
+            rows.append(row)
+
+        out = {"scope": "market" if seller is None else "seller",
+               "dev_account": seller,
+               "month_count": len(rows),
+               "first_month": rows[0]["month"] if rows else None,
+               "last_month": rows[-1]["month"] if rows else None}
+        out.update(_block(scoped))
+        out["market_conversion_rate"] = (
+            None if seller is None
+            else _block(watches)["conversion_rate"])
+        out["disclaimer"] = self.disclaimer
+        out["months"] = rows
+        return out
