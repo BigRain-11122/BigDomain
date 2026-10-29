@@ -4342,6 +4342,14 @@ SUITES = [
     # (AC-LTI1..AC-LTI8 pre-registered in state/queue/tech.md R2156.)
     ("os-logs-inventory",
      os.path.join("..", "os", "test_logs_inventory.py"), 8),
+    # R2244: the standing-line floors (main >= 5, tech >= 10, explore >= 10)
+    # become a reading instead of a mid-window discovery - a read-only gauge
+    # over the three queue files, column-0 row law, gate markers reported but
+    # never claimable, honest zero for an empty queue and fail-closed for a
+    # missing one.
+    # (AC-QF1..AC-QF8 pre-registered in state/queue/tech.md R2240 a.)
+    ("os-queue-floor",
+     os.path.join("..", "os", "test_queue_floor.py"), 8),
     ]
 
 FAILS = 0

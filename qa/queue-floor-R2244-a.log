@@ -1,0 +1,10 @@
+RUN A rc=0 suite=test_queue_floor.py
+PASS AC-QF1 report and row keys pinned, deterministic, verdict in the closed set
+PASS AC-QF2 only column-0 boxed rows count, exact box letters only
+PASS AC-QF3 seven gate marker forms excluded from claimable, still counted as open
+PASS AC-QF4 floors pinned to 5/10/10, shortfall clamps at zero, total sums the queues
+PASS AC-QF5 empty queue reads an honest zero, absent queue reads MISSING with the whole floor as shortfall
+PASS AC-QF6 CLI exits 0/2/3 on met/short/missing, bad flags exit 2, JSON parses and is byte-stable
+PASS AC-QF7 one line carries every queue, live tree matches an independent recount
+PASS AC-QF8 gauge is a pure read, source ASCII with zero network imports and wired as os-queue-floor(8)
+SUITE PASS 8/8
