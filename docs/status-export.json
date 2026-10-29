@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-29T17:18:33+08:00",
-  "do": "product + verification window R2266 on the debt register first item: the pinned queue floor finally has a consumer, so the declaration and the splitter can no longer disagree silently; then the full battery re-proved the committed tree at 438 suites / 3605 criteria.",
+  "export_ts": "2026-10-29T17:34:10+08:00",
+  "do": "product window R2267 on the debt register first item: the first=yes row now has a gate that must answer which item this window leads with, and it refuses to read an absent register as no debt.",
   "ceo_face": {
-    "current": "R2266 交付一个可跑实物并顺带把最新切片纳入全量回归：把 R2265 写下的「地板声明」真正接上消费面。此前 state/log_floor.json 可以读 PINNED，而分类器实际切分用的是命令行传进来的另一个轮号，两边不一致没人吭声。新解析器只认声明（import log_floor.audit，不重写形状、不直接读声明行），声明 UNPINNED / DRIFT / 自洽性被拒 / 文件坏时一律不给地板、各带自己的错误码，绝不回落到默认值；命令行给的地板会被「比对」而不是「相信」——相同读 AGREES，不同读 DISAGREES 并同时点名两个轮号；整个读数不写盘、不读时钟（临时世界与真实 state/ 树在读数前后摘要完全一致）。判据 AC-FDL1..AC-FDL6 先写在队列行里再动代码；双跑判据行逐字节同一（digest 8023A5283DEA3FE8），五邻域套件同批全绿。实测输出：floor=R2249 caller=- oldest_label=R2249 declarations=1 verdict=AGREES，退出码 0。随后在已提交树上跑全量电池：438/438 套件绿 + 控制 7/7、756.3s，矩阵 438/3605 逐字节同一，指纹 CLEAN，profile PASS，census DRIFT-CLEAN，VERDICT PASS。",
-    "latest_artifact": "qa/queue-floor-decl-R2266.log（2091B·双跑判据行同一·单写者 utf-8 LF·由 R2261 的 evidence_capture 一次调用产出）+ src/os/queue_floor_decl.py + src/os/test_queue_floor_decl.py",
-    "last_artifact": "qa/reconcile-all-R2266.log（771553B·单写者 utf-8 LF·crlf=0 bare_cr=0 bom=False·438/438 套件 + 控制 7/7）+ docs/sandbox-suite-matrix.md（438 套件 / 3605 判据·42489B·green=438/438）+ 四段收尾工具 src/os/battery_followup_R2266.py",
-    "next_milestone": "R2267 认领本窗新种的队头行 queue_only_floor_wire：让分类器自己从声明取地板（--floor-from-declaration），并拒绝「同时给两个地板来源」的歧义，把声明与切分彻底焊死",
-    "next_milestone_due": "2026-10-30T23:59:59+08:00"
+    "current": "R2267 出实物：src/os/debt_gate.py —— 债务登记簿写的 first=yes 那一条，从此有一个闸在开工前必须回答：这一窗到底该领哪一项。三种诚实结局，没有第四种：CLAIM-FIRST 点名条目/开启轮/备注/已背窗数；OPEN-NONE 同时覆盖「空登记簿」和「有开项但没标 first」，因为两者都只说明这一窗该自己登记；而登记簿缺失、不可读或坏形一律拒绝并带着登记簿自己的错误码族——文件不在，绝不能被读成「没有欠账」。行法是从 debt_register 导入的，不重写，所以登记簿只有一个主人；模块不写盘、不读钟。",
+    "latest_artifact": "src/os/debt_gate.py + src/os/test_debt_gate.py（双跑判据同 digest，qa/debt-gate-R2267.log）+ 接线 os-debt-gate(5)；实测 DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 carried=1 open=2",
+    "last_artifact": "src/os/debt_gate.py + src/os/test_debt_gate.py（双跑判据同 digest，qa/debt-gate-R2267.log）+ 接线 os-debt-gate(5)；实测 DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 carried=1 open=2",
+    "next_milestone": "R2268 回到验证：在已提交的树上跑全量回归电池（预期 439 套件 / 3610 判据= R2266 的 438/3605 加本窗 os-debt-gate 的 1 套件 5 判据），再跑四段收尾；电池绿之前不碰产品码。预计 2026-10-29 内完成",
+    "next_milestone_due": "2026-10-31T05:34:10+08:00"
   },
   "depts": [
     {
@@ -109,22 +109,6 @@
   ],
   "results": [
     [
-      "R2263",
-      "R2263 product window on the debt register first item (product-face-R2263): the top deliverable tech row (the R2257 queue_only_reconcile seed, criteria already pinned in that row BEFORE the code) shipped as src/os/queue_only_reconcile.py - the queue-only residue state_seq reports is split against a mandatory floor into LOGGED / FOLDED / NEVER-LOGGED, the stamp and label law imported from state_seq and proven by patching it in the suite, the three counts required to sum to the stamp count before a verdict, zero writes and a fail-closed exit 3 on unreadable input. SUITE PASS 6/6 two legs byte-identical (qa/queue-only-R2263.log 1839B, single writer utf-8 LF through the R2261 evidence_capture callable, dogfooded so this window own evidence ran as one call), five adjacent os suites green in the same capture, wired os-queue-only(6). LIVE QUEUE ONLY floor=R2249 stamps=166 logged=5 folded=161 never_logged=0 max_stamp=2261 verdict=RECONCILED - a previously unreconciled residue is now classified. Battery and matrix regeneration carry to R2264 (the R2168 mixed-tree rule)."
-    ],
-    [
-      "R2259",
-      "R2259 product window on the debt register first item: the R2248 e seed shipped as src/os/seed_anchor.py with AC-SAN1..AC-SAN5 pinned in state/queue/tech.md BEFORE the code and a zero-occupancy anchor check at HEAD. SUITE PASS 5/5 double-run byte-identical criterion sha16 42FAF3CADB8BEEF9 (qa/seed-anchor-R2259-a.log and -b.log, 429B each, single writer utf-8 LF), five adjacent os suites green (qa/regression-R2259.log, fails=0), wired os-seed-anchor(5). Live reading: seed_anchor OCCUPIED head=31 tree=52 (text occupancy), os-seed-anchor FREE at HEAD head=0 and occupied only in the working tree. One implementation defect found by the suite and fixed in the module (the HEAD leg passed the revision before the pattern so git read HEAD as the needle; now an explicit -e), no criterion relaxed. Tech floor refilled in the same window with one real gap row (evidence_capture, AC-EVC1..AC-EVC6 pre-registered, five anchors zero-occupancy rc=1), gauge FLOOR-MET main 5/5 tech 10/10 explore 10/10. Register row product-face-R2259 closed, successor reconcile-battery-R2260 opened as first=yes; the battery and the matrix regeneration carry to R2260 (the R2168 mixed-tree rule)."
-    ],
-    [
-      "R2258",
-      "R2258 verification window on the committed tree: RUNNER PASS 433/433 suites green plus reconcile controls 7/7 in 989.7s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3576; four follow-up sections all PASS via src/os/battery_followup_R2258.py - matrix 433 suites / 3576 criteria read back byte-identical (42111B, green=433/433), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2200 tee=1671 baselined=529 flags=0. The +1 suite / +6 criteria against R2256 is exactly the R2257 os-state-seq suite joining the registry. Register row reconcile-battery-R2258 closed, successor product-face-R2259 opened as first=yes. Zero product code changed: a 0-point verification window."
-    ],
-    [
-      "R2257",
-      "R2257 product window: the R2248 d seed shipped as src/os/state_seq.py with AC-SEQ1..AC-SEQ6 pinned in state/queue/tech.md BEFORE the code and a zero-occupancy anchor check at HEAD. SUITE PASS 6/6 double-run byte-identical criterion sha16 93B363F778BE65E1 (qa/state-seq-R2257-a.log and -b.log, 478B each, single writer utf-8 LF through src/os/evidence_R2257.py), five adjacent os suites green (qa/regression-R2257.log, fails=0), wired os-state-seq(6). Live gate: STATE SEQUENCE labels=48 distinct=16 span=2242..2257 gaps=0 repeats=0 backwards=0 tick=2257 tick_lead=0 queue_done=164 queue_only=156 verdict=SEQUENCE-OK. First live read produced two real findings carried instead of swept: 156 queue done stamps have no log item (the log window is folded to 15 rounds) and tick_lead is 0. The AC-SEQ4 wording was corrected at the gate from 'written more than once' to 'returns after a different round intervened' - disclosed, no assertion relaxed. Tech floor refilled in the same window with one real gap row (queue_only_reconcile, AC-QOC1..6 pre-registered, five anchors zero-occupancy rc=1), gauge FLOOR-MET main 5/5 tech 10/10 explore 10/10. Register row product-face-R2257 closed, successor reconcile-battery-R2258 opened as first=yes."
-    ],
-    [
       "R2256",
       "R2256 verification window on the committed tree: RUNNER PASS 432/432 suites green plus controls 7/7 in 852.6s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3570; four follow-up sections all PASS via src/os/battery_followup_R2256.py - matrix 432 suites / 3570 criteria read back byte-identical (42046B, green=432/432), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2196 tee=1667 baselined=529 flags=0. The +1 suite / +6 criteria against R2254 is exactly the R2255 os-round-evidence suite joining the registry. Register row reconcile-battery-R2256 closed, successor product-face-R2257 opened as first=yes. Zero product code changed: a 0-point verification window."
     ],
@@ -177,10 +161,6 @@
       "product window: explore head seed R2230 5/6 delivered as api_category_watch_conversion_months; SUITE 8/8 double-run with byte-identical criterion sha16 50e5228778f319c9 (904B per leg, single-writer utf-8 LF, zero CR); six adjacent watch/conversion suites green 8/8; PRODUCT_SHA_STABLE True; first run 7/8 with a test expectation corrected (trimmed cells 4 -> the honest 5), no criterion or implementation relaxed. Same window: fold R592 moved log lines 1:21 into the October archive (83849B -> 53651B, token_missing [] over 462 tokens, predicted_eq_actual true). Debt: full battery and matrix regeneration deferred to R2238."
     ],
     [
-      "2266",
-      "OSLoop 执行 tick"
-    ],
-    [
       "R2260",
       "R2260 verification window on the debt register first item (reconcile-battery-R2260): RUNNER PASS 434/434 suites plus controls 7/7 in 732.0s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2260.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total=3581; four follow-up sections all PASS via src/os/battery_followup_R2260.py - matrix regenerated to 434 suites / 3581 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42181B, green=434/434), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS, writer census re-frozen then DRIFT-CLEAN files=2204 tee=1675 baselined=529 flags=0, VERDICT PASS. The +1 suite / +5 criteria against R2258 is exactly the R2259 os-seed-anchor suite joining the registry. Zero product code changed (the R2168 mixed-tree rule), so the honest score is 0 product points; state.json measured 78004B against the 78500B waterline, so fold R594 ran first (log lines 1:25, 36907 content bytes, 514 tokens, token_missing empty, 78004B -> 45329B, predicted==actual)."
     ],
@@ -203,15 +183,28 @@
     [
       "R2266",
       "R2266 product plus verification window on the debt register first item (product-face-R2266): the window shipped the product face FIRST so the battery could measure a committed tree, then ran the full battery on that commit (14f95a42) instead of a mixed one. PRODUCT: src/os/queue_floor_decl.py plus src/os/test_queue_floor_decl.py - the declared floor finally has a consumer, so state/log_floor.json can no longer read PINNED while the actual split uses another number. The resolver imports log_floor.audit (a patched verdict flows straight through; no shape function and no direct row indexing), hands back NO floor on UNPINNED / DRIFT / a consistency refusal / unreadable input with its own code each, compares a caller floor instead of trusting it (equal AGREES, different DISAGREES naming both rounds), and writes nothing and reads no clock. Criteria AC-FDL1..AC-FDL6 were already pinned INSIDE the R2265 seed row BEFORE the code. SUITE PASS 6/6 double-run identical criterion digest 8023A5283DEA3FE8 (qa/queue-floor-decl-R2266.log, 2091B, single writer utf-8 LF through the R2261 evidence_capture callable), five adjacent os suites green (log_floor, queue_only_reconcile, state_seq, evidence_capture, seed_anchor), wired os-queue-floor-decl(6). LIVE QUEUE FLOOR DECL floor=R2249 caller=- oldest_label=R2249 declarations=1 verdict=AGREES rc=0. VERIFICATION: RUNNER PASS 438/438 suites plus controls 7/7 in 756.3s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2266.log, single-writer utf-8 LF through src/os/battery_stream.py), expected criteria total=3605; four follow-up sections all PASS via src/os/battery_followup_R2266.py - matrix 438 suites / 3605 criteria byte-identical (42489B, green=438/438), fingerprint CLEAN 5 domains, runner profile --daily --check PASS, census re-frozen then DRIFT-CLEAN files=2213 tee=1684 baselined=529 flags=0, VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False over 771553B. Honest correction: the register predicted +1 suite / +6 criteria against R2264; measured +2 / +12 (438/3605) because the R2265 os-log-floor suite had never been battery-covered either - both deltas resolve exactly to os-log-floor (6) and os-queue-floor-decl (6). Honest score 2 points, plus one real gap row seeded (queue_only_floor_wire, AC-QFW1..AC-QFW6 pre-registered, six anchors zero-occupancy) to keep the tech floor at 10/10."
+    ],
+    "R2267 product window on the debt register first item (product-face-R2267, seed = the R2248 f debt_gate row with AC-DGT1..AC-DGT5 already pinned BEFORE the code): src/os/debt_gate.py plus src/os/test_debt_gate.py. The register names a first=yes row for the next window and nothing stopped a window from not reading it, so the gate asks that one question: CLAIM-FIRST naming item/opened/note/carried, OPEN-NONE covering an empty register and an all-first=no register alike, and a refusal on a missing, unreadable or malformed register so an absent file never reads as nothing owed. Row law imported from debt_register, zero writes, no clock, byte-stable JSON. SUITE PASS 5/5 double-run identical digest (qa/debt-gate-R2267.log, single writer utf-8 LF through the R2261 capture callable), five adjacent os suites green, wired os-debt-gate(5). LIVE DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 carried=1 open=2 first=1. One real gap row (queue_head, AC-QHD1..AC-QHD6) seeded to hold the tech floor after the claim; gauge FLOOR-MET 10/10.",
+    [
+      "R2267",
+      "R2267 product window on the debt register first item (product-face-R2267, seed = the R2248 f debt_gate row with AC-DGT1..AC-DGT5 already pinned BEFORE the code): src/os/debt_gate.py plus src/os/test_debt_gate.py. The register names a first=yes row for the next window and nothing stopped a window from not reading it, so the gate asks that one question: CLAIM-FIRST naming item/opened/note/carried, OPEN-NONE covering an empty register and an all-first=no register alike, and a refusal on a missing, unreadable or malformed register so an absent file never reads as nothing owed. Row law imported from debt_register, zero writes, no clock, byte-stable JSON. SUITE PASS 5/5 double-run identical digest (qa/debt-gate-R2267.log, single writer utf-8 LF through the R2261 capture callable), five adjacent os suites green, wired os-debt-gate(5). LIVE DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 carried=1 open=2 first=1. One real gap row (queue_head, AC-QHD1..AC-QHD6) seeded to hold the tech floor after the claim; gauge FLOOR-MET 10/10."
+    ],
+    [
+      "R2267",
+      "R2267 product window on the debt register first item (product-face-R2267, seed = the R2248 f debt_gate row with AC-DGT1..AC-DGT5 already pinned BEFORE the code): src/os/debt_gate.py plus src/os/test_debt_gate.py. The register names a first=yes row for the next window and nothing stopped a window from not reading it, so the gate asks that one question: CLAIM-FIRST naming item/opened/note/carried, OPEN-NONE covering an empty register and an all-first=no register alike, and a refusal on a missing, unreadable or malformed register so an absent file never reads as nothing owed. Row law imported from debt_register, zero writes, no clock, byte-stable JSON. SUITE PASS 5/5 double-run identical digest (qa/debt-gate-R2267.log, single writer utf-8 LF through the R2261 capture callable), five adjacent os suites green, wired os-debt-gate(5). LIVE DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 carried=1 open=2 first=1. One real gap row (queue_head, AC-QHD1..AC-QHD6) seeded to hold the tech floor after the claim; gauge FLOOR-MET 10/10."
+    ],
+    [
+      "2267",
+      "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

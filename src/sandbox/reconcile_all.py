@@ -4458,6 +4458,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-floor-decl",
      os.path.join("..", "os", "test_queue_floor_decl.py"), 6),
+    # R2267: the register names a first=yes row for the next window, but
+    # nothing stopped a window from simply not reading it. The gate answers
+    # that one question and fails closed on a missing register instead of
+    # reading "nothing owed" out of an absent file.
+    # (AC-DGT1..AC-DGT5 pinned in state/queue/tech.md as the R2248 f seed row
+    # BEFORE the code existed.)
+    ("os-debt-gate",
+     os.path.join("..", "os", "test_debt_gate.py"), 5),
     ]
 
 FAILS = 0

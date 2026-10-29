@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2267 suite=src/os/test_debt_gate.py legs=2
+== LEG A rc=0 digest=9175A36DF5C13048
+PASS AC-DGT1 CLAIM-FIRST verdict with the register own counts
+PASS AC-DGT2 names item, opened, note and a carried age that is never faked
+PASS AC-DGT3 absence reads OPEN-NONE while a lost or broken register refuses
+PASS AC-DGT4 CLI 0/2/3/5, byte-stable JSON with every key, zero writes
+PASS AC-DGT5 pure ASCII, no network or clock, wired, live reading closed
+LIVE DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 opened=R2266 carried=1 stale=no open=2 first=1
+SUITE PASS 5/5
+== LEG B rc=0 digest=9175A36DF5C13048
+PASS AC-DGT1 CLAIM-FIRST verdict with the register own counts
+PASS AC-DGT2 names item, opened, note and a carried age that is never faked
+PASS AC-DGT3 absence reads OPEN-NONE while a lost or broken register refuses
+PASS AC-DGT4 CLI 0/2/3/5, byte-stable JSON with every key, zero writes
+PASS AC-DGT5 pure ASCII, no network or clock, wired, live reading closed
+LIVE DEBT GATE verdict=CLAIM-FIRST item=product-face-R2267 opened=R2266 carried=1 stale=no open=2 first=1
+SUITE PASS 5/5
+== ADJACENT 5
+== src/os/test_debt_register.py rc=0 SUITE PASS 8/8
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_log_floor.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=9175A36DF5C13048
