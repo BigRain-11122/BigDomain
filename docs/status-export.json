@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T10:05:00+08:00",
-  "do": "product window R2246: the state.json write canon became one callable with a measured layout report and an atomic, payload-preserving repair",
+  "export_ts": "2026-10-29T11:20:00+08:00",
+  "do": "verification window R2247: the three-window reconcile debt was cleared - full battery 427/427 plus the four follow-up sections on the committed tree",
   "ceo_face": {
-    "current": "R2246 產品輪：state.json 的寫入正典收成一個可呼叫。毛病不是修不好，是修了兩次還回來——R2243 手工把 53 條日誌行拉回 16 空格並改成 CRLF，R2245 收賬又把它寫回裸 LF（24 個裸換行）。本輪交付 src/os/state_io.py：layout 直接讀位元組出量測（CRLF／裸 LF／孤 CR／日誌行數對解析長度／偏移行數／一個 layout_ok 判詞），canon 把裸 LF 與錯縮排改成正典並證明內容不變，行數與日誌條目對不上就拒做（E_SIO_LAYOUT）而不是硬排；write_canon 只在內容完全不變時放行（E_SIO_JSON），走 mkstemp＋fsync＋os.replace 原子落地並回讀位元組；fix 乾跑只預測不寫，執行必須落在自己的預測上。真樹實效：25346B 裸 LF 讀出 CANON-DRIFT，執行後 25370B／24 CRLF／0 裸 LF／14 條日誌行全在 16 空格，JSON 內容與寫入前逐鍵相等，複查 CANON-CLEAN。證據＝SUITE PASS 8/8 雙跑逐位元組同一 sha16 F50A624669A848CB＋六鄰套件全綠＋實況檢查 rc=0。本輪零雲端呼叫、零外部 API 觸點。誠實注：全量對賬電池＋套件矩陣再生本輪未跑（25 分鐘預算），已是連三窗欠帳，如實記為下一窗首項。",
-    "latest_artifact": "src/os/state_io.py（寫入正典：量測＋保內容改寫＋原子寫入）＋ src/os/test_state_io.py（SUITE PASS 8/8 雙跑逐位元組同一，qa/state-io-R2246-a.log 與 -b.log，各 579 位元組，單寫者 utf-8 LF）＋ 接線 os-state-io(8)（src/sandbox/reconcile_all.py）＋實況修復 src/os/state.json（25346B 裸 LF → 25370B 全 CRLF，內容逐鍵不變）；時間戳 2026-10-29",
-    "next_milestone": "下一窗（48 小時內，R2247）：①在提交樹跑全量對賬電池＋套件矩陣再生（已連三窗欠帳：R2244／R2245／R2246 均在檔，照 R2168 混樹律不在電池窗內改產品碼）；②按量規缺口補真種子（tech 6/10、explore 5/10）並認領最上真活項"
+    "current": "R2247 驗證輪：把連欠三窗（R2244／R2245／R2246）的對賬欠帳一次清掉。全量電池 RUNNER PASS 427/427 套件全綠＋對賬控制 7/7，846.9 秒（qa/reconcile-all-R2247.log，單寫者 utf-8 LF），出生站臨時清掃 932/932 世界 326.57 MiB，busy=0 failed=0；電池後四段全程 PASS（新單寫者 helper src/os/battery_followup_R2247.py）：套件矩陣重生成並回讀逐位元組同一＝427 套件／3538 判據（docs/sandbox-suite-matrix.md，41673B，green=427/427）、指紋五域 CLEAN、runner profile --daily --check PASS、寫手普查重凍後 DRIFT-CLEAN files=2177 tee=1648 baselined=529 flags=0，收在 VERDICT PASS。誠實記分＝本輪零產品碼改動、零新資料面，是 0 分驗證輪，只買回欠帳；補種義務未清，量規讀 main=5/5 tech=5/10 explore=5/10 FLOOR-DEBT shortfall=10，已列 R2248 首項。",
+    "latest_artifact": "qa/reconcile-all-R2247.log（全量電池 427/427＋四段後續全 PASS，單寫者 utf-8 LF）＋ src/os/battery_followup_R2247.py（矩陣再生／指紋／profile／普查四段單寫者 runner）＋ docs/sandbox-suite-matrix.md（427 套件／3538 判據，41673B，逐位元組回讀同一）；時間戳 2026-10-29",
+    "next_milestone": "下一窗（48 小時內，R2248）：①先補真種子把 tech 補到 10、explore 補到 10（量規實測 5/10 與 5/10，每條須過查重前置）②認領補種後的隊頭最上真活項出產品面（apimarket 月度軸仍有未覆蓋問題）"
   },
   "depts": [
     {
@@ -34,6 +34,11 @@
     }
   ],
   "outs": [
+    [
+      "full reconcile battery and suite-matrix regeneration re-proven (R2247)",
+      "on",
+      "R2247: the battery debt carried by three windows is cleared on the committed tree. Full reconcile battery RUNNER PASS 427/427 suites green plus reconcile controls 7/7 in 846.9s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2247.log, single-writer utf-8 LF through src/os/battery_stream.py). Four follow-up sections then all PASS through the new single-writer helper src/os/battery_followup_R2247.py: matrix regenerated to 427 suites / 3538 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 41673B, green=427/427); fingerprint CLEAN over 5 domains; runner profile --daily --check PASS; writer census re-frozen then DRIFT-CLEAN files=2177 tee=1648 baselined=529 flags=0. Honest note: the first battery attempt was cancelled for producing no output (its stdout was piped to Out-Null), and an orphan check proved zero surviving runners and zero partial evidence before the rerun. No product code changed."
+    ],
     [
       "state write canon as one callable (state_io.py) - layout measured from bytes, payload-preserving canon, atomic write",
       "on",
@@ -71,6 +76,10 @@
     ]
   ],
   "results": [
+    [
+      "R2247",
+      "verification window on the three-window debt: full battery RUNNER PASS 427/427 + controls 7/7 in 846.9s, tmp reclaim 932/932 worlds 326.57 MiB, four follow-up sections all PASS (matrix 427 suites / 3538 criteria byte-identical, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN files=2177 flags=0). Zero product code changed, so a 0-point window; the queue seeding duty was not discharged - the gauge read main=5/5 tech=5/10 explore=5/10 FLOOR-DEBT shortfall=10 at open and at closeout - and it leads R2248, together with one honest cancelled first attempt (Out-Null suppressed streaming, orphan check clean, rerun used the streamed path)."
+    ],
     [
       "R2246",
       "product window on the carried layout debt: the state.json write canon as one callable (layout/canon/write_canon/fix) in src/os/state_io.py, criteria AC-SIO1..AC-SIO8 pre-registered in state/queue/tech.md BEFORE the code, SUITE PASS 8/8 double-run byte-identical sha16 F50A624669A848CB, wired os-state-io(8), six adjacent os suites green plus the live --check rc=0, and the live file repaired to canonical (25346B bare LF -> 25370B CRLF, JSON payload unchanged). Honest debt: the full reconcile battery and the suite-matrix regeneration were not run and are the R2247 first item for the third window running."
@@ -120,17 +129,17 @@
       "R2184: five-silence scan clean with the decision baseline an exact 159/159 match, so zero domain action. Product: api_market_ticket_size with AC-MTS1..AC-MTS8 pre-registered before the code, SUITE PASS 8/8 double-run byte-identical (sha256 9756078494370546), wired as ledger-apimarket-ticketsize(8), six adjacent suites green. Full battery RUNNER PASS 382/382 in 649.1s with the birth-site sweep reclaiming 858/858 worlds, 304.28 MiB, busy=0 failed=0."
     ],
     [
-      "2246",
+      "2247",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-23..2026-10-29",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
