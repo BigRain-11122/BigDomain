@@ -1,0 +1,4 @@
+test_apimarket_sellerpricecadencemonths.py rc=0 SUITE 8/8
+test_apimarket_sellerwatchmonths.py rc=0 SUITE 8/8
+test_apimarket_sellerquestionmonths.py rc=0 SUITE 8/8
+test_apimarket_marketwatchmonths.py rc=0 SUITE 8/8

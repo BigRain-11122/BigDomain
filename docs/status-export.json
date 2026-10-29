@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-10-29T08:00:34+08:00",
-  "do": "verification window R2239: the carried reconcile debt is discharged - full battery 421/421 plus matrix 421 suites / 3492 criteria, and a name-level diff that explains a stale count instead of asserting a loss",
+  "export_ts": "2026-10-29T08:09:47+08:00",
+  "do": "product window R2240: the last seed of the R2230 family ships as api_seller_price_demand_months, joining the repricing, watch and question month axes so a seller can read whether it moved the price when demand arrived",
   "ceo_face": {
-    "current": "R2239 把上一轮欠下的验证债清掉了：全量对账电池 421/421 套件全绿（957.6 秒，含出生点临时目录清扫 926/926 个、回收 324.82 MiB），随后矩阵重建读到 421 套 / 3492 条判据、指纹五域 CLEAN、每日档位检查 PASS、写者普查冻结后 DRIFT-CLEAN（files=2156 tee=1628 baselined=528）。本轮同时纠正了上一轮的一个过期预估：R2238 预测「419→420 套 / 3475→3484 判据」，实际对 HEAD 上的矩阵是 418/3467 起算，多出 3 套 25 条，逐名比对确认正好是 retry-naming(9) + categorywatchconversionmonths(8) + sellerratingmonths(8)，没有套件丢失、没有判据放宽。",
-    "latest_artifact": "qa/reconcile-all-R2239.log（759896 字节，单写者 utf-8 LF 流式证据）+ docs/sandbox-suite-matrix.md（41107 字节，green=421/421）+ src/os/battery_followup_R2239.py，时间戳 2026-10-29 08:00",
-    "next_milestone": "R2240（48 小时内）：验证债已清零，下一窗回到产品面——优先领 apimarket 观察/供给月度族里仍有真实缺口的探针行，并把 tech=4 / explore=2 这两个低于常备线的队列补到真缺口为止；另有一项本机车道债：BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
+    "current": "R2240 产品轮：卖家「改价是否跟着需求走」这一面落地——api_seller_price_demand_months 把改价、关注、取关、提问四腿按各自 UTC 月并入一张连续网格（OCT..DEC），响应月=有改价且有需求、需求月=净关注>0 或有提问，市场 0.5 / dana 1.0 / lia 0.0 / gina 0.0；净关注为 0 的十一月即使有两次改价也诚实记为非需求月，十二月有提问无改价记为非响应月；卖家隔离与四腿分账守恒，市场基准不自比，峰值并列取较早月。判据 AC-SPD1..8 全部通过。",
+    "latest_artifact": "qa/apimarket-sellerpricedemandmonths-R2240-a.log 与 -b.log（各 869 字节，双跑逐字节同一，sha256 9f8fcd66b6e836c6b96d53ddd11e25a31b94b2a7fce3eca77c1375f9b1fe6bab） + src/sandbox/ledger/apimarket.py 新面 + qa/regression-R2240.log（相邻四套件 8/8×4）；时间戳 2026-10-29 08:09",
+    "next_milestone": "R2241（48 小时内）：补跑全量对账电池与套件矩阵再生（本轮因 25 分钟预算未跑，记录在案）；并把 explore 7/10、tech 8/10 的队列地板欠账继续用真实缺口补齐；另有一项悬挂的本地事项=BigDomain-OSLoop 仍是 InteractiveToken，需提权窗改 S4U"
   },
   "depts": [
     {

@@ -15945,3 +15945,219 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         out["months"] = rows
         return out
+
+    def api_seller_price_demand_months(self, dev_account=None):
+        """Monthly repricing response to demand (criteria
+        AC-SPD1..AC-SPD8 pre-registered in the R2240 explore-queue
+        claim row BEFORE this code existed; the AC-SPD prefix,
+        api_seller_price_demand_months,
+        test_apimarket_sellerpricedemandmonths,
+        ledger-apimarket-sellerpricedemandmonths, response_month_count
+        and market_response_rate were git-grep zero-occupancy against
+        HEAD 2026-10-29, rc=1).
+
+        Three timelines already existed and never met:
+        api_seller_price_cadence_months answers how often a seller
+        reprices, api_seller_watch_months how much attention arrived
+        and api_seller_question_months how many pre-sale questions
+        came in. So the seller's own operating question - "when
+        interest rose, did I actually move the price" - had no face,
+        and a seller that repriced into a demand spike read exactly
+        like one that never touched a price.
+
+        Join law (AC-SPD2): every leg books in the UTC month of its
+        own immutable stamp - a revision in revised_utc, a watch in
+        watched_utc, an unwatch in unwatched_utc and a question in
+        asked_utc. An answer is not an event here and never re-dates
+        the month its question landed in, and a later write never
+        rewrites the month an earlier one measured.
+
+        Response law (AC-SPD3): a response month is one that carries
+        at least one revision AND demand (a positive watch delta or a
+        question); a demand month is one whose demand is positive,
+        so a month drained by unwatches is honestly not demand. The
+        envelope rate is response months over demand months and is
+        None - never a fabricated 0.0 - when the seller saw no
+        demand at all. This face publishes NO correlation
+        coefficient: a flat month stays None rather than inventing a
+        number.
+
+        Grid law (AC-SPD4): rows run contiguously over the UNION of
+        the revision, watch, unwatch and question months, so a month
+        with no event carries an honest zero row whose
+        running_revision stays flat. net_count is the up/down split
+        difference and watch_net_count the signed watch delta.
+
+        Scope law (AC-SPD5/AC-SPD6): dev_account None is the whole
+        market (scope == 'market' and market_response_rate None -
+        the face never benchmarks itself against itself); a seller
+        scope joins every leg through apimarket_listings.dev_account
+        with strict isolation and carries the market-wide rate
+        computed by the same law. Peaks take the highest month with
+        the earlier-month tie-break and a zero month is never a
+        peak.
+
+        Gates run before any read (fail-closed E_AM_BAD_ACCOUNT on
+        the usr: prefix shape); the bare usr: prefix reads honestly
+        empty. Pure read: zero row mutations, zero token movement."""
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def _core(scope):
+            clauses = ""
+            args = ()
+            if scope is not None:
+                clauses = " WHERE dev_account = ?"
+                args = (str(scope),)
+            listings = self._conn.execute(
+                "SELECT listing_id, token_price FROM apimarket_listings"
+                + clauses + " ORDER BY listing_id", args).fetchall()
+            listing_ids = set(int(row[0]) for row in listings)
+            buckets = {}
+
+            def bucket(month):
+                return buckets.setdefault(
+                    month, {"revision": 0, "up": 0, "down": 0,
+                            "watch": 0, "unwatch": 0, "question": 0})
+
+            for row in listings:
+                listing_id = int(row[0])
+                previous = int(row[1])
+                revisions = self._conn.execute(
+                    "SELECT token_price, revised_utc FROM"
+                    " apimarket_price_revisions WHERE listing_id = ?"
+                    " ORDER BY revision_id", (listing_id,)).fetchall()
+                for rev in revisions:
+                    price = int(rev[0])
+                    b = bucket(str(rev[1])[:7])
+                    b["revision"] += 1
+                    if price > previous:
+                        b["up"] += 1
+                    elif price < previous:
+                        b["down"] += 1
+                    previous = price
+
+            watches = self._conn.execute(
+                "SELECT w.listing_id, w.watched_utc, u.unwatched_utc"
+                " FROM apimarket_watchlist w"
+                " LEFT JOIN apimarket_unwatchings u"
+                " ON u.watch_id = w.watch_id"
+                " ORDER BY w.watch_id").fetchall()
+            for row in watches:
+                if int(row[0]) not in listing_ids:
+                    continue
+                bucket(str(row[1])[:7])["watch"] += 1
+                if row[2] is not None:
+                    bucket(str(row[2])[:7])["unwatch"] += 1
+
+            questions = self._conn.execute(
+                "SELECT listing_id, asked_utc FROM apimarket_questions"
+                " ORDER BY question_id").fetchall()
+            for row in questions:
+                if int(row[0]) not in listing_ids:
+                    continue
+                bucket(str(row[1])[:7])["question"] += 1
+
+            months = []
+            running = 0
+            demand_months = 0
+            response_months = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    b = {"revision": 0, "up": 0, "down": 0,
+                         "watch": 0, "unwatch": 0, "question": 0}
+                running += b["revision"]
+                watch_net = b["watch"] - b["unwatch"]
+                has_demand = watch_net > 0 or b["question"] > 0
+                if has_demand:
+                    demand_months += 1
+                    if b["revision"] > 0:
+                        response_months += 1
+                months.append({
+                    "month": month,
+                    "revision_count": b["revision"],
+                    "up_count": b["up"],
+                    "down_count": b["down"],
+                    "net_count": b["up"] - b["down"],
+                    "watch_count": b["watch"],
+                    "unwatch_count": b["unwatch"],
+                    "watch_net_count": watch_net,
+                    "question_count": b["question"],
+                    "running_revision": running})
+
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["revision_count"] <= 0:
+                    continue
+                if (peak_count is None
+                        or row["revision_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["revision_count"]
+
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["revision_count"] > 0),
+                "revision_count": sum(row["revision_count"]
+                                      for row in months),
+                "up_count": sum(row["up_count"] for row in months),
+                "down_count": sum(row["down_count"] for row in months),
+                "watch_count": sum(row["watch_count"] for row in months),
+                "unwatch_count": sum(row["unwatch_count"]
+                                     for row in months),
+                "watch_net_count": sum(row["watch_net_count"]
+                                       for row in months),
+                "question_count": sum(row["question_count"]
+                                      for row in months),
+                "response_month_count": response_months,
+                "demand_month_count": demand_months,
+                "response_rate": (round(response_months
+                                        / float(demand_months), 4)
+                                  if demand_months else None),
+                "peak_revision_month": peak_month,
+                "peak_revision_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_revision_count": (
+                    months[-1]["revision_count"] if months else None),
+                "months": months}
+
+        with self._lock:
+            if dev_account is None:
+                core = _core(None)
+                market_rate = None
+                scope = "market"
+            else:
+                core = _core(str(dev_account))
+                market_rate = _core(None)["response_rate"]
+                scope = "seller"
+
+        return {
+            "dev_account": (None if dev_account is None
+                            else str(dev_account)),
+            "scope": scope,
+            "month_count": core["month_count"],
+            "active_month_count": core["active_month_count"],
+            "revision_count": core["revision_count"],
+            "up_count": core["up_count"],
+            "down_count": core["down_count"],
+            "watch_count": core["watch_count"],
+            "unwatch_count": core["unwatch_count"],
+            "watch_net_count": core["watch_net_count"],
+            "question_count": core["question_count"],
+            "response_month_count": core["response_month_count"],
+            "demand_month_count": core["demand_month_count"],
+            "response_rate": core["response_rate"],
+            "peak_revision_month": core["peak_revision_month"],
+            "peak_revision_count": core["peak_revision_count"],
+            "market_response_rate": market_rate,
+            "latest_month_revision_count": core[
+                "latest_month_revision_count"],
+            "first_month": core["first_month"],
+            "last_month": core["last_month"],
+            "months": core["months"],
+            "disclaimer": self.disclaimer}

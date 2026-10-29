@@ -2698,6 +2698,16 @@ SUITES = [
     # the code, in the R2201 window.
     ("ledger-apimarket-sellerpricecadencemonths", os.path.join(
         "ledger", "test_apimarket_sellerpricecadencemonths.py"), 8),
+    # seller price response to demand (the UNION month grid joining the
+    # revision, watch, unwatch and question legs on one UTC month axis; a
+    # response month needs a revision AND demand, a demand month needs a
+    # positive watch delta or a question, the rate is None with no demand,
+    # strict seller isolation, the market benchmark that never measures
+    # itself, and cross-face identity against all three source faces) -
+    # criteria AC-SPD1..AC-SPD8 registered in the R2230 seed 6/6
+    # explore-queue claim row BEFORE the code, in the R2240 window.
+    ("ledger-apimarket-sellerpricedemandmonths", os.path.join(
+        "ledger", "test_apimarket_sellerpricedemandmonths.py"), 8),
     # buyer-side monthly refund flow (a refund books in the UTC month of its
     # own refunded_utc, never the purchase month, with honest zero months and
     # the pooled money average)

@@ -1,0 +1,10 @@
+PASS AC-SPD1: env_keys=22 exact=True rows=True len=22 empty=(0, None, []) published_only=0 sig=True
+PASS AC-SPD2: octTwin=(2, 1, 1) octNow=(2, 1, 1) danaFrozen=True dec=(0, 1)
+PASS AC-SPD3: market=(1, 2, 0.5) nov=(0, 2) dana=1.0 lia=0.0 gina=0.0
+PASS AC-SPD4: grid=['2026-10', '2026-11', '2026-12'] dana_grid=['2026-10', '2026-11'] nets=[0, 0, 0] watch_nets=[1, 0, 0] running=[2, 4, 4] active=2
+PASS AC-SPD5: partition=(1, 1, 2)/(1, 1, 0)/(1, 0, 0)/(1, 0, 1) dana_nov=(-1, 0) gina_nov=(0, 0) lia_dec=True
+PASS AC-SPD6: market_peak=('2026-10', 2) rates=(None, 0.5, 0.5) gina_peak=('2026-11', 2) latest=0
+PASS AC-SPD7: cadence=(4, 4, 2, 2) watch=(2, 2, 1, 1) questions=(2, 2, 1, 1) window=True dana_window=True
+PASS AC-SPD8: gates=True bare=(0, 0, 0.5) digests_same=True tables=27 tx_same=True restart=(True, True) wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8
