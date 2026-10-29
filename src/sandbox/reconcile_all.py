@@ -4450,6 +4450,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-log-floor",
      os.path.join("..", "os", "test_log_floor.py"), 6),
+    # R2266: the declared floor as the only source of a floor. The pinned
+    # declaration had no consumer, so the file could read PINNED while every
+    # split used a caller literal; the resolver joins the two faces, hands back
+    # no floor on a refusal, and names a disagreement instead of assuming it.
+    # (AC-FDL1..AC-FDL6 pinned in state/queue/tech.md as the R2265 seed row
+    # BEFORE the code existed.)
+    ("os-queue-floor-decl",
+     os.path.join("..", "os", "test_queue_floor_decl.py"), 6),
     ]
 
 FAILS = 0
