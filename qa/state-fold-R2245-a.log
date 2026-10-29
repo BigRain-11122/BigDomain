@@ -1,0 +1,8 @@
+RUN A rc=0 suite=test_state_fold.py
+PASS AC-SF1 waterline verdict from the disk size, margin exact, closed verdict set and pinned report keys
+PASS AC-SF2 window moves verbatim with byte sum, tokens covered, prefix and suffix intact and the plan keys pinned
+PASS AC-SF3 verbatim appendix, old bytes a strict prefix, second append stacks, create only on demand, missing fails closed
+PASS AC-SF4 --check is byte-for-byte read-only with exit 0 clear / 2 due or bad flags / 3 unreadable
+PASS AC-SF5 plan idempotent, bounds/token/gate refusals write nothing, one execute lands on its prediction and re-checks clear
+PASS AC-SF6 source ASCII, stdlib only, no network, predicate single owned and wired as os-state-fold(6)
+SUITE PASS 6/6

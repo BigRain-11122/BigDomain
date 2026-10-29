@@ -4350,6 +4350,15 @@ SUITES = [
     # (AC-QF1..AC-QF8 pre-registered in state/queue/tech.md R2240 a.)
     ("os-queue-floor",
      os.path.join("..", "os", "test_queue_floor.py"), 8),
+    # R2245: the state.json log fold becomes one callable instead of a
+    # hand-run surgical habit - a waterline verdict read from the disk size,
+    # a fold predicate with verbatim window bytes and token coverage, a
+    # byte-verified archive append that never rewrites, a read-only --check
+    # and an execute path that lands exactly on its own prediction or
+    # refuses before any write.
+    # (AC-SF1..AC-SF6 pre-registered in state/queue/tech.md R2240 b.)
+    ("os-state-fold",
+     os.path.join("..", "os", "test_state_fold.py"), 6),
     ]
 
 FAILS = 0
