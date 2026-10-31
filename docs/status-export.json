@@ -1,12 +1,12 @@
 {
- "export_ts": "2026-10-31T16:53:31+08:00",
- "do": "product window: closing a carried-debt row is now one callable instead of hand surgery, and the shipped writer closed this window own register row and opened its successor",
+ "export_ts": "2026-10-31T17:18:09+08:00",
+ "do": "verification window: the full reconcile battery and the four follow-up sections re-proven on the committed tree with zero product edits, and the pre-registered delta matched the measurement",
  "ceo_face": {
-  "current": "R2274 产品面已落盘：债务登记簿的『关行』从手工手术变成一次调用（src/os/debt_close.py + 6 判据套件首跑全绿 6/6）；本窗用它亲手关闭 product-face-R2274，并用既有 writer 开出后继电池行，登记簿现读 open=2 done=24；顺带实锚发现登记簿存在重复 item（reconcile-battery-and-matrix 两行 done），据此补种真种子 debt_item_unique，tech 地板复绿 10/10",
-  "latest_artifact": "src/os/debt_close.py + src/os/test_debt_close.py（证据 qa/debt-close-R2274.log，1658B，双跑判据摘要一致，五邻域套件全绿，单写者 utf-8 LF；接线 os-debt-close(6)）",
-  "last_artifact": "src/os/debt_close.py + src/os/test_debt_close.py（证据 qa/debt-close-R2274.log，1658B，双跑判据摘要一致，五邻域套件全绿，单写者 utf-8 LF；接线 os-debt-close(6)）",
-  "next_milestone": "R2275 验证窗：在已提交树上跑全量 reconcile 电池（预期 443 套件 / 3634 判据，即本窗 +1 套件 +6 判据），再跑四段 follow-up（矩阵再生+回读、指纹链、runner profile、census），毕后回产品面取 tech 队头 line 342（AC-QRX1，queue_row_exempt）",
-  "next_milestone_due": "2026-11-02T14:53:31+08:00"
+  "current": "R2275 验证窗已完成：在已提交树 b6be0f6f 上跑全量 reconcile 电池（443 套件全绿 + 7 控制项，828.2s，判据总数 3634，与预注册的 +1 套件/+6 判据精确一致）；四段 follow-up 全过（矩阵 42867B 逐字节同一、指纹链 CLEAN、runner profile 一致、census DRIFT-CLEAN）；债务行由 R2274 的写入器自行关闭（open 2→1 done 24→25），并开出 product-face-R2276。本轮零产品代码改动，诚实计 0 产品分",
+  "latest_artifact": "qa/reconcile-all-R2275.log（772984B，单写者 utf-8 LF，RUNNER PASS 443/443 + 控制 7/7，828.2s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（443 套件 / 3634 判据，42867B，重生成后 --check 逐字节同一）",
+  "last_artifact": "qa/reconcile-all-R2275.log（772984B，单写者 utf-8 LF，RUNNER PASS 443/443 + 控制 7/7，828.2s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（443 套件 / 3634 判据，42867B，重生成后 --check 逐字节同一）",
+  "next_milestone": "R2276 回产品面：取 tech 队头 line 342（AC-QRX1，queue_row_exempt 种子，六判据已在行内预注册），窗前做 git grep -F 零占用锚验，出一件带套件的产品面，若认领使 tech 可认领降到 9 则同窗补一条真缺口行，先提交再跑电池",
+  "next_milestone_due": "2026-11-02T17:18:09+08:00"
  },
  "depts": [
   {
@@ -36,6 +36,11 @@
   }
  ],
  "outs": [
+  [
+   "full reconcile battery plus the four follow-up sections re-proven on the committed tree, and the pre-registered delta matched the measurement exactly (R2275)",
+   "on",
+   "R2275: the debt row demanded verification before any product work, so this window changed no product code. Full reconcile battery on the committed R2274 tree b6be0f6f with an empty git status before and after = RUNNER PASS 443/443 suites plus controls 7/7 in 828.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2275.log, 772984B, single-writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), criteria total 3634 - the +1 suite / +6 criteria against R2273 (442/3628) is exactly the R2274 os-debt-close suite and the pre-registered prediction needed no correction. The four follow-up sections then ran through src/os/battery_followup.py: the matrix section FAILED first on the stale doc (on-disk=42798B regenerated=42867B) and did not rewrite it, src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 443 suites / 3634 criteria (42867B), and the re-run read all four sections PASS with the matrix byte-identical. The register row was closed through the R2274 writer (open 2->1, done 24->25, readback ok) and product-face-R2276 opened first=yes. Disclosed: the first battery call used a runner path relative to the repo root while the streamer resolves it under src/, exited rc=2 in 0.1s with zero suites run, and the corrected run overwrote that short log."
+  ],
   [
    "battery, matrix and the four post-battery sections re-proven on the committed tree, and the pre-registered delta matched the measurement (R2273)",
    "on",
@@ -231,21 +236,26 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2274",
+   "2275",
    "OSLoop 执行 tick"
   ],
   [
    "R2274",
    "R2274 product window on the debt register first item (product-face-R2274): the row the debt gate and queue_head both named (tech.md line 340, prefix AC-DEBC1) was claimed with its six criteria already pinned in the seed row BEFORE the code. PRODUCT: src/os/debt_close.py plus src/os/test_debt_close.py - closing a carried-debt row stops being hand surgery. render_closed() rewrites only what the done law requires (box flipped, first= dropped, closed stamp appended, note untouched); plan() refuses unknown, already-done, ambiguous and bad-round closes before any byte changes and re-parses through debt_register requiring the open and done counts to move by exactly one each way; the write is one atomic os.replace re-measured through debt_register.register so a register that cannot parse after the edit is an error, never a silent write; the dry run writes nothing and predicts the exact post bytes. Evidence: SUITE PASS 6/6 on the first run, two legs with an identical criterion digest and five adjacent os suites green (qa/debt-close-R2274.log, 1658B, one utf-8 LF single writer through the R2261 evidence_capture callable), wired os-debt-close(6). LIVE dogfood: the shipped callable closed product-face-R2274 itself (line=41, open 2->1, done 23->24, readback ok) and debt_append opened reconcile-battery-R2275 first=yes. The claim dropped tech claimable to 9, so one real gap row was seeded from a live finding - the register carries reconcile-battery-and-matrix on two done rows, a duplicate debt_register never checks - and the floors closed FLOOR-MET 10/10. Honest notes: the register was measured LF-only before the write; state.json measured 62334B against the 78500B waterline so no fold was due; the battery carries to R2275 (the R2168 mixed-tree rule)."
+  ],
+  [
+   "R2275",
+   "R2275 verification window on the debt register first item (reconcile-battery-R2275), discharged with zero product edits until green (the R2168 mixed-tree rule): full reconcile battery on the committed R2274 tree b6be0f6f with an empty git status before and after = RUNNER PASS 443/443 suites green plus controls 7/7 in 828.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2275.log, 772984B at RUNNER close, single-writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), criteria total 3634 - exactly the pre-registered +1 suite / +6 criteria against R2273 (442/3628) from the R2274 os-debt-close suite, so the prediction matched the measurement with no correction. The four follow-up sections then ran through src/os/battery_followup.py: the matrix section FAILED first on the stale doc (on-disk=42798B regenerated=42867B) and did NOT rewrite it, which is the designed order; src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 443 suites / 3634 criteria (42867B) and the re-run read all four sections PASS (matrix byte-identical, fingerprint CLEAN 5 domains, profile --daily --check byte-identical, census DRIFT-CLEAN), closing on VERDICT PASS with eol_ok=True. The register row was then closed through the R2274 writer itself (line=47, open 2->1, done 24->25, before=28625B after=28628B, readback ok) and debt_append opened product-face-R2276 first=yes (before=28628B after=29108B, readback ok), so the register reads open=2 done=25. State fold measured, not assumed: 67588B against the 78500B waterline, so no fold was due and none was run; the closeout landed the file at 71654B. Honest notes: (a) the first battery invocation passed the runner path relative to the repo root while the streamer resolves it under src/, so it exited rc=2 in 0.1s with zero suites run (the R2131 precedent) and the corrected run overwrote that short log, so no red battery evidence exists for this window and none is claimed; (b) this is a 0-point verification window with no product face.",
+   "qa/reconcile-all-R2275.log"
   ]
  ],
  "self_drive": {
   "window": "2026-10-25..2026-10-31",
   "window_days": 7,
-  "log_lines_in_window": 12,
+  "log_lines_in_window": 13,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 12,
+  "substantive_non_idle_mention_lines": 13,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
