@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2314 suite=src/os/test_gate_decl_identity.py legs=2
+== LEG A rc=0 digest=B43A6E684F49910F
+gate_decl_identity suite (expected criteria 6)
+PASS AC-GDI1 identity shape and queue path are imported laws
+PASS AC-GDI2 three states are exhaustive and disjoint
+PASS AC-GDI3 a shared bare placeholder names every carrier
+PASS AC-GDI4 levels are tagged and claimability is not judged
+PASS AC-GDI5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDI6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== LEG B rc=0 digest=B43A6E684F49910F
+gate_decl_identity suite (expected criteria 6)
+PASS AC-GDI1 identity shape and queue path are imported laws
+PASS AC-GDI2 three states are exhaustive and disjoint
+PASS AC-GDI3 a shared bare placeholder names every carrier
+PASS AC-GDI4 levels are tagged and claimability is not judged
+PASS AC-GDI5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDI6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_drift.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_append.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=B43A6E684F49910F

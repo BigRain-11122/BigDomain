@@ -4604,6 +4604,15 @@ SUITES = [
     # as the R2286 seed row BEFORE the code existed.)
     ("os-gate-drift",
      os.path.join("..", "os", "test_gate_drift.py"), 6),
+    # R2314: gate_decl_append validated an identity only as a non-empty unique
+    # string, so a bare placeholder no row carries was planned as a brand-new
+    # declaration while the true duplicate was refused. One reader resolves
+    # every declared identity against the live rows as MATCHED, UNMATCHED or
+    # AMBIGUOUS, level-tagged and never judging claimability, so the writer can
+    # ask that reader instead of owning a second address law. (AC-GDI1..AC-GDI6
+    # pinned in state/queue/tech.md as the R2313 seed row BEFORE the code.)
+    ("os-gate-decl-identity",
+     os.path.join("..", "os", "test_gate_decl_identity.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads
