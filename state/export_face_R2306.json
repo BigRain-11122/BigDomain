@@ -1,0 +1,9 @@
+{
+  "do": "R2306 验证窗：把 R2305 的评审窗口套件纳入整套见证（全量电池 459/459 套 + 四段 follow-up）",
+  "current": "R2306 已完成全量电池见证：在已提交的 R2305 树 d813bfc8 上 459/459 套全绿、判据 3730（恰为预注册 +1 套 / +6 判据），四段 follow-up 复跑全 PASS",
+  "latest": "qa/reconcile-all-R2306.log（2026-11-01）+ docs/sandbox-suite-matrix.md 重生成至 459 套 / 3730 判据",
+  "next": "R2307 产品面：tech 队头 line 369 前缀 AC-SAP1 的 stamp_exempt_append（受格条目写入器），六判据已在行内预注册，窗口 ≤48h",
+  "last": "qa/reconcile-all-R2306.log",
+  "out": "qa/reconcile-all-R2306.log",
+  "result": "R2306 verification window: full reconcile battery on the committed R2305 tree d813bfc8 with an empty git status before the run - RUNNER PASS 459/459 suites plus controls 7/7 in 838.2s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy zero failed zero, criteria total 3730 exactly the pre-registered plus 1 suite plus 6 criteria against R2304 (458/3724) from the os-review-window suite; four follow-up sections read PASS after the matrix section refused to rewrite the stale doc (on-disk 44075B vs regenerated 44151B) and suite_matrix regenerated docs/sandbox-suite-matrix.md to 459 suites / 3730 criteria at 44151B; register closed and the successor names the product face at tech head line 369 prefix AC-SAP1"
+}
