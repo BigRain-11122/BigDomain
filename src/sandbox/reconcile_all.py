@@ -4584,6 +4584,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-history",
      os.path.join("..", "os", "test_followup_history.py"), 6),
+    # R2292: queue_row_exempt records an acceptance once and nothing ever
+    # looks at it again, so a waiver granted while the world looked one way
+    # quietly becomes permanent. One read-only reviewer ages every declared
+    # entry against a passed round, names each one at or beyond the window
+    # with BOTH rounds, and refuses a declared round later than the round
+    # being checked.
+    # (AC-EXR1..AC-EXR6 pinned in state/queue/tech.md as the R2276 seed row
+    # BEFORE the code existed.)
+    ("os-exempt-review",
+     os.path.join("..", "os", "test_exempt_review.py"), 6),
     ]
 
 FAILS = 0

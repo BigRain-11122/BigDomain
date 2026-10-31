@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2292 suite=src/os/test_exempt_review.py legs=2
+== LEG A rc=0 digest=2932650D4C74098F
+PASS AC-EXR1 declaration law is imported and a patched reader flows through
+PASS AC-EXR2 age law, at-or-beyond window STALE naming both rounds, until round ends an acceptance
+PASS AC-EXR3 future declared round refused as E_EXR_FUTURE
+PASS AC-EXR4 zero writes and zero clock (declaration digests identically)
+PASS AC-EXR5 CLI 0/2/3/5 and byte-stable JSON over pinned keys
+PASS AC-EXR6 pure ASCII, stdlib only, wired, live reading of nine entries
+LIVE EXEMPT REVIEW round=R2292 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN
+SUITE PASS 6/6
+== LEG B rc=0 digest=2932650D4C74098F
+PASS AC-EXR1 declaration law is imported and a patched reader flows through
+PASS AC-EXR2 age law, at-or-beyond window STALE naming both rounds, until round ends an acceptance
+PASS AC-EXR3 future declared round refused as E_EXR_FUTURE
+PASS AC-EXR4 zero writes and zero clock (declaration digests identically)
+PASS AC-EXR5 CLI 0/2/3/5 and byte-stable JSON over pinned keys
+PASS AC-EXR6 pure ASCII, stdlib only, wired, live reading of nine entries
+LIVE EXEMPT REVIEW round=R2292 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_row_exempt.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_row.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_debt_item_unique.py rc=0 SUITE PASS 6/6
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=2932650D4C74098F
