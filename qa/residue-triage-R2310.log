@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2310 suite=src/os/test_residue_triage.py legs=2
+== LEG A rc=0 digest=7E964FC4AF820DCE
+residue_triage suite (expected criteria 6)
+PASS AC-RTR1 residue and statuses imported, patch flows through
+PASS AC-RTR2 unmatched entry never covers the live debt
+PASS AC-RTR3 disagreement names both statuses
+PASS AC-RTR4 expiry names until, missing declaration is UNPINNED
+PASS AC-RTR5 CLI codes, byte-stable pinned json, zero writes
+PASS AC-RTR6 pure source, wired, live residue fully triaged
+SUITE PASS 6/6
+== LEG B rc=0 digest=7E964FC4AF820DCE
+residue_triage suite (expected criteria 6)
+PASS AC-RTR1 residue and statuses imported, patch flows through
+PASS AC-RTR2 unmatched entry never covers the live debt
+PASS AC-RTR3 disagreement names both statuses
+PASS AC-RTR4 expiry names until, missing declaration is UNPINNED
+PASS AC-RTR5 CLI codes, byte-stable pinned json, zero writes
+PASS AC-RTR6 pure source, wired, live residue fully triaged
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_review_window.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_variants.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_exempt_append.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=7E964FC4AF820DCE

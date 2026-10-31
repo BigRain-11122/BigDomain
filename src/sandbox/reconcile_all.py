@@ -4634,6 +4634,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-review-window",
      os.path.join("..", "os", "test_review_window.py"), 6),
+    # R2310: stamp_residue reports the whole stamped-but-never-logged residue
+    # as one table, but every reviewed round stays in it forever, so the same
+    # 185 rows are re-triaged by hand every window. One pinned
+    # state/residue_triage.json plus a reader that imports the live residue
+    # list and its statuses from stamp_residue itself, reads an entry for a
+    # round outside the live list as inert, names both readings on a status
+    # disagreement, hands a round back to the debt at its until round, and
+    # reads a missing declaration as UNPINNED with the full debt.
+    # (AC-RTR1..AC-RTR6 pinned in state/queue/tech.md as the R2298 seed row
+    # BEFORE the code existed.)
+    ("os-residue-triage",
+     os.path.join("..", "os", "test_residue_triage.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran
