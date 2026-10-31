@@ -1303,6 +1303,13 @@
       "declared_by": "R2311",
       "reason": "the R2311 waterline fold moved this round's only log item into the archive while its accepted stamp still sits on a closed queue row, so the delivery stands and the round stops reading as untriaged debt",
       "until": 2330
+    },
+    {
+      "round": 2300,
+      "status": "DELIVERED",
+      "declared_by": "R2316",
+      "reason": "read at R2316 off the board: state/queue/tech.md:366 carries [done 2026-11-01 R2300] for the gate_drift row and commit b6bf3a38 ran the R2301 battery green on that committed tree, so the round delivered; the accepted stamp simply sat on a row that has since closed",
+      "until": 2330
     }
   ]
 }
