@@ -25,13 +25,19 @@ Three deliberate narrowings:
     unreadable input fails closed instead of producing a classification.
 
 Criteria AC-QOC1..AC-QOC6 were pinned in state/queue/tech.md as the R2257 seed
-row BEFORE this code existed. Pure ASCII source, stdlib only, zero network.
+row BEFORE this code existed. The declared-floor wiring (AC-QFW1..AC-QFW6) was
+pinned as the R2266 seed row BEFORE it existed: `--floor-from-declaration`
+takes the floor from `queue_floor_decl.resolve` so the pinned declaration has a
+real consumer and the two faces cannot disagree by hand, while `--floor` stays
+for an explicit reading and the two are refused together.
+Pure ASCII source, stdlib only, zero network.
 """
 
 import json
 import os
 import sys
 
+import queue_floor_decl
 import state_seq
 
 VERDICTS = ("EMPTY", "RECONCILED", "RESIDUE")
@@ -70,6 +76,25 @@ def parse_floor(value):
     if not text or not text.isdigit():
         raise QueueOnlyError("E_QOC_BAD_FLOOR", repr(value))
     return int(text)
+
+
+def declared_floor(root):
+    """The declared floor through the resolver, or a refusal (AC-QFW1/QFW2).
+
+    The floor is taken from `queue_floor_decl.resolve` and never derived from
+    the log: a derived floor is the exact blindness `log_floor` exists to stop,
+    so a declaration that is not PINNED refuses the split instead of falling
+    back to one.
+    """
+    try:
+        report = queue_floor_decl.resolve(root)
+    except queue_floor_decl.FloorDeclError as exc:
+        if exc.code == "E_FDL_UNREADABLE":
+            raise QueueOnlyError("E_QFW_UNREADABLE",
+                                 "%s (%s)" % (exc.code, exc.detail))
+        raise QueueOnlyError("E_QFW_NOT_PINNED",
+                             "%s (%s)" % (exc.code, exc.detail))
+    return report["floor"]
 
 
 def classify(stamps, labels, floor):
@@ -149,18 +174,21 @@ def to_json(report):
     return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
 
 
-USAGE = ("usage: queue_only_reconcile.py --check --floor R<n> "
+USAGE = ("usage: queue_only_reconcile.py --check "
+         "(--floor R<n> | --floor-from-declaration) "
          "[--root PATH] [--json]\n"
          "  exit 0 = every stamp is LOGGED or FOLDED (or the queues are "
          "honestly empty)\n"
-         "  exit 2 = at least one stamp is NEVER-LOGGED, or the flags are "
-         "bad\n"
-         "  exit 3 = state.json or a queue file is missing or unparseable\n")
+         "  exit 2 = at least one stamp is NEVER-LOGGED, the declared floor "
+         "is not PINNED, or the flags are bad\n"
+         "  exit 3 = state.json, a queue file or the declaration is missing "
+         "or unparseable\n")
 
 
 def main(argv):
     check = False
     as_json = False
+    from_decl = False
     floor_text = None
     root = os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
@@ -171,6 +199,8 @@ def main(argv):
             check = True
         elif arg == "--json":
             as_json = True
+        elif arg == "--floor-from-declaration":
+            from_decl = True
         elif arg in ("--floor", "--root"):
             index += 1
             if index >= len(argv):
@@ -193,12 +223,28 @@ def main(argv):
         sys.stdout.write("E_QOC_BAD_ARGS: --check is required\n")
         sys.stdout.write(USAGE)
         return 2
-    try:
-        floor = parse_floor(floor_text)
-    except QueueOnlyError as exc:
-        sys.stdout.write("%s\n" % exc.code)
+    # AC-QFW3: two sources of truth are the ambiguity this closes, and zero
+    # sources would let a derived floor back in silently.
+    if from_decl and floor_text is not None:
+        sys.stdout.write("E_QFW_BOTH: --floor and --floor-from-declaration "
+                         "are two sources of truth\n")
         sys.stdout.write(USAGE)
         return 2
+    if from_decl:
+        try:
+            floor = declared_floor(root)
+        except QueueOnlyError as exc:
+            sys.stdout.write("%s: %s\n" % (exc.code, exc.detail))
+            if exc.code == "E_QFW_UNREADABLE":
+                return 3
+            return 2
+    else:
+        try:
+            floor = parse_floor(floor_text)
+        except QueueOnlyError as exc:
+            sys.stdout.write("%s\n" % exc.code)
+            sys.stdout.write(USAGE)
+            return 2
     try:
         report = audit(root, floor)
     except QueueOnlyError as exc:

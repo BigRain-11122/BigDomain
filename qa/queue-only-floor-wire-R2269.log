@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2269 suite=src/os/test_queue_only_floor_wire.py legs=2
+== LEG A rc=0 digest=0F95357E1E69333B
+PASS AC-QFW1 the declared floor is obtained through queue_floor_decl.resolve (a patched verdict flows through) and is never re-derived from the log
+PASS AC-QFW2 an UNPINNED or DRIFT declaration refuses the split with exit 2 and no counts, never a default floor
+PASS AC-QFW3 --floor with --floor-from-declaration is refused naming both, and neither is refused so no silent derived floor survives
+PASS AC-QFW4 the declared floor and the same literal floor produce byte-identical LOGGED/FOLDED/NEVER-LOGGED counts
+PASS AC-QFW5 CLI exits 0/2/3 as pinned, --json is byte-stable over the nine report keys, and the split writes nothing
+LIVE QUEUE ONLY floor=R2249 stamps=170 logged=8 folded=161 never_logged=1 max_stamp=2267 verdict=RESIDUE
+PASS AC-QFW6 pure ASCII, stdlib only, zero network, wired as os-queue-only-floor-wire(6), live reading taken through the declared floor
+SUITE PASS 6/6
+== LEG B rc=0 digest=0F95357E1E69333B
+PASS AC-QFW1 the declared floor is obtained through queue_floor_decl.resolve (a patched verdict flows through) and is never re-derived from the log
+PASS AC-QFW2 an UNPINNED or DRIFT declaration refuses the split with exit 2 and no counts, never a default floor
+PASS AC-QFW3 --floor with --floor-from-declaration is refused naming both, and neither is refused so no silent derived floor survives
+PASS AC-QFW4 the declared floor and the same literal floor produce byte-identical LOGGED/FOLDED/NEVER-LOGGED counts
+PASS AC-QFW5 CLI exits 0/2/3 as pinned, --json is byte-stable over the nine report keys, and the split writes nothing
+LIVE QUEUE ONLY floor=R2249 stamps=170 logged=8 folded=161 never_logged=1 max_stamp=2267 verdict=RESIDUE
+PASS AC-QFW6 pure ASCII, stdlib only, zero network, wired as os-queue-only-floor-wire(6), live reading taken through the declared floor
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_only_reconcile.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+== src/os/test_log_floor.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=5 fails=0 digest=0F95357E1E69333B

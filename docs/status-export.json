@@ -1,12 +1,13 @@
 {
-  "export_ts": "2026-10-31T14:32:52+08:00",
-  "do": "verification window R2268 on the debt register first item: the full reconcile battery and its four follow-ups are green on the committed tree, and the state log was folded inside the waterline with every token covered.",
+  "export_ts": "2026-10-31T15:07:50+08:00",
+  "do": "product window R2269 on the top deliverable tech row: the declared queue-only floor finally has a consumer inside the splitter, and the new reading names a real never-logged round.",
   "ceo_face": {
-    "current": "R2268 验证窗：在已提交的树上把全量回归电池跑绿——439 套件全绿 + 控制 7/7（1604.1s，判据总数 3610，恰好是 R2266 的 438/3605 加上 R2267 的 debt_gate 1 套件 5 判据），随后四段收尾全过：套件矩阵再生成 439/3610 逐字节同一、指纹链 5 域 CLEAN、runner profile 逐字节同一、qa 写者普查重新冻结后 DRIFT-CLEAN，终判 PASS。同时 state.json 量得 77298B（水位 78500B·余量仅 1202B），本轮收尾按状态折叠法把最老 13 行折进十月归档（525 个token 全覆盖，折后 70018B·余量 8482B）。",
-    "latest_artifact": "qa/reconcile-all-R2268.log（772153B，单写者 utf-8 LF）+ docs/sandbox-suite-matrix.md（42567B·439/3610·green=439/439）；实况 RUNNER PASS 439/439 套件 + 控制 7/7",
-    "last_artifact": "qa/reconcile-all-R2268.log（772153B，单写者 utf-8 LF）+ docs/sandbox-suite-matrix.md（42567B·439/3610·green=439/439）；实况 RUNNER PASS 439/439 套件 + 控制 7/7",
-    "next_milestone": "R2269 回到产品面：验证债已清，登记簿现点名 product-face-R2269 first=yes；下一窗认领队列最上可交付行（R2267 的 queue_head 种子或 R2266 的 queue_only_floor_wire 种子），判据先于代码预注册、写入前先做 HEAD 零占用锚检，并先把产品面提交再跑电池。预计 2026-11-01 18:00 前完成",
-    "next_milestone_due": "2026-11-01T17:32:52+08:00"
+    "current": "R2269 产品窗：把「已声明的日志窗口地板」接进唯一的分割器。queue_only_reconcile 新增 --floor-from-declaration，地板取自 queue_floor_decl.resolve 而不再由调用方手填，声明非 PINNED（缺文件或漂移）直接拒分（exit 2、零计数、无默认地板），--floor 与它同时给出被点名拒绝（两个真相源=本该消灭的歧义），同一地板下 LOGGED/FOLDED/NEVER-LOGGED 与九键 JSON 逐字节不变。证据=套件 6/6 双跑判据行同一 + 五条相邻 os 套件全绿（qa/queue-only-floor-wire-R2269.log·2266B·单写者 utf-8 LF），接线 os-queue-only-floor-wire(6)。实读新发现（如实上报未掩盖）：地板来自声明后浮出一条真债——floor=R2249 stamps=170 logged=8 folded=161 never_logged=1 verdict=RESIDUE，其中 NEVER-LOGGED R2250（盖了队列完成戳却没有日志行）；追查它需要的「哪几条队列行带这个戳」已作 stamp_locator 种子入板。队列地板收口 main 5/5 tech 10/10 explore 10/10 FLOOR-MET；state.json 74838B / 水位 78500B（余量 3662B）。",
+    "latest_artifact": "qa/queue-only-floor-wire-R2269.log（2266B·单写者 utf-8 LF·双跑判据行同一+五邻域套件全绿）+ src/os/queue_only_reconcile.py（新增 --floor-from-declaration 与 E_QFW_BOTH / E_QFW_NOT_PINNED / E_QFW_UNREADABLE 三个拒绝码）+ src/os/test_queue_only_floor_wire.py（6 判据）",
+    "last_artifact": "qa/queue-only-floor-wire-R2269.log（2266B·单写者 utf-8 LF·双跑判据行同一+五邻域套件全绿）+ src/os/queue_only_reconcile.py（新增 --floor-from-declaration 与 E_QFW_BOTH / E_QFW_NOT_PINNED / E_QFW_UNREADABLE 三个拒绝码）+ src/os/test_queue_only_floor_wire.py（6 判据）",
+    "next_milestone": "R2270：先产品后验证（R2168 混树律）。认领 state/queue/tech.md 最上可交付行（criteria 已预注册 + HEAD 零占用锚验）——两条开种子=R2269 stamp_locator （追 R2250 残留）与 R2267 queue_head（顶行判定自动化）；提交后在该已提交树上跑全量对账电池，预期较 R2268（439 套件 / 3610 判据）+1 套件 / +6 判据，再接四段后续（矩阵再生+回读、指纹链、runner profile、写入者普查）。",
+    "next_milestone_due": "2026-11-01T18:00:00+08:00",
+    "updated": "2026-10-31T15:07:50+08:00"
   },
   "depts": [
     {
@@ -36,6 +37,11 @@
     }
   ],
   "outs": [
+    [
+      "declared floor gets a consumer: the pinned declaration and the splitter can no longer disagree silently, and the new reading names NEVER-LOGGED R2250 (R2269)",
+      "on",
+      "R2269: R2265 pinned the log-window floor in state/log_floor.json and R2266 shipped the resolver, but queue_only_reconcile still took its floor as a caller literal, so the declaration could read PINNED while every actual split used another number. --floor-from-declaration now takes the floor from queue_floor_decl.resolve and never re-derives it, an UNPINNED or DRIFT declaration refuses the split at exit 2 with zero counts, --floor together with it is refused naming both, and for the same floor the classification is byte-identical to the pre-change splitter. SUITE PASS 6/6 double-run plus five adjacent os suites green through the R2261 evidence_capture callable (qa/queue-only-floor-wire-R2269.log, 2266B, single writer utf-8 LF), wired os-queue-only-floor-wire(6). Live finding carried, not swept: the declared floor exposes NEVER-LOGGED R2250 (verdict RESIDUE, floor=R2249, stamps=170, logged=8, folded=161) that the derived floor could not see; the stamp_locator seed was registered to triage it."
+    ],
     [
       "queue floor declaration gets a consumer: the pinned floor and the splitter can no longer disagree silently (R2266)",
       "on",
@@ -108,6 +114,11 @@
     ]
   ],
   "results": [
+    [
+      "R2269",
+      "product window R2269 on the top deliverable tech row: the declared queue-only floor gets a consumer inside the splitter (--floor-from-declaration takes it from queue_floor_decl.resolve, refuses an UNPINNED or DRIFT declaration at exit 2 with zero counts, and refuses --floor together with it), SUITE PASS 6/6 double-run plus five adjacent os suites green (qa/queue-only-floor-wire-R2269.log, 2266B, single writer utf-8 LF), wired os-queue-only-floor-wire(6); the live reading names NEVER-LOGGED R2250 (verdict RESIDUE, floor=R2249, stamps=170, logged=8, folded=161), reported not swept.",
+      "qa/queue-only-floor-wire-R2269.log"
+    ],
     [
       "R2256",
       "R2256 verification window on the committed tree: RUNNER PASS 432/432 suites green plus controls 7/7 in 852.6s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (single-writer utf-8 LF through battery_stream.py), expected criteria total=3570; four follow-up sections all PASS via src/os/battery_followup_R2256.py - matrix 432 suites / 3570 criteria read back byte-identical (42046B, green=432/432), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2196 tee=1667 baselined=529 flags=0. The +1 suite / +6 criteria against R2254 is exactly the R2255 os-round-evidence suite joining the registry. Register row reconcile-battery-R2256 closed, successor product-face-R2257 opened as first=yes. Zero product code changed: a 0-point verification window."
@@ -198,17 +209,17 @@
       "R2268 verification window on the debt register first item (reconcile-battery-R2268), discharged on the committed tree with ZERO product edits until green (the R2168 mixed-tree rule): RUNNER PASS 439/439 suites green plus controls 7/7 in 1604.1s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2268.log, single-writer utf-8 LF through src/os/battery_stream.py), criteria total 3610 - exactly the pre-registered +1 suite / +5 criteria against R2266 (438/3605) from the R2267 os-debt-gate suite. Four follow-up sections all PASS via src/os/battery_followup_R2268.py: matrix 439 suites / 3610 criteria byte-identical (42567B, green=439/439), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, census re-frozen then DRIFT-CLEAN files=2215 tee=1686 baselined=529 flags=0, VERDICT PASS with eol crlf=0 bare_cr=0 bom=False over 772153B. The state fold was measured not assumed (77298B against the 78500B gate, margin 1202B) and executed through state_fold.fold: 13 lines into the October archive, 525 tokens covered with token_missing empty, 70018B, margin 8482B. Honest disclosures: the first invocation was piped through a truncating selector and died to the five-minute no-output rule with zero output, no evidence file and no surviving child (the R2211 trap re-proven), and an orphan check proved zero survivors and a clean tree before the unpiped rerun whose numbers are above; the RUNNER took 1604.1s, beyond the 25-minute budget, so no product face shipped and the window scores 0 product points, honestly recorded."
     ],
     [
-      "2268",
+      "2269",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-25..2026-10-31",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 14,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

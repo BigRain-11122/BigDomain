@@ -4458,6 +4458,13 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-floor-decl",
      os.path.join("..", "os", "test_queue_floor_decl.py"), 6),
+    # R2269: the declared floor finally has a consumer - the splitter takes it
+    # from queue_floor_decl.resolve instead of a caller literal, refuses a
+    # declaration that is not PINNED, and refuses two sources of truth.
+    # (AC-QFW1..AC-QFW6 pinned in state/queue/tech.md as the R2266 seed row
+    # BEFORE the code existed.)
+    ("os-queue-only-floor-wire",
+     os.path.join("..", "os", "test_queue_only_floor_wire.py"), 6),
     # R2267: the register names a first=yes row for the next window, but
     # nothing stopped a window from simply not reading it. The gate answers
     # that one question and fails closed on a missing register instead of
