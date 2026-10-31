@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T00:00:03+08:00",
-  "do": "product window: an accepted-stamp declaration that could rot silently in either direction is now a reading - src/os/stamp_exempt_review.py lists MISSING (a declared entry matching no live debt row, with its declaration entry index) and UNDECLARED (a live debt row carrying no entry, with file and line) from the gate and the declaration it already trusts, reconciles both against the reader own exempt/unmatched numbers before any verdict, and refuses rather than guessing; SUITE PASS 6/6 double-run with five adjacent suites green, live reading NO-DRIFT over 380 entries / 380 violations",
+  "export_ts": "2026-11-01T00:32:59+08:00",
+  "do": "verification window: the whole suite battery was re-run on the committed tree with zero product edits until green - 453/453 suites plus 7/7 reconcile controls in 809.2s, criteria 3694, exactly the pre-registered +1 suite / +6 criteria against the previous round, and the matrix doc was regenerated from that evidence instead of being trusted",
   "ceo_face": {
-    "current": "R2294 产品轮：接受的盖章豁免声明从此可被双向体检。queue_done_stamp_exempt 只问「这条声明还匹配得到一行吗」，于是两种腐烂都无声：被豁免的行事后被加注→文本摘要漂移→声明变成无主；声明之后新关的行→根本没有条目。两种情况下验收面一直是绿的。新增 src/os/stamp_exempt_review.py：从两个既有读数（queue_done_stamp.audit_root 的闸 + queue_done_stamp_exempt 的声明与身份律）双向列出漂移——MISSING 带声明条目序号，UNDECLARED 带文件与行号——且从不猜哪边过期；两侧计数必须先与阅读器自身的 exempt/unmatched 数字对平（否则 E_SER_COUNT 拒绝），缺声明= E_SER_UNPINNED 而非把 380 行一律报成漂移，坏 JSON/缺队文件/同一队内两行同身份各有专属码；零写盘零读钟。证据 SUITE PASS 6/6 双跑判据行同一 + 五个相邻队套件全绿（qa/stamp-exempt-review-R2294.log，1844B，单写者 utf-8 LF 经 evidence_capture），接线 os-stamp-exempt-review(6)。实况 STAMP EXEMPT REVIEW round=R2294 entries=380 violations=380 matched=380 missing=0 undeclared=0 verdict=NO-DRIFT（声明与 tech.md 均证明逐字节未动）。认领使 tech 可认领降到 9，已补一条真缺口种子（stamp_exempt_append，AC-SAP1..AC-SAP6 预注册，五锚零占用）→ 队列回到 main 5/5 · tech 10/10 · explore 10/10。债务行经自带写入器关闭（debt_close line 66，open 2→1，done 43→44，回读 ok），后继 product-face-R2295 置 first=yes（39397B→39875B，回读 ok）。收口跨水位，按整块折窗折 602（log 1..10，R2279+R2280 完整块，580 token 全覆盖），折后 72147B / 余量 6353B，四个账本套件复跑 8/8/8/8 全绿。",
-    "latest_artifact": "src/os/stamp_exempt_review.py + src/os/test_stamp_exempt_review.py + qa/stamp-exempt-review-R2294.log（SUITE PASS 6/6 双跑，1844B）·2026-10-31",
-    "next_milestone": "R2295 验证轮：在已提交的 R2294 树上跑全量 reconcile 电池（R2168 混合树规避，零产品改动直到转绿），预注册预期 = 对上轮 452 套件 / 3688 判据的 +1 套件 / +6 判据（来自 os-stamp-exempt-review），随后四段后续经 battery_followup 执行。窗口 ≤24h。",
-    "next_milestone_due": "2026-11-02T00:00:03+08:00",
-    "last_artifact": "R2294 产品窗：stamp_exempt_review 6/6 双跑 + 5 相邻套件绿，qa/stamp-exempt-review-R2294.log·2026-10-31"
+    "current": "R2295 验证轮：在已提交的 R2294 树上零产品改动跑全量套件电池。实况 RUNNER PASS 453/453 套件+ 控制 7/7，809.2 秒，判据总数 3694——恰是预注册对上轮 452 套件/3688 判据的 +1 套件/+6 判据（来自 os-stamp-exempt-review 套件），预测与实测零偏差；同一电池窗出生站清扫 932/932 世界、326.57 MiB，busy=0 failed=0。四段后续经 src/os/battery_followup.py 执行：矩阵段先按设计 FAIL（盘上 43590B vs 重生成 43675B，且不擅自改写），再由 src/sandbox/suite_matrix.py 按本次证据重生成 docs/sandbox-suite-matrix.md 至 453 套件 / 3694 判据（43675B），复跑四段全 PASS（矩阵逐字节同一、指纹五域 CLEAN、runner profile --daily --check 逐字节同一、census DRIFT-CLEAN），终判 VERDICT R2295 PASS（crlf=0 bare_cr=0 bom=False）。证据 qa/reconcile-all-R2295.log（终态 782769B，单写者 utf-8 LF 经 battery_stream，绝无 shell 重定向）。债务行经自带写入器关闭（line 67，open 2→1，done 44→45，回读 ok），后继 product-face-R2296 置 first=yes（39878B→40817B，回读 ok）并点名下轮产品面=tech 队头第 362 行 AC-EOM1。诚实记分：本轮 0 产品分（无产品面）。state 76620B / 余量 1880B 未跨水位，四个账本套件复跑 8/8/8/8 全绿。",
+    "latest_artifact": "qa/reconcile-all-R2295.log（RUNNER PASS 453/453 + 控制 7/7，判据 3694，782769B）+ docs/sandbox-suite-matrix.md（453 套件 / 3694 判据，43675B）·2026-11-01",
+    "next_milestone": "R2296 产品轮：认领 tech 队头 state/queue/tech.md:362（AC-EOM1，R2282 evidence_output_map 种子，判据已先于代码钉在该行）——把「哪两件遗留脚本写同一个 qa 证据路径、哪条被电池引用的产物已无人声明」做成一张只读地图，再按需补种保 floor，提交后再跑电池。窗 ≤24h。",
+    "next_milestone_due": "2026-11-02T00:32:59+08:00",
+    "last_artifact": "R2295 验证轮：电池 453/453 + 控制 7/7（809.2s，判据 3694），qa/reconcile-all-R2295.log·2026-11-01"
   },
   "depts": [
     {
@@ -36,6 +36,16 @@
     }
   ],
   "outs": [
+    [
+      "a battery that was predicted before it ran and matched to the criterion: 453 suites / 3694 criteria on the nose, so the registry growth is accounted for by name instead of being discovered afterwards (R2295)",
+      "on",
+      "R2295: the first launch named a runner path that battery_stream resolves relative to src/, so it tried src/src/sandbox/reconcile_all.py and exited before any suite ran, leaving a 215B evidence file naming the missing path; the artefact was deleted and the sanctioned run used the default runner path. No criterion was touched and no suite ran in the failed launch."
+    ],
+    [
+      "a battery that was predicted before it ran and matched to the criterion: 453 suites / 3694 criteria on the nose, so the registry growth is accounted for by name instead of being discovered afterwards (R2295)",
+      "on",
+      "R2295: the first launch named a runner path that battery_stream resolves relative to src/, so it tried src/src/sandbox/reconcile_all.py and exited before any suite ran, leaving a 215B evidence file naming the missing path; the artefact was deleted and the sanctioned run used the default runner path. No criterion was touched and no suite ran in the failed launch."
+    ],
     [
       "a drift reader that will not go green on a rotten pair: MISSING and UNDECLARED are both listed with their own locators, and a count disagreement refuses instead of printing a drift list nobody can trust (R2294)",
       "on",
@@ -148,6 +158,14 @@
     ]
   ],
   "results": [
+    [
+      "R2295",
+      "R2295 verification window on the debt register first item (product-face-R2295): the full reconcile battery ran on the committed R2294 tree 46fddee2 with an empty git status and zero product edits until green - RUNNER PASS 453/453 suites plus controls 7/7 in 809.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB and criteria total 3694, exactly the pre-registered +1 suite / +6 criteria against R2293 (452/3688) from the os-stamp-exempt-review suite, so the prediction matched the measurement with no correction; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 453 suites / 3694 criteria at 43675B; register closed and product-face-R2296 opened first=yes naming the AC-EOM1 tech head; 0-point verification window with no product face"
+    ],
+    [
+      "R2295",
+      "R2295 verification window on the debt register first item (product-face-R2295): the full reconcile battery ran on the committed R2294 tree 46fddee2 with an empty git status and zero product edits until green - RUNNER PASS 453/453 suites plus controls 7/7 in 809.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB and criteria total 3694, exactly the pre-registered +1 suite / +6 criteria against R2293 (452/3688) from the os-stamp-exempt-review suite, so the prediction matched the measurement with no correction; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 453 suites / 3694 criteria at 43675B; register closed and product-face-R2296 opened first=yes naming the AC-EOM1 tech head; 0-point verification window with no product face"
+    ],
     [
       "R2294",
       "R2294 product window on the debt register first item (product-face-R2294): the accepted-stamp declaration is read from BOTH sides - MISSING names a declared entry matching no live debt row with its declaration entry index, UNDECLARED names a live debt row carrying no entry with its file and line - and the split reconciles with the reader own exempt and unmatched numbers before any verdict, refusing with E_SER_COUNT on disagreement; SUITE PASS 6/6 double-run with five adjacent suite green (qa/stamp-exempt-review-R2294.log, 1844B); live reading NO-DRIFT over 380 entries / 380 violations with both real files proved byte-unchanged; one real gap row seeded for the tech floor; 2-point product window"
@@ -269,7 +287,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2294",
+      "2295",
       "OSLoop 执行 tick"
     ],
     [
@@ -324,12 +342,12 @@
     ]
   ],
   "self_drive": {
-    "window": "2026-10-25..2026-10-31",
+    "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
