@@ -4473,6 +4473,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-debt-gate",
      os.path.join("..", "os", "test_debt_gate.py"), 5),
+    # R2270: which queue row comes FIRST becomes a reading. queue_floor counts
+    # claimable rows and queue_row gates their prefix, but the top deliverable
+    # row was still re-derived by hand every window; this reader names the head
+    # (file order, first claimable row that declares criteria), every skipped
+    # row with its reason, and an honest NO-HEAD.
+    # (AC-QHD1..AC-QHD6 pinned in state/queue/tech.md as the R2267 seed row
+    # BEFORE the code existed.)
+    ("os-queue-head",
+     os.path.join("..", "os", "test_queue_head.py"), 6),
     ]
 
 FAILS = 0

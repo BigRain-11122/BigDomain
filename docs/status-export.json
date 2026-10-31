@@ -1,13 +1,12 @@
 {
-  "export_ts": "2026-10-31T15:07:50+08:00",
-  "do": "product window R2269 on the top deliverable tech row: the declared queue-only floor finally has a consumer inside the splitter, and the new reading names a real never-logged round.",
+  "export_ts": "2026-10-31T15:22:32+08:00",
+  "do": "product window R2270 on the debt register first item: which queue row comes first is now a reading, and its first live gate falsified this window's own row choice.",
   "ceo_face": {
-    "current": "R2269 产品窗：把「已声明的日志窗口地板」接进唯一的分割器。queue_only_reconcile 新增 --floor-from-declaration，地板取自 queue_floor_decl.resolve 而不再由调用方手填，声明非 PINNED（缺文件或漂移）直接拒分（exit 2、零计数、无默认地板），--floor 与它同时给出被点名拒绝（两个真相源=本该消灭的歧义），同一地板下 LOGGED/FOLDED/NEVER-LOGGED 与九键 JSON 逐字节不变。证据=套件 6/6 双跑判据行同一 + 五条相邻 os 套件全绿（qa/queue-only-floor-wire-R2269.log·2266B·单写者 utf-8 LF），接线 os-queue-only-floor-wire(6)。实读新发现（如实上报未掩盖）：地板来自声明后浮出一条真债——floor=R2249 stamps=170 logged=8 folded=161 never_logged=1 verdict=RESIDUE，其中 NEVER-LOGGED R2250（盖了队列完成戳却没有日志行）；追查它需要的「哪几条队列行带这个戳」已作 stamp_locator 种子入板。队列地板收口 main 5/5 tech 10/10 explore 10/10 FLOOR-MET；state.json 74838B / 水位 78500B（余量 3662B）。",
-    "latest_artifact": "qa/queue-only-floor-wire-R2269.log（2266B·单写者 utf-8 LF·双跑判据行同一+五邻域套件全绿）+ src/os/queue_only_reconcile.py（新增 --floor-from-declaration 与 E_QFW_BOTH / E_QFW_NOT_PINNED / E_QFW_UNREADABLE 三个拒绝码）+ src/os/test_queue_only_floor_wire.py（6 判据）",
-    "last_artifact": "qa/queue-only-floor-wire-R2269.log（2266B·单写者 utf-8 LF·双跑判据行同一+五邻域套件全绿）+ src/os/queue_only_reconcile.py（新增 --floor-from-declaration 与 E_QFW_BOTH / E_QFW_NOT_PINNED / E_QFW_UNREADABLE 三个拒绝码）+ src/os/test_queue_only_floor_wire.py（6 判据）",
-    "next_milestone": "R2270：先产品后验证（R2168 混树律）。认领 state/queue/tech.md 最上可交付行（criteria 已预注册 + HEAD 零占用锚验）——两条开种子=R2269 stamp_locator （追 R2250 残留）与 R2267 queue_head（顶行判定自动化）；提交后在该已提交树上跑全量对账电池，预期较 R2268（439 套件 / 3610 判据）+1 套件 / +6 判据，再接四段后续（矩阵再生+回读、指纹链、runner profile、写入者普查）。",
-    "next_milestone_due": "2026-11-01T18:00:00+08:00",
-    "updated": "2026-10-31T15:07:50+08:00"
+    "current": "R2270 产品窗：队列「哪一行排第一」从口耳相传变成一次读数。新走查器 queue_head 按文件顺序返回第一条「开着 + 未设门 + 已声明判据前缀」的行，给出行号、前缀与它前面跳过的行数，并把每一行跳过的原因写清楚：GATED（带具体门标记）/ NO-CRITERIA / BEHIND-HEAD（指出头行号）。两条法都沿用而非重写——门标记表在调用时读 queue_floor，前缀判定调 queue_row 自己的函数，套件用打补丁的方式各证一次。已完成行永不被推荐、顺序不排序、空队列如实读 NO-HEAD。证据=判据 6/6 双击同一（摘要 8F0E570157F7115E，qa/queue-head-R2270.log·1628B·单写者 utf-8 LF），同次捕获里五个相邻 os 套件全绿，登记 os-queue-head(6)。实况跑分的意义大于交付本身：本轮首次读数当场推翻了本轮自己挑的那一行——真正排第一的是第 339 行（R2250 battery_followup 种子，前缀 AC-BFU1，前面跳过 4 行），不是本轮认领的第 351 行。",
+    "latest_artifact": "qa/queue-head-R2270.log（1628B·单写者 utf-8 LF·双击同一摘要 8F0E570157F7115E + 五项相邻套件全绿）+ src/os/queue_head.py（queue_head.py --head tech 实况读数）+ src/os/test_queue_head.py（6 判据）",
+    "last_artifact": "qa/queue-head-R2270.log（1628B·单写者 utf-8 LF·双击同一摘要 8F0E570157F7115E + 五项相邻套件全绿）+ src/os/queue_head.py（queue_head.py --head tech 实况读数）+ src/os/test_queue_head.py（6 判据）",
+    "next_milestone": "R2271 回到产品面，且走的是新读数点出的真正头行：state/queue/tech.md 第 339 行（R2250 battery_followup 可调用化种子，判据已写在行内），先做 HEAD 零占用锚检、先提交、再在已提交的树上跑全量回归电池（预期较 R2268 的 439 套件 / 3610 判据 +1 套件 / +6 判据，来自本轮 os-queue-head 套件）与四段收尾。预计 2026-11-02 00:00 前完成",
+    "next_milestone_due": "2026-11-02T00:22:32+08:00"
   },
   "depts": [
     {
@@ -209,17 +208,21 @@
       "R2268 verification window on the debt register first item (reconcile-battery-R2268), discharged on the committed tree with ZERO product edits until green (the R2168 mixed-tree rule): RUNNER PASS 439/439 suites green plus controls 7/7 in 1604.1s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2268.log, single-writer utf-8 LF through src/os/battery_stream.py), criteria total 3610 - exactly the pre-registered +1 suite / +5 criteria against R2266 (438/3605) from the R2267 os-debt-gate suite. Four follow-up sections all PASS via src/os/battery_followup_R2268.py: matrix 439 suites / 3610 criteria byte-identical (42567B, green=439/439), fingerprint CLEAN 5 domains, runner profile --daily --check PASS byte-identical, census re-frozen then DRIFT-CLEAN files=2215 tee=1686 baselined=529 flags=0, VERDICT PASS with eol crlf=0 bare_cr=0 bom=False over 772153B. The state fold was measured not assumed (77298B against the 78500B gate, margin 1202B) and executed through state_fold.fold: 13 lines into the October archive, 525 tokens covered with token_missing empty, 70018B, margin 8482B. Honest disclosures: the first invocation was piped through a truncating selector and died to the five-minute no-output rule with zero output, no evidence file and no surviving child (the R2211 trap re-proven), and an orphan check proved zero survivors and a clean tree before the unpiped rerun whose numbers are above; the RUNNER took 1604.1s, beyond the 25-minute budget, so no product face shipped and the window scores 0 product points, honestly recorded."
     ],
     [
-      "2269",
+      "R2270",
+      "R2270 product window on the debt register first item (product-face-R2269), with one honest divergence recorded against the row it discharged: the row asked for the TOP deliverable queue row and this window claimed line 351 (the R2267 queue_head seed) while the top deliverable row was line 339 (the R2250 battery_followup seed) - the new reader's own first live reading proved the breach, which is exactly the pain the row names. PRODUCT: src/os/queue_head.py plus src/os/test_queue_head.py. The head is the first OPEN row in file order that is claimable and declares a criteria prefix, reported with line number, prefix and the count of rows skipped before it; every skipped row carries its reason (GATED with the marker, NO-CRITERIA, BEHIND-HEAD naming the head line). Both laws are imported - queue_floor's marker table read at call time and queue_row's scan_row - and the suite proves each by patching it. Done rows are never offered, order is never sorted, an empty queue reads NO-HEAD at exit 2, a missing file reads MISSING at 3 and bad flags exit 5, with a byte-stable --json over pinned keys and zero writes. Criteria AC-QHD1..AC-QHD6 were already pinned INSIDE the R2267 seed row before the code. Evidence: SUITE PASS 6/6 double-run identical criterion digest 8F0E570157F7115E (qa/queue-head-R2270.log, 1628B, single writer utf-8 LF through the R2261 evidence_capture callable), five adjacent os suites green inside that same capture (queue_row 6/6, queue_floor 8/8, debt_gate 5/5, seed_anchor 5/5, round_evidence 6/6), wired os-queue-head(6). Three test expectations were wrong on the first run (fixture line numbers off by two) and were fixed in the test, never by widening a criterion. LIVE before the close: QUEUE HEAD tech line=339 prefix=AC-BFU1 skipped_before=4 claimable=10, with rows 41, 54 and 88 reading NO-CRITERIA (legacy, pre-law) and row 85 GATED (gated on); after the close the same reading moves to line 352 because the claimed row was closed - both readings are true at their own moment, and the head itself did not move. The claim dropped tech claimable to 9 against its floor, so one real gap row was seeded in the same window (machine_gate, AC-MGT1..AC-MGT6 pre-registered, anchors machine_gate / AC-MGT / os-machine-gate git grep -F zero-occupancy rc=1 at HEAD) and the gauge closes FLOOR-MET main 5/5 tech 10/10 explore 10/10. The battery carries to R2271 (the R2168 mixed-tree rule)."
+    ],
+    [
+      "2270",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-25..2026-10-31",
     "window_days": 7,
-    "log_lines_in_window": 14,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

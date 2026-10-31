@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2270 suite=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_queue_head.py legs=2
+== LEG A rc=0 digest=8F0E570157F7115E
+queue_head suite (expected criteria 6)
+PASS AC-QHD1 head is first claimable prefixed row, file order
+PASS AC-QHD2 gate marker law imported from queue_floor
+PASS AC-QHD3 criteria law imported from queue_row, refusals named
+PASS AC-QHD4 done rows never offered, NO-HEAD honest, no sorting
+PASS AC-QHD5 CLI codes 0/2/3/5, --json pinned, nothing written
+PASS AC-QHD6 pure ASCII, no network, wired, live head is real
+SUITE PASS 6/6
+== LEG B rc=0 digest=8F0E570157F7115E
+queue_head suite (expected criteria 6)
+PASS AC-QHD1 head is first claimable prefixed row, file order
+PASS AC-QHD2 gate marker law imported from queue_floor
+PASS AC-QHD3 criteria law imported from queue_row, refusals named
+PASS AC-QHD4 done rows never offered, NO-HEAD honest, no sorting
+PASS AC-QHD5 CLI codes 0/2/3/5, --json pinned, nothing written
+PASS AC-QHD6 pure ASCII, no network, wired, live head is real
+SUITE PASS 6/6
+== ADJACENT 5
+== C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_queue_row.py rc=0 SUITE PASS 6/6
+== C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_queue_floor.py rc=0 SUITE PASS 8/8
+== C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_debt_gate.py rc=0 SUITE PASS 5/5
+== C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_seed_anchor.py rc=0 SUITE PASS 5/5
+== C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_round_evidence.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=8F0E570157F7115E
