@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "declared_by": "R2286",
+  "reason": "capability blockers this host cannot work around; each entry names the row identity, the capability and the reason it is undeliverable here",
+  "gates": [
+    {
+      "identity": "-#02878cdc",
+      "capability": "docker",
+      "reason": "docker is absent on this host, so a docker-compose sandbox row cannot be delivered here",
+      "declared_by": "R2286"
+    }
+  ]
+}

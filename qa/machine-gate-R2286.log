@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2286 suite=src/os/test_machine_gate.py legs=2
+== LEG A rc=0 digest=5E4FE0B0A4DAB7D1
+machine_gate suite (expected criteria 6)
+PASS AC-MGT1 head law imported, a patched head flows through
+PASS AC-MGT2 blocker names its four fields, bad input closes
+PASS AC-MGT3 blocked row reported, the next row is offered
+PASS AC-MGT4 missing declaration refuses, never a blind offer
+PASS AC-MGT5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-MGT6 pure, wired, unmatchable rows read INERT honestly
+SUITE PASS 6/6
+== LEG B rc=0 digest=5E4FE0B0A4DAB7D1
+machine_gate suite (expected criteria 6)
+PASS AC-MGT1 head law imported, a patched head flows through
+PASS AC-MGT2 blocker names its four fields, bad input closes
+PASS AC-MGT3 blocked row reported, the next row is offered
+PASS AC-MGT4 missing declaration refuses, never a blind offer
+PASS AC-MGT5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-MGT6 pure, wired, unmatchable rows read INERT honestly
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_queue_row.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=5E4FE0B0A4DAB7D1

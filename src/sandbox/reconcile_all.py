@@ -4555,6 +4555,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-locator",
      os.path.join("..", "os", "test_stamp_locator.py"), 6),
+    # R2286: queue_head answers WHICH row comes first but cannot know a row is
+    # undeliverable for a MACHINE reason. One declared file plus a reader that
+    # joins it with the head reading names the first claimable row this host is
+    # NOT blocked from, keyed by a stable row identity instead of a line.
+    # (AC-MGT1..AC-MGT6 pinned in state/queue/tech.md as the R2270 seed row
+    # BEFORE the code existed.)
+    ("os-machine-gate",
+     os.path.join("..", "os", "test_machine_gate.py"), 6),
     ]
 
 FAILS = 0
