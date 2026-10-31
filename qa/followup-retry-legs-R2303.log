@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2303 suite=src/os/test_followup_retry_legs.py legs=2
+== LEG A rc=0 digest=70809765F34907F4
+followup_retry_legs suite (expected criteria 6)
+PASS AC-FRTL1 retry family asked of retry_naming
+PASS AC-FRTL2 canonical plus every retry leg in retry order
+PASS AC-FRTL3 last leg decides, earlier legs still reported
+PASS AC-FRTL4 canonical-only round equals the history reading
+PASS AC-FRTL5 retry without canonical refuses
+PASS AC-FRTL6 read-only, pure, wired, live recovery visible
+SUITE PASS 6/6
+== LEG B rc=0 digest=70809765F34907F4
+followup_retry_legs suite (expected criteria 6)
+PASS AC-FRTL1 retry family asked of retry_naming
+PASS AC-FRTL2 canonical plus every retry leg in retry order
+PASS AC-FRTL3 last leg decides, earlier legs still reported
+PASS AC-FRTL4 canonical-only round equals the history reading
+PASS AC-FRTL5 retry without canonical refuses
+PASS AC-FRTL6 read-only, pure, wired, live recovery visible
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_variants.py rc=0 SUITE PASS 6/6
+== src/os/test_os_retry_naming.py rc=0 SUITE PASS 9/8
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=5 fails=0 digest=70809765F34907F4

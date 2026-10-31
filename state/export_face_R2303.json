@@ -1,0 +1,9 @@
+{
+  "do": "R2303 产品面：把「重跑救绿的轮次」读回史（tech 队头 followup_retry_legs 交付）",
+  "current": "R2303 已提交产品面 src/os/followup_retry_legs.py（套件 6/6 双跑同一、证据 1304B 在盘），下一轮在已提交树上跑全量电池",
+  "latest": "qa/followup-retry-legs-R2303.log 与 src/os/followup_retry_legs.py（2026-11-01 02:55）",
+  "next": "R2304 全量电池 + 四段收尾（预期 458 套件 / 3724 判据，+2 套件/+12 判据：R2302 evidence_variants 与 R2303 followup_retry_legs 两支各 +6），窗 ≤48h",
+  "last": "src/os/followup_retry_legs.py",
+  "out": "src/os/followup_retry_legs.py",
+  "result": "R2303 product face: followup_retry_legs joins a round's canonical leg with every -retry leg in retry order (law asked of retry_naming), takes the verdict from the LAST leg while reporting every earlier leg with its own runner line, returns the exact followup_history row for a canonical-only round, and refuses a retry leg whose canonical leg is absent; SUITE PASS 6/6 with five adjacent suites green, wired os-followup-retry-legs(6); live R2289 now reads PASS through 2 legs (canonical INCOMPLETE runner=FAIL, retry PASS), pile rounds=427 canonical_only=423 retried=4 red=412; one real gap row seeded (followup_retry_history) to hold the tech floor at 10/10"
+}

@@ -4612,6 +4612,17 @@ SUITES = [
     # pinned in state/queue/tech.md as the R2288 seed row BEFORE the code.)
     ("os-evidence-variants",
      os.path.join("..", "os", "test_evidence_variants.py"), 6),
+    # R2303: followup_history judges a round from its canonical leg alone and
+    # reports the law-mandated `-retry` leg as IGNORED, so a round whose first
+    # battery went RED and whose retry went GREEN reads INCOMPLETE forever
+    # (measured live at R2289 and R2277). One read-only joiner resolves the
+    # canonical leg plus every retry leg in retry order, takes the round
+    # verdict from the LAST leg while reporting every earlier leg with its own
+    # runner line, and refuses a retry leg that has no canonical leg.
+    # (AC-FRTL1..AC-FRTL6 pinned in state/queue/tech.md as the R2289 seed row
+    # BEFORE the code existed.)
+    ("os-followup-retry-legs",
+     os.path.join("..", "os", "test_followup_retry_legs.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran
