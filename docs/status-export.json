@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T00:43:04+08:00",
-  "do": "product window: the legacy evidence pile gained a read-only output map - per script the qa paths it declares, every collision naming both scripts and the declaration line, and the cited outputs nobody declares, so a legacy script can be retired without silently deleting a file another one still owns or breaking a citation",
+  "export_ts": "2026-11-01T01:11:39+08:00",
+  "do": "verification window: the full reconcile battery and the four follow-up sections run on the committed R2296 tree with zero product edits, 454/454 suites green and criteria total 3700 exactly as pre-registered",
   "ceo_face": {
-    "current": "R2296 产品轮：认领 tech 队头 AC-EOM1（R2282 evidence_output_map 种子，判据先于代码钉在该行），交付 src/os/evidence_output_map.py + 套件。它回答「删掉一件遗留证据脚本安不安全」——按脚本列出它声明的 qa 产物路径、把两件脚本同写一条路径的冲突连同双方脚本名与声明行号一起报告、再把「被记录引用却无人声明」的产物单列。全程只读、不跑被审脚本、不读时钟。套件 SUITE PASS 6/6 双跑判据行同一 digest F9ABC32AFC68130B，五邻域套件同次捕获全绿（qa/evidence-output-map-R2296.log，1273B，单写者 utf-8 LF），接线 os-evidence-output-map(6)。实况读数（qa/evidence-output-map-live-R2296.log）：92 件脚本 / 164 条声明路径 / 0 冲突 / 16 条被引用但无人声明 / 1 件读 NONE——冲突腿在夹具上已实证、在真实数据上尚未触发，如实披露。声明读取覆盖四种本仓写法（拼接字面量、os.path.join 拆分、字符串相加、qa 目录常量先绑定后拼接）。认领后 tech 可认领数降到 9，故同窗补入一条真缺口种子 evidence_output_audit（AC-EOA1..AC-EOA6 预注册，五锚零占用），floor 复归 main 5/5 tech 10/10 explore 10/10。收口：state 折叠 603（log 1..10 整块迁入 archive，token 全覆盖，82229B→71779B，预测=实测，归档 4952494B→4968242B），账本四套件复跑 8/8/8/8 全绿；债务行经自带写入器关闭（line 68，open 2→1，done 45→46，回读 ok），后继 product-face-R2297 置 first=yes（40820B→41502B，回读 ok）。",
-    "latest_artifact": "src/os/evidence_output_map.py + qa/evidence-output-map-R2296.log（SUITE PASS 6/6 双跑同一 digest，五邻域全绿）+ qa/evidence-output-map-live-R2296.log（92 脚本 / 164 声明 / 0 冲突 / 16 引用未声明）·2026-11-01",
-    "next_milestone": "R2297 验证轮：在已提交的 R2296 树上零产品改动跑全量套件电池，预注册期望本轮 453 套件/3694 判据→ +1 套件/+6 判据（来自 os-evidence-output-map），随后四段后续（矩阵段先 FAIL 后重生成再 PASS）；之后产品面回到 tech 队头第 364 行 AC-SRS1。窗 ≤24h。",
-    "next_milestone_due": "2026-11-02T00:43:04+08:00",
-    "last_artifact": "R2296 产品轮：遗留证据脚本的产物地图交付，qa/evidence-output-map-R2296.log·2026-11-01"
+    "current": "R2297 验证轮：在已提交的 R2296 树上跑完整个对账电池——RUNNER PASS 454/454 套件 + 控制面 7/7，841.2 秒，出生点 TMP 回收 932/932（326.57 MiB，busy=0 failed=0），criteria 总数 3700，正好等于本轮预注册的「较 R2295 的 453 套件/3694 判据 +1 套件/+6 判据」（来自 R2296 的 os-evidence-output-map 套件），预测与实测完全一致、无一处需要解释掉。四节后续检查先由矩阵节按设计拒绝改写陈旧文档（盘上 43675B 对重生成 43762B），再由 src/sandbox/suite_matrix.py 重生成 docs/sandbox-suite-matrix.md 到 454 套件/3700 判据（43762B）后复跑，四节全 PASS（矩阵逐字节一致 / 指纹 CLEAN 5 域 / runner --daily 逐字节一致 / 写者普查 DRIFT-CLEAN），VERDICT R2297 PASS。本轮零产品改动，属诚实记 0 分验证窗口。",
+    "latest_artifact": "qa/reconcile-all-R2297.log（779452B·RUNNER PASS 454/454·criteria 3700·841.2s）+ docs/sandbox-suite-matrix.md（43762B·454 套件/3700 判据）——2026-11-01",
+    "next_milestone": "R2298 产品面：回到 tech 队头（state/queue/tech.md 第 365 行，前缀 AC-SRS1，R2284 的 stamp_residue 种子，判据已在写码之前钉在该行内），先做 HEAD 上零占位的锚点复查，一件产品面+套件落地后先提交、电池留给下一轮（R2168 混合树律）；窗 ≤24h。",
+    "next_milestone_due": "2026-11-02T01:11:39+08:00",
+    "last_artifact": "R2297 验证轮：全量对账电池 454/454 + 四节后续检查全 PASS（qa/reconcile-all-R2297.log）——2026-11-01"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "a measured, reproducible verification of the whole sandbox suite registry instead of a claim: 454/454 suites and 3700 criteria green on a committed tree, plus a matrix doc regenerated from the run's own evidence (R2297)",
+      "on",
+      "verification only: no product surface changed this window; the reading is the artefact"
+    ],
     [
       "a read-only map that makes deleting a legacy evidence script a decidable act: the qa paths each script declares, the paths two scripts both own, and the cited outputs nobody declares (R2296)",
       "on",
@@ -163,6 +168,10 @@
     ]
   ],
   "results": [
+    [
+      "R2297",
+      "R2297 verification window on the debt register first item (product-face-R2297 = reconcile battery): zero product code changed (the R2168 mixed-tree rule; git status --short empty both before and after the run). Battery on the committed R2296 tree cd78b4a4: RUNNER PASS 454/454 suites plus controls 7/7 in 841.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2297.log, 779452B, single-writer utf-8 LF through src/os/battery_stream.py on a `python -u` unpiped run, never a shell redirection) and criteria total 3700 - exactly the pre-registered +1 suite / +6 criteria against R2295 (453 suites / 3694 criteria) from the R2296 os-evidence-output-map suite, so the prediction matched the measurement with no correction. The four follow-up sections ran through src/os/battery_followup.py: the matrix section FAILED first on the stale doc (on-disk 43675B against regenerated 43762B) and did NOT rewrite it, which is the designed order; src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 454 suites / 3700 criteria (43762B) and the re-run inside the same minute read all four sections PASS (matrix byte-identical, fingerprint CLEAN 5 domains, profile --daily --check byte-identical, census DRIFT-CLEAN), VERDICT R2297 PASS. Register closed through its own writer (DEBT CLOSE line 69, open 2->1, done 46->47, readback ok) and product-face-R2298 opened first=yes naming the tech head at state/queue/tech.md line 365 prefix AC-SRS1. Honest disclosures: (a) the first invocation piped the run through a truncating selector and was cancelled by the five-minute no-output rule with no evidence file and no surviving runner (orphan check proved zero battery_stream/reconcile_all processes and a clean tree before the sanctioned unpiped rerun) - the R2279 precedent repeating, disclosed rather than swept; (b) this is a 0-point verification window with no product face, honestly recorded; (c) the debt_append first attempt was refused E_DEBTA_BAD_FIELD because the note carried '=' characters, and the note was rewritten without them rather than by loosening the parser."
+    ],
     [
       "R2296",
       "R2296 product window on the debt register first item (product-face-R2296): claimed the tech head the reader named, state/queue/tech.md line 362 prefix AC-EOM1, whose AC-EOM1..AC-EOM6 criteria were already pinned in that row BEFORE the code, after a fresh zero-occupancy anchor check at HEAD. src/os/evidence_output_map.py plus its suite report per legacy script the qa outputs it declares, every path two scripts both claim (naming both scripts and the declaration line) and the cited outputs no script declares, so retiring a script stops being a hunch; it never runs the scripts it judges, writes nothing and reads no clock. SUITE PASS 6/6 double-run with identical digest F9ABC32AFC68130B and five adjacent suites green through evidence_capture, wired os-evidence-output-map(6). Live: 92 scripts, 164 declared paths, 0 collisions, 16 cited-but-undeclared outputs and 1 NONE row, so the collision leg has fired on fixtures but not yet on real data - disclosed. One real gap row seeded (evidence_output_audit, AC-EOA1..AC-EOA6) to hold the tech floor at 10/10; register closed and product-face-R2297 opened first=yes naming the battery"
@@ -296,7 +305,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2296",
+      "2297",
       "OSLoop 执行 tick"
     ],
     [
@@ -353,10 +362,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
