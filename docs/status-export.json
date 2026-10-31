@@ -1,12 +1,10 @@
 {
- "export_ts": "2026-10-31T17:18:09+08:00",
- "do": "verification window: the full reconcile battery and the four follow-up sections re-proven on the committed tree with zero product edits, and the pre-registered delta matched the measurement",
+ "export_ts": "2026-10-31T17:26:30+08:00",
+ "do": "product window on the debt register first item: an accepted queue pre-registration exemption is now a dated, reasoned record in one file instead of prose repeated by hand every window",
  "ceo_face": {
-  "current": "R2275 验证窗已完成：在已提交树 b6be0f6f 上跑全量 reconcile 电池（443 套件全绿 + 7 控制项，828.2s，判据总数 3634，与预注册的 +1 套件/+6 判据精确一致）；四段 follow-up 全过（矩阵 42867B 逐字节同一、指纹链 CLEAN、runner profile 一致、census DRIFT-CLEAN）；债务行由 R2274 的写入器自行关闭（open 2→1 done 24→25），并开出 product-face-R2276。本轮零产品代码改动，诚实计 0 产品分",
-  "latest_artifact": "qa/reconcile-all-R2275.log（772984B，单写者 utf-8 LF，RUNNER PASS 443/443 + 控制 7/7，828.2s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（443 套件 / 3634 判据，42867B，重生成后 --check 逐字节同一）",
-  "last_artifact": "qa/reconcile-all-R2275.log（772984B，单写者 utf-8 LF，RUNNER PASS 443/443 + 控制 7/7，828.2s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（443 套件 / 3634 判据，42867B，重生成后 --check 逐字节同一）",
-  "next_milestone": "R2276 回产品面：取 tech 队头 line 342（AC-QRX1，queue_row_exempt 种子，六判据已在行内预注册），窗前做 git grep -F 零占用锚验，出一件带套件的产品面，若认领使 tech 可认领降到 9 则同窗补一条真缺口行，先提交再跑电池",
-  "next_milestone_due": "2026-11-02T17:18:09+08:00"
+  "current": "R2276 产品窗：队列预注册门报出的 9 条不合规行不再靠每窗手写散文解释，改为一份带日期与理由的豁免登记册（state/queue/prefix_exempt.json），由新模块 src/os/queue_row_exempt.py 校验并与门读数合并；门本身的读法不变（仍报 9 条），只是每条现在是可复核的记录。",
+  "latest_artifact": "src/os/queue_row_exempt.py + src/os/test_queue_row_exempt.py + state/queue/prefix_exempt.json（套件 6/6 双跑判据一致，qa/queue-row-exempt-R2276.log 1358B，相邻五套件全绿）",
+  "next_milestone": "R2277 全量 reconcile 电池在已提交树上跑绿（预注册 444 套件 / 3640 判据，来自本轮新套件），窗口 ≤24h"
  },
  "depts": [
   {
@@ -236,7 +234,7 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2275",
+   "2276",
    "OSLoop 执行 tick"
   ],
   [
@@ -252,10 +250,10 @@
  "self_drive": {
   "window": "2026-10-25..2026-10-31",
   "window_days": 7,
-  "log_lines_in_window": 13,
+  "log_lines_in_window": 14,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 13,
+  "substantive_non_idle_mention_lines": 14,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

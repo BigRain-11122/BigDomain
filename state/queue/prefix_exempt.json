@@ -1,0 +1,59 @@
+{
+  "note": "Accepted pre-registration exemptions for the queue_row gate. Law: src/os/queue_row_exempt.py. An identity is the first backticked token of the row when it has one, otherwise the row leading ASCII token plus # and a sha8 of the row text - never a line number, so inserting rows above changes nothing. Each entry carries the round that accepted it and why. An entry whose row later declares its criteria prefix simply stops matching and is reported as unmatched, so an exemption can never outlive the condition that justified it.",
+  "exemptions": [
+    {
+      "queue": "main",
+      "identity": "launch-ops-rehearsal#2fe92cf5",
+      "declared": "R2276",
+      "reason": "gated on CEO approval of the P1 launch-ops rehearsal; an outside party owns acceptance and the row predates the pre-registration law"
+    },
+    {
+      "queue": "main",
+      "identity": "BD-PROP-001#d84fd036",
+      "declared": "R2276",
+      "reason": "standing weekly proposal duty line, not a deliverable row, so it carries no criteria by nature"
+    },
+    {
+      "queue": "main",
+      "identity": "charter#308aea2d",
+      "declared": "R2276",
+      "reason": "standing QA charter crawl duty line, not a deliverable row, so it carries no criteria by nature"
+    },
+    {
+      "queue": "main",
+      "identity": "m4-visitor-end-spec#af274fbd",
+      "declared": "R2276",
+      "reason": "visitor-end spec blocked behind the same CEO approval gate as the launch-ops rehearsal row"
+    },
+    {
+      "queue": "main",
+      "identity": "heartbeat.txt#ee909034",
+      "declared": "R2276",
+      "reason": "standing heartbeat duty line, not a deliverable row, so it carries no criteria by nature"
+    },
+    {
+      "queue": "tech",
+      "identity": "docker-compose#576d2181",
+      "declared": "R2276",
+      "reason": "docker is absent on this host; adjudicated not a deliverable face in prose at R2257, R2259, R2263, R2266 and R2267 before this file existed"
+    },
+    {
+      "queue": "tech",
+      "identity": "logs#affca276",
+      "declared": "R2276",
+      "reason": "standing logs-toolkit maintenance line whose criteria were already delivered; adjudicated not a deliverable face at R2257 through R2274"
+    },
+    {
+      "queue": "tech",
+      "identity": "suite_matrix#8e07f908",
+      "declared": "R2276",
+      "reason": "diagnosis line already delivered at R1727; adjudicated not a deliverable face at R2257 through R2274"
+    },
+    {
+      "queue": "explore",
+      "identity": "benchmarks#c0b54c80",
+      "declared": "R2276",
+      "reason": "blocked on the merchant number and the virtual payment qualification, which are CEO physical items"
+    }
+  ]
+}

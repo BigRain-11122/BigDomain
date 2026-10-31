@@ -4504,6 +4504,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-debt-close",
      os.path.join("..", "os", "test_debt_close.py"), 6),
+    # R2276: the pre-registration gate has always reported 9 undeclared
+    # claimable rows and every one of them predates the law, so the reading
+    # could never go green except by rewriting history or silently widening
+    # the gate. This adds the third way: an ACCEPTED exemption declared in one
+    # file, keyed by a stable row identity instead of a line number, carrying
+    # a dated reason and an optional expiry, and reported back as exempt_today
+    # against still_debt. The gate itself is imported, never re-implemented.
+    # (AC-QRX1..AC-QRX6 pinned in state/queue/tech.md as the R2253 seed row
+    # BEFORE the code existed.)
+    ("os-queue-row-exempt",
+     os.path.join("..", "os", "test_queue_row_exempt.py"), 6),
     ]
 
 FAILS = 0

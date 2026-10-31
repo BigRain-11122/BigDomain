@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2276 suite=src/os/test_queue_row_exempt.py legs=2
+== LEG A rc=0 digest=5D73A59F0A07DD7C
+queue_row_exempt suite (expected criteria 6)
+PASS AC-QRX1 pinned shape, UNPINNED honest, bad declarations refused
+PASS AC-QRX2 identity stable under line shifts, reword reopens debt
+PASS AC-QRX3 reason, declared round and until validated
+PASS AC-QRX4 expired exemption reads as debt, until named
+PASS AC-QRX5 gate imported, counts reconcile, ambiguity refused
+PASS AC-QRX6 pure ASCII, no clock, no network, wired, live real
+SUITE PASS 6/6
+== LEG B rc=0 digest=5D73A59F0A07DD7C
+queue_row_exempt suite (expected criteria 6)
+PASS AC-QRX1 pinned shape, UNPINNED honest, bad declarations refused
+PASS AC-QRX2 identity stable under line shifts, reword reopens debt
+PASS AC-QRX3 reason, declared round and until validated
+PASS AC-QRX4 expired exemption reads as debt, until named
+PASS AC-QRX5 gate imported, counts reconcile, ambiguity refused
+PASS AC-QRX6 pure ASCII, no clock, no network, wired, live real
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_row.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+== src/os/test_debt_register.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=5 fails=0 digest=5D73A59F0A07DD7C
