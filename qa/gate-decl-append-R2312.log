@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2312 suite=src/os/test_gate_decl_append.py legs=2
+== LEG A rc=0 digest=D28AB1E016BB686C
+gate_decl_append suite (expected criteria 6)
+PASS AC-GDA1 shape law imported from machine_gate, patch flows
+PASS AC-GDA2 duplicate identity and unknown capability refused
+PASS AC-GDA3 dry run first, one atomic replace, no temp
+PASS AC-GDA4 post re-parses, one new entry, old bytes intact
+PASS AC-GDA5 pinned exit codes, byte-stable json, no stray writes
+PASS AC-GDA6 pure source, wired, live declaration reads and is untouched
+SUITE PASS 6/6
+== LEG B rc=0 digest=D28AB1E016BB686C
+gate_decl_append suite (expected criteria 6)
+PASS AC-GDA1 shape law imported from machine_gate, patch flows
+PASS AC-GDA2 duplicate identity and unknown capability refused
+PASS AC-GDA3 dry run first, one atomic replace, no temp
+PASS AC-GDA4 post re-parses, one new entry, old bytes intact
+PASS AC-GDA5 pinned exit codes, byte-stable json, no stray writes
+PASS AC-GDA6 pure source, wired, live declaration reads and is untouched
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_gate_drift.py rc=0 SUITE PASS 6/6
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=D28AB1E016BB686C

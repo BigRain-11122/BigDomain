@@ -1,0 +1,9 @@
+{
+  "do": "R2312 产品轮：零点路由表的闸门声明终于有了写入器——加一条 blocker 不再手改 JSON",
+  "current": "R2312 产品窗。五静扫描开轮干净（git status 空、无 index.lock；decisions.md 289 行等于基线 289 行；集团台账三条 @BigDomain 巡查行已清，最后一条 P-20261026-0930 在 R2311 编号回执；集团 orders 尾行维持 2026-10-31 18:23；基准 2026-10-29 在七天闸内）。债务闸指向的 product-face-R2310 说明已陈旧（该面在 R2310 已交付），故改用 queue_head 实读队头=第 374 行 前缀 AC-GDA1（R2300 种子行，AC-GDA1..AC-GDA6 六条判据在写码之前就钉在该行内）。交付：src/os/gate_decl_append.py + src/os/test_gate_decl_append.py。state/machine_gates.json 此前只有读器与漂移读器、没有写入器，任何 blocker 都只能手改 JSON——手改正是身份摘要变陈旧、能力拼错到批量跑才炸的来路。写入器：收 identity/capability/reason/declared_by，用 machine_gate 自己的词表校验，任何字节变动之前先拒重复身份、未知能力与第二份声明头；按文本拼接插一条进 gates 数组（既有条目逐字节不动），再把后文过 machine_gate 重解析并要求恰好新增一条；默认干跑给出前后字节数，执行只做一次原子替换、回读字节等于预测、不留临时文件。一条法则两个入口：machine_gate.read_declaration 现委托给新增的 read_declaration_text，写入器问的是那个早已拒绝一切缺陷的读器，而不是自己再抄一份形状。套件两跑 6/6 判据摘要一致，三支相邻闸门套件同时绿（gate_drift 6/6、machine_gate 6/6、residue_triage 6/6），证据 qa/gate-decl-append-R2312.log 1268B 单写器 utf-8 LF 经 evidence_capture。实读：对真声明干跑读 declarations=1->2 bytes=427->567 且一字未写；重复声明在役身份 -#02878cdc 被 E_GDA_DUP 拒并点名该字段。本轮得 2 分（可跑实物+套件）。",
+  "latest": "src/os/gate_decl_append.py + src/os/test_gate_decl_append.py（套件 6/6 两跑摘要一致，相邻三支闸门套件绿）；证据 qa/gate-decl-append-R2312.log 1268B；2026-11-01",
+  "next": "R2313 回到验证面：在已提交树上跑全量电池（预算 463 套件 / 3754 判据，比 R2311 的 462/3748 恰多本轮一支 6 判据套件），再跑四段跟进并重生成套件矩阵；48 小时内",
+  "last": "qa/gate-decl-append-R2312.log",
+  "result": "R2312 product face shipped: one gate-declaration writer that imports machine_gate's own shape law, refuses duplicates and unknown capabilities before any byte, splices as text, and proves its own read-back; suite 6/6 twice plus three adjacent gate suites green",
+  "out": "qa/gate-decl-append-R2312.log"
+}

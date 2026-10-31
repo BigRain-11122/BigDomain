@@ -4646,6 +4646,21 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-residue-triage",
      os.path.join("..", "os", "test_residue_triage.py"), 6),
+    # R2312: state/machine_gates.json has a reader and a drift reader but no
+    # writer, so adding or repairing a blocker means editing JSON by hand -
+    # which is how an identity gets a stale digest or a capability typo that
+    # only fails when the batch runs. One writer takes identity/capability/
+    # reason, validates them against machine_gate's own vocabulary, refuses a
+    # duplicate identity and a second declaration header BEFORE any byte
+    # changes, splices one entry into the gates array as text (so a
+    # pre-existing entry stays byte-intact), re-parses the post text through
+    # machine_gate.read_declaration_text and proves one new entry, and is a
+    # dry run by default with a predicted byte delta, one atomic os.replace,
+    # a read-back byte proof and no temp residue.
+    # (AC-GDA1..AC-GDA6 pinned in state/queue/tech.md as the R2300 seed row
+    # BEFORE the code existed.)
+    ("os-gate-decl-append",
+     os.path.join("..", "os", "test_gate_decl_append.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran

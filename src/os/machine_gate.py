@@ -104,10 +104,20 @@ def read_declaration(path):
             text = handle.read()
     except (IOError, OSError, UnicodeDecodeError) as exc:
         raise MachineGateError("E_MGT_NO_DECL", "%s (%s)" % (path, exc))
+    return read_declaration_text(text, path)
+
+
+def read_declaration_text(text, where="<text>"):
+    """Validate declaration TEXT through the same law as the file reader.
+
+    A writer needs the identical verdict on a string it has not written yet,
+    so the whole law lives here and read_declaration only supplies the bytes.
+    One owner, two entry points.
+    """
     try:
         data = json.loads(text)
     except ValueError as exc:
-        raise MachineGateError("E_MGT_BAD_DECL", "%s (%s)" % (path, exc))
+        raise MachineGateError("E_MGT_BAD_DECL", "%s (%s)" % (where, exc))
     if not isinstance(data, dict):
         raise MachineGateError("E_MGT_BAD_DECL", "top level is not an object")
     for key in DECLARATION_KEYS:
