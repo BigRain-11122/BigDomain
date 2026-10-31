@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2302 suite=src/os/test_evidence_variants.py legs=2
+== LEG A rc=0 digest=4C1B9787CFCC43E7
+evidence_variants suite (expected criteria 6)
+PASS AC-EVR1 round and suffix derived from the shared name law
+PASS AC-EVR2 ORPHAN named, never dropped silently
+PASS AC-EVR3 duplicate matched by digest, DISTINCT names both
+PASS AC-EVR4 read-only, no clock, unreadable fails closed
+PASS AC-EVR5 CLI codes, byte-stable json, pinned keys
+PASS AC-EVR6 pure source, wired, live pile classified
+SUITE PASS 6/6
+== LEG B rc=0 digest=4C1B9787CFCC43E7
+evidence_variants suite (expected criteria 6)
+PASS AC-EVR1 round and suffix derived from the shared name law
+PASS AC-EVR2 ORPHAN named, never dropped silently
+PASS AC-EVR3 duplicate matched by digest, DISTINCT names both
+PASS AC-EVR4 read-only, no clock, unreadable fails closed
+PASS AC-EVR5 CLI codes, byte-stable json, pinned keys
+PASS AC-EVR6 pure source, wired, live pile classified
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_run_identity.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_drift.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=4C1B9787CFCC43E7

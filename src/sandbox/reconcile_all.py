@@ -4604,6 +4604,14 @@ SUITES = [
     # as the R2286 seed row BEFORE the code existed.)
     ("os-gate-drift",
      os.path.join("..", "os", "test_gate_drift.py"), 6),
+    # R2302: followup_history reports 61 non-canonical evidence names as
+    # IGNORED, so a failure leg or a correction retry written under a variant
+    # name stays invisible while the canonical leg of the same round reads
+    # green. evidence_variants pairs each variant with its canonical round and
+    # calls it DUPLICATE or DISTINCT by content digest. (AC-EVR1..AC-EVR6
+    # pinned in state/queue/tech.md as the R2288 seed row BEFORE the code.)
+    ("os-evidence-variants",
+     os.path.join("..", "os", "test_evidence_variants.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran
