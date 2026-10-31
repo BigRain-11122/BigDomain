@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-31T23:26:56+08:00",
-  "do": "product window on the debt register first item: an accepted exemption is now AGED instead of forgotten - one read-only reviewer takes the declaration through queue_row_exempt, names every entry at or beyond the window with both rounds, refuses a future declared round, and reads the nine live acceptances as sixteeen rounds old against a hundred-round window (REVIEW-CLEAN, honestly not yet fired)",
+  "export_ts": "2026-10-31T23:49:59+08:00",
+  "do": "verification window: the full reconcile battery on the committed R2292 tree reads RUNNER PASS 452/452 suites plus controls 7/7 in 854.9s with criteria total 3688, exactly the pre-registered +1 suite / +6 criteria from the os-exempt-review suite; the four follow-up sections then read VERDICT PASS after the matrix section refused to rewrite the stale doc and the registry was regenerated to 452 suites / 3688 criteria from this battery's own evidence",
   "ceo_face": {
-    "current": "R2292 产品轮：豁免不再是一次性记录——新读面 src/os/exempt_review.py 拿 queue_row_exempt 的同一份声明（9 条，全部声明于 R2276），按传入轮次计算年龄，到窗或到 until 的条目一律 STALE 并同时点名两个轮次；声明轮晚于被查轮次直接拒读 E_EXR_FUTURE（未来豁免不能算年龄）。窗口由调用方给出（CLI 缺省 100 并打印），缺失声明读 UNPINNED 而非伪造通过，读面零写入零时钟。套件 6/6 双跑同一判据摘要，五条相邻队列/欠账套件全绿（qa/exempt-review-R2292.log，1607B，经 evidence_capture 单写者 utf-8 LF）；接线 os-exempt-review(6)。实测读数：EXEMPT REVIEW round=R2292 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN——九条豁免年龄 16 轮，尚未触发，如实记录而不是粉饰。本行认领使 tech 可认领数落到 9，故同窗补一条真缺口种子 review_window_decl（AC-RWD1..AC-RWD6 预注册，六锚零占用），地板复读 FLOOR-MET main 5/5 tech 10/10 explore 10/10。",
-    "latest_artifact": "src/os/exempt_review.py + src/os/test_exempt_review.py（套件 6/6 双跑，证据 qa/exempt-review-R2292.log）；2026-10-31 23:26",
-    "next_milestone": "R2293 验证轮：在已提交的 R2292 树上跑全量 reconcile 电池（预期 452 套件 / 3688 判据，即本窗 os-exempt-review 套件 +1/+6），随后四段跟进（矩阵先如实 FAIL 再由 suite_matrix 重生成后复跑）",
-    "next_milestone_due": "2026-11-01T23:26:56+08:00",
-    "last_artifact": "R2291：全量 reconcile 电池 RUNNER PASS 451/451 套件 + 控制 7/7，判据总数 3682，四段跟进 VERDICT PASS（qa/reconcile-all-R2291.log）"
+    "current": "R2293 验证轮（非产品面·诚实记 0 分）：在已提交的 R2292 树 3addd18e 上跑全量 reconcile 电池，跑前 git status 全空（R2168 混合树规避）。结果 RUNNER PASS 452/452 套件 + 控制 7/7，854.9s，出生站清扫 932/932 世界 326.57 MiB busy=0 failed=0，判据总数 3688 —— 与预注册的 +1 套件 / +6 判据（对 R2291 的 451/3682）完全吻合，来自 R2292 的 os-exempt-review 套件，预测与实测无需更正。四段后续经 src/os/battery_followup.py 执行：矩阵段先如实 FAIL 于过期文档（盘上 43512B，重生成 43590B）且拒绝改写（设计如此），src/sandbox/suite_matrix.py 按本电池证据重生成 452 套件 / 3688 判据后复跑四段全 PASS（矩阵逐字节同一、指纹 5 域 CLEAN、profile --daily --check 逐字节同一、census DRIFT-CLEAN），VERDICT R2293 PASS。债务行经自带写入器关闭（debt_close line 65，open 2→1，done 42→43，回读 ok），后继 product-face-R2294 经 debt_append 置 first=yes（39148B→39394B，回读 ok）。收口跨水位，按整块折窗折 601（R2278 四行块，9 token 全覆盖），折后 75837B / 余量 2663B，四个账本套件复跑 8/8/8/8 全绿。",
+    "latest_artifact": "qa/reconcile-all-R2293.log（RUNNER PASS 452/452 + 控制 7/7，778152B）+ docs/sandbox-suite-matrix.md（452 套件 / 3688 判据，43590B）·2026-10-31",
+    "next_milestone": "R2294 产品轮：回到债务闸点名的产品面 —— 技术队头 state/queue/tech.md:360，前缀 AC-SER1，即 R2280 的 stamp_exempt_review 种子（判据 AC-SER1..AC-SER6 已先于代码钉在该行内）。落一块带套件的产品面，认领使 tech 可认领降到 9 时补一条真缺口种子，先提交再跑电池。",
+    "next_milestone_due": "2026-11-01T23:49:59+08:00",
+    "last_artifact": "R2292 产品窗：src/os/exempt_review.py + 套件（6/6 双跑），qa/exempt-review-R2292.log·2026-10-31"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "a verification window that could only confirm a prediction it had already registered, and it confirmed it exactly: 452 suites / 3688 criteria against the pinned 451 / 3682 (R2293)",
+      "on",
+      "R2293: the battery was launched detached and hidden because battery_stream buffers its evidence in memory and writes once at completion, so every probe before the end legitimately found no file - buffering, not a dead runner, confirmed by the live process and then by the 778152B file. No product code changed this window."
+    ],
     [
       "the trace from a closed queue row back to the window that closed it is now a reading, and the debt it finds (380 rows) is reported at its real size instead of living as prose (R2278)",
       "on",
@@ -138,6 +143,10 @@
     ]
   ],
   "results": [
+    [
+      "R2293",
+      "R2293 verification window on the debt register first item (product-face-R2293): the full reconcile battery on the committed R2292 tree 3addd18e with an empty git status before the run read RUNNER PASS 452/452 suites plus controls 7/7 in 854.9s, criteria total 3688 = exactly the pre-registered +1 suite / +6 criteria against R2291 (451/3682) from the R2292 os-exempt-review suite; four follow-up sections PASS after the matrix section refused to rewrite the stale doc; register closed and product-face-R2294 opened first=yes naming the tech head at line 360 prefix AC-SER1; 0-point window with no product face, honestly recorded"
+    ],
     [
       "R2278",
       "R2278 product window on the debt register first item (product-face-R2278): queue_done_stamp shipped - every accepted stamp form resolves to a window (marker word done/claimed+done/claimed/negative/closed plus a date and R<n>, or R<n> alone), a date alone is DATE-ONLY debt because several rounds share a day, an empty or shapeless bracket is BAD-STAMP, no bracket is UNSTAMPED, and a stamp EARLIER than the row own seed round is STAMP-BEFORE-SEED with both rounds named. The row law is imported from queue_floor and the suite proves it by patching is_done_row; a missing queue reads MISSING with zero fabricated debt and exit 3. SUITE PASS 6/6 double-run identical digest (qa/queue-done-stamp-R2278.log, 1242B, single writer utf-8 LF through the R2261 capture callable), five adjacent queue suites green, wired os-queue-done-stamp(6). LIVE done=542 stamped=253 ok=162 unstamped=289 date_only=91 before_seed=0 violations=380 verdict=DONE-STAMP-DEBT. The claim dropped tech claimable to 9, so one real gap row was seeded (queue_done_stamp_exempt, AC-SEX1..AC-SEX6 pre-registered) and the gauge closed FLOOR-MET 10/10; the register row was closed and reconcile-battery-R2279 opened first=yes."
@@ -251,7 +260,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2292",
+      "2293",
       "OSLoop 执行 tick"
     ],
     [
