@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2288 suite=src/os/test_followup_history.py legs=2
+== LEG A rc=0 digest=813D5C3B836397DC
+followup_history suite (expected criteria 6)
+PASS AC-FHY1 vocabulary imported, absent sections named
+PASS AC-FHY2 ordered by round number, duplicate refused
+PASS AC-FHY3 a verdict-less log reads INCOMPLETE, not green
+PASS AC-FHY4 read-only, clockless, fails closed with no rounds
+PASS AC-FHY5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-FHY6 pure, wired, a FAIL then PASS is a visible run
+SUITE PASS 6/6
+== LEG B rc=0 digest=813D5C3B836397DC
+followup_history suite (expected criteria 6)
+PASS AC-FHY1 vocabulary imported, absent sections named
+PASS AC-FHY2 ordered by round number, duplicate refused
+PASS AC-FHY3 a verdict-less log reads INCOMPLETE, not green
+PASS AC-FHY4 read-only, clockless, fails closed with no rounds
+PASS AC-FHY5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-FHY6 pure, wired, a FAIL then PASS is a visible run
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_locator.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_parity.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_queue_done_stamp_exempt.py rc=0 SUITE PASS 6/6 criteria
+EVIDENCE identical=True adjacent=5 fails=0 digest=813D5C3B836397DC

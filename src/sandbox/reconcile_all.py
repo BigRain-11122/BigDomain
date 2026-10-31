@@ -4563,6 +4563,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-machine-gate",
      os.path.join("..", "os", "test_machine_gate.py"), 6),
+    # R2288: the four post-battery sections run as one callable but their
+    # HISTORY was prose - a section that failed then passed in the same log
+    # read like one that never failed, and a round whose follow-up never ran
+    # read like a green round. One read-only reader over the reconcile logs
+    # parses SECTION/VERDICT in R-number order, names ABSENT sections and
+    # INCOMPLETE rounds, and refuses an unreadable pile or a duplicate round.
+    # (AC-FHY1..AC-FHY6 pinned in state/queue/tech.md as the R2272 seed row
+    # BEFORE the code existed.)
+    ("os-followup-history",
+     os.path.join("..", "os", "test_followup_history.py"), 6),
     ]
 
 FAILS = 0
