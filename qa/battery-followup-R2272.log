@@ -1,0 +1,28 @@
+EVIDENCE CAPTURE round=R2272 suite=src/os/test_battery_followup.py legs=2
+== LEG A rc=0 digest=4EDA37F73D1EE3B1
+battery_followup suite (expected criteria 6)
+PASS AC-BFU1 four pinned sections in order, PASS/FAIL one-line detail
+PASS AC-BFU2 matrix read-back, mismatch FAIL names both byte counts
+PASS AC-BFU3 read-orchestrator writes nothing; one writer, one path
+PASS AC-BFU4 missing tool / unreadable matrix FAIL with codes
+PASS AC-BFU5 CLI 0/2/3/5, --json pinned, single append target
+  legacy copies=42 total=137947B widest=4254B callable=11010B
+PASS AC-BFU6 ASCII, no network, wired, legacy pile byte-wider
+SUITE PASS 6/6
+== LEG B rc=0 digest=4EDA37F73D1EE3B1
+battery_followup suite (expected criteria 6)
+PASS AC-BFU1 four pinned sections in order, PASS/FAIL one-line detail
+PASS AC-BFU2 matrix read-back, mismatch FAIL names both byte counts
+PASS AC-BFU3 read-orchestrator writes nothing; one writer, one path
+PASS AC-BFU4 missing tool / unreadable matrix FAIL with codes
+PASS AC-BFU5 CLI 0/2/3/5, --json pinned, single append target
+  legacy copies=42 total=137947B widest=4254B callable=11010B
+PASS AC-BFU6 ASCII, no network, wired, legacy pile byte-wider
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+== src/os/test_log_floor.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=4EDA37F73D1EE3B1

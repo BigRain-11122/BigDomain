@@ -4482,6 +4482,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-head",
      os.path.join("..", "os", "test_queue_head.py"), 6),
+    # R2272: the four post-battery sections (matrix regen+read-back, fingerprint
+    # chain, runner profile, writer census) are one callable instead of the
+    # forty-two per-round copies battery_followup_R1999.._R2271, each of which
+    # re-implemented the same sequence and differed only by evidence path and
+    # label, so a defect fixed in one copy stayed broken in the next. The matrix
+    # section regenerates into a private temp copy and byte-compares it: a
+    # mismatch is a FAIL naming BOTH byte counts and the shipped doc is never
+    # silently rewritten.
+    # (AC-BFU1..AC-BFU6 pinned in state/queue/tech.md as the R2250 seed row
+    # BEFORE the code existed.)
+    ("os-battery-followup",
+     os.path.join("..", "os", "test_battery_followup.py"), 6),
     ]
 
 FAILS = 0
