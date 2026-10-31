@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2290 suite=src/os/test_debt_item_unique.py legs=2
+== LEG A rc=0 digest=B9C7FE01D456C65B
+PASS AC-DIU1 row law imported from debt_register, patched parse flows through
+PASS AC-DIU2 every duplicate with all its rows, total matches recount
+PASS AC-DIU3 DUP-OPEN and DUP-DONE separated, never merged
+PASS AC-DIU4 honest UNIQUE and EMPTY, absent and malformed fail closed
+PASS AC-DIU5 zero writes, zero clock, CLI 0/2/3/5, byte-stable JSON
+PASS AC-DIU6 pure ASCII, stdlib only, wired, live reading names the seed case
+LIVE DEBT ITEM UNIQUE rows=41 duplicate_items=1 dup_open=0 dup_done=1 verdict=DUPLICATES
+SUITE PASS 6/6
+== LEG B rc=0 digest=B9C7FE01D456C65B
+PASS AC-DIU1 row law imported from debt_register, patched parse flows through
+PASS AC-DIU2 every duplicate with all its rows, total matches recount
+PASS AC-DIU3 DUP-OPEN and DUP-DONE separated, never merged
+PASS AC-DIU4 honest UNIQUE and EMPTY, absent and malformed fail closed
+PASS AC-DIU5 zero writes, zero clock, CLI 0/2/3/5, byte-stable JSON
+PASS AC-DIU6 pure ASCII, stdlib only, wired, live reading names the seed case
+LIVE DEBT ITEM UNIQUE rows=41 duplicate_items=1 dup_open=0 dup_done=1 verdict=DUPLICATES
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_debt_register.py rc=0 SUITE PASS 8/8
+== src/os/test_debt_close.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_append.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=B9C7FE01D456C65B

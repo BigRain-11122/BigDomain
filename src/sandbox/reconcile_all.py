@@ -4504,6 +4504,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-debt-close",
      os.path.join("..", "os", "test_debt_close.py"), 6),
+    # R2290: debt_register checks each row's shape and allows at most one
+    # open first=yes, but never checks that an ITEM appears once - the live
+    # register carries reconcile-battery-and-matrix on two done rows, so
+    # "what does the register say about this item" depends on which
+    # duplicate a reader happens to take. This reader reports every
+    # duplicate with all its rows and separates live debt carried twice
+    # (DUP-OPEN) from history kept twice (DUP-DONE).
+    # (AC-DIU1..AC-DIU6 pinned in state/queue/tech.md as the R2274 seed row
+    # BEFORE the code existed.)
+    ("os-debt-item-unique",
+     os.path.join("..", "os", "test_debt_item_unique.py"), 6),
     # R2276: the pre-registration gate has always reported 9 undeclared
     # claimable rows and every one of them predates the law, so the reading
     # could never go green except by rewriting history or silently widening
