@@ -4594,6 +4594,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-exempt-review",
      os.path.join("..", "os", "test_exempt_review.py"), 6),
+    # R2294: the accepted-stamp declaration read from BOTH sides - a declared
+    # entry matching no live debt row (MISSING) and a live debt row carrying no
+    # entry (UNDECLARED) are listed with their own locators, the split
+    # reconciles with the reader own exempt/unmatched numbers before a verdict
+    # is issued, and nothing is ever rewritten.
+    # (AC-SER1..AC-SER6 pinned in state/queue/tech.md as the R2280 seed row
+    # BEFORE the code existed.)
+    ("os-stamp-exempt-review",
+     os.path.join("..", "os", "test_stamp_exempt_review.py"), 6),
     ]
 
 FAILS = 0

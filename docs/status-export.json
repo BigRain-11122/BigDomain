@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-31T23:49:59+08:00",
-  "do": "verification window: the full reconcile battery on the committed R2292 tree reads RUNNER PASS 452/452 suites plus controls 7/7 in 854.9s with criteria total 3688, exactly the pre-registered +1 suite / +6 criteria from the os-exempt-review suite; the four follow-up sections then read VERDICT PASS after the matrix section refused to rewrite the stale doc and the registry was regenerated to 452 suites / 3688 criteria from this battery's own evidence",
+  "export_ts": "2026-11-01T00:00:03+08:00",
+  "do": "product window: an accepted-stamp declaration that could rot silently in either direction is now a reading - src/os/stamp_exempt_review.py lists MISSING (a declared entry matching no live debt row, with its declaration entry index) and UNDECLARED (a live debt row carrying no entry, with file and line) from the gate and the declaration it already trusts, reconciles both against the reader own exempt/unmatched numbers before any verdict, and refuses rather than guessing; SUITE PASS 6/6 double-run with five adjacent suites green, live reading NO-DRIFT over 380 entries / 380 violations",
   "ceo_face": {
-    "current": "R2293 验证轮（非产品面·诚实记 0 分）：在已提交的 R2292 树 3addd18e 上跑全量 reconcile 电池，跑前 git status 全空（R2168 混合树规避）。结果 RUNNER PASS 452/452 套件 + 控制 7/7，854.9s，出生站清扫 932/932 世界 326.57 MiB busy=0 failed=0，判据总数 3688 —— 与预注册的 +1 套件 / +6 判据（对 R2291 的 451/3682）完全吻合，来自 R2292 的 os-exempt-review 套件，预测与实测无需更正。四段后续经 src/os/battery_followup.py 执行：矩阵段先如实 FAIL 于过期文档（盘上 43512B，重生成 43590B）且拒绝改写（设计如此），src/sandbox/suite_matrix.py 按本电池证据重生成 452 套件 / 3688 判据后复跑四段全 PASS（矩阵逐字节同一、指纹 5 域 CLEAN、profile --daily --check 逐字节同一、census DRIFT-CLEAN），VERDICT R2293 PASS。债务行经自带写入器关闭（debt_close line 65，open 2→1，done 42→43，回读 ok），后继 product-face-R2294 经 debt_append 置 first=yes（39148B→39394B，回读 ok）。收口跨水位，按整块折窗折 601（R2278 四行块，9 token 全覆盖），折后 75837B / 余量 2663B，四个账本套件复跑 8/8/8/8 全绿。",
-    "latest_artifact": "qa/reconcile-all-R2293.log（RUNNER PASS 452/452 + 控制 7/7，778152B）+ docs/sandbox-suite-matrix.md（452 套件 / 3688 判据，43590B）·2026-10-31",
-    "next_milestone": "R2294 产品轮：回到债务闸点名的产品面 —— 技术队头 state/queue/tech.md:360，前缀 AC-SER1，即 R2280 的 stamp_exempt_review 种子（判据 AC-SER1..AC-SER6 已先于代码钉在该行内）。落一块带套件的产品面，认领使 tech 可认领降到 9 时补一条真缺口种子，先提交再跑电池。",
-    "next_milestone_due": "2026-11-01T23:49:59+08:00",
-    "last_artifact": "R2292 产品窗：src/os/exempt_review.py + 套件（6/6 双跑），qa/exempt-review-R2292.log·2026-10-31"
+    "current": "R2294 产品轮：接受的盖章豁免声明从此可被双向体检。queue_done_stamp_exempt 只问「这条声明还匹配得到一行吗」，于是两种腐烂都无声：被豁免的行事后被加注→文本摘要漂移→声明变成无主；声明之后新关的行→根本没有条目。两种情况下验收面一直是绿的。新增 src/os/stamp_exempt_review.py：从两个既有读数（queue_done_stamp.audit_root 的闸 + queue_done_stamp_exempt 的声明与身份律）双向列出漂移——MISSING 带声明条目序号，UNDECLARED 带文件与行号——且从不猜哪边过期；两侧计数必须先与阅读器自身的 exempt/unmatched 数字对平（否则 E_SER_COUNT 拒绝），缺声明= E_SER_UNPINNED 而非把 380 行一律报成漂移，坏 JSON/缺队文件/同一队内两行同身份各有专属码；零写盘零读钟。证据 SUITE PASS 6/6 双跑判据行同一 + 五个相邻队套件全绿（qa/stamp-exempt-review-R2294.log，1844B，单写者 utf-8 LF 经 evidence_capture），接线 os-stamp-exempt-review(6)。实况 STAMP EXEMPT REVIEW round=R2294 entries=380 violations=380 matched=380 missing=0 undeclared=0 verdict=NO-DRIFT（声明与 tech.md 均证明逐字节未动）。认领使 tech 可认领降到 9，已补一条真缺口种子（stamp_exempt_append，AC-SAP1..AC-SAP6 预注册，五锚零占用）→ 队列回到 main 5/5 · tech 10/10 · explore 10/10。债务行经自带写入器关闭（debt_close line 66，open 2→1，done 43→44，回读 ok），后继 product-face-R2295 置 first=yes（39397B→39875B，回读 ok）。收口跨水位，按整块折窗折 602（log 1..10，R2279+R2280 完整块，580 token 全覆盖），折后 72147B / 余量 6353B，四个账本套件复跑 8/8/8/8 全绿。",
+    "latest_artifact": "src/os/stamp_exempt_review.py + src/os/test_stamp_exempt_review.py + qa/stamp-exempt-review-R2294.log（SUITE PASS 6/6 双跑，1844B）·2026-10-31",
+    "next_milestone": "R2295 验证轮：在已提交的 R2294 树上跑全量 reconcile 电池（R2168 混合树规避，零产品改动直到转绿），预注册预期 = 对上轮 452 套件 / 3688 判据的 +1 套件 / +6 判据（来自 os-stamp-exempt-review），随后四段后续经 battery_followup 执行。窗口 ≤24h。",
+    "next_milestone_due": "2026-11-02T00:00:03+08:00",
+    "last_artifact": "R2294 产品窗：stamp_exempt_review 6/6 双跑 + 5 相邻套件绿，qa/stamp-exempt-review-R2294.log·2026-10-31"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "a drift reader that will not go green on a rotten pair: MISSING and UNDECLARED are both listed with their own locators, and a count disagreement refuses instead of printing a drift list nobody can trust (R2294)",
+      "on",
+      "R2294: the first suite run was red 3/6 and two reds were this-window test defects - one expected a patched reader to affect a subprocess (it cannot) and one put duplicate rows in different queues, which is not ambiguous because identity is keyed per queue. The third red was the missing runner wiring. No criterion was widened; the fixtures were fixed."
+    ],
     [
       "a verification window that could only confirm a prediction it had already registered, and it confirmed it exactly: 452 suites / 3688 criteria against the pinned 451 / 3682 (R2293)",
       "on",
@@ -143,6 +148,10 @@
     ]
   ],
   "results": [
+    [
+      "R2294",
+      "R2294 product window on the debt register first item (product-face-R2294): the accepted-stamp declaration is read from BOTH sides - MISSING names a declared entry matching no live debt row with its declaration entry index, UNDECLARED names a live debt row carrying no entry with its file and line - and the split reconciles with the reader own exempt and unmatched numbers before any verdict, refusing with E_SER_COUNT on disagreement; SUITE PASS 6/6 double-run with five adjacent suite green (qa/stamp-exempt-review-R2294.log, 1844B); live reading NO-DRIFT over 380 entries / 380 violations with both real files proved byte-unchanged; one real gap row seeded for the tech floor; 2-point product window"
+    ],
     [
       "R2293",
       "R2293 verification window on the debt register first item (product-face-R2293): the full reconcile battery on the committed R2292 tree 3addd18e with an empty git status before the run read RUNNER PASS 452/452 suites plus controls 7/7 in 854.9s, criteria total 3688 = exactly the pre-registered +1 suite / +6 criteria against R2291 (451/3682) from the R2292 os-exempt-review suite; four follow-up sections PASS after the matrix section refused to rewrite the stale doc; register closed and product-face-R2294 opened first=yes naming the tech head at line 360 prefix AC-SER1; 0-point window with no product face, honestly recorded"
@@ -260,7 +269,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2293",
+      "2294",
       "OSLoop 执行 tick"
     ],
     [
@@ -317,10 +326,10 @@
   "self_drive": {
     "window": "2026-10-25..2026-10-31",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

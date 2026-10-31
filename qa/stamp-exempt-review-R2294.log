@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2294 suite=src/os/test_stamp_exempt_review.py legs=2
+== LEG A rc=0 digest=A69E7818E962CC82
+PASS AC-SER1 drift listed both ways with identities and lines
+PASS AC-SER2 counts reconcile with the reader own exempt and unmatched numbers, disagreement refuses
+PASS AC-SER3 healthy declaration reads NO-DRIFT at exit 0
+PASS AC-SER4 stale declaration reads DRIFT at exit 2 without touching either file
+PASS AC-SER5 missing declaration, broken JSON, missing queue and an ambiguous pair each fail closed with its own code
+PASS AC-SER6 pure ASCII, stdlib only, wired, live reading of 380 entries
+LIVE STAMP EXEMPT REVIEW round=R2294 declaration=PINNED entries=380 violations=380 matched=380 exempt=380 expired=0 missing=0 undeclared=0 verdict=NO-DRIFT
+SUITE PASS 6/6
+== LEG B rc=0 digest=A69E7818E962CC82
+PASS AC-SER1 drift listed both ways with identities and lines
+PASS AC-SER2 counts reconcile with the reader own exempt and unmatched numbers, disagreement refuses
+PASS AC-SER3 healthy declaration reads NO-DRIFT at exit 0
+PASS AC-SER4 stale declaration reads DRIFT at exit 2 without touching either file
+PASS AC-SER5 missing declaration, broken JSON, missing queue and an ambiguous pair each fail closed with its own code
+PASS AC-SER6 pure ASCII, stdlib only, wired, live reading of 380 entries
+LIVE STAMP EXEMPT REVIEW round=R2294 declaration=PINNED entries=380 violations=380 matched=380 exempt=380 expired=0 missing=0 undeclared=0 verdict=NO-DRIFT
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_done_stamp.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_done_stamp_exempt.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_stamp_locator.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=A69E7818E962CC82
