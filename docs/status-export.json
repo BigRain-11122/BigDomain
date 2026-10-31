@@ -1,10 +1,11 @@
 {
- "export_ts": "2026-10-31T17:26:30+08:00",
- "do": "product window on the debt register first item: an accepted queue pre-registration exemption is now a dated, reasoned record in one file instead of prose repeated by hand every window",
+ "export_ts": "2026-10-31T18:20:01+08:00",
+ "do": "verification window on the debt register first item: the full reconcile battery ran on the committed tree and, on its red leg, exposed a real structural defect in the ledger coverage law's interaction with the fold marker format",
  "ceo_face": {
-  "current": "R2276 产品窗：队列预注册门报出的 9 条不合规行不再靠每窗手写散文解释，改为一份带日期与理由的豁免登记册（state/queue/prefix_exempt.json），由新模块 src/os/queue_row_exempt.py 校验并与门读数合并；门本身的读法不变（仍报 9 条），只是每条现在是可复核的记录。",
-  "latest_artifact": "src/os/queue_row_exempt.py + src/os/test_queue_row_exempt.py + state/queue/prefix_exempt.json（套件 6/6 双跑判据一致，qa/queue-row-exempt-R2276.log 1358B，相邻五套件全绿）",
-  "next_milestone": "R2277 全量 reconcile 电池在已提交树上跑绿（预注册 444 套件 / 3640 判据，来自本轮新套件），窗口 ≤24h"
+  "current": "R2277 验证窗：本轮不写产品代码，只结清上一轮留下的验证债。先做水位折叠（state.json 77602B→52581B，17 行原文入档、14 个 token 全覆盖），再在已提交的干净树上跑全量电池。第一次电池红灯 441/444（4 条断言失败），抓到的是一处真缺陷：一条折叠摘要行以轮次号开头，被账本覆盖律当成「某轮的叙述行」，而该轮的账目行刚被折进档案，覆盖律只看活窗口、永远无法由档案自愈，于是三条账本套件集体误报 DIRTY。把该行改成非叙述形式（载荷证明：37 条日志仅 1 条变化、CRLF 数不变）后两面均 CLEAN、三套件 8/8；重跑电池 444/444 全绿、3640 判据、矩阵 444/3640 逐字节一致。",
+  "latest_artifact": "qa/reconcile-all-R2277-retry.log（RUNNER PASS 444/444 套件 + 控制 7/7，880.8s，775484B，单写者 utf-8 LF） + docs/sandbox-suite-matrix.md（444 套件 / 3640 判据，42974B）；红灯档 qa/reconcile-all-R2277.log 原样保留",
+  "next_milestone": "R2278 回到产品面：技术队头 line 343（AC-QDS1，queue_done_stamp 种子）出一个可跑实物 + 自套件，窗 ≤24h",
+  "next_milestone_due": "2026-11-01T14:00:00+08:00"
  },
  "depts": [
   {
@@ -34,6 +35,11 @@
   }
  ],
  "outs": [
+  [
+   "the reconcile battery's red leg caught a real defect in the ledger coverage law rather than a stale matrix, and the repair re-proved the whole registry green (R2277)",
+   "on",
+   "R2277: the debt row demanded verification before any product work, so this window changed no product code. Fold 596 came first because the closeout rows would have crossed the 78500B waterline: log lines 34..50 (the R2238..R2276 window) moved verbatim into logs/state-log-archive-2026-10.md with all 14 window tokens covered, 77602B -> 52577B at margin 25923B, committed alone as 0ceb1886 so the battery could measure a clean tree. The first battery was RED: 441/444 suites, 4 failed assertions, criteria total 3640. The cause was a real structural defect, not a flake - the live fold marker line 'R2271 fold: lines 1..22 ...' matches the round-narrative regex while the R2271 own ledger line had just moved into the archive, and the coverage law keeps errors LIVE-only by design, so the union can never heal it; os-ledger-lines AC-LGR8, os-ledger-archive AC-LGA7/AC-LGA8 and os-ledger-baseline AC-LGB8 all read DIRTY. The marker was reworded to the canonical non-narrative form with a payload proof (37 log items, exactly one differs, its other wording byte-equal, CRLF count unchanged, 52577B -> 52581B, commit 121abe09) and the red leg was retained unchanged. Both faces then read CLEAN (live 12 ledger / 23 round, union 293 ledger / 1881 round, zero missing, zero orphan) and all three suites are 8/8. The retry battery on the committed repair tree = RUNNER PASS 444/444 suites plus controls 7/7 in 880.8s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2277-retry.log, 775484B, crlf=0, single-writer utf-8 LF through src/os/battery_stream.py), criteria total 3640 - exactly the pre-registered +1 suite / +6 criteria against R2275, so the prediction needed no correction. Four follow-up sections all PASS through src/os/battery_followup.py after the matrix section correctly refused to rewrite the stale doc (on-disk 42867B vs regenerated 42974B); suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 444 suites / 3640 criteria and --check read it byte-identical. Honest score 0 product points."
+  ],
   [
    "full reconcile battery plus the four follow-up sections re-proven on the committed tree, and the pre-registered delta matched the measurement exactly (R2275)",
    "on",
@@ -126,6 +132,11 @@
   ]
  ],
  "results": [
+  [
+   "R2277",
+   "R2277 verification window on the debt register first item (reconcile-battery-R2277), discharged with zero product edits until green (the R2168 mixed-tree rule), and the red leg bought a real fix. Fold 596 first: log lines 34..50 verbatim into the archive, 14 tokens covered, 77602B -> 52577B, committed alone (0ceb1886). First battery RED 441/444 with 4 failed assertions (criteria total 3640): the live fold marker 'R2271 fold: lines 1..22 ...' matches the round-narrative regex while R2271 own ledger line had moved to the archive, and live-only gating cannot heal from the archive, so os-ledger-lines AC-LGR8, os-ledger-archive AC-LGA7/AC-LGA8 and os-ledger-baseline AC-LGB8 read DIRTY. Marker reworded to non-narrative form with a payload proof (one item differs, CRLF unchanged, 52581B, commit 121abe09); red leg kept. Retry on the committed tree = RUNNER PASS 444/444 suites plus controls 7/7 in 880.8s, TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2277-retry.log, 775484B, crlf=0, single-writer utf-8 LF through battery_stream), criteria total 3640 - exactly the pre-registered +1 suite / +6 criteria against R2275. Four follow-up sections all PASS (matrix 444/3640 byte-identical after the designed refusal, fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN). Honest score 0 product points; disclosed: one truncated-pipe invocation produced no output and left zero orphans, two of my own repair attempts aborted on self-written arithmetic guards before any write, and the register file was momentarily truncated by an argument-order mistake and restored from git within the same step.",
+   "qa/reconcile-all-R2277-retry.log"
+  ],
   [
    "R2273",
    "R2273 verification window on the debt register first item (product-face-R2273), discharged with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 442/442 suites green plus controls 7/7 in 834.9s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2273.log, 772281B, crlf=0, single-writer utf-8 LF through src/os/battery_stream.py), criteria total 3628; the pre-registered +1 suite / +6 criteria against R2271 (441/3622) matched the measured total exactly. Four follow-up sections all PASS through the new single callable src/os/battery_followup.py in its first production use - matrix 442 suites / 3628 criteria byte-identical (42798B) after an intended FAIL on the stale doc that was never rewritten, fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census DRIFT-CLEAN. Honest score 0 product points; register row closed and the successor product-face-R2274 opened as first=yes against the tech head at line 340 (AC-DEBC1).",
@@ -234,7 +245,7 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2276",
+   "2277",
    "OSLoop 执行 tick"
   ],
   [
@@ -250,10 +261,10 @@
  "self_drive": {
   "window": "2026-10-25..2026-10-31",
   "window_days": 7,
-  "log_lines_in_window": 14,
+  "log_lines_in_window": 10,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 14,
+  "substantive_non_idle_mention_lines": 9,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,
