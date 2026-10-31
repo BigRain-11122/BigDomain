@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2298 suite=src/os/test_stamp_residue.py legs=2
+== LEG A rc=0 digest=E6DA44F4782CDB1E
+stamp_residue suite (expected criteria 6)
+PASS AC-SRS1 residue list and stamp law imported
+PASS AC-SRS2 each round once, counts reconcile
+PASS AC-SRS3 open-only stamp reads STAMP-ONLY-OPEN
+PASS AC-SRS4 NO-HIT named, empty residue CLEAN at exit 0
+PASS AC-SRS5 CLI codes and byte-stable --json
+PASS AC-SRS6 pure, both imports live, wired, zero writes
+SUITE PASS 6/6
+== LEG B rc=0 digest=E6DA44F4782CDB1E
+stamp_residue suite (expected criteria 6)
+PASS AC-SRS1 residue list and stamp law imported
+PASS AC-SRS2 each round once, counts reconcile
+PASS AC-SRS3 open-only stamp reads STAMP-ONLY-OPEN
+PASS AC-SRS4 NO-HIT named, empty residue CLEAN at exit 0
+PASS AC-SRS5 CLI codes and byte-stable --json
+PASS AC-SRS6 pure, both imports live, wired, zero writes
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_stamp_locator.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_evidence_output_map.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_queue_done_stamp.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=E6DA44F4782CDB1E

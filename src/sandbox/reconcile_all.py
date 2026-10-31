@@ -4576,6 +4576,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-locator",
      os.path.join("..", "os", "test_stamp_locator.py"), 6),
+    # R2298: state_seq names the residue (rounds that stamped a queue row and
+    # left no log item) and stamp_locator locates ONE round's stamp, so
+    # triaging the residue was still N hand greps. One read-only reader joins
+    # the two and separates a stamp on a CLOSED row (delivery evidence) from a
+    # stamp on an OPEN row (proves nothing), so a NEVER-LOGGED reading becomes
+    # one table. Residue list imported from state_seq, hit scan from
+    # stamp_locator. (AC-SRS1..AC-SRS6 pinned in state/queue/tech.md as the
+    # R2284 seed row BEFORE the code existed.)
+    ("os-stamp-residue",
+     os.path.join("..", "os", "test_stamp_residue.py"), 6),
     # R2286: queue_head answers WHICH row comes first but cannot know a row is
     # undeliverable for a MACHINE reason. One declared file plus a reader that
     # joins it with the head reading names the first claimable row this host is
