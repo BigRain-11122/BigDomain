@@ -1296,6 +1296,13 @@
       "declared_by": "R2310",
       "reason": "reviewed at R2310 at its live status",
       "until": 2330
+    },
+    {
+      "round": 2298,
+      "status": "DELIVERED",
+      "declared_by": "R2311",
+      "reason": "the R2311 waterline fold moved this round's only log item into the archive while its accepted stamp still sits on a closed queue row, so the delivery stands and the round stops reading as untriaged debt",
+      "until": 2330
     }
   ]
 }

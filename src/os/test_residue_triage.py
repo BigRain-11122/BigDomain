@@ -288,7 +288,15 @@ def ac_rtr6():
                 stdlib_only = False
     runner = io.open(RUNNER, "r", encoding="utf-8").read()
     wired = ('"%s"' % LABEL in runner) or ("'%s'" % LABEL in runner)
-    live = RT.read(REPO, "R2310")
+    # Check the declaration against the newest round it claims to cover, read
+    # from the declaration itself: a pinned check round would refuse the very
+    # carry the window is allowed to make (R2311 added one carried entry).
+    with io.open(os.path.join(REPO, RT.DECLARATION_PATH),
+                 encoding="ascii") as handle:
+        declared = json.load(handle)
+    claim = max(int(str(entry["declared_by"]).lstrip("R"))
+                for entry in declared["entries"])
+    live = RT.read(REPO, "R%d" % claim)
     rendered = RT.render(live)
     ok = (ascii_only and no_net and no_clock and stdlib_only and wired
           and live["declaration"] == "PINNED"

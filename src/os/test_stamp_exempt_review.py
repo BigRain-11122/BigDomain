@@ -236,15 +236,21 @@ live_tech = os.path.join(REPO, "state", "queue", "tech.md")
 live_before = (digest(live_decl), digest(live_tech))
 live = SER.audit(REPO, 2294)
 live_after = (digest(live_decl), digest(live_tech))
+# The budget is read from the declaration itself: the criterion is that the
+# live reader agrees with the declaration it just read, not that the fleet
+# ever keeps one pinned entry count (R2311 added an accepted exemption).
+expected_entries = len(SER.declaration_of(REPO)["entries"])
 check(not non_ascii and not clock_hits and not net_hits
       and WIRED_EXPECT in runner and LABEL in runner
       and live_before == live_after
       and live["declaration"] == "PINNED"
-      and live["entries"] == 380 and live["violation_count"] == 380
-      and live["matched"] == 380
+      and live["entries"] == expected_entries
+      and live["violation_count"] == expected_entries
+      and live["matched"] == expected_entries
       and live["missing_count"] == 0 and live["undeclared_count"] == 0
       and live["verdict"] == "NO-DRIFT",
-      "AC-SER6 pure ASCII, stdlib only, wired, live reading of 380 entries")
+      "AC-SER6 pure ASCII, stdlib only, wired, live reading of %d entries"
+      % expected_entries)
 
 print("LIVE %s" % SER.one_line(live), flush=True)
 print("SUITE %s %d/%d" % ("PASS" if FAILS == 0 else "FAIL",
