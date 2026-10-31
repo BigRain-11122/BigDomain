@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-10-31T16:17:56+08:00",
-  "do": "verification debt opened by a product window: the four post-battery sections are now one callable, and its own live gate proved the shipped matrix is stale instead of silently rewriting it",
+  "export_ts": "2026-10-31T16:46:22+08:00",
+  "do": "verification window: the battery, the matrix regeneration and the four post-battery sections re-proven on the committed tree, with the new single callable's first production use and its predicted delta matched exactly",
   "ceo_face": {
-    "current": "R2272 产品窗：电池后四段（矩阵再生回读/指纹链/runner 画像/写者普查）从 42 份逐轮复制件收成一个可调用件 —— 它只读不写，矩阵段在私有临时副本上再生后与在册文档逐字节比对，不一致就报 FAIL 并同时给出两侧字节数、绝不静默改写（实活读数 on-disk=42718B regenerated=42803B）；六个判据先于代码预注册，套件 6/6 双跑同一 + 五个相邻 os 套件全绿",
-    "latest_artifact": "src/os/battery_followup.py（11010B，纯 ASCII/stdlib/零网络）+ src/os/test_battery_followup.py（AC-BFU1..6 全绿）+ qa/battery-followup-R2272.log（1507B，单写者 utf-8 LF，两腿同一判据摘要，五个相邻套件绿）；接线 os-battery-followup(6)",
-    "last_artifact": "src/os/battery_followup.py（11010B，纯 ASCII/stdlib/零网络）+ src/os/test_battery_followup.py（AC-BFU1..6 全绿）+ qa/battery-followup-R2272.log（1507B，单写者 utf-8 LF，两腿同一判据摘要，五个相邻套件绿）；接线 os-battery-followup(6)",
-    "next_milestone": "R2273 验证窗：在已提交树上跑全量电池（R2271 读数为 441 套件/3622 判据，预注册 +1 套件/+6 判据 = 442/3628）+ 用这个新单件首次跑四段 follow-up，并用该电池证据重生成 docs/sandbox-suite-matrix.md",
-    "next_milestone_due": "2026-11-02T16:17:56+08:00"
+    "current": "R2273 验证窗：在已提交树上跑全量电池并全绿 —— 442 套件 + 7/7 控制，3628 判据，834.9s；预注册的 +1 套件/+6 判据与实测完全一致（六轮来首次无需勘误）。四段 follow-up 首次由新单件 src/os/battery_followup.py 一次跑完：矩阵段先按设计如实 FAIL（在册 42718B vs 再生 42798B）且绝不静默改写，再由电池证据重生成到 442 套件/3628 判据，重跑四段全 PASS",
+    "latest_artifact": "qa/reconcile-all-R2273.log（772281B，单写者 utf-8 LF，crlf=0，含电池 442/442 + 四段 follow-up 两腿原文） + docs/sandbox-suite-matrix.md（42798B，442 套件/3628 判据，回读逐字节同一）",
+    "last_artifact": "qa/reconcile-all-R2273.log（772281B，单写者 utf-8 LF，crlf=0，含电池 442/442 + 四段 follow-up 两腿原文） + docs/sandbox-suite-matrix.md（42798B，442 套件/3628 判据，回读逐字节同一）",
+    "next_milestone": "R2274 产品窗：认领 tech 队头 state/queue/tech.md:340（AC-DEBC1，R2251 debt_close 种子，判据已在该行预注册），先做 HEAD 零占用锚验再写代码，交一个可用件 + 套件；提交后再跑电池（R2168 混树禁律）",
+    "next_milestone_due": "2026-11-02T08:46:22+08:00"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "battery, matrix and the four post-battery sections re-proven on the committed tree, and the pre-registered delta matched the measurement (R2273)",
+      "on",
+      "R2273: the debt row demanded verification before any product work, so this window changed no product code. Full reconcile battery on the committed R2272 tree 1d78605a with an empty git status before and after = RUNNER PASS 442/442 suites plus controls 7/7 in 834.9s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2273.log, 772281B, crlf=0, single-writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), criteria total 3628 - the +1 suite / +6 criteria against R2271 (441/3622) is exactly the R2272 os-battery-followup suite and the pre-registered prediction needed no correction for the first time in six windows. The four follow-up sections then ran through src/os/battery_followup.py as its first production use: the matrix section FAILED first on the stale doc (on-disk=42718B regenerated=42798B) and did not rewrite it, src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 442 suites / 3628 criteria (42798B), and the re-run read all four sections PASS with the matrix byte-identical. Disclosed: the first regeneration call used a wrong path and exited 2 without writing, so the follow-up was appended twice (1889B FAIL then 1950B PASS), both legs kept verbatim."
+    ],
     [
       "declared floor gets a consumer: the pinned declaration and the splitter can no longer disagree silently, and the new reading names NEVER-LOGGED R2250 (R2269)",
       "on",
@@ -113,6 +118,11 @@
     ]
   ],
   "results": [
+    [
+      "R2273",
+      "R2273 verification window on the debt register first item (product-face-R2273), discharged with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 442/442 suites green plus controls 7/7 in 834.9s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2273.log, 772281B, crlf=0, single-writer utf-8 LF through src/os/battery_stream.py), criteria total 3628; the pre-registered +1 suite / +6 criteria against R2271 (441/3622) matched the measured total exactly. Four follow-up sections all PASS through the new single callable src/os/battery_followup.py in its first production use - matrix 442 suites / 3628 criteria byte-identical (42798B) after an intended FAIL on the stale doc that was never rewritten, fingerprint CLEAN 5 domains, runner profile --daily --check PASS, writer census DRIFT-CLEAN. Honest score 0 product points; register row closed and the successor product-face-R2274 opened as first=yes against the tech head at line 340 (AC-DEBC1).",
+      "qa/reconcile-all-R2273.log"
+    ],
     [
       "R2269",
       "product window R2269 on the top deliverable tech row: the declared queue-only floor gets a consumer inside the splitter (--floor-from-declaration takes it from queue_floor_decl.resolve, refuses an UNPINNED or DRIFT declaration at exit 2 with zero counts, and refuses --floor together with it), SUITE PASS 6/6 double-run plus five adjacent os suites green (qa/queue-only-floor-wire-R2269.log, 2266B, single writer utf-8 LF), wired os-queue-only-floor-wire(6); the live reading names NEVER-LOGGED R2250 (verdict RESIDUE, floor=R2249, stamps=170, logged=8, folded=161), reported not swept.",
@@ -216,17 +226,17 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2272",
+      "2273",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-25..2026-10-31",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
