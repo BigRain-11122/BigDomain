@@ -4673,6 +4673,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-exempt-append",
      os.path.join("..", "os", "test_stamp_exempt_append.py"), 6),
+    # R2296: the output map names what each legacy copy DECLARES, but not
+    # whether that declaration is still on disk - a script can declare a log
+    # that was never written while the map counts it as owned. One read-only
+    # audit resolves every literal to EXISTS or ABSENT and every template to
+    # a family count, and a script with nothing resolvable reads STALE.
+    # (AC-EOA1..AC-EOA6 pinned in state/queue/tech.md as the R2296 seed row
+    # BEFORE the code existed.)
+    ("os-evidence-output-audit",
+     os.path.join("..", "os", "test_evidence_output_audit.py"), 6),
     ]
 
 FAILS = 0

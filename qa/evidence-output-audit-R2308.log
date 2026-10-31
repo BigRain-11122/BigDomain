@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2308 suite=src/os/test_evidence_output_audit.py legs=2
+== LEG A rc=0 digest=18D2B658FDA392E0
+PASS AC-EOA1 patched_absent=qa/injected-R9999.log imports_map=True
+PASS AC-EOA2 literals=3 exists=1 absent=2
+PASS AC-EOA3 hit=1 none=1
+PASS AC-EOA4 stale=R9002.py,R9004.py,R9005.py,R9006.py clean=CLEAN
+PASS AC-EOA5 rc=0/2/3/3/5 stable=True
+PASS AC-EOA6 ascii=True imports=json,os,re,sys,evidence_output_map wired=True
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=18D2B658FDA392E0
+PASS AC-EOA1 patched_absent=qa/injected-R9999.log imports_map=True
+PASS AC-EOA2 literals=3 exists=1 absent=2
+PASS AC-EOA3 hit=1 none=1
+PASS AC-EOA4 stale=R9002.py,R9004.py,R9005.py,R9006.py clean=CLEAN
+PASS AC-EOA5 rc=0/2/3/3/5 stable=True
+PASS AC-EOA6 ascii=True imports=json,os,re,sys,evidence_output_map wired=True
+SUITE PASS 6/6 criteria
+== ADJACENT 5
+== src/os/test_evidence_output_map.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_evidence_variants.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_parity.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_retry_legs.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=18D2B658FDA392E0

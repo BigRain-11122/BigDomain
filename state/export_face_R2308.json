@@ -1,0 +1,9 @@
+{
+  "do": "R2308 产品窗：把「声明了但盘上没有」变成一条finding（evidence_output_audit 读盘核验器 + 六判据套件）",
+  "current": "R2308 已交付 evidence_output_audit：把输出地图的声明与 qa 目录逐一核验——字面声明读 EXISTS/ABSENT、模板声明读 FAMILY-HIT（带命中数）/FAMILY-NONE、无可解析声明读 STALE；套件 6/6 双跑一致，五套相邻全绿，已接入电池 os-evidence-output-audit(6)",
+  "latest": "src/os/evidence_output_audit.py + qa/evidence-output-audit-R2308.log（2026-11-01）",
+  "next": "R2309 产品面：tech 队头 line 372 前缀 AC-RTR1 的 retire_candidate（三读者合流的退役判定器），六判据已在行内预注册，窗口 ≤48h",
+  "last": "qa/evidence-output-audit-R2308.log",
+  "out": "src/os/evidence_output_audit.py",
+  "result": "R2308 product window: evidence_output_audit shipped with AC-EOA1..AC-EOA6 pinned in the queue row before the code - the declaration law is imported from evidence_output_map (proved by patching eom.declarations and watching an injected declaration flow through as ABSENT), every literal resolves to EXISTS or ABSENT, every template to FAMILY-HIT with its match count or FAMILY-NONE with zero, and a script with nothing resolvable reads STALE with its reason; SUITE PASS 6/6 double-run identical with five adjacent suites green through evidence_capture (qa/evidence-output-audit-R2308.log, 1216B) and wired os-evidence-output-audit(6); LIVE over the real 92-script / 164-declaration pile exists=132 absent=0 family_hit=26 family_none=6 stale=1 verdict=FINDINGS exit 2, the single STALE being evidence_R2213.py NO-DECLARATION which agrees with the map NONE reading at R2296"
+}
