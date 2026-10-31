@@ -4527,6 +4527,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-done-stamp",
      os.path.join("..", "os", "test_queue_done_stamp.py"), 6),
+    # R2280: the window-stamp gate reports 380 live closed rows as debt and
+    # every one of them predates the law, so the reading can never go green
+    # without rewriting history or widening the gate into a blind spot. This
+    # reads an ACCEPTED exemption from one pinned file keyed by a stable row
+    # identity, carries a dated reason and an optional expiry, reports
+    # exempt_today against still_debt, and refuses to read a malformed or
+    # ambiguous declaration. The gate itself is imported, never re-derived.
+    # (AC-SEX1..AC-SEX6 pinned in state/queue/tech.md as the R2278 seed row
+    # BEFORE the code existed.)
+    ("os-queue-done-stamp-exempt",
+     os.path.join("..", "os", "test_queue_done_stamp_exempt.py"), 6),
     ]
 
 FAILS = 0
