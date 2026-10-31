@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T01:18:26+08:00",
-  "do": "product window: the stamped-but-never-logged residue is now one table instead of N hand greps - a read-only reader that joins the residue list from state_seq with the per-round hit scan from stamp_locator and separates delivery evidence from a stamp sitting on an unfinished row",
+  "export_ts": "2026-11-01T01:56:35+08:00",
+  "do": "verification window: the full reconcile battery ran twice on the committed R2298 tree - the first run went RED on a real bookkeeping defect, the repair was committed alone, and the retry read all green",
   "ceo_face": {
-    "current": "R2298 产品窗：把「盖了章却从没写进日志」的残量从逐轮手工 grep 变成一张表。新件 src/os/stamp_residue.py 不新增第二套法则——残量清单直接读 state_seq.audit 的 queue_only，每轮命中直接读 stamp_locator.locate，套件靠分别打补丁证明这两处导入真在用。关键区分：章落在已完成行=交付证据；章落在未完成行=什么也证明不了，单列 STAMP-ONLY-OPEN，绝不当作交付。套件 SUITE PASS 6/6 双跑同一摘要、五个相邻 os 套件全绿（qa/stamp-residue-R2298.log，1228B，单一写入器 utf-8 LF），已接入 os-stamp-residue(6)。实况：STAMP RESIDUE rounds=179 delivered=159 stamp_only_open=20 no_hit=0（读时），本轮自身的日志行落账后为 178/158/20——与 state_seq 的 queue_only 在两个时点都对得上。认领使 tech 可认领数降到 9，已补一枚真缺口种子行（residue_triage，AC-RTR1..AC-RTR6 预注册、五个锚点零占用），机队水位 FLOOR-MET 5/5 10/10 10/10。诚实披露三件：队列回执初稿把 queue_done 误当残量写成 185/165，提交前按实测就地勘正为 179/159/20；一次 --json 经 shell 重定向写成 UTF-16，已丢弃不采信；tasks.md 本窗未动。",
-    "latest_artifact": "src/os/stamp_residue.py + src/os/test_stamp_residue.py（SUITE PASS 6/6 双跑同一摘要、五邻近套件全绿，qa/stamp-residue-R2298.log 1228B），实况 179 轮残量 159/20/0 分档，2026-11-01",
-    "next_milestone": "R2299 验证面：在已提交树上跑全量 reconcile 电池（预期 +1 套件/+6 判据，即 448/3664），随后四段 followup（矩阵段会先因陈旧文档 FAIL 且不得改写，须 suite_matrix 重生成后复跑）",
-    "next_milestone_due": "2026-11-02T01:18:26+08:00",
-    "last_artifact": "qa/reconcile-all-R2297.log（779452B，454/454 套件、3700 判据），2026-11-01"
+    "current": "本轮没有新产品代码：R2299 把整条 reconcile 电池在已提交的 R2298 树上跑了两遍。第一遍 451/455 红——R2298 收尾把一个本该属于 R2298 的观察项写成了 R2299 标签却没有对应账本行，账本门因此读 DIRTY，四个账本套件连带红。把它标回真正写它的轮次（预测差量 +18 字节、原子写、回读核对）后四个套件 8/8，重跑电池 RUNNER PASS 455/455 套件 + 控制项 7/7，判据合计 3706，正好等于预登记的 +1 套件 / +6 判据（R2297 是 454/3700），四段 follow-up 全 PASS（矩阵段先按设计拒绝旧文档，再生成到 455 套件 / 3706 判据 / 43861B）。",
+    "latest_artifact": "qa/reconcile-all-R2299-retry.log（779925B，455/455 套件、3706 条判据、777.0s）；红腿作为证据保留在 qa/reconcile-all-R2299.log",
+    "next_milestone": "R2300 回到产品面：队列真头部 AC-GDR1 gate_drift——把 machine_gate 里一条匹配不上的惰性声明判成 DRIFT（行还在，只是文本变了）还是 GONE（行没了），先过零占用锚检再写码",
+    "next_milestone_due": "2026-11-02T01:56:35+08:00",
+    "last_artifact": "qa/reconcile-all-R2299-retry.log 779925B"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/reconcile-all-R2299-retry.log",
+      "on",
+      "R2299 verification: battery RED 451/455 on a real mislabeled-round defect, repaired in one predicted-delta edit, retry PASS 455/455 suites / 3706 criteria / 777.0s, four follow-up sections PASS"
+    ],
     [
       "a read-only table that turns the stamped-but-never-logged residue into triage data: 179 rounds, 159 carrying delivery evidence on closed rows, 20 sitting only on unfinished rows and therefore proving nothing (R2298)",
       "on",
@@ -173,6 +178,10 @@
     ]
   ],
   "results": [
+    [
+      "R2299",
+      "R2299 verification: battery RED 451/455 on a real mislabeled-round defect, repaired in one predicted-delta edit, retry PASS 455/455 suites / 3706 criteria / 777.0s, four follow-up sections PASS"
+    ],
     [
       "R2298",
       "R2298 product face on the row the reader named (state/queue/tech.md:364, prefix AC-SRS1, the R2284 stamp_residue seed whose AC-SRS1..AC-SRS6 were pinned BEFORE the code), after a fresh zero-occupancy anchor check at HEAD. src/os/stamp_residue.py adds no third law: the residue list is read off state_seq.audit and every hit off stamp_locator.locate, each proven by patching it in the suite. A round stamped only on an OPEN row reads STAMP-ONLY-OPEN rather than as delivery evidence, a round with no hit reads NO-HIT, and an empty residue reads CLEAN at exit 0. SUITE PASS 6/6 double-run identical with five adjacent os suites green through evidence_capture (qa/stamp-residue-R2298.log, 1228B, one utf-8 LF single writer), wired os-stamp-residue(6). LIVE 179/159/20/0 RESIDUE at the reading, 178/158/20 once this window own log item retires R2298, reconciling with state_seq queue_only at both instants. Honest disclosures: the first queue note said 185/165 because queue_done was read as the residue size and was corrected in place to the measured numbers before any commit; a --json leg written through a shell redirection landed UTF-16 and was discarded, not trusted; tasks.md was not touched. The claim dropped tech claimable to 9, so one real gap row was seeded (residue_triage, AC-RTR1..AC-RTR6 pre-registered, five anchors zero-occupancy) and the gauge closed FLOOR-MET 5/5 10/10 10/10. The battery carries to R2299."
@@ -314,7 +323,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2298",
+      "2299",
       "OSLoop 执行 tick"
     ],
     [
@@ -371,10 +380,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

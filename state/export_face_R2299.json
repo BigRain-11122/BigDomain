@@ -1,0 +1,9 @@
+{
+  "do": "verification window: the full reconcile battery ran twice on the committed R2298 tree - the first run went RED on a real bookkeeping defect, the repair was committed alone, and the retry read all green",
+  "current": "本轮没有新产品代码：R2299 把整条 reconcile 电池在已提交的 R2298 树上跑了两遍。第一遍 451/455 红——R2298 收尾把一个本该属于 R2298 的观察项写成了 R2299 标签却没有对应账本行，账本门因此读 DIRTY，四个账本套件连带红。把它标回真正写它的轮次（预测差量 +18 字节、原子写、回读核对）后四个套件 8/8，重跑电池 RUNNER PASS 455/455 套件 + 控制项 7/7，判据合计 3706，正好等于预登记的 +1 套件 / +6 判据（R2297 是 454/3700），四段 follow-up 全 PASS（矩阵段先按设计拒绝旧文档，再生成到 455 套件 / 3706 判据 / 43861B）。",
+  "latest": "qa/reconcile-all-R2299-retry.log（779925B，455/455 套件、3706 条判据、777.0s）；红腿作为证据保留在 qa/reconcile-all-R2299.log",
+  "next": "R2300 回到产品面：队列真头部 AC-GDR1 gate_drift——把 machine_gate 里一条匹配不上的惰性声明判成 DRIFT（行还在，只是文本变了）还是 GONE（行没了），先过零占用锚检再写码",
+  "last": "qa/reconcile-all-R2299-retry.log 779925B",
+  "result": "R2299 verification: battery RED 451/455 on a real mislabeled-round defect, repaired in one predicted-delta edit, retry PASS 455/455 suites / 3706 criteria / 777.0s, four follow-up sections PASS",
+  "out": "qa/reconcile-all-R2299-retry.log"
+}
