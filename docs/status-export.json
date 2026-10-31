@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T02:56:43+08:00",
-  "do": "R2303 产品面：把「重跑救绿的轮次」读回史（tech 队头 followup_retry_legs 交付）",
+  "export_ts": "2026-11-01T03:16:34+08:00",
+  "do": "R2304 验证轮：把 R2302/R2303 两个新产品面纳入全量电池见证（零产品改动）",
   "ceo_face": {
-    "current": "R2303 已提交产品面 src/os/followup_retry_legs.py（套件 6/6 双跑同一、证据 1304B 在盘），下一轮在已提交树上跑全量电池",
-    "latest_artifact": "qa/followup-retry-legs-R2303.log 与 src/os/followup_retry_legs.py（2026-11-01 02:55）",
-    "next_milestone": "R2304 全量电池 + 四段收尾（预期 458 套件 / 3724 判据，+2 套件/+12 判据：R2302 evidence_variants 与 R2303 followup_retry_legs 各 +6），窗 ≤48h",
-    "next_milestone_due": "2026-11-03T02:56:43+08:00",
-    "last_artifact": "src/os/followup_retry_legs.py"
+    "current": "R2304 已跑全量电池 458/458 套件 + 控制 7/7（816.6s），四段收尾全 PASS，下一轮回到产品面 tech 队头",
+    "latest_artifact": "qa/reconcile-all-R2304.log + docs/sandbox-suite-matrix.md（2026-11-01）",
+    "next_milestone": "R2305 产品面：src/os/review_window_decl.py（tech 队头 line 368 前缀 AC-RWD1，判据已预注册在行内），窗口 ≤48h",
+    "next_milestone_due": "2026-11-03T03:16:34+08:00",
+    "last_artifact": "qa/reconcile-all-R2304.log"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/reconcile-all-R2304.log",
+      "on",
+      "R2304 verification window: full reconcile battery on the committed R2303 tree d43e1eb6 with an empty git status before the run = RUNNER PASS 458/458 suites plus controls 7/7 in 816.6s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3724 - exactly the pre-registered +2 suites / +12 criteria against R2301 from the R2302 evidence_variants and R2303 followup_retry_legs suites; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 458/3724 at 44075B; the R2303 retry reader read live as rounds=428 canonical_only=424 retried=4 red=412 with R2277 and R2289 both PASS through their retry leg; zero product edits, so 0 product points honestly recorded"
+    ],
     [
       "src/os/followup_retry_legs.py",
       "on",
@@ -199,6 +204,10 @@
   ],
   "results": [
     [
+      "R2304",
+      "R2304 verification window: full reconcile battery on the committed R2303 tree d43e1eb6 with an empty git status before the run = RUNNER PASS 458/458 suites plus controls 7/7 in 816.6s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3724 - exactly the pre-registered +2 suites / +12 criteria against R2301 from the R2302 evidence_variants and R2303 followup_retry_legs suites; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 458/3724 at 44075B; the R2303 retry reader read live as rounds=428 canonical_only=424 retried=4 red=412 with R2277 and R2289 both PASS through their retry leg; zero product edits, so 0 product points honestly recorded"
+    ],
+    [
       "R2303",
       "R2303 product face: followup_retry_legs joins a round's canonical leg with every -retry leg in retry order (law asked of retry_naming), takes the verdict from the LAST leg while reporting every earlier leg with its own runner line, returns the exact followup_history row for a canonical-only round, and refuses a retry leg whose canonical leg is absent; SUITE PASS 6/6 with five adjacent suites green, wired os-followup-retry-legs(6); live R2289 now reads PASS through 2 legs (canonical INCOMPLETE runner=FAIL, retry PASS), pile rounds=427 canonical_only=423 retried=4 red=412; one real gap row seeded (followup_retry_history) to hold the tech floor at 10/10"
     ],
@@ -359,7 +368,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2303",
+      "2304",
       "OSLoop 执行 tick"
     ],
     [
@@ -416,10 +425,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
