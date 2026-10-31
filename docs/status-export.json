@@ -1,12 +1,12 @@
 {
- "export_ts": "2026-10-31T19:41:43+08:00",
- "do": "verification window: the full reconcile battery and the four follow-up sections re-proven on the committed tree with zero product edits, and the pre-registered delta matched the measurement exactly",
+ "export_ts": "2026-10-31T19:56:30+08:00",
+ "do": "product window: one read-only reader that says which of the ninety-odd legacy per-round evidence scripts actually do the five ritual legs, so retirement becomes one script at a time with evidence instead of a bulk delete",
  "ceo_face": {
-  "current": "R2281 验证窗已完成：在已提交树 5d4038f7 上跑全量 reconcile 电池（446 套件全绿 + 7 控制项，917.8s，判据总数 3652，与预注册的 +1 套件/+6 判据精确一致）；四段 follow-up 全过（矩阵 43126B 逐字节同一、指纹链 CLEAN、runner profile 一致、census DRIFT-CLEAN）；债务行由本仓写入器自行关闭并开启 product-face-R2282。本轮零产品代码改动，诚实计 0 产品分。",
-  "latest_artifact": "qa/reconcile-all-R2281.log（774691B，单写者 utf-8 LF，RUNNER PASS 446/446 + 控制 7/7，917.8s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（446 套件 / 3652 判据，43126B，重生成后 --check 逐字节同一）",
-  "next_milestone": "R2282 回产品面：取 tech 队头 line 347（AC-EVP1，evidence_parity 种子，六判据已在行内预注册），窗前做 git grep -F 零占用锚验，出一件带套件的产品面；若认领使 tech 可认领降至 9 则同窗补一条真缺口行，先提交再跑电池",
-  "next_milestone_due": "2026-11-01T19:41:43+08:00",
-  "last_artifact": "qa/reconcile-all-R2281.log（774691B，单写者 utf-8 LF，RUNNER PASS 446/446 + 控制 7/7，917.8s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（446 套件 / 3652 判据，43126B，重生成后 --check 逐字节同一）"
+  "current": "R2282 产品窗已交付：新增 src/os/evidence_parity.py，只读静态判读每个旧证据脚本是否完整做齐五道仪式腿（双腿/判据摘要/单写者 utf-8 LF/相邻批次/实时闸行），每腿输出 PRESENT / MISSING / DIFFERENT，判据 AC-EVP1..AC-EVP6 在队列行内先于代码预注册；套件 6/6 双跑同一 digest。实况读数：92 个旧脚本中仅 6 个五腿全齐，逐腿缺口第一次可量化。",
+  "latest_artifact": "qa/evidence-parity-R2282.log（1550B，双腿同一 digest 610E03314512DFE8 + 五个相邻套件全绿，经 R2261 evidence_capture 单写者出件）与 qa/evidence-parity-live-R2282.log（573B，实况堆读数 92 脚本 / 6 全齐，逐腿 present/missing/different）",
+  "next_milestone": "R2283 先跑已提交树的验证窗（预注册 +1 套件/+6 判据 → 447 套件 / 3658 判据），再回产品面取 tech 队头 line 354（AC-SLC1，stamp_locator 种子，判据已在行内预注册）",
+  "next_milestone_due": "2026-11-02T19:56:30+08:00",
+  "last_artifact": "qa/evidence-parity-R2282.log（1550B，双腿同一 digest 610E03314512DFE8 + 五个相邻套件全绿，经 R2261 evidence_capture 单写者出件）与 qa/evidence-parity-live-R2282.log（573B，实况堆读数 92 脚本 / 6 全齐，逐腿 present/missing/different）"
  },
  "depts": [
   {
@@ -255,7 +255,7 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2281",
+   "2282",
    "OSLoop 执行 tick"
   ],
   [
@@ -274,15 +274,19 @@
   [
    "R2281",
    "R2281 verification window on the debt register first item (reconcile-battery-R2281), discharged on the committed R2280 tree 5d4038f7 with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 446/446 suites + controls 7/7 in 917.8s, criteria total 3652 - exactly the pre-registered +1 suite / +6 criteria against R2279 (445/3646) from the os-queue-done-stamp-exempt suite. Four follow-up sections all PASS after the matrix regeneration (43126B, byte-identical), fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN, VERDICT R2281 PASS. Register closed through its own writer and product-face-R2282 opened first=yes; honest score 0 product points."
+  ],
+  [
+   "R2282",
+   "R2282 product window on the debt register first item (product-face-R2282): claimed the top deliverable tech row (state/queue/tech.md:347, prefix AC-EVP1, the R2261 evidence_parity seed) whose AC-EVP1..AC-EVP6 were pinned in that row BEFORE the code, after a fresh zero-occupancy anchor check at HEAD 2026-10-31. Shipped src/os/evidence_parity.py plus src/os/test_evidence_parity.py: one read-only reader classifies the five ritual legs in the pinned order two-legs / criteria-digest / single-writer / adjacent-batch / live-gate as PRESENT / MISSING / DIFFERENT by static analysis only, where PRESENT needs a positive marker AND its shape and a mismatched shape reads DIFFERENT rather than being rounded up; the judged script is never executed, nothing is written and no clock is read. SUITE PASS 6/6 double-run identical digest 610E03314512DFE8 with five adjacent os suites green (qa/evidence-parity-R2282.log, 1550B, single writer utf-8 LF through the R2261 capture callable), wired os-evidence-parity(6). LIVE pile: 92 scripts, 6 fully ALL-PRESENT, per-leg two-legs 14/73/5, criteria-digest 27/12/53, single-writer 60/0/32, adjacent-batch 16/75/1, live-gate 6/82/4. One real gap row seeded to hold the tech floor (evidence_output_map, AC-EOM1..AC-EOM6 pre-registered). Register closed and reconcile-battery-R2283 opened first=yes through the shipped writers; honest score 2 product points."
   ]
  ],
  "self_drive": {
   "window": "2026-10-25..2026-10-31",
   "window_days": 7,
-  "log_lines_in_window": 13,
+  "log_lines_in_window": 7,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 12,
+  "substantive_non_idle_mention_lines": 6,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

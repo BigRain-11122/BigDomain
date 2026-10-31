@@ -4538,6 +4538,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-done-stamp-exempt",
      os.path.join("..", "os", "test_queue_done_stamp_exempt.py"), 6),
+    # R2282: the legacy per-round evidence pile cannot be retired on a hunch.
+    # One read-only reader classifies each of the five ritual legs PRESENT /
+    # MISSING / DIFFERENT by static analysis, so retirement becomes one script
+    # at a time with evidence instead of a bulk delete.
+    # (AC-EVP1..AC-EVP6 pinned in state/queue/tech.md as the R2261 seed row
+    # BEFORE the code existed.)
+    ("os-evidence-parity",
+     os.path.join("..", "os", "test_evidence_parity.py"), 6),
     ]
 
 FAILS = 0

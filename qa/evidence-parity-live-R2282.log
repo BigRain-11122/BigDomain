@@ -1,0 +1,9 @@
+RUN rc=0 --script src/os/evidence_R2259.py
+EVIDENCE PARITY script=src/os/evidence_R2259.py bytes=3857 sha16=3c2fcbf1f0497013 legs=5 present=5 missing=0 different=0 verdict=ALL-PRESENT
+RUN rc=2 --dir src/os
+EVIDENCE PARITY PILE dir=src/os pattern=evidence_R*.py scripts=92 unreadable=0 all_present=6 verdict=PARITY-DEBT
+LEG two-legs present=14 missing=73 different=5
+LEG criteria-digest present=27 missing=12 different=53
+LEG single-writer present=60 missing=0 different=32
+LEG adjacent-batch present=16 missing=75 different=1
+LEG live-gate present=6 missing=82 different=4
