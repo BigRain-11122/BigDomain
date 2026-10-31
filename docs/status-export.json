@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T05:48:53+08:00",
-  "do": "R2312 产品轮：零点路由表的闸门声明终于有了写入器——加一条 blocker 不再手改 JSON",
+  "export_ts": "2026-11-01T06:13:51+08:00",
+  "do": "R2313 验证轮：在已提交树上把 463 支套件全跑一遍——全绿，判据 3754 与预注册分毫不差",
   "ceo_face": {
-    "current": "R2312 产品窗。五静扫描开轮干净（git status 空、无 index.lock；decisions.md 289 行等于基线 289 行；集团台账三条 @BigDomain 巡查行已清，最后一条 P-20261026-0930 在 R2311 编号回执；集团 orders 尾行维持 2026-10-31 18:23；基准 2026-10-29 在七天闸内）。债务闸指向的 product-face-R2310 说明已陈旧（该面在 R2310 已交付），故改用 queue_head 实读队头=第 374 行 前缀 AC-GDA1（R2300 种子行，AC-GDA1..AC-GDA6 六条判据在写码之前就钉在该行内）。交付：src/os/gate_decl_append.py + src/os/test_gate_decl_append.py。state/machine_gates.json 此前只有读器与漂移读器、没有写入器，任何 blocker 都只能手改 JSON——手改正是身份摘要变陈旧、能力拼错到批量跑才炸的来路。写入器：收 identity/capability/reason/declared_by，用 machine_gate 自己的词表校验，任何字节变动之前先拒重复身份、未知能力与第二份声明头；按文本拼接插一条进 gates 数组（既有条目逐字节不动），再把后文过 machine_gate 重解析并要求恰好新增一条；默认干跑给出前后字节数，执行只做一次原子替换、回读字节等于预测、不留临时文件。一条法则两个入口：machine_gate.read_declaration 现委托给新增的 read_declaration_text，写入器问的是那个早已拒绝一切缺陷的读器，而不是自己再抄一份形状。套件两跑 6/6 判据摘要一致，三支相邻闸门套件同时绿（gate_drift 6/6、machine_gate 6/6、residue_triage 6/6），证据 qa/gate-decl-append-R2312.log 1268B 单写器 utf-8 LF 经 evidence_capture。实读：对真声明干跑读 declarations=1->2 bytes=427->567 且一字未写；重复声明在役身份 -#02878cdc 被 E_GDA_DUP 拒并点名该字段。本轮得 2 分（可跑实物+套件）。",
-    "latest_artifact": "src/os/gate_decl_append.py + src/os/test_gate_decl_append.py（套件 6/6 两跑摘要一致，相邻三支闸门套件绿）；证据 qa/gate-decl-append-R2312.log 1268B；2026-11-01",
-    "next_milestone": "R2313 回到验证面：在已提交树上跑全量电池（预算 463 套件 / 3754 判据，比 R2311 的 462/3748 恰多本轮一支 6 判据套件），再跑四段跟进并重生成套件矩阵；48 小时内",
-    "next_milestone_due": "2026-11-03T05:48:53+08:00",
-    "last_artifact": "qa/gate-decl-append-R2312.log"
+    "current": "R2313 验证窗。五静扫描开轮干净（git status 空、无 index.lock；decisions.md 289 行等于基线 289 行且 token 差集为空；集团台账三条 @BigDomain 巡查行已清，最后一条 P-20261026-0930 在 R2311 编号回执；集团 orders 尾行维持 2026-10-31 18:23；基准 2026-10-29 在七天闸内）。债务闸指名唯一 first=yes 行 product-face-R2313，说明是最新的，故本轮按 R2168 混合树律零产品改动做纯验证。结果：在已提交的 R2312 树 21ea75c9 上跑全量电池=运行器 PASS 463/463 套件全绿外加控制 7/7，耗时 800.3 秒，出生点回收 932/932 世界 326.57 MiB、零失败，判据总数 3754——恰好比 R2311 的 462/3748 多出 R2312 那支六判据套件，预注册与实测完全对上。证据 qa/reconcile-all-R2313.log 783785B，单写器 utf-8 LF 经 battery_stream。随后四段跟进：矩阵段先按设计 FAIL 并拒绝改写陈旧文档（盘上 44406B、重生成 44486B），用 suite_matrix 重生成到 463 套件/3754 判据后再跑四段全 PASS（矩阵逐字节一致、指纹 CLEAN 5 域、画像 --daily --check 逐字节一致、普查 DRIFT-CLEAN），VERDICT R2313 PASS。最后做债务说明要求的活读：重复声明在役身份 -#02878cdc 被 E_GDA_DUP 拒于 exit 2 且声明文件哈希一字未动。本轮零产品分，产品面留给 R2314。",
+    "latest_artifact": "qa/reconcile-all-R2313.log（463/463 全绿 + 控制 7/7，判据 3754，四段跟进全 PASS）；docs/sandbox-suite-matrix.md 重生成至 463 套件/3754 判据 44486B；2026-11-01",
+    "next_milestone": "R2314 回到产品面：给闸门声明配一支身份读器（gate_decl_identity，判据 AC-GDI1..AC-GDI6 已先钉在队头种子行内），让「声明指向的行到底存不存在」成为可读结论而不是沉默；48 小时内",
+    "next_milestone_due": "2026-11-03T06:13:51+08:00",
+    "last_artifact": "qa/reconcile-all-R2313.log"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/reconcile-all-R2313.log",
+      "on",
+      "R2313 verification: full reconcile battery on the committed R2312 tree read 463/463 suites green plus controls 7/7 with criteria 3754 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the live duplicate-declaration probe refused E_GDA_DUP with the declaration byte-stable"
+    ],
     [
       "qa/gate-decl-append-R2312.log",
       "on",
@@ -239,6 +244,10 @@
   ],
   "results": [
     [
+      "R2313",
+      "R2313 verification: full reconcile battery on the committed R2312 tree read 463/463 suites green plus controls 7/7 with criteria 3754 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the live duplicate-declaration probe refused E_GDA_DUP with the declaration byte-stable"
+    ],
+    [
       "R2312",
       "R2312 product face shipped: one gate-declaration writer that imports machine_gate's own shape law, refuses duplicates and unknown capabilities before any byte, splices as text, and proves its own read-back; suite 6/6 twice plus three adjacent gate suites green"
     ],
@@ -431,7 +440,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2312",
+      "2313",
       "OSLoop 执行 tick"
     ],
     [
@@ -495,7 +504,7 @@
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   }
 }

@@ -1,0 +1,9 @@
+{
+  "do": "R2313 验证轮：在已提交树上把 463 支套件全跑一遍——全绿，判据 3754 与预注册分毫不差",
+  "current": "R2313 验证窗。五静扫描开轮干净（git status 空、无 index.lock；decisions.md 289 行等于基线 289 行且 token 差集为空；集团台账三条 @BigDomain 巡查行已清，最后一条 P-20261026-0930 在 R2311 编号回执；集团 orders 尾行维持 2026-10-31 18:23；基准 2026-10-29 在七天闸内）。债务闸指名唯一 first=yes 行 product-face-R2313，说明是最新的，故本轮按 R2168 混合树律零产品改动做纯验证。结果：在已提交的 R2312 树 21ea75c9 上跑全量电池=运行器 PASS 463/463 套件全绿外加控制 7/7，耗时 800.3 秒，出生点回收 932/932 世界 326.57 MiB、零失败，判据总数 3754——恰好比 R2311 的 462/3748 多出 R2312 那支六判据套件，预注册与实测完全对上。证据 qa/reconcile-all-R2313.log 783785B，单写器 utf-8 LF 经 battery_stream。随后四段跟进：矩阵段先按设计 FAIL 并拒绝改写陈旧文档（盘上 44406B、重生成 44486B），用 suite_matrix 重生成到 463 套件/3754 判据后再跑四段全 PASS（矩阵逐字节一致、指纹 CLEAN 5 域、画像 --daily --check 逐字节一致、普查 DRIFT-CLEAN），VERDICT R2313 PASS。最后做债务说明要求的活读：重复声明在役身份 -#02878cdc 被 E_GDA_DUP 拒于 exit 2 且声明文件哈希一字未动。本轮零产品分，产品面留给 R2314。",
+  "latest": "qa/reconcile-all-R2313.log（463/463 全绿 + 控制 7/7，判据 3754，四段跟进全 PASS）；docs/sandbox-suite-matrix.md 重生成至 463 套件/3754 判据 44486B；2026-11-01",
+  "next": "R2314 回到产品面：给闸门声明配一支身份读器（gate_decl_identity，判据 AC-GDI1..AC-GDI6 已先钉在队头种子行内），让「声明指向的行到底存不存在」成为可读结论而不是沉默；48 小时内",
+  "last": "qa/reconcile-all-R2313.log",
+  "result": "R2313 verification: full reconcile battery on the committed R2312 tree read 463/463 suites green plus controls 7/7 with criteria 3754 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the live duplicate-declaration probe refused E_GDA_DUP with the declaration byte-stable",
+  "out": "qa/reconcile-all-R2313.log"
+}
