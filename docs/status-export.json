@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T06:54:49+08:00",
-  "do": "R2315 双件窗：先在已提交树上把 464 支套件全跑一遍（全绿，判据 3760 与预注册分毫不差），再把闸门声明写入器接到身份读器上——地址错了就一个字都不落盘",
+  "export_ts": "2026-11-01T07:48:57+08:00",
+  "do": "R2316 验证轮带修复：R2315 树上第一次全量对账是红的（463/465）3 条断言失败），两个根因均是真缺陷：R2315 三份证据被 shell 重定向写成 pwsh 方言（普查 cd7 DRIFT-FLAG x3），以及实时残留 187 轮对 一个 186 轮的三分类声明（R2300 未分类）（。修复在出生地：一个 python 单写者重生成证据，R2300 按板单行与 commit b6bf3a38 补登记；重跑 465/465 全绿、判据 3766 与预注册一致。",
   "ceo_face": {
-    "current": "R2315 窗。开轮五静干净（git status 空、无 index.lock；decisions 令牌差集为空；集团台账三行巡查已清、无未回编号；orders 尾行维持 2026-10-31 18:23；基线 10-29 在七天闸内）。债务闸指名唯一 first=yes 行，本轮先做纯验证（R2168 混合树律，零产品改动到全绿为止）：已提交树 99a47702 上跑全量电池＝RUNNER PASS 464/464 套件全绿＋控制 7/7，834.4 秒，出生点回收 932/932 世界 326.57 MiB、零失败，判据 3760——正是预注册的 +1 套件/+6 判据，预测与实测分毫不差。随后四段跟进：矩阵段先按设计 FAIL 且拒绝改写陈旧文档（44486B 对 44573B），suite_matrix 重生成到 464 套件/3760 判据后复跑四段全 PASS。再做产品面：gate_decl_identity_wire 让写入器先问身份读器，UNMATCHED/AMBIGUOUS 在落任何字节前拒绝并列出载体行，MATCHED 仍是重复拒绝，只有 MATCHED 才交给原写入器。套件 6/6 连跑两次同一摘要，相邻四套件全绿；实弹：R2314 的 --identity '-' 现在以 E_GDIW_AMBIGUOUS 拒于 exit 2 并点名 281 个共享载体，声明文件一字未动。",
-    "latest_artifact": "src/os/gate_decl_identity_wire.py＋test_gate_decl_identity_wire.py（6 判据双跑同一 sha16 669cc7f355d76d38，相邻四闸套件全绿）与 qa/reconcile-all-R2315.log（464/464 全绿＋控制 7/7，判据 3760，四段跟进全 PASS），2026-11-01",
-    "next_milestone": "R2316 首项＝在已提交的 R2315 树上跑全量电池（预注册 465 套件/3766 判据），再回产品面队头；48 小时内",
-    "next_milestone_due": "2026-11-03T06:54:49+08:00",
-    "last_artifact": "qa/reconcile-all-R2315.log"
+    "current": "R2316 本轮为验证与修复窗：已提交树 886743c8 上全量对账重跑读 RUNNER PASS 465/465 套件 + 控制 7/7，判据 3766 条与预注册完全一致（4个跟段全 PASS）；环境面未变：orders 尾行仍为 2026-10-31 18:23，decisions 无新行，台账开项仅剩 S4U 重注册一项（需提权窗口）；本轮无产品代码改动，诚实计 0 分。",
+    "latest_artifact": "qa/reconcile-all-R2316-run2.log（465/465 全绿、判据 3766、控制 7/7、842.2 秒）+ src/os/repair_R2316.py（两处缺陷出生地修复），2026-11-01",
+    "next_milestone": "R2317 回产品面：state/queue/tech.md:376 AC-GDRT1 gate_decl_retire（门声明退役）先做零占用锚检、再出模块+套件，提交后才跑电池",
+    "next_milestone_due": "2026-11-03T07:48:57+08:00",
+    "last_artifact": "qa/reconcile-all-R2316-run2.log（465/465 全绿、判据 3766、控制 7/7、842.2 秒）+ src/os/repair_R2316.py（两处缺陷出生地修复），2026-11-01"
   },
   "depts": [
     {
@@ -36,11 +36,6 @@
     }
   ],
   "outs": [
-    [
-      "src/os/gate_decl_identity_wire.py",
-      "on",
-      "R2315 verification plus product: battery on the committed R2314 tree read 464/464 suites green plus controls 7/7 with criteria 3760 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the new gate_decl_identity_wire face refuses an UNMATCHED/AMBIGUOUS identity before any byte (suite 6/6 twice, live '-' refused E_GDIW_AMBIGUOUS over 281 carriers)"
-    ],
     [
       "qa/reconcile-all-R2313.log",
       "on",
@@ -245,9 +240,18 @@
       "the age of every accepted exemption is now readable, so a waiver granted while the world looked one way cannot quietly become permanent",
       "on",
       "src/os/exempt_review.py (6 criteria, qa/exempt-review-R2292.log); the window is a caller argument and the CLI default is printed so a reading always names the window that produced it"
+    ],
+    [
+      "src/os/repair_R2316.py",
+      "on",
+      "R2316 repair: regenerates the three shell-captured R2315 evidence files from a fresh double suite run plus the live refusal through one utf-8 LF writer (census flags 3 -> 0), and appends the R2300 triage entry as a minimal text insertion (186 -> 187 entries, every existing entry byte-intact); the re-run battery read 465/465 green"
     ]
   ],
   "results": [
+    [
+      "R2316",
+      "the first battery on the R2315 tree was red for two real reasons and both were repaired at their birth sites: three shell-captured evidence files were regenerated through one python writer, and round R2300 was triaged DELIVERED off the board row and commit b6bf3a38 so the live residue reads TRIAGED 187/187; the re-run on the committed tree read 465/465 suites, controls 7/7, criteria 3766 exactly as pre-registered, and all four follow-up sections PASS after suite_matrix regenerated the stale doc"
+    ],
     [
       "R2315",
       "R2315 verification plus product: battery on the committed R2314 tree read 464/464 suites green plus controls 7/7 with criteria 3760 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the new gate_decl_identity_wire face refuses an UNMATCHED/AMBIGUOUS identity before any byte (suite 6/6 twice, live '-' refused E_GDIW_AMBIGUOUS over 281 carriers)"
@@ -500,11 +504,6 @@
     [
       "R2291",
       "R2291 verification window on the debt register first item (reconcile-battery-R2291), discharged on the committed R2290 tree 62a4922a with zero product edits until green (the R2168 mixed-tree rule): full reconcile battery = RUNNER PASS 451/451 suites green plus controls 7/7 in 793.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2291.log, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), criteria total 3682 - exactly the pre-registered +1 suite / +6 criteria against R2289 (450/3676) from the os-debt-item-unique suite, so the prediction matched the measurement with no correction. Four follow-up sections then ran through src/os/battery_followup.py: the matrix section FAILED first on the stale doc (on-disk=43456B regenerated=43512B) and did NOT rewrite it, which is the designed order; src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 451 suites / 3682 criteria (43512B) and the re-run read all four sections PASS (matrix byte-identical, fingerprint CLEAN 5 domains, profile --daily --check byte-identical, census DRIFT-CLEAN), closing on VERDICT R2291 PASS. Register closed through its own writer (debt_close line=63, open 2->1, done 40->41, readback ok) and product-face-R2292 opened first=yes through debt_append (before=38199B after=38983B, readback ok) naming the tech head at state/queue/tech.md:358 prefix AC-EXR1. Honest score: a 0-point verification window with no product face; the closeout crossed the waterline by 698B and was folded as fold 599 over log lines 6..9 (the R2277 block, 6 tokens covered, 79198B -> 74031B at margin 4469B) with the four ledger suites re-run 8/8 afterwards."
-    ],
-    [
-      "R2292",
-      "an accepted waiver becomes a dated reading instead of a permanent one: src/os/exempt_review.py ages every declared exemption against a passed round, reports each stale entry with BOTH rounds, treats a declared until round as the end of an acceptance, and refuses a declared round later than the round being checked (E_EXR_FUTURE); the declaration law is imported from queue_row_exempt and proven by patching it. SUITE PASS 6/6 double-run identical with five adjacent suites green, wired os-exempt-review(6). LIVE: 9 entries, age 16, window 100, REVIEW-CLEAN.",
-      "R2292"
     ]
   ],
   "self_drive": {
