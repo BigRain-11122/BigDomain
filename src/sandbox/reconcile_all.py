@@ -4546,6 +4546,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-evidence-parity",
      os.path.join("..", "os", "test_evidence_parity.py"), 6),
+    # R2284: the declared-floor reading names rounds that stamped a queue row
+    # and left no log item, and triaging one was still a hand grep. One
+    # read-only locator answers which queue rows carry a round's done stamp -
+    # file, line, row head and whether the row is closed - with the stamp law
+    # imported from state_seq and the row-closed law from queue_floor.
+    # (AC-SLC1..AC-SLC6 pinned in state/queue/tech.md as the R2269 seed row
+    # BEFORE the code existed.)
+    ("os-stamp-locator",
+     os.path.join("..", "os", "test_stamp_locator.py"), 6),
     ]
 
 FAILS = 0

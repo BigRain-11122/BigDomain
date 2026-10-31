@@ -1,12 +1,12 @@
 {
- "export_ts": "2026-10-31T20:22:30+08:00",
- "do": "verification window: the whole 447-suite reconcile battery ran on the committed tree so the newest product face is covered by the full registry instead of only its own suite; zero product edits until green",
+ "export_ts": "2026-10-31T20:38:00+08:00",
+ "do": "product window on the debt register first item: a round's done stamp is now a reading (file, line, row head, closed marker) instead of a hand grep, with the stamp law imported from state_seq and the row law from queue_floor",
  "ceo_face": {
-  "current": "R2283 验证窗已交付：在已提交树 2332496b 上跑全量对账电池，447/447 套件全绿 + 7/7 对账控制项，940.1s，判据总数 3658——与预注册的 +1 套件/+6 判据完全吻合；四段跟随后验（矩阵重建 43205B 字节一致 / 指纹链 CLEAN 5 域 / runner 日档字节一致 / 写者普查 DRIFT-CLEAN）全部 PASS，矩阵段先按设计 FAIL 且未改写。",
-  "latest_artifact": "qa/reconcile-all-R2283.log（775329B，单写者 utf-8 LF，成于 src/os/battery_stream.py；RUNNER PASS 447/447 + controls 7/7）与 docs/sandbox-suite-matrix.md（43205B，447 套件 / 3658 判据）",
-  "next_milestone": "R2284 回产品面：取 tech 队头 state/queue/tech.md:354（AC-SLC1，stamp_locator 种子，六条判据已在行内先于代码预注册），把 NEVER-LOGGED 印记残留变成可命名的证据链（文件/行号/行首/开闭标记）",
-  "next_milestone_due": "2026-11-02T20:22:30+08:00",
-  "last_artifact": "qa/reconcile-all-R2283.log（775329B，单写者 utf-8 LF，成于 src/os/battery_stream.py；RUNNER PASS 447/447 + controls 7/7）与 docs/sandbox-suite-matrix.md（43205B，447 套件 / 3658 判据）"
+  "current": "R2284 产品窗：取 tech 队头 state/queue/tech.md:354（AC-SLC1 的 stamp_locator 种子），交付 src/os/stamp_locator.py 与其套件——某个轮次的 done 印章现在是一次读数（文件/行号/行首/是否已关闭），不再是手工 grep；套件 6/6 双跑同一、五邻域全绿。",
+  "latest_artifact": "src/os/stamp_locator.py + src/os/test_stamp_locator.py；qa/stamp-locator-R2284.log（1204B，双腿同一，相邻 5 套件全绿）；活读数 STAMP LOCATOR round=R2250 hits=1 verdict=HITS",
+  "next_milestone": "R2285 验证窗：在已提交树上跑全量 reconcile 电池（预期 +1 套件 / +6 判据，即 os-stamp-locator 入册），再做四段 follow-up。",
+  "next_milestone_due": "2026-11-02T20:38:00+08:00",
+  "last_artifact": "src/os/stamp_locator.py + src/os/test_stamp_locator.py；qa/stamp-locator-R2284.log（1204B，双腿同一，相邻 5 套件全绿）；活读数 STAMP LOCATOR round=R2250 hits=1 verdict=HITS"
  },
  "depts": [
   {
@@ -255,7 +255,7 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2283",
+   "2284",
    "OSLoop 执行 tick"
   ],
   [
@@ -280,17 +280,17 @@
    "R2282 product window on the debt register first item (product-face-R2282): claimed the top deliverable tech row (state/queue/tech.md:347, prefix AC-EVP1, the R2261 evidence_parity seed) whose AC-EVP1..AC-EVP6 were pinned in that row BEFORE the code, after a fresh zero-occupancy anchor check at HEAD 2026-10-31. Shipped src/os/evidence_parity.py plus src/os/test_evidence_parity.py: one read-only reader classifies the five ritual legs in the pinned order two-legs / criteria-digest / single-writer / adjacent-batch / live-gate as PRESENT / MISSING / DIFFERENT by static analysis only, where PRESENT needs a positive marker AND its shape and a mismatched shape reads DIFFERENT rather than being rounded up; the judged script is never executed, nothing is written and no clock is read. SUITE PASS 6/6 double-run identical digest 610E03314512DFE8 with five adjacent os suites green (qa/evidence-parity-R2282.log, 1550B, single writer utf-8 LF through the R2261 capture callable), wired os-evidence-parity(6). LIVE pile: 92 scripts, 6 fully ALL-PRESENT, per-leg two-legs 14/73/5, criteria-digest 27/12/53, single-writer 60/0/32, adjacent-batch 16/75/1, live-gate 6/82/4. One real gap row seeded to hold the tech floor (evidence_output_map, AC-EOM1..AC-EOM6 pre-registered). Register closed and reconcile-battery-R2283 opened first=yes through the shipped writers; honest score 2 product points."
   ],
   [
-   "R2283",
-   "R2283 verification window on the debt register first item (reconcile-battery-R2283), discharged on the committed R2282 tree 2332496b with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 447/447 suites + controls 7/7 in 940.1s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2283.log, 775329B, single writer utf-8 LF through src/os/battery_stream.py), criteria total 3658 - exactly the pre-registered +1 suite / +6 criteria against R2281 (446/3652) from the os-evidence-parity suite, so the prediction matched with no correction. Four follow-up sections all PASS after the matrix regeneration (43205B byte-identical), fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN, VERDICT R2283 PASS. Register closed through its own writer (line=55, open 2->1, done 32->33, readback ok) and product-face-R2284 opened first=yes naming the tech head state/queue/tech.md:354 prefix AC-SLC1 (before=33390B after=34202B, readback ok); honest score 0 product points, and no state fold was due at 42015B against the 78500B waterline."
+   "R2284",
+   "R2284 product window on the debt register first item (product-face-R2284), discharged on the tech head state/queue/tech.md:354 prefix AC-SLC1 after a fresh zero-occupancy anchor check at HEAD: src/os/stamp_locator.py plus src/os/test_stamp_locator.py, AC-SLC1..AC-SLC6 already pinned in the R2269 seed row BEFORE the code. The locator answers which queue rows carry a round's done stamp - file, line, row head and closed marker - with the stamp law imported from state_seq and the row-closed law imported from queue_floor, each proven by patching it; NO-HITS reads honestly at exit 2, a missing queue directory refuses at 3, bad flags at 5, and the reader writes nothing and reads no clock. SUITE PASS 6/6 double-run identical through the evidence_capture callable with five adjacent os suites green (qa/stamp-locator-R2284.log, 1204B). LIVE: round=R2250 hits=1 verdict=HITS at state/queue/tech.md:5 closed=yes - the residue the declared-floor gate names really is on a closed row. The claim dropped tech claimable to 9, so one real gap row was seeded (stamp_residue, AC-SRS1..AC-SRS6 pre-registered, five anchors zero-occupancy) and the gauge closed FLOOR-MET 5/5 10/10 10/10. Register closed through its own writer (line=56, open 2->1, done 33->34) and product-face-R2285 opened first=yes naming the committed-tree battery; honest score 2 product points, no state fold due at 46353B against the 78500B waterline."
   ]
  ],
  "self_drive": {
   "window": "2026-10-25..2026-10-31",
   "window_days": 7,
-  "log_lines_in_window": 8,
+  "log_lines_in_window": 9,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 7,
+  "substantive_non_idle_mention_lines": 8,
   "proposals_total": 5,
   "proposals_open": 3,
   "queue_main_open": 6,

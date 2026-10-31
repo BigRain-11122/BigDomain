@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2284 suite=src/os/test_stamp_locator.py legs=2
+== LEG A rc=0 digest=A1607E19C67FAB5C
+stamp_locator suite (expected criteria 6)
+PASS AC-SLC1 stamp law imported from state_seq
+PASS AC-SLC2 hits carry file/line/head/closed, count matches
+PASS AC-SLC3 no stamp reads NO-HITS at exit 2
+PASS AC-SLC4 zero writes, reproducible, no clock
+PASS AC-SLC5 CLI codes and byte-stable --json
+PASS AC-SLC6 pure, imported row law, wired, zero writes
+SUITE PASS 6/6
+== LEG B rc=0 digest=A1607E19C67FAB5C
+stamp_locator suite (expected criteria 6)
+PASS AC-SLC1 stamp law imported from state_seq
+PASS AC-SLC2 hits carry file/line/head/closed, count matches
+PASS AC-SLC3 no stamp reads NO-HITS at exit 2
+PASS AC-SLC4 zero writes, reproducible, no clock
+PASS AC-SLC5 CLI codes and byte-stable --json
+PASS AC-SLC6 pure, imported row law, wired, zero writes
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_done_stamp.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=A1607E19C67FAB5C
