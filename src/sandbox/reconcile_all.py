@@ -4515,6 +4515,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-row-exempt",
      os.path.join("..", "os", "test_queue_row_exempt.py"), 6),
+    # R2278: queue_row gates every claimable OPEN row on naming its criteria
+    # prefix and says nothing about a row that is already closed, so a done
+    # row could land with no window stamp, with a stamp naming no window, or
+    # with a round earlier than the round the row was opened in. This reads
+    # the done rows of the three queues and makes the trace a check: only a
+    # resolved window counts, a date alone does not (several rounds share a
+    # day), and a stamp that predates its own seed round is refused with both
+    # rounds named. The row law is imported from queue_floor.
+    # (AC-QDS1..AC-QDS6 pinned in state/queue/tech.md as the R2255 seed row
+    # BEFORE the code existed.)
+    ("os-queue-done-stamp",
+     os.path.join("..", "os", "test_queue_done_stamp.py"), 6),
     ]
 
 FAILS = 0

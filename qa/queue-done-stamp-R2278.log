@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2278 suite=src/os/test_queue_done_stamp.py legs=2
+== LEG A rc=0 digest=18FED7F38801B3B0
+queue_done_stamp suite (expected criteria 6)
+PASS AC-QDS1 stamp forms resolve, a date alone is debt
+PASS AC-QDS2 unstamped done row is debt, counts reconcile
+PASS AC-QDS3 stamp before its own seed round refused
+PASS AC-QDS4 file and line point at the real row
+PASS AC-QDS5 honest empty and honest absent
+PASS AC-QDS6 pure, imported row law, wired, zero writes
+SUITE PASS 6/6
+== LEG B rc=0 digest=18FED7F38801B3B0
+queue_done_stamp suite (expected criteria 6)
+PASS AC-QDS1 stamp forms resolve, a date alone is debt
+PASS AC-QDS2 unstamped done row is debt, counts reconcile
+PASS AC-QDS3 stamp before its own seed round refused
+PASS AC-QDS4 file and line point at the real row
+PASS AC-QDS5 honest empty and honest absent
+PASS AC-QDS6 pure, imported row law, wired, zero writes
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_queue_row.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_row_exempt.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_only_reconcile.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=18FED7F38801B3B0
