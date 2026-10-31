@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T04:05:15+08:00",
-  "do": "R2306 验证窗：把 R2305 的评审窗口套件纳入整套见证（全量电池 459/459 套 + 四段 follow-up）",
+  "export_ts": "2026-11-01T04:16:52+08:00",
+  "do": "R2307 product window: the accepted-stamp declaration got its writer - a new closed row is now rendered in the declaration own shape, validated by its own reader and joined against the reviewer own live pairs, with three refusals before any byte changes.",
   "ceo_face": {
-    "current": "R2306 已完成全量电池见证：在已提交的 R2305 树 d813bfc8 上 459/459 套全绿、判据 3730（恰为预注册 +1 套 / +6 判据），四段 follow-up 复跑全 PASS",
-    "latest_artifact": "qa/reconcile-all-R2306.log（2026-11-01）+ docs/sandbox-suite-matrix.md 重生成至 459 套 / 3730 判据",
-    "next_milestone": "R2307 产品面：tech 队头 line 369 前缀 AC-SAP1 的 stamp_exempt_append（受格条目写入器），六判据已在行内预注册，窗口 ≤48h",
-    "next_milestone_due": "2026-11-03T04:05:15+08:00",
-    "last_artifact": "qa/reconcile-all-R2306.log"
+    "current": "R2307 shipped src/os/stamp_exempt_append.py + its suite: a NEW closed row can be declared instead of hand-typed into a 380-entry JSON. The declaration reader is the authority on shape, the live pair join is the reviewer own, a missing row / duplicate pair / ambiguous pair each refuse before any byte changes, a dry run predicts the exact post size and an executed append is one atomic replace proved by read-back. SUITE PASS 6/6 double-run with five adjacent suites green; wired os-stamp-exempt-append(6). Live CLI on the real 78774B declaration: both legs refused as designed and the file stayed byte-identical.",
+    "latest_artifact": "qa/stamp-exempt-append-R2307.log (2026-11-01, 850B) + src/os/stamp_exempt_append.py",
+    "next_milestone": "R2308 product face at the tech head line 370 prefix AC-EOA1 (evidence_output_audit seed, criteria already pinned in that row); the full reconcile battery carries as the successor row - window <=48h",
+    "next_milestone_due": "2026-11-03T04:16:52+08:00",
+    "last_artifact": "qa/stamp-exempt-append-R2307.log"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "src/os/stamp_exempt_append.py",
+      "on",
+      "R2307 product window: stamp_exempt_append shipped with its six pre-registered criteria pinned in the tech row before the code - one writer module plus suite, one real module defect and two this-window test defects caught before any evidence, two live refusals against the real 78774B declaration with the file proved byte-identical, one gap seed holding the tech floor, one waterline fold, and zero cloud calls."
+    ],
     [
       "qa/reconcile-all-R2306.log",
       "on",
@@ -214,6 +219,10 @@
   ],
   "results": [
     [
+      "R2307",
+      "R2307 product window: stamp_exempt_append shipped with its six pre-registered criteria pinned in the tech row before the code - one writer module plus suite, one real module defect and two this-window test defects caught before any evidence, two live refusals against the real 78774B declaration with the file proved byte-identical, one gap seed holding the tech floor, one waterline fold, and zero cloud calls."
+    ],
+    [
       "R2306",
       "R2306 verification window: full reconcile battery on the committed R2305 tree d813bfc8 with an empty git status before the run - RUNNER PASS 459/459 suites plus controls 7/7 in 838.2s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy zero failed zero, criteria total 3730 exactly the pre-registered plus 1 suite plus 6 criteria against R2304 (458/3724) from the os-review-window suite; four follow-up sections read PASS after the matrix section refused to rewrite the stale doc (on-disk 44075B vs regenerated 44151B) and suite_matrix regenerated docs/sandbox-suite-matrix.md to 459 suites / 3730 criteria at 44151B; register closed and the successor names the product face at tech head line 369 prefix AC-SAP1"
     ],
@@ -386,7 +395,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2306",
+      "2307",
       "OSLoop 执行 tick"
     ],
     [
@@ -443,10 +452,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

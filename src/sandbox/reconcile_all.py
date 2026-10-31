@@ -4663,6 +4663,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-exempt-review",
      os.path.join("..", "os", "test_stamp_exempt_review.py"), 6),
+    # R2307: accepting a NEW closed row written instead of hand-typed - the
+    # entry is rendered in the declaration own shape and validated BY THE
+    # READER, the live (queue, identity) join is the reviewer own, a missing
+    # row / duplicate pair / ambiguous pair each refuse before any byte
+    # changes, a dry run predicts the exact post size, and an executed append
+    # is one atomic replace proved by read-back with no temp residue.
+    # (AC-SAP1..AC-SAP6 pinned in state/queue/tech.md as the R2294 seed row
+    # BEFORE the code existed.)
+    ("os-stamp-exempt-append",
+     os.path.join("..", "os", "test_stamp_exempt_append.py"), 6),
     ]
 
 FAILS = 0

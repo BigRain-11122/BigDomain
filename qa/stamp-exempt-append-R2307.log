@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2307 suite=src/os/test_stamp_exempt_append.py legs=2
+== LEG A rc=0 digest=46FC85EE67372C3A
+SUITE stamp_exempt_append (R2307) criteria=6
+PASS AC-SAP1
+PASS AC-SAP2
+PASS AC-SAP3
+PASS AC-SAP4
+PASS AC-SAP5
+PASS AC-SAP6
+SUITE RESULT passes=6 fails=0 criteria=6
+== LEG B rc=0 digest=46FC85EE67372C3A
+SUITE stamp_exempt_append (R2307) criteria=6
+PASS AC-SAP1
+PASS AC-SAP2
+PASS AC-SAP3
+PASS AC-SAP4
+PASS AC-SAP5
+PASS AC-SAP6
+SUITE RESULT passes=6 fails=0 criteria=6
+== ADJACENT 5
+== src/os/test_stamp_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_done_stamp_exempt.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_queue_done_stamp.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window.py rc=0 SUITE PASS 6/6
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=46FC85EE67372C3A
