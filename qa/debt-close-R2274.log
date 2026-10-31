@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2274 suite=src/os/test_debt_close.py legs=2
+== LEG A rc=0 digest=9070F8AEA6D15B78
+PASS AC-DEBC1 one row closed, counts move by one, no first left behind
+PASS AC-DEBC2 unknown, already-done and ambiguous refused, bytes unchanged
+PASS AC-DEBC3 predating or malformed round refused, first flag dropped
+PASS AC-DEBC4 unparseable register refused; read-back goes through register
+PASS AC-DEBC5 dry run predicts exactly, atomic write leaves no residue
+PASS AC-DEBC6 pure ASCII, stdlib only, wired, CLI 0/2/5, zero writes
+LIVE DEBT CLOSE item=loop-s4u-reconcile round=R2274 opened=R2231 line=43 open=2->1 done=23->24 before=27894B after=27898B wrote=no readback=n/a
+SUITE PASS 6/6
+== LEG B rc=0 digest=9070F8AEA6D15B78
+PASS AC-DEBC1 one row closed, counts move by one, no first left behind
+PASS AC-DEBC2 unknown, already-done and ambiguous refused, bytes unchanged
+PASS AC-DEBC3 predating or malformed round refused, first flag dropped
+PASS AC-DEBC4 unparseable register refused; read-back goes through register
+PASS AC-DEBC5 dry run predicts exactly, atomic write leaves no residue
+PASS AC-DEBC6 pure ASCII, stdlib only, wired, CLI 0/2/5, zero writes
+LIVE DEBT CLOSE item=loop-s4u-reconcile round=R2274 opened=R2231 line=43 open=2->1 done=23->24 before=27894B after=27898B wrote=no readback=n/a
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_debt_register.py rc=0 SUITE PASS 8/8
+== src/os/test_debt_append.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=9070F8AEA6D15B78

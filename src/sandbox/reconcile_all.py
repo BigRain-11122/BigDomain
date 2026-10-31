@@ -4494,6 +4494,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-battery-followup",
      os.path.join("..", "os", "test_battery_followup.py"), 6),
+    # R2274: debt_append gave the register a writer for OPEN rows, but closing
+    # one is still hand surgery - a window edits "- [ ]" to "- [x]" and types
+    # closed=R<n> by hand, so a wrong stamp or a closed row that keeps
+    # first=yes stays invisible until debt_register refuses the whole file.
+    # This callable closes exactly one row by item and proves the result
+    # through the register own parser and counter.
+    # (AC-DEBC1..AC-DEBC6 pinned in state/queue/tech.md as the R2251 seed row
+    # BEFORE the code existed.)
+    ("os-debt-close",
+     os.path.join("..", "os", "test_debt_close.py"), 6),
     ]
 
 FAILS = 0
