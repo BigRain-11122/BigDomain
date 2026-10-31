@@ -4557,6 +4557,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-evidence-parity",
      os.path.join("..", "os", "test_evidence_parity.py"), 6),
+    # R2296: parity says whether a legacy copy still performs the whole ritual,
+    # which is not enough to delete one. One read-only map reports per script
+    # the qa evidence paths it declares, every path two scripts both claim
+    # (naming both scripts and the declaration line) and the cited outputs no
+    # script declares, so retiring a script no longer silently deletes a file
+    # another author owns or breaks a citation the record still depends on.
+    # (AC-EOM1..AC-EOM6 pinned in state/queue/tech.md as the R2282 seed row
+    # BEFORE the code existed.)
+    ("os-evidence-output-map",
+     os.path.join("..", "os", "test_evidence_output_map.py"), 6),
     # R2284: the declared-floor reading names rounds that stamped a queue row
     # and left no log item, and triaging one was still a hand grep. One
     # read-only locator answers which queue rows carry a round's done stamp -

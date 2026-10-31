@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2296 suite=test_evidence_output_map.py legs=2
+== LEG A rc=0 digest=F9ABC32AFC68130B
+PASS AC-EOM1 scripts=4 rows=4 none_verdict=NONE
+PASS AC-EOM2 path=qa/shared-R9001.log scripts=.\evidence_R9001.py,.\evidence_R9002.py lines=11,11 declared_total=3 sum_rows=3 template=1
+PASS AC-EOM3 absent=qa/cited-R9005.log clean_verdict=CLEAN
+PASS AC-EOM4 files=4 unchanged=True
+PASS AC-EOM5 rc=0/2/3/5 json_stable=True
+PASS AC-EOM6 ascii=True imports=hashlib,json,os,re,sys wired=True
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=F9ABC32AFC68130B
+PASS AC-EOM1 scripts=4 rows=4 none_verdict=NONE
+PASS AC-EOM2 path=qa/shared-R9001.log scripts=.\evidence_R9001.py,.\evidence_R9002.py lines=11,11 declared_total=3 sum_rows=3 template=1
+PASS AC-EOM3 absent=qa/cited-R9005.log clean_verdict=CLEAN
+PASS AC-EOM4 files=4 unchanged=True
+PASS AC-EOM5 rc=0/2/3/5 json_stable=True
+PASS AC-EOM6 ascii=True imports=hashlib,json,os,re,sys wired=True
+SUITE PASS 6/6 criteria
+== ADJACENT 5
+== test_evidence_parity.py rc=0 SUITE PASS 6/6 criteria
+== test_seed_anchor.py rc=0 SUITE PASS 5/5
+== test_state_seq.py rc=0 SUITE PASS 6/6
+== test_queue_floor.py rc=0 SUITE PASS 8/8
+== test_queue_row.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=F9ABC32AFC68130B

@@ -1,0 +1,109 @@
+EVIDENCE OUTPUT MAP dir=src/os pattern=evidence_R*.py scripts=92 declared=164 collision=0 absent=16 verdict=FINDINGS
+ROW src/os\evidence_R1909.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1910.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1913.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1915.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1918.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1919.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1920.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1932.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1935.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1936.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1937.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1938.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1939.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1940.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1941.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1942.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1943.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1944.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1946.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1947.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1948.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1949.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1950.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1951.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1953.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1955.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1956.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1958.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1970.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1976.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1977.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1979.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1981.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1985.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1989.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1990.py count=2 verdict=DECLARED
+ROW src/os\evidence_R1992.py count=3 verdict=DECLARED
+ROW src/os\evidence_R1997.py count=1 verdict=DECLARED
+ROW src/os\evidence_R1999.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2006.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2007.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2008.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2009.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2017.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2018.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2021.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2023.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2024.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2025.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2026.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2028.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2029.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2030.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2035.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2036.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2043.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2044.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2070.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2111.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2119.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2128.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2142.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2144.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2161.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2181.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2182.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2183.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2184.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2188.py count=3 verdict=DECLARED
+ROW src/os\evidence_R2196.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2212.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2213.py count=0 verdict=NONE
+ROW src/os\evidence_R2231.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2232.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2234.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2236.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2237.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2238.py count=1 verdict=DECLARED
+ROW src/os\evidence_R2240.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2241.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2242.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2244.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2245.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2246.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2248.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2250.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2251.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2253.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2255.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2257.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2259.py count=2 verdict=DECLARED
+ROW src/os\evidence_R2261.py count=2 verdict=DECLARED
+ABSENT qa/stamp-locator-R2284.log cited_line=10
+ABSENT qa/reconcile-all-R2285.log cited_line=14
+ABSENT qa/machine-gate-R2286.log cited_line=18
+ABSENT qa/reconcile-all-R2287.log cited_line=22
+ABSENT qa/reconcile-all-<Rxxxx>.log cited_line=26
+ABSENT qa/followup-history-R2288.log cited_line=26
+ABSENT qa/reconcile-all-R2289.log cited_line=30
+ABSENT qa/reconcile-all-R2289-retry.log cited_line=30
+ABSENT qa/debt-item-unique-R2290.log cited_line=34
+ABSENT qa/reconcile-all-R2291.log cited_line=39
+ABSENT qa/exempt-review-R2292.log cited_line=43
+ABSENT qa/reconcile-all-R2293.log cited_line=47
+ABSENT qa/stamp-exempt-review-R2294.log cited_line=51
+ABSENT qa/reconcile-all-R2295.log cited_line=55
+ABSENT qa/evidence-output-map-R2296.log cited_line=59
+ABSENT qa/evidence-output-map-live-R2296.log cited_line=59
