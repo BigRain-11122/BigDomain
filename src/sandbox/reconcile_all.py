@@ -4623,6 +4623,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-retry-legs",
      os.path.join("..", "os", "test_followup_retry_legs.py"), 6),
+    # R2305: exempt_review ages every accepted entry against a window that
+    # arrives as a per-call argument, so two reviewers can read the SAME
+    # declaration as FRESH and STALE on the same day and neither reading is
+    # wrong. One pinned state/review_window.json plus a resolver that accepts
+    # exactly one shape, refuses a future declaration before it is used, reads
+    # a silent window bump as DRIFT with both rounds named, and hands back NO
+    # window for any unreadable or drifting state.
+    # (AC-RWD1..AC-RWD6 pinned in state/queue/tech.md as the R2292 seed row
+    # BEFORE the code existed.)
+    ("os-review-window",
+     os.path.join("..", "os", "test_review_window.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran

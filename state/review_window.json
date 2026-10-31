@@ -1,0 +1,12 @@
+{
+  "window": 100,
+  "declared_by": "R2305",
+  "reason": "exempt_review carried its staleness window as a per-call argument whose only default lived in the CLI, so two reviewers could read the same declaration as FRESH and STALE on the same day and neither reading was wrong; the live exempt declaration also carries no until on any entry, making the age window the only thing that can ever end a waiver. The window is hereby pinned and dated so it can only move through a new declaration row.",
+  "declarations": [
+    {
+      "window": 100,
+      "declared_by": "R2305",
+      "reason": "first explicit declaration, set equal to the exempt_review CLI default so the boundary is dated instead of inferred"
+    }
+  ]
+}

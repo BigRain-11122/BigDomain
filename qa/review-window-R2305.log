@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2305 suite=src/os/test_review_window.py legs=2
+== LEG A rc=0 digest=5EED97220EAC5742
+review_window_decl suite (expected criteria 6)
+PASS AC-RWD1 one pinned shape, five distinct refusal codes
+PASS AC-RWD2 disagreement names both windows
+PASS AC-RWD3 drift names both windows and both rounds
+PASS AC-RWD4 refuse rather than default, zero writes, no clock
+PASS AC-RWD5 CLI codes and byte-stable pinned json
+PASS AC-RWD6 pure source, wired, live declaration pinned
+SUITE PASS 6/6
+== LEG B rc=0 digest=5EED97220EAC5742
+review_window_decl suite (expected criteria 6)
+PASS AC-RWD1 one pinned shape, five distinct refusal codes
+PASS AC-RWD2 disagreement names both windows
+PASS AC-RWD3 drift names both windows and both rounds
+PASS AC-RWD4 refuse rather than default, zero writes, no clock
+PASS AC-RWD5 CLI codes and byte-stable pinned json
+PASS AC-RWD6 pure source, wired, live declaration pinned
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+== src/os/test_log_floor.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=5EED97220EAC5742

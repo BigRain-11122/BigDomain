@@ -1,0 +1,9 @@
+{
+  "do": "R2305 产品面：把评审窗口变成钉死并带日期的声明（state/review_window.json + src/os/review_window_decl.py）",
+  "current": "R2305 已交付 review_window_decl：六判据 AC-RWD1..AC-RWD6 先于代码钉在 tech 队头行内，套件 6/6 双跑同一，实况读 window=100 PINNED/AGREES 与 exempt_review 的 CLI 缺省一致",
+  "latest": "qa/review-window-R2305.log + src/os/review_window_decl.py + state/review_window.json（2026-11-01）",
+  "next": "R2306 全量电池：把 R2305 新套件纳入整套见证（预注册 +1 套件 / +6 判据，459/3730），窗口 ≤48h",
+  "last": "qa/review-window-R2305.log",
+  "out": "qa/review-window-R2305.log",
+  "result": "R2305 product window: review_window_decl shipped with its six pre-registered criteria pinned inside the R2292 seed row before the code - one pinned state/review_window.json plus a resolver that accepts exactly one shape, refuses a future declaration before it is used, reads a silent window bump as DRIFT naming both windows and both rounds, hands back NO window for any unreadable or drifting state, and compares a caller window instead of trusting it; suite PASS 6/6 double-run identical with five adjacent suites green (qa/review-window-R2305.log, 1270B, one utf-8 LF single writer), wired os-review-window(6), live reading window=100 declared=100 declared_by=R2305 verdict=AGREES"
+}
