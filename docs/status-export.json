@@ -1,12 +1,12 @@
 {
- "export_ts": "2026-10-31T19:40:00+08:00",
- "do": "product window: the 380 closed queue rows the window-stamp gate reports as debt became a dated acceptance instead of a permanent red",
+ "export_ts": "2026-10-31T19:41:43+08:00",
+ "do": "verification window: the full reconcile battery and the four follow-up sections re-proven on the committed tree with zero product edits, and the pre-registered delta matched the measurement exactly",
  "ceo_face": {
-  "current": "R2280 产品面：stamp 闸判负的 380 条已关闭队列行现在是一份带日期的接受记录，不再是永久红灯。新增 src/os/queue_done_stamp_exempt.py + 套件（AC-SEX1..AC-SEX6 SUITE PASS 6/6 双跑同一、五邻域全绿）+ 声明件 state/queue/stamp_exempt.json（380 条，78774B）。闸本身被 import（patch 后判决直穿），身份=行文本 sha8 故换行不动身份；声明缺失读 UNPINNED 且全债、过期条目回债并报 until、无匹配条目只记 unmatched 不洗绿、两行文本相同则拒读（E_SEX_AMBIGUOUS）。实况=EXEMPT-CLEAN 380/380，而闸自身仍诚实报 DONE-STAMP-DEBT 380。",
-  "latest_artifact": "qa/queue-done-stamp-exempt-R2280.log（1593B，单写 utf-8 LF，SUITE PASS 6/6 双跑判据同一 + 五邻域绿）；state/queue/stamp_exempt.json（380 条声明，78774B）；src/os/queue_done_stamp_exempt.py + src/os/test_queue_done_stamp_exempt.py",
-  "next_milestone": "R2281 先回验证：在已提交树上跑全量 reconcile 电池与四段 follow-up，零产品改动直到转绿。预注册期望=+1 套件/+6 判据（445/3646 → 446/3652，来自 os-queue-done-stamp-exempt 套件）；实测不符须点名套件披露而非抹平。电池后再回产品面：tech 队头 line 347（AC-EVP1，evidence_parity）。",
-  "next_milestone_due": "2026-11-01T09:30:00+08:00",
-  "last_artifact": "qa/queue-done-stamp-exempt-R2280.log（1593B，单写 utf-8 LF，SUITE PASS 6/6 双跑判据同一 + 五邻域绿）；state/queue/stamp_exempt.json（380 条声明，78774B）；src/os/queue_done_stamp_exempt.py + src/os/test_queue_done_stamp_exempt.py"
+  "current": "R2281 验证窗已完成：在已提交树 5d4038f7 上跑全量 reconcile 电池（446 套件全绿 + 7 控制项，917.8s，判据总数 3652，与预注册的 +1 套件/+6 判据精确一致）；四段 follow-up 全过（矩阵 43126B 逐字节同一、指纹链 CLEAN、runner profile 一致、census DRIFT-CLEAN）；债务行由本仓写入器自行关闭并开启 product-face-R2282。本轮零产品代码改动，诚实计 0 产品分。",
+  "latest_artifact": "qa/reconcile-all-R2281.log（774691B，单写者 utf-8 LF，RUNNER PASS 446/446 + 控制 7/7，917.8s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（446 套件 / 3652 判据，43126B，重生成后 --check 逐字节同一）",
+  "next_milestone": "R2282 回产品面：取 tech 队头 line 347（AC-EVP1，evidence_parity 种子，六判据已在行内预注册），窗前做 git grep -F 零占用锚验，出一件带套件的产品面；若认领使 tech 可认领降至 9 则同窗补一条真缺口行，先提交再跑电池",
+  "next_milestone_due": "2026-11-01T19:41:43+08:00",
+  "last_artifact": "qa/reconcile-all-R2281.log（774691B，单写者 utf-8 LF，RUNNER PASS 446/446 + 控制 7/7，917.8s，出生站 TMP 回收 932/932 世界 326.57 MiB busy=0 failed=0）与 docs/sandbox-suite-matrix.md（446 套件 / 3652 判据，43126B，重生成后 --check 逐字节同一）"
  },
  "depts": [
   {
@@ -255,7 +255,7 @@
    "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
   ],
   [
-   "2280",
+   "2281",
    "OSLoop 执行 tick"
   ],
   [
@@ -270,6 +270,10 @@
   [
    "R2279",
    "R2279 verification window on the debt register first item (reconcile-battery-R2279), discharged on the committed R2278 tree c2896ff3 with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 445/445 suites + controls 7/7 in 851.4s, criteria total 3646 - exactly the pre-registered +1 suite / +6 criteria against R2277 (444/3640) from the os-queue-done-stamp suite. Four follow-up sections all PASS after the matrix regeneration (43031B, byte-identical), fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN, VERDICT R2279 PASS. Register closed through its own writer and product-face-R2280 opened first=yes; honest score 0 product points."
+  ],
+  [
+   "R2281",
+   "R2281 verification window on the debt register first item (reconcile-battery-R2281), discharged on the committed R2280 tree 5d4038f7 with zero product edits until green (the R2168 mixed-tree rule): RUNNER PASS 446/446 suites + controls 7/7 in 917.8s, criteria total 3652 - exactly the pre-registered +1 suite / +6 criteria against R2279 (445/3646) from the os-queue-done-stamp-exempt suite. Four follow-up sections all PASS after the matrix regeneration (43126B, byte-identical), fingerprint CLEAN 5 domains, profile PASS, census DRIFT-CLEAN, VERDICT R2281 PASS. Register closed through its own writer and product-face-R2282 opened first=yes; honest score 0 product points."
   ]
  ],
  "self_drive": {
