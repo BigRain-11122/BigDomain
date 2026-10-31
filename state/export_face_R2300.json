@@ -1,0 +1,9 @@
+{
+  "do": "product window: a machine gate that stopped matching now says WHY - moved house (DRIFT) or gone (GONE) - instead of reading as one inert shrug",
+  "current": "本轮出了新产品：惰性机器门现在会自己说清楚为什么失效。以前 machine_gate 只说「这条声明匹配不上了」，行被改写和行被删掉读数完全一样，运维得靠手工 grep 队列才能重建声明。新增 gate_drift：取每条惰性声明身份的前缀，回队列里找还有哪一行带着它，给出 DRIFT（旧身份、新身份、新旧行号、共享前缀、身份是否真的变了）或 GONE（只剩前缀、没有行号）。判定用的门读数与声明本身全部从 machine_gate 导入（套件用替换 MG.gate 证明这条导入是真的），行与判据前缀的法则来自 queue_floor 与 queue_row，队列里只有一套行谓词。分割穷尽且互斥，惰性清单为空时诚实读 NO-DRIFT 退出 0；声明或队列缺失/不可读时按 machine_gate 自己的错误码拒绝读成 NO-DRIFT。套件 6/6 双跑判据行逐字节同一、五个相邻套件同轮全绿（qa/gate-drift-R2300.log，1309B，单写者 utf-8 LF），已接线 os-gate-drift(6)。实况读：那条 docker 声明仍然逐字匹配第 41 行——只是那行没声明判据前缀所以机器门永远不会交付它，现在读 STILL-PRESENT 退出 0，而不是对着没动过的行喊 drift。",
+  "latest": "qa/gate-drift-R2300.log（1309B）：gate_drift 套件 6/6 双跑判据行逐字节同一 + 五个相邻套件全绿；同轮 live 读 GATE DRIFT tech declarations=1 inert=1 drift=1 gone=0 moved=0 verdict=STILL-PRESENT",
+  "next": "R2301 跑校验：在已提交的 R2300 树上跑全量 reconcile 电池（零产品改动直到全绿），预登记 +1 套件 / +6 判据（455 套件 / 3706 判据 → 456 / 3712），跑完再走四段 follow-up（矩阵段先拒绝旧文档再重生成）",
+  "last": "qa/gate-drift-R2300.log 1309B",
+  "result": "R2300 product: src/os/gate_drift.py + its suite (6 criteria, double-run identical, 5 adjacent suites green, wired os-gate-drift(6)); the inert declaration now splits into DRIFT (old identity, new identity, both lines, shared prefix) or GONE, gate reading imported from machine_gate and proven by patching it; live STILL-PRESENT at exit 0 for the docker row that never moved",
+  "out": "qa/gate-drift-R2300.log"
+}

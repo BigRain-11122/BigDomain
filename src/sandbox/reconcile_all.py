@@ -4594,6 +4594,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-machine-gate",
      os.path.join("..", "os", "test_machine_gate.py"), 6),
+    # R2300: machine_gate reports an INERT declaration but cannot say WHY it
+    # stopped matching - a row whose text was edited and a row that was
+    # deleted both read as the same inert entry with no line. One read-only
+    # reader takes the prefix of every inert identity, looks for rows still
+    # carrying it, and names DRIFT (old identity, new identity, both lines,
+    # shared prefix) or GONE (prefix, no line), so repairing the declaration
+    # stops being a hand grep. (AC-GDR1..AC-GDR6 pinned in state/queue/tech.md
+    # as the R2286 seed row BEFORE the code existed.)
+    ("os-gate-drift",
+     os.path.join("..", "os", "test_gate_drift.py"), 6),
     # R2288: the four post-battery sections run as one callable but their
     # HISTORY was prose - a section that failed then passed in the same log
     # read like one that never failed, and a round whose follow-up never ran

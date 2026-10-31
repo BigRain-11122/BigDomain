@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2300 suite=src/os/test_gate_drift.py legs=2
+== LEG A rc=0 digest=6746129955733A43
+gate_drift suite (expected criteria 6)
+PASS AC-GDR1 gate reading imported, a patched reading flows
+PASS AC-GDR2 DRIFT names both identities, GONE names no line
+PASS AC-GDR3 split exhaustive and disjoint, empty reads NO-DRIFT
+PASS AC-GDR4 absent declaration refuses, never a blind NO-DRIFT
+PASS AC-GDR5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-GDR6 pure, wired, a still-present row is not drift
+SUITE PASS 6/6
+== LEG B rc=0 digest=6746129955733A43
+gate_drift suite (expected criteria 6)
+PASS AC-GDR1 gate reading imported, a patched reading flows
+PASS AC-GDR2 DRIFT names both identities, GONE names no line
+PASS AC-GDR3 split exhaustive and disjoint, empty reads NO-DRIFT
+PASS AC-GDR4 absent declaration refuses, never a blind NO-DRIFT
+PASS AC-GDR5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-GDR6 pure, wired, a still-present row is not drift
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_row.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=6746129955733A43
