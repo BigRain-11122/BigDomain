@@ -4613,6 +4613,15 @@ SUITES = [
     # pinned in state/queue/tech.md as the R2313 seed row BEFORE the code.)
     ("os-gate-decl-identity",
      os.path.join("..", "os", "test_gate_decl_identity.py"), 6),
+    # R2315: the writer owned its own permissive address rule, so "--identity -"
+    # was planned as a brand-new declaration while the R2314 reader resolved
+    # the same text AMBIGUOUS over four carriers. The wire asks that reader
+    # first: UNMATCHED and AMBIGUOUS refuse before any byte with the reader
+    # state and its carrier lines, MATCHED stays a duplicate refusal, and only
+    # a MATCHED identity reaches gate_decl_append.plan. (AC-GDIW1..AC-GDIW6
+    # pinned in state/queue/tech.md as the R2314 seed row BEFORE the code.)
+    ("os-gate-decl-identity-wire",
+     os.path.join("..", "os", "test_gate_decl_identity_wire.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

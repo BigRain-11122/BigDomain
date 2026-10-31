@@ -1,0 +1,8 @@
+gate_decl_identity_wire suite (expected criteria 6)
+PASS AC-GDIW1 the resolution is the reader's, not a second scan
+PASS AC-GDIW2 UNMATCHED/AMBIGUOUS refused before any byte
+PASS AC-GDIW3 dry run names the state and writes nothing
+PASS AC-GDIW4 one entry appended, the survivor byte-intact
+PASS AC-GDIW5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDIW6 pure, wired, and writes nothing
+SUITE PASS 6/6

@@ -1,0 +1,9 @@
+{
+  "do": "R2315 双件窗：先在已提交树上把 464 支套件全跑一遍（全绿，判据 3760 与预注册分毫不差），再把闸门声明写入器接到身份读器上——地址错了就一个字都不落盘",
+  "current": "R2315 窗。开轮五静干净（git status 空、无 index.lock；decisions 令牌差集为空；集团台账三行巡查已清、无未回编号；orders 尾行维持 2026-10-31 18:23；基线 10-29 在七天闸内）。债务闸指名唯一 first=yes 行，本轮先做纯验证（R2168 混合树律，零产品改动到全绿为止）：已提交树 99a47702 上跑全量电池＝RUNNER PASS 464/464 套件全绿＋控制 7/7，834.4 秒，出生点回收 932/932 世界 326.57 MiB、零失败，判据 3760——正是预注册的 +1 套件/+6 判据，预测与实测分毫不差。随后四段跟进：矩阵段先按设计 FAIL 且拒绝改写陈旧文档（44486B 对 44573B），suite_matrix 重生成到 464 套件/3760 判据后复跑四段全 PASS。再做产品面：gate_decl_identity_wire 让写入器先问身份读器，UNMATCHED/AMBIGUOUS 在落任何字节前拒绝并列出载体行，MATCHED 仍是重复拒绝，只有 MATCHED 才交给原写入器。套件 6/6 连跑两次同一摘要，相邻四套件全绿；实弹：R2314 的 --identity '-' 现在以 E_GDIW_AMBIGUOUS 拒于 exit 2 并点名 281 个共享载体，声明文件一字未动。",
+  "latest": "src/os/gate_decl_identity_wire.py＋test_gate_decl_identity_wire.py（6 判据双跑同一 sha16 669cc7f355d76d38，相邻四闸套件全绿）与 qa/reconcile-all-R2315.log（464/464 全绿＋控制 7/7，判据 3760，四段跟进全 PASS），2026-11-01",
+  "next": "R2316 首项＝在已提交的 R2315 树上跑全量电池（预注册 465 套件/3766 判据），再回产品面队头；48 小时内",
+  "last": "qa/reconcile-all-R2315.log",
+  "result": "R2315 verification plus product: battery on the committed R2314 tree read 464/464 suites green plus controls 7/7 with criteria 3760 exactly as pre-registered, four follow-up sections PASS after the matrix was regenerated, and the new gate_decl_identity_wire face refuses an UNMATCHED/AMBIGUOUS identity before any byte (suite 6/6 twice, live '-' refused E_GDIW_AMBIGUOUS over 281 carriers)",
+  "out": "src/os/gate_decl_identity_wire.py"
+}
