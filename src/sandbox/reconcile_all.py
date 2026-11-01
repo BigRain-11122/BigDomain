@@ -4868,6 +4868,21 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-orphan-promotion-ledger",
      os.path.join("..", "os", "test_orphan_promotion_ledger.py"), 6),
+    # R2343: followup_history names which rounds are unfixed (live at R2343:
+    # 413 of 438 read INCOMPLETE) and every one of them reads the same word,
+    # while three different debts hide behind it - a legacy log that predates
+    # the SECTION ritual and can never carry sections, a log whose sections ran
+    # but whose VERDICT line was never written, and a log whose VERDICT exists
+    # while a named section is ABSENT. One read-only classifier lands every
+    # round in exactly one of four disjoint causes, asking the section
+    # vocabulary and the SECTION/VERDICT reading of followup_history rather
+    # than restating either, deriving the cause from the log body alone (no
+    # clock, no round threshold) and refusing at exit 3 instead of ever
+    # reading COMPLETE off a failed read.
+    # (AC-FIC1..AC-FIC6 pinned in state/queue/tech.md as the R2325 seed row
+    # BEFORE the code existed.)
+    ("os-followup-incomplete-cause",
+     os.path.join("..", "os", "test_followup_incomplete_cause.py"), 6),
     ]
 
 FAILS = 0

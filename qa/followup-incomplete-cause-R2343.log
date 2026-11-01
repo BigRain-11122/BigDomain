@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2343 suite=src/os/test_followup_incomplete_cause.py legs=2
+== LEG A rc=0 digest=DBCD1C32C455906E
+followup_incomplete_cause suite (criteria=6)
+PASS AC-FIC1 readings asked of followup_history, patched parser flows
+PASS AC-FIC2 four causes disjoint, one per round, absent names listed
+PASS AC-FIC3 cause from the log alone, no clock and no round threshold
+PASS AC-FIC4 absent/unreadable evidence refuses at 3 with its own code
+PASS AC-FIC5 read-only, 0/2/5 codes, pinned byte-stable JSON
+PASS AC-FIC6 ASCII, stdlib only, zero network, reconcile label wired
+SUITE PASS 6/6
+== LEG B rc=0 digest=DBCD1C32C455906E
+followup_incomplete_cause suite (criteria=6)
+PASS AC-FIC1 readings asked of followup_history, patched parser flows
+PASS AC-FIC2 four causes disjoint, one per round, absent names listed
+PASS AC-FIC3 cause from the log alone, no clock and no round threshold
+PASS AC-FIC4 absent/unreadable evidence refuses at 3 with its own code
+PASS AC-FIC5 read-only, 0/2/5 codes, pinned byte-stable JSON
+PASS AC-FIC6 ASCII, stdlib only, zero network, reconcile label wired
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_retry_history.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_retry_legs.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=DBCD1C32C455906E

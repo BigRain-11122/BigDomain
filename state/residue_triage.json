@@ -1403,6 +1403,13 @@
       "until": 2350
     },
     {"round": 2329, "status": "DELIVERED", "declared_by": "R2342", "reason": "fold 630 archived the whole R2329 block; its tech row was closed on the board and the round shipped stamp_exempt_prune with a captured evidence file", "until": 2350},
-    {"round": 2342, "status": "DELIVERED", "declared_by": "R2342", "reason": "this window own round: fold 630 moved the R2328/R2329/R2330 closing notes, and R2342 shipped orphan_promotion_ledger with its suite and evidence", "until": 2350}
+    {"round": 2342, "status": "DELIVERED", "declared_by": "R2342", "reason": "this window own round: fold 630 moved the R2328/R2329/R2330 closing notes, and R2342 shipped orphan_promotion_ledger with its suite and evidence", "until": 2350},
+    {
+      "round": 2331,
+      "status": "DELIVERED",
+      "declared_by": "R2343",
+      "reason": "fold 631 archived the R2331 block verbatim on a round-block boundary; the round shipped src/os/retire_candidate.py with its six pre-registered criteria and closed one tech row, so its delivery is on record and this entry restores that reading after the fold",
+      "until": 2350
+    }
   ]
 }

@@ -85,3 +85,4 @@ tick 2339 2026-11-01 R2339 product window: ORPHAN PROMOTE shipped and USED - src
 tick 2340 R2340 red-then-repair: AC-OTR6 empty-pile premise corrected and made stricter, suite 6/6 twice, green full battery carried to R2341
 tick 2341 R2341 green battery 477/477 suites 3838 criteria as pre-registered, four follow-up sections PASS, matrix regenerated to 45670B, VERDICT PASS
 tick 2342 R2342 product window: orphan_promotion_ledger shipped (five disjoint readings, raw-text append, measured digest), suite 6/6 twice identical, live backfill of R2136 at 675847B, battery carried to R2343
+tick 2343 R2343 battery 478/478 suites 3844 criteria as pre-registered plus followup_incomplete_cause shipped (four disjoint causes, 421/448 legacy), suite 6/6 twice identical, matrix regenerated to 45769B, VERDICT PASS
