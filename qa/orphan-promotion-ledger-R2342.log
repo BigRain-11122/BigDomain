@@ -1,0 +1,20 @@
+EVIDENCE CAPTURE round=R2342 suite=src/os/test_orphan_promotion_ledger.py legs=2
+== LEG A rc=0 digest=77D98618BE2C1754
+PASS AC-OPL1 canonical law imported from orphan_promote
+PASS AC-OPL2 four file-side readings are disjoint and complete
+PASS AC-OPL3 a moved digest reads STALE with both digests named
+PASS AC-OPL4 append keeps neighbours, duplicate names the entry
+PASS AC-OPL5 CLI codes, byte-stable json, zero writes
+PASS AC-OPL6 pure ASCII, stdlib only, no clock, wired
+SUITE PASS 6/6
+== LEG B rc=0 digest=77D98618BE2C1754
+PASS AC-OPL1 canonical law imported from orphan_promote
+PASS AC-OPL2 four file-side readings are disjoint and complete
+PASS AC-OPL3 a moved digest reads STALE with both digests named
+PASS AC-OPL4 append keeps neighbours, duplicate names the entry
+PASS AC-OPL5 CLI codes, byte-stable json, zero writes
+PASS AC-OPL6 pure ASCII, stdlib only, no clock, wired
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_orphan_promote.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=77D98618BE2C1754

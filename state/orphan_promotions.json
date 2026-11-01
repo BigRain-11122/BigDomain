@@ -1,0 +1,6 @@
+{
+  "since_round": "R2342",
+  "entries": [
+    {"round": "R2136", "canonical": "reconcile-all-R2136.log", "source": "reconcile-all-R2136c.log", "bytes": 675847, "digest": "875082b40b84672da00eaf834e53a4fcccef7ec3a0dda07656750507947d2d20", "declared_by": "R2342", "until": "R2360", "reason": "promoted at R2339 from the stranded -c leg; backfilled here because the act had no record"}
+  ]
+}

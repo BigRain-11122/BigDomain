@@ -1,12 +1,13 @@
 {
-  "export_ts": "2026-11-01T19:18:24+08:00",
-  "do": "R2341 绿色全量重跑落定：在提交树 50b88267 上跑满 477 套件，判据总计 3838，与 R2340 预注册数字逐位相等（+1 套件 / +6 判据，全部来自 R2339 的 os-orphan-promote 套件），零修正零豁免。四段跟随按设计顺序跑：矩阵段先红后绿（旧文档 45594B → 重生 45670B，且在红格时不改写文档这一条照旧生效），指纹、画像、写者普查三段一次即绿。质量门结论 R2341 PASS。本轮零产品码，分数如实记 0。",
+  "export_ts": "2026-11-01T19:51:40+08:00",
+  "do": "R2342 产品面：孤儿提升终于有账本。src/os/orphan_promotion_ledger.py 读一份带日期的提升声明（since_round=R2342），把声明条目与 qa/ 里真实的正名证据逐条对账，五种互斥读数（RECORDED/STALE/EXPIRED/MISSING/UNRECORDED），字节被改动的记录读 STALE 并同时点名两个摘要；正名律问 orphan_promote、证据目录问 orphan_trace（两处都能被补丁搬动，模块内没有第二套律）。追加走原生文本一次原子替换、邻居条目逐字节不动、重复轮次点名拒绝；写入的字节数与摘要由磁盘实测而非调用方宣称。套件 6/6 双跑同一，邻近四套件绿，证据 qa/orphan-promotion-ledger-R2342.log。真实数据动作：把 R2339 那次 R2136 提升按磁盘 675847 字节 / 摘要 875082b40b84 回填入册（与 R2339 当时报告逐位相同）。本次为 2 分产品面（可跑可看的实物），电池顺延至 R2343。",
   "ceo_face": {
-    "current": "R2341：提交树上 RUNNER PASS 477/477 套件 + 控制组 7/7，判据 3838 与预注册相等；四段跟随全绿，矩阵重生至 45670B",
-    "latest_artifact": "qa/reconcile-all-R2341.log（791836B，477/477 套件绿，含四段跟随追加）与 docs/sandbox-suite-matrix.md（45670B，477 套件 / 3838 判据）",
-    "next_milestone": "R2342：技术队头 AC-OPL1（orphan_promotion_ledger，state/queue/tech.md:388）上出产品面：提升动作落台账，先提交后电池",
+    "current": "R2342：孤儿提升入册——提升声明 + 五读数对账器上线，真实回填 R2136（675847B，摘要 875082b40b84），套件 6/6 双跑同一",
+    "latest_artifact": "src/os/orphan_promotion_ledger.py、src/os/test_orphan_promotion_ledger.py、state/orphan_promotions.json（1 条记录，389B）、qa/orphan-promotion-ledger-R2342.log（1031B，两腿同一）",
+    "next_milestone": "R2343：在已提交树上跑满全量电池（预注册 478 套件 / 3844 判据，对 R2341 的 477/3838 恰为 +1/+6，来自本轮 os-orphan-promotion-ledger 套件），随后接 tech 队头 AC-FIC1；窗口 ≤48h",
     "next_milestone_due": "2026-11-03T19:18:24+08:00",
-    "last_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）；取证 qa/retire-accept-R2333.log（1282B）；声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）"
+    "last_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）；取证 qa/retire-accept-R2333.log（1282B）；声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）",
+    "updated_at": "2026-11-01T19:51:40+08:00"
   },
   "depts": [
     {
@@ -429,6 +430,10 @@
   ],
   "results": [
     [
+      "R2342",
+      "R2342 product window: the promotion finally has a record - src/os/orphan_promotion_ledger.py plus its six-criteria suite (AC-OPL1..AC-OPL6 pinned in the R2339 seed row before the code), five disjoint readings of the declaration against the live evidence directory, both laws imported (orphan_promote canonical name, orphan_trace directory), raw-text append with one atomic replace and byte-identical neighbours, duplicate refused by name, measured digest rather than a caller claim, suite 6/6 twice identical via evidence_capture plus four adjacent suites green, and the real R2136 promotion backfilled at its measured 675847 bytes"
+    ],
+    [
       "R2341",
       "R2341 green battery on the committed tree 50b88267: RUNNER PASS 477/477 suites plus controls 7/7 in 826.5s, criteria total 3838 exactly as pre-registered against R2338 (476/3832), four follow-up sections PASS after the designed matrix FAIL and its regeneration to 45670B, VERDICT R2341 PASS, zero product code"
     ],
@@ -737,7 +742,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2341",
+      "2342",
       "OSLoop 执行 tick"
     ],
     [

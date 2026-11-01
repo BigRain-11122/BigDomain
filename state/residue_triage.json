@@ -1401,6 +1401,8 @@
       "declared_by": "R2341",
       "reason": "fold 629 archived the R2327 ledger line, so the round now reads stamped-but-never-logged in the live state; its closeout row is closed on the board (tech.md:381) and the round is delivered - the fold-created residue is recognised, not re-opened",
       "until": 2350
-    }
+    },
+    {"round": 2329, "status": "DELIVERED", "declared_by": "R2342", "reason": "fold 630 archived the whole R2329 block; its tech row was closed on the board and the round shipped stamp_exempt_prune with a captured evidence file", "until": 2350},
+    {"round": 2342, "status": "DELIVERED", "declared_by": "R2342", "reason": "this window own round: fold 630 moved the R2328/R2329/R2330 closing notes, and R2342 shipped orphan_promotion_ledger with its suite and evidence", "until": 2350}
   ]
 }

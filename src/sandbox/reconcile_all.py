@@ -4852,6 +4852,22 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-orphan-promote",
      os.path.join("..", "os", "test_orphan_promote.py"), 6),
+    # R2342: the promotion finally has a record. orphan_promote can now create
+    # a canonical evidence name out of a stranded leg, but nothing said which
+    # leg it came from, which digest it carried, which round promoted it or
+    # until when that judgement holds - so a canonical file no window ever
+    # promoted read exactly like one this writer produced. The ledger is read
+    # against the live evidence directory and every canonical file lands in
+    # exactly one of five disjoint readings (RECORDED, STALE, EXPIRED, MISSING,
+    # UNRECORDED) with the two integrity readings outranking expiry; a record
+    # whose bytes moved reads STALE naming both digests; an append is raw text
+    # with one atomic replace that leaves every neighbour entry byte-identical
+    # and refuses a duplicate by naming the recorded entry; and the reader
+    # writes nothing, failing closed on an absent declaration.
+    # (AC-OPL1..AC-OPL6 pinned in state/queue/tech.md as the R2339 seed row
+    # BEFORE the code existed.)
+    ("os-orphan-promotion-ledger",
+     os.path.join("..", "os", "test_orphan_promotion_ledger.py"), 6),
     ]
 
 FAILS = 0
