@@ -1,0 +1,16 @@
+R2368 live: the published floor reading vs the undiscounted gauge
+
+$ queue_floor_reading_wire.py --check   (rc=2)
+QUEUE FLOOR READING main=5/5 tech=9/10-1 explore=10/10 verdict=FLOOR-DEBT shortfall=1 delivered=1
+  main     open=6 done=5 gated=1 claimable=5 discounted=0 floor=5 shortfall=0 status=MET
+  tech     open=11 done=347 gated=1 claimable=9 discounted=1 floor=10 shortfall=1 status=SHORT
+    discounted line=413 prefix=AC-QFR1
+  explore  open=10 done=239 gated=0 claimable=10 discounted=0 floor=10 shortfall=0 status=MET
+
+$ queue_floor.py --check   (rc=0)
+QUEUE FLOOR main=5/5 tech=10/10 explore=10/10 verdict=FLOOR-MET shortfall=0
+  main     open=6 done=5 gated=1 claimable=5 floor=5 shortfall=0 status=MET
+  tech     open=11 done=347 gated=1 claimable=10 floor=10 shortfall=0 status=MET
+  explore  open=10 done=239 gated=0 claimable=10 floor=10 shortfall=0 status=MET
+
+READING: the two readers disagree on the same tree at the same instant, which is the defect this wire removes - the undiscounted gauge reports the tech floor as MET while one of its ten claimable rows (line 413, AC-QFR1) is this window's own shipped row.

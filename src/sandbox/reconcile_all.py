@@ -4924,6 +4924,15 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-queue-floor-delivered-wire",
      os.path.join("..", "os", "test_queue_floor_delivered_wire.py"), 6),
+    # R2368: ONE published floor reading. The discount existed since R2365 but
+    # the reader every other tool called was still queue_floor.gauge, so two
+    # readers answered differently at the same instant and the undiscounted
+    # number was the published one. The wire publishes the discounted number
+    # with the discounted rows travelling beside it.
+    # (AC-QFR1..AC-QFR6 pinned in state/queue/tech.md line 413 at R2365
+    # BEFORE the code existed.)
+    ("os-queue-floor-reading-wire",
+     os.path.join("..", "os", "test_queue_floor_reading_wire.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only

@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2368 suite=src/os/test_queue_floor_reading_wire.py legs=2
+== LEG A rc=0 digest=DE16557C8515F39B
+PASS AC-QFR1 the report comes from queue_floor_delivered_wire.gauge and patching it moves the published number
+PASS AC-QFR2 the discount count and the discounted rows (line+prefix) travel with the published number and gross reconciles
+PASS AC-QFR3 a queue with nothing delivered publishes queue_floor's row byte for byte on every shared key
+PASS AC-QFR4 CLI 0 met / 2 short or bad flags / 3 missing, JSON byte-stable in the pinned key order
+PASS AC-QFR5 the reading is a pure function of the root and no clock is read
+PASS AC-QFR6 pure ASCII, stdlib only, zero network imports, wired as os-queue-floor-reading-wire(6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=DE16557C8515F39B
+PASS AC-QFR1 the report comes from queue_floor_delivered_wire.gauge and patching it moves the published number
+PASS AC-QFR2 the discount count and the discounted rows (line+prefix) travel with the published number and gross reconciles
+PASS AC-QFR3 a queue with nothing delivered publishes queue_floor's row byte for byte on every shared key
+PASS AC-QFR4 CLI 0 met / 2 short or bad flags / 3 missing, JSON byte-stable in the pinned key order
+PASS AC-QFR5 the reading is a pure function of the root and no clock is read
+PASS AC-QFR6 pure ASCII, stdlib only, zero network imports, wired as os-queue-floor-reading-wire(6)
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+== src/os/test_queue_floor_delivered_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_occupancy.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=DE16557C8515F39B
