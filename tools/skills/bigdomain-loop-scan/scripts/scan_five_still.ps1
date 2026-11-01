@@ -105,7 +105,16 @@ try {
   if ($baseStr -eq '') {
     Write-Output "[DEC] FLAG rows=$($D.Count) known_tokens=$($tok.Count) row_owner_tokens=$($ownerTok.Count) baseline_missing (init state.json last_dec_tokens from full token set, then only diff)"
   } else {
-    $baseTok = @($baseStr -split ',' | Where-Object { $_ })
+    # last_dec_tokens is a JSON array; [string] on an array joins with spaces (not commas),
+    # so a comma-only split collapsed the entire baseline into one token and every row
+    # re-flagged as new each round (R2344 birth-site fix). Split on commas AND whitespace,
+    # and accept the array form directly.
+    $baseTok = @(@($st.last_dec_tokens) | ForEach-Object { [string]$_ } | ForEach-Object { $_ -split '[,\s]+' } | Where-Object { $_ })
+    # Guard: a baseline that collapses to a single token while rows exist means the parse
+    # regressed, not that every row is new. Say so instead of re-flagging the whole board.
+    if ($baseTok.Count -eq 1 -and $ownerTok.Count -gt 1) {
+      Write-Output "[DEC] FLAG baseline_parse_collapsed count=1 owners=$($ownerTok.Count) (parse defect, not new rows - fix the baseline split)"
+    }
     $newTok = @($ownerTok | Where-Object { $baseTok -notcontains $_ })
     $refMissing = @($refTok | Where-Object { $baseTok -notcontains $_ -and $ownerTok -notcontains $_ })
     if ($newTok.Count -gt 0) {
