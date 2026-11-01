@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2346 suite=src/os/test_stamp_exempt_guard.py legs=2
+== LEG A rc=0 digest=0CE1E57562596F17
+SUITE stamp_exempt_guard (R2346) criteria=6
+PASS AC-SEG1 both plans pin the digest and byte count of the text they read, and a moved text or a different file moves the pin
+PASS AC-SEG2 a moved digest refuses E_SEG_STALE through the writer and through the guard, and an unpinned commit refuses rather than writing blind
+PASS AC-SEG3 the stale refusal keeps the concurrent writer's bytes byte-identical, leaves the rest of the tree untouched and leaves no temp residue
+PASS AC-SEG4 an unchanged digest completes one atomic replace, proved by read-back, with no temp residue
+PASS AC-SEG5 both writers share one guard callable: same function object, no copied os.replace, and an executed append and an executed prune each route through it
+PASS AC-SEG6 pure ASCII, stdlib only, zero network, no clock, its own reconcile label and one runner entry
+SUITE RESULT passes=6 fails=0 criteria=6
+== LEG B rc=0 digest=0CE1E57562596F17
+SUITE stamp_exempt_guard (R2346) criteria=6
+PASS AC-SEG1 both plans pin the digest and byte count of the text they read, and a moved text or a different file moves the pin
+PASS AC-SEG2 a moved digest refuses E_SEG_STALE through the writer and through the guard, and an unpinned commit refuses rather than writing blind
+PASS AC-SEG3 the stale refusal keeps the concurrent writer's bytes byte-identical, leaves the rest of the tree untouched and leaves no temp residue
+PASS AC-SEG4 an unchanged digest completes one atomic replace, proved by read-back, with no temp residue
+PASS AC-SEG5 both writers share one guard callable: same function object, no copied os.replace, and an executed append and an executed prune each route through it
+PASS AC-SEG6 pure ASCII, stdlib only, zero network, no clock, its own reconcile label and one runner entry
+SUITE RESULT passes=6 fails=0 criteria=6
+== ADJACENT 3
+== src/os/test_stamp_exempt_append.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+== src/os/test_stamp_exempt_prune.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_exempt_review.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=0CE1E57562596F17

@@ -4891,6 +4891,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-review-window-history",
      os.path.join("..", "os", "test_review_window_history.py"), 6),
+    # R2346: the acceptance declaration has ONE write path carrying a
+    # staleness law - a plan pins the digest it read, an execute re-reads and
+    # refuses E_SEG_STALE before a byte is written, and both writers ask the
+    # same callable instead of keeping a second copy of the temp-write and
+    # replace. (AC-SEG1..AC-SEG6 pinned in state/queue/tech.md as the R2329
+    # seed row BEFORE the code existed.)
+    ("os-stamp-exempt-guard",
+     os.path.join("..", "os", "test_stamp_exempt_guard.py"), 6),
     ]
 
 FAILS = 0

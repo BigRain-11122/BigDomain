@@ -333,7 +333,11 @@ def ac_sap6():
     imports = set(re.findall(r"^(?:import|from)\s+([A-Za-z_][\w.]*)",
                              source, re.M))
     allowed = {"io", "json", "os", "shutil", "sys", "tempfile",
-               "queue_done_stamp_exempt", "stamp_exempt_review"}
+               "queue_done_stamp_exempt", "stamp_exempt_review",
+               # R2346 AC-SEG5: the write mechanics moved into the shared
+               # pinned-text guard, so this writer imports it instead of
+               # carrying a second copy of the temp-write/os.replace block.
+               "stamp_exempt_guard"}
     imports_ok = imports <= allowed
     banned = ("time.time", "datetime", "urllib", "requests", "socket",
               "subprocess")

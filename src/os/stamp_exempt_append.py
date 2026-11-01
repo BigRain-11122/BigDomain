@@ -33,7 +33,7 @@
 #                     silently discharge two rows.
 #
 # Dry run by default: the report carries before/predicted byte counts and
-# nothing is written. With --execute the append is one os.replace from a
+# nothing is written. With --execute the append is ONE guarded replace from a
 # same-directory temp, proved by a read-back of the exact predicted bytes,
 # with no temp residue left behind.
 #
@@ -48,6 +48,7 @@ import sys
 import tempfile
 
 import queue_done_stamp_exempt as SEX
+import stamp_exempt_guard as SEG
 import stamp_exempt_review as SER
 
 DECL_REL = SEX.DECL_REL
@@ -65,6 +66,8 @@ REPORT_KEYS = (
     "entry_count_before",
     "entry_count_after",
     "before_bytes",
+    "source_digest",
+    "source_bytes",
     "predicted_bytes",
     "wrote",
     "read_back_ok",
@@ -223,6 +226,9 @@ def plan(text, entry, pairs):
     report["entry_count_before"] = len(entries)
     report["entry_count_after"] = len(after)
     report["before_bytes"] = len(text.encode("utf-8"))
+    pinned = SEG.pin(text)
+    report["source_digest"] = pinned["digest"]
+    report["source_bytes"] = pinned["bytes"]
     report["predicted_bytes"] = len(post.encode("utf-8"))
     report["wrote"] = False
     report["read_back_ok"] = None
@@ -271,22 +277,17 @@ def append(root, queue, identity, declared, reason, until=None, execute=False):
             % (len(data), report["predicted_bytes"]))
     temp = path + TEMP_SUFFIX
     try:
-        with io.open(temp, "wb") as handle:
-            handle.write(data)
-        os.replace(temp, path)
-    except (IOError, OSError) as exc:
-        if os.path.exists(temp):
-            os.remove(temp)
-        raise StampExemptAppendError("E_SEAP_WRITE", "%s (%s)" % (path, exc))
-    with io.open(path, "rb") as handle:
-        back = handle.read()
-    report["wrote"] = True
-    report["read_back_ok"] = back == data
-    if not report["read_back_ok"]:
-        raise StampExemptAppendError(
-            "E_SEAP_READBACK",
-            "read-back carries %d bytes, predicted %d"
-            % (len(back), len(data)))
+        guard = SEG.commit(
+            path,
+            {"digest": report["source_digest"], "bytes": report["source_bytes"]},
+            data, TEMP_SUFFIX,
+            {"write": "E_SEAP_WRITE", "readback": "E_SEAP_READBACK",
+             "residue": "E_SEAP_RESIDUE",
+             "unreadable": "E_SEAP_BAD_DECL"})
+    except SEG.StampGuardError as exc:
+        raise StampExemptAppendError(exc.code, exc.detail)
+    report["wrote"] = guard["wrote"]
+    report["read_back_ok"] = guard["read_back_ok"]
     if os.path.exists(temp):
         raise StampExemptAppendError("E_SEAP_RESIDUE",
                                      "temp file survived: %s" % temp)

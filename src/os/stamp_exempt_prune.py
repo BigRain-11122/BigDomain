@@ -38,7 +38,7 @@
 # stamp_exempt_append.declaration_entries -> read_declaration) and must carry
 # exactly entries - retired. Never a second copy of the entry rules.
 #
-# AC-SEPR5 an executed prune is one temp write plus os.replace, proved by
+# AC-SEPR5 an executed prune is one guarded replace through stamp_exempt_guard,
 # read-back, with no temp residue left behind on either path. A refused plan
 # (nothing to retire, unpinned, count mismatch, bad splice) writes nothing.
 #
@@ -53,6 +53,7 @@ import sys
 
 import queue_done_stamp_exempt as SEX
 import stamp_exempt_append as SEPA
+import stamp_exempt_guard as SEG
 import stamp_exempt_review as SER
 
 DECL_REL = SEX.DECL_REL
@@ -71,6 +72,8 @@ PLAN_KEYS = (
     "retire",
     "keep_count",
     "before_bytes",
+    "source_digest",
+    "source_bytes",
     "after_bytes",
     "predicted_bytes",
     "wrote",
@@ -286,6 +289,7 @@ def plan(root, round_no, execute=False):
             % (len(spans), len(entries)))
 
     drop = [item["entry"] - 1 for item in retire]
+    pinned = SEG.pin(text)
     report = {
         "round": round_no,
         "declaration": review["declaration"],
@@ -297,6 +301,8 @@ def plan(root, round_no, execute=False):
         "retire": retire,
         "keep_count": len(entries) - len(drop),
         "before_bytes": len(text.encode("utf-8")),
+        "source_digest": pinned["digest"],
+        "source_bytes": pinned["bytes"],
         "after_bytes": None,
         "predicted_bytes": None,
         "wrote": False,
@@ -343,22 +349,20 @@ def plan(root, round_no, execute=False):
 
     temp = path + TEMP_SUFFIX
     try:
-        with io.open(temp, "wb") as handle:
-            handle.write(payload)
-        os.replace(temp, path)
-    except (IOError, OSError) as exc:
-        if os.path.exists(temp):
-            os.remove(temp)
-        raise StampExemptPruneError("E_SPR_WRITE", "%s (%s)" % (path, exc))
-    with io.open(path, "rb") as handle:
-        back = handle.read()
-    report["wrote"] = True
-    report["read_back_ok"] = back == payload
-    if not report["read_back_ok"]:
-        raise StampExemptPruneError(
-            "E_SPR_READBACK",
-            "read-back carries %d bytes, predicted %d"
-            % (len(back), len(payload)))
+        guard = SEG.commit(
+            path,
+            {"digest": report["source_digest"], "bytes": report["source_bytes"]},
+            payload, TEMP_SUFFIX,
+            {"write": "E_SPR_WRITE", "readback": "E_SPR_READBACK",
+             "residue": "E_SPR_RESIDUE",
+             "unreadable": "E_SPR_BAD_DECL"})
+    except SEG.StampGuardError as exc:
+        raise StampExemptPruneError(exc.code, exc.detail)
+    report["wrote"] = guard["wrote"]
+    report["read_back_ok"] = guard["read_back_ok"]
+    if os.path.exists(temp):
+        raise StampExemptPruneError("E_SPR_RESIDUE",
+                                    "temp file survived: %s" % temp)
     return report
 
 
