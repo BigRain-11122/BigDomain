@@ -22,7 +22,10 @@ persisted clock strings (settled_utc, registered/purchased/
 consumed utc, minute_window, the month window), time-derived
 api_key values and time-derived spend_tx hex ids, so the
 evidence digests mask all three families (banded projection,
-R1902 law) while the in-run battery keeps full dumps.
+R1902 law) while the in-run battery keeps full dumps with the
+read-time minute ring projected out (AC-DSVP1 asserts the ring is
+really present in the raw dump, so the projection cannot hide a
+vanished field or a moved persisted value).
 
 Usage: python test_devshare_persist.py
 """
@@ -55,6 +58,22 @@ _UTC_RE = re.compile(
     r' "(?:\d{4}-\d{2}[^"]*)"')
 _KEY_RE = re.compile(r'"api_key": "[^"]*"')
 _TXS_RE = re.compile(r'"spend_txs": \[[^\]]*\]')
+_CLOCK_RING_RE = re.compile(r'"(minute_(?:window|used))": (?:"[^"]*"|-?\d+)')
+
+
+def project_clock(text):
+    """Mask the read-time minute ring inside one board dump.
+
+    dev_board exposes the current UTC minute (minute_window) and the
+    usage counted in it (minute_used); both follow the wall clock BY
+    DESIGN, so two reads either side of a minute boundary differ while
+    no persisted state moved. The comparison laws below are about
+    persisted state, so the ring is projected out here; AC-DSVP1 still
+    asserts the ring is really present in the raw dump, so the
+    projection can never hide a vanished or changed field.
+    """
+    return _CLOCK_RING_RE.sub(
+        lambda m: '"%s": "<clock-ring>"' % m.group(1), text)
 
 
 def record(ac, ok, evidence):
@@ -114,8 +133,8 @@ def table_counts(db_path):
 def read_battery(ds, dk, led):
     return {
         "hist": dump(ds.devshare_windows()),
-        "board_ada": dump(dk.dev_board("usr:ada")),
-        "board_lin": dump(dk.dev_board("usr:lin")),
+        "board_ada": project_clock(dump(dk.dev_board("usr:ada"))),
+        "board_lin": project_clock(dump(dk.dev_board("usr:lin"))),
         "bal_ada": led.balance("usr:ada")["balance"],
         "bal_lin": led.balance("usr:lin")["balance"],
         "bal_ghost": led.balance("usr:ghost")["balance"],
@@ -237,7 +256,17 @@ def main():
     probes1, ok_probes1 = run_probes(probe_specs1)
     ok_drift1 = (table_counts(db_path) == cnt1
                  and read_battery(ds, dk, led) == bat1)
-    ok1 = ok_world and ok_probes1 and ok_drift1
+    raw_board = dump(dk.dev_board("usr:ada"))
+    ring_present = ('"minute_window"' in raw_board
+                    and '"minute_used"' in raw_board
+                    and project_clock(raw_board) != raw_board)
+    poked = dict(bat1)
+    poked["board_ada"] = bat1["board_ada"].replace(
+        '"quota_used": 12', '"quota_used": 11')
+    guard_ok = (ring_present
+                and poked["board_ada"] != bat1["board_ada"]
+                and battery_diffs(bat1, poked) == ["board_ada"])
+    ok1 = ok_world and ok_probes1 and ok_drift1 and guard_ok
     record("AC-DSVP1", ok1, "anchor world pinned (registered devs"
           " ada quota 12 + lin quota 5; devshare w1 explicit paid"
           " [(ada,34),(lin,15)] total 49; w2 usage-derived paid"
@@ -248,7 +277,11 @@ def main():
           " 3872, pool:reserve 4100;"
           " incentive_windows=3 share-tx=5); five gate probes"
           " rejected (%s); counts and battery frozen across the"
-          " probe batch; digest=%s" % (
+          " probe batch (the read-time minute ring is projected out"
+          " of the board comparison, the ring is proved present in"
+          " the raw dump, and a poked persisted counter still reads"
+          " as a diff, so the projection is proved honest);"
+          " digest=%s" % (
               "; ".join(probes1), evidence_digest(bat1)))
 
     # -- AC-DSVP2 cross-restart byte-identical replay ------------
@@ -272,7 +305,9 @@ def main():
           " byte-identical to the pre-close snapshot (windows"
           " history with persisted settled_utc rows + both"
           " dev boards with registered/purchased/consumed utc"
-          " values + five balances), diffs=%s; the read-only dock"
+          " values + five balances), with the read-time minute ring"
+          " projected out of both board dumps so a minute boundary"
+          " cannot fake a difference, diffs=%s; the read-only dock"
           " rebuilds over the same incentive_windows values with"
           " zero in-memory drift; digest=%s" % (
               diffs2 or "none", evidence_digest(bat2)))
