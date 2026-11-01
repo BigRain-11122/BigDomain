@@ -1,0 +1,8 @@
+{
+  "do": "R2337 产品窗：测出队列头邻的「已交付仍被当可认领」真缺口——队头指向 AC-GDIW1（gate_decl_identity_wire），而它 R2315 就交付完了。新增占用读数 queue_occupancy：每条可认领行点名的模块都去盘上核对，模块+套件两件齐才算已交付；实测可认领 10 行中只有 1 行已交付。同时把那条陈年队列行真实关闭（不重写代码）并补一条真缺口种子：让队头选择正式去问占用读数。套件 6/6 双跑同一，邻接四套全绿。",
+  "current": "R2337 已收账：queue_occupancy（队列占用读数）在盘，可认领行的已交付面从「只能人肉查」变成硬读数；实测当前队头就是已交付行（HEAD-DELIVERED），队列行已真实翻转、新种子已入板；水位 fold 626 已跑（1..5，76483B，余 2017B），state 均衡、四套账本套件全绿。",
+  "latest_artifact": "src/os/queue_occupancy.py（占用读数）+ src/os/test_queue_occupancy.py（SUITE PASS 6/6 双跑同一）+ qa/queue-occupancy-R2337.log（1338B，单写器 utf-8 LF）",
+  "next_milestone": "R2338 验证窗：在已提交的 R2337 树上跑全量电池（预注册 476 套件 / 3832 判据，即 +1/+6）；电池绿后回到产品面：队列头 AC-OTP1（orphan_promote，判据已在行内预注册）。",
+  "entry": "R2337 product face: measured that the queue head offered work already shipped at R2315 (AC-GDIW1), shipped src/os/queue_occupancy.py plus its suite 6/6 twice so a row's delivery state is a reading instead of a guess, closed the stale row against the files on disk, seeded one real gap row for the head-selection wire, discharged the R2336 battery debt row and opened the R2338 one at 476/3832",
+  "heartbeat": "tick 2337 2026-11-01 R2337 product window: queue_occupancy reads the tech queue claimable=10 prefixed=7 delivered=1 head=386 AC-GDIW1 DELIVERED verdict=HEAD-DELIVERED, suite 6/6 twice, stale row closed and one gap row seeded, fold 626 to 76483B (margin 2017B), four ledger suites green"
+}

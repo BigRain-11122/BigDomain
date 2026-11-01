@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2337 suite=src/os/test_queue_occupancy.py legs=2
+== LEG A rc=0 digest=84D81C3E80FFDBB2
+queue_occupancy suite (expected criteria 6)
+PASS AC-QOC1 the row law and the prefix law are queue_floor's and queue_row's, not a second parser
+PASS AC-QOC2 delivered means every named module has its file and suite
+PASS AC-QOC3 the reading writes nothing, runs no suite, reads no clock
+PASS AC-QOC4 HEAD-DELIVERED is named, and a delivered row behind the head counts as stale
+PASS AC-QOC5 CLI 0/2/3/5 and a byte-stable JSON over pinned keys
+PASS AC-QOC6 pure ASCII, stdlib only, and wired under its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=84D81C3E80FFDBB2
+queue_occupancy suite (expected criteria 6)
+PASS AC-QOC1 the row law and the prefix law are queue_floor's and queue_row's, not a second parser
+PASS AC-QOC2 delivered means every named module has its file and suite
+PASS AC-QOC3 the reading writes nothing, runs no suite, reads no clock
+PASS AC-QOC4 HEAD-DELIVERED is named, and a delivered row behind the head counts as stale
+PASS AC-QOC5 CLI 0/2/3/5 and a byte-stable JSON over pinned keys
+PASS AC-QOC6 pure ASCII, stdlib only, and wired under its own label
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_gate_decl_identity_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=84D81C3E80FFDBB2

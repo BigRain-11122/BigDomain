@@ -4807,6 +4807,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-residue-triage-append",
      os.path.join("..", "os", "test_residue_triage_append.py"), 6),
+    # R2337: queue_head answers WHICH row comes first, but nothing asked
+    # whether that row still needs doing - the head it named this window
+    # had shipped at R2315. Every module a claimable row names is now
+    # resolved against the tree: DELIVERED needs both the module file and
+    # its suite, anything less stays CLAIMABLE, and the head verdict says
+    # HEAD-DELIVERED rather than pretending the work is pending.
+    # (AC-QOC1..AC-QOC6 pinned in state/queue/tech.md as the R2337 seed
+    # row BEFORE the code existed.)
+    ("os-queue-occupancy",
+     os.path.join("..", "os", "test_queue_occupancy.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only
