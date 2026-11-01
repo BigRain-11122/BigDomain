@@ -5016,6 +5016,14 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-runner-arg-guard",
      os.path.join("..", "os", "test_runner_arg_guard.py"), 6),
+    # R2363: the declaration finally has a general re-pin writer - the act
+    # that was done by a round script with the round and the until window as
+    # constants, with no dry run and no refusal surface. The entry set, the
+    # status tuple, the judge and the live reading are residue_triage own.
+    # (AC-RTRP1..AC-RTRP6 were pinned in state/queue/tech.md:410 as the R2353
+    # seed row BEFORE the code.)
+    ("os-residue-triage-repin",
+     os.path.join("..", "os", "test_residue_triage_repin.py"), 6),
     ]
 
 FAILS = 0

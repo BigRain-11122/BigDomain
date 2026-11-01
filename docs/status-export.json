@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-11-02T05:05:31+08:00",
-  "do": "R2362 verification-then-product window: the carried battery ran first on the committed R2361 tree and was red on EVIDENCE - three R2361 logs had been captured through a PowerShell redirect and were utf-16, so the writer census flagged them; they were transcoded to utf-8/LF and the census went DRIFT-CLEAN without widening its baseline. Then the runner finally got an argument guard: reconcile_all has no parser, so any token - --help included - became an evidence FILE NAME and started a real battery; src/os/runner_arg_guard.py imports reconcile_all.CLI_CONTRACT instead of a second flag list, refuses an unknown flag naming the token and the file it would have created, and answers a bare --help as a question.",
+  "export_ts": "2026-11-02T05:14:13+08:00",
+  "do": "R2363 product window: the triage declaration finally has a general re-pin writer (src/os/residue_triage_repin.py) that plans by number, writes nothing by default, refuses a moved status before it can be laundered and proves its own size on one atomic replace; the real declaration was re-pinned at R2363 from one live reading (211 entries, 63026B -> 62266B, TRIAGED 211/211). The carried battery row stays open with its target named.",
   "ceo_face": {
-    "current": "R2362 verification-then-product window: the carried battery ran first on the committed R2361 tree and was red on EVIDENCE - three R2361 logs had been captured through a PowerShell redirect and were utf-16, so the writer census flagged them; they were transcoded to utf-8/LF and the census went DRIFT-CLEAN without widening its baseline. Then the runner finally got an argument guard: reconcile_all has no parser, so any token - --help included - became an evidence FILE NAME and started a real battery; src/os/runner_arg_guard.py imports reconcile_all.CLI_CONTRACT instead of a second flag list, refuses an unknown flag naming the token and the file it would have created, and answers a bare --help as a question.",
-    "latest_artifact": "src/os/runner_arg_guard.py + src/os/test_runner_arg_guard.py (AC-RAG1..AC-RAG6, suite 6/6) and qa/reconcile-battery-R2362.log (RUNNER PASS 491/491 suites, criteria 3922, 844.6s) with docs/sandbox-suite-matrix.md regenerated to 46996B and --check byte-identical",
-    "next_milestone": "R2363: THE BATTERY ON THE COMMITTED R2362 TREE with an empty git status before and after (the R2168 mixed-tree rule), pre-registered at 491 suites / 3922 criteria, then the four follow-up sections and a return to the tech head with fresh criteria pinned before code.",
+    "current": "R2363 product window: the triage declaration finally has a general re-pin writer (src/os/residue_triage_repin.py) that plans by number, writes nothing by default, refuses a moved status before it can be laundered and proves its own size on one atomic replace; the real declaration was re-pinned at R2363 from one live reading (211 entries, 63026B -> 62266B, TRIAGED 211/211). The carried battery row stays open with its target named.",
+    "latest_artifact": "src/os/residue_triage_repin.py + src/os/test_residue_triage_repin.py (AC-RTRP1..AC-RTRP6, SUITE PASS 6/6 twice identical), state/residue_triage.json re-pinned at R2363 (211 entries, TRIAGED), evidence qa/residue-triage-repin-R2363.log and qa/residue-triage-repin-live-R2363.log - written 2026-11-02 R2363.",
+    "next_milestone": "R2364: the carried reconcile battery on the committed R2363 tree with an empty git status (the R2168 mixed-tree rule), target 491 suites / 3922 criteria plus this window one suite and six criteria = 492 / 3928, then the queue head the reader names (state/queue/tech.md:411 prefix AC-FDW1); the idempotent re-pin seed (AC-RTRI1..AC-RTRI6) stands behind it in the FIFO. Window 48h.",
     "next_milestone_due": "2026-11-04T05:05:31+08:00",
     "last_artifact": "src/os/runner_arg_guard.py + src/os/test_runner_arg_guard.py (AC-RAG1..AC-RAG6, suite 6/6) and qa/reconcile-battery-R2362.log (RUNNER PASS 491/491 suites, criteria 3922, 844.6s) with docs/sandbox-suite-matrix.md regenerated to 46996B and --check byte-identical",
     "updated_at": "2026-11-02T05:05:31+08:00"
@@ -145,6 +145,10 @@
   ],
   "results": [
     [
+      "2363",
+      "OSLoop 执行 tick"
+    ],
+    [
       "R2362",
       "R2362 verification-then-product window: the carried battery's red reading was diagnosed as shell-capture dialect (three R2361 logs utf-16 by BOM) and fixed by transcoding the evidence to utf-8/LF instead of widening the census baseline; then AC-RAG1..AC-RAG6 shipped as src/os/runner_arg_guard.py plus its suite, with reconcile_all.CLI_CONTRACT as the imported single source so the guard cannot drift from the runner it guards. Suite 6/6, full battery 491/491 and 3922 criteria, matrix regenerated and byte-identical on check."
     ],
@@ -232,14 +236,14 @@
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 10,
     "queue_explore_open": 10
   }
 }

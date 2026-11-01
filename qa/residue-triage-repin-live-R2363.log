@@ -1,0 +1,13 @@
+RESIDUE REPIN PLANNED round=R2363 until=R2373 entries=211->211 dropped=0 bytes=63026->62266
+  STATUS DELIVERED count=191
+  STATUS STAMP-ONLY-OPEN count=20
+  REASON re-pinned at R2363 from one live reading
+LIVE DRY RUN wrote=no verdict=PLANNED
+RESIDUE REPIN PINNED round=R2363 until=R2373 entries=211->211 dropped=0 bytes=63026->62266
+  STATUS DELIVERED count=191
+  STATUS STAMP-ONLY-OPEN count=20
+  REASON re-pinned at R2363 from one live reading
+LIVE EXECUTE wrote=yes bytes=63026->62266 predicted=62266
+READ BACK RESIDUE TRIAGE declaration=PINNED declared_by=R2363 round=R2363 residue=211 triaged=211 untriaged=0 unmatched=0 disagrees=0 expired=0 verdict=TRIAGED
+RESIDUE 211/211 triaged verdict=TRIAGED
+TEMP RESIDUE []
