@@ -4883,6 +4883,14 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-incomplete-cause",
      os.path.join("..", "os", "test_followup_incomplete_cause.py"), 6),
+    # R2345: the declarations list read as a HISTORY - the rows come from
+    # review_window_decl.shape and the agreement is asked of its resolver, so
+    # the two readers cannot disagree about the same file; a rewind refuses
+    # naming both rows and rounds and a named move is never a failure.
+    # (AC-RWH1..AC-RWH6 pinned in state/queue/tech.md as the R2327 seed row
+    # BEFORE the code existed.)
+    ("os-review-window-history",
+     os.path.join("..", "os", "test_review_window_history.py"), 6),
     ]
 
 FAILS = 0

@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2345 suite=src/os/test_review_window_history.py legs=2
+== LEG A rc=0 digest=154335DE83138CA5
+review_window_history suite (expected criteria 6)
+PASS AC-RWH1 rows come from RWD.shape and a patched shape flows through
+PASS AC-RWH2 a declared_by rewind refuses naming both rows and rounds
+PASS AC-RWH3 moves named in file order, no move reads EMPTY-HISTORY
+PASS AC-RWH4 identical DRIFT reading to the resolver on a one-row diff
+PASS AC-RWH5 exit codes 0/2/3/5, byte-stable --json, zero writes
+PASS AC-RWH6 pure source, wired, live declaration reads honestly
+SUITE PASS 6/6
+== LEG B rc=0 digest=154335DE83138CA5
+review_window_history suite (expected criteria 6)
+PASS AC-RWH1 rows come from RWD.shape and a patched shape flows through
+PASS AC-RWH2 a declared_by rewind refuses naming both rows and rounds
+PASS AC-RWH3 moves named in file order, no move reads EMPTY-HISTORY
+PASS AC-RWH4 identical DRIFT reading to the resolver on a one-row diff
+PASS AC-RWH5 exit codes 0/2/3/5, byte-stable --json, zero writes
+PASS AC-RWH6 pure source, wired, live declaration reads honestly
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_review_window.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_occupancy.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=154335DE83138CA5

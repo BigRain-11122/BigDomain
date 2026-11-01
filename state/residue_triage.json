@@ -1410,6 +1410,13 @@
       "declared_by": "R2343",
       "reason": "fold 631 archived the R2331 block verbatim on a round-block boundary; the round shipped src/os/retire_candidate.py with its six pre-registered criteria and closed one tech row, so its delivery is on record and this entry restores that reading after the fold",
       "until": 2350
+    },
+    {
+      "round": 2333,
+      "status": "DELIVERED",
+      "declared_by": "R2345",
+      "reason": "fold 631 moved the R2333 block into logs/state-log-archive-2026-11.md verbatim on a round-block boundary, so the round now sits on no live row while its delivery is unchanged and the rows it shipped are closed",
+      "until": 2350
     }
   ]
 }
