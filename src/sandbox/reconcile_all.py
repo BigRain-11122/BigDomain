@@ -4897,6 +4897,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-residue-triage-append",
      os.path.join("..", "os", "test_residue_triage_append.py"), 6),
+    # R2369: the single-entry append refuses to leave any residue round
+    # undeclared, so a fold that creates several residue rounds at once
+    # (measured at R2355: fold 640 created R2345, R2346 and R2348) could
+    # not go through the shipped channel. The batch writer accepts every
+    # pair in one call, judges the file BEFORE writing, and performs one
+    # atomic replace at a proved size.
+    # (AC-RTAB1..AC-RTAB6 pinned in state/queue/tech.md as the R2355 seed
+    # BEFORE the code existed.)
+    ("os-residue-triage-append-batch",
+     os.path.join("..", "os", "test_residue_triage_append_batch.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now

@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2369 suite=src/os/test_residue_triage_append_batch.py legs=2
+== LEG A rc=0 digest=88124F055DE23763
+residue_triage_append_batch suite (expected criteria 6)
+PASS AC-RTAB1 several entries in one call
+PASS AC-RTAB2 duplicates and DISAGREES refuse before a byte
+PASS AC-RTAB3 one atomic replace at the predicted size
+PASS AC-RTAB4 exit 0 only on TRIAGED, partial batch refused
+PASS AC-RTAB5 single-entry CLI keeps its pinned behaviour
+PASS AC-RTAB6 pure stdlib, owners stay the owners
+SUITE PASS 6/6
+== LEG B rc=0 digest=88124F055DE23763
+residue_triage_append_batch suite (expected criteria 6)
+PASS AC-RTAB1 several entries in one call
+PASS AC-RTAB2 duplicates and DISAGREES refuse before a byte
+PASS AC-RTAB3 one atomic replace at the predicted size
+PASS AC-RTAB4 exit 0 only on TRIAGED, partial batch refused
+PASS AC-RTAB5 single-entry CLI keeps its pinned behaviour
+PASS AC-RTAB6 pure stdlib, owners stay the owners
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_seed_anchor.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=4 fails=0 digest=88124F055DE23763
