@@ -4684,6 +4684,19 @@ SUITES = [
     # BEFORE the code.)
     ("os-residue-triage-decl-reason",
      os.path.join("..", "os", "test_residue_triage_decl_reason.py"), 6),
+    # R2351: the triage declaration head could only be renewed by hand, which
+    # is exactly how it aged (R2350 measured eleven appends behind a R2331
+    # head). This writer renews only what it MEASURED: the entry set, the
+    # statuses and the live residue come from residue_triage and the head
+    # claim from residue_triage_decl_reason, the dry run is the default and
+    # writes no byte, a renewal is refused when an entry disagrees with the
+    # live reading / a live residue round is undeclared / the round would
+    # predate an entry, and the executed renewal is one atomic splice that
+    # leaves every entry byte-identical and proves its own predicted size.
+    # (AC-RTRH1..AC-RTRH6 pinned in state/queue/tech.md as the R2350 seed row
+    # BEFORE the code.)
+    ("os-residue-triage-head-renew",
+     os.path.join("..", "os", "test_residue_triage_head_renew.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2351 suite=src/os/test_residue_triage_head_renew.py legs=2
+== LEG A rc=0 digest=E76AE248C5320D9E
+PASS AC-RTRH1 imports
+PASS AC-RTRH2 dry run plans and writes nothing
+PASS AC-RTRH3 refusals name their rounds
+PASS AC-RTRH4 atomic splice
+PASS AC-RTRH5 CLI codes
+PASS AC-RTRH6 purity and wiring
+SUITE PASS 6/6
+== LEG B rc=0 digest=E76AE248C5320D9E
+PASS AC-RTRH1 imports
+PASS AC-RTRH2 dry run plans and writes nothing
+PASS AC-RTRH3 refusals name their rounds
+PASS AC-RTRH4 atomic splice
+PASS AC-RTRH5 CLI codes
+PASS AC-RTRH6 purity and wiring
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage_decl_reason.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_retire_apply.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E76AE248C5320D9E
