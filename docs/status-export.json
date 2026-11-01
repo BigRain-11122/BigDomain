@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T11:57:24+08:00",
-  "do": "R2324 验证窗：清掉 R2323 产品窗欠下的验证账——先在已提交树上把状态文件的水位线折叠（78481B → 71311B，余量 7189B），再跑全量对账电池，最后回读产品面实况。",
+  "export_ts": "2026-11-01T12:03:44+08:00",
+  "do": "R2325 产品窗：让「本司跟进聚合」按最后一腿判读。R2303 的 joiners 只修了单轮读，而厂里真正打印的 aggregate 仍按 canonical 腿判每一轮——被绿色 retry 修好的轮次永远计红（R2303 实测 rounds=427 red=412，其中 4 轮有 retry）。本轮交付 src/os/followup_retry_history.py：整目录一遍读，每轮判读与腿序全部问 followup_retry_legs，分成 green / recovered / unfixed / regressed 四类互斥，recovered + unfixed 恰好划分 canonical 未 PASS 的轮次，并带自检（不再划分即拒E_FRH_COUNT）；无 retry 的轮次逐键等同于 followup_history 的读解；孤儿 retry （canonical 已不在）经命名律发现后拒绝 E_FRTL_ORPHAN_RETRY，不再从计数里消失。",
   "ceo_face": {
-    "current": "R2324 验证窗交付：折叠 619 + 全量对账电池 RUNNER PASS 469/469 套件（控制 7/7）791.9 秒，判据总数 3790 与预注册完全一致（对 R2322 468/3784 为 +1 套件 / +6 判据），四段跟随检查在矩阵先按设计 FAIL 后重生成再复跑，全部 PASS，VERDICT R2324 PASS；实况回读 orphan_trace --trace = rounds=1 legs=2 trace_exists=1 verdict=TRACE-FOUND，R2136 由 -c 腿顶替。本窗零产品代码改动，0 产品分。",
-    "latest_artifact": "qa/reconcile-all-R2324.log（2026-11-01·786983B·RUNNER PASS 469/469·判据 3790）+ docs/sandbox-suite-matrix.md（45005B·469/3790）",
-    "next_milestone": "R2325 产品窗：认领技术队头 state/queue/tech.md:380（AC-FRH1 followup_retry_history），判据已预注册于该行；随后电池目标预注册为 470 套件 / 3796 判据——窗 ≤48h",
-    "next_milestone_due": "2026-11-03T11:57:24+08:00",
-    "last_artifact": "qa/reconcile-all-R2324.log"
+    "current": "R2325 产品窗完成：跟进聚合最后一腿判读 src/os/followup_retry_history.py 落盘并接线，套件 6/6 双腿全绿、四套相邻跟进套件同时绿，证据 qa/followup-retry-history-R2325.log（1338B）。真实全堆实测：rounds=438 green=20 retried=6 recovered=5 unfixed=413 regressed=0，verdict=HISTORY-DEBT——五轮被 retry 修复（R2277/R2289/R2299/R2318/R2320）现已点名可见。技术队列可认领 9，已从本轮自身读数补种一条真缺口行（followup_incomplete_cause）。",
+    "latest_artifact": "src/os/followup_retry_history.py（+ 测试套件 6 判据）与 qa/followup-retry-history-R2325.log（1338B·双腿一致·四套相邻全绿），2026-11-01",
+    "next_milestone": "R2326 验证轮：在已提交树上跑全量对账电池（预注册目标 471 套件 / 3802 判据 = 相对 R2324 的 470/3796 恰好 +1 套件 / +6 判据），矩阵重生成后四段随访必须全 PASS；随访后回产品面，接技术队头新种子 followup_incomplete_cause（把「为什么是 INCOMPLETE」从一句状态变成分类读数）",
+    "next_milestone_due": "2026-11-03T08:03:44+08:00",
+    "last_artifact": "src/os/followup_retry_history.py（+ 测试套件 6 判据）与 qa/followup-retry-history-R2325.log（1338B·双腿一致·四套相邻全绿），2026-11-01"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "src/os/followup_retry_history.py",
+      "on",
+      "R2325 产品窗：跟进聚合不再只按 canonical 腿判读。整目录一遍读，按最后一腿把每轮分成 green / recovered / unfixed / regressed 四类互斥，recovered + unfixed 恰好划分 canonical 未 PASS 的轮次并带自检；无 retry 的轮次逐键等同旧读解；孤儿 retry 被发现即拒绝而不是从计数里消失。套件 6/6 双腿一致＋四套相邻全绿；真实全堆实测 rounds=438 green=20 retried=6 recovered=5 unfixed=413 regressed=0，五轮被 retry 修复的轮次已点名。"
+    ],
     [
       "qa/reconcile-all-R2324.log",
       "on",
@@ -289,6 +294,10 @@
   ],
   "results": [
     [
+      "R2325",
+      "product window: src/os/followup_retry_history.py with its six pre-registered criteria, one runner wiring line, one evidence capture (qa/followup-retry-history-R2325.log 1338B, two identical legs plus four adjacent followup suites green) and one live reading over 438 rounds that names the five recovered rounds; one tech row closed and one real gap row seeded, because claimable fell 10 -> 9."
+    ],
+    [
       "R2324",
       "R2324 verification window: fold 619 moved the R2309 and R2310 whole round blocks into the archive at a 19B margin (78481B -> 71311B), the full reconcile battery on the committed fold tree read RUNNER PASS 469/469 suites plus controls 7/7 in 791.9s with criteria total 3790 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL and its regeneration, and the live product read TRACE-FOUND with R2136 standing in through its -c leg; zero product code changed."
     ],
@@ -529,7 +538,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2324",
+      "2325",
       "OSLoop 执行 tick"
     ],
     [
