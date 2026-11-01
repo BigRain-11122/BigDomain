@@ -4622,6 +4622,13 @@ SUITES = [
     # pinned in state/queue/tech.md as the R2314 seed row BEFORE the code.)
     ("os-gate-decl-identity-wire",
      os.path.join("..", "os", "test_gate_decl_identity_wire.py"), 6),
+    # R2317: the declaration could gain an entry but never lose one, so a
+    # completed row left its blocker declared forever and only a hand edit
+    # could retire it; the writer asks machine_gate own live reading and
+    # refuses an entry that is still blocking. (AC-GDRT1..AC-GDRT6 pinned
+    # in state/queue/tech.md as the R2312 seed row BEFORE the code.)
+    ("os-gate-decl-retire",
+     os.path.join("..", "os", "test_gate_decl_retire.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

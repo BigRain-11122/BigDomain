@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2317 suite=src/os/test_gate_decl_retire.py legs=2
+== LEG A rc=0 digest=C8B24846FFA43CDE
+gate_decl_retire suite (expected criteria 6)
+PASS AC-GDRT1 shape, post reader and live block are imported
+PASS AC-GDRT2 both refusals name the field and write nothing
+PASS AC-GDRT3 dry run writes nothing, execute is exact
+PASS AC-GDRT4 post carries one fewer entry, survivors intact
+PASS AC-GDRT5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRT6 pure, wired, and a plan writes nothing
+SUITE PASS 6/6
+== LEG B rc=0 digest=C8B24846FFA43CDE
+gate_decl_retire suite (expected criteria 6)
+PASS AC-GDRT1 shape, post reader and live block are imported
+PASS AC-GDRT2 both refusals name the field and write nothing
+PASS AC-GDRT3 dry run writes nothing, execute is exact
+PASS AC-GDRT4 post carries one fewer entry, survivors intact
+PASS AC-GDRT5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRT6 pure, wired, and a plan writes nothing
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_machine_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_append.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_drift.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=C8B24846FFA43CDE
