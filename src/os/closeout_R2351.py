@@ -176,6 +176,16 @@ LOG_ITEMS = [
 ]
 
 
+TOKENS = (
+    "R2351 tokens: local=~19k api=0 api_reason=product window - one product "
+    "writer with its six pre-registered criteria and its suite (red twice "
+    "before green: the design renewed the head window to a window the shipped "
+    "comparison cannot read as clean, and one criterion asserted a string the "
+    "entries themselves carry), three adjacent suites, one dry-run reading of "
+    "the live declaration and the closeout, all stdlib/local."
+)
+
+
 def read_json(path):
     with io.open(path, "r", encoding="utf-8") as handle:
         return json.load(handle)
@@ -366,6 +376,41 @@ def write_heartbeat(state, execute):
 
 def main(argv):
     execute = "--execute" in argv
+    if "--append-tokens" in argv:
+        # The round-accounting line is written after the window item so the
+        # window log keeps its own order; nothing else is touched here.
+        state = read_json(STATE)
+        if any(item.startswith("R2351 tokens:") for item in state["log"]):
+            print("TOKENS already present")
+            return 0
+        state["log"] = state["log"] + [TOKENS]
+        payload = json.dumps(state, ensure_ascii=False, indent=2,
+                             sort_keys=False)
+        data = SIO.canon(payload).encode("utf-8")
+        print("STATE log_items=%d bytes=%d" % (len(state["log"]), len(data)))
+        if len(data) > 78500:
+            raise SystemExit("E_R2351_STATE_GATE bytes=%d" % len(data))
+        if not execute:
+            print("DRY RUN: pass --execute to write")
+            return 0
+        folder = os.path.dirname(os.path.abspath(STATE))
+        handle, temp = tempfile.mkstemp(dir=folder, prefix=".state_R2351t_")
+        try:
+            with os.fdopen(handle, "wb") as sink:
+                sink.write(data)
+                sink.flush()
+                os.fsync(sink.fileno())
+            os.replace(temp, STATE)
+        except BaseException:
+            try:
+                os.unlink(temp)
+            except OSError:
+                pass
+            raise
+        with io.open(STATE, "rb") as back:
+            ok = back.read() == data
+        print("STATE READBACK ok=%s" % ok)
+        return 0 if ok else 2
     if "--export-only" in argv:
         return write_export(read_json(STATE), execute)
     code = close_queue(execute)
