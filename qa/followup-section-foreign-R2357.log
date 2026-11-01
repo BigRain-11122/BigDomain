@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2357 suite=src/os/test_followup_section_foreign.py legs=2
+== LEG A rc=0 digest=3DA737F450872F45
+followup_section_foreign suite (expected criteria 6)
+PASS AC-FSF1 vocabulary and parse asked of followup_history
+PASS AC-FSF2 disjoint readings, exactly one per round
+PASS AC-FSF3 log-derived, clockless, no round threshold
+PASS AC-FSF4 fails closed at exit 3, never reads CLEAN
+PASS AC-FSF5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-FSF6 pure, wired, missing ritual names named
+SUITE PASS 6/6
+== LEG B rc=0 digest=3DA737F450872F45
+followup_section_foreign suite (expected criteria 6)
+PASS AC-FSF1 vocabulary and parse asked of followup_history
+PASS AC-FSF2 disjoint readings, exactly one per round
+PASS AC-FSF3 log-derived, clockless, no round threshold
+PASS AC-FSF4 fails closed at exit 3, never reads CLEAN
+PASS AC-FSF5 CLI 0/2/5, byte-stable json, zero writes
+PASS AC-FSF6 pure, wired, missing ritual names named
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=3DA737F450872F45

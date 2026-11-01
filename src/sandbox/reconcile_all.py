@@ -4798,6 +4798,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-history",
      os.path.join("..", "os", "test_followup_history.py"), 6),
+    # R2357: followup_history parses a SECTION line under ANY name and then
+    # never looks at it again, so a log carrying an older or a future ritual
+    # name was neither reported nor refused (measured at R2343 on the live
+    # log). One read-only reader derives each round's reading from the log
+    # alone (FOREIGN-SECTION / VOCABULARY-CLEAN, disjoint and exhaustive) and
+    # keeps a directory census so a ritual rename is a set difference.
+    # (AC-FSF1..AC-FSF6 pinned in state/queue/tech.md as the R2343 seed row
+    # BEFORE the code existed.)
+    ("os-followup-section-foreign",
+     os.path.join("..", "os", "test_followup_section_foreign.py"), 6),
     # R2292: queue_row_exempt records an acceptance once and nothing ever
     # looks at it again, so a waiver granted while the world looked one way
     # quietly becomes permanent. One read-only reviewer ages every declared
