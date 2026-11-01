@@ -41,3 +41,10 @@
 - 判据（≤3 问）：①同一改动下 scope 跑墙钟 ≤ 全量跑的 50%？②对 10 个已知历史缺陷做变异回放（把旧缺陷重新注入改动域），scope 跑全部拦下（零漏检）？③缺省入口逐字节不变（不带 --scope 时证据字节与现行一致），矩阵 --check 与 census 双绿？
 - 收口三态：①②③ 全过=转常设双轨；②漏检任一=判负回滚（质量门优先，负面结论也是产出）；③不过=当窗修回缺省面再判。
 〔2026-10-24 R2071 交：本窗首条·窗配额已清〕
+
+### BD-PROP-006 晋升账本的到期哨兵（2026-11-02，窗 11-01~11-07，状态 open，判据=账本债在验证窗内可见，试点窗 11-02~11-15）
+
+- 现象：本轮给晋升写入器接上了账本闸，实测 `--plan R2136` 已能报出「recorded as reconcile-all-R2136.log by R2342 until R2360」；但账本自己的 until 日期与五种债务读数（RECORDED/STALE/EXPIRED/MISSING/UNRECORDED）在结算轮里没有任何一站去读——`orphan_promotion_ledger --check` 只有人手想起才跑，一条记录静默到期、或一条 canonical 证据字节被改，到下次有人想起之前都无人知晓。
+- 建议：把 `orphan_promotion_ledger --check --round R<n>` 作为只读小节接进 `src/os/battery_followup.py` 的收尾四节之末（第五节），判读 LEDGER-DEBT/CLEAN、债务行原样打印；不改账本、不加时钟、不加写面，欠债只报不拦（拦截面已由 R2356 的写入器闸承担，这里只补可见性）。
+- 判据（先立 3 问）：① 把一条 canonical 证据改一个字节，该节必须从 CLEAN 翻成 LEDGER-DEBT 并指名该轮；② 实况树上必须 CLEAN（零假债），且该节耗时 ≤2s；③ 与既有四节同样只读——跑完 `git status --short` 为空。
+- 收口锚：①②③ 全过=转正（并入 battery_followup 常驻节）；①过②不过=回炉降噪（先修判读再上）；③不过=撤回（只读律高于便利）。

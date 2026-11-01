@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T01:19:30+08:00",
-  "do": "R2355 verification window: the carried battery ran on the committed R2354 tree and reads RUNNER PASS 486/486 suites plus controls 7/7 in 1056.0s with criteria total 3892; all four follow-up sections then PASS (matrix byte-identical at 46510B, fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2355 PASS. The six new group decision rows were reviewed and none dispatches this company. No product code shipped.",
+  "export_ts": "2026-11-02T01:40:16+08:00",
+  "do": "R2356 product window: the promotion WRITER now asks the ledger before it copies. src/os/orphan_promotion_wire.py gates RECORDED, STALE, a live record whose file is gone and an unrecorded canonical file with their own codes, and lets a lapsed judgement through while naming the until it supersedes; six pre-registered criteria green twice with an identical digest, four adjacent suites green, registry now reads 487 suites / 3898 criteria.",
   "ceo_face": {
-    "current": "R2355 verification window: the carried battery ran on the committed R2354 tree and reads RUNNER PASS 486/486 suites plus controls 7/7 in 1056.0s with criteria total 3892; all four follow-up sections then PASS (matrix byte-identical at 46510B, fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2355 PASS. The six new group decision rows were reviewed and none dispatches this company. No product code shipped.",
-    "latest_artifact": "qa/reconcile-all-R2355.log (796964B, single writer utf-8 LF through src/os/battery_stream.py) - 486 suites / 3892 criteria, 7/7 reconcile controls, TMP RECLAIM 932/932 worlds 326.59 MiB; docs/sandbox-suite-matrix.md regenerated to 486 / 3892 (46510B).",
-    "next_milestone": "R2356: claim the queue head state/queue/tech.md:400 prefix AC-OPW1 (orphan_promotion_wire) - wire the promotion writer to ask the promotion ledger before it copies, then commit before any battery.",
-    "next_milestone_due": "2026-11-04T01:19:30+08:00",
-    "last_artifact": "qa/reconcile-all-R2355.log (796964B, single writer utf-8 LF through src/os/battery_stream.py) - 486 suites / 3892 criteria, 7/7 reconcile controls, TMP RECLAIM 932/932 worlds 326.59 MiB; docs/sandbox-suite-matrix.md regenerated to 486 / 3892 (46510B).",
-    "updated_at": "2026-11-02T01:19:30+08:00"
+    "current": "R2356 product window: the promotion WRITER now asks the ledger before it copies. src/os/orphan_promotion_wire.py gates RECORDED, STALE, a live record whose file is gone and an unrecorded canonical file with their own codes, and lets a lapsed judgement through while naming the until it supersedes; six pre-registered criteria green twice with an identical digest, four adjacent suites green, registry now reads 487 suites / 3898 criteria.",
+    "latest_artifact": "src/os/orphan_promotion_wire.py + src/os/test_orphan_promotion_wire.py with qa/orphan-promotion-wire-R2356.log (1067B) - SUITE PASS 6/6 twice, adjacent orphan-trace / orphan-promote / orphan-promotion-ledger / followup-history all 6/6; live dogfood --plan R2136 refuses E_OPW_RECORDED naming the record (reconcile-all-R2136.log, by R2342, until R2360) where orphan_promote alone only reported a taken target.",
+    "next_milestone": "R2357: the battery on the committed R2356 tree with zero product edits, pre-registered at 487 suites / 3898 criteria (+1 suite / +6 criteria against R2355 486/3892), then back to the tech head (AC-FSF1).",
+    "next_milestone_due": "2026-11-04T01:40:16+08:00",
+    "last_artifact": "src/os/orphan_promotion_wire.py + src/os/test_orphan_promotion_wire.py with qa/orphan-promotion-wire-R2356.log (1067B) - SUITE PASS 6/6 twice, adjacent orphan-trace / orphan-promote / orphan-promotion-ledger / followup-history all 6/6; live dogfood --plan R2136 refuses E_OPW_RECORDED naming the record (reconcile-all-R2136.log, by R2342, until R2360) where orphan_promote alone only reported a taken target.",
+    "updated_at": "2026-11-02T01:40:16+08:00"
   },
   "depts": [
     {
@@ -451,6 +451,11 @@
       "qa/reconcile-all-R2355.log",
       "on",
       "R2355 verification: the carried battery on the committed R2354 tree read 486/486 suites plus controls 7/7 with criteria total 3892, and all four follow-up sections PASS after the designed matrix FAIL and its regeneration - the newest two suites are proven wired into the whole registry, not only into their own runs"
+    ],
+    [
+      "src/os/orphan_promotion_wire.py",
+      "on",
+      "R2356 product: the promotion writer asks the ledger before it copies - a recorded, stale, live-but-fileless or unrecorded canonical target refuses with its own code, and a lapsed judgement allows the copy while naming the record it supersedes"
     ]
   ],
   "results": [
@@ -771,7 +776,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2355",
+      "2356",
       "OSLoop 执行 tick"
     ],
     [
@@ -846,17 +851,21 @@
     [
       "R2355",
       "verification window on the register's first=yes item: battery PASS 486/486 suites, criteria 3892, 1056.0s, TMP RECLAIM 932/932; matrix regenerated to 486/3892 (46510B) and re-read byte-identical; fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN; the pre-registered 485/3886 missed by exactly os-queue-head-delivered (6 criteria) and the delta is named; six new group decision rows acknowledged as non-execution and the token baseline widened to 74; battery row closed and product-face-R2356 opened first=yes"
+    ],
+    [
+      "R2356",
+      "product window on the register's first=yes item: one module plus a six-criteria suite pre-pinned at R2342, SUITE PASS 6/6 twice with an identical digest, four adjacent suites green, matrix regenerated to 487 suites / 3898 criteria, and a live dogfood that now names the record R2136 would have walked over; register row closed and the battery row opened first=yes; no registry-wide battery this window and that is disclosed rather than implied"
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 6,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
-    "proposals_total": 5,
-    "proposals_open": 3,
+    "substantive_non_idle_mention_lines": 7,
+    "proposals_total": 6,
+    "proposals_open": 4,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10
