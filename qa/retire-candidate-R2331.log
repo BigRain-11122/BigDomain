@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2331 suite=src/os/test_retire_candidate.py legs=2
+== LEG A rc=0 digest=10F01160BA34C6D5
+retire_candidate suite (expected criteria 6)
+PASS AC-RET1 three imported readers, each patch moving the verdict
+PASS AC-RET2 one fixture, three single-fact blockers, own reasons
+PASS AC-RET3 a stale declaration is never RETIRE-READY
+PASS AC-RET4 a collision blocks both owners and names the other
+PASS AC-RET5 read-only pile, CLI 0/2/3/5 and a stable JSON
+PASS AC-RET6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== LEG B rc=0 digest=10F01160BA34C6D5
+retire_candidate suite (expected criteria 6)
+PASS AC-RET1 three imported readers, each patch moving the verdict
+PASS AC-RET2 one fixture, three single-fact blockers, own reasons
+PASS AC-RET3 a stale declaration is never RETIRE-READY
+PASS AC-RET4 a collision blocks both owners and names the other
+PASS AC-RET5 read-only pile, CLI 0/2/3/5 and a stable JSON
+PASS AC-RET6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_evidence_output_audit.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_evidence_output_map.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_evidence_parity.py rc=0 SUITE PASS 6/6 criteria
+EVIDENCE identical=True adjacent=3 fails=0 digest=10F01160BA34C6D5

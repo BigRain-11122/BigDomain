@@ -4644,6 +4644,15 @@ SUITES = [
     # pinned in state/queue/tech.md as the R2319 seed row BEFORE the code.)
     ("os-gate-decl-retire-scope",
      os.path.join("..", "os", "test_gate_decl_retire_scope.py"), 6),
+    # R2331: three readers each hold one third of the retirement question and
+    # nothing joined them, so deciding to delete an evidence copy meant holding
+    # the conjunction in one head. retire_candidate asks the audit, the map and
+    # the parity scan (all imported) and answers RETIRE-READY only when every
+    # condition holds, else OWNED with the one blocking reason. (AC-RET1..
+    # AC-RET6 pinned in state/queue/tech.md as the R2308 seed row BEFORE the
+    # code.)
+    ("os-retire-candidate",
+     os.path.join("..", "os", "test_retire_candidate.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

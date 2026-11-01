@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-01T14:43:33+08:00",
-  "do": "R2330 验证轮：在已提交树上跑全量校准电池，红了 1 个套件（471/472），定位到根因（测试读数把「当前分钟环」当成了持久化状态），在出生地修好并复跑全绿 472/472、判据 3808 与预登记完全一致。",
+  "export_ts": "2026-11-01T15:02:30+08:00",
+  "do": "R2331 产品轮：把「退役决策」从三份读数各自为政变成一问答——新件 retire_candidate 同时向审计、声明映射、证据成色三个读者要答案，三条件齐备才读 RETIRE-READY，否则只报一条阻塞原因；顺带把已过期的残留裁决声明按一次实测读数续期。",
   "ceo_face": {
-    "current": "R2330 验证轮已完成：全量电池首跑红（471/472 套件，仅 ledger-devshare-persist 的 AC-DSVP1/AC-DSVP2 两判据失败，判据总数 3808 与预登记一致）；实测根因＝dev_board 按设计会带出「当前分钟窗口/本分钟用量」这类读时字段，而套件把完整 dump 当持久化状态做逐字节比对，于是跨越分钟边界就假红（探针钉住了唯一变动字段 minute_window，强制跨分钟的夹具把红态变成可复现的 1/7）；出生地修复以 f14b56fe 单独提交（只在板面 dump 里投影掉 minute_window/minute_used 两字段，并在 AC-DSVP1 加了两道守护：裸 dump 里分钟环必须真实存在、被篡改的持久化计数必须仍被判成差异，故意失明的投影实测会读红）；修复树复跑 RUNNER PASS 472/472＋controls 7/7（823.7s，TMP RECLAIM 932/932），四段后续（matrix 先按设计 FAIL 不重写、suite_matrix 重生成到 472/3808 45292B 后全 PASS）收尾 VERDICT R2330 PASS；活体复读 stamp_exempt_prune 仍是 NOTHING-TO-RETIRE（381 条、79026B 未动）。",
-    "latest_artifact": "qa/reconcile-all-R2330-retry.log（789666B，472/472 全绿＋criteria 3808）与红腿 qa/reconcile-all-R2330.log（789740B，471/472）；修复提交 f14b56fe",
-    "next_milestone": "R2331 回到产品面：队列头 AC-RET1（state/queue/tech.md:383 retire_candidate，判据 AC-RET1..AC-RET6 已在行内预登记）——把「三个读者各持一半退役问题」补成一问：这条已登记的闸到底算不算退役候选；按铁律先提交再跑电池（下一轮预登记 473 套件 / 3814 判据）。窗 ≤48h。",
-    "next_milestone_due": "2026-11-03T14:43:33+08:00",
+    "current": "R2331 产品轮已完成：`src/os/retire_candidate.py` + 配套套件落盘，判据 AC-RET1..AC-RET6 在 R2308 队列行内先于代码预登记。三个输入一律从各自读者导入（套件逐个打补丁 EOA.audit / EOM.build / EVP.scan 验证结论会跟着动，并断言本模组内没有 re.compile、没有 hexdigest、没有 split_target，即不存在第二套声明扫描）；RETIRE-READY 必须三条件同时成立，否则只报一条阻塞原因，优先级钉死并写进文件头（DECLARATION-STALE ＞ PARITY-DEBT ＞ COLLISION，因为声明未解析是唯一「删掉副本等于删掉记录」的情形）。套件 SUITE PASS 6/6 跑两遍判据摘要一致，经 evidence_capture 出件并带三件相邻套件全绿（qa/retire-candidate-R2331.log，1262B），接线 os-retire-candidate(6)。活体实测：92 个证据副本里 retire_ready=6（evidence_R2248/2250/2253/2255/2257/2259，即 R2261 用 evidence_capture 取代的那批手写轮次件）、owned=86、stale=1（evidence_R2213 读 NO-DECLARATION）、parity_debt=85、collision=0。本轮另做两件实测动作：残留裁决声明在 until=R2330 已整份过期，按一次活体读数续期（195 条、declared_by=R2331、until=R2350、verdict=TRIAGED，重跑幂等 33306B）；state.json 在开轮时偏离写规范（135 个裸 LF、63 项缩进不合），先用 state_io --fix 修好再折叠（fold 621/622，70109B，余量 8391B）。",
+    "latest_artifact": "src/os/retire_candidate.py 与 src/os/test_retire_candidate.py（套件 6/6 双跑一致）；证据 qa/retire-candidate-R2331.log（1262B）；续期后的 state/residue_triage.json（195 条，until=R2350）",
+    "next_milestone": "R2332 在已提交树上跑全量校准电池，预登记 473 套件 / 3814 判据（相对 R2330 的 472/3808 恰为 +1 套件 / +6 判据，来自本轮 os-retire-candidate 套件），任何更大差额必须点名而非搪塞；绿了再回到产品面 AC-RAC1（state/queue/tech.md:384 retire_accept，本轮活体读数绝出来的真缺口：六条可退役件还没有一份带窗口的接受记录）。窗 ≤48h。",
+    "next_milestone_due": "2026-11-03T15:02:30+08:00",
     "last_artifact": "qa/reconcile-all-R2328-retry.log"
   },
   "depts": [
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/retire-candidate-R2331.log",
+      "on",
+      "R2331 产品轮：retire_candidate 落地（六判据 6/6 双跑一致，活体 92 件中 6 件可退役），残留裁决声明续期至 R2350，队列补真缺口行"
+    ],
     [
       "qa/reconcile-all-R2330.log",
       "on",
@@ -324,6 +329,10 @@
   ],
   "results": [
     [
+      "R2331",
+      "R2331 产品轮：retire_candidate 落地（六判据 6/6 双跑一致，活体 92 件中 6 件可退役），残留裁决声明续期至 R2350，队列补真缺口行"
+    ],
+    [
       "R2330",
       "R2330 验证轮：电池红→出生地修复→复跑全绿（472/472，判据 3808 与预登记一致）"
     ],
@@ -588,7 +597,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2330",
+      "2331",
       "OSLoop 执行 tick"
     ],
     [
@@ -640,10 +649,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
