@@ -1,0 +1,8 @@
+{
+  "do": "R2335 产品窗：给残留三账本加了一个只补一条的写入口——以前补一条要把整本按实况重跑一遍，等于把一条对不上的记录悄悄洗成对得上；现在一条一条补，重复的直接顶回来，对不上的把两个状态都亮出来。",
+  "current": "R2335 产品窗（开轮五静干净：树净、无锁、决策 61 个 token 无新增、集团台账无 @BigDomain 行、集团 orders 尾行仍是 2026-11-01 10:4x 基线）。债务闸点名 product-face-R2335，与板顶一致，本轮认领 state/queue/tech.md:385 前缀 AC-RTA1（R2310 种子），AC-RTA1..AC-RTA6 在动手前已写在该行里。交付 src/os/residue_triage_append.py 与配套 6 件判据：账本与状态全部取自 residue_triage（换掉读取器立刻跟着变，本件不另写一份读取与状态表）；重复轮次直接拒绝并报出已存在条目的状态/声明轮/窗口；实况状态对不上的拒绝并把两个状态都点名，堵掉整本重跑洗单的捷径；until 早于本条目声明轮拒绝；写入是原文切片，其余每一条字节不变，一次原子替换加读回校验；只有重读为 TRIAGED 才给 0。证据：两腿一致 6/6，四条邻接件同批全绿（qa/residue-triage-append-R2335.log，1255B）。实况只读：真账本 entries=197 residue=- verdict=TRIAGED，所以本轮实况是「无可补条目」，真账本一个字节没动——本件是治疗手段，不是强行开刀。队列：交付行已勾，同窗补一条实测缺口种子（residue_triage_decl_reason，账本头部仍写着 R2331 声明而条目已到 R2333/R2334），量尺回到 5/5、10/10、10/10。",
+  "latest_artifact": "qa/residue-triage-append-R2335.log（1255B，两腿一致，四邻接件 6/6 全绿）；src/os/residue_triage_append.py + src/os/test_residue_triage_append.py（6/6 两跑一致，判据摘要一致）；src/sandbox/reconcile_all.py 已挂 os-residue-triage-append(6)；state/queue/tech.md 交付行已勾、缺口种子已入板",
+  "next_milestone": "R2336 在当前提交树上跑全量对账电池（零产品改动，按 R2168 混合树律），预注册 475 件 / 3826 判据（对 R2334 的 474/3820 正好 +1 件 / +6 判据）；之后回产品面 tech.md:386 前缀 AC-GDIW1",
+  "entry": "R2335 交付 residue_triage_append：一条一条补残留三账本，重复与实况不符各自拒绝且不静默改写；两腿 6/6 一致、四邻接件全绿，实况只读 TRIAGED 不动真账本；同窗补缺口种子，量尺回到 5/5 10/10 10/10",
+  "heartbeat": "R2335 product window: shipped residue_triage_append (one dated entry as its own operation, duplicates and live disagreements refuse by name, raw-text splice keeps neighbours byte-identical); suite 6/6 twice identical, four adjacent suites green; live read-only check reads TRIAGED with nothing to append; one gap row seeded so the gauge stays FLOOR-MET"
+}

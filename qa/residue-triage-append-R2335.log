@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2335 suite=src/os/test_residue_triage_append.py legs=2
+== LEG A rc=0 digest=9A94AE0680523735
+residue_triage_append suite (expected criteria 6)
+PASS AC-RTA1 loader and statuses imported, patches flow through
+PASS AC-RTA2 duplicate refuses naming the existing entry
+PASS AC-RTA3 live disagreement refuses naming both statuses
+PASS AC-RTA4 until guard and byte-identical neighbours
+PASS AC-RTA5 CLI 0/2/3/5 and a byte-stable JSON
+PASS AC-RTA6 pure, wired, and never deletes a declaration
+SUITE PASS 6/6
+== LEG B rc=0 digest=9A94AE0680523735
+residue_triage_append suite (expected criteria 6)
+PASS AC-RTA1 loader and statuses imported, patches flow through
+PASS AC-RTA2 duplicate refuses naming the existing entry
+PASS AC-RTA3 live disagreement refuses naming both statuses
+PASS AC-RTA4 until guard and byte-identical neighbours
+PASS AC-RTA5 CLI 0/2/3/5 and a byte-stable JSON
+PASS AC-RTA6 pure, wired, and never deletes a declaration
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_locator.py rc=0 SUITE PASS 6/6
+== src/os/test_state_seq.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=9A94AE0680523735

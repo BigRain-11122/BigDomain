@@ -4794,6 +4794,19 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-exempt-prune",
      os.path.join("..", "os", "test_stamp_exempt_prune.py"), 6),
+    # R2335: the residue triage declaration can be pinned, but accepting ONE
+    # more round meant re-running the R2310 regeneration helper, which
+    # rewrites every entry from the live reading and therefore silently
+    # absorbs a DISAGREES into a TRIAGED entry. One dated append is now its
+    # own operation: the loader and every status are imported from
+    # residue_triage, a duplicate refuses by naming the existing entry, a
+    # live disagreement refuses naming BOTH statuses, an until earlier than
+    # its own declared_by refuses, and the write is a raw-text splice that
+    # leaves every other entry byte-identical.
+    # (AC-RTA1..AC-RTA6 pinned in state/queue/tech.md as the R2310 seed row
+    # BEFORE the code existed.)
+    ("os-residue-triage-append",
+     os.path.join("..", "os", "test_residue_triage_append.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only
