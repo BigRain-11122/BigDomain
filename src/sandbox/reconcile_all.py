@@ -4662,6 +4662,17 @@ SUITES = [
     # BEFORE the code.)
     ("os-retire-accept",
      os.path.join("..", "os", "test_retire_accept.py"), 6),
+    # R2348: retire_accept RECORDS that six evidence copies are safe to retire
+    # and nothing can act on the record, so the acting step is a MOVE into the
+    # gitignored quarantine path (media/quarantine/R<nnnn>/): the class and the
+    # live verdict are imported, the dry run is the default and proves it moved
+    # nothing by a whole-tree digest, only an ACCEPTED entry is movable, an
+    # executed apply is one os.replace whose per-file digest map shows exactly
+    # two changed paths, and the module carries no delete path at all.
+    # (AC-RAP1..AC-RAP6 pinned in state/queue/tech.md as the R2333 seed row
+    # BEFORE the code.)
+    ("os-retire-apply",
+     os.path.join("..", "os", "test_retire_apply.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-01T22:20:00+08:00",
-  "do": "R2347 验证窗：已提交 R2346 树上的全量校准电池 481/481 套件全绿、3862 判据与预注册逐字吻合（917.3 秒）。跟进四段的矩阵段按设计先红，红的不是文档陈旧而是真缺陷：某套件本轮报出 -3.5 秒的负墙钟，矩阵的时长正则只收非负数，该行被丢掉，481 行只解析出 480 行，整份回归记录因此被判「不适格」而回退到上一轮日志，跟进的两条腿永远对不上。已在源头修复（允许负号且把异常时长写进文档可见处），修复后 481 行全解析、文档重生成 46044B、四段全过，VERDICT R2347 PASS。本轮无新产品面，队头 AC-RAP1 retire_apply 留到下轮。",
+  "export_ts": "2026-11-01T22:52:00+08:00",
+  "do": "R2348 产品窗：还款引擎终于有了“执行步”。退休审批（retire_accept）只记账“六份证据副本可以退休”，却没有任何动作面——只能手动搬移，既无轮次记录也无字节证明更无回滚路径。新交付 src/os/retire_apply.py 把它变成一条命令：类别与现场结论全部从审批读取器导入（不重建第二套判定）；默认干跑并用全树摘要证明“一个字节没动”；只有 ACCEPTED 条目可动，其余三类各自拒绝并带审批原文理由；真正执行是一次 os.replace 移入 media/quarantine/R轮次/ （gitignore 区），并用逐文件摘要图证明“只有两条路径变化、目标字节等于源文件”；模块里没有任何删除路径（不含 os.remove/unlink/rmtree）。套件双跑 6/6 判据逐字节同一，四个相邻套件全绿；现场实读：六条 ACCEPTED、干跑 src/os/evidence_R2248.py 预计 3137 字节移入隔离区（wrote=no）。本窗没做现场搬移（那是另一次可审计动作）；全量电池转 R2349，预注册 482 套件 / 3868 判据。",
   "ceo_face": {
-    "current": "R2347 验证窗：已提交 R2346 树上的全量校准电池 481/481 套件全绿、3862 判据与预注册逐字吻合（917.3 秒）。跟进四段的矩阵段按设计先红，红的不是文档陈旧而是真缺陷：某套件本轮报出 -3.5 秒的负墙钟，矩阵的时长正则只收非负数，该行被丢掉，481 行只解析出 480 行，整份回归记录因此被判「不适格」而回退到上一轮日志，跟进的两条腿永远对不上。已在源头修复（允许负号且把异常时长写进文档可见处），修复后 481 行全解析、文档重生成 46044B、四段全过，VERDICT R2347 PASS。本轮无新产品面，队头 AC-RAP1 retire_apply 留到下轮。",
-    "latest_artifact": "src/sandbox/suite_matrix.py 修复 + qa/reconcile-all-R2347.log（797022B，481/481 套件、3862 判据、单写者 UTF-8 LF）+ docs/sandbox-suite-matrix.md（46044B，green=481/481，由本轮日志生成）",
-    "next_milestone": "R2348：先按债务闸跑全量电池（预注册 482 套件 / 3868 判据，即本轮补上的 os-retire-apply 套件；若该产品面未交付则维持 481/3862 并说明），再按队头 line 393 AC-RAP1 交付 retire_apply（把已接受的退役真正移入隔离目录，永不删除）",
-    "next_milestone_due": "2026-11-03T22:20:00+08:00",
-    "last_artifact": "src/sandbox/suite_matrix.py 修复 + qa/reconcile-all-R2347.log（797022B，481/481 套件、3862 判据、单写者 UTF-8 LF）+ docs/sandbox-suite-matrix.md（46044B，green=481/481，由本轮日志生成）",
-    "updated_at": "2026-11-01T22:20:00+08:00"
+    "current": "R2348 产品窗：还款引擎终于有了“执行步”。退休审批（retire_accept）只记账“六份证据副本可以退休”，却没有任何动作面——只能手动搬移，既无轮次记录也无字节证明更无回滚路径。新交付 src/os/retire_apply.py 把它变成一条命令：类别与现场结论全部从审批读取器导入（不重建第二套判定）；默认干跑并用全树摘要证明“一个字节没动”；只有 ACCEPTED 条目可动，其余三类各自拒绝并带审批原文理由；真正执行是一次 os.replace 移入 media/quarantine/R轮次/ （gitignore 区），并用逐文件摘要图证明“只有两条路径变化、目标字节等于源文件”；模块里没有任何删除路径（不含 os.remove/unlink/rmtree）。套件双跑 6/6 判据逐字节同一，四个相邻套件全绿；现场实读：六条 ACCEPTED、干跑 src/os/evidence_R2248.py 预计 3137 字节移入隔离区（wrote=no）。本窗没做现场搬移（那是另一次可审计动作）；全量电池转 R2349，预注册 482 套件 / 3868 判据。",
+    "latest_artifact": "src/os/retire_apply.py + src/os/test_retire_apply.py + qa/retire-apply-R2348.log（624B，双跑 6/6 同一判据摘要）+ 接线 os-retire-apply(6) + state/queue/tech.md 新种子 AC-RAG1..6（R2348-11-01）",
+    "next_milestone": "R2349：先跑已提交树的全量对账电池（预注册 482 套件 / 3868 判据）+ 四段后续，绿后回产品面队头 line 394 AC-RTD1；2026-11-02 前完成",
+    "next_milestone_due": "2026-11-03T22:52:00+08:00",
+    "last_artifact": "src/os/retire_apply.py + src/os/test_retire_apply.py + qa/retire-apply-R2348.log（624B，双跑 6/6 同一判据摘要）+ 接线 os-retire-apply(6) + state/queue/tech.md 新种子 AC-RAG1..6（R2348-11-01）",
+    "updated_at": "2026-11-01T22:52:00+08:00"
   },
   "depts": [
     {

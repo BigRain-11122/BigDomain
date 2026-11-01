@@ -1,0 +1,20 @@
+EVIDENCE CAPTURE round=R2348 suite=src/os/test_retire_apply.py legs=2
+== LEG A rc=0 digest=5C79D05538327884
+PASS AC-RAP1 imports
+PASS AC-RAP2 dry run
+PASS AC-RAP3 only ACCEPTED moves
+PASS AC-RAP4 executed move
+PASS AC-RAP5 CLI codes
+PASS AC-RAP6 purity and wiring
+SUITE PASS 6/6
+== LEG B rc=0 digest=5C79D05538327884
+PASS AC-RAP1 imports
+PASS AC-RAP2 dry run
+PASS AC-RAP3 only ACCEPTED moves
+PASS AC-RAP4 executed move
+PASS AC-RAP5 CLI codes
+PASS AC-RAP6 purity and wiring
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_retire_candidate.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=5C79D05538327884

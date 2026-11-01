@@ -1424,6 +1424,13 @@
       "declared_by": "R2346",
       "reason": "the R2346 fold moved the whole R2335 block (round line, ledger line, self-heal, decision gate and disclosures) verbatim into the monthly archive on a round-block boundary, so the round is delivered and only its ledger line left the live window",
       "until": 2360
+    },
+    {
+      "round": 2337,
+      "status": "DELIVERED",
+      "declared_by": "R2348",
+      "reason": "fold R2348 moved the whole R2337 block into the archive while its delivery stamp sits on a closed tech row; the round is DELIVERED (ledger line and done row on disk)",
+      "until": 2360
     }
   ]
 }
