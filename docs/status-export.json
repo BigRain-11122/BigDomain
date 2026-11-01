@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T15:02:30+08:00",
+  "export_ts": "2026-11-01T15:25:38+08:00",
   "do": "R2331 产品轮：把「退役决策」从三份读数各自为政变成一问答——新件 retire_candidate 同时向审计、声明映射、证据成色三个读者要答案，三条件齐备才读 RETIRE-READY，否则只报一条阻塞原因；顺带把已过期的残留裁决声明按一次实测读数续期。",
   "ceo_face": {
-    "current": "R2331 产品轮已完成：`src/os/retire_candidate.py` + 配套套件落盘，判据 AC-RET1..AC-RET6 在 R2308 队列行内先于代码预登记。三个输入一律从各自读者导入（套件逐个打补丁 EOA.audit / EOM.build / EVP.scan 验证结论会跟着动，并断言本模组内没有 re.compile、没有 hexdigest、没有 split_target，即不存在第二套声明扫描）；RETIRE-READY 必须三条件同时成立，否则只报一条阻塞原因，优先级钉死并写进文件头（DECLARATION-STALE ＞ PARITY-DEBT ＞ COLLISION，因为声明未解析是唯一「删掉副本等于删掉记录」的情形）。套件 SUITE PASS 6/6 跑两遍判据摘要一致，经 evidence_capture 出件并带三件相邻套件全绿（qa/retire-candidate-R2331.log，1262B），接线 os-retire-candidate(6)。活体实测：92 个证据副本里 retire_ready=6（evidence_R2248/2250/2253/2255/2257/2259，即 R2261 用 evidence_capture 取代的那批手写轮次件）、owned=86、stale=1（evidence_R2213 读 NO-DECLARATION）、parity_debt=85、collision=0。本轮另做两件实测动作：残留裁决声明在 until=R2330 已整份过期，按一次活体读数续期（195 条、declared_by=R2331、until=R2350、verdict=TRIAGED，重跑幂等 33306B）；state.json 在开轮时偏离写规范（135 个裸 LF、63 项缩进不合），先用 state_io --fix 修好再折叠（fold 621/622，70109B，余量 8391B）。",
-    "latest_artifact": "src/os/retire_candidate.py 与 src/os/test_retire_candidate.py（套件 6/6 双跑一致）；证据 qa/retire-candidate-R2331.log（1262B）；续期后的 state/residue_triage.json（195 条，until=R2350）",
-    "next_milestone": "R2332 在已提交树上跑全量校准电池，预登记 473 套件 / 3814 判据（相对 R2330 的 472/3808 恰为 +1 套件 / +6 判据，来自本轮 os-retire-candidate 套件），任何更大差额必须点名而非搪塞；绿了再回到产品面 AC-RAC1（state/queue/tech.md:384 retire_accept，本轮活体读数绝出来的真缺口：六条可退役件还没有一份带窗口的接受记录）。窗 ≤48h。",
-    "next_milestone_due": "2026-11-03T15:02:30+08:00",
-    "last_artifact": "qa/reconcile-all-R2328-retry.log"
+    "current": "R2332 验证窗：在已提交树 5574820a 上跑全量校准电池（零产品改动），473/473 套件全绿 + 控制 7/7，907.8s，判据总数 3814——与预登记的 473/3814 完全一致（相对 R2330 的 472/3808 恰为 +1 套件 / +6 判据，来源=R2331 交付的 os-retire-candidate 套件）。四段跟进按设计顺序：矩阵段先在过期文档上 FAIL 且不改写，再由 suite_matrix 重生成 473/3814（45349B），复跑四段全 PASS（矩阵逐字节同一 / 指纹五域 CLEAN / runner profile --daily --check 逐字节同一 / census DRIFT-CLEAN），VERDICT R2332 PASS。残留判定复读 TRIAGED（195 条，until=R2350）。本轮 0 产品分：只买回验证确定性。",
+    "latest_artifact": "qa/reconcile-all-R2332.log（R2332 全量校准电池，473/473 套件 + 控制 7/7，判据 3814 与预登记逐位一致）· 2026-11-01",
+    "next_milestone": "R2333 回到产品面：认领 tech 队头（state/queue/tech.md:384 前缀 AC-RAC1，retire_accept——本轮实测仍有 6 份 RETIRE-READY 副本落在盘上），先零占用锚检再落码，提交后才跑电池（R2168 混合树铁律）。",
+    "next_milestone_due": "2026-11-03T16:40:00+08:00",
+    "last_artifact": "src/os/retire_candidate.py 与 src/os/test_retire_candidate.py（套件 6/6 双跑一致）；证据 qa/retire-candidate-R2331.log（1262B）；续期后的 state/residue_triage.json（195 条，until=R2350）"
   },
   "depts": [
     {
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/reconcile-all-R2332.log",
+      "on",
+      "R2332 verification window: RUNNER PASS 473/473 suites + controls 7/7 in 907.8s, TMP RECLAIM 932/932, criteria total 3814 exactly as pre-registered (+1 suite / +6 criteria against R2330 472/3808 from the R2331 os-retire-candidate suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 473/3814 (45349B); residue TRIAGED; zero product code, 0 product points."
+    ],
     [
       "qa/retire-candidate-R2331.log",
       "on",
@@ -329,6 +334,10 @@
   ],
   "results": [
     [
+      "R2332",
+      "R2332 verification window: RUNNER PASS 473/473 suites + controls 7/7 in 907.8s, TMP RECLAIM 932/932, criteria total 3814 exactly as pre-registered (+1 suite / +6 criteria against R2330 472/3808 from the R2331 os-retire-candidate suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 473/3814 (45349B); residue TRIAGED; zero product code, 0 product points."
+    ],
+    [
       "R2331",
       "R2331 产品轮：retire_candidate 落地（六判据 6/6 双跑一致，活体 92 件中 6 件可退役），残留裁决声明续期至 R2350，队列补真缺口行"
     ],
@@ -597,7 +606,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2331",
+      "2332",
       "OSLoop 执行 tick"
     ],
     [
@@ -649,10 +658,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
