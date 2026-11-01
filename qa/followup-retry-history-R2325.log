@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2325 suite=src/os/test_followup_retry_history.py legs=2
+== LEG A rc=0 digest=37ACBEAFCAB79895
+followup_retry_history suite (expected criteria 6)
+PASS AC-FRH1 per-round reading and leg order asked of the joiner
+PASS AC-FRH2 recovered and unfixed partition the red canonicals
+PASS AC-FRH3 canonical-only round keeps the history reading
+PASS AC-FRH4 orphan retry refuses instead of vanishing
+PASS AC-FRH5 read-only, four exit codes, stable pinned json
+PASS AC-FRH6 pure, wired, live pile aggregate agrees with the joiner
+SUITE PASS 6/6
+== LEG B rc=0 digest=37ACBEAFCAB79895
+followup_retry_history suite (expected criteria 6)
+PASS AC-FRH1 per-round reading and leg order asked of the joiner
+PASS AC-FRH2 recovered and unfixed partition the red canonicals
+PASS AC-FRH3 canonical-only round keeps the history reading
+PASS AC-FRH4 orphan retry refuses instead of vanishing
+PASS AC-FRH5 read-only, four exit codes, stable pinned json
+PASS AC-FRH6 pure, wired, live pile aggregate agrees with the joiner
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_followup_retry_legs.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_os_retry_naming.py rc=0 SUITE PASS 9/8
+== src/os/test_evidence_variants.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=37ACBEAFCAB79895

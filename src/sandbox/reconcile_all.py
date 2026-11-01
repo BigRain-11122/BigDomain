@@ -4663,6 +4663,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-retry-legs",
      os.path.join("..", "os", "test_followup_retry_legs.py"), 6),
+    # R2325: the joiner fixed ONE round, but the aggregate the house prints
+    # still judged every round from its canonical leg alone, so a round
+    # recovered by a green retry was counted red and the aggregate could never
+    # read ALL-CLEAN while any recovered round existed (live at R2303:
+    # rounds=427 red=412 with four retried rounds). One reading over the whole
+    # directory takes the per-round verdict from the LAST leg and splits the
+    # rounds into green / recovered / unfixed / regressed, with recovered and
+    # unfixed partitioning the rounds whose canonical leg is not PASS.
+    # (AC-FRH1..AC-FRH6 pinned in state/queue/tech.md as the R2303 seed row
+    # BEFORE the code existed.)
+    ("os-followup-retry-history",
+     os.path.join("..", "os", "test_followup_retry_history.py"), 6),
     # R2305: exempt_review ages every accepted entry against a window that
     # arrives as a per-call argument, so two reviewers can read the SAME
     # declaration as FRESH and STALE on the same day and neither reading is
