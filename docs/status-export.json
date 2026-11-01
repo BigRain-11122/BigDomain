@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T05:14:13+08:00",
-  "do": "R2363 product window: the triage declaration finally has a general re-pin writer (src/os/residue_triage_repin.py) that plans by number, writes nothing by default, refuses a moved status before it can be laundered and proves its own size on one atomic replace; the real declaration was re-pinned at R2363 from one live reading (211 entries, 63026B -> 62266B, TRIAGED 211/211). The carried battery row stays open with its target named.",
+  "export_ts": "2026-11-02T05:39:16+08:00",
+  "do": "R2364 verification window: the debt gate named the carried battery and it ran first on the committed 1610c9d1 tree with zero product edits, reading RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with criteria total 3928 exactly as pre-registered (+1 suite / +6 criteria from R2363's shipped suite). The four follow-up sections then PASSED after the designed matrix FAIL and its regeneration, for VERDICT R2364 PASS.",
   "ceo_face": {
-    "current": "R2363 product window: the triage declaration finally has a general re-pin writer (src/os/residue_triage_repin.py) that plans by number, writes nothing by default, refuses a moved status before it can be laundered and proves its own size on one atomic replace; the real declaration was re-pinned at R2363 from one live reading (211 entries, 63026B -> 62266B, TRIAGED 211/211). The carried battery row stays open with its target named.",
-    "latest_artifact": "src/os/residue_triage_repin.py + src/os/test_residue_triage_repin.py (AC-RTRP1..AC-RTRP6, SUITE PASS 6/6 twice identical), state/residue_triage.json re-pinned at R2363 (211 entries, TRIAGED), evidence qa/residue-triage-repin-R2363.log and qa/residue-triage-repin-live-R2363.log - written 2026-11-02 R2363.",
-    "next_milestone": "R2364: the carried reconcile battery on the committed R2363 tree with an empty git status (the R2168 mixed-tree rule), target 491 suites / 3922 criteria plus this window one suite and six criteria = 492 / 3928, then the queue head the reader names (state/queue/tech.md:411 prefix AC-FDW1); the idempotent re-pin seed (AC-RTRI1..AC-RTRI6) stands behind it in the FIFO. Window 48h.",
-    "next_milestone_due": "2026-11-04T05:05:31+08:00",
-    "last_artifact": "src/os/runner_arg_guard.py + src/os/test_runner_arg_guard.py (AC-RAG1..AC-RAG6, suite 6/6) and qa/reconcile-battery-R2362.log (RUNNER PASS 491/491 suites, criteria 3922, 844.6s) with docs/sandbox-suite-matrix.md regenerated to 46996B and --check byte-identical",
-    "updated_at": "2026-11-02T05:05:31+08:00"
+    "current": "R2364 verification window: the debt gate named the carried battery and it ran first on the committed 1610c9d1 tree with zero product edits, reading RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with criteria total 3928 exactly as pre-registered (+1 suite / +6 criteria from R2363's shipped suite). The four follow-up sections then PASSED after the designed matrix FAIL and its regeneration, for VERDICT R2364 PASS.",
+    "latest_artifact": "qa/reconcile-all-R2364.log (single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; docs/sandbox-suite-matrix.md regenerated to 492 suites / 3928 criteria (47070B, green=492/492) and re-read byte-identical.",
+    "next_milestone": "R2365: the product face resuming at state/queue/tech.md:411 prefix AC-FDW1 (queue_floor_delivered_wire), whose six criteria were pinned in that row at R2354 BEFORE any code - the floor gauge still counts a DELIVERED open row as claimable supply, so a queue can read FLOOR-MET over rows whose module and suite already shipped.",
+    "next_milestone_due": "2026-11-04T05:39:16+08:00",
+    "last_artifact": "qa/reconcile-all-R2364.log (single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; docs/sandbox-suite-matrix.md regenerated to 492 suites / 3928 criteria (47070B, green=492/492) and re-read byte-identical.",
+    "updated_at": "2026-11-02T05:39:16+08:00"
   },
   "depts": [
     {
@@ -141,11 +141,16 @@
       "qa/reconcile-all-R2332.log",
       "on",
       "R2332 verification window: RUNNER PASS 473/473 suites + controls 7/7 in 907.8s, TMP RECLAIM 932/932, criteria total 3814 exactly as pre-registered (+1 suite / +6 criteria against R2330 472/3808 from the R2331 os-retire-candidate suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 473/3814 (45349B); residue TRIAGED; zero product code, 0 product points."
+    ],
+    [
+      "qa/reconcile-all-R2364.log",
+      "on",
+      "R2364 verification: the battery on the committed tree reads RUNNER PASS 492/492 suites with 3928 criteria exactly as pre-registered, 884.6s, and the four follow-up sections close on VERDICT PASS"
     ]
   ],
   "results": [
     [
-      "2363",
+      "2364",
       "OSLoop 执行 tick"
     ],
     [
@@ -231,15 +236,19 @@
     [
       "R2325",
       "product window: src/os/followup_retry_history.py with its six pre-registered criteria, one runner wiring line, one evidence capture (qa/followup-retry-history-R2325.log 1338B, two identical legs plus four adjacent followup suites green) and one live reading over 438 rounds that names the five recovered rounds; one tech row closed and one real gap row seeded, because claimable fell 10 -> 9."
+    ],
+    [
+      "R2364",
+      "verification window: the carried battery ran FIRST on the committed 1610c9d1 tree with zero product edits (the R2168 mixed-tree rule) - RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with criteria total 3928 exactly as pre-registered from the R2363 os-residue-triage-repin suite, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; four follow-up sections PASS after the designed matrix FAIL and its regeneration to 47070B at 492/3928 (matrix byte-identical, fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2364 PASS; fold 641 moved 11 log items at a true round-block boundary (predicted 72360B measured 72360B, margin 6140, 745 tokens covered) and the two rounds it left untriaged were declared through the shipped re-pin writer (211 -> 213 entries, TRIAGED 213/213, dropped=0); five ledger and triage suites re-read green; battery row closed and product-face-R2365 opened first=yes; zero product code, 0 product points"
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
