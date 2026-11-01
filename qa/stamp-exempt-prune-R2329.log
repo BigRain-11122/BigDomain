@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2329 suite=src/os/test_stamp_exempt_prune.py legs=2
+== LEG A rc=0 digest=0E6786A923DFBD55
+PASS AC-SEPR1 retire set derived from the reviewer MISSING and the reader EXPIRED readings
+PASS AC-SEPR2 plan names every entry it would drop and dry run is the default
+PASS AC-SEPR3 splice keeps every surviving entry byte-identical and in order on both layouts
+PASS AC-SEPR4 post text validated through read_declaration with the exact expected count
+PASS AC-SEPR5 executed prune is one atomic replace with read-back and no temp residue, a refused plan writes nothing
+PASS AC-SEPR6 purity, own reconcile label, stable JSON keys and one runner entry with six criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=0E6786A923DFBD55
+PASS AC-SEPR1 retire set derived from the reviewer MISSING and the reader EXPIRED readings
+PASS AC-SEPR2 plan names every entry it would drop and dry run is the default
+PASS AC-SEPR3 splice keeps every surviving entry byte-identical and in order on both layouts
+PASS AC-SEPR4 post text validated through read_declaration with the exact expected count
+PASS AC-SEPR5 executed prune is one atomic replace with read-back and no temp residue, a refused plan writes nothing
+PASS AC-SEPR6 purity, own reconcile label, stable JSON keys and one runner entry with six criteria
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_stamp_exempt_append.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+== src/os/test_stamp_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_done_stamp.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_done_stamp_exempt.py rc=0 SUITE PASS 6/6 criteria
+EVIDENCE identical=True adjacent=4 fails=0 digest=0E6786A923DFBD55

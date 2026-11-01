@@ -4764,6 +4764,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-stamp-exempt-append",
      os.path.join("..", "os", "test_stamp_exempt_append.py"), 6),
+    # R2307: the declaration can grow and its rot is named, but nothing could
+    # retire an entry - a MISSING or EXPIRED entry stayed in the file forever.
+    # The retire set is derived from the reviewer own MISSING list and the
+    # reader own EXPIRED status, a dry run names every entry it would drop,
+    # the splice keeps every surviving entry byte-identical and in order, the
+    # post text is validated through the shipped reader with the exact
+    # expected count, and an executed prune is one atomic replace proved by
+    # read-back with no temp residue.
+    # (AC-SEPR1..AC-SEPR6 pinned in state/queue/tech.md as the R2307 seed row
+    # BEFORE the code existed.)
+    ("os-stamp-exempt-prune",
+     os.path.join("..", "os", "test_stamp_exempt_prune.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only
