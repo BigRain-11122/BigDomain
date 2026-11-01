@@ -346,14 +346,30 @@ def main():
            % (sub6["price_cent"], sub6["spend_tx"]))
 
     # -- AC-CVGG7 positive controls ----------------------------
-    v71 = ds3.coverage_board("2026-10")
-    v72 = ds3.coverage_board("2026-11")
+    # The two months are derived from the world's own record stamps
+    # instead of hardcoded literals: the window law reads
+    # subscribed_utc (record time), so a literal month silently
+    # stops being "the active month" the moment the wall clock rolls
+    # into it. The criterion intent is unchanged - one month that
+    # carries the live rows, one adjacent month that carries none.
+    conn7 = sqlite3.connect(ds3.db_path)
+    try:
+        live_m = conn7.execute(
+            "SELECT substr(MIN(subscribed_utc), 1, 7)"
+            " FROM dataset_subscriptions").fetchone()[0]
+    finally:
+        conn7.close()
+    _y, _m = int(live_m[:4]), int(live_m[5:7])
+    empty_m = ("%04d-01" % (_y + 1) if _m == 12
+               else "%04d-%02d" % (_y, _m + 1))
+    v71 = ds3.coverage_board(live_m)
+    v72 = ds3.coverage_board(empty_m)
     v70 = ds3.coverage_board()
     ok7 = [
         sorted(v71.keys()) == ["coverage_board", "disclaimer",
                                "window"],
-        v71["window"] == "2026-10",
-        v72["window"] == "2026-11",
+        v71["window"] == live_m,
+        v72["window"] == empty_m,
         sorted(v70.keys()) == ["coverage_board", "disclaimer"],
         v71["coverage_board"][0]["dataset_key"] == DATASET,
         v72["coverage_board"][0]["dataset_key"] == DATASET,
@@ -361,13 +377,14 @@ def main():
     ]
     record("AC-CVGG7", all(ok7),
            "positive controls: the same shapes as proper 'YYYY-MM'"
-           " strings read through (window='2026-10' sees the two"
-           " live rows, window='2026-11' is the honest all-zero"
-           " month), the explicit-window envelope adds exactly the"
-           " 'window' key while the default envelope keeps its"
-           " two-key shape, and the registry row-set authority"
-           " holds inside a month with no activity - so the gate"
-           " family rejects only malformed forms")
+           " strings read through (window=%r sees the live rows,"
+           " window=%r is the honest all-zero month - both derived"
+           " from the world's own subscribed_utc stamps), the"
+           " explicit-window envelope adds exactly the 'window' key"
+           " while the default envelope keeps its two-key shape, and"
+           " the registry row-set authority holds inside a month"
+           " with no activity - so the gate family rejects only"
+           " malformed forms" % (live_m, empty_m))
 
     # -- AC-CVGG8 hygiene + delivery ---------------------------
     ds3.close()

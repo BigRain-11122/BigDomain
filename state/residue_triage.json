@@ -1311,5 +1311,20 @@
       "reason": "read at R2316 off the board: state/queue/tech.md:366 carries [done 2026-11-01 R2300] for the gate_drift row and commit b6bf3a38 ran the R2301 battery green on that committed tree, so the round delivered; the accepted stamp simply sat on a row that has since closed",
       "until": 2330
     }
+,
+    {
+      "round": 2302,
+      "status": "DELIVERED",
+      "declared_by": "R2318",
+      "reason": "read at R2318 off the live stamp table: state/queue/tech.md:367 carries a CLOSED row for the evidence_variants face this round shipped, and the round became residue only when the R2317 fold 616 moved its log block into the archive",
+      "until": 2330
+    },
+    {
+      "round": 2303,
+      "status": "DELIVERED",
+      "declared_by": "R2318",
+      "reason": "read at R2318 off the live stamp table: state/queue/tech.md:368 carries a CLOSED row for the followup_retry_legs face this round shipped, and the round became residue only when the R2317 fold 616 moved its log block into the archive",
+      "until": 2330
+    }
   ]
 }

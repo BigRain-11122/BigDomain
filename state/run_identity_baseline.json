@@ -11,5 +11,11 @@
       "classes": ["E_FALSE_BYTE_CLAIM"],
       "why": "This stem is a BATTERY log, not one suite's double run. The primary leg is the RED first attempt (RUNNER FAIL, 2 failed assertions) and the run2 leg is the post-fix rerun on the next committed tree (RUNNER PASS 415/415 in 1001.0s), so the two files legitimately differ by 44 lines and 2139 bytes. The byte-claim class is raised by the 420/421 per-suite sentences inside the bodies ('byte-identical=True' on a suite's own a/b legs), which describe those suite pairs and never this file pair. Disclosed here rather than renaming the archive, because a battery log cannot be reproduced to the same bytes; R2233 adopts the forward convention that a correction rerun is named -retry so it is never read as a pair suffix."
     }
+,
+    {
+      "base": "reconcile-all-R2316",
+      "classes": ["E_FALSE_BYTE_CLAIM"],
+      "why": "This stem is a BATTERY log, not one suite's double run. The primary leg is the RED first attempt on the R2315 tree and the -run2 leg is the post-repair rerun on the committed repair tree, so the two files legitimately differ. The byte claims the audit reads are the per-suite 'byte-identical' sentences inside the bodies, never this file pair. Disclosed here rather than renaming an archive that cannot be reproduced to the same bytes."
+    }
   ]
 }

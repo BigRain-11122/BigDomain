@@ -3700,13 +3700,22 @@ async def room_board_persist_cases():
         srv_b.stop()
 
         # ---- AC-S52: stopped-window explicit-ts November row + cross-face ----
+        # The quiet month is derived from the world's own event month
+        # (w) instead of a hardcoded literal: the board windows read
+        # ts_utc, so the moment the wall clock rolls into the literal
+        # month it stops being the month with no other activity. The
+        # criterion intent is unchanged - one month that carries only
+        # the explicit-ts row, one month that carries the live rows.
         from store import EventStore
         st = EventStore(db, disclaimer=notice)
         s_oct = json.dumps(st.room_message_board(window=w), sort_keys=True)
-        st.append("2026-11-05T01:00:01.000000Z", "chat.broadcast",
+        _qy, _qm = int(w[:4]), int(w[5:7])
+        nxt = ("%04d-01" % (_qy + 1) if _qm == 12
+               else "%04d-%02d" % (_qy, _qm + 1))
+        st.append(nxt + "-05T01:00:01.000000Z", "chat.broadcast",
                   "res-nov-direct", "arena", "nov arena row",
                   {"text": "nov arena row"})
-        nov_env = st.room_message_board(window="2026-11")
+        nov_env = st.room_message_board(window=nxt)
         store_full_rows = st.room_message_board()["room_message_board"]
         nov_expected_rows = [{"room": "arena", "messages": 1, "actors": 1}]
         full_expected_rows = [
@@ -3753,7 +3762,7 @@ async def room_board_persist_cases():
         st2 = EventStore(db, disclaimer=notice)
         oct_after = json.dumps(st2.room_message_board(window=w),
                                sort_keys=True)
-        nov_after = json.dumps(st2.room_message_board(window="2026-11"),
+        nov_after = json.dumps(st2.room_message_board(window=nxt),
                                sort_keys=True)
         st2.close()
 
