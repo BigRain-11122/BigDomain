@@ -76,11 +76,16 @@ def main(argv):
     directory = os.path.dirname(path)
     if not os.path.isdir(directory):
         raise SystemExit("E_SEED_DIR: %s missing" % directory)
-    with io.open(path, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(body)
-    with io.open(path, "r", encoding="utf-8") as handle:
-        back = handle.read()
-    if back != body:
+    # The write goes through the pinned-text guard (R2361):
+    # stamp_exempt_seed_guard_wire pins the declaration as it stands, refuses
+    # E_SEG_STALE when another writer moved it in between, and performs the one
+    # atomic replace. This module keeps the entry rules, not the mechanics.
+    import stamp_exempt_seed_guard_wire as SEGW  # noqa: E402
+    report = SEGW.plan(path, body)
+    print(SEGW.one_line(report))
+    done = SEGW.execute(report)
+    print(SEGW.one_line(done))
+    if not done.get("read_back_ok"):
         raise SystemExit("E_SEED_READBACK: declaration does not read back")
     print("WROTE %s entries=%d bytes=%d gate_violations=%d gate_verdict=%s"
           % (SX.DECL_REL.replace(os.sep, "/"), len(entries), len(body),

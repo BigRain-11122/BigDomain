@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T03:36:10+08:00",
-  "do": "R2360 verification window: the debt gate named the carried battery and it ran first on the committed bc4334fa tree with zero product edits, reading RUNNER PASS 489/489 suites plus controls 7/7 in 881.8s with criteria total 3910 exactly as pre-registered from R2359's shipped suite. The four follow-up sections then PASSED after the designed matrix FAIL and its regeneration, for VERDICT R2360 PASS.",
+  "export_ts": "2026-11-02T03:58:31+08:00",
+  "do": "R2361 product window: the seed generator of state/queue/stamp_exempt.json now asks the same pinned-text guard the append and prune writers already ask - a plan pins the digest and byte count it read, an execute refuses E_SEG_STALE before a byte when another writer moved the declaration in between, and the write is one atomic replace proved by read-back. Suite 6/6 twice byte-identical plus five adjacent suites green, with a live dry run planning 381 entries over 79026B and writing nothing.",
   "ceo_face": {
-    "current": "R2360 verification window: the debt gate named the carried battery and it ran first on the committed bc4334fa tree with zero product edits, reading RUNNER PASS 489/489 suites plus controls 7/7 in 881.8s with criteria total 3910 exactly as pre-registered from R2359's shipped suite. The four follow-up sections then PASSED after the designed matrix FAIL and its regeneration, for VERDICT R2360 PASS.",
-    "latest_artifact": "qa/reconcile-all-R2360.log (799502B, single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 489/489 suites plus controls 7/7 in 881.8s with TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; docs/sandbox-suite-matrix.md regenerated to 489 suites / 3910 criteria (46795B, green=489/489) and re-read byte-identical, with the 28-byte shrink named as the evidence leg moving from the R2358-retry log to this round own battery log.",
-    "next_milestone": "R2361: the product face resuming at state/queue/tech.md:403 prefix AC-SGS1 (stamp_exempt_seed_guard_wire), whose six criteria were pinned in that row at R2346 BEFORE any code - the seed generator of state/queue/stamp_exempt.json goes through the same pinned-text guard the append and prune writers already ask.",
-    "next_milestone_due": "2026-11-04T03:36:10+08:00",
-    "last_artifact": "qa/reconcile-all-R2360.log (799502B, single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 489/489 suites plus controls 7/7 in 881.8s with TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; docs/sandbox-suite-matrix.md regenerated to 489 suites / 3910 criteria (46795B, green=489/489) and re-read byte-identical, with the 28-byte shrink named as the evidence leg moving from the R2358-retry log to this round own battery log.",
-    "updated_at": "2026-11-02T03:36:10+08:00"
+    "current": "R2361 product window: the seed generator of state/queue/stamp_exempt.json now asks the same pinned-text guard the append and prune writers already ask - a plan pins the digest and byte count it read, an execute refuses E_SEG_STALE before a byte when another writer moved the declaration in between, and the write is one atomic replace proved by read-back. Suite 6/6 twice byte-identical plus five adjacent suites green, with a live dry run planning 381 entries over 79026B and writing nothing.",
+    "latest_artifact": "src/os/stamp_exempt_seed_guard_wire.py + src/os/test_stamp_exempt_seed_guard_wire.py (AC-SGS1..AC-SGS6), evidence qa/stamp-exempt-seed-guard-wire-R2361-a.log / -b.log (sha16 423471e4cfba0153, byte-identical) and qa/stamp-exempt-seed-guard-wire-live-R2361.log",
+    "next_milestone": "R2362: THE BATTERY ON THE COMMITTED R2361 TREE, zero product edits until green (the R2168 mixed-tree rule). The registry read 489 suites / 3910 criteria at R2360, so the expectation is +1 suite / +6 criteria (490 / 3916) from os-stamp-exempt-seed-guard-wire; any other delta must be named rather than swept. Then the four follow-up sections through src/os/battery_followup.py, whose matrix section FAILs first on the stale doc and must not rewrite it.",
+    "next_milestone_due": "2026-11-04T03:58:31+08:00",
+    "last_artifact": "src/os/stamp_exempt_seed_guard_wire.py + src/os/test_stamp_exempt_seed_guard_wire.py (AC-SGS1..AC-SGS6), evidence qa/stamp-exempt-seed-guard-wire-R2361-a.log / -b.log (sha16 423471e4cfba0153, byte-identical) and qa/stamp-exempt-seed-guard-wire-live-R2361.log",
+    "updated_at": "2026-11-02T03:58:31+08:00"
   },
   "depts": [
     {
@@ -476,6 +476,11 @@
       "qa/reconcile-all-R2360.log",
       "on",
       "R2360 verification: the battery on the committed tree reads RUNNER PASS 489/489 suites with 3910 criteria exactly as pre-registered, 881.8s, and the four follow-up sections close on VERDICT PASS"
+    ],
+    [
+      "src/os/stamp_exempt_seed_guard_wire.py",
+      "on",
+      "R2361 product: the third writer of state/queue/stamp_exempt.json goes through the pinned-text guard - plan names the digest and byte counts it would replace, execute refuses E_SEG_STALE before any byte, and the atomic replace is proved by read-back; suite 6/6 twice plus five adjacent suites green"
     ]
   ],
   "results": [
@@ -796,7 +801,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2360",
+      "2361",
       "OSLoop 执行 tick"
     ],
     [
@@ -891,6 +896,10 @@
     [
       "R2360",
       "verification window: the carried battery ran FIRST on the committed bc4334fa tree with zero product edits (the R2168 mixed-tree rule) - RUNNER PASS 489/489 suites plus controls 7/7 in 881.8s with criteria total 3910 exactly as pre-registered from R2359 os-review-window-history-wire, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; four follow-up sections PASS after the designed matrix FAIL and its regeneration to 46795B at 489/3910 (matrix byte-identical, fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2360 PASS; the 28-byte matrix shrink is named as the evidence leg moving, not a drift; the first attempt was cancelled by a filtered pipeline and wrote no evidence, rerun unfiltered; battery row closed and reconcile-battery-R2361 opened first=yes; zero product code, 0 product points"
+    ],
+    [
+      "R2361",
+      "product window: the five-still gate found no new transfer or decision token and queue_head read the tech head (tech.md:403 AC-SGS1, claimable=11), so one product face shipped - stamp_exempt_seed_guard_wire plus its suite, AC-SGS1..AC-SGS6 pinned in that row at R2346 BEFORE the code and re-anchored at HEAD with zero executable occupancy; the seed generator stamp_exempt_seed_R2280.py now routes through the wire instead of one io.open(path, 'w'), so all three declaration writers ask one guard; SUITE 6/6 twice byte-identical (sha16 423471e4cfba0153) plus five adjacent suites green, wired os-stamp-exempt-seed-guard-wire(6), live dry run planned 381 entries 79026B->78976B and wrote nothing; no battery ran (the tree was about to change by design) - battery row closed and reconcile-battery-R2362 opened first=yes at a measured target; tasks.md untouched for its encoding; one product face, 2 points"
     ]
   ],
   "self_drive": {
@@ -903,7 +912,7 @@
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 11,
     "queue_explore_open": 10
   }
 }

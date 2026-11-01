@@ -4989,6 +4989,13 @@ SUITES = [
     # seed row BEFORE the code existed.)
     ("os-stamp-exempt-guard",
      os.path.join("..", "os", "test_stamp_exempt_guard.py"), 6),
+    # R2361: the THIRD writer of the same declaration now asks that guard - the
+    # seed generator plans a pinned reading, refuses E_SEG_STALE when another
+    # writer moved the file in between, and commits through the one atomic
+    # replace instead of one io.open(path, "w"). (AC-SGS1..AC-SGS6 were pinned
+    # in state/queue/tech.md:403 as the R2346 seed row BEFORE the code.)
+    ("os-stamp-exempt-seed-guard-wire",
+     os.path.join("..", "os", "test_stamp_exempt_seed_guard_wire.py"), 6),
     ]
 
 FAILS = 0
