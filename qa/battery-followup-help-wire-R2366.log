@@ -1,0 +1,27 @@
+--- LEG A rc=0 criteria=6 ---
+battery_followup_help_wire suite (expected criteria 6)
+PASS AC-BFH1 both contracts imported; no second flag table
+PASS AC-BFH2 bare --help answers at exit 0, no section runs
+PASS AC-BFH3 unknown flag refused at 2 naming the token
+PASS AC-BFH4 other codes and printed lines byte-identical
+PASS AC-BFH5 --json byte-stable over pinned keys, both CLIs
+PASS AC-BFH6 ASCII, no clock/network, wired, sections still run
+SUITE PASS 6/6
+--- LEG B rc=0 criteria=6 ---
+battery_followup_help_wire suite (expected criteria 6)
+PASS AC-BFH1 both contracts imported; no second flag table
+PASS AC-BFH2 bare --help answers at exit 0, no section runs
+PASS AC-BFH3 unknown flag refused at 2 naming the token
+PASS AC-BFH4 other codes and printed lines byte-identical
+PASS AC-BFH5 --json byte-stable over pinned keys, both CLIs
+PASS AC-BFH6 ASCII, no clock/network, wired, sections still run
+SUITE PASS 6/6
+--- EVIDENCE legs=2 identical=True criterion_sha16=7e6881b726a46311 ---
+--- LIVE battery_followup.py --help rc=0 ---
+usage: battery_followup.py --evidence EVIDENCE --label LABEL --root ROOT --round ROUND --dry-run --json [--help]
+  --help  print this usage and run no section (exit 0)
+  exit 0 = every section PASS, or this question answered
+  exit 2 = a section FAILED
+  exit 3 = the evidence file is missing
+  exit 5 = bad flags
+house contract: reconcile_all.py [evidence_log_path] flags=(none)

@@ -52,6 +52,20 @@ E_BFU_REGEN = "E_BFU_REGEN"
 DEFAULTS = {"evidence": "qa/reconcile-all.log", "label": "R0", "round": None,
             "sections": [], "verdict": "FAIL", "failing": []}
 
+# The parser's own flag tables (R2366). They are module level because
+# battery_followup_help_wire renders usage from THEM, so this tree keeps one
+# flag table and the help text cannot drift from the parser.
+# Both dicts map flag -> the option key it fills.
+TAKES = {"--root": "root", "--evidence": "evidence", "--label": "label",
+         "--round": "round"}
+FLAGS = {"--json": "json", "--dry-run": "dry_run"}
+
+HELP_FLAGS = ("--help", "-h")
+
+
+class HelpAsked(Exception):
+    """A bare --help is a QUESTION, not a bad flag (AC-BFH2)."""
+
 
 def clean(text):
     """No captured body reaches the evidence file with a CR in it."""
@@ -212,15 +226,21 @@ def write_sections(path, report, bodies):
 
 
 def parse_args(argv):
-    """AC-BFU5: pinned flags; anything else is bad flags (exit 5)."""
+    """AC-BFU5: pinned flags; anything else is bad flags (exit 5).
+
+    R2366 (AC-BFH2): `--help` / `-h` is a QUESTION and now leaves through
+    HelpAsked, so the CLI answers it at exit 0 instead of calling the operator
+    wrong. Every other token keeps its own exit code byte for byte (AC-BFH4).
+    """
     opts = {"root": None, "evidence": None, "label": None, "round": None,
             "json": False, "dry_run": False}
-    takes = {"--root": "root", "--evidence": "evidence", "--label": "label",
-             "--round": "round"}
-    flags = {"--json": "json", "--dry-run": "dry_run"}
+    takes = TAKES
+    flags = FLAGS
     index = 0
     while index < len(argv):
         arg = argv[index]
+        if arg in HELP_FLAGS:
+            raise HelpAsked(arg)
         if arg in flags:
             opts[flags[arg]] = True
             index += 1
@@ -253,9 +273,18 @@ def parse_args(argv):
     return opts
 
 
+def help_text():
+    """The usage block, asked of the help wire so there is one owner of it."""
+    import battery_followup_help_wire as HW
+    return HW.usage_text(module=sys.modules[__name__])
+
+
 def main(argv):
     try:
         opts = parse_args(argv)
+    except HelpAsked:
+        print(help_text(), end="")
+        return 0
     except ValueError as exc:
         print(str(exc))
         return 5

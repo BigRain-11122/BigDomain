@@ -1,0 +1,7 @@
+usage: battery_followup.py --evidence EVIDENCE --label LABEL --root ROOT --round ROUND --dry-run --json [--help]
+  --help  print this usage and run no section (exit 0)
+  exit 0 = every section PASS, or this question answered
+  exit 2 = a section FAILED
+  exit 3 = the evidence file is missing
+  exit 5 = bad flags
+house contract: reconcile_all.py [evidence_log_path] flags=(none)

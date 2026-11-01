@@ -1492,6 +1492,69 @@
       "declared_by": 2364,
       "reason": "re-pinned at R2351 at its measured status DELIVERED",
       "until": 2373
+    },
+    {
+      "round": 2353,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2354,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2356,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2357,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2359,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2361,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2362,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2363,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
+    },
+    {
+      "round": 2365,
+      "status": "DELIVERED",
+      "declared_by": "R2366",
+      "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2376
     }
   ]
 }

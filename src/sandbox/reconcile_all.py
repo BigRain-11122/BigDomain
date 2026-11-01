@@ -4506,6 +4506,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-battery-followup",
      os.path.join("..", "os", "test_battery_followup.py"), 6),
+    # R2366: battery_followup answered a bare --help with E_BFU_BAD_ARGS at
+    # exit 5 while this runner answers --help as a QUESTION at exit 0 under the
+    # R2362 runner_arg_guard contract, so one CLI lied to an operator asking how
+    # to use it. The wire renders usage from TWO imported contracts - this
+    # runner CLI_CONTRACT (through the guard own importer) and the follow-up
+    # parser own tables - so the help text cannot drift from either CLI, while
+    # every other exit code and printed line stays byte-identical.
+    # (AC-BFH1..AC-BFH6 pinned in state/queue/tech.md line 412 at R2365 BEFORE
+    # the code existed.)
+    ("os-battery-followup-help-wire",
+     os.path.join("..", "os", "test_battery_followup_help_wire.py"), 6),
     # R2274: debt_append gave the register a writer for OPEN rows, but closing
     # one is still hand surgery - a window edits "- [ ]" to "- [x]" and types
     # closed=R<n> by hand, so a wrong stamp or a closed row that keeps
