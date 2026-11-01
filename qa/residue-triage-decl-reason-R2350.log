@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2350 suite=src/os/test_residue_triage_decl_reason.py legs=2
+== LEG A rc=0 digest=E41D8375FE9FA275
+PASS AC-RTD1 imports
+PASS AC-RTD2 declared_by later
+PASS AC-RTD3 window mismatch
+PASS AC-RTD4 current and unpinned
+PASS AC-RTD5 CLI codes
+PASS AC-RTD6 purity and wiring
+SUITE PASS 6/6
+== LEG B rc=0 digest=E41D8375FE9FA275
+PASS AC-RTD1 imports
+PASS AC-RTD2 declared_by later
+PASS AC-RTD3 window mismatch
+PASS AC-RTD4 current and unpinned
+PASS AC-RTD5 CLI codes
+PASS AC-RTD6 purity and wiring
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_retire_apply.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E41D8375FE9FA275

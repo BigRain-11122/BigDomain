@@ -4673,6 +4673,17 @@ SUITES = [
     # BEFORE the code.)
     ("os-retire-apply",
      os.path.join("..", "os", "test_retire_apply.py"), 6),
+    # R2350: the triage declaration HEAD claim ("declared_by R2331 ... until
+    # R2350") is measured against the entries it claims to speak for - the
+    # declaration and the status vocabulary come from residue_triage, an entry
+    # whose declared_by or until outgrew the head reads HEAD-STALE naming both
+    # rounds and both windows with the first break in entry order, a matching
+    # head reads HEAD-CURRENT, a missing declaration reads UNPINNED, and the
+    # module writes nothing and reads no clock.
+    # (AC-RTD1..AC-RTD6 pinned in state/queue/tech.md as the R2335 seed row
+    # BEFORE the code.)
+    ("os-residue-triage-decl-reason",
+     os.path.join("..", "os", "test_residue_triage_decl_reason.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads
