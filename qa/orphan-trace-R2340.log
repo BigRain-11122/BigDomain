@@ -1,0 +1,8 @@
+orphan_trace suite (expected criteria 6)
+PASS AC-OTR1 orphans and rounds imported from evidence_variants
+PASS AC-OTR2 every runner leg named, first in name order stands
+PASS AC-OTR3 NO-TRACE named, empty orphan list is NO-ORPHAN
+PASS AC-OTR4 undecodable leg refuses with its own code
+PASS AC-OTR5 CLI codes, byte-stable json, pinned keys
+PASS AC-OTR6 pure source, wired, live orphan pile resolved
+SUITE PASS 6/6

@@ -1,0 +1,8 @@
+{
+  "do": "R2340 预注册电池在提交树上跑红，红腿只有一条且是真红：os-orphan-trace 的 AC-OTR6 把「孤儿堆必须非空」写死进判据，而 R2339 自己的 R2136 提升刚刚把堆清空（rounds=0、verdict=NO-ORPHAN，正是想要的终态）。修复方向是更严不是更松：空堆只有在 evidence_variants 读数确认零孤儿行时才合法，NO-ORPHAN 从此不可能是静默零。产品码零改动，改的是套件活体判据与其 measured 行；套件双跑 6/6 且输出字节一致（sha16 6FB177E1FFEEC407）。全量绿色重跑排入 R2341，红腿证据保留在盘。",
+  "current": "R2340：电池跑红→根因实测→判据修正（更严）→套件 6/6 双跑一致；绿色全量重跑待 R2341",
+  "latest_artifact": "qa/reconcile-all-R2340.log（红腿 792543B，476/477 套件，唯一失败 AC-OTR6）与 qa/orphan-trace-R2340.log（修复后 SUITE PASS 6/6）",
+  "next_milestone": "R2341：在提交树上跑到 RUNNER PASS 477 套件 / 3838 判据，四段跟随全绿并重生矩阵",
+  "entry": "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341",
+  "heartbeat": "tick 2340 R2340 red-then-repair: AC-OTR6 empty-pile premise corrected and made stricter, suite 6/6 twice, green full battery carried to R2341"
+}

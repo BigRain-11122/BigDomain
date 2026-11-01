@@ -295,9 +295,16 @@ def ac_otr6():
     wired = ('"%s"' % LABEL in runner) or ("'%s'" % LABEL in runner)
     live = OT.traces(REPO)
     counts = live["counts"]
+    # R2340: an empty pile is the RESOLVED end state, so NO-ORPHAN may not be
+    # a silent zero. It is legal only when the variants reading this reader is
+    # built on carries zero ORPHAN rows; a non-empty pile still needs rounds.
+    orphans = [row for row in EV.variants(REPO)["variants"]
+               if row["status"] == "ORPHAN"]
+    resolved = (counts["rounds"] >= 1) or (
+        live["verdict"] == "NO-ORPHAN" and not orphans)
     ok = (ascii_only and no_net and wired
           and live["dir"] == "qa"
-          and counts["rounds"] >= 1
+          and resolved
           and counts["legs"] >= counts["rounds"]
           and counts["trace_exists"] + counts["no_trace"] == counts["rounds"]
           and live["verdict"] in ("NO-ORPHAN", "TRACE-FOUND",
@@ -307,8 +314,8 @@ def ac_otr6():
                   for item in live["rounds"]
                   if item["status"] == "TRACE-EXISTS"))
     if not ok:
-        print("  measured: ascii=%r net=%r wired=%r live=%r"
-              % (ascii_only, no_net, wired, live), flush=True)
+        print("  measured: ascii=%r net=%r wired=%r orphans=%d live=%r"
+              % (ascii_only, no_net, wired, len(orphans), live), flush=True)
     check(ok, "AC-OTR6 pure source, wired, live orphan pile resolved")
 
 

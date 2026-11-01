@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-01T18:06:06+08:00",
-  "do": "R2339 产品窗：把孤儿证据的绿腿正式扶正——src/os/orphan_promote.py 先出计划（源腿 / 规范名 / 字节数 / 摘要）再复制，且已在真证据目录上执行：R2136 的 RUNNER PASS 腿已复制为 qa/reconcile-all-R2136.log（675847B，回读同字节），孤儿追踪因此归零，followup_history 第一次看得见 R2136。",
+  "export_ts": "2026-11-01T18:44:06+08:00",
+  "do": "R2340 预注册电池在提交树上跑红，红腿只有一条且是真红：os-orphan-trace 的 AC-OTR6 把「孤儿堆必须非空」写死进判据，而 R2339 自己的 R2136 提升刚刚把堆清空（rounds=0、verdict=NO-ORPHAN，正是想要的终态）。修复方向是更严不是更松：空堆只有在 evidence_variants 读数确认零孤儿行时才合法，NO-ORPHAN 从此不可能是静默零。产品码零改动，改的是套件活体判据与其 measured 行；套件双跑 6/6 且输出字节一致（sha16 6FB177E1FFEEC407）。全量绿色重跑排入 R2341，红腿证据保留在盘。",
   "ceo_face": {
-    "current": "R2339 产品面落地并真执行：判据 6/6 双跑同摘要，四个邻域套件全绿；认领行关闭并补种一条真缺口（orphan_promotion_ledger），队列仍 5/5 10/10 10/10；债务登记已把全量电池排给 R2340。",
-    "latest_artifact": "src/os/orphan_promote.py + src/os/test_orphan_promote.py + qa/reconcile-all-R2136.log（675847B，回读同字节）+ qa/orphan-promote-R2339.log（1070B）",
-    "next_milestone": "R2340 验证窗：在已提交的 R2339 树上跑全量电池，预注册 477 套件 / 3838 判据（相对 R2338 的 476/3832 恰 +1/+6），跑前先重冻 census 基线（本轮新增两件证据）；绿后回到产品面 AC-OPL1。",
-    "next_milestone_due": "2026-11-03T18:06:06+08:00",
+    "current": "R2340：电池跑红→根因实测→判据修正（更严）→套件 6/6 双跑一致；绿色全量重跑待 R2341",
+    "latest_artifact": "qa/reconcile-all-R2340-red.log（红腿 792543B，476/477 套件，唯一失败 AC-OTR6）与 qa/orphan-trace-R2340.log（修复后 SUITE PASS 6/6）",
+    "next_milestone": "R2341：在提交树上跑到 RUNNER PASS 477 套件 / 3838 判据，四段跟随全绿并重生矩阵",
+    "next_milestone_due": "2026-11-03T18:44:06+08:00",
     "last_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）；取证 qa/retire-accept-R2333.log（1282B）；声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）"
   },
   "depts": [
@@ -36,6 +36,21 @@
     }
   ],
   "outs": [
+    [
+      "qa/orphan-trace-R2340.log",
+      "on",
+      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
+    ],
+    [
+      "qa/reconcile-all-R2340-red.log",
+      "on",
+      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
+    ],
+    [
+      "src/os/test_orphan_trace.py",
+      "on",
+      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
+    ],
     [
       "qa/orphan-promote-R2339.log",
       "on",
@@ -409,6 +424,10 @@
   ],
   "results": [
     [
+      "R2340",
+      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
+    ],
+    [
       "R2339",
       "R2339 product window: the orphan trace gains its writer - AC-OTP1..AC-OTP6 were pinned in the queue row BEFORE the code, a standings-only pick takes the first RUNNER PASS leg in name order and names the other green legs, a named non-green leg refuses naming the green ones, NO-TRACE and an existing canonical target refuse before any byte, the dry run is the default and an executed promotion copies one leg with both sides proved; the live R2136 promotion was PERFORMED (reconcile-all-R2136c.log -> reconcile-all-R2136.log, 675847B, digest 875082b40b84), so orphan_trace now reads NO-ORPHAN, evidence_variants reads -c DUPLICATE and -b DISTINCT with orphan=0, and followup_history reads round R2136 for the first time as INCOMPLETE runner=PASS"
     ],
@@ -709,7 +728,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2339",
+      "2340",
       "OSLoop 执行 tick"
     ],
     [
