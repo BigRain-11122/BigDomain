@@ -1,0 +1,11 @@
+{
+  "declared_by": "R2333",
+  "entries": [
+    {"script": "src/os/evidence_R2248.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"},
+    {"script": "src/os/evidence_R2250.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"},
+    {"script": "src/os/evidence_R2253.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"},
+    {"script": "src/os/evidence_R2255.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"},
+    {"script": "src/os/evidence_R2257.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"},
+    {"script": "src/os/evidence_R2259.py", "declared": "R2333", "reason": "legacy per-round evidence writer: declaration resolved, ritual complete, no collision at R2333; superseded by evidence_capture", "until": "R2350"}
+  ]
+}

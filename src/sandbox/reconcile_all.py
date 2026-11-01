@@ -4653,6 +4653,15 @@ SUITES = [
     # code.)
     ("os-retire-candidate",
      os.path.join("..", "os", "test_retire_candidate.py"), 6),
+    # R2333: retire_candidate names the copies that are safe to retire, but
+    # nothing can act on that reading, so an accepted retirement is a RECORD
+    # with a window (state/queue/retire_accept.json) read back against the
+    # live resolver - ACCEPTED / EXPIRED / UNMATCHED / STALE-DECISION, exactly
+    # one class per entry, and the module never deletes a script.
+    # (AC-RAC1..AC-RAC6 pinned in state/queue/tech.md as the R2331 seed row
+    # BEFORE the code.)
+    ("os-retire-accept",
+     os.path.join("..", "os", "test_retire_accept.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

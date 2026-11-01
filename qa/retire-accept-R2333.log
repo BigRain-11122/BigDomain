@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2333 suite=src/os/test_retire_accept.py legs=2
+== LEG A rc=0 digest=D1F1F5649B84F963
+retire_accept suite (expected criteria 6)
+PASS AC-RAC1 verdicts imported, each patch moving the class
+PASS AC-RAC2 four disjoint classes, each naming its own fact
+PASS AC-RAC3 absent declaration reads UNPINNED with candidates
+PASS AC-RAC4 refuses first, then one atomic append keeps the rest
+PASS AC-RAC5 CLI 0/2/3/5 and a byte-stable JSON
+PASS AC-RAC6 pure, wired, and carries no script delete path
+SUITE PASS 6/6
+== LEG B rc=0 digest=D1F1F5649B84F963
+retire_accept suite (expected criteria 6)
+PASS AC-RAC1 verdicts imported, each patch moving the class
+PASS AC-RAC2 four disjoint classes, each naming its own fact
+PASS AC-RAC3 absent declaration reads UNPINNED with candidates
+PASS AC-RAC4 refuses first, then one atomic append keeps the rest
+PASS AC-RAC5 CLI 0/2/3/5 and a byte-stable JSON
+PASS AC-RAC6 pure, wired, and carries no script delete path
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_retire_candidate.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_exempt_prune.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=D1F1F5649B84F963

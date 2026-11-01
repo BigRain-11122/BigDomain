@@ -1366,6 +1366,13 @@
       "declared_by": "R2331",
       "reason": "reviewed at R2331 at its live status",
       "until": 2350
+    },
+    {
+      "round": 2319,
+      "status": "DELIVERED",
+      "declared_by": "R2333",
+      "reason": "read at R2333 off the live stamp table: state/queue/tech.md:377 carries a CLOSED row for the gate_decl_retire_wire face R2319 shipped, and the round became residue only when the R2333 fold 622 moved its log block into the archive",
+      "until": 2350
     }
   ]
 }
