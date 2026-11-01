@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-01T18:44:06+08:00",
-  "do": "R2340 预注册电池在提交树上跑红，红腿只有一条且是真红：os-orphan-trace 的 AC-OTR6 把「孤儿堆必须非空」写死进判据，而 R2339 自己的 R2136 提升刚刚把堆清空（rounds=0、verdict=NO-ORPHAN，正是想要的终态）。修复方向是更严不是更松：空堆只有在 evidence_variants 读数确认零孤儿行时才合法，NO-ORPHAN 从此不可能是静默零。产品码零改动，改的是套件活体判据与其 measured 行；套件双跑 6/6 且输出字节一致（sha16 6FB177E1FFEEC407）。全量绿色重跑排入 R2341，红腿证据保留在盘。",
+  "export_ts": "2026-11-01T19:18:24+08:00",
+  "do": "R2341 绿色全量重跑落定：在提交树 50b88267 上跑满 477 套件，判据总计 3838，与 R2340 预注册数字逐位相等（+1 套件 / +6 判据，全部来自 R2339 的 os-orphan-promote 套件），零修正零豁免。四段跟随按设计顺序跑：矩阵段先红后绿（旧文档 45594B → 重生 45670B，且在红格时不改写文档这一条照旧生效），指纹、画像、写者普查三段一次即绿。质量门结论 R2341 PASS。本轮零产品码，分数如实记 0。",
   "ceo_face": {
-    "current": "R2340：电池跑红→根因实测→判据修正（更严）→套件 6/6 双跑一致；绿色全量重跑待 R2341",
-    "latest_artifact": "qa/reconcile-all-R2340-red.log（红腿 792543B，476/477 套件，唯一失败 AC-OTR6）与 qa/orphan-trace-R2340.log（修复后 SUITE PASS 6/6）",
-    "next_milestone": "R2341：在提交树上跑到 RUNNER PASS 477 套件 / 3838 判据，四段跟随全绿并重生矩阵",
-    "next_milestone_due": "2026-11-03T18:44:06+08:00",
+    "current": "R2341：提交树上 RUNNER PASS 477/477 套件 + 控制组 7/7，判据 3838 与预注册相等；四段跟随全绿，矩阵重生至 45670B",
+    "latest_artifact": "qa/reconcile-all-R2341.log（791836B，477/477 套件绿，含四段跟随追加）与 docs/sandbox-suite-matrix.md（45670B，477 套件 / 3838 判据）",
+    "next_milestone": "R2342：技术队头 AC-OPL1（orphan_promotion_ledger，state/queue/tech.md:388）上出产品面：提升动作落台账，先提交后电池",
+    "next_milestone_due": "2026-11-03T19:18:24+08:00",
     "last_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）；取证 qa/retire-accept-R2333.log（1282B）；声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）"
   },
   "depts": [
@@ -36,6 +36,11 @@
     }
   ],
   "outs": [
+    [
+      "qa/reconcile-all-R2341.log",
+      "on",
+      "R2341 green battery on the committed tree 50b88267: RUNNER PASS 477/477 suites plus controls 7/7 in 826.5s, criteria total 3838 exactly as pre-registered against R2338 (476/3832), four follow-up sections PASS after the designed matrix FAIL and its regeneration to 45670B, VERDICT R2341 PASS, zero product code"
+    ],
     [
       "qa/orphan-trace-R2340.log",
       "on",
@@ -424,6 +429,10 @@
   ],
   "results": [
     [
+      "R2341",
+      "R2341 green battery on the committed tree 50b88267: RUNNER PASS 477/477 suites plus controls 7/7 in 826.5s, criteria total 3838 exactly as pre-registered against R2338 (476/3832), four follow-up sections PASS after the designed matrix FAIL and its regeneration to 45670B, VERDICT R2341 PASS, zero product code"
+    ],
+    [
       "R2340",
       "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
     ],
@@ -728,7 +737,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2340",
+      "2341",
       "OSLoop 执行 tick"
     ],
     [
@@ -780,10 +789,10 @@
   "self_drive": {
     "window": "2026-10-26..2026-11-01",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,

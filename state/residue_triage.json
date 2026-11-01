@@ -1394,6 +1394,13 @@
       "declared_by": "R2338",
       "reason": "fold 627 at R2338 moved the R2325 block into the monthly archive, which the fold law turns into live residue; the round is DELIVERED on the live stamp table (queue row closed at R2325 with its product face shipped)",
       "until": 2350
+    },
+    {
+      "round": 2327,
+      "status": "DELIVERED",
+      "declared_by": "R2341",
+      "reason": "fold 629 archived the R2327 ledger line, so the round now reads stamped-but-never-logged in the live state; its closeout row is closed on the board (tech.md:381) and the round is delivered - the fold-created residue is recognised, not re-opened",
+      "until": 2350
     }
   ]
 }
