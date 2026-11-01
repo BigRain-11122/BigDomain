@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2339 suite=src/os/test_orphan_promote.py legs=2
+== LEG A rc=0 digest=EB48143FB2C0C381
+orphan_promote suite (expected criteria 6)
+PASS AC-OTP1 round, legs and standing-in leg are imported
+PASS AC-OTP2 first PASS leg picked, other green leg named
+PASS AC-OTP3 no trace, non-green source and target refuse
+PASS AC-OTP4 dry run writes nothing, promotion copies once
+PASS AC-OTP5 CLI 0/2/3/5, stable JSON, no clock
+PASS AC-OTP6 pure ASCII, stdlib only, wired, one replace
+SUITE PASS 6/6
+== LEG B rc=0 digest=EB48143FB2C0C381
+orphan_promote suite (expected criteria 6)
+PASS AC-OTP1 round, legs and standing-in leg are imported
+PASS AC-OTP2 first PASS leg picked, other green leg named
+PASS AC-OTP3 no trace, non-green source and target refuse
+PASS AC-OTP4 dry run writes nothing, promotion copies once
+PASS AC-OTP5 CLI 0/2/3/5, stable JSON, no clock
+PASS AC-OTP6 pure ASCII, stdlib only, wired, one replace
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=EB48143FB2C0C381

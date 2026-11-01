@@ -4838,6 +4838,20 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-orphan-trace",
      os.path.join("..", "os", "test_orphan_trace.py"), 6),
+    # R2339: the orphan trace stops being a dead end. orphan_trace names the
+    # standing-in leg of an ORPHAN round; this writer PLANS and then performs
+    # the promotion of that round to its canonical name, asking orphan_trace
+    # for the round, its legs and its standing-in leg rather than re-deriving
+    # them. A standings-only pick prefers the first RUNNER PASS leg in name
+    # order and names every other green leg, a named non-green source refuses
+    # naming the green legs, NO-TRACE and an existing canonical target each
+    # refuse with their own code before any byte is written, the dry run is
+    # the default, and an executed promotion COPIES one leg so the variant
+    # survives its own promotion with the source proved byte-identical.
+    # (AC-OTP1..AC-OTP6 pinned in state/queue/tech.md as the R2323 seed row
+    # BEFORE the code existed.)
+    ("os-orphan-promote",
+     os.path.join("..", "os", "test_orphan_promote.py"), 6),
     ]
 
 FAILS = 0
