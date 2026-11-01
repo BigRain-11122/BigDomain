@@ -4629,6 +4629,14 @@ SUITES = [
     # in state/queue/tech.md as the R2312 seed row BEFORE the code.)
     ("os-gate-decl-retire",
      os.path.join("..", "os", "test_gate_decl_retire.py"), 6),
+    # R2319: gate_decl_retire asked machine_gate's candidate reading, which only
+    # ever sees a CLAIMABLE row, so an entry whose row exists but carries no
+    # criteria prefix read PLANNED for retirement while it was still the truth;
+    # the wire asks gate_decl_identity first and only an UNMATCHED identity
+    # reaches the retire plan. (AC-GDRTW1..AC-GDRTW6 pinned in
+    # state/queue/tech.md as the R2317 seed row BEFORE the code.)
+    ("os-gate-decl-retire-wire",
+     os.path.join("..", "os", "test_gate_decl_retire_wire.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

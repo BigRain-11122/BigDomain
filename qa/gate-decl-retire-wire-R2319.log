@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2319 suite=src/os/test_gate_decl_retire_wire.py legs=2
+== LEG A rc=0 digest=98A52DE349DBC2E6
+gate_decl_retire_wire suite (expected criteria 6)
+PASS AC-GDRTW1 both laws imported, neither re-implemented
+PASS AC-GDRTW2 MATCHED/AMBIGUOUS refused before any byte
+PASS AC-GDRTW3 refusal is the reader's state, not claimability
+PASS AC-GDRTW4 success path byte-identical to the direct plan
+PASS AC-GDRTW5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRTW6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== LEG B rc=0 digest=98A52DE349DBC2E6
+gate_decl_retire_wire suite (expected criteria 6)
+PASS AC-GDRTW1 both laws imported, neither re-implemented
+PASS AC-GDRTW2 MATCHED/AMBIGUOUS refused before any byte
+PASS AC-GDRTW3 refusal is the reader's state, not claimability
+PASS AC-GDRTW4 success path byte-identical to the direct plan
+PASS AC-GDRTW5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRTW6 pure, wired, and writes nothing
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_gate_decl_identity_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_retire.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_identity.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_append.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=98A52DE349DBC2E6

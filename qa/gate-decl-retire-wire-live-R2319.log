@@ -1,0 +1,6 @@
+R2319 live reading of the real declaration (state/machine_gates.json)
+before: 427B sha256-16 10EF269E863896CE
+probe : gate_decl_retire_wire.py --identity -#02878cdc
+result: REFUSED E_GDRTW_MATCHED identity resolves MATCHED (one row carries this identity); carriers none; rc=2
+after : 427B sha256-16 10EF269E863896CE (file byte-identical, nothing written)
+contrast: R2317 measured the same identity as PLANNED for retirement (declarations 1->0) through gate_decl_retire alone
