@@ -4686,6 +4686,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-review-window",
      os.path.join("..", "os", "test_review_window.py"), 6),
+    # R2327: the pinned review window had no consumer - exempt_review still
+    # aged every entry against a per-call --window whose only default lived in
+    # the CLI, so a PINNED declaration and the actual age readings could
+    # disagree invisibly. The window now comes from review_window_decl.resolve
+    # through review_window_wire, an UNPINNED / DRIFT / refused declaration
+    # refuses before any entry is aged with zero counts, an explicit --window
+    # with --window-from-declaration is refused as two sources of truth, and
+    # the same pinned window leaves the FRESH/STALE rows byte-identical.
+    # (AC-RWW1..AC-RWW6 pinned in state/queue/tech.md as the R2305 seed row
+    # BEFORE the code existed.)
+    ("os-review-window-wire",
+     os.path.join("..", "os", "test_review_window_wire.py"), 6),
     # R2310: stamp_residue reports the whole stamped-but-never-logged residue
     # as one table, but every reviewed round stays in it forever, so the same
     # 185 rows are re-triaged by hand every window. One pinned

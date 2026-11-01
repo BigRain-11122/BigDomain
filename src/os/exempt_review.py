@@ -23,10 +23,17 @@
 # round LATER than the round being checked is refused (E_EXR_FUTURE) rather
 # than aged to a negative number - a future acceptance cannot be aged.
 #
-# The window is a caller argument, never a built-in default baked into the
+# The window is a caller argument or the pinned declaration, never a built-in
 # verdict: no window means no staleness claim. The CLI carries 100 rounds as
 # its own declared default and prints it, so a reading always says which
-# window produced it.
+# window produced it and where it came from (window_source).
+#
+# Declared-window wiring (AC-RWW1..AC-RWW6, pinned as the R2305 seed row of
+# state/queue/tech.md BEFORE this code): --window-from-declaration takes the
+# window from review_window_decl.resolve through review_window_wire, refuses
+# an UNPINNED / DRIFT / consistency-refused declaration before any entry is
+# aged, and is refused together with an explicit --window rather than
+# resolved by precedence. The age law itself is untouched.
 #
 # Pure read: nothing is written, no clock is read, no network import.
 # Source is pure ASCII, stdlib only.
@@ -36,8 +43,16 @@ import os
 import sys
 
 import queue_row_exempt as QRE
+import review_window_wire as RWW
 
 WINDOW_DEFAULT = 100
+
+SOURCE_ARGUMENT = RWW.SOURCE_ARGUMENT
+SOURCE_DECLARATION = RWW.SOURCE_DECLARATION
+
+# A caller that names no window at all gets the CLI default; the sentinel
+# keeps that distinct from "the caller passed the default explicitly".
+NO_WINDOW = object()
 
 ROW_KEYS = ("queue", "identity", "declared", "until", "age", "status")
 
@@ -50,6 +65,7 @@ REPORT_KEYS = (
     "stale_count",
     "stale",
     "verdict",
+    "window_source",
 )
 
 VERDICTS = ("REVIEW-CLEAN", "REVIEW-STALE")
@@ -112,12 +128,23 @@ def one_entry(raw, current, window):
     }
 
 
-def audit(root, round_text, window=WINDOW_DEFAULT):
+def audit(root, round_text, window=NO_WINDOW, window_source=SOURCE_ARGUMENT):
     """Age every declared exemption against one round. Writes nothing."""
     current = round_number(round_text)
     if current is None:
         raise ExemptReviewError("E_EXR_BAD_ROUND",
                                 "round must be R<n>, got %r" % (round_text,))
+    if window_source == SOURCE_DECLARATION:
+        # AC-RWW3: the declaration is the only source on this path, so a
+        # window argument alongside it is an ambiguity, not a precedence.
+        if window is not NO_WINDOW:
+            raise ExemptReviewError(
+                "E_RWW_BOTH",
+                "a window argument and the declared window are two sources "
+                "of truth")
+        window = RWW.declared_window(root, round_text)
+    elif window is NO_WINDOW:
+        window = WINDOW_DEFAULT
     window = check_window(window)
     try:
         declaration = QRE.read_declaration(root)
@@ -147,16 +174,17 @@ def audit(root, round_text, window=WINDOW_DEFAULT):
         "stale_count": len(stale),
         "stale": stale,
         "verdict": VERDICTS[1] if stale else VERDICTS[0],
+        "window_source": window_source,
     }
 
 
 def one_line(report):
     """The single line a window prints for itself."""
     return ("EXEMPT REVIEW round=%s window=%d declaration=%s entries=%d "
-            "stale=%d verdict=%s"
+            "stale=%d verdict=%s source=%s"
             % (report["round"], report["window"], report["declaration"],
                len(report["entries"]), report["stale_count"],
-               report["verdict"]))
+               report["verdict"], report["window_source"]))
 
 
 def detail_line(row):
@@ -177,7 +205,8 @@ def render_json(report):
 def main(argv):
     args = list(argv[1:])
     round_text = None
-    window = WINDOW_DEFAULT
+    window = NO_WINDOW
+    from_decl = False
     root = os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
     use_json = False
@@ -199,6 +228,9 @@ def main(argv):
                                         "window is not an int: %r"
                                         % (args[index + 1],))
             index += 2
+        elif arg == "--window-from-declaration":
+            from_decl = True
+            index += 1
         elif arg == "--root":
             if index + 1 >= len(args):
                 raise ExemptReviewError("E_EXR_BAD_FLAGS", "--root needs a value")
@@ -214,7 +246,25 @@ def main(argv):
         raise ExemptReviewError("E_EXR_BAD_FLAGS",
                                 "--round is mandatory (a default round would "
                                 "decide on its own)")
-    report = audit(root, round_text, window)
+    # AC-RWW3: two sources of truth are the ambiguity this closes, and zero
+    # sources would let a silent default back in on the declared path.
+    if from_decl and window is not NO_WINDOW:
+        raise ExemptReviewError(
+            "E_RWW_BOTH",
+            "--window and --window-from-declaration are two sources of truth")
+    try:
+        if from_decl:
+            report = audit(root, round_text, window_source=SOURCE_DECLARATION)
+        else:
+            report = audit(root, round_text, window)
+    except RWW.ReviewWindowWireError as exc:
+        # AC-RWW2: the declaration refuses BEFORE any entry is aged, and the
+        # reading says so with zero counts instead of a silent default window.
+        print("REFUSE %s: %s" % (exc.code, exc.detail))
+        print("  EXEMPT REVIEW round=%s window=- entries=0 stale=0 "
+              "verdict=WINDOW-REFUSED source=%s"
+              % (round_text, SOURCE_DECLARATION))
+        return 2
     if use_json:
         print(render_json(report))
     else:
@@ -229,8 +279,8 @@ if __name__ == "__main__":
         sys.exit(main(sys.argv))
     except ExemptReviewError as exc:
         if exc.code in ("E_EXR_BAD_FLAGS", "E_EXR_BAD_ROUND",
-                        "E_EXR_BAD_WINDOW"):
-            print("BAD FLAGS %s" % exc.code)
+                        "E_EXR_BAD_WINDOW", "E_RWW_BOTH"):
+            print("BAD FLAGS %s: %s" % (exc.code, exc.detail))
             sys.exit(5)
         print("REFUSE %s: %s" % (exc.code, exc.detail))
         sys.exit(3)

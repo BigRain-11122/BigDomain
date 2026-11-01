@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2327 suite=src/os/test_review_window_wire.py legs=2
+== LEG A rc=0 digest=139BF1A0AB53642E
+PASS AC-RWW1 the window is imported from review_window_decl.resolve (a patched verdict flows straight through exempt_review) and is never re-derived from the declarations rows
+PASS AC-RWW2 an UNPINNED or DRIFT declaration refuses at exit 2 with zero counts and its own code, never the CLI default window
+PASS AC-RWW3 --window with --window-from-declaration is refused naming both rather than resolved by precedence
+PASS AC-RWW4 for the same world the FRESH/STALE rows are byte-identical whether the pinned number is passed explicitly or read from the declaration, and the window is the pinned one
+PASS AC-RWW5 CLI exits 0/2/5 with a byte-stable --json over the pinned keys (window source included), and the reading writes nothing
+LIVE EXEMPT REVIEW round=R2327 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN source=declaration
+PASS AC-RWW6 pure ASCII, stdlib only, zero network, no clock, wired as os-review-window-wire(6), live reading taken through the declaration
+SUITE PASS 6/6
+== LEG B rc=0 digest=139BF1A0AB53642E
+PASS AC-RWW1 the window is imported from review_window_decl.resolve (a patched verdict flows straight through exempt_review) and is never re-derived from the declarations rows
+PASS AC-RWW2 an UNPINNED or DRIFT declaration refuses at exit 2 with zero counts and its own code, never the CLI default window
+PASS AC-RWW3 --window with --window-from-declaration is refused naming both rather than resolved by precedence
+PASS AC-RWW4 for the same world the FRESH/STALE rows are byte-identical whether the pinned number is passed explicitly or read from the declaration, and the window is the pinned one
+PASS AC-RWW5 CLI exits 0/2/5 with a byte-stable --json over the pinned keys (window source included), and the reading writes nothing
+LIVE EXEMPT REVIEW round=R2327 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN source=declaration
+PASS AC-RWW6 pure ASCII, stdlib only, zero network, no clock, wired as os-review-window-wire(6), live reading taken through the declaration
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=139BF1A0AB53642E
