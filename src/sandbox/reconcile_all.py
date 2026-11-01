@@ -4749,6 +4749,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-evidence-output-audit",
      os.path.join("..", "os", "test_evidence_output_audit.py"), 6),
+    # R2323: evidence_variants reads an ORPHAN leg the same whether that round
+    # produced a usable trace under a variant name or never produced a trace at
+    # all, so the operator opens both legs by hand to learn whether the round
+    # is recoverable by a rename. One read-only resolver reads the RUNNER and
+    # VERDICT lines inside each orphan round's own legs: TRACE-EXISTS names
+    # every runner-carrying leg with its verdict and digest plus the first in
+    # name order as the standing-in leg, NO-TRACE names the round when none
+    # does, and an undecodable leg refuses the reading.
+    # (AC-OTR1..AC-OTR6 pinned in state/queue/tech.md as the R2302 seed row
+    # BEFORE the code existed.)
+    ("os-orphan-trace",
+     os.path.join("..", "os", "test_orphan_trace.py"), 6),
     ]
 
 FAILS = 0

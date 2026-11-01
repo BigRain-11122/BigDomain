@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2323 suite=src/os/test_orphan_trace.py legs=2
+== LEG A rc=0 digest=252212963E792472
+orphan_trace suite (expected criteria 6)
+PASS AC-OTR1 orphans and rounds imported from evidence_variants
+PASS AC-OTR2 every runner leg named, first in name order stands
+PASS AC-OTR3 NO-TRACE named, empty orphan list is NO-ORPHAN
+PASS AC-OTR4 undecodable leg refuses with its own code
+PASS AC-OTR5 CLI codes, byte-stable json, pinned keys
+PASS AC-OTR6 pure source, wired, live orphan pile resolved
+SUITE PASS 6/6
+== LEG B rc=0 digest=252212963E792472
+orphan_trace suite (expected criteria 6)
+PASS AC-OTR1 orphans and rounds imported from evidence_variants
+PASS AC-OTR2 every runner leg named, first in name order stands
+PASS AC-OTR3 NO-TRACE named, empty orphan list is NO-ORPHAN
+PASS AC-OTR4 undecodable leg refuses with its own code
+PASS AC-OTR5 CLI codes, byte-stable json, pinned keys
+PASS AC-OTR6 pure source, wired, live orphan pile resolved
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_evidence_variants.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_retry_legs.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_output_audit.py rc=0 SUITE PASS 6/6 criteria
+EVIDENCE identical=True adjacent=5 fails=0 digest=252212963E792472
