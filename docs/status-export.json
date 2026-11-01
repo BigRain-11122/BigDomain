@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-01T21:00:54+08:00",
-  "do": "R2345 产品窗：开轮债务闸点名 reconcile-battery-R2344（opened R2343），实测发现那块电池 R2344 早已跑绿（qa/reconcile-all-R2344.log 第 5494 行 RUNNER PASS 479/479 suites、控制 7/7、922.0s，第 5434 行 criteria total=3850 正是预注册值），只是登记行没关闭，闸门遂把新窗口指向已完成的活。修在登记簿本身而不是重跑十五分钟电池：debt_close 关闭该行（open 3->2、done 82->83、回读 ok），debt_append 开出后继 reconcile-battery-R2346 first=yes（预注册 480 suites / 3856 criteria）。随后认领 tech 队头 line 391 AC-RWH1，交付 src/os/review_window_history.py 与其六条预注册判据套件：声明列表从此被当作历史读——行来自 review_window_decl.shape、一致性问 review_window_decl.resolve，故两个读者对同一文件不可能给出不同口径；declared_by 回退拒绝并点名两行两轮；每个窗口移动按文件顺序点名 from/to 与两个申报轮；无移动读 EMPTY-HISTORY 而非 CLEAN。套件 6/6 双跑同摘要，四邻域全绿，接线 os-review-window-history(6)，真实声明实读 declarations=1 moves=0 verdict=EMPTY-HISTORY / RESOLVER AGREES。状态文件先修写入正典（73742B->74438B，载荷等同证明），再折 631（预测 62530B 等于实测 62530B，690 令牌全覆盖）；但 631 的窗口在第 10 行把 R2334 块切断——收尾说明留在活窗而账本行进了档案，账本闸当场读出 rounds_without_ledger=2334 并判红三个账本套件。按出生站疗法修：折 632 只把那一行搬进同一档案，预测 69928B 等于实测 69928B，令牌 0 故不可能丢，活门复读 CLEAN，四个账本套件 8/8、产品套件 6/6 复跑全绿；轮线里「两块都完整」的旧断言已就地改回实测事实。",
+  "export_ts": "2026-11-01T21:37:57+08:00",
+  "do": "R2346 验证后产品窗：债务闸所指的电池跑在已提交的 R2345 树上，480/480 套件全绿、3856 判据与预注册逐字吻合，四段跟进全过（矩阵按设计先红后再生到 45956B）；随后交付 stamp_exempt_guard——计划钉住它读到的摘要，执行前重读、摘要变了就在落盘前拒绝（E_SEG_STALE），两个声明写入器改成共用这一个调用口，不再各存一份临时写+替换；第三个写入器（R2280 种子生成器）仍在绕过它，已按实测补种。",
   "ceo_face": {
-    "current": "R2345：闸门把新窗口指向已跑完的电池这一登记簿漏洞已修（关旧行+开后继新行，不重跑），tech 队头历史面已落地可跑（六判据双跑绿、四个邻域套件绿、真实声明实读诚实）",
-    "latest_artifact": "src/os/review_window_history.py + src/os/test_review_window_history.py；证据 qa/review-window-history-R2345.log（1294B）；捕获行 EVIDENCE CAPTURE round=R2345 suite=src/os/test_review_window_history.py legs=2；套件行 SUITE PASS 6/6",
-    "next_milestone": "R2346：提交树上跑全量电池（预注册 480 suites / 3856 criteria），随后开 tech 队头 line 392 AC-SEG1 / 窗 ≤48h（head=AC-SEG1 line=392）",
-    "next_milestone_due": "2026-11-03T21:00:54+08:00",
-    "last_artifact": "src/os/review_window_history.py + src/os/test_review_window_history.py；证据 qa/review-window-history-R2345.log（1294B）；捕获行 EVIDENCE CAPTURE round=R2345 suite=src/os/test_review_window_history.py legs=2；套件行 SUITE PASS 6/6",
-    "updated_at": "2026-11-01T19:51:40+08:00"
+    "current": "R2346 验证后产品窗：债务闸所指的电池跑在已提交的 R2345 树上，480/480 套件全绿、3856 判据与预注册逐字吻合，四段跟进全过（矩阵按设计先红后再生到 45956B）；随后交付 stamp_exempt_guard——计划钉住它读到的摘要，执行前重读、摘要变了就在落盘前拒绝（E_SEG_STALE），两个声明写入器改成共用这一个调用口，不再各存一份临时写+替换；第三个写入器（R2280 种子生成器）仍在绕过它，已按实测补种。",
+    "latest_artifact": "src/os/stamp_exempt_guard.py + src/os/test_stamp_exempt_guard.py，证据 qa/stamp-exempt-guard-R2346.log（2198B，两次同一摘要判据 6/6，三条邻接套件全绿）；实况只读读数：真实声明摘要 397D3C1C71E149DB／79026B，剪枝干跑携带同一摘要且未落盘。",
+    "next_milestone": "R2347：在已提交树上跑全量电池（预注册 481 套件 / 3862 判据），再把第三个写入器接到 guard（队列头 line 393 AC-RAP1 retire_apply）",
+    "next_milestone_due": "2026-11-03T21:37:57+08:00",
+    "last_artifact": "src/os/stamp_exempt_guard.py + src/os/test_stamp_exempt_guard.py，证据 qa/stamp-exempt-guard-R2346.log（2198B，两次同一摘要判据 6/6，三条邻接套件全绿）；实况只读读数：真实声明摘要 397D3C1C71E149DB／79026B，剪枝干跑携带同一摘要且未落盘。",
+    "updated_at": "2026-11-01T21:37:57+08:00"
   },
   "depts": [
     {
@@ -426,6 +426,11 @@
       "src/os/repair_R2316.py",
       "on",
       "R2316 repair: regenerates the three shell-captured R2315 evidence files from a fresh double suite run plus the live refusal through one utf-8 LF writer (census flags 3 -> 0), and appends the R2300 triage entry as a minimal text insertion (186 -> 187 entries, every existing entry byte-intact); the re-run battery read 465/465 green"
+    ],
+    [
+      "src/os/stamp_exempt_guard.py",
+      "on",
+      "R2346 product: one pinned-text guard both declaration writers ask - a plan carries the digest it read, commit re-reads and refuses E_SEG_STALE before any byte, and the two writers now share that single callable (they carry no os.replace of their own)"
     ]
   ],
   "results": [
@@ -797,6 +802,10 @@
     [
       "R2291",
       "R2291 verification window on the debt register first item (reconcile-battery-R2291), discharged on the committed R2290 tree 62a4922a with zero product edits until green (the R2168 mixed-tree rule): full reconcile battery = RUNNER PASS 451/451 suites green plus controls 7/7 in 793.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0 (qa/reconcile-all-R2291.log, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection), criteria total 3682 - exactly the pre-registered +1 suite / +6 criteria against R2289 (450/3676) from the os-debt-item-unique suite, so the prediction matched the measurement with no correction. Four follow-up sections then ran through src/os/battery_followup.py: the matrix section FAILED first on the stale doc (on-disk=43456B regenerated=43512B) and did NOT rewrite it, which is the designed order; src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md to 451 suites / 3682 criteria (43512B) and the re-run read all four sections PASS (matrix byte-identical, fingerprint CLEAN 5 domains, profile --daily --check byte-identical, census DRIFT-CLEAN), closing on VERDICT R2291 PASS. Register closed through its own writer (debt_close line=63, open 2->1, done 40->41, readback ok) and product-face-R2292 opened first=yes through debt_append (before=38199B after=38983B, readback ok) naming the tech head at state/queue/tech.md:358 prefix AC-EXR1. Honest score: a 0-point verification window with no product face; the closeout crossed the waterline by 698B and was folded as fold 599 over log lines 6..9 (the R2277 block, 6 tokens covered, 79198B -> 74031B at margin 4469B) with the four ledger suites re-run 8/8 afterwards."
+    ],
+    [
+      "R2346",
+      "verification-then-product window: battery on the committed R2345 tree PASS 480/480 suites with 3856 criteria exactly as pre-registered, four follow-up sections PASS; then stamp_exempt_guard shipped with AC-SEG1..AC-SEG6 (6/6 twice plus three adjacent suites), the third writer seeded as AC-SGS1..AC-SGS6"
     ]
   ],
   "self_drive": {

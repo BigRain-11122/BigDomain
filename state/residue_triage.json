@@ -1417,6 +1417,13 @@
       "declared_by": "R2345",
       "reason": "fold 631 moved the R2333 block into logs/state-log-archive-2026-11.md verbatim on a round-block boundary, so the round now sits on no live row while its delivery is unchanged and the rows it shipped are closed",
       "until": 2350
+    },
+    {
+      "round": 2335,
+      "status": "DELIVERED",
+      "declared_by": "R2346",
+      "reason": "the R2346 fold moved the whole R2335 block (round line, ledger line, self-heal, decision gate and disclosures) verbatim into the monthly archive on a round-block boundary, so the round is delivered and only its ledger line left the live window",
+      "until": 2360
     }
   ]
 }
