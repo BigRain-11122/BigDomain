@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R2353 suite=src/os/test_residue_triage_entry_retire.py legs=2
+== LEG A rc=0 digest=754549DEDE58B314
+PASS AC-RTER1 imports
+PASS AC-RTER2 dry run plans and writes nothing
+PASS AC-RTER3 refusals name their rounds
+PASS AC-RTER4 atomic splice
+PASS AC-RTER5 CLI codes
+PASS AC-RTER6 purity and wiring
+SUITE PASS 6/6
+== LEG B rc=0 digest=754549DEDE58B314
+PASS AC-RTER1 imports
+PASS AC-RTER2 dry run plans and writes nothing
+PASS AC-RTER3 refusals name their rounds
+PASS AC-RTER4 atomic splice
+PASS AC-RTER5 CLI codes
+PASS AC-RTER6 purity and wiring
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=754549DEDE58B314

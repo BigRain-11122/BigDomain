@@ -4697,6 +4697,16 @@ SUITES = [
     # BEFORE the code.)
     ("os-residue-triage-head-renew",
      os.path.join("..", "os", "test_residue_triage_head_renew.py"), 6),
+    # R2353: the declaration grew a writer for NEW entries and a writer for
+    # the HEAD, but an entry whose round left the live residue stayed in the
+    # declared set forever and only a hand edit could remove it. The retire
+    # writer plans by number in a dry run, refuses any round the live reading
+    # still carries, and executes one atomic splice that leaves every
+    # surviving entry and the head byte-identical.
+    # (AC-RTER1..AC-RTER6 pinned in state/queue/tech.md as the R2351 seed row
+    # BEFORE the code.)
+    ("os-residue-triage-entry-retire",
+     os.path.join("..", "os", "test_residue_triage_entry_retire.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads
