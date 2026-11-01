@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-02 01:15 +08:00
+- 生成时间: generated: 2026-11-02 01:38 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2355.log
 - 状态证据: reconcile-all-R2355.log (RUNNER PASS 486/486 suites green, reconcile controls 7/7, 1056.0s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 486 | 3892 | 486/486 | R2355 |
+| 487 | 3898 | 486/486 | R2355 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -520,10 +520,11 @@
 | 481 | os-orphan-trace | ../os/test_orphan_trace.py | 6 | green | 1.7 |
 | 482 | os-orphan-promote | ../os/test_orphan_promote.py | 6 | green | 1.3 |
 | 483 | os-orphan-promotion-ledger | ../os/test_orphan_promotion_ledger.py | 6 | green | 1.1 |
-| 484 | os-followup-incomplete-cause | ../os/test_followup_incomplete_cause.py | 6 | green | 1.0 |
-| 485 | os-review-window-history | ../os/test_review_window_history.py | 6 | green | 1.4 |
-| 486 | os-stamp-exempt-guard | ../os/test_stamp_exempt_guard.py | 6 | green | 0.2 |
-|  | 合计 |  | 3892 | green 486 / FAIL 0 / no-evidence 0 |  |
+| 484 | os-orphan-promotion-wire | ../os/test_orphan_promotion_wire.py | 6 | no-evidence | - |
+| 485 | os-followup-incomplete-cause | ../os/test_followup_incomplete_cause.py | 6 | green | 1.0 |
+| 486 | os-review-window-history | ../os/test_review_window_history.py | 6 | green | 1.4 |
+| 487 | os-stamp-exempt-guard | ../os/test_stamp_exempt_guard.py | 6 | green | 0.2 |
+|  | 合计 |  | 3898 | green 486 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

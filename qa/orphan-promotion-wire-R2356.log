@@ -1,0 +1,15 @@
+R2356 orphan_promotion_wire evidence
+SUITE os-orphan-promotion-wire criteria=6
+orphan_promotion_wire suite (expected criteria 6)
+PASS AC-OPW1 ledger reading imported, patched reading honoured
+PASS AC-OPW2 recorded target refuses naming its claim
+PASS AC-OPW3 stale gives up both digests and copies nothing
+PASS AC-OPW4 expired judgement permits and names its until
+PASS AC-OPW5 refusal is byte-identical, codes stay as pinned
+PASS AC-OPW6 ASCII, stdlib only, no write primitive, wired
+SUITE PASS 6/6
+criteria digest run1=13e6ea4b36c064a9b766792b292c46d40195ee5f9e72169091731f5e62f03c6e
+criteria digest run2=13e6ea4b36c064a9b766792b292c46d40195ee5f9e72169091731f5e62f03c6e identical=yes
+adjacent os-orphan-trace 6/6 os-orphan-promote 6/6 os-orphan-promotion-ledger 6/6 os-followup-history 6/6
+live dogfood: orphan_promotion_wire.py --plan R2136 -> rc=2 E_OPW_RECORDED: R2136 is recorded as reconcile-all-R2136.log by R2342 until R2360; nothing is copied
+live dogfood: orphan_promotion_wire.py --plan R9998 -> rc=2 E_OTP_NO_ROUND (gate allowed, orphan_promote refused)

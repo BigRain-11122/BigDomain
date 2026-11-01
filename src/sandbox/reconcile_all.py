@@ -4922,6 +4922,20 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-orphan-promotion-ledger",
      os.path.join("..", "os", "test_orphan_promotion_ledger.py"), 6),
+    # R2356: the promotion writer now asks the ledger before it copies. Until
+    # this window orphan_promote's only guard was "does the canonical target
+    # exist on disk", so a round the ledger already claimed with no file behind
+    # it (a backfilled record, a lapsed judgement) was invisible and a later
+    # promotion of the same round could walk over it silently. The gate runs
+    # before the writer looks at the target at all: RECORDED, STALE, a LIVE
+    # record whose file is gone and an UNRECORDED canonical file each refuse
+    # with their own code, while a LAPSED judgement permits the copy and names
+    # the until it supersedes. The module holds no write primitive of its own -
+    # the only mutation on this path is orphan_promote's single os.replace.
+    # (AC-OPW1..AC-OPW6 pinned in state/queue/tech.md as the R2342 seed row
+    # BEFORE the code existed.)
+    ("os-orphan-promotion-wire",
+     os.path.join("..", "os", "test_orphan_promotion_wire.py"), 6),
     # R2343: followup_history names which rounds are unfixed (live at R2343:
     # 413 of 438 read INCOMPLETE) and every one of them reads the same word,
     # while three different debts hide behind it - a legacy log that predates
