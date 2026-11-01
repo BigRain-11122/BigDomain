@@ -4637,6 +4637,13 @@ SUITES = [
     # state/queue/tech.md as the R2317 seed row BEFORE the code.)
     ("os-gate-decl-retire-wire",
      os.path.join("..", "os", "test_gate_decl_retire_wire.py"), 6),
+    # R2321: the retire wire refused every MATCHED identity, so a declared
+    # blocker whose row was COMPLETED could never be retired - the gated and
+    # the done fixture refused identically. The scope reading hands the plan
+    # only a matched DONE row or an UNMATCHED identity. (AC-GDRTS1..AC-GDRTS6
+    # pinned in state/queue/tech.md as the R2319 seed row BEFORE the code.)
+    ("os-gate-decl-retire-scope",
+     os.path.join("..", "os", "test_gate_decl_retire_scope.py"), 6),
     # R2302: followup_history reports 61 non-canonical evidence names as
     # IGNORED, so a failure leg or a correction retry written under a variant
     # name stays invisible while the canonical leg of the same round reads

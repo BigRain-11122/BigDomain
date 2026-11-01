@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2321 suite=src\os\test_gate_decl_retire_scope.py legs=2
+== LEG A rc=0 digest=5A79F29593F8BC33
+gate_decl_retire_scope suite (expected criteria 6)
+PASS AC-GDRTS1 both laws imported, neither re-implemented
+PASS AC-GDRTS2 done row retires, open and gated refuse by level
+PASS AC-GDRTS3 AMBIGUOUS keeps refusing, UNMATCHED still plans
+PASS AC-GDRTS4 success path byte-identical to the direct retire
+PASS AC-GDRTS5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRTS6 pure, wired, and writes nothing on a dry run
+SUITE PASS 6/6
+== LEG B rc=0 digest=5A79F29593F8BC33
+gate_decl_retire_scope suite (expected criteria 6)
+PASS AC-GDRTS1 both laws imported, neither re-implemented
+PASS AC-GDRTS2 done row retires, open and gated refuse by level
+PASS AC-GDRTS3 AMBIGUOUS keeps refusing, UNMATCHED still plans
+PASS AC-GDRTS4 success path byte-identical to the direct retire
+PASS AC-GDRTS5 CLI codes and a byte-stable pinned JSON
+PASS AC-GDRTS6 pure, wired, and writes nothing on a dry run
+SUITE PASS 6/6
+== ADJACENT 4
+== src\os\test_gate_decl_retire.py rc=0 SUITE PASS 6/6
+== src\os\test_gate_decl_retire_wire.py rc=0 SUITE PASS 6/6
+== src\os\test_gate_decl_identity.py rc=0 SUITE PASS 6/6
+== src\os\test_gate_decl_append.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=5A79F29593F8BC33

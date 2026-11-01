@@ -1334,5 +1334,13 @@
       "reason": "read at R2320 off the live stamp table: state/queue/tech.md:369 carries a CLOSED row for the review_window_decl face this round shipped, and the round became residue only when the R2319 fold 618 (commit 652a7f59) moved its log block into the archive",
       "until": 2330
     }
+,
+    {
+      "round": 2307,
+      "status": "DELIVERED",
+      "declared_by": "R2321",
+      "reason": "read at R2321 off the live stamp table: state/queue/tech.md:370 carries a CLOSED row for the stamp_exempt_append face this round shipped, and the round became residue only when the R2321 fold 619 moved its log block into the archive",
+      "until": 2330
+    }
   ]
 }
