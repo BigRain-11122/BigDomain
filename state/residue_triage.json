@@ -1457,6 +1457,27 @@
       "declared_by": "R2354",
       "reason": "fold 638 moved this round log block into the monthly archive while its stamp stayed on a closed row; the live triage reading is DELIVERED because its ledger line and its done row are on disk",
       "until": 2363
+    },
+    {
+      "round": 2345,
+      "status": "DELIVERED",
+      "declared_by": "R2355",
+      "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2364
+    },
+    {
+      "round": 2346,
+      "status": "DELIVERED",
+      "declared_by": "R2355",
+      "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2364
+    },
+    {
+      "round": 2348,
+      "status": "DELIVERED",
+      "declared_by": "R2355",
+      "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
+      "until": 2364
     }
   ]
 }

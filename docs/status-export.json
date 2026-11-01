@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-01T23:57:47+08:00",
-  "do": "R2354 产品窗：队列的「报价」终于先问占用读数——已交付的行不再被端给新窗，而是被越过并点名是哪件模块交付的，报价继续走到下一条可认领行；全部前缀行都已交付时读 ALL-DELIVERED 而非 NO-HEAD。同窗清欠：债务簿里指向R2352 残留漂移的那行在 R2353 已被真实治好（本窗实测 TRIAGED 206/206、退出码 0、红套件转绿），故按 R2345 先例就地收口并开出继任电池行。",
+  "export_ts": "2026-11-02T01:19:30+08:00",
+  "do": "R2355 verification window: the carried battery ran on the committed R2354 tree and reads RUNNER PASS 486/486 suites plus controls 7/7 in 1056.0s with criteria total 3892; all four follow-up sections then PASS (matrix byte-identical at 46510B, fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2355 PASS. The six new group decision rows were reviewed and none dispatches this company. No product code shipped.",
   "ceo_face": {
-    "current": "R2354 产品窗：队列的「报价」终于先问占用读数——已交付的行不再被端给新窗，而是被越过并点名是哪件模块交付的，报价继续走到下一条可认领行；全部前缀行都已交付时读 ALL-DELIVERED 而非 NO-HEAD。同窗清欠：债务簿里指向R2352 残留漂移的那行在 R2353 已被真实治好（本窗实测 TRIAGED 206/206、退出码 0、红套件转绿），故按 R2345 先例就地收口并开出继任电池行。",
-    "latest_artifact": "src/os/queue_head_delivered.py + src/os/test_queue_head_delivered.py，证据 qa/queue-head-delivered-R2354.log（1476B，两次同一摘要，6/6，三条邻接套件全绿）；实况读数 QUEUE OFFER tech line=400 prefix=AC-OPW1 walked_over=1 verdict=OFFERED——本窗认领的 line 398 现在读 DELIVERED 并被越过。",
-    "next_milestone": "R2355：在已提交的 R2354 树上跑全量电池（预注册 485 套件 / 3886 判据，对 R2352 的 484/3880 恰为 +1 套件 / +6 判据），随后交付队列头 line 400 AC-OPW1 orphan_promotion_wire——让晋升写入器先问晋升账本",
-    "next_milestone_due": "2026-11-03T23:57:47+08:00",
-    "last_artifact": "src/os/queue_head_delivered.py + src/os/test_queue_head_delivered.py，证据 qa/queue-head-delivered-R2354.log（1476B，两次同一摘要，6/6，三条邻接套件全绿）；实况读数 QUEUE OFFER tech line=400 prefix=AC-OPW1 walked_over=1 verdict=OFFERED——本窗认领的 line 398 现在读 DELIVERED 并被越过。",
-    "updated_at": "2026-11-01T23:57:47+08:00"
+    "current": "R2355 verification window: the carried battery ran on the committed R2354 tree and reads RUNNER PASS 486/486 suites plus controls 7/7 in 1056.0s with criteria total 3892; all four follow-up sections then PASS (matrix byte-identical at 46510B, fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2355 PASS. The six new group decision rows were reviewed and none dispatches this company. No product code shipped.",
+    "latest_artifact": "qa/reconcile-all-R2355.log (796964B, single writer utf-8 LF through src/os/battery_stream.py) - 486 suites / 3892 criteria, 7/7 reconcile controls, TMP RECLAIM 932/932 worlds 326.59 MiB; docs/sandbox-suite-matrix.md regenerated to 486 / 3892 (46510B).",
+    "next_milestone": "R2356: claim the queue head state/queue/tech.md:400 prefix AC-OPW1 (orphan_promotion_wire) - wire the promotion writer to ask the promotion ledger before it copies, then commit before any battery.",
+    "next_milestone_due": "2026-11-04T01:19:30+08:00",
+    "last_artifact": "qa/reconcile-all-R2355.log (796964B, single writer utf-8 LF through src/os/battery_stream.py) - 486 suites / 3892 criteria, 7/7 reconcile controls, TMP RECLAIM 932/932 worlds 326.59 MiB; docs/sandbox-suite-matrix.md regenerated to 486 / 3892 (46510B).",
+    "updated_at": "2026-11-02T01:19:30+08:00"
   },
   "depts": [
     {
@@ -446,6 +446,11 @@
       "src/os/queue_head_delivered.py",
       "on",
       "R2354 product: the queue offer finally asks the occupancy reading - a row whose module and suite already shipped is walked over and NAMED with its module, the offer continues to the next claimable row, and a queue of shipped rows reads ALL-DELIVERED instead of NO-HEAD"
+    ],
+    [
+      "qa/reconcile-all-R2355.log",
+      "on",
+      "R2355 verification: the carried battery on the committed R2354 tree read 486/486 suites plus controls 7/7 with criteria total 3892, and all four follow-up sections PASS after the designed matrix FAIL and its regeneration - the newest two suites are proven wired into the whole registry, not only into their own runs"
     ]
   ],
   "results": [
@@ -766,7 +771,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2354",
+      "2355",
       "OSLoop 执行 tick"
     ],
     [
@@ -837,19 +842,23 @@
     [
       "R2354",
       "product window that discharged a stale register row: verified the R2352 residue drift was already repaired (TRIAGED 206/206, suite green), closed that row and opened reconcile-battery-R2355 at 485 suites / 3886 criteria, then shipped queue_head_delivered with AC-QHO1..AC-QHO6 (6/6 twice plus three adjacent suites) and read it live - the row this window claimed now reads DELIVERED and is walked over; one real gap row seeded (queue_floor_delivered_wire); no battery ran"
+    ],
+    [
+      "R2355",
+      "verification window on the register's first=yes item: battery PASS 486/486 suites, criteria 3892, 1056.0s, TMP RECLAIM 932/932; matrix regenerated to 486/3892 (46510B) and re-read byte-identical; fingerprint CLEAN, profile byte-identical, census DRIFT-CLEAN; the pre-registered 485/3886 missed by exactly os-queue-head-delivered (6 criteria) and the delta is named; six new group decision rows acknowledged as non-execution and the token baseline widened to 74; battery row closed and product-face-R2356 opened first=yes"
     ]
   ],
   "self_drive": {
-    "window": "2026-10-26..2026-11-01",
+    "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 5,
     "proposals_open": 3,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   }
 }
