@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2354 suite=src/os/test_queue_head_delivered.py legs=2
+== LEG A rc=0 digest=9D731E7CB186F743
+queue_head_delivered suite (expected criteria 6)
+PASS AC-QHO1 occupancy is imported from queue_occupancy and no second module-path scan exists
+PASS AC-QHO2 a delivered head is walked over with its module named and the offer continues
+PASS AC-QHO3 a queue of shipped rows reads ALL-DELIVERED, not NO-HEAD
+PASS AC-QHO4 walked-over rows are in file order and only rows before the head are walked over
+PASS AC-QHO5 CLI 0/2/3/5 and a byte-stable JSON over pinned keys
+PASS AC-QHO6 pure ASCII, stdlib only, no clock, no network, wired
+SUITE PASS 6/6
+== LEG B rc=0 digest=9D731E7CB186F743
+queue_head_delivered suite (expected criteria 6)
+PASS AC-QHO1 occupancy is imported from queue_occupancy and no second module-path scan exists
+PASS AC-QHO2 a delivered head is walked over with its module named and the offer continues
+PASS AC-QHO3 a queue of shipped rows reads ALL-DELIVERED, not NO-HEAD
+PASS AC-QHO4 walked-over rows are in file order and only rows before the head are walked over
+PASS AC-QHO5 CLI 0/2/3/5 and a byte-stable JSON over pinned keys
+PASS AC-QHO6 pure ASCII, stdlib only, no clock, no network, wired
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_queue_occupancy.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=3 fails=0 digest=9D731E7CB186F743

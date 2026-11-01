@@ -1450,6 +1450,13 @@
       "declared_by": "R2353",
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2363
+    },
+    {
+      "round": 2343,
+      "status": "DELIVERED",
+      "declared_by": "R2354",
+      "reason": "fold 638 moved this round log block into the monthly archive while its stamp stayed on a closed row; the live triage reading is DELIVERED because its ledger line and its done row are on disk",
+      "until": 2363
     }
   ]
 }

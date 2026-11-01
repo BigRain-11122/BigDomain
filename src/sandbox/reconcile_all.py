@@ -4862,6 +4862,15 @@ SUITES = [
     # row BEFORE the code existed.)
     ("os-queue-occupancy",
      os.path.join("..", "os", "test_queue_occupancy.py"), 6),
+    # R2354: the occupancy reading existed but the OFFER never asked it, so
+    # queue_head still handed a delivered row to a fresh window. The offer
+    # now walks over a DELIVERED row and names the module that shipped it,
+    # continues to the next claimable row, and reads ALL-DELIVERED instead
+    # of NO-HEAD when every prefixed row has shipped.
+    # (AC-QHO1..AC-QHO6 pinned in state/queue/tech.md as the R2337 seed
+    # row BEFORE the code existed.)
+    ("os-queue-head-delivered",
+     os.path.join("..", "os", "test_queue_head_delivered.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only
