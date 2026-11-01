@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T15:40:35+08:00",
+  "export_ts": "2026-11-01T16:19:16+08:00",
   "do": "R2333 产品分：把「同意退休」从一句话变成有时限的账——接受退役不再靠手删文件，而是先登记、再对着活跃读数复核，谁都可以在下个窗口把这条接受重新算一遍。",
   "ceo_face": {
-    "current": "R2333 产品面完成：`src/os/retire_accept.py` + 配套测试（AC-RAC1..AC-RAC6 在 R2331 队列行里先预登记，再写代码）。退休判断原本只看不写：resolver 按契约只读，六份可退役副本每个窗口被重新推一遍，要么干看着、要么手删一份且不留任何记录。新模块钉死一份接受声明 `state/queue/retire_accept.json`，并拿实时 resolver 复核，每条只落一类且四类互斥：ACCEPTED（仍在窗口内且仍读 RETIRE-READY）、EXPIRED（点名它的 until 轮）、UNMATCHED（实时根本没有这一行）、STALE-DECISION（又读回 OWNED，并把当前阻塞原因点名）。优先级写进注释：两类完整性判定高于过期判定，完整性内部「无行」高于「被占」。声明缺失读 UNPINNED、退出码 2，且把实时候选全列出来，绝不伪造绿灯；写入端先拒重复脚本、拒 until 早于自身申报轮、拒实时不读 RETIRE-READY 的脚本。测试 SUITE PASS 6/6，两遍判据摘要完全一致（D1F1F5649B84F963），evidence_capture 取证且四个相邻套件同时绿（qa/retire-accept-R2333.log，1282B），已挂 runner os-retire-accept(6)。实测并自食：声明先钉空文件，再用模块自带追加路径依次接受六份实测 RETIRE-READY 副本（R2248/2250/2253/2255/2257/2259），until=R2350，六次追加各自原子替换并按预测字节数回读（48 → 270 → 493 → 716 → 939 → 1162 → 1385B）；现在读数 pinned=yes entries=6 accepted=6 expired=0 unmatched=0 stale_decision=0 pending=0 verdict=PINNED 退出码 0，--json 两次逐字节相同。模块自身绝不删除任何文件；真正动手是下一枚种子 retire_apply（移入隔离目录，永不删除）。",
-    "latest_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）· 取证 qa/retire-accept-R2333.log（1282B）· 声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）",
-    "next_milestone": "R2334 先在已提交的 R2333 树上跑全量校准电池，预登记 474 套件 / 3820 判据（相对 R2332 的 473/3814 恰好 +1 套件 / +6 判据，就是本轮 os-retire-accept 套件），任何更大的差都必须点名而不是抹平；随后回到产品面，按 queue_head 点名的队头 AC-RTA1（residue_triage_append），并推进本轮种下的 retire_apply（AC-RAP1..AC-RAP6，把六条 ACCEPTED 真正移入隔离目录）。窗口 ≤48h。",
-    "next_milestone_due": "2026-11-03T15:40:35+08:00",
-    "last_artifact": "src/os/retire_candidate.py 与 src/os/test_retire_candidate.py（套件 6/6 双跑一致）；证据 qa/retire-candidate-R2331.log（1262B）；续期后的 state/residue_triage.json（195 条，until=R2350）"
+    "current": "R2334 验证面完成：全量校准电池在已提交的 R2333 树上跑通——474/474 套件全绿、控制 7/7、判据总数 3820，与预注册 474/3820 精确吻合（相对 R2332 的 473/3814 恰好 +1 套件 / +6 判据，就是 R2333 的 os-retire-accept 套件）。四段跟随处理按设计顺序跑：矩阵段先 FAIL（拒绝改写陈旧文档），用本轮证据再生到 474 套件 / 3820 判据（45424B），复跑四段全 PASS（矩阵逐字节一致、指纹 5 域 CLEAN、runner profile 每日档逐字节一致、写者普查 DRIFT-CLEAN），收口 VERDICT R2334 PASS。水位线先行：state.json 72996B 距 78500B 闸仅 5504B，先折 623 把 1..5 行（上一折标加整个 R2321 块）逐字搬进归档（227645B→239467B，664 个窗口 token 全覆盖、无缺失），预测 67067B = 实测 67067B；折叠新生残留 R2321 按名补记（status 取自实例戳表 tech.md:378 的 CLOSED 行）196→197 条，读数 residue=197 triaged=197 untriaged=0。本轮零产品代码改动。",
+    "latest_artifact": "qa/reconcile-all-R2334.log（790737B·单写者 utf-8 LF·RUNNER PASS 474/474 控制 7/7）· docs/sandbox-suite-matrix.md（474 套件 / 3820 判据·45424B）· state/residue_triage.json（197 条·until=R2350）· logs/state-log-archive-2026-11.md（239467B·fold 623）",
+    "next_milestone": "R2335 回到产品面：按 python src/os/queue_head.py --head tech 实测读到的队头（收口时=state/queue/tech.md:385 前缀 AC-RTA1 residue_triage_append，其后是种子 retire_apply AC-RAP1..AC-RAP6——把六条 ACCEPTED 真正移入隔离目录，永不删除）先跑零占用锚检、按行内已预注册判据落一件可跑产品面加套件，提交后再跑电池（R2168 混合树律），电池预注册 475 套件 / 3826 判据。窗 ≤48h。",
+    "next_milestone_due": "2026-11-03T16:19:16+08:00",
+    "last_artifact": "src/os/retire_accept.py + src/os/test_retire_accept.py（判据 6/6 两遍一致）；取证 qa/retire-accept-R2333.log（1282B）；声明 state/queue/retire_accept.json（六条 ACCEPTED，until=R2350，1385B）"
   },
   "depts": [
     {
@@ -344,6 +344,10 @@
   ],
   "results": [
     [
+      "R2334",
+      "R2334 verification window: RUNNER PASS 474/474 suites + controls 7/7 in 845.9s, TMP RECLAIM 932/932, criteria total 3820 exactly as pre-registered (+1 suite / +6 criteria against R2332 473/3814 from the R2333 os-retire-accept suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 474/3820 (45424B); fold 623 72996B->67067B with 664 tokens covered and R2321 spliced as the one fold-created residue; zero product code, 0 product points."
+    ],
+    [
       "R2333",
       "R2333 产品分：retire_accept 落地，判据 6/6 两遍一致，实测钉住六条接受（until=R2350），退休第一次有了可复核的账。"
     ],
@@ -620,7 +624,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2333",
+      "2334",
       "OSLoop 执行 tick"
     ],
     [

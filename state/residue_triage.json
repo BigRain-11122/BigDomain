@@ -1373,6 +1373,13 @@
       "declared_by": "R2333",
       "reason": "read at R2333 off the live stamp table: state/queue/tech.md:377 carries a CLOSED row for the gate_decl_retire_wire face R2319 shipped, and the round became residue only when the R2333 fold 622 moved its log block into the archive",
       "until": 2350
+    },
+    {
+      "round": 2321,
+      "status": "DELIVERED",
+      "declared_by": "R2334",
+      "reason": "read at R2334 off the live stamp table: state/queue/tech.md:378 carries a CLOSED row for the gate_decl_retire_scope face R2321 shipped, and the round became residue only when the R2334 fold 623 moved its log block into the archive",
+      "until": 2350
     }
   ]
 }
