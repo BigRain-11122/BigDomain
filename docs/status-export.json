@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-01T22:52:00+08:00",
+  "export_ts": "2026-11-01T23:20:00+08:00",
   "do": "R2348 产品窗：还款引擎终于有了“执行步”。退休审批（retire_accept）只记账“六份证据副本可以退休”，却没有任何动作面——只能手动搬移，既无轮次记录也无字节证明更无回滚路径。新交付 src/os/retire_apply.py 把它变成一条命令：类别与现场结论全部从审批读取器导入（不重建第二套判定）；默认干跑并用全树摘要证明“一个字节没动”；只有 ACCEPTED 条目可动，其余三类各自拒绝并带审批原文理由；真正执行是一次 os.replace 移入 media/quarantine/R轮次/ （gitignore 区），并用逐文件摘要图证明“只有两条路径变化、目标字节等于源文件”；模块里没有任何删除路径（不含 os.remove/unlink/rmtree）。套件双跑 6/6 判据逐字节同一，四个相邻套件全绿；现场实读：六条 ACCEPTED、干跑 src/os/evidence_R2248.py 预计 3137 字节移入隔离区（wrote=no）。本窗没做现场搬移（那是另一次可审计动作）；全量电池转 R2349，预注册 482 套件 / 3868 判据。",
   "ceo_face": {
-    "current": "R2348 产品窗：还款引擎终于有了“执行步”。退休审批（retire_accept）只记账“六份证据副本可以退休”，却没有任何动作面——只能手动搬移，既无轮次记录也无字节证明更无回滚路径。新交付 src/os/retire_apply.py 把它变成一条命令：类别与现场结论全部从审批读取器导入（不重建第二套判定）；默认干跑并用全树摘要证明“一个字节没动”；只有 ACCEPTED 条目可动，其余三类各自拒绝并带审批原文理由；真正执行是一次 os.replace 移入 media/quarantine/R轮次/ （gitignore 区），并用逐文件摘要图证明“只有两条路径变化、目标字节等于源文件”；模块里没有任何删除路径（不含 os.remove/unlink/rmtree）。套件双跑 6/6 判据逐字节同一，四个相邻套件全绿；现场实读：六条 ACCEPTED、干跑 src/os/evidence_R2248.py 预计 3137 字节移入隔离区（wrote=no）。本窗没做现场搬移（那是另一次可审计动作）；全量电池转 R2349，预注册 482 套件 / 3868 判据。",
-    "latest_artifact": "src/os/retire_apply.py + src/os/test_retire_apply.py + qa/retire-apply-R2348.log（624B，双跑 6/6 同一判据摘要）+ 接线 os-retire-apply(6) + state/queue/tech.md 新种子 AC-RAG1..6（R2348-11-01）",
-    "next_milestone": "R2349：先跑已提交树的全量对账电池（预注册 482 套件 / 3868 判据）+ 四段后续，绿后回产品面队头 line 394 AC-RTD1；2026-11-02 前完成",
-    "next_milestone_due": "2026-11-03T22:52:00+08:00",
+    "current": "R2349 验证窗：全量电池在已提交的 R2348 树上跑完——482 套件全绿 / 3868 判据（与预注册完全一致）、对账控制 7/7、981.1 秒、临时世界 932/932 回收零残留。四段后续按设计先红后绿：矩阵段先报文档过期且拒绝改写，suite_matrix 重生成到 46114B 后四段全 PASS，判定 R2349 PASS。本窗未出产品件（如实记 0 分），队列头部仍是 line 394 AC-RTD1。",
+    "latest_artifact": "qa/reconcile-all-R2349.log（482/482 套件绿、3868 判据、控制 7/7、981.1s）+ docs/sandbox-suite-matrix.md（46114B，482 套件 / 3868 判据）（2026-11-01 23:0x）",
+    "next_milestone": "R2350：产品面 state/queue/tech.md:394 AC-RTD1（residue_triage_decl_reason——把三分类声明的首部声明与逐条条目对账，首部陈旧读 HEAD-STALE）六判据交付+套件；随后电池预注册 483 套件 / 3874 判据。2026-11-02 前完成。",
+    "next_milestone_due": "2026-11-03T23:20:00+08:00",
     "last_artifact": "src/os/retire_apply.py + src/os/test_retire_apply.py + qa/retire-apply-R2348.log（624B，双跑 6/6 同一判据摘要）+ 接线 os-retire-apply(6) + state/queue/tech.md 新种子 AC-RAG1..6（R2348-11-01）",
-    "updated_at": "2026-11-01T22:52:00+08:00"
+    "updated_at": "2026-11-01T23:20:00+08:00"
   },
   "depts": [
     {
