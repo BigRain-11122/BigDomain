@@ -10,3 +10,5 @@ R2349: battery on the committed R2348 tree read RUNNER PASS 482/482 suites plus 
 2359 2026-11-02T02:58:13
 2360 2026-11-02T03:36:10
 2361 2026-11-02T03:58:48
+2362 2026-11-02T05:05:31+08:00
+R2362: battery on the committed R2361 tree read RED ON EVIDENCE (one FAIL: writer census DRIFT-FLAG from three utf-16 captured R2361 logs), fixed by transcoding the logs to utf-8/LF with the baseline untouched (census flags=0 DRIFT-CLEAN); then src/os/runner_arg_guard.py + suite shipped at AC-RAG1..AC-RAG6 (6/6), reconcile_all.CLI_CONTRACT added as the imported contract, full battery green at 491/491 suites and criteria 3922 (844.6s), matrix regenerated 46996B and --check byte-identical, os-battery-followup 6/6.

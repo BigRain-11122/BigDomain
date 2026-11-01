@@ -79,6 +79,18 @@ def _load_json(path):
     with open(path, encoding="utf-8") as handle:
         return json.load(handle)
 
+# Machine-readable CLI contract (R2362). src/os/runner_arg_guard.py IMPORTS
+# this dict instead of keeping a second hand-written flag list, so the guard
+# and this runner cannot drift apart. It stays beside main()'s real behaviour:
+# one optional positional (evidence path), no flags of its own, and a bare
+# `--help` answered as a question rather than silently becoming a file name.
+CLI_CONTRACT = {
+    "name": "reconcile_all.py",
+    "known_flags": (),
+    "max_positional": 1,
+    "positional_label": "evidence_log_path",
+}
+
 SUITES = [
     # (label, suite path relative to the sandbox root, expected criteria)
     # R1773 lobby room-level message read face: per-room chat counts +
@@ -4996,6 +5008,14 @@ SUITES = [
     # in state/queue/tech.md:403 as the R2346 seed row BEFORE the code.)
     ("os-stamp-exempt-seed-guard-wire",
      os.path.join("..", "os", "test_stamp_exempt_seed_guard_wire.py"), 6),
+    # R2362: the runner finally has an argument guard - reconcile_all has no
+    # parser, so any token (--help included) becomes an evidence FILE NAME and
+    # starts a real battery. The guard reads CLI_CONTRACT above instead of a
+    # second flag list and refuses an unknown flag before any suite starts.
+    # (AC-RAG1..AC-RAG6 were pinned in state/queue/tech.md:404 as the R2348
+    # seed row BEFORE the code.)
+    ("os-runner-arg-guard",
+     os.path.join("..", "os", "test_runner_arg_guard.py"), 6),
     ]
 
 FAILS = 0
