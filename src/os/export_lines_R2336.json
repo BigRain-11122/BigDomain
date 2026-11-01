@@ -1,0 +1,9 @@
+{
+  "do": "R2336 验证窗：在已提交树上把全量对账电池重跑一遍（上一轮把电池顺延到本轮）。首跑红了三套台账判据，根因不是判据而是上一轮的字数折窗把 R2322 整块日志从中间切开——主行和账本行进了档，两条尾注留在活窗，活窗于是读成「有轮次、无账本行」。本轮先把修复单独提交（fold 625 把这对尾注也归档，使该轮整块在档），再在干净树上重跑，475/475 全绿、判据总数 3826 与预注册分毫不差。零产品代码改动。",
+  "current": "R2336 在已提交树上跑全量对账电池。首跑 472/475：os-ledger-lines AC-LGR8、os-ledger-archive AC-LGA7/AC-LGA8、os-ledger-baseline AC-LGB8 三红，根因同一个——fold 624（上一轮）按字节选窗，把 R2322 的整块日志从中间切开：主轮次行与「R2322 tokens:」账本行进档，自检与披露两条尾注留在活窗，活窗因此报 new_missing=[2322]。修复单独提交（3011d4aa）：fold 625 把这对尾注也归档，pre-op sha16 20f5a98b42b502c4，预测与实测同为 74748B，余量 3752B，state_io 读 CANON-CLEAN、62 条日志零缩进漂移，三套红判据全部 8/8。随后重跑：RUNNER PASS 475/475 套 + 对账控制 7/7，807.9s，TMP RECLAIM 932/932，判据总数 3826 与预注册完全一致；四段 follow-up 先按设计在矩阵档上 FAIL（不改写），suite_matrix 重生成 475 套 / 3826 判据（45513B）后复跑全 PASS，VERDICT R2336 PASS。收尾再折 626（按块边界选窗，1..6，77130B，余量 1370B），折后活窗台账闸干净，折出的 R2323 一轮经 residue_triage_append 补记（198 条目，TRIAGED）。本轮零产品代码、0 产品分。",
+  "latest_artifact": "qa/reconcile-all-R2336.log（796458B，单写者 UTF-8 LF，RUNNER PASS 475/475 + 控制 7/7 + 判据 3826）与红腿 qa/reconcile-all-R2336-red.log（796428B，472/475，三套台账判据红在同一根因）；证据含四段 follow-up 的 PASS 段与矩阵重生成记录",
+  "last_artifact": "src/os/closeout_R2336.py（本轮收账脚本，ASCII 源、读回校验）；state/residue_triage.json 由 197 条增至 198 条（R2323 经 append 通道补记，DELIVERED until R2360）",
+  "next_milestone": "R2337 回到产品面：queue_head --head tech 当前指向 state/queue/tech.md:386 前缀 AC-GDIW1（gate_decl_identity_wire），其后是已预埋的 residue_triage_decl_reason（声明头仍写 declared_by R2331 而新增条目各带其主，属本轮实测漂移）。另有一条真实机制缺口入债：折窗按字节选窗会切断轮次块，须给折窗加块边界守卫。",
+  "entry": "R2336 验证窗：全量电池先红后绿（472/475 → 475/475，判据 3826 与预注册一致），红因上一轮折窗切断轮次块，fold 625 修复、fold 626 按块边界折水位，零产品代码",
+  "heartbeat": "tick 2336 R2336 verdict=PASS battery=475/475 criteria=3826 followups=PASS folds=625,626 debt=fold-block-boundary"
+}

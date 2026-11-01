@@ -1380,6 +1380,13 @@
       "declared_by": "R2334",
       "reason": "read at R2334 off the live stamp table: state/queue/tech.md:378 carries a CLOSED row for the gate_decl_retire_scope face R2321 shipped, and the round became residue only when the R2334 fold 623 moved its log block into the archive",
       "until": 2350
+    },
+    {
+      "round": 2323,
+      "status": "DELIVERED",
+      "declared_by": "R2336",
+      "reason": "R2323 shipped a resolver module with its six pre-registered criteria and its suite; the round block was moved whole into the archive by fold 626 on a block boundary, which is what left its stamp on an open row",
+      "until": 2360
     }
   ]
 }
