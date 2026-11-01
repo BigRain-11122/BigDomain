@@ -1,0 +1,43 @@
+BigDomain QA smoke R2320 (2026-11-01, Asia/Shanghai) - group QA charter v1.0 daily crawl round
+============================================================================
+1 DAILY CRAWL - web direct reading (zero key, read-only)
+  source: https://openstd.samr.gov.cn/bzgk/gb/std_list?p.p2=45438
+  read : 全国标准信息公共服务平台 search row, fetched 2026-11-01
+  row  : 1 GB 45438-2025 | 网络安全技术 人工智能生成合成内容标识方法 | 强标 | 现行
+         publish 2025-02-28 | implement 2025-09-01
+  meaning: the AIGC labelling method is a MANDATORY national standard already in force,
+           not a draft - the declaration in docs/global-benchmarks.md until today only had
+           the standard registry path as a pointer with the full-text page unread; the
+           registry row now pins class (强标), status (现行) and both dates directly.
+  consumer: BLUEPRINT 五 生死线 AIGC 标识面 + P-47 各设计件四件套的标识面 (§五)
+
+2 BENCHMARK REFRESH - docs/global-benchmarks.md §AIGC 标识 source table + §4 update row
+  state.json benchmarks_refreshed := 2026-11-01 (was 2026-10-29, inside the 7-day gate anyway)
+
+3 SIGNAL WALL - docs/research/intelligence-wall.md, grade A (official registry, primary source)
+  consumed by the AIGC labelling face of every P-47 design doc; no new external API touch.
+
+4 SELF CHECK (four items)
+  [x] daily crawl executed with 1 new primary source, dates quoted from the page itself
+  [x] benchmarks refreshed today (15h rule and 7-day gate both satisfied)
+  [x] research source chain recorded with URL + grade + consumer
+  [x] signal wall entry appended with its consumer named
+
+5 BATTERY EVIDENCE THIS WINDOW (the round's real product face)
+  qa/reconcile-all-R2320-retry2.log 789696B sha16 fef565e4620c6ba9
+  RUNNER PASS (467/467 suites green, reconcile controls 7/7, 900.3s)
+  criteria total 3778 == the pre-registered +1 suite / +6 criteria over R2318 (466/3772)
+  TMP RECLAIM candidates=932 removed=932 busy=0 failed=0 reclaimed=326.59 MiB
+  follow-up four sections: matrix byte-identical 44867B, fingerprint CLEAN,
+  profile byte-identical, census DRIFT-CLEAN -> VERDICT retry2 PASS
+  docs/sandbox-suite-matrix.md 44867B sha16 fab4c1fe2036bb0a
+  state/residue_triage.json 33490B sha16 fb062328ee7c6fb7 (190 entries, verdict TRIAGED)
+
+6 HONEST NOTES
+  - the two earlier R2320 legs are kept on disk as red legs: qa/reconcile-all-R2320.log
+    (RUNNER FAIL, 4 failed assertions) and qa/reconcile-all-R2320-retry.log (RUNNER FAIL,
+    2 failed assertions, one suite red: os-residue-triage AC-RTR6).
+  - a third attempt was aborted because two writers shared one evidence file (duplicate
+    suite labels in the log); that file was deleted rather than published as evidence.
+  - this window shipped no product code (verification + repair window), so it scores
+    0 product points and the queue head carries to R2321.
