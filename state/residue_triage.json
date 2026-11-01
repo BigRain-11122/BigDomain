@@ -1349,6 +1349,20 @@
       "declared_by": "R2322",
       "reason": "read at R2322 off the live stamp table: state/queue/tech.md:371 carries a CLOSED row ([done 2026-11-01 R2308]) for the evidence_output_audit face this round shipped, and the round became residue when the R2322 fold 620 moved its last live log lines into the archive after the R2315 fold 615 had already archived its round line",
       "until": 2330
+    },
+    {
+      "round": 2312,
+      "status": "DELIVERED",
+      "declared_by": "R2328",
+      "reason": "read at R2328 off the live stamp table: state/queue/tech.md:374 carries a CLOSED row for the gate_decl_append face this round shipped, and the round became residue when fold 617 moved its log block into the archive",
+      "until": 2330
+    },
+    {
+      "round": 2314,
+      "status": "DELIVERED",
+      "declared_by": "R2328",
+      "reason": "read at R2328 off the live stamp table: state/queue/tech.md:375 carries a CLOSED row for the gate_decl_identity face this round shipped, and the round became residue when fold 620 of this window moved its log block into the archive",
+      "until": 2330
     }
   ]
 }
