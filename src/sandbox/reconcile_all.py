@@ -4761,6 +4761,18 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-review-window-wire",
      os.path.join("..", "os", "test_review_window_wire.py"), 6),
+    # R2359: review_window_history reads the declarations LIST as a history but
+    # nothing consumed it - the wire asked review_window_decl.resolve only, and
+    # that resolver compares the last row against the top-level window while
+    # being blind to the order of the rows, so exempt_review could age entries
+    # against a window taken from a list whose own declared_by rewinds. The
+    # wire now asks the history FIRST and refuses E_RWHW_DECL_HISTORY naming
+    # both rounds, keeps UNPINNED/DRIFT byte-identical to the resolver's own
+    # code and words, and reports a legal move with every move named.
+    # (AC-RWHW1..AC-RWHW6 pinned in state/queue/tech.md as the R2345 seed row
+    # BEFORE the guard existed.)
+    ("os-review-window-history-wire",
+     os.path.join("..", "os", "test_review_window_history_wire.py"), 6),
     # R2310: stamp_residue reports the whole stamped-but-never-logged residue
     # as one table, but every reviewed round stays in it forever, so the same
     # 185 rows are re-triaged by hand every window. One pinned

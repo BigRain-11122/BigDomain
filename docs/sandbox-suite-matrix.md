@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-02 02:46 +08:00
+- 生成时间: generated: 2026-11-02 02:57 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2358-retry.log
 - 状态证据: reconcile-all-R2358-retry.log (RUNNER PASS 488/488 suites green, reconcile controls 7/7, 854.8s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 488 | 3904 | 488/488 | R2358 |
+| 489 | 3910 | 488/488 | R2358 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -506,26 +506,27 @@
 | 467 | os-followup-retry-history | ../os/test_followup_retry_history.py | 6 | green | 8.1 |
 | 468 | os-review-window | ../os/test_review_window.py | 6 | green | 1.1 |
 | 469 | os-review-window-wire | ../os/test_review_window_wire.py | 6 | green | 1.1 |
-| 470 | os-residue-triage | ../os/test_residue_triage.py | 6 | green | 2.5 |
-| 471 | os-gate-decl-append | ../os/test_gate_decl_append.py | 6 | green | 1.3 |
-| 472 | os-followup-history | ../os/test_followup_history.py | 6 | green | 1.3 |
-| 473 | os-followup-section-foreign | ../os/test_followup_section_foreign.py | 6 | green | 1.3 |
-| 474 | os-exempt-review | ../os/test_exempt_review.py | 6 | green | 0.9 |
-| 475 | os-stamp-exempt-review | ../os/test_stamp_exempt_review.py | 6 | green | 0.9 |
-| 476 | os-stamp-exempt-append | ../os/test_stamp_exempt_append.py | 6 | green | 0.4 |
-| 477 | os-stamp-exempt-prune | ../os/test_stamp_exempt_prune.py | 6 | green | 0.5 |
-| 478 | os-residue-triage-append | ../os/test_residue_triage_append.py | 6 | green | 1.1 |
-| 479 | os-queue-occupancy | ../os/test_queue_occupancy.py | 6 | green | 0.9 |
-| 480 | os-queue-head-delivered | ../os/test_queue_head_delivered.py | 6 | green | 1.0 |
-| 481 | os-evidence-output-audit | ../os/test_evidence_output_audit.py | 6 | green | 0.8 |
-| 482 | os-orphan-trace | ../os/test_orphan_trace.py | 6 | green | 1.5 |
-| 483 | os-orphan-promote | ../os/test_orphan_promote.py | 6 | green | 1.1 |
-| 484 | os-orphan-promotion-ledger | ../os/test_orphan_promotion_ledger.py | 6 | green | 1.3 |
-| 485 | os-orphan-promotion-wire | ../os/test_orphan_promotion_wire.py | 6 | green | 1.5 |
-| 486 | os-followup-incomplete-cause | ../os/test_followup_incomplete_cause.py | 6 | green | 1.1 |
-| 487 | os-review-window-history | ../os/test_review_window_history.py | 6 | green | 1.6 |
-| 488 | os-stamp-exempt-guard | ../os/test_stamp_exempt_guard.py | 6 | green | 0.2 |
-|  | 合计 |  | 3904 | green 488 / FAIL 0 / no-evidence 0 |  |
+| 470 | os-review-window-history-wire | ../os/test_review_window_history_wire.py | 6 | no-evidence | - |
+| 471 | os-residue-triage | ../os/test_residue_triage.py | 6 | green | 2.5 |
+| 472 | os-gate-decl-append | ../os/test_gate_decl_append.py | 6 | green | 1.3 |
+| 473 | os-followup-history | ../os/test_followup_history.py | 6 | green | 1.3 |
+| 474 | os-followup-section-foreign | ../os/test_followup_section_foreign.py | 6 | green | 1.3 |
+| 475 | os-exempt-review | ../os/test_exempt_review.py | 6 | green | 0.9 |
+| 476 | os-stamp-exempt-review | ../os/test_stamp_exempt_review.py | 6 | green | 0.9 |
+| 477 | os-stamp-exempt-append | ../os/test_stamp_exempt_append.py | 6 | green | 0.4 |
+| 478 | os-stamp-exempt-prune | ../os/test_stamp_exempt_prune.py | 6 | green | 0.5 |
+| 479 | os-residue-triage-append | ../os/test_residue_triage_append.py | 6 | green | 1.1 |
+| 480 | os-queue-occupancy | ../os/test_queue_occupancy.py | 6 | green | 0.9 |
+| 481 | os-queue-head-delivered | ../os/test_queue_head_delivered.py | 6 | green | 1.0 |
+| 482 | os-evidence-output-audit | ../os/test_evidence_output_audit.py | 6 | green | 0.8 |
+| 483 | os-orphan-trace | ../os/test_orphan_trace.py | 6 | green | 1.5 |
+| 484 | os-orphan-promote | ../os/test_orphan_promote.py | 6 | green | 1.1 |
+| 485 | os-orphan-promotion-ledger | ../os/test_orphan_promotion_ledger.py | 6 | green | 1.3 |
+| 486 | os-orphan-promotion-wire | ../os/test_orphan_promotion_wire.py | 6 | green | 1.5 |
+| 487 | os-followup-incomplete-cause | ../os/test_followup_incomplete_cause.py | 6 | green | 1.1 |
+| 488 | os-review-window-history | ../os/test_review_window_history.py | 6 | green | 1.6 |
+| 489 | os-stamp-exempt-guard | ../os/test_stamp_exempt_guard.py | 6 | green | 0.2 |
+|  | 合计 |  | 3910 | green 488 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

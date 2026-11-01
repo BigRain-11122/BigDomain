@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T02:48:00+08:00",
-  "do": "R2358 verification window: the carried battery ran first on the committed R2357 tree and its first run was RED ON DATA, NOT CODE - os-stamp-exempt-review AC-SER6 named one undeclared closed row, the R2356 product row whose done bracket had swallowed its whole narrative past the 60-character stamp payload. The repair was one line at that row's birth site (the narrative moved outside the bracket, a valid [done 2026-11-01 R2356] left behind), never a widened criterion and never a new exemption. On the committed repair tree the retry reads RUNNER PASS 488/488 suites with 3904 criteria and all four follow-up sections PASS.",
+  "export_ts": "2026-11-02T02:58:13+08:00",
+  "do": "R2359 product window: the review window's declared path finally asks the HISTORY, so a declarations list whose rows rewind in time is refused instead of quietly aging every exempt entry against it.",
   "ceo_face": {
-    "current": "R2358 verification window: the carried battery ran first on the committed R2357 tree and its first run was RED ON DATA, NOT CODE - os-stamp-exempt-review AC-SER6 named one undeclared closed row, the R2356 product row whose done bracket had swallowed its whole narrative past the 60-character stamp payload. The repair was one line at that row's birth site (the narrative moved outside the bracket, a valid [done 2026-11-01 R2356] left behind), never a widened criterion and never a new exemption. On the committed repair tree the retry reads RUNNER PASS 488/488 suites with 3904 criteria and all four follow-up sections PASS.",
-    "latest_artifact": "qa/reconcile-all-R2358-retry.log (798018B, single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 488/488 suites plus controls 7/7 in 854.8s with TMP RECLAIM 932/932; the red leg qa/reconcile-all-R2358.log (797981B) is kept beside it; the matrix regenerated to 488 suites / 3904 criteria (docs/sandbox-suite-matrix.md, 46718B) and re-read byte-identical.",
-    "next_milestone": "R2359: the product face the register now names - state/queue/tech.md:402 prefix AC-RWHW1 (review_window_wire), whose six criteria were pinned there at R2345 BEFORE any code, so the declared-window path finally asks the declaration history before it hands a window out.",
-    "next_milestone_due": "2026-11-04T02:48:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2358-retry.log (798018B, single writer utf-8 LF through src/os/battery_stream.py) - RUNNER PASS 488/488 suites plus controls 7/7 in 854.8s with TMP RECLAIM 932/932; the red leg qa/reconcile-all-R2358.log (797981B) is kept beside it; the matrix regenerated to 488 suites / 3904 criteria (docs/sandbox-suite-matrix.md, 46718B) and re-read byte-identical.",
-    "updated_at": "2026-11-02T02:48:00+08:00"
+    "current": "R2359 product window: the review window's declared path finally asks the HISTORY, so a declarations list whose rows rewind in time is refused instead of quietly aging every exempt entry against it.",
+    "latest_artifact": "src/os/review_window_wire.py (guarded) + src/os/test_review_window_history_wire.py with qa/review-window-history-wire-R2359.log (3110B) - SUITE PASS 6/6 twice identical, three adjacent review-window suites green; live reading window=100 moves=0 verdict=EMPTY-HISTORY.",
+    "next_milestone": "R2360: the battery on the committed R2359 tree with zero product edits, pre-registered at 489 suites / 3910 criteria (+1 suite / +6 criteria against R2358 488/3904), then the measured argument-path gap above.",
+    "next_milestone_due": "2026-11-04T02:58:13+08:00",
+    "last_artifact": "src/os/review_window_wire.py (guarded) + src/os/test_review_window_history_wire.py with qa/review-window-history-wire-R2359.log (3110B) - SUITE PASS 6/6 twice identical, three adjacent review-window suites green; live reading window=100 moves=0 verdict=EMPTY-HISTORY.",
+    "updated_at": "2026-11-02T02:58:13+08:00"
   },
   "depts": [
     {
@@ -468,9 +468,9 @@
       "R2358 verification: the retry battery on the committed repair tree reads RUNNER PASS 488/488 suites, criteria 3904, 854.8s; the first run's red leg stays on disk and the one failure was a queue row whose done bracket hid its stamp"
     ],
     [
-      "qa/reconcile-all-R2358-retry.log",
+      "src/os/review_window_wire.py",
       "on",
-      "R2358 verification: the retry battery on the committed repair tree reads RUNNER PASS 488/488 suites, criteria 3904, 854.8s; the first run's red leg stays on disk and the one failure was a queue row whose done bracket hid its stamp"
+      "R2359 product: the declared review path asks the declarations HISTORY first, so a list whose rows rewind refuses E_RWHW_DECL_HISTORY naming both rounds instead of aging every exempt entry against it"
     ]
   ],
   "results": [
@@ -791,7 +791,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2358",
+      "2359",
       "OSLoop 执行 tick"
     ],
     [
@@ -880,17 +880,17 @@
       "verification window: first run RED on data - os-stamp-exempt-review AC-SER6 named tech.md:400 as an undeclared closed row because its done bracket carried a ~500-character narrative past the 60-character payload; repaired at the birth site in one line (commit 7e503a50) with no criterion widened and no exemption added; retry PASS 488/488 with 3904 criteria exactly the measured registry after R2357's own suite, four follow-up sections PASS, battery row closed and product-face-R2359 opened first=yes at tech line 402 AC-RWHW1; zero product code, 0 points"
     ],
     [
-      "R2358",
-      "verification window: first run RED on data - os-stamp-exempt-review AC-SER6 named tech.md:400 as an undeclared closed row because its done bracket carried a ~500-character narrative past the 60-character payload; repaired at the birth site in one line (commit 7e503a50) with no criterion widened and no exemption added; retry PASS 488/488 with 3904 criteria exactly the measured registry after R2357's own suite, four follow-up sections PASS, battery row closed and product-face-R2359 opened first=yes at tech line 402 AC-RWHW1; zero product code, 0 points"
+      "R2359",
+      "product window on the debt-gate row: one guard plus a six-criteria suite pre-pinned at R2345, SUITE PASS 6/6 with an identical digest pair, three adjacent suites green, matrix regenerated 489/3910, one queue row closed and one measured argument-path gap seeded"
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

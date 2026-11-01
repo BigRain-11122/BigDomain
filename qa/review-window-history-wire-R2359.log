@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2359 suite=src/os/test_review_window_history_wire.py legs=2
+== LEG A rc=0 digest=B6B281E18F4B5EEF
+PASS AC-RWHW1 declared_window asks review_window_history.history first (a patched history flows straight through) and refuses E_RWHW_DECL_HISTORY carrying the history's own code and both rounds before any window is handed back
+PASS AC-RWHW2 a DRIFT history carries the resolver's own DRIFT detail through the wire unchanged (measured against the resolver exception itself, on two fixtures that differ by exactly the top-level window)
+PASS AC-RWHW3 an UNPINNED history keeps the existing E_RWW_UNPINNED pathway byte-identical (same code, the resolver's own detail, zero counts and WINDOW-REFUSED), so the guard adds a refusal without changing the meaning of the absent case
+PASS AC-RWHW4 a moved-but-monotonic history still hands the last row's window out (exempt_review ages against it) and names every move in the wire report, so a legal move is never turned into a refusal
+PASS AC-RWHW5 the wire CLI exits 0/2/3/5 with a byte-stable --json over the pinned REPORT_KEYS, and a refusal leaves the declaration bytes untouched
+LIVE REVIEW WINDOW WIRE window=100 source=declaration moves=0 declared_by=R2305 verdict=EMPTY-HISTORY
+PASS AC-RWHW6 pure ASCII, stdlib only, zero network, no clock, the history law imported rather than restated (a patched history moves the report), wired as os-review-window-history-wire(6), live reading taken
+SUITE PASS 6/6
+== LEG B rc=0 digest=B6B281E18F4B5EEF
+PASS AC-RWHW1 declared_window asks review_window_history.history first (a patched history flows straight through) and refuses E_RWHW_DECL_HISTORY carrying the history's own code and both rounds before any window is handed back
+PASS AC-RWHW2 a DRIFT history carries the resolver's own DRIFT detail through the wire unchanged (measured against the resolver exception itself, on two fixtures that differ by exactly the top-level window)
+PASS AC-RWHW3 an UNPINNED history keeps the existing E_RWW_UNPINNED pathway byte-identical (same code, the resolver's own detail, zero counts and WINDOW-REFUSED), so the guard adds a refusal without changing the meaning of the absent case
+PASS AC-RWHW4 a moved-but-monotonic history still hands the last row's window out (exempt_review ages against it) and names every move in the wire report, so a legal move is never turned into a refusal
+PASS AC-RWHW5 the wire CLI exits 0/2/3/5 with a byte-stable --json over the pinned REPORT_KEYS, and a refusal leaves the declaration bytes untouched
+LIVE REVIEW WINDOW WIRE window=100 source=declaration moves=0 declared_by=R2305 verdict=EMPTY-HISTORY
+PASS AC-RWHW6 pure ASCII, stdlib only, zero network, no clock, the history law imported rather than restated (a patched history moves the report), wired as os-review-window-history-wire(6), live reading taken
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_history.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=B6B281E18F4B5EEF
