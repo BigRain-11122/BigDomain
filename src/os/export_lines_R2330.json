@@ -1,0 +1,8 @@
+{
+  "do": "R2330 验证轮：在已提交树上跑全量校准电池，红了 1 个套件（471/472），定位到根因（测试读数把「当前分钟环」当成了持久化状态），在出生地修好并复跑全绿 472/472、判据 3808 与预登记完全一致。",
+  "current": "R2330 验证轮已完成：全量电池首跑红（471/472 套件，仅 ledger-devshare-persist 的 AC-DSVP1/AC-DSVP2 两判据失败，判据总数 3808 与预登记一致）；实测根因＝dev_board 按设计会带出「当前分钟窗口/本分钟用量」这类读时字段，而套件把完整 dump 当持久化状态做逐字节比对，于是跨越分钟边界就假红（探针钉住了唯一变动字段 minute_window，强制跨分钟的夹具把红态变成可复现的 1/7）；出生地修复以 f14b56fe 单独提交（只在板面 dump 里投影掉 minute_window/minute_used 两字段，并在 AC-DSVP1 加了两道守护：裸 dump 里分钟环必须真实存在、被篡改的持久化计数必须仍被判成差异，故意失明的投影实测会读红）；修复树复跑 RUNNER PASS 472/472＋controls 7/7（823.7s，TMP RECLAIM 932/932），四段后续（matrix 先按设计 FAIL 不重写、suite_matrix 重生成到 472/3808 45292B 后全 PASS）收尾 VERDICT R2330 PASS；活体复读 stamp_exempt_prune 仍是 NOTHING-TO-RETIRE（381 条、79026B 未动）。",
+  "latest_artifact": "qa/reconcile-all-R2330-retry.log（789666B，472/472 全绿＋criteria 3808）与红腿 qa/reconcile-all-R2330.log（789740B，471/472）；修复提交 f14b56fe",
+  "next_milestone": "R2331 回到产品面：队列头 AC-RET1（state/queue/tech.md:383 retire_candidate，判据 AC-RET1..AC-RET6 已在行内预登记）——把「三个读者各持一半退役问题」补成一问：这条已登记的闸到底算不算退役候选；按铁律先提交再跑电池（下一轮预登记 473 套件 / 3814 判据）。窗 ≤48h。",
+  "entry": "R2330 验证轮：电池红→出生地修复→复跑全绿（472/472，判据 3808 与预登记一致）",
+  "heartbeat": "tick 2330 2026-11-01 verification window: battery RED 471/472 on ledger-devshare-persist (AC-DSVP1/AC-DSVP2), root cause measured as the read-time minute ring inside full board dumps, birth-site repair f14b56fe with two guards, retry RUNNER PASS 472/472 criteria 3808 plus four follow-up sections PASS."
+}
