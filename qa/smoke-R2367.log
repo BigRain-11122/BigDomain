@@ -1,0 +1,64 @@
+BigDomain QA smoke R2367 (2026-11-02, Asia/Shanghai) - group QA charter v1.0 daily crawl round
+============================================================================
+1 DAILY CRAWL - web direct reading (zero key, read-only, one fetch)
+  source: https://developers.weixin.qq.com/miniprogram/dev/api/payment/wx.requestVirtualPayment.html
+  read  : official API page, fetched 2026-11-02 06:2x +08:00, no login, no key
+  got   : the parameter table and the full error-code table, which the tree had
+          never read (until today only the FAMILY NAME was recorded):
+          signData Object required, passed as a STRING of JSON, e.g.
+            '{"offerId":"123","buyQuantity":1,"env":0,"currencyType":"CNY",
+              "productId":"testproductId","goodsPrice":10,
+              "outTradeNo":"xxxxxx","attach":"testdata"}'
+          offerId string required | buyQuantity number required
+          env number optional 0 live / 1 sandbox, default 0
+          currencyType string required, only CNY legal
+          productId string, required only when mode=short_series_goods
+          goodsPrice number (fen), required only when mode=short_series_goods,
+            used to check the price against the console item price
+          activitySellingPrice number optional (fen), must travel with goodsPrice
+          outTradeNo string required, 8-32 chars, [A-Za-z0-9 _-|@], not leading _,
+            one use only, and the page itself says uniqueness is not guaranteed
+            in extreme cases so business must not depend on it
+          attach string required, passed through to the delivery notification
+  code  : 1001 / -1 / -2 / -4 / -5 / -15001 / -15002 / -15003 / -15004 / -15005 /
+          -15006 / -15007 / -15008 / -15009 / -15010 / -15011 / -15012 / -15013 /
+          -15014 / -15016 / -15017 / -15018 / -15019 / -15020 / -15021
+  three constraints the design must honor, read off the page:
+    (a) -15011 says the LIVE build accepts env=0 only, sandbox env=1 is refused,
+        so a sandbox leg cannot be assumed to exist in production;
+    (b) -15002 + the outTradeNo note: one use only AND not a uniqueness law,
+        so the idempotency key stays ours, not the order number;
+    (c) -15013: goodsPrice is checked against the console item price, so the
+        19.9 price must exist as a published item before any order is sent.
+  consumer: P-47 item 4 pay-integration design (docs/spec/) field-level gate;
+          BLUEPRINT section 4 payment route note; bootstrap physical checklist
+          gains "publish item + price in console before first order".
+
+2 BENCHMARK REFRESH - docs/global-benchmarks.md section 1 payment row note,
+   section 3 new source row, section 4 update row;
+   state.json benchmarks_refreshed := 2026-11-02 (was 2026-11-01)
+
+3 SIGNAL WALL - docs/research/intelligence-wall.md, W37 main row + conclusion
+   row, grade A (official API page, primary source); consumer named in both.
+
+4 SELF CHECK (four items)
+  [x] daily crawl executed with one new primary source, fields quoted verbatim
+  [x] benchmarks refreshed today (15h rule and 7-day gate both satisfied)
+  [x] research source chain recorded with URL + grade + consumer
+  [x] signal wall entry appended with its consumer named
+
+5 BATTERY STATUS - CARRIED, NOT RUN (disclosed, not claimed)
+  reconcile-battery-R2367 stays OPEN with its measured target: 494 suites /
+  3940 criteria (matrix doc at HEAD still reads 492/3928 from the R2364 leg,
+  plus the R2365 os-queue-floor-delivered-wire suite and the R2366
+  os-battery-followup-help-wire suite, six criteria each). This window spent
+  its budget on the daily crawl the charter red-lights on; the battery is the
+  next window first item, on a committed tree, before any product edit.
+
+6 HONEST NOTES
+  - one fetch, no failure to report; no second attempt was needed, so there is
+    no negative-result row this round (two-state law kept, nothing to note).
+  - the page did NOT state a base-library version or an iOS/Android split on
+    this surface, so those two remain M (unproven) and are not asserted.
+  - this window shipped no product code: it is a charter crawl round, so it
+    scores 0 product points and the queue head carries to the next window.

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T06:24:39+08:00",
-  "do": "R2366 product window: the follow-up CLI now answers a bare --help as a QUESTION at exit 0 instead of calling the operator wrong with a bad-args exit 5, and it answers from two imported contracts - the runner CLI contract through the guard own importer, and the follow-up own flag tables - so no second flag table exists in the tree.",
+  "export_ts": "2026-11-02T06:30:16+08:00",
+  "do": "R2367 QA charter daily crawl round: one official source read (the wx.requestVirtualPayment API page) and three design gates taken from its own error codes - production has no sandbox env, the order number is one-use but not guaranteed unique so the idempotency key stays ours, and the item must be published and priced before any order. No product code this window; the battery is carried.",
   "ceo_face": {
-    "current": "R2366 product window: the follow-up CLI now answers a bare --help as a QUESTION at exit 0 instead of calling the operator wrong with a bad-args exit 5, and it answers from two imported contracts - the runner CLI contract through the guard own importer, and the follow-up own flag tables - so no second flag table exists in the tree.",
-    "latest_artifact": "src/os/battery_followup_help_wire.py plus its six-criteria suite (qa/battery-followup-help-wire-R2366.log, two identical legs at criterion digest 7e6881b726a46311) and the live answer it was built for (qa/battery-followup-help-wire-live-R2366.log: exit 0 with the derived usage block and the house contract line).",
-    "next_milestone": "R2367: the battery the R2168 mixed-tree rule defers, pre-registered at 494 suites / 3940 criteria (the matrix doc at HEAD still reads 492/3928 from the R2364 leg, plus the R2365 os-queue-floor-delivered-wire suite and this window os-battery-followup-help-wire suite, six criteria each), then the product face the queue head names.",
-    "next_milestone_due": "2026-11-04T06:24:39+08:00",
-    "last_artifact": "src/os/battery_followup_help_wire.py plus its six-criteria suite (qa/battery-followup-help-wire-R2366.log, two identical legs at criterion digest 7e6881b726a46311) and the live answer it was built for (qa/battery-followup-help-wire-live-R2366.log: exit 0 with the derived usage block and the house contract line).",
-    "updated_at": "2026-11-02T06:24:39+08:00"
+    "current": "R2367 QA charter daily crawl round: one official source read (the wx.requestVirtualPayment API page) and three design gates taken from its own error codes - production has no sandbox env, the order number is one-use but not guaranteed unique so the idempotency key stays ours, and the item must be published and priced before any order. No product code this window; the battery is carried.",
+    "latest_artifact": "qa/smoke-R2367.log (64 lines) and qa/smoke-R2367.png (904x1415, rendered from that log by the shipped renderer), plus docs/global-benchmarks.md W37 rows and docs/research/intelligence-wall.md W37 main + conclusion.",
+    "next_milestone": "R2368: the battery on the committed R2367 tree, pre-registered at 494 suites / 3940 criteria (matrix doc at HEAD still 492/3928 from R2364, plus the R2365 os-queue-floor-delivered-wire and R2366 os-battery-followup-help-wire suites, six criteria each), then the P-47 item 4 pay-spec field gate that W37 now makes writable without the merchant number.",
+    "next_milestone_due": "2026-11-04T06:30:16+08:00",
+    "last_artifact": "qa/smoke-R2367.log (64 lines) and qa/smoke-R2367.png (904x1415, rendered from that log by the shipped renderer), plus docs/global-benchmarks.md W37 rows and docs/research/intelligence-wall.md W37 main + conclusion.",
+    "updated_at": "2026-11-02T06:30:16+08:00"
   },
   "depts": [
     {
@@ -156,11 +156,16 @@
       "src/os/battery_followup_help_wire.py",
       "on",
       "R2366 product: the follow-up CLI answers --help at exit 0 from two imported contracts (runner CLI_CONTRACT via the guard importer, and its own parser flag tables), so the help text cannot drift from either CLI while every other exit code and printed line stays byte-identical; six criteria green twice and one live answer"
+    ],
+    [
+      "qa/smoke-R2367.png",
+      "on",
+      "R2367 QA charter daily crawl: one official API page read once and rendered into a real log+png evidence pair; the reading is the wx.requestVirtualPayment field table and its twenty-five error codes, consumed as three design gates in the pay spec"
     ]
   ],
   "results": [
     [
-      "2366",
+      "2367",
       "OSLoop 执行 tick"
     ],
     [
@@ -258,15 +263,19 @@
     [
       "R2366",
       "product window: state/queue/tech.md:412 AC-BFH1 battery_followup_help_wire - the follow-up CLI finally answers the question an operator asks. The debt gate read CLAIM-FIRST item=product-face-R2365 and that turned out to be FINISHED work (R2365 had shipped it), so the row was verified by measurement (module, suite, two evidence logs and the runner wiring all on disk) and closed through debt_close instead of being re-run - the R2345/R2354 shape, named as the round first finding. The claimed tech row 412 had its AC-BFH1..AC-BFH6 pinned at R2365 BEFORE any code, re-anchored at HEAD (E_BFH and both file names zero-occupancy; battery_followup_help_wire and AC-BFH only in prose and state). SHIPPED src/os/battery_followup_help_wire.py plus its six-criteria suite, and battery_followup.py now carries module-level TAKES/FLAGS and raises HelpAsked on --help, answered at exit 0 through the wire. The house half of the usage block is imported from reconcile_all.CLI_CONTRACT through runner_arg_guard.load_contract, the flag half from the parser own tables, and the wire validates the three keys it reads so a short contract refuses E_BFH_NO_CONTRACT instead of raising a KeyError inside a renderer. SUITE PASS 6/6 twice identical (qa/battery-followup-help-wire-R2366.log, 1411B, single utf-8 LF writer), os-battery-followup and os-run-argument-guard still 6/6 unchanged, wired os-battery-followup-help-wire(6). LIVE: battery_followup.py --help answers exit 0 with the derived usage and the house line reconcile_all.py [evidence_log_path] flags=(none) (qa/battery-followup-help-wire-live-R2366.log, 380B), where the same call was exit 5 E_BFU_BAD_ARGS before. Seven new group decision rows D-20261102-07..13 read in full and NONE dispatches this company (collection no-op, line triage, duanju, LANE-REGISTRY, disabled-task whitelist, external audit, Biggame Art/Builds); baseline widened. Row stamped, one REAL measured gap seeded (contract_usage_renderer, AC-CUR1..6 - the guard and this wire now render two usage blocks for one shape), floor FLOOR-MET 5/5 10/10 10/10. Disclosed: the first closeout fold picked a tokens LINE as its boundary, archiving this round own narrative, and the second picked one inside the R2365 block, which read rounds_without_ledger=2365; repaired at the birth site (archive section trimmed, state restored byte-exact from the fold backup, refold at the true boundary log_len-8 = line 69, predicted=measured 16702B, 771 tokens covered, log=9, ledger CLEAN), then the nine fold-created residue rounds were spliced in ONE atomic replace through the shipped reader/shape/composer/judge (213->222 entries, 62765B->65393B measured, TRIAGED 222/222)"
+    ],
+    [
+      "R2367",
+      "QA charter daily crawl round: [QA] was the flag the scan raised and [HB] was this company own row-shape defect - the scanner reads the LAST heartbeat line and needs 'tick <n>', while R2366 wrote pure narrative, so the row existed but could not parse; repaired by carrying the token in the new line, history untouched. CRAWL: wx.requestVirtualPayment official API page, one fetch, zero key, zero retry - signData is an Object passed as a JSON STRING and its nine fields plus twenty-five error codes are now on file; three gates follow from the page itself: -15011 (live builds accept env=0 only, so sandbox is not a production verification path), -15002 with the outTradeNo note (one-use and not guaranteed unique, so the idempotency key stays ours), -15013 (goodsPrice checked against the console item price, so publish before ordering). Consumed into benchmarks sections 1/3/4, wall W37 plus conclusion, and the pay-spec field gate. Battery NOT run: reconcile-battery-R2367 remains open at its measured 494 suites / 3940 criteria and is the next window first item. Zero product code, 0 product points, disclosed."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 1,
+    "log_lines_in_window": 2,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 1,
+    "substantive_non_idle_mention_lines": 2,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
