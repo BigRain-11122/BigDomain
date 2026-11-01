@@ -50,7 +50,15 @@ import reconcile_all as RA  # suite registry single source of truth
 
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
-    r" fail-lines=(\d+) criteria=(\d+) ([0-9.]+)s")
+    r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
+# R2347 defect: the duration group refused a leading minus, so one suite the
+# runner had just counted green (its wall time read -3.5s across a clock step)
+# dropped out of the parse, the block stopped matching the runner count, and
+# the whole 481-suite regression record became INELIGIBLE for default
+# discovery - the matrix silently fell back to the previous round's log and
+# the follow-up's two legs compared different evidence. The minus is accepted
+# and CARRIED into the doc rather than dropped, so an odd duration stays
+# visible instead of hiding a suite.
 RUNNER_RE = re.compile(
     r"(?m)^RUNNER (PASS|FAIL) \((\d+)/(\d+) suites green,"
     r" reconcile controls (\d+)/(\d+), ([0-9.]+)s\)")
