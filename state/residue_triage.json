@@ -1387,6 +1387,13 @@
       "declared_by": "R2336",
       "reason": "R2323 shipped a resolver module with its six pre-registered criteria and its suite; the round block was moved whole into the archive by fold 626 on a block boundary, which is what left its stamp on an open row",
       "until": 2360
+    },
+    {
+      "round": 2325,
+      "status": "DELIVERED",
+      "declared_by": "R2338",
+      "reason": "fold 627 at R2338 moved the R2325 block into the monthly archive, which the fold law turns into live residue; the round is DELIVERED on the live stamp table (queue row closed at R2325 with its product face shipped)",
+      "until": 2350
     }
   ]
 }

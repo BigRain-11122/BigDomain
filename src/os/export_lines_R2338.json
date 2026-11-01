@@ -1,0 +1,8 @@
+{
+  "do": "R2338 验证窗：在已提交的 R2337 树（0a2c0020）上零产品改动跑全量电池——RUNNER PASS 476/476 套件 + 控制 7/7，888.4s，判据总数 3832，与预注册（476/3832，较 R2336 的 475/3826 恰 +1 套件 / +6 判据，来自 R2337 的 os-queue-occupancy 套件）完全吻合，零修正。四段跟进全 PASS（矩阵逐字节同一 45594B、指纹五域 CLEAN、runner profile 逐字节同一、census DRIFT-CLEAN），VERDICT R2338 PASS。",
+  "current": "R2338 已收账：全量电池在已提交树上全绿（476 套件 / 3832 判据），出生站清扫 932/932 世界 326.59 MiB；state 开窗时偏离写入正典（bare_lf=135、63/63 项缩进错位），先经 state_io 修复再折叠 627（1..9 行原文入档，预测=实测 67935B，余 10565B），折叠新生的 R2325 残留经既有 append 通道按名补记（199/199 TRIAGED）；债务登记簿已收 reconcile-battery-R2337 并开出 product-face-R2338。",
+  "latest_artifact": "qa/reconcile-all-R2338.log（电池证据，单写器 utf-8 LF，含四段跟进追加）+ docs/sandbox-suite-matrix.md（476 套件 / 3832 判据，45594B）+ logs/state-log-archive-2026-11.md（fold 627 原文归档 285363B）",
+  "next_milestone": "R2339 产品窗：回到队头 AC-OTP1（orphan_promote，判据已在该队列行内预注册，认领前做 HEAD 零占用锚查），提交产品件后再跑电池（R2168 混合树律）。",
+  "entry": "R2338 verification window: full reconcile battery on the committed R2337 tree 0a2c0020 with zero product edits, RUNNER PASS 476/476 plus controls 7/7 in 888.4s and criteria 3832 exactly as pre-registered, four follow-up sections PASS, state canon repaired then fold 627 to 67935B with the fold-created residue round R2325 spliced through the shipped append channel, debt row closed and the R2339 product row opened",
+  "heartbeat": "tick 2338 2026-11-01 R2338 verification window: battery PASS 476/476 suites + controls 7/7 888.4s criteria 3832 exactly as pre-registered, TMP RECLAIM 932/932 326.59 MiB, matrix byte-identical 45594B, canon repaired then fold 627 to 67935B (margin 10565B), residue R2325 appended 199/199 TRIAGED"
+}
