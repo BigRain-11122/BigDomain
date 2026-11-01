@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-01T20:23:57+08:00",
-  "do": "R2343 验证+产品双面：先在已提交的 R2342 树上跑全量电池（478 套件 / 3844 判据，与预注册完全一致，896.0s，控制 7/7），四段跟进按设计顺序矩阵先 FAIL 再重生成复跑全 PASS；随后交付 src/os/followup_incomplete_cause.py ——INCOMPLETE 不再是一个词：section 词汇与 SECTION/VERDICT 读数都问 followup_history，每轮落进四个互斥成因之一（LEGACY-DIALECT / NO-VERDICT / MISSING-SECTION / COMPLETE），成因只由日志本体推导，无时钟无轮次阈值，只读取不写入，证据 qa/followup-incomplete-cause-R2343.log。实读 448 轮中 421 轮是 LEGACY-DIALECT——这些债重读永远不会好，此前与可修的缺口同一个词。",
+  "export_ts": "2026-11-01T20:46:27+08:00",
+  "do": "R2344 工具缺陷窗：开轮五静扫描报 [DEC] 54 条「新决策行」，全部是历史行（D-20261028-01..D-20261101-22）。在出生地定位：state.json 的 last_dec_tokens 是 JSON 数组，PowerShell 把数组转字符串是按空格拼接，而闸门只按逗号切分，于是 65 个令牌塌缩成 1 个，任何行主令牌都永远对不上。修复前实测已证（按逗号切分基线只得 1 个令牌）。修在 tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1：逗号与空白都切分、直接接受数组形态，并加一道塌缩守卫（若再回归就报 baseline_parse_collapsed，而不是把整块板子重新点成新行）。修后复扫 [DEC] PASS rows=134 known_tokens=65 row_owner_tokens=54。提交 44b79820。同一缺陷早已打死本仓的 Python 姊妹闸 src/os/scan_five_still.py（第 31 行对同一字段调 .split(',')，遇列表即 AttributeError），该扫描面自字段类型漂移起一直不可用；已用 norm_tokens 助手两种形态通吃修好，并实跑证明（LEDGER 未回执 0 / DEC 令牌 65 新 0 / BENCH 2026-11-01）。随后按板顶跑提交树全量电池，证据 qa/reconcile-all-R2344.log。",
   "ceo_face": {
-    "current": "R2343：电池 478/478 全绿 + 交付「回合未完成成因分类器」，实读 448 轮中 421 轮属永不可愈的旧格式债，判据 6/6 双跑逐字节同一",
-    "latest_artifact": "src/os/followup_incomplete_cause.py + src/os/test_followup_incomplete_cause.py；证据 qa/followup-incomplete-cause-R2343.log（1358B）；电池证据 qa/reconcile-all-R2343.log（792889B，478/478 绿）",
-    "next_milestone": "R2344：在 R2343 已提交树上跑全量电池（预注册 479 套件 / 3850 判据，+1 套件/+6 判据来自本窗套件），随后开 tech 队头 AC-RWH1 的产品面 / 窗 ≤48h",
-    "next_milestone_due": "2026-11-03T20:23:57+08:00",
-    "last_artifact": "src/os/followup_incomplete_cause.py + src/os/test_followup_incomplete_cause.py；证据 qa/followup-incomplete-cause-R2343.log（1358B）；电池证据 qa/reconcile-all-R2343.log（792889B，478/478 绿）",
+    "current": "R2344：决策闸每轮误报 54 条新行的假红已修死（PowerShell 面出生地一处 + 塌缩守卫），Python 姊妹闸的同一死因也已修好并实跑转绿；板顶电池读数见实物行",
+    "latest_artifact": "tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1（提交 44b79820）+ src/os/scan_five_still.py（姊妹闸复活）；电池证据 qa/reconcile-all-R2344.log（793479B）；读数 RUNNER PASS (479/479 suites green, reconcile controls 7/7, 922.0s)",
+    "next_milestone": "R2345：开 tech 队头 line 391 AC-RWH1（src/os/review_window_history.py，六条预注册判据）的产品面，单窗内落可运行模块 + 测试 / 窗 ≤48h",
+    "next_milestone_due": "2026-11-03T20:46:27+08:00",
+    "last_artifact": "tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1（提交 44b79820）+ src/os/scan_five_still.py（姊妹闸复活）；电池证据 qa/reconcile-all-R2344.log（793479B）；读数 RUNNER PASS (479/479 suites green, reconcile controls 7/7, 922.0s)",
     "updated_at": "2026-11-01T19:51:40+08:00"
   },
   "depts": [

@@ -86,3 +86,4 @@ tick 2340 R2340 red-then-repair: AC-OTR6 empty-pile premise corrected and made s
 tick 2341 R2341 green battery 477/477 suites 3838 criteria as pre-registered, four follow-up sections PASS, matrix regenerated to 45670B, VERDICT PASS
 tick 2342 R2342 product window: orphan_promotion_ledger shipped (five disjoint readings, raw-text append, measured digest), suite 6/6 twice identical, live backfill of R2136 at 675847B, battery carried to R2343
 tick 2343 R2343 battery 478/478 suites 3844 criteria as pre-registered plus followup_incomplete_cause shipped (four disjoint causes, 421/448 legacy), suite 6/6 twice identical, matrix regenerated to 45769B, VERDICT PASS
+tick 2344 R2344 tooling-defect window: DEC baseline parse fixed at its birth site (array stringified to 65 tokens, comma split left 1) plus a collapse guard, re-scan [DEC] PASS, committed tree battery RUNNER PASS (479/479 suites green, reconcile controls 7/7, 922.0s); NO-RUNTIME-LINE

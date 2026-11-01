@@ -12,6 +12,17 @@ def rd(p):
 
 TOKRE = re.compile(r"(?:P|D|C|O|T|XL)-\d{4}-\d{2}-\d{2}-\d+|O-2026\d{5}-\d+|D-\d{8}-\d+|C-\d{8}-\d+|BD-PROP-\d+|OH-\d{8}")
 
+def norm_tokens(value):
+    """last_dec_tokens is documented as a comma-joined string, but recent
+    closeouts wrote a JSON list into it; accept both instead of dying."""
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        items = [str(x) for x in value]
+    else:
+        items = re.split(r"[,\s]+", str(value))
+    return [x for x in (i.strip() for i in items) if x]
+
 state = json.load(io.open(os.path.join(ROOT, "src", "os", "state.json"), "r", encoding="utf-8"))
 log_text = json.dumps(state.get("log", []), ensure_ascii=False)
 
@@ -28,7 +39,7 @@ for l in led_lines:
 dec = rd(os.path.join(GRP, "docs", "decisions.md"))
 dec_rows = [l for l in dec.splitlines() if l.strip()]
 dec_tokens = set(re.findall(r"D-\d{8}-\d+|C-\d{8}-\d+", dec))
-base_dec = set(x for x in state.get("last_dec_tokens", "").split(",") if x)
+base_dec = set(norm_tokens(state.get("last_dec_tokens")))
 dec_new = sorted(dec_tokens - base_dec)
 
 # [ORD] group orders: top timestamp sample + tail + @BigDomain rows
