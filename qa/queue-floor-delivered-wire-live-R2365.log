@@ -1,0 +1,5 @@
+QUEUE FLOOR main=5/5 tech=8/10-1 explore=10/10 verdict=FLOOR-DEBT shortfall=2 delivered=1
+  main     open=6 done=5 gated=1 claimable=5 effective=5 discounted=0 floor=5 shortfall=0 status=MET
+  tech     open=10 done=345 gated=1 claimable=9 effective=8 discounted=1 floor=10 shortfall=2 status=SHORT
+    discounted line=411 prefix=AC-FDW1
+  explore  open=10 done=239 gated=0 claimable=10 effective=10 discounted=0 floor=10 shortfall=0 status=MET

@@ -4905,6 +4905,14 @@ SUITES = [
     # row BEFORE the code existed.)
     ("os-queue-head-delivered",
      os.path.join("..", "os", "test_queue_head_delivered.py"), 6),
+    # R2365: the offer walks over a delivered row, but the floor gauge still
+    # counted it, so a queue could read FLOOR-MET over rows that already
+    # shipped. The wire discounts a DELIVERED row from claimable supply,
+    # names it, and leaves every count queue_floor publishes untouched.
+    # (AC-FDW1..AC-FDW6 pinned in state/queue/tech.md line 411 at R2354
+    # BEFORE the code existed.)
+    ("os-queue-floor-delivered-wire",
+     os.path.join("..", "os", "test_queue_floor_delivered_wire.py"), 6),
     # R2296: the output map names what each legacy copy DECLARES, but not
     # whether that declaration is still on disk - a script can declare a log
     # that was never written while the map counts it as owned. One read-only
