@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-01T23:20:00+08:00",
-  "do": "R2348 产品窗：还款引擎终于有了“执行步”。退休审批（retire_accept）只记账“六份证据副本可以退休”，却没有任何动作面——只能手动搬移，既无轮次记录也无字节证明更无回滚路径。新交付 src/os/retire_apply.py 把它变成一条命令：类别与现场结论全部从审批读取器导入（不重建第二套判定）；默认干跑并用全树摘要证明“一个字节没动”；只有 ACCEPTED 条目可动，其余三类各自拒绝并带审批原文理由；真正执行是一次 os.replace 移入 media/quarantine/R轮次/ （gitignore 区），并用逐文件摘要图证明“只有两条路径变化、目标字节等于源文件”；模块里没有任何删除路径（不含 os.remove/unlink/rmtree）。套件双跑 6/6 判据逐字节同一，四个相邻套件全绿；现场实读：六条 ACCEPTED、干跑 src/os/evidence_R2248.py 预计 3137 字节移入隔离区（wrote=no）。本窗没做现场搬移（那是另一次可审计动作）；全量电池转 R2349，预注册 482 套件 / 3868 判据。",
+  "export_ts": "2026-11-01T22:58:11+08:00",
+  "do": "R2350 产品窗：把「三账清单声明头」终于接上度量——只读件 residue_triage_decl_reason 把声明头的 declared_by 与 until 声明逐条对比 206 条条目，实况读数 HEAD-STALE、11 处断裂、首个断裂在 R2319（该条条目声明于 R2333），其中三条还带着 until R2360 而同头声道 R2350。头声本窗不擅自续期，因为续期等于宣称重读了全部 206 条而本窗没有做。",
   "ceo_face": {
-    "current": "R2349 验证窗：全量电池在已提交的 R2348 树上跑完——482 套件全绿 / 3868 判据（与预注册完全一致）、对账控制 7/7、981.1 秒、临时世界 932/932 回收零残留。四段后续按设计先红后绿：矩阵段先报文档过期且拒绝改写，suite_matrix 重生成到 46114B 后四段全 PASS，判定 R2349 PASS。本窗未出产品件（如实记 0 分），队列头部仍是 line 394 AC-RTD1。",
-    "latest_artifact": "qa/reconcile-all-R2349.log（482/482 套件绿、3868 判据、控制 7/7、981.1s）+ docs/sandbox-suite-matrix.md（46114B，482 套件 / 3868 判据）（2026-11-01 23:0x）",
-    "next_milestone": "R2350：产品面 state/queue/tech.md:394 AC-RTD1（residue_triage_decl_reason——把三分类声明的首部声明与逐条条目对账，首部陈旧读 HEAD-STALE）六判据交付+套件；随后电池预注册 483 套件 / 3874 判据。2026-11-02 前完成。",
-    "next_milestone_due": "2026-11-03T23:20:00+08:00",
-    "last_artifact": "src/os/retire_apply.py + src/os/test_retire_apply.py + qa/retire-apply-R2348.log（624B，双跑 6/6 同一判据摘要）+ 接线 os-retire-apply(6) + state/queue/tech.md 新种子 AC-RAG1..6（R2348-11-01）",
-    "updated_at": "2026-11-01T23:20:00+08:00"
+    "current": "R2350 产品窗：把「三账清单声明头」终于接上度量——只读件 residue_triage_decl_reason 把声明头的 declared_by 与 until 声明逐条对比 206 条条目，实况读数 HEAD-STALE、11 处断裂、首个断裂在 R2319（该条条目声明于 R2333），其中三条还带着 until R2360 而同头声道 R2350。头声本窗不擅自续期，因为续期等于宣称重读了全部 206 条而本窗没有做。",
+    "latest_artifact": "src/os/residue_triage_decl_reason.py + src/os/test_residue_triage_decl_reason.py，证据 qa/residue-triage-decl-reason-R2350.log（773B，两次同一判据摘要 E41D8375FE9FA275，6/6，三条邻接套件全绿）；实况只读读数 declared_by=R2331 head_until=R2350 entries=206 breaks=11 first_break=R2319 verdict=HEAD-STALE，退出码 2。",
+    "next_milestone": "R2351：在已提交的 R2350 树上跑全量电池（预注册 483 套件 / 3874 判据），随后交付队列头 line 396 AC-RTRH1 residue_triage_head_renew——只在其测量过的轮次上续期头声",
+    "next_milestone_due": "2026-11-03T22:58:11+08:00",
+    "last_artifact": "src/os/residue_triage_decl_reason.py + src/os/test_residue_triage_decl_reason.py，证据 qa/residue-triage-decl-reason-R2350.log（773B，两次同一判据摘要 E41D8375FE9FA275，6/6，三条邻接套件全绿）；实况只读读数 declared_by=R2331 head_until=R2350 entries=206 breaks=11 first_break=R2319 verdict=HEAD-STALE，退出码 2。",
+    "updated_at": "2026-11-01T22:58:11+08:00"
   },
   "depts": [
     {
@@ -308,11 +308,6 @@
       "R2295: the first launch named a runner path that battery_stream resolves relative to src/, so it tried src/src/sandbox/reconcile_all.py and exited before any suite ran, leaving a 215B evidence file naming the missing path; the artefact was deleted and the sanctioned run used the default runner path. No criterion was touched and no suite ran in the failed launch."
     ],
     [
-      "a battery that was predicted before it ran and matched to the criterion: 453 suites / 3694 criteria on the nose, so the registry growth is accounted for by name instead of being discovered afterwards (R2295)",
-      "on",
-      "R2295: the first launch named a runner path that battery_stream resolves relative to src/, so it tried src/src/sandbox/reconcile_all.py and exited before any suite ran, leaving a 215B evidence file naming the missing path; the artefact was deleted and the sanctioned run used the default runner path. No criterion was touched and no suite ran in the failed launch."
-    ],
-    [
       "a drift reader that will not go green on a rotten pair: MISSING and UNDECLARED are both listed with their own locators, and a count disagreement refuses instead of printing a drift list nobody can trust (R2294)",
       "on",
       "R2294: the first suite run was red 3/6 and two reds were this-window test defects - one expected a patched reader to affect a subprocess (it cannot) and one put duplicate rows in different queues, which is not ambiguous because identity is keyed per queue. The third red was the missing runner wiring. No criterion was widened; the fixtures were fixed."
@@ -431,6 +426,11 @@
       "src/os/stamp_exempt_guard.py",
       "on",
       "R2346 product: one pinned-text guard both declaration writers ask - a plan carries the digest it read, commit re-reads and refuses E_SEG_STALE before any byte, and the two writers now share that single callable (they carry no os.replace of their own)"
+    ],
+    [
+      "src/os/residue_triage_decl_reason.py",
+      "on",
+      "R2350 product: the triage declaration head claim is measured against the entries it speaks for - HEAD-STALE names the first break in entry order, HEAD-CURRENT is the honest green, UNPINNED is a missing declaration and never a pass (read-only, writes nothing)"
     ]
   ],
   "results": [
@@ -631,10 +631,6 @@
       "R2295 verification window on the debt register first item (product-face-R2295): the full reconcile battery ran on the committed R2294 tree 46fddee2 with an empty git status and zero product edits until green - RUNNER PASS 453/453 suites plus controls 7/7 in 809.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB and criteria total 3694, exactly the pre-registered +1 suite / +6 criteria against R2293 (452/3688) from the os-stamp-exempt-review suite, so the prediction matched the measurement with no correction; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 453 suites / 3694 criteria at 43675B; register closed and product-face-R2296 opened first=yes naming the AC-EOM1 tech head; 0-point verification window with no product face"
     ],
     [
-      "R2295",
-      "R2295 verification window on the debt register first item (product-face-R2295): the full reconcile battery ran on the committed R2294 tree 46fddee2 with an empty git status and zero product edits until green - RUNNER PASS 453/453 suites plus controls 7/7 in 809.2s with birth-site TMP RECLAIM 932/932 worlds 326.57 MiB and criteria total 3694, exactly the pre-registered +1 suite / +6 criteria against R2293 (452/3688) from the os-stamp-exempt-review suite, so the prediction matched the measurement with no correction; four follow-up sections PASS after the matrix section refused to rewrite the stale doc and suite_matrix regenerated it to 453 suites / 3694 criteria at 43675B; register closed and product-face-R2296 opened first=yes naming the AC-EOM1 tech head; 0-point verification window with no product face"
-    ],
-    [
       "R2294",
       "R2294 product window on the debt register first item (product-face-R2294): the accepted-stamp declaration is read from BOTH sides - MISSING names a declared entry matching no live debt row with its declaration entry index, UNDECLARED names a live debt row carrying no entry with its file and line - and the split reconciles with the reader own exempt and unmatched numbers before any verdict, refusing with E_SER_COUNT on disagreement; SUITE PASS 6/6 double-run with five adjacent suite green (qa/stamp-exempt-review-R2294.log, 1844B); live reading NO-DRIFT over 380 entries / 380 violations with both real files proved byte-unchanged; one real gap row seeded for the tech floor; 2-point product window"
     ],
@@ -755,7 +751,7 @@
       "R2271 verification window on the debt register first item (reconcile-battery-R2271): zero product edits until green (the R2168 mixed-tree rule), battery on the committed 55e4e691 tree with an empty git status before and after = RUNNER PASS 441/441 suites plus controls 7/7 in 899.0s, birth-site TMP RECLAIM 932/932 worlds 326.57 MiB busy=0 failed=0, criteria total 3622, evidence qa/reconcile-all-R2271.log (773682B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection). Measured delta against R2268 (439 suites / 3610 criteria) is +2 suites / +12 criteria, not the pre-registered +1/+6: the register counted only the R2270 os-queue-head suite and the R2269 os-queue-only-floor-wire suite had never been battery-covered either because R2270 ran no battery, so both deltas resolve exactly and the prediction error is disclosed. Four follow-up sections all PASS through src/os/battery_followup_R2271.py: matrix regenerated to 441 suites / 3622 criteria and read back byte-identical (docs/sandbox-suite-matrix.md, 42718B, green=441/441), fingerprint chain CLEAN over 5 domains, runner profile --daily --check PASS byte-identical, writer census re-frozen then DRIFT-CLEAN files=2218 tee=1689 baselined=529 disappeared=0 flags=0, closing on VERDICT PASS with the log own EOL self-check crlf=0 bare_cr=0 bom=False. FINDING repaired in-window because the closeout could not proceed otherwise: state_fold refused the on-disk state with E_SF_BAD_LAYOUT (a later closeout had rewritten state.json with 4-space LF items while the module pins the canonical 16-space layout) while the file sat at 78449B, 51B below the 78500B waterline - the fold gate, the only thing between the file and the gate, had silently become unusable. src/os/closeout_R2271.py restores the canonical layout with a json equality proof, folds window 1..22 through state_fold.fold itself (545 tokens covered, 78449B -> 53645B, margin 24855B) and appends the rows layout-preserving with a round-trip proof. Honest score 0 product points; the line-339 product face is registered as product-face-R2272 first=yes."
     ],
     [
-      "2348",
+      "2350",
       "OSLoop 执行 tick"
     ],
     [
@@ -806,6 +802,10 @@
     [
       "R2346",
       "verification-then-product window: battery on the committed R2345 tree PASS 480/480 suites with 3856 criteria exactly as pre-registered, four follow-up sections PASS; then stamp_exempt_guard shipped with AC-SEG1..AC-SEG6 (6/6 twice plus three adjacent suites), the third writer seeded as AC-SGS1..AC-SGS6"
+    ],
+    [
+      "R2350",
+      "product window: residue_triage_decl_reason shipped with AC-RTD1..AC-RTD6 (6/6 twice plus three adjacent suites), live reading HEAD-STALE declared_by R2331 vs 206 entries with 11 breaks and first break R2319; one real gap row seeded (residue_triage_head_renew); no battery ran and the register row reconcile-battery-R2350 stays open for R2351"
     ]
   ],
   "self_drive": {
