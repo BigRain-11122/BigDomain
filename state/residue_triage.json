@@ -1660,6 +1660,13 @@
       "declared_by": 2391,
       "reason": "re-pinned at R2381 at its measured status DELIVERED",
       "until": 2408
+    },
+    {
+      "round": 2382,
+      "status": "DELIVERED",
+      "declared_by": "R2391",
+      "reason": "re-pinned at R2382 at its measured status DELIVERED",
+      "until": 2408
     }
   ]
 }
