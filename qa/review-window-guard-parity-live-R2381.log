@@ -1,0 +1,6 @@
+STEP1 live --check rc=0
+  REVIEW WINDOW GUARD PARITY verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes
+    DECLARED WINDOW
+    ARGUMENT ARGUMENT-CLEAN
+STEP2 --json rc=0 byte_stable=True keys=verdict,rewind,declared,declared_code,declared_window,argument,argument_history,argument_code,agrees
+STEP3 exit codes: agree(base)=0

@@ -4806,6 +4806,17 @@ SUITES = [
     # BEFORE the guard existed.)
     ("os-review-window-wire-argument-guard",
      os.path.join("..", "os", "test_review_window_wire_argument_guard.py"), 6),
+    # R2381: the same declarations list is read by the DECLARED path
+    # (review_window_wire.window_report) and the ARGUMENT path
+    # (review_window_wire_argument_guard.reading), and each was proved only on
+    # its own fixtures, so a future edit to either law could split the pair in
+    # silence. One parity hands the same file to both faces and says
+    # PARITY-AGREES or PARITY-DISAGREES naming both codes, asking only the one
+    # question they share: does this list rewind?
+    # (AC-RWGP1..AC-RWGP6 pinned in state/queue/tech.md as the R2371 seed row
+    # BEFORE the code existed.)
+    ("os-review-window-guard-parity",
+     os.path.join("..", "os", "test_review_window_guard_parity.py"), 6),
     # R2310: stamp_residue reports the whole stamped-but-never-logged residue
     # as one table, but every reviewed round stays in it forever, so the same
     # 185 rows are re-triaged by hand every window. One pinned

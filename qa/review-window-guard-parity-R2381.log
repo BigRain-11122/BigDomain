@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2381 suite=src/os/test_review_window_guard_parity.py legs=2
+== LEG A rc=0 digest=20C8D41C2369D831
+PASS AC-RWGP1 both faces are imported and asked at call time (patching window_report moves the verdict, patching reading moves it too) and this module carries no second declarations reader, no row parser and no declared_by comparison
+PASS AC-RWGP2 a rewinding declaration reads PARITY-AGREES with BOTH faces naming the carried E_RWHW_DECL_HISTORY, and the CLI exits 0
+PASS AC-RWGP3 a monotonic list (and an UNPINNED one the argument path deliberately ignores) reads PARITY-AGREES with the declared window carried from the wire and the argument guard's own history word beside it - two different questions, not a disagreement
+PASS AC-RWGP4 a patched divergence on EITHER side reads PARITY-DISAGREES naming both codes, and the tree digest is identical before and after - the parity writes nothing
+PASS AC-RWGP5 the CLI exits 0 (agree) / 2 (disagree) / 3 (missing root) / 5 (bad flags) with a byte-stable --json over the pinned PARITY_KEYS and one trailing LF
+LIVE REVIEW WINDOW GUARD PARITY verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes
+PASS AC-RWGP6 pure ASCII, stdlib only, zero network, no clock, read-only, wired as os-review-window-guard-parity(6), with the live tree reading taken
+SUITE PASS 6/6
+== LEG B rc=0 digest=20C8D41C2369D831
+PASS AC-RWGP1 both faces are imported and asked at call time (patching window_report moves the verdict, patching reading moves it too) and this module carries no second declarations reader, no row parser and no declared_by comparison
+PASS AC-RWGP2 a rewinding declaration reads PARITY-AGREES with BOTH faces naming the carried E_RWHW_DECL_HISTORY, and the CLI exits 0
+PASS AC-RWGP3 a monotonic list (and an UNPINNED one the argument path deliberately ignores) reads PARITY-AGREES with the declared window carried from the wire and the argument guard's own history word beside it - two different questions, not a disagreement
+PASS AC-RWGP4 a patched divergence on EITHER side reads PARITY-DISAGREES naming both codes, and the tree digest is identical before and after - the parity writes nothing
+PASS AC-RWGP5 the CLI exits 0 (agree) / 2 (disagree) / 3 (missing root) / 5 (bad flags) with a byte-stable --json over the pinned PARITY_KEYS and one trailing LF
+LIVE REVIEW WINDOW GUARD PARITY verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes
+PASS AC-RWGP6 pure ASCII, stdlib only, zero network, no clock, read-only, wired as os-review-window-guard-parity(6), with the live tree reading taken
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire_argument_guard.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_history_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_history.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=20C8D41C2369D831
