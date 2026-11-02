@@ -1,0 +1,4 @@
+R2388 repin_noop_eol_dialect live capture
+LEG-A dialect=LF rc=0 out=EOL DIALECT dialect=LF bytes=67603 normalised=67603
+LEG-B rc=0 unchanged=yes temps=[] out=EOL NOOP COMPARE verdict=NOOP dialect=CRLF composed=LF raw_equal=no bytes=69247->67603 normalised=67603 |   REASON the content matches; only the line endings differ (CRLF vs LF), so nothing is written and the file keeps its dialect
+LEG-C shipped_rc=0 wire_rc=0 same_stdout=yes shipped=RESIDUE REPIN PLANNED round=R2388 until=R2404 entries=234->234 dropped=0 bytes=67603->67513

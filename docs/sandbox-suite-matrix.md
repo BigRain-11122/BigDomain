@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-02 20:19 +08:00
+- 生成时间: generated: 2026-11-02 20:48 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2387.log
 - 状态证据: reconcile-all-R2387.log (RUNNER PASS 513/513 suites green, reconcile controls 7/7, 1317.7s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 513 | 4054 | 513/513 | R2387 |
+| 515 | 4066 | 513/513 | R2387 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -539,18 +539,20 @@
 | 500 | os-residue-triage-repin | ../os/test_residue_triage_repin.py | 6 | green | 1.1 |
 | 501 | os-residue-triage-repin-idempotent | ../os/test_residue_triage_repin_idempotent.py | 6 | green | 1.1 |
 | 502 | os-repin-noop-parity | ../os/test_repin_noop_parity.py | 6 | green | 1.5 |
-| 503 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.1 |
-| 504 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.0 |
-| 505 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.2 |
-| 506 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.6 |
-| 507 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.4 |
-| 508 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.7 |
-| 509 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.2 |
-| 510 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.2 |
-| 511 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.8 |
-| 512 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.7 |
-| 513 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 1.0 |
-|  | 合计 |  | 4054 | green 513 / FAIL 0 / no-evidence 0 |  |
+| 503 | os-repin-noop-eol-dialect | ../os/test_repin_noop_eol_dialect.py | 6 | no-evidence | - |
+| 504 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.1 |
+| 505 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.0 |
+| 506 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.2 |
+| 507 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.6 |
+| 508 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.4 |
+| 509 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.7 |
+| 510 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.2 |
+| 511 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.2 |
+| 512 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.8 |
+| 513 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.7 |
+| 514 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 1.0 |
+| 515 | os-review-window-guard-parity-blind-agreement | ../os/test_review_window_guard_parity_blind_agreement.py | 6 | no-evidence | - |
+|  | 合计 |  | 4066 | green 513 / FAIL 0 / no-evidence 2 |  |
 
 ## 证据出处
 

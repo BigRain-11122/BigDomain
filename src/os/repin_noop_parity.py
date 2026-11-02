@@ -65,15 +65,14 @@ class ParityError(Exception):
 def is_noop(path, text):
     """The ONE comparison law: does the composed document equal the file?
 
-    By BYTES only. A declaration that could not be read is not a NOOP - the
-    caller then walks the shipped writer and its own refusals decide.
+    The law now owns the EOL dialect and lives in ONE place
+    (`repin_noop_eol_dialect.is_noop`), imported AT CALL time (R2388) so a
+    patched normaliser moves the shipped CLI and the wire together. A
+    declaration that could not be read is not a NOOP - the caller then walks
+    the shipped writer and its own refusals decide.
     """
-    try:
-        with open(path, "rb") as handle:
-            current = handle.read()
-    except (IOError, OSError):
-        return False
-    return current == text.encode("utf-8")
+    import repin_noop_eol_dialect as RNED
+    return RNED.is_noop(path, text)
 
 
 def _faces():

@@ -5118,6 +5118,14 @@ SUITES = [
     # as the R2372 seed row BEFORE the code.)
     ("os-repin-noop-parity",
      os.path.join("..", "os", "test_repin_noop_parity.py"), 6),
+    # R2388: the NOOP comparison was decided by BYTES, which is right about
+    # content and wrong about transport - a CRLF declaration carrying the
+    # composition read PLANNED and was rewritten. ONE normalisation now owns
+    # the EOL dialect and both faces call it at call time. (AC-RNED1..AC-RNED6
+    # were pinned in state/queue/tech.md:442 as the R2382 seed row BEFORE the
+    # code.)
+    ("os-repin-noop-eol-dialect",
+     os.path.join("..", "os", "test_repin_noop_eol_dialect.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

@@ -199,11 +199,14 @@ def ac_rtri2():
     source = io.open(MODULE, "r", encoding="utf-8").read()
     code = code_only(source)
     # the module never reads the head round at all, so it cannot be deciding
-    # on it - and the comparison it does make is bytes against bytes
+    # on it - and the comparison it does make is the shipped one law, asked at
+    # call time rather than re-derived here (R2388 moved that law into
+    # repin_noop_eol_dialect; this anchor follows the delegation, it does not
+    # widen the criterion)
     no_head_round = ("declared_by" not in code
                      and "entries_before" not in code)
-    byte_law = ("on_disk_bytes(" in code
-                and "current == composed" in code)
+    byte_law = ("RNP.is_noop(" in code
+                and "on_disk_bytes" not in code)
 
     world = make_world()
     try:

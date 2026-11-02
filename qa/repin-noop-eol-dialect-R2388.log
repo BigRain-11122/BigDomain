@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2388 suite=src/os/test_repin_noop_eol_dialect.py legs=2
+== LEG A rc=0 digest=97EAAF9D80FF2484
+PASS AC-RNED1 a CRLF declaration whose content equals the composition reads NOOP on the module and on the shipped CLI, writes no byte, creates no temp and keeps its CRLF dialect
+PASS AC-RNED2 an LF declaration keeps today's readings (PLANNED, PINNED, NOOP) and the written file is the composition itself, LF only, at the predicted size
+PASS AC-RNED3 a declaration that differs in CONTENT still reads PLANNED, still rewrites, and ends on the new composition - the normalisation is content-safe
+PASS AC-RNED4 the parity reads AGREES over the CRLF declaration with both faces on NOOP, no refusal code, and neither reports a write
+PASS AC-RNED5 the normalisation is defined exactly once under src/os and replacing it moves BOTH the shipped reader and the wire from NOOP to PLANNED on the same CRLF world
+PASS AC-RNED6 the module is pure ASCII stdlib with no clock and no network, defines the one normalisation, and carries its own reconcile label wired into the runner
+SUMMARY passes=6 fails=0
+== LEG B rc=0 digest=97EAAF9D80FF2484
+PASS AC-RNED1 a CRLF declaration whose content equals the composition reads NOOP on the module and on the shipped CLI, writes no byte, creates no temp and keeps its CRLF dialect
+PASS AC-RNED2 an LF declaration keeps today's readings (PLANNED, PINNED, NOOP) and the written file is the composition itself, LF only, at the predicted size
+PASS AC-RNED3 a declaration that differs in CONTENT still reads PLANNED, still rewrites, and ends on the new composition - the normalisation is content-safe
+PASS AC-RNED4 the parity reads AGREES over the CRLF declaration with both faces on NOOP, no refusal code, and neither reports a write
+PASS AC-RNED5 the normalisation is defined exactly once under src/os and replacing it moves BOTH the shipped reader and the wire from NOOP to PLANNED on the same CRLF world
+PASS AC-RNED6 the module is pure ASCII stdlib with no clock and no network, defines the one normalisation, and carries its own reconcile label wired into the runner
+SUMMARY passes=6 fails=0
+== ADJACENT 3
+== src/os/test_repin_noop_parity.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_repin.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_repin_idempotent.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=97EAAF9D80FF2484

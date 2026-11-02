@@ -49,15 +49,6 @@ USAGE = ("usage: residue_triage_repin_idempotent.py --round R<n> "
          "  exit 5 = bad flags (including an --until before the round)\n")
 
 
-def on_disk_bytes(path):
-    """The declaration's bytes, or None when there is no file to compare."""
-    try:
-        with open(path, "rb") as handle:
-            return handle.read()
-    except (IOError, OSError):
-        return None
-
-
 def decide(root, round_text, until_text, reason, allow_drop=False,
            execute=False):
     """Compose first, then compare BYTES with the file: NOOP or the writer.
@@ -68,9 +59,11 @@ def decide(root, round_text, until_text, reason, allow_drop=False,
     which is what keeps the write path singular.
     """
     report = RTR.build(root, round_text, until_text, reason, allow_drop)
-    composed = report["_text"].encode("utf-8")
-    current = on_disk_bytes(report["_path"])
-    if current is not None and current == composed:
+    # the comparison is repin_noop_parity's ONE law (which now owns the EOL
+    # dialect), asked at CALL time so a patched normaliser moves this reading
+    # and the shipped CLI's together rather than leaving two copies (R2388)
+    import repin_noop_parity as RNP
+    if RNP.is_noop(report["_path"], report["_text"]):
         report["verdict"] = NOOP
         report["executed"] = False
         return report
