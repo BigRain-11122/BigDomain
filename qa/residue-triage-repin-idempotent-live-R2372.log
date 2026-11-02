@@ -1,0 +1,18 @@
+LIVE R2372 residue_triage_repin_idempotent (read-only dry runs)
+declaration_before 63c97734153ec2eb5594ee2207f6098da68c7f8103e828ffeeebed23eed853c1 65393B
+declaration_after  63c97734153ec2eb5594ee2207f6098da68c7f8103e828ffeeebed23eed853c1 65393B
+declaration_unchanged True
+shipped rc=0 bytes=190
+wire    rc=0 bytes=190
+byte_identical True
+SHIPPED RESIDUE REPIN PLANNED round=R2372 until=R2390 entries=222->222 dropped=0 bytes=65393->65210
+  STATUS DELIVERED count=202
+  STATUS STAMP-ONLY-OPEN count=20
+  REASON would re-pin at R2372
+WIRE    RESIDUE REPIN PLANNED round=R2372 until=R2390 entries=222->222 dropped=0 bytes=65393->65210
+  STATUS DELIVERED count=202
+  STATUS STAMP-ONLY-OPEN count=20
+  REASON would re-pin at R2372
+json rc=0
+JSON {"verdict": "PLANNED", "executed": false, "round": "R2372", "until": "R2390", "reason": "would re-pin at R2372", "entries_before": 222, "entries_after": 222, "statuses": [{"status": "DELIVERED", "count": 202}, {"status": "STAMP-ONLY-OPEN", "count": 20}], "dropped": [], "predicted_bytes": 65210, "declaration_bytes": 65393, "residue": [], "disagrees": 0}
+verdict LIVE-PARITY
