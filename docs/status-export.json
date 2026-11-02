@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T13:02:49+08:00",
-  "do": "R2377 product window: the two writers that publish the CEO-visible export are now MEASURED against each other - the closeout recipe and queue_export_gate_wire ran over one document and read AGREES at 78973 bytes on the real tree, so the proven write path finally has a reader that says whether the path in use agrees with it.",
+  "export_ts": "2026-11-02T13:35:03+08:00",
+  "do": "R2378 verification-then-product window: the export parity finally has a CALLER. The battery ran first on the committed tree (504/504 suites, criteria total 4000 exactly as pre-registered), then the queue head was claimed and closeout_export_parity_wire shipped - the closeout now stages the bytes it is about to publish, asks the parity over the staged document, and only replaces the export on AGREES.",
   "ceo_face": {
-    "current": "R2377 product window: the two writers that publish the CEO-visible export are now MEASURED against each other - the closeout recipe and queue_export_gate_wire ran over one document and read AGREES at 78973 bytes on the real tree, so the proven write path finally has a reader that says whether the path in use agrees with it.",
-    "latest_artifact": "src/os/export_closeout_gate_parity.py plus its six-criteria suite (qa/export-closeout-gate-parity-R2377.log, 2094B, two legs identical, four adjacent suites green); the live reading over docs/status-export.json is verdict=AGREES with both recipes at 78973 bytes.",
-    "next_milestone": "R2378: the battery on the committed R2377 tree pre-registered at 504 suites / 4000 criteria (this window own suite), then the product face at the queue head the reader names; the seed this window measured is closeout_export_parity_wire (AC-CEPW1..6), because the parity is a CLI that the closeout never calls, so the real path can still publish a block nobody proved and nobody compared.",
-    "next_milestone_due": "2026-11-04T13:02:49+08:00",
-    "last_artifact": "src/os/export_closeout_gate_parity.py plus its six-criteria suite (qa/export-closeout-gate-parity-R2377.log, 2094B, two legs identical, four adjacent suites green); the live reading over docs/status-export.json is verdict=AGREES with both recipes at 78973 bytes.",
-    "updated_at": "2026-11-02T13:02:49+08:00"
+    "current": "R2378 verification-then-product window: the export parity finally has a CALLER. The battery ran first on the committed tree (504/504 suites, criteria total 4000 exactly as pre-registered), then the queue head was claimed and closeout_export_parity_wire shipped - the closeout now stages the bytes it is about to publish, asks the parity over the staged document, and only replaces the export on AGREES.",
+    "latest_artifact": "src/os/closeout_export_parity_wire.py plus its six-criteria suite (qa/closeout-export-parity-wire-R2378.log, 3023B, two legs identical, four adjacent suites green); the live run over docs/status-export.json read WRITTEN reading=AGREES at 80266 bytes with no staged residue, and closeout_R2377.py now publishes its export through it.",
+    "next_milestone": "R2379: the battery on the committed R2378 tree pre-registered at 505 suites / 4006 criteria (this window own suite), then the product face at the queue head the reader names (line 425 prefix AC-RSBF1). The seed this window measured is export_publish_path_guard (AC-EPPG1..6): of the three closeout scripts that publish the export, only closeout_R2377.py asks the parity wire, and nothing reads that.",
+    "next_milestone_due": "2026-11-04T13:35:03+08:00",
+    "last_artifact": "src/os/closeout_export_parity_wire.py plus its six-criteria suite (qa/closeout-export-parity-wire-R2378.log, 3023B, two legs identical, four adjacent suites green); the live run over docs/status-export.json read WRITTEN reading=AGREES at 80266 bytes with no staged residue, and closeout_R2377.py now publishes its export through it.",
+    "updated_at": "2026-11-02T13:35:03+08:00"
   },
   "depts": [
     {
@@ -211,11 +211,16 @@
       "src/os/export_closeout_gate_parity.py",
       "on",
       "R2377 product: both writers that publish the CEO-visible export are run over one document and compared byte for byte - identical reads AGREES, a wire refusal reads BYPASS naming the queue the gate refuses, differing bytes read DISAGREES naming the first differing field; the live tree reads AGREES at 78973/78973 bytes"
+    ],
+    [
+      "src/os/closeout_export_parity_wire.py",
+      "on",
+      "R2378 product: the closeout now stages the bytes it is about to publish, asks export_closeout_gate_parity over the staged document and only replaces the export on AGREES - a refusal leaves the file byte-identical with no residue, an agreeing reading writes and reads back, and the live run read WRITTEN/AGREES at 80266 bytes"
     ]
   ],
   "results": [
     [
-      "2377",
+      "2378",
       "OSLoop 执行 tick"
     ],
     [
@@ -357,15 +362,19 @@
     [
       "R2377",
       "product window on the queue head: CLAIMED state/queue/tech.md:423 AC-ECGP1 export_closeout_gate_parity, whose six criteria were pinned there at R2376 BEFORE the code and every anchor read prose-only at HEAD. Shipped the parity module plus its six-criteria suite: the closeout recipe (QFE.apply then json.dumps) and queue_export_gate_wire.publish are both run over the same document inside a private temp copy, so patching either writer moves the verdict, a gate refusal is named BYPASS with the queue, and the check writes nothing in the repository and reads no clock. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/export-closeout-gate-parity-R2377.log, 2094B), wired os-export-closeout-gate-parity(6) so the registry reads 504/4000. LIVE: the real export reads verdict=AGREES gate=WRITTEN at 78973 bytes on both sides. Row 423 stamped and one REAL measured gap seeded (closeout_export_parity_wire: the parity has no caller on the write path). Disclosed: the refusal leg is proved on fixtures, not by doctoring the live export, and the decision baseline kept two tokens that left the compacted file."
+    ],
+    [
+      "R2378",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 504/504 suites plus controls 7/7 in 1320.0s with criteria total 4000 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as ac0e183b. Then CLAIMED state/queue/tech.md:424 AC-CEPW1 closeout_export_parity_wire, criteria pinned there at R2377, anchors prose-only at HEAD. Shipped the wire: stage, ask the parity, publish on AGREES only, no residue on refusal, compose owned by the parity closeout_style so no second formatter exists, and src/os/closeout_R2377.py now publishes its export through it. SUITE PASS 6/6 twice identical plus four adjacent suites green (3023B), wired os-closeout-export-parity-wire(6) so the registry reads 505/4006. LIVE: WRITTEN reading=AGREES at 80266 bytes, gate CURRENT, second run byte-identical, no staged residue. Row stamped and one REAL measured gap seeded (export_publish_path_guard: two older closeouts still publish directly)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -398,7 +407,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 357,
+        "done_rows": 358,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

@@ -18,6 +18,7 @@ REPO = os.path.dirname(SRC)
 sys.path.insert(0, BASE)
 
 import check_export_consistency as CEC  # noqa: E402
+import closeout_export_parity_wire as CEPW  # noqa: E402
 import queue_floor_export_face as QFE  # noqa: E402
 import state_io  # noqa: E402
 
@@ -344,7 +345,14 @@ def refresh_export(execute, state):
         print("EXPORT dry run bytes=%d queue_verdict=%s"
               % (len(text.encode("utf-8")), data["queue"]["verdict"]))
         return
-    back = write_text(EXPORT, text)
+    # The published bytes are proved BEFORE they replace the export: the wire
+    # stages them, asks export_closeout_gate_parity over the staged document,
+    # and only publishes on AGREES (R2378 AC-CEPW1 - the caller the parity
+    # never had, so a closeout can no longer publish an unproven block).
+    parity, parity_code = CEPW.publish(REPO, EXPORT, text=text)
+    if parity_code != 0:
+        raise SystemExit("E_EXPORT_PARITY %s" % parity["reading"])
+    back = read_text(EXPORT)
     if back != text:
         raise SystemExit("E_EXPORT readback")
     print("EXPORT bytes=%d queue_verdict=%s"

@@ -1,0 +1,7 @@
+CMD src/os/closeout_export_parity_wire.py --publish --root . --export docs/status-export.json --json -> rc=0
+  {"label": "os-closeout-export-parity-wire", "verdict": "WRITTEN", "path": "docs/status-export.json", "gate": "WRITTEN", "reading": "AGREES", "bytes": 80266, "residue": "(none)"}
+CMD src/os/queue_export_freshness_gate.py --check --root . --export docs/status-export.json -> rc=0
+  QUEUE EXPORT FRESHNESS os-queue-export-freshness-gate verdict=CURRENT path=docs/status-export.json drifted=(none)
+STEP2 idempotent bytes_before=80266 bytes_after=80266 identical=True
+STEP3 staged_residue=(none)
+VERDICT LIVE-PUBLISHED

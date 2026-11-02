@@ -5127,6 +5127,14 @@ SUITES = [
     # code.)
     ("os-export-closeout-gate-parity",
      os.path.join("..", "os", "test_export_closeout_gate_parity.py"), 6),
+    # R2378: R2377 shipped the parity as a CLI with no caller, so a closeout
+    # could still publish a queue block nobody proved. This wire is the caller:
+    # it stages the bytes it is about to publish, asks the parity over that
+    # staged document, and only replaces the export on AGREES. (AC-CEPW1..
+    # AC-CEPW6 were pinned in state/queue/tech.md:424 as the R2377 seed row
+    # BEFORE the code.)
+    ("os-closeout-export-parity-wire",
+     os.path.join("..", "os", "test_closeout_export_parity_wire.py"), 6),
     ]
 
 FAILS = 0

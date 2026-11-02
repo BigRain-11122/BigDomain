@@ -1,0 +1,51 @@
+EVIDENCE CAPTURE round=R2378 suite=src/os/test_closeout_export_parity_wire.py legs=2
+== LEG A rc=0 digest=C9549B67CAA6DEB8
+PASS AC-CEPW1a publish writes through the real parity
+PASS AC-CEPW1b patching check moves what is published
+PASS AC-CEPW1c the closeout byte shape stays owned by the parity
+PASS AC-CEPW2a a refusal is named with its reading
+PASS AC-CEPW2b the export is untouched and no residue is left
+PASS AC-CEPW3a an agreeing reading writes
+PASS AC-CEPW3b the written bytes are the closeout shape
+PASS AC-CEPW3c the staged file does not survive the publish
+PASS AC-CEPW4a a refusal leaves every file and every size alone
+PASS AC-CEPW4b no clock and no network import in the wire
+E_ECGP_EXPORT_MISSING: C:\Users\sjs20\AppData\Local\Temp\cepw5-hdh07fig\absent.json
+E_CEPW_BAD_FLAGS: unknown argument --nope
+E_CEPW_BAD_FLAGS: --publish is required
+CLOSEOUT EXPORT PARITY os-closeout-export-parity-wire verdict=REFUSED path=C:\Users\sjs20\AppData\Local\Temp\cepw5-hdh07fig\second.json gate=WRITTEN reading=DISAGREES bytes=0 residue=(none)
+PASS AC-CEPW5a exit 0 on a written export
+PASS AC-CEPW5b refusals keep their own codes (2/3/5/5)
+PASS AC-CEPW5c the json face is the pinned key order
+PASS AC-CEPW6a the wire and its suite are pure ASCII
+PASS AC-CEPW6b the wire carries its own label and is registry-wired
+PASS AC-CEPW6c six criteria declared to the registry
+SUITE PASS 16/16
+== LEG B rc=0 digest=C9549B67CAA6DEB8
+PASS AC-CEPW1a publish writes through the real parity
+PASS AC-CEPW1b patching check moves what is published
+PASS AC-CEPW1c the closeout byte shape stays owned by the parity
+PASS AC-CEPW2a a refusal is named with its reading
+PASS AC-CEPW2b the export is untouched and no residue is left
+PASS AC-CEPW3a an agreeing reading writes
+PASS AC-CEPW3b the written bytes are the closeout shape
+PASS AC-CEPW3c the staged file does not survive the publish
+PASS AC-CEPW4a a refusal leaves every file and every size alone
+PASS AC-CEPW4b no clock and no network import in the wire
+E_ECGP_EXPORT_MISSING: C:\Users\sjs20\AppData\Local\Temp\cepw5-gqsttdfd\absent.json
+E_CEPW_BAD_FLAGS: unknown argument --nope
+E_CEPW_BAD_FLAGS: --publish is required
+CLOSEOUT EXPORT PARITY os-closeout-export-parity-wire verdict=REFUSED path=C:\Users\sjs20\AppData\Local\Temp\cepw5-gqsttdfd\second.json gate=WRITTEN reading=DISAGREES bytes=0 residue=(none)
+PASS AC-CEPW5a exit 0 on a written export
+PASS AC-CEPW5b refusals keep their own codes (2/3/5/5)
+PASS AC-CEPW5c the json face is the pinned key order
+PASS AC-CEPW6a the wire and its suite are pure ASCII
+PASS AC-CEPW6b the wire carries its own label and is registry-wired
+PASS AC-CEPW6c six criteria declared to the registry
+SUITE PASS 16/16
+== ADJACENT 4
+== src/os/test_export_closeout_gate_parity.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_freshness_gate.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=C9549B67CAA6DEB8
