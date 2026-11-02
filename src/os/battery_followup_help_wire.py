@@ -31,7 +31,20 @@
 import json
 import sys
 
+import own_usage_block_renderer as OUB
+
 HELP_FLAGS = ("--help", "-h")
+
+# The trailing lines of this tool's own block. They are data, not a format:
+# R2383 moved the SHAPE (lead, derived metavar, honest "(none)") into
+# own_usage_block_renderer, so neither this module nor the guard writes a
+# format string for a tool's own arguments any more (AC-OUB1).
+OWN_FOOTERS = (
+    "  --help  print this usage and run no section (exit 0)",
+    "  exit 0 = every section PASS, or this question answered",
+    "  exit 2 = a section FAILED",
+    "  exit 3 = the evidence file is missing",
+    "  exit 5 = bad flags")
 
 # The keys this module actually reads off the house contract. Checked here
 # rather than trusted, so a contract that lost a key refuses instead of
@@ -119,21 +132,17 @@ def usage_text(module=None, path=None):
     """The usage block, derived from both contracts rather than hand-written."""
     own = own_contract(module)
     runner = load_runner_contract(path)
-    # The value flags carry a metavar derived from their own option key, so the
-    # placeholder cannot drift from the table either.
-    takes = " ".join("%s %s" % (flag, own["takes"][flag].upper())
-                     for flag in sorted(own["takes"]))
-    flags = " ".join(sorted(own["flags"]))
-    lines = [
-        "usage: %s %s %s [--help]" % (own["name"], takes, flags),
-        "  --help  print this usage and run no section (exit 0)",
-        "  exit 0 = every section PASS, or this question answered",
-        "  exit 2 = a section FAILED",
-        "  exit 3 = the evidence file is missing",
-        "  exit 5 = bad flags",
-        house_line(runner),
-    ]
-    return "\n".join(lines) + "\n"
+    # R2383: the own-block SHAPE lives in own_usage_block_renderer - the lead,
+    # the metavar derived from each option key, the flag order and the honest
+    # "(none)". This module supplies only the tables and the trailing lines,
+    # so patching the renderer moves this block as well as the guard's.
+    block = OUB.block({
+        "name": own["name"],
+        "takes": own["takes"],
+        "flags": own["flags"],
+        "help": "[--help]",
+        "prose": OWN_FOOTERS + (house_line(runner),)})
+    return block + "\n"
 
 
 def answer(tokens, module=None):

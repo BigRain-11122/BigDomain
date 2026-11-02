@@ -1,0 +1,8 @@
+LIVE own_usage_block_renderer R2383
+STEP1 guard_block_matches_published=True
+STEP2 wire_head_matches_published=True
+STEP3 wire_ends_with_one_newline=True
+STEP4 patched_guard='PATCHED' patched_wire='PATCHED\n'
+STEP5 restored_guard_matches=True
+STEP6 guard_head_literal=(none)=True wire_head_literal=(none)=True
+VERDICT LIVE-COLLAPSED

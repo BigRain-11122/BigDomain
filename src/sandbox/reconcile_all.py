@@ -5118,6 +5118,13 @@ SUITES = [
     # as the R2372 seed row BEFORE the code.)
     ("os-repin-noop-parity",
      os.path.join("..", "os", "test_repin_noop_parity.py"), 6),
+    # R2383: the imported runner contract had one owner after R2373, but a
+    # tool's OWN argument block still had none - the guard wrote a literal
+    # and the help wire composed its own flag line. One renderer owns that
+    # shape now. (AC-OUB1..AC-OUB6 were pinned in state/queue/tech.md:429
+    # as the R2373 seed row BEFORE the code.)
+    ("os-own-usage-block-renderer",
+     os.path.join("..", "os", "test_own_usage_block_renderer.py"), 6),
     # R2373: the runner contract had TWO formatters - the guard's two-line
     # usage block and the help wire's one-line house line - so a third tool
     # would have made three. contract_usage_renderer now owns the vocabulary

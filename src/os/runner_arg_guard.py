@@ -30,8 +30,17 @@ import os
 import sys
 
 import contract_usage_renderer as CUR
+import own_usage_block_renderer as OUB
 
 GUARD_LABEL = "runner-arg-guard"
+GUARD_FLAGS = ("--json",)
+GUARD_POSITIONAL = "<runner argv ...>"
+GUARD_EXTRA = ("runner_arg_guard.py --guard-help",)
+GUARD_PROSE = (
+    "answers whether reconcile_all.py would accept that argv; "
+    "exit 0 allowed/asked, 2 refused, 3 unreadable runner, "
+    "5 bad guard flags. A bare --help is forwarded to the runner "
+    "as a QUESTION (exit 0), never swallowed by the guard.")
 RUNNER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
     __file__))), "sandbox", "reconcile_all.py")
 CONTRACT_KEYS = ("name", "known_flags", "max_positional", "positional_label")
@@ -136,12 +145,19 @@ def render(result, as_json):
 
 
 def guard_usage():
-    return ("usage: runner_arg_guard.py [--json] [--] <runner argv ...>\n"
-            "       runner_arg_guard.py --guard-help\n"
-            "answers whether reconcile_all.py would accept that argv; "
-            "exit 0 allowed/asked, 2 refused, 3 unreadable runner, "
-            "5 bad guard flags. A bare --help is forwarded to the runner "
-            "as a QUESTION (exit 0), never swallowed by the guard.")
+    """This tool's OWN block, rendered by the one own-block owner (AC-OUB1).
+
+    R2383: the literal that used to live here was the second of two shapes a
+    third tool could have copied. Every line now comes from
+    own_usage_block_renderer, so a change there moves this block too, while
+    the published text stays byte-identical to R2366 (AC-OUB2).
+    """
+    return OUB.block({"name": "runner_arg_guard.py",
+                      "flags": GUARD_FLAGS,
+                      "brackets": True,
+                      "positional": GUARD_POSITIONAL,
+                      "extra": GUARD_EXTRA,
+                      "prose": (GUARD_PROSE,)})
 
 
 def main(argv):

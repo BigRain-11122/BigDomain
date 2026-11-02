@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2383 suite=src/os/test_own_usage_block_renderer.py legs=2
+== LEG A rc=0 digest=D15AB697C9831B21
+SUITE own_usage_block_renderer (R2383) criteria=6
+PASS AC-OUB1 the renderer owns both own-blocks; patching it moves both CLIs and neither caller writes a format string
+PASS AC-OUB2 both published own-blocks byte-identical; the collapse adds no new wording
+PASS AC-OUB3 a value flag with no metavar and a flagless table render their honest form rather than a partial line
+PASS AC-OUB4 an empty own-flag set renders (none) rather than a blank line
+PASS AC-OUB5 both CLIs keep their exit codes and a byte-stable --json over pinned keys
+PASS AC-OUB6 pure ASCII, stdlib only, no clock, no network, the four follow-up sections intact, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=D15AB697C9831B21
+SUITE own_usage_block_renderer (R2383) criteria=6
+PASS AC-OUB1 the renderer owns both own-blocks; patching it moves both CLIs and neither caller writes a format string
+PASS AC-OUB2 both published own-blocks byte-identical; the collapse adds no new wording
+PASS AC-OUB3 a value flag with no metavar and a flagless table render their honest form rather than a partial line
+PASS AC-OUB4 an empty own-flag set renders (none) rather than a blank line
+PASS AC-OUB5 both CLIs keep their exit codes and a byte-stable --json over pinned keys
+PASS AC-OUB6 pure ASCII, stdlib only, no clock, no network, the four follow-up sections intact, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_contract_usage_renderer.py rc=0 SUITE PASS 6/6
+== src/os/test_runner_arg_guard.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+== src/os/test_battery_followup_help_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=D15AB697C9831B21
