@@ -1,0 +1,10 @@
+LIVE repin noop parity round=R2382 until=R2400
+STEP1 parity=AGREES first_diff=None shipped=REFUSED wire=REFUSED
+STEP2 shipped_code=E_RTRP_UNMATCHED wire_code=E_RTRP_UNMATCHED
+STEP3 drop_unmatched parity=AGREES shipped=PLANNED wire=PLANNED
+STEP4 shipped CLI rc=0 line=RESIDUE REPIN PLANNED round=R2382 until=R2400 entries=230->228 dropped=2 bytes=66932->66425
+STEP5 wire CLI rc=0 line=RESIDUE REPIN PLANNED round=R2382 until=R2400 entries=230->228 dropped=2 bytes=66932->66425
+STEP6 parity CLI rc=0 line=REPIN NOOP PARITY verdict=AGREES round=R2382 until=R2400 shipped=E_RTRP_UNMATCHED wire=E_RTRP_UNMATCHED first_diff=(none)
+STEP7 text_stable=True json_stable=True
+STEP8 declaration_digest b35b58c910a33f17 -> b35b58c910a33f17 unchanged=True
+STEP9 compact={"first_diff": null, "round": "R2382", "shipped": "REFUSED", "shipped_code": "E_RTRP_UNMATCHED", "until": "R2400", "verdict": "AGREES", "wire": "REFUSED", "wire_code": "E_RTRP_UNMATCHED"}

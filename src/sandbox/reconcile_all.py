@@ -5111,6 +5111,13 @@ SUITES = [
     # the R2363 seed row BEFORE the code.)
     ("os-residue-triage-repin-idempotent",
      os.path.join("..", "os", "test_residue_triage_repin_idempotent.py"), 6),
+    # R2382: the NOOP reading existed in ONE module and not in the tool
+    # operators actually run. repin_noop_parity owns the comparison, the
+    # shipped CLI imports it, and the parity names the first field the two
+    # faces differ on. (AC-RNP1..AC-RNP6 were pinned in state/queue/tech.md:428
+    # as the R2372 seed row BEFORE the code.)
+    ("os-repin-noop-parity",
+     os.path.join("..", "os", "test_repin_noop_parity.py"), 6),
     # R2373: the runner contract had TWO formatters - the guard's two-line
     # usage block and the help wire's one-line house line - so a third tool
     # would have made three. contract_usage_renderer now owns the vocabulary

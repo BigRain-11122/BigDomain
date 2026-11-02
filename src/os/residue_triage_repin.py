@@ -26,7 +26,11 @@ This is that writer made general, and it may only claim what it measured:
     job and not this writer's;
   * an until earlier than the round itself refuses, and the executed write is
     ONE atomic replace that proves its predicted size, re-reads TRIAGED at the
-    given round, and leaves no temp residue.
+    given round, and leaves no temp residue;
+  * a composition whose bytes already ARE the file on disk reads NOOP and
+    writes nothing, decided through `repin_noop_parity.is_noop` so the shipped
+    CLI and the wire answer one question with ONE comparison rather than two
+    (R2382; the seam R2363 measured and R2372 added to the wire only).
 
 Pure stdlib, pure ASCII source, zero network, no clock of its own (the round
 is an argument). Criteria AC-RTRP1..AC-RTRP6 were pinned inside the R2353 seed
@@ -195,8 +199,22 @@ def build(root, round_text, until_text, reason, allow_drop=False):
 
 def plan(root, round_text, until_text, reason, allow_drop=False,
          execute=False):
-    """Plan, and execute only when asked: one atomic replace, then a read."""
+    """Plan, and execute only when asked: one atomic replace, then a read.
+
+    A composition whose bytes already ARE the file on disk reads NOOP and
+    returns before the writer is reached, so an idempotent re-pin creates no
+    temp file and reports no write where there was none. The comparison is
+    `repin_noop_parity.is_noop` - imported, never copied - so the wire and
+    this CLI cannot answer that question differently.
+    """
     report = build(root, round_text, until_text, reason, allow_drop)
+    # imported HERE so this module keeps its top-level name set and the
+    # comparison stays one call-time lookup rather than a parsed constant
+    import repin_noop_parity as RNP
+    if RNP.is_noop(report["_path"], report["_text"]):
+        report["verdict"] = "NOOP"
+        report["executed"] = False
+        return report
     if not execute:
         return report
     path = report["_path"]
@@ -267,7 +285,8 @@ USAGE = ("usage: residue_triage_repin.py --round R<n> --until R<n> "
          "--reason TEXT [--drop-unmatched] [--execute] [--root PATH] "
          "[--json]\n"
          "  dry run is the default and writes no byte\n"
-         "  exit 0 = PLANNED (dry run) or PINNED (--execute)\n"
+         "  exit 0 = PLANNED (dry run), PINNED (--execute) or NOOP (the file "
+         "already IS the composition)\n"
          "  exit 2 = refused over live state (DISAGREES, UNMATCHED, "
          "NOT-TRIAGED)\n"
          "  exit 3 = the declaration is missing (UNPINNED) or unreadable\n"

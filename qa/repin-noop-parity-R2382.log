@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2382 suite=src/os/test_repin_noop_parity.py legs=2
+== LEG A rc=0 digest=FD7C4369E8F6414E
+PASS AC-RNP1 the shipped CLI reads NOOP over an already-pinned declaration, the file digest and the whole world map are unchanged, no temp file is created, and the NOOP verdict travels in --json with executed=False
+PASS AC-RNP2 the shipped CLI and the wire print byte-identical output and exit codes on the dry, executed and every refusing path (2 UNMATCHED, 5 bad until, 3 UNPINNED, 3 unreadable), and both executed worlds end on the same declaration bytes
+PASS AC-RNP3 both faces agree over ONE declaration (PLANNED, NOOP and a shared refusal), and a patched face on either side reads DISAGREES while a differing refusal DETAIL is named as first_diff=detail
+PASS AC-RNP4 the --json key order stays the shipped PLAN_KEYS on BOTH CLIs, a NOOP reading adds no key, and the parity serialises its own pinned REPORT_KEYS
+PASS AC-RNP5 the shipped module imports the comparison and keeps its ONE os.replace writer, the parity module composes nothing and writes nothing, and patching is_noop moves the shipped verdict to NOOP without touching a byte
+LIVE REPIN NOOP PARITY verdict=AGREES round=R2382 until=R2400 shipped=E_RTRP_UNMATCHED wire=E_RTRP_UNMATCHED first_diff=(none)
+PASS AC-RNP6 pure ASCII, stdlib only, zero network, no clock, wired as os-repin-noop-parity(6), with a live reading over the real tree
+SUITE PASS 6/6
+== LEG B rc=0 digest=FD7C4369E8F6414E
+PASS AC-RNP1 the shipped CLI reads NOOP over an already-pinned declaration, the file digest and the whole world map are unchanged, no temp file is created, and the NOOP verdict travels in --json with executed=False
+PASS AC-RNP2 the shipped CLI and the wire print byte-identical output and exit codes on the dry, executed and every refusing path (2 UNMATCHED, 5 bad until, 3 UNPINNED, 3 unreadable), and both executed worlds end on the same declaration bytes
+PASS AC-RNP3 both faces agree over ONE declaration (PLANNED, NOOP and a shared refusal), and a patched face on either side reads DISAGREES while a differing refusal DETAIL is named as first_diff=detail
+PASS AC-RNP4 the --json key order stays the shipped PLAN_KEYS on BOTH CLIs, a NOOP reading adds no key, and the parity serialises its own pinned REPORT_KEYS
+PASS AC-RNP5 the shipped module imports the comparison and keeps its ONE os.replace writer, the parity module composes nothing and writes nothing, and patching is_noop moves the shipped verdict to NOOP without touching a byte
+LIVE REPIN NOOP PARITY verdict=AGREES round=R2382 until=R2400 shipped=E_RTRP_UNMATCHED wire=E_RTRP_UNMATCHED first_diff=(none)
+PASS AC-RNP6 pure ASCII, stdlib only, zero network, no clock, wired as os-repin-noop-parity(6), with a live reading over the real tree
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_residue_triage_repin.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_repin_idempotent.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_batch_status_face.py rc=0 SUITE 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=FD7C4369E8F6414E
