@@ -5340,6 +5340,14 @@ SUITES = [
     # positives stop while runner_arg_guard's real drift stays.
     ("os-owner-table-usage-wire",
      os.path.join("..", "os", "test_owner_table_usage_wire.py"), 6),
+    # R2406: R2398 closed the transport for the four SPLICE writers and left
+    # the RE-RENDER out, so a re-pin of a CRLF declaration still converted
+    # every line to LF. The re-pin now asks the shipped writer law for the
+    # payload at call time, keeps an LF declaration byte-identical and refuses
+    # a MIXED one before any byte. (AC-RDPL1..AC-RDPL6 were pinned in
+    # state/queue/tech.md:478 as the R2398 seed row BEFORE the code.)
+    ("os-repin-dialect-preservation",
+     os.path.join("..", "os", "test_repin_dialect_preservation.py"), 6),
     ]
 
 FAILS = 0

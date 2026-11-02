@@ -1,0 +1,7 @@
+LIVE REPIN DIALECT R2406 declaration_bytes=70344 dialect=LF
+READING REPIN DIALECT dialect=LF composed=70344 payload=70344 preserved=yes
+SAME-TEXT resolve dialect=LF payload=70344 equal_to_file=True
+CRLF-COPY resolve dialect=CRLF payload=72093 crlf_pairs=1749 lone_lf=0
+REAL-CLI rc=0 RESIDUE REPIN NOOP round=R2406 until=R2416 entries=249->249 dropped=0 bytes=70344->70344
+MIXED-COPY resolve=None code=E_RDPL_MIXED refused=True
+VERDICT dialect=LF crlf_kept=True mixed_refused=True real_noop=NOOP

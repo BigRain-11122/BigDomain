@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2406 suite=src/os/test_repin_dialect_preservation.py legs=2
+== LEG A rc=0 digest=4AD9DCBC5E8C8344
+repin_dialect_preservation suite (expected criteria 6)
+PASS AC-RDPL1 a CRLF declaration is still CRLF after a re-pin
+PASS AC-RDPL2 an LF declaration keeps today's bytes exactly
+PASS AC-RDPL3 the NOOP path writes nothing and leaves no temp
+PASS AC-RDPL4 refusal codes, exits and printed lines unchanged
+PASS AC-RDPL5 the shared dialect law moves the re-pin too
+PASS AC-RDPL6 pure, stdlib only and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=4AD9DCBC5E8C8344
+repin_dialect_preservation suite (expected criteria 6)
+PASS AC-RDPL1 a CRLF declaration is still CRLF after a re-pin
+PASS AC-RDPL2 an LF declaration keeps today's bytes exactly
+PASS AC-RDPL3 the NOOP path writes nothing and leaves no temp
+PASS AC-RDPL4 refusal codes, exits and printed lines unchanged
+PASS AC-RDPL5 the shared dialect law moves the re-pin too
+PASS AC-RDPL6 pure, stdlib only and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage_repin.py rc=0 SUITE PASS 6/6
+== src/os/test_repin_noop_parity.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_repin_idempotent.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=4AD9DCBC5E8C8344

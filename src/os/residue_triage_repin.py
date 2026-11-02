@@ -26,7 +26,10 @@ This is that writer made general, and it may only claim what it measured:
     job and not this writer's;
   * an until earlier than the round itself refuses, and the executed write is
     ONE atomic replace that proves its predicted size, re-reads TRIAGED at the
-    given round, and leaves no temp residue;
+    given round, and leaves no temp residue. The BYTES it lands are the
+    declaration's own dialect (R2406): a re-render is not a splice, so it
+    claims no byte-identity for untouched lines, but it does stop converting a
+    CRLF declaration to LF and it REFUSES a MIXED one before any byte;
   * a composition whose bytes already ARE the file on disk reads NOOP and
     writes nothing, decided through `repin_noop_parity.is_noop` so the shipped
     CLI and the wire answer one question with ONE comparison rather than two
@@ -43,6 +46,8 @@ import sys
 
 import residue_triage as RT
 
+# the suffix the ONE atomic write in this module uses (AC-RNP5 keeps that
+# writer and only the PAYLOAD is derived elsewhere, R2406)
 TEMP_SUFFIX = ".tmp-rtrep"
 
 PLAN_KEYS = (
@@ -176,6 +181,13 @@ def build(root, round_text, until_text, reason, allow_drop=False):
     text = json.dumps(document, ensure_ascii=True, indent=2) + "\n"
     path = os.path.join(root, RT.DECLARATION_PATH)
     before = os.path.getsize(path) if os.path.exists(path) else 0
+    # a RE-RENDER lands in the declaration's own dialect too (R2406): the
+    # dialect is asked of the shipped writer law at CALL time, so a patched
+    # reading moves this writer and a MIXED declaration refuses here - before
+    # any byte - instead of having one transport chosen for it. Imported here
+    # so this module's own name set stays what AC-RTRP6 pins.
+    import repin_dialect_preservation as RDPL
+    dialect_name, payload = RDPL.payload_for(path, text)
     return {
         "verdict": "PLANNED",
         "executed": False,
@@ -187,12 +199,14 @@ def build(root, round_text, until_text, reason, allow_drop=False):
         "statuses": [{"status": name, "count": counts[name]}
                      for name in sorted(counts)],
         "dropped": unmatched if allow_drop else [],
-        "predicted_bytes": len(text.encode("utf-8")),
+        "predicted_bytes": len(payload),
         "declaration_bytes": before,
         "residue": [],
         "disagrees": 0,
         "_path": path,
         "_text": text,
+        "_payload": payload,
+        "_dialect": dialect_name,
         "_round": current,
     }
 
@@ -218,10 +232,10 @@ def plan(root, round_text, until_text, reason, allow_drop=False,
     if not execute:
         return report
     path = report["_path"]
-    text = report["_text"]
     temp = path + TEMP_SUFFIX
-    with open(temp, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(text)
+    # BINARY, so no text handle can translate the transport back (R2406)
+    with open(temp, "wb") as handle:
+        handle.write(report["_payload"])
     os.replace(temp, path)
     sized = os.path.getsize(path)
     if sized != report["predicted_bytes"]:
@@ -294,6 +308,7 @@ USAGE = ("usage: residue_triage_repin.py --round R<n> --until R<n> "
 
 
 def main(argv):
+    import repin_dialect_preservation as RDPL
     as_json = False
     execute = False
     allow_drop = False
@@ -358,6 +373,14 @@ def main(argv):
             return 3
         if exc.code in ("E_RTRP_BAD_REASON", "E_RTRP_UNTIL_PREDATES"):
             return 5
+        return 2
+    except RDPL.RepinDialectError as exc:
+        # a declaration whose transport nobody can preserve refuses before any
+        # byte, with its own code and the same two-line shape every other
+        # refusal of this CLI prints
+        sys.stdout.write("%s\n" % exc.code)
+        if exc.detail:
+            sys.stdout.write("  %s\n" % exc.detail)
         return 2
     if as_json:
         sys.stdout.write(to_json(report))
