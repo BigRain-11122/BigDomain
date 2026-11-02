@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2401 suite=src/os/test_ledger_line_shape_guard.py legs=2
+== LEG A rc=0 digest=C734203748C42FFF
+ledger_line_shape_guard suite (expected criteria 6)
+PASS AC-LLSG1 the verdict follows the shipped law, patched or real
+PASS AC-LLSG2 a date prefix is refused by name, a conforming line passes
+PASS AC-LLSG3 local/api verdicts are the law's own codes, no local number grammar
+PASS AC-LLSG4 refusal writes nothing, the dry run predicts the exact post size, the write lands the line
+PASS AC-LLSG5 CLI exits 0/2/3/5 with a byte-stable --json over the pinned keys
+PASS AC-LLSG6 pure, stdlib only, no clock, no net, wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=C734203748C42FFF
+ledger_line_shape_guard suite (expected criteria 6)
+PASS AC-LLSG1 the verdict follows the shipped law, patched or real
+PASS AC-LLSG2 a date prefix is refused by name, a conforming line passes
+PASS AC-LLSG3 local/api verdicts are the law's own codes, no local number grammar
+PASS AC-LLSG4 refusal writes nothing, the dry run predicts the exact post size, the write lands the line
+PASS AC-LLSG5 CLI exits 0/2/3/5 with a byte-stable --json over the pinned keys
+PASS AC-LLSG6 pure, stdlib only, no clock, no net, wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_closeout.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_baseline.py rc=0 SUITE PASS 8/8 criteria
+EVIDENCE identical=True adjacent=3 fails=0 digest=C734203748C42FFF

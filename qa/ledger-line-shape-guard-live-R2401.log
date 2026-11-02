@@ -1,0 +1,7 @@
+ledger_line_shape_guard live capture R2401 (real tree, read-only)
+state=state.json bytes=83393 log_items=81 ledger_items=27
+last_real_ledger_round=R2401 verdict=ACCEPTED code=- round=2401 local=24000 api=0
+dated_candidate verdict=REFUSED code=E_LLSG_DATE_PREFIX token=2026-11-02
+dry_run_same_line predicted_bytes=84135 wrote=no state_bytes_now=83393
+json_stable=True keys=verdict,code,token,round,local_value,api,predicted_bytes,wrote
+registry_rows=113 module_digest=5ee886a51edccd45/5ee886a51edccd45 unchanged=True
