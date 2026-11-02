@@ -5119,6 +5119,14 @@ SUITES = [
     # pinned in state/queue/tech.md:422 as the R2375 seed row BEFORE the code.)
     ("os-queue-export-gate-wire",
      os.path.join("..", "os", "test_queue_export_gate_wire.py"), 6),
+    # R2377: R2376 gave the export a proved write path, but the closeout that
+    # publishes every round still calls QFE.apply and writes the document
+    # itself, so the wire had no caller in the real path and two writers
+    # published one face with nothing measuring agreement. (AC-ECGP1..AC-ECGP6
+    # were pinned in state/queue/tech.md:423 as the R2376 seed row BEFORE the
+    # code.)
+    ("os-export-closeout-gate-parity",
+     os.path.join("..", "os", "test_export_closeout_gate_parity.py"), 6),
     ]
 
 FAILS = 0

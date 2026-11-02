@@ -1,0 +1,27 @@
+EVIDENCE CAPTURE round=R2377 suite=src/os/test_export_closeout_gate_parity.py legs=2
+== LEG A rc=0 digest=34D04C07736BF96A
+SUITE export_closeout_gate_parity (R2377) criteria=6
+PASS AC-ECGP1 the parity is derived from the two real writers (patching QFE.apply or QEG.publish moves the verdict)
+PASS AC-ECGP2 a closeout-style write and a wire write over the same document publish identical bytes
+PASS AC-ECGP3 a closeout-style write the gate would refuse is named BYPASS with the queue named
+PASS AC-ECGP4 the check writes nothing (no residue) and the module reads no clock
+EXPORT WRITER PARITY os-export-closeout-gate-parity verdict=BYPASS path=C:\Users\sjs20\AppData\Local\Temp\ecgp5-g2wu6o8q\status-export.json gate=REFUSED differs=wire-refused
+PASS AC-ECGP5 exit 0 = AGREES, 2 = BYPASS or DISAGREES, 3 = missing file, 5 = bad flags
+PASS AC-ECGP6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=34D04C07736BF96A
+SUITE export_closeout_gate_parity (R2377) criteria=6
+PASS AC-ECGP1 the parity is derived from the two real writers (patching QFE.apply or QEG.publish moves the verdict)
+PASS AC-ECGP2 a closeout-style write and a wire write over the same document publish identical bytes
+PASS AC-ECGP3 a closeout-style write the gate would refuse is named BYPASS with the queue named
+PASS AC-ECGP4 the check writes nothing (no residue) and the module reads no clock
+EXPORT WRITER PARITY os-export-closeout-gate-parity verdict=BYPASS path=C:\Users\sjs20\AppData\Local\Temp\ecgp5-gail48fc\status-export.json gate=REFUSED differs=wire-refused
+PASS AC-ECGP5 exit 0 = AGREES, 2 = BYPASS or DISAGREES, 3 = missing file, 5 = bad flags
+PASS AC-ECGP6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_freshness_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=34D04C07736BF96A

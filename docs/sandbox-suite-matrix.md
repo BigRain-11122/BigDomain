@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-02 12:53 +08:00
+- 生成时间: generated: 2026-11-02 13:03 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2376.log
 - 状态证据: reconcile-all-R2376.log (RUNNER PASS 502/502 suites green, reconcile controls 7/7, 1177.9s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 503 | 3994 | 502/502 | R2376 |
+| 504 | 4000 | 502/502 | R2376 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -540,7 +540,8 @@
 | 501 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.3 |
 | 502 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.8 |
 | 503 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | no-evidence | - |
-|  | 合计 |  | 3994 | green 502 / FAIL 0 / no-evidence 1 |  |
+| 504 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | no-evidence | - |
+|  | 合计 |  | 4000 | green 502 / FAIL 0 / no-evidence 2 |  |
 
 ## 证据出处
 
