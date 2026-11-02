@@ -1,0 +1,7 @@
+RELATIVE IMPORT PUBLISH BINDING LIVE R2402
+real tree verdict=WIRE code=0 scanned=2137 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=15 from_import=0 bare=0
+parent law over the same tree verdict=WIRE code=0 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=15 from_import=0 bare=0
+relative fixture verdict=RELATIVE code=2 publishers=rel_pub.py relative=1 kind=from_import module=.wire state=RELATIVE line=10
+same fixture through the parent law verdict=UNRESOLVED code=2 kind=bare state=UNRESOLVED
+json byte_stable=True keys=13
+module digest before=f85c074c74db7329 after=f85c074c74db7329 unchanged=True

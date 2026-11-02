@@ -5186,6 +5186,13 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-export-publish-from-import-law",
      os.path.join("..", "os", "test_export_publish_from_import_law.py"), 6),
+    # R2400: the from-import patterns required a dotted module, so a PACKAGE
+    # RELATIVE import survived that law as an unbound bare call. One added
+    # notion binds it and names the relative module text it cannot place.
+    # (AC-RIPB1..AC-RIPB6 were pinned in state/queue/tech.md:465 as the R2400
+    # seed row BEFORE the code.)
+    ("os-relative-import-publish-binding",
+     os.path.join("..", "os", "test_relative_import_publish_binding.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

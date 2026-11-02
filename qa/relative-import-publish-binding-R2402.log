@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2402 suite=src/os/test_relative_import_publish_binding.py legs=2
+== LEG A rc=0 digest=3830CD47B226DC38
+PASS AC-RIPB1 AC-RIPB1 a relative import reads as from_import
+PASS AC-RIPB1b AC-RIPB1 the absolute table is asked, not restated
+PASS AC-RIPB2 AC-RIPB2 the absolute forms read exactly as before
+PASS AC-RIPB3 AC-RIPB3 the local name is the alias, as before
+PASS AC-RIPB4 AC-RIPB4 the parent law's own reading is untouched
+PASS AC-RIPB5 AC-RIPB5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-RIPB6 AC-RIPB6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=7 fails=0
+== LEG B rc=0 digest=3830CD47B226DC38
+PASS AC-RIPB1 AC-RIPB1 a relative import reads as from_import
+PASS AC-RIPB1b AC-RIPB1 the absolute table is asked, not restated
+PASS AC-RIPB2 AC-RIPB2 the absolute forms read exactly as before
+PASS AC-RIPB3 AC-RIPB3 the local name is the alias, as before
+PASS AC-RIPB4 AC-RIPB4 the parent law's own reading is untouched
+PASS AC-RIPB5 AC-RIPB5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-RIPB6 AC-RIPB6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=7 fails=0
+== ADJACENT 3
+== src/os/test_export_publish_from_import_law.py rc=0 SUITE PASS criteria=6 passes=8 fails=0
+== src/os/test_export_publish_wire_identity.py rc=0 NO SUITE LINE
+== src/os/test_export_publish_path_guard.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=3 fails=0 digest=3830CD47B226DC38
