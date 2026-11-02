@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T12:24:14+08:00",
-  "do": "R2375 verification-then-product window: the battery on the committed R2374 tree read RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered, and the export's queue block finally has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue and refuses to call a stale block CURRENT.",
+  "export_ts": "2026-11-02T12:55:13+08:00",
+  "do": "R2376 verification-then-product window: the battery on the committed R2375 tree read RUNNER PASS 502/502 suites plus controls 7/7 in 1177.9s with criteria total 3988 EXACTLY as pre-registered, and the export write path now PROVES its queue block - composed, staged beside the file, checked by the gate, and only then published.",
   "ceo_face": {
-    "current": "R2375 verification-then-product window: the battery on the committed R2374 tree read RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered, and the export's queue block finally has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue and refuses to call a stale block CURRENT.",
-    "latest_artifact": "src/os/queue_export_freshness_gate.py plus its six-criteria suite, and the live leg that caught a REAL staleness nothing else saw: shipping the module and suite turned tech row 421 into a delivered row, so tech fell to 9 claimable while the export still published FLOOR-MET - the gate read STALE naming queue:tech and the section scalars, the writer refreshed the block, and the gate then read CURRENT (qa/queue-export-freshness-gate-live-R2375.log).",
-    "next_milestone": "R2376: the battery on the committed R2375 tree pre-registered at 502 suites / 3988 criteria (this window own os-queue-export-freshness-gate suite), then the product face at the queue head the reader names; the seed this window measured is queue_export_gate_wire (AC-QEG1..6), because the gate is a CLI only - nothing runs it automatically and check_export_consistency still never opens the queue block.",
-    "next_milestone_due": "2026-11-04T12:24:14+08:00",
-    "last_artifact": "src/os/queue_export_freshness_gate.py plus its six-criteria suite, and the live leg that caught a REAL staleness nothing else saw: shipping the module and suite turned tech row 421 into a delivered row, so tech fell to 9 claimable while the export still published FLOOR-MET - the gate read STALE naming queue:tech and the section scalars, the writer refreshed the block, and the gate then read CURRENT (qa/queue-export-freshness-gate-live-R2375.log).",
-    "updated_at": "2026-11-02T12:24:14+08:00"
+    "current": "R2376 verification-then-product window: the battery on the committed R2375 tree read RUNNER PASS 502/502 suites plus controls 7/7 in 1177.9s with criteria total 3988 EXACTLY as pre-registered, and the export write path now PROVES its queue block - composed, staged beside the file, checked by the gate, and only then published.",
+    "latest_artifact": "src/os/queue_export_gate_wire.py plus its six-criteria suite, and the live leg that caught a REAL staleness no other checker saw: the export published FLOOR-MET while tech was one row short, the gate read STALE naming queue:tech, the wire refused to publish unproven and then wrote the proven block (qa/queue-export-gate-wire-live-R2376.log, 1461B).",
+    "next_milestone": "R2377: the battery on the committed R2376 tree pre-registered at 503 suites / 3994 criteria (this window own os-queue-export-gate-wire suite), then the product face at the queue head the reader names; the seed this window measured is export_closeout_gate_parity (AC-ECGP1..6), because the closeouts still write the export through queue_floor_export_face.apply directly and never call the new wire, so the guard exists on one write path and the actual closeout bypasses it.",
+    "next_milestone_due": "2026-11-04T12:55:13+08:00",
+    "last_artifact": "src/os/queue_export_gate_wire.py plus its six-criteria suite, and the live leg that caught a REAL staleness no other checker saw: the export published FLOOR-MET while tech was one row short, the gate read STALE naming queue:tech, the wire refused to publish unproven and then wrote the proven block (qa/queue-export-gate-wire-live-R2376.log, 1461B).",
+    "updated_at": "2026-11-02T12:55:13+08:00"
   },
   "depts": [
     {
@@ -201,11 +201,16 @@
       "src/os/queue_export_freshness_gate.py",
       "on",
       "R2375 product: the export's queue block now has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue (claimable, delivered line or prefix, or any row field) plus every drifted section scalar, reads a section-less export as MISSING and never CURRENT, writes nothing and reads no clock; six criteria green twice plus a live leg that caught a REAL staleness (tech 9 claimable published as FLOOR-MET) and watched the writer close it"
+    ],
+    [
+      "src/os/queue_export_gate_wire.py",
+      "on",
+      "R2376 product: the export write path composes the live queue section, stages those bytes beside the file, asks queue_export_freshness_gate.check, and only replaces the original on CURRENT - a refusal leaves the file byte-identical with no residue; six criteria green twice plus a live leg that caught a REAL staleness (tech one row short, published as FLOOR-MET) and closed it"
     ]
   ],
   "results": [
     [
-      "2375",
+      "2376",
       "OSLoop 执行 tick"
     ],
     [
@@ -339,15 +344,19 @@
     [
       "R2375",
       "verification then product: the debt gate named reconcile-battery-R2374, so the battery ran first on the committed tree - RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2375.log, 809143B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 501/3982 at 48002B, VERDICT R2375 PASS, evidence and matrix committed alone as bff3e884. Then the claimed row: state/queue/tech.md:421 AC-QEF1 queue_export_freshness_gate, its six criteria pinned there at R2374 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the live side IS the export face, drift names the drifted queues, MISSING never reads CURRENT, and the gate is read-only with no clock. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-export-freshness-gate-R2375.log), wired os-queue-export-freshness-gate(6) so the registry reads 502/3988. LIVE, and this is the round's best evidence: the real-tree leg read STALE rc=2 drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech - a genuine staleness that predated the window, because shipping the module and suite turned tech row 421 into a delivered row and tech fell to 9 effective claimable while the export still published FLOOR-MET; the writer refreshed the block and the gate then read CURRENT rc=0, with a drifted copy still STALE naming queue:tech, a section-less copy MISSING and an absent file rc=3. Row 421 stamped and one REAL measured gap seeded (queue_export_gate_wire: the gate is a CLI, nothing runs it on the write path), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2374 closed, battery-R2375 opened first=yes at 502/3988. Disclosed: the first battery was killed by the buffering pipe trap with nothing lost, and the window overran its budget because the battery cost 1317.3s."
+    ],
+    [
+      "R2376",
+      "verification then product: the debt gate named reconcile-battery-R2375, so the battery ran first - RUNNER PASS 502/502 suites plus controls 7/7 in 1177.9s with criteria total 3988 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2376.log, 809800B); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 503/3994 at 48201B, VERDICT R2376 PASS, evidence and matrix committed alone as 7692ec90. Then the claimed row: state/queue/tech.md:422 AC-QEG1 queue_export_gate_wire, its six criteria pinned there at R2375 BEFORE the code and every anchor prose-only at HEAD. Shipped the wire plus its six-criteria suite: compose through the face, stage beside the export, ask the gate, replace only on CURRENT. SUITE PASS 6/6 twice identical plus three adjacent suites green, wired os-queue-export-gate-wire(6) so the registry reads 503/3994. LIVE: the real-tree leg read STALE naming queue:tech and the section scalars - a real staleness that predated the window - then the wire wrote the proven block 77070B -> 77162B and the gate read CURRENT, with a doctored copy repaired, not-json and absent files at rc=3 and bad flags at rc=5. Row 422 stamped and one REAL measured gap seeded (export_closeout_gate_parity: the closeouts still call QFE.apply directly and never the new wire). Register: battery-R2375 closed, battery-R2376 opened first=yes at 503/3994. Disclosed: the tree was not clean for the whole battery run, though the runner had already imported its 502-suite registry and the measured criteria total matched exactly."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -380,7 +389,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 355,
+        "done_rows": 356,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
