@@ -82,12 +82,19 @@ UNREADABLE_CODES = (
 
 
 class ResidueTriageAppendError(Exception):
-    """A refusal carrying its own code."""
+    """A refusal carrying its own code.
 
-    def __init__(self, code, detail=""):
+    A refused --check may also carry the live status of the asked round
+    (AC-ACSP2); every other refusal leaves it None so its printed lines stay
+    byte-identical (AC-ACSP4).
+    """
+
+    def __init__(self, code, detail="", status=None, round_label=None):
         Exception.__init__(self, "%s: %s" % (code, detail))
         self.code = code
         self.detail = detail
+        self.status = status
+        self.round = round_label
 
 
 def _round(value, origin):
@@ -329,29 +336,33 @@ def apply(root, prepared):
 def check(root, round_value):
     """The read-only face: what would an append have to accept?"""
     current = _round(round_value, "round")
+    # The status face is asked FIRST, so a refused triage read still names the
+    # live status of the round the operator asked about (AC-ACSP1, AC-ACSP2).
+    # The precedence itself is append_check_status_precedence's; the E_RTA_*
+    # code mapping below stays this module's one law.
+    import append_check_status_precedence as ACSP
     try:
-        report = RT.read(root, "R%d" % current)
-    except RT.ResidueTriageError as exc:
-        code = "E_RTA_UNREADABLE"
-        if exc.code in ("E_RTR_BAD_ARGS",):
-            code = "E_RTA_BAD_ARGS"
-        elif exc.code in ("E_RTR_BAD_STATE",):
-            code = "E_RTA_BAD_STATE"
-        raise ResidueTriageAppendError(
-            code, "%s: %s" % (exc.code, exc.detail))
-    # The live status of the ASKED round is the single-append status face's
-    # reading (AC-SASF2), asked at CALL time so this module still loads
-    # without it and the --append path never reaches it (AC-SASF4).
-    import single_append_status_face as SASF
-    try:
-        face = SASF.reading(root, "R%d" % current)
-    except SASF.SingleAppendStatusFaceError as exc:
+        outcome = ACSP.asked(root, "R%d" % current)
+    except ACSP.AppendCheckStatusPrecedenceError as exc:
         raise ResidueTriageAppendError(
             "E_RTA_BAD_STATE", "%s: %s" % (exc.code, exc.detail))
+    if outcome["refusal"] is not None:
+        code = "E_RTA_UNREADABLE"
+        if outcome["refusal"]["code"] in ("E_RTR_BAD_ARGS",):
+            code = "E_RTA_BAD_ARGS"
+        elif outcome["refusal"]["code"] in ("E_RTR_BAD_STATE",):
+            code = "E_RTA_BAD_STATE"
+        raise ResidueTriageAppendError(
+            code,
+            "%s: %s" % (outcome["refusal"]["code"],
+                        outcome["refusal"]["detail"]),
+            status=outcome["status"],
+            round_label=outcome["requested"])
+    report = outcome["report"]
     out = {
         "action": "check",
         "round": "R%d" % current,
-        "status": face["requested_status"],
+        "status": outcome["status"],
         "declared_by": "-" if report["declared_by"] is None
         else report["declared_by"],
         "until": "-",
@@ -414,6 +425,27 @@ USAGE = ("usage: residue_triage_append.py --check --round R<n> [--root PATH]\n"
          "           the residue, until before declared_by, still untriaged)\n"
          "  exit 3 = unreadable or unpinned declaration, bad shape\n"
          "  exit 5 = bad flags\n")
+
+
+def refused_report(exc):
+    """The pinned keys for a refused --check, with its status carried
+    (AC-ACSP5). Never used by the --append path (AC-ACSP4)."""
+    return {
+        "action": "check",
+        "round": exc.round or "-",
+        "status": exc.status,
+        "declared_by": "-",
+        "until": "-",
+        "before_bytes": 0,
+        "after_bytes": 0,
+        "delta": 0,
+        "entries_before": 0,
+        "entries_after": 0,
+        "residue": [],
+        "declaration": "-",
+        "verdict": exc.code,
+        "wrote": False,
+    }
 
 
 def main(argv):
@@ -554,9 +586,17 @@ def main(argv):
                         "wrote": True,
                     }
     except ResidueTriageAppendError as exc:
-        sys.stdout.write("%s\n" % exc.code)
-        if exc.detail:
-            sys.stdout.write("  %s\n" % exc.detail)
+        if as_json and exc.status is not None:
+            sys.stdout.write(to_json(refused_report(exc)))
+        else:
+            sys.stdout.write("%s\n" % exc.code)
+            if exc.detail:
+                sys.stdout.write("  %s\n" % exc.detail)
+            if exc.status is not None:
+                import append_check_status_precedence as ACSP
+                for line in ACSP.refusal_lines(
+                        {"requested": exc.round, "status": exc.status}):
+                    sys.stdout.write("  %s\n" % line)
         if exc.code == "E_RTA_BAD_ARGS":
             return 5
         if exc.code in UNREADABLE_CODES:

@@ -4947,6 +4947,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-residue-triage-append-batch",
      os.path.join("..", "os", "test_residue_triage_append_batch.py"), 6),
+    # R2392: --check used to ask the triage read FIRST, so exactly when that
+    # read refused (measured at R2385: --check --round R1755 answered
+    # E_RTA_UNREADABLE / E_RTR_DECL_FUTURE and printed no status) the operator
+    # got nothing about the round they asked about, while the status face
+    # alone read it DELIVERED. The face is now asked before the triage read
+    # and a refused check carries its status plus one NOTE line; the --append
+    # path never asks the face and its lines stay byte-identical.
+    # (AC-ACSP1..AC-ACSP6 pinned in state/queue/tech.md line 449 as the R2385
+    # seed BEFORE the code existed.)
+    ("os-append-check-status-precedence",
+     os.path.join("..", "os", "test_append_check_status_precedence.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now

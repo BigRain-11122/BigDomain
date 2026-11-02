@@ -1,1 +1,1 @@
-2026-11-02T21:40:00+08:00 R2391 export_publish_wire_identity shipped; live src/os reads WIRE over 11 publishers; dead register row repaired; battery carried OPEN
+2026-11-02T22:34:00+08:00 R2392 append_check_status_precedence shipped; a refused --check now names its live status at exit 3 while the append path stays byte-identical; battery carried OPEN

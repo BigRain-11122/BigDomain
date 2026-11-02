@@ -1,0 +1,28 @@
+EVIDENCE CAPTURE round=R2392 suite=src/os/test_append_check_status_precedence.py legs=2
+== LEG A rc=0 digest=0EA692707510EE20
+append_check_status_precedence suite (expected criteria 6)
+PASS AC-ACSP1 the face decides the status on a refused read
+PASS AC-ACSP2 refused check names the live status at exit 3
+PASS AC-ACSP3 NOT-RESIDUE stays distinguishable when refused
+E_RTA_DUPLICATE
+  R9002 is already declared status=DELIVERED declared_by=R2335 until=R9900
+PASS AC-ACSP4 append lines unchanged, the face never asked
+PASS AC-ACSP5 exits unchanged, JSON carries the refused status
+PASS AC-ACSP6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=0EA692707510EE20
+append_check_status_precedence suite (expected criteria 6)
+PASS AC-ACSP1 the face decides the status on a refused read
+PASS AC-ACSP2 refused check names the live status at exit 3
+PASS AC-ACSP3 NOT-RESIDUE stays distinguishable when refused
+E_RTA_DUPLICATE
+  R9002 is already declared status=DELIVERED declared_by=R2335 until=R9900
+PASS AC-ACSP4 append lines unchanged, the face never asked
+PASS AC-ACSP5 exits unchanged, JSON carries the refused status
+PASS AC-ACSP6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append_batch.py rc=0 SUITE PASS 6/6
+== src/os/test_single_append_status_face.py rc=0 SUITE os-single-append-status-face expected-criteria=6 pass=6 fail=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=0EA692707510EE20

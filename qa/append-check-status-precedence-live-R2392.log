@@ -1,0 +1,23 @@
+LIVE CAPTURE round=R2392 append_check_status_precedence
+single writer utf-8 LF, no clock, no network
+
+== STEP1 refused check on the real tree (round below declared_by)
+rc=3
+E_RTA_UNREADABLE
+  E_RTR_DECL_FUTURE: declared_by R2391 is later than the round being checked R1755
+  STATUS R1755 DELIVERED
+  NOTE E_ACSP_STATUS_ON_REFUSAL: the status face answers even when the triage read refuses
+
+== STEP2 the same refused check as JSON (pinned keys)
+rc=3
+{"action": "check", "round": "R1755", "status": "DELIVERED", "declared_by": "-", "until": "-", "before_bytes": 0, "after_bytes": 0, "delta": 0, "entries_before": 0, "entries_after": 0, "residue": [], "declaration": "-", "verdict": "E_RTA_UNREADABLE", "wrote": false}
+
+== STEP3 a clean check on the real tree (unchanged happy path)
+rc=0
+RESIDUE TRIAGE APPEND action=check round=R2391 status=NOT-RESIDUE declared_by=R2391 until=- entries=237->237 bytes=0->0 delta=0 residue=- declaration=PINNED verdict=TRIAGED wrote=no
+  NOTE E_SASF_NOT_RESIDUE: R2391 is not in the live residue
+
+== STEP4 an --append refusal keeps its two lines and asks no face
+rc=2
+E_RTA_DUPLICATE
+  R1755 is already declared status=DELIVERED declared_by=R2391 until=R2408
