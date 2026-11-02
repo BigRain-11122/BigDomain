@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-11-03T07:31:37+08:00",
+  "export_ts": "2026-11-03T08:12:00+08:00",
   "do": "R2407 verification: the carried battery ran on the committed tree and found one real defect - the R2405 fold cut a round in half - so the fold now refuses a round-split window",
   "ceo_face": {
     "current": "R2407 verification: the carried battery ran on the committed tree and found one real defect - the R2405 fold cut a round in half - so the fold now refuses a round-split window",
     "latest_artifact": "src/os/state_fold.py + src/os/test_fold_round_block_boundary.py + qa/reconcile-all-R2407.log + qa/reconcile-all-R2407-retry.log + qa/fold-round-block-boundary-R2407.log",
-    "next_milestone": "run the battery a third leg on the closed-out tree (target 532 suites / 4168 criteria), then claim state/queue/tech.md AC-LDWS1",
+    "next_milestone": "run the battery first on this committed tree (target 532 suites / 4168 criteria) with the debt rows clean, then claim state/queue/tech.md AC-LDWS1",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
     "last_artifact": "src/os/state_fold.py + src/os/test_fold_round_block_boundary.py + qa/reconcile-all-R2407.log + qa/reconcile-all-R2407-retry.log + qa/fold-round-block-boundary-R2407.log",
     "updated_at": "2026-11-03T08:5x:00+08:00"
@@ -183,10 +183,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 57,
+    "substantive_non_idle_mention_lines": 59,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
