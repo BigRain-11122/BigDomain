@@ -8,3 +8,4 @@
 2026-11-03T23:40:00+08:00 tick=2402 R2402 product window relative_import_publish_binding shipped; battery carried
 2026-11-03T05:22:00+08:00 tick=2403 R2403 product window runner_abort_face shipped; battery carried
 2026-11-03T05:33:00+08:00 tick=2404 R2404 product window followup_bare_evidence_face shipped; battery carried
+2026-11-03T06:24:00+08:00 tick=2405 R2405 verification window - battery green on the committed tree after two evidence repairs
