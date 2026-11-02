@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T16:03:12+08:00",
-  "do": "R2381 verification-then-product window: the same declarations list is now measured across both review-window faces by one parity, so a future edit to either law can no longer split the declared path and the argument path in silence. The battery ran first on the committed tree (507/507 suites, criteria total 4018 exactly as pre-registered), then the queue head was claimed and review_window_guard_parity shipped.",
+  "export_ts": "2026-11-02T16:42:50+08:00",
+  "do": "R2382 verification-then-product window: the re-pin NOOP was in one module and not in the tool operators run, so the shipped CLI now reads NOOP over a declaration that already IS its own composition, through ONE comparison imported from repin_noop_parity, and a parity names the first field the two faces differ on. The battery ran first on the committed tree (508/508 suites, criteria total 4024 exactly as pre-registered).",
   "ceo_face": {
-    "current": "R2381 verification-then-product window: the same declarations list is now measured across both review-window faces by one parity, so a future edit to either law can no longer split the declared path and the argument path in silence. The battery ran first on the committed tree (507/507 suites, criteria total 4018 exactly as pre-registered), then the queue head was claimed and review_window_guard_parity shipped.",
-    "latest_artifact": "src/os/review_window_guard_parity.py plus its six-criteria suite (qa/review-window-guard-parity-R2381.log, 2991B, two legs identical, four adjacent review-window suites green); the live run over the real tree reads verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes.",
-    "next_milestone": "R2382: the battery on the committed R2381 tree pre-registered at 508 suites / 4024 criteria (this window own suite), then the product face at the queue head the reader names (line 428 prefix AC-RNP1). The seed this window measured is review_window_guard_parity_blind_agreement (AC-RWGB1..6): the parity reads PARITY-AGREES over a declaration NEITHER face could parse, so agreement-on-ignorance currently reads as agreement.",
-    "next_milestone_due": "2026-11-04T16:03:12+08:00",
-    "last_artifact": "src/os/review_window_guard_parity.py plus its six-criteria suite (qa/review-window-guard-parity-R2381.log, 2991B, two legs identical, four adjacent review-window suites green); the live run over the real tree reads verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes.",
-    "updated_at": "2026-11-02T16:03:12+08:00"
+    "current": "R2382 verification-then-product window: the re-pin NOOP was in one module and not in the tool operators run, so the shipped CLI now reads NOOP over a declaration that already IS its own composition, through ONE comparison imported from repin_noop_parity, and a parity names the first field the two faces differ on. The battery ran first on the committed tree (508/508 suites, criteria total 4024 exactly as pre-registered).",
+    "latest_artifact": "src/os/repin_noop_parity.py plus its six-criteria suite (qa/repin-noop-parity-R2382.log, 3113B, two legs identical, four adjacent residue suites green) and the NOOP branch in src/os/residue_triage_repin.py; the live run reads verdict=AGREES with both faces carrying E_RTRP_UNMATCHED and the live declaration digest unchanged.",
+    "next_milestone": "R2383: the battery on the committed R2382 tree pre-registered at 509 suites / 4030 criteria (this window own parity suite), then the product face at the queue head (line 429 prefix AC-OUB1, own_usage_block_renderer). The seed this window MEASURED is repin_noop_eol_dialect (AC-RNED1..6): a declaration carrying CRLF reads PLANNED and is rewritten to LF as PINNED, so a byte-identical declaration is written where nothing needed writing.",
+    "next_milestone_due": "2026-11-04T16:42:50+08:00",
+    "last_artifact": "src/os/repin_noop_parity.py plus its six-criteria suite (qa/repin-noop-parity-R2382.log, 3113B, two legs identical, four adjacent residue suites green) and the NOOP branch in src/os/residue_triage_repin.py; the live run reads verdict=AGREES with both faces carrying E_RTRP_UNMATCHED and the live declaration digest unchanged.",
+    "updated_at": "2026-11-02T16:42:50+08:00"
   },
   "depts": [
     {
@@ -231,11 +231,16 @@
       "src/os/review_window_guard_parity.py",
       "on",
       "R2381 product: one parity hands a single declarations list to both review-window faces and asks only the question they share (does it rewind), reading PARITY-AGREES or PARITY-DISAGREES with both codes named - the live tree reads AGREES window=100"
+    ],
+    [
+      "src/os/repin_noop_parity.py",
+      "on",
+      "R2382 product: one comparison law decides NOOP for the shipped re-pin CLI and the wire, and a parity runs both faces over one declaration and names the first field they differ on - the live tree reads AGREES with the file digest unchanged"
     ]
   ],
   "results": [
     [
-      "2381",
+      "2382",
       "OSLoop 执行 tick"
     ],
     [
@@ -393,15 +398,19 @@
     [
       "R2381",
       "verification-then-product: the battery ran first on the committed tree and read PASS 507/507 suites plus controls 7/7 in 1604.7s with criteria total 4018 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as e3e42226. Then CLAIMED state/queue/tech.md:427 AC-RWGP1 review_window_guard_parity, criteria pinned there at R2371, anchors prose-only at HEAD. Shipped the parity so both faces are imported and asked at call time over one declaration; a two-sided rewind agrees on the carried E_RWHW_DECL_HISTORY, a monotonic list agrees with the declared window and the argument history word both reported, and any split reads PARITY-DISAGREES naming both codes. SUITE PASS 6/6 twice identical plus four adjacent suites green (2991B), wired os-review-window-guard-parity(6) so the registry reads 508/4024. LIVE: AGREES, window=100, byte-stable --json over eight pinned keys. Row stamped and one REAL measured gap seeded (blind agreement over an unreadable declaration)."
+    ],
+    [
+      "R2382",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 508/508 suites plus controls 7/7 in 1359.9s with criteria total 4024 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as d32692f3. Then CLAIMED state/queue/tech.md:428 AC-RNP1 repin_noop_parity, criteria pinned there at R2372, anchors prose-only at HEAD. Shipped the comparison so the shipped CLI reads NOOP over its own composition and the parity names a split, refusals compared by code then detail. SUITE PASS 6/6 twice identical plus four adjacent suites green (3113B), wired os-repin-noop-parity(6) so the registry reads 509/4030. LIVE: AGREES, both faces refusing E_RTRP_UNMATCHED, declaration digest unchanged. Row stamped and one REAL measured gap seeded (a CRLF declaration reads PLANNED and is rewritten)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -434,7 +443,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 361,
+        "done_rows": 362,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
