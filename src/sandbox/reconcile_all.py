@@ -5309,6 +5309,13 @@ SUITES = [
     # state/queue/tech.md:454 as the R2386 seed row BEFORE the code.)
     ("os-matrix-evidence-pile-consistency",
      os.path.join("..", "os", "test_matrix_evidence_pile_consistency.py"), 6),
+    # R2404: the matrix section already handed its tool the measured pile, but
+    # the follow-up CLI still joined a bare evidence name to the root and
+    # answered MISSING EVIDENCE - the only face an operator walks disagreed
+    # with the face that guarded the pile. (AC-FBEF1..AC-FBEF6 were pinned in
+    # state/queue/tech.md:476 as the R2396 seed row BEFORE the code.)
+    ("os-followup-bare-evidence-face",
+     os.path.join("..", "os", "test_followup_bare_evidence_face.py"), 6),
     # R2387: the review-window parity compares two rewind booleans, so it
     # reads PARITY-AGREES when NEITHER face could read the declaration - a
     # green over exactly the file that would break both paths. This face names

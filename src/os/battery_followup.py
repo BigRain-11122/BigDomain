@@ -304,11 +304,22 @@ def main(argv):
     except ValueError as exc:
         print(str(exc))
         return 5
-    evidence = os.path.join(opts["root"], opts["evidence"].replace("/", os.sep))
-    if not os.path.isfile(evidence):
+    # R2404 (AC-FBEF1..AC-FBEF6): a bare evidence name is resolved through the
+    # SAME measured pile the matrix section asks, so the CLI face and the
+    # section face name one file. A name carrying a directory, and a file that
+    # already sits at the root, keep today's string and today's refusal.
+    import followup_bare_evidence_face as FBEF
+    facing = FBEF.placement(opts["evidence"], opts["root"])
+    if facing["verdict"] != FBEF.RESOLVED:
+        print("MISSING EVIDENCE %s code=%s"
+              % (opts["evidence"], facing["code"]))
+        return 3
+    if not facing["exists"]:
         print("MISSING EVIDENCE %s" % opts["evidence"])
         return 3
-    report, bodies = sections(opts["root"], opts["evidence"], opts["label"],
+    argument = facing["argument"]
+    evidence = os.path.join(opts["root"], argument.replace("/", os.sep))
+    report, bodies = sections(opts["root"], argument, opts["label"],
                               opts["round"])
     if opts["dry_run"]:
         print(render(report), end="")

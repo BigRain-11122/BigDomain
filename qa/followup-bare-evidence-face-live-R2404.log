@@ -1,0 +1,14 @@
+LIVE R2404 followup bare evidence face on the real tree
+  bare=reconcile-all-R2394-retry.log pile=qa argument=qa\reconcile-all-R2394-retry.log exists=yes verdict=RESOLVED
+  OLD-JOIN root/reconcile-all-R2394-retry.log exists=no  (this is the MISSING EVIDENCE the operator used to see at exit 3)
+  with-dir=qa/reconcile-all-R2394-retry.log argument=qa/reconcile-all-R2394-retry.log exists=yes unchanged=yes
+  CLI ok rc=0
+    FOLLOWUP EVIDENCE evidence=reconcile-all-R2394-retry.log pile=qa verdict=RESOLVED
+      argument=qa\reconcile-all-R2394-retry.log exists=yes
+  CLI refused rc=3
+    FOLLOWUP EVIDENCE evidence=no-such-evidence-R2404.log pile=- verdict=REFUSED
+      argument=- exists=no
+      code=E_BEPR_NOT_FOUND evidence 'no-such-evidence-R2404.log' is not under root 'C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain'
+  CLI bad flag rc=5 line=E_FBEF_BAD_ARGS --nope
+  deep-pile file-exists=yes verdict=REFUSED code=E_BEPR_NOT_FOUND
+  module digest before=4d18d15c8bebc93a after=4d18d15c8bebc93a

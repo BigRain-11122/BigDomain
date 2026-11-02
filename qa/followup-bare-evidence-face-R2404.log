@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2404 suite=src/os/test_followup_bare_evidence_face.py legs=2
+== LEG A rc=0 digest=367AB2CB62A8B1E3
+followup_bare_evidence_face suite (expected criteria 6)
+PASS AC-FBEF1 a bare name living in exactly one pile is accepted and the sections receive that pile's path, and a patched pile moves what they receive
+PASS AC-FBEF2 a name that carries a directory is joined to the root exactly as today, byte for byte, including its refusal at exit 3 when absent
+PASS AC-FBEF3 a bare name that lives nowhere or in two piles refuses at exit 3 naming the pile law's own code, never a guessed pile
+PASS AC-FBEF4 the section report for an accepted bare name is byte-identical to the report produced from the same file passed with its directory
+PASS AC-FBEF5 CLI codes 0/2/3/5 and the --json payload are unchanged for every already-working invocation, and a resolved bare name no longer answers MISSING EVIDENCE
+PASS AC-FBEF6 pure ASCII, stdlib only, no clock, no network, asks the pile law at call time, plus its own reconcile label
+SUITE PASS 6/6
+== LEG B rc=0 digest=367AB2CB62A8B1E3
+followup_bare_evidence_face suite (expected criteria 6)
+PASS AC-FBEF1 a bare name living in exactly one pile is accepted and the sections receive that pile's path, and a patched pile moves what they receive
+PASS AC-FBEF2 a name that carries a directory is joined to the root exactly as today, byte for byte, including its refusal at exit 3 when absent
+PASS AC-FBEF3 a bare name that lives nowhere or in two piles refuses at exit 3 naming the pile law's own code, never a guessed pile
+PASS AC-FBEF4 the section report for an accepted bare name is byte-identical to the report produced from the same file passed with its directory
+PASS AC-FBEF5 CLI codes 0/2/3/5 and the --json payload are unchanged for every already-working invocation, and a resolved bare name no longer answers MISSING EVIDENCE
+PASS AC-FBEF6 pure ASCII, stdlib only, no clock, no network, asks the pile law at call time, plus its own reconcile label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_matrix_evidence_pile_consistency.py rc=0 SUITE PASS 6/6
+== src/os/test_bare_evidence_pile_refusal.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=367AB2CB62A8B1E3
