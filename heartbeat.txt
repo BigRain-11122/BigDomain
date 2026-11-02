@@ -1,1 +1,1 @@
-2026-11-02T23:59:00+08:00 R2390 owner_table_parity shipped; tech head now line 445 seeded AC-OTUW1; battery carried OPEN
+2026-11-02T21:40:00+08:00 R2391 export_publish_wire_identity shipped; live src/os reads WIRE over 11 publishers; dead register row repaired; battery carried OPEN

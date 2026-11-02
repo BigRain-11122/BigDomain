@@ -1,0 +1,27 @@
+EVIDENCE CAPTURE round=R2391 suite=src/os/test_export_publish_wire_identity.py legs=2
+== LEG A rc=0 digest=0010BFA86E461093
+PASS AC-EPWI1 AC-EPWI1 the routed publish names its callee module
+PASS AC-EPWI1b AC-EPWI1 the guard law is asked at call time, not restated
+PASS AC-EPWI2 AC-EPWI2 the wire reads WIRE, another module reads FOREIGN
+PASS AC-EPWI2b AC-EPWI2 a plain import of the wire resolves to the wire
+PASS AC-EPWI3 AC-EPWI3 nothing published reads NO-PUBLISH, not WIRE
+PASS AC-EPWI3b AC-EPWI3 a publish spelled in prose is not a call
+PASS AC-EPWI4 AC-EPWI4 import and call must agree, else UNRESOLVED
+PASS AC-EPWI5 AC-EPWI5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPWI6 AC-EPWI6 writes nothing, no clock, ascii, wired
+CRITERIA EXPECTED 6 OBSERVED 9 PASS 9 FAIL 0
+== LEG B rc=0 digest=0010BFA86E461093
+PASS AC-EPWI1 AC-EPWI1 the routed publish names its callee module
+PASS AC-EPWI1b AC-EPWI1 the guard law is asked at call time, not restated
+PASS AC-EPWI2 AC-EPWI2 the wire reads WIRE, another module reads FOREIGN
+PASS AC-EPWI2b AC-EPWI2 a plain import of the wire resolves to the wire
+PASS AC-EPWI3 AC-EPWI3 nothing published reads NO-PUBLISH, not WIRE
+PASS AC-EPWI3b AC-EPWI3 a publish spelled in prose is not a call
+PASS AC-EPWI4 AC-EPWI4 import and call must agree, else UNRESOLVED
+PASS AC-EPWI5 AC-EPWI5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPWI6 AC-EPWI6 writes nothing, no clock, ascii, wired
+CRITERIA EXPECTED 6 OBSERVED 9 PASS 9 FAIL 0
+== ADJACENT 2
+== src/os/test_export_publish_path_guard.py rc=0 NO SUITE LINE
+== src/os/test_owner_table_parity.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=2 fails=0 digest=0010BFA86E461093

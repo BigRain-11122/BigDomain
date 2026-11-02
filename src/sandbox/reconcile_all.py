@@ -5143,6 +5143,15 @@ SUITES = [
     # src/os/orphan_promote.py, so free labels were pinned and disclosed.)
     ("os-owner-table-parity",
      os.path.join("..", "os", "test_owner_table_parity.py"), 6),
+    # R2391: R2384 read any `.publish(..., EXPORT, ...)` as the proven route
+    # without asking WHICH module it resolves to, so a script could hand the
+    # export to another publisher and still read CLEAN while never touching
+    # the wire that proves the bytes. One reading now resolves the callee
+    # through the file's own import lines.
+    # (AC-EPWI1..AC-EPWI6 were pinned in state/queue/tech.md:447 as the R2384
+    # seed row BEFORE the code.)
+    ("os-export-publish-wire-identity",
+     os.path.join("..", "os", "test_export_publish_wire_identity.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

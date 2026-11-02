@@ -1,0 +1,3 @@
+STEP1 live root=src/os verdict=WIRE code=0 scanned=1046 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=11
+STEP2 foreign-fixture verdict=FOREIGN code=2 foreign=foreign_pub.py modules=some_other_module
+STEP3 module-digest before=59771b8fc9405180 after=59771b8fc9405180 unchanged=True
