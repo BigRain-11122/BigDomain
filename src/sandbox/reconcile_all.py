@@ -5265,6 +5265,16 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-bare-evidence-pile-refusal",
      os.path.join("..", "os", "test_bare_evidence_pile_refusal.py"), 6),
+    # R2396: the matrix section guarded the pile a bare evidence name was
+    # MEASURED to live in, but still handed the ORIGINAL string to the tool -
+    # which resolves it against the root, so the guard could speak about one
+    # pile while the rendered doc came from another. The tool argument is now
+    # derived from that same measured pile, a name carrying a directory is
+    # handed through byte for byte, and a name that cannot be placed refuses
+    # before the tool is called at all. (AC-MEPC1..AC-MEPC6 were pinned in
+    # state/queue/tech.md:454 as the R2386 seed row BEFORE the code.)
+    ("os-matrix-evidence-pile-consistency",
+     os.path.join("..", "os", "test_matrix_evidence_pile_consistency.py"), 6),
     # R2387: the review-window parity compares two rewind booleans, so it
     # reads PARITY-AGREES when NEITHER face could read the declaration - a
     # green over exactly the file that would break both paths. This face names

@@ -1,0 +1,7 @@
+STEP1 evidence=reconcile-all-R2394-retry.log pile=qa argument=qa\reconcile-all-R2394-retry.log verdict=PLACED
+STEP2 evidence=qa/reconcile-all-R2394-retry.log argument=qa/reconcile-all-R2394-retry.log unchanged=True
+STEP3 same_file=True tool_exists=True bare_at_root=False
+STEP4 missing_rc=2 code_line=  code=E_BEPR_NOT_FOUND evidence 'reconcile-all-R0000.log' is not under root 'C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain'
+STEP5 cli_rc=0 guard=VOCABULARY-CLEAN reading=MATRIX EVIDENCE PILE evidence=reconcile-all-R2394-retry.log pile=qa verdict=PLACED
+STEP6 digest_before=a61eab556143c832 digest_after=a61eab556143c832 unchanged=True
+VERDICT LIVE-ALIGNED

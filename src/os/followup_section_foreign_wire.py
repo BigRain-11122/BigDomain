@@ -115,6 +115,7 @@ def matrix_section(root, evidence, call, directory=None):
     is read. An explicit directory still wins, and an evidence path under qa
     derives 'qa', keeping the normal reading byte-identical (AC-FGES2).
     """
+    import matrix_evidence_pile_consistency as MEPC
     if directory is None:
         import followup_guard_evidence_scope as FGES
         directory = FGES.evidence_dir(evidence)
@@ -127,8 +128,17 @@ def matrix_section(root, evidence, call, directory=None):
             try:
                 directory = BEPR.pile_for(evidence, root)
             except BEPR.BareEvidencePileRefusalError as exc:
-                return {"section": SECTION_NAME, "verdict": "FAIL",
-                        "detail": "%s evidence=%s" % (exc.code, evidence)}, ""
+                return MEPC.refusal_entry(
+                    MEPC.E_MEPC_UNPLACEABLE,
+                    "%s %s" % (exc.code, exc.detail), evidence), ""
+    # R2396 (AC-MEPC1/AC-MEPC4): the pile was measured but the ORIGINAL string
+    # was still handed to the tool, and the tool resolves it against the root -
+    # so the guard could speak about one pile while the doc was built from
+    # another. The argument is now derived from THAT SAME measured pile, and a
+    # name that cannot be placed refuses before the tool is called at all.
+    evidence, refused = MEPC.align(evidence, root, directory)
+    if refused is not None:
+        return refused, ""
     reading = guard(root, directory)
     if reading["verdict"] == FSF.VERDICT_FOREIGN:
         return {"section": SECTION_NAME, "verdict": "FAIL",

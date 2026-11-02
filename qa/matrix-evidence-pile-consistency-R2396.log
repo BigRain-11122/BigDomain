@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2396 suite=src/os/test_matrix_evidence_pile_consistency.py legs=2
+== LEG A rc=0 digest=4036966E1D35BF81
+matrix_evidence_pile_consistency suite (expected criteria 6)
+PASS AC-MEPC1 a bare evidence name reaches the tool as the measured pile plus the basename, and a patched derivation moves the argument the tool receives
+PASS AC-MEPC2 a name that carries a directory is handed through unchanged, byte for byte, and its section report is the pre-wire reading
+PASS AC-MEPC3 the tool argument and the guarded pile resolve to the same file under a root that is not the cwd - the old bare name resolved to nothing there
+PASS AC-MEPC4 a name that cannot be placed refuses before the tool is called at all, so no doc is rendered from a pile the guard cannot name
+PASS AC-MEPC5 the section report for an unchanged pile stays byte-identical to the R2386 reading and the CLI codes 0/2/3/5 with a byte-stable --json over the pinned keys are unchanged
+PASS AC-MEPC6 pure ASCII, stdlib only, zero network, no clock, the sibling laws imported at call time, asked by the matrix section, plus its own reconcile label
+SUITE PASS 6/6
+== LEG B rc=0 digest=4036966E1D35BF81
+matrix_evidence_pile_consistency suite (expected criteria 6)
+PASS AC-MEPC1 a bare evidence name reaches the tool as the measured pile plus the basename, and a patched derivation moves the argument the tool receives
+PASS AC-MEPC2 a name that carries a directory is handed through unchanged, byte for byte, and its section report is the pre-wire reading
+PASS AC-MEPC3 the tool argument and the guarded pile resolve to the same file under a root that is not the cwd - the old bare name resolved to nothing there
+PASS AC-MEPC4 a name that cannot be placed refuses before the tool is called at all, so no doc is rendered from a pile the guard cannot name
+PASS AC-MEPC5 the section report for an unchanged pile stays byte-identical to the R2386 reading and the CLI codes 0/2/3/5 with a byte-stable --json over the pinned keys are unchanged
+PASS AC-MEPC6 pure ASCII, stdlib only, zero network, no clock, the sibling laws imported at call time, asked by the matrix section, plus its own reconcile label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_bare_evidence_pile_refusal.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_guard_evidence_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_section_foreign_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=4036966E1D35BF81
