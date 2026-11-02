@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T13:35:03+08:00",
-  "do": "R2378 verification-then-product window: the export parity finally has a CALLER. The battery ran first on the committed tree (504/504 suites, criteria total 4000 exactly as pre-registered), then the queue head was claimed and closeout_export_parity_wire shipped - the closeout now stages the bytes it is about to publish, asks the parity over the staged document, and only replaces the export on AGREES.",
+  "export_ts": "2026-11-02T14:29:07+08:00",
+  "do": "R2379 verification-then-product window: the residue batch face now names the LIVE STATUS of every residue round. The battery ran first on the committed tree (505/505 suites, criteria total 4006 exactly as pre-registered), then the queue head was claimed and residue_batch_status_face shipped - the batch CLI --check now asks it, so a --pair list is composed from one call instead of a second tool plus a guess.",
   "ceo_face": {
-    "current": "R2378 verification-then-product window: the export parity finally has a CALLER. The battery ran first on the committed tree (504/504 suites, criteria total 4000 exactly as pre-registered), then the queue head was claimed and closeout_export_parity_wire shipped - the closeout now stages the bytes it is about to publish, asks the parity over the staged document, and only replaces the export on AGREES.",
-    "latest_artifact": "src/os/closeout_export_parity_wire.py plus its six-criteria suite (qa/closeout-export-parity-wire-R2378.log, 3023B, two legs identical, four adjacent suites green); the live run over docs/status-export.json read WRITTEN reading=AGREES at 80266 bytes with no staged residue, and closeout_R2377.py now publishes its export through it.",
-    "next_milestone": "R2379: the battery on the committed R2378 tree pre-registered at 505 suites / 4006 criteria (this window own suite), then the product face at the queue head the reader names (line 425 prefix AC-RSBF1). The seed this window measured is export_publish_path_guard (AC-EPPG1..6): of the three closeout scripts that publish the export, only closeout_R2377.py asks the parity wire, and nothing reads that.",
-    "next_milestone_due": "2026-11-04T13:35:03+08:00",
-    "last_artifact": "src/os/closeout_export_parity_wire.py plus its six-criteria suite (qa/closeout-export-parity-wire-R2378.log, 3023B, two legs identical, four adjacent suites green); the live run over docs/status-export.json read WRITTEN reading=AGREES at 80266 bytes with no staged residue, and closeout_R2377.py now publishes its export through it.",
-    "updated_at": "2026-11-02T13:35:03+08:00"
+    "current": "R2379 verification-then-product window: the residue batch face now names the LIVE STATUS of every residue round. The battery ran first on the committed tree (505/505 suites, criteria total 4006 exactly as pre-registered), then the queue head was claimed and residue_batch_status_face shipped - the batch CLI --check now asks it, so a --pair list is composed from one call instead of a second tool plus a guess.",
+    "latest_artifact": "src/os/residue_batch_status_face.py plus its six-criteria suite (qa/residue-batch-status-face-R2379.log, 1245B, two legs identical, four adjacent suites green); the live run over the real tree names 225 residue rounds with DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0 and the batch --check carries those statuses, where before this window it printed no status at all.",
+    "next_milestone": "R2380: the battery on the committed R2379 tree pre-registered at 506 suites / 4012 criteria (this window own suite), then the product face at the queue head the reader names (line 426 prefix AC-FGES1). The seed this window measured is single_append_status_face (AC-SASF1..6): the batch writer now names live statuses, but the single-entry writer --check still prints none, so a one-round append costs the same refused call.",
+    "next_milestone_due": "2026-11-04T14:29:07+08:00",
+    "last_artifact": "src/os/residue_batch_status_face.py plus its six-criteria suite (qa/residue-batch-status-face-R2379.log, 1245B, two legs identical, four adjacent suites green); the live run over the real tree names 225 residue rounds with DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0 and the batch --check carries those statuses, where before this window it printed no status at all.",
+    "updated_at": "2026-11-02T14:29:07+08:00"
   },
   "depts": [
     {
@@ -216,11 +216,16 @@
       "src/os/closeout_export_parity_wire.py",
       "on",
       "R2378 product: the closeout now stages the bytes it is about to publish, asks export_closeout_gate_parity over the staged document and only replaces the export on AGREES - a refusal leaves the file byte-identical with no residue, an agreeing reading writes and reads back, and the live run read WRITTEN/AGREES at 80266 bytes"
+    ],
+    [
+      "src/os/residue_batch_status_face.py",
+      "on",
+      "R2379 product: the live status of every residue round is one reading (stamp_residue's own, reached through residue_triage), the batch CLI --check asks it and names each round with its status, and a round outside the residue reads NOT-RESIDUE - the live tree reads 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0"
     ]
   ],
   "results": [
     [
-      "2378",
+      "2379",
       "OSLoop 执行 tick"
     ],
     [
@@ -366,6 +371,10 @@
     [
       "R2378",
       "verification-then-product: the battery ran first on the committed tree and read PASS 504/504 suites plus controls 7/7 in 1320.0s with criteria total 4000 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as ac0e183b. Then CLAIMED state/queue/tech.md:424 AC-CEPW1 closeout_export_parity_wire, criteria pinned there at R2377, anchors prose-only at HEAD. Shipped the wire: stage, ask the parity, publish on AGREES only, no residue on refusal, compose owned by the parity closeout_style so no second formatter exists, and src/os/closeout_R2377.py now publishes its export through it. SUITE PASS 6/6 twice identical plus four adjacent suites green (3023B), wired os-closeout-export-parity-wire(6) so the registry reads 505/4006. LIVE: WRITTEN reading=AGREES at 80266 bytes, gate CURRENT, second run byte-identical, no staged residue. Row stamped and one REAL measured gap seeded (export_publish_path_guard: two older closeouts still publish directly)."
+    ],
+    [
+      "R2379",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 505/505 suites plus controls 7/7 in 1334.7s with criteria total 4006 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as a79df5b9. Then CLAIMED state/queue/tech.md:425 AC-RSBF1 residue_batch_status_face, criteria pinned there at R2369, anchors prose-only at HEAD. Shipped the face: the status map is residue_triage.live_residue over stamp_residue's own read, the vocabulary is read at call time, --check names every round with its status, a round outside the residue reads NOT-RESIDUE at exit 2, exits 0/2/3/5 with a byte-stable pinned --json, and the batch CLI --check now asks it at call time while --append never touches it. SUITE PASS 6/6 twice identical plus four adjacent suites green (1245B), wired os-residue-batch-status-face(6) so the registry reads 506/4012. LIVE: 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0, json byte-stable, R1755 FOUND, R9999 NOT-RESIDUE, batch carries the statuses. Row stamped and one REAL measured gap seeded (single_append_status_face: the single-entry writer still names no status)."
     ]
   ],
   "self_drive": {
@@ -407,7 +416,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 358,
+        "done_rows": 359,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

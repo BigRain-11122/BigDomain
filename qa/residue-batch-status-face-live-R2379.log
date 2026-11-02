@@ -1,0 +1,8 @@
+LIVE R2379 residue_batch_status_face on the real tree
+STEP1 map rc=0 RESIDUE BATCH STATUS action=check rounds=225 requested=- requested_status=- counts=DELIVERED=205,STAMP-ONLY-OPEN=20,NO-HIT=0 verdict=MAP source=stamp_residue via residue_triage
+STEP2 json rc=0,0 byte_stable=True
+STEP3 known R1755 rc=0 RESIDUE BATCH STATUS action=check rounds=225 requested=R1755 requested_status=DELIVERED counts=DELIVERED=205,STAMP-ONLY-OPEN=20,NO-HIT=0 verdict=FOUND source=stamp_residue via residue_triage
+STEP4 absent rc=2 RESIDUE BATCH STATUS action=check rounds=225 requested=R9999 requested_status=NOT-RESIDUE counts=DELIVERED=205,STAMP-ONLY-OPEN=20,NO-HIT=0 verdict=NOT-RESIDUE source=stamp_residue via residue_triage
+STEP5 batch-check rc=0 carries_statuses=True
+STEP5 line RESIDUE TRIAGE APPEND BATCH action=check rounds=R1755,R1763,R1824,R1825,R1883,R1884,R1885,R1886,R1889,R1891,R1894,R1896,R1897,R1898,R1902,R1905,R1907,R1908,R1909,R1910,R1911,R1912,R1913,R1914,R1915,R1916,R1923,R1926,R1927,R1929,R1930,R1931,R1932,R1933,R1934,R1935,R1936,R1937,R1938,R1939,R1940,R1941,R1942,R1943,R1945,R1946,R1947,R1957,R1958,R1976,R2038,R2059,R2062,R2072,R2077,R2078,R2079,R2081,R208
+VERDICT LIVE-FACE rounds=225

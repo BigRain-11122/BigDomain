@@ -329,10 +329,19 @@ def check(root, round_value):
             code = "E_RTAB_BAD_STATE"
         raise ResidueTriageAppendBatchError(
             code, "%s: %s" % (exc.code, exc.detail))
+    # The live status of every residue round is the status face's reading
+    # (AC-RSBF2), imported at CALL time so this module still loads without it
+    # and the --append path never reaches it (AC-RSBF4).
+    import residue_batch_status_face as RSBF
+    try:
+        face = RSBF.face(root)
+    except RSBF.ResidueBatchStatusFaceError as exc:
+        raise ResidueTriageAppendBatchError(
+            "E_RTAB_BAD_STATE", "%s: %s" % (exc.code, exc.detail))
     return {
         "action": "check",
-        "rounds": [],
-        "statuses": [],
+        "rounds": list(face["rounds"]),
+        "statuses": list(face["statuses"]),
         "declared_by": "-" if report["declared_by"] is None
         else report["declared_by"],
         "until": "-",
@@ -367,6 +376,9 @@ def one_line(report):
 def render(report):
     """The one line, then every round still awaiting an entry."""
     out = [one_line(report)]
+    for index, label in enumerate(report["rounds"]):
+        out.append("  ROUND %s status=%s"
+                   % (label, report["statuses"][index]))
     for value in report["residue"]:
         out.append("  RESIDUE R%d has no dated entry yet" % value)
     return "\n".join(out)

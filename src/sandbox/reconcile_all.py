@@ -5135,6 +5135,15 @@ SUITES = [
     # BEFORE the code.)
     ("os-closeout-export-parity-wire",
      os.path.join("..", "os", "test_closeout_export_parity_wire.py"), 6),
+    # R2379: the batch writer refused a status that disagreed with the live
+    # reading, but nothing told the operator WHAT that status was, so a --pair
+    # list cost a refused call to compose. This face names every residue round
+    # with its live status (stamp_residue's own read, reached through
+    # residue_triage) and reads NOT-RESIDUE for a round outside it, and the
+    # batch CLI's --check now asks it. (AC-RSBF1..AC-RSBF6 were pinned in
+    # state/queue/tech.md:425 as the R2369 seed row BEFORE the code.)
+    ("os-residue-batch-status-face",
+     os.path.join("..", "os", "test_residue_batch_status_face.py"), 6),
     ]
 
 FAILS = 0

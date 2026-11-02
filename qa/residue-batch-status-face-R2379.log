@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2379 suite=src/os/test_residue_batch_status_face.py legs=2
+== LEG A rc=0 digest=598373B18F67962E
+SUITE os-residue-batch-status-face
+PASS AC-RSBF1 the status map is stamp_residue's own reading
+PASS AC-RSBF2 every residue round is named with its status
+PASS AC-RSBF3 NOT-RESIDUE carries its own code
+PASS AC-RSBF4 the append path is untouched by this face
+PASS AC-RSBF5 exit codes and a byte-stable pinned --json
+PASS AC-RSBF6 pure stdlib, ASCII, no clock, runner label wired
+SUITE 6/6
+== LEG B rc=0 digest=598373B18F67962E
+SUITE os-residue-batch-status-face
+PASS AC-RSBF1 the status map is stamp_residue's own reading
+PASS AC-RSBF2 every residue round is named with its status
+PASS AC-RSBF3 NOT-RESIDUE carries its own code
+PASS AC-RSBF4 the append path is untouched by this face
+PASS AC-RSBF5 exit codes and a byte-stable pinned --json
+PASS AC-RSBF6 pure stdlib, ASCII, no clock, runner label wired
+SUITE 6/6
+== ADJACENT 4
+== src/os/test_residue_triage_append_batch.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=598373B18F67962E
