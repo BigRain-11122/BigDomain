@@ -129,7 +129,8 @@ column-0 checkbox starts one.
 - [x] opened=R2376 | item=reconcile-battery-R2376 | note=R2376 shipped queue_export_gate_wire plus its six-criteria suite and wired os-queue-export-gate-wire, so the registry has not walked that edit yet. Run the full reconcile battery on the committed R2376 tree with an empty git status, pre-registered at 503 suites / 3994 criteria, then the four follow-up sections through src/os/battery_followup.py. Then the product face at the queue head the reader names. | closed=R2378
 - [x] opened=R2378 | item=reconcile-battery-R2378 | note=R2378 shipped closeout_export_parity_wire plus its six-criteria suite, wired os-closeout-export-parity-wire, and rerouted closeout_R2377.py through it; battery target 505 suites / 4006 criteria on the committed tree | closed=R2379
 - [x] opened=R2379 | item=reconcile-battery-R2379 | note=R2379 shipped residue_batch_status_face plus its six-criteria suite, wired os-residue-batch-status-face, and wired the batch CLI --check through it; battery target 506 suites / 4012 criteria on the committed tree | closed=R2380
-- [ ] opened=R2380 | item=reconcile-battery-R2380 | note=R2380 shipped followup_guard_evidence_scope plus its six-criteria suite, wired os-followup-guard-evidence-scope, and the follow-up matrix section now derives its guarded pile from the evidence path; battery target 507 suites / 4018 criteria on the committed tree | first=yes
+- [x] opened=R2380 | item=reconcile-battery-R2380 | note=R2380 shipped followup_guard_evidence_scope plus its six-criteria suite, wired os-followup-guard-evidence-scope, and the follow-up matrix section now derives its guarded pile from the evidence path; battery target 507 suites / 4018 criteria on the committed tree | closed=R2381
+- [ ] opened=R2381 | item=reconcile-battery-R2381 | note=battery target 508 suites / 4024 criteria on the committed R2381 tree (this window os-review-window-guard-parity suite) | first=yes
 
 ## Closed
 

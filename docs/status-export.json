@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T15:07:09+08:00",
-  "do": "R2380 verification-then-product window: the follow-up matrix section now guards the pile the EVIDENCE belongs to instead of a hard-coded 'qa', so the refusal and the matrix always describe the same logs. The battery ran first on the committed tree (506/506 suites, criteria total 4012 exactly as pre-registered), then the queue head was claimed and followup_guard_evidence_scope shipped.",
+  "export_ts": "2026-11-02T16:03:12+08:00",
+  "do": "R2381 verification-then-product window: the same declarations list is now measured across both review-window faces by one parity, so a future edit to either law can no longer split the declared path and the argument path in silence. The battery ran first on the committed tree (507/507 suites, criteria total 4018 exactly as pre-registered), then the queue head was claimed and review_window_guard_parity shipped.",
   "ceo_face": {
-    "current": "R2380 verification-then-product window: the follow-up matrix section now guards the pile the EVIDENCE belongs to instead of a hard-coded 'qa', so the refusal and the matrix always describe the same logs. The battery ran first on the committed tree (506/506 suites, criteria total 4012 exactly as pre-registered), then the queue head was claimed and followup_guard_evidence_scope shipped.",
-    "latest_artifact": "src/os/followup_guard_evidence_scope.py plus its six-criteria suite (qa/followup-guard-evidence-scope-R2380.log, 1988B, two legs identical, three adjacent suites green); the live run over the real tree reads derived_dir=qa with the guarded section identical_to_core=True, where before this window a matrix built from any other pile was protected by a reading of qa.",
-    "next_milestone": "R2381: the battery on the committed R2380 tree pre-registered at 507 suites / 4018 criteria (this window own suite), then the product face at the queue head the reader names (line 427 prefix AC-RWGP1). The seed this window measured is bare_evidence_pile_refusal (AC-BEPR1..6): the pile now follows the evidence path, but a path with no directory part still falls back to 'qa' in silence.",
-    "next_milestone_due": "2026-11-04T15:07:09+08:00",
-    "last_artifact": "src/os/followup_guard_evidence_scope.py plus its six-criteria suite (qa/followup-guard-evidence-scope-R2380.log, 1988B, two legs identical, three adjacent suites green); the live run over the real tree reads derived_dir=qa with the guarded section identical_to_core=True, where before this window a matrix built from any other pile was protected by a reading of qa.",
-    "updated_at": "2026-11-02T15:07:09+08:00"
+    "current": "R2381 verification-then-product window: the same declarations list is now measured across both review-window faces by one parity, so a future edit to either law can no longer split the declared path and the argument path in silence. The battery ran first on the committed tree (507/507 suites, criteria total 4018 exactly as pre-registered), then the queue head was claimed and review_window_guard_parity shipped.",
+    "latest_artifact": "src/os/review_window_guard_parity.py plus its six-criteria suite (qa/review-window-guard-parity-R2381.log, 2991B, two legs identical, four adjacent review-window suites green); the live run over the real tree reads verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes.",
+    "next_milestone": "R2382: the battery on the committed R2381 tree pre-registered at 508 suites / 4024 criteria (this window own suite), then the product face at the queue head the reader names (line 428 prefix AC-RNP1). The seed this window measured is review_window_guard_parity_blind_agreement (AC-RWGB1..6): the parity reads PARITY-AGREES over a declaration NEITHER face could parse, so agreement-on-ignorance currently reads as agreement.",
+    "next_milestone_due": "2026-11-04T16:03:12+08:00",
+    "last_artifact": "src/os/review_window_guard_parity.py plus its six-criteria suite (qa/review-window-guard-parity-R2381.log, 2991B, two legs identical, four adjacent review-window suites green); the live run over the real tree reads verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes.",
+    "updated_at": "2026-11-02T16:03:12+08:00"
   },
   "depts": [
     {
@@ -226,11 +226,16 @@
       "src/os/followup_guard_evidence_scope.py",
       "on",
       "R2380 product: the guarded pile of the follow-up matrix section is derived from the evidence path, so a matrix built from any pile is refused on THAT pile rather than protected by a reading of qa, and an evidence path under qa keeps the old reading byte for byte - the live tree reads derived_dir=qa identical_to_core=True"
+    ],
+    [
+      "src/os/review_window_guard_parity.py",
+      "on",
+      "R2381 product: one parity hands a single declarations list to both review-window faces and asks only the question they share (does it rewind), reading PARITY-AGREES or PARITY-DISAGREES with both codes named - the live tree reads AGREES window=100"
     ]
   ],
   "results": [
     [
-      "2380",
+      "2381",
       "OSLoop 执行 tick"
     ],
     [
@@ -384,15 +389,19 @@
     [
       "R2380",
       "verification-then-product: the battery ran first on the committed tree and read PASS 506/506 suites plus controls 7/7 in 1233.7s with criteria total 4012 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as 2215a2b9. Then CLAIMED state/queue/tech.md:426 AC-FGES1 followup_guard_evidence_scope, criteria pinned there at R2370, anchors prose-only at HEAD. Shipped the pile derivation as one pure module and rerouted the matrix section through it at call time, so a patched derivation moves which pile is read while an explicit directory still wins. SUITE PASS 6/6 twice identical plus three adjacent suites green (1988B), wired os-followup-guard-evidence-scope(6) so the registry reads 507/4018. LIVE: derived_dir=qa, identical_to_core=True, abs_dir=qa, cli_rc=0. Row stamped and one REAL measured gap seeded (bare_evidence_pile_refusal: a bare filename still falls back to qa)."
+    ],
+    [
+      "R2381",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 507/507 suites plus controls 7/7 in 1604.7s with criteria total 4018 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as e3e42226. Then CLAIMED state/queue/tech.md:427 AC-RWGP1 review_window_guard_parity, criteria pinned there at R2371, anchors prose-only at HEAD. Shipped the parity so both faces are imported and asked at call time over one declaration; a two-sided rewind agrees on the carried E_RWHW_DECL_HISTORY, a monotonic list agrees with the declared window and the argument history word both reported, and any split reads PARITY-DISAGREES naming both codes. SUITE PASS 6/6 twice identical plus four adjacent suites green (2991B), wired os-review-window-guard-parity(6) so the registry reads 508/4024. LIVE: AGREES, window=100, byte-stable --json over eight pinned keys. Row stamped and one REAL measured gap seeded (blind agreement over an unreadable declaration)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 10,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -425,7 +434,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 360,
+        "done_rows": 361,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
