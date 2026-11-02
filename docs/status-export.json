@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T09:13:00+08:00",
-  "do": "R2371 product window: the explicit --window path finally ASKS the history. `exempt_review --window N` used to take the caller's number and age every accepted entry without ever noticing that the declarations list is not a history; now a list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds, before any entry is aged, while a monotonic, UNPINNED or DRIFT declaration keeps its reading byte-identical.",
+  "export_ts": "2026-11-02T10:01:42+08:00",
+  "do": "R2372 product window: the re-pin finally has a NOOP. A second re-pin over an already-pinned declaration composed bytes IDENTICAL to the file and still reported PLANNED, so --execute rewrote the same bytes and reported PINNED and no reader could tell 'nothing to do' from 'I wrote it'. The wire compares the composed document with the file and reads NOOP, returning before the writer is entered; the decision is bytes and never the head round, and every non-NOOP path is still the shipped writer's own report, codes and JSON order.",
   "ceo_face": {
-    "current": "R2371 product window: the explicit --window path finally ASKS the history. `exempt_review --window N` used to take the caller's number and age every accepted entry without ever noticing that the declarations list is not a history; now a list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds, before any entry is aged, while a monotonic, UNPINNED or DRIFT declaration keeps its reading byte-identical.",
-    "latest_artifact": "src/os/review_window_wire_argument_guard.py plus its six-criteria suite (qa/review-window-wire-argument-guard-R2371.log, two identical legs plus four adjacent suites green), the live reading of the real declarations list (qa/review-window-wire-argument-guard-live-R2371.log, ARGUMENT-CLEAN / EMPTY-HISTORY / window=100, declaration sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2371.log, RUNNER PASS 497/497, criteria 3958).",
-    "next_milestone": "R2372: the battery on the committed R2371 tree pre-registered at 498 suites / 3964 criteria (this window own os-review-window-wire-argument-guard suite), then the product face at the queue head the reader names - it currently offers line 418 prefix AC-RTRI1 (residue_triage_repin_idempotent); the seed this window measured is review_window_guard_parity (AC-RWGP1..6), because the declared and argument paths now refuse the same file with the same code and nothing measures that the pair agrees over ONE declaration.",
-    "next_milestone_due": "2026-11-04T09:13:00+08:00",
-    "last_artifact": "src/os/review_window_wire_argument_guard.py plus its six-criteria suite (qa/review-window-wire-argument-guard-R2371.log, two identical legs plus four adjacent suites green), the live reading of the real declarations list (qa/review-window-wire-argument-guard-live-R2371.log, ARGUMENT-CLEAN / EMPTY-HISTORY / window=100, declaration sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2371.log, RUNNER PASS 497/497, criteria 3958).",
-    "updated_at": "2026-11-02T09:13:00+08:00"
+    "current": "R2372 product window: the re-pin finally has a NOOP. A second re-pin over an already-pinned declaration composed bytes IDENTICAL to the file and still reported PLANNED, so --execute rewrote the same bytes and reported PINNED and no reader could tell 'nothing to do' from 'I wrote it'. The wire compares the composed document with the file and reads NOOP, returning before the writer is entered; the decision is bytes and never the head round, and every non-NOOP path is still the shipped writer's own report, codes and JSON order.",
+    "latest_artifact": "src/os/residue_triage_repin_idempotent.py plus its six-criteria suite (qa/residue-triage-repin-idempotent-R2372.log, two identical legs plus four adjacent suites green), the live parity leg on the real declaration (qa/residue-triage-repin-idempotent-live-R2372.log, LIVE-PARITY, sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2372.log, RUNNER PASS 498/498, criteria 3964).",
+    "next_milestone": "R2373: the battery on the committed R2372 tree pre-registered at 499 suites / 3970 criteria (this window own os-residue-triage-repin-idempotent suite), then the product face at the queue head the reader names - it currently offers line 419 prefix AC-CUR1 (contract_usage_renderer); the seed this window measured is repin_noop_parity (AC-RNP1..6), because the NOOP exists in the wire and not in the tool operators run, so one act still has two answers.",
+    "next_milestone_due": "2026-11-04T10:01:42+08:00",
+    "last_artifact": "src/os/residue_triage_repin_idempotent.py plus its six-criteria suite (qa/residue-triage-repin-idempotent-R2372.log, two identical legs plus four adjacent suites green), the live parity leg on the real declaration (qa/residue-triage-repin-idempotent-live-R2372.log, LIVE-PARITY, sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2372.log, RUNNER PASS 498/498, criteria 3964).",
+    "updated_at": "2026-11-02T10:01:42+08:00"
   },
   "depts": [
     {
@@ -181,11 +181,16 @@
       "src/os/review_window_wire_argument_guard.py",
       "on",
       "R2371 product: the explicit --window argument path asks review_window_history FIRST, so a declarations list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds before any entry is aged; the rewind law is imported at call time and the code is carried through the wire's own mapping, a monotonic or UNPINNED or DRIFT declaration keeps its reading byte-identical, and the declaration bytes stay untouched; six criteria green twice plus a live reading of the real list"
+    ],
+    [
+      "src/os/residue_triage_repin_idempotent.py",
+      "on",
+      "R2372 product: the re-pin reads NOOP when the composed declaration equals the file on disk, decided by BYTES and never by the head round (the module never mentions declared_by), returning before the writer is entered so no temp file is created and the atomic write path is not doubled; a one-byte content drift reads PLANNED again, and every non-NOOP path is the shipped writer's own report printed through the shipped renderer and serialiser, with the two CLIs proved byte-identical on PLANNED and on refusals and NOOP at exit 0; six criteria green twice plus a live parity leg on the real declaration"
     ]
   ],
   "results": [
     [
-      "2371",
+      "2372",
       "OSLoop 执行 tick"
     ],
     [
@@ -303,15 +308,19 @@
     [
       "R2371",
       "verification then product: the debt gate named reconcile-battery-R2370, so the battery ran first on the committed 5d9485d2 tree - RUNNER PASS 497/497 suites plus controls 7/7 in 987.8s, criteria total 3958 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2371.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 497/3958 (47582B, VERDICT PASS); evidence and matrix committed alone as 5d9485d2. Then the claimed row: state/queue/tech.md:417 AC-RWAG1 review_window_wire_argument_guard, its six criteria pinned in that row at R2359 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the guard plus its six-criteria suite: the history law is imported at call time (proved by patching it and watching both the library report and the CLI move) and the refusal code is carried through review_window_wire.carry_history_code, so `exempt_review --window N` refuses a rewinding list with the same E_RWHW_DECL_HISTORY the declared path uses, naming both rounds; UNPINNED, DRIFT, a moved list and an unreadable file all leave the explicit window's reading byte-identical because that window is the caller's, and the refusal lands before any entry is aged with zero counts and WINDOW-REFUSED while the declaration bytes are untouched. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/review-window-wire-argument-guard-R2371.log, 3426B), wired os-review-window-wire-argument-guard(6). LIVE: the real declarations list reads ARGUMENT-CLEAN / EMPTY-HISTORY / window=100 / declared_by=R2305 at exit 0 and both exempt_review paths read 9 entries 0 stale with the declaration sha256 unchanged. Row stamped and one REAL measured gap row seeded (review_window_guard_parity, AC-RWGP1..6: the two paths now refuse the same file with the same code but nothing measures that they agree over one declaration), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first battery invocation was cancelled by a truncating pipe (the known trap) with zero survivors and no evidence file before the direct-stream rerun; three suite reds were this window own assertions and fixtures, corrected to the measured truth without widening a criterion; and one REAL module defect was found on the way - the refusal detail now carries the history code exactly as the declared path does"
+    ],
+    [
+      "R2372",
+      "verification then product: the debt gate named reconcile-battery-R2371, so the battery ran first on the committed 674adfa9 tree, unfiltered - RUNNER PASS 498/498 suites plus controls 7/7 in 933.3s, criteria total 3964 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2372.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 498/3964 (47697B, VERDICT PASS); evidence and matrix committed alone as be1ac6a. Then the claimed row: state/queue/tech.md:418 AC-RTRI1 residue_triage_repin_idempotent, its six criteria pinned in that row at R2363 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the wire plus its six-criteria suite: the composition is residue_triage_repin.build and the writer is residue_triage_repin.plan (a patched build moves the reading, a patched plan moves the executed path, and nothing here calls os.replace or json.dumps), NOOP fires only on byte equality and returns before the writer is entered, and the CLI codes and --json key order are pinned to the shipped ones. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/residue-triage-repin-idempotent-R2372.log, 3090B), wired os-residue-triage-repin-idempotent(6). LIVE: both CLIs byte-identical over the real declaration and its sha256 unchanged across two dry runs (65393B), while the same call still composes 65210B - the live declaration IS stale, so NOOP is proved on fixtures and not claimed as a live catch. Row stamped (predicted=measured 1472542B) and one REAL measured gap seeded (repin_noop_parity, AC-RNP1..6: the NOOP exists in the wire and not in the shipped CLI, so one act has two answers), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: two suite reds were this window own fixture and assertion (a missing seeded declaration, and a byte-count delta where a content delta was meant), one red was the absent registry entry, and decide reads the declaration twice on the non-NOOP path rather than reproducing the writer"
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 6,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2372 suite=src/os/test_residue_triage_repin_idempotent.py legs=2
+== LEG A rc=0 digest=EC428BE0B102E138
+PASS AC-RTRI1 an already-pinned declaration reads NOOP with executed=False, the file digest unchanged, no temp file and the writer never entered
+PASS AC-RTRI2 the NOOP reading is decided by BYTES and not by the head round: a declaration pinned at the older R2360 still reads NOOP for R2360 while the same file at R2372 reads PLANNED, and the module never mentions declared_by
+PASS AC-RTRI3 a composition that drifts by exactly ONE byte reads PLANNED again rather than NOOP, and the dry run still writes nothing
+PASS AC-RTRI4 the PLANNED and refused paths are BYTE-IDENTICAL to the shipped CLI (same rc and same stdout), every code is unchanged (0/2/5), the --json key order is the shipped PLAN_KEYS, and NOOP is exit 0 carrying its own verdict
+PASS AC-RTRI5 the NOOP branch creates no temp file and never enters the writer, while an executed re-pin goes through the shipped atomic path exactly ONCE and leaves no temp residue
+LIVE RESIDUE REPIN PLANNED round=R2372 until=R2390 entries=222->222 dropped=0 bytes=65393->65210
+PASS AC-RTRI6 pure ASCII, stdlib only, zero network, no clock, the composition and the writer are the shipped ones (a patched build moves the NOOP reading and nothing here calls os.replace or json.dumps), wired as os-residue-triage-repin-idempotent(6), live reading taken
+SUITE PASS 6/6
+== LEG B rc=0 digest=EC428BE0B102E138
+PASS AC-RTRI1 an already-pinned declaration reads NOOP with executed=False, the file digest unchanged, no temp file and the writer never entered
+PASS AC-RTRI2 the NOOP reading is decided by BYTES and not by the head round: a declaration pinned at the older R2360 still reads NOOP for R2360 while the same file at R2372 reads PLANNED, and the module never mentions declared_by
+PASS AC-RTRI3 a composition that drifts by exactly ONE byte reads PLANNED again rather than NOOP, and the dry run still writes nothing
+PASS AC-RTRI4 the PLANNED and refused paths are BYTE-IDENTICAL to the shipped CLI (same rc and same stdout), every code is unchanged (0/2/5), the --json key order is the shipped PLAN_KEYS, and NOOP is exit 0 carrying its own verdict
+PASS AC-RTRI5 the NOOP branch creates no temp file and never enters the writer, while an executed re-pin goes through the shipped atomic path exactly ONCE and leaves no temp residue
+LIVE RESIDUE REPIN PLANNED round=R2372 until=R2390 entries=222->222 dropped=0 bytes=65393->65210
+PASS AC-RTRI6 pure ASCII, stdlib only, zero network, no clock, the composition and the writer are the shipped ones (a patched build moves the NOOP reading and nothing here calls os.replace or json.dumps), wired as os-residue-triage-repin-idempotent(6), live reading taken
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_residue_triage_repin.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_stamp_residue.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=EC428BE0B102E138

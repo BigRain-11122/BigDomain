@@ -5081,6 +5081,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-residue-triage-repin",
      os.path.join("..", "os", "test_residue_triage_repin.py"), 6),
+    # R2372: the re-pin composed identical bytes over an already-pinned
+    # declaration and still reported PLANNED, so --execute rewrote the same
+    # bytes and reported PINNED. The wire adds the NOOP reading, decided by
+    # BYTES and never by the head round, returning before the writer is
+    # entered, with every non-NOOP path still the shipped writer's own report
+    # and codes. (AC-RTRI1..AC-RTRI6 were pinned in state/queue/tech.md:418 as
+    # the R2363 seed row BEFORE the code.)
+    ("os-residue-triage-repin-idempotent",
+     os.path.join("..", "os", "test_residue_triage_repin_idempotent.py"), 6),
     ]
 
 FAILS = 0
