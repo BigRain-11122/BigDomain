@@ -1,0 +1,5 @@
+STEP1 derived_dir=qa evidence=qa/reconcile-all-R2380.log
+STEP2 section_verdict=FAIL identical_to_core=True detail=matrix mismatch on-disk=48502B regenerated=48613B (no rewrite)
+STEP3 abs_dir=qa same_as_relative=True
+STEP4 cli_rc=0 last=census foreign=none missing=none
+VERDICT LIVE-DERIVED

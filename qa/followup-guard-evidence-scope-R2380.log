@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2380 suite=src/os/test_followup_guard_evidence_scope.py legs=2
+== LEG A rc=0 digest=CDE13DA50CE73971
+followup_guard_evidence_scope suite (expected criteria 6)
+PASS AC-FGES1 the guarded directory is derived from the evidence path and a patched derivation moves which pile is read
+PASS AC-FGES2 an evidence path under qa keeps the section report byte-identical to the R2370 wire
+PASS AC-FGES3 an evidence pile that reads FOREIGN-SECTION refuses, proving the guard follows the MEASURED pile
+PASS AC-FGES4 a relative and an absolute evidence path read the same pile, so the refusal never depends on the working directory
+PASS AC-FGES5 CLI codes 0/2/3/5 and a byte-stable --json over the pinned GUARD_KEYS are unchanged
+PASS AC-FGES6 pure ASCII, stdlib only, zero network, no clock, the reading still imported from followup_section_foreign, plus its own reconcile label
+SUITE PASS 6/6
+== LEG B rc=0 digest=CDE13DA50CE73971
+followup_guard_evidence_scope suite (expected criteria 6)
+PASS AC-FGES1 the guarded directory is derived from the evidence path and a patched derivation moves which pile is read
+PASS AC-FGES2 an evidence path under qa keeps the section report byte-identical to the R2370 wire
+PASS AC-FGES3 an evidence pile that reads FOREIGN-SECTION refuses, proving the guard follows the MEASURED pile
+PASS AC-FGES4 a relative and an absolute evidence path read the same pile, so the refusal never depends on the working directory
+PASS AC-FGES5 CLI codes 0/2/3/5 and a byte-stable --json over the pinned GUARD_KEYS are unchanged
+PASS AC-FGES6 pure ASCII, stdlib only, zero network, no clock, the reading still imported from followup_section_foreign, plus its own reconcile label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_followup_section_foreign_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_section_foreign.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=CDE13DA50CE73971

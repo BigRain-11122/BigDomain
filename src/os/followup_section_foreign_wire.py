@@ -105,8 +105,19 @@ def refusal_detail(reading):
                ",".join(reading["foreign"]) or "-"))
 
 
-def matrix_section(root, evidence, call, directory="qa"):
-    """The guarded matrix section: reader first, refusal before any byte."""
+def matrix_section(root, evidence, call, directory=None):
+    """The guarded matrix section: reader first, refusal before any byte.
+
+    R2380 (AC-FGES1): when the caller names no directory the guarded pile is
+    DERIVED from the evidence path through followup_guard_evidence_scope, so
+    the refusal and the matrix always describe the same logs. The derivation
+    is asked as an attribute at call time, so a patched one moves which pile
+    is read. An explicit directory still wins, and an evidence path under qa
+    derives 'qa', keeping the normal reading byte-identical (AC-FGES2).
+    """
+    if directory is None:
+        import followup_guard_evidence_scope as FGES
+        directory = FGES.evidence_dir(evidence)
     reading = guard(root, directory)
     if reading["verdict"] == FSF.VERDICT_FOREIGN:
         return {"section": SECTION_NAME, "verdict": "FAIL",

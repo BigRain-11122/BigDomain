@@ -4860,6 +4860,16 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-followup-section-foreign-wire",
      os.path.join("..", "os", "test_followup_section_foreign_wire.py"), 6),
+    # R2380: that wire guarded a FIXED pile - it took the evidence path the
+    # caller named and then read the literal directory 'qa', so a matrix built
+    # from any other pile was protected by a reading of a pile it was not
+    # comparing. One pure module now derives the guarded pile from the evidence
+    # path, so the refusal and the matrix always describe the same logs and an
+    # evidence path under qa keeps the old reading byte for byte.
+    # (AC-FGES1..AC-FGES6 pinned in state/queue/tech.md as the R2370 seed row
+    # BEFORE the code existed.)
+    ("os-followup-guard-evidence-scope",
+     os.path.join("..", "os", "test_followup_guard_evidence_scope.py"), 6),
     ("os-followup-section-foreign",
      os.path.join("..", "os", "test_followup_section_foreign.py"), 6),
     # R2292: queue_row_exempt records an acceptance once and nothing ever
