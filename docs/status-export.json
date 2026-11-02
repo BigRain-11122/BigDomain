@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T01:51:07+08:00",
-  "do": "R2395: the battery's 300s per-suite cap became a reading - on today's real evidence pile three ledger-apimarket suites sit at 232.2s, 246.8s and 268.1s against that cap, i.e. 31.9s..67.8s of headroom, which is exactly how R2393 lost a whole battery leg with no code defect.",
+  "export_ts": "2026-11-03T02:17:30+08:00",
+  "do": "R2396: the follow-up matrix section finally hands its tool the SAME file the pile guard reads - measured on the real tree, a bare evidence name now reaches suite_matrix.py as qa/<name> (the pile the file actually lives in) instead of <root>/<name>, which does not exist, so a guard and a doc can no longer describe two different piles.",
   "ceo_face": {
-    "current": "R2395: the battery's 300s per-suite cap became a reading - on today's real evidence pile three ledger-apimarket suites sit at 232.2s, 246.8s and 268.1s against that cap, i.e. 31.9s..67.8s of headroom, which is exactly how R2393 lost a whole battery leg with no code defect.",
-    "latest_artifact": "qa/runner-suite-timeout-headroom-live-R2395.log (three band suites named on the real pile) and qa/runner-suite-timeout-headroom-R2395.log (SUITE PASS 6/6)",
-    "next_milestone": "the carried battery on this tree at its re-measured target (521 suites / 4102 criteria), then the second pre-registered row ledger_line_shape_guard (AC-LLSG1..6)",
+    "current": "R2396: the follow-up matrix section finally hands its tool the SAME file the pile guard reads - measured on the real tree, a bare evidence name now reaches suite_matrix.py as qa/<name> (the pile the file actually lives in) instead of <root>/<name>, which does not exist, so a guard and a doc can no longer describe two different piles.",
+    "latest_artifact": "qa/matrix-evidence-pile-consistency-live-R2396.log (same_file=yes, tool_exists=yes, bare_at_root=no on the real pile) and qa/matrix-evidence-pile-consistency-R2396.log (SUITE PASS 6/6)",
+    "next_milestone": "the carried battery on this tree at its re-measured target (522 suites / 4108 criteria), then the next pre-registered tech head review_window_guard_parity_consumer_wire (AC-RWPC1..6)",
     "next_milestone_due": "2026-11-05T23:00:00+08:00",
-    "last_artifact": "qa/runner-suite-timeout-headroom-live-R2395.log (three band suites named on the real pile) and qa/runner-suite-timeout-headroom-R2395.log (SUITE PASS 6/6)",
-    "updated_at": "2026-11-03T01:51:07+08:00"
+    "last_artifact": "qa/matrix-evidence-pile-consistency-live-R2396.log (same_file=yes, tool_exists=yes, bare_at_root=no on the real pile) and qa/matrix-evidence-pile-consistency-R2396.log (SUITE PASS 6/6)",
+    "updated_at": "2026-11-03T02:17:30+08:00"
   },
   "depts": [
     {
@@ -88,6 +88,10 @@
   ],
   "results": [
     [
+      "2396",
+      "2026-11-03 R2396 product face, the row the reader named: CLAIMED state/queue/tech.md:454 prefix AC-MEPC1 (matrix_evidence_pile_consistency), whose AC-MEPC1..AC-MEPC6 were pinned INSIDE that row at R2386 BEFORE any code, after an anchor check at HEAD. SHIPPED src/os/matrix_evidence_pile_consistency.py plus its suite: the matrix section guarded the pile a bare evidence name MEASUREDLY lives in, but still handed the ORIGINAL string to the tool, which resolves it against the root - so the guard could speak about qa while `suite_matrix.py --evidence <bare name>` read <root>/<name>, a file that in the measured world does not exist at all. ONE derivation now answers what the tool must receive: a bare name becomes <measured pile>/<basename> (the pile law is asked at call time, so a patched measurement moves the argument), a name carrying a directory is handed through byte for byte, and a name th"
+    ],
+    [
       "2392",
       "R2392 product window (five-silence scan clean at open: empty git status at HEAD d4d08910, no .git/index.lock; LEDGER atbd_lines=0 unreplied_groups=0; DEC rows=172 tokens=86 new=0; the group orders tail 2026-11-02 11:04 already acknowledged as non-execution; benchmarks refreshed 2026-11-02 inside the seven-day gate; floor FLOOR-MET main 5/5 tech 10/10 explore 10/10). PRODUCT: claimed state/queue/tech.md:449 prefix AC-ACSP1 (append_check_status_precedence), criteria pinned in that row at R2385 BEFORE any code, anchors re-checked at HEAD. SHIPPED src/os/append_check_status_precedence.py plus its six-criteria suite: the single writer --check asked the triage read FIRST, so exactly when that read refused (measured at R2385: --check --round R1755 answered E_RTA_UNREADABLE / E_RTR_DECL_FUTURE and printed no status at all while the status face alone read R1755 DELIVERED at exit 0) the operator got nothing about the round they asked about. The module owns only the ORDER: the status reading stays single_append_status_face (asked at call time), the triage reading stays residue_triage.read, and the refusal is RETURNED so residue_triage_append keeps the one E_RTA_* code mapping - no second residue scan is written. A refused check now prints its live status and one NOTE line beside the unchanged refusal and exit 3; the same call as --json carries the status over the pinned REPORT_KEYS; the --append path never asks the face and its two lines are byte-identical; a clean check is unchanged at exit 0. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/append-check-status-precedence-R2392.log, legs=2 identical=True adjacent=3 fails=0), wired os-append-check-status-precedence(6). LIVE on the real tree: --check --round R1755 reads E_RTA_UNREADABLE + E_RTR_DECL_FUTURE + STATUS R1755 DELIVERED + one NOTE at exit 3, the same call as --json carries status=DELIVERED with verdict=E_RTA_UNREADABLE, a clean check R2391 is unchanged at exit 0, and an --append refusal is still its two lines (qa/append-check-status-precedence-live-R2392.log). Board: row 449 stamped and one REAL measured gap row seeded (refused_check_declaration_face, AC-RCDF1..AC-RCDF6 pre-registered in that row, five anchors zero-occupancy at HEAD) because the refused JSON still reports declared_by=\"-\" while its own detail line names R2391."
     ],
@@ -108,7 +112,7 @@
       "R2388 product window: state/queue/tech.md:442 prefix AC-RNED1 (repin_noop_eol_dialect), criteria pinned in that row at R2382 BEFORE any code, anchors re-checked at HEAD (only the row's own board helper and state prose mentioned the names). SHIPPED src/os/repin_noop_eol_dialect.py plus src/os/test_repin_noop_eol_dialect.py: the NOOP comparison owned BYTES, which is right about content and wrong about transport - a CRLF declaration carrying the composition read PLANNED and --execute rewrote it to LF, so an unchanged declaration was written and no reader could tell that from a real re-pin. ONE normalisation now lives in that module (CRLF and a lone CR to LF, content never touched), is_noop answers the one question both writer faces ask, and repin_noop_parity.is_noop plus residue_triage_repin_idempotent.decide call it AT CALL time so the literal byte comparison that used to live in the wire is gone rather than duplicated; the wire's dead on_disk_bytes helper went with it. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/repin-noop-eol-dialect-R2388.log, 2402B, legs=2 identical=True adjacent=3 fails=0), wired os-repin-noop-eol-dialect(6) so the registry reads 515 suites / 4066 criteria and docs/sandbox-suite-matrix.md was regenerated to match (49422B, green=513/515 because the two newest suites are not in the R2387 battery evidence). LIVE: qa/repin-noop-eol-dialect-live-R2388.log reads the REAL 67603B declaration as dialect=LF, a CRLF copy of the REAL declaration as verdict=NOOP raw_equal=no dialect=CRLF with its digest unchanged and no temp beside it, and the REAL tree dry re-pin at R2388 as PLANNED with shipped and wire printing the same line - so the normalisation is content-safe and not a blanket green. Row 442 stamped and one REAL measured gap seeded (declaration_writer_noop_parity, AC-DWNP1..AC-DWNP6 pre-registered in that row, five anchors zero-occupancy): the three sibling declaration writers hold is_noop ZERO times, so the law reaches one of four writers."
     ],
     [
-      "2395",
+      "2396",
       "OSLoop 执行 tick"
     ],
     [
@@ -139,10 +143,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 21,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 25,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -174,10 +178,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 11,
-        "done_rows": 372,
+        "open_rows": 12,
+        "done_rows": 375,
         "gated_rows": 1,
-        "claimable": 10,
+        "claimable": 11,
         "discounted": 0,
         "delivered": [],
         "floor": 10,
