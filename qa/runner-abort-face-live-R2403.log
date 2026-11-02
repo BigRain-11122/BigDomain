@@ -1,0 +1,20 @@
+REGISTRY suites=529
+PILE logs=549 COMPLETE=508 ABORTED=14 UNREADABLE=27
+ABORT reconcile-all-R1852.log suite=ledger-props-persist seen=57/529
+ABORT reconcile-all-R1868.log suite=ledger-props-persist seen=71/529
+ABORT reconcile-all-R1985.log suite=watermark-scale-recover seen=83/529
+ABORT reconcile-all-R1987.log suite=dual-track seen=86/529
+ABORT reconcile-all-R2017-2.log suite=ugc-reviewdesk-persist seen=184/529
+ABORT reconcile-all-R2122.log suite=reconcile-daily-sentinel seen=99/529
+ABORT reconcile-all-R2129-timeout.log suite=ledger-apimarket-searchstock seen=241/529
+ABORT reconcile-all-R2135.log suite=ledger-apimarket-searchstock seen=245/529
+ABORT reconcile-all-R2135w.log suite=member-expiring-soon-persist seen=172/529
+ABORT reconcile-all-R2140-firstfail.log suite=ledger-apimarket-searchstock seen=251/529
+ABORT reconcile-all-R2145.log suite=pay-notify-wiring seen=57/529
+ABORT reconcile-all-R2162.log suite=ledger-apimarket-buyerratingpattern seen=258/529
+ABORT reconcile-all-R2201-firstfail.log suite=ledger-apimarket-repeatpurchase seen=225/529
+ABORT reconcile-all-R2393-retry2.log suite=ledger-apimarket-reportclaims seen=319/529
+FIXTURE-abort verdict=ABORTED suite=ledger-props missing=527
+FIXTURE-verdict verdict=COMPLETE suite=- code=0
+FIXTURE-blind verdict=UNREADABLE code=3
+DIGEST before=db1d2c633fd26b81 after=db1d2c633fd26b81 same=True

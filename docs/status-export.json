@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T23:40:00+08:00",
-  "do": "R2402 relative_import_publish_binding: a PACKAGE-RELATIVE import binds its local name, so an in-package publisher is no longer reported as an unbound call",
+  "export_ts": "2026-11-03T05:22:00+08:00",
+  "do": "R2403 runner_abort_face: a battery body now names the suite that killed it (14 aborted legs found in the real pile, including the R2393 leg that used to leave silence)",
   "ceo_face": {
-    "current": "R2402 relative_import_publish_binding: a PACKAGE-RELATIVE import binds its local name, so an in-package publisher is no longer reported as an unbound call",
-    "latest_artifact": "qa/relative-import-publish-binding-live-R2402.log + src/os/relative_import_publish_binding.py",
-    "next_milestone": "run the carried battery on this committed tree (528 suites / 4144 criteria) and then claim state/queue/tech.md:474 AC-RAF1",
+    "current": "R2403 runner_abort_face: a battery body now names the suite that killed it (14 aborted legs found in the real pile, including the R2393 leg that used to leave silence)",
+    "latest_artifact": "qa/runner-abort-face-live-R2403.log + src/os/runner_abort_face.py",
+    "next_milestone": "run the carried battery on this committed tree (529 suites / 4150 criteria) and then claim state/queue/tech.md:476 AC-FBEF1",
     "next_milestone_due": "2026-11-05T23:00:00+08:00",
-    "last_artifact": "qa/relative-import-publish-binding-live-R2402.log + src/os/relative_import_publish_binding.py",
-    "updated_at": "2026-11-03T23:40:00+08:00"
+    "last_artifact": "qa/runner-abort-face-live-R2403.log + src/os/runner_abort_face.py",
+    "updated_at": "2026-11-03T05:22:00+08:00"
   },
   "depts": [
     {
@@ -90,6 +90,10 @@
   ],
   "results": [
     [
+      "2403",
+      "R2403 runner_abort_face shipped - a battery body names the suite that killed it (real pile: 549 logs, 14 ABORTED, 27 UNREADABLE); registry 529/4150"
+    ],
+    [
       "2402",
       "R2402 relative_import_publish_binding shipped - a PACKAGE-RELATIVE import binds its local name and reads from_import with the relative module text instead of bare/UNRESOLVED; real tree WIRE 11/11, registry 528/4144"
     ],
@@ -130,7 +134,7 @@
       "R2388 product window: state/queue/tech.md:442 prefix AC-RNED1 (repin_noop_eol_dialect), criteria pinned in that row at R2382 BEFORE any code, anchors re-checked at HEAD (only the row's own board helper and state prose mentioned the names). SHIPPED src/os/repin_noop_eol_dialect.py plus src/os/test_repin_noop_eol_dialect.py: the NOOP comparison owned BYTES, which is right about content and wrong about transport - a CRLF declaration carrying the composition read PLANNED and --execute rewrote it to LF, so an unchanged declaration was written and no reader could tell that from a real re-pin. ONE normalisation now lives in that module (CRLF and a lone CR to LF, content never touched), is_noop answers the one question both writer faces ask, and repin_noop_parity.is_noop plus residue_triage_repin_idempotent.decide call it AT CALL time so the literal byte comparison that used to live in the wire is gone rather than duplicated; the wire's dead on_disk_bytes helper went with it. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/repin-noop-eol-dialect-R2388.log, 2402B, legs=2 identical=True adjacent=3 fails=0), wired os-repin-noop-eol-dialect(6) so the registry reads 515 suites / 4066 criteria and docs/sandbox-suite-matrix.md was regenerated to match (49422B, green=513/515 because the two newest suites are not in the R2387 battery evidence). LIVE: qa/repin-noop-eol-dialect-live-R2388.log reads the REAL 67603B declaration as dialect=LF, a CRLF copy of the REAL declaration as verdict=NOOP raw_equal=no dialect=CRLF with its digest unchanged and no temp beside it, and the REAL tree dry re-pin at R2388 as PLANNED with shipped and wire printing the same line - so the normalisation is content-safe and not a blanket green. Row 442 stamped and one REAL measured gap seeded (declaration_writer_noop_parity, AC-DWNP1..AC-DWNP6 pre-registered in that row, five anchors zero-occupancy): the three sibling declaration writers hold is_noop ZERO times, so the law reaches one of four writers."
     ],
     [
-      "2402",
+      "2403",
       "OSLoop 执行 tick"
     ],
     [
@@ -161,10 +165,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 62,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 54,
+    "substantive_non_idle_mention_lines": 60,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -197,7 +201,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 381,
+        "done_rows": 382,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

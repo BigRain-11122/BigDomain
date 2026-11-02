@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2403 suite=src/os/test_runner_abort_face.py legs=2
+== LEG A rc=0 digest=6255BC394D815902
+runner_abort_face suite (expected criteria 6)
+PASS AC-RAF1 aborted suite = registry minus body suite lines
+PASS AC-RAF2 a complete body writes no abort reading
+PASS AC-RAF3 ABORTED names the suite, COMPLETE exits 0
+PASS AC-RAF4 an unparseable body reads UNREADABLE
+PASS AC-RAF5 exits 0/2/3/5 and --json is byte-stable
+PASS AC-RAF6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=6255BC394D815902
+runner_abort_face suite (expected criteria 6)
+PASS AC-RAF1 aborted suite = registry minus body suite lines
+PASS AC-RAF2 a complete body writes no abort reading
+PASS AC-RAF3 ABORTED names the suite, COMPLETE exits 0
+PASS AC-RAF4 an unparseable body reads UNREADABLE
+PASS AC-RAF5 exits 0/2/3/5 and --json is byte-stable
+PASS AC-RAF6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_runner_suite_timeout_headroom.py rc=0 SUITE PASS 6/6
+== src/os/test_owner_table_usage_wire.py rc=0 NO SUITE LINE
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=6255BC394D815902

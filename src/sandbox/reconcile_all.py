@@ -4973,6 +4973,17 @@ SUITES = [
     # state/queue/tech.md line 462 as the R2393 seed BEFORE the code.)
     ("os-runner-suite-timeout-headroom",
      os.path.join("..", "os", "test_runner_suite_timeout_headroom.py"), 6),
+    # R2403: the headroom reading only knows suites some leg FINISHED, so the
+    # suite that actually killed a battery was the one line the pile never
+    # carried - R2393 leg 3 died on ledger/test_apimarket_report_claims.py at
+    # exactly 300s and no suite line was ever written for it. A body now reads
+    # COMPLETE (its own verdict line), ABORTED (the first registered suite with
+    # no suite line, derived not hard-coded) or UNREADABLE, so a dead battery
+    # yields a named suite instead of silence.
+    # (AC-RAF1..AC-RAF6 pinned in state/queue/tech.md line 474 as the R2395
+    # seed BEFORE the code.)
+    ("os-runner-abort-face",
+     os.path.join("..", "os", "test_runner_abort_face.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now
