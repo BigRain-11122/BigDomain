@@ -4966,6 +4966,13 @@ SUITES = [
     # seed BEFORE the code existed.)
     ("os-refused-check-declaration-face",
      os.path.join("..", "os", "test_refused_check_declaration_face.py"), 6),
+    # R2395: the 300s per-suite cap is a reading now - each registered
+    # suite's own slowest measured leg and the headroom it carries, so a
+    # loaded machine is named in a warning band instead of killing a
+    # whole battery in silence. (AC-RTH1..AC-RTH6 pinned in
+    # state/queue/tech.md line 462 as the R2393 seed BEFORE the code.)
+    ("os-runner-suite-timeout-headroom",
+     os.path.join("..", "os", "test_runner_suite_timeout_headroom.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now

@@ -1,0 +1,7 @@
+LIVE runner_suite_timeout_headroom R2395
+STEP1 real pile rc=2 VERDICT BAND-HIT suites=521 measured=520 band=3 no_measure=1
+STEP2 json rc=2/2 stable=True bytes=60841
+STEP3 tightened cap=200 band_lines=5 named=BAND ledger-apimarket-activity slowest=134.8s headroom=65.2s
+STEP4 refusals registry_rc=3 flag_rc=5 flag_code=E_RTH_BAD_ARGS
+STEP5 module_digest_unchanged=True
+VERDICT LIVE-READONLY

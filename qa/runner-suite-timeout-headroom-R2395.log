@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2395 suite=src/os/test_runner_suite_timeout_headroom.py legs=2
+== LEG A rc=0 digest=CB10BFECDEC50D24
+runner_suite_timeout_headroom suite (expected criteria 6)
+PASS AC-RTH1 durations read from suite lines, patch moves them
+PASS AC-RTH2 headroom is cap minus the slowest measured leg
+PASS AC-RTH3 band named with BAND-HIT, comfortable reads CLEAN
+PASS AC-RTH4 an unmeasured suite reads NO-MEASURE
+PASS AC-RTH5 exits 0/2/3/5 and --json is byte-stable
+PASS AC-RTH6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=CB10BFECDEC50D24
+runner_suite_timeout_headroom suite (expected criteria 6)
+PASS AC-RTH1 durations read from suite lines, patch moves them
+PASS AC-RTH2 headroom is cap minus the slowest measured leg
+PASS AC-RTH3 band named with BAND-HIT, comfortable reads CLEAN
+PASS AC-RTH4 an unmeasured suite reads NO-MEASURE
+PASS AC-RTH5 exits 0/2/3/5 and --json is byte-stable
+PASS AC-RTH6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_owner_table_parity.py rc=0 NO SUITE LINE
+== src/os/test_export_publish_wire_identity.py rc=0 NO SUITE LINE
+== src/os/test_declaration_writer_noop_parity.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=3 fails=0 digest=CB10BFECDEC50D24
