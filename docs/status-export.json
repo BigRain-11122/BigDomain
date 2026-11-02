@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T18:49:50+08:00",
-  "do": "R2385 verification-then-product window: the battery owed since R2384 ran first on the committed tree and came back RUNNER PASS 511/511 suites with controls 7/7 and criteria total 4042 exactly as pre-registered, then the single-entry residue writer finally names the live status of the round a --append is about - the batch CLI stopped costing a refused call at R2379, and the single CLI still did.",
+  "export_ts": "2026-11-02T20:05:00+08:00",
+  "do": "R2386 verification-then-product window: the battery owed since R2385 ran first on the committed tree (RUNNER PASS 512/512 suites, controls 7/7, criteria total 4048 exactly as pre-registered), then a bare evidence filename stopped reading as 'qa' by default - the pile is measured where the file actually lives under the root, and a name that lives nowhere or in two piles now refuses instead of speaking about a pile it cannot prove.",
   "ceo_face": {
-    "current": "R2385 verification-then-product window: the battery owed since R2384 ran first on the committed tree and came back RUNNER PASS 511/511 suites with controls 7/7 and criteria total 4042 exactly as pre-registered, then the single-entry residue writer finally names the live status of the round a --append is about - the batch CLI stopped costing a refused call at R2379, and the single CLI still did.",
-    "latest_artifact": "src/os/single_append_status_face.py plus its six-criteria suite (qa/single-append-status-face-R2385.log, two legs with an identical criterion digest, three adjacent residue suites green) and one runner wiring line; the single writer --check now prints status=<live> where it printed status=- before this window (qa/single-append-status-face-live-R2385.log).",
-    "next_milestone": "R2386: the battery on the committed R2385 tree, pre-registered at 512 suites / 4048 criteria, then the successor seam this window measured: the status face is asked AFTER the triage read, so exactly when that read refuses (E_RTA_UNREADABLE on a round below declared_by) the operator still gets no status at all.",
+    "current": "R2386 verification-then-product window: the battery owed since R2385 ran first on the committed tree (RUNNER PASS 512/512 suites, controls 7/7, criteria total 4048 exactly as pre-registered), then a bare evidence filename stopped reading as 'qa' by default - the pile is measured where the file actually lives under the root, and a name that lives nowhere or in two piles now refuses instead of speaking about a pile it cannot prove.",
+    "latest_artifact": "src/os/bare_evidence_pile_refusal.py plus its six-criteria suite (qa/bare-evidence-pile-refusal-R2386.log, two legs with an identical criterion digest, three adjacent suites green) and one runner wiring line; the follow-up matrix section now asks it for a bare evidence name, so the guarded pile and the matrix describe the same file (qa/bare-evidence-pile-refusal-live-R2386.log: dir=qa over 474 rounds, missing name refuses E_BEPR_NOT_FOUND at rc 2).",
+    "next_milestone": "R2387: the battery on the committed R2386 tree, pre-registered at 513 suites / 4054 criteria, then the successor seam this window measured: the matrix section now guards the MEASURED pile but still hands the ORIGINAL evidence string to the matrix tool, so a bare name can be guarded in one pile and rendered from another when cwd is not root.",
     "next_milestone_due": "2026-11-04T12:00:00+08:00",
-    "last_artifact": "src/os/single_append_status_face.py plus its six-criteria suite (qa/single-append-status-face-R2385.log, two legs with an identical criterion digest, three adjacent residue suites green) and one runner wiring line; the single writer --check now prints status=<live> where it printed status=- before this window (qa/single-append-status-face-live-R2385.log).",
-    "updated_at": "2026-11-02T18:49:50+08:00"
+    "last_artifact": "src/os/bare_evidence_pile_refusal.py plus its six-criteria suite (qa/bare-evidence-pile-refusal-R2386.log, two legs with an identical criterion digest, three adjacent suites green) and one runner wiring line; the follow-up matrix section now asks it for a bare evidence name, so the guarded pile and the matrix describe the same file (qa/bare-evidence-pile-refusal-live-R2386.log: dir=qa over 474 rounds, missing name refuses E_BEPR_NOT_FOUND at rc 2).",
+    "updated_at": "2026-11-02T20:05:00+08:00"
   },
   "depts": [
     {
@@ -251,11 +251,16 @@
       "src/os/single_append_status_face.py",
       "on",
       "R2385 product: the single-entry residue writer --check now names the asked round with the live status the batch face reports, and a round outside the live residue reads NOT-RESIDUE with its own code instead of an invented status"
+    ],
+    [
+      "src/os/bare_evidence_pile_refusal.py",
+      "on",
+      "R2386 product: a bare evidence filename is no longer read as 'qa' - the pile is measured where the file actually lives under the root, a name living in two piles refuses as E_BEPR_AMBIGUOUS and a name living nowhere refuses as E_BEPR_NOT_FOUND, while a name carrying a directory keeps the R2380 reading byte for byte"
     ]
   ],
   "results": [
     [
-      "2385",
+      "2386",
       "OSLoop 执行 tick"
     ],
     [
@@ -429,6 +434,10 @@
     [
       "R2385",
       "verification-then-product window: the carried battery owed since R2384 ran FIRST on the committed tree - RUNNER PASS 511/511 suites plus controls 7/7 in 1237.8s with criteria total 4042 exactly as pre-registered and TMP RECLAIM 932/932, four follow-up sections PASS after the designed matrix FAIL and its regeneration to 48989B, evidence and matrix committed alone as 94b01774. CLAIMED state/queue/tech.md:433 AC-SASF1 single_append_status_face, criteria pinned there at R2379, anchors prose-only at HEAD. SUITE PASS 6/6 twice identical plus three adjacent residue suites green (1233B), wired os-single-append-status-face(6) so the registry reads 512/4048. LIVE: the face reads R1755 DELIVERED FOUND at rc 0 and R2384 NOT-RESIDUE at rc 2, the single writer prints status=NOT-RESIDUE where it printed status=-, and the pre-existing E_RTA_UNREADABLE past-round refusal is byte-identical. Rows stamped and one REAL measured gap seeded (append_check_status_precedence: the face is asked after the triage read, so a refused round still gets no status). Two battery rows closed against the one run and the successor opened at 512/4048."
+    ],
+    [
+      "R2386",
+      "R2386 verification-then-product window: the carried battery owed since R2385 ran FIRST on the committed tree 84619739 with an empty git status - RUNNER PASS 512/512 suites plus controls 7/7 in 1686.5s with criteria total 4048 EXACTLY as pre-registered and TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0 (qa/reconcile-all-R2386.log, 819029B, single writer utf-8 LF through src/os/battery_stream.py); the four follow-up sections ran through src/os/battery_followup.py, the matrix section FAILED first on the stale doc (on-disk=48989B regenerated=49095B) and did not rewrite it, suite_matrix regenerated docs/sandbox-suite-matrix.md to 512 suites / 4048 criteria and the re-run read all four PASS for VERDICT R2386 PASS; evidence and matrix committed alone as dec152c3 before any product byte changed (the R2168 mixed-tree rule). FIRST-ROUND STEP DISCLOSED: an earlier invocation was cancelled by the shell tool's five-minute no-output rule while the runner was buffering, which left a stray file named '--help' (removed) and one partial evidence file (deleted); the battery was then run detached and its evidence file was written from scratch, so no leg is a mixture of two runs. PRODUCT: claimed state/queue/tech.md:434 prefix AC-BEPR1 (bare_evidence_pile_refusal), criteria pinned in that row at R2380 BEFORE any code, anchors prose-only at HEAD. SHIPPED src/os/bare_evidence_pile_refusal.py plus src/os/test_bare_evidence_pile_refusal.py: a bare evidence NAME is resolved by STAT-ing it under the root (the root itself answers '.', then one-level subdirectories), two containing piles refuse as E_BEPR_AMBIGUOUS and a name that lives nowhere refuses as E_BEPR_NOT_FOUND, so no default pile is left anywhere in the derivation; a name WITH a directory part is handed to followup_guard_evidence_scope at call time, so that R2380 reading is byte-identical; the CLI asks the same question and reads the measured pile through followup_section_foreign_wire, so a bare name living in a FOREIGN-SECTION pile refuses NAMING that pile while the wire keeps exit codes 0/2/3/5 and its pinned GUARD_KEYS. The follow-up matrix section asks BEPR.is_bare at call time and derives the pile through BEPR.pile_for, refusing before any matrix byte when the name cannot be placed; the wire stays os-free because the bare test lives in the new module. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/bare-evidence-pile-refusal-R2386.log, 2064B, legs=2 identical=True adjacent=3 fails=0, single writer utf-8 LF through src/os/evidence_capture.py), wired os-bare-evidence-pile-refusal(6) so the registry reads 513 suites / 4054 criteria. LIVE: qa/bare-evidence-pile-refusal-live-R2386.log (662B, crlf=0, cr=0) reads dir=qa verdict=VOCABULARY-CLEAN rounds=474 rc=0 with a byte-stable --json over the seven pinned keys and a name that lives nowhere refusing E_BEPR_NOT_FOUND at rc 2 on the real tree. Row 434 stamped and one REAL measured gap seeded (matrix_evidence_pile_consistency, AC-MEPC1..AC-MEPC6 pre-registered in that row, five anchors zero-occupancy): the guard now follows the measured pile but the matrix tool is still handed the original string. Register: battery-R2385 closed, battery-R2386 opened first=yes at 513 suites / 4054 criteria. Group order 2026-11-02 11:04 (bm-a memory/cleanup sweep, executed by bm-a) read and logged as NOTED, not this company's execution surface."
     ]
   ],
   "self_drive": {
@@ -470,7 +479,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 365,
+        "done_rows": 366,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

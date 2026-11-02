@@ -1,0 +1,14 @@
+LIVE bare_evidence_pile_refusal R2386
+rc_text=0 rc_json=0 rc_missing=2
+stable=True
+--- text ---
+BARE EVIDENCE PILE dir=qa verdict=VOCABULARY-CLEAN rounds=474 foreign_rounds=0
+  foreign=none
+  census foreign=none missing=none
+--- json ---
+{"dir": "qa", "verdict": "VOCABULARY-CLEAN", "rounds": 474, "rounds_foreign": [], "foreign": [], "census": {"vocabulary": ["matrix", "fingerprint", "profile", "census"], "foreign": [], "missing": []}, "code": ""}
+--- missing ---
+BARE EVIDENCE PILE dir= verdict=REFUSED rounds=0 foreign_rounds=0
+  foreign=none
+  census foreign=none missing=none
+  code=E_BEPR_NOT_FOUND evidence 'no-such-log-R2386.log' is not under root '.'

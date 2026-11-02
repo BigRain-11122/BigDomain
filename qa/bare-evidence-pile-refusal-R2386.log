@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2386 suite=src/os/test_bare_evidence_pile_refusal.py legs=2
+== LEG A rc=0 digest=32A41A905A101176
+bare_evidence_pile_refusal suite (expected criteria 6)
+PASS AC-BEPR1 a bare filename derives its pile by STAT-ing it under the root and a patched resolver moves which pile is read
+PASS AC-BEPR2 an evidence path that carries a directory keeps the R2380 derived answer and the wire reading byte for byte
+PASS AC-BEPR3 a bare filename that lives in a FOREIGN-SECTION pile refuses and names that pile, so the answer was measured
+PASS AC-BEPR4 a bare filename that lives nowhere refuses with its own code at exit 2 instead of reading a pile it cannot prove
+PASS AC-BEPR5 CLI codes 0/2/3/5 and a byte-stable --json over the pinned GUARD_KEYS are unchanged
+PASS AC-BEPR6 pure ASCII, stdlib only, zero network, no clock, no default pile, asked by the matrix section at call time, plus its own reconcile label
+SUITE PASS 6/6
+== LEG B rc=0 digest=32A41A905A101176
+bare_evidence_pile_refusal suite (expected criteria 6)
+PASS AC-BEPR1 a bare filename derives its pile by STAT-ing it under the root and a patched resolver moves which pile is read
+PASS AC-BEPR2 an evidence path that carries a directory keeps the R2380 derived answer and the wire reading byte for byte
+PASS AC-BEPR3 a bare filename that lives in a FOREIGN-SECTION pile refuses and names that pile, so the answer was measured
+PASS AC-BEPR4 a bare filename that lives nowhere refuses with its own code at exit 2 instead of reading a pile it cannot prove
+PASS AC-BEPR5 CLI codes 0/2/3/5 and a byte-stable --json over the pinned GUARD_KEYS are unchanged
+PASS AC-BEPR6 pure ASCII, stdlib only, zero network, no clock, no default pile, asked by the matrix section at call time, plus its own reconcile label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_followup_guard_evidence_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_section_foreign_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=32A41A905A101176

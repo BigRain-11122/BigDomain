@@ -5196,6 +5196,15 @@ SUITES = [
     # pinned in state/queue/tech.md:433 as the R2379 seed row BEFORE the code.)
     ("os-single-append-status-face",
      os.path.join("..", "os", "test_single_append_status_face.py"), 6),
+    # R2386: the guarded pile follows the evidence path, but a BARE filename
+    # has no directory part and fell back to a constant, so the guard could
+    # once more speak about a pile the file does not belong to. The pile is
+    # now MEASURED under the root, and a name that lives nowhere (or in two
+    # piles) refuses with its own code instead of reading a default.
+    # (AC-BEPR1..AC-BEPR6 were pinned in state/queue/tech.md:434 as the R2380
+    # seed row BEFORE the code.)
+    ("os-bare-evidence-pile-refusal",
+     os.path.join("..", "os", "test_bare_evidence_pile_refusal.py"), 6),
     ]
 
 FAILS = 0

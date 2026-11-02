@@ -118,6 +118,17 @@ def matrix_section(root, evidence, call, directory=None):
     if directory is None:
         import followup_guard_evidence_scope as FGES
         directory = FGES.evidence_dir(evidence)
+        # R2386 (AC-BEPR1): a bare filename names no directory, so the
+        # derivation above can only answer its default. The pile is MEASURED
+        # instead, and a name the measurement cannot place in exactly one
+        # pile refuses before any matrix byte is rendered.
+        import bare_evidence_pile_refusal as BEPR
+        if BEPR.is_bare(evidence):
+            try:
+                directory = BEPR.pile_for(evidence, root)
+            except BEPR.BareEvidencePileRefusalError as exc:
+                return {"section": SECTION_NAME, "verdict": "FAIL",
+                        "detail": "%s evidence=%s" % (exc.code, evidence)}, ""
     reading = guard(root, directory)
     if reading["verdict"] == FSF.VERDICT_FOREIGN:
         return {"section": SECTION_NAME, "verdict": "FAIL",
