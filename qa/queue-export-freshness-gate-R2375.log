@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2375 suite=src/os/test_queue_export_freshness_gate.py legs=2
+== LEG A rc=0 digest=000FF8B5E6922031
+SUITE queue_export_freshness_gate (R2375) criteria=6
+PASS AC-QEF1 the live side IS queue_floor_export_face.face (patching that face moves the verdict)
+PASS AC-QEF2 a drifted claimable or a drifted delivered row names that queue and refuses
+PASS AC-QEF3 a section-less export reads MISSING and never CURRENT
+PASS AC-QEF4 writes nothing and reads no clock
+PASS AC-QEF5 exit 0 = CURRENT, 2 = STALE or MISSING, 3 = missing file, 5 = bad flags
+PASS AC-QEF6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=000FF8B5E6922031
+SUITE queue_export_freshness_gate (R2375) criteria=6
+PASS AC-QEF1 the live side IS queue_floor_export_face.face (patching that face moves the verdict)
+PASS AC-QEF2 a drifted claimable or a drifted delivered row names that queue and refuses
+PASS AC-QEF3 a section-less export reads MISSING and never CURRENT
+PASS AC-QEF4 writes nothing and reads no clock
+PASS AC-QEF5 exit 0 = CURRENT, 2 = STALE or MISSING, 3 = missing file, 5 = bad flags
+PASS AC-QEF6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_reading_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=3 fails=0 digest=000FF8B5E6922031

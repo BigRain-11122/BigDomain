@@ -1,0 +1,9 @@
+LIVE queue_export_freshness_gate on the real tree (R2375)
+export=docs\status-export.json
+STEP1 real-tree-before rc=2 verdict=STALE drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech
+STEP2 writer-refresh rc=0 QUEUE EXPORT os-queue-floor-export-face verdict=WRITTEN path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\docs\status-export.json claimable=5,9,10
+STEP3 real-tree-after rc=0 verdict=CURRENT
+STEP4 queue-drift rc=2 verdict=STALE drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech
+STEP5 no-section rc=2 verdict=MISSING
+STEP6 absent-file rc=3 stderr=E_QEF_EXPORT_MISSING: C:\Users\sjs20\AppData\Local\Temp\qef-live-ruo5vx93\absent.json
+VERDICT LIVE-STALE-NAMED-THEN-CLOSED live_caught=True closed_by_writer=True

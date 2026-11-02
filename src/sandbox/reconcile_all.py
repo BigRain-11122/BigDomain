@@ -5106,6 +5106,13 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-queue-floor-export-face",
      os.path.join("..", "os", "test_queue_floor_export_face.py"), 6),
+    # R2375: R2374 gave docs/status-export.json a queue section derived at
+    # write time, but nothing watched it - check_export_consistency opens only
+    # the twelve self_drive fields, so the block could age silently after a
+    # queue edit. (AC-QEF1..AC-QEF6 were pinned in state/queue/tech.md:421 as
+    # the R2374 seed row BEFORE the code.)
+    ("os-queue-export-freshness-gate",
+     os.path.join("..", "os", "test_queue_export_freshness_gate.py"), 6),
     ]
 
 FAILS = 0

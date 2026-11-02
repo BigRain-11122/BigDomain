@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T11:42:19+08:00",
-  "do": "R2374 verification-then-product window: the battery on the committed R2373 tree read RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered, and the CEO-visible export finally publishes a queue line - docs/status-export.json now carries queue_floor_reading_wire.published, the discounted claimable and every discounted row included.",
+  "export_ts": "2026-11-02T12:24:14+08:00",
+  "do": "R2375 verification-then-product window: the battery on the committed R2374 tree read RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered, and the export's queue block finally has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue and refuses to call a stale block CURRENT.",
   "ceo_face": {
-    "current": "R2374 verification-then-product window: the battery on the committed R2373 tree read RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered, and the CEO-visible export finally publishes a queue line - docs/status-export.json now carries queue_floor_reading_wire.published, the discounted claimable and every discounted row included.",
-    "latest_artifact": "docs/status-export.json now carries a live queue section (CLI leg: STALE -> WRITTEN 72523B -> CURRENT, matches_live=True), shipped with src/os/queue_floor_export_face.py and its six-criteria suite (qa/queue-floor-export-face-R2374.log, two identical legs plus three adjacent suites green), plus the battery that proves the registry unharmed (qa/reconcile-all-R2374.log, RUNNER PASS 500/500, criteria 3976).",
-    "next_milestone": "R2375: the battery on the committed R2374 tree pre-registered at 501 suites / 3982 criteria (this window own os-queue-floor-export-face suite), then the product face at the queue head the reader names; the seed this window measured is queue_export_freshness_gate (AC-QEF1..6), because the export's queue section can age silently - check_export_consistency never opens it.",
-    "next_milestone_due": "2026-11-04T11:42:19+08:00",
-    "last_artifact": "docs/status-export.json now carries a live queue section (CLI leg: STALE -> WRITTEN 72523B -> CURRENT, matches_live=True), shipped with src/os/queue_floor_export_face.py and its six-criteria suite (qa/queue-floor-export-face-R2374.log, two identical legs plus three adjacent suites green), plus the battery that proves the registry unharmed (qa/reconcile-all-R2374.log, RUNNER PASS 500/500, criteria 3976).",
-    "updated_at": "2026-11-02T11:42:19+08:00"
+    "current": "R2375 verification-then-product window: the battery on the committed R2374 tree read RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered, and the export's queue block finally has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue and refuses to call a stale block CURRENT.",
+    "latest_artifact": "src/os/queue_export_freshness_gate.py plus its six-criteria suite, and the live leg that caught a REAL staleness nothing else saw: shipping the module and suite turned tech row 421 into a delivered row, so tech fell to 9 claimable while the export still published FLOOR-MET - the gate read STALE naming queue:tech and the section scalars, the writer refreshed the block, and the gate then read CURRENT (qa/queue-export-freshness-gate-live-R2375.log).",
+    "next_milestone": "R2376: the battery on the committed R2375 tree pre-registered at 502 suites / 3988 criteria (this window own os-queue-export-freshness-gate suite), then the product face at the queue head the reader names; the seed this window measured is queue_export_gate_wire (AC-QEG1..6), because the gate is a CLI only - nothing runs it automatically and check_export_consistency still never opens the queue block.",
+    "next_milestone_due": "2026-11-04T12:24:14+08:00",
+    "last_artifact": "src/os/queue_export_freshness_gate.py plus its six-criteria suite, and the live leg that caught a REAL staleness nothing else saw: shipping the module and suite turned tech row 421 into a delivered row, so tech fell to 9 claimable while the export still published FLOOR-MET - the gate read STALE naming queue:tech and the section scalars, the writer refreshed the block, and the gate then read CURRENT (qa/queue-export-freshness-gate-live-R2375.log).",
+    "updated_at": "2026-11-02T12:24:14+08:00"
   },
   "depts": [
     {
@@ -196,11 +196,16 @@
       "src/os/queue_floor_export_face.py",
       "on",
       "R2374 product: the CEO-visible export finally publishes the one queue reading - the section it writes IS queue_floor_reading_wire.published, so the discounted claimable and every discounted row (line + prefix) travel unchanged, re-derived on every call with one atomic write and a read-back proof, and the CLI reads STALE rather than CURRENT when the export disagrees; six criteria green twice plus a live leg that caught the real missing section (STALE rc=2 -> WRITTEN 72523B -> CURRENT)"
+    ],
+    [
+      "src/os/queue_export_freshness_gate.py",
+      "on",
+      "R2375 product: the export's queue block now has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue (claimable, delivered line or prefix, or any row field) plus every drifted section scalar, reads a section-less export as MISSING and never CURRENT, writes nothing and reads no clock; six criteria green twice plus a live leg that caught a REAL staleness (tech 9 claimable published as FLOOR-MET) and watched the writer close it"
     ]
   ],
   "results": [
     [
-      "2374",
+      "2375",
       "OSLoop 执行 tick"
     ],
     [
@@ -330,15 +335,19 @@
     [
       "R2374",
       "verification then product: the debt gate named reconcile-battery-R2373, so the battery ran first on the committed ee2bab1e tree - RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2374.log, 808379B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 500/3976 at 47905B, VERDICT R2374 PASS, evidence and matrix committed alone as 16430e6c. Then the claimed row: state/queue/tech.md:420 AC-QFE1 queue_floor_export_face, its six criteria pinned there at R2368 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the section IS queue_floor_reading_wire.published, so the discounted claimable plus every discounted row reach the export unchanged, with no second parser, no queue-file scan and no canned number; compose() re-reads the tree on every call and write() is one atomic replace with a read-back proof. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-floor-export-face-R2374.log), wired os-queue-floor-export-face(6) so the registry reads 501/3982. LIVE: STALE rc=2 at contact because the export carried no queue section at all, WRITTEN 72523B matches_live=True, then CURRENT rc=0. Row 420 stamped and one REAL measured gap seeded (queue_export_freshness_gate: check_export_consistency never opens the queue block, so the section can age silently), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2373 closed, battery-R2374 opened first=yes at 501/3982. Disclosed: the window overran its budget because the battery cost 1089.1s; AC-QFE2's discount path is proved on fixtures because the live queue delivers nothing today."
+    ],
+    [
+      "R2375",
+      "verification then product: the debt gate named reconcile-battery-R2374, so the battery ran first on the committed tree - RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2375.log, 809143B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 501/3982 at 48002B, VERDICT R2375 PASS, evidence and matrix committed alone as bff3e884. Then the claimed row: state/queue/tech.md:421 AC-QEF1 queue_export_freshness_gate, its six criteria pinned there at R2374 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the live side IS the export face, drift names the drifted queues, MISSING never reads CURRENT, and the gate is read-only with no clock. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-export-freshness-gate-R2375.log), wired os-queue-export-freshness-gate(6) so the registry reads 502/3988. LIVE, and this is the round's best evidence: the real-tree leg read STALE rc=2 drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech - a genuine staleness that predated the window, because shipping the module and suite turned tech row 421 into a delivered row and tech fell to 9 effective claimable while the export still published FLOOR-MET; the writer refreshed the block and the gate then read CURRENT rc=0, with a drifted copy still STALE naming queue:tech, a section-less copy MISSING and an absent file rc=3. Row 421 stamped and one REAL measured gap seeded (queue_export_gate_wire: the gate is a CLI, nothing runs it on the write path), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2374 closed, battery-R2375 opened first=yes at 502/3988. Disclosed: the first battery was killed by the buffering pipe trap with nothing lost, and the window overran its budget because the battery cost 1317.3s."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -371,7 +380,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 354,
+        "done_rows": 355,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
