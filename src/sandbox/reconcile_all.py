@@ -4796,6 +4796,16 @@ SUITES = [
     # BEFORE the guard existed.)
     ("os-review-window-history-wire",
      os.path.join("..", "os", "test_review_window_history_wire.py"), 6),
+    # R2371: the history guard landed on the DECLARED path only, so
+    # `exempt_review --window N` still aged every entry against a list that
+    # is not a history. The argument path now asks the same reader first and
+    # refuses a provable rewind with the declared path's own
+    # E_RWHW_DECL_HISTORY, while a monotonic, UNPINNED or DRIFT declaration
+    # keeps its reading byte-identical.
+    # (AC-RWAG1..AC-RWAG6 pinned in state/queue/tech.md as the R2359 seed row
+    # BEFORE the guard existed.)
+    ("os-review-window-wire-argument-guard",
+     os.path.join("..", "os", "test_review_window_wire_argument_guard.py"), 6),
     # R2310: stamp_residue reports the whole stamped-but-never-logged residue
     # as one table, but every reviewed round stays in it forever, so the same
     # 185 rows are re-triaged by hand every window. One pinned

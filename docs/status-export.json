@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T08:39:39+08:00",
-  "do": "R2370 product window: the follow-up ritual finally ASKS the foreign-section reader. The matrix section used to regenerate the doc over whatever the pile contained, so a ritual rename would have regenerated the matrix over foreign sections in silence while the reader stayed a manual call; now a FOREIGN-SECTION pile refuses before any matrix byte is rendered, a clean pile keeps the matrix byte-identical, and a census disagreement is reported even when every round reads clean.",
+  "export_ts": "2026-11-02T09:13:00+08:00",
+  "do": "R2371 product window: the explicit --window path finally ASKS the history. `exempt_review --window N` used to take the caller's number and age every accepted entry without ever noticing that the declarations list is not a history; now a list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds, before any entry is aged, while a monotonic, UNPINNED or DRIFT declaration keeps its reading byte-identical.",
   "ceo_face": {
-    "current": "R2370 product window: the follow-up ritual finally ASKS the foreign-section reader. The matrix section used to regenerate the doc over whatever the pile contained, so a ritual rename would have regenerated the matrix over foreign sections in silence while the reader stayed a manual call; now a FOREIGN-SECTION pile refuses before any matrix byte is rendered, a clean pile keeps the matrix byte-identical, and a census disagreement is reported even when every round reads clean.",
-    "latest_artifact": "src/os/followup_section_foreign_wire.py plus its six-criteria suite (qa/followup-section-foreign-wire-R2370.log, two identical legs plus four adjacent suites green), the live guard reading of the real pile (qa/followup-section-foreign-wire-live-R2370.log, VOCABULARY-CLEAN over 460 rounds) and the battery that proves the registry unharmed (qa/reconcile-all-R2370.log, RUNNER PASS 496/496, criteria 3952).",
-    "next_milestone": "R2371: the battery on the committed R2370 tree pre-registered at 497 suites / 3958 criteria (this window own os-followup-section-foreign-wire suite), then the product face at the queue head the reader names; the seed this window measured is followup_guard_evidence_scope (AC-FGES1..6), because the guard asks a fixed 'qa' pile while the section compares the evidence path it was actually given.",
-    "next_milestone_due": "2026-11-04T08:39:39+08:00",
-    "last_artifact": "src/os/followup_section_foreign_wire.py plus its six-criteria suite (qa/followup-section-foreign-wire-R2370.log, two identical legs plus four adjacent suites green), the live guard reading of the real pile (qa/followup-section-foreign-wire-live-R2370.log, VOCABULARY-CLEAN over 460 rounds) and the battery that proves the registry unharmed (qa/reconcile-all-R2370.log, RUNNER PASS 496/496, criteria 3952).",
-    "updated_at": "2026-11-02T08:39:39+08:00"
+    "current": "R2371 product window: the explicit --window path finally ASKS the history. `exempt_review --window N` used to take the caller's number and age every accepted entry without ever noticing that the declarations list is not a history; now a list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds, before any entry is aged, while a monotonic, UNPINNED or DRIFT declaration keeps its reading byte-identical.",
+    "latest_artifact": "src/os/review_window_wire_argument_guard.py plus its six-criteria suite (qa/review-window-wire-argument-guard-R2371.log, two identical legs plus four adjacent suites green), the live reading of the real declarations list (qa/review-window-wire-argument-guard-live-R2371.log, ARGUMENT-CLEAN / EMPTY-HISTORY / window=100, declaration sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2371.log, RUNNER PASS 497/497, criteria 3958).",
+    "next_milestone": "R2372: the battery on the committed R2371 tree pre-registered at 498 suites / 3964 criteria (this window own os-review-window-wire-argument-guard suite), then the product face at the queue head the reader names - it currently offers line 418 prefix AC-RTRI1 (residue_triage_repin_idempotent); the seed this window measured is review_window_guard_parity (AC-RWGP1..6), because the declared and argument paths now refuse the same file with the same code and nothing measures that the pair agrees over ONE declaration.",
+    "next_milestone_due": "2026-11-04T09:13:00+08:00",
+    "last_artifact": "src/os/review_window_wire_argument_guard.py plus its six-criteria suite (qa/review-window-wire-argument-guard-R2371.log, two identical legs plus four adjacent suites green), the live reading of the real declarations list (qa/review-window-wire-argument-guard-live-R2371.log, ARGUMENT-CLEAN / EMPTY-HISTORY / window=100, declaration sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2371.log, RUNNER PASS 497/497, criteria 3958).",
+    "updated_at": "2026-11-02T09:13:00+08:00"
   },
   "depts": [
     {
@@ -176,11 +176,16 @@
       "src/os/followup_section_foreign_wire.py",
       "on",
       "R2370 product: the follow-up matrix section asks the section-name reader FIRST - a foreign pile refuses naming the rounds and the names before any matrix byte is rendered, a clean pile keeps the matrix byte-identical to the pre-wire section, and a census disagreement is reported on a clean pile; six criteria green twice and a live reading of the real pile as VOCABULARY-CLEAN"
+    ],
+    [
+      "src/os/review_window_wire_argument_guard.py",
+      "on",
+      "R2371 product: the explicit --window argument path asks review_window_history FIRST, so a declarations list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds before any entry is aged; the rewind law is imported at call time and the code is carried through the wire's own mapping, a monotonic or UNPINNED or DRIFT declaration keeps its reading byte-identical, and the declaration bytes stay untouched; six criteria green twice plus a live reading of the real list"
     ]
   ],
   "results": [
     [
-      "2370",
+      "2371",
       "OSLoop 执行 tick"
     ],
     [
@@ -294,15 +299,19 @@
     [
       "R2370",
       "verification then product: the debt gate named product-face-R2370, so the battery ran first on the committed 6b918367 tree - RUNNER PASS 496/496 suites plus controls 7/7 in 990.9s, criteria total 3952 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2370.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 496/3952 (47476B, VERDICT PASS); evidence and matrix committed alone as bd736b53. Then the claimed row: state/queue/tech.md:416 AC-FSFW1 followup_section_foreign_wire, its six criteria pinned in that row at R2357 BEFORE the code and every anchor prose-only at HEAD. Shipped the guard wire plus its six-criteria suite: the reading stays followup_section_foreign's (this file parses no log and imports no os) and the matrix core stays battery_followup.matrix_core with its body unchanged, battery_followup.section_matrix delegating through a call-time import so the modules never import each other at load; a FOREIGN-SECTION pile refuses at E_FSFW_FOREIGN_SECTION naming the rounds and the names before matrix_core is entered, a clean pile matches the doc byte for byte, a census disagreement is reported even on a clean pile, and a pile the reader cannot speak about is NOT a refusal but carries the guard code on the detail. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/followup-section-foreign-wire-R2370.log, 1380B), wired os-followup-section-foreign-wire(6). LIVE: the real pile reads VOCABULARY-CLEAN over 460 rounds at rc=0 and the guarded section runs in front of the real matrix; the refusal branch is proved on fixtures and not claimed as a live catch. Row stamped and one REAL measured gap row seeded (followup_guard_evidence_scope, AC-FGES1..6: the guard asks a fixed qa pile while the section compares the evidence path it was given), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first red was a REAL module defect in the pinned key order and the module was fixed; the second red was this window own fixture asserting the render line against a --json payload, corrected without widening a criterion; the live dry run reads matrix FAIL only because this window added the 497th suite after its own green battery"
+    ],
+    [
+      "R2371",
+      "verification then product: the debt gate named reconcile-battery-R2370, so the battery ran first on the committed 5d9485d2 tree - RUNNER PASS 497/497 suites plus controls 7/7 in 987.8s, criteria total 3958 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2371.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 497/3958 (47582B, VERDICT PASS); evidence and matrix committed alone as 5d9485d2. Then the claimed row: state/queue/tech.md:417 AC-RWAG1 review_window_wire_argument_guard, its six criteria pinned in that row at R2359 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the guard plus its six-criteria suite: the history law is imported at call time (proved by patching it and watching both the library report and the CLI move) and the refusal code is carried through review_window_wire.carry_history_code, so `exempt_review --window N` refuses a rewinding list with the same E_RWHW_DECL_HISTORY the declared path uses, naming both rounds; UNPINNED, DRIFT, a moved list and an unreadable file all leave the explicit window's reading byte-identical because that window is the caller's, and the refusal lands before any entry is aged with zero counts and WINDOW-REFUSED while the declaration bytes are untouched. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/review-window-wire-argument-guard-R2371.log, 3426B), wired os-review-window-wire-argument-guard(6). LIVE: the real declarations list reads ARGUMENT-CLEAN / EMPTY-HISTORY / window=100 / declared_by=R2305 at exit 0 and both exempt_review paths read 9 entries 0 stale with the declaration sha256 unchanged. Row stamped and one REAL measured gap row seeded (review_window_guard_parity, AC-RWGP1..6: the two paths now refuse the same file with the same code but nothing measures that they agree over one declaration), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first battery invocation was cancelled by a truncating pipe (the known trap) with zero survivors and no evidence file before the direct-stream rerun; three suite reds were this window own assertions and fixtures, corrected to the measured truth without widening a criterion; and one REAL module defect was found on the way - the refusal detail now carries the history code exactly as the declared path does"
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 6,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

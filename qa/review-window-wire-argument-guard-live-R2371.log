@@ -1,0 +1,10 @@
+R2371 review_window_wire_argument_guard live capture
+declaration state/review_window.json sha256 before=75f51236bbe8061205f51dc8d473c95f06ae8b314b652f3a7f31f544f93cbf6b after=75f51236bbe8061205f51dc8d473c95f06ae8b314b652f3a7f31f544f93cbf6b
+guard --check rc=0
+  REVIEW WINDOW ARGUMENT GUARD verdict=ARGUMENT-CLEAN history=EMPTY-HISTORY window=100 moves=0 declared_by=R2305
+guard --check --json rc=0
+  {"verdict": "ARGUMENT-CLEAN", "code": null, "history": "EMPTY-HISTORY", "declarations": 1, "moves": [], "rewind": null, "declared_by": "R2305", "window": 100, "detail": ""}
+exempt_review --round R2371 --window 100 rc=0
+  EXEMPT REVIEW round=R2371 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN source=argument
+exempt_review --round R2371 --window-from-declaration rc=0
+  EXEMPT REVIEW round=R2371 window=100 declaration=PINNED entries=9 stale=0 verdict=REVIEW-CLEAN source=declaration

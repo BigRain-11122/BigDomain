@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2371 suite=src/os/test_review_window_wire_argument_guard.py legs=2
+== LEG A rc=0 digest=F7A6E11A670E861B
+PASS AC-RWAG1 the argument path asks review_window_history first and refuses the declared path's own E_RWHW_DECL_HISTORY naming both rounds - on a patched history AND on a real rewinding declaration file, with the law imported not restated
+PASS AC-RWAG2 a lone-argument reading on a monotonic declaration stays byte-identical (same report keys, same rows, same window, same printed line), so the guard adds a refusal and nothing else
+PASS AC-RWAG3 an UNPINNED window declaration keeps the argument path's reading byte-identical and exits 0 with the caller's window intact, while the guard's own line says history=UNPINNED - because an explicit window is the caller's and not the declaration's
+PASS AC-RWAG4 the refusal happens before any entry is aged - zero counts and WINDOW-REFUSED on the CLI, with the declaration bytes untouched (whole-tree digest identical before and after)
+PASS AC-RWAG5 the guard CLI exits 0/2/5 with a byte-stable --json over the pinned REPORT_KEYS, an unreadable list reads ARGUMENT-UNKNOWN (never a silent pass), and the exempt_review codes for the argument path are unchanged (clean 0, stale 2)
+LIVE REVIEW WINDOW ARGUMENT GUARD verdict=ARGUMENT-CLEAN history=EMPTY-HISTORY window=100 moves=0 declared_by=R2305
+PASS AC-RWAG6 pure ASCII, stdlib only, zero network, no clock, the history law imported rather than restated (a patched history moves this report), wired as os-review-window-wire-argument-guard(6), live reading taken
+SUITE PASS 6/6
+== LEG B rc=0 digest=F7A6E11A670E861B
+PASS AC-RWAG1 the argument path asks review_window_history first and refuses the declared path's own E_RWHW_DECL_HISTORY naming both rounds - on a patched history AND on a real rewinding declaration file, with the law imported not restated
+PASS AC-RWAG2 a lone-argument reading on a monotonic declaration stays byte-identical (same report keys, same rows, same window, same printed line), so the guard adds a refusal and nothing else
+PASS AC-RWAG3 an UNPINNED window declaration keeps the argument path's reading byte-identical and exits 0 with the caller's window intact, while the guard's own line says history=UNPINNED - because an explicit window is the caller's and not the declaration's
+PASS AC-RWAG4 the refusal happens before any entry is aged - zero counts and WINDOW-REFUSED on the CLI, with the declaration bytes untouched (whole-tree digest identical before and after)
+PASS AC-RWAG5 the guard CLI exits 0/2/5 with a byte-stable --json over the pinned REPORT_KEYS, an unreadable list reads ARGUMENT-UNKNOWN (never a silent pass), and the exempt_review codes for the argument path are unchanged (clean 0, stale 2)
+LIVE REVIEW WINDOW ARGUMENT GUARD verdict=ARGUMENT-CLEAN history=EMPTY-HISTORY window=100 moves=0 declared_by=R2305
+PASS AC-RWAG6 pure ASCII, stdlib only, zero network, no clock, the history law imported rather than restated (a patched history moves this report), wired as os-review-window-wire-argument-guard(6), live reading taken
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_history_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_history.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=F7A6E11A670E861B

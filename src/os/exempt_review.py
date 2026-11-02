@@ -35,6 +35,15 @@
 # aged, and is refused together with an explicit --window rather than
 # resolved by precedence. The age law itself is untouched.
 #
+# Argument-path wiring (AC-RWAG1..AC-RWAG6, pinned as the R2359 seed row of
+# the same board BEFORE that guard existed): an explicit --window is the
+# caller's number, so this path never took its window from the declaration -
+# but it also never noticed that the declarations list was not a history at
+# all. review_window_wire_argument_guard asks that question first and refuses
+# ONLY a provable rewind, with the same E_RWHW_DECL_HISTORY the declared path
+# uses; a monotonic, UNPINNED or DRIFT declaration leaves this reading byte
+# identical. The age law is still untouched.
+#
 # Pure read: nothing is written, no clock is read, no network import.
 # Source is pure ASCII, stdlib only.
 
@@ -44,6 +53,7 @@ import sys
 
 import queue_row_exempt as QRE
 import review_window_wire as RWW
+import review_window_wire_argument_guard as RWAG
 
 WINDOW_DEFAULT = 100
 
@@ -134,6 +144,14 @@ def audit(root, round_text, window=NO_WINDOW, window_source=SOURCE_ARGUMENT):
     if current is None:
         raise ExemptReviewError("E_EXR_BAD_ROUND",
                                 "round must be R<n>, got %r" % (round_text,))
+    if window_source != SOURCE_DECLARATION:
+        # AC-RWAG1..AC-RWAG4: the ARGUMENT path asks the history too, so a
+        # declarations list whose declared_by rewinds refuses here instead of
+        # being silently overridden by an explicit window. The guard decides
+        # nothing else: a monotonic, UNPINNED or DRIFT declaration leaves this
+        # path's reading byte-identical, and the refusal happens BEFORE any
+        # entry is aged.
+        RWAG.guard(root)
     if window_source == SOURCE_DECLARATION:
         # AC-RWW3: the declaration is the only source on this path, so a
         # window argument alongside it is an ambiguity, not a precedence.
@@ -264,6 +282,14 @@ def main(argv):
         print("  EXEMPT REVIEW round=%s window=- entries=0 stale=0 "
               "verdict=WINDOW-REFUSED source=%s"
               % (round_text, SOURCE_DECLARATION))
+        return 2
+    except RWAG.ReviewWindowArgumentGuardError as exc:
+        # AC-RWAG4: same shape on the argument path - zero counts, the
+        # WINDOW-REFUSED word, and not one entry aged.
+        print("REFUSE %s: %s" % (exc.code, exc.detail))
+        print("  EXEMPT REVIEW round=%s window=- entries=0 stale=0 "
+              "verdict=WINDOW-REFUSED source=%s"
+              % (round_text, SOURCE_ARGUMENT))
         return 2
     if use_json:
         print(render_json(report))
