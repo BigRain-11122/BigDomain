@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T17:30:24+08:00",
-  "do": "R2383 verification-then-product window: a tool's OWN argument block finally has one owner - runner_arg_guard.guard_usage() was a hand-written literal and battery_followup_help_wire.usage_text() composed its own flag line from format strings, so a third tool had to copy one of the two shapes; both now render through own_usage_block_renderer and both published texts stay byte-identical. The battery ran first on the committed tree (509/509 suites, criteria total 4030 exactly as pre-registered).",
+  "export_ts": "2026-11-02T18:05:00+08:00",
+  "do": "R2384 product window: the export's own write path is finally a reading. export_publish_path_guard walks a tree, decides which scripts belong to the CURRENT publishing path (does the script ask queue_floor_export_face, the module that owns the current shape) and names every one of those that writes docs/status-export.json itself instead of handing the bytes to closeout_export_parity_wire.publish. On the real tree it reads BYPASS over 5 offenders against 7 clean, so the bypass is measured rather than assumed.",
   "ceo_face": {
-    "current": "R2383 verification-then-product window: a tool's OWN argument block finally has one owner - runner_arg_guard.guard_usage() was a hand-written literal and battery_followup_help_wire.usage_text() composed its own flag line from format strings, so a third tool had to copy one of the two shapes; both now render through own_usage_block_renderer and both published texts stay byte-identical. The battery ran first on the committed tree (509/509 suites, criteria total 4030 exactly as pre-registered).",
-    "latest_artifact": "src/os/own_usage_block_renderer.py plus its six-criteria suite (qa/own-usage-block-renderer-R2383.log, 1797B, two legs identical, three adjacent suites green) and the reroute of src/os/runner_arg_guard.py and src/os/battery_followup_help_wire.py through it; the live capture reads VERDICT LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched (qa/own-usage-block-renderer-live-R2383.log, 333B).",
-    "next_milestone": "R2384: the battery on the committed R2383 tree pre-registered at 510 suites / 4036 criteria (this window own renderer suite), then the product face the queue head names (line 431 prefix AC-EPPG1, export_publish_path_guard). The seed this window MEASURED is owner_table_parity (AC-OTP1..AC-OTP6): the block is rendered from ONE shape but its table is still hand-written beside the parser that accepts the flags, so a flag added to the loop never appears in the help.",
-    "next_milestone_due": "2026-11-04T17:30:24+08:00",
-    "last_artifact": "src/os/own_usage_block_renderer.py plus its six-criteria suite (qa/own-usage-block-renderer-R2383.log, 1797B, two legs identical, three adjacent suites green) and the reroute of src/os/runner_arg_guard.py and src/os/battery_followup_help_wire.py through it; the live capture reads VERDICT LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched (qa/own-usage-block-renderer-live-R2383.log, 333B).",
-    "updated_at": "2026-11-02T17:30:24+08:00"
+    "current": "R2384 product window: the export's own write path is finally a reading. export_publish_path_guard walks a tree, decides which scripts belong to the CURRENT publishing path (does the script ask queue_floor_export_face, the module that owns the current shape) and names every one of those that writes docs/status-export.json itself instead of handing the bytes to closeout_export_parity_wire.publish. On the real tree it reads BYPASS over 5 offenders against 7 clean, so the bypass is measured rather than assumed.",
+    "latest_artifact": "src/os/export_publish_path_guard.py plus its six-criteria suite (qa/export-publish-path-guard-R2384.log, two legs with an identical criterion digest, three adjacent suites green) and one runner wiring line; the live capture reads 1018 scripts walked, 143 publishers, 12 on the current path, 5 offenders named with file and line and 131 historical fossils counted but not accused (qa/export-publish-path-guard-live-R2384.log).",
+    "next_milestone": "R2385: the battery on the committed R2384 tree, pre-registered at 511 suites / 4042 criteria, then the successor seam this window's own live capture measures: a script that hands the export to ANOTHER module's publish still reads CLEAN, so the call is not yet proven to be the proven wire.",
+    "next_milestone_due": "2026-11-04T23:59:59+08:00",
+    "last_artifact": "src/os/export_publish_path_guard.py plus its six-criteria suite (qa/export-publish-path-guard-R2384.log, two legs with an identical criterion digest, three adjacent suites green) and one runner wiring line; the live capture reads 1018 scripts walked, 143 publishers, 12 on the current path, 5 offenders named with file and line and 131 historical fossils counted but not accused (qa/export-publish-path-guard-live-R2384.log).",
+    "updated_at": "2026-11-02T18:05:00+08:00"
   },
   "depts": [
     {
@@ -241,11 +241,16 @@
       "src/os/own_usage_block_renderer.py",
       "on",
       "R2383 product: a tool's own argument block now has one owner - the guard's literal and the help wire's composed flag line both render through it, with the derived metavar, the honest (none) and the declared bracket spelling, while every published line stays byte-identical"
+    ],
+    [
+      "src/os/export_publish_path_guard.py",
+      "on",
+      "R2384 product: every script on the current export publishing path is now read - the ones that write docs/status-export.json themselves are named BYPASS with file and line, the ones that hand their bytes to the parity wire read CLEAN, and 2019-era one-offs are reported as historical instead of accused"
     ]
   ],
   "results": [
     [
-      "2383",
+      "2384",
       "OSLoop 执行 tick"
     ],
     [
@@ -411,15 +416,19 @@
     [
       "R2383",
       "verification-then-product: the battery ran first on the committed tree and read PASS 509/509 suites plus controls 7/7 in 1319.2s with criteria total 4030 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as b44e9032. Then CLAIMED state/queue/tech.md:429 AC-OUB1 own_usage_block_renderer, criteria pinned there at R2373, anchors prose-only at HEAD. Shipped one renderer imported by both CLIs so neither writes a format string for its own block; SUITE PASS 6/6 twice identical plus three adjacent suites green (1797B), wired os-own-usage-block-renderer(6) so the registry reads 510/4036. LIVE: LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched. Row stamped and one REAL measured gap seeded (the table is still hand-written beside the parser). Fold 645 at a true block boundary, predicted=measured 70838B, one residue re-pin."
+    ],
+    [
+      "R2384",
+      "product window: the debt gate named reconcile-battery-R2383 and the product-first law outranked it, so the row stays OPEN at 510 suites / 4036 criteria and the product face shipped instead. CLAIMED state/queue/tech.md:431 AC-EPPG1 export_publish_path_guard, criteria pinned there at R2378, anchors prose-only at HEAD. The law was narrowed once, before any evidence, after a measured over-broad first reading accused 131 historical scripts. SUITE PASS 6/6 twice identical plus three adjacent suites green (1663B), wired os-export-publish-path-guard(6) so the registry reads 511/4042. LIVE over 1018 scripts: BYPASS with 5 offenders (closeout_R2374:411, closeout_R2375:375, closeout_R2376:376, export_R2368:139, export_R2373:149) against 7 clean (closeout_R2377..R2383). Row stamped and one REAL measured gap seeded (export_publish_wire_identity: a publish to another module still reads CLEAN)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -452,7 +461,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 363,
+        "done_rows": 364,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

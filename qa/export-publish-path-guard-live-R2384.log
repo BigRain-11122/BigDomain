@@ -1,0 +1,18 @@
+EXPORT PUBLISH PATH GUARD LIVE CAPTURE R2384
+root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os
+
+STEP1 write-nothing baseline files=1325 digest=ad1f584b740aea62
+STEP2 real tree verdict=BYPASS rc=2 scanned=1020 publishers=144 current=13 historical=131
+  BYPASS closeout_R2374.py:411 back = write_text(EXPORT, text)
+  BYPASS closeout_R2375.py:375 back = write_text(EXPORT, text)
+  BYPASS closeout_R2376.py:376 back = write_text(EXPORT, text)
+  BYPASS export_R2368.py:139 with io.open(EXPORT, "w", encoding="utf-8", newline="\n") as handle:
+  BYPASS export_R2373.py:149 with io.open(EXPORT, "w", encoding="utf-8", newline="\n") as handle:
+  CLEAN closeout_R2377.py,closeout_R2378.py,closeout_R2379.py,closeout_R2380.py,closeout_R2381.py,closeout_R2382.py,closeout_R2383.py,closeout_R2384.py
+STEP3 routed copy verdict=CLEAN rc=0 offenders=(none) clean=routed_copy.py
+STEP4 json byte-stable=True rc=2/2 bytes=7178
+STEP5 missing-root rc=3 E_EPPG_NO_ROOT: C:\Users\sjs20\AppData\Local\Temp\eppg-live-mq9ruqt1\nope
+STEP6 bad-flags rc=5 E_EPPG_BAD_FLAGS unknown argument --bogus
+STEP7 foreign publish verdict=CLEAN rc=0 offenders=(none) clean=foreign_writer.py (the seeded seam: a publish to another module reads CLEAN)
+STEP8 write-nothing after files=1325 digest=ad1f584b740aea62 identical=True
+VERDICT LIVE-BYPASS-MEASURED offenders=5 clean=8 historical=131

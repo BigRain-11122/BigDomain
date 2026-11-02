@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2384 suite=src/os/test_export_publish_path_guard.py legs=2
+== LEG A rc=0 digest=68405C6EAD80133D
+PASS AC-EPPG1 AC-EPPG1 offender named with file and publishing line
+PASS AC-EPPG1b AC-EPPG1 the reported line follows the file it was read from
+PASS AC-EPPG2 AC-EPPG2 routed reads CLEAN, blessed name does not, fossils are historical
+PASS AC-EPPG2b AC-EPPG2 a two-step write is caught at its open() line
+PASS AC-EPPG3 AC-EPPG3 writes nothing and reads no clock
+PASS AC-EPPG4 AC-EPPG4 no current publisher reads EMPTY at exit 0
+PASS AC-EPPG5 AC-EPPG5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPPG6 AC-EPPG6 ascii, stdlib only, no network, wired to the runner
+CRITERIA EXPECTED 6 OBSERVED 8 PASS 8 FAIL 0
+== LEG B rc=0 digest=68405C6EAD80133D
+PASS AC-EPPG1 AC-EPPG1 offender named with file and publishing line
+PASS AC-EPPG1b AC-EPPG1 the reported line follows the file it was read from
+PASS AC-EPPG2 AC-EPPG2 routed reads CLEAN, blessed name does not, fossils are historical
+PASS AC-EPPG2b AC-EPPG2 a two-step write is caught at its open() line
+PASS AC-EPPG3 AC-EPPG3 writes nothing and reads no clock
+PASS AC-EPPG4 AC-EPPG4 no current publisher reads EMPTY at exit 0
+PASS AC-EPPG5 AC-EPPG5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPPG6 AC-EPPG6 ascii, stdlib only, no network, wired to the runner
+CRITERIA EXPECTED 6 OBSERVED 8 PASS 8 FAIL 0
+== ADJACENT 3
+== src/os/test_closeout_export_parity_wire.py rc=0 SUITE PASS 16/16
+== src/os/test_export_closeout_gate_parity.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=68405C6EAD80133D

@@ -5179,6 +5179,15 @@ SUITES = [
     # state/queue/tech.md:425 as the R2369 seed row BEFORE the code.)
     ("os-residue-batch-status-face",
      os.path.join("..", "os", "test_residue_batch_status_face.py"), 6),
+    # R2384: R2378 routed one closeout through the parity wire, but the export
+    # has three writers and only one asked it, so the bypass was a habit rather
+    # than a measurement. export_publish_path_guard reads every script in a tree
+    # and names each one that writes the export itself, while a script that
+    # publishes through the wire reads CLEAN - a property of the code, not a
+    # blessed filename. (AC-EPPG1..AC-EPPG6 were pinned in state/queue/tech.md:431
+    # as the R2378 seed row BEFORE the code.)
+    ("os-export-publish-path-guard",
+     os.path.join("..", "os", "test_export_publish_path_guard.py"), 6),
     ]
 
 FAILS = 0
