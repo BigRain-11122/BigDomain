@@ -53,7 +53,7 @@ ITEMS = [
     "NOT rewrite it, which is the designed order; src/sandbox/suite_matrix.py "
     "regenerated docs/sandbox-suite-matrix.md to 499 suites / 3970 criteria "
     "(47836B) and the re-run read all four PASS for VERDICT R2373 PASS. The "
-    "evidence and the matrix were committed ALONE as 4b2b4f7d before any "
+    "evidence and the matrix were committed ALONE as 411b0077 before any "
     "product byte changed (the R2168 mixed-tree rule).",
 
     "R2373 product face, the row the reader named: CLAIMED "
@@ -168,7 +168,7 @@ BACKLOG_ROW = (
     "EXACTLY as pre-registered, TMP RECLAIM 932/932 (qa/reconcile-all-R2373-"
     "retry.log, 807623B, crlf=0); four follow-up sections PASS after the "
     "designed matrix FAIL and its regeneration to 499/3970 at 47836B, VERDICT "
-    "R2373 PASS, evidence and matrix committed alone as 4b2b4f7d. PRODUCT: "
+    "R2373 PASS, evidence and matrix committed alone as 411b0077. PRODUCT: "
     "claimed state/queue/tech.md:419 prefix AC-CUR1 (contract_usage_renderer), "
     "criteria pinned in that row at R2366 BEFORE any code, anchors prose-only "
     "at HEAD. SHIPPED src/os/contract_usage_renderer.py: the contract block "

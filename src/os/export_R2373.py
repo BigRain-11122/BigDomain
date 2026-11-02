@@ -99,7 +99,7 @@ def main(argv):
         "in 1267.0s, criteria total 3970 EXACTLY as pre-registered, TMP RECLAIM "
         "932/932, four follow-up sections PASS after the designed matrix FAIL "
         "and its regeneration to 499/3970 at 47836B (VERDICT PASS), evidence "
-        "and matrix committed alone as 4b2b4f7d. Then the claimed row: "
+        "and matrix committed alone as 411b0077. Then the claimed row: "
         "state/queue/tech.md:419 AC-CUR1 contract_usage_renderer, its six "
         "criteria pinned there at R2366 BEFORE the code and every anchor "
         "prose-only at HEAD. Shipped the renderer plus its six-criteria suite: "
