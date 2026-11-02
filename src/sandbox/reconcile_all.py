@@ -4371,6 +4371,16 @@ SUITES = [
     # (AC-SF1..AC-SF6 pre-registered in state/queue/tech.md R2240 b.)
     ("os-state-fold",
      os.path.join("..", "os", "test_state_fold.py"), 6),
+    # R2407: a tokens line is not automatically a block's LAST line - a round
+    # may append disclosures after its ledger, and the R2405 fold then left
+    # R2395's ledger in the archive while the rest of the round stayed live.
+    # The fold now refuses a window whose last moved line is round X's tokens
+    # line while the first kept line still opens with that same round.
+    # (AC-FRB1..AC-FRB6 were registered at R2407 AFTER the repair - the suite
+    # docstring records that ordering; the debt row fold-block-boundary has
+    # carried the item intent since R2336.)
+    ("os-fold-round-block-boundary",
+     os.path.join("..", "os", "test_fold_round_block_boundary.py"), 6),
     # R2246: the state.json write canon as one callable - the bare-LF and
     # off-indent drift repaired by hand twice (R2243, R2245) now has a
     # measured layout report, a payload-preserving canonical rewrite and an

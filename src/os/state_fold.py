@@ -41,6 +41,12 @@ GATE = 78500
 PAT = re.compile(r'(?:AC|BD|C|D|O|T|XL|OH|R)-[0-9A-Za-z][0-9A-Za-z]*'
                  r'(?:-[0-9A-Za-z]+)*')
 
+# Round-block boundary law (R2407). A tokens line ends a round's ledger, but a
+# round may append items AFTER its ledger line (disclosures, self-heal,
+# repairs), so the ledger line is not automatically the block's last line.
+TOKENS_RE = re.compile(r'^R(\d{3,5}) tokens:')
+ROUND_HEAD_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\b')
+
 VERDICTS = ("FOLD-CLEAR", "FOLD-DUE")
 
 ITEM_INDENT = 16
@@ -53,7 +59,7 @@ PLAN_KEYS = ("window_start", "window_end", "window_lines",
              "window_content_bytes", "summary_head", "tokens_total",
              "tokens_missing", "token_ok", "gate", "reserve_bytes",
              "predicted_bytes", "margin", "gate_ok", "preop_sha16",
-             "newline", "folded_log_len")
+             "round_split", "newline", "folded_log_len")
 
 ARCHIVE_KEYS = ("path", "created", "prefix_intact", "before_bytes",
                 "after_bytes", "appendix_bytes", "sha16")
@@ -152,6 +158,28 @@ def ps_escape(value):
     return literal
 
 
+def round_split(window, kept):
+    """The round this cut splits in half, or None.
+
+    R2405 cut after `R2395 tokens:` and left R2395's closeout disclosures in
+    the live log, so the round line survived while its ledger line moved to
+    the archive - and the ledger coverage law then read R2395 as a round
+    without a ledger. A cut is refused only when the LAST moved line is a
+    round's own tokens line and the FIRST kept line still opens with that same
+    round; prose that merely mentions the number mid-line is not a
+    continuation, so this does not refuse ordinary cuts.
+    """
+    if not window or not kept:
+        return None
+    last = TOKENS_RE.match(window[-1])
+    if not last:
+        return None
+    head = ROUND_HEAD_RE.match(kept[0])
+    if head and head.group(1) == last.group(1):
+        return "R" + last.group(1)
+    return None
+
+
 def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
               gate=GATE):
     """The fold predicate. Returns (plan, folded_text); writes nothing."""
@@ -208,6 +236,7 @@ def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
         "margin": int(gate) - predicted,
         "gate_ok": predicted + int(reserve) <= int(gate),
         "preop_sha16": hashlib.sha256(raw).hexdigest()[:16],
+        "round_split": round_split(window, log[end:]),
         "newline": "CRLF" if layout["newline"] == "\r\n" else "LF",
         "folded_log_len": new_log_len,
     }
@@ -289,6 +318,8 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     fail = []
     if plan["tokens_missing"]:
         fail.append("token-missing")
+    if plan["round_split"]:
+        fail.append("round-split")
     if not plan["gate_ok"]:
         fail.append("gate-exceed")
     result = dict(plan)

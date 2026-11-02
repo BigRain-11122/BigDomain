@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2407 suite=src/os/test_fold_round_block_boundary.py legs=2
+== LEG A rc=0 digest=660D18891CA54EB9
+suite: fold round-block boundary (R2407 AC-FRB1..AC-FRB6)
+PASS AC-FRB1 the guard names R2395 for the real split shape
+PASS AC-FRB2 a cut at a true block boundary is allowed
+PASS AC-FRB3 a mid-line mention is not a split
+PASS AC-FRB4 a split window is refused before any write
+PASS AC-FRB5 a clean window still lands on its prediction
+PASS AC-FRB6 guard single-owned, ASCII stdlib, no network, wired
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=660D18891CA54EB9
+suite: fold round-block boundary (R2407 AC-FRB1..AC-FRB6)
+PASS AC-FRB1 the guard names R2395 for the real split shape
+PASS AC-FRB2 a cut at a true block boundary is allowed
+PASS AC-FRB3 a mid-line mention is not a split
+PASS AC-FRB4 a split window is refused before any write
+PASS AC-FRB5 a clean window still lands on its prediction
+PASS AC-FRB6 guard single-owned, ASCII stdlib, no network, wired
+SUITE PASS 6/6 criteria
+== ADJACENT 3
+== src/os/test_state_fold.py rc=0 SUITE PASS 6/6
+== src/os/test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_archive.py rc=0 SUITE PASS 8/8 criteria
+EVIDENCE identical=True adjacent=3 fails=0 digest=660D18891CA54EB9
