@@ -267,9 +267,17 @@ def plan(root, round_value, status, declared_by, reason, until):
 
 
 def apply(root, prepared):
-    """One atomic replace, then a read-back through the reader (AC-RTA4)."""
+    """One atomic replace, then a read-back through the reader (AC-RTA4).
+
+    The write path asks the shared NOOP comparison FIRST (AC-DWNP1), so a
+    composition that already equals the declaration writes no byte and creates
+    no temp. On any other reading the shipped path below runs unchanged.
+    """
     path = prepared["path"]
     payload = prepared["after_bytes"]
+    import declaration_writer_noop_parity as DWNP
+    if DWNP.is_noop(path, payload):
+        return None
     temp = path + ".tmp-rta"
     try:
         with open(temp, "wb") as handle:
@@ -382,6 +390,9 @@ def render(report):
     if report["status"] == NOT_RESIDUE:
         out.append("  NOTE E_SASF_NOT_RESIDUE: %s is not in the live residue"
                    % report["round"])
+    if report["verdict"] == "NOOP":
+        out.append("  NOTE the composition already equals the declaration, "
+                   "so no byte was written")
     return "\n".join(out)
 
 
@@ -507,23 +518,41 @@ def main(argv):
                 }
             else:
                 reread = apply(root, prepared)
-                report = {
-                    "action": "append",
-                    "round": "R%d" % entry["round"],
-                    "status": entry["status"],
-                    "declared_by": "R%d" % entry["declared_by"],
-                    "until": "R%d" % entry["until"],
-                    "before_bytes": prepared["before_bytes"],
-                    "after_bytes": prepared["before_bytes"]
-                    + prepared["delta"],
-                    "delta": prepared["delta"],
-                    "entries_before": prepared["entries_before"],
-                    "entries_after": prepared["entries_after"],
-                    "residue": list(reread["residue"]),
-                    "declaration": reread["declaration"],
-                    "verdict": reread["verdict"],
-                    "wrote": True,
-                }
+                if reread is None:
+                    report = {
+                        "action": "append",
+                        "round": "R%d" % entry["round"],
+                        "status": entry["status"],
+                        "declared_by": "R%d" % entry["declared_by"],
+                        "until": "R%d" % entry["until"],
+                        "before_bytes": prepared["before_bytes"],
+                        "after_bytes": prepared["before_bytes"],
+                        "delta": 0,
+                        "entries_before": prepared["entries_before"],
+                        "entries_after": prepared["entries_before"],
+                        "residue": [],
+                        "declaration": "PINNED",
+                        "verdict": "NOOP",
+                        "wrote": False,
+                    }
+                else:
+                    report = {
+                        "action": "append",
+                        "round": "R%d" % entry["round"],
+                        "status": entry["status"],
+                        "declared_by": "R%d" % entry["declared_by"],
+                        "until": "R%d" % entry["until"],
+                        "before_bytes": prepared["before_bytes"],
+                        "after_bytes": prepared["before_bytes"]
+                        + prepared["delta"],
+                        "delta": prepared["delta"],
+                        "entries_before": prepared["entries_before"],
+                        "entries_after": prepared["entries_after"],
+                        "residue": list(reread["residue"]),
+                        "declaration": reread["declaration"],
+                        "verdict": reread["verdict"],
+                        "wrote": True,
+                    }
     except ResidueTriageAppendError as exc:
         sys.stdout.write("%s\n" % exc.code)
         if exc.detail:
@@ -540,7 +569,7 @@ def main(argv):
         sys.stdout.write(render(report) + "\n")
     if report["action"] == "dry-run":
         return 0
-    if report["verdict"] == "TRIAGED":
+    if report["verdict"] in ("TRIAGED", "NOOP"):
         return 0
     return 2
 

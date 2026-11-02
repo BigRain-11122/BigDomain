@@ -1,1 +1,1 @@
-R2388 ok repin_noop_eol_dialect NOOP owns the EOL dialect
+R2389 ok declaration_writer_noop_parity one NOOP seam for all four writers

@@ -5126,6 +5126,14 @@ SUITES = [
     # code.)
     ("os-repin-noop-eol-dialect",
      os.path.join("..", "os", "test_repin_noop_eol_dialect.py"), 6),
+    # R2389: the NOOP law reached the re-pin path only - the three other
+    # declaration writers each composed a fresh document and wrote it through
+    # their own atomic replace with no comparison against the bytes already on
+    # disk. One shared seam is now asked by all four before any replace.
+    # (AC-DWNP1..AC-DWNP6 were pinned in state/queue/tech.md:444 as the R2388
+    # seed row BEFORE the code.)
+    ("os-declaration-writer-noop-parity",
+     os.path.join("..", "os", "test_declaration_writer_noop_parity.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

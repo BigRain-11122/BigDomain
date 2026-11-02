@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2389 suite=src/os/test_declaration_writer_noop_parity.py legs=2
+== LEG A rc=0 digest=85DCACBFD86A1BA8
+PASS AC-DWNP1 append, head renew and entry retire each read NOOP on an identical composition, leaving the world map unchanged and creating no temp
+PASS AC-DWNP2 the shared comparison and the re-pin's own comparison read a CRLF declaration identically, field for field and key order for key order
+PASS AC-DWNP3 a one-byte content change still reads PLANNED and still writes on all three writers
+PASS AC-DWNP4 the append refusal, the retire refusal and the renew NOOP line print exactly what they printed before, with the same exit codes
+PASS AC-DWNP5 each writer asks the comparison at exactly one call site and patching the shared law moves all four faces, writing nothing
+PASS AC-DWNP6 the module is pure ASCII stdlib - the shared law is the only extra import and it is asked at call time - with no clock, no network and no write primitive, and it carries its own reconcile label wired into the runner
+SUMMARY passes=6 fails=0
+== LEG B rc=0 digest=85DCACBFD86A1BA8
+PASS AC-DWNP1 append, head renew and entry retire each read NOOP on an identical composition, leaving the world map unchanged and creating no temp
+PASS AC-DWNP2 the shared comparison and the re-pin's own comparison read a CRLF declaration identically, field for field and key order for key order
+PASS AC-DWNP3 a one-byte content change still reads PLANNED and still writes on all three writers
+PASS AC-DWNP4 the append refusal, the retire refusal and the renew NOOP line print exactly what they printed before, with the same exit codes
+PASS AC-DWNP5 each writer asks the comparison at exactly one call site and patching the shared law moves all four faces, writing nothing
+PASS AC-DWNP6 the module is pure ASCII stdlib - the shared law is the only extra import and it is asked at call time - with no clock, no network and no write primitive, and it carries its own reconcile label wired into the runner
+SUMMARY passes=6 fails=0
+== ADJACENT 4
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_head_renew.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_entry_retire.py rc=0 SUITE PASS 6/6
+== src/os/test_repin_noop_eol_dialect.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=4 fails=0 digest=85DCACBFD86A1BA8

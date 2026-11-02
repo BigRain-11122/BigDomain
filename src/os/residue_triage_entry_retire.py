@@ -254,6 +254,10 @@ def plan(root, round_text, execute=False):
         return prepared
 
     temp = path + ".tmp-rter"
+    import declaration_writer_noop_parity as DWNP
+    if DWNP.is_noop(path, after_bytes):
+        prepared["noop"] = True
+        return prepared
     try:
         with open(temp, "wb") as handle:
             handle.write(after_bytes)
@@ -289,6 +293,12 @@ def plan(root, round_text, execute=False):
 
 def report(prepared):
     """The pinned report shape, headed by the action that produced it."""
+    if prepared.get("noop"):
+        verdict = "NOOP"
+    elif prepared["executed"]:
+        verdict = "RETIRED"
+    else:
+        verdict = "PLANNED"
     return {
         "action": "retire" if prepared["executed"] else "plan",
         "round": "R%d" % prepared["round"],
@@ -300,7 +310,7 @@ def report(prepared):
         "after_bytes": prepared["before_bytes"] + prepared["delta"],
         "delta": prepared["delta"],
         "declaration": "PINNED",
-        "verdict": "RETIRED" if prepared["executed"] else "PLANNED",
+        "verdict": verdict,
         "wrote": prepared["executed"],
     }
 

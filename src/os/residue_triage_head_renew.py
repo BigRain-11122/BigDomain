@@ -323,6 +323,27 @@ def plan(root, round_text, execute=False):
                 "E_RTRH_STALE",
                 "the declaration moved between the plan and the write",
                 EXIT_REFUSED)
+        # The shared NOOP comparison is asked BEFORE the write (AC-DWNP1): a
+        # renewal whose rendered bytes equal the file leaves it untouched
+        # instead of rewriting the same document under a RENEWED word.
+        import declaration_writer_noop_parity as DWNP
+        if DWNP.is_noop(path, data):
+            return {
+                "declaration": "PINNED",
+                "old_declared_by": head["declared_by"],
+                "old_until": head["head_until"],
+                "new_declared_by": head["declared_by"],
+                "new_until": head["head_until"],
+                "entries": len(entries),
+                "statuses": histogram(entries),
+                "unmatched": unmatched,
+                "old_bytes": old_bytes,
+                "predicted_bytes": old_bytes,
+                "remaining_breaks": len(survivors),
+                "remaining_first": first_survivor,
+                "executed": False,
+                "verdict": "NOOP",
+            }
         write_atomic(path, data, predicted, tail, tail)
 
     return {

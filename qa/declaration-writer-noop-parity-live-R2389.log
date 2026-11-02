@@ -1,0 +1,8 @@
+STEP1 compare_the_declaration_with_its_own_bytes verdict=NOOP dialect=LF raw_equal=yes
+DECLARATION WRITER NOOP verdict=NOOP dialect=LF composed=LF raw_equal=yes bytes=67758->67758 normalised=67758
+STEP2 append_check rc=0 {"action": "check", "round": "R2389", "status": "NOT-RESIDUE", "declared_by": "R2389", "until": "-", "before_bytes": 0, "after_bytes": 0, "delta": 0, "entries_before": 235, "entries_after": 235, "residue": [], "declaration": "PINNED", "verdict": "TRIAGED", "wrote": false}
+STEP3 renew_dry_run rc=0 {"declaration": "PINNED", "old_declared_by": "R2389", "old_until": "R2406", "new_declared_by": "R2389", "new_until": "R2406", "entries": 235, "statuses": [{"status": "DELIVERED", "count": 215}, {"status": "STAMP-ONLY-OPEN", "count": 20}], "unmatched": 0, "old_bytes": 67758, "predicted_bytes": 67758, "remaining_breaks": 0, "remaining_first": "-", "executed": false, "verdict": "NOOP"}
+STEP4 retire_dry_run rc=2 E_RTER_NOT_DECLARED
+STEP5 cli_self_compare rc=0 DECLARATION WRITER NOOP verdict=NOOP dialect=LF composed=LF raw_equal=yes bytes=67758->67758 normalised=67758
+STEP6 declaration_digest before=e77e7ba0c68b5ce3 after=e77e7ba0c68b5ce3 unchanged=yes
+VERDICT LIVE-READ-ONLY

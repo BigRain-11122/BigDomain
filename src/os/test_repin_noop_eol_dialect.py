@@ -330,7 +330,20 @@ def ac_rned5():
             if not name.endswith(".py") or name.startswith("test_"):
                 continue
             with io.open(os.path.join(BASE, name), encoding="utf-8") as f:
-                definitions += f.read().count("def normalise_bytes")
+                text = f.read()
+            # Count real DEFINITIONS, not prose: a one-off round script that
+            # quotes the name inside a string must not read as a second law.
+            # Re-anchored at R2389 after closeout_R2388.py was measured doing
+            # exactly that; the criterion's intent - exactly one owner - is
+            # unchanged and is now measured on the AST.
+            try:
+                tree = ast.parse(text)
+            except SyntaxError:
+                continue
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef) \
+                        and node.name == "normalise_bytes":
+                    definitions += 1
 
         RNED.normalise_bytes = lambda data: data
         try:
