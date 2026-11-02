@@ -2,8 +2,8 @@ LIVE R2372 residue_triage_repin_idempotent (read-only dry runs)
 declaration_before 63c97734153ec2eb5594ee2207f6098da68c7f8103e828ffeeebed23eed853c1 65393B
 declaration_after  63c97734153ec2eb5594ee2207f6098da68c7f8103e828ffeeebed23eed853c1 65393B
 declaration_unchanged True
-shipped rc=0 bytes=190
-wire    rc=0 bytes=190
+shipped rc=0 bytes=186
+wire    rc=0 bytes=186
 byte_identical True
 SHIPPED RESIDUE REPIN PLANNED round=R2372 until=R2390 entries=222->222 dropped=0 bytes=65393->65210
   STATUS DELIVERED count=202

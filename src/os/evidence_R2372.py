@@ -27,13 +27,25 @@ def digest(path):
         return hashlib.sha256(handle.read()).hexdigest()
 
 
+def transport(text):
+    """Normalise the child's console transport EOL, nothing else.
+
+    R2373 measured the defect this fixes: the child CLI prints through the
+    Windows console, so its stdout arrives with CRLF, and embedding it
+    verbatim put six CRLF lines inside a file the census reads as ONE utf-8
+    LF dialect (class=other). The payload is the printed LINE set; only the
+    transport EOL is normalised here, exactly the R2366 AC-BFH4 lesson.
+    """
+    return text.replace("\r\n", "\n")
+
+
 def run(module, extra):
     argv = [sys.executable, module] + list(extra)
     proc = subprocess.Popen(argv, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE, cwd=REPO)
     out, err = proc.communicate()
-    return proc.returncode, out.decode("utf-8", "replace"), \
-        err.decode("utf-8", "replace")
+    return proc.returncode, transport(out.decode("utf-8", "replace")), \
+        transport(err.decode("utf-8", "replace"))
 
 
 def main():
