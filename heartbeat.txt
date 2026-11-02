@@ -1,2 +1,1 @@
-2026-11-02T22:34:00+08:00 R2392 append_check_status_precedence shipped; a refused --check now names its live status at exit 3 while the append path stays byte-identical; battery carried OPEN
-2393 2026-11-03 R2393 verification-then-repair-then-product window (three battery legs, two birth-site repairs, one product face)
+2026-11-03T01:00+08:00 R2394 battery green 520/520
