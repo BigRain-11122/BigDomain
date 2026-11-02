@@ -5294,6 +5294,11 @@ SUITES = [
     ("os-declaration-writer-dialect-preservation",
      os.path.join("..", "os",
                   "test_declaration_writer_dialect_preservation.py"), 6),
+    # R2399: a constant is an own-flag table only when a help or usage path in
+    # the same file reads it, so the three measured data-constant false
+    # positives stop while runner_arg_guard's real drift stays.
+    ("os-owner-table-usage-wire",
+     os.path.join("..", "os", "test_owner_table_usage_wire.py"), 6),
     ]
 
 FAILS = 0

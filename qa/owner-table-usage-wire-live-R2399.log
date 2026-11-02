@@ -1,0 +1,23 @@
+R2399 OWNER TABLE USAGE WIRE live capture (real tree)
+module=src/os/owner_table_usage_wire.py
+module_before sha16=f5cb2ecdddcedbec bytes=11143
+
+-- false positives the new notion removes --
+rc=2 OWNER TABLE USAGE WIRE evidence_R2372.py verdict=NO-TABLE E_OTUW_NO_TABLE
+rc=2 OWNER TABLE USAGE WIRE r2140_fold.py verdict=NO-TABLE E_OTUW_NO_TABLE
+rc=2 OWNER TABLE USAGE WIRE retry_naming.py verdict=NO-TABLE E_OTUW_NO_TABLE
+
+-- true readings that must not move --
+rc=2 OWNER TABLE USAGE WIRE runner_arg_guard.py verdict=PARITY-DISAGREES missing_in_table=[--guard*,--help] missing_in_parser=[]
+rc=0 OWNER TABLE USAGE WIRE battery_followup.py verdict=PARITY-AGREES table=8 parser=8
+
+-- the shipped law keeps its own face --
+law rc=2 OWNER TABLE PARITY runner_arg_guard.py verdict=PARITY-DISAGREES missing_in_table=[--guard*,--help] missing_in_parser=[]
+
+-- refusals --
+bad_flag rc=5 OWNER TABLE USAGE WIRE E_OTUW_BAD_FLAG --nope
+missing rc=3 OWNER TABLE USAGE WIRE E_OTUW_UNREADABLE src/os/no-such-tool.py
+json rc=0 {"missing_in_parser":[],"missing_in_table":[],"parser":["--help","-h","--json","--dry-run","--root","--evidence","--label","--round"],"prefix":[],"table":["--root","--evidence","--label","--round","--json","--dry-run","--help","-h"],"tool":"battery_followup.py","verdict":"PARITY-AGREES"}
+
+module_after sha16=f5cb2ecdddcedbec bytes=11143
+module_unchanged=yes

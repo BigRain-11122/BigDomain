@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2399 suite=src/os/test_owner_table_usage_wire.py legs=2
+== LEG A rc=0 digest=B69940C8442515F4
+PASS AC-OTUW1 the usage path decides which constants are a table, and patching that path moves the reading
+PASS AC-OTUW2 the three data-constant false positives read NO-TABLE while runner_arg_guard keeps its real drift and battery_followup keeps AGREES 8/8
+PASS AC-OTUW3 a NEW one-sided tool reads DISAGREES with no edit, and the reading carries no tool name and no whitelist
+PASS AC-OTUW4 nothing is written, no clock is read, and owner_table_parity's bytes and printed lines are unchanged
+PASS AC-OTUW5 exits are 0/2/3/5 and --json is byte-stable over the shipped key set
+PASS AC-OTUW6 the module is pure ASCII stdlib with no network and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== LEG B rc=0 digest=B69940C8442515F4
+PASS AC-OTUW1 the usage path decides which constants are a table, and patching that path moves the reading
+PASS AC-OTUW2 the three data-constant false positives read NO-TABLE while runner_arg_guard keeps its real drift and battery_followup keeps AGREES 8/8
+PASS AC-OTUW3 a NEW one-sided tool reads DISAGREES with no edit, and the reading carries no tool name and no whitelist
+PASS AC-OTUW4 nothing is written, no clock is read, and owner_table_parity's bytes and printed lines are unchanged
+PASS AC-OTUW5 exits are 0/2/3/5 and --json is byte-stable over the shipped key set
+PASS AC-OTUW6 the module is pure ASCII stdlib with no network and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== ADJACENT 3
+== src/os/test_owner_table_parity.py rc=0 NO SUITE LINE
+== src/os/test_matrix_evidence_pile_consistency.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_guard_parity_consumer_wire.py rc=0 SUITE PASS
+EVIDENCE identical=True adjacent=3 fails=0 digest=B69940C8442515F4
