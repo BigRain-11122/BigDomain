@@ -245,11 +245,21 @@ def plan(root, pairs, declared_by, reason, until):
     except (IOError, OSError) as exc:
         raise ResidueTriageAppendBatchError("E_RTAB_UNREADABLE", str(exc))
     try:
-        before_text = raw_bytes.decode("utf-8")
-    except UnicodeDecodeError as exc:
+        with open(path, "r", encoding="utf-8", newline=None) as handle:
+            before_text = handle.read()
+    except (UnicodeDecodeError, IOError, OSError) as exc:
         raise ResidueTriageAppendBatchError("E_RTAB_UNREADABLE", str(exc))
+    # The splice runs on universal-newline text and the result is re-rendered
+    # in the declaration's own dialect: the same law the single append asks
+    # (AC-DWPP1/AC-DWPP2), and what makes a CRLF declaration spliceable at
+    # all (the pinned closer is an LF layout).
+    import declaration_writer_dialect_preservation as DWDP
     after_text = compose(before_text, entries)
-    after_bytes = after_text.encode("utf-8")
+    try:
+        _, after_bytes = DWDP.encode(raw_bytes, after_text)
+    except DWDP.DialectError as exc:
+        raise ResidueTriageAppendBatchError(
+            "E_RTAB_UNREADABLE", "%s: %s" % (exc.code, exc.detail))
     return {
         "entries": entries,
         "path": path,
@@ -265,6 +275,12 @@ def apply(root, prepared):
     """One atomic replace, then a read-back through the reader (AC-RTAB3)."""
     path = prepared["path"]
     payload = prepared["after_bytes"]
+    # The shared NOOP comparison is asked BEFORE the write (AC-DWPP3): this
+    # writer shipped before the law reached any writer, so a batch whose
+    # composition already equals the declaration used to rewrite it.
+    import declaration_writer_noop_parity as DWNP
+    if DWNP.is_noop(path, payload):
+        return None
     temp = path + ".tmp-rtab"
     try:
         with open(temp, "wb") as handle:
@@ -523,23 +539,43 @@ def main(argv):
                 }
             else:
                 reread = apply(root, prepared)
-                report = {
-                    "action": "append",
-                    "rounds": [value[0] for value in runtime],
-                    "statuses": [value[1] for value in runtime],
-                    "declared_by": "R%s" % by.lstrip("R"),
-                    "until": "R%s" % until.lstrip("R"),
-                    "before_bytes": prepared["before_bytes"],
-                    "after_bytes": prepared["before_bytes"]
-                    + prepared["delta"],
-                    "delta": prepared["delta"],
-                    "entries_before": prepared["entries_before"],
-                    "entries_after": prepared["entries_after"],
-                    "residue": list(reread["residue"]),
-                    "declaration": reread["declaration"],
-                    "verdict": reread["verdict"],
-                    "wrote": True,
-                }
+                if reread is None:
+                    # the NOOP reading: the declaration already carried the
+                    # composition, so nothing was written (AC-DWPP3)
+                    report = {
+                        "action": "append",
+                        "rounds": [value[0] for value in runtime],
+                        "statuses": [value[1] for value in runtime],
+                        "declared_by": "R%s" % by.lstrip("R"),
+                        "until": "R%s" % until.lstrip("R"),
+                        "before_bytes": prepared["before_bytes"],
+                        "after_bytes": prepared["before_bytes"],
+                        "delta": 0,
+                        "entries_before": prepared["entries_before"],
+                        "entries_after": prepared["entries_before"],
+                        "residue": [],
+                        "declaration": "PINNED",
+                        "verdict": "NOOP",
+                        "wrote": False,
+                    }
+                else:
+                    report = {
+                        "action": "append",
+                        "rounds": [value[0] for value in runtime],
+                        "statuses": [value[1] for value in runtime],
+                        "declared_by": "R%s" % by.lstrip("R"),
+                        "until": "R%s" % until.lstrip("R"),
+                        "before_bytes": prepared["before_bytes"],
+                        "after_bytes": prepared["before_bytes"]
+                        + prepared["delta"],
+                        "delta": prepared["delta"],
+                        "entries_before": prepared["entries_before"],
+                        "entries_after": prepared["entries_after"],
+                        "residue": list(reread["residue"]),
+                        "declaration": reread["declaration"],
+                        "verdict": reread["verdict"],
+                        "wrote": True,
+                    }
     except ResidueTriageAppendBatchError as exc:
         sys.stdout.write("%s\n" % exc.code)
         if exc.detail:
@@ -556,7 +592,7 @@ def main(argv):
         sys.stdout.write(render(report) + "\n")
     if report["action"] == "dry-run":
         return 0
-    if report["verdict"] == "TRIAGED":
+    if report["verdict"] in ("TRIAGED", "NOOP"):
         return 0
     return 2
 

@@ -210,10 +210,15 @@ def plan(root, round_text, execute=False):
             raw_bytes = handle.read()
     except (IOError, OSError) as exc:
         raise EntryRetireError("E_RTER_UNREADABLE", str(exc))
+    # universal-newline text: spans and the splice work on LF whatever
+    # transport the file carries, and the result is re-rendered in the
+    # declaration's own dialect below (AC-DWPP1/AC-DWPP2)
     try:
-        before_text = raw_bytes.decode("utf-8")
-    except UnicodeDecodeError as exc:
+        with open(path, "r", encoding="utf-8", newline=None) as handle:
+            before_text = handle.read()
+    except (UnicodeDecodeError, IOError, OSError) as exc:
         raise EntryRetireError("E_RTER_UNREADABLE", str(exc))
+    import declaration_writer_dialect_preservation as DWDP
 
     spans = _spans(before_text)
     if len(spans) != len(declaration["entries"]):
@@ -222,7 +227,14 @@ def plan(root, round_text, execute=False):
             "the text carries %d entry objects against %d declared entries"
             % (len(spans), len(declaration["entries"])))
     after_text = _cut(before_text, spans, position)
-    after_bytes = after_text.encode("utf-8")
+    # the declaration's own dialect is re-applied to the spliced text
+    # (AC-DWPP1/AC-DWPP2); an unpreservable dialect refuses in this module's
+    # unreadable family so no existing refusal/exit/line moves (AC-DWPP4)
+    try:
+        _, after_bytes = DWDP.encode(raw_bytes, after_text)
+    except DWDP.DialectError as exc:
+        raise EntryRetireError(
+            "E_RTER_UNREADABLE", "%s: %s" % (exc.code, exc.detail))
 
     survivors = [entry for entry in declaration["entries"]
                  if entry["round"] != number]

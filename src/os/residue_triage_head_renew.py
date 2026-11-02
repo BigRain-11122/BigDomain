@@ -242,7 +242,15 @@ def plan(root, round_text, execute=False):
             raw_bytes = handle.read()
     except (IOError, OSError) as exc:
         raise RenewError("E_RTRH_UNREADABLE", str(exc), EXIT_UNREADABLE)
-    raw = raw_bytes.decode("utf-8", "replace")
+    # universal-newline text: the splice works on LF whatever transport the
+    # file carries, and the result is re-rendered in the declaration's own
+    # dialect at the end of this plan (AC-DWPP1/AC-DWPP2)
+    try:
+        with open(path, "r", encoding="utf-8", newline=None) as handle:
+            raw = handle.read()
+    except (UnicodeDecodeError, IOError, OSError) as exc:
+        raise RenewError("E_RTRH_UNREADABLE", str(exc), EXIT_UNREADABLE)
+    import declaration_writer_dialect_preservation as DWDP
 
     entries = declaration["entries"]
     head_until = None if head["head_until"] == "-" else \
@@ -307,7 +315,15 @@ def plan(root, round_text, execute=False):
     first_survivor = survivors[0]["round"] if survivors else "-"
     reason = reason_text(current, entries, window)
     renewed, tail = splice(raw, current, reason)
-    data = renewed.encode("utf-8")
+    # the declaration's own dialect is re-applied to the renewed text
+    # (AC-DWPP1/AC-DWPP2); an unpreservable dialect refuses in this module's
+    # unreadable family so no existing refusal/exit/line moves (AC-DWPP4)
+    try:
+        _, data = DWDP.encode(raw_bytes, renewed)
+    except DWDP.DialectError as exc:
+        raise RenewError(
+            "E_RTRH_UNREADABLE", "%s: %s" % (exc.code, exc.detail),
+            EXIT_UNREADABLE)
     predicted = len(data)
     unmatched = len([entry for entry in entries
                      if entry["round"] not in live])

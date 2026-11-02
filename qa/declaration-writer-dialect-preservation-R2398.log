@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2398 suite=src/os/test_declaration_writer_dialect_preservation.py legs=2
+== LEG A rc=0 digest=1042F64EB9D5C418
+declaration_writer_dialect_preservation suite (expected criteria 6)
+PASS AC-DWPP1 a CRLF declaration stays CRLF after a real append
+PASS AC-DWPP2 an LF declaration keeps today's bytes exactly
+PASS AC-DWPP3 the NOOP path writes nothing on all four writers
+PASS AC-DWPP4 refusal codes, exits and printed lines unchanged
+PASS AC-DWPP5 the shared dialect law moves every writer
+PASS AC-DWPP6 pure, read-only seam and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=1042F64EB9D5C418
+declaration_writer_dialect_preservation suite (expected criteria 6)
+PASS AC-DWPP1 a CRLF declaration stays CRLF after a real append
+PASS AC-DWPP2 an LF declaration keeps today's bytes exactly
+PASS AC-DWPP3 the NOOP path writes nothing on all four writers
+PASS AC-DWPP4 refusal codes, exits and printed lines unchanged
+PASS AC-DWPP5 the shared dialect law moves every writer
+PASS AC-DWPP6 pure, read-only seam and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage_append_batch.py rc=0 SUITE PASS 6/6
+== src/os/test_declaration_writer_noop_parity.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=3 fails=0 digest=1042F64EB9D5C418

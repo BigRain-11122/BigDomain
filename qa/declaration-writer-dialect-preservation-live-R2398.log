@@ -1,0 +1,15 @@
+== LIVE CAPTURE R2398 (read-only on the real tree)
+-- dialect rc=0
+DECLARATION DIALECT dialect=LF composed=68838 payload=68838 preserved=yes
+-- dialect-json rc=0
+{"dialect": "LF", "composed_bytes": 68838, "payload_bytes": 68838, "preserved": true}
+-- append-check rc=0
+RESIDUE TRIAGE APPEND action=check round=R2397 status=NOT-RESIDUE declared_by=R2395 until=- entries=241->241 bytes=0->0 delta=0 residue=- declaration=PINNED verdict=TRIAGED wrote=no
+  NOTE E_SASF_NOT_RESIDUE: R2397 is not in the live residue
+-- retire-refusal rc=2
+E_RTER_NOT_DECLARED
+  R9999 carries no entry (241 entries are declared)
+-- renew-noop rc=0
+RESIDUE TRIAGE HEAD RENEW old=R2395/R2412 new=R2395/R2412 entries=241 [DELIVERED=221 STAMP-ONLY-OPEN=20] unmatched=0 bytes=68838->68838 remaining=0/- executed=no verdict=NOOP
+  STATUS DELIVERED count=221
+  STATUS STAMP-ONLY-OPEN count=20

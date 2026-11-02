@@ -5289,6 +5289,11 @@ SUITES = [
     ("os-review-window-guard-parity-consumer-wire",
      os.path.join("..", "os",
                   "test_review_window_guard_parity_consumer_wire.py"), 6),
+    # R2398: a writer that actually changes a declaration keeps that
+    # declaration's own line endings instead of converting every line to LF.
+    ("os-declaration-writer-dialect-preservation",
+     os.path.join("..", "os",
+                  "test_declaration_writer_dialect_preservation.py"), 6),
     ]
 
 FAILS = 0

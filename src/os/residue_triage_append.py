@@ -261,11 +261,26 @@ def plan(root, round_value, status, declared_by, reason, until):
     except (IOError, OSError) as exc:
         raise ResidueTriageAppendError("E_RTA_UNREADABLE", str(exc))
     try:
-        before_text = raw_bytes.decode("utf-8")
-    except UnicodeDecodeError as exc:
+        with open(path, "r", encoding="utf-8", newline=None) as handle:
+            before_text = handle.read()
+    except (UnicodeDecodeError, IOError, OSError) as exc:
         raise ResidueTriageAppendError("E_RTA_UNREADABLE", str(exc))
+    # The splice runs on universal-newline text (CRLF and CR arrive as LF), so
+    # compose's pinned closer matches whatever transport the file carries; the
+    # composed result is then re-rendered in the declaration's own dialect
+    # (AC-DWPP1/AC-DWPP2). Without this, a CRLF declaration could not even be
+    # appended to - it read E_RTA_BAD_SHAPE instead of being converted.
     after_text = compose(before_text, entry)
-    after_bytes = after_text.encode("utf-8")
+    # an LF declaration gets exactly today's bytes; a CRLF declaration keeps
+    # CRLF on every line it already carried; a dialect no writer can preserve
+    # refuses in this module's own unreadable family, so no existing refusal
+    # code, exit code or printed line moves (AC-DWPP4)
+    import declaration_writer_dialect_preservation as DWDP
+    try:
+        _, after_bytes = DWDP.encode(raw_bytes, after_text)
+    except DWDP.DialectError as exc:
+        raise ResidueTriageAppendError(
+            "E_RTA_UNREADABLE", "%s: %s" % (exc.code, exc.detail))
     return {
         "entry": entry,
         "path": path,

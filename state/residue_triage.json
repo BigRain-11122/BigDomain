@@ -1,1692 +1,1713 @@
 {
-  "declared_by": 2395,
-  "reason": "R2395 fold moved early blocks into the archive; every status taken from one live reading",
+  "declared_by": 2398,
+  "reason": "fold 650 moved the live log blocks of the early rounds into the monthly archive",
   "entries": [
     {
       "round": 1755,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1763,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1824,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1825,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1883,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1884,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1885,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1886,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1889,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1891,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1894,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1896,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1897,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1898,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1902,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1905,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1907,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1908,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1909,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1910,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1911,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1912,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1913,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1914,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1915,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1916,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1923,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1926,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1927,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1929,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1930,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1931,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1932,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1933,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1934,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1935,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1936,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1937,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1938,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1939,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1940,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1941,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1942,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1943,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1945,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1946,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1947,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1957,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1958,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 1976,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2038,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2059,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2062,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2072,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2077,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2078,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2079,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2081,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2082,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2084,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2085,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2087,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2089,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2090,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2091,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2093,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2094,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2095,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2096,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2097,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2098,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2099,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2100,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2101,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2102,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2103,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2104,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2106,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2107,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2108,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2109,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2110,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2111,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2112,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2113,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2114,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2115,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2116,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2117,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2118,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2119,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2120,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2121,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2122,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2124,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2125,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2126,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2127,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2128,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2129,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2130,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2131,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2132,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2133,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2134,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2146,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2147,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2148,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2149,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2150,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2151,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2152,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2154,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2155,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2156,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2157,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2159,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2160,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2163,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2164,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2165,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2169,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2170,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2173,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2175,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2178,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2179,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2180,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2182,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2183,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2184,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2185,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2186,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2187,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2190,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2191,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2192,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2193,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2196,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2202,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2203,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2204,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2205,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2206,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2207,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2209,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2210,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2212,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2215,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2217,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2220,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2222,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2225,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2226,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2228,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2241,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2242,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2244,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2245,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2246,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2248,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2250,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2253,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2257,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2259,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2261,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2263,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2265,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2266,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2267,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2269,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2270,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2272,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2274,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2276,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2278,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2280,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2282,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2284,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2286,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2288,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2290,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2292,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2294,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2296,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2298,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2300,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2302,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2303,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2305,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2307,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2308,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2312,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2314,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2317,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2319,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2321,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2323,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2325,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2327,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2329,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2331,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2333,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2335,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2337,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2339,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2342,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2412
     },
     {
       "round": 2343,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 638 moved this round log block into the monthly archive while its stamp stayed on a closed row; the live triage reading is DELIVERED because its ledger line and its done row are on disk",
       "until": 2412
     },
     {
       "round": 2345,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2346,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2348,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 640 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2350,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2350 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2351,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2351 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2353,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2354,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2356,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2357,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2359,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2361,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2362,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2363,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2365,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 642 moved this round's log block into the monthly archive; its ledger line and its done row are on disk, and stamp_residue reads DELIVERED on a closed row",
       "until": 2412
     },
     {
       "round": 2366,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2366 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2368,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2368 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2369,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2369 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2370,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2370 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2371,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 644 moved the R2371/R2372 blocks and this round own stamp; all three measured DELIVERED by the live reading",
       "until": 2412
     },
     {
       "round": 2372,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "fold 644 moved the R2371/R2372 blocks and this round own stamp; all three measured DELIVERED by the live reading",
       "until": 2412
     },
     {
       "round": 2373,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2373 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2374,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2374 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2375,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2375 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2376,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2376 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2377,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2377 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2378,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2378 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2379,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2379 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2380,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2380 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2381,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2381 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2382,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2382 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2383,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2383 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2384,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2384 at its measured status DELIVERED",
       "until": 2412
     },
     {
       "round": 2385,
       "status": "DELIVERED",
-      "declared_by": 2395,
+      "declared_by": 2398,
       "reason": "re-pinned at R2385 at its measured status DELIVERED",
+      "until": 2412
+    },
+    {
+      "round": 2386,
+      "status": "DELIVERED",
+      "declared_by": 2398,
+      "reason": "re-pinned at R2386 at its measured status DELIVERED",
+      "until": 2412
+    },
+    {
+      "round": 2387,
+      "status": "DELIVERED",
+      "declared_by": 2398,
+      "reason": "re-pinned at R2387 at its measured status DELIVERED",
+      "until": 2412
+    },
+    {
+      "round": 2388,
+      "status": "DELIVERED",
+      "declared_by": 2398,
+      "reason": "re-pinned at R2388 at its measured status DELIVERED",
       "until": 2412
     }
   ]
