@@ -1,1 +1,1 @@
-R2389 ok declaration_writer_noop_parity one NOOP seam for all four writers
+2026-11-02T23:59:00+08:00 R2390 owner_table_parity shipped; tech head now line 445 seeded AC-OTUW1; battery carried OPEN

@@ -5134,6 +5134,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-declaration-writer-noop-parity",
      os.path.join("..", "os", "test_declaration_writer_noop_parity.py"), 6),
+    # R2390: R2383 gave a tool's OWN argument block one renderer, so the
+    # shape is owned - but the TABLE it is rendered from is still hand-written
+    # beside the parser that accepts the tokens, and nothing compared the two.
+    # One reader now derives both sides and names each one-sided flag.
+    # (AC-OTPP1..AC-OTPP6 were pinned in state/queue/tech.md:445 as the R2383
+    # seed row BEFORE the code; the seeded AC-OTP/E_OTP labels collide with
+    # src/os/orphan_promote.py, so free labels were pinned and disclosed.)
+    ("os-owner-table-parity",
+     os.path.join("..", "os", "test_owner_table_parity.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

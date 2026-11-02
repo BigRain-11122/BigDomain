@@ -1,0 +1,12 @@
+LIVE owner_table_parity R2390 on the real tree
+runner_arg_guard rc=2
+  out: OWNER TABLE PARITY runner_arg_guard.py verdict=PARITY-DISAGREES missing_in_table=[--guard*,--help] missing_in_parser=[]
+own_usage_block_renderer rc=2
+  out: OWNER TABLE PARITY own_usage_block_renderer.py verdict=NO-TABLE E_OTPP_NO_TABLE
+battery_followup rc=0
+  out: OWNER TABLE PARITY battery_followup.py verdict=PARITY-AGREES table=8 parser=8
+runner_arg_guard_json_1 rc=2
+  out: {"missing_in_parser":[],"missing_in_table":["--guard*","--help"],"parser":["--help","--guard-help","--json"],"prefix":["--guard"],"table":["--json"],"tool":"runner_arg_guard.py","verdict":"PARITY-DISAGREES"}
+runner_arg_guard_json_2 rc=2
+  out: {"missing_in_parser":[],"missing_in_table":["--guard*","--help"],"parser":["--help","--guard-help","--json"],"prefix":["--guard"],"table":["--json"],"tool":"runner_arg_guard.py","verdict":"PARITY-DISAGREES"}
+module digest before=368b140e16cc7cd0 after=368b140e16cc7cd0 unchanged=True

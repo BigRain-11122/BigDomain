@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2390 suite=src/os/test_owner_table_parity.py legs=2
+== LEG A rc=0 digest=D19847068D40C731
+PASS AC-OTPP1 the table and the parser source are both read from the pointed tool - literal, membership and startswith legs - and each flag is named on the side it is missing from
+PASS AC-OTPP2 an agreeing tool reads PARITY-AGREES at exit 0, a one-sided tool names the flag and its side at exit 2, and removing one table entry from the SAME parser flips it
+PASS AC-OTPP3 the audited file's bytes and mtime are unchanged and the module carries no write primitive and no clock import
+PASS AC-OTPP4 a tool with no own-flag table reads NO-TABLE at exit 2 rather than PARITY-AGREES by accident
+PASS AC-OTPP5 exits are 0/2/3/5 and --json is byte-stable over the pinned key set
+PASS AC-OTPP6 the module is pure ASCII stdlib with no network and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== LEG B rc=0 digest=D19847068D40C731
+PASS AC-OTPP1 the table and the parser source are both read from the pointed tool - literal, membership and startswith legs - and each flag is named on the side it is missing from
+PASS AC-OTPP2 an agreeing tool reads PARITY-AGREES at exit 0, a one-sided tool names the flag and its side at exit 2, and removing one table entry from the SAME parser flips it
+PASS AC-OTPP3 the audited file's bytes and mtime are unchanged and the module carries no write primitive and no clock import
+PASS AC-OTPP4 a tool with no own-flag table reads NO-TABLE at exit 2 rather than PARITY-AGREES by accident
+PASS AC-OTPP5 exits are 0/2/3/5 and --json is byte-stable over the pinned key set
+PASS AC-OTPP6 the module is pure ASCII stdlib with no network and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== ADJACENT 3
+== src/os/test_own_usage_block_renderer.py rc=0 SUITE PASS 6/6
+== src/os/test_runner_arg_guard.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+== src/os/test_contract_usage_renderer.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=D19847068D40C731

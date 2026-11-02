@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T23:40:00+08:00",
-  "do": "R2389 product window: the NOOP comparison now reaches all four declaration writers - append, head renew, entry retire and the re-pin ask ONE shared seam before their atomic replace, so a composition that already equals the file writes no byte and creates no temp, while every refusal code, exit code and printed line stays exactly as it was.",
+  "export_ts": "2026-11-02T23:59:00+08:00",
+  "do": "R2390 product window: state/queue/tech.md:445 prefix AC-OTPP1 (owner_table_parity), criteria pinned in that row at R2383 BEFORE any code, anchors re-checked at HEAD. MEASURED DEFECT IN THE SEEDED LABELS: AC-OTP1..AC-OTP6 and E_OTP_* are already owned by src/os/orphan_promote.py, so this window pinned the free labels AC-OTPP1..AC-OTPP6 / E_OTPP_* for the same six substantive criteria and discloses the substitution on the board row and in the module docstring instead of silently sharing a prefix. SHIPPED src/os/owner_table_parity.py plus src/os/test_owner_table_parity.py: R2383 gave a tool OWN argument block one renderer, so the shape is owned, but the TABLE it is rendered from was still hand-written beside the parser that accepts the tokens and nothing compared them. The reader derives both sides from ONE tool file (module-level UPPER_CASE constants that carry flag literals - tuple, flag->dest dict or help-only tuple - against literal comparisons, membership tests resolved one hop through a module constant or a local alias of it, and startswith prefixes over a token-name) and names every flag present on one side and missing from the other. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/owner-table-parity-R2390.log, 2061B, legs=2 identical=True adjacent=3 fails=0), wired os-owner-table-parity(6). LIVE, not a plan: qa/owner-table-parity-live-R2390.log reads runner_arg_guard.py as PARITY-DISAGREES missing_in_table=[--guard*,--help] - its help block lists --json plus a --guard-help line while the parser also accepts --help and the whole --guard family - battery_followup.py as PARITY-AGREES table=8 parser=8 (its FLAGS/TAKES/HELP_FLAGS tables are the ones its help text renders), own_usage_block_renderer.py as NO-TABLE, the --json reading byte-stable across two runs, and the module digest identical before and after. Board: row 445 stamped, one REAL measured gap row seeded (owner_table_usage_wire, AC-OTUW1..AC-OTUW6 pre-registered in that row, five anchors zero-occupancy at HEAD).",
   "ceo_face": {
-    "current": "R2389 product window: the NOOP comparison now reaches all four declaration writers - append, head renew, entry retire and the re-pin ask ONE shared seam before their atomic replace, so a composition that already equals the file writes no byte and creates no temp, while every refusal code, exit code and printed line stays exactly as it was.",
-    "latest_artifact": "src/os/declaration_writer_noop_parity.py plus its six-criteria suite (qa/declaration-writer-noop-parity-R2389.log, qa/declaration-writer-noop-parity-live-R2389.log)",
-    "next_milestone": "run the carried full battery at 516 suites / 4072 criteria on the committed R2389 tree, then keep a declaration's OWN dialect when a writer genuinely changes it (AC-DWPP1..6 already pinned in state/queue/tech.md)",
-    "next_milestone_due": "2026-11-04T12:00:00+08:00",
-    "last_artifact": "src/os/review_window_guard_parity_blind_agreement.py plus its six-criteria suite (qa/review-window-guard-parity-blind-agreement-R2387.log, two legs with an identical criterion digest, three adjacent review-window suites green) and one runner wiring line; the live capture reads the real tree PARITY-AGREES ignorance=none window=100 with a byte-stable --json over the nine pinned keys, and a fixture declaration neither face can read reads PARITY-UNKNOWN ignorance=both at rc 1 (qa/review-window-guard-parity-blind-agreement-live-R2387.log).",
-    "updated_at": "2026-11-02T20:25:00+08:00"
+    "current": "R2390: a tool own help table and its parser are now compared, so a flag the parser accepts but the help block never lists is named instead of silent.",
+    "latest_artifact": "src/os/owner_table_parity.py plus its six-criteria suite (qa/owner-table-parity-R2390.log, qa/owner-table-parity-live-R2390.log)",
+    "next_milestone": "owner_table_usage_wire: constants count as tables only when a help path reads them, removing the three measured data-constant false positives while keeping the real drift",
+    "next_milestone_due": "2026-11-03",
+    "last_artifact": "src/os/owner_table_parity.py plus its six-criteria suite (qa/owner-table-parity-R2390.log, qa/owner-table-parity-live-R2390.log)",
+    "updated_at": "2026-11-02T23:59:00+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/owner_table_parity.py plus its six-criteria suite (qa/owner-table-parity-R2390.log, qa/owner-table-parity-live-R2390.log)",
     [
       "src/os/declaration_writer_noop_parity.py plus its six-criteria suite (qa/declaration-writer-noop-parity-R2389.log, qa/declaration-writer-noop-parity-live-R2389.log)",
       "on",
@@ -91,189 +92,13 @@
       "logs/state-log-archive-2026-11.md",
       "on",
       "R2338 verification window: full reconcile battery on the committed R2337 tree 0a2c0020 with zero product edits, RUNNER PASS 476/476 plus controls 7/7 in 888.4s and criteria 3832 exactly as pre-registered, four follow-up sections PASS, state canon repaired then fold 627 to 67935B with the fold-created residue round R2325 spliced through the shipped append channel, debt row closed and the R2339 product row opened"
-    ],
-    [
-      "docs/sandbox-suite-matrix.md",
-      "on",
-      "R2338 verification window: full reconcile battery on the committed R2337 tree 0a2c0020 with zero product edits, RUNNER PASS 476/476 plus controls 7/7 in 888.4s and criteria 3832 exactly as pre-registered, four follow-up sections PASS, state canon repaired then fold 627 to 67935B with the fold-created residue round R2325 spliced through the shipped append channel, debt row closed and the R2339 product row opened"
-    ],
-    [
-      "qa/reconcile-all-R2338.log",
-      "on",
-      "R2338 verification window: full reconcile battery on the committed R2337 tree 0a2c0020 with zero product edits, RUNNER PASS 476/476 plus controls 7/7 in 888.4s and criteria 3832 exactly as pre-registered, four follow-up sections PASS, state canon repaired then fold 627 to 67935B with the fold-created residue round R2325 spliced through the shipped append channel, debt row closed and the R2339 product row opened"
-    ],
-    [
-      "qa/queue-occupancy-R2337.log",
-      "on",
-      "R2337 product face: measured that the queue head offered work already shipped at R2315 (AC-GDIW1), shipped src/os/queue_occupancy.py plus its suite 6/6 twice so a row's delivery state is a reading instead of a guess, closed the stale row against the files on disk, seeded one real gap row for the head-selection wire, discharged the R2336 battery debt row and opened the R2338 one at 476/3832"
-    ],
-    [
-      "src/os/test_queue_occupancy.py",
-      "on",
-      "R2337 product face: measured that the queue head offered work already shipped at R2315 (AC-GDIW1), shipped src/os/queue_occupancy.py plus its suite 6/6 twice so a row's delivery state is a reading instead of a guess, closed the stale row against the files on disk, seeded one real gap row for the head-selection wire, discharged the R2336 battery debt row and opened the R2338 one at 476/3832"
-    ],
-    [
-      "src/os/queue_occupancy.py",
-      "on",
-      "R2337 product face: measured that the queue head offered work already shipped at R2315 (AC-GDIW1), shipped src/os/queue_occupancy.py plus its suite 6/6 twice so a row's delivery state is a reading instead of a guess, closed the stale row against the files on disk, seeded one real gap row for the head-selection wire, discharged the R2336 battery debt row and opened the R2338 one at 476/3832"
-    ],
-    [
-      "src/os/state.json",
-      "on",
-      "R2336 验证窗：全量电池先红后绿（472/475 → 475/475，判据 3826 与预注册一致），红因上一轮折窗切断轮次块，fold 625 修复、fold 626 按块边界折水位，零产品代码"
-    ],
-    [
-      "qa/reconcile-all-R2336.log",
-      "on",
-      "R2336 验证窗：全量电池先红后绿（472/475 → 475/475，判据 3826 与预注册一致），红因上一轮折窗切断轮次块，fold 625 修复、fold 626 按块边界折水位，零产品代码"
-    ],
-    [
-      "src/os/residue_triage_append.py",
-      "on",
-      "R2335 交付 residue_triage_append：一条一条补残留三账本，重复与实况不符各自拒绝且不静默改写；两腿 6/6 一致、四邻接件全绿，实况只读 TRIAGED 不动真账本；同窗补缺口种子，量尺回到 5/5 10/10 10/10"
-    ],
-    [
-      "qa/residue-triage-append-R2335.log",
-      "on",
-      "R2335 交付 residue_triage_append：一条一条补残留三账本，重复与实况不符各自拒绝且不静默改写；两腿 6/6 一致、四邻接件全绿，实况只读 TRIAGED 不动真账本；同窗补缺口种子，量尺回到 5/5 10/10 10/10"
-    ],
-    [
-      "state/queue/retire_accept.json",
-      "on",
-      "R2333 产品分：retire_accept 落地，判据 6/6 两遍一致，实测钉住六条接受（until=R2350），退休第一次有了可复核的账。"
-    ],
-    [
-      "qa/retire-accept-R2333.log",
-      "on",
-      "R2333 产品分：retire_accept 落地，判据 6/6 两遍一致，实测钉住六条接受（until=R2350），退休第一次有了可复核的账。"
-    ],
-    [
-      "qa/reconcile-all-R2332.log",
-      "on",
-      "R2332 verification window: RUNNER PASS 473/473 suites + controls 7/7 in 907.8s, TMP RECLAIM 932/932, criteria total 3814 exactly as pre-registered (+1 suite / +6 criteria against R2330 472/3808 from the R2331 os-retire-candidate suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 473/3814 (45349B); residue TRIAGED; zero product code, 0 product points."
-    ],
-    [
-      "qa/reconcile-all-R2364.log",
-      "on",
-      "R2364 verification: the battery on the committed tree reads RUNNER PASS 492/492 suites with 3928 criteria exactly as pre-registered, 884.6s, and the four follow-up sections close on VERDICT PASS"
-    ],
-    [
-      "src/os/queue_floor_delivered_wire.py",
-      "on",
-      "R2365 product: the floor gauge discounts a DELIVERED open row from standing supply and names it, so a queue of shipped rows reads FLOOR-DEBT instead of a met floor; six criteria green twice and one live reading that caught the defect it was built for"
-    ],
-    [
-      "src/os/battery_followup_help_wire.py",
-      "on",
-      "R2366 product: the follow-up CLI answers --help at exit 0 from two imported contracts (runner CLI_CONTRACT via the guard importer, and its own parser flag tables), so the help text cannot drift from either CLI while every other exit code and printed line stays byte-identical; six criteria green twice and one live answer"
-    ],
-    [
-      "qa/smoke-R2367.png",
-      "on",
-      "R2367 QA charter daily crawl: one official API page read once and rendered into a real log+png evidence pair; the reading is the wx.requestVirtualPayment field table and its twenty-five error codes, consumed as three design gates in the pay spec"
-    ],
-    [
-      "src/os/queue_floor_reading_wire.py",
-      "on",
-      "R2368 product: one published floor reading whose claimable IS the discounted number, with the discount count and the discounted rows (line+prefix) beside it so gross reconciles; six criteria green twice and one live reading where the published number and the undiscounted gauge disagree on the same tree"
-    ],
-    [
-      "src/os/residue_triage_append_batch.py",
-      "on",
-      "R2369 product: several residue (round, status) pairs declared in one call, validated before a byte moves, judged before the write so a partial batch refuses, and landed by one atomic replace at a predicted size; six criteria green twice and one live check reading the real declaration as TRIAGED with nothing to append"
-    ],
-    [
-      "src/os/followup_section_foreign_wire.py",
-      "on",
-      "R2370 product: the follow-up matrix section asks the section-name reader FIRST - a foreign pile refuses naming the rounds and the names before any matrix byte is rendered, a clean pile keeps the matrix byte-identical to the pre-wire section, and a census disagreement is reported on a clean pile; six criteria green twice and a live reading of the real pile as VOCABULARY-CLEAN"
-    ],
-    [
-      "src/os/review_window_wire_argument_guard.py",
-      "on",
-      "R2371 product: the explicit --window argument path asks review_window_history FIRST, so a declarations list whose declared_by rewinds refuses with the declared path's own E_RWHW_DECL_HISTORY naming both rounds before any entry is aged; the rewind law is imported at call time and the code is carried through the wire's own mapping, a monotonic or UNPINNED or DRIFT declaration keeps its reading byte-identical, and the declaration bytes stay untouched; six criteria green twice plus a live reading of the real list"
-    ],
-    [
-      "src/os/residue_triage_repin_idempotent.py",
-      "on",
-      "R2372 product: the re-pin reads NOOP when the composed declaration equals the file on disk, decided by BYTES and never by the head round (the module never mentions declared_by), returning before the writer is entered so no temp file is created and the atomic write path is not doubled; a one-byte content drift reads PLANNED again, and every non-NOOP path is the shipped writer's own report printed through the shipped renderer and serialiser, with the two CLIs proved byte-identical on PLANNED and on refusals and NOOP at exit 0; six criteria green twice plus a live parity leg on the real declaration"
-    ],
-    [
-      "src/os/contract_usage_renderer.py",
-      "on",
-      "R2373 product: one usage renderer for a CLI contract - the required keys, the flag spelling and the honest (none) now have one owner, in the two shapes the already-published texts need (block for the guard, inline for the wire's house line), with the guard as the exported door; a missing key refuses with its own code instead of rendering a partial block; six criteria green twice plus a live leg where both CLIs answer through the module and both texts are byte-identical to R2366"
-    ],
-    [
-      "src/os/queue_floor_export_face.py",
-      "on",
-      "R2374 product: the CEO-visible export finally publishes the one queue reading - the section it writes IS queue_floor_reading_wire.published, so the discounted claimable and every discounted row (line + prefix) travel unchanged, re-derived on every call with one atomic write and a read-back proof, and the CLI reads STALE rather than CURRENT when the export disagrees; six criteria green twice plus a live leg that caught the real missing section (STALE rc=2 -> WRITTEN 72523B -> CURRENT)"
-    ],
-    [
-      "src/os/queue_export_freshness_gate.py",
-      "on",
-      "R2375 product: the export's queue block now has a watchdog - it recomputes the live reading through queue_floor_export_face.face, names every drifted queue (claimable, delivered line or prefix, or any row field) plus every drifted section scalar, reads a section-less export as MISSING and never CURRENT, writes nothing and reads no clock; six criteria green twice plus a live leg that caught a REAL staleness (tech 9 claimable published as FLOOR-MET) and watched the writer close it"
-    ],
-    [
-      "src/os/queue_export_gate_wire.py",
-      "on",
-      "R2376 product: the export write path composes the live queue section, stages those bytes beside the file, asks queue_export_freshness_gate.check, and only replaces the original on CURRENT - a refusal leaves the file byte-identical with no residue; six criteria green twice plus a live leg that caught a REAL staleness (tech one row short, published as FLOOR-MET) and closed it"
-    ],
-    [
-      "src/os/export_closeout_gate_parity.py",
-      "on",
-      "R2377 product: both writers that publish the CEO-visible export are run over one document and compared byte for byte - identical reads AGREES, a wire refusal reads BYPASS naming the queue the gate refuses, differing bytes read DISAGREES naming the first differing field; the live tree reads AGREES at 78973/78973 bytes"
-    ],
-    [
-      "src/os/closeout_export_parity_wire.py",
-      "on",
-      "R2378 product: the closeout now stages the bytes it is about to publish, asks export_closeout_gate_parity over the staged document and only replaces the export on AGREES - a refusal leaves the file byte-identical with no residue, an agreeing reading writes and reads back, and the live run read WRITTEN/AGREES at 80266 bytes"
-    ],
-    [
-      "src/os/residue_batch_status_face.py",
-      "on",
-      "R2379 product: the live status of every residue round is one reading (stamp_residue's own, reached through residue_triage), the batch CLI --check asks it and names each round with its status, and a round outside the residue reads NOT-RESIDUE - the live tree reads 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0"
-    ],
-    [
-      "src/os/followup_guard_evidence_scope.py",
-      "on",
-      "R2380 product: the guarded pile of the follow-up matrix section is derived from the evidence path, so a matrix built from any pile is refused on THAT pile rather than protected by a reading of qa, and an evidence path under qa keeps the old reading byte for byte - the live tree reads derived_dir=qa identical_to_core=True"
-    ],
-    [
-      "src/os/review_window_guard_parity.py",
-      "on",
-      "R2381 product: one parity hands a single declarations list to both review-window faces and asks only the question they share (does it rewind), reading PARITY-AGREES or PARITY-DISAGREES with both codes named - the live tree reads AGREES window=100"
-    ],
-    [
-      "src/os/repin_noop_parity.py",
-      "on",
-      "R2382 product: one comparison law decides NOOP for the shipped re-pin CLI and the wire, and a parity runs both faces over one declaration and names the first field they differ on - the live tree reads AGREES with the file digest unchanged"
-    ],
-    [
-      "src/os/own_usage_block_renderer.py",
-      "on",
-      "R2383 product: a tool's own argument block now has one owner - the guard's literal and the help wire's composed flag line both render through it, with the derived metavar, the honest (none) and the declared bracket spelling, while every published line stays byte-identical"
-    ],
-    [
-      "src/os/export_publish_path_guard.py",
-      "on",
-      "R2384 product: every script on the current export publishing path is now read - the ones that write docs/status-export.json themselves are named BYPASS with file and line, the ones that hand their bytes to the parity wire read CLEAN, and 2019-era one-offs are reported as historical instead of accused"
-    ],
-    [
-      "src/os/single_append_status_face.py",
-      "on",
-      "R2385 product: the single-entry residue writer --check now names the asked round with the live status the batch face reports, and a round outside the live residue reads NOT-RESIDUE with its own code instead of an invented status"
-    ],
-    [
-      "src/os/bare_evidence_pile_refusal.py",
-      "on",
-      "R2386 product: a bare evidence filename is no longer read as 'qa' - the pile is measured where the file actually lives under the root, a name living in two piles refuses as E_BEPR_AMBIGUOUS and a name living nowhere refuses as E_BEPR_NOT_FOUND, while a name carrying a directory keeps the R2380 reading byte for byte"
-    ],
-    [
-      "src/os/review_window_guard_parity_blind_agreement.py",
-      "on",
-      "R2387 product: the review-window parity no longer reports a blind agreement as a green - a pair that agrees only because neither face could read the declaration reads PARITY-UNKNOWN naming both carried codes at exit 1, while every informed reading keeps the parity's own eight fields byte for byte"
     ]
   ],
   "results": [
+    [
+      "2390",
+      "R2390 product window: state/queue/tech.md:445 prefix AC-OTPP1 (owner_table_parity), criteria pinned in that row at R2383 BEFORE any code, anchors re-checked at HEAD. MEASURED DEFECT IN THE SEEDED LABELS: AC-OTP1..AC-OTP6 and E_OTP_* are already owned by src/os/orphan_promote.py, so this window pinned the free labels AC-OTPP1..AC-OTPP6 / E_OTPP_* for the same six substantive criteria and discloses the substitution on the board row and in the module docstring instead of silently sharing a prefix. SHIPPED src/os/owner_table_parity.py plus src/os/test_owner_table_parity.py: R2383 gave a tool OWN argument block one renderer, so the shape is owned, but the TABLE it is rendered from was still hand-written beside the parser that accepts the tokens and nothing compared them. The reader derives both sides from ONE tool file (module-level UPPER_CASE constants that carry flag literals - tuple, flag->dest dict or help-only tuple - against literal comparisons, membership tests resolved one hop through a module constant or a local alias of it, and startswith prefixes over a token-name) and names every flag present on one side and missing from the other. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/owner-table-parity-R2390.log, 2061B, legs=2 identical=True adjacent=3 fails=0), wired os-owner-table-parity(6). LIVE, not a plan: qa/owner-table-parity-live-R2390.log reads runner_arg_guard.py as PARITY-DISAGREES missing_in_table=[--guard*,--help] - its help block lists --json plus a --guard-help line while the parser also accepts --help and the whole --guard family - battery_followup.py as PARITY-AGREES table=8 parser=8 (its FLAGS/TAKES/HELP_FLAGS tables are the ones its help text renders), own_usage_block_renderer.py as NO-TABLE, the --json reading byte-stable across two runs, and the module digest identical before and after. Board: row 445 stamped, one REAL measured gap row seeded (owner_table_usage_wire, AC-OTUW1..AC-OTUW6 pre-registered in that row, five anchors zero-occupancy at HEAD)."
+    ],
     [
       "2389",
       "R2389 product window: state/queue/tech.md:444 prefix AC-DWNP1 (declaration_writer_noop_parity), criteria pinned in that row at R2388 BEFORE any code, anchors re-checked at HEAD (all five names hit only prose and state files: the R2388 round script, state.json, the row). SHIPPED src/os/declaration_writer_noop_parity.py plus src/os/test_declaration_writer_noop_parity.py: the NOOP law reached the re-pin path only, so residue_triage_append, residue_triage_head_renew and residue_triage_entry_retire each composed a fresh declaration and wrote it through their own atomic replace without ever asking whether the file already carried it - measured at R2388 by source count, and still true at HEAD. ONE shared seam (is_noop / compare) now asks the law that already owns the EOL dialect, imported at CALL time through _law(), so the comparison has exactly one owner and patching it moves all four faces; each writer asks it at ONE call site before its atomic replace, returns NOOP with wrote=no and creates no temp, while every other path - every refusal code, exit code and printed line - is byte-identical. SUITE PASS 6/6 twice with an identical criterion digest plus four adjacent suites green (qa/declaration-writer-noop-parity-R2389.log, 2351B, legs=2 identical=True adjacent=4 fails=0, single writer utf-8 LF through src/os/evidence_capture.py), wired os-declaration-writer-noop-parity(6) so the registry reads 516 suites / 4072 criteria. LIVE, not a plan: qa/declaration-writer-noop-parity-live-R2389.log reads the REAL 67603B declaration as NOOP dialect=LF with raw_equal=yes, the three CLIs answering exactly as before (append --check TRIAGED/234 entries, renew dry run NOOP old=R2387/R2404, retire E_RTER_NOT_DECLARED at rc 2), the CLI self-compare NOOP, and the declaration digest unchanged before and after - the seam is read-only on the real tree. Row 444 stamped and one REAL measured gap seeded (declaration_writer_dialect_preservation, AC-DWPP1..AC-DWPP6 pre-registered in that row, five anchors re-checked zero-occupancy): the NOOP fix stops the POINTLESS write and leaves the REAL one, because compose renders its entry with hard-coded LF and apply encodes the whole document as LF, so a genuine append to a CRLF declaration still converts every line of the file."
@@ -283,7 +108,7 @@
       "R2388 product window: state/queue/tech.md:442 prefix AC-RNED1 (repin_noop_eol_dialect), criteria pinned in that row at R2382 BEFORE any code, anchors re-checked at HEAD (only the row's own board helper and state prose mentioned the names). SHIPPED src/os/repin_noop_eol_dialect.py plus src/os/test_repin_noop_eol_dialect.py: the NOOP comparison owned BYTES, which is right about content and wrong about transport - a CRLF declaration carrying the composition read PLANNED and --execute rewrote it to LF, so an unchanged declaration was written and no reader could tell that from a real re-pin. ONE normalisation now lives in that module (CRLF and a lone CR to LF, content never touched), is_noop answers the one question both writer faces ask, and repin_noop_parity.is_noop plus residue_triage_repin_idempotent.decide call it AT CALL time so the literal byte comparison that used to live in the wire is gone rather than duplicated; the wire's dead on_disk_bytes helper went with it. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/repin-noop-eol-dialect-R2388.log, 2402B, legs=2 identical=True adjacent=3 fails=0), wired os-repin-noop-eol-dialect(6) so the registry reads 515 suites / 4066 criteria and docs/sandbox-suite-matrix.md was regenerated to match (49422B, green=513/515 because the two newest suites are not in the R2387 battery evidence). LIVE: qa/repin-noop-eol-dialect-live-R2388.log reads the REAL 67603B declaration as dialect=LF, a CRLF copy of the REAL declaration as verdict=NOOP raw_equal=no dialect=CRLF with its digest unchanged and no temp beside it, and the REAL tree dry re-pin at R2388 as PLANNED with shipped and wire printing the same line - so the normalisation is content-safe and not a blanket green. Row 442 stamped and one REAL measured gap seeded (declaration_writer_noop_parity, AC-DWNP1..AC-DWNP6 pre-registered in that row, five anchors zero-occupancy): the three sibling declaration writers hold is_noop ZERO times, so the law reaches one of four writers."
     ],
     [
-      "2389",
+      "2390",
       "OSLoop 执行 tick"
     ],
     [
@@ -317,154 +142,6 @@
     [
       "R2338",
       "R2338 verification window: full reconcile battery on the committed R2337 tree 0a2c0020 with zero product edits, RUNNER PASS 476/476 plus controls 7/7 in 888.4s and criteria 3832 exactly as pre-registered, four follow-up sections PASS, state canon repaired then fold 627 to 67935B with the fold-created residue round R2325 spliced through the shipped append channel, debt row closed and the R2339 product row opened"
-    ],
-    [
-      "R2337",
-      "R2337 product face: measured that the queue head offered work already shipped at R2315 (AC-GDIW1), shipped src/os/queue_occupancy.py plus its suite 6/6 twice so a row's delivery state is a reading instead of a guess, closed the stale row against the files on disk, seeded one real gap row for the head-selection wire, discharged the R2336 battery debt row and opened the R2338 one at 476/3832"
-    ],
-    [
-      "R2336",
-      "R2336 验证窗：全量电池先红后绿（472/475 → 475/475，判据 3826 与预注册一致），红因上一轮折窗切断轮次块，fold 625 修复、fold 626 按块边界折水位，零产品代码"
-    ],
-    [
-      "R2335",
-      "R2335 交付 residue_triage_append：一条一条补残留三账本，重复与实况不符各自拒绝且不静默改写；两腿 6/6 一致、四邻接件全绿，实况只读 TRIAGED 不动真账本；同窗补缺口种子，量尺回到 5/5 10/10 10/10"
-    ],
-    [
-      "R2334",
-      "R2334 verification window: RUNNER PASS 474/474 suites + controls 7/7 in 845.9s, TMP RECLAIM 932/932, criteria total 3820 exactly as pre-registered (+1 suite / +6 criteria against R2332 473/3814 from the R2333 os-retire-accept suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 474/3820 (45424B); fold 623 72996B->67067B with 664 tokens covered and R2321 spliced as the one fold-created residue; zero product code, 0 product points."
-    ],
-    [
-      "R2333",
-      "R2333 产品分：retire_accept 落地，判据 6/6 两遍一致，实测钉住六条接受（until=R2350），退休第一次有了可复核的账。"
-    ],
-    [
-      "R2332",
-      "R2332 verification window: RUNNER PASS 473/473 suites + controls 7/7 in 907.8s, TMP RECLAIM 932/932, criteria total 3814 exactly as pre-registered (+1 suite / +6 criteria against R2330 472/3808 from the R2331 os-retire-candidate suite); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 473/3814 (45349B); residue TRIAGED; zero product code, 0 product points."
-    ],
-    [
-      "R2331",
-      "R2331 产品轮：retire_candidate 落地（六判据 6/6 双跑一致，活体 92 件中 6 件可退役），残留裁决声明续期至 R2350，队列补真缺口行"
-    ],
-    [
-      "R2330",
-      "R2330 验证轮：电池红→出生地修复→复跑全绿（472/472，判据 3808 与预登记一致）"
-    ],
-    [
-      "R2329",
-      "R2329 product window: shipped stamp_exempt_prune so the accepted-stamp declaration can shrink - the retire set comes from the reviewer own MISSING list and the reader own EXPIRED row status, a dry run names every entry it would drop, span surgery keeps every surviving entry byte-identical on both layouts, the post is validated through read_declaration, and one atomic replace is proved by read-back; live on the real 381-entry declaration it reads NOTHING-TO-RETIRE so the file was read and never written; suite 6/6 twice identical with four adjacent suites green, wired os-stamp-exempt-prune(6)."
-    ],
-    [
-      "R2328",
-      "R2328 verification window: the battery the R2327 closeout deferred ran on the committed tree and its FIRST leg was red - 467/471 suites, 5 assertions, all in the ledger family - because the R2327 closeout had written its round ledger item without a round prefix, so the pinned '^R<n> tokens:' law could not see it; repaired at the birth site with a six-byte raw-text splice that leaves every other byte identical, all four ledger suites green, and the retry read RUNNER PASS 471/471 plus controls 7/7 in 827.1s with criteria total 3802 exactly as pre-registered; four follow-up sections PASS after the designed matrix FAIL and its regeneration; zero product code changed."
-    ],
-    [
-      "R2327",
-      "R2327 product window: exempt_review now takes its review window from the pinned declaration through review_window_wire instead of a per-call default, refusing UNPINNED/DRIFT/refused declarations at exit 2 with zero counts, refusing an explicit --window together with the new flag as two sources of truth, and leaving the FRESH/STALE rows byte-identical for the same pinned window; AC-RWW1..AC-RWW6 SUITE PASS 6/6 twice."
-    ],
-    [
-      "R2326",
-      "R2326 verification window: the full reconcile battery on the committed R2325 tree read RUNNER PASS 470/470 suites plus controls 7/7 in 839.6s with criteria total 3796; the pre-registered 471/3802 was reconciled by a named correction (the board's parenthetical baseline mislabelled the post-R2325 state as R2324, whose own log reads 469/3790, so the measured delta is exactly +1 suite / +6 criteria from os-followup-retry-history); four follow-up sections PASS after the designed matrix FAIL and its regeneration; zero product code changed."
-    ],
-    [
-      "R2325",
-      "product window: src/os/followup_retry_history.py with its six pre-registered criteria, one runner wiring line, one evidence capture (qa/followup-retry-history-R2325.log 1338B, two identical legs plus four adjacent followup suites green) and one live reading over 438 rounds that names the five recovered rounds; one tech row closed and one real gap row seeded, because claimable fell 10 -> 9."
-    ],
-    [
-      "R2364",
-      "verification window: the carried battery ran FIRST on the committed 1610c9d1 tree with zero product edits (the R2168 mixed-tree rule) - RUNNER PASS 492/492 suites plus controls 7/7 in 884.6s with criteria total 3928 exactly as pre-registered from the R2363 os-residue-triage-repin suite, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; four follow-up sections PASS after the designed matrix FAIL and its regeneration to 47070B at 492/3928 (matrix byte-identical, fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN) for VERDICT R2364 PASS; fold 641 moved 11 log items at a true round-block boundary (predicted 72360B measured 72360B, margin 6140, 745 tokens covered) and the two rounds it left untriaged were declared through the shipped re-pin writer (211 -> 213 entries, TRIAGED 213/213, dropped=0); five ledger and triage suites re-read green; battery row closed and product-face-R2365 opened first=yes; zero product code, 0 product points"
-    ],
-    [
-      "R2365",
-      "product window: state/queue/tech.md:411 AC-FDW1 queue_floor_delivered_wire - the floor gauge finally asks the occupancy reading. The debt gate read CLAIM-FIRST item=product-face-R2365 and the six criteria were pinned in that row at R2354 BEFORE any code, all five anchors zero-occupancy at HEAD. The reading is imported from queue_occupancy (patching its reader moves the gauge; no module-path scan and no row parser here) and a DELIVERED open row is discounted from claimable supply while open/done/gated/claimable stay byte-identical to queue_floor, because the discount is its own key; an all-delivered queue reads FLOOR-DEBT with the whole floor as shortfall and the rows named, and a queue with no prefixed row reads exactly queue_floor's row. SUITE PASS 6/6 twice identical (qa/queue-floor-delivered-wire-R2365.log, 1552B) plus three adjacent suites green, wired os-queue-floor-delivered-wire(6). LIVE: main=5/5 tech=8/10-1 explore=10/10 FLOOR-DEBT shortfall=2 delivered=1, the discounted row being line 411 AC-FDW1 itself, while queue_floor alone still read tech=9/10 at that instant. Row stamped and two REAL measured gaps seeded (AC-BFH1..6, AC-QFR1..6) so the floor stays 10/10 with no filler. Disclosed: the live capture first landed utf-16 BOM through a PowerShell redirect and was transcoded to utf-8 LF (900B to 444B, content identical), census flags=0 DRIFT-CLEAN; no battery ran, so the next one must read 493 suites / 3934 criteria against R2364's 492/3928"
-    ],
-    [
-      "R2366",
-      "product window: state/queue/tech.md:412 AC-BFH1 battery_followup_help_wire - the follow-up CLI finally answers the question an operator asks. The debt gate read CLAIM-FIRST item=product-face-R2365 and that turned out to be FINISHED work (R2365 had shipped it), so the row was verified by measurement (module, suite, two evidence logs and the runner wiring all on disk) and closed through debt_close instead of being re-run - the R2345/R2354 shape, named as the round first finding. The claimed tech row 412 had its AC-BFH1..AC-BFH6 pinned at R2365 BEFORE any code, re-anchored at HEAD (E_BFH and both file names zero-occupancy; battery_followup_help_wire and AC-BFH only in prose and state). SHIPPED src/os/battery_followup_help_wire.py plus its six-criteria suite, and battery_followup.py now carries module-level TAKES/FLAGS and raises HelpAsked on --help, answered at exit 0 through the wire. The house half of the usage block is imported from reconcile_all.CLI_CONTRACT through runner_arg_guard.load_contract, the flag half from the parser own tables, and the wire validates the three keys it reads so a short contract refuses E_BFH_NO_CONTRACT instead of raising a KeyError inside a renderer. SUITE PASS 6/6 twice identical (qa/battery-followup-help-wire-R2366.log, 1411B, single utf-8 LF writer), os-battery-followup and os-run-argument-guard still 6/6 unchanged, wired os-battery-followup-help-wire(6). LIVE: battery_followup.py --help answers exit 0 with the derived usage and the house line reconcile_all.py [evidence_log_path] flags=(none) (qa/battery-followup-help-wire-live-R2366.log, 380B), where the same call was exit 5 E_BFU_BAD_ARGS before. Seven new group decision rows D-20261102-07..13 read in full and NONE dispatches this company (collection no-op, line triage, duanju, LANE-REGISTRY, disabled-task whitelist, external audit, Biggame Art/Builds); baseline widened. Row stamped, one REAL measured gap seeded (contract_usage_renderer, AC-CUR1..6 - the guard and this wire now render two usage blocks for one shape), floor FLOOR-MET 5/5 10/10 10/10. Disclosed: the first closeout fold picked a tokens LINE as its boundary, archiving this round own narrative, and the second picked one inside the R2365 block, which read rounds_without_ledger=2365; repaired at the birth site (archive section trimmed, state restored byte-exact from the fold backup, refold at the true boundary log_len-8 = line 69, predicted=measured 16702B, 771 tokens covered, log=9, ledger CLEAN), then the nine fold-created residue rounds were spliced in ONE atomic replace through the shipped reader/shape/composer/judge (213->222 entries, 62765B->65393B measured, TRIAGED 222/222)"
-    ],
-    [
-      "R2367",
-      "QA charter daily crawl round: [QA] was the flag the scan raised and [HB] was this company own row-shape defect - the scanner reads the LAST heartbeat line and needs 'tick <n>', while R2366 wrote pure narrative, so the row existed but could not parse; repaired by carrying the token in the new line, history untouched. CRAWL: wx.requestVirtualPayment official API page, one fetch, zero key, zero retry - signData is an Object passed as a JSON STRING and its nine fields plus twenty-five error codes are now on file; three gates follow from the page itself: -15011 (live builds accept env=0 only, so sandbox is not a production verification path), -15002 with the outTradeNo note (one-use and not guaranteed unique, so the idempotency key stays ours), -15013 (goodsPrice checked against the console item price, so publish before ordering). Consumed into benchmarks sections 1/3/4, wall W37 plus conclusion, and the pay-spec field gate. Battery NOT run: reconcile-battery-R2367 remains open at its measured 494 suites / 3940 criteria and is the next window first item. Zero product code, 0 product points, disclosed."
-    ],
-    [
-      "R2368",
-      "verification then product: the carried battery ran first on the committed dffdd007 tree - RUNNER PASS 494/494 suites plus controls 7/7 in 914.6s, criteria total 3940 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2368.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 494/3940 (47273B, VERDICT PASS), committed alone as cee549f7 before any product byte changed. Then the claimed row: state/queue/tech.md:413 AC-QFR1 queue_floor_reading_wire, its six criteria pinned in that row at R2365 BEFORE the code and all five anchors zero-occupancy at HEAD. The wire publishes ONE floor reading whose claimable IS the discounted number, with the discount count and the discounted rows (line+prefix, exactly as queue_occupancy reported them) beside it so gross reconciles as claimable + discounted; the report is queue_floor_delivered_wire.gauge itself and every row law stays with queue_floor, so a queue with nothing delivered publishes queue_floor's row byte for byte on every shared key; pure read, no clock, no writes, no network. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/queue-floor-reading-wire-R2368.log, 1723B), wired os-queue-floor-reading-wire(6). LIVE: published tech=9/10-1 FLOOR-DEBT shortfall=1 delivered=1, the discounted row being line 413 AC-QFR1 itself, while queue_floor alone still read tech=10/10 FLOOR-MET at that instant. Row stamped and one REAL measured gap row seeded (queue_floor_export_face, AC-QFE1..6: git grep -F over docs/status-export.json and check_export_consistency.py for claimable/floor/FLOOR returns ZERO hits, so the published number has no consumer on the export), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first battery invocation was piped through a filtering selector and died to the five-minute no-output rule with zero survivors and zero evidence before the direct-stream rerun whose numbers are above"
-    ],
-    [
-      "R2369",
-      "verification then product: the debt gate named reconcile-battery-R2368, so the battery ran first on the committed 74d94279 tree - RUNNER PASS 495/495 suites plus controls 7/7 in 945.9s, criteria total 3946 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2369.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 495/3946 (47371B, VERDICT PASS). Then the claimed row: state/queue/tech.md:414 AC-RTAB1 residue_triage_append_batch, its six criteria pinned in that row at R2355 BEFORE the code and every anchor prose-only at HEAD. Shipped the batch writer plus its six-criteria suite: the declaration reader, the status vocabulary, the shape check and the judge stay with residue_triage, the entry layout stays with residue_triage_append, duplicates (in the call and already declared), a round outside the residue and a DISAGREES all refuse before a byte with both statuses named, the judge runs before the write so a partial batch refuses naming the rounds it would leave, and the write is one atomic replace at a proved size with a per-entry re-read and no .tmp residue. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/residue-triage-append-batch-R2369.log, 1246B), wired os-residue-triage-append-batch(6). LIVE: the real declaration reads 222 entries, PINNED, TRIAGED, residue none - no live write, the value is the channel. Row stamped and one REAL measured gap row seeded (residue_batch_status_face, AC-RSBF1..6: --check names the rounds awaiting an entry and no live status, so composing a pair list needs a second tool), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: three first-run reds were this window own fixtures (closed rows read DELIVERED, an expired until, and an exit-code expectation) and each was fixed in the test instead of widening a criterion"
-    ],
-    [
-      "R2370",
-      "verification then product: the debt gate named product-face-R2370, so the battery ran first on the committed 6b918367 tree - RUNNER PASS 496/496 suites plus controls 7/7 in 990.9s, criteria total 3952 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2370.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 496/3952 (47476B, VERDICT PASS); evidence and matrix committed alone as bd736b53. Then the claimed row: state/queue/tech.md:416 AC-FSFW1 followup_section_foreign_wire, its six criteria pinned in that row at R2357 BEFORE the code and every anchor prose-only at HEAD. Shipped the guard wire plus its six-criteria suite: the reading stays followup_section_foreign's (this file parses no log and imports no os) and the matrix core stays battery_followup.matrix_core with its body unchanged, battery_followup.section_matrix delegating through a call-time import so the modules never import each other at load; a FOREIGN-SECTION pile refuses at E_FSFW_FOREIGN_SECTION naming the rounds and the names before matrix_core is entered, a clean pile matches the doc byte for byte, a census disagreement is reported even on a clean pile, and a pile the reader cannot speak about is NOT a refusal but carries the guard code on the detail. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/followup-section-foreign-wire-R2370.log, 1380B), wired os-followup-section-foreign-wire(6). LIVE: the real pile reads VOCABULARY-CLEAN over 460 rounds at rc=0 and the guarded section runs in front of the real matrix; the refusal branch is proved on fixtures and not claimed as a live catch. Row stamped and one REAL measured gap row seeded (followup_guard_evidence_scope, AC-FGES1..6: the guard asks a fixed qa pile while the section compares the evidence path it was given), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first red was a REAL module defect in the pinned key order and the module was fixed; the second red was this window own fixture asserting the render line against a --json payload, corrected without widening a criterion; the live dry run reads matrix FAIL only because this window added the 497th suite after its own green battery"
-    ],
-    [
-      "R2371",
-      "verification then product: the debt gate named reconcile-battery-R2370, so the battery ran first on the committed 5d9485d2 tree - RUNNER PASS 497/497 suites plus controls 7/7 in 987.8s, criteria total 3958 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2371.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 497/3958 (47582B, VERDICT PASS); evidence and matrix committed alone as 5d9485d2. Then the claimed row: state/queue/tech.md:417 AC-RWAG1 review_window_wire_argument_guard, its six criteria pinned in that row at R2359 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the guard plus its six-criteria suite: the history law is imported at call time (proved by patching it and watching both the library report and the CLI move) and the refusal code is carried through review_window_wire.carry_history_code, so `exempt_review --window N` refuses a rewinding list with the same E_RWHW_DECL_HISTORY the declared path uses, naming both rounds; UNPINNED, DRIFT, a moved list and an unreadable file all leave the explicit window's reading byte-identical because that window is the caller's, and the refusal lands before any entry is aged with zero counts and WINDOW-REFUSED while the declaration bytes are untouched. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/review-window-wire-argument-guard-R2371.log, 3426B), wired os-review-window-wire-argument-guard(6). LIVE: the real declarations list reads ARGUMENT-CLEAN / EMPTY-HISTORY / window=100 / declared_by=R2305 at exit 0 and both exempt_review paths read 9 entries 0 stale with the declaration sha256 unchanged. Row stamped and one REAL measured gap row seeded (review_window_guard_parity, AC-RWGP1..6: the two paths now refuse the same file with the same code but nothing measures that they agree over one declaration), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: the first battery invocation was cancelled by a truncating pipe (the known trap) with zero survivors and no evidence file before the direct-stream rerun; three suite reds were this window own assertions and fixtures, corrected to the measured truth without widening a criterion; and one REAL module defect was found on the way - the refusal detail now carries the history code exactly as the declared path does"
-    ],
-    [
-      "R2372",
-      "verification then product: the debt gate named reconcile-battery-R2371, so the battery ran first on the committed 674adfa9 tree, unfiltered - RUNNER PASS 498/498 suites plus controls 7/7 in 933.3s, criteria total 3964 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2372.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 498/3964 (47697B, VERDICT PASS); evidence and matrix committed alone as be1ac6a. Then the claimed row: state/queue/tech.md:418 AC-RTRI1 residue_triage_repin_idempotent, its six criteria pinned in that row at R2363 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the wire plus its six-criteria suite: the composition is residue_triage_repin.build and the writer is residue_triage_repin.plan (a patched build moves the reading, a patched plan moves the executed path, and nothing here calls os.replace or json.dumps), NOOP fires only on byte equality and returns before the writer is entered, and the CLI codes and --json key order are pinned to the shipped ones. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/residue-triage-repin-idempotent-R2372.log, 3090B), wired os-residue-triage-repin-idempotent(6). LIVE: both CLIs byte-identical over the real declaration and its sha256 unchanged across two dry runs (65393B), while the same call still composes 65210B - the live declaration IS stale, so NOOP is proved on fixtures and not claimed as a live catch. Row stamped (predicted=measured 1472542B) and one REAL measured gap seeded (repin_noop_parity, AC-RNP1..6: the NOOP exists in the wire and not in the shipped CLI, so one act has two answers), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: two suite reds were this window own fixture and assertion (a missing seeded declaration, and a byte-count delta where a content delta was meant), one red was the absent registry entry, and decide reads the declaration twice on the non-NOOP path rather than reproducing the writer"
-    ],
-    [
-      "R2373",
-      "verification then product: the debt gate named reconcile-battery-R2372, so the battery ran first on the committed ee2bab1e tree - and it was RED ON EVIDENCE, NOT CODE: 498/499 suites, both failures reading reconcile-daily-census cd7 DRIFT-FLAG, because the R2372 live evidence carried six CRLF lines inside a file the census reads as one utf-8 LF dialect. Repaired at the birth site (one transport-EOL normalisation in evidence_R2372.py, file regenerated, payload identical except the two byte-count lines) and the census read DRIFT-CLEAN with the baseline untouched; the retry on the committed repair tree read RUNNER PASS 499/499 plus controls 7/7 in 1267.0s, criteria total 3970 EXACTLY as pre-registered, TMP RECLAIM 932/932, four follow-up sections PASS after the designed matrix FAIL and its regeneration to 499/3970 at 47836B (VERDICT PASS), evidence and matrix committed alone as 411b0077. Then the claimed row: state/queue/tech.md:419 AC-CUR1 contract_usage_renderer, its six criteria pinned there at R2366 BEFORE the code and every anchor prose-only at HEAD. Shipped the renderer plus its six-criteria suite: one owner of the contract vocabulary in the two published shapes, a missing key refusing with E_CUR_CONTRACT_MISSING_<KEY> (guard exit 3, wire keeps its published E_BFH_NO_CONTRACT at exit 5), and the wire asking runner_arg_guard.contract_line so the guard stays the exported door. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/contract-usage-renderer-R2373.log), wired os-contract-usage-renderer(6) so the registry reads 500/3976. LIVE: LIVE-COLLAPSED with block_guard_equals_module and wire_house_identical both True. Row stamped and one REAL measured gap seeded (own_usage_block_renderer: a tool's own argument block is still hand-written), gauge FLOOR-MET 5/5 10/10 10/10, reader now offers line 420 AC-QFE1. Register: battery-R2372 closed, battery-R2373 opened first=yes at 500/3976. Disclosed: the first battery invocation died to the Out-Null no-output trap with zero survivors and zero evidence; AC-CUR2 forced two shapes to survive; the window overran its budget."
-    ],
-    [
-      "R2374",
-      "verification then product: the debt gate named reconcile-battery-R2373, so the battery ran first on the committed ee2bab1e tree - RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2374.log, 808379B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 500/3976 at 47905B, VERDICT R2374 PASS, evidence and matrix committed alone as 16430e6c. Then the claimed row: state/queue/tech.md:420 AC-QFE1 queue_floor_export_face, its six criteria pinned there at R2368 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the section IS queue_floor_reading_wire.published, so the discounted claimable plus every discounted row reach the export unchanged, with no second parser, no queue-file scan and no canned number; compose() re-reads the tree on every call and write() is one atomic replace with a read-back proof. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-floor-export-face-R2374.log), wired os-queue-floor-export-face(6) so the registry reads 501/3982. LIVE: STALE rc=2 at contact because the export carried no queue section at all, WRITTEN 72523B matches_live=True, then CURRENT rc=0. Row 420 stamped and one REAL measured gap seeded (queue_export_freshness_gate: check_export_consistency never opens the queue block, so the section can age silently), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2373 closed, battery-R2374 opened first=yes at 501/3982. Disclosed: the window overran its budget because the battery cost 1089.1s; AC-QFE2's discount path is proved on fixtures because the live queue delivers nothing today."
-    ],
-    [
-      "R2375",
-      "verification then product: the debt gate named reconcile-battery-R2374, so the battery ran first on the committed tree - RUNNER PASS 501/501 suites plus controls 7/7 in 1317.3s with criteria total 3982 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2375.log, 809143B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 501/3982 at 48002B, VERDICT R2375 PASS, evidence and matrix committed alone as bff3e884. Then the claimed row: state/queue/tech.md:421 AC-QEF1 queue_export_freshness_gate, its six criteria pinned there at R2374 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the live side IS the export face, drift names the drifted queues, MISSING never reads CURRENT, and the gate is read-only with no clock. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-export-freshness-gate-R2375.log), wired os-queue-export-freshness-gate(6) so the registry reads 502/3988. LIVE, and this is the round's best evidence: the real-tree leg read STALE rc=2 drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech - a genuine staleness that predated the window, because shipping the module and suite turned tech row 421 into a delivered row and tech fell to 9 effective claimable while the export still published FLOOR-MET; the writer refreshed the block and the gate then read CURRENT rc=0, with a drifted copy still STALE naming queue:tech, a section-less copy MISSING and an absent file rc=3. Row 421 stamped and one REAL measured gap seeded (queue_export_gate_wire: the gate is a CLI, nothing runs it on the write path), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2374 closed, battery-R2375 opened first=yes at 502/3988. Disclosed: the first battery was killed by the buffering pipe trap with nothing lost, and the window overran its budget because the battery cost 1317.3s."
-    ],
-    [
-      "R2376",
-      "verification then product: the debt gate named reconcile-battery-R2375, so the battery ran first - RUNNER PASS 502/502 suites plus controls 7/7 in 1177.9s with criteria total 3988 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2376.log, 809800B); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 503/3994 at 48201B, VERDICT R2376 PASS, evidence and matrix committed alone as 7692ec90. Then the claimed row: state/queue/tech.md:422 AC-QEG1 queue_export_gate_wire, its six criteria pinned there at R2375 BEFORE the code and every anchor prose-only at HEAD. Shipped the wire plus its six-criteria suite: compose through the face, stage beside the export, ask the gate, replace only on CURRENT. SUITE PASS 6/6 twice identical plus three adjacent suites green, wired os-queue-export-gate-wire(6) so the registry reads 503/3994. LIVE: the real-tree leg read STALE naming queue:tech and the section scalars - a real staleness that predated the window - then the wire wrote the proven block 77070B -> 77162B and the gate read CURRENT, with a doctored copy repaired, not-json and absent files at rc=3 and bad flags at rc=5. Row 422 stamped and one REAL measured gap seeded (export_closeout_gate_parity: the closeouts still call QFE.apply directly and never the new wire). Register: battery-R2375 closed, battery-R2376 opened first=yes at 503/3994. Disclosed: the tree was not clean for the whole battery run, though the runner had already imported its 502-suite registry and the measured criteria total matched exactly."
-    ],
-    [
-      "R2377",
-      "product window on the queue head: CLAIMED state/queue/tech.md:423 AC-ECGP1 export_closeout_gate_parity, whose six criteria were pinned there at R2376 BEFORE the code and every anchor read prose-only at HEAD. Shipped the parity module plus its six-criteria suite: the closeout recipe (QFE.apply then json.dumps) and queue_export_gate_wire.publish are both run over the same document inside a private temp copy, so patching either writer moves the verdict, a gate refusal is named BYPASS with the queue, and the check writes nothing in the repository and reads no clock. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/export-closeout-gate-parity-R2377.log, 2094B), wired os-export-closeout-gate-parity(6) so the registry reads 504/4000. LIVE: the real export reads verdict=AGREES gate=WRITTEN at 78973 bytes on both sides. Row 423 stamped and one REAL measured gap seeded (closeout_export_parity_wire: the parity has no caller on the write path). Disclosed: the refusal leg is proved on fixtures, not by doctoring the live export, and the decision baseline kept two tokens that left the compacted file."
-    ],
-    [
-      "R2378",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 504/504 suites plus controls 7/7 in 1320.0s with criteria total 4000 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as ac0e183b. Then CLAIMED state/queue/tech.md:424 AC-CEPW1 closeout_export_parity_wire, criteria pinned there at R2377, anchors prose-only at HEAD. Shipped the wire: stage, ask the parity, publish on AGREES only, no residue on refusal, compose owned by the parity closeout_style so no second formatter exists, and src/os/closeout_R2377.py now publishes its export through it. SUITE PASS 6/6 twice identical plus four adjacent suites green (3023B), wired os-closeout-export-parity-wire(6) so the registry reads 505/4006. LIVE: WRITTEN reading=AGREES at 80266 bytes, gate CURRENT, second run byte-identical, no staged residue. Row stamped and one REAL measured gap seeded (export_publish_path_guard: two older closeouts still publish directly)."
-    ],
-    [
-      "R2379",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 505/505 suites plus controls 7/7 in 1334.7s with criteria total 4006 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as a79df5b9. Then CLAIMED state/queue/tech.md:425 AC-RSBF1 residue_batch_status_face, criteria pinned there at R2369, anchors prose-only at HEAD. Shipped the face: the status map is residue_triage.live_residue over stamp_residue's own read, the vocabulary is read at call time, --check names every round with its status, a round outside the residue reads NOT-RESIDUE at exit 2, exits 0/2/3/5 with a byte-stable pinned --json, and the batch CLI --check now asks it at call time while --append never touches it. SUITE PASS 6/6 twice identical plus four adjacent suites green (1245B), wired os-residue-batch-status-face(6) so the registry reads 506/4012. LIVE: 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0, json byte-stable, R1755 FOUND, R9999 NOT-RESIDUE, batch carries the statuses. Row stamped and one REAL measured gap seeded (single_append_status_face: the single-entry writer still names no status)."
-    ],
-    [
-      "R2380",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 506/506 suites plus controls 7/7 in 1233.7s with criteria total 4012 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as 2215a2b9. Then CLAIMED state/queue/tech.md:426 AC-FGES1 followup_guard_evidence_scope, criteria pinned there at R2370, anchors prose-only at HEAD. Shipped the pile derivation as one pure module and rerouted the matrix section through it at call time, so a patched derivation moves which pile is read while an explicit directory still wins. SUITE PASS 6/6 twice identical plus three adjacent suites green (1988B), wired os-followup-guard-evidence-scope(6) so the registry reads 507/4018. LIVE: derived_dir=qa, identical_to_core=True, abs_dir=qa, cli_rc=0. Row stamped and one REAL measured gap seeded (bare_evidence_pile_refusal: a bare filename still falls back to qa)."
-    ],
-    [
-      "R2381",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 507/507 suites plus controls 7/7 in 1604.7s with criteria total 4018 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as e3e42226. Then CLAIMED state/queue/tech.md:427 AC-RWGP1 review_window_guard_parity, criteria pinned there at R2371, anchors prose-only at HEAD. Shipped the parity so both faces are imported and asked at call time over one declaration; a two-sided rewind agrees on the carried E_RWHW_DECL_HISTORY, a monotonic list agrees with the declared window and the argument history word both reported, and any split reads PARITY-DISAGREES naming both codes. SUITE PASS 6/6 twice identical plus four adjacent suites green (2991B), wired os-review-window-guard-parity(6) so the registry reads 508/4024. LIVE: AGREES, window=100, byte-stable --json over eight pinned keys. Row stamped and one REAL measured gap seeded (blind agreement over an unreadable declaration)."
-    ],
-    [
-      "R2382",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 508/508 suites plus controls 7/7 in 1359.9s with criteria total 4024 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as d32692f3. Then CLAIMED state/queue/tech.md:428 AC-RNP1 repin_noop_parity, criteria pinned there at R2372, anchors prose-only at HEAD. Shipped the comparison so the shipped CLI reads NOOP over its own composition and the parity names a split, refusals compared by code then detail. SUITE PASS 6/6 twice identical plus four adjacent suites green (3113B), wired os-repin-noop-parity(6) so the registry reads 509/4030. LIVE: AGREES, both faces refusing E_RTRP_UNMATCHED, declaration digest unchanged. Row stamped and one REAL measured gap seeded (a CRLF declaration reads PLANNED and is rewritten)."
-    ],
-    [
-      "R2383",
-      "verification-then-product: the battery ran first on the committed tree and read PASS 509/509 suites plus controls 7/7 in 1319.2s with criteria total 4030 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as b44e9032. Then CLAIMED state/queue/tech.md:429 AC-OUB1 own_usage_block_renderer, criteria pinned there at R2373, anchors prose-only at HEAD. Shipped one renderer imported by both CLIs so neither writes a format string for its own block; SUITE PASS 6/6 twice identical plus three adjacent suites green (1797B), wired os-own-usage-block-renderer(6) so the registry reads 510/4036. LIVE: LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched. Row stamped and one REAL measured gap seeded (the table is still hand-written beside the parser). Fold 645 at a true block boundary, predicted=measured 70838B, one residue re-pin."
-    ],
-    [
-      "R2384",
-      "product window: the debt gate named reconcile-battery-R2383 and the product-first law outranked it, so the row stays OPEN at 510 suites / 4036 criteria and the product face shipped instead. CLAIMED state/queue/tech.md:431 AC-EPPG1 export_publish_path_guard, criteria pinned there at R2378, anchors prose-only at HEAD. The law was narrowed once, before any evidence, after a measured over-broad first reading accused 131 historical scripts. SUITE PASS 6/6 twice identical plus three adjacent suites green (1663B), wired os-export-publish-path-guard(6) so the registry reads 511/4042. LIVE over 1018 scripts: BYPASS with 5 offenders (closeout_R2374:411, closeout_R2375:375, closeout_R2376:376, export_R2368:139, export_R2373:149) against 7 clean (closeout_R2377..R2383). Row stamped and one REAL measured gap seeded (export_publish_wire_identity: a publish to another module still reads CLEAN)."
-    ],
-    [
-      "R2385",
-      "verification-then-product window: the carried battery owed since R2384 ran FIRST on the committed tree - RUNNER PASS 511/511 suites plus controls 7/7 in 1237.8s with criteria total 4042 exactly as pre-registered and TMP RECLAIM 932/932, four follow-up sections PASS after the designed matrix FAIL and its regeneration to 48989B, evidence and matrix committed alone as 94b01774. CLAIMED state/queue/tech.md:433 AC-SASF1 single_append_status_face, criteria pinned there at R2379, anchors prose-only at HEAD. SUITE PASS 6/6 twice identical plus three adjacent residue suites green (1233B), wired os-single-append-status-face(6) so the registry reads 512/4048. LIVE: the face reads R1755 DELIVERED FOUND at rc 0 and R2384 NOT-RESIDUE at rc 2, the single writer prints status=NOT-RESIDUE where it printed status=-, and the pre-existing E_RTA_UNREADABLE past-round refusal is byte-identical. Rows stamped and one REAL measured gap seeded (append_check_status_precedence: the face is asked after the triage read, so a refused round still gets no status). Two battery rows closed against the one run and the successor opened at 512/4048."
-    ],
-    [
-      "R2386",
-      "R2386 verification-then-product window: the carried battery owed since R2385 ran FIRST on the committed tree 84619739 with an empty git status - RUNNER PASS 512/512 suites plus controls 7/7 in 1686.5s with criteria total 4048 EXACTLY as pre-registered and TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0 (qa/reconcile-all-R2386.log, 819029B, single writer utf-8 LF through src/os/battery_stream.py); the four follow-up sections ran through src/os/battery_followup.py, the matrix section FAILED first on the stale doc (on-disk=48989B regenerated=49095B) and did not rewrite it, suite_matrix regenerated docs/sandbox-suite-matrix.md to 512 suites / 4048 criteria and the re-run read all four PASS for VERDICT R2386 PASS; evidence and matrix committed alone as dec152c3 before any product byte changed (the R2168 mixed-tree rule). FIRST-ROUND STEP DISCLOSED: an earlier invocation was cancelled by the shell tool's five-minute no-output rule while the runner was buffering, which left a stray file named '--help' (removed) and one partial evidence file (deleted); the battery was then run detached and its evidence file was written from scratch, so no leg is a mixture of two runs. PRODUCT: claimed state/queue/tech.md:434 prefix AC-BEPR1 (bare_evidence_pile_refusal), criteria pinned in that row at R2380 BEFORE any code, anchors prose-only at HEAD. SHIPPED src/os/bare_evidence_pile_refusal.py plus src/os/test_bare_evidence_pile_refusal.py: a bare evidence NAME is resolved by STAT-ing it under the root (the root itself answers '.', then one-level subdirectories), two containing piles refuse as E_BEPR_AMBIGUOUS and a name that lives nowhere refuses as E_BEPR_NOT_FOUND, so no default pile is left anywhere in the derivation; a name WITH a directory part is handed to followup_guard_evidence_scope at call time, so that R2380 reading is byte-identical; the CLI asks the same question and reads the measured pile through followup_section_foreign_wire, so a bare name living in a FOREIGN-SECTION pile refuses NAMING that pile while the wire keeps exit codes 0/2/3/5 and its pinned GUARD_KEYS. The follow-up matrix section asks BEPR.is_bare at call time and derives the pile through BEPR.pile_for, refusing before any matrix byte when the name cannot be placed; the wire stays os-free because the bare test lives in the new module. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/bare-evidence-pile-refusal-R2386.log, 2064B, legs=2 identical=True adjacent=3 fails=0, single writer utf-8 LF through src/os/evidence_capture.py), wired os-bare-evidence-pile-refusal(6) so the registry reads 513 suites / 4054 criteria. LIVE: qa/bare-evidence-pile-refusal-live-R2386.log (662B, crlf=0, cr=0) reads dir=qa verdict=VOCABULARY-CLEAN rounds=474 rc=0 with a byte-stable --json over the seven pinned keys and a name that lives nowhere refusing E_BEPR_NOT_FOUND at rc 2 on the real tree. Row 434 stamped and one REAL measured gap seeded (matrix_evidence_pile_consistency, AC-MEPC1..AC-MEPC6 pre-registered in that row, five anchors zero-occupancy): the guard now follows the measured pile but the matrix tool is still handed the original string. Register: battery-R2385 closed, battery-R2386 opened first=yes at 513 suites / 4054 criteria. Group order 2026-11-02 11:04 (bm-a memory/cleanup sweep, executed by bm-a) read and logged as NOTED, not this company's execution surface."
-    ],
-    [
-      "R2387",
-      "R2387 verification-then-product window: the carried battery owed since R2386 ran FIRST on the committed tree with an empty git status - RUNNER PASS 513/513 suites plus controls 7/7 in 1317.7s with criteria total 4054 EXACTLY as pre-registered and TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0 (qa/reconcile-all-R2387.log, 820179B, single writer utf-8 LF through src/os/battery_stream.py, never a shell redirection); the four follow-up sections ran through src/os/battery_followup.py, the matrix section FAILED first on the stale doc (on-disk=49095B regenerated=49188B) and did not rewrite it, suite_matrix regenerated docs/sandbox-suite-matrix.md to 513 suites / 4054 criteria and the re-run read all four PASS for VERDICT R2387 PASS; evidence and matrix committed ALONE as bba99b85 before any product byte changed (the R2168 mixed-tree rule). PRODUCT: claimed state/queue/tech.md:439 prefix AC-RWGB1 (review_window_guard_parity_blind_agreement), criteria pinned in that row at R2381 BEFORE any code, anchors prose-only at HEAD (that row, src/os/closeout_R2381.py, src/os/state.json, zero hits under src/*.py in the parity naming). SHIPPED src/os/review_window_guard_parity_blind_agreement.py plus its six-criteria suite: the shipped parity is imported and asked at CALL time, so patching its check moves this reading and no second rewind comparison, declarations reader or row parser is written here; a side that answered 'I could not judge' is named as an ignorance (the argument face's own UNKNOWN word is taken from that face's vocabulary at call time rather than restated) and a pair that agrees only because nobody could judge reads PARITY-UNKNOWN with both carried codes - never AGREES; a genuine two-sided rewind, a clean or merely moved list, and a deliberately UNPINNED list keep PARITY-AGREES and keep the parity's eight fields byte for byte; a real split still reads PARITY-DISAGREES naming both codes and outranks an ignorance instead of being swallowed by it; the CLI adds exactly one exit code (1 for UNKNOWN) to 0/2/3/5 and the JSON adds exactly one key, ignorance, after the eight pinned ones. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent review-window suites green (qa/review-window-guard-parity-blind-agreement-R2387.log, 3803B, legs=2 identical=True adjacent=3 fails=0, single writer utf-8 LF through src/os/evidence_capture.py), wired os-review-window-guard-parity-blind-agreement(6) so the registry reads 514 suites / 4060 criteria. LIVE, not a plan: qa/review-window-guard-parity-blind-agreement-live-R2387.log (529B, crlf=0, lf=6) reads the real tree verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes ignorance=none with a byte-stable --json over the nine pinned keys, and a fixture declaration neither face can read reads PARITY-UNKNOWN ignorance=both declared=E_RWW_UNREADABLE argument=ARGUMENT-UNKNOWN at rc 1 where the shipped parity still reads PARITY-AGREES. Tech row 439 stamped [done 2026-11-02 R2387] through src/os/board_R2387.py (payload 23 chars inside the 60-char stamp law, 1027173 -> 1030136 chars with readback ok) and one REAL measured gap row seeded (parity_consumer_wire, AC-RWPC1..AC-RWPC6 pre-registered in that row, five anchors zero-occupancy): git grep proves RWGP. has ZERO non-test hits under src/, so the reading refuses nothing an operator walks. Gauge after the stamp and the seed reads claimable=10 tech (FLOOR-MET) and the reader now offers line 442 prefix AC-RNED1. Register: reconcile-battery-R2386 closed through debt_close (line=158, open 3->2, done 114->115, 84810B->84813B, readback ok) and reconcile-battery-R2387 opened first=yes through debt_append at the measured successor target 514 suites / 4060 criteria (84813B->85099B, readback ok). Five-silence scan at open read LEDGER with zero @BigDomain lines, DEC tokens 86 with new=0 and gone=0 over the stored baseline (row count 137 -> 172 is formatting movement, not a directive), the group orders tail still the 2026-11-02 11:04 model-policy baseline already acknowledged as non-execution, and benchmarks refreshed 2026-11-02 inside the seven-day gate."
     ]
   ],
   "self_drive": {
