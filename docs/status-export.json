@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T16:42:50+08:00",
-  "do": "R2382 verification-then-product window: the re-pin NOOP was in one module and not in the tool operators run, so the shipped CLI now reads NOOP over a declaration that already IS its own composition, through ONE comparison imported from repin_noop_parity, and a parity names the first field the two faces differ on. The battery ran first on the committed tree (508/508 suites, criteria total 4024 exactly as pre-registered).",
+  "export_ts": "2026-11-02T17:30:24+08:00",
+  "do": "R2383 verification-then-product window: a tool's OWN argument block finally has one owner - runner_arg_guard.guard_usage() was a hand-written literal and battery_followup_help_wire.usage_text() composed its own flag line from format strings, so a third tool had to copy one of the two shapes; both now render through own_usage_block_renderer and both published texts stay byte-identical. The battery ran first on the committed tree (509/509 suites, criteria total 4030 exactly as pre-registered).",
   "ceo_face": {
-    "current": "R2382 verification-then-product window: the re-pin NOOP was in one module and not in the tool operators run, so the shipped CLI now reads NOOP over a declaration that already IS its own composition, through ONE comparison imported from repin_noop_parity, and a parity names the first field the two faces differ on. The battery ran first on the committed tree (508/508 suites, criteria total 4024 exactly as pre-registered).",
-    "latest_artifact": "src/os/repin_noop_parity.py plus its six-criteria suite (qa/repin-noop-parity-R2382.log, 3113B, two legs identical, four adjacent residue suites green) and the NOOP branch in src/os/residue_triage_repin.py; the live run reads verdict=AGREES with both faces carrying E_RTRP_UNMATCHED and the live declaration digest unchanged.",
-    "next_milestone": "R2383: the battery on the committed R2382 tree pre-registered at 509 suites / 4030 criteria (this window own parity suite), then the product face at the queue head (line 429 prefix AC-OUB1, own_usage_block_renderer). The seed this window MEASURED is repin_noop_eol_dialect (AC-RNED1..6): a declaration carrying CRLF reads PLANNED and is rewritten to LF as PINNED, so a byte-identical declaration is written where nothing needed writing.",
-    "next_milestone_due": "2026-11-04T16:42:50+08:00",
-    "last_artifact": "src/os/repin_noop_parity.py plus its six-criteria suite (qa/repin-noop-parity-R2382.log, 3113B, two legs identical, four adjacent residue suites green) and the NOOP branch in src/os/residue_triage_repin.py; the live run reads verdict=AGREES with both faces carrying E_RTRP_UNMATCHED and the live declaration digest unchanged.",
-    "updated_at": "2026-11-02T16:42:50+08:00"
+    "current": "R2383 verification-then-product window: a tool's OWN argument block finally has one owner - runner_arg_guard.guard_usage() was a hand-written literal and battery_followup_help_wire.usage_text() composed its own flag line from format strings, so a third tool had to copy one of the two shapes; both now render through own_usage_block_renderer and both published texts stay byte-identical. The battery ran first on the committed tree (509/509 suites, criteria total 4030 exactly as pre-registered).",
+    "latest_artifact": "src/os/own_usage_block_renderer.py plus its six-criteria suite (qa/own-usage-block-renderer-R2383.log, 1797B, two legs identical, three adjacent suites green) and the reroute of src/os/runner_arg_guard.py and src/os/battery_followup_help_wire.py through it; the live capture reads VERDICT LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched (qa/own-usage-block-renderer-live-R2383.log, 333B).",
+    "next_milestone": "R2384: the battery on the committed R2383 tree pre-registered at 510 suites / 4036 criteria (this window own renderer suite), then the product face the queue head names (line 431 prefix AC-EPPG1, export_publish_path_guard). The seed this window MEASURED is owner_table_parity (AC-OTP1..AC-OTP6): the block is rendered from ONE shape but its table is still hand-written beside the parser that accepts the flags, so a flag added to the loop never appears in the help.",
+    "next_milestone_due": "2026-11-04T17:30:24+08:00",
+    "last_artifact": "src/os/own_usage_block_renderer.py plus its six-criteria suite (qa/own-usage-block-renderer-R2383.log, 1797B, two legs identical, three adjacent suites green) and the reroute of src/os/runner_arg_guard.py and src/os/battery_followup_help_wire.py through it; the live capture reads VERDICT LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched (qa/own-usage-block-renderer-live-R2383.log, 333B).",
+    "updated_at": "2026-11-02T17:30:24+08:00"
   },
   "depts": [
     {
@@ -236,11 +236,16 @@
       "src/os/repin_noop_parity.py",
       "on",
       "R2382 product: one comparison law decides NOOP for the shipped re-pin CLI and the wire, and a parity runs both faces over one declaration and names the first field they differ on - the live tree reads AGREES with the file digest unchanged"
+    ],
+    [
+      "src/os/own_usage_block_renderer.py",
+      "on",
+      "R2383 product: a tool's own argument block now has one owner - the guard's literal and the help wire's composed flag line both render through it, with the derived metavar, the honest (none) and the declared bracket spelling, while every published line stays byte-identical"
     ]
   ],
   "results": [
     [
-      "2382",
+      "2383",
       "OSLoop 执行 tick"
     ],
     [
@@ -402,6 +407,10 @@
     [
       "R2382",
       "verification-then-product: the battery ran first on the committed tree and read PASS 508/508 suites plus controls 7/7 in 1359.9s with criteria total 4024 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as d32692f3. Then CLAIMED state/queue/tech.md:428 AC-RNP1 repin_noop_parity, criteria pinned there at R2372, anchors prose-only at HEAD. Shipped the comparison so the shipped CLI reads NOOP over its own composition and the parity names a split, refusals compared by code then detail. SUITE PASS 6/6 twice identical plus four adjacent suites green (3113B), wired os-repin-noop-parity(6) so the registry reads 509/4030. LIVE: AGREES, both faces refusing E_RTRP_UNMATCHED, declaration digest unchanged. Row stamped and one REAL measured gap seeded (a CRLF declaration reads PLANNED and is rewritten)."
+    ],
+    [
+      "R2383",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 509/509 suites plus controls 7/7 in 1319.2s with criteria total 4030 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as b44e9032. Then CLAIMED state/queue/tech.md:429 AC-OUB1 own_usage_block_renderer, criteria pinned there at R2373, anchors prose-only at HEAD. Shipped one renderer imported by both CLIs so neither writes a format string for its own block; SUITE PASS 6/6 twice identical plus three adjacent suites green (1797B), wired os-own-usage-block-renderer(6) so the registry reads 510/4036. LIVE: LIVE-COLLAPSED with both published blocks byte-identical and both CLIs moving when the renderer is patched. Row stamped and one REAL measured gap seeded (the table is still hand-written beside the parser). Fold 645 at a true block boundary, predicted=measured 70838B, one residue re-pin."
     ]
   ],
   "self_drive": {
@@ -443,7 +452,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 362,
+        "done_rows": 363,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

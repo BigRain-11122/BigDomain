@@ -131,7 +131,8 @@ column-0 checkbox starts one.
 - [x] opened=R2379 | item=reconcile-battery-R2379 | note=R2379 shipped residue_batch_status_face plus its six-criteria suite, wired os-residue-batch-status-face, and wired the batch CLI --check through it; battery target 506 suites / 4012 criteria on the committed tree | closed=R2380
 - [x] opened=R2380 | item=reconcile-battery-R2380 | note=R2380 shipped followup_guard_evidence_scope plus its six-criteria suite, wired os-followup-guard-evidence-scope, and the follow-up matrix section now derives its guarded pile from the evidence path; battery target 507 suites / 4018 criteria on the committed tree | closed=R2381
 - [x] opened=R2381 | item=reconcile-battery-R2381 | note=battery target 508 suites / 4024 criteria on the committed R2381 tree (this window os-review-window-guard-parity suite) | closed=R2382
-- [ ] opened=R2382 | item=reconcile-battery-R2382 | note=the battery for the R2382 tree (509 suites / 4030 criteria expected: the R2382 parity suite plus the shipped repin suite reparsed) runs FIRST next window on the committed tree | first=yes
+- [x] opened=R2382 | item=reconcile-battery-R2382 | note=the battery for the R2382 tree (509 suites / 4030 criteria expected: the R2382 parity suite plus the shipped repin suite reparsed) runs FIRST next window on the committed tree | closed=R2383
+- [ ] opened=R2383 | item=reconcile-battery-R2383 | note=the battery for the R2383 tree (510 suites / 4036 criteria expected: the R2383 os-own-usage-block-renderer suite plus this window board edit) runs FIRST next window on the committed tree | first=yes
 
 ## Closed
 
