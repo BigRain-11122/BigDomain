@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2373 suite=test_contract_usage_renderer.py legs=2
+== LEG A rc=0 digest=ED20D0779A291882
+SUITE contract_usage_renderer (R2373) criteria=6
+PASS AC-CUR1 renderer owned by the module; patching it moves both CLIs and no second format string is written
+PASS AC-CUR2 both published texts byte-identical; the collapse adds no new wording
+PASS AC-CUR3 a missing key refuses with its own code instead of rendering a partial block
+PASS AC-CUR4 an empty flag set renders (none) rather than a blank
+PASS AC-CUR5 wire exits 0/2/5 and both CLIs keep a byte-stable --json over pinned keys
+PASS AC-CUR6 pure ASCII, stdlib only, no clock, no network, the four follow-up sections intact, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=ED20D0779A291882
+SUITE contract_usage_renderer (R2373) criteria=6
+PASS AC-CUR1 renderer owned by the module; patching it moves both CLIs and no second format string is written
+PASS AC-CUR2 both published texts byte-identical; the collapse adds no new wording
+PASS AC-CUR3 a missing key refuses with its own code instead of rendering a partial block
+PASS AC-CUR4 an empty flag set renders (none) rather than a blank
+PASS AC-CUR5 wire exits 0/2/5 and both CLIs keep a byte-stable --json over pinned keys
+PASS AC-CUR6 pure ASCII, stdlib only, no clock, no network, the four follow-up sections intact, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 3
+== test_battery_followup_help_wire.py rc=0 SUITE PASS 6/6
+== test_runner_arg_guard.py rc=0 SUITE RESULT passes=6 fails=0 criteria=6
+== test_battery_followup.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=ED20D0779A291882

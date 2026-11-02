@@ -29,6 +29,8 @@ import json
 import os
 import sys
 
+import contract_usage_renderer as CUR
+
 GUARD_LABEL = "runner-arg-guard"
 RUNNER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
     __file__))), "sandbox", "reconcile_all.py")
@@ -66,15 +68,19 @@ def load_contract(path=None):
 
 
 def usage_text(contract):
-    """Runner usage, derived from the contract (never hand-written)."""
-    lines = ["usage: %s [%s]"
-             % (contract["name"], contract["positional_label"])]
-    flags = tuple(contract["known_flags"])
-    if flags:
-        lines.append("known flags: %s" % " ".join(flags))
-    else:
-        lines.append("known flags: (none)")
-    return "\n".join(lines)
+    """Runner usage, derived from the contract (never hand-written).
+
+    R2373: the formatting lives in contract_usage_renderer, which is the ONE
+    owner of the contract-block vocabulary - the wire renders its house line
+    through the same module, so a change there moves both CLIs (AC-CUR1).
+    The text this function returns is byte-identical to what R2362 shipped.
+    """
+    return CUR.block(contract)
+
+
+def contract_line(contract):
+    """The one-line form of the same contract; the wire asks for this."""
+    return CUR.inline(contract)
 
 
 def classify(runner_argv, contract, cwd):
@@ -168,7 +174,11 @@ def main(argv):
     result = classify(runner_argv, contract, os.getcwd())
     print(render(result, as_json), flush=True)
     if result["status"] == "asked":
-        print(usage_text(contract), flush=True)
+        try:
+            print(usage_text(contract), flush=True)
+        except CUR.ContractUsageError as exc:
+            print("%s %s" % (GUARD_LABEL, exc.code), flush=True)
+            return E_UNREADABLE
         return E_OK
     return E_OK if result["status"] == "allowed" else E_REFUSED
 

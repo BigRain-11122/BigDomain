@@ -1,0 +1,13 @@
+LIVE R2373 contract_usage_renderer (read-only help paths)
+guard --guard-help rc=0 bytes=324
+guard --help rc=0
+wire --help rc=0
+block_guard_equals_module True
+line_guard_equals_module True
+guard_published_identical True
+wire_house_identical True
+wire_house_in_help True
+guard_published_in_asked True
+GUARD-BLOCK usage: reconcile_all.py [evidence_log_path] | known flags: (none)
+WIRE-HOUSE house contract: reconcile_all.py [evidence_log_path] flags=(none)
+verdict LIVE-COLLAPSED

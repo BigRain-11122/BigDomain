@@ -5090,6 +5090,15 @@ SUITES = [
     # the R2363 seed row BEFORE the code.)
     ("os-residue-triage-repin-idempotent",
      os.path.join("..", "os", "test_residue_triage_repin_idempotent.py"), 6),
+    # R2373: the runner contract had TWO formatters - the guard's two-line
+    # usage block and the help wire's one-line house line - so a third tool
+    # would have made three. contract_usage_renderer now owns the vocabulary
+    # (the required keys, the flag spelling and the honest "(none)") and both
+    # CLIs ask it, while every already-published line stays byte-identical.
+    # (AC-CUR1..AC-CUR6 were pinned in state/queue/tech.md:419 as the R2366
+    # seed row BEFORE the code.)
+    ("os-contract-usage-renderer",
+     os.path.join("..", "os", "test_contract_usage_renderer.py"), 6),
     ]
 
 FAILS = 0

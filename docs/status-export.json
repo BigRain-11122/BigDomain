@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T10:01:42+08:00",
-  "do": "R2372 product window: the re-pin finally has a NOOP. A second re-pin over an already-pinned declaration composed bytes IDENTICAL to the file and still reported PLANNED, so --execute rewrote the same bytes and reported PINNED and no reader could tell 'nothing to do' from 'I wrote it'. The wire compares the composed document with the file and reads NOOP, returning before the writer is entered; the decision is bytes and never the head round, and every non-NOOP path is still the shipped writer's own report, codes and JSON order.",
+  "export_ts": "2026-11-02T11:03:40+08:00",
+  "do": "R2373 product window: the runner contract finally has ONE usage renderer. The guard rendered a two-line usage block and the help wire rendered a second one-line block from the same contract, so a third tool would have made three. contract_usage_renderer now owns the vocabulary - the three required keys, the flag spelling and the honest (none) - in the two shapes both published texts need, and the guard exports it as usage_text/contract_line so neither CLI writes a format string while every already-published line stays byte-identical.",
   "ceo_face": {
-    "current": "R2372 product window: the re-pin finally has a NOOP. A second re-pin over an already-pinned declaration composed bytes IDENTICAL to the file and still reported PLANNED, so --execute rewrote the same bytes and reported PINNED and no reader could tell 'nothing to do' from 'I wrote it'. The wire compares the composed document with the file and reads NOOP, returning before the writer is entered; the decision is bytes and never the head round, and every non-NOOP path is still the shipped writer's own report, codes and JSON order.",
-    "latest_artifact": "src/os/residue_triage_repin_idempotent.py plus its six-criteria suite (qa/residue-triage-repin-idempotent-R2372.log, two identical legs plus four adjacent suites green), the live parity leg on the real declaration (qa/residue-triage-repin-idempotent-live-R2372.log, LIVE-PARITY, sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2372.log, RUNNER PASS 498/498, criteria 3964).",
-    "next_milestone": "R2373: the battery on the committed R2372 tree pre-registered at 499 suites / 3970 criteria (this window own os-residue-triage-repin-idempotent suite), then the product face at the queue head the reader names - it currently offers line 419 prefix AC-CUR1 (contract_usage_renderer); the seed this window measured is repin_noop_parity (AC-RNP1..6), because the NOOP exists in the wire and not in the tool operators run, so one act still has two answers.",
-    "next_milestone_due": "2026-11-04T10:01:42+08:00",
-    "last_artifact": "src/os/residue_triage_repin_idempotent.py plus its six-criteria suite (qa/residue-triage-repin-idempotent-R2372.log, two identical legs plus four adjacent suites green), the live parity leg on the real declaration (qa/residue-triage-repin-idempotent-live-R2372.log, LIVE-PARITY, sha256 unchanged) and the battery that proves the registry unharmed (qa/reconcile-all-R2372.log, RUNNER PASS 498/498, criteria 3964).",
-    "updated_at": "2026-11-02T10:01:42+08:00"
+    "current": "R2373 product window: the runner contract finally has ONE usage renderer. The guard rendered a two-line usage block and the help wire rendered a second one-line block from the same contract, so a third tool would have made three. contract_usage_renderer now owns the vocabulary - the three required keys, the flag spelling and the honest (none) - in the two shapes both published texts need, and the guard exports it as usage_text/contract_line so neither CLI writes a format string while every already-published line stays byte-identical.",
+    "latest_artifact": "src/os/contract_usage_renderer.py plus its six-criteria suite (qa/contract-usage-renderer-R2373.log, two identical legs plus three adjacent suites green), the live leg proving both CLIs answer through the one module with both texts byte-identical to R2366 (qa/contract-usage-renderer-live-R2373.log, LIVE-COLLAPSED) and the battery that proves the registry unharmed (qa/reconcile-all-R2373-retry.log, RUNNER PASS 499/499, criteria 3970).",
+    "next_milestone": "R2374: the battery on the committed R2373 tree pre-registered at 500 suites / 3976 criteria (this window own os-contract-usage-renderer suite), then the product face at the queue head the reader names - it currently offers line 420 prefix AC-QFE1 (queue_floor_export_face); the seed this window measured is own_usage_block_renderer (AC-OUB1..6), because a tool's OWN argument block is still a hand-written literal and the wire composes its own flag line from strings.",
+    "next_milestone_due": "2026-11-04T11:03:40+08:00",
+    "last_artifact": "src/os/contract_usage_renderer.py plus its six-criteria suite (qa/contract-usage-renderer-R2373.log, two identical legs plus three adjacent suites green), the live leg proving both CLIs answer through the one module with both texts byte-identical to R2366 (qa/contract-usage-renderer-live-R2373.log, LIVE-COLLAPSED) and the battery that proves the registry unharmed (qa/reconcile-all-R2373-retry.log, RUNNER PASS 499/499, criteria 3970).",
+    "updated_at": "2026-11-02T11:03:40+08:00"
   },
   "depts": [
     {
@@ -186,11 +186,16 @@
       "src/os/residue_triage_repin_idempotent.py",
       "on",
       "R2372 product: the re-pin reads NOOP when the composed declaration equals the file on disk, decided by BYTES and never by the head round (the module never mentions declared_by), returning before the writer is entered so no temp file is created and the atomic write path is not doubled; a one-byte content drift reads PLANNED again, and every non-NOOP path is the shipped writer's own report printed through the shipped renderer and serialiser, with the two CLIs proved byte-identical on PLANNED and on refusals and NOOP at exit 0; six criteria green twice plus a live parity leg on the real declaration"
+    ],
+    [
+      "src/os/contract_usage_renderer.py",
+      "on",
+      "R2373 product: one usage renderer for a CLI contract - the required keys, the flag spelling and the honest (none) now have one owner, in the two shapes the already-published texts need (block for the guard, inline for the wire's house line), with the guard as the exported door; a missing key refuses with its own code instead of rendering a partial block; six criteria green twice plus a live leg where both CLIs answer through the module and both texts are byte-identical to R2366"
     ]
   ],
   "results": [
     [
-      "2372",
+      "2373",
       "OSLoop 执行 tick"
     ],
     [
@@ -312,15 +317,19 @@
     [
       "R2372",
       "verification then product: the debt gate named reconcile-battery-R2371, so the battery ran first on the committed 674adfa9 tree, unfiltered - RUNNER PASS 498/498 suites plus controls 7/7 in 933.3s, criteria total 3964 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB (qa/reconcile-all-R2372.log) - and the four follow-up sections PASS after the designed matrix FAIL and its regeneration to 498/3964 (47697B, VERDICT PASS); evidence and matrix committed alone as be1ac6a. Then the claimed row: state/queue/tech.md:418 AC-RTRI1 residue_triage_repin_idempotent, its six criteria pinned in that row at R2363 BEFORE the code and every anchor prose-only or zero-occupancy at HEAD. Shipped the wire plus its six-criteria suite: the composition is residue_triage_repin.build and the writer is residue_triage_repin.plan (a patched build moves the reading, a patched plan moves the executed path, and nothing here calls os.replace or json.dumps), NOOP fires only on byte equality and returns before the writer is entered, and the CLI codes and --json key order are pinned to the shipped ones. SUITE PASS 6/6 twice identical plus four adjacent suites green (qa/residue-triage-repin-idempotent-R2372.log, 3090B), wired os-residue-triage-repin-idempotent(6). LIVE: both CLIs byte-identical over the real declaration and its sha256 unchanged across two dry runs (65393B), while the same call still composes 65210B - the live declaration IS stale, so NOOP is proved on fixtures and not claimed as a live catch. Row stamped (predicted=measured 1472542B) and one REAL measured gap seeded (repin_noop_parity, AC-RNP1..6: the NOOP exists in the wire and not in the shipped CLI, so one act has two answers), gauge FLOOR-MET 5/5 10/10 10/10. Disclosed: two suite reds were this window own fixture and assertion (a missing seeded declaration, and a byte-count delta where a content delta was meant), one red was the absent registry entry, and decide reads the declaration twice on the non-NOOP path rather than reproducing the writer"
+    ],
+    [
+      "R2373",
+      "verification then product: the debt gate named reconcile-battery-R2372, so the battery ran first on the committed ee2bab1e tree - and it was RED ON EVIDENCE, NOT CODE: 498/499 suites, both failures reading reconcile-daily-census cd7 DRIFT-FLAG, because the R2372 live evidence carried six CRLF lines inside a file the census reads as one utf-8 LF dialect. Repaired at the birth site (one transport-EOL normalisation in evidence_R2372.py, file regenerated, payload identical except the two byte-count lines) and the census read DRIFT-CLEAN with the baseline untouched; the retry on the committed repair tree read RUNNER PASS 499/499 plus controls 7/7 in 1267.0s, criteria total 3970 EXACTLY as pre-registered, TMP RECLAIM 932/932, four follow-up sections PASS after the designed matrix FAIL and its regeneration to 499/3970 at 47836B (VERDICT PASS), evidence and matrix committed alone as 4b2b4f7d. Then the claimed row: state/queue/tech.md:419 AC-CUR1 contract_usage_renderer, its six criteria pinned there at R2366 BEFORE the code and every anchor prose-only at HEAD. Shipped the renderer plus its six-criteria suite: one owner of the contract vocabulary in the two published shapes, a missing key refusing with E_CUR_CONTRACT_MISSING_<KEY> (guard exit 3, wire keeps its published E_BFH_NO_CONTRACT at exit 5), and the wire asking runner_arg_guard.contract_line so the guard stays the exported door. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/contract-usage-renderer-R2373.log), wired os-contract-usage-renderer(6) so the registry reads 500/3976. LIVE: LIVE-COLLAPSED with block_guard_equals_module and wire_house_identical both True. Row stamped and one REAL measured gap seeded (own_usage_block_renderer: a tool's own argument block is still hand-written), gauge FLOOR-MET 5/5 10/10 10/10, reader now offers line 420 AC-QFE1. Register: battery-R2372 closed, battery-R2373 opened first=yes at 500/3976. Disclosed: the first battery invocation died to the Out-Null no-output trap with zero survivors and zero evidence; AC-CUR2 forced two shapes to survive; the window overran its budget."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 7,
+    "log_lines_in_window": 8,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

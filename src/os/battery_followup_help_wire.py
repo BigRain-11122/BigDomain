@@ -98,6 +98,23 @@ def known_flags(own):
     return tuple(sorted(tokens))
 
 
+def house_line(runner):
+    """The house half of the block, rendered by the guard's own renderer.
+
+    R2373: the formatting moved to contract_usage_renderer, which the guard
+    exports as usage_text (two-line) and contract_line (one-line). This wire
+    asks the guard for the one-line form instead of writing a second format
+    string, so a change in that module moves BOTH CLIs (AC-CUR1) while this
+    line stays byte-identical to what R2366 published (AC-CUR2).
+    """
+    import runner_arg_guard
+    try:
+        return runner_arg_guard.contract_line(runner)
+    except Exception as exc:
+        code = getattr(exc, "code", None) or str(exc) or "unrenderable"
+        raise HelpWireError(E_BFH_NO_CONTRACT, code)
+
+
 def usage_text(module=None, path=None):
     """The usage block, derived from both contracts rather than hand-written."""
     own = own_contract(module)
@@ -107,7 +124,6 @@ def usage_text(module=None, path=None):
     takes = " ".join("%s %s" % (flag, own["takes"][flag].upper())
                      for flag in sorted(own["takes"]))
     flags = " ".join(sorted(own["flags"]))
-    runner_flags = " ".join(tuple(runner["known_flags"])) or "(none)"
     lines = [
         "usage: %s %s %s [--help]" % (own["name"], takes, flags),
         "  --help  print this usage and run no section (exit 0)",
@@ -115,8 +131,7 @@ def usage_text(module=None, path=None):
         "  exit 2 = a section FAILED",
         "  exit 3 = the evidence file is missing",
         "  exit 5 = bad flags",
-        "house contract: %s [%s] flags=%s"
-        % (runner["name"], runner["positional_label"], runner_flags),
+        house_line(runner),
     ]
     return "\n".join(lines) + "\n"
 
