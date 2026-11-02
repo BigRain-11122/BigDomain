@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2400 suite=src/os/test_export_publish_from_import_law.py legs=2
+== LEG A rc=0 digest=443EC2F953B029D0
+PASS AC-EPBW1 AC-EPBW1 a from-import publish is read and names its module
+PASS AC-EPBW1b AC-EPBW1 the binding table is asked, not restated
+PASS AC-EPBW2 AC-EPBW2 the attribute spelling reads exactly as before
+PASS AC-EPBW3 AC-EPBW3 an unbound bare publish reads UNRESOLVED
+PASS AC-EPBW4 AC-EPBW4 import and call must agree, aliases included
+PASS AC-EPBW4b AC-EPBW4 a publish spelled in prose is not a call
+PASS AC-EPBW5 AC-EPBW5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPBW6 AC-EPBW6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=8 fails=0
+== LEG B rc=0 digest=443EC2F953B029D0
+PASS AC-EPBW1 AC-EPBW1 a from-import publish is read and names its module
+PASS AC-EPBW1b AC-EPBW1 the binding table is asked, not restated
+PASS AC-EPBW2 AC-EPBW2 the attribute spelling reads exactly as before
+PASS AC-EPBW3 AC-EPBW3 an unbound bare publish reads UNRESOLVED
+PASS AC-EPBW4 AC-EPBW4 import and call must agree, aliases included
+PASS AC-EPBW4b AC-EPBW4 a publish spelled in prose is not a call
+PASS AC-EPBW5 AC-EPBW5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-EPBW6 AC-EPBW6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=8 fails=0
+== ADJACENT 3
+== src/os/test_export_publish_wire_identity.py rc=0 NO SUITE LINE
+== src/os/test_export_publish_path_guard.py rc=0 NO SUITE LINE
+== src/os/test_owner_table_usage_wire.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=3 fails=0 digest=443EC2F953B029D0

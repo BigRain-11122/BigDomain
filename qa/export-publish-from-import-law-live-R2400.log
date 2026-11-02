@@ -1,0 +1,18 @@
+LIVE R2400 export_publish_from_import_law (read-only)
+== NEW LAW over the REAL tree (src\os)
+rc=0
+EXPORT PUBLISH FROM IMPORT LAW os-export-publish-from-import-law verdict=WIRE scanned=1094 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=14 from_import=0 bare=0 wire_module=closeout_export_parity_wire
+== IDENTITY over the same tree (attribute reading must not move)
+rc=0
+EXPORT PUBLISH WIRE IDENTITY os-export-publish-wire-identity verdict=WIRE scanned=1094 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=14 wire_module=closeout_export_parity_wire
+== NEW LAW over a from-import fixture (must read WIRE)
+rc=0
+{"label": "os-export-publish-from-import-law", "verdict": "WIRE", "root": "C:\\Users\\sjs20\\AppData\\Local\\Temp\\epbw-live-6guii7pl", "scanned": 1, "publishers": ["publisher.py"], "wire": ["publisher.py"], "foreign": [], "unresolved": [], "no_publish": [], "from_import": 1, "bare": 0, "detail": [{"kind": "from_import", "receiver": "publish", "module": "closeout_export_parity_wire", "state": "WIRE", "line": 10, "text": "return publish(   , EXPORT, text=    )", "path": "publisher.py"}]}
+== NEW LAW over a from-import fixture bound to another module
+rc=2
+EXPORT PUBLISH FROM IMPORT LAW os-export-publish-from-import-law verdict=FOREIGN scanned=1 publishers=1 wire=0 foreign=publisher.py unresolved=(none) no_publish=0 from_import=1 bare=0 wire_module=closeout_export_parity_wire
+  FOREIGN publisher.py:10 kind=from_import receiver=publish module=some_other_wire
+== IDENTITY over the same foreign fixture (must now read FOREIGN)
+rc=2
+EXPORT PUBLISH WIRE IDENTITY os-export-publish-wire-identity verdict=FOREIGN scanned=1 publishers=1 wire=0 foreign=publisher.py unresolved=(none) no_publish=0 wire_module=closeout_export_parity_wire
+  FOREIGN publisher.py:10 receiver=publish module=some_other_wire

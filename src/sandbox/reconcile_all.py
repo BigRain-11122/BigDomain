@@ -5178,6 +5178,14 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-export-publish-wire-identity",
      os.path.join("..", "os", "test_export_publish_wire_identity.py"), 6),
+    # R2400: the routed-publish law was the guard's attribute call only, so a
+    # `from M import publish` followed by a bare publish() call read
+    # NO-PUBLISH and a current publisher was reported as publishing nothing.
+    # One spelling law now reads attribute, from-import and bare.
+    # (AC-EPBW1..AC-EPBW6 were pinned in state/queue/tech.md:463 as the R2391
+    # seed row BEFORE the code.)
+    ("os-export-publish-from-import-law",
+     os.path.join("..", "os", "test_export_publish_from_import_law.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

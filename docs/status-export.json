@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T03:28:57+08:00",
-  "do": "R2399 owner_table_usage_wire: a constant is an own-flag table only when a help or usage path in the same file reads it - the three measured data-constant false positives read NO-TABLE while runner_arg_guard keeps its real drift and battery_followup keeps AGREES 8/8",
+  "export_ts": "2026-11-03T03:52:34+08:00",
+  "do": "R2400 export_publish_from_import_law: a publish imported by name is now a publish - attribute, from-import and bare spellings are read by one law, and the real tree still reads WIRE over the same 11 publishers the identity module names",
   "ceo_face": {
-    "current": "R2399 owner_table_usage_wire: a constant is an own-flag table only when a help or usage path in the same file reads it - the three measured data-constant false positives read NO-TABLE while runner_arg_guard keeps its real drift and battery_followup keeps AGREES 8/8",
-    "latest_artifact": "qa/owner-table-usage-wire-live-R2399.log + src/os/owner_table_usage_wire.py",
-    "next_milestone": "claim state/queue/tech.md:463 AC-EPBW1 (export_publish_from_import_law) - the bare from-import publish spelling resolves to its callee",
+    "current": "R2400 export_publish_from_import_law: a publish imported by name is now a publish - attribute, from-import and bare spellings are read by one law, and the real tree still reads WIRE over the same 11 publishers the identity module names",
+    "latest_artifact": "qa/export-publish-from-import-law-live-R2400.log + src/os/export_publish_from_import_law.py",
+    "next_milestone": "claim state/queue/tech.md:465 AC-RIPB1 (relative_import_publish_binding) - the package-relative import spelling resolves instead of reading bare",
     "next_milestone_due": "2026-11-05T23:00:00+08:00",
-    "last_artifact": "qa/owner-table-usage-wire-live-R2399.log + src/os/owner_table_usage_wire.py",
-    "updated_at": "2026-11-03T03:28:57+08:00"
+    "last_artifact": "qa/export-publish-from-import-law-live-R2400.log + src/os/export_publish_from_import_law.py",
+    "updated_at": "2026-11-03T03:52:34+08:00"
   },
   "depts": [
     {
@@ -90,6 +90,10 @@
   ],
   "results": [
     [
+      "2400",
+      "2026-11-03 R2400 product face: CLAIMED state/queue/tech.md:463 prefix AC-EPBW1 (export_publish_from_import_law), criteria pinned in that row at R2391 before any code. SHIPPED src/os/export_publish_from_import_law.py plus its six-criteria suite: the routed-publish law was the guard's `.publish(` attribute call, so a file that did `from closeout_export_parity_wire import publish` and then a BARE `publish(\".\", EXPORT, ...)` was not a routed publish at all and read NO-PUBLISH - a current publisher reported as publishing nothing. One law now reads three spellings (attribute through the guard's own law, from_import through the file's own import lines, bare as UNRESOLVED) and export_publish_wire_identity asks it while republishing its four original row keys, so the attribute reading is byte-identical. SUITE PASS 6/6 twice with an identical digest 443EC2F953B029D0 plus three adjacent suites green (qa/export-publish-from-import-law-R2400.log, 1590B, legs=2 identical=True adjacent=3 fails=0), wired os-export-publish-from-import-law(6) so the registry reads 526 suites / 4132 criteria. LIVE: qa/export-publish-from-import-law-live-R2400.log reads the REAL src/os as WIRE 11 publishers / 14 no_publish / from_import=0 bare=0 with the identity module reading the same 11/11 over the same 1094 files, and a from-import fixture as WIRE naming closeout_export_parity_wire. Tech row 463 stamped and one REAL measured gap row seeded (relative_import_publish_binding, AC-RIPB1..AC-RIPB6 pre-registered): `from . import publish` still reads bare/UNRESOLVED. No battery ran: reconcile-battery-R2394 stays OPEN."
+    ],
+    [
       "2398",
       "2026-11-03 R2398 product face: CLAIMED state/queue/tech.md:458 prefix AC-DWPP1 (declaration_writer_dialect_preservation), criteria pinned in that row at R2389 before any code. SHIPPED src/os/declaration_writer_dialect_preservation.py plus its six-criteria suite: a writer that actually CHANGES a declaration now keeps that declaration's own line endings instead of converting every line to LF - the dialect is the shared law's answer at CALL time, an LF declaration gets exactly today's bytes, a CRLF declaration is spliced on universal-newline text and re-rendered as CRLF so every untouched line is byte-identical, and a MIXED declaration refuses rather than having a transport chosen for it. All four writers (single append, batch append, head renew, entry retire) ask it at one call site each. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/declaration-writer-dialect-preservation-R2398.log, 1354B, legs=2 identical=True adjacent=3 fails=0), wired os-declaration-writer-dialect-preservation(6) so the registry reads 524 suites / 4120 criteria. Two defects measured and repaired at birth: a CRLF declaration could not be appended to at all before this window (compose's pinned closer is an LF layout, so it read E_RTA_BAD_SHAPE), and the batch writer shipped before the NOOP law and asked no comparison at all. LIVE: the real 68838B declaration reads dialect=LF preserved=yes and the real head renew reads NOOP with nothing written. No battery ran: reconcile-battery-R2394 stays OPEN at 524 suites / 4120 criteria."
     ],
@@ -122,7 +126,7 @@
       "R2388 product window: state/queue/tech.md:442 prefix AC-RNED1 (repin_noop_eol_dialect), criteria pinned in that row at R2382 BEFORE any code, anchors re-checked at HEAD (only the row's own board helper and state prose mentioned the names). SHIPPED src/os/repin_noop_eol_dialect.py plus src/os/test_repin_noop_eol_dialect.py: the NOOP comparison owned BYTES, which is right about content and wrong about transport - a CRLF declaration carrying the composition read PLANNED and --execute rewrote it to LF, so an unchanged declaration was written and no reader could tell that from a real re-pin. ONE normalisation now lives in that module (CRLF and a lone CR to LF, content never touched), is_noop answers the one question both writer faces ask, and repin_noop_parity.is_noop plus residue_triage_repin_idempotent.decide call it AT CALL time so the literal byte comparison that used to live in the wire is gone rather than duplicated; the wire's dead on_disk_bytes helper went with it. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/repin-noop-eol-dialect-R2388.log, 2402B, legs=2 identical=True adjacent=3 fails=0), wired os-repin-noop-eol-dialect(6) so the registry reads 515 suites / 4066 criteria and docs/sandbox-suite-matrix.md was regenerated to match (49422B, green=513/515 because the two newest suites are not in the R2387 battery evidence). LIVE: qa/repin-noop-eol-dialect-live-R2388.log reads the REAL 67603B declaration as dialect=LF, a CRLF copy of the REAL declaration as verdict=NOOP raw_equal=no dialect=CRLF with its digest unchanged and no temp beside it, and the REAL tree dry re-pin at R2388 as PLANNED with shipped and wire printing the same line - so the normalisation is content-safe and not a blanket green. Row 442 stamped and one REAL measured gap seeded (declaration_writer_noop_parity, AC-DWNP1..AC-DWNP6 pre-registered in that row, five anchors zero-occupancy): the three sibling declaration writers hold is_noop ZERO times, so the law reaches one of four writers."
     ],
     [
-      "2399",
+      "2400",
       "OSLoop 执行 tick"
     ],
     [
@@ -153,10 +157,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 42,
+    "log_lines_in_window": 47,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 41,
+    "substantive_non_idle_mention_lines": 46,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -189,7 +193,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 378,
+        "done_rows": 379,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

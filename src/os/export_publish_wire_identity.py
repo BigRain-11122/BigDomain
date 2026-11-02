@@ -44,9 +44,10 @@
 # round script's own prose and its embedded fixture script both read as
 # UNRESOLVED until the token mask went in. A `from M import publish` followed
 # by a BARE `publish(...)` call is outside the guard's attribute-call law, so
-# it does not count as a routed publish at all and the script reads
-# NO-PUBLISH - carried as a real gap rather than papered over by a second
-# publish law here.
+# it did not count as a routed publish at all and the script read NO-PUBLISH;
+# the spelling law now lives in export_publish_from_import_law (R2400), which
+# this module asks at CALL time, and the row shape below is unchanged - the
+# attribute spelling still resolves to the same receiver, module and state.
 #
 # This module writes nothing and reads no clock (AC-EPWI6). Source is pure
 # ASCII, stdlib only, zero network.
@@ -203,24 +204,30 @@ def code_only(lines):
     return ["".join(chars) for chars in masked]
 
 
+def from_import_law():
+    """The module that owns which publish SPELLINGS count as a publish.
+
+    Imported at call time so a caller (and the suite) can patch it and move
+    this reading, and so the spelling law has exactly one owner.
+    """
+    return importlib.import_module("export_publish_from_import_law")
+
+
 def audit_script(source_lines, export_name, wire_module):
-    """Every publish call in one file, resolved against its own imports."""
-    lines = code_only(source_lines)
-    bindings = import_bindings(lines)
+    """Every publish call in one file, resolved against its own imports.
+
+    The spelling law is export_publish_from_import_law asked at CALL time, so
+    a `from M import publish` followed by a bare `publish(...)` is read here
+    too instead of reading NO-PUBLISH. The row shape is unchanged on purpose:
+    the attribute spelling still yields the same receiver, module and state,
+    and the four keys below are exactly what this module published before.
+    """
     calls = []
-    for number, line in enumerate(lines, 1):
-        if not guard().routed_publish(line, export_name):
-            continue
-        receiver, module = callee_of(line, bindings)
-        if not module:
-            state = UNRESOLVED
-        elif module == wire_module:
-            state = WIRE
-        else:
-            state = FOREIGN
-        calls.append({"line": number, "receiver": receiver,
-                      "module": module, "state": state,
-                      "text": line.strip()[:120]})
+    for row in from_import_law().classify_script(
+            source_lines, export_name, wire_module):
+        calls.append({"line": row["line"], "receiver": row["receiver"],
+                      "module": row["module"], "state": row["state"],
+                      "text": row["text"]})
     return calls
 
 
