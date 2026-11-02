@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T11:03:40+08:00",
-  "do": "R2373 product window: the runner contract finally has ONE usage renderer. The guard rendered a two-line usage block and the help wire rendered a second one-line block from the same contract, so a third tool would have made three. contract_usage_renderer now owns the vocabulary - the three required keys, the flag spelling and the honest (none) - in the two shapes both published texts need, and the guard exports it as usage_text/contract_line so neither CLI writes a format string while every already-published line stays byte-identical.",
+  "export_ts": "2026-11-02T11:42:19+08:00",
+  "do": "R2374 verification-then-product window: the battery on the committed R2373 tree read RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered, and the CEO-visible export finally publishes a queue line - docs/status-export.json now carries queue_floor_reading_wire.published, the discounted claimable and every discounted row included.",
   "ceo_face": {
-    "current": "R2373 product window: the runner contract finally has ONE usage renderer. The guard rendered a two-line usage block and the help wire rendered a second one-line block from the same contract, so a third tool would have made three. contract_usage_renderer now owns the vocabulary - the three required keys, the flag spelling and the honest (none) - in the two shapes both published texts need, and the guard exports it as usage_text/contract_line so neither CLI writes a format string while every already-published line stays byte-identical.",
-    "latest_artifact": "src/os/contract_usage_renderer.py plus its six-criteria suite (qa/contract-usage-renderer-R2373.log, two identical legs plus three adjacent suites green), the live leg proving both CLIs answer through the one module with both texts byte-identical to R2366 (qa/contract-usage-renderer-live-R2373.log, LIVE-COLLAPSED) and the battery that proves the registry unharmed (qa/reconcile-all-R2373-retry.log, RUNNER PASS 499/499, criteria 3970).",
-    "next_milestone": "R2374: the battery on the committed R2373 tree pre-registered at 500 suites / 3976 criteria (this window own os-contract-usage-renderer suite), then the product face at the queue head the reader names - it currently offers line 420 prefix AC-QFE1 (queue_floor_export_face); the seed this window measured is own_usage_block_renderer (AC-OUB1..6), because a tool's OWN argument block is still a hand-written literal and the wire composes its own flag line from strings.",
-    "next_milestone_due": "2026-11-04T11:03:40+08:00",
-    "last_artifact": "src/os/contract_usage_renderer.py plus its six-criteria suite (qa/contract-usage-renderer-R2373.log, two identical legs plus three adjacent suites green), the live leg proving both CLIs answer through the one module with both texts byte-identical to R2366 (qa/contract-usage-renderer-live-R2373.log, LIVE-COLLAPSED) and the battery that proves the registry unharmed (qa/reconcile-all-R2373-retry.log, RUNNER PASS 499/499, criteria 3970).",
-    "updated_at": "2026-11-02T11:03:40+08:00"
+    "current": "R2374 verification-then-product window: the battery on the committed R2373 tree read RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered, and the CEO-visible export finally publishes a queue line - docs/status-export.json now carries queue_floor_reading_wire.published, the discounted claimable and every discounted row included.",
+    "latest_artifact": "docs/status-export.json now carries a live queue section (CLI leg: STALE -> WRITTEN 72523B -> CURRENT, matches_live=True), shipped with src/os/queue_floor_export_face.py and its six-criteria suite (qa/queue-floor-export-face-R2374.log, two identical legs plus three adjacent suites green), plus the battery that proves the registry unharmed (qa/reconcile-all-R2374.log, RUNNER PASS 500/500, criteria 3976).",
+    "next_milestone": "R2375: the battery on the committed R2374 tree pre-registered at 501 suites / 3982 criteria (this window own os-queue-floor-export-face suite), then the product face at the queue head the reader names; the seed this window measured is queue_export_freshness_gate (AC-QEF1..6), because the export's queue section can age silently - check_export_consistency never opens it.",
+    "next_milestone_due": "2026-11-04T11:42:19+08:00",
+    "last_artifact": "docs/status-export.json now carries a live queue section (CLI leg: STALE -> WRITTEN 72523B -> CURRENT, matches_live=True), shipped with src/os/queue_floor_export_face.py and its six-criteria suite (qa/queue-floor-export-face-R2374.log, two identical legs plus three adjacent suites green), plus the battery that proves the registry unharmed (qa/reconcile-all-R2374.log, RUNNER PASS 500/500, criteria 3976).",
+    "updated_at": "2026-11-02T11:42:19+08:00"
   },
   "depts": [
     {
@@ -191,11 +191,16 @@
       "src/os/contract_usage_renderer.py",
       "on",
       "R2373 product: one usage renderer for a CLI contract - the required keys, the flag spelling and the honest (none) now have one owner, in the two shapes the already-published texts need (block for the guard, inline for the wire's house line), with the guard as the exported door; a missing key refuses with its own code instead of rendering a partial block; six criteria green twice plus a live leg where both CLIs answer through the module and both texts are byte-identical to R2366"
+    ],
+    [
+      "src/os/queue_floor_export_face.py",
+      "on",
+      "R2374 product: the CEO-visible export finally publishes the one queue reading - the section it writes IS queue_floor_reading_wire.published, so the discounted claimable and every discounted row (line + prefix) travel unchanged, re-derived on every call with one atomic write and a read-back proof, and the CLI reads STALE rather than CURRENT when the export disagrees; six criteria green twice plus a live leg that caught the real missing section (STALE rc=2 -> WRITTEN 72523B -> CURRENT)"
     ]
   ],
   "results": [
     [
-      "2373",
+      "2374",
       "OSLoop 执行 tick"
     ],
     [
@@ -321,19 +326,78 @@
     [
       "R2373",
       "verification then product: the debt gate named reconcile-battery-R2372, so the battery ran first on the committed ee2bab1e tree - and it was RED ON EVIDENCE, NOT CODE: 498/499 suites, both failures reading reconcile-daily-census cd7 DRIFT-FLAG, because the R2372 live evidence carried six CRLF lines inside a file the census reads as one utf-8 LF dialect. Repaired at the birth site (one transport-EOL normalisation in evidence_R2372.py, file regenerated, payload identical except the two byte-count lines) and the census read DRIFT-CLEAN with the baseline untouched; the retry on the committed repair tree read RUNNER PASS 499/499 plus controls 7/7 in 1267.0s, criteria total 3970 EXACTLY as pre-registered, TMP RECLAIM 932/932, four follow-up sections PASS after the designed matrix FAIL and its regeneration to 499/3970 at 47836B (VERDICT PASS), evidence and matrix committed alone as 411b0077. Then the claimed row: state/queue/tech.md:419 AC-CUR1 contract_usage_renderer, its six criteria pinned there at R2366 BEFORE the code and every anchor prose-only at HEAD. Shipped the renderer plus its six-criteria suite: one owner of the contract vocabulary in the two published shapes, a missing key refusing with E_CUR_CONTRACT_MISSING_<KEY> (guard exit 3, wire keeps its published E_BFH_NO_CONTRACT at exit 5), and the wire asking runner_arg_guard.contract_line so the guard stays the exported door. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/contract-usage-renderer-R2373.log), wired os-contract-usage-renderer(6) so the registry reads 500/3976. LIVE: LIVE-COLLAPSED with block_guard_equals_module and wire_house_identical both True. Row stamped and one REAL measured gap seeded (own_usage_block_renderer: a tool's own argument block is still hand-written), gauge FLOOR-MET 5/5 10/10 10/10, reader now offers line 420 AC-QFE1. Register: battery-R2372 closed, battery-R2373 opened first=yes at 500/3976. Disclosed: the first battery invocation died to the Out-Null no-output trap with zero survivors and zero evidence; AC-CUR2 forced two shapes to survive; the window overran its budget."
+    ],
+    [
+      "R2374",
+      "verification then product: the debt gate named reconcile-battery-R2373, so the battery ran first on the committed ee2bab1e tree - RUNNER PASS 500/500 suites plus controls 7/7 in 1089.1s with criteria total 3976 EXACTLY as pre-registered and TMP RECLAIM 932/932 (qa/reconcile-all-R2374.log, 808379B, crlf=0); four follow-up sections PASS after the designed matrix FAIL and its regeneration to 500/3976 at 47905B, VERDICT R2374 PASS, evidence and matrix committed alone as 16430e6c. Then the claimed row: state/queue/tech.md:420 AC-QFE1 queue_floor_export_face, its six criteria pinned there at R2368 BEFORE the code and every anchor prose-only at HEAD. Shipped the module plus its six-criteria suite: the section IS queue_floor_reading_wire.published, so the discounted claimable plus every discounted row reach the export unchanged, with no second parser, no queue-file scan and no canned number; compose() re-reads the tree on every call and write() is one atomic replace with a read-back proof. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/queue-floor-export-face-R2374.log), wired os-queue-floor-export-face(6) so the registry reads 501/3982. LIVE: STALE rc=2 at contact because the export carried no queue section at all, WRITTEN 72523B matches_live=True, then CURRENT rc=0. Row 420 stamped and one REAL measured gap seeded (queue_export_freshness_gate: check_export_consistency never opens the queue block, so the section can age silently), gauge FLOOR-MET 5/5 10/10 10/10. Register: battery-R2373 closed, battery-R2374 opened first=yes at 501/3982. Disclosed: the window overran its budget because the battery cost 1089.1s; AC-QFE2's discount path is proved on fixtures because the live queue delivers nothing today."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 8,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
+  },
+  "queue": {
+    "floors": {
+      "main": 5,
+      "tech": 10,
+      "explore": 10
+    },
+    "queues": [
+      {
+        "queue": "main",
+        "path": "state/queue/main.md",
+        "present": true,
+        "open_rows": 6,
+        "done_rows": 5,
+        "gated_rows": 1,
+        "claimable": 5,
+        "discounted": 0,
+        "delivered": [],
+        "floor": 5,
+        "shortfall": 0,
+        "status": "MET"
+      },
+      {
+        "queue": "tech",
+        "path": "state/queue/tech.md",
+        "present": true,
+        "open_rows": 11,
+        "done_rows": 354,
+        "gated_rows": 1,
+        "claimable": 10,
+        "discounted": 0,
+        "delivered": [],
+        "floor": 10,
+        "shortfall": 0,
+        "status": "MET"
+      },
+      {
+        "queue": "explore",
+        "path": "state/queue/explore.md",
+        "present": true,
+        "open_rows": 10,
+        "done_rows": 239,
+        "gated_rows": 0,
+        "claimable": 10,
+        "discounted": 0,
+        "delivered": [],
+        "floor": 10,
+        "shortfall": 0,
+        "status": "MET"
+      }
+    ],
+    "verdict": "FLOOR-MET",
+    "shortfall_total": 0,
+    "missing": [],
+    "delivered_total": 0
   }
 }

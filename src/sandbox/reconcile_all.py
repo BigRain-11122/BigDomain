@@ -5099,6 +5099,13 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-contract-usage-renderer",
      os.path.join("..", "os", "test_contract_usage_renderer.py"), 6),
+    # R2374: queue_floor_reading_wire had exactly one published reading and
+    # docs/status-export.json carried no queue line at all, so the corrected
+    # number had no consumer on the face the reader opens.
+    # (AC-QFE1..AC-QFE6 were pinned in state/queue/tech.md:420 as the R2368
+    # seed row BEFORE the code.)
+    ("os-queue-floor-export-face",
+     os.path.join("..", "os", "test_queue_floor_export_face.py"), 6),
     ]
 
 FAILS = 0

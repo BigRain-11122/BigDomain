@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2374 suite=src/os/test_queue_floor_export_face.py legs=2
+== LEG A rc=0 digest=0EB3FBDCC73C9A49
+SUITE queue_floor_export_face (R2374) criteria=6
+PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+PASS AC-QFE3 check_export_consistency reads 21/21 with the new field, and the field is not a second derivation
+PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=0EB3FBDCC73C9A49
+SUITE queue_floor_export_face (R2374) criteria=6
+PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+PASS AC-QFE3 check_export_consistency reads 21/21 with the new field, and the field is not a second derivation
+PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_queue_floor_reading_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_delivered_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_export_freshness.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=0EB3FBDCC73C9A49

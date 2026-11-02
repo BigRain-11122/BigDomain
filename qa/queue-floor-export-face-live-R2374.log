@@ -1,0 +1,7 @@
+R2374 live leg: queue_floor_export_face on the real tree
+step=before
+rc=2 out={"label": "os-queue-floor-export-face", "verdict": "STALE", "path": "docs\\status-export.json", "claimable": [5, 10, 10], "delivered_total": 0, "matches_live": false}
+step=execute
+rc=0 out={"label": "os-queue-floor-export-face", "verdict": "WRITTEN", "path": "docs\\status-export.json", "bytes": 72523, "claimable": [5, 10, 10], "matches_live": true}
+step=after
+rc=0 out={"label": "os-queue-floor-export-face", "verdict": "CURRENT", "path": "docs\\status-export.json", "claimable": [5, 10, 10], "delivered_total": 0, "matches_live": true}
