@@ -37,3 +37,4 @@ R2374 (tick 2374): verification then product - the debt gate named reconcile-bat
 2026-11-02T18:05:00+08:00 R2384 product: export_publish_path_guard reads BYPASS over 1018 scripts (5 offenders, 7 clean, 131 historical)
 2026-11-02T18:49:50+08:00 R2385 verification-then-product: battery 511/511 suites 4042 criteria green; single_append_status_face shipped, live --check names status=NOT-RESIDUE / DELIVERED
 2026-11-02T20:05:00+08:00 R2386 verification-then-product: battery 512/512 suites 4048 criteria green; bare_evidence_pile_refusal shipped, live bare name derives dir=qa over 474 rounds and a missing name refuses E_BEPR_NOT_FOUND
+2026-11-02T20:25:00+08:00 R2387 verification-then-product: battery 513/513 suites 4054 criteria green; review_window_guard_parity_blind_agreement shipped, live tree reads PARITY-AGREES ignorance=none while a fixture neither face can read now reads PARITY-UNKNOWN at rc 1

@@ -5205,6 +5205,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-bare-evidence-pile-refusal",
      os.path.join("..", "os", "test_bare_evidence_pile_refusal.py"), 6),
+    # R2387: the review-window parity compares two rewind booleans, so it
+    # reads PARITY-AGREES when NEITHER face could read the declaration - a
+    # green over exactly the file that would break both paths. This face names
+    # the ignorance (PARITY-UNKNOWN, exit 1) and keeps every informed reading
+    # byte for byte. (AC-RWGB1..AC-RWGB6 were pinned in state/queue/tech.md:439
+    # as the R2381 seed row BEFORE the code.)
+    ("os-review-window-guard-parity-blind-agreement",
+     os.path.join("..", "os",
+                  "test_review_window_guard_parity_blind_agreement.py"), 6),
     ]
 
 FAILS = 0

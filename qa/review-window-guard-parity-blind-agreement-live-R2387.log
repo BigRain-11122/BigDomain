@@ -1,0 +1,6 @@
+STEP1 LIVE tree REVIEW WINDOW GUARD PARITY BLIND verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes ignorance=none
+STEP2 LIVE json byte-stable=True keys=verdict,rewind,declared,declared_code,declared_window,argument,argument_history,argument_code,agrees,ignorance
+STEP3 FIXTURE unreadable parity=PARITY-AGREES blind=PARITY-UNKNOWN ignorance=both
+STEP4 FIXTURE codes declared=E_RWW_UNREADABLE argument=ARGUMENT-UNKNOWN(E_RWW_UNREADABLE)
+STEP5 FIXTURE exit=1
+VERDICT LIVE-AGREES-INFORMED

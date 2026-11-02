@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2387 suite=src/os/test_review_window_guard_parity_blind_agreement.py legs=2
+== LEG A rc=0 digest=ED1C31ADEE0DC71D
+PASS AC-RWGB1 a declaration neither face can read reads PARITY-UNKNOWN naming BOTH codes (the carried E_RWW_UNREADABLE on each side, the argument side with its own UNKNOWN word), never AGREES - while the shipped parity still reads PARITY-AGREES on the same world, so the gap this face closes is named rather than asserted, and the CLI exits 1
+PASS AC-RWGB2 a rewinding list still reads PARITY-AGREES with BOTH faces naming the carried E_RWHW_DECL_HISTORY, all eight parity fields byte for byte, and the CLI exits 0
+PASS AC-RWGB3 a clean monotonic list keeps PARITY-AGREES with the declared window carried, and an UNPINNED list (a state the argument path deliberately ignores) is NOT called an ignorance - every informed reading keeps the parity's eight fields byte for byte
+PASS AC-RWGB4 a genuine split still reads PARITY-DISAGREES naming both codes, and a split reads DISAGREES even when one side is ignorant, so the new verdict never swallows a disagreement - and the tree digest is identical before and after
+PASS AC-RWGB5 the CLI exits 0 (agree) / 1 (unknown) / 2 (disagree) / 3 (missing root) / 5 (bad flags) with a byte-stable --json over the eight parity keys plus exactly one new key 'ignorance', in that order and with one trailing LF
+LIVE REVIEW WINDOW GUARD PARITY BLIND verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes ignorance=none
+PASS AC-RWGB6 pure ASCII, stdlib only, zero network, no clock, read-only, the parity imported and asked at call time (a patched check moves this reading through to its window), wired as os-review-window-guard-parity-blind-agreement(6), with the live tree reading taken
+SUITE PASS 6/6
+== LEG B rc=0 digest=ED1C31ADEE0DC71D
+PASS AC-RWGB1 a declaration neither face can read reads PARITY-UNKNOWN naming BOTH codes (the carried E_RWW_UNREADABLE on each side, the argument side with its own UNKNOWN word), never AGREES - while the shipped parity still reads PARITY-AGREES on the same world, so the gap this face closes is named rather than asserted, and the CLI exits 1
+PASS AC-RWGB2 a rewinding list still reads PARITY-AGREES with BOTH faces naming the carried E_RWHW_DECL_HISTORY, all eight parity fields byte for byte, and the CLI exits 0
+PASS AC-RWGB3 a clean monotonic list keeps PARITY-AGREES with the declared window carried, and an UNPINNED list (a state the argument path deliberately ignores) is NOT called an ignorance - every informed reading keeps the parity's eight fields byte for byte
+PASS AC-RWGB4 a genuine split still reads PARITY-DISAGREES naming both codes, and a split reads DISAGREES even when one side is ignorant, so the new verdict never swallows a disagreement - and the tree digest is identical before and after
+PASS AC-RWGB5 the CLI exits 0 (agree) / 1 (unknown) / 2 (disagree) / 3 (missing root) / 5 (bad flags) with a byte-stable --json over the eight parity keys plus exactly one new key 'ignorance', in that order and with one trailing LF
+LIVE REVIEW WINDOW GUARD PARITY BLIND verdict=PARITY-AGREES rewind=no window=100 declared=WINDOW argument=ARGUMENT-CLEAN agrees=yes ignorance=none
+PASS AC-RWGB6 pure ASCII, stdlib only, zero network, no clock, read-only, the parity imported and asked at call time (a patched check moves this reading through to its window), wired as os-review-window-guard-parity-blind-agreement(6), with the live tree reading taken
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_review_window_guard_parity.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire_argument_guard.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=ED1C31ADEE0DC71D
