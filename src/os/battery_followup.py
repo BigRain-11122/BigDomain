@@ -108,8 +108,13 @@ def _fail(name, detail):
     return {"section": name, "verdict": "FAIL", "detail": detail}
 
 
-def section_matrix(root, evidence, call):
-    """AC-BFU2: regenerate into a temp copy, compare, never rewrite the doc."""
+def matrix_core(root, evidence, call):
+    """AC-BFU2: regenerate into a temp copy, compare, never rewrite the doc.
+
+    R2370: this body is unchanged; section_matrix below is now the guarded
+    entry point, so the matrix section asks followup_section_foreign FIRST
+    (AC-FSFW2) before any matrix byte is rendered.
+    """
     path = tool(root, "matrix")
     if path is None:
         return _fail("matrix", "%s %s" % (E_BFU_NO_TOOL, TOOLS["matrix"])), ""
@@ -139,6 +144,17 @@ def section_matrix(root, evidence, call):
                      " regenerated=%dB %s"
                      % (rc, len(disk), len(fresh), first_line(out))), clean(out)
     return _ok("matrix", "matrix byte-identical %dB" % len(fresh)), clean(out)
+
+
+def section_matrix(root, evidence, call):
+    """AC-FSFW1/R2370: the matrix section asks the foreign-section reader FIRST.
+
+    The guard lives in followup_section_foreign_wire, imported at call time so
+    the two modules do not import each other at load. A FOREIGN-SECTION pile
+    refuses before matrix_core runs at all, so no matrix byte is rendered.
+    """
+    import followup_section_foreign_wire as FSFW
+    return FSFW.matrix_section(root, evidence, call)
 
 
 def section_tool(name, root, argv, call):

@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2370 suite=src/os/test_followup_section_foreign_wire.py legs=2
+== LEG A rc=0 digest=8A63AC392E4826AF
+followup_section_foreign_wire suite (expected criteria 6)
+PASS AC-FSFW1 reading imported from the reader, patched reading flows
+PASS AC-FSFW2 foreign pile refuses before any matrix byte
+PASS AC-FSFW3 clean pile matrix section byte-identical to pre-wire
+PASS AC-FSFW4 census disagreement reported on a clean pile
+PASS AC-FSFW5 CLI 0/2/3/5, --json pinned, doc untouched
+PASS AC-FSFW6 ASCII, stdlib, clockless, wired in the registry
+SUITE PASS 6/6
+== LEG B rc=0 digest=8A63AC392E4826AF
+followup_section_foreign_wire suite (expected criteria 6)
+PASS AC-FSFW1 reading imported from the reader, patched reading flows
+PASS AC-FSFW2 foreign pile refuses before any matrix byte
+PASS AC-FSFW3 clean pile matrix section byte-identical to pre-wire
+PASS AC-FSFW4 census disagreement reported on a clean pile
+PASS AC-FSFW5 CLI 0/2/3/5, --json pinned, doc untouched
+PASS AC-FSFW6 ASCII, stdlib, clockless, wired in the registry
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_followup_section_foreign.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup_help_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_reading_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=8A63AC392E4826AF

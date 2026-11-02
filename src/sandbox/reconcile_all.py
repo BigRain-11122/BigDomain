@@ -4841,6 +4841,15 @@ SUITES = [
     # keeps a directory census so a ritual rename is a set difference.
     # (AC-FSF1..AC-FSF6 pinned in state/queue/tech.md as the R2343 seed row
     # BEFORE the code existed.)
+    # R2370: the foreign-section reader finally has a CONSUMER - the follow-up
+    # matrix section asks it FIRST, so a pile carrying a SECTION name the ritual
+    # does not own REFUSES the section, naming the rounds and the names, before
+    # any matrix byte is rendered; a clean pile keeps the matrix byte-identical;
+    # and a census disagreement is reported even when every round reads clean.
+    # (AC-FSFW1..AC-FSFW6 pinned in state/queue/tech.md as the R2357 seed row
+    # BEFORE the code existed.)
+    ("os-followup-section-foreign-wire",
+     os.path.join("..", "os", "test_followup_section_foreign_wire.py"), 6),
     ("os-followup-section-foreign",
      os.path.join("..", "os", "test_followup_section_foreign.py"), 6),
     # R2292: queue_row_exempt records an acceptance once and nothing ever
