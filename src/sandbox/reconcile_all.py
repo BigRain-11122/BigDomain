@@ -5113,6 +5113,12 @@ SUITES = [
     # the R2374 seed row BEFORE the code.)
     ("os-queue-export-freshness-gate",
      os.path.join("..", "os", "test_queue_export_freshness_gate.py"), 6),
+    # R2376: R2375 shipped a gate that can NAME a stale queue block, but only
+    # a human typing the CLI ever ran it - the writer replaced the export with
+    # whatever section it had just composed, unproven. (AC-QEG1..AC-QEG6 were
+    # pinned in state/queue/tech.md:422 as the R2375 seed row BEFORE the code.)
+    ("os-queue-export-gate-wire",
+     os.path.join("..", "os", "test_queue_export_gate_wire.py"), 6),
     ]
 
 FAILS = 0
