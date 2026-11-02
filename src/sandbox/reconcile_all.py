@@ -4958,6 +4958,14 @@ SUITES = [
     # seed BEFORE the code existed.)
     ("os-append-check-status-precedence",
      os.path.join("..", "os", "test_append_check_status_precedence.py"), 6),
+    # R2393: the refused --check carried the round's live status but still
+    # answered declared_by="-" while its own detail line named the boundary,
+    # so the payload and the prose disagreed. The declaration's own head is
+    # now derived without aging anything and rides on the refusal.
+    # (AC-RCDF1..AC-RCDF6 pinned in state/queue/tech.md line 451 as the R2392
+    # seed BEFORE the code existed.)
+    ("os-refused-check-declaration-face",
+     os.path.join("..", "os", "test_refused_check_declaration_face.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now

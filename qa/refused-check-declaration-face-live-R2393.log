@@ -1,0 +1,10 @@
+R2393 refused_check_declaration_face live capture
+declaration: state/residue_triage.json declared_by=R2391 entries=237
+PREDICATE: the refused payload must name the boundary its own detail line names
+LEG-A --json rc=3
+LEG-B human rc=3
+  E_RTA_UNREADABLE
+    E_RTR_DECL_FUTURE: declared_by R2391 is later than the round being checked R1755
+    STATUS R1755 DELIVERED
+    NOTE E_ACSP_STATUS_ON_REFUSAL: the status face answers even when the triage read refuses
+VERDICT declared_by_named=True was_dash_at_R2392=True

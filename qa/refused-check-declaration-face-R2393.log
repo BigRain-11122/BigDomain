@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2393 suite=src/os/test_refused_check_declaration_face.py legs=2
+== LEG A rc=0 digest=A2958D41F7D143ED
+refused_check_declaration_face suite (expected criteria 6)
+PASS AC-RCDF1 declared_by comes from the loader, patch moves it
+PASS AC-RCDF2 an unreadable declaration keeps '-' and its code
+PASS AC-RCDF3 the aging step is never run by the added derivation
+PASS AC-RCDF4 success payload and append lines byte-identical
+PASS AC-RCDF5 exits and key order unchanged, boundary named
+PASS AC-RCDF6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=A2958D41F7D143ED
+refused_check_declaration_face suite (expected criteria 6)
+PASS AC-RCDF1 declared_by comes from the loader, patch moves it
+PASS AC-RCDF2 an unreadable declaration keeps '-' and its code
+PASS AC-RCDF3 the aging step is never run by the added derivation
+PASS AC-RCDF4 success payload and append lines byte-identical
+PASS AC-RCDF5 exits and key order unchanged, boundary named
+PASS AC-RCDF6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_residue_triage_append.py rc=0 SUITE PASS 6/6
+== src/os/test_append_check_status_precedence.py rc=0 SUITE PASS 6/6
+== src/os/test_residue_triage.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=A2958D41F7D143ED

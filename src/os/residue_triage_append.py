@@ -89,12 +89,16 @@ class ResidueTriageAppendError(Exception):
     byte-identical (AC-ACSP4).
     """
 
-    def __init__(self, code, detail="", status=None, round_label=None):
+    def __init__(self, code, detail="", status=None, round_label=None,
+                 declared_by=None):
         Exception.__init__(self, "%s: %s" % (code, detail))
         self.code = code
         self.detail = detail
         self.status = status
         self.round = round_label
+        # The boundary the check tripped on, read from the declaration's own
+        # head (AC-RCDF1). Never set on the --append path.
+        self.declared_by = "-" if declared_by is None else declared_by
 
 
 def _round(value, origin):
@@ -352,12 +356,17 @@ def check(root, round_value):
             code = "E_RTA_BAD_ARGS"
         elif outcome["refusal"]["code"] in ("E_RTR_BAD_STATE",):
             code = "E_RTA_BAD_STATE"
+        # The declared boundary travels with the refusal so the payload and the
+        # prose name one round (AC-RCDF1). The head is derived without aging
+        # anything, so the refusal code above is unchanged (AC-RCDF3).
+        import refused_check_declaration_face as RCDF
         raise ResidueTriageAppendError(
             code,
             "%s: %s" % (outcome["refusal"]["code"],
                         outcome["refusal"]["detail"]),
             status=outcome["status"],
-            round_label=outcome["requested"])
+            round_label=outcome["requested"],
+            declared_by=RCDF.head(root))
     report = outcome["report"]
     out = {
         "action": "check",
@@ -429,12 +438,13 @@ USAGE = ("usage: residue_triage_append.py --check --round R<n> [--root PATH]\n"
 
 def refused_report(exc):
     """The pinned keys for a refused --check, with its status carried
-    (AC-ACSP5). Never used by the --append path (AC-ACSP4)."""
+    (AC-ACSP5) and the declared boundary named (AC-RCDF1). Never used by the
+    --append path (AC-ACSP4)."""
     return {
         "action": "check",
         "round": exc.round or "-",
         "status": exc.status,
-        "declared_by": "-",
+        "declared_by": exc.declared_by,
         "until": "-",
         "before_bytes": 0,
         "after_bytes": 0,
