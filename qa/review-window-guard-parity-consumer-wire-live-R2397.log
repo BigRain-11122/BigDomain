@@ -1,0 +1,24 @@
+[1] real tree consumer --check rc=0
+REVIEW WINDOW PARITY CONSUMER verdict=WINDOW-CLEAN code=- parity=PARITY-AGREES window=100 declared=WINDOW argument=ARGUMENT-CLEAN ignorance=none
+[2] real tree exempt_review --window-from-declaration rc=2
+EXEMPT REVIEW round=R2397 window=100 declaration=PINNED entries=9 stale=9 verdict=REVIEW-STALE source=declaration
+  STALE main/launch-ops-rehearsal#2fe92cf5 declared=R2276 age=121 until=None
+  STALE main/BD-PROP-001#d84fd036 declared=R2276 age=121 until=None
+  STALE main/charter#308aea2d declared=R2276 age=121 until=None
+  STALE main/m4-visitor-end-spec#af274fbd declared=R2276 age=121 until=None
+  STALE main/heartbeat.txt#ee909034 declared=R2276 age=121 until=None
+  STALE tech/docker-compose#576d2181 declared=R2276 age=121 until=None
+  STALE tech/logs#affca276 declared=R2276 age=121 until=None
+  STALE tech/suite_matrix#8e07f908 declared=R2276 age=121 until=None
+  STALE explore/benchmarks#c0b54c80 declared=R2276 age=121 until=None
+[3] blind fixture (unreadable declaration) rc=2
+REVIEW WINDOW PARITY CONSUMER verdict=WINDOW-UNKNOWN code=E_RWPC_UNKNOWN parity=PARITY-UNKNOWN window=- declared=E_RWW_UNREADABLE argument=E_RWW_UNREADABLE ignorance=both
+  E_RWPC_UNKNOWN
+  ignorance=both declared=E_RWW_UNREADABLE argument=E_RWW_UNREADABLE
+[4] clean fixture (informed agreement) rc=0
+REVIEW WINDOW PARITY CONSUMER verdict=WINDOW-CLEAN code=- parity=PARITY-AGREES window=20 declared=WINDOW argument=ARGUMENT-CLEAN ignorance=none
+[5] clean fixture through the acting path rc=2
+EXEMPT REVIEW round=R2397 window=20 declaration=PINNED entries=1 stale=1 verdict=REVIEW-STALE source=declaration
+  STALE tech/seed-a declared=R2290 age=107 until=None
+[6] real tree --json rc=0
+{"verdict": "WINDOW-CLEAN", "code": null, "parity": "PARITY-AGREES", "ignorance": "none", "declared": "WINDOW", "declared_code": null, "argument": "ARGUMENT-CLEAN", "argument_code": null, "window": 100, "detail": ""}

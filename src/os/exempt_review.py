@@ -44,6 +44,15 @@
 # uses; a monotonic, UNPINNED or DRIFT declaration leaves this reading byte
 # identical. The age law is still untouched.
 #
+# Parity-consumer wiring (AC-RWPC1..AC-RWPC6, pinned as the R2387 seed row of
+# the same board BEFORE that guard existed): the declared path now asks
+# review_window_guard_parity_consumer_wire before it takes the window, so a
+# declarations list on which the two review-window faces SPLIT, or on which
+# the pair agrees only because neither face could judge it (the R2387 blind
+# green), refuses here with E_RWPC_SPLIT / E_RWPC_UNKNOWN. An informed
+# agreement refuses nothing and the window this path returns is byte for byte
+# what it was.
+#
 # Pure read: nothing is written, no clock is read, no network import.
 # Source is pure ASCII, stdlib only.
 
@@ -52,6 +61,7 @@ import os
 import sys
 
 import queue_row_exempt as QRE
+import review_window_guard_parity_consumer_wire as RWGPC
 import review_window_wire as RWW
 import review_window_wire_argument_guard as RWAG
 
@@ -160,6 +170,7 @@ def audit(root, round_text, window=NO_WINDOW, window_source=SOURCE_ARGUMENT):
                 "E_RWW_BOTH",
                 "a window argument and the declared window are two sources "
                 "of truth")
+        RWGPC.guard(root, round_text)
         window = RWW.declared_window(root, round_text)
     elif window is NO_WINDOW:
         window = WINDOW_DEFAULT
@@ -290,6 +301,14 @@ def main(argv):
         print("  EXEMPT REVIEW round=%s window=- entries=0 stale=0 "
               "verdict=WINDOW-REFUSED source=%s"
               % (round_text, SOURCE_ARGUMENT))
+        return 2
+    except RWGPC.ReviewWindowParityConsumerError as exc:
+        # AC-RWPC2/AC-RWPC3: a split or a blind agreement refuses BEFORE any
+        # entry is aged, with the same zero-count refusal shape.
+        print("REFUSE %s: %s" % (exc.code, exc.detail))
+        print("  EXEMPT REVIEW round=%s window=- entries=0 stale=0 "
+              "verdict=WINDOW-REFUSED source=%s"
+              % (round_text, SOURCE_DECLARATION))
         return 2
     if use_json:
         print(render_json(report))

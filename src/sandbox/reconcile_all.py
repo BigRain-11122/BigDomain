@@ -5284,6 +5284,11 @@ SUITES = [
     ("os-review-window-guard-parity-blind-agreement",
      os.path.join("..", "os",
                   "test_review_window_guard_parity_blind_agreement.py"), 6),
+    # R2397: the acting path asks the blind-agreement reading, so a split and
+    # a blind green refuse where entries would be aged.
+    ("os-review-window-guard-parity-consumer-wire",
+     os.path.join("..", "os",
+                  "test_review_window_guard_parity_consumer_wire.py"), 6),
     ]
 
 FAILS = 0

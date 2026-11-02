@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2397 suite=src/os/test_review_window_guard_parity_consumer_wire.py legs=2
+== LEG A rc=0 digest=21865FBDA97129D8
+PASS AC-RWPC1 the consumer asks RWGB.check at call time - a patched reading moves its verdict to UNKNOWN, the same call is restored byte-identically, the module imports nothing but that one law, and no second rewind comparison or declared_by read lives here
+PASS AC-RWPC2 a split refuses with its own E_RWPC_SPLIT naming both faces' codes, and the CLI exits 2 where the clean world exits 0
+PASS AC-RWPC3 a blind agreement refuses with E_RWPC_UNKNOWN - a different word from the split's - naming the ignorant side(s) it measured, and the CLI exits 2
+PASS AC-RWPC4 on an informed agreement the acting path is byte identical with the guard installed and with it patched out - window 20 either way, the same rendered and JSON report, and an unchanged tree digest
+PASS AC-RWPC5 the report carries this face's pinned key order and is byte-stable across runs, the CLI keeps 0/2/3/5, and the new codes and verdicts are additions that rename none of the shipped words (ignorance vocabulary still read from its owner)
+PASS AC-RWPC6 the module is pure ASCII, stdlib only, imports no network and reads no clock, and its reconcile label os-review-window-guard-parity-consumer-wire is wired for six criteria
+SUITE os-review-window-guard-parity-consumer-wire criteria=6 pass=6 fail=0
+SUITE PASS
+== LEG B rc=0 digest=21865FBDA97129D8
+PASS AC-RWPC1 the consumer asks RWGB.check at call time - a patched reading moves its verdict to UNKNOWN, the same call is restored byte-identically, the module imports nothing but that one law, and no second rewind comparison or declared_by read lives here
+PASS AC-RWPC2 a split refuses with its own E_RWPC_SPLIT naming both faces' codes, and the CLI exits 2 where the clean world exits 0
+PASS AC-RWPC3 a blind agreement refuses with E_RWPC_UNKNOWN - a different word from the split's - naming the ignorant side(s) it measured, and the CLI exits 2
+PASS AC-RWPC4 on an informed agreement the acting path is byte identical with the guard installed and with it patched out - window 20 either way, the same rendered and JSON report, and an unchanged tree digest
+PASS AC-RWPC5 the report carries this face's pinned key order and is byte-stable across runs, the CLI keeps 0/2/3/5, and the new codes and verdicts are additions that rename none of the shipped words (ignorance vocabulary still read from its owner)
+PASS AC-RWPC6 the module is pure ASCII, stdlib only, imports no network and reads no clock, and its reconcile label os-review-window-guard-parity-consumer-wire is wired for six criteria
+SUITE os-review-window-guard-parity-consumer-wire criteria=6 pass=6 fail=0
+SUITE PASS
+== ADJACENT 3
+== src/os/test_exempt_review.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_review_window_guard_parity_blind_agreement.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=21865FBDA97129D8

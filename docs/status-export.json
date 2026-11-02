@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T02:17:30+08:00",
-  "do": "R2396: the follow-up matrix section finally hands its tool the SAME file the pile guard reads - measured on the real tree, a bare evidence name now reaches suite_matrix.py as qa/<name> (the pile the file actually lives in) instead of <root>/<name>, which does not exist, so a guard and a doc can no longer describe two different piles.",
+  "export_ts": "2026-11-03T02:29:35+08:00",
+  "do": "R2397: the path that ages exemptions finally asks the review-window parity - a declarations list on which the two faces SPLIT, or on which they agree only because neither could judge it, now refuses before any entry is aged, while an informed agreement leaves the reading byte for byte what it was.",
   "ceo_face": {
-    "current": "R2396: the follow-up matrix section finally hands its tool the SAME file the pile guard reads - measured on the real tree, a bare evidence name now reaches suite_matrix.py as qa/<name> (the pile the file actually lives in) instead of <root>/<name>, which does not exist, so a guard and a doc can no longer describe two different piles.",
-    "latest_artifact": "qa/matrix-evidence-pile-consistency-live-R2396.log (same_file=yes, tool_exists=yes, bare_at_root=no on the real pile) and qa/matrix-evidence-pile-consistency-R2396.log (SUITE PASS 6/6)",
-    "next_milestone": "the carried battery on this tree at its re-measured target (522 suites / 4108 criteria), then the next pre-registered tech head review_window_guard_parity_consumer_wire (AC-RWPC1..6)",
-    "next_milestone_due": "2026-11-05T23:00:00+08:00",
-    "last_artifact": "qa/matrix-evidence-pile-consistency-live-R2396.log (same_file=yes, tool_exists=yes, bare_at_root=no on the real pile) and qa/matrix-evidence-pile-consistency-R2396.log (SUITE PASS 6/6)",
-    "updated_at": "2026-11-03T02:17:30+08:00"
+    "current": "R2397: the path that ages exemptions finally asks the review-window parity - a declarations list on which the two faces SPLIT, or on which they agree only because neither could judge it, now refuses before any entry is aged, while an informed agreement leaves the reading byte for byte what it was.",
+    "latest_artifact": "qa/review-window-guard-parity-consumer-wire-live-R2397.log (real tree WINDOW-CLEAN window=100; blind fixture refuses E_RWPC_UNKNOWN) and qa/review-window-guard-parity-consumer-wire-R2397.log (SUITE PASS 6/6)",
+    "next_milestone": "the carried battery on this tree at its re-measured target (523 suites / 4114 criteria), then the next pre-registered tech head declaration_writer_dialect_preservation (AC-DWPP1..6)",
+    "next_milestone_due": "2026-11-04T22:00:00+08:00",
+    "last_artifact": "qa/review-window-guard-parity-consumer-wire-live-R2397.log (real tree WINDOW-CLEAN window=100; blind fixture refuses E_RWPC_UNKNOWN) and qa/review-window-guard-parity-consumer-wire-R2397.log (SUITE PASS 6/6)",
+    "updated_at": "2026-11-03T02:29:35+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/review_window_guard_parity_consumer_wire.py plus its six-criteria suite (qa/review-window-guard-parity-consumer-wire-R2397.log, qa/review-window-guard-parity-consumer-wire-live-R2397.log)",
     "qa/runner-suite-timeout-headroom-live-R2395.log (three band suites named on the real pile) and qa/runner-suite-timeout-headroom-R2395.log (SUITE PASS 6/6)",
     "src/os/export_publish_wire_identity.py plus its six-criteria suite (qa/export-publish-wire-identity-R2391.log, qa/export-publish-wire-identity-live-R2391.log)",
     "src/os/owner_table_parity.py plus its six-criteria suite (qa/owner-table-parity-R2390.log, qa/owner-table-parity-live-R2390.log)",
@@ -88,6 +89,10 @@
   ],
   "results": [
     [
+      "2397",
+      "2026-11-03 R2397 product face: CLAIMED state/queue/tech.md:457 prefix AC-RWPC1 (review_window_guard_parity_consumer_wire), criteria pinned in that row at R2387 before any code. SHIPPED src/os/review_window_guard_parity_consumer_wire.py plus its six-criteria suite: the blind-agreement reading is asked at CALL time from the path that ages entries, a split refuses E_RWPC_SPLIT naming both faces' codes, a blind agreement refuses E_RWPC_UNKNOWN naming the ignorant side(s), and an informed agreement refuses nothing so exempt_review --window-from-declaration reads the same window and the same report as before. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/review-window-guard-parity-consumer-wire-R2397.log, 3005B), wired os-review-window-guard-parity-consumer-wire(6) so the registry reads 523 suites / 4114 criteria. LIVE: the real tree reads WINDOW-CLEAN parity=PARITY-AGREES window=100 and a fixture neither face can read refuses E_RWPC_UNKNOWN at exit 2. No battery ran: reconcile-battery-R2394 stays OPEN at 523 suites / 4114 criteria."
+    ],
+    [
       "2396",
       "2026-11-03 R2396 product face, the row the reader named: CLAIMED state/queue/tech.md:454 prefix AC-MEPC1 (matrix_evidence_pile_consistency), whose AC-MEPC1..AC-MEPC6 were pinned INSIDE that row at R2386 BEFORE any code, after an anchor check at HEAD. SHIPPED src/os/matrix_evidence_pile_consistency.py plus its suite: the matrix section guarded the pile a bare evidence name MEASUREDLY lives in, but still handed the ORIGINAL string to the tool, which resolves it against the root - so the guard could speak about qa while `suite_matrix.py --evidence <bare name>` read <root>/<name>, a file that in the measured world does not exist at all. ONE derivation now answers what the tool must receive: a bare name becomes <measured pile>/<basename> (the pile law is asked at call time, so a patched measurement moves the argument), a name carrying a directory is handed through byte for byte, and a name th"
     ],
@@ -112,7 +117,7 @@
       "R2388 product window: state/queue/tech.md:442 prefix AC-RNED1 (repin_noop_eol_dialect), criteria pinned in that row at R2382 BEFORE any code, anchors re-checked at HEAD (only the row's own board helper and state prose mentioned the names). SHIPPED src/os/repin_noop_eol_dialect.py plus src/os/test_repin_noop_eol_dialect.py: the NOOP comparison owned BYTES, which is right about content and wrong about transport - a CRLF declaration carrying the composition read PLANNED and --execute rewrote it to LF, so an unchanged declaration was written and no reader could tell that from a real re-pin. ONE normalisation now lives in that module (CRLF and a lone CR to LF, content never touched), is_noop answers the one question both writer faces ask, and repin_noop_parity.is_noop plus residue_triage_repin_idempotent.decide call it AT CALL time so the literal byte comparison that used to live in the wire is gone rather than duplicated; the wire's dead on_disk_bytes helper went with it. SUITE PASS 6/6 twice with an identical criterion digest plus three adjacent suites green (qa/repin-noop-eol-dialect-R2388.log, 2402B, legs=2 identical=True adjacent=3 fails=0), wired os-repin-noop-eol-dialect(6) so the registry reads 515 suites / 4066 criteria and docs/sandbox-suite-matrix.md was regenerated to match (49422B, green=513/515 because the two newest suites are not in the R2387 battery evidence). LIVE: qa/repin-noop-eol-dialect-live-R2388.log reads the REAL 67603B declaration as dialect=LF, a CRLF copy of the REAL declaration as verdict=NOOP raw_equal=no dialect=CRLF with its digest unchanged and no temp beside it, and the REAL tree dry re-pin at R2388 as PLANNED with shipped and wire printing the same line - so the normalisation is content-safe and not a blanket green. Row 442 stamped and one REAL measured gap seeded (declaration_writer_noop_parity, AC-DWNP1..AC-DWNP6 pre-registered in that row, five anchors zero-occupancy): the three sibling declaration writers hold is_noop ZERO times, so the law reaches one of four writers."
     ],
     [
-      "2396",
+      "2397",
       "OSLoop 执行 tick"
     ],
     [
@@ -143,14 +148,14 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 31,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 25,
+    "substantive_non_idle_mention_lines": 30,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 11,
     "queue_explore_open": 10
   },
   "queue": {
@@ -178,10 +183,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 12,
-        "done_rows": 375,
+        "open_rows": 11,
+        "done_rows": 376,
         "gated_rows": 1,
-        "claimable": 11,
+        "claimable": 10,
         "discounted": 0,
         "delivered": [],
         "floor": 10,
