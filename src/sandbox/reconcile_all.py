@@ -5188,6 +5188,14 @@ SUITES = [
     # as the R2378 seed row BEFORE the code.)
     ("os-export-publish-path-guard",
      os.path.join("..", "os", "test_export_publish_path_guard.py"), 6),
+    # R2385: the batch writer names the live status of every residue round, but
+    # the SINGLE writer printed none, so composing one --append cost exactly the
+    # refused call the batch CLI no longer costs. Its --check now asks one face
+    # that answers the asked round WITH its live status, and a round outside the
+    # residue reads NOT-RESIDUE with its own code. (AC-SASF1..AC-SASF6 were
+    # pinned in state/queue/tech.md:433 as the R2379 seed row BEFORE the code.)
+    ("os-single-append-status-face",
+     os.path.join("..", "os", "test_single_append_status_face.py"), 6),
     ]
 
 FAILS = 0

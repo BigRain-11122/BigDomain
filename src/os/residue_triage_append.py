@@ -48,6 +48,12 @@ INDENT = "    "
 
 SUITE_LABEL = "os-residue-triage-append"
 
+# The label single_append_status_face reports for a round the live residue does
+# not carry. The READING is that module's; this constant is only the word this
+# renderer compares against, and the suite pins the two equal so they cannot
+# drift apart.
+NOT_RESIDUE = "NOT-RESIDUE"
+
 REPORT_KEYS = (
     "action",
     "round",
@@ -325,10 +331,19 @@ def check(root, round_value):
             code = "E_RTA_BAD_STATE"
         raise ResidueTriageAppendError(
             code, "%s: %s" % (exc.code, exc.detail))
+    # The live status of the ASKED round is the single-append status face's
+    # reading (AC-SASF2), asked at CALL time so this module still loads
+    # without it and the --append path never reaches it (AC-SASF4).
+    import single_append_status_face as SASF
+    try:
+        face = SASF.reading(root, "R%d" % current)
+    except SASF.SingleAppendStatusFaceError as exc:
+        raise ResidueTriageAppendError(
+            "E_RTA_BAD_STATE", "%s: %s" % (exc.code, exc.detail))
     out = {
         "action": "check",
         "round": "R%d" % current,
-        "status": "-",
+        "status": face["requested_status"],
         "declared_by": "-" if report["declared_by"] is None
         else report["declared_by"],
         "until": "-",
@@ -364,6 +379,9 @@ def render(report):
     out = [one_line(report)]
     for value in report["residue"]:
         out.append("  RESIDUE R%d has no dated entry yet" % value)
+    if report["status"] == NOT_RESIDUE:
+        out.append("  NOTE E_SASF_NOT_RESIDUE: %s is not in the live residue"
+                   % report["round"])
     return "\n".join(out)
 
 

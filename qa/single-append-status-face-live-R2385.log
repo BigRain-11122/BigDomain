@@ -1,0 +1,18 @@
+single_append_status_face LIVE reading R2385 (real tree, read-only)
+STEP1 FOUND leg (SASF CLI, a declared residue round): rc=0
+  SINGLE APPEND STATUS action=check requested=R1755 requested_status=DELIVERED found=yes rounds=232 verdict=FOUND source=stamp_residue via residue_triage
+STEP2 NOT-RESIDUE leg (SASF CLI, this round is TRIAGED so it is not residue): rc=2
+  SINGLE APPEND STATUS action=check requested=R2384 requested_status=NOT-RESIDUE found=no rounds=232 verdict=NOT-RESIDUE source=stamp_residue via residue_triage
+    NOT-RESIDUE R2384 is not in the live residue
+  E_SASF_NOT_RESIDUE: R2384 is not in the live residue
+STEP3 the SINGLE writer --check now names the status (was status=- before this window): rc=0
+  RESIDUE TRIAGE APPEND action=check round=R2384 status=NOT-RESIDUE declared_by=R2384 until=- entries=232->232 bytes=0->0 delta=0 residue=- declaration=PINNED verdict=TRIAGED wrote=no
+    NOTE E_SASF_NOT_RESIDUE: R2384 is not in the live residue
+STEP4 the pre-existing past-round refusal is unchanged (byte-identical code): rc=3
+  E_RTA_UNREADABLE
+    E_RTR_DECL_FUTURE: declared_by R2384 is later than the round being checked R1755
+STEP5 the reading is the batch face own map: rc=0
+  RESIDUE BATCH STATUS action=check rounds=232 requested=- requested_status=- counts=DELIVERED=212,STAMP-ONLY-OPEN=20,NO-HIT=0 verdict=MAP source=stamp_residue via residue_triage
+STEP6 live residue is empty, so no round awaits an entry today: rc=0
+  RESIDUE TRIAGE declaration=PINNED declared_by=R2384 round=R2385 residue=232 triaged=232 untriaged=0 unmatched=0 disagrees=0 expired=0 verdict=TRIAGED
+STEP7 append path untouched: the four append refusal codes are proved on fixtures in the suite, not live (no live refusal was manufactured)

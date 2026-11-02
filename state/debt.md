@@ -132,8 +132,9 @@ column-0 checkbox starts one.
 - [x] opened=R2380 | item=reconcile-battery-R2380 | note=R2380 shipped followup_guard_evidence_scope plus its six-criteria suite, wired os-followup-guard-evidence-scope, and the follow-up matrix section now derives its guarded pile from the evidence path; battery target 507 suites / 4018 criteria on the committed tree | closed=R2381
 - [x] opened=R2381 | item=reconcile-battery-R2381 | note=battery target 508 suites / 4024 criteria on the committed R2381 tree (this window os-review-window-guard-parity suite) | closed=R2382
 - [x] opened=R2382 | item=reconcile-battery-R2382 | note=the battery for the R2382 tree (509 suites / 4030 criteria expected: the R2382 parity suite plus the shipped repin suite reparsed) runs FIRST next window on the committed tree | closed=R2383
-- [ ] opened=R2383 | item=reconcile-battery-R2383 | note=the battery for the R2383 tree (510 suites / 4036 criteria expected: the R2383 os-own-usage-block-renderer suite plus this window board edit) runs FIRST next window on the committed tree | first=yes
-- [ ] opened=R2384 | item=reconcile-battery-R2384 | note=NOT RUN: the R2384 window took the product face first per the product-first law, so the R2383 battery row stays the claim-first item; when it runs it will walk the committed R2384 tree at 511 suites / 4042 criteria (510/4036 plus this window's os-export-publish-path-guard suite) | first=no
+- [x] opened=R2383 | item=reconcile-battery-R2383 | note=the battery for the R2383 tree (510 suites / 4036 criteria expected: the R2383 os-own-usage-block-renderer suite plus this window board edit) runs FIRST next window on the committed tree | closed=R2385
+- [x] opened=R2384 | item=reconcile-battery-R2384 | note=NOT RUN: the R2384 window took the product face first per the product-first law, so the R2383 battery row stays the claim-first item; when it runs it will walk the committed R2384 tree at 511 suites / 4042 criteria (510/4036 plus this window's os-export-publish-path-guard suite) | closed=R2385
+- [ ] opened=R2385 | item=reconcile-battery-R2385 | note=the battery for the R2385 tree (512 suites / 4048 criteria expected: 511/4042 plus this window os-single-append-status-face suite) runs FIRST next window on the committed tree | first=yes
 
 ## Closed
 
