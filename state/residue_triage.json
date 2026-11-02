@@ -1590,6 +1590,27 @@
       "declared_by": 2379,
       "reason": "re-pinned at R2379 at its measured status DELIVERED",
       "until": 2396
+    },
+    {
+      "round": 2371,
+      "status": "DELIVERED",
+      "declared_by": "R2380",
+      "reason": "fold 644 moved the R2371/R2372 blocks and this round own stamp; all three measured DELIVERED by the live reading",
+      "until": 2396
+    },
+    {
+      "round": 2372,
+      "status": "DELIVERED",
+      "declared_by": "R2380",
+      "reason": "fold 644 moved the R2371/R2372 blocks and this round own stamp; all three measured DELIVERED by the live reading",
+      "until": 2396
+    },
+    {
+      "round": 2380,
+      "status": "DELIVERED",
+      "declared_by": "R2380",
+      "reason": "fold 644 moved the R2371/R2372 blocks and this round own stamp; all three measured DELIVERED by the live reading",
+      "until": 2396
     }
   ]
 }

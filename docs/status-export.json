@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-02T14:29:07+08:00",
-  "do": "R2379 verification-then-product window: the residue batch face now names the LIVE STATUS of every residue round. The battery ran first on the committed tree (505/505 suites, criteria total 4006 exactly as pre-registered), then the queue head was claimed and residue_batch_status_face shipped - the batch CLI --check now asks it, so a --pair list is composed from one call instead of a second tool plus a guess.",
+  "export_ts": "2026-11-02T15:07:09+08:00",
+  "do": "R2380 verification-then-product window: the follow-up matrix section now guards the pile the EVIDENCE belongs to instead of a hard-coded 'qa', so the refusal and the matrix always describe the same logs. The battery ran first on the committed tree (506/506 suites, criteria total 4012 exactly as pre-registered), then the queue head was claimed and followup_guard_evidence_scope shipped.",
   "ceo_face": {
-    "current": "R2379 verification-then-product window: the residue batch face now names the LIVE STATUS of every residue round. The battery ran first on the committed tree (505/505 suites, criteria total 4006 exactly as pre-registered), then the queue head was claimed and residue_batch_status_face shipped - the batch CLI --check now asks it, so a --pair list is composed from one call instead of a second tool plus a guess.",
-    "latest_artifact": "src/os/residue_batch_status_face.py plus its six-criteria suite (qa/residue-batch-status-face-R2379.log, 1245B, two legs identical, four adjacent suites green); the live run over the real tree names 225 residue rounds with DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0 and the batch --check carries those statuses, where before this window it printed no status at all.",
-    "next_milestone": "R2380: the battery on the committed R2379 tree pre-registered at 506 suites / 4012 criteria (this window own suite), then the product face at the queue head the reader names (line 426 prefix AC-FGES1). The seed this window measured is single_append_status_face (AC-SASF1..6): the batch writer now names live statuses, but the single-entry writer --check still prints none, so a one-round append costs the same refused call.",
-    "next_milestone_due": "2026-11-04T14:29:07+08:00",
-    "last_artifact": "src/os/residue_batch_status_face.py plus its six-criteria suite (qa/residue-batch-status-face-R2379.log, 1245B, two legs identical, four adjacent suites green); the live run over the real tree names 225 residue rounds with DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0 and the batch --check carries those statuses, where before this window it printed no status at all.",
-    "updated_at": "2026-11-02T14:29:07+08:00"
+    "current": "R2380 verification-then-product window: the follow-up matrix section now guards the pile the EVIDENCE belongs to instead of a hard-coded 'qa', so the refusal and the matrix always describe the same logs. The battery ran first on the committed tree (506/506 suites, criteria total 4012 exactly as pre-registered), then the queue head was claimed and followup_guard_evidence_scope shipped.",
+    "latest_artifact": "src/os/followup_guard_evidence_scope.py plus its six-criteria suite (qa/followup-guard-evidence-scope-R2380.log, 1988B, two legs identical, three adjacent suites green); the live run over the real tree reads derived_dir=qa with the guarded section identical_to_core=True, where before this window a matrix built from any other pile was protected by a reading of qa.",
+    "next_milestone": "R2381: the battery on the committed R2380 tree pre-registered at 507 suites / 4018 criteria (this window own suite), then the product face at the queue head the reader names (line 427 prefix AC-RWGP1). The seed this window measured is bare_evidence_pile_refusal (AC-BEPR1..6): the pile now follows the evidence path, but a path with no directory part still falls back to 'qa' in silence.",
+    "next_milestone_due": "2026-11-04T15:07:09+08:00",
+    "last_artifact": "src/os/followup_guard_evidence_scope.py plus its six-criteria suite (qa/followup-guard-evidence-scope-R2380.log, 1988B, two legs identical, three adjacent suites green); the live run over the real tree reads derived_dir=qa with the guarded section identical_to_core=True, where before this window a matrix built from any other pile was protected by a reading of qa.",
+    "updated_at": "2026-11-02T15:07:09+08:00"
   },
   "depts": [
     {
@@ -221,11 +221,16 @@
       "src/os/residue_batch_status_face.py",
       "on",
       "R2379 product: the live status of every residue round is one reading (stamp_residue's own, reached through residue_triage), the batch CLI --check asks it and names each round with its status, and a round outside the residue reads NOT-RESIDUE - the live tree reads 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0"
+    ],
+    [
+      "src/os/followup_guard_evidence_scope.py",
+      "on",
+      "R2380 product: the guarded pile of the follow-up matrix section is derived from the evidence path, so a matrix built from any pile is refused on THAT pile rather than protected by a reading of qa, and an evidence path under qa keeps the old reading byte for byte - the live tree reads derived_dir=qa identical_to_core=True"
     ]
   ],
   "results": [
     [
-      "2379",
+      "2380",
       "OSLoop 执行 tick"
     ],
     [
@@ -375,15 +380,19 @@
     [
       "R2379",
       "verification-then-product: the battery ran first on the committed tree and read PASS 505/505 suites plus controls 7/7 in 1334.7s with criteria total 4006 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as a79df5b9. Then CLAIMED state/queue/tech.md:425 AC-RSBF1 residue_batch_status_face, criteria pinned there at R2369, anchors prose-only at HEAD. Shipped the face: the status map is residue_triage.live_residue over stamp_residue's own read, the vocabulary is read at call time, --check names every round with its status, a round outside the residue reads NOT-RESIDUE at exit 2, exits 0/2/3/5 with a byte-stable pinned --json, and the batch CLI --check now asks it at call time while --append never touches it. SUITE PASS 6/6 twice identical plus four adjacent suites green (1245B), wired os-residue-batch-status-face(6) so the registry reads 506/4012. LIVE: 225 rounds DELIVERED=205 STAMP-ONLY-OPEN=20 NO-HIT=0, json byte-stable, R1755 FOUND, R9999 NOT-RESIDUE, batch carries the statuses. Row stamped and one REAL measured gap seeded (single_append_status_face: the single-entry writer still names no status)."
+    ],
+    [
+      "R2380",
+      "verification-then-product: the battery ran first on the committed tree and read PASS 506/506 suites plus controls 7/7 in 1233.7s with criteria total 4012 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL, evidence and matrix committed alone as 2215a2b9. Then CLAIMED state/queue/tech.md:426 AC-FGES1 followup_guard_evidence_scope, criteria pinned there at R2370, anchors prose-only at HEAD. Shipped the pile derivation as one pure module and rerouted the matrix section through it at call time, so a patched derivation moves which pile is read while an explicit directory still wins. SUITE PASS 6/6 twice identical plus three adjacent suites green (1988B), wired os-followup-guard-evidence-scope(6) so the registry reads 507/4018. LIVE: derived_dir=qa, identical_to_core=True, abs_dir=qa, cli_rc=0. Row stamped and one REAL measured gap seeded (bare_evidence_pile_refusal: a bare filename still falls back to qa)."
     ]
   ],
   "self_drive": {
     "window": "2026-10-27..2026-11-02",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -416,7 +425,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 359,
+        "done_rows": 360,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
