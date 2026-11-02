@@ -1,0 +1,11 @@
+STEP1 gate-before rc=2 QUEUE EXPORT FRESHNESS os-queue-export-freshness-gate verdict=STALE path=docs\status-export.json drifted=section:verdict,section:shortfall_total,section:delivered_total,queue:tech
+STEP2 wire-execute rc=0 {"label": "os-queue-export-gate-wire", "verdict": "WRITTEN", "path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\docs\\status-export.json", "gate": "CURRENT", "drifted": [], "bytes": 77162}
+STEP3 gate-after rc=0 QUEUE EXPORT FRESHNESS os-queue-export-freshness-gate verdict=CURRENT path=docs\status-export.json drifted=(none)
+STEP4 export bytes 77070 -> 77162
+STEP5 staged residue=[]
+STEP6 doctored-copy repaired rc=0 {"label": "os-queue-export-gate-wire", "verdict": "WRITTEN", "path": "C:\\Users\\sjs20\\AppData\\Local\\Temp\\qeg-live-zhxgr7s4\\doctored.json", "gate": "CURRENT", "drifted": [], "bytes": 77162}
+STEP7 doctored-after rc=0 QUEUE EXPORT FRESHNESS os-queue-export-freshness-gate verdict=CURRENT path=C:\Users\sjs20\AppData\Local\Temp\qeg-live-zhxgr7s4\doctored.json drifted=(none)
+STEP8 not-json rc=3 E_QFE_EXPORT_NOT_JSON: C:\Users\sjs20\AppData\Local\Temp\qeg-live-zhxgr7s4\broken.json
+STEP9 absent rc=3 E_QFE_EXPORT_MISSING: C:\Users\sjs20\AppData\Local\Temp\qeg-live-zhxgr7s4\none.json
+STEP10 bad-flags rc=5 E_QEG_BAD_FLAGS unknown argument --bogus
+VERDICT live=WRITTEN refusal_leg=fixtures-only (a refusal needs the tree to move between compose and check, which the suite proves by patching the gate)

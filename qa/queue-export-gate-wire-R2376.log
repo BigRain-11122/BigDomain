@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2376 suite=src/os/test_queue_export_gate_wire.py legs=2
+== LEG A rc=0 digest=B214526D5044729F
+SUITE queue_export_gate_wire (R2376) criteria=6
+PASS AC-QEG1 the write path calls queue_export_freshness_gate.check (patching it moves the verdict)
+PASS AC-QEG2 a stale block is refused before any byte is replaced (the old file survives intact)
+PASS AC-QEG3 a fresh export is written and reads back identical
+PASS AC-QEG4 a refusal writes nothing (no residue) and the module reads no clock
+QUEUE EXPORT GATE os-queue-export-gate-wire verdict=REFUSED path=C:\Users\sjs20\AppData\Local\Temp\qeg5-hf4zhngf\status-export.json gate=STALE bytes=1190 drifted=queue:tech
+PASS AC-QEG5 exit 0 = written, 2 = refused, 3 = missing file, 5 = bad flags
+PASS AC-QEG6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== LEG B rc=0 digest=B214526D5044729F
+SUITE queue_export_gate_wire (R2376) criteria=6
+PASS AC-QEG1 the write path calls queue_export_freshness_gate.check (patching it moves the verdict)
+PASS AC-QEG2 a stale block is refused before any byte is replaced (the old file survives intact)
+PASS AC-QEG3 a fresh export is written and reads back identical
+PASS AC-QEG4 a refusal writes nothing (no residue) and the module reads no clock
+QUEUE EXPORT GATE os-queue-export-gate-wire verdict=REFUSED path=C:\Users\sjs20\AppData\Local\Temp\qeg5-zqoan3p0\status-export.json gate=STALE bytes=1190 drifted=queue:tech
+PASS AC-QEG5 exit 0 = written, 2 = refused, 3 = missing file, 5 = bad flags
+PASS AC-QEG6 pure ASCII, stdlib only, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_queue_export_freshness_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_reading_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=B214526D5044729F
