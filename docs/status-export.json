@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T02:34:00+08:00",
-  "do": "R2420 product: the alias gate prints the receiver, absolute and relative answers side by side for every from-import naming publish, so a file can never read CLEAN while the tables disagree; suite 6/6 first run, registry 538/4204",
+  "export_ts": "2026-11-04T01:30:00+08:00",
+  "do": "R2421 verification: the battery came back red on ONE test defect - the AC-MSC4 live leg pinned qa/reconcile-all-R2418.log instead of asking the shipped doc which evidence it records - and the repair at the birth site then read RUNNER PASS 538/538 suites at criteria 4204 exactly as pre-registered",
   "ceo_face": {
-    "current": "R2420 product: the alias gate prints the receiver, absolute and relative answers side by side for every from-import naming publish, so a file can never read CLEAN while the tables disagree; suite 6/6 first run, registry 538/4204",
-    "latest_artifact": "src/os/relative_import_alias_gate.py + qa/relative-import-alias-gate-R2420.log (1516B, legs=2 identical) + qa/relative-import-alias-gate-live-R2420.log (1591B)",
-    "next_milestone": "next window runs the reconcile battery on this src change at the pre-registered 538 suites / 4204 criteria, then the four follow-up sections",
+    "current": "R2421 verification: the battery came back red on ONE test defect - the AC-MSC4 live leg pinned qa/reconcile-all-R2418.log instead of asking the shipped doc which evidence it records - and the repair at the birth site then read RUNNER PASS 538/538 suites at criteria 4204 exactly as pre-registered",
+    "latest_artifact": "src/os/test_matrix_stamp_compare.py (AC-MSC4 live leg now asks suite_matrix.doc_evidence_face) + qa/reconcile-all-R2421-retry.log (840488B, RUNNER PASS 538/538) + docs/sandbox-suite-matrix.md (51830B, 538 suites / 4204 criteria)",
+    "next_milestone": "reconcile-battery-R2421: one green RUNNER PASS over the 538 suites / 4204 criteria on the committed R2421 tree first, then the four follow-up sections, then a product face at the tech head AC-PIAG1",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2419.log (839910B, RUNNER PASS 537/537 suites) + docs/sandbox-suite-matrix.md (51708B, 537 suites / 4198 criteria)",
-    "updated_at": "2026-11-04T02:34:00+08:00"
+    "last_artifact": "src/os/test_matrix_stamp_compare.py (AC-MSC4 live leg now asks suite_matrix.doc_evidence_face) + qa/reconcile-all-R2421-retry.log (840488B, RUNNER PASS 538/538) + docs/sandbox-suite-matrix.md (51830B, 538 suites / 4204 criteria)",
+    "updated_at": "2026-11-04T01:30:00+08:00"
   },
   "depts": [
     {
@@ -37,11 +37,16 @@
     }
   ],
   "outs": [
+    "src/os/test_matrix_stamp_compare.py (AC-MSC4 live leg now asks suite_matrix.doc_evidence_face) + qa/reconcile-all-R2421-retry.log (840488B, RUNNER PASS 538/538) + docs/sandbox-suite-matrix.md (51830B, 538 suites / 4204 criteria)",
     "src/os/relative_import_alias_gate.py + qa/relative-import-alias-gate-R2420.log (1516B, legs=2 identical) + qa/relative-import-alias-gate-live-R2420.log (1591B)",
     "qa/reconcile-all-R2419.log (839910B, RUNNER PASS 537/537 suites) + docs/sandbox-suite-matrix.md (51708B, 537 suites / 4198 criteria)",
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2421",
+      "R2421 verification: the battery came back red on ONE test defect - the AC-MSC4 live leg pinned qa/reconcile-all-R2418.log instead of asking the shipped doc which evidence it records - and the repair at the birth site then read RUNNER PASS 538/538 suites at criteria 4204 exactly as pre-registered"
+    ],
     [
       2420,
       "R2420 product: relative_import_alias_gate names the receiver / absolute / relative answers per line; suite 6/6 first run, registry 538 suites / 4204 criteria, live reading EMPTY on the real tree"
@@ -55,7 +60,7 @@
       "2026-11-04 R2418 product face: CLAIMED state/queue/tech.md:493 prefix AC-MSC1 (matrix-stamp-compare), criteria pinned in that row at R2414 before any code. SHIPPED src/os/matrix_stamp_compare.py plus its six-criteria suite, one read-only --stamp-from DOC flag on src/sandbox/suite_matrix.py and one call-site change in src/os/battery_followup.py matrix_core: the matrix section no longer byte-compares a freshly stamped render with the shipped doc (which manufactured an equal-length FAIL on the stamp line whenever the minute differed and hid every real drift behind it), it renders STAMP-ALIGNED to the doc it is compared with - the stamp is asked of suite_matrix.doc_stamp at CALL time, the same law --check uses, so no second stamp parser exists. Refusals keep their own codes (E_MSC_NO_DOC / E_MSC_NO_STAMP / E_MSC_NO_TOOL / E_MSC_REGEN) with CLI exits 0/2/3/5 and a byte-stable --json. SUITE PASS 6/6 twice with an identical criterion digest plus one adjacent suite green, wired os-matrix-stamp-compare(6) so the registry reads 537 suites / 4198 criteria. LIVE: the real generator followed a borrowed 1999-01-01 stamp while a plain render of the same content stamped 2026-11-04 00:03; the doc was regenerated to 51710B and the four sections then read VERDICT R2418 PASS failing=none where they read FAIL minutes earlier. Debt: reconcile-battery-R2417 and matrix-stamp-compare both closed through the shipped CLI (predictions matched), reconcile-battery-R2418 registered first=yes, one tech seed pinned to restore the floor."
     ],
     [
-      2420,
+      "2421",
       "OSLoop 执行 tick"
     ],
     [
@@ -186,10 +191,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 76,
+    "substantive_non_idle_mention_lines": 84,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -220,7 +225,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 391,
+        "done_rows": 392,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,
@@ -239,6 +244,7 @@
         "shortfall": 0,
         "status": "MET"
       }
-    ]
+    ],
+    "verdict": "FLOOR-MET"
   }
 }
