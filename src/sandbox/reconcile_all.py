@@ -5242,6 +5242,16 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-matrix-stamp-compare",
      os.path.join("..", "os", "test_matrix_stamp_compare.py"), 6),
+    # R2420: three shipped tables answer three different alias questions and
+    # nothing said which one a reader meant, so `from some_wire import other as
+    # publish` read bound in the receiver table and unbound in both
+    # publish-name tables. One reading now asks all three at call time and
+    # prints them side by side, so a file can never read CLEAN while they
+    # disagree.
+    # (AC-RIAG1..AC-RIAG6 were pinned in state/queue/tech.md:486 as the R2402
+    # seed row BEFORE the code.)
+    ("os-relative-import-alias-gate",
+     os.path.join("..", "os", "test_relative_import_alias_gate.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

@@ -1,0 +1,19 @@
+LIVE READING R2420 - relative_import_alias_gate on the REAL tree and on fixtures
+
+real-tree: verdict=EMPTY scanned=1157 files_with_imports=0 bound=0 unbound=0 rc=0
+real-tree: asymmetric_files=(none)
+
+fixture readings (spelling / verdict / bound_by / receiver / absolute / relative):
+  renamed_abs from some_wire import other as publish           absolute  UNBOUND  receiver         receiver={"publish": "some_wire"} absolute={} relative={}
+  renamed_rel from .wire import other as publish               relative  UNBOUND  (none)           receiver={} absolute={} relative={}
+  alias_abs   from some_wire import publish as ship            absolute  BOUND    receiver,absolute receiver={"ship": "some_wire"} absolute={"ship": "some_wire"} relative={}
+  alias_rel   from .wire import publish as ship                relative  BOUND    relative         receiver={} absolute={} relative={"ship": ".wire"}
+  plain_abs   from some_wire import publish                    absolute  BOUND    receiver,absolute receiver={"publish": "some_wire"} absolute={"publish": "some_wire"} relative={}
+  plain_rel   from .wire import publish                        relative  BOUND    relative         receiver={} absolute={} relative={"publish": ".wire"}
+
+fixture-file verdicts from audit() over throwaway roots:
+  renamed_abs_only verdict=ASYMMETRIC  rc=2 unbound=1 asymmetric=sample.py
+  plain_both      verdict=CLEAN       rc=0 unbound=0 asymmetric=(none)
+
+note: the real tree reads EMPTY because no script under src/os imports the name
+publish through a from-import; every real publisher uses `import M as X`.

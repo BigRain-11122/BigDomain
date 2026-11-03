@@ -1,0 +1,23 @@
+EVIDENCE CAPTURE round=R2420 suite=src/os/test_relative_import_alias_gate.py legs=2
+== LEG A rc=0 digest=A7853805404B1D3F
+PASS AC-RIAG1 the three tables are asked at call time, never restated
+PASS AC-RIAG2 a renamed import reads bound on the receiver side and unbound on both publish-name sides, both printed
+PASS AC-RIAG3 a matching import reads bound on both spellings
+PASS AC-RIAG4 no file reads CLEAN while the tables disagree
+PASS AC-RIAG5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-RIAG6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== LEG B rc=0 digest=A7853805404B1D3F
+PASS AC-RIAG1 the three tables are asked at call time, never restated
+PASS AC-RIAG2 a renamed import reads bound on the receiver side and unbound on both publish-name sides, both printed
+PASS AC-RIAG3 a matching import reads bound on both spellings
+PASS AC-RIAG4 no file reads CLEAN while the tables disagree
+PASS AC-RIAG5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-RIAG6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== ADJACENT 4
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+== src/os/test_publish_relative_package_identity.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_export_publish_from_import_law.py rc=0 SUITE PASS criteria=6 passes=8 fails=0
+== src/os/test_export_publish_wire_identity.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=4 fails=0 digest=A7853805404B1D3F
