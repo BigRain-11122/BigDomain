@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-04T06:44:25+08:00",
+  "export_ts": "2026-11-04T07:20:00+08:00",
   "do": "R2429 verification window: the full reconcile battery ran on the committed R2428 tree at the pre-registered 542 suites / 4228 criteria, came back red on one CRLF line inside a live-capture evidence log, was repaired at the birth site through run_identity.normalize with the payload proved identical, and the retry leg then read RUNNER PASS 542/542 at the same criteria total with all four follow-up sections green",
   "ceo_face": {
-    "current": "R2429 verification window: the full reconcile battery ran on the committed R2428 tree at the pre-registered 542 suites / 4228 criteria, came back red on one CRLF line inside a live-capture evidence log, was repaired at the birth site through run_identity.normalize with the payload proved identical, and the retry leg then read RUNNER PASS 542/542 at the same criteria total with all four follow-up sections green",
-    "latest_artifact": "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
-    "next_milestone": "product face on the tech head the reader names: state/queue/tech.md:492 prefix AC-PICBS1 (comma_binding_sibling_faces, AC-PICBS1..AC-PICBS6 pinned at R2428) - export_publish_from_import_law and publish_relative_package_identity still read UNRESOLVED on the comma-list fixture the identity face now resolves",
-    "next_milestone_due": "2026-11-05T22:00:00+08:00",
+    "current": "R2430 product window: the comma-aware receiver table was on the identity face only, so one spelling of one publisher read WIRE there and UNRESOLVED on the two sibling faces; one seam now answers which table every publisher face consults, and the three faces read FACES-AGREE over the real tree",
+    "latest_artifact": "src/os/comma_binding_sibling_faces.py + src/os/test_comma_binding_sibling_faces.py (SUITE PASS 6/6 twice identical, adjacent 5/5) + qa/comma-binding-sibling-faces-R2430.log (1770B) + qa/comma-binding-sibling-faces-live-R2430.log (2866B, FACES-AGREE)",
+    "next_milestone": "the reconcile battery the R2168 mixed-tree rule owes on the committed R2430 tree at the measured 543 suites / 4234 criteria, then the seeded identity-face comparison row",
+    "next_milestone_due": "2026-11-06T07:20:00+08:00",
     "last_artifact": "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
     "updated_at": "2026-11-04T06:44:25+08:00"
   },
@@ -50,7 +50,7 @@
   ],
   "results": [
     [
-      "2429",
+      "2430",
       "OSLoop 执行 tick"
     ],
     [
@@ -229,10 +229,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -265,7 +265,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 396,
+        "done_rows": 397,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,

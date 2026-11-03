@@ -202,7 +202,9 @@ def classify_script(lines, package=None, export_name=DEFAULT_EXPORT_NAME,
     if package is None:
         return parent().classify_script(lines, export_name, wire_module)
     code = lead.code_only(lines)
-    receivers = lead.import_bindings(code)
+    # AC-PICBS1: same seam as the from-import face, asked at CALL time.
+    receivers = importlib.import_module(
+        "comma_binding_sibling_faces").receivers_for(lines)
     publish_names = parent().imported_publish_names(code)
     calls = []
     for number, line in enumerate(code, 1):

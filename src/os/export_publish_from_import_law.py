@@ -189,12 +189,19 @@ def classify_line(line, receivers, publish_names,
             "state": state}
 
 
+def siblings():
+    """The module that owns which receiver table every face consults."""
+    return importlib.import_module("comma_binding_sibling_faces")
+
+
 def classify_script(lines, export_name=DEFAULT_EXPORT_NAME,
                     wire_module=DEFAULT_WIRE):
     """Every publish call in one file, in file order, with its spelling."""
     lead = identity()
     code = lead.code_only(lines)
-    receivers = lead.import_bindings(code)
+    # AC-PICBS1: the table choice is the sibling seam's, asked at CALL time, so
+    # one spelling cannot read WIRE on the identity face and UNRESOLVED here.
+    receivers = siblings().receivers_for(lines)
     publish_names = imported_publish_names(code)
     calls = []
     for number, line in enumerate(code, 1):

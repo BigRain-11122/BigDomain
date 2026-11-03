@@ -5287,6 +5287,13 @@ SUITES = [
     # R2426 seed row BEFORE the code.)
     ("os-comma-binding-consumer-wire",
      os.path.join("..", "os", "test_comma_binding_consumer_wire.py"), 6),
+    # R2430: the comma-aware table reached the identity face alone, so the
+    # two sibling faces still read UNRESOLVED for a comma-list publisher
+    # the identity face read as WIRE. One seam now chooses the table for
+    # every face. (AC-PICBS1..AC-PICBS6 were pinned in
+    # state/queue/tech.md line 492 as the R2428 seed BEFORE the code.)
+    ("os-comma-binding-sibling-faces",
+     os.path.join("..", "os", "test_comma_binding_sibling_faces.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

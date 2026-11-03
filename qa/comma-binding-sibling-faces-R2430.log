@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2430 suite=src/os/test_comma_binding_sibling_faces.py legs=2
+== LEG A rc=0 digest=BA5B9F83CFD214D7
+PASS AC-PICBS1 both faces ask the shipped seam at call time and no split is restated
+PASS AC-PICBS2 one comma-list fixture reads WIRE on every face
+PASS AC-PICBS3 a script without a comma list keeps every key of every row byte-identical against HEAD
+PASS AC-PICBS4 a receiver no import binds still reads UNRESOLVED on both faces
+PASS AC-PICBS5 every pre-existing refusal code, exit code and printed line of both CLIs is unchanged
+PASS AC-PICBS6 pure ASCII, stdlib only, read-only, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== LEG B rc=0 digest=BA5B9F83CFD214D7
+PASS AC-PICBS1 both faces ask the shipped seam at call time and no split is restated
+PASS AC-PICBS2 one comma-list fixture reads WIRE on every face
+PASS AC-PICBS3 a script without a comma list keeps every key of every row byte-identical against HEAD
+PASS AC-PICBS4 a receiver no import binds still reads UNRESOLVED on both faces
+PASS AC-PICBS5 every pre-existing refusal code, exit code and printed line of both CLIs is unchanged
+PASS AC-PICBS6 pure ASCII, stdlib only, read-only, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== ADJACENT 5
+== src/os/test_export_publish_from_import_law.py rc=0 SUITE PASS criteria=6 passes=8 fails=0
+== src/os/test_publish_relative_package_identity.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+== src/os/test_comma_binding_consumer_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_comma_binding_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+EVIDENCE identical=True adjacent=5 fails=0 digest=BA5B9F83CFD214D7

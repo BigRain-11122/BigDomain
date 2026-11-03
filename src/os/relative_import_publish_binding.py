@@ -190,7 +190,11 @@ def classify_script(lines, export_name=DEFAULT_EXPORT_NAME,
     """Every publish call in one file, in file order, with its spelling."""
     lead = identity()
     code = lead.code_only(lines)
-    receivers = lead.import_bindings(code)
+    # AC-PICBS1: the receiver table is the sibling seam's, asked at CALL time,
+    # so a comma-list publisher cannot read UNRESOLVED here while the identity
+    # face reads WIRE. A file with no comma list gets the very same table.
+    receivers = importlib.import_module(
+        "comma_binding_sibling_faces").receivers_for(lines)
     publish_names = imported_publish_names(code)
     calls = []
     for number, line in enumerate(code, 1):

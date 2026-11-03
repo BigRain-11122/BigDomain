@@ -1,0 +1,18 @@
+LIVE R2430 comma binding sibling faces over the REAL src/os
+module_digest_before=f6326678fa8e86d9b391a29ede8582c0c03d55f69b5f06d5d682e4838fc3b26b
+
+sibling-faces rc=0
+COMMA BINDING SIBLING FACES os-comma-binding-sibling-faces verdict=FACES-AGREE root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os package=(none) wire_module=closeout_export_parity_wire
+  FACE os-export-publish-from-import-law verdict=WIRE publishers=11 wire=closeout_R2377.py,closeout_R2378.py,closeout_R2379.py,closeout_R2380.py,closeout_R2381.py,closeout_R2382.py,closeout_R2383.py,closeout_R2384.py,closeout_R2385.py,closeout_R2386.py,closeout_R2387.py foreign=(none) unresolved=(none) no_publish=closeout_R2374.py,closeout_R2375.py,closeout_R2376.py,closeout_R2397.py,closeout_R2398.py,closeout_R2399.py,closeout_R2400.py,closeout_R2402.py,closeout_R2403.py,closeout_R2404.py,closeout_R2405.py,closeout_R2406.py,closeout_R2407.py,closeout_R2408.py,export_closeout_gate_parity.py,queue_export_freshness_gate.py,queue_export_gate_wire.py,test_closeout_export_parity_wire.py,test_export_closeout_gate_parity.py,test_queue_export_freshness_gate.py,test_queue_export_gate_wire.py,test_queue_floor_export_face.py
+  FACE os-publish-relative-package-identity verdict=WIRE publishers=11 wire=closeout_R2377.py,closeout_R2378.py,closeout_R2379.py,closeout_R2380.py,closeout_R2381.py,closeout_R2382.py,closeout_R2383.py,closeout_R2384.py,closeout_R2385.py,closeout_R2386.py,closeout_R2387.py foreign=(none) unresolved=(none) no_publish=closeout_R2374.py,closeout_R2375.py,closeout_R2376.py,closeout_R2397.py,closeout_R2398.py,closeout_R2399.py,closeout_R2400.py,closeout_R2402.py,closeout_R2403.py,closeout_R2404.py,closeout_R2405.py,closeout_R2406.py,closeout_R2407.py,closeout_R2408.py,export_closeout_gate_parity.py,queue_export_freshness_gate.py,queue_export_gate_wire.py,test_closeout_export_parity_wire.py,test_export_closeout_gate_parity.py,test_queue_export_freshness_gate.py,test_queue_export_gate_wire.py,test_queue_floor_export_face.py
+
+from-import-law rc=0
+EXPORT PUBLISH FROM IMPORT LAW os-export-publish-from-import-law verdict=WIRE scanned=1188 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=22 from_import=0 bare=0 wire_module=closeout_export_parity_wire
+
+relative-package-identity rc=0
+PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=WIRE package=(none) scanned=1188 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=22 from_import=0 bare=0 refused=0 wire_module=closeout_export_parity_wire
+
+identity rc=0
+EXPORT PUBLISH WIRE IDENTITY os-export-publish-wire-identity verdict=WIRE scanned=1188 publishers=11 wire=11 foreign=(none) unresolved=(none) no_publish=22 wire_module=closeout_export_parity_wire
+
+module_digest_after=f6326678fa8e86d9b391a29ede8582c0c03d55f69b5f06d5d682e4838fc3b26b unchanged=yes

@@ -1,3 +1,4 @@
+- [x] [done 2026-11-04 R2430] tech 队头交付行（product-face-R2430）：src/os/comma_binding_sibling_faces.py 让三个发布面共用一张表——comma_binding_wire.bindings 在调用时被问，from-import 法/相对包面/相对绑定法各自在自己的调用点接线，故一种写法不可能一面 WIRE 一面 UNRESOLVED。SUITE PASS 6/6 双跑同一 digest + 邻域 5 套件全绿，wired os-comma-binding-sibling-faces(6) → 注册表 543 套件 / 4234 判据；LIVE 真树 FACES-AGREE（两面各 11 发布者、identity 面同 11 WIRE），真树无逗号列表发布者故逗号案例只在 fixture 上证成并如实记负；同窗补种 comma_binding_identity_face_compare（AC-PICIC1..6 预注册）。
 # BigDomain 任务板
 
 > 认领制（venture 司内九件）。由 CPH4 Labs 巡检批代建（2026-09-24）。宿主会话接管后按 backlog 制自管。
