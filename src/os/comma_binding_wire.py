@@ -38,9 +38,12 @@
 # not re-specified here. A file with no comma list is answered by the shipped
 # table alone, byte for byte, which is why AC-PICBW3 holds by construction.
 #
-# Not edited on purpose: export_publish_wire_identity.py. Its refusal codes,
-# exit codes and printed lines stay exactly as they were, and AC-PICBW5 proves
-# that against the HEAD copy of that module run as its own script.
+# Not edited here on purpose: export_publish_wire_identity.py. Its refusal
+# codes, exit codes and printed lines stay exactly as they were, and AC-PICBW5
+# proves that against the HEAD copy of that module run as its own script.
+# R2428 later put THIS wire's table on that identity path through a separate
+# seam (comma_binding_consumer_wire.wire_audit_script, AC-PICBC1..6), which is
+# a consumer of this module and not a change to the law it publishes.
 #
 # This module writes nothing and reads no clock (AC-PICBW6). Source is pure
 # ASCII, stdlib only, zero network, read-only.

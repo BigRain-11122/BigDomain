@@ -5279,6 +5279,14 @@ SUITES = [
     # R2424 seed row BEFORE the code.)
     ("os-comma-binding-wire",
      os.path.join("..", "os", "test_comma_binding_wire.py"), 6),
+    # R2428: the wire above RESOLVED a comma-list publisher but no shipped
+    # reading asked it, so the identity face still answered UNRESOLVED for the
+    # house spelling. This suite proves the consumer that puts the comma-aware
+    # table on that path while every file without a comma list keeps its rows.
+    # (AC-PICBC1..AC-PICBC6 were pinned in state/queue/tech.md line 491 as the
+    # R2426 seed row BEFORE the code.)
+    ("os-comma-binding-consumer-wire",
+     os.path.join("..", "os", "test_comma_binding_consumer_wire.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

@@ -213,17 +213,31 @@ def from_import_law():
     return importlib.import_module("export_publish_from_import_law")
 
 
+def comma_consumer():
+    """The module that owns the comma-aware binding table on this path.
+
+    Imported at call time so a caller (and the suite) can patch it and move
+    this reading, and so the comma split has one owner (AC-PICBC1).
+    """
+    return importlib.import_module("comma_binding_consumer_wire")
+
+
 def audit_script(source_lines, export_name, wire_module):
     """Every publish call in one file, resolved against its own imports.
 
-    The spelling law is export_publish_from_import_law asked at CALL time, so
-    a `from M import publish` followed by a bare `publish(...)` is read here
-    too instead of reading NO-PUBLISH. The row shape is unchanged on purpose:
-    the attribute spelling still yields the same receiver, module and state,
-    and the four keys below are exactly what this module published before.
+    The reading is comma_binding_consumer_wire.wire_audit_script asked at CALL
+    time: it hands a file with no comma list to the shipped from-import law
+    unchanged (so those rows are byte for byte what they were), and a file
+    with a comma list to the same spelling law over the comma-aware table.
+    The spelling law itself is export_publish_from_import_law asked at CALL
+    time, so a `from M import publish` followed by a bare `publish(...)` is
+    read here too instead of reading NO-PUBLISH. The row shape is unchanged
+    on purpose: the four keys below are exactly what this module published
+    before, and the computed values are unchanged for every file without a
+    comma list (AC-PICBC3).
     """
     calls = []
-    for row in from_import_law().classify_script(
+    for row in comma_consumer().wire_audit_script(
             source_lines, export_name, wire_module):
         calls.append({"line": row["line"], "receiver": row["receiver"],
                       "module": row["module"], "state": row["state"],

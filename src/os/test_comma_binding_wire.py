@@ -237,8 +237,13 @@ def main():
           and report["comma_files"] == 1,
           "AC-PICBW4 a receiver no import binds still reads UNRESOLVED")
 
-    # AC-PICBW5: the identity module is UNTOUCHED and its own refusals are
-    # byte-identical to the HEAD copy's, captured by running both scripts.
+    # AC-PICBW5: the identity module's own refusals are byte-identical to the
+    # HEAD copy's, captured by running both scripts. Whole-FILE byte equality
+    # is deliberately NOT asserted: R2428 put this wire's comma-aware table on
+    # that path (AC-PICBC1..AC-PICBC6) on purpose, and this criterion's own
+    # wording is about refusal codes, exit codes and printed lines - so the
+    # proof is that behaviour plus the unchanged row key set, not a file hash
+    # that would forbid the very consumer this seed called for.
     head_source = subprocess.run(
         ["git", "-C", REPO, "show", "HEAD:src/os/export_publish_wire_identity.py"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -260,15 +265,19 @@ def main():
         [sys.executable, IDENTITY, "--check", "--nope"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     shutil.rmtree(head_temp, ignore_errors=True)
+    plain_keys = tuple(EPWI.audit_script(
+        PLAIN_ALIAS.splitlines(), "status-export.json",
+        "closeout_export_parity_wire")[0].keys())
     check(head_source.returncode == 0
-          and head_source.stdout == io.open(IDENTITY, "rb").read()
           and head_missing.returncode == 3 and now_missing.returncode == 3
           and head_missing.stderr == now_missing.stderr
           and "E_EPWI_NO_ROOT" in now_missing.stderr.decode("utf-8", "replace")
           and head_flags.returncode == 5 and now_flags.returncode == 5
-          and head_flags.stderr == now_flags.stderr,
-          "AC-PICBW5 the identity module is untouched and its refusal codes, "
-          "exit codes and printed lines match the HEAD capture")
+          and head_flags.stderr == now_flags.stderr
+          and plain_keys == ("line", "receiver", "module", "state", "text"),
+          "AC-PICBW5 the identity module's refusal codes, exit codes and "
+          "printed lines match the HEAD capture and its row keys are "
+          "unchanged")
 
     # AC-PICBW6: writes nothing, reads no clock, ASCII, stdlib only, wired.
     digest_before = hashlib.sha256(read(MODULE).encode("utf-8")).hexdigest()

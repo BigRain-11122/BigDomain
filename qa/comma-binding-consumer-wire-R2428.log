@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2428 suite=src/os/test_comma_binding_consumer_wire.py legs=2
+== LEG A rc=0 digest=AE3742F0457219CF
+PASS AC-PICBC1 the comma-aware table is asked at call time and no split is restated
+PASS AC-PICBC2 a comma-list publisher reads WIRE (or FOREIGN) with its module instead of UNRESOLVED
+PASS AC-PICBC3 a script with no comma list keeps every row key of its identity reading byte-identical
+PASS AC-PICBC4 a receiver no import binds still reads UNRESOLVED
+PASS AC-PICBC5 the identity CLI refusal codes, exit codes and printed lines match the HEAD capture
+PASS AC-PICBC6 writes nothing, no clock, ascii, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== LEG B rc=0 digest=AE3742F0457219CF
+PASS AC-PICBC1 the comma-aware table is asked at call time and no split is restated
+PASS AC-PICBC2 a comma-list publisher reads WIRE (or FOREIGN) with its module instead of UNRESOLVED
+PASS AC-PICBC3 a script with no comma list keeps every row key of its identity reading byte-identical
+PASS AC-PICBC4 a receiver no import binds still reads UNRESOLVED
+PASS AC-PICBC5 the identity CLI refusal codes, exit codes and printed lines match the HEAD capture
+PASS AC-PICBC6 writes nothing, no clock, ascii, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== ADJACENT 3
+== src/os/test_comma_binding_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_export_publish_wire_identity.py rc=0 NO SUITE LINE
+== src/os/test_export_publish_from_import_law.py rc=0 SUITE PASS criteria=6 passes=8 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=AE3742F0457219CF
