@@ -1,0 +1,26 @@
+PUBLISH RELATIVE PACKAGE IDENTITY LIVE CAPTURE round=R2415
+module=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\publish_relative_package_identity.py
+
+[1] the REAL tree, no package declared (parent reading kept):
+    exit=0 PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=WIRE package=(none) scanned=1143 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=22 from_import=0 bare=0 refused=0 wire_module=closeout_export_parity_wire
+
+[2] the REAL tree, package declared (absolute imports unchanged):
+    exit=0 PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=WIRE package=os scanned=1143 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=22 from_import=0 bare=0 refused=0 wire_module=closeout_export_parity_wire
+
+[3] fixture `from .wire import publish`, declared package mypkg, wire mypkg.wire:
+    exit=0 PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=WIRE package=mypkg scanned=1 publishers=1 wire=1 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=0 wire_module=mypkg.wire
+    same fixture, wire left at the default (mypkg.wire is FOREIGN):
+    exit=2 PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=FOREIGN package=mypkg scanned=1 publishers=1 wire=0 foreign=rel_pub.py unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=0 wire_module=closeout_export_parity_wire
+      FOREIGN rel_pub.py:10 kind=from_import receiver=publish module=mypkg.wire
+
+[4] the SAME fixture through the parent law (reads RELATIVE, no declaration):
+    exit=2 RELATIVE IMPORT PUBLISH BINDING os-relative-import-publish-binding verdict=RELATIVE scanned=1 publishers=1 wire=0 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 wire_module=closeout_export_parity_wire
+      RELATIVE rel_pub.py:10 kind=from_import receiver=publish module=.wire
+
+[5] fixture `from ..wire import publish` with a one-segment package (cannot join):
+    exit=2 PUBLISH RELATIVE PACKAGE IDENTITY os-publish-relative-package-identity verdict=REFUSED package=mypkg scanned=1 publishers=1 wire=0 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=1 wire_module=closeout_export_parity_wire
+      REFUSED up_pub.py:10 kind=from_import receiver=(bare) module=..wire
+      REFUSED up_pub.py:10 E_PRPI_CANNOT_JOIN package=mypkg
+
+[6] a bad declaration is refused by name, never guessed:
+    exit=5 stderr=E_PRPI_BAD_PACKAGE: bad/name

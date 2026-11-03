@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2415 suite=src/os/test_publish_relative_package_identity.py legs=2
+== LEG A rc=0 digest=485096275561776A
+PASS AC-PRPI1 a declared package resolves .M to package.M
+PASS AC-PRPI2 . resolves to the package and .. climbs it
+PASS AC-PRPI3 no package keeps today's RELATIVE reading byte for byte
+PASS AC-PRPI4 an unjoinable declaration refuses naming it
+PASS AC-PRPI5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-PRPI6 AC-PRPI6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== LEG B rc=0 digest=485096275561776A
+PASS AC-PRPI1 a declared package resolves .M to package.M
+PASS AC-PRPI2 . resolves to the package and .. climbs it
+PASS AC-PRPI3 no package keeps today's RELATIVE reading byte for byte
+PASS AC-PRPI4 an unjoinable declaration refuses naming it
+PASS AC-PRPI5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-PRPI6 AC-PRPI6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== ADJACENT 3
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+== src/os/test_export_publish_from_import_law.py rc=0 SUITE PASS criteria=6 passes=8 fails=0
+== src/os/test_export_publish_path_guard.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=3 fails=0 digest=485096275561776A

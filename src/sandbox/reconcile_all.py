@@ -5214,6 +5214,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-relative-import-publish-binding",
      os.path.join("..", "os", "test_relative_import_publish_binding.py"), 6),
+    # R2415: the relative binding named the relative module text but reads one
+    # file on its own, so an in-package publisher stayed RELATIVE. One added
+    # notion joins a caller-DECLARED package onto that text and the parent
+    # law's own classifier then reads WIRE or FOREIGN; a join that climbs past
+    # the declaration refuses naming both sides.
+    # (AC-PRPI1..AC-PRPI6 were pinned in state/queue/tech.md:482 as the R2402
+    # seed row BEFORE the code.)
+    ("os-publish-relative-package-identity",
+     os.path.join("..", "os", "test_publish_relative_package_identity.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window
