@@ -36,9 +36,10 @@ EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "matrix_stamp_compare.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-matrix-stamp-compare"
+SANDBOX = os.path.join(SRC, "sandbox")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 EVIDENCE = os.path.join(REPO, "qa", "reconcile-all-R2418.log")
-MATRIX_TOOL = os.path.join(SRC, "sandbox", "suite_matrix.py")
+MATRIX_TOOL = os.path.join(SANDBOX, "suite_matrix.py")
 OTHER_MINUTE = "1999-01-01 00:00 +08:00"
 BODY = "SUITE body line one\nSUITE body line two\n"
 
@@ -64,6 +65,27 @@ def read_text(path):
 def digest(path):
     with open(path, "rb") as handle:
         return hashlib.sha256(handle.read()).hexdigest()
+
+
+def recorded_evidence():
+    """The evidence path the SHIPPED doc records, asked of suite_matrix's own
+    doc_evidence_face at CALL time.
+
+    R2421 birth-site repair, measured not guessed: the live leg of AC-MSC4
+    pinned ONE round's evidence file, so the window after the doc was
+    regenerated from the next round's evidence read live=FAIL while
+    suite_matrix --check read PASS - a split that was the test's fault, not
+    the law's. The doc already names the file it was rendered from, so this
+    leg asks the same law --check asks instead of naming a round.
+    """
+    if SANDBOX not in sys.path:
+        sys.path.insert(0, SANDBOX)
+    import suite_matrix  # noqa: E402  (one evidence-face law in the tree)
+    recorded = suite_matrix.doc_evidence_face(read_text(DOC),
+                                              suite_matrix.load_patterns())
+    if recorded is None:
+        return EVIDENCE
+    return os.path.join(REPO, recorded.replace("/", os.sep))
 
 
 def stamp_parts():
@@ -292,7 +314,7 @@ def ac_msc4():
         shutil.rmtree(red_world, ignore_errors=True)
     source = read_text(MODULE)
     never_writes_doc = not re.search(r'doc_path[^\n]*,\s*"w', source)
-    live_row = MSC.compare(REPO, DOC, EVIDENCE)
+    live_row = MSC.compare(REPO, DOC, recorded_evidence())
     authority_live = subprocess.run([sys.executable, MATRIX_TOOL, "--check"],
                                     cwd=REPO, capture_output=True)
     agrees = ((authority_live.returncode == 0)
