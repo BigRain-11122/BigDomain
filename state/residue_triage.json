@@ -1842,6 +1842,55 @@
       "declared_by": "R2423",
       "reason": "fold R2423 moved the R2419..R2422 round blocks out of the live log; these three round stamps now read as residue though each was delivered in its own window",
       "until": 2440
+    },
+    {
+      "round": 2417,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2418,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2420,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2422,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2424,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2426,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
+    },
+    {
+      "round": 2428,
+      "status": "DELIVERED",
+      "declared_by": "R2429",
+      "reason": "fold 641 moved these round blocks into the monthly archive at a true round-block boundary and declared each at its measured status",
+      "until": 2460
     }
   ]
 }

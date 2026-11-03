@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T05:56:00+08:00",
-  "do": "R2428 product window: src/os/comma_binding_consumer_wire.py puts the comma-aware binding table on the identity path - a comma-list publisher now reads WIRE with its module instead of UNRESOLVED, while every file without a comma list keeps its rows byte for byte; suite 6/6 twice with three adjacent suites green and the registry measured at 542 suites / 4228 criteria",
+  "export_ts": "2026-11-04T06:44:25+08:00",
+  "do": "R2429 verification window: the full reconcile battery ran on the committed R2428 tree at the pre-registered 542 suites / 4228 criteria, came back red on one CRLF line inside a live-capture evidence log, was repaired at the birth site through run_identity.normalize with the payload proved identical, and the retry leg then read RUNNER PASS 542/542 at the same criteria total with all four follow-up sections green",
   "ceo_face": {
-    "current": "R2428 product window: src/os/comma_binding_consumer_wire.py puts the comma-aware binding table on the identity path - a comma-list publisher now reads WIRE with its module instead of UNRESOLVED, while every file without a comma list keeps its rows byte for byte; suite 6/6 twice with three adjacent suites green and the registry measured at 542 suites / 4228 criteria",
-    "latest_artifact": "src/os/comma_binding_consumer_wire.py + src/os/test_comma_binding_consumer_wire.py + qa/comma-binding-consumer-wire-R2428.log (1594B, legs=2 identical=True adjacent=3 fails=0) + qa/comma-binding-consumer-wire-live-R2428.log (HEAD UNRESOLVED rc=2 vs shipped WIRE rc=0 on one fixture; real tree WIRE 11/11)",
-    "next_milestone": "full reconcile battery on the committed R2428 tree with zero product edits at the measured 542 suites / 4228 criteria, then the product face the queue head names: state/queue/tech.md:492 prefix AC-PICBS1 (comma_binding_sibling_faces, AC-PICBS1..AC-PICBS6 seeded at R2428) - export_publish_from_import_law and publish_relative_package_identity still read UNRESOLVED for the same comma-list fixture the identity face now resolves",
+    "current": "R2429 verification window: the full reconcile battery ran on the committed R2428 tree at the pre-registered 542 suites / 4228 criteria, came back red on one CRLF line inside a live-capture evidence log, was repaired at the birth site through run_identity.normalize with the payload proved identical, and the retry leg then read RUNNER PASS 542/542 at the same criteria total with all four follow-up sections green",
+    "latest_artifact": "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
+    "next_milestone": "product face on the tech head the reader names: state/queue/tech.md:492 prefix AC-PICBS1 (comma_binding_sibling_faces, AC-PICBS1..AC-PICBS6 pinned at R2428) - export_publish_from_import_law and publish_relative_package_identity still read UNRESOLVED on the comma-list fixture the identity face now resolves",
     "next_milestone_due": "2026-11-05T22:00:00+08:00",
-    "last_artifact": "src/os/comma_binding_consumer_wire.py + src/os/test_comma_binding_consumer_wire.py + qa/comma-binding-consumer-wire-R2428.log (1594B, legs=2 identical=True adjacent=3 fails=0) + qa/comma-binding-consumer-wire-live-R2428.log (HEAD UNRESOLVED rc=2 vs shipped WIRE rc=0 on one fixture; real tree WIRE 11/11)",
-    "updated_at": "2026-11-04T05:56:00+08:00"
+    "last_artifact": "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
+    "updated_at": "2026-11-04T06:44:25+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
     "src/os/comma_binding_consumer_wire.py + src/os/test_comma_binding_consumer_wire.py + qa/comma-binding-consumer-wire-R2428.log (1594B, legs=2 identical=True adjacent=3 fails=0) + qa/comma-binding-consumer-wire-live-R2428.log (HEAD UNRESOLVED rc=2 vs shipped WIRE rc=0 on one fixture; real tree WIRE 11/11)",
     "qa/reconcile-all-R2427.log (RUNNER PASS 541/541, criteria 4222, 948.0s) + docs/sandbox-suite-matrix.md regenerated 52086B at 541 suites / 4222 criteria (byte-identical on --check) + debt register at 105512B with reconcile-battery-R2427 and stale-suite-matrix-copy closed",
     "src/os/comma_binding_wire.py + src/os/test_comma_binding_wire.py + qa/comma-binding-wire-R2426.log (1626B, legs=2 identical=True adjacent=3 fails=0) + qa/comma-binding-wire-live-R2426.log (real tree EMPTY, fixture RESOLVED)",
@@ -48,6 +49,14 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2429",
+      "OSLoop 执行 tick"
+    ],
+    [
+      "2429",
+      "R2429 verification window: the full reconcile battery ran on the committed R2428 tree at the pre-registered 542 suites / 4228 criteria, came back red on one CRLF line inside a live-capture evidence log, was repaired at the birth site through run_identity.normalize with the payload proved identical, and the retry leg then read RUNNER PASS 542/542 at the same criteria total with all four follow-up sections green"
+    ],
     [
       "2428",
       "R2428 product window: src/os/comma_binding_consumer_wire.py puts the comma-aware binding table on the identity path - a comma-list publisher now reads WIRE with its module instead of UNRESOLVED, while every file without a comma list keeps its rows byte for byte; suite 6/6 twice with three adjacent suites green and the registry measured at 542 suites / 4228 criteria"
@@ -91,10 +100,6 @@
     [
       "2418",
       "2026-11-04 R2418 product face: CLAIMED state/queue/tech.md:493 prefix AC-MSC1 (matrix-stamp-compare), criteria pinned in that row at R2414 before any code. SHIPPED src/os/matrix_stamp_compare.py plus its six-criteria suite, one read-only --stamp-from DOC flag on src/sandbox/suite_matrix.py and one call-site change in src/os/battery_followup.py matrix_core: the matrix section no longer byte-compares a freshly stamped render with the shipped doc (which manufactured an equal-length FAIL on the stamp line whenever the minute differed and hid every real drift behind it), it renders STAMP-ALIGNED to the doc it is compared with - the stamp is asked of suite_matrix.doc_stamp at CALL time, the same law --check uses, so no second stamp parser exists. Refusals keep their own codes (E_MSC_NO_DOC / E_MSC_NO_STAMP / E_MSC_NO_TOOL / E_MSC_REGEN) with CLI exits 0/2/3/5 and a byte-stable --json. SUITE PASS 6/6 twice with an identical criterion digest plus one adjacent suite green, wired os-matrix-stamp-compare(6) so the registry reads 537 suites / 4198 criteria. LIVE: the real generator followed a borrowed 1999-01-01 stamp while a plain render of the same content stamped 2026-11-04 00:03; the doc was regenerated to 51710B and the four sections then read VERDICT R2418 PASS failing=none where they read FAIL minutes earlier. Debt: reconcile-battery-R2417 and matrix-stamp-compare both closed through the shipped CLI (predictions matched), reconcile-battery-R2418 registered first=yes, one tech seed pinned to restore the floor."
-    ],
-    [
-      "2428",
-      "OSLoop 执行 tick"
     ],
     [
       "2417",
@@ -224,10 +229,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 85,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 85,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
