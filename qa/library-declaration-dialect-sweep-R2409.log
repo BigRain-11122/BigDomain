@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2409 suite=src/os/test_library_declaration_dialect_sweep.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+library_declaration_dialect_sweep suite (expected criteria 6)
+  PASS AC-LDWS1 source-derived sweep separates history, no whitelist
+  PASS AC-LDWS2 every declaration writer asks the law at call time
+  PASS AC-LDWS3 an LF declaration keeps today's bytes
+  PASS AC-LDWS4 a CRLF declaration stays CRLF after the real write
+  PASS AC-LDWS5 pre-existing refusals unchanged, proved on HEAD
+  PASS AC-LDWS6 pure, stdlib only and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+library_declaration_dialect_sweep suite (expected criteria 6)
+  PASS AC-LDWS1 source-derived sweep separates history, no whitelist
+  PASS AC-LDWS2 every declaration writer asks the law at call time
+  PASS AC-LDWS3 an LF declaration keeps today's bytes
+  PASS AC-LDWS4 a CRLF declaration stays CRLF after the real write
+  PASS AC-LDWS5 pre-existing refusals unchanged, proved on HEAD
+  PASS AC-LDWS6 pure, stdlib only and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_gate_decl_append.py rc=0 SUITE PASS 6/6
+== src/os/test_gate_decl_retire.py rc=0 SUITE PASS 6/6
+== src/os/test_orphan_promotion_ledger.py rc=0 SUITE PASS 6/6
+== src/os/test_retire_accept.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=E3B0C44298FC1C14

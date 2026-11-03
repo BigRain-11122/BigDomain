@@ -1,0 +1,4 @@
+LIBRARY DIALECT SWEEP scanned=1012 library=5 historical=143 general=16 routed=5 unrouted=0 verdict=SWEEP-CLEAN
+  CRLF COPY dialect-before=CRLF entries-before=1 entries-after=2
+  CRLF COPY kept=True lone_lf=0 lone_cr=0 read_back=True
+  MODULE digest 26dcc58a93be8e0a unchanged=True

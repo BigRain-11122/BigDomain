@@ -37,6 +37,7 @@ import json
 import os
 import sys
 
+import declaration_writer_dialect_preservation as DWD
 import machine_gate as MG
 
 TEMP_SUFFIX = ".gda-tmp"
@@ -125,7 +126,17 @@ def _check_fields(identity, capability, reason, declared_by):
             % (capability, "/".join(MG.CAPABILITIES)))
 
 
-def plan(text, identity, capability, reason, declared_by):
+def payload_bytes(raw, post):
+    """The bytes to land: the shared dialect law, asked at CALL time.
+
+    `raw` is the declaration as it sits on disk; `post` is this writer's own
+    LF composition. An LF declaration therefore gets exactly today's bytes,
+    and a CRLF declaration keeps its transport instead of being converted.
+    """
+    return DWD.encode(raw, post)[1]
+
+
+def plan(text, identity, capability, reason, declared_by, raw=None):
     """Compute the post text without writing; return the planned report."""
     _check_fields(identity, capability, reason, declared_by)
     if text.count('"version"') > 1:
@@ -192,7 +203,8 @@ def plan(text, identity, capability, reason, declared_by):
         "declarations_before": len(before["gates"]),
         "declarations_after": len(after["gates"]),
         "before_bytes": len(text.encode("utf-8")),
-        "predicted_bytes": len(post.encode("utf-8")),
+        "predicted_bytes": len(payload_bytes(
+            post.encode("utf-8") if raw is None else raw, post)),
         "post": post,
     }
 
@@ -207,9 +219,11 @@ def append_gate(root, identity, capability, reason, declared_by,
     try:
         with io.open(path, "r", encoding="utf-8") as handle:
             text = handle.read()
+        with io.open(path, "rb") as handle:
+            raw = handle.read()
     except (IOError, OSError, UnicodeDecodeError) as exc:
         raise GateDeclAppendError("E_GDA_NO_DECL", "%s (%s)" % (path, exc))
-    report = plan(text, identity, capability, reason, declared_by)
+    report = plan(text, identity, capability, reason, declared_by, raw=raw)
     post = report.pop("post")
     report["path"] = rel.replace(os.sep, "/")
     report["wrote"] = False
@@ -217,7 +231,7 @@ def append_gate(root, identity, capability, reason, declared_by,
     if not execute:
         report["verdict"] = "PLANNED"
         return report
-    data = post.encode("utf-8")
+    data = payload_bytes(raw, post)
     temp = path + TEMP_SUFFIX
     try:
         with io.open(temp, "wb") as handle:

@@ -50,6 +50,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
+import declaration_writer_dialect_preservation as DWD
 import evidence_variants as EV
 import followup_history as FH
 import orphan_promote as OP
@@ -352,7 +353,12 @@ def _same_entry(reading, entry):
     return True
 
 
-def plan(text, entry, path, files, round_no):
+def payload_bytes(raw, post):
+    """The bytes to land: the shared dialect law, asked at CALL time."""
+    return DWD.encode(raw, post)[1]
+
+
+def plan(text, entry, path, files, round_no, raw=None):
     """Validate the entry and the post text; return the report and the post."""
     entries = declaration_entries(text)
     label = entry["round"]
@@ -404,7 +410,8 @@ def plan(text, entry, path, files, round_no):
     report["entry_count_before"] = len(entries)
     report["entry_count_after"] = len(after)
     report["before_bytes"] = len(text.encode("utf-8"))
-    report["predicted_bytes"] = len(post.encode("utf-8"))
+    report["predicted_bytes"] = len(payload_bytes(
+        post.encode("utf-8") if raw is None else raw, post))
     report["wrote"] = False
     report["read_back_ok"] = None
     return report, post
@@ -417,10 +424,16 @@ def add(root, round_value, declared_by, until=None, directory="qa",
     text, _payload = read_declaration(root)
     path, files = canonical_files(root, directory)
     entry = render_entry(label, "", source, 0, "", declared_by, until, reason)
-    report, post = plan(text, entry, path, files, label)
+    try:
+        with io.open(os.path.join(root, DECL_REL), "rb") as handle:
+            raw = handle.read()
+    except (IOError, OSError) as exc:
+        raise OrphanPromotionLedgerError(E_OPL_UNREADABLE,
+                                         "%s (%s)" % (DECL_REL, exc))
+    report, post = plan(text, entry, path, files, label, raw=raw)
     if not execute:
         return report
-    data = post.encode("utf-8")
+    data = payload_bytes(raw, post)
     if len(data) != report["predicted_bytes"]:
         raise OrphanPromotionLedgerError(
             E_OPL_PREDICT, "payload is %d bytes, predicted %d"

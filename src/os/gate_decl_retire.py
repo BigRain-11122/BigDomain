@@ -43,6 +43,7 @@ import json
 import os
 import sys
 
+import declaration_writer_dialect_preservation as DWD
 import gate_decl_append as GDA
 import machine_gate as MG
 
@@ -125,7 +126,12 @@ def _blocked_line(report, identity):
     return None
 
 
-def plan(text, identity, live_report):
+def payload_bytes(raw, post):
+    """The bytes to land: the shared dialect law, asked at CALL time."""
+    return DWD.encode(raw, post)[1]
+
+
+def plan(text, identity, live_report, raw=None):
     """Compute the post text without writing; return the planned report."""
     _check_identity(identity)
     if text.count('"version"') > 1:
@@ -195,7 +201,8 @@ def plan(text, identity, live_report):
         "declarations_before": len(before["gates"]),
         "declarations_after": len(after["gates"]),
         "before_bytes": len(text.encode("utf-8")),
-        "predicted_bytes": len(post.encode("utf-8")),
+        "predicted_bytes": len(payload_bytes(
+            post.encode("utf-8") if raw is None else raw, post)),
         "post": post,
     }
 
@@ -209,6 +216,8 @@ def retire(root, identity, queue_name="tech", declaration=None, execute=False):
     try:
         with io.open(path, "r", encoding="utf-8") as handle:
             text = handle.read()
+        with io.open(path, "rb") as handle:
+            raw = handle.read()
     except (IOError, OSError, UnicodeDecodeError) as exc:
         raise GateDeclRetireError("E_GDRT_NO_DECL", "%s (%s)" % (path, exc))
     try:
@@ -216,7 +225,7 @@ def retire(root, identity, queue_name="tech", declaration=None, execute=False):
     except MG.MachineGateError as exc:
         raise GateDeclRetireError("E_GDRT_NO_QUEUE",
                                   "%s (%s)" % (exc.code, exc.detail))
-    report = plan(text, identity, live)
+    report = plan(text, identity, live, raw=raw)
     post = report.pop("post")
     report["path"] = rel.replace(os.sep, "/")
     report["wrote"] = False
@@ -224,7 +233,7 @@ def retire(root, identity, queue_name="tech", declaration=None, execute=False):
     if not execute:
         report["verdict"] = "PLANNED"
         return report
-    data = post.encode("utf-8")
+    data = payload_bytes(raw, post)
     temp = path + TEMP_SUFFIX
     try:
         with io.open(temp, "wb") as handle:

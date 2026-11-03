@@ -5358,6 +5358,11 @@ SUITES = [
     # state/queue/tech.md:478 as the R2398 seed row BEFORE the code.)
     ("os-repin-dialect-preservation",
      os.path.join("..", "os", "test_repin_dialect_preservation.py"), 6),
+    # every LIBRARY writer of a JSON declaration asks the one dialect law.
+    # (AC-LDWS1..AC-LDWS6 were pinned in state/queue/tech.md:479 as the
+    # R2406 seed row BEFORE the code.)
+    ("os-library-declaration-dialect-sweep",
+     os.path.join("..", "os", "test_library_declaration_dialect_sweep.py"), 6),
     ]
 
 FAILS = 0

@@ -343,7 +343,18 @@ def _same_entry(reading, entry):
     return True
 
 
-def plan(text, entry, live):
+def payload_bytes(raw, post):
+    """The bytes to land: the shared dialect law, asked at CALL time.
+
+    Imported here rather than at module level because AC-RAC6 pins this
+    module's top-level import set; the import is still resolved per call, so
+    a patched law moves this writer's bytes (AC-LDWS2).
+    """
+    import declaration_writer_dialect_preservation as DWD
+    return DWD.encode(raw, post)[1]
+
+
+def plan(text, entry, live, raw=None):
     """Validate the entry and the post text; return the report and the post."""
     entries = declaration_entries(text)
     name = entry["script"]
@@ -387,7 +398,8 @@ def plan(text, entry, live):
     report["entry_count_before"] = len(entries)
     report["entry_count_after"] = len(after)
     report["before_bytes"] = len(text.encode("utf-8"))
-    report["predicted_bytes"] = len(post.encode("utf-8"))
+    report["predicted_bytes"] = len(payload_bytes(
+        post.encode("utf-8") if raw is None else raw, post))
     report["wrote"] = False
     report["read_back_ok"] = None
     return report, post
@@ -403,13 +415,15 @@ def accept(root, script, declared, reason, until=None, execute=False):
     try:
         with io.open(path, "r", encoding="utf-8") as handle:
             text = handle.read()
+        with io.open(path, "rb") as handle:
+            raw = handle.read()
     except (IOError, OSError, UnicodeDecodeError) as exc:
         raise RetireAcceptError("E_RAC_BAD_DECL", "%s (%s)" % (path, exc))
     entry = render_entry(script, declared, reason, until)
-    report, post = plan(text, entry, live_index(live_report(root)))
+    report, post = plan(text, entry, live_index(live_report(root)), raw=raw)
     if not execute:
         return report
-    data = post.encode("utf-8")
+    data = payload_bytes(raw, post)
     if len(data) != report["predicted_bytes"]:
         raise RetireAcceptError("E_RAC_PREDICT",
                                 "payload is %d bytes, predicted %d"
