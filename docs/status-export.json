@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T01:05:00+08:00",
-  "do": "R2418 verification-then-fix: the carried battery read RUNNER PASS 536/536 suites at the pre-registered 4192 criteria, the four follow-up sections then reproduced the open matrix-stamp-compare defect live (on-disk 51530B against regenerated 51617B), and the fix shipped the same window - the matrix render is now stamp-aligned through the doc's own stamp, so the section compares content instead of the clock, and the same four sections then read VERDICT R2418 PASS failing=none",
+  "export_ts": "2026-11-04T01:26:00+08:00",
+  "do": "R2419 verification: the carried battery read RUNNER PASS 537/537 suites with criteria 4198 exactly as pre-registered, and the four follow-up sections read VERDICT R2419 PASS after the stale matrix doc was regenerated to 51708B",
   "ceo_face": {
-    "current": "R2418 verification-then-fix: the carried battery read RUNNER PASS 536/536 suites at the pre-registered 4192 criteria, the four follow-up sections then reproduced the open matrix-stamp-compare defect live (on-disk 51530B against regenerated 51617B), and the fix shipped the same window - the matrix render is now stamp-aligned through the doc's own stamp, so the section compares content instead of the clock, and the same four sections then read VERDICT R2418 PASS failing=none",
-    "latest_artifact": "src/os/matrix_stamp_compare.py + qa/matrix-stamp-compare-R2418.log (1518B, legs=2 identical=True adjacent=5 fails=0) + qa/reconcile-all-R2418.log (839176B, RUNNER PASS 536/536, controls 7/7, 1034.0s, criteria 4192) + docs/sandbox-suite-matrix.md regenerated to 537 suites / 4198 criteria (51710B)",
-    "next_milestone": "next window owes the battery this round's src/ change opened (537 suites / 4198 criteria pre-registered against the registry's own read), then the debt gate: loop-s4u-reconcile (stale, needs an elevated S4U re-registration), stale-suite-matrix-copy, and the newly pinned AC-MSPL1..AC-MSPL6 row on recording a borrowed stamp in the rendered document's own command line",
+    "current": "R2419 verification: the carried battery read RUNNER PASS 537/537 suites with criteria 4198 exactly as pre-registered, and the four follow-up sections read VERDICT R2419 PASS after the stale matrix doc was regenerated to 51708B",
+    "latest_artifact": "qa/reconcile-all-R2419.log (839910B, RUNNER PASS 537/537 suites) + docs/sandbox-suite-matrix.md (51708B, 537 suites / 4198 criteria)",
+    "next_milestone": "next window is a PRODUCT face: claim tech head state/queue/tech.md:486 prefix AC-RIAG1 (relative_import_alias_gate) and ship it with its six-criteria suite",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
-    "last_artifact": "src/os/publish_relative_package_identity.py + qa/publish-relative-package-identity-R2415.log (1310B, legs=2 identical=True)",
-    "updated_at": "2026-11-03T23:14:25+08:00"
+    "last_artifact": "src/os/matrix_stamp_compare.py + qa/matrix-stamp-compare-R2418.log (1518B, legs=2 identical=True adjacent=5 fails=0) + qa/reconcile-all-R2418.log (839176B, RUNNER PASS 536/536, controls 7/7, 1034.0s, criteria 4192) + docs/sandbox-suite-matrix.md regenerated to 537 suites / 4198 criteria (51710B)",
+    "updated_at": "2026-11-04T01:26:00+08:00"
   },
   "depts": [
     {
@@ -37,73 +37,21 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2419.log (839910B, RUNNER PASS 537/537 suites) + docs/sandbox-suite-matrix.md (51708B, 537 suites / 4198 criteria)",
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)",
-    "src/os/publish_relative_package_identity.py + qa/publish-relative-package-identity-R2415.log (1310B, legs=2 identical=True) + qa/publish-relative-package-identity-live-R2415.log (2580B)",
-    "qa/reconcile-all-R2414.log (837982B, green leg) + qa/smoke-R2414.log / qa/smoke-R2414.png",
-    "qa/reconcile-all-R2413.log (837944B, red leg) + state/queue/stamp_exempt.json (383 entries, 79445B, live NO-DRIFT)",
-    "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
-    "qa/reconcile-all-R2411.log (837201B, RUNNER PASS) + docs/sandbox-suite-matrix.md (533 suites / 4174 criteria, 51314B) + src/os/closeout_R2411.py",
-    "qa/reconcile-daily-20261103-2.log + state/debt.md + src/os/closeout_R2408.py",
-    "src/os/state_fold.py + src/os/test_fold_round_block_boundary.py + qa/reconcile-all-R2407.log + qa/reconcile-all-R2407-retry.log + qa/fold-round-block-boundary-R2407.log",
-    "src/os/repin_dialect_preservation.py + qa/repin-dialect-preservation-R2406.log + qa/repin-dialect-preservation-live-R2406.log",
-    "src/os/declaration_writer_dialect_preservation.py plus its six-criteria suite (qa/declaration-writer-dialect-preservation-R2398.log, qa/declaration-writer-dialect-preservation-live-R2398.log)",
-    "src/os/review_window_guard_parity_consumer_wire.py plus its six-criteria suite (qa/review-window-guard-parity-consumer-wire-R2397.log, qa/review-window-guard-parity-consumer-wire-live-R2397.log)",
-    "qa/runner-suite-timeout-headroom-live-R2395.log (three band suites named on the real pile) and qa/runner-suite-timeout-headroom-R2395.log (SUITE PASS 6/6)",
-    "src/os/export_publish_wire_identity.py plus its six-criteria suite (qa/export-publish-wire-identity-R2391.log, qa/export-publish-wire-identity-live-R2391.log)",
-    "src/os/owner_table_parity.py plus its six-criteria suite (qa/owner-table-parity-R2390.log, qa/owner-table-parity-live-R2390.log)",
-    [
-      "src/os/declaration_writer_noop_parity.py plus its six-criteria suite (qa/declaration-writer-noop-parity-R2389.log, qa/declaration-writer-noop-parity-live-R2389.log)",
-      "on",
-      "R2389: one shared NOOP seam is asked by all four declaration writers before any atomic replace, so an unchanged declaration is never rewritten and no temp is created."
-    ],
-    [
-      "src/os/repin_noop_eol_dialect.py plus its six-criteria suite (qa/repin-noop-eol-dialect-R2388.log, qa/repin-noop-eol-dialect-live-R2388.log)",
-      "on",
-      "R2388: the NOOP comparison owns the EOL dialect - a CRLF declaration carrying the composition reads NOOP and is not rewritten; one normalisation serves the shipped CLI and the wire."
-    ],
-    [
-      "qa/reconcile-battery-R2362.log",
-      "on",
-      "R2362 green battery on the edited tree: RUNNER PASS 491/491 suites plus controls 7/7 in 844.6s with criteria 3922 exactly as pre-registered against R2361 (490/3916); TMP RECLAIM 977/977 worlds 343.03 MiB busy=0 failed=0; the matrix doc regenerated to 46996B / 491 suites / 3922 criteria and --check reads byte-identical; os-battery-followup re-ran 6/6 PASS. The same window's first run on the committed R2361 tree was red on evidence (three utf-16 captured logs, census DRIFT-FLAG), fixed by dialect transcode with the baseline untouched."
-    ],
-    [
-      "qa/reconcile-all-R2341.log",
-      "on",
-      "R2341 green battery on the committed tree 50b88267: RUNNER PASS 477/477 suites plus controls 7/7 in 826.5s, criteria total 3838 exactly as pre-registered against R2338 (476/3832), four follow-up sections PASS after the designed matrix FAIL and its regeneration to 45670B, VERDICT R2341 PASS, zero product code"
-    ],
-    [
-      "qa/orphan-trace-R2340.log",
-      "on",
-      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
-    ],
-    [
-      "qa/reconcile-all-R2340-red.log",
-      "on",
-      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
-    ],
-    [
-      "src/os/test_orphan_trace.py",
-      "on",
-      "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
-    ],
-    [
-      "qa/orphan-promote-R2339.log",
-      "on",
-      "R2339 product window: the orphan trace gains its writer - AC-OTP1..AC-OTP6 were pinned in the queue row BEFORE the code, a standings-only pick takes the first RUNNER PASS leg in name order and names the other green legs, a named non-green leg refuses naming the green ones, NO-TRACE and an existing canonical target refuse before any byte, the dry run is the default and an executed promotion copies one leg with both sides proved; the live R2136 promotion was PERFORMED (reconcile-all-R2136c.log -> reconcile-all-R2136.log, 675847B, digest 875082b40b84), so orphan_trace now reads NO-ORPHAN, evidence_variants reads -c DUPLICATE and -b DISTINCT with orphan=0, and followup_history reads round R2136 for the first time as INCOMPLETE runner=PASS"
-    ],
-    [
-      "qa/reconcile-all-R2136.log",
-      "on",
-      "R2339 product window: the orphan trace gains its writer - AC-OTP1..AC-OTP6 were pinned in the queue row BEFORE the code, a standings-only pick takes the first RUNNER PASS leg in name order and names the other green legs, a named non-green leg refuses naming the green ones, NO-TRACE and an existing canonical target refuse before any byte, the dry run is the default and an executed promotion copies one leg with both sides proved; the live R2136 promotion was PERFORMED (reconcile-all-R2136c.log -> reconcile-all-R2136.log, 675847B, digest 875082b40b84), so orphan_trace now reads NO-ORPHAN, evidence_variants reads -c DUPLICATE and -b DISTINCT with orphan=0, and followup_history reads round R2136 for the first time as INCOMPLETE runner=PASS"
-    ]
+    "src/os/publish_relative_package_identity.py + qa/publish-relative-package-identity-R2415.log (1310B, legs=2 identical=True) + qa/publish-relative-package-identity-live-R2415.log (2580B)"
   ],
   "results": [
+    [
+      2419,
+      "R2419 verification window: battery RUNNER PASS 537/537 at 4198 criteria pre-registered, four follow-up sections VERDICT PASS after the stale matrix was regenerated, zero product code shipped"
+    ],
     [
       "2418",
       "2026-11-04 R2418 product face: CLAIMED state/queue/tech.md:493 prefix AC-MSC1 (matrix-stamp-compare), criteria pinned in that row at R2414 before any code. SHIPPED src/os/matrix_stamp_compare.py plus its six-criteria suite, one read-only --stamp-from DOC flag on src/sandbox/suite_matrix.py and one call-site change in src/os/battery_followup.py matrix_core: the matrix section no longer byte-compares a freshly stamped render with the shipped doc (which manufactured an equal-length FAIL on the stamp line whenever the minute differed and hid every real drift behind it), it renders STAMP-ALIGNED to the doc it is compared with - the stamp is asked of suite_matrix.doc_stamp at CALL time, the same law --check uses, so no second stamp parser exists. Refusals keep their own codes (E_MSC_NO_DOC / E_MSC_NO_STAMP / E_MSC_NO_TOOL / E_MSC_REGEN) with CLI exits 0/2/3/5 and a byte-stable --json. SUITE PASS 6/6 twice with an identical criterion digest plus one adjacent suite green, wired os-matrix-stamp-compare(6) so the registry reads 537 suites / 4198 criteria. LIVE: the real generator followed a borrowed 1999-01-01 stamp while a plain render of the same content stamped 2026-11-04 00:03; the doc was regenerated to 51710B and the four sections then read VERDICT R2418 PASS failing=none where they read FAIL minutes earlier. Debt: reconcile-battery-R2417 and matrix-stamp-compare both closed through the shipped CLI (predictions matched), reconcile-battery-R2418 registered first=yes, one tech seed pinned to restore the floor."
     ],
     [
-      "2418",
+      2419,
       "OSLoop 执行 tick"
     ],
     [
@@ -234,10 +182,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 66,
+    "log_lines_in_window": 71,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 66,
+    "substantive_non_idle_mention_lines": 71,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
