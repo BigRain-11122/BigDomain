@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2417 live=runner-abort-history module_sha16_before=a24e8b744b7ac98c
+PILE logs=2461 COMPLETE=754 ABORTED=21 UNREADABLE=1686
+AGE diag-inaq-R9999.log verdict=LIVE-ABORT round=R9999 family=0 green=-
+AGE pool-waterpersist-R1929.log verdict=LIVE-ABORT round=R1929 family=0 green=-
+AGE reconcile-all-R1852.log verdict=LIVE-ABORT round=R1852 family=0 green=-
+AGE reconcile-all-R1868.log verdict=LIVE-ABORT round=R1868 family=0 green=-
+AGE reconcile-all-R1985.log verdict=LIVE-ABORT round=R1985 family=0 green=-
+AGE reconcile-all-R1987.log verdict=LIVE-ABORT round=R1987 family=0 green=-
+AGE reconcile-all-R2017-2.log verdict=LIVE-ABORT round=R2017 family=0 green=-
+AGE reconcile-all-R2122.log verdict=LIVE-ABORT round=R2122 family=0 green=-
+AGE reconcile-all-R2129-timeout.log verdict=LIVE-ABORT round=R2129 family=0 green=-
+AGE reconcile-all-R2135.log verdict=LIVE-ABORT round=R2135 family=0 green=-
+AGE reconcile-all-R2135w.log verdict=LIVE-ABORT round=R2135 family=0 green=-
+AGE reconcile-all-R2140-firstfail.log verdict=LIVE-ABORT round=R2140 family=0 green=-
+AGE reconcile-all-R2145.log verdict=LIVE-ABORT round=R2145 family=0 green=-
+AGE reconcile-all-R2162.log verdict=LIVE-ABORT round=R2162 family=0 green=-
+AGE reconcile-all-R2201-firstfail.log verdict=LIVE-ABORT round=R2201 family=0 green=-
+AGE reconcile-all-R2393-retry2.log verdict=LIVE-ABORT round=R2393 family=2 green=-
+AGE reconcile-daily-20261026.log verdict=ORPHAN-ABORT round=- family=0 green=-
+AGE reconcile-daily-20261027-2.log verdict=ORPHAN-ABORT round=- family=0 green=-
+AGE reconcile-daily-20261027.log verdict=ORPHAN-ABORT round=- family=0 green=-
+AGE reconcile-daily-20261029.log verdict=ORPHAN-ABORT round=- family=0 green=-
+AGE reconcile-daily-20261103.log verdict=ORPHAN-ABORT round=- family=0 green=-
+AGES aborted=21 SUPERSEDED=0 LIVE-ABORT=16 ORPHAN-ABORT=5 REFUSED=0
+MODULE sha16_after=a24e8b744b7ac98c unchanged=True

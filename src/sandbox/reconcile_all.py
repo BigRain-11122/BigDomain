@@ -4994,6 +4994,16 @@ SUITES = [
     # seed BEFORE the code.)
     ("os-runner-abort-face",
      os.path.join("..", "os", "test_runner_abort_face.py"), 6),
+    # R2417: the abort face names the suite a body died on but never whether
+    # that abort still matters - measured at R2403 over the real pile, the
+    # aborted bodies had no way to be told apart from live debt. A body is now
+    # aged against its own round's retry family: SUPERSEDED (a green leg of
+    # the same round, both files named), LIVE-ABORT (no green leg), or
+    # ORPHAN-ABORT (no canonical round token in the name at all).
+    # (AC-RAH1..AC-RAH6 pinned in state/queue/tech.md line 484 as the R2403
+    # seed BEFORE the code.)
+    ("os-runner-abort-history",
+     os.path.join("..", "os", "test_runner_abort_history.py"), 6),
     # R2337: queue_head answers WHICH row comes first, but nothing asked
     # whether that row still needs doing - the head it named this window
     # had shipped at R2315. Every module a claimable row names is now

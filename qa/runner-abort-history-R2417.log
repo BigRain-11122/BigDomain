@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2417 suite=src/os/test_runner_abort_history.py legs=2
+== LEG A rc=0 digest=0BE3621D330C6E00
+runner_abort_history suite (expected criteria 6)
+PASS AC-RAH1 abort verdict and retry family come from the shipped laws at call time
+PASS AC-RAH2 an aborted leg with a green leg reads SUPERSEDED naming both files
+PASS AC-RAH3 an aborted leg with no green leg reads LIVE-ABORT at exit 2
+PASS AC-RAH4 an aborted body with no round token reads ORPHAN-ABORT and a name outside the family scope is not folded into a round
+PASS AC-RAH5 CLI exits 0/2/3/5 with a byte-stable --json
+PASS AC-RAH6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=0BE3621D330C6E00
+runner_abort_history suite (expected criteria 6)
+PASS AC-RAH1 abort verdict and retry family come from the shipped laws at call time
+PASS AC-RAH2 an aborted leg with a green leg reads SUPERSEDED naming both files
+PASS AC-RAH3 an aborted leg with no green leg reads LIVE-ABORT at exit 2
+PASS AC-RAH4 an aborted body with no round token reads ORPHAN-ABORT and a name outside the family scope is not folded into a round
+PASS AC-RAH5 CLI exits 0/2/3/5 with a byte-stable --json
+PASS AC-RAH6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_runner_abort_face.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_retry_legs.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_history.py rc=0 SUITE PASS 6/6
+== src/os/test_round_evidence.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=0BE3621D330C6E00
