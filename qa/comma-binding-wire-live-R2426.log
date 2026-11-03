@@ -1,0 +1,7 @@
+LIVE R2426 comma_binding_wire on the REAL src/os tree (rc=0)
+COMMA BINDING WIRE os-comma-binding-wire verdict=EMPTY scanned=1175 compared=1173 parity=1167 comma_files=6 comma_lines=6 resolved=0 unresolved=0
+FIXTURE comma-list publisher (rc=0)
+COMMA BINDING WIRE os-comma-binding-wire verdict=RESOLVED scanned=1 compared=1 parity=0 comma_files=1 comma_lines=1 resolved=1 unresolved=0
+  BOUND comma_pub.py:5 receiver=wiremod table_module=(unbound) wire_module=some_wire
+TABLE-ONLY identity reading on the same fixture (rc=0)
+EXPORT PUBLISH WIRE IDENTITY os-export-publish-wire-identity verdict=EMPTY scanned=1 publishers=0 wire=0 foreign=(none) unresolved=(none) no_publish=0 wire_module=closeout_export_parity_wire

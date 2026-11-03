@@ -5270,6 +5270,15 @@ SUITES = [
     # R2422 seed row BEFORE the code.)
     ("os-plain-import-comma-binding",
      os.path.join("..", "os", "test_plain_import_comma_binding.py"), 6),
+    # R2426: the reading above NAMED the dropped comma part; the receiver
+    # table itself still drops it, so callee_of returned module '' and the
+    # identity reading reported UNRESOLVED for a publisher a plain alias
+    # resolves. This suite proves the wire that asks the shipped splitter and
+    # adds only the parts the anchored pattern dropped.
+    # (AC-PICBW1..AC-PICBW6 were pinned in state/queue/tech.md line 490 as the
+    # R2424 seed row BEFORE the code.)
+    ("os-comma-binding-wire",
+     os.path.join("..", "os", "test_comma_binding_wire.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window
