@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T09:53:03+08:00",
-  "do": "R2411 verification: the carried battery read RUNNER PASS 533/533 suites with criteria 4174 exactly as pre-registered and all four follow-up sections PASS, so the R2409 battery row closed green",
+  "export_ts": "2026-11-03T13:20:00+08:00",
+  "do": "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)",
   "ceo_face": {
-    "current": "R2411 verification: the carried battery read RUNNER PASS 533/533 suites with criteria 4174 exactly as pre-registered and all four follow-up sections PASS, so the R2409 battery row closed green",
-    "latest_artifact": "qa/reconcile-all-R2411.log (837201B, RUNNER PASS) + docs/sandbox-suite-matrix.md (533 suites / 4174 criteria, 51314B) + src/os/closeout_R2411.py",
-    "next_milestone": "next product face: claim the top deliverable tech queue row with its six criteria pinned before any code (debt row product-face-R2412)",
+    "current": "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)",
+    "latest_artifact": "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
+    "next_milestone": "reconcile-battery-R2412: the full battery on this committed tree at the pre-registered target of 534 suites / 4180 criteria, zero product edits",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2411.log (837201B, RUNNER PASS) + docs/sandbox-suite-matrix.md (533 suites / 4174 criteria, 51314B) + src/os/closeout_R2411.py",
-    "updated_at": "2026-11-03T09:53:03+08:00"
+    "last_artifact": "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
+    "updated_at": "2026-11-03T13:20:00+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
     "qa/reconcile-all-R2411.log (837201B, RUNNER PASS) + docs/sandbox-suite-matrix.md (533 suites / 4174 criteria, 51314B) + src/os/closeout_R2411.py",
     "qa/reconcile-daily-20261103-2.log + state/debt.md + src/os/closeout_R2408.py",
     "src/os/state_fold.py + src/os/test_fold_round_block_boundary.py + qa/reconcile-all-R2407.log + qa/reconcile-all-R2407-retry.log + qa/fold-round-block-boundary-R2407.log",
@@ -94,11 +95,15 @@
   ],
   "results": [
     [
+      "2412",
+      "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)"
+    ],
+    [
       "2411",
       "R2411 verification: the carried battery read RUNNER PASS 533/533 suites with criteria 4174 exactly as pre-registered and all four follow-up sections PASS, so the R2409 battery row closed green"
     ],
     [
-      "2411",
+      "2412",
       "OSLoop 执行 tick"
     ],
     [
@@ -201,10 +206,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

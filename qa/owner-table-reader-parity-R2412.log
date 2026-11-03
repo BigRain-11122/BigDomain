@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2412 suite=src/os/test_owner_table_reader_parity.py legs=2
+== LEG A rc=0 digest=AD72C9863E679922
+PASS AC-OTRP1 both readings are asked at call time, so patching either shipped reader moves the disagreement list
+PASS AC-OTRP2 every row names both verdicts and a law-only row carries the flags the law itself reported
+PASS AC-OTRP3 an agreeing tree reads PARITY-CLEAN at exit 0 and a disagreeing one reads PARITY-SPLIT at exit 2
+PASS AC-OTRP4 a per-round copy is superseded only while its base callable sits beside it, and no tool name is hard-coded
+PASS AC-OTRP5 exits are 0/2/3/5 and --json is byte-stable over the pinned key set
+PASS AC-OTRP6 pure ASCII stdlib, no clock, no network, read-only, and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== LEG B rc=0 digest=AD72C9863E679922
+PASS AC-OTRP1 both readings are asked at call time, so patching either shipped reader moves the disagreement list
+PASS AC-OTRP2 every row names both verdicts and a law-only row carries the flags the law itself reported
+PASS AC-OTRP3 an agreeing tree reads PARITY-CLEAN at exit 0 and a disagreeing one reads PARITY-SPLIT at exit 2
+PASS AC-OTRP4 a per-round copy is superseded only while its base callable sits beside it, and no tool name is hard-coded
+PASS AC-OTRP5 exits are 0/2/3/5 and --json is byte-stable over the pinned key set
+PASS AC-OTRP6 pure ASCII stdlib, no clock, no network, read-only, and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0
+== ADJACENT 3
+== src/os/test_owner_table_parity.py rc=0 NO SUITE LINE
+== src/os/test_owner_table_usage_wire.py rc=0 NO SUITE LINE
+== src/os/test_library_declaration_dialect_sweep.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=AD72C9863E679922

@@ -1,0 +1,44 @@
+LIVE FACE round=R2412 exit=2
+OWNER TABLE READER PARITY root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os scanned=1017 rows=40 superseded=35 split=5 verdict=PARITY-SPLIT files=[battery_followup_help_wire.py,evidence_R2372.py,r2140_fold.py,retry_naming.py,run_identity.py]
+JSON scanned=1017 rows=40 superseded=35 split=5 verdict=PARITY-SPLIT
+ROWS tool|law|wire|reason|flags|superseded
+battery_followup_R1999.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2168.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2171.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2174.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2177.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2183.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2184.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2185.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2187.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2197.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2199.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2203.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2205.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2208.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2211.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2213.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2214.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2216.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2221.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2225.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2227.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2233.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2235.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2239.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2247.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2249.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2252.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2254.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2256.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2258.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2260.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence,--update-baseline|True
+battery_followup_R2262.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence|True
+battery_followup_R2264.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence|True
+battery_followup_R2268.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence|True
+battery_followup_R2271.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--chain,--check,--daily,--evidence|True
+battery_followup_help_wire.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--json|False
+evidence_R2372.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--drop-unmatched,--reason,--round,--until|False
+r2140_fold.py|PARITY-DISAGREES|NO-TABLE|law-only-table|--desc,--fold-no,--round,--summary-file,--window-slice|False
+retry_naming.py|PARITY-DISAGREES|NO-TABLE|law-only-table|-2,-run2|False
+run_identity.py|PARITY-DISAGREES|NO-TABLE|law-only-table|-a,-b,-retry,-run2,-verifya,-verifyb|False

@@ -5363,6 +5363,13 @@ SUITES = [
     # R2406 seed row BEFORE the code.)
     ("os-library-declaration-dialect-sweep",
      os.path.join("..", "os", "test_library_declaration_dialect_sweep.py"), 6),
+    # R2412: the two shipped table readers answer two different questions,
+    # so both are asked of the same file and every disagreement is
+    # published with its reason instead of being inferred from two logs.
+    # (AC-OTRP1..AC-OTRP6 were pinned in state/queue/tech.md:480 as the
+    # R2399 seed row BEFORE the code.)
+    ("os-owner-table-reader-parity",
+     os.path.join("..", "os", "test_owner_table_reader_parity.py"), 6),
     ]
 
 FAILS = 0
