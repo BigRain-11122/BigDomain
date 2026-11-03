@@ -192,10 +192,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 68,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
