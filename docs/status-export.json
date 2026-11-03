@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T04:52:00+08:00",
-  "do": "R2424 product window: plain_import_comma_binding ships so a comma-separated import that binds publish is NAMED instead of silently dropped - the whole-statement receiver answer, the per-part one and the two publish-name tables are printed side by side; suite 6/6 twice identical plus three adjacent suites green, registry 540 suites / 4216 criteria",
+  "export_ts": "2026-11-04T04:54:06+08:00",
+  "do": "R2425 verification window: the full reconcile battery on the committed R2424 tree read RUNNER PASS 540/540 suites plus controls 7/7 in 942.7s at the pre-registered 540 suites / 4216 criteria measured exactly, then all four follow-up sections PASS after regenerating the matrix doc to 52001B",
   "ceo_face": {
-    "current": "R2424 product window: plain_import_comma_binding ships so a comma-separated import that binds publish is NAMED instead of silently dropped - the whole-statement receiver answer, the per-part one and the two publish-name tables are printed side by side; suite 6/6 twice identical plus three adjacent suites green, registry 540 suites / 4216 criteria",
-    "latest_artifact": "src/os/plain_import_comma_binding.py + src/os/test_plain_import_comma_binding.py (qa/plain-import-comma-binding-R2424.log, legs=2 identical=True; qa/plain-import-comma-binding-live-R2424.log, 559B class=tee)",
-    "next_milestone": "reconcile-battery-R2425: the full battery on the committed R2424 tree at the measured target 540 suites / 4216 criteria, then one product face on the tech head state/queue/tech.md line 490 prefix AC-PICBW1 (comma_binding_wire, AC-PICBW1..AC-PICBW6 pinned at R2424)",
+    "current": "R2425 verification window: the full reconcile battery on the committed R2424 tree read RUNNER PASS 540/540 suites plus controls 7/7 in 942.7s at the pre-registered 540 suites / 4216 criteria measured exactly, then all four follow-up sections PASS after regenerating the matrix doc to 52001B",
+    "latest_artifact": "qa/reconcile-all-R2425.log (845614B, RUNNER PASS 540/540, criteria 4216) + docs/sandbox-suite-matrix.md regenerated to 52001B, 540 suites / 4216 criteria, --check byte-identical",
+    "next_milestone": "product face on the tech head state/queue/tech.md:490 prefix AC-PICBW1 (comma_binding_wire, AC-PICBW1..AC-PICBW6 pinned at R2424): the reading NAMES the dropped import part while the receiver table still drops it, so callee_of on a comma list returns module \"\" and the identity reading answers UNRESOLVED for a publisher a bare call would resolve",
     "next_milestone_due": "2026-11-05T22:00:00+08:00",
-    "last_artifact": "src/os/plain_import_comma_binding.py + src/os/test_plain_import_comma_binding.py (qa/plain-import-comma-binding-R2424.log, legs=2 identical=True; qa/plain-import-comma-binding-live-R2424.log, 559B class=tee)",
-    "updated_at": "2026-11-04T04:52:00+08:00"
+    "last_artifact": "qa/reconcile-all-R2425.log (845614B, RUNNER PASS 540/540, criteria 4216) + docs/sandbox-suite-matrix.md regenerated to 52001B, 540 suites / 4216 criteria, --check byte-identical",
+    "updated_at": "2026-11-04T04:54:06+08:00"
   },
   "depts": [
     {
@@ -37,7 +37,7 @@
     }
   ],
   "outs": [
-    "src/os/plain_import_comma_binding.py + src/os/test_plain_import_comma_binding.py (qa/plain-import-comma-binding-R2424.log, legs=2 identical=True; qa/plain-import-comma-binding-live-R2424.log, 559B class=tee)",
+    "qa/reconcile-all-R2425.log (845614B, RUNNER PASS 540/540, criteria 4216) + docs/sandbox-suite-matrix.md regenerated to 52001B, 540 suites / 4216 criteria, --check byte-identical",
     "qa/reconcile-all-R2423-retry.log (RUNNER PASS 539/539, 4210 criteria, 907.8s) + qa/reconcile-all-R2423.log (the red leg, 538/539) + docs/sandbox-suite-matrix.md (539 suites / 4210 criteria, --check byte-identical) + src/os/repair_R2423.py (birth-site transport repair)",
     "src/os/test_matrix_stamp_compare.py (AC-MSC4 live leg now asks suite_matrix.doc_evidence_face) + qa/reconcile-all-R2421-retry.log (840488B, RUNNER PASS 538/538) + docs/sandbox-suite-matrix.md (51830B, 538 suites / 4204 criteria)",
     "src/os/relative_import_alias_gate.py + qa/relative-import-alias-gate-R2420.log (1516B, legs=2 identical) + qa/relative-import-alias-gate-live-R2420.log (1591B)",
@@ -45,6 +45,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2425",
+      "R2425 verification window: the full reconcile battery on the committed R2424 tree read RUNNER PASS 540/540 suites plus controls 7/7 in 942.7s at the pre-registered 540 suites / 4216 criteria measured exactly, then all four follow-up sections PASS after regenerating the matrix doc to 52001B"
+    ],
     [
       "2424",
       "R2424 product window: plain_import_comma_binding ships so a comma-separated import that binds publish is NAMED instead of silently dropped - the whole-statement receiver answer, the per-part one and the two publish-name tables are printed side by side; suite 6/6 twice identical plus three adjacent suites green, registry 540 suites / 4216 criteria"
@@ -74,7 +78,7 @@
       "2026-11-04 R2418 product face: CLAIMED state/queue/tech.md:493 prefix AC-MSC1 (matrix-stamp-compare), criteria pinned in that row at R2414 before any code. SHIPPED src/os/matrix_stamp_compare.py plus its six-criteria suite, one read-only --stamp-from DOC flag on src/sandbox/suite_matrix.py and one call-site change in src/os/battery_followup.py matrix_core: the matrix section no longer byte-compares a freshly stamped render with the shipped doc (which manufactured an equal-length FAIL on the stamp line whenever the minute differed and hid every real drift behind it), it renders STAMP-ALIGNED to the doc it is compared with - the stamp is asked of suite_matrix.doc_stamp at CALL time, the same law --check uses, so no second stamp parser exists. Refusals keep their own codes (E_MSC_NO_DOC / E_MSC_NO_STAMP / E_MSC_NO_TOOL / E_MSC_REGEN) with CLI exits 0/2/3/5 and a byte-stable --json. SUITE PASS 6/6 twice with an identical criterion digest plus one adjacent suite green, wired os-matrix-stamp-compare(6) so the registry reads 537 suites / 4198 criteria. LIVE: the real generator followed a borrowed 1999-01-01 stamp while a plain render of the same content stamped 2026-11-04 00:03; the doc was regenerated to 51710B and the four sections then read VERDICT R2418 PASS failing=none where they read FAIL minutes earlier. Debt: reconcile-battery-R2417 and matrix-stamp-compare both closed through the shipped CLI (predictions matched), reconcile-battery-R2418 registered first=yes, one tech seed pinned to restore the floor."
     ],
     [
-      "2424",
+      "2425",
       "OSLoop 执行 tick"
     ],
     [
@@ -205,10 +209,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 62,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 62,
+    "substantive_non_idle_mention_lines": 68,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
