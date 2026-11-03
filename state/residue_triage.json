@@ -1821,6 +1821,27 @@
       "declared_by": 2422,
       "reason": "the R2409 waterline fold moved these round blocks to the archive at a true round-block boundary; each round own ledger line is delivered and its stamp now sits outside the live window",
       "until": 2460
+    },
+    {
+      "round": 2409,
+      "status": "DELIVERED",
+      "declared_by": "R2423",
+      "reason": "fold R2423 moved the R2419..R2422 round blocks out of the live log; these three round stamps now read as residue though each was delivered in its own window",
+      "until": 2440
+    },
+    {
+      "round": 2412,
+      "status": "DELIVERED",
+      "declared_by": "R2423",
+      "reason": "fold R2423 moved the R2419..R2422 round blocks out of the live log; these three round stamps now read as residue though each was delivered in its own window",
+      "until": 2440
+    },
+    {
+      "round": 2415,
+      "status": "DELIVERED",
+      "declared_by": "R2423",
+      "reason": "fold R2423 moved the R2419..R2422 round blocks out of the live log; these three round stamps now read as residue though each was delivered in its own window",
+      "until": 2440
     }
   ]
 }
