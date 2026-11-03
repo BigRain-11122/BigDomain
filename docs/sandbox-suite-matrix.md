@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-04 02:29 +08:00
+- 生成时间: generated: 2026-11-04 02:37 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2422.log
 - 状态证据: reconcile-all-R2422.log (RUNNER PASS 538/538 suites green, reconcile controls 7/7, 929.2s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 538 | 4204 | 538/538 | R2422 |
+| 539 | 4210 | 538/538 | R2422 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -554,28 +554,29 @@
 | 515 | os-publish-relative-package-identity | ../os/test_publish_relative_package_identity.py | 6 | green | 1.0 |
 | 516 | os-matrix-stamp-compare | ../os/test_matrix_stamp_compare.py | 6 | green | 2.0 |
 | 517 | os-relative-import-alias-gate | ../os/test_relative_import_alias_gate.py | 6 | green | 0.9 |
-| 518 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 0.5 |
-| 519 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.1 |
-| 520 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.0 |
-| 521 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.2 |
-| 522 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.6 |
-| 523 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.4 |
-| 524 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.7 |
-| 525 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.3 |
-| 526 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.1 |
-| 527 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.7 |
-| 528 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.8 |
-| 529 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 0.9 |
-| 530 | os-matrix-evidence-pile-consistency | ../os/test_matrix_evidence_pile_consistency.py | 6 | green | 0.6 |
-| 531 | os-followup-bare-evidence-face | ../os/test_followup_bare_evidence_face.py | 6 | green | 0.6 |
-| 532 | os-review-window-guard-parity-blind-agreement | ../os/test_review_window_guard_parity_blind_agreement.py | 6 | green | 0.1 |
-| 533 | os-review-window-guard-parity-consumer-wire | ../os/test_review_window_guard_parity_consumer_wire.py | 6 | green | 0.1 |
-| 534 | os-declaration-writer-dialect-preservation | ../os/test_declaration_writer_dialect_preservation.py | 6 | green | 1.1 |
-| 535 | os-owner-table-usage-wire | ../os/test_owner_table_usage_wire.py | 6 | green | 1.1 |
-| 536 | os-repin-dialect-preservation | ../os/test_repin_dialect_preservation.py | 6 | green | 1.6 |
-| 537 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 3.1 |
-| 538 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 0.7 |
-|  | 合计 |  | 4204 | green 538 / FAIL 0 / no-evidence 0 |  |
+| 518 | os-plain-import-alias-gate | ../os/test_plain_import_alias_gate.py | 6 | no-evidence | - |
+| 519 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 0.5 |
+| 520 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.1 |
+| 521 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.0 |
+| 522 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.2 |
+| 523 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.6 |
+| 524 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.4 |
+| 525 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.7 |
+| 526 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.3 |
+| 527 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.1 |
+| 528 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.7 |
+| 529 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.8 |
+| 530 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 0.9 |
+| 531 | os-matrix-evidence-pile-consistency | ../os/test_matrix_evidence_pile_consistency.py | 6 | green | 0.6 |
+| 532 | os-followup-bare-evidence-face | ../os/test_followup_bare_evidence_face.py | 6 | green | 0.6 |
+| 533 | os-review-window-guard-parity-blind-agreement | ../os/test_review_window_guard_parity_blind_agreement.py | 6 | green | 0.1 |
+| 534 | os-review-window-guard-parity-consumer-wire | ../os/test_review_window_guard_parity_consumer_wire.py | 6 | green | 0.1 |
+| 535 | os-declaration-writer-dialect-preservation | ../os/test_declaration_writer_dialect_preservation.py | 6 | green | 1.1 |
+| 536 | os-owner-table-usage-wire | ../os/test_owner_table_usage_wire.py | 6 | green | 1.1 |
+| 537 | os-repin-dialect-preservation | ../os/test_repin_dialect_preservation.py | 6 | green | 1.6 |
+| 538 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 3.1 |
+| 539 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 0.7 |
+|  | 合计 |  | 4210 | green 538 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

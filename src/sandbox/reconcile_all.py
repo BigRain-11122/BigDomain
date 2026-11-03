@@ -5252,6 +5252,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-relative-import-alias-gate",
      os.path.join("..", "os", "test_relative_import_alias_gate.py"), 6),
+    # R2422: the alias gate above reads FROM-imports only, so the house idiom
+    # `import M as publish` was outside its scope - measured at R2420 at HEAD,
+    # that line bound publish in the receiver table while both publish-name
+    # tables answered {} and the gate read mentions_publish=False. The plain
+    # gate reads the plain-import tail and prints the same three answers.
+    # (AC-PIAG1..AC-PIAG6 were pinned in state/queue/tech.md as the R2420 seed
+    # row BEFORE the code.)
+    ("os-plain-import-alias-gate",
+     os.path.join("..", "os", "test_plain_import_alias_gate.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window
