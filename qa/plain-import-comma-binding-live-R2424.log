@@ -1,0 +1,4 @@
+PLAIN IMPORT COMMA BINDING os-plain-import-comma-binding verdict=EMPTY scanned=1170 comma_lines=0 files=0 bound=0 unbound=0 dropped=0 asymmetric=(none)
+FIXTURE root=<tempdir> expect one UNBOUND comma line and one non-publish list
+PLAIN IMPORT COMMA BINDING os-plain-import-comma-binding verdict=ASYMMETRIC scanned=1 comma_lines=1 files=1 bound=0 unbound=1 dropped=1 asymmetric=list_pub.py
+  UNBOUND list_pub.py:1 parts=2 publish_parts=some_wire receiver={"os": "os"} receiver_parts={"os": "os", "publish": "some_wire"} dropped=publish absolute={} relative={}

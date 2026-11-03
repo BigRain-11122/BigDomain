@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2424 suite=src/os/test_plain_import_comma_binding.py legs=2
+== LEG A rc=0 digest=4CB2363E399CDEAF
+PASS AC-PICB1 the splitter and the receiver table are asked at call time and no import pattern is restated
+PASS AC-PICB2 the comma list binds publish on the receiver side and reads UNBOUND with both receiver answers printed
+PASS AC-PICB3 exactly the comma parts that bind publish are counted
+PASS AC-PICB4 no file reads EMPTY while a comma-list line binds publish unbound
+PASS AC-PICB5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-PICB6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== LEG B rc=0 digest=4CB2363E399CDEAF
+PASS AC-PICB1 the splitter and the receiver table are asked at call time and no import pattern is restated
+PASS AC-PICB2 the comma list binds publish on the receiver side and reads UNBOUND with both receiver answers printed
+PASS AC-PICB3 exactly the comma parts that bind publish are counted
+PASS AC-PICB4 no file reads EMPTY while a comma-list line binds publish unbound
+PASS AC-PICB5 exit codes 0/2/3/5 plus a byte-stable --json
+PASS AC-PICB6 writes nothing, ASCII, stdlib only, wired
+SUITE PASS criteria=6 passes=6 fails=0
+== ADJACENT 3
+== src/os/test_plain_import_alias_gate.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_relative_import_alias_gate.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=4CB2363E399CDEAF

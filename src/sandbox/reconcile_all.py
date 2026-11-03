@@ -5261,6 +5261,15 @@ SUITES = [
     # row BEFORE the code.)
     ("os-plain-import-alias-gate",
      os.path.join("..", "os", "test_plain_import_alias_gate.py"), 6),
+    # R2424: the alias gate reads the plain-import tail itself, but the
+    # receiver table behind it matches only the FIRST module of a comma list,
+    # so `import os, some_wire as publish` binds {"os": "os"} and says nothing
+    # about the second module. This suite proves the per-part reading that
+    # prints the dropped binding beside the whole-statement answer.
+    # (AC-PICB1..AC-PICB6 were pinned in state/queue/tech.md line 489 as the
+    # R2422 seed row BEFORE the code.)
+    ("os-plain-import-comma-binding",
+     os.path.join("..", "os", "test_plain_import_comma_binding.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window
