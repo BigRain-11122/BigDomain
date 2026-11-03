@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-03T13:20:00+08:00",
-  "do": "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)",
+  "export_ts": "2026-11-03T10:35:00+08:00",
+  "do": "R2413 verification: full battery on the committed tree read 534/534 suite lines at the pre-registered 4180 criteria; the one red (undeclared R2412 discharge stamp) repaired through the shipped writer at its predicted bytes, live NO-DRIFT",
   "ceo_face": {
-    "current": "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)",
-    "latest_artifact": "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
-    "next_milestone": "reconcile-battery-R2412: the full battery on this committed tree at the pre-registered target of 534 suites / 4180 criteria, zero product edits",
+    "current": "R2413 verification: full battery on the committed tree read 534/534 suite lines at the pre-registered 4180 criteria; the one red (undeclared R2412 discharge stamp) repaired through the shipped writer at its predicted bytes, live NO-DRIFT",
+    "latest_artifact": "qa/reconcile-all-R2413.log (837944B, red leg) + state/queue/stamp_exempt.json (383 entries, 79445B, live NO-DRIFT)",
+    "next_milestone": "reconcile-battery-R2412 retry: one green RUNNER PASS over the same 534 suites / 4180 criteria on the repaired committed tree, then the four follow-up sections",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
-    "last_artifact": "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
-    "updated_at": "2026-11-03T13:20:00+08:00"
+    "last_artifact": "qa/reconcile-all-R2413.log (837944B, red leg) + state/queue/stamp_exempt.json (383 entries, 79445B, live NO-DRIFT)",
+    "updated_at": "2026-11-03T10:35:00+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2413.log (837944B, red leg) + state/queue/stamp_exempt.json (383 entries, 79445B, live NO-DRIFT)",
     "src/os/owner_table_reader_parity.py + qa/owner-table-reader-parity-R2412.log (1782B, legs=2 identical) + qa/owner-table-reader-parity-live-R2412.log (5177B, 44 lines)",
     "qa/reconcile-all-R2411.log (837201B, RUNNER PASS) + docs/sandbox-suite-matrix.md (533 suites / 4174 criteria, 51314B) + src/os/closeout_R2411.py",
     "qa/reconcile-daily-20261103-2.log + state/debt.md + src/os/closeout_R2408.py",
@@ -95,6 +96,10 @@
   ],
   "results": [
     [
+      "2413",
+      "R2413 verification: full battery on the committed tree read 534/534 suite lines at the pre-registered 4180 criteria; the one red (undeclared R2412 discharge stamp) repaired through the shipped writer at its predicted bytes, live NO-DRIFT"
+    ],
+    [
       "2412",
       "R2412 product: owner_table_reader_parity now asks both shipped table readers of the same file and publishes every disagreement with its reason (scanned 1017, rows 40, superseded 35, split 5)"
     ],
@@ -103,7 +108,7 @@
       "R2411 verification: the carried battery read RUNNER PASS 533/533 suites with criteria 4174 exactly as pre-registered and all four follow-up sections PASS, so the R2409 battery row closed green"
     ],
     [
-      "2412",
+      "2413",
       "OSLoop 执行 tick"
     ],
     [
@@ -206,10 +211,10 @@
   "self_drive": {
     "window": "2026-10-28..2026-11-03",
     "window_days": 7,
-    "log_lines_in_window": 24,
+    "log_lines_in_window": 30,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 24,
+    "substantive_non_idle_mention_lines": 30,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
