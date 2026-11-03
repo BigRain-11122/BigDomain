@@ -17,3 +17,4 @@
 2026-11-03 09:53 R2411 verification: the carried battery read RUNNER PASS 533/533 suites at criteria 4174 exactly as pre-registered and all four follow-up sections PASS, so the R2409 battery row closed green and product-face-R2412 leads next
 2026-11-03 13:20 R2412 product: src/os/owner_table_reader_parity.py ships - both shipped table readers asked of the same file, 1017 scanned / 40 rows / 35 superseded / 5 split, suite 6/6 with two-leg evidence
 2026-11-03 10:35 R2413 verification: battery on the committed tree read 534/534 suite lines at the pre-registered 4180 criteria; the one red (undeclared R2412 discharge stamp) repaired through stamp_exempt_append at 79445B predicted == measured, live NO-DRIFT 383 entries
+2026-11-03T15:53:23+08:00 tick=2414 R2414 verification window - carried battery green at the pre-registered 534/534 suites and 4180 criteria with all four follow-ups measured (matrix stamp-line defect named), daily crawl source W38 landed

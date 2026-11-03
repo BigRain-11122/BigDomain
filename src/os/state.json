@@ -1,8 +1,8 @@
 {
-  "tick": 2413,
+  "tick": 2414,
   "last_order": "2026-11-02 11:04",
-  "last_decision_rows": 148,
-  "benchmarks_refreshed": "2026-11-02",
+  "last_decision_rows": 208,
+  "benchmarks_refreshed": "2026-11-03",
   "last_gord_tbl_rows": 4,
   "last_dec_tokens": [
     "D-20260930-18",
@@ -101,7 +101,13 @@
     "D-20261103-08",
     "D-20261103-09",
     "D-20261103-10",
-    "D-20261103-11"
+    "D-20261103-11",
+    "D-20261103-12",
+    "D-20261103-13",
+    "D-20261103-14",
+    "D-20261103-15",
+    "D-20261103-16",
+    "D-20261103-17"
   ],
   "log": [
                 "Fold R2407: 13 early log items moved verbatim into the monthly archive at a true round-block boundary; tokens covered AC-ACSP1,AC-ACSP6,AC-BEPR1,AC-BEPR3,AC-BEPR5,AC-DWNP1,AC-DWNP3,AC-DWNP6,AC-DWPP1,AC-DWPP6,AC-EPBW1,AC-EPBW6,AC-EPPG1,AC-EPPG3,AC-EPPG6,AC-EPWI1,AC-EPWI1b,AC-EPWI2b,AC-EPWI3b,AC-EPWI6,AC-FBEF1,AC-FBEF6,AC-LLSG1,AC-LLSG6,AC-MEPC1,AC-MEPC5,AC-MEPC6,AC-OTP,AC-OTP1,AC-OTP6,AC-OTPP1,AC-OTPP2,AC-OTPP3,AC-OTPP6,AC-OTUW1,AC-OTUW6,AC-OUB1,AC-OUB2,AC-OUB6,AC-RAF1,AC-RAF6,AC-RCDF1,AC-RCDF6,AC-RNED1,AC-RNED5,AC-RTH1,AC-RTH3,AC-RTH6,AC-RTR6,AC-RTRI2,AC-RWGB1,AC-RWPC1,AC-RWPC2,AC-RWPC3,AC-RWPC4,AC-RWPC6,AC-SASF1,AC-SASF2,AC-SASF6,C-2,C-3,D-20261103-01,D-DUE,D-HIT,D-STALE,O-MEASURE,O-PUBLISH,O-TABLE,R-MET,T-CLEAN,T-RESIDUE,T-ROUND,T-STALE,T-UNKNOWN,T-ing.",
@@ -140,6 +146,14 @@
                 "2026-11-03 R2413 repair at the birth site, never by widening a criterion: the entry was appended through the shipped stamp_exempt_append (predicted 79254B -> 79445B, measured 79445B exactly, entries 382 -> 383, wrote=yes readback=ok) and the live reading is now NO-DRIFT violations=383 matched=383 exempt=382 expired=1 undeclared=0.",
                 "2026-11-03 R2413 honest gaps, stated rather than swept: (a) NO green RUNNER PASS exists for this tree, so reconcile-battery-R2412 stays OPEN with the SAME target of 534 suites / 4180 criteria - a declaration repair adds no suite and no criterion - and the retry leg is owed next; (b) the four follow-up sections (matrix, fingerprint, profile, census) were NOT run, because they follow a green leg; (c) the expired stamp-exemption entry (until R2330) was NOT renewed, exactly as at R2358, R2410 and R2411 - it reads expired=1 and causes no drift; (d) MEASURED and named, not swept: the R2409 suite os-library-declaration-dialect-sweep still prints its six PASS lines two spaces deeper than the runner PASS counter, so that column under-reports it while criteria=6 still counts - unchanged and still unfixed.",
                 "R2413 tokens: local=~18k api=0 api_reason=verification window - one full battery on the committed tree at a pre-registered target that matched exactly (534 suites / 4180 criteria), one red traced to one real undeclared stamp and repaired through the shipped writer at its predicted byte count with a read-back, one red leg preserved, one register note appended so the debt row carries the measurement, and the state/export/backlog/heartbeat closeout; zero product code shipped, zero cloud calls and zero external API touches",
-                "2026-11-03 R2413 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; src/os/register_loop_task.ps1 passes an explicit S4U principal but needs an elevated shell and this session is unelevated, so the task definition was left untouched (hundred-and-sixty-eighth consecutive disclosure, carried as the stale row loop-s4u-reconcile in state/debt.md)."
+                "2026-11-03 R2413 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; src/os/register_loop_task.ps1 passes an explicit S4U principal but needs an elevated shell and this session is unelevated, so the task definition was left untouched (hundred-and-sixty-eighth consecutive disclosure, carried as the stale row loop-s4u-reconcile in state/debt.md).",
+                "2026-11-03 R2414 verification window (five-silence scan at open: LEDGER @BigDomain addressed rows=0 unreplied=0 with the duplicate P-2026-10-25-06 in the lastp window explained as a group-side id repeat; DEC row-owner tokens new=6; QA daily crawl due; HB unparsed; TREE clean at HEAD 191f2229, no index.lock). The debt gate named CLAIM-FIRST item=reconcile-battery-R2412 with the pre-registered target of 534 suites / 4180 criteria, so the battery ran FIRST on the committed tree with zero product edits.",
+                "2026-11-03 R2414 the battery matched its prediction exactly: python src/os/battery_stream.py --evidence qa/reconcile-all-R2414.log read RUNNER PASS (534/534 suites green, reconcile controls 7/7, 1055.3s) with criteria total 4180 == the pre-registered target and TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0; evidence 837982B, the green leg for the R2412 tree.",
+                "2026-11-03 R2414 the four follow-up sections ran in the designed order and exposed a REAL over-strict compare instead of passing: leg1 matrix FAIL on the stale doc (51314B vs 51414B, no rewrite), src/sandbox/suite_matrix.py regenerated to 51414B at 534 suites / 4180 criteria, leg2 matrix still FAIL at on-disk=51414B regenerated=51414B with fingerprint/profile/census PASS; the measured root cause is that the section byte-compares a freshly stamped render while the ONLY differing line is the generation stamp (15:51 vs 15:50), and suite_matrix --check (content-only) reads PASS byte-identical 51414B / 534 suites / 4180 criteria. Registered as measured debt row matrix-stamp-compare rather than swept.",
+                "2026-11-03 R2414 daily crawl discharged with a real new source: the four-department AIGC labeling measures (guoxin ban tong zi [2025] no.2, effective 2025-09-01) fetched from the official cac.gov.cn full-text page, signal row W38 written to docs/research/intelligence-wall.md with its consumer landing points (P-47 four-piece AIGC label face, bootstrap pre-release check, UGC user-declaration entry), benchmark section 4 record appended, qa/smoke-R2414.log and qa/smoke-R2414.png rendered from the real log.",
+                "2026-11-03 R2414 DEC receipts with numbers: D-20261103-12 (five-company collection batch) = known, not this company execution face; D-20261103-13 (pause_integrity delivery / lane-task-guard path) = group-level, known; D-20261103-14 (D-20261103-11 judged negative) = known; D-20261103-15 (orders.md conflict markers) = group-level, known; D-20261103-16 (task-health-codes doc overdue) = group-level, known; D-20261103-17 (task-expected-disabled.json no-op) = group-level, known. Baseline extended to 103 tokens / 208 rows.",
+                "2026-11-03 R2414 LEDGER adjudicated: atbd_rows=0 means no addressed row is unreplied for this company, and conflict=1 is the identifier P-2026-10-25-06 appearing twice inside the lastp scan window - a group-side id repeat with no execution surface here, recorded rather than acted on.",
+                "R2414 tokens: local=~26k api=0 api_reason=verification window - one full battery on the committed tree at an exact pre-registered target, four follow-up sections with one intended matrix FAIL and one measured stamp-line defect named instead of swept, one official source fetched for the charter crawl with wall and benchmark records, smoke log and PNG rendered from the real log, six decision rows adjudicated with numbers and one ledger id repeat explained, and the state/export/heartbeat closeout; zero product code shipped, zero cloud calls, zero external API touches beyond the single read-only official page fetch",
+                "R2414 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; src/os/register_loop_task.ps1 passes an explicit S4U principal but needs an elevated shell and this session is unelevated, so the task definition was left untouched (hundred-and-sixty-ninth consecutive disclosure, carried as the stale row loop-s4u-reconcile in state/debt.md)."
   ]
 }

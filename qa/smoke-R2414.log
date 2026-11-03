@@ -1,0 +1,42 @@
+BigDomain QA smoke - round R2414 - 2026-11-03
+================================================
+
+[1] DAILY CRAWL: source fetched = 1 (official full text)
+    SRC: cac.gov.cn/2025-03/14/c_1743654684782215.htm
+    TITLE: AIGC content labeling measures (guoxin ban tong zi [2025] no.2)
+    EFFECTIVE: 2025-09-01
+    KEY: explicit label positions per modality; metadata implicit label;
+         platform verification duty; user declaration duty
+    RESULT: captured, signal row W38 written to docs/research/intelligence-wall.md
+
+[2] BENCHMARK REFRESH: docs/global-benchmarks.md section 4 record appended
+    (2026-11-03 W38 line), state.benchmarks_refreshed set to 2026-11-03
+
+[3] RECONCILE BATTERY (debt gate CLAIM-FIRST item=reconcile-battery-R2412)
+    CMD: python src/os/battery_stream.py --evidence qa/reconcile-all-R2414.log
+    RESULT: RUNNER PASS (534/534 suites green, reconcile controls 7/7, 1055.3s)
+    CRITERIA TOTAL: 4180 == pre-registered 4180 (exact)
+    TMP RECLAIM: candidates=932 removed=932 busy=0 failed=0 326.59 MiB
+    EVIDENCE: qa/reconcile-all-R2414.log 837982B
+
+[4] FOLLOW-UP SECTIONS: python src/os/battery_followup.py --round 2414
+    LEG1: matrix FAIL (stale doc 51314B vs 51414B, no rewrite) / fingerprint PASS /
+          profile PASS / census PASS -> VERDICT FAIL failing=matrix (intended order)
+    REGEN: python src/sandbox/suite_matrix.py -> 51414B, 534 suites / 4180 criteria
+    LEG2: matrix FAIL on-disk=51414B regenerated=51414B (EQUAL BYTES) /
+          fingerprint PASS / profile PASS / census PASS
+    ROOT CAUSE (measured, not assumed): the follow-up matrix section byte-compares a
+    freshly stamped render against the doc; the only differing line is the generation
+    stamp (15:51 vs 15:50). suite_matrix --check compares content-only and reads:
+    PASS check: docs/sandbox-suite-matrix.md byte-identical (51414 bytes, 534 suites,
+    4180 criteria). Defect registered as measured debt: matrix-stamp-compare.
+
+[5] SELF-CHECK FOUR ITEMS
+    daily crawl executed ................ yes (1 new official source)
+    benchmark 15h/crawl law ............. refreshed today
+    research source chain ............... wall W38 carries A-class URL + date
+    signal wall ......................... W38 written with consumer landing points
+
+[6] HONEST SCORE
+    product code shipped = 0 (verification window, R2168 mixed-tree rule)
+    product points = 0; verification evidence + crawl evidence shipped
