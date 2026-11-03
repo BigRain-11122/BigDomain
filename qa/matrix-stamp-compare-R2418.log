@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2418 suite=src/os/test_matrix_stamp_compare.py legs=2
+== LEG A rc=0 digest=BB51198207571FDE
+matrix_stamp_compare suite (expected criteria 6)
+PASS AC-MSC1 a doc from another minute reads PASS and the real generator follows its stamp
+PASS AC-MSC2 a genuine equal-length content difference FAILs naming both byte counts
+PASS AC-MSC3 missing doc / missing tool / unreadable evidence keep their own codes and never fail open
+PASS AC-MSC4 --check remains the authority and no path rewrites the shipped doc
+PASS AC-MSC5 stamp-line absence is a refusal with its own code rather than an assumed pass
+PASS AC-MSC6 pure ASCII, stdlib only, no clock, no network, one stamp law, wired with its own label
+SUITE PASS 6/6
+== LEG B rc=0 digest=BB51198207571FDE
+matrix_stamp_compare suite (expected criteria 6)
+PASS AC-MSC1 a doc from another minute reads PASS and the real generator follows its stamp
+PASS AC-MSC2 a genuine equal-length content difference FAILs naming both byte counts
+PASS AC-MSC3 missing doc / missing tool / unreadable evidence keep their own codes and never fail open
+PASS AC-MSC4 --check remains the authority and no path rewrites the shipped doc
+PASS AC-MSC5 stamp-line absence is a refusal with its own code rather than an assumed pass
+PASS AC-MSC6 pure ASCII, stdlib only, no clock, no network, one stamp law, wired with its own label
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup_help_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_section_foreign_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_guard_evidence_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_matrix_evidence_pile_consistency.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=BB51198207571FDE

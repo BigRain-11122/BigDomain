@@ -30,13 +30,34 @@ import battery_followup as BF  # noqa: E402
 import followup_guard_evidence_scope as FGES  # noqa: E402
 import followup_section_foreign as FSF  # noqa: E402
 import followup_section_foreign_wire as FSFW  # noqa: E402
+import matrix_stamp_compare as MSC  # noqa: E402
 
 EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "followup_section_foreign_wire.py")
 HELPER = os.path.join(BASE, "followup_guard_evidence_scope.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-followup-guard-evidence-scope"
-DOC_BYTES = b"MATRIX\n"
+REPO_DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
+
+
+def stamp_line():
+    """R2418: a stand-in doc must carry a real stamp line, taken through the
+    law rather than spelled here, because the matrix section now refuses a doc
+    with none (E_MSC_NO_STAMP)."""
+    verdict, _code, stamp, _detail = MSC.stamp_of(REPO_DOC)
+    if verdict != MSC.PASS or not stamp:
+        return None
+    with io.open(REPO_DOC, "r", encoding="utf-8") as handle:
+        for line in handle.read().split("\n"):
+            if stamp in line:
+                return line
+    return None
+
+
+STAMP_LINE = stamp_line()
+
+DOC_BYTES = (("%s\nMATRIX\n" % STAMP_LINE)
+             if STAMP_LINE else "MATRIX\n").encode("utf-8")
 FOREIGN_NAME = "FOREIGN_RITUAL"
 VOCAB = ("matrix", "fingerprint", "profile", "census")
 

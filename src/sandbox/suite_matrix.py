@@ -346,6 +346,13 @@ def main(argv):
     parser.add_argument("--check", action="store_true",
                         help="recompute and byte-compare against --out;"
                         " drift or missing doc exits 2")
+    parser.add_argument("--stamp-from", default=None, metavar="DOC",
+                        help="R2418 (AC-MSC1): render with the stamp line the"
+                        " named document already carries, so a byte compare"
+                        " between two minutes is content-only. The stamp is"
+                        " read through doc_stamp - the same law --check uses -"
+                        " and a document without one refuses E_SMX_STAMP_FROM"
+                        " at exit 3 instead of inventing a stamp")
     args = parser.parse_args(argv[1:])
 
     problems = self_checks()
@@ -387,8 +394,21 @@ def main(argv):
                              rel(evidence_path))
         return 2
 
-    stamp = time.strftime("%Y-%m-%d %H:%M +08:00",
-                          time.gmtime(time.time() + 8 * 3600))
+    if args.stamp_from:
+        if not os.path.exists(args.stamp_from):
+            print("FAIL stamp-from: E_SMX_STAMP_FROM source missing: %s"
+                  % rel(args.stamp_from))
+            return 3
+        with open(args.stamp_from, encoding="utf-8") as handle:
+            source_doc = handle.read()
+        stamp = doc_stamp(source_doc, patterns)
+        if stamp is None:
+            print("FAIL stamp-from: E_SMX_STAMP_FROM no stamp line found in"
+                  " %s" % rel(args.stamp_from))
+            return 3
+    else:
+        stamp = time.strftime("%Y-%m-%d %H:%M +08:00",
+                              time.gmtime(time.time() + 8 * 3600))
     fresh = render(patterns, evidence_path, status, run, stamp)
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)

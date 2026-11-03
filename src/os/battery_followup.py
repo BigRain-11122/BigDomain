@@ -114,15 +114,28 @@ def matrix_core(root, evidence, call):
     R2370: this body is unchanged; section_matrix below is now the guarded
     entry point, so the matrix section asks followup_section_foreign FIRST
     (AC-FSFW2) before any matrix byte is rendered.
+
+    R2418 (AC-MSC1): the render is STAMP-ALIGNED - the doc's own stamp line is
+    asked of suite_matrix through matrix_stamp_compare and handed back to the
+    generator, so a doc regenerated in another minute no longer reads a
+    mismatch of equal byte length on the one volatile line. A doc carrying no
+    stamp line refuses with that module's own code instead of passing.
     """
     path = tool(root, "matrix")
     if path is None:
         return _fail("matrix", "%s %s" % (E_BFU_NO_TOOL, TOOLS["matrix"])), ""
+    import matrix_stamp_compare as MSC
     doc = os.path.join(root, MATRIX_DOC.replace("/", os.sep))
+    if not os.path.isfile(doc):
+        return _fail("matrix", "%s %s" % (E_BFU_NO_MATRIX, MATRIX_DOC)), ""
+    verdict, code, stamp, detail = MSC.stamp_of(doc)
+    if verdict != MSC.PASS:
+        return _fail("matrix", "%s %s %s" % (code, MATRIX_DOC, detail)), ""
     work = tempfile.mkdtemp(prefix="bigdomain-bfu-")
     try:
         copy = os.path.join(work, "matrix.md")
-        rc, out = call([PY, path, "--out", copy, "--evidence", evidence])
+        rc, out = call([PY, path, "--out", copy, "--evidence", evidence,
+                        "--stamp-from", doc])
         if rc != 0 or not os.path.isfile(copy):
             return _fail("matrix", "%s rc=%d %s"
                          % (E_BFU_REGEN, rc, first_line(out))), clean(out)

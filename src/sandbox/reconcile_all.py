@@ -5233,6 +5233,15 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-publish-relative-package-identity",
      os.path.join("..", "os", "test_publish_relative_package_identity.py"), 6),
+    # R2418: the matrix section byte-compared a freshly stamped render with the
+    # shipped doc, so a doc regenerated in another minute read a mismatch of
+    # EQUAL byte length on the one volatile line and every real drift hid
+    # behind it. The render is now stamp-aligned to the doc it is compared
+    # with, asking suite_matrix.doc_stamp at call time - one stamp law.
+    # (AC-MSC1..AC-MSC6 were pinned in state/queue/tech.md:493 as the R2414
+    # seed row BEFORE the code.)
+    ("os-matrix-stamp-compare",
+     os.path.join("..", "os", "test_matrix_stamp_compare.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

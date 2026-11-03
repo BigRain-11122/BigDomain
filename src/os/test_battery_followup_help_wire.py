@@ -29,13 +29,34 @@ sys.path.insert(0, BASE)
 import battery_followup as BF  # noqa: E402
 import battery_followup_help_wire as HW  # noqa: E402
 import runner_arg_guard as RAG  # noqa: E402
+import matrix_stamp_compare as MSC  # noqa: E402
 
 EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "battery_followup.py")
 WIRE = os.path.join(BASE, "battery_followup_help_wire.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-battery-followup-help-wire"
-DOC_BYTES = b"MATRIX\n"
+REPO_DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
+
+
+def stamp_line():
+    """R2418: a stand-in doc must carry a real stamp line, taken through the
+    law rather than spelled here, because the matrix section now refuses a doc
+    with none (E_MSC_NO_STAMP)."""
+    verdict, _code, stamp, _detail = MSC.stamp_of(REPO_DOC)
+    if verdict != MSC.PASS or not stamp:
+        return None
+    with io.open(REPO_DOC, "r", encoding="utf-8") as handle:
+        for line in handle.read().split("\n"):
+            if stamp in line:
+                return line
+    return None
+
+
+STAMP_LINE = stamp_line()
+
+DOC_BYTES = (("%s\nMATRIX\n" % STAMP_LINE)
+             if STAMP_LINE else "MATRIX\n").encode("utf-8")
 
 PASSES = 0
 FAILS = 0
@@ -58,10 +79,10 @@ def stub(body):
 MATRIX_OK = stub(
     "a = sys.argv\n"
     "if '--out' in a:\n"
-    "    open(a[a.index('--out') + 1], 'wb').write(b'MATRIX\\n')\n"
+    "    open(a[a.index('--out') + 1], 'wb').write(%r)\n"
     "    print('PASS generated matrix')\n"
     "else:\n"
-    "    print('PASS check: byte-identical (7 bytes, 1 suites)')\n")
+    "    print('PASS check: byte-identical (7 bytes, 1 suites)')\n" % DOC_BYTES)
 
 CENSUS_OK = stub("print('CENSUS DRIFT-CLEAN files=0 flags=0')")
 FP_OK = stub("print('FINGERPRINT chain CLEAN domains=5')")

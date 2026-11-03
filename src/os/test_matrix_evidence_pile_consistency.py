@@ -32,13 +32,34 @@ import bare_evidence_pile_refusal as BEPR  # noqa: E402
 import battery_followup as BF  # noqa: E402
 import followup_section_foreign_wire as FSFW  # noqa: E402
 import matrix_evidence_pile_consistency as MEPC  # noqa: E402
+import matrix_stamp_compare as MSC  # noqa: E402
 
 EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "matrix_evidence_pile_consistency.py")
 WIRE = os.path.join(BASE, "followup_section_foreign_wire.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-matrix-evidence-pile-consistency"
-DOC_BYTES = b"MATRIX\n"
+REPO_DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
+
+
+def stamp_line():
+    """R2418: a stand-in doc must carry a real stamp line, taken through the
+    law rather than spelled here, because the matrix section now refuses a doc
+    with none (E_MSC_NO_STAMP)."""
+    verdict, _code, stamp, _detail = MSC.stamp_of(REPO_DOC)
+    if verdict != MSC.PASS or not stamp:
+        return None
+    with io.open(REPO_DOC, "r", encoding="utf-8") as handle:
+        for line in handle.read().split("\n"):
+            if stamp in line:
+                return line
+    return None
+
+
+STAMP_LINE = stamp_line()
+
+DOC_BYTES = (("%s\nMATRIX\n" % STAMP_LINE)
+             if STAMP_LINE else "MATRIX\n").encode("utf-8")
 BARE = "reconcile-all-R9001.log"
 VOCAB = ("matrix", "fingerprint", "profile", "census")
 

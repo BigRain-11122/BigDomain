@@ -28,12 +28,32 @@ sys.path.insert(0, BASE)
 import battery_followup as BF  # noqa: E402
 import followup_section_foreign as FSF  # noqa: E402
 import followup_section_foreign_wire as FSFW  # noqa: E402
+import matrix_stamp_compare as MSC  # noqa: E402
 
 EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "followup_section_foreign_wire.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-followup-section-foreign-wire"
-DOC_BYTES = b"MATRIX\n"
+REPO_DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
+
+
+def stamp_line():
+    """R2418: the matrix section now refuses a doc with no stamp line, so the
+    stand-in doc carries the SHIPPED doc's own stamp line, taken through the
+    law rather than spelled here."""
+    verdict, _code, stamp, _detail = MSC.stamp_of(REPO_DOC)
+    if verdict != MSC.PASS or not stamp:
+        return None
+    with io.open(REPO_DOC, "r", encoding="utf-8") as handle:
+        for line in handle.read().split("\n"):
+            if stamp in line:
+                return line
+    return None
+
+
+STAMP_LINE = stamp_line()
+DOC_BYTES = (("%s\nMATRIX\n" % STAMP_LINE) if STAMP_LINE
+             else "MATRIX\n").encode("utf-8")
 FOREIGN_NAME = "FOREIGN_RITUAL"
 VOCAB = ("matrix", "fingerprint", "profile", "census")
 

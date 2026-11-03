@@ -22,12 +22,32 @@ REPO = os.path.dirname(SRC)
 sys.path.insert(0, BASE)
 
 import battery_followup as BF  # noqa: E402
+import matrix_stamp_compare as MSC  # noqa: E402
 
 EXPECTED_CRITERIA = 6
 MODULE = os.path.join(BASE, "battery_followup.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-battery-followup"
-DOC_BYTES = b"MATRIX\n"
+REPO_DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
+
+
+def stamp_line():
+    """The shipped doc's own stamp line, taken from the law rather than spelled
+    here: R2418 made the matrix section refuse a doc with no stamp line, so a
+    stand-in doc without one would only prove the refusal."""
+    verdict, _code, stamp, _detail = MSC.stamp_of(REPO_DOC)
+    if verdict != MSC.PASS or not stamp:
+        return None
+    with io.open(REPO_DOC, "r", encoding="utf-8") as handle:
+        for line in handle.read().split("\n"):
+            if stamp in line:
+                return line
+    return None
+
+
+STAMP_LINE = stamp_line()
+DOC_BYTES = (("%s\nMATRIX\n" % STAMP_LINE) if STAMP_LINE
+             else "MATRIX\n").encode("utf-8")
 
 PASSES = 0
 FAILS = 0
@@ -50,18 +70,18 @@ def stub(body):
 MATRIX_OK = stub(
     "a = sys.argv\n"
     "if '--out' in a:\n"
-    "    open(a[a.index('--out') + 1], 'wb').write(b'MATRIX\\n')\n"
+    "    open(a[a.index('--out') + 1], 'wb').write(%r)\n"
     "    print('PASS generated matrix')\n"
     "else:\n"
-    "    print('PASS check: byte-identical (7 bytes, 1 suites)')\n")
+    "    print('PASS check: byte-identical (7 bytes, 1 suites)')\n" % DOC_BYTES)
 
 MATRIX_WIDE = stub(
     "a = sys.argv\n"
     "if '--out' in a:\n"
-    "    open(a[a.index('--out') + 1], 'wb').write(b'MATRIX-REGEN\\n')\n"
+    "    open(a[a.index('--out') + 1], 'wb').write(%r)\n"
     "    print('PASS generated matrix')\n"
     "else:\n"
-    "    print('PASS check')\n")
+    "    print('PASS check')\n" % (DOC_BYTES + b"WIDE\n"))
 
 CENSUS_OK = stub("print('CENSUS DRIFT-CLEAN files=0 flags=0')")
 CENSUS_RED = stub("print('CENSUS DRIFT files=1 flags=1')\nsys.exit(2)")
@@ -182,7 +202,8 @@ def ac_bfu2():
         drop_world(world)
     ok = (wide["verdict"] == "FAIL"
           and "on-disk=%dB" % len(DOC_BYTES) in wide["detail"]
-          and "regenerated=%dB" % len(b"MATRIX-REGEN\n") in wide["detail"]
+          and "regenerated=%dB" % (len(DOC_BYTES) + len(b"WIDE\n"))
+          in wide["detail"]
           and "no rewrite" in wide["detail"]
           and before == after
           and even["verdict"] == "PASS"

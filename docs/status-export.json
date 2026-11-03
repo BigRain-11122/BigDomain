@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-11-03T23:14:25+08:00",
-  "do": "R2417 product: runner_abort_history ages every ABORTED battery body against its own round's retry family, so an abort that a green leg of the same round already superseded is named SUPERSEDED with both files instead of reading like live debt; the live read of the real 2461-log pile splits 21 aborts into 16 LIVE-ABORT and 5 ORPHAN-ABORT and corrects the seed's own premise",
+  "export_ts": "2026-11-04T01:05:00+08:00",
+  "do": "R2418 verification-then-fix: the carried battery read RUNNER PASS 536/536 suites at the pre-registered 4192 criteria, the four follow-up sections then reproduced the open matrix-stamp-compare defect live (on-disk 51530B against regenerated 51617B), and the fix shipped the same window - the matrix render is now stamp-aligned through the doc's own stamp, so the section compares content instead of the clock, and the same four sections then read VERDICT R2418 PASS failing=none",
   "ceo_face": {
-    "current": "R2417 product: runner_abort_history ages every ABORTED battery body against its own round's retry family, so an abort that a green leg of the same round already superseded is named SUPERSEDED with both files instead of reading like live debt; the live read of the real 2461-log pile splits 21 aborts into 16 LIVE-ABORT and 5 ORPHAN-ABORT and corrects the seed's own premise",
-    "latest_artifact": "src/os/runner_abort_history.py + qa/runner-abort-history-R2417.log (1553B, legs=2 identical=True adjacent=4 fails=0) + qa/runner-abort-history-live-R2417.log (1917B, AGES aborted=21 SUPERSEDED=0 LIVE-ABORT=16 ORPHAN-ABORT=5)",
-    "next_milestone": "next window owes the battery the R2417 src/os change opened (536 suites / 4192 criteria pre-registered against the registry's own read) and then the debt gate: loop-s4u-reconcile (stale, needs an elevated S4U re-registration) and matrix-stamp-compare (the follow-up section still byte-compares a freshly stamped render)",
+    "current": "R2418 verification-then-fix: the carried battery read RUNNER PASS 536/536 suites at the pre-registered 4192 criteria, the four follow-up sections then reproduced the open matrix-stamp-compare defect live (on-disk 51530B against regenerated 51617B), and the fix shipped the same window - the matrix render is now stamp-aligned through the doc's own stamp, so the section compares content instead of the clock, and the same four sections then read VERDICT R2418 PASS failing=none",
+    "latest_artifact": "src/os/matrix_stamp_compare.py + qa/matrix-stamp-compare-R2418.log (1518B, legs=2 identical=True adjacent=5 fails=0) + qa/reconcile-all-R2418.log (839176B, RUNNER PASS 536/536, controls 7/7, 1034.0s, criteria 4192) + docs/sandbox-suite-matrix.md regenerated to 537 suites / 4198 criteria (51710B)",
+    "next_milestone": "next window owes the battery this round's src/ change opened (537 suites / 4198 criteria pre-registered against the registry's own read), then the debt gate: loop-s4u-reconcile (stale, needs an elevated S4U re-registration), stale-suite-matrix-copy, and the newly pinned AC-MSPL1..AC-MSPL6 row on recording a borrowed stamp in the rendered document's own command line",
     "next_milestone_due": "2026-11-04T23:00:00+08:00",
     "last_artifact": "src/os/publish_relative_package_identity.py + qa/publish-relative-package-identity-R2415.log (1310B, legs=2 identical=True)",
     "updated_at": "2026-11-03T23:14:25+08:00"
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)",
     "src/os/publish_relative_package_identity.py + qa/publish-relative-package-identity-R2415.log (1310B, legs=2 identical=True) + qa/publish-relative-package-identity-live-R2415.log (2580B)",
     "qa/reconcile-all-R2414.log (837982B, green leg) + qa/smoke-R2414.log / qa/smoke-R2414.png",
     "qa/reconcile-all-R2413.log (837944B, red leg) + state/queue/stamp_exempt.json (383 entries, 79445B, live NO-DRIFT)",
@@ -98,7 +99,11 @@
   ],
   "results": [
     [
-      "2417",
+      "2418",
+      "2026-11-04 R2418 product face: CLAIMED state/queue/tech.md:493 prefix AC-MSC1 (matrix-stamp-compare), criteria pinned in that row at R2414 before any code. SHIPPED src/os/matrix_stamp_compare.py plus its six-criteria suite, one read-only --stamp-from DOC flag on src/sandbox/suite_matrix.py and one call-site change in src/os/battery_followup.py matrix_core: the matrix section no longer byte-compares a freshly stamped render with the shipped doc (which manufactured an equal-length FAIL on the stamp line whenever the minute differed and hid every real drift behind it), it renders STAMP-ALIGNED to the doc it is compared with - the stamp is asked of suite_matrix.doc_stamp at CALL time, the same law --check uses, so no second stamp parser exists. Refusals keep their own codes (E_MSC_NO_DOC / E_MSC_NO_STAMP / E_MSC_NO_TOOL / E_MSC_REGEN) with CLI exits 0/2/3/5 and a byte-stable --json. SUITE PASS 6/6 twice with an identical criterion digest plus one adjacent suite green, wired os-matrix-stamp-compare(6) so the registry reads 537 suites / 4198 criteria. LIVE: the real generator followed a borrowed 1999-01-01 stamp while a plain render of the same content stamped 2026-11-04 00:03; the doc was regenerated to 51710B and the four sections then read VERDICT R2418 PASS failing=none where they read FAIL minutes earlier. Debt: reconcile-battery-R2417 and matrix-stamp-compare both closed through the shipped CLI (predictions matched), reconcile-battery-R2418 registered first=yes, one tech seed pinned to restore the floor."
+    ],
+    [
+      "2418",
       "OSLoop 执行 tick"
     ],
     [
@@ -227,12 +232,12 @@
     ]
   ],
   "self_drive": {
-    "window": "2026-10-28..2026-11-03",
+    "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 66,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 56,
+    "substantive_non_idle_mention_lines": 66,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -254,8 +259,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -264,12 +267,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 12,
-        "done_rows": 389,
+        "open_rows": 11,
+        "done_rows": 391,
         "gated_rows": 1,
-        "claimable": 11,
-        "discounted": 0,
-        "delivered": [],
+        "claimable": 10,
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -282,16 +283,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
-    "missing": [],
-    "delivered_total": 0
+    ]
   }
 }
