@@ -382,6 +382,7 @@
     {"queue": "tech", "identity": "watermark#f08f99ad", "declared": "R2280", "reason": "DATE-ONLY: closed before the window-stamp law landed at R2278; no window can be recovered without rewriting the row"},
     {"queue": "tech", "identity": "writer-census#84625b12", "declared": "R2280", "reason": "UNSTAMPED: closed before the window-stamp law landed at R2278; no window can be recovered without rewriting the row"},
     {"queue": "tech", "identity": "tech#4e0ad38d", "declared": "R2298", "reason": "delivered at R2298 and its log item moved into the archive by the R2311 waterline fold, so the row keeps its accepted stamp without a live log line", "until": "R2330"},
-    {"queue": "tech", "identity": "DISCHARGED#9c271447", "declared": "R2410", "reason": "R2409 product-window row closed after the R2280 seed; the discharge note is delivery evidence, not an uncovered stamp", "until": "R2430"}
+    {"queue": "tech", "identity": "DISCHARGED#9c271447", "declared": "R2410", "reason": "R2409 product-window row closed after the R2280 seed; the discharge note is delivery evidence, not an uncovered stamp", "until": "R2430"},
+    {"queue": "tech", "identity": "DISCHARGED#f1bd5eac", "declared": "R2413", "reason": "R2412 discharge row closed after the R2280 seed; measured DRIFT at R2413 battery", "until": "R2500"}
   ]
 }
