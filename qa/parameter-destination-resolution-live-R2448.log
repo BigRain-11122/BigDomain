@@ -1,0 +1,10 @@
+LIVE R2448 audit rc=2
+GENERAL DIALECT AUDIT scanned=1106 general=146 keeps=10 repair=2 unresolved=132 routed=7 unrouted=3 verdict=AUDIT-DEBT
+  DEBT closeout_export_parity_wire.py lands a structured file and does not ask declaration_writer_dialect_preservation at call time
+  DEBT queue_export_gate_wire.py lands a structured file and does not ask declaration_writer_dialect_preservation at call time
+  DEBT queue_floor_export_face.py lands a structured file and does not ask declaration_writer_dialect_preservation at call time
+LIVE R2448 pdr rc=2
+PARAM DESTINATION scanned=1106 writers=85 resolved=213 unresolved=3 verdict=PARAM-MIXED
+  UNRESOLVED dec_watermark.py line=141 E_PDR_UNRESOLVED (parameter path of write_atomic call site argument does not resolve)
+  UNRESOLVED evidence_writer.py line=223 E_PDR_UNRESOLVED (parameter path of _restore call site argument does not resolve)
+  UNRESOLVED stamp_exempt_guard.py line=142 E_PDR_UNRESOLVED (parameter path of commit has no in-module call site)

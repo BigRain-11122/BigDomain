@@ -51,6 +51,7 @@ import os
 
 import declaration_writer_dialect_preservation as DWDP
 import library_declaration_dialect_sweep as LDWS
+import parameter_destination_resolution as PDR
 
 PREFIX = "E_GWDA"
 SUITE_LABEL = "os-general-writer-dialect-audit"
@@ -233,6 +234,12 @@ def replace_targets(source):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     resolved = []
     unresolved = []
+    # asked at CALL time, only for the destinations this module's own flow
+    # could not resolve: a destination that arrives as a PARAMETER is read
+    # through the module's own call sites by the shipped resolution law, which
+    # hands each call-site argument back to THIS resolver (one resolver, two
+    # readers).
+    param_cache = None
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
             continue
@@ -247,9 +254,21 @@ def replace_targets(source):
                     destination = keyword.value
         found = _resolve_node(destination, assigns, funcs, imports, base_dir)
         if not found:
+            if param_cache is None:
+                param_cache = PDR.by_call_site(
+                    source,
+                    lambda expr: _resolve_node(expr, assigns, funcs, imports,
+                                               base_dir))
+            line = getattr(node, "lineno", 0)
+            found = param_cache["calls"].get(line, [])
+        if not found:
             label = ast.dump(destination) if destination is not None else "none"
             short = "os.replace destination not resolvable"
-            if isinstance(destination, ast.Name):
+            named = (param_cache or {}).get("unresolved", {}).get(
+                getattr(node, "lineno", 0))
+            if named:
+                short += " (%s)" % named
+            elif isinstance(destination, ast.Name):
                 short += " (name %s carries no assignment)" % destination.id
             elif isinstance(destination, ast.Call):
                 short += " (call to a function with no single-return body)"

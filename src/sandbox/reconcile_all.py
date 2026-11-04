@@ -5312,6 +5312,13 @@ SUITES = [
     # state/queue/tech.md line 498 as the R2409 seed BEFORE the code.)
     ("os-general-writer-dialect-audit",
      os.path.join("..", "os", "test_general_writer_dialect_audit.py"), 6),
+    # R2448: a GENERAL writer that RECEIVES its destination as a function
+    # parameter read E_GWDA_UNRESOLVED and hid among the unread rows. The
+    # destination is now resolved through the module own call sites, with each
+    # argument handed back to the audit own resolver. (AC-PDR1..AC-PDR6 were
+    # pinned in state/queue/tech.md line 514 as the R2434 seed BEFORE the code.)
+    ("os-parameter-destination-resolution",
+     os.path.join("..", "os", "test_parameter_destination_resolution.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

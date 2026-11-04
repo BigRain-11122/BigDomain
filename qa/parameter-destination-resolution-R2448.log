@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2448 suite=src/os/test_parameter_destination_resolution.py legs=2
+== LEG A rc=0 digest=C0FC9D5F3FD6F499
+PASS AC-PDR1 the destination is derived from the source call sites, never a whitelist file
+PASS AC-PDR2 adding the call site moves a parameter writer into KEEPS with the target it passes (UNRESOLVED without it)
+PASS AC-PDR3 a parameter with no call site still reads UNRESOLVED naming the function
+PASS AC-PDR4 every previously routed writer keeps its target and stays routed (7 writers)
+PASS AC-PDR5 the audit keeps its refusal codes, exit codes and report surface
+PASS AC-PDR6 pure ASCII, stdlib only, no clock, zero network, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== LEG B rc=0 digest=C0FC9D5F3FD6F499
+PASS AC-PDR1 the destination is derived from the source call sites, never a whitelist file
+PASS AC-PDR2 adding the call site moves a parameter writer into KEEPS with the target it passes (UNRESOLVED without it)
+PASS AC-PDR3 a parameter with no call site still reads UNRESOLVED naming the function
+PASS AC-PDR4 every previously routed writer keeps its target and stays routed (7 writers)
+PASS AC-PDR5 the audit keeps its refusal codes, exit codes and report surface
+PASS AC-PDR6 pure ASCII, stdlib only, no clock, zero network, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== ADJACENT 3
+== src/os/test_general_writer_dialect_audit.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=C0FC9D5F3FD6F499

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T01:09:34+08:00",
-  "do": "R2447 verification window: the battery carried by R2446 ran on the committed tree and came back green on its first leg at exactly the pre-registered size, so no product code moved this round; the one artifact that changed is the suite matrix, which was re-rendered from THIS round own eligible green evidence instead of a borrowed older leg - its own green line now reads 551/551",
+  "export_ts": "2026-11-05T01:27:49+08:00",
+  "do": "R2448 product window: the parameter-resolution law is live - a writer that receives its os.replace destination as a function PARAMETER is now resolved through its own module call sites, so the dialect audit can say whether such a writer is clean or merely unread (live: 213 destinations resolved, 3 still refused and named). Its honest consequence is also published: three export writers that used to hide in the unread pile now read as real debt because they land docs/status-export.json without asking the shared dialect law",
   "ceo_face": {
-    "current": "R2447 verification window: the battery carried by R2446 ran on the committed tree and came back green on its first leg at exactly the pre-registered size, so no product code moved this round; the one artifact that changed is the suite matrix, which was re-rendered from THIS round own eligible green evidence instead of a borrowed older leg - its own green line now reads 551/551",
-    "latest_artifact": "qa/reconcile-all-R2447.log (RUNNER PASS 551/551 suites plus controls 7/7 in 1493.3s, criteria total 4282 exactly as pre-registered) + docs/sandbox-suite-matrix.md regenerated stamp-aligned from that log to 53196B at 551 suites / 4282 criteria with --check byte-identical, green=551/551",
-    "next_milestone": "the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:514 prefix AC-PDR1 (parameter_destination_resolution, criteria AC-PDR1..AC-PDR6 pinned there at R2434 BEFORE any code): resolve a writer's os.replace destination through its own module call sites so a path arriving as a PARAMETER stops reading E_GWDA_UNRESOLVED and hiding in the 129 unread rows",
+    "current": "R2448 product window: the parameter-resolution law is live - a writer that receives its os.replace destination as a function PARAMETER is now resolved through its own module call sites, so the dialect audit can say whether such a writer is clean or merely unread (live: 213 destinations resolved, 3 still refused and named). Its honest consequence is also published: three export writers that used to hide in the unread pile now read as real debt because they land docs/status-export.json without asking the shared dialect law",
+    "latest_artifact": "src/os/parameter_destination_resolution.py + src/os/test_parameter_destination_resolution.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + qa/parameter-destination-resolution-R2448.log (1624B) + qa/parameter-destination-resolution-live-R2448.log + docs/sandbox-suite-matrix.md regenerated to 53313B at 552 suites / 4288 criteria, --check byte-identical",
+    "next_milestone": "the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:516 prefix AC-SEWD1 (status_export_writer_dialect_wire, criteria AC-SEWD1..AC-SEWD6 pinned there at R2448 BEFORE any code): route the three export writers that land docs/status-export.json through the shared payload derivation so a CRLF export stays CRLF and the audit reads AUDIT-CLEAN with routed == keeps; before that the R2168 mixed-tree rule owes reconcile-battery-R2449 at the pre-registered 552 suites / 4288 criteria",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2447.log (RUNNER PASS 551/551 suites plus controls 7/7 in 1493.3s, criteria total 4282 exactly as pre-registered) + docs/sandbox-suite-matrix.md regenerated stamp-aligned from that log to 53196B at 551 suites / 4282 criteria with --check byte-identical, green=551/551",
-    "updated_at": "2026-11-05T01:09:34+08:00"
+    "last_artifact": "src/os/parameter_destination_resolution.py + src/os/test_parameter_destination_resolution.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + qa/parameter-destination-resolution-R2448.log (1624B) + qa/parameter-destination-resolution-live-R2448.log + docs/sandbox-suite-matrix.md regenerated to 53313B at 552 suites / 4288 criteria, --check byte-identical",
+    "updated_at": "2026-11-05T01:27:49+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/parameter_destination_resolution.py (new law) + src/os/test_parameter_destination_resolution.py (6 criteria) + qa/parameter-destination-resolution-R2448.log (1624B) + qa/parameter-destination-resolution-live-R2448.log + docs/sandbox-suite-matrix.md (53313B, 552 suites / 4288 criteria) + state/debt.md (open=2 done=163)",
     "qa/reconcile-all-R2447.log (851847B) + docs/sandbox-suite-matrix.md (53196B, 551 suites / 4282 criteria, green=551/551) + state/debt.md (open=2 done=162)",
     "src/os/comma_binding_face_row_drift.py + src/os/test_comma_binding_face_row_drift.py + qa/comma-binding-face-row-drift-R2446.log + qa/comma-binding-face-row-drift-live-R2446.log + docs/sandbox-suite-matrix.md (53223B, 551 suites / 4282 criteria)",
     "qa/reconcile-all-R2445.log + qa/reconcile-all-R2445-retry.log (red legs) plus qa/reconcile-all-R2445-final.log (RUNNER PASS 550/550, criteria 4276) and docs/sandbox-suite-matrix.md regenerated to 53114B",
@@ -66,6 +67,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2448",
+      "2026-11-05 R2448 product window on the item the debt gate named first=yes (product-face-R2448, tech head state/queue/tech.md:514 prefix AC-PDR1, criteria pinned there at R2434 BEFORE any code): shipped src/os/parameter_destination_resolution.py plus its six-criteria suite. A GENERAL writer whose os.replace destination arrives as a function parameter used to read E_GWDA_UNRESOLVED and hide among the unread rows; the destination is now resolved through the module own in-module call sites with each argument handed back to the audit own resolver (one resolver, two readers), nested parameters followed one hop at a time under a declared MAX_DEPTH, and a function with no in-module call site reading UNRESOLVED naming the function. SUITE PASS 6/6 twice identical plus three adjacent suites green (qa/parameter-destination-resolution-R2448.log, 1624B, legs=2 identical=True adjacent=3 fails=0); wired os-parameter-destination-resolution(6) so the registry reads 552 suites / 4288 criteria and the matrix was regenerated from the only eligible evidence face to 53313B with --check byte-identical (its green line honestly reads 551/552). LIVE: scanned=1106 writers=85 resolved=213 unresolved=3 with all three refusals named. The audit now reads keeps=10 routed=7 unrouted=3 verdict=AUDIT-DEBT because the three newly resolved writers (closeout_export_parity_wire, queue_export_gate_wire, queue_floor_export_face) all land docs/status-export.json without asking the shared derivation - reported rather than repaired and seeded as the gap row status_export_writer_dialect_wire at tech line 516 with the floor still FLOOR-MET. The audit own suite was corrected at its birth site where it pinned live snapshots (KEEPS == 7 and the AUDIT-CLEAN verdict), with no criterion widened and the honest AUDIT-DEBT stated in its output. Debt: product-face-R2448 closed at 115405B -> 115408B (line=184, open 3->2, done 162->163, readback ok) and reconcile-battery-R2449 opened first=yes at 115408B -> 115711B at the pre-registered 552 suites / 4288 criteria."
+    ],
     [
       "2447",
       "2026-11-05 R2447 verification window on the item the debt gate named first=yes (reconcile-battery-R2447, carried from R2446 at the pre-registered 551 suites / 4282 criteria): zero product code changed and the R2168 mixed-tree rule was honoured. The battery ran FIRST on the committed 54535c88 tree with an empty git status and read RUNNER PASS on its FIRST leg - 551/551 suites green plus reconcile controls 7/7 in 1493.3s with a measured criteria total of 4282, the pre-registered number to the unit, and TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0 (qa/reconcile-all-R2447.log, 851847B, one utf-8 LF single writer through battery_stream). No red leg exists for this round because none was produced, stated rather than implied. The four follow-up sections produced the designed order: matrix FAIL at on-disk 53223B against regenerated 53196B with no byte written, then a stamp-aligned regeneration from this round own eligible green evidence, --check byte-identical at 53196B / 551 suites / 4282 criteria, and VERDICT R2447 PASS failing=none (fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2447 closed through the shipped debtor at its predicted 114707B -> 114710B (line=183, open 3->2, done 161->162, readback ok) and product-face-R2448 opened first=yes at 114710B -> 115405B naming the tech head AC-PDR1; no successor battery owed because no product src byte changed and the registry stays at 551 suites / 4282 criteria. Five new group decision rows (D-20261105-01..05) were judged and all five read ACKNOWLEDGED-NO-ACTION. Zero product points claimed."
@@ -307,17 +312,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2447",
+      "2448",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 80,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 82,
+    "substantive_non_idle_mention_lines": 80,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -348,7 +353,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 405,
+        "done_rows": 406,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,
