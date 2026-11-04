@@ -1,0 +1,42 @@
+EVIDENCE CAPTURE round=R2446 suite=src/os/test_comma_binding_face_row_drift.py legs=2
+== LEG A rc=0 digest=DF580000DB688CFE
+PASS AC-PFRD1 the compared keys are the rows' own intersection
+PASS AC-PFRD1 dropping a published key narrows the comparison instead of a fixed list
+PASS AC-PFRD1 no fixed compared-key list in the source
+PASS AC-PFRD2 the probe keeps verdict=FACES-AGREE with no difference at the verdict level
+PASS AC-PFRD2 a rewritten module under an unchanged verdict reads ROWS-SPLIT naming the line and both modules
+PASS AC-PFRD3 agreeing rows keep the shipped report unchanged
+PASS AC-PFRD3 agreeing rows print the shipped text byte for byte
+PASS AC-PFRD4 the muted face still agrees at the verdict level
+PASS AC-PFRD4 a silent face is named instead of counted as agreement
+PASS AC-PFRD5 every carrier row carries the pinned split keys
+PASS AC-PFRD5 the identity carrier records its own label and the seam that fired
+PASS AC-PFRD6 source is pure ASCII
+PASS AC-PFRD6 stdlib only, no network, no clock
+PASS AC-PFRD6 the module writes nothing and reads no clock
+PASS AC-PFRD6 own reconcile label
+PASS AC-PFRD6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=DF580000DB688CFE
+PASS AC-PFRD1 the compared keys are the rows' own intersection
+PASS AC-PFRD1 dropping a published key narrows the comparison instead of a fixed list
+PASS AC-PFRD1 no fixed compared-key list in the source
+PASS AC-PFRD2 the probe keeps verdict=FACES-AGREE with no difference at the verdict level
+PASS AC-PFRD2 a rewritten module under an unchanged verdict reads ROWS-SPLIT naming the line and both modules
+PASS AC-PFRD3 agreeing rows keep the shipped report unchanged
+PASS AC-PFRD3 agreeing rows print the shipped text byte for byte
+PASS AC-PFRD4 the muted face still agrees at the verdict level
+PASS AC-PFRD4 a silent face is named instead of counted as agreement
+PASS AC-PFRD5 every carrier row carries the pinned split keys
+PASS AC-PFRD5 the identity carrier records its own label and the seam that fired
+PASS AC-PFRD6 source is pure ASCII
+PASS AC-PFRD6 stdlib only, no network, no clock
+PASS AC-PFRD6 the module writes nothing and reads no clock
+PASS AC-PFRD6 own reconcile label
+PASS AC-PFRD6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== ADJACENT 3
+== src/os/test_comma_binding_identity_face_compare.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_comma_binding_sibling_faces.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+== src/os/test_comma_binding_consumer_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=DF580000DB688CFE

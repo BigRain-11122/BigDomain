@@ -5511,6 +5511,16 @@ SUITES = [
     # state/queue/tech.md:510 as the R2430 seed row BEFORE the code.)
     ("os-comma-binding-identity-face-compare",
      os.path.join("..", "os", "test_comma_binding_identity_face_compare.py"), 6),
+    # R2446: the R2444 compare reads each face VERDICT and publisher SET, so a
+    # per-line disagreement under an agreeing verdict was invisible (measured
+    # at R2444: one identity detail row rewritten still reads FACES-AGREE
+    # rc=0 differences=0). The keys the faces DO share are now compared per
+    # (path, line) and a face that publishes nothing on a line the others
+    # publish is named SILENT rather than counted as agreement.
+    # (AC-PFRD1..AC-PFRD6 were pinned in state/queue/tech.md:512 as the R2444
+    # seed row BEFORE the code.)
+    ("os-comma-binding-face-row-drift",
+     os.path.join("..", "os", "test_comma_binding_face_row_drift.py"), 6),
     ]
 
 FAILS = 0

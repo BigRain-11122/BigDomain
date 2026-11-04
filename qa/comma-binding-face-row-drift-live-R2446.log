@@ -1,0 +1,6 @@
+COMMA BINDING FACE ROW DRIFT LIVE round=R2446 root=src/os package=src.os
+verdict=FACES-AGREE rc=0 cells=11 compared=module,receiver,state,text
+parent_verdict=FACES-AGREE publishers=11 splits=0 silent=0
+publisher_files=closeout_R2377.py,closeout_R2378.py,closeout_R2379.py,closeout_R2380.py,closeout_R2381.py,closeout_R2382.py,closeout_R2383.py,closeout_R2384.py,closeout_R2385.py,closeout_R2386.py,closeout_R2387.py
+
+json={"cells": 11, "compared_keys": ["module", "receiver", "state", "text"], "label": "os-comma-binding-face-row-drift", "package": "src.os", "parent_verdict": "FACES-AGREE", "publishers": ["closeout_R2377.py", "closeout_R2378.py", "closeout_R2379.py", "closeout_R2380.py", "closeout_R2381.py", "closeout_R2382.py", "closeout_R2383.py", "closeout_R2384.py", "closeout_R2385.py", "closeout_R2386.py", "closeout_R2387.py"], "root": "src/os", "silent": 0, "splits": 0, "verdict": "FACES-AGREE", "wire": "closeout_export_parity_wire"}

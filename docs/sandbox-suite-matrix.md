@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 550 | 4276 | 550/550 | R2445 |
+| 551 | 4282 | 550/550 | R2445 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -588,7 +588,8 @@
 | 548 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 1.1 |
 | 549 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.9 |
 | 550 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
-|  | 合计 |  | 4276 | green 550 / FAIL 0 / no-evidence 0 |  |
+| 551 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | no-evidence | - |
+|  | 合计 |  | 4282 | green 550 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
