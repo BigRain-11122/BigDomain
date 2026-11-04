@@ -5294,6 +5294,15 @@ SUITES = [
     # state/queue/tech.md line 492 as the R2428 seed BEFORE the code.)
     ("os-comma-binding-sibling-faces",
      os.path.join("..", "os", "test_comma_binding_sibling_faces.py"), 6),
+    # R2432: the pile measurement walked the root and its ONE-LEVEL
+    # subdirectories only, so a log filed at qa/rounds/<name> read
+    # E_BEPR_NOT_FOUND on every shipped face while it sat on disk. One
+    # DECLARED depth is now asked at call time, and a name whose absence
+    # cannot be proved refuses naming the depth searched.
+    # (AC-BEDP1..AC-BEDP6 were pinned in state/queue/tech.md:494 as the
+    # R2404 seed row BEFORE the code.)
+    ("os-bare-evidence-deep-pile",
+     os.path.join("..", "os", "test_bare_evidence_deep_pile.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2432 suite=src/os/test_bare_evidence_deep_pile.py legs=2
+== LEG A rc=0 digest=2D355566A54F5FBD
+bare_evidence_deep_pile suite (expected criteria 6)
+PASS AC-BEDP1 a bare name filed at depth 2 resolves, the matrix tool argument names that same path, and the shipped R2386 face reads the same pile
+PASS AC-BEDP2 the declared depth is read at CALL time: patching it to 3 resolves a depth-3 name and putting it back to 2 refuses that same name naming depth 2
+PASS AC-BEDP3 a name beyond the declared depth refuses with a code that names the depth searched, never E_BEPR_NOT_FOUND alone, while a proved absence keeps the shipped code
+PASS AC-BEDP4 two copies inside the searched depth refuse as ambiguous naming both piles, and the R2386 one-level ambiguity reading is unchanged
+PASS AC-BEDP5 the CLI answers 0/2/3/5 and its --json is byte-stable over the pinned keys, ASCII, one trailing newline
+PASS AC-BEDP6 writes nothing, reads no clock, pure ASCII, stdlib only, plus its own reconcile label and its own suite file
+SUITE PASS 6/6
+== LEG B rc=0 digest=2D355566A54F5FBD
+bare_evidence_deep_pile suite (expected criteria 6)
+PASS AC-BEDP1 a bare name filed at depth 2 resolves, the matrix tool argument names that same path, and the shipped R2386 face reads the same pile
+PASS AC-BEDP2 the declared depth is read at CALL time: patching it to 3 resolves a depth-3 name and putting it back to 2 refuses that same name naming depth 2
+PASS AC-BEDP3 a name beyond the declared depth refuses with a code that names the depth searched, never E_BEPR_NOT_FOUND alone, while a proved absence keeps the shipped code
+PASS AC-BEDP4 two copies inside the searched depth refuse as ambiguous naming both piles, and the R2386 one-level ambiguity reading is unchanged
+PASS AC-BEDP5 the CLI answers 0/2/3/5 and its --json is byte-stable over the pinned keys, ASCII, one trailing newline
+PASS AC-BEDP6 writes nothing, reads no clock, pure ASCII, stdlib only, plus its own reconcile label and its own suite file
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_bare_evidence_pile_refusal.py rc=0 SUITE PASS 6/6
+== src/os/test_matrix_evidence_pile_consistency.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_bare_evidence_face.py rc=0 SUITE PASS 6/6
+== src/os/test_followup_guard_evidence_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=2D355566A54F5FBD

@@ -1,0 +1,27 @@
+LIVE CAPTURE round=R2432 module=bare_evidence_deep_pile face=CLI root=. depth=2
+== real bare name at depth 2 (qa/bonsai-bd/server-cpu.out.log)
+command: bare_evidence_deep_pile.py --check server-cpu.out.log --root .
+rc=0
+BARE EVIDENCE DEEP PILE evidence=server-cpu.out.log root=. depth=2
+  pile=qa\bonsai-bd verdict=RESOLVED
+json: {"evidence": "server-cpu.out.log", "root": ".", "depth": 2, "pile": "qa\\bonsai-bd", "verdict": "RESOLVED", "code": "", "detail": "pile=qa\\bonsai-bd"}
+== the shipped R2386 face on the same real name, same root
+command: bare_evidence_pile_refusal.py --check server-cpu.out.log --root .
+rc=3
+BARE EVIDENCE PILE dir=qa\bonsai-bd verdict=UNREADABLE rounds=0 foreign_rounds=0
+  code=E_FSF_NO_EVIDENCE pile=qa\bonsai-bd
+note: before R2432 this same bare name read code=E_BEPR_NOT_FOUND verdict=REFUSED
+      on both faces while the file was on disk; the face now reaches the pile
+      and reports the honest downstream reading (UNREADABLE: that log is not
+      an evidence document), not absence.
+== a name that is nowhere, root continues below the searched depth
+command: bare_evidence_deep_pile.py --check no-such-log-R2432.log --root .
+rc=2
+BARE EVIDENCE DEEP PILE evidence=no-such-log-R2432.log root=. depth=2
+  pile=- verdict=REFUSED
+  code=E_BEDP_BEYOND_DEPTH evidence 'no-such-log-R2432.log' is not within the
+  searched depth 2 of root '.', which continues below that depth
+== pre-registered defect, measured this window before any code
+command: bare_evidence_pile_refusal.py --check reconcile-all-R9999.log --root <temp>/qa/rounds
+rc=2 verdict=REFUSED code=E_BEPR_NOT_FOUND file-exists=yes
+VERDICT R2432 LIVE-RESOLVED

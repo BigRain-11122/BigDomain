@@ -75,34 +75,19 @@ def is_bare(evidence):
 def resolve_bare(evidence, root):
     """AC-BEPR1: the pile a bare filename actually lives in, by STAT-ing it.
 
-    The root itself counts (answered as '.'), then every one-level
-    subdirectory. Two containing piles are refused instead of chosen, because
-    a guard that picks one of two is back to guessing.
+    R2432: the walk itself is no longer owned here - it is asked of
+    bare_evidence_deep_pile at CALL time, so the DECLARED depth lives in one
+    place and a patched depth moves this face too. The root itself still
+    counts (answered as '.'), two containing piles are still refused instead
+    of chosen, and every code this face published before R2432 keeps its
+    spelling: only a name that is not found within the searched depth while
+    the tree really continues below it is reported as E_BEDP_BEYOND_DEPTH.
     """
-    found = []
-    direct = os.path.join(root, evidence)
-    if os.path.isfile(direct):
-        found.append(ROOT_PILE)
+    import bare_evidence_deep_pile as BEDP
     try:
-        names = sorted(os.listdir(root))
-    except OSError:
-        names = []
-    for name in names:
-        folder = os.path.join(root, name)
-        if os.path.isdir(folder) and os.path.isfile(
-                os.path.join(folder, evidence)):
-            if name not in found:
-                found.append(name)
-    if not found:
-        raise BareEvidencePileRefusalError(
-            E_BEPR_NOT_FOUND,
-            "evidence %r is not under root %r" % (evidence, root))
-    if len(found) > 1:
-        raise BareEvidencePileRefusalError(
-            E_BEPR_AMBIGUOUS,
-            "evidence %r lives in piles %s"
-            % (evidence, ",".join(found)))
-    return found[0]
+        return BEDP.resolve(evidence, root)
+    except BEDP.BareEvidenceDeepPileError as exc:
+        raise BareEvidencePileRefusalError(exc.code, exc.detail)
 
 
 def pile_for(evidence, root):
