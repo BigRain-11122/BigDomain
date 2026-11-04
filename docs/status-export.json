@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T07:39:41+08:00",
+  "export_ts": "2026-11-05T07:40:54+08:00",
   "do": "R2460 business window: the silicon lobby now opens in a browser. Run `python src/sandbox/lobby/server.py --web-port 8094` and open http://127.0.0.1:8094/lobby/ - connect, take the mock sandbox entrance, open a second window, and the two windows chat in the same room while an un-entitled window is refused",
   "ceo_face": {
     "current": "R2460 business window: the silicon lobby now opens in a browser. Run `python src/sandbox/lobby/server.py --web-port 8094` and open http://127.0.0.1:8094/lobby/ - connect, take the mock sandbox entrance, open a second window, and the two windows chat in the same room while an un-entitled window is refused",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the battery the R2459/R2460 src edits owe runs FIRST next window on the committed tree at the pre-registered 558 suites / 4324 criteria (reconcile-battery-R2461), which also un-stales docs/sandbox-suite-matrix.md; then the lobby page gets its next business step - the same two-window chat driven by the real msgSecCheck the moment the mini-program appid/secret lands, and a room picker over the shipped lobby/quant/cocreate rooms, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/lobby.html (7379B self-contained page, zero external references, AI generated label + non-advice note + mock/no-real-charge statement on screen) + src/sandbox/lobby/lobby_page.py (GET /lobby/, GET /lobby, GET /lobby/api/config publishing the REAL ws port; read-only HTTP) + one --web-port flag on src/sandbox/lobby/server.py + src/sandbox/lobby/test_lobby_page.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-page-R2460.log 1225B) + a live process capture (qa/lobby-page-live-R2460.log)",
-    "updated_at": "2026-11-05T07:39:41+08:00"
+    "updated_at": "2026-11-05T07:40:54+08:00"
   },
   "depts": [
     {
@@ -370,10 +370,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 83,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 83,
+    "substantive_non_idle_mention_lines": 84,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
