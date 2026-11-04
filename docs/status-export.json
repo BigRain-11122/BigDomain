@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T16:40:38+08:00",
-  "do": "R2438 product window: acceptance ages are now MEASURED - the owner table triage declaration records since_round on every entry but nothing aged it, so a review written today and one accepted a year earlier read identically; the new face prints AGED past the declared window while the row stays TRIAGED",
+  "export_ts": "2026-11-04T17:45:51+08:00",
+  "do": "R2439 verification window: the battery caught a real transport defect in the PREVIOUS window's evidence - three R2438 logs written as CRLF through a PowerShell redirect - and it was repaired at the birth site with the line set proved identical and the census baseline untouched; the re-run then read 547/547 suites green at exactly the pre-registered 4258 criteria",
   "ceo_face": {
-    "current": "R2438 product window: acceptance ages are now MEASURED - the owner table triage declaration records since_round on every entry but nothing aged it, so a review written today and one accepted a year earlier read identically; the new face prints AGED past the declared window while the row stays TRIAGED",
-    "latest_artifact": "src/os/owner_table_triage_expiry.py + src/os/test_owner_table_triage_expiry.py (SUITE PASS 6/6 twice byte-identical, qa/owner-table-triage-expiry-R2438-a.log / -b.log) + LIVE qa/owner-table-triage-expiry-live-R2438.log (scanned=1073, triaged=6, aged=0, verdict=EXPIRY-CLEAN) + registry 547 suites / 4258 criteria",
-    "next_milestone": "reconcile battery on the committed R2438 tree, pre-registered at 547 suites / 4258 criteria (+1 suite / +6 criteria): matrix must regenerate green and --check byte-identical, census DRIFT-CLEAN at its 529 baseline; after that the product face resumes at the tech head that queue_head.py --head tech names at that round",
+    "current": "R2439 verification window: the battery caught a real transport defect in the PREVIOUS window's evidence - three R2438 logs written as CRLF through a PowerShell redirect - and it was repaired at the birth site with the line set proved identical and the census baseline untouched; the re-run then read 547/547 suites green at exactly the pre-registered 4258 criteria",
+    "latest_artifact": "qa/reconcile-all-R2439-retry.log (RUNNER PASS 547/547 suites, reconcile controls 7/7, 1065.2s, criteria 4258), qa/reconcile-all-R2439.log kept as the honest red leg, docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria with --check byte-identical, census DRIFT-CLEAN at its 529 baseline",
+    "next_milestone": "product face at the tech head the deliverable-aware reader offers, state/queue/tech.md:504 prefix AC-RMEF1 (relative_module_existence_face): a package-relative import joined into its declared package is never checked against the modules the read tree actually carries, so a typo reads FOREIGN exactly like a genuinely foreign wire",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
-    "last_artifact": "src/os/owner_table_triage_expiry.py + src/os/test_owner_table_triage_expiry.py (SUITE PASS 6/6 twice byte-identical, qa/owner-table-triage-expiry-R2438-a.log / -b.log) + LIVE qa/owner-table-triage-expiry-live-R2438.log (scanned=1073, triaged=6, aged=0, verdict=EXPIRY-CLEAN) + registry 547 suites / 4258 criteria",
-    "updated_at": "2026-11-04T16:40:38+08:00"
+    "last_artifact": "qa/reconcile-all-R2439-retry.log (RUNNER PASS 547/547 suites, reconcile controls 7/7, 1065.2s, criteria 4258), qa/reconcile-all-R2439.log kept as the honest red leg, docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria with --check byte-identical, census DRIFT-CLEAN at its 529 baseline",
+    "updated_at": "2026-11-04T17:45:51+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2439.log (red leg, 546/547) + qa/reconcile-all-R2439-retry.log (847083B, RUNNER PASS 547/547, criteria 4258) + src/os/repair_R2439.py (birth-site transport repair, payload proved, commit 95974c57) + docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria",
     "src/os/owner_table_triage_expiry.py + src/os/test_owner_table_triage_expiry.py (SUITE PASS 6/6 twice) + qa/owner-table-triage-expiry-R2438-a.log / -b.log (667B, identical) + qa/owner-table-triage-expiry-live-R2438.log + docs/sandbox-suite-matrix.md 52694B at 547 suites / 4258 criteria",
     "qa/reconcile-all-R2437.log (RUNNER PASS 546/546, 981.2s, criteria 4252) + docs/sandbox-suite-matrix.md regenerated to 52591B byte-identical + src/os/closeout_R2437.py",
     "src/os/owner_table_split_triage.py, state/owner_table_triage.json, qa/owner-table-split-triage-live-R2436.log and the two suite legs",
@@ -56,6 +57,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2439",
+      "2026-11-04 R2439 verification window on the debt gate first=yes item (reconcile-battery-R2439, carried from R2438): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 on the committed 93c57c03 tree read 546/547 suites with the criteria total 4258 EXACTLY as pre-registered (qa/reconcile-all-R2439.log kept as the red leg, 1045.2s) and the only red was reconcile-daily-census; the shipped census checker NAMED the cause instead of leaving a guess - three R2438 evidence logs were utf-8 bodies whose every line ended CRLF (class=pwsh-capture) because that window captured them through a PowerShell redirect, with the payload intact. Repaired at the birth site, never by widening the baseline: src/os/repair_R2439.py asked the shipped run_identity.normalize for the allowed normalisation, proved the line set identical before the write, landed utf-8 LF through one atomic replace and read the bytes back (667B -> 660B twice, 973B -> 968B, crlf=0, readback ok), after which the census read DRIFT-CLEAN flags=0 with its 529-entry baseline untouched; the repair was committed ALONE as 95974c57. Retry leg on the committed repair tree: RUNNER PASS 547/547 suites plus controls 7/7 in 1065.2s at criteria 4258, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0, evidence qa/reconcile-all-R2439-retry.log (847083B, one utf-8 LF single writer). Four follow-up sections produced the designed first FAIL and then a green verdict: leg 1 VERDICT FAIL failing=matrix at on-disk=52694B against regenerated=52715B with no byte written, suite_matrix regenerated the doc through --stamp-from, --check read byte-identical at 52715B / 547 suites / 4258 criteria, and the re-run read VERDICT R2439 PASS failing=none. Debt: reconcile-battery-R2439 closed through the shipped debt_close (110337B -> 110340B, open 2->1, done 152->153, readback ok) and product-face-R2440 opened first=yes through debt_append (110340B -> 110852B, readback ok) at the tech head state/queue/tech.md:504 prefix AC-RMEF1. Honest: zero product points claimed, no criterion widened, no census baseline entry added, and the window ran far past its 25-minute budget (two full batteries)."
+    ],
     [
       "2438",
       "2026-11-04 R2438 product window on the debt gate first=yes item (product-face-R2438, tech head state/queue/tech.md:502): the triage declaration recorded since_round on every acceptance but MEASURED nothing aged it, so an acceptance written at R2436 and one accepted a year earlier read identically and a never-expiring waiver carried a date nobody reads. AC-OTTE1..AC-OTTE6 were pinned inside that queue row BEFORE any code, then src/os/owner_table_triage_expiry.py shipped: age = current_round - since_round for every TRIAGED row, status TRIAGED kept with both verdicts and the law flags printed, AGED once age > window, FRESH at the exact boundary, an entry with no live row reported unageable rather than aged or clean, and a since_round later than the supplied round failing closed E_OTTE_FUTURE at exit 3. The face reads no clock: --round is required, a missing one reads E_OTTE_NO_ROUND at exit 3. SUITE PASS 6/6 on two byte-identical runs (667B each), four adjacent owner_table suites green, wired os-owner-table-triage-expiry(6) so the registry reads 547 suites / 4258 criteria, matrix regenerated to 52694B reading green=546/547 with --check byte-identical. LIVE on the real src/os: scanned=1073 round=2438 window=30 triaged=6 aged=0 fresh=6 unageable=0 verdict=EXPIRY-CLEAN - all six measured acceptances at age 2 rounds because R2436 wrote them. Debt: product-face-R2438 closed, reconcile-battery-R2439 opened first=yes at 547/4258. Honest: no battery ran this window (the tree was about to change by design), no census entry was added, and no CEO-visible artifact was rebuilt."
@@ -261,17 +266,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2438",
+      "2439",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 69,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 61,
+    "substantive_non_idle_mention_lines": 69,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
