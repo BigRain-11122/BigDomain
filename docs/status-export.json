@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-04T19:24:08+08:00",
+  "export_ts": "2026-11-04T19:27:03+08:00",
   "do": "R2441 verification window: the reconcile battery prescribed by the debt register ran on the committed R2440 tree and caught a real closeout-ordering defect - the derived export counters described a document one log line shorter than the file - repaired at the birth site and re-proved with a second full battery",
   "ceo_face": {
     "current": "R2441 verification window: the reconcile battery prescribed by the debt register ran on the committed R2440 tree and caught a real closeout-ordering defect - the derived export counters described a document one log line shorter than the file - repaired at the birth site and re-proved with a second full battery",
@@ -7,7 +7,7 @@
     "next_milestone": "product face at the tech head the deliverable-aware reader offers (state/queue/tech.md:508 prefix AC-MSPL1 matrix_stamp_provenance_line, criteria pinned before any code); no successor battery is owed because no product src byte changed this window; due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2441-retry.log (847687B, RUNNER PASS 548/548 suites green, controls 7/7, 1187.2s, criteria 4264 exactly as pre-registered) + qa/reconcile-all-R2441.log (847696B, the honest red leg: 547/548 with os-queue-floor-export-face AC-QFE3 at stored=76 vs recomputed=77) + docs/sandbox-suite-matrix.md 52827B at 548 suites / 4264 criteria with --check byte-identical + docs/status-export.json re-derived to 21/21 consistency",
-    "updated_at": "2026-11-04T19:24:08+08:00"
+    "updated_at": "2026-11-04T19:27:03+08:00"
   },
   "depts": [
     {
@@ -283,10 +283,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 87,
+    "log_lines_in_window": 88,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 87,
+    "substantive_non_idle_mention_lines": 88,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
