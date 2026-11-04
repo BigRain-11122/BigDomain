@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-04T21:13:14+08:00",
+  "export_ts": "2026-11-04T21:14:04+08:00",
   "do": "R2443 verification window: the full reconcile battery on the committed R2442 tree came back RED on the R2442 suite's own block oracle (it compared an ordinary render against the stamp-aligned shipped doc), was repaired at its birth site so the provenance line is excluded on both sides while every other header/label line stays byte-compared, and the retry read 549/549 suites green at the pre-registered 4270 criteria",
   "ceo_face": {
     "current": "R2443 verification window: the full reconcile battery on the committed R2442 tree came back RED on the R2442 suite's own block oracle (it compared an ordinary render against the stamp-aligned shipped doc), was repaired at its birth site so the provenance line is excluded on both sides while every other header/label line stays byte-compared, and the retry read 549/549 suites green at the pre-registered 4270 criteria",
@@ -7,7 +7,7 @@
     "next_milestone": "product window on the tech head state/queue/tech.md:510 prefix AC-PICIC1 (comma_binding_identity_face_compare): all three publisher faces asked over one tree so a split against the identity face cannot hide behind an agreeing pair (product-face-R2444 first=yes); due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
     "last_artifact": "src/os/test_matrix_stamp_provenance_line.py repair (commit 23901bcf, block() excludes the stamp_from line on both sides, suite back to 6/6) + qa/reconcile-all-R2443-retry.log (RUNNER PASS 549/549 suites, controls 7/7, 1328.1s, criteria 4270 exactly) + qa/reconcile-all-R2443.log (the honest red leg) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52990B at 549 suites / 4270 criteria with --check byte-identical, 2026-11-04 21:12 +08:00",
-    "updated_at": "2026-11-04T21:13:14+08:00"
+    "updated_at": "2026-11-04T21:14:04+08:00"
   },
   "depts": [
     {
@@ -293,10 +293,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 83,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 83,
+    "substantive_non_idle_mention_lines": 84,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
