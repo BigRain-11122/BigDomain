@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T07:16:50+08:00",
+  "export_ts": "2026-11-05T07:18:03+08:00",
   "do": "R2458 verification window: the battery the R2457 product edit owed was discharged on the committed tree - 556 suites green at 4312 criteria, exactly the pre-registered count - and the suite matrix was regenerated from this round own evidence, so the registry this station reports is proven rather than asserted",
   "ceo_face": {
     "current": "R2458 verification window: the battery the R2457 product edit owed was discharged on the committed tree - 556 suites green at 4312 criteria, exactly the pre-registered count - and the suite matrix was regenerated from this round own evidence, so the registry this station reports is proven rather than asserted",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a face a reader can open: either the carried product-face-R2456 (tech head AC-PFKC1, three windows stale) or a P-47 business face that supersedes it, and it says which before it writes code. The city page is runnable right now: python src/sandbox/lobby/server.py --city-http-port 8092 then http://127.0.0.1:8092/city/, and the lobby sandbox bring-up remains python src/sandbox/lobby/interop_demo.py, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2458.log (RUNNER PASS 556/556 suites, reconcile controls 7/7, 1337.6s, criteria summed to 4312, fails=0, zero CRLF) + docs/sandbox-suite-matrix.md regenerated through --stamp-from to 53731B at 556 suites / 4312 criteria with --check byte-identical + follow-up legs appended for VERDICT R2458 PASS (matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN)",
-    "updated_at": "2026-11-05T07:16:50+08:00"
+    "updated_at": "2026-11-05T07:18:03+08:00"
   },
   "depts": [
     {
@@ -360,10 +360,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 68,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 68,
+    "substantive_non_idle_mention_lines": 70,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
