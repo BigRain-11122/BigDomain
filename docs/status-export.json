@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T12:40:00+08:00",
-  "do": "R2434 product window: the declaration sweep separated DECLARATION from GENERAL and said nothing about GENERAL, so the audit now reads each writer OWN os.replace destination through its own data flow and found 8 general writers landing a structured document the house keeps with only 4 routed; debt_append, debt_close and state_fold were rewired onto the shared payload derivation at their own call sites, the real tree reads AUDIT-CLEAN 7 routed / 2 repair / 129 unresolved printed, and the next window owes the battery at 545 suites / 4246 criteria",
+  "export_ts": "2026-11-04T09:56:01+08:00",
+  "do": "R2435 verification window: the debt gate named the battery the R2168 rule owed on the committed R2434 tree, so the full reconcile battery ran FIRST at the pre-registered 545 suites / 4246 criteria and read RUNNER PASS on the first leg (1080.8s, controls 7/7, TMP RECLAIM 932/932); all four follow-up sections then went green after the designed matrix FAIL was closed by a stamp-aligned regeneration, and a malformed heartbeat line left by the R2434 closeout was repaired at its birth site",
   "ceo_face": {
-    "current": "R2433 verification window: the debt gate named the battery the R2168 rule owed on the committed R2432 tree, so the full reconcile battery ran FIRST at the pre-registered 544 suites / 4240 criteria and came back red on the CEO-VISIBLE export face itself (18/21: two tick rows and a self_drive sampled before its own state append); the document was repaired at the birth site through the shipped derivation, committed alone, and the retry leg read RUNNER PASS 544/544 at the same criteria total with all four follow-up sections green",
-    "latest_artifact": "qa/reconcile-all-R2433.log (red leg, 1029.8s) + qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 1017.4s, criteria 4240) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52412B at 544 suites / 4240 criteria with --check byte-identical",
-    "next_milestone": "product face on the tech head state/queue/tech.md:498 prefix AC-GWDA1 (general_writer_dialect_audit), whose criteria were pinned in that row at R2409 before any code",
+    "current": "R2435 verification window: the debt gate named the battery the R2168 rule owed on the committed R2434 tree, so the full reconcile battery ran FIRST at the pre-registered 545 suites / 4246 criteria and read RUNNER PASS on the first leg (1080.8s, controls 7/7, TMP RECLAIM 932/932); all four follow-up sections then went green after the designed matrix FAIL was closed by a stamp-aligned regeneration, and a malformed heartbeat line left by the R2434 closeout was repaired at its birth site",
+    "latest_artifact": "qa/reconcile-all-R2435.log (RUNNER PASS 545/545 suites, controls 7/7, 1080.8s, criteria 4246 exactly as pre-registered, 845513B) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52495B at 545 suites / 4246 criteria with --check byte-identical",
+    "next_milestone": "product face on the tech head state/queue/tech.md:500 prefix AC-OTST1 (owner_table_split_triage: the split face re-reports the same five known law false positives every round with no way to say reviewed and accepted, so the debt count can never reach zero), whose AC-OTST1..AC-OTST6 were pinned in that row at R2412 before any code",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2433.log (red leg, 1029.8s) + qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 1017.4s, criteria 4240) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52412B at 544 suites / 4240 criteria with --check byte-identical",
-    "updated_at": "2026-11-04T09:00:05+08:00"
+    "last_artifact": "qa/reconcile-all-R2435.log (RUNNER PASS 545/545 suites, controls 7/7, 1080.8s, criteria 4246 exactly as pre-registered, 845513B) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52495B at 545 suites / 4246 criteria with --check byte-identical",
+    "updated_at": "2026-11-04T09:56:01+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2435.log (RUNNER PASS 545/545, criteria 4246, 845513B) and docs/sandbox-suite-matrix.md regenerated to 52495B",
     "qa/reconcile-all-R2433.log (red leg, 1029.8s) plus qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 4240 criteria) and docs/sandbox-suite-matrix.md regenerated to 52412B",
     "src/os/bare_evidence_deep_pile.py + src/os/test_bare_evidence_deep_pile.py + qa/bare-evidence-deep-pile-R2432.log (2374B, legs=2 identical=True adjacent=4 fails=0) + qa/bare-evidence-deep-pile-live-R2432.log (real tree RESOLVED qa/bonsai-bd at depth 2 vs NOT_FOUND before)",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
@@ -52,6 +53,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2435",
+      "2026-11-04 R2435 verification window on the item the debt gate named first=yes (reconcile-battery-R2435, carried from R2434): zero product code changed, the R2168 mixed-tree rule honoured. The battery read RUNNER PASS 545/545 suites plus controls 7/7 in 1080.8s with the criteria total 4246 exactly as pre-registered, and the census re-read DRIFT-CLEAN with its 529-entry baseline untouched. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52495B, and the re-run read VERDICT R2435 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2435 closed at its predicted bytes and product-face-R2436 opened first=yes through the shipped CLIs; no successor battery was registered because this window changed no product src byte. A real defect in the CEO-adjacent heartbeat face was found and repaired at its birth site: the R2434 closeout had appended a bare tick number instead of a tick= row. Zero product points claimed."
+    ],
     [
       "2433",
       "2026-11-04 R2433 verification window on the item the debt gate named first=yes (reconcile-battery-R2433, carried from R2432): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 543/544 suites with the criteria total 4240 exactly as pre-registered and the only red was os-queue-floor-export-face at AC-QFE3, measuring pass=18 fail=3: self_drive stored 19 lines against 23 recomputed, and two results rows carried the tick label (2432 and 2431). Root cause measured on the document: the R2432 closeout edited the export through an ad-hoc step that inserted a fresh tick row and sampled self_drive before its own state append. Repaired at the birth site, never by widening the checker: one surviving tick row, self_drive re-derived through the shipped export_R2431.self_drive() callable, atomic write with a read-back, 64472B -> 64418B, then SUMMARY pass=21 fail=0 VERDICT PASS; committed alone as da5dfc5e. Retry leg on the repaired tree: RUNNER PASS 544/544 suites plus controls 7/7 in 1017.4s at criteria 4240, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, regenerated stamp-aligned to 52412B, and the re-run read VERDICT R2433 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2433 closed and product-face-R2434 opened first=yes through the shipped CLIs. Zero product points claimed."
@@ -241,17 +246,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2434",
+      "2435",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 39,
+    "log_lines_in_window": 46,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 39,
+    "substantive_non_idle_mention_lines": 46,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -273,8 +278,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -286,17 +289,10 @@
         "open_rows": 11,
         "done_rows": 398,
         "gated_rows": 1,
-        "claimable": 9,
-        "discounted": 1,
-        "delivered": [
-          {
-            "line": 494,
-            "prefix": "AC-BEDP1"
-          }
-        ],
+        "claimable": 10,
         "floor": 10,
-        "shortfall": 1,
-        "status": "SHORT"
+        "shortfall": 0,
+        "status": "MET"
       },
       {
         "queue": "explore",
@@ -306,16 +302,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-DEBT",
-    "shortfall_total": 1,
-    "missing": [],
-    "delivered_total": 1
+    ]
   }
 }
