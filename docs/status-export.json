@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T23:16:50+08:00",
-  "do": "R2445 verification window: the debt gate named the battery the R2168 rule owed on the committed R2444 tree, so the full reconcile battery ran FIRST at the pre-registered 550 suites / 4276 criteria and came back red twice on one face - the matrix document recorded the R2444 product suite log while the checker resolves only eligible all-green battery evidence; the document was re-rendered from the one eligible face and committed alone, after which the final leg read RUNNER PASS 550/550 at the same criteria total with all four follow-up sections green",
+  "export_ts": "2026-11-04T23:44:49+08:00",
+  "do": "R2446 product window: the three-face compare reads a VERDICT and a publisher SET, so a per-line module rewrite under an agreeing verdict was invisible - the shipped reader now compares the values the faces actually share on every published (path, line), names a disagreement ROWS-SPLIT with the file, the line, the key and each face's own module, label and seam, and names a face that publishes nothing on a line the others publish as ROWS-SILENT instead of counting it as agreement",
   "ceo_face": {
-    "current": "R2445 verification window: the debt gate named the battery the R2168 rule owed on the committed R2444 tree, so the full reconcile battery ran FIRST at the pre-registered 550 suites / 4276 criteria and came back red twice on one face - the matrix document recorded the R2444 product suite log while the checker resolves only eligible all-green battery evidence; the document was re-rendered from the one eligible face and committed alone, after which the final leg read RUNNER PASS 550/550 at the same criteria total with all four follow-up sections green",
-    "latest_artifact": "qa/reconcile-all-R2445.log + qa/reconcile-all-R2445-retry.log (both red legs, 851226B / 851228B) + qa/reconcile-all-R2445-final.log (RUNNER PASS 550/550, 1387.4s, criteria 4276) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 53114B at 550 suites / 4276 criteria with --check byte-identical",
-    "next_milestone": "product face on the tech head state/queue/tech.md:512 prefix AC-PFRD1 (comma_binding_face_row_drift: the three-face compare reads verdicts and publisher sets only, so a per-line module drift under an unchanged verdict still reads FACES-AGREE), whose criteria were pinned in that row at R2444 before any code",
+    "current": "R2446 product window: the three-face compare reads a VERDICT and a publisher SET, so a per-line module rewrite under an agreeing verdict was invisible - the shipped reader now compares the values the faces actually share on every published (path, line), names a disagreement ROWS-SPLIT with the file, the line, the key and each face's own module, label and seam, and names a face that publishes nothing on a line the others publish as ROWS-SILENT instead of counting it as agreement",
+    "latest_artifact": "src/os/comma_binding_face_row_drift.py + src/os/test_comma_binding_face_row_drift.py + qa/comma-binding-face-row-drift-R2446.log (SUITE PASS 6/6 twice identical plus three adjacent comma suites green) + qa/comma-binding-face-row-drift-live-R2446.log (FACES-AGREE rc=0, 11 cells, 0 splits, 0 silent) + docs/sandbox-suite-matrix.md regenerated to 53223B at 551 suites / 4282 criteria with --check byte-identical",
+    "next_milestone": "the battery the R2168 rule owes on the committed R2446 tree (reconcile-battery-R2447, first=yes in the register) at the pre-registered 551 suites / 4282 criteria, with the matrix regenerated from THAT green evidence because a render from an ineligible log reads as a face mismatch; then the product face at the tech head state/queue/tech.md:514 prefix AC-PDR1",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2445.log + qa/reconcile-all-R2445-retry.log (both red legs, 851226B / 851228B) + qa/reconcile-all-R2445-final.log (RUNNER PASS 550/550, 1387.4s, criteria 4276) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 53114B at 550 suites / 4276 criteria with --check byte-identical",
-    "updated_at": "2026-11-04T23:16:50+08:00"
+    "last_artifact": "src/os/comma_binding_face_row_drift.py + src/os/test_comma_binding_face_row_drift.py + qa/comma-binding-face-row-drift-R2446.log (SUITE PASS 6/6 twice identical plus three adjacent comma suites green) + qa/comma-binding-face-row-drift-live-R2446.log (FACES-AGREE rc=0, 11 cells, 0 splits, 0 silent) + docs/sandbox-suite-matrix.md regenerated to 53223B at 551 suites / 4282 criteria with --check byte-identical",
+    "updated_at": "2026-11-04T23:44:49+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/comma_binding_face_row_drift.py + src/os/test_comma_binding_face_row_drift.py + qa/comma-binding-face-row-drift-R2446.log + qa/comma-binding-face-row-drift-live-R2446.log + docs/sandbox-suite-matrix.md (53223B, 551 suites / 4282 criteria)",
     "qa/reconcile-all-R2445.log + qa/reconcile-all-R2445-retry.log (red legs) plus qa/reconcile-all-R2445-final.log (RUNNER PASS 550/550, criteria 4276) and docs/sandbox-suite-matrix.md regenerated to 53114B",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
     "src/os/comma_binding_identity_face_compare.py (new, 3 faces, measured seams) + src/os/test_comma_binding_identity_face_compare.py (new, 6/6 twice identical) + src/os/live_R2444.py + qa/comma-binding-identity-face-compare-R2444.log + qa/comma-binding-identity-face-compare-live-R2444.log + src/sandbox/reconcile_all.py (one registry row, 550/4276) + docs/sandbox-suite-matrix.md (55305B, --check byte-identical) + state/queue/tech.md (row 510 discharged, real gap seed at 512) + state/debt.md (one closed, two opened) + docs/status-export.json + src/os/closeout_R2444.py + src/os/backlog.md + src/os/state.json + heartbeat.txt",
@@ -64,6 +65,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2446",
+      "2026-11-04 R2446 product window on the item the debt gate named first=yes (product-face-R2446, tech head state/queue/tech.md:512 prefix AC-PFRD1 comma_binding_face_row_drift, whose AC-PFRD1..AC-PFRD6 were pinned in that row at R2444 BEFORE any code): SHIPPED src/os/comma_binding_face_row_drift.py plus its six-criteria suite. It asks the SHIPPED compare at CALL time and keeps its report unchanged, then compares the values the three faces actually share on every (path, line) a face publishes; the compared keys are the intersection of the published key sets minus the row identity, derived per run rather than listed. The exact probe this row was seeded from is proved both ways - the identity detail row rewritten from closeout_export_parity_wire to drifted_wire still reads FACES-AGREE rc=0 differences=0 at the verdict level, and the new reading names it ROWS-SPLIT at the line with both modules - while a face that publishes nothing on a line the others publish reads ROWS-SILENT naming that face. SUITE PASS 6/6 twice with an identical digest plus three adjacent comma suites green (EVIDENCE CAPTURE round=R2446 legs=2 identical=True adjacent=3 fails=0) and a live capture on the real src/os reading FACES-AGREE rc=0 cells=11 compared=module/receiver/state/text splits=0 silent=0 over 11 publishers; the real tree carries no row drift, so the split and silent cases are proved on fixtures only and are not claimed as live catches. Wired os-comma-binding-face-row-drift(6) so the registry reads 551 suites / 4282 criteria; docs/sandbox-suite-matrix.md was regenerated stamp-aligned from the only eligible evidence face to 53223B with --check byte-identical. Board: row 512 stamped, one REAL measured gap row seeded from this window's own limit (row_key_carrier_scope AC-PFKC1..AC-PFKC6: a key two faces carry and disagree on is dropped, measured as `kind` over 22 rows and `relative` over 11), floor FLOOR-MET 5/5 10/10 10/10. Debt: product-face-R2446 closed through the shipped debtor (114246B -> 114249B, line=182, open 3->2, done 160->161) and reconcile-battery-R2447 opened first=yes at 114249B -> 114707B because this window changed product src bytes and moved the registry count. Zero CEO-visible business surface."
+    ],
     [
       "2445",
       "2026-11-04 R2445 verification window on the item the debt gate named first=yes (reconcile-battery-R2445, carried from R2444 at the pre-registered 550 suites / 4276 criteria): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 549/550 suites with the criteria total 4276 exactly as pre-registered and the only red was os-matrix-stamp-compare AC-MSC4, whose detail printed check=2 against the module verdict PASS; suite_matrix --check named the cause as an evidence-face mismatch, because R2444 had rendered the document from its own product suite log while the checker resolves only eligible all-green battery evidence. The retry leg reproduced the identical single red, which proved it deterministic. Repaired at the birth site: the document was re-rendered through the shipped generator with --stamp-from from the one eligible evidence face (53113B, --check PASS byte-identical, suite 6/6 with AC-MSC4 green) and the repair was committed ALONE as 2ed31668. Final leg on the committed repair tree: RUNNER PASS 550/550 plus controls 7/7 in 1387.4s at criteria 4276, TMP RECLAIM 932/932. Four follow-up sections then gave the designed matrix FAIL (53113B vs 53114B), a stamp-aligned regeneration to 53114B at 550/4276 and VERDICT R2445 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: battery closed through the shipped debtor (line=180, open 3->2, done 159->160) and product-face-R2446 opened first=yes at 113812B -> 114246B naming state/queue/tech.md:512 AC-PFRD1; no successor battery owed because only a document changed. Zero product points claimed."
@@ -297,17 +302,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2445",
+      "2446",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 64,
+    "log_lines_in_window": 73,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 64,
+    "substantive_non_idle_mention_lines": 73,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -338,7 +343,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 404,
+        "done_rows": 405,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,
