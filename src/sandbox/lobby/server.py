@@ -28,6 +28,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 
 from city import CityFace, start_city_http  # noqa: E402
+from lobby_page import start_lobby_http  # noqa: E402
 from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # noqa: E402
 from store import EventStore, utc_now_iso  # noqa: E402
 
@@ -591,6 +592,8 @@ def build_parser():
     parser.add_argument("--ping-timeout", type=float, default=None, help="test override")
     parser.add_argument("--city-dir", default=None, help="read-only city data dir override")
     parser.add_argument("--city-http-port", type=int, default=None, help="city read API port override")
+    parser.add_argument("--web-port", type=int, default=None,
+                        help="serve the browser lobby client (lobby.html) on this port")
     return parser
 
 
@@ -653,6 +656,12 @@ def main():
         httpd = start_city_http(args.host, city_port, city)
         banner += " city_api=http://%s:%d/city/snapshot census_rows=%d city_dir=%s" % (
             args.host, httpd.server_address[1], city.imported, city.city_dir)
+    if args.web_port is not None:
+        web = start_lobby_http(args.host, args.web_port, port)
+        banner += " lobby_page=http://%s:%d/lobby/ ws_port=%d" % (
+            args.host, web.server_address[1], port)
+    else:
+        banner += " lobby_page=off (pass --web-port 8094 for the browser client)"
     print(banner, flush=True)
     try:
         asyncio.run(run_server(args.host, port, ping_interval, ping_timeout))

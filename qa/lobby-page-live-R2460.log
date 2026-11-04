@@ -1,0 +1,8 @@
+LOBBY PAGE LIVE R2460
+bring_up: python src/sandbox/lobby/server.py --web-port 8094
+banner: serving ws://127.0.0.1:61818/ws rooms=lobby,quant,cocreate ping_interval=30 ping_timeout=60 gate=ok db=C:\Users\sjs20\AppData\Local\Temp\lobby-live-nxdcecrd\e.db city_api=http://127.0.0.1:61819/city/snapshot census_rows=3 city_dir=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\lobby\city_data lobby_page=http://127.0.0.1:61821/lobby/ ws_port=61818
+GET /lobby/ status=200 bytes=7379
+page_notices: aigc=True non_advice=True mock=True
+GET /lobby/api/config ws_port=61818 ws_path=/ws real_ws=61818
+open_in_browser: http://127.0.0.1:61821/lobby/
+zero survivors: terminated pid=54108

@@ -210,6 +210,12 @@ SUITES = [
     # (AC-CKD1..AC-CKD6 were pre-registered in src/os/backlog.md at R2459
     # BEFORE this suite and its module existed.)
     ("os-lobby-checkout-demo", os.path.join("lobby", "test_checkout_demo.py"), 6),
+    # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
+    # a page a person can open in a browser - GET /lobby/ plus a same-origin
+    # config route that publishes the real ws port, with the frames the page
+    # sends replayed against the real server (AC-LBP1..AC-LBP6 pre-registered
+    # in src/os/backlog.md at R2460 BEFORE this suite existed).
+    ("os-lobby-lobby-page", os.path.join("lobby", "test_lobby_page.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
