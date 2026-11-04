@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-04T18:03:25+08:00",
+  "export_ts": "2026-11-04T18:51:30+08:00",
   "do": "R2440 product window: a package-relative publish joined onto a declared package is now checked against the modules the read tree actually carries, so a typo reads MISSING-MODULE (naming the joined text and the package) instead of reading FOREIGN exactly like a genuinely foreign wire - while a join with a file behind it and a run with no package keep the parent reading",
   "ceo_face": {
     "current": "R2440 product window: a package-relative publish joined onto a declared package is now checked against the modules the read tree actually carries, so a typo reads MISSING-MODULE (naming the joined text and the package) instead of reading FOREIGN exactly like a genuinely foreign wire - while a join with a file behind it and a run with no package keep the parent reading",
@@ -7,7 +7,7 @@
     "next_milestone": "reconcile battery on the committed R2440 tree at the pre-registered 548 suites / 4264 criteria (the R2168 mixed-tree rule owes it because this window changed product src bytes), then the product face at the tech head the deliverable-aware reader offers; due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
     "last_artifact": "src/os/relative_module_existence_face.py + src/os/test_relative_module_existence_face.py (SUITE PASS 6/6 twice, qa/relative-module-existence-face-R2440.log 1510B, legs=2 identical=True adjacent=4 fails=0), qa/relative-module-existence-face-live-R2440.log (539B, REAL src/os: corpus=1216, publishers=11, missing=0), docs/sandbox-suite-matrix.md 52828B at 548 suites / 4264 criteria with --check byte-identical",
-    "updated_at": "2026-11-04T18:03:25+08:00"
+    "updated_at": "2026-11-04T18:51:30+08:00"
   },
   "depts": [
     {
@@ -278,10 +278,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 77,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 76,
+    "substantive_non_idle_mention_lines": 77,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
