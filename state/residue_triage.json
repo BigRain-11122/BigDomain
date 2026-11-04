@@ -1898,6 +1898,34 @@
       "declared_by": 2442,
       "reason": "re-pinned at R2430 at its measured status DELIVERED",
       "until": 2470
+    },
+    {
+      "round": 2432,
+      "status": "DELIVERED",
+      "declared_by": "R2445",
+      "reason": "fold 2445 archived these round blocks at a true round-block boundary",
+      "until": 2470
+    },
+    {
+      "round": 2434,
+      "status": "DELIVERED",
+      "declared_by": "R2445",
+      "reason": "fold 2445 archived these round blocks at a true round-block boundary",
+      "until": 2470
+    },
+    {
+      "round": 2436,
+      "status": "DELIVERED",
+      "declared_by": "R2445",
+      "reason": "fold 2445 archived these round blocks at a true round-block boundary",
+      "until": 2470
+    },
+    {
+      "round": 2438,
+      "status": "DELIVERED",
+      "declared_by": "R2445",
+      "reason": "fold 2445 archived these round blocks at a true round-block boundary",
+      "until": 2470
     }
   ]
 }
