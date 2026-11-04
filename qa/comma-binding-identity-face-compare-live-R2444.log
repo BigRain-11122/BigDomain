@@ -1,0 +1,6 @@
+LIVE R2444 real tree src/os rc=0
+verdict=FACES-AGREE faces=3 differences=0 rows=33
+face=from-import verdict=WIRE publishers=11 rows=11 keys=7 seams=comma_binding_sibling_faces.receivers_for:33
+face=relative verdict=WIRE publishers=11 rows=11 keys=8 seams=comma_binding_sibling_faces.receivers_for:33
+face=identity verdict=WIRE publishers=11 rows=11 keys=6 seams=comma_binding_sibling_faces.receivers_for:33,comma_binding_consumer_wire.wire_audit_script:33
+MEASURED LIMIT one identity row module rewritten to drifted_wire under an unchanged WIRE verdict reads verdict=FACES-AGREE rc=0 differences=0 - the compare reads verdicts and publisher sets, not per-line rows

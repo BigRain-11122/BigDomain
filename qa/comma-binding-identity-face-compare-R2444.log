@@ -1,0 +1,38 @@
+EVIDENCE CAPTURE round=R2444 suite=src/os/test_comma_binding_identity_face_compare.py legs=2
+== LEG A rc=0 digest=6D174EB5708FE9E5
+PASS AC-PICIC1 all three faces are asked at call time
+PASS AC-PICIC1 no receiver table or import grammar is restated
+PASS AC-PICIC2 one comma-list fixture reads WIRE on all three faces
+PASS AC-PICIC2 a differing face is named instead of inferred
+PASS AC-PICIC2 the foreign fixture still reads FOREIGN everywhere
+PASS AC-PICIC3 a no-comma script keeps every key of every row on all three faces
+PASS AC-PICIC4 a receiver no import binds reads UNRESOLVED everywhere rather than being guessed
+PASS AC-PICIC5 each face row records the seam that supplied it
+PASS AC-PICIC5 the recorded seam is the seam that fires
+PASS AC-PICIC6 source is pure ASCII
+PASS AC-PICIC6 stdlib only, no network, no clock
+PASS AC-PICIC6 the module writes nothing and reads no clock
+PASS AC-PICIC6 own reconcile label
+PASS AC-PICIC6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=6D174EB5708FE9E5
+PASS AC-PICIC1 all three faces are asked at call time
+PASS AC-PICIC1 no receiver table or import grammar is restated
+PASS AC-PICIC2 one comma-list fixture reads WIRE on all three faces
+PASS AC-PICIC2 a differing face is named instead of inferred
+PASS AC-PICIC2 the foreign fixture still reads FOREIGN everywhere
+PASS AC-PICIC3 a no-comma script keeps every key of every row on all three faces
+PASS AC-PICIC4 a receiver no import binds reads UNRESOLVED everywhere rather than being guessed
+PASS AC-PICIC5 each face row records the seam that supplied it
+PASS AC-PICIC5 the recorded seam is the seam that fires
+PASS AC-PICIC6 source is pure ASCII
+PASS AC-PICIC6 stdlib only, no network, no clock
+PASS AC-PICIC6 the module writes nothing and reads no clock
+PASS AC-PICIC6 own reconcile label
+PASS AC-PICIC6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== ADJACENT 3
+== src/os/test_comma_binding_sibling_faces.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+== src/os/test_comma_binding_consumer_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_comma_binding_wire.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=6D174EB5708FE9E5

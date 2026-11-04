@@ -5503,6 +5503,14 @@ SUITES = [
     # state/queue/tech.md:508 as the R2418 seed row BEFORE the code.)
     ("os-matrix-stamp-provenance-line",
      os.path.join("..", "os", "test_matrix_stamp_provenance_line.py"), 6),
+    # R2444: the sibling reading (R2430) compared the from-import face with
+    # the relative face only, while the identity face reaches the comma-aware
+    # table by a DIFFERENT seam (comma_binding_consumer_wire). All three faces
+    # are now asked over one tree and each disagreement is published with the
+    # seam that actually fired. (AC-PICIC1..AC-PICIC6 were pinned in
+    # state/queue/tech.md:510 as the R2430 seed row BEFORE the code.)
+    ("os-comma-binding-identity-face-compare",
+     os.path.join("..", "os", "test_comma_binding_identity_face_compare.py"), 6),
     ]
 
 FAILS = 0
