@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T06:03:37+08:00",
+  "export_ts": "2026-11-05T06:05:01+08:00",
   "do": "R2455 verification window: the battery the R2454 product edit owed was run on the committed tree and came back green - 555/555 suites plus controls 7/7 at exactly the pre-registered 4306 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
   "ceo_face": {
     "current": "R2455 verification window: the battery the R2454 product edit owed was run on the committed tree and came back green - 555/555 suites plus controls 7/7 at exactly the pre-registered 4306 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
@@ -7,7 +7,7 @@
     "next_milestone": "the debt gate now names product-face-R2456 first=yes and the tech head reads state/queue/tech.md:522 prefix AC-PFKC1 row_key_carrier_scope - the row key is carried by more than one face with no reading that says which carrier a given line came from; criteria AC-PFKC1..AC-PFKC6 were pinned in that row at R2446 before any code, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2455.log (855799B at the green leg, 859638B with both follow-up legs, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, RUNNER PASS 555/555 suites + controls 7/7 in 1209.1s at criteria 4306) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53657B at 555 suites / 4306 criteria with --check byte-identical and its own green line reading 555/555 + src/os/closeout_R2455.py (state, backlog and heartbeat writers for this window)",
-    "updated_at": "2026-11-05T06:03:37+08:00"
+    "updated_at": "2026-11-05T06:05:01+08:00"
   },
   "depts": [
     {
@@ -345,10 +345,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 52,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 51,
+    "substantive_non_idle_mention_lines": 52,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
