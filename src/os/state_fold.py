@@ -346,11 +346,13 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
                  plan["preop_sha16"]))
     appended = append_archive(archive, header, window,
                              allow_create=True, now=stamp)
+    import general_writer_dialect_audit as GWDA
+    payload = GWDA.payload_for(path, folded_text)
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path),
                                prefix=".state-fold-")
     try:
         with os.fdopen(fd, "wb") as handle:
-            handle.write(folded_text.encode("utf-8"))
+            handle.write(payload)
         os.replace(tmp, path)
     except OSError:
         if os.path.exists(tmp):
@@ -366,7 +368,7 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
         "archive": appended,
         "post_bytes": len(post_raw),
         "predicted_eq_actual": (len(post_raw) == plan["predicted_bytes"]
-                                and post_raw == folded_text.encode("utf-8")
+                                and post_raw == payload
                                 and post_state["log"] == expected_log),
     })
     return result

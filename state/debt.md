@@ -165,7 +165,8 @@ column-0 checkbox starts one.
 - [x] opened=R2430 | item=reconcile-battery-R2431 | note=R2430 shipped comma_binding_sibling_faces plus its suite, rewired three publisher faces onto one seam and wired the runner, so the R2168 mixed-tree rule owes a full battery on the committed tree at the measured 543 suites / 4234 criteria before any further product edit | closed=R2431
 - [x] opened=R2431 | item=product-face-R2432 | note=R2431 green battery on the committed R2430 tree (543 suites / 4234 criteria, VERDICT PASS); next window takes the tech head state/queue/tech.md:494 prefix AC-BEDP1 (bare_evidence_deep_pile), criteria pinned in that row at R2404 | closed=R2432
 - [x] opened=R2432 | item=reconcile-battery-R2433 | note=R2432 shipped a product face (bare_evidence_deep_pile, 6/6 twice identical, adjacent 4/4 green) and changed src/os plus one runner registry line, so the R2168 mixed-tree rule puts the full reconcile battery on the committed R2432 tree with zero product edits at the pre-registered 544 suites / 4240 criteria | closed=R2433
-- [ ] opened=R2433 | item=product-face-R2434 | note=product face on the tech head state/queue/tech.md:498 prefix AC-GWDA1 (general_writer_dialect_audit), whose AC-GWDA1..AC-GWDA6 were pinned at R2409 BEFORE any code; the R2433 window named this head after walking over the delivered AC-BEDP1 row | first=yes
+- [x] opened=R2433 | item=product-face-R2434 | note=product face on the tech head state/queue/tech.md:498 prefix AC-GWDA1 (general_writer_dialect_audit), whose AC-GWDA1..AC-GWDA6 were pinned at R2409 BEFORE any code; the R2433 window named this head after walking over the delivered AC-BEDP1 row | closed=R2434
+- [ ] opened=R2434 | item=reconcile-battery-R2435 | note=battery on the committed R2434 tree at the pre-registered 545 suites / 4246 criteria (plus the one seed suite this round owes) | first=yes
 
 ## Closed
 

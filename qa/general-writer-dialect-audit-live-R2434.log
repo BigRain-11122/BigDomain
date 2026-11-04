@@ -1,0 +1,14 @@
+LIVE general_writer_dialect_audit over the REAL tree (round R2434)
+GENERAL DIALECT AUDIT scanned=1065 general=139 keeps=7 repair=2 unresolved=129 routed=7 unrouted=0 verdict=AUDIT-CLEAN
+  KEEPS debt_append.py target=state/debt.md asks=yes
+  KEEPS debt_close.py target=state/debt.md asks=yes
+  REPAIR logs_toolkit.py target=src/os/state.json excluded=E_GWDA_REPAIR (defines a normalising callable)
+  KEEPS residue_triage_append.py target=state/residue_triage.json asks=yes
+  KEEPS residue_triage_append_batch.py target=state/residue_triage.json asks=yes
+  KEEPS residue_triage_entry_retire.py target=state/residue_triage.json asks=yes
+  KEEPS residue_triage_head_renew.py target=state/residue_triage.json asks=yes
+  KEEPS state_fold.py target=src/os/state.json asks=yes
+  REPAIR state_io.py target=src/os/state.json excluded=E_GWDA_REPAIR (defines a normalising callable)
+  UNRESOLVED count=129 (named in the full run, destination reading failed)
+  verdict=AUDIT-CLEAN keeps=7 routed=7 unrouted=0 repair=2
+  CRLF-APPEND copies=1 crlf=6 lone_lf=0 row_present=True

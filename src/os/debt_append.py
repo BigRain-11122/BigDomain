@@ -166,7 +166,8 @@ def append_row(root, opened, item, note="", first="no", execute=False):
     report["read_back_ok"] = None
     if not execute:
         return report
-    data = post.encode("utf-8")
+    import general_writer_dialect_audit as GWDA
+    data = GWDA.payload_for(path, post)
     temp = path + TEMP_SUFFIX
     try:
         with io.open(temp, "wb") as handle:

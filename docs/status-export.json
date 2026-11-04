@@ -1,6 +1,6 @@
 {
-  "export_ts": "2026-11-04T09:00:05+08:00",
-  "do": "R2433 verification window: the debt gate named the battery the R2168 rule owed on the committed R2432 tree, so the full reconcile battery ran FIRST at the pre-registered 544 suites / 4240 criteria and came back red on the CEO-VISIBLE export face itself (18/21: two tick rows and a self_drive sampled before its own state append); the document was repaired at the birth site through the shipped derivation, committed alone, and the retry leg read RUNNER PASS 544/544 at the same criteria total with all four follow-up sections green",
+  "export_ts": "2026-11-04T12:40:00+08:00",
+  "do": "R2434 product window: the declaration sweep separated DECLARATION from GENERAL and said nothing about GENERAL, so the audit now reads each writer OWN os.replace destination through its own data flow and found 8 general writers landing a structured document the house keeps with only 4 routed; debt_append, debt_close and state_fold were rewired onto the shared payload derivation at their own call sites, the real tree reads AUDIT-CLEAN 7 routed / 2 repair / 129 unresolved printed, and the next window owes the battery at 545 suites / 4246 criteria",
   "ceo_face": {
     "current": "R2433 verification window: the debt gate named the battery the R2168 rule owed on the committed R2432 tree, so the full reconcile battery ran FIRST at the pre-registered 544 suites / 4240 criteria and came back red on the CEO-VISIBLE export face itself (18/21: two tick rows and a self_drive sampled before its own state append); the document was repaired at the birth site through the shipped derivation, committed alone, and the retry leg read RUNNER PASS 544/544 at the same criteria total with all four follow-up sections green",
     "latest_artifact": "qa/reconcile-all-R2433.log (red leg, 1029.8s) + qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 1017.4s, criteria 4240) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52412B at 544 suites / 4240 criteria with --check byte-identical",
@@ -59,10 +59,6 @@
     [
       "2432",
       "R2432 product window on the item the debt gate named first=yes (product-face-R2432, tech head state/queue/tech.md:494 prefix AC-BEDP1, criteria pinned at R2404 before any code): the pile measurement walked only the root and its one-level subdirectories, so a bare log filed at qa/rounds/<name> read E_BEPR_NOT_FOUND on both shipped faces while it sat on disk - measured this window on a stand-in root before any code. Shipped src/os/bare_evidence_deep_pile.py plus its six-criteria suite: one declared depth (MAX_DEPTH=2) is asked at call time, so a patched depth moves every face that asks it; bare_evidence_pile_refusal.resolve_bare now asks that law at its own call site, which carries the matrix tool argument and the follow-up face with it. A name that is not found while the tree really continues below the searched depth refuses E_BEDP_BEYOND_DEPTH naming the depth searched, while a proved absence keeps the shipped E_BEPR_NOT_FOUND spelling and the one-level ambiguity reading is unchanged. SUITE PASS 6/6 twice with an identical digest plus four adjacent suites green (qa/bare-evidence-deep-pile-R2432.log, 2374B, legs=2 identical=True adjacent=4 fails=0); registry measured 544 suites / 4240 criteria. LIVE over the real tree, not a plan: qa/bare-evidence-deep-pile-live-R2432.log reads the bare name server-cpu.out.log as RESOLVED pile=qa/bonsai-bd at exit 0 where both faces read NOT_FOUND before R2432, and a name that is nowhere reads E_BEDP_BEYOND_DEPTH naming depth 2. Zero cloud calls, zero external API touches."
-    ],
-    [
-      "2433",
-      "OSLoop 执行 tick"
     ],
     [
       "2431",
@@ -239,15 +235,23 @@
     [
       "R2340",
       "R2340 red-then-repair: the R2339 promotion emptied the live orphan pile, so AC-OTR6's rounds>=1 premise was false; repaired stricter (empty pile legal only when the variants reading carries zero orphans), suite 6/6 twice identical, full green re-run carried to R2341"
+    ],
+    [
+      "2434",
+      "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
+    ],
+    [
+      "2434",
+      "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 32,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 32,
+    "substantive_non_idle_mention_lines": 39,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -269,6 +273,8 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
+        "discounted": 0,
+        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -278,12 +284,19 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 397,
+        "done_rows": 398,
         "gated_rows": 1,
-        "claimable": 10,
+        "claimable": 9,
+        "discounted": 1,
+        "delivered": [
+          {
+            "line": 494,
+            "prefix": "AC-BEDP1"
+          }
+        ],
         "floor": 10,
-        "shortfall": 0,
-        "status": "MET"
+        "shortfall": 1,
+        "status": "SHORT"
       },
       {
         "queue": "explore",
@@ -293,10 +306,16 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
+        "discounted": 0,
+        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ]
+    ],
+    "verdict": "FLOOR-DEBT",
+    "shortfall_total": 1,
+    "missing": [],
+    "delivered_total": 1
   }
 }

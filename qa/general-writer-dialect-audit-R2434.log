@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2434 suite=src/os/test_general_writer_dialect_audit.py legs=2
+== LEG A rc=0 digest=FB4CACF7DD7B662F
+PASS AC-GWDA1 the tier is derived from the source, never a whitelist file
+PASS AC-GWDA2 patching the shared derivation moves every named writer and a real write lands the patched bytes
+PASS AC-GWDA3 an LF target keeps exactly today's bytes (7 writers)
+PASS AC-GWDA4 a CRLF target stays CRLF through the real write (crlf=6 lone_lf=0)
+PASS AC-GWDA5 the three edited writers keep their HEAD refusal code, exit code and printed line
+PASS AC-GWDA6 pure ASCII, stdlib only, no clock, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== LEG B rc=0 digest=FB4CACF7DD7B662F
+PASS AC-GWDA1 the tier is derived from the source, never a whitelist file
+PASS AC-GWDA2 patching the shared derivation moves every named writer and a real write lands the patched bytes
+PASS AC-GWDA3 an LF target keeps exactly today's bytes (7 writers)
+PASS AC-GWDA4 a CRLF target stays CRLF through the real write (crlf=6 lone_lf=0)
+PASS AC-GWDA5 the three edited writers keep their HEAD refusal code, exit code and printed line
+PASS AC-GWDA6 pure ASCII, stdlib only, no clock, own label and suite
+SUITE PASS criteria=6 pass=6 fail=0
+== ADJACENT 5
+== src/os/test_debt_append.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_close.py rc=0 SUITE PASS 6/6
+== src/os/test_state_fold.py rc=0 SUITE PASS 6/6
+== src/os/test_library_declaration_dialect_sweep.py rc=0 SUITE PASS 6/6
+== src/os/test_declaration_writer_dialect_preservation.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=FB4CACF7DD7B662F

@@ -5303,6 +5303,15 @@ SUITES = [
     # R2404 seed row BEFORE the code.)
     ("os-bare-evidence-deep-pile",
      os.path.join("..", "os", "test_bare_evidence_deep_pile.py"), 6),
+    # R2434: the declaration sweep split DECLARATION from GENERAL honestly and
+    # then said nothing about GENERAL, so the writers that land a structured
+    # document the house keeps (the debt register, src/os/state.json, the
+    # residue declaration) chose their own transport. The tier is now read off
+    # each writer own os.replace destination and routed through the shared
+    # payload derivation at call time. (AC-GWDA1..AC-GWDA6 were pinned in
+    # state/queue/tech.md line 498 as the R2409 seed BEFORE the code.)
+    ("os-general-writer-dialect-audit",
+     os.path.join("..", "os", "test_general_writer_dialect_audit.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window
