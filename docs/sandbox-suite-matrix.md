@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 552 | 4288 | 552/552 | R2449 |
+| 553 | 4294 | 552/552 | R2449 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -563,34 +563,35 @@
 | 523 | os-bare-evidence-deep-pile | ../os/test_bare_evidence_deep_pile.py | 6 | green | 1.1 |
 | 524 | os-general-writer-dialect-audit | ../os/test_general_writer_dialect_audit.py | 6 | green | 19.2 |
 | 525 | os-parameter-destination-resolution | ../os/test_parameter_destination_resolution.py | 6 | green | 7.7 |
-| 526 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 0.6 |
-| 527 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.5 |
-| 528 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.3 |
-| 529 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 1.1 |
-| 530 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.8 |
-| 531 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.5 |
-| 532 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.8 |
-| 533 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.3 |
-| 534 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.2 |
-| 535 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.8 |
-| 536 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.9 |
-| 537 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 1.2 |
-| 538 | os-matrix-evidence-pile-consistency | ../os/test_matrix_evidence_pile_consistency.py | 6 | green | 0.8 |
-| 539 | os-followup-bare-evidence-face | ../os/test_followup_bare_evidence_face.py | 6 | green | 0.7 |
-| 540 | os-review-window-guard-parity-blind-agreement | ../os/test_review_window_guard_parity_blind_agreement.py | 6 | green | 0.1 |
-| 541 | os-review-window-guard-parity-consumer-wire | ../os/test_review_window_guard_parity_consumer_wire.py | 6 | green | 0.2 |
-| 542 | os-declaration-writer-dialect-preservation | ../os/test_declaration_writer_dialect_preservation.py | 6 | green | 1.6 |
-| 543 | os-owner-table-usage-wire | ../os/test_owner_table_usage_wire.py | 6 | green | 1.3 |
-| 544 | os-repin-dialect-preservation | ../os/test_repin_dialect_preservation.py | 6 | green | 1.7 |
-| 545 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 3.8 |
-| 546 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 0.9 |
-| 547 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 1.3 |
-| 548 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | green | 1.3 |
-| 549 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 1.2 |
-| 550 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.7 |
-| 551 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
-| 552 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
-|  | 合计 |  | 4288 | green 552 / FAIL 0 / no-evidence 0 |  |
+| 526 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | no-evidence | - |
+| 527 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 0.6 |
+| 528 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.5 |
+| 529 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.3 |
+| 530 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 1.1 |
+| 531 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 0.8 |
+| 532 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.5 |
+| 533 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 0.8 |
+| 534 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.3 |
+| 535 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 1.2 |
+| 536 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 0.8 |
+| 537 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 1.9 |
+| 538 | os-bare-evidence-pile-refusal | ../os/test_bare_evidence_pile_refusal.py | 6 | green | 1.2 |
+| 539 | os-matrix-evidence-pile-consistency | ../os/test_matrix_evidence_pile_consistency.py | 6 | green | 0.8 |
+| 540 | os-followup-bare-evidence-face | ../os/test_followup_bare_evidence_face.py | 6 | green | 0.7 |
+| 541 | os-review-window-guard-parity-blind-agreement | ../os/test_review_window_guard_parity_blind_agreement.py | 6 | green | 0.1 |
+| 542 | os-review-window-guard-parity-consumer-wire | ../os/test_review_window_guard_parity_consumer_wire.py | 6 | green | 0.2 |
+| 543 | os-declaration-writer-dialect-preservation | ../os/test_declaration_writer_dialect_preservation.py | 6 | green | 1.6 |
+| 544 | os-owner-table-usage-wire | ../os/test_owner_table_usage_wire.py | 6 | green | 1.3 |
+| 545 | os-repin-dialect-preservation | ../os/test_repin_dialect_preservation.py | 6 | green | 1.7 |
+| 546 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 3.8 |
+| 547 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 0.9 |
+| 548 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 1.3 |
+| 549 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | green | 1.3 |
+| 550 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 1.2 |
+| 551 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.7 |
+| 552 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
+| 553 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
+|  | 合计 |  | 4294 | green 552 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

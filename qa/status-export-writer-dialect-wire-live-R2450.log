@@ -1,0 +1,5 @@
+STATUS EXPORT WRITERS derived=3 routed=3 unrouted=0 transport=LF/CRLF audit=AUDIT-CLEAN verdict=WIRED
+  WRITER closeout_export_parity_wire.py target=docs/status-export.json asks=yes
+  WRITER queue_export_gate_wire.py target=docs/status-export.json asks=yes
+  WRITER queue_floor_export_face.py target=docs/status-export.json asks=yes
+  TRANSPORT lf=98405B today-exact=True crlf=98802B lone-lf=0 crlf-kept=True

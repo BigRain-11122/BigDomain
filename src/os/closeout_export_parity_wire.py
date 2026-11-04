@@ -42,6 +42,7 @@ import os
 import sys
 
 import export_closeout_gate_parity as ECGP
+import general_writer_dialect_audit as GWDA
 
 LABEL = "os-closeout-export-parity-wire"
 DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
@@ -82,8 +83,9 @@ def publish(root, path, text=None):
     """Stage, prove with the parity, and only then replace the export."""
     if text is None:
         text = compose(root, path)
+    payload = _payload(path, text)
     stage = path + ".parity-stage"
-    report, code = _stage_and_check(root, path, stage, text)
+    report, code = _stage_and_check(root, path, stage, payload)
     if code != 0:
         return {
             "label": LABEL,
@@ -95,9 +97,9 @@ def publish(root, path, text=None):
             "residue": "(none)",
         }, 2
     os.replace(stage, path)
-    with io.open(path, "r", encoding="utf-8", newline="") as handle:
+    with io.open(path, "rb") as handle:
         back = handle.read()
-    if back != text:
+    if back != payload:
         raise CloseoutExportParityWireError("E_CEPW_READBACK", path)
     return {
         "label": LABEL,
@@ -105,20 +107,28 @@ def publish(root, path, text=None):
         "path": path,
         "gate": report.get("gate"),
         "reading": "AGREES",
-        "bytes": len(back.encode("utf-8")),
+        "bytes": len(back),
         "residue": "(none)",
     }, 0
 
 
-def _stage_and_check(root, path, stage, text):
+def _payload(path, text):
+    """The bytes to publish, in the target's OWN transport (AC-SEWD2/3)."""
+    try:
+        return GWDA.payload_for(path, text)
+    except GWDA.AuditError as exc:
+        raise CloseoutExportParityWireError(exc.code, exc.detail)
+
+
+def _stage_and_check(root, path, stage, payload):
     """Write the staged bytes, ask the parity, and leave no residue on refusal.
 
     The staged file SURVIVES a passing reading on purpose: the caller replaces
     the export with it, so removing it here would publish nothing.
     """
     try:
-        with io.open(stage, "w", encoding="utf-8", newline="") as handle:
-            handle.write(text)
+        with io.open(stage, "wb") as handle:
+            handle.write(payload)
     except (IOError, OSError):
         _drop(stage)
         raise CloseoutExportParityWireError("E_CEPW_STAGE", path)

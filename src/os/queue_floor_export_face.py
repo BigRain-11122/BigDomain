@@ -38,6 +38,7 @@ import json
 import os
 import sys
 
+import general_writer_dialect_audit as GWDA
 import queue_floor_reading_wire as QFRW
 
 FACE_KEY = "queue"
@@ -95,16 +96,30 @@ def compose(root, path):
     return json.dumps(data, ensure_ascii=False, indent=2) + "\n"
 
 
+def _payload(path, text):
+    """The bytes to land, in the target's OWN transport (AC-SEWD2/AC-SEWD3).
+
+    The dialect is not decided here: general_writer_dialect_audit.payload_for
+    asks the shared law at CALL time, so an LF export keeps exactly today's
+    bytes and a CRLF export keeps CRLF.
+    """
+    try:
+        return GWDA.payload_for(path, text)
+    except GWDA.AuditError as exc:
+        raise QueueFloorExportFaceError(exc.code, exc.detail)
+
+
 def write(root, path):
     """Write the derived section atomically and prove it by reading back."""
     text = compose(root, path)
+    payload = _payload(path, text)
     temporary = path + ".tmp"
-    with io.open(temporary, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(text)
+    with io.open(temporary, "wb") as handle:
+        handle.write(payload)
     os.replace(temporary, path)
-    with io.open(path, "r", encoding="utf-8", newline="") as handle:
+    with io.open(path, "rb") as handle:
         back = handle.read()
-    if back != text:
+    if back != payload:
         raise QueueFloorExportFaceError("E_QFE_READBACK")
     return text
 

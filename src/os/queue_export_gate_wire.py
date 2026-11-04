@@ -36,6 +36,7 @@ import json
 import os
 import sys
 
+import general_writer_dialect_audit as GWDA
 import queue_export_freshness_gate as GATE
 import queue_floor_export_face as QFE
 
@@ -66,12 +67,20 @@ class QueueExportGateWireError(Exception):
         self.detail = detail
 
 
-def _stage(text, path):
+def _stage(payload, path):
     """Write the composed bytes beside the export; never over it."""
     staged = path + STAGE_SUFFIX
-    with io.open(staged, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(text)
+    with io.open(staged, "wb") as handle:
+        handle.write(payload)
     return staged
+
+
+def _payload(path, text):
+    """The bytes to publish, in the target's OWN transport (AC-SEWD2/3)."""
+    try:
+        return GWDA.payload_for(path, text)
+    except GWDA.AuditError as exc:
+        raise QueueExportGateWireError(exc.code, exc.detail)
 
 
 def _discard(staged):
@@ -91,7 +100,8 @@ def publish(root, path):
     except (IOError, OSError):
         raise QueueExportGateWireError("E_QEG_EXPORT_MISSING", path)
 
-    staged = _stage(text, path)
+    payload = _payload(path, text)
+    staged = _stage(payload, path)
     try:
         verdict, code = GATE.check(root, staged)
     except GATE.QueueExportFreshnessGateError as exc:
@@ -116,9 +126,9 @@ def publish(root, path):
         }, 2
 
     os.replace(staged, path)
-    with io.open(path, "r", encoding="utf-8", newline="") as handle:
+    with io.open(path, "rb") as handle:
         back = handle.read()
-    if back != text:
+    if back != payload:
         raise QueueExportGateWireError("E_QEG_READBACK", path)
 
     return {

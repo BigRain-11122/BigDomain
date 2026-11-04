@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2450 suite=src/os/test_status_export_writer_dialect_wire.py legs=2
+== LEG A rc=0 digest=AA1CFA0B810A6A49
+SUITE status_export_writer_dialect_wire (R2450) criteria=6
+PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names
+PASS AC-SEWD2 a CRLF docs/status-export.json keeps CRLF through a real writer call with zero lone LF
+PASS AC-SEWD3 an LF export keeps exactly today's bytes
+PASS AC-SEWD4 every one of the three writers keeps its existing refusal code, exit code and printed line
+PASS AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps after the wire
+PASS AC-SEWD6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite
+SUITE PASS 6/6
+== LEG B rc=0 digest=AA1CFA0B810A6A49
+SUITE status_export_writer_dialect_wire (R2450) criteria=6
+PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names
+PASS AC-SEWD2 a CRLF docs/status-export.json keeps CRLF through a real writer call with zero lone LF
+PASS AC-SEWD3 an LF export keeps exactly today's bytes
+PASS AC-SEWD4 every one of the three writers keeps its existing refusal code, exit code and printed line
+PASS AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps after the wire
+PASS AC-SEWD6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_general_writer_dialect_audit.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=AA1CFA0B810A6A49

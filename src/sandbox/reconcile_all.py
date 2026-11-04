@@ -5319,6 +5319,14 @@ SUITES = [
     # pinned in state/queue/tech.md line 514 as the R2434 seed BEFORE the code.)
     ("os-parameter-destination-resolution",
      os.path.join("..", "os", "test_parameter_destination_resolution.py"), 6),
+    # R2450: three writers land the CEO-visible export and none of them asked
+    # the shared payload derivation, so the document was rewritten in whichever
+    # transport the running writer felt like. Every writer the audit derives
+    # for that document now asks the law at its own write site, and both
+    # transports are proved with a REAL writer call. (AC-SEWD1..AC-SEWD6 were
+    # pinned in state/queue/tech.md:516 as the R2448 seed BEFORE the code.)
+    ("os-status-export-writer-dialect-wire",
+     os.path.join("..", "os", "test_status_export_writer_dialect_wire.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

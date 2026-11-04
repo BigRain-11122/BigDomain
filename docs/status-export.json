@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T02:17:23+08:00",
-  "do": "R2449 verification window: the full reconcile battery ran FIRST on the committed tree and read RUNNER PASS on the first leg - 552/552 suites plus 7/7 controls in 1235.9s at the pre-registered 4288 criteria - and docs/sandbox-suite-matrix.md was then regenerated from THIS round own eligible evidence, so the artifact and its own checker name the same log and its green line reads 552/552 for the first time in four windows",
+  "export_ts": "2026-11-05T02:26:51+08:00",
+  "do": "R2450 product window: the three writers that land docs/status-export.json now ask the shared dialect law at their own write sites, so the document the reader opens is no longer rewritten in whichever transport the running writer felt like - an LF export keeps exactly today's bytes and a CRLF export keeps CRLF with zero lone LF, proved by real writer calls over copies of the live document, and the dialect audit now reads AUDIT-CLEAN with routed == keeps",
   "ceo_face": {
-    "current": "R2449 verification window: the full reconcile battery ran FIRST on the committed tree and read RUNNER PASS on the first leg - 552/552 suites plus 7/7 controls in 1235.9s at the pre-registered 4288 criteria - and docs/sandbox-suite-matrix.md was then regenerated from THIS round own eligible evidence, so the artifact and its own checker name the same log and its green line reads 552/552 for the first time in four windows",
-    "latest_artifact": "qa/reconcile-all-R2449.log (852581B, 552/552 suites green, criteria 4288, crlf=0) + docs/sandbox-suite-matrix.md regenerated to 53304B at 552 suites / 4288 criteria with green=552/552, --check byte-identical",
-    "next_milestone": "the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:516 prefix AC-SEWD1 (status_export_writer_dialect_wire, criteria AC-SEWD1..AC-SEWD6 pinned there at R2448 BEFORE any code): route the three export writers that land docs/status-export.json through the shared payload derivation so a CRLF export stays CRLF and the audit reads AUDIT-CLEAN with routed == keeps",
+    "current": "R2450 product window: the three writers that land docs/status-export.json now ask the shared dialect law at their own write sites, so the document the reader opens is no longer rewritten in whichever transport the running writer felt like - an LF export keeps exactly today's bytes and a CRLF export keeps CRLF with zero lone LF, proved by real writer calls over copies of the live document, and the dialect audit now reads AUDIT-CLEAN with routed == keeps",
+    "latest_artifact": "src/os/status_export_writer_dialect_wire.py + src/os/test_status_export_writer_dialect_wire.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + src/os/queue_floor_export_face.py + src/os/queue_export_gate_wire.py + src/os/closeout_export_parity_wire.py (dialect wired at the write site) + qa/status-export-writer-dialect-wire-R2450.log (1693B) + qa/status-export-writer-dialect-wire-live-R2450.log (414B) + docs/sandbox-suite-matrix.md regenerated to 53423B at 553 suites / 4294 criteria, --check byte-identical",
+    "next_milestone": "the R2168 mixed-tree rule owes reconcile-battery-R2451 at the pre-registered 553 suites / 4294 criteria, and after it the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:518 prefix AC-SEWS1 (status_export_writer_transport_scope): prove the transport of every derived export writer, naming an UNPROVABLE writer with its refusal code instead of silently dropping it",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2449.log (852581B, 552/552 suites green, criteria 4288, crlf=0) + docs/sandbox-suite-matrix.md regenerated to 53304B at 552 suites / 4288 criteria with green=552/552, --check byte-identical",
-    "updated_at": "2026-11-05T02:17:23+08:00"
+    "last_artifact": "src/os/status_export_writer_dialect_wire.py + src/os/test_status_export_writer_dialect_wire.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + src/os/queue_floor_export_face.py + src/os/queue_export_gate_wire.py + src/os/closeout_export_parity_wire.py (dialect wired at the write site) + qa/status-export-writer-dialect-wire-R2450.log (1693B) + qa/status-export-writer-dialect-wire-live-R2450.log (414B) + docs/sandbox-suite-matrix.md regenerated to 53423B at 553 suites / 4294 criteria, --check byte-identical",
+    "updated_at": "2026-11-05T02:26:51+08:00"
   },
   "depts": [
     {
@@ -68,6 +68,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2450",
+      "2026-11-05 R2450 product window on the item the debt gate named first=yes (product-face-R2450, tech head state/queue/tech.md:516 prefix AC-SEWD1 status_export_writer_dialect_wire, criteria pinned there at R2448 BEFORE any code): the R2448 debt was closed at its three write sites - queue_floor_export_face.write, queue_export_gate_wire.publish and closeout_export_parity_wire.publish now ask general_writer_dialect_audit.payload_for before landing bytes and write the returned payload in binary with a byte read-back - and src/os/status_export_writer_dialect_wire.py proves it: the writer set is DERIVED from the shipped audit at CALL time, the LF copy comes back byte for byte and the CRLF copy CRLF with zero lone LF, both over copies of the live document through real writer calls. SUITE PASS 6/6 twice with an identical digest plus three adjacent suites and three writer-suite regressions green (qa/status-export-writer-dialect-wire-R2450.log, 1693B); registry 553 suites / 4294 criteria; matrix regenerated to 53423B with --check byte-identical. LIVE: derived=3 routed=3 unrouted=0 transport=LF/CRLF audit=AUDIT-CLEAN verdict=WIRED, lf=98405B today-exact=True crlf=98802B lone-lf=0, and the audit reads keeps=10 routed=10 unrouted=0 AUDIT-CLEAN. One real measured gap seeded as status_export_writer_transport_scope (AC-SEWS1..AC-SEWS6) at line 518. Debt: product-face-R2450 closed at 116179B -> 116182B (line=186, open 2->1, done 165->166, readback ok) and reconcile-battery-R2451 opened first=yes at 116182B -> 116580B. The state log was folded 1..100 at a true round-block boundary (13794B against the 78500B gate, tokens 226 none missing, no residue rounds)."
+    ],
     [
       "2449",
       "2026-11-05 R2449 verification window on the item the debt gate named first=yes (reconcile-battery-R2449, carried from R2448 at the pre-registered 552 suites / 4288 criteria): zero product code changed and the R2168 mixed-tree rule was honoured. The battery read RUNNER PASS on the FIRST leg - 552/552 suites green, reconcile controls 7/7, 1235.9s, criteria total 4288 EXACTLY as pre-registered (qa/reconcile-all-R2449.log, 852581B, crlf=0), TMP RECLAIM candidates=932 removed=932 busy=0 failed=0. The four follow-up sections produced the designed order: matrix FAIL at on-disk=53313B against regenerated=53304B with no byte written, then a stamp-aligned regeneration from this round own eligible evidence, --check byte-identical at 53304B / 552 suites / 4288 criteria, and VERDICT R2449 PASS failing=none with fingerprint CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN. Debt: reconcile-battery-R2449 closed at 115711B -> 115714B (line=185, open 3->2, done 163->164, readback ok) and the carried fold-due-R2445 closed at 115714B -> 115718B (line=181, open 2->1, done 164->165, readback ok) because state_fold --check now reads FOLD-CLEAR at 69469B against the 78500B gate; product-face-R2450 was opened first=yes at 115718B -> 116179B. Remaining open: loop-s4u-reconcile only."
@@ -317,17 +321,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2449",
+      "2450",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 88,
+    "log_lines_in_window": 9,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 88,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -358,7 +362,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 406,
+        "done_rows": 407,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,
