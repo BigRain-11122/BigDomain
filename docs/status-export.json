@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-04T20:07:51+08:00",
+  "export_ts": "2026-11-04T20:08:36+08:00",
   "do": "R2442 product window: a render told to borrow another document's stamp now RECORDS that borrow inside the artifact and --check reads it back, so a borrowed-stamp doc is no longer byte-for-byte indistinguishable from an ordinary render - while an ordinary render keeps today's bytes and a doc written before this law still checks green",
   "ceo_face": {
     "current": "R2442 product window: a render told to borrow another document's stamp now RECORDS that borrow inside the artifact and --check reads it back, so a borrowed-stamp doc is no longer byte-for-byte indistinguishable from an ordinary render - while an ordinary render keeps today's bytes and a doc written before this law still checks green",
@@ -7,7 +7,7 @@
     "next_milestone": "verification window on the committed R2442 tree: the full reconcile battery at the pre-registered 549 suites / 4270 criteria (reconcile-battery-R2443 first=yes), then back to the product face the reader offers at state/queue/tech.md:510 prefix AC-PICIC1; due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
     "last_artifact": "src/os/matrix_stamp_provenance_line.py (one law, two directions: segment() writes the provenance line, recorded_source() reads it back) + qa/matrix-stamp-provenance-line-R2442.log (3787B, SUITE PASS 6/6 twice, legs=2 identical=True, adjacent=3 fails=0) + qa/matrix-stamp-provenance-line-live-R2442.log (463B, crlf=0) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52994B at 549 suites / 4270 criteria with --check byte-identical",
-    "updated_at": "2026-11-04T20:07:51+08:00"
+    "updated_at": "2026-11-04T20:08:36+08:00"
   },
   "depts": [
     {
@@ -288,10 +288,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 75,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 74,
+    "substantive_non_idle_mention_lines": 75,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
