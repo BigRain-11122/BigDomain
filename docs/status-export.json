@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-11-05T05:18:56+08:00",
-  "do": "R2453 verification window: the battery the R2452 product edit owed was run on the committed tree and came back green - 554/554 suites plus controls 7/7 at exactly the pre-registered 4300 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
+  "export_ts": "2026-11-05T05:35:44+08:00",
+  "do": "R2454 产品窗：closeout 发布线现在按目标自身换行方言组合并落盘 - CRLF 文档从 R2452 的 REFUSED 变成 WRITTEN/AGREES（lone_lf=0，413 行 CRLF），LF 文档字节与今天完全一致；病因在出生站修好（parity 组合改为调用时询问shipped 方言律），不是放宽判据",
   "ceo_face": {
-    "current": "R2453 verification window: the battery the R2452 product edit owed was run on the committed tree and came back green - 554/554 suites plus controls 7/7 at exactly the pre-registered 4300 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
-    "latest_artifact": "qa/reconcile-all-R2453.log (858125B, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, both follow-up legs retained: 1889B FAIL then 1950B PASS, RUNNER PASS 554/554 suites + controls 7/7 in 1255.0s at criteria 4300) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53539B at 554 suites / 4300 criteria with --check byte-identical and its own green line reading 554/554 + src/os/closeout_R2453.py (state, backlog and heartbeat writers for this window)",
-    "next_milestone": "the debt gate now names product-face-R2454 first=yes and the tech head still reads state/queue/tech.md:520 prefix AC-CEPD1 closeout_export_parity_dialect_wire - the closeout wire cannot publish a CRLF-dialect export at all, which is the exact dialect the R2450 wire exists to preserve; criteria AC-CEPD1..AC-CEPD6 were pinned in that row at R2452 before any code, ETA inside 48h",
+    "current": "R2454 产品窗：closeout 发布线现在按目标自身换行方言组合并落盘 - CRLF 文档从 R2452 的 REFUSED 变成 WRITTEN/AGREES（lone_lf=0，413 行 CRLF），LF 文档字节与今天完全一致；病因在出生站修好（parity 组合改为调用时询问shipped 方言律），不是放宽判据",
+    "latest_artifact": "src/os/closeout_export_parity_dialect_wire.py + src/os/test_closeout_export_parity_dialect_wire.py（套件 20/20 两跑同判 6 准则 × 2 + 3 邻套件绿；qa/closeout-export-parity-dialect-wire-R2454.log、qa/closeout-export-parity-dialect-wire-live-R2454.log）",
+    "next_milestone": "下一窗=债务门 first=yes reconcile-battery-R2455（本轮改了产品字节，预注册 555 套件 / 4306 准则），24h 内跑绿并刷新矩阵",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2453.log (858125B, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, both follow-up legs retained: 1889B FAIL then 1950B PASS, RUNNER PASS 554/554 suites + controls 7/7 in 1255.0s at criteria 4300) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53539B at 554 suites / 4300 criteria with --check byte-identical and its own green line reading 554/554 + src/os/closeout_R2453.py (state, backlog and heartbeat writers for this window)",
     "updated_at": "2026-11-05T05:18:56+08:00"
@@ -65,7 +65,8 @@
     "src/os/test_matrix_stamp_compare.py (AC-MSC4 live leg now asks suite_matrix.doc_evidence_face) + qa/reconcile-all-R2421-retry.log (840488B, RUNNER PASS 538/538) + docs/sandbox-suite-matrix.md (51830B, 538 suites / 4204 criteria)",
     "src/os/relative_import_alias_gate.py + qa/relative-import-alias-gate-R2420.log (1516B, legs=2 identical) + qa/relative-import-alias-gate-live-R2420.log (1591B)",
     "qa/reconcile-all-R2419.log (839910B, RUNNER PASS 537/537 suites) + docs/sandbox-suite-matrix.md (51708B, 537 suites / 4198 criteria)",
-    "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
+    "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)",
+    "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
     [
@@ -333,17 +334,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2453",
+      "2454",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 45,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 38,
+    "substantive_non_idle_mention_lines": 45,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

@@ -1,0 +1,51 @@
+EVIDENCE round=R2454 suite=os-closeout-export-parity-dialect-wire
+LEG1 rc=0
+PASS AC-CEPD1a a CRLF document composes with zero lone LF
+PASS AC-CEPD1b an LF document keeps today's bytes
+PASS AC-CEPD1c the dialect law is asked at CALL time
+PASS AC-CEPD2a the CRLF document is WRITTEN, parity AGREEing
+PASS AC-CEPD2b the bytes are the LF composition with CRLF endings
+PASS AC-CEPD2c zero lone LF, declared CRLF transport
+PASS AC-CEPD3a the LF document is WRITTEN
+PASS AC-CEPD3b today's LF bytes are unchanged
+PASS AC-CEPD3c the reading names LF and the landed size
+PASS AC-CEPD4a a doctored value reads DISAGREES with its own name
+PASS AC-CEPD4b the check leaves the document byte-identical
+PASS AC-CEPD4c a content refusal publishes nothing, leaves no residue
+PASS AC-CEPD5a the LF reading keys keep their values
+PASS AC-CEPD5b the LF byte counts are unchanged, transport added
+PASS AC-CEPD5c the CRLF reading agrees in its own transport
+PASS AC-CEPD6a the wire and its suite are pure ASCII
+PASS AC-CEPD6b no clock and no network import in the wire
+PASS AC-CEPD6c the wire carries its own label and is registry-wired
+PASS AC-CEPD6d the json face is the pinned key order
+PASS AC-CEPD6e the CLI keeps its codes and six criteria
+SUITE PASS 20/20
+LEG2 rc=0
+PASS AC-CEPD1a a CRLF document composes with zero lone LF
+PASS AC-CEPD1b an LF document keeps today's bytes
+PASS AC-CEPD1c the dialect law is asked at CALL time
+PASS AC-CEPD2a the CRLF document is WRITTEN, parity AGREEing
+PASS AC-CEPD2b the bytes are the LF composition with CRLF endings
+PASS AC-CEPD2c zero lone LF, declared CRLF transport
+PASS AC-CEPD3a the LF document is WRITTEN
+PASS AC-CEPD3b today's LF bytes are unchanged
+PASS AC-CEPD3c the reading names LF and the landed size
+PASS AC-CEPD4a a doctored value reads DISAGREES with its own name
+PASS AC-CEPD4b the check leaves the document byte-identical
+PASS AC-CEPD4c a content refusal publishes nothing, leaves no residue
+PASS AC-CEPD5a the LF reading keys keep their values
+PASS AC-CEPD5b the LF byte counts are unchanged, transport added
+PASS AC-CEPD5c the CRLF reading agrees in its own transport
+PASS AC-CEPD6a the wire and its suite are pure ASCII
+PASS AC-CEPD6b no clock and no network import in the wire
+PASS AC-CEPD6c the wire carries its own label and is registry-wired
+PASS AC-CEPD6d the json face is the pinned key order
+PASS AC-CEPD6e the CLI keeps its codes and six criteria
+SUITE PASS 20/20
+identical=True
+adjacent=3
+ADJ test_export_closeout_gate_parity.py rc=0 SUITE PASS 6/6
+ADJ test_closeout_export_parity_wire.py rc=0 SUITE PASS 16/16
+ADJ test_status_export_writer_transport_scope.py rc=0 SUITE PASS 6/6
+fails=0

@@ -5395,6 +5395,15 @@ SUITES = [
     # BEFORE the code.)
     ("os-closeout-export-parity-wire",
      os.path.join("..", "os", "test_closeout_export_parity_wire.py"), 6),
+    # R2454: MEASURED at R2452 the closeout wire could not publish a CRLF
+    # export at all - the parity composed LF text while the gate wire kept the
+    # target dialect, so the refusal was transport-only, not content drift. The
+    # composition now lands the target's own transport, asked of the shipped
+    # dialect law at CALL time, and this wire publishes and reads back what it
+    # landed. (AC-CEPD1..AC-CEPD6 were pinned in state/queue/tech.md:520 as the
+    # R2452 seed row BEFORE the code.)
+    ("os-closeout-export-parity-dialect-wire",
+     os.path.join("..", "os", "test_closeout_export_parity_dialect_wire.py"), 6),
     # R2379: the batch writer refused a status that disagreed with the live
     # reading, but nothing told the operator WHAT that status was, so a --pair
     # list cost a refused call to compose. This face names every residue round

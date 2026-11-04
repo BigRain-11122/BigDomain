@@ -1,0 +1,4 @@
+EVIDENCE round=R2454 live face
+REAL-DOC dialect=LF parity=AGREES gate=WRITTEN differs=(none)
+CRLF-COPY source=docs/status-export.json publish=WRITTEN reading=AGREES transport=CRLF bytes=106468 lone_lf=0 crlf=413
+NOTE the copy was written inside a temp directory; the repository export was only read

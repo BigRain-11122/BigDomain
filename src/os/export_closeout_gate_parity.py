@@ -45,6 +45,8 @@ import shutil
 import sys
 import tempfile
 
+import declaration_writer_dialect_preservation as DWDP
+import general_writer_dialect_audit as GWDA
 import queue_export_gate_wire as QEG
 import queue_floor_export_face as QFE
 
@@ -73,12 +75,24 @@ class ExportCloseoutGateParityError(Exception):
         self.detail = detail
 
 
+def transport(path):
+    """The document's own line-ending dialect, from the shipped law."""
+    try:
+        with io.open(path, "rb") as handle:
+            raw = handle.read()
+    except (IOError, OSError):
+        raise ExportCloseoutGateParityError("E_ECGP_EXPORT_MISSING", path)
+    return DWDP.dialect(raw)
+
+
 def closeout_style(root, path):
     """The bytes the closeout recipe publishes for this document.
 
     This is the closeout's own shape: read, QFE.apply, json.dumps(indent=2)
-    plus one trailing LF. QFE.apply is asked as an attribute at call time so a
-    patched apply moves these bytes (AC-ECGP1).
+    plus one trailing LF, then rendered in the target's OWN transport by the
+    shipped dialect law (AC-CEPD1/AC-CEPD3). QFE.apply and the dialect law are
+    both asked as attributes at call time, so patching either moves these
+    bytes (AC-ECGP1, AC-CEPD1); no newline is hardcoded here.
     """
     try:
         with io.open(path, "r", encoding="utf-8-sig") as handle:
@@ -93,7 +107,15 @@ def closeout_style(root, path):
         QFE.apply(data, root)
     except QFE.QueueFloorExportFaceError as exc:
         raise ExportCloseoutGateParityError(exc.code, exc.detail)
-    return json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+    text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+    try:
+        payload = GWDA.payload_for(path, text)
+    except GWDA.AuditError as exc:
+        raise ExportCloseoutGateParityError(exc.code, exc.detail)
+    try:
+        return payload.decode("utf-8")
+    except UnicodeDecodeError:
+        raise ExportCloseoutGateParityError("E_ECGP_NOT_UTF8", path)
 
 
 def _wire_reading(root, path):
@@ -161,6 +183,7 @@ def first_difference(left_text, right_text):
 def check(root, path):
     """Compare both recipes over one document; write nothing in the repo."""
     closeout_text = closeout_style(root, path)
+    own_transport = transport(path)
     wire_text, wire_result, wire_code = _wire_reading(root, path)
 
     if wire_code != 0:
@@ -168,6 +191,7 @@ def check(root, path):
             "label": LABEL,
             "verdict": "BYPASS",
             "path": path,
+            "transport": own_transport,
             "gate": wire_result.get("verdict"),
             "drifted": list(wire_result.get("drifted") or ()),
             "closeout_bytes": len(closeout_text.encode("utf-8")),
@@ -181,6 +205,7 @@ def check(root, path):
         "label": LABEL,
         "verdict": verdict,
         "path": path,
+        "transport": own_transport,
         "gate": wire_result.get("verdict"),
         "drifted": [],
         "closeout_bytes": len(closeout_text.encode("utf-8")),
