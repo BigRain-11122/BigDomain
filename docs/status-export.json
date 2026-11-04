@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T08:16:01+08:00",
-  "do": "R2432 product window on the item the debt gate named first=yes (product-face-R2432, tech head state/queue/tech.md:494 prefix AC-BEDP1): the pile measurement walked only the root and its one-level subdirectories, so a log filed at qa/rounds/<name> read E_BEPR_NOT_FOUND on both shipped faces while it sat on disk (measured before any code); one declared depth is now asked at call time and a name whose absence cannot be proved refuses naming the depth searched",
+  "export_ts": "2026-11-04T09:00:05+08:00",
+  "do": "R2433 verification window: the debt gate named the battery the R2168 rule owed on the committed R2432 tree, so the full reconcile battery ran FIRST at the pre-registered 544 suites / 4240 criteria and came back red on the CEO-VISIBLE export face itself (18/21: two tick rows and a self_drive sampled before its own state append); the document was repaired at the birth site through the shipped derivation, committed alone, and the retry leg read RUNNER PASS 544/544 at the same criteria total with all four follow-up sections green",
   "ceo_face": {
-    "current": "R2432 product window: shipped src/os/bare_evidence_deep_pile.py - the depth of the evidence-pile measurement is now one declared law asked at call time (2 = root plus two levels), so a bare name at qa/rounds/<name> resolves instead of reading absent, and a name that is not found while the tree continues below the searched depth refuses with E_BEDP_BEYOND_DEPTH naming that depth; the R2386 face and the matrix tool argument both ask the same law at their own call sites",
-    "latest_artifact": "src/os/bare_evidence_deep_pile.py + src/os/test_bare_evidence_deep_pile.py + qa/bare-evidence-deep-pile-R2432.log (2374B, legs=2 identical=True adjacent=4 fails=0) + qa/bare-evidence-deep-pile-live-R2432.log (real tree: the bare qa/bonsai-bd log now RESOLVES at depth 2, where it previously read NOT_FOUND)",
-    "next_milestone": "reconcile battery on the committed R2432 tree at the pre-registered 544 suites / 4240 criteria with zero product edits (the R2168 mixed-tree rule), plus the four follow-up sections and the suite-matrix regeneration it compares against",
+    "current": "R2433 verification window: the debt gate named the battery the R2168 rule owed on the committed R2432 tree, so the full reconcile battery ran FIRST at the pre-registered 544 suites / 4240 criteria and came back red on the CEO-VISIBLE export face itself (18/21: two tick rows and a self_drive sampled before its own state append); the document was repaired at the birth site through the shipped derivation, committed alone, and the retry leg read RUNNER PASS 544/544 at the same criteria total with all four follow-up sections green",
+    "latest_artifact": "qa/reconcile-all-R2433.log (red leg, 1029.8s) + qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 1017.4s, criteria 4240) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52412B at 544 suites / 4240 criteria with --check byte-identical",
+    "next_milestone": "product face on the tech head state/queue/tech.md:498 prefix AC-GWDA1 (general_writer_dialect_audit), whose criteria were pinned in that row at R2409 before any code",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/os/bare_evidence_deep_pile.py + src/os/test_bare_evidence_deep_pile.py + qa/bare-evidence-deep-pile-R2432.log (2374B, legs=2 identical=True adjacent=4 fails=0) + qa/bare-evidence-deep-pile-live-R2432.log (real tree: the bare qa/bonsai-bd log now RESOLVES at depth 2, where it previously read NOT_FOUND)",
-    "updated_at": "2026-11-04T08:16:01+08:00"
+    "last_artifact": "qa/reconcile-all-R2433.log (red leg, 1029.8s) + qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 1017.4s, criteria 4240) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52412B at 544 suites / 4240 criteria with --check byte-identical",
+    "updated_at": "2026-11-04T09:00:05+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2433.log (red leg, 1029.8s) plus qa/reconcile-all-R2433-retry.log (RUNNER PASS 544/544, 4240 criteria) and docs/sandbox-suite-matrix.md regenerated to 52412B",
     "src/os/bare_evidence_deep_pile.py + src/os/test_bare_evidence_deep_pile.py + qa/bare-evidence-deep-pile-R2432.log (2374B, legs=2 identical=True adjacent=4 fails=0) + qa/bare-evidence-deep-pile-live-R2432.log (real tree RESOLVED qa/bonsai-bd at depth 2 vs NOT_FOUND before)",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
     "qa/reconcile-all-R2429.log (red leg, 843117B) + qa/reconcile-all-R2429-retry.log (RUNNER PASS 542/542, 1099.2s, 843138B) + docs/sandbox-suite-matrix.md regenerated to 52215B at 542 suites / 4228 criteria with --check byte-identical + src/os/repair_R2429.py (birth-site dialect repair, 1644B -> 1643B, crlf=0, readback=ok)",
@@ -52,11 +53,15 @@
   ],
   "results": [
     [
+      "2433",
+      "2026-11-04 R2433 verification window on the item the debt gate named first=yes (reconcile-battery-R2433, carried from R2432): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 543/544 suites with the criteria total 4240 exactly as pre-registered and the only red was os-queue-floor-export-face at AC-QFE3, measuring pass=18 fail=3: self_drive stored 19 lines against 23 recomputed, and two results rows carried the tick label (2432 and 2431). Root cause measured on the document: the R2432 closeout edited the export through an ad-hoc step that inserted a fresh tick row and sampled self_drive before its own state append. Repaired at the birth site, never by widening the checker: one surviving tick row, self_drive re-derived through the shipped export_R2431.self_drive() callable, atomic write with a read-back, 64472B -> 64418B, then SUMMARY pass=21 fail=0 VERDICT PASS; committed alone as da5dfc5e. Retry leg on the repaired tree: RUNNER PASS 544/544 suites plus controls 7/7 in 1017.4s at criteria 4240, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, regenerated stamp-aligned to 52412B, and the re-run read VERDICT R2433 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2433 closed and product-face-R2434 opened first=yes through the shipped CLIs. Zero product points claimed."
+    ],
+    [
       "2432",
       "R2432 product window on the item the debt gate named first=yes (product-face-R2432, tech head state/queue/tech.md:494 prefix AC-BEDP1, criteria pinned at R2404 before any code): the pile measurement walked only the root and its one-level subdirectories, so a bare log filed at qa/rounds/<name> read E_BEPR_NOT_FOUND on both shipped faces while it sat on disk - measured this window on a stand-in root before any code. Shipped src/os/bare_evidence_deep_pile.py plus its six-criteria suite: one declared depth (MAX_DEPTH=2) is asked at call time, so a patched depth moves every face that asks it; bare_evidence_pile_refusal.resolve_bare now asks that law at its own call site, which carries the matrix tool argument and the follow-up face with it. A name that is not found while the tree really continues below the searched depth refuses E_BEDP_BEYOND_DEPTH naming the depth searched, while a proved absence keeps the shipped E_BEPR_NOT_FOUND spelling and the one-level ambiguity reading is unchanged. SUITE PASS 6/6 twice with an identical digest plus four adjacent suites green (qa/bare-evidence-deep-pile-R2432.log, 2374B, legs=2 identical=True adjacent=4 fails=0); registry measured 544 suites / 4240 criteria. LIVE over the real tree, not a plan: qa/bare-evidence-deep-pile-live-R2432.log reads the bare name server-cpu.out.log as RESOLVED pile=qa/bonsai-bd at exit 0 where both faces read NOT_FOUND before R2432, and a name that is nowhere reads E_BEDP_BEYOND_DEPTH naming depth 2. Zero cloud calls, zero external API touches."
     ],
     [
-      "2432",
+      "2433",
       "OSLoop 执行 tick"
     ],
     [
@@ -239,10 +244,10 @@
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 32,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 23,
+    "substantive_non_idle_mention_lines": 32,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -264,8 +269,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -278,8 +281,6 @@
         "done_rows": 397,
         "gated_rows": 1,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -292,16 +293,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
-    "missing": [],
-    "delivered_total": 0
+    ]
   }
 }
