@@ -5468,6 +5468,15 @@ SUITES = [
     # R2399 seed row BEFORE the code.)
     ("os-owner-table-reader-parity",
      os.path.join("..", "os", "test_owner_table_reader_parity.py"), 6),
+
+    # R2436: the split face publishes the disagreement every round, but there
+    # was no way to say a known law false positive was reviewed and accepted,
+    # so the debt count could never reach zero. The triage declaration moves a
+    # reviewed row out of the split while still printing both verdicts, and
+    # ages an entry whose row is gone into STALE. (AC-OTST1..AC-OTST6 were
+    # pinned in state/queue/tech.md:500 as the R2412 seed row BEFORE the code.)
+    ("os-owner-table-split-triage",
+     os.path.join("..", "os", "test_owner_table_split_triage.py"), 6),
     ]
 
 FAILS = 0

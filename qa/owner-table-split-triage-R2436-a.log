@@ -1,0 +1,7 @@
+PASS AC-OTST1 the declaration row shape is exactly {tool, reason, since_round} and a dead entry reads STALE
+PASS AC-OTST2 a triaged row is counted TRIAGED, leaves split, and still prints both verdicts plus the law flags
+PASS AC-OTST3 an entry for a tool that now agrees on both sides reads STALE, never clean by accident
+PASS AC-OTST4 CLEAN at exit 0 when every disagreement is triaged, SPLIT at exit 2 while any row is untriaged
+PASS AC-OTST5 the reader writes nothing and keeps the declaration's line endings; exits are 0/2/3/5 and --json is byte-stable
+PASS AC-OTST6 pure ASCII stdlib, no clock, no network, and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0

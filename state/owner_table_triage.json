@@ -1,0 +1,35 @@
+{
+ "note": "Reviewed triage declarations for owner_table_split_triage. Each entry accepts ONE tool at the disagreement reason it names (the reason string is the split face taxonomy value, matched exactly). Staleness is measured every run: an entry whose tool no longer produces a live disagreement, or whose reason changed, is printed STALE and the row returns to the split. Authored at R2436 from the measured live reading of src/os (1067 tools, 41 rows, 35 superseded, 6 live).",
+ "entries": [
+  {
+   "tool": "battery_followup_help_wire.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  },
+  {
+   "tool": "evidence_R2372.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  },
+  {
+   "tool": "matrix_stamp_compare.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  },
+  {
+   "tool": "r2140_fold.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  },
+  {
+   "tool": "retry_naming.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  },
+  {
+   "tool": "run_identity.py",
+   "reason": "law-only-table",
+   "since_round": 2436
+  }
+ ]
+}
