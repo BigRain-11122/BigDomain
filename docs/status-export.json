@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T17:45:51+08:00",
-  "do": "R2439 verification window: the battery caught a real transport defect in the PREVIOUS window's evidence - three R2438 logs written as CRLF through a PowerShell redirect - and it was repaired at the birth site with the line set proved identical and the census baseline untouched; the re-run then read 547/547 suites green at exactly the pre-registered 4258 criteria",
+  "export_ts": "2026-11-04T18:03:25+08:00",
+  "do": "R2440 product window: a package-relative publish joined onto a declared package is now checked against the modules the read tree actually carries, so a typo reads MISSING-MODULE (naming the joined text and the package) instead of reading FOREIGN exactly like a genuinely foreign wire - while a join with a file behind it and a run with no package keep the parent reading",
   "ceo_face": {
-    "current": "R2439 verification window: the battery caught a real transport defect in the PREVIOUS window's evidence - three R2438 logs written as CRLF through a PowerShell redirect - and it was repaired at the birth site with the line set proved identical and the census baseline untouched; the re-run then read 547/547 suites green at exactly the pre-registered 4258 criteria",
-    "latest_artifact": "qa/reconcile-all-R2439-retry.log (RUNNER PASS 547/547 suites, reconcile controls 7/7, 1065.2s, criteria 4258), qa/reconcile-all-R2439.log kept as the honest red leg, docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria with --check byte-identical, census DRIFT-CLEAN at its 529 baseline",
-    "next_milestone": "product face at the tech head the deliverable-aware reader offers, state/queue/tech.md:504 prefix AC-RMEF1 (relative_module_existence_face): a package-relative import joined into its declared package is never checked against the modules the read tree actually carries, so a typo reads FOREIGN exactly like a genuinely foreign wire",
+    "current": "R2440 product window: a package-relative publish joined onto a declared package is now checked against the modules the read tree actually carries, so a typo reads MISSING-MODULE (naming the joined text and the package) instead of reading FOREIGN exactly like a genuinely foreign wire - while a join with a file behind it and a run with no package keep the parent reading",
+    "latest_artifact": "src/os/relative_module_existence_face.py + src/os/test_relative_module_existence_face.py (SUITE PASS 6/6 twice, qa/relative-module-existence-face-R2440.log 1510B, legs=2 identical=True adjacent=4 fails=0), qa/relative-module-existence-face-live-R2440.log (539B, REAL src/os: corpus=1216, publishers=11, missing=0), docs/sandbox-suite-matrix.md 52828B at 548 suites / 4264 criteria with --check byte-identical",
+    "next_milestone": "reconcile battery on the committed R2440 tree at the pre-registered 548 suites / 4264 criteria (the R2168 mixed-tree rule owes it because this window changed product src bytes), then the product face at the tech head the deliverable-aware reader offers; due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2439-retry.log (RUNNER PASS 547/547 suites, reconcile controls 7/7, 1065.2s, criteria 4258), qa/reconcile-all-R2439.log kept as the honest red leg, docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria with --check byte-identical, census DRIFT-CLEAN at its 529 baseline",
-    "updated_at": "2026-11-04T17:45:51+08:00"
+    "last_artifact": "src/os/relative_module_existence_face.py + src/os/test_relative_module_existence_face.py (SUITE PASS 6/6 twice, qa/relative-module-existence-face-R2440.log 1510B, legs=2 identical=True adjacent=4 fails=0), qa/relative-module-existence-face-live-R2440.log (539B, REAL src/os: corpus=1216, publishers=11, missing=0), docs/sandbox-suite-matrix.md 52828B at 548 suites / 4264 criteria with --check byte-identical",
+    "updated_at": "2026-11-04T18:03:25+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/relative_module_existence_face.py (module corpus + MISSING-MODULE reading) + src/os/test_relative_module_existence_face.py (6 criteria) + qa/relative-module-existence-face-R2440.log (1510B, legs=2 identical=True adjacent=4 fails=0) + qa/relative-module-existence-face-live-R2440.log (539B real tree) + docs/sandbox-suite-matrix.md 52828B at 548/4264 + state/queue/tech.md (row 504 stamped, 2 gap rows seeded, stale row 494 closed) + src/os/backlog.md + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2439.log (red leg, 546/547) + qa/reconcile-all-R2439-retry.log (847083B, RUNNER PASS 547/547, criteria 4258) + src/os/repair_R2439.py (birth-site transport repair, payload proved, commit 95974c57) + docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria",
     "src/os/owner_table_triage_expiry.py + src/os/test_owner_table_triage_expiry.py (SUITE PASS 6/6 twice) + qa/owner-table-triage-expiry-R2438-a.log / -b.log (667B, identical) + qa/owner-table-triage-expiry-live-R2438.log + docs/sandbox-suite-matrix.md 52694B at 547 suites / 4258 criteria",
     "qa/reconcile-all-R2437.log (RUNNER PASS 546/546, 981.2s, criteria 4252) + docs/sandbox-suite-matrix.md regenerated to 52591B byte-identical + src/os/closeout_R2437.py",
@@ -57,6 +58,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2440",
+      "2026-11-04 R2440 product window on the debt gate first=yes item (product-face-R2440, tech head state/queue/tech.md:504 prefix AC-RMEF1, criteria AC-RMEF1..AC-RMEF6 pinned in that row at R2415 BEFORE any code): SHIPPED src/os/relative_module_existence_face.py plus its six-criteria suite. The reading is publish_relative_package_identity own audit asked at CALL time and the join is that module own join_package, so no second classifier and no second join exist; the one new fact is the module corpus MEASURED off the read tree own .py files and the one new word is MISSING-MODULE, printed with the joined text and the declared package when a join has no file behind it. A join WITH a file behind it keeps the parent reading with verdict, rows and counts compared against the parent audit, and NO declared package keeps the parent reading byte for byte while measuring no corpus at all. SUITE PASS 6/6 twice with an identical digest plus four adjacent suites green (qa/relative-module-existence-face-R2440.log, 1510B, legs=2 identical=True adjacent=4 fails=0), wired os-relative-module-existence-face(6) so the registry reads 548 suites / 4264 criteria, matrix regenerated through --stamp-from to 52828B at 548/4264 with --check byte-identical. LIVE on the REAL src/os with --package src.os (539B): corpus=1216, scanned=1214, publishers=11 wire=11, relative=0, missing=0 - the tree carries no package-relative publish line, so the MISSING-MODULE case is proved on fixtures only and is NOT claimed as a live catch. Board: row 504 stamped, TWO real gap rows seeded from this window own measured limits (relative_module_corpus_scope, AC-RMSC1..6 and relative_package_presence_refusal, AC-RMPP1..6), and a stale delivered row (494 AC-BEDP1, shipped at R2432) closed at the round that delivered it so the floor reads FLOOR-MET 5/5 10/10 10/10 with discounted=0. Debt: product-face-R2440 closed through the shipped debt_close (110852B -> 110855B, line=174, open 2->1, done 153->154, readback ok) and reconcile-battery-R2441 opened first=yes through debt_append at the pre-registered 548/4264 (110855B -> 111148B, readback ok). Honest: two product points for a runnable internal reading, no CEO-visible artifact rebuilt, one first-draft key-order defect caught by AC-RMEF5 and fixed in the module with no criterion widened."
+    ],
     [
       "2439",
       "2026-11-04 R2439 verification window on the debt gate first=yes item (reconcile-battery-R2439, carried from R2438): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 on the committed 93c57c03 tree read 546/547 suites with the criteria total 4258 EXACTLY as pre-registered (qa/reconcile-all-R2439.log kept as the red leg, 1045.2s) and the only red was reconcile-daily-census; the shipped census checker NAMED the cause instead of leaving a guess - three R2438 evidence logs were utf-8 bodies whose every line ended CRLF (class=pwsh-capture) because that window captured them through a PowerShell redirect, with the payload intact. Repaired at the birth site, never by widening the baseline: src/os/repair_R2439.py asked the shipped run_identity.normalize for the allowed normalisation, proved the line set identical before the write, landed utf-8 LF through one atomic replace and read the bytes back (667B -> 660B twice, 973B -> 968B, crlf=0, readback ok), after which the census read DRIFT-CLEAN flags=0 with its 529-entry baseline untouched; the repair was committed ALONE as 95974c57. Retry leg on the committed repair tree: RUNNER PASS 547/547 suites plus controls 7/7 in 1065.2s at criteria 4258, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0, evidence qa/reconcile-all-R2439-retry.log (847083B, one utf-8 LF single writer). Four follow-up sections produced the designed first FAIL and then a green verdict: leg 1 VERDICT FAIL failing=matrix at on-disk=52694B against regenerated=52715B with no byte written, suite_matrix regenerated the doc through --stamp-from, --check read byte-identical at 52715B / 547 suites / 4258 criteria, and the re-run read VERDICT R2439 PASS failing=none. Debt: reconcile-battery-R2439 closed through the shipped debt_close (110337B -> 110340B, open 2->1, done 152->153, readback ok) and product-face-R2440 opened first=yes through debt_append (110340B -> 110852B, readback ok) at the tech head state/queue/tech.md:504 prefix AC-RMEF1. Honest: zero product points claimed, no criterion widened, no census baseline entry added, and the window ran far past its 25-minute budget (two full batteries)."
@@ -266,17 +271,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2439",
+      "2440",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 76,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 69,
+    "substantive_non_idle_mention_lines": 76,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -307,7 +312,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 400,
+        "done_rows": 402,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,

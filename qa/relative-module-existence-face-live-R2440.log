@@ -1,0 +1,4 @@
+LIVE R2440 relative_module_existence_face over the REAL src/os with --package src.os
+exit=0
+RELATIVE MODULE EXISTENCE os-relative-module-existence-face verdict=WIRE package=src.os corpus=1216 scanned=1214 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=22 from_import=0 bare=0 refused=0 missing=0
+note: the real tree carries no package-relative publish line, so the existence reading has nothing to check and the parent reading stands byte for byte; the MISSING-MODULE case is proved on fixtures in the suite.

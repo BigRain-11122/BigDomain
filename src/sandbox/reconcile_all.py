@@ -5485,6 +5485,15 @@ SUITES = [
     # state/queue/tech.md:502 as the R2436 seed row BEFORE the code.)
     ("os-owner-table-triage-expiry",
      os.path.join("..", "os", "test_owner_table_triage_expiry.py"), 6),
+    # R2440: a package-relative publish joined onto its DECLARED package was
+    # never checked against the modules the read tree carries, so a typo read
+    # FOREIGN exactly like a genuinely foreign wire (measured at R2415). The
+    # corpus is measured off the tree's own .py files and a join with nothing
+    # behind it reads MISSING-MODULE, while a join with a file behind it and a
+    # run with no package keep the parent's reading. (AC-RMEF1..AC-RMEF6 were
+    # pinned in state/queue/tech.md:504 as the R2415 seed row BEFORE the code.)
+    ("os-relative-module-existence-face",
+     os.path.join("..", "os", "test_relative_module_existence_face.py"), 6),
     ]
 
 FAILS = 0

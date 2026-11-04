@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2440 suite=src/os/test_relative_module_existence_face.py legs=2
+== LEG A rc=0 digest=99E990CB989EB1E8
+PASS AC-RMEF1 parent audit asked at call time, corpus measured off the tree
+PASS AC-RMEF2 a join with a file behind it keeps today's reading
+PASS AC-RMEF3 a join with nothing behind it reads MISSING-MODULE
+PASS AC-RMEF4 no package keeps the parent reading and measures no corpus
+PASS AC-RMEF5 exits 0/2/3/5 with byte-stable --json over pinned keys
+PASS AC-RMEF6 writes nothing, no clock, ASCII, its own label and suite
+SUMMARY pass=6 fail=0 criteria=6
+SUITE PASS
+== LEG B rc=0 digest=99E990CB989EB1E8
+PASS AC-RMEF1 parent audit asked at call time, corpus measured off the tree
+PASS AC-RMEF2 a join with a file behind it keeps today's reading
+PASS AC-RMEF3 a join with nothing behind it reads MISSING-MODULE
+PASS AC-RMEF4 no package keeps the parent reading and measures no corpus
+PASS AC-RMEF5 exits 0/2/3/5 with byte-stable --json over pinned keys
+PASS AC-RMEF6 writes nothing, no clock, ASCII, its own label and suite
+SUMMARY pass=6 fail=0 criteria=6
+SUITE PASS
+== ADJACENT 4
+== src/os/test_publish_relative_package_identity.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_relative_import_publish_binding.py rc=0 SUITE PASS criteria=6 passes=7 fails=0
+== src/os/test_comma_binding_sibling_faces.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+== src/os/test_bare_evidence_deep_pile.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=99E990CB989EB1E8
