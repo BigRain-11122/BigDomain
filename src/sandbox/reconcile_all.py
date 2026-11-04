@@ -5494,6 +5494,15 @@ SUITES = [
     # pinned in state/queue/tech.md:504 as the R2415 seed row BEFORE the code.)
     ("os-relative-module-existence-face",
      os.path.join("..", "os", "test_relative_module_existence_face.py"), 6),
+    # R2442: --stamp-from let a render follow another document's stamp but the
+    # artifact could not say so - the command line named only --evidence, so a
+    # borrowed-stamp render was byte-for-byte identical to an ordinary one
+    # (measured at R2418). One src/os law now writes the borrow into the
+    # artifact and reads it back for --check, with the label owned by
+    # suite_matrix_patterns.json. (AC-MSPL1..AC-MSPL6 were pinned in
+    # state/queue/tech.md:508 as the R2418 seed row BEFORE the code.)
+    ("os-matrix-stamp-provenance-line",
+     os.path.join("..", "os", "test_matrix_stamp_provenance_line.py"), 6),
     ]
 
 FAILS = 0

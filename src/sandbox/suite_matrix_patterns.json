@@ -4,6 +4,7 @@
     "title": "沙箱套件矩阵（对账可计费可见面）",
     "stamp": "生成时间",
     "command": "生成命令",
+    "stamp_from": "印章来源",
     "evidence_line": "状态证据",
     "response": "回应",
     "response_text": "C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。",

@@ -3,6 +3,7 @@
 
 - 生成时间: generated: 2026-11-04 10:47 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2441-retry.log
+- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2441-retry.log (RUNNER PASS 548/548 suites green, reconcile controls 7/7, 1187.2s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -10,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 548 | 4264 | 548/548 | R2441 |
+| 549 | 4270 | 548/548 | R2441 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -585,7 +586,8 @@
 | 546 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 2.5 |
 | 547 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | green | 1.8 |
 | 548 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 1.4 |
-|  | 合计 |  | 4264 | green 548 / FAIL 0 / no-evidence 0 |  |
+| 549 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | no-evidence | - |
+|  | 合计 |  | 4270 | green 548 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

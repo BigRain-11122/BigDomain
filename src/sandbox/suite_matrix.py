@@ -48,6 +48,17 @@ DEFAULT_OUT = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
 sys.path.insert(0, BASE)
 import reconcile_all as RA  # suite registry single source of truth
 
+# R2442 (AC-MSPL1..AC-MSPL6, criteria pinned in state/queue/tech.md:508 at
+# R2418 BEFORE the code): a render told to follow another document's stamp
+# must record that fact inside the artifact. The whole line law - label,
+# flag and the read-back that --check uses - lives in one src/os module, so
+# writing and parsing cannot drift apart; an ordinary render gets None and
+# keeps its bytes byte for byte.
+OS_DIR = os.path.join(os.path.dirname(BASE), "os")
+if OS_DIR not in sys.path:
+    sys.path.insert(0, OS_DIR)
+import matrix_stamp_provenance_line as MSPL  # noqa: E402
+
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
     r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
@@ -198,7 +209,7 @@ def suite_status(entry):
     return "FAIL(exit=%d)" % entry["exit"], entry["secs"]
 
 
-def render(patterns, evidence_path, status, run, stamp):
+def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -227,6 +238,11 @@ def render(patterns, evidence_path, status, run, stamp):
                % (labels["stamp"], labels["stamp_prefix"], stamp))
     out.append("- %s: python src/sandbox/suite_matrix.py --evidence %s"
                % (labels["command"], rel(evidence_path)))
+    # Pinned position: the borrow names itself directly under the command
+    # line it qualifies, and its wording/prefix is owned by the patterns.
+    provenance = MSPL.segment(labels, stamp_from)
+    if provenance:
+        out.append(provenance)
     out.append("- %s: %s (%s)" % (labels["evidence_line"], base,
                                   runner_line))
     out.append("- %s: %s" % (labels["response"], labels["response_text"]))
@@ -381,7 +397,8 @@ def main(argv):
         if stamp is None:
             print("FAIL check: no stamp line found in %s" % rel(args.out))
             return 2
-        fresh = render(patterns, evidence_path, status, run, stamp)
+        fresh = render(patterns, evidence_path, status, run, stamp,
+                       stamp_from=MSPL.recorded_source(current, patterns["labels"]))
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -409,7 +426,9 @@ def main(argv):
     else:
         stamp = time.strftime("%Y-%m-%d %H:%M +08:00",
                               time.gmtime(time.time() + 8 * 3600))
-    fresh = render(patterns, evidence_path, status, run, stamp)
+    stamp_from_rel = rel(args.stamp_from) if args.stamp_from else None
+    fresh = render(patterns, evidence_path, status, run, stamp,
+                   stamp_from=stamp_from_rel)
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)
     green = sum(1 for label, _, _ in RA.SUITES

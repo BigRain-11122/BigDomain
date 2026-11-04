@@ -1,0 +1,10 @@
+LIVE --doc docs/sandbox-suite-matrix.md rc=0
+  MATRIX STAMP PROVENANCE label=stamp_from
+    segment=-
+    recorded=docs/sandbox-suite-matrix.md
+LIVE --stamp-from docs/sandbox-suite-matrix.md rc=0
+  MATRIX STAMP PROVENANCE label=stamp_from
+    segment=- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
+    recorded=-
+LIVE --doc docs/sandbox-suite-matrix.md --json rc=0
+  {"label": "stamp_from", "recorded": "docs/sandbox-suite-matrix.md", "segment": null}

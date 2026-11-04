@@ -1,0 +1,68 @@
+EVIDENCE CAPTURE round=R2442 suite=src/os/test_matrix_stamp_provenance_line.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+MATRIX STAMP PROVENANCE LINE suite (R2442, 6 criteria)
+  PASS AC-MSPL1 stamp-from render records the flag and source
+  PASS AC-MSPL1 command line keeps today's wording
+  PASS AC-MSPL1 ordinary render records nothing extra
+  PASS AC-MSPL1 ordinary render keeps the header/label block byte for byte
+  PASS AC-MSPL2 the stamp line carries the value doc_stamp answered
+  PASS AC-MSPL2 the provenance line is the seam's own segment
+  PASS AC-MSPL2 the recorded line restates no stamp value
+  PASS AC-MSPL3 ordinary doc answers the evidence path
+  PASS AC-MSPL3 stamp-aligned doc answers the evidence path
+  PASS AC-MSPL3 shipped doc answers the same path
+  PASS AC-MSPL4 --check PASS on the ordinary render
+  PASS AC-MSPL4 --check PASS on the stamp-aligned render
+  PASS AC-MSPL4 the recorded source reads back at exit 0
+  PASS AC-MSPL4 the read-back equals the render's own source
+  PASS AC-MSPL5 the patterns file carries the new label
+  PASS AC-MSPL5 the label text is not in the source
+  PASS AC-MSPL5 the label is asked of the patterns at CALL time
+  PASS AC-MSPL5 a patterns file without the label fails closed
+  PASS AC-MSPL5 existing label lines keep their order
+  PASS AC-MSPL5 the shipped doc carries that same order
+  PASS AC-MSPL5 the new segment sits directly under the command line
+  PASS AC-MSPL6 source is pure ASCII
+  PASS AC-MSPL6 imports are stdlib only (['argparse', 'json', 'sys'])
+  PASS AC-MSPL6 the module reads no clock
+  PASS AC-MSPL6 zero network imports
+  PASS AC-MSPL6 the module holds no write primitive
+  PASS AC-MSPL6 the runner wires this suite
+  PASS AC-MSPL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+MATRIX STAMP PROVENANCE LINE suite (R2442, 6 criteria)
+  PASS AC-MSPL1 stamp-from render records the flag and source
+  PASS AC-MSPL1 command line keeps today's wording
+  PASS AC-MSPL1 ordinary render records nothing extra
+  PASS AC-MSPL1 ordinary render keeps the header/label block byte for byte
+  PASS AC-MSPL2 the stamp line carries the value doc_stamp answered
+  PASS AC-MSPL2 the provenance line is the seam's own segment
+  PASS AC-MSPL2 the recorded line restates no stamp value
+  PASS AC-MSPL3 ordinary doc answers the evidence path
+  PASS AC-MSPL3 stamp-aligned doc answers the evidence path
+  PASS AC-MSPL3 shipped doc answers the same path
+  PASS AC-MSPL4 --check PASS on the ordinary render
+  PASS AC-MSPL4 --check PASS on the stamp-aligned render
+  PASS AC-MSPL4 the recorded source reads back at exit 0
+  PASS AC-MSPL4 the read-back equals the render's own source
+  PASS AC-MSPL5 the patterns file carries the new label
+  PASS AC-MSPL5 the label text is not in the source
+  PASS AC-MSPL5 the label is asked of the patterns at CALL time
+  PASS AC-MSPL5 a patterns file without the label fails closed
+  PASS AC-MSPL5 existing label lines keep their order
+  PASS AC-MSPL5 the shipped doc carries that same order
+  PASS AC-MSPL5 the new segment sits directly under the command line
+  PASS AC-MSPL6 source is pure ASCII
+  PASS AC-MSPL6 imports are stdlib only (['argparse', 'json', 'sys'])
+  PASS AC-MSPL6 the module reads no clock
+  PASS AC-MSPL6 zero network imports
+  PASS AC-MSPL6 the module holds no write primitive
+  PASS AC-MSPL6 the runner wires this suite
+  PASS AC-MSPL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 3
+== src/os/test_matrix_stamp_compare.py rc=0 SUITE PASS 6/6
+== src/os/test_battery_followup.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E3B0C44298FC1C14

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-04T19:27:03+08:00",
-  "do": "R2441 verification window: the reconcile battery prescribed by the debt register ran on the committed R2440 tree and caught a real closeout-ordering defect - the derived export counters described a document one log line shorter than the file - repaired at the birth site and re-proved with a second full battery",
+  "export_ts": "2026-11-04T20:07:51+08:00",
+  "do": "R2442 product window: a render told to borrow another document's stamp now RECORDS that borrow inside the artifact and --check reads it back, so a borrowed-stamp doc is no longer byte-for-byte indistinguishable from an ordinary render - while an ordinary render keeps today's bytes and a doc written before this law still checks green",
   "ceo_face": {
-    "current": "R2441 verification window: the reconcile battery prescribed by the debt register ran on the committed R2440 tree and caught a real closeout-ordering defect - the derived export counters described a document one log line shorter than the file - repaired at the birth site and re-proved with a second full battery",
-    "latest_artifact": "qa/reconcile-all-R2441-retry.log (847687B, RUNNER PASS 548/548 suites green, controls 7/7, 1187.2s, criteria 4264 exactly as pre-registered) + qa/reconcile-all-R2441.log (847696B, the honest red leg: 547/548 with os-queue-floor-export-face AC-QFE3 at stored=76 vs recomputed=77) + docs/sandbox-suite-matrix.md 52827B at 548 suites / 4264 criteria with --check byte-identical + docs/status-export.json re-derived to 21/21 consistency",
-    "next_milestone": "product face at the tech head the deliverable-aware reader offers (state/queue/tech.md:508 prefix AC-MSPL1 matrix_stamp_provenance_line, criteria pinned before any code); no successor battery is owed because no product src byte changed this window; due 2026-11-06 18:00",
+    "current": "R2442 product window: a render told to borrow another document's stamp now RECORDS that borrow inside the artifact and --check reads it back, so a borrowed-stamp doc is no longer byte-for-byte indistinguishable from an ordinary render - while an ordinary render keeps today's bytes and a doc written before this law still checks green",
+    "latest_artifact": "src/os/matrix_stamp_provenance_line.py (one law, two directions: segment() writes the provenance line, recorded_source() reads it back) + qa/matrix-stamp-provenance-line-R2442.log (3787B, SUITE PASS 6/6 twice, legs=2 identical=True, adjacent=3 fails=0) + qa/matrix-stamp-provenance-line-live-R2442.log (463B, crlf=0) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52994B at 549 suites / 4270 criteria with --check byte-identical",
+    "next_milestone": "verification window on the committed R2442 tree: the full reconcile battery at the pre-registered 549 suites / 4270 criteria (reconcile-battery-R2443 first=yes), then back to the product face the reader offers at state/queue/tech.md:510 prefix AC-PICIC1; due 2026-11-06 18:00",
     "next_milestone_due": "2026-11-06T18:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2441-retry.log (847687B, RUNNER PASS 548/548 suites green, controls 7/7, 1187.2s, criteria 4264 exactly as pre-registered) + qa/reconcile-all-R2441.log (847696B, the honest red leg: 547/548 with os-queue-floor-export-face AC-QFE3 at stored=76 vs recomputed=77) + docs/sandbox-suite-matrix.md 52827B at 548 suites / 4264 criteria with --check byte-identical + docs/status-export.json re-derived to 21/21 consistency",
-    "updated_at": "2026-11-04T19:27:03+08:00"
+    "last_artifact": "src/os/matrix_stamp_provenance_line.py (one law, two directions: segment() writes the provenance line, recorded_source() reads it back) + qa/matrix-stamp-provenance-line-R2442.log (3787B, SUITE PASS 6/6 twice, legs=2 identical=True, adjacent=3 fails=0) + qa/matrix-stamp-provenance-line-live-R2442.log (463B, crlf=0) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52994B at 549 suites / 4270 criteria with --check byte-identical",
+    "updated_at": "2026-11-04T20:07:51+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/matrix_stamp_provenance_line.py + src/os/test_matrix_stamp_provenance_line.py + src/sandbox/suite_matrix.py (two call sites) + src/sandbox/suite_matrix_patterns.json (label) + src/sandbox/reconcile_all.py (wiring) + qa/matrix-stamp-provenance-line-R2442.log (3787B) + qa/matrix-stamp-provenance-line-live-R2442.log (463B) + docs/sandbox-suite-matrix.md (52994B at 549/4270) + docs/status-export.json (re-derived, 21/21 consistency) + state/queue/tech.md (row 508 stamped, one seed) + state/debt.md (two closed, one opened) + src/os/backlog.md + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2441-retry.log (847687B, RUNNER PASS 548/548, criteria 4264) + qa/reconcile-all-R2441.log (847696B, honest red leg) + docs/status-export.json (re-derived, 21/21 consistency) + docs/sandbox-suite-matrix.md (52827B at 548/4264, --check byte-identical) + state/debt.md (battery closed, product-face-R2442 opened) + src/os/closeout_R2441.py + src/os/export_R2441.py + src/os/backlog.md + src/os/state.json + heartbeat.txt",
     "src/os/relative_module_existence_face.py (module corpus + MISSING-MODULE reading) + src/os/test_relative_module_existence_face.py (6 criteria) + qa/relative-module-existence-face-R2440.log (1510B, legs=2 identical=True adjacent=4 fails=0) + qa/relative-module-existence-face-live-R2440.log (539B real tree) + docs/sandbox-suite-matrix.md 52828B at 548/4264 + state/queue/tech.md (row 504 stamped, 2 gap rows seeded, stale row 494 closed) + src/os/backlog.md + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2439.log (red leg, 546/547) + qa/reconcile-all-R2439-retry.log (847083B, RUNNER PASS 547/547, criteria 4258) + src/os/repair_R2439.py (birth-site transport repair, payload proved, commit 95974c57) + docs/sandbox-suite-matrix.md 52715B at 547 suites / 4258 criteria",
@@ -59,6 +60,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2442",
+      "2026-11-04 R2442 product window on the debt gate first=yes item (product-face-R2442, tech head state/queue/tech.md:508 prefix AC-MSPL1 matrix_stamp_provenance_line, AC-MSPL1..AC-MSPL6 pinned there at R2418 BEFORE any code): MEASURED at R2418 that --stamp-from let a render borrow another document's stamp while the artifact could not say so - the generation command line was a fixed format string naming only --evidence. SHIPPED src/os/matrix_stamp_provenance_line.py: ONE law with two directions, segment() rendering the line an artifact must carry for a given source and recorded_source() reading that same line back, with the label owned by suite_matrix_patterns.json and a patterns file without it failing closed. Wired at suite_matrix's own two call sites, so --check on a stamp-aligned doc recovers the borrow instead of reporting drift, and an artifact written before this law still checks byte-identical. MEASURED on real renders: ordinary 52827B with no provenance line and its header/label block byte-identical to the shipped doc, stamp-from 52871B naming its source, --check PASS on all three states. SUITE PASS 6/6 twice with an identical digest plus three adjacent suites green (qa/matrix-stamp-provenance-line-R2442.log, 3787B), wired os-matrix-stamp-provenance-line(6) so the registry reads 549 suites / 4270 criteria; the shipped matrix was regenerated stamp-aligned to 52994B at 549/4270 with --check byte-identical. Board: row 508 stamped, one REAL gap row seeded (matrix_stamp_from_liveness, AC-MSFL1..AC-MSFL6: a recorded source is never checked for existence), floor FLOOR-MET 5/5 10/10 10/10, head now line 510 AC-PICIC1. Debt: product-face-R2442 and fold-due-R2442 closed, reconcile-battery-R2443 opened first=yes at the pre-registered 549/4270. Honest: two product points for an internal artifact-level reading, no CEO-visible business surface rebuilt."
+    ],
     [
       "2441",
       "2026-11-04 R2441 verification window on the debt gate first=yes item (reconcile-battery-R2441, pre-registered at 548 suites / 4264 criteria by the R2440 closeout): leg 1 on the committed tree read 547/548 with the criteria total exactly 4264 and the only red being the shipped export consistency, which named the defect instead of hiding it - self_drive.log_lines_in_window and substantive_non_idle_mention_lines both stored=76 against recomputed=77, because the R2440 closeout refreshed the export and THEN appended its own push log line. Repaired at the birth site with the shipped refresh re-derived from the live tree (77944B, fresh stamp, check_export_consistency 21/21 VERDICT PASS, W=77 idle=0 nop=0 sub=77) and committed ALONE as 144e63e3 with no baseline widened and no criterion touched. Leg 2 on the committed repair tree read RUNNER PASS 548/548 plus controls 7/7 in 1187.2s with criteria 4264 to the unit and TMP RECLAIM 932/932 at 326.59 MiB; the four follow-up sections gave the designed matrix FAIL at 52828B vs 52827B, then a regeneration through --stamp-from and VERDICT R2441 PASS failing=none with fingerprint CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN. Five new group decisions D-20261104-08..12 were judged and all five read ACKNOWLEDGED-NO-ACTION for this company. Debt: battery closed through the shipped tool (111148B -> 111151B, open 2->1, done 154->155, readback ok) and product-face-R2442 opened first=yes (111151B -> 111472B) at tech head 508 prefix AC-MSPL1. Honest: ZERO product code shipped and zero product points claimed."
@@ -276,17 +281,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2441",
+      "2442",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-29..2026-11-04",
     "window_days": 7,
-    "log_lines_in_window": 88,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 88,
+    "substantive_non_idle_mention_lines": 74,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -317,7 +322,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 402,
+        "done_rows": 403,
         "gated_rows": 1,
         "claimable": 10,
         "floor": 10,
