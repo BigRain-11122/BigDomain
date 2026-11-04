@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T06:18:00+08:00",
+  "export_ts": "2026-11-05T06:19:00+08:00",
   "do": "R2456 BUSINESS window on group dispatch D-20261105-09: the P-47 lobby sandbox is now a runnable thing - one docker-compose bring-up for the existing WebSocket server, a 19.9 entrance and month-card MOCK that never claims a real debit, a msgSecCheck local stub with the production contract, and a two-client interop demo that starts the real server and proves the acceptance cases",
   "ceo_face": {
     "current": "R2456 BUSINESS window on group dispatch D-20261105-09: the P-47 lobby sandbox is now a runnable thing - one docker-compose bring-up for the existing WebSocket server, a 19.9 entrance and month-card MOCK that never claims a real debit, a msgSecCheck local stub with the production contract, and a two-client interop demo that starts the real server and proves the acceptance cases",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05 12:00 acceptance receipt for D-20261105-09 is due in HQ-FEEDBACK as one line (already written this window); after that the next business increment on the same face is the real msgSecCheck transport swap and the lobby room-board read face over the shipped store, both gated only on CEO physical items for the real paths - the sandbox paths stay runnable now, and the internal tech head state/queue/tech.md:522 AC-PFKC1 stays claimable, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/lobby-interop-R2456.log (LOBBY INTEROP PASS: hello+risk first, spectator refused E_ENTRANCE_REQUIRED with zero broadcast, granted send broadcast to two connections sharing one evt_id at 0.3ms, ai_generated=false server-authoritative, blocked word refused E_CONTENT_REJECTED with a one-second listener proving no leak) + src/sandbox/lobby/docker-compose.yml + Dockerfile + requirements.txt (one-command sandbox bring-up, ws 8091 / city 8092, city_data :ro, named event-db volume, healthcheck) + src/sandbox/lobby/pay_mock.py (chargeable=false on every object) + src/sandbox/lobby/msgsec_stub.py (PARITY-OK cases=14 stub_mismatch=0 gate_agree=14)",
-    "updated_at": "2026-11-05T06:18:00+08:00"
+    "updated_at": "2026-11-05T06:19:00+08:00"
   },
   "depts": [
     {
@@ -350,10 +350,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 57,
+    "substantive_non_idle_mention_lines": 58,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
