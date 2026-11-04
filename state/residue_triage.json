@@ -1926,6 +1926,41 @@
       "declared_by": "R2445",
       "reason": "fold 2445 archived these round blocks at a true round-block boundary",
       "until": 2470
+    },
+    {
+      "round": 2440,
+      "status": "DELIVERED",
+      "declared_by": "R2451",
+      "reason": "verified at R2451 from one live reading of the shipped residue face",
+      "until": 2470
+    },
+    {
+      "round": 2442,
+      "status": "DELIVERED",
+      "declared_by": "R2451",
+      "reason": "verified at R2451 from one live reading of the shipped residue face",
+      "until": 2470
+    },
+    {
+      "round": 2444,
+      "status": "DELIVERED",
+      "declared_by": "R2451",
+      "reason": "verified at R2451 from one live reading of the shipped residue face",
+      "until": 2470
+    },
+    {
+      "round": 2446,
+      "status": "DELIVERED",
+      "declared_by": "R2451",
+      "reason": "verified at R2451 from one live reading of the shipped residue face",
+      "until": 2470
+    },
+    {
+      "round": 2448,
+      "status": "DELIVERED",
+      "declared_by": "R2451",
+      "reason": "verified at R2451 from one live reading of the shipped residue face",
+      "until": 2470
     }
   ]
 }

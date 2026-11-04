@@ -76,7 +76,7 @@ def ac_sewd1():
             "routed": 2,
             "verdict": "AUDIT-CLEAN",
         }
-        reading = SEWD.check(".", None)
+        reading = SEWD.check(REPO, None)
     finally:
         GWDA.report = real
     names = sorted(row["name"] for row in reading["rows"])
@@ -164,11 +164,11 @@ def ac_sewd4():
 
 def ac_sewd5():
     """AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps."""
-    reading = GWDA.report(".")
+    reading = GWDA.report(REPO)
     keeps = [row for row in reading["rows"] if row["kind"] == "KEEPS"]
     routed = [row for row in reading["rows"]
               if row["kind"] == "KEEPS" and row["asks"]]
-    live = SEWD.check(".", None)
+    live = SEWD.check(REPO, None)
     export_keeps = [row for row in keeps
                     if SEWD.spell(row["target"]) == SEWD.TARGET]
     ok = (reading["verdict"] == "AUDIT-CLEAN"
