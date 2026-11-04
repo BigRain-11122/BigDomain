@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T01:27:49+08:00",
+  "export_ts": "2026-11-05T01:29:40+08:00",
   "do": "R2448 product window: the parameter-resolution law is live - a writer that receives its os.replace destination as a function PARAMETER is now resolved through its own module call sites, so the dialect audit can say whether such a writer is clean or merely unread (live: 213 destinations resolved, 3 still refused and named). Its honest consequence is also published: three export writers that used to hide in the unread pile now read as real debt because they land docs/status-export.json without asking the shared dialect law",
   "ceo_face": {
     "current": "R2448 product window: the parameter-resolution law is live - a writer that receives its os.replace destination as a function PARAMETER is now resolved through its own module call sites, so the dialect audit can say whether such a writer is clean or merely unread (live: 213 destinations resolved, 3 still refused and named). Its honest consequence is also published: three export writers that used to hide in the unread pile now read as real debt because they land docs/status-export.json without asking the shared dialect law",
@@ -7,7 +7,7 @@
     "next_milestone": "the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:516 prefix AC-SEWD1 (status_export_writer_dialect_wire, criteria AC-SEWD1..AC-SEWD6 pinned there at R2448 BEFORE any code): route the three export writers that land docs/status-export.json through the shared payload derivation so a CRLF export stays CRLF and the audit reads AUDIT-CLEAN with routed == keeps; before that the R2168 mixed-tree rule owes reconcile-battery-R2449 at the pre-registered 552 suites / 4288 criteria",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/parameter_destination_resolution.py + src/os/test_parameter_destination_resolution.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + qa/parameter-destination-resolution-R2448.log (1624B) + qa/parameter-destination-resolution-live-R2448.log + docs/sandbox-suite-matrix.md regenerated to 53313B at 552 suites / 4288 criteria, --check byte-identical",
-    "updated_at": "2026-11-05T01:27:49+08:00"
+    "updated_at": "2026-11-05T01:29:40+08:00"
   },
   "depts": [
     {
@@ -319,10 +319,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 80,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 80,
+    "substantive_non_idle_mention_lines": 81,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
