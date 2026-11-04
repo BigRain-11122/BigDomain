@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T05:35:44+08:00",
-  "do": "R2454 产品窗：closeout 发布线现在按目标自身换行方言组合并落盘 - CRLF 文档从 R2452 的 REFUSED 变成 WRITTEN/AGREES（lone_lf=0，413 行 CRLF），LF 文档字节与今天完全一致；病因在出生站修好（parity 组合改为调用时询问shipped 方言律），不是放宽判据",
+  "export_ts": "2026-11-05T06:03:37+08:00",
+  "do": "R2455 verification window: the battery the R2454 product edit owed was run on the committed tree and came back green - 555/555 suites plus controls 7/7 at exactly the pre-registered 4306 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
   "ceo_face": {
-    "current": "R2454 产品窗：closeout 发布线现在按目标自身换行方言组合并落盘 - CRLF 文档从 R2452 的 REFUSED 变成 WRITTEN/AGREES（lone_lf=0，413 行 CRLF），LF 文档字节与今天完全一致；病因在出生站修好（parity 组合改为调用时询问shipped 方言律），不是放宽判据",
-    "latest_artifact": "src/os/closeout_export_parity_dialect_wire.py + src/os/test_closeout_export_parity_dialect_wire.py（套件 20/20 两跑同判 6 准则 × 2 + 3 邻套件绿；qa/closeout-export-parity-dialect-wire-R2454.log、qa/closeout-export-parity-dialect-wire-live-R2454.log）",
-    "next_milestone": "下一窗=债务门 first=yes reconcile-battery-R2455（本轮改了产品字节，预注册 555 套件 / 4306 准则），24h 内跑绿并刷新矩阵",
+    "current": "R2455 verification window: the battery the R2454 product edit owed was run on the committed tree and came back green - 555/555 suites plus controls 7/7 at exactly the pre-registered 4306 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
+    "latest_artifact": "qa/reconcile-all-R2455.log (855799B at the green leg, 859638B with both follow-up legs, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, RUNNER PASS 555/555 suites + controls 7/7 in 1209.1s at criteria 4306) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53657B at 555 suites / 4306 criteria with --check byte-identical and its own green line reading 555/555 + src/os/closeout_R2455.py (state, backlog and heartbeat writers for this window)",
+    "next_milestone": "the debt gate now names product-face-R2456 first=yes and the tech head reads state/queue/tech.md:522 prefix AC-PFKC1 row_key_carrier_scope - the row key is carried by more than one face with no reading that says which carrier a given line came from; criteria AC-PFKC1..AC-PFKC6 were pinned in that row at R2446 before any code, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2453.log (858125B, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, both follow-up legs retained: 1889B FAIL then 1950B PASS, RUNNER PASS 554/554 suites + controls 7/7 in 1255.0s at criteria 4300) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53539B at 554 suites / 4300 criteria with --check byte-identical and its own green line reading 554/554 + src/os/closeout_R2453.py (state, backlog and heartbeat writers for this window)",
-    "updated_at": "2026-11-05T05:18:56+08:00"
+    "last_artifact": "qa/reconcile-all-R2455.log (855799B at the green leg, 859638B with both follow-up legs, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, RUNNER PASS 555/555 suites + controls 7/7 in 1209.1s at criteria 4306) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53657B at 555 suites / 4306 criteria with --check byte-identical and its own green line reading 555/555 + src/os/closeout_R2455.py (state, backlog and heartbeat writers for this window)",
+    "updated_at": "2026-11-05T06:03:37+08:00"
   },
   "depts": [
     {
@@ -69,6 +69,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2455",
+      "2026-11-05 R2455 verification window on the debt gate first=yes item reconcile-battery-R2455 (carried from R2454 at the pre-registered 555 suites / 4306 criteria): ZERO product code changed, the R2168 mixed-tree rule honoured. The battery ran on the committed b216bfa9 tree with an empty git status, launched detached and unfiltered so the filtering-pipe trap was not re-paid, and read RUNNER PASS 555/555 suites green plus reconcile controls 7/7 in 1209.1s at criteria total=4306 EXACTLY as pre-registered, TMP RECLAIM candidates=932 removed=932 busy=0 failed=0 reclaimed 326.59 MiB, evidence written by one utf-8 LF single writer (crlf=0 bom=False). The four follow-up sections produced the designed order: matrix FAILED first on the stale doc (on-disk=53662B against regenerated=53657B) with no byte written, the doc was regenerated from THIS round own eligible green evidence through --stamp-from to 53657B at 555/4306, --check read byte-identical, and the re-run read matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN for VERDICT R2455 PASS failing=none. Debt: reconcile-battery-R2455 closed at 118758B -> 118761B (line=191, open 2->1, done 170->171, readback ok) and NO successor battery owed because no product src byte changed and the registry is unmoved, so product-face-R2456 was opened first=yes at 118761B -> 118972B naming the tech head state/queue/tech.md:522 prefix AC-PFKC1. Zero product points claimed; no P-47 business surface was rebuilt and every P-47 item remains blocked on CEO physical pieces."
+    ],
     [
       "2453",
       "2026-11-05 R2453 verification window on the debt gate first=yes item reconcile-battery-R2453 (carried from R2452 at the pre-registered 554 suites / 4300 criteria): ZERO product code changed, the R2168 mixed-tree rule honoured. The first launch was killed by the filtering-pipe trap before the battery started - no evidence file, zero survivors, disclosed rather than counted - so it was relaunched unfiltered and read RUNNER PASS 554/554 suites green plus reconcile controls 7/7 in 1255.0s at criteria total 4300 EXACTLY as pre-registered, TMP RECLAIM 932/932 busy=0 failed=0 reclaimed 326.59 MiB, evidence written by one utf-8 LF single writer (crlf=0 bare_cr=0 bom=False). The four follow-up sections produced the designed order: matrix FAILED first on the stale doc (on-disk=53568B against regenerated=53539B) with no byte written, the doc was regenerated from THIS round own eligible green evidence through --stamp-from to 53539B at 554/4300, --check read byte-identical, and the re-run read matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN for VERDICT R2453 PASS failing=none. Debt: reconcile-battery-R2453 closed at 117670B -> 117673B (line=189, open 2->1, done 168->169, readback ok) and NO successor battery owed because no product src byte changed and the registry is unmoved, so product-face-R2454 was opened first=yes at 117673B -> 118555B naming the tech head AC-CEPD1. Zero product points claimed; no P-47 business surface was rebuilt and every P-47 item remains blocked on CEO physical pieces."
@@ -334,17 +338,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2454",
+      "2455",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 45,
+    "log_lines_in_window": 51,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 45,
+    "substantive_non_idle_mention_lines": 51,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -377,7 +381,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 12,
-        "done_rows": 408,
+        "done_rows": 409,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 0,
