@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T04:25:25+08:00",
+  "export_ts": "2026-11-05T04:26:34+08:00",
   "do": "R2452 product window: the export writer transport scope landed - every writer the audit derives for docs/status-export.json is now asked to prove BOTH transports in its own publishable world, so the dialect the R2450 wire protects is proved for the writers it never ran, and a writer that refuses is published as UNPROVABLE with its own refusal code instead of being silently dropped",
   "ceo_face": {
     "current": "R2452 product window: the export writer transport scope landed - every writer the audit derives for docs/status-export.json is now asked to prove BOTH transports in its own publishable world, so the dialect the R2450 wire protects is proved for the writers it never ran, and a writer that refuses is published as UNPROVABLE with its own refusal code instead of being silently dropped",
@@ -7,7 +7,7 @@
     "next_milestone": "the R2168 mixed-tree rule owes the battery next: reconcile-battery-R2453 at the pre-registered 554 suites / 4300 criteria on the committed R2452 tree, then regenerate the matrix from THAT green evidence - and the tech head now carries the gap this window measured, closeout_export_parity_dialect_wire at state/queue/tech.md:520 prefix AC-CEPD1, because the closeout wire cannot publish a CRLF-dialect export at all",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/status_export_writer_transport_scope.py (proved set derived from the shipped audit at CALL time, entry point discovered per writer, LF+CRLF copies in a private world) + src/os/test_status_export_writer_transport_scope.py (6/6 twice, identical digest) + src/os/status_export_writer_dialect_wire.py (transport root repaired at the birth site, 6/6 from both cwds) + qa/status-export-writer-transport-scope-R2452.log (2076B, legs=2 identical, 3 adjacent suites green) + qa/status-export-writer-transport-scope-live-R2452.log (559B, one utf-8 LF body, zero CRLF, scope=SCOPE-PARTIAL proved=2) + docs/sandbox-suite-matrix.md regenerated to 53568B at 554 suites / 4300 criteria, --check byte-identical",
-    "updated_at": "2026-11-05T04:25:25+08:00"
+    "updated_at": "2026-11-05T04:26:34+08:00"
   },
   "depts": [
     {
@@ -336,10 +336,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 28,
+    "log_lines_in_window": 29,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 28,
+    "substantive_non_idle_mention_lines": 29,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
