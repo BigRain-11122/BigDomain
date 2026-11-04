@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T06:33:08+08:00",
-  "do": "R2457 product window on the CEO fleet order OB-20261105-003656-879: the silicon city is now openable in a browser - the read-only city HTTP face serves a shipped page at GET /city and GET /city/ (population, districts, visitors, ambient, event tail, census lookup) while /city/snapshot and /census/<id> keep their exact JSON contract",
+  "export_ts": "2026-11-05T07:16:50+08:00",
+  "do": "R2458 verification window: the battery the R2457 product edit owed was discharged on the committed tree - 556 suites green at 4312 criteria, exactly the pre-registered count - and the suite matrix was regenerated from this round own evidence, so the registry this station reports is proven rather than asserted",
   "ceo_face": {
-    "current": "R2457 product window on the CEO fleet order OB-20261105-003656-879: the silicon city is now openable in a browser - the read-only city HTTP face serves a shipped page at GET /city and GET /city/ (population, districts, visitors, ambient, event tail, census lookup) while /city/snapshot and /census/<id> keep their exact JSON contract",
-    "latest_artifact": "src/sandbox/lobby/city_view.html (6653B self-contained page, AI 生成内容 label + non-investment note verbatim, zero network references) served by src/sandbox/lobby/city.py at GET /city and GET /city/ + qa/city-view-R2457.log (SUITE PASS 6/6 twice, AC-CV1..AC-CV6, sha16 F4DA3A32459C2E32 of the served bytes; both legs ran the real server on a private port and a temp db) + src/sandbox/lobby/test_city_view.py (the proof)",
-    "next_milestone": "2026-11-05/06 the owed full reconcile battery runs FIRST on the committed R2457 tree at the pre-registered 556 suites / 4312 criteria (row reconcile-battery-R2458), then the carried product-face-R2456 (tech head AC-PFKC1) or the next P-47 business face; the city page is runnable right now: python src/sandbox/lobby/server.py --city-http-port 8092 then http://127.0.0.1:8092/city/, ETA inside 48h",
+    "current": "R2458 verification window: the battery the R2457 product edit owed was discharged on the committed tree - 556 suites green at 4312 criteria, exactly the pre-registered count - and the suite matrix was regenerated from this round own evidence, so the registry this station reports is proven rather than asserted",
+    "latest_artifact": "qa/reconcile-all-R2458.log (RUNNER PASS 556/556 suites, reconcile controls 7/7, 1337.6s, criteria summed to 4312, fails=0, zero CRLF) + docs/sandbox-suite-matrix.md regenerated through --stamp-from to 53731B at 556 suites / 4312 criteria with --check byte-identical + follow-up legs appended for VERDICT R2458 PASS (matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN)",
+    "next_milestone": "2026-11-05/06 the next window ships a face a reader can open: either the carried product-face-R2456 (tech head AC-PFKC1, three windows stale) or a P-47 business face that supersedes it, and it says which before it writes code. The city page is runnable right now: python src/sandbox/lobby/server.py --city-http-port 8092 then http://127.0.0.1:8092/city/, and the lobby sandbox bring-up remains python src/sandbox/lobby/interop_demo.py, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/lobby/city_view.html (6653B self-contained page, AI 生成内容 label + non-investment note verbatim, zero network references) served by src/sandbox/lobby/city.py at GET /city and GET /city/ + qa/city-view-R2457.log (SUITE PASS 6/6 twice, AC-CV1..AC-CV6, sha16 F4DA3A32459C2E32 of the served bytes; both legs ran the real server on a private port and a temp db) + src/sandbox/lobby/test_city_view.py (the proof)",
-    "updated_at": "2026-11-05T06:33:08+08:00"
+    "last_artifact": "qa/reconcile-all-R2458.log (RUNNER PASS 556/556 suites, reconcile controls 7/7, 1337.6s, criteria summed to 4312, fails=0, zero CRLF) + docs/sandbox-suite-matrix.md regenerated through --stamp-from to 53731B at 556 suites / 4312 criteria with --check byte-identical + follow-up legs appended for VERDICT R2458 PASS (matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN)",
+    "updated_at": "2026-11-05T07:16:50+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2458.log (adopted green leg plus two follow-up legs) + docs/sandbox-suite-matrix.md (regenerated stamp-aligned) + src/os/repair_R2458.py (state transport repair, birth site) + src/os/closeout_R2458.py + src/os/export_R2458.py + state/debt.md + docs/status-export.json + src/os/state.json + src/os/backlog.md + heartbeat.txt",
     "src/sandbox/lobby/city_view.html (the shipped page) + src/sandbox/lobby/city.py (one route) + src/sandbox/lobby/test_city_view.py (six criteria, two real-server legs) + src/sandbox/reconcile_all.py (os-lobby-city-view registered) + qa/city-view-R2457.log + docs/status-export.json + src/os/state.json + src/os/backlog.md + state/debt.md + tasks.md + heartbeat.txt + src/os/closeout_R2457.py + src/os/export_R2457.py",
     "src/sandbox/lobby/docker-compose.yml + src/sandbox/lobby/Dockerfile + src/sandbox/lobby/requirements.txt + src/sandbox/lobby/.dockerignore (one-command sandbox bring-up) + src/sandbox/lobby/pay_mock.py (19.9 non-chargeable mock) + src/sandbox/lobby/msgsec_stub.py (msgSecCheck stub + contract + parity) + src/sandbox/lobby/interop_demo.py (two-client acceptance proof) + qa/lobby-interop-R2456.log (LOBBY INTEROP PASS) + docs/status-export.json + src/os/state.json + src/os/backlog.md + heartbeat.txt + HQ-FEEDBACK.md (12:00 receipt line)",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
@@ -71,6 +72,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2458",
+      "2026-11-05 R2458 VERIFICATION window on the carried row reconcile-battery-R2458 (owed by R2457 at the pre-registered 556 suites / 4312 criteria): zero product src bytes changed, the R2168 mixed-tree rule honoured. The battery had already been run on this committed tree by a prior attempt and left as one untracked evidence file, so it was ADOPTED and re-measured rather than re-run - 556 suite rows, criteria summed to 4312 EXACTLY as pre-registered, fails=0, one RUNNER PASS line at 1337.6s. PROVENANCE DISCLOSED: that body is a shell capture (its first line reads 'no evidence path: shell-capture mode'), not the battery_stream single writer the house law asks for; it measures 856250B, crlf=0, lone_lf=6240, bom=False, and the census section reads DRIFT-CLEAN over it. Four follow-up sections in the designed order: LEG 1 matrix FAIL at on-disk=53657B against regenerated=53731B with no byte written while fingerprint/profile/census PASS; src/sandbox/suite_matrix.py regenerated docs/sandbox-suite-matrix.md from this round own evidence through --stamp-from to 53731B at 556 suites / 4312 criteria green=556/556 and --check read byte-identical; LEG 2 read all four sections PASS for VERDICT R2458 PASS failing=none, and both legs were appended by the shipped writer (856250B -> 860089B, closing line 'VERDICT R2458: PASS eol crlf=0 bare_cr=0 bom=False'). Debt: reconcile-battery-R2458 closed at 119464B -> 119468B (line=193, open 3->2, done 171->172, readback ok); no successor battery is owed because no product src byte and no registry count moved; the gate now reads open=2 first=product-face-R2456 (stale, carried=3). A REAL defect of my own was found and repaired at its birth site: the first closeout draft wrote src/os/state.json with a hardcoded LF newline and so converted the working document transport, and the first repair asked the git blob (already git-normalised to LF) instead of the working copy, which converted it a second time - repair_R2458.py now seeds the CRLF source explicitly, proves the line set identical before writing, lands one atomic replace and reads the bytes back (63459B, crlf=218, lone_lf=0, readback ok, layout_ok=True), and closeout_R2458.py asks the shipped dialect law at its own write site so a rerun preserves the transport. Honest limits: ZERO product points this window - nothing a CEO could open was rebuilt and every P-47 item remains blocked on CEO physical pieces; the unsupported-flag trap was paid again (probing reconcile_all.py with --list started a real battery whose pipe was cut, leaving a repo-root file named --list, deleted before any commit with zero survivors); the debt leader is still an internal audit face while the standing CEO order asks for real output, stated so the next window picks deliberately."
+    ],
     [
       "2457",
       "2026-11-05 R2457 PRODUCT window on the CEO fleet order OB-20261105-003656-879 (real output only, no new mechanism / rule / document) rather than on the debt gate named product-face-R2456: the five-silence scan HELD (git clean at HEAD 0368b20b, zero @BigDomain ledger rows, decisions new=0 against a 129-token baseline over 199 rows, orders tail 2026-11-05 00:36 == last_order, benchmarks 2026-11-03 inside the seven-day gate), so no dispatch forced the choice - the internal queue head is an audit face and the standing order of the day is real output, so this window made the city viewable. SHIPPED src/sandbox/lobby/city_view.html (6653B, self-contained, zero http/https references, both standing compliance surfaces verbatim: AI 生成内容 label and the non-investment note) and one route in src/sandbox/lobby/city.py, so GET /city and GET /city/ serve that page while /city/snapshot keeps application/json and /census/<id> keeps its 200/404 contract and every non-GET stays 405. The page renders the snapshot package (population, districts_open, visitors_today, ambient, trend, event tail) and a census lookup box over the existing endpoint. EVIDENCE: test_city_view.py reads SUITE PASS 6/6 twice with identical verdict lines (AC-CV1..AC-CV6, a 200 text/html 6653B offline page, both compliance strings present, post=405 unknown=404 census=200, /city and /city/ byte-identical and equal to the file on disk sha16 F4DA3A32459C2E32, an empty city dir still serving the page with a 503 snapshot and the not-ready line, and hygiene bom=False crlf=0 ascii_src=True wired=True), qa/city-view-R2457.log written by one utf-8 LF single writer, both legs running the REAL server on a private port and a temp db so no live database was touched; the 79-criteria lobby suite stayed green (AC-S13 proofs unchanged) and the registry now reads 556 suites / 4312 criteria. Honest limits: the first suite run failed 5/6 on my own wiring assertion (registry label vs the pre-registered criterion) and the REGISTRY was renamed rather than the criterion loosened; the page needs the server because fetch has no origin under file://; no battery or matrix ran this window (the R2168 mixed-tree rule) so reconcile-battery-R2458 was registered and is owed FIRST next window; READ-ONLY observation, not repaired because the city data line owns the file: city_data/world-public.json and citizens-light.jsonl carry evidently truncated multi-byte sequences that the new page will display as-is. Two product points: after nine internal-audit windows this station now has a second CEO-openable surface, and it is the first one a person can browse."
@@ -348,17 +353,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2457",
+      "2458",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 63,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 63,
+    "substantive_non_idle_mention_lines": 68,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -380,6 +385,8 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
+        "discounted": 0,
+        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -392,6 +399,8 @@
         "done_rows": 409,
         "gated_rows": 1,
         "claimable": 11,
+        "discounted": 0,
+        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -404,10 +413,16 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
+        "discounted": 0,
+        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ]
+    ],
+    "verdict": "FLOOR-MET",
+    "shortfall_total": 0,
+    "missing": [],
+    "delivered_total": 0
   }
 }
