@@ -125,13 +125,19 @@ def ac_mspl1(world):
                      "AC-MSPL1 ordinary render records nothing extra") and recorded
     # Byte-level: the header/label block of an ordinary render is identical
     # to the shipped (HEAD-law) doc's block apart from the volatile stamp
-    # line. The matrix body is NOT compared here: the registry legitimately
-    # grew by this window's own suite, which no label law may hide.
+    # line and the provenance segment. The stamp line is volatile by law; the
+    # provenance line belongs only to a STAMP-ALIGNED doc, so a shipped doc
+    # regenerated with --stamp-from legitimately carries it and the ordinary
+    # render does not - that absence is proved on its own above, so excluding
+    # it on both sides keeps every other header/label line byte-compared. The
+    # matrix body is NOT compared here: the registry legitimately grew by
+    # this window's own suite, which no label law may hide.
     def block(lines):
         for index, row in enumerate(lines):
             if row.startswith("- %s: " % labels["response"]):
                 return [row for row in lines[:index + 1]
-                        if not row.startswith("- %s: " % labels["stamp"])]
+                        if not row.startswith("- %s: " % labels["stamp"])
+                        and not row.startswith("- %s: " % labels["stamp_from"])]
         return []
 
     recorded = check(block(plain_lines) == block(doc_lines)
