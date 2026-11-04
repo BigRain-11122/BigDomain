@@ -1,0 +1,4 @@
+STATUS EXPORT WRITERS derived=3 routed=3 unrouted=0 transport=LF/CRLF audit=AUDIT-CLEAN verdict=WIRED scope=SCOPE-PARTIAL proved=2 unprovable=closeout_export_parity_wire.py
+  SCOPE closeout_export_parity_wire.py verdict=UNPROVABLE refusal=2/DISAGREES agree=no lf=WRITTEN/102887B crlf=REFUSED/102935B lone-lf=0
+  SCOPE queue_export_gate_wire.py verdict=PROVED refusal=(none) agree=yes lf=WRITTEN/102887B crlf=WRITTEN/103292B lone-lf=0
+  SCOPE queue_floor_export_face.py verdict=PROVED refusal=(none) agree=yes lf=WRITTEN/102887B crlf=WRITTEN/103292B lone-lf=0

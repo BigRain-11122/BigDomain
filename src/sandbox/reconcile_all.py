@@ -5327,6 +5327,14 @@ SUITES = [
     # pinned in state/queue/tech.md:516 as the R2448 seed BEFORE the code.)
     ("os-status-export-writer-dialect-wire",
      os.path.join("..", "os", "test_status_export_writer_dialect_wire.py"), 6),
+    # R2452: the R2450 dialect wire proved both transports for the QUEUE-FLOOR
+    # writer only, while three writers land docs/status-export.json. This suite
+    # asks every derived writer for both transports in its own publishable
+    # world and publishes a refusal as UNPROVABLE with the writer own code
+    # rather than dropping it. (AC-SEWS1..AC-SEWS6 were pinned in
+    # state/queue/tech.md:518 as the R2450 seed BEFORE the code.)
+    ("os-status-export-writer-transport-scope",
+     os.path.join("..", "os", "test_status_export_writer_transport_scope.py"), 6),
     # R2393: the ledger law was LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens: and
     # nothing asked it BEFORE a line was appended, so the R2392 closeout
     # wrote a date-prefixed ledger line and four suites went red a window

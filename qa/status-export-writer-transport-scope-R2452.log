@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2452 suite=src\os\test_status_export_writer_transport_scope.py legs=2
+== LEG A rc=0 digest=FA3C14CA12D7A4E0
+SUITE status_export_writer_transport_scope (R2452) criteria=6
+PASS AC-SEWS1 the proved writer set is derived from the audit reading at CALL time, never a fixed writer name
+PASS AC-SEWS2 every derived writer is asked for BOTH transports, a proved writer keeps CRLF with zero lone LF, and a refusing writer is named rather than dropped
+PASS AC-SEWS3 an LF copy keeps exactly today's bytes through every proving writer, and both transports carry the same document
+PASS AC-SEWS4 an UNPROVABLE writer is published with its own refusal code and leaves its document byte-identical
+PASS AC-SEWS5 the reading gains a per-writer transport line while every existing key keeps its value
+PASS AC-SEWS6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite, and the CLI agrees with itself
+SUITE PASS 6/6
+== LEG B rc=0 digest=FA3C14CA12D7A4E0
+SUITE status_export_writer_transport_scope (R2452) criteria=6
+PASS AC-SEWS1 the proved writer set is derived from the audit reading at CALL time, never a fixed writer name
+PASS AC-SEWS2 every derived writer is asked for BOTH transports, a proved writer keeps CRLF with zero lone LF, and a refusing writer is named rather than dropped
+PASS AC-SEWS3 an LF copy keeps exactly today's bytes through every proving writer, and both transports carry the same document
+PASS AC-SEWS4 an UNPROVABLE writer is published with its own refusal code and leaves its document byte-identical
+PASS AC-SEWS5 the reading gains a per-writer transport line while every existing key keeps its value
+PASS AC-SEWS6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite, and the CLI agrees with itself
+SUITE PASS 6/6
+== ADJACENT 3
+== src\os\test_status_export_writer_dialect_wire.py rc=0 SUITE PASS 6/6
+== src\os\test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src\os\test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=FA3C14CA12D7A4E0

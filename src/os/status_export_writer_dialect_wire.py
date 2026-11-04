@@ -101,8 +101,14 @@ def derived(root):
     return reading, rows
 
 
-def transport(folder, sample):
-    """Run the REAL queue-floor writer over an LF copy and a CRLF copy."""
+def transport(folder, sample, root="."):
+    """Run the REAL queue-floor writer over an LF copy and a CRLF copy.
+
+    The root is passed IN (R2452 birth-site repair): the queues the writer
+    composes from are the root the caller read, not the process cwd. The R2451
+    repair fixed the suite call sites only, so a caller running anywhere but
+    the repository root was still proving transports against the wrong queues.
+    """
     with io.open(sample, "rb") as handle:
         raw = handle.read()
     try:
@@ -116,15 +122,15 @@ def transport(folder, sample):
         body += "\n"
     with io.open(lf_path, "wb") as handle:
         handle.write(body.encode("utf-8"))
-    composed = QFE.compose(".", lf_path)
-    QFE.write(".", lf_path)
+    composed = QFE.compose(root, lf_path)
+    QFE.write(root, lf_path)
     with io.open(lf_path, "rb") as handle:
         lf_back = handle.read()
     lf_ok = lf_back == composed.encode("utf-8")
 
     with io.open(crlf_path, "wb") as handle:
         handle.write(body.replace("\n", "\r\n").encode("utf-8"))
-    QFE.write(".", crlf_path)
+    QFE.write(root, crlf_path)
     with io.open(crlf_path, "rb") as handle:
         crlf_back = handle.read()
     lone = crlf_back.replace(b"\r\n", b"").count(b"\n")
@@ -152,7 +158,7 @@ def check(root, sample=None):
             raise WireError("E_SEWD_SAMPLE_MISSING", sample)
         folder = tempfile.mkdtemp(prefix="sewd-")
         try:
-            transport_row = transport(folder, sample)
+            transport_row = transport(folder, sample, root)
         finally:
             shutil.rmtree(folder, ignore_errors=True)
     if not rows:
