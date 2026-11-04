@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T04:26:34+08:00",
-  "do": "R2452 product window: the export writer transport scope landed - every writer the audit derives for docs/status-export.json is now asked to prove BOTH transports in its own publishable world, so the dialect the R2450 wire protects is proved for the writers it never ran, and a writer that refuses is published as UNPROVABLE with its own refusal code instead of being silently dropped",
+  "export_ts": "2026-11-05T05:17:48+08:00",
+  "do": "R2453 verification window: the battery the R2452 product edit owed was run on the committed tree and came back green - 554/554 suites plus controls 7/7 at exactly the pre-registered 4300 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
   "ceo_face": {
-    "current": "R2452 product window: the export writer transport scope landed - every writer the audit derives for docs/status-export.json is now asked to prove BOTH transports in its own publishable world, so the dialect the R2450 wire protects is proved for the writers it never ran, and a writer that refuses is published as UNPROVABLE with its own refusal code instead of being silently dropped",
-    "latest_artifact": "src/os/status_export_writer_transport_scope.py (proved set derived from the shipped audit at CALL time, entry point discovered per writer, LF+CRLF copies in a private world) + src/os/test_status_export_writer_transport_scope.py (6/6 twice, identical digest) + src/os/status_export_writer_dialect_wire.py (transport root repaired at the birth site, 6/6 from both cwds) + qa/status-export-writer-transport-scope-R2452.log (2076B, legs=2 identical, 3 adjacent suites green) + qa/status-export-writer-transport-scope-live-R2452.log (559B, one utf-8 LF body, zero CRLF, scope=SCOPE-PARTIAL proved=2) + docs/sandbox-suite-matrix.md regenerated to 53568B at 554 suites / 4300 criteria, --check byte-identical",
-    "next_milestone": "the R2168 mixed-tree rule owes the battery next: reconcile-battery-R2453 at the pre-registered 554 suites / 4300 criteria on the committed R2452 tree, then regenerate the matrix from THAT green evidence - and the tech head now carries the gap this window measured, closeout_export_parity_dialect_wire at state/queue/tech.md:520 prefix AC-CEPD1, because the closeout wire cannot publish a CRLF-dialect export at all",
+    "current": "R2453 verification window: the battery the R2452 product edit owed was run on the committed tree and came back green - 554/554 suites plus controls 7/7 at exactly the pre-registered 4300 criteria - and the suite matrix was regenerated from THIS round own green evidence so the published registry is self-describing instead of borrowed",
+    "latest_artifact": "qa/reconcile-all-R2453.log (858125B, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, both follow-up legs retained: 1889B FAIL then 1950B PASS, RUNNER PASS 554/554 suites + controls 7/7 in 1255.0s at criteria 4300) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53539B at 554 suites / 4300 criteria with --check byte-identical and its own green line reading 554/554 + src/os/closeout_R2453.py (state, backlog and heartbeat writers for this window)",
+    "next_milestone": "the debt gate now names product-face-R2454 first=yes and the tech head still reads state/queue/tech.md:520 prefix AC-CEPD1 closeout_export_parity_dialect_wire - the closeout wire cannot publish a CRLF-dialect export at all, which is the exact dialect the R2450 wire exists to preserve; criteria AC-CEPD1..AC-CEPD6 were pinned in that row at R2452 before any code, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/os/status_export_writer_transport_scope.py (proved set derived from the shipped audit at CALL time, entry point discovered per writer, LF+CRLF copies in a private world) + src/os/test_status_export_writer_transport_scope.py (6/6 twice, identical digest) + src/os/status_export_writer_dialect_wire.py (transport root repaired at the birth site, 6/6 from both cwds) + qa/status-export-writer-transport-scope-R2452.log (2076B, legs=2 identical, 3 adjacent suites green) + qa/status-export-writer-transport-scope-live-R2452.log (559B, one utf-8 LF body, zero CRLF, scope=SCOPE-PARTIAL proved=2) + docs/sandbox-suite-matrix.md regenerated to 53568B at 554 suites / 4300 criteria, --check byte-identical",
-    "updated_at": "2026-11-05T04:26:34+08:00"
+    "last_artifact": "qa/reconcile-all-R2453.log (858125B, one utf-8 LF single writer through src/os/battery_stream.py, crlf=0 bom=False, both follow-up legs retained: 1889B FAIL then 1950B PASS, RUNNER PASS 554/554 suites + controls 7/7 in 1255.0s at criteria 4300) + docs/sandbox-suite-matrix.md regenerated from that evidence through --stamp-from to 53539B at 554 suites / 4300 criteria with --check byte-identical and its own green line reading 554/554 + src/os/closeout_R2453.py (state, backlog and heartbeat writers for this window)",
+    "updated_at": "2026-11-05T05:17:48+08:00"
   },
   "depts": [
     {
@@ -68,6 +68,10 @@
     "src/os/matrix_stamp_compare.py plus its six-criteria suite (qa/matrix-stamp-compare-R2418.log), docs/sandbox-suite-matrix.md regenerated stamp-aligned (537 suites / 4198 criteria)"
   ],
   "results": [
+    [
+      "2453",
+      "2026-11-05 R2453 verification window on the debt gate first=yes item reconcile-battery-R2453 (carried from R2452 at the pre-registered 554 suites / 4300 criteria): ZERO product code changed, the R2168 mixed-tree rule honoured. The first launch was killed by the filtering-pipe trap before the battery started - no evidence file, zero survivors, disclosed rather than counted - so it was relaunched unfiltered and read RUNNER PASS 554/554 suites green plus reconcile controls 7/7 in 1255.0s at criteria total 4300 EXACTLY as pre-registered, TMP RECLAIM 932/932 busy=0 failed=0 reclaimed 326.59 MiB, evidence written by one utf-8 LF single writer (crlf=0 bare_cr=0 bom=False). The four follow-up sections produced the designed order: matrix FAILED first on the stale doc (on-disk=53568B against regenerated=53539B) with no byte written, the doc was regenerated from THIS round own eligible green evidence through --stamp-from to 53539B at 554/4300, --check read byte-identical, and the re-run read matrix byte-identical, fingerprint CLEAN domains=5, profile byte-identical, census DRIFT-CLEAN for VERDICT R2453 PASS failing=none. Debt: reconcile-battery-R2453 closed at 117670B -> 117673B (line=189, open 2->1, done 168->169, readback ok) and NO successor battery owed because no product src byte changed and the registry is unmoved, so product-face-R2454 was opened first=yes at 117673B -> 118555B naming the tech head AC-CEPD1. Zero product points claimed; no P-47 business surface was rebuilt and every P-47 item remains blocked on CEO physical pieces."
+    ],
     [
       "2452",
       "2026-11-05 R2452 product window on the debt gate first=yes item product-face-R2452 (tech head state/queue/tech.md:518 prefix AC-SEWS1, criteria pinned at R2450). Shipped a scope whose proved set is the dialect wire own derived set read off the shipped audit at CALL time, with each writer asked through its OWN entry point (write, else publish) over an LF copy and a CRLF copy of the real document in a private fixture world, and the two legs required to agree on the same document; a writer that refuses is published as UNPROVABLE with its own refusal code and the measured fact that its document stayed byte-identical. MEASURED: scope=SCOPE-PARTIAL proved=2 unprovable=closeout_export_parity_wire.py, with queue_export_gate_wire PROVED (lf=102887B crlf=103292B lone-lf=0 agree=yes) and queue_floor_export_face PROVED (same bytes) - the two writers the R2450 wire never proved - while the closeout wire reads refusal=2/DISAGREES on CRLF and writes normally on LF, a transport-only refusal now named instead of hidden. A real birth-site defect surfaced by running the suite from src/os (FAIL 5/6, today=102854 against rows 102887): status_export_writer_dialect_wire.transport had the queues root hardcoded to '.', so the shipped wire own proof had been reading the process cwd - repaired by passing the root through, 6/6 from BOTH cwds. Evidence: capture 2 legs identical + 3 adjacent suites green (2076B) and a 559B single-writer LF live log with zero CRLF (exit 2, which is the honest code for a partial scope). Registry 554 suites / 4300 criteria, matrix regenerated to 53568B with --check byte-identical and its green line honestly reading 553/554. Debt: product-face-R2452 closed (116959B->116962B, line=188, open 2->1, done 167->168, readback ok) and reconcile-battery-R2453 opened first=yes (116962B->117670B); board row 518 stamped (1615074B->1618464B) and one real gap seeded at line 520 with AC-CEPD1..AC-CEPD6 pinned before any code. Two product points claimed for the reading; no P-47 business surface was rebuilt."
@@ -329,21 +333,21 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2452",
+      "2453",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 29,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 29,
+    "substantive_non_idle_mention_lines": 37,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   },
   "queue": {
@@ -371,10 +375,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 11,
+        "open_rows": 12,
         "done_rows": 408,
         "gated_rows": 1,
-        "claimable": 10,
+        "claimable": 11,
         "discounted": 0,
         "delivered": [],
         "floor": 10,
