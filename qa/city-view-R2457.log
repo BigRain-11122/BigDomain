@@ -1,0 +1,8 @@
+CITY VIEW R2457 live leg: real server, private port, temp db (legs=2)
+PASS AC-CV1 status=200 type=text/html bytes=6653 offline=True
+PASS AC-CV2 aigc_label=True risk_note=True
+PASS AC-CV3 snapshot=json post=405 unknown=404 census=200
+PASS AC-CV4 identical=True bytes=6653 sha16=F4DA3A32459C2E32
+PASS AC-CV6 bom=False crlf=0 ascii_src=True wired=True
+PASS AC-CV5 page=200 snapshot=503 not_ready_line=True
+SUITE PASS 6/6

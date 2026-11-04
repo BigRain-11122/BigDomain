@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>硅基城市 · BigDomain</title>
+<style>
+  :root{--ink:#1a2130;--muted:#6b7280;--line:#e3e7ee;--bg:#f6f7f9;--card:#fff;--accent:#2f4b8f;--ok:#2f7d4f;--warn:#b4530a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  .wrap{max-width:900px;margin:0 auto;padding:0 18px 44px}
+  header{background:var(--accent);color:#fff;padding:30px 0 24px;margin-bottom:22px}
+  header h1{font-size:24px;letter-spacing:.5px}
+  header p{margin-top:6px;font-size:13px;opacity:.9}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badge{font-size:12px;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:2px 10px}
+  .badge.ai{background:#fff;color:var(--accent);font-weight:700;border-color:#fff}
+  h2{font-size:16px;margin:22px 0 10px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
+  .stat .k{font-size:12px;color:var(--muted)}
+  .stat .v{font-size:22px;font-weight:700;margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+  ul.events{list-style:none}
+  ul.events li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  ul.events li:last-child{border-bottom:0}
+  .ts{color:var(--muted);font-size:12px;margin-right:8px}
+  .row{display:flex;gap:8px;margin-top:10px}
+  input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px}
+  button{padding:8px 14px;border:0;border-radius:6px;background:var(--accent);color:#fff;font-size:14px;cursor:pointer}
+  pre{background:#f2f4f8;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12px;white-space:pre-wrap;word-break:break-word}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+  .err{color:var(--warn);font-size:13px;margin-top:10px}
+  footer{margin-top:26px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  footer p{margin:4px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>硅基城市 BigDomain</h1>
+    <p>公众共创元宙平台 · 只读观测窗（沙盒）</p>
+    <div class="badges">
+      <span class="badge ai">AI 生成内容</span>
+      <span class="badge">只读</span>
+      <span class="badge" id="asof">快照时间读取中…</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h2>城市概览</h2>
+  <div class="stats">
+    <div class="stat"><div class="k">在册居民</div><div class="v" id="pop">—</div></div>
+    <div class="stat"><div class="k">开放街区</div><div class="v" id="districts">—</div></div>
+    <div class="stat"><div class="k">今日访客</div><div class="v" id="visitors">—</div></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="k" style="font-size:12px;color:var(--muted)">街区动态</div>
+    <div id="ambient" style="margin-top:4px">—</div>
+    <div id="trend" class="note">—</div>
+  </div>
+  <div class="err" id="err"></div>
+
+  <h2>最近事件</h2>
+  <div class="card"><ul class="events" id="events"><li>读取中…</li></ul></div>
+
+  <h2>居民查询</h2>
+  <div class="card">
+    <div class="note">输入户籍编号查看公开档案（例：B-00231）。荣誉席不出档。</div>
+    <div class="row">
+      <input id="cid" placeholder="B-00231" autocomplete="off">
+      <button id="go">查询</button>
+    </div>
+    <pre id="out" style="margin-top:10px;display:none"></pre>
+  </div>
+
+  <footer>
+    <p>AI 生成内容：本页展示的城市数据由 AI 内容管线生成，并带 AI 生成标识。</p>
+    <p>非投资建议：本页为沙盒演示，不构成任何投资、理财或收益承诺。</p>
+    <p>只读观测窗：写入动作只发生在 WebSocket 大厅侧，本页没有任何写接口。</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var NOT_READY = "城市快照暂未就绪";
+  function text(id, v) { document.getElementById(id).textContent = (v === undefined || v === null) ? "—" : String(v); }
+
+  function render(snap) {
+    var city = snap.city || {};
+    text("pop", city.population);
+    text("districts", city.districts_open);
+    text("visitors", city.visitors_today);
+    text("ambient", city.ambient);
+    text("trend", city.trend_hint);
+    text("asof", "快照 " + (snap.as_of || "—"));
+    var list = document.getElementById("events");
+    list.innerHTML = "";
+    var events = snap.events_tail || [];
+    if (!events.length) { list.innerHTML = "<li>暂无事件</li>"; return; }
+    events.forEach(function (ev) {
+      var li = document.createElement("li");
+      var ts = document.createElement("span");
+      ts.className = "ts";
+      ts.textContent = ev.ts_utc || "";
+      var zone = document.createElement("b");
+      zone.textContent = (ev.zone || "") + " · ";
+      li.appendChild(ts);
+      li.appendChild(zone);
+      li.appendChild(document.createTextNode(ev.summary || ""));
+      list.appendChild(li);
+    });
+  }
+
+  function fail(status, detail) {
+    var box = document.getElementById("err");
+    box.textContent = NOT_READY + "（HTTP " + status + "）" + (detail ? "：" + detail : "");
+    var list = document.getElementById("events");
+    list.innerHTML = "<li>暂无事件（快照未就绪）</li>";
+  }
+
+  fetch("/city/snapshot", { headers: { "Accept": "application/json" } })
+    .then(function (r) {
+      if (!r.ok) {
+        return r.json().catch(function () { return {}; }).then(function (body) {
+          fail(r.status, body.error || "");
+        });
+      }
+      return r.json().then(render);
+    })
+    .catch(function (e) { fail("network", String(e)); });
+
+  function lookup() {
+    var id = (document.getElementById("cid").value || "").trim();
+    var out = document.getElementById("out");
+    if (!id) { return; }
+    out.style.display = "block";
+    out.textContent = "查询中…";
+    fetch("/census/" + encodeURIComponent(id), { headers: { "Accept": "application/json" } })
+      .then(function (r) { return r.json(); })
+      .then(function (body) { out.textContent = JSON.stringify(body, null, 2); })
+      .catch(function (e) { out.textContent = "查询失败：" + String(e); });
+  }
+
+  document.getElementById("go").addEventListener("click", lookup);
+  document.getElementById("cid").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { lookup(); }
+  });
+}());
+</script>
+</body>
+</html>

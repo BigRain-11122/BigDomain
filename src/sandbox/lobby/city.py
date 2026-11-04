@@ -191,11 +191,30 @@ class CityFace:
 
 
 class CityReadHandler(BaseHTTPRequestHandler):
-    """Read-only HTTP face: GET /city/snapshot, GET /census/<id>. Everything
-    else is 404; every non-GET method is 405 (no write endpoints at all -
-    the intake face is the WebSocket avatar.register, not HTTP)."""
+    """Read-only HTTP face: GET /city/ (the shipped view page), GET
+    /city/snapshot, GET /census/<id>. Everything else is 404; every
+    non-GET method is 405 (no write endpoints at all - the intake face
+    is the WebSocket avatar.register, not HTTP)."""
 
     city = None  # wired at startup
+    view_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "city_view.html")
+
+    def _send_html(self, path):
+        """Serve the shipped page bytes as-is: one source of truth on disk
+        and no build step, so GET /city and GET /city/ answer identical
+        bytes (AC-CV4). A missing page is a 503, never a 500."""
+        try:
+            with open(path, "rb") as handle:
+                body = handle.read()
+        except OSError:
+            self._send(503, {"error": "city view page missing on disk"})
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
     def _send(self, code, obj):
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
@@ -207,6 +226,9 @@ class CityReadHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
+        if path in ("/city", "/city/"):
+            self._send_html(self.view_path)
+            return
         if path == "/city/snapshot":
             code, obj = self.city.snapshot_body()
             self._send(code, obj)

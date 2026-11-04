@@ -195,6 +195,14 @@ SUITES = [
     # billed resend; behavioral-proof method, violations below the
     # mute trigger) - AC-IDR1..IDR7 (72 -> 79).
     ("lobby", os.path.join("lobby", "test_client.py"), 79),
+    # R2457: the city read face gains a page, not an endpoint - GET /city and
+    # GET /city/ serve the shipped city_view.html bytes while /city/snapshot
+    # and /census/<id> keep their exact JSON contract, so a visitor can end
+    # up looking at the silicon city in a browser. (AC-CV1..AC-CV6 were
+    # pre-registered in src/os/backlog.md at R2457 BEFORE the page and this
+    # suite existed.) Both legs run the real server on private ports and a
+    # temp db, and the last leg serves a city dir with no snapshot package.
+    ("os-lobby-city-view", os.path.join("lobby", "test_city_view.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
