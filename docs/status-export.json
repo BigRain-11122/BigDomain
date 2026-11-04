@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T02:26:51+08:00",
+  "export_ts": "2026-11-05T02:27:44+08:00",
   "do": "R2450 product window: the three writers that land docs/status-export.json now ask the shared dialect law at their own write sites, so the document the reader opens is no longer rewritten in whichever transport the running writer felt like - an LF export keeps exactly today's bytes and a CRLF export keeps CRLF with zero lone LF, proved by real writer calls over copies of the live document, and the dialect audit now reads AUDIT-CLEAN with routed == keeps",
   "ceo_face": {
     "current": "R2450 product window: the three writers that land docs/status-export.json now ask the shared dialect law at their own write sites, so the document the reader opens is no longer rewritten in whichever transport the running writer felt like - an LF export keeps exactly today's bytes and a CRLF export keeps CRLF with zero lone LF, proved by real writer calls over copies of the live document, and the dialect audit now reads AUDIT-CLEAN with routed == keeps",
@@ -7,7 +7,7 @@
     "next_milestone": "the R2168 mixed-tree rule owes reconcile-battery-R2451 at the pre-registered 553 suites / 4294 criteria, and after it the next PRODUCT face at the deliverable-aware tech head state/queue/tech.md:518 prefix AC-SEWS1 (status_export_writer_transport_scope): prove the transport of every derived export writer, naming an UNPROVABLE writer with its refusal code instead of silently dropping it",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/status_export_writer_dialect_wire.py + src/os/test_status_export_writer_dialect_wire.py (SUITE PASS 6/6 twice identical, 3 adjacent suites green) + src/os/queue_floor_export_face.py + src/os/queue_export_gate_wire.py + src/os/closeout_export_parity_wire.py (dialect wired at the write site) + qa/status-export-writer-dialect-wire-R2450.log (1693B) + qa/status-export-writer-dialect-wire-live-R2450.log (414B) + docs/sandbox-suite-matrix.md regenerated to 53423B at 553 suites / 4294 criteria, --check byte-identical",
-    "updated_at": "2026-11-05T02:26:51+08:00"
+    "updated_at": "2026-11-05T02:27:44+08:00"
   },
   "depts": [
     {
@@ -328,10 +328,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 9,
+    "log_lines_in_window": 10,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
