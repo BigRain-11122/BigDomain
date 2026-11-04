@@ -1,0 +1,9 @@
+LOBBY INTEROP PASS round=R2456 port=61945 db=C:\Users\sjs20\AppData\Local\Temp\lobby-interop-850cikqg\events.db
+  AC-S1 hello rooms=['lobby', 'quant', 'cocreate'] v=1
+  AC-S6 risk persistent=True text_len=115
+  AC-S2 spectator send refused code=E_ENTRANCE_REQUIRED
+  AC-S3 grant mock=True
+  AC-S3 broadcast delivered to 2 connections rtt_ms=0.3 evt_id=ccdf0b80aa93eb6e
+  AC-S5 ai_generated=False actor=res-60f4332b
+  AC-S4 blocked word refused code=E_CONTENT_REJECTED and not broadcast
+  AC-S4 no broadcast leaked to spectator

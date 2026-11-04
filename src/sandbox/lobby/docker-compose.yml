@@ -1,0 +1,35 @@
+# BigDomain lobby sandbox orchestration (P-47-1b).
+# Sandbox only: no TLS, no domain, no real payment, no real msgSecCheck.
+# docker compose up  ->  ws://localhost:8091/ws  +  http://localhost:8092/city/snapshot
+services:
+  lobby:
+    build: .
+    image: bigdomain-lobby-sandbox:0.1
+    container_name: bigdomain-lobby-sandbox
+    command:
+      - python
+      - server.py
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8091"
+      - --db
+      - /app/data/events.db
+    ports:
+      - "8091:8091"
+      - "8092:8092"
+    volumes:
+      - ./city_data:/app/city_data:ro
+      - lobby-data:/app/data
+    environment:
+      PYTHONUNBUFFERED: "1"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket;s=socket.create_connection(('127.0.0.1',8091),2);s.close()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  lobby-data:
