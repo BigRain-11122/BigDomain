@@ -1,0 +1,37 @@
+BigDomain R2459 - 19.9 entrance checkout face (P-47-4) evidence
+round: R2459  date: 2026-11-05  captured: local, one utf-8 LF writer
+
+SUITE src/sandbox/lobby/test_checkout_demo.py
+LEG1 SUITE PASS 6/6 digest=46654133EC75D89438D1B6C4547C79CE
+LEG2 SUITE PASS 6/6 digest=46654133EC75D89438D1B6C4547C79CE
+identical=True
+
+AC-CKD1 page=200 html identical=True bytes=8051 notices=mock/ai/advice PASS
+AC-CKD2 order=1990 mock=True chargeable=False blank=400/E_PAYMOCK_BAD_ACTOR orders_kept=True PASS
+AC-CKD3 replay1=False replay2=True same_receipt=True card_active=True PASS
+AC-CKD4 unpaid=403/E_ENTRANCE_REQUIRED gate_before=True risky=422 review=422 pass=200 gate_after=3 PASS
+AC-CKD5 unknown=404/E_PAYMOCK_UNKNOWN_ORDER untouched=True 404=404/404 put=405 PASS
+AC-CKD6 ascii=True banned=[] page_utf8=True registry_row=1 PASS
+
+LIVE (real CLI process, private port 8093, CREATE_NO_WINDOW, terminated after)
+BRINGUP: CHECKOUT DEMO on http://127.0.0.1:8093/checkout/ channel=mock chargeable=false gate=wordlist-stub
+PAGE bytes=8051 notices=True
+LIVE ORDER amount=1990 mock=True chargeable=False id=sbx-order-<hex>
+SERVER STOPPED
+
+BIRTH DEFECTS FOUND BY RUNNING (repaired at the birth site, criteria NOT widened)
+1. demo.state() asked self.pay.contract(), but contract() is a module-level
+   function on pay_mock - a real AttributeError surfaced as a 500-class drop on
+   /checkout/api/state. Repaired by importing pay_mock.contract and calling it.
+2. AC-CKD6 read banned=['import time'] because main() imported time for its idle
+   loop. The criterion was pre-registered, so the MODULE changed instead: an
+   idle threading.Event().wait() replaces the clock import and the module now
+   carries zero clock reference.
+3. The first live probe hung because the child process buffered its bring-up
+   line into a pipe and the parent blocked on readline; the probe now polls the
+   endpoint with -u and a bounded retry loop, and the survivor was cleared.
+
+NOT CLAIMED
+- Docker is absent on this host, so the containerised bring-up stays unproved.
+- The real WeChat msgSecCheck and the real 19.9 debit both wait on CEO physical
+  items (mini-program appid/secret, merchant id); the page says so on screen.

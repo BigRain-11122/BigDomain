@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BigDomain 硅基域 · 19.9 入场结账沙箱</title>
+<style>
+  :root {
+    --ink: #11161d;
+    --muted: #5b6572;
+    --line: #d9dee5;
+    --paper: #f6f7f9;
+    --ok: #147d4a;
+    --warn: #8a5b00;
+    --bad: #a5231c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.65 -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  header, main, footer { max-width: 880px; margin: 0 auto; padding: 0 22px; }
+  header { padding-top: 34px; padding-bottom: 8px; }
+  h1 { font-size: 21px; margin: 0 0 6px; letter-spacing: .2px; }
+  .sub { color: var(--muted); font-size: 13.5px; margin: 0 0 14px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .badge {
+    font-size: 12px; padding: 3px 9px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fff; color: var(--muted);
+  }
+  .badge.mock { border-color: #c9a227; color: var(--warn); background: #fdf7e3; }
+  .badge.ai { border-color: #9fb6d4; color: #22456f; background: #eef4fb; }
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  .step { font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+  h2 { font-size: 16px; margin: 4px 0 12px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; }
+  input[type=text], textarea {
+    width: 100%; padding: 9px 11px; font: inherit; color: inherit;
+    border: 1px solid var(--line); border-radius: 7px; background: #fcfcfd;
+  }
+  textarea { min-height: 74px; resize: vertical; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 12px; }
+  button {
+    font: inherit; padding: 9px 16px; border-radius: 7px; cursor: pointer;
+    border: 1px solid #1c3a63; background: #1c3a63; color: #fff;
+  }
+  button.ghost { background: #fff; color: #1c3a63; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .out {
+    margin-top: 14px; background: #0f1418; color: #cfe3d6; border-radius: 8px;
+    padding: 12px 14px; font: 12.5px/1.55 ui-monospace, Consolas, monospace;
+    white-space: pre-wrap; word-break: break-word; min-height: 42px;
+  }
+  .ok { color: var(--ok); }
+  .warn { color: var(--warn); }
+  .bad { color: var(--bad); }
+  footer { padding-bottom: 40px; color: var(--muted); font-size: 12.5px; }
+  footer p { margin: 6px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BigDomain 硅基域 · 19.9 入场结账沙箱</h1>
+  <p class="sub">公众共创元宙平台 · 沙箱环境 · 无真实交易、无真实账号</p>
+  <div class="badges">
+    <span class="badge mock">MOCK · 非真实扣费</span>
+    <span class="badge ai">AI 生成内容标识</span>
+    <span class="badge">非投顾风险提示</span>
+    <span class="badge">零服务器沙箱</span>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="step">第 1 步</div>
+    <h2>下 19.9 入场单</h2>
+    <label for="actor">访客名（沙箱标识，随便起）</label>
+    <input id="actor" type="text" value="sandbox-visitor-1" autocomplete="off">
+    <div class="row">
+      <button id="btn-order">下单 19.9（模拟）</button>
+      <button id="btn-state" class="ghost">查询当前权益</button>
+    </div>
+    <p class="hint">金额固定 1990 分。模拟通道不会产生任何真实扣款，商户号到位前不接真钱。</p>
+  </section>
+
+  <section class="card">
+    <div class="step">第 2 步</div>
+    <h2>支付并领取月卡</h2>
+    <div class="row">
+      <button id="btn-pay">支付这笔单（模拟）+ 发 30 天月卡</button>
+    </div>
+    <p class="hint">重复点支付不会重复出账：第二次回来的回执与第一次同号（replay=true）。</p>
+  </section>
+
+  <section class="card">
+    <div class="step">第 3 步</div>
+    <h2>试发一句话</h2>
+    <label for="say">内容（先过入场闸，再过内容安全检查）</label>
+    <textarea id="say">今天城市里新开了一家咖啡店，想约邻居一起去看看。</textarea>
+    <div class="row">
+      <button id="btn-send">发送（沙箱）</button>
+    </div>
+    <p class="hint">没有有效入场权益时先被拒（E_ENTRANCE_REQUIRED），根本不会进入内容检查。词表命中读 risky 直接拒，读 review 进人工队列。</p>
+    <div id="out" class="out">等待操作……</div>
+  </section>
+
+  <section class="card">
+    <div class="step">状态面</div>
+    <h2>当前读到的权益</h2>
+    <div id="stateout" class="out">点上方「查询当前权益」。</div>
+  </section>
+</main>
+
+<footer>
+  <p>AI 生成内容标识：本页展示的城市与内容安全判定来自 AI 生成流程，按平台要求标注 AI 生成内容。</p>
+  <p>非投顾风险提示：本页一切数据与演示仅为产品功能说明，不构成投资建议，不承诺收益；平台不对任何第三方据此作出的决定负责。</p>
+  <p>红线说明：支付为模拟通道（chargeable=false、mock=true）；内容检查为本地词表桩，真实 msgSecCheck 需小程序 appid/secret（CEO 物理件）。页面只调用本站同源接口，不向任何外部地址发请求。</p>
+</footer>
+
+<script>
+(function () {
+  var out = document.getElementById("out");
+  var stateout = document.getElementById("stateout");
+
+  function show(el, title, obj, cls) {
+    var head = title + (cls ? "" : "");
+    el.textContent = head + "\n" + JSON.stringify(obj, null, 2);
+    el.className = "out" + (cls ? " " + cls : "");
+  }
+
+  function actor() {
+    return (document.getElementById("actor").value || "").trim();
+  }
+
+  function post(path, body) {
+    return fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        return { status: res.status, data: data };
+      });
+    });
+  }
+
+  var currentOrder = null;
+
+  document.getElementById("btn-order").addEventListener("click", function () {
+    post("/checkout/api/order", { actor: actor() }).then(function (r) {
+      if (r.status === 201) {
+        currentOrder = r.data.order.order_id;
+        show(out, "下单成功（HTTP " + r.status + "）", r.data.order, "ok");
+      } else {
+        show(out, "下单被拒（HTTP " + r.status + "）", r.data, "bad");
+      }
+    }).catch(function (e) {
+      show(out, "请求失败", { error: String(e) }, "bad");
+    });
+  });
+
+  document.getElementById("btn-pay").addEventListener("click", function () {
+    if (!currentOrder) {
+      show(out, "还没有订单", { hint: "先点第 1 步「下单 19.9（模拟）」" }, "warn");
+      return;
+    }
+    post("/checkout/api/pay", { order_id: currentOrder }).then(function (r) {
+      if (r.status === 200) {
+        show(out, "支付回执（HTTP " + r.status + "）", r.data, "ok");
+      } else {
+        show(out, "支付被拒（HTTP " + r.status + "）", r.data, "bad");
+      }
+    });
+  });
+
+  document.getElementById("btn-send").addEventListener("click", function () {
+    post("/checkout/api/send", {
+      actor: actor(),
+      text: document.getElementById("say").value
+    }).then(function (r) {
+      if (r.status === 200) {
+        show(out, "发送通过（HTTP " + r.status + "）", r.data, "ok");
+      } else {
+        show(out, "发送被拒（HTTP " + r.status + "）", r.data, "bad");
+      }
+    });
+  });
+
+  document.getElementById("btn-state").addEventListener("click", function () {
+    fetch("/checkout/api/state?actor=" + encodeURIComponent(actor()))
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        show(stateout, "权益读取", data, data.entrance_active ? "ok" : "warn");
+      });
+  });
+})();
+</script>
+</body>
+</html>

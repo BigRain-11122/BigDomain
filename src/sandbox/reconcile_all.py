@@ -203,6 +203,13 @@ SUITES = [
     # suite existed.) Both legs run the real server on private ports and a
     # temp db, and the last leg serves a city dir with no snapshot package.
     ("os-lobby-city-view", os.path.join("lobby", "test_city_view.py"), 6),
+    # 19.9 entrance checkout face (R2459, P-47-4): the shipped pay_mock and
+    # msgsec_stub become a page a person can click through - GET /checkout/
+    # plus order/pay/send/state routes, with the entrance gate ordered BEFORE
+    # the content gate. Every criterion is read off a real server on port 0.
+    # (AC-CKD1..AC-CKD6 were pre-registered in src/os/backlog.md at R2459
+    # BEFORE this suite and its module existed.)
+    ("os-lobby-checkout-demo", os.path.join("lobby", "test_checkout_demo.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
