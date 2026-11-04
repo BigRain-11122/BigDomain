@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 546 | 4252 | 546/546 | R2437 |
+| 547 | 4258 | 546/546 | R2437 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -583,7 +583,8 @@
 | 544 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 3.2 |
 | 545 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 0.7 |
 | 546 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 1.2 |
-|  | 合计 |  | 4252 | green 546 / FAIL 0 / no-evidence 0 |  |
+| 547 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | no-evidence | - |
+|  | 合计 |  | 4258 | green 546 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

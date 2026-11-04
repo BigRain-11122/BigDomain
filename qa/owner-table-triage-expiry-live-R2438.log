@@ -1,0 +1,5 @@
+OWNER TABLE TRIAGE EXPIRY root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os scanned=1073 round=2438 window=30 triaged=6 aged=0 fresh=6 unageable=0 verdict=EXPIRY-CLEAN fresh=[battery_followup_help_wire.py(2),evidence_R2372.py(2),matrix_stamp_compare.py(2),r2140_fold.py(2),retry_naming.py(2),run_identity.py(2)]
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.

@@ -1,0 +1,7 @@
+PASS AC-OTTE1 age is measured as current_round minus since_round and the row keeps status TRIAGED printing both verdicts
+PASS AC-OTTE2 age == window reads FRESH and age == window + 1 reads AGED
+PASS AC-OTTE3 a dead entry is unageable, never aged, and a future since_round fails closed
+PASS AC-OTTE4 EXPIRY-AGED at exit 2, EXPIRY-CLEAN at 0, and a missing or bad --round reads exit 3 rather than a clock
+PASS AC-OTTE5 the face writes nothing and keeps the declaration's line endings; exits are 0/2/3/5 and --json is byte-stable
+PASS AC-OTTE6 pure ASCII stdlib, no clock, no network, and its own reconcile label is wired into the runner
+SUMMARY passes=6 fails=0

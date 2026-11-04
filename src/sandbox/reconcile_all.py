@@ -5477,6 +5477,14 @@ SUITES = [
     # pinned in state/queue/tech.md:500 as the R2412 seed row BEFORE the code.)
     ("os-owner-table-split-triage",
      os.path.join("..", "os", "test_owner_table_split_triage.py"), 6),
+    # R2438: the triage declaration records since_round on every acceptance
+    # but nothing aged it, so an acceptance written at R2436 and one accepted
+    # a year earlier read identically - a never-expiring waiver. One face now
+    # measures the age against the supplied round and prints AGED while the
+    # row stays TRIAGED until re-reviewed. (AC-OTTE1..AC-OTTE6 were pinned in
+    # state/queue/tech.md:502 as the R2436 seed row BEFORE the code.)
+    ("os-owner-table-triage-expiry",
+     os.path.join("..", "os", "test_owner_table_triage_expiry.py"), 6),
     ]
 
 FAILS = 0
