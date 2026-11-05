@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T03:55:17+08:00",
+  "export_ts": "2026-11-06T03:57:00+08:00",
   "do": "R2483 verification window: the two batteries R2481 and R2482 owed are now run and green on a committed tree - 569/569 suites and exactly 4390 criteria - and the battery earned its keep by catching four R2482 evidence files written in PowerShell UTF-16, which were re-captured through the shipped utf-8 writer",
   "ceo_face": {
     "current": "R2483 verification window: the two batteries R2481 and R2482 owed are now run and green on a committed tree - 569/569 suites and exactly 4390 criteria - and the battery earned its keep by catching four R2482 evidence files written in PowerShell UTF-16, which were re-captured through the shipped utf-8 writer",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the battery debt is clear and the gate now names product-face-R2456 (prefix AC-PFKC1) as CLAIM-FIRST, so the next window owes a BUSINESS face rather than another battery; the strongest candidate remains wiring the control panel into the hub payload so the one entry page leads to it, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2483-retry.log (864674B, utf-8 LF, closing line 'RUNNER PASS (569/569 suites green, reconcile controls 7/7, 1652.7s)' with an independent recount of exactly 4390 criteria) + qa/panel-lobby-R2483.log (1532B, identical legs, digest 10C09149A5755E9A) + qa/start-all-R2483.log (464B) + docs/sandbox-suite-matrix.md (54691B, green=569/569, --check byte-identical) at 2026-11-06 R2483",
-    "updated_at": "2026-11-06T03:55:17+08:00"
+    "updated_at": "2026-11-06T03:57:00+08:00"
   },
   "depts": [
     {
@@ -485,10 +485,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 77,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 76,
+    "substantive_non_idle_mention_lines": 77,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
