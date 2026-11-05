@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T16:25:23+08:00",
+  "export_ts": "2026-11-05T16:26:28+08:00",
   "do": "R2475 BUSINESS window: the sandbox entry page now reaches FIVE faces instead of four - the UGC console shipped at R2473 entered the hub payload, its card and a request-time live marker, and the operator flag --ugc-port - so one URL really reaches the newest console",
   "ceo_face": {
     "current": "R2475 BUSINESS window: the sandbox entry page now reaches FIVE faces instead of four - the UGC console shipped at R2473 entered the hub payload, its card and a request-time live marker, and the operator flag --ugc-port - so one URL really reaches the newest console",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window owes the battery on this committed tree FIRST (reconcile-battery-R2475, pre-registered 565 suites / 4366 criteria) because the R2168 mixed-tree rule puts it ahead of any further product byte; after green the product face is the next thing a person cannot yet do - the hub can say a face is alive but cannot start one; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/hub-ugc-R2475.log (SUITE PASS 6/6 twice, identical verdict digest b13a5112f83d66d7, 1018B, one utf-8 LF writer) + qa/hub-ugc-live-R2475.log (a REAL ugc_page.py on port 54398 published by the hub as http://127.0.0.1:54398/ugc/ with live_ugc=True and the shipped 8816B page answering 200) + src/sandbox/lobby/hub.html + docs/sandbox-suite-matrix.md (54396B, 565 suites / 4366 criteria, --check byte-identical)",
-    "updated_at": "2026-11-05T16:25:23+08:00"
+    "updated_at": "2026-11-05T16:26:28+08:00"
   },
   "depts": [
     {
@@ -445,10 +445,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 11,
+    "log_lines_in_window": 12,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
