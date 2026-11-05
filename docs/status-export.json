@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T08:47:10+08:00",
-  "do": "R2463 verification window: the battery the R2462 src edits owed ran on the committed tree - 559/559 suites green, controls 7/7, 4330 criteria exactly as pre-registered, 990.3s - so the entry page shipped at R2462 is now PROVED, not merely shipped. Same bring-up: python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 then open http://127.0.0.1:8095/hub/",
+  "export_ts": "2026-11-05T08:53:25+08:00",
+  "do": "R2464 business window: the lobby page now has a room selector filled from the server own config and a readable event ledger. Bring-up unchanged - python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 then open http://127.0.0.1:8094/lobby/ - switch rooms from the selector and watch the ledger record every frame; a second window still stays quiet until it joins the same room",
   "ceo_face": {
-    "current": "R2463 verification window: the battery the R2462 src edits owed ran on the committed tree - 559/559 suites green, controls 7/7, 4330 criteria exactly as pre-registered, 990.3s - so the entry page shipped at R2462 is now PROVED, not merely shipped. Same bring-up: python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 then open http://127.0.0.1:8095/hub/",
-    "latest_artifact": "src/sandbox/lobby/hub.html (5393B self-contained entry page shipped R2462) plus LATE evidence qa/reconcile-all-R2463.log (858063B, one utf-8 LF single writer, crlf=0 bom=False) reading RUNNER PASS 559/559 suites, controls 7/7, criteria total=4330, TMP RECLAIM 932/932 removed",
-    "next_milestone": "2026-11-05/06 a BUSINESS face superseding the carried internal audit row product-face-R2456 (carried 8 windows, stale) under the CEO standing order for real output - target: the shipped lobby gains a room picker and a readable event ledger so a visitor sees more than one room, ETA inside 48h; then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land",
+    "current": "R2464 business window: the lobby page now has a room selector filled from the server own config and a readable event ledger. Bring-up unchanged - python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 then open http://127.0.0.1:8094/lobby/ - switch rooms from the selector and watch the ledger record every frame; a second window still stays quiet until it joins the same room",
+    "latest_artifact": "src/sandbox/lobby/lobby.html (10077B page with room selector + event ledger, zero hardcoded room names) + src/sandbox/lobby/lobby_page.py (GET /lobby/api/rooms wired from the server cfg) + server.py rooms wiring + src/sandbox/lobby/test_lobby_rooms.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-room-picker-R2464.log) + qa/lobby-room-picker-live-R2464.log",
+    "next_milestone": "2026-11-05/07 the battery the R2464 src edits owe runs FIRST next window on the committed tree at the pre-registered 560 suites / 4336 criteria (reconcile-battery-R2465); then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, and a server-side room history read face so the ledger can show what happened before the page was opened, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/lobby/hub.html (5393B self-contained entry page shipped R2462) plus LATE evidence qa/reconcile-all-R2463.log (858063B, one utf-8 LF single writer, crlf=0 bom=False) reading RUNNER PASS 559/559 suites, controls 7/7, criteria total=4330, TMP RECLAIM 932/932 removed",
-    "updated_at": "2026-11-05T08:47:10+08:00"
+    "last_artifact": "src/sandbox/lobby/lobby.html (10077B page with room selector + event ledger, zero hardcoded room names) + src/sandbox/lobby/lobby_page.py (GET /lobby/api/rooms wired from the server cfg) + server.py rooms wiring + src/sandbox/lobby/test_lobby_rooms.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-room-picker-R2464.log) + qa/lobby-room-picker-live-R2464.log",
+    "updated_at": "2026-11-05T08:53:25+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/sandbox/lobby/lobby.html + src/sandbox/lobby/lobby_page.py + src/sandbox/lobby/server.py (rooms wiring) + src/sandbox/lobby/test_lobby_rooms.py + src/sandbox/reconcile_all.py (one registry row) + qa/lobby-room-picker-R2464.log + qa/lobby-room-picker-live-R2464.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/backlog.md + src/os/closeout_R2464.py + src/os/live_R2464.py + src/os/export_R2464.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2463.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/backlog.md + src/os/closeout_R2463.py + src/os/export_R2463.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/hub.html + src/sandbox/lobby/hub_page.py + src/sandbox/lobby/test_hub_page.py + src/sandbox/lobby/server.py (--hub-port, --checkout-port) + qa/sandbox-hub-R2462.log + src/sandbox/reconcile_all.py (one registry row) + docs/sandbox-suite-matrix.md + state/debt.md + src/os/backlog.md + src/os/closeout_R2462.py + src/os/fold_R2462.py + src/os/export_R2462.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2461.log + docs/sandbox-suite-matrix.md + state/debt.md + state/residue_triage.json + src/os/backlog.md + src/os/closeout_R2461.py + src/os/fold_R2461.py + src/os/export_R2461.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
@@ -77,6 +78,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2464",
+      "2026-11-05 R2464 BUSINESS window on the milestone the R2463 export named: the lobby had three configured rooms but only one room a visitor could reach. Shipped GET /lobby/api/rooms wired from the server own config, a room selector that subscribes the new room and releases the old one, and a client-side event ledger recording every received frame. Six criteria were pinned BEFORE the code and read off a real server and a real WebSocket client, twice with an identical digest, adjacent suites green: the rooms route matches the config in order, the page hardcodes no room name, the standing compliance surfaces are intact, an unknown room is refused, and rooms really partition - a client left on the default room received nothing for a full second while the subscriber read the message. Registry 560 suites / 4336 criteria, matrix byte-identical. Honest limits: the ledger is a client-side reading that starts empty on reload, Docker is absent so the compose bring-up stays unproved, and the real debit plus the real msgSecCheck still wait on CEO physical items."
+    ],
     [
       "2463",
       "2026-11-05 R2463 VERIFICATION window (zero product points, stated rather than dressed up): the R2168 mixed-tree rule owed the battery after R2462 changed product src bytes and moved the registry. RUNNER PASS 559/559 suites green, controls 7/7, 4330 criteria exactly as pre-registered, 990.3s, TMP RECLAIM 932/932. The designed matrix FAIL-then-regenerate order held: FAIL at 53959B vs 53952B with no byte written, then a stamp-aligned regeneration from this round own green evidence and a byte-identical --check, then LEG 2 four sections PASS for VERDICT R2463 PASS. Evidence is a single utf-8 LF writer (crlf=0 bom=False). Honest limits: nothing a CEO can open was rebuilt this window, no P-47 business surface was touched, Docker is absent so the compose bring-up stays unproved, and the real debit plus the real msgSecCheck still wait on CEO physical items."
@@ -378,17 +383,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2463",
+      "2464",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 75,
+    "log_lines_in_window": 82,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 75,
+    "substantive_non_idle_mention_lines": 82,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

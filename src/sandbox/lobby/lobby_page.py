@@ -21,12 +21,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PAGE_NAME = "lobby.html"
 ROUTES = ("/lobby", "/lobby/")
 CONFIG_ROUTE = "/lobby/api/config"
+ROOMS_ROUTE = "/lobby/api/rooms"
 
 
 class LobbyPageHandler(BaseHTTPRequestHandler):
     """Read-only HTTP face for the lobby client page."""
 
     ws_port = None  # wired at startup
+    rooms = ()  # the server own configured room list, wired at startup
     page_path = os.path.join(HERE, PAGE_NAME)
 
     def _send_page(self):
@@ -60,7 +62,13 @@ class LobbyPageHandler(BaseHTTPRequestHandler):
         if path == CONFIG_ROUTE:
             self._send(200, {"ws_port": int(self.ws_port), "ws_path": "/ws"})
             return
-        self._send(404, {"error": "not found: GET /lobby/ and GET /lobby/api/config only"})
+        if path == ROOMS_ROUTE:
+            rooms = [str(name) for name in self.rooms]
+            self._send(200, {"rooms": rooms,
+                             "default": rooms[0] if rooms else None})
+            return
+        self._send(404, {"error": "not found: GET /lobby/, /lobby/api/config and "
+                                  "/lobby/api/rooms only"})
 
     def _read_only(self):
         self._send(405, {"error": "method not allowed: the lobby page face is read-only"})
@@ -81,13 +89,16 @@ class LobbyPageHandler(BaseHTTPRequestHandler):
         pass
 
 
-def start_lobby_http(host, port, ws_port):
+def start_lobby_http(host, port, ws_port, rooms=None):
     """Start the page face on its own thread; returns the server object.
 
     The real bound port is at server.server_address[1], so a caller may pass
-    port 0 (tests do) and read back what the OS assigned.
+    port 0 (tests do) and read back what the OS assigned. The room list is the
+    caller's configured rooms, never a literal in this module.
     """
-    handler = type("BoundLobbyPageHandler", (LobbyPageHandler,), {"ws_port": int(ws_port)})
+    bound = {"ws_port": int(ws_port),
+             "rooms": tuple(str(name) for name in (rooms or ()))}
+    handler = type("BoundLobbyPageHandler", (LobbyPageHandler,), bound)
     httpd = ThreadingHTTPServer((host, port), handler)
     threading.Thread(target=httpd.serve_forever, name="lobby-page", daemon=True).start()
     return httpd

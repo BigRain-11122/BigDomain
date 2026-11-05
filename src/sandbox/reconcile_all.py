@@ -224,6 +224,15 @@ SUITES = [
     # (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at R2462
     # BEFORE this suite, its module and the page existed.)
     ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 6),
+    # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
+    # the server OWN configured rooms (never a literal in the module or page),
+    # the page gains a selector that subscribes the new room and releases the
+    # old one, and an event ledger records every received frame. Rooms really
+    # partition - proved by a stranger staying quiet - which is the behaviour a
+    # visitor needs before three rooms mean anything.
+    # (AC-RP1..AC-RP6 were pre-registered in src/os/backlog.md at R2464
+    # BEFORE this suite, the module change and the page change.)
+    ("os-lobby-room-picker", os.path.join("lobby", "test_lobby_rooms.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of

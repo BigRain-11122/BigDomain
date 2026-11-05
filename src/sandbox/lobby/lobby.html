@@ -10,6 +10,7 @@
   body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
   header{display:flex;align-items:baseline;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
   h1{font-size:18px;margin:0;font-weight:600}
+  h2{font-size:14px;margin:20px 0 8px;font-weight:600;color:var(--dim)}
   .badge{font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
   .badge.ai{border-color:var(--accent);color:var(--accent)}
   main{max-width:860px;margin:0 auto;padding:18px 20px 40px}
@@ -18,7 +19,7 @@
   button{cursor:pointer}
   button:disabled{opacity:.45;cursor:not-allowed}
   #connect{border-color:var(--accent);color:var(--accent)}
-  #log{height:340px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+  #log{height:300px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
   .row{padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.05)}
   .row:last-child{border-bottom:0}
   .who{color:var(--accent)}
@@ -30,6 +31,11 @@
   .notes{margin-top:18px;color:var(--dim);font-size:12.5px;line-height:1.8}
   .notes b{color:var(--warn);font-weight:600}
   .state{font-size:13px;color:var(--dim)}
+  .ledgerwrap{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{text-align:left;padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap}
+  th{color:var(--dim);font-weight:600;position:sticky;top:0;background:var(--panel)}
+  td.wide{white-space:normal;word-break:break-all;color:var(--dim)}
 </style>
 </head>
 <body>
@@ -41,6 +47,7 @@
 <main>
   <div class="bar">
     <input id="nick" placeholder="显示昵称（仅本地）" maxlength="16" size="16">
+    <select id="room" aria-label="房间" title="房间"></select>
     <button id="connect">连接大厅</button>
     <button id="grant" disabled>领取沙箱入场券（mock）</button>
     <span id="state" class="state">未连接</span>
@@ -49,6 +56,13 @@
   <div class="compose">
     <input id="text" placeholder="说点什么…（需沙箱入场券）" maxlength="200" disabled>
     <button id="send" disabled>发送</button>
+  </div>
+  <h2>事件账本（本页收到的每一帧）</h2>
+  <div class="ledgerwrap">
+    <table id="ledger">
+      <thead><tr><th>时间</th><th>类型</th><th>房间</th><th>evt_id</th><th>主体</th></tr></thead>
+      <tbody id="ledger-body"></tbody>
+    </table>
   </div>
   <p class="notes">
     <b>这是沙箱环境。</b>入场券为模拟支付（mock，不会真实扣费），真实 19.9 入口待商户号到位后接入。<br>
@@ -60,6 +74,7 @@
 (function(){
   "use strict";
   var ws = null, wsPort = null, seat = null, canSpeak = false;
+  var rooms = [], currentRoom = null;
   var logEl = document.getElementById("log");
   var stateEl = document.getElementById("state");
   var nickEl = document.getElementById("nick");
@@ -67,6 +82,8 @@
   var sendEl = document.getElementById("send");
   var grantEl = document.getElementById("grant");
   var connEl = document.getElementById("connect");
+  var roomEl = document.getElementById("room");
+  var ledgerBody = document.getElementById("ledger-body");
 
   function now(){ var d = new Date(); return d.toTimeString().slice(0,8); }
   function line(cls, who, text){
@@ -89,15 +106,48 @@
     var n = (nickEl.value || "").trim();
     return n ? n + "（" + (seat || "未入场") + "）" : (seat || "");
   }
+  function ledger(frame){
+    var p = frame.payload || {};
+    var cells = [
+      frame.ts_utc || now(),
+      frame.type || "?",
+      frame.room || p.room || "-",
+      frame.evt_id || p.evt_id || "-",
+      frame.actor || "-"
+    ];
+    var tr = document.createElement("tr");
+    for (var i = 0; i < cells.length; i++){
+      var td = document.createElement("td");
+      td.textContent = String(cells[i]);
+      if (i === 3) { td.className = "wide"; }
+      tr.appendChild(td);
+    }
+    ledgerBody.appendChild(tr);
+    while (ledgerBody.rows.length > 200) { ledgerBody.deleteRow(0); }
+  }
 
   function loadConfig(){
     return fetch("api/config").then(function(r){ return r.json(); }).then(function(cfg){
       wsPort = cfg.ws_port;
     });
   }
+  function loadRooms(){
+    return fetch("api/rooms").then(function(r){ return r.json(); }).then(function(payload){
+      rooms = payload.rooms || [];
+      currentRoom = payload.default || rooms[0] || null;
+      roomEl.innerHTML = "";
+      for (var i = 0; i < rooms.length; i++){
+        var opt = document.createElement("option");
+        opt.value = rooms[i]; opt.textContent = rooms[i];
+        roomEl.appendChild(opt);
+      }
+      if (currentRoom){ roomEl.value = currentRoom; }
+      setState("房间 " + rooms.join(" / "));
+    });
+  }
 
   function connect(){
-    loadConfig().then(function(){
+    loadConfig().then(loadRooms).then(function(){
       var scheme = (location.protocol === "https:" ? "wss" : "ws");
       var url = scheme + "://" + location.hostname + ":" + wsPort + "/ws";
       setState("连接中…");
@@ -108,15 +158,17 @@
       ws.onmessage = function(ev){
         var frame;
         try { frame = JSON.parse(ev.data); } catch (e) { line("err", "", "收到无法解析的帧"); return; }
+        ledger(frame);
         var type = frame.type || "";
         if (type === "sys.hello"){
-          setState("已连接 · 房间 " + ((frame.payload && frame.payload.rooms) || []).join("/"));
+          var helloRooms = (frame.payload && frame.payload.rooms) || rooms;
+          setState("已连接 · 房间 " + helloRooms.join("/"));
           line("sys", "系统", "大厅已就绪（协议 v" + (frame.payload ? frame.payload.v : "?") + "）");
         } else if (type === "sys.risk_warning"){
           line("sys", "风险提示", (frame.payload && frame.payload.text) || "风险提示");
         } else if (type === "chat.broadcast"){
           var t = frame.payload && frame.payload.text;
-          line("", frame.actor || "?", t || "");
+          line("", (frame.actor || "?") + " @" + (frame.room || "-"), t || "");
         } else if (type === "pay.grant_sandbox"){
           seat = (frame.payload && frame.payload.actor) || seat;
           setSpeak(true);
@@ -139,7 +191,7 @@
     var t = (textEl.value || "").trim();
     if (!t) return;
     ws.send(JSON.stringify({
-      v: 1, type: "chat.send", room: "lobby",
+      v: 1, type: "chat.send", room: currentRoom,
       payload: { text: t },
       client_msg_id: "web-" + Date.now() + "-" + Math.floor(Math.random()*1000)
     }));
@@ -148,12 +200,24 @@
 
   function grant(){
     if (!ws || ws.readyState !== 1){ line("err", "", "尚未连接"); return; }
-    ws.send(JSON.stringify({ v: 1, type: "pay.grant_sandbox", room: "lobby", payload: {} }));
+    ws.send(JSON.stringify({ v: 1, type: "pay.grant_sandbox", room: currentRoom, payload: {} }));
+  }
+
+  function switchRoom(){
+    var next = roomEl.value;
+    if (!next || next === currentRoom) return;
+    if (ws && ws.readyState === 1){
+      ws.send(JSON.stringify({ v: 1, type: "room.subscribe", payload: { room: next } }));
+      if (currentRoom){ ws.send(JSON.stringify({ v: 1, type: "room.unsubscribe", payload: { room: currentRoom } })); }
+    }
+    currentRoom = next;
+    setState("当前房间 " + next);
   }
 
   connEl.addEventListener("click", function(){ if (!ws) connect(); });
   sendEl.addEventListener("click", send);
   grantEl.addEventListener("click", grant);
+  roomEl.addEventListener("change", switchRoom);
   textEl.addEventListener("keydown", function(e){ if (e.key === "Enter") send(); });
 })();
 </script>

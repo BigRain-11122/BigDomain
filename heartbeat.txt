@@ -43,3 +43,4 @@ tick=2460 2026-11-05T07:39:09+0800 R2460 lobby browser client shipped (page 7379
 tick=2461 2026-11-05T08:11:26+08:00 R2461 verification: battery 558/558 suites at 4324 criteria green, matrix regenerated, VERDICT PASS, two debt rows closed
 tick=2462 2026-11-05T08:18:07+08:00 R2462 sandbox entry page shipped (GET /hub/ 5393B, /hub/api/faces publishes real bound ports, suite 6/6 x2, registry 559/4330)
 2026-11-05T08:5x+08:00 R2463 verification window: battery green 559/559 suites, controls 7/7, 4330 criteria, 990.3s; matrix regenerated 53952B byte-identical; debt row closed
+2026-11-05T09:2x+08:00 R2464 business window: lobby room picker + event ledger shipped, SUITE PASS 6/6 twice identical, adjacent 3 green, LIVE PASS, registry 560 suites / 4336 criteria

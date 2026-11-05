@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2464 suite=src/sandbox/lobby/test_lobby_rooms.py legs=2
+== LEG A rc=0 digest=F7F3F4CCF845A7F7
+PASS AC-RP1 status=200 rooms=lobby,quant,cocreate default=lobby not_hardcoded=True
+PASS AC-RP2 selector=True ledger=True fetches_rooms=True literals=0
+PASS AC-RP3 same_as_disk=True offline=True bytes=10077 bom=False crlf=0 ascii_module=True surfaces=3
+PASS AC-RP4 subscribe_notice=True room=quant unknown_room=E_ROOM_UNKNOWN
+PASS AC-RP5 partitioned=True stranger_quiet=True shared_evt=True evt_len=16
+PASS AC-RP6 switch_frames_accepted=True subscribe_notice=True unsubscribe_notice=True banner_route=True wired=True
+SUITE PASS 6/6
+== LEG B rc=0 digest=F7F3F4CCF845A7F7
+PASS AC-RP1 status=200 rooms=lobby,quant,cocreate default=lobby not_hardcoded=True
+PASS AC-RP2 selector=True ledger=True fetches_rooms=True literals=0
+PASS AC-RP3 same_as_disk=True offline=True bytes=10077 bom=False crlf=0 ascii_module=True surfaces=3
+PASS AC-RP4 subscribe_notice=True room=quant unknown_room=E_ROOM_UNKNOWN
+PASS AC-RP5 partitioned=True stranger_quiet=True shared_evt=True evt_len=16
+PASS AC-RP6 switch_frames_accepted=True subscribe_notice=True unsubscribe_notice=True banner_route=True wired=True
+SUITE PASS 6/6
+== ADJACENT 3
+== src/sandbox/lobby/test_lobby_page.py rc=0 SUITE PASS 6/6
+== src/sandbox/lobby/test_hub_page.py rc=0 SUITE PASS 6/6
+== src/sandbox/lobby/test_city_view.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=F7F3F4CCF845A7F7

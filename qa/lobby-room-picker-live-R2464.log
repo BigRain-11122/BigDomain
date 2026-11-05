@@ -1,0 +1,5 @@
+LIVE R2464 room picker: the server was started the way a person would start it, banner=serving ws://127.0.0.1:53182/ws rooms=lobby,quant,cocreate ping_interval=30 ping_timeout=60 gate=ok db=C:\Users\sjs20\AppData\Local\Temp\r2464-live\e.db city_api=http://127.0.0.1:8092/city/snapshot census_rows=3 city_dir=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\lobby\city_data lobby_page=http://127.0.0.1:53183/lobby/ ws_port=53182 hub=off (pass --hub-port 8095 for the sandbox entry page)
+LIVE rooms route status=200 payload={"default": "lobby", "rooms": ["lobby", "quant", "cocreate"]}
+LIVE page status=200 bytes=10077 carries_selector=True carries_ledger=True
+LIVE the selector reads the route, not the file: configured room names found in the page=0
+LIVE process terminated, returncode=1

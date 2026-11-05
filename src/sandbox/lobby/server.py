@@ -665,7 +665,7 @@ def main():
         banner += " city_api=http://%s:%d/city/snapshot census_rows=%d city_dir=%s" % (
             args.host, city_bound, city.imported, city.city_dir)
     if args.web_port is not None:
-        web = start_lobby_http(args.host, args.web_port, port)
+        web = start_lobby_http(args.host, args.web_port, port, rooms=LOBBY.rooms)
         web_bound = web.server_address[1]
         banner += " lobby_page=http://%s:%d/lobby/ ws_port=%d" % (
             args.host, web_bound, port)
