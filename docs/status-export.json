@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T12:56:30+08:00",
+  "export_ts": "2026-11-05T12:57:26+08:00",
   "do": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
   "ceo_face": {
     "current": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window discharges reconcile-battery-R2469 at the pre-registered 562 suites / 4348 criteria on the committed tree; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/ledger/ledger.html (7977B) + src/sandbox/ledger/ledger_page.py + qa/token-ledger-console-R2469.log (SUITE PASS 6/6 twice with an identical digest AC9413AB3051B0C32A33F4100507768B) + qa/token-ledger-console-live-R2469.log (real process: mint booked, overdraw 409 E_NEGATIVE_BALANCE, verdict PASS, total 0)",
-    "updated_at": "2026-11-05T12:56:30+08:00"
+    "updated_at": "2026-11-05T12:57:26+08:00"
   },
   "depts": [
     {
@@ -415,10 +415,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 81,
+    "log_lines_in_window": 82,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 81,
+    "substantive_non_idle_mention_lines": 82,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
