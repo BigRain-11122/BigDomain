@@ -1,0 +1,20 @@
+EVIDENCE CAPTURE round=R2483 suite=src/sandbox/test_panel_lobby.py legs=2
+== LEG A rc=0 digest=10C09149A5755E9A
+PASS AC-LBY1 lobby published in the contract  startable lists four faces and the lobby command names all five sockets
+PASS AC-LBY2 start assigns five distinct OS ports  hub port is the published address
+PASS AC-LBY3 readiness measured, never declared  the published hub port accepts and serves the hub page
+PASS AC-LBY4 refusals honest and cheap  unknown face, blank body, never-started stop, double start
+PASS AC-LBY6 hygiene, registration and an honest page  ASCII source, no shell, one registry row, page updated
+PASS AC-LBY5 teardown leaves nothing  stop refuses the hub port and shutdown kills the child
+SUITE PASS 6/6
+== LEG B rc=0 digest=10C09149A5755E9A
+PASS AC-LBY1 lobby published in the contract  startable lists four faces and the lobby command names all five sockets
+PASS AC-LBY2 start assigns five distinct OS ports  hub port is the published address
+PASS AC-LBY3 readiness measured, never declared  the published hub port accepts and serves the hub page
+PASS AC-LBY4 refusals honest and cheap  unknown face, blank body, never-started stop, double start
+PASS AC-LBY6 hygiene, registration and an honest page  ASCII source, no shell, one registry row, page updated
+PASS AC-LBY5 teardown leaves nothing  stop refuses the hub port and shutdown kills the child
+SUITE PASS 6/6
+== ADJACENT 1
+== src/sandbox/test_start_all.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=10C09149A5755E9A
