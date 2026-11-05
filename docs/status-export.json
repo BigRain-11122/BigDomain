@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T22:09:09+08:00",
+  "export_ts": "2026-11-05T22:10:18+08:00",
   "do": "R2476 VERIFICATION window: the whole registry was re-run on the committed R2475 tree and reads 565/565 suites green with the criteria total EXACTLY at the 4366 pre-registered - so the fifth hub face shipped last window is now proved rather than merely shipped",
   "ceo_face": {
     "current": "R2476 VERIFICATION window: the whole registry was re-run on the committed R2475 tree and reads 565/565 suites green with the criteria total EXACTLY at the 4366 pre-registered - so the fifth hub face shipped last window is now proved rather than merely shipped",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face and names the supersession of the carried audit row product-face-R2456 (carried 21 windows, still open and claimable); the named candidate is making the hub START a face instead of only reporting whether one listens - today the one entry URL can say a console is alive but cannot bring one up",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2476.log (RUNNER PASS 565/565 suites, controls 7/7, 4366 criteria exactly as pre-registered, 1444.8s, 862587B, one utf-8 LF writer, crlf=0 lone_cr=0 bom=False) + docs/sandbox-suite-matrix.md (54399B, 565 suites / 4366 criteria, regenerated from this round's own green evidence, --check byte-identical)",
-    "updated_at": "2026-11-05T22:09:09+08:00"
+    "updated_at": "2026-11-05T22:10:18+08:00"
   },
   "depts": [
     {
@@ -450,10 +450,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 19,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
