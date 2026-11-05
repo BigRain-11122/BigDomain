@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T01:26:06+08:00",
+  "export_ts": "2026-11-06T01:28:41+08:00",
   "do": "R2480 verification window: the battery the R2479 cap work owed ran and came back GREEN on the first measured leg - 567/567 suites, controls 7/7, 4378 criteria EXACTLY as pre-registered, and its closing line now states 'suite cap=600s overrides=0', so the new declared cap is visible in the run's own summary instead of living only in source",
   "ceo_face": {
     "current": "R2480 verification window: the battery the R2479 cap work owed ran and came back GREEN on the first measured leg - 567/567 suites, controls 7/7, 4378 criteria EXACTLY as pre-registered, and its closing line now states 'suite cap=600s overrides=0', so the new declared cap is visible in the run's own summary instead of living only in source",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the next window should ship a BUSINESS face and name the supersession of the carried audit row product-face-R2456 (state/queue/tech.md:522 prefix AC-PFKC1), per the CEO standing order OB-20261105-003656-879; the strongest named candidate remains letting the hub page START a face from the browser, which R2477 disclosed as only half met, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2480.log (863364B, no BOM, crlf=0, lone_cr=0, 567 per-suite rows summing to 4378 criteria, zero FAIL rows, RUNNER PASS in 1301.2s) + docs/sandbox-suite-matrix.md (regenerated stamp-aligned to 54551B, 567 suites / 4378 criteria, green=567/567 self-describing, --check byte-identical)",
-    "updated_at": "2026-11-06T01:26:06+08:00"
+    "updated_at": "2026-11-06T01:28:41+08:00"
   },
   "depts": [
     {
@@ -470,10 +470,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 52,
+    "log_lines_in_window": 53,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 52,
+    "substantive_non_idle_mention_lines": 53,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
