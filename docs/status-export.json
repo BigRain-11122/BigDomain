@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T04:58:21+08:00",
+  "export_ts": "2026-11-06T04:59:28+08:00",
   "do": "R2485 verification window: the full reconcile battery the debt register owed ran GREEN on the committed R2484 tree at exactly the pre-registered 570 suites / 4396 criteria, so the hub-to-panel face is now proved rather than merely committed",
   "ceo_face": {
     "current": "R2485 verification window: the full reconcile battery the debt register owed ran GREEN on the committed R2484 tree at exactly the pre-registered 570 suites / 4396 criteria, so the hub-to-panel face is now proved rather than merely committed",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the debt gate still names CLAIM-FIRST product-face-R2456 (prefix AC-PFKC1, open=2), so the next window owes a BUSINESS face; the strongest candidates are a panel that can also STOP what it started from the hub page, or the carried row_key_carrier_scope audit face; every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2485.log (865175B, utf-8 LF, no BOM, crlf=0, 'RUNNER PASS (570/570 suites green, reconcile controls 7/7, 1280.9s)', zero FAIL suite rows, criteria recount 4396 = the pre-registered target) + docs/sandbox-suite-matrix.md (54732B, 570 suites / 4396 criteria, --check byte-identical) at 2026-11-06 R2485",
-    "updated_at": "2026-11-06T04:58:21+08:00"
+    "updated_at": "2026-11-06T04:59:28+08:00"
   },
   "depts": [
     {
@@ -495,10 +495,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 25,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 25,
+    "substantive_non_idle_mention_lines": 26,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
