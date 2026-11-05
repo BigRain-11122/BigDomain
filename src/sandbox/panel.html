@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>沙箱控制台 · Sandbox Panel</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 24px; font: 15px/1.55 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+         background: #12151a; color: #e8ecf1; }
+  h1 { font-size: 20px; margin: 0 0 4px; letter-spacing: .5px; }
+  .sub { color: #9aa7b6; font-size: 13px; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #232a33; vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: #8b98a8; font-weight: 600; }
+  td.face { font-family: ui-monospace, Consolas, monospace; font-size: 14px; color: #cfe3ff; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+  .live { background: #10391f; color: #58d68d; }
+  .down { background: #3a1b1b; color: #ef8a8a; }
+  button { font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 6px; cursor: pointer;
+           border: 1px solid #2f6f9e; background: #17384d; color: #cfe8ff; }
+  button:hover:not(:disabled) { background: #1d4a66; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.stop { border-color: #7a3b3b; background: #3a1d1d; color: #ffcfcf; }
+  a { color: #7fc0ff; word-break: break-all; }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #9fb0c2; }
+  .notice { border-left: 3px solid #2f6f9e; padding: 10px 12px; margin: 10px 0; background: #171d24;
+            border-radius: 4px; font-size: 13px; color: #c3cedb; }
+  .notice.warn { border-left-color: #c98a2b; }
+  .notice.risk { border-left-color: #b0533f; }
+  #log { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #9aa7b6;
+         min-height: 42px; white-space: pre-wrap; background: #171d24; border-radius: 4px; padding: 10px; }
+  footer { margin-top: 18px; color: #6f7d8c; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>沙箱控制台 · Sandbox Panel</h1>
+<div class="sub">一张页面即可启动与停止沙箱面板。每个「启动」都会真正拉起已交付的模块，并只在本机端口确实接受连接后才回报地址。</div>
+
+<table>
+  <thead>
+    <tr><th>面 · face</th><th>状态 · live</th><th>地址 · url</th><th>操作</th></tr>
+  </thead>
+  <tbody id="rows">
+    <tr><td colspan="4">正在读取状态…</td></tr>
+  </tbody>
+</table>
+
+<div class="notice" id="n-ai">AI 判定</div>
+<div class="notice warn" id="n-mock">MOCK / NO REAL CHARGE: every face this panel starts runs the sandbox build with mock=true and chargeable=false, so no money moves and no real account is touched.</div>
+<div class="notice risk" id="n-risk">非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）</div>
+
+<div id="log">就绪。</div>
+
+<footer>
+  只列出可独立启动的三个面：checkout / ledger / ugc。lobby 服务器在一个进程里同时持有 ws、city、gate、web、hub 五个端口，因此不在这里单独启动 —— 从终端运行 <code>python src/sandbox/start_all.py</code> 会一次性拉起全部六个面。
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var rowsEl = document.getElementById("rows");
+  var logEl = document.getElementById("log");
+
+  function say(text) {
+    var stamp = new Date().toISOString().slice(11, 19);
+    logEl.textContent = "[" + stamp + "] " + text;
+  }
+
+  function badge(live) {
+    var span = document.createElement("span");
+    span.className = "badge " + (live ? "live" : "down");
+    span.textContent = live ? "LIVE" : "DOWN";
+    return span;
+  }
+
+  function render(payload) {
+    rowsEl.textContent = "";
+    var faces = payload.faces || [];
+    if (!faces.length) {
+      var empty = document.createElement("tr");
+      var cell = document.createElement("td");
+      cell.colSpan = 4;
+      cell.textContent = "面板没有报告任何面。";
+      empty.appendChild(cell);
+      rowsEl.appendChild(empty);
+    }
+    faces.forEach(function (face) {
+      var tr = document.createElement("tr");
+
+      var idCell = document.createElement("td");
+      idCell.className = "face";
+      idCell.textContent = face.id;
+      tr.appendChild(idCell);
+
+      var liveCell = document.createElement("td");
+      liveCell.appendChild(badge(face.live));
+      tr.appendChild(liveCell);
+
+      var urlCell = document.createElement("td");
+      if (face.url) {
+        var link = document.createElement("a");
+        link.href = face.url;
+        link.textContent = face.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        urlCell.appendChild(link);
+      } else {
+        var none = document.createElement("span");
+        none.textContent = "（未启动）";
+        urlCell.appendChild(none);
+        var cmd = document.createElement("div");
+        var code = document.createElement("code");
+        code.textContent = face.cmd;
+        cmd.appendChild(code);
+        urlCell.appendChild(cmd);
+      }
+      tr.appendChild(urlCell);
+
+      var actCell = document.createElement("td");
+      var start = document.createElement("button");
+      start.textContent = "启动";
+      start.disabled = !!face.live;
+      start.onclick = function () { act("api/start", face.id, start); };
+      actCell.appendChild(start);
+      var stop = document.createElement("button");
+      stop.className = "stop";
+      stop.textContent = "停止";
+      stop.disabled = !face.started;
+      stop.onclick = function () { act("api/stop", face.id, stop); };
+      actCell.appendChild(document.createTextNode(" "));
+      actCell.appendChild(stop);
+      tr.appendChild(actCell);
+
+      rowsEl.appendChild(tr);
+    });
+
+    var notices = payload.notices || {};
+    if (notices.ai_label) {
+      document.getElementById("n-ai").textContent = notices.ai_label;
+    }
+    if (notices.mock_statement) {
+      document.getElementById("n-mock").textContent = notices.mock_statement;
+    }
+    if (notices.disclaimer) {
+      document.getElementById("n-risk").textContent = notices.disclaimer;
+    }
+  }
+
+  function refresh() {
+    return fetch("api/state", { cache: "no-store" })
+      .then(function (res) { return res.json(); })
+      .then(render)
+      .catch(function (err) { say("状态读取失败：" + err); });
+  }
+
+  function act(route, faceId, button) {
+    button.disabled = true;
+    say(route + " " + faceId + " …");
+    fetch(route, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ face: faceId })
+    }).then(function (res) {
+      return res.json().then(function (body) { return [res.status, body]; });
+    }).then(function (pair) {
+      var status = pair[0], body = pair[1];
+      if (status >= 200 && status < 300) {
+        say(faceId + " → " + (body.url || body.stopped ? "已停止" : "完成"));
+      } else {
+        say(faceId + " 被拒绝 " + status + " " + (body.error || ""));
+      }
+      return refresh();
+    }).catch(function (err) {
+      say("调用失败：" + err);
+      button.disabled = false;
+    });
+  }
+
+  refresh();
+  setInterval(refresh, 4000);
+}());
+</script>
+</body>
+</html>

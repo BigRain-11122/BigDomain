@@ -241,6 +241,12 @@ SUITES = [
     # teardown that leaves no port open (AC-STL1..AC-STL6 pre-registered in
     # src/os/backlog.md at R2477 BEFORE this suite and its module existed).
     ("start-all", os.path.join("test_start_all.py"), 6),
+    # sandbox control panel (R2481): the other half of what R2477 disclosed as
+    # unmet - a browser can now START a face, because POST /panel/api/start
+    # really spawns the shipped module on an OS-assigned port and reports the
+    # URL only after that socket accepts (AC-PAN1..AC-PAN6 pre-registered in
+    # src/os/backlog.md at R2481 BEFORE this suite and its module existed).
+    ("panel", os.path.join("test_panel.py"), 6),
     # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
     # a page a person can open in a browser - GET /lobby/ plus a same-origin
     # config route that publishes the real ws port, with the frames the page

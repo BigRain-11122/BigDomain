@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R2481 suite=src/sandbox/test_panel.py legs=2
+== LEG A rc=0 digest=CEB6D522A66597E5
+PASS AC-PAN1 page real and standing surfaces  byte-identical on both slash forms
+PASS AC-PAN2 state measured  listener on/off moved one face only
+PASS AC-PAN3 start really starts  spawned port accepts and serves the shipped page
+PASS AC-PAN4 refusals honest  400/409/404 with their own codes
+PASS AC-PAN6 hygiene and registration  405/404 coded, module ASCII stdlib only, one registry row
+PASS AC-PAN5 teardown leaves nothing  stopped port refused and the server took its child down
+SUITE PASS 6/6
+== LEG B rc=0 digest=CEB6D522A66597E5
+PASS AC-PAN1 page real and standing surfaces  byte-identical on both slash forms
+PASS AC-PAN2 state measured  listener on/off moved one face only
+PASS AC-PAN3 start really starts  spawned port accepts and serves the shipped page
+PASS AC-PAN4 refusals honest  400/409/404 with their own codes
+PASS AC-PAN6 hygiene and registration  405/404 coded, module ASCII stdlib only, one registry row
+PASS AC-PAN5 teardown leaves nothing  stopped port refused and the server took its child down
+SUITE PASS 6/6
+== ADJACENT 2
+== src/sandbox/ledger/test_ledger_page.py rc=0 SUITE PASS 6/6 digest=AC9413AB3051B0C32A33F4100507768B
+== src/sandbox/lobby/test_hub_page.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=CEB6D522A66597E5
