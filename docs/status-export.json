@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T05:30:50+08:00",
+  "export_ts": "2026-11-06T05:31:48+08:00",
   "do": "R2487 business face: the membership entitlement side of the 19.9 entrance is now a clickable page instead of a terminal-only engine - a resident can be joined to a sandbox month card and then read their tier, privileges, credits, birth certificate and expiring rows from one URL",
   "ceo_face": {
     "current": "R2487 business face: the membership entitlement side of the 19.9 entrance is now a clickable page instead of a terminal-only engine - a resident can be joined to a sandbox month card and then read their tier, privileges, credits, birth certificate and expiring rows from one URL",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the debt register owes reconcile-battery-R2486 and reconcile-battery-R2487 before any further product byte, and the member-face suite is still unregistered in the suite registry; after that the member face should be offered from the hub and the panel so a person reaches it without a command line",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/member/member_page.py (16000B class module) + src/sandbox/member/member.html (8752B, zero external references, AI label + non-advice note + mock/no-charge statement) + qa/member-face-R2487.log (954B, utf-8 LF, crlf=0, legs=2 identical=True, 6/6 green twice) at 2026-11-06 R2487",
-    "updated_at": "2026-11-06T05:30:50+08:00"
+    "updated_at": "2026-11-06T05:31:48+08:00"
   },
   "depts": [
     {
@@ -505,10 +505,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 36,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 36,
+    "substantive_non_idle_mention_lines": 37,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
