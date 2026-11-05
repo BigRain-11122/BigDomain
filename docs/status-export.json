@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T04:18:19+08:00",
+  "export_ts": "2026-11-06T04:19:36+08:00",
   "do": "R2484 business window: the one door now leads to the control panel - the hub payload publishes the panel face at 8099 and marks whether it is really listening, so a person who opens the hub can reach a click-to-start surface instead of being told to run a command",
   "ceo_face": {
     "current": "R2484 business window: the one door now leads to the control panel - the hub payload publishes the panel face at 8099 and marks whether it is really listening, so a person who opens the hub can reach a click-to-start surface instead of being told to run a command",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the R2168 mixed-tree rule makes the next window owe the full reconcile battery on the committed R2484 tree at the pre-registered 570 suites / 4396 criteria BEFORE any further product byte; the strongest product candidate after that is a panel that can also STOP what it started from the hub page and a hub payload that links the panel from every card, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/hub-panel-live-R2484.log (real lobby server + real panel: hub 200 at 7853B, published panel url 200 at 7738B byte-identical to panel.html, live[panel]=True, teardown refused) + qa/hub-panel-R2484.log (1163B, two identical legs 6/6) + docs/sandbox-suite-matrix.md (54765B, 570 suites / 4396 criteria, --check byte-identical) at 2026-11-06 R2484",
-    "updated_at": "2026-11-06T04:18:19+08:00"
+    "updated_at": "2026-11-06T04:19:36+08:00"
   },
   "depts": [
     {
@@ -490,10 +490,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 16,
+    "log_lines_in_window": 17,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
