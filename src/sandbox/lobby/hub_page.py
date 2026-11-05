@@ -93,7 +93,8 @@ class HubPageHandler(BaseHTTPRequestHandler):
         pass
 
 
-def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093):
+def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093,
+                gate_port=None):
     """Compose the face list from the ports this process really bound.
 
     Every URL is derived here from a port handed in by the caller, so a suite
@@ -118,6 +119,9 @@ def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093
     if checkout_port is not None:
         faces["checkout"] = "http://%s:%d/checkout/" % (host, int(checkout_port))
         faces["checkout_note"] = CHECKOUT_NOTE % int(checkout_port)
+    if gate_port is not None:
+        faces["gate"] = "http://%s:%d/gate/" % (host, int(gate_port))
+        faces["gate_note"] = "started by this process (--gate-port)"
     return faces
 
 

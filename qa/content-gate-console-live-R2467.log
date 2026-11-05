@@ -1,0 +1,9 @@
+BANNER serving ws://127.0.0.1:52059/ws rooms=lobby,quant,cocreate ping_interval=30 ping_timeout=60 gate=ok db=C:\Users\sjs20\AppData\Local\Temp\gate-live-2bxbxdfe\events.db city_api=http://127.0.0.1:52060/city/snapshot census_rows=3 city_dir=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\lobby\city_data gate=http://127.0.0.1:52062/gate/ max_len=2000 lobby_page=http://127.0.0.1:52065/lobby/ ws_port=52059 hub=http://127.0.0.1:52061/hub/ faces=14 checkout_port=8093
+GATE PORT bound=52062 requested=52062
+GET /gate/ status=200 bytes=7157 notices_ok=True
+GET /gate/api/contract status=200 endpoint=https://api.weixin.qq.com/wxa/msg_sec_check blocked_on=CEO physical item: mini-program appid/secret
+POST /gate/api/check plain status=200 suggest=pass label=100 decision=SERVE mock=True billable=False
+POST /gate/api/check forbidden status=200 suggest=risky label=20001 decision=REFUSE mock=True billable=False
+POST /gate/api/check advisory status=200 suggest=review label=20002 decision=REVIEW mock=True billable=False
+POST /gate/api/check blank status=400 code=E_GC_BAD_CONTENT
+HUB faces gate=http://127.0.0.1:52062/gate/

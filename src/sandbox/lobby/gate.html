@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内容安全闸判据台 · 沙箱</title>
+<style>
+  :root {
+    --bg: #0f1216; --panel: #171c22; --line: #2a3138; --ink: #e8edf2;
+    --dim: #93a1ae; --ok: #35e08a; --warn: #f4c542; --bad: #ff5d5d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 20px 48px; background: var(--bg); color: var(--ink);
+    font: 15px/1.65 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  }
+  main { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: .02em; }
+  .sub { color: var(--dim); margin: 0 0 20px; font-size: 14px; }
+  section, .panel {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px 18px; margin: 0 0 16px;
+  }
+  h2 { font-size: 15px; margin: 0 0 10px; color: var(--ink); }
+  textarea {
+    width: 100%; min-height: 88px; resize: vertical; padding: 10px 12px;
+    border-radius: 8px; border: 1px solid var(--line); background: #10151a;
+    color: var(--ink); font: inherit;
+  }
+  button {
+    margin-top: 10px; padding: 9px 18px; border-radius: 8px; border: 0;
+    background: #2f6df6; color: #fff; font: inherit; cursor: pointer;
+  }
+  button:disabled { opacity: .5; cursor: default; }
+  code, .mono { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+  .verdict { font-size: 20px; font-weight: 700; letter-spacing: .04em; }
+  .SERVE { color: var(--ok); }
+  .REVIEW { color: var(--warn); }
+  .REFUSE { color: var(--bad); }
+  dl { display: grid; grid-template-columns: 132px 1fr; gap: 6px 12px; margin: 10px 0 0; }
+  dt { color: var(--dim); }
+  dd { margin: 0; word-break: break-all; }
+  .notices { display: grid; gap: 10px; font-size: 13px; color: var(--dim); }
+  .notices strong { color: var(--ink); display: block; margin-bottom: 2px; }
+  footer { color: var(--dim); font-size: 12.5px; margin-top: 22px; }
+  .hint { color: var(--dim); font-size: 13px; margin: 8px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>内容安全闸 · 判据台</h1>
+  <p class="sub">输入一句话，看到闸门真正返回的判定。台上跑的是已发货的 msgSecCheck 本地实现（stub），不是另写一套。</p>
+
+  <section>
+    <h2>送检内容</h2>
+    <textarea id="content" placeholder="在这里输入要送检的文字，例如一句群聊消息"></textarea>
+    <button id="send" type="button">送检</button>
+    <p class="hint" id="hint">闸门按服务端配置的词表判定：违禁词 → 拒绝，违规劝诱词 → 转人工复核，其余 → 放行。</p>
+  </section>
+
+  <section id="result-panel" hidden>
+    <h2>闸门判定</h2>
+    <p class="verdict" id="verdict">—</p>
+    <dl>
+      <dt>suggest</dt><dd class="mono" id="r-suggest">—</dd>
+      <dt>label</dt><dd class="mono" id="r-label">—</dd>
+      <dt>trace_id</dt><dd class="mono" id="r-trace">—</dd>
+      <dt>HTTP 处置</dt><dd class="mono" id="r-http">—</dd>
+      <dt>计费</dt><dd class="mono" id="r-bill">—</dd>
+    </dl>
+  </section>
+
+  <section id="error-panel" hidden>
+    <h2>闸门没有给出判定</h2>
+    <p class="mono" id="r-error">—</p>
+    <p class="hint">闸门不可用时必须拒绝放行，这条是死线，不因故障而放宽。</p>
+  </section>
+
+  <section>
+    <h2>闸门契约（真实接口必须满足）</h2>
+    <dl>
+      <dt>生产接口</dt><dd class="mono" id="c-endpoint">—</dd>
+      <dt>提供方</dt><dd class="mono" id="c-provider">—</dd>
+      <dt>取值域</dt><dd class="mono" id="c-suggests">—</dd>
+      <dt>请求字段</dt><dd class="mono" id="c-request">—</dd>
+      <dt>卡在哪</dt><dd class="mono" id="c-blocked">—</dd>
+    </dl>
+  </section>
+
+  <section class="notices">
+    <div><strong>AI 生成内容标识</strong>沙箱内的对话、页面与判定说明均为 AI 生成或模拟内容，已按标识呈现。</div>
+    <div><strong>非投顾提示</strong>本页面不构成任何投资建议，不提供投资顾问服务，请独立判断、风险自担。</div>
+    <div><strong>mock（沙箱模拟，不产生真实扣费）</strong>本台判定来自本地词表实现，响应标注 mock=true、billable=false；真实 msgSecCheck 等待 CEO 物理件（小程序 appid/secret）。</div>
+  </section>
+
+  <footer>
+    只读说法：本台除了一次不落盘的送检判定外不写任何数据；页面零外部引用，判定词表全部来自服务端配置。<br>
+    启动方式：<code>python src/sandbox/lobby/server.py --gate-port 8096</code>，然后打开本页。
+  </footer>
+</main>
+<script>
+(function () {
+  var btn = document.getElementById('send');
+  var input = document.getElementById('content');
+  var resultPanel = document.getElementById('result-panel');
+  var errorPanel = document.getElementById('error-panel');
+
+  function setText(id, value) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = (value === undefined || value === null) ? '—' : String(value); }
+  }
+
+  fetch('/gate/api/contract', { cache: 'no-store' })
+    .then(function (resp) {
+      if (!resp.ok) { throw new Error('contract ' + resp.status); }
+      return resp.json();
+    })
+    .then(function (data) {
+      setText('c-endpoint', data.endpoint);
+      setText('c-provider', data.provider_prod);
+      setText('c-suggests', (data.suggest_values || []).join(' / '));
+      setText('c-request', (data.request_keys || []).join(', '));
+      setText('c-blocked', data.blocked_on);
+    })
+    .catch(function (err) {
+      setText('c-blocked', '契约读取失败：' + err.message);
+    });
+
+  btn.addEventListener('click', function () {
+    var text = input.value;
+    btn.disabled = true;
+    resultPanel.hidden = true;
+    errorPanel.hidden = true;
+    fetch('/gate/api/check', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: text })
+    })
+      .then(function (resp) {
+        return resp.json().then(function (body) { return { status: resp.status, body: body }; });
+      })
+      .then(function (out) {
+        if (out.status !== 200) {
+          errorPanel.hidden = false;
+          setText('r-error', (out.body && (out.body.error || out.body.code)) || ('HTTP ' + out.status));
+          return;
+        }
+        var resp = out.body;
+        var result = resp.result || {};
+        resultPanel.hidden = false;
+        var verdict = document.getElementById('verdict');
+        verdict.className = 'verdict ' + (resp.http_decision || '');
+        verdict.textContent = resp.http_decision || '—';
+        setText('r-suggest', result.suggest);
+        setText('r-label', result.label);
+        setText('r-trace', resp.trace_id);
+        setText('r-http', resp.http_decision);
+        setText('r-bill', 'mock=' + resp.mock + ' billable=' + resp.billable);
+      })
+      .catch(function (err) {
+        errorPanel.hidden = false;
+        setText('r-error', '请求失败：' + err.message);
+      })
+      .then(function () { btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

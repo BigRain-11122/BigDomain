@@ -29,9 +29,11 @@ sys.path.insert(0, BASE)
 
 from city import CityFace, start_city_http  # noqa: E402
 from hub_page import build_faces, start_hub_http  # noqa: E402
+from gate_page import start_gate_http  # noqa: E402
 from lobby_page import start_lobby_http  # noqa: E402
 from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # noqa: E402
 from store import EventStore, utc_now_iso  # noqa: E402
+import msgsec_stub  # noqa: E402
 
 try:  # websockets >= 13 asyncio implementation
     from websockets.asyncio.server import serve
@@ -599,6 +601,8 @@ def build_parser():
                         help="serve the sandbox entry page (hub.html) on this port")
     parser.add_argument("--checkout-port", type=int, default=8093,
                         help="port the separate checkout demo is expected on (published, not started)")
+    parser.add_argument("--gate-port", type=int, default=None,
+                        help="serve the content-gate console (gate.html) on this port")
     return parser
 
 
@@ -664,6 +668,17 @@ def main():
         city_bound = httpd.server_address[1]
         banner += " city_api=http://%s:%d/city/snapshot census_rows=%d city_dir=%s" % (
             args.host, city_bound, city.imported, city.city_dir)
+    gate_bound = None
+    if args.gate_port is not None:
+        gate_stub = msgsec_stub.MsgSecStub.from_config(cfg)
+        gate_len = int(cfg.get("max_text_len", 2000))
+        gate_httpd = start_gate_http(args.host, args.gate_port, gate_stub,
+                                     max_len=gate_len)
+        gate_bound = gate_httpd.server_address[1]
+        banner += " gate=http://%s:%d/gate/ max_len=%d" % (
+            args.host, gate_bound, gate_len)
+    else:
+        banner += " gate=off (pass --gate-port 8096 for the content-gate console)"
     if args.web_port is not None:
         web = start_lobby_http(args.host, args.web_port, port, rooms=LOBBY.rooms)
         web_bound = web.server_address[1]
@@ -674,7 +689,8 @@ def main():
     if args.hub_port is not None:
         faces = build_faces(args.host, port, web_port=web_bound,
                             city_port=city_bound,
-                            checkout_port=args.checkout_port)
+                            checkout_port=args.checkout_port,
+                            gate_port=gate_bound)
         hub = start_hub_http(args.host, args.hub_port, faces)
         banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d" % (
             args.host, hub.server_address[1], len(faces), args.checkout_port)

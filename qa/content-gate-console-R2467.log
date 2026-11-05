@@ -1,0 +1,18 @@
+R2467 CONTENT-GATE CONSOLE EVIDENCE legs=2 adjacent=4
+LEG 1 exit=0 digest=F7E14C91CCD7EB42
+  PASS AC-GC1 status=200 type=text/html bytes=7157 offline=True same_as_disk=True
+  PASS AC-GC2 aigc_label=True risk_note=True mock_note=True physical_item=True
+  PASS AC-GC3 provider=msgSecCheck-v2 endpoint=https://api.weixin.qq.com/wxa/msg_sec_check suggests=3 blocked_on=True
+  PASS AC-GC4 plain=SERVE forbidden=REFUSE advisory=REVIEW trace32=True mock=True billable=False config_driven=True
+  PASS AC-GC5 identical=True unknown404=True method405=True blank400=True overlong413=True
+  PASS AC-GC6 bom=False crlf=0 ascii_module=True clock=0 banner=True hub_face=True wired=True page_sha16=BAC08B7B9D63E907
+  SUITE PASS 6/6
+LEG 2 exit=0 digest=F7E14C91CCD7EB42 identical=True
+  PASS AC-GC1 status=200 type=text/html bytes=7157 offline=True same_as_disk=True
+  PASS AC-GC2 aigc_label=True risk_note=True mock_note=True physical_item=True
+  PASS AC-GC3 provider=msgSecCheck-v2 endpoint=https://api.weixin.qq.com/wxa/msg_sec_check suggests=3 blocked_on=True
+  PASS AC-GC4 plain=SERVE forbidden=REFUSE advisory=REVIEW trace32=True mock=True billable=False config_driven=True
+  PASS AC-GC5 identical=True unknown404=True method405=True blank400=True overlong413=True
+  PASS AC-GC6 bom=False crlf=0 ascii_module=True clock=0 banner=True hub_face=True wired=True page_sha16=BAC08B7B9D63E907
+  SUITE PASS 6/6
+VERDICT legs_identical=True suite_exit=0/0

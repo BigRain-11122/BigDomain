@@ -233,6 +233,16 @@ SUITES = [
     # (AC-RP1..AC-RP6 were pre-registered in src/os/backlog.md at R2464
     # BEFORE this suite, the module change and the page change.)
     ("os-lobby-room-picker", os.path.join("lobby", "test_lobby_rooms.py"), 6),
+    # content-gate console (R2467): the shipped msgSecCheck stub became a face a
+    # person can use - GET /gate/ serves the page from disk, /gate/api/contract
+    # publishes the endpoint the real WeChat gate must satisfy, and
+    # POST /gate/api/check runs the SHIPPED stub over the text and returns its
+    # own response plus one derived http_decision taken from the stub own
+    # is_risky / needs_review helpers, so the suggest-to-action mapping has one
+    # owner and no second wordlist exists.
+    # (AC-GC1..AC-GC6 were pre-registered in src/os/backlog.md at R2467
+    # BEFORE this suite, its module and the page existed.)
+    ("os-content-gate-console", os.path.join("lobby", "test_gate_console.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
