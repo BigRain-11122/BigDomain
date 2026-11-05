@@ -215,6 +215,11 @@ SUITES = [
     # during the request (AC-HLL1..AC-HLL6 pre-registered in src/os/backlog.md
     # at R2471 BEFORE this suite, its module edit and its card existed).
     ("lobby-hub-ledger", os.path.join("lobby", "test_hub_ledger_live.py"), 6),
+    # hub UGC card and live wiring (R2475): the newest shipped console - the
+    # UGC submit/review page on port 8098 - enters the entry payload and the
+    # measured live map, so one URL reaches all five faces (AC-HUG1..AC-HUG6
+    # pre-registered in src/os/backlog.md at R2475 BEFORE this suite existed).
+    ("lobby-hub-ugc", os.path.join("lobby", "test_hub_ugc.py"), 6),
     # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
     # a page a person can open in a browser - GET /lobby/ plus a same-origin
     # config route that publishes the real ws port, with the frames the page

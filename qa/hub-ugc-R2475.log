@@ -1,0 +1,17 @@
+EVIDENCE CAPTURE round=R2475 suite=test_hub_ugc.py legs=2 identical=True
+AC-HUG1 additive face contract PASS  old keys checked, ugc published at 8098
+AC-HUG2 live map measured PASS  listener on/off moved ugc only
+AC-HUG3 read-only surface untouched PASS  page byte-identical on both slash forms
+AC-HUG4 page carries the face PASS  5 markers, zero external references
+AC-HUG5 operator wiring honest PASS  flag advertised and passed through
+AC-HUG6 hygiene and registration PASS  ascii module, one row, adjacent suites green
+SUITE PASS 6/6
+
+--- LEG 2 ---
+AC-HUG1 additive face contract PASS  old keys checked, ugc published at 8098
+AC-HUG2 live map measured PASS  listener on/off moved ugc only
+AC-HUG3 read-only surface untouched PASS  page byte-identical on both slash forms
+AC-HUG4 page carries the face PASS  5 markers, zero external references
+AC-HUG5 operator wiring honest PASS  flag advertised and passed through
+AC-HUG6 hygiene and registration PASS  ascii module, one row, adjacent suites green
+SUITE PASS 6/6

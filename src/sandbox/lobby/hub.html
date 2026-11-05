@@ -64,7 +64,7 @@
 <body>
 <main>
   <h1>硅基域 · 沙箱控制台</h1>
-  <p class="sub">公众共创元宙 · 本地沙箱四个可打开的面向，一页进入，每个面向标注此刻是否真的在监听。</p>
+  <p class="sub">公众共创元宙 · 本地沙箱五个可打开的面向，一页进入，每个面向标注此刻是否真的在监听。</p>
   <div class="strip" id="strip">
     <span>状态：<b id="state">读取中</b></span>
     <span>实时通道：<code id="ws">—</code></span>
@@ -99,6 +99,13 @@
       <p>铸出—分成—消费的复式分录，余额、账单与八查对账同屏。</p>
       <a id="link-ledger" href="#">打开账本 →</a>
     </article>
+    <article class="face">
+      <span class="tag external">独立进程</span>
+      <span class="tag" data-face="ugc">检测中</span>
+      <h2>创作 · UGC 投稿控制台</h2>
+      <p>提交一句话，过内容闸，看它落进池子还是进审阅队列，再逐条裁决。</p>
+      <a id="link-ugc" href="#">打开投稿 →</a>
+    </article>
   </section>
 
   <section class="notices">
@@ -109,7 +116,7 @@
 
   <footer>
     只读入口页：仅 GET 提供页面与接口清单，除 GET 以外一律拒绝。页面本身不引用任何外部资源。<br>
-    启动方式：<code>python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095</code>
+    启动方式：<code>python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 --ugc-port 8098</code>
   </footer>
 </main>
 <script>
@@ -120,6 +127,7 @@
   var city = document.getElementById('link-city');
   var checkout = document.getElementById('link-checkout');
   var ledger = document.getElementById('link-ledger');
+  var ugc = document.getElementById('link-ugc');
 
   function text(el, value) { if (el) { el.textContent = value; } }
 
@@ -147,6 +155,8 @@
       if (data.checkout_note) { checkout.setAttribute('title', data.checkout_note); }
       if (data.ledger) { ledger.setAttribute('href', data.ledger); }
       if (data.ledger_note) { ledger.setAttribute('title', data.ledger_note); }
+      if (data.ugc) { ugc.setAttribute('href', data.ugc); }
+      if (data.ugc_note) { ugc.setAttribute('title', data.ugc_note); }
       paint(data.live);
     })
     .catch(function () {

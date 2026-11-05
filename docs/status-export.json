@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T16:10:53+08:00",
-  "do": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
+  "export_ts": "2026-11-05T16:25:23+08:00",
+  "do": "R2475 BUSINESS window: the sandbox entry page now reaches FIVE faces instead of four - the UGC console shipped at R2473 entered the hub payload, its card and a request-time live marker, and the operator flag --ugc-port - so one URL really reaches the newest console",
   "ceo_face": {
-    "current": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
-    "latest_artifact": "qa/reconcile-all-R2474.log (862025B at the green leg, 863975B with both follow-up legs, RUNNER PASS 564/564 suites, controls 7/7, 1047.8s) + docs/sandbox-suite-matrix.md (54326B, regenerated from this round own green evidence, --check byte-identical, green line self-describing at 564/564)",
-    "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face and says plainly that it supersedes the carried audit row product-face-R2456: the named candidate is wiring the ledger console (R2469) and the UGC console (R2473) into the lobby hub live map, which both business windows disclosed as not yet done; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
+    "current": "R2475 BUSINESS window: the sandbox entry page now reaches FIVE faces instead of four - the UGC console shipped at R2473 entered the hub payload, its card and a request-time live marker, and the operator flag --ugc-port - so one URL really reaches the newest console",
+    "latest_artifact": "qa/hub-ugc-R2475.log (SUITE PASS 6/6 twice, identical verdict digest b13a5112f83d66d7, 1018B, one utf-8 LF writer) + qa/hub-ugc-live-R2475.log (a REAL ugc_page.py on port 54398 published by the hub as http://127.0.0.1:54398/ugc/ with live_ugc=True and the shipped 8816B page answering 200) + src/sandbox/lobby/hub.html + docs/sandbox-suite-matrix.md (54396B, 565 suites / 4366 criteria, --check byte-identical)",
+    "next_milestone": "2026-11-05/06 the next window owes the battery on this committed tree FIRST (reconcile-battery-R2475, pre-registered 565 suites / 4366 criteria) because the R2168 mixed-tree rule puts it ahead of any further product byte; after green the product face is the next thing a person cannot yet do - the hub can say a face is alive but cannot start one; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2474.log (862025B at the green leg, 863975B with both follow-up legs, RUNNER PASS 564/564 suites, controls 7/7, 1047.8s) + docs/sandbox-suite-matrix.md (54326B, regenerated from this round own green evidence, --check byte-identical, green line self-describing at 564/564)",
-    "updated_at": "2026-11-05T16:10:53+08:00"
+    "last_artifact": "qa/hub-ugc-R2475.log (SUITE PASS 6/6 twice, identical verdict digest b13a5112f83d66d7, 1018B, one utf-8 LF writer) + qa/hub-ugc-live-R2475.log (a REAL ugc_page.py on port 54398 published by the hub as http://127.0.0.1:54398/ugc/ with live_ugc=True and the shipped 8816B page answering 200) + src/sandbox/lobby/hub.html + docs/sandbox-suite-matrix.md (54396B, 565 suites / 4366 criteria, --check byte-identical)",
+    "updated_at": "2026-11-05T16:25:23+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/sandbox/lobby/hub_page.py + src/sandbox/lobby/hub.html + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_ugc.py + src/sandbox/lobby/test_hub_ledger_live.py + src/sandbox/reconcile_all.py + qa/hub-ugc-R2475.log + qa/hub-ugc-live-R2475.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/export_R2475.py + src/os/state.json + src/os/backlog.md + docs/status-export.json",
     "qa/reconcile-all-R2474.log + docs/sandbox-suite-matrix.md + src/os/closeout_R2474.py + src/os/fold_R2474.py + src/os/export_R2474.py + state/debt.md + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/ugc/ugc_console.html + src/sandbox/ugc/ugc_page.py + src/sandbox/ugc/test_ugc_console.py + src/sandbox/reconcile_all.py + src/os/live_R2473.py + src/os/closeout_R2473.py + src/os/fold_R2473.py + src/os/export_R2473.py + qa/ugc-console-R2473.log + qa/ugc-console-live-R2473.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "qa/reconcile-all-R2472.log + qa/reconcile-all-R2472-retry.log + src/os/repair_R2472.py + src/os/closeout_R2472.py + src/os/fold_R2472.py + src/os/fold2_R2472.py + src/os/export_R2472.py + docs/sandbox-suite-matrix.md + state/debt.md + state/residue_triage.json + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
@@ -88,6 +89,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2475",
+      "2026-11-05 R2475 BUSINESS window on the CEO standing order OB-20261105-003656-879 (real output only); it SUPERSEDES the carried internal audit row product-face-R2456 by name, which stays open and claimable at state/queue/tech.md:522 prefix AC-PFKC1. Five-silence scan at open was clean at HEAD 800120a4 with an empty git status and no index.lock, zero unreplied @BigDomain ledger rows, the content-addressed decisions diff new=0 against its 136-token baseline, the group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, and the tech head read AC-PFKC1 with claimable=11 so no idle declaration was available. SHIPPED the fifth face into the one door: hub_page gains UGC_CMD/UGC_NOTE plus ugc_port (default 8098) in build_faces and in face_ports, hub.html gains the UGC card id=link-ugc with its data-face=ugc live marker (five markers, zero external references), server.py advertises --ugc-port and passes ugc_port through, and test_hub_ugc.py wires AC-HUG1..AC-HUG6 into the registry as lobby-hub-ugc(6). PROOF: criteria pinned in src/os/backlog.md BEFORE the code, SUITE PASS 6/6 twice with identical verdict bodies (digest b13a5112f83d66d7) in qa/hub-ugc-R2475.log, and a LIVE leg against a real UGC console in qa/hub-ugc-live-R2475.log. ONE real defect found and repaired at its birth site: test_hub_ledger_live.py asserted face_ports as an exact dict where its own AC-HLL1 is an additive contract, so the neighbour refused the new key; the assertion now reads the five keys it owns as a subset with the criterion text unchanged and no other assertion loosened. Registry 565 suites / 4366 criteria; matrix restamped stamp-aligned to 54396B with --check byte-identical, its green line honestly 564/565 because this window ran no battery. Debt: reconcile-battery-R2475 appended first=no at its predicted 122769B -> 123176B (readback ok) with the pre-registered 565/4366 target. Honest gaps: no battery ran; every P-47 item beyond the shipped sandbox faces remains blocked on CEO physical items (merchant id, mini-program appid/secret); Docker is absent on this host; the hub still cannot start a face, it can only report whether one is listening."
+    ],
     [
       "2474",
       "2026-11-05 R2474 VERIFICATION window on the battery the R2473 business face owed (reconcile-battery-R2473, pre-registered at 564 suites / 4360 criteria), because the R2168 mixed-tree rule puts the battery ahead of the carried audit row product-face-R2456 (still open and claimable). Five-silence scan at open was clean at HEAD 5cbdfe22 equal to origin/main with no index.lock, zero unreplied @BigDomain ledger rows, the content-addressed decisions diff naming exactly ONE new token D-20261105-17 (a group duty-round @BigCompute backfill dispatch plus the bm-b/bm-c E1 escalation and the PROBE A acks on @CPH4) judged KNOWLEDGE-ONLY with the baseline widened by it, the group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with claimable=11 and the floor MET. BATTERY on the committed tree with an empty git status before the run, GREEN ON THE FIRST LEG: RUNNER PASS 564/564 suites plus controls 7/7 in 1047.8s at criteria total 4360 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0, evidence written by ONE utf-8 LF single writer through the shipped battery stream (crlf=0 lone_cr=0 bom=False) and launched detached and unfiltered so the filtering-pipe trap was not re-paid. Four follow-up sections in the designed order: the dry run read VERDICT FAIL failing=matrix at on-disk 54354B against regenerated 54326B with no byte written, the matrix was regenerated stamp-aligned from this round own green evidence, --check read byte-identical at 54326B / 564 suites / 4360 criteria, and the write leg read VERDICT R2474 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2473 closed through the shipped debt_close at its predicted 122765B -> 122769B (open 3->2, done 179->180, readback ok); no successor battery owed because no product src byte changed and the registry is unmoved. A waterline fold ran at a true round-block boundary (window 1..84, the whole R2465..R2473 blocks plus the previous fold summary, 289 tokens covered none missing, predicted 12528B = measured). Zero product points claimed; every P-47 item beyond the shipped sandbox faces remains blocked on CEO physical items (merchant id, mini-program appid/secret), and Docker is absent on this host."
@@ -433,17 +438,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2474",
+      "2475",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 7,
+    "log_lines_in_window": 11,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -465,8 +470,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -479,8 +482,6 @@
         "done_rows": 409,
         "gated_rows": 1,
         "claimable": 11,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -493,16 +494,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
-    "missing": [],
-    "delivered_total": 0
+    ]
   }
 }

@@ -1,0 +1,4 @@
+ugc console started port=54398 reachable=True
+probe status=200 ugc_url=http://127.0.0.1:54398/ugc/ live_ugc=True live_keys=3
+ugc page via published url status=200 bytes=8816
+LIVE PASS

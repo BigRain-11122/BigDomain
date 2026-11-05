@@ -108,10 +108,16 @@ def ac_hll1():
               % (old.get("ledger_note"),))
     want_ports = {"lobby": 8094, "city": 8092, "checkout": 8093,
                   "gate": 8096, "ledger": 8097}
-    if old.get("face_ports") != want_ports:
-        bad += 1
-        print("  AC-HLL1 face_ports=%r want %r"
-              % (old.get("face_ports"), want_ports))
+    # AC-HLL1 is an ADDITIVE contract: every face this window published keeps
+    # its exact port. A later window may add its own face (R2475 added ugc),
+    # so this reads the subset it owns instead of pinning the whole map - the
+    # exact-dict assertion was over-strict against the criterion as written.
+    got_ports = old.get("face_ports") or {}
+    for face_id, port in want_ports.items():
+        if got_ports.get(face_id) != port:
+            bad += 1
+            print("  AC-HLL1 face_ports[%s]=%r want %r"
+                  % (face_id, got_ports.get(face_id), port))
     moved = hub_page.build_faces(host, 8091, web_port=8094, city_port=8092,
                                  checkout_port=8093, gate_port=8096,
                                  ledger_port=9101)
