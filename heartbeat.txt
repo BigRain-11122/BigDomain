@@ -41,3 +41,4 @@ tick=2458 2026-11-05T R2458 verification: adopted the R2457-owed battery evidenc
 2026-11-05T07:29:04+08:00 R2459 checkout demo shipped (page 8051B, suite 6/6 x2)
 tick=2460 2026-11-05T07:39:09+0800 R2460 lobby browser client shipped (page 7379B, suite 6/6 x2, live capture)
 tick=2461 2026-11-05T08:11:26+08:00 R2461 verification: battery 558/558 suites at 4324 criteria green, matrix regenerated, VERDICT PASS, two debt rows closed
+tick=2462 2026-11-05T08:18:07+08:00 R2462 sandbox entry page shipped (GET /hub/ 5393B, /hub/api/faces publishes real bound ports, suite 6/6 x2, registry 559/4330)

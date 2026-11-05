@@ -1,0 +1,20 @@
+EVIDENCE CAPTURE round=R2462 suite=src/sandbox/lobby/test_hub_page.py legs=2
+== LEG A rc=0 digest=7874A074D3DDA9C9
+PASS AC-HUB1 status=200 type=text/html bytes=5393 offline=True same_as_disk=True
+PASS AC-HUB2 aigc_label=True risk_note=True mock_note=True read_only=True
+PASS AC-HUB3 identical=True faces_json=True unknown=404 post=405
+PASS AC-HUB4 lobby_port=True city_port=True checkout_port=True ws_port=True mock=True chargeable=False
+PASS AC-HUB5 bom=False crlf=0 ascii_module=True page_sha16=224201265DC41630
+PASS AC-HUB6 banner_url=True checkout_port=True wired=True
+SUITE PASS 6/6
+== LEG B rc=0 digest=7874A074D3DDA9C9
+PASS AC-HUB1 status=200 type=text/html bytes=5393 offline=True same_as_disk=True
+PASS AC-HUB2 aigc_label=True risk_note=True mock_note=True read_only=True
+PASS AC-HUB3 identical=True faces_json=True unknown=404 post=405
+PASS AC-HUB4 lobby_port=True city_port=True checkout_port=True ws_port=True mock=True chargeable=False
+PASS AC-HUB5 bom=False crlf=0 ascii_module=True page_sha16=224201265DC41630
+PASS AC-HUB6 banner_url=True checkout_port=True wired=True
+SUITE PASS 6/6
+== ADJACENT 1
+== src/sandbox/lobby/test_lobby_page.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=7874A074D3DDA9C9

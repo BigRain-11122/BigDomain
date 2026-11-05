@@ -216,6 +216,14 @@ SUITES = [
     # sends replayed against the real server (AC-LBP1..AC-LBP6 pre-registered
     # in src/os/backlog.md at R2460 BEFORE this suite existed).
     ("os-lobby-lobby-page", os.path.join("lobby", "test_lobby_page.py"), 6),
+    # sandbox entry face (R2462, P-47 hub): the three openable faces - city,
+    # lobby and the 19.9 checkout - finally have one door. GET /hub/ serves a
+    # self-contained page and GET /hub/api/faces publishes the ports THIS
+    # process really bound, so the page never guesses one; the checkout demo is
+    # a separate process and the payload says so instead of claiming liveness.
+    # (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at R2462
+    # BEFORE this suite, its module and the page existed.)
+    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of

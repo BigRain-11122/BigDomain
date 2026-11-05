@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>硅基域 · 沙箱控制台</title>
+<style>
+  :root {
+    --ink: #12161c;
+    --muted: #616a75;
+    --line: #dfe4ea;
+    --card: #ffffff;
+    --bg: #f4f6f8;
+    --accent: #2f6f4f;
+    --warn: #8a5a1e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 24px 64px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 6px; letter-spacing: .5px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+  .strip {
+    display: flex; flex-wrap: wrap; gap: 8px 20px;
+    font-size: 13px; color: var(--muted);
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 10px 0; margin: 18px 0 24px;
+  }
+  .strip code { color: var(--ink); }
+  .faces { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .face {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .face h2 { font-size: 17px; margin: 0; }
+  .face p { margin: 0; font-size: 13px; color: var(--muted); }
+  .face a {
+    margin-top: auto; display: inline-block; text-decoration: none;
+    color: var(--accent); font-weight: 600; font-size: 14px;
+  }
+  .face a:hover { text-decoration: underline; }
+  .face .tag {
+    align-self: flex-start; font-size: 11px; letter-spacing: .5px;
+    padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .tag.live { color: var(--accent); border-color: #bcd8c8; background: #f0f7f3; }
+  .tag.external { color: var(--warn); border-color: #e2d2b8; background: #fbf6ec; }
+  .notices {
+    margin-top: 28px; border-top: 1px solid var(--line); padding-top: 18px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px 24px; font-size: 13px; color: var(--muted);
+  }
+  .notices strong { color: var(--ink); font-weight: 600; }
+  footer { margin-top: 26px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>硅基域 · 沙箱控制台</h1>
+  <p class="sub">公众共创元宙 · 本地沙箱三个可打开的面向，一页进入。</p>
+  <div class="strip" id="strip">
+    <span>状态：<b id="state">读取中</b></span>
+    <span>实时通道：<code id="ws">—</code></span>
+  </div>
+
+  <section class="faces">
+    <article class="face">
+      <span class="tag live">同源</span>
+      <h2>大厅 · 实时聊天</h2>
+      <p>进入大厅取沙箱通行证，开第二个窗口，两边看到同一条消息。</p>
+      <a id="link-lobby" href="/lobby/">打开大厅 →</a>
+    </article>
+    <article class="face">
+      <span class="tag live">本机</span>
+      <h2>城市 · 硅基快照</h2>
+      <p>人口、分区、访客与事件尾巴；可按编号查询居民档案。</p>
+      <a id="link-city" href="#">打开城市 →</a>
+    </article>
+    <article class="face">
+      <span class="tag external">独立进程</span>
+      <h2>进场 · 19.9 沙箱结账</h2>
+      <p>先过进场闸再进内容闸的下单—支付—月卡流程，全程模拟。</p>
+      <a id="link-checkout" href="#">打开结账 →</a>
+    </article>
+  </section>
+
+  <section class="notices">
+    <div><strong>AI 生成内容标识</strong><br>本沙箱内的对话、城市数据与页面文案均为 AI 生成或模拟数据，已按标识面呈现。</div>
+    <div><strong>非投顾提示</strong><br>本页面不构成任何投资建议，不提供投资顾问服务，风险由使用者自行判断。</div>
+    <div><strong>mock（沙箱模拟，不产生真实扣款）</strong><br>19.9 进场为模拟链路，所有单据标注 chargeable=false，未接入真实商户号。</div>
+  </section>
+
+  <footer>
+    只读入口页：仅 GET 提供页面与接口清单，除 GET 以外一律拒绝。页面本身不引用任何外部资源。<br>
+    启动方式：<code>python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095</code>
+  </footer>
+</main>
+<script>
+(function () {
+  var state = document.getElementById('state');
+  var wsOut = document.getElementById('ws');
+  var lobby = document.getElementById('link-lobby');
+  var city = document.getElementById('link-city');
+  var checkout = document.getElementById('link-checkout');
+
+  function text(el, value) { if (el) { el.textContent = value; } }
+
+  fetch('/hub/api/faces', { cache: 'no-store' })
+    .then(function (resp) {
+      if (!resp.ok) { throw new Error('faces ' + resp.status); }
+      return resp.json();
+    })
+    .then(function (data) {
+      text(state, '已连接');
+      text(wsOut, data.ws || '—');
+      if (data.lobby) { lobby.setAttribute('href', data.lobby); }
+      if (data.city) { city.setAttribute('href', data.city); }
+      if (data.checkout) { checkout.setAttribute('href', data.checkout); }
+      if (data.checkout_note) { checkout.setAttribute('title', data.checkout_note); }
+    })
+    .catch(function () {
+      text(state, '未连接（直接打开文件时无同源接口）');
+    });
+})();
+</script>
+</body>
+</html>

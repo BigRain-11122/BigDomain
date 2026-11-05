@@ -28,6 +28,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE)
 
 from city import CityFace, start_city_http  # noqa: E402
+from hub_page import build_faces, start_hub_http  # noqa: E402
 from lobby_page import start_lobby_http  # noqa: E402
 from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # noqa: E402
 from store import EventStore, utc_now_iso  # noqa: E402
@@ -594,6 +595,10 @@ def build_parser():
     parser.add_argument("--city-http-port", type=int, default=None, help="city read API port override")
     parser.add_argument("--web-port", type=int, default=None,
                         help="serve the browser lobby client (lobby.html) on this port")
+    parser.add_argument("--hub-port", type=int, default=None,
+                        help="serve the sandbox entry page (hub.html) on this port")
+    parser.add_argument("--checkout-port", type=int, default=8093,
+                        help="port the separate checkout demo is expected on (published, not started)")
     return parser
 
 
@@ -648,20 +653,33 @@ def main():
     LOBBY = Lobby(cfg, gate, store, city=city)
     banner = "serving ws://%s:%d/ws rooms=%s ping_interval=%g ping_timeout=%g gate=ok db=%s" % (
         args.host, port, ",".join(LOBBY.rooms), ping_interval, ping_timeout, args.db)
+    city_bound = None
+    web_bound = None
     if city is not None:
         city_port = (
             args.city_http_port if args.city_http_port is not None
             else int(city_cfg.get("http_port", 8092))
         )
         httpd = start_city_http(args.host, city_port, city)
+        city_bound = httpd.server_address[1]
         banner += " city_api=http://%s:%d/city/snapshot census_rows=%d city_dir=%s" % (
-            args.host, httpd.server_address[1], city.imported, city.city_dir)
+            args.host, city_bound, city.imported, city.city_dir)
     if args.web_port is not None:
         web = start_lobby_http(args.host, args.web_port, port)
+        web_bound = web.server_address[1]
         banner += " lobby_page=http://%s:%d/lobby/ ws_port=%d" % (
-            args.host, web.server_address[1], port)
+            args.host, web_bound, port)
     else:
         banner += " lobby_page=off (pass --web-port 8094 for the browser client)"
+    if args.hub_port is not None:
+        faces = build_faces(args.host, port, web_port=web_bound,
+                            city_port=city_bound,
+                            checkout_port=args.checkout_port)
+        hub = start_hub_http(args.host, args.hub_port, faces)
+        banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d" % (
+            args.host, hub.server_address[1], len(faces), args.checkout_port)
+    else:
+        banner += " hub=off (pass --hub-port 8095 for the sandbox entry page)"
     print(banner, flush=True)
     try:
         asyncio.run(run_server(args.host, port, ping_interval, ping_timeout))
