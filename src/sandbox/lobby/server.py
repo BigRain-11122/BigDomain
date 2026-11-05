@@ -601,6 +601,8 @@ def build_parser():
                         help="serve the sandbox entry page (hub.html) on this port")
     parser.add_argument("--checkout-port", type=int, default=8093,
                         help="port the separate checkout demo is expected on (published, not started)")
+    parser.add_argument("--ledger-port", type=int, default=8097,
+                        help="port the separate token ledger console is expected on (default 8097, published, not started)")
     parser.add_argument("--gate-port", type=int, default=None,
                         help="serve the content-gate console (gate.html) on this port")
     return parser
@@ -690,10 +692,12 @@ def main():
         faces = build_faces(args.host, port, web_port=web_bound,
                             city_port=city_bound,
                             checkout_port=args.checkout_port,
-                            gate_port=gate_bound)
+                            gate_port=gate_bound,
+                            ledger_port=args.ledger_port)
         hub = start_hub_http(args.host, args.hub_port, faces)
-        banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d" % (
-            args.host, hub.server_address[1], len(faces), args.checkout_port)
+        banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d ledger_port=%d" % (
+            args.host, hub.server_address[1], len(faces), args.checkout_port,
+            args.ledger_port)
     else:
         banner += " hub=off (pass --hub-port 8095 for the sandbox entry page)"
     print(banner, flush=True)

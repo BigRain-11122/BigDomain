@@ -20,6 +20,7 @@ a lie a reader can disprove in one click.
 
 import json
 import os
+import socket
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -33,12 +34,49 @@ CHECKOUT_NOTE = ("the 19.9 checkout demo is a separate process - start "
                  "python src/sandbox/lobby/checkout_demo.py --port %d to make "
                  "this link live")
 
+LEDGER_CMD = "python src/sandbox/ledger/ledger_page.py --port %d"
+LEDGER_NOTE = ("the token ledger console is a separate process - start "
+               + LEDGER_CMD + " to make this link live")
+
+PROBE_PARAMS = ("1", "true", "yes", "on")
+
+
+def face_live(host, port, timeout=0.35):
+    """True when something is really listening on that port right now.
+
+    A TCP connect is the cheapest honest liveness test: it needs no HTTP
+    contract from the other process and it cannot be satisfied by a page that
+    merely names a port. A refused or timed-out connect is a dead face, never
+    an unknown one.
+    """
+    try:
+        with socket.create_connection((host, int(port)), timeout=timeout):
+            return True
+    except (OSError, ValueError):
+        return False
+
 
 class HubPageHandler(BaseHTTPRequestHandler):
     """Read-only HTTP face for the sandbox entry page."""
 
     faces = {}  # wired at startup
+    probe_host = "127.0.0.1"
     page_path = os.path.join(HERE, PAGE_NAME)
+
+    def _faces_payload(self, probe):
+        """The published faces, plus a measured live map when asked to probe.
+
+        The map is recomputed on every probing request and never stored, so a
+        face that died since the last call cannot keep reading alive.
+        """
+        payload = dict(self.faces)
+        if probe:
+            ports = payload.get("face_ports") or {}
+            payload["live"] = dict(
+                (face_id, face_live(self.probe_host, port))
+                for face_id, port in sorted(ports.items())
+            )
+        return payload
 
     def _send_page(self):
         try:
@@ -64,12 +102,16 @@ class HubPageHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
-        path = urllib.parse.urlparse(self.path).path
+        parsed = urllib.parse.urlparse(self.path)
+        path = parsed.path
         if path in ROUTES:
             self._send_page()
             return
         if path == FACES_ROUTE:
-            self._send(200, dict(self.faces))
+            query = urllib.parse.parse_qs(parsed.query)
+            probe = any(value.strip().lower() in PROBE_PARAMS
+                        for value in query.get("probe", []))
+            self._send(200, self._faces_payload(probe))
             return
         self._send(404, {"error": "not found: GET /hub/, GET /hub and "
                                   "GET /hub/api/faces only"})
@@ -94,7 +136,7 @@ class HubPageHandler(BaseHTTPRequestHandler):
 
 
 def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093,
-                gate_port=None):
+                gate_port=None, ledger_port=8097):
     """Compose the face list from the ports this process really bound.
 
     Every URL is derived here from a port handed in by the caller, so a suite
@@ -122,6 +164,17 @@ def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093
     if gate_port is not None:
         faces["gate"] = "http://%s:%d/gate/" % (host, int(gate_port))
         faces["gate_note"] = "started by this process (--gate-port)"
+    if ledger_port is not None:
+        faces["ledger"] = "http://%s:%d/ledger/" % (host, int(ledger_port))
+        faces["ledger_note"] = LEDGER_NOTE % int(ledger_port)
+        faces["ledger_cmd"] = LEDGER_CMD % int(ledger_port)
+    ports = {}
+    for face_id, port in (("lobby", web_port), ("city", city_port),
+                          ("checkout", checkout_port), ("gate", gate_port),
+                          ("ledger", ledger_port)):
+        if port is not None:
+            ports[face_id] = int(port)
+    faces["face_ports"] = ports
     return faces
 
 
@@ -131,7 +184,8 @@ def start_hub_http(host, port, faces):
     The real bound port is at server.server_address[1], so a caller may pass
     port 0 (tests do) and read back what the OS assigned.
     """
-    handler = type("BoundHubPageHandler", (HubPageHandler,), {"faces": dict(faces)})
+    handler = type("BoundHubPageHandler", (HubPageHandler,),
+                   {"faces": dict(faces), "probe_host": host})
     httpd = ThreadingHTTPServer((host, port), handler)
     threading.Thread(target=httpd.serve_forever, name="sandbox-hub", daemon=True).start()
     return httpd

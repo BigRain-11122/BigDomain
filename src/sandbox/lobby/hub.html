@@ -64,7 +64,7 @@
 <body>
 <main>
   <h1>硅基域 · 沙箱控制台</h1>
-  <p class="sub">公众共创元宙 · 本地沙箱三个可打开的面向，一页进入。</p>
+  <p class="sub">公众共创元宙 · 本地沙箱四个可打开的面向，一页进入，每个面向标注此刻是否真的在监听。</p>
   <div class="strip" id="strip">
     <span>状态：<b id="state">读取中</b></span>
     <span>实时通道：<code id="ws">—</code></span>
@@ -73,21 +73,31 @@
   <section class="faces">
     <article class="face">
       <span class="tag live">同源</span>
+      <span class="tag" data-face="lobby">检测中</span>
       <h2>大厅 · 实时聊天</h2>
       <p>进入大厅取沙箱通行证，开第二个窗口，两边看到同一条消息。</p>
       <a id="link-lobby" href="/lobby/">打开大厅 →</a>
     </article>
     <article class="face">
       <span class="tag live">本机</span>
+      <span class="tag" data-face="city">检测中</span>
       <h2>城市 · 硅基快照</h2>
       <p>人口、分区、访客与事件尾巴；可按编号查询居民档案。</p>
       <a id="link-city" href="#">打开城市 →</a>
     </article>
     <article class="face">
       <span class="tag external">独立进程</span>
+      <span class="tag" data-face="checkout">检测中</span>
       <h2>进场 · 19.9 沙箱结账</h2>
       <p>先过进场闸再进内容闸的下单—支付—月卡流程，全程模拟。</p>
       <a id="link-checkout" href="#">打开结账 →</a>
+    </article>
+    <article class="face">
+      <span class="tag external">独立进程</span>
+      <span class="tag" data-face="ledger">检测中</span>
+      <h2>代币 · 双式记账账本</h2>
+      <p>铸出—分成—消费的复式分录，余额、账单与八查对账同屏。</p>
+      <a id="link-ledger" href="#">打开账本 →</a>
     </article>
   </section>
 
@@ -109,10 +119,21 @@
   var lobby = document.getElementById('link-lobby');
   var city = document.getElementById('link-city');
   var checkout = document.getElementById('link-checkout');
+  var ledger = document.getElementById('link-ledger');
 
   function text(el, value) { if (el) { el.textContent = value; } }
 
-  fetch('/hub/api/faces', { cache: 'no-store' })
+  function paint(live) {
+    var marks = document.querySelectorAll('[data-face]');
+    for (var i = 0; i < marks.length; i += 1) {
+      var id = marks[i].getAttribute('data-face');
+      var up = live && live[id] === true;
+      marks[i].textContent = up ? '在线' : '未启动';
+      marks[i].className = up ? 'tag live' : 'tag';
+    }
+  }
+
+  fetch('/hub/api/faces?probe=1', { cache: 'no-store' })
     .then(function (resp) {
       if (!resp.ok) { throw new Error('faces ' + resp.status); }
       return resp.json();
@@ -124,6 +145,9 @@
       if (data.city) { city.setAttribute('href', data.city); }
       if (data.checkout) { checkout.setAttribute('href', data.checkout); }
       if (data.checkout_note) { checkout.setAttribute('title', data.checkout_note); }
+      if (data.ledger) { ledger.setAttribute('href', data.ledger); }
+      if (data.ledger_note) { ledger.setAttribute('title', data.ledger_note); }
+      paint(data.live);
     })
     .catch(function () {
       text(state, '未连接（直接打开文件时无同源接口）');

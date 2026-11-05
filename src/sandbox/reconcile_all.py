@@ -210,6 +210,11 @@ SUITES = [
     # (AC-CKD1..AC-CKD6 were pre-registered in src/os/backlog.md at R2459
     # BEFORE this suite and its module existed.)
     ("os-lobby-checkout-demo", os.path.join("lobby", "test_checkout_demo.py"), 6),
+    # hub ledger face + measured live map (R2471): the entry page publishes the
+    # token console as a fourth face and paints each face from a TCP probe made
+    # during the request (AC-HLL1..AC-HLL6 pre-registered in src/os/backlog.md
+    # at R2471 BEFORE this suite, its module edit and its card existed).
+    ("lobby-hub-ledger", os.path.join("lobby", "test_hub_ledger_live.py"), 6),
     # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
     # a page a person can open in a browser - GET /lobby/ plus a same-origin
     # config route that publishes the real ws port, with the frames the page
