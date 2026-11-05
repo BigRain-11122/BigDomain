@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T08:10:45+08:00",
+  "export_ts": "2026-11-05T08:12:54+08:00",
   "do": "R2461 verification window: the sandbox faces shipped over the last two windows are now PROVED rather than merely shipped. Bring-up is unchanged - `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094` - then open http://127.0.0.1:8094/lobby/ for the chat, http://127.0.0.1:8092/city/ for the city, and the checkout page served by checkout_demo.py for the 19.9 mock",
   "ceo_face": {
     "current": "R2461 verification window: the sandbox faces shipped over the last two windows are now PROVED rather than merely shipped. Bring-up is unchanged - `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094` - then open http://127.0.0.1:8094/lobby/ for the chat, http://127.0.0.1:8092/city/ for the city, and the checkout page served by checkout_demo.py for the 19.9 mock",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/07 the next window takes the gate leader product-face-R2456 or a P-47 business face under the CEO standing order; then a sandbox hub page linking the city, lobby and checkout faces from one URL, and the real msgSecCheck plus the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "docs/sandbox-suite-matrix.md regenerated from this round own battery evidence (53887B, 558 suites / 4324 criteria, --check byte-identical) + qa/reconcile-all-R2461.log (861329B, one utf-8 LF single writer, RUNNER PASS 558/558 suites, reconcile controls 7/7, 1002.1s, TMP RECLAIM 932/932) + both outstanding battery debt rows closed through their shipped CLI",
-    "updated_at": "2026-11-05T08:10:45+08:00"
+    "updated_at": "2026-11-05T08:12:54+08:00"
   },
   "depts": [
     {
@@ -375,10 +375,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 80,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 80,
+    "substantive_non_idle_mention_lines": 81,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
