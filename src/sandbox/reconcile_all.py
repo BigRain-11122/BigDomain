@@ -220,6 +220,11 @@ SUITES = [
     # measured live map, so one URL reaches all five faces (AC-HUG1..AC-HUG6
     # pre-registered in src/os/backlog.md at R2475 BEFORE this suite existed).
     ("lobby-hub-ugc", os.path.join("lobby", "test_hub_ugc.py"), 6),
+    # one-command sandbox launcher (R2477): six faces on OS-assigned ports,
+    # readiness proved by a real connect plus the hub's own probe map, and a
+    # teardown that leaves no port open (AC-STL1..AC-STL6 pre-registered in
+    # src/os/backlog.md at R2477 BEFORE this suite and its module existed).
+    ("start-all", os.path.join("test_start_all.py"), 6),
     # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
     # a page a person can open in a browser - GET /lobby/ plus a same-origin
     # config route that publishes the real ws port, with the frames the page
