@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T08:45:59+08:00",
+  "export_ts": "2026-11-05T08:47:10+08:00",
   "do": "R2463 verification window: the battery the R2462 src edits owed ran on the committed tree - 559/559 suites green, controls 7/7, 4330 criteria exactly as pre-registered, 990.3s - so the entry page shipped at R2462 is now PROVED, not merely shipped. Same bring-up: python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 then open http://127.0.0.1:8095/hub/",
   "ceo_face": {
     "current": "R2463 verification window: the battery the R2462 src edits owed ran on the committed tree - 559/559 suites green, controls 7/7, 4330 criteria exactly as pre-registered, 990.3s - so the entry page shipped at R2462 is now PROVED, not merely shipped. Same bring-up: python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 then open http://127.0.0.1:8095/hub/",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 a BUSINESS face superseding the carried internal audit row product-face-R2456 (carried 8 windows, stale) under the CEO standing order for real output - target: the shipped lobby gains a room picker and a readable event ledger so a visitor sees more than one room, ETA inside 48h; then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/hub.html (5393B self-contained entry page shipped R2462) plus LATE evidence qa/reconcile-all-R2463.log (858063B, one utf-8 LF single writer, crlf=0 bom=False) reading RUNNER PASS 559/559 suites, controls 7/7, criteria total=4330, TMP RECLAIM 932/932 removed",
-    "updated_at": "2026-11-05T08:45:59+08:00"
+    "updated_at": "2026-11-05T08:47:10+08:00"
   },
   "depts": [
     {
@@ -385,10 +385,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 75,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 74,
+    "substantive_non_idle_mention_lines": 75,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
