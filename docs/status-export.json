@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T12:57:26+08:00",
-  "do": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
+  "export_ts": "2026-11-05T13:24:52+08:00",
+  "do": "R2470 VERIFICATION window: the whole registry was re-proved on the tree R2469 committed - 562 suites green, 4348 criteria exactly as pre-registered - so the token-ledger console shipped last window is PROVED rather than merely shipped; no new product face this window",
   "ceo_face": {
-    "current": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
-    "latest_artifact": "src/sandbox/ledger/ledger.html (7977B) + src/sandbox/ledger/ledger_page.py + qa/token-ledger-console-R2469.log (SUITE PASS 6/6 twice with an identical digest AC9413AB3051B0C32A33F4100507768B) + qa/token-ledger-console-live-R2469.log (real process: mint booked, overdraw 409 E_NEGATIVE_BALANCE, verdict PASS, total 0)",
-    "next_milestone": "2026-11-05/06 the next window discharges reconcile-battery-R2469 at the pre-registered 562 suites / 4348 criteria on the committed tree; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
+    "current": "R2470 VERIFICATION window: the whole registry was re-proved on the tree R2469 committed - 562 suites green, 4348 criteria exactly as pre-registered - so the token-ledger console shipped last window is PROVED rather than merely shipped; no new product face this window",
+    "latest_artifact": "qa/reconcile-all-R2470.log (RUNNER PASS 562/562 suites, controls 7/7, 1042.3s, criteria total=4348 exact) + qa/reconcile-all-R2470.log tail (VERDICT R2470 PASS, four follow-up sections) + docs/sandbox-suite-matrix.md (54185B restamped from this round own green evidence, --check byte-identical)",
+    "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face over the carried audit row product-face-R2456: the R2469 token-ledger console wired into the lobby hub payload so every sandbox face is reachable from one page; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/ledger/ledger.html (7977B) + src/sandbox/ledger/ledger_page.py + qa/token-ledger-console-R2469.log (SUITE PASS 6/6 twice with an identical digest AC9413AB3051B0C32A33F4100507768B) + qa/token-ledger-console-live-R2469.log (real process: mint booked, overdraw 409 E_NEGATIVE_BALANCE, verdict PASS, total 0)",
-    "updated_at": "2026-11-05T12:57:26+08:00"
+    "last_artifact": "qa/reconcile-all-R2470.log (RUNNER PASS 562/562 suites, controls 7/7, 1042.3s, criteria total=4348 exact) + qa/reconcile-all-R2470.log tail (VERDICT R2470 PASS, four follow-up sections) + docs/sandbox-suite-matrix.md (54185B restamped from this round own green evidence, --check byte-identical)",
+    "updated_at": "2026-11-05T13:24:52+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2470.log + logs/battery-R2470-stdout.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2470.py + src/os/fold_R2470.py + src/os/export_R2470.py + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/ledger/ledger.html + src/sandbox/ledger/ledger_page.py + src/sandbox/ledger/test_ledger_page.py + src/sandbox/reconcile_all.py + qa/token-ledger-console-R2469.log + qa/token-ledger-console-live-R2469.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2469.py + src/os/fold_R2469.py + src/os/export_R2469.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2468.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2468.py + src/os/export_R2468.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/gate.html + src/sandbox/lobby/gate_page.py + src/sandbox/lobby/test_gate_console.py + src/sandbox/lobby/server.py + src/sandbox/lobby/hub_page.py + src/sandbox/reconcile_all.py + qa/content-gate-console-R2467.log + qa/content-gate-console-live-R2467.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2467.py + src/os/export_R2467.py + src/os/live_R2467.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
@@ -83,6 +84,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2470",
+      "2026-11-05 R2470 VERIFICATION window on the battery the R2469 business face owed (reconcile-battery-R2469, pre-registered at 562 suites / 4348 criteria), honoured per the R2168 mixed-tree rule with zero product src bytes changed. Five-silence scan at open: git status empty at HEAD 73111332 equal to origin/main with no index.lock, zero unreplied @BigDomain ledger rows, content-addressed decisions diff new=0, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with the floor MET. Battery on the committed tree with an empty git status: RUNNER PASS 562/562 suites plus controls 7/7 in 1042.3s at criteria total 4348 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0, evidence written by one utf-8 LF single writer (crlf=0, bom=False). Four follow-up sections in the designed order: designed matrix FAIL at on-disk=54192B against regenerated=54185B with no byte written, stamp-aligned regeneration from this round own green evidence, --check byte-identical, then VERDICT R2470 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2469 closed through its shipped writer at the predicted 121819B -> 121823B (open 3->2, done 177->178, readback ok); no successor battery owed because no product src byte moved. Waterline fold ran at a true round-block boundary (the whole R2459 and R2460 blocks, 256 tokens, 84177B -> 72265B predicted equal to measured, FOLD-CLEAR margin 6235B). Zero product points claimed; the gate leader is still the internal audit row product-face-R2456 (carried=16, stale), so the next window ships a business face and says so plainly. Honest: Docker is absent, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, one poll command was auto-cancelled by the shell no-output gate while the battery kept running as a separate process (verified alive by pid, no second launch), and tasks.md was not touched as it is the P-47 canonical board."
+    ],
     [
       "2469",
       "2026-11-05 R2469 BUSINESS window on the CEO standing order OB-20261105-003656-879, SUPERSEDING the carried internal audit row product-face-R2456 by name (which stays open and claimable at state/queue/tech.md:522 prefix AC-PFKC1). Five-silence scan at open: git status empty at HEAD 99f38e9f equal to origin/main, zero @BigDomain rows in the evolution ledger, decisions diff new=0 against the stored baseline, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with the floor MET. Finding: the P-47-2b ledger already ships as ledger.py (AC-L1..AC-L11) and reconcile.py (eight checks) but had no face a person could operate. Product: src/sandbox/ledger/ledger.html plus ledger_page.py, six same-origin routes over the SHIPPED ledger and the SHIPPED checks so no book law and no check is re-implemented, with the content gate and the server-side source_ai marker still decided by their owners (a client source_ai=false is booked as TRUE per config). Evidence: AC-LC1..AC-LC6 pre-registered before the code, SUITE PASS 6/6 twice with an identical digest, two adjacent suites green (ledger 11/11, props 7/7), one real-process live capture, registry 562 suites / 4348 criteria, matrix regenerated stamp-aligned to 54192B with --check byte-identical and its green line honestly 561/562. Debt: reconcile-battery-R2469 opened first=no at 121385B -> 121819B. The waterline fold ran at a true round-block boundary (R2458 block, 252 tokens covered, 83133B -> 76663B predicted equal to measured) and all four ledger suites re-read 8/8. Honest: no fiat field exists anywhere, nothing is chargeable, the console is not yet listed in the lobby hub payload, Docker is absent, and the real 19.9 debit plus the real msgSecCheck still wait on CEO physical items."
@@ -408,17 +413,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2469",
+      "2470",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 82,
+    "substantive_non_idle_mention_lines": 74,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
