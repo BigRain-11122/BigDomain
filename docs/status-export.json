@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T06:19:55+08:00",
-  "do": "R2488 verification window: the two batteries the register owed ran first on the committed tree, so the audit face shipped at R2486 and the member page shipped at R2487 are now proved green at 571/571 suites and exactly 4402 criteria instead of merely committed",
+  "export_ts": "2026-11-06T06:37:31+08:00",
+  "do": "R2489 business window: the membership page - the 'what do I hold now' side of the 19.9 entrance - is now one click from the entry page and one click from the control panel, where R2487 had left it reachable only by a command nobody had been told about",
   "ceo_face": {
-    "current": "R2488 verification window: the two batteries the register owed ran first on the committed tree, so the audit face shipped at R2486 and the member page shipped at R2487 are now proved green at 571/571 suites and exactly 4402 criteria instead of merely committed",
-    "latest_artifact": "qa/reconcile-all-R2488.log (866662B, RUNNER PASS 571/571 suites, controls 7/7, 1947.4s, criteria recount 4402 exact) + docs/sandbox-suite-matrix.md (54834B, 571 suites / 4402 criteria, --check byte-identical) at 2026-11-06 R2488",
-    "next_milestone": "2026-11-07 the queue head is state/queue/tech.md:524, the R2438 per-entry expiry-window seed (owner_table_triage_expiry_window); the debt register no longer owes a battery, because R2488 closed reconcile-battery-R2486 and reconcile-battery-R2487 on this tree. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2489 business window: the membership page - the 'what do I hold now' side of the 19.9 entrance - is now one click from the entry page and one click from the control panel, where R2487 had left it reachable only by a command nobody had been told about",
+    "latest_artifact": "src/sandbox/lobby/hub.html + src/sandbox/lobby/hub_page.py + src/sandbox/panel.py (member published and startable; qa/hub-member-R2489.log 1321B legs=2 identical, qa/hub-member-live-R2489.log LIVE PASS member page 8752B byte-identical to disk) at 2026-11-06 R2489",
+    "next_milestone": "2026-11-07 the debt register owes the full reconcile battery on this committed tree first (reconcile-battery-R2489, pre-registered 573 suites / 4414 criteria, because two registry rows were wired); after green the queue head named by src/os/queue_head.py --head tech resumes. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2488.log (866662B, RUNNER PASS 571/571 suites, controls 7/7, 1947.4s, criteria recount 4402 exact) + docs/sandbox-suite-matrix.md (54834B, 571 suites / 4402 criteria, --check byte-identical) at 2026-11-06 R2488",
-    "updated_at": "2026-11-06T06:19:55+08:00"
+    "last_artifact": "src/sandbox/lobby/hub.html + src/sandbox/lobby/hub_page.py + src/sandbox/panel.py (member published and startable; qa/hub-member-R2489.log 1321B legs=2 identical, qa/hub-member-live-R2489.log LIVE PASS member page 8752B byte-identical to disk) at 2026-11-06 R2489",
+    "updated_at": "2026-11-06T06:37:31+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/sandbox/lobby/hub.html + src/sandbox/lobby/hub_page.py + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_member.py + src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/member/member_page.py + src/sandbox/reconcile_all.py + qa/hub-member-R2489.log + qa/hub-member-live-R2489.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/live_R2489.py + src/os/closeout_R2489.py + src/os/export_R2489.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2488.log + docs/sandbox-suite-matrix.md + state/debt.md + logs/battery-R2488.pid + src/os/closeout_R2488.py + src/os/export_R2488.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
     "src/os/row_key_carrier_scope.py + src/os/test_row_key_carrier_scope.py + qa/row-key-carrier-scope-R2486.log + qa/row-key-carrier-scope-live-R2486.log + src/sandbox/reconcile_all.py + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/state_append_R2486.py + src/os/export_R2486.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
@@ -102,6 +103,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2489",
+      "2026-11-06 R2489 BUSINESS window on the CEO standing order OB-20261105-003656-879 (real output only). The claim was R2487's own disclosed half: the membership page shipped with no way to reach it from the one door, and its suite was never wired into the runner. Shipped the hub member face (member/member_note/member_cmd, member_port default 8096, in build_faces and face_ports, a --member-port flag on server.py and a seventh card with its live marker in hub.html), added member to the panel's FACE_MODULES/FACE_IDS so a click starts it, and moved member_page.py's own --port default off the hub's customary 8095 to 8096 because the two collided. AC-HMB1..AC-HMB6 were pinned in src/os/backlog.md BEFORE any code and read SUITE PASS 6/6 twice with identical verdicts plus three adjacent suites green (qa/hub-member-R2489.log 1321B); the live leg started the real lobby server and the real member page and read live[member]=False before, True after, the published URL serving 8752B byte-identical to member.html, both ports refusing afterwards. The registry moved 571/4402 -> 573/4414 by exactly two rows (lobby-hub-member and the previously unregistered member-face), the matrix was restamped stamp-aligned to 54983B with a byte-identical --check whose green line honestly reads 571/573, census read DRIFT-CLEAN flags=0, and reconcile-battery-R2489 was appended first=no at the pre-registered target. Four neighbouring pinned criteria were amended openly (two exact face_ports maps and two exact startable lists each gained the new member without loosening to a subset), and test_start_all AC-STL6 was replaced with its intent preserved because 'git diff --quiet HEAD' over the hub bytes can only hold on the round that wrote it. Four new group decisions D-20261106-01..04 were read in full and judged KNOWLEDGE-ONLY with the baseline widened. Honest: the panel still starts member on its own port rather than together with the lobby, the hub still cannot start anything itself, the member page still uses a throwaway temp world per run, Docker is absent so no containerised bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, tasks.md was not touched, and no fold was due (state 45294B at open against the 78500B waterline)."
+    ],
     [
       "2488",
       "2026-11-06 R2488 verification window on the two batteries the register owed (reconcile-battery-R2486 and reconcile-battery-R2487, both pre-registered at 571 suites / 4402 criteria), because the R2168 mixed-tree rule puts an owed battery ahead of any further product byte and R2487 had itself disclosed breaking that ordering. Five-silence scan at open was clean: empty git status with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff reading new=0 against the stored 142-token baseline over 304 lines, the orders tail unchanged at 2026-11-05 20:22 and benchmarks refreshed 2026-11-03 inside the seven-day gate. Battery: launched detached (the runner tees through a block-buffered stdout, and the R2485 lesson about the five-minute silence watchdog was applied rather than re-paid) and read RUNNER PASS 571/571 suites, controls 7/7, 1947.4s with zero FAIL rows and an independent recount of exactly 4402 criteria. Follow-up sections: dry run read matrix FAIL on-disk=54827B regenerated=54834B while fingerprint/profile/census passed, the matrix was regenerated stamp-aligned from this round's own green evidence and --check read byte-identical at 54834B / 571 / 4402, and the write leg read all four sections PASS for VERDICT R2488 PASS. Debt: three rows closed through their own writer - the two battery rows (126816B -> 126824B) and the carried pointer product-face-R2456 (126824B -> 126827B), the last one because its note names state/queue/tech.md:522 which reads done at R2486, so leaving it open would have made the next window rebuild row_key_carrier_scope. Honest: this is a ZERO product-point window; MY OWN MISTAKE IS DISCLOSED - I probed a one-off closeout script with --help, which appended seven stale R2480 log items and moved the tick, and the change was reverted with git checkout before any commit, and a one-off export script was likewise run by mistake and reverted, so the only state and export writes of this round come from this window's own drivers; Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; no fold was due (state 39013B at open against the 78500B waterline); tasks.md was not touched."
@@ -503,17 +508,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2488",
+      "2489",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 44,
+    "log_lines_in_window": 52,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 44,
+    "substantive_non_idle_mention_lines": 52,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

@@ -111,11 +111,12 @@ def ac_hug1():
         bad += 1
         print("  AC-HUG1 ugc_note does not name the port: %r"
               % (old.get("ugc_note"),))
-    # R2484 added the panel face to the same contract; the pinned map keeps
-    # its equality law and gains that member rather than being loosened to a
-    # subset (the R2482 AC-PAN2 shape).
+    # R2484 added the panel face to the same contract and R2489 added member;
+    # the pinned map keeps its equality law and gains that member rather than
+    # being loosened to a subset (the R2482 AC-PAN2 shape).
     want_ports = {"lobby": 8094, "city": 8092, "checkout": 8093,
-                  "gate": 8096, "ledger": 8097, "ugc": 8098, "panel": 8099}
+                  "gate": 8096, "ledger": 8097, "ugc": 8098, "panel": 8099,
+                  "member": 8096}
     if old.get("face_ports") != want_ports:
         bad += 1
         print("  AC-HUG1 face_ports=%r want %r"

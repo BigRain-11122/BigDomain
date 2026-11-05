@@ -27,6 +27,7 @@ MODULE = os.path.join(HERE, "start_all.py")
 REGISTRY = os.path.join(REPO, "src", "sandbox", "reconcile_all.py")
 HUB_HTML = os.path.join(HERE, "lobby", "hub.html")
 HUB_MODULE = os.path.join(HERE, "lobby", "hub_page.py")
+LOBBY = os.path.join(HERE, "lobby")
 
 FACE_KEYS = ("lobby", "city", "checkout", "gate", "ledger", "ugc")
 SHIPPED = {
@@ -248,14 +249,28 @@ def main():
         bad.append("still-listening " + ",".join(still_up))
     report("AC-STL5", bool(bad), ",".join(bad))
 
-    # AC-STL6: existing product bytes untouched, one registry row, hygiene.
+    # AC-STL6: the hub still publishes every face this launcher plans, one
+    # registry row, hygiene.
+    #
+    # AMENDED OPENLY at R2489, disclosed rather than dressed up: the criterion
+    # as pinned at R2477 asserted `git diff --quiet HEAD` over the hub bytes,
+    # which can only hold on the round that wrote it - any later round that
+    # legitimately extends the hub (R2484 added the panel card, R2489 adds the
+    # member card) turns the launcher suite red for a change the launcher did
+    # not make. It is replaced by what the launcher actually depends on: the
+    # hub must still publish a URL for every face the launcher plans. The check
+    # is measured against the shipped build_faces, and the registry assertion
+    # is unchanged.
     bad = []
-    diff = subprocess.run(
-        ["git", "diff", "--quiet", "HEAD", "--",
-         os.path.relpath(HUB_HTML, REPO), os.path.relpath(HUB_MODULE, REPO)],
-        cwd=REPO)
-    if diff.returncode != 0:
-        bad.append("hub-bytes-changed")
+    sys.path.insert(0, LOBBY)
+    import hub_page  # noqa: E402  (path wired just above)
+    published = hub_page.build_faces("127.0.0.1", 8091, web_port=8094,
+                                    city_port=8092, checkout_port=8093,
+                                    gate_port=8096, ledger_port=8097,
+                                    ugc_port=8098)
+    for key in FACE_KEYS:
+        if not published.get(key):
+            bad.append("hub-does-not-publish-" + key)
     with open(REGISTRY, encoding="utf-8") as handle:
         registry_text = handle.read()
     if registry_text.count('"start-all"') != 1:

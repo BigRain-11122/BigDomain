@@ -151,7 +151,10 @@ def ac_pan2():
         ids = [row.get("id") for row in payload.get("faces") or []]
         # AMENDED at R2482: the lobby joined the published faces, so the pinned
         # three-id list gained a fourth id rather than the assertion weakening.
-        if ids != ["checkout", "ledger", "ugc", "lobby"]:
+        # AMENDED again at R2489 for the same reason: the membership page joined
+        # as the fifth startable face, so the pinned list gains that id and
+        # stays an exact list (never a subset check).
+        if ids != ["checkout", "ledger", "member", "ugc", "lobby"]:
             bad += 1
             print("  AC-PAN2 face list drifted: %r" % (ids,))
         for face_id in ids:
@@ -162,6 +165,7 @@ def ac_pan2():
             cmd = row.get("cmd") or ""
             module_name = {"checkout": "checkout_demo.py",
                            "ledger": "ledger_page.py",
+                           "member": "member_page.py",
                            "ugc": "ugc_page.py",
                            "lobby": "server.py"}[face_id]
             if module_name not in cmd:

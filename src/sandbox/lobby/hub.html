@@ -64,7 +64,7 @@
 <body>
 <main>
   <h1>硅基域 · 沙箱控制台</h1>
-  <p class="sub">公众共创元宙 · 本地沙箱六个可打开的面向，一页进入，每个面向标注此刻是否真的在监听；控制台可在页面上把独立进程一个点点起来。</p>
+  <p class="sub">公众共创元宙 · 本地沙箱七个可打开的面向，一页进入，每个面向标注此刻是否真的在监听；控制台可在页面上把独立进程一个一个点起来。</p>
   <div class="strip" id="strip">
     <span>状态：<b id="state">读取中</b></span>
     <span>实时通道：<code id="ws">—</code></span>
@@ -113,6 +113,13 @@
       <p>不用敲命令：在页面上点一下把结账、账本、投稿或大厅拉起来，端口由系统分配并当场验证。</p>
       <a id="link-panel" href="#">打开控制台 →</a>
     </article>
+    <article class="face">
+      <span class="tag external">独立进程</span>
+      <span class="tag" data-face="member">检测中</span>
+      <h2>会员 · 我现在持有什么</h2>
+      <p>19.9 进场之后的另一侧：档位、权益、出生证明与即将过期的项目，一眼看完。</p>
+      <a id="link-member" href="#">打开会员页 →</a>
+    </article>
   </section>
 
   <section class="notices">
@@ -123,8 +130,9 @@
 
   <footer>
     只读入口页：仅 GET 提供页面与接口清单，除 GET 以外一律拒绝。页面本身不引用任何外部资源。<br>
-    启动方式：<code>python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 --ugc-port 8098 --panel-port 8099</code><br>
-    控制台另起：<code>python src/sandbox/panel.py --port 8099</code>
+    启动方式：<code>python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095 --ugc-port 8098 --panel-port 8099 --member-port 8096</code><br>
+    控制台另起：<code>python src/sandbox/panel.py --port 8099</code><br>
+    会员页另起：<code>python src/sandbox/member/member_page.py --port 8096</code>（也可在控制台点一下启动）
   </footer>
 </main>
 <script>
@@ -137,6 +145,7 @@
   var ledger = document.getElementById('link-ledger');
   var ugc = document.getElementById('link-ugc');
   var panel = document.getElementById('link-panel');
+  var member = document.getElementById('link-member');
 
   function text(el, value) { if (el) { el.textContent = value; } }
 
@@ -168,6 +177,8 @@
       if (data.ugc_note) { ugc.setAttribute('title', data.ugc_note); }
       if (data.panel) { panel.setAttribute('href', data.panel); }
       if (data.panel_note) { panel.setAttribute('title', data.panel_note); }
+      if (data.member) { member.setAttribute('href', data.member); }
+      if (data.member_note) { member.setAttribute('title', data.member_note); }
       paint(data.live);
     })
     .catch(function () {

@@ -47,6 +47,12 @@ PANEL_NOTE = ("the control panel is a separate process - start "
               + PANEL_CMD + " and every startable face can then be launched "
               "from a page instead of a command")
 
+MEMBER_CMD = "python src/sandbox/member/member_page.py --host %s --port %d"
+MEMBER_NOTE = ("the membership page is a separate process - start "
+               + MEMBER_CMD +
+               " to make this link live and see what the 19.9 entrance "
+               "actually granted")
+
 PROBE_PARAMS = ("1", "true", "yes", "on")
 
 
@@ -146,7 +152,7 @@ class HubPageHandler(BaseHTTPRequestHandler):
 
 def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093,
                 gate_port=None, ledger_port=8097, ugc_port=8098,
-                panel_port=8099):
+                panel_port=8099, member_port=8096):
     """Compose the face list from the ports this process really bound.
 
     Every URL is derived here from a port handed in by the caller, so a suite
@@ -186,11 +192,15 @@ def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093
         faces["panel"] = "http://%s:%d/panel/" % (host, int(panel_port))
         faces["panel_note"] = PANEL_NOTE % int(panel_port)
         faces["panel_cmd"] = PANEL_CMD % int(panel_port)
+    if member_port is not None:
+        faces["member"] = "http://%s:%d/member/" % (host, int(member_port))
+        faces["member_note"] = MEMBER_NOTE % (host, int(member_port))
+        faces["member_cmd"] = MEMBER_CMD % (host, int(member_port))
     ports = {}
     for face_id, port in (("lobby", web_port), ("city", city_port),
                           ("checkout", checkout_port), ("gate", gate_port),
                           ("ledger", ledger_port), ("ugc", ugc_port),
-                          ("panel", panel_port)):
+                          ("panel", panel_port), ("member", member_port)):
         if port is not None:
             ports[face_id] = int(port)
     faces["face_ports"] = ports

@@ -94,7 +94,10 @@ def ac_lby1():
             bad += 1
             print("  AC-LBY1 state answered %s" % (code,))
         startable = payload.get("startable")
-        if startable != ["checkout", "ledger", "ugc", "lobby"]:
+        # AMENDED at R2489: the membership page joined the startable faces, so
+        # the pinned list gains that id and stays an exact list (the R2482
+        # AC-PAN2 shape - extended, never loosened to a subset check).
+        if startable != ["checkout", "ledger", "member", "ugc", "lobby"]:
             bad += 1
             print("  AC-LBY1 startable reads %r" % (startable,))
         row = face_row(payload, "lobby")
@@ -117,7 +120,7 @@ def ac_lby1():
         httpd.shutdown()
         httpd.server_close()
     return report("AC-LBY1 lobby published in the contract", bad,
-                  "startable lists four faces and the lobby command names "
+                  "startable lists five faces and the lobby command names "
                   "all five sockets")
 
 

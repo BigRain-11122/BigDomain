@@ -45,6 +45,7 @@ CHECKOUT = os.path.join(HERE, "lobby", "checkout_demo.py")
 LEDGER = os.path.join(HERE, "ledger", "ledger_page.py")
 UGC = os.path.join(HERE, "ugc", "ugc_page.py")
 LOBBY = os.path.join(HERE, "lobby", "server.py")
+MEMBER = os.path.join(HERE, "member", "member_page.py")
 LEDGER_CONFIG = os.path.join(HERE, "ledger", "config.json")
 
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
@@ -57,6 +58,8 @@ FACE_MODULES = {
                "python src/sandbox/ledger/ledger_page.py --host %s --port %d"),
     "ugc": (UGC, "/ugc/",
             "python src/sandbox/ugc/ugc_page.py --host %s --port %d"),
+    "member": (MEMBER, "/member/",
+               "python src/sandbox/member/member_page.py --host %s --port %d"),
 }
 # The lobby is one process holding five sockets; the hub socket is the face a
 # person opens, so the hub port is what this panel publishes and measures.
@@ -69,7 +72,7 @@ LOBBY_FLAGS = {
     "gate": "--gate-port",
 }
 LOBBY_PATH = "/hub/"
-FACE_IDS = ("checkout", "ledger", "ugc", "lobby")
+FACE_IDS = ("checkout", "ledger", "member", "ugc", "lobby")
 
 MOCK_STATEMENT = (
     "MOCK / NO REAL CHARGE: every face this panel starts runs the sandbox "

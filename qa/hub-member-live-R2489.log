@@ -1,0 +1,6 @@
+hub_probe status=200 member=http://127.0.0.1:58297/member/ live_member=False
+hub_probe_after_start live_member=True live_panel=False keys=6
+member_get status=200 bytes=8752 disk=8752 identical=True
+hub_page status=200 bytes=8589 external_refs=False
+ports_after_stop hub_open=False member_open=False
+LIVE PASS member face published, measured and served

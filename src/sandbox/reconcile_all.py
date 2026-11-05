@@ -242,6 +242,18 @@ SUITES = [
     # src/os/backlog.md at R2484 BEFORE this suite, the hub_page edit, the
     # hub.html card and the server.py flag existed).
     ("lobby-hub-panel", os.path.join("lobby", "test_hub_panel.py"), 6),
+    # hub membership face (R2489): the 19.9 entrance's other side - what a
+    # person actually holds - finally reachable from the ONE door, with its
+    # live marker and a --member-port flag; the panel gains member as a fifth
+    # startable face and the proof starts a REAL member page (AC-HMB1..AC-HMB6
+    # pre-registered in src/os/backlog.md at R2489 BEFORE this suite, the
+    # hub_page edit, the hub.html card, the server flag, the panel row and the
+    # member_page default-port change existed).
+    ("lobby-hub-member", os.path.join("lobby", "test_hub_member.py"), 6),
+    # R2489 also wires the R2487 membership page suite itself: it shipped at
+    # R2487 and its own closeout disclosed that the registry was unmoved, so
+    # no battery had ever walked it (AC-MFN1..AC-MFN6 live in that suite).
+    ("member-face", os.path.join("member", "test_member_page.py"), 6),
     # one-command sandbox launcher (R2477): six faces on OS-assigned ports,
     # readiness proved by a real connect plus the hub's own probe map, and a
     # teardown that leaves no port open (AC-STL1..AC-STL6 pre-registered in
