@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T13:39:17+08:00",
-  "do": "R2471 BUSINESS window: the one entry page now lists the P-47-2 token ledger console as a fourth face and tells the truth about every face - each card reads online/not-started from a TCP probe made during that request, so a dead link can no longer look alive",
+  "export_ts": "2026-11-05T14:58:59+08:00",
+  "do": "R2472 VERIFICATION window: the whole 563-suite registry was proved on the tree R2471 committed, and the one red suite it caught was a real evidence-dialect defect - three R2471 captures stored as PowerShell UTF-16 - repaired at its birth site so the census reads DRIFT-CLEAN with its baseline untouched",
   "ceo_face": {
-    "current": "R2471 BUSINESS window: the one entry page now lists the P-47-2 token ledger console as a fourth face and tells the truth about every face - each card reads online/not-started from a TCP probe made during that request, so a dead link can no longer look alive",
-    "latest_artifact": "src/sandbox/lobby/hub.html (four face cards + live markers) + src/sandbox/lobby/hub_page.py (ledger face and face_ports, GET /hub/api/faces?probe=1 live map) + src/sandbox/lobby/test_hub_ledger_live.py (SUITE PASS 6/6 twice, identical verdict lines) + qa/hub-ledger-live-R2471.log (five faces 200, live all true, zero survivors)",
-    "next_milestone": "2026-11-05/06 the next window runs the owed battery on this tree (reconcile-battery-R2471, pre-registered at 563 suites / 4354 criteria) and folds src/os/state.json, which now sits at 78449B against the 78500B waterline (margin 51B); the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
+    "current": "R2472 VERIFICATION window: the whole 563-suite registry was proved on the tree R2471 committed, and the one red suite it caught was a real evidence-dialect defect - three R2471 captures stored as PowerShell UTF-16 - repaired at its birth site so the census reads DRIFT-CLEAN with its baseline untouched",
+    "latest_artifact": "qa/reconcile-all-R2472-retry.log (RUNNER PASS 563/563 suites, controls 7/7, criteria total=4354 exactly as pre-registered) + docs/sandbox-suite-matrix.md (restamped 54284B, registry 563 suites / 4354 criteria, --check byte-identical) + src/os/repair_R2472.py (dialect repair, payload lines proved identical, committed alone as d5332644)",
+    "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face rather than another verification pass, per the CEO standing order OB-20261105-003656-879, naming the supersession of the carried audit row product-face-R2456 (open, claimable, carried 17 windows) and taking the tech head state/queue/tech.md:522 prefix AC-PFKC1; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/lobby/hub.html (four face cards + live markers) + src/sandbox/lobby/hub_page.py (ledger face and face_ports, GET /hub/api/faces?probe=1 live map) + src/sandbox/lobby/test_hub_ledger_live.py (SUITE PASS 6/6 twice, identical verdict lines) + qa/hub-ledger-live-R2471.log (five faces 200, live all true, zero survivors)",
-    "updated_at": "2026-11-05T13:39:17+08:00"
+    "last_artifact": "qa/reconcile-all-R2472-retry.log (RUNNER PASS 563/563 suites, controls 7/7, criteria total=4354 exactly as pre-registered) + docs/sandbox-suite-matrix.md (restamped 54284B, registry 563 suites / 4354 criteria, --check byte-identical) + src/os/repair_R2472.py (dialect repair, payload lines proved identical, committed alone as d5332644)",
+    "updated_at": "2026-11-05T14:58:59+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2472.log + qa/reconcile-all-R2472-retry.log + src/os/repair_R2472.py + src/os/closeout_R2472.py + src/os/fold_R2472.py + src/os/fold2_R2472.py + src/os/export_R2472.py + docs/sandbox-suite-matrix.md + state/debt.md + state/residue_triage.json + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/lobby/hub_page.py + src/sandbox/lobby/hub.html + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_ledger_live.py + src/sandbox/reconcile_all.py + qa/hub-ledger-R2471-a.log + qa/hub-ledger-R2471-b.log + qa/hub-ledger-live-R2471.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2471.py + src/os/export_R2471.py + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "qa/reconcile-all-R2470.log + logs/battery-R2470-stdout.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2470.py + src/os/fold_R2470.py + src/os/export_R2470.py + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/ledger/ledger.html + src/sandbox/ledger/ledger_page.py + src/sandbox/ledger/test_ledger_page.py + src/sandbox/reconcile_all.py + qa/token-ledger-console-R2469.log + qa/token-ledger-console-live-R2469.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2469.py + src/os/fold_R2469.py + src/os/export_R2469.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
@@ -85,6 +86,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2472",
+      "2026-11-05 R2472 VERIFICATION window on the battery the R2471 business face owed (reconcile-battery-R2471, pre-registered at 563 suites / 4354 criteria), per the R2168 mixed-tree rule, with zero product code changed. Five-silence scan at open was clean at HEAD b1938c87 equal to origin/main with no index.lock, zero @BigDomain ledger rows, content-addressed decisions diff new=0 against the 211-row / 135-token baseline, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with the floor MET. BATTERY LEG 1 RED: 562/563 suites with the single red being reconcile-daily-census AC-CD7 at exit=2 drift; qa_writer_census --check then NAMED the cause - three R2471 evidence logs stored as PowerShell UTF-16 (ps-utf16). FIX AT THE BIRTH SITE: src/os/repair_R2472.py decoded each capture, proved its line set identical through run_identity.normalize, and rewrote utf-8 LF with one atomic replace and a byte read-back (952B->468B twice, 2662B->1319B, crlf=0), committed ALONE as d5332644; census then read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched and the suite re-read 8/8. BATTERY LEG 2 GREEN on the repaired tree: RUNNER PASS 563/563 suites, controls 7/7, 1074.7s, criteria total=4354 EXACTLY as pre-registered, TMP RECLAIM 932/932 (861296B green / 863246B with both follow-up legs, crlf=0 bom=False, one utf-8 LF single writer). Follow-up four sections: designed matrix FAIL at 54266B against 54284B with no byte written, stamp-aligned regeneration to 54284B at 563/4354 green=563/563 with --check byte-identical, then VERDICT R2472 PASS failing=none. Debt: reconcile-battery-R2471 closed through debt_close at its predicted 122265B -> 122269B (open 3->2, done 178->179, readback ok); no successor battery owed because no product src byte moved. Two round-block folds (655 and 656) brought state.json from 79291B to 68907B, margin 9593, tokens covered with none missing, and the expired residue declaration was renewed from one live reading at declared_by=R2472 until=R2482 (283 entries, dropped=0, check exit 0 TRIAGED). Honest: ZERO product points, nothing a CEO can open was rebuilt; the red leg is kept and not counted green; one botched launch of my own left a 215-byte stub evidence file that was deleted before any commit; Docker is absent; the real msgSecCheck and the real 19.9 debit still wait on CEO physical items."
+    ],
     [
       "2471",
       "2026-11-05 R2471 BUSINESS window on the CEO standing order OB-20261105-003656-879, superseding the carried internal audit row product-face-R2456 by name (it stays open and claimable). Five-silence scan at open was clean at HEAD 34c752af equal to origin/main with no index.lock, zero unreplied @BigDomain ledger rows, content-addressed decisions diff new=0, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate. Shipped the hub ledger face and a measured live map: build_faces keeps all fourteen old keys value-identical and adds ledger/ledger_note/ledger_cmd/face_ports (default 8097), /hub/api/faces?probe=1 answers a live map built by TCP connect at request time, hub.html gains the fourth card plus one live marker per face and still carries zero external references, and server.py advertises --ledger-port (default named in the help text) and passes it through. Evidence: src/sandbox/lobby/test_hub_ledger_live.py SUITE PASS 6/6 TWICE with byte-identical verdict lines (qa/hub-ledger-R2471-a.log and -b.log), with the live map proved by opening and closing a real listener and two adjacent suites re-run green inside AC-HLL6. Live: qa/hub-ledger-live-R2471.log starts the whole stack and reads five faces at 200 with live all true, then zero survivors and a dead hub after stop. Matrix regenerated stamp-aligned to 54266B at 563 suites / 4354 criteria with --check byte-identical and green honestly 562/563; reconcile-battery-R2471 opened first=no at 121823B -> 122265B (readback ok), so the mixed-tree rule owes the battery first next window. Honest: the ledger console is still a separate process and one URL does not start four servers; Docker is absent; the real msgSecCheck and the real 19.9 debit still wait on CEO physical items; one printed substring check in the live driver proves nothing and is disclosed rather than cited; state.json sits 51B under the waterline so the next window must fold."
@@ -418,17 +423,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2471",
+      "2472",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 83,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 83,
+    "substantive_non_idle_mention_lines": 70,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -450,6 +455,8 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
+        "discounted": 0,
+        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -462,6 +469,8 @@
         "done_rows": 409,
         "gated_rows": 1,
         "claimable": 11,
+        "discounted": 0,
+        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -474,10 +483,16 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
+        "discounted": 0,
+        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ]
+    ],
+    "verdict": "FLOOR-MET",
+    "shortfall_total": 0,
+    "missing": [],
+    "delivered_total": 0
   }
 }
