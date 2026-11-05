@@ -1,0 +1,8 @@
+PASS lobby hub listening on 65086 (panel published on 65087)
+PASS hub page 200 at 7853B byte-identical to disk
+PASS published panel url=http://127.0.0.1:65087/panel/
+PASS live map reads panel=True
+PASS published panel url 200 at 7738B byte-identical to disk
+PASS panel state 200 startable=checkout,ledger,ugc,lobby
+PASS panel port 65087 refused after teardown
+LIVE PASS rc=0

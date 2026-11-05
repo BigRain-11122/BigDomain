@@ -236,6 +236,12 @@ SUITES = [
     # measured live map, so one URL reaches all five faces (AC-HUG1..AC-HUG6
     # pre-registered in src/os/backlog.md at R2475 BEFORE this suite existed).
     ("lobby-hub-ugc", os.path.join("lobby", "test_hub_ugc.py"), 6),
+    # hub control-panel card (R2484): the one door finally leads to the panel,
+    # so a person who opens the hub learns a click-to-start surface exists and
+    # the live map reports it (AC-HPN1..AC-HPN6 pre-registered in
+    # src/os/backlog.md at R2484 BEFORE this suite, the hub_page edit, the
+    # hub.html card and the server.py flag existed).
+    ("lobby-hub-panel", os.path.join("lobby", "test_hub_panel.py"), 6),
     # one-command sandbox launcher (R2477): six faces on OS-assigned ports,
     # readiness proved by a real connect plus the hub's own probe map, and a
     # teardown that leaves no port open (AC-STL1..AC-STL6 pre-registered in

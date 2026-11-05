@@ -1,0 +1,19 @@
+EVIDENCE CAPTURE round=R2484 suite=src/sandbox/lobby/test_hub_panel.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+AC-HPN1 additive face contract PASS  old keys checked, panel published at 8099
+AC-HPN2 live map measured PASS  listener on/off moved panel only
+AC-HPN3 page carries the face PASS  6 markers, zero external references
+AC-HPN4 operator wiring honest PASS  flag advertised and passed through
+AC-HPN5 read-only surface untouched PASS  page byte-identical, three adjacent suites green
+AC-HPN6 hygiene and registration PASS  ascii module, one registry row
+SUITE PASS 6/6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+AC-HPN1 additive face contract PASS  old keys checked, panel published at 8099
+AC-HPN2 live map measured PASS  listener on/off moved panel only
+AC-HPN3 page carries the face PASS  6 markers, zero external references
+AC-HPN4 operator wiring honest PASS  flag advertised and passed through
+AC-HPN5 read-only surface untouched PASS  page byte-identical, three adjacent suites green
+AC-HPN6 hygiene and registration PASS  ascii module, one registry row
+SUITE PASS 6/6
+== ADJACENT 0
+EVIDENCE identical=True adjacent=0 fails=0 digest=E3B0C44298FC1C14

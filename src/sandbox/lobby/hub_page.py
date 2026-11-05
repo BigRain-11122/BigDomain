@@ -42,6 +42,11 @@ UGC_CMD = "python src/sandbox/ugc/ugc_page.py --port %d"
 UGC_NOTE = ("the UGC console is a separate process - start "
             + UGC_CMD + " to make this link live")
 
+PANEL_CMD = "python src/sandbox/panel.py --port %d"
+PANEL_NOTE = ("the control panel is a separate process - start "
+              + PANEL_CMD + " and every startable face can then be launched "
+              "from a page instead of a command")
+
 PROBE_PARAMS = ("1", "true", "yes", "on")
 
 
@@ -140,7 +145,8 @@ class HubPageHandler(BaseHTTPRequestHandler):
 
 
 def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093,
-                gate_port=None, ledger_port=8097, ugc_port=8098):
+                gate_port=None, ledger_port=8097, ugc_port=8098,
+                panel_port=8099):
     """Compose the face list from the ports this process really bound.
 
     Every URL is derived here from a port handed in by the caller, so a suite
@@ -176,10 +182,15 @@ def build_faces(host, ws_port, web_port=None, city_port=None, checkout_port=8093
         faces["ugc"] = "http://%s:%d/ugc/" % (host, int(ugc_port))
         faces["ugc_note"] = UGC_NOTE % int(ugc_port)
         faces["ugc_cmd"] = UGC_CMD % int(ugc_port)
+    if panel_port is not None:
+        faces["panel"] = "http://%s:%d/panel/" % (host, int(panel_port))
+        faces["panel_note"] = PANEL_NOTE % int(panel_port)
+        faces["panel_cmd"] = PANEL_CMD % int(panel_port)
     ports = {}
     for face_id, port in (("lobby", web_port), ("city", city_port),
                           ("checkout", checkout_port), ("gate", gate_port),
-                          ("ledger", ledger_port), ("ugc", ugc_port)):
+                          ("ledger", ledger_port), ("ugc", ugc_port),
+                          ("panel", panel_port)):
         if port is not None:
             ports[face_id] = int(port)
     faces["face_ports"] = ports

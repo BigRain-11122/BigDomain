@@ -607,6 +607,8 @@ def build_parser():
                         help="serve the content-gate console (gate.html) on this port")
     parser.add_argument("--ugc-port", type=int, default=8098,
                         help="port the separate UGC console is expected on (default 8098, published, not started)")
+    parser.add_argument("--panel-port", type=int, default=8099,
+                        help="port the separate sandbox control panel is expected on (default 8099, published, not started)")
     return parser
 
 
@@ -696,11 +698,12 @@ def main():
                             checkout_port=args.checkout_port,
                             gate_port=gate_bound,
                             ledger_port=args.ledger_port,
-                            ugc_port=args.ugc_port)
+                            ugc_port=args.ugc_port,
+                            panel_port=args.panel_port)
         hub = start_hub_http(args.host, args.hub_port, faces)
-        banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d ledger_port=%d ugc_port=%d" % (
+        banner += " hub=http://%s:%d/hub/ faces=%d checkout_port=%d ledger_port=%d ugc_port=%d panel_port=%d" % (
             args.host, hub.server_address[1], len(faces), args.checkout_port,
-            args.ledger_port, args.ugc_port)
+            args.ledger_port, args.ugc_port, args.panel_port)
     else:
         banner += " hub=off (pass --hub-port 8095 for the sandbox entry page)"
     print(banner, flush=True)
