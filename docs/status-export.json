@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T14:58:59+08:00",
+  "export_ts": "2026-11-05T15:01:11+08:00",
   "do": "R2472 VERIFICATION window: the whole 563-suite registry was proved on the tree R2471 committed, and the one red suite it caught was a real evidence-dialect defect - three R2471 captures stored as PowerShell UTF-16 - repaired at its birth site so the census reads DRIFT-CLEAN with its baseline untouched",
   "ceo_face": {
     "current": "R2472 VERIFICATION window: the whole 563-suite registry was proved on the tree R2471 committed, and the one red suite it caught was a real evidence-dialect defect - three R2471 captures stored as PowerShell UTF-16 - repaired at its birth site so the census reads DRIFT-CLEAN with its baseline untouched",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face rather than another verification pass, per the CEO standing order OB-20261105-003656-879, naming the supersession of the carried audit row product-face-R2456 (open, claimable, carried 17 windows) and taking the tech head state/queue/tech.md:522 prefix AC-PFKC1; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2472-retry.log (RUNNER PASS 563/563 suites, controls 7/7, criteria total=4354 exactly as pre-registered) + docs/sandbox-suite-matrix.md (restamped 54284B, registry 563 suites / 4354 criteria, --check byte-identical) + src/os/repair_R2472.py (dialect repair, payload lines proved identical, committed alone as d5332644)",
-    "updated_at": "2026-11-05T14:58:59+08:00"
+    "updated_at": "2026-11-05T15:01:11+08:00"
   },
   "depts": [
     {
@@ -430,10 +430,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 70,
+    "log_lines_in_window": 71,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 70,
+    "substantive_non_idle_mention_lines": 71,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
