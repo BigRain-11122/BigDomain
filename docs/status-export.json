@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T12:06:04+08:00",
+  "export_ts": "2026-11-05T12:07:27+08:00",
   "do": "R2467 business window: the content gate finally becomes something a person can use - open the console, type a sentence, read the verdict the shipped msgSecCheck stub really returned (SERVE / REVIEW / REFUSE) together with its trace id and the endpoint contract the real WeChat gate must satisfy",
   "ceo_face": {
     "current": "R2467 business window: the content gate finally becomes something a person can use - open the console, type a sentence, read the verdict the shipped msgSecCheck stub really returned (SERVE / REVIEW / REFUSE) together with its trace id and the endpoint contract the real WeChat gate must satisfy",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window runs the battery R2467 owes at the pre-registered 561 suites / 4342 criteria, and the real msgSecCheck plus the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/gate.html + src/sandbox/lobby/gate_page.py (openable console over the shipped stub) + qa/content-gate-console-R2467.log (SUITE PASS 6/6 twice, identical digest) + qa/content-gate-console-live-R2467.log (real process, bound port in the banner)",
-    "updated_at": "2026-11-05T12:06:04+08:00"
+    "updated_at": "2026-11-05T12:07:27+08:00"
   },
   "depts": [
     {
@@ -405,10 +405,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 72,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 72,
+    "substantive_non_idle_mention_lines": 74,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
