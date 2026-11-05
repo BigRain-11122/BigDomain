@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T15:33:32+08:00",
-  "do": "R2473 BUSINESS window: the P-47-3b UGC pipeline is now a face a person can operate in a browser - submit a sentence, watch the shipped content gate decide pass / review, take a gray-zone case to a human verdict, and watch the proposal pool move",
+  "export_ts": "2026-11-05T16:07:18+08:00",
+  "do": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
   "ceo_face": {
-    "current": "R2473 BUSINESS window: the P-47-3b UGC pipeline is now a face a person can operate in a browser - submit a sentence, watch the shipped content gate decide pass / review, take a gray-zone case to a human verdict, and watch the proposal pool move",
-    "latest_artifact": "src/sandbox/ugc/ugc_console.html (8816B console: submit, suspended review with pass/risky, pool with per-line counts) + src/sandbox/ugc/ugc_page.py (four routes over the SHIPPED pipeline/store/wordlist/review) + qa/ugc-console-R2473.log (SUITE PASS 6/6 twice, identical digest) + qa/ugc-console-live-R2473.log (real process: pass / review / verdict / pool 2, review 0)",
-    "next_milestone": "2026-11-05/06 the next window runs the owed battery on this tree (reconcile-battery-R2473, pre-registered at 564 suites / 4360 criteria) and then wires this console into the lobby hub payload; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
+    "current": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
+    "latest_artifact": "qa/reconcile-all-R2474.log (862025B at the green leg, 863975B with both follow-up legs, RUNNER PASS 564/564 suites, controls 7/7, 1047.8s) + docs/sandbox-suite-matrix.md (54326B, regenerated from this round own green evidence, --check byte-identical, green line self-describing at 564/564)",
+    "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face and says plainly that it supersedes the carried audit row product-face-R2456: the named candidate is wiring the ledger console (R2469) and the UGC console (R2473) into the lobby hub live map, which both business windows disclosed as not yet done; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/ugc/ugc_console.html (8816B console: submit, suspended review with pass/risky, pool with per-line counts) + src/sandbox/ugc/ugc_page.py (four routes over the SHIPPED pipeline/store/wordlist/review) + qa/ugc-console-R2473.log (SUITE PASS 6/6 twice, identical digest) + qa/ugc-console-live-R2473.log (real process: pass / review / verdict / pool 2, review 0)",
-    "updated_at": "2026-11-05T15:33:32+08:00"
+    "last_artifact": "qa/reconcile-all-R2474.log (862025B at the green leg, 863975B with both follow-up legs, RUNNER PASS 564/564 suites, controls 7/7, 1047.8s) + docs/sandbox-suite-matrix.md (54326B, regenerated from this round own green evidence, --check byte-identical, green line self-describing at 564/564)",
+    "updated_at": "2026-11-05T16:07:18+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2474.log + docs/sandbox-suite-matrix.md + src/os/closeout_R2474.py + src/os/fold_R2474.py + src/os/export_R2474.py + state/debt.md + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/ugc/ugc_console.html + src/sandbox/ugc/ugc_page.py + src/sandbox/ugc/test_ugc_console.py + src/sandbox/reconcile_all.py + src/os/live_R2473.py + src/os/closeout_R2473.py + src/os/fold_R2473.py + src/os/export_R2473.py + qa/ugc-console-R2473.log + qa/ugc-console-live-R2473.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "qa/reconcile-all-R2472.log + qa/reconcile-all-R2472-retry.log + src/os/repair_R2472.py + src/os/closeout_R2472.py + src/os/fold_R2472.py + src/os/fold2_R2472.py + src/os/export_R2472.py + docs/sandbox-suite-matrix.md + state/debt.md + state/residue_triage.json + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
     "src/sandbox/lobby/hub_page.py + src/sandbox/lobby/hub.html + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_ledger_live.py + src/sandbox/reconcile_all.py + qa/hub-ledger-R2471-a.log + qa/hub-ledger-R2471-b.log + qa/hub-ledger-live-R2471.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2471.py + src/os/export_R2471.py + src/os/state.json + src/os/backlog.md + heartbeat.txt + docs/status-export.json",
@@ -87,6 +88,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2474",
+      "2026-11-05 R2474 VERIFICATION window on the battery the R2473 business face owed (reconcile-battery-R2473, pre-registered at 564 suites / 4360 criteria), because the R2168 mixed-tree rule puts the battery ahead of the carried audit row product-face-R2456 (still open and claimable). Five-silence scan at open was clean at HEAD 5cbdfe22 equal to origin/main with no index.lock, zero unreplied @BigDomain ledger rows, the content-addressed decisions diff naming exactly ONE new token D-20261105-17 (a group duty-round @BigCompute backfill dispatch plus the bm-b/bm-c E1 escalation and the PROBE A acks on @CPH4) judged KNOWLEDGE-ONLY with the baseline widened by it, the group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with claimable=11 and the floor MET. BATTERY on the committed tree with an empty git status before the run, GREEN ON THE FIRST LEG: RUNNER PASS 564/564 suites plus controls 7/7 in 1047.8s at criteria total 4360 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds 326.59 MiB busy=0 failed=0, evidence written by ONE utf-8 LF single writer through the shipped battery stream (crlf=0 lone_cr=0 bom=False) and launched detached and unfiltered so the filtering-pipe trap was not re-paid. Four follow-up sections in the designed order: the dry run read VERDICT FAIL failing=matrix at on-disk 54354B against regenerated 54326B with no byte written, the matrix was regenerated stamp-aligned from this round own green evidence, --check read byte-identical at 54326B / 564 suites / 4360 criteria, and the write leg read VERDICT R2474 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2473 closed through the shipped debt_close at its predicted 122765B -> 122769B (open 3->2, done 179->180, readback ok); no successor battery owed because no product src byte changed and the registry is unmoved. A waterline fold ran at a true round-block boundary (window 1..84, the whole R2465..R2473 blocks plus the previous fold summary, 289 tokens covered none missing, predicted 12528B = measured). Zero product points claimed; every P-47 item beyond the shipped sandbox faces remains blocked on CEO physical items (merchant id, mini-program appid/secret), and Docker is absent on this host."
+    ],
     [
       "2473",
       "2026-11-05 R2473 BUSINESS window on the CEO standing order OB-20261105-003656-879, superseding the carried internal audit row product-face-R2456 by name (it stays open and claimable). Five-silence scan at open was clean at HEAD f9f83a3f equal to origin/main with no index.lock, zero @BigDomain ledger rows, content-addressed decisions diff new=0, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate. FINDING: the shipped P-47-3b UGC pipeline could only be driven from a terminal, so nobody could submit, see the gate decision, take a gray case to a verdict, or watch the pool. SHIPPED ugc_console.html (8816B, offline, live-config AI label and non-advice disclaimer, mock statement on screen) plus ugc_page.py (GET /ugc and /ugc/ page bytes, GET /ugc/api/state derived from the SHIPPED review table and pool_query, POST /ugc/api/submit through grant_entrance_sandbox and submit, POST /ugc/api/verdict through review_verdict; unknown 404, POST on the read route 405, blank 400, over-length 413) plus one registry row ugc-console(6). AC-UGW1..AC-UGW6 were pre-registered before the code; the suite reads SUITE PASS 6/6 TWICE with an identical digest E8C2DB4ACF5DAFC0 plus three adjacent suites green (ugc 37/37, water-journal 7/7, reviewdesk-persist 7/7), and the live capture starts the real process (page 8816B, submit pass, gray suspended, verdict 200, pool 2, review 0, child dead) with a single utf-8 LF writer. Matrix restamped to 54354B at 564 suites / 4360 criteria with --check byte-identical and green honestly 563/564; reconcile-battery-R2473 opened first=no at 122269B -> 122765B, so the mixed-tree rule owes the battery first next window. Two own defects caught by running: the pre-registered 32-hex evt_id was a measurement error corrected to the shipped 16-hex width (disclosed, no assertion relaxed), and POST on the read route answered 404 where the criterion asks 405, so the MODULE was fixed and the criterion left as written. Honest: sandbox face on the shipped pipeline with a mock entrance and nothing chargeable; the real msgSecCheck and the real 19.9 debit still wait on CEO physical items; Docker is absent; the console is its own process and is not yet listed in the hub payload."
@@ -428,17 +433,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2473",
+      "2474",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 5,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 74,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
