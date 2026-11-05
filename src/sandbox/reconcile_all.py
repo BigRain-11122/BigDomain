@@ -5640,11 +5640,25 @@ def run_cmd(cmd, cwd):
     # R1824/R1825 child-utf-8-bytes-decoded-as-cp936 mojibake).
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE,
-                           stderr=subprocess.STDOUT, text=True,
-                           encoding="utf-8", errors="replace", cwd=cwd,
-                           timeout=300, env=env)
-    return proc.returncode, proc.stdout or ""
+    try:
+        proc = subprocess.run(cmd, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT, text=True,
+                               encoding="utf-8", errors="replace", cwd=cwd,
+                               timeout=300, env=env)
+        return proc.returncode, proc.stdout or ""
+    except subprocess.TimeoutExpired as exc:
+        # A loaded machine must not abort the whole battery: R2393 leg 3
+        # and R2466 leg 2 both died at exactly the 300s cap on a suite
+        # whose own measured leg was 268s, which is load and not a code
+        # defect. The timeout is recorded as one FAILED suite carrying
+        # every line the child produced, so the run still reaches its
+        # summary and the red leg stays readable.
+        out = exc.stdout or ""
+        if isinstance(out, bytes):
+            out = out.decode("utf-8", "replace")
+        out = (out or "").rstrip("\n")
+        marker = "TIMEOUT suite exceeded the 300s per-suite cap"
+        return 124, (out + "\n" + marker) if out else marker
 
 
 def echo(out):
