@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T08:53:25+08:00",
+  "export_ts": "2026-11-05T08:54:09+08:00",
   "do": "R2464 business window: the lobby page now has a room selector filled from the server own config and a readable event ledger. Bring-up unchanged - python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 then open http://127.0.0.1:8094/lobby/ - switch rooms from the selector and watch the ledger record every frame; a second window still stays quiet until it joins the same room",
   "ceo_face": {
     "current": "R2464 business window: the lobby page now has a room selector filled from the server own config and a readable event ledger. Bring-up unchanged - python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 then open http://127.0.0.1:8094/lobby/ - switch rooms from the selector and watch the ledger record every frame; a second window still stays quiet until it joins the same room",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/07 the battery the R2464 src edits owe runs FIRST next window on the committed tree at the pre-registered 560 suites / 4336 criteria (reconcile-battery-R2465); then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, and a server-side room history read face so the ledger can show what happened before the page was opened, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/lobby.html (10077B page with room selector + event ledger, zero hardcoded room names) + src/sandbox/lobby/lobby_page.py (GET /lobby/api/rooms wired from the server cfg) + server.py rooms wiring + src/sandbox/lobby/test_lobby_rooms.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-room-picker-R2464.log) + qa/lobby-room-picker-live-R2464.log",
-    "updated_at": "2026-11-05T08:53:25+08:00"
+    "updated_at": "2026-11-05T08:54:09+08:00"
   },
   "depts": [
     {
@@ -390,10 +390,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 82,
+    "substantive_non_idle_mention_lines": 83,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
