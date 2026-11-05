@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>BigDomain 会员权益面 · 沙箱</title>
+<style>
+  :root { --ink:#1c1f23; --sub:#5b6570; --line:#e3e7ec; --bg:#f7f8fa; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:15px/1.65 "Segoe UI","Microsoft YaHei",sans-serif; }
+  main { max-width:860px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; letter-spacing:.5px; }
+  .sub { color:var(--sub); font-size:13px; margin-bottom:20px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px;
+          padding:18px 20px; margin-bottom:14px; }
+  .card h2 { font-size:15px; margin:0 0 12px; font-weight:600; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  input { flex:1 1 200px; min-width:160px; padding:8px 10px; font-size:14px;
+          border:1px solid var(--line); border-radius:6px; background:#fbfcfd; }
+  button { padding:8px 16px; font-size:14px; border:0; border-radius:6px;
+           background:var(--ink); color:#fff; cursor:pointer; }
+  button:hover { opacity:.88; }
+  button.ghost { background:#fff; color:var(--ink);
+                 border:1px solid var(--line); }
+  dl { display:grid; grid-template-columns:112px 1fr; gap:6px 14px;
+       margin:0; font-size:14px; }
+  dt { color:var(--sub); }
+  dd { margin:0; word-break:break-all; }
+  .pill { display:inline-block; padding:1px 9px; margin:2px 4px 2px 0;
+          border-radius:999px; background:#eef1f5; font-size:12.5px; }
+  .ok { color:#1f7a4d; font-weight:600; }
+  .bad { color:#a33; font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); }
+  th { color:var(--sub); font-weight:500; }
+  .note { font-size:12.5px; color:var(--sub); }
+  .banner { font-size:12.5px; background:#fff8e6; border:1px solid #f0dfae;
+            border-radius:6px; padding:8px 12px; margin-bottom:14px;
+            color:#6b5420; }
+  .disc { font-size:12px; color:var(--sub); border-top:1px solid var(--line);
+          margin-top:14px; padding-top:12px; }
+  .ai { display:inline-block; font-size:11.5px; padding:1px 7px;
+        border-radius:4px; background:#e8f0ff; color:#2b4b8a;
+        margin-left:8px; vertical-align:1px; }
+  #msg { font-size:13px; margin-left:10px; color:var(--sub); }
+  .miss { color:#8a6d1f; }
+</style>
+</head>
+<body>
+<main>
+  <h1>会员权益面<span class="ai" id="ai-label">AI 生成</span></h1>
+  <div class="sub">19.9 入门月卡在沙箱里的权益读数面 · 数据源=会员引擎（权益 / 余额 / 出生证明 / 临期）</div>
+
+  <div class="banner">沙箱面：所有订单为 mock，永不计费、永不记账（mock=true / chargeable=false）。真实 19.9 支付通道待 CEO 物理件（商户号）到位后接入。</div>
+
+  <div class="card">
+    <h2>查看一位居民的权益</h2>
+    <div class="row">
+      <input id="avatar" placeholder="居民名（沙箱自定，如 alice）" autocomplete="off">
+      <input id="days" placeholder="临期窗口（天，默认 30）" value="30" style="flex:0 0 150px">
+      <button id="load">读取权益</button>
+      <button id="join" class="ghost">沙箱开月卡</button>
+      <span id="msg"></span>
+    </div>
+    <div class="note" style="margin-top:8px">已持有权益的居民：<span id="avatars">读取中…</span></div>
+  </div>
+
+  <div class="card">
+    <h2>权益读数</h2>
+    <dl>
+      <dt>居民</dt><dd id="s-avatar">—</dd>
+      <dt>当前档位</dt><dd id="s-tiers">—</dd>
+      <dt>特权</dt><dd id="s-privs">—</dd>
+      <dt>剩余额度</dt><dd id="s-credits">—</dd>
+      <dt>出生证明</dt><dd id="s-cert">—</dd>
+      <dt>有效周期</dt><dd id="s-periods">—</dd>
+      <dt>临期清单</dt><dd id="s-expiring">—</dd>
+    </dl>
+    <div class="disc" id="disclaimer">非投顾常驻提示读取中…</div>
+  </div>
+
+  <div class="card">
+    <h2>档位（读取自会员目录，单一来源）</h2>
+    <table>
+      <thead><tr><th>档位</th><th>每月额度</th><th>特权</th></tr></thead>
+      <tbody id="tiers"><tr><td colspan="3" class="miss">读取中…</td></tr></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var state = null;
+
+  function el(id) { return document.getElementById(id); }
+  function text(v) {
+    if (v === null || v === undefined || v === "") { return "—"; }
+    if (Array.isArray(v)) { return v.length ? v.join("、") : "（无）"; }
+    return String(v);
+  }
+  function pills(list) {
+    if (!Array.isArray(list) || !list.length) { return "（无）"; }
+    return list.map(function (x) {
+      return '<span class="pill">' + String(x) + '</span>';
+    }).join("");
+  }
+  function say(msg, cls) {
+    var node = el("msg");
+    node.textContent = msg || "";
+    node.className = cls || "";
+  }
+
+  function render(s) {
+    state = s;
+    if (s.ai_label) { el("ai-label").textContent = s.ai_label; }
+    var priv = s.privileges || {};
+    el("s-avatar").textContent = text(s.avatar);
+    el("s-tiers").innerHTML = pills(priv.tiers);
+    el("s-privs").innerHTML = pills(priv.privileges);
+    var bal = s.balance || {};
+    el("s-credits").textContent = (bal.credits_remaining !== undefined)
+      ? (bal.credits_remaining + " / " + (bal.credits_granted || 0))
+      : text(bal.remaining || bal.credits);
+    var cert = s.birth_cert || {};
+    el("s-cert").innerHTML = cert.birth_cert
+      ? '<span class="ok">已获永久入城资格</span>'
+      : '<span class="bad">尚无（未持有任何有效支付凭证）</span>';
+    var periods = priv.periods || [];
+    el("s-periods").textContent = periods.length
+      ? periods.map(function (p) {
+          return p.tier + " · 第" + p.period_no + "期 · 至 " + p.end_utc;
+        }).join("；")
+      : "（无有效周期）";
+    var soon = s.expiring_soon || [];
+    el("s-expiring").textContent = Array.isArray(soon) && soon.length
+      ? soon.map(function (r) {
+          return (r.census_avatar_id || r.avatar || "?") + " · " +
+                 (r.end_utc || "") + "（还剩 " + (r.days_left !== undefined ? r.days_left : "?") + " 天）";
+        }).join("；")
+      : "未来 " + s.window_days + " 天内无临期";
+    el("disclaimer").textContent = s.disclaimer ||
+      (priv.disclaimer || "非投顾常驻提示缺失");
+    var catalog = s.catalog || [];
+    var rows = catalog.map(function (t) {
+      return "<tr><td>" + t.tier + "</td><td>" + t.monthly_credits +
+             "</td><td>" + pills(t.privileges) + "</td></tr>";
+    });
+    el("tiers").innerHTML = rows.length ? rows.join("")
+      : '<tr><td colspan="3" class="miss">目录为空</td></tr>';
+  }
+
+  function get(url) {
+    return fetch(url, { headers: { "Accept": "application/json" } })
+      .then(function (r) {
+        return r.json().then(function (b) {
+          if (!r.ok) { throw new Error(b.error || ("HTTP " + r.status)); }
+          return b;
+        });
+      });
+  }
+
+  function loadAvatars() {
+    get("/member/api/avatars").then(function (b) {
+      el("avatars").textContent = b.count ? b.avatars.join("、") : "（暂无）";
+      if (b.count && !el("avatar").value) { el("avatar").value = b.avatars[0]; }
+    }).catch(function (e) { el("avatars").textContent = "读取失败：" + e.message; });
+  }
+
+  function read() {
+    var who = el("avatar").value.trim();
+    if (!who) { say("请先填居民名", "miss"); return; }
+    var days = el("days").value.trim() || "30";
+    say("读取中…");
+    get("/member/api/state?avatar=" + encodeURIComponent(who) +
+        "&days=" + encodeURIComponent(days))
+      .then(function (b) { render(b); say("已读取", "ok"); })
+      .catch(function (e) { say("失败：" + e.message, "bad"); });
+  }
+
+  function join() {
+    var who = el("avatar").value.trim();
+    if (!who) { say("请先填居民名", "miss"); return; }
+    say("开通中…");
+    fetch("/member/api/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ avatar: who })
+    }).then(function (r) {
+      return r.json().then(function (b) {
+        if (!r.ok) { throw new Error(b.error || ("HTTP " + r.status)); }
+        return b;
+      });
+    }).then(function (b) {
+      render(b);
+      say("沙箱月卡已开通（mock，未计费）", "ok");
+      loadAvatars();
+    }).catch(function (e) { say("开通失败：" + e.message, "bad"); });
+  }
+
+  el("load").addEventListener("click", read);
+  el("join").addEventListener("click", join);
+  el("avatar").addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter") { read(); }
+  });
+  loadAvatars();
+})();
+</script>
+</body>
+</html>

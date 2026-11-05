@@ -1,0 +1,20 @@
+=== BigDomain member face suite (R2487) ===
+legs=2 identical=True rc=0/0
+
+PASS AC-MFN1: page=8752B disk=8752B both_200=True
+PASS AC-MFN2: blank=400/E_NO_AVATAR days=400/E_BAD_BODY get404=404 post404=404
+PASS AC-MFN3: active=False tiers=[] cert=False
+PASS AC-MFN4: join=200 amount=1990 tiers=['experience'] cert=True periods=1
+PASS AC-MFN5: disclaimer_match=True ai_label='AI 生成' avatars=['alice']
+PASS AC-MFN6: external=none member_paths=3 ascii=True egress=0
+live: state=200 bytes=4187
+SUITE 6/6 green
+--- leg 2 ---
+PASS AC-MFN1: page=8752B disk=8752B both_200=True
+PASS AC-MFN2: blank=400/E_NO_AVATAR days=400/E_BAD_BODY get404=404 post404=404
+PASS AC-MFN3: active=False tiers=[] cert=False
+PASS AC-MFN4: join=200 amount=1990 tiers=['experience'] cert=True periods=1
+PASS AC-MFN5: disclaimer_match=True ai_label='AI 生成' avatars=['alice']
+PASS AC-MFN6: external=none member_paths=3 ascii=True egress=0
+live: state=200 bytes=4187
+SUITE 6/6 green

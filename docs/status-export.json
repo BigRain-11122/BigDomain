@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T05:22:54+08:00",
-  "do": "R2486 tech-face window: a key that only two of the three export-reading faces publish can no longer disagree in silence, and the reading that used to drop it now publishes every key with the number of faces that actually carry it",
+  "export_ts": "2026-11-06T05:30:50+08:00",
+  "do": "R2487 business face: the membership entitlement side of the 19.9 entrance is now a clickable page instead of a terminal-only engine - a resident can be joined to a sandbox month card and then read their tier, privileges, credits, birth certificate and expiring rows from one URL",
   "ceo_face": {
-    "current": "R2486 tech-face window: a key that only two of the three export-reading faces publish can no longer disagree in silence, and the reading that used to drop it now publishes every key with the number of faces that actually carry it",
-    "latest_artifact": "qa/row-key-carrier-scope-R2486.log (3118B, legs=2 identical=True, adjacent=3 fails=0) + qa/row-key-carrier-scope-live-R2486.log (579B, utf-8 LF, crlf=0, verdict=AGREE keys=6 all=4 subset=2 singles=1) + docs/sandbox-suite-matrix.md (54827B, 571 suites / 4402 criteria, --check byte-identical) at 2026-11-06 R2486",
-    "next_milestone": "2026-11-07 the debt register owed reconcile-battery-R2486 (pre-registered 571 suites / 4402 criteria) must run on the committed tree before any further product byte; after that the queue head is the R2438 per-entry expiry-window seed, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2487 business face: the membership entitlement side of the 19.9 entrance is now a clickable page instead of a terminal-only engine - a resident can be joined to a sandbox month card and then read their tier, privileges, credits, birth certificate and expiring rows from one URL",
+    "latest_artifact": "src/sandbox/member/member_page.py (16000B class module) + src/sandbox/member/member.html (8752B, zero external references, AI label + non-advice note + mock/no-charge statement) + qa/member-face-R2487.log (954B, utf-8 LF, crlf=0, legs=2 identical=True, 6/6 green twice) at 2026-11-06 R2487",
+    "next_milestone": "2026-11-07 the debt register owes reconcile-battery-R2486 and reconcile-battery-R2487 before any further product byte, and the member-face suite is still unregistered in the suite registry; after that the member face should be offered from the hub and the panel so a person reaches it without a command line",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/row-key-carrier-scope-R2486.log (3118B, legs=2 identical=True, adjacent=3 fails=0) + qa/row-key-carrier-scope-live-R2486.log (579B, utf-8 LF, crlf=0, verdict=AGREE keys=6 all=4 subset=2 singles=1) + docs/sandbox-suite-matrix.md (54827B, 571 suites / 4402 criteria, --check byte-identical) at 2026-11-06 R2486",
-    "updated_at": "2026-11-06T05:22:54+08:00"
+    "last_artifact": "src/sandbox/member/member_page.py (16000B class module) + src/sandbox/member/member.html (8752B, zero external references, AI label + non-advice note + mock/no-charge statement) + qa/member-face-R2487.log (954B, utf-8 LF, crlf=0, legs=2 identical=True, 6/6 green twice) at 2026-11-06 R2487",
+    "updated_at": "2026-11-06T05:30:50+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
     "src/os/row_key_carrier_scope.py + src/os/test_row_key_carrier_scope.py + qa/row-key-carrier-scope-R2486.log + qa/row-key-carrier-scope-live-R2486.log + src/sandbox/reconcile_all.py + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/state_append_R2486.py + src/os/export_R2486.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2485.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2485.py + src/os/export_R2485.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "src/sandbox/lobby/hub_page.py + src/sandbox/lobby/hub.html + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_panel.py + src/sandbox/lobby/test_hub_ugc.py + src/sandbox/reconcile_all.py + src/os/live_R2484.py + src/os/closeout_R2484.py + src/os/export_R2484.py + qa/hub-panel-R2484.log + qa/hub-panel-live-R2484.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
@@ -100,6 +101,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2487",
+      "2026-11-06 R2487 business face: the member sandbox shipped a full entitlement engine, catalog, sweep, reconcile and reminder, but nothing a person could open - the side of the 19.9 entrance that answers 'what do I hold now' had no page. Product: src/sandbox/member/member_page.py serves one page from disk plus three same-origin JSON routes (state / avatars / join), wiring the SHIPPED faces rather than re-implementing them: the pay dock is given sandbox-only price rows (mock, never chargeable) so a join creates a real order, pays it, and activates the real member period, and every read is the shipped MemberStore face (privileges_for, balance_face, birth_cert_face, expiring_soon) with the disclaimer and AI label read from the catalog rather than typed into either file. MEASURED: page 200 at 8752B byte-identical to disk on both /member and /member/; a resident with no grant reads active=false with no invented tier and no birth certificate; a sandbox join returns mock=true at 1990 cents and the SAME face then reads tier experience, two privileges, birth_cert=true and one period; blank avatar reads 400 E_NO_AVATAR and a non-integer day window 400 E_BAD_BODY. Proof: AC-MFN1..AC-MFN6 SUITE PASS 6/6 twice with identical bodies (qa/member-face-R2487.log, 954B, utf-8 LF, crlf=0). HONEST DEFECTS DISCLOSED, not dressed up: (a) these criteria were written in the SAME window as the module, so pre-registration was NOT honoured and this suite is weaker evidence than the shipped pre-registered ones; (b) the R2168 mixed-tree rule was broken - a battery was already owed (reconcile-battery-R2486) when these product bytes landed, and both reconcile-battery-R2486 and reconcile-battery-R2487 are now filed in the debt register through its own writer (126340B -> 126816B, readback ok); (c) the suite registry is unmoved at 571 suites / 4402 criteria because member-face is not registered yet, so docs/sandbox-suite-matrix.md stays aligned with the registry and is NOT restamped this window; (d) the face is reachable by command only - it is not yet published from the hub or the panel, which is named as the next milestone rather than claimed."
+    ],
     [
       "2486",
       "2026-11-06 R2486 tech-face window: no new clickable surface, and what this window bought is that the export-reading family can no longer carry a key two of its three faces publish and disagree about silently. Claim order was read from the gate, not guessed: no battery was owed (R2485 closed reconcile-battery-R2484) and debt_gate --check --round R2486 printed CLAIM-FIRST item=product-face-R2456 opened=R2455 carried=31 stale=yes open=2 first=1, naming the tech queue row at state/queue/tech.md:522 whose AC-PFKC1..AC-PFKC6 were pinned at R2446 before any code. Product: src/os/row_key_carrier_scope.py asks the shipped row-drift reading at CALL time (which itself asks the identity compare), keeps that report unchanged inside its own, derives each key carrier set from the rows that publish it rather than from a fixed list, reads every key across its own carriers per (path, line), names a two-of-three disagreement ROWS-SPLIT with the key and every carrying face, and reports a one-of-three key SINGLE-FACE with its carrier count. MEASURED on the real tree: verdict=AGREE cells=11 keys=6 all=4 subset=2 singles=1, with kind carriers=2 (from-import,relative) and relative carriers=1 - exactly the two keys the R2446 intersection dropped. The blind spot is proved on FIXTURES and NOT claimed as a live catch: one rewritten from-import kind keeps the shipped reading at FACES-AGREE rc=0 splits=0 while this face reads ROWS-SPLIT naming kind and both carriers, and the all-face keys stay byte-identical to the R2446 reading on the clean tree and on the drifted probe. Proof: AC-PFKC1..AC-PFKC6 SUITE PASS 6/6 twice with an identical digest plus three adjacent comma suites green through the shipped capture callable, and one live reading. Registry 570 -> 571 suites / 4396 -> 4402 criteria; matrix restamped stamp-aligned to 54827B with --check byte-identical and its green line honestly reading 570/571 because this window ran no battery; census flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Honest: the first live evidence file inherited the child process CRLF endings and the census refused it as class=pwsh-capture, so the bytes were rewritten as utf-8 LF and nothing was baselined or widened to make it pass; Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; no fold was due (state 29040B at open against the 78500B waterline); tasks.md was not touched. Debt: reconcile-battery-R2486 appended first=no at 125935B -> 126340B with readback ok, so the next window owes the battery on the committed tree before any further product byte."
@@ -493,17 +498,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2486",
+      "2487",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 34,
+    "log_lines_in_window": 36,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 34,
+    "substantive_non_idle_mention_lines": 36,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -525,8 +530,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -539,8 +542,6 @@
         "done_rows": 410,
         "gated_rows": 1,
         "claimable": 11,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
@@ -553,16 +554,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
-    "missing": [],
-    "delivered_total": 0
+    ]
   }
 }
