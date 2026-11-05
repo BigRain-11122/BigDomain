@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T22:23:34+08:00",
-  "do": "R2477 BUSINESS window: one command now brings the whole sandbox up - python src/sandbox/start_all.py starts all six faces on OS-assigned ports, proves each socket really accepts and that the hub's own probe map reads it live, prints the single door URL, and takes the whole thing down cleanly; proved twice 6/6 plus a live run where all six faces answered 200",
+  "export_ts": "2026-11-05T23:56:53+08:00",
+  "do": "R2478 VERIFICATION window: the full reconcile battery ran on the committed tree and came back RED at 564/566 - one evidence-dialect drift and one 300s cap casualty - so the dialect defect was repaired at its birth site with a payload-identical proof (census now DRIFT-CLEAN, the red suite 8/8 alone) and the retry battery came back GREEN at 566/566 suites and exactly the 4372 pre-registered criteria; the cap casualty is measured, named and pre-registered, not silently waved through",
   "ceo_face": {
-    "current": "R2477 BUSINESS window: one command now brings the whole sandbox up - python src/sandbox/start_all.py starts all six faces on OS-assigned ports, proves each socket really accepts and that the hub's own probe map reads it live, prints the single door URL, and takes the whole thing down cleanly; proved twice 6/6 plus a live run where all six faces answered 200",
-    "latest_artifact": "src/sandbox/start_all.py (one-command launcher, pure ASCII, stdlib only, no shell) + src/sandbox/test_start_all.py (AC-STL1..AC-STL6) + qa/start-all-R2477-leg1.log & leg2.log (SUITE PASS 6/6 twice, identical verdict bodies) + qa/start-all-live-R2477.log (hub page 200 at 7104B, zero external references, six faces 200, launcher_exit=0, ports_still_open_after_stop=0)",
-    "next_milestone": "2026-11-06 the next window owes the reconcile battery first (reconcile-battery-R2477, pre-registered 566 suites / 4372 criteria) on the committed tree before any product byte; after that the named business increment stays the half of the R2475 candidate this window did not reach - letting the hub page START a face from the browser instead of only from a terminal",
+    "current": "R2478 VERIFICATION window: the full reconcile battery ran on the committed tree and came back RED at 564/566 - one evidence-dialect drift and one 300s cap casualty - so the dialect defect was repaired at its birth site with a payload-identical proof (census now DRIFT-CLEAN, the red suite 8/8 alone) and the retry battery came back GREEN at 566/566 suites and exactly the 4372 pre-registered criteria; the cap casualty is measured, named and pre-registered, not silently waved through",
+    "latest_artifact": "qa/reconcile-all-R2478-leg2.log (RUNNER PASS 566/566 suites, controls 7/7, 4372 criteria exactly as pre-registered, 1224.2s) + qa/reconcile-all-R2478.log (the red leg, kept) + src/os/repair_R2478.py (dialect repair, payload_equal=True on all three captures, atomic replace, byte read-back) + docs/sandbox-suite-matrix.md (54474B, self-describing green=566/566, --check byte-identical) + state/debt.md (reconcile-battery-R2477 closed, runner-suite-timeout-cap opened)",
+    "next_milestone": "2026-11-06 the next window owes a BUSINESS face (CEO standing order OB-20261105-003656-879) and should name the supersession of the carried audit row product-face-R2456; the two named candidates are letting the hub page START a face from the browser (half of the R2475 candidate still undone) and the pre-registered AC-RSC1..AC-RSC6 timeout-cap work, which must land with its criteria because the deployed headroom fixture pins the 300s cap as a reading",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/start_all.py (one-command launcher, pure ASCII, stdlib only, no shell) + src/sandbox/test_start_all.py (AC-STL1..AC-STL6) + qa/start-all-R2477-leg1.log & leg2.log (SUITE PASS 6/6 twice, identical verdict bodies) + qa/start-all-live-R2477.log (hub page 200 at 7104B, zero external references, six faces 200, launcher_exit=0, ports_still_open_after_stop=0)",
-    "updated_at": "2026-11-05T22:23:34+08:00"
+    "last_artifact": "qa/reconcile-all-R2478-leg2.log (RUNNER PASS 566/566 suites, controls 7/7, 4372 criteria exactly as pre-registered, 1224.2s) + qa/reconcile-all-R2478.log (the red leg, kept) + src/os/repair_R2478.py (dialect repair, payload_equal=True on all three captures, atomic replace, byte read-back) + docs/sandbox-suite-matrix.md (54474B, self-describing green=566/566, --check byte-identical) + state/debt.md (reconcile-battery-R2477 closed, runner-suite-timeout-cap opened)",
+    "updated_at": "2026-11-05T23:56:53+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2478.log + qa/reconcile-all-R2478-leg2.log + src/os/repair_R2478.py + src/os/launch_battery_R2478.py + src/os/seed_queue_R2478.py + qa/start-all-R2477-leg1.log + qa/start-all-R2477-leg2.log + qa/start-all-live-R2477.log + docs/sandbox-suite-matrix.md + state/debt.md + state/queue/tech.md + src/os/state.json + src/os/state_append_R2478.py + src/os/export_R2478.py + docs/status-export.json + heartbeat.txt",
     "src/sandbox/start_all.py + src/sandbox/test_start_all.py + src/sandbox/reconcile_all.py + qa/start-all-R2477-leg1.log + qa/start-all-R2477-leg2.log + qa/start-all-live-R2477.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/backlog.md + src/os/state_append_R2477.py + src/os/export_R2477.py + docs/status-export.json + heartbeat.txt",
     "qa/reconcile-all-R2476.log + logs/battery-R2476-stdout.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/backlog.md + src/os/state_append_R2476.py + src/os/export_R2476.py + docs/status-export.json + heartbeat.txt",
     "src/sandbox/lobby/hub_page.py + src/sandbox/lobby/hub.html + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_ugc.py + src/sandbox/lobby/test_hub_ledger_live.py + src/sandbox/reconcile_all.py + qa/hub-ugc-R2475.log + qa/hub-ugc-live-R2475.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/export_R2475.py + src/os/state.json + src/os/backlog.md + docs/status-export.json",
@@ -91,6 +92,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2478",
+      "2026-11-05 R2478 VERIFICATION window on the battery R2477 owed (reconcile-battery-R2477, pre-registered at 566 suites / 4372 criteria), because the R2168 mixed-tree rule puts the battery ahead of any further product byte. Five-silence scan at open was clean at HEAD 23179787 with an empty git status and no index.lock, zero @BigDomain ledger rows, the content-addressed decisions diff reading new=0 against the 142-token baseline, the group orders tail unchanged at 2026-11-05 20:22, benchmarks refreshed 2026-11-03 inside the seven-day gate. LEG 1 WAS RED at 564/566 in 1603.6s and both reds were real. (a) reconcile-daily-census named drift(exit=2) because the R2477 window wrote three of its own evidence captures outside the one UTF-8 LF single-writer law - start-all-live-R2477.log as ps-utf16 and both suite legs as utf-8-sig with CRLF. Repair landed at the birth site: each file decoded, the line set proved identical through run_identity.normalize (payload_equal=True on all three), rewritten UTF-8 LF with an atomic os.replace and a byte read-back (922B -> 447B, 103B -> 93B twice, crlf=0 bom=False), committed ALONE as b4e1ac93 before any retry, after which the census reads flags=0 DRIFT-CLEAN and the suite reads 8/8 alone. (b) ledger-apimarket-reportclaims exit=124 was the flat 300s per-suite cap, not an assertion: the same suite passes 8/8 alone in 198s, and the shipped headroom reader already reads three ledger suites in the band (232.2s / 268.1s / 300.1s against 300s), so this is the third casualty of the same cap. It is NOT fixed here, and saying why is the point: the deployed os-runner-suite-timeout-headroom fixture pins the 300s default as a reading, so a bare cap raise would make that instrument lie - instead a debt row runner-suite-timeout-cap was appended through its writer (123367B -> 124306B, readback ok) and a tech seed row was landed with AC-RSC1..AC-RSC6 pinned before any code. LEG 2 WAS GREEN on the repaired committed tree b4e1ac93: RUNNER PASS 566/566 suites, controls 7/7, and the closing line reads exactly 4372 criteria, the pre-registered total, in 1224.2s, with TMP RECLAIM 932/932 and both legs kept as evidence. The four follow-up sections ran in the designed order: a designed matrix FAIL at 54461B against 54474B with no byte written, a stamp-aligned regeneration from this round own green evidence reading green=566/566, a byte-identical --check, then VERDICT R2478 PASS with fingerprint CLEAN, profile byte-identical and census DRIFT-CLEAN. Debt: reconcile-battery-R2477 closed through debt_close at its predicted 123363B -> 123367B (line=203, open 3->2, done 181->182, readback ok) and no successor battery was registered because no product src byte moved. Honest: this is a ZERO product-point window - nothing a CEO could open was rebuilt; what it bought is a proved registry on the exact tree R2477 committed, a repair that is proven payload-identical rather than trusted, and a timeout defect that is named instead of excused by machine load; Docker is absent so a containerised bring-up stays unproved; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched."
+    ],
     [
       "2477",
       "2026-11-05 R2477 BUSINESS window delivered (CEO standing order OB-20261105-003656-879, real output only; it supersedes the carried audit row product-face-R2456 by name, which stays open and claimable). Five-silence scan at open was clean at HEAD 92e5e494 with an empty git status and no index.lock, zero unreplied @BigDomain ledger rows, the content-addressed decisions diff naming ZERO new tokens against the baseline, the group orders tail unchanged at 2026-11-05 20:22, benchmarks refreshed 2026-11-03 inside the seven-day gate, and tech head AC-PFKC1 with claimable=11 so no idle declaration was available. SHIPPED a launcher that closes the last step the hub could not: the hub is read-only, so every card it publishes ended in 'start this yourself', and a person needed five commands for six faces. start_all.py picks OS-assigned ports for eight sockets, starts the four shipped entry modules unchanged via argument vectors led by sys.executable (no shell, CREATE_NO_WINDOW so no console flashes), waits until every socket accepts, then asks the hub's own probe map what it publishes, so the URL printed is the hub's answer rather than a literal. Modes: serve (until a stop file appears) and --check (start, prove, tear down, report, exit). AC-STL1..AC-STL6 were pinned in src/os/backlog.md BEFORE the module, suite or registry row existed and read SUITE PASS 6/6 twice with identical verdict bodies; the live leg read hub 200 at 7104B with zero external references and all six faces 200 through the published URLs (checkout 8051B, city 6653B, gate 7157B, ledger 7977B, lobby 10077B, ugc 8816B), launcher_exit=0 and ports_still_open_after_stop=0. Two real defects were found by running and repaired at their birth sites rather than by loosening a criterion: the suite read a report left by the previous leg before this run rewrote it, and a face name was used as a plan key (lobby's socket is planned as web, now published as face_ports through FACE_PORT_KEY). Registry moved 565 -> 566 suites and 4366 -> 4372 criteria; the matrix was regenerated stamp-aligned to 54461B with --check byte-identical and its green line honestly reading 565/566; reconcile-battery-R2477 was appended first=no at its predicted 123180B -> 123363B with readback ok. Honest: half of the named candidate is met (a terminal command brings everything up) and half is not (the page still cannot start a face from the browser) and that is stated as half met; Docker is absent so a containerised bring-up stays unproved; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched."
@@ -448,21 +453,21 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2477",
+      "2478",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 27,
+    "log_lines_in_window": 36,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 27,
+    "substantive_non_idle_mention_lines": 36,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 13,
     "queue_explore_open": 10
   },
   "queue": {
@@ -488,10 +493,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 12,
+        "open_rows": 13,
         "done_rows": 409,
         "gated_rows": 1,
-        "claimable": 11,
+        "claimable": 12,
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
