@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T22:22:01+08:00",
+  "export_ts": "2026-11-05T22:23:34+08:00",
   "do": "R2477 BUSINESS window: one command now brings the whole sandbox up - python src/sandbox/start_all.py starts all six faces on OS-assigned ports, proves each socket really accepts and that the hub's own probe map reads it live, prints the single door URL, and takes the whole thing down cleanly; proved twice 6/6 plus a live run where all six faces answered 200",
   "ceo_face": {
     "current": "R2477 BUSINESS window: one command now brings the whole sandbox up - python src/sandbox/start_all.py starts all six faces on OS-assigned ports, proves each socket really accepts and that the hub's own probe map reads it live, prints the single door URL, and takes the whole thing down cleanly; proved twice 6/6 plus a live run where all six faces answered 200",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-06 the next window owes the reconcile battery first (reconcile-battery-R2477, pre-registered 566 suites / 4372 criteria) on the committed tree before any product byte; after that the named business increment stays the half of the R2475 candidate this window did not reach - letting the hub page START a face from the browser instead of only from a terminal",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/start_all.py (one-command launcher, pure ASCII, stdlib only, no shell) + src/sandbox/test_start_all.py (AC-STL1..AC-STL6) + qa/start-all-R2477-leg1.log & leg2.log (SUITE PASS 6/6 twice, identical verdict bodies) + qa/start-all-live-R2477.log (hub page 200 at 7104B, zero external references, six faces 200, launcher_exit=0, ports_still_open_after_stop=0)",
-    "updated_at": "2026-11-05T22:22:01+08:00"
+    "updated_at": "2026-11-05T22:23:34+08:00"
   },
   "depts": [
     {
@@ -455,10 +455,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 27,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 26,
+    "substantive_non_idle_mention_lines": 27,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
