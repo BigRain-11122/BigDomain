@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T12:40:46+08:00",
+  "export_ts": "2026-11-05T12:41:53+08:00",
   "do": "R2468 verification window: the content-gate console shipped at R2467 is now PROVED end to end - the full reconcile battery reads 561/561 suites green at exactly the pre-registered 4342 criteria on the committed tree, so every sandbox face a person can open carries a green registry behind it",
   "ceo_face": {
     "current": "R2468 verification window: the content-gate console shipped at R2467 is now PROVED end to end - the full reconcile battery reads 561/561 suites green at exactly the pre-registered 4342 criteria on the committed tree, so every sandbox face a person can open carries a green registry behind it",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face rather than another audit face, superseding the carried row product-face-R2456 and naming the supersession plainly; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2468.log (RUNNER PASS 561/561 suites, controls 7/7, 4342 criteria, 1205.5s, one utf-8 LF writer) + docs/sandbox-suite-matrix.md (54116B, green=561/561, --check byte-identical)",
-    "updated_at": "2026-11-05T12:40:46+08:00"
+    "updated_at": "2026-11-05T12:41:53+08:00"
   },
   "depts": [
     {
@@ -410,10 +410,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 79,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 79,
+    "substantive_non_idle_mention_lines": 81,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
