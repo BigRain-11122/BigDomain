@@ -1,0 +1,8 @@
+round=R2486 face=row_key_carrier_scope root=src/os exit=0
+ROW KEY CARRIER SCOPE os-row-key-carrier-scope verdict=AGREE cells=11 keys=6 all=4 subset=2 singles=1
+  KEY kind carriers=2 scope=subset faces=from-import,relative
+  KEY module carriers=3 scope=all-faces faces=from-import,identity,relative
+  KEY receiver carriers=3 scope=all-faces faces=from-import,identity,relative
+  KEY relative carriers=1 scope=subset faces=relative
+  KEY state carriers=3 scope=all-faces faces=from-import,identity,relative
+  KEY text carriers=3 scope=all-faces faces=from-import,identity,relative

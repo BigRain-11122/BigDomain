@@ -5670,6 +5670,17 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-comma-binding-face-row-drift",
      os.path.join("..", "os", "test_comma_binding_face_row_drift.py"), 6),
+    # R2486: the row-drift reading compares only the keys EVERY face carries,
+    # so MEASURED at R2446 the intersection was module/receiver/state/text and
+    # `kind` (from-import + relative, 22 rows over 11 files) and `relative`
+    # (relative only, 11 rows) were dropped in silence. Every published key is
+    # now read across the faces that actually carry it: a two-of-three
+    # disagreement is ROWS-SPLIT naming both carriers and a one-of-three key is
+    # SINGLE-FACE with its carrier count instead of silence.
+    # (AC-PFKC1..AC-PFKC6 were pinned in state/queue/tech.md:522 as the R2446
+    # seed row BEFORE the code.)
+    ("os-row-key-carrier-scope",
+     os.path.join("..", "os", "test_row_key_carrier_scope.py"), 6),
     ]
 
 FAILS = 0

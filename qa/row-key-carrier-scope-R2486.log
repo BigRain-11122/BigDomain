@@ -1,0 +1,50 @@
+EVIDENCE CAPTURE round=R2486 suite=src/os/test_row_key_carrier_scope.py legs=2
+== LEG A rc=0 digest=4EEB19C7165DDA12
+PASS AC-PFKC1 a key's carriers are the faces that publish it
+PASS AC-PFKC1 dropping a key from one face narrows its own carrier set instead of a fixed list
+PASS AC-PFKC1 no fixed key list in the source
+PASS AC-PFKC2 the probe is invisible to the R2446 intersection reading
+PASS AC-PFKC2 a two-of-three key disagreement reads ROWS-SPLIT naming the key and both carriers
+PASS AC-PFKC2 the split key keeps its carrier count
+PASS AC-PFKC3 a one-of-three key is reported SINGLE-FACE with its carrier count
+PASS AC-PFKC3 a single-face key is never invented as a split
+PASS AC-PFKC3 the scope rows separate all-face keys from a subset
+PASS AC-PFKC4 every published key carries its carrier count
+PASS AC-PFKC4 the shipped R2446 reading is kept unchanged inside this report
+PASS AC-PFKC4 agreeing all-face keys keep the R2446 split reading byte for byte
+PASS AC-PFKC4 a subset-key split does not disturb the all-face reading
+PASS AC-PFKC5 every carrier row carries the pinned split keys
+PASS AC-PFKC5 the relative carrier records its own label and the seam that fired
+PASS AC-PFKC6 source is pure ASCII
+PASS AC-PFKC6 stdlib only, no network, no clock
+PASS AC-PFKC6 the module writes nothing and reads no clock
+PASS AC-PFKC6 own reconcile label
+PASS AC-PFKC6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=4EEB19C7165DDA12
+PASS AC-PFKC1 a key's carriers are the faces that publish it
+PASS AC-PFKC1 dropping a key from one face narrows its own carrier set instead of a fixed list
+PASS AC-PFKC1 no fixed key list in the source
+PASS AC-PFKC2 the probe is invisible to the R2446 intersection reading
+PASS AC-PFKC2 a two-of-three key disagreement reads ROWS-SPLIT naming the key and both carriers
+PASS AC-PFKC2 the split key keeps its carrier count
+PASS AC-PFKC3 a one-of-three key is reported SINGLE-FACE with its carrier count
+PASS AC-PFKC3 a single-face key is never invented as a split
+PASS AC-PFKC3 the scope rows separate all-face keys from a subset
+PASS AC-PFKC4 every published key carries its carrier count
+PASS AC-PFKC4 the shipped R2446 reading is kept unchanged inside this report
+PASS AC-PFKC4 agreeing all-face keys keep the R2446 split reading byte for byte
+PASS AC-PFKC4 a subset-key split does not disturb the all-face reading
+PASS AC-PFKC5 every carrier row carries the pinned split keys
+PASS AC-PFKC5 the relative carrier records its own label and the seam that fired
+PASS AC-PFKC6 source is pure ASCII
+PASS AC-PFKC6 stdlib only, no network, no clock
+PASS AC-PFKC6 the module writes nothing and reads no clock
+PASS AC-PFKC6 own reconcile label
+PASS AC-PFKC6 own suite is wired into the reconcile runner
+SUITE PASS 6/6 criteria
+== ADJACENT 3
+== src/os/test_comma_binding_face_row_drift.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_comma_binding_identity_face_compare.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_comma_binding_sibling_faces.py rc=0 SUITE PASS criteria=6 pass=6 fail=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=4EEB19C7165DDA12

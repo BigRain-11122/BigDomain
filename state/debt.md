@@ -206,6 +206,7 @@ column-0 checkbox starts one.
 - [x] opened=R2481 | item=reconcile-battery-R2481 | note=pre-registered target 568 suites / 4384 criteria; owed by the R2481 panel face before any further product byte (R2168 mixed-tree rule) | closed=R2483
 - [x] opened=R2482 | item=reconcile-battery-R2482 | note=battery owed on the committed tree before any further product byte (R2168 mixed-tree rule); pre-registered target 569 suites / 4390 criteria | closed=R2483
 - [x] opened=R2484 | item=reconcile-battery-R2484 | note=R2484 shipped the hub control-panel face and one suite, moving the registry to 570 suites and 4396 criteria, so the R2168 mixed-tree rule puts the full reconcile battery on the committed R2484 tree first next window at that pre-registered target. One neighbouring pinned criterion was amended openly where the product legitimately moved it: test_hub_ugc AC-HUG1 now carries panel 8099 as a seventh face_ports member, keeping the equality law rather than loosening it. | closed=R2485
+- [ ] opened=R2486 | item=reconcile-battery-R2486 | note=R2486 added one product module src/os/row_key_carrier_scope.py and one six-criteria suite, and moved the registry to 571 suites / 4402 criteria, so the R2168 mixed-tree rule makes the NEXT window run a full battery on the committed tree BEFORE any further product byte. Pre-registered target: 571 suites green and exactly 4402 criteria. | first=no
 
 ## Closed
 

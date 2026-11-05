@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 570 | 4396 | 570/570 | R2485 |
+| 571 | 4402 | 570/570 | R2485 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -608,7 +608,8 @@
 | 568 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.5 |
 | 569 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
 | 570 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
-|  | 合计 |  | 4396 | green 570 / FAIL 0 / no-evidence 0 |  |
+| 571 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4402 | green 570 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
