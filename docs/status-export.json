@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T16:07:18+08:00",
+  "export_ts": "2026-11-05T16:10:53+08:00",
   "do": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
   "ceo_face": {
     "current": "R2474 VERIFICATION window: the full reconcile battery ran on the tree R2473 committed and passed on its FIRST leg - 564 suites and 4360 criteria, exactly the totals pre-registered - so the UGC console shipped last window is now PROVED rather than only shipped",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face and says plainly that it supersedes the carried audit row product-face-R2456: the named candidate is wiring the ledger console (R2469) and the UGC console (R2473) into the lobby hub live map, which both business windows disclosed as not yet done; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2474.log (862025B at the green leg, 863975B with both follow-up legs, RUNNER PASS 564/564 suites, controls 7/7, 1047.8s) + docs/sandbox-suite-matrix.md (54326B, regenerated from this round own green evidence, --check byte-identical, green line self-describing at 564/564)",
-    "updated_at": "2026-11-05T16:07:18+08:00"
+    "updated_at": "2026-11-05T16:10:53+08:00"
   },
   "depts": [
     {
@@ -440,10 +440,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
