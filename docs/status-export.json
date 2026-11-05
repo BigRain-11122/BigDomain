@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T02:46:00+08:00",
-  "do": "R2482 business window: the sandbox control panel now starts the lobby too - the one process that owns ws, city, web, hub and gate is given five distinct OS ports up front and its hub URL is published only after that socket accepts, so the face the product is about can be brought up from the browser instead of a terminal",
+  "export_ts": "2026-11-06T03:55:17+08:00",
+  "do": "R2483 verification window: the two batteries R2481 and R2482 owed are now run and green on a committed tree - 569/569 suites and exactly 4390 criteria - and the battery earned its keep by catching four R2482 evidence files written in PowerShell UTF-16, which were re-captured through the shipped utf-8 writer",
   "ceo_face": {
-    "current": "R2482 business window: the sandbox control panel now starts the lobby too - the one process that owns ws, city, web, hub and gate is given five distinct OS ports up front and its hub URL is published only after that socket accepts, so the face the product is about can be brought up from the browser instead of a terminal",
-    "latest_artifact": "src/sandbox/panel.html (7738B, self-contained, footer now tells the four-face truth) + qa/panel-lobby-R2482-a.log and -b.log (1264B each, SUITE PASS 6/6 twice) + qa/panel-lobby-live-R2482.log (869B: lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, hub page 200 at 7104B, stop left the hub port refused) at 2026-11-06 02:44",
-    "next_milestone": "2026-11-07 the next window owes reconcile-battery-R2482 on the committed tree before any further product byte (569 suites / 4390 criteria pre-registered, R2168 mixed-tree rule); after that the strongest product candidate is wiring the panel into the hub payload so the one entry page leads to the control panel, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2483 verification window: the two batteries R2481 and R2482 owed are now run and green on a committed tree - 569/569 suites and exactly 4390 criteria - and the battery earned its keep by catching four R2482 evidence files written in PowerShell UTF-16, which were re-captured through the shipped utf-8 writer",
+    "latest_artifact": "qa/reconcile-all-R2483-retry.log (864674B, utf-8 LF, closing line 'RUNNER PASS (569/569 suites green, reconcile controls 7/7, 1652.7s)' with an independent recount of exactly 4390 criteria) + qa/panel-lobby-R2483.log (1532B, identical legs, digest 10C09149A5755E9A) + qa/start-all-R2483.log (464B) + docs/sandbox-suite-matrix.md (54691B, green=569/569, --check byte-identical) at 2026-11-06 R2483",
+    "next_milestone": "2026-11-07 the battery debt is clear and the gate now names product-face-R2456 (prefix AC-PFKC1) as CLAIM-FIRST, so the next window owes a BUSINESS face rather than another battery; the strongest candidate remains wiring the control panel into the hub payload so the one entry page leads to it, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/panel.html (7738B, self-contained, footer now tells the four-face truth) + qa/panel-lobby-R2482-a.log and -b.log (1264B each, SUITE PASS 6/6 twice) + qa/panel-lobby-live-R2482.log (869B: lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, hub page 200 at 7104B, stop left the hub port refused) at 2026-11-06 02:44",
-    "updated_at": "2026-11-06T02:46:00+08:00"
+    "last_artifact": "qa/reconcile-all-R2483-retry.log (864674B, utf-8 LF, closing line 'RUNNER PASS (569/569 suites green, reconcile controls 7/7, 1652.7s)' with an independent recount of exactly 4390 criteria) + qa/panel-lobby-R2483.log (1532B, identical legs, digest 10C09149A5755E9A) + qa/start-all-R2483.log (464B) + docs/sandbox-suite-matrix.md (54691B, green=569/569, --check byte-identical) at 2026-11-06 R2483",
+    "updated_at": "2026-11-06T03:55:17+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2483.log + qa/reconcile-all-R2483-retry.log + qa/panel-lobby-R2483.log + qa/start-all-R2483.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/state_append_R2483.py + src/os/export_R2483.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/test_panel_lobby.py + src/sandbox/test_panel.py + src/sandbox/reconcile_all.py + qa/panel-lobby-R2482-a.log + qa/panel-lobby-R2482-b.log + qa/panel-lobby-live-R2482.log + qa/panel-R2482-adjacent.log + qa/start-all-R2482-adjacent.log + state/debt.md + src/os/state.json + src/os/append_R2482.py + src/os/export_R2482.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/test_panel.py + src/sandbox/reconcile_all.py + qa/panel-R2481.log + qa/panel-live-R2481.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/panel_live_R2481.py + src/os/append_R2481.py + src/os/export_R2481.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2480.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/closeout_R2480.py + src/os/export_R2480.py + src/os/launch_battery_R2480.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
@@ -96,6 +97,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2483",
+      "2026-11-06 R2483 verification window: the two owed batteries were run and the first leg was RED - 568/569 suites with one real failure, reconcile-daily-census cd7-live-real-tree exit=2. The suite reproduced alone in 5s and the census named the cause in four lines: the four R2482 evidence files (panel-R2482-adjacent.log, panel-lobby-R2482-a.log, panel-lobby-R2482-b.log, start-all-R2482-adjacent.log) were PowerShell UTF-16, class=ps-utf16, DRIFT-FLAG. Repaired at the birth site: those four files were deleted and the evidence re-taken through the shipped src/os/evidence_capture.py as two utf-8 LF files (qa/panel-lobby-R2483.log 1532B, qa/start-all-R2483.log 464B, both crlf=0, no BOM), after which the census read DRIFT-CLEAN flags=0 and the red suite read 8/8 alone; the repair was committed as 6f2e6eb4 so the retry ran on a committed tree. RETRY GREEN: qa/reconcile-all-R2483-retry.log 864674B, 'RUNNER PASS (569/569 suites green, reconcile controls 7/7, 1652.7s)', 4390 criteria by independent recount, zero FAIL rows. Four follow-up sections: matrix FAIL then regenerated stamp-aligned to 54691B with --check byte-identical, so VERDICT R2483 PASS failing=none. Debt: reconcile-battery-R2481 and reconcile-battery-R2482 both closed through their shipped writer (125387B -> 125391B -> 125395B, readback ok each); no successor battery is owed because no registry module or suite changed post-battery and the registry is unmoved at 569/4390. Honest: zero product points, the defect was self-inflicted by R2482 and only surfaced because a battery finally ran, my own 'reconcile_all.py --help' invocation created a stray file named '--help' (deleted before commit, no evidence written, and the runner has no unknown-flag refusal - an unfixed rough edge, not claimed as fixed), the four old R2482 evidence paths no longer exist by design, Docker is absent so no containerised bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, and tasks.md was not touched."
+    ],
     [
       "2482",
       "2026-11-06 R2482 business window delivered: the panel can start the lobby. SHIPPED src/sandbox/panel.py lobby leg (LOBBY_PORT_KEYS / LOBBY_FLAGS, five distinct OS ports assigned before the spawn, published port = hub, the whole ports map and the exact reproducing command returned, stop and server shutdown both kill the child) plus src/sandbox/panel.html footer rewritten to the four-face truth (7738B) plus one registry row panel-lobby(6). PROOF: AC-LBY1..AC-LBY6 written in this window before the code and the suite, reading SUITE PASS 6/6 TWICE with identical criterion lines (qa/panel-lobby-R2482-a.log and -b.log, 1264B each) and two adjacent suites green (qa/panel-R2482-adjacent.log, qa/start-all-R2482-adjacent.log, both 6/6); the live leg drove a REAL panel process over HTTP - page 200 at 7738B, lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, the hub socket accepting at the moment of the answer, hub page 200 at 7104B, state live=true port=51251, stop 200, hub port refused afterwards. THREE pinned criteria amended openly where the product legitimately moved them: AC-PAN2's exact face list gained the fourth id rather than loosening, AC-PAN4's unknown-face example moved from lobby to nope with the assertion unchanged, and AC-LBY1's module expectation was corrected to the existing src-relative contract after the first run disclosed rather than dressed up. Registry 569 suites / 4390 criteria; reconcile-battery-R2482 appended first=no at 125178B -> 125387B with readback ok, so the next window owes the battery before any further product byte. Honest: the panel is not linked from the hub payload, a panel-started lobby is invisible to the hub's own liveness map, only the hub port is measured live, Docker is absent so no containerised bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, and tasks.md was not touched."
@@ -473,17 +478,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2482",
+      "2483",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 68,
+    "log_lines_in_window": 76,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 68,
+    "substantive_non_idle_mention_lines": 76,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
