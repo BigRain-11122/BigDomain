@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T02:17:22+08:00",
-  "do": "R2481 business window: the sandbox gained a control panel - one page with a Start and a Stop verb per face, and the Start button really spawns the shipped module on an OS-assigned port and returns the URL only after that socket accepts, which is the half R2477 disclosed as unmet",
+  "export_ts": "2026-11-06T02:46:00+08:00",
+  "do": "R2482 business window: the sandbox control panel now starts the lobby too - the one process that owns ws, city, web, hub and gate is given five distinct OS ports up front and its hub URL is published only after that socket accepts, so the face the product is about can be brought up from the browser instead of a terminal",
   "ceo_face": {
-    "current": "R2481 business window: the sandbox gained a control panel - one page with a Start and a Stop verb per face, and the Start button really spawns the shipped module on an OS-assigned port and returns the URL only after that socket accepts, which is the half R2477 disclosed as unmet",
-    "latest_artifact": "src/sandbox/panel.html (7590B, self-contained) + qa/panel-R2481.log (SUITE PASS 6/6 twice, digest CEB6D522A66597E5, two adjacent suites green) + qa/panel-live-R2481.log (362B, live leg: page 200 at 7590B, ledger started on port 53571, published URL 200 with the shipped 7977B page byte-identical, stop left the port refused)",
-    "next_milestone": "2026-11-07 the next window owes the battery on the committed tree before any further product byte (reconcile-battery-R2481, pre-registered 568 suites / 4384 criteria, R2168 mixed-tree rule); after that the strongest product candidate is wiring the panel into the hub payload so the one entry page can reach it, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2482 business window: the sandbox control panel now starts the lobby too - the one process that owns ws, city, web, hub and gate is given five distinct OS ports up front and its hub URL is published only after that socket accepts, so the face the product is about can be brought up from the browser instead of a terminal",
+    "latest_artifact": "src/sandbox/panel.html (7738B, self-contained, footer now tells the four-face truth) + qa/panel-lobby-R2482-a.log and -b.log (1264B each, SUITE PASS 6/6 twice) + qa/panel-lobby-live-R2482.log (869B: lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, hub page 200 at 7104B, stop left the hub port refused) at 2026-11-06 02:44",
+    "next_milestone": "2026-11-07 the next window owes reconcile-battery-R2482 on the committed tree before any further product byte (569 suites / 4390 criteria pre-registered, R2168 mixed-tree rule); after that the strongest product candidate is wiring the panel into the hub payload so the one entry page leads to the control panel, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/panel.html (7590B, self-contained) + qa/panel-R2481.log (SUITE PASS 6/6 twice, digest CEB6D522A66597E5, two adjacent suites green) + qa/panel-live-R2481.log (362B, live leg: page 200 at 7590B, ledger started on port 53571, published URL 200 with the shipped 7977B page byte-identical, stop left the port refused)",
-    "updated_at": "2026-11-06T02:17:22+08:00"
+    "last_artifact": "src/sandbox/panel.html (7738B, self-contained, footer now tells the four-face truth) + qa/panel-lobby-R2482-a.log and -b.log (1264B each, SUITE PASS 6/6 twice) + qa/panel-lobby-live-R2482.log (869B: lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, hub page 200 at 7104B, stop left the hub port refused) at 2026-11-06 02:44",
+    "updated_at": "2026-11-06T02:46:00+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/test_panel_lobby.py + src/sandbox/test_panel.py + src/sandbox/reconcile_all.py + qa/panel-lobby-R2482-a.log + qa/panel-lobby-R2482-b.log + qa/panel-lobby-live-R2482.log + qa/panel-R2482-adjacent.log + qa/start-all-R2482-adjacent.log + state/debt.md + src/os/state.json + src/os/append_R2482.py + src/os/export_R2482.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/test_panel.py + src/sandbox/reconcile_all.py + qa/panel-R2481.log + qa/panel-live-R2481.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/panel_live_R2481.py + src/os/append_R2481.py + src/os/export_R2481.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2480.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state.json + src/os/closeout_R2480.py + src/os/export_R2480.py + src/os/launch_battery_R2480.py + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "src/sandbox/reconcile_all.py + src/os/runner_suite_timeout_cap.py + src/os/test_runner_suite_timeout_cap.py + src/os/runner_suite_timeout_headroom.py + qa/runner-timeout-cap-R2479.log + docs/sandbox-suite-matrix.md + state/debt.md + state/queue/tech.md + src/os/state.json + src/os/state_append_R2479.py + src/os/export_R2479.py + docs/status-export.json + heartbeat.txt",
@@ -95,6 +96,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2482",
+      "2026-11-06 R2482 business window delivered: the panel can start the lobby. SHIPPED src/sandbox/panel.py lobby leg (LOBBY_PORT_KEYS / LOBBY_FLAGS, five distinct OS ports assigned before the spawn, published port = hub, the whole ports map and the exact reproducing command returned, stop and server shutdown both kill the child) plus src/sandbox/panel.html footer rewritten to the four-face truth (7738B) plus one registry row panel-lobby(6). PROOF: AC-LBY1..AC-LBY6 written in this window before the code and the suite, reading SUITE PASS 6/6 TWICE with identical criterion lines (qa/panel-lobby-R2482-a.log and -b.log, 1264B each) and two adjacent suites green (qa/panel-R2482-adjacent.log, qa/start-all-R2482-adjacent.log, both 6/6); the live leg drove a REAL panel process over HTTP - page 200 at 7738B, lobby started with ws=51248 city=51249 web=51250 hub=51251 gate=51252, the hub socket accepting at the moment of the answer, hub page 200 at 7104B, state live=true port=51251, stop 200, hub port refused afterwards. THREE pinned criteria amended openly where the product legitimately moved them: AC-PAN2's exact face list gained the fourth id rather than loosening, AC-PAN4's unknown-face example moved from lobby to nope with the assertion unchanged, and AC-LBY1's module expectation was corrected to the existing src-relative contract after the first run disclosed rather than dressed up. Registry 569 suites / 4390 criteria; reconcile-battery-R2482 appended first=no at 125178B -> 125387B with readback ok, so the next window owes the battery before any further product byte. Honest: the panel is not linked from the hub payload, a panel-started lobby is invisible to the hub's own liveness map, only the hub port is measured live, Docker is absent so no containerised bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, and tasks.md was not touched."
+    ],
     [
       "2481",
       "2026-11-06 R2481 business window delivered: a person can now start a shipped sandbox face from a browser instead of a terminal. SHIPPED src/sandbox/panel.py (pure ASCII stdlib, GET /panel and /panel/ from disk, GET /panel/api/state with a live flag measured by TCP at call time, POST /panel/api/start spawning the shipped module through sys.executable with CREATE_NO_WINDOW and reporting the URL only after the socket accepts, POST /panel/api/stop terminating the child it owns) and src/sandbox/panel.html (7590B, zero external references, the AI label, the non-advice note and a mock/no-real-charge statement on screen) plus one registry row panel(6). PROOF: AC-PAN1..AC-PAN6 were pinned in src/os/backlog.md before the code and read SUITE PASS 6/6 twice with identical bodies (digest CEB6D522A66597E5) with two adjacent suites green in the same capture; the live leg drove the real module over HTTP - page 200 at 7590B, state naming checkout,ledger,ugc, ledger started on OS-assigned port 53571, the published URL answering 200 with bytes byte-identical to ledger.html (7977B), stop answered 200 and the port then refused a connect. ONE REAL DEFECT found by running and repaired at its birth site: the suite printed 'AC-PAN1 ... PASS' rather than a PASS/FAIL-prefixed line, so the first capture digested to the empty-string hash and the battery's ^PASS counter would have read zero criteria; the prefix was corrected, the stale evidence file deleted, and the capture re-taken. ONE AMENDMENT disclosed: AC-PAN6 first carried the copied 'imports no clock module' ban, impossible for a module that must wait on a socket, dropped before the suite existed and before any PASS was claimed. Registry 568 suites / 4384 criteria; matrix restamped stamp-aligned to 54605B with --check byte-identical (green honestly 567/568); reconcile-battery-R2481 appended first=no at 124975B -> 125178B, so the next window owes the battery before any further product byte. Honest: the panel starts three faces and not the lobby server, the hub page does not yet link to it, Docker is absent so no containerised bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait on CEO physical items, tasks.md was not touched, and no fold was due at 56704B against the 78500B waterline."
@@ -468,17 +473,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2481",
+      "2482",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 62,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 62,
+    "substantive_non_idle_mention_lines": 68,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

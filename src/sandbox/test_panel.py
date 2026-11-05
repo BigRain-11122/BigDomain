@@ -149,7 +149,9 @@ def ac_pan2():
         if code != 200:
             return report("AC-PAN2 state measured", 1, "state answered %s" % code)
         ids = [row.get("id") for row in payload.get("faces") or []]
-        if ids != ["checkout", "ledger", "ugc"]:
+        # AMENDED at R2482: the lobby joined the published faces, so the pinned
+        # three-id list gained a fourth id rather than the assertion weakening.
+        if ids != ["checkout", "ledger", "ugc", "lobby"]:
             bad += 1
             print("  AC-PAN2 face list drifted: %r" % (ids,))
         for face_id in ids:
@@ -160,7 +162,8 @@ def ac_pan2():
             cmd = row.get("cmd") or ""
             module_name = {"checkout": "checkout_demo.py",
                            "ledger": "ledger_page.py",
-                           "ugc": "ugc_page.py"}[face_id]
+                           "ugc": "ugc_page.py",
+                           "lobby": "server.py"}[face_id]
             if module_name not in cmd:
                 bad += 1
                 print("  AC-PAN2 cmd does not name the module: %r" % (cmd,))
@@ -244,7 +247,7 @@ def ac_pan4():
     bad = 0
     try:
         code, payload = jhttp(base + "/panel/api/start", "POST",
-                              {"face": "lobby"})
+                              {"face": "nope"})
         if code != 400 or payload.get("error") != "E_PANEL_UNKNOWN_FACE":
             bad += 1
             print("  AC-PAN4 unknown face answered %s %r" % (code, payload))

@@ -1,0 +1,9 @@
+panel_port=51242 accepts=True
+page=200 bytes=7738
+start=200 {"chargeable": false, "cmd": "python src/sandbox/lobby/server.py --host 127.0.0.1 --port 51248 --city-http-port 51249 --web-port 51250 --hub-port 51251 --gate-port 51252", "face": "lobby", "live": true, "mock": true, "port": 51251, "ports": {"city": 51249, "gate": 51252, "hub": 51251, "web": 51250, "ws": 51248}, "url": "http://127.0.0.1:51251/hub/"}
+hub_accepts=True
+hub_page=200 bytes=7104
+state_lobby={"cmd": "python src/sandbox/lobby/server.py --host 127.0.0.1 --port 51248 --city-http-port 51249 --web-port 51250 --hub-port 51251 --gate-port 51252", "id": "lobby", "live": true, "module": "sandbox\\lobby\\server.py", "port": 51251, "started": true, "url": "http://127.0.0.1:51251/hub/"}
+stop=200 {"face": "lobby", "live": false, "port": 51251, "stopped": true}
+hub_refused_after_stop=True
+panel_exit=1

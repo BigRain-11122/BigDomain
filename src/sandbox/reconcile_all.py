@@ -247,6 +247,11 @@ SUITES = [
     # URL only after that socket accepts (AC-PAN1..AC-PAN6 pre-registered in
     # src/os/backlog.md at R2481 BEFORE this suite and its module existed).
     ("panel", os.path.join("test_panel.py"), 6),
+    # the panel can also start the lobby: one process holding five sockets,
+    # assigned up front and proved by its hub port (AC-LBY1..AC-LBY6
+    # pre-registered in src/os/backlog.md at R2482 BEFORE this suite and the
+    # lobby leg of panel.py existed).
+    ("panel-lobby", os.path.join("test_panel_lobby.py"), 6),
     # browser lobby client (R2460, P-47-1b): the shipped WebSocket lobby gains
     # a page a person can open in a browser - GET /lobby/ plus a same-origin
     # config route that publishes the real ws port, with the frames the page

@@ -10,11 +10,13 @@ face, and the start route really spawns the shipped entry module on an
 OS-assigned port, waits until that socket accepts, and hands back the URL it
 measured - so a click is enough and no port is ever assumed free.
 
-What it starts, and why only these three: the checkout demo, the token ledger
-console and the UGC console are each their own process and their own module.
-The lobby server owns the ws, city, gate, web and hub sockets in one process,
-so starting it from here would be a different shape and is deliberately not
-offered - a panel that claimed to start it would be lying.
+What it starts: the checkout demo, the token ledger console and the UGC console
+are each their own process and their own module, so each gets one OS-assigned
+port. The lobby server owns the ws, city, web, hub and gate sockets in ONE
+process, so it is started with a whole set of ports assigned up front and is
+proved by its hub port - the address a person actually opens. A panel that
+printed a lobby URL nobody had measured would be lying, so the lobby counts as
+live only when its hub socket accepts a connection at the moment of reading.
 
 Honesty law: nothing is reported live because it was launched. A face reads
 live only when its port accepts a connection at the moment of the reading, and
@@ -42,6 +44,7 @@ STOP_ROUTE = "/panel/api/stop"
 CHECKOUT = os.path.join(HERE, "lobby", "checkout_demo.py")
 LEDGER = os.path.join(HERE, "ledger", "ledger_page.py")
 UGC = os.path.join(HERE, "ugc", "ugc_page.py")
+LOBBY = os.path.join(HERE, "lobby", "server.py")
 LEDGER_CONFIG = os.path.join(HERE, "ledger", "config.json")
 
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
@@ -55,7 +58,18 @@ FACE_MODULES = {
     "ugc": (UGC, "/ugc/",
             "python src/sandbox/ugc/ugc_page.py --host %s --port %d"),
 }
-FACE_IDS = ("checkout", "ledger", "ugc")
+# The lobby is one process holding five sockets; the hub socket is the face a
+# person opens, so the hub port is what this panel publishes and measures.
+LOBBY_PORT_KEYS = ("ws", "city", "web", "hub", "gate")
+LOBBY_FLAGS = {
+    "ws": "--port",
+    "city": "--city-http-port",
+    "web": "--web-port",
+    "hub": "--hub-port",
+    "gate": "--gate-port",
+}
+LOBBY_PATH = "/hub/"
+FACE_IDS = ("checkout", "ledger", "ugc", "lobby")
 
 MOCK_STATEMENT = (
     "MOCK / NO REAL CHARGE: every face this panel starts runs the sandbox "
@@ -120,12 +134,25 @@ class Panel(object):
         self.children = {}  # face id -> {"port": int, "proc": Popen}
 
     def url_of(self, face_id, port):
+        if face_id == "lobby":
+            return "http://%s:%d%s" % (self.host, int(port), LOBBY_PATH)
         return "http://%s:%d%s" % (self.host, int(port),
                                    FACE_MODULES[face_id][1])
 
-    def cmd_of(self, face_id, port=None):
+    def cmd_of(self, face_id, ports=None):
+        if face_id == "lobby":
+            parts = []
+            for key in LOBBY_PORT_KEYS:
+                parts.append(LOBBY_FLAGS[key])
+                parts.append(str(int(ports[key])) if ports else "0")
+            return "python src/sandbox/lobby/server.py --host %s %s" % (
+                self.host, " ".join(parts))
         template = FACE_MODULES[face_id][2]
-        return template % (self.host, int(port) if port else 0)
+        return template % (self.host, int(ports) if ports else 0)
+
+    def module_of(self, face_id):
+        path = LOBBY if face_id == "lobby" else FACE_MODULES[face_id][0]
+        return os.path.relpath(path, os.path.dirname(HERE))
 
     def face_rows(self):
         rows = []
@@ -134,6 +161,8 @@ class Panel(object):
         for face_id in FACE_IDS:
             entry = snapshot.get(face_id)
             port = entry["port"] if entry else None
+            ports = entry.get("ports") if entry else None
+            cmd_ports = ports if face_id == "lobby" else port
             alive = bool(entry) and entry["proc"].poll() is None
             live = alive and can_connect(self.host, port) if port else False
             rows.append({
@@ -142,9 +171,8 @@ class Panel(object):
                 "url": self.url_of(face_id, port) if port else None,
                 "live": bool(live),
                 "started": bool(entry),
-                "cmd": self.cmd_of(face_id, port),
-                "module": os.path.relpath(FACE_MODULES[face_id][0],
-                                          os.path.dirname(HERE)),
+                "cmd": self.cmd_of(face_id, cmd_ports),
+                "module": self.module_of(face_id),
             })
         return rows
 
@@ -166,7 +194,7 @@ class Panel(object):
 
     def start(self, face_id):
         """Spawn one shipped module and prove it before claiming success."""
-        if face_id not in FACE_MODULES:
+        if face_id not in FACE_IDS:
             return 400, {"error": "E_PANEL_UNKNOWN_FACE",
                          "detail": "startable: " + ",".join(FACE_IDS)}
         with self.lock:
@@ -174,9 +202,24 @@ class Panel(object):
             if entry is not None and entry["proc"].poll() is None:
                 return 409, {"error": "E_PANEL_ALREADY_RUNNING",
                              "face": face_id, "port": entry["port"]}
-            port = free_port(self.host)
-            argv = [sys.executable, FACE_MODULES[face_id][0],
-                    "--host", self.host, "--port", str(port)]
+            ports = None
+            if face_id == "lobby":
+                ports = {}
+                taken = set()
+                for key in LOBBY_PORT_KEYS:
+                    candidate = free_port(self.host)
+                    while candidate in taken:
+                        candidate = free_port(self.host)
+                    taken.add(candidate)
+                    ports[key] = candidate
+                port = ports["hub"]
+                argv = [sys.executable, LOBBY, "--host", self.host]
+                for key in LOBBY_PORT_KEYS:
+                    argv.extend([LOBBY_FLAGS[key], str(ports[key])])
+            else:
+                port = free_port(self.host)
+                argv = [sys.executable, FACE_MODULES[face_id][0],
+                        "--host", self.host, "--port", str(port)]
             proc = subprocess.Popen(
                 argv,
                 stdin=subprocess.DEVNULL,
@@ -184,22 +227,26 @@ class Panel(object):
                 stderr=subprocess.DEVNULL,
                 creationflags=NO_WINDOW,
             )
-            self.children[face_id] = {"port": port, "proc": proc}
+            self.children[face_id] = {"port": port, "proc": proc,
+                                      "ports": ports}
         if not wait_port(self.host, port, self.timeout):
             self._kill(face_id)
             return 500, {"error": "E_PANEL_NOT_UP", "face": face_id,
                          "port": port,
                          "detail": "the module was launched but its port never "
                                    "accepted a connection"}
-        return 200, {
+        body = {
             "face": face_id,
             "port": port,
             "url": self.url_of(face_id, port),
             "live": True,
             "mock": True,
             "chargeable": False,
-            "cmd": self.cmd_of(face_id, port),
+            "cmd": self.cmd_of(face_id, ports if face_id == "lobby" else port),
         }
+        if ports:
+            body["ports"] = dict(ports)
+        return 200, body
 
     def stop(self, face_id):
         with self.lock:

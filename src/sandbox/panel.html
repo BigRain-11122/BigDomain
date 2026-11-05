@@ -53,7 +53,7 @@
 <div id="log">就绪。</div>
 
 <footer>
-  只列出可独立启动的三个面：checkout / ledger / ugc。lobby 服务器在一个进程里同时持有 ws、city、gate、web、hub 五个端口，因此不在这里单独启动 —— 从终端运行 <code>python src/sandbox/start_all.py</code> 会一次性拉起全部六个面。
+  四个面都能在这里启动：checkout / ledger / ugc 各占一个端口；lobby 服务器在一个进程里同时持有 ws、city、web、hub、gate 五个端口，面板会先把这五个端口一次性分配好再拉起它，并以 hub 端口作为对外地址来测定存活 —— 只有 hub 端口当场连得上才会显示 LIVE。终端里的 <code>python src/sandbox/start_all.py</code> 仍可一次性拉起全部六个面。
 </footer>
 
 <script>
