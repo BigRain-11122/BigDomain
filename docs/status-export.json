@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T09:53:17+08:00",
+  "export_ts": "2026-11-05T10:28:25+08:00",
   "do": "R2465 verification window: the full reconcile battery ran twice on the committed tree and both legs are red for two different, named, repaired causes - a residue round the register never declared (R2452, now declared and re-proved green) and a load-sensitive transport race in the checkout-demo suite (now retried at the birth site and proved green twice standalone). No product byte was rebuilt and nothing a CEO can open changed this window",
   "ceo_face": {
     "current": "R2465 verification window: the full reconcile battery ran twice on the committed tree and both legs are red for two different, named, repaired causes - a residue round the register never declared (R2452, now declared and re-proved green) and a load-sensitive transport race in the checkout-demo suite (now retried at the birth site and proved green twice standalone). No product byte was rebuilt and nothing a CEO can open changed this window",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the green battery this window owes runs FIRST on the committed tree at the unchanged pre-registered 560 suites / 4336 criteria, closing reconcile-battery-R2465; then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "state/residue_triage.json (282 declarations, R2452 appended through residue_triage_append and re-proved by AC-RTR6) + src/sandbox/lobby/test_checkout_demo.py (transport retry in the http helper, criteria untouched) + qa/reconcile-all-R2465.log (both legs, red, kept verbatim) + repair commit 9f0e5a57",
-    "updated_at": "2026-11-05T09:53:17+08:00"
+    "updated_at": "2026-11-05T10:28:25+08:00"
   },
   "depts": [
     {
@@ -395,10 +395,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 90,
+    "log_lines_in_window": 91,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 90,
+    "substantive_non_idle_mention_lines": 91,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
