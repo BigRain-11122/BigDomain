@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T08:17:51+08:00",
+  "export_ts": "2026-11-05T08:18:48+08:00",
   "do": "R2462 business window: the sandbox now has ONE door. Run `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095` and open http://127.0.0.1:8095/hub/ - one page lists the lobby chat, the silicon city and the 19.9 mock checkout, and it fills each link from the ports the server really bound",
   "ceo_face": {
     "current": "R2462 business window: the sandbox now has ONE door. Run `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094 --hub-port 8095` and open http://127.0.0.1:8095/hub/ - one page lists the lobby chat, the silicon city and the 19.9 mock checkout, and it fills each link from the ports the server really bound",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/07 the battery the R2462 src edits owe runs FIRST next window on the committed tree at the pre-registered 559 suites / 4330 criteria (reconcile-battery-R2463); then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, and a room picker over the shipped lobby rooms, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/hub.html (5393B self-contained entry page, zero external references, AI generated label + non-advice note + mock/no-real-charge statement + read-only statement) + src/sandbox/lobby/hub_page.py (GET /hub/, GET /hub, GET /hub/api/faces publishing the REAL bound ports; read-only HTTP) + --hub-port/--checkout-port on src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_page.py SUITE PASS 6/6 twice with an identical digest (qa/sandbox-hub-R2462.log)",
-    "updated_at": "2026-11-05T08:17:51+08:00"
+    "updated_at": "2026-11-05T08:18:48+08:00"
   },
   "depts": [
     {
@@ -380,10 +380,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 79,
+    "log_lines_in_window": 80,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 79,
+    "substantive_non_idle_mention_lines": 80,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
