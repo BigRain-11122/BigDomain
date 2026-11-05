@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UGC 管道控制台 · BigDomain 沙箱</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.6 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+         margin: 0; padding: 24px; background: #f6f7f9; color: #1c1f24; }
+  @media (prefers-color-scheme: dark) { body { background:#16181d; color:#e6e8ec; } .card{background:#20242b;border-color:#2c313a} }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color:#6b7280; font-size: 13px; margin-bottom: 16px; }
+  .card { background:#fff; border:1px solid #e3e6ea; border-radius:10px; padding:16px; margin-bottom:16px; }
+  .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px;
+         background:#eef1f5; color:#445; margin-left:8px; vertical-align:middle; }
+  label { display:block; font-size:13px; color:#555; margin:8px 0 4px; }
+  input[type=text], textarea { width:100%; box-sizing:border-box; padding:8px 10px;
+         border:1px solid #ccd2da; border-radius:8px; font:inherit; background:transparent; color:inherit; }
+  textarea { min-height:80px; resize:vertical; }
+  button { font:inherit; padding:7px 14px; border-radius:8px; border:1px solid #2f6fed;
+           background:#2f6fed; color:#fff; cursor:pointer; }
+  button.ghost { background:transparent; color:#2f6fed; }
+  button.warn { border-color:#b42318; background:#b42318; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid #e8ebef; vertical-align:top; }
+  th { color:#6b7280; font-weight:600; }
+  .mono { font-family: ui-monospace, Consolas, monospace; font-size:12px; }
+  .notice { border-left:3px solid #d97706; background:#fff8ec; color:#5a4a2a;
+            padding:10px 12px; border-radius:6px; font-size:13px; }
+  @media (prefers-color-scheme: dark) { .notice { background:#2a2419; color:#e8dcc4; } }
+  .ok { color:#177245; } .bad { color:#b42318; } .muted { color:#6b7280; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+</style>
+</head>
+<body>
+
+<h1>UGC 管道控制台 <span class="tag">AI 整理</span><span class="tag">沙箱 · mock</span></h1>
+<div class="sub">P-47-3b 沙箱面：投稿 → 内容闸 → 灰区人工复核 → 池。全部判定由已发货的 pipeline / store / wordlist / review 完成，本页只是操作面。</div>
+
+<div class="notice" id="disclaimer">
+  非投顾常驻提示：提案池与编年史内容均为用户研究/创作思路，不构成投资建议；采纳与否与任何收益无关，平台不作任何收益承诺。站内代币为内循环权益，不可提现、不可外流。（常驻展示·不可折叠）
+</div>
+
+<div class="card" style="margin-top:16px">
+  <div class="row" style="justify-content:space-between">
+    <strong>投稿</strong>
+    <span class="muted" id="mockline">本页为沙箱演示：入口凭证为 mock，不产生任何真实扣款或真实收益。</span>
+  </div>
+  <label for="actor">投稿人（actor）</label>
+  <input type="text" id="actor" value="visitor" autocomplete="off">
+  <label for="content">一句话提案（上限 <span id="maxlen">2000</span> 字）</label>
+  <textarea id="content" placeholder="例如：把城市里的旧公交站改成可投稿的故事亭"></textarea>
+  <div class="row" style="margin-top:10px">
+    <button id="btnSubmit">提交</button>
+    <span class="muted">提交前会自动领取一张 mock 入口凭证（chargeable=false）</span>
+  </div>
+  <div id="receipt" style="margin-top:12px" class="mono muted">尚无回执</div>
+</div>
+
+<div class="card">
+  <div class="row" style="justify-content:space-between">
+    <strong>灰区待审 <span class="muted">（无裁决＝长期挂起，永不自动放行）</span></strong>
+    <button class="ghost" id="btnRefresh">刷新</button>
+  </div>
+  <table>
+    <thead><tr><th style="width:26%">事件</th><th>内容</th><th style="width:170px">裁决</th></tr></thead>
+    <tbody id="reviewBody"><tr><td colspan="3" class="muted">读取中…</td></tr></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <strong>提案池</strong>
+  <div id="poolSummary" class="muted" style="margin:8px 0">读取中…</div>
+  <table>
+    <thead><tr><th style="width:26%">条目</th><th>内容</th><th style="width:120px">线路</th><th style="width:110px">状态</th></tr></thead>
+    <tbody id="poolBody"><tr><td colspan="4" class="muted">读取中…</td></tr></tbody>
+  </table>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function show(el, text, cls) { el.className = "mono " + (cls || "muted"); el.textContent = text; }
+
+  function loadState() {
+    fetch("/ugc/api/state", { cache: "no-store" }).then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.notices) {
+          $("disclaimer").textContent = d.notices.disclaimer;
+          if (d.notices.max_len) { $("maxlen").textContent = d.notices.max_len; }
+          if (d.notices.ai_label) {
+            var tags = document.querySelectorAll(".tag");
+            if (tags.length) { tags[0].textContent = d.notices.ai_label; }
+          }
+        }
+        var rb = $("reviewBody"), rows = d.review || [];
+        if (!rows.length) { rb.innerHTML = '<tr><td colspan="3" class="muted">没有挂起案件</td></tr>'; }
+        else {
+          rb.innerHTML = rows.map(function (r) {
+            return '<tr><td class="mono">' + esc(r.evt_id) + '</td><td>' + esc(r.content) +
+              '</td><td><button class="ghost" data-pass="' + esc(r.evt_id) + '">通过</button> ' +
+              '<button class="warn" data-risky="' + esc(r.evt_id) + '">判风险</button></td></tr>';
+          }).join("");
+        }
+        var pb = $("poolBody"), items = (d.pool && d.pool.items) || [];
+        $("poolSummary").textContent = "共 " + items.length + " 条 · " +
+          Object.keys(d.pool_counts || {}).map(function (k) { return k + "=" + d.pool_counts[k]; }).join("  ") || "共 0 条";
+        if (!items.length) { pb.innerHTML = '<tr><td colspan="4" class="muted">池为空</td></tr>'; }
+        else {
+          pb.innerHTML = items.map(function (i) {
+            return '<tr><td class="mono">' + esc(i.evt_id) + '</td><td>' + esc(i.content || "") +
+              '</td><td>' + esc(i.line || "") + '</td><td>' + esc(i.state || "") + '</td></tr>';
+          }).join("");
+        }
+      }).catch(function (e) { show($("receipt"), "状态读取失败：" + e, "bad"); });
+  }
+
+  function post(path, body) {
+    return fetch(path, {
+      method: "POST", cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().then(function (d) { return { status: r.status, body: d }; });
+    });
+  }
+
+  $("btnSubmit").addEventListener("click", function () {
+    var actor = $("actor").value.trim() || "visitor";
+    var content = $("content").value.trim();
+    if (!content) { show($("receipt"), "请先写一句话提案", "bad"); return; }
+    post("/ugc/api/submit", { actor: actor, content: content }).then(function (res) {
+      var b = res.body || {};
+      if (res.status === 200) {
+        show($("receipt"), "回执：gate=" + b.gate + " received=" + b.received +
+          (b.suspended ? " suspended=true" : "") + (b.line ? " line=" + b.line : "") +
+          " evt=" + b.evt_id, "ok");
+        $("content").value = "";
+      } else {
+        show($("receipt"), "被拒（" + res.status + "）：" + (b.code || "") + " " + (b.error || ""), "bad");
+      }
+      loadState();
+    }).catch(function (e) { show($("receipt"), "提交失败：" + e, "bad"); });
+  });
+
+  document.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (!t || t.tagName !== "BUTTON") { return; }
+    var pass = t.getAttribute("data-pass"), risky = t.getAttribute("data-risky");
+    if (!pass && !risky) { return; }
+    var evt = pass || risky, verdict = pass ? "pass" : "risky";
+    post("/ugc/api/verdict", { evt_id: evt, verdict: verdict }).then(function (res) {
+      var b = res.body || {};
+      if (res.status === 200) { show($("receipt"), "裁决已记录：" + evt + " → " + verdict, "ok"); }
+      else { show($("receipt"), "裁决被拒（" + res.status + "）：" + (b.code || "") + " " + (b.error || ""), "bad"); }
+      loadState();
+    });
+  });
+
+  $("btnRefresh").addEventListener("click", loadState);
+  loadState();
+})();
+</script>
+</body>
+</html>

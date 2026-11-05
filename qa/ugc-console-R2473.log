@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2473 suite=src/sandbox/ugc/test_ugc_console.py legs=2
+== LEG A rc=0 digest=E8C2DB4ACF5DAFC0
+PASS AC-UGW1 bytes=8816 identical=2 offline=True ai_label=True disclaimer=True mock_marker=True sha16=8569EF06639C7C5F
+PASS AC-UGW2 review=0 pool=0 notices_live=True ai_label=True disclaimer=True max_len=2000
+PASS AC-UGW3 gate=pass evt=6879ee7c... pool=1 blank=400 long=413 refusals_stored=0
+PASS AC-UGW4 forbidden=E_CONTENT_REJECTED refused=4xx/422 stored=0 gray_suspended=True review_rows=1 words_literal=0
+PASS AC-UGW5 pass_routed=True twice=409/E_REVIEW_DONE risky=422/trace=risky unknown=404
+PASS AC-UGW6 unknown=404 post_state=405 put=405 ascii_module=True clock=0 bom=False crlf=0 registry=True
+SUITE PASS 6/6
+== LEG B rc=0 digest=E8C2DB4ACF5DAFC0
+PASS AC-UGW1 bytes=8816 identical=2 offline=True ai_label=True disclaimer=True mock_marker=True sha16=8569EF06639C7C5F
+PASS AC-UGW2 review=0 pool=0 notices_live=True ai_label=True disclaimer=True max_len=2000
+PASS AC-UGW3 gate=pass evt=6879ee7c... pool=1 blank=400 long=413 refusals_stored=0
+PASS AC-UGW4 forbidden=E_CONTENT_REJECTED refused=4xx/422 stored=0 gray_suspended=True review_rows=1 words_literal=0
+PASS AC-UGW5 pass_routed=True twice=409/E_REVIEW_DONE risky=422/trace=risky unknown=404
+PASS AC-UGW6 unknown=404 post_state=405 put=405 ascii_module=True clock=0 bom=False crlf=0 registry=True
+SUITE PASS 6/6
+== ADJACENT 3
+== src/sandbox/ugc/test_ugc.py rc=0 SUITE PASS (37/37 criteria pass)
+== src/sandbox/ugc/test_water_journal.py rc=0 SUITE PASS 7/7
+== src/sandbox/ugc/test_reviewdesk_persist.py rc=0 SUITE PASS 7/7
+EVIDENCE identical=True adjacent=3 fails=0 digest=E8C2DB4ACF5DAFC0

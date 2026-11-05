@@ -255,6 +255,12 @@ SUITES = [
     # (AC-LC1..AC-LC6 were pre-registered in src/os/backlog.md at R2469
     # BEFORE this suite, its module and the page existed.)
     ("os-ledger-page", os.path.join("ledger", "test_ledger_page.py"), 6),
+    # R2473: the P-47-3b UGC pipeline becomes a face a person can use - a
+    # self-contained console page over the SHIPPED pipeline/store/wordlist/review,
+    # so the gate, the routing, the gray-zone desk and the pool keep exactly one
+    # owner each. (AC-UGW1..AC-UGW6 were pre-registered in src/os/backlog.md at
+    # R2473 BEFORE this suite, its module and the page existed.)
+    ("ugc-console", os.path.join("ugc", "test_ugc_console.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of
