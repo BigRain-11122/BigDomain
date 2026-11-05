@@ -1968,6 +1968,13 @@
       "declared_by": "R2461",
       "reason": "fold R2461 moved the whole R2450 block to the monthly archive at a true round-block boundary while its stamp sits on a closed tech row, so the round reads STAMP-ONLY-OPEN residue; the R2450 window shipped, passed its suite twice and pushed 51d445bd..311c72b5",
       "until": 2470
+    },
+    {
+      "round": 2452,
+      "status": "DELIVERED",
+      "declared_by": "R2465",
+      "reason": "R2465 verification window declared the one live residue round the register did not carry: R2452 reads DELIVERED with hits=1 closed=1 open=0 over state/queue/tech.md:518, so the residual 282-vs-281 gap is a missing declaration rather than an open work item",
+      "until": 2470
     }
   ]
 }
