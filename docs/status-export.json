@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T02:16:05+08:00",
+  "export_ts": "2026-11-06T02:17:22+08:00",
   "do": "R2481 business window: the sandbox gained a control panel - one page with a Start and a Stop verb per face, and the Start button really spawns the shipped module on an OS-assigned port and returns the URL only after that socket accepts, which is the half R2477 disclosed as unmet",
   "ceo_face": {
     "current": "R2481 business window: the sandbox gained a control panel - one page with a Start and a Stop verb per face, and the Start button really spawns the shipped module on an OS-assigned port and returns the URL only after that socket accepts, which is the half R2477 disclosed as unmet",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the next window owes the battery on the committed tree before any further product byte (reconcile-battery-R2481, pre-registered 568 suites / 4384 criteria, R2168 mixed-tree rule); after that the strongest product candidate is wiring the panel into the hub payload so the one entry page can reach it, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/panel.html (7590B, self-contained) + qa/panel-R2481.log (SUITE PASS 6/6 twice, digest CEB6D522A66597E5, two adjacent suites green) + qa/panel-live-R2481.log (362B, live leg: page 200 at 7590B, ledger started on port 53571, published URL 200 with the shipped 7977B page byte-identical, stop left the port refused)",
-    "updated_at": "2026-11-06T02:16:05+08:00"
+    "updated_at": "2026-11-06T02:17:22+08:00"
   },
   "depts": [
     {
@@ -475,10 +475,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 62,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 61,
+    "substantive_non_idle_mention_lines": 62,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
