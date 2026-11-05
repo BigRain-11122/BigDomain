@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T00:03:28+08:00",
+  "export_ts": "2026-11-06T00:05:58+08:00",
   "do": "R2479 TECH window: the battery's per-suite timeout is now ONE declared number the headroom instrument READS from the runner source (no second 300 literal can drift from the run again), with a declared per-suite override so a slow suite gets room without widening the global guard; the cap moved 300 -> 600s and the three ledger suites that had no load headroom left now read COMFORTABLE while a genuine outlier still reads BAND",
   "ceo_face": {
     "current": "R2479 TECH window: the battery's per-suite timeout is now ONE declared number the headroom instrument READS from the runner source (no second 300 literal can drift from the run again), with a declared per-suite override so a slow suite gets room without widening the global guard; the cap moved 300 -> 600s and the three ledger suites that had no load headroom left now read COMFORTABLE while a genuine outlier still reads BAND",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-06 the next window owes the reconcile battery FIRST (reconcile-battery-R2479, pre-registered 567 suites / 4378 criteria) on the committed tree before any product byte, and that battery should show the three ledger suites COMFORTABLE at the 600s cap; after that the standing candidate remains letting the hub page START a face from the browser, and every P-47 item beyond the shipped sandbox faces still waits on CEO physical items",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/runner_suite_timeout_cap.py (new owner of the reading, CLI --check exits 0 CAP-DECLARED / 2 UNDECLARED / 3 / 5) + src/sandbox/reconcile_all.py (SUITE_TIMEOUT_S = 600, SUITE_TIMEOUT_OVERRIDES, suite_timeout(), explicit run_cmd timeout, summary states 'suite cap=600s') + src/os/runner_suite_timeout_headroom.py (default cap now read from the runner, not a literal) + src/os/test_runner_suite_timeout_cap.py (AC-RSC1..AC-RSC6) + qa/runner-timeout-cap-R2479.log (SUITE PASS 6/6 twice, identical bodies, 1169B utf-8 LF) + docs/sandbox-suite-matrix.md (54575B, green=566/567 honest)",
-    "updated_at": "2026-11-06T00:03:28+08:00"
+    "updated_at": "2026-11-06T00:05:58+08:00"
   },
   "depts": [
     {
@@ -465,10 +465,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 45,
+    "log_lines_in_window": 46,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 45,
+    "substantive_non_idle_mention_lines": 46,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
