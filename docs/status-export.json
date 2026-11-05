@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T23:56:53+08:00",
+  "export_ts": "2026-11-05T23:57:58+08:00",
   "do": "R2478 VERIFICATION window: the full reconcile battery ran on the committed tree and came back RED at 564/566 - one evidence-dialect drift and one 300s cap casualty - so the dialect defect was repaired at its birth site with a payload-identical proof (census now DRIFT-CLEAN, the red suite 8/8 alone) and the retry battery came back GREEN at 566/566 suites and exactly the 4372 pre-registered criteria; the cap casualty is measured, named and pre-registered, not silently waved through",
   "ceo_face": {
     "current": "R2478 VERIFICATION window: the full reconcile battery ran on the committed tree and came back RED at 564/566 - one evidence-dialect drift and one 300s cap casualty - so the dialect defect was repaired at its birth site with a payload-identical proof (census now DRIFT-CLEAN, the red suite 8/8 alone) and the retry battery came back GREEN at 566/566 suites and exactly the 4372 pre-registered criteria; the cap casualty is measured, named and pre-registered, not silently waved through",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-06 the next window owes a BUSINESS face (CEO standing order OB-20261105-003656-879) and should name the supersession of the carried audit row product-face-R2456; the two named candidates are letting the hub page START a face from the browser (half of the R2475 candidate still undone) and the pre-registered AC-RSC1..AC-RSC6 timeout-cap work, which must land with its criteria because the deployed headroom fixture pins the 300s cap as a reading",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2478-leg2.log (RUNNER PASS 566/566 suites, controls 7/7, 4372 criteria exactly as pre-registered, 1224.2s) + qa/reconcile-all-R2478.log (the red leg, kept) + src/os/repair_R2478.py (dialect repair, payload_equal=True on all three captures, atomic replace, byte read-back) + docs/sandbox-suite-matrix.md (54474B, self-describing green=566/566, --check byte-identical) + state/debt.md (reconcile-battery-R2477 closed, runner-suite-timeout-cap opened)",
-    "updated_at": "2026-11-05T23:56:53+08:00"
+    "updated_at": "2026-11-05T23:57:58+08:00"
   },
   "depts": [
     {
@@ -460,10 +460,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 36,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 36,
+    "substantive_non_idle_mention_lines": 37,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
