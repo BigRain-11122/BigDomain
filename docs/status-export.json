@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T06:18:55+08:00",
+  "export_ts": "2026-11-06T06:19:55+08:00",
   "do": "R2488 verification window: the two batteries the register owed ran first on the committed tree, so the audit face shipped at R2486 and the member page shipped at R2487 are now proved green at 571/571 suites and exactly 4402 criteria instead of merely committed",
   "ceo_face": {
     "current": "R2488 verification window: the two batteries the register owed ran first on the committed tree, so the audit face shipped at R2486 and the member page shipped at R2487 are now proved green at 571/571 suites and exactly 4402 criteria instead of merely committed",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the queue head is state/queue/tech.md:524, the R2438 per-entry expiry-window seed (owner_table_triage_expiry_window); the debt register no longer owes a battery, because R2488 closed reconcile-battery-R2486 and reconcile-battery-R2487 on this tree. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2488.log (866662B, RUNNER PASS 571/571 suites, controls 7/7, 1947.4s, criteria recount 4402 exact) + docs/sandbox-suite-matrix.md (54834B, 571 suites / 4402 criteria, --check byte-identical) at 2026-11-06 R2488",
-    "updated_at": "2026-11-06T06:18:55+08:00"
+    "updated_at": "2026-11-06T06:19:55+08:00"
   },
   "depts": [
     {
@@ -510,10 +510,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 43,
+    "log_lines_in_window": 44,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 43,
+    "substantive_non_idle_mention_lines": 44,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
