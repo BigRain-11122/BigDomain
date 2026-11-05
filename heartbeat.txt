@@ -1,1 +1,2 @@
 ﻿R2465 verification window | 2026-11-05 | battery twice RED with two named causes repaired (R2452 residue declaration, checkout-demo transport retry) | reconcile-battery-R2465 still OPEN | zero product points | fold deferred
+R2466 verification window | 2026-11-05 | battery green 560/560 at the pre-registered 4336 criteria after two birth-site repairs (stale export, 300s-cap abort) | reconcile-battery-R2465 CLOSED | zero product points | fold 652 landed 87861B -> 60618B

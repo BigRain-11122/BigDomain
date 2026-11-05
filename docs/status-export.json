@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T10:28:25+08:00",
-  "do": "R2465 verification window: the full reconcile battery ran twice on the committed tree and both legs are red for two different, named, repaired causes - a residue round the register never declared (R2452, now declared and re-proved green) and a load-sensitive transport race in the checkout-demo suite (now retried at the birth site and proved green twice standalone). No product byte was rebuilt and nothing a CEO can open changed this window",
+  "export_ts": "2026-11-05T11:34:44+08:00",
+  "do": "R2466 verification window: the battery the R2464 edits owed finally ran green - 560/560 suites, 4336 criteria exactly as pre-registered - after two real birth-site repairs, a stale export re-derived through its shipped drivers and a runner that now survives a suite hitting the 300s cap instead of aborting the whole run",
   "ceo_face": {
-    "current": "R2465 verification window: the full reconcile battery ran twice on the committed tree and both legs are red for two different, named, repaired causes - a residue round the register never declared (R2452, now declared and re-proved green) and a load-sensitive transport race in the checkout-demo suite (now retried at the birth site and proved green twice standalone). No product byte was rebuilt and nothing a CEO can open changed this window",
-    "latest_artifact": "state/residue_triage.json (282 declarations, R2452 appended through residue_triage_append and re-proved by AC-RTR6) + src/sandbox/lobby/test_checkout_demo.py (transport retry in the http helper, criteria untouched) + qa/reconcile-all-R2465.log (both legs, red, kept verbatim) + repair commit 9f0e5a57",
-    "next_milestone": "2026-11-05/06 the green battery this window owes runs FIRST on the committed tree at the unchanged pre-registered 560 suites / 4336 criteria, closing reconcile-battery-R2465; then the real msgSecCheck and the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
+    "current": "R2466 verification window: the battery the R2464 edits owed finally ran green - 560/560 suites, 4336 criteria exactly as pre-registered - after two real birth-site repairs, a stale export re-derived through its shipped drivers and a runner that now survives a suite hitting the 300s cap instead of aborting the whole run",
+    "latest_artifact": "qa/reconcile-all-R2466-retry2.log (RUNNER PASS 560/560, controls 7/7, 1143.3s, one utf-8 LF single writer) + docs/sandbox-suite-matrix.md (regenerated stamp-aligned, byte-identical check) + repair commits dc3a6f05 and f7728805",
+    "next_milestone": "2026-11-05/06 the next window resumes the PRODUCT face at tech head state/queue/tech.md:522 AC-PFKC1 (product-face-R2456), and the real msgSecCheck plus the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "state/residue_triage.json (282 declarations, R2452 appended through residue_triage_append and re-proved by AC-RTR6) + src/sandbox/lobby/test_checkout_demo.py (transport retry in the http helper, criteria untouched) + qa/reconcile-all-R2465.log (both legs, red, kept verbatim) + repair commit 9f0e5a57",
-    "updated_at": "2026-11-05T10:28:25+08:00"
+    "last_artifact": "qa/reconcile-all-R2466-retry2.log (RUNNER PASS 560/560, controls 7/7, 1143.3s, one utf-8 LF single writer) + docs/sandbox-suite-matrix.md (regenerated stamp-aligned, byte-identical check) + repair commits dc3a6f05 and f7728805",
+    "updated_at": "2026-11-05T11:34:44+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "docs/sandbox-suite-matrix.md + qa/reconcile-all-R2466-retry2.log + src/sandbox/reconcile_all.py + state/residue_triage.json + src/os/closeout_R2466.py + src/os/export_R2466.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "state/residue_triage.json + src/sandbox/lobby/test_checkout_demo.py + qa/reconcile-all-R2465.log + src/os/closeout_R2465.py + src/os/export_R2465.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/lobby.html + src/sandbox/lobby/lobby_page.py + src/sandbox/lobby/server.py (rooms wiring) + src/sandbox/lobby/test_lobby_rooms.py + src/sandbox/reconcile_all.py (one registry row) + qa/lobby-room-picker-R2464.log + qa/lobby-room-picker-live-R2464.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/backlog.md + src/os/closeout_R2464.py + src/os/live_R2464.py + src/os/export_R2464.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2463.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/backlog.md + src/os/closeout_R2463.py + src/os/export_R2463.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
@@ -79,6 +80,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2466",
+      "2026-11-05 R2466 VERIFICATION window on the battery R2464 owed and R2465 could not discharge. Leg 1 was RED with self_drive stored=90 against 91 live lines because R2465 appended its self-heal line after its last export refresh (the R2433/R2441 closeout-ordering shape); the export was re-derived through export_R2465 then queue_export_gate_wire --execute (consistency 21/21 PASS) and both red suites read 6/6. Leg 2 ABORTED on subprocess.TimeoutExpired at the 300s per-suite cap on ledger-apimarket-refundregister, whose own measured leg is 268.1s, so run_cmd now records one failed suite with a TIMEOUT marker at exit 124 instead of killing the battery. Leg 3 on the committed repair tree read RUNNER PASS 560/560 with criteria total 4336 exactly as pre-registered, four follow-up sections PASS after the designed matrix FAIL and its stamp-aligned regeneration, reconcile-battery-R2465 closed through debt_close (open 3->2, done 175->176), the fold that R2465 deferred run at a true round-block boundary (87861B -> 60618B, FOLD-CLEAR) and its one fold-created residue round R2454 declared through the shipped writer (282->283 entries, TRIAGED). Honest: zero product points, nothing a CEO can open was rebuilt, and the real debit plus the real msgSecCheck still wait on CEO physical items."
+    ],
     [
       "2465",
       "2026-11-05 R2465 VERIFICATION window, and it reports red evidence as red. Leg 1 read 559/560 suites green with one failing suite (os-residue-triage AC-RTR6, untriaged=1); the live-vs-declared set difference named exactly R2452, whose residue row is DELIVERED with hits=1 closed=1, so the gap was a missing declaration. It was appended through the shipped writer (dry run first, 281->282 entries, readback TRIAGED) and the suite re-ran SUITE PASS 6/6. Leg 2 then failed a DIFFERENT single suite: os-lobby-checkout-demo died on its first request with WinError 10053, while standalone it reads 6/6 twice with the unchanged digest 46654133EC75D89438D1B6C4547C79CE, so the suite http helper now retries transport failures only and prints every retry, with no status, byte or count assertion relaxed. Honest limits: reconcile-battery-R2465 stays OPEN because no green full battery exists yet; zero product points; the matrix was not regenerated from a red leg; Docker is absent and the real debit plus the real msgSecCheck still wait on CEO physical items."
@@ -388,17 +393,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2465",
+      "2466",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 91,
+    "log_lines_in_window": 66,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 91,
+    "substantive_non_idle_mention_lines": 66,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

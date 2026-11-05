@@ -1975,6 +1975,13 @@
       "declared_by": "R2465",
       "reason": "R2465 verification window declared the one live residue round the register did not carry: R2452 reads DELIVERED with hits=1 closed=1 open=0 over state/queue/tech.md:518, so the residual 282-vs-281 gap is a missing declaration rather than an open work item",
       "until": 2470
+    },
+    {
+      "round": 2454,
+      "status": "DELIVERED",
+      "declared_by": "R2466",
+      "reason": "fold-created round: R2466 fold archived log items 2..40, and R2454 evidence was delivered and pushed at its own round",
+      "until": 2470
     }
   ]
 }
