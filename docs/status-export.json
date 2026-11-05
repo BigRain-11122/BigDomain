@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T13:38:09+08:00",
+  "export_ts": "2026-11-05T13:39:17+08:00",
   "do": "R2471 BUSINESS window: the one entry page now lists the P-47-2 token ledger console as a fourth face and tells the truth about every face - each card reads online/not-started from a TCP probe made during that request, so a dead link can no longer look alive",
   "ceo_face": {
     "current": "R2471 BUSINESS window: the one entry page now lists the P-47-2 token ledger console as a fourth face and tells the truth about every face - each card reads online/not-started from a TCP probe made during that request, so a dead link can no longer look alive",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window runs the owed battery on this tree (reconcile-battery-R2471, pre-registered at 563 suites / 4354 criteria) and folds src/os/state.json, which now sits at 78449B against the 78500B waterline (margin 51B); the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/lobby/hub.html (four face cards + live markers) + src/sandbox/lobby/hub_page.py (ledger face and face_ports, GET /hub/api/faces?probe=1 live map) + src/sandbox/lobby/test_hub_ledger_live.py (SUITE PASS 6/6 twice, identical verdict lines) + qa/hub-ledger-live-R2471.log (five faces 200, live all true, zero survivors)",
-    "updated_at": "2026-11-05T13:38:09+08:00"
+    "updated_at": "2026-11-05T13:39:17+08:00"
   },
   "depts": [
     {
@@ -425,10 +425,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 81,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 81,
+    "substantive_non_idle_mention_lines": 83,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
