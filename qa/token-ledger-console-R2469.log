@@ -1,0 +1,14 @@
+AC-LC1 bytes=7977 same=True external=[] notices=True/True/True PASS
+AC-LC2 status=200 accounts=5 balance_seam=True check_seam=True verdict=PASS PASS
+AC-LC3 status=201 pool+100 equity-100 total=0 verdict=PASS refusals=400/E_BAD_ACCOUNT 400/E_BAD_AMOUNT PASS
+AC-LC4 gate=403/E_GATE_REF booked=True ai_rows=1 server_ai=True PASS
+AC-LC5 overdraw=409/E_NEGATIVE_BALANCE untouched=True spend=201 balance10 total=0 verdict=PASS PASS
+AC-LC6 same=True 404=404 405=405 bill=3 ascii=True banned=[] row=1 PASS
+AC-LC1 bytes=7977 same=True external=[] notices=True/True/True PASS
+AC-LC2 status=200 accounts=5 balance_seam=True check_seam=True verdict=PASS PASS
+AC-LC3 status=201 pool+100 equity-100 total=0 verdict=PASS refusals=400/E_BAD_ACCOUNT 400/E_BAD_AMOUNT PASS
+AC-LC4 gate=403/E_GATE_REF booked=True ai_rows=1 server_ai=True PASS
+AC-LC5 overdraw=409/E_NEGATIVE_BALANCE untouched=True spend=201 balance10 total=0 verdict=PASS PASS
+AC-LC6 same=True 404=404 405=405 bill=3 ascii=True banned=[] row=1 PASS
+EVIDENCE CAPTURE legs=2 identical=True digests=AC9413AB3051B0C32A33F4100507768B/AC9413AB3051B0C32A33F4100507768B
+SUITE PASS 6/6 digest=AC9413AB3051B0C32A33F4100507768B

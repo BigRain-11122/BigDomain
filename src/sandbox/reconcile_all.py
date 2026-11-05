@@ -243,6 +243,13 @@ SUITES = [
     # (AC-GC1..AC-GC6 were pre-registered in src/os/backlog.md at R2467
     # BEFORE this suite, its module and the page existed.)
     ("os-content-gate-console", os.path.join("lobby", "test_gate_console.py"), 6),
+    # R2469: the token double-entry ledger becomes a face a person can use -
+    # a self-contained console page over the SHIPPED ledger and the SHIPPED
+    # reconcile.check_lines, so every booked tx and every one of the eight
+    # checks is still owned by exactly one module.
+    # (AC-LC1..AC-LC6 were pre-registered in src/os/backlog.md at R2469
+    # BEFORE this suite, its module and the page existed.)
+    ("os-ledger-page", os.path.join("ledger", "test_ledger_page.py"), 6),
     ("ledger", os.path.join("ledger", "test_ledger.py"), 11),
     ("ledger-props", os.path.join("ledger", "test_props.py"), 7),
     # props persist window: cross-restart byte-identical replay of

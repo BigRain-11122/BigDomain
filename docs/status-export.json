@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T12:41:53+08:00",
-  "do": "R2468 verification window: the content-gate console shipped at R2467 is now PROVED end to end - the full reconcile battery reads 561/561 suites green at exactly the pre-registered 4342 criteria on the committed tree, so every sandbox face a person can open carries a green registry behind it",
+  "export_ts": "2026-11-05T12:56:30+08:00",
+  "do": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
   "ceo_face": {
-    "current": "R2468 verification window: the content-gate console shipped at R2467 is now PROVED end to end - the full reconcile battery reads 561/561 suites green at exactly the pre-registered 4342 criteria on the committed tree, so every sandbox face a person can open carries a green registry behind it",
-    "latest_artifact": "qa/reconcile-all-R2468.log (RUNNER PASS 561/561 suites, controls 7/7, 4342 criteria, 1205.5s, one utf-8 LF writer) + docs/sandbox-suite-matrix.md (54116B, green=561/561, --check byte-identical)",
-    "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face rather than another audit face, superseding the carried row product-face-R2456 and naming the supersession plainly; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
+    "current": "R2469 BUSINESS window: the P-47-2b token double-entry ledger is now a face a person can USE - one self-contained console drives the shipped ledger and prints the shipped eight-check reconcile verdict on every action, so a mint, a gated reward, a spend and a refused overdraw are all visible instead of terminal runs",
+    "latest_artifact": "src/sandbox/ledger/ledger.html (7977B) + src/sandbox/ledger/ledger_page.py + qa/token-ledger-console-R2469.log (SUITE PASS 6/6 twice with an identical digest AC9413AB3051B0C32A33F4100507768B) + qa/token-ledger-console-live-R2469.log (real process: mint booked, overdraw 409 E_NEGATIVE_BALANCE, verdict PASS, total 0)",
+    "next_milestone": "2026-11-05/06 the next window discharges reconcile-battery-R2469 at the pre-registered 562 suites / 4348 criteria on the committed tree; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2468.log (RUNNER PASS 561/561 suites, controls 7/7, 4342 criteria, 1205.5s, one utf-8 LF writer) + docs/sandbox-suite-matrix.md (54116B, green=561/561, --check byte-identical)",
-    "updated_at": "2026-11-05T12:41:53+08:00"
+    "last_artifact": "src/sandbox/ledger/ledger.html (7977B) + src/sandbox/ledger/ledger_page.py + qa/token-ledger-console-R2469.log (SUITE PASS 6/6 twice with an identical digest AC9413AB3051B0C32A33F4100507768B) + qa/token-ledger-console-live-R2469.log (real process: mint booked, overdraw 409 E_NEGATIVE_BALANCE, verdict PASS, total 0)",
+    "updated_at": "2026-11-05T12:56:30+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/sandbox/ledger/ledger.html + src/sandbox/ledger/ledger_page.py + src/sandbox/ledger/test_ledger_page.py + src/sandbox/reconcile_all.py + qa/token-ledger-console-R2469.log + qa/token-ledger-console-live-R2469.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2469.py + src/os/fold_R2469.py + src/os/export_R2469.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2468.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2468.py + src/os/export_R2468.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/gate.html + src/sandbox/lobby/gate_page.py + src/sandbox/lobby/test_gate_console.py + src/sandbox/lobby/server.py + src/sandbox/lobby/hub_page.py + src/sandbox/reconcile_all.py + qa/content-gate-console-R2467.log + qa/content-gate-console-live-R2467.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2467.py + src/os/export_R2467.py + src/os/live_R2467.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "docs/sandbox-suite-matrix.md + qa/reconcile-all-R2466-retry2.log + src/sandbox/reconcile_all.py + state/residue_triage.json + src/os/closeout_R2466.py + src/os/export_R2466.py + src/os/backlog.md + docs/status-export.json + src/os/state.json + heartbeat.txt",
@@ -82,6 +83,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2469",
+      "2026-11-05 R2469 BUSINESS window on the CEO standing order OB-20261105-003656-879, SUPERSEDING the carried internal audit row product-face-R2456 by name (which stays open and claimable at state/queue/tech.md:522 prefix AC-PFKC1). Five-silence scan at open: git status empty at HEAD 99f38e9f equal to origin/main, zero @BigDomain rows in the evolution ledger, decisions diff new=0 against the stored baseline, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with the floor MET. Finding: the P-47-2b ledger already ships as ledger.py (AC-L1..AC-L11) and reconcile.py (eight checks) but had no face a person could operate. Product: src/sandbox/ledger/ledger.html plus ledger_page.py, six same-origin routes over the SHIPPED ledger and the SHIPPED checks so no book law and no check is re-implemented, with the content gate and the server-side source_ai marker still decided by their owners (a client source_ai=false is booked as TRUE per config). Evidence: AC-LC1..AC-LC6 pre-registered before the code, SUITE PASS 6/6 twice with an identical digest, two adjacent suites green (ledger 11/11, props 7/7), one real-process live capture, registry 562 suites / 4348 criteria, matrix regenerated stamp-aligned to 54192B with --check byte-identical and its green line honestly 561/562. Debt: reconcile-battery-R2469 opened first=no at 121385B -> 121819B. The waterline fold ran at a true round-block boundary (R2458 block, 252 tokens covered, 83133B -> 76663B predicted equal to measured) and all four ledger suites re-read 8/8. Honest: no fiat field exists anywhere, nothing is chargeable, the console is not yet listed in the lobby hub payload, Docker is absent, and the real 19.9 debit plus the real msgSecCheck still wait on CEO physical items."
+    ],
     [
       "2468",
       "2026-11-05 R2468 VERIFICATION window on the debt the R2467 business window left behind, not on a new face: the R2168 mixed-tree rule owed the battery because R2467 changed product src bytes and moved the registry 560->561 suites / 4336->4342 criteria. Five-silence scan at open: git status empty at HEAD 660d794d, zero @BigDomain rows in the evolution ledger, group orders tail unchanged at 2026-11-05 00:36, benchmarks refreshed 2026-11-03 inside the seven-day gate, queue head AC-PFKC1 with the floor MET. The content-addressed decisions diff named five new tokens D-20261105-12..16 and all five were judged KNOWLEDGE-ONLY as group/fleet or other-company faces, with the baseline widened by exactly those five. Battery on the committed tree: RUNNER PASS 561/561 suites plus controls 7/7 in 1205.5s, criteria total 4342 EXACTLY as pre-registered, TMP RECLAIM 932/932 worlds. Four follow-up sections produced the designed order - one matrix FAIL at 54146B against 54116B with no byte written, then a stamp-aligned regeneration from this round own green evidence, --check byte-identical at 54116B / 561 suites / 4342 criteria, then VERDICT R2468 PASS failing=none. Debt: reconcile-battery-R2467 closed through its shipped CLI at the predicted 121381B -> 121385B with readback ok; no successor battery, because no product src byte changed and the registry is unmoved. Honest: zero product points, the --help probe started a real suite run and left a 5-byte file named --help in the root (deleted before any commit), Docker is absent, and the real msgSecCheck plus the real 19.9 debit still wait on CEO physical items."
@@ -403,7 +408,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2468",
+      "2469",
       "OSLoop 执行 tick"
     ]
   ],

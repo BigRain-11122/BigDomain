@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代币账本控制台 · BigDomain 沙箱</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--ok:#1f7a4d;--bad:#a4302c;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1000px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:14px}
+h1{font-size:21px;margin:0;font-weight:650}
+.badge{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);
+background:#fff;color:var(--muted)}
+.badge.ai{color:#7a4b00;border-color:#e8d5ab;background:#fdf6e6}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.risk{font-size:13px;color:var(--muted);border-left:3px solid #e8d5ab;padding-left:12px;margin:0}
+.mock{margin:10px 0 0;font-size:13px;color:#7a4b00;background:#fdf6e6;border-radius:8px;padding:8px 12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+label{font-size:13px;color:var(--muted)}
+input{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:180px}
+button{font:inherit;padding:7px 14px;border-radius:8px;border:1px solid var(--line);
+background:#fff;cursor:pointer}
+button:hover{border-color:#b9c2cc}
+button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+h2{font-size:14px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+ul.list{list-style:none;margin:0;padding:0;font-size:13px}
+ul.list li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;
+border-bottom:1px dashed var(--line)}
+ul.list li:last-child{border-bottom:0}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+pre{margin:0;font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:pre-wrap;
+color:var(--muted)}
+.verdict{font-weight:650}
+.verdict.pass{color:var(--ok)}
+.verdict.fail{color:var(--bad)}
+#status{min-height:22px;font-size:13px;color:var(--bad)}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>代币双式账本</h1>
+  <span class="badge ai">AI 判定</span>
+  <span class="badge">沙箱 · mock</span>
+  <span class="badge">单写者 · SQLite WAL</span>
+</header>
+
+<div class="card">
+  <p class="risk">非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）</p>
+  <p class="mock">沙箱演示：代币不可提现、不可兑换、不可转账；本页没有任何真实扣款。</p>
+</div>
+
+<div class="card">
+  <div class="row">
+    <label>账号 <input id="acct" value="usr:demo" spellcheck="false"></label>
+    <button class="primary" data-op="refresh">刷新</button>
+    <button data-op="mint">铸币 100 → 奖励池</button>
+    <button data-op="reward">领取 login 奖励</button>
+    <button data-op="spend">消费 30</button>
+  </div>
+  <p id="status"></p>
+</div>
+
+<div class="grid">
+  <div class="card"><h2>账户余额</h2><ul class="list" id="balances"></ul></div>
+  <div class="card"><h2>账单</h2><ul class="list" id="bill"></ul></div>
+  <div class="card"><h2>对账（8 项）</h2>
+    <p class="verdict" id="verdict"></p><pre id="checks"></pre></div>
+</div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+
+  function text(node, value) {
+    while (node.firstChild) { node.removeChild(node.firstChild); }
+    node.appendChild(document.createTextNode(value));
+  }
+
+  function addRow(list, left, right, mono) {
+    var li = document.createElement("li");
+    var a = document.createElement("span");
+    if (mono) { a.className = "mono"; }
+    text(a, left);
+    var b = document.createElement("span");
+    b.className = "mono";
+    text(b, right);
+    li.appendChild(a);
+    li.appendChild(b);
+    list.appendChild(li);
+  }
+
+  function status(msg) { text($("status"), msg || ""); }
+
+  function call(method, path, body) {
+    var opt = { method: method, headers: {} };
+    if (body) {
+      opt.headers["Content-Type"] = "application/json";
+      opt.body = JSON.stringify(body);
+    }
+    return fetch(path, opt).then(function (res) {
+      return res.json().catch(function () { return { error: "E_BAD_JSON" }; })
+        .then(function (obj) {
+          if (!res.ok) {
+            var msg = (obj.error || ("E_HTTP_" + res.status));
+            if (obj.detail) { msg += " (" + obj.detail + ")"; }
+            throw new Error(msg);
+          }
+          return obj;
+        });
+    });
+  }
+
+  function renderBalances(accounts) {
+    var list = $("balances");
+    while (list.firstChild) { list.removeChild(list.firstChild); }
+    (accounts || []).forEach(function (row) {
+      addRow(list, row.account_id, String(row.balance), true);
+    });
+    if (!accounts || !accounts.length) { addRow(list, "还没有账户", "-"); }
+  }
+
+  function renderBill(items) {
+    var list = $("bill");
+    while (list.firstChild) { list.removeChild(list.firstChild); }
+    (items || []).forEach(function (it) {
+      var label = it.type + " · " + it.action + " · " +
+        (it.direction === "credit" ? "+" : "-") + it.amount;
+      if (it.source_ai) { label += " · [" + (it.ai_label || "AI") + "]"; }
+      addRow(list, label, String(it.ref || ""), false);
+    });
+    if (!items || !items.length) { addRow(list, "暂无记录", "-"); }
+  }
+
+  function renderReconcile(rec) {
+    rec = rec || {};
+    var v = $("verdict");
+    v.className = "verdict " + (rec.verdict === "PASS" ? "pass" : "fail");
+    text(v, "RECONCILE " + (rec.verdict || "UNKNOWN") +
+      " (" + (rec.failed || 0) + "/" + (rec.checks ? rec.checks.length : 0) + " 失败)");
+    var pre = $("checks");
+    while (pre.firstChild) { pre.removeChild(pre.firstChild); }
+    pre.appendChild(document.createTextNode((rec.checks || []).join("\n")));
+  }
+
+  function refresh() {
+    var acct = $("acct").value.trim();
+    return call("GET", "/ledger/api/state").then(function (state) {
+      renderBalances(state.accounts);
+      renderReconcile(state.reconcile);
+      status("");
+      if (!acct) { return null; }
+      return call("GET", "/ledger/api/bill?account=" + encodeURIComponent(acct))
+        .then(function (bill) { renderBill(bill.items); });
+    }).catch(function (err) { status("失败：" + err.message); });
+  }
+
+  function ref() { return "ui-" + Date.now().toString(36); }
+
+  var OPS = {
+    mint: function () {
+      return call("POST", "/ledger/api/mint", {
+        pool_id: "pool:reward", amount: 100, ref: ref()
+      });
+    },
+    reward: function () {
+      return call("POST", "/ledger/api/reward", {
+        account_id: $("acct").value.trim(), action: "login", ref: ref()
+      });
+    },
+    spend: function () {
+      return call("POST", "/ledger/api/spend", {
+        account_id: $("acct").value.trim(), amount: 30, ref: ref()
+      });
+    },
+    refresh: function () { return Promise.resolve(null); }
+  };
+
+  document.addEventListener("click", function (ev) {
+    var btn = ev.target.closest("button[data-op]");
+    if (!btn) { return; }
+    var op = btn.getAttribute("data-op");
+    status("");
+    Promise.resolve(OPS[op] ? OPS[op]() : null)
+      .then(function () { return refresh(); })
+      .catch(function (err) { status("拒绝：" + err.message); });
+  });
+
+  $("acct").addEventListener("change", refresh);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", refresh);
+  } else {
+    refresh();
+  }
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+LEDGER CONSOLE on http://127.0.0.1:57774/ledger/
+GET /ledger/ status=200 bytes=7977 notices=[True, True, True]
+GET /ledger/api/state status=200 accounts=5 verdict=PASS chargeable=False
+POST /ledger/api/mint status=201 tx=60c4daa2d1676b9d
+POST /ledger/api/reward status=201
+POST /ledger/api/spend status=409 error=E_NEGATIVE_BALANCE
+GET /ledger/api/state after verdict=PASS total=0
