@@ -5655,6 +5655,16 @@ SUITES = [
     # pinned in state/queue/tech.md:504 as the R2415 seed row BEFORE the code.)
     ("os-relative-module-existence-face",
      os.path.join("..", "os", "test_relative_module_existence_face.py"), 6),
+    # R2491: the existence face measures its corpus by walking the root it is
+    # given, so a join whose module lives OUTSIDE that root (an installed
+    # package, or a publisher in a subdirectory while the package sits at the
+    # tree top) read MISSING-MODULE exactly like a broken import. Every absence
+    # now carries the scope it was judged against - the root as given and the
+    # corpus size - and caller-declared extra names are merged on top of the
+    # measured tree instead of replacing it. (AC-RMSC1..AC-RMSC6 pinned in
+    # state/queue/tech.md:525 as the R2440 seed row BEFORE the code.)
+    ("os-relative-module-corpus-scope",
+     os.path.join("..", "os", "test_relative_module_corpus_scope.py"), 6),
     # R2442: --stamp-from let a render follow another document's stamp but the
     # artifact could not say so - the command line named only --evidence, so a
     # borrowed-stamp render was byte-for-byte identical to an ordinary one

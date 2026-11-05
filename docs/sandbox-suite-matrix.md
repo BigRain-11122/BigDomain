@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 573 | 4414 | 573/573 | R2490 |
+| 574 | 4420 | 573/573 | R2490 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -607,11 +607,12 @@
 | 567 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 1.2 |
 | 568 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | green | 1.1 |
 | 569 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 0.8 |
-| 570 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.4 |
-| 571 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
-| 572 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
-| 573 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | green | 0.1 |
-|  | 合计 |  | 4414 | green 573 / FAIL 0 / no-evidence 0 |  |
+| 570 | os-relative-module-corpus-scope | ../os/test_relative_module_corpus_scope.py | 6 | no-evidence | - |
+| 571 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.4 |
+| 572 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
+| 573 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
+| 574 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | green | 0.1 |
+|  | 合计 |  | 4420 | green 573 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

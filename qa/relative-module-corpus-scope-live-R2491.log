@@ -1,0 +1,12 @@
+LEG 1 real tree root=src/os package=src.os rc=0
+  RELATIVE MODULE CORPUS SCOPE os-relative-module-corpus-scope verdict=WIRE package=src.os corpus=1402 scope=TREE scope_root=src\os scanned=1400 publishers=11 wire=11 foreign=(none) unresolved=(none) relative=0 no_publish=25 from_import=0 bare=0 refused=0 missing=0 extra=(none)
+
+LEG 2 scope limit root=C:\Users\sjs20\AppData\Local\Temp\rmsc-live-ik2n10fn\scripts package=mypkg rc=2
+  RELATIVE MODULE CORPUS SCOPE os-relative-module-corpus-scope verdict=MISSING-MODULE package=mypkg corpus=1 scope=TREE scope_root=C:\Users\sjs20\AppData\Local\Temp\rmsc-live-ik2n10fn\scripts scanned=1 publishers=1 wire=1 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=0 missing=1 extra=(none)
+    MISSING-MODULE rel_pub.py:10 module=mypkg.wire package=mypkg scope_root=C:\Users\sjs20\AppData\Local\Temp\rmsc-live-ik2n10fn\scripts scope_corpus=1
+
+LEG 3 same root + declared extra rc=0
+  RELATIVE MODULE CORPUS SCOPE os-relative-module-corpus-scope verdict=WIRE package=mypkg corpus=2 scope=TREE+EXTRA scope_root=C:\Users\sjs20\AppData\Local\Temp\rmsc-live-ik2n10fn\scripts scanned=1 publishers=1 wire=1 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=0 missing=0 extra=mypkg.wire
+
+LEG 4 whole tree root (package is a sibling of scripts/) rc=0
+  RELATIVE MODULE CORPUS SCOPE os-relative-module-corpus-scope verdict=WIRE package=mypkg corpus=3 scope=TREE scope_root=C:\Users\sjs20\AppData\Local\Temp\rmsc-live-ik2n10fn scanned=3 publishers=1 wire=1 foreign=(none) unresolved=(none) relative=1 no_publish=0 from_import=1 bare=0 refused=0 missing=0 extra=(none)

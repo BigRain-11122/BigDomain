@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2491 suite=src/os/test_relative_module_corpus_scope.py legs=2
+== LEG A rc=0 digest=F01D6148DEC39C4F
+PASS AC-RMSC1 every MISSING-MODULE row prints root as given + corpus size
+PASS AC-RMSC2 a module carried in another top-level package is present
+PASS AC-RMSC3 extras merged on top of the tree, patched reading still moves
+PASS AC-RMSC4 parent audit asked at call time, exactly one corpus walk
+PASS AC-RMSC5 exits 0/2/3/5, byte-stable json, R2440 keys kept
+PASS AC-RMSC6 ascii, stdlib, no clock, read-only, own label + suite wired
+SUITE PASS (6/6 criteria pass)
+== LEG B rc=0 digest=F01D6148DEC39C4F
+PASS AC-RMSC1 every MISSING-MODULE row prints root as given + corpus size
+PASS AC-RMSC2 a module carried in another top-level package is present
+PASS AC-RMSC3 extras merged on top of the tree, patched reading still moves
+PASS AC-RMSC4 parent audit asked at call time, exactly one corpus walk
+PASS AC-RMSC5 exits 0/2/3/5, byte-stable json, R2440 keys kept
+PASS AC-RMSC6 ascii, stdlib, no clock, read-only, own label + suite wired
+SUITE PASS (6/6 criteria pass)
+== ADJACENT 3
+== src/os/test_relative_module_existence_face.py rc=0 SUITE PASS
+== src/os/test_publish_relative_package_identity.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+== src/os/test_relative_import_alias_gate.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=F01D6148DEC39C4F
