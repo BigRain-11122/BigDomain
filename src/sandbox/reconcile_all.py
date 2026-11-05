@@ -57,6 +57,22 @@ import tempfile
 import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+
+# R2479 AC-RSC1: ONE named per-suite cap for the whole battery. The headroom
+# reader in src/os/runner_suite_timeout_cap.py reads THIS line rather than
+# carrying a second literal, so the instrument cannot drift from the run it
+# describes. The flat 300 that lived here had no headroom left: three ledger
+# suites measured 232.2s / 268.1s / 300.1s and the third one lost the cap
+# inside a loaded battery (R2393 leg 3, R2466 leg 2, R2478 leg 1).
+SUITE_TIMEOUT_S = 600
+
+# R2479 AC-RSC2: declared per-suite overrides, keyed by the suite label that
+# appears in the registry and in every evidence line. Empty today because the
+# raised global cap is enough headroom for the three measured slow suites; the
+# mechanism exists so the next slow arrival is a one-line declaration instead
+# of a global widening that would hide every other suite.
+SUITE_TIMEOUT_OVERRIDES = {}
+
 LEDGER = os.path.join(BASE, "ledger")
 PAY = os.path.join(BASE, "pay")
 MEMBER = os.path.join(BASE, "member")
@@ -5052,6 +5068,14 @@ SUITES = [
     # seed BEFORE the code existed.)
     ("os-refused-check-declaration-face",
      os.path.join("..", "os", "test_refused_check_declaration_face.py"), 6),
+    # R2479: the per-suite cap is ONE declared constant that the headroom
+    # instrument reads from this source, and a declared override can buy one
+    # slow suite more room without widening the global guard. R2393 leg 3,
+    # R2466 leg 2 and R2478 leg 1 each lost a suite to the old flat 300.
+    # (AC-RSC1..AC-RSC6 pinned in the R2478 seed row of
+    # state/queue/tech.md BEFORE the code existed.)
+    ("os-runner-suite-timeout-cap",
+     os.path.join("..", "os", "test_runner_suite_timeout_cap.py"), 6),
     # R2395: the 300s per-suite cap is a reading now - each registered
     # suite's own slowest measured leg and the headroom it carries, so a
     # loaded machine is named in a warning band instead of killing a
@@ -5668,7 +5692,12 @@ def note(ok, line):
     print("%s %s" % ("PASS" if ok else "FAIL", line), flush=True)
 
 
-def run_cmd(cmd, cwd):
+def suite_timeout(label):
+    """R2479 AC-RSC2: one declared override per suite label, else the cap."""
+    return SUITE_TIMEOUT_OVERRIDES.get(label, SUITE_TIMEOUT_S)
+
+
+def run_cmd(cmd, cwd, timeout=None):
     # single-dialect child pipes: every child is forced to EMIT utf-8
     # (PYTHONIOENCODING injected over a copy of the ambient env, so
     # whatever the calling shell set is overridden) and the runner
@@ -5676,26 +5705,29 @@ def run_cmd(cmd, cwd):
     # participates. Locale-dependent decode is how mixed-dialect
     # evidence bytes were born (R1791/R1792 raw cp936 in the files,
     # R1824/R1825 child-utf-8-bytes-decoded-as-cp936 mojibake).
+    # R2479: the cap is the named constant unless a caller declares one.
+    cap = SUITE_TIMEOUT_S if timeout is None else timeout
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
     try:
         proc = subprocess.run(cmd, stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT, text=True,
                                encoding="utf-8", errors="replace", cwd=cwd,
-                               timeout=300, env=env)
+                               timeout=cap, env=env)
         return proc.returncode, proc.stdout or ""
     except subprocess.TimeoutExpired as exc:
         # A loaded machine must not abort the whole battery: R2393 leg 3
-        # and R2466 leg 2 both died at exactly the 300s cap on a suite
-        # whose own measured leg was 268s, which is load and not a code
-        # defect. The timeout is recorded as one FAILED suite carrying
-        # every line the child produced, so the run still reaches its
-        # summary and the red leg stays readable.
+        # and R2466 leg 2 both died at exactly the cap on a suite whose
+        # own measured leg was 268s, which is load and not a code defect.
+        # The timeout is recorded as one FAILED suite carrying every line
+        # the child produced, so the run still reaches its summary and the
+        # red leg stays readable. R2479: the marker names the cap that
+        # actually ran, so an operator never has to read the source.
         out = exc.stdout or ""
         if isinstance(out, bytes):
             out = out.decode("utf-8", "replace")
         out = (out or "").rstrip("\n")
-        marker = "TIMEOUT suite exceeded the 300s per-suite cap"
+        marker = "TIMEOUT suite exceeded the %ds per-suite cap" % cap
         return 124, (out + "\n" + marker) if out else marker
 
 
@@ -5710,7 +5742,9 @@ def phase_suites():
     for label, rel, crit in SUITES:
         path = os.path.join(BASE, rel)
         t0 = time.time()
-        code, out = run_cmd([sys.executable, path], cwd=os.path.dirname(path))
+        code, out = run_cmd([sys.executable, path],
+                            cwd=os.path.dirname(path),
+                            timeout=suite_timeout(label))
         echo(out)
         passes = len(re.findall(r"(?m)^PASS\b", out))
         fails = len(re.findall(r"(?m)^FAIL\b", out))
@@ -5721,8 +5755,10 @@ def phase_suites():
         note(ok, "suite %s exit=%d pass-lines=%d fail-lines=%d criteria=%d %.1fs"
              % (label, code, passes, fails, crit, time.time() - t0))
     note(green == len(SUITES),
-         "suites %d/%d green, expected criteria total=%d"
-         % (green, len(SUITES), total))
+         "suites %d/%d green, expected criteria total=%d, suite cap=%ds"
+         " overrides=%d"
+         % (green, len(SUITES), total, SUITE_TIMEOUT_S,
+            len(SUITE_TIMEOUT_OVERRIDES)))
     return green == len(SUITES)
 
 

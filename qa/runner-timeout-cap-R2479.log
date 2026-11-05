@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2479 suite=src/os/test_runner_suite_timeout_cap.py legs=2
+== LEG A rc=0 digest=5B6D8AB0E9AACBD8
+runner_suite_timeout_cap suite (expected criteria 6)
+PASS AC-RSC1 cap is one declared constant read from the source
+PASS AC-RSC2 declared override honoured, others keep the cap
+PASS AC-RSC3 AC-RTH1..AC-RTH6 stay green unchanged
+PASS AC-RSC4 slow three COMFORTABLE, a real outlier still BAND
+PASS AC-RSC5 cap readable and a timeout never aborts the run
+PASS AC-RSC6 pure, read-only, one row, own CLI declares the cap
+SUITE PASS 6/6
+== LEG B rc=0 digest=5B6D8AB0E9AACBD8
+runner_suite_timeout_cap suite (expected criteria 6)
+PASS AC-RSC1 cap is one declared constant read from the source
+PASS AC-RSC2 declared override honoured, others keep the cap
+PASS AC-RSC3 AC-RTH1..AC-RTH6 stay green unchanged
+PASS AC-RSC4 slow three COMFORTABLE, a real outlier still BAND
+PASS AC-RSC5 cap readable and a timeout never aborts the run
+PASS AC-RSC6 pure, read-only, one row, own CLI declares the cap
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_runner_suite_timeout_headroom.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=5B6D8AB0E9AACBD8

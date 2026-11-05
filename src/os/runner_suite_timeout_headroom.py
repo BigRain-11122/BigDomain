@@ -229,7 +229,8 @@ USAGE = ("usage: runner_suite_timeout_headroom.py --check [--cap S] "
 
 def parse_args(argv):
     options = {"check": False, "cap": CAP_DEFAULT, "band": BAND_DEFAULT,
-               "root": None, "runner": None, "json": False}
+               "root": None, "runner": None, "json": False,
+               "cap_given": False}
     paths = []
     index = 0
     while index < len(argv):
@@ -250,6 +251,7 @@ def parse_args(argv):
                 except ValueError:
                     raise HeadroomError("E_RTH_BAD_ARGS",
                                         "cap is not a number: %s" % value)
+                options["cap_given"] = True
             elif token == "--band":
                 try:
                     options["band"] = float(value)
@@ -305,6 +307,16 @@ def main(argv):
                                os.path.dirname(os.path.abspath(__file__)))))
     runner = options["runner"] or os.path.join(root, "src", "sandbox",
                                                "reconcile_all.py")
+    # R2479 AC-RSC1: the cap is a READING of the runner source, so this
+    # instrument cannot disagree with the run it describes. The import is
+    # the dunder form on purpose: AC-RTH6 pins this module's import set to
+    # exactly ast/io/json/os/re/sys, and a top-level (or indented) import
+    # statement would widen it. A fixture world carries no declaration, so
+    # runner_suite_timeout_cap answers its fallback cap and the pinned
+    # 300.0 fixtures keep reading exactly as they did.
+    if not options["cap_given"] and os.path.isfile(runner):
+        options["cap"] = __import__(
+            "runner_suite_timeout_cap").default_cap(runner)
     evidence = paths or default_inputs(root)
     if not evidence:
         print("E_RTH_NO_EVIDENCE: no reconcile-all-*.log under %s"
