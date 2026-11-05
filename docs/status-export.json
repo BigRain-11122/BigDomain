@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T07:03:55+08:00",
+  "export_ts": "2026-11-06T07:05:17+08:00",
   "do": "R2490 verification window: the full reconcile battery the mixed-tree rule owed on the R2489 tree ran green - 573/573 suites, 4414 criteria, zero FAIL rows - so the hub-member face shipped last window is now PROVED on a committed tree instead of merely committed",
   "ceo_face": {
     "current": "R2490 verification window: the full reconcile battery the mixed-tree rule owed on the R2489 tree ran green - 573/573 suites, 4414 criteria, zero FAIL rows - so the hub-member face shipped last window is now PROVED on a committed tree instead of merely committed",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 a PRODUCT face on the tech head the register now names: state/queue/tech.md:525 prefix AC-RMSC1 (relative_module_corpus_scope, criteria pinned at R2440 before any code) - the next window must ship a face, not another battery. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2490.log (867723B, utf-8 LF, bom=False, closing line RUNNER PASS 573/573 suites green, controls 7/7, 1150.1s) + docs/sandbox-suite-matrix.md restamped self-describing at 573 suites / 4414 criteria with a byte-identical --check at 2026-11-06 R2490",
-    "updated_at": "2026-11-06T07:03:55+08:00"
+    "updated_at": "2026-11-06T07:05:17+08:00"
   },
   "depts": [
     {
@@ -520,10 +520,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 59,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 59,
+    "substantive_non_idle_mention_lines": 60,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
