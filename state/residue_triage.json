@@ -1961,6 +1961,13 @@
       "declared_by": "R2451",
       "reason": "verified at R2451 from one live reading of the shipped residue face",
       "until": 2470
+    },
+    {
+      "round": 2450,
+      "status": "DELIVERED",
+      "declared_by": "R2461",
+      "reason": "fold R2461 moved the whole R2450 block to the monthly archive at a true round-block boundary while its stamp sits on a closed tech row, so the round reads STAMP-ONLY-OPEN residue; the R2450 window shipped, passed its suite twice and pushed 51d445bd..311c72b5",
+      "until": 2470
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-05T07:40:54+08:00",
-  "do": "R2460 business window: the silicon lobby now opens in a browser. Run `python src/sandbox/lobby/server.py --web-port 8094` and open http://127.0.0.1:8094/lobby/ - connect, take the mock sandbox entrance, open a second window, and the two windows chat in the same room while an un-entitled window is refused",
+  "export_ts": "2026-11-05T08:10:45+08:00",
+  "do": "R2461 verification window: the sandbox faces shipped over the last two windows are now PROVED rather than merely shipped. Bring-up is unchanged - `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094` - then open http://127.0.0.1:8094/lobby/ for the chat, http://127.0.0.1:8092/city/ for the city, and the checkout page served by checkout_demo.py for the 19.9 mock",
   "ceo_face": {
-    "current": "R2460 business window: the silicon lobby now opens in a browser. Run `python src/sandbox/lobby/server.py --web-port 8094` and open http://127.0.0.1:8094/lobby/ - connect, take the mock sandbox entrance, open a second window, and the two windows chat in the same room while an un-entitled window is refused",
-    "latest_artifact": "src/sandbox/lobby/lobby.html (7379B self-contained page, zero external references, AI generated label + non-advice note + mock/no-real-charge statement on screen) + src/sandbox/lobby/lobby_page.py (GET /lobby/, GET /lobby, GET /lobby/api/config publishing the REAL ws port; read-only HTTP) + one --web-port flag on src/sandbox/lobby/server.py + src/sandbox/lobby/test_lobby_page.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-page-R2460.log 1225B) + a live process capture (qa/lobby-page-live-R2460.log)",
-    "next_milestone": "2026-11-05/06 the battery the R2459/R2460 src edits owe runs FIRST next window on the committed tree at the pre-registered 558 suites / 4324 criteria (reconcile-battery-R2461), which also un-stales docs/sandbox-suite-matrix.md; then the lobby page gets its next business step - the same two-window chat driven by the real msgSecCheck the moment the mini-program appid/secret lands, and a room picker over the shipped lobby/quant/cocreate rooms, ETA inside 48h",
+    "current": "R2461 verification window: the sandbox faces shipped over the last two windows are now PROVED rather than merely shipped. Bring-up is unchanged - `python src/sandbox/lobby/server.py --city-http-port 8092 --web-port 8094` - then open http://127.0.0.1:8094/lobby/ for the chat, http://127.0.0.1:8092/city/ for the city, and the checkout page served by checkout_demo.py for the 19.9 mock",
+    "latest_artifact": "docs/sandbox-suite-matrix.md regenerated from this round own battery evidence (53887B, 558 suites / 4324 criteria, --check byte-identical) + qa/reconcile-all-R2461.log (861329B, one utf-8 LF single writer, RUNNER PASS 558/558 suites, reconcile controls 7/7, 1002.1s, TMP RECLAIM 932/932) + both outstanding battery debt rows closed through their shipped CLI",
+    "next_milestone": "2026-11-05/07 the next window takes the gate leader product-face-R2456 or a P-47 business face under the CEO standing order; then a sandbox hub page linking the city, lobby and checkout faces from one URL, and the real msgSecCheck plus the real 19.9 debit the moment the mini-program appid/secret and the merchant id land, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/sandbox/lobby/lobby.html (7379B self-contained page, zero external references, AI generated label + non-advice note + mock/no-real-charge statement on screen) + src/sandbox/lobby/lobby_page.py (GET /lobby/, GET /lobby, GET /lobby/api/config publishing the REAL ws port; read-only HTTP) + one --web-port flag on src/sandbox/lobby/server.py + src/sandbox/lobby/test_lobby_page.py SUITE PASS 6/6 twice with an identical digest (qa/lobby-page-R2460.log 1225B) + a live process capture (qa/lobby-page-live-R2460.log)",
-    "updated_at": "2026-11-05T07:40:54+08:00"
+    "last_artifact": "docs/sandbox-suite-matrix.md regenerated from this round own battery evidence (53887B, 558 suites / 4324 criteria, --check byte-identical) + qa/reconcile-all-R2461.log (861329B, one utf-8 LF single writer, RUNNER PASS 558/558 suites, reconcile controls 7/7, 1002.1s, TMP RECLAIM 932/932) + both outstanding battery debt rows closed through their shipped CLI",
+    "updated_at": "2026-11-05T08:10:45+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2461.log + docs/sandbox-suite-matrix.md + state/debt.md + state/residue_triage.json + src/os/backlog.md + src/os/closeout_R2461.py + src/os/fold_R2461.py + src/os/export_R2461.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/lobby.html + src/sandbox/lobby/lobby_page.py + src/sandbox/lobby/server.py (one --web-port flag) + src/sandbox/lobby/test_lobby_page.py + qa/lobby-page-R2460.log + qa/lobby-page-live-R2460.log + src/sandbox/reconcile_all.py (one registry row) + state/debt.md + src/os/backlog.md + src/os/closeout_R2460.py + src/os/export_R2460.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "src/sandbox/lobby/checkout_demo.py + src/sandbox/lobby/checkout.html + src/sandbox/lobby/test_checkout_demo.py + qa/checkout-demo-R2459.log + src/sandbox/reconcile_all.py (one registry row) + state/debt.md + src/os/backlog.md + src/os/export_R2459.py + docs/status-export.json + src/os/state.json + heartbeat.txt",
     "qa/reconcile-all-R2458.log (adopted green leg plus two follow-up legs) + docs/sandbox-suite-matrix.md (regenerated stamp-aligned) + src/os/repair_R2458.py (state transport repair, birth site) + src/os/closeout_R2458.py + src/os/export_R2458.py + state/debt.md + docs/status-export.json + src/os/state.json + src/os/backlog.md + heartbeat.txt",
@@ -74,6 +75,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2461",
+      "2026-11-05 R2461 VERIFICATION window on the debt two product windows left behind: the R2459 checkout face and the R2460 lobby page both changed product src bytes and neither side had been verified by the whole registry, so the R2168 mixed-tree rule owed the battery first. It ran on the committed tree 2a9fed3f with an empty git status and read RUNNER PASS 558/558 suites green plus reconcile controls 7/7 in 1002.1s at criteria total 4324 EXACTLY as pre-registered, with birth-site TMP RECLAIM 932/932 and evidence written by one utf-8 LF single writer. The four follow-up sections produced the designed order - matrix FAIL at 53731B against 53887B without rewriting anything, then a stamp-aligned regeneration from this round own green evidence, --check byte-identical, and all four sections PASS for VERDICT R2461 PASS. The regeneration also un-stales the suite matrix that R2460 had to disclose as stale, and its own green line now reads 558/558 because it names this round battery. Both battery debt rows were closed through their shipped writer (open 4->2, done 172->174, readback ok); no successor battery is owed because no product src byte changed and the registry is unmoved. The closeout crossed the state waterline, so the R2450 block was folded at a true round-block boundary (12 lines, 232 tokens, predicted=actual 73836B) and the fold-created residue round R2450 was spliced through the shipped batch channel at its MEASURED DELIVERED status (281/281 TRIAGED), with the badge exemption reading NO-DRIFT over 383 entries. Honest limits: zero product points - nothing a CEO could open was rebuilt this window, the value is that the shipped sandbox faces are now proved; Docker is still absent so the compose bring-up stays unproved; the real debit and the real msgSecCheck still wait on CEO physical items (merchant id, mini-program appid/secret)."
+    ],
     [
       "2460",
       "2026-11-05 R2460 BUSINESS window, SUPERSEDING the carried internal audit face product-face-R2456 (still open and claimable at state/queue/tech.md:522 prefix AC-PFKC1) under the CEO standing order OB-20261105-003656-879: real output only, no new mechanism, rule or document. Until today the lobby WebSocket could only be driven by a terminal demo (interop_demo.py) while the city page and the checkout page were already clickable, so this window shipped the missing surface: lobby.html plus lobby_page.py, a read-only HTTP face serving the page byte-identical from disk and answering a same-origin GET /lobby/api/config with the REAL ws port, wired into server.py behind one --web-port flag. A person opens http://127.0.0.1:8094/lobby/, connects, takes the MOCK sandbox entrance and chats with a second window: both receive one shared evt_id, the server stays authoritative on actor and ai_generated, a spectator is refused E_ENTRANCE_REQUIRED, and unknown paths 404 while every non-GET reads 405. Six criteria were read off a REAL server on an OS-assigned port and a REAL WebSocket client, twice with an identical digest, with the city-view suite re-run green adjacent; the registry moved exactly one row to 558 suites / 4324 criteria; a live capture proves the same bring-up a CEO would run. Three self-inflicted defects were caught by RUNNING and fixed at their birth site without widening a criterion: the peer connection hello/risk frames were never drained, three printed lines carried volatile values that broke cross-leg comparison, and the state canon had drifted (CRLF preserved, off-indent 89 -> 0). Honest limits: the criteria landed on the board only at closeout so the pin-before-code order was not honoured this window; the suite matrix is stale because no battery ran and its newest evidence face carries no stamp line; Docker is absent so the compose bring-up is unproved; the real debit and the real msgSecCheck still wait on CEO physical items (merchant id, mini-program appid/secret)."
@@ -363,17 +368,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2460",
+      "2461",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 84,
+    "log_lines_in_window": 80,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 84,
+    "substantive_non_idle_mention_lines": 80,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
