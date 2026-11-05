@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T13:24:52+08:00",
+  "export_ts": "2026-11-05T13:28:17+08:00",
   "do": "R2470 VERIFICATION window: the whole registry was re-proved on the tree R2469 committed - 562 suites green, 4348 criteria exactly as pre-registered - so the token-ledger console shipped last window is PROVED rather than merely shipped; no new product face this window",
   "ceo_face": {
     "current": "R2470 VERIFICATION window: the whole registry was re-proved on the tree R2469 committed - 562 suites green, 4348 criteria exactly as pre-registered - so the token-ledger console shipped last window is PROVED rather than merely shipped; no new product face this window",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window ships a BUSINESS face over the carried audit row product-face-R2456: the R2469 token-ledger console wired into the lobby hub payload so every sandbox face is reachable from one page; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2470.log (RUNNER PASS 562/562 suites, controls 7/7, 1042.3s, criteria total=4348 exact) + qa/reconcile-all-R2470.log tail (VERDICT R2470 PASS, four follow-up sections) + docs/sandbox-suite-matrix.md (54185B restamped from this round own green evidence, --check byte-identical)",
-    "updated_at": "2026-11-05T13:24:52+08:00"
+    "updated_at": "2026-11-05T13:28:17+08:00"
   },
   "depts": [
     {
@@ -420,10 +420,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 75,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 74,
+    "substantive_non_idle_mention_lines": 75,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
