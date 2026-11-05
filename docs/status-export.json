@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-05T15:32:12+08:00",
+  "export_ts": "2026-11-05T15:33:32+08:00",
   "do": "R2473 BUSINESS window: the P-47-3b UGC pipeline is now a face a person can operate in a browser - submit a sentence, watch the shipped content gate decide pass / review, take a gray-zone case to a human verdict, and watch the proposal pool move",
   "ceo_face": {
     "current": "R2473 BUSINESS window: the P-47-3b UGC pipeline is now a face a person can operate in a browser - submit a sentence, watch the shipped content gate decide pass / review, take a gray-zone case to a human verdict, and watch the proposal pool move",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-05/06 the next window runs the owed battery on this tree (reconcile-battery-R2473, pre-registered at 564 suites / 4360 criteria) and then wires this console into the lobby hub payload; the real msgSecCheck and the real 19.9 debit land the moment the mini-program appid/secret and the merchant id arrive, ETA inside 48h",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/sandbox/ugc/ugc_console.html (8816B console: submit, suspended review with pass/risky, pool with per-line counts) + src/sandbox/ugc/ugc_page.py (four routes over the SHIPPED pipeline/store/wordlist/review) + qa/ugc-console-R2473.log (SUITE PASS 6/6 twice, identical digest) + qa/ugc-console-live-R2473.log (real process: pass / review / verdict / pool 2, review 0)",
-    "updated_at": "2026-11-05T15:32:12+08:00"
+    "updated_at": "2026-11-05T15:33:32+08:00"
   },
   "depts": [
     {
@@ -435,10 +435,10 @@
   "self_drive": {
     "window": "2026-10-30..2026-11-05",
     "window_days": 7,
-    "log_lines_in_window": 72,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 72,
+    "substantive_non_idle_mention_lines": 74,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
